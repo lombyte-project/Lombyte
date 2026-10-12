@@ -181,7 +181,10 @@ void FUN_L00_0029ff58(void) {
     L00Quad29ff58 q;
     float transformed[4][4];
     float *position;
-    int i, index0, index1, index2, index3;
+
+    int offset;
+    volatile int i;
+    int index0, index1, index2, index3;
     int *indices, *second, *third;
     D_L00_00161184 = D_L00_00161184 + 0.01f;
     if (1.0f < D_L00_00161184) {
@@ -192,24 +195,21 @@ void FUN_L00_0029ff58(void) {
     q.extra[3] = 0x4000000044L;
     q.extra[1] = FUN_001f44b8_29ff58(0x18);
     i = 0;
+    indices = D_L00_001CA480[0];
     while (1) {
-        indices = D_L00_001CA480[i];
-        index0 = indices[0];
+        offset = i * 16;
         i++;
-        second = (int *)((char *)D_L00_001CA480 + (i - 1) * 16 + 4);
-        FUN_001f9cf8_29ff58(transformed[0], D_L00_001CA380[index0], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
-        index1 = *second;
-        FUN_001f9cf8_29ff58(transformed[1], D_L00_001CA380[index1], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
-        third = (int *)((char *)D_L00_001CA480 + (i - 1) * 16 + 8);
-        index2 = *third;
-        FUN_001f9cf8_29ff58(transformed[2], D_L00_001CA380[index2], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
-        index3 = indices[3];
-        FUN_001f9cf8_29ff58(transformed[3], D_L00_001CA380[index3], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
-        position = (float *)(*(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0x10);
+        FUN_001f9cf8_29ff58(transformed[0], D_L00_001CA380[indices[0]], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
+        second = (int *)((int)D_L00_001CA480 + offset + 4);
+        FUN_001f9cf8_29ff58(transformed[1], D_L00_001CA380[*second], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
+        third = (int *)((int)D_L00_001CA480 + offset + 8);
+        FUN_001f9cf8_29ff58(transformed[2], D_L00_001CA380[*third], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
+        FUN_001f9cf8_29ff58(transformed[3], D_L00_001CA380[indices[3]], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
+        position = (float *)(*(char **)(D_L00_001CA4C0_29ff58 + 0x1c));
 #define SET_POSITION(n) \
-        q.position[n][0] = position[0] + transformed[n][0]; \
-        q.position[n][1] = position[1] + transformed[n][1]; \
-        q.position[n][2] = position[2] + transformed[n][2]
+        q.position[n][0] = position[4] + transformed[n][0]; \
+        q.position[n][1] = position[5] + transformed[n][1]; \
+        q.position[n][2] = position[6] + transformed[n][2]
         SET_POSITION(0);
         SET_POSITION(1);
         SET_POSITION(2);
@@ -219,15 +219,19 @@ void FUN_L00_0029ff58(void) {
         index1 = *second;
         index2 = *third;
         index3 = indices[3];
-#define SET_COLOR_UV(n, index) \
-        q.color[n] = D_L00_001CA458[index]; \
-        q.uv[n][0] = D_L00_001CA410[index][0]; \
-        q.uv[n][1] = D_L00_001CA410[index][1] + D_L00_00161184
-        SET_COLOR_UV(0, index0);
-        SET_COLOR_UV(1, index1);
-        SET_COLOR_UV(2, index2);
-        SET_COLOR_UV(3, index3);
-#undef SET_COLOR_UV
+        q.color[0] = D_L00_001CA458[index0];
+        q.color[1] = D_L00_001CA458[index1];
+        q.color[2] = D_L00_001CA458[index2];
+        q.color[3] = D_L00_001CA458[index3];
+        q.uv[0][0] = D_L00_001CA410[index0][0];
+        q.uv[0][1] = D_L00_001CA410[index0][1] + D_L00_00161184;
+        q.uv[1][0] = D_L00_001CA410[index1][0];
+        q.uv[1][1] = D_L00_001CA410[index1][1] + D_L00_00161184;
+        q.uv[2][0] = D_L00_001CA410[index2][0];
+        q.uv[2][1] = D_L00_001CA410[index2][1] + D_L00_00161184;
+        q.uv[3][0] = D_L00_001CA410[index3][0];
+        q.uv[3][1] = D_L00_001CA410[index3][1] + D_L00_00161184;
+        indices += 4;
         FUN_001f7d30_29ff58(&q, 0, 1);
         if (i >= 4) break;
     }
