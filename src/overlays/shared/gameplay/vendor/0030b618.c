@@ -276,9 +276,6 @@ char *FUN_L01_0030c898(char *owner, char *pos, float a, float b, float c, float 
     }
     return m;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030c9a8.s", FUN_L01_0030c9a8);
-#else
 typedef struct {
     OvlQuad dir;
     void *owner;
@@ -333,16 +330,20 @@ void FUN_L01_0030c9a8(char *m) {
     pitch_k = frame_time_sq * 4.712389f;
     pitch_max = frame_time * 3.1415927f;
     *(f32 *)(m + 0x48) = desired_yaw;
-    *(f32 *)(m + 0x44) = spring_turn((f32 *)(e + 4), *(f32 *)(m + 0x44), desired_pitch,
-                                            pitch_k, pitch_d, pitch_max);
-    build_spherical_offset_30c9a8(offset.f, frame_time * 40.0f,
-                                   *(f32 *)(m + 0x48), -*(f32 *)(m + 0x44));
-    old_pos.q = *(OvlQuad *)pos;
+    {
+        f32 pitch_result = spring_turn((f32 *)(e + 4), *(f32 *)(m + 0x44), desired_pitch,
+                                                pitch_k, pitch_d, pitch_max);
+        pitch_max = frame_time * 40.0f;
+        *(f32 *)(m + 0x44) = pitch_result;
+        build_spherical_offset_30c9a8(offset.f, pitch_max,
+                                       *(f32 *)(m + 0x48), -pitch_result);
+    }
+    qcopy(&old_pos, pos);
     fast_vec_add(pos, pos, &offset);
-    if (pos[0] < 2.0f || pos[0] > 1021.0f ||
-        pos[1] < 2.0f || pos[1] > 1021.0f ||
-        pos[2] < 2.0f || pos[2] > 1021.0f ||
-        pos[0] < 0.0f || pos[1] < 0.0f || pos[2] < 0.0f ||
+    if (*(f32 *)(m + 0x10) < 2.0f || *(f32 *)(m + 0x10) > 1021.0f ||
+        *(f32 *)(m + 0x14) < 2.0f || *(f32 *)(m + 0x14) > 1021.0f ||
+        *(f32 *)(m + 0x18) < 2.0f || *(f32 *)(m + 0x18) > 1021.0f ||
+        *(f32 *)(m + 0x10) < 0.0f || *(f32 *)(m + 0x14) < 0.0f || *(f32 *)(m + 0x18) < 0.0f ||
         distance_xyz_30c9a8(pos, D_L01_00167240_30c9a8) > 64.0f) {
         mark_moby_for_removal_30c9a8(m);
         return;
@@ -370,11 +371,10 @@ void FUN_L01_0030c9a8(char *m) {
                 *(s16 *)(e + 0x14) = scale_game_frames(3);
             return;
         }
-        *(OvlQuad *)pos = D_L01_001742E0_30c9a8;
+        qcopy(pos, &D_L01_001742E0_30c9a8);
     }
     mark_moby_for_removal_30c9a8(m);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
