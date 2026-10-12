@@ -397,7 +397,7 @@ void FUN_L06_002ffc38(int idx) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ffcb0.s", FUN_L06_002ffcb0);
 #else
 extern char D_0013F3D0_ffcb0[] __asm__("D_0013F3D0");
-extern char *D_L06_0015FFD8_ffcb0 __asm__("D_L06_0015FFD8");
+extern unsigned char *D_L06_0015FFD8_ffcb0 __asm__("D_L06_0015FFD8");
 extern char *D_L06_001600EC_ffcb0 __asm__("D_L06_001600EC");
 extern int D_L06_0015F404_ffcb0 __asm__("D_L06_0015F404");
 extern int D_L06_0015F408_ffcb0 __asm__("D_L06_0015F408");
@@ -437,14 +437,18 @@ extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eac18(int);
 extern void FUN_L06_002356a0(int, int);
 extern void FUN_L06_00300278(char *);
-extern void enqueue_callback_list_1(int, char *) __asm__("FUN_001f4600");
+extern void enqueue_callback_list_1(int, char *) __asm__("FUN_L06_00210fc8");
 extern void allocate_voice_for_target_entry_ffcb0(int, int, char *) __asm__("FUN_0022da68");
+
+extern void FUN_L06_00300958(void);
+extern void FUN_L06_00300720(void);
+extern void FUN_L06_00300588(void);
+extern void FUN_L06_003003f0(void);
 
 void FUN_L06_002ffcb0(char *moby) {
     int *data = *(int **)(moby + 0x78);
-    char *hero = D_0013F3D0_ffcb0;
     float pos[4], rot[4], from[4], target[4], offset[4];
-    char *base;
+    int base;
     int state;
     *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00162048_ffcb0;
     switch ((unsigned char)moby[0x20]) {
@@ -456,7 +460,7 @@ void FUN_L06_002ffcb0(char *moby) {
         if ((data[2] < 0 || (unsigned char)D_L06_0015FFD8_ffcb0[(data[2] << 8) + 0xbc] == 0) && data[8] != -1) {
             break;
         }
-        if (vector_distance_ffcb0(moby + 0x10, hero) < 32.0f) {
+        if (vector_distance_ffcb0(moby + 0x10, D_0013F3D0_ffcb0) < 32.0f) {
             moby[0x20] = 2;
             data[9] = scale_frames_ffcb0(30);
         } else {
@@ -466,20 +470,45 @@ void FUN_L06_002ffcb0(char *moby) {
         break;
     case 2:
         if (count_down_ffcb0(data + 9)) {
-            moby[0x20] = 3;
-            D_L06_0015F404_ffcb0 = 1;
-            D_L06_0015F408_ffcb0 = 0x12;
-            base = D_L06_001600EC_ffcb0 + (data[5] << 7);
-            qcopy(pos, base + 0x30);
-            qcopy(rot, base + 0x70);
+            {
+                int state;
+                int base;
+                moby[0x20] = 3;
+                D_L06_0015F404_ffcb0 = 1;
+                D_L06_0015F408_ffcb0 = 0x12;
+                state = data[5];
+                state <<= 7;
+                base = (int)D_L06_001600EC_ffcb0;
+                qcopy(pos, (void *)(state + base + 0x30));
+                qcopy(rot, (void *)(state + base + 0x70));
+            }
             FUN_L00_002eaaa0(pos, rot, 1, scale_frames_ffcb0(300), 0);
             FUN_L06_00312b40(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
             FUN_L06_00312a78(pos);
             FUN_L06_00312ad0(rot);
-            data[6] = 0;
-            base = D_L06_001600EC_ffcb0 + (data[4] << 7);
-            *(float *)(base + 0x78) = angle_atan2_ffcb0(*(float *)(moby + 0x10) - *(float *)(base + 0x30), *(float *)(moby + 0x14) - *(float *)(base + 0x34));
-            FUN_L00_00216f90(base + 0x30, base + 0x70, 0x72, 0);
+            {
+                int base;
+                int state;
+                float facing;
+                data[6] = 0;
+                {
+                    int base;
+                    base = data[4];
+                    base <<= 7;
+                    base += (int)D_L06_001600EC_ffcb0;
+                    facing = angle_atan2_ffcb0(*(float *)(moby + 0x10) - *(float *)(base + 0x30), *(float *)(moby + 0x14) - *(float *)(base + 0x34));
+                }
+                {
+                    int state;
+                    state = data[4];
+                    state <<= 7;
+                    base = (int)D_L06_001600EC_ffcb0;
+                    *(float *)(state + base + 0x78) = facing;
+                }
+                state = data[4];
+                state <<= 7;
+                FUN_L00_00216f90((void *)(base + state + 0x30), (void *)(base + state + 0x70), 0x72, 0);
+            }
         }
         if (data[9] < D_L06_00162044_ffcb0)
             D_L06_0015F3FC_ffcb0 = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044_ffcb0;
@@ -489,11 +518,23 @@ void FUN_L06_002ffcb0(char *moby) {
             data[9]++;
             D_L06_0015F3FC_ffcb0 = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044_ffcb0;
         }
-        if ((float)data[6] < 0.99999f) {
-            if ((float)data[6] >= 0.05f && data[3] >= 0) {
-                base = D_L06_001600EC_ffcb0 + (data[3] << 7);
-                qcopy(base + 0x30, hero);
-                *(float *)(base + 0x38) -= 0.5f;
+        /* This field holds float bits; retail completes only on an ordered >= comparison. */
+        if (*(float *)(data + 6) >= 0.99999f) {
+            moby[0x20] = 5;
+            FUN_L06_002356a0(0, 0);
+            FUN_L06_00312ce8(2);
+            D_L06_0015F404_ffcb0 = 0;
+        } else {
+            if (*(float *)(data + 6) >= 0.05f && data[3] >= 0) {
+                {
+                    int state;
+                    int base;
+                    state = data[3];
+                    state <<= 7;
+                    base = (int)D_L06_001600EC_ffcb0;
+                    qcopy((void *)(state + base + 0x30), D_0013F3D0_ffcb0);
+                    *(float *)(state + base + 0x38) -= 0.5f;
+                }
                 data[3] = -1;
             }
             if (data[1] == 1 && vector_distance_ffcb0(moby + 0x10, D_L06_0015FFD8_ffcb0 + (data[8] << 8) + 0x10) > 0.1f) {
@@ -501,43 +542,47 @@ void FUN_L06_002ffcb0(char *moby) {
                 FUN_L06_00300278(moby);
             }
             approach_two_stage_ffcb0((float *)(data + 6), (float *)(data + 7), 1.0f, D_0015ED70_ffcb0, D_0015ED70_ffcb0, D_0015ED6C_ffcb0 * 1.5f);
-            base = D_L06_001600EC_ffcb0 + (data[5] << 7);
-            qcopy(pos, base + 0x30);
-            *(u128 *)from = *(u128 *)(base + 0x70);
+            {
+                int state;
+                int base;
+                state = data[5];
+                state <<= 7;
+                base = (int)D_L06_001600EC_ffcb0;
+                qcopy(pos, (void *)(state + base + 0x30));
+                qcopy(from, (void *)(state + base + 0x70));
+            }
             from[0] = D_L06_00162050_ffcb0 * 0.017453292f;
-            *(u128 *)rot = *(u128 *)hero;
-            *(u128 *)target = *(u128 *)(hero + 16);
-            target[1] = rot[1];
-            normalize_2fd1a0(offset, hero - 0x80, -2.0f);
+            qcopy(rot, D_0013F3D0_ffcb0);
+            qcopy(target, D_0013F3D0_ffcb0 + 16);
+            /* Retail takes this component from the camera rotation, not the hero position. */
+            target[1] = from[1];
+            normalize_2fd1a0(offset, D_0013F3D0_ffcb0 - 0x80, -2.0f);
             vec_add_ffcb0(rot, rot, offset);
             rot[2] += 0.85f;
-            lerp_vector_ffcb0(pos, pos, rot, (float)data[6]);
-            lerp_vector_ffcb0(from, from, target, (float)data[6]);
+            lerp_vector_ffcb0(pos, pos, rot, *(float *)(data + 6));
+            lerp_vector_ffcb0(from, from, target, *(float *)(data + 6));
             FUN_L00_002ea9d8(pos);
             FUN_L00_002eaa30(from);
-        } else {
-            moby[0x20] = 5;
-            FUN_L06_002356a0(0, 0);
-            FUN_L06_00312ce8(2);
-            D_L06_0015F404_ffcb0 = 0;
         }
         break;
     case 4:
-        if (vector_distance_ffcb0(moby + 0x10, hero) < 16.0f) {
-            base = D_L06_001600EC_ffcb0 + (data[3] << 7);
-            *(u128 *)(base + 0x30) = *(u128 *)hero;
-            *(float *)(base + 0x38) -= 0.5f;
+        if (vector_distance_ffcb0(moby + 0x10, D_0013F3D0_ffcb0) < 16.0f) {
+            state = data[3];
+            state <<= 7;
+            base = (int)D_L06_001600EC_ffcb0;
+            qcopy((void *)(state + base + 0x30), D_0013F3D0_ffcb0);
+            *(float *)(state + base + 0x38) -= 0.5f;
             data[3] = -1;
             moby[0x20] = 5;
         }
         break;
     }
-    if (data[1] == 0) {
-        if (data[0] == 0) enqueue_callback_list_1(0x300588, moby);
-        else enqueue_callback_list_1(0x3003f0, moby);
+    if (data[1] != 0) {
+        if (data[0] != 0) enqueue_callback_list_1((int)FUN_L06_00300720, moby);
+        else enqueue_callback_list_1((int)FUN_L06_00300958, moby);
     } else {
-        if (data[0] == 0) enqueue_callback_list_1(0x300958, moby);
-        else enqueue_callback_list_1(0x300720, moby);
+        if (data[0] != 0) enqueue_callback_list_1((int)FUN_L06_003003f0, moby);
+        else enqueue_callback_list_1((int)FUN_L06_00300588, moby);
     }
 }
 #endif
