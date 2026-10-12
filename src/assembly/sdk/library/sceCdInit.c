@@ -70,7 +70,6 @@ int sceCdInit(int init_mode) {
     D_00131300[0] = -1;
     D_00131308[0] = D_001312F8[0] = -1;
     D_00131304[0] = -1;
-    rbuf = D_001324C0;
     D_001312F4[0] = 0;
     D_00131310[0] = count;
     D_0013130C[0] = -1;
@@ -90,8 +89,9 @@ int sceCdInit(int init_mode) {
             D_001599C0[0] = init_mode;
             D_0013130C[0] = 0;
             sceSifWriteBackDCache(D_001599C0, 4);
+            rbuf = D_001324C0;
             if (sceSifCallRpc(&D_00159968, 0, 0, D_001599C0, 4, rbuf, 0x10, 0, 0) < 0) {
-                D_001312E4[0] = 0;
+                *(volatile s32 *)D_001312E4 = 0;
                 return 0;
             }
             break;
