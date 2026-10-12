@@ -5554,11 +5554,18 @@
         "source_path": "src/gameplay/camera/fun_001ed470.c",
         "address": "0x001ed470",
         "current_name": "FUN_001ed470",
-        "proposed_name": null,
+        "proposed_name": "camera_pre_update",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "needs_review",
+        "confidence": "low",
+        "evidence": [
+          {
+            "kind": "cross_project_name",
+            "project": "ReRAC",
+            "name": "CameraPreUpdate",
+            "note": "suggested, from its level-01 copy"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -5665,11 +5672,18 @@
         "source_path": "src/rendering/effects/fun_001edc50.c",
         "address": "0x001edc50",
         "current_name": "FUN_001edc50",
-        "proposed_name": null,
+        "proposed_name": "lens_flare_draw",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "needs_review",
+        "confidence": "low",
+        "evidence": [
+          {
+            "kind": "cross_project_name",
+            "project": "ReRAC",
+            "name": "LensFlareDraw",
+            "note": "suggested, from its level-01 copy"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -12087,11 +12101,18 @@
         "source_path": "src/rendering/fun_00218888.c",
         "address": "0x00218888",
         "current_name": "FUN_00218888",
-        "proposed_name": null,
+        "proposed_name": "part_type02_spawn",
         "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "needs_review",
+        "confidence": "low",
+        "evidence": [
+          {
+            "kind": "cross_project_name",
+            "project": "ReRAC",
+            "name": "PartType02Spawn",
+            "note": "suggested, from its level-01 copy"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -16547,10 +16568,10 @@
         "source_path": "src/gameplay/vendor/fun_00238630.c",
         "address": "0x00238630",
         "current_name": "FUN_00238630",
-        "proposed_name": null,
+        "proposed_name": "vendor_draw_salesman_video",
         "logical_group": "gameplay/vendor",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "needs_review",
+        "confidence": "low",
         "evidence": [
           {
             "kind": "git_log",
@@ -16560,6 +16581,12 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL vendor.c"
+          },
+          {
+            "kind": "cross_project_name",
+            "project": "ReRAC",
+            "name": "VendorDrawSalesmanVideo",
+            "note": "suggested, from its level-01 copy"
           }
         ],
         "logical_group_confidence": "high"
@@ -16586,10 +16613,10 @@
         "source_path": "src/gameplay/vendor/fun_002386e8.c",
         "address": "0x002386e8",
         "current_name": "FUN_002386e8",
-        "proposed_name": null,
+        "proposed_name": "vendor_draw_icon_strip",
         "logical_group": "gameplay/vendor",
-        "status": "unresolved",
-        "confidence": "unresolved",
+        "status": "needs_review",
+        "confidence": "low",
         "evidence": [
           {
             "kind": "git_log",
@@ -16599,6 +16626,12 @@
           {
             "kind": "cross_region_module",
             "note": "rac1-decomp (PAL) places it in its original source file: PAL vendor.c"
+          },
+          {
+            "kind": "cross_project_name",
+            "project": "ReRAC",
+            "name": "VendorDrawIconStrip",
+            "note": "suggested, from its level-01 copy"
           }
         ],
         "logical_group_confidence": "high"
@@ -16642,11 +16675,18 @@
         "source_path": "src/gameplay/vendor/fun_00239160.c",
         "address": "0x00239160",
         "current_name": "FUN_00239160",
-        "proposed_name": null,
+        "proposed_name": "vendor_draw_prompt",
         "logical_group": "gameplay/vendor",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
+        "status": "needs_review",
+        "confidence": "low",
+        "evidence": [
+          {
+            "kind": "cross_project_name",
+            "project": "ReRAC",
+            "name": "VendorDrawPrompt",
+            "note": "suggested, from its level-01 copy"
+          }
+        ],
         "logical_group_confidence": "unresolved"
       },
       {
@@ -20012,6 +20052,25 @@
           }
         ],
         "logical_group_confidence": "high"
+      },
+      {
+        "unit": "ui/menus/fun_0023a2c0",
+        "source_path": "src/ui/menus/fun_0023a2c0.c",
+        "address": "0x0023a2c0",
+        "current_name": "FUN_0023a2c0",
+        "proposed_name": "menu_moby_update",
+        "logical_group": "ui/menus",
+        "status": "needs_review",
+        "confidence": "low",
+        "evidence": [
+          {
+            "kind": "cross_project_name",
+            "project": "ReRAC",
+            "name": "MenuMobyUpdate",
+            "note": "suggested, from its level-01 copy"
+          }
+        ],
+        "logical_group_confidence": "medium"
       }
     ]
   }
