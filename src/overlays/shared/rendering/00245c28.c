@@ -344,14 +344,14 @@ void FUN_L00_002468b8(void) {
     FUN_001e93e8();
     FUN_0020bf90(state->archive_index, 1);
     first_base = D_L00_001B9CF0.first_base;
-    second_base = D_L00_001B9CF0.second_base;
+    state->old_base = first_base;
+    state->start = 0;
     buffer = first_base + 0x9a800;
+    state->buffer = buffer;
+    second_base = D_L00_001B9CF0.second_base;
+    state->old_end = second_base;
     D_L00_001B9CF0.first_base = buffer + 0x48000;
     D_L00_001B9CF0.second_base = second_base + 0x48000;
-    D_L00_001841F0.old_base = first_base;
-    D_L00_001841F0.start = 0;
-    D_L00_001841F0.buffer = buffer;
-    D_L00_001841F0.old_end = second_base;
     state->zero_284 = 0;
     state->zero_288 = 0;
     state->slot_28c = -1;
@@ -379,9 +379,9 @@ void FUN_L00_002468b8(void) {
         if (D_L00_001841F0.file_handle != -1) {
             D_L00_001841F0.last_transfer_bytes = D_L00_001841F0.transfer_bytes;
             FUN_00232f20(D_L00_001841F0.buffer, D_L00_001841F0.file_handle, 0, D_L00_001841F0.transfer_bytes, 0);
+            D_L00_001841F0.active = 1;
             D_L00_001841F0.load_state = -2;
             D_L00_001841F0.level_slot = D_0013D4E1 != 0 ? current_level_index + 0x100 : current_level_index;
-            D_L00_001841F0.active = 1;
             return;
         }
     }
