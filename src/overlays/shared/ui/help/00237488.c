@@ -414,7 +414,7 @@ extern u128 D_0013F3D0;
 extern int FUN_L05_002388a0(float, float, float *) __asm__("FUN_L00_0020a240");
 extern float FUN_L00_0022e0f0(void *) __asm__("FUN_001f9b20");
 extern float FUN_L00_0022e598(float, float) __asm__("FUN_001f9e90");
-extern int FUN_L00_00288630(void) __asm__("FUN_L00_0025e3b8");
+extern int FUN_L00_00288630(void *) __asm__("FUN_L00_0025e3b8");
 extern void FUN_L00_0025c9d8(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern int FUN_L00_0021e8d8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float FUN_L00_0022e138(void *, void *) __asm__("FUN_001f9b48");
@@ -446,7 +446,7 @@ void FUN_L05_0024bdc0(void) {
             hero.unk250 = FUN_L00_0022e598(*(float *)(level + 0x48), probe_value);
             if (*(int *)(level + 0x18)) {
                 hero.unk255 = 1;
-                if (FUN_L00_00288630()) hero.unk254 = 1;
+                if (FUN_L00_00288630(*(void **)(level + 0x18))) hero.unk254 = 1;
             }
         }
     }
