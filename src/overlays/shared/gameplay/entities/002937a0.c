@@ -6,239 +6,323 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/entities.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d2af0.s", FUN_L08_002d2af0);
-#else
-extern void FUN_L08_002d36e0(char *);
-extern void FUN_L08_002d3d78(char *);
-extern void FUN_L08_002d3878(char *);
-extern void FUN_L08_002d4108(char *);
-extern void FUN_L00_00263ac8(float, void *, int, void *);
-extern float FUN_001f9b48(void *, void *);
-extern float FUN_001f9b80(void *, void *);
-extern void FUN_L00_0025a120(void *);
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void clear_vector_xyz(void *) __asm__("FUN_001f99f8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float floor_height(void *, int, float) __asm__("FUN_00213508");
-extern float absolute_float(float) __asm__("func_001F99C0");
-extern float fast_sin(float) __asm__("func_001F9DE0");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern void FUN_L00_00258278(void *, float, float, float, float, void *);
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern int is_value_within_interpolated_window(float, void *) __asm__("FUN_00214cc8");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern int FUN_L00_0028d8c0(void *, int);
-extern int FUN_L00_002dc9f0(void *, void *);
-extern void FUN_L00_00259bc8(void *, void *, int, void *, void *, float);
-extern void FUN_L00_0025e450_002e8210(void *, void *, void *, float, float, int, int, int,
-                                         float, float, float, int, float, float, int, int, int, int)
-    __asm__("FUN_L00_0025e450");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void blend_moby_animation(MobyAnim *, int, int, int) __asm__("FUN_00212f90");
-extern int lerp_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
-extern void FUN_L00_0024f7c8(void *, int, void *);
-extern char D_L08_001675C0[];
-extern char D_L08_00161888 __attribute__((sda));
+#include "rnc/gameplay/entities/moby.h"
 
 #include "qcopy.h"
-#define FIELD(type, base, offset) (*(type *)((base) + (offset)))
-/* Updates the path-following states, voice handle, motion, and draw callbacks. */
-void FUN_L08_002d2af0(char *m) {
-    char *d = FIELD(char *, m, 0x78);
-    OvlVec4 target, offset, position;
-    float angle, magnitude, f;
-    unsigned char state;
-    int color;
-    FUN_L00_00263ac8(3.6f, m, 2, d + 0x230);
-    if (FIELD(unsigned char, m, 0x31) && FUN_001f9b48(m + 0x10, D_L08_001675C0) < 28.0f) {
-        FUN_L00_0025a120(m);
-        m[0x7f] = 0x16;
+
+/* Scoutbot update: hovers at its post, flies to its target and back, calls reinforcements, shoots, dies. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D3DF8), where it is exact; names translated to the US level program. */
+
+typedef struct Moby Moby;
+
+typedef struct Data_3DF8 {
+    char pad0[0x29];
+    unsigned char b29;
+    char pad2A[0x16];
+    float v40[4];
+    char pad50[8];
+    unsigned char b58;
+    char pad59;
+    unsigned char b5A;
+    char pad5B[0x6D];
+    short hC8;
+    char padCA[6];
+    void *pD0;
+    char padD4[0x3C];
+    char f110[0x60];
+    float v170[4];
+    char pad180[0x30];
+    Moby *f1B0;
+    int f1B4;
+    char pad1B8[8];
+    float v1C0[4];
+    float v1D0[4];
+    float v1E0[4];
+    float v1F0[4];
+    float f200;
+    float f204;
+    float f208;
+    float f20C;
+    float f210;
+    short h214;
+    short h216;
+    Moby *f218;
+    int f21C;
+    char f220[0x10];
+    char f230[0x10];
+} Data_3DF8;
+
+extern char D_L08_0016D2E8[];
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float FUN_001f9b80(void *, void *);
+extern float FUN_001f9e90(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern int FUN_001fa6e0();
+extern int FUN_L00_0024f7c8();
+extern int FUN_L00_002dc9f0();
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern short D_L08_00161888 __attribute__((sda));
+extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
+float absolute_float(float input) __asm__("func_001F99C0");
+int FUN_L00_0028d8c0(int a, int i);
+s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
+void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
+void FUN_L00_0025a120(char *o);
+void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate);
+void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
+void FUN_L08_002d36e0_c(char *m) __asm__("FUN_L08_002d36e0");
+void FUN_L08_002d3878(char *m);
+void FUN_L08_002d3d78_c(char *m) __asm__("FUN_L08_002d3d78");
+void FUN_L08_002d4108_c(char *arg) __asm__("FUN_L08_002d4108");
+extern void sound_3DF8(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
+extern float distance_3DF8(void *, void *) __asm__("FUN_001f9b48");
+extern void wake_3DF8(void *) __asm__("FUN_L00_0025a120");
+extern float randangle_3DF8(void) __asm__("FUN_00213308");
+extern void zero_3DF8(void *) __asm__("FUN_001f99f8");
+extern int randomf_3DF8(float) __asm__("FUN_001fa6d0");
+extern void animate_3DF8(void *, int, int, int) __asm__("FUN_00212f90");
+extern float ground_3DF8(void *, int, float) __asm__("FUN_00213508");
+extern float rangef_3DF8(float, float) __asm__("FUN_002132a8");
+extern float sine_3DF8(float) __asm__("FUN_001f9dc8");
+extern float cosine_3DF8(float) __asm__("FUN_001f9de0");
+extern void vadd_3DF8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float angle_3DF8(float, float) __asm__("FUN_001f9e90");
+extern void turn_3DF8(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
+extern float anglediff_3DF8(float, float) __asm__("FUN_001fa688");
+extern float fast_distance_3DF8(void *, void *) __asm__("FUN_001f9b80");
+extern float fabs_3DF8(float) __asm__("FUN_001f99c0");
+extern int sound_id_3DF8(int, int, void *) __asm__("FUN_0022da68");
+extern float animframe_3DF8(void *) __asm__("FUN_0020c9e0");
+extern void draw_3DF8(void *, void *) __asm__("FUN_001f4600");
+extern int animdone_3DF8(void *, float) __asm__("FUN_00214cc8");
+extern void shoot_3DF8(void *, void *, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
+extern int sound_busy_3DF8(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int hitreact_3DF8(void *, void *) __asm__("FUN_L00_002dc9f0");
+extern void explode_3DF8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void delete_3DF8(void *) __asm__("FUN_0020c828");
+extern int colorlerp_3DF8(int, int, float) __asm__("FUN_001fa6e0");
+extern void joint_3DF8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void glow_3DF8() __asm__("FUN_L08_002d3878");
+extern void body_3DF8() __asm__("FUN_L08_002d4108");
+extern char hero_pos_3DF8[] __asm__("D_L08_001675C0");
+extern float frame_3DF8 __asm__("D_0015ED6C");
+extern float dt_3DF8 __asm__("D_0015ED70");
+
+void FUN_L08_002d2af0(Moby *moby) {
+    Data_3DF8 *d = (struct Data_3DF8 *)moby->pvars;
+    float tgt[4];
+    float v30[4];
+    float v40[4];
+
+    sound_3DF8(3.6f, moby, 2, d->f230);
+    if (moby->unk31 != 0 && distance_3DF8(&moby->pos, hero_pos_3DF8) < 28.0f) {
+        wake_3DF8(moby);
+        moby->unk7F = 0x16;
     }
-    FUN_L08_002d36e0(m);
-    FIELD(char *, d, 0x218) = FIELD(char *, d, 0x1b0);
-    qcopy(&target, d + 0x170);
-    state = FIELD(unsigned char, m, 0x20);
-    switch (state) {
+    FUN_L08_002d36e0_c((char *)moby);
+    d->f218 = d->f1B0;
+    qcopy(tgt, d->v170);
+    switch (moby->state) {
     case 0:
-        if (FIELD(int, d, 0x21c) == -1) goto remove;
-        FIELD(unsigned short, m, 0x34) |= 0x1000;
-        FIELD(float, m, 0x48) = random_angle_radians();
-        FIELD(float, d, 0x200) = 4.0f;
-        angle = random_angle_radians();
-        FIELD(float, d, 0x208) = 0.5f;
-        FIELD(float, d, 0x204) = angle;
-        clear_vector_xyz(d + 0x40);
-        FIELD(float, d, 0x20c) = frame_time * 2.0943952f;
-        d[0x58] = truncate_float_to_s32(15.0f);
-        d[0x5a] = truncate_float_to_s32(9.6f);
-        FIELD(char *, d, 0xd0) = &D_L08_00161888;
-        if (FIELD(unsigned char, m, 0x53) != 0) blend_moby_animation((MobyAnim *)m, 0, 0, 0);
-        m[0x20] = 1;
-        qcopy(d + 0x1c0, m + 0x10);
-        f = floor_height(m + 0x10, 0, 0.5f);
-        if (FIELD(float, m, 0x18) - 10.0f < f) {
-            FIELD(float, d, 0x1c8) = floor_height(m + 0x10, 0, 0.5f);
-            FIELD(short, d, 0x216) = 1;
+        if (d->f21C == -1) {
+            delete_3DF8(moby);
+            return;
+        }
+        moby->flags |= 0x1000;
+        moby->rot.z = randangle_3DF8();
+        d->f200 = 4.0f;
+        d->f204 = randangle_3DF8();
+        d->f208 = 0.5f;
+        zero_3DF8(d->v40);
+        d->f20C = frame_3DF8 * 2.0943952f;
+        d->b58 = randomf_3DF8(15.0f);
+        d->b5A = randomf_3DF8(9.6f);
+        d->pD0 = &D_L08_00161888;
+        if (moby->prev_seq != 0) {
+            animate_3DF8(moby, 0, 0, 0);
+        }
+        moby->state = 1;
+        qcopy(d->v1C0, &moby->pos);
+        if (ground_3DF8(&moby->pos, 0, 0.5f) > moby->pos.z - 10.0f) {
+            d->v1C0[2] = ground_3DF8(&moby->pos, 0, 0.5f);
+            d->h216 = 1;
         } else {
-            FIELD(float, d, 0x1c8) = FIELD(float, m, 0x18);
-            FIELD(short, d, 0x216) = 0;
+            d->v1C0[2] = moby->pos.z;
+            d->h216 = 0;
         }
-        qcopy(d + 0x1f0, d + 0x1c0);
-        d[0x29] = 0;
+        qcopy(d->v1F0, d->v1C0);
+        d->b29 = 0;
         break;
-    case 1: {
-        float angle, magnitude;
-        if (FIELD(int, d, 0x1b4) != 2) {
-            FIELD(float, d, 0x200) = 0.0f;
-            FIELD(float, d, 0x208) = 0.1f;
-            if (FIELD(unsigned char, m, 0x53) != 2) blend_moby_animation((MobyAnim *)m, 2, 0, 6);
-            m[0x20] = 2;
-        } else if (FIELD(unsigned char, m, 0x70) & 2) {
-            angle = random_angle_radians();
-            magnitude = random_float_between(0.0f, 3.0f);
-            offset.f[0] = fast_cos(angle) * magnitude;
-            offset.f[1] = fast_sin(angle) * magnitude;
-            offset.f[2] = 0.0f;
-            add_vector_xyz(d + 0x1f0, d + 0x1c0, &offset);
-            if (FIELD(unsigned char, m, 0x53) != 2) blend_moby_animation((MobyAnim *)m, 2, 0, 6);
-            m[0x20] = 7;
+    case 1:
+        if (d->f1B4 != 2) {
+            d->f200 = 0.0f;
+            d->f208 = 0.1f;
+            if (moby->prev_seq != 2) {
+                animate_3DF8(moby, 2, 0, 6);
+            }
+            moby->state = 2;
+        } else if (moby->unk70 & 2) {
+            float a = randangle_3DF8();
+            float r = rangef_3DF8(0.0f, 3.0f);
+
+            v30[0] = sine_3DF8(a) * r;
+            v30[1] = cosine_3DF8(a) * r;
+            v30[2] = 0.0f;
+            vadd_3DF8(d->v1F0, d->v1C0, v30);
+            if (moby->prev_seq != 2) {
+                animate_3DF8(moby, 2, 0, 6);
+            }
+            moby->state = 7;
         }
         break;
-    }
     case 7: {
-        float angle;
-        angle = angle_atan2(FIELD(float, d, 0x1f0) - FIELD(float, m, 0x10), FIELD(float, d, 0x1f4) - FIELD(float, m, 0x14));
-        FUN_L00_00258278(m, angle, 0.01f, 0.3f, 0.05f, d + 0x210);
-        if (fast_difference_between_rotations(FIELD(float, m, 0x48), angle) < 0.7853982f) {
-            FIELD(float, d, 0x40) += fast_cos(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
-            FIELD(float, d, 0x44) += fast_sin(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
+        float a = angle_3DF8(d->v1F0[0] - moby->pos.x, d->v1F0[1] - moby->pos.y);
+
+        turn_3DF8(moby, a, &d->f210, 0.01f, 0.3f, 0.05f);
+        if (anglediff_3DF8(moby->rot.z, a) < 0.7853982f) {
+            d->v40[0] += sine_3DF8(moby->rot.z) * (dt_3DF8 * 12.0f);
+            d->v40[1] += cosine_3DF8(moby->rot.z) * (dt_3DF8 * 12.0f);
         }
-        if (FUN_001f9b80(m + 0x10, d + 0x1f0) < 0.5f) {
-            if (FIELD(unsigned char, m, 0x53) != 0) blend_moby_animation((MobyAnim *)m, 0, 0, 3);
-            m[0x20] = 1;
+        if (fast_distance_3DF8(&moby->pos, d->v1F0) < 0.5f) {
+            if (moby->prev_seq != 0) {
+                animate_3DF8(moby, 0, 0, 3);
+            }
+            moby->state = 1;
         }
         break;
     }
     case 2: {
-        float angle;
-        angle = angle_atan2(target.f[0] - FIELD(float, m, 0x10), target.f[1] - FIELD(float, m, 0x14));
-        FUN_L00_00258278(m, angle, 0.01f, 0.3f, 0.05f, d + 0x210);
-        if (fast_difference_between_rotations(FIELD(float, m, 0x48), angle) < 0.7853982f) {
-            FIELD(float, d, 0x40) += fast_cos(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
-            FIELD(float, d, 0x44) += fast_sin(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
+        float a = angle_3DF8(tgt[0] - moby->pos.x, tgt[1] - moby->pos.y);
+
+        turn_3DF8(moby, a, &d->f210, 0.01f, 0.3f, 0.05f);
+        if (anglediff_3DF8(moby->rot.z, a) < 0.7853982f) {
+            d->v40[0] += sine_3DF8(moby->rot.z) * (dt_3DF8 * 12.0f);
+            d->v40[1] += cosine_3DF8(moby->rot.z) * (dt_3DF8 * 12.0f);
         }
-        if (FUN_001f9b80(m + 0x10, FIELD(char *, d, 0x218) + 0x10) < 3.0f &&
-            absolute_float(FIELD(float, FIELD(char *, d, 0x218), 0x18) - FIELD(float, m, 0x18)) < 2.0f) {
-            FIELD(short, d, 0x214) = allocate_voice_for_target_entry(0, 0, m);
-            m[0x20] = 6;
-            break;
-        }
-        if (15.0f < FUN_001f9b80(&target, d + 0x1c0) ||
-            4.0f < absolute_float(FIELD(float, d, 0x1c8) - target.f[2])) {
-            FIELD(float, d, 0x200) = 4.0f;
-            FIELD(float, d, 0x208) = 0.5f;
-            if (FIELD(unsigned char, m, 0x53) != 2) blend_moby_animation((MobyAnim *)m, 2, 0, 6);
-            m[0x20] = 3;
+        if (fast_distance_3DF8(&moby->pos, &d->f218->pos) < 3.0f && fabs_3DF8(d->f218->pos.z - moby->pos.z) < 2.0f) {
+            d->h214 = sound_id_3DF8(0, 0, moby);
+            moby->state = 6;
+        } else if (fast_distance_3DF8(tgt, d->v1C0) > 15.0f || fabs_3DF8(d->v1C0[2] - tgt[2]) > 4.0f) {
+            d->f200 = 4.0f;
+            d->f208 = 0.5f;
+            if (moby->prev_seq != 2) {
+                animate_3DF8(moby, 2, 0, 6);
+            }
+            moby->state = 3;
         }
         break;
     }
     case 3: {
-        float angle;
-        angle = angle_atan2(FIELD(float, d, 0x1c0) - FIELD(float, m, 0x10), FIELD(float, d, 0x1c4) - FIELD(float, m, 0x14));
-        FIELD(float, d, 0x200) = 4.0f;
-        FIELD(float, d, 0x208) = 0.5f;
-        FUN_L00_00258278(m, angle, 0.01f, 0.3f, 0.05f, d + 0x210);
-        if (fast_difference_between_rotations(FIELD(float, m, 0x48), angle) < 0.7853982f) {
-            FIELD(float, d, 0x40) += fast_cos(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
-            FIELD(float, d, 0x44) += fast_sin(FIELD(float, m, 0x48)) * (frame_time_sq * 12.0f);
+        float a = angle_3DF8(d->v1C0[0] - moby->pos.x, d->v1C0[1] - moby->pos.y);
+
+        d->f200 = 4.0f;
+        d->f208 = 0.5f;
+        turn_3DF8(moby, a, &d->f210, 0.01f, 0.3f, 0.05f);
+        if (anglediff_3DF8(moby->rot.z, a) < 0.7853982f) {
+            d->v40[0] += sine_3DF8(moby->rot.z) * (dt_3DF8 * 12.0f);
+            d->v40[1] += cosine_3DF8(moby->rot.z) * (dt_3DF8 * 12.0f);
         }
-        if (FUN_001f9b80(m + 0x10, d + 0x1c0) < 1.0f &&
-            3.9f <= absolute_float(FIELD(float, d, 0x1c8) - FIELD(float, m, 0x18))) {
-            if (FIELD(unsigned char, m, 0x53) != 0) blend_moby_animation((MobyAnim *)m, 0, 0, 3);
-            m[0x20] = 1;
+        if (fast_distance_3DF8(&moby->pos, d->v1C0) < 1.0f && fabs_3DF8(d->v1C0[2] - moby->pos.z) >= 3.9f) {
+            if (moby->prev_seq != 0) {
+                animate_3DF8(moby, 0, 0, 3);
+            }
+            moby->state = 1;
         }
         break;
     }
     case 4: {
-        float angle, f, t;
-        angle = angle_atan2(target.f[0] - FIELD(float, m, 0x10), target.f[1] - FIELD(float, m, 0x14));
-        FUN_L00_00258278(m, angle, 0.01f, 0.3f, 0.05f, d + 0x210);
-        f = compute_interpolated_record_value(m);
-        if (FIELD(unsigned char, m, 0x52) == FIELD(unsigned char, m, 0x53) && 9.0f <= f && f <= 14.0f) {
-            t = (f - 9.0f) / 5.0f;
-            FIELD(float, d, 0x1dc) = t / 3.0f;
-            FIELD(float, d, 0x1ec) = (t + t) / 3.0f;
-            angle = random_angle_radians();
-            FIELD(float, d, 0x1d4) = fast_sin(angle) * 0.25f * t;
-            FIELD(float, d, 0x1d8) = fast_cos(angle) * 0.25f * t;
-            FIELD(float, d, 0x1e4) = fast_sin(angle) * 0.25f * t;
-            FIELD(float, d, 0x1e8) = fast_cos(angle) * 0.25f * t;
-            enqueue_callback_list_1(FUN_L08_002d3878, m);
+        float a = angle_3DF8(tgt[0] - moby->pos.x, tgt[1] - moby->pos.y);
+        float t;
+
+        turn_3DF8(moby, a, &d->f210, 0.01f, 0.3f, 0.05f);
+        t = animframe_3DF8(moby);
+        if (moby->seq == moby->prev_seq && t >= 9.0f && t <= 14.0f) {
+            float u = (t - 9.0f) / 5.0f;
+            float r;
+
+            d->v1D0[3] = u / 3.0f;
+            d->v1E0[3] = (u * 2.0f) / 3.0f;
+            r = randangle_3DF8();
+            d->v1D0[1] = cosine_3DF8(r) * 0.25f * u;
+            d->v1D0[2] = sine_3DF8(r) * 0.25f * u;
+            d->v1E0[1] = cosine_3DF8(r) * 0.25f * u;
+            d->v1E0[2] = sine_3DF8(r) * 0.25f * u;
+            draw_3DF8(glow_3DF8, moby);
         }
-        if (!is_value_within_interpolated_window(14.0f, m)) break;
-        if (FUN_001f9b80(FIELD(char *, d, 0x1b0) + 0x10, m + 0x10) < 3.0f) {
-            magnitude = 1.0f;
-            if (absolute_float(FIELD(float, FIELD(char *, d, 0x218), 0x18) - FIELD(float, m, 0x18)) < magnitude) {
-                offset.f[0] = fast_cos(FIELD(float, m, 0x48)) * 0.2f;
-                offset.f[1] = fast_sin(FIELD(float, m, 0x48)) * 0.2f;
-                offset.f[2] = 0.0f;
-                qcopy(&position, &target);
-                position.f[2] += 0.75f;
-                FUN_L00_00259bc8(FIELD(char *, d, 0x218), m, 1, &position, &offset, magnitude);
+        if (animdone_3DF8(moby, 14.0f)) {
+            if (fast_distance_3DF8(&d->f1B0->pos, &moby->pos) < 3.0f && fabs_3DF8(d->f218->pos.z - moby->pos.z) < 1.0f) {
+                v30[0] = sine_3DF8(moby->rot.z) * 0.2f;
+                v30[1] = cosine_3DF8(moby->rot.z) * 0.2f;
+                v30[2] = 0.0f;
+                qcopy(v40, tgt);
+                v40[2] += 0.75f;
+                shoot_3DF8(d->f218, moby, 1, v40, v30, 1.0f);
             }
+            d->f200 = 4.0f;
+            d->f208 = 0.5f;
+            if (moby->prev_seq != 2) {
+                animate_3DF8(moby, 2, 0, 3);
+            }
+            moby->state = 3;
         }
-        FIELD(float, d, 0x200) = 4.0f;
-        FIELD(float, d, 0x208) = 0.5f;
-        if (FIELD(unsigned char, m, 0x53) != 2) blend_moby_animation((MobyAnim *)m, 2, 0, 3);
-        m[0x20] = 3;
         break;
     }
     case 6: {
-        float angle;
-        angle = angle_atan2(target.f[0] - FIELD(float, m, 0x10), target.f[1] - FIELD(float, m, 0x14));
-        FUN_L00_00258278(m, angle, 0.01f, 0.3f, 0.05f, d + 0x210);
-        if (FUN_L00_0028d8c0(m, FIELD(short, d, 0x214))) break;
-        if (FIELD(unsigned char, m, 0x53) != 3) blend_moby_animation((MobyAnim *)m, 3, 0, 3);
-        m[0x20] = 4;
+        float a = angle_3DF8(tgt[0] - moby->pos.x, tgt[1] - moby->pos.y);
+
+        turn_3DF8(moby, a, &d->f210, 0.01f, 0.3f, 0.05f);
+        if (sound_busy_3DF8(moby, d->h214) == 0) {
+            if (moby->prev_seq != 3) {
+                animate_3DF8(moby, 3, 0, 3);
+            }
+            moby->state = 4;
+        }
         break;
     }
     case 5:
-        if (FUN_L00_002dc9f0(m, d + 0x110)) {
-            FIELD(float, d, 0x200) = 4.0f;
-            FIELD(float, d, 0x208) = 0.5f;
-            if (FIELD(unsigned char, m, 0x53) != 2) blend_moby_animation((MobyAnim *)m, 2, 0, 3);
-            FIELD(short, d, 0xc8) = 0;
+        if (hitreact_3DF8(moby, d->f110)) {
+            d->f200 = 4.0f;
+            d->f208 = 0.5f;
+            if (moby->prev_seq != 2) {
+                animate_3DF8(moby, 2, 0, 3);
+            }
+            d->hC8 = 0;
         }
         break;
-    case 99:
-        qcopy(&offset, m + 0x10);
-        offset.f[2] += 1.0f;
-        allocate_voice_for_target_entry(1, 0, m);
-        FUN_L00_0025e450_002e8210(m, d + 0x40, &offset, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 0.0f, 0, 1, -1, 0);
-remove:
-        mark_moby_for_removal(m);
+    case 0x63:
+        qcopy(v30, &moby->pos);
+        v30[2] += 1.0f;
+        sound_id_3DF8(1, 0, moby);
+        explode_3DF8(moby, d->v40, v30, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 0.0f, 0, 1, -1, 0);
+        delete_3DF8(moby);
         return;
     }
-    FUN_L08_002d3d78(m);
-    {
-        int state = FIELD(unsigned char, m, 0x20);
-        if ((unsigned char)state != 5 && (int)((unsigned int)state << 24) >= 0) {
-            color = 0x7f20ff20;
-            if ((unsigned char)state == 4 || (unsigned char)state == 6) color = 0x7f2828a0;
-            FIELD(int, m, 0x90) = lerp_color(FIELD(int, m, 0x90), color, 0.1f);
-            FUN_L00_0024f7c8(m, 3, d + 0x220);
-            enqueue_callback_list_1(FUN_L08_002d4108, m);
+    FUN_L08_002d3d78_c((char *)moby);
+    if (moby->state != 5 && (signed char)moby->state >= 0) {
+        int col = 0x7F20FF20;
+
+        if (moby->state == 4 || moby->state == 6) {
+            col = 0x7F2828A0;
         }
+        moby->unk90 = colorlerp_3DF8(moby->unk90, col, 0.1f);
+        joint_3DF8(moby, 3, d->f220);
+        draw_3DF8(body_3DF8, moby);
     }
 }
-#undef FIELD
-#endif
 /* Takes hits (dying at 0 health), then follows the moby's path and gives up on it when too far off. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
