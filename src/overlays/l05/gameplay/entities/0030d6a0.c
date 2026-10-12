@@ -666,7 +666,116 @@ void FUN_L05_0030f408(char *moby, float turn_scale, float speed_scale) {
                    D_L05_00161DE0 * speed_scale * 0.017453292f * frame_time_sq,
                    D_L05_00161DE4 * 0.017453292f * frame_time);
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030f5c8.s", FUN_L05_0030f5c8);
+extern void *hit_by_f5c8(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
+extern struct Moby *spawn_moby_f5c8(int) __asm__("FUN_0020c4f8");
+extern void mark_moby_for_removal_f5c8(struct Moby *) __asm__("FUN_0020c828");
+extern float random_float_between_f5c8(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below_f5c8(int) __asm__("FUN_00213260");
+extern void scale_vector_f5c8(void *, void *, float) __asm__("FUN_001f9a68");
+extern void add_vector_f5c8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_vector_f5c8(void *) __asm__("FUN_001f99f8");
+extern void random_vector_f5c8(void *, float, float) __asm__("FUN_L00_00257d78");
+extern void transform_vector_f5c8(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern int scale_game_frames_f5c8(int) __asm__("FUN_001f96f8");
+extern float scale_time_f5c8(float) __asm__("FUN_001f96b0");
+extern int float_to_int_f5c8(float) __asm__("FUN_001fa6d0");
+extern float fast_add_rotations_f5c8(float, float) __asm__("FUN_001fa580");
+extern float fast_cos_f5c8(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_f5c8(float) __asm__("FUN_001f9de0");
+extern int allocate_target_entry_f5c8(int, int, void *) __asm__("FUN_0022da68");
+extern void FUN_L05_00318648(struct Moby *, struct Moby *, void *, void *, int);
+extern void FUN_L01_0029b0a0(void *, int, void *, int, void *);
+extern void update_entity_f5c8(struct Moby *) __asm__("FUN_L00_00250df8");
+extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
+                            void *vel, f32 f2);
+extern float frame_time_f5c8 __asm__("D_0015ED6C");
+extern char D_L05_001BAAA0[];
+
+void FUN_L05_0030f5c8(struct Moby *moby) {
+    float vel[4];
+    float spin_vel[4];
+    float dir[4];
+    float drift[4];
+    float pos[4];
+    struct Moby *piece;
+    float angle;
+    float life;
+    float speed;
+    int j, spin;
+    if (hit_by_f5c8(moby, 0xB30000, 0) != 0) {
+        piece = spawn_moby_f5c8(0x3D4);
+        if (piece != 0) {
+            char *vars;
+            piece->spawn_frame = moby->spawn_frame;
+            piece->visible = 1;
+            vars = (char *)piece->pvars;
+            piece->draw_dist = 0x40;
+            piece->update_dist = 0x40;
+            qcopy(&piece->pos, &moby->pos);
+            qcopy(&piece->rot, &moby->rot);
+            speed = random_float_between_f5c8(5.0f, 12.0f);
+            scale_vector_f5c8(vel, &moby->rot_row0, -(speed * frame_time_f5c8));
+            clear_vector_f5c8(spin_vel);
+            FUN_L05_00318648(piece, moby, vel, spin_vel, scale_game_frames_f5c8(60));
+            *(int *)(vars + 0xC) = 0x200;
+        }
+        allocate_target_entry_f5c8(0, 0, piece);
+        angle = 0.0f;
+        {
+            int i;
+            for (i = 0; i < 6; i++) {
+                angle = fast_add_rotations_f5c8(angle, 1.0471976f);
+                piece = spawn_moby_f5c8(0x3D5);
+                if (piece != 0) {
+                    char *vars = (char *)piece->pvars;
+                    *(u128 *)spin_vel = 0;
+                    *(u128 *)drift = 0;
+                    spin_vel[2] = 0.75f;
+                    drift[1] = fast_sin_f5c8(angle) * 1.4f;
+                    drift[2] = fast_cos_f5c8(angle) * 1.4f;
+                    *(u128 *)dir = *(u128 *)drift;
+                    transform_vector_f5c8(dir, dir, &moby->rot_row0);
+                    for (j = 0; j < 10; j++) {
+                        float size;
+                        random_vector_f5c8(drift, frame_time_f5c8 * 1.5f, frame_time_f5c8 * 2.0f);
+                        scale_vector_f5c8(pos, drift, 5.0f);
+                        add_vector_f5c8(pos, pos, dir);
+                        add_vector_f5c8(pos, pos, &moby->pos);
+                        spin = random_integer_below_f5c8(2);
+                        if (spin == 0) {
+                            spin--;
+                        }
+                        size = random_float_between_f5c8(0.4f, 0.5f);
+                        FUN_L00_00272060(pos, scale_game_frames_f5c8(25), size * 0.2f, size, 0x7F207F7F, 0, spin, drift,
+                                         0.0f);
+                        spin = -spin;
+                        FUN_L00_00272060(pos, scale_game_frames_f5c8(25), size * 0.14f, size * 0.7f, 0x7F7F7F7F, 1, spin, drift,
+                                         0.0f);
+                    }
+                        piece->spawn_frame = moby->spawn_frame;
+                    piece->draw_dist = 0x40;
+                    piece->visible = 1;
+                    piece->update_dist = 0x40;
+                        qcopy(&piece->pos, &moby->pos);
+                    qcopy(&piece->rot, &moby->rot);
+                    speed = random_float_between_f5c8(0.0f, 24.0f);
+                    life = random_float_between_f5c8(60.0f, 120.0f);
+                    scale_vector_f5c8(vel, &moby->rot_row0, -(speed * frame_time_f5c8));
+                    clear_vector_f5c8(spin_vel);
+                    FUN_L05_00318648(piece, moby, vel, spin_vel, float_to_int_f5c8(scale_time_f5c8(life)));
+                    *(int *)(vars + 0xC) = 0x200;
+                    piece->rot.x = angle;
+                    update_entity_f5c8(piece);
+                }
+            }
+        }
+        moby->command = 1;
+        FUN_L01_0029b0a0(&moby->command, 1, moby, 1, D_L05_001BAAA0);
+        mark_moby_for_removal_f5c8(moby);
+    } else if (moby->command) {
+        mark_moby_for_removal_f5c8(moby);
+    }
+}
 
 struct GateVars {
     s32 trigger;   /* D_L05_0015FFD8 index of the moby whose byte 0xBC opens it */
