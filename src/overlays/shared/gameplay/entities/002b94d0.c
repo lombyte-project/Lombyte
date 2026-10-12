@@ -1888,22 +1888,19 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002be650.s", FUN_L00_002be650);
 #else
 typedef struct {
     OvlQuad corner[4];
-    int color[4];
-    int unk50, unk54, unk58;
-    float unk5C, unk60;
-    int unk64;
-    float unk68, unk6C;
-    long unk70, tex, unk80, unk88;
+    volatile int color[4];
+    volatile int unk50, unk54, unk58;
+    volatile float unk5C, unk60;
+    volatile int unk64;
+    volatile float unk68;
+    volatile float unk6C;
+    volatile long unk70;
+    long tex, unk80, unk88;
 } Q_2be650;
-extern float D_L00_001617E8[] __attribute__((section(".data")));
-extern float D_L00_00161808[] __attribute__((section(".data")));
-extern int D_L00_00161818[] __attribute__((section(".data")));
-extern u128 D_L00_001DD0A0[] __attribute__((section(".data")));
-extern u128 D_L00_001DD0D0[] __attribute__((section(".data")));
 extern OvlVec4 D_L00_001DBF20_2be650[] __asm__("D_L00_001DBF20") __attribute__((section(".data")));
 extern OvlVec4 D_0013F5E0_2be650 __asm__("D_0013F5E0");
-extern int D_L00_00161760 __attribute__((sda));
-extern int D_L00_00161764 __attribute__((sda));
+extern int D_L00_00161760 __attribute__((section(".sdata")));
+extern int D_L00_00161764 __attribute__((section(".sdata")));
 extern long tex_2be650(int) __asm__("FUN_001f44b8");
 extern int color_alpha_2be650(float) __asm__("FUN_001fa6d0");
 extern void vmul_2be650(float, void *, void *) __asm__("FUN_001f9a68");
@@ -1927,6 +1924,7 @@ void FUN_L00_002be650(void *o) {
     quad.tex = tex_2be650(8);
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
+    quad.unk6C = 1.0f;
     quad.unk70 = 0;
     quad.unk50 = 0;
     quad.unk54 = 0;
@@ -1935,27 +1933,29 @@ void FUN_L00_002be650(void *o) {
     quad.unk60 = 1.0f;
     quad.unk64 = 0;
     quad.unk68 = 1.0f;
-    quad.unk6C = 1.0f;
-    color = D_0013E535 ? D_L00_00161764 : D_L00_00161760;
-    color &= 0xFFFFFF;
+    if (D_0013E535)
+        color = D_L00_00161764 & 0xFFFFFF;
+    else
+        color = D_L00_00161760 & 0xFFFFFF;
     vertexTarget = &vertex[0];
     i = 0;
     do {
         nextIndex = i + 1;
-        if (D_L00_00161818[i] != 0) {
-            int c = color | (color_alpha_2be650(D_L00_001617E8[i]) << 24);
+        if (((int *)&D_L00_00161818)[i] != 0) {
+            unsigned int c = color_alpha_2be650(((float *)&D_L00_001617E8)[i]);
+            c = (c << 24) | color;
             quad.color[0] = c;
-            quad.color[1] = c;
-            quad.color[2] = c;
             quad.color[3] = c;
-            qcopy(&scaled, &D_L00_001DD0D0[i]);
-            qcopy(vertexTarget, &D_L00_001DD0A0[i]);
+            quad.color[2] = c;
+            quad.color[1] = c;
+            qcopy(vertexTarget, &((u128 *)&D_L00_001DD0A0)[i]);
+            qcopy(&scaled, &((u128 *)&D_L00_001DD0D0)[i]);
             vmul_2be650(-1.0f, &negativeUp, &D_0013F5E0_2be650);
             cross_2be650(&axis, &scaled, &negativeUp);
             normalize_2be650(&axis, &axis, 1.0f);
             cross_2be650(&negativeUp, &axis, &scaled);
             for (j = 0; j < 4; j++) {
-                vmul_2be650(D_L00_00161808[i], &vertex[1], &D_L00_001DBF20_2be650[j]);
+                vmul_2be650(((float *)&D_L00_00161808)[i], &vertex[1], &D_L00_001DBF20_2be650[j]);
                 xform_2be650(&quad.corner[j], &vertex[1], &scaled);
             }
             draw_2be650(&quad, 0, 0);
