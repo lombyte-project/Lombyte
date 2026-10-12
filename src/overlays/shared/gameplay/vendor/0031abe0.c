@@ -44,7 +44,183 @@ void FUN_L05_0031abe0(char *moby) {
     }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031c8e0.s", FUN_L05_0031c8e0);
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/vector.h"
+
+/* Vars of the level 5 mine FUN_L05_0031c8e0 drives. */
+struct MineVars_c8e0 {
+    u8 pad0[0x60];
+    s32 alpha;                     /* 0x60: glow alpha, faded out with camera distance */
+    u8 glow_r, glow_g, glow_b;     /* 0x64: moby glow colour */
+    u8 pad67;
+    s32 color;                     /* 0x68: spark colour */
+    u8 spark_r, spark_g, spark_b;  /* 0x6C */
+    u8 max_alpha;                  /* 0x6F */
+};
+
+/* A spark effect FUN_L00_0026d000 returns. */
+struct Spark_c8e0 {
+    u8 pad0[3];
+    u8 flags;                      /* 0x03 */
+    u8 pad4[6];
+    s16 life;                      /* 0x0A */
+    u8 padC[0x14];
+    struct SparkDraw_c8e0 {
+        u8 pad0[4];
+        s32 mode;                  /* 0x24 */
+        u8 pad8[2];
+        u8 fade;                   /* 0x2A */
+        u8 life;                   /* 0x2B */
+    } draw;
+};
+
+extern char D_L05_001671C0_c8e0[] __asm__("D_L05_001671C0");
+extern f32 D_L05_00161FC8_c8e0 __asm__("D_L05_00161FC8") __attribute__((sda));
+extern f32 D_L05_00161FD0 __attribute__((sda));
+extern f32 D_L05_00161FD4 __attribute__((sda));
+extern f32 D_0015ED60;
+extern f32 vector_distance_c8e0(void *, void *) __asm__("FUN_001f9b80");
+extern f32 distance_xyz_c8e0(void *, void *) __asm__("FUN_001f9b48");
+extern f32 int_to_float_c8e0(s32) __asm__("FUN_001fa6c0");
+extern s32 float_to_int_c8e0(f32) __asm__("FUN_001fa6d0");
+extern void enqueue_callback_c8e0(void (*)(char *), struct Moby *) __asm__("FUN_001f4600");
+extern char *find_moby_hit_c8e0(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void scale_vector_xyz_c8e0(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void add_vector_xyz_c8e0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void play_sound_c8e0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern s32 scale_game_frames_c8e0(s32) __asm__("FUN_001f96f8");
+extern struct Moby *spawn_debris_c8e0(f32, struct Moby *, s32, void *, void *, s32, s32, void *, void *, void *) __asm__("FUN_L00_00263fd8");
+extern void FUN_L01_002787a0_c8e0(struct Moby *) __asm__("FUN_L01_002787a0");
+extern f32 fast_add_rotations_c8e0(f32, f32) __asm__("FUN_001fa580");
+extern f32 random_float_between_c8e0(f32, f32) __asm__("FUN_002132a8");
+extern s32 random_integer_below_c8e0(s32) __asm__("FUN_00213260");
+extern f32 random_angle_c8e0(void) __asm__("FUN_00213308");
+extern void build_spherical_offset_c8e0(void *, f32, f32, f32) __asm__("FUN_00214db0");
+extern f32 random_float_c8e0(f32, f32) __asm__("FUN_L00_00257c48");
+extern void spawn_trail_c8e0(void *, s32, f32, f32, s32, s32, s32, void *, f32) __asm__("FUN_L00_00272060");
+extern struct Spark_c8e0 *spawn_spark_c8e0(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
+extern s32 random_int_between_c8e0(s32, s32) __asm__("FUN_L00_00257b90");
+extern void mark_moby_for_removal_c8e0(struct Moby *) __asm__("FUN_0020c828");
+extern char *FUN_L05_0031d160(unsigned char *);
+void FUN_L05_0031cf58(char *m);
+
+/* Mine update: sets its glow, fades it out with camera distance and blows up into debris, smoke and sparks when something touches it. */
+void FUN_L05_0031c8e0(struct Moby *moby) {
+    struct MineVars_c8e0 *vars = (struct MineVars_c8e0 *)moby->pvars;
+    Vec4 tip;
+    Vec4 vel;
+    Vec4 dir;
+    Vec4 start;
+    f32 distance;
+    f32 camera_distance;
+    f32 size;
+    f32 speed;
+    f32 yaw;
+    f32 pitch;
+    char *hit;
+    struct Moby *debris;
+    struct Spark_c8e0 *spark;
+    struct SparkDraw_c8e0 *draw;
+    s32 sign;
+    s32 turn;
+    s32 i;
+    s32 frames;
+
+    if (moby->state == 0) {
+        moby->state = 1;
+        moby->glow_color = (0x7F000000 | vars->glow_b << 16 | vars->glow_g << 8) | vars->glow_r;
+        vars->color = vars->spark_b << 16 | vars->spark_g << 8 | vars->spark_r;
+    }
+    /* Fakematch: the distance passes through a second variable; assigned directly,
+       the compiler keeps it in $f0 and picks other registers for the fade below. */
+    camera_distance = vector_distance_c8e0(D_L05_001671C0_c8e0, &moby->pos);
+    distance = camera_distance;
+    if (48.0f <= distance) {
+        return;
+    }
+    if (32.0f <= distance) {
+        distance -= 32.0f;
+        distance *= 0.0625f;
+        vars->alpha = float_to_int_c8e0(int_to_float_c8e0(vars->max_alpha) * (1.0f - distance));
+    } else {
+        vars->alpha = vars->max_alpha;
+    }
+    enqueue_callback_c8e0(FUN_L05_0031cf58, moby);
+    hit = find_moby_hit_c8e0(moby, 0x810000, 0);
+    moby->hit_slot = 0xFF;
+    if (hit == 0) {
+        return;
+    }
+    scale_vector_xyz_c8e0(&tip, &moby->rot_row2, D_L05_00161FC8_c8e0);
+    add_vector_xyz_c8e0(&tip, &moby->pos, &tip);
+    if (!(*(s32 *)(hit + 0x24) & 0x800000) && !(distance_xyz_c8e0(&tip, hit) <= 0.8f)) {
+        if ((*(struct Moby **)(hit + 0x20))->oclass != 0x47) {
+            return;
+        }
+        if (!(distance_xyz_c8e0(&tip, &(*(struct Moby **)(hit + 0x20))->pos) <= 0.8f)) {
+            return;
+        }
+    }
+    play_sound_c8e0(0, 0, moby);
+    FUN_L05_0031d160((unsigned char *)moby);
+    debris = spawn_debris_c8e0(frame_time_sq * 12.0f, moby, 0x5ED, &moby->pos, &moby->rot, scale_game_frames_c8e0(0x5A), 0,
+                               D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
+    if (debris != 0) {
+        debris->spawn_frame = moby->spawn_frame;
+    }
+    FUN_L01_002787a0_c8e0(moby);
+    scale_vector_xyz_c8e0(&vel, &moby->rot_row0, D_L05_00161FD0 * D_0015ED60);
+    vel.f[2] += D_L05_00161FD4 * D_0015ED60;
+    debris = spawn_debris_c8e0(frame_time_sq * 12.0f, moby, 0x5EE, &moby->pos, &moby->rot, scale_game_frames_c8e0(0x5A), 0,
+                               &vel, D_L05_0015F580, D_L05_0015F580);
+    if (debris != 0) {
+        debris->spawn_frame = moby->spawn_frame;
+    }
+    vel.f[0] = -vel.f[0];
+    vel.f[1] = -vel.f[1];
+    moby->rot.z = fast_add_rotations_c8e0(moby->rot.z, 3.1415927f);
+    debris = spawn_debris_c8e0(frame_time_sq * 12.0f, moby, 0x5EE, &moby->pos, &moby->rot, scale_game_frames_c8e0(0x5A), 0,
+                               &vel, D_L05_0015F580, D_L05_0015F580);
+    if (debris != 0) {
+        debris->spawn_frame = moby->spawn_frame;
+    }
+    for (i = 0; i < 24; i++) {
+        size = random_float_between_c8e0(0.3f, 4.0f);
+        sign = random_integer_below_c8e0(2);
+        if (sign == 0) {
+            sign--;
+        }
+        yaw = random_angle_c8e0();
+        pitch = random_float_between_c8e0(0.34906584f, 1.5358897f);
+        build_spherical_offset_c8e0(&dir, random_float_between_c8e0(0.05f, 0.1f) * D_0015ED60, yaw, pitch);
+        qcopy(&start, &tip);
+        start.f[0] += random_float_c8e0(0.0f, 0.15f);
+        start.f[1] += random_float_c8e0(0.0f, 0.15f);
+        start.f[2] += random_float_c8e0(0.0f, 0.15f);
+        frames = scale_game_frames_c8e0(0x3C);
+        spawn_trail_c8e0(&start, frames, size * 0.1f, size, vars->color | 0x7F000000, 0, sign, &dir, 0.003f);
+        sign = -sign;
+        frames = scale_game_frames_c8e0(0x3C);
+        spawn_trail_c8e0(&start, frames, size * 0.07f, size * 0.7f, 0x7F7F7F7F, 1, sign, &dir, 0.003f);
+        dir.f[1] = 0.0f;
+        dir.f[0] = 0.0f;
+        dir.f[2] = random_float_between_c8e0(0.01f, 0.05f) * D_0015ED60;
+        speed = random_float_between_c8e0(60000.0f, 200000.0f);
+        turn = random_integer_below_c8e0(2);
+        spark = spawn_spark_c8e0(&tip, 0.3f, 1.0f, 1.02f, random_integer_below_c8e0(2) ? -turn : turn, &dir, speed, 0x407F7F7F);
+        if (spark != 0) {
+            spark->life = scale_game_frames_c8e0(random_int_between_c8e0(0x5A, 0x78));
+            draw = &spark->draw;
+            draw->mode = 2;
+            draw->fade = random_int_between_c8e0(0x40, 0x60);
+            draw->life = spark->life;
+            if (random_integer_below_c8e0(2) != 0) {
+                spark->flags = 0x44;
+            }
+        }
+    }
+    mark_moby_for_removal_c8e0(moby);
+}
 /* Draws the moby's camera-facing glow sprite, flickering its alpha at random. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031E468), where it is exact; names translated to the US level program. */
 
