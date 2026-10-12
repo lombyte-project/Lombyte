@@ -420,7 +420,7 @@ void FUN_L08_002d3878(char *m) {
     fast_vec_sub(&delta, *(char **)(data + 0x218) + 0x10, &pos);
     scale_vector_002d3878(3.0f, &delta);
     delta.v[3] = 1.0f;
-    delta.v[2] = (*(float *)(*(char **)(data + 0x218) + 0x18) + 0.25f) - delta.v[2];
+    delta.v[2] = (*(float *)(*(char **)(data + 0x218) + 0x18) + 0.25f) - pos.v[2];
     length = fast_vec_length(&delta);
     clear_vector_002d3878(&angles);
     angles.v[1] = -angle_atan2_002d3878(vector_length_xy_002d3878(&delta), delta.v[2]);
