@@ -58,10 +58,10 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             scale = width + 0x9ff;
             scale /= width;
             scaled_horizontal = horizontal_offset * scale;
-            value = ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x27c)) & 0xfff)) |
-                    ((u64)(s64)(scale - 1) << 23) |
+            value = ((u64)(s64)(scale - 1) << 23) |
+                    ((u64)((vertical_offset + kernel_vertical + 0x32) & 0xfff) << 12) |
                     ((u64)((s64)(width * scale) - 1) << 32) |
-                    ((u64)((vertical_offset + kernel_vertical + 0x32) & 0xfff) << 12);
+                    ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x27c)) & 0xfff));
             if (state->nSFrame_mode == 0) {
                 scale = height - 1;
             } else {
@@ -74,8 +74,8 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             scaled_horizontal = horizontal_offset * scale;
             value = ((u64)(s64)(height - 1) << 44) |
                     ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)(((s64)scaled_horizontal + (s64)(((u32)kernel_horizontal + 0x27cU) & 0xfffU)) & 0xfff)) |
+                    ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)((vertical_offset + kernel_vertical + 0x19) & 0xfff) << 12);
         }
         output->display = value;
@@ -84,10 +84,10 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             scale = width + 0x9ff;
             scale /= width;
             scaled_horizontal = horizontal_offset * scale;
-            value = ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x290)) & 0xfff)) |
-                    ((u64)(s64)(scale - 1) << 23) |
+            value = ((u64)(s64)(scale - 1) << 23) |
+                    ((u64)((vertical_offset + kernel_vertical + 0x48) & 0xfff) << 12) |
                     ((u64)((s64)(width * scale) - 1) << 32) |
-                    ((u64)((vertical_offset + kernel_vertical + 0x48) & 0xfff) << 12);
+                    ((u64)(((s64)scaled_horizontal + ((s64)kernel_horizontal + 0x290)) & 0xfff));
             if (state->nSFrame_mode != 0) {
                 scale = height * 2 - 1;
             } else {
@@ -100,18 +100,18 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
             scaled_horizontal = horizontal_offset * scale;
             value = ((u64)(s64)(height - 1) << 44) |
                     ((u64)(s64)(scale - 1) << 23) |
-                    ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)(((s64)scaled_horizontal + (s64)(((u32)kernel_horizontal + 0x290U) & 0xfffU)) & 0xfff)) |
+                    ((u64)((s64)(width * scale) - 1) << 32) |
                     ((u64)((vertical_offset + kernel_vertical + 0x24) & 0xfff) << 12);
         }
         output->display = value;
     } else if ((s16)mode == 0x50) {
         output->display = ((u64)(s64)(height - 1) << 44) |
-                          ((u64)(s64)(width * 2 - 1) << 32) |
+                          ((u64)((vertical_offset + kernel_vertical + 0x23) & 0xfff) << 12) |
+                          0x800000ULL |
                           ((u64)(((s64)(horizontal_offset * 2) + kernel_horizontal +
                                   ((0x2d0 - width) / 2 * 2) + 0xe8) & 0xfff)) |
-                          ((u64)((vertical_offset + kernel_vertical + 0x23) & 0xfff) << 12) |
-                          0x800000ULL;
+                          ((u64)(s64)(width * 2 - 1) << 32);
     } else {
         scePrintf("sceGsDefDispEnv:Not support displaymode for 0x%x!!\n");
     }
