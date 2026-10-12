@@ -10801,12 +10801,12 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_00212e28",
-        "source_path": "src/assembly/textbin/fun_00212e28.c",
+        "unit": "gameplay/entities/update_visible_resident_objects",
+        "source_path": "src/gameplay/entities/update_visible_resident_objects.c",
         "address": "0x00212e28",
         "current_name": "FUN_00212e28",
         "proposed_name": "update_visible_resident_objects",
-        "logical_group": "unclassified",
+        "logical_group": "gameplay/entities",
         "status": "proposed",
         "confidence": "medium",
         "evidence": [
@@ -10815,7 +10815,7 @@
             "note": "named in source after review of the matched C body"
           }
         ],
-        "logical_group_confidence": "unresolved"
+        "logical_group_confidence": "high"
       },
       {
         "unit": "gameplay/animation/set_moby_animation",
