@@ -2777,6 +2777,7 @@ void FUN_L00_0020a9e8(void) {
     s32 *check_timer;
     s32 *store_timer;
     char *record;
+    struct HeroEase *output;
     s32 i;
 
     if (g->i2084 != 0 || *(u8 *)((char *)g->p2080 + 0x53) != 0)
@@ -2784,19 +2785,20 @@ void FUN_L00_0020a9e8(void) {
 
     timers = (s32 *)(base + 0x1060);
     check_timer = timers;
-    store_timer = timers;
-    record = base;
+    output = D_L00_0017A680_002054e8;
     i = 0;
+    record = base;
+    store_timer = check_timer;
     do {
         s32 j;
         f32 y, x;
         if (FUN_001fef68_a9e8(check_timer) != 0) {
             s32 low, high;
             if (i == 0) {
-                *(f32 *)(record + 0x1028) = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
+                *(f32 *)&hero.unk1028 = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
                 low = FUN_001fef20_a9e8(0x46);
                 high = FUN_001fef20_a9e8(0x96);
-                *(s32 *)(base + 0x1060) = FUN_L00_00257b90_a540(low, high);
+                *(s32 *)((char *)&hero + 0x1060) = FUN_L00_00257b90_a540(low, high);
             } else if (i == 1) {
                 *(f32 *)((char *)timers - 0x28) = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
                 low = FUN_001fef20_a9e8(0x28);
@@ -2831,8 +2833,8 @@ fourth_sign_done:
         j = i + 13;
         y = *(f32 *)(record + 0x1028);
         x = *(f32 *)(record + 0x1024);
-        *(f32 *)((char *)&D_L00_0017A680_a540 + j * 0xb0 + 0x64) = x;
-        *(f32 *)((char *)&D_L00_0017A680_a540 + j * 0xb0 + 0x68) = y;
+        output[j].rot_target.f[2] = y;
+        output[j].rot_target.f[1] = x;
         record += 0x10;
         store_timer++;
         check_timer++;
