@@ -1845,15 +1845,12 @@ int FUN_L13_002e4300(struct Moby *m, char *arg, float *t) {
     FUN_L00_0025d538(m, e);
     return result;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e4448.s", FUN_L13_002e4448);
-#else
 extern void FUN_L00_002591d0(char **, int, int, int);
 extern void FUN_L00_002592b8(char **, char *, int, int);
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern int FUN_001f9770(short *);
 extern int FUN_001f96f8(int);
-extern void FUN_0022da68(int, int, void *) __asm__("FUN_0022da68");
+extern int FUN_0022da68(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L01_0026e0e0(int, int);
 extern void FUN_001e93b0(char *, short, short, int);
 extern char D_L13_001F4D90[];
@@ -1863,93 +1860,103 @@ extern int D_L13_0015F5CC;
 
 extern int D_L13_0015F5CC_absolute __asm__("D_L13_0015F5CC") __attribute__((section(".data")));
 
+typedef struct {
+    u8 pad0[0x20];
+    float unk20;
+    short unk24;
+    u8 pad26[0x4A];
+    short unk70;
+    short unk72;
+    short unk74;
+    short unk76;
+    u8 unk78;
+    u8 unk79;
+    u8 unk7A;
+    u8 unk7B;
+    int unk7C;
+    char *unk80;
+    short unk84;
+} SwitchVars;
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
 void FUN_L13_002e4448(char *moby) {
-    unsigned char *data = *(unsigned char **)(moby + 0x78);
+    SwitchVars *data = *(SwitchVars **)(moby + 0x78);
     int hit = 0;
 
-    if (*(short *)(data + 0x74) == 0 && (unsigned char)(moby[0x20] - 1) < 2) {
-        hit = FUN_L13_002e4300((struct Moby *)moby, data, (float *)(data + 0x20));
+    if (data->unk74 == 0 && (unsigned char)(moby[0x20] - 1) < 2) {
+        hit = FUN_L13_002e4300((struct Moby *)moby, data, &data->unk20);
     }
     switch ((unsigned char)moby[0x20]) {
     case 0:
-        if ((unsigned char)data[0x79] == 0) {
+        if (data->unk79 == 0) {
             char *iter[4];
             char *linked;
-            data[0x7B] = 0;
-            *(char **)(data + 0x80) = moby;
+
+            data->unk7B = 0;
+            data->unk80 = moby;
             FUN_L00_002591d0(iter, (unsigned char)moby[0x21], 0, 0);
+            /* Fakematch: the volatile read keeps the reload of iter[0] at the top of the
+               body; with a plain read it moves into the branch delay slot. */
             while ((linked = *(char *volatile *)iter) != 0) {
                 linked = iter[0];
                 if (linked != moby && *(short *)(linked + 0xA6) == 0xE7) {
-                    char *other_data = *(char **)(linked + 0x78);
-                    *(volatile unsigned char *)(other_data + 0x79) = 1;
-                    *(char *volatile *)(other_data + 0x80) = moby;
+                    SwitchVars *other_data = *(SwitchVars **)(linked + 0x78);
+
+                    other_data->unk80 = moby;
+                    other_data->unk79 = 1;
                 }
-                data[0x7B]++;
+                data->unk7B++;
                 FUN_L00_002592b8(iter, iter[0], 0, 0);
             }
-            *(short *)(data + 0x76) = 0;
-        } else {
-            *(short *)(data + 0x76) = 0;
         }
-        *(short *)(data + 0x70) = 0;
-        *(short *)(data + 0x72) = 0;
-        data[0x7A] = 0;
-        *(short *)(data + 0x74) = 0;
+        data->unk70 = 0;
+        data->unk72 = 0;
+        data->unk7A = 0;
+        data->unk74 = 0;
+        data->unk76 = 0;
+
         FUN_L00_002502f0(moby, 0x80, 0x80, 0x80);
         moby[0x20] = 1;
         break;
     case 1:
     case 2:
-        if (*(short *)(data + 0x74) == 0 && hit != 0) {
+        if (data->unk74 == 0 && hit != 0) {
             char *linked;
-            char *linked_data;
-            linked = *(char **)(data + 0x80);
-            linked_data = *(char **)(linked + 0x78);
+            SwitchVars *linked_data;
+            linked = data->unk80;
+            linked_data = *(SwitchVars **)(linked + 0x78);
             if ((unsigned char)linked[0x20] == 1) {
-                data[0x7A] = 0;
+                data->unk7A = 0;
                 linked[0x20] = 2;
-                if (*(int *)(linked_data + 0x7C) > 0) {
-                    *(short *)(linked_data + 0x70) = FUN_001f96f8(*(int *)(data + 0x7C));
+                if (linked_data->unk7C > 0) {
+                    linked_data->unk70 = FUN_001f96f8(data->unk7C);
                 }
             }
-            linked_data[0x7A]++;
+            linked_data->unk7A++;
             FUN_0022da68(3, 0, moby);
             FUN_L00_002502f0(moby, 0, 0xFF, 0);
-            *(short *)(data + 0x74) = 1;
+            data->unk74 = 1;
         }
         if ((unsigned char)moby[0x20] == 2) {
-            if ((unsigned char)data[0x7A] >= (unsigned char)data[0x7B]) {
+            if (data->unk7A >= data->unk7B) {
                 FUN_L01_0026e0e0((unsigned char)moby[0x21], 4);
                 FUN_0022da68(1, 0, moby);
-                *(short *)(data + 0x70) = *(short *)(data + 0x84);
-                FUN_001e93b0(D_L13_001F4D90, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC_absolute);
+                data->unk70 = data->unk84;
+                FUN_001e93b0(D_L13_001F4D90, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC);
                 moby[0x20] = 4;
             } else {
-                if (*(int *)(data + 0x7C) >= 0) {
-                    if (FUN_001f9770((short *)(data + 0x70)) != 0) {
-                        *(short *)(data + 0x74) = 0;
-                        data[0x7A] = 0;
+                if (data->unk7C >= 0) {
+                    if (FUN_001f9770(&data->unk70) != 0) {
+
+                        data->unk7A = 0;
+                        data->unk74 = 0;
+
                         FUN_0022da68(2, 0, moby);
                         FUN_L01_0026e0e0((unsigned char)moby[0x21], 3);
                         FUN_001e93b0(D_L13_001F4DB0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC);
                         moby[0x20] = 3;
-                    } else if (FUN_001f9770((short *)(data + 0x72)) != 0) {
-                        int a, b, divisor;
+                    } else if (FUN_001f9770(&data->unk72) != 0) {
                         FUN_0022da68(0, 0, moby);
-                        a = FUN_001f96f8(0x2D);
-                        b = FUN_001f96f8(5);
-                        divisor = FUN_001f96f8(0x28);
-                        b += *(short *)(data + 0x70) / divisor;
-                if (a < b) {
-                            *(short *)(data + 0x72) = FUN_001f96f8(0x2D);
-                        } else {
-                            int b, divisor;
-                            b = FUN_001f96f8(5);
-                            divisor = FUN_001f96f8(0x28);
-                            b += *(short *)(data + 0x70) / divisor;
-                    *(short *)(data + 0x72) = b;
-                        }
+                        data->unk72 = MIN(FUN_001f96f8(0x2D), FUN_001f96f8(5) + data->unk70 / FUN_001f96f8(0x28));
                     }
                 }
             }
@@ -1957,52 +1964,42 @@ void FUN_L13_002e4448(char *moby) {
         break;
     case 3:
         FUN_L00_002502f0(moby, 0x80, 0x80, 0x80);
-        data[0x7A] = 0;
-        *(short *)(data + 0x74) = 0;
-        *(float *)(data + 0x20) = (float)*(short *)(data + 0x24);
+
+        data->unk7A = 0;
+        data->unk74 = 0;
+        data->unk20 = (float)data->unk24;
         moby[0x20] = 1;
+
         break;
     case 4:
-        if ((unsigned char)data[0x79] == 0 && *(short *)(data + 0x70) != -1) {
-            if (FUN_001f9770((short *)(data + 0x70)) != 0) {
-                data[0x7A] = 0;
-                *(short *)(data + 0x74) = 0;
+        if (data->unk79 == 0 && data->unk70 != -1) {
+            if (FUN_001f9770(&data->unk70) != 0) {
+
+                data->unk7A = 0;
+                data->unk74 = 0;
+
                 FUN_0022da68(2, 0, moby);
                 FUN_L01_0026e0e0((unsigned char)moby[0x21], 3);
                 FUN_001e93b0(D_L13_001F4DD0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC);
                 moby[0x20] = 3;
-            } else if (FUN_001f9770((short *)(data + 0x72)) != 0) {
-                int a, b, divisor;
+            } else if (FUN_001f9770(&data->unk72) != 0) {
                 FUN_0022da68(0, 0, moby);
-                a = FUN_001f96f8(0x2D);
-                b = FUN_001f96f8(5);
-                divisor = FUN_001f96f8(0x28);
-                b += *(short *)(data + 0x70) / divisor;
-                if (a < b) {
-                    *(short *)(data + 0x72) = FUN_001f96f8(0x2D);
-                } else {
-                    int b, divisor;
-                    b = FUN_001f96f8(5);
-                    divisor = FUN_001f96f8(0x28);
-                    b += *(short *)(data + 0x70) / divisor;
-                    *(short *)(data + 0x72) = b;
-                }
+                data->unk72 = MIN(FUN_001f96f8(0x2D), FUN_001f96f8(5) + data->unk70 / FUN_001f96f8(0x28));
             }
         }
-        if (FUN_001f9770((short *)(data + 0x76)) != 0) {
-            *(short *)(data + 0x76) = FUN_001f96f8(0x14);
-            if ((unsigned char)data[0x78] != 0) {
+        if (FUN_001f9770(&data->unk76) != 0) {
+            data->unk76 = FUN_001f96f8(0x14);
+            if (data->unk78 != 0) {
                 FUN_L00_002502f0(moby, 0, 0xFF, 0);
-                data[0x78] = 0;
+                data->unk78 = 0;
             } else {
                 FUN_L00_002502f0(moby, 0, 0, 0xFF);
-                data[0x78] = 1;
+                data->unk78 = 1;
             }
         }
         break;
     }
 }
-#endif
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern void *create_moby() __asm__("FUN_0020c4f8");
