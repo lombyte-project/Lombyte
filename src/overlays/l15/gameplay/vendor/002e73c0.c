@@ -1484,11 +1484,11 @@ void FUN_L15_002edbe0(struct Moby *moby) {
     FUN_L00_00250320(moby, &r, &g, &b);
     p = (Quad4 *)&t.f[1];
     color = (D_L15_001621EC << 24) | (b << 16) | (g << 8) | r;
+    end = D_L15_001DECB0 + 0x230 / 4;
     o = D_L15_001DECB0;
     zout = D_L15_001DECB0 + 2;
-    s = D_L15_001DE860;
     colors = D_L15_001DF048;
-    end = D_L15_001DECB0 + 0x230 / 4;
+    s = D_L15_001DE860;
     do {
         float x = s[0];
         float y = s[1];
