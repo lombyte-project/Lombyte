@@ -881,15 +881,17 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     source = *(volatile s32 *)&depth_buffer_address;
     initial_count = pal ? 14 : initial_count;
     second_count = pal ? 14 : second_count;
-    count = initial_count;
-    for (; count != 0;) {
-        count--;
-        FUN_00122330(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
-        source += 0x10000;
-        FUN_00118a80(0);
-        FUN_00122658(buffer, destination);
-        destination += 0xc000;
-        FUN_00120558(0, 0);
+    if (initial_count != 0) {
+        count = initial_count;
+        do {
+            count--;
+            FUN_00122330(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
+            source += 0x10000;
+            FUN_00118a80(0);
+            FUN_00122658(buffer, destination);
+            destination += 0xc000;
+            FUN_00120558(0, 0);
+        } while (count != 0);
     }
     source = D_0015EE78_gp;
     if (second_count != 0) {
