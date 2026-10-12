@@ -353,13 +353,14 @@ extern void update_moby_motion_31aee0(void *, void *, void *, void *) __asm__("F
 extern u8 *D_L07_0015FFD8_31aee0 __asm__("D_L07_0015FFD8") __attribute__((sda));
 extern f32 D_0015ED6C_31aee0 __asm__("D_0015ED6C");
 
+extern s32 D_L07_00184528[] NOT_SDA;
 void FUN_L07_0031aee0(u8 *moby)
 {
     u8 *data = *(u8 **)(moby + 0x78);
     u8 *other;
     u8 *position;
     f32 delta[4];
-    f32 old_rotation[8];
+    f32 old_rotation[4];
     f32 vectors[8];
     f32 distance;
     s32 index;
@@ -367,7 +368,7 @@ void FUN_L07_0031aee0(u8 *moby)
     typedef u32 quadword __attribute__((mode(TI), aligned(16)));
 
     scale_vector_xyz_31aee0(-1.0f, delta, moby + 0x10);
-    *(quadword *)(old_rotation + 4) = *(quadword *)(moby + 0x40);
+    *(quadword *)(old_rotation) = *(quadword *)(moby + 0x40);
 
     if (moby[0xb0] != 0xff &&
         D_0014C150_30D370[moby[0xb0] + D_0015ED84 * 16] == 0xff)
@@ -380,7 +381,7 @@ void FUN_L07_0031aee0(u8 *moby)
         *(quadword *)(data + 0xa0) = *(quadword *)position;
         index = *(s32 *)(data + 0xd8);
         if (index != -1)
-            ((s32 *)0x184528)[index] = 0;
+            D_L07_00184528[index] = 0;
         moby[0x20] = 1;
         *(s32 *)(data + 0xac) = 0;
         break;
@@ -429,7 +430,7 @@ void FUN_L07_0031aee0(u8 *moby)
             *(s32 *)(data + 0xac) = 0;
             index = *(s32 *)(data + 0xd8);
             if (index != -1)
-                ((s32 *)0x184528)[index] = 1;
+                D_L07_00184528[index] = 1;
             moby[0x20] = 3;
             if (*(s32 *)(data + 0xd4) != -1)
                 play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
@@ -475,7 +476,7 @@ void FUN_L07_0031aee0(u8 *moby)
                     play_sound_31aee0(*(s32 *)(data + 0xd4), 0, moby);
                 index = *(s32 *)(data + 0xd8);
                 if (index != -1)
-                    ((s32 *)0x184528)[index] = 0;
+                    D_L07_00184528[index] = 0;
                 moby[0x20] = 1;
             }
         }
@@ -484,6 +485,6 @@ void FUN_L07_0031aee0(u8 *moby)
         break;
     }
     add_vector_xyz_31aee0(delta, delta, moby + 0x10);
-    update_moby_motion_31aee0(data + 0x60, delta, old_rotation + 4, moby + 0x40);
+    update_moby_motion_31aee0(data + 0x60, delta, old_rotation, moby + 0x40);
 }
 #endif
