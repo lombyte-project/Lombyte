@@ -26,115 +26,155 @@ void FUN_L11_0030e690(char *moby) {
         *(float *)(s + 8) = *(float *)(moby + 0x18);
     } while (*p++ >= 0);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030ee00.s", FUN_L11_0030ee00);
-#else
-extern char D_0013F350_ee00[] __asm__("D_0013F350");
-extern unsigned char D_0013D4C3;
-extern unsigned int D_001413DC;
-extern char D_00141968_ee00[] __asm__("D_00141968");
-#define D_00141CF2 (*(unsigned short *)(stats + 0x38a))
-#define D_00141CC8 (*(unsigned short *)(stats + 0x360))
-#define D_00141CCA (*(unsigned short *)(stats + 0x362))
-#define D_00141CCC (*(unsigned int *)(stats + 0x364))
-extern int D_0015EEA4;
-extern int D_0013EEA4 __attribute__((sda));
-extern unsigned char D_0014C050[];
-extern unsigned char D_L00_001BA5D0[];
-extern unsigned char D_L00_001BB230[];
-extern unsigned char D_L00_0015FC88[];
-extern int D_0014CC90[];
-extern float D_0013F3D0[];
-extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L00_00203908(int, int);
+#include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/vector.h"
 
-void FUN_L11_0030ee00(char *moby) {
-    int elapsed;
-    int threshold;
-    int id;
-    unsigned char state = *(unsigned char *)(moby + 0x20);
-    char *owner = *(char **)(moby + 0x78);
-    if (state == 0) goto initialize;
-    if (state == 1) goto active;
-    return;
-initialize:
-    {
-        char *stats = D_00141968_ee00;
-        int level = current_level_index;
-        *(volatile unsigned short *)(stats + 0x362) = 0;
-        *(volatile unsigned short *)(stats + 0x360) = 0;
-        *(unsigned short *)(owner + 0x3E) |= 8;
-        if (level == 11 && *(unsigned char *)(moby + 0xB0) != 0xff) {
-            unsigned short uid = *(unsigned short *)(moby + 0xB2);
-            if (D_L00_001BB230[0x454 + (short)uid] != 0 ||
-                ((D_0014CC90[(short)uid >> 5] >> (uid & 31)) & 1)) {
-                *(unsigned char *)(moby + 0x20) = 2;
-                *(float *)(moby + 0x18) -= 1.5f;
-                allocate_voice_for_target_entry(0, 0, moby);
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003102C8), where it is exact; names translated to the US level program. */
+
+typedef struct Hero Hero;
+
+typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } LvState_3102C8;
+
+typedef struct {
+    char pad000[0x360];
+    unsigned short count;   /* 0x360 */
+    unsigned short best;    /* 0x362 */
+    unsigned int levels;    /* 0x364 */
+    char pad368[0x22];
+    unsigned short best2;   /* 0x38A */
+} Stats_3102C8;
+
+typedef struct {
+    char pad00[0x10];
+    float pos[2];           /* 0x10 */
+    float z;                /* 0x18 */
+    char pad1C[0x4];
+    unsigned char state;    /* 0x20 */
+    char pad21[0x57];
+    char *vars;             /* 0x78 */
+    char pad7C[0x34];
+    unsigned char bB0;      /* 0xB0 */
+    char padB1;
+    unsigned short uid;     /* 0xB2 */
+} Lock_3102C8;
+
+extern unsigned char D_00141968_r[] __asm__("D_00141968");
+extern unsigned char D_0014C190_r[] __asm__("D_0014C190");
+extern unsigned char D_0013F350_r[] __asm__("D_0013F350");
+extern unsigned char D_0014C050_r[] __asm__("D_0014C050");
+extern unsigned char D_0013F3D0_r[] __asm__("D_0013F3D0");
+extern char D_00141968_c[] __asm__("D_00141968");
+extern float FUN_001f9b80(void *, void *);
+extern int D_0014C050; /* no foreign declaration */
+extern int D_0015ED84;
+extern int D_0015EEA4;
+extern int D_L11_0015FC88; /* no foreign declaration */
+extern int D_L11_001BAFD0; /* no foreign declaration */
+extern int D_L11_001BBC30; /* no foreign declaration */
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
+extern unsigned char D_0013F350[];
+s32 FUN_L00_00203908(s32 a, s32 b);
+extern char D_0013E633_3102C8[] __asm__("D_00141968");
+extern u8 D_0013D4C0[];
+extern unsigned char D_0014171B_3102C8[] __asm__("D_0013F350");
+extern LvState_3102C8 D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");
+extern LvState_3102C8 D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
+extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
+extern void func_0022ED80_3102C8(int, int, void *) __asm__("FUN_0022da68");
+extern int func_L00_00203F20_3102C8(int a, int b) __asm__("FUN_L00_00203908");
+extern float func_001F9D48_3102C8(void *, void *) __asm__("FUN_001f9b80");
+extern int func_001F9850_3102C8(int) __asm__("FUN_001f96f8");
+
+void FUN_L11_0030ee00(Lock_3102C8 *moby)
+{
+    char *d = moby->vars;
+
+    switch (moby->state) {
+    case 0: {
+        int e = D_0015ED84;
+        ((Stats_3102C8 *)(D_00141968_r))->count = 0;
+        ((Stats_3102C8 *)(D_00141968_r))->best = 0;
+        *(unsigned short *)(d + 0x3E) |= 8;
+        if (e == 0xB && moby->bB0 != 0xFF) {
+            if (D_L11_001BBF40_3102C8.collected[(short)moby->uid] != 0 ||
+                ((*(int *)(D_0014C190_r + (((short)moby->uid >> 5) * 4 + (e << 8))) >> (moby->uid & 0x1F)) & 1)) {
+                moby->state = 2;
+                moby->z = moby->z - 1.5f;
+                func_0022ED80_3102C8(0, 0, moby);
                 return;
             }
         }
-        *(unsigned char *)(moby + 0x20) = 1;
-        return;
+        moby->state = 1;
+        break;
     }
-active:
-    {
-    char *hero_state = D_0013F350_ee00;
-    if (*(int *)(hero_state + 0x2fc) == (int)moby && D_0013D4C3 != 0 &&
-        *(short *)(hero_state + 0x30e) == 0 && *(int *)(hero_state + 0x2084) == 0x22) {
-        if (current_level_index == 11 && *(unsigned char *)(moby + 0xB0) != 0xff) {
-            id = *(unsigned char *)(moby + 0xB0);
-            D_L00_001BA5D0[0x454 + *(short *)(moby + 0xB2)] = id + 2;
-            id = *(volatile unsigned char *)(moby + 0xB0);
-            if (id == 0xff) goto change_state;
-            if (D_L00_0015FC88[id] == 0xff) goto change_state;
-            if (D_0014C050[0xb0 + id] != 0xff) goto change_state;
-            D_L00_001BB230[0x454 + *(short *)(moby + 0xB2)] = id + 2;
+    case 1:
+        if (((void *)((Hero *)(D_0013F350_r))->ground_moby) == moby && D_0013D4C0[3] != 0 &&
+            ((Hero *)(D_0013F350_r))->air_frames.s == 0 && ((Hero *)(D_0013F350_r))->state.current == 0x22) {
+            if (D_0015ED84 == 0xB && moby->bB0 != 0xFF) {
+                int c;
+                int u;
+                D_L11_001BB2E0_3102C8.collected[(short)moby->uid] = moby->bB0 + 2;
+                c = moby->bB0;
+                u = c & 0xFF;
+                if (c == 0xFF || (D_L11_0015FD08_3102C8[u] != 0xFF &&
+                                  (D_0014C050_r)[u + (D_0015ED84 << 4)] == 0xFF)) {
+                    D_L11_001BBF40_3102C8.collected[(short)moby->uid] = c + 2;
+                }
+            }
+            moby->state = 2;
+            moby->z = moby->z - 1.5f;
+            func_0022ED80_3102C8(0, 0, moby);
         }
-change_state:
-        *(unsigned char *)(moby + 0x20) = 2;
-        *(float *)(moby + 0x18) -= 1.5f;
-        allocate_voice_for_target_entry(0, 0, moby);
-    }
-    }
-    if (*(unsigned char *)(moby + 0xB0) == 0xff) return;
-    if (!(vector_distance_xy(moby + 0x10, D_0013F3D0) < 4.0f)) return;
-    if (D_001413DC >= 2) return;
-    {
-    char *stats = D_00141968_ee00;
-    if (D_0013D4C3 == 0) {
-        elapsed = scale_game_frames(D_0015EEA4) - D_00141CF2 * 600;
-        threshold = (int)((float)scale_game_frames(18) * 60.0f);
-        if (elapsed <= threshold && D_00141CF2 * 600 != 0) {
-            if (scale_game_frames(D_0013EEA4) / 600 > D_00141CF2)
-                D_00141CF2 = scale_game_frames(D_0013EEA4) / 600;
+        if (moby->bB0 == 0xFF) {
+            return;
+        }
+        if (!(func_001F9D48_3102C8(moby->pos, D_0013F3D0_r) < 4.0f)) {
+            return;
+        }
+        if (!((unsigned int)*(int *)(D_0013F3D0_r + 0x200C) < 2)) {
+            return;
+        }
+        if (D_0013D4C0[3] == 0) {
+            int r = func_001F9850_3102C8(D_0015EEA4) - ((Stats_3102C8 *)(D_00141968_r))->best2 * 600;
+            if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < r ||
+                ((Stats_3102C8 *)(D_00141968_r))->best2 * 600 == 0) {
+                func_L00_00203F20_3102C8(0x2B02, 0x71);
+                return;
+            }
+            {
+                int q = func_001F9850_3102C8(D_0015EEA4) / 600;
+                if (((Stats_3102C8 *)(D_00141968_r))->best2 < q) {
+                    ((Stats_3102C8 *)(D_00141968_r))->best2 = func_001F9850_3102C8(D_0015EEA4) / 600;
+                }
+            }
+        } else if (((Stats_3102C8 *)(D_00141968_r))->count != 0) {
+            int r = func_001F9850_3102C8(D_0015EEA4) - ((Stats_3102C8 *)(D_00141968_r))->best * 600;
+            if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < r ||
+                ((Stats_3102C8 *)(D_00141968_r))->best * 600 == 0) {
+                func_L00_00203F20_3102C8(0x2B01, 0x6C);
+                return;
+            }
+            {
+                int q = func_001F9850_3102C8(D_0015EEA4) / 600;
+                if (((Stats_3102C8 *)(D_00141968_r))->best < q) {
+                    ((Stats_3102C8 *)(D_00141968_r))->best = func_001F9850_3102C8(D_0015EEA4) / 600;
+                }
+            }
         } else {
-            FUN_L00_00203908(0x2b02, 0x71);
+            ((Stats_3102C8 *)(D_00141968_r))->count += 1;
+            {
+                int q = func_001F9850_3102C8(D_0015EEA4) / 600;
+                if (((Stats_3102C8 *)(D_00141968_r))->best < q) {
+                    ((Stats_3102C8 *)(D_00141968_r))->best = func_001F9850_3102C8(D_0015EEA4) / 600;
+                }
+            }
+            ((Stats_3102C8 *)(D_00141968_r))->levels =
+                ((Stats_3102C8 *)(D_00141968_r))->levels | (1 << D_0015ED84) | 0x80000000;
         }
-    } else if (D_00141CC8 == 0) {
-        D_00141CC8 = 1;
-        if (D_00141CCA < scale_game_frames(D_0013EEA4) / 600)
-            D_00141CCA = scale_game_frames(D_0013EEA4) / 600;
-        D_00141CCC |= (1u << (current_level_index & 31)) | 0x80000000u;
-    } else {
-        elapsed = scale_game_frames(D_0013EEA4) - D_00141CCA * 600;
-        threshold = (int)((float)scale_game_frames(18) * 60.0f);
-        if (elapsed <= threshold && D_00141CCA * 600 != 0) {
-            if (scale_game_frames(D_0013EEA4) / 600 > D_00141CCA)
-                D_00141CCA = scale_game_frames(D_0013EEA4) / 600;
-        } else {
-            FUN_L00_00203908(0x2b01, 0x6c);
-        }
-    }
+        break;
     }
 }
-#undef D_00141CF2
-#undef D_00141CC8
-#undef D_00141CCA
-#undef D_00141CCC
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310cf8.s", FUN_L11_00310cf8);
 #else
