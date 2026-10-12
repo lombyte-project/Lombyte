@@ -48,17 +48,18 @@ extern void draw_2fd1a0(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L06_002fd1a0(void) {
     Packet_2fd1a0 first, second;
-    float matrix[5][4] __attribute__((aligned(16)));
+    float matrix[4][4] __attribute__((aligned(16)));
     float vec2[4] __attribute__((aligned(16)));
     float vec1[4] __attribute__((aligned(16)));
     float y_offset = D_L06_00161FA0 * D_L06_00167400[86];
     float x_offset = D_L06_00161FA4 * D_L06_00167400[85];
+    void *matrix_ptr;
     long flags;
     int i, j;
 
     long tex = texture_2fd1a0(D_L06_00161F90);
-    second.tex = texture_2fd1a0(0x2a);
     first.tex = tex;
+    second.tex = texture_2fd1a0(0x2a);
     flags = (long)D_L06_00161F7C;
     flags |= (long)D_L06_00161F80 << 2;
     flags |= (long)D_L06_00161F84 << 4;
@@ -70,16 +71,17 @@ void FUN_L06_002fd1a0(void) {
     first.unk80 = 0xFF9000000260L;
     second.unk70 = 0;
     first.unk70 = 0;
+    matrix_ptr = matrix;
     initialize_matrix_2fd1a0(matrix);
     first.color[0] = first.color[1] = first.color[2] = first.color[3] = D_L06_00161F94;
     second.color[0] = second.color[1] = second.color[2] = second.color[3] = D_L06_00161F98;
     i = 0;
     do {
         transform_2fd1a0(vec1, D_L06_001F2610[i], D_L06_00161F9C);
-        multiply_2fd1a0(vec1, vec1, matrix);
+        multiply_2fd1a0(vec1, vec1, matrix_ptr);
         subtract_2fd1a0(vec2, vec1, D_L06_00167540);
         normalize_2fd1a0(vec2, vec2, 1.0f);
-        transform_other_2fd1a0(vec1, D_L06_001F19D0[i], matrix);
+        transform_other_2fd1a0(vec1, D_L06_001F19D0[i], matrix_ptr);
         normalize_other_2fd1a0(vec2, vec1);
         j = 0;
         do {
