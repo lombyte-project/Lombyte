@@ -667,9 +667,9 @@ void FUN_L06_002ff2c8(char *moby) {
             if (alignment > 0.4f) {
                 point[2] -= frame_time + frame_time;
             } else if (alignment < 0.3f) {
-                point[2] += *(f32 *)&D_L06_00161FD8_d + *(f32 *)&D_L06_00161FD8_d;
+                point[2] += (frame_time + frame_time);
             }
-            if (entry[3] < 1.0f || FUN_001efa68(data + offset + 0x230, point, 2, 0, 0) == 0) {
+            if (!(entry[3] >= 1.0f) || FUN_001efa68(data + offset + 0x230, point, 2, 0, 0) == 0) {
                 if (point[3] < 1.0f) {
                     approach_value(&point[3], 0.0f, frame_time + frame_time);
                 }
