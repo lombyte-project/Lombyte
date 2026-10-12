@@ -21,22 +21,22 @@ int FUN_L01_00263a28(char *state, int index, unsigned int *type, float *result,
     char *entry;
     float scale;
     u128 matrix[4];
-    u128 first[1];
-    u128 second;
+    sceVu0FVECTOR first;
+    sceVu0FVECTOR second;
     float separation;
+    short *jointIndices;
 
     entry = *(char **)(state + 0x94);
     if (entry == 0) {
         return 0;
     }
-    entry += index * 0x20;
-    entry += 0x10;
+    entry += index * 0x20 + 0x10;
     *type = *(unsigned char *)entry;
     scale = *(float *)(state + 0x2c) * 0.0009765625f;
     FUN_001fa050(matrix, state + 0x40);
 
     if (*type < 2 || *type == 3) {
-        *(u128 *)result = *(u128 *)(entry + 0x10);
+        *(u128 *)result = *(volatile u128 *)(entry + 0x10);
         FUN_001f9a68(scale, result, result);
         FUN_001f9d20(result, result, matrix);
         FUN_001f9a10(result, result, state + 0x10);
@@ -51,7 +51,7 @@ int FUN_L01_00263a28(char *state, int index, unsigned int *type, float *result,
         if (joint != 0) {
             FUN_0020fa90(state, joint, 0);
         }
-        *(u128 *)result = *(u128 *)(0x70000000 + *(int *)(entry + 4) * 0x10);
+        *(u128 *)result = *(volatile u128 *)(0x70000000 + *(int *)(entry + 4) * 0x10);
         FUN_001f9a68(scale, result, result);
         FUN_001f9d20(result, result, matrix);
         FUN_001f9a10(result, result, state + 0x10);
@@ -63,18 +63,20 @@ int FUN_L01_00263a28(char *state, int index, unsigned int *type, float *result,
         if (joint != 0) {
             FUN_0020fa90(state, joint, 0);
         }
-        FUN_001f9a80(scale, first, (void *)(0x70000000 + *(short *)(entry + 4) * 0x10));
-        FUN_001f9a80(scale, &second, (void *)(0x70000000 + *(short *)(entry + 6) * 0x10));
-        if (((float *)first)[2] < ((float *)&second)[2]) {
-            *(u128 *)result = first[0];
+        jointIndices = (short *)(entry + 4);
+        FUN_001f9a80(scale, first, (void *)(0x70000000 + jointIndices[0] * 0x10));
+        FUN_001f9a80(scale, second, (void *)(0x70000000 + jointIndices[1] * 0x10));
+        if (((float *)first)[2] < ((float *)second)[2]) {
+            *(u128 *)result = *(volatile u128 *)first;
         } else {
-            *(u128 *)result = second;
+            *(u128 *)result = *(volatile u128 *)second;
         }
         FUN_001f9d20(result, result, matrix);
         FUN_001f9a10(result, result, state + 0x10);
         *radius = *(float *)(entry + 0xc) * scale;
-        FUN_001f9a28(&second, &second, first);
-        separation = FUN_001f9af0(&second);
+        FUN_001f9a28(second, second, first);
+        *distance = FUN_001f9af0(second);
+        return 1;
     } else {
         return 0;
     }
