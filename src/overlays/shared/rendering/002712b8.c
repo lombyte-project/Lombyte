@@ -455,20 +455,25 @@ void FUN_L00_002721f0(unsigned char *p) {
         alpha = q[0xB];
         originalAlpha = alpha;
         alpha = (unsigned int)alpha >> 1;
-        a = (float)originalAlpha + (float)(alpha - originalAlpha) * t;
+        a = (float)(alpha - originalAlpha);
+        a *= t;
+        a += (float)originalAlpha;
     } else {
         t = (float)*(short *)(p + 0xA) / FUN_001fa6c0_2721f0(*(short *)(q + 8) - 6);
         *(float *)(p + 0xC) = *(float *)q +
             ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)q) * t;
-        a = (float)(q[0xB] >> 1) * t + 0.0f;
+        a = (float)(q[0xB] >> 1);
+        a *= t;
+        a += 0.0f;
     }
-    *(unsigned int *)(p + 4) = (FUN_001fa6d0_2721f0(a) << 24) |
+    alpha = FUN_001fa6d0_2721f0(a);
+    *(unsigned int *)(p + 4) = (alpha << 24) |
                                 (*(unsigned int *)(p + 4) & 0xFFFFFF);
     r = (float *)(q + 0xC);
-    v[0] = *(float *)(q + 0xC);
-    v[1] = *(float *)(q + 0x10);
-    v[2] = *(float *)(q + 0x14);
-    v[3] = 0.0f;
+    *(volatile float *)&v[0] = *(float *)(q + 0xC);
+    *(volatile float *)&v[1] = r[1];
+    v[2] = r[2];
+    *(volatile int *)&v[3] = 0;
     FUN_001f9a10_2721f0(p + 0x10, p + 0x10, &v);
     *(float *)(q + 0x14) -= *(float *)(q + 0x18);
     if (*(float *)(p + 0x10) < 2.0f || 1021.0f < *(float *)(p + 0x10) ||
