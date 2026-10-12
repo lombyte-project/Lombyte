@@ -990,7 +990,7 @@ void FUN_L00_00206e00(void) {
     s32 i, j, length, position;
     u8 *sequence;
     u8 *history;
-    s32 *history_count;
+    volatile s32 *history_count;
     if (D_0015EEA0 == 0 && D_0015EE20 == 0)
         return;
     g = &hero;
