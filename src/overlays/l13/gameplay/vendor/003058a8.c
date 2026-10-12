@@ -74,9 +74,6 @@ void FUN_L13_00305988(struct Moby *moby, char *pos, int arg2, float arg3) {
     moby->collision = moby->pclass->collision;
     FUN_L00_00250df8(moby);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00305a58.s", FUN_L13_00305a58);
-#else
 extern char *FUN_L00_0025a420(void *, int, int);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
@@ -170,7 +167,7 @@ void FUN_L13_00305a58(struct Moby *moby) {
     if (*(float *)(data + 0x28) < distance || other_distance < distance) {
         if (moby->visible != 0) {
             int i;
-            for (i = 2; i >= 0; i--) {
+            for (i = 0; i < 3; i++) {
                 *(OvlQuad *)&work.random_direction = 0;
                 work.random_direction.x = FUN_002132a8(-1.0f, 1.0f);
                 work.random_direction.y = FUN_002132a8(-1.0f, 1.0f);
@@ -198,7 +195,7 @@ void FUN_L13_00305a58(struct Moby *moby) {
     qcopy(&moby->pos, &D_L13_00174140.pos);
     if (moby->visible != 0) {
         int i;
-        for (i = 4; i >= 0; i--) {
+        for (i = 0; i < 5; i++) {
             *(OvlQuad *)&work.direction = 0;
             work.direction.x = FUN_002132a8(-1.0f, 1.0f);
             work.direction.y = FUN_002132a8(-1.0f, 1.0f);
@@ -232,7 +229,6 @@ bounds:
         moby->pos.z < 2.0f || moby->pos.z > 1021.0f)
         mark_moby_for_removal(moby);
 }
-#endif
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
@@ -1103,14 +1099,11 @@ void FUN_L13_0030af50(struct Moby *moby) {
         return;
     moby->command = d[0x24];
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030b628.s", FUN_L13_0030b628);
-#else
 extern int D_L13_0015F5C4;
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern char *D_L13_001600EC;
 extern u8 alternate_item_available[128] __asm__("D_0013D388");
-extern unsigned char D_001413F5;
+extern unsigned char D_001413F5 __attribute__((section(".data")));
 extern float D_L13_0015F3FC;
 extern int D_L13_0015F404;
 extern float D_0013E090, D_0013E0A8, D_0013E094, D_0013E098;
@@ -1120,7 +1113,7 @@ extern struct {
     char pad6C[0xC];
     float unk78;
 } D_0013E030;
-extern unsigned char D_L13_0015FC88[];
+extern unsigned char D_L13_0015FC88[] __attribute__((section(".sdata")));
 extern char D_0013F3D0[];
 extern int is_point_inside_clip_volume_alt(void *, int);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -1192,7 +1185,7 @@ after_state_4:
                 entity = (char *)(D_L13_0015FFD8_m + data[4] * 0x100);
                 object = D_L13_001600EC;
                 index *= 0x80;
-                qcopy(entity + 0x10, object + index + 0x30);
+                qcopy(entity + 0x10, &object[index + 0x30]);
                 object += index;
                 FUN_L00_00216f90(object + 0x30, object + 0x70, 0, 1);
                 D_001413F5 = 1;
@@ -1301,7 +1294,6 @@ after_state_4:
         break;
     }
 }
-#endif
 
 #define NOT_SDA
 

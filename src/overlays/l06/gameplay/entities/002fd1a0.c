@@ -393,9 +393,6 @@ void FUN_L06_002ffc38(int idx) {
     }
 }
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ffcb0.s", FUN_L06_002ffcb0);
-#else
 extern char D_0013F3D0_ffcb0[] __asm__("D_0013F3D0");
 extern unsigned char *D_L06_0015FFD8_ffcb0 __asm__("D_L06_0015FFD8");
 extern char *D_L06_001600EC_ffcb0 __asm__("D_L06_001600EC");
@@ -435,7 +432,7 @@ extern void FUN_L06_00312ce8(int);
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eac18(int);
-extern void FUN_L06_002356a0(int, int);
+extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern void FUN_L06_00300278(char *);
 extern void enqueue_callback_list_1(int, char *) __asm__("FUN_L06_00210fc8");
 extern void allocate_voice_for_target_entry_ffcb0(int, int, char *) __asm__("FUN_0022da68");
@@ -521,7 +518,7 @@ void FUN_L06_002ffcb0(char *moby) {
         /* This field holds float bits; retail completes only on an ordered >= comparison. */
         if (*(float *)(data + 6) >= 0.99999f) {
             moby[0x20] = 5;
-            FUN_L06_002356a0(0, 0);
+            hero_set_state(0, 0);
             FUN_L06_00312ce8(2);
             D_L06_0015F404_ffcb0 = 0;
         } else {
@@ -585,7 +582,6 @@ void FUN_L06_002ffcb0(char *moby) {
         else enqueue_callback_list_1((int)FUN_L06_00300588, moby);
     }
 }
-#endif
 
 #include "qcopy.h"
 extern char *create_moby_300278(int) __asm__("FUN_0020c4f8");

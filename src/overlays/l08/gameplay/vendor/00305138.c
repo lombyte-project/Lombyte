@@ -540,9 +540,6 @@ void FUN_L08_00306b30(u8 *object, s32 mode)
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00307540.s", FUN_L08_00307540);
-#else
 typedef struct {
     u16 count;
     u16 best;
@@ -550,8 +547,8 @@ typedef struct {
 } VendorEventRecord;
 
 #include "rnc/gameplay/state/item_state.h"
-extern VendorEventRecord D_00141968[];
-extern s32 D_0015EEA4;
+extern VendorEventRecord help_records[] __asm__("D_00141968");
+extern s32 game_frame_count __asm__("D_0015EEA4");
 extern s32 D_001413DC NOT_SDA;
 extern s32 D_001413D4 NOT_SDA;
 extern u8 D_0013D413 NOT_SDA;
@@ -559,15 +556,14 @@ extern u8 D_0013D4DD NOT_SDA;
 extern u8 D_0013D4DC NOT_SDA;
 extern u8 D_0013D3B7 NOT_SDA;
 extern u8 D_0013DD4A NOT_SDA;
-extern s32 D_0015ED84;
 extern s32 D_0013F5E0[];
 extern char D_0013F3D0[];
-extern s32 FUN_00269ee0(void *, s32) __asm__("FUN_00214720");
-extern s32 FUN_00211a30(s32) __asm__("FUN_001f96f8");
-extern void FUN_00216488(s32, s32) __asm__("FUN_L00_00203908");
-extern void FUN_00296038(s32, s32, s32) __asm__("FUN_0022db10");
-extern void FUN_0026dbd0(s32, s32) __asm__("FUN_L00_00263d40");
-extern f32 FUN_00211f18(void *, void *) __asm__("FUN_001f9ab0");
+extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
+extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
+extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
+extern f32 dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
 
 typedef struct {
     s32 first;
@@ -581,104 +577,96 @@ void FUN_L08_00307540(struct Moby *moby) {
     VendorEventData *data = *(VendorEventData **)((char *)moby + 0x78);
     s32 elapsed;
     s32 time;
-    s32 level;
     f32 volume[4];
 
     switch (data->state) {
     case 0:
-        if (FUN_00269ee0(&hero.motion.pos, data->third) && hero.state.control_mode == 15)
+        if (is_point_inside_clip_volume(&hero.motion.pos, data->third) && hero.state.control_mode == 15)
             data->state = 1;
         break;
     case 1:
         if (hero.state.current == 0x42) {
             data->state = 0;
-        } else if (FUN_00269ee0(&hero.motion.pos, data->fourth) && item_unlocked[11] == 0) {
+        } else if (is_point_inside_clip_volume(&hero.motion.pos, data->fourth) && item_unlocked[11] == 0) {
             item_unlocked[11] = 1;
-            FUN_00296038(1, 0, 0);
-            FUN_0026dbd0(0x53d6, -1);
+            allocate_voice_for_bank_entry(1, 0, 0);
+            queue_dialogue_message(0x53d6, -1);
         }
         break;
     }
     if (item_available[29] == 0) {
-        if (FUN_00269ee0(&hero.motion.pos, data->first)) {
-            elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[48].best * 600;
-            if ((s32)((f32)FUN_00211a30(18) * 60.0f) < elapsed || D_00141968[48].best * 600 == 0) {
-                FUN_00216488(8000, 0x30);
+        if (is_point_inside_clip_volume(&hero.motion.pos, data->first)) {
+            elapsed = scale_game_frames(game_frame_count) - help_records[48].best * 600;
+            if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed || help_records[48].best * 600 == 0) {
+                help_request(8000, 0x30);
             } else {
-                time = FUN_00211a30(D_0015EEA4) / 600;
-                if (D_00141968[48].best < time)
-                    D_00141968[48].best = FUN_00211a30(D_0015EEA4) / 600;
+                time = scale_game_frames(game_frame_count) / 600;
+                if (help_records[48].best < time)
+                    help_records[48].best = scale_game_frames(game_frame_count) / 600;
             }
         }
     }
     if (item_available[29] != 0) {
-        if (FUN_00269ee0(&hero.motion.pos, data->first) && alternate_item_available[47] == 0) {
-            if (D_00141968[49].count != 0) {
-                elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[49].best * 600;
-                if ((s32)((f32)FUN_00211a30(18) * 60.0f) < elapsed || D_00141968[49].best * 600 == 0) {
-                    FUN_00216488(8001, 0x31);
+        if (is_point_inside_clip_volume(&hero.motion.pos, data->first) && alternate_item_available[47] == 0) {
+            if (help_records[49].count != 0) {
+                elapsed = scale_game_frames(game_frame_count) - help_records[49].best * 600;
+                if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed || help_records[49].best * 600 == 0) {
+                    help_request(8001, 0x31);
                 } else {
-                    time = FUN_00211a30(D_0015EEA4) / 600;
-                    if (D_00141968[49].best < time)
-                        D_00141968[49].best = FUN_00211a30(D_0015EEA4) / 600;
+                    time = scale_game_frames(game_frame_count) / 600;
+                    if (help_records[49].best < time)
+                        help_records[49].best = scale_game_frames(game_frame_count) / 600;
                 }
-                        } else {
-                D_00141968[49].count++;
-                time = FUN_00211a30(D_0015EEA4) / 600;
-                level = D_0015ED84;
-                if (D_00141968[49].best < time) {
-                    *(volatile u16 *)&D_00141968[49].best = FUN_00211a30(D_0015EEA4) / 600;
-                    level = *(volatile s32 *)&D_0015ED84;
-                }
-                D_00141968[49].flags = (1 << level) | (0x80000000 | D_00141968[49].flags);
+            } else {
+                help_records[49].count++;
+                time = scale_game_frames(game_frame_count) / 600;
+                if (help_records[49].best < time)
+                    help_records[49].best = scale_game_frames(game_frame_count) / 600;
+                help_records[49].flags = help_records[49].flags | (1 << current_level_index) | 0x80000000;
             }
         }
     }
     if (item_available[28] == 0) {
-        if (FUN_00269ee0(&hero.motion.pos, data->second) && D_0013DD4A != 0) {
-            elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[50].best * 600;
-            if ((s32)((f32)FUN_00211a30(18) * 60.0f) < elapsed || D_00141968[50].best * 600 == 0) {
-                FUN_00216488(8002, 0x32);
+        if (is_point_inside_clip_volume(&hero.motion.pos, data->second) && D_0013DD4A != 0) {
+            elapsed = scale_game_frames(game_frame_count) - help_records[50].best * 600;
+            if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed || help_records[50].best * 600 == 0) {
+                help_request(8002, 0x32);
             } else {
-                time = FUN_00211a30(D_0015EEA4) / 600;
-                if (D_00141968[50].best < time)
-                    D_00141968[50].best = FUN_00211a30(D_0015EEA4) / 600;
+                time = scale_game_frames(game_frame_count) / 600;
+                if (help_records[50].best < time)
+                    help_records[50].best = scale_game_frames(game_frame_count) / 600;
             }
             goto sample_volume;
         }
     }
     if (item_available[28] != 0) {
-        if (FUN_00269ee0(&hero.motion.pos, data->second) && D_0013DD4A != 0) {
-            if (D_00141968[112].count != 0) {
-                elapsed = FUN_00211a30(D_0015EEA4) - D_00141968[112].best * 600;
-                if ((s32)((f32)FUN_00211a30(18) * 60.0f) < elapsed || D_00141968[112].best * 600 == 0) {
-                    FUN_00216488(8005, 0x70);
+        if (is_point_inside_clip_volume(&hero.motion.pos, data->second) && D_0013DD4A != 0) {
+            if (help_records[112].count != 0) {
+                elapsed = scale_game_frames(game_frame_count) - help_records[112].best * 600;
+                if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed || help_records[112].best * 600 == 0) {
+                    help_request(8005, 0x70);
                 } else {
-                    time = FUN_00211a30(D_0015EEA4) / 600;
-                    if (D_00141968[112].best < time)
-                        D_00141968[112].best = FUN_00211a30(D_0015EEA4) / 600;
+                    time = scale_game_frames(game_frame_count) / 600;
+                    if (help_records[112].best < time)
+                        help_records[112].best = scale_game_frames(game_frame_count) / 600;
                 }
-                        } else {
-                D_00141968[112].count++;
-                time = FUN_00211a30(D_0015EEA4) / 600;
-                level = D_0015ED84;
-                if (D_00141968[112].best < time) {
-                    *(volatile u16 *)&D_00141968[112].best = FUN_00211a30(D_0015EEA4) / 600;
-                    level = *(volatile s32 *)&D_0015ED84;
-                }
-                D_00141968[112].flags = (1 << level) | (0x80000000 | D_00141968[112].flags);
+            } else {
+                help_records[112].count++;
+                time = scale_game_frames(game_frame_count) / 600;
+                if (help_records[112].best < time)
+                    help_records[112].best = scale_game_frames(game_frame_count) / 600;
+                help_records[112].flags = help_records[112].flags | (1 << current_level_index) | 0x80000000;
             }
         }
     }
 sample_volume:
     *(u128 *)volume = 0;
     volume[2] = -1.0f;
-    if (FUN_00211f18((char *)&hero + 0x290, volume) < 0.1f)
-        D_00141968[112].count = -1;
+    if (dot_vectors_xyz((char *)&hero + 0x290, volume) < 0.1f)
+        help_records[112].count = -1;
     if (alternate_item_available[47] == 0 && hero.state.control_mode == 15)
         alternate_item_available[47] = 1;
 }
-#endif
 
 /* per-frame update of a moby that fires a sound event when the game state allows */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_00309998), where it is exact; names translated to the US level program. */

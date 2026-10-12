@@ -2120,9 +2120,6 @@ void FUN_L01_002ef560(unsigned char *moby) {
                          scale_game_frames(time));
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef770.s", FUN_L01_002ef770);
-#else
 extern s32 D_L01_001619EC __attribute__((sda));
 extern s32 D_L01_001619F0 __attribute__((sda));
 extern f32 D_L01_001619F4 __attribute__((sda));
@@ -2150,7 +2147,7 @@ extern int FUN_001fa6e0(f32, s32, s32);
 extern f32 D_0015ED68;
 extern f32 FUN_00220e20(f32) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
 void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
     char *data = (char *)MOBY(moby)->pvars;
@@ -2196,13 +2193,12 @@ void FUN_L01_002ef770(unsigned char *moby, f32 *mode) {
             first = scale_game_frames(D_L01_00161A2C);
             second = scale_game_frames(D_L01_00161A30);
             duration = truncate_float_to_s32(FUN_00220e20(random_float_between_alt((f32)D_L01_00161A34 * 0.5f, (f32)D_L01_00161A34 * 2.5f)));
-            FUN_00218888(pos, origin_copy, velocity, lower, upper, first, second, duration, -1);
+            spawn_spark(pos, origin_copy, velocity, lower, upper, first, second, duration, -1);
         }
         i = next;
       } while (i < D_L01_001619EC);
     }
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F0E60), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002db8f8(void *);
