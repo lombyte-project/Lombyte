@@ -746,14 +746,11 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002c9c70.s", FUN_L10_002c9c70);
-#else
+#include "types.h"
 extern struct Moby *D_L10_0015FFD8;
 extern float FUN_001fa6c0_2c9c70(int) __asm__("FUN_001fa6c0");
 extern int FUN_001fa6d0_2c9c70(float) __asm__("FUN_001fa6d0");
 extern int FUN_001f9740_2c9c70(int *) __asm__("FUN_001f9740");
-extern int D_0015ED84_2c9c70 __asm__("D_0015ED84") __attribute__((section(".data")));
 extern int D_0015ED84;
 extern unsigned char D_0014C190_2c9c70[] __asm__("D_0014C190");
 extern unsigned char D_0014C050_2c9c70[] __asm__("D_0014C050");
@@ -764,39 +761,34 @@ extern char linked_moby_missing_message[] __asm__("D_L10_001DCE00");
 
 void FUN_L10_002c9c70(struct Moby *moby) {
     char *d = (char *)moby->pvars;
-    struct Moby *target = 0;
     int differences = 0;
+    struct Moby *target = 0;
     int *slot = (int *)(d + 0x18);
     unsigned char state;
 
     if (*(int *)(d + 0x10) != -1) {
         target = &D_L10_0015FFD8[*(int *)(d + 0x10)];
     }
-    {
-        unsigned char id = moby->mission;
-        if ((id == 0xff ||
-             D_0014C050_2c9c70[id + (D_0015ED84 << 4)] != 0xff) &&
-            moby->state != 0) {
-            int *entry = slot;
-            int i = 4;
-            do {
-                int index = *entry;
-                if (index != -1) {
-                    struct Moby *other = &D_L10_0015FFD8[index];
-                    if (other != 0 && other->oclass == *(short *)(entry + 1) &&
-                        other->state != 0xfe && other->state != 0xfd) {
-                        unsigned short id = other->save_id;
-                        if ((((*(int *)(D_0014C190_2c9c70 + (((short)id >> 5) * 4) +
-                                  (D_0015ED84_2c9c70 << 8)) >> (id & 31)) ^ 1) & 1) != 0) {
-                            if (*(signed char *)((char *)entry + 6) == -1 ||
-                                other->state != *(signed char *)((char *)entry + 6))
-                                differences++;
-                        }
+    if ((moby->mission == 0xff ||
+         D_0014C050_2c9c70[moby->mission + (D_0015ED84 << 4)] != 0xff) &&
+        moby->state != 0) {
+        int i;
+        for (i = 0; i < 5; i++) {
+            int *entry = slot + i * 2;
+            int index = *entry;
+            if (index != -1) {
+                struct Moby *other = &D_L10_0015FFD8[index];
+                if (other != 0 && other->oclass == *(short *)(entry + 1) &&
+                    other->state != 0xfe && other->state != 0xfd) {
+                    unsigned short id = other->save_id;
+                    if ((((*(int *)(D_0014C190_2c9c70 + (((short)id >> 5) * 4) +
+                              (D_0015ED84 << 8)) >> (id & 31)) ^ 1) & 1) != 0) {
+                        if (*(signed char *)((char *)entry + 6) == -1 ||
+                            other->state != *(signed char *)((char *)entry + 6))
+                            differences++;
                     }
                 }
-                i--;
-                entry += 2;
-            } while (i >= 0);
+            }
         }
     }
     switch (state = moby->state) {
@@ -839,9 +831,10 @@ void FUN_L10_002c9c70(struct Moby *moby) {
             float initial = *(float *)(d + 4);
             float now = *(float *)d;
             float scale = moby->pclass->scale;
-            moby->scale = (now < initial ? initial * scale : now * scale);
+            float size = (now < initial ? initial * scale : now * scale);
+            moby->state = 1;
+            moby->scale = size;
         }
-        moby->state = 1;
         break;
     case 1:
         if (differences == 0) {
@@ -875,7 +868,6 @@ void FUN_L10_002c9c70(struct Moby *moby) {
         break;
     }
 }
-#endif
 void FUN_L10_002d7b18(struct Moby *a, float t) {
     float c = a->pos.z;
     float d = t - c;
