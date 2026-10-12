@@ -698,7 +698,7 @@ extern int func_001F6EA8_239918(int, int, int, int, int) __asm__("FUN_001f6af0")
 extern int func_L00_00236400_239918(void *, int *, int *) __asm__("FUN_L00_00235a70");
 
 int FUN_L00_00238f88(Elem_239918 *e) {
-    Ids_239918 tmp;
+    Ids_239918 text_ids;
     int x, y;
     int a, b, hw, hh, i, alpha, k, yy, col, shadow, str;
     float f22, f23;
@@ -768,9 +768,9 @@ int FUN_L00_00238f88(Elem_239918 *e) {
     }
     k = e->sel;
     if (k >= 0 && D_L00_0015FAC0_c2[D_L00_0015F72C][k].f0 != 0) {
-        tmp = D_L00_0015F8C0_239918;
+        text_ids = D_L00_0015F8C0_239918;
         if (D_L00_0015FAC0_c2[D_L00_0015F72C][k].f0 != 0) {
-            str = func_001FE540_239918(tmp.v[k]);
+            str = func_001FE540_239918(text_ids.v[k]);
             if (str != 0 && func_00116810_239918(str) != 0) {
                 float f20 = f23 * f22;
                 col = func_001FA8A8_239918(D_L00_0015F7D4, D_L00_0015F7D8, f20);

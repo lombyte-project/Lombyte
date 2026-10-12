@@ -934,15 +934,15 @@ void FUN_L00_002e2250(int unused, int idx) {
         float t;
         float a;
         float b;
-        float c;
+        float random;
 
         p->z = 0.0f;
         s = func_L00_0025F368_2E3700(D_L00_00161CE8_2E3700[idx] + fn * 0.99483764f);
         t = func_L00_0025F368_2E3700(D_L00_00161CF8_2E3700[idx] + fn * 0.20944f);
         a = func_001F9FA8_2E3700(t) * 0.5f;
         b = func_001F9FA8_2E3700(s);
-        c = func_L00_00258C80_2E3700(0.0f, 0.2f);
-        p->z += a * b + c;
+        random = func_L00_00258C80_2E3700(0.0f, 0.2f);
+        p->z += a * b + random;
         p->y = func_001F9F90_2E3700(s) * 0.3f;
         p->w = 1.0f;
         p->x = step * fn;

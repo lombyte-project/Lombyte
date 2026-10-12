@@ -602,8 +602,8 @@ void FUN_L05_00329ce8(Camera_32B1F8 *m) {
     V_32B1F8 down;
     V_32B1F8 focus;
     V_32B1F8 rel;
-    V_32B1F8 lat;
-    V_32B1F8 off;
+    V_32B1F8 lateral;
+    V_32B1F8 radial;
     V_32B1F8 base;
     V_32B1F8 goal;
     V_32B1F8 tmp;
@@ -615,7 +615,7 @@ void FUN_L05_00329ce8(Camera_32B1F8 *m) {
     Focus_32B1F8 *q;
     Track_32B1F8 *tr;
     float dist;
-    Spring_32B1F8 *e;
+    Spring_32B1F8 *spring;
     float *v;
     float dd;
     V_32B1F8 *pos;
@@ -626,7 +626,7 @@ void FUN_L05_00329ce8(Camera_32B1F8 *m) {
     tr = &d->track;
     dist = d->dist;
     q = &d->focus;
-    e = &d->spring;
+    spring = &d->spring;
     fast_vec_normalize(&down, g, -1.0f);
     qcopy(&focus, &q->pos);
     if (d->mode == 0) {
@@ -634,10 +634,10 @@ void FUN_L05_00329ce8(Camera_32B1F8 *m) {
         n = 0;
         dd = fast_vec_dot(&rel, &q->axis);
         fast_vec_normalize(&tmp, &q->axis, dd);
-        fast_vec_sub(&lat, &rel, &tmp);
-        fast_vec_normalize(&off, &lat, e->dist);
-        fast_vec_add(&base, &focus, &off);
-        fast_vec_normalize(&tmp, &q->axis, e->height);
+        fast_vec_sub(&lateral, &rel, &tmp);
+        fast_vec_normalize(&radial, &lateral, spring->dist);
+        fast_vec_add(&base, &focus, &radial);
+        fast_vec_normalize(&tmp, &q->axis, spring->height);
         fast_vec_add(&goal, &base, &tmp);
         fast_vec_add(&goal, &goal, &d->bias);
         m->pos.x = spring_32B1F8(m->pos.x, goal.x, &d->vel[0], d->k10, d->k14, d->k18);
@@ -652,7 +652,7 @@ void FUN_L05_00329ce8(Camera_32B1F8 *m) {
         fast_vec_scale(&step, &step, 0.16666667f);
         while (n < 6) {
             if (collide_32B1F8(0.5f, &probe, 18, 0) != 0) {
-                e->height = spring_32B1F8(e->height, D_L05_00174378_32B1F8 - focus.z, &cur->vel, 0.05f, 0.2f, 0.0f);
+                spring->height = spring_32B1F8(spring->height, D_L05_00174378_32B1F8 - focus.z, &cur->vel, 0.05f, 0.2f, 0.0f);
                 break;
             }
             n++;
@@ -662,27 +662,27 @@ void FUN_L05_00329ce8(Camera_32B1F8 *m) {
             d->bias.x = spring_32B1F8(d->bias.x, 0.0f, &d->bias_vel[0], 0.02f, 0.2f, 0.05f);
             d->bias.y = spring_32B1F8(d->bias.y, 0.0f, &d->bias_vel[1], 0.02f, 0.2f, 0.05f);
             d->bias.z = spring_32B1F8(d->bias.z, 0.0f, &d->bias_vel[2], 0.02f, 0.2f, 0.05f);
-            e->height = spring_32B1F8(e->height, d->spring_height, &cur->vel, 0.005f, 0.2f, 0.0f);
+            spring->height = spring_32B1F8(spring->height, d->spring_height, &cur->vel, 0.005f, 0.2f, 0.0f);
         }
         if (((Hero *)(D_0013E633_32B1F8 - 0x290))->air_frames.s != 0 && 2.0f < ((Hero *)(D_0013E633_32B1F8 - 0x290))->ground_distance) {
-            if (fabs_32B1F8(e->dist - d->spring_dist2) < 0.015f) e->dist = d->spring_dist2;
-            else if (e->dist < d->spring_dist2) e->dist = e->dist + 0.015f;
-            else e->dist = e->dist - 0.015f;
+            if (fabs_32B1F8(spring->dist - d->spring_dist2) < 0.015f) spring->dist = d->spring_dist2;
+            else if (spring->dist < d->spring_dist2) spring->dist = spring->dist + 0.015f;
+            else spring->dist = spring->dist - 0.015f;
             if (n == 6) {
-                if (fabs_32B1F8(e->height - d->spring_height2) < 0.05f) e->height = d->spring_height2;
-                else if (e->height < d->spring_height2) e->height = e->height + 0.05f;
-                else e->height = e->height - 0.05f;
+                if (fabs_32B1F8(spring->height - d->spring_height2) < 0.05f) spring->height = d->spring_height2;
+                else if (spring->height < d->spring_height2) spring->height = spring->height + 0.05f;
+                else spring->height = spring->height - 0.05f;
             }
             if (fabs_32B1F8(q->dist - d->focus_dist) < 0.02f) q->dist = d->focus_dist;
             else if (q->dist < d->focus_dist) q->dist = q->dist + 0.02f;
             else q->dist = q->dist - 0.02f;
         } else {
-            if (fabs_32B1F8(e->dist - d->spring_dist) < 0.03f) e->dist = d->spring_dist;
-            else if (e->dist < d->spring_dist) e->dist = e->dist + 0.03f;
-            else e->dist = e->dist - 0.03f;
-            if (fabs_32B1F8(e->height - d->spring_height) < 0.1f) e->height = d->spring_height;
-            else if (e->height < d->spring_height) e->height = e->height + 0.1f;
-            else e->height = e->height - 0.1f;
+            if (fabs_32B1F8(spring->dist - d->spring_dist) < 0.03f) spring->dist = d->spring_dist;
+            else if (spring->dist < d->spring_dist) spring->dist = spring->dist + 0.03f;
+            else spring->dist = spring->dist - 0.03f;
+            if (fabs_32B1F8(spring->height - d->spring_height) < 0.1f) spring->height = d->spring_height;
+            else if (spring->height < d->spring_height) spring->height = spring->height + 0.1f;
+            else spring->height = spring->height - 0.1f;
             if (fabs_32B1F8(q->dist - dist) < 0.04f) q->dist = dist;
             else if (q->dist < dist) q->dist = q->dist + 0.04f;
             else q->dist = q->dist - 0.04f;
@@ -690,12 +690,12 @@ void FUN_L05_00329ce8(Camera_32B1F8 *m) {
         fl = 1;
     } else {
         qcopy(&d->aim, *(char **)(g + 0x1DF0) + 0xE0);
-        if (fabs_32B1F8(e->dist - d->spring_dist) < 0.015f) e->dist = d->spring_dist;
-        else if (e->dist < d->spring_dist) e->dist = e->dist + 0.015f;
-        else e->dist = e->dist - 0.015f;
-        if (fabs_32B1F8(e->height - d->spring_height) < 0.05f) e->height = d->spring_height;
-        else if (e->height < d->spring_height) e->height = e->height + 0.05f;
-        else e->height = e->height - 0.05f;
+        if (fabs_32B1F8(spring->dist - d->spring_dist) < 0.015f) spring->dist = d->spring_dist;
+        else if (spring->dist < d->spring_dist) spring->dist = spring->dist + 0.015f;
+        else spring->dist = spring->dist - 0.015f;
+        if (fabs_32B1F8(spring->height - d->spring_height) < 0.05f) spring->height = d->spring_height;
+        else if (spring->height < d->spring_height) spring->height = spring->height + 0.05f;
+        else spring->height = spring->height - 0.05f;
         if (fabs_32B1F8(q->dist - dist) < 0.02f) q->dist = dist;
         else if (q->dist < dist) q->dist = q->dist + 0.02f;
         else q->dist = q->dist - 0.02f;

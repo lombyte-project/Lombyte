@@ -1023,10 +1023,10 @@ extern void func_0020D678_309688(void *) __asm__("FUN_0020c828");
 extern unsigned char D_0014171B_309688[] __asm__("D_0014C050");
 extern char alternate_item_available[] __asm__("D_0013D388");
 
-void FUN_L09_003082d8(Moby *m)
+void FUN_L09_003082d8(Moby *moby)
 {
-    BarrierData_309688 *d = (*(BarrierData_309688 **)&m->pvars);
-    float a20[4], a30[4], a40[4], a50[4], a60[4];
+    BarrierData_309688 *d = (*(BarrierData_309688 **)&moby->pvars);
+    float origin[4], a30[4], a40[4], vel[4], a60[4];
     Hit_309688 *r;
     int flag;
     int n;
@@ -1034,67 +1034,67 @@ void FUN_L09_003082d8(Moby *m)
     float ang;
     float f;
 
-    if (m->state == 0) {
+    if (moby->state == 0) {
         if (d->idx != -1) ((Flags_309688 *)(alternate_item_available + d->idx))->f43 = 0;
-        m->state = 1;
+        moby->state = 1;
     }
-    if (m->unkB0 != 0xFF) {
+    if (moby->unkB0 != 0xFF) {
         int row = D_0015ED84 * 16;
-        if (D_0014171B_309688[m->unkB0 + row] == 0xFF) {
+        if (D_0014171B_309688[moby->unkB0 + row] == 0xFF) {
             if (d->idx != -1) ((Flags_309688 *)(alternate_item_available + d->idx))->f43 = 1;
-            func_0020D678_309688(m);
+            func_0020D678_309688(moby);
             return;
         }
     }
     flag = 0;
-    r = func_L00_0025B478_309688(m, 0x40000, 0);
-    if (func_L00_001FEF78_309688(&m->unkBC) == 0) return;
+    r = func_L00_0025B478_309688(moby, 0x40000, 0);
+    if (func_L00_001FEF78_309688(&moby->unkBC) == 0) return;
     if (r == 0) return;
-    if (m->oclass < 0x508) flag = func_L09_003095D0_309688(m, m->oclass + 1) != 0;
-    m->unkBC = func_001F9850_309688(10);
-    qcopy(a20, ((f32 *)&m->pos));
-    qcopy(a30, ((f32 *)&m->pos));
-    if (m->oclass < 0x508) {
-        func_0022ED80_309688(0, 0, m);
+    if (moby->oclass < 0x508) flag = func_L09_003095D0_309688(moby, moby->oclass + 1) != 0;
+    moby->unkBC = func_001F9850_309688(10);
+    qcopy(origin, ((f32 *)&moby->pos));
+    qcopy(a30, ((f32 *)&moby->pos));
+    if (moby->oclass < 0x508) {
+        func_0022ED80_309688(0, 0, moby);
     } else {
-        func_0022ED80_309688(0, 0, m);
+        func_0022ED80_309688(0, 0, moby);
     }
-    m->unkA4 = 0xFF;
+    moby->unkA4 = 0xFF;
     n = 40;
     if (0.85f < D_L09_0015F5D0 || 0.85f < D_L09_0015F5D4) n = 30;
     ang = -3.1415927f;
     for (i = 0; i < n; i++) {
-        *(u128 *)a50 = 0;
-        a50[0] = func_002140F8_309688(-0.4f, 0.4f);
-        a50[1] = func_002140F8_309688(-0.6f, 0.6f);
-        a50[2] = func_002140F8_309688(-0.4f, 0.4f);
-        *(u128 *)a40 = *(u128 *)a50;
+        *(u128 *)vel = 0;
+        vel[0] = func_002140F8_309688(-0.4f, 0.4f);
+        vel[1] = func_002140F8_309688(-0.6f, 0.6f);
+        vel[2] = func_002140F8_309688(-0.4f, 0.4f);
+        *(u128 *)a40 = *(u128 *)vel;
         f = func_002140F8_309688(0.3f, 2.6f);
         a40[0] = a40[0] + f * func_001F9F90_309688(ang);
         f = f * func_001F9FA8_309688(ang);
         a40[2] = a40[2] + f;
-        func_001F9EC0_309688(a40, a40, ((f32 *)&m->unkC0));
+        func_001F9EC0_309688(a40, a40, ((f32 *)&moby->unkC0));
         fast_vec_add(a40, a40, a30);
-        fast_vec_sub(a50, a40, a20);
-        f = func_001F9B88_309688(6.0f - fast_vec_length(a50)) / 6.0f;
+        fast_vec_sub(vel, a40, origin);
+        f = func_001F9B88_309688(6.0f - fast_vec_length(vel)) / 6.0f;
         func_L00_001FF4B0_309688(a60, r->pos, f * f * 8.0f);
-        fast_vec_add(a50, a50, a60);
-        func_L00_001FF4B0_309688(a50, a50, f * (func_002140F8_309688(5.0f, 8.0f) * D_0015ED6C));
-        if (m->oclass == 0x508) {
+        fast_vec_add(vel, vel, a60);
+        func_L00_001FF4B0_309688(vel, vel, f * (func_002140F8_309688(5.0f, 8.0f) * D_0015ED6C));
+        if (moby->oclass == 0x508) {
             int odd = i & 1;
-            func_L09_002F0BB8_309688(m, a40, a50, odd, func_002140F8_309688(1.0f, 1.3f));
+            func_L09_002F0BB8_309688(moby, a40, vel, odd, func_002140F8_309688(1.0f, 1.3f));
         }
         if (i % 3 == 0) {
-            func_L00_00260108_309688(m, a40, -1, func_002140F8_309688(0.3f, 0.6f), 0.0f);
+            func_L00_00260108_309688(moby, a40, -1, func_002140F8_309688(0.3f, 0.6f), 0.0f);
         }
         ang = ang + 6.2831855f / func_001FA888_309688(n);
     }
     fast_vec_scale(a40, r->pos, 0.5f);
-    func_L00_0025F4A8_309688(m, r->pos, a20, 0.0f, 0.0f, 10, 3, 16, 3.0f, 2.0f, 1.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-    if (m->oclass == 0x508) {
+    func_L00_0025F4A8_309688(moby, r->pos, origin, 0.0f, 0.0f, 10, 3, 16, 3.0f, 2.0f, 1.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+    if (moby->oclass == 0x508) {
         if (d->idx != -1) ((Flags_309688 *)(alternate_item_available + d->idx))->f43 = 1;
     }
-    if (m->oclass == 0x508 || flag) func_0020D678_309688(m);
+    if (moby->oclass == 0x508 || flag) func_0020D678_309688(moby);
 }
 #include "qzero.h"
 
@@ -1159,7 +1159,7 @@ extern unsigned char D_0013F3D0[];
 void FUN_L09_003091b0(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float v0[4];
-    float v1[4];
+    float original_rotation[4];
     float v2[4];
     float v3[4];
     float v4[4];
@@ -1171,7 +1171,7 @@ void FUN_L09_003091b0(char *moby) {
     unsigned char c;
 
     func_001F9C30_30A560(v0, moby + 0x10, -1.0f);
-    qcopy(v1, moby + 0x40);
+    qcopy(original_rotation, moby + 0x40);
     f25 = *(float *)(moby + 0x18);
     f24 = *(float *)(data + 0x84) - 0.300000012f;
     s = ((unsigned char *)moby)[0x20];
@@ -1287,7 +1287,7 @@ void FUN_L09_003091b0(char *moby) {
         *(float *)(moby + 0x40) = func_001FA748_30A560(*(float *)(data + 0x60), *(float *)(moby + 0x40));
         *(float *)(moby + 0x44) = func_001FA748_30A560(*(float *)(data + 0x64), *(float *)(moby + 0x44));
         func_001F9BD8_30A560(v0, v0, moby + 0x10);
-        func_L00_002617B0_30A560(data + 0x20, v0, v1, moby + 0x40);
+        func_L00_002617B0_30A560(data + 0x20, v0, original_rotation, moby + 0x40);
         break;
     }
 }

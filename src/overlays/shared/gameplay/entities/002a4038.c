@@ -108,7 +108,7 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     float m[16];
     int *base;
     int *p;
-    long *c;
+    long *words;
     long w;
     long sel;
     unsigned int lim;
@@ -199,31 +199,31 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
         w = ((QuadCamera *)D_L02_0016D040)->c230 | ((QuadCamera *)D_L02_0016D040)->c234 << 8
             | ((QuadCamera *)D_L02_0016D040)->c238 << 16;
     }
-    c = (long *)PACKET_CURSOR;
+    words = (long *)PACKET_CURSOR;
     lim = 0x60;
     sel = 0x5360A;
     if (!(lim < arg->alpha)) {
         sel = 0x5370B;
     }
-    c[0] = 0x8000000000008001;
-    c[1] = 0xEEEEEEEE;
-    c[2] = (long)arg->alpha << 32 | 0x64;
-    c[3] = 0x42;
-    c[4] = TEXTURE_REGISTER;
-    c[5] = 6;
-    c[6] = w;
-    c[7] = 0x3D;
-    c[8] = (long)(TEXTURE_CURSOR >> 8) << 32 | 0x1000000000000;
-    c[9] = 0x50;
-    c[10] = 0;
-    c[11] = 0x51;
-    c[12] = 0x4000000040;
-    c[13] = 0x52;
-    c[14] = 0;
-    c[15] = 0x53;
-    c[16] = sel;
-    c[17] = 0x47;
-    PACKET_CURSOR = (int *)(c + 18);
+    words[0] = 0x8000000000008001;
+    words[1] = 0xEEEEEEEE;
+    words[2] = (long)arg->alpha << 32 | 0x64;
+    words[3] = 0x42;
+    words[4] = TEXTURE_REGISTER;
+    words[5] = 6;
+    words[6] = w;
+    words[7] = 0x3D;
+    words[8] = (long)(TEXTURE_CURSOR >> 8) << 32 | 0x1000000000000;
+    words[9] = 0x50;
+    words[10] = 0;
+    words[11] = 0x51;
+    words[12] = 0x4000000040;
+    words[13] = 0x52;
+    words[14] = 0;
+    words[15] = 0x53;
+    words[16] = sel;
+    words[17] = 0x47;
+    PACKET_CURSOR = (int *)(words + 18);
     PACKET_CURSOR[0] = 0x30000401;
     PACKET_CURSOR[1] = (int)arg->dst;
     PACKET_CURSOR[2] = 0;
@@ -234,12 +234,12 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     PACKET_CURSOR[2] = 0;
     PACKET_CURSOR[3] = 0x50000002;
     PACKET_CURSOR += 4;
-    c = (long *)PACKET_CURSOR;
-    c[0] = 0x1000000000008001;
-    c[1] = 0xE;
-    c[2] = 0;
-    c[3] = 0x3F;
-    PACKET_CURSOR = (int *)(c + 4);
+    words = (long *)PACKET_CURSOR;
+    words[0] = 0x1000000000008001;
+    words[1] = 0xE;
+    words[2] = 0;
+    words[3] = 0x3F;
+    PACKET_CURSOR = (int *)(words + 4);
     TEXTURE_CURSOR += 0x4000;
 }
 #undef PACKET_CURSOR

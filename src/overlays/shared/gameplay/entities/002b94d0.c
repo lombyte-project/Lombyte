@@ -1023,7 +1023,7 @@ extern void func_L00_00236DE8_2BDAF0(void) __asm__("FUN_L00_00236458");
 extern void func_L00_002377E0_2BDAF0(void) __asm__("FUN_L00_00236e50");
 
 void FUN_L00_002bc7e8(Moby *m) {
-    Vq_2BDAF0 v0;
+    Vq_2BDAF0 direction;
     Vq_2BDAF0 v[3];
     Vq_2BDAF0 mt[4];
     Ray_2BDAF0 *p;
@@ -1073,21 +1073,21 @@ void FUN_L00_002bc7e8(Moby *m) {
         if (((Hero *)D_0013F450_2BDAF0)->state.current == 1) {
             func_L00_00222B80_2BDAF0(30, 1);
         }
-        *(u128_2BDAF0 *)&v0 = 0;
+        *(u128_2BDAF0 *)&direction = 0;
         if (((Hero *)D_0013F450_2BDAF0)->state.current == 30
             && (*(unsigned short *)((char *)((Hero *)D_0013F450_2BDAF0)->moby + 0x34) & 1)) {
             func_001FA480_2BDAF0(v, D_L00_00166D80_2BDAF0);
             func_001FA4A0_2BDAF0(mt, v);
-            v0.z = 1.0f;
-            func_001F9EE8_2BDAF0(&v0, &v0, mt);
+            direction.z = 1.0f;
+            func_001F9EE8_2BDAF0(&direction, &direction, mt);
         } else if (((Hero *)D_0013F450_2BDAF0)->unk22C8 == 1) {
-            func_001F9C30_2BDAF0(&v0, &m->unkD0, -1.0f);
+            func_001F9C30_2BDAF0(&direction, &m->unkD0, -1.0f);
         } else {
-            v0.x = 1.0f;
-            func_001F9EC0_2BDAF0(&v0, &v0, ((Hero *)D_0013F450_2BDAF0)->basis[0].f);
+            direction.x = 1.0f;
+            func_001F9EC0_2BDAF0(&direction, &direction, ((Hero *)D_0013F450_2BDAF0)->basis[0].f);
         }
-        p->yaw = func_L00_001FF860_2BDAF0(v0.x, v0.y);
-        p->pitch = func_L00_001FF860_2BDAF0(func_001F9CE8_2BDAF0(&v0), v0.z);
+        p->yaw = func_L00_001FF860_2BDAF0(direction.x, direction.y);
+        p->pitch = func_L00_001FF860_2BDAF0(func_001F9CE8_2BDAF0(&direction), direction.z);
         *(u128_2BDAF0 *)&v[0] = *(u128_2BDAF0 *)p->pos;
         hit = func_L00_002BD6B8_2BDAF0(m, &v[0], &p->yaw, &p->pitch);
         func_001F9908_2BDAF0(&p->delay);
@@ -1161,8 +1161,8 @@ void FUN_L00_002bc7e8(Moby *m) {
         D_L00_001617BC = 1;
         if (D_L00_001617C0 >= 0) {
             float f;
-            func_L00_001FF4B0_2BDAF0(&v0, &m->unkD0, -0.5f);
-            func_001F9BD8_2BDAF0(&v[0], p, &v0);
+            func_L00_001FF4B0_2BDAF0(&direction, &m->unkD0, -0.5f);
+            func_001F9BD8_2BDAF0(&v[0], p, &direction);
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[0] = v[0].x;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[1] = v[0].y;
             ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[D_L00_001617C0].pos[2] = v[0].z;
@@ -2557,7 +2557,7 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
     float mid[4];
     float z[4];
     int ok;
-    float len;
+    float half_length;
     float sum;
 
     ok = 1;
@@ -2565,9 +2565,9 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *m, Blk_2C0CF8 *p, void *q, int flag) {
     func_L00_001FF5B0_2C0CF8(m->f2C * 5.2f / m->p24->f24, d, d);
     func_001F9BD8_2C0CF8(land, m->pos, d);
     func_001F9C30_2C0CF8(half, d, 0.5f);
-    len = func_001F9CE8_2C0CF8(half);
+    half_length = func_001F9CE8_2C0CF8(half);
     func_001F9BD8_2C0CF8(half, m->pos, half);
-    if (!(0.5f < len)) {
+    if (!(0.5f < half_length)) {
         ok = 0;
     }
     land[2] = func_L00_002BFF88_2C0CF8(land, m);

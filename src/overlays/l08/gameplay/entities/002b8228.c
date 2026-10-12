@@ -560,8 +560,8 @@ extern void rotation_2D5FA8(float *, int, float) __asm__("FUN_L00_001fff28");
 extern void matmul_2D5FA8(float *, float *, float *) __asm__("FUN_001fa3c0");
 extern void effects_update_2D5FA8(Moby *, short *) __asm__("FUN_L00_0025d538");
 
-void FUN_L08_002d4ca0(Moby *m) {
-    Data_2D5FA8 *d = (Data_2D5FA8 *)m->pvars;
+void FUN_L08_002d4ca0(Moby *moby) {
+    Data_2D5FA8 *d = (Data_2D5FA8 *)moby->pvars;
     Hit_2D5FA8 *t;
     Hit_2D5FA8 *u;
     Hit_2D5FA8 *c;
@@ -570,7 +570,7 @@ void FUN_L08_002d4ca0(Moby *m) {
     float damage = 0.0f;
     int one;
 
-    t = find_2D5FA8(m, 0x330000, 0);
+    t = find_2D5FA8(moby, 0x330000, 0);
     if (d->partA != 0) {
         u = find_2D5FA8(d->partA, 0x210000, 0);
     } else {
@@ -586,11 +586,11 @@ void FUN_L08_002d4ca0(Moby *m) {
         short h = t->moby->oclass;
         if (h == 0x1A9 || h == 0x47) t = 0;
     }
-    damage_2D5FA8(m, t, &d->health, 0, &hit, &damage, 0, 4);
+    damage_2D5FA8(moby, t, &d->health, 0, &hit, &damage, 0, 4);
     one = 1;
-    if (hit != one && m->state != 0) {
+    if (hit != one && moby->state != 0) {
         d->health -= damage;
-        if (damage != 0.0f) event_2D5FA8(4, 0, m);
+        if (damage != 0.0f) event_2D5FA8(4, 0, moby);
         if (d->health > 0.0f) {
             if (damage < 4.0f) {
                 d->tint = 0x78;
@@ -606,24 +606,24 @@ void FUN_L08_002d4ca0(Moby *m) {
                 d->tint = 0xE6;
                 d->timer = ticks_2D5FA8(0x1E);
             }
-            if (m->state == 0xC && m->prev_seq != 1) {
-                animate_2D5FA8(m, 1, 0, 0);
+            if (moby->state == 0xC && moby->prev_seq != 1) {
+                animate_2D5FA8(moby, 1, 0, 0);
             }
         } else {
             int dead = 0x63;
-            if (m->state != dead) {
-                qcopy(vec, &m->pos);
+            if (moby->state != dead) {
+                qcopy(vec, &moby->pos);
                 vec[2] += 3.0f;
                 d->tint = 0xFA;
                 zero_2D5FA8(d->f120);
-                burst_2D5FA8(m, d->f40, vec, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, one, -1, 0);
-                spawn_2D5FA8(m, 0x6C0, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6C1, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6C2, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6C3, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6C4, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                if (m->prev_seq != one) animate_2D5FA8(m, 1, 0, 3);
-                m->state = dead;
+                burst_2D5FA8(moby, d->f40, vec, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, one, -1, 0);
+                spawn_2D5FA8(moby, 0x6C0, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(moby, 0x6C1, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(moby, 0x6C2, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(moby, 0x6C3, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(moby, 0x6C4, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                if (moby->prev_seq != one) animate_2D5FA8(moby, 1, 0, 3);
+                moby->state = dead;
                 d->health = 6.0f;
                 d->flags &= 0xFFFD;
             } else {
@@ -644,34 +644,34 @@ void FUN_L08_002d4ca0(Moby *m) {
                         }
                     }
                 }
-                qcopy(vec, &m->pos);
+                qcopy(vec, &moby->pos);
                 vec[2] += 1.0f;
-                explode_2D5FA8(m, 0, -1);
-                event_2D5FA8(2, 0, m);
-                burst_2D5FA8(m, d->f40, vec, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-                spawn_2D5FA8(m, 0x6FE, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6FE, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6FF, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6FF, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
-                spawn_2D5FA8(m, 0x6FF, (float *)&m->pos, (float *)&m->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                explode_2D5FA8(moby, 0, -1);
+                event_2D5FA8(2, 0, moby);
+                burst_2D5FA8(moby, d->f40, vec, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+                spawn_2D5FA8(moby, 0x6FE, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(moby, 0x6FE, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(moby, 0x6FF, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(moby, 0x6FF, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
+                spawn_2D5FA8(moby, 0x6FF, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8, D_L08_0015F660_2D5FA8);
                 if (d->partA != 0) delete_2D5FA8(d->partA);
                 if (d->partB != 0) delete_2D5FA8(d->partB);
-                delete_2D5FA8(m);
+                delete_2D5FA8(moby);
                 return;
             }
         }
-        effects_start_2D5FA8(m, &d->anim0);
+        effects_start_2D5FA8(moby, &d->anim0);
     }
 
-    m->unkA4 = 0xFF;
+    moby->unkA4 = 0xFF;
     if (d->partA != 0) d->partA->unkA4 = 0xFF;
     if (d->partB != 0) d->partB->unkA4 = 0xFF;
 
-    follow_2D5FA8(100.0f, m, d->target, 0, 0, D_L08_001B0FB0_2D5FA8[d->path]->list, D_L08_001B0FB0_2D5FA8[d->path]->count);
+    follow_2D5FA8(100.0f, moby, d->target, 0, 0, D_L08_001B0FB0_2D5FA8[d->path]->list, D_L08_001B0FB0_2D5FA8[d->path]->count);
     if (d->fF0 == 0) d->fF0 = *(int *)D_0013E633_2D5FA8;
     if (d->mode != 2) {
         float yaw, len, pitch;
-        fast_vec_sub(vec, d->target, (float *)&m->pos);
+        fast_vec_sub(vec, d->target, (float *)&moby->pos);
         vec[2] -= 3.0f;
         yaw = angle_2D5FA8(vec[0], vec[1]);
         len = length_2D5FA8(vec);
@@ -681,7 +681,7 @@ void FUN_L08_002d4ca0(Moby *m) {
         } else if (pitch < -0.7853982f) {
             pitch = -0.7853982f;
         }
-        yaw = angle_delta_2D5FA8(yaw, m->rot.z);
+        yaw = angle_delta_2D5FA8(yaw, moby->rot.z);
         approach_2D5FA8(&d->yaw, yaw, &d->yaw_speed, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
         approach_2D5FA8(&d->pitch, pitch, &d->pitch_speed, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE70_2D5FA8 * 12.566371f, D_0015EE6C_2D5FA8 * 9.424778f);
     } else {
@@ -694,7 +694,7 @@ void FUN_L08_002d4ca0(Moby *m) {
     {
         short a0 = d->anim0;
         short a2 = d->anim2;
-        effects_update_2D5FA8(m, &d->anim0);
+        effects_update_2D5FA8(moby, &d->anim0);
         if (d->partA != 0) {
             d->anim0 = a0;
             d->anim2 = a2;
@@ -835,21 +835,21 @@ extern float func_001F9878_2D6C58(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_2D6C58(float) __asm__("FUN_001fa6d0");
 extern char *func_00219780_2D6C58(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
-void FUN_L08_002d5950(char *moby, int a1, int count) {
+void FUN_L08_002d5950(char *moby, int joint, int count) {
     char *d = *(char **)(moby + 0x78);
     char t10[32];
     float t30[8];
     float t50[4];
     float t60[4];
     float t70[4];
-    float t80[4];
+    float jitter[4];
     float v90[4];
     int i;
     int x1, x2, x3;
     float s, t;
 
-    func_L00_00250800_2D6C58(moby, a1, t50);
-    func_0020DAF8_2D6C58(moby, a1, t10);
+    func_L00_00250800_2D6C58(moby, joint, t50);
+    func_0020DAF8_2D6C58(moby, joint, t10);
     for (i = 0; i < count; i++) {
         float *vp = v90;
 
@@ -861,8 +861,8 @@ void FUN_L08_002d5950(char *moby, int a1, int count) {
         qcopy(t60, d + 0x40);
         qcopy(t70, d + 0x40);
         if (count / 3 < i) {
-            func_L00_001FF4B0_2D6C58(t80, t30, func_002140F8_2D6C58(D_L08_001618DC, D_L08_001618DC * 1.2f) * D_0015ED6C);
-            fast_vec_add(t60, t60, t80);
+            func_L00_001FF4B0_2D6C58(jitter, t30, func_002140F8_2D6C58(D_L08_001618DC, D_L08_001618DC * 1.2f) * D_0015ED6C);
+            fast_vec_add(t60, t60, jitter);
             fast_vec_scale(t70, t70, 0.5f);
             t = func_001F9F90_2D6C58(s);
             t = t * (func_002140F8_2D6C58(0.0f, D_L08_001618E8) * D_0015ED6C);
@@ -872,8 +872,8 @@ void FUN_L08_002d5950(char *moby, int a1, int count) {
             t70[1] = t70[1] + t;
             t70[2] = D_L08_001618E0 * D_0015ED6C;
         } else {
-            func_L00_001FF4B0_2D6C58(t80, t30, func_002140F8_2D6C58(0.0f, D_L08_001618DC) * D_0015ED6C);
-            fast_vec_add(t60, t60, t80);
+            func_L00_001FF4B0_2D6C58(jitter, t30, func_002140F8_2D6C58(0.0f, D_L08_001618DC) * D_0015ED6C);
+            fast_vec_add(t60, t60, jitter);
             fast_vec_scale(t70, t70, 0.5f);
             t = func_001F9F90_2D6C58(s);
             t = t * (func_002140F8_2D6C58(0.0f, D_L08_001618E8 * 0.25f) * D_0015ED6C);

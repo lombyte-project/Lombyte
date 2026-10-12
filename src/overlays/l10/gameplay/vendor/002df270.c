@@ -2096,9 +2096,9 @@ extern unsigned char D_0013D5CA_2E9978[] __asm__("D_0015EEA4") __attribute__((sd
 extern unsigned char D_0013D605_2E9978[] __asm__("D_0013D388");
 extern char D_0013D355_2E9978[] __asm__("D_00141B28");
 
-void FUN_L10_002e85b8(Moby *m)
+void FUN_L10_002e85b8(Moby *moby)
 {
-    EvData_2E9978 *d = (EvData_2E9978 *)((int *)m->pvars);
+    EvData_2E9978 *d = (EvData_2E9978 *)((int *)moby->pvars);
     Moby *p;
     int flag;
     int sub;
@@ -2108,10 +2108,10 @@ void FUN_L10_002e85b8(Moby *m)
     } else {
         D_L10_00161F38 = 0;
     }
-    switch (m->state) {
+    switch (moby->state) {
     case 0:
-        m->unk30 = 0xFF;
-        m->state = 1;
+        moby->unk30 = 0xFF;
+        moby->state = 1;
         break;
     case 1:
         if (func_00215570_2E9978(D_0013F3D0_r, d->f0) != 0

@@ -374,7 +374,7 @@ void FUN_L09_002c6230(Moby *m) {
     float ang2;
     Data_2C73D0 *d;
     Hit_2C73D0 *r;
-    int st;
+    int response;
     int res;
     int lost;
 
@@ -395,11 +395,11 @@ void FUN_L09_002c6230(Moby *m) {
     }
     a1 = 0.0f;
     r = func_L00_0025B478_2C73D0(m, 0x330000, 0);
-    st = func_L00_0025B4D0_2C73D0(m, r, &d->health, 0, &flag, &a1, 0, 4);
+    response = func_L00_0025B4D0_2C73D0(m, r, &d->health, 0, &flag, &a1, 0, 4);
     if (flag != 1 && m->state != 6) {
         d->health = d->health - a1;
         if (d->health <= 0.0f) {
-            st = 1;
+            response = 1;
         }
         d->f90 = func_001FA898_2C73D0(512.0f);
         d->f80 = D_L09_001613F8 * D_0015ED70;
@@ -409,7 +409,7 @@ void FUN_L09_002c6230(Moby *m) {
         d->bAD = 0;
         func_0022ED80_2C73D0(8, 0, m);
 
-        switch (st) {
+        switch (response) {
         case 9:
         case 10:
             d->reactTime = 0xFA;
@@ -488,9 +488,9 @@ void FUN_L09_002c6230(Moby *m) {
             }
         }
     } else {
-        Moby *q = d->f160;
-        if (q != 0 && q->state != 0xFE && q->state != 0xFD) {
-            qcopy(d->target, &q->pos);
+        Moby *target = d->f160;
+        if (target != 0 && target->state != 0xFE && target->state != 0xFD) {
+            qcopy(d->target, &target->pos);
         } else {
             d->f160 = 0;
             d->f164 = 2;

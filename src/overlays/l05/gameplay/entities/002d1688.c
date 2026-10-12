@@ -609,7 +609,7 @@ extern char *D_L05_001B0CB0_2D8388[] __asm__("D_L05_001B0930");
 
 void FUN_L05_002d7140(char *moby) {
     Data_2D8388 *d = *(Data_2D8388 **)(moby + 0x78);
-    char *r;
+    char *hit;
     char *p;
     char *cur;
     char *prev;
@@ -630,7 +630,7 @@ void FUN_L05_002d7140(char *moby) {
     float *pos, *rot, *tab;
 
     if (D_L05_001672C8_2D8388[0] < 55.0f) return;
-    r = func_L00_0025B478_2D8388(moby, 0x10000, 0);
+    hit = func_L00_0025B478_2D8388(moby, 0x10000, 0);
     flag = 0;
     switch (*(unsigned char *)(moby + 0x20)) {
     case 0: {
@@ -722,7 +722,7 @@ void FUN_L05_002d7140(char *moby) {
         } else {
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         }
-        if (r != 0 && 0.0f < *(float *)(r + 0x2C)) flag = 1;
+        if (hit != 0 && 0.0f < *(float *)(hit + 0x2C)) flag = 1;
         if (flag) *(unsigned char *)(moby + 0x20) = 2;
         break;
     }
