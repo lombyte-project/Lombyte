@@ -253,14 +253,16 @@ void FUN_L06_002d8738(char *moby) {
     quad.color[1] = D_L06_00161C64_globals.word88;
     quad.color[2] = D_L06_00161C64_globals.word88;
     quad.color[3] = D_L06_00161C64_globals.word88;
-    for (i = 0; i < 42; i++) {
+    i = 0;
+    do {
         FUN_001f9d20(facePos, D_L06_001D40C0[i], matrix);
+        i++;
         FUN_001f9a28(direction, facePos, D_L06_00167540);
         FUN_001f9bf8(direction, direction, 1.0f);
-        FUN_001f9cf8(facePos, D_L06_001D3A90[i], matrix);
+        FUN_001f9cf8(facePos, D_L06_001D3A90[i - 1], matrix);
         if (!(0.0f < FUN_001f9ab0(direction, facePos))) {
             for (j = 0; j < 4; j++) {
-                short *indices = D_L06_001D3620[i];
+                short *indices = D_L06_001D3620[i - 1];
                 short vertex = indices[j * 2];
                 qcopy(quad.corner[j], D_L06_001D4530[vertex]);
                 if (near) {
@@ -274,7 +276,7 @@ void FUN_L06_002d8738(char *moby) {
             }
             FUN_001f7d30(&quad, 0, 0);
         }
-    }
+    } while (i < 42);
 }
 #endif
 /* Spawns a moby of type 0x12F at the owner's position and links it to the owner. */
