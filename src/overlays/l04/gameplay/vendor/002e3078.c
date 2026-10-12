@@ -109,7 +109,310 @@ void FUN_L04_002e3078(struct Moby *moby) {
         break;
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002e4418.s", FUN_L04_002e4418);
+#include "sda.h"
+
+/* UpdateMoby_1343: tutorial hint and statistic triggers around the player on Eudora. */
+/* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002E57F8), where it is exact; names translated to the US level program. */
+
+typedef struct Hero Hero;
+
+typedef struct Moby Moby;
+
+typedef struct {
+    int f0;
+    int f4;
+    int f8;
+    int fC;
+    int f10;
+    int f14;
+    int f18;
+    int f1C;
+    int f20;
+    int f24;
+    int f28;
+    int f2C;
+    int f30;
+    int f34;
+    int f38;
+    int f3C;
+    int f40;
+    int f44;
+    int f48;
+    int f4C;
+    int f50;
+} Data_2E57F8;
+
+typedef struct {
+    unsigned short count;
+    unsigned short time;
+    unsigned int mask;
+} Help_2E57F8;
+
+extern char *D_L04_0015FFD8 __attribute__((section(".sdata")));
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern int D_0015ED84 __attribute__((section(".sdata")));
+extern int D_0015EEA4 __attribute__((section(".sdata")));
+extern int D_0015EEAC __attribute__((section(".sdata")));
+extern int D_L04_0015FFE4; /* no foreign declaration */
+extern int D_L04_00179590[] __attribute__((section(".data")));
+extern int FUN_L00_00203908(int a, int b);
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern unsigned char D_0013D3A4 __attribute__((section(".data")));
+extern unsigned char D_0013D3A5 __attribute__((section(".data")));
+extern unsigned char D_0013D3A6 __attribute__((section(".data")));
+extern unsigned char D_0013D3A7 __attribute__((section(".data")));
+extern unsigned char D_0013D4D4 __attribute__((section(".data")));
+extern unsigned char D_0013D4DA __attribute__((section(".data")));
+extern unsigned char D_0013D4E3[];
+extern unsigned char D_0013E533[];
+extern unsigned char D_0014161B[];
+extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
+extern unsigned short D_001417C2 __attribute__((section(".data")));
+extern unsigned short D_00141892 __attribute__((section(".data")));
+extern unsigned short D_001418D0 __attribute__((section(".data")));
+extern unsigned short D_00141908 __attribute__((section(".data")));
+extern unsigned short D_00141910 __attribute__((section(".data")));
+extern unsigned short D_00141940 __attribute__((section(".data")));
+extern char D_0013F3D0[];
+extern char D_00141848[];
+extern char D_00141968[];
+extern char D_0013F350[];
+extern char D_0013D4E8[];
+extern Moby *D_L04_00160064_2E57F8 __asm__("D_L04_0015FFE4");
+extern Moby *D_L04_00160058_2E57F8 __asm__("D_L04_0015FFD8");
+
+void FUN_L04_002e4418(Moby *moby) {
+    Data_2E57F8 *data = *(void **)&moby->pvars;
+
+    switch (moby->state) {
+    case 0:
+        moby->unk30 = 0xFF;
+        moby->state = 1;
+        data->f14 = -1;
+        break;
+    case 1:
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f0) != 0
+            && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1
+            && D_0014C050_c[moby->unkB0 + (D_0015ED84 << 4)] != 0xFF) {
+            if (data->f14 == -1) {
+                Help_2E57F8 *h = (Help_2E57F8 *)(((char *)&D_00141848));
+                data->f14 = D_0015EEAC;
+                if (h[0x18].count < 0xFFFF) {
+                    h[0x18].count++;
+                }
+                if (scale_game_frames_alt(D_0015EEA4) / 600 > h[0x18].time) {
+                    h[0x18].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                }
+                h[0x18].mask = h[0x18].mask | (1 << D_0015ED84) | 0x80000000;
+            } else if (D_00141908 >= 3) {
+                if (D_0013D4D4 == 0) {
+                    Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
+                    if (b[0x1D].count == 0) {
+                        FUN_L00_00203908(0xFA1, 0x1D);
+                    }
+                } else {
+                    int t = scale_game_frames_alt(D_0015EEA4) - D_001417C2 * 600;
+                    if (scale_game_frames_alt(0x4650) < t) {
+                        Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
+                        if (b[0x1C].count == 0) {
+                            FUN_L00_00203908(0xFA0, 0x1C);
+                        }
+                    }
+                }
+            }
+        }
+
+        {
+            Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
+            if (b[0x42].count < 4) {
+                if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f34) != 0
+                    || is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f38) != 0) {
+                    Hero *h = (Hero *)(((char *)&D_0013F3D0 - 0x80));
+                    if (h->state.prev == 0x3B && h->state_timer == 0) {
+                        Moby *m;
+                        for (m = D_L04_00160064_2E57F8; m != 0; m = m->next) {
+                            if (m->oclass == 0x118
+                                && distance_xyz(((float *)&m->pos), ((char *)&D_0013F3D0)) < 3.0f
+                                && *(float *)*(void **)&m->pvars != 1.0f) {
+                                data->f20++;
+                                if (data->f20 == 3 || data->f20 == 6) {
+                                    FUN_L00_00203908(0x3EE, 0x42);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        {
+            unsigned char *g = ((char *)&D_0013D4E8);
+            if (g[9] != 0 && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
+                Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
+                if (b[0x1E].count == 0) {
+                    FUN_L00_00203908(0xFA2, 0x1E);
+                }
+            }
+        }
+
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f3C) != 0 && D_00141940 == 0
+            && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
+            Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
+            if (b[0x77].count == 0) {
+                FUN_L00_00203908(0x4E2D, 0x77);
+            }
+        }
+
+        if (data->f48 != -1) {
+            if (D_L04_00160058_2E57F8[data->f48].oclass == 0x267 && D_L04_00160058_2E57F8[data->f48].state == 4) {
+                D_0013D3A4 = 1;
+            }
+        }
+        if (data->f4C != -1) {
+            if (D_L04_00160058_2E57F8[data->f4C].oclass == 0x267 && D_L04_00160058_2E57F8[data->f4C].state == 4) {
+                D_0013D3A5 = 1;
+            }
+        }
+        if (data->f40 != -1) {
+            if (D_L04_00160058_2E57F8[data->f40].oclass == 0x118 && D_L04_00160058_2E57F8[data->f40].state == 5) {
+                D_0013D3A6 = 1;
+            }
+        }
+        if (data->f44 != -1) {
+            if (D_L04_00160058_2E57F8[data->f44].oclass == 0x118 && D_L04_00160058_2E57F8[data->f44].state == 5) {
+                D_0013D3A7 = 1;
+            }
+        }
+
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f4) != 0
+            && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)
+            && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
+            if (D_0013D4DA == 0) {
+                Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
+                int t = scale_game_frames_alt(D_0015EEA4) - b[0x1F].time * 600;
+                if ((int)(scale_game_frames_alt(0x12) * 60.0f) < t || b[0x1F].time * 600 == 0) {
+                    FUN_L00_00203908(0xFA3, 0x1F);
+                } else {
+                    int n = scale_game_frames_alt(D_0015EEA4) / 600;
+                    if (b[0x1F].time < n) {
+                        b[0x1F].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                    }
+                }
+            } else {
+                if (data->f48 != -1 && D_L04_00160058_2E57F8[data->f48].oclass == 0x267 && D_L04_00160058_2E57F8[data->f48].state == 4) {
+                    Help_2E57F8 *h = (Help_2E57F8 *)(((char *)&D_00141848));
+                    unsigned int c = h[0x11].count;
+                    if (c <= 0xFFFE) {
+                        h[0x11].count = c + 1;
+                    }
+                    if (scale_game_frames_alt(D_0015EEA4) / 600 > h[0x11].time) {
+                        h[0x11].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                    }
+                    h[0x11].mask = h[0x11].mask | (1 << D_0015ED84) | 0x80000000;
+                } else if (data->fC == 0) {
+                    if (D_001418D0 == 0) {
+                        Help_2E57F8 *b;
+                        data->f8++;
+                        b = (Help_2E57F8 *)(((char *)&D_00141968));
+                        if (b[0x20].count != 0) {
+                            int t = scale_game_frames_alt(D_0015EEA4) - b[0x20].time * 600;
+                            if ((int)(scale_game_frames_alt(0x12) * 60.0f) < t || b[0x20].time * 600 == 0) {
+                                FUN_L00_00203908(0xFA4, 0x20);
+                            } else {
+                                int n = scale_game_frames_alt(D_0015EEA4) / 600;
+                                if (b[0x20].time < n) {
+                                    b[0x20].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                                }
+                            }
+                        } else {
+                            int n;
+                            b[0x20].count++;
+                            n = scale_game_frames_alt(D_0015EEA4) / 600;
+                            if (b[0x20].time < n) {
+                                b[0x20].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                            }
+                            b[0x20].mask = b[0x20].mask | (1 << D_0015ED84) | 0x80000000;
+                        }
+                    }
+                }
+            }
+        } else if (data->fC != 0) {
+            if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f4) == 0) {
+                data->fC = 0;
+            }
+        }
+
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f50) != 0
+            && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)
+            && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
+            int t = scale_game_frames_alt(D_0015EEA4) - D_00141892 * 600;
+            if (scale_game_frames_alt(0x34BC0) < t) {
+                Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
+                if (!(b[0x43].mask & (1 << D_0015ED84))) {
+                    FUN_L00_00203908(0x3EF, 0x43);
+                }
+            }
+        }
+
+        {
+            Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
+            if (b[0x46].count == 0 || b[0x47].count == 0) {
+                Hero *h = (Hero *)(((char *)&D_0013F3D0 - 0x80));
+                Moby *p;
+                if (h->state.current == 0x72 && (p = h->ground_moby) != 0 && p->oclass == 0x267
+                    && is_point_inside_clip_volume((char *)h + 0x80, data->f4) != 0) {
+                    if (b[0x46].count == 0) {
+                        FUN_L00_00203908(0x7DB, 0x46);
+                    } else if (b[0x47].count == 0) {
+                        data->f1C++;
+                        if (scale_game_frames_alt(0x708) < data->f1C) {
+                            FUN_L00_00203908(0x7DC, 0x47);
+                        }
+                    }
+                } else {
+                    data->f1C = 0;
+                }
+            }
+        }
+
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f30) != 0) {
+            Help_2E57F8 *h = (Help_2E57F8 *)(((char *)&D_00141848));
+            if (h[0x19].count == 0
+                && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)) {
+                int n;
+                h[0x19].count++;
+                n = scale_game_frames_alt(D_0015EEA4) / 600;
+                if (h[0x19].time < n) {
+                    h[0x19].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                }
+                h[0x19].mask = h[0x19].mask | (1 << D_0015ED84) | 0x80000000;
+            }
+        }
+
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f2C) != 0 && D_00141910 == 0
+            && ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) >= 2 && ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) != 9
+            && data->f28 == 0) {
+            data->f24++;
+            data->f28 = scale_game_frames_alt(0xB4);
+        } else if (data->f28 != 0) {
+            if (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9) {
+                data->f28 = 0;
+            }
+        }
+
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f2C) != 0 && D_00141910 == 0
+            && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)
+            && data->f24 >= 3
+            && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
+            Help_2E57F8 *b = (Help_2E57F8 *)(((char *)&D_00141968));
+            if (b[0x49].count == 0) {
+                FUN_L00_00203908(0xFA5, 0x49);
+            }
+        }
+        break;
+    }
+}
 #include "eetypes.h"
 #include "qcopy.h"
 
