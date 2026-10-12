@@ -389,10 +389,12 @@ extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
-#define L12_VENDOR_REFERENCE ((char *)0x167100)
+extern int D_L12_00167100;
+typedef struct { char pad[0x140]; float position[4]; float pad150; float pitch; float yaw; } Reference_303370;
+#define L12_VENDOR_REFERENCE ((Reference_303370 *)&D_L12_00167100)
 
-void FUN_L12_00303370(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+void FUN_L12_00303370(void *moby) {
+    char *data = (char *)((struct Moby *)moby)->pvars;
     int found = 0;
     int i;
     int offset;
@@ -401,16 +403,16 @@ void FUN_L12_00303370(struct Moby *moby) {
     i = 0;
     offset = 0;
     do {
-        int index = *(int *)(data + 0x40 + offset);
-        if (index != -1) {
-            struct Moby *other = (struct Moby *)(D_L12_0015FFD8_p + index * 0x100);
+        offset = *(int *)(data + offset + 0x40);
+        if (offset != -1) {
+            struct Moby *other = (struct Moby *)(D_L12_0015FFD8_p + offset * 0x100);
             float yaw_limit;
             float pitch_limit;
             float yaw;
             float distance;
             float pitch;
 
-            qcopy(position, &other->pos);
+            *(u128 *)position = *(u128 *)&other->pos;
             yaw_limit = 0.12217305f;
             pitch_limit = yaw_limit;
             if (other->oclass == 0x146) {
@@ -421,25 +423,25 @@ void FUN_L12_00303370(struct Moby *moby) {
                 pitch_limit = 0.05235988f;
                 position[2] += 1.5f;
             }
-            yaw = FUN_001f9e90(position[0] - *(float *)(L12_VENDOR_REFERENCE + 0x140),
-                                   position[1] - *(float *)(L12_VENDOR_REFERENCE + 0x144));
-            distance = FUN_001f9b80(L12_VENDOR_REFERENCE + 0x140, position);
-            pitch = FUN_001f9e90(distance, position[2] - *(float *)(L12_VENDOR_REFERENCE + 0x148));
-            if (fast_difference_between_rotations(yaw, *(float *)(L12_VENDOR_REFERENCE + 0x158)) < yaw_limit &&
-                fast_difference_between_rotations(pitch, -*(float *)(L12_VENDOR_REFERENCE + 0x154)) < pitch_limit) {
+            yaw = FUN_001f9e90(position[0] - L12_VENDOR_REFERENCE->position[0],
+                                   position[1] - L12_VENDOR_REFERENCE->position[1]);
+            distance = FUN_001f9b80(L12_VENDOR_REFERENCE->position, position);
+            pitch = FUN_001f9e90(distance, position[2] - L12_VENDOR_REFERENCE->position[2]);
+            if (fast_difference_between_rotations(yaw, L12_VENDOR_REFERENCE->yaw) < yaw_limit &&
+                fast_difference_between_rotations(pitch, -L12_VENDOR_REFERENCE->pitch) < pitch_limit) {
                 found = 1;
             }
         }
         i++;
-        offset += 4;
+        offset = i * 4;
     } while (i < 10);
-    if (found) {
+    if (!found) {
+        tick_countdown_32_alt((int *)(data + 0x88));
+    } else {
         *(int *)(data + 0x88) += 2;
         if (scale_ticks(0x1e) < *(int *)(data + 0x88)) {
             *(int *)(data + 0x88) = scale_ticks(0x1e);
         }
-    } else {
-        tick_countdown_32_alt((int *)(data + 0x88));
     }
 }
 #endif
