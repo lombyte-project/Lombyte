@@ -631,96 +631,93 @@ extern struct Moby *D_L10_0015FFD8;
 extern float FUN_001fa6c0_2c9c70(int) __asm__("FUN_001fa6c0");
 extern int FUN_001fa6d0_2c9c70(float) __asm__("FUN_001fa6d0");
 extern int FUN_001f9740_2c9c70(int *) __asm__("FUN_001f9740");
-extern int D_0015ED84_2c9c70 __asm__("D_0015ED84");
+extern int D_0015ED84_2c9c70 __asm__("D_0015ED84") __attribute__((section(".data")));
+extern int D_0015ED84;
 extern unsigned char D_0014C190_2c9c70[] __asm__("D_0014C190");
 extern unsigned char D_0014C050_2c9c70[] __asm__("D_0014C050");
+
+extern char linked_moby_warning[] __asm__("D_L10_001DCDA0");
+extern char linked_moby_present_message[] __asm__("D_L10_001DCDD0");
+extern char linked_moby_missing_message[] __asm__("D_L10_001DCE00");
 
 void FUN_L10_002c9c70(struct Moby *moby) {
     char *d = (char *)moby->pvars;
     struct Moby *target = 0;
     int differences = 0;
-    int i;
     int *slot = (int *)(d + 0x18);
     unsigned char state;
 
     if (*(int *)(d + 0x10) != -1) {
         target = &D_L10_0015FFD8[*(int *)(d + 0x10)];
     }
-    state = moby->state;
-    if ((moby->unkB0 == 0xff ||
-         D_0014C050_2c9c70[(D_0015ED84_2c9c70 << 4) + moby->unkB0] != 0xff) &&
-        state != 0) {
-        i = 4;
-        do {
-            int index = *slot;
-            if (index != -1) {
-                struct Moby *other = &D_L10_0015FFD8[index];
-                if (other != 0 && other->oclass == *(short *)(slot + 1) &&
-                    other->state != 0xfe && other->state != 0xfd) {
-                    unsigned short id = other->save_id;
-                    if ((((*(int *)(D_0014C190_2c9c70 + (((short)id >> 5) * 4) +
-                              (D_0015ED84_2c9c70 << 8)) >> (id & 31)) ^ 1) & 1) != 0) {
-                        if (*(signed char *)((char *)slot + 6) == -1 ||
-                            other->state != *(signed char *)((char *)slot + 6))
-                            differences++;
+    {
+        unsigned char id = moby->unkB0;
+        if ((id == 0xff ||
+             D_0014C050_2c9c70[id + (D_0015ED84 << 4)] != 0xff) &&
+            moby->state != 0) {
+            int *entry = slot;
+            int i = 4;
+            do {
+                int index = *entry;
+                if (index != -1) {
+                    struct Moby *other = &D_L10_0015FFD8[index];
+                    if (other != 0 && other->oclass == *(short *)(entry + 1) &&
+                        other->state != 0xfe && other->state != 0xfd) {
+                        unsigned short id = other->save_id;
+                        if ((((*(int *)(D_0014C190_2c9c70 + (((short)id >> 5) * 4) +
+                                  (D_0015ED84_2c9c70 << 8)) >> (id & 31)) ^ 1) & 1) != 0) {
+                            if (*(signed char *)((char *)entry + 6) == -1 ||
+                                other->state != *(signed char *)((char *)entry + 6))
+                                differences++;
+                        }
                     }
                 }
-            }
-            i--;
-            slot += 2;
-        } while (i >= 0);
+                i--;
+                entry += 2;
+            } while (i >= 0);
+        }
     }
-    switch (state) {
+    switch (state = moby->state) {
     case 0:
-        if (target == 0) {
-            stub_printf((char *)0x001dcda0);
-        } else {
+        /* Position flags select opposite copy directions; rotation flags have priority. */
+        if (target != 0) {
             *(short *)(d + 0x14) = target->oclass;
             *(float *)(d + 0x44) = FUN_001fa6c0_2c9c70(target->unk23);
-            {
-                OvlQuad *position_source;
-                OvlQuad *position_destination;
-                if ((*(int *)(d + 8) & 0x10) != 0) {
-                    position_source = (OvlQuad *)&moby->pos;
-                    position_destination = (OvlQuad *)&target->pos;
-                } else {
-                    position_source = (OvlQuad *)&target->pos;
-                    position_destination = (OvlQuad *)&moby->pos;
-                }
-                if ((*(int *)(d + 8) & 0x50) != 0) *position_destination = *position_source;
+            if ((*(int *)(d + 8) & 0x10) != 0) {
+                qcopy(&moby->pos, &target->pos);
+            } else if ((*(int *)(d + 8) & 0x40) != 0) {
+                qcopy(&target->pos, &moby->pos);
             }
             if ((*(int *)(d + 8) & 0x20) != 0) {
-                *(OvlQuad *)&moby->rot = *(OvlQuad *)&target->rot;
+                qcopy_nc(&moby->rot, &target->rot);
             } else if ((*(int *)(d + 8) & 0x80) != 0) {
-                *(OvlQuad *)&target->rot = *(OvlQuad *)&moby->rot;
-            } else {
-                stub_printf((char *)0x001dcda0);
+                qcopy_nc(&target->rot, &moby->rot);
+            }
+        } else {
+            /* Retail logs only a missing target; neither rotation flag is silent. */
+            stub_printf(linked_moby_warning);
+        }
+        {
+            int *entry = slot;
+            int i;
+            for (i = 0; i < 5; i++, entry += 2) {
+                int index = *entry;
+                if (index != -1) {
+                    char *base = D_L10_0015FFD8_p;
+                    unsigned short oclass = *(unsigned short *)((index << 8) + (int)base + 0xa6);
+                    *(short *)(entry + 1) = oclass;
+                    stub_printf(linked_moby_present_message, ((char *)moby - base) >> 8,
+                                i, index, (short)oclass);
+                } else {
+                    stub_printf(linked_moby_missing_message, ((char *)moby - D_L10_0015FFD8_p) >> 8, i);
+                }
             }
         }
         {
-        int *entry = (int *)(d + 0x18);
-        struct Moby *base = D_L10_0015FFD8;
-        char *present_message = (char *)0x001dcdd0;
-        char *missing_message = (char *)0x001dce00;
-        int moby_index = ((char *)moby - (char *)D_L10_0015FFD8) >> 8;
-        for (i = 0; i < 5; i++, entry += 2) {
-            int index = *entry;
-            if (index == -1) {
-                stub_printf(missing_message, moby_index, i);
-            } else {
-                short oclass = base[index].oclass;
-                *(short *)(entry + 1) = oclass;
-                stub_printf(present_message, moby_index,
-                            i, index, oclass);
-            }
-        }
-        }
-        {
-            if (*(float *)d < *(float *)(d + 4)) {
-                moby->scale = *(float *)(d + 4) * moby->pclass->scale;
-            } else {
-                moby->scale = *(float *)d * moby->pclass->scale;
-            }
+            float initial = *(float *)(d + 4);
+            float now = *(float *)d;
+            float scale = moby->pclass->scale;
+            moby->scale = (now < initial ? initial * scale : now * scale);
         }
         moby->state = 1;
         break;
