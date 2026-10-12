@@ -370,6 +370,7 @@ void FUN_L01_0022d090(void)
     probe.f[0] += fast_cos(hero.motion.rot.f[2]) * hero.unk234;
     probe.f[1] += fast_sin(hero.motion.rot.f[2]) * hero.unk234;
     while (1) {
+probe_next:
         probe.f[0] += fast_cos(hero.motion.rot.f[2]) * fwd * step;
         probe.f[1] += fast_sin(hero.motion.rot.f[2]) * fwd * step;
         qcopy(&top, &probe);
@@ -386,8 +387,9 @@ void FUN_L01_0022d090(void)
         i++;
         if (found)
             break;
-        if (i >= 4)
-            return;
+        if (i < 4)
+            goto probe_next;
+        return;
     }
 
     if (coll_hit.moby != 0) {
@@ -418,9 +420,11 @@ void FUN_L01_0022d090(void)
     else
         hero.unk4F4 &= ~1;
     ang = atan2_f(top.f[0] - hero.motion.pos.f[0], top.f[1] - hero.motion.pos.f[1]);
-    launch_scale = hero.ground_z.f;
-    hero.unk4E0 = top.f[2];
-    if (top.f[2] - launch_scale < 1.8f)
+    wall_yaw = hero.ground_z.f;
+    max_slope = top.f[2];
+    hero.unk4E0 = max_slope;
+    max_slope -= wall_yaw;
+    if (max_slope < 1.8f)
         return;
 
     five = 5.0f;
@@ -463,9 +467,11 @@ void FUN_L01_0022d090(void)
                 edge.f[1] += fast_sin(hero.unk4E4) * d;
                 qcopy(&hero.unk4D0, &edge);
                 hero.unk4D0.f[0] += fast_cos(hero.unk4E4) * edge_offset;
-                hero.unk4D0.f[1] += fast_sin(hero.unk4E4) * edge_offset;
-                hero.unk4D0.f[2] += -1.43f;
+                wall_yaw = fast_sin(hero.unk4E4) * edge_offset;
                 hero.unk4E8 = 1;
+                hero.unk4D0.f[1] = wall_yaw + hero.unk4D0.f[1];
+                wall_yaw = -1.43f;
+                hero.unk4D0.f[2] += wall_yaw;
                 return;
             }
             d += inc;
