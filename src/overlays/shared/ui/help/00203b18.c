@@ -1325,11 +1325,11 @@ extern u8 item_text_variant[] __asm__("D_0013E520");
 extern int current_level_index __asm__("D_0015ED84");
 
 void FUN_L00_002076a8(void) {
-    struct Hero *g = &hero;
+    struct Hero *player = &hero;
     int blink;
 
-    if (g->unk22F4 != 0) {
-        int color = g->unk22F8;
+    if (player->unk22F4 != 0) {
+        int color = player->unk22F8;
         int red = color & 0xff;
         int blue = (color >> 16) & 0xff;
         int green = (color >> 8) & 0xff;
@@ -1340,9 +1340,9 @@ void FUN_L00_002076a8(void) {
         if (green < 0) green = 0;
         if (blue < 0) blue = 0;
         {
-            int packed = (unsigned int)color >> 24;
-            glow_n(((void *)g->moby), red, green, blue);
-            g->unk22F8 = packed << 24 | blue << 16 | green << 8 | red;
+            int alpha = (unsigned int)color >> 24;
+            glow_n(((void *)player->moby), red, green, blue);
+            player->unk22F8 = alpha << 24 | blue << 16 | green << 8 | red;
         }
     }
 

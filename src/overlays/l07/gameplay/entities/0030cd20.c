@@ -46,23 +46,23 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
     Vec4 start;
     float distance;
     float time;
-    int forceEnd;
-    int forceStart;
-    u8 spawnId;
+    int force_end;
+    int force_start;
+    u8 spawn_id;
     int no_spawn;
 
     if (moby->unkB0 != 0xff && D_0014C050[moby->unkB0 + current_level_index * 16] == 0xff)
         vars->target = -1;
-    spawnId = moby->unkB0;
-    forceEnd = 0;
+    spawn_id = moby->unkB0;
+    force_end = 0;
     /* Fakematch: the 0xFF compare needs its own variable for retail register order. */
     no_spawn = 0xff;
-    forceStart = 0;
-    if (D_L07_0015FC88[spawnId] == no_spawn) {
+    force_start = 0;
+    if (D_L07_0015FC88[spawn_id] == no_spawn) {
         if (vars->forceReturn != 0)
-            forceEnd = 1;
+            force_end = 1;
         else
-            forceStart = 1;
+            force_start = 1;
     }
 
     switch (moby->state) {
@@ -74,9 +74,9 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
         vars->home.w = 0;
         return;
     case 1:
-        if (forceStart)
+        if (force_start)
             return;
-        if (!forceEnd && vars->target != -1 &&
+        if (!force_end && vars->target != -1 &&
             (target = &D_L07_0015FFD8[vars->target]) != 0 &&
             target->state != 0xfe && target->state != 0xfd &&
             target->state != vars->openState)
@@ -92,7 +92,7 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
         moby->state = 2;
         break;
     case 2:
-        if (forceStart || (!forceEnd && vars->target != -1 &&
+        if (force_start || (!force_end && vars->target != -1 &&
             (target = &D_L07_0015FFD8[vars->target]) != 0 &&
             target->state != 0xfe && target->state != 0xfd &&
             target->state == vars->shutState)) {
@@ -122,7 +122,7 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
             FUN_0022da68(vars->startSound, 0, moby);
         return;
     case 3:
-        if (!forceStart && (forceEnd || vars->target == -1 ||
+        if (!force_start && (force_end || vars->target == -1 ||
             (target = &D_L07_0015FFD8[vars->target]) == 0 ||
             target->state == 0xfe || target->state == 0xfd ||
             target->state != vars->shutState))
@@ -133,7 +133,7 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
         moby->state = 4;
         break;
     case 4:
-        if (!forceStart && (forceEnd || vars->target == -1 ||
+        if (!force_start && (force_end || vars->target == -1 ||
             (target = &D_L07_0015FFD8[vars->target]) == 0 ||
             target->state == 0xfe || target->state == 0xfd ||
             target->state == vars->openState)) {

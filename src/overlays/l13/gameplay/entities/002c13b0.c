@@ -1562,20 +1562,12 @@ mark:
     FUN_L00_0025d538(moby, d + 0x60);
 }
 extern int FUN_001160d8(void);
-extern void FUN_L13_002cefc0_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L13_002cefc0_remove(void *) __asm__("FUN_0020c828");
-extern int FUN_L13_002cefc0_allocate(int, int, void *) __asm__("FUN_L13_00297fa0");
-extern int FUN_L13_002cefc0_update(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int FUN_L13_002cefc0_ready(int) __asm__("FUN_00213260");
-extern float FUN_L13_002cefc0_random(float, float) __asm__("FUN_002132a8");
-extern int FUN_L13_002cefc0_test(void *, float) __asm__("FUN_00214cc8");
-
-extern void FUN_L13_002cefc0_vector(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_L13_002cefc0_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void FUN_L13_002cefc0_subtract(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L13_002cefc0_particle(void *, int, int, int, float, int, float) __asm__("FUN_L00_00269b70");
-extern int FUN_L13_002cefc0_offset(int) __asm__("FUN_001f96f8");
+extern int start_moby_voice(int, int, void *) __asm__("FUN_L13_00297fa0");
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
+extern void spawn_particle(void *, int, int, int, float, int, float) __asm__("FUN_L00_00269b70");
 extern char *FUN_L13_0030bfb0(char *, void *, float);
+extern void set_voice_position(int, void *) __asm__("FUN_L13_002982e8");
 extern int D_0015ED84;
 extern int D_0014C190[];
 
@@ -1589,11 +1581,11 @@ void FUN_L13_002cefc0(struct Moby *moby) {
     float position[4];
     float velocity[4];
     float rotated[4];
-    int link;
+    int linked_index;
     int i;
-    int r0;
-    int r1;
-    int r2;
+    int red;
+    int green;
+    int blue;
     float scale;
     float threshold;
     int state = m[0x20];
@@ -1606,40 +1598,40 @@ void FUN_L13_002cefc0(struct Moby *moby) {
         data[0x70 / 4] = -1;
         if ((*(int *)((char *)D_0014C190 + (D_0015ED84 << 8) + (((short)*(unsigned short *)(m + 0xB2) >> 5) << 2))
              >> (*(unsigned short *)(m + 0xB2) & 31)) & 1) {
-            link = data[0x74 / 4];
-            if (link != -1) linked_state_flags[link] = 1;
-            FUN_L13_002cefc0_remove(moby);
+            linked_index = data[0x74 / 4];
+            if (linked_index != -1) linked_state_flags[linked_index] = 1;
+            mark_moby_for_removal(moby);
             return;
         }
-        FUN_L13_002cefc0_position(moby, 0, position);
+        moby_point_position(moby, 0, position);
         position[2] += 1.1f;
         FUN_L13_0030bfb0((char *)moby, position, 2.7f);
         *(unsigned short *)(m + 0x34) &= 0xEFFF;
         return;
     }
     case 1: {
-        link = data[0x74 / 4];
-        if (link != -1) linked_state_flags[link] = 0;
+        linked_index = data[0x74 / 4];
+        if (linked_index != -1) linked_state_flags[linked_index] = 0;
         if (data[0x70 / 4] == -1) goto allocate_voice;
-        if (FUN_L13_002cefc0_update(moby, data[0x70 / 4])) goto voice_done;
+        if (voice_is_playing(moby, data[0x70 / 4])) goto voice_done;
         if (data[0x70 / 4] != -1) goto play_voice;
 allocate_voice:
-        data[0x70 / 4] = FUN_L13_002cefc0_allocate(0, 4, moby);
+        data[0x70 / 4] = start_moby_voice(0, 4, moby);
         if (data[0x70 / 4] == -1) goto voice_done;
 play_voice:
         qzero(position);
         position[2] += 8.7f;
-        FUN_L13_002982e8(data[0x70 / 4], position);
+        set_voice_position(data[0x70 / 4], position);
 voice_done:
-        if (m[0x31] != 0 && FUN_L13_002cefc0_ready(9) == 0) {
-            r0 = (FUN_001160d8() + 0x30) & 0x3F;
-            r1 = (FUN_001160d8() + 0x20) & 0x3F;
-            r2 = FUN_001160d8() & 0x2F;
-            FUN_L13_002cefc0_position(moby, 0, position);
+        if (m[0x31] != 0 && random_integer_below(9) == 0) {
+            red = (FUN_001160d8() + 0x30) & 0x3F;
+            green = (FUN_001160d8() + 0x20) & 0x3F;
+            blue = FUN_001160d8() & 0x2F;
+            moby_point_position(moby, 0, position);
             position[2] += 0.5f;
-            scale = FUN_L13_002cefc0_random(900000.0f, 1800000.0f);
-            FUN_L13_002cefc0_particle(position, r0, r1, r2, scale,
-                                      FUN_L13_002cefc0_offset(FUN_001160d8() % 40 + 40), 0.0f);
+            scale = random_float_between(900000.0f, 1800000.0f);
+            spawn_particle(position, red, green, blue, scale,
+                                      scale_game_frames(FUN_001160d8() % 40 + 40), 0.0f);
         }
         FUN_L13_002cecb8(moby, (unsigned char *)data, (float *)((char *)data + 0x20));
         return;
@@ -1654,26 +1646,26 @@ voice_done:
         case 1: threshold = 17.0f; break;
         case 2: threshold = 17.0f; break;
         }
-        if (threshold < 100.0f && FUN_L13_002cefc0_test(moby, threshold)) {
-            FUN_L13_002cefc0_position(moby, m[0xBC] + 1, velocity);
+        if (threshold < 100.0f && is_value_within_interpolated_window(moby, threshold)) {
+            moby_point_position(moby, m[0xBC] + 1, velocity);
             emit_effect_l13(moby, position, velocity, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 0.0f, 1.0f, -1, 20.0f, 1, 1, -1, 0);
             m[0xBC]++;
         }
         if ((m[0x70] & 2) == 0) return;
         emit_effect_l13(moby, position, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 0.0f, 1.0f, -1, 20.0f, 1, 1, -1, 0);
-        FUN_L13_002cefc0_position(moby, 3, velocity);
-        FUN_L13_002cefc0_subtract(velocity, velocity, m + 0x10);
+        moby_point_position(moby, 3, velocity);
+        subtract_vector_xyz(velocity, velocity, m + 0x10);
         i = 4;
         do {
             i--;
-            scale = FUN_L13_002cefc0_random(0.0f, 3.0f);
-            FUN_L13_002cefc0_scale(rotated, velocity, scale);
-            FUN_L13_002cefc0_vector(rotated, rotated, m + 0x10);
+            scale = random_float_between(0.0f, 3.0f);
+            scale_vector_xyz(rotated, velocity, scale);
+            add_vector_xyz(rotated, rotated, m + 0x10);
             FUN_L13_002ce688(m, rotated, 1);
         } while (i >= 0);
-        link = data[0x74 / 4];
-        if (link != -1) linked_state_flags[link] = 1;
-        FUN_L13_002cefc0_remove(moby);
+        linked_index = data[0x74 / 4];
+        if (linked_index != -1) linked_state_flags[linked_index] = 1;
+        mark_moby_for_removal(moby);
         return;
     }
     default: return;
