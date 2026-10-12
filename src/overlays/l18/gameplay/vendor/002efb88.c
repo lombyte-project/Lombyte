@@ -321,15 +321,18 @@ void FUN_L18_002f0390(struct Moby *moby) {
     do {
         unsigned char *m;
         char *data;
-        do {
-            m = D_L18_0015FFD8 + ((*p & 0x7fff) << 8);
-        } while (*(short *)(m + 0xa6) != 0x54b);
+        unsigned int index = *(unsigned short *)p;
+        while (1) {
+            m = D_L18_0015FFD8 + ((index & 0x7fff) << 8);
+            if (*(short *)(m + 0xa6) == 0x54b) break;
+            index = *(volatile unsigned short *)p;
+        }
         data = *(char **)(m + 0x78);
         for (i = 0; i < *(short *)(data + 0x164); i++) {
+            int base = (*(short *)(data + 0x166) - i + 15) & 15;
             if (D_L18_0016223C == 0) {
-                int base = (*(short *)(data + 0x166) - i + 15) & 15;
                 for (k = 0; k < 4; k++) {
-                    add_vector_xyz(quads[i] + k * 16, data + 0x10 + (((base + k / 2) & 15) << 4),
+                    add_vector_xyz(quads[i] + k * 16, data + 0x10 + (((base + (k >> 1)) & 15) << 4),
                                    extra + ((k & 1) << 2));
                 }
                 draw_geometry_quad(quads[i], 0, 0);
