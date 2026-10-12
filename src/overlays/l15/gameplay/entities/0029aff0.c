@@ -1691,7 +1691,7 @@ void FUN_L15_002d0fa8(void *arg) {
     UData *d = m->data;
     char *slot = 0;
     int kind;
-    float impact = 0.0f;
+    float impact;
     int i;
     int hit;
     int code;
@@ -1702,6 +1702,7 @@ void FUN_L15_002d0fa8(void *arg) {
     unsigned char state;
 
     *(float *)((char *)m + 0x2C) = D_L15_00161B2C * *(float *)(m->cls + 0x24);
+    impact = 0.0f;
     d->w1C8 = 0;
     for (i = 0; i < 64; i++) {
         char *entry = D_00178700 + i * 0x40;
@@ -1726,9 +1727,9 @@ void FUN_L15_002d0fa8(void *arg) {
         if (kind != 1 && state != 10 && state != 0x40 &&
             *(short *)(*(char **)(slot + 0x20) + 0xA6) != 0x350) {
             d->f20 -= impact;
-            code = 9;
-            if (*(unsigned short *)(slot + 0x2A) != 0x100)
-                code = hit;
+            code = hit;
+            if (*(unsigned short *)(slot + 0x2A) == 0x100)
+                code = 9;
             if (state == 2)
                 code = 9;
             if (d->f20 <= 0.0f)
@@ -1754,9 +1755,11 @@ void FUN_L15_002d0fa8(void *arg) {
             case 6:
             case 7:
             case 8:
+                angle = D_L15_00161B08 * D_0015ED6C;
+                direction = D_L15_00161B04 * D_0015ED6C;
                 d->w1C8 = 1;
-                *(float *)((char *)d + 0x88) = D_L15_00161B08 * D_0015ED6C;
-                *(float *)((char *)d + 0x8C) = D_L15_00161B04 * D_0015ED6C;
+                *(float *)((char *)d + 0x88) = angle;
+                *(float *)((char *)d + 0x8C) = direction;
                 FUN_00251c90((char *)d + 0x70, 4.0f, 1.0f);
                 *(float *)((char *)d + 0xC0) = 12.0f;
                 *(float *)((char *)d + 0xC4) = 16.0f;
