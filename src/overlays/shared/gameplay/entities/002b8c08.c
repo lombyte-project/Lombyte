@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/overlay/collision.h"
 
 extern f32 D_L01_001CAD00[];
 
@@ -468,13 +469,10 @@ void FUN_L01_002c72c8(void) {
                          FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 20000.0f);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002c7530.s", FUN_L01_002c7530);
-#else
 extern int FUN_001f9740(void *);
 extern int FUN_001e9448(void *);
-extern int collect_mobies_in_sphere(void *, int, int, void *, float) __asm__("FUN_L00_001f2868");
-extern void FUN_L00_00259bc8(void *, void *, int, void *, void *, float);
+extern int collect_mobies_in_sphere(float, void *, int, int, void *) __asm__("FUN_L00_001f2868");
+extern void FUN_L00_00259bc8_2c7530(float, void *, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void FUN_001f9bf8(void *, void *, float);
 extern float FUN_001f9b80(void *, void *);
@@ -484,15 +482,15 @@ extern int FUN_001f96f8(int);
 extern int truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L01_00280970(int, void *);
 extern void FUN_0020c828(void *);
-extern int D_L01_001742C0_sda __asm__("D_L01_001742C0") __attribute__((sda));
 
+extern s32 D_L01_00161494 __attribute__((sda));
+extern f32 D_L01_0016149C __attribute__((sda));
 void FUN_L01_002c7530(char *moby) {
     int *data = *(int **)(moby + 0x78);
     char *camera = D_L01_00167240;
     char hit[0x30];
     float normal[4];
     float distance;
-    s32 state;
 
     distance = FUN_001f9b80(camera, moby + 0x10);
     camera -= 0x140;
@@ -501,19 +499,18 @@ void FUN_L01_002c7530(char *moby) {
                                              *(float *)(camera + 0x144) - *(float *)(moby + 0x14));
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(data + 3));
     FUN_001f9a10(moby + 0x10, moby + 0x10, data + 8);
-    state = (u8)moby[0x20];
-    switch (state) {
+    switch ((u8)moby[0x20]) {
     case 1:
-        FUN_L01_00280970(*(int *)((char *)&D_L01_001742C0_sda + 0x18), moby);
+        FUN_L01_00280970(D_L01_00161494, moby);
         FUN_001f9bf8(normal, data + 8, 1.0f);
         make_hit_descriptor(hit, moby, 0, 0.0f, normal);
-        if (collect_mobies_in_sphere(moby + 0x10, 0x10, data[6], hit, *(float *)((char *)&D_L01_001742C0_sda + 0x20)) &&
+        if (collect_mobies_in_sphere(D_L01_0016149C, moby + 0x10, 0x10, data[6], hit) &&
             !FUN_001e9448(moby)) {
-            if (*(int *)((char *)&D_L01_001742C0_sda + 0x18) != 0)
-                FUN_L00_00259bc8(*(void **)((char *)&D_L01_001742C0_sda + 0x18), moby, 0x10001,
-                                   (char *)&D_L01_001742C0_sda + 0x20, normal, 1.0f);
+            CollisionHit *contact = (CollisionHit *)D_L01_001742C0;
+            if (contact->moby != 0)
+                FUN_L00_00259bc8_2c7530(1.0f, contact->moby, moby, 0x10001, &contact->point, normal);
             ((void (*)(void *))FUN_L01_002c72c8)(moby);
-            goto mark;
+            goto remove;
         }
         if (FUN_001f9740(data)) {
             data[0] = FUN_001f96f8(0x1e);
@@ -521,21 +518,20 @@ void FUN_L01_002c7530(char *moby) {
             if (data[4] != 0)
                 data[4] = 0;
         }
-        return;
+        break;
+    case 0:
+        break;
     case 2:
-        if (!FUN_001f9740(data)) {
+        if (FUN_001f9740(data)) {
+        remove:
+            FUN_0020c828(moby);
+        } else {
             int duration = FUN_001f96f8(0x1e);
             moby[0x23] = truncate_float_to_s32((float)data[0] * (127.0f / (float)duration));
-            return;
         }
         break;
-    default:
-        return;
     }
-mark:
-    FUN_0020c828(moby);
 }
-#endif
 extern int D_0015ED84_r __asm__("D_0015ED84");
 extern unsigned char D_0013D394 __attribute__((section(".data")));
 extern unsigned char D_0013D395 __attribute__((section(".data")));
