@@ -734,20 +734,14 @@ void FUN_L08_002d55c8(struct Moby *moby, int path_id) {
     }
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5950.s", FUN_L08_002d5950);
-#else
-extern void FUN_0020cca8(void *, int, void *);
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D6C58), where it is exact; names translated to the US level program. */
+
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
+extern f32 random_angle_radians_c(void) __asm__("func_00213308");
+extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
+extern float FUN_001f96b0(float);
 extern int D_L08_001618D4 __attribute__((sda));
 extern int D_L08_001618D8 __attribute__((sda));
 extern float D_L08_001618DC __attribute__((sda));
@@ -758,63 +752,79 @@ extern int D_L08_001618F0 __attribute__((sda));
 extern int D_L08_001618F4 __attribute__((sda));
 extern float D_L08_001618F8 __attribute__((sda));
 extern float D_L08_001618FC __attribute__((sda));
+extern int FUN_L00_0024f7c8();
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
+extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
+extern void func_L00_00250800_2D6C58(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void func_0020DAF8_2D6C58(char *, int, char *) __asm__("FUN_0020cca8");
+extern float func_00214158_2D6C58(void) __asm__("FUN_00213308");
+extern float func_002140F8_2D6C58(float, float) __asm__("FUN_002132a8");
+extern void func_L00_001FF4B0_2D6C58(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9BD8_2D6C58(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void func_001F9C30_2D6C58(void *, void *, float) __asm__("FUN_001f9a68");
+extern float func_001F9F90_2D6C58(float) __asm__("FUN_001f9dc8");
+extern float func_001F9FA8_2D6C58(float) __asm__("FUN_001f9de0");
+extern float func_001F9878_2D6C58(float) __asm__("FUN_001f96b0");
+extern int func_001FA898_2D6C58(float) __asm__("FUN_001fa6d0");
+extern char *func_00219780_2D6C58(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
-void FUN_L08_002d5950(struct Moby *moby, int joint, int count) {
-    float basis[16];
-    float base[4];
-    float velocity[4];
-    float offset[4];
-    float jitter[4];
-    float pos[4];
-    float angle;
-    float sine;
-    float spread;
+void FUN_L08_002d5950(char *moby, int a1, int count) {
+    char *d = *(char **)(moby + 0x78);
+    char t10[32];
+    float t30[8];
+    float t50[4];
+    float t60[4];
+    float t70[4];
+    float t80[4];
+    float v90[4];
     int i;
-    int a, b, c;
-    char *vars = (char *)moby->pvars;
-    float * volatile pos_ptr;
+    int x1, x2, x3;
+    float s, t;
 
-    moby_point_position(moby, joint, base);
-    FUN_0020cca8(moby, joint, basis);
-    i = 0;
-    if (count <= 0)
-        return;
-    pos_ptr = pos;
-    for (; i < count; i++) {
-        angle = random_angle_radians();
-        qcopy(pos_ptr, base);
-        pos[0] += random_float_between(-0.05f, 0.05f);
-        pos[1] += random_float_between(-0.05f, 0.05f);
-        pos[2] += random_float_between(-0.05f, 0.05f);
-        qcopy(velocity, vars + 0x40);
-        qcopy(offset, vars + 0x40);
+    func_L00_00250800_2D6C58(moby, a1, t50);
+    func_0020DAF8_2D6C58(moby, a1, t10);
+    for (i = 0; i < count; i++) {
+        float *vp = v90;
+
+        s = func_00214158_2D6C58();
+        qcopy(vp, t50);
+        v90[0] += func_002140F8_2D6C58(-0.05f, 0.05f);
+        v90[1] += func_002140F8_2D6C58(-0.05f, 0.05f);
+        v90[2] += func_002140F8_2D6C58(-0.05f, 0.05f);
+        qcopy(t60, d + 0x40);
+        qcopy(t70, d + 0x40);
         if (count / 3 < i) {
-            spread = D_L08_001618DC * 1.2f;
-            normalize_vector_xyz(jitter, basis + 8, random_float_between(D_L08_001618DC, spread) * D_0015ED6C);
-            add_vector_xyz(velocity, velocity, jitter);
-            scale_vector_xyz(offset, offset, 0.5f);
-            offset[0] += fast_cos(angle) * (random_float_between(0.0f, D_L08_001618E8) * D_0015ED6C);
-            sine = fast_sin(angle);
-            spread = D_L08_001618E8;
+            func_L00_001FF4B0_2D6C58(t80, t30, func_002140F8_2D6C58(D_L08_001618DC, D_L08_001618DC * 1.2f) * D_0015ED6C);
+            func_001F9BD8_2D6C58(t60, t60, t80);
+            func_001F9C30_2D6C58(t70, t70, 0.5f);
+            t = func_001F9F90_2D6C58(s);
+            t = t * (func_002140F8_2D6C58(0.0f, D_L08_001618E8) * D_0015ED6C);
+            t70[0] = t70[0] + t;
+            t = func_001F9FA8_2D6C58(s);
+            t = t * (func_002140F8_2D6C58(0.0f, D_L08_001618E8) * D_0015ED6C);
+            t70[1] = t70[1] + t;
+            t70[2] = D_L08_001618E0 * D_0015ED6C;
         } else {
-            normalize_vector_xyz(jitter, basis + 8, random_float_between(0.0f, D_L08_001618DC) * D_0015ED6C);
-            add_vector_xyz(velocity, velocity, jitter);
-            scale_vector_xyz(offset, offset, 0.5f);
-            offset[0] += fast_cos(angle) * (random_float_between(0.0f, D_L08_001618E8 * 0.25f) * D_0015ED6C);
-            sine = fast_sin(angle);
-            spread = D_L08_001618E8 * 0.25f;
+            func_L00_001FF4B0_2D6C58(t80, t30, func_002140F8_2D6C58(0.0f, D_L08_001618DC) * D_0015ED6C);
+            func_001F9BD8_2D6C58(t60, t60, t80);
+            func_001F9C30_2D6C58(t70, t70, 0.5f);
+            t = func_001F9F90_2D6C58(s);
+            t = t * (func_002140F8_2D6C58(0.0f, D_L08_001618E8 * 0.25f) * D_0015ED6C);
+            t70[0] = t70[0] + t;
+            t = func_001F9FA8_2D6C58(s);
+            t = t * (func_002140F8_2D6C58(0.0f, D_L08_001618E8 * 0.25f) * D_0015ED6C);
+            t70[1] = t70[1] + t;
+            t70[2] = D_L08_001618E0 * D_0015ED6C;
         }
-        offset[1] += sine * (random_float_between(0.0f, spread) * D_0015ED6C);
-        offset[2] = D_0015ED6C * D_L08_001618E0;
-        offset[3] = D_L08_001618FC;
-        velocity[3] = D_L08_001618F8;
-        a = truncate_float_to_s32(frame_scale_inv * random_float_between((float)D_L08_001618EC, (float)D_L08_001618EC * 1.2f));
-        b = truncate_float_to_s32(frame_scale_inv * random_float_between((float)D_L08_001618F0, (float)D_L08_001618F0 * 1.2f));
-        c = truncate_float_to_s32(frame_scale_inv * random_float_between((float)D_L08_001618F4, (float)D_L08_001618F4 * 1.5f));
-        FUN_00218888(pos, velocity, offset, D_L08_001618D4, D_L08_001618D8, a, b, c, -1);
+        t60[3] = D_L08_001618F8;
+        t70[3] = D_L08_001618FC;
+        x1 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618EC, (float)D_L08_001618EC * 1.2f)));
+        x2 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F0, (float)D_L08_001618F0 * 1.2f)));
+        x3 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F4, (float)D_L08_001618F4 * 1.5f)));
+        func_00219780_2D6C58(t50, t60, t70, D_L08_001618D4, D_L08_001618D8, x1, x2, x3, -1);
     }
 }
-#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5d08.s", FUN_L08_002d5d08);
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d6450.s", FUN_L08_002d6450);
