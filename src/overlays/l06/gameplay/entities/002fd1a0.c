@@ -1988,19 +1988,23 @@ void FUN_L06_003049f8(char *m) {
                 float *q = scratch;
                 int j;
                 for (j = 29; j >= 0; j--) {
+                    float scale;
                     FUN_L06_00217300(p);
                     p += 4;
+                    scale = D_L06_00162200 * frame_time;
                     *points = position;
                     points += 4;
                     position += increment;
-                    random_vector_3049f8(q, 0.0f, D_L06_00162200 * frame_time);
+                    random_vector_3049f8(q, 0.0f, scale);
                     q += 4;
                 }
                 {
                     /* The completed countdown is -1: these cursors start at
                      * the second and third scratch vectors. */
-                    float *second = scratch + (j + 2) * 4;
-                    float *third = scratch + (j + 3) * 4;
+                    float *second, *third;
+                    j += 2;
+                    second = scratch + j * 4;
+                    third = scratch + (j + 1) * 4;
                     q = scratch;
                     paths = (float *)(data + i * 0x1e0 + 0x790);
                     for (j = 27; j >= 0; j--) {
@@ -2015,10 +2019,9 @@ void FUN_L06_003049f8(char *m) {
                 }
                 timers[i] = D_L06_00162234;
             } else {
-                float *points = (float *)(data + i * 0x1e0);
+                float *points = (float *)(data + i * 0x1e0 + 0x10);
                 float *paths = (float *)(data + i * 0x1e0 + 0x790);
                 int j;
-                points += 4;
                 for (j = 27; j >= 0; j--) {
                     FUN_001f9a10(points, points, paths);
                     points += 4;
@@ -2060,14 +2063,14 @@ void FUN_L06_003049f8(char *m) {
             scratch[31] = 1.0f;
             for (j = 49; j >= 0; j--) {
                 float angle = random_float_3049f8(0.0f, D_L06_00162204 * 0.75f);
-                normalize_vector_3049f8(d, b, angle);
+                normalize_vector_3049f8(d, scratch + 16, angle);
                 FUN_001f9a10(d, d, scratch + 28);
                 {
                     int v = fast_tween_color_3049f8(random_float_between_3049f8(0.0f, 1.0f), D_L06_00162214, D_L06_00162218);
                     float f = random_float_between_3049f8(D_L06_0016221C, D_L06_00162220);
                     int n = truncate_float_to_s32_3049f8(random_float_between_3049f8((float)D_L06_00162224, (float)D_L06_00162228));
-                    random_vector_3049f8(e, D_L06_0016222C * frame_time, D_L06_00162230 * frame_time);
-                    spawn_particle_3049f8(f, d, e, v, scale_game_frames_3049f8(n) & 0xff, random_byte_3049f8(0xff) & 0xff, 0);
+                    random_vector_3049f8(scratch + 36, D_L06_0016222C * frame_time, D_L06_00162230 * frame_time);
+                    spawn_particle_3049f8(f, d, scratch + 36, v, scale_game_frames_3049f8(n) & 0xff, random_byte_3049f8(0xff) & 0xff, 0);
                 }
             }
         }
