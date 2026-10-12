@@ -1018,7 +1018,17 @@ extern void FUN_L00_002660c0(s32);
 extern void FUN_L00_001ff040(void *, s32, s32);
 extern void FUN_L00_00265fa0(s32, s32, s32);
 
+/* The retail record bases are 0x16A8 and 0x1748 within disc_table.
+ * This view preserves those offsets separately from the signed index.
+ * The spacing does not establish the number of valid records. */
+typedef struct {
+    char pad[0x16A8];
+    struct DiscFile records[20];
+    struct DiscFile records_alt[20];
+} DiscTableRecords;
+
 void FUN_L00_00299a68(void) {
+
     s32 offset;
     s32 first_destination, second_destination;
     s32 index;
@@ -1029,28 +1039,32 @@ void FUN_L00_00299a68(void) {
     D_L00_0015F3FC_298840 = 1.0f;
     FUN_L00_001ff040((D_L00_0015F5C4 = 7, (char *)&D_L00_0015F622 - 2), 0, 0x10);
     offset = D_L00_001611CC - 0xE0000;
-    second_destination = D_L00_00173E00_298840.x8 + offset;
     first_destination = D_L00_00173E00_298840.x4 + offset;
+    second_destination = D_L00_00173E00_298840.x8 + offset;
     D_L00_0015F62C = second_destination;
     D_L00_001611CC = offset;
-    D_L00_0015F628 = first_destination;
-    index = (s16)D_L00_0015F622;
+    *(volatile s32 *)&D_L00_0015F628 = first_destination;
     if (pal_mode != 0) {
-        FUN_L00_00265fa0(D_L00_0015F628, disc_table.music_60000[index + 38].sector,
-                           disc_table.music_60000[index + 38].size);
+        index = (s16)D_L00_0015F622;
+        FUN_L00_00265fa0(first_destination, ((DiscTableRecords *)&disc_table)->records_alt[index].sector,
+                           ((DiscTableRecords *)&disc_table)->records_alt[index].size);
     } else {
-        FUN_L00_00265fa0(D_L00_0015F628, disc_table.music_60000[index + 18].sector,
-                           disc_table.music_60000[index + 18].size);
+        index = (s16)D_L00_0015F622;
+        FUN_L00_00265fa0(first_destination, ((DiscTableRecords *)&disc_table)->records[index].sector,
+                           ((DiscTableRecords *)&disc_table)->records[index].size);
     }
     FUN_L00_002660c0(1);
-    D_L00_0015F622++;
-    index = (s16)D_L00_0015F622;
+    index = D_L00_0015F622 + 1;
+    D_L00_0015F622 = index;
+    index = (s32)((u32)index << 16);
     if (pal_mode != 0) {
-        FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 38].sector,
-                           disc_table.music_60000[index + 38].size);
+        second_destination = D_L00_0015F62C;
+        FUN_L00_00265fa0(second_destination, ((DiscTableRecords *)&disc_table)->records_alt[index >> 16].sector,
+                           ((DiscTableRecords *)&disc_table)->records_alt[index >> 16].size);
     } else {
-        FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 18].sector,
-                           disc_table.music_60000[index + 18].size);
+        second_destination = D_L00_0015F62C;
+        FUN_L00_00265fa0(second_destination, ((DiscTableRecords *)&disc_table)->records[index >> 16].sector,
+                           ((DiscTableRecords *)&disc_table)->records[index >> 16].size);
     }
 }
 #endif
