@@ -25,9 +25,9 @@ extern ItemCount_257218 D_L00_001C40B0[] __asm__("D_L00_001C40B0");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 
 int FUN_L00_00257218(u8 *m, s32 *item) {
-    s32 available = 0;
-    s32 stocked = 0;
     s32 shortfall = 0;
+    s32 stocked = 0;
+    s32 available = 0;
     s32 i;
     s32 choice;
     u32 id;
@@ -36,27 +36,43 @@ int FUN_L00_00257218(u8 *m, s32 *item) {
     if (*item <= 0 || (m != 0 &&
         ((D_0014C190_257218[current_level_index][(s16)*(u16 *)(m + 0xB2) >> 5] >>
           (*(u16 *)(m + 0xB2) & 31)) & 1))) {
-        entry = D_0015EDD0_257218;
-        i = 0;
-        if (*entry != 0xFF) {
-            while (1) {
-                id = *entry & 0x3F;
-                if (item_available[id]) {
-                    ItemCount_257218 *count = &D_L00_001C40B0[id];
-                    available++;
-                    if (count->count != 0) {
-                        stocked++;
+        {
+            s32 scan_index = 0;
+            if (D_0015EDD0_257218[0] != 0xFF) {
+                entry = D_0015EDD0_257218;
+                while (1) {
+                    id = *entry & 0x3F;
+                    if (item_available[id]) {
+                        ItemCount_257218 *count = &D_L00_001C40B0[id];
+                        available++;
+                        if (count->count != 0) {
+                            stocked++;
+                        }
+                        shortfall += weapon_ammo_counts[id] < count->count;
                     }
-                    shortfall += weapon_ammo_counts[id] < count->count;
+                    entry++;
+                    if (++scan_index >= 12 || *entry == 0xFF) break;
                 }
-                i++;
-                entry++;
-                if (i == 12) break;
-                if (*entry == 0xFF) break;
             }
         }
+        /* Retail also uses list index -1 when the random selection is negative. */
         i = -1;
-        if (shortfall == 0) {
+        if (shortfall != 0) {
+            choice = random_integer_below(shortfall);
+            if (choice >= 0) {
+                i = -1;
+                while (1) {
+                    ++i;
+                    id = D_0015EDD0_257218[i] & 0x3F;
+                    if (item_available[id]) {
+                        ItemCount_257218 *count = &D_L00_001C40B0[id];
+                        choice -= weapon_ammo_counts[id] < count->count;
+                    }
+                    if (choice < 0) break;
+                }
+            }
+            id = D_0015EDD0_257218[i] & 0x3F;
+        } else {
             id = 10;
             if (available != 0) {
                 choice = random_integer_below(stocked);
@@ -66,34 +82,19 @@ int FUN_L00_00257218(u8 *m, s32 *item) {
                         i++;
                         id = D_0015EDD0_257218[i] & 0x3F;
                         if (item_available[id]) {
-                            if (D_L00_001C40B0[id].count != 0) choice--;
+                            ItemCount_257218 *count = &D_L00_001C40B0[id];
+                            if (count->count != 0) choice--;
                         }
                         if (choice < 0) break;
                     }
                 }
                 id = D_0015EDD0_257218[i] & 0x3F;
             }
-        } else {
-            choice = random_integer_below(shortfall);
-            if (choice >= 0) {
-                i = 0;
-                while (1) {
-                    id = D_0015EDD0_257218[i] & 0x3F;
-                    if (item_available[id]) {
-                        choice -= weapon_ammo_counts[id] < D_L00_001C40B0[id].count;
-                    }
-                    if (choice < 0) break;
-                    ++i;
-                }
-            }
-            id = D_0015EDD0_257218[i] & 0x3F;
         }
         *item = id;
     }
-    choice = random_integer_below(5);
-    id = 1;
-    if (choice == 0) id = 2;
-    return id;
+    if (random_integer_below(5) != 0) return 1;
+    return 2;
 }
 #endif
 extern int D_0015ED84_257470 __asm__("D_0015ED84");
