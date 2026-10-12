@@ -449,7 +449,9 @@ struct Hero {
     Vec4 unk770;                   /* 0x770 */
     Vec4 unk780;                   /* 0x780 */
     Vec4 unk790;                   /* 0x790 */
-    u8 pad_7A0[0x30];
+    s16 unk7A0[8];                 /* 0x7A0 */
+    s16 unk7B0[8];                 /* 0x7B0 */
+    s16 unk7C0[8];                 /* 0x7C0 */
     f32 unk7D0[0x20];              /* 0x7D0 */
     u8 pad_850[0x4];
     f32 unk854;                    /* 0x854 */
