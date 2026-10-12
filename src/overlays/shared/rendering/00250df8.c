@@ -58,34 +58,34 @@ int FUN_L00_00257218(u8 *m, s32 *item) {
         /* Retail also uses list index -1 when the random selection is negative. */
         i = -1;
         if (shortfall != 0) {
-            choice = random_integer_below(shortfall);
-            if (choice >= 0) {
+            stocked = random_integer_below(shortfall);
+            if (stocked >= 0) {
                 i = -1;
                 while (1) {
                     ++i;
                     id = D_0015EDD0_257218[i] & 0x3F;
                     if (item_available[id]) {
                         ItemCount_257218 *count = &D_L00_001C40B0[id];
-                        choice -= weapon_ammo_counts[id] < count->count;
+                        stocked -= weapon_ammo_counts[id] < count->count;
                     }
-                    if (choice < 0) break;
+                    if (stocked < 0) break;
                 }
             }
             id = D_0015EDD0_257218[i] & 0x3F;
         } else {
             id = 10;
             if (available != 0) {
-                choice = random_integer_below(stocked);
-                if (choice >= 0) {
+                stocked = random_integer_below(stocked);
+                if (stocked >= 0) {
                     i = -1;
                     while (1) {
                         i++;
                         id = D_0015EDD0_257218[i] & 0x3F;
                         if (item_available[id]) {
                             ItemCount_257218 *count = &D_L00_001C40B0[id];
-                            if (count->count != 0) choice--;
+                            if (count->count != 0) stocked--;
                         }
-                        if (choice < 0) break;
+                        if (stocked < 0) break;
                     }
                 }
                 id = D_0015EDD0_257218[i] & 0x3F;
@@ -93,8 +93,9 @@ int FUN_L00_00257218(u8 *m, s32 *item) {
         }
         *item = id;
     }
-    if (random_integer_below(5) != 0) return 1;
-    return 2;
+    choice = 2;
+    if (random_integer_below(5) != 0) choice = 1;
+    return choice;
 }
 #endif
 extern int D_0015ED84_257470 __asm__("D_0015ED84");
