@@ -2230,7 +2230,7 @@ typedef union {
 void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
     V_002ddcb8 first, second, third, scaled_first, scaled_third, temp1, temp2;
     V_002ddcb8 *next;
-    char *global = (char *)&D_0013F350_c;
+    char *global;
     char *vector_source;
     float sampled;
     int i;
@@ -2241,6 +2241,7 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
         return;
     D_L00_00161B84_002ddcb8 = 1.7f;
     *(int *)((char *)&D_L00_00161B84_002ddcb8 - 0x44) = 0;
+    global = (char *)&D_0013F350_c;
     i = *(int *)(global + 0x2084);
     if ((i == 30 || i == 1) &&
         (*(u16 *)(*(char **)(global + 0x2080) + 0x34) & 1)) {
@@ -2253,27 +2254,27 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
         qcopy(&third, frame_context + 0xe0);
     } else {
         vector_source = global + 0x640;
-        qcopy(&first, vector_source);
-        qcopy(&second, vector_source + 0x10);
-        qcopy(&third, vector_source + 0x20);
+        first.bits = ((V_002ddcb8 *)vector_source)->bits;
+        second.bits = ((V_002ddcb8 *)(vector_source + 0x10))->bits;
+        third.bits = ((V_002ddcb8 *)(vector_source + 0x20))->bits;
     }
     FUN_001ff500_002ddcb8(&scaled_first, &first, 1.7f);
     FUN_001ff500_002ddcb8(&scaled_third, &third, 1.0f);
-    *(V_002ddcb8 *)D_L00_001E5F40_002ddcb8 = *(V_002ddcb8 *)initial_vector;
+    qcopy(D_L00_001E5F40_002ddcb8, initial_vector);
     *(short *)(D_L00_001E5F40_002ddcb8 + 0xc8) = 0;
     next = (V_002ddcb8 *)(D_L00_001E5F40_002ddcb8 + 0x10);
     record = D_L00_001E5F30_002ddcb8 + 0x10;
     halfword = (short *)(D_L00_001E5F40_002ddcb8 + 0xca);
-    i = 9;
-    while (i--) {
+    i = 8;
+    do {
         FUN_001ff278_002ddcb8(next, record, &scaled_first);
         ++next;
         *halfword++ = 0;
         record += 0x10;
-    }
+    } while (--i >= 0);
     FUN_001ff260_002ddcb8(D_L00_00161B60_002ddcb8);
-    temp2.bits = 0;
     temp1.bits = 0;
+    temp2.bits = 0;
     temp2.f[3] = 1.0f;
     temp1.f[2] = 0.1f;
     temp1.f[3] = 1.0f;
