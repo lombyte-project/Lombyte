@@ -809,11 +809,8 @@ void FUN_L02_002fa7c8(char *m) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002fb648.s", FUN_L02_002fb648);
-#else
 extern char *D_L02_0015EF50;
-extern char *D_L02_001674DC;
+extern char *D_L02_001674DC __attribute__((section(".data")));
 extern float FUN_001f9b48(void *, void *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_0025fa38(void *, int);
@@ -869,7 +866,6 @@ int FUN_L02_002fb648(char *moby) {
 rejected:
     return 0;
 }
-#endif
 /* Checks whether the target's direction is within a and b degrees of the reference axis. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FCBC0), where it is exact; names translated to the US level program. */
 
