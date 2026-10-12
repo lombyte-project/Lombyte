@@ -1461,7 +1461,7 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     float along;
     float segment_length;
     float best;
-    struct { s32 path_index; void *out; volatile int changed; } state;
+    struct { volatile s32 path_index; void *out; volatile int changed; } state;
     int i;
     int next_index;
     char *path;
@@ -1469,11 +1469,11 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     char **path_entry;
 
     state.path_index = path_index;
-    state.out = out;
     state.changed = 0;
+    *(void * volatile *)&state.out = out;
     best = 512.0f;
     qcopy_nc(&from_point, position);
-    path_offset = path_index * 4;
+    path_offset = state.path_index * 4;
     i = 0;
     if (state.changed < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1) do {
         int next;
