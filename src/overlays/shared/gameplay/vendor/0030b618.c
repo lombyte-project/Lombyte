@@ -48,12 +48,15 @@ void FUN_L01_0030b618(u8 *m) {
             mark_moby_for_removal_b618(m);
             return;
         }
-        for (i = 0; i < *(s32 *)(e + 0x58); i++) {
-            f32 *point = ((f32 *)e) + i * 4;
-            point[0] *= 0.00390625f;
-            point[1] *= 0.00390625f;
-            point[2] *= 0.00390625f;
-            point[3] *= 0.00390625f;
+        {
+            s32 i;
+            for (i = 0; i < *(s32 *)(e + 0x58); i++) {
+                f32 *point = ((f32 *)e) + i * 4;
+                point[0] *= 0.00390625f;
+                point[1] *= 0.00390625f;
+                point[2] *= 0.00390625f;
+                point[3] *= 0.00390625f;
+            }
         }
         *(s32 *)(e + 0x68) = -1;
         if (m[0x30] < truncate_float_to_s32_b618(*(f32 *)(e + 0x5c)) + 4)
@@ -110,12 +113,14 @@ void FUN_L01_0030b618(u8 *m) {
             interpolate_vector_b618(e + 0x40, &first, &second, sine);
         }
         cutoff = *(f32 *)(e + 0x5c) * 0.75f;
-        if (cutoff < elapsed) {
-            f32 numerator = elapsed - cutoff;
+        {
             f32 denominator = *(f32 *)(e + 0x5c) - cutoff;
-            first = 0;
-            second = *(OvlQuad *)(e + 0x40);
-            interpolate_vector_b618(e + 0x40, &second, &first, numerator / denominator);
+            if (cutoff < elapsed) {
+                f32 numerator = elapsed - cutoff;
+                first = 0;
+                second = *(OvlQuad *)(e + 0x40);
+                interpolate_vector_b618(e + 0x40, &second, &first, numerator / denominator);
+            }
         }
         slot = *(s32 *)(e + 0x68);
         if (slot == -1) {
