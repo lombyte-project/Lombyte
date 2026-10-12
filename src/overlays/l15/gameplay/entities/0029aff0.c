@@ -690,17 +690,17 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
 
 void FUN_L15_002c4f88(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f88 *look) {
-    SteeringVec_4f88 target = *goal;
-    SteeringVec_4f88 look_copy = *look;
+    SteeringVec_4f88 target;
+    SteeringVec_4f88 look_copy;
     SteeringVec_4f88 scaled;
-    SteeringVec_4f88 origin = *(SteeringVec_4f88 *)&moby->pos;
+    SteeringVec_4f88 origin;
     SteeringVec_4f88 delta;
     SteeringVec_4f88 *look_at = &look_copy;
     SteeringVec_4f88 *target_at = &target;
     SteeringVars_4f88 *vars = (SteeringVars_4f88 *)moby->pvars;
-    float distance = FUN_001f9b48(&moby->pos, target_at);
-    float step = frame_time_sq * 10.0f;
-    float old_speed = vars->speed;
+    float distance;
+    float step;
+    float old_speed;
     float limit;
     float facing;
     float angle;
@@ -718,6 +718,12 @@ void FUN_L15_002c4f88(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f8
     float pos_y;
 
 
+    target.q = goal->q;
+    origin.q = *(u128 *)&moby->pos;
+    look_copy.q = look->q;
+    distance = FUN_001f9b48(&moby->pos, target_at);
+    step = frame_time_sq * 10.0f;
+    old_speed = vars->speed;
     speed_sq = old_speed * old_speed;
     twice_step = step + step;
     threshold = speed_sq / twice_step;
