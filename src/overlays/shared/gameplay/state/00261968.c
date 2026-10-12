@@ -154,7 +154,7 @@ extern void FUN_001ff3c0_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_00
 extern f32 FUN_001ff3d8_261d78(OvlVec4 *) __asm__("FUN_001f9af0");
 extern void FUN_001ff500_261d78(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
 
-s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) {
+s32 FUN_L00_00261d78(f32 distance, volatile s32 path_index, OvlVec4 *point, OvlVec4 *out) {
     OvlVec4 difference;
     OvlVec4 scaled_difference;
     OvlVec4 working;
@@ -166,6 +166,7 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     s32 i;
     s32 offset;
     s32 found;
+    s32 next;
     f32 segment_length;
     f32 projection;
 
@@ -175,11 +176,13 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     i = 0;
     if (0 < (*entry)->count - 1) {
         do {
+            entry = &D_L00_001B04B0_261d78[path_index];
             offset = i << 4;
-            if ((*entry)->points[i].f[3] != 0.0f || (*entry)->points[offset / 16 + 1].f[3] != 0.0f) {
-                FUN_001ff2a8_261d78(&difference, &working, &(*entry)->points[offset / 16 + 1]);
+            next = i + 1;
+            if ((*entry)->points[i].f[3] != 0.0f || (*entry)->points[next].f[3] != 0.0f) {
+                FUN_001ff2a8_261d78(&difference, &working, (OvlVec4 *)((u8 *)*entry + offset + 0x10));
                 difference.i[2] = 0;
-                FUN_001ff2a8_261d78(&segment, &(*entry)->points[offset / 16 + 1], &(*entry)->points[i]);
+                FUN_001ff2a8_261d78(&segment, (OvlVec4 *)((u8 *)*entry + offset + 0x20), (OvlVec4 *)((u8 *)*entry + offset + 0x10));
                 segment.i[2] = 0;
                 FUN_001ff500_261d78(&scaled_segment, &segment, 1.0f);
                 FUN_001ff3c0_261d78(&cross, &difference, &scaled_segment);
@@ -195,7 +198,7 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
                             goto next_segment;
                         found = 1;
                         FUN_001ff500_261d78(&scaled_difference, &difference, distance);
-                        FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[offset / 16 + 1]);
+                        FUN_001ff278_261d78(&working, &scaled_difference, (OvlVec4 *)((u8 *)*entry + offset + 0x10));
                         working.f[2] = point->f[2];
                     } else {
                         found = 1;
@@ -203,14 +206,14 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
                         FUN_001ff2a8_261d78(&scaled_difference, &difference, &scaled_cross);
                         FUN_001ff500_261d78(&scaled_difference, &scaled_difference, distance);
                         FUN_001ff278_261d78(&scaled_difference, &scaled_difference, &scaled_cross);
-                        FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[offset / 16 + 1]);
+                        FUN_001ff278_261d78(&working, &scaled_difference, (OvlVec4 *)((u8 *)*entry + offset + 0x10));
                         working.f[2] = point->f[2];
                     }
                 }
             }
 next_segment:
-            i++;
-        } while (i < (*entry)->count - 1);
+            i = next;
+        } while (i < D_L00_001B04B0_261d78[path_index]->count - 1);
     }
     if (found)
         out->q = working.q;
