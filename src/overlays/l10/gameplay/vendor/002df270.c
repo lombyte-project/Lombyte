@@ -1872,7 +1872,7 @@ void FUN_L10_002e5968(struct Moby *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e5be0.s", FUN_L10_002e5be0);
 #else
 extern s32 D_L10_00161EF0 __attribute__((sda));
-extern volatile s32 D_L10_00161EF4 __attribute__((sda));
+extern s32 D_L10_00161EF4 __attribute__((sda));
 extern f32 D_L10_00161EF8 __attribute__((sda));
 extern f32 D_L10_00161EFC __attribute__((sda));
 extern f32 D_L10_00161F00 __attribute__((sda));
@@ -1935,11 +1935,11 @@ void FUN_L10_002e5be0(struct Moby *moby) {
                 upper = 1.2f;
             }
             amount = random_float_between(lower, upper) * pvars[1];
-            first_color = D_L10_00161EF0;
-            color = fast_tween_color(random_float_between(0.5f, 1.0f),
-                                     first_color, D_L10_00161EF4);
-            fade_color = fast_tween_color(random_float_between(0.25f, 0.5f),
-                                          D_L10_00161EF4, D_L10_00161EF4 & 0xff000000);
+            x = random_float_between(0.5f, 1.0f);
+            color = fast_tween_color(x, D_L10_00161EF0, D_L10_00161EF4);
+            first_color = D_L10_00161EF4 & 0xff000000;
+            x = random_float_between(0.25f, 0.5f);
+            fade_color = fast_tween_color(x, D_L10_00161EF4, first_color);
             life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
             FUN_L00_002738e8(amount, pvars[0], D_L10_00161F00 * frame_time_sq,
                                &position, &velocity, life, color, fade_color, variant);
