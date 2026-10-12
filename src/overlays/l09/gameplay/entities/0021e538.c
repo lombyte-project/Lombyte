@@ -188,27 +188,38 @@ extern int D_L09_001CB470;
 extern char D_L09_00166E40[];
 extern char D_L09_00166EC0[];
 
+extern float D_L09_00166F40[];
+extern float D_L09_0016CBC0[];
+extern float D_L09_001612F8;
+extern float D_L09_001612FC;
+extern float D_L09_00161300;
+extern float D_L09_00161304 __attribute__((section(".sdata")));
+#include "rnc/overlay/quad.h"
+#include "qcopy.h"
+#define PACKET_CURSOR (*(int * volatile *)&D_L09_001611C0)
+
 void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     char *data = data_ptr;
     char *list = list_ptr;
     int i;
     int j;
+    int entry_offset;
     int *packet;
     u64 *words;
-    float matrix[16];
+    float matrix[12];
     float offset[4];
-    int color;
-    int *scratch = (int *)0x700003fc;
+    u64 color;
+    int *scratch;
     float *old = (float *)0x001612f8;
-    float *current = (float *)0x0016cbc0;
+    float *current = D_L09_0016CBC0;
     float saved0 = current[0x218 / 4];
     float saved1 = current[0x21c / 4];
     float saved2 = current[0x228 / 4];
     float saved3 = current[0x22c / 4];
-    old[0] = saved0;
-    old[1] = saved1;
-    old[2] = saved2;
-    *(float *)0x00161304 = saved3;
+    D_L09_001612F8 = saved0;
+    D_L09_001612FC = saved1;
+    D_L09_00161300 = saved2;
+    D_L09_00161304 = saved3;
     if (D_L09_0015F458 != 1) {
         current[0x218 / 4] = *(float *)(data + 0x20);
         current[0x21c / 4] = *(float *)(data + 0x24);
@@ -218,91 +229,112 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     setup_first_context();
     setup_second_context();
     FUN_001f9ff8(1024.0f, matrix);
-    setup_offset_vector(-1024.0f, offset, (void *)0x00166f40);
+    setup_offset_vector(-1024.0f, offset, D_L09_00166F40);
     offset[3] = 1.0f;
     FUN_00233830(&D_L09_0010E810, D_L09_0010E800);
-    D_L09_001611C0[0] = 0x10000000;
-    D_L09_001611C0[1] = 0;
-    D_L09_001611C0[2] = 0x11000000;
-    D_L09_001611C0[3] = 0x01000404;
-    packet = D_L09_001611C0;
-    packet[4] = 0;
-    packet[5] = 0;
-    packet[6] = 0;
-    packet[7] = 0x6c0c43a4;
-    transform_packet_data(packet + 8, D_L09_00166E40, matrix);
-    transform_packet_data(packet + 24, D_L09_00166EC0, matrix);
-    packet[40] = 0x8000;
-    packet[41] = 0x303ec000;
-    packet[42] = 0x412;
-    packet[43] = *(int *)0x0016cdd0;
-    *(u64 *)(packet + 44) = *(u64 *)0x0016cd50;
-    packet[46] = *(int *)0x0016cd58;
-    packet[47] = *(int *)0x0016cd5c;
-    *(u64 *)(packet + 48) = *(u64 *)0x0016cd60;
-    packet[50] = *(int *)0x0016cd68;
-    packet[51] = *(int *)0x0016cd6c;
-    packet[52] = *(int *)0x0016cdec;
-    packet[57] = 0x020001d2;
-    packet[56] = 0x03000000;
-    packet[53] = *(int *)0x0016cde8;
-    packet[58] = 0x15000000;
-    packet[54] = 0;
-    packet[55] = 0;
-    packet[59] = 0;
-    *D_L09_001611C0 |= (((packet + 60) - D_L09_001611C0) >> 2) - 1;
-    D_L09_001611C0 = packet + 60;
-    packet[60] = 0x30000003;
-    D_L09_001611C0[1] = (int)&D_L09_001CB470;
-    D_L09_001611C0[2] = 0;
-    D_L09_001611C0[3] = 0x50000003;
-    packet = D_L09_001611C0 + 4;
-    D_L09_001611C0 += 4;
+    {
+        int *packet;
+        int *packet_end;
+        PACKET_CURSOR[0] = 0x10000000;
+        PACKET_CURSOR[1] = 0;
+        PACKET_CURSOR[2] = 0x11000000;
+        PACKET_CURSOR[3] = 0x01000404;
+        packet = PACKET_CURSOR;
+        packet[4] = 0;
+        packet[5] = 0;
+        packet[6] = 0;
+        packet[7] = 0x6c0c43a4;
+        transform_packet_data(packet + 8, D_L09_00166F40 - 64, matrix);
+        transform_packet_data(packet + 24, D_L09_00166F40 - 32, matrix);
+        packet[40] = 0x8000;
+        packet[41] = 0x303ec000;
+        packet[42] = 0x412;
+        *(float *)(packet + 43) = current[0x210 / 4];
+        packet_end = packet + 44;
+        qcopy(packet_end, current + 0x190 / 4);
+        packet_end = packet + 48;
+        qcopy(packet_end, current + 0x1a0 / 4);
+        *(float *)(packet + 52) = current[0x22c / 4];
+        packet[57] = 0x020001d2;
+        packet[56] = 0x03000000;
+        *(float *)(packet + 53) = current[0x228 / 4];
+        packet[58] = 0x15000000;
+        packet[54] = 0;
+        packet[55] = 0;
+        packet[59] = 0;
+        packet_end = packet + 60;
+        {
+            int *words = PACKET_CURSOR;
+            *words |= (((int)packet_end - (int)words) >> 4) - 1;
+        }
+        D_L09_001611C0 = packet_end;
+        packet[60] = 0x30000003;
+    }
+    PACKET_CURSOR[1] = (int)&D_L09_001CB470;
+    PACKET_CURSOR[2] = 0;
+    PACKET_CURSOR[3] = 0x50000003;
+    packet = PACKET_CURSOR + 4;
+    D_L09_001611C0 = packet;
     packet[0] = 0x10000008;
-    D_L09_001611C0[1] = 0;
-    D_L09_001611C0[2] = 0;
-    D_L09_001611C0[3] = 0x50000008;
-    color = (unsigned char)data[0x32] << 16 | (unsigned char)data[0x31] << 8 | (unsigned char)data[0x30];
+    PACKET_CURSOR[1] = 0;
+    PACKET_CURSOR[2] = 0;
+    PACKET_CURSOR[3] = 0x50000008;
+    packet = PACKET_CURSOR;
+    words = (u64 *)(packet + 4);
+    D_L09_001611C0 = packet + 4;
+    color = (unsigned char)data[0x30] | (unsigned char)data[0x31] << 8 | (unsigned char)data[0x32] << 16;
     if (D_L09_0015F458 == 1)
-        color = *(int *)0x0016cdf0 | (*(int *)0x0016cdf4 << 8) |
-                (*(int *)0x0016cdf8 << 16);
-    words = (u64 *)(D_L09_001611C0 + 4);
-    *(u64 *)(D_L09_001611C0 + 4) = 0x7000000000008001ULL;
-    words[1] = 0xeeeeeeeeULL;
-    words[2] = ((u64)(unsigned char)data[0x3f] << 32) | 100;
-    words[3] = 0x42;
-    words[4] = D_L09_001612F0;
-    words[5] = 6;
-    words[6] = (long)color;
-    words[7] = 0x3d;
-    words[8] = 0;
-    words[9] = 8;
-    words[10] = 0x50000;
-    words[11] = 0x47;
-    words[12] = 0xff9000000260ULL;
-    words[13] = 0x14;
-    words[14] = (unsigned char)data[0x3f] > 0x60 ? 0x5360a : 0x5370b;
-    words[15] = 0x47;
-    D_L09_001611C0 += 36;
+        color = (long)(*(int *)(current + 0x230 / 4) | (*(int *)(current + 0x234 / 4) << 8) |
+                (*(int *)(current + 0x238 / 4) << 16));
+    {
+        u64 alpha = (unsigned char)data[0x3f];
+        u64 blend;
+        words[0] = 0x7000000000008001ULL;
+        blend = 0x60U < alpha ? 0x5360a : 0x5370b;
+        words[1] = 0xeeeeeeeeULL;
+        words[2] = ((u64)(unsigned char)data[0x3f] << 32) | 100;
+        words[3] = 0x42;
+        words[4] = D_L09_001612F0;
+        words[5] = 6;
+        words[6] = (long)color;
+        words[7] = 0x3d;
+        words[8] = 0;
+        words[9] = 8;
+        words[10] = 0x50000;
+        words[11] = 0x47;
+        words[12] = 0xff9000000260ULL;
+        words[13] = 0x14;
+        words[14] = blend;
+        words[15] = 0x47;
+        D_L09_001611C0 = (int *)(words + 16);
+    }
+    scratch = (int *)0x700003fc;
     for (i = 255; i >= 0; i--)
         *scratch-- = 0x757c8e;
-    for (i = 0; i < count; i++) {
-        char *entry = list + i * 32;
-        int visible = FUN_001fa728(entry, 256.0f);
+    i = 0;
+    if (count > 0) do {
+        char *entry;
+        int visible;
+        entry_offset = i * 32;
+        entry = (char *)((int)list + entry_offset);
+        i++;
+        visible = FUN_001fa728(entry, 256.0f);
         if (visible != -1) {
             int n = *(int *)(entry + 0x1c);
             float *source = *(float **)(entry + 0x14);
             float *destination = (float *)0x70001000;
-            for (j = 0; j < n; j++) {
+            j = n;
+            if (j > 0) do {
                 *destination++ = *source++ * 0.5f;
                 *destination++ = *source++ * 0.5f;
-            }
-            FUN_L00_001fde98(n, *(int *)(entry + 0x10), 0x70000000,
+            } while (--j != 0);
+            FUN_L00_001fde98(n, *(int *)(entry_offset + (int)list + 0x10), 0x70000000,
                               (void *)0x70001000, visible == 0);
         }
-    }
+    } while (i < count);
     FUN_L02_002a46e0(data);
 }
+#undef PACKET_CURSOR
 #endif
 #define NOT_SDA
 
