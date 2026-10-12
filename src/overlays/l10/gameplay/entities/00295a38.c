@@ -1987,12 +1987,7 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                 char *base = data + group * 0x2580 + item * 0x10;
                 char *other = base + 0x9600;
                 char *buffer = (char *)scratch + item * 0x10;
-                if (FUN_001f25d0(entry) == 0) {
-                    for (row = 1; row < 19; row++) {
-                        char *dst = base + row * 0x140;
-                        FUN_001f28e0(dst, dst, other + row * 0x140);
-                    }
-                } else {
+                if (FUN_001f25d0(entry) != 0) {
                     char *dst = base;
                     char *out = buffer;
                     for (row = 0; row < 20; row++) {
@@ -2011,6 +2006,12 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                         FUN_001f2968(0.333f, dst, dst);
                     }
                     *(int *)entry = D_L10_00161D64;
+                } else {
+                    for (row = 1; row < 19; row++) {
+                        char *dst = base + row * 0x140;
+                        FUN_001f28e0(dst, dst, other + row * 0x140);
+                    }
+
                 }
             }
             group_table += 0x78;
