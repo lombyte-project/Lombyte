@@ -1280,7 +1280,7 @@ s32 FUN_L00_0023a2d0(Hud *m) {
 
     sprintf_alt(buf, D_L00_0015F918);
     x += D_L00_0015F904;
-    y += D_L00_0015F908;
+    slide = y + D_L00_0015F908;
     period = FUN_001f96f8(D_L00_0015F914);
     pulse = fast_sin((f32)(D_L00_0015F5CC % period) /
                      convert_integer_to_float(period) * 6.28318f - 3.14159f) * 4.0f - 3.0f;
@@ -1289,8 +1289,8 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     scaled_text = pulse * text;
     shadow = fast_tween_color(0, 0x80000000, scaled_text);
     color = fast_tween_color(D_L00_0015F90C, D_L00_0015F910, scaled_text);
-    FUN_L00_001fb470(x + 1, y + 1, shadow, buf, -1);
-    FUN_L00_001fb470(x, y, color, buf, -1);
+    FUN_L00_001fb470(x + 1, slide + 1, shadow, buf, -1);
+    FUN_L00_001fb470(x, slide, color, buf, -1);
 out:
     return m->ret;
 }
