@@ -2728,23 +2728,25 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
     D_L00_00161B84_002ddcb8 = 1.7f;
     *(int *)((char *)&D_L00_00161B84_002ddcb8 - 0x44) = 0;
     global = (char *)&D_0013F350_c;
-    i = *(int *)(global + 0x2084);
-    if ((i == 30 || i == 1) &&
-        (*(u16 *)(*(char **)(global + 0x2080) + 0x34) & 1)) {
-        qcopy(&first, D_L00_00166FD0_002ddcb8);
-        qcopy(&second, D_L00_00166FD0_002ddcb8 + 0x10);
-        qcopy(&third, D_L00_00166FD0_002ddcb8 + 0x20);
-    } else if (*(short *)(global + 0x22c8) == 1) {
-        FUN_001ff300_002ddcb8(&first, frame_context + 0xd0, -1.0f);
-        qcopy(&second, frame_context + 0xc0);
-        qcopy(&third, frame_context + 0xe0);
-    } else {
-        vector_source = global + 0x640;
-        first.bits = ((V_002ddcb8 *)vector_source)->bits;
-        second.bits = ((V_002ddcb8 *)(vector_source + 0x10))->bits;
-        third.bits = ((V_002ddcb8 *)(vector_source + 0x20))->bits;
+    {
+        int i = *(int *)(global + 0x2084);
+        if ((i == 30 || i == 1) &&
+            (*(u16 *)(*(char **)(global + 0x2080) + 0x34) & 1)) {
+            qcopy(&first, D_L00_00166FD0_002ddcb8);
+            qcopy(&second, D_L00_00166FD0_002ddcb8 + 0x10);
+            qcopy(&third, D_L00_00166FD0_002ddcb8 + 0x20);
+        } else if (*(short *)(global + 0x22c8) == 1) {
+            FUN_001ff300_002ddcb8(&first, frame_context + 0xd0, -1.0f);
+            qcopy(&second, frame_context + 0xc0);
+            qcopy(&third, frame_context + 0xe0);
+        } else {
+            vector_source = global + 0x640;
+            qcopy_nc(&first, vector_source);
+            qcopy_nc(&second, vector_source + 0x10);
+            qcopy_nc(&third, vector_source + 0x20);
+        }
     }
-    FUN_001ff500_002ddcb8(&scaled_first, &first, 1.7f);
+    FUN_001ff500_002ddcb8(&scaled_first, &first, *(volatile float *)&D_L00_00161B84_002ddcb8);
     FUN_001ff500_002ddcb8(&scaled_third, &third, 1.0f);
     qcopy(D_L00_001E5F40_002ddcb8, initial_vector);
     *(short *)(D_L00_001E5F40_002ddcb8 + 0xc8) = 0;
@@ -2761,9 +2763,9 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
     FUN_001ff260_002ddcb8(D_L00_00161B60_002ddcb8);
     temp1.bits = 0;
     temp2.bits = 0;
-    temp2.f[3] = 1.0f;
-    temp1.f[2] = 0.1f;
-    temp1.f[3] = 1.0f;
+    *(volatile float *)&temp2.f[3] = 1.0f;
+    *(volatile float *)&temp1.f[2] = 0.1f;
+    *(volatile float *)&temp1.f[3] = 1.0f;
     temp2.f[0] = 1.0f;
     sampled = FUN_00257cb0_002ddcb8();
     FUN_0025fc08_002ddcb8(D_L00_00161B70_002ddcb8, sampled, &temp1, &temp2);
