@@ -1141,6 +1141,7 @@ extern void FUN_L00_002592b8(void **, void *, s32, s32);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
 extern s32 D_0013D4B8;
+extern s32 weapon_ammo_counts[37] __asm__("D_0013D428");
 extern f32 D_0013F420[];
 extern f32 D_0013F3D0[];
 
@@ -1198,18 +1199,17 @@ void FUN_L05_00253b48(void) {
                 color |= green << 8;
                 color |= red;
                 do {
-                    moby = second;
-                    if (*(s16 *)(moby + 0xA6) == 0x474) {
-                        *(u16 *)(moby + 0x34) |= 0x10;
-                        *(u32 *)(moby + 0x90) = color;
-                        if (FUN_L00_001fefc8(moby + 0xBC, moby) != 0) {
-                            FUN_001f9a28(delta, moby + 0x10, D_0013F3D0);
+                    if (*(s16 *)(second + 0xA6) == 0x474) {
+                        *(u16 *)(second + 0x34) |= 0x10;
+                        *(u32 *)(second + 0x90) = color;
+                        if (FUN_L00_001fefc8(second + 0xBC, second) != 0) {
+                            FUN_001f9a28(delta, second + 0x10, D_0013F3D0);
                             FUN_001f9fc8(matrix);
-                            FUN_001fa2d8(matrix, moby + 0xC0);
+                            FUN_001fa2d8(matrix, second + 0xC0);
                             FUN_001f9d20(delta, delta, matrix);
                             if (FUN_001f99c0(delta[0]) < 2.8f && FUN_001f99c0(delta[1]) < 1.25f && FUN_001f99c0(delta[2]) < 1.5f) {
-                                hero.unk8C4 += **(s32 **)(moby + 0x78);
-                                moby[0xBC] = FUN_001f96f8(0x3C);
+                                hero.unk8C4 += **(s32 **)(second + 0x78);
+                                second[0xBC] = FUN_001f96f8(0x3C);
                                 if (hero.unk86C != 0)
                                     allocate_voice_for_target_entry(1, 0, hero.unk86C);
                             }
@@ -1225,18 +1225,19 @@ void FUN_L05_00253b48(void) {
         while (third != 0) {
 
             if (*(s16 *)(third + 0xA6) == 0x1D6 && FUN_L00_001fefc8(third + 0xBC, third) != 0 && FUN_001f9b48(D_0013F420, third + 0x10) < 1.5f) {
+                struct Hero *g = &hero;
                 third[0xBC] = FUN_001f96f8(300);
-                if (*(s32 *)((u8 *)&hero + 0x10B8) != 0x24) {
-                    *(s32 *)((u8 *)&hero + 0x20B8) = 0x24;
-                    hero.unk20AC = 0;
+                if (*(s32 *)((u8 *)g + 0x10B8) != 0x24) {
+                    *(s32 *)((u8 *)g + 0x20B8) = 0x24;
+                    g->unk20AC = 0;
                     FUN_L05_0023dc88(0);
-                    hero.unk20AC = 1;
+                    g->unk20AC = 1;
                 }
-                hero.unk8CE++;
-                if (hero.unk8CE > 3)
-                    hero.unk8CE = 3;
-                *(s32 *)((u8 *)&hero + 0x20B8) = 0x24;
-                D_0013D4B8++;
+                g->unk8CE++;
+                if (g->unk8CE > 3)
+                    g->unk8CE = 3;
+                *(s32 *)((u8 *)g + 0x20B8) = 0x24;
+                weapon_ammo_counts[36]++;
             }
             FUN_L00_002592b8((void **)&third, third, 0, 0);
         }
