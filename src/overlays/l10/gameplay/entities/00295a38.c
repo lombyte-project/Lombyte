@@ -765,9 +765,6 @@ void FUN_L10_002d7b18(struct Moby *a, float t) {
         a->pos.z = t;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002d7b80.s", FUN_L10_002d7b80);
-#else
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -846,7 +843,7 @@ void FUN_L10_002d7b80(struct Moby *moby) {
                         **(char **)(data + 0x14) = 1;
                 }
             }
-            for (i = 4; i >= 0; i--) {
+            for (i = 0; i < 5; i++) {
                 *(OvlQuad *)rand_dir = 0;
                 rand_dir[0] = random_float_between_alt(-1.0f, 1.0f);
                 rand_dir[1] = random_float_between_alt(-1.0f, 1.0f);
@@ -869,7 +866,6 @@ void FUN_L10_002d7b80(struct Moby *moby) {
         FUN_001f9b80(&moby->pos, &D_L10_00167240) > 80.0f)
         mark_moby_for_removal_d7b80(moby);
 }
-#endif
 #ifndef NOT_SDA
 #endif
 #ifndef MACRO_ADDR
