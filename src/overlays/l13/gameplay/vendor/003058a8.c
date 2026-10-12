@@ -464,7 +464,128 @@ bounds:
 }
 #endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003073c8.s", FUN_L13_003073c8);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00307b10.s", FUN_L13_00307b10);
+struct BlastHit {
+    u8 pad0[0x2C];
+    f32 damage;
+};
+
+struct BlastVars {
+    u8 pad0[0x20];
+    f32 health;
+    u8 pad24[2];
+    s16 effect_timer;
+    u8 pad28;
+    u8 hit;
+    u8 pad2A[0x36];
+    u8 effects[7];
+    u8 effect_level;
+    u8 pad68[8];
+    int timer;
+};
+
+extern char D_L13_001F5590[];
+extern char D_L13_00178200[];
+extern int D_L13_00161E2C __attribute__((sda));
+extern f32 D_L13_00161E30 __attribute__((sda));
+extern f32 D_L13_00161E34 __attribute__((sda));
+extern f32 D_L13_00161E38 __attribute__((sda));
+extern struct BlastHit *find_moby_hit_7b10(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int fptodp_7b10(float) __asm__("FUN_00120478");
+extern void debug_print_7b10() __asm__("FUN_001e93b0");
+extern int hit_check_7b10(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern void stop_moby_sound_7b10(void *, int, int) __asm__("FUN_L00_00257470");
+extern void anim_reset_7b10(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void anim_update_7b10(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void FUN_L13_003073c8(struct Moby *, void *);
+extern void FUN_L10_002e3de8(struct Moby *);
+extern int allocate_voice_7b10(int, int, int) __asm__("FUN_0022da68");
+extern int scale_game_frames_7b10(int) __asm__("FUN_001f96f8");
+extern float random_float_7b10(float, float) __asm__("FUN_002132a8");
+extern float int_to_float_7b10(int) __asm__("FUN_001fa6c0");
+extern float lerp_7b10(float, float, float) __asm__("FUN_L00_0025b6a8");
+extern int collect_mobies_7b10(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
+extern void blast_mobys_7b10(struct Moby *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
+extern float scale_time_7b10(float) __asm__("FUN_001f96b0");
+extern void remove_7b10(struct Moby *) __asm__("FUN_0020c828");
+
+void FUN_L13_00307b10(struct Moby *moby) {
+    struct BlastVars *vars = (struct BlastVars *)moby->pvars;
+    struct BlastHit *hit;
+    float *health;
+    void *effects;
+    int kind;
+    float pos[4];
+    int hits;
+    int timer;
+
+    switch (moby->state) {
+    case 0:
+        vars->hit = 0;
+        moby->rot.x *= 0.7f;
+        moby->rot.y *= 0.7f;
+        hit = find_moby_hit_7b10(moby, 0x330001, 0);
+        health = &vars->health;
+        if (hit != 0) {
+            debug_print_7b10(D_L13_001F5590, moby->oclass, (s16)moby->save_id, fptodp_7b10(hit->damage));
+        }
+        switch (hit_check_7b10(moby, hit, health, 0, &kind, 0, 0, 4)) {
+        case 1:
+        case 2:
+            *health = 0;
+            break;
+        case 0:
+        case 3:
+        case 11:
+            break;
+        }
+        effects = vars->effects;
+        if (kind >= 2) {
+            if (*health <= hit->damage) {
+                *health = 0;
+                moby->flags &= 0xEFFF;
+                stop_moby_sound_7b10(moby, 0, -1);
+                vars->effect_level = 0x78;
+                anim_reset_7b10(moby, effects);
+                vars->timer = 0;
+                FUN_L13_003073c8(moby, vars);
+                FUN_L10_002e3de8(moby);
+                allocate_voice_7b10(0, 0, (int)moby);
+                moby->state = 1;
+            } else {
+                *health = *health - hit->damage;
+                vars->effect_level = 0xFA;
+                vars->effect_timer = scale_game_frames_7b10(0x3C);
+                anim_reset_7b10(moby, effects);
+                moby->rot.x = random_float_7b10(-0.034906585f, 0.034906585f);
+                moby->rot.y = random_float_7b10(-0.034906585f, 0.034906585f);
+            }
+        }
+        moby->hit_slot = 0xFF;
+        anim_update_7b10(moby, effects);
+        break;
+    case 1:
+        qcopy(pos, &moby->pos);
+        pos[2] += 1.0f;
+        hits = collect_mobies_7b10(lerp_7b10(D_L13_00161E30, D_L13_00161E34,
+                                              int_to_float_7b10(vars->timer) /
+                                                  int_to_float_7b10(scale_game_frames_7b10(D_L13_00161E2C))),
+                                    pos, 0x10, moby, 0);
+        blast_mobys_7b10(moby, pos, D_L13_00178200, hits, 0, 0x830001, 2, 1, D_L13_00161E38, 1.0f, 1.0f);
+        if (vars->timer > scale_time_7b10((float)D_L13_00161E2C * 0.5f)) {
+            moby->flags |= 0x41;
+            FUN_L10_002e3de8(moby);
+        } else {
+            moby->alpha = moby->alpha * 7 / 8;
+        }
+        timer = vars->timer + 1;
+        vars->timer = timer;
+        if (scale_game_frames_7b10(D_L13_00161E2C) < timer) {
+            FUN_L10_002e3de8(moby);
+            remove_7b10(moby);
+        }
+        break;
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00307e98.s", FUN_L13_00307e98);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00308d10.s", FUN_L13_00308d10);
 
