@@ -5,11 +5,9 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030b618.s", FUN_L01_0030b618);
-#else
 #include "rnc/overlay/quad.h"
 #include "qcopy.h"
+#include "qzero.h"
 extern s32 truncate_float_to_s32_b618(f32) __asm__("FUN_001fa6d0");
 extern f32 distance_xyz_b618(void *, void *) __asm__("FUN_001f9b80");
 extern s32 is_point_inside_clip_volume_b618(void *, s32) __asm__("FUN_00214720");
@@ -29,15 +27,13 @@ void FUN_L01_0030b618(u8 *m) {
     s32 state = m[0x20];
     char *e = *(char **)(m + 0x78);
     s32 i;
-    s32 count;
     s32 current;
     s32 next;
     s32 slot;
     f32 elapsed;
     f32 active;
     f32 phase;
-    f32 sine_input;
-    f32 sine;
+    f32 blend;
     f32 cutoff;
     OvlQuad first;
     OvlQuad second;
@@ -98,28 +94,28 @@ void FUN_L01_0030b618(u8 *m) {
         phase = itof_s_b618(*(s32 *)(e + 0x70) - *(s32 *)(e + 0x6c));
         phase = phase / itof_s_b618(*(s32 *)(e + 0x70));
         phase *= 3.1415927f;
-        sine_input = phase * 0.5f;
+        blend = phase * 0.5f;
         if (*(s32 *)(e + 0x7c) != 0)
-            sine_input += 1.5707964f;
-        sine = fast_sin(sine_input);
+            blend += 1.5707964f;
+        blend = fast_sin(blend);
 
         if (*(s32 *)(e + 0x7c) != 0) {
             first = ((OvlQuad *)e)[*(s32 *)(e + 0x78)];
             second = ((OvlQuad *)e)[*(s32 *)(e + 0x74)];
-            interpolate_vector_b618(e + 0x40, &first, &second, sine);
+            interpolate_vector_b618(e + 0x40, &first, &second, blend);
         } else {
             first = ((OvlQuad *)e)[*(s32 *)(e + 0x74)];
             second = ((OvlQuad *)e)[*(s32 *)(e + 0x78)];
-            interpolate_vector_b618(e + 0x40, &first, &second, sine);
+            interpolate_vector_b618(e + 0x40, &first, &second, blend);
         }
         cutoff = *(f32 *)(e + 0x5c) * 0.75f;
         {
             f32 denominator = *(f32 *)(e + 0x5c) - cutoff;
             if (cutoff < elapsed) {
-                f32 numerator = elapsed - cutoff;
-                first = 0;
+                f32 fade = (elapsed - cutoff) / denominator;
+                qzero(&first);
                 second = *(OvlQuad *)(e + 0x40);
-                interpolate_vector_b618(e + 0x40, &second, &first, numerator / denominator);
+                interpolate_vector_b618(e + 0x40, &second, &first, fade);
             }
         }
         slot = *(s32 *)(e + 0x68);
@@ -144,7 +140,6 @@ void FUN_L01_0030b618(u8 *m) {
         }
     }
 }
-#endif
 #include "rnc/overlay/quad.h"
 typedef union {
     OvlQuad q;
