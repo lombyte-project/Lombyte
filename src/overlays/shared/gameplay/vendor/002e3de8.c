@@ -100,9 +100,15 @@ extern int float_to_integer(float) __asm__("FUN_001fa6d0");
 extern float integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void transform_vectors(float *, void *, int) __asm__("FUN_001f7d30");
 typedef struct { float v[4]; } aligned_vector __attribute__((aligned(16)));
-extern int D_L10_0015B340 __asm__("D_0015B340") __attribute__((sda));
-extern int D_L10_0015B348[] __asm__("D_0015B348") __attribute__((sda));
-
+/* Retail uses gp-0x4cc0 for the count and four separate two-word
+ * color tables at gp-0x4cb8, -0x4cb0, -0x4ca8 and -0x4ca0.
+ * With gp=0x166c00 these are 0x161f40 and 0x161f48..0x161f60.
+ * Keep the existing C names while binding the checked overlay addresses. */
+extern int D_L10_0015B340 __asm__("D_L10_00161F40") __attribute__((sda));
+extern int D_L10_0015B348[2] __asm__("D_L10_00161F48") __attribute__((sda));
+extern int D_L10_00161F50[2] __attribute__((sda));
+extern int D_L10_00161F58[2] __attribute__((sda));
+extern int D_L10_00161F60[2] __attribute__((sda));
 
 void FUN_L10_002e91b8(unsigned char *m) {
     unsigned char first[0x90] __attribute__((aligned(16)));
@@ -146,9 +152,9 @@ void FUN_L10_002e91b8(unsigned char *m) {
         int parity = i & 1;
         int *colors = D_L10_0015B348;
         unsigned long long color = (long long)colors[parity] |
-            ((long long)colors[parity + 2] << 2) |
-            ((long long)colors[parity + 4] << 4) |
-            ((long long)colors[parity + 6] << 6) | 0x8000000000ULL;
+            ((long long)D_L10_00161F50[parity] << 2) |
+            ((long long)D_L10_00161F58[parity] << 4) |
+            ((long long)D_L10_00161F60[parity] << 6) | 0x8000000000ULL;
         int shade = ((int *)0x001da250)[i];
         float *angles = (float *)(first + 0x58);
         float *offsets = (float *)(first + 0x68);
@@ -158,8 +164,8 @@ void FUN_L10_002e91b8(unsigned char *m) {
         float *second_offsets = (float *)(second + 0x68);
         *(unsigned long long *)(first + 0x88) = color;
         *(unsigned long long *)(second + 0x88) =
-            (long long)colors[parity] | ((long long)colors[parity + 2] << 2) |
-            ((long long)colors[parity + 4] << 4) | ((long long)colors[parity + 6] << 6) |
+            (long long)colors[parity] | ((long long)D_L10_00161F50[parity] << 2) |
+            ((long long)D_L10_00161F58[parity] << 4) | ((long long)D_L10_00161F60[parity] << 6) |
             0x8000000000ULL;
         ((int *)(first + 0x40))[0] = shade;
         ((int *)(second + 0x40))[2] = shade;
