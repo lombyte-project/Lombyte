@@ -1657,7 +1657,207 @@ void FUN_L06_002f7000(struct Moby *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f7d78.s", FUN_L06_002f7d78);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f91e8.s", FUN_L06_002f91e8);
+/* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FA618), where it is exact; names translated to the US level program. */
+
+typedef struct Hero Hero;
+
+typedef struct Moby Moby;
+
+typedef struct {
+    char pad00[0x10];
+    float x;                /* 0x10 */
+    float y;                /* 0x14 */
+    float z;                /* 0x18 */
+    char pad1C[0x4];
+    struct Moby *owner; /* 0x20 */
+} Target_2FA618;
+
+typedef struct BlargVars_2FA618 {
+    char pad00[0x20];
+    float health;           /* 0x20 */
+    char pad24[0x14];
+    int f38;                /* 0x38 */
+    char pad3C[0x24];
+    char f60[0x7];          /* 0x60 */
+    unsigned char f67;      /* 0x67 */
+    char pad68[0x8];
+    char f70[0x18];         /* 0x70 */
+    float f88;              /* 0x88 */
+    float f8C;              /* 0x8C */
+    char pad90[0x30];
+    float fC0;              /* 0xC0 */
+    float fC4;              /* 0xC4 */
+    char padC8[0x58];
+    char f120[0x8];         /* 0x120 */
+    float f128;             /* 0x128 */
+    char pad12C[0x34];
+    int f160;               /* 0x160 */
+    int f164;               /* 0x164 */
+    char pad168[0x8];
+    char f170[0x30];        /* 0x170 */
+    float f1A0;             /* 0x1A0 */
+    char pad1A4[0x8];
+    int f1AC;               /* 0x1AC */
+    int f1B0;               /* 0x1B0 */
+    char pad1B4[0x14];
+    float f1C8;             /* 0x1C8 */
+    int f1CC;               /* 0x1CC */
+} BlargVars_2FA618;
+
+extern char D_0013F350[];
+extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C_c __asm__("D_0015ED6C");
+extern float FUN_001f96b0(float);
+extern int D_L06_0015F5CC; /* no foreign declaration */
+extern float D_L06_00161ED0 __attribute__((sda));
+extern int D_001413D0[];
+extern float D_L06_00161EE4 __attribute__((sda));
+extern int D_L06_00161EE8 __attribute__((sda));
+extern int D_L06_00161EEC __attribute__((sda));
+extern int FUN_001fa6e0(int, int, float);
+extern int FUN_00213928_c() __asm__("FUN_00213928");
+extern int FUN_L00_002598b0();
+extern int FUN_L00_0025a420_c() __asm__("FUN_L00_0025a420");
+extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+float absolute_float_c(float input) __asm__("func_001F99C0");
+int FUN_L00_0025ff38_c(float best, char *a, char *o, int *excluded, int excluded_count, void *region, int region_count) __asm__("FUN_L00_0025ff38");
+void FUN_L00_00257470_c(unsigned char *m, int flags, int arg) __asm__("FUN_L00_00257470");
+void FUN_L00_0025c558(u8 *a, void *b, int c, int d, int e, float f);
+void FUN_L00_0025d458_c(void *a, void *s) __asm__("FUN_L00_0025d458");
+void FUN_L00_0025d538_c(s32 id, void *s) __asm__("FUN_L00_0025d538");
+void FUN_L06_002f9698_c(char *arg) __asm__("FUN_L06_002f9698");
+extern float func_002140F8_2FA618(float, float) __asm__("FUN_002132a8");
+extern float func_001F9878_2FA618(float) __asm__("FUN_001f96b0");
+extern int func_001FA898_2FA618(float) __asm__("FUN_001fa6d0");
+extern int func_001F9908_2FA618(int *) __asm__("FUN_001f9740");
+extern Target_2FA618 *func_L00_0025B478_2FA618(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int func_L00_0025B4D0_2FA618(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern void func_L06_002FAAC8_2FA618(void *) __asm__("FUN_L06_002f9698");
+extern float func_L00_001FF860_2FA618(float, float) __asm__("FUN_001f9e90");
+extern void func_L00_0025D5B0_2FA618(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
+extern void func_L00_002584A8_2FA618(void *, int, int) __asm__("FUN_L00_00257470");
+extern void func_L00_0025E4B0_2FA618(void *, void *) __asm__("FUN_L00_0025d458");
+extern void func_L00_0025E590_2FA618(void *, void *) __asm__("FUN_L00_0025d538");
+extern void func_L00_0025A8E8_2FA618(void *, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+extern float func_001FA748_2FA618(float, float) __asm__("FUN_001fa580");
+extern float func_001F9FA8_2FA618(float) __asm__("FUN_001f9de0");
+extern int func_001FA8A8_2FA618(int, int, float) __asm__("FUN_001fa6e0");
+extern int func_L00_00260FB0_2FA618(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern float func_001F9D48_2FA618(void *, void *) __asm__("FUN_001f9b80");
+extern float func_001F9B88_2FA618(float) __asm__("FUN_001f99c0");
+extern int *D_L06_001B0FB0_2FA618[] __asm__("D_L06_001B0C30");
+extern unsigned char D_0013E633_2FA618[] __asm__("D_0013F350");
+
+void FUN_L06_002f91e8(Moby *moby)
+{
+    BlargVars_2FA618 *data = (struct BlargVars_2FA618 *)moby->pvars;
+    int hit;
+    float dmg;
+    Target_2FA618 *target;
+    int r;
+
+    if (data->f38 != 0) {
+        data->f1AC = func_001FA898_2FA618(func_001F9878_2FA618(func_002140F8_2FA618(180.0f, 240.0f)));
+        data->f38 = 0;
+    }
+    func_001F9908_2FA618(&data->f1AC);
+    dmg = 0.0f;
+    target = func_L00_0025B478_2FA618(moby, 0x330000, 0);
+    if (target != 0 && target->owner != 0 &&
+        target->owner->oclass == 0x418) {
+        target = 0;
+    }
+    r = func_L00_0025B4D0_2FA618(moby, target, &data->health, 0, &hit, &dmg, 0, 4);
+
+    if (hit != 1 && moby->state != 0x11 && moby->state != 3) {
+        data->health = data->health - dmg;
+        if (moby->group != 0xFF) {
+            func_L06_002FAAC8_2FA618(moby);
+        }
+        if (data->health <= 0.0f) {
+            r = 1;
+        } else if (data->f1CC != 0) {
+            r = 0xB;
+            data->f67 = 0xFA;
+        }
+
+        switch (r) {
+        case 0:
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+            moby->state = 14;
+            data->f88 = D_0015ED6C_c + D_0015ED6C_c;
+            data->f8C = D_0015ED6C_c;
+            data->fC0 = 5.0f;
+            data->fC4 = 8.5f;
+            func_L00_0025D5B0_2FA618(moby, data->f70, 9, 1, 0, func_L00_001FF860_2FA618(target->x, target->y));
+            data->f67 = 0xFA;
+            break;
+        case 1:
+        case 2:
+            moby->state = 0x11;
+            moby->flags &= 0xEFFF;
+            data->f88 = D_0015ED6C_c * 8.0f;
+            data->f8C = D_0015ED6C_c * 5.0f;
+            data->fC0 = 7.5f;
+            data->fC4 = 14.5f;
+            func_L00_0025D5B0_2FA618(moby, data->f70, 10, 1, 0, func_L00_001FF860_2FA618(target->x, target->y));
+            data->f67 = 0xFA;
+            func_L00_002584A8_2FA618(moby, 0, -1);
+            break;
+        case 11:
+            break;
+        }
+        func_L00_0025E4B0_2FA618(moby, data->f60);
+    }
+
+    moby->unkA4 = 0xFF;
+    func_L00_0025E590_2FA618(moby, data->f60);
+    switch (moby->state) {
+    case 8:
+    case 9:
+    case 12:
+    case 13:
+        if (D_L06_0015F5CC % 4 == (((int)moby >> 8) & 3)) {
+            func_L00_0025A8E8_2FA618(moby, 0.7f, &moby->pos.x, 0x10000, 0.9f, 1.0f, 0, 1, 0);
+        }
+        break;
+    }
+    data->f1C8 = func_001FA748_2FA618(data->f1C8, D_L06_00161EE4 * 0.017453292f * D_0015ED6C_c);
+    moby->unk90 = func_001FA8A8_2FA618(D_L06_00161EE8, D_L06_00161EEC,
+                                     (func_001F9FA8_2FA618(data->f1C8) + 1.0f) * 0.5f);
+
+    if (data->f1AC != 0) {
+        data->f1A0 = D_L06_00161ED0 + 6.0f;
+    } else if (moby->state == 1) {
+        if (moby == ((Moby *)((Hero *)D_0013E633_2FA618)->unk240) ||
+            moby == ((Moby *)((Hero *)D_0013E633_2FA618)->coll_hit_moby)) {
+            data->f1A0 = 6.0f;
+        } else {
+            data->f1A0 = 0.0f;
+        }
+    } else {
+        data->f1A0 = D_L06_00161ED0;
+    }
+
+    if (func_L00_00260FB0_2FA618(data->f1A0, moby, data->f120, 0, 0,
+                                 D_L06_001B0FB0_2FA618[data->f1B0] + 4, *D_L06_001B0FB0_2FA618[data->f1B0]) != 2) {
+        if (data->f1A0 < func_001F9D48_2FA618(data->f170, data->f120) ||
+            3.0f < func_001F9B88_2FA618(moby->pos.z - data->f128)) {
+            data->f164 = 2;
+        }
+    }
+    if (data->f160 == 0) {
+        data->f160 = D_001413D0[0];
+    }
+}
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f9a28.s", FUN_L06_002f9a28);
 extern int FUN_001fa6d0(float);
 extern char *FUN_L00_0025a420(void *, int, int);
