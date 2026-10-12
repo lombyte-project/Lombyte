@@ -157,104 +157,154 @@ void FUN_L12_00302c58(struct Moby *moby) {
         enqueue_callback_list_1(FUN_L12_003028c8, moby);
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00302f30.s", FUN_L12_00302f30);
-#else
-extern float FUN_001f9e90(float, float);
-extern float FUN_001f9b48(void *, void *);
+#include "rnc/math/vector.h"
+
+#include "qcopy.h"
+
+/* Level 12 vendor moby update: steers toward its target, then calls the vendor helpers. */
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00304310), where it is exact; names translated to the US level program. */
+
+typedef struct Moby Moby;
+
+typedef struct Data_304310 {
+    char pad0[0x2300];
+    int f2300;
+    int f2304;
+    int f2308;
+    int f230C;
+    int row; /* 0x2310 */
+    int target; /* 0x2314 */
+    float angle; /* 0x2318 */
+    int f231C;
+    int f2320;
+    float dist; /* 0x2324 */
+    float turn; /* 0x2328 */
+    int f232C;
+    int f2330;
+} Data_304310;
+
+typedef struct Row_304310 {
+    u128 v0;
+    u128 v10;
+    u128 v20;
+} Row_304310;
+
+extern Moby *D_L12_0015FFD8;
+extern char D_L12_00167240[];
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern float D_0015ED6C;
+extern float D_L12_0015F580[] __attribute__((section(".sdata")));
 extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9de0(float);
-extern float FUN_001f99c0(float);
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void scale_vector_xyz_cf(float, void *, void *) __asm__("FUN_001f9a68");
-extern void FUN_L00_0025b6b8(float, void *, void *, void *);
-extern int FUN_001fa728(float, void *);
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void make_hit_descriptor(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
-extern int FUN_001efa68(void *, void *, int, int, void *);
-extern char D_L12_0013F3D0[];
+extern float FUN_001f9e90(float, float);
+extern int D_0013F3D0; /* no foreign declaration */
+extern int D_L12_00161E08;
+extern int D_L12_00161E04;
+extern int D_L12_001B0930; /* no foreign declaration */
+extern int FUN_001efa68();
+extern int FUN_001fa728();
+extern int FUN_L00_00259888();
+extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_00214720");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+float absolute_float(float input) __asm__("func_001F99C0");
+void FUN_L00_0025b6b8(f32 t, f32 *out, f32 *a, f32 *b);
+void FUN_L12_00302c58(struct Moby *moby);
+extern float func_L00_001FF860_304310(float, float) __asm__("FUN_001f9e90");
+extern float func_001F9D10_304310(void *, void *) __asm__("FUN_001f9b48");
+extern float func_001FA748_304310(float, float) __asm__("FUN_001fa580");
+extern float func_001F9FA8_304310(float) __asm__("FUN_001f9de0");
+extern float func_001F9B88_304310(float) __asm__("FUN_001f99c0");
+extern void func_L00_0025C710_304310(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
+extern float func_001F9D48_304310(void *, void *) __asm__("FUN_001f9b80");
+extern void func_001F9BD8_304310(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void func_001F9C30_304310(void *, void *, float) __asm__("FUN_001f9a68");
+extern int func_L00_00200290_304310(void *, float) __asm__("FUN_001fa728");
+extern int func_00215570_304310(void *, int) __asm__("FUN_00214720");
+extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
+extern void func_L00_0025A8C0_304310(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
+extern int func_L00_001EFFF0_304310(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern Row_304310 *D_L12_001B0C30_304310[] __asm__("D_L12_001B0930");
+extern char D_L12_001672C0_304310[] __asm__("D_L12_00167240");
+extern float D_0013F4D0_304310[] __asm__("D_0013F3D0");
 
-void FUN_L12_00302f30(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    struct Moby *other;
-    float angle;
-    float phase;
-    float step;
-    float distance;
-    float points[8] __attribute__((aligned(16)));
-    u128 hit[3];
-    int index;
-    int target_index = *(int *)(data + 0x2314);
+void FUN_L12_00302f30(Moby *moby) {
+    Vec4 tmp0;
+    Vec4 tmp1;
+    char tmp2[0x30];
+    Data_304310 *data = *(Data_304310 **)&moby->pvars;
+    Row_304310 *row;
+    float a;
+    float half;
+    int idx;
 
-    if (target_index == -1) return;
+    if (data->target == -1) {
+        return;
+    }
     switch (moby->state) {
     case 0:
-        {
-            int initial_duration = 0x2d;
-            int final_duration = 0x16;
-            *(int *)0x00161e08 = final_duration;
-            *(int *)0x00161e04 = initial_duration;
-        }
-        *(int *)(data + 0x231c) = -1;
-        *(int *)(data + 0x2304) = 0xb;
-        *(int *)(data + 0x2308) = 0x17;
-        *(int *)(data + 0x230c) = 0x22;
-        *(int *)(data + 0x2300) = 0;
+        D_L12_00161E08 = 0x16;
+        D_L12_00161E04 = 0x2D;
+        data->f231C = -1;
+        data->f2304 = 0xB;
+        data->f2308 = 0x17;
+        data->f230C = 0x22;
+        data->f2300 = 0;
         moby->state = 1;
-        return;
-    case 1:
         break;
-    default:
-        return;
-    }
-    other = (struct Moby *)(((u32)target_index << 8) + (u32)D_L12_0015FFD8_p);
-    moby->rot.z = FUN_001f9e90(other->pos.x - moby->pos.x,
-                                other->pos.y - moby->pos.y);
-    other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + 0x2314) * 0x100);
-    distance = FUN_001f9b48(&moby->pos, &other->pos);
-    step = *(float *)(data + 0x2328) * 0.017453292f;
-    step = step * frame_time;
-    *(float *)(data + 0x2324) = distance;
-    angle = fast_add_rotations(*(float *)(data + 0x2318), step);
-    index = *(int *)(data + 0x2310);
-    *(float *)(data + 0x2318) = angle;
-    phase = FUN_001f9de0(angle);
-    if (1.5707964f < angle && angle < 3.1415927f) {
-        phase = 2.0f - phase;
-    }
-    if (-3.1415927f < angle && angle < -1.5707964f) {
-        phase = 2.0f - phase;
-    }
-    phase = phase * 0.5f + 0.5f;
-    if (1.0f < phase) phase -= 2.0f;
-    phase = FUN_001f99c0(phase);
-    *(u128 *)&points[0] = *(u128 *)(*(int *)(0x001b0930 + index * 4) + 0x10);
-    *(u128 *)&points[4] = *(u128 *)(*(int *)(0x001b0930 + index * 4) + 0x20);
-    FUN_L00_0025b6b8(phase, &moby->pos, points, points + 4);
-    if (FUN_001f9b80(&moby->pos, D_L12_0013F3D0) > 64.0f) return;
-
-    if (moby->unk31 == 0) {
-        other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + 0x2314) * 0x100);
-        if (other->unk31 == 0) {
-            FUN_001f9a10(points, &moby->pos, &other->pos);
-            scale_vector_xyz_cf(0.5f, points, points);
-            points[3] = 16.0f;
-            if (FUN_001fa728(32.0f, points) == -1) return;
+    case 1:
+        moby->rot.z = func_L00_001FF860_304310(D_L12_0015FFD8[data->target].pos.x - moby->pos.x,
+                                             D_L12_0015FFD8[data->target].pos.y - moby->pos.y);
+        data->dist = func_001F9D10_304310(((float *)&moby->pos), (char *)D_L12_0015FFD8 + (data->target << 8) + 0x10);
+        data->angle = func_001FA748_304310(data->angle, data->turn * 0.017453292f * D_0015ED6C);
+        row = D_L12_001B0C30_304310[data->row];
+        a = func_001F9FA8_304310(data->angle);
+        if (1.5707964f < data->angle && data->angle < 3.1415927f) {
+            a = 2.0f - a;
         }
+        if (-3.1415927f < data->angle && data->angle < -1.5707964f) {
+            a = 2.0f - a;
+        }
+        half = 0.5f;
+        a = a * half;
+        a = a + half;
+        if (1.0f < a) {
+            a = a - 2.0f;
+        }
+        a = func_001F9B88_304310(a);
+        tmp0.q = row->v10;
+        tmp1.q = row->v20;
+        func_L00_0025C710_304310(((float *)&moby->pos), &tmp0, &tmp1, a);
+        if (func_001F9D48_304310(((float *)&moby->pos), D_0013F4D0_304310) > 64.0f) {
+            return;
+        }
+        if (moby->unk31 == 0 && D_L12_0015FFD8[data->target].unk31 == 0) {
+            func_001F9BD8_304310(&tmp0, ((float *)&moby->pos), ((float *)&D_L12_0015FFD8[data->target].pos));
+            func_001F9C30_304310(&tmp0, &tmp0, half);
+            tmp0.f[3] = 16.0f;
+            if (func_L00_00200290_304310(&tmp0, 32.0f) == -1) {
+                return;
+            }
+        }
+        if (data->f2330 != -1 && func_00215570_304310(D_L12_001672C0_304310, data->f2330) != 0) {
+            return;
+        }
+        if (data->f2320 == 0) {
+            return;
+        }
+        func_L12_00304038_304310(moby);
+        idx = data->target;
+        if (idx == -1) {
+            return;
+        }
+        qcopy(&tmp0, &moby->pos.z);
+        qcopy(&tmp1, ((float *)&D_L12_0015FFD8[idx].pos));
+        func_L00_0025A8C0_304310(tmp2, moby, 0x10001, 1.0f, D_L12_0015F580);
+        func_L00_001EFFF0_304310(&tmp0, &tmp1, 0, 0, tmp2);
+        break;
     }
-    if (*(int *)(data + 0x2330) != -1 &&
-        is_point_inside_clip_volume(D_L12_00167240, *(int *)(data + 0x2330))) return;
-    if (*(int *)(data + 0x2320) == 0) return;
-    FUN_L12_00302c58(moby);
-    target_index = *(int *)(data + 0x2314);
-    if (target_index == -1) return;
-    *(u128 *)&points[0] = *(u128 *)((char *)moby + 0x18);
-    other = (struct Moby *)((u32)D_L12_0015FFD8_p + ((u32)target_index << 8));
-    *(u128 *)&points[4] = *(u128 *)&other->pos;
-    make_hit_descriptor(hit, moby, 0x10001, 1.0f, (void *)0x0015f580);
-    FUN_001efa68(points, points + 4, 0, 0, hit);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

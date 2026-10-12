@@ -24,286 +24,305 @@ int FUN_L04_001f3038(char *a, char *b, int n) {
     }
     return best;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_001f30e0.s", FUN_L04_001f30e0);
-#else
-typedef u32 u128 __attribute__((mode(TI), aligned(16)));
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_30e0;
-typedef union { Vec_30e0 v; int count; } PathEl_30e0;
-typedef struct Moby_30e0 {
-    char pad0[0x10];
-    Vec_30e0 pos;
-    signed char state;
-    char pad21[0x85];
-    short oclass;
-} Moby_30e0;
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+
+#include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F3010), where it is exact; names translated to the US level program. */
+
+typedef struct Hero Hero;
+
+typedef struct Moby Moby;
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_1F3010;
+
+typedef union { Vec_1F3010 v; int n; } PathEl_1F3010;
+
 typedef struct {
-    Vec_30e0 vel;
-    Vec_30e0 pos;
-    Vec_30e0 dir;
-    Vec_30e0 drift;
+    Vec_1F3010 vel;
+    Vec_1F3010 pos;
+    Vec_1F3010 dir;
+    Vec_1F3010 drift;
     float range;
     short timer;
     short pad46;
     float f48;
     float near;
-    Moby_30e0 *target;
-    Vec_30e0 *point;
+    Moby *target;
+    Vec_1F3010 *point;
     int pad58;
     short path;
     short count;
     short classes[8];
     float weight[8];
     float scale[8];
-} Steer_30e0;
-typedef struct {
-    char pad0[0x2080];
-    Moby_30e0 *moby;
-} Hero_30e0;
+} Steer_1F3010;
+
 typedef struct {
     char pad0[0x1C];
     int hit;
     char pad20[8];
     float z;
     char pad2C[0x14];
-    Vec_30e0 normal;
-} Coll_30e0;
+    Vec_1F3010 normal;
+} Coll_1F3010;
 
-extern PathEl_30e0 *D_L04_001b0630_30e0[] __asm__("D_L04_001b0630");
-extern Coll_30e0 D_L04_00173FC0_30e0 __asm__("D_L04_00173FC0");
-extern char D_L04_00173FF0_30e0[] __asm__("D_L04_00173FF0");
-extern char D_0013F350_30e0[] __asm__("D_0013F350");
-extern void clear_vector_xyz_30e0(void *) __asm__("FUN_001f99f8");
-extern float vector_distance_30e0(void *, void *) __asm__("FUN_001f9b48");
-extern void subtract_vector_xyz_30e0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float vector_length_xy_30e0(void *) __asm__("FUN_001f9af0");
-extern void normalize_vector_xyz_30e0(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void add_vector_xyz_30e0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_vector_xyz_30e0(void *, void *, float) __asm__("FUN_001f9a68");
-extern int FUN_001efa68_30e0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern float vector_length_30e0(void *) __asm__("FUN_001f9b20");
-extern float vector_angle_30e0(float, float) __asm__("FUN_001f9e90");
-extern void set_vector_length_30e0(void *, void *, float) __asm__("FUN_001f9c48");
-extern int collision_check_30e0(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int timer_elapsed_30e0(void *) __asm__("FUN_001f9770");
-extern float random_float_between_30e0(float, float) __asm__("FUN_002132a8");
-extern int angle_to_short_30e0(float) __asm__("FUN_001fa6d0");
-extern int nearest_point_30e0(Moby_30e0 *, void *, int) __asm__("FUN_L04_001f3038");
-extern int FUN_L04_0024c7d8_30e0(void *, void *, void *, int) __asm__("FUN_L04_0024c7d8");
+extern char D_L04_00173FF0[];
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float FUN_001f9e90(float, float);
+extern int D_0013F350; /* no foreign declaration */
+extern int D_L04_00173FC0; /* no foreign declaration */
+extern int D_L04_001B0630; /* no foreign declaration */
+extern int FUN_001efa68();
+extern int FUN_001f9770();
+extern int FUN_001f9c48();
+extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+int FUN_L04_001f3038_c(char *a, char *b, int n) __asm__("FUN_L04_001f3038");
+int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n);
+extern PathEl_1F3010 *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
+extern Coll_1F3010 D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
+extern char D_L04_00174070_1F3010[] __asm__("D_L04_00173FF0");
+extern char D_0013F450_1F3010[] __asm__("D_0013F350");
+extern void func_001F9BC0_1F3010(void *) __asm__("FUN_001f99f8");
+extern float func_001F9D10_1F3010(void *, void *) __asm__("FUN_001f9b48");
+extern void func_001F9BF0_1F3010(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float func_001F9CB8_1F3010(void *) __asm__("FUN_001f9af0");
+extern void func_L00_001FF4B0_1F3010(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9BD8_1F3010(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void func_001F9C30_1F3010(void *, void *, float) __asm__("FUN_001f9a68");
+extern int func_L00_001EFFF0_1F3010(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern float func_001F9CE8_1F3010(void *) __asm__("FUN_001f9b20");
+extern float func_L00_001FF860_1F3010(float, float) __asm__("FUN_001f9e90");
+extern void func_L00_001FF500_1F3010(void *, void *, float) __asm__("FUN_001f9c48");
+extern int func_L00_001F10E0_1F3010(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern int func_001F9938_1F3010(void *) __asm__("FUN_001f9770");
+extern float func_002140F8_1F3010(float, float) __asm__("FUN_002132a8");
+extern int func_001FA898_1F3010(float) __asm__("FUN_001fa6d0");
+extern int func_L04_001F2F68_1F3010(Moby *, void *, int) __asm__("FUN_L04_001f3038");
+extern int func_L04_0024D790_1F3010(void *, void *, void *, int) __asm__("FUN_L04_0024c7d8");
 
-/* Steering for a moby: pulls it along its path (data->path) and toward its target, pushes it away from the
- * listed mobys (and the hero's), and keeps it off the ground; effect holds the gains. */
-void FUN_L04_001f30e0(Moby_30e0 **children, int count, Moby_30e0 *child, Steer_30e0 *data, float *effect) {
-    Vec_30e0 path_hit;
-    Vec_30e0 force;
-    Vec_30e0 scratch;
-    Vec_30e0 ray_start;
-    Vec_30e0 ray_end;
-    Vec_30e0 surface_normal;
-    PathEl_30e0 *path;
-    Moby_30e0 *other;
-    int hit;
-    Moby_30e0 *neighbor;
-    int path_index;
+void FUN_L04_001f30e0(Moby **list, int n, Moby *m, Steer_1F3010 *c, float *f) {
+    Vec_1F3010 o;
+    Vec_1F3010 w;
+    Vec_1F3010 t;
+    Vec_1F3010 a;
+    Vec_1F3010 e;
+    Vec_1F3010 x;
+    PathEl_1F3010 *path;
+    Moby *obj;
+    int flag;
+    Moby *mob;
+    int r;
     int i;
-    int best_index;
-    int class_index;
-    int next_index;
-    int previous_index;
-    float distance;
-    float strength;
-    float next_distance;
-    float repulsion;
+    int k;
+    int ci;
+    int j;
+    int lo;
+    int hi;
+    float d;
+    float s;
+    float s2;
+    float g;
 
-    clear_vector_xyz_30e0(data);
-    distance = vector_distance_30e0(&child->pos, &scratch);
-    path_index = 0;
+    func_001F9BC0_1F3010(c);
+    d = func_001F9D10_1F3010(&m->pos, &t);
+    r = 0;
     path = 0;
-    hit = 0;
-    neighbor = 0;
-    if (data->path != -1) {
-        path = D_L04_001b0630_30e0[data->path];
-        path_index = nearest_point_30e0(child, &path[1], path[0].count);
-        hit = FUN_L04_0024c7d8_30e0(&path_hit, &child->pos, &path[1], path[0].count);
-        if (hit == 0) {
-            subtract_vector_xyz_30e0(&force, &path_hit, &child->pos);
-            strength = vector_length_xy_30e0(&force);
-            if (strength != 0.0f) {
-                strength = -effect[2] / (strength * strength);
+    flag = 0;
+    mob = 0;
+    if (c->path != -1) {
+        path = D_L04_001B0930_1F3010[c->path];
+        r = func_L04_001F2F68_1F3010(m, &path[1], path[0].n);
+        flag = func_L04_0024D790_1F3010(&o, &m->pos, &path[1], path[0].n);
+        if (flag == 0) {
+            func_001F9BF0_1F3010(&w, &o, &m->pos);
+            s = func_001F9CB8_1F3010(&w);
+            if (s != 0.0f) {
+                s = -f[2] / (s * s);
             } else {
-                strength = -1000.0f;
+                s = -1000.0f;
             }
         } else {
-            subtract_vector_xyz_30e0(&force, &path_hit, &child->pos);
-            strength = vector_length_xy_30e0(&force) + 3.0f;
-            if (distance < strength) {
-                strength = strength * (effect[2] * strength);
+            func_001F9BF0_1F3010(&w, &o, &m->pos);
+            s = func_001F9CB8_1F3010(&w) + 3.0f;
+            if (d < s) {
+                s = s * (f[2] * s);
             } else {
-                strength = 10000.0f;
+                s = 10000.0f;
             }
         }
-        normalize_vector_xyz_30e0(&force, &force, strength);
-        add_vector_xyz_30e0(data, data, &force);
+        func_L00_001FF4B0_1F3010(&w, &w, s);
+        func_001F9BD8_1F3010(c, c, &w);
     }
-    if (effect[0] != 0.0f) {
-        normalize_vector_xyz_30e0(&force, &data->dir, effect[0]);
-        add_vector_xyz_30e0(data, data, &force);
+    if (f[0] != 0.0f) {
+        func_L00_001FF4B0_1F3010(&w, &c->dir, f[0]);
+        func_001F9BD8_1F3010(c, c, &w);
     }
-    if (data->target == child) {
-        *(u128 *)&force = *(u128 *)&data->pos;
-        normalize_vector_xyz_30e0(&force, &force, effect[1]);
-        add_vector_xyz_30e0(data, data, &force);
+    if (c->target == m) {
+        qcopy(&w, &c->pos);
+        func_L00_001FF4B0_1F3010(&w, &w, f[1]);
+        func_001F9BD8_1F3010(c, c, &w);
     } else {
-        if (data->path != -1) {
-            best_index = path_index;
-            strength = vector_distance_30e0(&path[path_index + 1], &scratch);
-            next_index = 0;
-            if (path_index + 1 < path[0].count) {
-                next_index = path_index + 1;
+        if (c->path != -1) {
+            k = r;
+            s = func_001F9D10_1F3010(&path[r + 1], &t);
+            j = 0;
+            if (r + 1 < path[0].n) {
+                j = r + 1;
             }
-            next_distance = vector_distance_30e0(&path[next_index + 1], &scratch);
-            if (strength < next_distance) {
-                best_index = next_index;
-                strength = next_distance;
+            s2 = func_001F9D10_1F3010(&path[j + 1], &t);
+            if (s < s2) {
+                k = j;
+                s = s2;
             }
-            next_index = path_index - 1;
-            if (next_index < 0) {
-                next_index = path[0].count - 1;
+            j = r - 1;
+            if (j < 0) {
+                j = path[0].n - 1;
             }
-            if (strength < vector_distance_30e0(&path[next_index + 1], &scratch)) {
-                best_index = next_index;
+            if (s < func_001F9D10_1F3010(&path[j + 1], &t)) {
+                k = j;
             }
-            next_index = 0;
-            if (best_index + 1 < path[0].count) {
-                next_index = best_index + 1;
+            j = 0;
+            hi = path[0].n;
+            if (k + 1 < hi) {
+                j = k + 1;
             }
-            previous_index = best_index - 1;
-            if (previous_index <= -1) {
-                previous_index = path[0].count - 1;
+            lo = k - 1;
+            if (lo <= -1) {
+                lo = hi - 1;
             }
-            add_vector_xyz_30e0(&force, &path[next_index + 1], &path[previous_index + 1]);
-            add_vector_xyz_30e0(&force, &force, &path[best_index + 1]);
-            scale_vector_xyz_30e0(&force, &force, 0.33333334f);
-            if (hit == 0) {
-                subtract_vector_xyz_30e0(&force, &force, &child->pos);
-                strength = vector_length_xy_30e0(&force);
-                normalize_vector_xyz_30e0(&force, &force, strength * (strength * strength * effect[2]));
-                add_vector_xyz_30e0(data, data, &force);
-            }
-        }
-        if (data->target != 0) {
-            subtract_vector_xyz_30e0(&force, &data->target->pos, &child->pos);
-            if (vector_length_xy_30e0(&force) < distance) {
-                strength = vector_length_xy_30e0(&force);
-                normalize_vector_xyz_30e0(&force, &force, strength * (strength * strength * effect[1]));
-                add_vector_xyz_30e0(data, data, &force);
+            func_001F9BD8_1F3010(&w, &path[j + 1], &path[lo + 1]);
+            func_001F9BD8_1F3010(&w, &w, &path[k + 1]);
+            func_001F9C30_1F3010(&w, &w, 0.33333334f);
+            if (flag == 0) {
+                func_001F9BF0_1F3010(&w, &w, &m->pos);
+                s = func_001F9CB8_1F3010(&w);
+                func_L00_001FF4B0_1F3010(&w, &w, s * (s * s * f[2]));
+                func_001F9BD8_1F3010(c, c, &w);
             }
         }
-        if (data->point != 0) {
-            force.x = data->point->x - child->pos.x;
-            force.y = data->point->y - child->pos.y;
-            force.z = data->point->z - child->pos.z;
-            if (vector_length_xy_30e0(&force) < distance) {
-                strength = vector_length_xy_30e0(&force);
-                normalize_vector_xyz_30e0(&force, &force, strength * (strength * strength * effect[1]));
-                add_vector_xyz_30e0(data, data, &force);
+        if (c->target != 0) {
+            func_001F9BF0_1F3010(&w, &c->target->pos, &m->pos);
+            if (func_001F9CB8_1F3010(&w) < d) {
+                s = func_001F9CB8_1F3010(&w);
+                func_L00_001FF4B0_1F3010(&w, &w, s * (s * s * f[1]));
+                func_001F9BD8_1F3010(c, c, &w);
             }
         }
-        for (i = 0; i < count + 1; i++) {
-            if (i < count) {
-                other = children[i];
+        if (c->point != 0) {
+            w.x = c->point->x - m->pos.x;
+            w.y = c->point->y - m->pos.y;
+            w.z = c->point->z - m->pos.z;
+            if (func_001F9CB8_1F3010(&w) < d) {
+                s = func_001F9CB8_1F3010(&w);
+                func_L00_001FF4B0_1F3010(&w, &w, s * (s * s * f[1]));
+                func_001F9BD8_1F3010(c, c, &w);
+            }
+        }
+        for (i = 0; i < n + 1; i++) {
+            if (i < n) {
+                obj = list[i];
             } else {
-                other = ((Hero_30e0 *)D_0013F350_30e0)->moby;
+                obj = ((Hero *)D_0013F450_1F3010)->moby;
             }
-            class_index = 0;
-            if (other->state < 0 || child == other) {
+            ci = 0;
+            if ((*(signed char *)&obj->state) < 0 || m == obj) {
                 continue;
             }
-            strength = vector_distance_30e0(&child->pos, &other->pos);
-            if (data->near < strength) {
+            s = func_001F9D10_1F3010(&m->pos, &obj->pos);
+            if (c->near < s) {
                 continue;
             }
             do {
-                if (other->oclass == data->classes[class_index]) {
+                if (obj->oclass == c->classes[ci]) {
                     break;
                 }
-                class_index++;
-            } while (class_index < data->count);
-            if (class_index < data->count) {
-                if (strength < effect[4]) {
-                    neighbor = other;
+                ci++;
+            } while (ci < c->count);
+            if (ci < c->count) {
+                if (s < f[4]) {
+                    mob = obj;
                     break;
                 }
-                repulsion = strength / data->scale[class_index];
-                if (repulsion != 0.0f) {
-                    repulsion = data->weight[class_index] / (repulsion * repulsion);
+                g = s / c->scale[ci];
+                if (g != 0.0f) {
+                    g = c->weight[ci] / (g * g);
                 } else {
-                    repulsion = 1000.0f;
+                    g = 1000.0f;
                 }
-                subtract_vector_xyz_30e0(&force, &child->pos, &other->pos);
-                normalize_vector_xyz_30e0(&force, &force, repulsion);
-                add_vector_xyz_30e0(data, data, &force);
+                func_001F9BF0_1F3010(&w, &m->pos, &obj->pos);
+                func_L00_001FF4B0_1F3010(&w, &w, g);
+                func_001F9BD8_1F3010(c, c, &w);
             }
         }
     }
-    if (data->f48 == 0.0f) {
-        add_vector_xyz_30e0(&ray_start, &child->pos, &data->pos);
-        add_vector_xyz_30e0(&ray_end, &child->pos, &data->pos);
-        ray_start.z = ray_start.z + 1.5f;
-        ray_end.z = 0.01f;
-        if (FUN_001efa68_30e0(&ray_start, &ray_end, 2, child, 0) != 0) {
-            if (D_L04_00173FC0_30e0.hit > 0 && D_L04_00173FC0_30e0.z > child->pos.z) {
-                *(volatile Vec_30e0 *)&surface_normal = *(volatile Vec_30e0 *)&D_L04_00173FC0_30e0.normal;
-                strength = vector_angle_30e0(D_L04_00173FC0_30e0.normal.z, vector_length_30e0(&D_L04_00173FC0_30e0.normal));
-                set_vector_length_30e0(&surface_normal, &surface_normal, 1.0f);
-                scale_vector_xyz_30e0(&surface_normal, &surface_normal, effect[3]);
-                add_vector_xyz_30e0(data, data, &surface_normal);
-                if (0.4f < strength) {
-                    scale_vector_xyz_30e0(&surface_normal, &surface_normal, effect[3] * (strength * 10000.0f));
-                    add_vector_xyz_30e0(data, data, &surface_normal);
+    if (c->f48 == 0.0f) {
+        func_001F9BD8_1F3010(&a, &m->pos, &c->pos);
+        func_001F9BD8_1F3010(&e, &m->pos, &c->pos);
+        a.z = a.z + 1.5f;
+        e.z = 0.01f;
+        if (func_L00_001EFFF0_1F3010(&a, &e, 2, m, 0) != 0) {
+            if (D_L04_00174040_1F3010.hit > 0 && D_L04_00174040_1F3010.z > m->pos.z) {
+                qcopy(&x, &D_L04_00174040_1F3010.normal);
+                s = func_L00_001FF860_1F3010(D_L04_00174040_1F3010.normal.z, func_001F9CE8_1F3010(&D_L04_00174040_1F3010.normal));
+                func_L00_001FF500_1F3010(&x, &x, 1.0f);
+                func_001F9C30_1F3010(&x, &x, f[3]);
+                func_001F9BD8_1F3010(c, c, &x);
+                if (0.4f < s) {
+                    func_001F9C30_1F3010(&x, &x, f[3] * (s * 10000.0f));
+                    func_001F9BD8_1F3010(c, c, &x);
                 }
-                if (0.2f < child->pos.z - D_L04_00173FC0_30e0.z) {
-                    set_vector_length_30e0(&surface_normal, &data->pos, -(effect[3] * 1000.0f));
-                    add_vector_xyz_30e0(data, data, &surface_normal);
+                if (0.2f < m->pos.z - D_L04_00174040_1F3010.z) {
+                    func_L00_001FF500_1F3010(&x, &c->pos, -(f[3] * 1000.0f));
+                    func_001F9BD8_1F3010(c, c, &x);
                 }
             }
         }
     } else {
-        if (collision_check_30e0(effect[4], &child->pos, 4, child) != 0) {
-            subtract_vector_xyz_30e0(&force, D_L04_00173FF0_30e0, &child->pos);
-            force.z = force.z + effect[3];
-            normalize_vector_xyz_30e0(&force, &force, effect[3]);
-            add_vector_xyz_30e0(data, data, &force);
+        if (func_L00_001F10E0_1F3010(f[4], &m->pos, 4, m) != 0) {
+            func_001F9BF0_1F3010(&w, D_L04_00174070_1F3010, &m->pos);
+            w.z = w.z + f[3];
+            func_L00_001FF4B0_1F3010(&w, &w, f[3]);
+            func_001F9BD8_1F3010(c, c, &w);
         }
     }
-    if (data->f48 == 0.0f) {
-        set_vector_length_30e0(data, data, effect[6]);
-        data->vel.z = 0.0f;
+    if (c->f48 == 0.0f) {
+        func_L00_001FF500_1F3010(c, c, f[6]);
+        c->vel.z = 0.0f;
     } else {
-        normalize_vector_xyz_30e0(data, data, effect[6]);
-        data->vel.z = data->vel.z / data->f48;
+        func_L00_001FF4B0_1F3010(c, c, f[6]);
+        c->vel.z = c->vel.z / c->f48;
     }
-    if (timer_elapsed_30e0(&data->timer) != 0) {
-        data->timer = angle_to_short_30e0(random_float_between_30e0(45.0f, 90.0f));
-        data->drift.x = random_float_between_30e0(0.0f, data->range) - data->range * 0.5f;
-        data->drift.y = random_float_between_30e0(0.0f, data->range) - data->range * 0.5f;
-        if (data->f48 != 0.0f) {
-            data->drift.z = random_float_between_30e0(0.0f, data->range) - data->range * 0.5f;
+    if (func_001F9938_1F3010(&c->timer) != 0) {
+        c->timer = func_001FA898_1F3010(func_002140F8_1F3010(45.0f, 90.0f));
+        c->drift.x = func_002140F8_1F3010(0.0f, c->range) - c->range * 0.5f;
+        c->drift.y = func_002140F8_1F3010(0.0f, c->range) - c->range * 0.5f;
+        if (c->f48 != 0.0f) {
+            c->drift.z = func_002140F8_1F3010(0.0f, c->range) - c->range * 0.5f;
         } else {
-            data->drift.z = 0.0f;
+            c->drift.z = 0.0f;
         }
     }
-    add_vector_xyz_30e0(data, data, &data->drift);
-    if (neighbor != 0) {
-        subtract_vector_xyz_30e0(&force, &child->pos, &neighbor->pos);
-        if (data->f48 != 0.0f) {
-            normalize_vector_xyz_30e0(data, &force, effect[6]);
+    func_001F9BD8_1F3010(c, c, &c->drift);
+    if (mob != 0) {
+        func_001F9BF0_1F3010(&w, &m->pos, &mob->pos);
+        if (c->f48 != 0.0f) {
+            func_L00_001FF4B0_1F3010(c, &w, f[6]);
         } else {
-            set_vector_length_30e0(data, &force, effect[6]);
+            func_L00_001FF500_1F3010(c, &w, f[6]);
         }
     }
 }
-#endif
 
 #define NOT_SDA
 
