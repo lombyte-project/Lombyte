@@ -287,7 +287,7 @@ extern char *FUN_L00_0026daa0(char *, int, int, int, float);
 extern void *FUN_002141f8(char *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+void build_spherical_offset_u(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 unsigned char *FUN_L13_002e6a58(char *src, char *pos, char *target, char *vec, int arg,
                                 float scale) {
@@ -314,7 +314,7 @@ unsigned char *FUN_L13_002e6a58(char *src, char *pos, char *target, char *vec, i
         *(float *)(data + 0x2C) = scale;
         *(int *)(data + 0x30) = 0;
         *(int *)(data + 0x34) = 0;
-        build_spherical_offset(data, scale, *(float *)(vec + 8), -*(float *)(vec + 4));
+        build_spherical_offset_u(data, scale, *(float *)(vec + 8), -*(float *)(vec + 4));
         if (moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
@@ -330,4 +330,154 @@ unsigned char *FUN_L13_002e6a58(char *src, char *pos, char *target, char *vec, i
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e6c08.s", FUN_L13_002e6c08);
+#include "rnc/gameplay/entities/moby.h"
+
+#define NOT_SDA
+
+#define MACRO_ADDR
+
+#include "qcopy.h"
+
+/* Update for the rocket (class 295): smoke trail, steering toward its target, collision and expiry. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002E8040), where it is exact; names translated to the US level program. */
+
+typedef struct Moby Moby;
+
+typedef int Q_2E8040 __attribute__((mode(TI)));
+
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_2E8040;
+
+typedef struct Cls_2E8040 { char pad0[0x24]; float scale; } Cls_2E8040;
+
+typedef struct Rocket_2E8040 {
+    V4_2E8040 vel;
+    V4_2E8040 tpos;
+    Moby *owner;
+    Moby *target;
+    int timer;
+    float speed;
+    float yawv;
+    float pitchv;
+    float f38;
+    int target_uid;
+} Rocket_2E8040;
+
+typedef struct Tex_2E8040 { char pad0[0x5C]; unsigned char *p5C; } Tex_2E8040;
+
+char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern int D_L13_00174160;
+extern int D_L13_001B2380;
+extern int FUN_001efa68();
+extern int FUN_001f9b80();
+extern int FUN_001f9e90();
+extern int FUN_L00_0024f7c8();
+extern s32 scale_game_frames() __asm__("func_001F96F8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
+extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
+extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float accel, float maxv);
+unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
+void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate);
+extern float func_002140F8_2E8040(float, float) __asm__("FUN_002132a8");
+extern void func_L00_001FF4B0_2E8040(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9BD8_2E8040(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int func_001F9850_2E8040(int) __asm__("FUN_001f96f8");
+extern unsigned char *func_L00_00272158_2E8040(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
+extern void func_001F9EC0_2E8040(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern float func_00214158_2E8040(void) __asm__("FUN_00213308");
+extern void func_002156E0_2E8040(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
+extern unsigned char *func_L00_0026DA50_2E8040(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
+extern float func_001F9D10_2E8040(void *, void *) __asm__("FUN_001f9b48");
+extern float func_L00_001FF860_2E8040(float, float) __asm__("FUN_001f9e90");
+extern float func_001F9D48_2E8040(void *, void *) __asm__("FUN_001f9b80");
+extern float func_L00_0025CE58_2E8040(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
+extern void func_00215C00_2E8040(void *, float, float, float) __asm__("FUN_00214db0");
+extern void func_L00_00250800_2E8040(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern int func_L00_001EFFF0_2E8040(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern void func_L00_0025F4A8_2E8040(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void func_0020D678_2E8040(void *) __asm__("FUN_0020c828");
+extern int func_001F9908_2E8040(void *) __asm__("FUN_001f9740");
+extern Tex_2E8040 D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
+extern V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160");
+
+void FUN_L13_002e6c08(Moby *m) {
+    Rocket_2E8040 *d = *(void **)&m->pvars;
+    V4_2E8040 old;
+    V4_2E8040 hitpos;
+    V4_2E8040 tmp;
+    V4_2E8040 vel;
+    V4_2E8040 dir;
+    unsigned char *p;
+    float t;
+
+    qcopy(&old, &*(V4_2E8040 *)&m->pos);
+    m->scale += (((Cls_2E8040 *)m->pclass)->scale - m->scale) * 0.1f;
+    *(Q_2E8040 *)&dir = 0;
+    dir.x = func_002140F8_2E8040(-1.0f, 1.0f);
+    dir.y = func_002140F8_2E8040(-1.0f, 1.0f);
+    dir.z = func_002140F8_2E8040(-1.0f, 1.0f);
+    *(Q_2E8040 *)&vel = *(Q_2E8040 *)&dir;
+    func_L00_001FF4B0_2E8040(&vel, &vel, func_002140F8_2E8040(0.1f, 0.2f) * D_0015ED6C);
+    func_L00_001FF4B0_2E8040(&tmp, d, -func_002140F8_2E8040(D_0015ED6C * 0.1f, D_0015ED6C));
+    func_001F9BD8_2E8040(&vel, &vel, &tmp);
+    p = func_L00_00272158_2E8040(&*(V4_2E8040 *)&m->pos, (float *)&vel, func_001F9850_2E8040(6), 0x7F, 0xB0B0B0, 3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
+    if (p != 0) {
+        p[3] = 0x48;
+    }
+    for (t = 0.0f; t < 1.0f; t += 0.33333334f) {
+        func_L00_001FF4B0_2E8040(&tmp, d, func_002140F8_2E8040(t, t + 0.33333334f) * d->speed);
+        func_001F9BD8_2E8040(&tmp, &tmp, &*(V4_2E8040 *)&m->pos);
+        p = func_L00_00272158_2E8040(&tmp, (float *)&vel, func_001F9850_2E8040(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
+        if (p != 0) {
+            Tex_2E8040 *tex = &D_L13_001B2680_2E8040;
+            p[2] = *tex->p5C;
+            p[3] = 0x48;
+        }
+        *(Q_2E8040 *)&dir = 0;
+        dir.z = 0.02f;
+        func_001F9EC0_2E8040(&dir, &dir, &*(V4_2E8040 *)&m->unkC0);
+        func_002156E0_2E8040(&dir, &dir, &*(V4_2E8040 *)&m->unkC0, func_00214158_2E8040());
+        p = func_L00_0026DA50_2E8040(&tmp, &dir, 0x4F007FFF, 0x1FFFFFFF, func_001F9850_2E8040(5), 1, 20000.0f);
+        if (p != 0) {
+            p[3] = 0x48;
+        }
+    }
+    if (d->target != 0 && !(d->target->flags & 0x1000) && (d->target->flags & 1) && *(int *)&d->target->unk94 == 0) {
+        d->target = 0;
+    }
+    if (d->target != 0 && d->target->oclass == d->target_uid && d->target->state != 0xFE && d->target->state != 0xFD
+        && func_001F9D10_2E8040(&d->tpos, &*(V4_2E8040 *)&d->target->pos) < 3.0f) {
+        m->rot.z = func_L00_001FF860_2E8040(d->target->pos.x - m->pos.x, d->target->pos.y - m->pos.y);
+        m->rot.y = -func_L00_001FF860_2E8040(func_001F9D48_2E8040(&*(V4_2E8040 *)&m->pos, &*(V4_2E8040 *)&d->target->pos), d->target->pos.z - m->pos.z);
+        qcopy(&d->tpos, &*(V4_2E8040 *)&d->target->pos);
+    } else {
+        func_L00_0025CE58_2E8040(&m->rot.z, m->rot.z, &d->yawv, D_0015ED70 * 251.32741f, D_0015ED70 * 251.32741f, D_0015ED6C * 2513.2742f);
+        func_L00_0025CE58_2E8040(&m->rot.y, m->rot.y, &d->pitchv, D_0015ED70 * 251.32741f, D_0015ED70 * 251.32741f, D_0015ED6C * 2513.2742f);
+        d->target = 0;
+    }
+    func_00215C00_2E8040(d, d->speed, m->rot.z, -m->rot.y);
+    func_001F9BD8_2E8040(&*(V4_2E8040 *)&m->pos, &*(V4_2E8040 *)&m->pos, d);
+    if (m->pos.x < 2.0f || m->pos.x > 1021.0f || m->pos.y < 2.0f || m->pos.y > 1021.0f || m->pos.z < 2.0f || m->pos.z > 1021.0f) {
+        func_0020D678_2E8040(m);
+        return;
+    }
+    func_L00_00250800_2E8040(m, 1, &hitpos);
+    if (func_L00_001EFFF0_2E8040(&old, &hitpos, 0, d->owner, 0) != 0) {
+        qcopy(&tmp, &D_L13_001741E0_2E8040);
+        func_L00_0025F4A8_2E8040(m, d, &tmp, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f, 0, 20.0f, 0, 1, -1, 0);
+        func_0020D678_2E8040(m);
+        return;
+    }
+    if (func_001F9908_2E8040(&d->timer) != 0) {
+        func_0020D678_2E8040(m);
+    }
+}
