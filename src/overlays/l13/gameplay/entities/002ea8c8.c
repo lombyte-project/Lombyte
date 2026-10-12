@@ -1131,7 +1131,82 @@ char *FUN_L13_002ecd10(char *src, int arg, int id) {
     }
     return moby;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ece00.s", FUN_L13_002ece00);
+extern int coll_sphere_ece00(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
+extern void scale_vector_ece00(void *, void *, float) __asm__("FUN_001f9a68");
+extern void reflect_ece00(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern float fast_add_rotations_ece00(float, float) __asm__("FUN_001fa580");
+extern int tick_ece00(void *) __asm__("FUN_001f9740");
+extern void remove_ece00(struct Moby *) __asm__("FUN_0020c828");
+extern void burst_ece00(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern char D_L13_00174140[];
+
+struct PieceVars {
+    u8 pad0[0x10];
+    Vec4f vel;
+    u128 unk20;
+    f32 spin[3];
+    struct Moby *parent;
+    int timer;
+    int point;
+};
+
+void FUN_L13_002ece00(struct Moby *moby) {
+    struct PieceVars *vars = (struct PieceVars *)moby->pvars;
+    struct Moby *parent = vars->parent;
+    struct Moby *hit;
+    char *coll;
+    if (parent == 0 || parent->oclass != 0x184 || parent->state == 0xFE || parent->state == 0xFD) {
+        goto remove;
+    }
+    moby->flags = (moby->flags & 0xFFFC);
+    moby->flags = moby->flags | (vars->parent->flags & 3);
+    switch (moby->state) {
+    case 0:
+        moby->state = 1;
+        qzero(&vars->unk20);
+        break;
+    case 1:
+        moby->scale = moby->pclass->scale * vars->parent->scale / vars->parent->pclass->scale;
+        moby->spawn_frame = vars->parent->spawn_frame;
+        break;
+    case 2:
+        break;
+    case 3:
+        add_vector_xyz(&moby->pos, &moby->pos, &vars->vel);
+        scale_vector_ece00(&vars->vel, &vars->vel, 0.995f);
+        if (coll_sphere_ece00(&moby->pos, 2.0f, 0, moby) != 0) {
+            coll = D_L13_00174140;
+            hit = *(struct Moby **)(coll + 0x18);
+            if (hit == 0 || (hit->oclass != 0x191 && hit->oclass != 0x184 && hit->oclass != 0x185 &&
+                             hit->oclass != 0x186 && hit->oclass != 0x187 && hit->oclass != 0x188 &&
+                             hit->oclass != 0x189 && hit->oclass != 0x18A && hit->oclass != 0x18B &&
+                             hit->oclass != 0x18C && hit->oclass != 0x18F && hit->oclass != 0x190)) {
+                reflect_ece00(&vars->vel, &vars->vel, coll + 0x40);
+                moby->state = 4;
+            }
+        }
+        moby->rot.x = fast_add_rotations_ece00(moby->rot.x, vars->spin[0]);
+        moby->rot.y = fast_add_rotations_ece00(moby->rot.y, vars->spin[1]);
+        moby->rot.z = fast_add_rotations_ece00(moby->rot.z, vars->spin[2]);
+        vars->spin[0] *= 0.999f;
+        vars->spin[1] *= 0.999f;
+        vars->spin[2] *= 0.999f;
+        if (moby->pos.x < 10.0f || 1013.0f < moby->pos.x || moby->pos.y < 10.0f || 1013.0f < moby->pos.y ||
+            moby->pos.z < 10.0f || 1013.0f < moby->pos.z) {
+            goto remove;
+        }
+        if (tick_ece00(&vars->timer) == 0 || moby->visible != 0) {
+            break;
+        }
+    remove:
+        remove_ece00(moby);
+        break;
+    case 4:
+        burst_ece00(moby, &vars->vel, 0, 2.0f, 4.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
+        remove_ece00(moby);
+        break;
+    }
+}
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002ed158.s", FUN_L13_002ed158);
 #else
