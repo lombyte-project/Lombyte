@@ -49,7 +49,7 @@ extern float D_L08_0015F5D4;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_L00_00257b90(int, int);
-extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
@@ -188,7 +188,7 @@ void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f);
 void FUN_L08_00307b90_c(int arg) __asm__("FUN_L08_00307b90");
 extern char D_L08_00167640_3091B0[] __asm__("D_L08_001675C0");
 extern void func_L08_00309050_3091B0(int) __asm__("FUN_L08_00307b90");
-extern int func_L08_00211A38_3091B0(float *) __asm__("FUN_L08_00211b08");
+extern int update_float_countdown(float *) __asm__("FUN_L08_00211b08");
 extern void func_001F9BF0_3091B0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_00263D68_3091B0(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern float func_002140F8_3091B0(float, float) __asm__("FUN_002132a8");
@@ -257,7 +257,7 @@ void FUN_L08_00307cf0(Moby *m) {
         func_L08_00309050_3091B0(flag);
         break;
     case 2:
-        if (func_L08_00211A38_3091B0(&D_L08_00162370)) func_L08_00309050_3091B0(flag);
+        if (update_float_countdown(&D_L08_00162370)) func_L08_00309050_3091B0(flag);
         func_001F9BF0_3091B0(&dv, D_L08_00167640_3091B0, &obj->v30);
         D_L08_00160250 = *(u128_3091B0 *)&dv;
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;

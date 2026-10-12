@@ -391,21 +391,21 @@ extern float func_002140F8_2E8040(float, float) __asm__("FUN_002132a8");
 extern void func_L00_001FF4B0_2E8040(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_2E8040(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9850_2E8040(int) __asm__("FUN_001f96f8");
-extern unsigned char *func_L00_00272158_2E8040(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
+extern unsigned char *spawn_particle(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
 extern void func_001F9EC0_2E8040(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float func_00214158_2E8040(void) __asm__("FUN_00213308");
 extern void func_002156E0_2E8040(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
-extern unsigned char *func_L00_0026DA50_2E8040(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
+extern unsigned char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern float func_001F9D10_2E8040(void *, void *) __asm__("FUN_001f9b48");
-extern float func_L00_001FF860_2E8040(float, float) __asm__("FUN_001f9e90");
-extern float func_001F9D48_2E8040(void *, void *) __asm__("FUN_001f9b80");
-extern float func_L00_0025CE58_2E8040(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
+extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern float approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern void func_00215C00_2E8040(void *, float, float, float) __asm__("FUN_00214db0");
-extern void func_L00_00250800_2E8040(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern int func_L00_001EFFF0_2E8040(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void func_L00_0025F4A8_2E8040(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void func_0020D678_2E8040(void *) __asm__("FUN_0020c828");
-extern int func_001F9908_2E8040(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern Tex_2E8040 D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
 extern V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160");
 
@@ -429,14 +429,14 @@ void FUN_L13_002e6c08(Moby *m) {
     func_L00_001FF4B0_2E8040(&vel, &vel, func_002140F8_2E8040(0.1f, 0.2f) * D_0015ED6C);
     func_L00_001FF4B0_2E8040(&tmp, d, -func_002140F8_2E8040(D_0015ED6C * 0.1f, D_0015ED6C));
     func_001F9BD8_2E8040(&vel, &vel, &tmp);
-    p = func_L00_00272158_2E8040(&*(V4_2E8040 *)&m->pos, (float *)&vel, func_001F9850_2E8040(6), 0x7F, 0xB0B0B0, 3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
+    p = spawn_particle(&*(V4_2E8040 *)&m->pos, (float *)&vel, func_001F9850_2E8040(6), 0x7F, 0xB0B0B0, 3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
     if (p != 0) {
         p[3] = 0x48;
     }
     for (t = 0.0f; t < 1.0f; t += 0.33333334f) {
         func_L00_001FF4B0_2E8040(&tmp, d, func_002140F8_2E8040(t, t + 0.33333334f) * d->speed);
         func_001F9BD8_2E8040(&tmp, &tmp, &*(V4_2E8040 *)&m->pos);
-        p = func_L00_00272158_2E8040(&tmp, (float *)&vel, func_001F9850_2E8040(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
+        p = spawn_particle(&tmp, (float *)&vel, func_001F9850_2E8040(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (p != 0) {
             Tex_2E8040 *tex = &D_L13_001B2680_2E8040;
             p[2] = *tex->p5C;
@@ -446,7 +446,7 @@ void FUN_L13_002e6c08(Moby *m) {
         dir.z = 0.02f;
         func_001F9EC0_2E8040(&dir, &dir, &*(V4_2E8040 *)&m->unkC0);
         func_002156E0_2E8040(&dir, &dir, &*(V4_2E8040 *)&m->unkC0, func_00214158_2E8040());
-        p = func_L00_0026DA50_2E8040(&tmp, &dir, 0x4F007FFF, 0x1FFFFFFF, func_001F9850_2E8040(5), 1, 20000.0f);
+        p = spawn_burst(&tmp, &dir, 0x4F007FFF, 0x1FFFFFFF, func_001F9850_2E8040(5), 1, 20000.0f);
         if (p != 0) {
             p[3] = 0x48;
         }
@@ -456,12 +456,12 @@ void FUN_L13_002e6c08(Moby *m) {
     }
     if (d->target != 0 && d->target->oclass == d->target_uid && d->target->state != 0xFE && d->target->state != 0xFD
         && func_001F9D10_2E8040(&d->tpos, &*(V4_2E8040 *)&d->target->pos) < 3.0f) {
-        m->rot.z = func_L00_001FF860_2E8040(d->target->pos.x - m->pos.x, d->target->pos.y - m->pos.y);
-        m->rot.y = -func_L00_001FF860_2E8040(func_001F9D48_2E8040(&*(V4_2E8040 *)&m->pos, &*(V4_2E8040 *)&d->target->pos), d->target->pos.z - m->pos.z);
+        m->rot.z = angle_atan2(d->target->pos.x - m->pos.x, d->target->pos.y - m->pos.y);
+        m->rot.y = -angle_atan2(vector_distance(&*(V4_2E8040 *)&m->pos, &*(V4_2E8040 *)&d->target->pos), d->target->pos.z - m->pos.z);
         qcopy(&d->tpos, &*(V4_2E8040 *)&d->target->pos);
     } else {
-        func_L00_0025CE58_2E8040(&m->rot.z, m->rot.z, &d->yawv, D_0015ED70 * 251.32741f, D_0015ED70 * 251.32741f, D_0015ED6C * 2513.2742f);
-        func_L00_0025CE58_2E8040(&m->rot.y, m->rot.y, &d->pitchv, D_0015ED70 * 251.32741f, D_0015ED70 * 251.32741f, D_0015ED6C * 2513.2742f);
+        approach_angle(&m->rot.z, m->rot.z, &d->yawv, D_0015ED70 * 251.32741f, D_0015ED70 * 251.32741f, D_0015ED6C * 2513.2742f);
+        approach_angle(&m->rot.y, m->rot.y, &d->pitchv, D_0015ED70 * 251.32741f, D_0015ED70 * 251.32741f, D_0015ED6C * 2513.2742f);
         d->target = 0;
     }
     func_00215C00_2E8040(d, d->speed, m->rot.z, -m->rot.y);
@@ -470,14 +470,14 @@ void FUN_L13_002e6c08(Moby *m) {
         func_0020D678_2E8040(m);
         return;
     }
-    func_L00_00250800_2E8040(m, 1, &hitpos);
-    if (func_L00_001EFFF0_2E8040(&old, &hitpos, 0, d->owner, 0) != 0) {
+    moby_point_position(m, 1, &hitpos);
+    if (collision_line(&old, &hitpos, 0, d->owner, 0) != 0) {
         qcopy(&tmp, &D_L13_001741E0_2E8040);
-        func_L00_0025F4A8_2E8040(m, d, &tmp, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f, 0, 20.0f, 0, 1, -1, 0);
+        spawn_explosion(m, d, &tmp, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f, 0, 20.0f, 0, 1, -1, 0);
         func_0020D678_2E8040(m);
         return;
     }
-    if (func_001F9908_2E8040(&d->timer) != 0) {
+    if (fast_dec_timer(&d->timer) != 0) {
         func_0020D678_2E8040(m);
     }
 }

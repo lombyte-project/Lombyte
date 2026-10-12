@@ -2145,7 +2145,7 @@ extern float D_L06_00161D48 __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern Moby *func_0020D348_2F6330(int) __asm__("FUN_0020c4f8");
+extern Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int func_0022ED80_2F6330(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L06_002f4f00(Moby *m) {
@@ -2162,7 +2162,7 @@ void FUN_L06_002f4f00(Moby *m) {
         qcopy(d->pos, (*(float (*)[4])&m->pos));
         m->state = 2;
         for (i = 0; i < 7; i++) {
-            d->slots[i] = func_0020D348_2F6330(0x3FD);
+            d->slots[i] = create_moby(0x3FD);
             (*(char *)&d->slots[i]->unk30) = 0x40;
             d->slots[i]->unk32 = 0x40;
             (*(char *)&d->slots[i]->unk31) = 1;
@@ -2350,7 +2350,7 @@ extern int D_L06_00161E68 __attribute__((sda));
 extern float D_L06_00161E6C __attribute__((sda));
 extern int D_L06_00161E70 __attribute__((sda));
 extern int FUN_001fa6e0(int, int, float);
-extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -2385,7 +2385,7 @@ void FUN_L06_002f7628(char *moby) {
         } else if (beam->ph[i] <= 0.0f) {
             beam->ph[i] += 255.0f;
         }
-        if (tick_countdown_32_alt(&beam->t[i])) {
+        if (fast_dec_timer(&beam->t[i])) {
             beam->t[i] = scale_game_frames(0xFF);
         }
         f = convert_integer_to_float(scale_game_frames(0xFF) - beam->t[i]) / (float)scale_game_frames(0xFF);

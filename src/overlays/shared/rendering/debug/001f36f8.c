@@ -1085,7 +1085,7 @@ extern float D_L00_0015F450;
 extern float D_L00_0015F454;
 extern int D_0013E520[];
 extern int fptodp(float) __asm__("FUN_00120478");
-extern int print_debug_text_centered_alt(int,int,int,char*) __asm__("FUN_001f0c50");
+extern int print_debug_text_centered(int,int,int,char*) __asm__("FUN_001f0c50");
 extern s32 D_0015ED98;
 extern char D_L00_0015F0F0[];
 extern s32 D_L00_0015F5D8;
@@ -1115,8 +1115,8 @@ void FUN_L00_001f58e0(void) {
 
     append_gif_transfer_packet();
     if (D_L00_0015F5D8 == 0) {
-        print_debug_text_centered_alt(0x100, 0x10, 0x80C0C000, D_L00_0015F008);
-        print_debug_text_centered_alt(0x100, 0x18, 0x80C0C000, D_L00_0015F010);
+        print_debug_text_centered(0x100, 0x10, 0x80C0C000, D_L00_0015F008);
+        print_debug_text_centered(0x100, 0x18, 0x80C0C000, D_L00_0015F010);
         print_debug_text(0xC, 0x2C, 0x8000C000, D_L00_0015F020);
         print_debug_text(0xC, 0x32, 0x8000C000, D_L00_0015F028);
         print_debug_text(0x14, 0x40, 0x8000C0C0, D_L00_0015F030);

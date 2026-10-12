@@ -1078,18 +1078,18 @@ extern char *func_L00_0025B478_2D9988(void *, int, int) __asm__("FUN_L00_0025a42
 extern int func_L10_002D9530_2D9988(char *, char *, float *) __asm__("FUN_L10_002d8170");
 extern char D_L10_00178400_2D9988[] __asm__("D_L10_00178380");
 extern void func_001F9BD8_2D9988(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float func_L00_001FF860_2D9988(float, float) __asm__("FUN_001f9e90");
-extern void func_L00_0025BBA0_2D9988(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
+extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
+extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern float func_001F9F90_2D9988(float x) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2D9988(float) __asm__("FUN_001f9de0");
 extern int func_001F9850_2D9988(int) __asm__("FUN_001f96f8");
 extern int func_001F9938_2D9988(void *) __asm__("FUN_001f9770");
 extern void func_L00_00251358_2D9988(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void func_L00_00251328_2D9988(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void func_L00_001FF500_2D9988(void *, void *, float) __asm__("FUN_001f9c48");
+extern void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
 extern int func_L00_001F2BE8_2D9988(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void func_L00_0025BA50_2D9988(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
-extern void func_L00_00260108_2D9988(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void func_0020D678_2D9988(void *) __asm__("FUN_0020c828");
 
 void FUN_L10_002d85c8(char *m) {
@@ -1122,11 +1122,11 @@ void FUN_L10_002d85c8(char *m) {
         if (r16 != 0 && *(char **)(r16 + 0x20) != 0 && *(short *)(*(char **)(r16 + 0x20) + 0xA6) != *(short *)(m + 0xA6)) {
             float t;
             if (*(unsigned char *)(r16 + 0x28) == 0) {
-                s50 = func_L00_001FF860_2D9988(*(float *)(m + 0x10) - ((Hero *)D_0013E633_2D9988)->motion.pos.f[0],
+                s50 = angle_atan2(*(float *)(m + 0x10) - ((Hero *)D_0013E633_2D9988)->motion.pos.f[0],
                                                *(float *)(m + 0x14) - ((Hero *)D_0013E633_2D9988)->motion.pos.f[1]);
                 *(u128_2D9988 *)v10 = ((Obj_2D9988 *)r16)->q10;
                 s58 = s54 = D_0015ED6C * 10.0f;
-                func_L00_0025BBA0_2D9988(v10, &s50, &s54, &s58);
+                trooper_knockback_arc(v10, &s50, &s54, &s58);
                 *(float *)data = func_001F9F90_2D9988(s50) * s54;
                 *(float *)(data + 0x4) = func_001F9FA8_2D9988(s50) * s54;
                 ((Vel_2D9988 *)data)->z = 0.0f;
@@ -1158,11 +1158,11 @@ void FUN_L10_002d85c8(char *m) {
         if (r16 != 0 && *(char **)(r16 + 0x20) != 0 && *(short *)(*(char **)(r16 + 0x20) + 0xA6) != *(short *)(m + 0xA6)) {
             float t;
             if (*(unsigned char *)(r16 + 0x28) == 0) {
-                s68 = func_L00_001FF860_2D9988(*(float *)(m + 0x10) - ((Hero *)D_0013E633_2D9988)->motion.pos.f[0],
+                s68 = angle_atan2(*(float *)(m + 0x10) - ((Hero *)D_0013E633_2D9988)->motion.pos.f[0],
                                                *(float *)(m + 0x14) - ((Hero *)D_0013E633_2D9988)->motion.pos.f[1]);
                 *(u128_2D9988 *)v10 = ((Obj_2D9988 *)r16)->q10;
                 s70 = s6c = D_0015ED6C * 10.0f;
-                func_L00_0025BBA0_2D9988(v10, &s68, &s6c, &s70);
+                trooper_knockback_arc(v10, &s68, &s6c, &s70);
                 *(float *)data = func_001F9F90_2D9988(s68) * s6c;
                 *(float *)(data + 0x4) = func_001F9FA8_2D9988(s68) * s6c;
                 ((Vel_2D9988 *)data)->z = 0.0f;
@@ -1183,7 +1183,7 @@ void FUN_L10_002d85c8(char *m) {
         sb.f3c = 1.0f;
         sb.i40 = 1;
         qcopy(sb.v, data);
-        func_L00_001FF500_2D9988(sb.v, sb.v, 1.0f);
+        trooper_scale(sb.v, sb.v, 1.0f);
         flag21 = 0;
         sb.v[2] = 1.0f;
         sb.v[3] = 5627.925f;
@@ -1203,7 +1203,7 @@ void FUN_L10_002d85c8(char *m) {
         rA = func_L00_001F2BE8_2D9988(1.5f, m + 0x10, 0x10, m, 0);
         *(u128_2D9988 *)v10 = *(u128_2D9988 *)(m + 0x10);
         func_L00_0025BA50_2D9988(m, v10, D_L10_00178400_2D9988, rA, 0, 0x810001, 2, 1, 1.0f, 1.0f, 1.0f);
-        func_L00_00260108_2D9988(m, m + 0x10, 0, 0.5f, 13.0f);
+        cart_burst(m, m + 0x10, 0, 0.5f, 13.0f);
         func_0020D678_2D9988(m);
         return;
     }

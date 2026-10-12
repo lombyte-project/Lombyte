@@ -784,7 +784,7 @@ extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *arg0) __asm__("FUN_001f9740");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
@@ -1058,28 +1058,28 @@ void FUN_L00_0025d538(s32 id, void *s);
 extern int func_001F9908_3047E8(int *) __asm__("FUN_001f9740");
 extern Hit_3047E8 *func_L00_0025B478_3047E8(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float func_001F9D10_3047E8(void *, void *) __asm__("FUN_001f9b48");
-extern int func_L00_001EFFF0_3047E8(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int func_L00_0025B4D0_3047E8(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern int update_collision_l08(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern int func_001FA898_3047E8(float) __asm__("FUN_001fa6d0");
-extern float func_L00_001FF860_3047E8(float, float) __asm__("FUN_001f9e90");
-extern void func_L00_0025BBA0_3047E8(void *, float *, float *, float *) __asm__("FUN_L00_0025ab48");
-extern void func_L00_0025D5B0_3047E8(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
-extern void func_L00_002584A8_3047E8(void *, int, int) __asm__("FUN_L00_00257470");
-extern void func_L00_0025E4B0_3047E8(void *, short *) __asm__("FUN_L00_0025d458");
-extern void func_L00_0025E590_3047E8(void *, short *) __asm__("FUN_L00_0025d538");
+extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
+extern void trooper_knockback_arc(void *, float *, float *, float *) __asm__("FUN_L00_0025ab48");
+extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
+extern void stop_animation_l08(void *, int, int) __asm__("FUN_L00_00257470");
+extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(void *, short *) __asm__("FUN_L00_0025d538");
 extern float func_002140F8_3047E8(float, float) __asm__("FUN_002132a8");
-extern float func_001F9878_3047E8(float) __asm__("FUN_001f96b0");
-extern int func_L00_00260FB0_3047E8(float, void *, void *, int, int, int *, int) __asm__("FUN_L00_0025ff38");
-extern float func_001F9D48_3047E8(void *, void *) __asm__("FUN_001f9b80");
+extern float scale_time(float) __asm__("FUN_001f96b0");
+extern int activate_effect_l08(float, void *, void *, int, int, int *, int) __asm__("FUN_L00_0025ff38");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float func_001F9B88_3047E8(float) __asm__("FUN_001f99c0");
 extern Moby *func_L05_003053D8_3047E8(void *, int) __asm__("FUN_L05_00303f80");
 extern float func_001FA748_3047E8(float, float) __asm__("FUN_001fa580");
 extern float func_001F9FA8_3047E8(float) __asm__("FUN_001f9de0");
-extern int func_001FA8A8_3047E8(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void func_001F9BF0_3047E8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float func_001FA790_3047E8(float, float) __asm__("FUN_001fa5c8");
 extern float func_001F9CE8_3047E8(void *) __asm__("FUN_001f9b20");
-extern void func_L00_00263950_3047E8(void *, void *, int, float, float) __asm__("FUN_L00_002628d8");
+extern void update_joint_animation(void *, void *, int, float, float) __asm__("FUN_L00_002628d8");
 extern Path_3047E8 *D_L05_001B0CB0_3047E8[] __asm__("D_L05_001B0930");
 extern char D_0013E633_3047E8[] __asm__("D_0013F420");
 extern Moby *D_001413D0_3047E8 __asm__("D_001413D0") __attribute__((section(".data")));
@@ -1114,11 +1114,11 @@ void FUN_L05_00303390(Moby *m) {
         } else {
             qcopy(v10, r->at);
         }
-        if (func_001F9D10_3047E8(v0, v10) < 24.0f && func_L00_001EFFF0_3047E8(v0, v10, 2, m, 0) != 0) {
+        if (func_001F9D10_3047E8(v0, v10) < 24.0f && collision_line(v0, v10, 2, m, 0) != 0) {
             r = 0;
         }
     }
-    res = func_L00_0025B4D0_3047E8(m, r, &d->hp, 0, &cnt, &dmg, 0, 4);
+    res = update_collision_l08(m, r, &d->hp, 0, &cnt, &dmg, 0, 4);
     if (cnt != 1 && m->state != 14) {
         d->hp = d->hp - dmg;
         if (d->hp <= 0.0f) {
@@ -1148,10 +1148,10 @@ void FUN_L05_00303390(Moby *m) {
             d->f88 = D_L05_00161A88 * D_0015ED6C;
             d->f8C = D_L05_00161A8C * D_0015ED6C;
             d->fC4 = 10.0f;
-            ang = func_L00_001FF860_3047E8(m->pos.x - r->who->pos.x, m->pos.y - r->who->pos.y);
+            ang = angle_atan2(m->pos.x - r->who->pos.x, m->pos.y - r->who->pos.y);
             *(u128_3047E8 *)v0 = r->dir;
-            func_L00_0025BBA0_3047E8(v0, &ang, &d->f88, &d->f8C);
-            func_L00_0025D5B0_3047E8(m, d->f70, ang, 5, 1, 0);
+            trooper_knockback_arc(v0, &ang, &d->f88, &d->f8C);
+            trooper_start_knockback(m, d->f70, ang, 5, 1, 0);
             m->state = 11;
             d->b67 = 0x78;
             break;
@@ -1163,25 +1163,25 @@ void FUN_L05_00303390(Moby *m) {
             d->f8C = D_L05_00161A94 * D_0015ED6C;
             d->fC0 = 5.5f;
             d->fC4 = 11.0f;
-            ang2 = func_L00_001FF860_3047E8(m->pos.x - r->who->pos.x, m->pos.y - r->who->pos.y);
+            ang2 = angle_atan2(m->pos.x - r->who->pos.x, m->pos.y - r->who->pos.y);
             *(u128_3047E8 *)v0 = r->dir;
-            func_L00_0025BBA0_3047E8(v0, &ang2, &d->f88, &d->f8C);
-            func_L00_0025D5B0_3047E8(m, d->f70, ang2, 6, 1, 0);
+            trooper_knockback_arc(v0, &ang2, &d->f88, &d->f8C);
+            trooper_start_knockback(m, d->f70, ang2, 6, 1, 0);
             m->state = 14;
             d->b67 = 0xF0;
             if (r->who != 0 && *(struct Moby **)&r->who->pclass != 0 && *(short *)((u8 *)((struct Moby *)r->who->pclass) + 0x46) == 5) {
-                func_L00_002584A8_3047E8(m, 0x800, -1);
+                stop_animation_l08(m, 0x800, -1);
             } else {
-                func_L00_002584A8_3047E8(m, 0, -1);
+                stop_animation_l08(m, 0, -1);
             }
             break;
         }
-        func_L00_0025E4B0_3047E8(m, d->f60);
+        trooper_anim_update(m, d->f60);
     }
     m->unkA4 = 0xFF;
-    func_L00_0025E590_3047E8(m, d->f60);
+    trooper_anim_finish(m, d->f60);
     if (d->f38 != 0) {
-        d->f2B0 = func_001FA898_3047E8(func_001F9878_3047E8(func_002140F8_3047E8(180.0f, 240.0f)));
+        d->f2B0 = func_001FA898_3047E8(scale_time(func_002140F8_3047E8(180.0f, 240.0f)));
         d->f38 = 0;
     }
     func_001F9908_3047E8(&d->f2B0);
@@ -1190,15 +1190,15 @@ void FUN_L05_00303390(Moby *m) {
     } else {
         d->f2A0 = d->f29C;
     }
-    if (func_L00_00260FB0_3047E8(d->f2A0, m, d->f120, 0, 0, D_L05_001B0CB0_3047E8[d->f2CC]->pts, D_L05_001B0CB0_3047E8[d->f2CC]->n) != 2) {
-        if (d->f2A0 < func_001F9D48_3047E8(d->f270, d->f120) || 3.0f < func_001F9B88_3047E8(m->pos.z - d->f128)) {
+    if (activate_effect_l08(d->f2A0, m, d->f120, 0, 0, D_L05_001B0CB0_3047E8[d->f2CC]->pts, D_L05_001B0CB0_3047E8[d->f2CC]->n) != 2) {
+        if (d->f2A0 < vector_distance(d->f270, d->f120) || 3.0f < func_001F9B88_3047E8(m->pos.z - d->f128)) {
             d->f164 = 2;
         }
     }
     if (d->f2C8 >= 0) {
         Moby *t = func_L05_003053D8_3047E8(m, d->f2C8);
         if (t != 0) {
-            if (d->f164 == 2 || func_001F9D48_3047E8(((float *)&m->pos), ((float *)&t->pos)) < func_001F9D48_3047E8(((float *)&m->pos), ((float *)&d->target->pos))) {
+            if (d->f164 == 2 || vector_distance(((float *)&m->pos), ((float *)&t->pos)) < vector_distance(((float *)&m->pos), ((float *)&d->target->pos))) {
                 d->target = t;
                 d->f164 = 1;
             }
@@ -1208,14 +1208,14 @@ void FUN_L05_00303390(Moby *m) {
         d->target = D_001413D0_3047E8;
     }
     d->f2D8 = func_001FA748_3047E8(d->f2D8, D_0015ED6C * 9.424778f);
-    m->unk90 = func_001FA8A8_3047E8(D_L05_00161A74, D_L05_00161A78, (func_001F9FA8_3047E8(d->f2D8) + 1.0f) * 0.5f);
+    m->unk90 = fast_tween_color(D_L05_00161A74, D_L05_00161A78, (func_001F9FA8_3047E8(d->f2D8) + 1.0f) * 0.5f);
     k = m->state;
     if (k < 10) {
     if (k >= 4 && d->target == D_001413D0_3047E8) {
         float yaw, pitch;
         func_001F9BF0_3047E8(v0, ((float *)&d->target->pos), ((float *)&m->pos));
-        yaw = func_001FA790_3047E8(func_L00_001FF860_3047E8(v0[0], v0[1]), m->rot.z);
-        pitch = -func_L00_001FF860_3047E8(func_001F9CE8_3047E8(v0), v0[2]);
+        yaw = func_001FA790_3047E8(angle_atan2(v0[0], v0[1]), m->rot.z);
+        pitch = -angle_atan2(func_001F9CE8_3047E8(v0), v0[2]);
         if (m->flags & 0x8000) {
             yaw = -yaw;
         }
@@ -1234,8 +1234,8 @@ void FUN_L05_00303390(Moby *m) {
         d->f258 = yaw * 0.3f;
     }
     }
-    func_L00_00263950_3047E8(m, d->f170, 1, D_0015ED64 * 0.04f, D_0015ED64 * 0.3f);
-    func_L00_00263950_3047E8(m, d->f1F0, 2, D_0015ED64 * 0.04f, D_0015ED64 * 0.3f);
+    update_joint_animation(m, d->f170, 1, D_0015ED64 * 0.04f, D_0015ED64 * 0.3f);
+    update_joint_animation(m, d->f1F0, 2, D_0015ED64 * 0.04f, D_0015ED64 * 0.3f);
 }
 #include "rnc/gameplay/entities/moby.h"
 
@@ -1816,7 +1816,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00307910.s", FUN_L05_00307910);
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float FUN_001f96b0(float);
-extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *arg0) __asm__("FUN_001f9740");
 extern short D_L05_00161CD4_d __asm__("D_L05_00161CD4") __attribute__((sda));
 extern short D_L05_00161CD8_d __asm__("D_L05_00161CD8") __attribute__((sda));
 extern short D_L05_00161CDC_d __asm__("D_L05_00161CDC") __attribute__((sda));
@@ -1846,7 +1846,7 @@ void FUN_L05_0030bdd8(unsigned char *moby) {
         moby[0x20] = 1;
         break;
     case 1:
-        if (tick_countdown_32_alt((int *)(data + 0x78))) {
+        if (fast_dec_timer((int *)(data + 0x78))) {
             allocate_voice_for_target_entry_alt(0, 0, (int)moby);
             *(int *)(data + 0x78) = func_001FA898_r(FUN_001f96b0(random_float_between_alt(
                 (float)*(int *)&D_L05_00161CE4_d, (float)*(int *)&D_L05_00161CE8_d)));
