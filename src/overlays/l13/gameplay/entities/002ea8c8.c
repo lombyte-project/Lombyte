@@ -1072,7 +1072,8 @@ void FUN_L13_002ed158(void *moby, void *data) {
     FUN_001fa030(matrix, moby + 0x40);
     max_size = *(short *)(data + 10) < *(short *)(data + 8) ?
         *(short *)(data + 8) : *(short *)(data + 10);
-    *(OvlQuad *)query = 0;
+    *(unsigned long long *)query = 0;
+    query[3] = 0.0f;
     query[2] = (float)max_size * 0.5f;
     FUN_001f9cf8(query, query, matrix);
     FUN_001f9a10(query, query, moby + 0x10);
