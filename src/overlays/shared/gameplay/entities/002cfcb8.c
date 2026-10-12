@@ -1900,9 +1900,9 @@ after_blue:
 #endif
 typedef struct Moby Moby;
 extern void FUN_00212f90_2d4610(void *, int, int, int) __asm__("FUN_00212f90");
-extern int FUN_001f96f8_2d4610(int) __asm__("FUN_001f96f8");
-extern void FUN_001f9a28_2d4610(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_001f9a10_2d4610(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 typedef float ToadVec[4] __attribute__((aligned(16)));
 typedef struct { u8 pad0[0x24]; float unk24; } ToadClass;
 typedef struct { int count; int pad4[3]; ToadVec pts[1]; } ToadPath;
@@ -1948,42 +1948,43 @@ extern float D_L00_0016196C_2d4610 __asm__("D_L00_0016196C") __attribute__((sda)
 extern float D_L00_00161980_2d4610 __asm__("D_L00_00161980") __attribute__((sda));
 extern float D_L00_00161984_2d4610 __asm__("D_L00_00161984") __attribute__((sda));
 extern short D_L00_00161960_2d4610 __asm__("D_L00_00161960") __attribute__((sda));
-extern char D_L00_00166DC0_2d4610[] __asm__("D_L00_00166DC0");
-extern char *D_L00_0015FFD8_2d4610 __asm__("D_L00_0015FFD8") MACRO_ADDR;
+extern char camera_position[] __asm__("D_L00_00166DC0");
+extern char *moby_table __asm__("D_L00_0015FFD8") MACRO_ADDR;
 extern ToadPath *toad_paths[] __asm__("D_L00_001B04B0");
 
 extern void FUN_L00_002d5160_2d4610(void *) __asm__("FUN_L00_002d5160");
 extern void FUN_L00_002d5830_2d4610(void *) __asm__("FUN_L00_002d5830");
-extern float FUN_001f9b48_2d4610(void *, void *) __asm__("FUN_001f9b48");
+extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern void FUN_L00_0025a120_2d4610(void *) __asm__("FUN_L00_0025a120");
 extern void FUN_L00_00263ac8_2d4610(float, int, int, unsigned char *) __asm__("FUN_L00_00263ac8");
-extern float FUN_001f9b80_2d4610(void *, void *) __asm__("FUN_001f9b80");
-extern int FUN_001fa6d0_2d4610(float) __asm__("FUN_001fa6d0");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int FUN_L00_002dc9f0_2d4610(void *, void *) __asm__("FUN_L00_002dc9f0");
-extern float FUN_001f9e90_2d4610(float, float) __asm__("FUN_001f9e90");
-extern float FUN_L00_0025be00_2d4610(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
+extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
+extern float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
 extern float FUN_L00_002d54c8_2d4610(unsigned char *m, float *t, float vel) __asm__("FUN_L00_002d54c8");
-extern int FUN_L00_00257b90_2d4610(int, int) __asm__("FUN_L00_00257b90");
-extern float FUN_002132a8_2d4610(float, float) __asm__("FUN_002132a8");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_00261630_2d4610(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
-extern float FUN_001fa688_2d4610(float, float) __asm__("FUN_001fa688");
-extern int FUN_00214cc8_2d4610(void *, float) __asm__("FUN_00214cc8");
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
 extern void FUN_L00_002599e8_2d4610(void *, float, float, float, int, int, int, int, int) __asm__("FUN_L00_002599e8");
-extern void FUN_001f9bf8_2d4610(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int FUN_L00_00261968_2d4610(int, void *, void *) __asm__("FUN_L00_00261968");
-extern int FUN_00213260_2d4610(int) __asm__("FUN_00213260");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int FUN_L00_0025c698_2d4610(void *, void *) __asm__("FUN_L00_0025c698");
 extern void FUN_0022da68_2d4610(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_0025f3e8_2d4610(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void FUN_0020c828_2d4610(void *) __asm__("FUN_0020c828");
-extern float FUN_00213508_2d4610(void *, int, float) __asm__("FUN_00213508");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void FUN_L00_00261d78_2d4610(int, float, void *, void *) __asm__("FUN_L00_00261d78");
 extern float FUN_00213ed8_2d4610(float, float, float *) __asm__("FUN_00213ed8");
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D5AC0), where it is exact; names translated to the US level program. */
 
 /* Class 749 update (horny toad): state machine that walks a path or follows a target moby, hops, turns and dies; then settles its height and checks a pickup moby. */
-void FUN_L00_002d4610(Moby *moby) {
+void horny_toad_update(Moby *moby) __asm__("FUN_L00_002d4610");
+void horny_toad_update(Moby *moby) {
     ToadVars *data;
     Moby *target;
     ToadVec v;
@@ -1991,7 +1992,7 @@ void FUN_L00_002d4610(Moby *moby) {
     data = (ToadVars *)moby->pvars;
     FUN_L00_002d5160_2d4610(moby);
     target = data->target;
-    if (moby->unk31 != 0 && FUN_001f9b48_2d4610((*(ToadVec *)&moby->pos), D_L00_00166DC0_2d4610) < 26.0f) {
+    if (moby->unk31 != 0 && distance_xyz((*(ToadVec *)&moby->pos), camera_position) < 26.0f) {
         FUN_L00_0025a120_2d4610(moby);
         moby->unk7F = 0x15;
     }
@@ -2013,12 +2014,12 @@ void FUN_L00_002d4610(Moby *moby) {
             *(u128 *)v = 0;
             v[0] = 150.0f;
             v[1] = 127.0f;
-            if (FUN_001f9b80_2d4610((*(ToadVec *)&moby->pos), v) < 5.0f) {
+            if (vector_distance((*(ToadVec *)&moby->pos), v) < 5.0f) {
                 data->unk25C = 0.75f;
             }
         }
-        data->unk58 = FUN_001fa6d0_2d4610(12.0f);
-        data->unk5A = FUN_001fa6d0_2d4610(2.0f);
+        data->unk58 = truncate_float_to_s32(12.0f);
+        data->unk5A = truncate_float_to_s32(2.0f);
         if (data->path >= 0) {
             if (data->unk1E4 >= 0) {
                 ToadPath *path = toad_paths[data->path];
@@ -2028,7 +2029,7 @@ void FUN_L00_002d4610(Moby *moby) {
             } else if (data->follow_moby >= 0) {
                 qcopy(data->home, (*(ToadVec *)&moby->pos));
                 moby->state = 1;
-                if (moby->prev_seq != 2) FUN_00212f90_2d4610(moby, 2, 0, FUN_001f96f8_2d4610(10));
+                if (moby->prev_seq != 2) FUN_00212f90_2d4610(moby, 2, 0, scale_game_frames(10));
             } else {
                 FUN_0020c828_2d4610(moby);
                 return;
@@ -2045,25 +2046,25 @@ void FUN_L00_002d4610(Moby *moby) {
         }
         break;
     case 1: {
-        Moby *t = (Moby *)(D_L00_0015FFD8_2d4610 + (data->follow_moby << 8));
+        Moby *t = (Moby *)(moby_table + (data->follow_moby << 8));
         if (t != 0 && t->state != 0xFE && t->state != 0xFD) {
-            FUN_L00_0025be00_2d4610(&moby->rot.z, FUN_001f9e90_2d4610((*(ToadVec *)&t->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&t->pos)[1] - (*(ToadVec *)&moby->pos)[1]), &data->turn_speed, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
+            approach_angle(&moby->rot.z, angle_atan2((*(ToadVec *)&t->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&t->pos)[1] - (*(ToadVec *)&moby->pos)[1]), &data->turn_speed, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
         } else {
             moby->state = 8;
-            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
     }
     case 2:
         if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, toad_paths[data->path]->pts[data->path_point], 0.5f) < 1.0f) {
             moby->state = 1;
-            if (moby->prev_seq != 2) FUN_00212f90_2d4610(moby, 2, 0, FUN_001f96f8_2d4610(10));
+            if (moby->prev_seq != 2) FUN_00212f90_2d4610(moby, 2, 0, scale_game_frames(10));
         }
         break;
     case 3:
         if (data->unk1C4 != 2) {
             moby->state = 4;
-            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
     case 4: {
@@ -2073,81 +2074,81 @@ void FUN_L00_002d4610(Moby *moby) {
                 data->path_point++;
             } else {
                 moby->state = 5;
-                if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, FUN_001f96f8_2d4610(10));
+                if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, scale_game_frames(10));
             }
         } else if (data->unk1C4 != 2) {
             moby->state = 6;
-            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
     }
     case 5:
         if (moby->prev_seq != 4) {
-            int n = FUN_L00_00257b90_2d4610(0, 5);
-            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, n, FUN_001f96f8_2d4610(10));
-            moby->unk58 = FUN_002132a8_2d4610(0.92f, 1.08f);
+            int n = random_int_between(0, 5);
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, n, scale_game_frames(10));
+            moby->unk58 = random_float_between(0.92f, 1.08f);
         }
         FUN_L00_00261630_2d4610((char *)moby, (char *)data->unk240, 0.5f, 0.5f);
         if (data->unk1C4 != 2) {
-            data->unk1FC = FUN_002132a8_2d4610(-20.0f, 20.0f) * 0.017453292f;
+            data->unk1FC = random_float_between(-20.0f, 20.0f) * 0.017453292f;
             moby->state = 6;
-            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
     case 6:
         if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->unk180, 0.5f) < D_L00_00161980_2d4610
-            && FUN_001fa688_2d4610(moby->rot.z, FUN_001f9e90_2d4610((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) < 0.17453292f) {
+            && fast_difference_between_rotations(moby->rot.z, angle_atan2((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) < 0.17453292f) {
             moby->state = 7;
-            if (moby->prev_seq != 5) FUN_00212f90_2d4610(moby, 5, (int)D_L00_00161984_2d4610, FUN_001f96f8_2d4610(10));
+            if (moby->prev_seq != 5) FUN_00212f90_2d4610(moby, 5, (int)D_L00_00161984_2d4610, scale_game_frames(10));
         } else if (data->unk1C4 == 2) {
             moby->state = 8;
-            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
     case 7:
-        if (FUN_00214cc8_2d4610(moby, 34.0f) != 0) {
+        if (is_value_within_interpolated_window(moby, 34.0f) != 0) {
             FUN_L00_002599e8_2d4610(moby, 0.333f, 1.0f, 1.0f, 0, 1, 0, 1, 0);
         } else if (moby->unk70 & 2) {
             if (data->unk1C4 == 2) {
                 moby->state = 8;
-                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
-            } else if (FUN_001f9b80_2d4610((*(ToadVec *)&moby->pos), (*(ToadVec *)&target->pos)) > 1.5f
-                       || FUN_001fa688_2d4610(moby->rot.z, FUN_001f9e90_2d4610((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) > 0.17453292f) {
+                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
+            } else if (vector_distance((*(ToadVec *)&moby->pos), (*(ToadVec *)&target->pos)) > 1.5f
+                       || fast_difference_between_rotations(moby->rot.z, angle_atan2((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) > 0.17453292f) {
                 moby->state = 6;
-                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
             }
         }
         break;
     case 8:
         if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->home, 0.5f) < 1.5f) {
             moby->state = 5;
-            if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, FUN_001f96f8_2d4610(10));
+            if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, scale_game_frames(10));
         } else if (data->unk1C4 != 2) {
             moby->state = 6;
-            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
         }
         break;
     case 10: {
-        FUN_001f9a28_2d4610(v, data->unk180, (*(ToadVec *)&moby->pos));
+        subtract_vector_xyz(v, data->unk180, (*(ToadVec *)&moby->pos));
         v[2] = 0.0f;
-        FUN_001f9bf8_2d4610(v, v, 2.5f);
-        FUN_001f9a10_2d4610(v, v, (*(ToadVec *)&moby->pos));
+        normalize_vector_xyz(v, v, 2.5f);
+        add_vector_xyz(v, v, (*(ToadVec *)&moby->pos));
         if (FUN_L00_00261968_2d4610(data->unk1E0, (*(ToadVec *)&moby->pos), v) != 0) {
-            FUN_L00_0025be00_2d4610(&moby->rot.z, FUN_001f9e90_2d4610((*(ToadVec *)&data->target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&data->target->pos)[1] - (*(ToadVec *)&moby->pos)[1]), &data->turn_speed, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
+            approach_angle(&moby->rot.z, angle_atan2((*(ToadVec *)&data->target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&data->target->pos)[1] - (*(ToadVec *)&moby->pos)[1]), &data->turn_speed, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, frame_time * 12.566371f);
             if (moby->unk70 & 2) {
-                if (moby->prev_seq != FUN_00213260_2d4610(2) + 2) FUN_00212f90_2d4610(moby, FUN_00213260_2d4610(2) + 2, 0, FUN_001f96f8_2d4610(20));
+                if (moby->prev_seq != random_integer_below(2) + 2) FUN_00212f90_2d4610(moby, random_integer_below(2) + 2, 0, scale_game_frames(20));
             }
         } else {
-            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(20));
+            if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(20));
             FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->unk180, 0.5f);
         }
         if (moby->unk70 & 2) {
             if (data->unk1C4 != 2) {
                 moby->state = 6;
-                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(10));
+                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
             } else if (data->unk276 == 0) {
                 moby->state = 8;
-                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, FUN_001f96f8_2d4610(20));
+                if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(20));
             }
         }
         break;
@@ -2155,7 +2156,7 @@ void FUN_L00_002d4610(Moby *moby) {
     case 11:
         if (FUN_L00_0025c698_2d4610(moby, data->unk70) & 0x140) {
             moby->state = 5;
-            if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, FUN_001f96f8_2d4610(10));
+            if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, scale_game_frames(10));
         }
         break;
     case 12:
@@ -2168,14 +2169,14 @@ void FUN_L00_002d4610(Moby *moby) {
         break;
     }
     if (moby->state != 11 && moby->state != 12 && moby->state != 9) {
-        FUN_00213ed8_2d4610(FUN_00213508_2d4610((*(ToadVec *)&moby->pos), 0, 0.5f), frame_time * 7.0f, &(*(ToadVec *)&moby->pos)[2]);
+        FUN_00213ed8_2d4610(probe_ground_height((*(ToadVec *)&moby->pos), 0, 0.5f), frame_time * 7.0f, &(*(ToadVec *)&moby->pos)[2]);
         if (moby->state != 4) {
             FUN_L00_00261d78_2d4610(data->unk1E0, 0.25f, (*(ToadVec *)&moby->pos), (*(ToadVec *)&moby->pos));
         }
     }
     if (data->pickup_moby != -1) {
-        Moby *o = (Moby *)(D_L00_0015FFD8_2d4610 + (data->pickup_moby << 8));
-        if (FUN_001f9b80_2d4610((*(ToadVec *)&moby->pos), (*(ToadVec *)&o->pos)) < 1.0f) {
+        Moby *o = (Moby *)(moby_table + (data->pickup_moby << 8));
+        if (vector_distance((*(ToadVec *)&moby->pos), (*(ToadVec *)&o->pos)) < 1.0f) {
             if (o->oclass == 0x33E) {
                 FUN_L00_002d5830_2d4610(o);
                 data->pickup_moby = -1;
