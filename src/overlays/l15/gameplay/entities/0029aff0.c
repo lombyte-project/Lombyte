@@ -664,8 +664,8 @@ no_hit:
     moby->scale = moby->scale + moby->scale;
     {
     u16 save_id = moby->save_id;
-    u32 saved_bit = *(u32 *)(D_0014C190 + current_level_index * 0x100 +
-                    (((s16)save_id >> 5) * 4)) &
+    u32 saved_bit = *(u32 *)(D_0014C190 + (((s16)save_id >> 5) * 4) +
+                    current_level_index * 0x100) &
                     (1U << (save_id & 31));
     if (D_0013DD50 != 0 && saved_bit != 0)
         mark_moby_for_removal_7880(moby);
