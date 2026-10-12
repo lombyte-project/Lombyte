@@ -1104,12 +1104,13 @@ void FUN_L00_00299c48(void) {
                 FUN_L00_00299c00();
                 return;
             }
-            if ((s16)D_L00_0015F622 >= 0x2b) {
+            if ((s16)D_L00_0015F622 < 0x2b) {
+                D_L00_0015F624 = -1;
+                D_L00_0015F620 = 1;
+            } else {
                 FUN_L00_00299c00();
                 return;
             }
-            D_L00_0015F624 = -1;
-            D_L00_0015F620 = 1;
         }
     } else if (stage == active) {
         FUN_L00_002a09d8(1);
@@ -1118,13 +1119,21 @@ void FUN_L00_00299c48(void) {
             destination = (s32 *)D_L00_0015F628;
             source += D_L00_0015F624;
             destination += D_L00_0015F624;
-            for (offset = 0; offset < 0x38000; offset += 0x20) {
-                *destination = *source;
+            offset = 0;
+            do {
+                index = *source;
+                offset += 0x20;
                 source += 0x20;
+                *destination = index;
                 destination += 0x20;
-            }
+            } while (offset < 0x38000);
         } else if (D_L00_0015F624 >= 0x24) {
-            if (pal) {
+            if (!pal) {
+                if ((s16)D_L00_0015F622 == 8) {
+                    D_L00_0015F622 = 0x11;
+                    D_L00_0015F626 = 0x1590;
+                }
+            } else {
                 if ((s16)D_L00_0015F622 == 0x11) {
                     D_L00_0015F622 = 0x1b;
                     D_L00_0015F626 = 0x2238;
@@ -1133,14 +1142,11 @@ void FUN_L00_00299c48(void) {
                     D_L00_0015F622 = 0x27;
                     D_L00_0015F626 = 0x32b4;
                 }
-            } else if ((s16)D_L00_0015F622 == 8) {
-                D_L00_0015F622 = 0x11;
-                D_L00_0015F626 = 0x1590;
             }
             D_L00_0015F620 = 0;
-            D_L00_0015F622++;
+            index = (s16)(D_L00_0015F622 + 1);
             D_L00_0015F624 = -1;
-            index = (s16)D_L00_0015F622;
+            D_L00_0015F622 = index;
             index = index % 0x14;
             if (pal_mode == 0) {
                 FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 18].sector,
