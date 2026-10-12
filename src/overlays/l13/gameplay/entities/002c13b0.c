@@ -1794,7 +1794,188 @@ void FUN_L13_002e1348(struct Moby *moby, char *d, float s) {
         mark_moby_for_removal(moby);
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002e1638.s", FUN_L13_002e1638);
+#include "rnc/overlay/collision.h"
+
+/* Vars of a Gemlik blob (class 0x584, FUN_L13_002e1140). */
+struct BlobVars {
+    Vec4f vel;                     /* 0x00: moved by it each frame once launched */
+    Vec4f home;                    /* 0x10: respawn point; w: 20 */
+    f32 dir[3];                    /* 0x20: launch direction (rot_row0 at spawn) */
+    f32 start_scale;               /* 0x2C */
+    Vec4f spin;                    /* 0x30: x/y/z rotation per frame */
+    s32 child;                     /* 0x40: 1 when split off a bigger blob */
+    s32 timer;                     /* 0x44: frames left before it respawns */
+    struct Moby *owner;            /* 0x48: blob it split off */
+    s16 cooldown;                  /* 0x4C: frames before it can hit again */
+    s16 pieces;                    /* 0x4E: blobs left to split off */
+};
+
+extern f32 distance_xyz_1638(void *, void *) __asm__("FUN_001f9b48");
+extern s32 random_int_between_1638(s32, s32) __asm__("FUN_L00_00257b90");
+extern f32 random_float_between_1638(f32, f32) __asm__("FUN_002132a8");
+extern f32 random_angle_1638(void) __asm__("FUN_00213308");
+extern s32 rand_1638(void) __asm__("FUN_001160d8");
+extern void normalize_vector_xyz_1638(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz_1638(void *, void *, f32) __asm__("FUN_001f9c90");
+extern void add_vector_xyz_1638(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void reflect_vector_1638(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern s32 tick_countdown_16_1638(s16 *) __asm__("FUN_001f9770");
+extern s32 tick_countdown_32_1638(s32 *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames_1638(s32) __asm__("FUN_001f96f8");
+extern f32 fast_add_rotations_1638(f32, f32) __asm__("FUN_001fa580");
+extern s32 FUN_001fa728_1638(f32, void *) __asm__("FUN_001fa728");
+extern s32 FUN_L00_001f0d60_1638(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
+extern char *find_moby_hit_1638(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void mark_moby_for_removal_1638(struct Moby *) __asm__("FUN_0020c828");
+extern void FUN_L13_002e1348_1638(struct Moby *, struct BlobVars *, f32) __asm__("FUN_L13_002e1348");
+extern struct Hero hero_1638 __asm__("D_0013F350");
+extern Vec4f hero_pos_1638 __asm__("D_0013F3D0");
+extern CollisionHit coll_hit_1638 __asm__("D_L13_00174140");
+extern s32 frame_count_1638 __asm__("D_L13_0015F5CC");
+extern char *moby_base_1638 __asm__("D_L13_0015FFD8");
+
+/* Blob update: waits on its home point, jumps out at the hero when the ship comes near, splits when it hits something, and respawns. */
+void FUN_L13_002e1638(struct Moby *moby) {
+    struct BlobVars *vars = (struct BlobVars *)moby->pvars;
+    f32 distance = distance_xyz_1638(&moby->pos, &hero_pos_1638);
+    f32 size;
+    f32 spin;
+    char *hit;
+
+    switch (moby->state) {
+    case 0:
+        qcopy(&vars->home, &moby->pos);
+        vars->home.w = 20.0f;
+        qcopy(vars->dir, &moby->rot_row0);
+        vars->start_scale = moby->scale;
+        vars->pieces = random_int_between_1638(2, 3);
+        if (moby->scale < moby->pclass->scale) {
+            moby->unk72 = 0;
+        }
+        moby->state = 3;
+        break;
+    case 1:
+        if (hero_1638.state.current == 0x32 && hero_1638.ship_moby != 0 && hero_1638.ship_moby->oclass == 0x45
+            && (moby->visible != 0 || distance < 40.0f)) {
+            normalize_vector_xyz_1638(vars, vars->dir, random_float_between_1638(1.0f, 10.0f) * frame_time);
+            moby->state = 2;
+        }
+        break;
+    case 2:
+        tick_countdown_16_1638(&vars->cooldown);
+        add_vector_xyz_1638(&moby->pos, &moby->pos, vars);
+        if (moby->visible != 0 || distance < 40.0f) {
+            if (vars->child == 0) {
+                vars->timer = scale_game_frames_1638(0x168);
+            } else {
+                vars->timer = scale_game_frames_1638(0x78);
+            }
+            if (vars->cooldown == 0) {
+                moby->collision = moby->pclass->collision;
+                size = moby->scale / moby->pclass->scale;
+                if ((frame_count_1638 & 1) == (((char *)moby - moby_base_1638) >> 8 & 1)
+                    && FUN_L00_001f0d60_1638(size * 6.2f, &moby->pos, 0, moby) != 0) {
+                    if ((struct Moby *)coll_hit_1638.moby != vars->owner) {
+                        reflect_vector_1638(vars, vars, &coll_hit_1638.normal_x);
+                        qcopy(&moby->pos, coll_hit_1638.pad30);
+                        if (coll_hit_1638.moby == 0 || ((struct Moby *)coll_hit_1638.moby)->oclass != 0xD4) {
+                            FUN_L13_002e1348_1638(moby, vars, size);
+                        }
+                    }
+                } else {
+                    hit = find_moby_hit_1638(moby, 0x330000, 0);
+                    if (hit != 0 && (*(struct Moby **)(hit + 0x20))->oclass != 0xD4) {
+                        hit += 0x10;
+                        size = moby->scale;
+                        size /= moby->pclass->scale;
+                        scale_vector_xyz_1638(hit, hit, frame_time * 20.0f);
+                        add_vector_xyz_1638(vars, vars, hit);
+                        FUN_L13_002e1348_1638(moby, vars, size);
+                    }
+                    moby->hit_slot = 0xFF;
+                }
+            }
+        } else if (tick_countdown_32_1638(&vars->timer) != 0) {
+            if (vars->child == 1) {
+                mark_moby_for_removal_1638(moby);
+                return;
+            }
+            moby->state = 4;
+            moby->collision = 0;
+            moby->flags |= 1;
+            moby->visible = 0;
+            moby->scale = vars->start_scale;
+        }
+        break;
+    case 3:
+        qcopy(&moby->pos, &vars->home);
+        qzero(&vars->spin);
+        spin = random_float_between_1638(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
+        switch (rand_1638() % 3) {
+        case 0:
+            vars->spin.x = spin;
+            break;
+        case 1:
+            vars->spin.y = spin;
+            break;
+        case 2:
+            vars->spin.z = spin;
+            break;
+        }
+        spin = random_float_between_1638(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
+        switch (rand_1638() % 3) {
+        case 0:
+            vars->spin.x = spin;
+            break;
+        case 1:
+            vars->spin.y = spin;
+            break;
+        case 2:
+            vars->spin.z = spin;
+            break;
+        }
+        moby->rot.x = random_angle_1638();
+        moby->rot.y = random_angle_1638();
+        moby->rot.z = random_angle_1638();
+        qzero(&vars->vel);
+        moby->scale = vars->start_scale;
+        if (moby->pclass->scale < moby->scale) {
+            moby->unk72 = 100;
+        }
+        moby->state = 1;
+        break;
+    case 4:
+        if (FUN_001fa728_1638(moby->draw_dist, &vars->home) < 0) {
+            qcopy(&moby->pos, &vars->home);
+            moby->collision = moby->pclass->collision;
+            moby->visible = 1;
+            moby->flags &= ~1;
+            moby->state = 3;
+        }
+        break;
+    }
+    if (moby->pos.x < 20.0f) {
+        moby->pos.x = 20.0f;
+    }
+    if (moby->pos.x > 1003.0f) {
+        moby->pos.x = 1003.0f;
+    }
+    if (moby->pos.y < 20.0f) {
+        moby->pos.y = 20.0f;
+    }
+    if (moby->pos.y > 1003.0f) {
+        moby->pos.y = 1003.0f;
+    }
+    if (moby->pos.z < 20.0f) {
+        moby->pos.z = 20.0f;
+    }
+    if (moby->pos.z > 1003.0f) {
+        moby->pos.z = 1003.0f;
+    }
+    moby->rot.x = fast_add_rotations_1638(moby->rot.x, vars->spin.x);
+    moby->rot.y = fast_add_rotations_1638(moby->rot.y, vars->spin.y);
+    moby->rot.z = fast_add_rotations_1638(moby->rot.z, vars->spin.z);
+}
 /* runs one step of a moby's timed state and reports whether the timer ran out */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E56C8), where it is exact; names translated to the US level program. */
 
