@@ -1670,25 +1670,25 @@ void FUN_L07_00317910(void) {
         if (D_L07_00161B78 > 7.0f) D_L07_00161B78 -= 7.0f;
         row_offset = row * 0x140;
         for (column = 0; column < 20; column++) {
-            float end_phase = row_phase + column_step;
-            qcopy(packet.pos[0], (char *)&D_L07_0020DB00_c[14] + row_offset + (column << 4));
+            float end_phase;
+            qcopy(packet.pos[0], (char *)&D_L07_0020DB00_c[14] + (row_offset + (column << 4)));
             next_column = (column + 1) % 20;
-            qcopy(packet.pos[1], (char *)&D_L07_0020DB00_c[14] + row_offset + (next_column << 4));
-            qcopy(packet.pos[2], (char *)&D_L07_0020DAF0_c[-5] + row_offset + (column << 4));
-            qcopy(packet.pos[3], (char *)&D_L07_0020DAF0_c[-5] + row_offset + (next_column << 4));
+            qcopy(packet.pos[1], (char *)&D_L07_0020DB00_c[14] + (row_offset + (next_column << 4)));
+            qcopy(packet.pos[2], ((char *)&D_L07_0020DB00_c[14] - 0x140) + (row_offset + (column << 4)));
+            qcopy(packet.pos[3], ((char *)&D_L07_0020DB00_c[14] - 0x140) + (row_offset + (((column + 1) % 20) << 4)));
+            end_phase = row_phase + column_step;
             {
-                u32 previous = (u32)(u16)D_L07_0020DBC8[row - 1] << 16;
-                s32 current = D_L07_0020DBC8[row];
+                u16 previous = D_L07_0020DBC8[row - 1];
+                s64 current = D_L07_0020DBC8[row];
                 s32 j;
                 u32 *color_out = packet.color;
                 for (j = 1; j >= 0; j--) {
-                    alpha = current;
-                    if (alpha < 0) alpha = 0;
-                    if (alpha > 64) alpha = 64;
-                    color = ((u32)alpha << 24) | 0x404040;
+                    if (current < 0) current = 0;
+                    if (current > 64) current = 64;
+                    color = ((u32)current << 24) | 0x404040;
                     color_out[0] = color;
                     color_out[1] = color;
-                    current = (s32)previous >> 16;
+                    current = (s16)previous;
                     color_out += 2;
                 }
             }
