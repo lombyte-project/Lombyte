@@ -399,18 +399,20 @@ void FUN_L08_002d3878(char *m) {
     Packet_002d3878 pk;
     Vec_002d3878 matrix[3], direction, pos, delta, angles;
     float length;
+    u64 tag;
     Vec_002d3878 *points;
     char *source0;
     char *source1;
     float *v;
     int i;
-    pk.tag[1] = FUN_001f44b8_002d3878(14);
-    pk.color[1] = D_0015187C_002d3878;
+    tag = FUN_001f44b8_002d3878(14);
     pk.color[0] = D_00151878_002d3878;
+    pk.color[1] = D_0015187C_002d3878;
     pk.color[2] = D_00151880_002d3878;
     pk.color[3] = D_00151884_002d3878;
-    pk.tag[0] = 5;
+    pk.tag[1] = tag;
     pk.tag[2] = 0xff9000000260ULL;
+    pk.tag[0] = 5;
     pk.tag[3] = 0x8000000048ULL;
     pk.uv[0] = 0.0f; pk.uv[1] = 0.0f;
     pk.uv[2] = 1.0f; pk.uv[3] = 0.0f;
@@ -419,81 +421,81 @@ void FUN_L08_002d3878(char *m) {
     get_moby_position_002d3878(m, 2, &pos);
     fast_vec_sub(&delta, *(char **)(data + 0x218) + 0x10, &pos);
     scale_vector_002d3878(3.0f, &delta);
-    delta.v[3] = 1.0f;
     delta.v[2] = (*(float *)(*(char **)(data + 0x218) + 0x18) + 0.25f) - pos.v[2];
+    delta.v[3] = 1.0f;
     length = fast_vec_length(&delta);
     clear_vector_002d3878(&angles);
     angles.v[1] = -angle_atan2_002d3878(vector_length_xy_002d3878(&delta), delta.v[2]);
     angles.v[2] = angle_atan2_002d3878(delta.v[0], delta.v[1]);
     make_matrix_002d3878(matrix, &angles);
-    *(Vec_002d3878 *)&direction = pos;
+    qcopy(&direction, &pos);
     direction.v[3] = 1.0f;
 
     clear_vector_002d3878(&pk.vertices[0]);
     pk.vertices[0].v[2] = D_L08_00161894_002d3878;
     pk.vertices[0].v[3] = 1.0f;
-    source0 = data + 0x1d0;
-    source1 = data + 0x1e0;
-    pk.vertices[1] = *(Vec_002d3878 *)(source0);
-    pk.vertices[1].v[0] = length * *(float *)(source0 + 0xc);
+    qcopy(&pk.vertices[1], data + 0x1d0);
+    pk.vertices[1].v[0] = length * *(float *)(data + 0x1dc);
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
     clear_vector_002d3878(&pk.vertices[2]);
     pk.vertices[2].v[2] = 0.0f; pk.vertices[2].v[3] = 1.0f;
-    pk.vertices[3] = *(Vec_002d3878 *)(source0);
-    pk.vertices[3].v[0] = length * *(float *)(source0 + 0xc);
+    qcopy(&pk.vertices[3], data + 0x1d0);
+    pk.vertices[3].v[0] = length * *(float *)(data + 0x1dc);
     pk.vertices[3].v[2] += 0.25f; pk.vertices[3].v[3] = 1.0f;
-    points = pk.vertices;
-    FUN_001f7d30_002d3878(points, matrix, 1);
-    v = points[1].v;
-    for (i = 1; i < 4; i += 2, v += 8) {
-        float y, z;
-        if (i < 2) { y = -0.25f; z = 0.25f; }
-        else { y = 0.25f; z = -0.25f; }
-        v[1] = v[1] + y;
-        v[2] = v[2] + z;
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    {
+        float *v = pk.vertices[1].v;
+        for (i = 1; i < 4; i += 2, v += 8) {
+            if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
+            else { v[1] += 0.25f; v[2] += -0.25f; }
+        }
     }
-    FUN_001f7d30_002d3878(points, matrix, 1);
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
 
-    pk.vertices[0] = *(Vec_002d3878 *)(source0);
-    pk.vertices[0].v[0] = length * *(float *)(source0 + 0xc);
+    qcopy(&pk.vertices[0], data + 0x1d0);
+    pk.vertices[0].v[0] = length * *(float *)(data + 0x1dc);
     pk.vertices[0].v[2] += -0.25f; pk.vertices[0].v[3] = 1.0f;
-    pk.vertices[1] = *(Vec_002d3878 *)(source1);
-    pk.vertices[1].v[0] = length * *(float *)(source1 + 0xc);
+    qcopy(&pk.vertices[1], data + 0x1e0);
+    pk.vertices[1].v[0] = length * *(float *)(data + 0x1ec);
     pk.vertices[1].v[2] += -0.25f; pk.vertices[1].v[3] = 1.0f;
-    pk.vertices[2] = *(Vec_002d3878 *)(source0);
-    pk.vertices[2].v[0] = length * *(float *)(source0 + 0xc);
+    qcopy(&pk.vertices[2], data + 0x1d0);
+    pk.vertices[2].v[0] = length * *(float *)(data + 0x1dc);
     pk.vertices[2].v[2] += 0.25f; pk.vertices[2].v[3] = 1.0f;
-    pk.vertices[3] = *(Vec_002d3878 *)(source1);
-    pk.vertices[3].v[0] = length * *(float *)(source1 + 0xc);
+    qcopy(&pk.vertices[3], data + 0x1e0);
+    pk.vertices[3].v[0] = length * *(float *)(data + 0x1ec);
     pk.vertices[3].v[2] += 0.25f; pk.vertices[3].v[3] = 1.0f;
-    FUN_001f7d30_002d3878(points, matrix, 1);
-    for (i = 0; i < 4; i++) {
-        v = points[i].v;
-        if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
-        else { v[1] += 0.25f; v[2] += -0.25f; }
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    {
+        float *v = pk.vertices[0].v;
+        for (i = 0; i < 4; i++, v += 4) {
+            if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
+            else { v[1] += 0.25f; v[2] += -0.25f; }
+        }
     }
-    FUN_001f7d30_002d3878(points, matrix, 1);
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
 
-    pk.vertices[0] = *(Vec_002d3878 *)(source1);
-    pk.vertices[0].v[0] = length * *(float *)(source1 + 0xc);
+    qcopy(&pk.vertices[0], data + 0x1e0);
+    pk.vertices[0].v[0] = length * *(float *)(data + 0x1ec);
     pk.vertices[0].v[2] += -0.25f; pk.vertices[0].v[3] = 1.0f;
     clear_vector_002d3878(&pk.vertices[1]);
-    pk.vertices[1].v[0] = length * *(float *)(source0 + 0xc) * 3.0f;
+    pk.vertices[1].v[0] = length * *(float *)(data + 0x1dc) * 3.0f;
     pk.vertices[1].v[2] += D_L08_00161894_002d3878; pk.vertices[1].v[3] = 1.0f;
-    pk.vertices[2] = *(Vec_002d3878 *)(source1);
-    pk.vertices[2].v[0] = length * *(float *)(source1 + 0xc);
+    qcopy(&pk.vertices[2], data + 0x1e0);
+    pk.vertices[2].v[0] = length * *(float *)(data + 0x1ec);
     pk.vertices[2].v[2] += 0.25f; pk.vertices[2].v[3] = 1.0f;
     clear_vector_002d3878(&pk.vertices[3]);
-    pk.vertices[3].v[0] = length * *(float *)(source0 + 0xc) * 3.0f;
+    pk.vertices[3].v[0] = length * *(float *)(data + 0x1dc) * 3.0f;
     pk.vertices[3].v[2] = 0.0f; pk.vertices[3].v[3] = 1.0f;
-    FUN_001f7d30_002d3878(points, matrix, 1);
-    v = points[0].v;
-    for (i = 0; i < 4; i += 2, v += 8) {
-        if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
-        else { v[1] += 0.25f; v[2] += -0.25f; }
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    {
+        float *v = pk.vertices[0].v;
+        for (i = 0; i < 4; i += 2, v += 8) {
+            if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
+            else { v[1] += 0.25f; v[2] += -0.25f; }
+        }
     }
-    FUN_001f7d30_002d3878(points, matrix, 1);
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
 }
 #endif
 #define NOT_SDA
