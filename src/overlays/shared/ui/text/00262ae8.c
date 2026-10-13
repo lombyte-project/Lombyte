@@ -125,9 +125,10 @@ void FUN_L05_00262b58(HudCounter *e) {
         dst = D_L05_0015FAE0;
         for (i = 0; i < 4; i++) dst[i] = src[i];
         limit = D_0013FA5C;
+        timer = D_L05_0015F87C;
         if (D_L05_0015FAD4 < limit) {
             D_L05_0015FAD4 = limit;
-            counter[1] = D_L05_0015F87C;
+            counter[1] = timer;
         }
         if (D_0013F650 == 0) {
             if ((u32)(D_001413D4 - 0x6d) > 2) return;
