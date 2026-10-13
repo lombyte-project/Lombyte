@@ -2473,8 +2473,8 @@ void FUN_L06_003049f8(char *m) {
         b = scratch + 16;
         FUN_001f9ff8(b, D_L06_00162208_3049f8);
         FUN_001fa378(scratch, scratch, b);
-        d = scratch + 32;
         e = scratch + 36;
+        d = scratch + 32;
         for (i = 0; i < 4; i++) {
             int j;
             FUN_001fa050(b, D_L06_001FE890 + i * 4);
