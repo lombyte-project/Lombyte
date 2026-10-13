@@ -551,7 +551,7 @@ typedef struct {
     void *moby;
     int kind;
 } ChaserSight;
-typedef struct { int count; int pad[3]; RopeVec points[1]; } ChaserPath;
+#include "rnc/overlay/swarm_path.h"
 typedef struct { char pad[0x1D4]; unsigned char path_points[4]; int linked_mobys[6]; } ChaserPathPoints;
 typedef struct { char pad[0x3C]; short count; char pad2[0xE]; } ChaserSpawnRecord;
 extern char *D_L07_0015FFD8;
@@ -785,23 +785,23 @@ void FUN_L07_00314150(unsigned char *moby) {
         if (*(int *)(data + 0x18C) != -1) {
             int i;
             for (i = 0; i < *(int *)D_L07_001B0530[*(int *)(data + 0x18C)]; i++) {
-                ((ChaserPath *)D_L07_001B0530[*(int *)(data + 0x18C)])->points[i][3] =
+                ((SwarmPath *)D_L07_001B0530[*(int *)(data + 0x18C)])->points[i].f[3] =
                     FUN_001f9b48(D_L07_001B0530[*(int *)(data + 0x18C)] + (i * 16 + 0x10),
                                   D_L07_001B0530[*(int *)(data + 0x18C)] + (((i + 1) % *(int *)D_L07_001B0530[*(int *)(data + 0x18C)]) * 16 + 0x10));
-                *(float *)(data + 0x190) += ((ChaserPath *)D_L07_001B0530[*(int *)(data + 0x18C)])->points[i][3];
+                *(float *)(data + 0x190) += ((SwarmPath *)D_L07_001B0530[*(int *)(data + 0x18C)])->points[i].f[3];
             }
         }
         if (*(int *)(data + 0x290) != -1) {
             char *tbl = D_L07_001B0530[*(int *)(data + 0x290)];
             int i;
             for (i = 0; i < *(int *)tbl; i++) {
-                ((ChaserPath *)tbl)->points[i][3] = FUN_001f9b48(tbl + (i * 16 + 0x10), tbl + (((i + 1) % *(int *)tbl) * 16 + 0x10));
+                ((SwarmPath *)tbl)->points[i].f[3] = FUN_001f9b48(tbl + (i * 16 + 0x10), tbl + (((i + 1) % *(int *)tbl) * 16 + 0x10));
             }
         }
         if (*(int *)(data + 0x188) != -1) {
             int i;
             for (i = 0; i < *(int *)D_L07_001B0530[*(int *)(data + 0x188)]; i++) {
-                int k = truncate_float_to_s32(((ChaserPath *)D_L07_001B0530[*(int *)(data + 0x188)])->points[i][3]);
+                int k = truncate_float_to_s32(((SwarmPath *)D_L07_001B0530[*(int *)(data + 0x188)])->points[i].f[3]);
                 if ((unsigned int)k < 4) ((ChaserPathPoints *)data)->path_points[k] = i;
             }
         }

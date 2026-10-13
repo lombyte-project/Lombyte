@@ -1449,15 +1449,8 @@ extern void FUN_L08_002dc9a8_start(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L08_002dc9a8_finish(void *) __asm__("FUN_0020c828");
 extern float D_0015ED6C_2DC9A8 __asm__("D_0015ED6C");
 extern float D_0015ED70_2DC9A8 __asm__("D_0015ED70");
-typedef struct CollisionRecord_2DC9A8 {
-    char pad[0x18];
-    int owner;
-    int unknown;
-    float position[4];
-    char pad30[0x10];
-    float vector[4];
-} CollisionRecord_2DC9A8;
-extern CollisionRecord_2DC9A8 D_L08_00174640_2DC9A8 __asm__("D_L08_00174640");
+#include "rnc/overlay/collision.h"
+extern CollisionHit D_L08_00174640_2DC9A8 __asm__("D_L08_00174640");
 extern int D_L08_00174658_2DC9A8 __asm__("D_L08_00174658") __attribute__((section(".data")));
 
 typedef struct __attribute__((packed)) EffectVectorCopy_2DC9A8 {
@@ -1506,10 +1499,10 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         qcopy(record.velocity, data);
         if (FUN_L08_002dc9a8_trace(original, &record, 0, m, 0) != 0) {
             if (*(int *)(data + 0x20) != 0 &&
-                D_L08_00174640_2DC9A8.owner != *(int *)(data + 0x20)) {
+                D_L08_00174640_2DC9A8.moby != *(int *)(data + 0x20)) {
                 m[0x20] = 99;
-                qcopy(position, D_L08_00174640_2DC9A8.position);
-                FUN_L08_002dc9a8_add(data, data, D_L08_00174640_2DC9A8.vector);
+                qcopy(position, D_L08_00174640_2DC9A8.point.f);
+                FUN_L08_002dc9a8_add(data, data, &D_L08_00174640_2DC9A8.normal_x);
                 FUN_L08_002dc9a8_scale(D_0015ED6C_2DC9A8 + D_0015ED6C_2DC9A8, data, data);
             }
         } else {

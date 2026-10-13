@@ -93,7 +93,8 @@ extern void FUN_L00_00275eb0(void);
 
 extern u32 effect_handlers[] __asm__("D_L00_001B1E80");
 
-void FUN_L00_00268900(void)
+void register_part_types(void) __asm__("FUN_L00_00268900");
+void register_part_types(void)
 {
     u32 *handlers = effect_handlers;
     handlers[0] = (u32)FUN_L00_00268d48;

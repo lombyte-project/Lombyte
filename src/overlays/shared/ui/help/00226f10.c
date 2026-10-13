@@ -1300,7 +1300,8 @@ extern void add_vector_xyz_34358(void *, void *, void *) __asm__("FUN_001f9a10")
 extern void FUN_001f9c48_34358(void *, void *, f32) __asm__("FUN_001f9c48");
 extern f32 vector_length_xy_34358(void *) __asm__("FUN_001f9b20");
 
-void FUN_L01_00234358(float amount) {
+void air_accel(float amount) __asm__("FUN_L01_00234358");
+void air_accel(float amount) {
     f32 delta[4];
     Vec4 *velocity;
     Vec4 saved;

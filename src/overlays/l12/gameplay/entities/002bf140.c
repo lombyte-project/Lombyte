@@ -2373,7 +2373,7 @@ extern int D_L12_001619A0 __attribute__((sda));
 typedef struct { char pad[0x25c]; struct Moby *moby; int count; } Tracking_e9f68;
 extern Tracking_e9f68 D_L12_00167100;
 extern unsigned char D_0014C050[];
-typedef struct { char pad[0x74]; unsigned char active; char pad75[0x13]; struct Moby *moby; char rest[0x70 - 0x1c]; } Voice_e9f68;
+#include "rnc/audio/voice_pool.h"
 extern unsigned char D_0013E550[];
 extern unsigned char D_0013D4CB;
 extern unsigned short D_00141C50;
@@ -2406,7 +2406,7 @@ void FUN_L12_002e9f68(struct Moby *moby) {
             *(int *)(data + 0xb0) = allocate_voice_for_target_entry_e9f68(3, 4, (int)moby);
     } else {
         index = *(int *)(data + 0xb0);
-        if (index != -1 && ((Voice_e9f68 *)(D_0013E550 + index * 0x70))->moby == moby && ((Voice_e9f68 *)(D_0013E550 + index * 0x70))->active)
+        if (index != -1 && (void *)((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.owner == (void *)moby && ((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.state)
             release_voice(index);
         *(int *)(data + 0xb0) = -1;
     }
@@ -2618,7 +2618,7 @@ update_state:
         FUN_L00_0025e450(moby, D_L12_0015F580, &moby->pos, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, 2, 3.0f, 15.0f, 1, 1, -1, 0);
         if (*(int *)(data + 0xc0) == 0) FUN_L00_00257470(moby, 0, -1);
         index = *(int *)(data + 0xb0);
-        if (index != -1 && ((Voice_e9f68 *)(D_0013E550 + index * 0x70))->moby == moby && ((Voice_e9f68 *)(D_0013E550 + index * 0x70))->active) release_voice(index);
+        if (index != -1 && (void *)((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.owner == (void *)moby && ((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.state) release_voice(index);
         *(int *)(data + 0xb0) = -1;
         if (*(int *)(data + 0xc0) == 0) {
 remove:
