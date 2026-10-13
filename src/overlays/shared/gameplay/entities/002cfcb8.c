@@ -1139,12 +1139,11 @@ target_valid:
     if (*(u8 **)(vars + 0x50) != 0) {
         ((V2d2670 *)(*(u8 **)(vars + 0x50) + 0x10))->q = ((V2d2670 *)(vars + 0x40))->q;
     } else {
-        if (get_ammo(-1)) {
-            velocity.q = 0;
-        } else if (hero.unk20A8) {
+        if (!get_ammo(-1)) {
+            if (!hero.unk20A8) return;
             *(volatile u64 *)&velocity = 0;
             *((u64 *)&velocity + 1) = 0;
-        } else return;
+        } else velocity.q = 0;
         *(u8 **)(vars + 0x50) = FUN_L00_002c35c0((s32)moby, vars + 0x40, &velocity);
     }
 }
