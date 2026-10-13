@@ -1109,10 +1109,14 @@ void FUN_L07_0030b000(struct Moby *moby) {
         i = 0;
         if (0 < *(s32 *)(data + 0x78)) do {
             child = *(s32 *)(cursor + 0x78);
-            distance = FUN_001f9b48((char *)child + 0x80,
+            {
+                f32 segment_distance = FUN_001f9b48((char *)child + 0x80,
                               path + 0x10 + *(s32 *)(child + 0x90) * 16);
-            FUN_L00_0025d808(*(f32 *)(data + 0x7c) * frame_time, path,
+                f32 step = *(f32 *)(data + 0x7c) * frame_time;
+                distance = segment_distance;
+                FUN_L00_0025d808(step, path,
                          (char *)child + 0x80, (char *)child + 0x90, &distance, 1);
+            }
             *(s32 *)(child + 0x94) = *(s32 *)(child + 0x90) + 1;
             if (cursor == 0 || *(u8 *)(cursor + 0x20) == 0xfe ||
                 *(u8 *)(cursor + 0x20) == 0xfd) {
