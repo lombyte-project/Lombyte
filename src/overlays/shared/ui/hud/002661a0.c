@@ -113,15 +113,18 @@ int FUN_L05_00266320(HudElem *e) {
     FUN_00116248(buf, D_L05_0015F9E0, count);
     FUN_L00_001fb470(x - 1, y + 2, 0x80000000, buf, -1);
     FUN_L00_001fb470(x, y, D_L05_0015F99C, buf, -1);
-    x = D_L05_0015F9B0;
-    if (hero.unk8C0 == 1) {
-        FUN_00116248(buf, D_L05_0015F9E8, 1);
-    } else if (hero.unk8C0 == 2) {
-        FUN_00116248(buf, D_L05_0015F9F0, 2);
-    } else if (hero.unk8C0 == 3) {
-        FUN_00116248(buf, D_L05_0015F9F8, 3);
-    } else {
-        FUN_00116248(buf, D_L05_0015FA00);
+    {
+        int count = hero.unk8C0;
+        x = D_L05_0015F9B0;
+        if (count == 1) {
+            FUN_00116248(buf, D_L05_0015F9E8, 1);
+        } else if (count == 2) {
+            FUN_00116248(buf, D_L05_0015F9F0, 2);
+        } else if (count == 3) {
+            FUN_00116248(buf, D_L05_0015F9F8, 3);
+        } else {
+            FUN_00116248(buf, D_L05_0015FA00, count);
+        }
     }
     x -= measure_text_width_regular(buf, -1);
     FUN_L00_001fb470(x + 1, y + 1, 0x80000000, buf, -1);
