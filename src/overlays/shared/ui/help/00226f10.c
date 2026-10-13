@@ -1300,8 +1300,7 @@ extern void add_vector_xyz_34358(void *, void *, void *) __asm__("FUN_001f9a10")
 extern void FUN_001f9c48_34358(void *, void *, f32) __asm__("FUN_001f9c48");
 extern f32 vector_length_xy_34358(void *) __asm__("FUN_001f9b20");
 
-void air_accel(float amount) __asm__("FUN_L01_00234358");
-void air_accel(float amount) {
+void FUN_L01_00234358(float amount) {
     f32 delta[4];
     Vec4 *velocity;
     Vec4 saved;
@@ -1362,10 +1361,12 @@ ratio_done:
     } else if (factor > 3.0f) {
         factor = 3.0f;
     }
+    /* Keep the lower clamp in the single-precision amount multiplication. */
     if (factor < min_factor)
-        factor = min_factor;
+        amount *= min_factor;
+    else
+        amount *= factor;
     velocity = &hero.motion.velocity;
-    amount *= factor;
     subtract_vector_xyz_34358(delta, delta, velocity);
     length = vector_length_xy_34358(delta);
     if (amount < length)
@@ -1373,7 +1374,7 @@ ratio_done:
     add_vector_xyz_34358(velocity, velocity, delta);
     /* velocity is at hero + 0xE0; retail keeps this base for the copy. */
     saved.q = ((struct Hero *)((char *)velocity - 0xE0))->move_impulse.q;
-    ((struct Hero *)((char *)velocity - 0xE0))->ground_speed = ((struct Hero *)((char *)velocity - 0xE0))->motion.unk168 - FUN_L00_00213350_34358(&saved);
+    hero.ground_speed = hero.motion.unk168 - FUN_L00_00213350_34358(&saved);
     return;
 nonzero_mode:
         velocity = &hero.motion.velocity;
