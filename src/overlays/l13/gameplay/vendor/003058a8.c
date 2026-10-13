@@ -2181,7 +2181,7 @@ extern void FUN_0020c828(void *);
 extern void FUN_L13_0030c2b0(void *);
 extern void FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
 extern float D_0015ED70;
-extern int D_001413D0;
+extern int D_001413D0 __attribute__((section(".data")));
 extern float D_L13_00161F18 __attribute__((sda));
 extern float D_L13_00161F1C __attribute__((sda));
 extern float D_L13_00161F20 __attribute__((sda));
