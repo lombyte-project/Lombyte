@@ -941,6 +941,7 @@ void FUN_L14_002de670(struct Moby *moby) {
     f32 *position;
     s32 i;
     s32 n;
+    s32 alpha;
     s32 color;
     f32 size;
     f32 absolute_velocity;
@@ -978,13 +979,15 @@ void FUN_L14_002de670(struct Moby *moby) {
             goto particles;
         }
 effect:
+        i = -1;
         FUN_L00_0025e450(moby, velocity, position, 0.0f, 0.0f, 5, 2, 4,
-                            1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, -1, 0);
+                            1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, i, 0);
         coll_sphere(1.0f, position, 0, (void *)D_001413D0);
     }
     FUN_0020c828(moby);
     return;
 particles:
+    alpha = 0x60000000;
     FUN_L00_0026cbb0_de670(position, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
                          FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 60000.0f);
     for (i = 1; i >= 0; --i) {
@@ -994,7 +997,7 @@ particles:
         color = FUN_L00_00257b90(0x30, 0xFF);
         particle = FUN_L00_0026d000_de670(position, 0.025f, 1.0f, 1.0f, n,
                                        D_L14_0015F580, size,
-                                       0x60000000 | color | color << 8 | color << 16);
+                                       color | ((color << 16) | ((color << 8) | alpha)));
         if (particle != 0) {
             particle[3] = 0x44;
             fade = particle + 0x20;
@@ -1463,7 +1466,7 @@ typedef struct {
     float damage;
     s16 unk4;
     u8 pad6[0xA];
-    float unk10;
+    float collision;
     u8 pad14[0x26];
     u8 unk3A;
     u8 unk3B;
@@ -1532,7 +1535,7 @@ void FUN_L14_002ff640(struct Moby *moby) {
         clear_ff640(&scratch.info, 0x40);
         scratch.info.unk4 = 1;
         scratch.info.damage = 1.0f;
-        scratch.info.unk10 = 0.5f;
+        scratch.info.collision = 0.5f;
         scratch.info.unk3A = 7;
         scratch.info.unk3B = 0xFF;
         take_damage_ff640(moby, hit, &scratch.info, 0, &count, 0, 0, 4);
