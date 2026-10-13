@@ -258,8 +258,8 @@ state_zero:
             *(unsigned short *)(moby + 0x34) |= 1;
             *(unsigned char *)(moby + 0x30) = 0xff;
             *(float *)(data + 0x74) = *(float *)(moby + 0x18);
-            duration = 30;
-            goto set_timer;
+            *(int *)(data + 0x7c) = timer_2d1688(30);
+            return;
         }
         index = *(int *)(data + 0x60);
         if (index == -1) {
@@ -333,9 +333,10 @@ state_two:
         }
         if (hero.state.current == 0x12) return;
         path = D_L05_001B0930[*(int *)(data + 0x60)];
-        duration = 180;
-        if (check_path_2d1688(&hero.motion.pos, path + 0x10, *(int *)path) == 0) goto set_timer;
-        duration = 600;
+        if (check_path_2d1688(&hero.motion.pos, path + 0x10, *(int *)path) != 0)
+            duration = 600;
+        else
+            duration = 180;
 set_timer:
         *(int *)(data + 0x7c) = timer_2d1688(duration);
         return;
@@ -355,7 +356,9 @@ state_three:
             hero.unk20A5 = one;
             hero.motion.pos.f[2] += 20.0f;
         }
-        *(float *)(moby + 0x18) += *(float *)(data + 0x78);
+        speed = *(float *)(data + 0x78);
+        height = *(float *)(moby + 0x18);
+        *(float *)(moby + 0x18) = height + speed;
         speed = *(float *)(data + 0x78) - frame_time_sq * 10.0f;
         *(float *)(data + 0x78) = speed;
         if (speed < frame_time + frame_time) {
@@ -370,7 +373,7 @@ state_three:
         }
         if (*(float *)(data + 0x78) < 0.0f) {
             if (*(float *)(moby + 0x18) < hero.water_surface_z && *(unsigned char *)(moby + 0xbc) == 0) {
-                *(unsigned char *)(moby + 0xbc) = 1;
+                *(unsigned char *)(moby + 0xbc) = one;
                 effect_2d1688(0, 0, moby);
                 fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
                 fast_vec_add(v, v, moby + 0x10);
