@@ -59,8 +59,7 @@ void FUN_L07_0031d2e0(char *moby) {
         data[8] = 0;
         path = D_L07_001B0530[path_index];
         count = *(int *)path;
-        i = 0;
-        if (count > 0) do {
+        for (i = 0; i < count; i++) {
             char *current_path = D_L07_001B0530[path_index];
             int next = (i + 1) % *(int *)current_path;
             float length = fast_vec_dist(current_path + 0x10 + i * 0x10,
@@ -69,8 +68,7 @@ void FUN_L07_0031d2e0(char *moby) {
             *(float *)(data + 8) += *(float *)(D_L07_001B0530[data[1]] + 0x1c + i * 0x10);
             path_index = data[1];
             count = *(int *)D_L07_001B0530[path_index];
-            i++;
-        } while (i < count);
+        }
         moby[0x20] = 1;
 
     }
