@@ -235,8 +235,14 @@ void FUN_L06_002d8738(char *moby) {
             FUN_001f9bf8(projected, projected, 1.0f);
             projected[2] += 1.0f;
             scale = FUN_001f9988(projected[2] + projected[2]);
-            uv[1] = projected[1] / (scale + scale) + 0.5f;
-            uv[0] = projected[0] / (scale + scale) + 0.5f;
+            {
+                float x = projected[0];
+                float y = projected[1];
+                y = y / (scale + scale) + 0.5f;
+                x = x / (scale + scale) + 0.5f;
+                uv[1] = y;
+                uv[0] = x;
+            }
             uv += 2;
         }
     } else {
@@ -269,16 +275,19 @@ void FUN_L06_002d8738(char *moby) {
             short *indices = D_L06_001D3620[i - 1];
             float (*corner)[4] = quad.corner;
             float *uvOut = &quad.uv[0][0];
-            for (j = 3; j >= 0; j--, indices += 2, corner++, uvOut += 2) {
+            float *uvOutSecond = &quad.uv[0][1];
+            for (j = 3; j >= 0; j--, indices += 2, corner++, uvOut += 2, uvOutSecond += 2) {
                 short vertex = indices[0];
                 qcopy(corner, D_L06_001D4530[vertex]);
                 if (near) {
-                    uvOut[0] = D_L06_001D4360[vertex][0];
-                    uvOut[1] = D_L06_001D4360[vertex][1];
+                    float *uv = D_L06_001D4360[vertex];
+                    uvOut[0] = uv[0];
+                    *uvOutSecond = uv[1];
                 } else {
                     short uv = indices[1];
-                    uvOut[0] = D_L06_001D38C0[uv][0];
-                    uvOut[1] = D_L06_001D38C0[uv][1];
+                    float *uvSource = D_L06_001D38C0[uv];
+                    uvOut[0] = uvSource[0];
+                    *uvOutSecond = uvSource[1];
                 }
             }
             FUN_001f7d30(&quad, 0, 0);
