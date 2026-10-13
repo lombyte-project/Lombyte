@@ -32,8 +32,8 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_00203908(int, int) __asm__("FUN_L00_00203908");
 extern void FUN_L00_002d5830(void *) __asm__("FUN_L00_002d5830");
 extern void FUN_001f99f8(void *) __asm__("FUN_001f99f8");
-extern int game_frame_count __asm__("D_L05_0015EEA4") NOT_SDA;
-extern int current_level_index __asm__("D_L05_0015ED84") NOT_SDA;
+extern volatile int game_frame_count __asm__("D_L05_0015EEA4") NOT_SDA;
+extern volatile int current_level_index __asm__("D_L05_0015ED84") NOT_SDA;
 typedef unsigned int L05Vector __attribute__((mode(TI), aligned(16)));
 
 typedef struct { unsigned short count, best; int flags; } VendorEventRecord;
@@ -176,7 +176,7 @@ check_second_volume:
                 value = scale_game_frames(D_L05_0015EEA4) / 600;
                 player = D_L05_0015ED84;
                 if (D_00141A8A < value) {
-                    D_00141A8A = scale_game_frames(D_L05_0015EEA4) / 600;
+                    *(volatile unsigned short *)&D_00141A8A = scale_game_frames(D_L05_0015EEA4) / 600;
                     player = current_level_index;
                 }
                 player = (1u << player) | 0x80000000u;
@@ -189,13 +189,13 @@ check_second_volume:
         if (D_0014C050[data[8] + D_L05_0015ED84 * 16] == 0xff) {
             index = D_L05_0015EEA4;
             if (D_00141A90 < 0xffff) {
-                D_00141A90++;
+                *(volatile unsigned short *)&D_00141A90 = D_00141A90 + 1;
                 index = game_frame_count;
             }
             elapsed = scale_game_frames(index) / 600;
             player = D_L05_0015ED84;
             if (D_00141A92 < elapsed) {
-                D_00141A92 = scale_game_frames(D_L05_0015EEA4) / 600;
+                *(volatile unsigned short *)&D_00141A92 = scale_game_frames(D_L05_0015EEA4) / 600;
                 player = current_level_index;
             }
             player = (1u << player) | 0x80000000u;
@@ -225,13 +225,13 @@ check_second_volume:
             (is_point_inside_clip_volume(&hero.motion.pos, data[13]) || is_point_inside_clip_volume(&hero.motion.pos, data[14]))) {
             index = D_L05_0015EEA4;
             if (D_00141C58 < 0xffff) {
-                D_00141C58++;
+                *(volatile unsigned short *)&D_00141C58 = D_00141C58 + 1;
                 index = game_frame_count;
             }
             elapsed = scale_game_frames(index) / 600;
             player = D_L05_0015ED84;
             if (D_00141C5A < elapsed) {
-                D_00141C5A = scale_game_frames(D_L05_0015EEA4) / 600;
+                *(volatile unsigned short *)&D_00141C5A = scale_game_frames(D_L05_0015EEA4) / 600;
                 player = current_level_index;
             }
             player = (1u << player) | 0x80000000u;
