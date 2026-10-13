@@ -1671,7 +1671,265 @@ void FUN_L00_002c4380(char *moby) {
     }
 }
 #endif
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c53c0.s", FUN_L00_002c53c0);
+extern int D_L00_0015F5CC_2c53c0 __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
+extern s32 D_0013DE08_2c53c0[] __asm__("D_0013DE08");
+extern float D_0015ED60_2c53c0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern float D_0015ED6C_2c53c0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern int FUN_001f96f8_2c53c0(int) __asm__("FUN_001f96f8");
+extern float FUN_001f99c0_2c53c0(float) __asm__("FUN_001f99c0");
+extern void FUN_001f9a10_2c53c0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9a28_2c53c0(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float FUN_001f9af0_2c53c0(void *) __asm__("FUN_001f9af0");
+extern float FUN_001f9b48_2c53c0(void *, void *) __asm__("FUN_001f9b48");
+extern float FUN_001f9b80_2c53c0(void *, void *) __asm__("FUN_001f9b80");
+extern void FUN_001f9bf8_2c53c0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float FUN_001f9dc8_2c53c0(float) __asm__("FUN_001f9dc8");
+typedef struct {
+    float x;
+    float y;
+    float z;
+    float w;
+} __attribute__((aligned(16))) FxVec;
+typedef struct {
+    char pad[0x34];
+    short sound_multiple;
+    short sound_single;
+    char pad2[0x14];
+} FxAmmoRecord;
+extern char D_L00_00179BC0_6720[] __asm__("D_L00_00179AC0");
+extern FxVec D_L00_00173E70_2c53c0 __asm__("D_L00_00173E70");
+extern FxVec D_L00_00173E60_2c53c0 __asm__("D_L00_00173E60");
+extern float D_0015ED70_2c53c0 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern int D_L00_00161838_2c53c0 __asm__("D_L00_00161838") __attribute__((section(".sdata")));
+extern int FUN_001f9740_2c53c0(int *) __asm__("FUN_001f9740");
+extern int FUN_L00_001f0d60_2c53c0(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern int FUN_001efa68_2c53c0(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern void FUN_001f99f8_2c53c0(void *) __asm__("FUN_001f99f8");
+extern float FUN_00213ed8_2c53c0(void *, float, float) __asm__("FUN_00213ed8");
+extern int FUN_001fa6d0_2c53c0(float) __asm__("FUN_001fa6d0");
+extern int FUN_L00_00233e40_2c53c0(int, int) __asm__("FUN_L00_00233e40");
+extern void FUN_L00_00263db0_2c53c0(int, int, int) __asm__("FUN_L00_00263db0");
+extern int FUN_001f99a8_2c53c0(int) __asm__("FUN_001f99a8");
+extern int FUN_L00_0028dc90_2c53c0(int, int, int, int) __asm__("FUN_L00_0028dc90");
+extern float FUN_L00_00250430_2c53c0(void *, void *) __asm__("FUN_L00_00250430");
+extern void FUN_0020c828_2c53c0(void *) __asm__("FUN_0020c828");
+typedef struct {
+    int amount;
+    char pad4[2];
+    short recovery_timer;
+    int weapon;
+    char padC[4];
+    Vec4f velocity;
+    int timer;
+    float rise_speed;
+    float resting_height;
+} AmmoPickup_6720;
+
+/* Update ammunition pickup physics, collection, animation and scale.
+   Animation states share one stack value; index reloads follow calls. */
+void FUN_L00_002c53c0(struct Moby *m) {
+    AmmoPickup_6720 *p;
+    unsigned int state;
+    FxVec position;
+    FxVec predicted;
+    float value;
+    float magnitude;
+    float current;
+    float target;
+    float step;
+    float remaining;
+    p = (AmmoPickup_6720 *)m->pvars;
+    FUN_001f9740_2c53c0(&p->timer);
+    state = m->state;
+    if (state == 1 || state == 4 || state == 3) {
+        magnitude = FUN_001f9af0_2c53c0(&p->velocity);
+        if (magnitude != 0.0f) {
+            qcopy(&position, &m->pos);
+            position.z += 0.5f;
+            if (FUN_L00_001f0d60_2c53c0(0.4f, &position, 2, 0)) {
+                qcopy(&m->pos, &D_L00_00173E70_2c53c0);
+                m->pos.z -= 0.5f;
+            }
+        }
+        p->velocity.z -= D_0015ED70_2c53c0 * 4.9f;
+        FUN_001f9a10_2c53c0(&predicted, &m->pos, &p->velocity);
+        p->velocity.z -= D_0015ED70_2c53c0 * 4.9f;
+        qcopy(&position, &m->pos);
+        position.z += 0.1f;
+        if (FUN_001efa68_2c53c0(&position, &predicted, 2, 0, 0)) {
+            FUN_001f99f8_2c53c0(&p->velocity);
+            qcopy(&m->pos, &D_L00_00173E60_2c53c0);
+        } else {
+            qcopy(&m->pos, &predicted);
+        }
+    }
+    switch (m->state) {
+    case 0:
+        m->state = 1;
+        break;
+    case 1: {
+        struct Hero *player;
+        float *value_ptr;
+        float height_delta;
+        float distance;
+        int duration;
+        int eligible;
+        int idx;
+        int sound_idx;
+        int account_idx;
+        int before;
+        int after;
+        int difference;
+        int sound;
+        int elapsed;
+        int random;
+        int max_ammo;
+        value_ptr = &value;
+        *value_ptr = (float)m->alpha;
+        duration = FUN_001f96f8_2c53c0(30);
+        FUN_00213ed8_2c53c0(value_ptr, 128.0f, (float)(128 / duration));
+        m->alpha = FUN_001fa6d0_2c53c0(*value_ptr);
+        if (p->timer > 0)
+            return;
+        if (FUN_001f9af0_2c53c0(&p->velocity) != 0.0f)
+            return;
+        player = &hero;
+        eligible = 1;
+        height_delta =
+            FUN_001f99c0_2c53c0(m->pos.z - player->motion.pos.f[2]);
+        if (player->reach_height < height_delta) {
+            eligible = 0;
+        } else {
+            distance = FUN_001f9b80_2c53c0(&m->pos, &player->motion.pos);
+            if (player->reach_distance < distance)
+                eligible = 0;
+        }
+        idx = p->weapon;
+        before = weapon_ammo_counts[idx];
+        max_ammo = D_L00_001C40B0[idx].hE;
+        if (before >= max_ammo)
+            eligible = 0;
+        if (m->pos.z < p->resting_height - 2.0f)
+            eligible = 1;
+        if (hero.health.hp == 0)
+            eligible = 0;
+        if (!eligible)
+            goto pickup_failed;
+
+        {
+            FUN_L00_00233e40_2c53c0(idx, p->amount);
+            sound_idx = p->weapon;
+            after = weapon_ammo_counts[sound_idx];
+            if (before < after) {
+                difference = after - before;
+                if (difference == 1) {
+                    sound = ((FxAmmoRecord *)(D_L00_00179BC0_6720 + sound_idx * sizeof(FxAmmoRecord)))->sound_single;
+                } else {
+                    sound = ((FxAmmoRecord *)(D_L00_00179BC0_6720 + sound_idx * sizeof(FxAmmoRecord)))->sound_multiple;
+                }
+                FUN_L00_00263db0_2c53c0(sound, difference, -1);
+            }
+            account_idx = p->weapon;
+            D_0013DE08_2c53c0[account_idx] += weapon_ammo_counts[account_idx] - before;
+            m->state = 2;
+            m->scale *= D_0015ED60_2c53c0 * 0.20000005f + 1.0f;
+            FUN_001f99f8_2c53c0(&p->velocity);
+            elapsed = D_L00_0015F5CC_2c53c0 - D_L00_00161838_2c53c0;
+            p->rise_speed = D_0015ED6C_2c53c0 * 8.0f;
+            random = FUN_001f99a8_2c53c0(elapsed);
+            if (FUN_001f96f8_2c53c0(10) < random) {
+                FUN_L00_0028dc90_2c53c0(0, 0, (int)m, 0xD5);
+                D_L00_00161838_2c53c0 = D_L00_0015F5CC_2c53c0;
+            }
+            return;
+        }
+    pickup_failed:
+        if (m->alpha < 0xFF)
+            ++m->alpha;
+        if (FUN_L00_00250430_2c53c0(m, hero.moby) <= -0.2f) {
+            m->state = 3;
+            p->recovery_timer = FUN_001f96f8_2c53c0(60);
+        }
+        return;
+    }
+    case 2: {
+        float limit;
+        float distance;
+        float factor;
+        float class_scale;
+        FUN_00213ed8_2c53c0(&p->rise_speed, 0.0f, D_0015ED70_2c53c0 * 24.0f);
+        m->pos.z += p->rise_speed;
+        limit = FUN_001f9af0_2c53c0(&p->velocity);
+        FUN_00213ed8_2c53c0(&limit, D_0015ED6C_2c53c0 * 64.0f, D_0015ED70_2c53c0 * 24.0f);
+        FUN_001f9a28_2c53c0(&p->velocity, &hero.motion.unkD0, &m->pos);
+        if (m->scale == 0.0f || FUN_001f9af0_2c53c0(&p->velocity) < limit) {
+            FUN_0020c828_2c53c0(m);
+            return;
+        }
+        FUN_001f9bf8_2c53c0(&p->velocity, &p->velocity, limit);
+        FUN_001f9a10_2c53c0(&m->pos, &m->pos, &p->velocity);
+        distance = FUN_001f9b48_2c53c0(&m->pos, &hero.motion.unkD0);
+        factor = (float)FUN_001f96f8_2c53c0(30);
+        factor = factor * limit;
+        factor = factor + 0.01f;
+        distance = distance / factor;
+        if (1.0f < distance) {
+            distance = 1.0f;
+        } else if (distance < 0.3f) {
+            distance = 0.3f;
+        }
+        class_scale = m->pclass->scale;
+        FUN_00213ed8_2c53c0(&m->scale, class_scale * distance, class_scale * 0.1f);
+        return;
+    }
+    case 3: {
+        float *value_ptr;
+        float angle;
+        float oscillation;
+        float target;
+        int phase;
+        int random;
+        int idx;
+        phase = D_L00_0015F5CC_2c53c0 % 60;
+        value = (float)m->alpha;
+        angle = (float)phase / 60.0f;
+        angle = angle * 6.28318f;
+        angle = angle - 3.14159f;
+        oscillation = FUN_001f9dc8_2c53c0(angle);
+        oscillation = oscillation * 5.0f;
+        oscillation = oscillation + 5.0f;
+        target = (float)(FUN_001fa6d0_2c53c0(oscillation) + 10);
+        value_ptr = &value;
+        random = FUN_001f96f8_2c53c0(30);
+        FUN_00213ed8_2c53c0(value_ptr, target, (float)(128 / random));
+        m->alpha = FUN_001fa6d0_2c53c0(*value_ptr);
+        if (FUN_L00_00250430_2c53c0(m, hero.moby) >= 0.0f) {
+            m->state = 1;
+            return;
+        }
+        idx = p->weapon;
+        if (weapon_ammo_counts[idx] <
+                D_L00_001C40B0[idx].hE) {
+            m->state = 1;
+        }
+        return;
+    }
+    case 4:
+        current = m->scale;
+        target = m->pclass->scale;
+        step = D_0015ED60_2c53c0 * 0.03f;
+        current += (target - current) * step;
+        m->scale = current;
+        target = m->pclass->scale;
+        remaining = (target - current) / target;
+        if (remaining < 0.01f) {
+            m->scale = target;
+            m->state = 1;
+            m->collision = m->pclass->collision;
+        }
+        break;
+    }
+}
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c6158.s", FUN_L00_002c6158);
 #else
