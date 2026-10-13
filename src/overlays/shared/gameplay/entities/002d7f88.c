@@ -857,13 +857,13 @@ void FUN_L00_002d9810(u8 *m) {
     float *data = *(float **)(m + 0x78);
     char *shape;
     float ratio = data[0] / D_L00_00161A10_002d9810;
-    int i, j = 0x121, color;
+    int i, j, color;
     short *indices;
     char *source;
     char *destination = D_L00_001E3DA0_002d9810;
-    char *pointA, *pointB;
+    char *pointB, *pointA;
     float *u, *v;
-    float *shiftedVector;
+    float *shiftedVector = shifted;
 
     quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AD4_002d9810);
     quad.texture[2] = 0xff9000000260ULL;
@@ -874,7 +874,6 @@ void FUN_L00_002d9810(u8 *m) {
                       ((u64)D_L00_00161AD0_002d9810 << 32);
     quad.texture[0] = 0;
     FUN_00233980_002d9810(0x47, 0x53001);
-    shiftedVector = shifted;
     ((float *)&position)[0] = *(float *)(m + 0x10);
     ((float *)&position)[1] = *(float *)(m + 0x14);
     ((float *)&position)[2] = *(float *)(m + 0x18) + 0.5f;
@@ -897,6 +896,7 @@ void FUN_L00_002d9810(u8 *m) {
     FUN_00233980_002d9810(0x14, 0xff9000000260ULL);
     FUN_00233980_002d9810(0x4a, 0);
     FUN_001f76a0_002d9810();
+    j = 0x121;
     source = D_L00_001E14C0_002d9810;
     do {
         FUN_001f9d20_002d9810(&transformed, source, shiftedVector);
@@ -921,7 +921,7 @@ void FUN_L00_002d9810(u8 *m) {
     quad.texture[1] = FUN_001f44b8_002d9810(0xb);
     quad.texture[3] = 0x8000000048ULL;
     color = FUN_001fa6d0_002d9810(ratio * 64.0f + 128.0f);
-    color = ((u32)(color + D_L00_00161B10_002d9810) << 24) | D_L00_00161AE0_002d9810;
+    color = ((u32)(D_L00_00161B10_002d9810 + color) << 24) | D_L00_00161AE0_002d9810;
     quad.colors[3] = 0;
     quad.colors[2] = 0;
     quad.colors[0] = color;
@@ -938,8 +938,8 @@ void FUN_L00_002d9810(u8 *m) {
             else
                 FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810, pointA,
                                         D_L00_001E3480_002d9810 + index * 16);
-            pointA += 16;
             pointB += 16;
+            pointA += 16;
             indices++;
         }
         quad.texcoords[0] = 0.5f;
