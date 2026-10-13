@@ -2197,9 +2197,6 @@ void FUN_L10_002e85b8(Moby *moby)
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8ab0.s", FUN_L10_002e8ab0);
-#else
 typedef struct {
     int linked;
     int targets[3];
@@ -2280,19 +2277,23 @@ state_two:
         {
             struct Moby *candidate;
             candidate = 0;
+            if (vars->targets[0] != -1) {
+                struct Moby *target;
+                target = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
+                candidate = (target != 0 && target->state != 0xfe && target->state != 0xfd) ? target : 0;
+            }
             {
                 struct Moby *target;
-                if (vars->targets[0] != -1) {
-                    target = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
-                    candidate = (target != 0 && target->state != 0xfe && target->state != 0xfd) ? target : 0;
-                }
+                target = candidate;
                 if (candidate == 0) {
                     if (vars->targets[1] != -1) {
-                        target = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
-                        if (target != 0 && target->state != 0xfe && target->state != 0xfd)
-                            candidate = target;
+                        struct Moby *candidate;
+                        candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
+                        if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
+                            target = candidate;
                     }
                 }
+                candidate = target;
             }
             target = candidate;
         }
@@ -2375,7 +2376,6 @@ remove_candidate:
         return;
     }
 }
-#endif
 typedef struct {
     int unk0;
     float home_yaw;
