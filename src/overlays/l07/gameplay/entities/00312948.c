@@ -1884,6 +1884,7 @@ void FUN_L07_00319040(struct Moby *moby) {
     f32 speed;
     union { s32 bits; f32 value; } one;
     f32 stable_one;
+    f32 effect_scale;
     f32 turn;
     f32 new_speed;
     f32 max_speed;
@@ -1968,10 +1969,14 @@ void FUN_L07_00319040(struct Moby *moby) {
             make_hit_descriptor_19040(contact, moby, 0x10001, stable_one, &dir);
             qcopy(&probe, &moby->pos);
             probe.f[2] += 0.75f;
-            if (!probe_world_sphere(0.75f, &probe, 0x10, moby, contact) ||
+            if (!(!probe_world_sphere(0.75f, &probe, 0x10, moby, contact) ||
                 D_L07_00173ED8 == NULL || D_L07_00173ED8->oclass == 0x363 ||
                 D_L07_00173ED8->oclass == 0x456 || D_L07_00173ED8->oclass == 0x458 ||
-                D_L07_00173ED8->oclass == 0x365 || D_L07_00173ED8->oclass == 0x367) {
+                D_L07_00173ED8->oclass == 0x365 || D_L07_00173ED8->oclass == 0x367)) {
+                /* The saved descriptor scale is exactly 1.0f; its difference is +0.0f. */
+                effect_scale = stable_one;
+                turn = stable_one - stable_one;
+            } else {
                 qcopy(&probe, &moby->pos);
                 probe.f[2] += 0.55f;
                 if (coll_sphere(0.55f, &probe, 0, moby)) {
@@ -1979,10 +1984,11 @@ void FUN_L07_00319040(struct Moby *moby) {
                     add_vector_xyz(&moby->pos, &moby->pos, &push);
                 }
                 if (!tick_countdown_32_alt((s32 *)(vars + 0x78))) break;
-                /* The timeout path reloads the effect scale in retail. */
-                stable_one = 1.0f;
+                /* Reload the IEEE-754 effect scale on timeout. */
+                *(s32 *)&effect_scale = 0x3f800000;
+                turn = 0.0f;
             }
-            FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, stable_one, 2, 7.0f, 0, 1, -1, 0);
+            FUN_L00_0025e450(moby, &dir, NULL, turn, turn, 3, 3, 5, 2.0f, effect_scale, 4.0f, effect_scale, 2, 7.0f, 0, 1, -1, 0);
         }
         mark_moby_for_removal(moby);
         return;
