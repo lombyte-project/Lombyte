@@ -319,7 +319,74 @@ int FUN_L04_00292828(StMoby_2939E8 *m, Steer_2939E8 *a)
     m->pos.z = m->pos.z + dz;
     return ret;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00292d48.s", FUN_L04_00292d48);
+extern void get_joint_matrix_2d48(struct Moby *, int, float *) __asm__("FUN_0020cca8");
+extern float atan2_2d48(float, float) __asm__("FUN_001f9e90");
+extern float fast_add_rotations_2d48(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations_2d48(float, float) __asm__("FUN_001fa5c8");
+extern float rig_turn_2d48(float, float, float *, float, float, float) __asm__("FUN_L00_00258110");
+extern void axis_rotation_2d48(float *, int, float) __asm__("FUN_L00_001fff28");
+extern void quat_multiply_2d48(float *, float *, float *) __asm__("FUN_001fa3c0");
+extern f32 frame_scale_2d48 __asm__("D_0015ED60");
+
+void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
+    float joint[16];
+    float tilt[4];
+    float twist;
+    float base_yaw;
+    float heading;
+    LegRigLeg *leg;
+    int mask;
+    LegRig *row;
+    int i;
+
+    mask = 3;
+    for (i = 0; i < 2; i++) {
+        leg = &rig->legs[i];
+        get_joint_matrix_2d48(moby, leg->joint, joint);
+        heading = atan2_2d48(joint[4], joint[5]);
+        twist = fast_add_rotations_2d48(
+            fast_add_rotations_2d48(fast_subtract_rotations_2d48(leg->yaw, heading), leg->upper_turn),
+            leg->lower_turn);
+        base_yaw = fast_subtract_rotations_2d48(heading, twist);
+        if (rig->unkB7 == 0 || (flags & mask) == 0) {
+            leg->upper_turn = rig_turn_2d48(leg->upper_turn, 0.0f, &rig->legs[i].upper_turn_speed, 0.1f, 0.1f,
+                                           frame_scale_2d48 * 0.034906585f);
+            leg->lower_turn = rig_turn_2d48(leg->lower_turn, 0.0f, &rig->legs[i].lower_turn_speed, 0.1f, 0.1f,
+                                           frame_scale_2d48 * 0.034906585f);
+        } else {
+            if (rig->unkB7 == 13)
+                leg->upper_turn = rig_turn_2d48(leg->upper_turn, 0.0f, &rig->legs[i].upper_turn_speed, 0.1f, 0.1f,
+                                               frame_scale_2d48 * 0.034906585f);
+            else
+                leg->upper_turn = rig_turn_2d48(leg->upper_turn, twist * 0.5f, &rig->legs[i].upper_turn_speed, 0.1f,
+                                               0.1f, frame_scale_2d48 * 0.034906585f);
+            leg->lower_turn = fast_subtract_rotations_2d48(twist, leg->upper_turn);
+            leg->lower_turn_speed = 0.0f;
+        }
+        /* Fakematch: the later fields are read through the rig shifted by one leg stride. */
+        row = (LegRig *)((char *)rig + i * sizeof(LegRigLeg));
+        if (leg->upper_turn < leg->angle_min)
+            leg->upper_turn = leg->angle_min;
+        if (row->legs[0].upper_turn > row->legs[0].angle_max)
+            row->legs[0].upper_turn = row->legs[0].angle_max;
+        if (row->legs[0].lower_turn < row->legs[0].angle_min)
+            row->legs[0].lower_turn = row->legs[0].angle_min;
+        if (row->legs[0].lower_turn > row->legs[0].angle_max)
+            row->legs[0].lower_turn = row->legs[0].angle_max;
+        row->legs[0].yaw = fast_add_rotations_2d48(row->legs[0].upper_turn, base_yaw);
+        row->legs[0].yaw = fast_add_rotations_2d48(row->legs[0].lower_turn, row->legs[0].yaw);
+        if (row->legs[0].manip_b.attached)
+            axis_rotation_2d48(rig->legs[i].manip_b.rot, 2, row->legs[0].upper_turn);
+        if (row->legs[0].manip_a.attached) {
+            axis_rotation_2d48(rig->legs[i].manip_a.rot, 2, row->legs[0].lower_turn);
+            if (flags & mask) {
+                axis_rotation_2d48(tilt, 0, -moby->rot.x);
+                quat_multiply_2d48(rig->legs[i].manip_a.rot, rig->legs[i].manip_a.rot, tilt);
+            }
+        }
+        mask <<= 2;
+    }
+}
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00295778.s", FUN_L04_00295778);
 #else
@@ -525,8 +592,8 @@ void FUN_L04_00295de8(struct Moby *m, LegRig *rig) {
     transform_joint_points(m, 6, joints, rig);
     for (i = 0; i < 2; i++) {
         get_joint_matrix(m, rig->legs[i].joint, mtx[0]);
-        rig->legs[i].unk14 = 0;
-        rig->legs[i].unkC = 0;
+        rig->legs[i].upper_turn = 0;
+        rig->legs[i].lower_turn = 0;
         rig->legs[i].yaw = FUN_001f9e90(mtx[1][0], mtx[1][1]);
         if (rig->legs[i].manip_b.attached == 0)
             attach_rig_manip(m, rig->legs[i].slot_b, &rig->legs[i].manip_b);

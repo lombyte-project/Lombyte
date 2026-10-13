@@ -10,7 +10,9 @@
 typedef struct {
     /* 0x00 */ u8 unk0;
     /* 0x01 */ u8 attached;
-    /* 0x02 */ u8 pad2[0x3E];
+    /* 0x02 */ u8 pad2[0xE];
+    /* 0x10 */ f32 rot[4];            /* quaternion, turned by FUN_L04_00292d48 */
+    /* 0x20 */ u8 pad20[0x20];
 } LegRigManip;
 
 /* One leg: joint ids, yaw, angle limits and its two manipulators. */
@@ -21,10 +23,10 @@ typedef struct {
     /* 0x03 */ u8 slot_b;
     /* 0x04 */ u8 pad4[4];
     /* 0x08 */ f32 yaw;
-    /* 0x0C */ s32 unkC;
-    /* 0x10 */ u8 pad10[4];
-    /* 0x14 */ s32 unk14;
-    /* 0x18 */ u8 pad18[4];
+    /* 0x0C */ f32 lower_turn;        /* turns manip_a */
+    /* 0x10 */ f32 lower_turn_speed;
+    /* 0x14 */ f32 upper_turn;        /* turns manip_b */
+    /* 0x18 */ f32 upper_turn_speed;
     /* 0x1C */ f32 angle_min;         /* set by FUN_L04_00292370 */
     /* 0x20 */ f32 angle_max;
     /* 0x24 */ u8 pad24[0xC];
