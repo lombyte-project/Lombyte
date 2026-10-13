@@ -790,30 +790,32 @@ void FUN_L00_002772c0(s32 param_1) {
             }
             out_left = 0;
             out_top = 0;
-            out_right = width;
-            out_bottom = height;
             if ((flags & 2) != 0) {
                 out_right = texture_width;
                 out_bottom = texture_height;
-            } else if ((flags & 8) != 0) {
-                out_left = (width - texture_width) / 2;
-                out_top = (height - texture_height) / 2;
-                out_right = width - out_left;
-                if (width < out_right) out_right = width;
-                out_bottom = height - out_top;
-                if (height < out_bottom) out_bottom = height;
-                if (out_left < 0) out_left = 0;
-                if (out_top < 0) out_top = 0;
-            } else if ((flags & 4) != 0) {
-                if (texture_width < texture_height) {
-                    out_left = width / 2 - (texture_width * width) / (texture_height << 1);
+            } else {
+                out_right = width;
+                out_bottom = height;
+                if ((flags & 8) != 0) {
+                    out_left = (width - texture_width) / 2;
+                    out_top = (height - texture_height) / 2;
                     out_right = width - out_left;
-                } else {
-                    out_top = height / 2 - (texture_height * height) / (texture_width << 1);
+                    if (width < out_right) out_right = width;
                     out_bottom = height - out_top;
+                    if (height < out_bottom) out_bottom = height;
+                    if (out_left < 0) out_left = 0;
+                    if (out_top < 0) out_top = 0;
+                } else if ((flags & 4) != 0) {
+                    if (texture_width < texture_height) {
+                        out_left = width / 2 - (texture_width * width) / (texture_height << 1);
+                        out_right = width - out_left;
+                    } else {
+                        out_top = height / 2 - (texture_height * height) / (texture_width << 1);
+                        out_bottom = height - out_top;
+                    }
+                } else if ((flags & 0x10) == 0) {
+                    continue;
                 }
-            } else if ((flags & 0x10) == 0) {
-                continue;
             }
             FUN_L00_001fa290(right, bottom, texture_width, texture_height,
                               out_left, out_top, out_right - out_left, out_bottom - out_top,
