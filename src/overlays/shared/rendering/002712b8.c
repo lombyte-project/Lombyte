@@ -472,7 +472,8 @@ void FUN_L00_002721f0(unsigned char *p) {
                                 (*(unsigned int *)(p + 4) & 0xFFFFFF);
     r = (float *)(q + 0xC);
     *(volatile float *)&v[0] = *(float *)(q + 0xC);
-    *(volatile float *)&v[1] = r[1];
+    t = *(volatile float *)&r[1];
+    *(volatile float *)&v[1] = t;
     *(volatile float *)&v[2] = *(volatile float *)&r[2];
     *(int *)&v[3] = 0;
     FUN_001f9a10_2721f0(p + 0x10, p + 0x10, &v);
