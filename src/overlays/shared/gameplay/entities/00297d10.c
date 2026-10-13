@@ -1922,6 +1922,10 @@ void FUN_L06_002f2250(void) {
 
         i = 0;
         do {
+            int index, weight, j;
+            GbMoby *target;
+            GbClass *cls;
+            int n, count;
             index = 0;
             weight = 0;
             for (j = 0; j < target_count; j++) {
@@ -1932,11 +1936,16 @@ void FUN_L06_002f2250(void) {
             }
             weights[index] = -1;
             target = target_list[index];
+            count = 0;
+            n = 1;
             cls = FUN_002141f8_2f2250(target);
-            n = cls != 0 ? *(short *)((char *)cls + 4) : 1;
-            for (count = 0; count < n; count++) {
-                best_score = 9999999.0f;
-                best_moby = 0;
+            if (cls != 0) n = *(short *)((char *)cls + 4);
+            for (; count < n; count++) {
+                float best_score = 9999999.0f;
+                GbMoby *best_moby = 0;
+                GbMoby *moby;
+                GbVars *vars;
+                int k, last;
                 for (k = 0; k < moby_count; k++) {
                     moby = mobys[k];
                     vars = moby->vars;
