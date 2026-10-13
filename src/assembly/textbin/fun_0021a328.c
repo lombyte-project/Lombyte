@@ -110,9 +110,9 @@ int render_configured_text_label(struct MenuScreen *label) {
         struct MenuScreen *page = menu_system.current->focus;
         value_index = page->data.grid.selected_cell;
         entry = &page->data.grid.cells[value_index];
-        item_id = entry->id;
+        flags = entry->id;
         availability_table = entry->kind == 0 ? item_available : alternate_item_available;
-        flags = availability_table[item_id];
+        flags = availability_table[flags];
         if (flags != 0) {
             value_index = page->data.grid.selected_cell;
         } else {
