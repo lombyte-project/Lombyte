@@ -1319,12 +1319,13 @@ extern int FUN_L09_0030a298(struct Moby *);
 void FUN_L09_00309c08(struct Moby *moby) {
     PathFlyerVars_00309c08 *vars = (PathFlyerVars_00309c08 *)moby->pvars;
     PathNodes_00309c08 *path = (PathNodes_00309c08 *)D_L09_001B0630[vars->path];
+    Vec4 *position = &moby->pos;
     Vec4 original;
     Vec4 rotation;
     s16 dir;
     s32 voice;
 
-    scale_vector_00309c08(-1.0f, &original, &moby->pos);
+    scale_vector_00309c08(-1.0f, &original, position);
     qcopy(&rotation, &moby->rot);
     if (vars == 0) return;
 
@@ -1346,11 +1347,11 @@ void FUN_L09_00309c08(struct Moby *moby) {
                 vars->node = path->count - 2;
                 endpoint = &path->node[path->count - 1];
             } else {
-                vars->node = 1;
-                endpoint = &path->node[0];
                 vars->dir = 1;
+                endpoint = &path->node[0];
+                vars->node = 1;
             }
-            *(OvlQuad *)&moby->pos = *(OvlQuad *)endpoint;
+            *position = *endpoint;
             moby->rot.z = atan2_f(path->node[vars->node].f[0] - moby->pos.x,
                                    path->node[vars->node].f[1] - moby->pos.y);
         }
