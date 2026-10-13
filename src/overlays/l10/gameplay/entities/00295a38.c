@@ -2099,42 +2099,55 @@ void FUN_L10_002dcc58(struct Moby *moby) {
         *(float *)(data + 0x12de0) = phase;
         if (phase > 1.0f) *(float *)(data + 0x12de0) = phase - 1.0f;
         {
-        char *group_table = data + 0x12c00;
-        for (group = 0; group < 4; group++) {
-            for (item = 0; item < 10; item++) {
-                char *entry = group_table + item * 4;
-                char *base = data + group * 0x2580 + item * 0x10;
-                char *other = base + 0x9600;
-                char *buffer = (char *)scratch + item * 0x10;
-                if (FUN_001f25d0(entry) != 0) {
-                    char *dst = base;
-                    char *out = buffer;
-                    for (row = 0; row < 20; row++) {
-                        FUN_001f28c8(dst);
-                        *(float *)(dst + 0xc) = 1.0f;
-                        *(float *)(dst + 4) = (float)row * (D_L10_00161D58 / 20.0f) - D_L10_00161D58 * 0.5f;
-                        FUN_L10_0024a7f0(0.0f, D_L10_00161D54 * frame_time, out);
-                        dst += 0x140;
-                        out += 0xa0;
+            int group_table = 0x12c00;
+            for (group = 0; group < 4; group++) {
+                for (item = 0; item < 10; item++) {
+                    char *entry = data + (group * 0x78 + group_table) + item * 4;
+                    char *base = data + group * 0x2580;
+                    char *other = data + (group * 0x2580 + 0x9600);
+                    char *buffer = (char *)scratch + item * 0x10;
+                    if (FUN_001f25d0(entry) != 0) {
+                        char *dst = data + (item * 0x10 + group * 0x2580);
+                        char *current = base + item * 0x10;
+                        char *out = buffer;
+                        for (row = 0; row < 20; row++) {
+                            float phase;
+                            float value;
+                            FUN_001f28c8(current);
+                            current += 0x140;
+                            phase = D_L10_00161D58;
+                            value = D_L10_00161D54 * frame_time;
+                            *(float *)(dst + 0xc) = 1.0f;
+                            *(float *)(dst + 4) = (float)row * (phase / 20.0f) - phase * 0.5f;
+                            FUN_L10_0024a7f0(0.0f, value, out);
+                            dst += 0x140;
+                            out += 0xa0;
+                        }
+                        {
+                            char *dst = other + item * 0x10 + 0x140;
+                            char *current = buffer;
+                            char *out = buffer + 0x140;
+                            for (row = 17; row >= 0; row--) {
+                                FUN_001f28e0(dst, current, current + 0xa0);
+                                FUN_001f28e0(dst, dst, out);
+                                FUN_001f2968(0.333f, dst, dst);
+                                dst += 0x140;
+                                current += 0xa0;
+                                out += 0xa0;
+                            }
+                        }
+                        *(int *)entry = D_L10_00161D64;
+                    } else {
+                        char *dst = base + item * 0x10 + 0x140;
+                        char *out = other + item * 0x10 + 0x140;
+                        for (row = 17; row >= 0; row--) {
+                            FUN_001f28e0(dst, dst, out);
+                            dst += 0x140;
+                            out += 0x140;
+                        }
                     }
-                    for (row = 0; row < 18; row++) {
-                        char *dst = other + (row + 1) * 0x140;
-                        char *current = buffer + row * 0xa0;
-                        FUN_001f28e0(dst, current, current + 0xa0);
-                        FUN_001f28e0(dst, dst, buffer + 0x140 + row * 0xa0);
-                        FUN_001f2968(0.333f, dst, dst);
-                    }
-                    *(int *)entry = D_L10_00161D64;
-                } else {
-                    for (row = 1; row < 19; row++) {
-                        char *dst = base + row * 0x140;
-                        FUN_001f28e0(dst, dst, other + row * 0x140);
-                    }
-
                 }
             }
-            group_table += 0x78;
-        }
         }
         break;
     }
