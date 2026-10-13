@@ -1224,170 +1224,201 @@ ready:
     }
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002ed398.s", FUN_L15_002ed398);
-#else
-extern int D_L15_0015F5A4;
-extern int D_L15_0015FFD8;
-extern unsigned int D_001413DC;
-extern float D_0013F3D0[];
-extern int D_001413D4;
-extern int D_001413D0;
-extern unsigned char D_001413F4;
-extern unsigned char D_0013D4DF;
-extern unsigned char D_0013D4C4;
-extern unsigned char D_0013D3F6;
-extern unsigned char D_0013D3F7;
-extern int D_L15_00179A10;
-extern int D_L15_00179A34;
-extern unsigned short D_00141D42;
-extern unsigned short D_00141D48;
-extern unsigned short D_00141DA8;
-extern unsigned short D_00141D4A;
-extern unsigned int D_00141D4C;
-extern int D_00141D54;
-extern int D_00141D6C;
-extern unsigned int D_00141D7C;
-extern unsigned short D_00141DB0;
-extern unsigned short D_00141630;
-extern int D_L15_00161AC0;
-extern int D_L15_0015EEA4;
-extern int D_L15_0015ED84;
-extern int FUN_001f96f8(int) __asm__("FUN_001f96f8");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void FUN_L00_00203908(int, int) __asm__("FUN_L00_00203908");
-extern int FUN_L00_0020d568(void) __asm__("FUN_L00_0020d568");
 
-void FUN_L15_002ed398(struct Moby *moby) {
-    int *data = (int *)moby->pvars;
-    int i, found, target, index, *p;
-    unsigned char *m;
-    unsigned char state = moby->state;
-    unsigned char *flags;
-    int v;
-    switch (state) {
+typedef struct Talk_2ed398 {
+    int zone[4];
+    int npc[3];
+    int vol1C;
+    int vol20[3];
+    int vol2C;
+    int pad30;
+    int wait;
+    int hold38;
+    int hold3C;
+    int last;
+    char pad44[0x54 - 0x44];
+    int vol54;
+} Talk_2ed398;
+typedef struct Help_2ed398 {
+    int busy;
+    char p0[0x24 - 4];
+    int cur;
+} Help_2ed398;
+typedef struct Stats_2ed398 {
+    char p0[0x3DA];
+    unsigned short t3DA;
+    char p1[0x3E0 - 0x3DC];
+    unsigned short n3E0;
+    unsigned short t3E2;
+    int lv3E4;
+} Stats_2ed398;
+typedef struct Items_2ed398 {
+    char p0[0x6E];
+    unsigned char f6E;
+    unsigned char f6F;
+} Items_2ed398;
+
+extern int scale_game_frames_2ed398(int) __asm__("FUN_001f96f8");
+extern int is_point_inside_clip_volume_2ed398(void *, int) __asm__("FUN_00214720");
+extern int show_help_message_2ed398(int, int) __asm__("FUN_L00_00203908");
+extern int FUN_L00_0020d568_2ed398(void) __asm__("FUN_L00_0020d568");
+extern unsigned char D_0013D4DF_2ed398[] __asm__("D_0013D4DF");
+extern int D_0015EEA4_2ed398 __asm__("D_0015EEA4") __attribute__((section(".sdata")));
+extern int current_level_index_2ed398 __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_L15_0015F5A4_2ed398 __asm__("D_L15_0015F5A4") __attribute__((section(".sdata")));
+extern int D_L15_00161AC0_2ed398 __asm__("D_L15_00161AC0") __attribute__((section(".sdata")));
+extern char *moby_list_2ed398 __asm__("D_L15_0015FFD8") __attribute__((section(".sdata")));
+extern char D_L15_00179A10_2ed398[] __asm__("D_L15_00179A10");
+extern char D_00141680_2ed398[] __asm__("D_00141680");
+extern char D_00141968_2ed398[] __asm__("D_00141968");
+extern unsigned char D_0013D388_2ed398[] __asm__("D_0013D388");
+extern unsigned char D_0013D4C4_2ed398[] __asm__("D_0013D4C4");
+
+/* Quartu moby update (class 1469): hint and dialogue triggers from the hero's zones, with the play-time
+   records of the two hint messages. */
+void FUN_L15_002ed398(struct Moby *m) {
+    Talk_2ed398 *t = (struct Talk_2ed398 *)m->pvars;
+    int st = m->state;
+    struct Moby *e;
+    int i, j, found, npc, pick;
+
+    switch (st) {
     case 0:
-        moby->update_dist = 0xFF;
-        data[13] = FUN_001f96f8(0x4B0);
-        moby->state = 1;
+        m->update_dist = 0xFF;
+        t->wait = scale_game_frames_2ed398(0x4B0);
+        m->state = 1;
         break;
     case 1:
-        v = D_L15_0015F5A4;
-        index = data[4];
-        if (index != -1 &&
-            (m = (unsigned char *)(D_L15_0015FFD8 + (index << 8))) != 0 &&
-            *(short *)(m + 0xA6) == 0x4E &&
-            m[0x20] != 0xFE && m[0x20] != 0xFD && m[0x20] != 3 &&
-            is_point_inside_clip_volume(D_0013F3D0, data[3]) &&
-            (D_001413DC < 2 || D_001413DC == 9) &&
-            D_L15_00179A10 == 0 && D_L15_00179A34 == -1) {
-            if (D_0013D4DF == 0) {
-                int elapsed = FUN_001f96f8(D_L15_0015EEA4) - D_00141D42 * 600;
-                if ((int)((float)FUN_001f96f8(0x12) * 60.0f) < elapsed ||
-                    D_00141D42 * 600 == 0) {
-                    FUN_L00_00203908(0x3A98, 0x7B);
-                } else if (D_00141D42 < FUN_001f96f8(D_L15_0015EEA4) / 600) {
-                    D_00141D42 = FUN_001f96f8(D_L15_0015EEA4) / 600;
-                }
-            } else if (D_00141D48 == 0) {
-                D_00141D48 = 1;
-                if (D_00141D4A < FUN_001f96f8(D_L15_0015EEA4) / 600)
-                    D_00141D4A = FUN_001f96f8(D_L15_0015EEA4) / 600;
-                D_00141D4C = D_00141D4C | (600u << (D_L15_0015ED84 & 31)) | 0x80000000u;
-            } else {
-                int elapsed = FUN_001f96f8(D_L15_0015EEA4) - D_00141D4A * 600;
-                if ((int)((float)FUN_001f96f8(0x12) * 60.0f) < elapsed ||
-                    D_00141D4A * 600 == 0) {
-                    FUN_L00_00203908(0x3A99, 0x7C);
-                } else if (D_00141D4A < FUN_001f96f8(D_L15_0015EEA4) / 600) {
-                    D_00141D4A = FUN_001f96f8(D_L15_0015EEA4) / 600;
+        if (t->npc[0] != -1) {
+            e = (struct Moby *)(moby_list_2ed398 + (t->npc[0] << 8));
+            if (e != 0 && e->oclass == 0x4E && e->state != 0xFE && e->state != 0xFD && e->state != 3
+                && is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->zone[3]) != 0
+                && (hero.state.control_mode < 2u || hero.state.control_mode == 9)
+                && ((Help_2ed398 *)D_L15_00179A10_2ed398)->busy == 0 && ((Help_2ed398 *)D_L15_00179A10_2ed398)->cur == -1) {
+                if (D_0013D4DF_2ed398[0] == 0) {
+                    int lim, now;
+                    now = scale_game_frames_2ed398(D_0015EEA4_2ed398);
+                    lim = now - ((Stats_2ed398 *)D_00141968_2ed398)->t3DA * 600;
+                    if ((int)((float)scale_game_frames_2ed398(0x12) * 60.0f) < lim || ((Stats_2ed398 *)D_00141968_2ed398)->t3DA * 600 == 0) {
+                        show_help_message_2ed398(0x3A98, 0x7B);
+                    } else {
+                        now = scale_game_frames_2ed398(D_0015EEA4_2ed398);
+                        if (now / 600 > ((Stats_2ed398 *)D_00141968_2ed398)->t3DA) {
+                            ((Stats_2ed398 *)D_00141968_2ed398)->t3DA = scale_game_frames_2ed398(D_0015EEA4_2ed398) / 600;
+                        }
+                    }
+                } else if (((Stats_2ed398 *)D_00141968_2ed398)->n3E0 != 0) {
+                    int lim, now;
+                    now = scale_game_frames_2ed398(D_0015EEA4_2ed398);
+                    lim = now - ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 * 600;
+                    if ((int)((float)scale_game_frames_2ed398(0x12) * 60.0f) < lim || ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 * 600 == 0) {
+                        show_help_message_2ed398(0x3A99, 0x7C);
+                    } else {
+                        now = scale_game_frames_2ed398(D_0015EEA4_2ed398);
+                        if (now / 600 > ((Stats_2ed398 *)D_00141968_2ed398)->t3E2) {
+                            ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 = scale_game_frames_2ed398(D_0015EEA4_2ed398) / 600;
+                        }
+                    }
+                } else {
+                    int now;
+                    ((Stats_2ed398 *)D_00141968_2ed398)->n3E0++;
+                    now = scale_game_frames_2ed398(D_0015EEA4_2ed398);
+                    if (now / 600 > ((Stats_2ed398 *)D_00141968_2ed398)->t3E2) {
+                        ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 = scale_game_frames_2ed398(D_0015EEA4_2ed398) / 600;
+                    }
+                    ((Stats_2ed398 *)D_00141968_2ed398)->lv3E4 = ((Stats_2ed398 *)D_00141968_2ed398)->lv3E4 | (1 << current_level_index_2ed398) | 0x80000000;
                 }
             }
         }
-        v = D_L15_0015F5A4;
-        if (v && D_L15_00179A10 == 0 &&
-            D_L15_00179A34 == -1 && D_00141DB0 == 0) {
-            FUN_L00_00203908(0x3A9F, 0x89);
-            D_L15_0015F5A4 = 0;
+        if (D_L15_0015F5A4_2ed398 != 0 && ((Help_2ed398 *)D_L15_00179A10_2ed398)->busy == 0
+            && ((Help_2ed398 *)D_L15_00179A10_2ed398)->cur == -1 && *(unsigned short *)(D_00141680_2ed398 + 0x730) == 0) {
+            show_help_message_2ed398(0x3A9F, 0x89);
+            D_L15_0015F5A4_2ed398 = 0;
         }
-        if (is_point_inside_clip_volume(D_0013F3D0, data[21]) &&
-            D_001413F4 == 3 && D_00141630 == 0 &&
-            D_L15_00161AC0 == 0 && D_00141DA8 == 0) {
-            FUN_L00_00203908(0x3A9E, 0x88);
+        if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->vol54) != 0
+            && hero.vehicle_mode == 3 && hero.unk22E0 == 0
+            && D_L15_00161AC0_2ed398 == 0 && *(unsigned short *)(D_00141680_2ed398 + 0x728) == 0) {
+            show_help_message_2ed398(0x3A9E, 0x88);
         }
-        flags = &D_0013D3F6;
-        target = -1;
-        index = -1;
+        pick = -1;
+        npc = -1;
         found = 0;
         for (i = 0; i < 1; i++) {
-            p = data + i;
-            if (is_point_inside_clip_volume(D_0013F3D0, *p)) {
-                target = *p;
-                index = p[4];
+            if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->zone[i]) != 0) {
+                pick = t->zone[i];
+                npc = t->npc[i];
                 found = 1;
                 break;
             }
         }
-        if (found)
-            data[15]++;
-        else {
-            data[15] = 0;
-            data[16] = -1;
+        if (found != 0) {
+            t->hold3C = t->hold3C + 1;
+        } else {
+            t->hold3C = 0;
+            t->last = -1;
         }
-        if (index != -1 &&
-            (m = (unsigned char *)(D_L15_0015FFD8 + (index << 8))) != 0 &&
-            *(short *)(m + 0xA6) == 0x4E &&
-            m[0x20] != 0xFE && m[0x20] != 0xFD && m[0x20] != 3 &&
-            data[13] < data[15] && target != -1 && target != data[16] &&
-            (D_001413DC < 2 || D_001413DC == 9) &&
-            D_L15_00179A10 == 0 && D_L15_00179A34 == -1 && D_0013D4DF) {
-            data[13] = FUN_001f96f8(0x708);
-            if (D_00141D54 >= 0)
-                FUN_L00_00203908(0x3A9A, 0x7D);
-            data[16] = target;
-            data[15] = 0;
+        if (npc != -1) {
+            e = (struct Moby *)(moby_list_2ed398 + (npc << 8));
+            if (e != 0 && e->oclass == 0x4E && e->state != 0xFE && e->state != 0xFD && e->state != 3
+                && t->hold3C > t->wait && pick != -1 && pick != t->last
+                && (hero.state.control_mode < 2u || hero.state.control_mode == 9)
+                && ((Help_2ed398 *)D_L15_00179A10_2ed398)->busy == 0 && ((Help_2ed398 *)D_L15_00179A10_2ed398)->cur == -1
+                && D_0013D4DF_2ed398[0] != 0) {
+                t->wait = scale_game_frames_2ed398(0x708);
+                if (*(int *)(D_00141680_2ed398 + 0x6D4) >= 0) {
+                    show_help_message_2ed398(0x3A9A, 0x7D);
+                }
+                t->last = pick;
+                t->hold3C = 0;
+            }
         }
-        if (*(unsigned char *)(D_001413D0 + 0x52) == 12 && D_001413F4 == 2)
-            flags[1] = 1;
-        if (is_point_inside_clip_volume(D_0013F3D0, data[7]) &&
-            D_001413F4 == 2 && flags[1] == 0 &&
-            D_L15_00179A10 == 0 && D_L15_00179A34 == -1 && D_00141D6C >= 0)
-            FUN_L00_00203908(0x3A9C, 0x80);
-        if (is_point_inside_clip_volume(D_0013F3D0, data[8]) &&
-            D_L15_00179A10 == 0 && D_L15_00179A34 == -1 &&
-            D_0013D4C4 == 0 &&
-            (D_00141D7C & (1 << (D_L15_0015ED84 & 31))) == 0)
-            FUN_L00_00203908(0x3A9D, 0x82);
-        target = -1;
+        if (hero.moby->seq == 0xC && hero.vehicle_mode == 2) {
+            ((Items_2ed398 *)D_0013D388_2ed398)->f6F = 1;
+        }
+        if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->vol1C) != 0 && hero.vehicle_mode == 2
+            && ((Items_2ed398 *)D_0013D388_2ed398)->f6F == 0 && ((Help_2ed398 *)D_L15_00179A10_2ed398)->busy == 0
+            && ((Help_2ed398 *)D_L15_00179A10_2ed398)->cur == -1 && *(int *)(D_00141680_2ed398 + 0x6EC) >= 0) {
+            show_help_message_2ed398(0x3A9C, 0x80);
+        }
+        if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->vol20[0]) != 0 && ((Help_2ed398 *)D_L15_00179A10_2ed398)->busy == 0
+            && ((Help_2ed398 *)D_L15_00179A10_2ed398)->cur == -1 && D_0013D4C4_2ed398[0] == 0
+            && !(*(unsigned int *)(D_00141680_2ed398 + 0x6FC) & (1 << current_level_index_2ed398))) {
+            show_help_message_2ed398(0x3A9D, 0x82);
+        }
+        pick = -1;
         found = 0;
-        p = data + 8;
-        for (i = 0; i < 3; i++, p++) {
-            if (is_point_inside_clip_volume(D_0013F3D0, *p)) {
+        for (j = 0; j < 3; j++) {
+            if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->vol20[j]) != 0) {
                 found = 1;
-                if (data[16] != *p)
-                    target = *p;
+                if (t->last != t->vol20[j]) {
+                    pick = t->vol20[j];
+                }
                 break;
             }
         }
-        if (!found || (++data[14], D_001413D4 == 0x35)) {
-            data[14] = 0;
-            data[16] = -1;
+        if (found == 0) {
+            t->hold38 = 0;
+            t->last = -1;
+        } else {
+            t->hold38 = t->hold38 + 1;
+            if (hero.state.current == 0x35) {
+                t->hold38 = 0;
+                t->last = -1;
+            }
         }
-        v = FUN_001f96f8(0xE10);
-        if (v < data[14] && target != -1 &&
-            FUN_L00_0020d568() && D_L15_00179A10 == 0 &&
-            D_L15_00179A34 == -1 && D_0013D4C4) {
-            FUN_L00_00203908(0x4E2E, 0x78);
-            data[16] = target;
-            data[14] = 0;
+        if (scale_game_frames_2ed398(0xE10) < t->hold38 && pick != -1 && FUN_L00_0020d568_2ed398() != 0
+            && ((Help_2ed398 *)D_L15_00179A10_2ed398)->busy == 0 && ((Help_2ed398 *)D_L15_00179A10_2ed398)->cur == -1
+            && D_0013D4C4_2ed398[0] != 0) {
+            show_help_message_2ed398(0x4E2E, 0x78);
+            t->last = pick;
+            t->hold38 = 0;
         }
-        if (flags[0] == 0 &&
-            is_point_inside_clip_volume(D_0013F3D0, data[11]))
-            flags[0] = 1;
+        if (((Items_2ed398 *)D_0013D388_2ed398)->f6E == 0 && is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->vol2C) != 0) {
+            ((Items_2ed398 *)D_0013D388_2ed398)->f6E = 1;
+        }
         break;
     }
 }
-#endif
 /* Waits for state 1, then passes the slot for the level's current mode to FUN_L00_002637f8. */
 struct L15MissionState {
     char pad0[0x30];
