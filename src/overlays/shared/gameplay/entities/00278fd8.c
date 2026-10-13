@@ -2293,7 +2293,6 @@ extern float D_L15_001CE2F0[4][4];
 extern float D_L15_001CE330[4][4];
 
 int FUN_L15_002a3138(unsigned char *moby) {
-    extern int D_L15_001614C8_pairs[12] __asm__("D_L15_001614C8") __attribute__((sda));
     EffectQuad first, second;
     float transform[12];
     float position[4];
@@ -2317,7 +2316,7 @@ int FUN_L15_002a3138(unsigned char *moby) {
     }
     for (pass = 0; pass < 6; pass++) {
         int parity = pass & 1;
-        int *pairs = D_L15_001614C8_pairs;
+        int *pairs = &D_L15_001614C8;
         int level;
         first.alpha =
             (unsigned long long)pairs[4 + parity] |
@@ -2347,9 +2346,9 @@ int FUN_L15_002a3138(unsigned char *moby) {
         second.col[2] = level;
         for (corner = 0; corner < 4; corner++) {
             float *frequency = D_L15_001CE250[pass];
-            int *waveform = D_L15_001CE290[pass];
+            int waveform = pass * 8;
             float *uv = first.uv[corner];
-            float *base = D_L15_001CE2D0[corner];
+            int base = corner * 8;
             axis = 1;
             do {
                 int limit, value;
@@ -2357,16 +2356,18 @@ int FUN_L15_002a3138(unsigned char *moby) {
                 float step = 0.125f;
                 axis--;
                 limit = truncate_float_2a3138(*frequency * 360.0f);
-                angle = integer_to_float_2a3138(*(volatile int *)0x0015f3f8 % limit)
+                angle = integer_to_float_2a3138(*(int *)0x0015f3f8 % limit)
                     / *frequency - 180.0f;
                 frequency++;
-                value = *waveform++;
+                value = *(int *)((char *)D_L15_001CE290 + waveform);
+                waveform += 4;
                 if (value != 0) {
                     delta = fast_cos_2a3138(angle * 0.017453292f) * step;
                 } else {
                     delta = fast_sin_2a3138(angle * 0.017453292f) * step;
                 }
-                *uv++ = *base++ + delta;
+                *uv++ = *(float *)((char *)D_L15_001CE2D0 + base) + delta;
+                base += 4;
             } while (axis >= 0);
         }
         for (component = 0; component < 2; component++) {
