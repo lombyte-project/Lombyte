@@ -51,6 +51,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
     u8 matrix[64];
     struct Moby *child;
     u16 save_id;
+    u8 *save_byte;
     s32 first;
     s32 second;
     s32 divisor;
@@ -94,7 +95,9 @@ void FUN_L15_002e5958(struct Moby *moby) {
     case 1:
     case 2:
         save_id = moby->save_id;
-        if (D_L15_001BB830[0x454 + (s16)save_id] != 0 ||
+        save_byte = D_L15_001BB830;
+        save_byte += (s16)save_id;
+        if (save_byte[0x454] != 0 ||
             ((((s32)*(u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190)) >> (save_id & 31)) & 1) != 0) {
             if (vars->enabled != 0) {
                 FUN_L01_0026e0e0(moby->group, 4);
