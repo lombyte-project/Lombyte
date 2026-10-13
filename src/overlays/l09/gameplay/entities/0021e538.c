@@ -163,9 +163,6 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c1978.s", FUN_L09_002c1978);
-#else
 extern void setup_first_context(void) __asm__("FUN_001f2d98");
 extern void setup_second_context(void) __asm__("FUN_001f2260");
 extern void FUN_001f9ff8(float, void *);
@@ -210,6 +207,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     float offset[4];
     u64 color;
     int *scratch;
+    int scratch_color;
     float *old = (float *)0x001612f8;
     float *current = D_L09_0016CBC0;
     float saved0 = current[0x218 / 4];
@@ -304,6 +302,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         alpha = alpha <= 0x60U ? 0x5370b : 0x5360a;
         blend = alpha;
         words[4] = *(volatile u64 *)&D_L09_001612F0;
+        scratch_color = 0x757c8e;
         words[5] = 6;
         words[6] = (long)color;
         words[7] = 0x3d;
@@ -319,7 +318,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     }
     scratch = (int *)0x70000000;
     for (i = 255; i >= 0; i--)
-        scratch[i] = 0x757c8e;
+        scratch[i] = scratch_color;
     i = 0;
     if (count > 0) do {
         char *entry;
@@ -346,7 +345,6 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     FUN_L02_002a46e0(data);
 }
 #undef PACKET_CURSOR
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
