@@ -1831,7 +1831,7 @@ extern void FUN_L06_00303b68(char *);
 
 int FUN_L06_00303160(char *moby, int path) {
     char *data = *(char **)(moby + 0x78);
-    int *ids = (int *)(data + path * 4);
+    volatile int *ids = (volatile int *)(data + path * 4);
     float *first = D_L06_001B0C30_303160[ids[0x60 / 4]];
     float *middle = D_L06_001B0C30_303160[ids[0x74 / 4]];
     float *third = D_L06_001B0C30_303160[ids[0x88 / 4]];
@@ -1839,28 +1839,28 @@ int FUN_L06_00303160(char *moby, int path) {
     float first_time, third_time, first_fraction, third_fraction, first_index_float;
     float a, b, c, d, heading;
     float *prev, *cur, *next, *first_current;
-    int first_index, middle_index, third_index, event, previous_event;
+    long first_index, third_index;
+    int middle_index, event, previous_event;
     int next_index;
 
     approach_value_303160(1.0f, 1.0f / (float)scale_frames_303160(0x4b0), (float *)(data + 0xf4));
     first_time = *(float *)(data + 0xf4) * (float)(*(int *)first - 1);
     first_index = truncate_float_303160(first_time);
-    first_index_float = (float)first_index;
-    first_current = first + first_index * 4;
+    first_index_float = (float)(int)first_index;
+    first_fraction = first_time - first_index_float;
     middle_index = truncate_float_303160(*(float *)(data + 0xf4) * (float)(*(int *)middle - 1));
     third_time = *(float *)(data + 0xf4) * (float)(*(int *)third - 1);
     third_fraction = third_time - first_index_float;
     third_index = truncate_float_303160(third_time);
-    first_fraction = first_time - first_index_float;
-    lerp_vector_303160(from, first_current + 4, first_current + 8, first_fraction);
-    lerp_vector_303160((float *)(moby + 0x10), third + third_index * 4 + 4,
-                       third + third_index * 4 + 8, third_fraction);
+    lerp_vector_303160(from, first + ((int)first_index * 4 + 4), first + ((int)first_index * 4 + 8), first_fraction);
+    lerp_vector_303160((float *)(moby + 0x10), third + (int)third_index * 4 + 4,
+                       third + (int)third_index * 4 + 8, third_fraction);
     set_position_303160(from);
 
     if (third_index > 0) {
-        prev = third + (third_index - 1) * 4;
-        cur = third + third_index * 4;
-        next = third + (third_index + 1) * 4;
+        prev = third + ((int)third_index - 1) * 4;
+        cur = third + (int)third_index * 4;
+        next = third + ((int)third_index + 1) * 4;
         a = angle_atan2_303160(cur[4] - prev[4], cur[5] - prev[5]);
         b = angle_atan2_303160(next[4] - cur[4], next[5] - cur[5]);
         *(float *)(moby + 0x48) = fast_add_rotations_303160(
@@ -1895,15 +1895,16 @@ int FUN_L06_00303160(char *moby, int path) {
             D_0015ED70_303160 * 12.566371f, D_0015ED70_303160 * 12.566371f,
             D_0015ED6C_303160 * 6.2831855f);
     }
-    event = truncate_float_303160(first_current[7]);
-    previous_event = -1;
+    event = truncate_float_303160(first[(int)first_index * 4 + 7]);
     if (first_index != 0) {
-        float *previous = first + (first_index - 1) * 4;
+        float *previous = first + ((int)first_index - 1) * 4;
         previous_event = truncate_float_303160(previous[7]);
+    } else {
+        previous_event = -1;
     }
     if (event >= 0 || previous_event >= 0) {
-        first_current[7] = -1.0f;
-        first[(first_index - 1) * 4 + 7] = -1.0f;
+        first[(int)first_index * 4 + 7] = -1.0f;
+        first[((int)first_index - 1) * 4 + 7] = -1.0f;
         if (event < 8 && previous_event < 8) {
             event_303160(0, 0, moby);
             next_index = *(int *)(data + event * 4 + 0xd0);
