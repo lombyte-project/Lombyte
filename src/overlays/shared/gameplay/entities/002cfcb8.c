@@ -949,7 +949,7 @@ extern void FUN_L00_002d1f30(void *, void *, void *, f32, f32, f32);
 void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
     void *volatile saved_moby;
     Vec_2d2158 target;
-    Vec_2d2158 basis[3], matrix[4], direction, offset, trace_start, trace_end, velocity;
+    Vec_2d2158 basis[3], matrix[4], direction, offset, velocity, trace_start, trace_end;
     void *tracked;
     f32 angle, length, ratio, amount, vertical;
     s32 hit;
@@ -961,7 +961,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
     if (tracked == 0)
         return;
     tracked = *(void **)((u8 *)tracked + 0x78);
-    vars = tracked;
+
     direction.q = 0;
     direction.f[0] = 1.0f;
     FUN_001f9cf8_2d2158(&direction, &direction, &hero.basis);
@@ -1029,7 +1029,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
     else {
         D_0013FDA0_2d2158 = 0;
     }
-    FUN_L00_002d1f30(&target, &offset, vars + 0x10,
+    FUN_L00_002d1f30(&target, &offset, (u8 *)tracked + 0x10,
                       D_0015ED70_2d2158 * 9.0f, 0.00001f,
                       (controller_state.held & 5) ? 3.5f : 2.5f);
 }
