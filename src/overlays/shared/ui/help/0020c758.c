@@ -703,12 +703,14 @@ void FUN_L00_0020dd20(void) {
             active = 0;
             if (hero_ptr->unk20AB && (i == 0 || hero_ptr->unk20AB == 2))
                 active = 1;
-            if (hero_ptr->unk20AF) {
+            if (hero.unk20AF) {
                 active = 0;
+                slot = (u8 **)&hero.unkD00 + i;
                 if (*slot)
                     *(s32 *)(*slot + 0x34) = 1;
             }
             if (active) {
+                slot = (u8 **)&hero.unkD00 + i;
                 next = i + 1;
                 if (*slot == 0) {
                     *slot = FUN_L00_0024f028_20dd20((u8 *)hero_ptr->moby, D_L00_0015F6A0_20dd20[i]);
@@ -716,6 +718,7 @@ void FUN_L00_0020dd20(void) {
                     *(s32 *)(*slot + 0x18) = D_L00_00197300_20dd20[D_L00_00197BC0_20dd20[next]];
                 }
             } else {
+                slot = (u8 **)&hero.unkD00 + i;
                 next = i + 1;
                 if (*slot == 0)
                     goto next_slot;
@@ -726,14 +729,14 @@ void FUN_L00_0020dd20(void) {
         obj = *((u8 **)&hero.unkD00 + i);
         if (obj) {
             moby = (u8 *)hero_ptr->moby;
-            same = moby[0x52] == ((u8 *)hero_ptr->moby)[0x53];
-            if (hero_ptr->unkD08[0] && !hero_ptr->unkD14) {
+            same = moby[0x52] != ((u8 *)hero_ptr->moby)[0x53];
+            if (hero.unkD08[0] && !hero.unkD14) {
                 FUN_00213ed8_20dd20((f32 *)(obj + 8), zero, frame_scale * tenth);
             } else if (*(s32 *)(obj + 0x34) == 0) {
                 FUN_00213ed8_20dd20((f32 *)(obj + 8), 1.0f, frame_scale * tenth);
             }
             change = 0;
-            if (!same && hero_ptr->unkA9C) {
+            if (same && hero.unkA9C) {
                 if (FUN_L00_002050b8_20dd20(obj[0x23]) != FUN_L00_002050b8_20dd20(((u8 *)hero_ptr->moby)[0x53]))
                     change = obj[0x22] != obj[0x23];
             }
@@ -752,7 +755,9 @@ void FUN_L00_0020dd20(void) {
                     ANGLE_FIELD_20DD20(0x6d4) = angle_scale_small;
                     ANGLE_FIELD_20DD20(0x6d8) = angle_scale_large;
                 }
-                if (handled) {
+                if (handled == 0)
+                    goto unhandled_update;
+                {
                     if (obj[0x32] == 0 || obj[0x23] != 0) {
                         if (obj[0x22] == obj[0x23] || 0.5f < *(f32 *)(obj + 0x24)) {
                             obj[0x22] = obj[0x23];
@@ -769,8 +774,13 @@ void FUN_L00_0020dd20(void) {
                         obj[0x33] = 0;
                         *(f32 *)(obj + 0x2c) = one / (f32)j;
                     }
+                }
+                if (handled != 0) {
                     *(f32 *)(obj + 0x28) = one;
-                } else {
+                    goto special_textures;
+                }
+unhandled_update:
+                {
                     if (obj[0x33] == 0) {
                         obj[0x23] = FUN_L00_0020d5b8_20dd20((u8 *)hero_ptr->moby, ((u8 *)hero_ptr->moby)[0x53]);
                         obj[0x21] = 0;
@@ -786,24 +796,24 @@ void FUN_L00_0020dd20(void) {
                             obj[0x32] = 0;
                     }
                 }
+special_textures:
                 {
                     u8 *enabled = obj + 6;
                     u8 *symbol = obj + 0x22;
                     u8 **texture = (u8 **)(obj + 0x38);
                     u8 *texture_base = D_L00_0017CA80_20dd20 + i * 0x800;
-                    j = 0;
-                    do {
-                        if (symbol[j] < 0x17) {
-                            *enabled = 1;
-                            *texture = texture_base;
-                        } else {
-                            *enabled = 0;
-                        }
-                        enabled++;
-                        texture++;
-                        texture_base += 0x400;
-                        j++;
-                    } while (j < 2);
+                    if (symbol[0] < 0x17) {
+                        enabled[0] = 1;
+                        texture[0] = texture_base;
+                    } else {
+                        enabled[0] = 0;
+                    }
+                    if (symbol[1] < 0x17) {
+                        enabled[1] = 1;
+                        texture[1] = texture_base + 0x400;
+                    } else {
+                        enabled[1] = 0;
+                    }
                 }
                 FUN_L00_0024f190_20dd20((u8 *)hero_ptr->moby, obj);
             }
@@ -813,7 +823,7 @@ ordinary_update:
                 if (*(s16 *)(obj + 0x30) == 0) {
                     j = 0;
                     do {
-                        if (same || j == 1)
+                        if (!same || j == 1)
                             obj[0x22 + j] = FUN_L00_0020d5b8_20dd20((u8 *)hero_ptr->moby, ((u8 *)hero_ptr->moby)[0x52 + j]);
                         j++;
                     } while (j < 2);
@@ -827,7 +837,7 @@ ordinary_update:
                         *(u16 *)(obj + 0x30) = 0;
                     }
                 } else {
-                    if (same)
+                    if (!same)
                         obj[0x20] = ((u8 *)hero_ptr->moby)[0x50];
                     obj[0x21] = ((u8 *)hero_ptr->moby)[0x51];
                     *(f32 *)(obj + 0x24) = *(f32 *)((u8 *)hero_ptr->moby + 0x54);
@@ -837,19 +847,18 @@ ordinary_update:
                     u8 *enabled = obj + 6;
                     u8 **texture = (u8 **)(obj + 0x38);
                     u8 *texture_base = D_L00_0017CA80_20dd20 + i * 0x800;
-                    j = 0;
-                    do {
-                        if (symbol[j] < 0x17) {
-                            *enabled = 1;
-                            *texture = texture_base;
-                        } else {
-                            *enabled = 0;
-                        }
-                        enabled++;
-                        texture++;
-                        texture_base += 0x400;
-                        j++;
-                    } while (j < 2);
+                    if (symbol[0] < 0x17) {
+                        enabled[0] = 1;
+                        texture[0] = texture_base;
+                    } else {
+                        enabled[0] = 0;
+                    }
+                    if (symbol[1] < 0x17) {
+                        enabled[1] = 1;
+                        texture[1] = texture_base + 0x400;
+                    } else {
+                        enabled[1] = 0;
+                    }
                 }
                 FUN_L00_0024f190_20dd20((u8 *)hero_ptr->moby, obj);
             }
