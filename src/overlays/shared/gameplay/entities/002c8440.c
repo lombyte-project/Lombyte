@@ -2447,30 +2447,28 @@ void FUN_L00_002ce358(struct Moby *m)
             {
                 struct Moby **slots, **exclusions;
                 s32 i;
-                slots = (struct Moby **)hero.unk2020;
                 exclusions = (struct Moby **)((u8 *)&hero + 0x1ffc);
+                slots = (struct Moby **)hero.unk2020;
                 for (i = 0; i < 6; i++, slots++) {
                     other = *slots;
-                    if (!other)
-                        continue;
-                    if (other->oclass != 0x1df) {
-                        *slots = 0;
-                        continue;
+                    if (other != 0) {
+                        if (other->oclass == 0x1df) {
+                            if (other->state == 0xfe) {
+                                *slots = 0;
+                            } else if (other->state == 0xfd) {
+                                *slots = 0;
+                            } else {
+                                count++;
+                                *exclusions++ = *(struct Moby **)(other->pvars + 0x30);
+                                if (other->state < 4)
+                                    (*(u8 *)((u8 *)&hero + 0x1ff7))++;
+                                if (count > 8)
+                                    break;
+                            }
+                        } else {
+                            *slots = 0;
+                        }
                     }
-                    if (other->state == 0xfe) {
-                        *slots = 0;
-                        continue;
-                    }
-                    if (other->state == 0xfd) {
-                        *slots = 0;
-                        continue;
-                    }
-                    count++;
-                    *exclusions++ = *(struct Moby **)(other->pvars + 0x30);
-                    if (other->state < 4)
-                        (*(u8 *)((u8 *)&hero + 0x1ff7))++;
-                    if (count > 8)
-                        break;
                 }
                 if (count < 9) {
                     exclusions = (struct Moby **)((u8 *)&hero + 0x1ffc) + count;
@@ -2677,7 +2675,9 @@ state3:
 state4:
     {
         target = v->target;
-        if (target == 0 || target->oclass != v->target_oclass || target->state == 0xfe || target->state == 0xfd) {
+        if (target == 0 || target->oclass != v->target_oclass) {
+            v->target = 0;
+        } else if (target->state == 0xfe || target->state == 0xfd) {
             v->target = 0;
         } else {
             char *h = (char *)FUN_002141f8_c((char *)target);
