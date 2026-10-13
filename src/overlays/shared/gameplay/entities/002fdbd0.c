@@ -679,12 +679,10 @@ void FUN_L06_002ff2c8(char *moby) {
             } else if (alignment < 0.3f) {
                 point[2] += (frame_time + frame_time);
             }
-            if (!(entry[3] >= 1.0f) || FUN_001efa68(data + offset + 0x230, point, 2, 0, 0) == 0) {
-                if (point[3] < 1.0f) {
-                    approach_value(&point[3], 0.0f, frame_time + frame_time);
-                }
-            } else {
+            if (entry[3] >= 1.0f && FUN_001efa68(&data[offset + 0x230], point, 2, 0, 0) != 0) {
                 point[3] = 0.98f;
+            } else if (point[3] < 1.0f) {
+                approach_value(&point[3], 0.0f, frame_time + frame_time);
             }
             qcopy(entry, point);
             i++;
@@ -694,9 +692,11 @@ void FUN_L06_002ff2c8(char *moby) {
     }
     for (i = 0; i < 15; i = next) {
         f32 *entry = (f32 *)(data + 0x230 + i * 16);
-        f32 *next_entry = (f32 *)(data + 0x230 + (i + 1) * 16);
+        f32 *next_entry;
+        offset = i * 16;
         next = i + 1;
-        if (entry[3] >= 0.6f && next_entry[3] >= 0.6f) {
+        if (entry[3] >= 0.6f &&
+            (next_entry = (f32 *)(data + 0x230 + next * 16), next_entry[3] >= 0.6f)) {
             point[0] = fast_cos(*(f32 *)(moby + 0x48));
             point[1] = fast_sin_c(*(f32 *)(moby + 0x48));
             point[2] = 1.0f;
@@ -706,7 +706,7 @@ void FUN_L06_002ff2c8(char *moby) {
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = *(s16 *)(moby + 0xA6);
-            FUN_001efa68(entry, next_entry, 0, moby, &shot);
+            FUN_001efa68(&data[offset + 0x230], &data[offset + 0x240], 0, moby, &shot);
         }
     }
     enqueue_callback_list_1(FUN_L06_002ff680, moby);
