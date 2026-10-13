@@ -1696,7 +1696,7 @@ typedef struct {
     short sound_single;
     char pad2[0x14];
 } FxAmmoRecord;
-extern char D_L00_00179BC0_6720[] __asm__("D_L00_00179AC0");
+extern char ammo_sounds_2c53c0[] __asm__("D_L00_00179AC0");
 extern FxVec D_L00_00173E70_2c53c0 __asm__("D_L00_00173E70");
 extern FxVec D_L00_00173E60_2c53c0 __asm__("D_L00_00173E60");
 extern float D_0015ED70_2c53c0 __asm__("D_0015ED70") __attribute__((section(".sdata")));
@@ -1723,12 +1723,12 @@ typedef struct {
     int timer;
     float rise_speed;
     float resting_height;
-} AmmoPickup_6720;
+} AmmoPickup_2c53c0;
 
 /* Update ammunition pickup physics, collection, animation and scale.
    Animation states share one stack value; index reloads follow calls. */
 void FUN_L00_002c53c0(struct Moby *m) {
-    AmmoPickup_6720 *p;
+    AmmoPickup_2c53c0 *p;
     unsigned int state;
     FxVec position;
     FxVec predicted;
@@ -1738,7 +1738,7 @@ void FUN_L00_002c53c0(struct Moby *m) {
     float target;
     float step;
     float remaining;
-    p = (AmmoPickup_6720 *)m->pvars;
+    p = (AmmoPickup_2c53c0 *)m->pvars;
     FUN_001f9740_2c53c0(&p->timer);
     state = m->state;
     if (state == 1 || state == 4 || state == 3) {
@@ -1823,9 +1823,9 @@ void FUN_L00_002c53c0(struct Moby *m) {
             if (before < after) {
                 difference = after - before;
                 if (difference == 1) {
-                    sound = ((FxAmmoRecord *)(D_L00_00179BC0_6720 + sound_idx * sizeof(FxAmmoRecord)))->sound_single;
+                    sound = ((FxAmmoRecord *)(ammo_sounds_2c53c0 + sound_idx * sizeof(FxAmmoRecord)))->sound_single;
                 } else {
-                    sound = ((FxAmmoRecord *)(D_L00_00179BC0_6720 + sound_idx * sizeof(FxAmmoRecord)))->sound_multiple;
+                    sound = ((FxAmmoRecord *)(ammo_sounds_2c53c0 + sound_idx * sizeof(FxAmmoRecord)))->sound_multiple;
                 }
                 FUN_L00_00263db0_2c53c0(sound, difference, -1);
             }

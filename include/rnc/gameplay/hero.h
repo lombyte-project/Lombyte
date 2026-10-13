@@ -118,7 +118,9 @@ struct HeroItemSlot {
     s32 unk38;                     /* 0x38 */
     s16 unk3C;                     /* 0x3C */
     u16 unk3E;                     /* 0x3E */
-    u8 pad_40[0x10];
+    s32 unk40;                     /* 0x40: on slot 6, nonzero makes the Ryno aim along unk4C */
+    u8 pad_44[0x8];
+    f32 unk4C;                     /* 0x4C: yaw */
 };
 
 /*

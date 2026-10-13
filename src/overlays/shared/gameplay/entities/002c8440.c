@@ -1091,251 +1091,234 @@ M_2cc360 *FUN_L00_002cc360(float *pos, float *rot, M_2cc360 **excl, float maxYaw
     }
     return best;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cc608.s", FUN_L00_002cc608);
-#else
+#include "rnc/input/pad_state.h"
+
+#include "rnc/gameplay/state/usage_stats.h"
+typedef struct { float m[3][4]; } __attribute__((aligned(16))) Mat3_2cc608;
+typedef struct { float m[4][4]; } __attribute__((aligned(16))) Mat4_2cc608;
 typedef struct {
-    M_2cc360 *target;
-    u8 shot;
-    u8 direction;
-    s16 timer;
-    s32 target_timer;
-    f32 height;
-    s16 pause_timer;
-    s16 history_index;
-    f32 scale;
-    M_2cc360 *history[7];
-} Vars_2cc608;
-extern V_2cc360 D_L00_00166C80_2cc608 __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern V_2cc360 D_L00_00166DD0_2cc608 __asm__("D_L00_00166DD0") __attribute__((section(".data")));
-extern V_2cc360 D_L00_00166DC0_2cc608 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
-extern V_2cc360 D_0013F450_2cc608 __asm__("D_0013F450") __attribute__((section(".data")));
-extern V_2cc360 D_0013F490_2cc608 __asm__("D_0013F490") __attribute__((section(".data")));
-extern V_2cc360 D_0013F990_2cc608 __asm__("D_0013F990") __attribute__((section(".data")));
-extern u8 D_001403FC_2cc608 __asm__("D_001403FC") __attribute__((section(".data")));
-extern u32 D_001403F0_2cc608 __asm__("D_001403F0") __attribute__((section(".data")));
-extern u32 D_0013CAE4_2cc608 __asm__("D_0013CAE4") __attribute__((section(".data")));
-extern u32 D_0013CAE0_2cc608 __asm__("D_0013CAE0") __attribute__((section(".data")));
-extern s32 D_001413D4_2cc608 __asm__("D_001413D4") __attribute__((section(".data")));
-extern u8 D_001413FC_2cc608 __asm__("D_001413FC") __attribute__((section(".data")));
-extern s16 D_00141738_2cc608 __asm__("D_00141738") __attribute__((section(".data")));
-extern u16 D_0014173A_2cc608 __asm__("D_0014173A") __attribute__((section(".data")));
-extern u32 D_0014173C_2cc608 __asm__("D_0014173C") __attribute__((section(".data")));
-extern u32 D_0015EEA4_2cc608 __asm__("D_0015EEA4") __attribute__((section(".data")));
-extern u32 D_0015ED84_2cc608 __asm__("D_0015ED84") __attribute__((section(".data")));
-extern u32 D_0014060C_2cc608 __asm__("D_0014060C") __attribute__((section(".data")));
-extern s32 D_00140600_2cc608 __asm__("D_00140600") __attribute__((section(".data")));
-extern void FUN_001ffcd8_2cc608(void *, void *) __asm__("FUN_L00_001ffcd8");
-extern void FUN_001ffcf8_2cc608(void *, void *) __asm__("FUN_L00_001ffcf8");
-extern s32 FUN_001fef68_2cc608(void *) __asm__("FUN_L00_001fef68");
-extern s32 FUN_001fef98_2cc608(void *) __asm__("FUN_L00_001fef98");
-extern s32 FUN_001fef20_2cc608(s32) __asm__("FUN_L00_001fef20");
-extern void FUN_L00_0024f7c8_2cc608(void *, u8, void *) __asm__("FUN_L00_0024f7c8");
-extern void *FUN_L00_0025c338_2cc608(void *) __asm__("FUN_L00_0025c338");
-extern s32 FUN_L00_00233e98_2cc608(s32) __asm__("FUN_L00_00233e98");
-extern f32 FUN_001ff450_2cc608(void *, void *) __asm__("FUN_L00_001ff450");
-extern f32 FUN_001ff218_2cc608(f32) __asm__("FUN_L00_001ff218");
-extern void FUN_L00_001edf60_2cc608(f32, f32, f32, void *, u32, void *, s32, s32, s32) __asm__("FUN_L00_001edf60");
-extern void FUN_L00_002223f8_2cc608(s32, s32) __asm__("FUN_L00_002223f8");
-extern s32 FUN_L00_00233db8_2cc608(s32, s32) __asm__("FUN_L00_00233db8");
-extern void FUN_L00_0020e4c8_2cc608(void) __asm__("FUN_L00_0020e4c8");
-extern void FUN_L00_0020e698_2cc608(void) __asm__("FUN_L00_0020e698");
-extern void FUN_001ff6f8_2cc608(void *, void *, void *) __asm__("FUN_L00_001ff6f8");
-extern void FUN_001ff6d0_2cc608(void *, void *, void *) __asm__("FUN_L00_001ff6d0");
-extern void FUN_001ff278_2cc608(void *, void *, void *) __asm__("FUN_L00_001ff278");
-extern void FUN_001ff300_2cc608(f32, void *, void *) __asm__("FUN_L00_001ff300");
-extern f32 FUN_001ff8b0_2cc608(f32, f32) __asm__("FUN_L00_001ff8b0");
-extern f32 FUN_001ff408_2cc608(void *) __asm__("FUN_L00_001ff408");
-extern void FUN_L00_002ccee0_2cc608(f32, f32, f32, void *, void *, void *) __asm__("FUN_L00_002ccee0");
-extern u32 FUN_001160d8_2cc608(void) __asm__("FUN_001160d8");
+    struct Moby *target;
+    unsigned char shots;
+    unsigned char slot;
+    short shot_timer;
+    int lock_timer;
+    float height;
+    short track_timer;
+    short count;
+    float life;
+    struct Moby *recent[7];
+} Ryno_2cc608;
+typedef struct { float radius; char pad4[0xC]; float height; } Bounds_2cc608;
 
-void FUN_L00_002cc608(u8 *m) {
-    Vars_2cc608 *v = *(Vars_2cc608 **)(m + 0x78);
-    V_2cc360 basis[3], matrix[4], target_pos, shot_pos, offset;
-    M_2cc360 *found;
-    f32 distance, amount, direction;
-    u32 flag, period;
-    s32 i;
+extern char camera_2cc608[] __asm__("D_L00_00166C80");
+extern Vec4 camera_rot_2cc608 __asm__("D_L00_00166DD0");
+extern float camera_pos_2cc608[] __asm__("D_L00_00166DC0");
+extern int play_frames_2cc608 __asm__("D_0015EEA4") __attribute__((section(".sdata")));
+extern int current_level_index_2cc608 __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern struct UsageStats item_usage_2cc608 __asm__("D_00141680");
+extern void matcopy_2cc608(void *, void *) __asm__("FUN_001fa2b8");
+extern void transpose_2cc608(void *, void *) __asm__("FUN_001fa2d8");
+extern int timer32_2cc608(int *) __asm__("FUN_001f9740");
+extern int timer16_2cc608(short *) __asm__("FUN_001f9770");
+extern void muzzle_2cc608(struct Moby *, int, float *) __asm__("FUN_L00_0024f7c8");
+extern struct Moby *find_target_2cc608(float *, float *, struct Moby **, float, float, float) __asm__("FUN_L00_002cc360");
+extern int ticks_2cc608(int) __asm__("FUN_001f96f8");
+extern Bounds_2cc608 *bounds_2cc608(struct Moby *) __asm__("FUN_002141f8");
+extern int has_ammo_2cc608(int) __asm__("FUN_L00_00233e98");
+extern int use_ammo_2cc608(int, int) __asm__("FUN_L00_00233db8");
+extern float distance_2cc608(void *, void *) __asm__("FUN_001f9b48");
+extern float fabs_2cc608(float) __asm__("FUN_001f99c0");
+extern void reticle_2cc608(struct Moby *, int, float, float, float *, int, int, float, int) __asm__("FUN_L00_001edf60");
+extern void hud_2cc608(int, int) __asm__("FUN_L00_002223f8");
+extern void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
+extern void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
+extern void apply_mat4_2cc608(float *, float *, void *) __asm__("FUN_001f9d20");
+extern void apply_mat3_2cc608(float *, float *, void *) __asm__("FUN_001f9cf8");
+extern void add_2cc608(float *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_2cc608(float *, float *, float) __asm__("FUN_001f9a68");
+extern float angle_2cc608(float, float) __asm__("FUN_001f9e90");
+extern float length_2cc608(float *) __asm__("FUN_001f9b20");
+extern unsigned char *missile_2cc608(struct Moby *, float *, struct Moby *, float, float, float) __asm__("FUN_L00_002ccee0");
+extern int rand_2cc608(void) __asm__("FUN_001160d8");
 
-    FUN_001ffcd8_2cc608(basis, &D_L00_00166C80_2cc608);
-    FUN_001ffcf8_2cc608(matrix, basis);
-    if ((u8)(m[0x20] - 2) < 2) {
-        if (FUN_001fef68_2cc608(&v->target_timer) || !v->target ||
-            v->target->p20[0] == (char)0xfe || v->target->p20[0] == (char)0xfd) {
-            v->target = 0;
-            v->height = 0.0f;
+/* Ryno (class 454) update: target lock and reticle while held, then the eight-missile salvo state machine. */
+void FUN_L00_002cc608(struct Moby *m) {
+    Mat3_2cc608 cam;
+    Mat4_2cc608 view;
+    Vec4 aim;
+    Vec4 dir;
+    Vec4 ofs;
+    Ryno_2cc608 *d = *(Ryno_2cc608 **)&m->pvars;
+    struct Moby *r;
+    Bounds_2cc608 *b;
+    float yaw, pitch;
+    int i;
+
+    matcopy_2cc608(&cam, camera_2cc608);
+    transpose_2cc608(&view, &cam);
+    if ((unsigned int)(m->state - 2) < 2) {
+        if (timer32_2cc608(&d->lock_timer) || d->target == 0 || d->target->state == 0xFE || d->target->state == 0xFD) {
+            d->target = 0;
+            d->height = 0;
         }
-        target_pos.q = D_L00_00166DD0_2cc608.q;
-        target_pos.f[1] = -target_pos.f[1];
-        FUN_L00_0024f7c8_2cc608(m, v->direction, &shot_pos);
-        found = FUN_L00_002cc360(shot_pos.f, target_pos.f, 0, 1.698158264f, 1.698158264f, 80.0f);
-        if (found && (!v->target || v->target->p20[0] == (char)0xfe ||
-                      v->target->p20[0] == (char)0xfd || !v->target->b31)) {
-            v->height = 0.0f;
-            v->target = found;
-            v->target_timer = FUN_001fef20_2cc608(20);
-            v->scale = 1.0f;
-            found = FUN_L00_0025c338_2cc608(v->target);
-            if (found) {
-                v->height = *(f32 *)((u8 *)found + 0x10);
-                v->scale = *(f32 *)found;
+        qcopy(aim.f, camera_rot_2cc608.f);
+        aim.f[1] = -aim.f[1];
+        muzzle_2cc608(m, d->slot, dir.f);
+        r = find_target_2cc608(dir.f, aim.f, 0, 1.6981583f, 1.6981583f, 80.0f);
+        if ((r != 0 && d->target == 0) || d->target == 0 || d->target->state == 0xFE || d->target->state == 0xFD || d->target->visible == 0) {
+            d->height = 0;
+            d->target = r;
+            d->lock_timer = ticks_2cc608(20);
+            d->life = 1.0f;
+            b = bounds_2cc608(d->target);
+            if (b != 0) {
+                d->height = b->height;
+                d->life = b->radius;
             }
-        } else if (!found && (!v->target || v->target->p20[0] == (char)0xfe ||
-                             v->target->p20[0] == (char)0xfd || !v->target->b31)) {
-            v->height = 0.0f;
-            v->target = 0;
-            v->target_timer = FUN_001fef20_2cc608(20);
-            v->scale = 1.0f;
         }
-        if (v->target && FUN_001fef98_2cc608(&v->pause_timer) &&
-            FUN_L00_00233e98_2cc608(-1)) {
-            if (v->target->p20[0] == (char)0xfe || v->target->p20[0] == (char)0xfd) {
-                v->target = 0;
-                v->height = 0.0f;
+        if (d->target != 0 && timer16_2cc608(&d->track_timer) && has_ammo_2cc608(-1)) {
+            if (d->target == 0 || d->target->state == 0xFE || d->target->state == 0xFD) {
+                d->target = 0;
+                d->height = 0;
             } else {
-                distance = FUN_001ff450_2cc608(&D_L00_00166DC0_2cc608, &v->target->pos);
-                target_pos.q = v->target->pos.q;
-                target_pos.f[2] += v->height;
-                amount = FUN_001ff218_2cc608(0.9f - distance / 150.0f * 0.65f);
-                FUN_L00_001edf60_2cc608(amount, 0.0f, 90.0f, m, 0xff0fff0f, &target_pos, 0x23, -1, 4);
+                float f = distance_2cc608(camera_pos_2cc608, ((float *)&d->target->pos)) / 150.0f;
+                qcopy(aim.f, ((float *)&d->target->pos));
+                f = f * 0.65f;
+                aim.f[2] = aim.f[2] + d->height;
+                reticle_2cc608(m, 0xFF0FFF0F, fabs_2cc608(0.9f - f), 0.0f, aim.f, 0x23, -1, 90.0f, 4);
             }
         }
     }
-    switch (m[0x20]) {
+    switch (m->state) {
     case 0:
-        v->target = 0;
-        D_001403FC_2cc608 = 0;
-        m[0x20] = 1;
-        v->pause_timer = 0;
+        d->target = 0;
+        hero.items[0].unk1C = 0;
+        m->state = 1;
+        d->track_timer = 0;
         break;
     case 1:
-        if (m[0x70] & 2) m[0x20] = 2;
+        if (m->anim_flags & 2) m->state = 2;
         break;
     case 2:
-        if (D_001413D4_2cc608 == 1) FUN_L00_002223f8_2cc608(0x1e, 1);
-        if (!(D_001403F0_2cc608 & D_0013CAE4_2cc608) || D_001413FC_2cc608) return;
+        if (hero.state.current == 1) hud_2cc608(0x1E, 1);
+        if ((controller_state.pressed & hero.items[0].button_mask) == 0) return;
+        if (hero.unk20AC != 0) return;
+        if (use_ammo_2cc608(-1, 1) == 0) return;
         {
-    if (!FUN_L00_00233db8_2cc608(-1, 1)) return;
-    period = D_0015EEA4_2cc608;
-    if (D_00141738_2cc608 != -1) {
-        D_00141738_2cc608++;
-        period = D_0015EEA4_2cc608;
-    }
-    i = FUN_001fef20_2cc608(period);
-    flag = D_0015ED84_2cc608;
-    if (D_0014173A_2cc608 < i / 600) {
-        D_0014173A_2cc608 = FUN_001fef20_2cc608(D_0015EEA4_2cc608) / 600;
-        flag = D_0015ED84_2cc608;
-    }
-    D_001403FC_2cc608 = 2;
-    D_0014173C_2cc608 |= (1 << (flag & 31)) | 0x80000000;
-    m[0x20] = 4;
-    v->timer = 0;
-    v->direction = 0;
-    v->shot = 0;
-    FUN_L00_0020e4c8_2cc608();
-    for (i = 6; i >= 0; i--) v->history[i] = 0;
-    v->history_index = 0;
+            int per;
+            struct UsageStats *s = &item_usage_2cc608;
+            if (s->stat[23].count <= 0xFFFE) s->stat[23].count++;
+            per = 600;
+            if (ticks_2cc608(play_frames_2cc608) / per > s->stat[23].unk2) s->stat[23].unk2 = ticks_2cc608(play_frames_2cc608) / 600;
+            s->stat[23].level_mask = s->stat[23].level_mask | (1 << current_level_index_2cc608) | 0x80000000;
         }
+        hero.items[0].unk1C = 2;
+        m->state = 4;
+        d->shot_timer = 0;
+        d->slot = 0;
+        d->shots = 0;
+        fire_start_2cc608();
+        {
+            int k;
+            for (k = 6; k >= 0; k--) d->recent[k] = 0;
+        }
+        d->count = 0;
         break;
     case 3:
-        FUN_L00_001edf60_2cc608(1.0f, 0.0f, 90.0f, m, 0xff0f0fff, 0, 0x23, -1, 4);
-        if (D_0013CAE0_2cc608 & 5) {
-            if (!(D_0013CAE4_2cc608 & D_001403F0_2cc608) || D_001413FC_2cc608) return;
-            {
-    if (!FUN_L00_00233db8_2cc608(-1, 1)) return;
-    period = D_0015EEA4_2cc608;
-    if (D_00141738_2cc608 != -1) {
-        D_00141738_2cc608++;
-        period = D_0015EEA4_2cc608;
-    }
-    i = FUN_001fef20_2cc608(period);
-    flag = D_0015ED84_2cc608;
-    if (D_0014173A_2cc608 < i / 600) {
-        D_0014173A_2cc608 = FUN_001fef20_2cc608(D_0015EEA4_2cc608) / 600;
-        flag = D_0015ED84_2cc608;
-    }
-    D_001403FC_2cc608 = 2;
-    D_0014173C_2cc608 |= (1 << (flag & 31)) | 0x80000000;
-    m[0x20] = 4;
-    v->timer = 0;
-    v->direction = 0;
-    v->shot = 0;
-    FUN_L00_0020e4c8_2cc608();
-    for (i = 6; i >= 0; i--) v->history[i] = 0;
-    v->history_index = 0;
-            }
+        reticle_2cc608(m, 0xFF0F0FFF, 1.0f, 0.0f, 0, 0x23, -1, 90.0f, 4);
+        if ((controller_state.held & 5) == 0) {
+            m->state = 2;
             return;
         }
-        m[0x20] = 2;
+        if ((controller_state.pressed & hero.items[0].button_mask) == 0) return;
+        if (hero.unk20AC != 0) return;
+        if (use_ammo_2cc608(-1, 1) == 0) return;
+        {
+            int per;
+            struct UsageStats *s = &item_usage_2cc608;
+            if (s->stat[23].count <= 0xFFFE) s->stat[23].count++;
+            per = 600;
+            if (ticks_2cc608(play_frames_2cc608) / per > s->stat[23].unk2) s->stat[23].unk2 = ticks_2cc608(play_frames_2cc608) / 600;
+            s->stat[23].level_mask = s->stat[23].level_mask | (1 << current_level_index_2cc608) | 0x80000000;
+        }
+        hero.items[0].unk1C = 2;
+        m->state = 4;
+        d->shot_timer = 0;
+        d->slot = 0;
+        d->shots = 0;
+        fire_start_2cc608();
+        {
+            int k;
+            for (k = 6; k >= 0; k--) d->recent[k] = 0;
+        }
+        d->count = 0;
         break;
     case 4:
-        if (!FUN_001fef98_2cc608(&v->timer)) return;
-        v->timer = FUN_001fef20_2cc608(9);
-        v->direction++;
-        v->shot++;
-        v->direction %= 9;
-        offset.q = 0;
-        if (D_001413D4_2cc608 == 0x1e) {
-            offset.f[2] = 1.0f;
-            FUN_001ff6f8_2cc608(&offset, &offset, matrix);
+        if (timer16_2cc608(&d->shot_timer) == 0) return;
+        d->shot_timer = ticks_2cc608(9);
+        d->slot++;
+        d->slot = d->slot % 9;
+        d->shots++;
+        dir.q = 0;
+        if (hero.state.current == 30) {
+            dir.f[2] = 1.0f;
+            apply_mat4_2cc608(dir.f, dir.f, &view);
         } else {
-            offset.f[0] = 1.0f;
-            FUN_001ff6d0_2cc608(&offset, &offset, &D_0013F990_2cc608);
+            dir.f[0] = 1.0f;
+            apply_mat3_2cc608(dir.f, dir.f,  hero.basis);
         }
-        FUN_001ff278_2cc608(&shot_pos, &D_0013F450_2cc608, &D_0013F490_2cc608);
-        FUN_001ff300_2cc608(3.0f, &shot_pos, &shot_pos);
-        FUN_001ff278_2cc608(&offset, &offset, &shot_pos);
-        direction = (f32)D_0014060C_2cc608;
-        if (!D_00140600_2cc608) direction = FUN_001ff8b0_2cc608(offset.f[0], offset.f[1]);
-        amount = FUN_001ff8b0_2cc608(FUN_001ff408_2cc608(&offset), offset.f[2]);
-        FUN_L00_0024f7c8_2cc608(m, v->direction, &target_pos);
-        FUN_L00_0020e4c8_2cc608();
-        FUN_L00_002ccee0_2cc608(v->height, direction, -amount, m, &target_pos, v->target);
-        if (v->shot >= 7) {
-            D_001403FC_2cc608 = 0;
-            FUN_L00_0020e698_2cc608();
-            m[0x20] = 5;
-            v->timer = FUN_001fef20_2cc608(60);
-            v->pause_timer = FUN_001fef20_2cc608(60);
+        add_2cc608(ofs.f, &hero.motion.displacement, &hero.motion.platform_carry);
+        scale_2cc608(ofs.f, ofs.f, 3.0f);
+        add_2cc608(dir.f, dir.f, ofs.f);
+        if (hero.items[6].unk40 != 0) {
+            yaw = hero.items[6].unk4C;
+        } else {
+            yaw = angle_2cc608(dir.f[0], dir.f[1]);
         }
-        v->scale -= 1.0f;
-        if (v->scale > 0.0f && v->target && v->target->p20[0] != (char)0xfe &&
-            v->target->p20[0] != (char)0xfd) return;
-        v->history[v->history_index] = v->target;
-        v->history_index = (v->history_index + 1) % 7;
-        target_pos.q = D_L00_00166DD0_2cc608.q;
-        target_pos.f[1] = -target_pos.f[1];
-        v->target = FUN_L00_002cc360((f32 *)(m + 0x10), target_pos.f,
-                                       v->history, 3.141592741f, 3.141592741f, 100.0f);
-        if (!v->target) {
-            if (v->history_index < 1 || (FUN_001160d8_2cc608() & (v->history_index + 1))) {
-                v->height = 0.0f;
-            } else {
-                i = FUN_001160d8_2cc608();
-                v->target = v->history[i % v->history_index];
+        pitch = -angle_2cc608(length_2cc608(dir.f), dir.f[2]);
+        muzzle_2cc608(m, d->slot, aim.f);
+        fire_start_2cc608();
+        missile_2cc608(m, aim.f, d->target, d->height, yaw, pitch);
+        if (d->shots >= 7) {
+            hero.items[0].unk1C = 0;
+            fire_end_2cc608();
+            m->state = 5;
+            d->shot_timer = ticks_2cc608(60);
+            d->track_timer = ticks_2cc608(60);
+        }
+        d->life = d->life - 1.0f;
+        if (d->life <= 0.0f || d->target == 0 || d->target->state == 0xFE || d->target->state == 0xFD) {
+            d->recent[d->count] = d->target;
+            d->count++;
+            d->count = d->count % 7;
+            qcopy(aim.f, camera_rot_2cc608.f);
+            aim.f[1] = -aim.f[1];
+            d->target = find_target_2cc608(((float *)&m->pos), aim.f, d->recent, 3.1415927f, 3.1415927f, 100.0f);
+            if (d->target == 0 && d->count > 0 && (rand_2cc608() & (d->count + 1)) == 0) {
+                d->target = d->recent[rand_2cc608() % d->count];
+            }
+            d->height = 0;
+            d->lock_timer = ticks_2cc608(20);
+            d->life = 1.0f;
+            b = bounds_2cc608(d->target);
+            if (b != 0) {
+                d->height = b->height;
+                d->life = b->radius;
             }
         }
-        v->height = 0.0f;
-        v->target_timer = FUN_001fef20_2cc608(20);
-        v->scale = 1.0f;
-        found = FUN_L00_0025c338_2cc608(v->target);
-        if (found) {
-            v->height = *(f32 *)((u8 *)found + 0x10);
-            v->scale = *(f32 *)found;
-        }
-        return;
+        break;
     case 5:
-        if (!FUN_001fef98_2cc608(&v->timer)) return;
-        v->target = 0;
-        v->shot = 0;
-        m[0x20] = 2;
+        if (timer16_2cc608(&d->shot_timer) == 0) return;
+        d->shots = 0;
+        d->target = 0;
+        m->state = 2;
+        break;
+    case 6:
+    case 7:
+    case 8:
         break;
     }
-    return;
-
 }
-#endif
 typedef union {
     OvlQuad q;
     float f[4];
