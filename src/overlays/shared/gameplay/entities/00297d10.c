@@ -1849,6 +1849,7 @@ void FUN_L06_002f2250(void) {
                                 start[2] += 0.25f;
                                 end[2] += 0.25f;
                                 if (collision_line_2f2250(start, end, 2, moby, 0) == 0 || D_L06_001745C0.f18 == target) {
+                                    float score;
                                     unsigned short count;
                                     float *scores;
                                     score = FUN_L06_002f2148((char *)moby, (char *)target, 5);
@@ -1857,7 +1858,6 @@ void FUN_L06_002f2250(void) {
                                     for (k = 0; k < *(short *)((char *)vars + 0x192); k++, scores++, count = *(unsigned short *)((char *)vars + 0x192)) {
                                         if (score < *scores) {
                                             GbMoby **target_list;
-                                            float *scores;
                                             last = 6;
                                             if ((short)count - 1 < 7) last = (short)count - 1;
                                             target_list = (GbMoby **)((char *)vars + 0x1a4) + last;
@@ -1910,7 +1910,7 @@ void FUN_L06_002f2250(void) {
     }
     {
         GbMoby **moby_list = mobys;
-        for (i = moby_count; i > 0; i--) {
+        if (moby_count > 0) for (i = moby_count; i != 0; i--) {
             *(int *)((char *)(*moby_list++)->vars + 0x178) = 0;
         }
     }
@@ -1920,7 +1920,8 @@ void FUN_L06_002f2250(void) {
         GbMoby **target_list = targets;
         GbMoby **selected_list = selected;
 
-        for (i = 0; i < target_count; i++) {
+        i = 0;
+        do {
             index = 0;
             weight = 0;
             for (j = 0; j < target_count; j++) {
@@ -1969,11 +1970,12 @@ void FUN_L06_002f2250(void) {
                     vars->f17C = fast_add_rotations_2f2250(score, (float)j * step);
                 }
             }
-        }
+            i++;
+        } while (i < target_count);
     }
     {
         GbMoby **moby_list = mobys;
-        for (i = moby_count; i > 0; i--) {
+        if (moby_count > 0) for (i = moby_count; i != 0; i--) {
             GbVars *vars = (*moby_list++)->vars;
             vars->f18C = GB_FRAME;
             vars->target = *(GbMoby **)((char *)vars + 0x178);
