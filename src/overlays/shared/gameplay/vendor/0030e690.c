@@ -204,6 +204,9 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     int *tag;
     unsigned long long *q;
     int sx, sy;
+    unsigned long long packed_position;
+    volatile int saved_depth = z_and_fog;
+    unsigned long long packed_depth;
 
     center[0] = x;
     center[1] = y;
@@ -232,6 +235,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     q[4] = (unsigned long long)(red & 0xff) | ((unsigned long long)(green & 0xff) << 8) |
            ((unsigned long long)(blue & 0xff) << 16) | ((unsigned long long)(alpha & 0xff) << 24);
     q[5] = 0x100010;
+    packed_depth = (unsigned long long)saved_depth << 32;
     texture_width <<= 4;
     texture_height <<= 20;
     sx = ftoi_g(top_left[0] * 16.0f);
@@ -241,9 +245,10 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     sy -= 8;
     sx -= 8;
     q[7] = texture_width;
-    q[6] = (unsigned long long)(sx) |
-           ((unsigned long long)(sy) << 16) |
-           ((unsigned long long)z_and_fog << 32);
+    packed_position = (unsigned long long)sx;
+    packed_position |= (unsigned long long)sy << 16;
+    packed_position |= packed_depth;
+    q[6] = packed_position;
     sx = ftoi_g(bottom_left[0] * 16.0f);
     sy = ftoi_g(bottom_left[1] * 16.0f);
     sy += screen_extent[5];
@@ -251,9 +256,10 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     sy -= 8;
     sx -= 8;
     q[9] = texture_height;
-    q[8] = (unsigned long long)(sx) |
-           ((unsigned long long)(sy) << 16) |
-           ((unsigned long long)z_and_fog << 32);
+    packed_position = (unsigned long long)sx;
+    packed_position |= (unsigned long long)sy << 16;
+    packed_position |= packed_depth;
+    q[8] = packed_position;
     sx = ftoi_g(top_right[0] * 16.0f);
     sy = ftoi_g(top_right[1] * 16.0f);
     sy += screen_extent[5];
@@ -261,9 +267,10 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     sy -= 8;
     sx -= 8;
     q[11] = (texture_height) + (texture_width);
-    q[10] = (unsigned long long)(sx) |
-            ((unsigned long long)(sy) << 16) |
-            ((unsigned long long)z_and_fog << 32);
+    packed_position = (unsigned long long)sx;
+    packed_position |= (unsigned long long)sy << 16;
+    packed_position |= packed_depth;
+    q[10] = packed_position;
     sx = ftoi_g(bottom_right[0] * 16.0f);
     sy = ftoi_g(bottom_right[1] * 16.0f);
     sy += screen_extent[5];
@@ -271,9 +278,10 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     sy -= 8;
     sx -= 8;
     q[13] = 0;
-    q[12] = (unsigned long long)(sx) |
-            ((unsigned long long)(sy) << 16) |
-            ((unsigned long long)z_and_fog << 32);
+    packed_position = (unsigned long long)sx;
+    packed_position |= (unsigned long long)sy << 16;
+    packed_position |= packed_depth;
+    q[12] = packed_position;
     D_L11_001611C0_g = (*(volatile int *)&D_L11_001611C0_g) + 0x70;
 }
 #undef FUN_L11_00310cf8
