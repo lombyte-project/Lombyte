@@ -265,7 +265,6 @@ int FUN_L00_0025c698(void *moby, void *motion) {
         FUN_L00_00258278_0025c698(F_25C698(motion, 0x40), 0.02f, 0.3f,
             F_25C698(motion, 0x48), moby, (u8 *)motion + 0x44);
 
-    state = 0;
     moved = *(V4 *)((u8 *)moby + 0x10);
     moved.v[2] += F_25C698(motion, 0x28);
     FUN_001f9a68_0025c698((u8 *)moby + 0x10, (u8 *)moby + 0x10, motion);
@@ -274,19 +273,17 @@ int FUN_L00_0025c698(void *moby, void *motion) {
     FUN_001f9a68_0025c698(&surface, &probe, motion);
     count = FUN_L00_001f2868_0025c698(FUN_00200240_0025c698(I_25C698(motion, 0x20)) * 0.0010742188f,
         &surface, 0x10, moby, 0);
-    if (state < count) {
-        state = count;
-        hit = D_00177F00_0025c698;
-        do {
-            if (FUN_L00_0025e3b8_0025c698(*hit) == 0) {
-                if ((I_25C698(motion, 0x24) & 0x20) && H_25C698(motion, 0x3e) == 2)
-                    result |= 0x100;
-            } else {
-                FUN_L00_00259bc8_0025c698(1.0f, *hit, moby, 0x10000, (u8 *)moby + 0x10, motion);
-            }
-            hit++;
-            state--;
-        } while (state != 0);
+    state = count;
+    hit = D_00177F00_0025c698;
+    /* The query returns zero or a logical-right-shifted hit count. */
+    while (state-- > 0) {
+        if (FUN_L00_0025e3b8_0025c698(*hit) == 0) {
+            if ((I_25C698(motion, 0x24) & 0x20) && H_25C698(motion, 0x3e) == 2)
+                result |= 0x100;
+        } else {
+            FUN_L00_00259bc8_0025c698(1.0f, *hit, moby, 0x10000, (u8 *)moby + 0x10, motion);
+        }
+        hit++;
     }
     smoothing = FUN_001ff3d8_0025c698(motion);
     if ((float)I_25C698(motion, 0x20) * 0.0009765625f < smoothing) {
