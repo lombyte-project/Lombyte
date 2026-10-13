@@ -1957,7 +1957,6 @@ void FUN_L08_002de528(void *moby, int index, int count, int variant) {
             position[3] = 1.0f;
             FUN_001f9d20(position, position, (char *)D_L08_001600EC + table_offset);
             qcopy(spawned + 0x10, position);
-            --i;
             FUN_001f99f8(axis);
             FUN_001f9a28(velocity, position, origin);
             speed = random_float_between(frame_time * 12.0f, frame_time * 15.0f);
@@ -1966,7 +1965,7 @@ void FUN_L08_002de528(void *moby, int index, int count, int variant) {
             velocity[2] = angle;
             speed = random_float_between(60.0f, 90.0f);
             FUN_L05_00318648(spawned, (int)moby, velocity, axis, FUN_001fa6d0(speed));
-        } while (i != 0);
+        } while (--i != 0);
     }
 }
 
