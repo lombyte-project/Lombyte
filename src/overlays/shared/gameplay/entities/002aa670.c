@@ -1284,7 +1284,7 @@ void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
         }
     }
     *(short *)((char *)v + 0x54) = scale_game_frames_2acfd8(300);
-    qcopy(moby + 0x10, pos);
+    *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)pos;
     qcopy_nc(difference, (char *)hero.moby + 0x10);
     difference[2] = pos[2];
     if (FUN_001efa68_2acfd8(difference, pos, 0, hero.moby, 0) != 0) {
