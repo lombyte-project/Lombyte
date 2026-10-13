@@ -351,6 +351,7 @@ OVERLAY_SN_UNITS = {
     "shared/rendering/0027f660.c",
     "shared/rendering/commands/0020bc88.c",
     "shared/rendering/sky/00288ec0.c",
+    "shared/rendering/view/0025fcb8.c",
     "shared/runtime/dma/002b7a48.c",
     "shared/ui/help/001fe778.c",
     "shared/ui/help/00203b18.c",
