@@ -184,6 +184,7 @@ int FUN_L00_0025c698(void *moby, void *motion) {
     V4 moved, prior, probe, surface, normal, impulse;
     float speed, height, smoothing, target, duration, limit, time, value;
     float output, scratch;
+    float dot;
     int result = 0, count, *hit, state;
 
     F_25C698(motion, 8) -= F_25C698(motion, 0x10);
@@ -297,7 +298,7 @@ int FUN_L00_0025c698(void *moby, void *motion) {
         F_25C698(moby, 0x18) -= F_25C698(motion, 0x28);
         FUN_001f9bf8_0025c698(&normal, &D_00173E80_0025c698, 1.0f);
         if (normal.v[2] >= 0.707f) {
-            float dot = FUN_001f9ab0_0025c698(motion, &normal);
+            dot = FUN_001f9ab0_0025c698(motion, &normal);
             if (dot < 0.0f) {
                 if (D_00173E58_0025c698 == 0 || *(&D_00173E58_0025c698 + 1) > 0) {
                     result |= 1;
@@ -312,7 +313,7 @@ int FUN_L00_0025c698(void *moby, void *motion) {
                 }
             }
         } else {
-            float dot = FUN_001f9ab0_0025c698(motion, &normal);
+            dot = FUN_001f9ab0_0025c698(motion, &normal);
             if (dot < 0.0f) {
                 FUN_001f9bf8_0025c698(&impulse, &normal, dot * -(F_25C698(motion, 0x30) + 1.0f));
                 FUN_001f9a68_0025c698(motion, motion, &impulse);
