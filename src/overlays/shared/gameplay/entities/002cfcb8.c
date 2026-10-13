@@ -2325,8 +2325,8 @@ void FUN_L00_002d5160(unsigned char *m) {
         FUN_L00_0025ff38_2d5160(24.0f, m, effect, 0, 0, row + 0x10, *(s32 *)row);
     }
     if (*(s32 *)(v + 0x1C0) == 0) {
-        *(s32 *)(v + 0x1C0) = D_001413D0_2d5160;
-        *(OvlQuad *)effect = *(OvlQuad *)D_0013F3D0_2d5160;
+        *(s32 *)(v + 0x1C0) = (s32)hero.moby;
+        qcopy(effect, &hero.motion.pos);
     }
     FUN_001fef98_2d5160(v + 0x276);
     if (*(s32 *)(v + 0x38) != 0) {
