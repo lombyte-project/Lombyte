@@ -45,7 +45,8 @@ struct GameState {
     s32 unk124;
     u8 pad128[0x130 - 0x128];
     s32 unk130;
-    u8 pad134[0x140 - 0x134];
+    u8 pad134[0x13C - 0x134];
+    s32 unk13C;
     s32 unk140;
     s32 unk144;
     s32 stash_handles[20];         /* 0x148: FUN_L00_00276078 */
