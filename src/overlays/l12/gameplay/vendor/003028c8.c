@@ -1818,7 +1818,7 @@ void FUN_L12_00308350(struct Moby *m) {
     copy_moby_matrix(matrix, &m->rot_row0);
     qcopy(&matrix[3], &m->pos);
     matrix[3][3] = 1.0f;
-    first.texture = get_effect_texture_l12(0xe);
+    first.texture = second.texture = get_effect_texture_l12(0xe);
     flags = (long)D_L12_00161FBC;
     second_flags = (long)D_L12_00161FCC;
     flags |= (long)D_L12_00161FC0 << 2;
@@ -1831,11 +1831,9 @@ void FUN_L12_00308350(struct Moby *m) {
     second_flags |= 0x8000000000L;
     first.gs_state = flags;
     second.gs_state = second_flags;
-    first.texture_state = 0xFF9000000260L;
-    second.texture_state = 0xFF9000000260L;
-    first.tag = 0;
+    first.texture_state = second.texture_state = 0xFF9000000260L;
     second.tag = 0;
-    second.texture = first.texture;
+    first.tag = 0;
     first.color[0] = first.color[1] = first.color[2] = first.color[3] = D_L12_00161F90;
     second.color[0] = second.color[1] = second.color[2] = second.color[3] = D_L12_00161F94;
     j = 0;
