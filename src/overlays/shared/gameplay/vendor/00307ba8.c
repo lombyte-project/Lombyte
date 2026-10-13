@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "sda.h"
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -303,10 +304,6 @@ void FUN_L09_0030a9e8(unsigned char *a0, char *a1) {
     a0[0xA4] = 0xFF;
     FUN_L00_0025d538_c(a0, a1 + 0x60);
 }
-#define NOT_SDA
-
-#define MACRO_ADDR
-
 /* Counts the live level-0x75E mobys among the 20 slots at +0xB0 and returns the last slot not counted. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030BEE8), where it is exact; names translated to the US level program. */
 
@@ -328,7 +325,193 @@ int FUN_L09_0030aae0(int unused, char *m) {
     }
     return last;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_0030ab80.s", FUN_L09_0030ab80);
+extern void FUN_L09_0030a9e8_30ab80(char *, char *) __asm__("FUN_L09_0030a9e8");
+extern void mark_moby_for_removal_30ab80(void *) __asm__("FUN_0020c828");
+extern int FUN_L00_002591d0_30ab80(int *, int, int, int) __asm__("FUN_L00_002591d0");
+extern int tick_countdown_16_30ab80(void *) __asm__("FUN_001f9770");
+extern int random_integer_below_30ab80(int) __asm__("FUN_00213260");
+extern int pick_target_30ab80(void *, void *, float, void *, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int FUN_L09_0030aae0_30ab80(int, char *) __asm__("FUN_L09_0030aae0");
+extern float distance_30ab80(void *, void *) __asm__("FUN_001f9b48");
+extern void subtract_vector_xyz_30ab80(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_xyz_30ab80(void *, void *, float) __asm__("FUN_001f9a68");
+extern void FUN_001f9c90_30ab80(void *, void *, float) __asm__("FUN_001f9c90");
+extern float vector_length_xyz_30ab80(void *) __asm__("FUN_001f9af0");
+extern void normalize_vector_xyz_30ab80(void *, void *, float) __asm__("FUN_001f9bf8");
+extern int random_int_between_30ab80(int, int) __asm__("FUN_L00_00257b90");
+extern void FUN_L09_00277758_30ab80(float *, float) __asm__("FUN_L09_00277758");
+extern void add_vector_xyz_30ab80(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float random_float_between_30ab80(float, float) __asm__("FUN_002132a8");
+extern float FUN_00213508_30ab80(void *, int, float) __asm__("FUN_00213508");
+extern void moby_point_position_30ab80(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void FUN_L00_0025f8e0_30ab80(float *, float) __asm__("FUN_L00_0025f8e0");
+extern float FUN_L00_0025abf0_30ab80(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");
+extern char *FUN_L09_0030b218_30ab80(int, void *, void *, unsigned char, unsigned char) __asm__("FUN_L09_0030b218");
+extern int scale_game_frames_30ab80(int) __asm__("FUN_001f96f8");
+extern void FUN_L00_0025e450_30ab80(void *, void *, void *, float, float, int, int, int, float, float, float, float, int,
+                                    float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void *FUN_L00_00263fd8_30ab80(char *, int, void *, void *, int, int, float, float *, float *,
+                                     float *) __asm__("FUN_L00_00263fd8");
+extern char *D_L09_001600EC_30ab80 __asm__("D_L09_001600EC") __attribute__((sda));
+extern float D_L09_0015F580_30ab80[] __asm__("D_L09_0015F580") MACRO_ADDR;
+extern char *D_L09_001B0630_30ab80[] __asm__("D_L09_001B0630");
+extern char D_0013E533_30ab80[] __asm__("D_0013E533");
+extern float frame_scale_30ab80 __asm__("D_0015ED6C") MACRO_ADDR;
+extern float frame_scale_sq_30ab80 __asm__("D_0015ED70") MACRO_ADDR;
+
+typedef struct {
+    char pad0[0xB0];
+    char *slots[4];
+} SpawnerVars_30ab80;
+
+/* Spawner update (moby class 0x75D): state 0 clears the slot list, state 1 picks a target and lobs a
+ * 0x75E moby towards it, state 2 explodes. Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c:
+ * func_L09_0030BF88), where it is exact; this build has no 0.85 limit check before a spawn. */
+void FUN_L09_0030ab80(char *moby)
+{
+    char *d = *(char **)(moby + 0x78);
+    float target[4];
+    float vel[4];
+    float pos[4];
+    float offset[4];
+
+    FUN_L09_0030a9e8_30ab80(moby, d);
+    switch ((unsigned char)moby[0x20]) {
+    case 0: {
+        int h = 0;
+        while (FUN_L00_002591d0_30ab80(&h, *(int *)(d + 0x94), 0, 0) == 0) {
+            mark_moby_for_removal_30ab80((void *)h);
+        }
+        moby[0x20] = 1;
+        return;
+    }
+    case 1: {
+        FUN_L09_0030a9e8_30ab80(moby, d);
+        if (!tick_countdown_16_30ab80(d + 0x8E))
+            return;
+        if (random_integer_below_30ab80(7) == 0) {
+            char *excluded = 0;
+            int excluded_count = 0;
+            char *region = 0;
+            int region_count = 0;
+            if (*(int *)(d + 0x84) != -1) {
+                excluded = d + 0x84;
+                excluded_count = 1;
+            }
+            if (*(int *)(d + 0x88) != -1) {
+                char *q = D_L09_001B0630_30ab80[*(int *)(d + 0x88)];
+                region_count = *(int *)q;
+                region = q + 0x10;
+            }
+            pick_target_30ab80(moby, d + 0x100, *(float *)(d + 0x80), excluded, excluded_count, region, region_count);
+        } else {
+            char *p = *(char **)(d + 0x140);
+            if (p != 0 && (unsigned char)p[0x20] != 0xFE && (unsigned char)p[0x20] != 0xFD) {
+                qcopy(d + 0x100, p + 0x10);
+            } else {
+                *(int *)(d + 0x140) = 0;
+                *(int *)(d + 0x144) = 2;
+            }
+        }
+        if (*(int *)(d + 0x144) == 2)
+            return;
+        {
+        int last = FUN_L09_0030aae0_30ab80((int)moby, d);
+        char *sel;
+        if ((unsigned char)d[0x91] >= (unsigned char)d[0x90])
+            return;
+        if (last == -1)
+            return;
+        sel = 0;
+        if (*(unsigned char *)(d + 0x92) != 0) {
+            int i;
+            float best = 100000.0f;
+            for (i = 0; i < 4; i++) {
+                int idx = *(int *)(d + 0xA0 + i * 4);
+                if (idx != -1) {
+                    char *q = D_L09_001600EC_30ab80 + (idx << 7);
+                    float f = distance_30ab80(D_0013E533_30ab80 + 0xE9D, q + 0x30);
+                    if (f < best) {
+                        sel = q;
+                        best = f;
+                    }
+                }
+            }
+            if (sel == 0) {
+                subtract_vector_xyz_30ab80(target, d + 0x100, moby + 0x10);
+                scale_vector_xyz_30ab80(target, target, 0.5f);
+                if (3.0f < *(float *)(d + 0x80))
+                    FUN_001f9c90_30ab80(target, target, 3.0f);
+                if (vector_length_xyz_30ab80(target) < 3.0f)
+                    normalize_vector_xyz_30ab80(target, target, 3.0f);
+                add_vector_xyz_30ab80(target, target, moby + 0x10);
+            } else {
+                qcopy(target, sel + 0x30);
+            }
+        } else {
+            int start = random_int_between_30ab80(0, 3);
+            int i;
+            for (i = 0; i < 4; i++) {
+                int k = (i + start) % 4;
+                int idx = *(int *)(d + (k << 2) + 0xA0);
+                if (idx != -1) {
+                    sel = D_L09_001600EC_30ab80 + (idx << 7);
+                    break;
+                }
+            }
+            if (sel == 0) {
+                float s = *(float *)(d + 0x80);
+                if (s < 3.0f)
+                    s = 3.0f;
+                FUN_L09_00277758_30ab80(target, s);
+                add_vector_xyz_30ab80(target, target, moby + 0x10);
+            } else {
+                qcopy(target, sel + 0x30);
+            }
+        }
+        if (sel != 0) {
+            scale_vector_xyz_30ab80(vel, sel, random_float_between_30ab80(-1.0f, 1.0f));
+            add_vector_xyz_30ab80(target, target, vel);
+            scale_vector_xyz_30ab80(vel, sel + 0x10, random_float_between_30ab80(-1.0f, 1.0f));
+            add_vector_xyz_30ab80(target, target, vel);
+        }
+        {
+            float ground = FUN_00213508_30ab80(target, 0, 0.5f);
+            if (ground != 0.0f)
+                target[2] = ground;
+        }
+        subtract_vector_xyz_30ab80(vel, target, moby + 0x10);
+        {
+            float len = vector_length_xyz_30ab80(vel);
+            float speed = len * (frame_scale_30ab80 * 0.6f);
+            normalize_vector_xyz_30ab80(vel, vel, speed);
+            moby_point_position_30ab80(moby, 0, pos);
+            normalize_vector_xyz_30ab80(offset, vel, 0.05f);
+            FUN_L00_0025f8e0_30ab80(offset, 0.025f);
+            add_vector_xyz_30ab80(pos, pos, offset);
+            vel[2] = FUN_L00_0025abf0_30ab80(pos, target, 0, speed, -(frame_scale_sq_30ab80 * 9.8f));
+        }
+        ((SpawnerVars_30ab80 *)d)->slots[last] =
+            FUN_L09_0030b218_30ab80((int)moby, pos, vel, (unsigned char)d[0x93], (unsigned char)last);
+        *(short *)(d + 0x8E) = scale_game_frames_30ab80(*(short *)(d + 0x8C));
+        d[0x91] = (char)(d[0x91] + 1);
+        }
+        return;
+    }
+    case 2:
+        FUN_L00_0025e450_30ab80(moby, d + 0x70, 0, 0.0f, 0.0f, 30, 8, 20, 8.0f, 4.0f, 18.0f, 1.0f, 1, 15.0f, 1, 1, -1, 0);
+        FUN_L00_00263fd8_30ab80(moby, 0x6C5, moby + 0x10, moby + 0x40, 0, 0, 0.0f, D_L09_0015F580_30ab80,
+                                D_L09_0015F580_30ab80, D_L09_0015F580_30ab80);
+        FUN_L00_00263fd8_30ab80(moby, 0x6C6, moby + 0x10, moby + 0x40, 0, 0, 0.0f, D_L09_0015F580_30ab80,
+                                D_L09_0015F580_30ab80, D_L09_0015F580_30ab80);
+        FUN_L00_00263fd8_30ab80(moby, 0x6C7, moby + 0x10, moby + 0x40, 0, 0, 0.0f, D_L09_0015F580_30ab80,
+                                D_L09_0015F580_30ab80, D_L09_0015F580_30ab80);
+        mark_moby_for_removal_30ab80(moby);
+        return;
+    default:
+        return;
+    }
+}
 #include "qcopy.h"
 
 /* Spawns a moby of class 0x75E and initialises its data. */
