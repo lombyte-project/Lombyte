@@ -210,9 +210,6 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
         qcopy(out, &working);
     return found;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262030.s", FUN_L00_00262030);
-#else
 #include "rnc/overlay/quad.h"
 
 typedef struct {
@@ -284,9 +281,9 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
                     segment_length = FUN_001ff3d8_262030(&difference);
                     if (!(segment_length < distance))
                         goto next_segment_262030;
-                    found = 1;
                     FUN_001ff500_262030(distance, &scaled_difference, &difference);
                     FUN_001ff278_262030(&working, &scaled_difference, current);
+                    found = 1;
                 } else {
                     found = 1;
                     FUN_001ff500_262030(projection, &scaled_cross, &scaled_segment);
@@ -307,7 +304,6 @@ next_segment_262030:
     }
     return found;
 }
-#endif /* NON_MATCHING */
 #include "rnc/math/vector.h"
 
 /* A polyline of evenly spaced points. */
