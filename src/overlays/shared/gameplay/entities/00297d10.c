@@ -2188,7 +2188,7 @@ void FUN_L06_002f2250(void) {
         }
     }
     if (moby_count > 0) {
-        int j, k, last;
+        int i, j, k, last;
         GbMoby *moby, *target;
         GbVars *vars;
         GbClass *cls;
