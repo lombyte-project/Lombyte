@@ -578,8 +578,8 @@ void FUN_L05_0030c220(struct Moby *m) {
         j = 0;
         vertex_a = a.vertex[0];
         vertex_b = b.vertex[0];
-        color_a = a.color;
         color_b = b.color;
+        color_a = a.color;
         do {
             qcopy_nc(vertex_a, D_L05_001D67D0[j]);
             *(u128 *)b.vertex[j] = *(u128 *)D_L05_001D6810[j];
