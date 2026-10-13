@@ -226,8 +226,7 @@ int FUN_L00_0025c698(void *moby, void *motion) {
         result = 0x100;
 
     if (F_25C698(motion, 0x54) != -1.0f && F_25C698(motion, 0x50) != -1.0f) {
-        state = H_25C698(motion, 0x3e);
-        switch (state) {
+        switch (H_25C698(motion, 0x3e)) {
         case 0: {
             duration = FUN_001ff218_0025c698(F_25C698(motion, 8) / F_25C698(motion, 0x10));
             if (duration > 2.0f) {
