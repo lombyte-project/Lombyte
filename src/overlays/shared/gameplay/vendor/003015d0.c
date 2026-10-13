@@ -418,9 +418,7 @@ void FUN_L14_00301fa8(char *m) {
         } else {
             clear_u64_value(start);
         }
-        rounded = point + 3;
-        if (-1 < point) rounded = point;
-        rounded = (rounded >> 2) << 2;
+        rounded = (point / 4) * 4;
         for (i = 0; i < 4;) {
             if (i < 2) {
                 packet[0].vertices[i] = *(u128 *)(d + 0x20 + (point << 4));
@@ -460,9 +458,7 @@ add_main:
                     clear_u64_value(start);
                 }
                 if (point == 0) qcopy(end, start);
-                rounded = point + 3;
-                if (-1 < point) rounded = point;
-                rounded = (rounded >> 2) << 2;
+                rounded = (point / 4) * 4;
                 for (k = 0; k < 4;) {
                     if (k < 2) {
                         packet[0].vertices[k] = *(u128 *)(d + (point << 6) + 0x420 + (strip << 4));
