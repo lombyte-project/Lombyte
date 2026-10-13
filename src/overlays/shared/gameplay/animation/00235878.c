@@ -566,7 +566,7 @@ int FUN_L00_00237200(HudElem *e) {
     char text[64];
     const char *line;
     unsigned char *opacity = (unsigned char *)e + 0x70;
-    volatile int text_y;
+    int text_y;
 
     if (pal_mode != 0) {
         y = D_L00_0015F770 + 0xa;
@@ -592,10 +592,12 @@ int FUN_L00_00237200(HudElem *e) {
         left = 0xe0 - (width >> 1);
         other_width = FUN_001fb090((const char *)&D_L00_0017E530[1] + i, -1);
         other_left = 0xe0 - (other_width >> 1);
-        if (other_left <= left) {
-            left = other_left;
+        if (left < other_left) {
+            other_left = left;
+        } else {
             width = other_width;
         }
+        left = other_left;
         FUN_0023b4d8(FUN_0023b208(0x7580, 0), left + 0x20, y, width, 0x36, alpha);
         FUN_0023b4d8(FUN_0023b208(0x7580, 1), left, y, 0x20, 0x36, alpha);
         FUN_0023b860(FUN_0023b208(0x7580, 1), left + (width + 0x20), y, 0x20, 0x36, alpha);
@@ -609,7 +611,7 @@ int FUN_L00_00237200(HudElem *e) {
         FUN_0023b4d8(FUN_0023b208(0x7580, 0), left + 0x20, y, width, 0x20, alpha);
         FUN_0023b860(FUN_0023b208(0x7580, 1), left + (width + 0x20), y, 0x20, 0x20, alpha);
         FUN_001fb9a8(0x100, text_y, color, (const char *)D_L00_0017E530, -1);
-        level = current_level_index;
+        level = *(int *)0x15ed84;
     }
     if (level == 5 || level == 0x10) {
         typedef unsigned int quadword __attribute__((mode(TI), aligned(16)));
