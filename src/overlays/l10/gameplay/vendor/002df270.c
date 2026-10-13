@@ -2208,7 +2208,8 @@ typedef struct {
 } Vars_2E8AB0;
 
 extern struct Moby *D_L10_0015FFD8_8ab0 __asm__("D_L10_0015FFD8") __attribute__((sda));
-extern unsigned char D_L10_001BB6B0_8ab0[] __asm__("D_L10_001BB6B0");
+typedef struct { unsigned char pad[0x454]; unsigned char collected[1]; } SaveFlags_2E8AB0;
+extern SaveFlags_2E8AB0 D_L10_001BB6B0_8ab0 __asm__("D_L10_001BB6B0");
 extern int D_L10_001BA950_8ab0[] __asm__("D_L10_001BA950");
 extern int D_0014C190_8ab0[] __asm__("D_0014C190");
 extern float FUN_L00_00258110(float *, float, float, float, float, float);
@@ -2248,7 +2249,7 @@ state_zero:
         int signed_save_id;
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
-        if (D_L10_001BB6B0_8ab0[(short)save_id + 0x454] != 0 ||
+        if (D_L10_001BB6B0_8ab0.collected[(short)save_id] != 0 ||
             ((*(int *)((char *)D_0014C190_8ab0 + ((signed_save_id >> 5) * 4 + (current_level_index << 8))) >> (save_id & 31)) & 1) != 0) {
             moby->state = 3;
             return;
@@ -2271,7 +2272,7 @@ state_two:
         struct Moby *candidate;
         save_id = moby->save_id;
         signed_save_id = (short)save_id;
-        if (D_L10_001BB6B0_8ab0[(short)save_id + 0x454] != 0 ||
+        if (D_L10_001BB6B0_8ab0.collected[(short)save_id] != 0 ||
             ((*(int *)((char *)D_0014C190_8ab0 + ((signed_save_id >> 5) * 4 + (current_level_index << 8))) >> (save_id & 31)) & 1) != 0) {
             moby->state = 3;
             return;
