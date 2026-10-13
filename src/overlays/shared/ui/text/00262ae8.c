@@ -85,7 +85,7 @@ typedef struct {
 /* Retail accesses these names through the shared Hero base at 0x0013f350. */
 #define D_001413D4 hero.state.current
 #define D_0013F65E hero.air_frames.s
-#define D_0013F650 hero.unk300
+#define D_0013F650 hero.grounded_frames
 #define D_0013FA40 hero.unk6E0[4]
 #define D_0013FA5C (*(s32 *)&hero.pad_6FC[0x10])
 #define D_0013FBB4 hero.unk864
