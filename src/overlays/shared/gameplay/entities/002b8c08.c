@@ -1776,28 +1776,21 @@ extern char *FUN_L01_002ef350(char *);
 extern char *FUN_L01_002ef478(char *, int);
 extern void FUN_L01_002ef770(unsigned char *, float *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern f32 D_0015ED6C;
 extern float D_L01_0015ED6C __asm__("D_0015ED6C");
 extern float D_0013F420[4];
-extern char *D_L01_001612D0 __asm__("D_L01_001612D0");
-extern char *D_0015D3A4 __attribute__((section(".sdata")));
-extern float D_0015ED6C __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
-extern float D_0015C138 __attribute__((section(".sdata")));
-extern int D_0015ED64 __attribute__((section(".sdata")));
-extern int D_0015ED68 __attribute__((section(".sdata")));
+extern char *D_L01_001612D0;
+extern char *D_L01_0015FFD8 __attribute__((sda));
+extern float D_L01_001619A0 __attribute__((sda));
+extern float D_L01_001619A4 __attribute__((sda));
+extern int D_L01_00161998 __attribute__((sda));
+extern int D_L01_0016199C __attribute__((sda));
+extern float frame_time __attribute__((sda));
 extern char *D_001413D0;
 extern char *D_L01_001B0930[];
-#define D_0015D3A4 (*(char **)0x0015D3A4)
-#define D_0015ED6C (*(float *)0x0015ED6C)
-#define D_0015ED70 (*(float *)0x0015ED70)
-#define D_0015C138 (*(float *)0x0015C138)
-#define D_0015ED64 (*(int *)0x0015ED64)
-#define D_0015ED68 (*(int *)0x0015ED68)
 
 void FUN_L01_002eec68(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    char *hit = FUN_L00_0025a420(moby, 0x330000, 0);
+    char *hit;
     float origin[4] __attribute__((aligned(16)));
     float target[4] __attribute__((aligned(16)));
     float smoke_angle;
@@ -1813,22 +1806,24 @@ void FUN_L01_002eec68(char *moby) {
     float angle_step;
 
     smoke_angle = 0.0f;
+    hit = FUN_L00_0025a420(moby, 0x330000, 0);
     if (hit != 0) {
+        char *other;
         qcopy(origin, moby + 0x10);
         origin[2] += 0.5f;
         other = *(char **)(hit + 0x20);
-        if (other == 0) {
-            *(u128 *)target = *(u128 *)hit;
-        } else if (*(short *)(other + 0xa6) == 0x47) {
-            qcopy(target, D_0013F420);
-        } else {
-            if ((*(char **)(other + 0x24) == 0 ||
-                 *(short *)(*(char **)(other + 0x24) + 0x46) != 5) &&
-                *(short *)(other + 0xa6) != 0xba) {
-                qcopy(target, other + 0x10);
-            } else {
+        if (other != 0) {
+            if (*(short *)(other + 0xa6) == 0x47) {
+                qcopy(target, D_0013F420);
+            } else if ((*(char **)(other + 0x24) != 0 &&
+                        *(short *)(*(char **)(other + 0x24) + 0x46) == 5) ||
+                       *(short *)(other + 0xa6) == 0xba) {
                 qcopy(target, origin);
+            } else {
+                qcopy(target, other + 0x10);
             }
+        } else {
+            qcopy(target, hit);
         }
         if (FUN_001f9b48(origin, target) < 24.0f &&
             FUN_001efa68(origin, target, 2, (int)moby, 0) != 0) {
@@ -1840,69 +1835,89 @@ void FUN_L01_002eec68(char *moby) {
         (u8)moby[0x20] != 11 && (u8)moby[0x20] != 10 && (u8)moby[0x20] != 8) {
         FUN_0022da68(0, 0, moby);
         data[0x9d] = 0;
-        *(int *)(data + 0x70) = 0x3c03126f;
+        *(float *)(data + 0x70) = 0.008f;
         *(int *)(data + 0x84) = 8;
         *(float *)(data + 0x20) -= 1.0f;
         *(int *)(data + 0x80) = FUN_001fa6d0(*(float *)(data + 0x250) * 0.8f * 1024.0f);
         *(float *)(data + 0x88) = *(float *)(data + 0x250) * 0.8f;
         FUN_L01_002ef770((unsigned char *)moby, (float *)(hit + 0x10));
-        if (!(0.0f < *(float *)(data + 0x20))) {
-            *(u16 *)(moby + 0x34) &= 0xefff;
-            mark_moby_for_removal(moby);
-            return;
-        }
+        if (!(0.0f < *(float *)(data + 0x20))) goto depleted;
         other = FUN_L01_002ef350(moby);
         if (other != 0) {
             other_data = *(char **)(other + 0x78);
             other_data[0x9d] = 3;
-            *(int *)(other_data + 0x70) = 0x3c03126f;
+            *(float *)(other_data + 0x70) = 0.008f;
             *(int *)(other_data + 0x84) = 8;
             *(int *)(other_data + 0x80) = FUN_001fa6d0(*(float *)(data + 0x250) * 0.8f * 1024.0f);
-            *(float *)(other_data + 0x88) = *(float *)(data + 0x250) * 0.8f;
-            *(float *)(other_data + 0x78) = D_0015ED6C * D_0015ED6C;
-            *(float *)(other_data + 0x7c) = D_0015ED70 * D_0015ED6C;
-            *(float *)(other_data + 0xb0) = 7.0f;
-            *(float *)(other_data + 0xb4) = 13.0f;
-            *(int *)(other_data + 0x84) |= 4;
-            qcopy(origin, hit + 0x10);
+            {
+                float first_scale = D_L01_001619A0;
+                float second_scale = D_L01_001619A4;
+                float speed = *(float *)(data + 0x250);
+                float scale = D_L01_0015ED6C;
+                speed *= 0.8f;
+                first_scale *= scale;
+                second_scale *= scale;
+                effect = *(u32 *)(other_data + 0x84) | 4;
+                *(float *)(other_data + 0x88) = speed;
+                *(float *)(other_data + 0x78) = first_scale;
+                *(float *)(other_data + 0xb0) = 7.0f;
+                *(float *)(other_data + 0xb4) = 13.0f;
+                *(float *)(other_data + 0x7c) = second_scale;
+            }
+            *(u32 *)(other_data + 0x84) = effect;
+            *(u128 *)origin = *(u128 *)(hit + 0x10);
             FUN_L00_0025ab48(origin, &first_angle, other_data + 0x78, other_data + 0x7c);
             first_angle = FUN_001fa5c8(first_angle, 0.7853982f);
             FUN_L00_0025c558(first_angle, other, other_data + 0x60, 4, 8, 0);
-            *(float *)(other + 0x58) = 1.0f;
             other[0x20] = 8;
+            *(float *)(other + 0x58) = 1.0f;
         }
         other = FUN_L01_002ef350(moby);
         if (other != 0) {
             other_data = *(char **)(other + 0x78);
-            *(int *)(other_data + 0x70) = 0x3c03126f;
+            *(float *)(other_data + 0x70) = 0.008f;
             other_data[0x9d] = 3;
             *(int *)(other_data + 0x84) = 8;
             *(int *)(other_data + 0x80) = FUN_001fa6d0(*(float *)(data + 0x250) * 0.8f * 1024.0f);
-            *(float *)(other_data + 0x88) = *(float *)(data + 0x250) * 0.8f;
-            *(float *)(other_data + 0x78) = D_0015ED6C * D_0015ED6C;
-            *(float *)(other_data + 0x7c) = D_0015ED70 * D_0015ED6C;
-            *(float *)(other_data + 0xb0) = 7.0f;
-            *(float *)(other_data + 0xb4) = 13.0f;
-            *(int *)(other_data + 0x84) |= 4;
-            qcopy(origin, hit + 0x10);
+            {
+                float first_scale = D_L01_001619A0;
+                float second_scale = D_L01_001619A4;
+                float speed = *(float *)(data + 0x250);
+                float scale = D_L01_0015ED6C;
+                speed *= 0.8f;
+                first_scale *= scale;
+                second_scale *= scale;
+                effect = *(u32 *)(other_data + 0x84) | 4;
+                *(float *)(other_data + 0x88) = speed;
+                *(float *)(other_data + 0x78) = first_scale;
+                *(float *)(other_data + 0xb0) = 7.0f;
+                *(float *)(other_data + 0xb4) = 13.0f;
+                *(float *)(other_data + 0x7c) = second_scale;
+            }
+            *(u32 *)(other_data + 0x84) = effect;
+            *(u128 *)origin = *(u128 *)(hit + 0x10);
             FUN_L00_0025ab48(origin, &second_angle, other_data + 0x78, other_data + 0x7c);
             second_angle = FUN_001fa580(second_angle, 0.7853982f);
             FUN_L00_0025c558(second_angle, other, other_data + 0x60, 4, 8, 0);
-            *(float *)(other + 0x58) = 1.0f;
             other[0x20] = 8;
+            *(float *)(other + 0x58) = 1.0f;
         }
-        other = *(char **)(hit + 0x20);
-        if (other != 0 && *(char **)(other + 0x24) != 0 &&
-            *(short *)(*(char **)(other + 0x24) + 0x46) == 5) {
+        if (*(char **)(hit + 0x20) != 0 &&
+            *(char **)(*(char **)(hit + 0x20) + 0x24) != 0 &&
+            *(short *)(*(char **)(*(char **)(hit + 0x20) + 0x24) + 0x46) == 5) {
             FUN_L00_00257470(moby, 0x800, -1);
         } else {
             FUN_L00_00257470(moby, 0, -1);
         }
         mark_moby_for_removal(moby);
         return;
+    depleted:
+        *(u16 *)(moby + 0x34) &= 0xefff;
+        mark_moby_for_removal(moby);
+        return;
     }
-    moby[0xa4] = -1;
-    if (*(int *)(data + 0x258) != 0 && moby[0x20] != 0 &&
+    ((u8 *)moby)[0xa4] = 0xff;
+    if (*(int *)(data + 0x258) != 0 && ((u8 *)moby)[0x20] != 0 &&
         *(float *)(moby + 0x18) <
             *(float *)(D_L01_001612D0 + *(int *)(data + 0x258) * 0x1190 + 8)) {
         clear_vector(origin);
@@ -1920,7 +1935,7 @@ void FUN_L01_002eec68(char *moby) {
         *(float *)(data + 0x228) = *(float *)(data + 0x224) + 20.0f;
     }
     if (*(int *)(data + 0x260) <= 0 ||
-        D_0015D3A4[*(int *)(data + 0x260) * 0x100 + 0xbc] != 0) {
+        ((u8 *)D_L01_0015FFD8)[*(int *)(data + 0x260) * 0x100 + 0xbc] != 0) {
         shape = (int *)D_L01_001B0930[*(int *)(data + 0x24c)];
         if (FUN_L00_0025ff38(*(float *)(data + 0x228), moby, data + 0x1c0,
                               0, 0, shape + 4, *shape) != 2) {
@@ -1932,8 +1947,9 @@ void FUN_L01_002eec68(char *moby) {
     }
     selected = *(int *)(data + 0x248);
     if (selected < 0) {
-        selected = *(int *)(data + 0x200);
+        effect = *(int *)(data + 0x200);
     } else {
+        char *other;
         other = FUN_L01_002ef478(moby, selected);
         if (other != 0) {
             dist = FUN_001f9b80(moby + 0x10, other + 0x10);
@@ -1945,23 +1961,17 @@ void FUN_L01_002eec68(char *moby) {
                 }
             }
         }
-        selected = *(int *)(data + 0x200);
+        effect = *(int *)(data + 0x200);
     }
-    angle_step = D_0015C138;
-    if (selected == 0) {
+    angle_step = frame_time;
+    if (effect == 0) {
         *(char **)(data + 0x200) = D_001413D0;
-        angle_step = D_0015ED6C;
+        angle_step = D_L01_0015ED6C;
     }
     *(float *)(data + 0x254) = FUN_001fa580(*(float *)(data + 0x254), angle_step * 9.424778f);
     *(int *)(moby + 0x90) = FUN_001fa6e0((FUN_001f9de0(*(float *)(data + 0x254)) + 1.0f) * 0.5f,
-                                          D_0015ED64, D_0015ED68);
+                                          D_L01_00161998, D_L01_0016199C);
 }
-#undef D_0015D3A4
-#undef D_0015ED6C
-#undef D_0015ED70
-#undef D_0015C138
-#undef D_0015ED64
-#undef D_0015ED68
 #endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef350.s", FUN_L01_002ef350);
