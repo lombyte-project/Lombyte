@@ -442,7 +442,9 @@ s32 FUN_L00_002382a0(char *rec) {
     }
     selected = *(s32 *)(rec + 0x74);
     if (selected >= 0 && D_L00_0015FAC0_c[D_L00_0015F72C][selected].f0 != 0) {
-        f32 opacity = open * fade;
+        f32 opacity;
+        open *= fade;
+        opacity = open;
         color = fast_tween_color_alpha_first(opacity, D_L00_0015F798, D_L00_0015F79C);
         id = pause_iop_sprite_lists[selected];
         if (D_L00_001C40B0[id].h8 != 0) {
@@ -498,8 +500,7 @@ s32 FUN_L00_002382a0(char *rec) {
                     suffix = text + 2;
                     prefix_length = 1;
                 } else {
-                    while (j + 1 < text_length) {
-                        j++;
+                    while (++j < text_length) {
                         suffix++;
                         if (*(const u8 *)suffix == ' ') {
                             prefix_length = j + 1;
