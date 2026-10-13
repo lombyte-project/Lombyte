@@ -294,9 +294,11 @@ void FUN_L00_00276908(void) {
         }
         {
             struct GameState *state = &D_L00_001B9CF0;
+            s32 value;
             table = D_L00_0017E4D8;
+            value = *(s32 *)((u8 *)*(void **)(table + 0x18) + 0x74);
             D_0015EE78_gp = *(s32 *)state->pad18;
-            hud_send_resident_bank(0, *(s32 *)((u8 *)*(void **)(table + 0x18) + 0x74), 0);
+            hud_send_resident_bank(0, value, 0);
         }
         FUN_L00_00235310(2);
         if (*(s32 *)((u8 *)*(void **)(table + 0x18) + 0x80) != 0) {
