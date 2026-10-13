@@ -743,8 +743,8 @@ void FUN_L15_002aa280(struct Moby *moby)
 
     {
     float radius, angle;
-    int i = 0x18;
-    do {
+    int i = 0x19;
+    while (--i >= 0) {
         int duration;
         angle = random_float_between_7880(moby->rot.z, 1.5707963267948966f);
         radius = fast_cos_7880(angle);
@@ -771,8 +771,7 @@ void FUN_L15_002aa280(struct Moby *moby)
         size = random_float_between_7880(3.0f, 7.0f);
         FUN_L01_002f8530_7880(&offset, &velocity, *palette_entry, radius, duration,
                                 size, 0.15f, 2.0f, 1);
-        i--;
-    } while (i >= 0);
+    }
     }
     clear_u64_value_7880(&velocity);
     FUN_L00_0025e450_7880(moby, &velocity, &base, 0.0f, 0.0f, 20,
