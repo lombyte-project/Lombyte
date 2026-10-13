@@ -1238,6 +1238,7 @@ void FUN_L00_002bcf98(u8 *m) {
     f32 scale;
     u128 *copies;
     s32 *clears;
+    u128 *scaled_vector;
 
     if (D_L00_001617BC_abs != 0) {
         D_L00_001617BC = 0;
@@ -1251,6 +1252,7 @@ void FUN_L00_002bcf98(u8 *m) {
         D_L00_00161718_i = 0;
         D_L00_00161720_i = 0;
         D_L00_00161724_i = 0;
+        scaled_vector = &vec;
         D_L00_001617D0 = 0;
         D_L00_00161824 = 0;
         copies = (u128 *)&D_L00_001DD0D0;
@@ -1259,7 +1261,7 @@ void FUN_L00_002bcf98(u8 *m) {
             s32 j;
             for (j = 2; j >= 0; j--) {
                 *clears = 0;
-                qcopy(copies, &vec);
+                qcopy(copies, scaled_vector);
                 copies++;
                 clears++;
             }
