@@ -484,7 +484,7 @@ int FUN_L00_002365a8(HudElem *e) {
     origin.y = -half_h / 116.0f;
     direction.z = 0.0f;
     direction.w = 0.0f;
-    direction.y = half_h + (float)(y + e->unk4A);
+    direction.y = half_h + (float)(e->unk4A + y);
     direction.x = half_w + (float)(x + e->unk48);
     direction.x += (1.0f - D_L00_0015F768) * 0.5f * (float)D_L00_0015F760;
     direction.y += (1.0f - D_L00_0015F76C) * 0.5f * (float)D_L00_0015F764;
