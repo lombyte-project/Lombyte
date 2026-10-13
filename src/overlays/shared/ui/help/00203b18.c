@@ -273,9 +273,6 @@ void FUN_L00_00205600(void) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002056a8.s", FUN_L00_002056a8);
-#else
 typedef u32 Quad_56a8 __attribute__((mode(TI), aligned(16)));
 extern u8 D_L00_0017A680_56a8[] __asm__("D_L00_0017A680");
 extern Quad_56a8 D_L00_0017C040_56a8[] __asm__("D_L00_0017C040");
@@ -284,11 +281,9 @@ extern Quad_56a8 D_L00_0017C120_56a8[] __asm__("D_L00_0017C120");
 extern s32 D_L00_0017C1C0_56a8[] __asm__("D_L00_0017C1C0");
 extern f32 D_L00_0017C190_56a8[] __asm__("D_L00_0017C190");
 
+
 void FUN_L00_002056a8(void) {
     u8 *e;
-    u8 *g;
-    s32 i;
-    s32 *timer;
 
     {
         u8 *e = D_L00_0017A680_56a8;
@@ -315,50 +310,35 @@ void FUN_L00_002056a8(void) {
             *(f32 *)(e + 0x8a4) = -0.12217305f;
     }
     FUN_L00_00205600();
-    g = (u8 *)&hero;
-    timer = &((struct Hero *)g)->rand_timer.fired;
-    if (*timer != 0) {
-        *timer = *timer + 1;
-        if (*timer > 11)
-            *timer = 0;
-        if (*timer == 0) {
-            u8 *slot = g + 0xd30;
-            u8 *active = g + 0xd31;
-            for (i = 6; i >= 0; slot += 0x40, i--, active += 0x40) {
-                if (*active != 0)
-                    detach_manipulator((s32)((struct Hero *)g)->moby, slot);
+    {
+        if (hero.rand_timer.fired == 0)
+            return;
+        hero.rand_timer.fired++;
+        if (hero.rand_timer.fired > 11)
+            hero.rand_timer.fired = 0;
+        if (hero.rand_timer.fired == 0) {
+            s32 i;
+            for (i = 0; i < 7; i++) {
+                if (hero.manipulators[i].attached != 0)
+                    detach_manipulator((s32)hero.moby, &hero.manipulators[i]);
             }
         } else {
-            u8 *slot = g + 0xd30;
-            u8 *active = g;
-            u8 *dst_a = g + 0xd40;
-            u8 *dst_b = g + 0xd50;
-            u8 *dst_c = g + 0xd60;
-            Quad_56a8 *src_a = D_L00_0017C040_56a8;
-            Quad_56a8 *src_b = D_L00_0017C0B0_56a8;
-            Quad_56a8 *src_c = D_L00_0017C120_56a8;
-            s32 *kind = D_L00_0017C1C0_56a8;
-            for (i = 0; i != 7; i++, src_c++, dst_c += 0x40, src_b++, src_a++,
-                 dst_a += 0x40, kind++, slot += 0x40, active += 0x40, dst_b += 0x40) {
-                if (active[0xd31] == 0) {
-                    attach_manipulator((s32)((struct Hero *)g)->moby, *kind, slot);
-                    active[0xd33] = 1;
-                    *(Quad_56a8 *)dst_a = *src_a;
-                    *(Quad_56a8 *)dst_b = *src_b;
-                    *(Quad_56a8 *)dst_c = *src_c;
+            s32 i;
+            s32 j;
+            for (i = 0; i < 7; i++) {
+                if (hero.manipulators[i].attached == 0) {
+                    attach_manipulator((s32)hero.moby, D_L00_0017C1C0_56a8[i], &hero.manipulators[i]);
+                    hero.manipulators[i].unk3 = 1;
+                    qcopy(&hero.manipulators[i].quat, &D_L00_0017C040_56a8[i]);
+                    qcopy(&hero.manipulators[i].scale3, &D_L00_0017C0B0_56a8[i]);
+                    qcopy(&hero.manipulators[i].translation, &D_L00_0017C120_56a8[i]);
                 }
             }
-            {
-                f32 *yaw = (f32 *)(g + 0xd3c);
-                for (i = 6; i >= 0; i--) {
-                    *yaw = D_L00_0017C190_56a8[*timer];
-                    yaw = (f32 *)((u8 *)yaw + 0x40);
-                }
-            }
+            for (j = 0; j < 7; j++)
+                hero.manipulators[j].unkC = D_L00_0017C190_56a8[hero.rand_timer.fired];
         }
     }
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002059d8.s", FUN_L00_002059d8);
 #else
