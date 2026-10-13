@@ -2798,7 +2798,7 @@ extern s32 FUN_001fef20_a9e8(s32) __asm__("FUN_L00_001fef20");
 extern f32 FUN_L00_00257be8_a9e8(f32, f32) __asm__("FUN_L00_00257be8");
 
 void FUN_L00_0020a9e8(void) {
-    G_a540 *g = &D_0013F350_a540;
+    struct Hero *g = &hero;
     char *base = (char *)g;
     s32 *timers;
     s32 *check_timer;
@@ -2807,13 +2807,13 @@ void FUN_L00_0020a9e8(void) {
     struct HeroEase *output;
     s32 i;
 
-    if (g->i2084 != 0 || *(u8 *)((char *)g->p2080 + 0x53) != 0)
+    if (g->state.current != 0 || *(u8 *)((char *)g->moby + 0x53) != 0)
         return;
 
     timers = (s32 *)(base + 0x1060);
-    check_timer = timers;
     output = D_L00_0017A680_002054e8;
     i = 0;
+    check_timer = timers;
     record = base;
     store_timer = check_timer;
     do {
@@ -2868,6 +2868,7 @@ fourth_sign_done:
         i++;
     } while (i < 4);
 }
+
 #endif
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020B310), where it is exact; names translated to the US level program. */
 
