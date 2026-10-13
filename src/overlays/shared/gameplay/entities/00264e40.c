@@ -84,7 +84,7 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
         FUN_001f9a10(offset, offset, adjusted);
         FUN_001f9a68(velocity, adjusted, FUN_002132a8(0.0f, 1.0f));
         FUN_001f9a10(velocity, velocity, origin);
-        shot = FUN_L00_0026b230(velocity, offset, i >= first_count, travel);
+        shot = FUN_L00_0026b230(velocity, offset, i < first_count, travel);
         if (i == 2 && *(volatile int *)&save_shot) {
             int j;
             for (j = 0; j < 7; j++) {
