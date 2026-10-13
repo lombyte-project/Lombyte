@@ -2869,7 +2869,7 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
     f32 far_clip[4];
     f32 x_offset, y_offset, x_end, y_end;
     u32 near_bits, far_bits;
-    u32 mask;
+    u16 mask;
     s32 i, j, mode;
     s32 height_index, index;
     f32 *height;
