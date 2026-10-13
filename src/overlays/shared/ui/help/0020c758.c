@@ -1337,7 +1337,7 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     s32 i, j, n, chosen, ring, limit;
     volatile s32 count;
     f32 maximum;
-    s64 negative_one;
+    s64 negative_one = -1;
     u8 *record;
     f32 *score_ptr;
     void * volatile output;
@@ -1382,8 +1382,8 @@ void FUN_L00_0020f160(void *moby, void *matrix)
         score_ptr = scores;
     for (i = 0; i < n; i++) {
         s32 a = (*(volatile s32 *)(hero.pad_21B8)) - (i - 15);
-        a -= ((a < 0 ? a + 15 : a) >> 4) * 16;
-        negative_one = -1;
+        a -= ((negative_one < a ? a : a + 15) >> 4) * 16;
+
         for (j = 0; j < n; j++) {
             if (i != j) {
                 s32 b = (*(volatile s32 *)(hero.pad_21B8)) - (j - 15);
@@ -1412,7 +1412,7 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     for (i = 0; i < n; i++) {
         if (!(maximum * 0.2f < scores[i]) || count < 1 || !limit) {
             s32 a = (*(volatile s32 *)(hero.pad_21B8)) - (i - 15);
-            a -= ((a < 0 ? a + 15 : a) >> 4) * 16;
+            a -= ((negative_one < a ? a : a + 15) >> 4) * 16;
             record = (hero.pad_12EF + 1) + a * 0x30;
             chosen++;
             for (j = 0; j < 3; j++)
