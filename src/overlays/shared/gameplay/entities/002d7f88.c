@@ -924,13 +924,14 @@ void FUN_L00_002d9810(u8 *m) {
     color = ((u32)(D_L00_00161B10_002d9810 + color) << 24) | D_L00_00161AE0_002d9810;
     quad.colors[3] = 0;
     quad.colors[2] = 0;
-    quad.colors[0] = color;
     quad.colors[1] = color;
+    quad.colors[0] = color;
     for (i = 0; i < 32; i++) {
         indices = (short *)(D_L00_001E3A80_002d9810 + i * 8);
+        j = 0;
         pointB = (char *)quad.points;
         pointA = (char *)quad.points;
-        for (j = 0; j < 4; j++) {
+        for (; j < 4; j++) {
             short index = *indices;
             if (j >= 2)
                 FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810 * D_L00_00161AEC_002d9810,
