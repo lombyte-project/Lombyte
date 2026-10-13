@@ -1405,9 +1405,9 @@ void FUN_L00_0020f160(void *moby, void *matrix)
         } while (i != 0);
     }
     chosen = 0;
-    limit = count > 2;
+    limit = count < 3;
     for (i = 0; i < n; i++) {
-        if (!(maximum * 0.2f < scores[i]) || count < 1 || limit) {
+        if (!(maximum * 0.2f < scores[i]) || count < 1 || !limit) {
             s32 a = (*(volatile s32 *)(hero.pad_21B8)) - (i - 15);
             a -= ((a < 0 ? a + 15 : a) >> 4) * 16;
             record = (hero.pad_12EF + 1) + a * 0x30;
