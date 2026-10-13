@@ -1936,7 +1936,322 @@ void FUN_L00_002c53c0(struct Moby *m) {
     }
 }
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c6158.s", FUN_L00_002c6158);
+#include "rnc/input/pad_state.h"
+#include "rnc/math/vector.h"
+#include "rnc/gameplay/hero.h"
+#include "rnc/gameplay/entities/moby.h"
+
+
+
+#include "qcopy.h"
+
+/* Swingshot (class 208) update: keeps the hook at the glove, shows the targets, fires the hook to the swing target
+   or the grind target, swings the hero, and reels the hook back. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C74B8), where it is exact; names translated to the US level program. */
+
+
+typedef struct Moby Moby;
+
+
+typedef int OvlQuad_6158 __attribute__((mode(TI)));
+
+typedef unsigned int Q_2C74B8 __attribute__((mode(TI)));
+
+typedef union { struct { float x, y, z, w; } f; Q_2C74B8 q; } V_2C74B8 __attribute__((aligned(16)));
+
+typedef struct { V_2C74B8 row[3]; } M3_2C74B8;
+
+typedef struct HookData_2C74B8 { char pad0[4]; float speed; } HookData_2C74B8;
+
+typedef struct Data_2C74B8 {
+    char pad0[0x14];
+    Moby *hook;
+    float spin;
+    float scale;
+    float size;
+} Data_2C74B8;
+
+extern char D_0013F350[];
+extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float D_0015ED60;
+extern float D_0015ED6C;
+extern int D_0013C940; /* no foreign declaration */
+extern int FUN_001efa68(void *,void *,int,int,int);
+extern int FUN_L00_00205000();
+extern int FUN_L00_002223f8();
+extern int FUN_L00_002323b8();
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
+extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+unsigned char *FUN_L00_002c6f88(unsigned char *src, float f);
+void FUN_L00_001edf60(int a, int b, void *pos, int kind, int mode, float x, float y, float z);
+extern int func_L00_00222B80_2C74B8(int, int) __asm__("FUN_L00_002223f8");
+extern Moby *func_L00_002C82E8_2C74B8(void *, float) __asm__("FUN_L00_002c6f88");
+extern void func_L00_001EE2E0_2C74B8(int, int, float, void *, int, float, int, float, int) __asm__("FUN_L00_001edf60");
+extern int func_001F9850_2C74B8(int) __asm__("FUN_001f96f8");
+extern void func_00213DE0_2C74B8(void *, int, int, int) __asm__("FUN_00212f90");
+extern void func_L00_00250800_2C74B8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern int func_0022ED80_2C74B8(int, int, void *) __asm__("FUN_0022da68");
+extern float func_001F9D10_2C74B8(void *, void *) __asm__("FUN_001f9b48");
+extern void func_001F49B0_2C74B8(void (*)(char *), void *) __asm__("FUN_001f4600");
+extern void func_001F9BF0_2C74B8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_L00_001FF4B0_2C74B8(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9BD8_2C74B8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float func_001F9CB8_2C74B8(void *) __asm__("FUN_001f9af0");
+extern int func_L00_001EFFF0_2C74B8(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int func_L00_00205618_2C74B8(int) __asm__("FUN_L00_00205000");
+extern void func_L00_00232C10_2C74B8(int, int, float) __asm__("FUN_L00_002323b8");
+extern void func_L00_002C7128_2C74B8(char *) __asm__("FUN_L00_002c5dc8");
+
+void FUN_L00_002c6158(Moby *m) {
+    V_2C74B8 v0;
+    V_2C74B8 v10;
+    Data_2C74B8 *d;
+    HookData_2C74B8 *hd;
+    float speed;
+    int n;
+
+    if (m == 0) return;
+    if (hero.state.current == 1) func_L00_00222B80_2C74B8(30, 1);
+    d = (void *)m->pvars;
+    if (d == 0) return;
+    hd = 0;
+    if (!d->hook) d->hook = func_L00_002C82E8_2C74B8(m, frame_time * 24.0f);
+    if (d->hook) hd = (void *)d->hook->pvars;
+    if ((hero.state.current == 1 || hero.state.current == 30) &&
+        hero.state_timer >= 2) {
+        func_L00_001EE2E0_2C74B8((int)m, 0xFF0000FF, 1.0f, 0, 0x24, 0.0f, -1, 90.0f, 4);
+        if (hero.unk968 && hero.unk964)
+            func_L00_001EE2E0_2C74B8((int)m, 0xFF00FF00, 0.5f, &hero.unk964->pos, 0x24, 0.0f, -1, 90.0f, 4);
+        else if (hero.unk990)
+            func_L00_001EE2E0_2C74B8((int)m, 0xFF00FF00, 0.5f, &hero.unk990->pos, 0x24, 0.0f, -1, 90.0f, 4);
+    }
+    switch (m->state) {
+    case 0:
+    case 1:
+        if (m->anim_flags & 2) {
+            if (m->prev_seq != 1) func_00213DE0_2C74B8(m, 1, 0, func_001F9850_2C74B8(10));
+            m->state = 1;
+        }
+        if (d->hook) {
+            func_L00_00250800_2C74B8(m, 0, &d->hook->pos);
+            {
+                Moby *h = d->hook;
+                *(u128 *)&h->rot_row0 = *(u128 *)&m->rot_row0;
+                *(u128 *)&h->rot_row1 = *(u128 *)&m->rot_row1;
+                *(u128 *)&h->rot_row2 = *(u128 *)&m->rot_row2;
+            }
+        }
+        if (hero.state.current == 0x24 ||
+            (hero.state.control_mode == 0xF && hero.unk5B4)) {
+            if (hd) {
+                d->size = 0.280000001f;
+                d->scale = 1.0f;
+                d->spin = 0.0f;
+                hd->speed = frame_time * 24.0f;
+                if (m->prev_seq != 3) func_00213DE0_2C74B8(m, 3, 0, func_001F9850_2C74B8(10));
+                func_0022ED80_2C74B8(0, 0, m);
+                m->state = 2;
+            }
+        }
+        if (hero.state.current == 0x2C && hd) {
+            speed = func_001F9D10_2C74B8(&hero.unk994->pos, &d->hook->pos);
+            n = func_001F9850_2C74B8(7);
+            if (hero.items[0].unk20 < func_001F9850_2C74B8(30)) n = func_001F9850_2C74B8(5);
+            hd->speed = speed / (float)n;
+            d->size = 0.280000001f;
+            d->scale = 1.0f;
+            d->spin = 0.0f;
+            if (m->prev_seq != 3) func_00213DE0_2C74B8(m, 3, 0, func_001F9850_2C74B8(10));
+            func_0022ED80_2C74B8(0, 0, m);
+            m->state = 9;
+        }
+        break;
+    case 2:
+        func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        if (m->anim_flags & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        }
+        func_001F9BF0_2C74B8(&v0, &hero.unk964->pos, &d->hook->pos);
+        speed = hd->speed;
+        if (hero.state.control_mode == 0xF) {
+            speed = speed + hero.unk574;
+        } else if (hero.state.prev_control_mode == 4 || hero.state.prev_control_mode == 2) {
+            if (2.0f < hero.ground_distance) speed = frame_time * 48.0f;
+        }
+        qcopy(&v10, &hero.motion.pos);
+        v10.f.z += 0.5f;
+        if (func_L00_001EFFF0_2C74B8(&v10, &hero.unk964->pos, 2, 0, 0)) {
+            if (0.5f < hero.ground_distance) {
+                func_L00_00222B80_2C74B8(6, 1);
+            } else {
+                func_L00_00222B80_2C74B8(0, 0);
+                func_L00_00232C10_2C74B8(func_L00_00205618_2C74B8(0), 0, (float)func_001F9850_2C74B8(14));
+            }
+            m->state = 6;
+        } else if (speed < func_001F9D10_2C74B8(&d->hook->pos, &hero.unk964->pos)) {
+            func_L00_001FF4B0_2C74B8(&v0, &v0, speed);
+            func_001F9BD8_2C74B8(&d->hook->pos, &d->hook->pos, &v0);
+        } else {
+            qcopy(&d->hook->pos, &hero.unk964->pos);
+            m->state = 3;
+        }
+        break;
+    case 3:
+        func_0022ED80_2C74B8(1, 0, m);
+        func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        qcopy(&d->hook->pos, &hero.unk964->pos);
+        m->state = 4;
+        break;
+    case 4:
+        func_L00_00250800_2C74B8(m, 0, &v0);
+        qcopy(&v0, &hero.motion.pos);
+        v0.f.z += 0.5f;
+        if (func_L00_001EFFF0_2C74B8(&v0, &hero.unk964->pos, 2, 0, 0)) {
+            if (hero.air_frames.s) func_L00_00222B80_2C74B8(6, 1);
+            else func_L00_00222B80_2C74B8(0, 1);
+            m->state = 6;
+            break;
+        }
+        if (m->anim_flags & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        }
+        func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        d->spin = d->spin + 0.69813168f;
+        d->size = d->size * (frame_scale * -0.100000024f + 1.0f);
+        if (d->size < 0.168000013f) {
+            hero.unk5B4 = 0;
+            if (d->hook && 3.5f < func_001F9D10_2C74B8(&d->hook->pos, &hero.motion.pos)) {
+                if (!(controller_state.held & hero.items[0].button_mask)) {
+                    hero.unk988 = 1;
+                    func_L00_00222B80_2C74B8(0, 0);
+                    func_L00_00232C10_2C74B8(func_L00_00205618_2C74B8(0), 0, (float)func_001F9850_2C74B8(14));
+                    m->state = 6;
+                } else {
+                    func_0022ED80_2C74B8(2, 0, m);
+                    if (hero.unk978) func_L00_00222B80_2C74B8(0x26, 1);
+                    else func_L00_00222B80_2C74B8(0x25, 1);
+                    m->state = 5;
+                }
+            } else {
+                func_L00_00222B80_2C74B8(0, 1);
+                m->state = 6;
+            }
+        }
+        break;
+    case 5:
+        qcopy(&d->hook->pos, &hero.unk964->pos);
+        if (m->anim_flags & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        }
+        d->size = d->size * (frame_scale * -0.100000024f + 1.0f);
+        d->spin = d->spin + 0.69813168f;
+        func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        if ((unsigned int)(hero.state.current - 0x25) >= 2) m->state = 6;
+        break;
+    case 6:
+        func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        hd->speed = frame_time * 80.0f;
+        m->state = 7;
+        break;
+    case 7:
+        func_L00_00250800_2C74B8(m, 0, &v10);
+        func_001F9BF0_2C74B8(&v0, &v10, &d->hook->pos);
+        if (hd->speed < func_001F9D10_2C74B8(&d->hook->pos, &v10)) {
+            func_L00_001FF4B0_2C74B8(&v0, &v0, hd->speed);
+            func_001F9BD8_2C74B8(&d->hook->pos, &d->hook->pos, &v0);
+            func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        } else {
+            qcopy(&d->hook->pos, &v10);
+            if (m->prev_seq != 1) func_00213DE0_2C74B8(m, 1, 0, func_001F9850_2C74B8(10));
+            m->state = 1;
+        }
+        break;
+    case 8:
+        break;
+    case 9:
+        func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        if (m->anim_flags & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        }
+        func_001F9BF0_2C74B8(&v0, &hero.unk994->pos, &d->hook->pos);
+        if (hd->speed < func_001F9CB8_2C74B8(&v0)) {
+            func_L00_001FF4B0_2C74B8(&v0, &v0, hd->speed);
+            func_001F9BD8_2C74B8(&d->hook->pos, &d->hook->pos, &v0);
+        } else {
+            qcopy(&d->hook->pos, &hero.unk994->pos);
+            m->state = 11;
+            func_0022ED80_2C74B8(1, 0, m);
+        }
+        break;
+    case 10:
+        func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        m->state = 11;
+        break;
+    case 11:
+        if (m->anim_flags & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        }
+        func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        d->spin = d->spin + 0.69813168f;
+        d->size = d->size * (frame_scale * -0.600000024f + 1.0f);
+        if (d->size < 0.168000013f) {
+            hero.unk99C = 1;
+            m->state = 12;
+        }
+        break;
+    case 12:
+        if (hero.unk994)
+            qcopy(&d->hook->pos, &hero.unk994->pos);
+        if (m->anim_flags & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        }
+        d->size = d->size * (frame_scale * -0.600000024f + 1.0f);
+        d->spin = d->spin + 0.69813168f;
+        func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        if (hero.state.current != 0x2C) m->state = 13;
+        break;
+    case 13:
+        if (m->anim_flags & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        }
+        func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        hd->speed = frame_time * 80.0f;
+        m->state = 14;
+        break;
+    case 14:
+        if (m->anim_flags & 2) {
+            if (m->prev_seq != 4) func_00213DE0_2C74B8(m, 4, 0, func_001F9850_2C74B8(10));
+        }
+        func_L00_00250800_2C74B8(m, 0, &v10);
+        func_001F9BF0_2C74B8(&v0, &v10, &d->hook->pos);
+        if (hd->speed < func_001F9D10_2C74B8(&d->hook->pos, &v10)) {
+            func_L00_001FF4B0_2C74B8(&v0, &v0, hd->speed);
+            func_001F9BD8_2C74B8(&d->hook->pos, &d->hook->pos, &v0);
+            func_001F49B0_2C74B8(func_L00_002C7128_2C74B8, m);
+        } else {
+            qcopy(&d->hook->pos, &v10);
+            if (m->prev_seq != 1) func_00213DE0_2C74B8(m, 1, 0, func_001F9850_2C74B8(10));
+            m->state = 1;
+        }
+        if (hero.state.current == 0x2C && hd) {
+            hd->speed = func_001F9D10_2C74B8(&hero.unk994->pos, &d->hook->pos) / 10.0f;
+            d->scale = 1.0f;
+            d->size = 0.0f;
+            d->spin = 0.0f;
+            if (m->prev_seq != 3) func_00213DE0_2C74B8(m, 3, 0, func_001F9850_2C74B8(10));
+            m->state = 9;
+        }
+        break;
+    case 15:
+        break;
+    }
+}
 #else
 extern s32 D_001413D4_2c6158 __asm__("D_001413D4");
 extern s32 D_001413DC_2c6158 __asm__("D_001413DC");
