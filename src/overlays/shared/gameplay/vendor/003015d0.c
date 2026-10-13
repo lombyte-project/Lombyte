@@ -390,6 +390,7 @@ void FUN_L14_00301fa8(char *m) {
     float t;
     float *uv, *uv_base;
     int next;
+    int branch_next;
 
     FUN_001fa050(base, &frame->pad40[0x30]);
     FUN_001fa2d8(matrix, base);
@@ -459,7 +460,7 @@ add_main:
     for (strip = 0; strip < 4; strip++) {
         clear_u64_value(start);
         if (indices[strip] < 31) {
-            for (point = 0; point < 3; point = next) {
+            for (point = 0; point < 3; point = branch_next) {
                 qcopy(end, start);
                 if (point < 2) {
                     subtract_vector_xyz(side, d + (point << 6) + 0x420 + (strip << 4),
@@ -472,7 +473,7 @@ add_main:
                     clear_u64_value(start);
                 }
                 if (point == 0) qcopy(end, start);
-                next = point + 1;
+                branch_next = point + 1;
                 rounded = (point / 4) * 4;
                 uv = &packet[0].uv[0][0];
                 uv_base = (float *)0x001e5fd0;
