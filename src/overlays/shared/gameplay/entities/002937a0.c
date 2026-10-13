@@ -755,9 +755,6 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
     return moby;
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8210.s", FUN_L08_002e8210);
-#else
 extern void scale_vector_xyz_002e8210(void *, void *, float) __asm__("FUN_001f9a68");
 extern float vector_distance_xyz_002e8210(void *, void *) __asm__("FUN_001f9b48");
 extern float random_angle_002e8210(void) __asm__("FUN_00213308");
@@ -805,7 +802,10 @@ void FUN_L08_002e8210(char *moby) {
     add_vector_xyz(position_ptr, position_ptr, data);
     if (*(float *)(moby + 0x10) < 10.0f || *(float *)(moby + 0x14) < 10.0f ||
         *(float *)(moby + 0x18) < 10.0f || 500.0f < *(float *)(moby + 0x10) ||
-        500.0f < *(float *)(moby + 0x14) || 500.0f < *(float *)(moby + 0x18)) goto remove;
+        500.0f < *(float *)(moby + 0x14) || 500.0f < *(float *)(moby + 0x18)) {
+        mark_moby_for_removal_002e8210(moby);
+        return;
+    }
     scale_vector_xyz_002e8210(direction, data, -1.0f / D_L08_00161CDC);
     qcopy(position, position_ptr);
     i = 0;
@@ -880,7 +880,6 @@ collision:
     }
     mark_moby_for_removal_002e8210(moby);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
