@@ -61,7 +61,7 @@ extern float FUN_00213308_2c26c8(void) __asm__("FUN_00213308");
 extern float FUN_001f9dc8_2c26c8(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2c26c8(float) __asm__("FUN_001f9de0");
 extern float FUN_001f96b0_2c26c8(float) __asm__("FUN_001f96b0");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32_r(float) __asm__("FUN_001fa6d0");
 extern float D_0015ED6C_2c26c8 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float D_0015ED70_2c26c8 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern char D_0013D388_2c26c8[] __asm__("D_0013D388");
@@ -245,9 +245,9 @@ void FUN_L09_002c26c8(struct Moby *moby) {
                 vec[3] = D_L09_00161390_2c26c8;
                 buf.m[0][3] = D_L09_00161394_2c26c8;
                 FUN_00218888_2c26c8(buf.m[1], vec, buf.m[0], D_L09_0016136C_2c26c8, D_L09_00161370_2c26c8,
-                    func_001FA898_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_00161384_2c26c8, D_L09_00161384_2c26c8 * 2))),
-                    func_001FA898_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_00161388_2c26c8, D_L09_00161388_2c26c8 * 2))),
-                    func_001FA898_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_0016138C_2c26c8, D_L09_0016138C_2c26c8 * 2))),
+                    truncate_float_to_s32_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_00161384_2c26c8, D_L09_00161384_2c26c8 * 2))),
+                    truncate_float_to_s32_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_00161388_2c26c8, D_L09_00161388_2c26c8 * 2))),
+                    truncate_float_to_s32_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_0016138C_2c26c8, D_L09_0016138C_2c26c8 * 2))),
                     -1);
             }
             FUN_001f9a68_2c26c8(d->vel, d->vel, 0.45f);

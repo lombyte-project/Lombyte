@@ -1443,16 +1443,16 @@ extern int D_L05_0015F680_254608 __asm__("D_L05_0015F680") __attribute__((sda));
 extern int D_L05_0015F684_254608 __asm__("D_L05_0015F684") __attribute__((sda));
 extern float D_L05_0015F67C_254608 __asm__("D_L05_0015F67C") __attribute__((sda));
 extern int D_L05_0015F6A8_254608 __asm__("D_L05_0015F6A8") __attribute__((sda));
-extern float func_001F9D10_254608(void *, void *) __asm__("FUN_001f9b48");
-extern float func_L00_001FF860_254608(float, float) __asm__("FUN_001f9e90");
-extern float func_001FA850_254608(float, float) __asm__("FUN_001fa688");
+extern float distance_xyz_254608(void *, void *) __asm__("FUN_001f9b48");
+extern float angle_atan2_254608(float, float) __asm__("FUN_001f9e90");
+extern float fast_difference_between_rotations_254608(float, float) __asm__("FUN_001fa688");
 extern void func_L05_00254B38_254608(void *, void *) __asm__("FUN_L05_00254358");
 extern void func_L00_00217718_254608(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int func_L01_0028C2D8_254608(void *, void *, float) __asm__("FUN_L01_0028b510");
-extern int func_0022EE28_254608(int, int, int) __asm__("FUN_0022db10");
-extern void func_L00_00264DB8_254608(int, int) __asm__("FUN_L00_00263d40");
-extern void func_001FBC80_254608(int, void *) __asm__("FUN_001fbab8");
-extern void func_001FFDA0_254608(int, int) __asm__("FUN_001ff570");
+extern int allocate_voice_for_bank_entry_254608(int, int, int) __asm__("FUN_0022db10");
+extern void queue_dialogue_message_254608(int, int) __asm__("FUN_L00_00263d40");
+extern void mode_freeze_init_254608(int, void *) __asm__("FUN_001fbab8");
+extern void set_animation_parameter_254608(int, int) __asm__("FUN_001ff570");
 extern void func_001FFFA0_254608(void) __asm__("FUN_001ff768");
 
 /* Hoverboard race tick: advances the hero's and the opponents' path nodes and laps, handles wrong-way and fall resets, ranks everyone and finishes the race after three laps. */
@@ -1483,7 +1483,7 @@ void FUN_L05_00254608(void) {
         v0[0] = 163.0f;
         v0[1] = 119.0f;
         v0[2] = 80.0f;
-        if (func_001F9D10_254608(hero.motion.pos.f, v0) < 11.0f) {
+        if (distance_xyz_254608(hero.motion.pos.f, v0) < 11.0f) {
             if (hero.unk898 < 3 || hero.unk898 > 0x46) {
                 if (hero.unk898 >= 3) {
                     hero.unk89A++;
@@ -1495,7 +1495,7 @@ void FUN_L05_00254608(void) {
         v1[0] = 223.0f;
         v1[1] = 281.0f;
         v1[2] = 93.0f;
-        if (func_001F9D10_254608(hero.motion.pos.f, v1) < 7.0f) {
+        if (distance_xyz_254608(hero.motion.pos.f, v1) < 7.0f) {
             if (hero.unk898 < 0x3B) {
                 hero.unk898 = 0x3B;
             }
@@ -1509,8 +1509,8 @@ void FUN_L05_00254608(void) {
         i = hero.unk898;
         n1 = path->n + 1;
         next = (i + n1) % path->n;
-        ang = func_L00_001FF860_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
-        if (func_001FA850_254608(ang, func_L00_001FF860_254608(hero.motion.pos.f[0] - path->p[i].x, hero.motion.pos.f[1] - path->p[i].y)) < 1.5707964f) {
+        ang = angle_atan2_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
+        if (fast_difference_between_rotations_254608(ang, angle_atan2_254608(hero.motion.pos.f[0] - path->p[i].x, hero.motion.pos.f[1] - path->p[i].y)) < 1.5707964f) {
             hero.unk898 = next;
             if (next == 0) {
                 hero.unk89A++;
@@ -1534,9 +1534,9 @@ void FUN_L05_00254608(void) {
         i = hero.unk8C8;
         n1 = path->n + 1;
         next = (i + n1) % path->n;
-        dir = func_L00_001FF860_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
+        dir = angle_atan2_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
     }
-    if (near != 0 || (func_001FA850_254608(hero.motion.rot.f[2], dir) > 1.5707964f && hero.unk88D == 0)) {
+    if (near != 0 || (fast_difference_between_rotations_254608(hero.motion.rot.f[2], dir) > 1.5707964f && hero.unk88D == 0)) {
         hero.unk8AE++;
         if (hero.unk8AE > FUN_001f96f8_254608(0xB4)) {
             if (D_L05_0015F680_254608 == 0) {
@@ -1571,9 +1571,9 @@ void FUN_L05_00254608(void) {
         i = hero.unk7B0[j];
         n1 = path->n + 1;
         next = (i + n1) % path->n;
-        ang = func_L00_001FF860_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
+        ang = angle_atan2_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
         qcopy(v0, D_L05_0015FFD8_254608[d->f2C[j]].pos);
-        if (func_001FA850_254608(ang, func_L00_001FF860_254608(v0[0] - path->p[i].x, v0[1] - path->p[i].y)) < 1.5707964f) {
+        if (fast_difference_between_rotations_254608(ang, angle_atan2_254608(v0[0] - path->p[i].x, v0[1] - path->p[i].y)) < 1.5707964f) {
             hero.unk7B0[j] = next;
             if (next == 0) {
                 hero.unk7A0[j]++;
@@ -1619,8 +1619,8 @@ void FUN_L05_00254608(void) {
         if (t >= hero.unk894) {
             if (((Flags_254608 *)D_0013D408_254608)->f9 == 0) {
                 ((Flags_254608 *)D_0013D408_254608)->f9 = 1;
-                func_0022EE28_254608(1, 0, 0);
-                func_L00_00264DB8_254608(0x53D6, -1);
+                allocate_voice_for_bank_entry_254608(1, 0, 0);
+                queue_dialogue_message_254608(0x53D6, -1);
             }
         }
         if (d->f28 == -1) {
@@ -1630,7 +1630,7 @@ void FUN_L05_00254608(void) {
             D_L05_0015FFD8_254608[d->f28].fBC = 1;
         } else {
             hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[d->f28]);
-            func_001FBC80_254608(0, 0);
+            mode_freeze_init_254608(0, 0);
         }
         if (D_0015EE58_254608[0] == 0) {
             D_0015EE58_254608[0] = hero.unk894;
@@ -1645,7 +1645,7 @@ void FUN_L05_00254608(void) {
         }
         D_L05_0015FFD8_254608[d->f28].f30 = 0xFF;
         if (hero.unk880 != -1) {
-            func_001FFDA0_254608(hero.unk880, 0);
+            set_animation_parameter_254608(hero.unk880, 0);
             hero.unk880 = -1;
         }
         func_001FFFA0_254608();
@@ -1657,7 +1657,7 @@ void FUN_L05_00254608(void) {
             D_L05_0015FFD8_254608[d->f28].fBC = 1;
         } else {
             hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[d->f28]);
-            func_001FBC80_254608(0, 0);
+            mode_freeze_init_254608(0, 0);
         }
         if (D_0015EE58_254608[1] == 0) {
             D_0015EE58_254608[1] = hero.unk894;
@@ -1672,7 +1672,7 @@ void FUN_L05_00254608(void) {
         }
         D_L05_0015FFD8_254608[d->f28].f30 = 0xFF;
         if (hero.unk880 != -1) {
-            func_001FFDA0_254608(hero.unk880, 0);
+            set_animation_parameter_254608(hero.unk880, 0);
             hero.unk880 = -1;
         }
         func_001FFFA0_254608();

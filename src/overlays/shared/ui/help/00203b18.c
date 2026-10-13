@@ -1616,17 +1616,17 @@ void FUN_L00_00208038(u128 *v, int b, float x, float y) {
 
 typedef int u128_2080b0 __attribute__((mode(TI)));
 typedef union { u128_2080b0 q; float f[4]; } Vec4_2080b0 __attribute__((aligned(16)));
-extern void func_L00_00250800_2080b0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void func_L00_00208650_2080b0(void *vec, int a, float f0, float f1) __asm__("FUN_L00_00208038");
-extern float func_001FA748_2080b0(float, float) __asm__("FUN_001fa580");
-extern float func_001F9FA8_2080b0(float) __asm__("FUN_001f9de0");
-extern int func_001FA8A8_2080b0(int, int, float) __asm__("FUN_001fa6e0");
-extern void func_001F9EC0_2080b0(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void func_001F9BD8_2080b0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int func_001FA898_2080b0(float) __asm__("FUN_001fa6d0");
-extern int func_001F9850_2080b0(int) __asm__("FUN_001f96f8");
-extern float D_0015ED6C_2080b0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_0015ED60_2080b0 __asm__("D_0015ED60");
+extern void moby_point_position_2080b0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void queue_glow_sprite_2080b0(void *vec, int a, float f0, float f1) __asm__("FUN_L00_00208038");
+extern float fast_add_rotations_2080b0(float, float) __asm__("FUN_001fa580");
+extern float fast_sin_2080b0(float) __asm__("FUN_001f9de0");
+extern int fast_tween_color_2080b0(int, int, float) __asm__("FUN_001fa6e0");
+extern void transform_vector_by_basis_2080b0(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void add_vector_xyz_2080b0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int truncate_float_to_s32_2080b0(float) __asm__("FUN_001fa6d0");
+extern int scale_game_frames_2080b0(int) __asm__("FUN_001f96f8");
+extern float frame_time_2080b0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float frame_scale_2080b0 __asm__("D_0015ED60");
 
 // Hero gadget glow: pulses the colour of the hero's gadget moby (hero state 13, 16, 17, 19, 20) and
 // queues its glow sprites. c and g are shared by cases 17 and 20 (one pseudo each, retail's $s0/$s1).
@@ -1640,14 +1640,14 @@ void FUN_L00_002080b0(void) {
         struct Moby *w = hero.items[2].moby;
         if (w != 0 && ((w->flags ^ 1) & 1)) {
             for (i = 0; i < 2; i++) {
-                func_L00_00250800_2080b0(w, i, &v);
-                func_L00_00208650_2080b0(&v, 0x301EAA1E, 0.057f, 0.15f);
+                moby_point_position_2080b0(w, i, &v);
+                queue_glow_sprite_2080b0(&v, 0x301EAA1E, 0.057f, 0.15f);
             }
         }
     }
 
-    hero.glow_phase = func_001FA748_2080b0(hero.glow_phase, D_0015ED6C_2080b0 * 2.26892805f);
-    hero.moby->glow_color = func_001FA8A8_2080b0(0x806E8C6E, 0x805A3232, func_001F9FA8_2080b0(hero.glow_phase) * 0.5f + 0.5f);
+    hero.glow_phase = fast_add_rotations_2080b0(hero.glow_phase, frame_time_2080b0 * 2.26892805f);
+    hero.moby->glow_color = fast_tween_color_2080b0(0x806E8C6E, 0x805A3232, fast_sin_2080b0(hero.glow_phase) * 0.5f + 0.5f);
 
     m = hero.items[0].moby;
     if (m == 0) return;
@@ -1658,42 +1658,42 @@ void FUN_L00_002080b0(void) {
         int c5;
         int x1, x2, col;
         float fr;
-        float f = func_001FA748_2080b0(hero.items[0].glow_phase, D_0015ED6C_2080b0 * 4.36332321f);
+        float f = fast_add_rotations_2080b0(hero.items[0].glow_phase, frame_time_2080b0 * 4.36332321f);
         c5 = 0x28C8C8C8;
         hero.items[0].glow_phase = f;
         if (0.0f < f && f < 2.26892805f) c5 = 0x280A0A0A;
-        m->glow_color = func_001FA8A8_2080b0(m->glow_color, c5, 0.07f);
+        m->glow_color = fast_tween_color_2080b0(m->glow_color, c5, 0.07f);
         v.q = 0;
         v.f[0] = 0.0173452497f;
         v.f[1] = -0.0391772911f;
         v.f[2] = 0.0962345004f;
-        func_001F9EC0_2080b0(&v, &v, &m->rot_row0);
-        func_001F9BD8_2080b0(&v, &v, &m->pos);
+        transform_vector_by_basis_2080b0(&v, &v, &m->rot_row0);
+        add_vector_xyz_2080b0(&v, &v, &m->pos);
         c = (*(unsigned char *)&m->glow_color);
         g = ((unsigned char *)&m->glow_color)[1];
         fr = (float)c;
         c = ((unsigned char *)&m->glow_color)[2];
-        x1 = func_001FA898_2080b0(fr * 0.2f);
-        x2 = func_001FA898_2080b0((float)c * 0.2f);
+        x1 = truncate_float_to_s32_2080b0(fr * 0.2f);
+        x2 = truncate_float_to_s32_2080b0((float)c * 0.2f);
         col = ((g << 5) / 200) << 24;
         col |= x2 << 16;
         g <<= 8;
         col |= g;
         col |= x1;
-        func_L00_00208650_2080b0(&v, col, 0.15f, 0.1f);
+        queue_glow_sprite_2080b0(&v, col, 0.15f, 0.1f);
         break;
     }
     case 16:
-        if (func_001F9850_2080b0(50) < hero.items[0].unk20) {
+        if (scale_game_frames_2080b0(50) < hero.items[0].unk20) {
             float k, f;
             int r, g, b, a, col, col1, bs, gs;
-            k = D_0015ED6C_2080b0 * 3.14159274f;
-            if (hero.unk20A8 != 0) k = D_0015ED6C_2080b0 * 4.71238899f;
-            f = func_001FA748_2080b0(hero.items[0].glow_phase, k);
+            k = frame_time_2080b0 * 3.14159274f;
+            if (hero.unk20A8 != 0) k = frame_time_2080b0 * 4.71238899f;
+            f = fast_add_rotations_2080b0(hero.items[0].glow_phase, k);
             hero.items[0].glow_phase = f;
-            r = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 20.0f) + 30;
-            g = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 90.0f) + 150;
-            b = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 20.0f) + 30;
+            r = truncate_float_to_s32_2080b0(fast_sin_2080b0(f) * 20.0f) + 30;
+            g = truncate_float_to_s32_2080b0(fast_sin_2080b0(f) * 90.0f) + 150;
+            b = truncate_float_to_s32_2080b0(fast_sin_2080b0(f) * 20.0f) + 30;
             if (hero.unk20A8 != 0) {
                 int tmp = r;
                 r = g;
@@ -1704,75 +1704,75 @@ void FUN_L00_002080b0(void) {
             gs = g << 8;
             col1 |= gs;
             col1 |= r;
-            m->glow_color = func_001FA8A8_2080b0(m->glow_color, col1, 0.13f);
-            a = hero.items[0].unk20 - func_001F9850_2080b0(50);
+            m->glow_color = fast_tween_color_2080b0(m->glow_color, col1, 0.13f);
+            a = hero.items[0].unk20 - scale_game_frames_2080b0(50);
             if (a > 32) a = 32;
             col = (a << 24) | bs | gs | r;
-            func_L00_00250800_2080b0(m, 1, &v);
-            func_L00_00208650_2080b0(&v, col, 0.15f, 0.04f);
+            moby_point_position_2080b0(m, 1, &v);
+            queue_glow_sprite_2080b0(&v, col, 0.15f, 0.04f);
         }
         break;
     case 19: {
         float k, f;
         int r, g, b, col;
-        k = D_0015ED6C_2080b0 * 2.26892805f;
-        if (hero.unk20A8 != 0) k = D_0015ED6C_2080b0 * 7.33038282f;
-        f = func_001FA748_2080b0(hero.items[0].glow_phase, k);
+        k = frame_time_2080b0 * 2.26892805f;
+        if (hero.unk20A8 != 0) k = frame_time_2080b0 * 7.33038282f;
+        f = fast_add_rotations_2080b0(hero.items[0].glow_phase, k);
         hero.items[0].glow_phase = f;
         if (hero.unk20A8 != 0) {
-            r = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 30.0f) + 50;
-            g = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 30.0f) + 50;
-            b = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 90.0f) + 170;
+            r = truncate_float_to_s32_2080b0(fast_sin_2080b0(f) * 30.0f) + 50;
+            g = truncate_float_to_s32_2080b0(fast_sin_2080b0(f) * 30.0f) + 50;
+            b = truncate_float_to_s32_2080b0(fast_sin_2080b0(f) * 90.0f) + 170;
         } else {
-            r = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 70.0f) + 100;
-            g = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 40.0f) + 70;
-            b = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 40.0f) + 70;
+            r = truncate_float_to_s32_2080b0(fast_sin_2080b0(f) * 70.0f) + 100;
+            g = truncate_float_to_s32_2080b0(fast_sin_2080b0(f) * 40.0f) + 70;
+            b = truncate_float_to_s32_2080b0(fast_sin_2080b0(f) * 40.0f) + 70;
         }
         col = b << 16;
         col |= 0x80000000;
         col |= g << 8;
         col |= r;
-        m->glow_color = func_001FA8A8_2080b0(m->glow_color, col, 0.15f);
+        m->glow_color = fast_tween_color_2080b0(m->glow_color, col, 0.15f);
         break;
     }
     case 20: {
         int c5;
         int x1, x2, col;
         float fr;
-        float f = func_001FA748_2080b0(hero.items[0].glow_phase, D_0015ED6C_2080b0 * 4.36332321f);
+        float f = fast_add_rotations_2080b0(hero.items[0].glow_phase, frame_time_2080b0 * 4.36332321f);
         c5 = 0xDCDCDC;
         hero.items[0].glow_phase = f;
         if (0.0f < f && f < 2.44346094f) c5 = 0xA0A0A;
-        m->glow_color = func_001FA8A8_2080b0(m->glow_color, c5, 0.07f);
+        m->glow_color = fast_tween_color_2080b0(m->glow_color, c5, 0.07f);
         v.q = 0;
         v.f[0] = 0.0171042103f;
         v.f[1] = -0.0939194188f;
         v.f[2] = 0.140954122f;
-        func_001F9EC0_2080b0(&v, &v, &m->rot_row0);
-        func_001F9BD8_2080b0(&v, &v, &m->pos);
+        transform_vector_by_basis_2080b0(&v, &v, &m->rot_row0);
+        add_vector_xyz_2080b0(&v, &v, &m->pos);
         c = (*(unsigned char *)&m->glow_color);
         g = ((unsigned char *)&m->glow_color)[1];
         fr = (float)c;
         c = ((unsigned char *)&m->glow_color)[2];
-        x1 = func_001FA898_2080b0(fr * 0.2f);
-        x2 = func_001FA898_2080b0((float)c * 0.2f);
+        x1 = truncate_float_to_s32_2080b0(fr * 0.2f);
+        x2 = truncate_float_to_s32_2080b0((float)c * 0.2f);
         col = ((g << 5) / 200) << 24;
         col |= x2 << 16;
         g <<= 8;
         col |= g;
         col |= x1;
-        func_L00_00208650_2080b0(&v, col, 0.17f, 0.1f);
+        queue_glow_sprite_2080b0(&v, col, 0.17f, 0.1f);
         break;
     }
     case 13: {
         int c5;
-        float f = func_001FA748_2080b0(hero.items[0].glow_phase, D_0015ED6C_2080b0 * 4.71238899f);
+        float f = fast_add_rotations_2080b0(hero.items[0].glow_phase, frame_time_2080b0 * 4.71238899f);
         c5 = 0x2814D214;
         hero.items[0].glow_phase = f;
         if (0.0f < f && f < 2.09439516f) c5 = 0x281414D2;
-        m->glow_color = func_001FA8A8_2080b0(m->glow_color, c5, D_0015ED60_2080b0 * 0.05f);
-        func_L00_00250800_2080b0(m, 0, &v);
-        func_L00_00208650_2080b0(&v, m->glow_color, 0.1f, 0.03f);
+        m->glow_color = fast_tween_color_2080b0(m->glow_color, c5, frame_scale_2080b0 * 0.05f);
+        moby_point_position_2080b0(m, 0, &v);
+        queue_glow_sprite_2080b0(&v, m->glow_color, 0.1f, 0.03f);
         break;
     }
     }

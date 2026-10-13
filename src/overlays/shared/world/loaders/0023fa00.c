@@ -32,21 +32,21 @@ extern s32 second_record_gp_23fa00 __asm__("D_L00_0015FC10") __attribute__((sda)
 extern TexRecord_23fa00 first_record_fields_23fa00 __asm__("D_L00_0015FC0A") __attribute__((section(".sdata")));
 extern TexRecord_23fa00 second_record_fields_23fa00 __asm__("D_L00_0015FC1A") __attribute__((section(".sdata")));
 extern u8 record_index_23fa00 __asm__("D_L00_0015FC20") __attribute__((sda));
-extern u8 texture_loaded_23fa00[] __asm__("D_L00_00197BC0");
+extern u8 class_slot_by_id_23fa00[] __asm__("D_L00_00197BC0");
 extern u32 texture_addresses_23fa00[] __asm__("D_L00_00199A80");
-extern s32 first_texture_ids_23fa00[] __asm__("D_L00_00160548");
-extern s32 second_texture_ids_23fa00[] __asm__("D_L00_00160558");
+extern s32 first_class_ids_23fa00[] __asm__("D_L00_00160548");
+extern s32 second_class_ids_23fa00[] __asm__("D_L00_00160558");
 extern s32 D_L00_00160568_23fa00 __asm__("D_L00_00160568") __attribute__((section(".sdata")));
 extern s32 D_L00_00160564_23fa00 __asm__("D_L00_00160564") __attribute__((section(".sdata")));
 extern s32 D_L00_0016056C_23fa00 __asm__("D_L00_0016056C") __attribute__((section(".sdata")));
 extern void hud_send_resident_bank_23fa00(void *, void *, s32) __asm__("FUN_001f98d0");
-extern s32 FUN_00122330_23fa00(void *, s16, s16, s16, s16, s16, s16, s16) __asm__("FUN_00122330");
-extern void FUN_00118a80_23fa00(s32) __asm__("FUN_00118a80");
-extern s32 FUN_00122658_23fa00(void *, void *) __asm__("FUN_00122658");
-extern s32 FUN_00120558_23fa00(s32, u16) __asm__("FUN_00120558");
-extern void FUN_00203640_23fa00(void *, void *, void *, s32) __asm__("FUN_00203640");
+extern s32 sceGsSetDefLoadImage_23fa00(void *, s16, s16, s16, s16, s16, s16, s16) __asm__("FUN_00122330");
+extern void FlushCache_23fa00(s32) __asm__("FUN_00118a80");
+extern s32 sceGsExecLoadImage_23fa00(void *, void *) __asm__("FUN_00122658");
+extern s32 wait_for_graphics_pipeline_idle_23fa00(s32, u16) __asm__("FUN_00120558");
+extern void register_moby_class_23fa00(void *, void *, void *, s32) __asm__("FUN_00203640");
 
-/* Loads a level's four packed images through the GS loader and registers the image records and their data blocks. */
+/* Loads a level's four packed images through the GS loader, adds two texture records and registers the moby class of each one not loaded yet. */
 char *FUN_L00_0023fa00(char *bank, s32 *header) {
     s32 image[24];
     s32 i = 0;
@@ -69,26 +69,26 @@ char *FUN_L00_0023fa00(char *bank, s32 *header) {
     last_offset = ((ImageBank_23fa00 *)bank)->last_offset;
     do {
         if (i == 0) {
-            FUN_00122330_23fa00(image, (vram_base_23fa00[1] + header[0x2B]) >> 8, 1, 0x13, 0, 0, 0x40, 0x40);
+            sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2B]) >> 8, 1, 0x13, 0, 0, 0x40, 0x40);
             src = bank + first_offset;
             dst = first + 0x14430;
         } else if (i == 1) {
-            FUN_00122330_23fa00(image, (vram_base_23fa00[1] + header[0x2C]) >> 8, 1, 0x13, 0, 0, 0x20, 0x20);
+            sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2C]) >> 8, 1, 0x13, 0, 0, 0x20, 0x20);
             src = bank + first_offset;
             dst = first + 0x15430;
         } else if (i == 2) {
-            FUN_00122330_23fa00(image, (vram_base_23fa00[1] + header[0x2D]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
+            sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2D]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
             dst = first + 0x30;
             src = bank + first_offset;
         } else {
-            FUN_00122330_23fa00(image, (vram_base_23fa00[1] + header[0x2E]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
+            sceGsSetDefLoadImage_23fa00(image, (vram_base_23fa00[1] + header[0x2E]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
             src = bank + first_offset;
             dst = bank + last_offset + 0x30;
         }
-        FUN_00118a80_23fa00(0);
+        FlushCache_23fa00(0);
         i++;
-        FUN_00122658_23fa00(image, dst);
-        FUN_00120558_23fa00(0, 0);
+        sceGsExecLoadImage_23fa00(image, dst);
+        wait_for_graphics_pipeline_idle_23fa00(0, 0);
     } while (i < 4);
     base = bank;
     bank = src;
@@ -101,9 +101,9 @@ char *FUN_L00_0023fa00(char *bank, s32 *header) {
     hud_send_resident_bank_23fa00(bank, base + first_offset + 0x430, 0x14000);
     bank += 0x14000;
     record_index_23fa00 = texture_count_23fa00;
-    if (texture_loaded_23fa00[first_texture_ids_23fa00[level_render_state.content_variant]] == 0xFF) {
-        FUN_00203640_23fa00(base + sky_offset, first_record_23fa00 - texture_count_23fa00, &record_index_23fa00,
-                            first_texture_ids_23fa00[level_render_state.content_variant]);
+    if (class_slot_by_id_23fa00[first_class_ids_23fa00[level_render_state.content_variant]] == 0xFF) {
+        register_moby_class_23fa00(base + sky_offset, first_record_23fa00 - texture_count_23fa00, &record_index_23fa00,
+                            first_class_ids_23fa00[level_render_state.content_variant]);
     }
     next_index = texture_count_23fa00 + 1;
     second_record_fields_23fa00.h[0] = header[0x2E] >> 8;
@@ -113,9 +113,9 @@ char *FUN_L00_0023fa00(char *bank, s32 *header) {
     hud_send_resident_bank_23fa00(bank, base + last_offset + 0x430, 0x4000);
     bank += 0x4000;
     record_index_23fa00 = texture_count_23fa00;
-    if (texture_loaded_23fa00[second_texture_ids_23fa00[level_render_state.content_variant]] == 0xFF) {
-        FUN_00203640_23fa00(base + second_offset, second_record_23fa00 - texture_count_23fa00, &record_index_23fa00,
-                            second_texture_ids_23fa00[level_render_state.content_variant]);
+    if (class_slot_by_id_23fa00[second_class_ids_23fa00[level_render_state.content_variant]] == 0xFF) {
+        register_moby_class_23fa00(base + second_offset, second_record_23fa00 - texture_count_23fa00, &record_index_23fa00,
+                            second_class_ids_23fa00[level_render_state.content_variant]);
     }
     D_L00_00160564_23fa00 = 1;
     D_L00_00160568_23fa00 = 1;

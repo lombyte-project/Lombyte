@@ -497,29 +497,29 @@ extern char D_L00_001B0250_25e450[] __asm__("D_L00_001B0250");
 extern char D_L00_001B02A0_25e450[] __asm__("D_L00_001B02A0");
 extern S6_25e450 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
 extern S6_25e450 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
-extern int func_001F9850_25e450(int) __asm__("FUN_001f96f8");
-extern float func_002140F8_25e450(float, float) __asm__("FUN_002132a8");
-extern float func_00214158_25e450(void) __asm__("FUN_00213308");
-extern float func_001FA888_25e450(int) __asm__("FUN_001fa6c0");
-extern int func_001FA898_25e450(float) __asm__("FUN_001fa6d0");
-extern int func_002140B0_25e450(int) __asm__("FUN_00213260");
-extern void func_00215C00_25e450(void *, float, float, float) __asm__("FUN_00214db0");
+extern int scale_game_frames_25e450(int) __asm__("FUN_001f96f8");
+extern float random_float_between_25e450(float, float) __asm__("FUN_002132a8");
+extern float random_angle_radians_25e450(void) __asm__("FUN_00213308");
+extern float convert_integer_to_float_25e450(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32_25e450(float) __asm__("FUN_001fa6d0");
+extern int random_integer_below_25e450(int) __asm__("FUN_00213260");
+extern void build_spherical_offset_25e450(void *, float, float, float) __asm__("FUN_00214db0");
 extern unsigned func_L00_0025D140_25e450(unsigned, int) __asm__("FUN_L00_0025c0e8");
-extern int func_L00_00258BC8_25e450(int, int) __asm__("FUN_L00_00257b90");
+extern int random_int_between_25e450(int, int) __asm__("FUN_L00_00257b90");
 extern void func_L00_0025A890_25e450(void *, void *, int, float) __asm__("FUN_L00_00259858");
-extern int func_L00_001F2BE8_25e450(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
+extern int collect_mobies_in_sphere_25e450(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *func_L00_0026CA10_25e450(void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
-extern void func_001F9BF0_25e450(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float func_001F9CB8_25e450(void *) __asm__("FUN_001f9af0");
-extern void func_L00_001FF4B0_25e450(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_001F9BD8_25e450(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz_25e450(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float vector_length_xyz_25e450(void *) __asm__("FUN_001f9af0");
+extern void normalize_vector_xyz_25e450(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz_25e450(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_L00_001FF548_25e450(void *, void *, float) __asm__("FUN_001f9c90");
 extern void *func_L00_002B0738_25e450(void *, void *, int, int, int) __asm__("FUN_L00_002af450");
 extern void func_L00_0026B890_25e450(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void func_L00_0026B368_25e450(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
-extern int func_L00_002ADBB0_25e450(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
+extern int spawn_glow_particle_25e450(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern int func_L00_00200290_25e450(void *, float) __asm__("FUN_001fa728");
-extern int func_0022ED80_25e450(int, int, void *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry_25e450(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L00_002D4CE8_25e450(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 
 /* Beam explosion at moby m: a spark burst from a spawn event, optional glow sparks and a flash, with a cam tint. */
@@ -553,7 +553,7 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
         ev.b18 = 2;
         ev.b19 = 1;
         ev.h1A = *(unsigned short *)(m + 0xA6);
-        func_L00_001F2BE8_25e450(fA, pos, 0x10, m, &ev);
+        collect_mobies_in_sphere_25e450(fA, pos, 0x10, m, &ev);
     }
     }
     for (i = 0; i < n; i++) {
@@ -561,52 +561,52 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
         Q_25e450 dir;
         float a;
         float b;
-        a = func_002140F8_25e450(0.2617994f, 1.3962634f);
-        b = func_00214158_25e450();
-        func_00215C00_25e450(&dir, fF * (func_002140F8_25e450(7.0f, 10.5f) * D_0015ED6C_25e450), b, a);
+        a = random_float_between_25e450(0.2617994f, 1.3962634f);
+        b = random_angle_radians_25e450();
+        build_spherical_offset_25e450(&dir, fF * (random_float_between_25e450(7.0f, 10.5f) * D_0015ED6C_25e450), b, a);
         dir.f[2] += D_0015ED6C_25e450 * 3.0f;
         dist = fF * 40000.0f;
         func_L00_0026CA10_25e450(pos, &dir, func_L00_0025D140_25e450(0x4F007FFF, flag), func_L00_0025D140_25e450(0x1F00007F, flag),
-            func_L00_00258BC8_25e450(func_001F9850_25e450(0x3C), func_001F9850_25e450(0x78)) - s18 * 10, 1, -1, -1, dist);
+            random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x78)) - s18 * 10, 1, -1, -1, dist);
         }
     }
-    func_001F9BF0_25e450(&v0, D_L00_00166DC0_25e450, pos);
-    dist = func_001F9CB8_25e450(&v0);
+    subtract_vector_xyz_25e450(&v0, D_L00_00166DC0_25e450, pos);
+    dist = vector_length_xyz_25e450(&v0);
     {
     if (s16 != 0) {
         Q_25e450 d2;
         Q_25e450 rnd;
         int i;
         *(u128_25e450 *)&rnd = 0;
-        rnd.f[0] = func_002140F8_25e450(-1.0f, 1.0f);
-        rnd.f[1] = func_002140F8_25e450(-1.0f, 1.0f);
-        rnd.f[2] = func_002140F8_25e450(-1.0f, 1.0f);
+        rnd.f[0] = random_float_between_25e450(-1.0f, 1.0f);
+        rnd.f[1] = random_float_between_25e450(-1.0f, 1.0f);
+        rnd.f[2] = random_float_between_25e450(-1.0f, 1.0f);
         *(u128_25e450 *)&d2 = *(u128_25e450 *)&rnd;
         if (dist < 14.0f) {
             v0.f[2] += dist * 0.5f;
-            func_L00_001FF4B0_25e450(&d2, &d2, dist / 5.0f * D_0015ED6C_25e450);
-            func_L00_001FF4B0_25e450(&v0, &v0, (dist + dist) * D_0015ED6C_25e450);
-            func_001F9BD8_25e450(&d2, &d2, &v0);
+            normalize_vector_xyz_25e450(&d2, &d2, dist / 5.0f * D_0015ED6C_25e450);
+            normalize_vector_xyz_25e450(&v0, &v0, (dist + dist) * D_0015ED6C_25e450);
+            add_vector_xyz_25e450(&d2, &d2, &v0);
             func_L00_001FF548_25e450(&d2, &d2, D_0015ED6C_25e450 * 10.0f);
-            func_L00_002B0738_25e450(pos, &d2, func_L00_00258BC8_25e450(func_001F9850_25e450(0x3C), func_001F9850_25e450(0x5A)), 0, 0);
+            func_L00_002B0738_25e450(pos, &d2, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), 0, 0);
         }
         s16 = s16 - 1;
         for (i = 0; i < s16; i++) {
             float a;
             float b;
             int sel;
-            a = func_002140F8_25e450(0.2617994f, 1.3089969f);
-            b = func_00214158_25e450();
-            func_00215C00_25e450(&rnd, fF * (func_002140F8_25e450(7.0f, 10.5f) * D_0015ED6C_25e450), b, a);
+            a = random_float_between_25e450(0.2617994f, 1.3089969f);
+            b = random_angle_radians_25e450();
+            build_spherical_offset_25e450(&rnd, fF * (random_float_between_25e450(7.0f, 10.5f) * D_0015ED6C_25e450), b, a);
             rnd.f[2] += D_0015ED6C_25e450 + D_0015ED6C_25e450;
             sel = 0;
             if (i % 3 == 0) sel = 1;
-            func_L00_002B0738_25e450(pos, &rnd, func_L00_00258BC8_25e450(func_001F9850_25e450(0x3C), func_001F9850_25e450(0x5A)), sel, 0);
+            func_L00_002B0738_25e450(pos, &rnd, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), sel, 0);
         }
     }
     }
-    if (dist < func_001FA888_25e450(k8) * 2.0f) {
-        cnt4 = func_001FA898_25e450(dist) / 2;
+    if (dist < convert_integer_to_float_25e450(k8) * 2.0f) {
+        cnt4 = truncate_float_to_s32_25e450(dist) / 2;
     } else {
         cnt4 = k8;
     }
@@ -618,18 +618,18 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
         S6_25e450 c0;
         S6_25e450 c1;
         float sp;
-        sp = func_002140F8_25e450(8.0f, 10.0f) * D_0015ED6C_25e450;
+        sp = random_float_between_25e450(8.0f, 10.0f) * D_0015ED6C_25e450;
         c0 = D_L00_001E9030_25e450;
         c1 = D_L00_001E9048_25e450;
         sp = sp - t * D_0015ED6C_25e450;
         sp = sp * fF;
-        func_L00_0026B890_25e450(pos, &vb, func_L00_0025D140_25e450(c0.v[func_002140B0_25e450(6)], flag),
-            func_L00_0025D140_25e450(c1.v[func_002140B0_25e450(6)], flag), fF * 400000.0f,
-            func_L00_00258BC8_25e450(func_001F9850_25e450(0xF), func_001F9850_25e450(0x14)) - s18 * 3,
-            func_L00_00258BC8_25e450(func_001F9850_25e450(0x1E), func_001F9850_25e450(0x2D)) - s18 * 5, 0, 0, sp);
+        func_L00_0026B890_25e450(pos, &vb, func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag),
+            func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag), fF * 400000.0f,
+            random_int_between_25e450(scale_game_frames_25e450(0xF), scale_game_frames_25e450(0x14)) - s18 * 3,
+            random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - s18 * 5, 0, 0, sp);
         func_L00_0026B890_25e450(pos, &vb, 0x7FFFFFFF, 0xFFFFFF, fF * 400000.0f,
-            func_L00_00258BC8_25e450(func_001F9850_25e450(5), func_001F9850_25e450(0xA)) - s18 * 2,
-            func_L00_00258BC8_25e450(func_001F9850_25e450(0xF), func_001F9850_25e450(0x14)) - s18 * 3, 0, 0, sp * 0.5f);
+            random_int_between_25e450(scale_game_frames_25e450(5), scale_game_frames_25e450(0xA)) - s18 * 2,
+            random_int_between_25e450(scale_game_frames_25e450(0xF), scale_game_frames_25e450(0x14)) - s18 * 3, 0, 0, sp * 0.5f);
     }
     }
     {
@@ -642,15 +642,15 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
         int p1;
         int p2;
         *(u128_25e450 *)&rnd = 0;
-        rnd.f[0] = func_002140F8_25e450(-1.0f, 1.0f);
-        rnd.f[1] = func_002140F8_25e450(-1.0f, 1.0f);
-        rnd.f[2] = func_002140F8_25e450(-1.0f, 1.0f);
+        rnd.f[0] = random_float_between_25e450(-1.0f, 1.0f);
+        rnd.f[1] = random_float_between_25e450(-1.0f, 1.0f);
+        rnd.f[2] = random_float_between_25e450(-1.0f, 1.0f);
         *(u128_25e450 *)&vel = *(u128_25e450 *)&rnd;
-        func_L00_001FF4B0_25e450(&vel, &vel, fF * (func_002140F8_25e450(0.0f, 3.0f) * D_0015ED6C_25e450));
-        p1 = func_L00_0025D140_25e450(c0.v[func_002140B0_25e450(6)], flag);
-        p2 = func_L00_0025D140_25e450(c1.v[func_002140B0_25e450(6)], flag);
+        normalize_vector_xyz_25e450(&vel, &vel, fF * (random_float_between_25e450(0.0f, 3.0f) * D_0015ED6C_25e450));
+        p1 = func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag);
+        p2 = func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag);
         func_L00_0026B368_25e450(pos, &vel, p1, p2,
-            func_L00_00258BC8_25e450(func_001F9850_25e450(0x1E), func_001F9850_25e450(0x2D)) - s18 * 5, 200000.0f);
+            random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - s18 * 5, 200000.0f);
     }
     }
     if (m != 0 && fC > 0.0f) {
@@ -665,13 +665,13 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
         }
         u = r3 & 0xFF;
         if (D_L00_0015F5D0_25e450 < 0.95f && fE < dist) {
-            func_L00_002ADBB0_25e450(m, pos, &vb, fC, func_001F9850_25e450(0x10), r1, 0x96, r2, 0x20);
-            func_L00_002ADBB0_25e450(m, pos, &vb, fC, func_001F9850_25e450(0x16), u, 0x7F, 0x50, 0x20);
+            spawn_glow_particle_25e450(m, pos, &vb, fC, scale_game_frames_25e450(0x10), r1, 0x96, r2, 0x20);
+            spawn_glow_particle_25e450(m, pos, &vb, fC, scale_game_frames_25e450(0x16), u, 0x7F, 0x50, 0x20);
         }
-        func_L00_002ADBB0_25e450(m, pos, &vb, fC, func_001F9850_25e450(0x1E), u, 0x7F, 0, 0x30);
+        spawn_glow_particle_25e450(m, pos, &vb, fC, scale_game_frames_25e450(0x1E), u, 0x7F, 0, 0x30);
     }
     if (m != 0 && fD > 0.0f) {
-        func_L00_002ADBB0_25e450(m, pos, &vb, fD, func_001F9850_25e450(0x1B), 0xFF, 0xFF, 0xFF, 0x20);
+        spawn_glow_particle_25e450(m, pos, &vb, fD, scale_game_frames_25e450(0x1B), 0xFF, 0xFF, 0xFF, 0x20);
     }
     {
     if (k11) {
@@ -680,12 +680,12 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
         v.f[3] = 2.0f;
         if (func_L00_00200290_25e450(&v, 10.0f) != -1) {
             ((Cam_25e450 *)D_L00_00166C80_25e450)->f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
-            ((Cam_25e450 *)D_L00_00166C80_25e450)->f168 = func_001F9850_25e450(0x19);
+            ((Cam_25e450 *)D_L00_00166C80_25e450)->f168 = scale_game_frames_25e450(0x19);
         }
     }
     }
     if (m != 0 && k10 != -1) {
-        func_0022ED80_25e450(k10, 0, m);
+        allocate_voice_for_target_entry_25e450(k10, 0, m);
     }
     if (fG != 0.0f) {
         if (s18 == 0) {
