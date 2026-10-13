@@ -182,9 +182,9 @@ extern int D_L09_0016CD50[];
 extern int D_L09_0016CD60[];
 extern int D_L09_0016CDF0[];
 extern u64 D_L09_001612F0;
-extern unsigned short D_L09_0010E800;
-extern int D_L09_0010E810;
-extern int D_L09_001CB470;
+extern unsigned short D_L09_0010E800[];
+extern int D_L09_0010E810[];
+extern int D_L09_001CB470[];
 extern char D_L09_00166E40[];
 extern char D_L09_00166EC0[];
 
@@ -231,7 +231,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     FUN_001f9ff8(1024.0f, matrix);
     setup_offset_vector(-1024.0f, offset, D_L09_00166F40);
     offset[3] = 1.0f;
-    FUN_00233830(&D_L09_0010E810, D_L09_0010E800);
+    FUN_00233830(D_L09_0010E810, D_L09_0010E800[0]);
     {
         int *packet;
         int *packet_end;
@@ -273,12 +273,14 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         D_L09_001611C0 = packet_end;
         packet[60] = 0x30000003;
     }
-    PACKET_CURSOR[1] = (int)&D_L09_001CB470;
+    PACKET_CURSOR[1] = (int)D_L09_001CB470;
     PACKET_CURSOR[2] = 0;
     PACKET_CURSOR[3] = 0x50000003;
-    packet = PACKET_CURSOR + 4;
-    D_L09_001611C0 = packet;
-    packet[0] = 0x10000008;
+    {
+        int *packet = PACKET_CURSOR + 4;
+        D_L09_001611C0 = packet;
+        packet[0] = 0x10000008;
+    }
     PACKET_CURSOR[1] = 0;
     PACKET_CURSOR[2] = 0;
     PACKET_CURSOR[3] = 0x50000008;
@@ -315,29 +317,31 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         words[15] = 0x47;
         D_L09_001611C0 = (int *)(words + 16);
     }
-    scratch = (int *)0x700003fc;
-    for (i = 256; i != 0; i--)
-        *scratch-- = 0x757c8e;
+    scratch = (int *)0x70000000;
+    for (i = 255; i >= 0; i--)
+        scratch[i] = 0x757c8e;
     i = 0;
     if (count > 0) do {
         char *entry;
         int visible;
         entry_offset = i * 32;
         entry = (char *)((int)list + entry_offset);
-        i++;
         visible = FUN_001fa728(entry, 256.0f);
         if (visible != -1) {
             int n = *(int *)(entry + 0x1c);
             float *source = *(float **)(entry + 0x14);
             float *destination = (float *)0x70001000;
-            j = n;
-            if (j > 0) do {
-                *destination++ = *source++ * 0.5f;
-                *destination++ = *source++ * 0.5f;
-            } while (--j != 0);
-            FUN_L00_001fde98(n, *(int *)(entry_offset + (int)list + 0x10), 0x70000000,
+            if (n > 0) {
+                j = n;
+                do {
+                    *destination++ = *source++ * 0.5f;
+                    *destination++ = *source++ * 0.5f;
+                } while (--j != 0);
+            }
+            FUN_L00_001fde98(n, ((int *)list)[(i << 3) + 4], 0x70000000,
                               (void *)0x70001000, visible == 0);
         }
+        i++;
     } while (i < count);
     FUN_L02_002a46e0(data);
 }
