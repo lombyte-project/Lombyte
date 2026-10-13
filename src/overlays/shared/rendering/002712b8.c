@@ -2009,9 +2009,8 @@ void FUN_L00_00275aa0(unsigned char *m) {
 
     m[8] += q[0xa];
     h = *(short *)(q + 8);
-    h -= *(short *)(m + 0xa);
-    if (h < 6) {
-        f = (float)h / 5.0f;
+    if (h - *(short *)(m + 0xa) < 6) {
+        f = (float)(h - *(short *)(m + 0xa)) / 5.0f;
         *(float *)(m + 0xc) = *(float *)(q + 4) +
             ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)(q + 4)) * f;
         originalAlpha = q[0xb];
@@ -2021,7 +2020,7 @@ void FUN_L00_00275aa0(unsigned char *m) {
         alpha *= f;
         alpha = (float)originalAlpha + alpha;
     } else {
-        f = (float)*(short *)(m + 0xa) / FUN_001fa6c0_275aa0(*(short *)(q + 8) - 6);
+        f = (float)*(short *)(m + 0xa) / FUN_001fa6c0_275aa0(h - 6);
         *(float *)(m + 0xc) = *(float *)q +
             ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)q) * f;
         alpha = (float)(q[0xb] >> 1);
@@ -2030,10 +2029,10 @@ void FUN_L00_00275aa0(unsigned char *m) {
     }
     *(int *)(m + 4) = (FUN_001fa6d0_275aa0(alpha) << 24) | (*(int *)(m + 4) & 0xffffff);
     velocity = (float *)(q + 0xc);
-    v[0] = *(float *)(q + 0xc);
-    v[1] = *(float *)(q + 0x10);
+    *(volatile float *)&v[0] = *(volatile float *)(q + 0xc);
+    *(volatile float *)&v[1] = *(volatile float *)(q + 0x10);
     v[2] = *(float *)(q + 0x14);
-    *(int *)&v[3] = 0;
+    *(volatile int *)&v[3] = 0;
     FUN_001f9a10_275aa0(m + 0x10, m + 0x10, v);
     if (*(int *)(q + 0x18)) {
         subtract_vector_xyz(d, (char *)*(int *)(q + 0x18) + 0x10, m + 0x10);
