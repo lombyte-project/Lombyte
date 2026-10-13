@@ -1453,7 +1453,7 @@ extern void add_vector_304058(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void scale_vector_304058(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void scale_vector_304058(float, void *, void *) __asm__("FUN_001f9bf8");
 
 float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     Vec4 segment, result, from_point, normal, projection, cross, offset;
@@ -1492,7 +1492,7 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
         subtract_vector_304058(&normal, *path_entry + (segment_offset + 0x20),
                                *path_entry + next);
         normal.f[2] = 0.0f;
-        scale_vector_304058(&projection, &normal, 1.0f);
+        scale_vector_304058(1.0f, &projection, &normal);
         fast_vec_cross(&cross, &segment, &projection);
         separation = absolute_float_304058(cross.f[2]);
         if (separation < best)
@@ -1505,12 +1505,12 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
             if (!(fast_vec_length(&segment) < reach))
                 goto loop_next;
             state.changed = 1;
-            scale_vector_304058(&result, &segment, reach);
+            scale_vector_304058(reach, &result, &segment);
         } else {
             state.changed = 1;
-            scale_vector_304058(&offset, &projection, along);
+            scale_vector_304058(along, &offset, &projection);
             subtract_vector_304058(&result, &segment, &offset);
-            scale_vector_304058(&result, &result, reach);
+            scale_vector_304058(reach, &result, &result);
             add_vector_304058(&result, &result, &offset);
         }
         add_vector_304058(&from_point, &result,
