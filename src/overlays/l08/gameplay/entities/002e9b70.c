@@ -511,18 +511,21 @@ state_zero: {
         return;
     }
 state_one: {
+        s32 tint;
         s32 active = find_moby_hit_44c0(moby, 0x330000, 0);
         distance = FUN_001f9b80_44c0(&moby->pos, D_0013F3D0);
         if ((distance < 2.0f && *(s32 *)(D_0013F3D0 + 0x2004) == 0x42) || *(struct Moby **)(D_0013F3D0 + 0x1bc) == moby) {
             allocate_voice_for_target_entry_44c0(0, 0, moby);
             waypoint = 1;
+            tint = -1;
             FUN_L00_0025e450_44c0(moby, D_L08_0015F580, &moby->pos, 3.0f, 1.0f, 10, 20, 60,
-                          3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, waypoint, 1, -1, 0);
+                          3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, waypoint, 1, tint, 0);
         } else {
             if (active == 0) return;
             allocate_voice_for_target_entry_44c0(0, 0, moby);
+            tint = -1;
             FUN_L00_0025e450_44c0(moby, D_L08_0015F580, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
-                          1.0f, 3.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+                          1.0f, 3.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, tint, 0);
         }
         mark_moby_for_removal_44c0(moby);
         return;
