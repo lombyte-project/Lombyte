@@ -342,8 +342,8 @@ void FUN_L00_00276908(void) {
         }
         D_L00_0015F5D8 = 1;
         {
-            u8 *table = D_L00_00173E40;
-            *(s32 *)(table + 0x10) &= 0x7fffffff;
+            s32 *table = (s32 *)D_L00_00173E40;
+            table[4] &= 0x7fffffff;
         }
         FUN_L00_002a08c8();
         FUN_L00_002a09d8(1);
