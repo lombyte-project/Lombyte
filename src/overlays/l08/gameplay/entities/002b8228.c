@@ -1452,7 +1452,15 @@ extern void FUN_L08_002dc9a8_start(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L08_002dc9a8_finish(void *) __asm__("FUN_0020c828");
 extern float D_0015ED6C_2DC9A8 __asm__("D_0015ED6C");
 extern float D_0015ED70_2DC9A8 __asm__("D_0015ED70");
-extern char D_L08_00174640_2DC9A8[] __asm__("D_L08_00174640");
+typedef struct CollisionRecord_2DC9A8 {
+    char pad[0x18];
+    int owner;
+    int unknown;
+    float position[4];
+    char pad30[0x10];
+    float vector[4];
+} CollisionRecord_2DC9A8;
+extern CollisionRecord_2DC9A8 D_L08_00174640_2DC9A8 __asm__("D_L08_00174640");
 extern int D_L08_00174658_2DC9A8 __asm__("D_L08_00174658") __attribute__((section(".data")));
 
 typedef struct __attribute__((packed)) EffectVectorCopy_2DC9A8 {
@@ -1490,23 +1498,25 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
     switch ((unsigned char)m[0x20]) {
     case 1: {
         position = (float *)(m + 0x10);
-        *(volatile u128 *)original = *(volatile u128 *)position;
+        qcopy(original, position);
         FUN_L08_002dc9a8_transform(position, position, data);
         *(float *)(data + 8) -= D_0015ED70_2DC9A8 * 10.8f;
-        *(volatile u128 *)record.pos = *(volatile u128 *)position;
+        qcopy(record.pos, position);
         record.owner = m;
         record.flags = 0x810000;
-        record.scale = 1.0f;
         record.state = 1;
-        *(volatile u128 *)record.velocity = *(volatile u128 *)data;
-        if (FUN_L08_002dc9a8_trace(original, &record, 0, m, 0) == 0) {
+        record.scale = 1.0f;
+        qcopy(record.velocity, data);
+        if (FUN_L08_002dc9a8_trace(original, &record, 0, m, 0) != 0) {
+            if (*(int *)(data + 0x20) != 0 &&
+                D_L08_00174640_2DC9A8.owner != *(int *)(data + 0x20)) {
+                m[0x20] = 99;
+                qcopy(position, D_L08_00174640_2DC9A8.position);
+                FUN_L08_002dc9a8_add(data, data, D_L08_00174640_2DC9A8.vector);
+                FUN_L08_002dc9a8_scale(D_0015ED6C_2DC9A8 + D_0015ED6C_2DC9A8, data, data);
+            }
+        } else {
             if (FUN_L08_002dc9a8_test(data + 0x10) != 0) m[0x20] = 99;
-        } else if (*(int *)(data + 0x20) != 0 &&
-                   *(int *)(data + 0x20) != D_L08_00174658_2DC9A8) {
-            m[0x20] = 99;
-            *(volatile u128 *)position = *(volatile u128 *)(D_L08_00174640_2DC9A8 + 0x20);
-            FUN_L08_002dc9a8_add(data, data, D_L08_00174640_2DC9A8 + 0x40);
-            FUN_L08_002dc9a8_scale(D_0015ED6C_2DC9A8 + D_0015ED6C_2DC9A8, data, data);
         }
     } break;
     case 99: {
