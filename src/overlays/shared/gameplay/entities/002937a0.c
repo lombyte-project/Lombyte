@@ -1659,11 +1659,11 @@ void FUN_L08_003024d8(char *m) {
         case 3: case 4: case 5: case 6: case 7: case 8: {
             float pose_scale, timer_scale;
             timer_scale = frame_time * 3.0f;
-            pose_scale = frame_time * D_0016218C_3024d8;
-            *(float *)(d + 0xc0) = 5.0f;
-            *(float *)(d + 0xc4) = 10.0f;
+            pose_scale = D_0016218C_3024d8 * frame_time;
             *(float *)(d + 0x88) = pose_scale;
             *(float *)(d + 0x8c) = timer_scale;
+            *(float *)(d + 0xc0) = 5.0f;
+            *(float *)(d + 0xc4) = 10.0f;
             angle = angle_atan2_3024d8(*(float *)(m + 0x10) - *(float *)(*(char **)(h + 0x20) + 0x10),
                 *(float *)(m + 0x14) - *(float *)(*(char **)(h + 0x20) + 0x14));
             *(u128 *)pos = *(u128 *)(h + 0x10);
