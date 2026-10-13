@@ -865,10 +865,10 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     FUN_00118a80(0);
     FUN_L00_0028e048();
     FUN_L00_002656c0();
-    D_L00_0015F5D8 = 1;
     D_L00_00161048 = sector;
-    D_L00_00161050 = language;
     D_L00_0016104C = size;
+    D_L00_00161050 = language;
+    D_L00_0015F5D8 = 1;
     FUN_L00_001f9838(4);
     FUN_L00_002039a0();
     destination = *(volatile s32 *)&D_L00_0015F40C;
