@@ -2072,7 +2072,7 @@ extern void FUN_L10_0024a7f0(float, float, void *) __asm__("FUN_L00_00257d78");
 void FUN_L10_002dcc58(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float scratch[0xC80 / 4];
-    int group, item, row;
+    int group, item;
     float phase;
 
     switch (moby->state) {
@@ -2102,15 +2102,18 @@ void FUN_L10_002dcc58(struct Moby *moby) {
         {
             int group_table = 0x12c00;
             for (group = 0; group < 4; group++) {
+                int group_offset = group * 0x2580;
+                int timer_offset = group * 0x78;
                 for (item = 0; item < 10; item++) {
-                    char *entry = data + (group * 0x78 + group_table) + item * 4;
-                    char *base = data + group * 0x2580;
-                    char *other = data + (group * 0x2580 + 0x9600);
+                    char *entry = data + (timer_offset + group_table) + item * 4;
+                    char *base = data + group_offset;
+                    char *other = data + (group_offset + 0x9600);
                     char *buffer = (char *)scratch + item * 0x10;
                     if (FUN_001f25d0(entry) != 0) {
-                        char *dst = data + (item * 0x10 + group * 0x2580);
+                        char *dst = data + (item * 0x10 + group_offset);
                         char *current = base + item * 0x10;
                         char *out = buffer;
+                        int row;
                         for (row = 0; row < 20; row++) {
                             float phase;
                             float value;
@@ -2131,6 +2134,7 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                             char *dst = other + item * 0x10 + 0x140;
                             char *current = buffer;
                             char *out = buffer + 0x140;
+                            int row;
                             for (row = 17; row >= 0; row--) {
                                 FUN_001f28e0(dst, current, current + 0xa0);
                                 FUN_001f28e0(dst, dst, out);
@@ -2144,6 +2148,7 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                     } else {
                         char *dst = base + item * 0x10 + 0x140;
                         char *out = other + item * 0x10 + 0x140;
+                        int row;
                         for (row = 17; row >= 0; row--) {
                             FUN_001f28e0(dst, dst, out);
                             dst += 0x140;
