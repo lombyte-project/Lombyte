@@ -1066,7 +1066,7 @@ extern void FUN_L14_002e03b8(struct Moby *);
 extern f32 D_L14_00161B40_dfd10 __asm__("D_L14_00161B40") __attribute__((sda));
 extern f32 D_L14_00161B44_dfd10 __asm__("D_L14_00161B44") __attribute__((sda));
 extern f32 D_L14_00161B48_dfd10 __asm__("D_L14_00161B48") __attribute__((sda));
-extern s32 D_001413D0;
+extern s32 D_001413D0 __attribute__((section(".data")));
 extern s32 FUN_001f9740(void *);
 extern f32 FUN_001f99c0(f32);
 extern void FUN_001f9a10(void *, void *, void *);
@@ -1084,6 +1084,7 @@ void FUN_L14_002dfd10(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float *velocity;
     float *position;
+    float *path_position;
     float pos[4];
     float vec[4];
     float absolute_velocity;
@@ -1092,23 +1093,24 @@ void FUN_L14_002dfd10(struct Moby *moby) {
     float zero;
 
     if (moby->state == 0) {
+        path_position = pos;
         position = (float *)&moby->pos;
         path = *(char **)(race_paths_2e0170 + *(int *)(data + 0xc) * 0x20 + 0x10);
-        qcopy(pos, position);
+        qcopy(path_position, position);
         FUN_L00_0025d808(path, position, data + 0x10, data + 0x14, 0, *(float *)(data + 8));
-        subtract_vector_xyz(vec, position, pos);
+        subtract_vector_xyz(vec, position, path_position);
         *(float *)(data + 0x18) = vec[0];
         *(float *)(data + 0x1c) = vec[1];
         FUN_L14_002e03b8(moby);
         if (FUN_001f9740(data + 4) == 0) return;
         zero = 0.5f;
         normalize_vector_xyz(vec, vec, zero);
-        qcopy(pos, position);
+        qcopy(path_position, position);
         pos[2] += 0.25f;
         *(int *)&one = 0x3f800000;
         zero = 0.0f;
         FUN_L00_0028dc90(1, 0, moby, *(short *)(*(char **)data + 0xa6));
-        FUN_L00_0025e450(moby, vec, pos, zero, zero, 5, 2, 4,
+        FUN_L00_0025e450(moby, vec, path_position, zero, zero, 5, 2, 4,
                             one, 0.5f, 9.0f, one, -1, 15.0f, 0, 3, -1, 0);
     } else {
         position = (float *)&moby->pos;
