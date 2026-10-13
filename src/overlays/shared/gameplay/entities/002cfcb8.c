@@ -2269,6 +2269,7 @@ void FUN_L00_002d5160(unsigned char *m) {
     f32 forceX, forceY, forceZ, forceW, health, duration;
     f32 reactionC0, reactionC4;
     unsigned char *row;
+    s32 index;
     unsigned char *effect;
 
     if (m[0x20] == 0)
@@ -2316,20 +2317,21 @@ void FUN_L00_002d5160(unsigned char *m) {
     m[0xA4] = 0xFF;
     FUN_L00_0025d538_2d5160(m, v + 0x60);
     if (m[0x20] == 3) {
-        row = D_L00_001B04B0_2d5160[*(s32 *)(v + 0x1E4)];
+        index = *(s32 *)(v + 0x1E4);
         effect = v + 0x180;
-        FUN_L00_0025ff38_2d5160(64.0f, m, effect, 0, 0, row + 0x10, *(s32 *)row);
+        FUN_L00_0025ff38_2d5160(64.0f, m, effect, 0, 0, D_L00_001B04B0_2d5160[index] + 0x10, *(s32 *)D_L00_001B04B0_2d5160[index]);
     } else {
-        row = D_L00_001B04B0_2d5160[*(s32 *)(v + 0x1E0)];
+        index = *(s32 *)(v + 0x1E0);
         effect = v + 0x180;
-        FUN_L00_0025ff38_2d5160(24.0f, m, effect, 0, 0, row + 0x10, *(s32 *)row);
+        FUN_L00_0025ff38_2d5160(24.0f, m, effect, 0, 0, D_L00_001B04B0_2d5160[index] + 0x10, *(s32 *)D_L00_001B04B0_2d5160[index]);
     }
     if (*(s32 *)(v + 0x1C0) == 0) {
         *(s32 *)(v + 0x1C0) = (s32)hero.moby;
         qcopy(effect, &hero.motion.pos);
     }
     FUN_001fef98_2d5160(v + 0x276);
-    if (*(s32 *)(v + 0x38) != 0) {
+    index = *(s32 *)(v + 0x38);
+    if (index != 0) {
         *(s16 *)(v + 0x276) = FUN_00200250_2d5160(FUN_001fef10_2d5160(FUN_L00_00257be8_2d5160(180.0f, 240.0f)));
     }
     *(s32 *)(v + 0x38) = 0;
