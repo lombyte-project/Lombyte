@@ -96,7 +96,8 @@ int FUN_L00_00257218(u8 *m, s32 *item) {
         *item = selected_item & 0x3F;
     }
     choice = random_integer_below(5);
-    choice = 1 + (choice == 0);
+    if (choice) choice = 1;
+    else choice = 2;
     return choice;
 }
 #endif
