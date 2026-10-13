@@ -516,7 +516,6 @@ void FUN_L06_002feb40(struct Moby *moby) {
         case 2:
             {
                 f32 speed;
-                f32 remaining;
                 moby->state = 16;
                 vel = vars->vel.f;
                 speed = D_L06_00161FB8 * D_0015ED6C;
