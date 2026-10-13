@@ -346,7 +346,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025df68.s", FUN_L00_0025df68);
 #else
 extern f32 path_distance_25df68(void *, void *, f32) __asm__("FUN_L00_0025da70");
 extern void clear_vector_25df68(void *) __asm__("FUN_001f99f8");
-extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, s32, f32)
+extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, f32, s32)
     __asm__("FUN_L00_0025d808");
 
 s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
@@ -374,7 +374,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     limit = step + limit;
     do {
         crossed = sample_path(path, &work[0], &current,
-                                   &current_fraction, wrap, step);
+                                   &current_fraction, step, wrap);
         work[1] = *point;
         next_distance = path_distance_25df68(&work[0], &work[1], height_tolerance);
         if (next_distance < distance) {
@@ -388,10 +388,10 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
 
     start = best_segment;
     current_fraction = best_fraction;
-    sample_path(path, &work[0], &start, &current_fraction, wrap, -step);
+    sample_path(path, &work[0], &start, &current_fraction, -step, wrap);
     current_fraction = best_fraction;
     end = best_segment;
-    sample_path(path, &work[0], &end, &current_fraction, wrap, step);
+    sample_path(path, &work[0], &end, &current_fraction, step, wrap);
     end = FUN_L00_0025d7a0(path, end, 1, wrap);
     current = start;
     distance = 1000000000.0f;
@@ -413,7 +413,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
         count = *path;
         previous = count - 1;
         previous = (best_segment + previous) % count;
-        previous_distance = FUN_L00_0025dcd8(nearest, point,
+        distance = FUN_L00_0025dcd8(nearest, point,
             (OvlQuad *)(path + 4 + previous * 4),
             (OvlQuad *)(path + 4 + best_segment * 4), height_tolerance);
         *segment = previous;
@@ -421,6 +421,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
         work[1] = *(volatile OvlQuad *)(path + 4 + previous * 4);
         work[2] = *(volatile OvlQuad *)nearest;
         *fraction = path_distance_25df68(&work[1], &work[2], 0.0f);
+        previous_distance = distance;
     }
     count = *path;
     if (best_segment < count - 1 || wrap) {
