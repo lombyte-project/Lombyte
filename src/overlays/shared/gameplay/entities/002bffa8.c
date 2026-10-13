@@ -732,7 +732,7 @@ typedef struct {
     s32 timer;
 } CarrierVars_2c1ad0;
 typedef struct {
-    u8 pad0[0xA0];
+    u8 pad0[0x88];
     u16 deliveries;
     u16 unkA2;
     u32 levels;
@@ -783,6 +783,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     union { OvlVec4 launch; OvlVec4 arc; } temporary;
     OvlVec4 probe;
     f32 angle, slope, distance, horizontal, vertical, radius, speed;
+    f32 gravity;
     s32 hit = 0;
 
     if (moby == 0)
@@ -858,15 +859,15 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
         scale_vector_xyz(&target, &direction, D_0015ED68 * 60.0f);
         add_vector_xyz(&target, &target, &pos);
         if (controller_state.held & 5) {
-            temporary.arc.q = 0;
-            temporary.arc.f[2] = item_text_variant[0x11] ? 12.0f : 6.0f;
+            probe.q = 0;
+            probe.f[2] = item_text_variant[0x11] ? 12.0f : 6.0f;
             hit = 0;
-            direction.q = temporary.arc.q;
-            rotate_vector_2c1ad0(&direction, &direction, matrix);
-            angle = atan2_f(direction.f[0], direction.f[1]);
+            temporary.arc.q = probe.q;
+            rotate_vector_2c1ad0(&temporary.arc, &temporary.arc, matrix);
+            angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
             fast_subtract_rotations_2c1ad0(*(f32 *)((u8 *)hero.moby + 0x48), angle);
-            angle = atan2_f(direction.f[0], direction.f[1]);
-            slope = atan2_f(vector_length_xy_2c1ad0(&direction), direction.f[2]);
+            angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
+            slope = atan2_f(vector_length_xy_2c1ad0(&temporary.arc), temporary.arc.f[2]);
             if (slope > 0.5934119f)
                 slope = 0.5934119f;
             if (slope < -1.3962634f)
@@ -877,12 +878,12 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
             } else {
                 if (controller_state.held & 5) speed = 6.0f;
             }
-            build_spherical_offset_2c1ad0(&direction, speed, angle, slope);
-            distance = vector_length_xy_2c1ad0(&direction);
+            build_spherical_offset_2c1ad0(&temporary.arc, speed, angle, slope);
+            distance = vector_length_xy_2c1ad0(&temporary.arc);
             if (distance == 0.0f)
-                horizontal = direction.f[2] / 0.01f;
+                horizontal = temporary.arc.f[2] / 0.01f;
             else
-                horizontal = direction.f[2] / distance;
+                horizontal = temporary.arc.f[2] / distance;
             speed = 4.0f;
             if (item_text_variant[0x11]) {
                 if (controller_state.held & 5) speed = 12.0f;
@@ -893,10 +894,10 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
             radius = ((distance + distance) * distance * (1.0f - horizontal)) / (frame_time_sq * 9.8f);
             vertical = horizontal * radius;
             if (radius > 0.0f) {
-                direction.f[0] = FUN_001f9dc8(angle) * radius;
-                direction.f[1] = FUN_001f9de0(angle) * radius;
-                direction.f[2] = vertical;
-                add_vector_xyz(&probe, &D_L00_00166DC0_2c1ad0, &direction);
+                temporary.arc.f[0] = FUN_001f9dc8(angle) * radius;
+                temporary.arc.f[1] = FUN_001f9de0(angle) * radius;
+                temporary.arc.f[2] = vertical;
+                add_vector_xyz(&probe, &D_L00_00166DC0_2c1ad0, &temporary.arc);
                 if (collision_line(&D_L00_00166DC0_2c1ad0, &probe, 2, moby, 0) &&
                     coll_hit.moby != (s32)hero.moby) {
                     target.q = coll_hit.point.q;
@@ -911,6 +912,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
                 }
             }
         }
+        gravity = D_0015ED70 * 9.8f;
         speed = 4.0f;
         if (item_text_variant[0x11]) {
             if (controller_state.held & 5) speed = 12.0f;
@@ -918,7 +920,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
             if (controller_state.held & 5) speed = 6.0f;
         }
         FUN_L00_002c1928((f32 *)&pos, (OvlQuad *)&target, out,
-                          D_0015ED70 * 9.8f, 1.0f, speed);
+                          gravity, 1.0f, speed);
     }
     switch (moby->state) {
     case 0:
