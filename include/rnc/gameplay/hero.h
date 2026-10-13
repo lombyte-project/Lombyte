@@ -758,7 +758,8 @@ struct Hero {
     u8 unk20B2;                    /* 0x20B2 */
     u8 unk20B3;                    /* 0x20B3 */
     u8 unk20B4;                    /* 0x20B4 */
-    u8 pad_20B5[0x3];
+    u8 unk20B5;                    /* 0x20B5 */
+    u8 pad_20B6[0x2];
     s32 pending_item[7];           /* 0x20B8: per slot: item to switch to */
     s32 selected_item[7];          /* 0x20D4: per slot: item after a switch */
     s32 saved_item[7];             /* 0x20F0: per slot: item kept while another is forced in */
