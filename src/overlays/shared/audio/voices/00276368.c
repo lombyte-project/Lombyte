@@ -47,6 +47,8 @@ extern u8 D_L00_001B6B38[];
 extern u8 D_L00_001B86C8[];
 extern u8 D_L00_001B2588[];
 extern u8 D_L00_00180250[];
+extern u8 D_L00_00160280_init[] __asm__("D_L00_00160280") __attribute__((sda));
+extern u8 D_L00_00160290_init[] __asm__("D_L00_00160290") __attribute__((sda));
 extern f32 D_L00_00166DC0_init[] __asm__("D_L00_00166DC0");
 
 extern u8 D_L00_001841F0_init[] __asm__("D_L00_001841F0");
@@ -118,8 +120,8 @@ void FUN_L00_00276368(void) {
         D_L00_001B9DE4 = 0;
         D_L00_001B9DE0 = 0;
     }
-    FUN_L00_001ff300(D_L00_00180250, (u8 *)0x00160280, 1.0f);
-    qcopy((void *)D_L00_00180240, (u8 *)0x00160290);
+    FUN_L00_001ff300(D_L00_00180250, D_L00_00160280_init, 1.0f);
+    qcopy((void *)D_L00_00180240, D_L00_00160290_init);
     *(volatile u128_init *)D_L00_00180260 = 0;
     *(volatile u128_init *)(D_L00_00180260 + 4) = 0;
     qcopy((void *)D_L00_001B9D30, (void *)D_L00_00166DC0_init);
