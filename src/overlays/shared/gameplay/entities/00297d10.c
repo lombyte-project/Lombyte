@@ -1872,8 +1872,8 @@ void FUN_L06_002f2250(void) {
                                         }
                                     }
                                     if (k < 8) {
-                                        ((GbMoby **)((char *)vars + 0x1a0))[k] = target;
                                         ((float *)((char *)vars + 0x1c0))[k] = score;
+                                        ((GbMoby **)((char *)vars + 0x1a0))[k] = target;
                                         count = *(unsigned short *)((char *)vars + 0x192) + 1;
                                         *(short *)((char *)vars + 0x192) = count;
                                         if ((short)count > 8) *(short *)((char *)vars + 0x192) = 8;
@@ -1966,6 +1966,7 @@ void FUN_L06_002f2250(void) {
                 if (count > 1) step = angle / (float)(count - 1);
                 score = angle * -0.5f;
                 for (j = 0; j < count; j++) {
+                    GbVars *vars;
                     vars = selected[j]->vars;
                     vars->f17C = fast_add_rotations_2f2250(score, (float)j * step);
                 }
