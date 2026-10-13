@@ -320,8 +320,8 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
-extern void FUN_0022da68(void *, void *) __asm__("FUN_L07_0029a2a0");
-extern void FUN_L07_0029a2a0(int, int, void *) __asm__("FUN_0022da68");
+extern void FUN_0022da68(int, int, void *);
+extern void FUN_L07_0029a2a0(void *, void *);
 extern unsigned char D_00141346;
 extern char D_0013F3D0[];
 extern float D_0015ED6C;
@@ -414,11 +414,10 @@ void FUN_L13_00306300(struct Moby *moby) {
         FUN_001f9740((int *)(data + 0x2c)) == 0)
         goto collision;
     if (moby->visible != 0) {
-        int i = 2;
-        do {
+        int i;
+        for (i = 0; i < 3; i++) {
             *(OvlQuad *)&work.random_direction = 0;
             work.random_direction.x = random_float_between(-1.0f, 1.0f);
-            i--;
             work.random_direction.y = random_float_between(-1.0f, 1.0f);
             work.random_direction.z = random_float_between(-1.0f, 1.0f);
             work.velocity = work.random_direction;
@@ -427,8 +426,8 @@ void FUN_L13_00306300(struct Moby *moby) {
             add_vector_xyz(&work.velocity, &work.random_direction, &work.velocity);
             scale_vector_xyz_6300(&work.velocity, &work.velocity,
                 random_float_between(D_0015ED6C + D_0015ED6C, D_0015ED6C * 4.0f));
-            FUN_0022da68(&moby->pos, &work.velocity);
-        } while (i >= 0);
+            FUN_L07_0029a2a0(&moby->pos, &work.velocity);
+        }
     }
     mark_moby_for_removal(moby);
     return;
@@ -438,11 +437,10 @@ collision:
         goto bounds;
     qcopy(&moby->pos, &D_L13_00174140.pos);
     if (moby->visible != 0) {
-        int i = 4;
-        do {
+        int i;
+        for (i = 0; i < 5; i++) {
             *(OvlQuad *)&work.random_direction = 0;
             work.random_direction.x = random_float_between(-1.0f, 1.0f);
-            i--;
             work.random_direction.y = random_float_between(-1.0f, 1.0f);
             work.random_direction.z = random_float_between(-1.0f, 1.0f);
             work.velocity = work.random_direction;
@@ -454,11 +452,11 @@ collision:
                 random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
             FUN_L00_0026dd20(&moby->pos, &work.velocity, 0x7f2f4f6f,
                 random_int_between(scale_game_frames(10), scale_game_frames(15)), 30000.0f);
-        } while (i >= 0);
+        }
     }
     if (D_L13_00174140.moby != 0 &&
         (D_L13_00174140.moby)->oclass == 0)
-        FUN_L07_0029a2a0(0, 0, moby);
+        FUN_0022da68(0, 0, moby);
     mark_moby_for_removal(moby);
     return;
 bounds:
