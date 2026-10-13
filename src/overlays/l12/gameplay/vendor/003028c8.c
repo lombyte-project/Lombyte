@@ -409,6 +409,8 @@ void FUN_L12_00303370(void *moby) {
             float yaw_limit;
             float pitch_limit;
             float yaw;
+            float x;
+            float y;
             float distance;
             float pitch;
 
@@ -423,8 +425,9 @@ void FUN_L12_00303370(void *moby) {
                 pitch_limit = 0.05235988f;
                 position[2] += 1.5f;
             }
-            yaw = FUN_001f9e90(position[0] - L12_VENDOR_REFERENCE->position[0],
-                                   position[1] - L12_VENDOR_REFERENCE->position[1]);
+            y = position[1] - L12_VENDOR_REFERENCE->position[1];
+            x = position[0] - L12_VENDOR_REFERENCE->position[0];
+            yaw = FUN_001f9e90(x, y);
             distance = FUN_001f9b80(L12_VENDOR_REFERENCE->position, position);
             pitch = FUN_001f9e90(distance, position[2] - L12_VENDOR_REFERENCE->position[2]);
             if (fast_difference_between_rotations(yaw, L12_VENDOR_REFERENCE->yaw) < yaw_limit &&
