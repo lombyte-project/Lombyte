@@ -96,7 +96,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
     case 2:
         save_id = moby->save_id;
         save_byte = D_L15_001BB830;
-        save_byte += (s16)save_id;
+        save_byte -= -(s16)save_id;
         if (save_byte[0x454] != 0 ||
             ((((s32)*(u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190)) >> (save_id & 31)) & 1) != 0) {
             if (vars->enabled != 0) {
