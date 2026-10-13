@@ -2024,8 +2024,8 @@ void FUN_L10_002da690(void *moby) {
         u64 texture = get_effect_texture_da690(14);
         u64 packet_flags = ((u64)D_L10_00161C70) | ((u64)D_L10_00161C74 << 2) |
                 ((u64)D_L10_00161C78 << 4) | ((u64)D_L10_00161C7C << 6) | 0x8000000000ULL;
-        ((u64 *)buffers.matrix1)[5] = texture;
         ((u64 *)buffers.packet.fields.matrix2)[5] = texture;
+        ((u64 *)buffers.matrix1)[5] = texture;
         ((u64 *)buffers.matrix1)[6] = 0xff9000000260ULL;
         ((u64 *)buffers.matrix1)[7] = packet_flags;
         ((u64 *)buffers.packet.fields.matrix2)[6] = 0xff9000000260ULL;
@@ -2034,6 +2034,7 @@ void FUN_L10_002da690(void *moby) {
         ((u64 *)buffers.packet.fields.matrix2)[7] = packet_flags;
     }
     {
+        int i;
         float *source = (float *)0x001d9ff0;
         source++;
         i = 3;
@@ -2054,9 +2055,10 @@ void FUN_L10_002da690(void *moby) {
             phase = 0.0f;
             row = 0;
             do {
-                int next_row = row + 1;
+                int next_row;
                 phase += D_L10_00161D60;
                 if (phase > 1.0f) phase -= 1.0f;
+                next_row = row + 1;
                 for (i = 0; i < 4; i++) {
                     float value = ((float *)0x001d9ff0)[i * 2] + phase + *(float *)(base + 0x12de0);
                     matrix2[i * 2] = value;
