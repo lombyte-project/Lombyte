@@ -1012,32 +1012,35 @@ void FUN_L00_0020e728(void) {
     u8 **slot;
     int i;
     u128 *basis;
+    struct Hero *hero_state;
     if (hero.unk20A8 && hero.unk20AA && get_ammo(-1) == 0)
         FUN_L00_0020e698();
     i = 0;
     slot = hero.unkD08;
+    hero_state = (struct Hero *)((u8 *)slot - 0xD08);
     do {
         if (*slot != 0) {
             int id = FUN_L00_0020d498_c(0);
-            if (id == hero.unk2298) {
+            if (id == hero_state->unk2298) {
                 s32 anim;
                 ID_20e4c8 *definition = &D_L00_00179AC0_c[id];
-                if (hero.state.control_mode == 12)
+                if (hero_state->state.control_mode == 12)
                     anim = definition->f2C;
                 else
                     anim = definition->f28;
                 if (anim != -1 && (*slot)[0x23] != anim) {
-                    hero.unk2294 = anim;
-                    FUN_L00_0024f3e0((u8 *)hero.moby, *slot, hero.unk2294, 0,
+                    hero_state->unk2294 = anim;
+                    FUN_L00_0024f3e0((u8 *)hero_state->moby, *slot, hero_state->unk2294, 0,
                                       FUN_001f96f8_e728(8), 1);
                 }
             }
             FUN_L00_0024f190((u8 *)hero.moby, *slot);
             if (hero.unkD14 != 0) {
+                f32 scale = frame_scale;
                 if (hero.unkD14 == 2)
-                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, frame_scale * 0.25f);
+                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, scale * 0.25f);
                 else
-                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, frame_scale * 0.07f);
+                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, scale * 0.07f);
                 if (*(f32 *)(*slot + 8) == 0.0f) {
                     FUN_L00_0024f0e8((u8 *)hero.moby, slot);
                     return;
