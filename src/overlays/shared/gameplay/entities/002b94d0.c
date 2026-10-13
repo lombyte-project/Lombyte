@@ -774,7 +774,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bc3b0.s", FUN_L00_002bc3b0);
 #else
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char D_0013F3D0[];
-extern char *D_001413D0;
+extern char D_001413D0[];
 extern float D_0013F634;
 extern float D_L00_001616D8 __attribute__((sda));
 extern float D_L00_001616DC __attribute__((sda));
@@ -795,7 +795,7 @@ extern float FUN_001f99c0(float);
 extern float FUN_001f9df8(float);
 extern float FUN_001fa6c0(int);
 extern void FUN_001f9a10(void *, void *, void *);
-extern char *FUN_002141f8(char *);
+extern int FUN_002141f8();
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern int FUN_001efa68_2bc3b0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
@@ -828,7 +828,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
             *(s16 *)(candidate + 0xA6) == 0x452)
             continue;
         qcopy(target, candidate + 0x10);
-        data = FUN_002141f8(candidate);
+        data = (char *)FUN_002141f8(candidate);
         if (!data)
             continue;
         target[2] += *(float *)(data + 0x10);
@@ -861,7 +861,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
         apparentAngle = FUN_001f9df8(FUN_001f9b48(offset, target) / (distance + distance));
         apparentAngle += apparentAngle;
         if (D_L00_001616D8 * 0.017453292f < apparentAngle) {
-            data = FUN_002141f8(candidate);
+            data = (char *)FUN_002141f8(candidate);
             if (data) {
                 radius = FUN_001fa6c0(*(u8 *)(data + 10)) * 0.125f;
                 reduction = FUN_001f9df8(radius / distance);
@@ -875,10 +875,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
         if (apparentAngle < D_L00_001616D8 * 0.017453292f) {
             int valid = 1;
             if (FUN_001efa68_2bc3b0(position, target, 6, self, 0)) {
-                if (D_L00_00173E40_2bc3b0.moby == 0)
-                    valid = 0;
-                if (D_L00_00173E40_2bc3b0.moby &&
-                    D_L00_00173E40_2bc3b0.moby != candidate)
+                if (!D_L00_00173E40_2bc3b0.moby || D_L00_00173E40_2bc3b0.moby != candidate)
                     valid = 0;
             }
             if (valid) {
