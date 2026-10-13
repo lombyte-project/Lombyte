@@ -998,6 +998,7 @@ void FUN_L00_00206e00(void) {
     struct Hero *g;
     u8 *hero_base;
     s32 input;
+    u32 state;
     s32 level;
     s32 i, j, length, position;
     u8 *end;
@@ -1025,9 +1026,9 @@ void FUN_L00_00206e00(void) {
                         input = 1;
                     goto append;
                 }
+                state = g->unk450 ^ 3;
                 input = 3;
-                if (g->unk450 != 3)
-                    input = 0;
+                goto reject;
             } else if (g->state.current == 0x11) {
                 input = 9;
                 goto append;
@@ -1035,7 +1036,9 @@ void FUN_L00_00206e00(void) {
                 input = 10;
                 goto append;
             } else {
-                input = (g->state.current == 0xE) ? 5 : 0;
+                state = g->state.current ^ 0xE;
+                input = 5;
+                goto reject;
             }
         } else if (g->state.control_mode == 6) {
             if (g->state.current == HERO_STATE_WRENCH_SLAM) {
@@ -1046,12 +1049,13 @@ void FUN_L00_00206e00(void) {
                 input = g->attack_record + 12;
                 goto append;
             }
+            state = g->state.current ^ HERO_STATE_CROUCH_SWING;
             input = 4;
-            if (g->state.current != HERO_STATE_CROUCH_SWING) input = 0;
+            goto reject;
         } else {
+            state = g->state.current ^ 0x22;
             input = 11;
-            if (g->state.current != 0x22)
-                input = 0;
+            goto reject;
         }
     } else {
         level = FUN_001f96f8(0x3C);
@@ -1060,11 +1064,14 @@ void FUN_L00_00206e00(void) {
                 input = 7;
                 goto append;
             }
+            state = g->state.current ^ HERO_STATE_LAND;
             input = 8;
-            if (g->state.current != HERO_STATE_LAND)
-                input = 0;
+            goto reject;
         }
     }
+    goto append;
+reject:
+    if (state != 0) input = 0;
 append:
     if (input == 0)
         return;
