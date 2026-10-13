@@ -1917,6 +1917,8 @@ typedef union {
     float f[4];
 } L13EffectVector;
 
+#include "qzero.h"
+
 void FUN_L13_0030c3b8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     L13EffectVector old_pos, position, velocity, acceleration, second_pos;
@@ -1929,11 +1931,11 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
         acceleration.f[3] = D_L13_00161F60;
         i = 1;
         do {
-            position.quad = *(OvlQuad *)&moby->pos;
+            qcopy(&position, &moby->pos);
             position.f[0] += random_float_between_alt(-0.065f, 0.065f);
             position.f[1] += random_float_between_alt(-0.065f, 0.065f);
             position.f[2] += random_float_between_alt(-0.065f, 0.065f);
-            *(volatile OvlQuad *)&velocity = 0;
+            qzero(&velocity);
             i--;
             velocity.f[2] = random_float_between_alt(D_L13_00161F30 * frame_time * 0.9f,
                                                        D_L13_00161F30 * frame_time * 1.1f);
@@ -1958,12 +1960,12 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
         acceleration.f[3] = D_L13_00161F68;
         i = 1;
         do {
-            second_pos.quad = *(OvlQuad *)&moby->pos;
+            qcopy(&second_pos, &moby->pos);
             second_pos.f[0] += random_float_between_alt(-0.1f, 0.1f);
             second_pos.f[1] += random_float_between_alt(-0.1f, 0.1f);
             second_pos.f[2] += random_float_between_alt(-0.1f, 0.1f);
             random_float_between_alt(-D_L13_00161F58, D_L13_00161F58);
-            *(volatile OvlQuad *)&velocity = 0;
+            qzero(&velocity);
             i--;
             velocity.f[2] = random_float_between_alt(D_L13_00161F44 * frame_time * 0.7f,
                                                        D_L13_00161F44 * frame_time * 1.5f);
