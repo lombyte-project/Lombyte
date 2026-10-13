@@ -1281,9 +1281,6 @@ void FUN_L09_003091b0(char *moby) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00309c08.s", FUN_L09_00309c08);
-#else
 typedef struct {
     s32 count;
     u8 pad4[0xC];
@@ -1345,7 +1342,7 @@ void FUN_L09_00309c08(struct Moby *moby) {
             if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
                 vars->dir = -1;
                 vars->node = path->count - 2;
-                endpoint = &path->node[path->count - 1];
+                endpoint = (Vec4 *)((path->count << 4) + (s32)path);
             } else {
                 vars->dir = 1;
                 endpoint = &path->node[0];
@@ -1436,7 +1433,6 @@ void FUN_L09_00309c08(struct Moby *moby) {
     add_vector_xyz(&original, &original, &moby->pos);
     FUN_L00_00260738((u8 *)vars + 0x20, &original, &rotation, &moby->rot);
 }
-#endif
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
