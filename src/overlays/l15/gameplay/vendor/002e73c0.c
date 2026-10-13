@@ -1169,11 +1169,12 @@ void FUN_L15_002ec760(struct Moby *moby) {
     }
     {
     struct { OvlQuad target, pos, diff; } vecs;
+    char *pos = (char *)&moby->pos;
     fast = 0.02f;
     slow = 0.3f;
-    near_distance = FUN_001f8c00((char *)moby + 0x10, (void *)0x13f3d0);
+    near_distance = FUN_001f8c00(pos, (void *)0x13f3d0);
     if (near_distance < 8.0f) {
-        yaw = FUN_001f9028(D_0013F420 - *(float *)((char *)moby + 0x10), D_0013F424 - *(float *)((char *)moby + 0x14));
+        yaw = FUN_001f9028(D_0013F420 - *(float *)(pos), D_0013F424 - *(float *)((char *)moby + 0x14));
         if (FUN_001f9968(moby->rot.z, yaw) < 1.5707964f) {
             if (FUN_001f8b50((void *)0x13f450) > 0.01f)
                 *(int *)(data + 0x274) = FUN_001f8658(0x78);
@@ -1188,10 +1189,10 @@ void FUN_L15_002ec760(struct Moby *moby) {
 ready:
     if (FUN_001f86a0(data + 0x278)) {
         float angle = 0.017453292f;
-        *(int *)(data + 0x278) = FUN_001f99c8(D_0015ED68 * random_float_between(180.0f, 300.0f));
+        *(int *)(data + 0x278) = FUN_001f99c8(random_float_between(180.0f, 300.0f) * D_0015ED68);
         turn = FUN_001f9860(moby->rot.z, random_float_between(-90.0f, 90.0f) * angle);
         FUN_00252348(6.0f, turn, random_float_between(0.0f, 30.0f) * angle, data + 0x260);
-        FUN_001f89f0(data + 0x260, data + 0x260, (char *)moby + 0x10);
+        FUN_001f89f0(data + 0x260, data + 0x260, pos);
     }
     if (*(int *)(data + 0x274) == 0) {
         vecs.target = *(OvlQuad *)(data + 0x260);
@@ -1199,7 +1200,7 @@ ready:
         vecs.target = *(OvlQuad *)0x13f420;
         fast = 0.04f;
     }
-    vecs.pos = *(OvlQuad *)((char *)moby + 0x10);
+    vecs.pos = *(OvlQuad *)(pos);
     ((float *)&vecs.pos)[2] += 1.0f;
     FUN_001f8a20(&vecs.diff, &vecs.target, &vecs.pos);
     yaw = FUN_001f98a8(FUN_001f9028(((float *)&vecs.diff)[0], ((float *)&vecs.diff)[1]), moby->rot.z);
