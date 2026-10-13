@@ -1032,10 +1032,7 @@ void FUN_L00_0020e728(void) {
             if (id == hero_state->unk2298) {
                 s32 anim;
                 ID_20e4c8 *definition = &D_L00_00179AC0_c[id];
-                if (hero_state->state.control_mode == 12)
-                    anim = definition->f2C;
-                else
-                    anim = definition->f28;
+                anim = *(hero_state->state.control_mode == 12 ? &definition->f2C : &definition->f28);
                 if (anim != -1 && (*slot)[0x23] != anim) {
                     hero_state->unk2294 = anim;
                     FUN_L00_0024f3e0((u8 *)hero_state->moby, *slot, hero_state->unk2294, 0,
