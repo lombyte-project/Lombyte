@@ -214,7 +214,8 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     vertical[0] = height * fast_sin(angle);
     vertical[1] = height * fast_cos(angle);
     horizontal[0] = width * fast_cos(angle);
-    horizontal[1] = -width * fast_sin(angle);
+    width = -width;
+    horizontal[1] = width * fast_sin(angle);
     add_vector_xyz(top_left, center, vertical);
     subtract_vector_xyz(top_left, top_left, horizontal);
     add_vector_xyz(bottom_left, center, vertical);
@@ -225,6 +226,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[0] = 0x10000007;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[1] = 0;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[2] = 0;
+    packed_depth = (unsigned long long)saved_depth[0] << 32;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[3] = 0x50000007;
     tag = (int *)(*(volatile int *)&D_L11_001611C0_g);
     q = (unsigned long long *)(tag + 4);
@@ -236,7 +238,6 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     q[4] = (unsigned long long)(red & 0xff) | ((unsigned long long)(green & 0xff) << 8) |
            ((unsigned long long)(blue & 0xff) << 16) | ((unsigned long long)(alpha & 0xff) << 24);
     q[5] = 0x100010;
-    packed_depth = (unsigned long long)saved_depth[0] << 32;
     texture_width <<= 4;
     texture_height <<= 20;
     sx = ftoi_g(top_left[0] * 16.0f);
