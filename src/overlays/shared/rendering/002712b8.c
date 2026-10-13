@@ -457,7 +457,8 @@ void FUN_L00_002721f0(unsigned char *p) {
         alpha = (unsigned int)alpha >> 1;
         a = (float)(alpha - originalAlpha);
         a *= t;
-        a += (float)originalAlpha;
+        t = (float)originalAlpha + a;
+        a = t;
     } else {
         t = (float)*(short *)(p + 0xA) / FUN_001fa6c0_2721f0(*(short *)(q + 8) - 6);
         *(float *)(p + 0xC) = *(float *)q +
