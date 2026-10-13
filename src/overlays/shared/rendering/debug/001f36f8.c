@@ -496,7 +496,6 @@ void FUN_L00_001f4598(void) {
     char *player_setting;
     u8 byte_value;
     f32 dimension, scale, angle;
-    f64 formatted_x, formatted_y, formatted_z;
     s32 file, file_size;
     DebugRowCounts row_counts;
     union {
@@ -901,9 +900,10 @@ void FUN_L00_001f4598(void) {
             g_debug_menu.actuator_enabled = (u32)(g_debug_menu.actuator_enabled == 0);
         }
         if ((g_debug_menu.selected_row == 2) && (index = 0, (D_0013C940.buttons.w.pressed & 0xf0) != 0)) {
+            f64 formatted_x, formatted_y, formatted_z;
             enabled = FALSE;
             if (0 < D_L00_0015F614) {
-                capture_positions = D_L00_00173E20;
+                f32 *capture_positions = D_L00_00173E20;
                 do {
                     if (((((*capture_positions < D_L00_00166C80.camera.position[0] + 0.5f) &&
                            (D_L00_00166C80.camera.position[0] - 0.5f < *capture_positions)) &&
@@ -957,6 +957,7 @@ void FUN_L00_001f4598(void) {
             }
         }
         if ((g_debug_menu.selected_row == 3) && ((D_0013C940.buttons.w.pressed & 0xf0) != 0)) {
+            f64 formatted_x, formatted_y, formatted_z;
             FUN_00116248(capture.capture_path, D_L00_0015EFE0, D_L00_001E7938, D_0015ED84, D_L00_001E7958,
                          D_L00_0015EFF0);
             formatted_x = FUN_00120478(D_L00_00166C80.camera.position[0]);
