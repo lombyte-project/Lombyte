@@ -1041,11 +1041,13 @@ void FUN_L00_0020e728(void) {
             }
             FUN_L00_0024f190((u8 *)hero.moby, *slot);
             if (hero.unkD14 != 0) {
-                f32 scale = frame_scale;
-                if (hero.unkD14 == 2)
-                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, scale * 0.25f);
-                else
-                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, scale * 0.07f);
+                if (hero.unkD14 == 2) {
+                    f32 scale = frame_scale * 0.25f;
+                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, scale);
+                } else {
+                    f32 scale = frame_scale * 0.07f;
+                    FUN_00213ed8_e728((f32 *)(*slot + 8), 0.0f, scale);
+                }
                 if (*(f32 *)(*slot + 8) == 0.0f) {
                     FUN_L00_0024f0e8((u8 *)hero.moby, slot);
                     return;
