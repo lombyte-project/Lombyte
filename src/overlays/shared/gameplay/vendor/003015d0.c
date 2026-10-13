@@ -415,9 +415,9 @@ add_main:
             for (point = 0; point < 3; point++) {
                 qcopy(end, start);
                 if (point < 2) {
-                    subtract_vector_xyz(side, d + (strip << 4) + (point << 6) + 0x420,
-                        d + (strip << 4) + (point << 6) + 0x4a0);
-                    subtract_vector_xyz(work, d + (strip << 4) + (point << 6) + 0x460,
+                    subtract_vector_xyz(side, d + (point << 6) + 0x420 + (strip << 4),
+                        d + (point << 6) + 0x4a0 + (strip << 4));
+                    subtract_vector_xyz(work, d + (point << 6) + 0x460 + (strip << 4),
                         direction);
                     cross_vectors_xyz(start, work, side);
                     normalize_vector_xyz(start, start, 0.1f);
@@ -430,14 +430,14 @@ add_main:
                 rounded = (rounded >> 2) << 2;
                 for (k = 0; k < 4; k++) {
                     if (k < 2) {
-                        packet[0].vertices[k] = *(u128 *)(d + (strip << 4) + (point << 6) + 0x420);
+                        packet[0].vertices[k] = *(u128 *)(d + (point << 6) + 0x420 + (strip << 4));
                         if (!(k & 1)) subtract_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], end);
                         else {
                             src = end;
                             goto add_branch;
                         }
                     } else {
-                        packet[0].vertices[k] = *(u128 *)(d + (strip << 4) + (point << 6) + 0x460);
+                        packet[0].vertices[k] = *(u128 *)(d + (point << 6) + 0x460 + (strip << 4));
                         if (!(k & 1)) subtract_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], start);
                         else {
                             src = start;
