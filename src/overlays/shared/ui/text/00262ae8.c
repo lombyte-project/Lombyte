@@ -80,6 +80,18 @@ typedef struct {
     s32 smoothed;
 } HudCounter;
 
+#include "rnc/gameplay/hero.h"
+
+/* Retail accesses these names through the shared Hero base at 0x0013f350. */
+#define D_001413D4 hero.state.current
+#define D_0013F65E hero.air_frames.s
+#define D_0013F650 hero.unk300
+#define D_0013FA40 hero.unk6E0[4]
+#define D_0013FA5C (*(s32 *)&hero.pad_6FC[0x10])
+#define D_0013FBB4 hero.unk864
+#define D_0013FBF8 hero.unk8A8
+#define D_0013FA30 hero.unk6E0
+
 void FUN_L05_00262b58(HudCounter *e) {
     f32 value;
     s32 i;
@@ -95,24 +107,23 @@ void FUN_L05_00262b58(HudCounter *e) {
 
     switch (counter[2]) {
     case 0:
-    if (D_0013F65E < 6 || !((f32)D_0013FA5C >= 1.0f)) return;
-    D_L05_0015FAD4 = D_0013FA5C;
-    D_L05_0015FAD8 = 0;
-    i = 3;
-    dst = &D_L05_0015FAEC;
-    do { *dst-- = 0; } while (--i >= 0);
-    counter[2] = 1;
-    counter[1] = D_L05_0015F87C;
-    counter[0] = 0;
-    break;
+        if (D_0013F65E < 6 || ((f32)D_0013FA5C < 1.0f)) return;
+        D_L05_0015FAD4 = D_0013FA5C;
+        D_L05_0015FAD8 = 0;
+        i = 3;
+        dst = &D_L05_0015FAEC;
+        do { *dst-- = 0; } while (--i >= 0);
+        counter[2] = 1;
+        counter[1] = D_L05_0015F87C;
+        counter[0] = 0;
+        break;
     case 1:
         if (counter[0] < 10) counter[0]++;
         if (counter[1] != 0) counter[1]--;
         D_L05_0015FAD8 = D_0013FA40;
-        i = 3;
         src = D_0013FA30;
         dst = D_L05_0015FAE0;
-        do { *dst++ = *src++; } while (--i >= 0);
+        for (i = 0; i < 4; i++) dst[i] = src[i];
         if (D_L05_0015FAD4 < D_0013FA5C) {
             D_L05_0015FAD4 = D_0013FA5C;
             counter[1] = D_L05_0015F87C;
@@ -150,17 +161,7 @@ void FUN_L05_00262b58(HudCounter *e) {
     default:
         if ((u32)(counter[2] - 2) > 1) return;
 
-        timer = counter[0];
-        if (timer != 0) {
-            if (counter[2] == 3 && timer == scale_game_frames(0x6e)) {
-                D_0013FBF8 += D_L05_0015FB00;
-                D_0013FBB4 += D_L05_0015FB00 * 5;
-                limit = (s32)((f32)scale_game_frames(0x11) * 60.0f);
-                if (D_0013FBB4 > limit) {
-                    D_0013FBB4 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
-                }
-            }
-        } else {
+        if (counter[0] == 0) {
             D_L05_0015FB00 = 0;
             D_L05_0015FAD4 = 0;
             D_L05_0015FAD8 = 0;
@@ -169,10 +170,31 @@ void FUN_L05_00262b58(HudCounter *e) {
             do { *dst-- = 0; } while (--i >= 0);
             counter[2] = 0;
             counter[0] = 0;
+        } else {
+            if (counter[2] == 3) {
+                timer = counter[0];
+                if (timer == scale_game_frames(0x6e)) {
+                    D_0013FBF8 += D_L05_0015FB00;
+                    D_0013FBB4 += D_L05_0015FB00 * 5;
+                    limit = (s32)((f32)scale_game_frames(0x11) * 60.0f);
+                    if (D_0013FBB4 > limit) {
+                        D_0013FBB4 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
+                    }
+                }
+            }
         }
         counter[0]--;
     }
 }
+#undef D_001413D4
+#undef D_0013F65E
+#undef D_0013F650
+#undef D_0013FA40
+#undef D_0013FA5C
+#undef D_0013FBB4
+#undef D_0013FBF8
+#undef D_0013FA30
+
 #endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262f50.s", FUN_L05_00262f50);
