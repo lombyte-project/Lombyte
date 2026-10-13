@@ -2004,8 +2004,9 @@ char *FUN_L01_002ef350(char *self) {
     } else if (*(short *)(self + 0xA6) == 0x361) {
         type = 0x362;
     }
-    list = (short *)(lists_2ef478 + (unsigned char)self[0x21]);
-    list = *(short **)list;
+    entry = (unsigned char)self[0x21];
+    entities = (char *)(lists_2ef478 + entry);
+    list = *(short **)entities;
     entities = ents_2ef478;
     if (list == 0) return 0;
     goto scan;
