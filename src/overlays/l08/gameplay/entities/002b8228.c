@@ -358,7 +358,7 @@ void FUN_L08_002d23f0(char *moby) {
         qcopy(record.motion.from, position);
         record.motion.from[2] -= 0.16f;
         add_vector_xyz(position, position, velocity);
-        ((float *)velocity)[2] -= D_L08_00161860 * D_0015ED70;
+        *(float *)(data + 0x18) -= D_L08_00161860 * D_0015ED70;
         qcopy(record.motion.collision.position, position);
         record.motion.collision.position[2] -= 0.16f;
         record.motion.collision.flags = 0x810000;
@@ -381,7 +381,7 @@ void FUN_L08_002d23f0(char *moby) {
                 if (*(unsigned char *)(moby + 0xbc) & 1) {
                     allocate_voice_for_target_entry(1, 0, moby);
                     qcopy(position, collision_result + 0x20);
-                    ((float *)position)[2] += 0.16f;
+                    *(float *)(moby + 0x18) += 0.16f;
                     rotate_vector_2d23f0(velocity, velocity, collision_result + 0x40);
                     fast_vec_cross(impulse, velocity, collision_result + 0x40);
                     normalize_vector_xyz(impulse, impulse, random_float_between(-(D_0015ED6C * 1.5f), D_0015ED6C * 1.5f));
