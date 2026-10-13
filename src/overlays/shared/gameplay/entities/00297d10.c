@@ -276,7 +276,7 @@ void FUN_L06_002d8738(char *moby) {
             float (*corner)[4] = quad.corner;
             float *uvOut = &quad.uv[0][0];
             float *uvOutSecond = &quad.uv[0][1];
-            for (j = 3; j >= 0; j--, indices += 2, corner++, uvOut += 2, uvOutSecond += 2) {
+            for (j = 3; j >= 0; corner++, uvOutSecond += 2, uvOut += 2, j--, indices += 2) {
                 short vertex = indices[0];
                 qcopy(corner, D_L06_001D4530[vertex]);
                 if (near) {
