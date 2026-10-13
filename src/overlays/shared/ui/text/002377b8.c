@@ -1237,7 +1237,7 @@ void FUN_L00_0023a218(u8 *m) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a2d0.s", FUN_L00_0023a2d0);
 #else
-extern s32 frame_size __asm__("D_0013E504");
+extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
 extern s32 D_L00_0015F5CC;
 extern char D_L00_0015F918[];
 extern s32 D_L00_0015F8F8 __attribute__((sda));
@@ -1260,12 +1260,11 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     s32 color, shadow, period, text_x, text_y;
     f32 open, text, pulse, scaled_text;
 
-    y = frame_size - 42;
-    if (pal_mode_reload[0] == 0)
-        y = frame_size - 50;
+    y = frame_size - 50;
+    if (pal_mode_reload[0] != 0)
+        y = frame_size - 42;
     x = m->x;
-    q = &hero.vehicle_mode;
-    if (q[0] == 2)
+    if (hero.vehicle_mode == 2)
         return m->ret;
     if (hero.state.current == 50)
         return m->ret;
