@@ -258,8 +258,8 @@ initialize:
     Vec4f *moby_pos;
     data->initialized = 1;
     data->child_count = 0;
-    moby_pos = &moby->pos;
     for (i = 0; i < data->count; i++) {
+        moby_pos = &moby->pos;
         data->children[i] = 0;
         child = spawn_moby_29ecf8(0x55);
         if (child != 0) {
@@ -269,7 +269,7 @@ initialize:
             child->draw_dist = 0x7f;
             child->scale *= random_float_between_29ecf8(0.7f, 1.3f);
             child->rot.z = random_angle_29ecf8();
-            child->anim_speed = random_float_between_29ecf8(0.6f, 1.2f);
+            *(volatile f32 *)&child->anim_speed = random_float_between_29ecf8(0.6f, 1.2f);
             clear_vector_29ecf8(&part->pos);
             *(s16 *)((char *)part + 0x44) = 0;
             *(volatile f32 *)((char *)part + 0x4c) = 10.0f;
@@ -285,13 +285,13 @@ initialize:
             *(volatile s32 *)((char *)part + 0x58) = 0;
             *(volatile f32 *)((char *)part + 0x70) = 1.694f;
             *(volatile f32 *)((char *)part + 0x74) = 1.694f;
-            *(volatile f32 *)((char *)part + 0x94) = 5.0f;
+            *(f32 *)((char *)part + 0x94) = 5.0f;
             *(volatile f32 *)((char *)part + 0x48) = 1.056f;
-            *(s16 *)((char *)part + 0x5c) = -1;
-            *(f32 *)((char *)part + 0x40) = 0.003f;
-            *(s16 *)((char *)part + 0x5e) = 2;
-            *(s16 *)((char *)part + 0x60) = 0x55;
-            *(volatile f32 *)((char *)part + 0x90) = 1.0f;
+            *(volatile s16 *)((char *)part + 0x5c) = -1;
+            *(volatile f32 *)((char *)part + 0x40) = 0.003f;
+            *(volatile s16 *)((char *)part + 0x5e) = 2;
+            *(volatile s16 *)((char *)part + 0x60) = 0x55;
+            *(f32 *)((char *)part + 0x90) = 1.0f;
             *(s16 *)((char *)part + 0x62) = 0x1ee;
             update_spawned_moby_29ecf8(child);
         }
@@ -301,9 +301,9 @@ initialize:
 update:
     { s32 i;
     struct Moby *child;
-    children = data->children;
     for (i = 0; i < data->count; i++) {
         void *part;
+        children = data->children;
         child = children[i];
         part = child->pvars;
         D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * ((child->anim_speed + 1.0f) * 0.5f) * 0.05f * frame_scale_sq * ((child->anim_speed + 1.0f) * 0.5f);
