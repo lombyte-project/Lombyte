@@ -393,15 +393,15 @@ extern char D_L11_00174860_94f8[] __asm__("D_L11_00174860");
 
 void FUN_L11_003094f8(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    char *pos = moby + 0x10;
+    char *pos;
     V4_94f8 old, spray, temp, velocity, random;
     float t;
     float yaw;
     float pitch;
     char *target;
-    char *texture = D_L11_001B2A80_94f8;
+    char *texture;
 
-    qcopy(&old, pos);
+    qcopy(&old, moby + 0x10);
     *(float *)(moby + 0x2c) +=
         (*(float *)(*(char **)(moby + 0x24) + 0x24) - *(float *)(moby + 0x2c)) * 0.1f;
     *(Q_94f8 *)&random = 0;
@@ -413,8 +413,9 @@ void FUN_L11_003094f8(char *moby) {
                          random_float_between(0.1f, 0.2f) * frame_time);
     normalize_vector_xyz(&temp, data, -random_float_between(frame_time * 0.1f, frame_time));
     add_vector_xyz(&velocity, &velocity, &temp);
-    FUN_L00_002712b8_94f8(pos, &velocity, scale_game_frames(6), 0x7f, 0xb0b0b0,
+    FUN_L00_002712b8_94f8(moby + 0x10, &velocity, scale_game_frames(6), 0x7f, 0xb0b0b0,
                            3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
+    texture = D_L11_001B2A80_94f8;
     for (t = 0.0f; t < 1.0f; t += 0.33333334f) {
         unsigned char *particle;
         normalize_vector_xyz(&temp, data,
@@ -438,6 +439,7 @@ void FUN_L11_003094f8(char *moby) {
         FUN_L00_0026cbb0_94f8(&temp, &random, 0x4f007fff, 0x1fffffff,
                                scale_game_frames(5), 1, 20000.0f);
     }
+    pos = moby + 0x10;
     target = *(char **)(data + 0x24);
     if (target != 0 && (unsigned char)target[0x20] != 0xfe &&
         (unsigned char)target[0x20] != 0xfd &&
@@ -466,9 +468,13 @@ void FUN_L11_003094f8(char *moby) {
         *(float *)(moby + 0x18) < 2.0f || 1021.0f < *(float *)(moby + 0x18)) goto remove;
     moby_point_position_94f8(moby, 1, &spray);
     if (FUN_001efa68(&old, &spray, 0, *(void **)(data + 0x20), 0)) {
-        FUN_L00_0025e450_94f8(moby, data, D_L11_00174860_94f8, 2.0f, 10.0f,
-                               10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
-                               -1, 20.0f, 0, 1, -1, 0);
+        {
+            int spray_count = 1;
+            int tint = -1;
+            FUN_L00_0025e450_94f8(pos - 0x10, data, D_L11_00174860_94f8, 2.0f, 10.0f,
+                                   10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
+                                   -1, 20.0f, 0, spray_count, tint, 0);
+        }
 remove:
         mark_moby_for_removal(moby);
     } else if (tick_countdown_32_alt(data + 0x28)) {
