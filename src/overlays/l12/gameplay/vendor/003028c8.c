@@ -1244,7 +1244,7 @@ void FUN_L12_00306828(struct Moby *moby) {
     int i;
     int alpha = 0x80000000;
     char *data = (char *)moby->pvars;
-    for (i = 0; i < 18; i++) {
+    for (i = 0; i != 18; i++) {
         struct Moby *other;
         int period;
         float sine;
