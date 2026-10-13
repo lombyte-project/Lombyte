@@ -1257,16 +1257,17 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     char buf[16];
     u8 *q;
     s32 x, y, panel_right, panel_left, slide, alpha, text_alpha;
-    s32 color, shadow, period;
+    s32 color, shadow, period, text_x, text_y;
     f32 open, text, pulse, scaled_text;
 
     y = frame_size - 42;
     if (pal_mode_reload[0] == 0)
         y = frame_size - 50;
     x = m->x;
-    if (hero.vehicle_mode == 2)
+    q = &hero.vehicle_mode;
+    if (q[0] == 2)
         return m->ret;
-    if (*(s32 *)((u8 *)&hero + 0x2084) == 50)
+    if (hero.state.current == 50)
         return m->ret;
     q = m->ab;
     if (q[0] == 0)
@@ -1287,15 +1288,15 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     alpha = truncate_float_to_s32((f32)D_L00_0015F8F8 * open);
     panel_right = x + D_L00_0015F900;
     slide = truncate_float_to_s32((f32)D_L00_0015F8FC * open);
-    panel_left = panel_right - slide;
     draw_hud_sprite_flipped(get_icon_frame(0x7580, 1), panel_right + 16, y, 32, 32, alpha);
+    panel_left = panel_right - slide;
     draw_hud_sprite(get_icon_frame(0x7580, 0), panel_left, y, slide + 16, 32, alpha);
     draw_hud_sprite(get_icon_frame(0x7580, 1), panel_left - 32, y, 32, 32, alpha);
     draw_hud_icon(m, get_icon_frame(0x754f, D_L00_0015F5CC % 60 >> 1), x - 32, y, 0, text_alpha);
 
     sprintf_alt(buf, D_L00_0015F918);
-    x += D_L00_0015F904;
-    slide = y + D_L00_0015F908;
+    text_x = x + D_L00_0015F904;
+    text_y = y + D_L00_0015F908;
     period = FUN_001f96f8(D_L00_0015F914);
     pulse = fast_sin((f32)(D_L00_0015F5CC % period) /
                      convert_integer_to_float(period) * 6.28318f - 3.14159f) * 4.0f - 3.0f;
@@ -1304,8 +1305,8 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     scaled_text = pulse * text;
     shadow = fast_tween_color(0, 0x80000000, scaled_text);
     color = fast_tween_color(D_L00_0015F90C, D_L00_0015F910, scaled_text);
-    FUN_L00_001fb470(x + 1, slide + 1, shadow, buf, -1);
-    FUN_L00_001fb470(x, slide, color, buf, -1);
+    FUN_L00_001fb470(text_x + 1, text_y + 1, shadow, buf, -1);
+    FUN_L00_001fb470(text_x, text_y, color, buf, -1);
 out:
     return m->ret;
 }
