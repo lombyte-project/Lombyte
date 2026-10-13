@@ -1246,7 +1246,7 @@ void FUN_L06_002f5d78(char *moby) {
         left = (char **)(data + 0x110);
         for (i = 0, offset = 0; i < 10; i++, offset += 2, left++, right++) {
             float length = D_L06_00161D78 - ((float)i + (float)i);
-            threshold = D_L06_00161D70 + (float)(4 - i) * D_L06_00161D74;
+            threshold = (float)(4 - i) * D_L06_00161D74 + D_L06_00161D70;
             upper = length;
             lower = length - 1.0f;
             if (length < threshold) upper = threshold;
