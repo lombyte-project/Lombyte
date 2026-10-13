@@ -1234,9 +1234,6 @@ void FUN_L00_0023a218(u8 *m) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023a2d0.s", FUN_L00_0023a2d0);
-#else
 extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
 extern s32 D_L00_0015F5CC;
 extern char D_L00_0015F918[];
@@ -1260,9 +1257,13 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     s32 color, shadow, period, text_x, text_y;
     f32 open, text, pulse, scaled_text;
 
-    y = frame_size - 50;
-    if (pal_mode_reload[0] != 0)
-        y = frame_size - 42;
+    {
+        s32 panel_y = frame_size - 42;
+        s32 alternate_y = frame_size - 50;
+        y = panel_y;
+        if (pal_mode_reload[0] == 0)
+            y = alternate_y;
+    }
     x = m->x;
     if (hero.vehicle_mode == 2)
         return m->ret;
@@ -1309,7 +1310,6 @@ s32 FUN_L00_0023a2d0(Hud *m) {
 out:
     return m->ret;
 }
-#endif
 extern short D_00140986 __attribute__((section(".data")));
 int FUN_L00_00235a70(char *, int *, int *);
 void FUN_L00_00235ad8(char *, int *, int *, int, int);
