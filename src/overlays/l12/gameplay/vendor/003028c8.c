@@ -1545,18 +1545,23 @@ void FUN_L12_00308350(struct Moby *m) {
     qcopy(&matrix[3], &m->pos);
     matrix[3][3] = 1.0f;
     first.texture = get_effect_texture_l12(0xe);
-    flags = (long)D_L12_00161FBC | (long)D_L12_00161FC0 << 2 |
-            (long)D_L12_00161FC4 << 4 | (long)D_L12_00161FC8 << 6 |
-            0x8000000000L;
-    second_flags = (long)D_L12_00161FCC | (long)D_L12_00161FD0 << 2 |
-            (long)D_L12_00161FD4 << 4 | (long)D_L12_00161FD8 << 6 |
-            0x8000000000L;
+    flags = (long)D_L12_00161FBC;
+    second_flags = (long)D_L12_00161FCC;
+    flags |= (long)D_L12_00161FC0 << 2;
+    flags |= (long)D_L12_00161FC4 << 4;
+    flags |= (long)D_L12_00161FC8 << 6;
+    second_flags |= (long)D_L12_00161FD0 << 2;
+    second_flags |= (long)D_L12_00161FD4 << 4;
+    second_flags |= (long)D_L12_00161FD8 << 6;
+    flags |= 0x8000000000L;
+    second_flags |= 0x8000000000L;
     first.gs_state = flags;
     second.gs_state = second_flags;
     first.texture_state = 0xFF9000000260L;
     second.texture_state = 0xFF9000000260L;
+    first.tag = 0;
+    second.tag = 0;
     second.texture = first.texture;
-    first.tag = second.tag = 0;
     first.color[0] = first.color[1] = first.color[2] = first.color[3] = D_L12_00161F90;
     second.color[0] = second.color[1] = second.color[2] = second.color[3] = D_L12_00161F94;
     j = 0;
