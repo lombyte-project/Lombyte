@@ -1485,16 +1485,15 @@ void FUN_L00_0020f580(void)
                     *(u64 *)(moby + 0x38) = *(u64 *)(*(u8 **)((u8 *)&hero + 0x2080) + 0x38);
                     index = *(s32 *)(D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c + 0xc);
                     if (i == 1 && j == 1) index = 3;
-                    index *= 0x40;
-                    source = D_0013FE10_f580 + index;
+                    source = D_0013FE10_f580 + index * 0x40;
                     if (*(u8 *)(slot + 0x10aa) != 0) {
-                        *(u128 *)((u8 *)&hero + offset + 0x1070) = *(u128 *)(D_0013FE40_f580 + index);
+                        *(u128 *)((u8 *)&hero + offset + 0x1070) = *(u128 *)(D_0013FE40_f580 + index * 0x40);
                         FUN_0025d330_f580(source, (u8 *)&hero + offset + 0x1080);
                         FUN_00250480_f580(moby);
                         FUN_00250df8_f580(moby);
                         *(u16 *)(moby + 0x34) &= 0xfffb;
                     } else {
-                        *(u128 *)(moby + 0x10) = *(u128 *)(D_0013FE40_f580 + index);
+                        *(u128 *)(moby + 0x10) = *(u128 *)(D_0013FE40_f580 + index * 0x40);
                         if (large_font_height == 0 || *(s32 *)(D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c + 0x18) == 0) {
                             first = FUN_L00_0020d4d0(i);
                             second = FUN_L00_0020d518(i);
