@@ -1827,7 +1827,7 @@ extern void clear_vector_303160(float *) __asm__("FUN_001f99f8");
 extern void approach_angle_303160(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void event_303160(int, int, char *) __asm__("FUN_0022dba0");
 extern void FUN_L06_00303748(float, char *, char *, char *, int);
-extern void FUN_L06_00303b68(char *);
+extern void FUN_L06_00303b68(struct Moby *);
 
 int FUN_L06_00303160(char *moby, int path) {
     char *data = *(char **)(moby + 0x78);
@@ -1912,7 +1912,7 @@ int FUN_L06_00303160(char *moby, int path) {
                              D_L06_001600EC_303160 + next_index * 0x80, 6);
         } else if (event == 10 || previous_event == 10) {
             event_303160(1, 0, moby);
-            FUN_L06_00303b68(moby);
+            FUN_L06_00303b68((struct Moby *)moby);
         }
     }
     return *(float *)(data + 0xf4) == 1.0f;
