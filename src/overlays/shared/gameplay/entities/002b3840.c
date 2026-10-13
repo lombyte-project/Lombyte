@@ -668,14 +668,15 @@ void FUN_L05_0030c5b0(struct Moby *m) {
         else if (intensity < 0x20) intensity = 0x20;
         m->glow_color = 0x80000000 | intensity << 16 | intensity << 8 | intensity;
         if (hero.ground_moby == m && hero.air_frames.s == 0) {
-            int next_state = 2;
+            int next_state;
             D_L05_001BAA50.killed[(short)m->save_id] = m->mission + 2;
             if (m->mission == 0xFF ||
                 (D_L05_0015FC88[m->mission] != 0xFF && D_0014C050[current_level_index][m->mission] == 0xFF)) {
                 D_L05_001BB6B0.killed[(short)m->save_id] = m->mission + 2;
             }
-            m->state = next_state;
+            next_state = 2;
             m->command = 1;
+            m->state = next_state;
             m->glow_color = 0x80208020;
             allocate_voice_for_target_entry(0, 0, m);
             if (v->table != -1) {
