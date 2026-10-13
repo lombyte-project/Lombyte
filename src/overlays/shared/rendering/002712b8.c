@@ -473,8 +473,8 @@ void FUN_L00_002721f0(unsigned char *p) {
     r = (float *)(q + 0xC);
     *(volatile float *)&v[0] = *(float *)(q + 0xC);
     *(volatile float *)&v[1] = r[1];
-    v[2] = r[2];
-    *(volatile int *)&v[3] = 0;
+    *(volatile float *)&v[2] = *(volatile float *)&r[2];
+    *(int *)&v[3] = 0;
     FUN_001f9a10_2721f0(p + 0x10, p + 0x10, &v);
     *(float *)(q + 0x14) -= *(float *)(q + 0x18);
     if (*(float *)(p + 0x10) < 2.0f || 1021.0f < *(float *)(p + 0x10) ||
