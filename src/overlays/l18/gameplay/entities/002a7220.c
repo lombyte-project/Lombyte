@@ -1443,9 +1443,6 @@ int FUN_L18_002d8050(struct Moby *arg) {
     }
     return 0;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002d82c0.s", FUN_L18_002d82c0);
-#else
 extern float D_L18_0015F638 __attribute__((sda));
 extern float D_L18_00161A40 __attribute__((sda));
 extern float D_L18_00161A44 __attribute__((sda));
@@ -1455,27 +1452,27 @@ extern float D_L18_00161A5C __attribute__((sda));
 extern float D_L18_00161A60 __attribute__((sda));
 extern float D_L18_00161A64 __attribute__((sda));
 extern int D_L18_001623A8 __attribute__((sda));
-extern float D_0013F3D0[];
-extern struct Moby *D_0013F64C;
-extern short D_0013F65E;
-extern char D_001413D4[];
 extern void FUN_L18_002d88b8(struct Moby *);
 extern void FUN_L18_00227dd0(int, int);
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern short allocate_voice_for_target_entry_short(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern int allocate_voice_82c0(int, int, struct Moby *) __asm__("FUN_0022da68");
 
+/* Ported from rac1-decomp nonmatching/l18_veldin2/func_L18_002D96B0.c (func_L18_002D96B0) */
+/* Sinking platform update: arms its tilt, then sinks it under the hero until it is removed. */
 void FUN_L18_002d82c0(struct Moby *moby) {
+    char *data;
     float delta[4] __attribute__((aligned(16)));
-    float old_rotation[4] __attribute__((aligned(16)));
-    char *data = (char *)moby->pvars;
-    float ratio;
-    float speed;
-    float gravity;
+    float old_rot[4] __attribute__((aligned(16)));
+    float t;
+    float rate;
+    float sink;
+    float angle;
 
+    data = (char *)moby->pvars;
     scale_vector_xyz(delta, &moby->pos, -1.0f);
-    qcopy_nc(old_rotation, &moby->rot);
+    qcopy(old_rot, &moby->rot);
     switch (moby->state) {
     case 0:
         *(float *)(data + 0x60) = moby->pos.z;
@@ -1483,94 +1480,73 @@ void FUN_L18_002d82c0(struct Moby *moby) {
         *(int *)(data + 0x70) = 0;
         *(int *)(data + 0x68) = 0;
         *(int *)(data + 0x6C) = 0;
-        *(float *)(data + 0x74) = random_angle_radians();
+        angle = random_angle_radians();
         *(int *)(data + 0x5C) |= 1;
-        if (*(int *)(data + 0x88)) {
+        *(float *)(data + 0x74) = angle;
+        if (*(int *)(data + 0x88) != 0) {
             moby->state = 2;
         } else {
             moby->state = 1;
         }
         break;
-    case 1:
-    case 2:
-        break;
-    case 3: {
-        float ratio;
-        if (FUN_001f9740((int *)(data + 0x7C))) {
-            ratio = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) /
-                    (D_L18_00161A64 - D_L18_00161A60);
-            if (ratio > 1.0f) {
-                ratio = 1.0f;
-            } else if (ratio < 0.0f) {
-                ratio = 0.0f;
-            }
-            ratio = 1.0f - ratio * 0.333f;
-            if (*(int *)(data + 0x84)) {
-                ratio = D_L18_00161A50 * ratio;
-            } else {
-                ratio = D_L18_00161A58 * ratio;
-            }
-            *(float *)(data + 0x6C) = ratio * DEG_TO_RAD * frame_time;
-            moby->state = 4;
+    case 3:
+        if (FUN_001f9740((int *)(data + 0x7C)) == 0) {
+            break;
         }
+        t = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) / (D_L18_00161A64 - D_L18_00161A60);
+        if (1.0f < t) {
+            t = 1.0f;
+        } else if (t < 0.0f) {
+            t = 0.0f;
+        }
+        t = 1.0f - t * 0.333f;
+        if (*(int *)(data + 0x84) != 0) {
+            rate = D_L18_00161A50 * t;
+        } else {
+            rate = D_L18_00161A58 * t;
+        }
+        *(float *)(data + 0x6C) = rate * DEG_TO_RAD * frame_time;
+        moby->state = 4;
         break;
-    }
     case 4:
-        if (moby->visible && FUN_001f9740((int *)(data + 0x8C))) {
+        if (moby->visible != 0 && FUN_001f9740((int *)(data + 0x8C)) != 0) {
             FUN_L18_002d88b8(moby);
             *(int *)(data + 0x8C) = scale_ticks(random_int_between(0x5A, 0x78));
         }
         if (hero.ground_moby == moby && hero.air_frames.s == 0) {
             *(int *)(data + 0x8C) = 0;
             moby->state = 5;
-            *(short *)(data + 0x92) = allocate_voice_for_target_entry_short(1, 0, moby);
+            *(short *)(data + 0x92) = allocate_voice_82c0(1, 0, moby);
         }
-        if (*(int *)(data + 0x80) && FUN_001f9b80(&moby->pos, D_0013F3D0) < D_L18_00161A5C) {
+        if (*(int *)(data + 0x80) == 0) {
+            break;
+        }
+        if (FUN_001f9b80(&moby->pos, &hero.motion.pos) < D_L18_00161A5C) {
             moby->state = 5;
-            *(short *)(data + 0x92) = allocate_voice_for_target_entry_short(1, 0, moby);
+            *(short *)(data + 0x92) = allocate_voice_82c0(1, 0, moby);
         }
         break;
     case 5:
-        if (moby->visible && FUN_001f9740((int *)(data + 0x8C))) {
+        if (moby->visible != 0 && FUN_001f9740((int *)(data + 0x8C)) != 0) {
             FUN_L18_002d88b8(moby);
             *(int *)(data + 0x8C) = scale_ticks(random_int_between(0xF, 0x1E));
         }
-        gravity = convert_integer_to_float(D_L18_001623A8);
-        speed = D_L18_00161A64 - D_L18_00161A60;
-        ratio = (gravity - D_L18_00161A60) / speed;
-        if (ratio > 1.0f) {
-            ratio = 1.0f;
-        } else if (ratio < 0.0f) {
-            ratio = 0.0f;
+        sink = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) / (D_L18_00161A64 - D_L18_00161A60);
+        if (1.0f < sink) {
+            sink = 1.0f;
+        } else if (sink < 0.0f) {
+            sink = 0.0f;
         }
-        ratio = 1.0f - ratio * 0.333f;
-        if (*(int *)(data + 0x80) != 0) {
-            goto fixed_gravity;
-        }
-        if (*(int *)(data + 0x88) != 0) {
-            gravity = D_L18_00161A40;
-            if (*(int *)(data + 0x84) == 0) {
-fixed_gravity:
-                gravity = frame_time_sq;
-                speed = 15.0f;
-                goto apply_gravity;
-            }
+        sink = 1.0f - sink * 0.333f;
+        if (*(int *)(data + 0x80) != 0 || (*(int *)(data + 0x88) != 0 && *(int *)(data + 0x84) == 0)) {
+            *(float *)(data + 0x70) -= frame_time_sq * 15.0f;
+        } else if (*(int *)(data + 0x84) != 0) {
+            *(float *)(data + 0x70) -= D_L18_00161A40 * sink * frame_time_sq;
         } else {
-            if (*(int *)(data + 0x84)) {
-                gravity = D_L18_00161A40;
-            } else {
-                gravity = D_L18_00161A44;
-            }
+            *(float *)(data + 0x70) -= D_L18_00161A44 * sink * frame_time_sq;
         }
-        speed = frame_time_sq;
-        gravity = gravity * ratio;
-apply_gravity:
-        gravity = gravity * speed;
-        ratio = *(volatile float *)(data + 0x70);
-        *(volatile float *)(data + 0x70) = ratio - gravity;
-        *(float *)(data + 0x64) += *(volatile float *)(data + 0x70);
-        speed = *(float *)(data + 0x60) - 10.0f;
-        if (moby->pos.z < speed) {
+        *(float *)(data + 0x64) += *(float *)(data + 0x70);
+        if (moby->pos.z < *(float *)(data + 0x60) - 10.0f) {
             if (hero.ground_moby == moby && hero.air_frames.s == 0) {
                 if (hero.motion.pos.f[2] < D_L18_0015F638 && hero.state.current != 0x77) {
                     FUN_L18_00227dd0(0x77, 1);
@@ -1583,12 +1559,17 @@ apply_gravity:
             }
         }
         break;
+    case 1:
+        break;
+    case 2:
+        break;
+    default:
+        break;
     }
     FUN_L18_002d8710(moby);
     add_vector_xyz(delta, delta, &moby->pos);
-    FUN_L00_00260738(data + 0x20, delta, old_rotation, &moby->rot);
+    FUN_L00_00260738(data + 0x20, delta, old_rot, &moby->rot);
 }
-#endif
 /* Starts the moby's next phase with the given pair if it is waiting. */
 int FUN_L18_002d8888(struct Moby *arg, int a, int b) {
     int *data = (int *)arg->pvars;
