@@ -307,8 +307,7 @@ void FUN_L05_002f87a8(unsigned char *moby) {
             *(unsigned short *)0x141c60 == 0) {
             play_sound_87a8(0x138f, 0x5f);
         }
-        g = &hero;
-        if (g->state.control_mode != 0x16) {
+        if (hero.state.control_mode != 0x16) {
             moby[0x30] = 0x10;
             if (*(int *)(data + 0x50) == 0) {
                 qcopy(moby + 0x10, data + 0x10);
