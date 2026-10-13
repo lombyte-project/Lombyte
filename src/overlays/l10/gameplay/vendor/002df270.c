@@ -1963,7 +1963,6 @@ extern int D_L10_0013F640 __asm__("D_L10_0013F640") __attribute__((section(".sda
 
 void FUN_L10_002e8358(struct Moby *moby) {
     int *timer;
-    int accepted;
     float angle;
     int purchase;
     int upgrade_level;
@@ -1983,7 +1982,7 @@ void FUN_L10_002e8358(struct Moby *moby) {
             FUN_L00_00266858_vendor(moby, 1);
             if (alternate_item_available[4] == 0) {
                 if (current_bolt_count >= 4001) {
-                    accepted = try_set_help_message_vendor(1, 0x271e) != 0;
+                    int accepted = try_set_help_message_vendor(1, 0x271e) != 0;
                     if (!(D_0013CAE4 & 0x10)) return;
                     if (accepted == 0) return;
                     alternate_item_available[4] = 1;
@@ -2000,7 +1999,7 @@ void FUN_L10_002e8358(struct Moby *moby) {
             } else {
                 if (alternate_item_available[5] != 0 || timer[1] != 0) return;
                 if (current_bolt_count >= 30001) {
-                    accepted = try_set_help_message_vendor(1, 0x271f) != 0;
+                    int accepted = try_set_help_message_vendor(1, 0x271f) != 0;
                     if (!(D_0013CAE4 & 0x10)) return;
                     if (accepted == 0) return;
                     alternate_item_available[5] = 1;
@@ -2023,8 +2022,9 @@ state_one:
     if (D_L10_0015F5C4_vendor != 2) {
         memcard_save_data_vendor(0, -1);
         switch (alternate_item_available[5]) {
-        case 0: purchase = 0x271c; break;
         default: purchase = 0x271d; break;
+        case 1: purchase = 0x271d; break;
+        case 0: purchase = 0x271c; break;
         }
         FUN_L00_00263d40_vendor(purchase, -1);
         D_L10_0013F640 = 0xb4;
