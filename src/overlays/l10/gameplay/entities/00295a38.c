@@ -2081,6 +2081,7 @@ void FUN_L10_002dcc58(struct Moby *moby) {
             delete_moby(moby);
         } else {
             int value = 0;
+            long increment = 45;
             int item;
             D_L10_00161D68 = 0x16;
             D_L10_00161D64 = 0x2d;
@@ -2090,7 +2091,7 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                 *(int *)(data + 0x12c78 + item * 4) = quotient + 11;
                 *(int *)(data + 0x12cf0 + item * 4) = quotient + 23;
                 *(int *)(data + 0x12d68 + item * 4) = quotient + 34;
-                value += 45;
+                value += increment;
             }
             moby->state = 1;
         }
