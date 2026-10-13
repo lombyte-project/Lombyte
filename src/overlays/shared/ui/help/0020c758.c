@@ -2055,23 +2055,23 @@ extern void set_moby_sequence(void *, int, int, int) __asm__("FUN_L00_00257880")
 extern s32 D_L00_0015F3F8;
 
 void FUN_L00_00210748(void) {
+    struct Hero *hero_state = &hero;
     int i = 0;
     do {
-        struct HeroItemSlot *slot_hero = &hero.items[i];
-        struct Moby *moby = slot_hero->moby;
-        if (moby == 0) {
-            hero_switch_item(i);
-        } else {
-            if (slot_hero->state == 2) {
-                slot_hero->unk20++;
+        struct Hero *slot_hero = (struct Hero *)((char *)&hero + i * sizeof(struct HeroItemSlot));
+        struct Moby *moby = slot_hero->items[0].moby;
+        if (moby != 0) {
+            switch (slot_hero->items[0].state) {
+            case 2: {
+                slot_hero->items[0].unk20++;
                 hero_switch_item(i);
                 if (i == 0) {
                     int p = 0;
-                    struct HeroEase *e = &hero.unk18F0[0];
                     int end = 3;
+                    struct HeroEase *e = &hero_state->unk18F0[0];
                     do {
-                        if (hero.unk18F0[p].unkA0 != -1) {
-                            hero.unk18F0[p].kind = 5;
+                        if (hero_state->unk18F0[p].unkA0 != -1) {
+                            hero_state->unk18F0[p].kind = 5;
                             FUN_L00_00205168(e);
                         }
                         p++;
@@ -2080,15 +2080,19 @@ void FUN_L00_00210748(void) {
                 }
                 if ((moby->anim_flags & 2) && moby->prev_seq == 0)
                     set_moby_sequence(moby, 1, 0, 2);
-            } else if (slot_hero->state == 3) {
-                slot_hero->unk1B++;
-                if (moby->anim_flags & 2)
-                    FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
-                else if (i == 1 || i == 0)
+                break;
+            }
+            case 3: {
+                slot_hero->items[0].unk1B++;
+                if ((moby->anim_flags & 2) || i == 1 || i == 0)
                     FUN_L00_0020fca8(i, D_L00_0015F3F8 + 2);
             }
-            if (moby->state != 0xfe && moby->state != 0xfd && i != 6 && moby->update)
+            }
+            if (moby != 0 && (u32)moby->state != 0xfe && (u32)moby->state != 0xfd &&
+                i != 6 && moby->update)
                 moby->update(moby);
+        } else {
+            hero_switch_item(i);
         }
         i++;
     } while (i < 7);
