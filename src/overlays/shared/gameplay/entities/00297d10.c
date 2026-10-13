@@ -331,7 +331,185 @@ void FUN_L06_002e6148(char *moby) {
     FUN_L00_002d6bf0(moby);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e8678.s", FUN_L06_002e8678);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002e94f0.s", FUN_L06_002e94f0);
+#include "rnc/gameplay/entities/moby.h"
+
+struct MobyHit {
+    u8 pad0[0x10];
+    Vec4f pos;
+    struct Moby *source;
+};
+
+struct RespawnVars {
+    u8 pad0[0x20];
+    f32 health;
+    s16 max_health;
+    u8 pad26[0xA];
+    f32 spin;
+    u8 pad34[4];
+    int new_blink;
+    u8 pad3C[0x112];
+    u8 sparks_pending;
+    u8 pad14F[0x31];
+    Vec4f target_pos;
+    u8 pad190[0x30];
+    struct Moby *target;
+    int target_mode;
+    u8 pad1C8[0x14];
+    f32 base_range;
+    f32 range;
+    u8 pad1E4[4];
+    s16 blink_timer;
+    u8 pad1EA[0xA];
+    int path;
+    u8 pad1F8[0xC];
+    int target_id;
+    u8 pad208[2];
+    s16 frame_slot;
+    struct Moby *carried;
+    Vec4f spawn_pos;
+    u8 pad220[0x20];
+    s16 lives;
+    u8 pad242[6];
+    f32 glow_phase;
+};
+
+extern f32 D_L06_0015F580[] __attribute__((section(".sdata")));
+extern f32 D_L06_00161C04 __attribute__((sda));
+extern int D_L06_00161C08 __attribute__((sda));
+extern int D_L06_00161C0C __attribute__((sda));
+extern struct Moby *D_L06_0015FFD8_e94f0 __asm__("D_L06_0015FFD8") __attribute__((sda));
+extern u8 D_001413F4_e94f0[] __asm__("D_001413F4");
+extern int D_L06_0015F5CC;
+extern int *D_L06_001B0C30[];
+extern float D_0015ED6C;
+extern int hit_check_e94f0(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern void stop_moby_sound_e94f0(void *, int, int) __asm__("FUN_L00_00257470");
+extern int allocate_voice_e94f0(int, int, int) __asm__("FUN_0022da68");
+extern void FUN_L06_002ea198(struct Moby *, Vec4 *);
+extern void FUN_L06_002e9f30(struct Moby *);
+extern void FUN_L06_002ea498(char *);
+extern float fast_add_rotations_e94f0(float, float) __asm__("FUN_001fa580");
+extern float fast_sin_e94f0(float) __asm__("FUN_001f9de0");
+extern int blend_color_e94f0(int, int, float) __asm__("FUN_001fa6e0");
+extern float random_float_e94f0(float, float) __asm__("FUN_002132a8");
+extern float scale_time_e94f0(float) __asm__("FUN_001f96b0");
+extern int truncate_e94f0(float) __asm__("FUN_001fa6d0");
+extern int tick_e94f0(s16 *) __asm__("FUN_001f9770");
+extern void FUN_L06_002f34d8(char *, char **, f32);
+extern int point_in_path_e94f0(void *, void *, int) __asm__("FUN_L00_00259740");
+extern float distance_e94f0(void *, void *) __asm__("FUN_001f9b80");
+extern int follow_path_e94f0(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern float absf_e94f0(float) __asm__("FUN_001f99c0");
+extern struct MobyHit *hit_moby_e94f0(void *, int, int) __asm__("FUN_L00_0025a420");
+extern void remove_e94f0(struct Moby *) __asm__("FUN_0020c828");
+extern struct Moby *D_001413D0_e94f0 __asm__("D_001413D0") __attribute__((section(".data")));
+
+void FUN_L06_002e94f0(struct Moby *moby) {
+    struct RespawnVars *vars;
+    struct MobyHit *hit;
+    int kind;
+    float damage;
+    int code;
+
+    vars = (struct RespawnVars *)moby->pvars;
+    vars->spin = moby->rot_row2.z * 0.25f;
+    if (vars->carried != 0) {
+        hit = hit_moby_e94f0(vars->carried, 0x330000, 0);
+        if (hit != 0 && (hit->source == 0 || hit->source->oclass != 0xAF)) {
+            FUN_L06_002ea198(moby, (Vec4 *)D_L06_0015F580);
+            FUN_L06_002e9f30(moby);
+            stop_moby_sound_e94f0(moby, 0, -1);
+            goto remove;
+        }
+    }
+    damage = 0.0f;
+    hit = hit_moby_e94f0(moby, 0x330000, 0);
+    code = hit_check_e94f0(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
+    if (kind != 1 && moby->state != 0xE) {
+        vars->health = vars->health - damage;
+        if (vars->health <= 0.0f) {
+            code = 1;
+        }
+        switch (code) {
+        case 1:
+        case 2:
+            stop_moby_sound_e94f0(moby, 0, -1);
+            FUN_L06_002ea198(moby, (Vec4 *)&hit->pos);
+            if (vars->sparks_pending == 1) {
+                FUN_L06_002ea498((char *)moby);
+                vars->sparks_pending = 0;
+            }
+            allocate_voice_e94f0(3, 0, (int)moby);
+            if (vars->carried != 0) {
+                FUN_L06_002e9f30(moby);
+            }
+            if (vars->lives == 0) {
+            remove:
+                remove_e94f0(moby);
+                return;
+            }
+            vars->lives = vars->lives - 1;
+            vars->health = vars->max_health;
+            qcopy(&moby->pos, &vars->spawn_pos);
+            moby->state = 0xF;
+            moby->collision = 0;
+            moby->flags = (moby->flags & 0xEFFF) | 0x41;
+            break;
+        case 0:
+        case 3:
+        case 11:
+            break;
+        }
+    }
+    moby->hit_slot = 0xFF;
+    vars->glow_phase = fast_add_rotations_e94f0(vars->glow_phase, D_L06_00161C04 * 0.017453292f * D_0015ED6C);
+    moby->glow_color = blend_color_e94f0(D_L06_00161C08, D_L06_00161C0C, (fast_sin_e94f0(vars->glow_phase) + 1.0f) * 0.5f);
+    if (vars->new_blink != 0) {
+        vars->blink_timer = truncate_e94f0(scale_time_e94f0(random_float_e94f0(180.0f, 240.0f)));
+        vars->new_blink = 0;
+    }
+    tick_e94f0(&vars->blink_timer);
+    if (vars->blink_timer != 0) {
+        vars->range = vars->base_range + 6.0f;
+    } else {
+        vars->range = vars->base_range;
+    }
+    if (vars->target_id != -1) {
+        struct Moby *target = &D_L06_0015FFD8_e94f0[vars->target_id];
+        vars->target_mode = 1;
+        vars->target = target;
+        qcopy(&vars->target_pos, &target->pos);
+    } else if (D_001413F4_e94f0[0] == 1) {
+        if (D_L06_0015F5CC % 8 == vars->frame_slot) {
+            FUN_L06_002f34d8((char *)moby, (char **)&vars->target, vars->range);
+            if (vars->target == 0) {
+                vars->target_mode = 2;
+            } else {
+                int *path = D_L06_001B0C30[vars->path];
+                if (point_in_path_e94f0(&vars->target->pos, path + 4, *path) == 0 ||
+                    (vars->target->oclass == 0x359 && 2.0f < distance_e94f0(&moby->pos, &vars->target->pos))) {
+                    vars->target = 0;
+                    vars->target_mode = 2;
+                } else {
+                    vars->target_mode = 0;
+                }
+            }
+        }
+    } else {
+        Vec4f *goal = &vars->target_pos;
+        int *path = D_L06_001B0C30[vars->path];
+        if (follow_path_e94f0(moby, goal, vars->range, 0, 0, path + 4, *path) != 2) {
+            if (vars->range < distance_e94f0(&vars->spawn_pos, goal) ||
+                3.0f < absf_e94f0(moby->pos.z - vars->target_pos.z)) {
+                vars->target_mode = 2;
+            }
+        }
+    }
+    if (vars->target == 0) {
+        vars->target = D_001413D0_e94f0;
+    }
+}
+
 /* Build an orthogonal frame from two vectors and apply it to the matrix at moby+0xC0. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EADC8), where it is exact; names translated to the US level program. */
 
