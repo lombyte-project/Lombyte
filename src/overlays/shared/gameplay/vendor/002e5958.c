@@ -140,8 +140,12 @@ void FUN_L15_002e5958(struct Moby *moby) {
                     divisor = scale_game_frames(0x28);
                     if (first < second + vars->timer / divisor)
                         vars->delay = scale_game_frames(0x2d);
-                    else
-                        vars->delay = scale_game_frames(5) + vars->timer / scale_game_frames(0x28);
+                    else {
+                        s32 delay = scale_game_frames(5);
+                        s32 delay_divisor = scale_game_frames(0x28);
+                        delay_divisor = delay + vars->timer / delay_divisor;
+                        vars->delay = delay_divisor;
+                    }
                 }
             }
         }
