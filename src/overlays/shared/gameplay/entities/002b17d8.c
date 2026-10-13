@@ -943,6 +943,8 @@ void FUN_L14_002de670(struct Moby *moby) {
     s32 n;
     s32 alpha;
     s32 color;
+    s32 particle_type;
+    s32 fade_mode;
     f32 size;
     f32 absolute_velocity;
     u8 *particle;
@@ -988,6 +990,8 @@ effect:
     return;
 particles:
     alpha = 0x60000000;
+    particle_type = 0x44;
+    fade_mode = 2;
     FUN_L00_0026cbb0_de670(position, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
                          FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 60000.0f);
     for (i = 1; i >= 0; --i) {
@@ -999,10 +1003,10 @@ particles:
                                        D_L14_0015F580, size,
                                        color | ((color << 16) | ((color << 8) | alpha)));
         if (particle != 0) {
-            particle[3] = 0x44;
+            particle[3] = particle_type;
             fade = particle + 0x20;
             *(s16 *)(particle + 0xA) = FUN_001f96f8(0x3C);
-            *(s32 *)(fade + 4) = 2;
+            *(s32 *)(fade + 4) = fade_mode;
             fade[0xA] = 0x60;
             fade[0xB] = particle[0xA];
         }
