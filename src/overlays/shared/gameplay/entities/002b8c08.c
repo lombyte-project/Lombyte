@@ -115,9 +115,6 @@ void FUN_L01_002b8cb0(f32 *pos, s32 index, s32 mode) {
     }
     FUN_L01_00262388(mode, value);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b8f98.s", FUN_L01_002b8f98);
-#else
 #include "qcopy.h"
 #include "rnc/rendering/dma_tag.h"
 typedef struct {
@@ -134,11 +131,10 @@ typedef struct {
 extern u16 font_vu_program_tag[] __asm__("D_0010E800");
 extern u8 font_vu_program[] __asm__("D_0010E810");
 extern s32 D_L01_0015F5E0 __attribute__((section(".sdata")));
-#define D_0015F628 (*(u32 *)0x0015F628)
-#define D_0015F62C (*(u32 *)0x0015F62C)
-#define D_0015F630 (*(u32 *)0x0015F630)
-#define D_0015F634 (*(u32 *)0x0015F634)
-#define D_0015F5C0 (*(u8 **)0x0015F5C0)
+extern u32 D_L01_00161228 __attribute__((sda));
+extern u32 D_L01_0016122C __attribute__((sda));
+extern u32 D_L01_00161230 __attribute__((sda));
+extern u32 D_L01_00161234 __attribute__((sda));
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
 extern char D_L01_00167240[];
 extern L01Camera D_0016CEC0 __asm__("D_L01_0016CEC0");
@@ -193,19 +189,18 @@ void FUN_L01_002b8f98(void) {
     base[14].vif1 = 0;
     p = (u8 *)(base + 15);
     l01_packet.tag->tag |= ((p - (u8 *)l01_packet.tag) >> 4) - 1;
-    D_0015F5C0 = p;
+    l01_packet.bytes = p;
     FUN_L01_002b4c28();
     l01_packet.tag->tag = 0x30000007;
     l01_packet.tag->addr = (u32)D_L01_001CAC80;
     l01_packet.tag->vif0 = 0;
     l01_packet.tag->vif1 = 0x50000007;
-    D_0015F634 = -1;
-    D_0015F628 = -1;
-    D_0015F62C = -1;
+    D_L01_00161228 = 0xFFFFFFFF;
+    D_L01_0016122C = 0xFFFFFFFF;
+    D_L01_00161230 = 0xFFFFFFFF;
+    D_L01_00161234 = 0xFFFFFFFF;
     l01_packet.tag++;
-    D_0015F630 = -1;
 }
-#endif
 #include "qcopy.h"
 #define F(p, o) (*(float *)((p) + (o)))
 
