@@ -703,15 +703,15 @@ void FUN_L00_001f4598(void) {
             break;
         case 9:
             if ((D_0013C940.buttons.w.pressed & 0x50) != 0) {
-                if ((D_0013C940.buttons.w.pressed & 0x40) == 0) {
-                    g_debug_menu.scene_index = g_debug_menu.scene_index + -1;
-                    if (g_debug_menu.scene_index < -1) {
-                        g_debug_menu.scene_index = 0x23;
-                    }
-                } else {
+                if ((D_0013C940.buttons.w.pressed & 0x40) != 0) {
                     g_debug_menu.scene_index = g_debug_menu.scene_index + 1;
                     if (g_debug_menu.scene_index == 0x24) {
                         g_debug_menu.scene_index = -1;
+                    }
+                } else {
+                    g_debug_menu.scene_index = g_debug_menu.scene_index + -1;
+                    if (g_debug_menu.scene_index < -1) {
+                        g_debug_menu.scene_index = 0x23;
                     }
                 }
             }
@@ -762,50 +762,33 @@ void FUN_L00_001f4598(void) {
         } else {
             counter = (u32 *)&current_bolt_count;
         }
-        if ((D_0013C940.buttons.w.held & 8) == 0) {
-            if ((D_0013C940.buttons.w.held & 2) == 0) {
-                if ((D_0013C940.buttons.w.pressed & 0x40) != 0) {
-                    *counter = *counter + 1;
-                }
-                current_count = *counter;
-                if ((D_0013C940.buttons.w.pressed & 0x20) != 0) {
-                    new_count = current_count - 1;
-                    if (0 < (int)current_count)
-                        goto store_reduced_count;
-                    goto reload_count;
-                }
-            } else {
-                if ((D_0013C940.buttons.w.pressed & 0x40) != 0) {
-                    *counter = *counter + 600;
-                }
-                if ((D_0013C940.buttons.w.pressed & 0x20) == 0) {
-                    current_count = *counter;
-                } else {
-                    if ((int)*counter < 0x259) {
-                        *counter = 0;
-                    } else {
-                        new_count = *counter - 600;
-                    store_reduced_count:
-                        *counter = new_count;
-                    }
-                reload_count:
-                    current_count = *counter;
-                }
+        if (D_0013C940.buttons.w.held & 8) {
+            if (D_0013C940.buttons.w.pressed & 0x40)
+                *counter += 60;
+            if (D_0013C940.buttons.w.pressed & 0x20) {
+                if ((int)*counter > 60)
+                    *counter -= 60;
+                else
+                    *counter = 0;
+            }
+        } else if (D_0013C940.buttons.w.held & 2) {
+            if (D_0013C940.buttons.w.pressed & 0x40)
+                *counter += 600;
+            if (D_0013C940.buttons.w.pressed & 0x20) {
+                if ((int)*counter > 600)
+                    *counter -= 600;
+                else
+                    *counter = 0;
             }
         } else {
-            if ((D_0013C940.buttons.w.pressed & 0x40) != 0) {
-                *counter = *counter + 0x3c;
+            if (D_0013C940.buttons.w.pressed & 0x40)
+                *counter += 1;
+            if (D_0013C940.buttons.w.pressed & 0x20) {
+                if ((int)*counter > 0)
+                    *counter -= 1;
             }
-            if ((D_0013C940.buttons.w.pressed & 0x20) != 0) {
-                if (0x3c < (int)*counter) {
-                    new_count = *counter - 0x3c;
-                    goto store_reduced_count;
-                }
-                *counter = 0;
-                goto reload_count;
-            }
-            current_count = *counter;
         }
+        current_count = *counter;
         if ((int)maximum_count < (int)current_count) {
             *counter = maximum_count;
         }
@@ -831,7 +814,7 @@ void FUN_L00_001f4598(void) {
             if ((D_0013C940.buttons.held_pressed & 0x400000010) != 0) {
                 D_L00_0015F448 = D_L00_0015F448 - 1024.0f;
             }
-            if (D_L00_0015F44C < D_L00_0015F448) {
+            if (D_L00_0015F448 > D_L00_0015F44C) {
                 D_L00_0015F448 = D_L00_0015F44C;
             } else if (D_L00_0015F448 < 0.0f) {
                 D_L00_0015F448 = 0.0f;
@@ -846,7 +829,7 @@ void FUN_L00_001f4598(void) {
             }
             if (524288.0f < D_L00_0015F44C) {
                 D_L00_0015F44C = 524288.0f;
-            } else if (D_L00_0015F44C < D_L00_0015F448) {
+            } else if (D_L00_0015F448 > D_L00_0015F44C) {
                 D_L00_0015F44C = D_L00_0015F448;
             }
         }
@@ -877,7 +860,7 @@ void FUN_L00_001f4598(void) {
             }
         }
         if (g_debug_menu.selected_row == 4) {
-            if ((D_L00_0015F444 != 0xFF) &&
+            if ((D_L00_0015F444 < 0xFF) &&
                 ((D_0013C940.buttons.held_pressed & 0x800000040) != 0)) {
                 D_L00_0015F444 = D_L00_0015F444 + '\x01';
             }
@@ -887,7 +870,7 @@ void FUN_L00_001f4598(void) {
             }
         }
         if (g_debug_menu.selected_row == 5) {
-            if ((D_L00_0015F445 != 0xFF) &&
+            if ((D_L00_0015F445 < 0xFF) &&
                 ((D_0013C940.buttons.held_pressed & 0x800000040) != 0)) {
                 D_L00_0015F445 = D_L00_0015F445 + '\x01';
             }
@@ -898,7 +881,7 @@ void FUN_L00_001f4598(void) {
         }
         if (g_debug_menu.selected_row == 6) {
             byte_value = D_L00_0015F446;
-            if ((D_L00_0015F446 != 0xFF) &&
+            if ((D_L00_0015F446 < 0xFF) &&
                 ((D_0013C940.buttons.held_pressed & 0x800000040) != 0)) {
                 byte_value = byte_value + 1;
                 D_L00_0015F446 = byte_value;
