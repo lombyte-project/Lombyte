@@ -369,6 +369,8 @@ extern int D_L14_001620E4 __attribute__((sda));
 extern int D_L14_001620E8 __attribute__((sda));
 extern int D_L14_001620EC __attribute__((sda));
 
+extern char D_L14_001674C0[];
+
 void FUN_L14_00301fa8(char *m) {
     char *d = *(char **)(m + 0x78);
     VendorBeamFrame *frame = &D_L14_001600EC[*(int *)d];
@@ -385,12 +387,13 @@ void FUN_L14_00301fa8(char *m) {
     int color;
     u8 *indices;
     void *src;
+    float t;
 
     FUN_001fa050(base, &frame->pad40[0x30]);
     FUN_001fa2d8(matrix, base);
     frame = &D_L14_001600EC[*(int *)d];
     qcopy(base + 12, &frame->origin);
-    subtract_vector_xyz(direction, (void *)0x1674c0, &frame->origin);
+    subtract_vector_xyz(direction, D_L14_001674C0, &frame->origin);
     transform_vector_xyz(direction, direction, matrix);
 
     {
@@ -443,9 +446,10 @@ add_main:
                     add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], src);
                 }
             }
+            t = convert_integer_to_float(point - rounded) * 0.25f;
             j = i++;
             packet[0].uv[j][0] = ((float *)0x001e5fd0)[j * 2] +
-                convert_integer_to_float(point - rounded) * 0.25f;
+                t;
         }
         draw_geometry_quad(&packet[0], base, 0);
     }
@@ -483,9 +487,10 @@ add_branch:
                             add_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], src);
                         }
                     }
+                    t = convert_integer_to_float(point - rounded) * 0.25f;
                     j = k++;
                     packet[0].uv[j][0] = ((float *)0x001e5fd0)[j * 2] +
-                        convert_integer_to_float(point - rounded) * 0.25f;
+                        t;
                 }
                 draw_geometry_quad(&packet[0], base, 0);
             }
