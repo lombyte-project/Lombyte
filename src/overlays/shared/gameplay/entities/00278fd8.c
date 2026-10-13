@@ -1367,8 +1367,9 @@ void FUN_L15_0029a570(void *mp, int flag) {
                 float vy;
                 float vz;
                 frame_time_value = D_0015ED6C;
+                fall_speed = D_L15_001613F4;
                 frame_time_sq_value = D_0015ED70;
-                fall_speed = D_L15_001613F4 * frame_time_sq_value;
+                fall_speed = fall_speed * frame_time_sq_value;
                 vx = D_L15_00161408 * frame_time_value;
                 vy = D_L15_00161404 * frame_time_value;
                 vz = D_L15_0016140C * frame_time_value;
