@@ -1353,7 +1353,7 @@ mark_hit:
             slot = &slots[selected];
             vector = slot->moby->pvars;
             FUN_L00_0025f090(moby, &slot->moby->pos, -1, 2.0f, 13.0f);
-            FUN_001f9a28(vector, &slot->moby->pos, &(*(struct Moby **)((char *)vars + 0x64 + selected * 16))->pos);
+            FUN_001f9a28(vector, &slot->moby->pos, &vars->slots[selected].anchor->pos);
             normalize_vector_xyz(vector, vector, D_0015ED6C * 10.0f);
             slot->moby->state = 1;
             slot->moby = 0;
@@ -1369,7 +1369,7 @@ mark_hit:
                 if (slot->moby != 0) {
                     u8 *vector = slot->moby->pvars;
                     FUN_L00_0025f090(moby, &slot->moby->pos, -1, 2.0f, 13.0f);
-                    FUN_001f9a28(vector, &slot->moby->pos, &(*(struct Moby **)((char *)vars + 0x64 + index * 16))->pos);
+                    FUN_001f9a28(vector, &slot->moby->pos, &vars->slots[index].anchor->pos);
                     normalize_vector_xyz(vector, vector, D_0015ED6C * 10.0f);
                     slot->moby->state = 1;
                     slot->moby = 0;
