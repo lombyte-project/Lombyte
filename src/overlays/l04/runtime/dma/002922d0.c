@@ -513,7 +513,7 @@ int FUN_L04_00295778(struct Moby *m, LegRig *rig, float amount, float target, fl
         {
             int i;
             for (i = 0; i < 8 && rig_probe((float *)local.joints, probe_start, probe_end, 4, m); i++) {
-                *(u128 *)local.joints = *(u128 *)D_L04_00173FF0;
+                qcopy(local.joints, D_L04_00173FF0);
                 flags |= 1;
             }
         }
