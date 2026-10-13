@@ -300,7 +300,7 @@ void FUN_L00_002a5040(u8 *moby) {
     Point_2a5040 orbit[4];
     Vars_2a5040 *vars = *(Vars_2a5040 **)(moby + 0x78);
     s32 *indices = (s32 *)0x1d7460;
-    f32 *points = (f32 *)0x1d7360;
+    extern f32 points[] __asm__("D_L00_001D7360");
     f32 *uvs = (f32 *)0x1d73f0;
     f32 *uvs_y = (f32 *)0x1d73f4;
     u32 *colors = (u32 *)0x1d7438;
@@ -393,7 +393,7 @@ void FUN_L00_002a5040(u8 *moby) {
     orbit_copy[0] = orbit[0];
     orbit_copy[1] = orbit[1];
     orbit_copy[3] = orbit[3];
-    zero = orbit[0].w;
+    zero = 0.0f;
     rotation[0] = 0.0f;
     rotation[1] = 0.0f;
     rotation[2] = D_L00_00166C80_2a5040.f158;
@@ -431,14 +431,17 @@ void FUN_L00_002a5040(u8 *moby) {
     quad.uv[5] = 1.0f;
     quad.uv[6] = 1.0f;
     draw_geometry_quad(&quad, 0, 1);
-    for (i = 0; i < 4; i++) {
-        angle = (f32)i * 3.14159f * 0.5f - 3.14159f;
-        orbit[0].x = fast_cos_2a5040(angle) * 1.1f;
-        orbit[0].y = fast_sin(angle) * 1.1f;
-        orbit[0].z = 0.59f;
-        transform_point_2a5040(&orbit[0], &orbit[0], moby + 0xc0);
-        add_vector_xyz(&orbit[0], &orbit[0], moby + 0x10);
-        FUN_L00_00263618(&orbit[0], *(u32 *)(moby + 0x90) & 0xffff0000, 0.1333f, zero);
+    {
+        s32 i;
+        for (i = 0; i < 4; i++) {
+            angle = (f32)i * 3.14159f * 0.5f - 3.14159f;
+            orbit[0].x = fast_cos_2a5040(angle) * 1.1f;
+            orbit[0].y = fast_sin(angle) * 1.1f;
+            orbit[0].z = 0.59f;
+            transform_point_2a5040(&orbit[0], &orbit[0], moby + 0xc0);
+            add_vector_xyz(&orbit[0], &orbit[0], moby + 0x10);
+            FUN_L00_00263618(&orbit[0], *(u32 *)(moby + 0x90) & 0xffff0000, 0.1333f, zero);
+        }
     }
 }
 #endif
