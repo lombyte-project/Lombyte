@@ -388,6 +388,8 @@ void FUN_L14_00301fa8(char *m) {
     u8 *indices;
     void *src;
     float t;
+    float *uv, *uv_base;
+    int next;
 
     FUN_001fa050(base, &frame->pad40[0x30]);
     FUN_001fa2d8(matrix, base);
@@ -418,7 +420,7 @@ void FUN_L14_00301fa8(char *m) {
 
     clear_u64_value(start);
     indices = (u8 *)(d + 0x18);
-    for (point = 0; point < 31; point++) {
+    for (point = 0; point < 31; point = next) {
         qcopy(end, start);
         if (point < 30) {
             subtract_vector_xyz(side, d + 0x20 + (point << 4), d + 0x40 + (point << 4));
@@ -428,6 +430,7 @@ void FUN_L14_00301fa8(char *m) {
         } else {
             clear_u64_value(start);
         }
+        next = point + 1;
         rounded = (point / 4) * 4;
         for (i = 0; i < 4;) {
             if (i < 2) {
@@ -456,7 +459,7 @@ add_main:
     for (strip = 0; strip < 4; strip++) {
         clear_u64_value(start);
         if (indices[strip] < 31) {
-            for (point = 0; point < 3; point++) {
+            for (point = 0; point < 3; point = next) {
                 qcopy(end, start);
                 if (point < 2) {
                     subtract_vector_xyz(side, d + (point << 6) + 0x420 + (strip << 4),
@@ -469,7 +472,10 @@ add_main:
                     clear_u64_value(start);
                 }
                 if (point == 0) qcopy(end, start);
+                next = point + 1;
                 rounded = (point / 4) * 4;
+                uv = &packet[0].uv[0][0];
+                uv_base = (float *)0x001e5fd0;
                 for (k = 0; k < 4;) {
                     if (k < 2) {
                         packet[0].vertices[k] = *(u128 *)(d + (point << 6) + 0x420 + (strip << 4));
@@ -489,8 +495,10 @@ add_branch:
                     }
                     t = convert_integer_to_float(point - rounded) * 0.25f;
                     j = k++;
-                    packet[0].uv[j][0] = ((float *)0x001e5fd0)[j * 2] +
-                        t;
+                    t = *uv_base + t;
+                    uv_base += 2;
+                    *uv = t;
+                    uv += 2;
                 }
                 draw_geometry_quad(&packet[0], base, 0);
             }
