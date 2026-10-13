@@ -392,10 +392,14 @@ void FUN_L10_002f5b58(char *moby) {
     FUN_001f99f8(work + 0x30);
     {
         char *source = *(char **)(D_L10_00167100 + 0x184);
-        *(u128 *)moby_scale = *(u128 *)(source + 0x30);
-        *(u128 *)(moby + 0x00) = *(u128 *)(source + 0x00);
-        *(u128 *)moby_pos = *(u128 *)(source + 0x10);
-        *(u128 *)moby_rot = *(u128 *)(source + 0x20);
+        source += 0x30;
+        *(u128 *)moby_scale = *(u128 *)source;
+        source -= 0x30;
+        *(u128 *)moby = *(u128 *)source;
+        source += 0x10;
+        *(u128 *)moby_pos = *(u128 *)source;
+        source += 0x10;
+        *(u128 *)moby_rot = *(volatile u128 *)source;
     }
     if (*(int *)(data + 0x4c) == 0)
         hero_set_state(0x72, 1);
