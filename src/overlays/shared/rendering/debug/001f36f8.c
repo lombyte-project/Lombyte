@@ -451,7 +451,7 @@ extern u8 D_L00_0016CA40[] NOT_SDA;
 #define D_L00_0016CC7C (*(s32 *)(D_L00_0016CA40 + 0x23C))
 #define D_L00_0016CC80 (*(s32 *)(D_L00_0016CA40 + 0x240))
 #define D_L00_0016CC84 (*(s32 *)(D_L00_0016CA40 + 0x244))
-extern f32 *D_L00_00173E20 MACRO_ADDR;
+extern f32 *D_L00_00173E20 NOT_SDA;
 extern u8 item_defs[] __asm__("D_L00_00179AC0") NOT_SDA;
 #define D_L00_00179AFE ((s16 *)(item_defs + 0x3E))
 #include "rnc/ui/vendor/vendor_item_info.h"
@@ -466,7 +466,7 @@ extern const char D_L00_001E7938[];
 extern const char D_L00_001E7958[];
 extern const char D_L00_001E7970[];
 extern const char D_L00_001E7990[];
-extern u8 D_L00_0015EFD0[];
+extern u8 D_L00_0015EFD0[] __attribute__((sda));
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void FUN_001fb280(s32, s32, s32);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -494,7 +494,7 @@ void FUN_L00_001f4598(void) {
     u8 *level;
     f32 *capture_positions;
     char *player_setting;
-    u32 byte_value;
+    u8 byte_value;
     f32 dimension, scale, angle;
     f64 formatted_x, formatted_y, formatted_z;
     s32 file, file_size;
@@ -504,8 +504,8 @@ void FUN_L00_001f4598(void) {
         char capture_path[16];
     } capture __attribute__((aligned(16)));
     char path_buffer[48];
-    char position_buffer[48];
     char angle_buffer[16];
+    char position_buffer[48];
     sound_update();
     if ((D_0013C940.buttons.w.pressed & 0x500) != 0) {
         D_L00_0015F5C4 = g_debug_menu.unknown_a4;
@@ -581,13 +581,16 @@ void FUN_L00_001f4598(void) {
                      g_debug_menu.control_mode < 0)) {
                     g_debug_menu.control_mode = 3;
                 }
-                if (g_debug_menu.control_mode == 1) {
+                switch (g_debug_menu.control_mode) {
+                case 1: {
                     g_debug_menu.update_flags = 0;
-                } else if (g_debug_menu.control_mode < 2) {
-                    if (g_debug_menu.control_mode == 0) {
-                        g_debug_menu.update_flags = 0xf;
-                    }
-                } else if (g_debug_menu.control_mode == 2) {
+                break;
+                }
+                case 0: {
+                    g_debug_menu.update_flags = 0xf;
+                    break;
+                }
+                case 2: {
                     g_debug_menu.update_flags = 0;
                     FUN_001f9a28(capture.difference, hero.motion.pos.f, D_L00_00166C80.camera.position);
                     g_debug_menu.target_distance = FUN_001f9b20(capture.difference);
@@ -597,8 +600,12 @@ void FUN_L00_001f4598(void) {
                     g_debug_menu.target_height = hero.motion.pos.f[2] - D_L00_00166C80.camera.position[2];
                     g_debug_menu.target_yaw =
                         fast_subtract_rotations(hero.motion.rot.f[2], D_L00_00166C80.camera.angles[2]);
-                } else if (g_debug_menu.control_mode == 3) {
+                break;
+                }
+                case 3: {
                     g_debug_menu.update_flags = 6;
+                    break;
+                }
                 }
             }
             break;
@@ -680,14 +687,14 @@ void FUN_L00_001f4598(void) {
             if ((D_0013C940.buttons.w.pressed & 0x50) != 0) {
                 enabled = g_debug_menu.screen_mode == 0;
                 g_debug_menu.screen_mode = (u32)enabled;
-                if (enabled) {
-                    scale = 0.125f;
-                } else {
+                if (!enabled) {
                     scale = 0.5f;
+                } else {
+                    scale = 0.125f;
                 }
-                dimension = (float)FUN_001fa6c0(occl_cam_param0);
+                dimension = (float)FUN_001fa6c0((s16)occl_cam_param0);
                 D_L00_0016CC40 = dimension * scale;
-                dimension = (float)FUN_001fa6c0(occl_cam_param1);
+                dimension = (float)FUN_001fa6c0((s16)occl_cam_param1);
                 D_L00_0016CC44 = dimension * scale;
                 D_L00_0016CC48 = D_L00_0016CC40 * 4.0f;
                 D_L00_0016CC4C = D_L00_0016CC44 * 4.0f;
@@ -722,7 +729,7 @@ void FUN_L00_001f4598(void) {
                         (char *)(g_debug_menu.segment_index + D_0015ED84 * 0x10 + D_0014C050);
                     byte_value = '\0';
                     if (*player_setting == '\0') {
-                        byte_value = -1;
+                        byte_value = 255;
                     }
                     *player_setting = byte_value;
                     mission_state[index] = byte_value;
