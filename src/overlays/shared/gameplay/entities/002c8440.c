@@ -1374,7 +1374,7 @@ void FUN_L00_002cbcc0(u8 *m, s32 enabled)
     s32 color;
     s32 sign;
     u8 *effect;
-    u8 alpha = 0x44;
+    s32 alpha;
 
     handle = (void **)(*(u8 **)(m + 0x78) + 0x2c);
     for (i = 16; i >= 0; i--) {
@@ -1398,23 +1398,30 @@ void FUN_L00_002cbcc0(u8 *m, s32 enabled)
         }
     }
 
-    for (j = 2; j >= 0; j--) {
-        color = ((u32)FUN_L00_00257b90_2cbcc0(0x20, 0x80) << 24) | 0x606060;
-        sign = FUN_L00_00257b50_2cbcc0(2) ? -1 : 1;
-        vectors[0].q = 0;
-        vectors[0].f[2] = 1.0f;
-        vectors[0].f[3] = 1.0f;
-        vectors[0].f[2] = FUN_L00_00257be8_2cbcc0(0.01f, 0.025f) * D_0015ED60_2cbcc0;
-        effect = FUN_0026d000_2cbcc0(pos, sign, &vectors[0], color,
-            0.2f, 1.0f, 1.02f, 140000.0f);
-        if (effect != 0) {
-            *(s16 *)(effect + 0xa) = FUN_001fef20_2cbcc0(FUN_L00_00257b90_2cbcc0(50, 80));
-            effect += 0x20;
-            *(s32 *)(effect + 4) = 2;
-            effect[0xa] = color >> 24;
-            effect[0xb] = effect[-0x16];
-            if (FUN_L00_00257b50_2cbcc0(2))
-                effect[-0x1d] = alpha;
+    {
+        s32 j;
+        for (j = 2; j >= 0; j--) {
+            color = ((u32)FUN_L00_00257b90_2cbcc0(0x20, 0x80) << 24) | 0x606060;
+            sign = FUN_L00_00257b50_2cbcc0(2) ? -1 : 1;
+            vectors[0].q = 0;
+            vectors[0].f[2] = 1.0f;
+            vectors[0].f[3] = 1.0f;
+            vectors[0].f[2] = FUN_L00_00257be8_2cbcc0(0.01f, 0.025f) * D_0015ED60_2cbcc0;
+            effect = FUN_0026d000_2cbcc0(pos, sign, &vectors[0], color,
+                0.2f, 1.0f, 1.02f, 140000.0f);
+            if (effect != 0) {
+                *(s16 *)(effect + 0xa) = FUN_001fef20_2cbcc0(FUN_L00_00257b90_2cbcc0(50, 80));
+                /* The direction is no longer needed; retain the effect field address. */
+                sign = (s32)(effect + 0x20);
+                *(s32 *)(sign + 4) = 2;
+                ((u8 *)sign)[0xa] = color >> 24;
+                ((u8 *)sign)[0xb] = effect[0xa];
+                if (FUN_L00_00257b50_2cbcc0(2)) {
+                    /* The fixed low color byte is 0x60, so the alpha byte is 0x44. */
+                    alpha = color ^ 0x24;
+                    effect[3] = alpha;
+                }
+            }
         }
     }
 }
