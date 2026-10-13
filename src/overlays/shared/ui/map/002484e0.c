@@ -57,6 +57,7 @@ void FUN_L00_002484e0(f32 *position) {
     s32 mode15;
     s32 mode16;
     s32 i;
+    s32 *filter = filters;
 
     if (D_L00_00184218 == 0) return;
     if (*(s32 *)0x0015fdf8 != 0) {
@@ -76,16 +77,16 @@ void FUN_L00_002484e0(f32 *position) {
     mode15 = hero.state.control_mode == 15;
     mode16 = hero.state.control_mode == 16;
 
-    for (i = 0; i < 16; i++) {
+    for (i = 0; i < 16; i++, filter++) {
         u32 flags;
         f32 value;
         MapFilterCallback callback;
-        filters[i] = 1;
+        *filter = 1;
         if (i <= 0) continue;
         if (D_L00_00182BA0[level][i].lower != D_L00_00182BA0[level][i].upper) {
             value = *(f32 *)((u8 *)hero.moby + 0x18);
             if (D_L00_00182BA0[level][i].lower > value || value > D_L00_00182BA0[level][i].upper) {
-                filters[i] = 0;
+                *filter = 0;
                 continue;
             }
         }
@@ -115,7 +116,7 @@ void FUN_L00_002484e0(f32 *position) {
 #undef CHECK_CALLBACK
         continue;
 reject:
-        filters[i] = 0;
+        *filter = 0;
     }
 
     x_min = x - 16;
@@ -143,7 +144,7 @@ reject:
                 s64 column = column_start;
                 s32 test_column = test_start + column_offset;
                 s32 byte_column = byte_start + column_offset;
-                for (; column < column_end; column = (s32)column + 1, byte_column++, test_column++) {
+                for (; column < column_end; column++, byte_column++, test_column++) {
                     s32 bitmap_column = (s32)column;
                     volatile u8 *pixel;
                     if (bitmap_column < 0) bitmap_column += 7;
