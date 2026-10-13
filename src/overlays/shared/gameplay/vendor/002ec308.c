@@ -1130,6 +1130,7 @@ int FUN_L02_002fb9c8(char *moby) {
     if (*(float *)(data + 0x4c) != 0.0f)
         follow_camera_set_offset_scale(0, *(float *)(data + 0x4c), 0.005f);
     if (*(short *)(data + 0x3c) == 3) {
+        float heading;
         FUN_L00_002e8568(0);
         FUN_L00_002e8620();
         FUN_L00_002e8648();
@@ -1147,6 +1148,7 @@ int FUN_L02_002fb9c8(char *moby) {
         FUN_L00_002e85d8(0.02f, 0.2f);
         FUN_L00_002e8450(0, 5.84f, 0.003f);
         if (*(short *)(data + 0x3c) == 4) {
+            float angle;
             FUN_001f9a28(vec, target + 0x10, &hero.motion.pos);
             angle = FUN_001f9e90(vec[0], vec[1]);
             if (hit && fast_difference_between_rotations(angle, *(float *)(data + 0x40)) > 1.9198622f) {
