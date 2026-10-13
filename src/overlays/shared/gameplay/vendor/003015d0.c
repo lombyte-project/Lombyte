@@ -397,13 +397,13 @@ void FUN_L14_00301fa8(char *m) {
     packet[0].tag = packet[1].tag = packet[2].tag = 0;
     for (i = 0; i < 4; i++) {
         float v = ((float *)0x001e5fd0)[i * 2 + 1];
-        color = *(int *)(d + 0x14);
-        packet[0].uv[i][1] = v;
-        packet[1].uv[i][1] = v;
         packet[2].uv[i][1] = v;
-        packet[0].colors[i] = color;
-        packet[1].colors[i] = color;
+        packet[1].uv[i][1] = v;
+        packet[0].uv[i][1] = v;
+        color = *(int *)(d + 0x14);
         packet[2].colors[i] = color;
+        packet[1].colors[i] = color;
+        packet[0].colors[i] = color;
     }
 
     clear_u64_value(start);
