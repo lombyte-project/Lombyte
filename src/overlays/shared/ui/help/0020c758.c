@@ -1337,15 +1337,15 @@ void FUN_L00_0020f160(void *moby, void *matrix)
         FUN_001ff260_f160(sum + i * 16);
 
     if (hero.state.control_mode == 22)
-        limit = 14;
+        D_0013F694 = 14;
     else if (hero.state.current == 2)
-        limit = 5;
+        D_0013F694 = 5;
     else
-        limit = 11;
-    D_0013F694 = limit;
-    if ((*(s32 *)(hero.pad_21B8 + 8)) < D_0013F694)
+        D_0013F694 = 11;
+    limit = D_0013F694;
+    if ((*(s32 *)(hero.pad_21B8 + 8)) < limit)
         (*(s32 *)(hero.pad_21B8 + 8))++;
-    else if ((*(s32 *)(hero.pad_21B8 + 8)) > D_0013F694)
+    else if ((*(s32 *)(hero.pad_21B8 + 8)) > limit)
         (*(s32 *)(hero.pad_21B8 + 8))--;
     n = (*(s32 *)(hero.pad_21B8 + 8));
     if (n < 2)
@@ -1374,9 +1374,16 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     for (i = 0; i < n; i++)
         if (maximum < scores[i])
             maximum = scores[i];
-    for (i = 0; i < n; i++)
-        if (maximum * 0.2f < scores[i])
-            count++;
+    if (n > 0) {
+        score_ptr = scores;
+        i = n;
+        do {
+            if (maximum * 0.2f < *score_ptr)
+                count++;
+            i--;
+            score_ptr++;
+        } while (i != 0);
+    }
     chosen = 0;
     limit = count > 2;
     for (i = 0; i < n; i++) {
