@@ -593,8 +593,10 @@ void FUN_L05_0030c220(struct Moby *m) {
             offset_a_z = pass * 10.0f;
             offset_b_x = phase * 6.0f * sign;
             offset_b_z = pass * 12.0f;
-            vertex_a[2] += offset_a_z;
-            vertex_a[0] += offset_a_x;
+            offset_a_z = vertex_a[2] + offset_a_z;
+            offset_a_x = vertex_a[0] + offset_a_x;
+            vertex_a[2] = offset_a_z;
+            vertex_a[0] = offset_a_x;
             vertex_b[0] += offset_b_x;
             vertex_b[2] += offset_b_z;
             vertex_a += 4;
