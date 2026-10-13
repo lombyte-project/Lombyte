@@ -3,277 +3,416 @@
 #include "asm.h"
 
 /* Level load: relocates sky, uploads textures, loads HUD banks, flushes cache; many DebugPrints. */
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0026b768.s", FUN_L07_0026b768);
-#else
-#include "rnc/overlay/quad.h"
-#define W(a) (*(s32 *)(a))
-#define H(a) (*(s16 *)(a))
-#define UH(a) (*(u16 *)(a))
-#define B(a) (*(u8 *)(a))
-#define Q(a) (*(u64 *)(a))
-#define PRINT_SIZE(label,bytes,scale) debug_print((const char *)(label), FUN_00120478(FUN_001fa6c0(bytes) * (scale)))
-extern void load_hud_banks(void) __asm__("FUN_00202a98");
-extern void copy_words(void *, const void *, s32) __asm__("FUN_001f98d0");
-extern void copy_bytes(void *, const void *, s32) __asm__("FUN_001f9838");
-extern void fill_bytes(void *, s32, s32) __asm__("FUN_001f97e8");
-extern s32 decode_page(u16) __asm__("FUN_001f97a0");
-extern void load_header(s32, s32, s32) __asm__("FUN_L07_00267af0");
+#include "types.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "asm.h"
+#include "qcopy.h"
+
+typedef struct {
+    char *f0;     /* 0x00 */
+    s32 *f4;      /* 0x04: level header */
+    char pad8[4];
+    char *fC;     /* 0x0C */
+    char *f10;    /* 0x10 */
+    char *f14;    /* 0x14: base the header's offsets are taken from */
+    char *f18;    /* 0x18 */
+    char *f1C;    /* 0x1C */
+} Load26b768;
+
+typedef struct {
+    u8 pad0[0x1A];
+    s16 sound;   /* 0x1A */
+    s32 time;    /* 0x1C */
+} Slot26b768;
+
+typedef struct {
+    u8 pad0[0xC];
+    u8 seq_count;   /* 0x0C */
+    u8 count0D;     /* 0x0D */
+    u8 pad0E[0x1A];
+    Slot26b768 *f28; /* 0x28 */
+    u8 pad2C[0x1C];
+    char *seqs[1];  /* 0x48 */
+} Class26b768;
+
+typedef struct {
+    s32 offset;
+    u16 kind;
+    u16 pad6;
+    s32 pad8[2];
+} TexRef26b768;
+
+
+typedef struct {
+    s16 off;
+    s16 count;
+} Span26b768;
+
+extern Load26b768 D_L18_00174800_26b768 __asm__("D_L07_00173E80");
+extern char *D_L18_00174840_26b768[] __asm__("D_L07_00173EC0");
+typedef struct { s16 a; s16 b; s32 *file; } Ldg26b768;
+extern Ldg26b768 D_0015EE48;
+extern s32 current_level_index __asm__("D_0015ED84");
+extern u8 D_0014C050[];
+extern u8 D_L18_0015FC88_26b768[] __asm__("D_L07_0015FC88") __attribute__((section(".sdata")));
+extern s32 D_L07_0015F40C;
+extern s32 sound_bank_handle __asm__("D_0015ED5C");
+extern s32 D_L07_00160004;
+extern s32 D_0015EE8C;
+extern u64 D_L07_00182840[3];
+extern u64 D_L07_00182858[3];
+extern u64 D_L07_00182870[3];
+extern s32 D_L07_00160F54;
+extern s32 D_L07_001C4A80[];
+extern s32 D_L07_0015FFC8;
+extern s32 D_L07_00199B00[];
+extern u8 D_L07_001AEC40[];
+extern s32 D_L07_00160FD4;
+extern s32 D_L07_001C6780[];
+extern s32 D_L07_001604AC;
+extern s32 D_L07_001BC630[];
+extern char *D_L18_0015F600_26b768 __asm__("D_L07_0015F600");
+extern s32 D_L07_0016051C;
+extern Class26b768 *D_L07_00197380[];
+extern s32 D_L07_0016000C;
+extern s32 D_L07_00160010;
+extern s32 D_L07_00160008;
+extern s32 D_L07_001AFC40[];
+extern char *D_L07_001AFCA0[];
+extern s32 D_L07_001AFD00[];
+typedef int Q26b768 __attribute__((mode(TI)));
+extern Q26b768 D_L07_001AFD60[];
+extern u8 D_L07_00197C40[];
+extern char *D_L07_0015F420;
+extern s32 D_L07_0015F438;
+extern s32 D_L07_0015F43C;
+extern s32 D_L07_0015F440;
+extern s32 D_L07_0015FC98;
+extern s32 D_L07_0015FC9C;
+extern s32 D_L07_0015FCA0;
+extern s32 D_L07_0015FCA4;
+extern s32 D_L07_0015FCA8;
+extern char *D_L07_0015F604;
+extern Slot26b768 *D_L07_0015F5F4;
+extern s32 D_L07_0015F5F0;
+extern s32 D_L07_0015FFC0;
+extern s16 D_L07_00197A80[];
+extern u16 D_L07_001AFEE0[][16];
+extern char D_L07_0020FA20[], D_L07_0020FA40[], D_L07_0020FA70[], D_L07_0020FA88[],
+    D_L07_0020FAA0[], D_L07_0020FAB8[], D_L07_0020FAD0[], D_L07_0020FAE8[],
+    D_L07_0020FB00[], D_L07_0020FB18[], D_L07_0020FB30[], D_L07_0020FB50[],
+    D_L07_0020FB68[], D_L07_0020FB80[], D_L07_0020FB98[], D_L07_0020FBB0[],
+    D_L07_0020FBC8[], D_L07_0020FBE0[], D_L07_0020FBF8[], D_L07_0020FC10[],
+    D_L07_0020FC28[], D_L07_0020FC40[], D_L07_0020FC58[], D_L07_0020FC70[],
+    D_L07_0020FC88[], D_L07_0020FCA0[], D_L07_0020FCB8[], D_L07_0020FCD0[],
+    D_L07_0020FCE8[];
+extern char D_L07_0015FC80[];
+extern char D_L07_0032C980[];
+extern s32 D_L07_001B1B00[];
+extern char *D_L18_001C6200_26b768[] __asm__("D_L07_001C5880");
+extern char *D_L18_001BCA30_26b768[] __asm__("D_L07_001BC0B0");
+extern char *D_L18_00160FC0_26b768 __asm__("D_L07_00160FC0");
+extern char *D_L18_00160494_26b768 __asm__("D_L07_00160494");
+extern char *D_L18_0015FFD8_26b768 __asm__("D_L07_0015FFD8");
+extern char *D_L18_0015FFE8_26b768 __asm__("D_L07_0015FFE8");
+extern char *D_L18_00160108_26b768 __asm__("D_L07_00160108");
+extern char *D_L18_0016016C_26b768 __asm__("D_L07_0016016C");
+extern s32 D_0014EE90[16];
+typedef struct { u8 pad[0x10]; u32 v __attribute__((packed, aligned(1))); } Una26b768;
+extern u8 D_L07_00179180[];
+extern s32 game_frame __asm__("D_L07_0015F5CC");
+
+extern void FUN_00202a98(void);
+extern void FUN_001f98d0(void *, void *, s32);
+extern void FUN_001f9838_26b768(void *, void *, s32) __asm__("FUN_001f9838");
+extern void FUN_00203120(void *, s32, void *);
 extern void FUN_00118a80(s32);
-extern s32 FUN_L00_0024d8d0(s32, s32);
-extern void FUN_002040e0(s32, s32);
-extern void FUN_002028e0(s32);
-extern void FUN_L00_00241728(s32);
-extern void FUN_00203640(s32, s32, s32 *, s32);
-extern void FUN_L00_00241788(s32, s32);
-extern void FUN_002032e0(s32, s32);
-extern void FUN_00203730(s32, s32, s32 *, s32);
-extern void FUN_001e93e8(s32, s32);
-extern void FUN_00203b08(s32, s32, s32 *, s32 *, s32);
-extern void FUN_00202800(s32, s32);
-extern void FUN_L00_0023f120(s32);
-extern void FUN_L00_0023f0d8(s32);
-extern void FUN_002026c8(s32, s32, s32, s32);
-extern s32 FUN_L00_0023fa00(s32, s32 *);
-extern s32 FUN_L00_00241940(s32);
-extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
-extern f32 FUN_001fa6c0(s32);
-extern s32 FUN_00120478(f32);
-extern void FUN_00226f50(void);
+extern s32 FUN_L00_0024d8d0_26b768(void *, char *) __asm__("FUN_L00_0024d8d0");
+extern s32 FUN_001f97a0(s32);
+extern void FUN_002040e0(char *, void *);
+extern void FUN_002028e0(char *);
+extern void FUN_L00_00241728_26b768(char *) __asm__("FUN_L00_00241728");
+extern void FUN_00203640(char *, void *, void *, s32);
+extern void FUN_L00_00241788_26b768(void *, s32) __asm__("FUN_L00_00241788");
+extern void FUN_002032e0(Class26b768 *, s32);
+extern void FUN_00203730(char *, void *, void *, s32);
+extern void FUN_001e93e8(void *, s32);
+extern void FUN_00203b08(char *, void *, void *, void *, s32);
+extern void FUN_00202800(void *, s32);
+extern void FUN_L00_0023f120(char *);
+extern void FUN_L00_0023f0d8(char *);
+extern void FUN_002026c8(void *, char *, void *, s32);
+extern void printf_1e93b0(const char *, ...) __asm__("FUN_001e93b0");
+extern void FUN_001f97e8(void *, s32, s32);
+extern char *FUN_L00_0023fa00(char *, s32 *);
+extern char *FUN_L00_00241940_26b768(s32) __asm__("FUN_L00_00241940");
+extern f32 int_to_float(s32) __asm__("FUN_001fa6c0");
 extern void FUN_L00_00285008(void);
+extern void FUN_00226f50(void);
 extern void FUN_L00_00264740(void);
 
-s32 FUN_L07_0026b768(s32 load, s32 mode)
-{
-    s32 *header = (s32 *)W(0x00173e84);
-    s32 file = W(0x0015ee4c);
-    s32 base, end, i, j, offset, value, alloc_size, aligned_base;
-    s32 *entry, *out;
-    s16 *table, *record;
-    s32 entity;
-    if (load != 0) load_hud_banks();
-    base = W(0x00173e94);
-    if (load != 0) {
-        copy_words((void *)header, (void *)(file + W(file + 0x10)), W(file + 0x14));
-        W(0x0015880c) = 0;
-        copy_bytes((void *)0x0015fc88, (void *)(0x0014c050 + (W(0x0015ed84) << 4)), 0x10);
-        load_header(file + W(file + 0x18), header[0], (s32)header + header[1]);
-        W(0x00159404) = W(0x0015ed5c);
+#define GS_TEX0(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld) \
+    ((u64)(tbp0) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) \
+     | ((u64)(th) << 30) | ((u64)(tcc) << 34) | ((u64)(tfx) << 35) | ((u64)(cbp) << 37) \
+     | ((u64)(cpsm) << 51) | ((u64)(csm) << 55) | ((u64)(csa) << 56) | ((u64)(cld) << 61))
+#define KB(x) (int_to_float((s32)(x)) * (1.0f / 1024.0f))
+
+/* Reads the level's core data. Its index lists the object classes:
+ *   0x18  moby classes, 0x20 bytes per entry
+ *   0x20  tie classes, 0x20 bytes per entry
+ *   0x28  shrub classes, 0x30 bytes per entry
+ * Each entry holds the offset of the class data, the class number, and at 0x10
+ * sixteen bytes that say which level texture each texture slot uses (0xff
+ * means unused). Each class stores a scale (ties at 0x40, shrubs at 0x20,
+ * mobies at 0x24 of their data); a stored coordinate times scale / 1024 gives
+ * world units. Index 0x10 gives where the sky data starts and 0x14 where the
+ * collision data starts. */
+s32 FUN_L07_0026b768(s32 full, s32 keep) {
+    Load26b768 *ld = &D_L18_00174800_26b768;
+    s32 *h = ld->f4;
+    s32 *src = D_0015EE48.file;
+    char *base;
+    s32 used;
+    char *e;
+    char *free;
+    char *end;
+    Span26b768 *span;
+    TexRef26b768 *tex;
+    TexRef26b768 *t1;
+    TexRef26b768 *t3;
+    TexRef26b768 *t4;
+    char *tbl;
+    s32 i;
+    s32 j;
+    s32 n;
+    s32 k;
+    s32 c1, c2, c3, c4;
+    s32 m;
+    char *p;
+    s32 sq;
+    char *sp;
+    char *q;
+    s32 z;
+    s32 ci;
+    char *x;
+    char *y;
+    s32 a1, a2, a3;
+    char *q1, *q2;
+    u64 *t;
+
+    if (full)
+        FUN_00202a98();
+    base = ld->f14;
+    if (full) {
+        FUN_001f98d0(h, (char *)(src[4] + (s32)src), src[5]);
+        D_L07_0015F40C = 0;
+        FUN_001f9838_26b768(D_L18_0015FC88_26b768, D_0014C050 + current_level_index * 16, 0x10);
+        FUN_00203120((char *)(src[6] + (s32)src), h[0], (char *)h + h[1]);
+        D_L07_00160004 = sound_bank_handle;
         FUN_00118a80(0);
-        end = FUN_L00_0024d8d0(file + W(file + 0x50), base);
-        Q(0x00182840) = 0x80000005c0000000ULL | ((u64)((W(0x0015ee8c) + header[0x25]) >> 8) << 37) | 0x1d308000ULL | (u64)((W(0x0015ee8c) + header[0x24]) >> 8);
-        Q(0x00182848) = 0x0000ffa0000000e0ULL;
-        Q(0x00182850) = 0x0040000400004000ULL;
-        Q(0x00182868) = 0x0040000400004000ULL;
-        Q(0x00182860) = 0x0000ffa0000000e0ULL;
-        Q(0x00182858) = 0x8000000580000000ULL | ((u64)((W(0x0015ee8c) + header[0x27]) >> 8) << 37) | 0x19304000ULL | (u64)((W(0x0015ee8c) + header[0x26]) >> 8);
-        W(0x0015f40c) = base + header[0x18];
-        Q(0x00182880) = 0x0040000400004000ULL;
-        Q(0x00182878) = 0x0000ffa0000000e0ULL;
-        Q(0x00182870) = 0x80000005c0000000ULL | ((u64)((W(0x0015ee8c) + header[0x31]) >> 8) << 37) | 0x1d308000ULL | (u64)((W(0x0015ee8c) + header[0x30]) >> 8);
-        W(0x0015a354) = header[0xc];
-        entry = (s32 *)((s32)header + header[0xd]);
-        out = (s32 *)0x001c4a80;
-        i = 0;
-        if (W(0x0015a354) > 0) do {
-            s32 page = decode_page((u16)entry[1]);
-            out[i] = W(0x0015f40c) + entry[0] + (page << 28);
-            entry += 4;
-            i++;
-        } while (i < W(0x00160f54));
-        offset = header[0xf];
-        W(0x001593c8) = header[0xe];
-        entry = (s32 *)((s32)header + offset);
-        out = (s32 *)0x00199b00;
-        i = 0;
-        if (W(0x001593c8) > 0) do {
-            s32 page = decode_page((u16)entry[1]);
-            out[i] = W(0x0015f40c) + entry[0] + (page << 28);
-            entry += 4;
-            i++;
-        } while (i < W(0x0015ffc8));
-        copy_words((void *)0x001aec40, (void *)((s32)header + offset), W(0x0015ffc8) << 4);
-        W(0x0015a3d4) = header[0x10];
-        entry = (s32 *)((s32)header + header[0x11]);
-        out = (s32 *)0x001c6780;
-        i = 0;
-        if (W(0x0015a3d4) > 0) do {
-            s32 page = decode_page((u16)entry[1]);
-            out[i] = W(0x0015f40c) + entry[0] + (page << 28);
-            entry += 4;
-            i++;
-        } while (i < W(0x00160fd4));
-        W(0x001598ac) = header[0x12];
-        entry = (s32 *)((s32)header + header[0x13]);
-        out = (s32 *)0x001bc630;
-        i = 0;
-        if (W(0x001598ac) > 0) do {
-            s32 page = decode_page((u16)entry[1]);
-            out[i] = W(0x0015f40c) + entry[0] + (page << 28);
-            entry += 4;
-            i++;
-        } while (i < W(0x001604ac));
-        FUN_002040e0(base + header[2], (s32)header + header[0xd]);
-        if (header[3] == 0) W(0x0015f600) = 0;
-        else W(0x00158a00) = base + header[3];
-        if (header[4] == 0) W(0x0015991c) = 0;
-        else FUN_002028e0(base + header[4]);
-        FUN_L00_00241728(base + header[5]);
-        entry = (s32 *)((s32)header + header[7]);
-        for (i = 0; i < header[6]; i++) {
-            value = entry[0] ? base + entry[0] : 0;
-            FUN_00203640(value, (s32)header + header[0xf], entry + 4, entry[1]);
-            entry += 8;
-        }
-        FUN_L00_00241788((s32)header + header[7], header[7]);
-        entry = (s32 *)((s32)header + header[0x1e]);
-        entity = W(0x00197380);
-        for (i = 0; i < B(W(0x00197380) + 0xc); i++, entry++) {
-            if (*entry != 0) {
-                W(W(0x00197380) + i * 4 + 0x48) = base + *entry;
-                FUN_002032e0(W(0x00197380), i);
+        used = FUN_L00_0024d8d0_26b768((char *)(src[0x14] + (s32)src), base);
+        D_L07_0015F40C = (s32)(base + h[0x18]);
+
+        D_L07_00182840[0] = GS_TEX0((D_0015EE8C + h[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
+            (D_0015EE8C + h[0x25]) >> 8, 0, 0, 0, 4);
+        D_L07_00182840[1] = 0x0000FFA0000000E0;
+        D_L07_00182840[2] = 0x0040000400004000;
+        D_L07_00182858[0] = GS_TEX0((D_0015EE8C + h[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
+            (D_0015EE8C + h[0x27]) >> 8, 0, 0, 0, 4);
+        D_L07_00182858[1] = 0x0000FFA0000000E0;
+        D_L07_00182858[2] = 0x0040000400004000;
+        D_L07_00182870[0] = GS_TEX0((D_0015EE8C + h[0x30]) >> 8, 2, 0x13, 7, 7, 1, 0,
+            (D_0015EE8C + h[0x31]) >> 8, 0, 0, 0, 4);
+        D_L07_00182870[1] = 0x0000FFA0000000E0;
+        D_L07_00182870[2] = 0x0040000400004000;
+
+        t1 = (TexRef26b768 *)((char *)h + h[0xD]);
+        D_L07_00160F54 = h[0xC];
+        for (c1 = 0; c1 < D_L07_00160F54; c1++)
+            D_L07_001C4A80[c1] = D_L07_0015F40C + t1[c1].offset + (FUN_001f97a0(t1[c1].kind) << 28);
+        tex = (TexRef26b768 *)((char *)h + h[0xF]);
+        D_L07_0015FFC8 = h[0xE];
+        for (c2 = 0; c2 < D_L07_0015FFC8; c2++)
+            D_L07_00199B00[c2] = D_L07_0015F40C + tex[c2].offset + (FUN_001f97a0(tex[c2].kind) << 28);
+        FUN_001f98d0(D_L07_001AEC40, tex, D_L07_0015FFC8 * 16);
+        t3 = (TexRef26b768 *)((char *)h + h[0x11]);
+        D_L07_00160FD4 = h[0x10];
+        for (c3 = 0; c3 < D_L07_00160FD4; c3++)
+            D_L07_001C6780[c3] = D_L07_0015F40C + t3[c3].offset + (FUN_001f97a0(t3[c3].kind) << 28);
+        t4 = (TexRef26b768 *)((char *)h + h[0x13]);
+        D_L07_001604AC = h[0x12];
+        for (c4 = 0; c4 < D_L07_001604AC; c4++)
+            D_L07_001BC630[c4] = D_L07_0015F40C + t4[c4].offset + (FUN_001f97a0(t4[c4].kind) << 28);
+
+        FUN_002040e0(base + h[2], (char *)h + h[0xD]);
+        if (h[3])
+            D_L18_0015F600_26b768 = base + h[3];
+        else
+            D_L18_0015F600_26b768 = 0;
+        if (h[4])
+            FUN_002028e0(base + h[4]);
+        else
+            D_L07_0016051C = 0;
+        FUN_L00_00241728_26b768(base + h[5]);
+        for (i = 0, q2 = (char *)h + h[7]; i < h[6]; i++, q2 += 0x20)
+            FUN_00203640(*(s32 *)q2 ? base + *(s32 *)q2 : 0, (char *)h + h[0xF], q2 + 0x10, *(s32 *)(q2 + 4));
+        FUN_L00_00241788_26b768((char *)h + h[7], h[7]);
+        for (sq = 0, p = (char *)h + h[0x1E]; sq < D_L07_00197380[0]->seq_count; sq++, p += 4) {
+            if (*(s32 *)p) {
+                D_L07_00197380[0]->seqs[sq] = base + *(s32 *)p;
+                FUN_002032e0(D_L07_00197380[0], sq);
             }
         }
-        W(0x00159408) = header[0x20];
-        W(0x0016000c) = -1;
-        W(0x00160010) = 0;
-        entry = (s32 *)((s32)header + header[0x21]);
-        for (i = 0; i < header[0x20]; i++, entry += 4) {
-            s32 source;
-            W(0x001afc40 + i * 4) = entry[1];
-            W(0x001afca0 + i * 4) = base + entry[0];
-            W(0x001afd00 + i * 4) = entry[2];
-            source = (s32)header + header[7] + 0x10 + B(0x00197c40 + entry[1]) * 0x20;
-            *(OvlQuad *)(0x001afd60 + i * 0x10) = *(OvlQuad *)source;
+        D_L07_0016000C = -1;
+        q = (char *)h + h[0x21];
+        D_L07_00160010 = 0;
+        D_L07_00160008 = h[0x20];
+        for (m = 0; m < h[0x20]; m++, q += 0x10) {
+            D_L07_001AFC40[m] = *(s32 *)(q + 4);
+            D_L07_001AFCA0[m] = base + *(s32 *)q;
+            D_L07_001AFD00[m] = *(s32 *)(q + 8);
+            { s32 o = D_L07_00197C40[*(s32 *)(q + 4)] * 32 + 0x10;
+            qcopy(&D_L07_001AFD60[m], (char *)h + h[7] + o); }
         }
-        entry = (s32 *)((s32)header + header[9]);
-        for (i = 0; i < header[8]; i++, entry += 8)
-            FUN_00203730(base + entry[0], (s32)header + header[0x11], entry + 4, entry[1]);
-        FUN_001e93e8((s32)header + header[9], header[8]);
-        entry = (s32 *)((s32)header + header[0xb]);
-        for (i = 0; i < header[10]; i++, entry += 12)
-            FUN_00203b08(base + entry[0], (s32)header + header[0x13], entry + 4, entry + 8, entry[1]);
-        W(0x0015f420) = base + header[0x1a];
-        FUN_00202800((s32)header + header[0x17], header[0x16]);
-        if (header[0x28] == 0) {
-            W(0x00158838) = 0; W(0x0015f43c) = 0; W(0x0015f440) = 0;
-        } else FUN_L00_0023f120(base + header[0x28]);
-        if (header[0x29] == 0) {
-            W(0x00159098) = 0; W(0x0015fc9c) = 0; W(0x0015fca4) = 0;
-            W(0x0015fca0) = 0; W(0x0015fca8) = 0;
-        } else FUN_L00_0023f0d8(base + header[0x29]);
-        if (header[0x2a] == 0) W(0x0015f604) = 0;
-        else W(0x00158a04) = base + header[0x2a];
-        FUN_002026c8((s32)header + header[0x1b], base + header[0x19], (s32)header + header[0x15], header[0x14]);
-        table = (s16 *)((s32)header + header[0x1c]);
-        W(0x0015f5f0) = table[1];
-        alloc_size = W(0x0015f5f0) * 0x20;
-        aligned_base = (base + end + 0x3f) & ~0x3f;
-        W(0x0015f5f4) = aligned_base;
-        copy_bytes((void *)aligned_base, (void *)((s32)table + table[0]), alloc_size);
-        offset = (s32)table + table[2];
-        for (i = 0; i < W(0x0015f5f0); i++) {
-            s32 slot = W(0x0015f5f4) + i * 0x20;
-            s16 index = H(slot + 0x1a);
-            if (index < table[3]) UH(slot + 0x1a) = UH(offset + index * 4);
-            else { debug_print((const char *)0x0020fa20); H(W(0x0015f5f4) + i * 0x20 + 0x1a) = -1; }
-            W(W(0x0015f5f4) + i * 0x20 + 0x1c) = W(0x0015ed5c);
+        for (i = 0, q2 = (char *)h + h[9]; i < h[8]; i++, q2 += 0x20)
+            FUN_00203730(base + *(s32 *)q2, (char *)h + h[0x11], q2 + 0x10, *(s32 *)(q2 + 4));
+        FUN_001e93e8((char *)h + h[9], h[8]);
+        for (i = 0, q2 = (char *)h + h[0xB]; i < h[0xA]; i++, q2 += 0x30)
+            FUN_00203b08(base + *(s32 *)q2, (char *)h + h[0x13], q2 + 0x10, q2 + 0x20, *(s32 *)(q2 + 4));
+        D_L07_0015F420 = base + h[0x1A];
+        FUN_00202800((char *)h + h[0x17], h[0x16]);
+        if (h[0x28]) {
+            FUN_L00_0023f120(base + h[0x28]);
+        } else {
+            D_L07_0015F438 = 0;
+            D_L07_0015F43C = 0;
+            D_L07_0015F440 = 0;
         }
-        record = table + 4;
-        value = W(0x0015ffc0);
-        for (i = 0; i < value; i++, record += 2) {
-            s32 copy_index;
-            s32 *object_slot = (s32 *)(0x00197380 + i * 4);
-            s16 *ids = (s16 *)((s32)table + record[0]);
-            value = W(0x0015ffc0);
-            if (*object_slot == 0) {
-                for (j = 0; j < W(0x00160008); j++) {
-                    if (W(0x001afc40 + j * 4) == H(0x00197a80 + i * 2)) {
-                        if (j < W(0x00160008)) {
-                            fill_bytes((void *)(0x001afee0 + j * 0x20), -1, 0x20);
-                            value = W(0x0015ffc0);
-                            ids = (s16 *)((s32)table + record[0]);
-                            for (copy_index = 0; copy_index < record[1]; copy_index++) {
-                                UH(0x001afee0 + j * 0x20 + copy_index * 2) = ids[copy_index * 2];
-                                /* Retail switches the outer bound only if a sixteenth ID remains. */
-                                if (copy_index + 1 >= record[1]) break;
-                                if (copy_index >= 14) {
-                                    value = W(0x001593c0);
-                                    break;
-                                }
-                            }
-                        }
+        if (h[0x29]) {
+            FUN_L00_0023f0d8(base + h[0x29]);
+        } else {
+            D_L07_0015FC98 = 0;
+            D_L07_0015FC9C = 0;
+            D_L07_0015FCA4 = 0;
+            D_L07_0015FCA0 = 0;
+            D_L07_0015FCA8 = 0;
+        }
+        if (h[0x2A])
+            D_L07_0015F604 = base + h[0x2A];
+        else
+            D_L07_0015F604 = 0;
+        {
+            char *x1 = base + h[0x19];
+            char *x2 = (char *)h + h[0x15];
+            FUN_002026c8((char *)h + h[0x1B], x1, x2, h[0x14]);
+        }
+
+        tbl = (char *)h + h[0x1C];
+        span = (Span26b768 *)tbl;
+        free = (char *)((u32)(base + used + 0x3F) & ~0x3F);
+        n = span->count;
+        D_L07_0015F5F4 = (Slot26b768 *)free;
+        D_L07_0015F5F0 = n;
+        FUN_001f9838_26b768(free, tbl + span->off, n * 32);
+        span++;
+        free += n * 32;
+        e = tbl + span->off;
+        for (a3 = 0; a3 < D_L07_0015F5F0; a3++) {
+            if (D_L07_0015F5F4[a3].sound >= span->count) {
+                printf_1e93b0(D_L07_0020FA20);
+                D_L07_0015F5F4[a3].sound = -1;
+            } else {
+                D_L07_0015F5F4[a3].sound = *(u16 *)(e + D_L07_0015F5F4[a3].sound * 4);
+            }
+            D_L07_0015F5F4[a3].time = sound_bank_handle;
+        }
+        end = free + 0x3F;
+        span++;
+        for (ci = 0; ci < D_L07_0015FFC0; ci++, span++) {
+            Class26b768 *cls = D_L07_00197380[ci];
+            if (cls == 0) {
+                for (j = 0; j < D_L07_00160008; j++)
+                    if (D_L07_001AFC40[j] == D_L07_00197A80[ci])
                         break;
-                    }
+                if (j < D_L07_00160008) {
+                    FUN_001f97e8(D_L07_001AFEE0[j], -1, 0x20);
+                    e = tbl + span->off;
+                    for (k = 0; k < span->count && k < 15; k++, e += 4)
+                        D_L07_001AFEE0[j][k] = *(u16 *)e;
                 }
             } else {
-                s32 stamp;
-                if (record[1] != B(*object_slot + 0xd))
-                    debug_print((const char *)0x0020fa40, H(0x00197a80 + i * 2));
-                stamp = W(0x0015ed5c);
-                ids = (s16 *)((s32)table + record[0]);
-                value = W(0x0015ffc0);
-                for (j = 0; j < B(*object_slot + 0xd); j++) {
-                    s32 object = W(*object_slot + 0x28) + j * 0x20;
-                    UH(object + 0x1a) = ids[j * 2];
-                    W(W(*object_slot + 0x28) + j * 0x20 + 0x1c) = stamp;
+                if (span->count != cls->count0D)
+                    printf_1e93b0(D_L07_0020FA40, D_L07_00197A80[ci]);
+                e = tbl + span->off;
+                for (k = 0; k < D_L07_00197380[ci]->count0D; k++, e += 4) {
+                    D_L07_00197380[ci]->f28[k].sound = *(u16 *)e;
+                    D_L07_00197380[ci]->f28[k].time = sound_bank_handle;
                 }
             }
         }
-        W(0x00173e98) = FUN_L00_0023fa00((((base + end + 0x3f) & ~0x3f) + alloc_size + 0x3f) & ~0x3f, header);
+        D_L18_00174800_26b768.f18 = FUN_L00_0023fa00((char *)((u32)end & ~0x3F), h);
     }
-    W(0x00173e9c) = FUN_L00_00241940(load);
-    if (load != 0) {
-        f32 scale = 0.0009765625f;
-        debug_print((const char *)0x0020fa70);
-        PRINT_SIZE(0x0020fa88, 0x100000, scale);
-        PRINT_SIZE(0x0020faa0, 0x22c980, scale);
-        PRINT_SIZE(0x0020fab8, W(0x00173e80) - 0x32c980, scale);
-        PRINT_SIZE(0x0020fad0, W(0x00173e8c) - W(0x00173e80), scale);
-        PRINT_SIZE(0x0020fae8, W(0x00173e90) - W(0x00173e8c), scale);
-        PRINT_SIZE(0x0020fb00, W(0x00173e94) - W(0x00173e90), scale);
-        value = W(0x0015f600);
-        if (value == 0) value = W(0x0016051c);
-        if (value == 0) {
-            debug_print((const char *)0x0020fb30);
-            value = W(0x0015f600);
-        } else {
-            PRINT_SIZE(0x0020fb18, value - W(0x00173e94), scale);
-            value = W(0x00158a00);
+    D_L18_00174800_26b768.f1C = FUN_L00_00241940_26b768(full);
+    if (full) {
+        char *top;
+        printf_1e93b0(D_L07_0020FA70);
+        printf_1e93b0(D_L07_0020FA88, KB(0x100000));
+        top = D_L07_0032C980;
+        printf_1e93b0(D_L07_0020FAA0, KB(top - 0x100000));
+        printf_1e93b0(D_L07_0020FAB8, KB(D_L18_00174800_26b768.f0 - top));
+        printf_1e93b0(D_L07_0020FAD0, KB(D_L18_00174800_26b768.fC - D_L18_00174800_26b768.f0));
+        printf_1e93b0(D_L07_0020FAE8, KB(D_L18_00174800_26b768.f10 - D_L18_00174800_26b768.fC));
+        printf_1e93b0(D_L07_0020FB00, KB(D_L18_00174800_26b768.f14 - D_L18_00174800_26b768.f10));
+        if (D_L18_0015F600_26b768 != 0)
+            printf_1e93b0(D_L07_0020FB18, KB(D_L18_0015F600_26b768 - D_L18_00174800_26b768.f14));
+        else if (D_L07_0016051C != 0)
+            printf_1e93b0(D_L07_0020FB18, KB((char *)D_L07_0016051C - D_L18_00174800_26b768.f14));
+        else
+            printf_1e93b0(D_L07_0020FB30);
+        if (D_L18_0015F600_26b768 != 0) {
+            if (D_L07_0016051C != 0)
+                printf_1e93b0(D_L07_0020FB50, KB(D_L07_0016051C - (s32)D_L18_0015F600_26b768));
+            else
+                printf_1e93b0(D_L07_0020FB50, KB(D_L18_00174840_26b768[0] - D_L18_0015F600_26b768));
         }
-        if (value != 0) {
-            if (W(0x0016051c) == 0) PRINT_SIZE(0x0020fb50, W(0x00173ec0) - value, scale);
-            else PRINT_SIZE(0x0020fb50, W(0x0016051c) - value, scale);
+        if (h[4])
+            printf_1e93b0(D_L07_0020FB68, KB(D_L18_00174840_26b768[0] - (char *)D_L07_0016051C));
+        printf_1e93b0(D_L07_0020FB80, KB(D_L07_0015F40C - (s32)D_L18_00174840_26b768[0]));
+        printf_1e93b0(D_L07_0020FB98, KB((D_L07_001B1B00[1] >> 4) - D_L07_0015F40C));
+        printf_1e93b0(D_L07_0020FBB0, KB((s32)D_L07_0015F420 - (D_L07_001B1B00[1] >> 4)));
+        printf_1e93b0(D_L07_0020FBC8, KB((char *)D_L07_00197380[0] - D_L07_0015F420));
+        printf_1e93b0(D_L07_0020FBE0, KB(D_L18_001C6200_26b768[0] - (char *)D_L07_00197380[0]));
+        if (h[0xA])
+            printf_1e93b0(D_L07_0020FBF8, KB(D_L18_001BCA30_26b768[0] - D_L18_001C6200_26b768[0]));
+        else
+            printf_1e93b0(D_L07_0020FBF8, KB(D_L18_00160FC0_26b768 - D_L18_001C6200_26b768[0]));
+        if (h[0xA])
+            printf_1e93b0(D_L07_0020FC10, KB(D_L07_00197380[0]->seqs[0] - D_L18_001BCA30_26b768[0]));
+        printf_1e93b0(D_L07_0020FC28, KB(D_L18_00160FC0_26b768 - D_L07_00197380[0]->seqs[0]));
+        printf_1e93b0(D_L07_0020FC40, KB(D_L18_00160494_26b768 - D_L18_00160FC0_26b768));
+        printf_1e93b0(D_L07_0020FC58, KB(D_L18_0015FFD8_26b768 - D_L18_00160494_26b768));
+        printf_1e93b0(D_L07_0020FC70, KB(D_L18_0015FFE8_26b768 - D_L18_0015FFD8_26b768));
+        printf_1e93b0(D_L07_0020FC88, KB(D_L18_00160108_26b768 - D_L18_0015FFE8_26b768));
+        printf_1e93b0(D_L07_0020FCA0, KB(D_L18_0016016C_26b768 - D_L18_00160108_26b768));
+        printf_1e93b0(D_L07_0020FCB8, 128.0);
+        printf_1e93b0(D_L07_0015FC80);
+        printf_1e93b0(D_L07_0020FCD0, int_to_float((s32)D_L18_0016016C_26b768 + 0x20000) * (1.0f / 1048576.0f));
+        printf_1e93b0(D_L07_0015FC80);
+        {
+            char *lo = D_L18_00174800_26b768.f0 - 0x2D0000;
+            printf_1e93b0(D_L07_0020FCE8, int_to_float(D_L18_00174800_26b768.f1C - lo) * (1.0f / 1048576.0f));
         }
-        if (header[4] != 0) PRINT_SIZE(0x0020fb68, W(0x00173ec0) - W(0x0016051c), scale);
-        PRINT_SIZE(0x0020fb80, W(0x0015f40c) - W(0x00173ec0), scale);
-        PRINT_SIZE(0x0020fb98, (W(0x001b1b04) >> 4) - W(0x0015f40c), scale);
-        PRINT_SIZE(0x0020fbb0, W(0x0015f420) - (W(0x001b1b04) >> 4), scale);
-        PRINT_SIZE(0x0020fbc8, W(0x00197380) - W(0x0015f420), scale);
-        PRINT_SIZE(0x0020fbe0, W(0x001c5880) - W(0x00197380), scale);
-        if (header[10] == 0) PRINT_SIZE(0x0020fbf8, W(0x00160fc0) - W(0x001c5880), scale);
-        else PRINT_SIZE(0x0020fbf8, W(0x001bc0b0) - W(0x001c5880), scale);
-        if (header[10] != 0) PRINT_SIZE(0x0020fc10, W(W(0x00197380) + 0x48) - W(0x001bc0b0), scale);
-        PRINT_SIZE(0x0020fc28, W(0x00160fc0) - W(W(0x00197380) + 0x48), scale);
-        PRINT_SIZE(0x0020fc40, W(0x00160494) - W(0x00160fc0), scale);
-        PRINT_SIZE(0x0020fc58, W(0x0015ffd8) - W(0x00160494), scale);
-        PRINT_SIZE(0x0020fc70, W(0x0015ffe8) - W(0x0015ffd8), scale);
-        PRINT_SIZE(0x0020fc88, W(0x00160108) - W(0x0015ffe8), scale);
-        PRINT_SIZE(0x0020fca0, W(0x0016016c) - W(0x00160108), scale);
-        debug_print((const char *)0x0020fcb8, 128.0);
-        debug_print((const char *)0x0015fc80);
-        PRINT_SIZE(0x0020fcd0, W(0x0016016c) + 0x20000, 0.00000095367431640625f);
-        debug_print((const char *)0x0015fc80);
-        PRINT_SIZE(0x0020fce8, W(0x00173e9c) - (W(0x00173e80) - 0x2d0000), 0.00000095367431640625f);
-        debug_print((const char *)0x0015fc80);
+        printf_1e93b0(D_L07_0015FC80);
     }
-    if (mode == 0) {
+    if (keep) {
+        FUN_L00_00285008();
+    } else {
         FUN_00226f50();
-        for (i = 15; i >= 0; i--) W(0x0014ee90 + i * 4) = 0;
-    } else FUN_L00_00285008();
-    W(0x00179190) = 0;
+        for (z = 15; z >= 0; z--)
+            D_0014EE90[z] = 0;
+    }
+    ((Una26b768 *)D_L07_00179180)->v = 0;
     FUN_L00_00264740();
-    W(0x0015f5cc)++;
+    game_frame++;
     return 0;
 }
-#endif

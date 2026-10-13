@@ -4,235 +4,419 @@
 #include "asm.h"
 
 /* Level load: relocates sky, uploads textures, loads HUD banks, flushes cache; many DebugPrints. */
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00252dd0.s", FUN_L06_00252dd0);
-#else
-#include "eetypes.h"
-#define W(a) (*(int *)(a))
-#define H(a) (*(short *)(a))
-#define UH(a) (*(volatile unsigned short *)(a))
-#define B(a) (*(unsigned char *)(a))
-#define Q(a) (*(unsigned long long *)(a))
-#define P(a) ((int *)(a))
-#define AT(p,n) (*(int *)((char *)(p) + (n)))
+#include "types.h"
+#include "rnc/gameplay/entities/moby.h"
+#include "asm.h"
+#include "qcopy.h"
+
+typedef struct {
+    char *f0;     /* 0x00 */
+    s32 *f4;      /* 0x04: level header */
+    char pad8[4];
+    char *fC;     /* 0x0C */
+    char *f10;    /* 0x10 */
+    char *f14;    /* 0x14: base the header's offsets are taken from */
+    char *f18;    /* 0x18 */
+    char *f1C;    /* 0x1C */
+} Load252dd0;
+
+typedef struct {
+    u8 pad0[0x1A];
+    s16 sound;   /* 0x1A */
+    s32 time;    /* 0x1C */
+} Slot252dd0;
+
+typedef struct {
+    u8 pad0[0xC];
+    u8 seq_count;   /* 0x0C */
+    u8 count0D;     /* 0x0D */
+    u8 pad0E[0x1A];
+    Slot252dd0 *f28; /* 0x28 */
+    u8 pad2C[0x1C];
+    char *seqs[1];  /* 0x48 */
+} Class252dd0;
+
+typedef struct {
+    s32 offset;
+    u16 kind;
+    u16 pad6;
+    s32 pad8[2];
+} TexRef252dd0;
+
+
+typedef struct {
+    s16 off;
+    s16 count;
+} Span252dd0;
+
+extern Load252dd0 D_L18_00174800_252dd0 __asm__("D_L06_00174580");
+extern char *D_L18_00174840_252dd0[] __asm__("D_L06_001745C0");
+typedef struct { s16 a; s16 b; s32 *file; } Ldg252dd0;
+extern Ldg252dd0 D_0015EE48;
+extern s32 current_level_index __asm__("D_0015ED84");
+extern u8 D_0014C050[];
+extern u8 D_L18_0015FC88_252dd0[] __asm__("D_L06_0015FC88") __attribute__((section(".sdata")));
+extern s32 D_L06_0015F40C;
+extern s32 sound_bank_handle __asm__("D_0015ED5C");
+extern s32 D_L06_00160004;
+extern s32 D_0015EE8C;
+extern u64 D_L06_00182F40[3];
+extern u64 D_L06_00182F58[3];
+extern u64 D_L06_00182F70[3];
+extern s32 D_L06_00160F54;
+extern s32 D_L06_001C5180[];
+extern s32 D_L06_0015FFC8;
+extern s32 D_L06_0019A200[];
+extern u8 D_L06_001AF340[];
+extern s32 D_L06_00160FD4;
+extern s32 D_L06_001C6E80[];
+extern s32 D_L06_001604AC;
+extern s32 D_L06_001BCD30[];
+extern char *D_L18_0015F600_252dd0 __asm__("D_L06_0015F600");
+extern s32 D_L06_0016051C;
+extern Class252dd0 *D_L06_00197A80[];
+extern s32 D_L06_0016000C;
+extern s32 D_L06_00160010;
+extern s32 D_L06_00160008;
+extern s32 D_L06_001B0340[];
+extern char *D_L06_001B03A0[];
+extern s32 D_L06_001B0400[];
+typedef int Q252dd0 __attribute__((mode(TI)));
+extern Q252dd0 D_L06_001B0460[];
+extern u8 D_L06_00198340[];
+extern char *D_L06_0015F420;
+extern s32 D_L06_0015F438;
+extern s32 D_L06_0015F43C;
+extern s32 D_L06_0015F440;
+extern s32 D_L06_0015FC98;
+extern s32 D_L06_0015FC9C;
+extern s32 D_L06_0015FCA0;
+extern s32 D_L06_0015FCA4;
+extern s32 D_L06_0015FCA8;
+extern char *D_L06_0015F604;
+extern Slot252dd0 *D_L06_0015F5F4;
+extern s32 D_L06_0015F5F0;
+extern s32 D_L06_0015FFC0;
+extern s16 D_L06_00198180[];
+extern u16 D_L06_001B05E0[][16];
+extern char D_L06_001FFB80[], D_L06_001FFBA0[], D_L06_001FFBD0[], D_L06_001FFBE8[],
+    D_L06_001FFC00[], D_L06_001FFC18[], D_L06_001FFC30[], D_L06_001FFC48[],
+    D_L06_001FFC60[], D_L06_001FFC78[], D_L06_001FFC90[], D_L06_001FFCB0[],
+    D_L06_001FFCC8[], D_L06_001FFCE0[], D_L06_001FFCF8[], D_L06_001FFD10[],
+    D_L06_001FFD28[], D_L06_001FFD40[], D_L06_001FFD58[], D_L06_001FFD70[],
+    D_L06_001FFD88[], D_L06_001FFDA0[], D_L06_001FFDB8[], D_L06_001FFDD0[],
+    D_L06_001FFDE8[], D_L06_001FFE00[], D_L06_001FFE18[], D_L06_001FFE30[],
+    D_L06_001FFE48[];
+extern char D_L06_0015FC80[];
+extern char D_L06_00319998[];
+extern s32 D_L06_001B2200[];
+extern char *D_L18_001C6200_252dd0[] __asm__("D_L06_001C5F80");
+extern char *D_L18_001BCA30_252dd0[] __asm__("D_L06_001BC7B0");
+extern char *D_L18_00160FC0_252dd0 __asm__("D_L06_00160FC0");
+extern char *D_L18_00160494_252dd0 __asm__("D_L06_00160494");
+extern char *D_L18_0015FFD8_252dd0 __asm__("D_L06_0015FFD8");
+extern char *D_L18_0015FFE8_252dd0 __asm__("D_L06_0015FFE8");
+extern char *D_L18_00160108_252dd0 __asm__("D_L06_00160108");
+extern char *D_L18_0016016C_252dd0 __asm__("D_L06_0016016C");
+extern s32 D_0014EE90[16];
+typedef struct { u8 pad[0x10]; u32 v __attribute__((packed, aligned(1))); } Una252dd0;
+extern u8 D_L06_00179880[];
+extern s32 game_frame __asm__("D_L06_0015F5CC");
 
 extern void FUN_00202a98(void);
-extern void FUN_001f98d0(void *, void *, int);
-extern void FUN_001f9838(void *, void *, int);
-extern void FUN_00203120(void *, int, void *);
-extern void FUN_00118a80(int);
-extern int FUN_L00_0024d8d0(void *, int);
-extern int FUN_001f97a0(int);
-extern void FUN_002040e0(int, void *);
-extern void FUN_002028e0(int);
-extern void FUN_L00_00241728(int);
-extern void FUN_00203640(int, void *, void *, int);
-extern void FUN_L00_00241788(void *, int);
-extern void FUN_002032e0(int, int);
-extern void FUN_00203730(int, void *, void *, int);
-extern void FUN_001e93e8(void *, int);
-extern void FUN_00203b08(int, void *, void *, void *, int);
-extern void FUN_00202800(void *, int);
-extern void FUN_L00_0023f120(int);
-extern void FUN_L00_0023f0d8(int);
-extern void FUN_002026c8(void *, int, void *, int);
-extern void FUN_001e93b0(int, ...);
-extern void FUN_001f97e8(void *, int, int);
-extern int FUN_L00_0023fa00(int, void *);
-extern int FUN_L00_00241940(int);
-extern float FUN_001fa6c0(int);
-extern int FUN_00120478(float);
+extern void FUN_001f98d0(void *, void *, s32);
+extern void FUN_001f9838_252dd0(void *, void *, s32) __asm__("FUN_001f9838");
+extern void FUN_00203120(void *, s32, void *);
+extern void FUN_00118a80(s32);
+extern s32 FUN_L00_0024d8d0_252dd0(void *, char *) __asm__("FUN_L00_0024d8d0");
+extern s32 FUN_001f97a0(s32);
+extern void FUN_002040e0(char *, void *);
+extern void FUN_002028e0(char *);
+extern void FUN_L00_00241728_252dd0(char *) __asm__("FUN_L00_00241728");
+extern void FUN_00203640(char *, void *, void *, s32);
+extern void FUN_L00_00241788_252dd0(void *, s32) __asm__("FUN_L00_00241788");
+extern void FUN_002032e0(Class252dd0 *, s32);
+extern void FUN_00203730(char *, void *, void *, s32);
+extern void FUN_001e93e8(void *, s32);
+extern void FUN_00203b08(char *, void *, void *, void *, s32);
+extern void FUN_00202800(void *, s32);
+extern void FUN_L00_0023f120(char *);
+extern void FUN_L00_0023f0d8(char *);
+extern void FUN_002026c8(void *, char *, void *, s32);
+extern void printf_1e93b0(const char *, ...) __asm__("FUN_001e93b0");
+extern void FUN_001f97e8(void *, s32, s32);
+extern char *FUN_L00_0023fa00(char *, s32 *);
+extern char *FUN_L00_00241940_252dd0(s32) __asm__("FUN_L00_00241940");
+extern f32 int_to_float(s32) __asm__("FUN_001fa6c0");
 extern void FUN_L00_00285008(void);
 extern void FUN_00226f50(void);
 extern void FUN_L00_00264740(void);
 
-int FUN_L06_00252dd0(int param_1, int param_2) {
-    int *level = P(0x174580);
-    int *data = P(level[1]);
-    int *source = P(W(0x15ee4c));
-    int base;
-    int end;
-    int i, j, count, value, *entry;
-    short *sequence, *record;
-    float elapsed;
+#define GS_TEX0(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld) \
+    ((u64)(tbp0) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) \
+     | ((u64)(th) << 30) | ((u64)(tcc) << 34) | ((u64)(tfx) << 35) | ((u64)(cbp) << 37) \
+     | ((u64)(cpsm) << 51) | ((u64)(csm) << 55) | ((u64)(csa) << 56) | ((u64)(cld) << 61))
+#define KB(x) (int_to_float((s32)(x)) * (1.0f / 1024.0f))
 
-    if (param_1 != 0) FUN_00202a98();
-    base = level[5];
-    if (param_1 != 0) {
-        FUN_001f98d0(data, (char *)source + source[4], source[5]);
-        W(0x15f40c) = 0;
-        FUN_001f9838(P(0x15fc88), P(0x14c050 + W(0x15ed84) * 16), 16);
-        FUN_00203120((char *)source + source[6], data[0], (char *)data + data[1]);
-        W(0x160004) = W(0x15ed5c);
+/* Reads the level's core data. Its index lists the object classes:
+ *   0x18  moby classes, 0x20 bytes per entry
+ *   0x20  tie classes, 0x20 bytes per entry
+ *   0x28  shrub classes, 0x30 bytes per entry
+ * Each entry holds the offset of the class data, the class number, and at 0x10
+ * sixteen bytes that say which level texture each texture slot uses (0xff
+ * means unused). Each class stores a scale (ties at 0x40, shrubs at 0x20,
+ * mobies at 0x24 of their data); a stored coordinate times scale / 1024 gives
+ * world units. Index 0x10 gives where the sky data starts and 0x14 where the
+ * collision data starts. */
+s32 FUN_L06_00252dd0(s32 full, s32 keep) {
+    Load252dd0 *ld = &D_L18_00174800_252dd0;
+    s32 *h = ld->f4;
+    s32 *src = D_0015EE48.file;
+    char *base;
+    s32 used;
+    char *e;
+    char *free;
+    char *end;
+    Span252dd0 *span;
+    TexRef252dd0 *tex;
+    TexRef252dd0 *t1;
+    TexRef252dd0 *t3;
+    TexRef252dd0 *t4;
+    char *tbl;
+    s32 i;
+    s32 j;
+    s32 n;
+    s32 k;
+    s32 c1, c2, c3, c4;
+    s32 m;
+    char *p;
+    s32 sq;
+    char *sp;
+    char *q;
+    s32 z;
+    s32 ci;
+    char *x;
+    char *y;
+    s32 a1, a2, a3;
+    char *q1, *q2;
+    u64 *t;
+
+    if (full)
+        FUN_00202a98();
+    base = ld->f14;
+    if (full) {
+        FUN_001f98d0(h, (char *)(src[4] + (s32)src), src[5]);
+        D_L06_0015F40C = 0;
+        FUN_001f9838_252dd0(D_L18_0015FC88_252dd0, D_0014C050 + current_level_index * 16, 0x10);
+        FUN_00203120((char *)(src[6] + (s32)src), h[0], (char *)h + h[1]);
+        D_L06_00160004 = sound_bank_handle;
         FUN_00118a80(0);
-        end = FUN_L00_0024d8d0((char *)source + source[20], base);
-        Q(0x182f40) = 0x80000005c0000000ULL | 0x1d308000 | ((long long)((W(0x15ee8c) + data[37]) >> 8) << 37) | ((W(0x15ee8c) + data[36]) >> 8);
-        Q(0x182f48) = 0xffa0000000e0ULL;
-        Q(0x182f50) = 0x40000400004000ULL;
-        Q(0x182f68) = 0x40000400004000ULL;
-        Q(0x182f60) = 0xffa0000000e0ULL;
-        Q(0x182f58) = 0x8000000580000000ULL | 0x19304000 | ((long long)((W(0x15ee8c) + data[39]) >> 8) << 37) | ((W(0x15ee8c) + data[38]) >> 8);
-        W(0x15f40c) = base + data[24];
-        Q(0x182f80) = 0x40000400004000ULL;
-        Q(0x182f78) = 0xffa0000000e0ULL;
-        Q(0x182f70) = 0x80000005c0000000ULL | 0x1d308000 | ((long long)((W(0x15ee8c) + data[49]) >> 8) << 37) | ((W(0x15ee8c) + data[48]) >> 8);
+        used = FUN_L00_0024d8d0_252dd0((char *)(src[0x14] + (s32)src), base);
+        D_L06_0015F40C = (s32)(base + h[0x18]);
 
-        W(0x160f54) = data[12];
-        entry = P((char *)data + data[13]);
-        for (i = 0; i < W(0x160f54); i++, entry += 4)
-            W(0x1c5180 + i * 4) = W(0x15f40c) + entry[0] + (FUN_001f97a0((unsigned short)entry[1]) << 28);
-        W(0x15ffc8) = data[14];
-        entry = P((char *)data + data[15]);
-        for (i = 0; i < W(0x15ffc8); i++, entry += 4)
-            W(0x19a200 + i * 4) = W(0x15f40c) + entry[0] + (FUN_001f97a0((unsigned short)entry[1]) << 28);
-        FUN_001f98d0(P(0x1af340), (char *)data + data[15], W(0x15ffc8) << 4);
-        W(0x160fd4) = data[16];
-        entry = P((char *)data + data[17]);
-        for (i = 0; i < W(0x160fd4); i++, entry += 4)
-            W(0x1c6e80 + i * 4) = W(0x15f40c) + entry[0] + (FUN_001f97a0((unsigned short)entry[1]) << 28);
-        W(0x1604ac) = data[18];
-        entry = P((char *)data + data[19]);
-        for (i = 0; i < W(0x1604ac); i++, entry += 4)
-            W(0x1bcd30 + i * 4) = W(0x15f40c) + entry[0] + (FUN_001f97a0((unsigned short)entry[1]) << 28);
+        D_L06_00182F40[0] = GS_TEX0((D_0015EE8C + h[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
+            (D_0015EE8C + h[0x25]) >> 8, 0, 0, 0, 4);
+        D_L06_00182F40[1] = 0x0000FFA0000000E0;
+        D_L06_00182F40[2] = 0x0040000400004000;
+        D_L06_00182F58[0] = GS_TEX0((D_0015EE8C + h[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
+            (D_0015EE8C + h[0x27]) >> 8, 0, 0, 0, 4);
+        D_L06_00182F58[1] = 0x0000FFA0000000E0;
+        D_L06_00182F58[2] = 0x0040000400004000;
+        D_L06_00182F70[0] = GS_TEX0((D_0015EE8C + h[0x30]) >> 8, 2, 0x13, 7, 7, 1, 0,
+            (D_0015EE8C + h[0x31]) >> 8, 0, 0, 0, 4);
+        D_L06_00182F70[1] = 0x0000FFA0000000E0;
+        D_L06_00182F70[2] = 0x0040000400004000;
 
-        FUN_002040e0(base + data[2], (char *)data + data[13]);
-        if (data[3]) W(0x15f600) = base + data[3];
-        else W(0x15f600) = 0;
-        if (data[4]) FUN_002028e0(base + data[4]);
-        else W(0x16051c) = 0;
-        FUN_L00_00241728(base + data[5]);
-        entry = P((char *)data + data[7]);
-        for (i = 0; i < data[6]; i++, entry += 8) {
-            value = entry[0] ? base + entry[0] : 0;
-            FUN_00203640(value, (char *)data + data[15], entry + 4, entry[1]);
-        }
-        FUN_L00_00241788((char *)data + data[7], data[7]);
-        entry = P((char *)data + data[30]);
-        for (i = 0; i < B(W(0x197a80) + 12); i++, entry++) {
-            if (*entry) {
-                W(W(0x197a80) + 0x48 + i * 4) = base + *entry;
-                FUN_002032e0(W(0x197a80), i);
+        t1 = (TexRef252dd0 *)((char *)h + h[0xD]);
+        D_L06_00160F54 = h[0xC];
+        for (c1 = 0; c1 < D_L06_00160F54; c1++)
+            D_L06_001C5180[c1] = D_L06_0015F40C + t1[c1].offset + (FUN_001f97a0(t1[c1].kind) << 28);
+        tex = (TexRef252dd0 *)((char *)h + h[0xF]);
+        D_L06_0015FFC8 = h[0xE];
+        for (c2 = 0; c2 < D_L06_0015FFC8; c2++)
+            D_L06_0019A200[c2] = D_L06_0015F40C + tex[c2].offset + (FUN_001f97a0(tex[c2].kind) << 28);
+        FUN_001f98d0(D_L06_001AF340, tex, D_L06_0015FFC8 * 16);
+        t3 = (TexRef252dd0 *)((char *)h + h[0x11]);
+        D_L06_00160FD4 = h[0x10];
+        for (c3 = 0; c3 < D_L06_00160FD4; c3++)
+            D_L06_001C6E80[c3] = D_L06_0015F40C + t3[c3].offset + (FUN_001f97a0(t3[c3].kind) << 28);
+        t4 = (TexRef252dd0 *)((char *)h + h[0x13]);
+        D_L06_001604AC = h[0x12];
+        for (c4 = 0; c4 < D_L06_001604AC; c4++)
+            D_L06_001BCD30[c4] = D_L06_0015F40C + t4[c4].offset + (FUN_001f97a0(t4[c4].kind) << 28);
+
+        FUN_002040e0(base + h[2], (char *)h + h[0xD]);
+        if (h[3])
+            D_L18_0015F600_252dd0 = base + h[3];
+        else
+            D_L18_0015F600_252dd0 = 0;
+        if (h[4])
+            FUN_002028e0(base + h[4]);
+        else
+            D_L06_0016051C = 0;
+        FUN_L00_00241728_252dd0(base + h[5]);
+        for (i = 0, q2 = (char *)h + h[7]; i < h[6]; i++, q2 += 0x20)
+            FUN_00203640(*(s32 *)q2 ? base + *(s32 *)q2 : 0, (char *)h + h[0xF], q2 + 0x10, *(s32 *)(q2 + 4));
+        FUN_L00_00241788_252dd0((char *)h + h[7], h[7]);
+        for (sq = 0, p = (char *)h + h[0x1E]; sq < D_L06_00197A80[0]->seq_count; sq++, p += 4) {
+            if (*(s32 *)p) {
+                D_L06_00197A80[0]->seqs[sq] = base + *(s32 *)p;
+                FUN_002032e0(D_L06_00197A80[0], sq);
             }
         }
-        W(0x160008) = data[32];
-        W(0x16000c) = -1;
-        W(0x160010) = 0;
-        entry = P((char *)data + data[33]);
-        for (i = 0; i < W(0x160008); i++, entry += 4) {
-            W(0x1b0340 + i * 4) = entry[1];
-            W(0x1b03a0 + i * 4) = base + entry[0];
-            W(0x1b0400 + i * 4) = entry[2];
-            *(u128 *)(0x1b0460 + i * 16) = *(u128 *)((char *)data + data[7] + 0x10 + B(0x198340 + entry[1]) * 0x20);
+        D_L06_0016000C = -1;
+        q = (char *)h + h[0x21];
+        D_L06_00160010 = 0;
+        D_L06_00160008 = h[0x20];
+        for (m = 0; m < h[0x20]; m++, q += 0x10) {
+            D_L06_001B0340[m] = *(s32 *)(q + 4);
+            D_L06_001B03A0[m] = base + *(s32 *)q;
+            D_L06_001B0400[m] = *(s32 *)(q + 8);
+            { s32 o = D_L06_00198340[*(s32 *)(q + 4)] * 32 + 0x10;
+            qcopy(&D_L06_001B0460[m], (char *)h + h[7] + o); }
         }
-        entry = P((char *)data + data[9]);
-        for (i = 0; i < data[8]; i++, entry += 8)
-            FUN_00203730(base + entry[0], (char *)data + data[17], entry + 4, entry[1]);
-        FUN_001e93e8((char *)data + data[9], data[8]);
-        entry = P((char *)data + data[11]);
-        for (i = 0; i < data[10]; i++, entry += 12)
-            FUN_00203b08(base + entry[0], (char *)data + data[19], entry + 4, entry + 8, entry[1]);
-        W(0x15f420) = base + data[26];
-        FUN_00202800((char *)data + data[23], data[22]);
-        if (data[40]) FUN_L00_0023f120(base + data[40]);
-        else { W(0x15f438) = 0; W(0x15f43c) = 0; W(0x15f440) = 0; }
-        if (data[41]) FUN_L00_0023f0d8(base + data[41]);
-        else { W(0x15fc98) = 0; W(0x15fc9c) = 0; W(0x15fca4) = 0; W(0x15fca0) = 0; W(0x15fca8) = 0; }
-        if (data[42]) W(0x15f604) = base + data[42];
-        else W(0x15f604) = 0;
-        FUN_002026c8((char *)data + data[27], base + data[25], (char *)data + data[21], data[20]);
+        for (i = 0, q2 = (char *)h + h[9]; i < h[8]; i++, q2 += 0x20)
+            FUN_00203730(base + *(s32 *)q2, (char *)h + h[0x11], q2 + 0x10, *(s32 *)(q2 + 4));
+        FUN_001e93e8((char *)h + h[9], h[8]);
+        for (i = 0, q2 = (char *)h + h[0xB]; i < h[0xA]; i++, q2 += 0x30)
+            FUN_00203b08(base + *(s32 *)q2, (char *)h + h[0x13], q2 + 0x10, q2 + 0x20, *(s32 *)(q2 + 4));
+        D_L06_0015F420 = base + h[0x1A];
+        FUN_00202800((char *)h + h[0x17], h[0x16]);
+        if (h[0x28]) {
+            FUN_L00_0023f120(base + h[0x28]);
+        } else {
+            D_L06_0015F438 = 0;
+            D_L06_0015F43C = 0;
+            D_L06_0015F440 = 0;
+        }
+        if (h[0x29]) {
+            FUN_L00_0023f0d8(base + h[0x29]);
+        } else {
+            D_L06_0015FC98 = 0;
+            D_L06_0015FC9C = 0;
+            D_L06_0015FCA4 = 0;
+            D_L06_0015FCA0 = 0;
+            D_L06_0015FCA8 = 0;
+        }
+        if (h[0x2A])
+            D_L06_0015F604 = base + h[0x2A];
+        else
+            D_L06_0015F604 = 0;
+        {
+            char *x1 = base + h[0x19];
+            char *x2 = (char *)h + h[0x15];
+            FUN_002026c8((char *)h + h[0x1B], x1, x2, h[0x14]);
+        }
 
-        sequence = (short *)((char *)data + data[28]);
-        W(0x15f5f0) = sequence[1];
-        W(0x15f5f4) = (base + end + 63) & ~63;
-        FUN_001f9838(P(W(0x15f5f4)), (char *)sequence + sequence[0], W(0x15f5f0) * 32);
-        for (i = 0; i < W(0x15f5f0); i++) {
-            short index = H(W(0x15f5f4) + i * 32 + 0x1a);
-            if (index >= sequence[3]) { FUN_001e93b0(0x1ffb80); H(W(0x15f5f4) + i * 32 + 0x1a) = -1; }
-            else H(W(0x15f5f4) + i * 32 + 0x1a) = *(short *)((char *)sequence + sequence[2] + index * 4);
-            W(W(0x15f5f4) + i * 32 + 0x1c) = W(0x15ed5c);
+        tbl = (char *)h + h[0x1C];
+        span = (Span252dd0 *)tbl;
+        free = (char *)((u32)(base + used + 0x3F) & ~0x3F);
+        n = span->count;
+        D_L06_0015F5F4 = (Slot252dd0 *)free;
+        D_L06_0015F5F0 = n;
+        FUN_001f9838_252dd0(free, tbl + span->off, n * 32);
+        span++;
+        free += n * 32;
+        e = tbl + span->off;
+        for (a3 = 0; a3 < D_L06_0015F5F0; a3++) {
+            if (D_L06_0015F5F4[a3].sound >= span->count) {
+                printf_1e93b0(D_L06_001FFB80);
+                D_L06_0015F5F4[a3].sound = -1;
+            } else {
+                D_L06_0015F5F4[a3].sound = *(u16 *)(e + D_L06_0015F5F4[a3].sound * 4);
+            }
+            D_L06_0015F5F4[a3].time = sound_bank_handle;
         }
-        record = sequence + 4;
-        for (i = 0; i < W(0x15ffc0); i++, record += 2) {
-            int object = W(0x197a80 + i * 4);
-            short *frames = (short *)((char *)sequence + record[0]);
-            if (object == 0) {
-                for (j = 0; j < W(0x160008); j++)
-                    if (W(0x1b0340 + j * 4) == H(0x198180 + i * 2)) break;
-                if (j < W(0x160008)) {
-                    FUN_001f97e8(P(0x1b05e0 + j * 32), -1, 32);
-                    for (count = 0; count < record[1] && count <= 14; count++)
-                        H(0x1b05e0 + j * 32 + count * 2) = frames[count * 2];
+        end = free + 0x3F;
+        span++;
+        for (ci = 0; ci < D_L06_0015FFC0; ci++, span++) {
+            Class252dd0 *cls = D_L06_00197A80[ci];
+            if (cls == 0) {
+                for (j = 0; j < D_L06_00160008; j++)
+                    if (D_L06_001B0340[j] == D_L06_00198180[ci])
+                        break;
+                if (j < D_L06_00160008) {
+                    FUN_001f97e8(D_L06_001B05E0[j], -1, 0x20);
+                    e = tbl + span->off;
+                    for (k = 0; k < span->count && k < 15; k++, e += 4)
+                        D_L06_001B05E0[j][k] = *(u16 *)e;
                 }
             } else {
-                if (record[1] != B(object + 13)) FUN_001e93b0(0x1ffba0, UH(0x198180 + i * 2));
-                for (j = 0; j < B(object + 13); j++) {
-                    H(W(object + 0x28) + j * 32 + 0x1a) = frames[j * 2];
-                    W(W(object + 0x28) + j * 32 + 0x1c) = W(0x15ed5c);
+                if (span->count != cls->count0D)
+                    printf_1e93b0(D_L06_001FFBA0, D_L06_00198180[ci]);
+                e = tbl + span->off;
+                for (k = 0; k < D_L06_00197A80[ci]->count0D; k++, e += 4) {
+                    D_L06_00197A80[ci]->f28[k].sound = *(u16 *)e;
+                    D_L06_00197A80[ci]->f28[k].time = sound_bank_handle;
                 }
             }
         }
-        level[6] = FUN_L00_0023fa00((W(0x15f5f4) + W(0x15f5f0) * 32 + 63) & ~63, data);
+        D_L18_00174800_252dd0.f18 = FUN_L00_0023fa00((char *)((u32)end & ~0x3F), h);
     }
-    level[7] = FUN_L00_00241940(param_1);
-    if (param_1 != 0) {
-        FUN_001e93b0(0x1ffbd0);
-#define PRINT_SIZE(label,expr) do { elapsed = FUN_001fa6c0((expr)); FUN_001e93b0((label), FUN_00120478(elapsed * 0.0009765625f)); } while (0)
-        PRINT_SIZE(0x1ffbe8, 0x100000);
-        PRINT_SIZE(0x1ffc00, 0x219998);
-        PRINT_SIZE(0x1ffc18, level[0] - 0x319998);
-        PRINT_SIZE(0x1ffc30, level[3] - level[0]);
-        PRINT_SIZE(0x1ffc48, level[4] - level[3]);
-        PRINT_SIZE(0x1ffc60, level[5] - level[4]);
-        value = W(0x15f600);
-        if (value == 0) value = W(0x16051c);
-        if (value == 0) FUN_001e93b0(0x1ffc90);
-        else PRINT_SIZE(0x1ffc78, value - level[5]);
-        value = W(0x15f600);
-        if (value != 0) {
-            if (W(0x16051c)) PRINT_SIZE(0x1ffcb0, W(0x16051c) - value);
-            else PRINT_SIZE(0x1ffcb0, W(0x1745c0) - value);
+    D_L18_00174800_252dd0.f1C = FUN_L00_00241940_252dd0(full);
+    if (full) {
+        char *top;
+        printf_1e93b0(D_L06_001FFBD0);
+        printf_1e93b0(D_L06_001FFBE8, KB(0x100000));
+        top = D_L06_00319998;
+        printf_1e93b0(D_L06_001FFC00, KB(top - 0x100000));
+        printf_1e93b0(D_L06_001FFC18, KB(D_L18_00174800_252dd0.f0 - top));
+        printf_1e93b0(D_L06_001FFC30, KB(D_L18_00174800_252dd0.fC - D_L18_00174800_252dd0.f0));
+        printf_1e93b0(D_L06_001FFC48, KB(D_L18_00174800_252dd0.f10 - D_L18_00174800_252dd0.fC));
+        printf_1e93b0(D_L06_001FFC60, KB(D_L18_00174800_252dd0.f14 - D_L18_00174800_252dd0.f10));
+        if (D_L18_0015F600_252dd0 != 0)
+            printf_1e93b0(D_L06_001FFC78, KB(D_L18_0015F600_252dd0 - D_L18_00174800_252dd0.f14));
+        else if (D_L06_0016051C != 0)
+            printf_1e93b0(D_L06_001FFC78, KB((char *)D_L06_0016051C - D_L18_00174800_252dd0.f14));
+        else
+            printf_1e93b0(D_L06_001FFC90);
+        if (D_L18_0015F600_252dd0 != 0) {
+            if (D_L06_0016051C != 0)
+                printf_1e93b0(D_L06_001FFCB0, KB(D_L06_0016051C - (s32)D_L18_0015F600_252dd0));
+            else
+                printf_1e93b0(D_L06_001FFCB0, KB(D_L18_00174840_252dd0[0] - D_L18_0015F600_252dd0));
         }
-        if (data[4]) PRINT_SIZE(0x1ffcc8, W(0x1745c0) - W(0x16051c));
-        PRINT_SIZE(0x1ffce0, W(0x15f40c) - W(0x1745c0));
-        PRINT_SIZE(0x1ffcf8, (W(0x1b2204) >> 4) - W(0x15f40c));
-        PRINT_SIZE(0x1ffd10, W(0x15f420) - (W(0x1b2204) >> 4));
-        PRINT_SIZE(0x1ffd28, W(0x197a80) - W(0x15f420));
-        PRINT_SIZE(0x1ffd40, W(0x1c5f80) - W(0x197a80));
-        PRINT_SIZE(0x1ffd58, (data[10] ? W(0x1bc7b0) : W(0x160fc0)) - W(0x1c5f80));
-        if (data[10]) PRINT_SIZE(0x1ffd70, W(W(0x197a80) + 0x48) - W(0x1bc7b0));
-        PRINT_SIZE(0x1ffd88, W(0x160fc0) - W(W(0x197a80) + 0x48));
-        PRINT_SIZE(0x1ffda0, W(0x160494) - W(0x160fc0));
-        PRINT_SIZE(0x1ffdb8, W(0x15ffd8) - W(0x160494));
-        PRINT_SIZE(0x1ffdd0, W(0x15ffe8) - W(0x15ffd8));
-        PRINT_SIZE(0x1ffde8, W(0x160108) - W(0x15ffe8));
-        PRINT_SIZE(0x1ffe00, W(0x16016c) - W(0x160108));
-        FUN_001e93b0(0x1ffe18, 0x4060000000000000ULL);
-        FUN_001e93b0(0x15fc80);
-        elapsed = FUN_001fa6c0(W(0x16016c) + 0x20000);
-        FUN_001e93b0(0x1ffe30, FUN_00120478(elapsed * 9.5367431640625e-7f));
-        FUN_001e93b0(0x15fc80);
-        elapsed = FUN_001fa6c0(level[7] - (level[0] - 0x2d0000));
-        FUN_001e93b0(0x1ffe48, FUN_00120478(elapsed * 9.5367431640625e-7f));
-        FUN_001e93b0(0x15fc80);
-#undef PRINT_SIZE
+        if (h[4])
+            printf_1e93b0(D_L06_001FFCC8, KB(D_L18_00174840_252dd0[0] - (char *)D_L06_0016051C));
+        printf_1e93b0(D_L06_001FFCE0, KB(D_L06_0015F40C - (s32)D_L18_00174840_252dd0[0]));
+        printf_1e93b0(D_L06_001FFCF8, KB((D_L06_001B2200[1] >> 4) - D_L06_0015F40C));
+        printf_1e93b0(D_L06_001FFD10, KB((s32)D_L06_0015F420 - (D_L06_001B2200[1] >> 4)));
+        printf_1e93b0(D_L06_001FFD28, KB((char *)D_L06_00197A80[0] - D_L06_0015F420));
+        printf_1e93b0(D_L06_001FFD40, KB(D_L18_001C6200_252dd0[0] - (char *)D_L06_00197A80[0]));
+        if (h[0xA])
+            printf_1e93b0(D_L06_001FFD58, KB(D_L18_001BCA30_252dd0[0] - D_L18_001C6200_252dd0[0]));
+        else
+            printf_1e93b0(D_L06_001FFD58, KB(D_L18_00160FC0_252dd0 - D_L18_001C6200_252dd0[0]));
+        if (h[0xA])
+            printf_1e93b0(D_L06_001FFD70, KB(D_L06_00197A80[0]->seqs[0] - D_L18_001BCA30_252dd0[0]));
+        printf_1e93b0(D_L06_001FFD88, KB(D_L18_00160FC0_252dd0 - D_L06_00197A80[0]->seqs[0]));
+        printf_1e93b0(D_L06_001FFDA0, KB(D_L18_00160494_252dd0 - D_L18_00160FC0_252dd0));
+        printf_1e93b0(D_L06_001FFDB8, KB(D_L18_0015FFD8_252dd0 - D_L18_00160494_252dd0));
+        printf_1e93b0(D_L06_001FFDD0, KB(D_L18_0015FFE8_252dd0 - D_L18_0015FFD8_252dd0));
+        printf_1e93b0(D_L06_001FFDE8, KB(D_L18_00160108_252dd0 - D_L18_0015FFE8_252dd0));
+        printf_1e93b0(D_L06_001FFE00, KB(D_L18_0016016C_252dd0 - D_L18_00160108_252dd0));
+        printf_1e93b0(D_L06_001FFE18, 128.0);
+        printf_1e93b0(D_L06_0015FC80);
+        printf_1e93b0(D_L06_001FFE30, int_to_float((s32)D_L18_0016016C_252dd0 + 0x20000) * (1.0f / 1048576.0f));
+        printf_1e93b0(D_L06_0015FC80);
+        {
+            char *lo = D_L18_00174800_252dd0.f0 - 0x2D0000;
+            printf_1e93b0(D_L06_001FFE48, int_to_float(D_L18_00174800_252dd0.f1C - lo) * (1.0f / 1048576.0f));
+        }
+        printf_1e93b0(D_L06_0015FC80);
     }
-    if (param_2 == 0) {
+    if (keep) {
+        FUN_L00_00285008();
+    } else {
         FUN_00226f50();
-        for (i = 15; i >= 0; i--) W(0x14ee90 + i * 4) = 0;
-    } else FUN_L00_00285008();
-    W(0x179890) = 0;
+        for (z = 15; z >= 0; z--)
+            D_0014EE90[z] = 0;
+    }
+    ((Una252dd0 *)D_L06_00179880)->v = 0;
     FUN_L00_00264740();
-    W(0x15f5cc)++;
+    game_frame++;
     return 0;
 }
-#undef W
-#undef H
-#undef UH
-#undef B
-#undef Q
-#undef P
-#undef AT
-#endif
 #include "qcopy.h"
 #include "sda.h"
 
