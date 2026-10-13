@@ -781,8 +781,9 @@ void FUN_L00_002d19b0(u8 *m) {
     Vec_2d19b0 a, c, b;
     u8 *vars = *(u8 **)(m + 0x78);
     s16 *indices = D_L00_001DEE10_2d19b0;
-    f32 (*uv)[2], (*old_uv)[2];
+    f32 (*uv)[2];
     f32 *uv_y, *texcoords;
+    f32 (*old_uv)[2];
     s32 i, j, index, active = 0;
     f32 blend, len, x, y;
 
@@ -792,7 +793,7 @@ void FUN_L00_002d19b0(u8 *m) {
                       ((u64)(s64)D_L00_001618E4 << 4) | ((u64)(s64)D_L00_001618E8 << 6) |
                       ((u64)(s64)D_L00_001618EC << 32);
     quad.texture[0] = 0;
-    quad.colors[3] = quad.colors[2] = quad.colors[1] = quad.colors[0] = D_L00_001618F4;
+    quad.colors[0] = quad.colors[1] = quad.colors[2] = quad.colors[3] = D_L00_001618F4;
     if (absolute_float_2d19b0(D_L00_00166C80_2d19b0[80] - *(f32 *)(m + 0x10)) < 16.0f &&
         absolute_float_2d19b0(D_L00_00166C80_2d19b0[81] - *(f32 *)(m + 0x14)) < 16.0f)
         active = 1;
@@ -802,6 +803,8 @@ void FUN_L00_002d19b0(u8 *m) {
         blend = convert_integer_to_float_2d19b0(*(s32 *)(vars + 0x40));
         blend /= convert_integer_to_float_2d19b0(scale_game_frames_2d19b0(0x3c));
         uv = D_L00_001E0B00_2d19b0;
+        texcoords = quad.texcoords;
+        uv_y = quad.texcoords + 1;
         old_uv = D_L00_001E0E30_2d19b0;
         for (i = 0; i < 0x66; i++) {
             transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
@@ -835,19 +838,21 @@ void FUN_L00_002d19b0(u8 *m) {
     } else {
         if (m[0xbc] == 1) {
             m[0xbc] = 0;
+            texcoords = quad.texcoords;
+            uv_y = quad.texcoords + 1;
             for (i = 0; i < 0x66; i++) {
                 D_L00_001E0E30_2d19b0[i][0] = D_L00_001E0B00_2d19b0[i][0];
                 D_L00_001E0E30_2d19b0[i][1] = D_L00_001E0B00_2d19b0[i][1];
                 transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
             }
         } else {
+            texcoords = quad.texcoords;
+            uv_y = quad.texcoords + 1;
             for (i = 0; i < 0x66; i++)
                 transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
         }
         *(s32 *)(vars + 0x40) = scale_game_frames_2d19b0(0x3c);
     }
-    texcoords = quad.texcoords;
-    uv_y = quad.texcoords + 1;
     for (i = 0; i < 0x4a; i++) {
         f32 *uv_x = texcoords;
         f32 *uv_second = uv_y;
