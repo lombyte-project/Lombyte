@@ -102,8 +102,8 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
     }
     ((u32 *)packet)[0] = quadwords | 0x10000000;
     ((u32 *)packet)[3] = quadwords | 0x50000000;
-    ((u32 *)packet)[1] = 0;
     ((u32 *)packet)[2] = 0;
+    ((u32 *)packet)[1] = 0;
     *glyph_tag = (s64)(glyph_count | 0x8000) | 0x4400000000000000ULL;
 }
 #endif /* NON_MATCHING */
