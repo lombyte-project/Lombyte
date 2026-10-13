@@ -1827,7 +1827,7 @@ void FUN_L06_002f2250(void) {
         }
     }
     if (moby_count > 0) {
-        int i, j, k, last;
+        int j, k, last;
         GbMoby *moby, *target;
         GbVars *vars;
         GbClass *cls;
@@ -1924,8 +1924,6 @@ void FUN_L06_002f2250(void) {
         float max_angle = 1.7453293f;
         GbMoby **target_list = targets;
         GbMoby **selected_list = selected;
-        int i;
-
         i = 0;
         do {
             int index, weight;
