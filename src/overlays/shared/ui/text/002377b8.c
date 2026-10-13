@@ -70,10 +70,11 @@ int FUN_L00_00237840(char *rec) {
     }
     i = 1;
     if (i < *(int *)(rec + 0x74)) do {
-        step = D_L00_0015F764 * 0xea0;
+        int h;
         h = D_L00_0015F764;
         top = (y + *(short *)(rec + 0x4a)) << 4;
         top += (h * 0xf40) / 256;
+        step = D_L00_0015F764 * 0xea0;
         step = i * step / (*(int *)(rec + 8) << 8);
         i++;
         top -= step;
