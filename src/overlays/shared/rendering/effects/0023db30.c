@@ -28,15 +28,19 @@ void FUN_L00_0023db30(void *m) {
     Quad_0023db30 quad;
     OvlVec4 pos, rot, normal, base, scaled, offset, copied, other;
     float four;
+    float quarter;
+    float minus_quarter;
     float copied_x, other_x;
+    u64 texture;
     int i;
     OvlVec4 *p; OvlVec4 *point1; OvlVec4 *copied_ptr; OvlVec4 *other_ptr;
 
-    quad.texture[1] = get_texture_0023db30(14);
+    texture = get_texture_0023db30(14);
     quad.colors[0] = 0x3ff08080;
     quad.colors[1] = 0x3ff08080;
     quad.colors[2] = 0x3ff08030;
     quad.colors[3] = 0x3ff08030;
+    quad.texture[1] = texture;
     quad.texture[2] = 0xff9000000260ULL;
     quad.texture[0] = 5;
     quad.texture[3] = 0x8000000048ULL;
@@ -61,8 +65,7 @@ void FUN_L00_0023db30(void *m) {
     qcopy(&copied, &pos);
     add_0023db30(&other, &copied, &pos);
     {
-        float quarter = 0.25f;
-        float minus_quarter;
+        quarter = 0.25f;
         copied.f[3] = quarter;
         other.f[3] = 0.5f;
 
@@ -101,7 +104,6 @@ void FUN_L00_0023db30(void *m) {
 
     }
     {
-        float quarter;
         qcopy(&quad.points[0], &copied);
         quarter = -0.25f;
         copied_x = four * copied.f[3];
@@ -139,8 +141,6 @@ void FUN_L00_0023db30(void *m) {
 
     }
     {
-        float quarter;
-        float minus_quarter;
         qcopy(&quad.points[0], &other);
         minus_quarter = -0.25f;
         quad.points[0].f[0] = four * other.f[3];
