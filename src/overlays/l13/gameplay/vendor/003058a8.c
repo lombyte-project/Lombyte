@@ -423,6 +423,7 @@ update_hit:
         goto collision;
     if (moby->visible != 0) {
         int i;
+        L13Vector_6300 *velocity = &work.velocity;
         for (i = 0; i < 3; i++) {
             *(OvlQuad *)&work.random_direction = 0;
             work.random_direction.x = random_float_between(-1.0f, 1.0f);
@@ -430,11 +431,11 @@ update_hit:
             work.random_direction.z = random_float_between(-1.0f, 1.0f);
             *(OvlQuad *)&work.velocity = *(OvlQuad *)&work.random_direction;
             length = vector_length_xyz(&work.random_direction);
-            scale_vector_xyz_6300(&work.velocity, &work.velocity, length * 0.1f);
-            add_vector_xyz(&work.velocity, &work.random_direction, &work.velocity);
-            scale_vector_xyz_6300(&work.velocity, &work.velocity,
+            scale_vector_xyz_6300(velocity, velocity, length * 0.1f);
+            add_vector_xyz(velocity, &work.random_direction, velocity);
+            scale_vector_xyz_6300(velocity, velocity,
                 random_float_between(D_0015ED6C + D_0015ED6C, D_0015ED6C * 4.0f));
-            FUN_L07_0029a2a0(&moby->pos, &work.velocity);
+            FUN_L07_0029a2a0(&moby->pos, velocity);
         }
     }
     mark_moby_for_removal(moby);
