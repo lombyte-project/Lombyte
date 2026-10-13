@@ -32,13 +32,10 @@ char *FUN_L05_002d4168(int owner, char *pos, int arg, float f0, float f1) {
     }
     return moby;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002f4f60.s", FUN_L05_002f4f60);
-#else
-extern short D_L05_0015FFD8;
+extern s32 moby_pool_4f60 __asm__("D_L05_0015FFD8");
 
 void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
-    int moby = *(int *)0x15ffd8 + index * 0x100;
+    int moby = moby_pool_4f60 + index * 0x100;
     char *trigger = (char *)trigger_arg;
     short kind;
     unsigned int flags;
@@ -52,7 +49,7 @@ void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
         } else if (trigger[0x7c] < 0) {
             *(unsigned short *)(moby + 0x34) |= 2;
         }
-            if (trigger[0x7d] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+        if (trigger[0x7d] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
             *(char *)(moby + 0x31) = 1;
             *(unsigned short *)(moby + 0x34) &= 0xfffe;
         } else if (trigger[0x7d] < 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
@@ -60,7 +57,7 @@ void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
             flags = *(unsigned short *)(moby + 0x34) | 1;
             *(unsigned short *)(moby + 0x34) = flags;
         }
-            if (trigger[0x7f] > 0 && *(int *)(moby + 0x24) != 0) {
+        if (trigger[0x7f] > 0 && *(int *)(moby + 0x24) != 0) {
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         } else if (trigger[0x7f] < 0 && *(int *)(moby + 0x24) != 0) {
             *(int *)(moby + 0x94) = 0;
@@ -71,7 +68,7 @@ void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
         } else if (trigger[0x7c] < 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef) {
             *(unsigned short *)(moby + 0x34) &= 0xfffd;
         }
-            if (trigger[0x7d] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+        if (trigger[0x7d] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
             *(char *)(moby + 0x31) = 0;
             flags = *(unsigned short *)(moby + 0x34) | 1;
             *(unsigned short *)(moby + 0x34) = flags;
@@ -79,14 +76,13 @@ void FUN_L05_002f4f60(int index, int trigger_arg, int inside) {
             *(char *)(moby + 0x31) = 1;
             *(unsigned short *)(moby + 0x34) &= 0xfffe;
         }
-            if (trigger[0x7f] > 0) {
+        if (trigger[0x7f] > 0) {
             *(int *)(moby + 0x94) = 0;
         } else if (trigger[0x7f] < 0) {
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
         }
     }
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -867,7 +863,7 @@ void FUN_L05_00319510(void *moby_v) {
 }
 /* Finds the pool moby in this moby's class list whose data id at 0xB4 matches. */
 extern unsigned short *D_L05_001ABCC0_9598[] __asm__("D_L05_001ABCC0");
-extern char *D_L05_0015FFD8_9598 __asm__("D_L05_0015FFD8") __attribute__((sda));
+extern char *D_L05_0015FFD8_9598 __asm__("D_L05_0015FFD8");
 typedef struct { char pad[0x78]; char *data; char pad2[0x84]; } M_9598;
 char *FUN_L05_00319598(unsigned char *arg, int id) {
     unsigned short *p = D_L05_001ABCC0_9598[arg[0x21]];
