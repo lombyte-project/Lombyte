@@ -167,17 +167,19 @@ void FUN_L14_003017f8(char *m) {
     float origin[4] __attribute__((aligned(16)));
     int i, j, index, next, color;
     float length, t;
+    float y;
 
     D_L14_001600EC[*(int *)d].origin.f[3] = 1.0f;
     {
-        short duration = random_integer_between(scale_game_frames(D_L14_001620BC),
+        int duration = random_integer_between(scale_game_frames(D_L14_001620BC),
                                                 scale_game_frames(D_L14_001620C0));
-        *(int *)(d + 0x620) = duration;
+        *(int *)(d + 0x620) = (short)duration;
         *(short *)(d + 0x12) = duration;
     }
     length = vector_length_xyz(&D_L14_001600EC[*(int *)d].axis[1]);
+    length = length + length;
     for (i = 0; i < 32; i++) {
-        t = 0.5f - convert_integer_to_float(i) / convert_integer_to_float(31);
+        t = (0.5f - convert_integer_to_float(i) / convert_integer_to_float(31)) * length;
         if ((unsigned)(i - 3) < 26) {
             set_vector_xyz(path_a[i], 0.0f, D_L14_001620FC);
             set_vector_xyz(path_b[i], 0.0f, D_L14_00162100 * D_0015ED6C);
@@ -185,8 +187,9 @@ void FUN_L14_003017f8(char *m) {
             clear_u64_value(path_a[i]);
             clear_u64_value(path_b[i]);
         }
+        y = path_a[i][1];
         path_a[i][3] = 1.0f;
-        path_a[i][1] += t * (length + length);
+        path_a[i][1] = y + t;
     }
     for (i = 0; i < 32; i++) {
         if (i != 0 && i != 31) {
@@ -211,31 +214,31 @@ void FUN_L14_003017f8(char *m) {
         *(u128 *)(d + 0x420 + (i << 4)) = *(u128 *)(d + 0x20 + (index << 4));
         *(u128 *)(d + 0x520 + (i << 4)) = *(u128 *)(d + 0x220 + (index << 4));
         for (j = 2; j >= 0; j--) {
-            set_vector_xyz(work, 0.1f, 0.1f);
+            set_vector_xyz(delta_a, 0.1f, 0.1f);
             set_vector_xyz(d + 0x560 + (i << 4) + ((2 - j) << 6), 0.0f,
                            D_L14_00162100 * D_0015ED6C);
             add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
                            d + 0x420 + (i << 4) + ((2 - j) << 6), work);
             add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
-                           d + 0x460 + (i << 4) + ((2 - j) << 6), work);
+                           d + 0x460 + (i << 4) + ((2 - j) << 6), delta_a);
         }
     }
     if (FUN_001f9b80(&D_L14_001600EC[*(int *)d].origin, (void *)0x001674c0) >= 4.0f) {
         FUN_001fa050(matrix, &D_L14_001600EC[*(int *)d].pad40[0x30]);
-        *(u128 *)origin = *(u128 *)&D_L14_001600EC[*(int *)d].origin;
-        for (i = 0; i < 4; i++) {
-            FUN_001f9d20(work, d + 0x20 + (i << 7), matrix);
-            *(u128 *)delta_a = *(u128 *)(d + 0x220 + (i << 7));
+        qcopy(origin, &D_L14_001600EC[*(int *)d].origin);
+        for (i = 0; i < 32; i += 8) {
+            FUN_001f9d20(work, d + 0x20 + (i << 4), matrix);
+            qcopy(delta_a, d + 0x220 + (i << 4));
             delta_a[3] = D_L14_00162114;
             index = random_integer_below(2);
             color = index ? D_L14_0016211C : D_L14_00162120;
             index = random_integer_below(10);
             FUN_00218888(work, delta_a, delta_a, D_L14_00162108,
-                           D_L14_0016210C, i * 4, 15, scale_game_frames(index + 20), color);
+                           D_L14_0016210C, i >> 1, 15, scale_game_frames(index + 20), color);
         }
         for (i = 0; i < 2; i++) {
             FUN_001f9d20(work, d + 0x4e0 + (i << 4), matrix);
-            *(u128 *)delta_a = *(u128 *)(d + 0x5e0 + (i << 4));
+            qcopy(delta_a, d + 0x5e0 + (i << 4));
             delta_a[3] = D_L14_00162114;
             random_integer_below(2);
             index = random_integer_below(10);
