@@ -448,6 +448,7 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
     Vec_260a88 base, position, velocity, offset, adjusted, difference, quarter;
     float crossings[2];
     float time;
+    float scale;
     int large = 0, medium = 0, small = 0, single;
     int count, remaining, multiplier, near_count, far_count;
     int near_large, near_medium, near_small, near_single;
@@ -536,7 +537,7 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
                 } while (count < near_value && near_value > 3);
             }
             if (count > 3) {
-                int value_large = 0, value_medium = 0, value_small = 0;
+                int value_large = b_large * 50, value_medium = b_medium * 20, value_small = b_small * 5;
                 do {
                     if (b_single) {
                         b_single--; value_small += 5; b_small++;
@@ -559,8 +560,10 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
         qcopy(&position, moby + 0x10);
         position.f[2] += 0.5f;
         time = FUN_00257cb0_260a88();
-        velocity.f[0] = FUN_001ff7e8_260a88(time) * (FUN_00257be8_260a88(0.0f, 3.0f) * D_L00_0015ED6C_260a88);
-        velocity.f[1] = FUN_001ff800_260a88(time) * (FUN_00257be8_260a88(0.0f, 3.0f) * D_L00_0015ED6C_260a88);
+        scale = FUN_001ff7e8_260a88(time);
+        velocity.f[0] = scale * (FUN_00257be8_260a88(0.0f, 3.0f) * D_L00_0015ED6C_260a88);
+        scale = FUN_001ff800_260a88(time);
+        velocity.f[1] = scale * (FUN_00257be8_260a88(0.0f, 3.0f) * D_L00_0015ED6C_260a88);
         velocity.f[2] = 0.0f;
         velocity.f[2] = FUN_00257be8_260a88(3.7f, 6.0f) * D_L00_0015ED6C_260a88;
         offset.f[0] = velocity.f[0];
