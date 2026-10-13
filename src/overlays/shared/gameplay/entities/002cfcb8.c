@@ -1137,7 +1137,7 @@ target_valid:
         return;
     }
     if (*(u8 **)(vars + 0x50) != 0) {
-        qcopy(*(u8 **)(vars + 0x50) + 0x10, vars + 0x40);
+        ((V2d2670 *)(*(u8 **)(vars + 0x50) + 0x10))->q = ((V2d2670 *)(vars + 0x40))->q;
     } else {
         if (get_ammo(-1)) {
             velocity.q = 0;
