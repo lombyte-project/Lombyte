@@ -1973,6 +1973,7 @@ void FUN_L10_002da690(struct Moby *moby) {
     char scratch[(unsigned int)*(int *)(data + 4) * 0x40];
     /* The draw helper reads UVs at quad + 0x50 and packet words at quad + 0x70. */
     struct {
+        unsigned char vertices[0x50];
         float matrix1[16];
         union {
             unsigned char quad[0x90];
@@ -1980,8 +1981,6 @@ void FUN_L10_002da690(struct Moby *moby) {
         } packet;
         float rotation[16];
     } buffers __attribute__((aligned(16)));
-    u64 *words1 = (u64 *)buffers.matrix1;
-    u64 *words2 = (u64 *)buffers.packet.fields.matrix2;
     int i, group, row, vertex;
     float fade, phase;
     char *transform;
@@ -1996,15 +1995,12 @@ void FUN_L10_002da690(struct Moby *moby) {
         *(OvlQuad *)(transform + 0x30) = *(OvlQuad *)&moby->pos;
         *(float *)(transform + 0x38) += convert_integer_to_float_da690(i + 1) * *(float *)(data + 8);
     }
-    words1[5] = get_effect_texture_da690(14);
-    words1[6] = 0xff9000000260ULL;
-    words1[7] = ((u64)*(int *)0x0015b070) | ((u64)*(int *)0x0015b074 << 2) |
+    ((u64 *)buffers.matrix1)[5] = ((u64 *)buffers.packet.fields.matrix2)[5] = get_effect_texture_da690(14);
+    ((u64 *)buffers.matrix1)[6] = ((u64 *)buffers.packet.fields.matrix2)[6] = 0xff9000000260ULL;
+    ((u64 *)buffers.matrix1)[7] = ((u64 *)buffers.packet.fields.matrix2)[7] = ((u64)*(int *)0x0015b070) | ((u64)*(int *)0x0015b074 << 2) |
                 ((u64)*(int *)0x0015b078 << 4) | ((u64)*(int *)0x0015b07c << 6) | 0x8000000000ULL;
-    words1[4] = 0;
-    words2[4] = 0;
-    words2[5] = words1[5];
-    words2[6] = words1[6];
-    words2[7] = words1[7];
+    ((u64 *)buffers.matrix1)[4] = 0;
+    ((u64 *)buffers.packet.fields.matrix2)[4] = 0;
     for (i = 0; i < 4; i++) {
         buffers.matrix1[i * 2 + 1] = buffers.packet.fields.matrix2[i * 2 + 1] = ((float *)0x001d9ff4)[i * 2];
     }
