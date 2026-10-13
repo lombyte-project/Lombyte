@@ -1285,9 +1285,9 @@ void FUN_L15_0029a570(void *mp, int flag) {
     int kind;
     int code;
     float angle;
+    float fall_angle;
     float speed;
     float fall_speed;
-    float vx, vy, vz;
     int amount;
     float pos[4];
     int *path;
@@ -1330,22 +1330,28 @@ void FUN_L15_0029a570(void *mp, int flag) {
         case 7:
         case 8:
             {
-            float frame_time_sq_value = D_0015ED70;
-            float frame_time_value = D_0015ED6C;
-            vz = D_L15_00161400 * frame_time_value;
-            vy = D_L15_001613F8 * frame_time_value;
-            vx = D_L15_001613FC * frame_time_value;
-            fall_speed = D_L15_001613F0 * frame_time_sq_value;
+                float frame_time_value;
+                float frame_time_sq_value;
+                float vx;
+                float vy;
+                float vz;
+                frame_time_value = D_0015ED6C;
+                frame_time_sq_value = D_0015ED70;
+                fall_speed = D_L15_001613F0 * frame_time_sq_value;
+                vx = D_L15_001613FC * frame_time_value;
+                vy = D_L15_001613F8 * frame_time_value;
+                vz = D_L15_00161400 * frame_time_value;
+                *(float *)(data + 0x80) = fall_speed;
+                *(float *)(data + 0x88) = vx;
+                *(float *)(data + 0x8C) = vy;
+                *(float *)(data + 0x84) = vz;
+                *(float *)(data + 0xC0) = 5.0f;
+                *(float *)(data + 0xC4) = 10.0f;
             }
-            *(float *)(data + 0x80) = fall_speed;
-            *(float *)(data + 0x88) = vx;
-            *(float *)(data + 0x8C) = vy;
-            *(float *)(data + 0xC0) = 5.0f;
-            *(float *)(data + 0xC4) = 10.0f;
-            *(float *)(data + 0x84) = vz;
-            angle = FUN_001f9e90(*(float *)(moby + 0x10) - *(float *)(*(char **)(hit + 0x20) + 0x10),
+            speed = FUN_001f9e90(*(float *)(moby + 0x10) - *(float *)(*(char **)(hit + 0x20) + 0x10),
                                   *(float *)(moby + 0x14) - *(float *)(*(char **)(hit + 0x20) + 0x14));
             *(u128 *)pos = *(u128 *)(hit + 0x10);
+            angle = speed;
             FUN_L00_0025ab48(pos, &angle, data + 0x88, data + 0x8C);
             FUN_L00_0025c558(moby, data + 0x70, 7, 1, 0, angle);
             moby[0x20] = 0x15;
@@ -1355,25 +1361,31 @@ void FUN_L15_0029a570(void *mp, int flag) {
         case 1:
         case 2:
             {
-            float frame_time_value = D_0015ED6C;
-            float frame_time_sq_value = D_0015ED70;
-            fall_speed = D_L15_001613F4 * frame_time_sq_value;
-            vz = D_L15_0016140C * frame_time_value;
-            vy = D_L15_00161404 * frame_time_value;
-            vx = D_L15_00161408 * frame_time_value;
+                float frame_time_value;
+                float frame_time_sq_value;
+                float vx;
+                float vy;
+                float vz;
+                frame_time_value = D_0015ED6C;
+                frame_time_sq_value = D_0015ED70;
+                fall_speed = D_L15_001613F4 * frame_time_sq_value;
+                vx = D_L15_00161408 * frame_time_value;
+                vy = D_L15_00161404 * frame_time_value;
+                vz = D_L15_0016140C * frame_time_value;
+                *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+                *(float *)(data + 0x80) = fall_speed;
+                *(float *)(data + 0x88) = vx;
+                *(float *)(data + 0x8C) = vy;
+                *(float *)(data + 0x84) = vz;
+                *(float *)(data + 0xC0) = 8.0f;
+                *(float *)(data + 0xC4) = 16.0f;
             }
-            *(unsigned short *)(moby + 0x34) &= 0xEFFF;
-            *(float *)(data + 0x80) = fall_speed;
-            *(float *)(data + 0x88) = vx;
-            *(float *)(data + 0x8C) = vy;
-            *(float *)(data + 0xC0) = 8.0f;
-            *(float *)(data + 0xC4) = 16.0f;
-            *(float *)(data + 0x84) = vz;
-            angle = FUN_001f9e90(*(float *)(moby + 0x10) - *(float *)(*(char **)(hit + 0x20) + 0x10),
+            speed = FUN_001f9e90(*(float *)(moby + 0x10) - *(float *)(*(char **)(hit + 0x20) + 0x10),
                                   *(float *)(moby + 0x14) - *(float *)(*(char **)(hit + 0x20) + 0x14));
             *(u128 *)pos = *(u128 *)(hit + 0x10);
-            FUN_L00_0025ab48(pos, &angle, data + 0x88, data + 0x8C);
-            FUN_L00_0025c558(moby, data + 0x70, 8, 1, 0, angle);
+            fall_angle = speed;
+            FUN_L00_0025ab48(pos, &fall_angle, data + 0x88, data + 0x8C);
+            FUN_L00_0025c558(moby, data + 0x70, 8, 1, 0, fall_angle);
             moby[0x20] = 0x17;
             moby[0xBC] = 2;
             data[0x67] = 0xF0;
