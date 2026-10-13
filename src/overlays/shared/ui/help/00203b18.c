@@ -1037,7 +1037,8 @@ void FUN_L00_00206e00(void) {
                 input = g->attack_record + 12;
                 goto append;
             }
-            input = (g->state.current == HERO_STATE_CROUCH_SWING) ? 4 : 0;
+            input = 4;
+            if (g->state.current != HERO_STATE_CROUCH_SWING) input = 0;
         } else {
             input = 11;
             if (g->state.current != 0x22)
