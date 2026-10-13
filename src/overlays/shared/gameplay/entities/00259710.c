@@ -67,17 +67,14 @@ void make_hit_descriptor(char *a, int b, int c, float d, void *q) {
     qcopy(a, q);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002598b0.s", FUN_L00_002598b0);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002599e8.s", FUN_L00_002599e8);
-#else
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_002598b0(void *, void *, int, float, float, float, int, int, int);
-void FUN_L00_002599e8(void *a, int b, int c, float d, float e, float f, int g, int h, int i) {
+extern int FUN_L00_002598b0(void *, void *, int, float, float, float, int, int, int);
+/* Calls FUN_L00_002598b0 at a moby point; the f13 argument is ignored and c is passed again as a float. */
+int FUN_L00_002599e8(void *moby, int point, int c, float d, float unused, float f, int g, int h, int i) {
     float position[4] __attribute__((aligned(16)));
-    moby_point_position(a, b, position);
-    FUN_L00_002598b0(a, position, c, d, (float)c, f, g, h, i);
+    moby_point_position(moby, point, position);
+    return FUN_L00_002598b0(moby, position, c, d, (float)c, f, g, h, i);
 }
-#endif
 typedef unsigned int u128_259a88 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     u128_259a88 v;
