@@ -1248,8 +1248,7 @@ void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
             total = dot + length;
             distance = vector_distance(pos, *(char **)((char *)v + 0x60) + 0x10) / total;
             if (dot > 0.0f) {
-                distance *= dot;
-                scale_vector_xyz_2acfd8(direction, difference, distance);
+                scale_vector_xyz_2acfd8(direction, difference, distance * dot);
             } else {
                 scale_vector_xyz_2acfd8(direction, v + 0x10, distance);
             }
