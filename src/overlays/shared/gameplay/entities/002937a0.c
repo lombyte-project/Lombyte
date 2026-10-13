@@ -648,9 +648,6 @@ void FUN_L08_002d4108(char *arg) {
     }
     FUN_001f7d30_002d4108(&pk, 0, 0);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e7eb0.s", FUN_L08_002e7eb0);
-#else
 extern char *create_moby_002e7eb0(int) __asm__("FUN_0020c4f8");
 extern void set_moby_color_002e7eb0(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void update_moby_002e7eb0(void *) __asm__("FUN_L00_00250df8");
@@ -699,6 +696,7 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
     char *moby;
     char *data;
     float * volatile particle_position_ptr;
+    float *velocity_ptr, *offset_ptr, *matrix_row_ptr;
 
     *(u128 *)position_copy = *(u128 *)position;
     *(u128 *)rotation_copy = *(u128 *)rotation;
@@ -727,25 +725,28 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
         if ((float)i < D_L08_00161CE0_002e7eb0) {
             /* Retail intentionally uses the matrix third row as the particle input. */
             particle_position_ptr = matrix[2];
+            velocity_ptr = velocity;
+            offset_ptr = offset;
+            matrix_row_ptr = matrix[1];
             do {
                 angle = random_angle_002e7eb0();
                 {
                     float spread = D_L08_00161D04_002e7eb0;
                     magnitude = random_float_between_002e7eb0(spread, spread + spread) * frame_time;
                 }
-                normalize_vector_xyz_002e7eb0(velocity, particle_position_ptr, magnitude * fast_cos_002e7eb0(angle));
-                normalize_vector_xyz_002e7eb0(offset, matrix[1], magnitude * fast_sin_002e7eb0(angle));
-                add_vector_xyz_002e7eb0(velocity, velocity, offset);
-                qcopy(offset, velocity);
+                normalize_vector_xyz_002e7eb0(velocity_ptr, particle_position_ptr, magnitude * fast_cos_002e7eb0(angle));
+                normalize_vector_xyz_002e7eb0(offset_ptr, matrix_row_ptr, magnitude * fast_sin_002e7eb0(angle));
+                add_vector_xyz_002e7eb0(velocity_ptr, velocity_ptr, offset_ptr);
+                qcopy(offset_ptr, velocity_ptr);
                 velocity[3] = D_L08_00161D14_002e7eb0;
                 offset[3] = D_L08_00161D18_002e7eb0;
                 i++;
-                spawn_particle_002e7eb0(moby + 0x10, velocity, D_L08_00161CF8_002e7eb0, D_L08_00161CFC_002e7eb0,
+                spawn_particle_002e7eb0(moby + 0x10, velocity_ptr, D_L08_00161CF8_002e7eb0, D_L08_00161CFC_002e7eb0,
                     random_integer_002e7eb0(scale_game_frames_int_002e7eb0(10), scale_game_frames_int_002e7eb0(20)), 1, 20000.0f);
                 a = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D08_002e7eb0, (float)D_L08_00161D08_002e7eb0 * 1.2f)));
                 b = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D0C_002e7eb0, (float)D_L08_00161D0C_002e7eb0 * 1.2f)));
                 c = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D10_002e7eb0, (float)D_L08_00161D10_002e7eb0 * 1.5f)));
-                FUN_00218888_002e7eb0(moby + 0x10, velocity, offset, D_L08_00161CF0_002e7eb0, D_L08_00161CF4_002e7eb0, a, b, c, -1);
+                FUN_00218888_002e7eb0(moby + 0x10, velocity_ptr, offset_ptr, D_L08_00161CF0_002e7eb0, D_L08_00161CF4_002e7eb0, a, b, c, -1);
             } while ((float)i < D_L08_00161CE0_002e7eb0);
         }
         if (D_0015ED84_002e7eb0 == 12)
@@ -756,7 +757,6 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
     }
     return moby;
 }
-#endif
 extern void scale_vector_xyz_002e8210(void *, void *, float) __asm__("FUN_001f9a68");
 extern float vector_distance_xyz_002e8210(void *, void *) __asm__("FUN_001f9b48");
 extern float random_angle_002e8210(void) __asm__("FUN_00213308");
