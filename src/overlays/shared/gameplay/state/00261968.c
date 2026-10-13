@@ -137,9 +137,6 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     return found;
 }
 #endif /* NON_MATCHING */
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261d78.s", FUN_L00_00261d78);
-#else
 #include "rnc/overlay/quad.h"
 
 typedef struct {
@@ -157,7 +154,7 @@ extern void FUN_001ff3c0_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_00
 extern f32 FUN_001ff3d8_261d78(OvlVec4 *) __asm__("FUN_001f9af0");
 extern void FUN_001ff500_261d78(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
 
-s32 FUN_L00_00261d78(f32 distance, volatile s32 path_index, OvlVec4 *point, OvlVec4 *out) {
+s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out) {
     OvlVec4 difference;
     OvlVec4 scaled_difference;
     OvlVec4 working;
@@ -167,62 +164,47 @@ s32 FUN_L00_00261d78(f32 distance, volatile s32 path_index, OvlVec4 *point, OvlV
     OvlVec4 scaled_cross;
     SegmentPath_261d78 **entry;
     s32 i;
-    s32 offset;
     s32 found;
-    s32 next;
-    f32 segment_length;
-    f32 projection;
 
-    working.q = point->q;
     found = 0;
-    entry = &D_L00_001B04B0_261d78[path_index];
-    i = 0;
-    if (0 < (*entry)->count - 1) {
-        do {
-            entry = &D_L00_001B04B0_261d78[path_index];
-            offset = i << 4;
-            next = i + 1;
-            if ((*entry)->points[i].f[3] != 0.0f || (*entry)->points[next].f[3] != 0.0f) {
-                FUN_001ff2a8_261d78(&difference, &working, (OvlVec4 *)((u8 *)*entry + offset + 0x10));
-                difference.i[2] = 0;
-                FUN_001ff2a8_261d78(&segment, (OvlVec4 *)((u8 *)*entry + offset + 0x20), (OvlVec4 *)((u8 *)*entry + offset + 0x10));
-                segment.i[2] = 0;
-                FUN_001ff500_261d78(&scaled_segment, &segment, 1.0f);
-                FUN_001ff3c0_261d78(&cross, &difference, &scaled_segment);
-                segment_length = FUN_001ff218_261d78(cross.f[2]);
-                if (distance < segment_length)
-                    goto next_segment;
-                {
-                    segment_length = FUN_001ff3d8_261d78(&segment);
-                    projection = FUN_001ff398_261d78(&difference, &scaled_segment);
-                    if (segment_length < projection || projection < 0.0f) {
-                        segment_length = FUN_001ff3d8_261d78(&difference);
-                        if (!(segment_length < distance))
-                            goto next_segment;
-                        found = 1;
-                        FUN_001ff500_261d78(&scaled_difference, &difference, distance);
-                        FUN_001ff278_261d78(&working, &scaled_difference, (OvlVec4 *)((u8 *)*entry + offset + 0x10));
-                        working.f[2] = point->f[2];
-                    } else {
-                        found = 1;
-                        FUN_001ff500_261d78(&scaled_cross, &scaled_segment, projection);
-                        FUN_001ff2a8_261d78(&scaled_difference, &difference, &scaled_cross);
-                        FUN_001ff500_261d78(&scaled_difference, &scaled_difference, distance);
-                        FUN_001ff278_261d78(&scaled_difference, &scaled_difference, &scaled_cross);
-                        FUN_001ff278_261d78(&working, &scaled_difference, (OvlVec4 *)((u8 *)*entry + offset + 0x10));
-                        working.f[2] = point->f[2];
-                    }
-                }
+    qcopy_nc(&working, point);
+    for (i = 0; i < D_L00_001B04B0_261d78[path_index]->count - 1; i++) {
+        entry = &D_L00_001B04B0_261d78[path_index];
+        if ((*entry)->points[i].f[3] == 0.0f && (*entry)->points[i + 1].f[3] == 0.0f)
+            continue;
+        FUN_001ff2a8_261d78(&difference, &working, &(*entry)->points[i]);
+        difference.i[2] = 0;
+        FUN_001ff2a8_261d78(&segment, &(*entry)->points[i + 1], &(*entry)->points[i]);
+        segment.i[2] = 0;
+        FUN_001ff500_261d78(&scaled_segment, &segment, 1.0f);
+        FUN_001ff3c0_261d78(&cross, &difference, &scaled_segment);
+        if (distance < FUN_001ff218_261d78(cross.f[2]))
+            continue;
+        {
+            f32 segment_length = FUN_001ff3d8_261d78(&segment);
+            f32 projection = FUN_001ff398_261d78(&difference, &scaled_segment);
+            if (segment_length < projection || projection < 0.0f) {
+                if (!(FUN_001ff3d8_261d78(&difference) < distance))
+                    continue;
+                found = 1;
+                FUN_001ff500_261d78(&scaled_difference, &difference, distance);
+                FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[i]);
+                working.f[2] = point->f[2];
+            } else {
+                found = 1;
+                FUN_001ff500_261d78(&scaled_cross, &scaled_segment, projection);
+                FUN_001ff2a8_261d78(&scaled_difference, &difference, &scaled_cross);
+                FUN_001ff500_261d78(&scaled_difference, &scaled_difference, distance);
+                FUN_001ff278_261d78(&scaled_difference, &scaled_difference, &scaled_cross);
+                FUN_001ff278_261d78(&working, &scaled_difference, &(*entry)->points[i]);
+                working.f[2] = point->f[2];
             }
-next_segment:
-            i = next;
-        } while (i < D_L00_001B04B0_261d78[path_index]->count - 1);
+        }
     }
     if (found)
-        out->q = working.q;
+        qcopy(out, &working);
     return found;
 }
-#endif /* NON_MATCHING */
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262030.s", FUN_L00_00262030);
 #else
