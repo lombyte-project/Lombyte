@@ -1031,7 +1031,8 @@ extern u8 D_0013E539;
 extern s32 D_001413D4;
 extern u8 D_001413F8, D_001413FC;
 extern s32 D_0013F50C, D_0013F4E8;
-extern u32 D_0013CAE4, D_001403F0;
+extern u32 D_0013CAE4 __attribute__((section(".data")));
+extern u32 D_001403F0;
 extern s32 D_0015EEA4;
 extern struct UsageStat D_00141748;
 extern u8 D_00141680[] __attribute__((section(".data")));
@@ -1059,7 +1060,7 @@ void FUN_L00_002d2670(u8 *moby) {
     u8 start[64] __attribute__((aligned(16)));
     V2d2670 velocity;
     s32 value;
-    struct UsageStat *stat;
+    struct { u8 pad[0xc8]; struct UsageStat stat; } *stat;
 
     if (moby == 0) return;
     vars = *(u8 **)(moby + 0x78);
@@ -1075,7 +1076,8 @@ void FUN_L00_002d2670(u8 *moby) {
     if (target != 0) {
         *(s32 *)(target + 0x98) = 1;
         if (D_0013E539 && *(s16 *)(*(u8 **)(vars + 0x50) + 0xa6) != 0x76c) {
-            velocity.q = 0;
+            *(u64 *)&velocity = 0;
+            *((u64 *)&velocity + 1) = 0;
             FUN_L00_0025f800(*(u8 **)(vars + 0x50), D_L00_001B0830);
             FUN_0020c828_2d2670(*(u8 **)(vars + 0x50));
             *(u8 **)(vars + 0x50) = FUN_L00_002c35c0((s32)moby, vars + 0x40, &velocity);
@@ -1090,7 +1092,7 @@ target_valid:
     if (hero.state.current == 1) FUN_L00_002223f8(0x1e, 1);
     if (FUN_001fef68_2d2670((s32 *)(vars + 0x54)) && hero.unk20AC == 0) {
         if ((hero.unk20A8 && hero.unk1BC == FUN_001fef20_2d2670(0x11)) ||
-            ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1e && get_ammo(-1)) ||
+            ((hero.items[0].button_mask & D_0013CAE4) && hero.state.current == 0x1e && get_ammo(-1)) ||
             (hero.state.current == 0x23 && hero.state_timer == FUN_001fef20_2d2670(0x10))) {
             FUN_L00_00216de8(0x1a, 0);
             use_ammo(-1, 1);
@@ -1102,23 +1104,22 @@ target_valid:
     switch (moby[0x20]) {
     case 0:
         *(u8 **)(vars + 0x50) = 0;
-        moby[0x20] = 2;
-        if ((moby[0x70] & 2) == 0) moby[0x20] = 1;
+        moby[0x20] = (moby[0x70] & 2) ? 2 : 1;
     case 1:
         if (moby[0x70] & 2) moby[0x20] = 2;
         break;
     case 3:
-        if (*(u8 **)(vars + 0x50) == 0) {
-            FUN_0022da68_2d2670(0, 0, moby);
-        } else {
-            stat = (struct UsageStat *)(D_00141680 + 0xc8);
-            if (stat->count < 0xffff) stat->count++;
+        if (*(u8 **)(vars + 0x50) != 0) {
+            stat = (void *)D_00141680;
+            if (stat->stat.count < 0xffff) stat->stat.count++;
             value = FUN_001fef20_2d2670(D_0015EEA4) / 600;
-            if (stat->unk2 < value) stat->unk2 = FUN_001fef20_2d2670(D_0015EEA4) / 600;
-            stat->level_mask |= (1 << current_level_index) | 0x80000000;
+            if (stat->stat.unk2 < value) stat->stat.unk2 = FUN_001fef20_2d2670(D_0015EEA4) / 600;
+            stat->stat.level_mask = (stat->stat.level_mask | (1 << current_level_index)) | 0x80000000;
             FUN_L00_002c3888(vars + 0x40, *(u8 **)(vars + 0x50),
                 *(u8 **)(*(u8 **)(vars + 0x50) + 0x78) + 0x10);
             *(u8 **)(vars + 0x50) = 0;
+        } else {
+            FUN_0022da68_2d2670(0, 0, moby);
         }
         moby[0x20] = 4;
         *(s32 *)(vars + 0x54) = FUN_001fef20_2d2670(0x14);
@@ -1138,9 +1139,13 @@ target_valid:
     if (*(u8 **)(vars + 0x50) != 0) {
         qcopy(*(u8 **)(vars + 0x50) + 0x10, vars + 0x40);
     } else {
-        if (get_ammo(-1)) velocity.q = 0;
-        else if (hero.unk20A8) velocity.q = 0;
-        else return;
+        if (get_ammo(-1)) {
+            *(u64 *)&velocity = 0;
+            *((u64 *)&velocity + 1) = 0;
+        } else if (hero.unk20A8) {
+            *(u64 *)&velocity = 0;
+            *((u64 *)&velocity + 1) = 0;
+        } else return;
         *(u8 **)(vars + 0x50) = FUN_L00_002c35c0((s32)moby, vars + 0x40, &velocity);
     }
 }
