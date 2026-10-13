@@ -947,13 +947,14 @@ extern s32 trace_segment_2d2158(void *, void *, s32, void *, s32) __asm__("FUN_0
 extern void FUN_L00_002d1f30(void *, void *, void *, f32, f32, f32);
 
 void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
-    void *volatile saved_moby = moby;
+    void *volatile saved_moby;
     Vec_2d2158 target;
     Vec_2d2158 basis[3], matrix[4], direction, offset, trace_start, trace_end, velocity;
     void *tracked;
     f32 angle, length, ratio, amount, vertical;
     s32 hit;
     target = *position;
+    saved_moby = moby;
     setup_matrix_2d2158(basis, &D_L00_00166C80_2d2158[0]);
     matrix_from_basis_rows_2d2158(matrix, basis);
     tracked = *(void **)(vars + 0x50);
