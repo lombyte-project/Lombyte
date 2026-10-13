@@ -899,9 +899,10 @@ void FUN_L00_001f4598(void) {
         if ((g_debug_menu.selected_row == 1) && ((D_0013C940.buttons.w.pressed & 0x50) != 0)) {
             g_debug_menu.actuator_enabled = (u32)(g_debug_menu.actuator_enabled == 0);
         }
-        if ((g_debug_menu.selected_row == 2) && (index = 0, (D_0013C940.buttons.w.pressed & 0xf0) != 0)) {
+        if ((g_debug_menu.selected_row == 2) && ((D_0013C940.buttons.w.pressed & 0xf0) != 0)) {
+            b32 enabled = FALSE;
+            s32 index = 0;
             f64 formatted_x, formatted_y, formatted_z;
-            enabled = FALSE;
             if (0 < D_L00_0015F614) {
                 f32 *capture_positions = D_L00_00173E20;
                 do {
