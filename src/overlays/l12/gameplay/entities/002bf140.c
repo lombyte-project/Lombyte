@@ -867,8 +867,9 @@ void FUN_L12_002e3098(struct Moby *moby) {
     float angle, horizontal, vertical, radius;
     int i, j, count, a, b, c, d, life;
     float *position;
+    float *direction_ptr;
 
-    void *vars = moby->pvars;
+    void *vars = *(void *volatile *)&moby->pvars;
 
     count = D_L12_0016183C;
     if (moby->state == 15)
@@ -876,6 +877,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
     i = 0;
     if (count > 0) {
         position = pos;
+        direction_ptr = direction;
 
         do {
         qcopy(pos, &moby->pos);
@@ -892,9 +894,9 @@ void FUN_L12_002e3098(struct Moby *moby) {
         velocity[0] = fast_cos_e3098(angle) * (horizontal * frame_time);
         velocity[1] = fast_sin_e3098(angle) * (horizontal * frame_time);
         velocity[2] = vertical * frame_time + 0.0f;
-        set_direction(0.5f, direction, (char *)vars + 0x120);
+        set_direction(0.5f, direction_ptr, (char *)vars + 0x120);
         direction[2] = 0.0f;
-        rotate_vector(velocity, velocity, direction);
+        rotate_vector(velocity, velocity, direction_ptr);
         qcopy(accel, velocity);
         accel[2] -= D_L12_00161860 * frame_time_sq *
                     (float)scale_game_frames_e3098(D_L12_00161880);
