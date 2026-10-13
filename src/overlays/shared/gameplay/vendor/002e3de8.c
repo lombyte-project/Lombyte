@@ -258,12 +258,12 @@ void FUN_L10_002f5b58(char *moby) {
     char *data = *(char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 0x20 + 0x1c);
     char *work;
     float angle;
-    short *indices;
+    short * volatile indices;
     float *angles;
     char *acc;
+    char *moby_scale;
     char *moby_pos;
     char *moby_rot;
-    char *moby_scale;
 
     data[0x38] = 1;
     work = *(char **)(moby + 0x70);
