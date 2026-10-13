@@ -2066,15 +2066,15 @@ void FUN_L00_00210748(void) {
                 slot_hero->unk20++;
                 hero_switch_item(i);
                 if (i == 0) {
-                    char *p = (char *)&hero;
+                    int p = 0;
                     struct HeroEase *e = &hero.unk18F0[0];
-                    char *end = p + 0x210;
+                    int end = 3;
                     do {
-                        if (((struct HeroEase *)(p + 0x18F0))->unkA0 != -1) {
-                            ((struct HeroEase *)(p + 0x18F0))->kind = 5;
+                        if (hero.unk18F0[p].unkA0 != -1) {
+                            hero.unk18F0[p].kind = 5;
                             FUN_L00_00205168(e);
                         }
-                        p += 0xB0;
+                        p++;
                         e++;
                     } while (p < end);
                 }
