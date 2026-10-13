@@ -1995,7 +1995,14 @@ void FUN_L10_002da690(void *moby) {
     int i, group, row, vertex;
     float fade, phase;
     char *transform;
-    float *matrix1, *matrix2, *uv1, *uv2;
+    unsigned char *order;
+    int group_age;
+    char *age_base;
+    char *ages;
+    int group_vertices;
+    float *matrix1;
+    int next_group, next_row;
+    float *matrix2, *uv1, *uv2;
 
     {
         float distance = vector_distance_da690(&((struct Moby *)moby)->pos, &D_L10_00167240);
@@ -2024,11 +2031,11 @@ void FUN_L10_002da690(void *moby) {
         u64 texture = get_effect_texture_da690(14);
         u64 packet_flags = ((u64)D_L10_00161C70) | ((u64)D_L10_00161C74 << 2) |
                 ((u64)D_L10_00161C78 << 4) | ((u64)D_L10_00161C7C << 6) | 0x8000000000ULL;
-        ((u64 *)buffers.packet.fields.matrix2)[5] = texture;
         ((u64 *)buffers.matrix1)[5] = texture;
+        ((u64 *)buffers.packet.fields.matrix2)[5] = texture;
         ((u64 *)buffers.matrix1)[6] = 0xff9000000260ULL;
-        ((u64 *)buffers.matrix1)[7] = packet_flags;
         ((u64 *)buffers.packet.fields.matrix2)[6] = 0xff9000000260ULL;
+        ((u64 *)buffers.matrix1)[7] = packet_flags;
         ((u64 *)buffers.packet.fields.matrix2)[4] = 0;
         ((u64 *)buffers.matrix1)[4] = 0;
         ((u64 *)buffers.packet.fields.matrix2)[7] = packet_flags;
@@ -2048,16 +2055,16 @@ void FUN_L10_002da690(void *moby) {
         } while (--i >= 0);
     }
     {
-        char *age_base = base + 0x10000;
+        age_base = base + 0x10000;
         group = 0;
         do {
-            int next_group = group + 1;
+            next_group = group + 1;
             phase = 0.0f;
             row = 0;
             do {
-                int next_row;
                 phase += D_L10_00161D60;
                 if (phase > 1.0f) phase -= 1.0f;
+                group_vertices = (int)((long long)group * 0x2580);
                 next_row = row + 1;
                 for (i = 0; i < 4; i++) {
                     float value = ((float *)0x001d9ff0)[i * 2] + phase + *(float *)(base + 0x12de0);
@@ -2067,13 +2074,13 @@ void FUN_L10_002da690(void *moby) {
                 i = 0;
                 if (*(int *)(data + 4) > 0) {
                     do {
-                        unsigned char *order = (unsigned char *)(data + 0x10);
-                        int group_age = group * 0x78;
-                        int group_vertices = (int)((long long)group * 0x2580);
-                        char *ages = age_base + 0x2c00;
-                        int age = *(int *)(ages + (order[i] * 4 + group_age));
+                        int age;
                         float progress;
                         unsigned int color;
+                        order = (unsigned char *)(data + 0x10);
+                        group_age = group * 0x78;
+                        ages = age_base + 0x2c00;
+                        age = *(int *)(ages + (order[i] * 4 + group_age));
                         if (age > D_L10_00161D68) {
                             progress = convert_integer_to_float_da690(age - D_L10_00161D68) /
                                        convert_integer_to_float_da690(D_L10_00161D64 - D_L10_00161D68);
