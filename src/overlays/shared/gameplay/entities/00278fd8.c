@@ -2491,9 +2491,6 @@ void FUN_L15_002a7628(char *moby) {
     *(OvlQuad *)q.v[3] = *(OvlQuad *)D;
     draw_geometry_quad(&q, 0, 0);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002bddb0.s", FUN_L15_002bddb0);
-#else
 typedef struct {
     Vec4 origin;
     s32 trigger;
@@ -2544,6 +2541,7 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         {
         union { u32 bits; f32 value; } triple;
         f32 increment;
+        f32 scale;
         travel = vars->travel;
         increment = (moby->scale * 3.0f / moby->pclass->scale) / 3.0f * frame_time;
         increment = reversed ? -increment : increment;
@@ -2554,9 +2552,11 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         add_vector_door(&next, &vars->origin, &offset);
         *(u128 *)&moby->pos = next.q;
         magnitude = FUN_001f99c0(vars->travel);
+        scale = moby->scale;
         triple.bits = 0x40400000;
         __builtin_memcpy(&step, &triple.bits, sizeof(step));
-        if (!(moby->scale * step / moby->pclass->scale < magnitude))
+        step = step + 0.0f;
+        if (!(scale * step / moby->pclass->scale < magnitude))
             return;
         if (vars->trigger != -1) {
             moby->state = 3;
@@ -2610,7 +2610,6 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         }
     }
 }
-#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cb4c8.s", FUN_L15_002cb4c8);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */
 
