@@ -2539,8 +2539,9 @@ void FUN_L00_002b03a0(unsigned char *m) {
     char *target;
     void * volatile hit_owner = 0;
     void *pos = m + 0x10;
-    int reduced = 0;
-    int count, mode, i, j, low, high, life, color1, color2;
+    volatile int i, count;
+    volatile int reduced = 0;
+    int mode, j, low, high, life, color1, color2;
     float ratio, factor, yaw, pitch, time, speed, coefficient, discriminant, root1, root2, angle, length, bias;
 
     up.q = 0;
@@ -2573,7 +2574,8 @@ void FUN_L00_002b03a0(unsigned char *m) {
                 FUN_L00_001ff2c0(&scratch.vectors.intercept, &scratch.vectors.velocity, &target_motion);
                 qcopy(v, &scratch.vectors.target_sample);
                 speed = FUN_L00_001ff430(&scratch.vectors.velocity);
-                speed = *(float *)&v->w20 * *(float *)&v->w20 - speed;
+                length = *(float *)&v->w20;
+                speed = length * length - speed;
                 coefficient = (scratch.vectors.velocity.f[0] * scratch.vectors.distance.f[0] + scratch.vectors.velocity.f[1] * scratch.vectors.distance.f[1] +
                                scratch.vectors.velocity.f[2] * scratch.vectors.distance.f[2]) * -2.0f;
                 length = FUN_L00_001ff430(&scratch.vectors.distance);
@@ -2581,8 +2583,8 @@ void FUN_L00_002b03a0(unsigned char *m) {
                 root1 = (-coefficient + discriminant) / (speed + speed);
                 root2 = (-coefficient - discriminant) / (speed + speed);
                 if (0.0f < root1 && 0.0f < root2) {
-                    time = root2;
                     if (root2 < root1) time = root1;
+                    else time = root2;
                 } else {
                     time = root1;
                     if (!(0.0f < root1)) {
