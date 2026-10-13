@@ -28,6 +28,7 @@ int FUN_L01_00276c40(int idx, int a, int mask) {
 }
 
 #include "rnc/overlay/quad.h"
+#include "qcopy.h"
 
 /* A path in D_L01_001B0930: point count, then the points. */
 typedef struct {
@@ -45,7 +46,7 @@ extern s32 FUN_L00_00261968_276a48(s32, OvlVec4 *, OvlVec4 *) __asm__("FUN_L00_0
 
 /* Bit i set for each point i of the path that none of the n segments in ids
    reaches from pos (with a sideways margin of radius when it is nonzero). */
-s32 FUN_L01_00276a48(s32 *ids, s32 n, s32 path_index, f32 radius, OvlVec4 *pos) {
+s32 FUN_L01_00276a48(s32 *ids, s32 n, f32 radius, s32 path_index, OvlVec4 *pos) {
     Path_276a48 *path = D_L01_001B0930_276a48[path_index];
     OvlVec4 side;
     OvlVec4 left;
@@ -85,9 +86,6 @@ s32 FUN_L01_00276a48(s32 *ids, s32 n, s32 path_index, f32 radius, OvlVec4 *pos) 
     }
     return mask;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00276fe8.s", FUN_L01_00276fe8);
-#else
 extern f32 vec_distance_276fe8(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9b80");
 
 s32 FUN_L01_00276fe8(s32 *ids, s32 n, s32 path_index, f32 radius,
@@ -103,7 +101,7 @@ s32 FUN_L01_00276fe8(s32 *ids, s32 n, s32 path_index, f32 radius,
     s32 j;
     f32 nearest;
     f32 x;
-    s32 *id = ids;
+    s32 from_mask, to_mask;
 
     for (j = 0; j < n; j++) {
         if (radius != 0.0f) {
@@ -127,9 +125,9 @@ s32 FUN_L01_00276fe8(s32 *ids, s32 n, s32 path_index, f32 radius,
     }
     if (hit) {
         path = D_L01_001B0930_276a48[path_index];
-        mask = FUN_L01_00276c40(path_index,
-                   FUN_L01_00276a48(ids, n, path_index, radius, pos),
-                   FUN_L01_00276a48(ids, n, path_index, radius, target));
+        from_mask = FUN_L01_00276a48(ids, n, radius, path_index, pos);
+        to_mask = FUN_L01_00276a48(ids, n, radius, path_index, target);
+        mask = FUN_L01_00276c40(path_index, from_mask, to_mask);
         if (mask != 0) {
             nearest = 10000.0f;
             best = -1;
@@ -143,13 +141,12 @@ s32 FUN_L01_00276fe8(s32 *ids, s32 n, s32 path_index, f32 radius,
                 }
             }
             if (best >= 0) {
-                out->q = *(OvlQuad *)((u8 *)path + best * 16 + 16);
+                qcopy(out, &path->pts[best]);
                 return 1;
             }
         }
         return 0;
     }
-    out->q = target->q;
+    qcopy(out, target);
     return 1;
 }
-#endif
