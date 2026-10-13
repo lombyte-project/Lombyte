@@ -86,6 +86,7 @@ void FUN_L05_00262b58(HudCounter *e) {
     s32 *src;
     s32 *dst;
     s32 limit;
+    u8 timer;
     u8 *counter = &e->timer;
 
     value = (f32)e->smoothed;
@@ -146,27 +147,30 @@ void FUN_L05_00262b58(HudCounter *e) {
             counter[0] = scale_game_frames(0x3c);
         }
         break;
-    case 2:
-    case 3:
+    default:
+        if ((u32)(counter[2] - 2) > 1) return;
 
-    if (counter[0] == 0) {
-        D_L05_0015FB00 = 0;
-        D_L05_0015FAD4 = 0;
-        D_L05_0015FAD8 = 0;
-        i = 3;
-        dst = &D_L05_0015FAEC;
-        do { *dst-- = 0; } while (--i >= 0);
-        counter[2] = 0;
-        counter[0] = 0;
-    } else if (counter[2] == 3 && counter[0] == scale_game_frames(0x6e)) {
-        D_0013FBF8 += D_L05_0015FB00;
-        D_0013FBB4 += D_L05_0015FB00 * 5;
-        limit = (s32)((f32)scale_game_frames(0x11) * 60.0f);
-        if (D_0013FBB4 > limit) {
-            D_0013FBB4 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
+        timer = counter[0];
+        if (timer != 0) {
+            if (counter[2] == 3 && timer == scale_game_frames(0x6e)) {
+                D_0013FBF8 += D_L05_0015FB00;
+                D_0013FBB4 += D_L05_0015FB00 * 5;
+                limit = (s32)((f32)scale_game_frames(0x11) * 60.0f);
+                if (D_0013FBB4 > limit) {
+                    D_0013FBB4 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
+                }
+            }
+        } else {
+            D_L05_0015FB00 = 0;
+            D_L05_0015FAD4 = 0;
+            D_L05_0015FAD8 = 0;
+            i = 3;
+            dst = &D_L05_0015FAEC;
+            do { *dst-- = 0; } while (--i >= 0);
+            counter[2] = 0;
+            counter[0] = 0;
         }
-    }
-    counter[0]--;
+        counter[0]--;
     }
 }
 #endif
