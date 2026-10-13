@@ -224,7 +224,7 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
         __builtin_memcpy(effect_dest, effect, 0x20);
     }
     if (data->initialized == 0) {
-        *(u128 *)&data->origin = *(u128 *)&moby->pos;
+        *(volatile u128 *)&data->origin = *(volatile u128 *)&moby->pos;
         data->angle = 0.0f;
     } else if (data->child_count == 0) {
         for (other = (struct Moby *)D_L04_0015FFE4; other != 0; other = other->next) {
@@ -256,17 +256,15 @@ initialize:
     s32 i;
     struct Moby *child;
     Vec4f *moby_pos;
-    children = data->children;
     data->initialized = 1;
     data->child_count = 0;
-    if (data->count <= 0) return;
     moby_pos = &moby->pos;
     for (i = 0; i < data->count; i++) {
-        children[i] = 0;
+        data->children[i] = 0;
         child = spawn_moby_29ecf8(0x55);
         if (child != 0) {
             struct Moby *part = (struct Moby *)child->pvars;
-            children[i] = child;
+            data->children[i] = child;
             child->update_dist = 0x7f;
             child->draw_dist = 0x7f;
             child->scale *= random_float_between_29ecf8(0.7f, 1.3f);
@@ -290,7 +288,7 @@ initialize:
             *(volatile f32 *)((char *)part + 0x94) = 5.0f;
             *(volatile f32 *)((char *)part + 0x48) = 1.056f;
             *(s16 *)((char *)part + 0x5c) = -1;
-            *(volatile f32 *)((char *)part + 0x40) = 0.003f;
+            *(f32 *)((char *)part + 0x40) = 0.003f;
             *(s16 *)((char *)part + 0x5e) = 2;
             *(s16 *)((char *)part + 0x60) = 0x55;
             *(volatile f32 *)((char *)part + 0x90) = 1.0f;
@@ -308,10 +306,8 @@ update:
         void *part;
         child = children[i];
         part = child->pvars;
-        average = (child->anim_speed + 1.0f) * 0.5f;
-        D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * average * 0.05f * frame_scale_sq * average;
-        average = (child->anim_speed + 1.0f) * 0.5f;
-        D_L04_00166130[7] = (((data->radius * 7.753f) / 1800.0f) * frame_scale) * average;
+        D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * ((child->anim_speed + 1.0f) * 0.5f) * 0.05f * frame_scale_sq * ((child->anim_speed + 1.0f) * 0.5f);
+        D_L04_00166130[7] = (((data->radius * 7.753f) / 1800.0f) * frame_scale) * ((child->anim_speed + 1.0f) * 0.5f);
         FUN_L04_001f30e0(children, data->count, child, part, D_L04_00166130);
         apply_child_motion_29ecf8(0.0f, child, part, D_L04_00166130);
     }
