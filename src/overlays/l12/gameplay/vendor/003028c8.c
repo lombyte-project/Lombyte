@@ -1244,12 +1244,12 @@ void FUN_L12_00306828(struct Moby *moby) {
     int i;
     int alpha = 0x80000000;
     char *data = (char *)moby->pvars;
-    for (i = 0; i != 18; i++) {
+    for (i = 0; i < 18; i++) {
         struct Moby *other;
         int period;
         float sine;
         float color;
-        int red;
+        int red[1];
         int green;
         int blue;
         int packed_color;
@@ -1267,14 +1267,14 @@ void FUN_L12_00306828(struct Moby *moby) {
             phase = (float)(D_L12_0015F5CC % period) / divisor;
             sine = fast_sin((phase + phase) * 3.1415927f + -3.1415927f);
             color = sine * 70.0f;
-            red = truncate_float_to_s32(color);
+            red[0] = truncate_float_to_s32(color);
             green = truncate_float_to_s32(color);
             blue = truncate_float_to_s32(sine * 10.0f);
             green += 0xB4;
-            red += 0xB4;
+            red[0] += 0xB4;
             if (green > 0xFF) green = 0xFF;
-            if (red > 0xFF) red = 0xFF;
-            packed_color = ((blue + 0x46) << 16) | alpha | (green << 8) | red;
+            if (red[0] > 0xFF) red[0] = 0xFF;
+            packed_color = ((blue + 0x46) << 16) | alpha | (green << 8) | red[0];
             other->flags |= 0x10;
             other->glow_color = packed_color;
         }
