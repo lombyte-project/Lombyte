@@ -467,8 +467,8 @@ void FUN_L08_002d3878(char *m) {
     pk.vertices[3].v[2] += 0.25f; pk.vertices[3].v[3] = 1.0f;
     FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
     {
-        float *v = pk.vertices[0].v;
-        for (i = 0; i < 4; i++, v += 4) {
+        float *v;
+        for (i = 0, v = pk.vertices[0].v; i < 4; i++, v += 4) {
             if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
             else { v[1] += 0.25f; v[2] += -0.25f; }
         }
