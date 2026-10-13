@@ -231,7 +231,7 @@ void FUN_L14_003017f8(char *m) {
                 (float)next * 6.0f));
             index += 4;
             d[0x18 + i] = index;
-            offset = (i << 4) + (int)d;
+            offset = (unsigned int)((i << 4) + (int)d);
             qcopy((char *)offset + 0x420, d + 0x20 + (index << 4));
             qcopy((char *)offset + 0x520, d + 0x220 + (index << 4));
             for (j = 2; j >= 0; j--) {
