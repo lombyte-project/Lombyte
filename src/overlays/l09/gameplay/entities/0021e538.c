@@ -404,7 +404,6 @@ char *FUN_L09_002c2610(void *pos, int type, float *dist) {
     }
     return best;
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c26c8.s", FUN_L09_002c26c8);
 /* spawns a debris moby with randomized velocity toward a point */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EB808), where it is exact; names translated to the US level program. */
 

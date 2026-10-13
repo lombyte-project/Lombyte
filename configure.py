@@ -246,6 +246,7 @@ OVERLAY_SN_UNITS = {
     "l08/gameplay/vendor/00305138.c",
     "l08/rendering/00279f00.c",
     "l09/gameplay/entities/0021e538.c",
+    "l09/gameplay/entities/002c26c8.c",
     "l09/gameplay/vendor/003033a0.c",
     "l10/gameplay/entities/00295a38.c",
     "l10/gameplay/vendor/002df270.c",
