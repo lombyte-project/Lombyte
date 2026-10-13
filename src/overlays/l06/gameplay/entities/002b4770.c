@@ -2218,9 +2218,9 @@ void FUN_L06_002fbfb0(char *moby) {
         (*(char **)(data + 0x40))[0x31] = 1;
         *(long *)(*(char **)(data + 0x40) + 0x38) = *(long *)(moby + 0x38);
         *(unsigned short *)(*(char **)(data + 0x40) + 0x34) = *(unsigned short *)(moby + 0x34);
-        child = *(char **)(data + 0x40);
-        qcopy(child + 0x10, moby + 0x10);
-        qcopy(child + 0x40, moby + 0x40);
+        child = *(char **)(data + 0x40) + 0x10;
+        qcopy(child, moby + 0x10);
+        qcopy(child + 0x30, moby + 0x40);
         if (*(int *)data >= 0) {
             moby[0x20] = 1;
             return;
@@ -2237,7 +2237,7 @@ void FUN_L06_002fbfb0(char *moby) {
         moby[0x20] = 5;
         return;
     case 1:
-        if (!is_point_inside_clip_volume((void *)0x13f3d0, *(int *)data)) return;
+        if (!is_point_inside_clip_volume(&hero.motion.pos, *(int *)data)) return;
         if (*(int *)(data + 4) == 1) {
             moby[0x20] = 4;
             *(int *)(data + 0x4c) = scale_game_frames_alt(0x14);
@@ -2264,7 +2264,7 @@ void FUN_L06_002fbfb0(char *moby) {
         phase_a = FUN_001f9b48(moby + 0x10, data + 0x10);
         phase_b = FUN_001f9b48(*(char **)(data + 0x40) + 0x10, data + 0x10);
         if ((unsigned char)moby[0xbc] == 1) goto phase_one;
-        if ((unsigned char)moby[0xbc] < 2) goto phase_default;
+        if ((int)(unsigned char)moby[0xbc] < 2) goto phase_default;
         if ((unsigned char)moby[0xbc] == 2) goto phase_two;
 
         phase_default:
@@ -2332,9 +2332,9 @@ void FUN_L06_002fbfb0(char *moby) {
         moby[0x20] = 1;
         qcopy(moby + 0x10, data + 0x10);
         qcopy(moby + 0x40, data + 0x20);
-        child = *(char **)(data + 0x40);
-        qcopy(child + 0x10, moby + 0x10);
-        qcopy(child + 0x40, moby + 0x40);
+        child = *(char **)(data + 0x40) + 0x10;
+        qcopy(child, moby + 0x10);
+        qcopy(child + 0x30, moby + 0x40);
         *(volatile float *)(data + 0x48) = 0.0f;
         *(volatile float *)(data + 8) = 0.0f;
         *(volatile float *)(data + 0xc) = 0.0f;
