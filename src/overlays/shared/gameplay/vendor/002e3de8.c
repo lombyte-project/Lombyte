@@ -120,7 +120,8 @@ void FUN_L10_002e91b8(unsigned char *m) {
     float *second_source = (float *)0x001da310;
     float *first_vectors = (float *)first;
     float *second_vectors = (float *)second;
-    int i, j, k;
+    int i, k;
+    unsigned int j;
 
     copy_matrix(matrix, m + 0xc0);
     *(aligned_vector *)position = *(aligned_vector *)(m + 0x10);
@@ -179,10 +180,10 @@ void FUN_L10_002e91b8(unsigned char *m) {
                 int limit = float_to_integer(((float *)0x001da270)[index] * 360.0f);
                 float angle = integer_to_float(*(int *)0x0015f3f8 % limit) / ((float *)0x001da270)[index] - 180.0f;
                 float wave;
-                if (((int *)0x001da2b0)[index] == 0)
-                    wave = FUN_001f9de0(angle * 0.017453292f);
-                else
+                if (((int *)0x001da2b0)[index] != 0)
                     wave = FUN_001f9dc8(angle * 0.017453292f);
+                else
+                    wave = FUN_001f9de0(angle * 0.017453292f);
                 ((float *)(first + 0x50))[j * 2 + k] = ((float *)0x001da2f0)[j * 2 + k] + wave * 0.125f;
             }
         }
@@ -195,7 +196,7 @@ void FUN_L10_002e91b8(unsigned char *m) {
         }
         transform_vectors((float *)first, matrix, 0);
         transform_vectors((float *)second, matrix, 0);
-        for (j = 3; j >= 0; j--) {
+        for (j = 0; j < 4; j++) {
             ((float *)(first + j * 16))[1] += 0.1f;
             ((float *)(second + j * 16))[1] += 0.1f;
         }
