@@ -227,8 +227,8 @@ void FUN_L10_002e91b8(unsigned char *m) {
             transform_vectors((float *)first, matrix, 0);
             transform_vectors((float *)second, matrix, 0);
             {
-                float *first_vectors = (float *)first;
                 float *second_vectors = (float *)second;
+                float *first_vectors = (float *)first;
                 int j = 3;
                 do {
                     first_vectors[1] += 0.1f;
