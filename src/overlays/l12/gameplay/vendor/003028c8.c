@@ -412,7 +412,7 @@ void FUN_L12_00303370(void *moby) {
             float distance;
             float pitch;
 
-            *(u128 *)position = *(u128 *)&other->pos;
+            *(volatile u128 *)position = *(u128 *)&other->pos;
             yaw_limit = 0.12217305f;
             pitch_limit = yaw_limit;
             if (other->oclass == 0x146) {
