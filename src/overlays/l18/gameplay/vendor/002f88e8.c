@@ -975,7 +975,7 @@ extern int random_integer_below(int);
 extern int scale_game_frames(int);
 extern float D_L18_00162600 __attribute__((sda));
 extern void FUN_L00_002599e8(void *, float, float, float, int, int, int, int, int);
-extern void FUN_L18_002fc100(void *);
+extern void FUN_L18_002fc100(struct Moby *);
 void FUN_L18_002fc860(struct Moby *m);
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -993,7 +993,7 @@ void FUN_L18_002fbb98(unsigned char *m) {
     char tmp[16];
     unsigned char *e = *(unsigned char **)(m + 0x78);
     unsigned char *s0;
-    FUN_L18_002fc100(m);
+    FUN_L18_002fc100((struct Moby *)m);
     switch (m[0x20]) {
     case 0: {
         unsigned short h;
@@ -1129,142 +1129,161 @@ void FUN_L18_002fbb98(unsigned char *m) {
         enqueue_callback_list_1(FUN_L18_002fc860, m);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002fc100.s", FUN_L18_002fc100);
-#else
-extern int D_L18_00162604 __attribute__((sda));
-extern int D_L18_0016260C __attribute__((sda));
-extern int D_L18_00162610 __attribute__((sda));
-extern float D_L18_00162614 __attribute__((sda));
-extern float D_L18_00162618 __attribute__((sda));
-extern float D_L18_001625FC __attribute__((sda));
-extern float D_L18_0016261C __attribute__((sda));
-extern float D_L18_00162620 __attribute__((sda));
-extern float D_L18_00162624 __attribute__((sda));
-extern float D_L18_00162628 __attribute__((sda));
-extern int D_L18_0015F5CC __attribute__((sda));
+#include "rnc/gameplay/hero.h"
+#include "rnc/math_consts.h"
+extern int D_L18_0015F5CC_c100 __asm__("D_L18_0015F5CC");
+extern int D_L18_0015F5C4_c100 __asm__("D_L18_0015F5C4");
+extern int D_L18_00162604_c100 __asm__("D_L18_00162604") __attribute__((sda));
+extern int D_L18_0016260C_c100 __asm__("D_L18_0016260C") __attribute__((sda));
+extern int D_L18_00162610_c100 __asm__("D_L18_00162610") __attribute__((sda));
+extern float D_L18_001625FC_c100 __asm__("D_L18_001625FC") __attribute__((sda));
+extern float D_L18_00162614_c100 __asm__("D_L18_00162614") __attribute__((sda));
+extern float D_L18_00162618_c100 __asm__("D_L18_00162618") __attribute__((sda));
+extern float D_L18_0016261C_c100 __asm__("D_L18_0016261C") __attribute__((sda));
+extern float D_L18_00162620_c100 __asm__("D_L18_00162620") __attribute__((sda));
+extern float D_L18_00162624_c100 __asm__("D_L18_00162624") __attribute__((sda));
+extern float D_L18_00162628_c100 __asm__("D_L18_00162628") __attribute__((sda));
+extern float D_0015ED70_c100 __asm__("D_0015ED70");
+extern float D_0015ED6C_c100 __asm__("D_0015ED6C");
+extern int *D_L18_001B0EB0_c100[] __asm__("D_L18_001B0EB0");
+extern void FUN_L18_002fca98(struct Moby *moby);
+extern float fast_add_rotations_c100(float, float) __asm__("FUN_001fa580");
+extern float fast_sin_c100(float) __asm__("FUN_001f9de0");
+extern int tween_color_c100(int, int, float) __asm__("FUN_001fa6e0");
+extern void blend_moby_animation_c100(void *, int, int, int) __asm__("FUN_00212f90");
+extern int scale_game_frames_c100(int) __asm__("FUN_001f96f8");
+extern char *find_moby_hit_c100(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int hit_reaction_c100(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
+extern int random_integer_below_c100(int) __asm__("FUN_00213260");
+extern void knockback_c100(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
+extern void start_fall_c100(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
+extern void anim_reset_c100(void *, void *) __asm__("FUN_L00_0025d458");
+extern void anim_update_c100(void *, void *) __asm__("FUN_L00_0025d538");
+extern int FUN_L00_0025ff38_c100(float, void *, void *, int, int, int *, int) __asm__("FUN_L00_0025ff38");
 
-
-
-extern int *D_L18_001B0EB0[];
 typedef struct {
-    char pad0[0x80];
-    QVd058 target;
-    char pad90[0x4D0];
-    int *targets;
-    char pad564[0x1B1C];
-    int frame, event, unk2088, mode;
-} TargetState_c100;
-extern TargetState_c100 D_L18_0013F350;
-extern float frame_time_sq_c100 __asm__("D_L18_0015ED70") __attribute__((sda));
-extern void FUN_L18_002fca98(struct Moby *);
-extern int FUN_001fa6e0(int, int, float);
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern void hit_update(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
-extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern int follow_path(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+    char pad0[0x20];
+    float health;              /* 0x20 */
+    char pad24[0x3C];
+    char anim[0x7];            /* 0x60 */
+    unsigned char anim_flags;  /* 0x67 */
+    char pad68[8];
+    char fall[0x10];           /* 0x70 */
+    float unk80;
+    float unk84;
+    float unk88;
+    float unk8C;
+    int unk90;
+    int unk94;
+    float unk98;
+    char pad9C[0x11];
+    unsigned char unkAD;       /* 0xAD */
+    char padAE[0xE];
+    float unkBC;
+    float unkC0;
+    float unkC4;
+    char padC8[0xB8];
+    u128 target;               /* 0x180 */
+    char pad190[0x30];
+    struct Moby *target_moby;  /* 0x1C0 */
+    int target_mode;           /* 0x1C4 */
+    char pad1C8[0x18];
+    int path;                  /* 0x1E0 */
+    char pad1E4[0x14];
+    float spin;                /* 0x1F8 */
+} SentryVars_c100;
 
-void FUN_L18_002fc100(void *self) {
-    struct { QVd058 tmp; int st; float damage; float angle[2]; } scratch;
-    float zero;
-    unsigned char *destination;
-    unsigned char *m = self;
-    unsigned char *e = *(unsigned char **)(m + 0x78);
-    char *hit;
+/* Sentry update: spins and tints the moby, takes hits (knockback, then a fall), and follows its path toward the hero. */
+void FUN_L18_002fc100(struct Moby *m) {
+    SentryVars_c100 *d = (SentryVars_c100 *)m->pvars;
+    union { u128 q; float f[4]; } v;
+    int hit;
+    float dmg;
+    float angle;
     float speed;
-    int *path;
-    int *target;
-    if (m[0x20] == 0 || m[0x20] == 8)
+    char *coll;
+    int a;                      /* the reaction kind, later the path */
+    int b;                      /* the reaction flags, later the path's slot in the table */
+
+    if (m->state == 0 || m->state == 8) {
         return;
-    if (m[0x20] != 7 && D_L18_0015F5CC != D_L18_00162604) {
-        D_L18_00162604 = D_L18_0015F5CC;
-        enqueue_callback_list_1_overlay(FUN_L18_002fca98, m);
     }
-    speed = D_L18_00162614;
-    if ((unsigned int)(m[0x20] - 4) < 2)
-        speed = D_L18_00162618;
-    *(float *)(e + 0x1F8) = fast_add_rotations(*(float *)(e + 0x1F8), speed * 0.017453292f * frame_time);
-    *(int *)(m + 0x90) = FUN_001fa6e0(D_L18_0016260C, D_L18_00162610,
-        fast_sin(*(float *)(e + 0x1F8)) * 0.5f + 0.5f);
-    if (*(float *)(m + 0x18) < 100.0f && m[0x20] != 7)
-        m[0x20] = 6;
-    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * D_L18_001625FC;
-    if ((D_L18_0013F350.event == 0x72 || D_L18_0015F5C4 == 2) && m[0x20] != 7) {
-        m[0x20] = 8;
-        if (m[0x53])
-            blend_moby_animation(m, 0, 0, scale_game_frames(10));
-        *(int *)(m + 0x94) = 0;
-        *(unsigned short *)(m + 0x34) = (*(unsigned short *)(m + 0x34) | 0x41) & 0xEFFF;
-    } else {
-        zero = 0.0f;
-        scratch.damage = zero;
-        hit = find_moby_hit(m, 0x330000, 0);
-        hit_update(m, hit, e + 0x20, 0, &scratch.st, &scratch.damage, 0, 4);
-        if (scratch.st != 1 && m[0x20] != 6 && scratch.damage != zero) {
-            float remaining = *(float *)(e + 0x20) - scratch.damage;
-            *(float *)(e + 0x20) = remaining;
-            if (remaining <= zero) {
-                int choice = random_integer_below(2);
-                float squared = frame_time_sq_c100;
-                if (choice != 0) {
-                    m[0x20] = 6;
-                    goto finish_reaction;
-                }
-                {
-                    float time = frame_time;
-                    float a = *(volatile float *)&D_L18_0016261C;
-                    float b = *(volatile float *)&D_L18_00162620;
-                    float c = *(volatile float *)&D_L18_00162624;
-                    float d = *(volatile float *)&D_L18_00162628;
-                    a *= squared;
-                    b *= squared;
-                    c *= time;
-                    d *= time;
-                    *(volatile unsigned char *)(e + 0xAD) = 0;
-                    *(volatile float *)(e + 0x98) = 0.5f;
-                    *(volatile float *)(e + 0x8C) = d;
-                    *(volatile float *)(e + 0x80) = a;
-                    *(volatile float *)(e + 0x84) = b;
-                    *(volatile float *)(e + 0xBC) = frame_time + frame_time;
-                    *(volatile float *)(e + 0x88) = c;
-                    *(volatile int *)(e + 0x94) = 0x29;
-                    *(volatile int *)(e + 0x90) = 0x200;
-                    *(unsigned short *)(m + 0x34) &= 0xEFFF;
-                    scratch.tmp = *(QVd058 *)(hit + 0x10);
-                    trooper_knockback_arc(&scratch.tmp, scratch.angle, e + 0x88, e + 0x8C);
-                    trooper_start_knockback(m, e + 0x70, scratch.angle[0], 3, 1, 0);
-                    *(float *)(e + 0xC0) = 7.5f;
-                    *(float *)(e + 0xC4) = 15.0f;
-                    m[0x20] = 5;
-                    *(int *)(m + 0x94) = 0;
-                    e[0x67] = 0x78;
-                    trooper_anim_update(m, e + 0x60);
-                }
+    if (m->state != 7 && D_L18_0015F5CC_c100 != D_L18_00162604_c100) {
+        D_L18_00162604_c100 = D_L18_0015F5CC_c100;
+        enqueue_callback_list_1(FUN_L18_002fca98, m);
+    }
+    speed = D_L18_00162614_c100;
+    if (m->state == 4 || m->state == 5) {
+        speed = D_L18_00162618_c100;
+    }
+    d->spin = fast_add_rotations_c100(d->spin, speed * DEG_TO_RAD * D_0015ED6C_c100);
+    m->glow_color = tween_color_c100(D_L18_0016260C_c100, D_L18_00162610_c100,
+                                fast_sin_c100(d->spin) * 0.5f + 0.5f);
+    if (m->pos.z < 100.0f && m->state != 7) {
+        m->state = 6;
+    }
+    m->scale = m->pclass->scale * D_L18_001625FC_c100;
+    if (hero.state.current == 0x72 || D_L18_0015F5C4_c100 == 2) {
+        if (m->state != 7) {
+            m->state = 8;
+            if (m->prev_seq != 0) {
+                blend_moby_animation_c100(m, 0, 0, scale_game_frames_c100(10));
             }
+            m->collision = 0;
+            m->flags = (m->flags | 0x41) & ~0x1000;
+            return;
         }
-finish_reaction:
-        m[0xA4] = 0xFF;
-        trooper_anim_finish(m, e + 0x60);
-        destination = e + 0x180;
-        path = D_L18_001B0EB0[*(int *)(e + 0x1E0)];
-        follow_path(512.0f, m, destination, 0, 0, path + 4, *path);
-        if (*(int *)(e + 0x1C4) == 2) {
-            if (D_L18_0013F350.mode == 15) {
-                target = D_L18_0013F350.targets;
-                target = (int *)((char *)target + (*target << 4));
+    }
+    dmg = 0.0f;
+    coll = find_moby_hit_c100(m, 0x330000, 0);
+    hit_reaction_c100(m, coll, &d->health, 0, &hit, &dmg, 0, 4);
+    if (hit != 1 && m->state != 6 && dmg != 0.0f) {
+        d->health -= dmg;
+        if (d->health <= 0.0f) {
+            if (random_integer_below_c100(2) != 0) {
+                m->state = 6;
             } else {
-                target = (int *)&D_L18_0013F350.target;
+                b = 0x200;
+                d->unk90 = b;
+                d->unk98 = 0.5f;
+                d->unk80 = D_L18_0016261C_c100 * D_0015ED70_c100;
+                d->unk84 = D_L18_00162620_c100 * D_0015ED70_c100;
+                d->unk88 = D_L18_00162624_c100 * D_0015ED6C_c100;
+                d->unk8C = D_L18_00162628_c100 * D_0015ED6C_c100;
+                a = 0x29;
+                d->unk94 = a;
+                d->unkAD = 0;
+                d->unkBC = D_0015ED6C_c100 + D_0015ED6C_c100;
+                m->flags &= ~0x1000;
+                v.q = *(u128 *)(coll + 0x10);
+                knockback_c100(&v, &angle, &d->unk88, &d->unk8C);
+                start_fall_c100(m, d->fall, 3, 1, 0, angle);
+                d->unkC0 = 7.5f;
+                d->unkC4 = 15.0f;
+                m->state = 5;
+                m->collision = 0;
+                d->anim_flags = 0x78;
+                anim_reset_c100(m, d->anim);
             }
-            *(QVd058 *)destination = *(QVd058 *)target;
         }
-        if (*(int *)(e + 0x1C0) == 0)
-            *(int *)(e + 0x1C0) = D_L18_0013F350.frame;
+    }
+    m->hit_slot = 0xFF;
+    anim_update_c100(m, d->anim);
+    b = (int)&D_L18_001B0EB0_c100[d->path];
+    a = *(int *)b;
+    FUN_L00_0025ff38_c100(512.0f, m, &d->target, 0, 0, (int *)(a + 0x10), *(int *)a);
+    if (d->target_mode == 2) {
+        if (hero.state.control_mode == 0xF) {
+            int *list = (int *)hero.unk560;
+            qcopy(&d->target, (char *)list + *list * 16);
+        } else {
+            qcopy(&d->target, &hero.motion.pos);
+        }
+    }
+    if (d->target_moby == 0) {
+        d->target_moby = hero.moby;
     }
 }
-#endif
 #include "eetypes.h"
 
 /* Turns and accelerates the moby toward a target point and returns the remaining distance. */
