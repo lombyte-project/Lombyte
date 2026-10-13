@@ -670,9 +670,20 @@ extern void FUN_00218888_002e7eb0(void *, void *, void *, int, int, int, int, in
 extern int D_L08_0015F5CC_002e7eb0 __asm__("D_L08_0015F5CC");
 extern int D_0015ED84_002e7eb0 __asm__("D_0015ED84");
 typedef union { float float_value; int int_value; } Data_002e7eb0;
-extern Data_002e7eb0 D_L08_001618D8_002e7eb0[] __asm__("D_L00_001618D8") __attribute__((sda));
-
-#define DATA_002e7eb0(type, offset) (D_L08_001618D8_002e7eb0[((offset) - 0x47c) / 4].type##_value)
+/* Retail inherits GP 0x166c00: these scalar labels preserve its GP-relative loads.
+   Keep the existing timer name while binding it to the checked level-08 address. */
+extern float D_L08_001618D8_002e7eb0 __asm__("D_L08_00161CD8") __attribute__((sda));
+extern float D_L08_00161CE0_002e7eb0 __asm__("D_L08_00161CE0") __attribute__((sda));
+extern int D_L08_00161CF0_002e7eb0 __asm__("D_L08_00161CF0") __attribute__((sda));
+extern int D_L08_00161CF4_002e7eb0 __asm__("D_L08_00161CF4") __attribute__((sda));
+extern int D_L08_00161CF8_002e7eb0 __asm__("D_L08_00161CF8") __attribute__((sda));
+extern int D_L08_00161CFC_002e7eb0 __asm__("D_L08_00161CFC") __attribute__((sda));
+extern float D_L08_00161D04_002e7eb0 __asm__("D_L08_00161D04") __attribute__((sda));
+extern int D_L08_00161D08_002e7eb0 __asm__("D_L08_00161D08") __attribute__((sda));
+extern int D_L08_00161D0C_002e7eb0 __asm__("D_L08_00161D0C") __attribute__((sda));
+extern int D_L08_00161D10_002e7eb0 __asm__("D_L08_00161D10") __attribute__((sda));
+extern float D_L08_00161D14_002e7eb0 __asm__("D_L08_00161D14") __attribute__((sda));
+extern float D_L08_00161D18_002e7eb0 __asm__("D_L08_00161D18") __attribute__((sda));
 typedef struct { unsigned int words[4]; } Vec_002e7eb0 __attribute__((aligned(16)));
 
 char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
@@ -687,8 +698,8 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
     char *data;
     float * volatile particle_position_ptr;
 
-    qcopy_nc(position_copy, position);
-    qcopy_nc(rotation_copy, rotation);
+    *(Vec_002e7eb0 *)position_copy = *(Vec_002e7eb0 *)position;
+    *(Vec_002e7eb0 *)rotation_copy = *(Vec_002e7eb0 *)rotation;
     moby = create_moby_002e7eb0(0x1ca);
     if (moby != 0) {
         data = *(char **)(moby + 0x78);
@@ -701,7 +712,7 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
         *(volatile unsigned char *)(moby + 0x31) = 1;
         *(float *)(moby + 0x44) = -angle_atan2_002e7eb0(vector_length_xy_002e7eb0(rotation_copy), rotation_copy[2]);
         *(float *)(moby + 0x48) = angle_atan2_002e7eb0(rotation_copy[0], rotation_copy[1]);
-        qcopy((moby + 0x10), position_copy);
+        qcopy(moby + 0x10, position_copy);
         qcopy(data, rotation_copy);
         if (D_L08_0015F5CC_002e7eb0 & 1)
             *(volatile int *)(data + 0x1c) = 1;
@@ -709,33 +720,34 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
             *(volatile int *)(data + 0x1c) = -1;
         make_matrix_002e7eb0(matrix, moby + 0x40);
         i = 0;
-        if (0.0f < DATA_002e7eb0(float, 8)) {
+        if ((float)i < D_L08_00161CE0_002e7eb0) {
+            /* Retail intentionally uses the matrix third row as the particle input. */
             particle_position_ptr = matrix[2];
             do {
                 angle = random_angle_002e7eb0();
                 {
-                    float spread = DATA_002e7eb0(float, 44);
+                    float spread = D_L08_00161D04_002e7eb0;
                     magnitude = random_float_between_002e7eb0(spread, spread + spread) * frame_time;
                 }
                 normalize_vector_xyz_002e7eb0(velocity, particle_position_ptr, magnitude * fast_cos_002e7eb0(angle));
                 normalize_vector_xyz_002e7eb0(offset, matrix[1], magnitude * fast_sin_002e7eb0(angle));
                 add_vector_xyz_002e7eb0(velocity, velocity, offset);
                 qcopy(offset, velocity);
-                velocity[3] = DATA_002e7eb0(float, 60);
-                offset[3] = DATA_002e7eb0(float, 64);
+                velocity[3] = D_L08_00161D14_002e7eb0;
+                offset[3] = D_L08_00161D18_002e7eb0;
                 i++;
-                spawn_particle_002e7eb0(moby + 0x10, velocity, DATA_002e7eb0(int, 32), DATA_002e7eb0(int, 36),
+                spawn_particle_002e7eb0(moby + 0x10, velocity, D_L08_00161CF8_002e7eb0, D_L08_00161CFC_002e7eb0,
                     random_integer_002e7eb0(scale_game_frames_int_002e7eb0(10), scale_game_frames_int_002e7eb0(20)), 1, 20000.0f);
-                a = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)DATA_002e7eb0(int, 48), (float)DATA_002e7eb0(int, 48) * 1.2f)));
-                b = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)DATA_002e7eb0(int, 52), (float)DATA_002e7eb0(int, 52) * 1.2f)));
-                c = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)DATA_002e7eb0(int, 56), (float)DATA_002e7eb0(int, 56) * 1.5f)));
-                FUN_00218888_002e7eb0(moby + 0x10, velocity, offset, DATA_002e7eb0(int, 24), DATA_002e7eb0(int, 28), a, b, c, -1);
-            } while ((float)i < DATA_002e7eb0(float, 8));
+                a = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D08_002e7eb0, (float)D_L08_00161D08_002e7eb0 * 1.2f)));
+                b = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D0C_002e7eb0, (float)D_L08_00161D0C_002e7eb0 * 1.2f)));
+                c = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D10_002e7eb0, (float)D_L08_00161D10_002e7eb0 * 1.5f)));
+                FUN_00218888_002e7eb0(moby + 0x10, velocity, offset, D_L08_00161CF0_002e7eb0, D_L08_00161CF4_002e7eb0, a, b, c, -1);
+            } while ((float)i < D_L08_00161CE0_002e7eb0);
         }
         if (D_0015ED84_002e7eb0 == 12)
             *(int *)(data + 0x18) = scale_game_frames_int_002e7eb0(120);
         else
-            *(int *)(data + 0x18) = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(DATA_002e7eb0(float, 0)));
+            *(int *)(data + 0x18) = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(D_L08_001618D8_002e7eb0));
         update_moby_002e7eb0(moby);
     }
     return moby;
