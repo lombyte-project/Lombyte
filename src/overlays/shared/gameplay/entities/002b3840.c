@@ -510,9 +510,9 @@ void FUN_L05_0030c220(struct Moby *m) {
     float position[4];
     /* Draw helper reads four consecutive vectors: side, direction, up, position. */
     float matrix[16] __attribute__((aligned(16)));
-    float *side = matrix;
-    float *direction = matrix + 4;
-    float *up = matrix + 8;
+    float *side;
+    float *direction;
+    float *up;
     u64 texture;
     u64 flags;
     float phase;
@@ -528,9 +528,12 @@ void FUN_L05_0030c220(struct Moby *m) {
     clear_vector(rotation);
     rotation[2] = m->rot.z;
     rotation[1] = fast_sin(*(float *)(vars + 0x48)) * 0.5235988f + 0.5235988f;
+    side = matrix;
     rotation_vector_30c220(side, rotation);
+    direction = matrix + 4;
     subtract_vector_xyz_30c220(direction, D_L05_001671C0_30c220, position);
     normalize_vector_xyz_30c220(direction, direction, 1.0f);
+    up = matrix + 8;
     cross_vector_xyz_30c220(side, direction, up);
     cross_vector_xyz_30c220(direction, up, side);
     *(u128 *)(matrix + 12) = *(u128 *)position;
@@ -541,12 +544,12 @@ void FUN_L05_0030c220(struct Moby *m) {
             ((u64)(s64)D_L05_00161CFC << 4) |
             ((u64)(s64)D_L05_00161D00 << 6) |
             0x8000000000ULL;
-    a.control[1] = texture;
     b.control[1] = texture;
-    a.control[2] = 0xff9000000260ULL;
-    a.control[3] = flags;
+    a.control[1] = texture;
     b.control[2] = 0xff9000000260ULL;
     b.control[3] = flags;
+    a.control[2] = 0xff9000000260ULL;
+    a.control[3] = flags;
     b.control[0] = 0;
     a.control[0] = 0;
     {
@@ -579,7 +582,7 @@ void FUN_L05_0030c220(struct Moby *m) {
         color_b = b.color;
         do {
             qcopy_nc(vertex_a, D_L05_001D67D0[j]);
-            qcopy(b.vertex[j], D_L05_001D6810[j]);
+            *(u128 *)b.vertex[j] = *(u128 *)D_L05_001D6810[j];
             phase = (float)(i + (j & 1)) * 0.1f;
             sign = 1.0f;
             if (j > 1) sign = -1.0f;
