@@ -144,8 +144,8 @@ advance_first:
         if (FUN_L00_0025e3b8_2cfcb8(second) && !*(u8 **)(vars + 0xA4)) {
             qcopy_nc(&second_probe, second + 0x10);
             qcopy(&second_start, second + 0x10);
-            second_probe.z += *(f32 *)(vars + 0xB0) * 0.5f;
             second_start.z = 0.1f;
+            second_probe.z += *(f32 *)(vars + 0xB0) * 0.5f;
             if (FUN_L00_001efc70_2cfcb8(&second_probe, &second_start, 2, first, 0) &&
                 D_L00_00173E58_2cfcb8 && FUN_L00_002603d0_2cfcb8(D_L00_00173E58_2cfcb8)) {
                 if (first) *(u16 *)(first + 0x36) = 0x7F80;
@@ -175,8 +175,7 @@ advance_first:
                     *(u8 **)(vars + 0xA0)) {
                     if (*(s32 *)(vars + 0xC0) != -1) {
                     row = D_L00_001B04B0_2cfcb8[*(s32 *)(vars + 0xC0)];
-                    state = *(s32 *)(row + 0x1C);
-                    if (*(s32 *)row == 0 || state == 1 || state == 3) {
+                    if (*(s32 *)row == 0 || (state = *(s32 *)(row + 0x1C)) == 1 || state == 3) {
                         *(s32 *)(vars + 0xC0) = -1;
                     } else if (state != 0x111 && (u32)(state - 0x11) <= 0xFF) {
                         if (state - 0x10 >= *(s32 *)row) *(s32 *)(vars + 0xC0) = -1;
