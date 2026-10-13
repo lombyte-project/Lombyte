@@ -2351,11 +2351,12 @@ void FUN_L06_002f2250(void) {
     {
         GbMoby **moby_list = mobys;
         if (moby_count > 0) for (i = moby_count; i != 0; i--) {
-            GbVars *vars = (*moby_list++)->vars;
+            GbVars *vars = (*moby_list)->vars;
             vars->f18C = GB_FRAME;
             vars->target = *(GbMoby **)((char *)vars + 0x178);
             vars->target_searched = 1;
             if (*(int *)((char *)vars + 0x178) != 0) vars->f198 = 1;
+            moby_list++;
         }
     }
 }
