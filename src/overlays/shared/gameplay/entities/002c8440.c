@@ -559,7 +559,344 @@ struct Moby *FUN_L00_002c9348(State *a) {
     }
     return n;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c97e0.s", FUN_L00_002c97e0);
+#else
+extern f32 D_L00_0015F5D4_sda_2c97e0 __asm__("D_L00_0015F5D4") __attribute__((sda));
+extern f32 D_L00_0015F5D0_2c97e0 __asm__("D_L00_0015F5D0") __attribute__((section(".sdata")));
+extern f32 D_L00_0015F5D4_2c97e0 __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
+
+extern s32 D_L00_00161850_2c97e0 __asm__("D_L00_00161850") __attribute__((sda));
+extern f32 D_L00_00161858_2c97e0 __asm__("D_L00_00161858") __attribute__((sda));
+extern f32 D_L00_0016185C_2c97e0 __asm__("D_L00_0016185C") __attribute__((sda));
+extern f32 D_L00_00161860_2c97e0 __asm__("D_L00_00161860") __attribute__((sda));
+extern f32 D_L00_00161864_2c97e0 __asm__("D_L00_00161864") __attribute__((sda));
+extern f32 D_L00_00161868_2c97e0 __asm__("D_L00_00161868") __attribute__((sda));
+extern f32 D_L00_0016186C_2c97e0 __asm__("D_L00_0016186C") __attribute__((sda));
+extern s32 FUN_L00_00257b50_2c97e0(s32) __asm__("FUN_00213260");
+extern f32 FUN_L00_00257cb0_2c97e0(void) __asm__("FUN_00213308");
+extern void FUN_L00_00263ac8_2c97e0(struct Moby *, s32, void *, f32) __asm__("FUN_L00_00263ac8");
+extern void *FUN_L00_0025a420_2c97e0(void *, s32, s32) __asm__("FUN_L00_0025a420");
+extern s32 FUN_L00_00258490_2c97e0(void *, void *, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_00258490");
+extern void FUN_L00_00258278_2c97e0(void *, void *, f32, f32, f32, f32) __asm__("FUN_L00_00258278");
+extern s32 tick_timer_2cb418(void *) __asm__("FUN_001f9770");
+extern f32 vector_length_xyz_2cb418(void *) __asm__("FUN_001f9af0");
+extern f32 FUN_001fa688_2c97e0(void) __asm__("FUN_001fa688");
+extern s32 FUN_001fa6d0_2c97e0(f32) __asm__("FUN_001fa6d0");
+extern f32 distance_xy_2c97e0(void *, void *) __asm__("FUN_001f9b80");
+extern f32 distance_xyz_2c97e0(void *, void *) __asm__("FUN_001f9b48");
+extern f32 rotation_distance_2c97e0(f32, f32) __asm__("FUN_001fa688");
+extern f32 rotation_delta_2c97e0(f32, f32) __asm__("FUN_001fa5c8");
+extern void build_spherical_offset_2c97e0(void *, f32, f32, f32) __asm__("FUN_00214db0");
+extern void FUN_L00_0026ced0_2c97e0(void *, void *, u32, u32, s32, f32) __asm__("FUN_L00_0026ced0");
+extern s32 FUN_L00_001f2868_2c97e0(void *, s32, void *, s32, f32) __asm__("FUN_L00_001f2868");
+extern void FUN_L00_0025a9f8_2c97e0(void *, void *, s32, s32, s32, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_0025a9f8");
+extern void FUN_L00_0025e450_2c97e0(void *, void *, s32, s32, s32, s32, s32, s32, s32, s32, s32, f32, f32, f32, f32, f32, f32, f32) __asm__("FUN_L00_0025e450");
+extern void FUN_L00_002cbf68_2c97e0(void *, void *, void *) __asm__("FUN_L00_002cbf68");
+extern s32 FUN_L00_002dc9f0_2c97e0(void *, void *) __asm__("FUN_L00_002dc9f0");
+extern void FUN_L00_00257880_2c97e0(void *, s32, s32, s32) __asm__("FUN_00212f90");
+extern f32 FUN_L00_00259710_2c97e0(void *) __asm__("FUN_L00_00259710");
+extern f32 fabs_2c97e0(f32) __asm__("FUN_001f99c0");
+extern void normalize_2c97e0(void *, void *, f32) __asm__("FUN_001f9bf8");
+
+/* Update for class 0x10e. State-specific inequalities and scale omissions
+ * follow the level-00 instructions, including the close state-3 step. */
+void FUN_L00_002c97e0(struct Moby *m)
+{
+    V4 old_pos, next_pos, velocity, offset;
+    Sub *s2 = (Sub *)m->pvars;
+    s32 result = 0;
+    s32 i, count, a, b, mode;
+    void *hit;
+    f32 angle, scale, speed, f, g, h, rotation;
+    f32 anim_speed = m->anim_speed;
+    angle = atan2_f_2c8440(m->pos.x - hero.motion.pos.f[0], m->pos.y - hero.motion.pos.f[1]);
+    if (m->state == 0) {
+        m->state = 1;
+        s2->unk66 = 0;
+        s2->unk70 = -1;
+        a = scale_game_frames(120);
+        b = scale_game_frames(300);
+        s2->unk64 = FUN_L00_00257b90(a, b);
+        s2->unk78 = 1.0f;
+    }
+    if (m->state == 6) return;
+    if (D_0013E520[0x15])
+        FUN_L00_00263ac8_2c97e0(m, D_L00_00161850_2c97e0, (u8 *)s2 + 0x20, 5.0f);
+    else
+        FUN_L00_00263ac8_2c97e0(m, D_L00_00161850_2c97e0, (u8 *)s2 + 0x20, 7.7f);
+    qcopy(&old_pos, &m->pos);
+    if (s2->unk70 >= 0) {
+        if (tick_countdown_2c8440(&s2->unk70) && !m->visible) goto remove;
+        if (s2->unk70 >= 0) {
+            f = D_L00_0015F5D4_sda_2c97e0;
+            if ((f > 0.9f || D_L00_0015F5D0_2c97e0 > 0.9f) && !m->visible && s2->unk70 != -1) {
+                if (!FUN_L00_00257b50_2c97e0(199)) goto remove;
+                s2->unk70 = FUN_L00_00257b90(20, 30);
+                f = D_L00_0015F5D4_2c97e0;
+            }
+            if (f > 1.0f || D_L00_0015F5D0_2c97e0 > 1.0f) {
+                if (!m->visible) {
+                    if (!FUN_L00_00257b50_2c97e0(24)) goto remove;
+                } else if (!FUN_L00_00257b50_2c97e0(99)) s2->unk78 = 0.0f;
+                else s2->unk70 = FUN_L00_00257b90(20, 30);
+            }
+        }
+    }
+    if ((s32)s2->unk74 > 0) {
+        f = FUN_001fa6c0(s2->unk74);
+        m->scale += ((f * 3.0f + 1.0f) * m->pclass->scale - m->scale) * 0.1f;
+    }
+    scale = m->scale / m->pclass->scale;
+    if (tick_countdown_2c8440((s32 *)((u8 *)s2 + 0x7c))) {
+        hit = FUN_L00_0025a420_2c97e0(m, -1, 0);
+        if (hit) {
+            FUN_0022da68_c(1, 0, m);
+            s2->unk78 -= *(f32 *)((u8 *)hit + 0x2c);
+            *(s32 *)((u8 *)s2 + 0x7c) = scale_game_frames(25);
+        }
+    }
+    m->hit_slot = 255;
+    if (s2->unk78 < 1.0f) {
+        if (s2->unk74 == 0) {
+            for (i = 0; i < (s32)FUN_001fa6d0_2c97e0(scale) * 20; i++) {
+                f = random_float_between(0.0f, 0.37f) * scale;
+                g = FUN_L00_00257cb0_2c97e0(); h = FUN_L00_00257cb0_2c97e0();
+                build_spherical_offset_2c97e0(&offset, f, g, h);
+                offset.f[2] += random_float_between(0.25f, 0.5f) * scale;
+                add_vector_xyz_2c8440(&offset, &offset, &old_pos);
+                f = random_float_between(D_0015ED6C_2c8440 * 0.1f, D_0015ED6C_2c8440) * scale;
+                g = FUN_L00_00257cb0_2c97e0(); h = FUN_L00_00257cb0_2c97e0();
+                build_spherical_offset_2c97e0(&velocity, f, g, h);
+                f = scale * 150000.0f;
+                a = scale_game_frames(30); b = scale_game_frames(57);
+                a = FUN_L00_00257b90(a, b);
+                FUN_L00_0026ced0_2c97e0(&offset, &velocity, 0x3f7f7f7f, 0x2f2f2f, a, f);
+            }
+        } else {
+            offset.q = 0;
+            offset.f[0] = frame_scale * 0.5f;
+            offset.f[1] = offset.f[0]; offset.f[2] = frame_scale * 0.7f;
+            velocity.q = offset.q;
+            FUN_L00_0025e450_2c97e0(m, &velocity, 0, 0, 0, 0, -1, 1, 1, -1, *(u8 *)&s2->unk74, 0.0f, 2.0f, 4.0f, 3.0f, 9.0f, 1.0f, 12.0f);
+            a = FUN_L00_001f2868_2c97e0(&m->pos, 16, m, 0, 3.0f);
+            offset.q = ((V4 *)&m->pos)->q;
+            FUN_L00_0025a9f8_2c97e0(m, &offset, 0x177f00, a, 0, 0x830000, 2, 1, 1.0f, 1.0f, 1.0f);
+        }
+        count = FUN_L00_00257b90(5, 8);
+        if (D_L00_0015F5D0_2c97e0 > 0.85f || D_L00_0015F5D4_2c97e0 > 0.85f) {
+            if (D_L00_0015F5D0_2c97e0 > 1.0f || D_L00_0015F5D4_2c97e0 > 1.0f) count = 1;
+            else count /= 2;
+        }
+        if (count > 0) {
+            rotation = 0.017453292f;
+            do {
+                count--;
+                f = random_float_between(D_L00_00161868_2c97e0, D_L00_0016186C_2c97e0) * scale;
+                g = FUN_L00_00257cb0_2c97e0(); h = FUN_L00_00257cb0_2c97e0();
+                build_spherical_offset_2c97e0(&offset, f, g, h);
+                offset.f[2] += D_L00_00161864_2c97e0 * scale;
+                add_vector_xyz_2c8440(&offset, &offset, &old_pos);
+                f = random_float_between(D_L00_0016185C_2c97e0 * D_0015ED6C_2c8440, D_L00_00161860_2c97e0 * D_0015ED6C_2c8440);
+                g = FUN_L00_00257cb0_2c97e0();
+                build_spherical_offset_2c97e0(&velocity, f, g, D_L00_00161858_2c97e0 * rotation);
+                velocity.f[2] = random_float_between(3.5f, 5.5f) * D_0015ED6C_2c8440;
+                FUN_L00_002cbf68_2c97e0(m, &offset, &velocity);
+            } while (count != 0);
+        }
+        FUN_0022da68_c(1, 0, m);
+        if (s2->unk70 >= 0) goto remove;
+        m->collision = 0;
+        m->flags = (m->flags & 0xefff) | 0x41;
+        s2->unk74 = 0; m->state = 6; m->command = 0;
+        return;
+    }
+    if (tick_timer_2cb418(&s2->unk64)) {
+        a = FUN_L00_00257b50_2c97e0(100);
+        FUN_0022da68_c(a > 74, 0, m);
+        a = scale_game_frames(120); b = scale_game_frames(300);
+        s2->unk64 = FUN_L00_00257b90(a, b);
+    }
+    if (s2->unk70 < 0) speed = 0.333f;
+    else speed = (D_0015ED6C_2c8440 + D_0015ED6C_2c8440) * scale;
+    switch (m->state) {
+    case 1:
+        if (m->anim_flags & 2) {
+            a = FUN_L00_00257b50_2c97e0(2);
+            b = scale_game_frames(5);
+            FUN_L00_00257880_2c97e0(m, a == 0, 0, b);
+        }
+        if (tick_timer_2cb418(&s2->unk66) && distance_xy_2c97e0(&m->pos, &hero.motion.pos) < scale * 5.0f) {
+            next_pos.f[0] = FUN_001f9dc8(m->rot.z) * D_0015ED6C_2c8440 * scale;
+            next_pos.f[1] = FUN_001f9de0(m->rot.z) * D_0015ED6C_2c8440 * scale;
+            next_pos.f[2] = 0.0f;
+            add_vector_xyz_2c8440(&next_pos, &next_pos, &old_pos);
+            result = FUN_L00_00258490_2c97e0(m, &old_pos, &next_pos, 0, scale * 0.2f, scale * 0.5f, speed, 0.2617994f);
+            if (!result) {
+                angle = atan2_f_2c8440(old_pos.f[0] - m->pos.x, old_pos.f[1] - m->pos.y);
+                f = rotation_distance_2c97e0(m->rot.z, angle);
+                if (!(f < 1.5707964f) || !(scale * 0.01f < distance_xyz_2c97e0(&m->pos, &old_pos))) goto reset_timer_only;
+            }
+            m->state = 3; a = scale_game_frames(10); FUN_L00_00257880_2c97e0(m, 3, 0, a); break;
+        }
+        if (distance_xy_2c97e0(&m->pos, &hero.motion.pos) < scale * 5.0f && rotation_distance_2c97e0(angle, m->rot.z) > 0.5235988f) {
+            FUN_L00_00258490_2c97e0(m, &old_pos, &old_pos, 0, scale * 0.2f, scale * 0.5f, speed, 0.2617994f);
+            m->state = 2; a = scale_game_frames(10); FUN_L00_00257880_2c97e0(m, 3, 0, a); break;
+        }
+idle_move:
+        FUN_L00_00258490_2c97e0(m, &old_pos, &old_pos, 0, scale * 0.2f, scale * 0.5f, speed, 0.2617994f);
+        break;
+    case 2:
+        rotation = 0.5f;
+        FUN_L00_00258278_2c97e0(m, (u8 *)s2 + 0x68, angle, D_0015ED70_2c8440 * 0.7853982f, D_0015ED70_2c8440 * 1.5707964f, D_0015ED6C_2c8440 * 0.7853982f);
+        FUN_L00_00258490_2c97e0(m, &old_pos, &old_pos, 0, scale * 0.2f, scale * rotation, speed, 0.2617994f);
+        if (tick_timer_2cb418(&s2->unk66) && distance_xy_2c97e0(&m->pos, &hero.motion.pos) < scale * 5.0f) {
+            next_pos.f[0] = FUN_001f9dc8(m->rot.z) * D_0015ED6C_2c8440 * scale;
+            next_pos.f[1] = FUN_001f9de0(m->rot.z) * D_0015ED6C_2c8440 * scale;
+            next_pos.f[2] = 0.0f;
+            add_vector_xyz_2c8440(&next_pos, &next_pos, &old_pos);
+            f = probe_ground_height(&next_pos, 0, rotation);
+            f = fabs_2c97e0(f - next_pos.f[2]);
+            if (f <= (D_0015ED6C_2c8440 + D_0015ED6C_2c8440) * scale) {
+                m->state = 3; a = scale_game_frames(10); FUN_L00_00257880_2c97e0(m, 3, 0, a); break;
+            }
+            break;
+        }
+        if (rotation_distance_2c97e0(angle, m->rot.z) < 0.08726646f) goto reset_state;
+        if (scale * 6.0f < distance_xy_2c97e0(&m->pos, &hero.motion.pos)) goto reset_state;
+        break;
+    case 3:
+        if (scale * 6.0f < distance_xy_2c97e0(&m->pos, &hero.motion.pos)) {
+            m->state = 1;
+            a = scale_game_frames(60); b = scale_game_frames(180);
+            s2->unk66 = FUN_L00_00257b90(a, b);
+            a = FUN_L00_00257b50_2c97e0(2); b = scale_game_frames(5);
+            FUN_L00_00257880_2c97e0(m, a == 0, 0, b);
+            goto idle_move;
+        }
+        if (!(distance_xy_2c97e0(&m->pos, &hero.motion.pos) < scale * 3.0f)) {
+            FUN_L00_00258278_2c97e0(m, (u8 *)s2 + 0x68, angle, D_0015ED70_2c8440 * 0.7853982f, D_0015ED70_2c8440 * 1.5707964f, D_0015ED6C_2c8440 * 0.7853982f);
+            rotation = 1.5707964f;
+            next_pos.f[0] = FUN_001f9dc8(m->rot.z) * D_0015ED6C_2c8440 * scale;
+            next_pos.f[1] = FUN_001f9de0(m->rot.z) * D_0015ED6C_2c8440;
+            goto move_scaled;
+        }
+        FUN_L00_00258278_2c97e0(m, (u8 *)s2 + 0x68, angle, D_0015ED70_2c8440 * 0.7853982f, D_0015ED70_2c8440 * 1.5707964f, D_0015ED6C_2c8440 * 0.7853982f);
+        rotation = 1.5707964f;
+        next_pos.f[0] = FUN_001f9dc8(m->rot.z) * (D_0015ED6C_2c8440 + D_0015ED6C_2c8440);
+        next_pos.f[1] = FUN_001f9de0(m->rot.z) * (D_0015ED6C_2c8440 + D_0015ED6C_2c8440);
+        next_pos.f[2] = 0.0f;
+        add_vector_xyz_2c8440(&next_pos, &next_pos, &old_pos);
+        result = FUN_L00_00258490_2c97e0(m, &old_pos, &next_pos, 0, scale * 0.2f, scale * 0.5f, speed, 0.2617994f);
+        if (!result) {
+            angle = atan2_f_2c8440(old_pos.f[0] - m->pos.x, old_pos.f[1] - m->pos.y);
+            f = rotation_distance_2c97e0(m->rot.z, angle);
+            if (rotation < f || distance_xyz_2c97e0(&m->pos, &old_pos) < scale * 0.01f) goto reset_state;
+        }
+        m->state = 4; a = scale_game_frames(10); FUN_L00_00257880_2c97e0(m, 2, 0, a); break;
+    case 4:
+        result = tick_timer_2cb418(&s2->unk66);
+        if (result && scale * 4.0f < distance_xy_2c97e0(&m->pos, &hero.motion.pos)) {
+            FUN_L00_00258278_2c97e0(m, (u8 *)s2 + 0x68, angle, D_0015ED70_2c8440 * 0.7853982f, D_0015ED70_2c8440 * 1.5707964f, D_0015ED6C_2c8440 * 0.7853982f);
+            rotation = 1.5707964f;
+            next_pos.f[0] = FUN_001f9dc8(m->rot.z) * D_0015ED6C_2c8440 * scale;
+            next_pos.f[1] = FUN_001f9de0(m->rot.z) * D_0015ED6C_2c8440 * scale;
+            next_pos.f[2] = 0.0f;
+            add_vector_xyz_2c8440(&next_pos, &next_pos, &old_pos);
+            result = FUN_L00_00258490_2c97e0(m, &old_pos, &next_pos, 0, scale * 0.2f, scale * 0.5f, speed, 0.2617994f);
+            if (!result) {
+            angle = atan2_f_2c8440(old_pos.f[0] - m->pos.x, old_pos.f[1] - m->pos.y);
+            f = rotation_distance_2c97e0(m->rot.z, angle);
+            if (rotation < f || distance_xyz_2c97e0(&m->pos, &old_pos) < scale * 0.01f) goto reset_state;
+        }
+            m->state = 3; a = scale_game_frames(10); FUN_L00_00257880_2c97e0(m, 3, 0, a); break;
+        }
+        FUN_L00_00258278_2c97e0(m, (u8 *)s2 + 0x68, angle, D_0015ED70_2c8440 * 0.7853982f, D_0015ED70_2c8440 * 1.5707964f, D_0015ED6C_2c8440 * 0.7853982f);
+        rotation = 1.5707964f;
+        next_pos.f[0] = FUN_001f9dc8(m->rot.z) * (D_0015ED6C_2c8440 + D_0015ED6C_2c8440) * scale;
+        next_pos.f[1] = FUN_001f9de0(m->rot.z) * (D_0015ED6C_2c8440 + D_0015ED6C_2c8440);
+move_scaled:
+        next_pos.f[1] *= scale;
+        next_pos.f[2] = 0.0f;
+        add_vector_xyz_2c8440(&next_pos, &next_pos, &old_pos);
+        result = FUN_L00_00258490_2c97e0(m, &old_pos, &next_pos, 0, scale * 0.2f, scale * 0.5f, speed, 0.2617994f);
+        if (!result) {
+            angle = atan2_f_2c8440(old_pos.f[0] - m->pos.x, old_pos.f[1] - m->pos.y);
+            f = rotation_distance_2c97e0(m->rot.z, angle);
+            if (rotation < f || distance_xyz_2c97e0(&m->pos, &old_pos) < scale * 0.01f) goto reset_state;
+        }
+        break;
+reset_state:
+        m->state = 1;
+        a = scale_game_frames(60); b = scale_game_frames(180);
+        s2->unk66 = FUN_L00_00257b90(a, b);
+        a = FUN_L00_00257b50_2c97e0(2); mode = a == 0; a = scale_game_frames(5);
+        goto animate;
+reset_timer_only:
+        a = scale_game_frames(60); b = scale_game_frames(180);
+        s2->unk66 = FUN_L00_00257b90(a, b);
+        break;
+animate:
+        FUN_L00_00257880_2c97e0(m, mode, 0, a);
+        break;
+    case 5:
+        result = FUN_L00_002dc9f0_2c97e0(m, s2->unk10);
+        if (result) { m->state = 0; *(u16 *)((u8 *)s2->unk14 + 0x68) = 0; }
+        if (FUN_L00_00257b50_2c97e0(4)) return;
+        rotation = 0.017453292f;
+        f = random_float_between(D_L00_00161868_2c97e0, D_L00_0016186C_2c97e0) * scale;
+                g = FUN_L00_00257cb0_2c97e0(); h = FUN_L00_00257cb0_2c97e0();
+                build_spherical_offset_2c97e0(&offset, f, g, h);
+                offset.f[2] += D_L00_00161864_2c97e0 * scale;
+                add_vector_xyz_2c8440(&offset, &offset, &old_pos);
+                f = random_float_between(D_L00_0016185C_2c97e0 * D_0015ED6C_2c8440, D_L00_00161860_2c97e0 * D_0015ED6C_2c8440);
+                g = FUN_L00_00257cb0_2c97e0();
+                build_spherical_offset_2c97e0(&velocity, f, g, D_L00_00161858_2c97e0 * rotation);
+                velocity.f[2] = random_float_between(3.5f, 5.5f) * D_0015ED6C_2c8440;
+                FUN_L00_002cbf68_2c97e0(m, &offset, &velocity);
+        return;
+    }
+    if (!result) {
+        subtract_vector_xyz_2c8440(&velocity, &old_pos, &m->pos);
+        f = vector_length_xyz_2cb418(&velocity);
+        if (D_0015ED6C_2c8440 * scale < f)
+            normalize_2c97e0(&velocity, &velocity, D_0015ED6C_2c8440 * scale);
+        add_vector_xyz_2c8440(&old_pos, &m->pos, &velocity);
+        f = FUN_L00_00259710_2c97e0(&old_pos);
+        g = fabs_2c97e0(f - m->pos.z);
+        f = D_0015ED70_2c8440;
+        if (!(g <= D_0015ED6C_2c8440 * scale)) goto gravity;
+    }
+    qcopy(&m->pos, &old_pos);
+    f = D_0015ED70_2c8440;
+gravity:
+    *(f32 *)((u8 *)s2 + 0x6c) += f * 9.8f;
+    m->pos.z -= *(f32 *)((u8 *)s2 + 0x6c);
+    f = probe_ground_height(&m->pos, 0, 0.5f);
+    if (m->pos.z < f && f < m->pos.z + scale * 0.25f) {
+        *(f32 *)((u8 *)s2 + 0x6c) = 0.0f; m->pos.z = f;
+    }
+    if (!FUN_001f0b58_2c8440()) s2->unk78 = 0.0f;
+    if (m->state != 5) {
+        m->pos.z = D_L00_00173E40.f28;
+        qcopy(&velocity, &D_L00_00173E40.v40);
+        f = FUN_001f9dc8(m->rot.z); g = FUN_001f9de0(m->rot.z);
+        offset.f[0] = velocity.f[0] * f + velocity.f[1] * g;
+        f = FUN_001f9dc8(m->rot.z); g = FUN_001f9de0(m->rot.z);
+        offset.f[1] = velocity.f[1] * f - velocity.f[0] * g;
+        offset.f[2] = velocity.f[2];
+        f = -atan2_f_2c8440(FUN_001f9988(offset.f[0] * offset.f[0] + offset.f[2] * offset.f[2]), offset.f[1]);
+        angle = atan2_f_2c8440(offset.f[2], offset.f[0]);
+        f = rotation_delta_2c97e0(f, m->rot.x);
+        m->rot.x = fast_add_rotations_2c8440(m->rot.x, f * (D_0015ED6C_2c8440 * 6.2831855f));
+        f = rotation_delta_2c97e0(angle, m->rot.y);
+        m->rot.y = fast_add_rotations_2c8440(m->rot.y, f * (D_0015ED6C_2c8440 * 6.2831855f));
+    }
+    if (!(m->pos.z < 0.0f)) { m->anim_speed = anim_speed; return; }
+remove:
+    mark_moby_for_removal(m);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
