@@ -1000,6 +1000,7 @@ void FUN_L00_00206e00(void) {
     s32 input;
     s32 level;
     s32 i, j, length, position;
+    u8 *end;
     u8 *sequence;
     u8 *history;
     volatile s32 *history_count;
@@ -1075,7 +1076,9 @@ append:
     for (i = 0; i < 12; i++, sequence += 16) {
         length = 0;
         if (*sequence != 0) {
-            for (length = 1; sequence[length] != 0; length++) { }
+            end = sequence + 1;
+            length = 1;
+            while (*end != 0) { end++; length++; }
         }
         if (length != 0) {
             position = *history_count - length;
