@@ -51,8 +51,8 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     float adjusted[4] __attribute__((aligned(16)));
     float velocity[4] __attribute__((aligned(16)));
     float offset[4] __attribute__((aligned(16)));
-    float travel_step = 0.0f;
     float speed = 0.0f;
+    float travel_step = 0.0f;
     float travel;
     float acceleration;
     int count;
