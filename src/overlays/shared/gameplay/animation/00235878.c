@@ -637,17 +637,17 @@ int FUN_L00_00237200(HudElem *e) {
             point_data = (float *)line;
             if (FUN_001ff450(D_0013F3D0, point_data) < 5.0f) {
                 *(int *)0x15f648 = y + 100;
-                extra = current_level_index_sda == 0x10 ? 4 : 0;
-                elapsed = *(int *)((char *)freeze_stats_time_ref_a + extra);
-                extra = *(int *)((char *)freeze_stats_score_ref_a + extra);
+                extra = current_level_index_sda == 0x10 ? 1 : 0;
+                elapsed = freeze_stats_time_ref_a[extra];
+                extra = freeze_stats_score_ref_a[extra];
                 if (elapsed != 0) {
                     const char *message;
                     interval = pal_mode != 0 ? 3000 : 3600;
                     seconds = elapsed / interval;
-                    minute_scale = interval / 60;
+                    other_width = interval / 60;
                     remainder = elapsed - seconds * interval;
-                    other_left = remainder / minute_scale;
-                    remainder = (remainder - other_left * minute_scale) * 100 / minute_scale;
+                    other_left = remainder / other_width;
+                    remainder = (remainder - other_left * other_width) * 100 / other_width;
                     line = freeze_stats_time_format;
                     message = FUN_00203ad8(0x531b);
                     FUN_00116248(text, line, message, seconds, other_left, remainder);
