@@ -2,9 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261968.s", FUN_L00_00261968);
-#else
 #include "rnc/overlay/quad.h"
 #include "qcopy.h"
 
@@ -33,6 +30,7 @@ s32 FUN_L00_00261968(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
     s32 i;
     s32 offset;
     f32 crossing;
+    f32 zero;
 
     i = 1;
     FUN_001ff2a8_261968(&direction, end, start);
@@ -50,10 +48,11 @@ s32 FUN_L00_00261968(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
     current = &next;
     if (i < (*entry)->count) {
         offset = 0x20;
+        zero = 0.0f;
         do {
             FUN_001ff2a8_261968(current, (OvlVec4 *)((u8 *)*entry + offset), start);
             FUN_001ff6d0_261968(current, current, &direction);
-            if (first.f[3] != 0.0f || next.f[3] != 0.0f) {
+            if (first.f[3] != zero || next.f[3] != zero) {
                 if (next.f[1] * first.f[1] < 0.0f) {
                     crossing = (first.f[0] - next.f[0]) / (first.f[1] - next.f[1]) * -next.f[1] + next.f[0];
                     if (crossing > 0.0f && crossing < 1.0f)
@@ -67,7 +66,6 @@ s32 FUN_L00_00261968(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
     }
     return 0;
 }
-#endif /* NON_MATCHING */
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261b48.s", FUN_L00_00261b48);
 #else
