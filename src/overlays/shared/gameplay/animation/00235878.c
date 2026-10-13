@@ -641,14 +641,16 @@ int FUN_L00_00237200(HudElem *e) {
                 elapsed = *(int *)((char *)freeze_stats_time_ref_a + extra);
                 extra = *(int *)((char *)freeze_stats_score_ref_a + extra);
                 if (elapsed != 0) {
+                    const char *message;
                     interval = pal_mode != 0 ? 3000 : 3600;
-                    minute_scale = interval / 60;
                     seconds = elapsed / interval;
+                    minute_scale = interval / 60;
                     remainder = elapsed - seconds * interval;
-                    width = remainder / minute_scale;
-                    remainder = (remainder - width * minute_scale) * 100 / minute_scale;
+                    other_left = remainder / minute_scale;
+                    remainder = (remainder - other_left * minute_scale) * 100 / minute_scale;
                     line = freeze_stats_time_format;
-                    FUN_00116248(text, line, FUN_00203ad8(0x531b), seconds, width, remainder);
+                    message = FUN_00203ad8(0x531b);
+                    FUN_00116248(text, line, message, seconds, other_left, remainder);
                     FUN_0023cf80(0x100, y + 0x28, color, text);
                     if (extra != 0) {
                         FUN_00116248(text, freeze_stats_score_format, FUN_00203ad8(0x531c), extra);
