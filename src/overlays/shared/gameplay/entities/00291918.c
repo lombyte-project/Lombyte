@@ -704,7 +704,7 @@ extern float FUN_001f9e90(float, float);
 extern int FUN_001f0b58(void);
 extern void FUN_001f9a68(void *, void *, float);
 extern float FUN_001f9af0(void *);
-extern int FUN_001efa68(void *, void *, int, void *, int);
+extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_0022da68(int, int, void *);
 extern int FUN_001f9770(void *);
@@ -727,6 +727,8 @@ void FUN_L03_002c4718(struct Moby *m)
     struct { int old_m98, old_owner98, old_m94, old_owner94; } saved;
     float angle;
     float distance;
+    float time_step;
+    float scale_step;
 
     if (m == NULL) return;
     d = (float *)m->pvars;
@@ -813,13 +815,15 @@ first_collision_timer:
         if (FUN_001f9770(d + 5)) m->state = 2;
         m->rot.x = FUN_L00_0025e310(d[0]);
         m->rot.y = FUN_L00_0025e310(d[1]);
+        time_step = frame_time_sq;
+        scale_step = frame_scale;
         m->collision_disable = saved.old_m98;
         (*(struct Moby **)(d + 4))->collision_disable = saved.old_owner98;
         m->collision = saved.old_m94;
         (*(struct Moby **)(d + 4))->collision = saved.old_owner94;
-        d[2] -= frame_time_sq * 9.8f;
-        m->rot.x += frame_scale * 0.01f;
-        m->rot.y += frame_scale * 0.02f;
+        d[2] -= time_step * 9.8f;
+        m->rot.x += scale_step * 0.01f;
+        m->rot.y += scale_step * 0.02f;
     break;
     }
     case 1: {
