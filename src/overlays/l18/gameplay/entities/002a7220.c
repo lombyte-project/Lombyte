@@ -2363,14 +2363,15 @@ void FUN_L18_002e9768(struct Moby *moby) {
 
     switch (state) {
     case 0: {
-        unsigned char unkB0 = moby->mission;
-        if (unkB0 == 0xff ||
-            *((unsigned char *)D_0014C050_9768 + current_level_index * 16 + unkB0) != 0xff) {
-            moby->state = 1;
-            if (*(int *)data != 0) *(int *)(*(int *)data) = 3;
-            return;
+        int unkB0 = moby->mission;
+        if (unkB0 != 0xff) {
+            unkB0 += current_level_index * 16;
+            unkB0 = ((unsigned char *)D_0014C050_9768)[unkB0];
+            if (unkB0 == 0xff) goto remove;
         }
-        goto remove;
+        moby->state = 1;
+        if (*(int *)data != 0) *(int *)(*(int *)data) = 3;
+        return;
     }
     case 1:
         if (FUN_L00_0025a420(moby, 0x80000, 0)) {
