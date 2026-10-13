@@ -204,7 +204,6 @@ typedef struct PVars_29ecf8 {
 void FUN_L04_0029ecf8(struct Moby *moby) {
     PVars_29ecf8 *data = (PVars_29ecf8 *)moby->pvars;
     struct Moby **children;
-    struct Moby *child;
     struct Moby *other;
     f32 distance;
     f32 angle;
@@ -255,10 +254,13 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
 initialize:
     {
     s32 i;
-    Vec4f *moby_pos = &moby->pos;
+    struct Moby *child;
+    Vec4f *moby_pos;
     children = data->children;
     data->initialized = 1;
     data->child_count = 0;
+    if (data->count <= 0) return;
+    moby_pos = &moby->pos;
     for (i = 0; i < data->count; i++) {
         children[i] = 0;
         child = spawn_moby_29ecf8(0x55);
@@ -272,7 +274,7 @@ initialize:
             child->anim_speed = random_float_between_29ecf8(0.6f, 1.2f);
             clear_vector_29ecf8(&part->pos);
             *(s16 *)((char *)part + 0x44) = 0;
-            *(f32 *)((char *)part + 0x4c) = 10.0f;
+            *(volatile f32 *)((char *)part + 0x4c) = 10.0f;
             *(volatile u128 *)&child->pos = *(volatile u128 *)moby_pos;
             angle = random_angle_29ecf8();
             angle2 = random_angle_29ecf8();
@@ -280,18 +282,18 @@ initialize:
             child->pos.x += fast_cos_29ecf8(angle) * fast_sin_29ecf8(angle2) * size;
             child->pos.y += fast_sin_29ecf8(angle) * fast_sin_29ecf8(angle2) * size;
             child->pos.z += fast_cos_29ecf8(angle2) * size;
-            *(s32 *)((char *)part + 0x50) = 0;
-            *(void **)((char *)part + 0x54) = moby_pos;
-            *(s32 *)((char *)part + 0x58) = 0;
-            *(f32 *)((char *)part + 0x70) = 1.694f;
-            *(f32 *)((char *)part + 0x74) = 1.694f;
-            *(f32 *)((char *)part + 0x94) = 5.0f;
-            *(f32 *)((char *)part + 0x48) = 1.056f;
+            *(volatile s32 *)((char *)part + 0x50) = 0;
+            *(void *volatile *)((char *)part + 0x54) = moby_pos;
+            *(volatile s32 *)((char *)part + 0x58) = 0;
+            *(volatile f32 *)((char *)part + 0x70) = 1.694f;
+            *(volatile f32 *)((char *)part + 0x74) = 1.694f;
+            *(volatile f32 *)((char *)part + 0x94) = 5.0f;
+            *(volatile f32 *)((char *)part + 0x48) = 1.056f;
             *(s16 *)((char *)part + 0x5c) = -1;
-            *(f32 *)((char *)part + 0x40) = 0.003f;
+            *(volatile f32 *)((char *)part + 0x40) = 0.003f;
             *(s16 *)((char *)part + 0x5e) = 2;
             *(s16 *)((char *)part + 0x60) = 0x55;
-            *(f32 *)((char *)part + 0x90) = 1.0f;
+            *(volatile f32 *)((char *)part + 0x90) = 1.0f;
             *(s16 *)((char *)part + 0x62) = 0x1ee;
             update_spawned_moby_29ecf8(child);
         }
@@ -300,18 +302,16 @@ initialize:
     return;
 update:
     { s32 i;
+    struct Moby *child;
     children = data->children;
     for (i = 0; i < data->count; i++) {
         void *part;
         child = children[i];
         part = child->pvars;
-        speed = (data->radius * 7.753f) / 1800.0f;
         average = (child->anim_speed + 1.0f) * 0.5f;
-        D_L04_00166130[6] = speed * frame_scale * average * 0.05f * frame_scale_sq * average;
-        speed = (data->radius * 7.753f) / 1800.0f;
-        speed = speed * frame_scale;
+        D_L04_00166130[6] = ((data->radius * 7.753f) / 1800.0f) * frame_scale * average * 0.05f * frame_scale_sq * average;
         average = (child->anim_speed + 1.0f) * 0.5f;
-        D_L04_00166130[7] = speed * average;
+        D_L04_00166130[7] = (((data->radius * 7.753f) / 1800.0f) * frame_scale) * average;
         FUN_L04_001f30e0(children, data->count, child, part, D_L04_00166130);
         apply_child_motion_29ecf8(0.0f, child, part, D_L04_00166130);
     }
