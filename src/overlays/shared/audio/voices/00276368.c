@@ -280,34 +280,22 @@ void FUN_L00_00276908(void) {
             }
             D_L00_001B9CF0.owner = 0;
         }
-        {
-            s32 *saved;
-            s32 remaining;
-            s32 *desired;
-            s32 *active;
-            u8 *state;
-            state = (u8 *)&D_L00_001B9CF0;
-            active = D_00141660;
-            desired = (s32 *)(state + 0x30);
-            remaining = 3;
-            saved = (s32 *)&hero.pending_item;
-            do {
-                if (*active != *desired) {
-                    *saved = *desired != 0 ? *desired : 0x26;
-                }
-                saved++;
-                desired++;
-                remaining--;
-                active++;
-            } while (remaining >= 0);
+        for (i = 0; i < 4; i++) {
+            if (D_00141660[i] != ((s32 *)((u8 *)&D_L00_001B9CF0 + 0x30))[i]) {
+                hero.pending_item[i] =
+                    ((s32 *)((u8 *)&D_L00_001B9CF0 + 0x30))[i] != 0
+                        ? ((s32 *)((u8 *)&D_L00_001B9CF0 + 0x30))[i]
+                        : 0x26;
+            }
         }
-        D_0015EE78_gp = *(s32 *)((u8 *)&D_L00_001B9CF0 + 0x18);
-        hud_send_resident_bank(0, *(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x74), 0);
+        table = D_L00_0017E4D8;
+        D_0015EE78_gp = *(s32 *)D_L00_001B9CF0.pad18;
+        hud_send_resident_bank(0, *(s32 *)((u8 *)*(void **)(table + 0x18) + 0x74), 0);
         FUN_L00_00235310(2);
-        if (*(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x80) != 0) {
+        if (*(s32 *)((u8 *)*(void **)(table + 0x18) + 0x80) != 0) {
             FUN_L00_00235310(3);
         }
-        if (*(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x84) != 0) {
+        if (*(s32 *)((u8 *)*(void **)(table + 0x18) + 0x84) != 0) {
             FUN_L00_00235310(4);
         }
         {
