@@ -165,7 +165,10 @@ extern s32 rand(void);
 void update_level_gameplay_frame(void) __asm__("FUN_0022eaa8");
 
 void update_level_gameplay_frame(void) {
-    Vector4 first_position;
+    union {
+        Vector4 position;
+        volatile s32 sound_bank;
+    } first_position;
     Vector4 second_position;
     Matrix4x4 first_transform;
     Matrix4x4 second_transform;
@@ -175,7 +178,7 @@ void update_level_gameplay_frame(void) {
     LevelRenderObject *object;
     LevelRenderObject *expired_object;
     s32 mode_advance;
-    volatile s32 sound_bank;
+    s32 sound_bank;
     RenderModel *model;
     RenderArchiveTable *archive_table;
     u8 *archive_data;
@@ -212,7 +215,9 @@ void update_level_gameplay_frame(void) {
     if (render_sequence.time == 1 && current_level_index != 0 &&
         (current_level_index != 1 || level_available[3] != 0)) {
         read_global_table_entry();
-        sound_bank = sound_bank_handle;
+        /* The bank scratch is dead before scale_vector overwrites the position. */
+        first_position.sound_bank = sound_bank_handle;
+        sound_bank = first_position.sound_bank;
         mode_advance = level_render_state.mode;
         snd_play_sound_vol_pan_pmpb(sound_bank, mode_advance, 0x400, 0, 0, 0, 0, D_0013E5C0);
         snd_reset_state_and_flush_commands();
