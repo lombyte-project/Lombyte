@@ -2,97 +2,124 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023fa00.s", FUN_L00_0023fa00);
-#else
 #include "rnc/storage/disc_table.h"
 #include "rnc/rendering/level_render_state.h"
-typedef unsigned int u128_copy __attribute__((mode(TI), aligned(16)));
-extern s32 D_0015EE54, D_0015EE8C;
-#define D_L00_0015FFC8 (*(s32 *)0x0015ffc8)
-extern s16 D_L00_0015FC0A, D_L00_0015FC0C, D_L00_0015FC0E, D_L00_0015FC1A;
-extern s32 D_L00_00160548[], D_L00_00160558[];
-extern s32 D_L00_00160564, D_L00_00160568, D_L00_0016056C;
-extern u8 D_L00_00197BC0[];
-extern s32 D_L00_00199A80[];
-extern u128_copy D_L00_001AEBC0[];
-extern u128_copy D_00156800 __attribute__((sda)), D_00156810 __attribute__((sda));
-extern u8 D_00156820 __attribute__((sda));
-extern s32 D_00156BC8 __attribute__((sda));
-extern void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001f98d0");
-extern void FUN_00122330(void *, s16, s32, s32, s32, s32, s32, s32);
-extern void FUN_00118a80(s32);
-extern void FUN_00122658(void *, void *);
-extern void FUN_00120558(s32, s32);
-extern void FUN_L00_002409b8(void *, void *, void *);
+#include "qcopy.h"
 
-void *FUN_L00_0023fa00(u8 *bank, u8 *header) {
-    u8 buffer[0x60] __attribute__((aligned(16)));
-    s32 first_offset, second_offset, third_offset, fourth_offset;
+/* Offsets of the bank's four packed images, from the bank start. */
+typedef struct ImageBank_23fa00 {
+    s32 sky_offset;    /* 0x00 */
+    s32 first_offset;  /* 0x04 */
+    s32 second_offset; /* 0x08 */
+    s32 last_offset;   /* 0x0C */
+} ImageBank_23fa00;
+/* One 16-byte texture record of the level's texture table. */
+typedef struct TexRecord_23fa00 {
+    s16 h[8];
+} TexRecord_23fa00;
+typedef struct TexEntry_23fa00 {
+    s32 w[4];
+} TexEntry_23fa00;
+extern char *resident_bank_23fa00 __asm__("D_0015EE54") __attribute__((section(".sdata")));
+extern s32 vram_base_23fa00[2] __asm__("D_0015EE88") __attribute__((section(".sdata")));
+extern TexEntry_23fa00 texture_table_23fa00[] __asm__("D_L00_001AEBC0");
+extern s32 texture_count_23fa00 __asm__("D_L00_0015FFC8") __attribute__((section(".sdata")));
+/* $gp scalar aliases: retail takes the records' addresses through $gp. */
+extern s32 first_record_gp_23fa00 __asm__("D_L00_0015FC00") __attribute__((sda));
+extern s32 second_record_gp_23fa00 __asm__("D_L00_0015FC10") __attribute__((sda));
+#define first_record_23fa00 ((TexRecord_23fa00 *)&first_record_gp_23fa00)
+#define second_record_23fa00 ((TexRecord_23fa00 *)&second_record_gp_23fa00)
+extern TexRecord_23fa00 first_record_fields_23fa00 __asm__("D_L00_0015FC0A") __attribute__((section(".sdata")));
+extern TexRecord_23fa00 second_record_fields_23fa00 __asm__("D_L00_0015FC1A") __attribute__((section(".sdata")));
+extern u8 record_index_23fa00 __asm__("D_L00_0015FC20") __attribute__((sda));
+extern u8 texture_loaded_23fa00[] __asm__("D_L00_00197BC0");
+extern u32 texture_addresses_23fa00[] __asm__("D_L00_00199A80");
+extern s32 first_texture_ids_23fa00[] __asm__("D_L00_00160548");
+extern s32 second_texture_ids_23fa00[] __asm__("D_L00_00160558");
+extern s32 D_L00_00160568_23fa00 __asm__("D_L00_00160568") __attribute__((section(".sdata")));
+extern s32 D_L00_00160564_23fa00 __asm__("D_L00_00160564") __attribute__((section(".sdata")));
+extern s32 D_L00_0016056C_23fa00 __asm__("D_L00_0016056C") __attribute__((section(".sdata")));
+extern void hud_send_resident_bank_23fa00(void *, void *, s32) __asm__("FUN_001f98d0");
+extern s32 FUN_00122330_23fa00(void *, s16, s16, s16, s16, s16, s16, s16) __asm__("FUN_00122330");
+extern void FUN_00118a80_23fa00(s32) __asm__("FUN_00118a80");
+extern s32 FUN_00122658_23fa00(void *, void *) __asm__("FUN_00122658");
+extern s32 FUN_00120558_23fa00(s32, u16) __asm__("FUN_00120558");
+extern void FUN_00203640_23fa00(void *, void *, void *, s32) __asm__("FUN_00203640");
+
+/* Loads a level's four packed images through the GS loader and registers the image records and their data blocks. */
+char *FUN_L00_0023fa00(char *bank, s32 *header) {
+    s32 image[24];
+    s32 i = 0;
+    s32 sky_offset;
+    s32 first_offset;
+    s32 second_offset;
+    s32 last_offset;
+    char *first;
+    char *src;
+    char *dst;
+    char *base;
     s32 index;
-    s32 allocation;
-    u8 *destination, *texture;
-
-    hud_send_resident_bank((s32)bank, D_0015EE54,
-                           disc_table.level_archives[level_render_state.content_variant + 1].size << 11);
-    first_offset = *(s32 *)bank;
-    second_offset = *(s32 *)(bank + 4);
-    third_offset = *(s32 *)(bank + 8);
-    fourth_offset = *(s32 *)(bank + 12);
-    destination = bank + second_offset;
-    index = 0;
+    s32 next_index;
+    hud_send_resident_bank_23fa00(bank, resident_bank_23fa00,
+                                  disc_table.level_archives[level_render_state.content_variant + 1].size << 11);
+    sky_offset = ((ImageBank_23fa00 *)bank)->sky_offset;
+    first_offset = ((ImageBank_23fa00 *)bank)->first_offset;
+    first = bank + first_offset;
+    second_offset = ((ImageBank_23fa00 *)bank)->second_offset;
+    last_offset = ((ImageBank_23fa00 *)bank)->last_offset;
     do {
-        if (index == 0) {
-            FUN_00122330(buffer, ((*(s32 *)(header + 0xac) + D_0015EE8C) << 8) >> 16,
-                         1, 0x13, 0, 0, 0x40, 0x40);
-            texture = destination + 0x14430;
-        } else if (index == 1) {
-            FUN_00122330(buffer, ((*(s32 *)(header + 0xb0) + D_0015EE8C) << 8) >> 16,
-                         1, 0x13, 0, 0, 0x20, 0x20);
-            texture = destination + 0x15430;
-        } else if (index == 2) {
-            FUN_00122330(buffer, ((*(s32 *)(header + 0xb4) + D_0015EE8C) << 8) >> 16,
-                         1, 0, 0, 0, 0x10, 0x10);
-            texture = destination + 0x30;
+        if (i == 0) {
+            FUN_00122330_23fa00(image, (vram_base_23fa00[1] + header[0x2B]) >> 8, 1, 0x13, 0, 0, 0x40, 0x40);
+            src = bank + first_offset;
+            dst = first + 0x14430;
+        } else if (i == 1) {
+            FUN_00122330_23fa00(image, (vram_base_23fa00[1] + header[0x2C]) >> 8, 1, 0x13, 0, 0, 0x20, 0x20);
+            src = bank + first_offset;
+            dst = first + 0x15430;
+        } else if (i == 2) {
+            FUN_00122330_23fa00(image, (vram_base_23fa00[1] + header[0x2D]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
+            dst = first + 0x30;
+            src = bank + first_offset;
         } else {
-            FUN_00122330(buffer, ((*(s32 *)(header + 0xb8) + D_0015EE8C) << 8) >> 16,
-                         1, 0, 0, 0, 0x10, 0x10);
-            texture = bank + fourth_offset + 0x30;
+            FUN_00122330_23fa00(image, (vram_base_23fa00[1] + header[0x2E]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
+            src = bank + first_offset;
+            dst = bank + last_offset + 0x30;
         }
-        index++;
-        FUN_00118a80(0);
-        FUN_00122658(buffer, texture);
-        FUN_00120558(0, 0);
-    } while (index < 4);
-    D_L00_0015FC0A = *(s32 *)(header + 0xb4) >> 8;
-    D_L00_0015FC0C = *(s32 *)(header + 0xac) >> 8;
-    D_L00_0015FC0E = *(s32 *)(header + 0xb0) >> 8;
-    allocation = D_L00_0015FFC8;
-    D_L00_001AEBC0[allocation] = D_00156800;
-    D_L00_00199A80[allocation] = (s32)destination + 0x80000000;
-    hud_send_resident_bank((s32)destination, (s32)(bank + second_offset + 0x430), 0x14000);
-    D_00156820 = D_L00_0015FFC8;
-    allocation = D_00156BC8;
-    if (D_L00_00197BC0[D_L00_00160548[level_render_state.content_variant]] == 0xff) {
-        FUN_L00_002409b8(bank + first_offset, (u8 *)&D_00156800 - D_L00_0015FFC8 * 16, &D_00156820);
-        allocation = D_L00_0015FFC8;
+        FUN_00118a80_23fa00(0);
+        i++;
+        FUN_00122658_23fa00(image, dst);
+        FUN_00120558_23fa00(0, 0);
+    } while (i < 4);
+    base = bank;
+    bank = src;
+    first_record_fields_23fa00.h[0] = header[0x2D] >> 8;
+    index = texture_count_23fa00;
+    first_record_fields_23fa00.h[1] = header[0x2B] >> 8;
+    first_record_fields_23fa00.h[2] = header[0x2C] >> 8;
+    qcopy(&texture_table_23fa00[index], &first_record_23fa00[0]);
+    texture_addresses_23fa00[index] = (u32)bank - 0x80000000U;
+    hud_send_resident_bank_23fa00(bank, base + first_offset + 0x430, 0x14000);
+    bank += 0x14000;
+    record_index_23fa00 = texture_count_23fa00;
+    if (texture_loaded_23fa00[first_texture_ids_23fa00[level_render_state.content_variant]] == 0xFF) {
+        FUN_00203640_23fa00(base + sky_offset, first_record_23fa00 - texture_count_23fa00, &record_index_23fa00,
+                            first_texture_ids_23fa00[level_render_state.content_variant]);
     }
-    allocation++;
-    D_L00_0015FC1A = *(s32 *)(header + 0xb8) >> 8;
-    D_L00_0015FFC8 = allocation;
-    D_L00_001AEBC0[allocation] = D_00156810;
-    D_L00_00199A80[allocation] = (s32)destination + 0x70014000;
-    hud_send_resident_bank((s32)(destination + 0x14000), (s32)(bank + fourth_offset + 0x430), 0x4000);
-    D_00156820 = D_L00_0015FFC8;
-    allocation = D_00156BC8;
-    if (D_L00_00197BC0[D_L00_00160558[level_render_state.content_variant]] == 0xff) {
-        FUN_L00_002409b8(bank + third_offset, (u8 *)&D_00156810 - D_L00_0015FFC8 * 16, &D_00156820);
-        allocation = D_L00_0015FFC8;
+    next_index = texture_count_23fa00 + 1;
+    second_record_fields_23fa00.h[0] = header[0x2E] >> 8;
+    texture_count_23fa00 = next_index;
+    qcopy(&texture_table_23fa00[next_index], second_record_23fa00);
+    texture_addresses_23fa00[next_index] = (u32)bank + 0x70000000U;
+    hud_send_resident_bank_23fa00(bank, base + last_offset + 0x430, 0x4000);
+    bank += 0x4000;
+    record_index_23fa00 = texture_count_23fa00;
+    if (texture_loaded_23fa00[second_texture_ids_23fa00[level_render_state.content_variant]] == 0xFF) {
+        FUN_00203640_23fa00(base + second_offset, second_record_23fa00 - texture_count_23fa00, &record_index_23fa00,
+                            second_texture_ids_23fa00[level_render_state.content_variant]);
     }
-    D_L00_00160568 = 1;
-    D_L00_00160564 = 1;
-    D_L00_0015FFC8 = allocation + 1;
-    D_L00_0016056C = 0;
-    return destination + 0x18000;
+    D_L00_00160564_23fa00 = 1;
+    D_L00_00160568_23fa00 = 1;
+    texture_count_23fa00 = texture_count_23fa00 + 1;
+    D_L00_0016056C_23fa00 = 0;
+    return bank;
 }
-#endif
