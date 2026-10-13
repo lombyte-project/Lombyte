@@ -1997,9 +1997,9 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
         int color = ((alpha & 0xff) << 24) | ((green << 8) | 0x80) | (green << 16);
         *(int *)(packet + 0x40) = *(int *)(packet + 0x44) =
             *(int *)(packet + 0x48) = *(int *)(packet + 0x4c) = color;
-        radius = *(float *)(data + 8);
-        if (radius < radius_threshold) radius = radius * band;
-        else radius = radius - band * radius_threshold;
+        if (*(float *)(data + 8) < radius_threshold)
+            radius = *(float *)(data + 8) * band;
+        else radius = *(float *)(data + 8) - band * radius_threshold;
         side = (1.0f - band * 0.5f) * *(float *)(data + 0x10);
         phase = wrap_effect_phase_l07(convert_integer_to_float_l07(D_L07_0015F5CC) /
                                       (band * 40.0f + 40.0f), phase_work);
