@@ -2847,11 +2847,7 @@ reset_timer:
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b91c8.s", FUN_L01_002b91c8);
 #else
 #include "rnc/rendering/dma_tag.h"
-#define D_0015F620 (*(s32 *)0x0015F620)
-#define D_0015F628 (*(u32 *)0x0015F628)
-#define D_0015F62C (*(u32 *)0x0015F62C)
-#define D_0015F630 (*(u32 *)0x0015F630)
-#define D_0015F634 (*(u32 *)0x0015F634)
+extern s32 D_0015F620 __asm__("D_L01_00161220") __attribute__((sda));
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
 extern void FUN_L01_00261c10(void *, void *) __asm__("FUN_L01_00261c10");
 extern void FUN_L01_00261df8(f32 *) __asm__("FUN_L01_00261df8");
@@ -2913,7 +2909,7 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
         if ((near_bits & 0x08080808) == 0x08080808) goto next_entity;
         if ((near_bits & 0x20202020) == 0x20202020) goto next_entity;
 
-        FUN_L01_00261c10((void *)0x70000000, pos + D_0015F620 * 0x170 + 0x14);
+        FUN_L01_00261c10((void *)0x70000000, (u8 *)pos + (D_0015F620 * 0x5c0 + 0x50));
         FUN_L01_00261df8(pos);
         FUN_L01_002b8c08(pos);
         FUN_L01_002b80d0(pos);
@@ -2955,8 +2951,12 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
             data[8] = get_effect_texture(*(s32 *)(pos + 5));
             data[9] = 7;
             l01_packet.words = packet + 0x18;
-            D_0015F628 = *(u32 *)(pos + 5);
-            D_0015F62C = *(u32 *)(pos + 6);
+            {
+                u32 texture_id = *(u32 *)(pos + 5);
+                u32 second_texture_id = *(u32 *)(pos + 6);
+                D_0015F628 = texture_id;
+                D_0015F62C = second_texture_id;
+            }
             D_0015F630 = *(u8 *)(pos + 7);
             D_0015F634 = *(u8 *)((u8 *)pos + 0x1d);
         }
