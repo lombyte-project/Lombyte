@@ -1424,6 +1424,10 @@ extern float D_0015ED70 __attribute__((section(".sdata")));
 extern float D_0013F420[4];
 extern float D_L01_0015F580[] __attribute__((section(".sdata")));
 
+extern char D_L01_00161A40[16] __attribute__((section(".sdata")));
+extern char D_L01_00161A50[16] __attribute__((section(".sdata")));
+extern float D_L01_001619AC __attribute__((sda));
+
 void FUN_L01_002edca0(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *target;
@@ -1469,9 +1473,9 @@ void FUN_L01_002edca0(unsigned char *moby) {
         *(float *)(data + 0x30) = *(float *)(data + 0x250);
         *(float *)(data + 0x254) = FUN_00213308();
         if (*(short *)(moby + 0xa6) == 0x362)
-            *(void **)(data + 0x130) = (void *)0x0015AE50;
+            *(void **)(data + 0x130) = D_L01_00161A50;
         else
-            *(void **)(data + 0x130) = (void *)0x0015AE40;
+            *(void **)(data + 0x130) = D_L01_00161A40;
         data[0x29] = 1;
         if (*(int *)(data + 0x258) == 0) {
             *(float *)(data + 0x20) = 3.0f;
@@ -1484,18 +1488,20 @@ void FUN_L01_002edca0(unsigned char *moby) {
         FUN_L01_0026d930(data + 0x170);
         *(float *)(data + 0x178) = 2.0f;
         *(float *)(data + 0x17c) = 2.0f;
-        *(int *)(data + 0x170) = FUN_001fa6d0(*(float *)(data + 0x250) * 0.8f * 1024.0f);
-        *(float *)(data + 0x194) = *(float *)(data + 0x23c) * D_0015ED6C;
-        if (*(int *)(data + 0x230) == 0) {
+        result = FUN_001fa6d0(*(float *)(data + 0x250) * 0.8f * 1024.0f);
+        distance = *(float *)(data + 0x23c) * D_0015ED6C;
+        *(int *)(data + 0x170) = result;
+        *(float *)(data + 0x194) = distance;
+        if (*(int *)(data + 0x230) != 0) {
+            moby[0x20] = 1;
+            *(u16 *)(moby + 0x34) |= 0x1000;
+        } else {
             moby[0x20] = *(int *)(data + 0x25c) == -1 ? 12 : 13;
             *(int *)(moby + 0x94) = 0;
             *(int *)(moby + 0x58) = 0;
             moby[0x31] = 0;
             *(float *)(moby + 0x18) -= 20.0f;
             *(u16 *)(moby + 0x34) = (*(u16 *)(moby + 0x34) & 0xefff) | 1;
-        } else {
-            moby[0x20] = 1;
-            *(u16 *)(moby + 0x34) |= 0x1000;
         }
         break;
     case 1:
@@ -1503,15 +1509,15 @@ void FUN_L01_002edca0(unsigned char *moby) {
             if (FUN_00213260(4) == 0) {
                 path_hit = FUN_L01_00276fe8((int *)(data + 0x240), 1, *(int *)(data + 0x244),
                                             *(float *)(data + 0x250) * 0.8f,
-                                            moby + 0x10, target + 0x10, hit);
-                if (path_hit == 0) {
-                    *(int *)(data + 0x204) = 2;
-                } else {
+                                            moby + 0x10, target + 0x10, move);
+                if (path_hit != 0) {
                     moby[0x20] = 4;
                     if (moby[0x53] != 1)
                         FUN_00212f90(moby, 1, 0, FUN_001f96f8(10));
                     FUN_001f99f8(data + 0x40);
                     *(float *)(data + 0x234) = FUN_002132a8(-0.34906584f, 0.34906584f);
+                } else {
+                    *(int *)(data + 0x204) = 2;
                 }
             }
         }
@@ -1540,15 +1546,15 @@ void FUN_L01_002edca0(unsigned char *moby) {
             path_hit = FUN_L01_00276fe8((int *)(data + 0x240), 1, *(int *)(data + 0x244),
                                         *(float *)(data + 0x250) * 0.8f,
                                         moby + 0x10, target + 0x10, hit);
-            if (path_hit == 0) {
-                *(int *)(data + 0x204) = 2;
-            } else {
+            if (path_hit != 0) {
                 moby[0x20] = 3;
                 if (moby[0x53] != 0)
                     FUN_00212f90(moby, 0, 0, FUN_001f96f8(10));
                 FUN_001f99f8(data + 0x40);
                 *(float *)(data + 0x234) = FUN_002132a8(-0.34906584f, 0.34906584f);
                 *(float *)(data + 0x194) = *(float *)(data + 0x23c) * D_0015ED6C;
+            } else {
+                *(int *)(data + 0x204) = 2;
             }
         }
         if (*(int *)(data + 0x22c) != 0 && *(int *)(data + 0x204) == 2) {
@@ -1558,6 +1564,32 @@ void FUN_L01_002edca0(unsigned char *moby) {
         }
         FUN_L01_002ef560(moby);
         return;
+    case 15:
+        blocked = 0;
+        angle = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
+                              *(float *)(target + 0x14) - *(float *)(moby + 0x14));
+        FUN_L00_0025be00((float *)(moby + 0x48), (float *)(data + 0x220), angle,
+                          D_0015ED70 * 1.0471976f, D_0015ED70 * 1.0471976f,
+                          D_0015ED6C * 3.1415927f);
+        move[0] = FUN_001f9dc8(*(float *)(moby + 0x48));
+        move[1] = FUN_001f9de0(*(float *)(moby + 0x48));
+        move[2] = 0.0f;
+        FUN_L00_00258b50(moby, data + 0x170, move, data + 0x40, 1.0f);
+        if (FUN_L00_00261b48(*(int *)(data + 0x240), moby + 0x10, target + 0x10, hit) != 0 &&
+            FUN_001f9b48(moby + 0x10, hit) < 1.5f) blocked = 1;
+        if (*(int *)(data + 0x22c) == 0) {
+            moby[0x20] = 5;
+        } else if (blocked) {
+            moby[0x20] = 16;
+            if (moby[0x53] != 0)
+                FUN_00212f90(moby, 0, 0, FUN_001f96f8(10));
+        } else if (FUN_001f9b80(moby + 0x10, target + 0x10) < 2.0f) {
+            moby[0x20] = 6;
+            if (moby[0x53] != 2)
+                FUN_00212f90(moby, 2, 5, FUN_001f96f8(10));
+            return;
+        }
+        break;
     case 3:
     case 7:
         if (!(moby[0x70] & 2)) return;
@@ -1568,7 +1600,13 @@ void FUN_L01_002edca0(unsigned char *moby) {
     case 4:
         target += 0x10;
         distance = FUN_001f9b80(moby + 0x10, target);
-        if (D_0013F420[0] <= distance) {
+        if (distance < D_L01_001619AC) {
+            moby[0x20] = 6;
+            *(float *)(data + 0x194) = (*(float *)(data + 0x23c) + *(float *)(data + 0x23c)) * D_0015ED6C;
+            if (moby[0x53] != 2)
+                FUN_00212f90(moby, 2, 0, FUN_001f96f8(10));
+            return;
+        } else {
             path_hit = FUN_L01_00276fe8((int *)(data + 0x240), 1, *(int *)(data + 0x244),
                                         *(float *)(data + 0x250) * 0.8f, moby + 0x10, target, hit);
             if (path_hit == 0)
@@ -1593,11 +1631,6 @@ void FUN_L01_002edca0(unsigned char *moby) {
             FUN_L01_002ef560(moby);
             return;
         }
-        moby[0x20] = 6;
-        *(float *)(data + 0x194) = (*(float *)(data + 0x23c) + *(float *)(data + 0x23c)) * D_0015ED6C;
-        if (moby[0x53] != 2)
-            FUN_00212f90(moby, 2, 0, FUN_001f96f8(10));
-        return;
     case 5:
         target = data + 0x210;
         distance = FUN_001f9b80(moby + 0x10, target);
@@ -1650,10 +1683,8 @@ void FUN_L01_002edca0(unsigned char *moby) {
             move[1] = FUN_001f9de0(*(float *)(moby + 0x48));
             move[2] = 0.0f;
             move[3] = 5627.9248f;
-            hit[0] = *(float *)(target + 0x10);
-            hit[1] = *(float *)(target + 0x14);
-            hit[2] = *(float *)(target + 0x18) + 0.75f;
-            hit[3] = *(float *)(target + 0x1c);
+            qcopy(hit, target + 0x10);
+            hit[2] += 0.75f;
             FUN_L00_00259bc8(target, moby, 0x10001, hit, move, 1.0f);
             return;
         }
@@ -1713,32 +1744,6 @@ void FUN_L01_002edca0(unsigned char *moby) {
         if (FUN_L00_002dc9f0(moby, data + 0x60)) {
             moby[0x20] = 1;
             *(u16 *)(data + 0x128) = 0;
-        }
-        break;
-    case 15:
-        blocked = 0;
-        angle = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
-                              *(float *)(target + 0x14) - *(float *)(moby + 0x14));
-        FUN_L00_0025be00((float *)(moby + 0x48), (float *)(data + 0x220), angle,
-                          D_0015ED70 * 1.0471976f, D_0015ED70 * 1.0471976f,
-                          D_0015ED6C * 3.1415927f);
-        move[0] = FUN_001f9dc8(*(float *)(moby + 0x48));
-        move[1] = FUN_001f9de0(*(float *)(moby + 0x48));
-        move[2] = 0.0f;
-        FUN_L00_00258b50(moby, data + 0x170, move, data + 0x40, 1.0f);
-        if (FUN_L00_00261b48(*(int *)(data + 0x240), moby + 0x10, target + 0x10, hit) != 0 &&
-            FUN_001f9b48(moby + 0x10, hit) < 1.5f) blocked = 1;
-        if (*(int *)(data + 0x22c) == 0) {
-            moby[0x20] = 5;
-        } else if (blocked) {
-            moby[0x20] = 16;
-            if (moby[0x53] != 0)
-                FUN_00212f90(moby, 0, 0, FUN_001f96f8(10));
-        } else if (FUN_001f9b80(moby + 0x10, target + 0x10) < 2.0f) {
-            moby[0x20] = 6;
-            if (moby[0x53] != 2)
-                FUN_00212f90(moby, 2, 5, FUN_001f96f8(10));
-            return;
         }
         break;
     case 16:
