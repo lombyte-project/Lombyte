@@ -2163,7 +2163,7 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                 int group_offset = group * 0x2580;
                 int timer_offset = group * 0x78;
                 for (item = 0; item < 10; item++) {
-                    char *entry = data + (timer_offset + group_table) + item * 4;
+                    char *entry = (data + group_table) + timer_offset + item * 4;
                     char *base = data + group_offset;
                     char *other = data + (group_offset + 0x9600);
                     char *buffer = (char *)scratch + item * 0x10;
