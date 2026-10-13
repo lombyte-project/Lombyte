@@ -728,68 +728,86 @@ void FUN_L07_002cdb28(struct Moby *moby) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_002f5ba0.s", FUN_L07_002f5ba0);
-#else
-extern u8 D_0013D388[];
-extern s32 D_L07_0015F5C4;
-extern char *D_L07_0015FFD8;
-extern char *D_L07_001600EC __attribute__((section(".data")));
-extern char D_0013F3D0[];
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void FUN_L00_00298840(int);
-extern void FUN_L00_002607d0(int);
+/* Update for moby class 436 on level 07: steps through its scenes as the hero enters its clip volumes. */
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_002F6F20), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int open_volume;
+    int finish_volume;
+    int removed_moby;
+    int moby_0c;
+    int moby_10;
+    int moby_14;
+    int points_18;
+    int points_1c;
+} Class436Vars;
+
+typedef struct {
+    char pad0[0x30];
+    float unk30[4];
+    char pad40[0x30];
+    float unk70[4];
+} ScenePoints;
+
+extern u8 D_0013D3B1[];
+extern u8 alternate_item_available[128] __asm__("D_0013D388");
+extern struct Moby *level_mobys __asm__("D_L07_0015FFD8");
+extern int scene_state __asm__("D_L07_0015F5C4");
+extern ScenePoints *scene_points __asm__("D_L07_001600EC");
+extern void delete_moby_m(void *) __asm__("FUN_0020c828");
+extern void start_scene(int) __asm__("FUN_L00_00298840");
+extern int is_point_inside_clip_volume_i(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L01_0027a248(int, int);
-extern void FUN_L07_00270248(int, int, int, int);
 extern void FUN_L00_00299460(int);
-extern void FUN_0022e188(int);
-extern void FUN_0020b178(int, int);
 extern void FUN_001f9c90(void *, void *, float);
+extern void FUN_L07_00270248(int x, int y, int w, int h);
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
+extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
+extern void FUN_0022e188(int);
 
-void FUN_L07_002f5ba0(struct Moby *moby) {
-    int *data = (int *)moby->pvars;
-    char *other;
-    char *entry;
-    float delta[4];
+void FUN_L07_002f5ba0(struct Moby *moby)
+{
+    Class436Vars *data = (Class436Vars *)moby->pvars;
+    float v[4];
+
     switch (moby->state) {
     case 0:
-        if (D_0013D388[0x29] && data[2] != -1)
-            delete_moby((struct Moby *)(D_L07_0015FFD8 + data[2] * 0x100));
-        if (D_L07_0015F5C4 == 0) moby->state = 1;
+        if (D_0013D3B1[0] != 0 && data->removed_moby != -1) {
+            delete_moby_m(&level_mobys[data->removed_moby]);
+        }
+        if (scene_state == 0) moby->state = 1;
         break;
     case 1:
-        if (!D_0013D388[0x28]) {
-            D_0013D388[0x28] = 1;
+        if (alternate_item_available[0x28] == 0) {
+            alternate_item_available[0x28] = 1;
             moby->state = 2;
-            FUN_L00_00298840(0);
-            return;
+            start_scene(0);
+        } else {
+            moby->state = 3;
         }
-        moby->state = 3;
         break;
     case 2:
-        if (D_L07_0015F5C4 != 2) moby->state = 3;
+        if (scene_state != 2) moby->state = 3;
         break;
     case 3:
         moby->state = 4;
         break;
     case 4:
-        if (!D_0013D388[0x29]) {
-            if (data[0] != -1) {
-                if (is_point_inside_clip_volume(D_0013F3D0, data[0])) {
-                    D_0013D388[0x29] = 1;
-                    if (data[3] != -1) {
-                        other = D_L07_0015FFD8 + data[3] * 0x100;
-                        *(u16 *)(other + 0x34) |= 0x41;
+        if (alternate_item_available[0x29] == 0) {
+            if (data->open_volume != -1) {
+                if (is_point_inside_clip_volume_i(&hero.motion.pos, data->open_volume) != 0) {
+                    alternate_item_available[0x29] = 1;
+                    if (data->moby_0c != -1) {
+                        struct Moby *e = &level_mobys[data->moby_0c];
+                        e->flags |= 0x41;
                     }
-                    if (data[5] != -1) {
-                        {
-                            char *other = D_L07_0015FFD8 + data[5] * 0x100;
-                            *(u16 *)(other + 0x34) |= 0x41;
-                        }
+                    if (data->moby_14 != -1) {
+                        struct Moby *e = &level_mobys[data->moby_14];
+                        e->flags |= 0x41;
                     }
                     moby->state = 5;
-                    FUN_L00_00298840(1);
+                    start_scene(1);
                 }
             } else {
                 moby->state = 8;
@@ -797,127 +815,102 @@ void FUN_L07_002f5ba0(struct Moby *moby) {
         } else {
             moby->state = 7;
         }
-        if (moby->state != 4 && data[2] != -1)
-            delete_moby((struct Moby *)(D_L07_0015FFD8 + data[2] * 0x100));
+        if (moby->state != 4 && data->removed_moby != -1) {
+            delete_moby_m(&level_mobys[data->removed_moby]);
+        }
         break;
     case 5:
-        if (D_L07_0015F5C4 != 2) {
-            if (data[3] != -1) {
-                {
-                    char *other = D_L07_0015FFD8 + data[3] * 0x100;
-                    *(u16 *)(other + 0x34) |= 0x41;
-                }
-            }
-            moby->state = 6;
-            FUN_L00_00298840(2);
+        if (scene_state == 2) break;
+        if (data->moby_0c != -1) {
+            struct Moby *e = &level_mobys[data->moby_0c];
+            e->flags |= 0x41;
         }
+        moby->state = 6;
+        start_scene(2);
         break;
     case 6:
-        if (D_L07_0015F5C4 != 2) {
-            if (data[6] != -1) {
-                char *entry = (char *)((u32)data[6] * 0x80 + (u32)D_L07_001600EC);
-                FUN_L00_00216f90(entry + 0x30, entry + 0x70, 0, 1);
-            }
-            moby->state = 7;
+        if (scene_state == 2) break;
+        if (data->points_18 != -1) {
+            FUN_L00_00216f90(scene_points[data->points_18].unk30, scene_points[data->points_18].unk70, 0, 1);
         }
+        moby->state = 7;
         break;
     case 7:
-        if (data[3] != -1) {
-            {
-                char *other = D_L07_0015FFD8 + data[3] * 0x100;
-                *(u16 *)(other + 0x34) &= ~0x41;
-            }
+        if (data->moby_0c != -1) {
+            struct Moby *e = &level_mobys[data->moby_0c];
+            e->flags &= 0xFFBE;
         }
-        if (data[5] != -1) {
-            {
-                char *other = D_L07_0015FFD8 + data[5] * 0x100;
-                *(u16 *)(other + 0x34) &= ~0x41;
-            }
+        if (data->moby_14 != -1) {
+            struct Moby *e = &level_mobys[data->moby_14];
+            e->flags &= 0xFFBE;
         }
         FUN_L01_0027a248(2, 4);
         moby->state = 8;
         break;
-    case 8: {
-        char *other;
-        u8 next_state;
-        if (D_0013D388[0x2a]) {
-            next_state = 12;
-            goto store_state;
-        }
-        if (data[3] != -1) {
-            char *other = D_L07_0015FFD8 + data[3] * 0x100;
-            if (other && ((u8 *)other)[0x20] != 0xfe && ((u8 *)other)[0x20] != 0xfd)
-                goto check_state;
-        }
-        if (data[1] == -1) {
-            next_state = 13;
-            goto store_state;
-        }
-        if (is_point_inside_clip_volume(D_0013F3D0, data[1])) {
-            char *entry = (char *)((u32)data[7] * 0x80 + (u32)D_L07_001600EC);
-            FUN_L00_00216f90(entry + 0x30, entry + 0x70, 0x72, 1);
-            D_0013D388[0x2a] = 1;
-            moby->state = 9;
-            FUN_L00_00298840(3);
-        }
-        goto check_state;
-store_state:
-        moby->state = next_state;
-check_state:
-        if (moby->state != 8 && data[4] != -1) {
-            char *other = D_L07_0015FFD8 + data[4] * 0x100;
-            *(u16 *)(other + 0x34) |= 0x41;
-        }
-        break;
-    }
-    case 9:
-        if (D_L07_0015F5C4 != 2) {
-            moby->state = 10;
-            FUN_L00_00299460(8);
-        }
-        break;
-    case 10:
-        if (D_L07_0015F5C4 == 2) return;
-        moby->state = 11;
-        FUN_L00_00298840(4);
-    case 11: {
-        char *other;
-        if (D_L07_0015F5C4 != 2) {
-            if (data[7] != -1) {
-                char *entry = (char *)((u32)data[7] * 0x80 + (u32)D_L07_001600EC);
-                FUN_L00_00216f90(entry + 0x30, entry + 0x70, 0, 1);
+    case 8:
+        if (alternate_item_available[0x2A] == 0) {
+            struct Moby *e;
+            if (data->moby_0c == -1 || (e = &level_mobys[data->moby_0c]) == 0 || e->state == 0xFE || e->state == 0xFD) {
+                if (data->finish_volume != -1) {
+                    if (is_point_inside_clip_volume_i(&hero.motion.pos, data->finish_volume) != 0) {
+                        FUN_L00_00216f90(scene_points[data->points_1c].unk30, scene_points[data->points_1c].unk70, 0x72, 1);
+                        alternate_item_available[0x2A] = 1;
+                        moby->state = 9;
+                        start_scene(3);
+                    }
+                } else {
+                    moby->state = 13;
+                }
             }
-            if (data[4] != -1) {
-                other = D_L07_0015FFD8 + data[4] * 0x100;
-                subtract_vector_xyz(delta, D_0013F3D0, other + 0x10);
-                FUN_001f9c90(delta, delta, 0.9f);
-                add_vector_xyz(other + 0x10, D_0013F3D0, delta);
-                delete_moby((struct Moby *)other);
-            }
-            FUN_L07_00270248(0x87, 0xc, 0x56, 0x3c);
-            FUN_L00_002607d0(8);
-            FUN_0020b178(0, 8);
-            FUN_0022e188(8);
+        } else {
             moby->state = 12;
         }
+        if (moby->state != 8 && data->moby_10 != -1) {
+            struct Moby *e = &level_mobys[data->moby_10];
+            e->flags |= 0x41;
+        }
         break;
-    }
-    case 12: {
-        char *other;
-        if (data[4] != -1) {
-            other = D_L07_0015FFD8 + data[4] * 0x100;
-            if (other && ((u8 *)other)[0x20] != 0xfe && ((u8 *)other)[0x20] != 0xfd)
-                delete_moby((struct Moby *)other);
+    case 9:
+        if (scene_state == 2) break;
+        moby->state = 10;
+        FUN_L00_00299460(8);
+        break;
+    case 10:
+        if (scene_state == 2) break;
+        moby->state = 11;
+        start_scene(4);
+    case 11:
+        if (scene_state == 2) break;
+        if (data->points_1c != -1) {
+            FUN_L00_00216f90(scene_points[data->points_1c].unk30, scene_points[data->points_1c].unk70, 0, 1);
+        }
+        if (data->moby_10 != -1) {
+            struct Moby *e = &level_mobys[data->moby_10];
+            subtract_vector_xyz(v, &hero.motion.pos, &e->pos);
+            FUN_001f9c90(v, v, 0.9f);
+            add_vector_xyz(&e->pos, &hero.motion.pos, v);
+            delete_moby_m(e);
+        }
+        FUN_L07_00270248(0x87, 0xC, 0x56, 0x3C);
+        unlock_planet(8);
+        memcard_save_data(0, 8);
+        FUN_0022e188(8);
+        moby->state = 12;
+        break;
+    case 12:
+        if (data->moby_10 != -1) {
+            struct Moby *e = &level_mobys[data->moby_10];
+            if (e != 0 && e->state != 0xFE && e->state != 0xFD) {
+                delete_moby_m(e);
+            }
         }
         moby->state = 13;
         break;
-    }
     case 13:
-        delete_moby(moby);
+        delete_moby_m(moby);
         break;
     }
 }
-#endif
 #include "rnc/gameplay/entities/moby.h"
 
 struct SpawnClassView {
@@ -975,20 +968,20 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030b000.s", FUN_L07_0030b000);
 #else
 extern char *D_L07_001B0530[] __asm__("D_L07_001B0530");
 extern char *FUN_L00_0025a420(void *, int, int);
-extern s32 FUN_00213928(struct Moby *, char *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
-extern void FUN_L01_0026e0e0(s32, s32) __asm__("FUN_L01_0026e0e0");
-extern void FUN_001f99f8(void *) __asm__("FUN_001f99f8");
+extern s32 FUN_00213928(struct Moby *, char *, f32 *, s32, s32 *, s32, s32, s32);
+extern void FUN_L01_0026e0e0(s32, s32);
+extern void FUN_001f99f8(void *);
 extern void FUN_L00_0025e450_l07(f32, f32, f32, f32, f32, f32, f32, struct Moby *, void *, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
-extern f32 FUN_001f9b48(void *, void *) __asm__("FUN_001f9b48");
-extern s32 FUN_L00_002591d0(s32 *, s32, s32, s32) __asm__("FUN_L00_002591d0");
-extern s32 FUN_L00_002592b8(s32 *, s32, s32, s32) __asm__("FUN_L00_002592b8");
-extern void FUN_001e93b0(char *, ...) __asm__("FUN_001e93b0");
-extern s32 FUN_L01_0028b510(f32, void *, void *) __asm__("FUN_L01_0028b510");
+extern f32 FUN_001f9b48(void *, void *);
+extern s32 FUN_L00_002591d0(s32 *, s32, s32, s32);
+extern s32 FUN_L00_002592b8(s32 *, s32, s32, s32);
+extern void FUN_001e93b0(char *, ...);
+extern s32 FUN_L01_0028b510(f32, void *, void *);
 extern void FUN_L00_0025d458(void *, short *);
-extern void FUN_L00_0025d538(struct Moby *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L00_0025d808(f32, void *, void *, void *, void *, s32) __asm__("FUN_L00_0025d808");
-extern void FUN_001f9a28(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_00259fe8(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
+extern void FUN_L00_0025d538(struct Moby *, void *);
+extern void FUN_L00_0025d808(f32, void *, void *, void *, void *, s32);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_L00_00259fe8(struct Moby *, f32);
 extern char D_L07_00211550[] __asm__("D_L07_00211550");
 extern char D_L07_00211580[] __asm__("D_L07_00211580");
 extern char D_L07_002115D0[] __asm__("D_L07_002115D0");
