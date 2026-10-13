@@ -1361,13 +1361,11 @@ ratio_done:
     } else if (factor > 3.0f) {
         factor = 3.0f;
     }
-    /* Keep the lower clamp in the single-precision amount multiplication. */
-    if (factor < min_factor)
-        amount *= min_factor;
-    else
-        amount *= factor;
+    if (!(factor < min_factor))
+        min_factor = factor;
     velocity = &hero.motion.velocity;
     subtract_vector_xyz_34358(delta, delta, velocity);
+    amount *= min_factor;
     length = vector_length_xy_34358(delta);
     if (amount < length)
         FUN_001f9c48_34358(delta, delta, amount);
