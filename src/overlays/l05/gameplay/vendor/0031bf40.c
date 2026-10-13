@@ -8,7 +8,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031bf40.s", FUN_L05_0031bf40);
 #include "sda.h"
 extern char D_0013F3D0[];
 extern char D_0013F350[];
-extern int D_001413D4 NOT_SDA, D_001413DC NOT_SDA, D_0013F64C, D_0013D464;
+extern int D_001413D4 NOT_SDA, D_001413DC NOT_SDA, D_0013F64C, D_0013D464 NOT_SDA;
 extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;
 extern unsigned short D_001418A8, D_001418A0, D_00141930;
 extern short D_00141A88, D_00141A90, D_0013F65E;
@@ -185,12 +185,8 @@ check_second_volume:
     }
     if (D_00141A98 < 2) {
         if (D_0014C050[data[8] + D_L05_0015ED84 * 16] == 0xff) {
-            value = D_L05_0015EEA4;
-            if (D_00141A90 < 0xffff) {
-                D_00141A90++;
-                value = game_frame_count;
-            }
-            elapsed = scale_game_frames(value) / 600;
+            elapsed = scale_game_frames(D_00141A90 < 0xffff ?
+                (D_00141A90++, game_frame_count) : D_L05_0015EEA4) / 600;
             player = D_L05_0015ED84;
             if (D_00141A92 < elapsed) {
                 D_00141A92 = scale_game_frames(D_L05_0015EEA4) / 600;
@@ -220,12 +216,8 @@ check_second_volume:
     if (D_00141C58 == 0) {
         if (*(int *)(D_0013F350 + 0x2084) == 10 &&
             (is_point_inside_clip_volume(D_0013F3D0, data[13]) || is_point_inside_clip_volume(D_0013F3D0, data[14]))) {
-            value = D_L05_0015EEA4;
-            if (D_00141C58 < 0xffff) {
-                D_00141C58++;
-                value = game_frame_count;
-            }
-            elapsed = scale_game_frames(value) / 600;
+            elapsed = scale_game_frames(D_00141C58 < 0xffff ?
+                (D_00141C58++, game_frame_count) : D_L05_0015EEA4) / 600;
             player = D_L05_0015ED84;
             if (D_00141C5A < elapsed) {
                 D_00141C5A = scale_game_frames(D_L05_0015EEA4) / 600;
