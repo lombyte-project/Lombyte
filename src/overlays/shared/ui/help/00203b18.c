@@ -436,10 +436,11 @@ void FUN_L00_002059d8(void) {
         if (*(s16 *)(g + 0xFFE) == 0) {
             u8 *slot = g + 0xEF0;
             u8 *active = g + 0xEF1;
-            for (i = 3; i >= 0; i--, slot += 0x40, active += 0x40)
+            for (i = 3; i >= 0; slot += 0x40, i--, active += 0x40)
                 if (*active)
                     detach_manipulator_2059d8((s32)moby, slot);
         } else {
+            u32 i;
             u8 *slot = g + 0xEF0;
             u8 *active = g + 0xEF1;
             u8 *dst_a = g + 0xF00;
@@ -456,13 +457,20 @@ void FUN_L00_002059d8(void) {
                     attach_manipulator_2059d8((s32)moby, *kind, slot);
                     active[2] = 1;
                     qcopy(dst_a, src_a);
-                    qcopy(dst_b, src_b);
+                    *(volatile Quad_59d8 *)dst_b = *(volatile Quad_59d8 *)src_b;
                     qcopy(dst_c, src_c);
                     transform_help_quad_2059d8(*(f32 *)(moby + 0x2C), dst_c, dst_c);
                 }
             }
-            for (i = 3; i >= 0; i--)
-                *(f32 *)(g + 0xEFC + i * 0x40) = D_L00_0017C2A0_2059d8[*(s16 *)(g + 0xFFE)];
+            {
+                u8 *g = (u8 *)&hero;
+                s32 i;
+                f32 *yaw = (f32 *)(g + 0xEFC);
+                for (i = 3; i >= 0; i--) {
+                    *yaw = D_L00_0017C2A0_2059d8[*(s16 *)(g + 0xFFE)];
+                    yaw = (f32 *)((u8 *)yaw + 0x40);
+                }
+            }
         }
     }
 }
