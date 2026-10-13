@@ -450,7 +450,7 @@ int FUN_L11_003192c8(char *moby) {
     colors_base = (int *)(stack_data + 0x40);
     for (i = 0; i < 16; i++) {
         long long texture;
-        char *packet = stack_data + 0x40 + i * 0x90;
+        long long *packet = (long long *)(stack_data + 0x70);
         float *source;
         float *position;
         float *position_y;
@@ -459,10 +459,10 @@ int FUN_L11_003192c8(char *moby) {
         int j;
         j = 0;
         texture = trail_effect_texture(0x13);
-        *(long long *)(packet + 0x38) = texture;
-        *(long long *)(packet + 0x48) = 0x8000000048LL;
-        *(long long *)(packet + 0x40) = 0xff9000000260LL;
-        *(long long *)(packet + 0x30) = 0;
+        packet[i * 18 + 1] = texture;
+        packet[i * 18 + 3] = 0x8000000048LL;
+        packet[i * 18 + 2] = 0xff9000000260LL;
+        packet[i * 18] = 0;
         span = *(float *)&D_L11_001623F0_d * 4.0f;
         phase = integer_to_float((D_L11_0015F5CC + 3) & 3) / span;
         source = D_L11_001F1490;
