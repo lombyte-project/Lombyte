@@ -177,8 +177,7 @@ void FUN_L05_00262b58(HudCounter *e) {
                 if (timer == scale_game_frames(0x6e)) {
                     D_0013FBF8 += D_L05_0015FB00;
                     D_0013FBB4 += D_L05_0015FB00 * 5;
-                    limit = (s32)((f32)scale_game_frames(0x11) * 60.0f);
-                    if (D_0013FBB4 > limit) {
+                    if ((s32)((f32)scale_game_frames(0x11) * 60.0f) < D_0013FBB4) {
                         D_0013FBB4 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
                     }
                 }
