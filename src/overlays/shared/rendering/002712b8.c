@@ -2018,7 +2018,8 @@ void FUN_L00_00275aa0(unsigned char *m) {
         originalAlpha = q[0xb];
         h = originalAlpha;
         h = (unsigned int)h >> 1;
-        alpha = (float)(h - originalAlpha);
+        h -= originalAlpha;
+        alpha = (float)h;
         alpha *= f;
         alpha = (float)originalAlpha + alpha;
     } else {
