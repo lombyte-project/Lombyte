@@ -2113,12 +2113,15 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                         for (row = 0; row < 20; row++) {
                             float phase;
                             float value;
+                            float quotient, half;
                             FUN_001f28c8(current);
                             current += 0x140;
                             phase = D_L10_00161D58;
                             value = D_L10_00161D54 * frame_time;
+                            quotient = phase / 20.0f;
+                            half = phase * 0.5f;
                             *(float *)(dst + 0xc) = 1.0f;
-                            *(float *)(dst + 4) = (float)row * (phase / 20.0f) - phase * 0.5f;
+                            *(float *)(dst + 4) = (float)row * quotient - half;
                             FUN_L10_0024a7f0(0.0f, value, out);
                             dst += 0x140;
                             out += 0xa0;
