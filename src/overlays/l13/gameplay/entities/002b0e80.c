@@ -3007,7 +3007,7 @@ void FUN_L13_002ba178(void *moby, void *obj) {
     distance = frame_time*30.0f-frame_time*24.0f;
     if (height < 0.0f) speed_fraction = 0.0f/distance;
     else speed_fraction = height/distance;
-    *(u128 *)camera_position = 0;
+    camera_position[3] = 0.0f;
     *(u128 *)camera_rotation = 0;
     camera_position[0] = ((-15.0f-F(d,0x70))-speed_fraction*4.0f)*0.25f;
     camera_position[1] = F(d,0x6C)*-3.0f*0.25f;
