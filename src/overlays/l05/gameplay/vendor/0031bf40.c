@@ -184,15 +184,20 @@ check_second_volume:
         if (D_001413DC == 0x13) D_00141A88 = -1;
     }
     if (D_00141A98 < 2) {
+        VendorEventRecord *event = &D_00141968[37];
         if (D_0014C050[data[8] + D_L05_0015ED84 * 16] == 0xff) {
-            elapsed = scale_game_frames(D_00141A90 < 0xffff ?
-                (D_00141A90++, game_frame_count) : D_L05_0015EEA4) / 600;
+            index = D_L05_0015EEA4;
+            if (event->count < 0xffff) {
+                event->count++;
+                index = game_frame_count;
+            }
+            elapsed = scale_game_frames(index) / 600;
             player = D_L05_0015ED84;
-            if (D_00141A92 < elapsed) {
-                D_00141A92 = scale_game_frames(D_L05_0015EEA4) / 600;
+            if (event->best < elapsed) {
+                event->best = scale_game_frames(D_L05_0015EEA4) / 600;
                 player = current_level_index;
             }
-            D_00141A94 = (D_00141A94 | (1u << player)) | 0x80000000u;
+            event->flags = (event->flags | (1u << player)) | 0x80000000u;
         } else if (D_0014EE90[data[8]] > 2 && is_point_inside_clip_volume(D_0013F3D0, data[11])) {
             elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417A2 * 600;
             if (scale_game_frames(18000) < elapsed) {
