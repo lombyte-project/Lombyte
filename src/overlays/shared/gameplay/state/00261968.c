@@ -103,7 +103,6 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     FUN_001ff2a8_261b48(&direction, end, start);
     direction.i[2] = 0;
     FUN_001ff500_261b48(&direction, &direction, 1.0f / FUN_001ff3d8_261b48(&direction));
-    nearest = 1.0f;
     FUN_001ff260_261b48(&axis);
     axis.f[0] = direction.f[1];
     axis.f[1] = -direction.f[0];
@@ -112,10 +111,11 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     found = 0;
     i = 1;
     origin.f[2] = 1.0f;
+    nearest = origin.f[2];
     current = &first;
     FUN_001ff2a8_261b48(current, &(*entry)->points[0], start);
-    FUN_001ff6d0_261b48(current, current, &direction);
     previous = current;
+    FUN_001ff6d0_261b48(current, current, &direction);
     current = &next;
     if (i < (*entry)->count) {
         offset = 0x20;
@@ -124,14 +124,14 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
             FUN_001ff6d0_261b48(current, current, &direction);
             if (first.f[3] != 0.0f || current->f[3] != 0.0f) {
                 if (current->f[1] * first.f[1] < 0.0f) {
-                    crossing = (first.f[0] - current->f[0]) / (first.f[1] - current->f[1]) * -current->f[1] + current->f[0];
+                    crossing = (first.f[0] - next.f[0]) / (first.f[1] - current->f[1]) * -current->f[1] + next.f[0];
                     if (crossing > 0.0f && crossing < nearest) {
                         nearest = crossing;
                         found = 1;
                     }
                 }
             }
-            previous->q = ((volatile OvlVec4 *)current)->q;
+            qcopy(previous, current);
             i++;
             offset += 0x10;
         } while (i < (*entry)->count);
