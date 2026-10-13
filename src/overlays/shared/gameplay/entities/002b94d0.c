@@ -1216,7 +1216,7 @@ void FUN_L00_002bc7e8(Moby *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bcf98.s", FUN_L00_002bcf98);
 #else
 extern s32 D_L00_001617BC __attribute__((sda));
-#define D_L00_001617BC_abs (*(volatile s32 *)0x001617BC)
+extern s32 D_L00_001617BC_abs __asm__("D_L00_001617BC") __attribute__((section(".data")));
 extern f32 D_L00_001616DC __attribute__((sda));
 extern f32 D_L00_001617CC __attribute__((sda));
 extern volatile s32 D_L00_00161718_i __asm__("D_L00_00161718") __attribute__((sda));
@@ -1226,6 +1226,7 @@ extern s32 D_L00_001617D0 __attribute__((section(".data")));
 extern s32 D_L00_00161824 __attribute__((section(".data")));
 extern s32 D_L00_00161818 __attribute__((section(".data")));
 extern s32 D_L00_001DBF50 __attribute__((section(".data")));
+extern u128 D_L00_001DBF60_2bcf98 __asm__("D_L00_001DBF60") __attribute__((section(".data")));
 extern s32 D_L00_001DD0D0 __attribute__((section(".data")));
 extern void scale_vector_2bcf98(float, void *, void *) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10(void *, void *, void *);
@@ -1243,9 +1244,9 @@ void FUN_L00_002bcf98(u8 *m) {
         scale = D_L00_001616DC / convert_integer_to_float(12);
         D_L00_001617CC = scale;
         scale_vector_2bcf98(-scale, &vec, m + 0xD0);
-        qcopy((u128 *)&D_L00_001DBF50 + 1, (void *)source);
+        qcopy(&D_L00_001DBF60_2bcf98, (void *)source);
         for (i = 10; i >= 0; i--) {
-            FUN_001f9a10(&((u128 *)&D_L00_001DBF50)[12 - i], &((u128 *)&D_L00_001DBF50)[11 - i], &vec);
+            FUN_001f9a10((&D_L00_001DBF60_2bcf98 + (11 - i)), &((u128 *)&D_L00_001DBF50)[11 - i], &vec);
         }
         D_L00_00161718_i = 0;
         D_L00_00161720_i = 0;
