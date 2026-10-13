@@ -408,29 +408,28 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
         current = (current + 1) % *path;
     } while (1);
 
-    count = *path;
     previous_distance = 1000000000.0f;
     if (best_segment > 0 || wrap) {
+        count = *path;
         previous = count - 1;
         previous = (best_segment + previous) % count;
         previous_distance = FUN_L00_0025dcd8(nearest, point,
             (OvlQuad *)(path + 4 + previous * 4),
             (OvlQuad *)(path + 4 + best_segment * 4), height_tolerance);
         *segment = previous;
-        work[1] = *(OvlQuad *)(path + 4 + previous * 4);
-        work[2] = *nearest;
+        /* Retail reads the segment vertex before the projected point. */
+        work[1] = *(volatile OvlQuad *)(path + 4 + previous * 4);
+        work[2] = *(volatile OvlQuad *)nearest;
         *fraction = path_distance_25df68(&work[1], &work[2], 0.0f);
-        count = *path;
     }
-    if (best_segment >= count - 1 && !wrap)
-        return 1;
-    {
+    count = *path;
+    if (best_segment < count - 1 || wrap) {
         next_distance = FUN_L00_0025dcd8(&work[1], point,
             (OvlQuad *)(path + 4 + best_segment * 4),
             (OvlQuad *)(path + 4 + ((best_segment + 1) % count) * 4),
             height_tolerance);
         if (next_distance < previous_distance) {
-            *nearest = work[1];
+            qcopy_nc(nearest, &work[1]);
             *segment = best_segment;
             work[2] = *(OvlQuad *)(path + 4 + best_segment * 4);
             work[3] = *nearest;
