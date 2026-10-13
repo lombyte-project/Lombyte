@@ -704,103 +704,107 @@ void FUN_L08_002d4ca0(Moby *moby) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d55c8.s", FUN_L08_002d55c8);
-#else
 extern int D_L08_001B0CB0[];
-extern float D_0015ED6C;
-extern float D_0015ED70;
+extern char D_0013E550[];
+extern float D_L08_001618A0 __attribute__((sda));
 extern float fast_atan2_l08(float, float) __asm__("FUN_001f9e90");
-extern void approach_angle_l08(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
-extern void approach_float_l08(float *, float, float) __asm__("FUN_00213ed8");
+extern float approach_angle_l08(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
+extern void approach_value_l08(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_cos_l08(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_l08(float) __asm__("FUN_001f9de0");
 extern void add_vector_l08(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float approach_position_l08(void *, int, float) __asm__("FUN_00213508");
+extern float ground_height_l08(void *, int, float) __asm__("FUN_00213508");
 extern float distance_vector_l08(void *, void *) __asm__("FUN_001f9b80");
 extern float length_vector_l08(void *) __asm__("FUN_001f9af0");
-extern int event_valid_l08(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int create_event_l08(int, int, void *) __asm__("FUN_0022da68");
-extern void set_event_value_l08(int, int) __asm__("FUN_L01_002a1968");
-extern void end_event_l08(int) __asm__("FUN_0022d798");
+extern int sound_valid_l08(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int play_sound_l08(int, int, void *) __asm__("FUN_0022da68");
+extern void set_sound_volume_l08(int, int) __asm__("FUN_L01_002a1968");
+extern void stop_sound_l08(int) __asm__("FUN_0022d798");
 extern int scale_game_frames_l08(int) __asm__("FUN_001f96f8");
-extern char D_0013E550[];
-typedef struct { char pad[0x80]; int value; } VoiceEntryL08;
-extern float D_L08_0014ED6C __attribute__((sda));
-extern float D_L08_001518A0 __attribute__((sda));
+
+typedef struct {
+    u8 pad0[0x80];
+    int volume;
+} SoundSlot_2d55c8;
+
+#define SOUND_SLOT_2d55c8(id) ((SoundSlot_2d55c8 *)(D_0013E550 + (id) * 0x70))
+
+typedef struct {
+    u8 pad0[0x40];
+    float velocity[4];
+    u8 pad50[0x108];
+    float turn_speed;
+    int sound;
+    void *linked[2];
+    int point;
+    float target_speed;
+    u8 pad170[0x10];
+    float speed;
+} PathMoverVars_2d55c8;
 
 void FUN_L08_002d55c8(struct Moby *moby, int path_id) {
-    char *vars = (char *)moby->pvars;
+    PathMoverVars_2d55c8 *vars = (PathMoverVars_2d55c8 *)moby->pvars;
     int *path = (int *)D_L08_001B0CB0[path_id];
     float point[4];
     float step[3];
-    float size;
-    float dist;
-    int event;
-    int value;
-    int increment;
-    float *rotation;
+    float scale;
+    float angle;
+    float speed;
+    float *heading;
 
-    qcopy(point, path + 4 + *(int *)(vars + 0x168) * 4);
-    rotation = &moby->rot.z;
-    dist = fast_atan2_l08(point[0] - moby->pos.x, point[1] - moby->pos.y);
-    size = 4.712389f;
-    approach_angle_l08(rotation, dist,
-        (float *)(vars + 0x158),
-        D_0015ED70 * size, D_0015ED70 * size,
-        D_0015ED6C * 3.1415927f);
-    approach_float_l08((float *)(vars + 0x180), *(float *)(vars + 0x16c), D_0015ED70 + D_0015ED70);
-    step[0] = fast_cos_l08(moby->rot.z) * *(float *)(vars + 0x180);
-    step[1] = fast_sin_l08(moby->rot.z) * *(float *)(vars + 0x180);
+    qcopy(point, path + 4 + vars->point * 4);
+    heading = &moby->rot.z;
+    angle = fast_atan2_l08(point[0] - moby->pos.x, point[1] - moby->pos.y);
+    approach_angle_l08(heading, &vars->turn_speed, angle,
+        frame_time_sq * 4.712389f, frame_time_sq * 4.712389f, frame_time * 3.1415927f);
+    approach_value_l08(&vars->speed, vars->target_speed, frame_time_sq + frame_time_sq);
+    step[0] = fast_cos_l08(moby->rot.z) * vars->speed;
+    step[1] = fast_sin_l08(moby->rot.z) * vars->speed;
     step[2] = 0.0f;
     add_vector_l08(&moby->pos, &moby->pos, step);
-    moby->pos.z = approach_position_l08(&moby->pos, 0, 0.5f);
-    dist = distance_vector_l08(&moby->pos, point);
-    if (dist < 0.5f) {
-        *(int *)(vars + 0x168) = (*(int *)(vars + 0x168) + 1) % *path;
-        size = D_0015ED6C;
-    } else {
-        size = D_L08_0014ED6C;
+    moby->pos.z = ground_height_l08(&moby->pos, 0, 0.5f);
+    if (distance_vector_l08(&moby->pos, point) < 0.5f) {
+        vars->point = (vars->point + 1) % *path;
     }
-    size = *(float *)(vars + 0x180) / (D_L08_001518A0 * size);
-    if (size > 2.0f) { size = 2.0f; } else if (size < 0.0f) { size = 0.0f; }
-    if (*(char **)(vars + 0x160) != 0) {
+    scale = vars->speed / (D_L08_001618A0 * frame_time);
+    if (scale > 2.0f) {
+        scale = 2.0f;
+    } else if (scale < 0.0f) {
+        scale = 0.0f;
+    }
+    if (vars->linked[0] != 0) {
         char *linked;
-        *(float *)(*(char **)(vars + 0x160) + 0x58) = size;
-        linked = *(char **)(vars + 0x160);
+
+        *(float *)((char *)vars->linked[0] + 0x58) = scale;
+        linked = vars->linked[0];
         qcopy(linked + 0x40, (char *)moby + 0x40);
         qcopy(linked + 0x10, &moby->pos);
     }
-    if (*(char **)(vars + 0x164) != 0) {
+    if (vars->linked[1] != 0) {
         char *linked;
-        *(float *)(*(char **)(vars + 0x164) + 0x58) = size;
-        linked = *(char **)(vars + 0x164);
+
+        *(float *)((char *)vars->linked[1] + 0x58) = scale;
+        linked = vars->linked[1];
         qcopy(linked + 0x40, (char *)moby + 0x40);
         qcopy(linked + 0x10, &moby->pos);
     }
-    dist = length_vector_l08(vars + 0x40);
-    if (D_0015ED6C * 0.1f < dist) {
-        if (event_valid_l08(moby, *(int *)(vars + 0x15c)) == 0) {
-            event = create_event_l08(1, 4, moby);
-            *(int *)(vars + 0x15c) = event;
-            set_event_value_l08(event, 1);
-        } else if (((VoiceEntryL08 *)(D_0013E550 + *(int *)(vars + 0x15c) * 0x70))->value < 0x400) {
-            set_event_value_l08(*(int *)(vars + 0x15c),
-                ((VoiceEntryL08 *)(D_0013E550 + *(int *)(vars + 0x15c) * 0x70))->value + 0x400 / scale_game_frames_l08(60));
+    speed = length_vector_l08(vars->velocity);
+    if (frame_time * 0.1f < speed) {
+        if (sound_valid_l08(moby, vars->sound) == 0) {
+            vars->sound = play_sound_l08(1, 4, moby);
+            set_sound_volume_l08(vars->sound, 1);
+        } else if (SOUND_SLOT_2d55c8(vars->sound)->volume < 0x400) {
+            set_sound_volume_l08(vars->sound, SOUND_SLOT_2d55c8(vars->sound)->volume + 0x400 / scale_game_frames_l08(60));
         }
-    } else {
-        if (event_valid_l08(moby, *(int *)(vars + 0x15c)) != 0) {
-            if (((VoiceEntryL08 *)(D_0013E550 + *(int *)(vars + 0x15c) * 0x70))->value < 0x100) {
-                end_event_l08(*(int *)(vars + 0x15c));
-                *(int *)(vars + 0x15c) = -1;
-            } else {
-                set_event_value_l08(*(int *)(vars + 0x15c),
-                    ((VoiceEntryL08 *)(D_0013E550 + *(int *)(vars + 0x15c) * 0x70))->value - 0x400 / scale_game_frames_l08(60));
-            }
+    } else if (sound_valid_l08(moby, vars->sound) != 0) {
+        if (SOUND_SLOT_2d55c8(vars->sound)->volume < 0x100) {
+            stop_sound_l08(vars->sound);
+            vars->sound = -1;
+        } else {
+            set_sound_volume_l08(vars->sound, SOUND_SLOT_2d55c8(vars->sound)->volume - 0x400 / scale_game_frames_l08(60));
         }
     }
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D6C58), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
