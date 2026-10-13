@@ -2335,7 +2335,7 @@ void FUN_L00_0020e698_2b77f0(void) __asm__("FUN_L00_0020e698");
 s32 FUN_L00_0028d8c0_2b77f0(void *, s16) __asm__("FUN_L00_0028d8c0");
 void FUN_001f9cf8_2b77f0(void *, void *, void *) __asm__("FUN_001f9cf8");
 f32 FUN_001f9de0_2b77f0(f32) __asm__("FUN_001f9de0");
-f32 FUN_001f96b0_2b77f0(f32) __asm__("FUN_001f96b0");
+f32 FUN_001f96b0_2b77f0(f32) __asm__("FUN_L00_001fef10");
 f32 FUN_001fa6c0_2b77f0(s32) __asm__("FUN_001fa6c0");
 void FUN_001f9c48_2b77f0(void *, void *, f32) __asm__("FUN_001f9c48");
 s32 FUN_001efa68_2b77f0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
@@ -2346,7 +2346,7 @@ f32 FUN_002132a8_2b77f0(f32, f32) __asm__("FUN_002132a8");
 void *FUN_L00_0026b230_2b77f0(void *, void *, u8, f32) __asm__("FUN_L00_0026b230");
 void FUN_L00_00259bc8_2b77f0(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_L00_0025b970");
 void FUN_L00_001f2868_2b77f0(void *, f32, s32, void *, void *) __asm__("FUN_L00_001f2868");
-s32 FUN_001f9740_2b77f0(void *) __asm__("FUN_001f9740");
+s32 FUN_001f9740_2b77f0(void *) __asm__("FUN_001f9770");
 f32 FUN_001f9e90_2b77f0(f32, f32) __asm__("FUN_001f9e90");
 f32 FUN_001f96b0_alt_2b77f0(f32) __asm__("FUN_001f96b0");
 s16 FUN_001fa6d0_2b77f0(f32) __asm__("FUN_001fa6d0");
@@ -2371,10 +2371,9 @@ void FUN_L00_002b77f0(unsigned char *m) {
         f32 scale;
         s32 mode;
     } hit;
-    f32 response[2];
     f32 speed, length, strength, response_scale;
-    s32 count, initial_count, i;
-    volatile s32 gate;
+    struct { f32 response[2]; s32 gate, initial_count, count; } counts;
+    s32 i;
     s32 state;
     s16 h;
     s32 divisor;
@@ -2406,7 +2405,7 @@ void FUN_L00_002b77f0(unsigned char *m) {
         if (*(void **)v == 0) {
             *(void **)v = FUN_L00_002bb360_2b77f0(m);
             if (*(void **)v != 0) {
-                unsigned char *other = *(unsigned char **)v;
+                unsigned char *other = *(unsigned char * volatile *)v;
                 *(u16 *)(other + 0x34) |= 0x100;
                 *(f32 *)(*(unsigned char **)(other + 0x78) + 0xC) = D_L00_00161510_2b77f0;
             }
@@ -2446,11 +2445,11 @@ void FUN_L00_002b77f0(unsigned char *m) {
             FUN_001f9a40_2b77f0(&scratch, &D_L00_001614F0_2b77f0, &D_L00_00161500_2b77f0, FUN_001f9de0_2b77f0(angle) * 0.5f + 0.5f);
             FUN_001f9a40_2b77f0(D_001802C0_2b77f0 + *(s16 *)(v + 0x44) * 0x20, D_001802C0_2b77f0 + *(s16 *)(v + 0x44) * 0x20, &scratch, 0.1f);
         }
-        response[0] = response[1] = 0.0f;
+        counts.response[0] = counts.response[1] = 0.0f;
         speed = FUN_001fa6c0_2b77f0(D_0013E530_2b77f0) * 4.0f;
-        gate = 1;
+        counts.gate = 1;
         if (D_L00_0015F5CC & 3)
-            gate = 0;
+            counts.gate = 0;
         if (D_001413D4_2b77f0 == 1 && (*(u16 *)(m + 0x34) & 1)) {
             FUN_001f9bf8_2b77f0(&scratch, &D_00166FF0_2b77f0, -1.0f);
             FUN_001f9a10_2b77f0(&scratch, &scratch, &D_00166DC0_2b77f0);
@@ -2477,13 +2476,13 @@ void FUN_L00_002b77f0(unsigned char *m) {
             response_scale = D_001601E8_2b77f0;
         }
         FUN_L00_00259bc8_2b77f0(length, 1.0f, response_scale * D_0015ED70_2b77f0,
-                                  D_L00_00161514_2b77f0 * D_0015ED6C_c, &response[0], &response[1]);
-        FUN_001f9bf8_2b77f0(&dir, &dir, response[1]);
-        initial_count = D_L00_00161518_2b77f0;
+                                  D_L00_00161514_2b77f0 * D_0015ED6C_c, &counts.response[0], &counts.response[1]);
+        FUN_001f9bf8_2b77f0(&dir, &dir, counts.response[1]);
+        counts.initial_count = D_L00_00161518_2b77f0;
         if (length < 4.0f || (*(u16 *)(m + 0x34) & 1))
-            initial_count = 1;
-        count = D_L00_0016151C_2b77f0 + initial_count;
-        for (i = 0; i < count; i++) {
+            counts.initial_count = 1;
+        counts.count = D_L00_0016151C_2b77f0 + counts.initial_count;
+        for (i = 0; i < counts.count; i++) {
             FUN_L00_00257d78_2b77f0(&random_vec, 0.0f,
                 ((D_L00_00161524_2b77f0 - D_L00_00161528_2b77f0) *
                  (length / (D_L00_00161520_2b77f0 + speed)) +
@@ -2493,8 +2492,8 @@ void FUN_L00_002b77f0(unsigned char *m) {
             FUN_001f9a68_2b77f0(&particle_pos, &dir, angle);
             FUN_001f9a10_2b77f0(&particle_pos, &particle_pos, &scratch);
             effect = FUN_L00_0026b230_2b77f0(&particle_pos, &random_vec,
-                                               (i < initial_count) | 4, length);
-            if (i == 2 && gate)
+                                               (i < counts.initial_count) | 4, length);
+            if (i == 2 && counts.gate)
                 FUN_L00_002b8798_2b77f0(m, (s32)effect);
         }
         particle_pos.q = 0;
@@ -2527,10 +2526,10 @@ void FUN_L00_002b77f0(unsigned char *m) {
         divisor = FUN_001f96f8_2b77f0(D_L00_00161530_2b77f0);
         if (D_L00_0015F5CC % divisor == 0)
             FUN_L00_00233db8_2b77f0(-1, 1);
-        gate = FUN_L00_00233e98_2b77f0(-1);
+        state = FUN_L00_00233e98_2b77f0(-1);
         if (FUN_001f9740_2b77f0(v + 0x4C)) {
             if ((D_0013CAE0[0] & g->items[0].button_mask) &&
-                !g->unk20AC && gate)
+                !g->unk20AC && state)
                 goto tail;
             m[0x20] = 2;
             FUN_L00_0020e698_2b77f0();
@@ -2541,7 +2540,7 @@ void FUN_L00_002b77f0(unsigned char *m) {
                     FUN_L00_0028d918_2b77f0(h);
             }
             *(s16 *)(v + 0x4A) = -1;
-            if (!gate)
+            if (!state)
                 FUN_L00_0028dbe8_2b77f0(0, 0, m);
         }
         break;
