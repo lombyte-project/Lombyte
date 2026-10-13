@@ -1828,10 +1828,6 @@ void FUN_L06_002f2250(void) {
     }
     if (moby_count > 0) {
         for (i = 0; i < moby_count; i++) {
-            GbMoby *moby;
-            GbMoby *target;
-            GbVars *vars;
-            GbClass *cls;
             moby = mobys[i];
             vars = moby->vars;
             *(short *)((char *)vars + 0x192) = 0;
@@ -1894,7 +1890,6 @@ void FUN_L06_002f2250(void) {
     }
     target_count = 0;
     for (i = 0; i < moby_count; i++) {
-        GbVars *vars;
         vars = mobys[i]->vars;
         for (j = 0; j < *(short *)((char *)vars + 0x192); j++) {
             if (target_count != 50) {
@@ -1942,18 +1937,20 @@ void FUN_L06_002f2250(void) {
                 best_score = 9999999.0f;
                 best_moby = 0;
                 for (k = 0; k < moby_count; k++) {
-                    GbMoby *moby;
-                    GbVars *vars;
                     moby = mobys[k];
                     vars = moby->vars;
                     if (*(int *)((char *)vars + 0x178) == 0) {
                         last = *(short *)((char *)vars + 0x192);
-                        for (index = 0; index < last; index++) {
-                            if (((GbMoby **)((char *)vars + 0x1a0))[index] == target &&
-                                ((float *)((char *)vars + 0x1c0))[index] < best_score) {
-                                best_score = ((float *)((char *)vars + 0x1c0))[index];
-                                best_moby = moby;
-                            }
+                        if (last > 0) {
+                            float *scores = (float *)((char *)vars + 0x1c0);
+                            do {
+                                if (((GbMoby **)scores)[-8] == target && *scores < best_score) {
+                                    best_score = *scores;
+                                    best_moby = moby;
+                                }
+                                scores++;
+                                last--;
+                            } while (last != 0);
                         }
                     }
                 }
@@ -1966,11 +1963,10 @@ void FUN_L06_002f2250(void) {
                 if (angle > max_angle) angle = 1.7453293f;
                 step = 0.0f;
                 if (count > 1) step = angle / (float)(count - 1);
-                angle *= -0.5f;
+                score = angle * -0.5f;
                 for (j = 0; j < count; j++) {
-                    GbVars *vars;
                     vars = selected[j]->vars;
-                    vars->f17C = fast_add_rotations_2f2250(angle, (float)j * step);
+                    vars->f17C = fast_add_rotations_2f2250(score, (float)j * step);
                 }
             }
         }
