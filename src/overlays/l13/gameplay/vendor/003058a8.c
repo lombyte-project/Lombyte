@@ -360,7 +360,7 @@ void FUN_L13_00306300(struct Moby *moby) {
     } work;
     extern L13TargetRow_6300 D_L13_00178400[];
     int stationary;
-    int flags;
+    short flags;
     float length;
     extern struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vector_6300 pos; L13Vector_6300 pad2; L13Vector_6300 matrix; } D_L13_00174140;
 
@@ -370,7 +370,7 @@ void FUN_L13_00306300(struct Moby *moby) {
     work.direction.z = 0.0f;
     normalize_vector_xyz_6300(&work.direction, &work.direction, 1.0f);
     work.direction.z = 1.0f;
-    flags = 0x10001;
+    flags = 1;
     /* Existing symbols for hero.ammo_used and hero.motion.pos at their retail addresses. */
     if (D_00141346 != 0 && *(float *)(data + 0xc) != 31337.602f &&
         fast_vec_dist(&moby->pos, D_0013F3D0) < 2.0f) {
@@ -384,7 +384,7 @@ void FUN_L13_00306300(struct Moby *moby) {
         for (i = 0; i < 6; i++) {
             struct Moby *target = (struct Moby *)hero.unk2020[i];
             if (target != 0) {
-                FUN_L00_00259888(&work.hit, moby, flags, &work.direction, 1.0f);
+                FUN_L00_00259888(&work.hit, moby, (unsigned short)flags | 0x10000, &work.direction, 1.0f);
                 work.hit.oclass = moby->oclass;
                 work.hit.active = 1;
                 work.hit.valid = 1;
@@ -407,13 +407,13 @@ update_hit:
                     previous = &D_L13_00178400[target->hit_slot];
                     previous->oclass = moby->oclass;
                     previous = &D_L13_00178400[target->hit_slot];
-                    previous->flags = flags;
+                    previous->flags = (unsigned short)flags | 0x10000;
                 }
                 break;
             }
         }
     }
-    FUN_L00_00259888(&work.hit, moby, flags, &work.direction, 1.0f);
+    FUN_L00_00259888(&work.hit, moby, (unsigned short)flags | 0x10000, &work.direction, 1.0f);
     work.hit.oclass = moby->oclass;
     work.hit.active = 1;
     work.hit.valid = 1;
