@@ -243,20 +243,21 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     s32 next;
     s32 i;
     s32 offset;
-    OvlVec4 *volatile saved_out;
-    volatile s32 found;
+    OvlVec4 *saved_out;
+    s32 found;
     f32 original_height;
     f32 segment_length;
     f32 projection;
 
+    found = 0;
     saved_out = out;
     qcopy(&working, point);
-    found = 0;
     entry = D_L00_001B04B0_262030[path_index];
-    original_height = FUN_001ff398_262030(&working, &D_0013F5E0_262030);
+    offset = (s32)&D_0013F5E0_262030;
+    original_height = FUN_001ff398_262030(&working, (OvlVec4 *)offset);
+    i = 0;
     if (entry->count - 1 > found) {
-        i = 0;
-        height_axis = &D_0013F5E0_262030;
+        height_axis = (OvlVec4 *)offset;
         do {
             offset = i << 4;
             next = i + 1;
