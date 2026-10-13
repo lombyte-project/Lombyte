@@ -2341,6 +2341,7 @@ int FUN_L15_002a3138(unsigned char *moby) {
             do {
                 int limit, value;
                 float angle, delta;
+                float step = 0.125f;
                 axis--;
                 limit = truncate_float_2a3138(*frequency * 360.0f);
                 angle = integer_to_float_2a3138(*(volatile int *)0x0015f3f8 % limit)
@@ -2348,9 +2349,9 @@ int FUN_L15_002a3138(unsigned char *moby) {
                 frequency++;
                 value = *waveform++;
                 if (value != 0) {
-                    delta = fast_cos_2a3138(angle * 0.017453292f) * 0.125f;
+                    delta = fast_cos_2a3138(angle * 0.017453292f) * step;
                 } else {
-                    delta = fast_sin_2a3138(angle * 0.017453292f) * 0.125f;
+                    delta = fast_sin_2a3138(angle * 0.017453292f) * step;
                 }
                 *uv++ = *base++ + delta;
             } while (axis >= 0);
