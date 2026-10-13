@@ -587,7 +587,213 @@ void FUN_L13_00307b10(struct Moby *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00307e98.s", FUN_L13_00307e98);
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_00308d10.s", FUN_L13_00308d10);
+#include "rnc/overlay/collision.h"
+
+/* Vars of the level 13 walker FUN_L13_00308d10 drives. */
+struct WalkerVars_8d10 {
+    u8 pad0[0x20];
+    f32 health;                    /* 0x20 */
+    u8 pad24[2];
+    s16 stun_timer;                /* 0x26 */
+    u8 pad28[0x10];
+    s32 init;                      /* 0x38: nonzero until the idle timer is first drawn */
+    u8 pad3C[0x24];
+    u8 anim[8];                    /* 0x60 */
+    f32 fall_speed;                /* 0x68 */
+    u8 pad6C[0xC];
+    f32 knock_up;                  /* 0x78 */
+    f32 knock_back;                /* 0x7C */
+    s32 hit_sound;                 /* 0x80 */
+    u8 pad84[4];
+    f32 hit_scale;                 /* 0x88 */
+    u8 pad8C[0x24];
+    f32 knock_min;                 /* 0xB0 */
+    f32 knock_max;                 /* 0xB4 */
+    u8 padB8[0x58];
+    u8 flash[7];                   /* 0x110 */
+    u8 flash_time;                 /* 0x117 */
+    u8 pad118[8];
+    Vec4f target;                  /* 0x120 */
+    u8 pad130[0x30];
+    s32 start_frame;               /* 0x160 */
+    s32 mode;                      /* 0x164 */
+    u8 pad168[8];
+    Vec4f home;                    /* 0x170 */
+    s32 path;                      /* 0x180 */
+    s32 idle_timer;                /* 0x184 */
+    u8 pad188[8];
+    f32 range;                     /* 0x190 */
+    u8 pad194[8];
+    f32 near_range;                /* 0x19C */
+    f32 far_range;                 /* 0x1A0 */
+    s32 target_moby;               /* 0x1A4: -1: none */
+};
+
+extern f32 D_L13_00161E58 __attribute__((sda));
+extern f32 D_L13_00161E60 __attribute__((sda));
+extern f32 D_L13_00161E64 __attribute__((sda));
+extern f32 D_L13_00161E68 __attribute__((sda));
+extern f32 D_L13_00161E6C __attribute__((sda));
+extern s32 *walker_paths_8d10[] __asm__("D_L13_001B07B0");
+extern char D_L13_00160680[] __attribute__((section(".sdata")));
+extern s32 D_001413D0_8d10 __asm__("D_001413D0") __attribute__((section(".data")));
+extern CollisionHit coll_hit_8d10 __asm__("D_L13_00174140");
+extern void FUN_L13_003094f8(struct Moby *);
+extern f32 random_float_between_8d10(f32, f32) __asm__("FUN_002132a8");
+extern f32 FUN_001f96b0_8d10(f32) __asm__("FUN_001f96b0");
+extern s32 float_to_int_8d10(f32) __asm__("FUN_001fa6d0");
+extern s32 tick_countdown_32_8d10(s32 *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames_8d10(s32) __asm__("FUN_001f96f8");
+extern char *find_moby_hit_8d10(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern s32 hit_check_8d10(struct Moby *, char *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
+extern f32 atan2_f_8d10(f32, f32) __asm__("FUN_001f9e90");
+extern void knock_back_8d10(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
+extern void stop_moby_sound_8d10(struct Moby *, s32, s32) __asm__("FUN_L00_00257470");
+extern void anim_reset_8d10(struct Moby *, void *) __asm__("FUN_L00_0025d458");
+extern void anim_update_8d10(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern s32 find_target_8d10(f32, struct Moby *, void *, s32, s32, s32 *, s32) __asm__("FUN_L00_0025ff38");
+extern f32 vector_distance_8d10(void *, void *) __asm__("FUN_001f9b80");
+extern f32 absolute_float_8d10(f32) __asm__("FUN_001f99c0");
+extern s32 FUN_00214720_8d10(void *, s32) __asm__("FUN_00214720");
+extern f32 probe_ground_height_8d10(void *, s32, f32) __asm__("FUN_00213508");
+extern s32 ground_material_8d10(void) __asm__("FUN_001f0b58");
+extern f32 vector_length_xy_8d10(void *) __asm__("FUN_001f9b20");
+extern void normalize_vector_xyz_8d10(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz_8d10(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void mark_moby_for_removal_8d10(struct Moby *) __asm__("FUN_0020c828");
+
+/* Walker update: takes hits (knocked back, or dies at no health), picks its target and falls onto or slides off the ground. */
+void FUN_L13_00308d10(struct Moby *moby) {
+    struct WalkerVars_8d10 *vars = (struct WalkerVars_8d10 *)moby->pvars;
+    char *hit;
+    s32 code;
+    s32 kind;
+    f32 damage;
+    f32 ground;
+    s32 *path;
+    Vec4f push;
+
+    moby->scale = moby->pclass->scale * D_L13_00161E58;
+    FUN_L13_003094f8(moby);
+    if (vars->init != 0) {
+        vars->idle_timer = float_to_int_8d10(FUN_001f96b0_8d10(random_float_between_8d10(180.0f, 240.0f)));
+        vars->init = 0;
+    }
+    tick_countdown_32_8d10(&vars->idle_timer);
+    damage = 0.0f;
+    hit = find_moby_hit_8d10(moby, 0x330000, 0);
+    code = hit_check_8d10(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
+    if (kind != 1 && moby->state != 0x10) {
+        if (hit != 0 && *(struct Moby **)(hit + 0x20) != 0 && (*(struct Moby **)(hit + 0x20))->oclass == 0x4EE) {
+            damage = 0.0f;
+        }
+        vars->health -= damage;
+        if (vars->health <= 0.0f) {
+            code = 1;
+        }
+        vars->hit_sound = 0x2CD;
+        vars->hit_scale = 0.7f;
+        switch (code) {
+        case 0:
+        case 11:
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+            moby->state = 0xF;
+            vars->stun_timer = scale_game_frames_8d10(0x3C);
+            vars->knock_up = D_L13_00161E60 * frame_time;
+            vars->knock_back = D_L13_00161E64 * frame_time;
+            vars->knock_min = 8.0f;
+            vars->knock_max = 15.0f;
+            knock_back_8d10(moby, vars->anim, 7, 1, 0, atan2_f_8d10(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
+            vars->flash_time = 0xFA;
+            break;
+        case 1:
+        case 2:
+            moby->state = 0x10;
+            moby->flags &= ~0x1000;
+            vars->knock_up = D_L13_00161E68 * frame_time;
+            vars->knock_back = D_L13_00161E6C * frame_time;
+            vars->knock_min = 9.0f;
+            vars->knock_max = 17.0f;
+            knock_back_8d10(moby, vars->anim, 8, 1, 0, atan2_f_8d10(*(f32 *)(hit + 0x10), *(f32 *)(hit + 0x14)));
+            vars->flash_time = 0xFA;
+            stop_moby_sound_8d10(moby, 0, -1);
+            break;
+        }
+        anim_reset_8d10(moby, vars->flash);
+    }
+    moby->hit_slot = 0xFF;
+    anim_update_8d10(moby, vars->flash);
+    if (vars->idle_timer != 0) {
+        vars->range = vars->far_range;
+    } else {
+        vars->range = vars->near_range;
+    }
+    path = walker_paths_8d10[vars->path];
+    if (find_target_8d10(vars->range, moby, &vars->target, 0, 0, path + 4, *path) != 2) {
+        if (vars->range < vector_distance_8d10(&vars->home, &vars->target)
+            || absolute_float_8d10(moby->pos.z - vars->target.z) > 3.0f) {
+            vars->mode = 2;
+        }
+        if (vars->target_moby != -1 && FUN_00214720_8d10(&vars->target, vars->target_moby) == 0) {
+            vars->mode = 2;
+        } else {
+            vars->target_moby = -1;
+        }
+    }
+    if (vars->start_frame == 0) {
+        vars->start_frame = D_001413D0_8d10;
+    }
+    ground = probe_ground_height_8d10(&moby->pos, 0, 0.5f);
+    if (ground != 0.0f) {
+        switch (ground_material_8d10()) {
+        case 0:
+        case 1:
+        case 3:
+        case 11:
+        case 13:
+            moby->flags &= ~0x1000;
+            stop_moby_sound_8d10(moby, 0, -1);
+            FUN_L00_0025e450(moby, D_L13_00160680, 0, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            mark_moby_for_removal_8d10(moby);
+            return;
+        default:
+            if (moby->state < 0xF) {
+                if (atan2_f_8d10(coll_hit_8d10.normal_z, vector_length_xy_8d10(&coll_hit_8d10.normal_x)) > 0.6981317f) {
+                    normalize_vector_xyz_8d10(&push, &coll_hit_8d10.normal_x, 0.05f);
+                    add_vector_xyz_8d10(&moby->pos, &moby->pos, &push);
+                }
+                if (ground < moby->pos.z) {
+                    vars->fall_speed -= frame_time_sq * 9.8f;
+                    moby->pos.z += vars->fall_speed;
+                    if (moby->pos.z < ground) {
+                        vars->fall_speed = 0.0f;
+                        moby->pos.z = ground;
+                    }
+                } else if (moby->pos.z < ground) {
+                    moby->pos.z += 0.05f;
+                }
+            }
+            break;
+        }
+    } else {
+        if (moby->state < 0xF) {
+            vars->fall_speed -= frame_time_sq * 9.8f;
+            moby->pos.z += vars->fall_speed;
+        }
+    }
+    if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f
+        || moby->pos.z < 2.0f || moby->pos.z > 1021.0f) {
+        mark_moby_for_removal_8d10(moby);
+    }
+}
 
 #define NOT_SDA
 
