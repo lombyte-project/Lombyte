@@ -42,14 +42,16 @@ void project_graphics_bounds(f32 *first, f32 *opposite, s32 *width, s32 *height,
     *(volatile f32 *)&opposite_pointer[1] *= 1.0f / opposite_pointer[3];
     scale_y = view_context[101];
     scale_x = view_context[100];
-    projected_coordinate = first_projected[0] * scale_x;
+    projected_coordinate = first_projected[0];
+    projected_coordinate *= scale_x;
     first_projected[0] = projected_coordinate;
     first_projected[1] *= scale_y;
     opposite_pointer[0] *= scale_x;
     projected_coordinate = opposite_pointer[1] * scale_y;
     opposite_pointer[1] = projected_coordinate;
     projected_coordinate = (f32)screen_extent.half_width;
-    *x = convert_float_to_integer(first_projected[0] * 0.25f + projected_coordinate);
+    scale_y = first_projected[0];
+    *x = convert_float_to_integer(scale_y * 0.25f + projected_coordinate);
     *y = convert_float_to_integer(first_projected[1] * 0.25f + (f32)screen_extent.half_height);
     *(volatile s32 *)width =
         convert_float_to_integer((opposite_pointer[0] - first_projected[0]) * 0.25f);
