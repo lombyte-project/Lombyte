@@ -1508,10 +1508,9 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         }
     } break;
     case 99: {
-        frame_time = D_0015ED6C_2DC9A8;
-        record.pos[0] = frame_time * 14.0f;
-        record.pos[1] = frame_time * 22.0f;
-        record.pos[2] = frame_time * 12.0f;
+        record.pos[0] = D_0015ED6C_2DC9A8 * 14.0f;
+        record.pos[1] = D_0015ED6C_2DC9A8 * 22.0f;
+        record.pos[2] = D_0015ED6C_2DC9A8 * 12.0f;
         record.pos[3] = 0.0f;
         *(EffectVectorCopy_2DC9A8 *)original = *(EffectVectorCopy_2DC9A8 *)record.pos;
         record.owner = m;
