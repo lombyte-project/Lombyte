@@ -2286,16 +2286,16 @@ void FUN_L00_002d5160(unsigned char *m) {
     if (result != 1 && m[0x20] != 12 && damage != 0.0f) {
         forceX = D_L00_00161970_2d5160 * D_0015ED70_2d5160;
         forceY = D_L00_00161974_2d5160 * D_0015ED70_2d5160;
-        forceW = D_L00_0016197C_2d5160 * D_0015ED6C_2d5160;
         forceZ = D_L00_00161978_2d5160 * D_0015ED6C_2d5160;
+        forceW = D_L00_0016197C_2d5160 * D_0015ED6C_2d5160;
         health = *(f32 *)(v + 0x20) - damage;
         v[0xAD] = 0;
         duration = D_0015ED6C_2d5160 + D_0015ED6C_2d5160;
-        *(f32 *)(v + 0x80) = forceX;
         *(f32 *)(v + 0x98) = 0.75f;
         *(f32 *)(v + 0x20) = health;
-        *(f32 *)(v + 0x84) = forceY;
         *(f32 *)(v + 0x88) = forceZ;
+        *(f32 *)(v + 0x80) = forceX;
+        *(f32 *)(v + 0x84) = forceY;
         *(f32 *)(v + 0x8C) = forceW;
         *(f32 *)(v + 0xBC) = duration;
         *(s32 *)(v + 0x94) = 0x29;
