@@ -1471,8 +1471,8 @@ void FUN_L00_002cd1f0(struct Moby *m)
     V_2ccee0 start;
     /* These phases reuse the same stack storage in retail. */
     union { V_2ccee0 direction, bounce; } vector_scratch;
-    V_2ccee0 velocity, query, rotation;
-    union { struct { V_2ccee0 delta, target, end; } tracking; u8 collision_data[0x30]; } collision_scratch;
+    V_2ccee0 velocity, query;
+    union { struct { V_2ccee0 rotation, delta, target, end; } tracking; u8 collision_data[0x30]; } collision_scratch;
     V_2ccee0 matrix[4];
     f32 a, b, c, root, radius, f;
     s32 hit;
@@ -1498,11 +1498,11 @@ void FUN_L00_002cd1f0(struct Moby *m)
             qcopy(&collision_scratch.tracking.target, &t->pos);
             collision_scratch.tracking.target.f[2] += v->height;
             subtract_vector_xyz_2c8440(&collision_scratch.tracking.delta, &collision_scratch.tracking.target, &v->position);
-            subtract_vector_xyz_2c8440(&rotation, &collision_scratch.tracking.target, &v->offset);
+            subtract_vector_xyz_2c8440(&collision_scratch.tracking.rotation, &collision_scratch.tracking.target, &v->offset);
             qcopy(&v->position, &collision_scratch.tracking.target);
             a = v->radius * v->radius - FUN_001ff430_2cd1f0(&collision_scratch.tracking.delta);
-            b = (collision_scratch.tracking.delta.f[0] * rotation.f[0] + collision_scratch.tracking.delta.f[1] * rotation.f[1] + collision_scratch.tracking.delta.f[2] * rotation.f[2]) * -2.0f;
-            c = -FUN_001ff430_2cd1f0(&rotation);
+            b = (collision_scratch.tracking.delta.f[0] * collision_scratch.tracking.rotation.f[0] + collision_scratch.tracking.delta.f[1] * collision_scratch.tracking.rotation.f[1] + collision_scratch.tracking.delta.f[2] * collision_scratch.tracking.rotation.f[2]) * -2.0f;
+            c = -FUN_001ff430_2cd1f0(&collision_scratch.tracking.rotation);
             root = FUN_001ff1e0_2cd1f0(b * b - a * 4.0f * c);
             f = (-b + root) / (a + a);
             radius = (-b - root) / (a + a);
@@ -1512,11 +1512,11 @@ void FUN_L00_002cd1f0(struct Moby *m)
                 f = radius > 0.0f ? radius : -1.0f;
             if (f > 0.0f) {
                 FUN_001ff300_2cd1f0(f, &collision_scratch.tracking.end, &collision_scratch.tracking.delta);
-                add_vector_xyz_2c8440(&collision_scratch.tracking.end, &collision_scratch.tracking.end, &rotation);
+                add_vector_xyz_2c8440(&collision_scratch.tracking.end, &collision_scratch.tracking.end, &collision_scratch.tracking.rotation);
                 m->rot.z = FUN_00258110_2cd1f0(&v->yaw_velocity, m->rot.z, FUN_001ff8b0_2cd1f0(collision_scratch.tracking.end.f[0], collision_scratch.tracking.end.f[1]), frame_time_sq * 188.49556f, 0.0f, 0.0f);
                 m->rot.y = FUN_00258110_2cd1f0(&v->pitch_velocity, m->rot.y, -FUN_001ff8b0_2cd1f0(FUN_001ff408_2cd1f0(&collision_scratch.tracking.end), collision_scratch.tracking.end.f[2]), frame_time_sq * 188.49556f, 0.0f, 0.0f);
             }
-            f = FUN_001ff3d8_2cd1f0(&rotation);
+            f = FUN_001ff3d8_2cd1f0(&collision_scratch.tracking.rotation);
             if (f < 6.0f)
                 v->strength *= f / 6.0f;
             else
@@ -1524,17 +1524,17 @@ void FUN_L00_002cd1f0(struct Moby *m)
         }
     }
     FUN_00262c50_2cd1f0(&query, v->radius, m->rot.z, -m->rot.y);
-    vector_scratch.direction.q = 0;
-    vector_scratch.direction.f[0] = FUN_00257be8_2cd1f0(-1.0f, 1.0f);
-    vector_scratch.direction.f[1] = FUN_00257be8_2cd1f0(-1.0f, 1.0f);
-    vector_scratch.direction.f[2] = FUN_00257be8_2cd1f0(-1.0f, 1.0f);
-    rotation.q = vector_scratch.direction.q;
-    FUN_001ff500_2cd1f0(&rotation, &rotation, FUN_00257be8_2cd1f0(0.1f, 0.2f) * frame_time);
+    collision_scratch.tracking.delta.q = 0;
+    collision_scratch.tracking.delta.f[0] = FUN_00257be8_2cd1f0(-1.0f, 1.0f);
+    collision_scratch.tracking.delta.f[1] = FUN_00257be8_2cd1f0(-1.0f, 1.0f);
+    collision_scratch.tracking.delta.f[2] = FUN_00257be8_2cd1f0(-1.0f, 1.0f);
+    collision_scratch.tracking.rotation.q = collision_scratch.tracking.delta.q;
+    FUN_001ff500_2cd1f0(&collision_scratch.tracking.rotation, &collision_scratch.tracking.rotation, FUN_00257be8_2cd1f0(0.1f, 0.2f) * frame_time);
     FUN_001ff500_2cd1f0(&velocity, &query, -FUN_00257be8_2cd1f0(frame_time * 0.1f, frame_time));
-    add_vector_xyz_2c8440(&rotation, &rotation, &velocity);
+    add_vector_xyz_2c8440(&collision_scratch.tracking.rotation, &collision_scratch.tracking.rotation, &velocity);
     FUN_001ff500_2cd1f0(&velocity, &query, FUN_00257be8_2cd1f0(0.0f, 1.0f) * v->radius);
     add_vector_xyz_2c8440(&velocity, &velocity, &m->pos);
-    FUN_00269958_2cd1f0(&velocity, &rotation, 0x6f00afff, 0x100000ff,
+    FUN_00269958_2cd1f0(&velocity, &collision_scratch.tracking.rotation, 0x6f00afff, 0x100000ff,
                           FUN_001fef20_2cd1f0(FUN_00257b90_2cd1f0(28, 40)), 40,
                           FUN_00257b90_2cd1f0(40, 70), 1);
     qcopy(&start, &m->pos);
@@ -1546,13 +1546,13 @@ void FUN_L00_002cd1f0(struct Moby *m)
         v->strength = 0.9f;
     hit = 0;
     for (;;) {
-        vector_scratch.direction.f[1] = v->strength * FUN_001ff800_2cd1f0(v->yaw) * FUN_001ff7e8_2cd1f0(v->pitch);
-        vector_scratch.direction.f[2] = v->strength * FUN_001ff7e8_2cd1f0(v->yaw) * FUN_001ff7e8_2cd1f0(v->pitch);
-        vector_scratch.direction.f[0] = 0.0f;
-        vector_scratch.direction.f[3] = 0.0f;
+        collision_scratch.tracking.rotation.f[1] = v->strength * FUN_001ff800_2cd1f0(v->yaw) * FUN_001ff7e8_2cd1f0(v->pitch);
+        collision_scratch.tracking.rotation.f[2] = v->strength * FUN_001ff7e8_2cd1f0(v->yaw) * FUN_001ff7e8_2cd1f0(v->pitch);
+        collision_scratch.tracking.rotation.f[0] = 0.0f;
+        collision_scratch.tracking.rotation.f[3] = 0.0f;
         FUN_001ffa70_2cd1f0(matrix, &m->rot);
-        FUN_001ff6f8_2cd1f0(&vector_scratch.direction, &vector_scratch.direction, matrix);
-        add_vector_xyz_2c8440(&m->pos, &v->offset, &vector_scratch.direction);
+        FUN_001ff6f8_2cd1f0(&collision_scratch.tracking.rotation, &collision_scratch.tracking.rotation, matrix);
+        add_vector_xyz_2c8440(&m->pos, &v->offset, &collision_scratch.tracking.rotation);
         if (!collision_line_2c8440(&start, &m->pos, 6, m, 0))
             break;
         hit = 1;
@@ -1566,7 +1566,9 @@ void FUN_L00_002cd1f0(struct Moby *m)
         v->yaw_velocity = 0.0f;
         v->pitch_velocity = 0.0f;
     }
-    if (!(m->pos.x < 0.0f) && !(m->pos.y < 0.0f) && !(m->pos.z < 0.0f)) {
+    if (m->pos.x < 0.0f || m->pos.y < 0.0f || m->pos.z < 0.0f)
+        goto cleanup;
+    {
         u8 *player;
         *(struct Moby **)(collision_scratch.collision_data + 0x10) = m;
         *(u32 *)(collision_scratch.collision_data + 0x14) = 0x00830000;
@@ -1578,17 +1580,9 @@ void FUN_L00_002cd1f0(struct Moby *m)
         collision_scratch.collision_data[0x19] = 3;
         *(u16 *)(collision_scratch.collision_data + 0x1a) = m->oclass;
         *(f32 *)(collision_scratch.collision_data + 8) = 1.0f;
-        *(u32 *)(collision_scratch.collision_data + 12) = 0x45afdf66;
+        *(f32 *)(collision_scratch.collision_data + 12) = 5627.9248046875f;
         if (collision_line_2c8440(&start, &m->pos, 0, m, collision_scratch.collision_data)) {
-            if (coll_hit_2c8440.moby == 0) {
-                if (coll_hit_2c8440.unk1C <= 0)
-                    goto bounce_only;
-                m->command = 1;
-                qcopy(&m->pos, &coll_hit_2c8440.point);
-                FUN_001ff660_2cd1f0(&vector_scratch.bounce, &query, &coll_hit_normal_2c8440);
-                FUN_001ff500_2cd1f0(&vector_scratch.bounce, &vector_scratch.bounce, frame_time + frame_time);
-                FUN_0025e450_2cd1f0(m, &vector_scratch.bounce, 0, 0.0f, 1.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
-            } else {
+            if (coll_hit_2c8440.moby != 0) {
                 struct Moby *other = (struct Moby *)coll_hit_2c8440.moby;
                 player = D_001413D0_2ccee0;
                 if (other == (struct Moby *)player || other == v->owner || other->oclass == 0x1c9 || other->oclass == 0)
@@ -1598,19 +1592,30 @@ void FUN_L00_002cd1f0(struct Moby *m)
                 FUN_001ff660_2cd1f0(&vector_scratch.bounce, &query, &coll_hit_normal_2c8440);
                 FUN_001ff500_2cd1f0(&vector_scratch.bounce, &vector_scratch.bounce, frame_time + frame_time);
                 FUN_0025e450_2cd1f0(m, &vector_scratch.bounce, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
+            } else {
+                if (coll_hit_2c8440.unk1C <= 0)
+                    goto bounce_only;
+                m->command = 1;
+                qcopy(&m->pos, &coll_hit_2c8440.point);
+                FUN_001ff660_2cd1f0(&vector_scratch.bounce, &query, &coll_hit_normal_2c8440);
+                FUN_001ff500_2cd1f0(&vector_scratch.bounce, &vector_scratch.bounce, frame_time + frame_time);
+                FUN_0025e450_2cd1f0(m, &vector_scratch.bounce, 0, 0.0f, 1.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
             }
         } else if (!FUN_001fef68_2cd1f0(&v->timer) && !(200.0f < FUN_001ff488_2cd1f0(&m->pos, (player = D_001413D0_2ccee0) + 0x10))) {
-bounce_only:
-            if (v->timer % FUN_001fef20_2cd1f0(32) != 0)
-                return;
-            if (FUN_001160d8_2cd1f0() & 1)
-                v->yaw_step *= FUN_00257be8_2cd1f0(-0.7f, -1.5f);
-            if (FUN_001160d8_2cd1f0() & 1)
-                v->pitch_step *= FUN_00257be8_2cd1f0(-0.6f, -1.6f);
-            return;
+            goto bounce_only;
         }
     }
+cleanup:
     FUN_0024eb68_2cd1f0(m);
+    return;
+bounce_only:
+    if (v->timer % FUN_001fef20_2cd1f0(32) != 0)
+        return;
+    if (FUN_001160d8_2cd1f0() & 1)
+        v->yaw_step *= FUN_00257be8_2cd1f0(-0.7f, -1.5f);
+    if (FUN_001160d8_2cd1f0() & 1)
+        v->pitch_step *= FUN_00257be8_2cd1f0(-0.6f, -1.6f);
+    return;
 }
 #endif
 #include "qcopy.h"
