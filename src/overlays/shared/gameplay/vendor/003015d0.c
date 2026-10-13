@@ -186,17 +186,24 @@ void FUN_L14_003017f8(char *m) {
     {
         int i;
         for (i = 0; i < 32; i++) {
-            t = (0.5f - convert_integer_to_float(i) / convert_integer_to_float(31)) * length;
-            if ((unsigned)(i - 3) < 26) {
-                set_vector_xyz(path_a[i], 0.0f, D_L14_001620FC);
-                set_vector_xyz(path_b[i], 0.0f, D_L14_00162100 * D_0015ED6C);
-            } else {
+            t = convert_integer_to_float(i) / convert_integer_to_float(31);
+            {
+                float y = 0.5f - t;
+                t = y * length;
+            }
+            if ((unsigned)(i - 3) >= 26) {
                 clear_u64_value(path_a[i]);
                 clear_u64_value(path_b[i]);
+            } else {
+                set_vector_xyz(path_a[i], 0.0f, D_L14_001620FC);
+                set_vector_xyz(path_b[i], 0.0f, D_L14_00162100 * D_0015ED6C);
             }
-            y = path_a[i][1];
-            path_a[i][3] = 1.0f;
-            path_a[i][1] = y + t;
+            {
+                float *point = path_a[i];
+                y = point[1];
+                point[3] = 1.0f;
+                point[1] = y + t;
+            }
         }
     }
     {
@@ -225,8 +232,8 @@ void FUN_L14_003017f8(char *m) {
             index += 4;
             d[0x18 + i] = index;
             offset = (i << 4) + (int)d;
-            *(u128 *)((char *)offset + 0x420) = *(u128 *)(d + 0x20 + (index << 4));
-            *(u128 *)((char *)offset + 0x520) = *(u128 *)(d + 0x220 + (index << 4));
+            qcopy((char *)offset + 0x420, d + 0x20 + (index << 4));
+            qcopy((char *)offset + 0x520, d + 0x220 + (index << 4));
             for (j = 2; j >= 0; j--) {
                 set_vector_xyz(delta_a, 0.1f, 0.1f);
                 set_vector_xyz(d + 0x560 + (i << 4) + ((2 - j) << 6), 0.0f,
