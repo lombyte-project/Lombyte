@@ -460,22 +460,22 @@ struct Moby *FUN_L13_002b4958_c(struct Moby *parent) __asm__("FUN_L13_002b4958")
 void FUN_L00_00257d78(float *out, float lo, float hi);
 void FUN_L13_002b47a0_c(struct Moby *moby) __asm__("FUN_L13_002b47a0");
 void FUN_L13_002b48d8_c(struct Moby *moby) __asm__("FUN_L13_002b48d8");
-extern void func_L13_002B5A88_2B5368(void *) __asm__("FUN_L13_002b48d8");
-extern void *func_L13_002B5B08_2B5368(void *) __asm__("FUN_L13_002b4958");
-extern void func_L00_00264B40_2B5368(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
-extern void func_00213DE0_2B5368(void *, int, int, int) __asm__("FUN_00212f90");
+extern void FUN_L13_002b48d8_2b0e80(void *) __asm__("FUN_L13_002b48d8");
+extern void *FUN_L13_002b4958_2b0e80(void *) __asm__("FUN_L13_002b4958");
+extern void FUN_L00_00263ac8_2b0e80(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
+extern void FUN_00212f90_2b0e80(void *, int, int, int) __asm__("FUN_00212f90");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
-extern float func_001FA790_2B5368(float, float) __asm__("FUN_001fa5c8");
-extern float func_001FA748_2B5368(float, float) __asm__("FUN_001fa580");
-extern void func_L13_002B5950_2B5368(void *) __asm__("FUN_L13_002b47a0");
+extern float FUN_001fa5c8_2b0e80(float, float) __asm__("FUN_001fa5c8");
+extern float FUN_001fa580_2b0e80(float, float) __asm__("FUN_001fa580");
+extern void FUN_L13_002b47a0_2b0e80(void *) __asm__("FUN_L13_002b47a0");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
-extern void func_L00_0025F4A8_2B5368(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void FUN_L00_0025e450_2b0e80(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern unsigned char D_0013E633_2B5368[] __asm__("D_0013F420");
+extern unsigned char D_0013F420_2b0e80[] __asm__("D_0013F420");
 
 void FUN_L13_002b41b8(Moby_2B5368 *m) {
     Data_2B5368 *data = m->data;
@@ -483,29 +483,29 @@ void FUN_L13_002b41b8(Moby_2B5368 *m) {
     Moby_2B5368 *gun;
     float r;
 
-    func_L13_002B5A88_2B5368(m);
+    FUN_L13_002b48d8_2b0e80(m);
     t = data->target;
     if (data->gun != 0 && data->gun->cls_id == 0x24 && data->gun->state >= 0) {
-        func_L00_00264B40_2B5368(2.7f, data->gun, 1, data->fx);
+        FUN_L00_00263ac8_2b0e80(2.7f, data->gun, 1, data->fx);
     }
     switch ((unsigned char)m->state) {
     case 0:
         m->scale = m->cls->scale * 1.5f;
-        data->gun = func_L13_002B5B08_2B5368(m);
+        data->gun = FUN_L13_002b4958_2b0e80(m);
         data->f54 = m->rot.z;
         if (m->b53 != 0) {
-            func_00213DE0_2B5368(m, 0, 0, 10);
+            FUN_00212f90_2b0e80(m, 0, 0, 10);
         }
         m->state = 1;
         break;
     case 1:
         r = fast_difference_between_rotations(angle_atan2(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
         if (r < 1.5707964f && vector_distance(&m->pos, &t->pos) < 20.0f
-            && (data->volume == -1 || is_point_inside_clip_volume(D_0013E633_2B5368, data->volume) != 0)) {
+            && (data->volume == -1 || is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) != 0)) {
             data->f68 = 8.0f;
             if (m->b53 != 1) {
                 int a = random_int_between(0, 3);
-                func_00213DE0_2B5368(m, 1, a, random_int_between(7, 13));
+                FUN_00212f90_2b0e80(m, 1, a, random_int_between(7, 13));
             }
             m->state = 3;
         }
@@ -513,7 +513,7 @@ void FUN_L13_002b41b8(Moby_2B5368 *m) {
         if (data->gun == 0 || data->gun->cls_id != 0x24 || (unsigned char)data->gun->state == 0xFE
             || (unsigned char)data->gun->state == 0xFD || (unsigned char)data->gun->state == 2) {
             if (m->b53 != 0) {
-                func_00213DE0_2B5368(m, 0, 0, random_int_between(7, 13));
+                FUN_00212f90_2b0e80(m, 0, 0, random_int_between(7, 13));
             }
             data->f64 = 1.0f;
             m->state = 5;
@@ -522,28 +522,28 @@ void FUN_L13_002b41b8(Moby_2B5368 *m) {
     case 3:
         r = fast_difference_between_rotations(angle_atan2(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
         if (r >= 1.5707964f || vector_distance(&m->pos, &t->pos) > 22.0f
-            || (data->volume != -1 && is_point_inside_clip_volume(D_0013E633_2B5368, data->volume) == 0)) {
+            || (data->volume != -1 && is_point_inside_clip_volume(D_0013F420_2b0e80, data->volume) == 0)) {
             if (m->b53 != 0) {
-                func_00213DE0_2B5368(m, 0, 0, random_int_between(7, 13));
+                FUN_00212f90_2b0e80(m, 0, 0, random_int_between(7, 13));
             }
             m->state = 1;
         } else {
             float lim;
             approach_value(&data->f68, 20.0f, D_0015ED6C * 6.0f);
-            r = func_001FA790_2B5368(angle_atan2(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
+            r = FUN_001fa5c8_2b0e80(angle_atan2(t->pos.x - m->pos.x, t->pos.y - m->pos.y), data->f54);
             lim = data->f6C * 0.017453292f;
             if (lim < r) {
                 r = lim;
             } else if (r < -lim) {
                 r = -lim;
             }
-            r = func_001FA748_2B5368(r, data->f54);
+            r = FUN_001fa580_2b0e80(r, data->f54);
             approach_angle(&m->rot.z, r, &data->f60, D_0015ED70_c * 12.566371f, D_0015ED70_c * 12.566371f, D_0015ED6C * 12.566371f);
-            func_L13_002B5950_2B5368(m);
+            FUN_L13_002b47a0_2b0e80(m);
             if (data->gun == 0 || data->gun->cls_id != 0x24 || (unsigned char)data->gun->state == 0xFE
                 || (unsigned char)data->gun->state == 0xFD || (unsigned char)data->gun->state == 2) {
                 if (m->b53 != 0) {
-                    func_00213DE0_2B5368(m, 0, 0, random_int_between(7, 13));
+                    FUN_00212f90_2b0e80(m, 0, 0, random_int_between(7, 13));
                 }
                 data->f64 = 1.0f;
                 m->state = 5;
@@ -554,7 +554,7 @@ void FUN_L13_002b41b8(Moby_2B5368 *m) {
         V4_2B5368 v;
         random_vector(&v.x, 0.5f, 1.0f);
         mark_moby_for_removal_cf(m, 0, -1);
-        func_L00_0025F4A8_2B5368(m, &v, &m->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
+        FUN_L00_0025e450_2b0e80(m, &v, &m->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
         delete_moby(m);
         return;
     }

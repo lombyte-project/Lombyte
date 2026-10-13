@@ -2818,98 +2818,98 @@ void FUN_L00_0020e4c8(void);
 void FUN_L00_0020e698(void);
 void FUN_L00_0023e838(int);
 void FUN_L00_002b9310(char *moby);
-extern unsigned char D_0014171B_2B33E8[] __asm__("D_0014161B");
-extern int D_0015EFA4_2B33E8 __asm__("D_0015EEA4");
-extern int D_0015EE84_2B33E8 __asm__("D_0015ED84");
-extern char D_0013CA40_2B5C98[] __asm__("D_0013C940");
-extern char D_0013F450_2B7430[] __asm__("D_0013F350");
-extern float D_0015EE60_2B7430 __asm__("D_0015ED60");
-extern Voice_2B9AD8 D_0013E650_2B9AD8[] __asm__("D_0013E550");
-extern unsigned char D_0013E633_2B9AD8[] __asm__("D_0013E533");
-extern unsigned short D_00141E70_2B9AD8[] __asm__("D_00141D70");
-extern unsigned short D_00141A18_2B9AD8[] __asm__("D_00141918");
+extern unsigned char D_0014161B_2b2100[] __asm__("D_0014161B");
+extern int D_0015EEA4_2b2100a __asm__("D_0015EEA4");
+extern int D_0015ED84_2b2100 __asm__("D_0015ED84");
+extern char D_0013C940_2b2100[] __asm__("D_0013C940");
+extern char D_0013F350_2b2100[] __asm__("D_0013F350");
+extern float D_0015ED60_2b2100 __asm__("D_0015ED60");
+extern Voice_2B9AD8 D_0013E550_2b2100[] __asm__("D_0013E550");
+extern unsigned char D_0013E533_2b2100[] __asm__("D_0013E533");
+extern unsigned short D_00141D70_2b2100[] __asm__("D_00141D70");
+extern unsigned short D_00141918_2b2100[] __asm__("D_00141918");
 extern float D_L00_0017AEBC __attribute__((section(".data")));
-extern int D_L00_00161660_2B9AD8 __asm__("D_L00_00161590");
-extern char D_L00_001670D0_2B9AD8[] __asm__("D_L00_00166FD0");
-extern Light_2B9AD8 D_L00_001803C0_2B9AD8[] __asm__("D_L00_001802C0");
-extern int func_L00_00234718_2B9AD8(int) __asm__("FUN_L00_00233e98");
-extern void func_L00_00203F20_2B9AD8(int, int) __asm__("FUN_L00_00203908");
-extern int func_001F9938_2B9AD8(short *) __asm__("FUN_001f9770");
-extern int func_001F9908_2B9AD8(int *) __asm__("FUN_001f9740");
-extern int func_L00_00234638_2B9AD8(int, int) __asm__("FUN_L00_00233db8");
-extern int func_001F9850_2B9AD8(int) __asm__("FUN_001f96f8");
-extern int func_L00_0023EF78_2B9AD8(void *, float, float, int) __asm__("FUN_L00_0023e5e0");
-extern float func_L00_001FF860_2B9AD8(float, float) __asm__("FUN_001f9e90");
-extern float func_001FA850_2B9AD8(float, float) __asm__("FUN_001fa688");
-extern float func_001F9D10_2B9AD8(void *, void *) __asm__("FUN_001f9b48");
-extern Aim_2B9AD8 *func_L00_0025D390_2B9AD8(void *) __asm__("FUN_002141f8");
-extern float func_001FA888_2B9AD8(int) __asm__("FUN_001fa6c0");
-extern void func_001F9EC0_2B9AD8(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void func_001F9BD8_2B9AD8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void func_L00_00250800_2B9AD8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void func_L00_001FF4B0_2B9AD8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_L00_002BA608_2B9AD8(void *) __asm__("FUN_L00_002b9310");
-extern void func_L00_002BA7C8_2B9AD8(void *) __asm__("FUN_L00_002b94d0");
-extern void func_001F49B0_2B9AD8(void (*)(void), void *) __asm__("FUN_001f4600");
-extern void func_L00_0028EBF0_2B9AD8(int) __asm__("FUN_0022d798");
-extern int func_L00_0028EB98_2B9AD8(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int func_0022ED80_2B9AD8(int, int, void *) __asm__("FUN_0022da68");
-extern void func_L00_0020EB60_2B9AD8(void) __asm__("FUN_L00_0020e4c8");
-extern void func_L00_0020ED30_2B9AD8(void) __asm__("FUN_L00_0020e698");
-extern void func_L00_0023F1D0_2B9AD8(int) __asm__("FUN_L00_0023e838");
+extern int D_L00_00161590_2b2100 __asm__("D_L00_00161590");
+extern char D_L00_00166FD0_2b2100[] __asm__("D_L00_00166FD0");
+extern Light_2B9AD8 D_L00_001802C0_2b2100[] __asm__("D_L00_001802C0");
+extern int FUN_L00_00233e98_2b2100a(int) __asm__("FUN_L00_00233e98");
+extern void FUN_L00_00203908_2b2100(int, int) __asm__("FUN_L00_00203908");
+extern int FUN_001f9770_2b2100a(short *) __asm__("FUN_001f9770");
+extern int FUN_001f9740_2b2100(int *) __asm__("FUN_001f9740");
+extern int FUN_L00_00233db8_2b2100a(int, int) __asm__("FUN_L00_00233db8");
+extern int FUN_001f96f8_2b2100(int) __asm__("FUN_001f96f8");
+extern int FUN_L00_0023e5e0_2b2100(void *, float, float, int) __asm__("FUN_L00_0023e5e0");
+extern float FUN_001f9e90_2b2100(float, float) __asm__("FUN_001f9e90");
+extern float FUN_001fa688_2b2100(float, float) __asm__("FUN_001fa688");
+extern float FUN_001f9b48_2b2100(void *, void *) __asm__("FUN_001f9b48");
+extern Aim_2B9AD8 *FUN_002141f8_2b2100(void *) __asm__("FUN_002141f8");
+extern float FUN_001fa6c0_2b2100(int) __asm__("FUN_001fa6c0");
+extern void FUN_001f9cf8_2b2100(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void FUN_001f9a10_2b2100(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_L00_0024f7c8_2b2100a(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void FUN_001f9bf8_2b2100(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void FUN_L00_002b9310_2b2100(void *) __asm__("FUN_L00_002b9310");
+extern void FUN_L00_002b94d0_2b2100(void *) __asm__("FUN_L00_002b94d0");
+extern void FUN_001f4600_2b2100(void (*)(void), void *) __asm__("FUN_001f4600");
+extern void FUN_0022d798_2b2100(int) __asm__("FUN_0022d798");
+extern int FUN_L00_0028d8c0_2b2100(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int FUN_0022da68_2b2100(int, int, void *) __asm__("FUN_0022da68");
+extern void FUN_L00_0020e4c8_2b2100a(void) __asm__("FUN_L00_0020e4c8");
+extern void FUN_L00_0020e698_2b2100(void) __asm__("FUN_L00_0020e698");
+extern void FUN_L00_0023e838_2b2100a(int) __asm__("FUN_L00_0023e838");
 
 void FUN_L00_002b87e0(struct Moby *m) {
     V_2B9AD8 t;
     Data_2B9AD8 *s = (Data_2B9AD8 *)m->pvars;
     int active;
-    int done = ((struct Hero *)D_0013F450_2B7430)->items[0].state == 3;
+    int done = ((struct Hero *)D_0013F350_2b2100)->items[0].state == 3;
     int ready;
     struct Hero *h;
 
-    if ((controller_state.pressed & ((struct Hero *)D_0013F450_2B7430)->items[0].button_mask) &&
-        !((struct Hero *)D_0013F450_2B7430)->unk20AC) {
+    if ((controller_state.pressed & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) &&
+        !((struct Hero *)D_0013F350_2b2100)->unk20AC) {
         s->reach = 0.8f;
     }
     D_L00_0017AEBC = 0.9f;
     active = 0;
-    ready = func_L00_00234718_2B9AD8(-1);
-    if (D_00141E70_2B9AD8[0] == 0 && D_00141A18_2B9AD8[0] == 0 &&
-        ((struct Hero *)D_0013F450_2B7430)->unk20B5 >= 3) {
-        if ((unsigned int)((struct Hero *)D_0013F450_2B7430)->state.control_mode < 2 || ((struct Hero *)D_0013F450_2B7430)->state.control_mode == 9)
-            func_L00_00203F20_2B9AD8(0x4E30, 0x81);
+    ready = FUN_L00_00233e98_2b2100a(-1);
+    if (D_00141D70_2b2100[0] == 0 && D_00141918_2b2100[0] == 0 &&
+        ((struct Hero *)D_0013F350_2b2100)->unk20B5 >= 3) {
+        if ((unsigned int)((struct Hero *)D_0013F350_2b2100)->state.control_mode < 2 || ((struct Hero *)D_0013F350_2b2100)->state.control_mode == 9)
+            FUN_L00_00203908_2b2100(0x4E30, 0x81);
     }
-    if ((controller_state.held & ((struct Hero *)D_0013F450_2B7430)->items[0].button_mask) && m->state != 4 &&
-        m->state != 0 && !((struct Hero *)D_0013F450_2B7430)->unk20AC && ((struct Hero *)D_0013F450_2B7430)->state.current != 0x72) {
+    if ((controller_state.held & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) && m->state != 4 &&
+        m->state != 0 && !((struct Hero *)D_0013F350_2b2100)->unk20AC && ((struct Hero *)D_0013F350_2b2100)->state.current != 0x72) {
         if (s->timer == 0) {
             if (ready > 0) {
-                if (func_001F9938_2B9AD8(&s->tick)) {
-                    func_001F9938_2B9AD8(&s->f44);
-                    func_001F9938_2B9AD8(&s->f46);
-                    func_L00_00234638_2B9AD8(-1, 1);
-                    s->tick = func_001F9850_2B9AD8(10);
+                if (FUN_001f9770_2b2100a(&s->tick)) {
+                    FUN_001f9770_2b2100a(&s->f44);
+                    FUN_001f9770_2b2100a(&s->f46);
+                    FUN_L00_00233db8_2b2100a(-1, 1);
+                    s->tick = FUN_001f96f8_2b2100(10);
                 }
                 if (s->light == -1) {
-                    s->light = func_L00_0023EF78_2B9AD8(&m->pos, 7.5f, 0.0f, 0);
-                } else if (s->glow < func_001F9850_2B9AD8(10)) {
+                    s->light = FUN_L00_0023e5e0_2b2100(&m->pos, 7.5f, 0.0f, 0);
+                } else if (s->glow < FUN_001f96f8_2b2100(10)) {
                     s->glow++;
                 }
                 active = 1;
                 if (s->target) {
-                    if (2.0943f < func_001FA850_2B9AD8(((struct Hero *)D_0013F450_2B7430)->motion.rot.f[2],
-                            func_L00_001FF860_2B9AD8(s->target->pos.x - ((struct Hero *)D_0013F450_2B7430)->motion.pos.f[0],
-                                                     s->target->pos.y - ((struct Hero *)D_0013F450_2B7430)->motion.pos.f[1])) ||
+                    if (2.0943f < FUN_001fa688_2b2100(((struct Hero *)D_0013F350_2b2100)->motion.rot.f[2],
+                            FUN_001f9e90_2b2100(s->target->pos.x - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0],
+                                                     s->target->pos.y - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1])) ||
                         !s->target->visible ||
-                        20.0f < func_001F9D10_2B9AD8(&s->target->pos, &((struct Hero *)D_0013F450_2B7430)->motion.pos)) {
+                        20.0f < FUN_001f9b48_2b2100(&s->target->pos, &((struct Hero *)D_0013F350_2b2100)->motion.pos)) {
                         s->target = 0;
                         s->lock = 0;
                     }
                 }
                 if (s->target2) {
-                    if (2.0943f < func_001FA850_2B9AD8(((struct Hero *)D_0013F450_2B7430)->motion.rot.f[2],
-                            func_L00_001FF860_2B9AD8(s->target2->pos.x - ((struct Hero *)D_0013F450_2B7430)->motion.pos.f[0],
-                                                     s->target2->pos.y - ((struct Hero *)D_0013F450_2B7430)->motion.pos.f[1])) ||
+                    if (2.0943f < FUN_001fa688_2b2100(((struct Hero *)D_0013F350_2b2100)->motion.rot.f[2],
+                            FUN_001f9e90_2b2100(s->target2->pos.x - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0],
+                                                     s->target2->pos.y - ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1])) ||
                         !s->target2->visible ||
-                        20.0f < func_001F9D10_2B9AD8(&s->target2->pos, &((struct Hero *)D_0013F450_2B7430)->motion.pos)) {
+                        20.0f < FUN_001f9b48_2b2100(&s->target2->pos, &((struct Hero *)D_0013F350_2b2100)->motion.pos)) {
                         s->target2 = 0;
                         s->lock2 = 0;
                     }
@@ -2922,10 +2922,10 @@ void FUN_L00_002b87e0(struct Moby *m) {
                     Aim_2B9AD8 *a;
                     short n;
                     s->hold++;
-                    a = func_L00_0025D390_2B9AD8(s->target);
+                    a = FUN_002141f8_2b2100(s->target);
                     if (a && a->kind == 1) lim = 5;
                     n = s->hold;
-                    if (!(n < func_001F9850_2B9AD8(lim))) {
+                    if (!(n < FUN_001f96f8_2b2100(lim))) {
                         s->target = 0;
                         s->lock = 0;
                     }
@@ -2937,45 +2937,45 @@ void FUN_L00_002b87e0(struct Moby *m) {
                     Aim_2B9AD8 *a;
                     short n;
                     s->hold2++;
-                    a = func_L00_0025D390_2B9AD8(s->target2);
+                    a = FUN_002141f8_2b2100(s->target2);
                     if (a && a->kind == 1) lim = 5;
                     n = s->hold2;
-                    if (!(n < func_001F9850_2B9AD8(lim))) {
+                    if (!(n < FUN_001f96f8_2b2100(lim))) {
                         s->target2 = 0;
                         s->lock2 = 0;
                     }
                 } else {
                     s->hold2 = 0;
                 }
-                s->reach += (func_001FA888_2B9AD8(D_0013E633_2B9AD8[0]) * 6.0f + 12.0f - s->reach) * (D_0015EE60_2B7430 * 0.07f);
-                if (((struct Hero *)D_0013F450_2B7430)->state.current == 1) {
+                s->reach += (FUN_001fa6c0_2b2100(D_0013E533_2b2100[0]) * 6.0f + 12.0f - s->reach) * (D_0015ED60_2b2100 * 0.07f);
+                if (((struct Hero *)D_0013F350_2b2100)->state.current == 1) {
                     t.f.x = 1.2f;
                     t.f.y = 0.0f;
                     t.f.z = 0.0f;
-                    func_001F9EC0_2B9AD8(&t, &t, D_L00_001670D0_2B9AD8);
+                    FUN_001f9cf8_2b2100(&t, &t, D_L00_00166FD0_2b2100);
                     s->pos.f.z = t.f.z + m->pos.z;
-                    s->pos.f.x = t.f.x + ((struct Hero *)D_0013F450_2B7430)->motion.pos.f[0];
-                    s->pos.f.y = t.f.y + ((struct Hero *)D_0013F450_2B7430)->motion.pos.f[1];
+                    s->pos.f.x = t.f.x + ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0];
+                    s->pos.f.y = t.f.y + ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1];
                     t.f.x = s->reach;
                     t.f.y = 0.0f;
                     t.f.z = 0.0f;
-                    func_001F9EC0_2B9AD8(&t, &t, D_L00_001670D0_2B9AD8);
-                    func_001F9BD8_2B9AD8(&s->tip, &s->pos, &t);
-                } else if (((struct Hero *)D_0013F450_2B7430)->unk22C8 == 1) {
-                    func_L00_00250800_2B9AD8(m, 0, &s->pos);
+                    FUN_001f9cf8_2b2100(&t, &t, D_L00_00166FD0_2b2100);
+                    FUN_001f9a10_2b2100(&s->tip, &s->pos, &t);
+                } else if (((struct Hero *)D_0013F350_2b2100)->unk22C8 == 1) {
+                    FUN_L00_0024f7c8_2b2100a(m, 0, &s->pos);
                     t.f.x = 0.0f;
                     t.f.y = -s->reach;
                     t.f.z = 0.0f;
-                    func_001F9EC0_2B9AD8(&t, &t, &m->rot_row0);
-                    func_001F9BD8_2B9AD8(&s->tip, &s->pos, &t);
+                    FUN_001f9cf8_2b2100(&t, &t, &m->rot_row0);
+                    FUN_001f9a10_2b2100(&s->tip, &s->pos, &t);
                 } else {
-                    func_L00_00250800_2B9AD8(m, 0, &s->pos);
-                    func_L00_001FF4B0_2B9AD8(&s->tip, D_0013F450_2B7430 + 0x640, s->reach);
-                    func_001F9BD8_2B9AD8(&s->tip, &s->pos, &s->tip);
+                    FUN_L00_0024f7c8_2b2100a(m, 0, &s->pos);
+                    FUN_001f9bf8_2b2100(&s->tip, D_0013F350_2b2100 + 0x640, s->reach);
+                    FUN_001f9a10_2b2100(&s->tip, &s->pos, &s->tip);
                 }
-                func_L00_002BA608_2B9AD8(m);
-                func_L00_002BA7C8_2B9AD8(m);
-                func_001F49B0_2B9AD8(FUN_L00_002ba970, m);
+                FUN_L00_002b9310_2b2100(m);
+                FUN_L00_002b94d0_2b2100(m);
+                FUN_001f4600_2b2100(FUN_L00_002ba970, m);
             } else {
                 s->target = 0;
                 s->target2 = 0;
@@ -2992,23 +2992,23 @@ void FUN_L00_002b87e0(struct Moby *m) {
         s->lock2 = 0;
     }
     if (!active) {
-        D_L00_00161660_2B9AD8 = 1;
+        D_L00_00161590_2b2100 = 1;
         if (s->glow > 0) s->glow--;
         if (s->sound != -1) {
-            Voice_2B9AD8 *v = &D_0013E650_2B9AD8[s->sound];
-            if (v[1].owner == m && v[1].active) func_L00_0028EBF0_2B9AD8(s->sound);
+            Voice_2B9AD8 *v = &D_0013E550_2b2100[s->sound];
+            if (v[1].owner == m && v[1].active) FUN_0022d798_2b2100(s->sound);
         }
         s->sound = -1;
-    } else if (!func_L00_0028EB98_2B9AD8(m, s->sound)) {
-        s->sound = func_0022ED80_2B9AD8(4, 4, m);
+    } else if (!FUN_L00_0028d8c0_2b2100(m, s->sound)) {
+        s->sound = FUN_0022da68_2b2100(4, 4, m);
     }
     if (!s->target || s->target->state == 0xFE || s->target->state == 0xFD || !(s->target->flags & 0x1000)) s->lock = 1;
     if (!s->target2 || s->target2->state == 0xFE || s->target2->state == 0xFD || !(s->target2->flags & 0x1000)) s->lock2 = 1;
     switch (m->state) {
     case 0:
-        s->timer = func_001F9850_2B9AD8(16);
-        s->light = func_L00_0023EF78_2B9AD8(&s->pos, 0.0f, 0.0f, 0);
-        D_L00_00161660_2B9AD8 = 1;
+        s->timer = FUN_001f96f8_2b2100(16);
+        s->light = FUN_L00_0023e5e0_2b2100(&s->pos, 0.0f, 0.0f, 0);
+        D_L00_00161590_2b2100 = 1;
         m->state = 1;
         s->f3E = 20;
         s->sound = -1;
@@ -3020,19 +3020,19 @@ void FUN_L00_002b87e0(struct Moby *m) {
         s->f44 = 0;
         break;
     case 1:
-        func_001F9908_2B9AD8(&s->timer);
+        FUN_001f9740_2b2100(&s->timer);
         if (active) {
-            func_L00_0020EB60_2B9AD8();
+            FUN_L00_0020e4c8_2b2100a();
             m->state = 3;
         }
-        if ((controller_state.pressed & (h = (struct Hero *)D_0013F450_2B7430)->items[0].button_mask) && !h->unk20AC) {
+        if ((controller_state.pressed & (h = (struct Hero *)D_0013F350_2b2100)->items[0].button_mask) && !h->unk20AC) {
             if (active) {
-                Stats_2B9AD8 *st = (Stats_2B9AD8 *)(D_0014171B_2B33E8 + 0x65);
+                Stats_2B9AD8 *st = (Stats_2B9AD8 *)(D_0014161B_2b2100 + 0x65);
                 if (st->uses < 65535) st->uses++;
-                if (func_001F9850_2B9AD8(D_0015EFA4_2B33E8) / 600 > st->longest)
-                    st->longest = func_001F9850_2B9AD8(D_0015EFA4_2B33E8) / 600;
-                st->levels = (st->levels | (1 << D_0015EE84_2B33E8)) | 0x80000000;
-                func_L00_0020EB60_2B9AD8();
+                if (FUN_001f96f8_2b2100(D_0015EEA4_2b2100a) / 600 > st->longest)
+                    st->longest = FUN_001f96f8_2b2100(D_0015EEA4_2b2100a) / 600;
+                st->levels = (st->levels | (1 << D_0015ED84_2b2100)) | 0x80000000;
+                FUN_L00_0020e4c8_2b2100a();
                 m->state = 3;
             } else {
                 s->target = 0;
@@ -3040,33 +3040,33 @@ void FUN_L00_002b87e0(struct Moby *m) {
                 s->lock = 0;
                 s->lock2 = 0;
                 m->state = 1;
-                func_0022ED80_2B9AD8(0, 0, m);
-                func_L00_0020ED30_2B9AD8();
+                FUN_0022da68_2b2100(0, 0, m);
+                FUN_L00_0020e698_2b2100();
             }
         }
         break;
     case 2:
         break;
     case 3:
-        if ((controller_state.released & ((struct Hero *)D_0013F450_2B7430)->items[0].button_mask) || !active ||
-            ((struct Hero *)D_0013F450_2B7430)->unk20AC) {
-            h = (struct Hero *)D_0013F450_2B7430;
-            if (func_001F9850_2B9AD8(70) < h->unk1BC) {
-                if (((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->uses < 65535) ((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->uses++;
+        if ((controller_state.released & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) || !active ||
+            ((struct Hero *)D_0013F350_2b2100)->unk20AC) {
+            h = (struct Hero *)D_0013F350_2b2100;
+            if (FUN_001f96f8_2b2100(70) < h->unk1BC) {
+                if (((Stats2_2B9AD8 *)(D_0014161B_2b2100 + 0x22D))->uses < 65535) ((Stats2_2B9AD8 *)(D_0014161B_2b2100 + 0x22D))->uses++;
             }
-            if (func_001F9850_2B9AD8(D_0015EFA4_2B33E8) / 600 > ((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->longest)
-                ((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->longest = func_001F9850_2B9AD8(D_0015EFA4_2B33E8) / 600;
-            ((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->levels = (((Stats2_2B9AD8 *)(D_0014171B_2B33E8 + 0x22D))->levels | (1 << D_0015EE84_2B33E8)) | 0x80000000;
-            if (((struct Hero *)D_0013F450_2B7430)->unk1BC < func_001F9850_2B9AD8(30))
-                ((struct Hero *)D_0013F450_2B7430)->unk20B5++;
+            if (FUN_001f96f8_2b2100(D_0015EEA4_2b2100a) / 600 > ((Stats2_2B9AD8 *)(D_0014161B_2b2100 + 0x22D))->longest)
+                ((Stats2_2B9AD8 *)(D_0014161B_2b2100 + 0x22D))->longest = FUN_001f96f8_2b2100(D_0015EEA4_2b2100a) / 600;
+            ((Stats2_2B9AD8 *)(D_0014161B_2b2100 + 0x22D))->levels = (((Stats2_2B9AD8 *)(D_0014161B_2b2100 + 0x22D))->levels | (1 << D_0015ED84_2b2100)) | 0x80000000;
+            if (((struct Hero *)D_0013F350_2b2100)->unk1BC < FUN_001f96f8_2b2100(30))
+                ((struct Hero *)D_0013F350_2b2100)->unk20B5++;
             else
-                ((struct Hero *)D_0013F450_2B7430)->unk20B5 = 0;
+                ((struct Hero *)D_0013F350_2b2100)->unk20B5 = 0;
             s->target = 0;
             s->target2 = 0;
             s->lock = 0;
             s->lock2 = 0;
             s->reach = 0.0f;
-            func_L00_0020ED30_2B9AD8();
+            FUN_L00_0020e698_2b2100();
             m->state = 1;
         }
         break;
@@ -3080,18 +3080,18 @@ void FUN_L00_002b87e0(struct Moby *m) {
         qzero(&t);
         t.f.x = 2.0f;
         t.f.z = 2.0f;
-        func_001F9EC0_2B9AD8(&t, &t, D_0013F450_2B7430 + 0x640);
-        D_L00_001803C0_2B9AD8[s->light].pos.f.x = ((struct Hero *)D_0013F450_2B7430)->motion.pos.f[0] + t.f.x;
-        D_L00_001803C0_2B9AD8[s->light].pos.f.y = ((struct Hero *)D_0013F450_2B7430)->motion.pos.f[1] + t.f.y;
-        D_L00_001803C0_2B9AD8[s->light].pos.f.z = ((struct Hero *)D_0013F450_2B7430)->motion.pos.f[2] + t.f.z;
-        D_L00_001803C0_2B9AD8[s->light].pos.f.w = 7.5f;
-        k = func_001FA888_2B9AD8(s->glow) / (float)func_001F9850_2B9AD8(10);
-        D_L00_001803C0_2B9AD8[s->light].z = k;
+        FUN_001f9cf8_2b2100(&t, &t, D_0013F350_2b2100 + 0x640);
+        D_L00_001802C0_2b2100[s->light].pos.f.x = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0] + t.f.x;
+        D_L00_001802C0_2b2100[s->light].pos.f.y = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1] + t.f.y;
+        D_L00_001802C0_2b2100[s->light].pos.f.z = ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[2] + t.f.z;
+        D_L00_001802C0_2b2100[s->light].pos.f.w = 7.5f;
+        k = FUN_001fa6c0_2b2100(s->glow) / (float)FUN_001f96f8_2b2100(10);
+        D_L00_001802C0_2b2100[s->light].z = k;
         k = k * 0.7f;
-        D_L00_001803C0_2B9AD8[s->light].y = k;
-        D_L00_001803C0_2B9AD8[s->light].x = D_L00_001803C0_2B9AD8[s->light].y;
+        D_L00_001802C0_2b2100[s->light].y = k;
+        D_L00_001802C0_2b2100[s->light].x = D_L00_001802C0_2b2100[s->light].y;
         if (done && s->light != -1) {
-            func_L00_0023F1D0_2B9AD8(s->light);
+            FUN_L00_0023e838_2b2100a(s->light);
             s->light = -1;
         }
     }
