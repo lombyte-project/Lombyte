@@ -401,8 +401,8 @@ void FUN_L12_00303370(void *moby) {
     float position[4] __attribute__((aligned(16)));
 
     i = 0;
-    offset = 0;
     do {
+        offset = i * 4;
         offset = *(int *)(data + offset + 0x40);
         if (offset != -1) {
             struct Moby *other = (struct Moby *)(D_L12_0015FFD8_p + offset * 0x100);
