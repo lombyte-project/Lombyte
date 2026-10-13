@@ -480,7 +480,7 @@ extern void subtract_vector_xyz_44c0(void *, void *, void *) __asm__("FUN_001f9a
 extern void normalize_vector_xyz_44c0(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz_44c0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 scale_game_frames_44c0(s32) __asm__("FUN_001f96f8");
-extern void approach_value_44c0(void *, f32, f32) __asm__("FUN_00213ed8");
+extern f32 approach_value_44c0(void *, f32, f32) __asm__("FUN_00213ed8");
 extern void mark_moby_for_removal_44c0(struct Moby *) __asm__("FUN_0020c828");
 extern void allocate_voice_for_target_entry_44c0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void FUN_L00_00258278_44c0(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
