@@ -1923,7 +1923,7 @@ void FUN_L06_002f2250(void) {
         float spacing = 0.5235988f;
         float max_angle = 1.7453293f;
         GbMoby **target_list = targets;
-        GbMoby **selected_list = selected;
+
         i = 0;
         do {
             int index, weight;
@@ -1970,7 +1970,7 @@ void FUN_L06_002f2250(void) {
                 }
                 if (best_moby == 0) break;
                 *(GbMoby **)((char *)best_moby->vars + 0x178) = target;
-                selected_list[count] = best_moby;
+                selected[count] = best_moby;
             }
             if (count != 0) {
                 angle = (float)(count - 1) * spacing;
