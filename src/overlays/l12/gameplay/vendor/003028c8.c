@@ -1073,8 +1073,8 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern int collect_mobies_in_sphere(void *, int, struct Moby *, void *) __asm__("FUN_L00_001f2868");
-extern int coll_sphere(void *, int, struct Moby *) __asm__("FUN_L00_001f0d60");
+extern int collect_mobies_in_sphere(void *, int, struct Moby *, void *, float) __asm__("FUN_L00_001f2868");
+extern int coll_sphere(void *, int, struct Moby *, float) __asm__("FUN_L00_001f0d60");
 extern float FUN_L00_0025b8c0(float *, float *, float, float, float, float);
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
 extern void FUN_L00_00257470(struct Moby *, int, int);
@@ -1164,14 +1164,14 @@ void FUN_L12_00304e00(struct Moby *moby) {
             direction[3] = 5627.925f;
             direction[2] = 1.2f;
             func_L00_0025A8C0_304310(hit_info, moby, 0x10001, 1.0f, direction);
-            *(u128 *)position = *(u128 *)position_source;
-            position[2] += 0.4f;
-            if (!collect_mobies_in_sphere(position, 0x10, moby, hit_info) ||
+            *(volatile u128 *)position = *(volatile u128 *)position_source;
+            ((volatile float *)position)[2] += 0.4f;
+            if (!collect_mobies_in_sphere(position, 0x10, moby, hit_info, 0.4f) ||
                 !*(int *)0x001742d8 || *(short *)(*(int *)0x001742d8 + 0xa6) == 0x4f5 ||
                 *(int *)0x001742d8 == *(int *)((char *)moby + 0xb8)) {
-                *(u128 *)position = *(u128 *)position_source;
-                position[2] += 0.35f;
-                if (coll_sphere(position, 0, moby)) moby->state = 2;
+                *(volatile u128 *)position = *(volatile u128 *)position_source;
+                ((volatile float *)position)[2] += 0.35f;
+                if (coll_sphere(position, 0, moby, 0.35f)) moby->state = 2;
             } else moby->state = 2;
         }
     } break;
