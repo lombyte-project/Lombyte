@@ -588,9 +588,6 @@ void FUN_L18_002f9c20(struct Moby *m) {
     }
     draw_9c20(&pk, 0, 0);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f9eb8.s", FUN_L18_002f9eb8);
-#else
 extern float D_L18_0016252C_9eb8 __asm__("D_L18_0016252C");
 extern float D_L18_00162514_9eb8 __asm__("D_L18_00162514") __attribute__((sda));
 extern float D_L18_00162518_9eb8 __asm__("D_L18_00162518") __attribute__((sda));
@@ -604,8 +601,6 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     float mat[4][4];
     float up[4];
     Vec4 vertices[4];
-    float scale_z;
-    float scale_x;
     int i = 0;
     int color;
 
@@ -626,8 +621,6 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     norm_9c20(mat[2], mat[2], 1.0f);
     cross_9c20(mat[1], mat[0], mat[2]);
 
-    scale_z = D_L18_00162514_9eb8;
-    scale_x = D_L18_0016252C_9eb8;
     color = D_L18_00162504_9eb8 | 0xFF000000;
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
@@ -644,10 +637,10 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     pk.col[0] = color;
     i = 0;
     do {
-        qcopy(&vertices[i], D_L18_001DFBD0_9eb8[i]);
+        qcopy_nc(&vertices[i], D_L18_001DFBD0_9eb8[i]);
         {
-            vertices[i].f[2] *= scale_z;
-            vertices[i].f[0] *= scale_x;
+            vertices[i].f[2] *= D_L18_00162514_9eb8;
+            vertices[i].f[0] *= D_L18_0016252C_9eb8;
         }
         i++;
     } while (i < 4);
@@ -656,19 +649,16 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     }
     draw_9c20(&pk, 0, 0);
 
-    scale_z = D_L18_00162518_9eb8;
-    scale_x = D_L18_0016252C_9eb8;
-    color = D_L18_00162510_9eb8 | 0x7F000000;
-    pk.col[3] = color;
-    pk.col[2] = color;
-    pk.col[1] = color;
-    pk.col[0] = color;
+    pk.col[3] = D_L18_00162510_9eb8 | 0x7F000000;
+    pk.col[2] = pk.col[3];
+    pk.col[1] = pk.col[3];
+    pk.col[0] = pk.col[3];
     i = 0;
     do {
-        qcopy(&vertices[i], D_L18_001DFBD0_9eb8[i]);
+        qcopy_nc(&vertices[i], D_L18_001DFBD0_9eb8[i]);
         {
-            vertices[i].f[2] *= scale_z;
-            vertices[i].f[0] *= scale_x;
+            vertices[i].f[2] *= D_L18_00162518_9eb8;
+            vertices[i].f[0] *= D_L18_0016252C_9eb8;
         }
         i++;
     } while (i < 4);
@@ -677,19 +667,16 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     }
     draw_9c20(&pk, 0, 0);
 
-    scale_z = D_L18_0016251C_9eb8;
-    scale_x = D_L18_0016252C_9eb8;
-    color = D_L18_00162510_9eb8 | 0x7F000000;
-    pk.col[3] = color;
-    pk.col[2] = color;
-    pk.col[1] = color;
-    pk.col[0] = color;
+    pk.col[3] = D_L18_00162510_9eb8 | 0x7F000000;
+    pk.col[2] = pk.col[3];
+    pk.col[1] = pk.col[3];
+    pk.col[0] = pk.col[3];
     i = 0;
     do {
-        qcopy(&vertices[i], D_L18_001DFBD0_9eb8[i]);
+        qcopy_nc(&vertices[i], D_L18_001DFBD0_9eb8[i]);
         {
-            vertices[i].f[2] *= scale_z;
-            vertices[i].f[0] *= scale_x;
+            vertices[i].f[2] *= D_L18_0016251C_9eb8;
+            vertices[i].f[0] *= D_L18_0016252C_9eb8;
         }
         i++;
     } while (i < 4);
@@ -698,7 +685,6 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     }
     draw_9c20(&pk, 0, 0);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
