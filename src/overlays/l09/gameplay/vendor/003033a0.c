@@ -1302,11 +1302,9 @@ typedef struct {
     u8 padC4[8];
     f32 lag;
 } PathFlyerVars_00309c08;
-extern void FUN_L00_00262b00(f32, f32, struct Moby *, f32 *, f32 *);
-extern void FUN_L00_00262b80(struct Moby *, f32 *, f32 *, f32, f32, f32);
 extern void attach_manipulator(struct Moby *, s32, void *) __asm__("FUN_0020cb10");
 extern void scale_vector_00309c08(f32, void *, void *) __asm__("FUN_001f9a68");
-extern s32 check_voice_target_00309c08(void *, s32, void *) __asm__("FUN_L00_0028d8c0");
+extern s32 check_voice_target_00309c08(void *, s32) __asm__("FUN_L00_0028d8c0");
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 extern struct Moby *D_0013F64C __attribute__((section(".data")));
 extern s16 D_0013F65E __attribute__((section(".data")));
@@ -1327,7 +1325,7 @@ void FUN_L09_00309c08(struct Moby *moby) {
     s32 voice;
 
     scale_vector_00309c08(-1.0f, &original, &moby->pos);
-    *(OvlQuad *)&rotation = *(OvlQuad *)&moby->rot;
+    qcopy(&rotation, &moby->rot);
     if (vars == 0) return;
 
     switch (moby->state) {
@@ -1338,18 +1336,21 @@ void FUN_L09_00309c08(struct Moby *moby) {
         *(s32 *)((u8 *)vars + 0xC8) = 0;
         vars->lag = 0.0f;
         if (*(s32 *)((u8 *)vars + 0xA0) != 0) {
+            PathNodes_00309c08 *path;
+            Vec4 *endpoint;
             attach_manipulator(moby, 0, (u8 *)vars + 0x60);
             path = (PathNodes_00309c08 *)D_L09_001B0630[vars->path];
             moby->state = 1;
             if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
                 vars->dir = -1;
                 vars->node = path->count - 2;
-                qcopy(&moby->pos, &path->node[path->count - 1]);
+                endpoint = &path->node[path->count - 1];
             } else {
                 vars->node = 1;
-                qcopy(&moby->pos, &path->node[0]);
+                endpoint = &path->node[0];
                 vars->dir = 1;
             }
+            *(OvlQuad *)&moby->pos = *(OvlQuad *)endpoint;
             moby->rot.z = atan2_f(path->node[vars->node].f[0] - moby->pos.x,
                                    path->node[vars->node].f[1] - moby->pos.y);
         }
@@ -1358,17 +1359,17 @@ void FUN_L09_00309c08(struct Moby *moby) {
     case 2:
         vars->lag += (1.0f - vars->lag) * 0.01f;
         FUN_L00_00262b00(vars->lag * 0.14f, frame_time * 0.5235988f,
-                          moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
-        FUN_L00_00262b80(moby, (f32 *)((u8 *)vars + 0xD0), (f32 *)((u8 *)vars + 0xD4),
+                          (char *)moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
+        FUN_L00_00262b80(moby, (char *)vars + 0xD0, (char *)vars + 0xD4,
                           vars->lag * 0.08726646f, frame_time * 0.31415927f,
                           frame_time * 0.4886922f);
-        if (D_0013F64C != moby) moby->state = 1;
+        if (hero.ground_moby != moby) moby->state = 1;
         break;
     case 1:
         vars->lag += (1.0f - vars->lag) * 0.01f;
         FUN_L00_00262b00(vars->lag * 0.14f, frame_time * 0.5235988f,
-                          moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
-        FUN_L00_00262b80(moby, (f32 *)((u8 *)vars + 0xD0), (f32 *)((u8 *)vars + 0xD4),
+                          (char *)moby, (f32 *)((u8 *)vars + 0xD8), (f32 *)((u8 *)vars + 0xDC));
+        FUN_L00_00262b80(moby, (char *)vars + 0xD0, (char *)vars + 0xD4,
                           vars->lag * 0.08726646f, frame_time * 0.31415927f,
                           frame_time * 0.4886922f);
         if (*(s32 *)((u8 *)vars + 0xC8) != 0) {
@@ -1377,7 +1378,7 @@ void FUN_L09_00309c08(struct Moby *moby) {
                 moby->state = 3;
             }
         }
-        if (D_0013F64C == moby && D_0013F65E == 0) {
+        if (hero.ground_moby == moby && hero.air_frames.s == 0) {
             *(s32 *)((u8 *)vars + 0xC8) = 1;
             moby->state = 3;
         }
@@ -1385,27 +1386,33 @@ void FUN_L09_00309c08(struct Moby *moby) {
     case 3:
         if ((D_L09_0015F5CC & 7) == (((s32)moby >> 8) & 7)) {
             if (*(s32 *)((u8 *)vars + 0xC4) == -1 ||
-                (!check_voice_target_00309c08(moby, *(s32 *)((u8 *)vars + 0xC4), &moby->pos) &&
+                (!check_voice_target_00309c08(moby, *(s32 *)((u8 *)vars + 0xC4)) &&
                  *(s32 *)((u8 *)vars + 0xC4) == -1)) {
                 *(s32 *)((u8 *)vars + 0xC4) = allocate_voice_for_target_entry(0, 4, moby);
             }
         }
         if (vars->yaw_offset == 0.0f) {
             if (vars->dir < 0) {
-                if (*(s32 *)((u8 *)vars + 0xB4) != -1 && is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)vars + 0xB4)) &&
+                if (*(s32 *)((u8 *)vars + 0xB4) == -1 ||
+                    !is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)vars + 0xB4)))
+                    goto test_forward;
+                if (!(vector_distance(&moby->pos, &path->node[path->count - 1]) > 8.0f) ||
+                    !(vector_distance(&moby->pos, &path->node[0]) > 8.0f))
+                    goto advance_path;
+                vars->dir = 1;
+                vars->yaw_offset = 3.1415927f;
+            } else {
+            test_forward:
+                if (vars->dir > 0 && *(s32 *)((u8 *)vars + 0xB0) != -1 &&
+                    is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)vars + 0xB0)) &&
                     vector_distance(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
                     vector_distance(&moby->pos, &path->node[0]) > 8.0f) {
-                    vars->dir = 1;
+                    vars->dir = -1;
                     vars->yaw_offset = 3.1415927f;
                 }
-            } else if (vars->dir > 0 && *(s32 *)((u8 *)vars + 0xB0) != -1 &&
-                       is_point_inside_clip_volume(D_0013F3D0, *(s32 *)((u8 *)vars + 0xB0)) &&
-                       vector_distance(&moby->pos, &path->node[path->count - 1]) > 8.0f &&
-                       vector_distance(&moby->pos, &path->node[0]) > 8.0f) {
-                vars->dir = -1;
-                vars->yaw_offset = 3.1415927f;
             }
         }
+    advance_path:
         if (FUN_L09_0030a298(moby)) {
             voice = *(s32 *)((u8 *)vars + 0xC4);
             if (voice != -1) {
