@@ -213,148 +213,159 @@ void FUN_L00_002b3458(unsigned char *m) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b3628.s", FUN_L00_002b3628);
-#else
+#include "rnc/gameplay/entities/moby.h"
 typedef struct {
-    f32 f[4];
-} __attribute__((aligned(16))) V_2b3628;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 w;
+} __attribute__((aligned(16))) Vec4A_2b3628;
 
-typedef struct {
-    V_2b3628 points[4];
-    u32 colors[4];
-    f32 texcoords[8];
-    u64 texture[4];
-} Quad_2b3628;
+typedef int Q_2b3628 __attribute__((mode(TI)));
+typedef struct { float pos[4][4]; unsigned int col[4]; float uv[4][2]; unsigned long tag[4]; } Quad_2b3628;
+typedef struct { int a, b; } Ids_2b3628;
+typedef struct { float x, y, z; } P3_2b3628;
+typedef struct { float u, v; } UV_2b3628;
+typedef struct Child_2b3628 { char pad0[0xA6]; short cls; } Child_2b3628;
+typedef struct Data_2b3628 { int f0; int f4; Child_2b3628 *child; char padC[0x14]; float f20; char pad24[8]; float f2C; } Data_2b3628;
 
-extern u8 D_L00_00161488_2b3628[8] __asm__("D_L00_00161488");
-extern u8 D_L00_00161490_2b3628[8] __asm__("D_L00_00161490");
-extern V_2b3628 D_L00_00166DC0_2b3628 __asm__("D_L00_00166DC0");
-extern V_2b3628 D_0013F5E0_2b3628 __asm__("D_0013F5E0");
-extern V_2b3628 D_L00_001DA9E0_2b3628[4] __asm__("D_L00_001DA9E0");
-extern V_2b3628 D_L00_001DAA20_2b3628[4] __asm__("D_L00_001DAA20");
-extern f32 D_L00_001DAA60_2b3628[8] __asm__("D_L00_001DAA60");
-extern V_2b3628 D_L00_001D9470_2b3628[196] __asm__("D_L00_001D9470");
-extern f32 D_L00_001DA0B0_2b3628[392] __asm__("D_L00_001DA0B0");
-extern f32 D_L00_001DAA80_2b3628[196][3] __asm__("D_L00_001DAA80");
-void FUN_0024f850_2b3628(void *, s32, void *, void *) __asm__("FUN_0020cd48");
-void FUN_001ff2a8_2b3628(void *, void *, void *) __asm__("FUN_001f9a28");
-void FUN_001ff500_2b3628(f32, void *, void *) __asm__("FUN_001f9bf8");
-void FUN_001ff3c0_2b3628(void *, void *, void *) __asm__("FUN_001f9ad8");
-void FUN_001ff9e8_2b3628(void *) __asm__("FUN_001f9fc8");
-void FUN_001ffdd8_2b3628(void *, void *, void *) __asm__("FUN_001fa378");
-u64 FUN_001f9298_2b3628(s32) __asm__("FUN_001f44b8");
-void FUN_001ff300_2b3628(f32, void *, void *) __asm__("FUN_001f9a68");
-f32 FUN_00257be8_2b3628(f32, f32) __asm__("FUN_002132a8");
-void FUN_001fd228_2b3628(void *, void *, s32) __asm__("FUN_001f7d30");
-void FUN_001ff278_2b3628(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_001ff6f8_2b3628(void *, void *, void *) __asm__("FUN_001f9d20");
-void FUN_002a0ba8_2b3628(s32, u64) __asm__("FUN_00233980");
-void FUN_001fc740_2b3628(void) __asm__("FUN_001f76a0");
-void FUN_L00_001fde98_2b3628(s32, void *, void *, void *, s32) __asm__("FUN_L00_001fde98");
+extern Ids_2b3628 D_L00_00161488_2b3628 __asm__("D_L00_00161488") __attribute__((section(".data")));
+extern Ids_2b3628 D_L00_00161490_2b3628 __asm__("D_L00_00161490") __attribute__((section(".data")));
+extern float D_L00_001DA9E0_2b3628[][4] __asm__("D_L00_001DA9E0");
+extern float D_L00_001DAA60_2b3628[][2] __asm__("D_L00_001DAA60");
+extern float D_L00_001DAA20_2b3628[][4] __asm__("D_L00_001DAA20");
+extern float D_L00_00166DC0_2b3628[] __asm__("D_L00_00166DC0");
+extern UV_2b3628 D_L00_001DA0B0_2b3628[] __asm__("D_L00_001DA0B0");
+extern float D_L00_001D9470_2b3628[][4] __asm__("D_L00_001D9470");
+extern P3_2b3628 D_L00_001DAA80_2b3628[] __asm__("D_L00_001DAA80");
+extern int D_L00_001DA6D0_2b3628[] __asm__("D_L00_001DA6D0");
+extern void func_0020DB98_2b3628(void *, int, void *, void *) __asm__("FUN_0020cd48");
+extern void func_001F9BF0_2b3628(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void func_L00_001FF4B0_2b3628(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void func_001F9CA0_2b3628(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void func_001FA190_2b3628(void *) __asm__("FUN_001f9fc8");
+extern void func_001FA540_2b3628(void *, void *, void *) __asm__("FUN_001fa378");
+extern long func_001F4868_2b3628(int) __asm__("FUN_001f44b8");
+extern void func_001F9C30_2b3628(void *, void *, float) __asm__("FUN_001f9a68");
+extern float func_002140F8_2b3628(float, float) __asm__("FUN_002132a8");
+extern void func_L00_001FD1D8_2b3628(void *, void *, int) __asm__("FUN_001f7d30");
+extern void func_001F9BD8_2b3628(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void func_001F9EE8_2b3628(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void func_00234C98_2b3628(int, long) __asm__("FUN_00233980");
+extern void func_001F7868_2b3628(void) __asm__("FUN_001f76a0");
+extern void func_L00_001FDE48_2b3628(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
 
-void FUN_L00_002b3628(u8 *m) {
-    u8 *vars = *(u8 **)(m + 0x78);
-    u8 *other = *(u8 **)(vars + 8);
-    Quad_2b3628 quad;
-    V_2b3628 position[2], zero_vector, positive_transform[3], transformed;
-    V_2b3628 orientation[3], direction[6], side, up, offset, basis, loop_point;
-    u8 selection[16];
-    s32 i;
-    u32 color;
-    f32 phase;
+/* Draws the moby's beam: orients the moby along its child's two joints, draws three quads and a ribbon of 196 points. */
+void FUN_L00_002b3628(struct Moby *m) {
+    Quad_2b3628 pk;
+    Vec4A_2b3628 mtx[4];
+    Vec4A_2b3628 out[2];
+    Ids_2b3628 ids;
+    Vec4A_2b3628 up;
+    Vec4A_2b3628 res[4];
+    Vec4A_2b3628 idm[4];
+    Vec4A_2b3628 a;
+    Vec4A_2b3628 b;
+    Vec4A_2b3628 c;
+    Vec4A_2b3628 d;
+    Vec4A_2b3628 e;
+    Data_2b3628 *data = (Data_2b3628 *)m->pvars;
+    Child_2b3628 *child = data->child;
+    int i;
 
-    if (other == 0 || *(s16 *)(other + 0xa6) != 0x260)
+    if (child == 0 || child->cls != 0x260) {
         return;
-    quad.texture[3] = 0x8000000048ULL;
-    quad.texture[2] = 0xff9000000260ULL;
-    quad.texture[0] = 0;
-    if (*(s32 *)(vars + 4)) {
-        __builtin_memcpy(selection, D_L00_00161488_2b3628, 8);
-        FUN_0024f850_2b3628(other, 2, selection, position);
+    }
+    pk.tag[2] = 0xFF9000000260;
+    pk.tag[3] = 0x8000000048;
+    pk.tag[0] = 0;
+    if (data->f4 != 0) {
+        ids = D_L00_00161488_2b3628;
+        func_0020DB98_2b3628(child, 2, &ids, out);
     } else {
-        __builtin_memcpy(selection, D_L00_00161490_2b3628, 8);
-        FUN_0024f850_2b3628(other, 2, selection, position);
+        ids = D_L00_00161490_2b3628;
+        func_0020DB98_2b3628(child, 2, &ids, out);
     }
-    *(u128 *)&zero_vector = 0;
-    zero_vector.f[1] = 1.0f;
-    FUN_001ff2a8_2b3628(&positive_transform[2], &position[0], &position[1]);
-    FUN_001ff500_2b3628(1.0f, &positive_transform[2], &positive_transform[2]);
-    positive_transform[2].f[3] = 0.0f;
-    FUN_001ff3c0_2b3628(&positive_transform[0], &zero_vector, &positive_transform[2]);
-    FUN_001ff500_2b3628(1.0f, &positive_transform[0], &positive_transform[0]);
-    positive_transform[0].f[3] = 0.0f;
-    FUN_001ff3c0_2b3628(&positive_transform[1], &positive_transform[2], &positive_transform[0]);
-    positive_transform[1].f[3] = 0.0f;
-    qcopy(&transformed, &position[1]);
-    transformed.f[3] = 1.0f;
-    qcopy(m + 0xc0, &positive_transform[0]);
-    qcopy(m + 0xd0, &positive_transform[1]);
-    qcopy(m + 0xe0, &positive_transform[2]);
-    qcopy(m + 0x10, &transformed);
-    color = 0x80800000;
-    FUN_001ff9e8_2b3628(orientation);
-    offset.f[0] = 0.0f;
-    offset.f[1] = 0.0f;
-    offset.f[2] = -0.075f;
-    offset.f[3] = 1.0f;
-    FUN_001ffdd8_2b3628(direction, &positive_transform[0], orientation);
-    color |= 0x8080;
-    quad.texture[1] = FUN_001f9298_2b3628(12);
+    *(Q_2b3628 *)&up = 0;
+    up.y = 1.0f;
+    func_001F9BF0_2b3628(&mtx[2], &out[0], &out[1]);
+    func_L00_001FF4B0_2b3628(&mtx[2], &mtx[2], 1.0f);
+    mtx[2].w = 0.0f;
+    func_001F9CA0_2b3628(&mtx[0], &up, &mtx[2]);
+    func_L00_001FF4B0_2b3628(&mtx[0], &mtx[0], 1.0f);
+    mtx[0].w = 0.0f;
+    func_001F9CA0_2b3628(&mtx[1], &mtx[2], &mtx[0]);
+    mtx[1].w = 0.0f;
+    qcopy(&mtx[3], &out[1]);
+    mtx[3].w = 1.0f;
+    qcopy(&m->rot_row0, &mtx[0]);
+    qcopy(&m->rot_row1, &mtx[1]);
+    qcopy(&m->rot_row2, &mtx[2]);
+    qcopy(&m->pos, &mtx[3]);
+    func_001FA190_2b3628(idm);
+    idm[3].w = 1.0f;
+    idm[3].z = -0.075f;
+    idm[3].x = 0.0f;
+    idm[3].y = 0.0f;
+    func_001FA540_2b3628(res, mtx, idm);
+    pk.tag[1] = func_001F4868_2b3628(0xC);
     for (i = 0; i < 4; i++) {
-        quad.colors[i] = color;
-        FUN_001ff300_2b3628(*(f32 *)(vars + 0x2c), &quad.points[i], &D_L00_001DA9E0_2b3628[i]);
-        if (i != 0 && i != 2)
-            quad.points[i].f[2] -= FUN_00257be8_2b3628(0.0f, 0.1f);
-        quad.texcoords[i * 2] = D_L00_001DAA60_2b3628[i * 2];
-        quad.texcoords[i * 2 + 1] = D_L00_001DAA60_2b3628[i * 2 + 1];
+        pk.col[i] = 0x80808080;
+        if (i == 0 || i == 2) {
+            func_001F9C30_2b3628(pk.pos[i], D_L00_001DA9E0_2b3628[i], data->f2C);
+        } else {
+            float *v = pk.pos[i];
+            func_001F9C30_2b3628(v, D_L00_001DA9E0_2b3628[i], data->f2C);
+            v[2] -= func_002140F8_2b3628(0.0f, 0.1f);
+        }
+        pk.uv[i][0] = D_L00_001DAA60_2b3628[i][0];
+        pk.uv[i][1] = D_L00_001DAA60_2b3628[i][1];
     }
-    FUN_001fd228_2b3628(&quad, direction, 0);
+    func_L00_001FD1D8_2b3628(&pk, res, 0);
     for (i = 0; i < 4; i++) {
-        FUN_001ff300_2b3628(*(f32 *)(vars + 0x2c), &quad.points[i], &D_L00_001DAA20_2b3628[i]);
-        if (i != 0 && i != 2)
-            quad.points[i].f[2] -= FUN_00257be8_2b3628(0.0f, 0.1f);
+        if (i == 0 || i == 2) {
+            func_001F9C30_2b3628(pk.pos[i], D_L00_001DAA20_2b3628[i], data->f2C);
+        } else {
+            float *v = pk.pos[i];
+            func_001F9C30_2b3628(v, D_L00_001DAA20_2b3628[i], data->f2C);
+            v[2] -= func_002140F8_2b3628(0.0f, 0.1f);
+        }
     }
-    FUN_001fd228_2b3628(&quad, direction, 0);
-    quad.texture[1] = FUN_001f9298_2b3628(11);
-    FUN_001ff300_2b3628(-0.13f, &up, &positive_transform[2]);
-    FUN_001ff278_2b3628(&up, &up, &transformed);
-    FUN_001ff2a8_2b3628(&offset, &D_L00_00166DC0_2b3628, &up);
-    FUN_001ff500_2b3628(1.0f, &offset, &offset);
-    FUN_001ff3c0_2b3628(&side, &offset, &D_0013F5E0_2b3628);
-    FUN_001ff500_2b3628(-1.0f, &side, &side);
-    FUN_001ff3c0_2b3628(&basis, &side, &offset);
-    quad.colors[0] = 0x7f2020ff;
-    quad.colors[1] = 0x7f2020ff;
-    quad.colors[2] = 0x7f2020ff;
-    quad.colors[3] = 0x7f2020ff;
-    for (i = 3; i >= 0; i--) {
-        FUN_001ff300_2b3628(0.1f, &quad.points[3 - i], &D_L00_001DA9E0_2b3628[3 - i]);
-        FUN_001ff6f8_2b3628(&quad.points[3 - i], &quad.points[3 - i], &offset);
+    func_L00_001FD1D8_2b3628(&pk, res, 0);
+    pk.tag[1] = func_001F4868_2b3628(0xB);
+    func_001F9C30_2b3628(&d, &mtx[2], -0.13f);
+    func_001F9BD8_2b3628(&d, &d, &mtx[3]);
+    func_001F9BF0_2b3628(&a, D_L00_00166DC0_2b3628, &d);
+    func_L00_001FF4B0_2b3628(&a, &a, 1.0f);
+    func_001F9CA0_2b3628(&b, &a, &hero.gravity_dir);
+    func_L00_001FF4B0_2b3628(&b, &b, -1.0f);
+    func_001F9CA0_2b3628(&c, &b, &a);
+    pk.col[0] = pk.col[1] = pk.col[2] = pk.col[3] = 0x7F2020FF;
+    for (i = 0; i < 4; i++) {
+        func_001F9C30_2b3628(pk.pos[i], D_L00_001DA9E0_2b3628[i], 0.1f);
+        func_001F9EE8_2b3628(pk.pos[i], pk.pos[i], &a);
     }
-    FUN_001fd228_2b3628(&quad, 0, 0);
-    quad.texture[1] = FUN_001f9298_2b3628(10);
-    FUN_002a0ba8_2b3628(6, quad.texture[1]);
-    FUN_002a0ba8_2b3628(0x42, quad.texture[3]);
-    FUN_002a0ba8_2b3628(8, 0);
-    FUN_002a0ba8_2b3628(0x14, 0xff9000000260ULL);
-    FUN_002a0ba8_2b3628(0x4a, 0);
-    FUN_001fc740_2b3628();
-    for (i = 0; i < 196; i++) {
-        FUN_001ff300_2b3628(*(f32 *)(vars + 0x20), &loop_point, &D_L00_001D9470_2b3628[i]);
-        FUN_001ff6f8_2b3628(&loop_point, &loop_point, &positive_transform[0]);
-        phase = D_L00_001DA0B0_2b3628[i * 2 + 1] - 0.025f;
-        D_L00_001DAA80_2b3628[i][0] = loop_point.f[0];
-        D_L00_001DAA80_2b3628[i][1] = loop_point.f[1];
-        D_L00_001DAA80_2b3628[i][2] = loop_point.f[2];
-        D_L00_001DA0B0_2b3628[i * 2 + 1] = phase;
-        if (phase < -7.0f)
-            D_L00_001DA0B0_2b3628[i * 2 + 1] = phase + 7.0f;
+    func_L00_001FD1D8_2b3628(&pk, 0, 0);
+    func_00234C98_2b3628(6, func_001F4868_2b3628(0xA));
+    func_00234C98_2b3628(0x42, pk.tag[3]);
+    func_00234C98_2b3628(8, 0);
+    func_00234C98_2b3628(0x14, 0xFF9000000260);
+    func_00234C98_2b3628(0x4A, 0);
+    func_001F7868_2b3628();
+    for (i = 0; i < 0xC4; i++) {
+        func_001F9C30_2b3628(&e, D_L00_001D9470_2b3628[i], data->f20);
+        func_001F9EE8_2b3628(&e, &e, mtx);
+        D_L00_001DAA80_2b3628[i].x = e.x;
+        D_L00_001DAA80_2b3628[i].y = e.y;
+        D_L00_001DAA80_2b3628[i].z = e.z;
+        D_L00_001DA0B0_2b3628[i].v -= 0.025f;
+        if (D_L00_001DA0B0_2b3628[i].v < -7.0f) {
+            D_L00_001DA0B0_2b3628[i].v += 7.0f;
+        }
     }
-    FUN_L00_001fde98_2b3628(0x94, D_L00_001DAA80_2b3628, (void *)0x1da6d0, D_L00_001DA0B0_2b3628, 1);
-    FUN_L00_001fde98_2b3628(0x32, (void *)0x1db158, (void *)0x1da918, (void *)0x1da540, 1);
+    func_L00_001FDE48_2b3628(0x94, D_L00_001DAA80_2b3628, D_L00_001DA6D0_2b3628, D_L00_001DA0B0_2b3628, 1);
+    func_L00_001FDE48_2b3628(0x32, &D_L00_001DAA80_2b3628[0x92], &D_L00_001DA6D0_2b3628[0x92], &D_L00_001DA0B0_2b3628[0x92], 1);
 }
-#endif
 typedef struct {
     f32 f[4];
 } __attribute__((aligned(16))) V4;
