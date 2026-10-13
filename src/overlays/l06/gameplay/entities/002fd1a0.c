@@ -2467,11 +2467,14 @@ void FUN_L06_003049f8(char *m) {
     }
     case 3: {
         float scratch[120];
-        float *b = scratch + 16, *d = scratch + 32, *e = scratch + 36;
+        float *b, *d, *e;
         int i;
         FUN_001fa050(scratch, (float *)(m + 0x40));
+        b = scratch + 16;
         FUN_001f9ff8(b, D_L06_00162208_3049f8);
         FUN_001fa378(scratch, scratch, b);
+        d = scratch + 32;
+        e = scratch + 36;
         for (i = 0; i < 4; i++) {
             int j;
             FUN_001fa050(b, D_L06_001FE890 + i * 4);
@@ -2480,7 +2483,8 @@ void FUN_L06_003049f8(char *m) {
             FUN_001f9a10(scratch + 28, scratch + 28, m + 0x10);
             scratch[30] += (float)i * 1.7f + 0.6f;
             scratch[31] = 1.0f;
-            for (j = 49; j >= 0; j--) {
+            j = 49;
+            do {
                 float angle = random_float_3049f8(0.0f, D_L06_00162204 * 0.75f);
                 normalize_vector_3049f8(d, scratch + 16, angle);
                 FUN_001f9a10(d, d, scratch + 28);
@@ -2488,10 +2492,10 @@ void FUN_L06_003049f8(char *m) {
                     int v = fast_tween_color_3049f8(random_float_between_3049f8(0.0f, 1.0f), D_L06_00162214, D_L06_00162218);
                     float f = random_float_between_3049f8(D_L06_0016221C, D_L06_00162220);
                     int n = truncate_float_to_s32_3049f8(random_float_between_3049f8((float)D_L06_00162224, (float)D_L06_00162228));
-                    random_vector_3049f8(scratch + 36, D_L06_0016222C * frame_time, D_L06_00162230 * frame_time);
-                    spawn_particle_3049f8(f, d, scratch + 36, v, scale_game_frames_3049f8(n) & 0xff, random_byte_3049f8(0xff) & 0xff, 0);
+                    random_vector_3049f8(e, D_L06_0016222C * frame_time, D_L06_00162230 * frame_time);
+                    spawn_particle_3049f8(f, d, e, v, scale_game_frames_3049f8(n) & 0xff, random_byte_3049f8(0xff) & 0xff, 0);
                 }
-            }
+            } while (--j >= 0);
         }
         m[0x20] = 4;
 
