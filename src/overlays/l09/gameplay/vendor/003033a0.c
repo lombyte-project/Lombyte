@@ -873,7 +873,6 @@ extern void FUN_001f9bf8(f32, void *, void *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L00_00259858(void *, void *, s32, f32);
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-extern void print_vendor_contact(const char *, ...) __asm__("FUN_001e93b0");
 extern char D_L09_002090B0[];
 
 typedef struct { char pad[0x18]; char *hit; } CollisionState;
@@ -912,8 +911,8 @@ void FUN_L09_00305a28(struct Moby *moby) {
     if (*(s32 *)(data + 8) > 0) do {
         if (collect_mobies_in_sphere(F(data, 0), work + 4, 1, moby, work + 12) != 0) {
             char *hit = D_L09_00173FC0.hit;
-            print_vendor_contact(D_L09_002090B0, *(s16 *)((char *)moby + 0xb2), *(s16 *)(hit + 0xa6),
-                                 *(s16 *)(hit + 0xb2), F(data, 0xc));
+            stub_printf(D_L09_002090B0, *(s16 *)((char *)moby + 0xb2), *(s16 *)(hit + 0xa6),
+                        *(s16 *)(hit + 0xb2), F(data, 0xc));
         }
         i++;
         FUN_001f9a10(work + 4, work + 4, work);

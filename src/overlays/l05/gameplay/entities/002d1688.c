@@ -1549,8 +1549,7 @@ extern float D_0013F3D0[];
 
 extern int D_L05_00161B74 __attribute__((sda));
 extern float D_L05_00161AF0 __attribute__((sda));
-extern const float frame_time_k __asm__("D_0015ED6C");
-extern const float AF0_k __asm__("D_L05_00161AF0") __attribute__((sda));
+extern const float frame_time_const __asm__("D_0015ED6C");
 extern float D_L05_00161AF4 __attribute__((sda));
 
 void FUN_L05_00305178(char *moby) {
@@ -1567,7 +1566,6 @@ void FUN_L05_00305178(char *moby) {
     float position[4] __attribute__((aligned(16)));
     char effect_data[16] __attribute__((aligned(16)));
     float speed;
-    float frame_scale;
     float angle;
     struct Hero *base;
 
@@ -1658,26 +1656,26 @@ mark_children:
         *(float *)(data + 0x174) = 14.0f;
     if (*(char **)(data + 0x184) != 0) {
         char *first;
-        float k;
+        float offset_scale;
         speed = vector_length_305178(data + 0x40);
-        speed /= D_L05_00161AF0 * frame_time_k;
-        k = D_L05_00161AF4;
+        speed /= D_L05_00161AF0 * frame_time_const;
+        offset_scale = D_L05_00161AF4;
         *(float *)(*(char **)(data + 0x184) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x184) + 0x58) +=
-            *(float *)(data + 0x84) * k;
+            *(float *)(data + 0x84) * offset_scale;
         first = *(char **)(data + 0x184);
         qcopy(first + 0x40, moby + 0x40);
         qcopy(first + 0x10, moby + 0x10);
     }
     if (*(char **)(data + 0x188) != 0) {
         char *second;
-        float k;
+        float offset_scale;
         speed = vector_length_305178(data + 0x40);
-        speed /= D_L05_00161AF0 * frame_time_k;
-        k = D_L05_00161AF4;
+        speed /= D_L05_00161AF0 * frame_time_const;
+        offset_scale = D_L05_00161AF4;
         *(float *)(*(char **)(data + 0x188) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x188) + 0x58) -=
-            *(float *)(data + 0x84) * k;
+            *(float *)(data + 0x84) * offset_scale;
         second = *(char **)(data + 0x188);
         qcopy(second + 0x40, moby + 0x40);
         qcopy(second + 0x10, moby + 0x10);
