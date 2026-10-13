@@ -1274,7 +1274,8 @@ void FUN_L05_00254058(void) {
         stats->stat[30].level_mask |= 0x80000000;
     }
     {
-        counter = (s32 *)((char *)&hero + 0x700);
+        counter = (s32 *)((char *)&hero + 0x6D0);
+        counter += 12;
         for (i = 2; i >= 0; i--, counter++) {
             if (absolute_float(*(f32 *)(counter - 12)) > 3.3161256f) {
                 f32 rotation = *(f32 *)(counter - 12);
@@ -1290,7 +1291,7 @@ void FUN_L05_00254058(void) {
         struct Hero *g = &hero;
         *(s32 *)((char *)g + 0x70C) = 0;
         {
-            counter = (s32 *)((char *)g + 0x700);
+            s32 *counter = (s32 *)((char *)g + 0x700);
             i = 2;
             do {
                 if (*(s32 *)((char *)g + 0x70C) < *counter)
@@ -1326,7 +1327,7 @@ void FUN_L05_00254058(void) {
     }
     {
         struct Hero *g = &hero;
-        for (i = 0; i < 5; i++) table.values[i] = D_L05_002169F8[i];
+        table = *(struct ScoreTable *)D_L05_002169F8;
         *(f32 *)((char *)g + 0x6F4) = table.values[*(s32 *)((char *)g + 0x6F0)];
         frames = FUN_001f96b0(1.0f);
         *(s32 *)((char *)g + 0x6FC) = truncate_float_to_s32((f32)((*(s32 *)((char *)g + 0x6F8) * 100) / (s32)(frames * 60.0f)));
