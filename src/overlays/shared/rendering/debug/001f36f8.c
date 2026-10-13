@@ -64,8 +64,8 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
     packet[2] = 0x10AB400000000001ULL;
     tags = packet + 2;
     tags[1] = 0xE;
-    tags[2] = 1;
     tags[3] = 0x14;
+    tags[2] = 1;
     tags[4] = 0x2400000000000001ULL;
     tags[5] = 0x61;
     ((u64 *)tags)[6] = color & 0xFFFFFFFFULL;
@@ -100,8 +100,8 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
         }
         x += *(s32 *)((u8 *)D_L00_00169B00 + glyph);
     }
-    ((u32 *)packet)[3] = quadwords | 0x50000000;
     ((u32 *)packet)[0] = quadwords | 0x10000000;
+    ((u32 *)packet)[3] = quadwords | 0x50000000;
     ((u32 *)packet)[1] = 0;
     ((u32 *)packet)[2] = 0;
     *glyph_tag = (s64)(glyph_count | 0x8000) | 0x4400000000000000ULL;
