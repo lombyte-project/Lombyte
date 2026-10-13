@@ -1775,9 +1775,10 @@ void FUN_L15_002d0fa8(void *arg) {
                 FUN_00251c90((char *)d + 0x70, 4.0f, 1.0f);
                 *(float *)((char *)d + 0xC0) = 12.0f;
                 *(float *)((char *)d + 0xC4) = 16.0f;
-                direction = FUN_001f9028(m->pos.f[0] - *(float *)(*(char **)(slot + 0x20) + 0x10),
+                angle = FUN_001f9028(m->pos.f[0] - *(float *)(*(char **)(slot + 0x20) + 0x10),
                                           m->pos.f[1] - *(float *)(*(char **)(slot + 0x20) + 0x14));
                 origin.q = *(u128 *)(slot + 0x10);
+                direction = angle;
                 FUN_0024a430(&origin, &direction, (char *)d + 0x88, (char *)d + 0x8C);
                 FUN_0024be00(direction, m, (char *)d + 0x70, 8, 1, 0);
                 FUN_0027bb68(0, 0, m, 0x79);
@@ -1807,16 +1808,20 @@ void FUN_L15_002d0fa8(void *arg) {
     d->w164 = 0;
     if (m->state == 1) {
         angle = d->f174;
-    } else if (d->w1D0 != -1) {
-        UPath *path = D_L15_001B0AB0[d->w1D0];
-        d->f1B8 = *(float *)((char *)d + 0x178);
-        FUN_0024f7e0(d->f1B8, m, (char *)d + 0x120, 0, 0, &path->pt[0], path->n);
-        goto check_path;
     } else {
+        if (d->w1D0 != -1)
+            goto follow_path;
         angle = *(float *)((char *)d + 0x178);
     }
     d->f1B8 = angle;
     FUN_0024f560(d->f1B8, m, (char *)d + 0x120);
+    goto check_path;
+follow_path:
+    {
+        UPath *path = D_L15_001B0AB0[d->w1D0];
+        d->f1B8 = *(float *)((char *)d + 0x178);
+        FUN_0024f7e0(d->f1B8, m, (char *)d + 0x120, 0, 0, &path->pt[0], path->n);
+    }
 check_path:
     if (d->f1B8 < FUN_001f8bc8(&m->pos, (char *)d + 0x120))
         d->w164 = 2;
