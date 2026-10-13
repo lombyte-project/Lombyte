@@ -2849,6 +2849,7 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
     u32 near_bits, far_bits;
     u32 mask;
     s32 i, j, mode;
+    s32 height_index, index;
     f32 *height;
     u32 *packet;
     u64 *data;
@@ -2901,19 +2902,19 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
         FUN_L01_002b80d0(pos);
         if (*(u32 *)(pos + 0x11) & 1) {
             height = (f32 *)0x70002008;
-            for (j = 0x10; j >= 0; j--, height += 3) *height = pos[2];
+            for (height_index = 0x10; height_index >= 0; height_index--, height += 3) *height = pos[2];
         }
         if (*(u32 *)(pos + 0x11) & 2) {
             height = (f32 *)0x700020c8;
-            for (j = 0x10; j >= 0; j--, height += 0x33) *height = pos[2];
+            for (height_index = 0x10; height_index >= 0; height_index--, height += 0x33) *height = pos[2];
         }
         if (*(u32 *)(pos + 0x11) & 4) {
             height = (f32 *)0x70002cc8;
-            for (j = 0x10; j >= 0; j--, height += 3) *height = pos[2];
+            for (height_index = 0x10; height_index >= 0; height_index--, height += 3) *height = pos[2];
         }
         if (*(u32 *)(pos + 0x11) & 8) {
             height = (f32 *)0x70002008;
-            for (j = 0x10; j >= 0; j--, height += 0x33) *height = pos[2];
+            for (height_index = 0x10; height_index >= 0; height_index--, height += 0x33) *height = pos[2];
         }
         mode = (far_bits & 0x2f2f2f2f) ? 1 : ((near_bits & 0x2f2f2f2f) ? 2 : 0);
         mask = *(u16 *)((u8 *)pos + 0x1e);
@@ -2942,8 +2943,8 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
             D_0015F630 = *(u8 *)(pos + 7);
             D_0015F634 = *(u8 *)((u8 *)pos + 0x1d);
         }
-        for (j = 0; j < 16; j++, mask = (s32)mask >> 1) {
-            if (mask & 1) FUN_L01_002b8cb0(pos, j, mode);
+        for (index = 0; index < 16; index++, mask = (s32)mask >> 1) {
+            if (mask & 1) FUN_L01_002b8cb0(pos, index, mode);
         }
 next_entity:
         i++;
