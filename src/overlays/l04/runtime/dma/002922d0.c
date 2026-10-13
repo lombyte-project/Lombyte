@@ -60,8 +60,8 @@ void FUN_L04_002923b8(char *arg0, char *arg1) {
     float transformed[16];
     LegRigAnim **entry = (LegRigAnim **)(arg1 + 0x70);
     int *current;
-    int i;
-    int j;
+    unsigned char i;
+    unsigned short j;
     int offset;
     char *record;
     char *upper;
@@ -87,16 +87,16 @@ void FUN_L04_002923b8(char *arg0, char *arg1) {
                 LegRigAnim *item = *slot;
                 float start = item->phase[1].from[j];
                 float end = item->phase[1].to[j];
-                current = (float *)((char *)item + 0x38 + offset);
+                current = &item->phase[1].span[j];
                 if (start <= end)
                     difference = end - start;
                 else
                     difference = (end + item->len) - start;
                 *current = difference;
                 item = *slot;
-                current = (float *)((char *)item + 0x20 + offset);
                 start = item->phase[0].from[j];
                 end = item->phase[0].to[j];
+                current = &item->phase[0].span[j];
                 if (start <= end)
                     difference = end - start;
                 else
