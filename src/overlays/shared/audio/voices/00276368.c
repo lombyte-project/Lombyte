@@ -282,12 +282,13 @@ void FUN_L00_00276908(void) {
         }
         {
             s32 i;
+            s32 value = 0x26;
             for (i = 3; i >= 0; i--) {
                 if (D_00141660[3 - i] != ((s32 *)&D_L00_001B9CF0)[15 - i]) {
                     hero.pending_item[3 - i] =
                         ((s32 *)&D_L00_001B9CF0)[15 - i] != 0
                             ? ((s32 *)&D_L00_001B9CF0)[15 - i]
-                            : 0x26;
+                            : value;
                 }
             }
         }
