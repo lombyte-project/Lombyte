@@ -13,7 +13,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int sample_path(float, int *, float *, int *, float *, int) __asm__("FUN_L00_0025d808");
+extern int sample_path(int *, float *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
 extern void spawn_on_path(float *, int, int, int) __asm__("FUN_L00_002c52a8");
 extern int FUN_00120478(float);
 extern char *D_L07_001B0530[];
@@ -118,7 +118,7 @@ state_one:
                         int accepted = 0;
                         remaining = total - batch;
                         do {
-                            sample_path(step, (int *)path, position, &segment, &fraction, 1);
+                            sample_path((int *)path, position, &segment, &fraction, step, 1);
                             if (data[9] == -1 ||
                                 12.0f < vector_distance(D_L07_0015FFD8 + data[9] * 0x100 + 0x10, position))
                                 accepted = 1;
@@ -136,8 +136,8 @@ state_one:
                         spawn_on_path(position, id, batch, 0);
                         step += random_float_between(*(float *)(data + 8) / 10.0f, 2.0f);
                         if (remaining < batch) {
-                            debug_print(D_L07_00211BA8, remaining);
                             batch = remaining;
+                            debug_print(D_L07_00211BA8, remaining);
                         }
                     } while (remaining > 0);
                 }
