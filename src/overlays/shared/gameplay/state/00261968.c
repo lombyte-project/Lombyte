@@ -247,8 +247,8 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     f32 projection;
 
     saved_out = out;
+    qcopy(&working, point);
     found = 0;
-    working = *point;
     entry = D_L00_001B04B0_262030[path_index];
     original_height = FUN_001ff398_262030(&working, &D_0013F5E0_262030);
     if (entry->count - 1 > found) {
