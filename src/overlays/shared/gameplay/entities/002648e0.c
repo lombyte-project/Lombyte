@@ -12,7 +12,7 @@ typedef struct {
     s32 ticks;
 } MobyProfile;
 
-extern u64 D_0013CAE0;
+extern u64 D_0013CAE0[];
 extern s32 D_L00_0015F3F8;
 extern struct Moby *D_L00_0015FFE4;
 extern s16 D_L00_00197A00[];
@@ -42,7 +42,7 @@ void FUN_L00_002648e0(void) {
     s32 *entry;
     s16 profile_label;
 
-    if ((D_0013CAE0 & 0x800000007LL) != 0x800000007LL) {
+    if ((D_0013CAE0[0] & 0x800000007LL) != 0x800000007LL) {
         FUN_L00_00264848();
         return;
     }
