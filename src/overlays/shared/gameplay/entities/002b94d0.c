@@ -1913,10 +1913,12 @@ void FUN_L00_002be650(void *o) {
     OvlVec4 axis;
     OvlVec4 negativeUp;
     OvlVec4 vertex[2];
-    volatile int color;
-    OvlVec4 * volatile vertexTarget;
+    struct {
+        volatile int color;
+        OvlVec4 * volatile vertexTarget;
+        int nextIndex;
+    } state;
     int i, j;
-    int nextIndex;
 
     (void)o;
     quad.tex = tex_2be650(8);
@@ -1938,19 +1940,19 @@ void FUN_L00_002be650(void *o) {
         else
             c = D_L00_00161760;
         i = 0;
-        color = c & 0xFFFFFF;
+        state.color = c & 0xFFFFFF;
     }
-    vertexTarget = &vertex[0];
+    state.vertexTarget = &vertex[0];
     do {
-        nextIndex = i + 1;
+        state.nextIndex = i + 1;
         if (((int *)&D_L00_00161818)[i] != 0) {
             unsigned int c = color_alpha_2be650(((float *)&D_L00_001617E8)[i]);
-            c = (c << 24) | color;
+            c = (c << 24) | state.color;
             quad.color[3] = c;
             quad.color[2] = c;
             quad.color[1] = c;
             quad.color[0] = c;
-            qcopy(vertexTarget, &((u128 *)&D_L00_001DD0A0)[i]);
+            qcopy(state.vertexTarget, &((u128 *)&D_L00_001DD0A0)[i]);
             qcopy(&scaled, &((u128 *)&D_L00_001DD0D0)[i]);
             vmul_2be650(-1.0f, &negativeUp, &D_0013F5E0_2be650);
             cross_2be650(&axis, &scaled, &negativeUp);
@@ -1962,7 +1964,7 @@ void FUN_L00_002be650(void *o) {
             }
             draw_2be650(&quad, 0, 0);
         }
-        i = nextIndex;
+        i = state.nextIndex;
     } while (i < 3);
 }
 #endif
