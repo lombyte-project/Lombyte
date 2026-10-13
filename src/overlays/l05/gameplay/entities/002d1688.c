@@ -1474,7 +1474,9 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     *(void * volatile *)&state.out = out;
     best = 512.0f;
     qcopy_nc(&from_point, position);
-    path_offset = state.path_index * 4;
+    /* Retain the saved-index read; the first lookup uses the incoming index. */
+    (void)state.path_index;
+    path_offset = path_index * 4;
     i = state.changed;
     if (i < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1) do {
         int next;
