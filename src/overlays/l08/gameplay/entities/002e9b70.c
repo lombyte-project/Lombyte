@@ -705,15 +705,15 @@ void FUN_L08_002f5e58(struct Moby *m) {
     b = (u8 *)d;
     f = (f32 *)d;
     stride = (b[8] + 1) * 16;
-    grid = __builtin_alloca(((u32)(b[8] + 1) * 128 * (b[9] + 1)) >> 3);
+    grid = __builtin_alloca((((u32)(b[8] + 1) << 7) * (b[9] + 1)) >> 3);
     inv_x = 1.0f / convert_integer_to_float(b[8]);
     inv_y = 1.0f / convert_integer_to_float(b[9]);
     u = __builtin_alloca((b[8] * 4 + 0x13) & 0x7f0);
     v = __builtin_alloca((b[9] * 4 + 0x13) & 0x7f0);
     time = convert_integer_to_float(D_L08_0015F3F8);
     {
-        f32 *current = d->levels_a;
         f32 *target = d->levels_b;
+        f32 *current = d->levels_a;
         i = 7;
         do {
             f32 value = *current;
@@ -827,31 +827,41 @@ void FUN_L08_002f5e58(struct Moby *m) {
     }
     a = FUN_001f9de0(FUN_L00_0025e310(time * f[0x12]));
     a = FUN_L00_00200228(time*f[0x10] + f[0x11]*a, &temp);
-    for (i=0; i<=b[8]; i++) { u[i] = a; a = a + inv_x / d->period_a; }
+    { s32 count = 0; f32 *weight = u; do { *weight++ = a; count++; a = a + inv_x / d->period_a; } while (count <= b[8]); }
     a = FUN_001f9de0(FUN_L00_0025e310(time * f[0x15]));
     a = FUN_L00_00200228(time*f[0x13] + f[0x14]*a, &temp);
-    for (i=0; i<=b[9]; i++) { v[i] = a; a = a + inv_y / d->period_b; }
+    { s32 count = 0; f32 *weight = v; do { *weight++ = a; count++; a = a + inv_y / d->period_b; } while (count <= b[9]); }
     for (i=0; i<b[9]; i++) {
-        k = i * stride;
-        count = (i + 1) * stride;
-        for (j=0; j<b[8]; j++) {
-            packet.uv[0][0] = u[j]; packet.uv[0][1] = v[i];
-            packet.uv[1][0] = u[j+1]; packet.uv[1][1] = v[i];
-            packet.uv[2][0] = u[j]; packet.uv[2][1] = v[i+1];
-            packet.uv[3][0] = u[j+1]; packet.uv[3][1] = v[i+1];
-            add_vector_xyz(&packet.points[0], (char *)grid+(j*16+k), &m->pos);
-            add_vector_xyz(&packet.points[1], (char *)grid+((j+1)*16+k), &m->pos);
-            add_vector_xyz(&packet.points[2], (char *)grid+(j*16+count), &m->pos);
-            add_vector_xyz(&packet.points[3], (char *)grid+((j+1)*16+count), &m->pos);
-            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+(j*16+k)))->f[3]);
-            packet.color[0] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+((j+1)*16+k)))->f[3]);
-            packet.color[1] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+(j*16+count)))->f[3]);
-            packet.color[2] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+((j+1)*16+count)))->f[3]);
-            packet.color[3] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-            FUN_001f7d30(&packet, NULL, 0);
+        {
+            Vec4 *current;
+            Vec4 *target;
+            f32 *current_v = v + i;
+            f32 *target_v = v + i + 1;
+            if (b[8]) {
+                k = i * stride;
+                count = (i + 1) * stride;
+                current = (Vec4 *)((char *)grid + k);
+                target = (Vec4 *)((char *)grid + count);
+                for (j=0; j<b[8]; j++) {
+                    packet.uv[0][0] = u[j]; packet.uv[0][1] = *current_v;
+                    packet.uv[1][0] = u[j+1]; packet.uv[1][1] = *current_v;
+                    packet.uv[2][0] = u[j]; packet.uv[2][1] = *target_v;
+                    packet.uv[3][0] = u[j+1]; packet.uv[3][1] = *target_v;
+                    add_vector_xyz(&packet.points[0], &current[j], &m->pos);
+                    add_vector_xyz(&packet.points[1], &current[j+1], &m->pos);
+                    add_vector_xyz(&packet.points[2], &target[j], &m->pos);
+                    add_vector_xyz(&packet.points[3], &target[j+1], &m->pos);
+                    temp = truncate_float_to_s32_u((&current[j])->f[3]);
+                    packet.color[0] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+                    temp = truncate_float_to_s32_u((&current[j+1])->f[3]);
+                    packet.color[1] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+                    temp = truncate_float_to_s32_u((&target[j])->f[3]);
+                    packet.color[2] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+                    temp = truncate_float_to_s32_u((&target[j+1])->f[3]);
+                    packet.color[3] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+                    FUN_001f7d30(&packet, NULL, 0);
+                }
+            }
         }
     }
     if (!(d->flags & 2)) return;
