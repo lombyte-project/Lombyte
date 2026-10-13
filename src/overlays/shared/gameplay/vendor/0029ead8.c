@@ -131,26 +131,27 @@ extern int D_L00_00161220 __attribute__((sda));
 
 void FUN_L00_002a3ec8(float x, float y, float radius, float strength,
                       float *tiles, int count, int additive) {
-    int tile_index = 0;
+    int tile_index;
     float *tile = tiles;
-    int row, column, first_column, last_column, last_row;
+    int row, column, first_column, last_column, last_row, first_row;
     int column_offset, far_row_offset;
     unsigned neighbor;
     float grid_x, grid_y, sample_x, sample_y, dy, value, magnitude, distance_squared;
+    tile_index = 0;
     if (count > 0) {
         do {
-            ++tile_index;
             grid_y = (y - (tile[1] + D_L00_001CA880[3])) / D_L00_001CA880[5];
             grid_x = (x - (tile[0] + D_L00_001CA880[2])) / D_L00_001CA880[4];
-            row = (int)(grid_y - radius);
-            if (row < 0) row = 0;
+            first_row = (int)(grid_y - radius);
+            if (first_row < 0) first_row = 0;
             last_row = (int)(grid_y + radius);
             if (last_row > 15) last_row = 15;
             last_column = (int)(grid_x + radius);
             if (last_column > 15) last_column = 15;
             first_column = (int)(grid_x - radius);
             if (first_column < 0) first_column = 0;
-            sample_y = tile[1] + D_L00_001CA880[3] + D_L00_001CA880[5] * (float)row;
+            sample_y = tile[1] + D_L00_001CA880[3] + D_L00_001CA880[5] * (float)first_row;
+            row = first_row;
             while (row <= last_row) {
                 sample_x = tile[0] + D_L00_001CA880[2] + D_L00_001CA880[4] * (float)first_column;
                 column = first_column;
@@ -161,14 +162,16 @@ void FUN_L00_002a3ec8(float x, float y, float radius, float strength,
                     do {
                         distance_squared = (x - sample_x) * (x - sample_x) + dy;
                         value = strength;
-                        if (!(distance_squared < 1.0f))
-                            value = strength / FUN_001f9988(distance_squared);
-                        if (additive == 0) {
+                        if (!(distance_squared < 1.0f)) {
+                            value = FUN_001f9988(distance_squared);
+                            value = strength / value;
+                        }
+                        if (additive != 0) {
+                            value += *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161220 * 0x5c0));
+                        } else {
                             magnitude = absolute_float(value);
                             if (magnitude < absolute_float(*(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161218 * 0x5c0))))
                                 value = *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161218 * 0x5c0));
-                        } else {
-                            value += *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161220 * 0x5c0));
                         }
                         *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161218 * 0x5c0)) = value;
                         if (row < 2 && (neighbor = ((unsigned char *)tile)[12]) != 255) {
@@ -203,7 +206,7 @@ void FUN_L00_002a3ec8(float x, float y, float radius, float strength,
                         if (neighbor != 255 && column == 0 && row == 15)
                             *(float *)((char *)tiles + neighbor * 0x1190 + (D_L00_00161218 * 0x5c0) + 0x5d4) = *(float *)((char *)tile + D_L00_00161218 * 0x5c0 + 0x410);
                         neighbor = ((unsigned char *)tile)[19];
-                        if (neighbor != 255 && column == 15 && row == 15)
+                        if (neighbor != 255 && column == 15 && row == column)
                             *(float *)((char *)tiles + neighbor * 0x1190 + (D_L00_00161218 * 0x5c0) + 0x5d0) = *(float *)((char *)tile + D_L00_00161218 * 0x5c0 + 0x44c);
                         ++column;
                         far_row_offset += 4;
@@ -215,7 +218,7 @@ void FUN_L00_002a3ec8(float x, float y, float radius, float strength,
                 ++row;
             }
             tile += 0x464;
-        } while (tile_index < count);
+        } while (++tile_index < count);
     }
 }
 #endif
