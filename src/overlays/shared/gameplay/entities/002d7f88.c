@@ -2866,6 +2866,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     short *halfword;
     int i, j, row, segment, count, small_count, index, next_segment;
     float fraction, sampled, angle, delta, length, row_float, spread, phase, value;
+    int next_row;
 
     FUN_L00_002ddcb8(frame_context, initial_vector);
     global = (char *)&D_0013F350_c;
@@ -2992,7 +2993,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
         phase = row_float * 0.7f;
         current = D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6);
         prior = D_L00_001E4B40;
-        ++row;
+        next_row = row + 1;
         j = 0;
         do {
             value = spread + 0.1f;
@@ -3006,6 +3007,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
             prior += 16;
         } while (j < 20);
         FUN_001ff500_002ddcb8(&scaled_first, &offset, D_L00_00161B84);
+        row = next_row;
     } while (row < 10);
     FUN_001f9598_002ddf60(FUN_L00_002dd8e8, frame_context);
     count = 0;
@@ -3099,12 +3101,12 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                     row = *(volatile short *)record;
                     FUN_001ff278_002ddcb8(*(char **)(record + 20) + 16, D_L00_001E5F40_002ddcb8 + row * 16, &temp1);
                     segment = *(volatile short *)(record + 2);
-                    FUN_001ff2a8_002ddf60(&temp2, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
-                    FUN_001ff2a8_002ddf60(&edge, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&temp2, D_L00_001E6020_002ddf60 + row * 320 + segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&edge, D_L00_001E6020_002ddf60 + row * 320 + segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
                     interpolate_vector4_linear_002ddf60(&offset, &temp2, &edge, fraction);
                     next_segment = (segment + 19) % 20;
-                    FUN_001ff2a8_002ddf60(&direction, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + next_segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
-                    FUN_001ff2a8_002ddf60(&tangent, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + next_segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&direction, D_L00_001E6020_002ddf60 + row * 320 + next_segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&tangent, D_L00_001E6020_002ddf60 + row * 320 + next_segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
                     interpolate_vector4_linear_002ddf60(&following, &direction, &tangent, fraction);
                     interpolate_vector4_linear_002ddf60(&offset, &offset, &following, *(volatile float *)(record + 8));
                     value = *(volatile float *)(record + 8) + *(volatile float *)(record + 12);
