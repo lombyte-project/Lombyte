@@ -346,6 +346,7 @@ OVERLAY_SN_UNITS = {
     "shared/math/interpolation/00257ef0.c",
     "shared/math/interpolation/00258830.c",
     "shared/math/interpolation/0026d930.c",
+    "shared/math/rotations/0025d238.c",
     "shared/math/rotations/002899f8.c",
     "shared/math/vectors/0025c230.c",
     "shared/rendering/00269290.c",
