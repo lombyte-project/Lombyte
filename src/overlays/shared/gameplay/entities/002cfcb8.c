@@ -744,6 +744,7 @@ extern s32 D_L00_001618E8 __attribute__((sda));
 extern s32 D_L00_001618EC __attribute__((sda));
 extern s32 D_L00_001618F0 __attribute__((sda));
 extern s32 D_L00_001618F4 __attribute__((sda));
+extern f32 D_L00_00166C80_2d19b0[] __asm__("D_L00_00166C80");
 extern Vec_2d19b0 D_L00_00166DC0_2d19b0 __asm__("D_L00_00166DC0");
 extern Vec_2d19b0 D_L00_00166DC0_loop_2d19b0 __asm__("D_L00_00166DC0");
 extern Vec_2d19b0 D_L00_001DE7B0_2d19b0[] __asm__("D_L00_001DE7B0");
@@ -785,8 +786,8 @@ void FUN_L00_002d19b0(u8 *m) {
     quad.colors[1] = D_L00_001618F4;
     quad.colors[2] = D_L00_001618F4;
     quad.colors[3] = D_L00_001618F4;
-    if (absolute_float_2d19b0(D_L00_00166DC0_2d19b0.x - *(f32 *)(m + 0x10)) < 16.0f &&
-        absolute_float_2d19b0(D_L00_00166DC0_2d19b0.y - *(f32 *)(m + 0x14)) < 16.0f)
+    if (absolute_float_2d19b0(D_L00_00166C80_2d19b0[80] - *(f32 *)(m + 0x10)) < 16.0f &&
+        absolute_float_2d19b0(D_L00_00166C80_2d19b0[81] - *(f32 *)(m + 0x14)) < 16.0f)
         active = 1;
     if (active || m[0x20] == 1) {
         m[0xbc] = 1;
@@ -813,10 +814,12 @@ void FUN_L00_002d19b0(u8 *m) {
                 y = c.y / len + 0.5f;
                 uv[0][0] = x;
             } else {
-                x = c.x / len + 0.5f;
-                y = c.y / len + 0.5f;
+                x = c.x / len;
+                y = c.y / len;
+                x += 0.5f;
                 uv[0][0] = x + (old_uv[0][0] - x) * blend;
-                y = y + (old_uv[0][1] - y) * blend;
+                x = y + 0.5f;
+                y = x + (old_uv[0][1] - x) * blend;
             }
             uv[0][1] = y;
             uv++;
