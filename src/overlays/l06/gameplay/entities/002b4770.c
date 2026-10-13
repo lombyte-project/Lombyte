@@ -1215,7 +1215,7 @@ void FUN_L06_002f5d78(char *moby) {
     float angle, other, upper, lower, base, threshold;
     char **left, **right;
 
-    for (i = 0, offset = 0; i < 20; i++, offset += 4) {
+    for (i = 0, offset = 0; offset < 80;) {
         float angle;
         float length = D_L06_00161D78 - (float)i;
         if (length < 0.0f) length = 0.0f;
@@ -1233,6 +1233,8 @@ void FUN_L06_002f5d78(char *moby) {
         else if (angle < 0.0f) angle = 0.0f;
         left = (char **)(data + 0x70 + offset);
         right = (char **)(data + 0xc0 + offset);
+        i++;
+        offset += 4;
         *(float *)(*left + 0x40) = -angle;
         *(float *)(*right + 0x40) = angle;
         FUN_L00_00250df8(*left);
@@ -1282,15 +1284,15 @@ void FUN_L06_002f5d78(char *moby) {
             if (1.5707964f < other) other = 1.5707964f;
             else if (other < 0.0f) other = 0.0f;
             if (angle != 0.0f && other == 0.0f) allocate_voice_for_target_entry(2, 0, (int)*left);
-            lower = (D_L06_00161D80 * DEG_TO_RAD - (float)(i + i) * 0.7853982f) - 0.7853982f;
+            upper = (D_L06_00161D80 * DEG_TO_RAD - (float)(i + i) * 0.7853982f) - 0.7853982f;
             other = angle - (*(float *)&D_L06_00161DA4) * DEG_TO_RAD;
-            if (1.5707964f < lower) lower = 1.5707964f;
-            else if (lower < 0.0f) lower = 0.0f;
+            if (1.5707964f < upper) upper = 1.5707964f;
+            else if (upper < 0.0f) upper = 0.0f;
             if (1.5707964f < other) other = 1.5707964f;
             else if (other < 0.0f) other = 0.0f;
-            if (lower != 0.0f && other == 0.0f) allocate_voice_for_target_entry(2, 0, (int)*right);
+            if (upper != 0.0f && other == 0.0f) allocate_voice_for_target_entry(2, 0, (int)*right);
             *(float *)(*left + 0x44) = -angle;
-            *(float *)(*right + 0x44) = -lower;
+            *(float *)(*right + 0x44) = -upper;
             FUN_L00_00250df8(*left);
             FUN_L00_00250df8(*right);
         }
