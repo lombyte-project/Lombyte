@@ -542,6 +542,7 @@ extern unsigned char D_L00_0017E530[];
 extern int freeze_stats_time_ref_a[] __asm__("D_0015EE58");
 extern int freeze_stats_score_ref_a[] __asm__("D_0015EE68");
 extern float D_0013F3D0[];
+extern void *memcpy(void *, const void *, unsigned int);
 
 extern float FUN_00200240(unsigned int) __asm__("FUN_001fa6c0");
 extern float FUN_001fef10(float) __asm__("FUN_001f96b0");
@@ -592,10 +593,10 @@ int FUN_L00_00237200(HudElem *e) {
         left = 0xe0 - (width >> 1);
         other_width = FUN_001fb090((const char *)&D_L00_0017E530[1] + i, -1);
         other_left = 0xe0 - (other_width >> 1);
-        if (left < other_left) {
-            other_left = left;
-        } else {
+        if (left >= other_left) {
             width = other_width;
+        } else {
+            other_left = left;
         }
         left = other_left;
         FUN_0023b4d8(FUN_0023b208(0x7580, 0), left + 0x20, y, width, 0x36, alpha);
@@ -623,21 +624,17 @@ int FUN_L00_00237200(HudElem *e) {
         points[1].x = 115.7f;
         points[1].y = 287.0f;
         points[1].z = 119.5f;
-        if (level == 5) {
-            point = points[0];
-        } else {
-            point = points[1];
-        }
-        if (FUN_001ff450(D_0013F3D0, &point.x) < 5.0f) {
+        if (FUN_001ff450(D_0013F3D0,
+                level == 5 ? memcpy(&point, &points[0], sizeof(point))
+                           : memcpy(&point, &points[1], sizeof(point))) < 5.0f) {
             *(int *)0x15f648 = y + 100;
-            extra = 4;
-            if (current_level_index_sda != 0x10) extra = 0;
-            elapsed = *(int *)((char *)freeze_stats_time_ref_a + extra);
-            extra = *(int *)((char *)freeze_stats_score_ref_a + extra);
+            extra = current_level_index_sda == 0x10 ? 1 : 0;
+            elapsed = freeze_stats_time_ref_a[extra];
+            extra = freeze_stats_score_ref_a[extra];
             if (elapsed != 0) {
                 interval = pal_mode != 0 ? 3000 : 3600;
-                minute_scale = interval / 60;
                 seconds = elapsed / interval;
+                minute_scale = interval / 60;
                 remainder = elapsed - seconds * interval;
                 width = remainder / minute_scale;
                 remainder = (remainder - width * minute_scale) * 100 / minute_scale;
