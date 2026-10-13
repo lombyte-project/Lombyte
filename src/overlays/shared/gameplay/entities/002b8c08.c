@@ -2689,24 +2689,27 @@ reset_timer:
         FUN_L01_0028bb90(path_state, B2(data, 0x120) & 0x20, moby, F2(data, 0xf4), F2(data, 0xf8));
         if ((B2(data, 0x120) & 0x1e) && !(B2(data, 0x120) & 1)) {
             link = (int *)(data + 0x140);
-            for (i = 0; i < 4; ++i) {
-                if ((B2(data, 0x120) & (2 << i)) && link[i] != -1) {
-                    child = D_L01_0015FFD8 + (link[i] << 8);
+            node = (char *)point;
+            for (i = 0; i < 4; ++i, node += 0x10, ++link) {
+                if ((B2(data, 0x120) & (2 << i)) && *link != -1) {
+                    child = D_L01_0015FFD8 + (*link << 8);
                     if (child && (child_data = *(char **)(child + 0x78)) != 0) {
                         I2(child_data, 0x70) |= 0x1000;
-                        FUN_002645a8_2f5168(moby, i, point + i * 4);
-                        FUN_002211b8_2f5168(work_init, point + i * 4, moby + 0x10);
+                        FUN_002645a8_2f5168(moby, i, node);
+                        FUN_002211b8_2f5168(work_init, node, moby + 0x10);
                         FUN_00221410_2f5168(work_init, work_init, 1.0f);
-                        Q2(child, 0x10) = *(OvlQuad *)(point + i * 4);
+                        Q2(child, 0x10) = *(OvlQuad *)node;
                         Q2(child_data, 0x80) = *(OvlQuad *)work_init;
                     }
                 }
             }
         }
-        if (H2(data, 0x11c) <= 0) {
-            if (D_L01_0015ED84 == 3 || D_L01_0015ED84 == 9) H2(data, 0x13a) = 0;
-            B2(moby, 0x20) = 1;
-        } else B2(moby, 0x20) = 3;
+        if (H2(data, 0x11c) > 0) {
+            B2(moby, 0x20) = 3;
+            return;
+        }
+        if (D_L01_0015ED84 == 3 || D_L01_0015ED84 == 9) H2(data, 0x13a) = 0;
+        B2(moby, 0x20) = 1;
         return;
     case 2:
         if (path_state->path_id == -1) return;
