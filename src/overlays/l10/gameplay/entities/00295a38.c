@@ -2011,11 +2011,12 @@ void FUN_L10_002da690(void *moby) {
     if (*(int *)(data + 4) > 0) {
         transform = scratch;
         do {
-            i++;
+            int next = i + 1;
+            i = next;
             rotation_matrix_da690(transform, &((struct Moby *)moby)->rot);
             multiply_matrix_da690(transform, transform, buffers.rotation);
             *(OvlQuad *)(transform + 0x30) = *(OvlQuad *)&((struct Moby *)moby)->pos;
-            *(float *)(transform + 0x38) += convert_integer_to_float_da690(i) * *(float *)(data + 8);
+            *(float *)(transform + 0x38) += convert_integer_to_float_da690(next) * *(float *)(data + 8);
             transform += 0x40;
         } while (i < *(int *)(data + 4));
     }
@@ -2023,17 +2024,18 @@ void FUN_L10_002da690(void *moby) {
         u64 texture = get_effect_texture_da690(14);
         u64 packet_flags = ((u64)D_L10_00161C70) | ((u64)D_L10_00161C74 << 2) |
                 ((u64)D_L10_00161C78 << 4) | ((u64)D_L10_00161C7C << 6) | 0x8000000000ULL;
-        ((u64 *)matrix1)[5] = texture;
-        ((u64 *)matrix2)[5] = texture;
-        ((u64 *)matrix1)[6] = 0xff9000000260ULL;
-        ((u64 *)matrix1)[7] = packet_flags;
-        ((u64 *)matrix2)[6] = 0xff9000000260ULL;
-        ((u64 *)matrix2)[4] = 0;
-        ((u64 *)matrix1)[4] = 0;
-        ((u64 *)matrix2)[7] = packet_flags;
+        ((u64 *)buffers.matrix1)[5] = texture;
+        ((u64 *)buffers.packet.fields.matrix2)[5] = texture;
+        ((u64 *)buffers.matrix1)[6] = 0xff9000000260ULL;
+        ((u64 *)buffers.matrix1)[7] = packet_flags;
+        ((u64 *)buffers.packet.fields.matrix2)[6] = 0xff9000000260ULL;
+        ((u64 *)buffers.packet.fields.matrix2)[4] = 0;
+        ((u64 *)buffers.matrix1)[4] = 0;
+        ((u64 *)buffers.packet.fields.matrix2)[7] = packet_flags;
     }
     {
-        float *source = (float *)0x001d9ff4;
+        float *source = (float *)0x001d9ff0;
+        source++;
         i = 3;
         do {
             float value = *source;
@@ -2044,49 +2046,65 @@ void FUN_L10_002da690(void *moby) {
             uv1 += 2;
         } while (--i >= 0);
     }
-    for (group = 0; group < 4; group++) {
-        phase = 0.0f;
-        for (row = 0; row < 19; row++) {
-            phase += D_L10_00161D60;
-            if (phase > 1.0f) phase -= 1.0f;
-            for (i = 0; i < 4; i++) {
-                float value = ((float *)0x001d9ff0)[i * 2] + phase + *(float *)(base + 0x12de0);
-                matrix1[i * 2] = value;
-                matrix2[i * 2] = value;
-            }
-            for (i = 0; i < *(int *)(data + 4); i++) {
-                unsigned char *order = (unsigned char *)(data + 0x10);
-                int age = *(int *)(base + 0x10000 + 0x2c00 + group * 0x78 + order[i] * 4);
-                float progress;
-                unsigned int color;
-                if (age > D_L10_00161D68) {
-                    progress = convert_integer_to_float_da690(age - D_L10_00161D68) /
-                               convert_integer_to_float_da690(D_L10_00161D64 - D_L10_00161D68);
-                } else {
-                    progress = 1.0f - convert_integer_to_float_da690(age) /
-                               convert_integer_to_float_da690(D_L10_00161D68);
+    {
+        char *age_base = base + 0x10000;
+        group = 0;
+        do {
+            int next_group = group + 1;
+            phase = 0.0f;
+            row = 0;
+            do {
+                int next_row = row + 1;
+                phase += D_L10_00161D60;
+                if (phase > 1.0f) phase -= 1.0f;
+                for (i = 0; i < 4; i++) {
+                    float value = ((float *)0x001d9ff0)[i * 2] + phase + *(float *)(base + 0x12de0);
+                    matrix2[i * 2] = value;
+                    matrix1[i * 2] = value;
                 }
-                color = fast_tween_color_da690(progress, D_L10_00161C90, D_L10_00161C94);
-                color = (color & 0xffffff) +
-                        (truncate_float_to_s32_da690(fade * fade *
-                         convert_integer_to_float_da690((int)color >> 24)) << 24);
-                if (((struct Moby *)moby)->state == 2) {
-                    float alpha = convert_integer_to_float_da690(*(int *)(data + 0x34));
-                    float duration = scale_time_da690(D_L10_00161C98 * 60.0f);
-                    color = (truncate_float_to_s32_da690(alpha * 255.0f / duration) << 24) | 0xffffff;
-                }
+                i = 0;
+                if (*(int *)(data + 4) > 0) {
+                    do {
+                        unsigned char *order = (unsigned char *)(data + 0x10);
+                        int group_age = group * 0x78;
+                        int group_vertices = (int)((long long)group * 0x2580);
+                        char *ages = age_base + 0x2c00;
+                        int age = *(int *)(ages + (order[i] * 4 + group_age));
+                        float progress;
+                        unsigned int color;
+                        if (age > D_L10_00161D68) {
+                            progress = convert_integer_to_float_da690(age - D_L10_00161D68) /
+                                       convert_integer_to_float_da690(D_L10_00161D64 - D_L10_00161D68);
+                        } else {
+                            progress = 1.0f - convert_integer_to_float_da690(age) /
+                                       convert_integer_to_float_da690(D_L10_00161D68);
+                        }
+                        color = fast_tween_color_da690(progress, D_L10_00161C90, D_L10_00161C94);
+                        color = (color & 0xffffff) +
+                                (truncate_float_to_s32_da690(fade * fade *
+                                 convert_integer_to_float_da690((int)color >> 24)) << 24);
+                        if (((struct Moby *)moby)->state == 2) {
+                            float alpha = convert_integer_to_float_da690(*(int *)(data + 0x34));
+                            float duration = scale_time_da690(D_L10_00161C98 * 60.0f);
+                            color = (truncate_float_to_s32_da690(alpha * 255.0f / duration) << 24) | 0xffffff;
+                        }
 
-                *(unsigned int *)(buffers.packet.quad + 0x40) = color;
-                *(unsigned int *)(buffers.packet.quad + 0x4c) = color;
-                *(unsigned int *)(buffers.packet.quad + 0x48) = color;
-                *(unsigned int *)(buffers.packet.quad + 0x44) = color;
-                for (vertex = 0; vertex < 4; vertex++) {
-                    add_vector_xyz_da690(buffers.packet.quad + vertex * 0x10, (char *)0x001da010 + vertex * 0x10,
-                        base + group * 0x2580 + (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
+                        *(unsigned int *)(buffers.packet.quad + 0x40) = color;
+                        *(unsigned int *)(buffers.packet.quad + 0x4c) = color;
+                        *(unsigned int *)(buffers.packet.quad + 0x48) = color;
+                        *(unsigned int *)(buffers.packet.quad + 0x44) = color;
+                        for (vertex = 0; vertex < 4; vertex++) {
+                            add_vector_xyz_da690(buffers.packet.quad + vertex * 0x10, (char *)0x001da010 + vertex * 0x10,
+                                base + group_vertices + (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
+                        }
+                        draw_geometry_quad_da690(buffers.packet.quad, scratch + i * 0x40, 0);
+                        i++;
+                    } while (i < *(int *)(data + 4));
                 }
-                draw_geometry_quad_da690(buffers.packet.quad, scratch + i * 0x40, 0);
-            }
-        }
+                row = next_row;
+            } while (row < 19);
+            group = next_group;
+        } while (group < 4);
     }
 }
 #endif
