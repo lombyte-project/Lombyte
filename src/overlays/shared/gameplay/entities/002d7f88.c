@@ -2638,7 +2638,7 @@ void FUN_L00_002dd8e8(void) {
     float phase, next_phase, offset, step, dot;
     float previous_phase;
     int row, segment, next_segment, value, previous_value;
-    int current;
+    int current, segment_offset;
     char *prior;
 
     quad.texture[1] = FUN_001f9298_002dd8e8(0x15);
@@ -2660,10 +2660,11 @@ void FUN_L00_002dd8e8(void) {
         current = row * 0x140;
         prior = D_L00_001E5EE0_002dd8e8;
         for (segment = 0; segment < 20; segment++) {
-            qcopy(&quad.points[0], D_L00_001E6020_002dd8e8 + (current + segment * 16));
+            segment_offset = segment * 16;
+            qcopy(&quad.points[0], D_L00_001E6020_002dd8e8 + (current + segment_offset));
             next_segment = (segment + 1) % 20;
             qcopy(&quad.points[1], D_L00_001E6020_002dd8e8 + (current + next_segment * 16));
-            qcopy(&quad.points[2], prior + (current + segment * 16));
+            qcopy(&quad.points[2], prior + (current + segment_offset));
             qcopy(&quad.points[3], prior + (current + next_segment * 16));
             FUN_001ff2a8_002dd8e8(&edge, &quad.points[0], &quad.points[1]);
             FUN_001ff2a8_002dd8e8(&outward, &quad.points[2], &quad.points[1]);
