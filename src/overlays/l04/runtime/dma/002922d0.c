@@ -410,7 +410,8 @@ extern float FUN_001f99c0(float);
 extern float D_L04_0015ED60 __asm__("D_L04_0015ED60");
 extern float D_L04_0015ED68 __asm__("D_L04_0015ED68");
 extern float D_L04_0015ED6C __asm__("D_L04_0015ED6C");
-extern float D_L04_0015816C __asm__("D_L04_0015816C");
+/* Retail -0x7e94($gp), with $gp = 0x166c00, addresses 0x0015ed6c. */
+extern float D_L04_0015816C __asm__("D_L04_0015ED6C") __attribute__((sda));
 extern float D_L04_00173FF8 __asm__("D_L04_00173FF8");
 extern int D_L04_00173FF0[] __asm__("D_L04_00173FF0");
 
@@ -496,40 +497,25 @@ int FUN_L04_00295778(struct Moby *m, LegRig *rig, float amount, float target, fl
     rig_step(m, rig, amount, target, step, changed);
     if ((rig->unkEE & 4) == 0) {
         rig_probe_setup(m, 0, &result, local.joints, &probe_start, &probe_end);
-        if (m->prev_seq == rig->anims[3]->id)
-            goto double_height;
-        if (m->prev_seq == rig->anims[1]->id)
-            goto double_height;
-        if (m->prev_seq == rig->anims[2]->id) {
-double_height:
-            height = rig->unkE0;
-            height += height;
-            goto store_height;
+        if (m->prev_seq == rig->anims[3]->id ||
+            m->prev_seq == rig->anims[1]->id ||
+            m->prev_seq == rig->anims[2]->id) {
+            *(float *)&rig->unkE8 = rig->unkE0 + rig->unkE0;
+        } else if (m->prev_seq == rig->anims[7]->id && (rig->mode & 15)) {
+            *(float *)&rig->unkE8 = rig->unkE0 + rig->unkE0;
+        } else if (m->prev_seq == m->seq) {
+            *(float *)&rig->unkE8 *= 0.9f;
         }
-        if (m->prev_seq == rig->anims[7]->id) {
-            if ((rig->mode & 15) == 0)
-                goto decay_height;
-            height = rig->unkE0 + rig->unkE0;
-            goto store_height;
-        }
-decay_height:
-        if (m->prev_seq == m->seq)
-            *(float *)&rig->unkE8 = *(float *)&rig->unkE8 * 0.9f;
         height = *(float *)&rig->unkE8;
-        goto have_height;
-store_height:
-        *(float *)&rig->unkE8 = height;
-        height = *(float *)&rig->unkE8;
-have_height:
         *(float *)&local.joints[2] += height;
         probe_end -= height;
         rig_sub_vector(local.v.offset, (float *)&m->pos, (float *)local.joints);
-        for (i = 0; i < 8 && rig_probe((float *)local.joints, probe_start, probe_end, 4, m); i++) {
-            ((int *)local.joints)[0] = D_L04_00173FF0[0];
-            ((int *)local.joints)[1] = D_L04_00173FF0[1];
-            ((int *)local.joints)[2] = D_L04_00173FF0[2];
-            ((int *)local.joints)[3] = D_L04_00173FF0[3];
-            flags |= 1;
+        {
+            int i;
+            for (i = 0; i < 8 && rig_probe((float *)local.joints, probe_start, probe_end, 4, m); i++) {
+                *(u128 *)local.joints = *(u128 *)D_L04_00173FF0;
+                flags |= 1;
+            }
         }
         rig_sub_vector((float *)transformed, (float *)local.joints, (float *)&m->pos);
         add_vector_xyz((float *)&m->pos, (float *)local.joints, local.v.offset);
@@ -547,16 +533,24 @@ have_height:
         m->anim_speed = 1.0f;
         first = rig->anims;
         if (rig->unkB7 != 0) {
+            i = 0;
             entry = first;
-            for (i = 0; i < 13; i++, entry++, first++) {
+            for (; i < 13; i++, entry++, first++) {
                 if ((*entry)->id == m->seq) {
-                    if (rig->speed < D_L04_0015ED6C * 0.19f) {
+                    if (rig->speed < *(float *)0x0015ed6c * 0.19f) {
                         height = rig_angle_difference(m->rot.z, target);
-                        if (0.09239978f < height && amount < D_L04_0015816C * 0.19f)
-                            entry = first;
+                        if (0.09239978f < height) {
+                            /* Retail retains this threshold as the rate numerator. */
+                            time = D_L04_0015816C * 0.19f;
+                            if (amount < time) {
+                                m->anim_speed = D_L04_0015ED68 * FUN_001f99c0(time / (*first)->rate);
+                                break;
+                            }
+                        }
                     }
-                    m->anim_speed = D_L04_0015ED68 * FUN_001f99c0(rig->speed / (*entry)->rate);
-                    return flags;
+                    time = rig->speed;
+                    m->anim_speed = D_L04_0015ED68 * FUN_001f99c0(time / (*entry)->rate);
+                    break;
                 }
             }
         }
