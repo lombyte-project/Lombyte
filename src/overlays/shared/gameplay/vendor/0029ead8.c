@@ -45,7 +45,7 @@ extern void FUN_0024ff08(s32, s32) __asm__("FUN_0020d330");
 extern s32 FUN_00116248(char *, const char *, ...);
 
 void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
-    volatile VendorTextBox box;
+    VendorTextBox box;
     char text[256];
     VendorItemInfo *price_table;
     s32 cost;
@@ -55,17 +55,16 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     FUN_00201560(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
     FUN_001153fc((void *)&box, 0, 0x18);
     box.half_x = x / 2;
+    box.half_y = y / 2;
     box.left = x - 8;
     box.top = y - 8;
-    box.half_y = y / 2;
     box.width = 0x10;
     box.style = 3;
     box.y = (s16)y;
     box.x = (s16)x;
 
     row = &vendor_menu.rows[vendor_menu.f58];
-    price_table = &D_L00_001C40B0[row->fD0];
-    if (row->fD4 == 1 && weapon_ammo_counts[row->fD0] >= price_table->hE) {
+    if (row->fD4 == 1 && weapon_ammo_counts[row->fD0] >= D_L00_001C40B0[row->fD0].hE) {
         cost = 0x5236;
         goto message;
     }
@@ -80,8 +79,10 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
         goto message;
     }
     FUN_0024ff08(vendor_menu.f20 + 0x500, 1);
-    box.style = 1;
-    box.half_y = 6;
+    cost = 1;
+    ((volatile VendorTextBox *)&box)->style = cost;
+    cost = 6;
+    ((volatile VendorTextBox *)&box)->half_y = cost;
     FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5237), -1);
     FUN_00116248(text, D_L00_00161160, D_L00_00161E34);
     if (D_L00_00161E34 >= 100)
