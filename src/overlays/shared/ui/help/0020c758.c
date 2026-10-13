@@ -1606,11 +1606,10 @@ after_moby:
                             angle = FUN_001ff800_f580(((f32)(D_L00_0015F5CC_f580 % random_range) / FUN_00200240_f580(random_range) * 2.0f) * 3.1415927f + -3.1415927f);
                             color_red = FUN_00200250_f580(angle * 90.0f);
                             color_green = FUN_00200250_f580(angle * 50.0f);
-                            color_blue = FUN_00200250_f580(angle * 10.0f) + 0x14;
+                            color_blue = FUN_00200250_f580(angle * 10.0f);
                             color_red += 0xd7;
-                            color_green += 0x32;
                             if (color_red > 0xff) color_red = 0xff;
-                            *(u32 *)(effect + 0x90) = (color_blue << 16) | 0x80000000 | (color_green << 8) | color_red;
+                            *(u32 *)(effect + 0x90) = ((color_blue + 0x14) << 16) | 0x80000000 | ((color_green + 0x32) << 8) | color_red;
                             *(u16 *)(effect + 0x34) |= 0x10;
                         }
                     }
