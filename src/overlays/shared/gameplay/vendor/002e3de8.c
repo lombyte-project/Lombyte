@@ -431,6 +431,7 @@ void FUN_L10_002f5b58(char *moby) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
 #else
+#include "qcopy.h"
 extern float D_L10_0015F3FC __attribute__((section(".data")));
 extern float D_L10_0015F3FC_sda __asm__("D_L10_0015F3FC") __attribute__((sda));
 extern int D_L10_0015F404;
@@ -465,8 +466,8 @@ extern float D_L10_0016CF70_far __asm__("D_L10_0016CF70") __attribute__((section
 
 void FUN_L10_002f5f18(char *moby) {
     char *work = *(char **)(moby + 0x70);
-    short *indices = (short *)(work + 0x58);
-    char *acc = (char *)indices - 0x18;
+    char *acc = work + 0x40;
+    short *indices = (short *)(acc + 0x18);
     int slot = *(short *)(moby + 0x84);
     unsigned char *data = *(unsigned char **)(D_L10_0015EF50 + slot * 0x20 + 0x1c);
     char *path;
@@ -474,7 +475,7 @@ void FUN_L10_002f5f18(char *moby) {
     union { float target[4]; float direction[4]; } vectors __attribute__((aligned(16)));
     float transformed[4] __attribute__((aligned(16)));
     float point[4] __attribute__((aligned(16)));
-    float *scale;
+    float * volatile scale;
     int i, count, next, index;
     long long segment;
     long long reached;
@@ -492,7 +493,7 @@ void FUN_L10_002f5f18(char *moby) {
         D_L10_0015F404 = 1;
         *(short *)(acc + 0x14) = 1;
         path += 0x10;
-        *(u128 *)scale = *(u128 *)path;
+        qcopy(scale, path);
         if (*(int *)(data + 0x28) >= 0) {
             path = D_L10_0015FFD8 + *(int *)(data + 0x28) * 0x100;
             vectors.target[0] = *(float *)(data + 0x2c);
@@ -536,7 +537,7 @@ void FUN_L10_002f5f18(char *moby) {
     }
     path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
     scale = (float *)(moby + 0x30);
-    *(u128 *)old_pos = *(u128 *)scale;
+    qcopy(old_pos, scale);
     reached = FUN_L00_0025d808(path, scale, (int *)(acc + 0x00),
                                 (float *)(acc + 0x04), *(float *)(data + 0x3c) * D_0015ED6C, 0);
     if (*(short *)(acc + 0x16) != 0) {
