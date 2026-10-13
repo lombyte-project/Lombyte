@@ -1494,7 +1494,8 @@ void FUN_L18_002d82c0(struct Moby *moby) {
     case 1:
     case 2:
         break;
-    case 3:
+    case 3: {
+        float ratio;
         if (FUN_001f9740((int *)(data + 0x7C))) {
             ratio = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) /
                     (D_L18_00161A64 - D_L18_00161A60);
@@ -1505,15 +1506,15 @@ void FUN_L18_002d82c0(struct Moby *moby) {
             }
             ratio = 1.0f - ratio * 0.333f;
             if (*(int *)(data + 0x84)) {
-                speed = D_L18_00161A50;
+                ratio = D_L18_00161A50 * ratio;
             } else {
-                speed = D_L18_00161A58;
+                ratio = D_L18_00161A58 * ratio;
             }
-            ratio = speed * ratio;
             *(float *)(data + 0x6C) = ratio * DEG_TO_RAD * frame_time;
             moby->state = 4;
         }
         break;
+    }
     case 4:
         if (moby->visible && FUN_001f9740((int *)(data + 0x8C))) {
             FUN_L18_002d88b8(moby);
@@ -1534,8 +1535,9 @@ void FUN_L18_002d82c0(struct Moby *moby) {
             FUN_L18_002d88b8(moby);
             *(int *)(data + 0x8C) = scale_ticks(random_int_between(0xF, 0x1E));
         }
-        ratio = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) /
-                (D_L18_00161A64 - D_L18_00161A60);
+        gravity = convert_integer_to_float(D_L18_001623A8);
+        speed = D_L18_00161A64 - D_L18_00161A60;
+        ratio = (gravity - D_L18_00161A60) / speed;
         if (ratio > 1.0f) {
             ratio = 1.0f;
         } else if (ratio < 0.0f) {
@@ -1564,10 +1566,11 @@ fixed_gravity:
         gravity = gravity * ratio;
 apply_gravity:
         gravity = gravity * speed;
-        speed = *(volatile float *)(data + 0x70);
-        *(volatile float *)(data + 0x70) = speed - gravity;
+        ratio = *(volatile float *)(data + 0x70);
+        *(volatile float *)(data + 0x70) = ratio - gravity;
         *(float *)(data + 0x64) += *(volatile float *)(data + 0x70);
-        if (moby->pos.z < *(float *)(data + 0x60) - 10.0f) {
+        speed = *(float *)(data + 0x60) - 10.0f;
+        if (moby->pos.z < speed) {
             if (hero.ground_moby == moby && hero.air_frames.s == 0) {
                 if (hero.motion.pos.f[2] < D_L18_0015F638 && hero.state.current != 0x77) {
                     FUN_L18_00227dd0(0x77, 1);
