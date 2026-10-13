@@ -419,7 +419,7 @@ extern f32 D_L06_00161FB8 __attribute__((sda));
 extern f32 D_L06_00161FBC __attribute__((sda));
 extern f32 D_0015ED6C __asm__("D_0015ED6C");
 extern s32 D_001413D0 __asm__("D_001413D0");
-extern u8 D_0013D419 __asm__("D_0013D419");
+#include "rnc/gameplay/state/item_state.h"
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time_for_update(f32) __asm__("FUN_001f96b0");
 extern s32 FUN_002182f0(f32) __asm__("FUN_001fa6d0");
@@ -445,6 +445,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
     struct Moby *other;
     struct Moby *fragment;
     s32 collision;
+    s32 fragment_count;
     struct {
         f32 position[4];
         f32 velocity[4];
@@ -456,7 +457,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
     f32 remaining;
     s32 *route;
     s16 frames;
-    Vec4 *vel;
+    f32 *vel;
 
     moby->scale = moby->pclass->scale * D_L06_00161FA8;
     FUN_L06_002ff2c8((char *)moby);
@@ -470,8 +471,8 @@ void FUN_L06_002feb40(struct Moby *moby) {
     collision = FUN_00269288(moby, other, &vars->unk20, 0, &scratch.hit_type, scratch.motion, 0, 4);
     if (scratch.hit_type != 1 && moby->state != 16) {
         if (current_level_index == 10 && other != 0 && *(struct Moby **)((char *)other + 0x20) != 0 &&
-            (*(struct Moby **)((char *)other + 0x20))->oclass == 0x31a && D_0013D419 == 0) {
-            D_0013D419 = 1;
+            (*(struct Moby **)((char *)other + 0x20))->oclass == 0x31a && item_unlocked[0x11] == 0) {
+            item_unlocked[0x11] = 1;
             FUN_0029ae30(1, 0, 0);
             FUN_00272ad8(0x53d6, -1);
         }
@@ -497,7 +498,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
                 f32 speed;
                 f32 remaining;
                 moby->state = 15;
-                vel = &vars->vel;
+                vel = vars->vel.f;
                 frames = scale_game_frames(60);
                 speed = D_L06_00161FB0 * D_0015ED6C;
                 remaining = D_L06_00161FB4 * D_0015ED6C;
@@ -517,7 +518,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
                 f32 speed;
                 f32 remaining;
                 moby->state = 16;
-                vel = &vars->vel;
+                vel = vars->vel.f;
                 speed = D_L06_00161FB8 * D_0015ED6C;
                 remaining = D_L06_00161FBC * D_0015ED6C;
                 moby->flags &= ~0x1000;
@@ -528,7 +529,8 @@ void FUN_L06_002feb40(struct Moby *moby) {
             }
             angle = FUN_001f9e90(other->pos.x, other->pos.y);
             FUN_0026b368(angle, moby, vel, 9, 1, 0);
-            for (collision = 9; collision >= 0; collision--) {
+            vel = scratch.velocity;
+            for (fragment_count = 9; fragment_count >= 0; fragment_count--) {
                 qcopy(scratch.position, &moby->pos);
                 scratch.position[2] += 2.5f;
                 scratch.position[0] += FUN_00266908(0.0f, 0.2f);
@@ -536,15 +538,15 @@ void FUN_L06_002feb40(struct Moby *moby) {
                 scratch.position[2] += FUN_00266908(0.0f, 0.2f);
                 angle = FUN_00266970();
                 speed = random_float_between(3.0f, 5.7f) * D_0015ED6C;
-                scratch.velocity[0] = FUN_001f9dc8(angle) * speed;
-                scratch.velocity[1] = FUN_001f9de0(angle) * speed;
-                scratch.velocity[2] = 0.0f;
+                vel[0] = FUN_001f9dc8(angle) * speed;
+                vel[1] = FUN_001f9de0(angle) * speed;
+                vel[2] = 0.0f;
                 angle = FUN_001f9e90(other->pos.x, other->pos.y);
-                scratch.velocity[0] += FUN_001f9dc8(angle) * (D_0015ED6C * 7.0f);
+                vel[0] += FUN_001f9dc8(angle) * (D_0015ED6C * 7.0f);
                 angle = FUN_001f9e90(other->pos.x, other->pos.y);
-                scratch.velocity[1] += FUN_001f9de0(angle) * (D_0015ED6C * 7.0f);
-                scratch.velocity[2] = random_float_between(3.0f, 8.5f) * D_0015ED6C;
-                fragment = (struct Moby *)FUN_L06_00300c60((char *)moby, scratch.position, scratch.velocity);
+                vel[1] += FUN_001f9de0(angle) * (D_0015ED6C * 7.0f);
+                vel[2] = random_float_between(3.0f, 8.5f) * D_0015ED6C;
+                fragment = (struct Moby *)FUN_L06_00300c60((char *)moby, scratch.position, vel);
                 if (fragment != 0) {
                     fragment->scale *= 0.4f;
                 }
