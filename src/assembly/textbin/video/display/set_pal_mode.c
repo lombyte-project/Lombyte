@@ -61,9 +61,8 @@ void set_pal_mode(void) {
     display_width = fs_aa_buffer.display_width;
     screen_extent.width = display_width;
     screen_extent.half_width = display_width >> 1;
-    screen_extent.half_height = fs_aa_buffer.display_height >> 1;
+    screen_extent.half_height = (screen_extent.height = fs_aa_buffer.display_height) >> 1;
     screen_extent.bottom = (screen_extent.half_height + 0x800) << 4;
-    screen_extent.height = fs_aa_buffer.display_height;
     screen_extent.left = (0x800 - screen_extent.half_width) << 4;
     screen_extent.right = (screen_extent.half_width + 0x800) << 4;
     screen_extent.top = (0x800 - screen_extent.half_height) << 4;
