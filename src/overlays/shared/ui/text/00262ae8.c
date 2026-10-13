@@ -92,13 +92,9 @@ void FUN_L05_00262b58(HudCounter *e) {
     approach_value(&value, (f32)*e->value, 6.0f);
     e->smoothed = truncate_float_to_s32(value);
 
-    if (counter[2] == 1) goto state_one;
-    if (counter[2] >= 2) {
-        if (counter[2] > 3) return;
-        goto tail;
-    }
-    if (counter[2] != 0) return;
-    if (D_0013F65E < 6 || (f32)D_0013FA5C < 1.0f) return;
+    switch (counter[2]) {
+    case 0:
+    if (D_0013F65E < 6 || !((f32)D_0013FA5C >= 1.0f)) return;
     D_L05_0015FAD4 = D_0013FA5C;
     D_L05_0015FAD8 = 0;
     i = 3;
@@ -107,8 +103,8 @@ void FUN_L05_00262b58(HudCounter *e) {
     counter[2] = 1;
     counter[0] = 0;
     counter[1] = D_L05_0015F87C;
-    return;
-state_one:
+    break;
+    case 1:
         if (counter[0] < 10) counter[0]++;
         if (counter[1] != 0) counter[1]--;
         D_L05_0015FAD8 = D_0013FA40;
@@ -149,8 +145,9 @@ state_one:
             counter[1] = D_L05_0015F87C;
             counter[0] = scale_game_frames(0x3c);
         }
-        return;
-tail:
+        break;
+    case 2:
+    case 3:
 
     if (counter[0] == 0) {
         D_L05_0015FB00 = 0;
@@ -170,6 +167,7 @@ tail:
         }
     }
     counter[0]--;
+    }
 }
 #endif
 #ifndef NON_MATCHING
