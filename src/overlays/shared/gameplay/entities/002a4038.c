@@ -1580,7 +1580,7 @@ void FUN_L02_002ea210(char *moby) {
             ea210_draw(position, output, 1, 0, 0);
         ea210_drawend(position);
         ea210_drawflush(output);
-        if (D_L02_00179A10 == 0 && *(int *)((char *)&D_L02_00179A10 + 0x24) == -1 &&
+        if (D_L02_00179A90_2D9F08.i0 == 0 && D_L02_00179A90_2D9F08.i24 == -1 &&
             0.2f < *(float *)(data + 0x40)) {
             ea210_fade(1.0f, frame_time * 4.0f, &D_L02_0015F3FC);
         } else {
