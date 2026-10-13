@@ -341,9 +341,6 @@ float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r
     g[0] = *out;
     return da70_25dcd8(e, g, 0.0f);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025df68.s", FUN_L00_0025df68);
-#else
 extern f32 path_distance_25df68(void *, void *, f32) __asm__("FUN_L00_0025da70");
 extern void clear_vector_25df68(void *) __asm__("FUN_001f99f8");
 extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, f32, s32)
@@ -360,6 +357,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     f32 current_fraction = 0.0f;
     f32 best_fraction;
     f32 distance, previous_distance, next_distance;
+    f32 expanded_limit;
 
     qcopy(&work[0], path + 4);
     work[1] = *point;
@@ -371,7 +369,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
         return 0;
     }
 
-    limit = step + limit;
+    expanded_limit = step + limit;
     do {
         crossed = sample_path(path, &work[0], &current,
                                    &current_fraction, step, wrap);
@@ -383,7 +381,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
             best_fraction = current_fraction;
         }
     } while (!crossed);
-    if (limit < distance)
+    if (expanded_limit < distance)
         return 0;
 
     start = best_segment;
@@ -410,6 +408,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
 
     previous_distance = 1000000000.0f;
     if (best_segment > 0 || wrap) {
+        f32 distance;
         count = *path;
         previous = count - 1;
         previous = (best_segment + previous) % count;
@@ -439,7 +438,6 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     }
     return 1;
 }
-#endif
 extern f32 FUN_L00_00200228(void *, f32);
 /* Wraps angle a into -pi..pi. */
 f32 FUN_L00_0025e310(f32 a) {
