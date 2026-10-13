@@ -1326,7 +1326,7 @@ void FUN_L05_00254058(void) {
     }
     {
         struct Hero *g = &hero;
-        table = *(struct ScoreTable *)D_L05_002169F8;
+        for (i = 0; i < 5; i++) table.values[i] = D_L05_002169F8[i];
         *(f32 *)((char *)g + 0x6F4) = table.values[*(s32 *)((char *)g + 0x6F0)];
         frames = FUN_001f96b0(1.0f);
         *(s32 *)((char *)g + 0x6FC) = truncate_float_to_s32((f32)((*(s32 *)((char *)g + 0x6F8) * 100) / (s32)(frames * 60.0f)));
