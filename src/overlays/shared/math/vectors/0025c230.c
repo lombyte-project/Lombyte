@@ -198,7 +198,7 @@ int FUN_L00_0025c698(void *moby, void *motion) {
         F_25C698(motion, 8) = F_25C698(motion, 0x1c);
 
     prior = *(V4 *)((u8 *)moby + 0x10);
-    prior.v[2] += F_25C698(motion, 0x28);
+    prior.v[2] = F_25C698(motion, 0x28) + prior.v[2];
     height = FUN_L00_00259698_0025c698(&prior, 0, 0.5f);
     if (FUN_001f35d8_0025c698() == 0) {
         if (F_25C698(motion, 0x5c) == 0.0f && height <= prior.v[2] &&
