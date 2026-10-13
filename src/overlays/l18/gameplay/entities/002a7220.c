@@ -2571,12 +2571,12 @@ typedef struct {
 extern float D_L18_001677C0_flare[] __asm__("D_L18_001677C0");
 extern L18FlareUV D_L18_001D9B50_flare[] __asm__("D_L18_001D9B50");
 extern L18FlareVector D_L18_001D9B70_flare[] __asm__("D_L18_001D9B70");
-extern int D_L18_00161EE4_flare __asm__("D_L18_00161EE4") __attribute__((section(".sdata")));
-extern int D_L18_00161EE8_flare __asm__("D_L18_00161EE8") __attribute__((section(".sdata")));
-extern int D_L18_00161EEC_flare __asm__("D_L18_00161EEC") __attribute__((section(".sdata")));
-extern int D_L18_00161EF0_flare __asm__("D_L18_00161EF0") __attribute__((section(".sdata")));
-extern int D_L18_00161EF8_flare[4] __asm__("D_L18_00161EF8") __attribute__((section(".sdata")));
-extern int D_L18_00161F08_flare[4] __asm__("D_L18_00161F08") __attribute__((section(".sdata")));
+extern int D_L18_00161EE4_flare __asm__("D_L18_00161EE4") __attribute__((sda));
+extern int D_L18_00161EE8_flare __asm__("D_L18_00161EE8") __attribute__((sda));
+extern int D_L18_00161EEC_flare __asm__("D_L18_00161EEC") __attribute__((sda));
+extern int D_L18_00161EF0_flare __asm__("D_L18_00161EF0") __attribute__((sda));
+extern int D_L18_00161EF8_flare __asm__("D_L18_00161EF8") __attribute__((sda));
+extern int D_L18_00161F08_flare __asm__("D_L18_00161F08") __attribute__((sda));
 extern void clear_flare_vector(void *) __asm__("FUN_001f99f8");
 extern float flare_length(float, float) __asm__("FUN_001f9e90");
 extern float flare_dot(void *, void *) __asm__("FUN_001f9b80");
@@ -2588,14 +2588,17 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
     L18FlarePacket packet[4];
     L18FlareVector axis;
     L18FlareVector basis[4][4];
-    float *volatile data = (float *)moby->pvars;
+    float *data = (float *)moby->pvars;
     int i;
-    int j;
+    unsigned int j;
+    L18FlareVector *corner;
     float x, y;
     void *pos = &moby->pos;
     clear_flare_vector(&axis);
-    x = D_L18_001677C0_flare[0] - moby->pos.x;
-    y = D_L18_001677C0_flare[1] - moby->pos.y;
+    x = moby->pos.x;
+    y = moby->pos.y;
+    x = D_L18_001677C0_flare[0] - x;
+    y = D_L18_001677C0_flare[1] - y;
     axis.z = flare_length(x, y);
     axis.y = -flare_length(flare_dot(pos, D_L18_001677C0_flare),
                             D_L18_001677C0_flare[2] - moby->pos.z);
@@ -2603,21 +2606,21 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
     copy_flare_vector(&basis[1][0], &axis);
     scale_vector_xyz(&basis[1][1], &basis[1][1], data[9]);
     scale_vector_xyz(&basis[1][2], &basis[1][2], data[9]);
-    *(OvlQuad *)&basis[0][3] = *(volatile OvlQuad *)pos;
-    *(OvlQuad *)&basis[1][3] = *(volatile OvlQuad *)pos;
+    qcopy(&basis[0][3], pos);
+    qcopy(&basis[1][3], pos);
     axis.x = data[11];
     copy_flare_vector(&basis[2][0], &axis);
     scale_vector_xyz(&basis[2][1], &basis[2][1], data[9]);
     scale_vector_xyz(&basis[2][2], &basis[2][2], data[9]);
-    *(OvlQuad *)&basis[2][3] = *(volatile OvlQuad *)pos;
+    qcopy(&basis[2][3], pos);
     axis.x = data[12];
     copy_flare_vector(&basis[3][0], &axis);
     scale_vector_xyz(&basis[3][1], &basis[3][1], data[9]);
     scale_vector_xyz(&basis[3][2], &basis[3][2], data[9]);
-    *(OvlQuad *)&basis[3][3] = *(volatile OvlQuad *)pos;
+    qcopy(&basis[3][3], pos);
     i = 0;
     do {
-        packet[i].texture = get_effect_texture(D_L18_00161F08_flare[i]);
+        packet[i].texture = get_effect_texture((&D_L18_00161F08_flare)[i]);
         packet[i].state = 0xff9000000260ULL;
         packet[i].flags = D_L18_00161EE4_flare |
                           ((unsigned long long)D_L18_00161EE8_flare << 2) |
@@ -2625,18 +2628,21 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
                           ((unsigned long long)D_L18_00161EF0_flare << 6) |
                           0x8000000000ULL;
         packet[i].zero = 0;
+        corner = &D_L18_001D9B70_flare[i * 4];
         j = 0;
         do {
             packet[i].uv[j].u = D_L18_001D9B50_flare[j].u;
             packet[i].uv[j].v = D_L18_001D9B50_flare[j].v;
             if (i == 0) {
                 packet[i].color[j] = tween_flare_color(data[9],
-                    D_L18_00161EF8_flare[i] & 0xffffff, D_L18_00161EF8_flare[i]);
+                    (&D_L18_00161EF8_flare)[i] & 0xffffff, (&D_L18_00161EF8_flare)[i]);
             } else {
-                packet[i].color[j] = D_L18_00161EF8_flare[i];
+                packet[i].color[j] = (&D_L18_00161EF8_flare)[i];
             }
-            *(OvlQuad *)&packet[i].corner[j] = *(OvlQuad *)&D_L18_001D9B70_flare[i * 4 + j];
-        } while (++j < 4);
+            qcopy(&packet[i].corner[j], corner);
+            j++;
+            corner++;
+        } while (j < 4);
         i++;
     } while (i < 4);
     draw_flare_packet(&packet[0], &basis[0][0], 0);
