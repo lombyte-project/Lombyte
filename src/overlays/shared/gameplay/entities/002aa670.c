@@ -1264,9 +1264,9 @@ void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
             if (angle > 1.5707964f) {
                 working[0] = fast_cos_2acfd8(atan2_2acfd8(hero.unk670, hero.unk674)) *
                             vector_distance(&hero.motion.pos, direction) * 0.5f;
-                working[1] = fast_sin_2acfd8(atan2_2acfd8(hero.unk670, hero.unk674)) *
-                            vector_distance(&hero.motion.pos, direction) * 0.5f;
+                angle = fast_sin_2acfd8(atan2_2acfd8(hero.unk670, hero.unk674));
                 working[2] = 0.0f;
+                working[1] = angle * vector_distance(&hero.motion.pos, direction) * 0.5f;
                 add_vector_xyz_2acfd8(desired, working, &hero.motion.pos);
                 qcopy(direction, desired);
             }
