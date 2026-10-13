@@ -2358,8 +2358,7 @@ extern unsigned char D_L18_001F29B8_9768[] __asm__("D_L18_001F29B8");
 
 void FUN_L18_002e9768(struct Moby *moby) {
     float *data = (float *)moby->pvars;
-    int state = moby->state;
-    int lifetime, spread;
+    long state = moby->state;
     float magnitude;
 
     switch (state) {
@@ -2399,15 +2398,21 @@ void FUN_L18_002e9768(struct Moby *moby) {
                     position[2] += random_float_between_9768(0.0f, 6.0f);
                     first = (int *)colors + random_integer_below_9768(6);
                     second = (int *)colors2 + random_integer_below_9768(6);
-                    lifetime = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
-                    spread = random_int_between(scale_game_frames_9768(30), scale_game_frames_9768(45));
-                    spawn_particle_9768(1500000.0f, magnitude, position, &D_L18_0015F580,
-                    *first, *second,
-                    lifetime, spread, 0, 0);
-                    lifetime = random_int_between(scale_game_frames_9768(5), scale_game_frames_9768(10));
-                    spread = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
-                    spawn_particle_9768(1500000.0f, magnitude * 0.5f, position, &D_L18_0015F580,
-                    0x7fffffff, 0xffffff, lifetime, spread, 0, 0);
+                    {
+                        int lifetime, spread;
+                        lifetime = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
+                        spread = random_int_between(scale_game_frames_9768(30), scale_game_frames_9768(45));
+                        spawn_particle_9768(1500000.0f, magnitude, position, &D_L18_0015F580,
+                        *first, *second,
+                        lifetime, spread, 0, 0);
+                    }
+                    {
+                        int lifetime, spread;
+                        lifetime = random_int_between(scale_game_frames_9768(5), scale_game_frames_9768(10));
+                        spread = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
+                        spawn_particle_9768(1500000.0f, magnitude * 0.5f, position, &D_L18_0015F580,
+                        0x7fffffff, 0xffffff, lifetime, spread, 0, 0);
+                    }
                 } while ((float)i < 10.0f);
             }
             {
@@ -2444,14 +2449,13 @@ remove:
             remove_moby_9768(moby);
             return;
         } else {
-            float *pos = &moby->pos.x;
             float vector[4];
             float speed = random_float_between_9768(10.0f, 15.0f) * frame_time;
             moby->collision = 0;
             moby->state = 3;
             data[2] = FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
             data[3] = FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
-            subtract_vector_9768(data + 4, pos, (float *)&D_0013F3D0_9768);
+            subtract_vector_9768(data + 4, &moby->pos.x, (float *)&D_0013F3D0_9768);
             data[6] = 0.0f;
             scale_vector_9768(data + 4, data + 4, speed);
             vector_from_angles_9768(vector, speed, speed);
