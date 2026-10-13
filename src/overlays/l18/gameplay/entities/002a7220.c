@@ -2568,6 +2568,8 @@ typedef struct {
     L18FlareUV uv[4];
     unsigned long long zero, texture, state, flags;
 } L18FlarePacket;
+typedef struct { char pad[0x140]; float position[4]; } L18FlareView;
+extern L18FlareView D_L18_00167680;
 extern float D_L18_001677C0_flare[] __asm__("D_L18_001677C0");
 extern L18FlareUV D_L18_001D9B50_flare[] __asm__("D_L18_001D9B50");
 extern L18FlareVector D_L18_001D9B70_flare[] __asm__("D_L18_001D9B70");
@@ -2597,11 +2599,11 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
     clear_flare_vector(&axis);
     x = moby->pos.x;
     y = moby->pos.y;
-    x = D_L18_001677C0_flare[0] - x;
-    y = D_L18_001677C0_flare[1] - y;
+    x = D_L18_00167680.position[0] - x;
+    y = D_L18_00167680.position[1] - y;
     axis.z = flare_length(x, y);
-    axis.y = -flare_length(flare_dot(pos, D_L18_001677C0_flare),
-                            D_L18_001677C0_flare[2] - moby->pos.z);
+    axis.y = -flare_length(flare_dot(pos, D_L18_00167680.position),
+                            D_L18_00167680.position[2] - moby->pos.z);
     copy_flare_vector(&basis[0][0], &axis);
     copy_flare_vector(&basis[1][0], &axis);
     scale_vector_xyz(&basis[1][1], &basis[1][1], data[9]);
