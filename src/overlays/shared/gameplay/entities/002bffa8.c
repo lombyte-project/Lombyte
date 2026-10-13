@@ -1386,7 +1386,7 @@ extern float FUN_002000e8_2c4380(float, float) __asm__("FUN_001fa580");
 extern void FUN_L00_0025f800(void *, void *);
 
 void FUN_L00_002c4380(char *moby) {
-    int active = D_0013E539;
+    int active = D_0013E533[6];
     char *vars = *(char **)(moby + 0x78);
     char *target;
     float v[4] __attribute__((aligned(16)));
@@ -1561,8 +1561,8 @@ void FUN_L00_002c4380(char *moby) {
             if (*(int *)(target + 0x20) != *(int *)(vars + 0x58) ||
                 *(int *)(vars + 0x5c) <= 0) {
                 *(int *)(vars + 0x58) = *(int *)(target + 0x20);
-                *(int *)(vars + 0x5c) = FUN_001fef20_2c4380(30);
-                if (*(short *)(vars + 0x6c) == 0) {
+                *(volatile int *)(vars + 0x5c) = FUN_001fef20_2c4380(30);
+                if (*(volatile short *)(vars + 0x6c) == 0) {
                     if (*(u16 *)(target + 0x28) == 0x101 &&
                         ((*(u64 *)(vars + 0x68) & 0xffffff00000000ULL) == 0)) {
                         *(short *)(vars + 0x6c) = FUN_001fef20_2c4380(100);
@@ -1570,16 +1570,19 @@ void FUN_L00_002c4380(char *moby) {
                     } else
                         vars[0x6e] = 0;
                     FUN_0028dbe8_2c4380(0, 0, moby);
-                    ((u8 *)vars)[7] = 0xfa;
-                    *(float *)(vars + 0x48) -= *(float *)(target + 0x2c);
+                    {
+                        float len = *(float *)(target + 0x2c);
+                        ((u8 *)vars)[7] = 0xfa;
+                        *(float *)(vars + 0x48) -= len;
+                    }
                     FUN_L00_0025d458(moby, vars);
                     if (*(float *)(vars + 0x48) < 0.0f) {
-                        v[0] = D_0015ED60_2c4380 * 0.5f;
-                        v[1] = v[0];
-                        v[2] = D_0015ED60_2c4380 * 0.7f;
-                        v[3] = 0.0f;
-                        scratch.w[0] = scratch.w[1] = v[0]; scratch.w[2] = v[2]; scratch.w[3] = 0.0f;
-                        FUN_L00_0025f8e0(v[0], v);
+                        *(OvlQuad *)scratch.w = 0;
+                        scratch.w[0] = D_0015ED60_2c4380 * 0.5f;
+                        scratch.w[2] = D_0015ED60_2c4380 * 0.7f;
+                        scratch.w[1] = scratch.w[0];
+                        *(OvlQuad *)v = *(OvlQuad *)scratch.w;
+                        FUN_L00_0025f8e0(scratch.w[0], v);
                         FUN_L00_0025e450(0, 0, 4.0f, 3.0f, 9.0f, 1.0f, 12.0f,
                                          moby, v, 0, 0, 0, 0, 2, 1, 1, -1, active);
                         if (active) {
