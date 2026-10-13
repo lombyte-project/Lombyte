@@ -2081,6 +2081,7 @@ void FUN_L10_002dcc58(struct Moby *moby) {
             delete_moby(moby);
         } else {
             int value = 0;
+            int item;
             D_L10_00161D68 = 0x16;
             D_L10_00161D64 = 0x2d;
             for (item = 0; item < 10; item++) {
