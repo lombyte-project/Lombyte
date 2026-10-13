@@ -2496,381 +2496,478 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         o = active_mobies[i];
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b03a0.s", FUN_L00_002b03a0);
-#else
-typedef struct { unsigned int color[6]; } ProjectileColors;
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002B1688), where it is exact; names translated to the US level program. */
+
+typedef u32 VQ1688 __attribute__((mode(TI), aligned(16)));
+
 typedef union {
-    struct { U910 distance, velocity, target_sample, intercept; } vectors;
-    Qry910 query;
-} ProjectileScratch;
+    VQ1688 q;
+    f32 f[4];
+    s32 i[4];
+} V1688;
+
+typedef int Q1688 __attribute__((mode(TI)));
+
+typedef struct {
+    V1688 previous_target;
+    M910 *owner;
+    int life;
+    M910 *target;
+    float target_height;
+    float speed;
+    float yaw_velocity;
+    float pitch_velocity;
+    float yaw;
+    float pitch;
+    float desired_speed;
+    int track_velocity;
+    short turn_time;
+    short turn_period;
+    int bounce_count;
+    int bounce_timer;
+    float limit;
+} Missile1688;
+
+typedef struct { int colors[6]; } Colors1688;
+
+typedef union {
+    Qry910 collision;
+    struct { V1688 direction; V1688 relative; V1688 target; } vectors;
+} MissilePhase1688;
+
+typedef struct { char pad0[0x100]; V1688 previous; char pad110[0x30]; V1688 current; } HeroMotion1688;
+
+typedef struct { char pad0[0x18]; M910 *moby; int kind; V1688 position; char pad30[0x10]; V1688 normal, velocity_end, velocity_start; } Impact1688;
+
 extern B910 D_L00_001E9950;
 extern B910 D_L00_001E99A0;
-extern ProjectileColors D_L00_001E99F0;
-extern ProjectileColors D_L00_001E9A08;
-extern float D_0015F5D0 __asm__("D_L00_0015F5D0");
-extern float D_0015F5D4 __asm__("D_L00_0015F5D4");
-extern U910 D_L00_00160660, D_L00_00160680;
-extern unsigned char *D_L00_001B20DC;
-/* Retail adds into the second argument and ignores the destination. */
-extern void FUN_L00_001ff290(void *, void *, void *);
-extern void FUN_L00_001ff2c0(void *, void *, void *);
-extern float FUN_L00_001ff430(void *);
-extern void FUN_L00_001ffd48(void *, void *, float);
-extern void FUN_L00_001ffe20(void *, void *, void *);
-extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
-extern void FUN_001f9fc8(void *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001f9cf8(void *, void *, void *);
-extern void FUN_L00_0026a4c8(void *, void *, int, int, int, float);
-extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
-extern unsigned char *FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
-extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern Cam910 D_L00_00166C80;
+extern Colors1688 D_L00_001E99F0;
+extern Colors1688 D_L00_001E9A08;
+extern E D_0013E520;
+extern P D_0013F350;
+extern V1688 D_L00_00160660 __attribute__((section(".sdata")));
+extern V1688 D_L00_00160680 __attribute__((section(".sdata")));
+extern char *FUN_L00_002af450(char *, char *, int, int, int);
+extern char *FUN_L00_002d3838(char *a, char *b, int c, char *d);
+extern f32 FUN_001f9b80(void *, void *);
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern f32 square_root_scalar(f32) __asm__("func_001F9988");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern float D_0015ED64;
+extern float D_0015ED6C;
+extern float D_0015ED70;
+extern float D_L00_0015F5D0;
+extern float D_L00_0015F5D4;
+extern float FUN_001f9e90(float, float);
+extern int *D_L00_00177F00[];
+extern int D_L00_0015F5CC;
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern int FUN_001f9770(void *);
+extern int FUN_001f9fc8();
+extern int FUN_L00_001f2868(void *, int, void *, void *, float);
+extern int FUN_L00_001ff290();
+extern int FUN_L00_001ff2c0();
+extern int FUN_L00_001ff430();
+extern int FUN_L00_001ffd48();
+extern int FUN_L00_001ffe20();
+extern int FUN_L00_00257b90(int, int);
+extern int FUN_L00_00258110();
+unsigned char *spawn_glow_particle_u8(void *owner, void *pos, void *vel, float scale, int lifetime, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) __asm__("FUN_L00_002ac910");
+extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
+extern s32 D_L00_00166DC0[];
+extern s32 D_L00_00173E40[0x1C];
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern short D_L00_001B0770[];
+extern unsigned FUN_L00_0025c0e8(unsigned c, int mask);
+extern unsigned char *D_L00_001B20DC __attribute__((section(".data")));
+extern void *FUN_L00_0026bb70(void *, void *, int, int, float, int, int, int, int);
+extern void FUN_001f9c48(void *, void *, float);
+extern void FUN_001f9c90(void *, void *, float);
+extern void FUN_001fa378(void *, void *, void *);
+extern void FUN_L00_001ff660(void *, void *, void *);
+extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
+extern void FUN_L00_0025f800(void *, void *);
+extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
+extern void build_spherical_offset_c(void *, f32, f32, f32) __asm__("FUN_00214db0");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+void FUN_L00_0026a4c8(Q1688 *a, Q1688 *b, int c, int d, int n, float f);
+void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
+void FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, float, float, float);
+void FUN_L00_002affa8(char *self, O *out, char *skip);
+extern Impact1688 impact1688 __asm__("D_L00_00173E40");
+extern HeroMotion1688 hero_motion1688 __asm__("D_0013F350");
+extern float dot1688(void *) __asm__("FUN_L00_001ff430");
+extern void cross1688(void *,void *,void *) __asm__("FUN_L00_001ff2c0");
+extern float horizontal1688(void *) __asm__("FUN_001f9b20");
+extern float chase1688(void *,float,float,float,float,float) __asm__("FUN_L00_00258110");
+extern unsigned char *smoke1688(void *,void *,int,int,int,int,float,float,float,float,float) __asm__("FUN_L00_002712b8");
+extern void rotate1688(void *,void *,void *) __asm__("FUN_001f9cf8");
+extern float random_angle1688(void) __asm__("FUN_00213308");
+extern void axis_rotate1688(void *,void *,void *,float) __asm__("FUN_00214890");
+extern void spark1688(void *,void *,int,int,int,int,float) __asm__("FUN_L00_0026cbb0");
+extern void combine_velocity1688(void *,void *,void *) __asm__("FUN_L00_001ff290");
+extern int collision1688(void *,void *,int,void *,void *) __asm__("FUN_001efa68");
+extern void reflect1688(void *,void *,void *) __asm__("FUN_L00_001ff660");
+extern void matrix_scale1688(void *,void *,float) __asm__("FUN_L00_001ffd48");
+extern void matrix_add1688(void *,void *,void *) __asm__("FUN_L00_001ffe20");
+extern void identity1688(void *) __asm__("FUN_001f9fc8");
+extern void transform1688(void *,void *,void *) __asm__("FUN_001f9d20");
+extern void rings1688(void *,void *,int,int,float,int,int,int,int,float) __asm__("FUN_L00_0026a9f0");
+extern void debris1688(void *,void *,int,int,float,int) __asm__("FUN_L00_0026a4c8");
 
-void FUN_L00_002b03a0(unsigned char *m) {
-    B910 a = D_L00_001E9950;
-    B910 b = D_L00_001E99A0;
-    U910 camera_distance, previous, recoil, up, random, offset, target_position, target_motion;
-    ProjectileScratch scratch;
-    U910 matrix[4], matrix_squared[4], product[4], scaled[4], rotation[4];
-    O *v;
-    char *target;
-    void * volatile hit_owner = 0;
-    void *pos = m + 0x10;
-    volatile int i, count;
-    volatile int reduced = 0;
-    int mode, j, low, high, life, color1, color2;
-    float ratio, factor, yaw, pitch, time, speed, coefficient, discriminant, root1, root2, angle, length, bias;
-
-    up.q = 0;
-    up.f[2] = frame_time * 8.0f;
-    recoil.q = up.q;
-    up.q = 0;
-    up.f[2] = 1.0f;
-    v = *(O **)(m + 0x78);
-    target = v->owner;
-    if (0.9f < D_0015F5D0 || 0.9f < D_0015F5D4)
-        reduced = 1;
-    *(float *)&v->w20 += ((*(float *)&v->w34 - *(float *)&v->w20) / 10.0f) * frame_scale_sq;
-    FUN_001f9770((char *)v + 0x3C);
-    ratio = convert_integer_to_float(*(short *)((char *)v + 0x3C));
-    ratio /= convert_integer_to_float(*(short *)((char *)v + 0x3E));
-    add_vector_xyz(&scratch.vectors.distance, D_0013F490_2afc70, (char *)D_0013F490_2afc70 - 0x40);
-    target_motion.q = scratch.vectors.distance.q;
-    scale_vector_xyz(&target_motion, &target_motion, ratio);
-    factor = convert_integer_to_float(D_0013E520.bB) + 1.0f;
-    if (target != 0) {
-        low = scale_game_frames(300);
-        high = scale_game_frames(5);
-        if (v->w14 < low - high && *(signed char *)(target + 0x20) >= 0) {
-            time = 0.0f;
-            qcopy(&scratch.vectors.target_sample, target + 0x10);
-            scratch.vectors.target_sample.f[2] += v->f1C;
-            subtract_vector_xyz(&scratch.vectors.distance, &scratch.vectors.target_sample, pos);
-            if (v->w38 != 0) {
-                subtract_vector_xyz(&scratch.vectors.velocity, &scratch.vectors.target_sample, v);
-                FUN_L00_001ff2c0(&scratch.vectors.intercept, &scratch.vectors.velocity, &target_motion);
-                qcopy(v, &scratch.vectors.target_sample);
-                speed = FUN_L00_001ff430(&scratch.vectors.velocity);
-                length = *(float *)&v->w20;
-                speed = length * length - speed;
-                coefficient = (scratch.vectors.velocity.f[0] * scratch.vectors.distance.f[0] + scratch.vectors.velocity.f[1] * scratch.vectors.distance.f[1] +
-                               scratch.vectors.velocity.f[2] * scratch.vectors.distance.f[2]) * -2.0f;
-                length = FUN_L00_001ff430(&scratch.vectors.distance);
-                discriminant = FUN_001f9988(coefficient * coefficient - speed * 4.0f * -length);
-                root1 = (-coefficient + discriminant) / (speed + speed);
-                root2 = (-coefficient - discriminant) / (speed + speed);
-                if (0.0f < root1 && 0.0f < root2) {
-                    if (root2 < root1) time = root1;
-                    else time = root2;
-                } else {
-                    time = root1;
-                    if (!(0.0f < root1)) {
-                        time = -1.0f;
-                        if (0.0f < root2) time = root2;
-                    }
+void FUN_L00_002b03a0(M910 *m) {
+    B910 effect=D_L00_001E9950;
+    B910 gold_effect=D_L00_001E99A0;
+    V1688 camera_delta;
+    V1688 previous;
+    V1688 blast_velocity;
+    V1688 normal;
+    V1688 smoke_position;
+    V1688 motion;
+    V1688 surface_motion;
+    V1688 hero_velocity;
+    MissilePhase1688 phase;
+    V1688 predicted;
+    float basis[4][4];
+    float basis_squared[4][4];
+    float rotation[4][4];
+    float diagonal[4][4];
+    float rotation_part[4][4];
+    M910 *skip=0;
+    int reduced=0;
+    Missile1688 *d;
+    M910 *target;
+    float size, yaw, pitch;
+    normal.q=0;
+    normal.f[2]=D_0015ED6C*8.0f;
+    blast_velocity.q=normal.q;
+    normal.q=0;
+    normal.f[2]=1.0f;
+    d=(Missile1688 *)m->v;
+    target=d->target;
+    if(D_L00_0015F5D0>0.9f || D_L00_0015F5D4>0.9f) reduced=1;
+    d->speed=d->speed+(d->desired_speed-d->speed)/10.0f*D_0015ED64;
+    FUN_001f9770(&d->turn_time);
+    {
+        float turn=convert_integer_to_float(d->turn_time);
+        turn=turn/convert_integer_to_float(d->turn_period);
+        add_vector_xyz(phase.collision.dir,&hero_motion1688.current,&hero_motion1688.previous);
+        hero_velocity.q=phase.vectors.direction.q;
+        scale_vector_xyz(&hero_velocity,&hero_velocity,turn);
+    }
+    size=convert_integer_to_float(D_0013E520.bB)+1.0f;
+    if(target && d->life<scale_game_frames_alt(300)-scale_game_frames_alt(5) && (signed char)target->state>=0) {
+        float time=0.0f;
+        qcopy(&phase.vectors.target,&target->pos);
+        phase.vectors.target.f[2]+=d->target_height;
+        subtract_vector_xyz(phase.collision.dir,&phase.vectors.target,(&m->pos));
+        if(d->track_velocity) {
+            float b,a,root,t1,t2,denominator,negative_b;
+            subtract_vector_xyz(&phase.vectors.relative,&phase.vectors.target,&d->previous_target);
+            cross1688(&predicted,&phase.vectors.relative,&hero_velocity);
+            qcopy(&d->previous_target,&phase.vectors.target);
+            a=dot1688(&phase.vectors.relative);
+            b=(phase.vectors.relative.f[0]*phase.collision.dir[0]+phase.vectors.relative.f[1]*phase.collision.dir[1]+phase.vectors.relative.f[2]*phase.collision.dir[2])*-2.0f;
+            a=d->speed*d->speed-a;
+            root=square_root_scalar(b*b-a*4.0f*-dot1688(phase.collision.dir));
+            negative_b=-b;
+            denominator=a+a;
+            t1=(negative_b+root)/denominator;
+            t2=(negative_b-root)/denominator;
+            if(t1>0.0f && t2>0.0f) {
+                if(t2<t1) time=t1;
+                else time=t2;
+            } else {
+                if(t1>0.0f) time=t1;
+                else {
+                    time=-1.0f;
+                    if(t2>0.0f) time=t2;
                 }
             }
-            if (0.0f < time && time < (float)scale_game_frames(300)) {
-                scale_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.velocity, time);
-                add_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, &scratch.vectors.distance);
-                yaw = FUN_001f9e90(scratch.vectors.intercept.f[0], scratch.vectors.intercept.f[1]);
-                pitch = -FUN_001f9e90(vector_length_xy(&scratch.vectors.intercept), scratch.vectors.intercept.f[2]);
-            } else {
-                yaw = FUN_001f9e90(scratch.vectors.distance.f[0], scratch.vectors.distance.f[1]);
-                pitch = -FUN_001f9e90(vector_length_xy(&scratch.vectors.distance), scratch.vectors.distance.f[2]);
-            }
-            goto turn;
         }
-    }
-    low = scale_game_frames(300);
-    high = scale_game_frames(5);
-    if (v->w14 < low - high) {
-        yaw = v->f2C;
-        pitch = v->f30;
-    } else {
-        yaw = *(float *)(m + 0x48);
-        pitch = *(float *)(m + 0x44);
-    }
-turn:
-    if (target != 0) {
-        *(float *)(m + 0x48) = spring_turn((float *)&v->w24, *(float *)(m + 0x48), yaw,
-            frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f);
-        *(float *)(m + 0x44) = spring_turn((float *)&v->w28, *(float *)(m + 0x44), pitch,
-            frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 6.2831855f);
-    } else {
-        *(float *)(m + 0x48) = spring_turn((float *)&v->w24, *(float *)(m + 0x48), yaw,
-            frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 4.712389f);
-        *(float *)(m + 0x44) = spring_turn((float *)&v->w28, *(float *)(m + 0x44), pitch,
-            frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 4.712389f);
-    }
-    build_spherical_offset(offset.f, *(float *)&v->w20, *(float *)(m + 0x48), -*(float *)(m + 0x44));
-    normalize_vector_xyz(coll_hit_normal, &offset, 1.0f);
-    scale_vector_xyz(coll_hit_normal, coll_hit_normal, -1.0f);
-    if (!reduced || !(D_L00_0015F5CC & 1)) {
-        unsigned char *particle;
-        scratch.vectors.velocity.q = 0;
-        scratch.vectors.velocity.f[0] = random_float_between(-1.0f, 1.0f);
-        scratch.vectors.velocity.f[1] = random_float_between(-1.0f, 1.0f);
-        scratch.vectors.velocity.f[2] = random_float_between(-1.0f, 1.0f);
-        scratch.vectors.distance.q = scratch.vectors.velocity.q;
-        normalize_vector_xyz(&scratch.vectors.distance, &scratch.vectors.distance, random_float_between(0.1f, 0.2f) * frame_time);
-        normalize_vector_xyz(&random, &offset, -random_float_between(frame_time * 0.1f, frame_time));
-        add_vector_xyz(&scratch.vectors.distance, &scratch.vectors.distance, &random);
-        normalize_vector_xyz(&random, &offset, random_float_between(0.0f, 1.0f) * *(float *)&v->w20);
-        add_vector_xyz(&random, &random, pos);
-        life = scale_game_frames(40);
-        particle = FUN_L00_002712b8(&random, &scratch.vectors.distance, life, 50, 0x505050, 3,
-                                      40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
-        if (particle != 0) {
-            unsigned char color = *D_L00_001B20DC;
-            particle[3] = 0x44;
-            particle[2] = color;
-        }
-        life = scale_game_frames(7);
-        FUN_L00_002712b8(pos, &scratch.vectors.distance, life, 0x7F, 0xB0B0B0, 3,
-                            40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
-        scratch.vectors.velocity.q = 0;
-        scratch.vectors.velocity.f[2] = 0.02f;
-        FUN_001f9cf8(&scratch.vectors.velocity, &scratch.vectors.velocity, m + 0xC0);
-        angle = random_angle_radians();
-        build_look_at_matrix(&scratch.vectors.velocity, &scratch.vectors.velocity, m + 0xC0, angle);
-        color1 = FUN_L00_0025c0e8(0x4F007FFF, D_0013E520.bB);
-        life = scale_game_frames(15);
-        spawn_burst(&random, &scratch.vectors.velocity, color1, 0x1FFFFFFF, life, 1, 25000.0f);
-    }
-    qcopy(&previous, pos);
-    FUN_L00_001ff290(&scratch.vectors.distance, &offset, &target_motion);
-    add_vector_xyz(pos, pos, &offset);
-    if (*(float *)(m + 0x10) < 0.0f || *(float *)(m + 0x14) < 0.0f || *(float *)(m + 0x18) < 0.0f)
-        goto remove;
-    scratch.query.flags = 0x830000;
-    scratch.query.fC = 3.0f;
-    scratch.query.moby = (M910 *)m;
-    scratch.query.i10 = 1;
-    qcopy(&scratch.query, &offset);
-    FUN_001f9c48(&scratch.query, &scratch.query, 1.0f);
-    scratch.query.dir[3] = 5627.925f;
-    scratch.query.b8 = 3;
-    scratch.query.cls = *(unsigned short *)(m + 0xA6);
-    scratch.query.dir[2] = 1.0f;
-    scratch.query.b9 = 1;
-    if (FUN_001efa68(&previous, pos, 0, (int)D_001413D0_2afc70, (int)&scratch.query)) {
-        if (coll_hit.moby != 0) {
-            if (coll_hit.moby == (M910 *)D_001413D0_2afc70) goto hit_ready;
-            if (coll_hit.moby == (M910 *)v->w10) goto hit_ready;
-            m[0xBC] = 2;
-            qcopy(pos, &coll_hit.pos);
-            subtract_vector_xyz(&target_position, (char *)&coll_hit + 0x50, (char *)&coll_hit + 0x60);
-            hit_owner = m;
+        if(time>0.0f && time<(float)scale_game_frames_alt(300)) {
+                scale_vector_xyz(&predicted,&phase.vectors.relative,time);
+                add_vector_xyz(&predicted,&predicted,phase.collision.dir);
+                yaw=FUN_001f9e90(predicted.f[0],predicted.f[1]);
+                pitch=-FUN_001f9e90(horizontal1688(&predicted),predicted.f[2]);
         } else {
-            if (coll_hit.i1C < 1) goto hit_ready;
-            m[0xBC] = 1;
-            qcopy(pos, &coll_hit.pos);
-            subtract_vector_xyz(&target_position, (char *)&coll_hit + 0x50, (char *)&coll_hit + 0x60);
+            yaw=FUN_001f9e90(phase.collision.dir[0],phase.collision.dir[1]);
+            pitch=-FUN_001f9e90(horizontal1688(phase.collision.dir),phase.collision.dir[2]);
         }
-        normalize_vector_xyz(&target_position, &target_position, 1.0f);
-        FUN_L00_001ff660(&recoil, &offset, coll_hit_normal);
-        normalize_vector_xyz(&recoil, &recoil, frame_time + frame_time);
-        normalize_vector_xyz(&up, coll_hit_normal, 1.0f);
-    } else if (tick_countdown_32_alt(&v->w14) || *(float *)((char *)v + 0x48) < FUN_001f9b80(pos, &hero_pos)) {
-        up.q = D_L00_00160680.q;
-        target_position.q = D_L00_00160660.q;
-        FUN_001f9cf8(&target_position, &target_position, m + 0xC0);
-        FUN_001f9cf8(&up, &up, m + 0xC0);
-        if (D_0013E520.bB == 0) goto remove;
-        m[0xBC] = 1;
-        add_vector_xyz(&recoil, &recoil, &offset);
+    } else {
+        if(d->life<scale_game_frames_alt(300)-scale_game_frames_alt(5)) {
+            yaw=d->yaw;
+            pitch=d->pitch;
+        } else {
+            yaw=m->rz;
+            pitch=m->ry;
+        }
     }
-hit_ready:
-    if (m[0xBC] != 0) {
-        int hit_count;
-        U910 random;
-        ProjectileColors colors1, colors2;
-        float blast = factor + factor;
-        hit_count = collect_mobies_in_sphere(pos, 0x10, m, 0, blast);
-        count = 10;
-        qcopy(&scratch.vectors.intercept, m + 0x10);
-        send_blast_hits(m, &scratch.vectors.intercept, D_L00_00177F00, hit_count, (int)hit_owner,
-                        0x830000, 3, 1, 3.0f, 1.0f, 1.0f);
-        matrix[0].f[0] = 0;
-        matrix[0].f[1] = up.f[2];
-        matrix[0].f[2] = -up.f[1];
-        matrix[0].f[3] = 0;
-        matrix[1].f[0] = -up.f[2];
-        matrix[1].f[1] = 0;
-        matrix[1].f[2] = up.f[0];
-        matrix[1].f[3] = 0;
-        matrix[2].f[0] = up.f[1];
-        matrix[2].f[1] = -up.f[0];
-        matrix[2].f[2] = 0;
-        matrix[2].f[3] = 0;
-        matrix[3].f[0] = 0.0f;
-        matrix[3].f[1] = 0.0f;
-        matrix[3].f[2] = 0.0f;
-        matrix[3].f[3] = 0.0f;
-        FUN_001fa378(matrix_squared, matrix, matrix);
-        mode = 0;
-        if (reduced) { count /= 3; mode = 1; }
-        for (i = count; i != 0; ) {
-            if (m[0xBC] == 1) {
-                angle = random_angle_radians();
-                FUN_L00_001ffd48(rotation, matrix_squared, 1.0f - fast_cos(angle));
-                FUN_L00_001ffd48(scaled, matrix, fast_sin(angle));
-                FUN_L00_001ffe20(scaled, scaled, rotation);
-                FUN_001f9fc8(rotation);
-                FUN_L00_001ffe20(product, scaled, rotation);
-                FUN_001f9d20(&scratch.vectors.intercept, &target_position, product);
-                normalize_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, random_float_between(8.5f, 16.5f) * frame_time * factor);
-            } else {
-                speed = random_float_between(8.5f, 16.5f) * frame_time * factor;
-                yaw = random_angle_radians();
-                pitch = random_angle_radians();
-                build_spherical_offset(scratch.vectors.intercept.f, speed, yaw, pitch);
+    if(target) {
+        m->rz=chase1688(&d->yaw_velocity,m->rz,yaw,D_0015ED70*6.2831855f,D_0015ED70*3.1415927f,D_0015ED6C*6.2831855f);
+        m->ry=chase1688(&d->pitch_velocity,m->ry,pitch,D_0015ED70*6.2831855f,D_0015ED70*3.1415927f,D_0015ED6C*6.2831855f);
+    } else {
+        m->rz=chase1688(&d->yaw_velocity,m->rz,yaw,D_0015ED70*6.2831855f,D_0015ED70*3.1415927f,D_0015ED6C*4.71238899f);
+        m->ry=chase1688(&d->pitch_velocity,m->ry,pitch,D_0015ED70*6.2831855f,D_0015ED70*3.1415927f,D_0015ED6C*4.71238899f);
+    }
+    build_spherical_offset_c(&motion,d->speed,m->rz,-m->ry);
+    normalize_vector_xyz(&impact1688.normal,&motion,1.0f);
+    scale_vector_xyz(&impact1688.normal,&impact1688.normal,-1.0f);
+    if(!reduced || !(D_L00_0015F5CC&1)) {
+        unsigned char *p;
+        phase.vectors.relative.q=0;
+        phase.vectors.relative.f[0]=random_float_between(-1.0f,1.0f);
+        phase.vectors.relative.f[1]=random_float_between(-1.0f,1.0f);
+        phase.vectors.relative.f[2]=random_float_between(-1.0f,1.0f);
+        phase.vectors.direction.q=phase.vectors.relative.q;
+        normalize_vector_xyz(phase.collision.dir,phase.collision.dir,random_float_between(0.1f,0.2f)*D_0015ED6C);
+        normalize_vector_xyz(&smoke_position,&motion,-random_float_between(D_0015ED6C*0.1f,D_0015ED6C));
+        add_vector_xyz(phase.collision.dir,phase.collision.dir,&smoke_position);
+        normalize_vector_xyz(&smoke_position,&motion,random_float_between(0.0f,1.0f)*d->speed);
+        add_vector_xyz(&smoke_position,&smoke_position,(&m->pos));
+        p=smoke1688(&smoke_position,phase.collision.dir,scale_game_frames_alt(40),50,0x505050,3,40000.0f,1000.0f,1.0f,-0.0002f,0.0f);
+        if(p) { unsigned char texture=*D_L00_001B20DC; p[3]=0x44; p[2]=texture; }
+        smoke1688((&m->pos),phase.collision.dir,scale_game_frames_alt(7),127,0xB0B0B0,3,40000.0f,1000.0f,1.0f,-0.0004f,0.0f);
+        phase.vectors.relative.q=0;
+        phase.vectors.relative.f[2]=0.02f;
+        rotate1688(&phase.vectors.relative,&phase.vectors.relative,m->mtx);
+        axis_rotate1688(&phase.vectors.relative,&phase.vectors.relative,m->mtx,random_angle1688());
+        {
+            int color=FUN_L00_0025c0e8(0x4F007FFF,D_0013E520.bB);
+            spark1688(&smoke_position,&phase.vectors.relative,color,0x1FFFFFFF,scale_game_frames_alt(15),1,25000.0f);
+        }
+    }
+    qcopy(&previous,(&m->pos));
+    combine_velocity1688(phase.collision.dir,&motion,&hero_velocity);
+    add_vector_xyz((&m->pos),(&m->pos),&motion);
+    if(m->pos.f[0]<0.0f || m->pos.f[1]<0.0f || m->pos.f[2]<0.0f) {
+        FUN_L00_0025f800(m,D_L00_001B0770);
+        mark_moby_for_removal(m);
+        return;
+    }
+    phase.collision.moby=m;
+    phase.collision.flags=0x830000;
+    phase.collision.fC=3.0f;
+    phase.collision.i10=1;
+    qcopy(phase.collision.dir,&motion);
+    FUN_001f9c48(phase.collision.dir,phase.collision.dir,1.0f);
+    phase.collision.dir[2]=1.0f;
+    phase.collision.dir[3]=5627.925f;
+    phase.collision.b8=3;
+    phase.collision.cls=m->cls;
+    phase.collision.b9=1;
+    if(collision1688(&previous,(&m->pos),0,D_0013F350.cam,&phase.collision)) {
+        Impact1688 *hit=&impact1688;
+        V1688 *hit_normal;
+        if(hit->moby) {
+            if(hit->moby!=(M910 *)D_0013F350.cam && hit->moby!=d->owner) {
+                m->bBC=2;
+                qcopy((&m->pos),&hit->position);
+                subtract_vector_xyz(&surface_motion,&hit->velocity_end,&hit->velocity_start);
+                hit_normal=&hit->normal;
+                skip=m;
+                normalize_vector_xyz(&surface_motion,&surface_motion,1.0f);
+                reflect1688(&blast_velocity,&motion,hit_normal);
+                normalize_vector_xyz(&blast_velocity,&blast_velocity,D_0015ED6C+D_0015ED6C);
+                normalize_vector_xyz(&normal,hit_normal,1.0f);
             }
-            scratch.vectors.intercept.f[2] += frame_time * 5.0f;
-            add_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, &recoil);
-            color1 = FUN_L00_0025c0e8(0x4F007FFF, D_0013E520.bB);
-            color2 = FUN_L00_0025c0e8(0x1F00007F, D_0013E520.bB);
-            if (1.0f < vector_length_xyz(&scratch.vectors.intercept))
-                normalize_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, frame_time * 8.0f);
-            i--;
-            low = scale_game_frames(60);
-            high = scale_game_frames(120);
-            life = FUN_L00_00257b90(low, high);
-            FUN_L00_0026bb70(pos, &scratch.vectors.intercept, color1, color2, factor * 40000.0f,
-                             life - mode * 35, 1, -1, -1);
+        } else if(hit->kind>0) {
+            m->bBC=1;
+            qcopy((&m->pos),&hit->position);
+            subtract_vector_xyz(&surface_motion,&hit->velocity_end,&hit->velocity_start);
+            hit_normal=&hit->normal;
+            normalize_vector_xyz(&surface_motion,&surface_motion,1.0f);
+            reflect1688(&blast_velocity,&motion,hit_normal);
+            normalize_vector_xyz(&blast_velocity,&blast_velocity,D_0015ED6C+D_0015ED6C);
+            normalize_vector_xyz(&normal,hit_normal,1.0f);
         }
-        random.q = 0;
-        random.f[0] = random_float_between(-1.0f, 1.0f);
-        random.f[1] = random_float_between(-1.0f, 1.0f);
-        random.f[2] = random_float_between(-1.0f, 1.0f);
-        scratch.vectors.intercept.q = random.q;
-        subtract_vector_xyz(&camera_distance, D_L00_00166DC0, pos);
-        length = vector_length_xyz(&camera_distance);
-        camera_distance.f[2] += length * 0.5f;
-        normalize_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, (length / 5.0f) * frame_time * factor);
-        normalize_vector_xyz(&camera_distance, &camera_distance, (length + length) * frame_time);
-        add_vector_xyz(&scratch.vectors.intercept, &scratch.vectors.intercept, &camera_distance);
-        FUN_001f9c90_2adb30(&scratch.vectors.intercept, &scratch.vectors.intercept, frame_time * 10.0f);
-        low = scale_game_frames(60);
-        high = scale_game_frames(90);
-        spawn_debris(pos, &scratch.vectors.intercept, FUN_L00_00257b90(low, high), 0, 0);
-        j = 3;
-        if (length < 6.0f) j = truncate_float_to_s32(length) / 2;
-        bias = 0.0f;
-        if (length < 7.0f) bias = 7.0f - length;
-        if (reduced) j /= 2;
-        if (j > 0) do {
-            speed = random_float_between(8.0f, 10.0f);
-            j--;
-            colors1 = D_L00_001E99F0;
-            colors2 = D_L00_001E9A08;
-            speed = speed * factor * frame_time - bias * frame_time;
-            color1 = FUN_L00_0025c0e8(colors1.color[random_integer_below(6)], D_0013E520.bB);
-            color2 = FUN_L00_0025c0e8(colors2.color[random_integer_below(6)], D_0013E520.bB);
-            low = scale_game_frames(15); high = scale_game_frames(20);
-            i = FUN_L00_00257b90(low, high) - mode * 7;
-            low = scale_game_frames(25); high = scale_game_frames(30);
-            life = FUN_L00_00257b90(low, high) - mode * 10;
-            FUN_L00_0026a9f0_2adb30(pos, &recoil, color1, color2, 400000.0f, i, life, 0, 0, speed);
-            low = scale_game_frames(5); high = scale_game_frames(10);
-            i = FUN_L00_00257b90(low, high) - mode * 5;
-            low = scale_game_frames(15); high = scale_game_frames(20);
-            life = FUN_L00_00257b90(low, high) - mode * 7;
-            FUN_L00_0026a9f0_2adb30(pos, &recoil, 0x7FFFFFFF, 0xFFFFFF, 400000.0f, i, life, 0, 0, speed * 0.5f);
-        } while (j != 0);
-        for (i = count; i != 0; ) {
-            U910 velocity, random;
-            colors1 = D_L00_001E99F0;
-            colors2 = D_L00_001E9A08;
-            random.q = 0;
-            random.f[0] = random_float_between(-1.0f, 1.0f);
-            i--;
-            random.f[1] = random_float_between(-1.0f, 1.0f);
-            random.f[2] = random_float_between(-1.0f, 1.0f);
-            velocity.q = random.q;
-            normalize_vector_xyz(&velocity, &velocity, random_float_between(0.0f, 3.0f) * frame_time * factor);
-            color1 = FUN_L00_0025c0e8(colors1.color[random_integer_below(6)], D_0013E520.bB);
-            color2 = FUN_L00_0025c0e8(colors2.color[random_integer_below(6)], D_0013E520.bB);
-            low = scale_game_frames(20); high = scale_game_frames(35);
-            life = FUN_L00_00257b90(low, high) - mode * 10;
-            FUN_L00_0026a4c8(pos, &velocity, color1, color2, life, factor * 200000.0f);
-        }
-        if (D_0015F5D0 < 0.95f && 9.0f < length) {
-            unsigned char red = 0x7F, blue = 0x7F;
-            if (D_0013E520.bB != 0) { red = 0x3C; blue = 0x3C; }
-            life = scale_game_frames(15);
-            spawn_glow_particle(m, pos, &recoil, life, red, 0x7F, blue, 0x20, factor * 4.0f);
-            life = scale_game_frames(24);
-            spawn_glow_particle(m, pos, &recoil, life, red, 0x7F, blue, 0x20, factor * 4.0f);
-        }
-        color1 = 0x7F;
-        if (D_0013E520.bB != 0) color1 = 0x20;
-        life = scale_game_frames(20);
-        spawn_glow_particle(m, pos, &recoil, life, color1, 0x7F, 0, 0x30, factor * 4.0f);
-        if (!reduced) {
-            life = scale_game_frames(19);
-            spawn_glow_particle(m, pos, &recoil, life, 0xFF, 0xFF, 0xFF, 0x20, blast);
-        }
-        offset.f[0] = 0;
-        m[0xBC] = 0;
-        if (length < 20.0f) player_camera.f160 = 0.4f - length * 0.0175f;
-        else player_camera.f160 = 0.050000012f;
-        player_camera.i168 = scale_game_frames(25);
-        allocate_voice_for_target_entry(0, 0, m);
-        if (!reduced) {
-            if (D_0013E520.bB == 0) FUN_L00_002d3838((char *)&a, pos, 0, 0);
-            else FUN_L00_002d3838((char *)&b, pos, 0, 0);
-        }
-        j = *(int *)((char *)v + 0x40) + 1;
-        *(int *)((char *)v + 0x40) = j;
-        if (D_0013E520.bB == 0 || j == 3) {
-remove:
-            FUN_L00_0025f800(m, D_L00_001B0770_2afc70);
+    } else if(tick_countdown_32_alt(&d->life) || d->limit<FUN_001f9b80((&m->pos),&D_0013F350.x80)) {
+        qcopy(&normal,&D_L00_00160680);
+        qcopy(&surface_motion,&D_L00_00160660);
+        rotate1688(&surface_motion,&surface_motion,m->mtx);
+        rotate1688(&normal,&normal,m->mtx);
+        if(!D_0013E520.bB) {
+            FUN_L00_0025f800(m,D_L00_001B0770);
             mark_moby_for_removal(m);
             return;
         }
-        v->owner = 0;
-        m[0xBC] = 0;
-        normalize_vector_xyz(coll_hit_normal, coll_hit_normal, 1.0f);
-        FUN_L00_001ff660(&random, &offset, coll_hit_normal);
-        *(float *)(m + 0x48) = FUN_001f9e90(random.f[0], random.f[1]);
-        *(float *)(m + 0x44) = -FUN_001f9e90(vector_length_xy(&random), random.f[2]);
-        v->w24 = 0; v->w28 = 0;
-        normalize_vector_xyz(&scratch.vectors.velocity, coll_hit_normal, 0.05f);
-        add_vector_xyz(pos, pos, &scratch.vectors.velocity);
-        if (coll_hit.moby != 0) v->w10 = (int)coll_hit.moby;
-        if (*(int *)((char *)v + 0x44) == 0)
-            *(int *)((char *)v + 0x44) = scale_game_frames(90);
-        FUN_L00_002affa8((char *)m, v, (char *)coll_hit.moby);
-        allocate_voice_for_target_entry(1, 0, m);
+        m->bBC=1;
+        add_vector_xyz(&blast_velocity,&blast_velocity,&motion);
     }
-    if (tick_countdown_32_alt((int *)((char *)v + 0x44))) *(int *)((char *)v + 0x40) = 0;
-    return;
+    if(m->bBC) {
+        float distance, near_adjust;
+        int particles;
+        int particle_reduction;
+        int i,j;
+        int hit=FUN_L00_001f2868((&m->pos),16,m,0,(size+size));
+        particles=10;
+        predicted.q=m->pos.q;
+        FUN_L00_0025a9f8(m,&predicted,D_L00_00177F00,hit,(int)skip,0x830000,3,1,3.0f,1.0f,1.0f);
+        particle_reduction=0;
+        basis[0][0]=0.0f;
+        basis[1][0]=-normal.f[2];
+        basis[2][0]=normal.f[1];
+        basis[3][0]=0.0f;
+        basis[0][1]=normal.f[2];
+        basis[1][1]=0.0f;
+        basis[2][1]=-normal.f[0];
+        basis[3][1]=0.0f;
+        basis[0][2]=-normal.f[1];
+        basis[1][2]=normal.f[0];
+        basis[2][2]=0.0f;
+        basis[3][2]=0.0f;
+        basis[0][3]=0.0f;
+        basis[1][3]=0.0f;
+        basis[2][3]=0.0f;
+        basis[3][3]=0.0f;
+        FUN_001fa378(basis_squared,basis,basis);
+        if(reduced) { particle_reduction=1; particles/=3; }
+        { int remaining;
+        for(remaining=0;remaining<particles;remaining++) {
+            if(m->bBC==1) {
+                float a=random_angle1688();
+                matrix_scale1688(rotation_part,basis_squared,1.0f-fast_cos(a));
+                matrix_scale1688(diagonal,basis,fast_sin(a));
+                matrix_add1688(diagonal,diagonal,rotation_part);
+                identity1688(rotation_part);
+                matrix_add1688(rotation,diagonal,rotation_part);
+                transform1688(&predicted,&surface_motion,rotation);
+                normalize_vector_xyz(&predicted,&predicted,random_float_between(8.5f,16.5f)*D_0015ED6C*size);
+            } else {
+                float speed=random_float_between(8.5f,16.5f)*D_0015ED6C*size;
+                float a=random_angle1688();
+                build_spherical_offset_c(&predicted,speed,a,random_angle1688());
+            }
+            predicted.f[2]+=D_0015ED6C*5.0f;
+            add_vector_xyz(&predicted,&predicted,&blast_velocity);
+            {
+                int color=FUN_L00_0025c0e8(0x4F007FFF,D_0013E520.bB);
+                int fade=FUN_L00_0025c0e8(0x1F00007F,D_0013E520.bB);
+                int life;
+                float particle_scale;
+                if(vector_length_xyz(&predicted)>1.0f) normalize_vector_xyz(&predicted,&predicted,D_0015ED6C*8.0f);
+                particle_scale=size*40000.0f;
+                life=FUN_L00_00257b90(scale_game_frames_alt(60),scale_game_frames_alt(120))-particle_reduction*35;
+                FUN_L00_0026bb70((&m->pos),&predicted,color,fade,particle_scale,life,1,-1,-1);
+            }
+        }
+        }
+        { V1688 random;
+            random.q=0;
+            random.f[0]=random_float_between(-1.0f,1.0f);
+            random.f[1]=random_float_between(-1.0f,1.0f);
+            random.f[2]=random_float_between(-1.0f,1.0f);
+            predicted.q=random.q;
+        }
+        subtract_vector_xyz(&camera_delta,D_L00_00166DC0,(&m->pos));
+        distance=vector_length_xyz(&camera_delta);
+        camera_delta.f[2]+=distance*0.5f;
+        normalize_vector_xyz(&predicted,&predicted,distance/5.0f*D_0015ED6C*size);
+        normalize_vector_xyz(&camera_delta,&camera_delta,(distance+distance)*D_0015ED6C);
+        add_vector_xyz(&predicted,&predicted,&camera_delta);
+        FUN_001f9c90(&predicted,&predicted,D_0015ED6C*10.0f);
+        FUN_L00_002af450((char *)(&m->pos),(char *)&predicted,FUN_L00_00257b90(scale_game_frames_alt(60),scale_game_frames_alt(90)),0,0);
+        if(distance<6.0f) j=truncate_float_to_s32(distance)/2;
+        else j=3;
+        near_adjust=0.0f;
+        if(distance<7.0f) near_adjust=7.0f-distance;
+        if(reduced) j/=2;
+        for(i=0;i<j;i++) {
+            float speed=random_float_between(8.0f,10.0f)*size*D_0015ED6C-near_adjust*D_0015ED6C;
+            Colors1688 color=D_L00_001E99F0;
+            Colors1688 fade=D_L00_001E9A08;
+            int c=FUN_L00_0025c0e8(color.colors[random_integer_below(6)],D_0013E520.bB);
+            int f=FUN_L00_0025c0e8(fade.colors[random_integer_below(6)],D_0013E520.bB);
+            int life=FUN_L00_00257b90(scale_game_frames_alt(15),scale_game_frames_alt(20))-particle_reduction*7;
+            int end=FUN_L00_00257b90(scale_game_frames_alt(25),scale_game_frames_alt(30))-particle_reduction*10;
+            int white_life, white_end;
+            rings1688((&m->pos),&blast_velocity,c,f,400000.0f,life,end,0,0,speed);
+            white_life=FUN_L00_00257b90(scale_game_frames_alt(5),scale_game_frames_alt(10))-particle_reduction*5;
+            white_end=FUN_L00_00257b90(scale_game_frames_alt(15),scale_game_frames_alt(20))-particle_reduction*7;
+            rings1688((&m->pos),&blast_velocity,0x7FFFFFFF,0xFFFFFF,400000.0f,white_life,white_end,0,0,speed*0.5f);
+        }
+        for(i=0;i<particles;i++) {
+            Colors1688 color=D_L00_001E99F0;
+            Colors1688 fade=D_L00_001E9A08;
+            V1688 v;
+            int c,f,life;
+            float debris_scale;
+            { V1688 random;
+            random.q=0;
+            random.f[0]=random_float_between(-1.0f,1.0f);
+            random.f[1]=random_float_between(-1.0f,1.0f);
+            random.f[2]=random_float_between(-1.0f,1.0f);
+                v.q=random.q;
+            }
+            normalize_vector_xyz(&v,&v,random_float_between(0.0f,3.0f)*D_0015ED6C*size);
+            c=FUN_L00_0025c0e8(color.colors[random_integer_below(6)],D_0013E520.bB);
+            f=FUN_L00_0025c0e8(fade.colors[random_integer_below(6)],D_0013E520.bB);
+            debris_scale=size*200000.0f;
+            life=FUN_L00_00257b90(scale_game_frames_alt(20),scale_game_frames_alt(35))-particle_reduction*10;
+            debris1688((&m->pos),&v,c,f,debris_scale,life);
+        }
+        if(D_L00_0015F5D0<0.95f && distance>9.0f) {
+            int c=127,f=127;
+            if(D_0013E520.bB) { c=60; f=60; }
+            spawn_glow_particle_u8(m,(&m->pos),&blast_velocity,size*4.0f,scale_game_frames_alt(15),c,127,f,32);
+            spawn_glow_particle_u8(m,(&m->pos),&blast_velocity,size*4.0f,scale_game_frames_alt(24),c,127,f,32);
+        }
+        { unsigned char color=127;
+          int life;
+          float flash_scale=size*4.0f;
+          if(D_0013E520.bB) color=32;
+          life=scale_game_frames_alt(20);
+          spawn_glow_particle_u8(m,(&m->pos),&blast_velocity,flash_scale,life,color,127,0,48);
+        }
+        if(!reduced) spawn_glow_particle_u8(m,(&m->pos),&blast_velocity,(size+size),scale_game_frames_alt(19),255,255,255,32);
+        motion.f[0]=0.0f;
+        m->bBC=0;
+        D_L00_00166C80.f160=distance<20.0f ? 0.4f-distance*0.0175f : 0.4f-20.0f*0.0175f;
+        D_L00_00166C80.i168=scale_game_frames_alt(25);
+        allocate_voice_for_target_entry_alt(0,0,(int)m);
+        if(!reduced) {
+            if(D_0013E520.bB) FUN_L00_002d3838((char *)&gold_effect,(char *)(&m->pos),0,0);
+            else FUN_L00_002d3838((char *)&effect,(char *)(&m->pos),0,0);
+        }
+        d->bounce_count++;
+        if(!D_0013E520.bB || d->bounce_count==3) {
+            FUN_L00_0025f800(m,D_L00_001B0770);
+            mark_moby_for_removal(m);
+            return;
+        }
+        { V1688 bounce[2];
+        d->target=0;
+        m->bBC=0;
+        normalize_vector_xyz(&impact1688.normal,&impact1688.normal,1.0f);
+        reflect1688(&bounce[0],&motion,&impact1688.normal);
+        m->rz=FUN_001f9e90(bounce[0].f[0],bounce[0].f[1]);
+        m->ry=-FUN_001f9e90(horizontal1688(&bounce[0]),bounce[0].f[2]);
+        d->yaw_velocity=0.0f; d->pitch_velocity=0.0f;
+        normalize_vector_xyz(&bounce[1],&impact1688.normal,0.05f);
+        add_vector_xyz((&m->pos),(&m->pos),&bounce[1]);
+        if(impact1688.moby) d->owner=impact1688.moby;
+        if(!d->bounce_timer) d->bounce_timer=scale_game_frames_alt(90);
+        FUN_L00_002affa8((char *)m,(O *)d,(char *)impact1688.moby);
+        allocate_voice_for_target_entry_alt(1,0,(int)m);
+            }
+    }
+    if(tick_countdown_32_alt(&d->bounce_timer)) d->bounce_count=0;
 }
-#endif
 typedef struct {
     float f[4];
 } __attribute__((aligned(16))) V_2b1af0;
