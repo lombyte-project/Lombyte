@@ -3154,9 +3154,10 @@ float FUN_00200240_2d73e8(s32) __asm__("FUN_001fa6c0");
 s32 FUN_00200250_2d73e8(float) __asm__("FUN_001fa6d0");
 s32 FUN_00257b50_2d73e8(s32) __asm__("FUN_00213260");
 
+extern T *D_L00_001600EC_2d73e8 __asm__("D_L00_001600EC") __attribute__((section(".data")));
 void FUN_L00_002d73e8(P *p) {
     Q *q = p->q;
-    T *t = &D_L00_001600EC[q->idx];
+    T *t = &D_L00_001600EC_2d73e8[q->idx];
     V position, zero_vector;
     V positive_transform[4], negative_transform[4];
     Quad_2d73e8 quad;
@@ -3216,9 +3217,11 @@ void FUN_L00_002d73e8(P *p) {
                     index = D_L00_001E1380_2d73e8[row][point];
                     source = &D_L00_001E12C0_2d73e8[index];
                     points->x = source->x;
-                    points->y = source->y * x;
+                    f = source->y * x;
+                    points->y = f;
                     points->w = 1.0f;
-                    points->z = source->z * y;
+                    f = source->z * y;
+                    points->z = f;
                     FUN_001ff6f8_2d73e8(points, points, transform);
                     *texcoords = D_L00_001E1440_2d73e8[index][1] + *phase;
                     *texcoords_second = D_L00_001E1440_2d73e8[index][0];
@@ -3255,9 +3258,11 @@ void FUN_L00_002d73e8(P *p) {
             for (point = 0, points = quad.points, texcoords = quad.texcoords, texcoords_second = quad.texcoords + 1, colors = quad.colors; point < 4; point++, points++, texcoords += 2, texcoords_second += 2, colors++) {
                 source = (V *)(D_L00_001E11A0_2d73e8 + point * 16);
                 points->x = source->x;
-                points->y = source->y * x;
+                f = source->y * x;
+                points->y = f;
                 points->w = 1.0f;
-                points->z = source->z * y;
+                f = source->z * y;
+                points->z = f;
                 f = source_texcoords[0] - *phase;
                 *texcoords_second = source_texcoords[1];
                 source_texcoords += 2;
