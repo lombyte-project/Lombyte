@@ -791,11 +791,8 @@ void FUN_L00_002d19b0(u8 *m) {
     quad.texture[3] = (u64)(s64)D_L00_001618DC | ((u64)(s64)D_L00_001618E0 << 2) |
                       ((u64)(s64)D_L00_001618E4 << 4) | ((u64)(s64)D_L00_001618E8 << 6) |
                       ((u64)(s64)D_L00_001618EC << 32);
-    quad.colors[0] = D_L00_001618F4;
     quad.texture[0] = 0;
-    quad.colors[1] = D_L00_001618F4;
-    quad.colors[2] = D_L00_001618F4;
-    quad.colors[3] = D_L00_001618F4;
+    quad.colors[3] = quad.colors[2] = quad.colors[1] = quad.colors[0] = D_L00_001618F4;
     if (absolute_float_2d19b0(D_L00_00166C80_2d19b0[80] - *(f32 *)(m + 0x10)) < 16.0f &&
         absolute_float_2d19b0(D_L00_00166C80_2d19b0[81] - *(f32 *)(m + 0x14)) < 16.0f)
         active = 1;
@@ -820,18 +817,16 @@ void FUN_L00_002d19b0(u8 *m) {
             len = fast_sqrt_2d19b0(c.z + c.z);
             len += len;
             if (m[0x20] == 1 || *(s32 *)(vars + 0x40) == 0) {
-                x = c.x / len + 0.5f;
-                y = c.y / len + 0.5f;
-                uv[0][0] = x;
+                uv[0][0] = c.x / len + 0.5f;
+                uv[0][1] = c.y / len + 0.5f;
             } else {
                 x = c.x / len;
                 y = c.y / len;
                 x += 0.5f;
                 uv[0][0] = x + (old_uv[0][0] - x) * blend;
                 x = y + 0.5f;
-                y = x + (old_uv[0][1] - x) * blend;
+                uv[0][1] = x + (old_uv[0][1] - x) * blend;
             }
-            uv[0][1] = y;
             uv++;
             old_uv++;
         }
