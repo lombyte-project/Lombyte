@@ -1420,8 +1420,7 @@ next_point:
             cursor = (HelpPath *)((char *)cursor + 0x20);
         } while (index < path->count);
     }
-    p = &path->points[selected];
-    qcopy(position, p);
+    qcopy(position, &path->points[selected]);
     qcopy(&point, position);
     point.z += 2.0f;
     position[2] = find_ground_height(0.5f, &point, 0);
