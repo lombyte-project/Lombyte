@@ -1349,9 +1349,6 @@ void FUN_L00_002cb418(Moby *m) {
     scale_vector_xyz_2cb418(&c, &b, random_float_between_2cb418(D_0015ED6C_2cb418 * 0.5f, D_0015ED6C_2cb418 + D_0015ED6C_2cb418) / len);
     spawn_spark_2cb418((Vec4A *)&m->pos, &c, 0x7F2F4F6F, random_int_between_2cb418(scale_game_frames_2cb418(10), scale_game_frames_2cb418(15)), 30000.0f);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002cbcc0.s", FUN_L00_002cbcc0);
-#else
 extern void FUN_00267a08_2cbcc0(void *) __asm__("FUN_L00_00267a08");
 extern f32 FUN_L00_00257be8_2cbcc0(f32, f32) __asm__("FUN_L00_00257be8");
 extern s32 FUN_L00_00257b90_2cbcc0(s32, s32) __asm__("FUN_L00_00257b90");
@@ -1359,7 +1356,7 @@ extern s32 FUN_L00_00257b50_2cbcc0(s32) __asm__("FUN_L00_00257b50");
 extern s32 FUN_001fef20_2cbcc0(s32) __asm__("FUN_L00_001fef20");
 extern void FUN_001ff500_2cbcc0(void *, void *, f32) __asm__("FUN_L00_001ff500");
 extern void *FUN_0026dd20_2cbcc0(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
-extern u8 *FUN_0026d000_2cbcc0(void *, s32, void *, u32, f32, f32, f32, f32) __asm__("FUN_L00_0026d000");
+extern u8 *FUN_0026d000_2cbcc0(f32, f32, f32, f32, void *, s32, void *, u32) __asm__("FUN_L00_0026d000");
 extern f32 D_0015ED6C_2cbcc0 __asm__("D_0015ED6C");
 extern f32 D_0015ED60_2cbcc0 __asm__("D_0015ED60");
 
@@ -1385,16 +1382,17 @@ void FUN_L00_002cbcc0(u8 *m, s32 enabled)
     pos = m + 0x10;
 
     if (enabled != 0) {
+        V4 *vector = &vectors[1];
         for (j = 4; j >= 0; j--) {
             vectors[1].q = 0;
             vectors[1].f[0] = FUN_L00_00257be8_2cbcc0(-1.0f, 1.0f);
             vectors[1].f[1] = FUN_L00_00257be8_2cbcc0(-1.0f, 1.0f);
             vectors[1].f[2] = FUN_L00_00257be8_2cbcc0(-1.0f, 1.0f);
             vectors[0].q = vectors[1].q;
-            FUN_001ff500_2cbcc0(&vectors[1], &vectors[0],
+            FUN_001ff500_2cbcc0(vector, &vectors[0],
                 FUN_L00_00257be8_2cbcc0(D_0015ED6C_2cbcc0 * 3.0f, D_0015ED6C_2cbcc0 * 6.0f));
             lifetime = FUN_L00_00257b90_2cbcc0(FUN_001fef20_2cbcc0(10), FUN_001fef20_2cbcc0(15));
-            FUN_0026dd20_2cbcc0(pos, &vectors[1], 0x7f2f4f6f, lifetime, 35000.0f);
+            FUN_0026dd20_2cbcc0(pos, vector, 0x7f2f4f6f, lifetime, 35000.0f);
         }
     }
 
@@ -1407,25 +1405,25 @@ void FUN_L00_002cbcc0(u8 *m, s32 enabled)
             vectors[0].f[2] = 1.0f;
             vectors[0].f[3] = 1.0f;
             vectors[0].f[2] = FUN_L00_00257be8_2cbcc0(0.01f, 0.025f) * D_0015ED60_2cbcc0;
-            effect = FUN_0026d000_2cbcc0(pos, sign, &vectors[0], color,
-                0.2f, 1.0f, 1.02f, 140000.0f);
+            effect = FUN_0026d000_2cbcc0(0.2f, 1.0f, 1.02f, 140000.0f,
+                pos, sign, &vectors[0], color);
             if (effect != 0) {
                 *(s16 *)(effect + 0xa) = FUN_001fef20_2cbcc0(FUN_L00_00257b90_2cbcc0(50, 80));
                 /* The direction is no longer needed; retain the effect field address. */
-                sign = (s32)(effect + 0x20);
-                *(s32 *)(sign + 4) = 2;
-                ((u8 *)sign)[0xa] = color >> 24;
-                ((u8 *)sign)[0xb] = effect[0xa];
-                if (FUN_L00_00257b50_2cbcc0(2)) {
+                i = (s32)(effect + 0x20);
+                *(s32 *)(i + 4) = 2;
+                ((u8 *)i)[0xa] = color >> 24;
+                ((u8 *)i)[0xb] = effect[0xa];
+                alpha = FUN_L00_00257b50_2cbcc0(2);
+                if (alpha) {
                     /* The fixed low color byte is 0x60, so the alpha byte is 0x44. */
-                    alpha = color ^ 0x24;
+                    alpha = 0x44;
                     effect[3] = alpha;
                 }
             }
         }
     }
 }
-#endif
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern float D_0015ED6C_2cbf68 __asm__("D_0015ED6C");
