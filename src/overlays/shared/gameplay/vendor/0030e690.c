@@ -431,7 +431,7 @@ int FUN_L11_003192c8(char *moby) {
     char stack_data[0x900] __attribute__((aligned(16)));
     float offset[8] __attribute__((aligned(16)));
     short *list;
-    int i, j;
+    int i;
     float phase;
     float *position_base;
     float *position_y_base;
@@ -456,6 +456,7 @@ int FUN_L11_003192c8(char *moby) {
         float *position_y;
         int *colors;
         float span;
+        int j;
         j = 0;
         texture = trail_effect_texture(0x13);
         *(long long *)(packet + 0x38) = texture;
@@ -495,6 +496,7 @@ int FUN_L11_003192c8(char *moby) {
                 int a = next + 15;
                 int b = next + 30;
                 int start;
+                int j;
                 if (limit < a) b = a;
                 start = a - ((b >> 4) << 4);
                 for (j = 0; j < 2; j++) {
