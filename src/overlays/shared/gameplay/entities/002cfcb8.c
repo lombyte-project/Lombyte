@@ -1104,7 +1104,7 @@ target_valid:
     switch (moby[0x20]) {
     case 0:
         *(u8 **)(vars + 0x50) = 0;
-        moby[0x20] = !(moby[0x70] & 2) ? 1 : 2;
+        if (!(moby[0x70] & 2)) moby[0x20] = 1; else moby[0x20] = 2;
     case 1:
         if (moby[0x70] & 2) moby[0x20] = 2;
         break;
@@ -1140,8 +1140,7 @@ target_valid:
         qcopy(*(u8 **)(vars + 0x50) + 0x10, vars + 0x40);
     } else {
         if (get_ammo(-1)) {
-            *(volatile u64 *)&velocity = 0;
-            *((u64 *)&velocity + 1) = 0;
+            velocity.q = 0;
         } else if (hero.unk20A8) {
             *(volatile u64 *)&velocity = 0;
             *((u64 *)&velocity + 1) = 0;
