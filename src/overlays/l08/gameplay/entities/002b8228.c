@@ -739,7 +739,6 @@ void FUN_L08_002d55c8(struct Moby *moby, int path_id) {
     int event;
     int value;
     int increment;
-    char *linked;
     float *rotation;
 
     qcopy(point, path + 4 + *(int *)(vars + 0x168) * 4);
@@ -766,12 +765,14 @@ void FUN_L08_002d55c8(struct Moby *moby, int path_id) {
     size = *(float *)(vars + 0x180) / (D_L08_001518A0 * size);
     if (size > 2.0f) { size = 2.0f; } else if (size < 0.0f) { size = 0.0f; }
     if (*(char **)(vars + 0x160) != 0) {
+        char *linked;
         *(float *)(*(char **)(vars + 0x160) + 0x58) = size;
         linked = *(char **)(vars + 0x160);
         qcopy(linked + 0x40, (char *)moby + 0x40);
         qcopy(linked + 0x10, &moby->pos);
     }
     if (*(char **)(vars + 0x164) != 0) {
+        char *linked;
         *(float *)(*(char **)(vars + 0x164) + 0x58) = size;
         linked = *(char **)(vars + 0x164);
         qcopy(linked + 0x40, (char *)moby + 0x40);
