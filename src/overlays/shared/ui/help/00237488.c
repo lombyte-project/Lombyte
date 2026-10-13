@@ -1382,13 +1382,13 @@ void FUN_L05_00254358(f32 *position, f32 *direction) {
     if (path->count > 0) {
         height_limit = 4.0f;
         p = path->points;
-        g = &hero;
         cursor = path;
         do {
             f32 a;
             s32 next;
             s32 count;
             f32 b;
+            g = &hero;
             a = FUN_001f9e90(cursor->points[0].x - g->motion.pos.f[0], cursor->points[0].y - g->motion.pos.f[1]);
             count = path->count;
             next = (s32)((u32)count + 2U);
