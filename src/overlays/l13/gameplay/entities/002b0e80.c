@@ -2021,7 +2021,8 @@ void FUN_L13_002ba178(void *moby, void *obj) {
     FUN_L00_0025b8c0(&F(d,0xB0),&F(d,0xC0),speed_fraction*0.34906578f+1.134464f,0.05f,1.0f,1.0f);
     angle=F(d,0xB0)*0.5f;
     x=fast_sin(angle);
-    D_L13_0016CDF0=x/FUN_001f9dc8(angle);
+    x=x/FUN_001f9dc8(angle);
+    D_L13_0016CDF0=x;
     update_view_context();
     m->rotation[0]=fast_add_rotations(d->angles[0],F(d,0x6C)*0.5f);
     m->rotation[1]=fast_add_rotations(d->angles[1],-F(d,0x70)*0.5f);
