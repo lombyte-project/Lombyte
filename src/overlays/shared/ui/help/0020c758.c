@@ -1360,7 +1360,7 @@ void FUN_L00_0020f160(void *moby, void *matrix)
         record = records + (*(volatile s32 *)hero_ptr->pad_21B8) * 0x30;
         normalize_vector_triplet(record);
         ring = (*(volatile s32 *)hero_ptr->pad_21B8) + 1;
-        (*(volatile s32 *)hero_ptr->pad_21B8) = ring % 16;
+        (*(s32 *)hero_ptr->pad_21B8) = ring % 16;
         (*(s32 *)(hero_ptr->pad_21B8 + 4))++;
         if ((*(s32 *)(hero_ptr->pad_21B8 + 4)) > 16)
             (*(s32 *)(hero_ptr->pad_21B8 + 4)) = 16;
