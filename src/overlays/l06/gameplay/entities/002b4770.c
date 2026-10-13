@@ -2212,6 +2212,7 @@ void FUN_L06_002fbfb0(char *moby) {
     float acceleration, max_speed, damping, rotation_acceleration, rotation_speed, rotation_damping;
     int next_timer;
     unsigned char next_phase;
+    int phase;
 
     switch ((unsigned char)moby[0x20]) {
     case 0:
@@ -2254,8 +2255,10 @@ void FUN_L06_002fbfb0(char *moby) {
         allocate_voice_for_target_entry(0, 0, (int)*(char **)(data + 0x40));
         return;
     case 3:
-        a = FUN_001f9b48(moby + 0x10, data + 0x10);
-        b = FUN_001f9b48(*(char **)(data + 0x40) + 0x10, data + 0x10);
+        target_delta = FUN_001f9b48(moby + 0x10, data + 0x10);
+        child = *(char **)(data + 0x40);
+        a = target_delta;
+        b = FUN_001f9b48(child + 0x10, data + 0x10);
         FUN_00213f38(&a, &((float *)data)[2], D_L06_00161F1C, frame_time_sq * 10.0f, frame_time_sq * 20.0f, frame_time * 5.0f);
         FUN_00213f38(&b, &((float *)data)[0x11], D_L06_00161F20, frame_time_sq * 10.0f, frame_time_sq * 20.0f, frame_time * 5.0f);
         FUN_001f9bf8(v, data + 0x30, a);
@@ -2266,16 +2269,19 @@ void FUN_L06_002fbfb0(char *moby) {
         if (absolute_float(a - D_L06_00161F1C) < 0.01f && absolute_float(b - D_L06_00161F20) < 0.01f) moby[0x20] = 5;
         return;
     case 4:
-        phase_a = FUN_001f9b48(moby + 0x10, data + 0x10);
-        phase_b = FUN_001f9b48(*(char **)(data + 0x40) + 0x10, data + 0x10);
-        if ((unsigned char)moby[0xbc] == 1) goto phase_one;
-        if ((int)(unsigned char)moby[0xbc] < 2) goto phase_default;
-        if ((unsigned char)moby[0xbc] == 2) goto phase_two;
+        target_delta = FUN_001f9b48(moby + 0x10, data + 0x10);
+        child = *(char **)(data + 0x40);
+        phase_a = target_delta;
+        phase_b = FUN_001f9b48(child + 0x10, data + 0x10);
+        phase = (unsigned char)moby[0xbc];
+        if (phase == 1) goto phase_one;
+        if (phase < 2) goto phase_default;
+        if (phase == 2) goto phase_two;
 
         phase_default:
+        target_a = D_L06_00161F24;
         target_rot_a = *(float *)(moby + 0x44);
         target_rot_b = target_rot_a;
-        target_a = D_L06_00161F24;
         target_b = D_L06_00161F28;
         acceleration = 10.0f;
         max_speed = 20.0f;
@@ -2301,10 +2307,10 @@ void FUN_L06_002fbfb0(char *moby) {
         next_timer = func_001FA898_r(random_float_between_alt((float)D_L06_00161F54, (float)D_L06_00161F58));
         goto phase_join;
         phase_two:
-        target_rot_a = D_L06_00161F2C;
-        target_rot_b = D_L06_00161F30;
         target_a = D_L06_00161F24;
+        target_rot_a = D_L06_00161F2C;
         target_b = D_L06_00161F28;
+        target_rot_b = D_L06_00161F30;
         acceleration = D_L06_00161F34;
         max_speed = D_L06_00161F38;
         damping = D_L06_00161F3C;
@@ -2314,10 +2320,11 @@ void FUN_L06_002fbfb0(char *moby) {
         next_phase = 1;
         next_timer = func_001FA898_r(random_float_between_alt((float)D_L06_00161F4C, (float)D_L06_00161F50));
         phase_join:
+        target_delta = target_rot_b;
         FUN_00213f38(&phase_a, &((float *)data)[2], target_a, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
         FUN_00213f38(&phase_b, &((float *)data)[0x11], target_b, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
         FUN_00213f38((float *)(moby + 0x44), &((float *)data)[3], target_rot_a, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
-        FUN_00213f38((float *)(*(char **)(data + 0x40) + 0x44), &((float *)data)[0x12], target_rot_b, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
+        FUN_00213f38((float *)(*(char **)(data + 0x40) + 0x44), &((float *)data)[0x12], target_delta, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
         FUN_001f9bf8(v, data + 0x30, phase_a);
         FUN_001f9a10(moby + 0x10, data + 0x10, v);
         FUN_001f9bf8(v, data + 0x30, -phase_b);
