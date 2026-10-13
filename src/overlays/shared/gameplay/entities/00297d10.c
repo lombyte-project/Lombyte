@@ -183,7 +183,10 @@ typedef struct {
     int word70, word74, word78, word7C, word80, word84, word88;
     float float8C;
 } L06BackdropGlobals;
-extern L06BackdropGlobals D_L06_00161C64_globals __asm__("D_L06_00161C64") __attribute__((sda));
+extern int D_L06_00161C64_globals[] __asm__("D_L06_00161C64") __attribute__((sda));
+
+/* Word offsets within the checked shared globals base. */
+enum { word70 = 3, word74, word78, word7C, word80, word84, word88, float8C };
 
 typedef struct {
     float corner[4][4];
@@ -225,7 +228,7 @@ void FUN_L06_002d8738(char *moby) {
             FUN_001f9a28(direction, D_L06_001D4530[i], D_L06_00167540);
             FUN_001f9bf8(direction, direction, 1.0f);
             FUN_001f9d20(normal, D_L06_001D3D30[i], matrix);
-            FUN_001f9bf8(normal, normal, D_L06_00161C64_globals.float8C);
+            FUN_001f9bf8(normal, normal, *(float *)&D_L06_00161C64_globals[float8C]);
             scale = FUN_001f9ab0(normal, direction);
             FUN_001f9a68(projected, normal, scale + scale);
             FUN_001f9a28(projected, direction, projected);
@@ -245,16 +248,16 @@ void FUN_L06_002d8738(char *moby) {
             src++;
         }
     }
-    quad.tex = FUN_001f44b8(D_L06_00161C64_globals.word84);
+    quad.tex = FUN_001f44b8(D_L06_00161C64_globals[word84]);
     quad.unk80 = 0xff9000000260L;
-    quad.unk88 = (long)D_L06_00161C64_globals.word70 | (long)D_L06_00161C64_globals.word74 << 2 |
-                 (long)D_L06_00161C64_globals.word78 << 4 | (long)D_L06_00161C64_globals.word7C << 6 |
-                 (long)D_L06_00161C64_globals.word80 << 32;
+    quad.unk88 = (long)D_L06_00161C64_globals[word70] | (long)D_L06_00161C64_globals[word74] << 2 |
+                 (long)D_L06_00161C64_globals[word78] << 4 | (long)D_L06_00161C64_globals[word7C] << 6 |
+                 (long)D_L06_00161C64_globals[word80] << 32;
     quad.unk70 = 0;
-    quad.color[0] = D_L06_00161C64_globals.word88;
-    quad.color[1] = D_L06_00161C64_globals.word88;
-    quad.color[2] = D_L06_00161C64_globals.word88;
-    quad.color[3] = D_L06_00161C64_globals.word88;
+    quad.color[0] = D_L06_00161C64_globals[word88];
+    quad.color[1] = D_L06_00161C64_globals[word88];
+    quad.color[2] = D_L06_00161C64_globals[word88];
+    quad.color[3] = D_L06_00161C64_globals[word88];
     i = 0;
     do {
         FUN_001f9d20(facePos, D_L06_001D40C0[i], matrix);
