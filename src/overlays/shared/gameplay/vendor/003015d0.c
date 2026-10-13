@@ -170,85 +170,102 @@ void FUN_L14_003017f8(char *m) {
     int i, j, index, next, color;
     float length, t;
     float y;
+    long offset;
     VendorBeamFrame *frame;
 
     D_L14_001600EC[*(int *)d].origin.f[3] = 1.0f;
     {
         int duration = random_integer_between(scale_game_frames(D_L14_001620BC),
-                                                scale_game_frames(D_L14_001620C0));
+            scale_game_frames(D_L14_001620C0));
         frame = &D_L14_001600EC[*(int *)d];
         *(int *)(d + 0x620) = (short)duration;
         *(short *)(d + 0x12) = duration;
     }
     length = vector_length_xyz(&frame->axis[1]);
     length = length + length;
-    for (i = 0; i < 32; i++) {
-        t = (0.5f - convert_integer_to_float(i) / convert_integer_to_float(31)) * length;
-        if ((unsigned)(i - 3) < 26) {
-            set_vector_xyz(path_a[i], 0.0f, D_L14_001620FC);
-            set_vector_xyz(path_b[i], 0.0f, D_L14_00162100 * D_0015ED6C);
-        } else {
-            clear_u64_value(path_a[i]);
-            clear_u64_value(path_b[i]);
-        }
-        y = path_a[i][1];
-        path_a[i][3] = 1.0f;
-        path_a[i][1] = y + t;
-    }
-    for (i = 0; i < 32; i++) {
-        if (i != 0 && i != 31) {
-            add_vector_xyz(work, path_a[i - 1], path_a[i]);
-            add_vector_xyz(work, work, path_a[i + 1]);
-            scale_vector_xyz(d + 0x20 + (i << 4), work, 0.333f);
-            add_vector_xyz(work, path_b[i - 1], path_b[i]);
-            add_vector_xyz(work, work, path_b[i + 1]);
-            scale_vector_xyz(d + 0x220 + (i << 4), work, 0.333f);
-        } else {
-            qcopy(d + 0x20 + (i << 4), path_a[i]);
-            qcopy(d + 0x220 + (i << 4), path_b[i]);
+    {
+        int i;
+        for (i = 0; i < 32; i++) {
+            t = (0.5f - convert_integer_to_float(i) / convert_integer_to_float(31)) * length;
+            if ((unsigned)(i - 3) < 26) {
+                set_vector_xyz(path_a[i], 0.0f, D_L14_001620FC);
+                set_vector_xyz(path_b[i], 0.0f, D_L14_00162100 * D_0015ED6C);
+            } else {
+                clear_u64_value(path_a[i]);
+                clear_u64_value(path_b[i]);
+            }
+            y = path_a[i][1];
+            path_a[i][3] = 1.0f;
+            path_a[i][1] = y + t;
         }
     }
-    for (i = 0; i < 4; i++) {
-        next = i + 1;
-        set_vector_xyz(work, D_L14_001620FC, D_L14_001620FC);
-        index = truncate_float_to_s32(random_float_between((float)i * 6.0f,
-                                                            (float)next * 6.0f));
-        index += 4;
-        d[0x18 + i] = index;
-        *(u128 *)(d + 0x420 + (i << 4)) = *(u128 *)(d + 0x20 + (index << 4));
-        *(u128 *)(d + 0x520 + (i << 4)) = *(u128 *)(d + 0x220 + (index << 4));
-        for (j = 2; j >= 0; j--) {
-            set_vector_xyz(delta_a, 0.1f, 0.1f);
-            set_vector_xyz(d + 0x560 + (i << 4) + ((2 - j) << 6), 0.0f,
-                           D_L14_00162100 * D_0015ED6C);
-            add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
-                           d + 0x420 + (i << 4) + ((2 - j) << 6), work);
-            add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
-                           d + 0x460 + (i << 4) + ((2 - j) << 6), delta_a);
+    {
+        int i;
+        for (i = 0; i < 32; i++) {
+            if (i != 0 && i != 31) {
+                add_vector_xyz(work, path_a[i - 1], path_a[i]);
+                add_vector_xyz(work, work, path_a[i + 1]);
+                scale_vector_xyz(d + 0x20 + (i << 4), work, 0.333f);
+                add_vector_xyz(work, path_b[i - 1], path_b[i]);
+                add_vector_xyz(work, work, path_b[i + 1]);
+                scale_vector_xyz(d + 0x220 + (i << 4), work, 0.333f);
+            } else {
+                qcopy(d + 0x20 + (i << 4), path_a[i]);
+                qcopy(d + 0x220 + (i << 4), path_b[i]);
+            }
+        }
+    }
+    {
+        int i;
+        for (i = 0; i < 4; i++) {
+            next = i + 1;
+            set_vector_xyz(work, D_L14_001620FC, D_L14_001620FC);
+            index = truncate_float_to_s32(random_float_between((float)i * 6.0f,
+                (float)next * 6.0f));
+            index += 4;
+            d[0x18 + i] = index;
+            offset = (i << 4) + (int)d;
+            *(u128 *)((char *)offset + 0x420) = *(u128 *)(d + 0x20 + (index << 4));
+            *(u128 *)((char *)offset + 0x520) = *(u128 *)(d + 0x220 + (index << 4));
+            for (j = 2; j >= 0; j--) {
+                set_vector_xyz(delta_a, 0.1f, 0.1f);
+                set_vector_xyz(d + 0x560 + (i << 4) + ((2 - j) << 6), 0.0f,
+                    D_L14_00162100 * D_0015ED6C);
+                add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
+                    (char *)offset + 0x420 + ((2 - j) << 6), work);
+                add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
+                    d + 0x460 + (i << 4) + ((2 - j) << 6), delta_a);
+            }
         }
     }
     if (FUN_001f9b80(&D_L14_001600EC[*(int *)d].origin, D_L14_001674C0) >= 4.0f) {
         FUN_001fa050(matrix, &D_L14_001600EC[*(int *)d].pad40[0x30]);
         qcopy(origin, &D_L14_001600EC[*(int *)d].origin);
-        for (i = 0; i < 32; i += 8) {
-            FUN_001f9d20(work, d + 0x20 + (i << 4), matrix);
-            qcopy(delta_a, d + 0x220 + (i << 4));
-            delta_a[3] = D_L14_00162114;
-            index = random_integer_below(2);
-            color = index ? D_L14_0016211C : D_L14_00162120;
-            index = random_integer_below(10);
-            FUN_00218888(work, delta_a, delta_a, D_L14_00162108,
-                           D_L14_0016210C, i >> 1, 15, scale_game_frames(index + 20), color);
+        {
+            int i;
+            for (i = 0; i < 32; i += 8) {
+                FUN_001f9d20(work, d + 0x20 + (i << 4), matrix);
+                qcopy(delta_a, d + 0x220 + (i << 4));
+                delta_a[3] = D_L14_00162114;
+                index = random_integer_below(2);
+                color = index ? D_L14_0016211C : D_L14_00162120;
+                index = random_integer_below(10);
+                FUN_00218888(work, delta_a, delta_a, D_L14_00162108,
+                    D_L14_0016210C, i >> 1, 15, scale_game_frames(index + 20), color);
+            }
         }
-        for (i = 0; i < 2; i++) {
-            FUN_001f9d20(work, d + 0x4e0 + (i << 4), matrix);
-            qcopy(delta_a, d + 0x5e0 + (i << 4));
-            delta_a[3] = D_L14_00162114;
-            random_integer_below(2);
-            index = random_integer_below(10);
-            FUN_00218888(work, delta_a, delta_a, D_L14_00162108,
-                           D_L14_0016210C, (unsigned char)d[0x18 + i] >> 1, 15,
-                           scale_game_frames(index + 20), D_L14_00162120);
+        {
+            int i;
+            for (i = 0; i < 2; i++) {
+                FUN_001f9d20(work, d + 0x4e0 + (i << 4), matrix);
+                qcopy(delta_a, d + 0x5e0 + (i << 4));
+                delta_a[3] = D_L14_00162114;
+                random_integer_below(2);
+                index = random_integer_below(10);
+                FUN_00218888(work, delta_a, delta_a, D_L14_00162108,
+                    D_L14_0016210C, (unsigned char)d[0x18 + i] >> 1, 15,
+                    scale_game_frames(index + 20), D_L14_00162120);
+            }
         }
     }
 }
