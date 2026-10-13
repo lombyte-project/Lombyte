@@ -404,7 +404,7 @@ void FUN_L11_003112b8(void *m, char *t) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003192c8.s", FUN_L11_003192c8);
 #else
-extern unsigned char D_0015EDB2[];
+extern unsigned char D_0015EDB2;
 extern float D_L11_001F1490[];
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
@@ -430,7 +430,7 @@ int FUN_L11_003192c8(char *moby) {
     if ((unsigned char)moby[0x21] == 0xff) {
         return;
     }
-    if (D_0015EDB2[0] != 0) {
+    if (D_0015EDB2 != 0) {
         *(float *)&D_L11_001623F0_d = 16.0f;
     } else {
         *(float *)&D_L11_001623F0_d = 5.0f;
@@ -460,16 +460,12 @@ int FUN_L11_003192c8(char *moby) {
         colors = colors_base + i * 0x24;
         for (; j < 4; j++) {
             float t;
-            position[0] = source[0];
-            *position_y = source[1];
+            position[j * 2] = source[j * 2];
+            position_y[j * 2] = source[j * 2 + 1];
             t = integer_to_float(i - ((j >> 1) - 1)) / *(float *)&D_L11_001623F0_d + phase;
             if (t > 1.0f) t = 1.0f;
             else if (t < 0.0f) t = 0.0f;
-            *colors = tween_color(t, 0x8c28aa28, 0x144646);
-            position_y += 2;
-            position += 2;
-            source += 2;
-            colors++;
+            colors[j] = tween_color(t, 0x8c28aa28, 0x144646);
         }
     }
     FUN_001153fc(offset, 0, 0x20);
