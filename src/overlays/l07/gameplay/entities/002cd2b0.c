@@ -2012,7 +2012,6 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
         green = green - green_step;
         center = *(float *)(moby + 0x10);
         *(float *)(packet + 0x28) = *(float *)(packet + 0x38) = *(float *)(moby + 0x18);
-        *(float *)(packet + 0x30) = center - radius;
         *(float *)(packet + 0x68) = *(float *)(packet + 0x58) = *(float *)(packet + 0x50) + width;
         *(float *)(packet + 0x34) = *(float *)(packet + 0x14) = *(float *)(moby + 0x14);
         *(float *)(packet + 0x6c) = *(float *)(packet + 0x64) = 1.0f;
@@ -2020,6 +2019,7 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
         *(float *)(packet + 0x08) = *(float *)(packet + 0x18) = side + *(float *)(moby + 0x18);
         *(float *)(packet + 0x10) = center - radius * (inner_scale - band * 0.03f);
         *(float *)(packet + 0x54) = 0.0f;
+        *(float *)(packet + 0x30) = center - radius;
         __builtin_memcpy(second, packet, 0x90);
         *(float *)(second + 8) = *(float *)(second + 0x18) = *(float *)(moby + 0x18) - 5.0f;
         angle = -2.8274336f;
