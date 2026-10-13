@@ -839,8 +839,11 @@ void FUN_L07_002f5ba0(struct Moby *moby) {
         break;
     case 8: {
         char *other;
-        u8 next_state = 12;
-        if (D_0013D388[0x2a]) goto store_state;
+        u8 next_state;
+        if (D_0013D388[0x2a]) {
+            next_state = 12;
+            goto store_state;
+        }
         if (data[3] != -1) {
             char *other = D_L07_0015FFD8 + data[3] * 0x100;
             if (other && ((u8 *)other)[0x20] != 0xfe && ((u8 *)other)[0x20] != 0xfd)
