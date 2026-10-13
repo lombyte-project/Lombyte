@@ -21,6 +21,7 @@ extern s32 D_L00_0015F5C4 MACRO_ADDR;
 extern s32 D_L00_0015F570 __asm__("D_L00_0015F570");
 extern s32 D_L00_0015F3F8 __asm__("D_L00_0015F3F8");
 extern s32 D_L00_0015F5AC __asm__("D_L00_0015F5AC");
+extern s32 D_0015F5AC __asm__("D_L00_0015F5AC") __attribute__((sda));
 extern f32 D_L00_0015F5D0 __asm__("D_L00_0015F5D0");
 #define D_L00_0016C060 (g_debug_menu.update_flags)
 #define D_L00_0016C070 (g_debug_menu.profiler_mode)
@@ -38,7 +39,7 @@ extern u8 D_00141680[] NOT_SDA;
 #define D_0013D36C (memory_card_state.pending_state)
 #define D_00141401 (hero.unk20B1)
 #define D_L00_001B9E2C (*(s32 *)((u8 *)&D_L00_001B9CF0 + 0x13c))
-extern u64 frm_clock_time __asm__("D_0015ED40") MACRO_ADDR;
+extern u64 frm_clock_time __asm__("D_0015ED40") NOT_SDA;
 extern s32 D_0015F3F8;
 extern s32 D_0015F570;
 extern s32 D_0015F5D8;
@@ -143,8 +144,8 @@ void FUN_L00_00245c28(void) {
     D_L00_0016C060 = 15;
     D_L00_0016C088 = pal_mode;
     D_L00_0016C090 = -1;
-    D_L00_0016C14C = 1;
     D_L00_0016C064 = 1;
+    D_L00_0016C14C = 1;
     FUN_001f3638();
     FUN_L00_002464a8();
     FUN_00234e98();
@@ -231,8 +232,9 @@ void FUN_L00_00245c28(void) {
         }
         D_L00_001B9E2C = 0;
         FUN_001f36f8();
-        FUN_001f6d98((void *)0x15fcb8, 0x10);
-        FUN_001f6da0((void *)0x15fcb8, 0x10);
+        bss_start = (u8 *)&pal_mode + 0xf38;
+        FUN_001f6d98(bss_start, 0x10);
+        FUN_001f6da0(bss_start, 0x10);
         FUN_002a09d8(1);
         frame_ratio = FUN_00200240(*timer);
         frame_ratio = frame_ratio / (pal_mode ? 11520.0f : 9600.0f);
@@ -240,8 +242,9 @@ void FUN_L00_00245c28(void) {
         if (D_L00_0015F5C4 == 0 && D_L00_0016C070 != 0) FUN_001f6d90();
         if (D_00141401 == 0) {
             if (D_L00_0015F5C4 == 0 || D_L00_0015F5C4 == 2) {
+                frames = (s32)*timer;
                 value = pal_mode ? 0x2d00 : 0x2580;
-                if (value < (s32)*timer) {
+                if (value < frames) {
                     if (D_L00_0015F5C4 == 0) {
                         FUN_00267898(); FUN_00297f78();
                     } else if (D_L00_0015F5C4 == 2 && D_L00_0016C8B0 == 0) {
@@ -251,7 +254,7 @@ void FUN_L00_00245c28(void) {
                 FUN_00122298(0);
                 D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
                 FUN_00284c50();
-                D_L00_0015F5AC = 0;
+                D_0015F5AC = 0;
             } else {
                 FUN_00122298(0);
                 D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
