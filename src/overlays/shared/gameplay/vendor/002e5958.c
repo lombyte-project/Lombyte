@@ -101,8 +101,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
             ((((s32)*(u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190)) >> (save_id & 31)) & 1) != 0) {
             if (vars->enabled != 0) {
                 FUN_L01_0026e0e0(moby->group, 4);
-                save_id = vars->restart_timer;
-                vars->timer = save_id;
+                vars->timer = vars->restart_timer;
                 moby->state = 4;
                 break;
             }
@@ -124,7 +123,8 @@ void FUN_L15_002e5958(struct Moby *moby) {
             if (vars->child_count >= vars->notified_count) {
                 FUN_L01_0026e0e0(moby->group, 4);
                 allocate_voice_for_target_entry(1, 0x31, moby);
-                vars->timer = vars->restart_timer;
+                near_parent = (u16)vars->restart_timer;
+                vars->timer = near_parent;
                 moby->state = 4;
                 break;
             } else {
