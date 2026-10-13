@@ -2243,6 +2243,7 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
             FUN_00218888(&position, &velocity, &acceleration, D_L13_00161F08,
                            D_L13_00161F0C, a, b, c, -1);
         } while (i >= 0);
+        amount = 0.017453292f;
         velocity.f[3] = D_L13_00161F64;
         acceleration.f[3] = D_L13_00161F68;
         i = 1;
@@ -2256,12 +2257,12 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
             i--;
             velocity.f[2] = random_float_between_alt(D_L13_00161F44 * frame_time * 0.7f,
                                                        D_L13_00161F44 * frame_time * 1.5f);
-            angle = random_float_between_alt(-D_L13_00161F54, D_L13_00161F54);
+            angle = random_float_between_alt(-D_L13_00161F54, D_L13_00161F54) * amount;
             direction = FUN_001fa580(FUN_001f9e90(*(float *)data, *(float *)(data + 4)),
-                                      angle * 0.017453292f);
+                                      angle);
             acceleration.f[0] = FUN_001f9dc8(direction) * (D_L13_00161F48 * frame_time);
             direction = FUN_001fa580(FUN_001f9e90(*(float *)data, *(float *)(data + 4)),
-                                      angle * 0.017453292f);
+                                      angle);
             acceleration.f[1] = FUN_001f9de0(direction) * (D_L13_00161F48 * frame_time);
             acceleration.f[2] = 0.0f;
             acceleration.f[2] = random_float_between_alt(D_L13_00161F4C * frame_time * 0.7f,
@@ -2287,14 +2288,14 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
             *(float *)((char *)moby + 0x2c) = *(float *)(data + 0x1c) * FUN_001fa6c0(life) /
                                                FUN_001fa6c0(*(short *)(data + 0x1a) / 4);
         }
-        if (FUN_001f9770(data + 0x18) == 0) {
-            if (moby->command != 1) return;
-            if (FUN_001efa68(&old_pos, &moby->pos, 2, (void *)D_001413D0, 0) == 0) return;
-            FUN_L13_0030c2b0(moby);
-            goto remove;
-        }
+        if (FUN_001f9770(data + 0x18) == 0) goto collision;
     }
-remove:
+    FUN_0020c828(moby);
+    return;
+collision:
+    if (moby->command != 1) return;
+    if (FUN_001efa68(&old_pos, &moby->pos, 2, (void *)D_001413D0, 0) == 0) return;
+    FUN_L13_0030c2b0(moby);
     FUN_0020c828(moby);
 }
 #endif
