@@ -134,9 +134,6 @@ int FUN_L00_0020c758(Vec4 *pos, f32 *dir)
     }
     return 0;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020cd08.s", FUN_L00_0020cd08);
-#else
 struct LedgeSpot_20cd08 {
     Vec4 sphere;
     s32 *owner;
@@ -153,65 +150,51 @@ extern f32 FUN_001f99c0(f32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
 int nearest_rail_point() __asm__("FUN_L00_0020cd08");
-int FUN_L00_0020cd08(void *from, void *outOwner, void *to, void *outI, void *outF,
-                     void *outKind, int skip, int only)
+int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF, s32 *outKind,
+                     s32 *skip, s32 *only)
 {
     Vec4 pos;
     s32 gotI;
     f32 gotF;
-    s32 i, spot_offset, only_offset, active_offset;
-    s32 count = D_L00_0015F710;
-    Vec4 *p;
+    s32 i;
+    Vec4 *p = &pos;
     f32 distance_limit, height_limit, distance, height;
     struct Hero *hero_state;
-    struct LedgeSpot_20cd08 *spots;
 
-    i = 0;
-    p = &pos;
     *(u128 *)p = *(u128 *)from;
-    if (count > 0) {
-        active_offset = 0;
-        only_offset = 0;
-        do {
-            spots = D_L00_0015F70C;
-            spot_offset = i * 0x20;
-            if (!((skip == 0 || (int)spots[i].owner != skip) &&
-                  (only == 0 || (int)((struct LedgeSpot_20cd08 *)(only_offset + (u32)spots))->owner == only) &&
-                  *((struct LedgeSpot_20cd08 *)(active_offset + (u32)spots))->owner != 0))
-                goto next_spot;
-            if (FUN_001f9b48((void *)(active_offset + (u32)D_L00_0015F70C), p) >
-                ((struct LedgeSpot_20cd08 *)(spot_offset + (u32)D_L00_0015F70C))->sphere.f[3])
-                goto next_spot;
-            if (!FUN_L00_0025df68(D_L00_0015F70C[i].owner, p, to, &gotI, &gotF,
-                                  D_L00_0015F70C[i].kind, 12.0f, 10.0f, 0.0f))
-                goto next_spot;
-            hero_state = &hero;
-            distance_limit = 0.9f;
-            height_limit = 1.5f;
-            if ((u32)hero_state->state.control_mode < 2)
-                distance_limit = 0.3f;
-            if (hero_state->unk1CA != 0) {
-                height_limit = 10.0f;
-                distance_limit += 0.5f;
-            }
-            distance = FUN_001f9b80(p, to);
-            height = FUN_001f99c0(p->f[2] - ((Vec4 *)to)->f[2]);
-            if (!(distance < distance_limit && height < height_limit))
-                goto next_spot;
-            *(s32 **)outOwner = D_L00_0015F70C[i].owner;
-            *(s32 *)outI = gotI;
-            *(f32 *)outF = gotF;
-            *(s32 *)outKind = D_L00_0015F70C[i].kind;
-            return 1;
-next_spot:
-            i++;
-            active_offset += 0x20;
-            only_offset += 0x20;
-        } while (i < D_L00_0015F710);
+    for (i = 0; i < D_L00_0015F710; i++) {
+        if (skip != 0 && D_L00_0015F70C[i].owner == skip)
+            continue;
+        if (only != 0 && D_L00_0015F70C[i].owner != only)
+            continue;
+        if (*D_L00_0015F70C[i].owner == 0)
+            continue;
+        if (FUN_001f9b48(&D_L00_0015F70C[i], p) > D_L00_0015F70C[i].sphere.f[3])
+            continue;
+        if (!FUN_L00_0025df68(D_L00_0015F70C[i].owner, p, to, &gotI, &gotF, D_L00_0015F70C[i].kind,
+                              12.0f, 10.0f, 0.0f))
+            continue;
+        hero_state = &hero;
+        distance_limit = 0.9f;
+        height_limit = 1.5f;
+        if ((u32)hero_state->state.control_mode < 2)
+            distance_limit = 0.3f;
+        if (hero_state->unk1CA != 0) {
+            height_limit = 10.0f;
+            distance_limit += 0.5f;
+        }
+        distance = FUN_001f9b80(p, to);
+        height = FUN_001f99c0(p->f[2] - to->f[2]);
+        if (!(distance < distance_limit && height < height_limit))
+            continue;
+        *outOwner = D_L00_0015F70C[i].owner;
+        *outI = gotI;
+        *outF = gotF;
+        *outKind = D_L00_0015F70C[i].kind;
+        return 1;
     }
     return 0;
 }
-#endif /* NON_MATCHING */
 #include "qcopy.h"
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
