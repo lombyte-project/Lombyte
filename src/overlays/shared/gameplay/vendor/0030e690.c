@@ -205,9 +205,10 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     unsigned long long *q;
     int sx, sy;
     unsigned long long packed_position;
-    volatile int saved_depth = z_and_fog;
+    volatile int saved_depth[2];
     unsigned long long packed_depth;
 
+    saved_depth[0] = z_and_fog;
     center[0] = x;
     center[1] = y;
     vertical[0] = height * fast_sin(angle);
@@ -235,7 +236,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     q[4] = (unsigned long long)(red & 0xff) | ((unsigned long long)(green & 0xff) << 8) |
            ((unsigned long long)(blue & 0xff) << 16) | ((unsigned long long)(alpha & 0xff) << 24);
     q[5] = 0x100010;
-    packed_depth = (unsigned long long)saved_depth << 32;
+    packed_depth = (unsigned long long)saved_depth[0] << 32;
     texture_width <<= 4;
     texture_height <<= 20;
     sx = ftoi_g(top_left[0] * 16.0f);
