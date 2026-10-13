@@ -732,7 +732,7 @@ typedef struct {
     s32 timer;
 } CarrierVars_2c1ad0;
 typedef struct {
-    u8 pad0[0xA0];
+    u8 pad0[0x88];
     u16 deliveries;
     u16 unkA2;
     u32 levels;
@@ -783,6 +783,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     union { OvlVec4 launch; OvlVec4 arc; } temporary;
     OvlVec4 probe;
     f32 angle, slope, distance, horizontal, vertical, radius, speed;
+    f32 gravity;
     s32 hit = 0;
 
     if (moby == 0)
@@ -858,15 +859,15 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
         scale_vector_xyz(&target, &direction, D_0015ED68 * 60.0f);
         add_vector_xyz(&target, &target, &pos);
         if (controller_state.held & 5) {
-            temporary.arc.q = 0;
-            temporary.arc.f[2] = item_text_variant[0x11] ? 12.0f : 6.0f;
+            probe.q = 0;
+            probe.f[2] = item_text_variant[0x11] ? 12.0f : 6.0f;
             hit = 0;
-            direction.q = temporary.arc.q;
-            rotate_vector_2c1ad0(&direction, &direction, matrix);
-            angle = atan2_f(direction.f[0], direction.f[1]);
+            temporary.arc.q = probe.q;
+            rotate_vector_2c1ad0(&temporary.arc, &temporary.arc, matrix);
+            angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
             fast_subtract_rotations_2c1ad0(*(f32 *)((u8 *)hero.moby + 0x48), angle);
-            angle = atan2_f(direction.f[0], direction.f[1]);
-            slope = atan2_f(vector_length_xy_2c1ad0(&direction), direction.f[2]);
+            angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
+            slope = atan2_f(vector_length_xy_2c1ad0(&temporary.arc), temporary.arc.f[2]);
             if (slope > 0.5934119f)
                 slope = 0.5934119f;
             if (slope < -1.3962634f)
@@ -877,12 +878,12 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
             } else {
                 if (controller_state.held & 5) speed = 6.0f;
             }
-            build_spherical_offset_2c1ad0(&direction, speed, angle, slope);
-            distance = vector_length_xy_2c1ad0(&direction);
+            build_spherical_offset_2c1ad0(&temporary.arc, speed, angle, slope);
+            distance = vector_length_xy_2c1ad0(&temporary.arc);
             if (distance == 0.0f)
-                horizontal = direction.f[2] / 0.01f;
+                horizontal = temporary.arc.f[2] / 0.01f;
             else
-                horizontal = direction.f[2] / distance;
+                horizontal = temporary.arc.f[2] / distance;
             speed = 4.0f;
             if (item_text_variant[0x11]) {
                 if (controller_state.held & 5) speed = 12.0f;
@@ -893,10 +894,10 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
             radius = ((distance + distance) * distance * (1.0f - horizontal)) / (frame_time_sq * 9.8f);
             vertical = horizontal * radius;
             if (radius > 0.0f) {
-                direction.f[0] = FUN_001f9dc8(angle) * radius;
-                direction.f[1] = FUN_001f9de0(angle) * radius;
-                direction.f[2] = vertical;
-                add_vector_xyz(&probe, &D_L00_00166DC0_2c1ad0, &direction);
+                temporary.arc.f[0] = FUN_001f9dc8(angle) * radius;
+                temporary.arc.f[1] = FUN_001f9de0(angle) * radius;
+                temporary.arc.f[2] = vertical;
+                add_vector_xyz(&probe, &D_L00_00166DC0_2c1ad0, &temporary.arc);
                 if (collision_line(&D_L00_00166DC0_2c1ad0, &probe, 2, moby, 0) &&
                     coll_hit.moby != (s32)hero.moby) {
                     target.q = coll_hit.point.q;
@@ -911,6 +912,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
                 }
             }
         }
+        gravity = D_0015ED70 * 9.8f;
         speed = 4.0f;
         if (item_text_variant[0x11]) {
             if (controller_state.held & 5) speed = 12.0f;
@@ -918,7 +920,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
             if (controller_state.held & 5) speed = 6.0f;
         }
         FUN_L00_002c1928((f32 *)&pos, (OvlQuad *)&target, out,
-                          D_0015ED70 * 9.8f, 1.0f, speed);
+                          gravity, 1.0f, speed);
     }
     switch (moby->state) {
     case 0:
@@ -1357,8 +1359,8 @@ extern void FUN_L00_002c4328(void *);
 extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
 extern void FUN_L00_0025f8e0(float, void *);
-extern void FUN_L00_0025e450(float, float, float, float, float, float, float,
-                              void *, void *, int, int, int, int, int, int, int, int, int);
+extern void FUN_L00_0025e450(float, void *, void *, int, float, float, int, int, int,
+                              float, float, float, float, int, int, int, int, int);
 extern void FUN_L00_00259858(float, void *, void *, int);
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_0024eb68_2c4380(void *) __asm__("FUN_0020c828");
@@ -1384,7 +1386,7 @@ extern float FUN_002000e8_2c4380(float, float) __asm__("FUN_001fa580");
 extern void FUN_L00_0025f800(void *, void *);
 
 void FUN_L00_002c4380(char *moby) {
-    int active = D_0013E539;
+    int active = D_0013E533[6];
     char *vars = *(char **)(moby + 0x78);
     char *target;
     float v[4] __attribute__((aligned(16)));
@@ -1559,8 +1561,8 @@ void FUN_L00_002c4380(char *moby) {
             if (*(int *)(target + 0x20) != *(int *)(vars + 0x58) ||
                 *(int *)(vars + 0x5c) <= 0) {
                 *(int *)(vars + 0x58) = *(int *)(target + 0x20);
-                *(int *)(vars + 0x5c) = FUN_001fef20_2c4380(30);
-                if (*(short *)(vars + 0x6c) == 0) {
+                *(volatile int *)(vars + 0x5c) = FUN_001fef20_2c4380(30);
+                if (*(volatile short *)(vars + 0x6c) == 0) {
                     if (*(u16 *)(target + 0x28) == 0x101 &&
                         ((*(u64 *)(vars + 0x68) & 0xffffff00000000ULL) == 0)) {
                         *(short *)(vars + 0x6c) = FUN_001fef20_2c4380(100);
@@ -1568,18 +1570,21 @@ void FUN_L00_002c4380(char *moby) {
                     } else
                         vars[0x6e] = 0;
                     FUN_0028dbe8_2c4380(0, 0, moby);
-                    ((u8 *)vars)[7] = 0xfa;
-                    *(float *)(vars + 0x48) -= *(float *)(target + 0x2c);
+                    {
+                        float len = *(float *)(target + 0x2c);
+                        ((u8 *)vars)[7] = 0xfa;
+                        *(float *)(vars + 0x48) -= len;
+                    }
                     FUN_L00_0025d458(moby, vars);
                     if (*(float *)(vars + 0x48) < 0.0f) {
-                        v[0] = D_0015ED60_2c4380 * 0.5f;
-                        v[1] = v[0];
-                        v[2] = D_0015ED60_2c4380 * 0.7f;
-                        v[3] = 0.0f;
-                        scratch.w[0] = scratch.w[1] = v[0]; scratch.w[2] = v[2]; scratch.w[3] = 0.0f;
-                        FUN_L00_0025f8e0(v[0], v);
-                        FUN_L00_0025e450(0, 0, 4.0f, 3.0f, 9.0f, 1.0f, 12.0f,
-                                         moby, v, 0, 0, 0, 0, 2, 1, 1, -1, active);
+                        *(OvlQuad *)scratch.w = 0;
+                        scratch.w[0] = D_0015ED60_2c4380 * 0.5f;
+                        scratch.w[2] = D_0015ED60_2c4380 * 0.7f;
+                        scratch.w[1] = scratch.w[0];
+                        *(OvlQuad *)v = *(OvlQuad *)scratch.w;
+                        FUN_L00_0025f8e0(scratch.w[0], v);
+                        FUN_L00_0025e450(0, moby, v, 0, 0, 4.0f, 0, 0, 0,
+                                         3.0f, 9.0f, 1.0f, 12.0f, 2, 1, 1, -1, active);
                         if (active) {
                             FUN_L00_00259858(effect + effect, scratch.w, moby, 0x810000);
                             ((u8 *)scratch.x)[8] = 2;
@@ -2101,8 +2106,8 @@ child_ready:;
                     m[0x20] = 6;
                 } else {
                     FUN_0028dbe8_2c6158(2, 0, m);
-                    if (hero.unk978 == 0) FUN_002223f8_2c6158(37, 1);
-                    else FUN_002223f8_2c6158(38, 1);
+                    if (hero.unk978 != 0) FUN_002223f8_2c6158(38, 1);
+                    else FUN_002223f8_2c6158(37, 1);
                     m[0x20] = 5;
                 }
             } else {

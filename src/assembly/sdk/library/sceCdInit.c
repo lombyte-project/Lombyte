@@ -67,8 +67,8 @@ int sceCdInit(int init_mode) {
     count = *(volatile s32 *)D_00131310 + 1;
     *(volatile s32 *)D_001312E4 = 1;
     /* Keep the retail reset order while grouping the final bind state. */
-    D_00131304[0] = (D_001312FC[0] = -1,
-                     D_00131300[0] = -1,
+    D_001312FC[0] = -1;
+    D_00131304[0] = (D_00131300[0] = -1,
                      D_001312F8[0] = -1,
                      D_00131308[0] = -1);
     D_001312F4[0] = 0;

@@ -839,15 +839,18 @@ void FUN_L07_002f5ba0(struct Moby *moby) {
         break;
     case 8: {
         char *other;
-        u8 next_state = 12;
-        if (D_0013D388[0x2a]) goto store_state;
+        u8 next_state;
+        if (D_0013D388[0x2a]) {
+            next_state = 12;
+            goto store_state;
+        }
         if (data[3] != -1) {
             char *other = D_L07_0015FFD8 + data[3] * 0x100;
             if (other && ((u8 *)other)[0x20] != 0xfe && ((u8 *)other)[0x20] != 0xfd)
                 goto check_state;
         }
-        next_state = 13;
         if (data[1] == -1) {
+            next_state = 13;
             goto store_state;
         }
         if (is_point_inside_clip_volume(D_0013F3D0, data[1])) {
@@ -1109,10 +1112,14 @@ void FUN_L07_0030b000(struct Moby *moby) {
         i = 0;
         if (0 < *(s32 *)(data + 0x78)) do {
             child = *(s32 *)(cursor + 0x78);
-            distance = FUN_001f9b48((char *)child + 0x80,
+            {
+                f32 segment_distance = FUN_001f9b48((char *)child + 0x80,
                               path + 0x10 + *(s32 *)(child + 0x90) * 16);
-            FUN_L00_0025d808(*(f32 *)(data + 0x7c) * frame_time, path,
+                f32 step = *(f32 *)(data + 0x7c) * frame_time;
+                distance = segment_distance;
+                FUN_L00_0025d808(step, path,
                          (char *)child + 0x80, (char *)child + 0x90, &distance, 1);
+            }
             *(s32 *)(child + 0x94) = *(s32 *)(child + 0x90) + 1;
             if (cursor == 0 || *(u8 *)(cursor + 0x20) == 0xfe ||
                 *(u8 *)(cursor + 0x20) == 0xfd) {
@@ -1639,7 +1646,7 @@ void FUN_L07_0030cd48(int arg) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cf90.s", FUN_L07_0030cf90);
 #else
 extern u8 D_0014C050[];
-#define D_L07_0015FFD8 (*(u8 **)0x15ffd8)
+extern s32 D_L07_00184528[] __attribute__((section(".data")));
 extern void FUN_001f9cf8(void *, void *, void *);
 
 typedef struct {
@@ -1657,6 +1664,7 @@ typedef struct {
 } FUN_L07_0030cf90_Vars;
 
 void FUN_L07_0030cf90(struct Moby *moby) {
+    extern char *D_L07_0015FFD8 __attribute__((sda));
     FUN_L07_0030cf90_Vars *vars = (FUN_L07_0030cf90_Vars *)moby->pvars;
     Vec4 origin;
     Vec4 rotated;
@@ -1682,9 +1690,8 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         vars->origin_y = position->y;
         vars->origin_z = position->z;
         vars->sound_slot = -1;
-        voice = vars->flag_index;
-        if (voice != -1)
-            ((s32 *)0x184528)[voice] = 0;
+        if (vars->flag_index != -1)
+            D_L07_00184528[vars->flag_index] = 0;
         moby->state = 1;
         break;
     }
@@ -1700,30 +1707,31 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         moby->state = 2;
         break;
     case 2:
-        target = (struct Moby *)((u32)D_L07_0015FFD8 + (u32)vars->target_index * 0x100);
-        if (vars->target_index == -1 || target == 0 ||
-            target->state == 0xfe || target->state == 0xfd ||
-            target->state != vars->target_state_word) {
-            distance = vector_distance(&moby->pos, &origin);
-            if (vars->radius < distance) {
-                if (vars->arrival_sound != -1)
-                    play_moby_sound(vars->arrival_sound, 0, moby);
-                if (vars->flag_index != -1)
-                    ((s32 *)0x184528)[vars->flag_index] = 1;
-                moby->state = 3;
-            } else {
-                step.q = 0;
-                step.f[1] = -(frame_scale * 0.01f);
-                rotated.q = step.q;
-                if (moby->oclass == 0x3f5 || moby->oclass == 0x429)
-                    rotated.f[1] = -rotated.f[1];
-                FUN_001f9cf8(&step, &rotated, &moby->rot_row0);
-                add_vector_xyz(&moby->pos, &moby->pos, &step);
-                return;
-            }
-        } else {
+        if (vars->target_index != -1 &&
+            (target = (struct Moby *)(D_L07_0015FFD8 + vars->target_index * 0x100)) != 0 &&
+            target->state != 0xfe && target->state != 0xfd &&
+            (position = &moby->pos, target->state == vars->target_state_word)) {
             play_moby_sound(vars->trigger_sound, 0, moby);
             moby->state = 4;
+            break;
+        }
+        position = &moby->pos;
+        distance = vector_distance(position, &origin);
+        if (vars->radius < distance) {
+            if (vars->arrival_sound != -1)
+                play_moby_sound(vars->arrival_sound, 0, moby);
+            if (vars->flag_index != -1)
+                D_L07_00184528[vars->flag_index] = 1;
+            moby->state = 3;
+        } else {
+            step.q = 0;
+            step.f[1] = -(frame_scale * 0.01f);
+            rotated.q = step.q;
+            if (moby->oclass == 0x3f5 || moby->oclass == 0x429)
+                rotated.f[1] = -rotated.f[1];
+            FUN_001f9cf8(&step, &rotated, &moby->rot_row0);
+            add_vector_xyz(position, position, &step);
+            return;
         }
         break;
     case 3:
@@ -1764,9 +1772,8 @@ void FUN_L07_0030cf90(struct Moby *moby) {
             vars->sound_slot = -1;
             if (vars->arrival_sound != -1)
                 play_moby_sound(vars->arrival_sound, 0, moby);
-            voice = vars->flag_index;
-            if (voice != -1)
-                ((s32 *)0x184528)[voice] = 0;
+            if (vars->flag_index != -1)
+                D_L07_00184528[vars->flag_index] = 0;
             moby->state = 1;
             break;
         }
@@ -1809,7 +1816,7 @@ void FUN_L07_0030d4d8(struct Moby *moby) {
     Vec4 offset;
     /* The target helper writes four vectors, a moby pointer and a result kind. */
     float target[18] __attribute__((aligned(16)));
-    Vec4 position, velocity, rotation;
+    Vec4 rotation, velocity, position;
     float matrix[16] __attribute__((aligned(16)));
     Vec4 best, point;
     int hit;
@@ -1834,7 +1841,7 @@ void FUN_L07_0030d4d8(struct Moby *moby) {
         /* Retail still reads damage at address 0x2c when src is null. */
         if (*health <= *(float *)(src + 0x2c)) {
             FUN_L00_00257470(moby, 0, -1);
-            *health = 0.0f;
+            *(float *)(data + 0x20) = 0.0f;
             FUN_001f99f8(&offset);
             FUN_L00_0025e450_l07(0.0f, 0.0f, 4.0f, 2.0f, 9.0f, 1.0f, 15.0f, moby, &offset, 0, 10, 3, 16, 1, 1, 1, -1, 0);
             FUN_L00_00263fd8(moby, 0x621, &moby->pos, &moby->rot, 0, 0, 0.0f, D_L07_0015F580, D_L07_0015F580, D_L07_0015F580);
@@ -1883,7 +1890,6 @@ animate:
                 best_difference = 3.1415927f;
                 offset.f[0] = random_float_between(3.0f, 11.0f);
                 offset.f[1] = random_float_between(-2.0f, 2.0f);
-                position_ptr = &position;
                 /* Retail initializes only w before selecting a point. */
                 best.f[3] = -1.0f;
                 offset.f[2] = 0.0f;
@@ -1897,7 +1903,7 @@ animate:
                         best_difference = angle;
                     }
                 }
-                qcopy(position_ptr, &best);
+                qcopy(&position, &best);
                 qzero(&rotation);
                 rotation.f[2] = *(float *)(data + 0xbc);
                 FUN_001fa050(matrix, &rotation);
@@ -1976,11 +1982,12 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
     int index = 0;
     unsigned char green = 0x80;
     float band = 0.0f;
-    int alpha = moby[0x23] / 5;
+    int alpha;
     char *data = *(char **)(moby + 0x78);
     unsigned int green_step = (green / 11) & 0xff;
     float radius_threshold = 0.9f;
     float inner_scale = 0.96f;
+    alpha = moby[0x23] / 5;
     *(unsigned long long *)(packet + 0x78) = get_effect_texture_l07(*(int *)(data + 0x18));
     *(unsigned long long *)(packet + 0x80) = 0xff9000000260ULL;
     *(unsigned long long *)(packet + 0x70) = 4;
@@ -1997,9 +2004,9 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
         int color = ((alpha & 0xff) << 24) | ((green << 8) | 0x80) | (green << 16);
         *(int *)(packet + 0x40) = *(int *)(packet + 0x44) =
             *(int *)(packet + 0x48) = *(int *)(packet + 0x4c) = color;
-        radius = *(float *)(data + 8);
-        if (radius < radius_threshold) radius = radius * band;
-        else radius = radius - band * radius_threshold;
+        if (*(float *)(data + 8) < radius_threshold)
+            radius = *(float *)(data + 8) * band;
+        else radius = *(float *)(data + 8) - band * radius_threshold;
         side = (1.0f - band * 0.5f) * *(float *)(data + 0x10);
         phase = wrap_effect_phase_l07(convert_integer_to_float_l07(D_L07_0015F5CC) /
                                       (band * 40.0f + 40.0f), phase_work);
@@ -2009,20 +2016,15 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
         width = convert_integer_to_float_l07((int)(index + 1) > 5 ? 5 : index + 1);
         green = green - green_step;
         center = *(float *)(moby + 0x10);
-        *(float *)(packet + 0x6c) = 1.0f;
-        *(float *)(packet + 0x34) = *(float *)(moby + 0x14);
+        *(float *)(packet + 0x34) = *(float *)(packet + 0x14) = *(float *)(moby + 0x14);
+        *(float *)(packet + 0x38) = *(float *)(packet + 0x28) = *(float *)(moby + 0x18);
         *(float *)(packet + 0x30) = center - radius;
-        *(float *)(packet + 0x68) = *(float *)(packet + 0x50) + width;
+        *(float *)(packet + 0x68) = *(float *)(packet + 0x58) = *(float *)(packet + 0x50) + width;
+        *(float *)(packet + 0x6c) = *(float *)(packet + 0x64) = 1.0f;
         *(float *)(packet + 0x5c) = 0.0f;
-        *(float *)(packet + 0x08) = side + *(float *)(moby + 0x18);
-        *(float *)(packet + 0x28) = *(float *)(moby + 0x18);
-        *(float *)(packet + 0x58) = *(float *)(packet + 0x68);
+        *(float *)(packet + 0x08) = *(float *)(packet + 0x18) = side + *(float *)(moby + 0x18);
         *(float *)(packet + 0x10) = center - radius * (inner_scale - band * 0.03f);
         *(float *)(packet + 0x54) = 0.0f;
-        *(float *)(packet + 0x64) = 1.0f;
-        *(float *)(packet + 0x14) = *(float *)(packet + 0x34);
-        *(float *)(packet + 0x18) = *(float *)(packet + 0x08);
-        *(float *)(packet + 0x38) = *(float *)(packet + 0x28);
         __builtin_memcpy(second, packet, 0x90);
         *(float *)(second + 8) = *(float *)(second + 0x18) = *(float *)(moby + 0x18) - 5.0f;
         angle = -2.8274336f;

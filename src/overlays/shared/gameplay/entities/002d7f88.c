@@ -857,7 +857,7 @@ void FUN_L00_002d9810(u8 *m) {
     float *data = *(float **)(m + 0x78);
     char *shape;
     float ratio = data[0] / D_L00_00161A10_002d9810;
-    int i = 0x121, j, color;
+    int i, j = 0x121, color;
     short *indices;
     char *source;
     char *destination = D_L00_001E3DA0_002d9810;
@@ -878,8 +878,8 @@ void FUN_L00_002d9810(u8 *m) {
     ((float *)&position)[0] = *(float *)(m + 0x10);
     ((float *)&position)[1] = *(float *)(m + 0x14);
     ((float *)&position)[2] = *(float *)(m + 0x18) + 0.5f;
-    ((float *)&position)[3] = 1.0f;
     ((float *)&position)[2] += data[0];
+    ((float *)&position)[3] = 1.0f;
     FUN_001f9a10_002d9810(&position, &position, D_L00_00161AF0_002d9810);
     FUN_001f9a28_002d9810(&rotated, D_L00_00166DC0_002d9810, &position);
     FUN_001f9bf8_002d9810(1.0f, shiftedVector, &rotated);
@@ -901,7 +901,7 @@ void FUN_L00_002d9810(u8 *m) {
     do {
         FUN_001f9d20_002d9810(&transformed, source, shiftedVector);
         source += 16;
-        i--;
+        j--;
         {
             float x = transformed[0], y = transformed[1], z = transformed[2];
             ((float *)destination)[0] = x;
@@ -909,7 +909,7 @@ void FUN_L00_002d9810(u8 *m) {
             ((float *)destination)[2] = z;
         }
         destination += 12;
-    } while (i >= 0);
+    } while (j >= 0);
     FUN_L00_001fde98_002d9810(0x94, D_L00_001E3DA0_002d9810,
                                 D_L00_001E2FF0_002d9810, D_L00_001E26E0_002d9810, 1);
     FUN_L00_001fde98_002d9810(0x6d, D_L00_001E3DA0_002d9810 + 0x6d8,
@@ -928,18 +928,19 @@ void FUN_L00_002d9810(u8 *m) {
     quad.colors[1] = color;
     for (i = 0; i < 32; i++) {
         indices = (short *)(D_L00_001E3A80_002d9810 + i * 8);
-        pointA = (char *)quad.points;
         pointB = (char *)quad.points;
+        pointA = (char *)quad.points;
         for (j = 0; j < 4; j++) {
+            short index = *indices;
             if (j >= 2)
                 FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810 * D_L00_00161AEC_002d9810,
-                                        pointB, D_L00_001E3480_002d9810 + *indices * 16);
+                                        pointB, D_L00_001E3480_002d9810 + index * 16);
             else
                 FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810, pointA,
-                                        D_L00_001E3480_002d9810 + *indices * 16);
-            indices++;
+                                        D_L00_001E3480_002d9810 + index * 16);
             pointA += 16;
             pointB += 16;
+            indices++;
         }
         quad.texcoords[0] = 0.5f;
         quad.texcoords[1] = 0.5f;
@@ -2015,20 +2016,21 @@ extern void FUN_L00_0025a9f8_002dbf28(float, float, float, void *, void *, void 
 void FUN_L00_002dbf28(char *moby) {
     u128 matrix[5];
     Q_WORDDATA origin, position, axis, temporary, scaled, displacement;
-    u8 first_colors[32], second_colors[32];
+    u32 first_colors[8], second_colors[8];
     float magnitude, range, deficit, speed;
     int multiplier, count, i, a, b, red, green, blue;
-    char *center = moby + 0x10;
+    char *center;
 
     __builtin_memcpy(matrix, D_L00_001EA0B0_002dbf28, 80);
     axis.ul128 = 0;
     axis.fl32[2] = frame_time + frame_time;
-    position = axis;
+    position.ul128 = axis.ul128;
     axis.ul128 = 0;
     axis.fl32[2] = 1.0f;
-    magnitude = FUN_001fa6c0_002dbf28(D_0013E529) + 1.0f;
+    center = moby + 0x10;
+    magnitude = FUN_001fa6c0_002dbf28(item_text_variant.b9) + 1.0f;
     multiplier = 1;
-    if (!D_0013E529) multiplier = 2;
+    if (!item_text_variant.b9) multiplier = 2;
     FUN_001f9a68_002dbf28(magnitude, &position, &position);
     FUN_001f9a28_002dbf28(&origin, D_L00_00166DC0_002dbf28, center);
     range = fast_vec_length(&origin);
@@ -2037,7 +2039,7 @@ void FUN_L00_002dbf28(char *moby) {
         displacement.ul128 = 0;
         displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-        scaled = displacement;
+        scaled.ul128 = displacement.ul128;
         FUN_001f9bf8_002dbf28(fast_vec_dot(&scaled, &axis), &temporary, &axis);
         FUN_001f9a28_002dbf28(&scaled, &scaled, &temporary);
         FUN_001f9bf8_002dbf28(FUN_002132a8_002dbf28(0.0f, 1.0f), &temporary, &axis);
@@ -2048,13 +2050,13 @@ void FUN_L00_002dbf28(char *moby) {
         FUN_001f9a10_002dbf28(&scaled, &scaled, &position);
         a = FUN_001f96f8_002dbf28(60);
         b = FUN_001f96f8_002dbf28(120);
-        FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 0, D_0013E529);
+        FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 0, item_text_variant.b9);
     }
     for (i = 0; i < 4 / multiplier; i++) {
         displacement.ul128 = 0;
         displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-        scaled = displacement;
+        scaled.ul128 = displacement.ul128;
         FUN_001f9bf8_002dbf28(fast_vec_dot(&scaled, &axis), &temporary, &axis);
         FUN_001f9a28_002dbf28(&scaled, &scaled, &temporary);
         FUN_001f9bf8_002dbf28(FUN_002132a8_002dbf28(0.0f, 1.0f), &temporary, &axis);
@@ -2065,69 +2067,76 @@ void FUN_L00_002dbf28(char *moby) {
         FUN_001f9a10_002dbf28(&scaled, &scaled, &position);
         a = FUN_001f96f8_002dbf28(60);
         b = FUN_001f96f8_002dbf28(90);
-        FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 1, D_0013E529);
+        FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 1, item_text_variant.b9);
     }
     displacement.ul128 = 0;
     displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
     displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
     displacement.fl32[2] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
     origin.fl32[2] += range * 0.5f;
-    scaled = displacement;
+    scaled.ul128 = displacement.ul128;
     FUN_001f9bf8_002dbf28((range / 5.0f) * frame_time, &scaled, &scaled);
     FUN_001f9bf8_002dbf28((range + range) * frame_time, &origin, &origin);
     FUN_001f9a10_002dbf28(&scaled, &scaled, &origin);
     FUN_001f9c90_002dbf28(&scaled, &scaled, frame_time * 10.0f);
     a = FUN_001f96f8_002dbf28(60);
     b = FUN_001f96f8_002dbf28(90);
-    FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 1, D_0013E529);
+    FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 1, item_text_variant.b9);
 
     count = 4;
     if (range < 6.0f) count = FUN_001fa6d0_002dbf28(range) + 1;
     deficit = 0.0f;
     if (range < 7.0f) deficit = 7.0f - range;
     for (i = 0; i < count; i++) {
+        int red, green, blue;
+        float effect_magnitude;
         speed = FUN_002132a8_002dbf28(8.0f, 10.0f);
         __builtin_memcpy(first_colors, D_L00_001EA100_002dbf28, 24);
         __builtin_memcpy(second_colors, D_L00_001EA118_002dbf28, 24);
         speed = magnitude * speed * frame_time - deficit * frame_time;
         a = FUN_00213260_002dbf28(6);
-        red = FUN_L00_0025c0e8_002dbf28(*(u32 *)(first_colors + a * 4), D_0013E529);
+        red = FUN_L00_0025c0e8_002dbf28(first_colors[a], item_text_variant.b9);
         a = FUN_00213260_002dbf28(6);
-        green = FUN_L00_0025c0e8_002dbf28(*(u32 *)(second_colors + a * 4), D_0013E529);
+        green = FUN_L00_0025c0e8_002dbf28(second_colors[a], item_text_variant.b9);
+        effect_magnitude = magnitude * 400000.0f;
         a = FUN_001f96f8_002dbf28(15);
         b = FUN_001f96f8_002dbf28(20);
         blue = FUN_L00_00257b90_002dbf28(a, b);
         a = FUN_001f96f8_002dbf28(25);
         b = FUN_001f96f8_002dbf28(30);
-        FUN_L00_0026a9f0_002dbf28(magnitude * 400000.0f, speed, center, &position,
+        FUN_L00_0026a9f0_002dbf28(effect_magnitude, speed, center, &position,
                                    red, green, blue, FUN_L00_00257b90_002dbf28(a, b), 0, 0);
     }
     if (range > 9.0f) {
         int effect_red, effect_green, effect_blue;
+        speed = magnitude * 4.0f;
         a = FUN_001f96f8_002dbf28(15);
-        FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, 127, 127, 127, 32);
+        FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, 127, 127, 127, 32);
         effect_red = 127; effect_green = 32; effect_blue = 0;
-        FUN_L00_0025c088_002dbf28(&effect_red, &effect_green, &effect_blue, D_0013E529);
+        FUN_L00_0025c088_002dbf28(&effect_red, &effect_green, &effect_blue, item_text_variant.b9);
         a = FUN_001f96f8_002dbf28(24);
-        FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, (u8)effect_red, (u8)effect_green, (u8)effect_blue, 32);
+        FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, (u8)effect_red, (u8)effect_green, (u8)effect_blue, 32);
     }
     red = 127; green = 63; blue = 0;
-    FUN_L00_0025c088_002dbf28(&red, &green, &blue, D_0013E529);
+    FUN_L00_0025c088_002dbf28(&red, &green, &blue, item_text_variant.b9);
+    speed = magnitude * 4.0f;
     a = FUN_001f96f8_002dbf28(20);
-    FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 48);
+    FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 48);
     red = 96; green = 16; blue = 0;
-    FUN_L00_0025c088_002dbf28(&red, &green, &blue, D_0013E529);
+    FUN_L00_0025c088_002dbf28(&red, &green, &blue, item_text_variant.b9);
+    speed = magnitude * 3.5f;
     a = FUN_001f96f8_002dbf28(27);
-    FUN_L00_002df808_002dbf28(magnitude * 3.5f, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 64);
+    FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 64);
     red = 32; green = 0; blue = 0;
-    FUN_L00_0025c088_002dbf28(&red, &green, &blue, D_0013E529);
+    FUN_L00_0025c088_002dbf28(&red, &green, &blue, item_text_variant.b9);
+    speed = magnitude * 3.0f;
     a = FUN_001f96f8_002dbf28(29);
-    FUN_L00_002df808_002dbf28(magnitude * 3.0f, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 32);
+    FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 32);
     if (range < 20.0f) *(float *)(D_L00_00166DC0_002dbf28 + 0x120) = 0.4f - range * 0.0175f;
     else *(float *)(D_L00_00166DC0_002dbf28 + 0x120) = 0.050000012f;
     *(int *)(D_L00_00166DC0_002dbf28 + 0x128) = FUN_001f96f8_002dbf28(25);
     FUN_L00_002d3838_002dbf28(matrix, center, 0, 0);
-    if (D_0013E529) {
+    if (item_text_variant.b9) {
         a = FUN_L00_001f2868_002dbf28(3.0f, center, 16, moby, 0);
         scaled.ul128 = *(u128 *)(moby + 0x10);
         FUN_L00_0025a9f8_002dbf28(2.0f, 1.0f, 1.0f, moby, &scaled,
@@ -2728,23 +2737,25 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
     D_L00_00161B84_002ddcb8 = 1.7f;
     *(int *)((char *)&D_L00_00161B84_002ddcb8 - 0x44) = 0;
     global = (char *)&D_0013F350_c;
-    i = *(int *)(global + 0x2084);
-    if ((i == 30 || i == 1) &&
-        (*(u16 *)(*(char **)(global + 0x2080) + 0x34) & 1)) {
-        qcopy(&first, D_L00_00166FD0_002ddcb8);
-        qcopy(&second, D_L00_00166FD0_002ddcb8 + 0x10);
-        qcopy(&third, D_L00_00166FD0_002ddcb8 + 0x20);
-    } else if (*(short *)(global + 0x22c8) == 1) {
-        FUN_001ff300_002ddcb8(&first, frame_context + 0xd0, -1.0f);
-        qcopy(&second, frame_context + 0xc0);
-        qcopy(&third, frame_context + 0xe0);
-    } else {
-        vector_source = global + 0x640;
-        first.bits = ((V_002ddcb8 *)vector_source)->bits;
-        second.bits = ((V_002ddcb8 *)(vector_source + 0x10))->bits;
-        third.bits = ((V_002ddcb8 *)(vector_source + 0x20))->bits;
+    {
+        int i = *(int *)(global + 0x2084);
+        if ((i == 30 || i == 1) &&
+            (*(u16 *)(*(char **)(global + 0x2080) + 0x34) & 1)) {
+            qcopy(&first, D_L00_00166FD0_002ddcb8);
+            qcopy(&second, D_L00_00166FD0_002ddcb8 + 0x10);
+            qcopy(&third, D_L00_00166FD0_002ddcb8 + 0x20);
+        } else if (*(short *)(global + 0x22c8) == 1) {
+            FUN_001ff300_002ddcb8(&first, frame_context + 0xd0, -1.0f);
+            qcopy(&second, frame_context + 0xc0);
+            qcopy(&third, frame_context + 0xe0);
+        } else {
+            vector_source = global + 0x640;
+            qcopy_nc(&first, vector_source);
+            qcopy_nc(&second, vector_source + 0x10);
+            qcopy_nc(&third, vector_source + 0x20);
+        }
     }
-    FUN_001ff500_002ddcb8(&scaled_first, &first, 1.7f);
+    FUN_001ff500_002ddcb8(&scaled_first, &first, *(volatile float *)&D_L00_00161B84_002ddcb8);
     FUN_001ff500_002ddcb8(&scaled_third, &third, 1.0f);
     qcopy(D_L00_001E5F40_002ddcb8, initial_vector);
     *(short *)(D_L00_001E5F40_002ddcb8 + 0xc8) = 0;
@@ -2761,9 +2772,9 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
     FUN_001ff260_002ddcb8(D_L00_00161B60_002ddcb8);
     temp1.bits = 0;
     temp2.bits = 0;
-    temp2.f[3] = 1.0f;
-    temp1.f[2] = 0.1f;
-    temp1.f[3] = 1.0f;
+    *(volatile float *)&temp2.f[3] = 1.0f;
+    *(volatile float *)&temp1.f[2] = 0.1f;
+    *(volatile float *)&temp1.f[3] = 1.0f;
     temp2.f[0] = 1.0f;
     sampled = FUN_00257cb0_002ddcb8();
     FUN_0025fc08_002ddcb8(D_L00_00161B70_002ddcb8, sampled, &temp1, &temp2);
@@ -2830,7 +2841,6 @@ float FUN_00257be8_002ddf60(float, float) __asm__("FUN_002132a8");
 int random_integer_below(int) __asm__("FUN_00213260");
 void FUN_001f9598_002ddf60(void (*)(void), void *) __asm__("FUN_001f4600");
 char *FUN_L00_0026d000(void *, int, void *, unsigned int, float, float, float, float);
-void FUN_L00_00267a08(void *);
 void interpolate_vector4_linear_002ddf60(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 
 void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
@@ -2935,7 +2945,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     } while (i >= 0);
     row = 1;
     do {
-        index = row * 16;
+        index = row << 4;
         FUN_001ff2a8_002ddf60(&temp1, D_L00_001E5F40_002ddcb8 + index, D_L00_001E5F30_002ddcb8 + index);
         qcopy(&temp2, &scaled_first);
         FUN_001ff3c0_002ddf60(&edge, &temp2, &temp1);
@@ -2967,7 +2977,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
         qcopy(&axis, &forward);
         spread = row_float * 0.3f;
         phase = row_float * 0.7f;
-        current = D_L00_001E6020_002ddf60 + row * 0x140;
+        current = D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6);
         prior = D_L00_001E4B40;
         ++row;
         j = 0;
@@ -2990,7 +3000,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     i = 0;
     do {
         j = i + 1;
-        record = D_L00_001E4C80_002ddf60 + i * 24;
+        record = D_L00_001E4C80_002ddf60 + (i * 3 << 3);
         if (!*(char **)(record + 20) && count < 5) {
             row = 9;
             if (((short *)(D_L00_001E5F40_002ddcb8 + 0xc8))[9] < 64) {
@@ -3003,7 +3013,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                     segment = random_integer_below(20);
                     sampled = FUN_00257be8_002ddf60(0.2f, 1.0f);
                     current = D_L00_001E6020_002ddf60 + segment * 16;
-                    FUN_001ff2d8_002ddf60(&temp1, current, current + row * 0x140, sampled);
+                    FUN_001ff2d8_002ddf60(&temp1, current, current + (int)((unsigned int)(row * 5) << 6), sampled);
                     FUN_001ff2d8_002ddf60(&edge, D_L00_001E5F40_002ddcb8, D_L00_001E5F40_002ddcb8 + row * 16, sampled);
                     sampled = FUN_00257be8_002ddf60(60000.0f, 180000.0f);
                     segment = random_integer_below(5);
@@ -3046,7 +3056,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                 *(volatile short *)record = index;
                 /* Test the wrapped signed halfword, including the original zero case. */
                 if ((int)((unsigned int)index << 16) <= 0) {
-                    FUN_L00_00267a08(*(char **)(record + 20));
+                    func_L00_002688A8_2D9EA0(*(char **)(record + 20));
                     *(char **)(record + 20) = 0;
                 } else {
                     *(volatile float *)(record + 4) -= length;
@@ -3056,14 +3066,14 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                 }
             }
             if (*(char **)(record + 20)) {
-                record = D_L00_001E4C80_002ddf60 + i * 24;
+                record = D_L00_001E4C80_002ddf60 + (i * 3 << 3);
                 fraction = *(volatile float *)(record + 4) / length;
                 if (*(volatile short *)record == 2) *(short *)(*(char **)(record + 20) + 10) = 100;
                 else if (*(volatile short *)record < 2) {
                     *(short *)(*(char **)(record + 20) + 10) = truncate_float_to_s32((1.0f - fraction) * 100.0f);
                     if (*(short *)(*(char **)(record + 20) + 10) < 61) *(short *)(*(char **)(record + 20) + 10) = 60;
                 }
-                i = i * 24;
+                i = (i * 3 << 3);
                 record = D_L00_001E4C80_002ddf60 + i;
                 if (*(volatile short *)record == 1) {
                     effect = *(char **)(record + 20);
@@ -3076,12 +3086,12 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                     row = *(volatile short *)record;
                     FUN_001ff278_002ddcb8(*(char **)(record + 20) + 16, D_L00_001E5F40_002ddcb8 + row * 16, &temp1);
                     segment = *(volatile short *)(record + 2);
-                    FUN_001ff2a8_002ddf60(&temp2, D_L00_001E6020_002ddf60 + row * 0x140 + segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
-                    FUN_001ff2a8_002ddf60(&edge, D_L00_001E6020_002ddf60 + row * 0x140 + segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&temp2, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&edge, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
                     interpolate_vector4_linear_002ddf60(&offset, &temp2, &edge, fraction);
                     next_segment = (segment + 19) % 20;
-                    FUN_001ff2a8_002ddf60(&direction, D_L00_001E6020_002ddf60 + row * 0x140 + next_segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
-                    FUN_001ff2a8_002ddf60(&tangent, D_L00_001E6020_002ddf60 + row * 0x140 + next_segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&direction, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + next_segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&tangent, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + next_segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
                     interpolate_vector4_linear_002ddf60(&following, &direction, &tangent, fraction);
                     interpolate_vector4_linear_002ddf60(&offset, &offset, &following, *(volatile float *)(record + 8));
                     value = *(volatile float *)(record + 8) + *(volatile float *)(record + 12);

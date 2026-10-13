@@ -865,10 +865,10 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     FUN_00118a80(0);
     FUN_L00_0028e048();
     FUN_L00_002656c0();
-    D_L00_0015F5D8 = 1;
     D_L00_00161048 = sector;
-    D_L00_00161050 = language;
     D_L00_0016104C = size;
+    D_L00_00161050 = language;
+    D_L00_0015F5D8 = 1;
     FUN_L00_001f9838(4);
     FUN_L00_002039a0();
     destination = *(volatile s32 *)&D_L00_0015F40C;
@@ -1018,7 +1018,17 @@ extern void FUN_L00_002660c0(s32);
 extern void FUN_L00_001ff040(void *, s32, s32);
 extern void FUN_L00_00265fa0(s32, s32, s32);
 
+/* The retail record bases are 0x16A8 and 0x1748 within disc_table.
+ * This view preserves those offsets separately from the signed index.
+ * The spacing does not establish the number of valid records. */
+typedef struct {
+    char pad[0x16A8];
+    struct DiscFile records[20];
+    struct DiscFile records_alt[20];
+} DiscTableRecords;
+
 void FUN_L00_00299a68(void) {
+
     s32 offset;
     s32 first_destination, second_destination;
     s32 index;
@@ -1029,28 +1039,32 @@ void FUN_L00_00299a68(void) {
     D_L00_0015F3FC_298840 = 1.0f;
     FUN_L00_001ff040((D_L00_0015F5C4 = 7, (char *)&D_L00_0015F622 - 2), 0, 0x10);
     offset = D_L00_001611CC - 0xE0000;
-    second_destination = D_L00_00173E00_298840.x8 + offset;
     first_destination = D_L00_00173E00_298840.x4 + offset;
+    second_destination = D_L00_00173E00_298840.x8 + offset;
     D_L00_0015F62C = second_destination;
     D_L00_001611CC = offset;
-    D_L00_0015F628 = first_destination;
-    index = (s16)D_L00_0015F622;
+    *(volatile s32 *)&D_L00_0015F628 = first_destination;
     if (pal_mode != 0) {
-        FUN_L00_00265fa0(D_L00_0015F628, disc_table.music_60000[index + 38].sector,
-                           disc_table.music_60000[index + 38].size);
+        index = (s16)D_L00_0015F622;
+        FUN_L00_00265fa0(first_destination, ((DiscTableRecords *)&disc_table)->records_alt[index].sector,
+                           ((DiscTableRecords *)&disc_table)->records_alt[index].size);
     } else {
-        FUN_L00_00265fa0(D_L00_0015F628, disc_table.music_60000[index + 18].sector,
-                           disc_table.music_60000[index + 18].size);
+        index = (s16)D_L00_0015F622;
+        FUN_L00_00265fa0(first_destination, ((DiscTableRecords *)&disc_table)->records[index].sector,
+                           ((DiscTableRecords *)&disc_table)->records[index].size);
     }
     FUN_L00_002660c0(1);
-    D_L00_0015F622++;
-    index = (s16)D_L00_0015F622;
+    index = D_L00_0015F622 + 1;
+    D_L00_0015F622 = index;
+    index = (s32)((u32)index << 16);
     if (pal_mode != 0) {
-        FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 38].sector,
-                           disc_table.music_60000[index + 38].size);
+        second_destination = D_L00_0015F62C;
+        FUN_L00_00265fa0(second_destination, ((DiscTableRecords *)&disc_table)->records_alt[index >> 16].sector,
+                           ((DiscTableRecords *)&disc_table)->records_alt[index >> 16].size);
     } else {
-        FUN_L00_00265fa0(D_L00_0015F62C, disc_table.music_60000[index + 18].sector,
-                           disc_table.music_60000[index + 18].size);
+        second_destination = D_L00_0015F62C;
+        FUN_L00_00265fa0(second_destination, ((DiscTableRecords *)&disc_table)->records[index >> 16].sector,
+                           ((DiscTableRecords *)&disc_table)->records[index >> 16].size);
     }
 }
 #endif
@@ -1568,9 +1582,6 @@ void FUN_L00_0029ab70(int a) {
     f216088_29ab70();
     f12dc80_29ab70();
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ad08.s", FUN_L00_0029ad08);
-#else
 extern s32 D_L00_0015F3FC;
 extern s32 D_00140408;
 extern s32 D_00141408;
@@ -1610,14 +1621,14 @@ void FUN_L00_0029ad08(void) {
     f32 *vec;
     struct S16_29ad08 *state;
     s32 *selected;
+    s16 mode;
 
     f2eac18_29ad08(2);
     if ((u16)(D_001516D0_29ad08.mode - 6) >= 2)
         D_001516D0_29ad08.mode = 5;
     g = &D_L00_001CA4C0_29ad08;
     D_L00_0015F5D8 = 1;
-    moby = (VendorMoby_29a6b0 *)g->moby;
-    moby->state = 1;
+    ((VendorMoby_29a6b0 *)g->moby)->state = 1;
     g->f0 = 3;
     g->f4 = 0;
     vec = (f32 *)((char *)g + 0xC0);
@@ -1627,8 +1638,7 @@ void FUN_L00_0029ad08(void) {
     *(f32 *)((char *)g + 0xC8) += 2.0f;
     *(f32 *)((char *)g + 0xC8) = f213508_29ad08(0.5f, vec, 0);
     f1f99f8_29ad08((char *)g + 0xB0);
-    moby = (VendorMoby_29a6b0 *)g->moby;
-    *(f32 *)((char *)g + 0xB8) = f1fa580_29ad08(moby->rot.f[2], 3.1415927f);
+    *(f32 *)((char *)g + 0xB8) = f1fa580_29ad08(((VendorMoby_29a6b0 *)g->moby)->rot.f[2], 3.1415927f);
     vu_euler_rotation_basis((char *)g + 0x80, (char *)g + 0xB0);
     f1f97e8_29ad08(&D_L00_0016C860_298840, 0, 0x1C0);
     f1f97e8_29ad08(D_L00_0017C340_298840, 0, 0x40);
@@ -1638,30 +1648,29 @@ void FUN_L00_0029ad08(void) {
     offset = D_L00_001611CC - 0x40000;
     D_L00_001611CC = offset;
     index = D_L00_001CA4C0_29ad08.f48;
-    item = D_L00_001CA020[index];
     D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + offset;
     D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + offset;
+    item = D_L00_001CA020[index];
     D_L00_0015F3FC = 0;
     D_L00_0015F400_29ad08 = 0;
     if (hero.items[0].item_id != 0 && index != hero.items[0].item_id)
         FUN_L00_0020fca8(0, 0);
-    index = D_L00_001CA4C0_29ad08.f48;
-    hero.pending_item[0] = index;
-    if (index == 0x18)
+    hero.pending_item[0] = D_L00_001CA4C0_29ad08.f48;
+    if (hero.pending_item[0] == 0x18)
         hero.pending_item[0] = 0;
-    index = D_L00_001CA4C0_29ad08.f48;
-    f204a40_29ad08(((struct T_29ad08 *)((char *)D_L00_00179AC0_29ad08 + index * 0x4C))->id, -1);
+    f204a40_29ad08(D_L00_00179AC0_29ad08[D_L00_001CA4C0_29ad08.f48].id, -1);
     f2454c8_29ad08(item);
     state = &D_001516D0_29ad08;
     *(s32 *)&state->pad[0x1C] = 0x2734;
     FUN_L00_002455c0(0);
-    while (D_001516D0_29ad08.mode != 3) {
+    mode = D_001516D0_29ad08.mode;
+    while (mode != 3) {
         sound_update();
         FUN_00122298(0);
+        mode = D_001516D0_29ad08.mode;
     }
     f215b10_29ad08();
 }
-#endif
 extern int D_L00_0015F5D8;
 extern char D_L00_001CA4C0_u[] __asm__("D_L00_001CA4C0");
 extern int D_L00_00161100 __attribute__((sda));

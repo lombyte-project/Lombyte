@@ -169,6 +169,8 @@ void FUN_L00_00276368(void) {
     FUN_L00_002a0f18(D_L00_001B9D00, D_L00_0015EE84, frame_size << 11);
     D_L00_001B9D08 = D_L00_0015EE78;
     if (D_L00_001B9CF0.state == 11 || D_L00_001B9CF0.state == 15) {
+        s32 i;
+        s32 *handle;
         D_L00_00184434 = D_L00_0015EE78 + 0x40000;
         D_L00_00184430 = D_L00_0015EE78;
         D_L00_0015EE78 += 0x40400;
@@ -180,6 +182,8 @@ void FUN_L00_00276368(void) {
             D_L00_0015EE78 += 0x4000;
         } while (i >= 0);
     } else {
+        s32 i;
+        s32 *handle;
         D_L00_00184430 = 0;
         D_L00_00184434 = 0;
         handle = D_L00_00184438 + 3;
@@ -193,8 +197,9 @@ void FUN_L00_00276368(void) {
     table = D_L00_00197300[0];
     D_L00_001B9DBC = table[12];
     table[12] += 28;
-    handle = D_L00_001B9D20;
     {
+        s32 i;
+        s32 *handle = D_L00_001B9D20;
         s32 *source = D_L00_00141660_init;
         i = 3;
         do {
@@ -257,18 +262,13 @@ void FUN_L00_00276908(void) {
     s32 handle;
     void *obj;
     void (*callback)(void *, s32);
-    u8 *state = (u8 *)&D_L00_001B9CF0;
-    s32 *saved;
-    s32 remaining;
-    s32 *desired;
-    s32 *active;
     u8 *table;
 
     if (D_L00_001B9CF0.progress >= 10) {
 
         FUN_L00_002a09d8(1);
         FUN_L00_002a07f8();
-        if (*(void **)(state + 4) != 0) {
+        if (D_L00_001B9CF0.owner != 0) {
             for (i = 0; i < 14; i++) {
                 obj = D_L00_001B9CF0.owner->objs[i];
                 if (obj != 0) {
@@ -278,38 +278,40 @@ void FUN_L00_00276908(void) {
                     }
                 }
             }
-            *(void **)(state + 4) = 0;
+            D_L00_001B9CF0.owner = 0;
         }
-        active = D_00141660;
-        desired = (s32 *)(state + 0x30);
-        remaining = 3;
-        saved = (s32 *)&hero;
-        saved = (s32 *)((u8 *)saved + 0x20b8);
-        do {
-            if (*active != *desired) {
-                *saved = *desired != 0 ? *desired : 0x26;
+        for (i = 0; i < 4; i++) {
+            if (D_00141660[i] != ((s32 *)((u8 *)&D_L00_001B9CF0 + 0x30))[i]) {
+                hero.pending_item[i] =
+                    ((s32 *)((u8 *)&D_L00_001B9CF0 + 0x30))[i] != 0
+                        ? ((s32 *)((u8 *)&D_L00_001B9CF0 + 0x30))[i]
+                        : 0x26;
             }
-            saved++;
-            desired++;
-            remaining--;
-            active++;
-        } while (remaining >= 0);
-        D_0015EE78_gp = *(s32 *)(state + 0x18);
-        hud_send_resident_bank(0, *(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x74), 0);
+        }
+        {
+            struct GameState *state = &D_L00_001B9CF0;
+            table = D_L00_0017E4D8;
+            D_0015EE78_gp = *(s32 *)state->pad18;
+            hud_send_resident_bank(0, *(s32 *)((u8 *)*(void **)(table + 0x18) + 0x74), 0);
+        }
         FUN_L00_00235310(2);
-        if (*(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x80) != 0) {
+        if (*(s32 *)((u8 *)*(void **)(table + 0x18) + 0x80) != 0) {
             FUN_L00_00235310(3);
         }
-        if (*(s32 *)((u8 *)*(void **)(D_L00_0017E4D8 + 0x18) + 0x84) != 0) {
+        if (*(s32 *)((u8 *)*(void **)(table + 0x18) + 0x84) != 0) {
             FUN_L00_00235310(4);
         }
-        saved = (s32 *)D_L00_001B9E90;
-        remaining = 13;
-        do {
-            remaining--;
-            *saved = (s32)delete_moby((struct Ent *)*saved);
-            saved++;
-        } while (remaining >= 0);
+        {
+            s32 *saved;
+            s32 remaining;
+            saved = (s32 *)((u32)&D_L00_001B9CF0 + 0x1a0);
+            remaining = 13;
+            do {
+                remaining--;
+                *saved = (s32)delete_moby((struct Ent *)*saved);
+                saved++;
+            } while (remaining >= 0);
+        }
         handle = show_health_hud();
         hud_keep_visible(handle, scale_game_frames(0xb4));
         handle = queue_animation_update(2, 0x754e, FUN_L00_00239cc8, FUN_L00_00239d00,
@@ -317,20 +319,26 @@ void FUN_L00_00276908(void) {
         hud_keep_visible(handle, scale_game_frames(0xb4));
         D_L00_001B9CF0.state = 0x14;
         D_L00_001B9CF0.unk14 = 2;
-        table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-        value = *(s32 *)(state + 0xcc);
-        if (value < table[0xc]) {
-            do {
-                table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-                *(s32 *)(table + 0x48 + value * 4) = 0;
-                value++;
-                table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-            } while (value < table[0xc]);
+        {
+            u8 *table;
+            value = *(s32 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
+            table = (u8 *)D_L00_00197300[0];
+            if (value < table[0xc]) {
+                do {
+                    table = (u8 *)D_L00_00197300[0];
+                    i = value++;
+                    *(s32 *)(table + 0x48 + i * 4) = 0;
+                    table = (u8 *)D_L00_00197300[0];
+                } while (value < table[0xc]);
+            }
+            table = (u8 *)D_L00_00197300[0];
+            table[0xc] = *(u8 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
         }
-        table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-        table[0xc] = *(u8 *)(state + 0xcc);
         D_L00_0015F5D8 = 1;
-        *(s32 *)(D_L00_00173E40 + 0x10) &= 0x7fffffff;
+        {
+            u8 *table = D_L00_00173E40;
+            *(s32 *)(table + 0x10) &= 0x7fffffff;
+        }
         FUN_L00_002a08c8();
         FUN_L00_002a09d8(1);
     }
@@ -728,8 +736,8 @@ void FUN_L00_002772c0(s32 param_1) {
             object->image[21] = height;
             object->image[22] = left;
             object->image[23] = top;
-            FUN_L00_0023caa8_772c0(width + 1, height + 1, width + left - 1,
-                                     height + top - 1, *(s32 *)0x00160270, 0);
+            FUN_L00_0023caa8_772c0(width + 1, height + 1, left + width - 1,
+                                     top + height - 1, *(s32 *)0x00160270, 0);
         }
     }
     for (pass = 0; pass < 2; pass++) {
@@ -779,30 +787,32 @@ void FUN_L00_002772c0(s32 param_1) {
             }
             out_left = 0;
             out_top = 0;
-            out_right = width;
-            out_bottom = height;
             if ((flags & 2) != 0) {
                 out_right = texture_width;
                 out_bottom = texture_height;
-            } else if ((flags & 8) != 0) {
-                out_left = (width - texture_width) / 2;
-                out_top = (height - texture_height) / 2;
-                out_right = width - out_left;
-                if (width < out_right) out_right = width;
-                out_bottom = height - out_top;
-                if (height < out_bottom) out_bottom = height;
-                if (out_left < 0) out_left = 0;
-                if (out_top < 0) out_top = 0;
-            } else if ((flags & 4) != 0) {
-                if (texture_width < texture_height) {
-                    out_left = width / 2 - (texture_width * width) / (texture_height << 1);
+            } else {
+                out_right = width;
+                out_bottom = height;
+                if ((flags & 8) != 0) {
+                    out_left = (width - texture_width) / 2;
+                    out_top = (height - texture_height) / 2;
                     out_right = width - out_left;
-                } else {
-                    out_top = height / 2 - (texture_height * height) / (texture_width << 1);
+                    if (width < out_right) out_right = width;
                     out_bottom = height - out_top;
+                    if (height < out_bottom) out_bottom = height;
+                    if (out_left < 0) out_left = 0;
+                    if (out_top < 0) out_top = 0;
+                } else if ((flags & 4) != 0) {
+                    if (texture_width < texture_height) {
+                        out_left = width / 2 - (texture_width * width) / (texture_height << 1);
+                        out_right = width - out_left;
+                    } else {
+                        out_top = height / 2 - (texture_height * height) / (texture_width << 1);
+                        out_bottom = height - out_top;
+                    }
+                } else if ((flags & 0x10) == 0) {
+                    continue;
                 }
-            } else if ((flags & 0x10) == 0) {
-                continue;
             }
             FUN_L00_001fa290(right, bottom, texture_width, texture_height,
                               out_left, out_top, out_right - out_left, out_bottom - out_top,

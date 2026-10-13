@@ -163,9 +163,6 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_002c1978.s", FUN_L09_002c1978);
-#else
 extern void setup_first_context(void) __asm__("FUN_001f2d98");
 extern void setup_second_context(void) __asm__("FUN_001f2260");
 extern void FUN_001f9ff8(float, void *);
@@ -182,9 +179,9 @@ extern int D_L09_0016CD50[];
 extern int D_L09_0016CD60[];
 extern int D_L09_0016CDF0[];
 extern u64 D_L09_001612F0;
-extern unsigned short D_L09_0010E800;
-extern int D_L09_0010E810;
-extern int D_L09_001CB470;
+extern unsigned short D_L09_0010E800[];
+extern int D_L09_0010E810[];
+extern int D_L09_001CB470[];
 extern char D_L09_00166E40[];
 extern char D_L09_00166EC0[];
 
@@ -210,6 +207,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     float offset[4];
     u64 color;
     int *scratch;
+    int scratch_color;
     float *old = (float *)0x001612f8;
     float *current = D_L09_0016CBC0;
     float saved0 = current[0x218 / 4];
@@ -231,7 +229,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     FUN_001f9ff8(1024.0f, matrix);
     setup_offset_vector(-1024.0f, offset, D_L09_00166F40);
     offset[3] = 1.0f;
-    FUN_00233830(&D_L09_0010E810, D_L09_0010E800);
+    FUN_00233830(D_L09_0010E810, D_L09_0010E800[0]);
     {
         int *packet;
         int *packet_end;
@@ -255,9 +253,12 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         packet_end = packet + 48;
         qcopy(packet_end, current + 0x1a0 / 4);
         *(float *)(packet + 52) = current[0x22c / 4];
-        packet[57] = 0x020001d2;
-        packet[56] = 0x03000000;
-        *(float *)(packet + 53) = current[0x228 / 4];
+        {
+            float saved0 = current[0x228 / 4];
+            packet[56] = 0x03000000;
+            packet[57] = 0x020001d2;
+            *(float *)(packet + 53) = saved0;
+        }
         packet[58] = 0x15000000;
         packet[54] = 0;
         packet[55] = 0;
@@ -270,12 +271,14 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         D_L09_001611C0 = packet_end;
         packet[60] = 0x30000003;
     }
-    PACKET_CURSOR[1] = (int)&D_L09_001CB470;
+    PACKET_CURSOR[1] = (int)D_L09_001CB470;
     PACKET_CURSOR[2] = 0;
     PACKET_CURSOR[3] = 0x50000003;
-    packet = PACKET_CURSOR + 4;
-    D_L09_001611C0 = packet;
-    packet[0] = 0x10000008;
+    {
+        int *packet = PACKET_CURSOR + 4;
+        D_L09_001611C0 = packet;
+        packet[0] = 0x10000008;
+    }
     PACKET_CURSOR[1] = 0;
     PACKET_CURSOR[2] = 0;
     PACKET_CURSOR[3] = 0x50000008;
@@ -283,18 +286,23 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     words = (u64 *)(packet + 4);
     D_L09_001611C0 = packet + 4;
     color = (unsigned char)data[0x30] | (unsigned char)data[0x31] << 8 | (unsigned char)data[0x32] << 16;
-    if (D_L09_0015F458 == 1)
+    /* Retail reads the mode after the packet cursor stores. */
+    if (*(volatile int *)&D_L09_0015F458 == 1)
         color = (long)(*(int *)(current + 0x230 / 4) | (*(int *)(current + 0x234 / 4) << 8) |
                 (*(int *)(current + 0x238 / 4) << 16));
     {
         u64 alpha = (unsigned char)data[0x3f];
         u64 blend;
         words[0] = 0x7000000000008001ULL;
-        blend = 0x60U < alpha ? 0x5360a : 0x5370b;
         words[1] = 0xeeeeeeeeULL;
-        words[2] = ((u64)(unsigned char)data[0x3f] << 32) | 100;
+        blend = (unsigned char)data[0x3f];
         words[3] = 0x42;
-        words[4] = D_L09_001612F0;
+        /* Retail stores packed alpha before reading D_L09_001612F0. */
+        *(volatile u64 *)&words[2] = (blend << 32) | 100;
+        alpha = alpha <= 0x60U ? 0x5370b : 0x5360a;
+        blend = alpha;
+        words[4] = *(volatile u64 *)&D_L09_001612F0;
+        scratch_color = 0x757c8e;
         words[5] = 6;
         words[6] = (long)color;
         words[7] = 0x3d;
@@ -308,34 +316,35 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         words[15] = 0x47;
         D_L09_001611C0 = (int *)(words + 16);
     }
-    scratch = (int *)0x700003fc;
+    scratch = (int *)0x70000000;
     for (i = 255; i >= 0; i--)
-        *scratch-- = 0x757c8e;
+        scratch[i] = scratch_color;
     i = 0;
     if (count > 0) do {
         char *entry;
         int visible;
         entry_offset = i * 32;
         entry = (char *)((int)list + entry_offset);
-        i++;
         visible = FUN_001fa728(entry, 256.0f);
         if (visible != -1) {
             int n = *(int *)(entry + 0x1c);
             float *source = *(float **)(entry + 0x14);
             float *destination = (float *)0x70001000;
-            j = n;
-            if (j > 0) do {
-                *destination++ = *source++ * 0.5f;
-                *destination++ = *source++ * 0.5f;
-            } while (--j != 0);
-            FUN_L00_001fde98(n, *(int *)(entry_offset + (int)list + 0x10), 0x70000000,
+            if (n > 0) {
+                j = n;
+                do {
+                    *destination++ = *source++ * 0.5f;
+                    *destination++ = *source++ * 0.5f;
+                } while (--j != 0);
+            }
+            FUN_L00_001fde98(n, ((int *)list)[(i << 3) + 4], 0x70000000,
                               (void *)0x70001000, visible == 0);
         }
+        i++;
     } while (i < count);
     FUN_L02_002a46e0(data);
 }
 #undef PACKET_CURSOR
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

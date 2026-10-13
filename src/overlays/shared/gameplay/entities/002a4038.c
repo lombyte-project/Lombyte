@@ -754,10 +754,9 @@ void FUN_L02_002d93e8(char *moby) {
     vu1_add_g_sregister_2d93e8(0x47, 0x5380b);
     texture = get_effect_texture_2d93e8(0x10);
     FUN_L02_002dae88();
-    for (state = 11; state >= 0; --state, ++markers) {
-        if (*markers != 0) *markers = 1;
+    for (state = 11, first = markers; state >= 0; --state, ++first) {
+        if (*first != 0) *first = 1;
     }
-    markers = (int *)(data + 0xb0);
     if (*(float *)(data + 0xe4) > 0.31415927f) {
         state = *(int *)(data + 0xe0);
         if (state == 1) first_step = 1;
@@ -1580,7 +1579,7 @@ void FUN_L02_002ea210(char *moby) {
             ea210_draw(position, output, 1, 0, 0);
         ea210_drawend(position);
         ea210_drawflush(output);
-        if (D_L02_00179A10 == 0 && *(int *)((char *)&D_L02_00179A10 + 0x24) == -1 &&
+        if (D_L02_00179A90_2D9F08.i0 == 0 && D_L02_00179A90_2D9F08.i24 == -1 &&
             0.2f < *(float *)(data + 0x40)) {
             ea210_fade(1.0f, frame_time * 4.0f, &D_L02_0015F3FC);
         } else {

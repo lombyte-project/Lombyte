@@ -6,9 +6,10 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031bf40.s", FUN_L05_0031bf40);
 #else
 #include "sda.h"
+#include "rnc/gameplay/hero.h"
 extern char D_0013F3D0[];
 extern char D_0013F350[];
-extern int D_001413D4 NOT_SDA, D_001413DC NOT_SDA, D_0013F64C, D_0013D464;
+extern int D_001413D4 NOT_SDA, D_001413DC NOT_SDA, D_0013F64C, D_0013D464 NOT_SDA;
 extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;
 extern unsigned short D_001418A8, D_001418A0, D_00141930;
 extern short D_00141A88, D_00141A90, D_0013F65E;
@@ -31,8 +32,8 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_00203908(int, int) __asm__("FUN_L00_00203908");
 extern void FUN_L00_002d5830(void *) __asm__("FUN_L00_002d5830");
 extern void FUN_001f99f8(void *) __asm__("FUN_001f99f8");
-extern int game_frame_count __asm__("D_L05_0015EEA4") NOT_SDA;
-extern int current_level_index __asm__("D_L05_0015ED84") NOT_SDA;
+extern volatile int game_frame_count __asm__("D_L05_0015EEA4") NOT_SDA;
+extern volatile int current_level_index __asm__("D_L05_0015ED84") NOT_SDA;
 typedef unsigned int L05Vector __attribute__((mode(TI), aligned(16)));
 
 typedef struct { unsigned short count, best; int flags; } VendorEventRecord;
@@ -175,28 +176,28 @@ check_second_volume:
                 value = scale_game_frames(D_L05_0015EEA4) / 600;
                 player = D_L05_0015ED84;
                 if (D_00141A8A < value) {
-                    D_00141A8A = scale_game_frames(D_L05_0015EEA4) / 600;
+                    *(volatile unsigned short *)&D_00141A8A = scale_game_frames(D_L05_0015EEA4) / 600;
                     player = current_level_index;
                 }
-                D_00141A8C = (D_00141A8C | (1u << player)) | 0x80000000u;
+                D_00141A8C = (1u << player) | (0x80000000u | D_00141A8C);
             }
         }
         if (D_001413DC == 0x13) D_00141A88 = -1;
     }
     if (D_00141A98 < 2) {
         if (D_0014C050[data[8] + D_L05_0015ED84 * 16] == 0xff) {
-            value = D_L05_0015EEA4;
+            index = D_L05_0015EEA4;
             if (D_00141A90 < 0xffff) {
-                D_00141A90++;
-                value = game_frame_count;
+                *(volatile unsigned short *)&D_00141A90 = D_00141A90 + 1;
+                index = game_frame_count;
             }
-            elapsed = scale_game_frames(value) / 600;
+            elapsed = scale_game_frames(index) / 600;
             player = D_L05_0015ED84;
             if (D_00141A92 < elapsed) {
-                D_00141A92 = scale_game_frames(D_L05_0015EEA4) / 600;
+                *(volatile unsigned short *)&D_00141A92 = scale_game_frames(D_L05_0015EEA4) / 600;
                 player = current_level_index;
             }
-            D_00141A94 = (D_00141A94 | (1u << player)) | 0x80000000u;
+            D_00141A94 = (1u << player) | (0x80000000u | D_00141A94);
         } else if (D_0014EE90[data[8]] > 2 && is_point_inside_clip_volume(D_0013F3D0, data[11])) {
             elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417A2 * 600;
             if (scale_game_frames(18000) < elapsed) {
@@ -218,28 +219,28 @@ check_second_volume:
     if (D_0013D388 && D_00141A78 == 0 && D_001413DC == 0x16)
         FUN_L00_00203908(0x1389, 0x22);
     if (D_00141C58 == 0) {
-        if (*(int *)(D_0013F350 + 0x2084) == 10 &&
-            (is_point_inside_clip_volume(D_0013F3D0, data[13]) || is_point_inside_clip_volume(D_0013F3D0, data[14]))) {
-            value = D_L05_0015EEA4;
+        if (hero.state.current == 10 &&
+            (is_point_inside_clip_volume(&hero.motion.pos, data[13]) || is_point_inside_clip_volume(&hero.motion.pos, data[14]))) {
+            index = D_L05_0015EEA4;
             if (D_00141C58 < 0xffff) {
-                D_00141C58++;
-                value = game_frame_count;
+                *(volatile unsigned short *)&D_00141C58 = D_00141C58 + 1;
+                index = game_frame_count;
             }
-            elapsed = scale_game_frames(value) / 600;
+            elapsed = scale_game_frames(index) / 600;
             player = D_L05_0015ED84;
             if (D_00141C5A < elapsed) {
-                D_00141C5A = scale_game_frames(D_L05_0015EEA4) / 600;
+                *(volatile unsigned short *)&D_00141C5A = scale_game_frames(D_L05_0015EEA4) / 600;
                 player = current_level_index;
             }
-            D_00141C5C = (D_00141C5C | (1u << player)) | 0x80000000u;
+            D_00141C5C = (1u << player) | (0x80000000u | D_00141C5C);
         }
-        if (D_001413DC == 0x12) {
+        if (hero.state.control_mode == 0x12) {
             if (is_point_inside_clip_volume(data + 4, data[13]) || is_point_inside_clip_volume(data + 4, data[14])) {
                 FUN_001f99f8(data + 4);
                 data[24]++;
             }
         } else if (data[24] > 1 &&
-                   (is_point_inside_clip_volume(D_0013F3D0, data[13]) || is_point_inside_clip_volume(D_0013F3D0, data[14])))
+                   (is_point_inside_clip_volume(&hero.motion.pos, data[13]) || is_point_inside_clip_volume(&hero.motion.pos, data[14])))
             FUN_L00_00203908(0x138e, 0x5e);
     }
     if (!D_001418D8 && !D_00141BB8 && D_0013D4CF &&

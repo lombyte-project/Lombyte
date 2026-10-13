@@ -779,7 +779,7 @@ extern f32 FUN_001f9b48(void *, void *);
 extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f99c0(f32);
 extern void FUN_L00_0025a120(struct Moby *);
-extern void make_hit_descriptor_19040(f32, void *, void *, s32, void *) __asm__("FUN_L00_00259888");
+extern void make_hit_descriptor_19040(void *, void *, s32, f32, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
@@ -803,7 +803,7 @@ void FUN_L07_00319040(struct Moby *moby) {
     Vec4 push;
     volatile s32 touching;
     f32 speed;
-    volatile f32 one;
+    union { s32 bits; f32 value; } one;
     f32 stable_one;
     f32 turn;
     f32 new_speed;
@@ -883,24 +883,27 @@ void FUN_L07_00319040(struct Moby *moby) {
         normalize_vector_xyz(&dir, &dir, *(f32 *)(vars + 0x70));
         add_vector_xyz(&moby->pos, &moby->pos, &dir);
         if (!(FUN_001f9b48(&moby->pos, vars + 0x60) > 64.0f)) {
-            one = 1.0f;
-            stable_one = one;
-            make_hit_descriptor_19040(stable_one, contact, moby, 0x10001, &dir);
+            /* Keep the descriptor scale available across the contact probe. */
+            *(s32 *)&one = 0x3f800000;
+            stable_one = one.value;
+            make_hit_descriptor_19040(contact, moby, 0x10001, stable_one, &dir);
             qcopy(&probe, &moby->pos);
             probe.f[2] += 0.75f;
             if (!probe_world_sphere(0.75f, &probe, 0x10, moby, contact) ||
                 D_L07_00173ED8 == NULL || D_L07_00173ED8->oclass == 0x363 ||
                 D_L07_00173ED8->oclass == 0x456 || D_L07_00173ED8->oclass == 0x458 ||
                 D_L07_00173ED8->oclass == 0x365 || D_L07_00173ED8->oclass == 0x367) {
-                probe.q = *(u128 *)&moby->pos;
-                probe.f[2] = moby->pos.z + 0.55f;
-                if (coll_sphere(0.0f, &probe, 0, moby)) {
+                qcopy(&probe, &moby->pos);
+                probe.f[2] += 0.55f;
+                if (coll_sphere(0.55f, &probe, 0, moby)) {
                     subtract_vector_xyz(&push, &D_L07_00173EF0, &probe);
                     add_vector_xyz(&moby->pos, &moby->pos, &push);
                 }
                 if (!tick_countdown_32_alt((s32 *)(vars + 0x78))) break;
+                /* The timeout path reloads the effect scale in retail. */
+                stable_one = 1.0f;
             }
-            FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, stable_one, 4.0f, stable_one, 2, 7.0f, 0, 1, -1, 0);
+            FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, stable_one, 2, 7.0f, 0, 1, -1, 0);
         }
         mark_moby_for_removal(moby);
         return;

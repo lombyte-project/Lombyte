@@ -1017,6 +1017,7 @@ void FUN_L00_002b49a8(u8 *m) {
     } scratch;
     f32 base_yaw, base_pitch, dist, adjusted_yaw, angle, limit;
     s32 i, n, index, state;
+    u16 *r;
     u8 *other, *part;
 
     scratch.velocity.q = 0;
@@ -1033,23 +1034,23 @@ void FUN_L00_002b49a8(u8 *m) {
     if (m[0x53] == 0 && m[0x51] < 3) v[0] = FUN_001f96f8_2b49a8(7);
 
     state = hero.state.current;
-    if (state == 30 && (*(u16 *)(D_001413D0_2b49a8 + 0x34) & 1)) {
+    if (state == 30 && (*(u16 *)(((u8 *)hero.moby) + 0x34) & 1)) {
         u8 *origin = (u8 *)D_L00_00166C80_b3058.v140;
         FUN_001fa2b8_2b49a8(&scratch.work.target, &D_L00_00166C80_b3058);
         FUN_001fa2d8_2b49a8(scratch.matrix, &scratch.work.target);
         scratch.velocity.f[2] = D_0015ED6C_2b49a8 * 40.0f;
         FUN_001f9d20_2b49a8(&scratch.velocity, &scratch.velocity, scratch.matrix);
         FUN_001f99f8_2b49a8(&scratch.position);
-        scratch.position.f[1] += 0.15f;
-        scratch.position.f[2] += 0.75f;
         scratch.position.f[0] += 0.15f;
+        scratch.position.f[2] += 0.75f;
+        scratch.position.f[1] += 0.15f;
         FUN_001f9d20_2b49a8(&scratch.position, &scratch.position, scratch.matrix);
         FUN_001f9a10_2b49a8(&scratch.position, &scratch.position, origin);
-        if (hero.state.current == state && (*(u16 *)(D_001413D0_2b49a8 + 0x34) & 1) && !hero.unk20AC) {
+        if (hero.state.current == state && (*(u16 *)(((u8 *)hero.moby) + 0x34) & 1) && !hero.unk20AC) {
             FUN_L00_001edf60_2b49a8(1.0f, 0.0f, 90.0f, m, 0xff0f0fff, 0, 0x26, -1, 4);
             FUN_001f9bf8_2b49a8(&scratch.tmp, &scratch.velocity, 20.0f);
-            FUN_001f9a10_2b49a8(&scratch.work.options, &scratch.tmp, &scratch.position);
-            scratch.tmp.q = scratch.work.options.vec.q;
+            FUN_001f9a10_2b49a8(&scratch.tmp2, &scratch.tmp, &scratch.position);
+            scratch.tmp.q = scratch.tmp2.q;
             if (FUN_001efa68_2b49a8(origin, &scratch.tmp, 0, m, 0) &&
                 D_L00_00173E58_2b49a8 && (*(u16 *)(D_L00_00173E58_2b49a8 + 0x34) & 0x1000))
                 other = D_L00_00173E58_2b49a8;
@@ -1059,7 +1060,7 @@ void FUN_L00_002b49a8(u8 *m) {
         FUN_001f9cf8_2b49a8(&scratch.velocity, &scratch.velocity, D_0013F990_2b49a8);
         FUN_L00_0024f7c8_2b49a8(m, 0, &scratch.position);
     }
-    scratch.yaw = D_00140600_2b49a8 ? D_0014060C_2b49a8 : FUN_001f9e90_2b49a8(scratch.velocity.f[0], scratch.velocity.f[1]);
+    scratch.yaw = *(s32 *)((u8 *)&hero + 0x12B0) ? *(f32 *)((u8 *)&hero + 0x12BC) : FUN_001f9e90_2b49a8(scratch.velocity.f[0], scratch.velocity.f[1]);
     scratch.pitch = -FUN_001f9e90_2b49a8(FUN_001f9b20_2b49a8(&scratch.velocity), scratch.velocity.f[2]);
     base_yaw = scratch.yaw;
     base_pitch = scratch.pitch;
@@ -1126,8 +1127,8 @@ pitch_ready:
             scratch.work.options.collision.b9 = 1;
             scratch.work.options.collision.oclass = *(u16 *)(m + 0xa6);
             FUN_L00_00233660_2b49a8(scratch.matrix, 0.7f, -0.15f, 0.5f);
-            FUN_L00_001f2868_2b49a8(scratch.matrix, 5, D_001413D0_2b49a8, &scratch.work.target, 0.42f);
-            FUN_L00_002caf70_2b49a8(D_001413D0_2b49a8, &scratch.position, other, scratch.yaw, scratch.pitch, base_yaw, base_pitch);
+            FUN_L00_001f2868_2b49a8(scratch.matrix, 5, ((u8 *)hero.moby), &scratch.work.target, 0.42f);
+            FUN_L00_002caf70_2b49a8(((u8 *)hero.moby), &scratch.position, other, scratch.yaw, scratch.pitch, base_yaw, base_pitch);
             v[5] = FUN_001f96f8_2b49a8(15);
             for (i = 4; i >= 0; --i) {
                 scratch.work.options.vec.q = 0;
@@ -1146,16 +1147,17 @@ pitch_ready:
                 FUN_L00_00257b90_2b49a8(FUN_001f96f8_2b49a8(4), FUN_001f96f8_2b49a8(7)), 200000.0f);
         }
         if (m[0x53] != 4) FUN_L00_00257880_2b49a8(m, 4, 0, FUN_001f96f8_2b49a8(7));
+        r = (u16 *)&D_00141680_b3058;
         n = D_0015EEA4_2b49a8;
-        if (D_001416F8_2b49a8 != -1) {
-            D_001416F8_2b49a8++;
+        if (r[0x3C] < 0xFFFF) {
+            r[0x3C]++;
             n = D_0015EEA4_2b49a8;
         }
-        if (D_001416FA_2b49a8 < FUN_001f96f8_2b49a8(n) / 600) {
-            D_001416FA_2b49a8 = FUN_001f96f8_2b49a8(D_0015EEA4_2b49a8) / 600;
+        if (r[0x3D] < FUN_001f96f8_2b49a8(n) / 600) {
+            r[0x3D] = FUN_001f96f8_2b49a8(D_0015EEA4_2b49a8) / 600;
             index = D_0015ED84_2b49a8;
         } else index = D_0015ED84_2b49a8;
-        D_001416FC_2b49a8 |= (1 << index) | 0x80000000;
+        (*(u32 *)&r[0x3E]) |= (1 << index) | 0x80000000;
     }
     if (((D_0013CAE0_2b49a8 & D_001403F0_2b49a8) && FUN_L00_00233e98_2b49a8(-1)) ||
         FUN_001f96f8_2b49a8(9) >= hero.unk1BC && hero.unk20A8) {
@@ -1181,15 +1183,15 @@ finish:
         f32 red, green, blue;
         index = FUN_001f96f8_2b49a8(9);
         n = v[5];
-        if (index <= n) n = FUN_001f96f8_2b49a8(9);
+        n = n < index ? n : FUN_001f96f8_2b49a8(9);
         red = FUN_001fa6c0_2b49a8(n) * 0.7f / (f32)FUN_001f96f8_2b49a8(9);
         index = FUN_001f96f8_2b49a8(9);
         n = v[5];
-        if (index <= n) n = FUN_001f96f8_2b49a8(9);
+        n = n < index ? n : FUN_001f96f8_2b49a8(9);
         green = FUN_001fa6c0_2b49a8(n) * 0.7f / (f32)FUN_001f96f8_2b49a8(9);
         index = FUN_001f96f8_2b49a8(9);
         n = v[5];
-        if (index <= n) n = FUN_001f96f8_2b49a8(9);
+        n = n < index ? n : FUN_001f96f8_2b49a8(9);
         blue = FUN_001fa6c0_2b49a8(n) * 0.7f / (f32)FUN_001f96f8_2b49a8(9);
         angle = FUN_001f9dc8_2b49a8(FUN_001f9e90_2b49a8(hero.unk670, hero.unk674));
         scratch.work.target.f[0] = hero.motion.pos.f[0] + (angle + angle);
@@ -1915,73 +1917,79 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     s16 *entry;
     f32 distance;
     f32 angle;
-    struct Hero *g;
 
     pos.q = *(u128 *)((u8 *)m + 0x10);
     vars = m->vars;
     limit = FUN_L00_00257b50_b6bc8(vars->pad14 > 0 ? vars->pad14 : 1);
     vars->pad14 = 0;
-    p = D_001ABA00_b6bc8;
-    while ((other = *p) != 0) {
-        state = FUN_L00_0025c338_b6bc8(other);
-        if (state != 0) {
-            distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
-            if (distance < 12.0f &&
-                ((u16)(*(u16 *)((u8 *)other + 0xa6) - 500) < 2 ||
-                 *(s16 *)((u8 *)other + 0xa6) == 0x1f9 ||
-                 *(s16 *)((u8 *)other + 0xa6) == 0x1ff)) {
-                g = &hero;
-                angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
-                    FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
-                                           *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
-                if (angle < 0.9599311f) {
-                    if (vars->pad14 == limit) {
-                        FUN_001ff2a8_b6bc8(&velocity, (u8 *)other + 0x10, (u8 *)m + 0x10);
-                        FUN_001ff500_b6bc8(1.5f, &velocity, &velocity);
-                        FUN_L00_00259bc8_b6bc8(other, m, 0x10000, &g->motion.pos, &velocity, 1.0f);
-                        vars->frame = FUN_001fef20_b6bc8(FUN_L00_00257b90_c(5, 0x2d));
-                    }
-                    vars->pad14++;
-                }
-            }
-            if (distance < radius) {
-                g = &hero;
-                angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
-                    FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
-                                           *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
-                if (angle < 0.9599311f) {
-                    Moby *current = *(Moby **)(state + 0x18);
-                    if (current == 0 || distance < FUN_001ff488_b6bc8((u8 *)current + 0x10, (u8 *)other + 0x10)) {
-                        *(Moby **)(state + 0x18) = m;
-                        count++;
-                    }
-                }
-            }
-        }
-        p++;
-    }
-    i = 1;
-    if (D_001B07B0_b6bc8[0] > 0) {
-        entry = D_001B07B0_b6bc8 + 1;
+    other = D_001ABA00_b6bc8[0];
+    if (other != 0) {
+        p = D_001ABA00_b6bc8;
         do {
-            other = (Moby *)(D_0015FFD8_b6bc8 + *entry * 0x100);
-            if (other != 0 && (s8)other->state >= 0) {
-                state = (u8 *)other->vars;
+            state = FUN_L00_0025c338_b6bc8(other);
+            if (state != 0) {
                 distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
-                if (distance < radius) {
-                    g = &hero;
+                if (distance < 12.0f &&
+                    ((u16)(*(u16 *)((u8 *)other + 0xa6) - 500) < 2 ||
+                     *(s16 *)((u8 *)other + 0xa6) == 0x1f9 ||
+                     *(s16 *)((u8 *)other + 0xa6) == 0x1ff)) {
+                    struct Hero *g = &hero;
                     angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
                         FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
                                                *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
                     if (angle < 0.9599311f) {
-                        *(Moby **)(state + 0x78) = m;
+                        if (vars->pad14 == limit) {
+                            FUN_001ff2a8_b6bc8(&velocity, (u8 *)other + 0x10, (u8 *)m + 0x10);
+                            FUN_001ff500_b6bc8(1.5f, &velocity, &velocity);
+                            FUN_L00_00259bc8_b6bc8(other, m, 0x10000, &g->motion.pos, &velocity, 1.0f);
+                            vars->frame = FUN_001fef20_b6bc8(FUN_L00_00257b90_c(5, 0x2d));
+                        }
+                        vars->pad14++;
+                    }
+                }
+                if (distance < radius) {
+                    struct Hero *g = &hero;
+                    angle = FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
+                                               *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]);
+                    /* D_0013F3D0 is hero.motion.pos; reload yaw after the angle helper. */
+                    angle = FUN_002001f0_b6bc8(
+                        ((struct Hero *)((u8 *)D_0013F3D0_b6bc8 - 0x80))->motion.rot.f[2], angle);
+                    if (angle < 0.9599311f) {
+                        Moby *current = *(Moby **)(state + 0x18);
+                        if (current == 0 || distance < FUN_001ff488_b6bc8((u8 *)current + 0x10, (u8 *)other + 0x10)) {
+                            *(Moby **)(state + 0x18) = m;
+                            count++;
+                        }
+                    }
+                }
+            }
+            p++;
+            other = *p;
+        } while (other != 0);
+    }
+    i = 1;
+    if (D_001B07B0_b6bc8[0] > 0) {
+        struct Hero *g = &hero;
+        s16 *entryCount = D_001B07B0_b6bc8;
+        entry = entryCount + 1;
+        do {
+            other = (Moby *)(D_0015FFD8_b6bc8 + *entry * 0x100);
+            if (other != 0 && (s8)other->state >= 0) {
+                Vars *vars = other->vars;
+                distance = FUN_001ff488_b6bc8(&pos, (u8 *)other + 0x10);
+                if (distance < radius) {
+                    angle = FUN_002001f0_b6bc8(g->motion.rot.f[2],
+                        FUN_001ff8b0_b6bc8(*(f32 *)((u8 *)other + 0x10) - g->motion.pos.f[0],
+                                               *(f32 *)((u8 *)other + 0x14) - g->motion.pos.f[1]));
+                    if (angle < 0.9599311f) {
+                        *(Moby **)((u8 *)vars + 0x78) = m;
                         count++;
                     }
                 }
             }
             i++;
             entry++;
-        } while (i <= D_001B07B0_b6bc8[0]);
+        } while (i <= entryCount[0]);
     }
     return count;
 }
@@ -2329,7 +2337,7 @@ void FUN_L00_0020e698_2b77f0(void) __asm__("FUN_L00_0020e698");
 s32 FUN_L00_0028d8c0_2b77f0(void *, s16) __asm__("FUN_L00_0028d8c0");
 void FUN_001f9cf8_2b77f0(void *, void *, void *) __asm__("FUN_001f9cf8");
 f32 FUN_001f9de0_2b77f0(f32) __asm__("FUN_001f9de0");
-f32 FUN_001f96b0_2b77f0(f32) __asm__("FUN_001f96b0");
+f32 FUN_001f96b0_2b77f0(f32) __asm__("FUN_L00_001fef10");
 f32 FUN_001fa6c0_2b77f0(s32) __asm__("FUN_001fa6c0");
 void FUN_001f9c48_2b77f0(void *, void *, f32) __asm__("FUN_001f9c48");
 s32 FUN_001efa68_2b77f0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
@@ -2340,7 +2348,7 @@ f32 FUN_002132a8_2b77f0(f32, f32) __asm__("FUN_002132a8");
 void *FUN_L00_0026b230_2b77f0(void *, void *, u8, f32) __asm__("FUN_L00_0026b230");
 void FUN_L00_00259bc8_2b77f0(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_L00_0025b970");
 void FUN_L00_001f2868_2b77f0(void *, f32, s32, void *, void *) __asm__("FUN_L00_001f2868");
-s32 FUN_001f9740_2b77f0(void *) __asm__("FUN_001f9740");
+s32 FUN_001f9740_2b77f0(void *) __asm__("FUN_001f9770");
 f32 FUN_001f9e90_2b77f0(f32, f32) __asm__("FUN_001f9e90");
 f32 FUN_001f96b0_alt_2b77f0(f32) __asm__("FUN_001f96b0");
 s16 FUN_001fa6d0_2b77f0(f32) __asm__("FUN_001fa6d0");
@@ -2365,10 +2373,9 @@ void FUN_L00_002b77f0(unsigned char *m) {
         f32 scale;
         s32 mode;
     } hit;
-    f32 response[2];
     f32 speed, length, strength, response_scale;
-    s32 count, initial_count, i;
-    volatile s32 gate;
+    struct { f32 response[2]; s32 gate, initial_count, count; } counts;
+    s32 i;
     s32 state;
     s16 h;
     s32 divisor;
@@ -2400,7 +2407,7 @@ void FUN_L00_002b77f0(unsigned char *m) {
         if (*(void **)v == 0) {
             *(void **)v = FUN_L00_002bb360_2b77f0(m);
             if (*(void **)v != 0) {
-                unsigned char *other = *(unsigned char **)v;
+                unsigned char *other = *(unsigned char * volatile *)v;
                 *(u16 *)(other + 0x34) |= 0x100;
                 *(f32 *)(*(unsigned char **)(other + 0x78) + 0xC) = D_L00_00161510_2b77f0;
             }
@@ -2440,11 +2447,11 @@ void FUN_L00_002b77f0(unsigned char *m) {
             FUN_001f9a40_2b77f0(&scratch, &D_L00_001614F0_2b77f0, &D_L00_00161500_2b77f0, FUN_001f9de0_2b77f0(angle) * 0.5f + 0.5f);
             FUN_001f9a40_2b77f0(D_001802C0_2b77f0 + *(s16 *)(v + 0x44) * 0x20, D_001802C0_2b77f0 + *(s16 *)(v + 0x44) * 0x20, &scratch, 0.1f);
         }
-        response[0] = response[1] = 0.0f;
+        counts.response[0] = counts.response[1] = 0.0f;
         speed = FUN_001fa6c0_2b77f0(D_0013E530_2b77f0) * 4.0f;
-        gate = 1;
+        counts.gate = 1;
         if (D_L00_0015F5CC & 3)
-            gate = 0;
+            counts.gate = 0;
         if (D_001413D4_2b77f0 == 1 && (*(u16 *)(m + 0x34) & 1)) {
             FUN_001f9bf8_2b77f0(&scratch, &D_00166FF0_2b77f0, -1.0f);
             FUN_001f9a10_2b77f0(&scratch, &scratch, &D_00166DC0_2b77f0);
@@ -2471,13 +2478,13 @@ void FUN_L00_002b77f0(unsigned char *m) {
             response_scale = D_001601E8_2b77f0;
         }
         FUN_L00_00259bc8_2b77f0(length, 1.0f, response_scale * D_0015ED70_2b77f0,
-                                  D_L00_00161514_2b77f0 * D_0015ED6C_c, &response[0], &response[1]);
-        FUN_001f9bf8_2b77f0(&dir, &dir, response[1]);
-        initial_count = D_L00_00161518_2b77f0;
+                                  D_L00_00161514_2b77f0 * D_0015ED6C_c, &counts.response[0], &counts.response[1]);
+        FUN_001f9bf8_2b77f0(&dir, &dir, counts.response[1]);
+        counts.initial_count = D_L00_00161518_2b77f0;
         if (length < 4.0f || (*(u16 *)(m + 0x34) & 1))
-            initial_count = 1;
-        count = D_L00_0016151C_2b77f0 + initial_count;
-        for (i = 0; i < count; i++) {
+            counts.initial_count = 1;
+        counts.count = D_L00_0016151C_2b77f0 + counts.initial_count;
+        for (i = 0; i < counts.count; i++) {
             FUN_L00_00257d78_2b77f0(&random_vec, 0.0f,
                 ((D_L00_00161524_2b77f0 - D_L00_00161528_2b77f0) *
                  (length / (D_L00_00161520_2b77f0 + speed)) +
@@ -2487,8 +2494,8 @@ void FUN_L00_002b77f0(unsigned char *m) {
             FUN_001f9a68_2b77f0(&particle_pos, &dir, angle);
             FUN_001f9a10_2b77f0(&particle_pos, &particle_pos, &scratch);
             effect = FUN_L00_0026b230_2b77f0(&particle_pos, &random_vec,
-                                               (i < initial_count) | 4, length);
-            if (i == 2 && gate)
+                                               (i < counts.initial_count) | 4, length);
+            if (i == 2 && counts.gate)
                 FUN_L00_002b8798_2b77f0(m, (s32)effect);
         }
         particle_pos.q = 0;
@@ -2521,10 +2528,10 @@ void FUN_L00_002b77f0(unsigned char *m) {
         divisor = FUN_001f96f8_2b77f0(D_L00_00161530_2b77f0);
         if (D_L00_0015F5CC % divisor == 0)
             FUN_L00_00233db8_2b77f0(-1, 1);
-        gate = FUN_L00_00233e98_2b77f0(-1);
+        state = FUN_L00_00233e98_2b77f0(-1);
         if (FUN_001f9740_2b77f0(v + 0x4C)) {
             if ((D_0013CAE0[0] & g->items[0].button_mask) &&
-                !g->unk20AC && gate)
+                !g->unk20AC && state)
                 goto tail;
             m[0x20] = 2;
             FUN_L00_0020e698_2b77f0();
@@ -2535,7 +2542,7 @@ void FUN_L00_002b77f0(unsigned char *m) {
                     FUN_L00_0028d918_2b77f0(h);
             }
             *(s16 *)(v + 0x4A) = -1;
-            if (!gate)
+            if (!state)
                 FUN_L00_0028dbe8_2b77f0(0, 0, m);
         }
         break;

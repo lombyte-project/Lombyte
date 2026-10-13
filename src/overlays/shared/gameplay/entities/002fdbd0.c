@@ -419,7 +419,7 @@ extern f32 D_L06_00161FB8 __attribute__((sda));
 extern f32 D_L06_00161FBC __attribute__((sda));
 extern f32 D_0015ED6C __asm__("D_0015ED6C");
 extern s32 D_001413D0 __asm__("D_001413D0");
-extern u8 D_0013D419 __asm__("D_0013D419");
+#include "rnc/gameplay/state/item_state.h"
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time_for_update(f32) __asm__("FUN_001f96b0");
 extern s32 FUN_002182f0(f32) __asm__("FUN_001fa6d0");
@@ -445,6 +445,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
     struct Moby *other;
     struct Moby *fragment;
     s32 collision;
+    s32 fragment_count;
     struct {
         f32 position[4];
         f32 velocity[4];
@@ -454,10 +455,9 @@ void FUN_L06_002feb40(struct Moby *moby) {
     f32 angle;
     f32 speed;
     f32 remaining;
-    s32 i;
     s32 *route;
     s16 frames;
-    Vec4 *vel;
+    f32 *vel;
 
     moby->scale = moby->pclass->scale * D_L06_00161FA8;
     FUN_L06_002ff2c8((char *)moby);
@@ -471,8 +471,8 @@ void FUN_L06_002feb40(struct Moby *moby) {
     collision = FUN_00269288(moby, other, &vars->unk20, 0, &scratch.hit_type, scratch.motion, 0, 4);
     if (scratch.hit_type != 1 && moby->state != 16) {
         if (current_level_index == 10 && other != 0 && *(struct Moby **)((char *)other + 0x20) != 0 &&
-            (*(struct Moby **)((char *)other + 0x20))->oclass == 0x31a && D_0013D419 == 0) {
-            D_0013D419 = 1;
+            (*(struct Moby **)((char *)other + 0x20))->oclass == 0x31a && item_unlocked[0x11] == 0) {
+            item_unlocked[0x11] = 1;
             FUN_0029ae30(1, 0, 0);
             FUN_00272ad8(0x53d6, -1);
         }
@@ -498,7 +498,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
                 f32 speed;
                 f32 remaining;
                 moby->state = 15;
-                vel = &vars->vel;
+                vel = vars->vel.f;
                 frames = scale_game_frames(60);
                 speed = D_L06_00161FB0 * D_0015ED6C;
                 remaining = D_L06_00161FB4 * D_0015ED6C;
@@ -518,7 +518,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
                 f32 speed;
                 f32 remaining;
                 moby->state = 16;
-                vel = &vars->vel;
+                vel = vars->vel.f;
                 speed = D_L06_00161FB8 * D_0015ED6C;
                 remaining = D_L06_00161FBC * D_0015ED6C;
                 moby->flags &= ~0x1000;
@@ -529,7 +529,8 @@ void FUN_L06_002feb40(struct Moby *moby) {
             }
             angle = FUN_001f9e90(other->pos.x, other->pos.y);
             FUN_0026b368(angle, moby, vel, 9, 1, 0);
-            for (i = 9; i >= 0; i--) {
+            vel = scratch.velocity;
+            for (fragment_count = 9; fragment_count >= 0; fragment_count--) {
                 qcopy(scratch.position, &moby->pos);
                 scratch.position[2] += 2.5f;
                 scratch.position[0] += FUN_00266908(0.0f, 0.2f);
@@ -537,15 +538,15 @@ void FUN_L06_002feb40(struct Moby *moby) {
                 scratch.position[2] += FUN_00266908(0.0f, 0.2f);
                 angle = FUN_00266970();
                 speed = random_float_between(3.0f, 5.7f) * D_0015ED6C;
-                scratch.velocity[0] = FUN_001f9dc8(angle) * speed;
-                scratch.velocity[1] = FUN_001f9de0(angle) * speed;
-                scratch.velocity[2] = 0.0f;
+                vel[0] = FUN_001f9dc8(angle) * speed;
+                vel[1] = FUN_001f9de0(angle) * speed;
+                vel[2] = 0.0f;
                 angle = FUN_001f9e90(other->pos.x, other->pos.y);
-                scratch.velocity[0] += FUN_001f9dc8(angle) * (D_0015ED6C * 7.0f);
+                vel[0] += FUN_001f9dc8(angle) * (D_0015ED6C * 7.0f);
                 angle = FUN_001f9e90(other->pos.x, other->pos.y);
-                scratch.velocity[1] += FUN_001f9de0(angle) * (D_0015ED6C * 7.0f);
-                scratch.velocity[2] = random_float_between(3.0f, 8.5f) * D_0015ED6C;
-                fragment = (struct Moby *)FUN_L06_00300c60((char *)moby, scratch.position, scratch.velocity);
+                vel[1] += FUN_001f9de0(angle) * (D_0015ED6C * 7.0f);
+                vel[2] = random_float_between(3.0f, 8.5f) * D_0015ED6C;
+                fragment = (struct Moby *)FUN_L06_00300c60((char *)moby, scratch.position, vel);
                 if (fragment != 0) {
                     fragment->scale *= 0.4f;
                 }
@@ -646,10 +647,10 @@ void FUN_L06_002ff2c8(char *moby) {
         return;
     }
     if (frames == 20) {
-        f32 *weight = (f32 *)data;
+        f32 *weight = (f32 *)(data + 0x230);
         s32 remaining = 15;
         do {
-            f32 *value = (f32 *)((char *)weight + 0x23C);
+            f32 *value = weight + 3;
             if (*value >= 1.0f) {
                 *value = 0.98f;
             }
@@ -661,6 +662,7 @@ void FUN_L06_002ff2c8(char *moby) {
     offset = 0;
     {
         f32 *entry = (f32 *)(data + 0x230);
+        f32 *relative_ptr = relative;
         do {
             if (hero.vehicle_mode == 1) {
                 step = D_L06_00161FD0 * frame_time * 0.5f;
@@ -671,19 +673,17 @@ void FUN_L06_002ff2c8(char *moby) {
             point[2] = 0.0f;
             normalize_vector_xyz(point, point, step);
             add_vector_xyz(point, entry, point);
-            subtract_vector_xyz(relative, point, moby + 0x10);
-            alignment = dot_vectors_xyz(relative, data + 0x220);
+            subtract_vector_xyz(relative_ptr, point, moby + 0x10);
+            alignment = dot_vectors_xyz(relative_ptr, data + 0x220);
             if (alignment > 0.4f) {
                 point[2] -= frame_time + frame_time;
             } else if (alignment < 0.3f) {
                 point[2] += (frame_time + frame_time);
             }
-            if (!(entry[3] >= 1.0f) || FUN_001efa68(data + offset + 0x230, point, 2, 0, 0) == 0) {
-                if (point[3] < 1.0f) {
-                    approach_value(&point[3], 0.0f, frame_time + frame_time);
-                }
-            } else {
+            if (entry[3] >= 1.0f && FUN_001efa68(&data[offset + 0x230], point, 2, 0, 0) != 0) {
                 point[3] = 0.98f;
+            } else if (point[3] < 1.0f) {
+                approach_value(&point[3], 0.0f, frame_time + frame_time);
             }
             qcopy(entry, point);
             i++;
@@ -693,9 +693,11 @@ void FUN_L06_002ff2c8(char *moby) {
     }
     for (i = 0; i < 15; i = next) {
         f32 *entry = (f32 *)(data + 0x230 + i * 16);
-        f32 *next_entry = (f32 *)(data + 0x230 + (i + 1) * 16);
+        f32 *next_entry;
+        offset = i * 16;
         next = i + 1;
-        if (entry[3] >= 0.6f && next_entry[3] >= 0.6f) {
+        if (entry[3] >= 0.6f &&
+            (next_entry = (f32 *)(data + 0x230 + next * 16), next_entry[3] >= 0.6f)) {
             point[0] = fast_cos(*(f32 *)(moby + 0x48));
             point[1] = fast_sin_c(*(f32 *)(moby + 0x48));
             point[2] = 1.0f;
@@ -705,7 +707,7 @@ void FUN_L06_002ff2c8(char *moby) {
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = *(s16 *)(moby + 0xA6);
-            FUN_001efa68(entry, next_entry, 0, moby, &shot);
+            FUN_001efa68(&data[offset + 0x230], &data[offset + 0x240], 0, moby, &shot);
         }
     }
     enqueue_callback_list_1(FUN_L06_002ff680, moby);

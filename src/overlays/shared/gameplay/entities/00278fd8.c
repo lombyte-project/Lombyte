@@ -1285,9 +1285,9 @@ void FUN_L15_0029a570(void *mp, int flag) {
     int kind;
     int code;
     float angle;
+    float fall_angle;
     float speed;
     float fall_speed;
-    float vx, vy, vz;
     int amount;
     float pos[4];
     int *path;
@@ -1330,22 +1330,28 @@ void FUN_L15_0029a570(void *mp, int flag) {
         case 7:
         case 8:
             {
-            float frame_time_sq_value = D_0015ED70;
-            float frame_time_value = D_0015ED6C;
-            vz = D_L15_00161400 * frame_time_value;
-            vy = D_L15_001613F8 * frame_time_value;
-            vx = D_L15_001613FC * frame_time_value;
-            fall_speed = D_L15_001613F0 * frame_time_sq_value;
+                float frame_time_value;
+                float frame_time_sq_value;
+                float vx;
+                float vy;
+                float vz;
+                frame_time_value = D_0015ED6C;
+                frame_time_sq_value = D_0015ED70;
+                fall_speed = D_L15_001613F0 * frame_time_sq_value;
+                vx = D_L15_001613FC * frame_time_value;
+                vy = D_L15_001613F8 * frame_time_value;
+                vz = D_L15_00161400 * frame_time_value;
+                *(float *)(data + 0x80) = fall_speed;
+                *(float *)(data + 0x88) = vx;
+                *(float *)(data + 0x8C) = vy;
+                *(float *)(data + 0x84) = vz;
+                *(float *)(data + 0xC0) = 5.0f;
+                *(float *)(data + 0xC4) = 10.0f;
             }
-            *(float *)(data + 0x80) = fall_speed;
-            *(float *)(data + 0x88) = vx;
-            *(float *)(data + 0x8C) = vy;
-            *(float *)(data + 0xC0) = 5.0f;
-            *(float *)(data + 0xC4) = 10.0f;
-            *(float *)(data + 0x84) = vz;
-            angle = FUN_001f9e90(*(float *)(moby + 0x10) - *(float *)(*(char **)(hit + 0x20) + 0x10),
+            speed = FUN_001f9e90(*(float *)(moby + 0x10) - *(float *)(*(char **)(hit + 0x20) + 0x10),
                                   *(float *)(moby + 0x14) - *(float *)(*(char **)(hit + 0x20) + 0x14));
             *(u128 *)pos = *(u128 *)(hit + 0x10);
+            angle = speed;
             FUN_L00_0025ab48(pos, &angle, data + 0x88, data + 0x8C);
             FUN_L00_0025c558(moby, data + 0x70, 7, 1, 0, angle);
             moby[0x20] = 0x15;
@@ -1355,25 +1361,32 @@ void FUN_L15_0029a570(void *mp, int flag) {
         case 1:
         case 2:
             {
-            float frame_time_value = D_0015ED6C;
-            float frame_time_sq_value = D_0015ED70;
-            fall_speed = D_L15_001613F4 * frame_time_sq_value;
-            vz = D_L15_0016140C * frame_time_value;
-            vy = D_L15_00161404 * frame_time_value;
-            vx = D_L15_00161408 * frame_time_value;
+                float frame_time_value;
+                float frame_time_sq_value;
+                float vx;
+                float vy;
+                float vz;
+                frame_time_value = D_0015ED6C;
+                fall_speed = D_L15_001613F4;
+                frame_time_sq_value = D_0015ED70;
+                fall_speed = fall_speed * frame_time_sq_value;
+                vx = D_L15_00161408 * frame_time_value;
+                vy = D_L15_00161404 * frame_time_value;
+                vz = D_L15_0016140C * frame_time_value;
+                *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+                *(float *)(data + 0x80) = fall_speed;
+                *(float *)(data + 0x88) = vx;
+                *(float *)(data + 0x8C) = vy;
+                *(float *)(data + 0x84) = vz;
+                *(float *)(data + 0xC0) = 8.0f;
+                *(float *)(data + 0xC4) = 16.0f;
             }
-            *(unsigned short *)(moby + 0x34) &= 0xEFFF;
-            *(float *)(data + 0x80) = fall_speed;
-            *(float *)(data + 0x88) = vx;
-            *(float *)(data + 0x8C) = vy;
-            *(float *)(data + 0xC0) = 8.0f;
-            *(float *)(data + 0xC4) = 16.0f;
-            *(float *)(data + 0x84) = vz;
-            angle = FUN_001f9e90(*(float *)(moby + 0x10) - *(float *)(*(char **)(hit + 0x20) + 0x10),
+            speed = FUN_001f9e90(*(float *)(moby + 0x10) - *(float *)(*(char **)(hit + 0x20) + 0x10),
                                   *(float *)(moby + 0x14) - *(float *)(*(char **)(hit + 0x20) + 0x14));
             *(u128 *)pos = *(u128 *)(hit + 0x10);
-            FUN_L00_0025ab48(pos, &angle, data + 0x88, data + 0x8C);
-            FUN_L00_0025c558(moby, data + 0x70, 8, 1, 0, angle);
+            fall_angle = speed;
+            FUN_L00_0025ab48(pos, &fall_angle, data + 0x88, data + 0x8C);
+            FUN_L00_0025c558(moby, data + 0x70, 8, 1, 0, fall_angle);
             moby[0x20] = 0x17;
             moby[0xBC] = 2;
             data[0x67] = 0xF0;
@@ -2280,7 +2293,6 @@ extern float D_L15_001CE2F0[4][4];
 extern float D_L15_001CE330[4][4];
 
 int FUN_L15_002a3138(unsigned char *moby) {
-    extern int D_L15_001614C8_pairs[12] __asm__("D_L15_001614C8") __attribute__((sda));
     EffectQuad first, second;
     float transform[12];
     float position[4];
@@ -2304,7 +2316,7 @@ int FUN_L15_002a3138(unsigned char *moby) {
     }
     for (pass = 0; pass < 6; pass++) {
         int parity = pass & 1;
-        int *pairs = D_L15_001614C8_pairs;
+        int *pairs = &D_L15_001614C8;
         int level;
         first.alpha =
             (unsigned long long)pairs[4 + parity] |
@@ -2334,25 +2346,28 @@ int FUN_L15_002a3138(unsigned char *moby) {
         second.col[2] = level;
         for (corner = 0; corner < 4; corner++) {
             float *frequency = D_L15_001CE250[pass];
-            int *waveform = D_L15_001CE290[pass];
+            int waveform = pass * 8;
             float *uv = first.uv[corner];
-            float *base = D_L15_001CE2D0[corner];
+            int base = corner * 8;
             axis = 1;
             do {
                 int limit, value;
                 float angle, delta;
+                float step = 0.125f;
                 axis--;
                 limit = truncate_float_2a3138(*frequency * 360.0f);
-                angle = integer_to_float_2a3138(*(volatile int *)0x0015f3f8 % limit)
+                angle = integer_to_float_2a3138(*(int *)0x0015f3f8 % limit)
                     / *frequency - 180.0f;
                 frequency++;
-                value = *waveform++;
+                value = *(int *)((char *)D_L15_001CE290 + waveform);
+                waveform += 4;
                 if (value != 0) {
-                    delta = fast_cos_2a3138(angle * 0.017453292f) * 0.125f;
+                    delta = fast_cos_2a3138(angle * 0.017453292f) * step;
                 } else {
-                    delta = fast_sin_2a3138(angle * 0.017453292f) * 0.125f;
+                    delta = fast_sin_2a3138(angle * 0.017453292f) * step;
                 }
-                *uv++ = *base++ + delta;
+                *uv++ = *(float *)((char *)D_L15_001CE2D0 + base) + delta;
+                base += 4;
             } while (axis >= 0);
         }
         for (component = 0; component < 2; component++) {
@@ -2476,9 +2491,6 @@ void FUN_L15_002a7628(char *moby) {
     *(OvlQuad *)q.v[3] = *(OvlQuad *)D;
     draw_geometry_quad(&q, 0, 0);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002bddb0.s", FUN_L15_002bddb0);
-#else
 typedef struct {
     Vec4 origin;
     s32 trigger;
@@ -2529,6 +2541,7 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         {
         union { u32 bits; f32 value; } triple;
         f32 increment;
+        f32 scale;
         travel = vars->travel;
         increment = (moby->scale * 3.0f / moby->pclass->scale) / 3.0f * frame_time;
         increment = reversed ? -increment : increment;
@@ -2539,8 +2552,11 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         add_vector_door(&next, &vars->origin, &offset);
         *(u128 *)&moby->pos = next.q;
         magnitude = FUN_001f99c0(vars->travel);
+        scale = moby->scale;
         triple.bits = 0x40400000;
-        if (!(moby->scale * triple.value / moby->pclass->scale < magnitude))
+        __builtin_memcpy(&step, &triple.bits, sizeof(step));
+        step = step + 0.0f;
+        if (!(scale * step / moby->pclass->scale < magnitude))
             return;
         if (vars->trigger != -1) {
             moby->state = 3;
@@ -2594,7 +2610,6 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         }
     }
 }
-#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cb4c8.s", FUN_L15_002cb4c8);
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */
 

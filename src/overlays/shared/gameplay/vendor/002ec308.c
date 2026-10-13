@@ -996,15 +996,11 @@ int FUN_L02_002fb9c8(char *moby) {
             unsigned int entry = *group;
             char *group_base = (char *)D_L02_0015FFD8;
             target = group_base + ((entry & 0x7fff) << 8);
-            if (*(signed char *)(target + 0x20) < 0) {
-                char *group_target;
-                do {
-                    group++;
-                    if ((int)(entry << 16) < 0) goto invalid;
-                    entry = *group;
-                    group_target = group_base + ((entry & 0x7fff) << 8);
-                } while (*(signed char *)(group_target + 0x20) < 0);
-                target = group_target;
+            while (*(signed char *)(target + 0x20) < 0) {
+                group++;
+                if ((int)(entry << 16) < 0) goto invalid;
+                entry = *group;
+                target = group_base + ((entry & 0x7fff) << 8);
             }
         }
     } else {
@@ -1134,14 +1130,16 @@ int FUN_L02_002fb9c8(char *moby) {
     if (*(float *)(data + 0x4c) != 0.0f)
         follow_camera_set_offset_scale(0, *(float *)(data + 0x4c), 0.005f);
     if (*(short *)(data + 0x3c) == 3) {
+        float heading;
         FUN_L00_002e8568(0);
         FUN_L00_002e8620();
         FUN_L00_002e8648();
         FUN_L00_002e85d8(0.01f, 0.2f);
         if (*(short *)(data + 0x20) >= scale_game_frames(120))
-            FUN_L00_002e8590(0.03f, 0.2f);
+            heading = 0.03f;
         else
-            FUN_L00_002e8590(((float)*(short *)(data + 0x20) / FUN_001fa6c0(scale_game_frames(120))) * 0.02f + 0.01f, 0.2f);
+            heading = ((float)*(short *)(data + 0x20) / FUN_001fa6c0(scale_game_frames(120))) * 0.02f + 0.01f;
+        FUN_L00_002e8590(heading, 0.2f);
     }
     if ((unsigned short)(*(short *)(data + 0x3c) - 4) < 2) {
         FUN_L00_002e8568(0);
@@ -1150,21 +1148,26 @@ int FUN_L02_002fb9c8(char *moby) {
         FUN_L00_002e85d8(0.02f, 0.2f);
         FUN_L00_002e8450(0, 5.84f, 0.003f);
         if (*(short *)(data + 0x3c) == 4) {
+            float angle;
             FUN_001f9a28(vec, target + 0x10, &hero.motion.pos);
             angle = FUN_001f9e90(vec[0], vec[1]);
             if (hit && fast_difference_between_rotations(angle, *(float *)(data + 0x40)) > 1.9198622f) {
-                if (*(float *)(data + 0x34) == 0.0f)
-                    FUN_L00_002e8450(0, 8.0f, 0.003f);
-                else
+                if (*(float *)(data + 0x34) != 0.0f)
                     FUN_L00_002e8450(0, *(float *)(data + 0x34) + 3.36f, 0.003f);
+                else {
+                    goto zero_offset;
+invalid:
+                    *(short *)(data + 0x20) = -1;
+                    FUN_L00_002e8388(moby);
+                    return;
+zero_offset:
+                    FUN_L00_002e8450(0, 8.0f, 0.003f);
+                }
             }
         }
         FUN_L02_002f6570(176);
     }
     return;
-invalid:
-    *(short *)(data + 0x20) = -1;
-    FUN_L00_002e8388(moby);
 }
 #endif
 #define NOT_SDA __attribute__((section(".data")))

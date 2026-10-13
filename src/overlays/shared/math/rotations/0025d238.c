@@ -341,19 +341,15 @@ float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r
     g[0] = *out;
     return da70_25dcd8(e, g, 0.0f);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025df68.s", FUN_L00_0025df68);
-#else
 extern f32 path_distance_25df68(void *, void *, f32) __asm__("FUN_L00_0025da70");
 extern void clear_vector_25df68(void *) __asm__("FUN_001f99f8");
-extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, s32, f32)
+extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, f32, s32)
     __asm__("FUN_L00_0025d808");
 
 s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
                        s32 *segment, f32 *fraction, s32 wrap,
                        f32 limit, f32 step, f32 height_tolerance) {
     OvlQuad work[4];
-    OvlQuad *work_point;
     s32 current = 0;
     s32 best_segment;
     s32 start, end, previous, count;
@@ -361,46 +357,46 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     f32 current_fraction = 0.0f;
     f32 best_fraction;
     f32 distance, previous_distance, next_distance;
+    f32 expanded_limit;
 
     qcopy(&work[0], path + 4);
-    work_point = &work[1];
-    *work_point = *point;
+    work[1] = *point;
     best_fraction = 0.0f;
-    distance = path_distance_25df68(&work[0], work_point, height_tolerance);
+    distance = path_distance_25df68(&work[0], &work[1], height_tolerance);
     best_segment = 0;
     if (*path == 0) {
         clear_vector_25df68(nearest);
         return 0;
     }
 
-    limit = step + limit;
+    expanded_limit = step + limit;
     do {
         crossed = sample_path(path, &work[0], &current,
-                                   &current_fraction, wrap, step);
-        *work_point = *point;
-        next_distance = path_distance_25df68(&work[0], work_point, height_tolerance);
+                                   &current_fraction, step, wrap);
+        work[1] = *point;
+        next_distance = path_distance_25df68(&work[0], &work[1], height_tolerance);
         if (next_distance < distance) {
             distance = next_distance;
             best_segment = current;
             best_fraction = current_fraction;
         }
     } while (!crossed);
-    if (limit < distance)
+    if (expanded_limit < distance)
         return 0;
 
     start = best_segment;
     current_fraction = best_fraction;
-    sample_path(path, &work[0], &start, &current_fraction, wrap, -step);
+    sample_path(path, &work[0], &start, &current_fraction, -step, wrap);
     current_fraction = best_fraction;
     end = best_segment;
-    sample_path(path, &work[0], &end, &current_fraction, wrap, step);
+    sample_path(path, &work[0], &end, &current_fraction, step, wrap);
     end = FUN_L00_0025d7a0(path, end, 1, wrap);
     current = start;
     distance = 1000000000.0f;
     do {
         work[1] = *(OvlQuad *)(path + 4 + current * 4);
         work[2] = *point;
-        next_distance = path_distance_25df68(work_point, &work[2], height_tolerance);
+        next_distance = path_distance_25df68(&work[1], &work[2], height_tolerance);
         if (next_distance < distance) {
             distance = next_distance;
             best_segment = current;
@@ -410,26 +406,30 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
         current = (current + 1) % *path;
     } while (1);
 
-    count = *path;
     previous_distance = 1000000000.0f;
     if (best_segment > 0 || wrap) {
-        previous = (best_segment + (count - 1)) % count;
-        previous_distance = FUN_L00_0025dcd8(nearest, point,
+        f32 distance;
+        count = *path;
+        previous = count - 1;
+        previous = (best_segment + previous) % count;
+        distance = FUN_L00_0025dcd8(nearest, point,
             (OvlQuad *)(path + 4 + previous * 4),
             (OvlQuad *)(path + 4 + best_segment * 4), height_tolerance);
         *segment = previous;
-        work[1] = *(OvlQuad *)(path + 4 + previous * 4);
-        work[2] = *nearest;
-        *fraction = path_distance_25df68(work_point, &work[2], 0.0f);
-        count = *path;
+        /* Retail reads the segment vertex before the projected point. */
+        work[1] = *(volatile OvlQuad *)(path + 4 + previous * 4);
+        work[2] = *(volatile OvlQuad *)nearest;
+        *fraction = path_distance_25df68(&work[1], &work[2], 0.0f);
+        previous_distance = distance;
     }
+    count = *path;
     if (best_segment < count - 1 || wrap) {
-        next_distance = FUN_L00_0025dcd8(work_point, point,
+        next_distance = FUN_L00_0025dcd8(&work[1], point,
             (OvlQuad *)(path + 4 + best_segment * 4),
             (OvlQuad *)(path + 4 + ((best_segment + 1) % count) * 4),
             height_tolerance);
         if (next_distance < previous_distance) {
-            *nearest = *work_point;
+            qcopy_nc(nearest, &work[1]);
             *segment = best_segment;
             work[2] = *(OvlQuad *)(path + 4 + best_segment * 4);
             work[3] = *nearest;
@@ -438,7 +438,6 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     }
     return 1;
 }
-#endif
 extern f32 FUN_L00_00200228(void *, f32);
 /* Wraps angle a into -pi..pi. */
 f32 FUN_L00_0025e310(f32 a) {

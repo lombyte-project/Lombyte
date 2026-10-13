@@ -704,7 +704,7 @@ extern float FUN_001f9e90(float, float);
 extern int FUN_001f0b58(void);
 extern void FUN_001f9a68(void *, void *, float);
 extern float FUN_001f9af0(void *);
-extern int FUN_001efa68(void *, void *, int, void *, int);
+extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_0022da68(int, int, void *);
 extern int FUN_001f9770(void *);
@@ -727,23 +727,26 @@ void FUN_L03_002c4718(struct Moby *m)
     struct { int old_m98, old_owner98, old_m94, old_owner94; } saved;
     float angle;
     float distance;
+    float time_step;
+    float scale_step;
 
     if (m == NULL) return;
     d = (float *)m->pvars;
     if (d == NULL) return;
     pos = (Vec4 *)&m->pos;
     FUN_001f9740(d + 8);
-    qcopy(&old_pos, pos);
+    old_pos = *pos;
     switch (m->state) {
     case 0: {
-        m->scale += (m->pclass->scale - m->scale) * (frame_scale * 0.05f);
+        scale_step = frame_scale * 0.05f;
+        m->scale += (m->pclass->scale - m->scale) * scale_step;
         FUN_001f9a10(pos, pos, d);
         FUN_001f9bf8(&next_pos, d, 0.2f);
         FUN_001f9a10(&next_pos, &next_pos, pos);
         saved.old_m98 = m->collision_disable;
-        saved.old_m94 = m->collision;
         saved.old_owner94 = (*(struct Moby **)(d + 4))->collision;
         saved.old_owner98 = (*(struct Moby **)(d + 4))->collision_disable;
+        saved.old_m94 = m->collision;
         m->collision_disable = -1;
         (*(struct Moby **)(d + 4))->collision_disable = -1;
         m->collision = 0;
@@ -813,13 +816,15 @@ first_collision_timer:
         if (FUN_001f9770(d + 5)) m->state = 2;
         m->rot.x = FUN_L00_0025e310(d[0]);
         m->rot.y = FUN_L00_0025e310(d[1]);
+        time_step = frame_time_sq;
+        scale_step = frame_scale;
         m->collision_disable = saved.old_m98;
         (*(struct Moby **)(d + 4))->collision_disable = saved.old_owner98;
         m->collision = saved.old_m94;
         (*(struct Moby **)(d + 4))->collision = saved.old_owner94;
-        d[2] -= frame_time_sq * 9.8f;
-        m->rot.x += frame_scale * 0.01f;
-        m->rot.y += frame_scale * 0.02f;
+        d[2] -= time_step * 9.8f;
+        m->rot.x += scale_step * 0.01f;
+        m->rot.y += scale_step * 0.02f;
     break;
     }
     case 1: {
@@ -848,7 +853,10 @@ first_collision_timer:
     }
     }
     FUN_L00_00259fe8(m, m->scale * 0.3f / m->pclass->scale);
-    if (m->pos.z < 5.0f || m->pos.z > 500.0f) goto remove_moby;
+    if (m->pos.z < 5.0f || m->pos.z > 500.0f) {
+        FUN_0020c828(m);
+        return;
+    }
     if (m->pos.x < 5.0f) m->pos.x = 5.0f;
     if (m->pos.x > 1018.0f) m->pos.x = 1018.0f;
     if (m->pos.y < 5.0f) m->pos.y = 5.0f;

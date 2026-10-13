@@ -53,8 +53,7 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     u16 ammo_cost;
 
     FUN_00201560(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
-    price_table = D_L00_001C40B0;
-    FUN_001153fc(&box, 0, 0x18);
+    FUN_001153fc((void *)&box, 0, 0x18);
     box.half_x = x / 2;
     box.half_y = y / 2;
     box.left = x - 8;
@@ -65,55 +64,59 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     box.x = (s16)x;
 
     row = &vendor_menu.rows[vendor_menu.f58];
-    if (row->fD4 == 1 && weapon_ammo_counts[row->fD0] >= price_table[row->fD0].hE) {
+    if (row->fD4 == 1 && weapon_ammo_counts[row->fD0] >= D_L00_001C40B0[row->fD0].hE) {
         cost = 0x5236;
         goto message;
     }
     if (vendor_menu.rows[vendor_menu.f58].fD4 != 1)
         goto purchase;
     if (vendor_menu.f40)
-        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA;
+        ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].hA;
     else
-        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
+        ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].h8;
     if (current_bolt_count < ammo_cost) {
         cost = 0x5238;
         goto message;
     }
     FUN_0024ff08(vendor_menu.f20 + 0x500, 1);
-    box.style = 1;
-    box.half_y = 6;
-    FUN_001fc4a8(&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5237), -1);
+    cost = 1;
+    ((volatile VendorTextBox *)&box)->style = cost;
+    cost = 6;
+    ((volatile VendorTextBox *)&box)->half_y = cost;
+    FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5237), -1);
     FUN_00116248(text, D_L00_00161160, D_L00_00161E34);
     if (D_L00_00161E34 >= 100)
         cost = 0x17;
-    else if (D_L00_00161E34 >= 10)
-        cost = 0x1e;
     else {
-        FUN_001fb3f0(0x25, 0x32, 0x80f0f0f0ULL, text, -1);
-        goto quantity_done;
+        if (D_L00_00161E34 < 10)
+            goto quantity_small;
+        cost = 0x1e;
     }
     FUN_001fb3f0(cost, 0x32, 0x80f0f0f0ULL, text, -1);
+    goto quantity_done;
+quantity_small:
+    FUN_001fb3f0(0x25, 0x32, 0x80f0f0f0ULL, text, -1);
 quantity_done:
     FUN_001fb3f0(0xc, 0x32, 0x80f0f0f0ULL, D_L00_00161168, -1);
     FUN_001fb3f0(0x40, 0x32, 0x80f0f0f0ULL, D_L00_00161170, -1);
     if (vendor_menu.f40)
-        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA;
+        ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].hA;
     else
-        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
-    FUN_00116248(text, D_L00_00161160, D_L00_00161E34 * ammo_cost);
+        ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].h8;
+    FUN_00116248(text, D_L00_00161160, D_L00_00161E34 * (s32)ammo_cost);
     FUN_001fb888(0x40, 0x4c, 0x80f0f0f0ULL, text, -1);
     return;
 message:
-    FUN_001fc4a8(&box, 0x80f0f0f0ULL, FUN_00203ad8(cost), -1);
+    FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(cost), -1);
     return;
 purchase:
-    cost = discount_purchase_pricing[0] ? price_table[vendor_menu.rows[vendor_menu.f58].fD0].f4 : price_table[vendor_menu.rows[vendor_menu.f58].fD0].f0;
+    cost = discount_purchase_pricing[0] ? D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].f4 : D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].f0;
     if (current_bolt_count >= cost) {
         FUN_001fb3f0(6, 6, 0x80f0f0f0ULL, FUN_00203ad8(0x5239), -1);
         FUN_001fb3f0(2, 0x20, 0x80f0f0f0ULL, FUN_00203ad8(0x524e), -1);
         FUN_001fb3f0(2, 0x3e, 0x80f0f0f0ULL, FUN_00203ad8(0x524b), -1);
     } else {
-        FUN_001fc4a8(&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5238), -1);
+        FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5238), -1);
     }
 
 }
@@ -129,26 +132,27 @@ extern int D_L00_00161220 __attribute__((sda));
 
 void FUN_L00_002a3ec8(float x, float y, float radius, float strength,
                       float *tiles, int count, int additive) {
-    int tile_index = 0;
+    int tile_index;
     float *tile = tiles;
-    int row, column, first_column, last_column, last_row;
+    int row, column, first_column, last_column, last_row, first_row;
     int column_offset, far_row_offset;
     unsigned neighbor;
     float grid_x, grid_y, sample_x, sample_y, dy, value, magnitude, distance_squared;
+    tile_index = 0;
     if (count > 0) {
         do {
-            ++tile_index;
             grid_y = (y - (tile[1] + D_L00_001CA880[3])) / D_L00_001CA880[5];
             grid_x = (x - (tile[0] + D_L00_001CA880[2])) / D_L00_001CA880[4];
-            row = (int)(grid_y - radius);
-            if (row < 0) row = 0;
+            first_row = (int)(grid_y - radius);
+            if (first_row < 0) first_row = 0;
             last_row = (int)(grid_y + radius);
             if (last_row > 15) last_row = 15;
             last_column = (int)(grid_x + radius);
             if (last_column > 15) last_column = 15;
             first_column = (int)(grid_x - radius);
             if (first_column < 0) first_column = 0;
-            sample_y = tile[1] + D_L00_001CA880[3] + D_L00_001CA880[5] * (float)row;
+            sample_y = tile[1] + D_L00_001CA880[3] + D_L00_001CA880[5] * (float)first_row;
+            row = first_row;
             while (row <= last_row) {
                 sample_x = tile[0] + D_L00_001CA880[2] + D_L00_001CA880[4] * (float)first_column;
                 column = first_column;
@@ -159,14 +163,16 @@ void FUN_L00_002a3ec8(float x, float y, float radius, float strength,
                     do {
                         distance_squared = (x - sample_x) * (x - sample_x) + dy;
                         value = strength;
-                        if (!(distance_squared < 1.0f))
-                            value = strength / FUN_001f9988(distance_squared);
-                        if (additive == 0) {
+                        if (!(distance_squared < 1.0f)) {
+                            value = FUN_001f9988(distance_squared);
+                            value = strength / value;
+                        }
+                        if (additive != 0) {
+                            value += *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161220 * 0x5c0));
+                        } else {
                             magnitude = absolute_float(value);
                             if (magnitude < absolute_float(*(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161218 * 0x5c0))))
                                 value = *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161218 * 0x5c0));
-                        } else {
-                            value += *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161220 * 0x5c0));
                         }
                         *(float *)((char *)(tile + 0x14) + (column_offset + row * 0x40 + D_L00_00161218 * 0x5c0)) = value;
                         if (row < 2 && (neighbor = ((unsigned char *)tile)[12]) != 255) {
@@ -201,7 +207,7 @@ void FUN_L00_002a3ec8(float x, float y, float radius, float strength,
                         if (neighbor != 255 && column == 0 && row == 15)
                             *(float *)((char *)tiles + neighbor * 0x1190 + (D_L00_00161218 * 0x5c0) + 0x5d4) = *(float *)((char *)tile + D_L00_00161218 * 0x5c0 + 0x410);
                         neighbor = ((unsigned char *)tile)[19];
-                        if (neighbor != 255 && column == 15 && row == 15)
+                        if (neighbor != 255 && column == 15 && row == column)
                             *(float *)((char *)tiles + neighbor * 0x1190 + (D_L00_00161218 * 0x5c0) + 0x5d0) = *(float *)((char *)tile + D_L00_00161218 * 0x5c0 + 0x44c);
                         ++column;
                         far_row_offset += 4;
@@ -213,7 +219,7 @@ void FUN_L00_002a3ec8(float x, float y, float radius, float strength,
                 ++row;
             }
             tile += 0x464;
-        } while (tile_index < count);
+        } while (++tile_index < count);
     }
 }
 #endif

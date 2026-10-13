@@ -22,8 +22,7 @@ void update_visible_resident_objects(void) __asm__("FUN_00212e28");
  * its point of use. */
 void update_visible_resident_objects(void) {
     struct Moby *moby;
-    /* Fakematch: retail keeps the callback in $v1. */
-    register void (*callback)(struct Moby *) __asm__("$3");
+    void (*callback)(struct Moby *);
 
     visible_moby_list = build_resident_visibility_list();
     moby = visible_moby_list;
@@ -34,14 +33,7 @@ void update_visible_resident_objects(void) {
             }
             callback = moby->update;
             if (callback != 0) {
-                register struct Moby *arg __asm__("$4");
-
-                /* Fakematch: the empty asm keeps the argument move out of
-                 * both delay slots, as retail leaves them. */
-                __asm__ volatile("");
-                arg = moby;
-                __asm__ volatile("" : : "r"(arg));
-                callback(arg);
+                callback(moby);
             }
             if (!(((volatile struct Moby *)moby)->flags & MOBY_SKIP_BOUNDS)) {
                 refresh_resident_object_spatial_bounds(moby);

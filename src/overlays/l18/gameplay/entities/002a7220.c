@@ -1494,7 +1494,8 @@ void FUN_L18_002d82c0(struct Moby *moby) {
     case 1:
     case 2:
         break;
-    case 3:
+    case 3: {
+        float ratio;
         if (FUN_001f9740((int *)(data + 0x7C))) {
             ratio = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) /
                     (D_L18_00161A64 - D_L18_00161A60);
@@ -1505,15 +1506,15 @@ void FUN_L18_002d82c0(struct Moby *moby) {
             }
             ratio = 1.0f - ratio * 0.333f;
             if (*(int *)(data + 0x84)) {
-                speed = D_L18_00161A50;
+                ratio = D_L18_00161A50 * ratio;
             } else {
-                speed = D_L18_00161A58;
+                ratio = D_L18_00161A58 * ratio;
             }
-            ratio = speed * ratio;
             *(float *)(data + 0x6C) = ratio * DEG_TO_RAD * frame_time;
             moby->state = 4;
         }
         break;
+    }
     case 4:
         if (moby->visible && FUN_001f9740((int *)(data + 0x8C))) {
             FUN_L18_002d88b8(moby);
@@ -1534,8 +1535,9 @@ void FUN_L18_002d82c0(struct Moby *moby) {
             FUN_L18_002d88b8(moby);
             *(int *)(data + 0x8C) = scale_ticks(random_int_between(0xF, 0x1E));
         }
-        ratio = (convert_integer_to_float(D_L18_001623A8) - D_L18_00161A60) /
-                (D_L18_00161A64 - D_L18_00161A60);
+        gravity = convert_integer_to_float(D_L18_001623A8);
+        speed = D_L18_00161A64 - D_L18_00161A60;
+        ratio = (gravity - D_L18_00161A60) / speed;
         if (ratio > 1.0f) {
             ratio = 1.0f;
         } else if (ratio < 0.0f) {
@@ -1564,10 +1566,11 @@ fixed_gravity:
         gravity = gravity * ratio;
 apply_gravity:
         gravity = gravity * speed;
-        speed = *(volatile float *)(data + 0x70);
-        *(volatile float *)(data + 0x70) = speed - gravity;
+        ratio = *(volatile float *)(data + 0x70);
+        *(volatile float *)(data + 0x70) = ratio - gravity;
         *(float *)(data + 0x64) += *(volatile float *)(data + 0x70);
-        if (moby->pos.z < *(float *)(data + 0x60) - 10.0f) {
+        speed = *(float *)(data + 0x60) - 10.0f;
+        if (moby->pos.z < speed) {
             if (hero.ground_moby == moby && hero.air_frames.s == 0) {
                 if (hero.motion.pos.f[2] < D_L18_0015F638 && hero.state.current != 0x77) {
                     FUN_L18_00227dd0(0x77, 1);
@@ -2355,20 +2358,20 @@ extern unsigned char D_L18_001F29B8_9768[] __asm__("D_L18_001F29B8");
 
 void FUN_L18_002e9768(struct Moby *moby) {
     float *data = (float *)moby->pvars;
-    int state = moby->state;
-    int lifetime, spread;
+    long state = moby->state;
     float magnitude;
 
     switch (state) {
     case 0: {
-        unsigned char unkB0 = moby->mission;
-        if (unkB0 == 0xff ||
-            *((unsigned char *)D_0014C050_9768 + current_level_index * 16 + unkB0) != 0xff) {
-            moby->state = 1;
-            if (*(int *)data != 0) *(int *)(*(int *)data) = 3;
-            return;
+        int unkB0 = moby->mission;
+        if (unkB0 != 0xff) {
+            unkB0 += current_level_index * 16;
+            unkB0 = ((unsigned char *)D_0014C050_9768)[unkB0];
+            if (unkB0 == 0xff) goto remove;
         }
-        goto remove;
+        moby->state = 1;
+        if (*(int *)data != 0) *(int *)(*(int *)data) = 3;
+        return;
     }
     case 1:
         if (FUN_L00_0025a420(moby, 0x80000, 0)) {
@@ -2396,15 +2399,21 @@ void FUN_L18_002e9768(struct Moby *moby) {
                     position[2] += random_float_between_9768(0.0f, 6.0f);
                     first = (int *)colors + random_integer_below_9768(6);
                     second = (int *)colors2 + random_integer_below_9768(6);
-                    lifetime = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
-                    spread = random_int_between(scale_game_frames_9768(30), scale_game_frames_9768(45));
-                    spawn_particle_9768(1500000.0f, magnitude, position, &D_L18_0015F580,
-                    *first, *second,
-                    lifetime, spread, 0, 0);
-                    lifetime = random_int_between(scale_game_frames_9768(5), scale_game_frames_9768(10));
-                    spread = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
-                    spawn_particle_9768(1500000.0f, magnitude * 0.5f, position, &D_L18_0015F580,
-                    0x7fffffff, 0xffffff, lifetime, spread, 0, 0);
+                    {
+                        int lifetime, spread;
+                        lifetime = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
+                        spread = random_int_between(scale_game_frames_9768(30), scale_game_frames_9768(45));
+                        spawn_particle_9768(1500000.0f, magnitude, position, &D_L18_0015F580,
+                        *first, *second,
+                        lifetime, spread, 0, 0);
+                    }
+                    {
+                        int lifetime, spread;
+                        lifetime = random_int_between(scale_game_frames_9768(5), scale_game_frames_9768(10));
+                        spread = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
+                        spawn_particle_9768(1500000.0f, magnitude * 0.5f, position, &D_L18_0015F580,
+                        0x7fffffff, 0xffffff, lifetime, spread, 0, 0);
+                    }
                 } while ((float)i < 10.0f);
             }
             {
@@ -2441,14 +2450,13 @@ remove:
             remove_moby_9768(moby);
             return;
         } else {
-            float *pos = &moby->pos.x;
             float vector[4];
             float speed = random_float_between_9768(10.0f, 15.0f) * frame_time;
             moby->collision = 0;
             moby->state = 3;
             data[2] = FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
             data[3] = FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
-            subtract_vector_9768(data + 4, pos, (float *)&D_0013F3D0_9768);
+            subtract_vector_9768(data + 4, &moby->pos.x, (float *)&D_0013F3D0_9768);
             data[6] = 0.0f;
             scale_vector_9768(data + 4, data + 4, speed);
             vector_from_angles_9768(vector, speed, speed);
@@ -2560,6 +2568,8 @@ typedef struct {
     L18FlareUV uv[4];
     unsigned long long zero, texture, state, flags;
 } L18FlarePacket;
+typedef struct { char pad[0x140]; float position[4]; } L18FlareView;
+extern L18FlareView D_L18_00167680;
 extern float D_L18_001677C0_flare[] __asm__("D_L18_001677C0");
 extern L18FlareUV D_L18_001D9B50_flare[] __asm__("D_L18_001D9B50");
 extern L18FlareVector D_L18_001D9B70_flare[] __asm__("D_L18_001D9B70");
@@ -2567,8 +2577,8 @@ extern int D_L18_00161EE4_flare __asm__("D_L18_00161EE4") __attribute__((sda));
 extern int D_L18_00161EE8_flare __asm__("D_L18_00161EE8") __attribute__((sda));
 extern int D_L18_00161EEC_flare __asm__("D_L18_00161EEC") __attribute__((sda));
 extern int D_L18_00161EF0_flare __asm__("D_L18_00161EF0") __attribute__((sda));
-extern int D_L18_00161EF8_flare[] __asm__("D_L18_00161EF8") __attribute__((section(".sdata")));
-extern int D_L18_00161F08_flare[] __asm__("D_L18_00161F08") __attribute__((section(".sdata")));
+extern int D_L18_00161EF8_flare __asm__("D_L18_00161EF8") __attribute__((sda));
+extern int D_L18_00161F08_flare __asm__("D_L18_00161F08") __attribute__((sda));
 extern void clear_flare_vector(void *) __asm__("FUN_001f99f8");
 extern float flare_length(float, float) __asm__("FUN_001f9e90");
 extern float flare_dot(void *, void *) __asm__("FUN_001f9b80");
@@ -2582,52 +2592,57 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
     L18FlareVector basis[4][4];
     float *data = (float *)moby->pvars;
     int i;
-    volatile int j;
+    unsigned int j;
+    L18FlareVector *corner;
     float x, y;
+    void *pos = &moby->pos;
     clear_flare_vector(&axis);
-    x = D_L18_001677C0_flare[0] - moby->pos.x;
-    y = D_L18_001677C0_flare[1] - moby->pos.y;
+    x = moby->pos.x;
+    y = moby->pos.y;
+    x = D_L18_00167680.position[0] - x;
+    y = D_L18_00167680.position[1] - y;
     axis.z = flare_length(x, y);
-    axis.y = -flare_length(flare_dot(&moby->pos, D_L18_001677C0_flare),
-                            D_L18_001677C0_flare[2] - moby->pos.z);
+    axis.y = -flare_length(flare_dot(pos, D_L18_00167680.position),
+                            D_L18_00167680.position[2] - moby->pos.z);
     copy_flare_vector(&basis[0][0], &axis);
     copy_flare_vector(&basis[1][0], &axis);
     scale_vector_xyz(&basis[1][1], &basis[1][1], data[9]);
     scale_vector_xyz(&basis[1][2], &basis[1][2], data[9]);
-    *(OvlQuad *)&basis[0][3] = *(OvlQuad *)&moby->pos;
-    *(OvlQuad *)&basis[1][3] = *(OvlQuad *)&moby->pos;
+    qcopy(&basis[0][3], pos);
+    qcopy(&basis[1][3], pos);
     axis.x = data[11];
     copy_flare_vector(&basis[2][0], &axis);
     scale_vector_xyz(&basis[2][1], &basis[2][1], data[9]);
     scale_vector_xyz(&basis[2][2], &basis[2][2], data[9]);
-    *(OvlQuad *)&basis[2][3] = *(OvlQuad *)&moby->pos;
+    qcopy(&basis[2][3], pos);
     axis.x = data[12];
     copy_flare_vector(&basis[3][0], &axis);
     scale_vector_xyz(&basis[3][1], &basis[3][1], data[9]);
     scale_vector_xyz(&basis[3][2], &basis[3][2], data[9]);
-    *(OvlQuad *)&basis[3][3] = *(OvlQuad *)&moby->pos;
+    qcopy(&basis[3][3], pos);
     i = 0;
     do {
-        packet[i].texture = get_effect_texture(D_L18_00161F08_flare[i]);
+        packet[i].texture = get_effect_texture((&D_L18_00161F08_flare)[i]);
         packet[i].state = 0xff9000000260ULL;
-        packet[i].flags = D_L18_00161EE4_flare |
-                          ((unsigned long long)D_L18_00161EE8_flare << 2) |
-                          ((unsigned long long)D_L18_00161EEC_flare << 4) |
-                          ((unsigned long long)D_L18_00161EF0_flare << 6) |
-                          0x8000000000ULL;
+        packet[i].flags = D_L18_00161EE4_flare | ((unsigned long long)D_L18_00161EE8_flare << 2);
+        packet[i].flags |= (unsigned long long)D_L18_00161EEC_flare << 4;
+        packet[i].flags |= (unsigned long long)D_L18_00161EF0_flare << 6;
+        packet[i].flags |= 0x8000000000ULL;
         packet[i].zero = 0;
+        corner = &D_L18_001D9B70_flare[i * 4];
         j = 0;
         do {
             packet[i].uv[j].u = D_L18_001D9B50_flare[j].u;
             packet[i].uv[j].v = D_L18_001D9B50_flare[j].v;
             if (i == 0) {
                 packet[i].color[j] = tween_flare_color(data[9],
-                    D_L18_00161EF8_flare[i] & 0xffffff, D_L18_00161EF8_flare[i]);
+                    (&D_L18_00161EF8_flare)[i] & 0xffffff, (&D_L18_00161EF8_flare)[i]);
             } else {
-                packet[i].color[j] = D_L18_00161EF8_flare[i];
+                packet[i].color[j] = (&D_L18_00161EF8_flare)[i];
             }
-            *(OvlQuad *)&packet[i].corner[j] = *(OvlQuad *)&D_L18_001D9B70_flare[i * 4 + j];
+            qcopy(&packet[i].corner[j], corner);
             j++;
+            corner++;
         } while (j < 4);
         i++;
     } while (i < 4);

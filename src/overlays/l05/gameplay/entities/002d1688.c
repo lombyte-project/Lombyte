@@ -282,8 +282,7 @@ state_zero:
 state_one:
     {
         path = D_L05_001B0930[*(int *)(data + 0x60)];
-        point = path + *(int *)(data + 0x68) * 16 + 0x10;
-        qcopy(v, point);
+        qcopy(v, path + *(int *)(data + 0x68) * 16 + 0x10);
         point = moby + 0x48;
         height = angle_2d1688(v[0] - *(float *)(moby + 0x10), v[1] - *(float *)(moby + 0x14));
         steer_2d1688(height, frame_time_sq * 3.1415927f, frame_time_sq * 3.1415927f,
@@ -342,49 +341,48 @@ set_timer:
         return;
     }
 state_three:
-    height = *(float *)(moby + 0x18);
-    if (hero.water_surface_z < height || *(float *)(data + 0x78) < 0.0f) {
-        if (hero.state.current != 0x72) {
-            qcopy(v, &hero.motion.pos);
-            v[2] = hero.water_surface_z;
-            FUN_L05_002d1fd8((int)moby, (char *)v);
-            set_camera_2d1688(&hero.motion.pos, &hero.motion.rot, 0x72, 0);
-        } else {
-            qcopy(&hero.motion.pos, moby + 0x10);
+    {
+        float speed;
+        if (hero.water_surface_z < *(float *)(moby + 0x18) || *(float *)(data + 0x78) < 0.0f) {
+            if (hero.state.current != 0x72) {
+                qcopy_nc(v, &hero.motion.pos);
+                v[2] = hero.water_surface_z;
+                FUN_L05_002d1fd8((int)moby, (char *)v);
+                set_camera_2d1688(&hero.motion.pos, &hero.motion.rot, 0x72, 0);
+            } else {
+                qcopy(&hero.motion.pos, moby + 0x10);
+            }
+            hero.unk20A5 = one;
+            hero.motion.pos.f[2] += 20.0f;
         }
-        hero.unk20A5 = one;
-        hero.motion.pos.f[2] += 20.0f;
-    }
-    height = *(float *)(moby + 0x18) + *(float *)(data + 0x78);
-    speed = frame_time_sq * 10.0f;
-    *(float *)(moby + 0x18) = height;
-    height = frame_time + frame_time;
-    speed = *(float *)(data + 0x78) - speed;
-    *(float *)(data + 0x78) = speed;
-    if (speed < height) {
-        fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
-        steer_2d1688(1.5533431f, frame_time_sq * 12.566371f,
-                      frame_time_sq * 12.566371f, frame_time * 25.132742f,
-                      moby + 0x44, data + 0x70);
-        copy_direction_2d1688(moby + 0xc0, moby + 0x40);
-        fast_vec_normalize((*(float *)&D_L05_00161388), w, moby + 0xe0);
-        fast_vec_sub(z, w, v);
-        fast_vec_sub(moby + 0x10, moby + 0x10, z);
-    }
-    if (*(float *)(data + 0x78) < 0.0f) {
-        if (*(float *)(moby + 0x18) < hero.water_surface_z && *(unsigned char *)(moby + 0xbc) == 0) {
-            *(unsigned char *)(moby + 0xbc) = 1;
-            effect_2d1688(0, 0, moby);
+        *(float *)(moby + 0x18) += *(float *)(data + 0x78);
+        speed = *(float *)(data + 0x78) - frame_time_sq * 10.0f;
+        *(float *)(data + 0x78) = speed;
+        if (speed < frame_time + frame_time) {
             fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
-            fast_vec_add(v, v, moby + 0x10);
-            v[2] = hero.water_surface_z;
-            FUN_L05_002d1fd8((int)moby, (char *)v);
+            steer_2d1688(1.5533431f, frame_time_sq * 12.566371f,
+                          frame_time_sq * 12.566371f, frame_time * 25.132742f,
+                          moby + 0x44, data + 0x70);
+            copy_direction_2d1688(moby + 0xc0, moby + 0x40);
+            fast_vec_normalize((*(float *)&D_L05_00161388), w, moby + 0xe0);
+            fast_vec_sub(z, w, v);
+            fast_vec_sub(moby + 0x10, moby + 0x10, z);
+        }
+        if (*(float *)(data + 0x78) < 0.0f) {
+            if (*(float *)(moby + 0x18) < hero.water_surface_z && *(unsigned char *)(moby + 0xbc) == 0) {
+                *(unsigned char *)(moby + 0xbc) = 1;
+                effect_2d1688(0, 0, moby);
+                fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
+                fast_vec_add(v, v, moby + 0x10);
+                v[2] = hero.water_surface_z;
+                FUN_L05_002d1fd8((int)moby, (char *)v);
+            }
         }
         if (*(float *)(data + 0x78) < 0.0f &&
             *(float *)(moby + 0x18) < *(float *)(data + 0x74) - 8.0f) sound_2d1688();
+        if ((*(unsigned char *)(moby + 0x70) & 2) != 0 && *(unsigned char *)(moby + 0x53) != 1)
+            set_action_2d1688(moby, 1, 0, timer_2d1688(10));
     }
-    if ((*(unsigned char *)(moby + 0x70) & 2) != 0 && *(unsigned char *)(moby + 0x53) != 1)
-        set_action_2d1688(moby, 1, 0, timer_2d1688(10));
 }
 #endif
 
@@ -815,7 +813,8 @@ void FUN_L05_002d7920(char *moby) {
             packet[i].uv[j][0] = D_L05_001CDD70[j][0];
             packet[i].uv[j][1] = D_L05_001CDD70[j][1];
             ratio = convert_integer_to_float(i + 1 - (j >> 1)) / (D_L05_001613E0 + phase);
-            ratio = ratio > 1.0f ? 1.0f : (ratio < 0.0f ? 0.0f : ratio);
+            if (ratio > 1.0f) ratio = 1.0f;
+            else if (ratio < 0.0f) ratio = 0.0f;
             packet[i].color[j] = interpolate_color_7920(ratio, D_L05_00161408, D_L05_0016140C);
         }
     }
@@ -833,17 +832,19 @@ void FUN_L05_002d7920(char *moby) {
                 for (frame = 0; frame < *(short *)(data + 0x320); frame++) {
                     int i;
                     int vertex_index;
-                    char *vertices = (char *)packet + frame * 0x90;
+                    int packet_offset = frame * 0x90;
                     vertex_index = (*(short *)(data + 0x322) - frame + 15) & 15;
                     for (i = 0; i < 3; i++) {
                         if (D_L05_001613F4 == 0) {
                             int k;
+                            char *vertices;
                             char *vertex_source = data + (i * 0x100 + 0x20);
                             for (k = 0; k < 4; k++) {
-                                transform_glow_vertex_7920(vertices + k * 0x10,
+                                transform_glow_vertex_7920((char *)packet + packet_offset + k * 0x10,
                                                            vertex_source + (((vertex_index + (k >> 1)) & 15) << 4),
                                                            (char *)matrix + (k & 1) * 0x10);
                             }
+                            vertices = (char *)packet + frame * 0x90;
                             draw_geometry_quad_7920(vertices, 0, 0);
                         }
                     }
@@ -1453,7 +1454,7 @@ extern void add_vector_304058(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void scale_vector_304058(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void scale_vector_304058(float, void *, void *) __asm__("FUN_001f9bf8");
 
 float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     Vec4 segment, result, from_point, normal, projection, cross, offset;
@@ -1461,7 +1462,7 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     float along;
     float segment_length;
     float best;
-    struct { s32 path_index; void *out; volatile int changed; } state;
+    struct { volatile s32 path_index; void *out; volatile int changed; } state;
     int i;
     int next_index;
     char *path;
@@ -1469,13 +1470,15 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     char **path_entry;
 
     state.path_index = path_index;
-    state.out = out;
     state.changed = 0;
+    *(void * volatile *)&state.out = out;
     best = 512.0f;
     qcopy_nc(&from_point, position);
+    /* Retain the saved-index read; the first lookup uses the incoming index. */
+    (void)state.path_index;
     path_offset = path_index * 4;
-    i = 0;
-    if (state.changed < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1) do {
+    i = state.changed;
+    if (i < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1) do {
         int next;
         int segment_offset = i * 16;
         next_index = i + 1;
@@ -1492,7 +1495,7 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
         subtract_vector_304058(&normal, *path_entry + (segment_offset + 0x20),
                                *path_entry + next);
         normal.f[2] = 0.0f;
-        scale_vector_304058(&projection, &normal, 1.0f);
+        scale_vector_304058(1.0f, &projection, &normal);
         fast_vec_cross(&cross, &segment, &projection);
         separation = absolute_float_304058(cross.f[2]);
         if (separation < best)
@@ -1505,12 +1508,12 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
             if (!(fast_vec_length(&segment) < reach))
                 goto loop_next;
             state.changed = 1;
-            scale_vector_304058(&result, &segment, reach);
+            scale_vector_304058(reach, &result, &segment);
         } else {
             state.changed = 1;
-            scale_vector_304058(&offset, &projection, along);
+            scale_vector_304058(along, &offset, &projection);
             subtract_vector_304058(&result, &segment, &offset);
-            scale_vector_304058(&result, &result, reach);
+            scale_vector_304058(reach, &result, &result);
             add_vector_304058(&result, &result, &offset);
         }
         add_vector_304058(&from_point, &result,

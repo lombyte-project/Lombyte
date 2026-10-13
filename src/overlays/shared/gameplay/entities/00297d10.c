@@ -167,6 +167,8 @@ extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_001f7d30(void *, int, int);
 extern char D_L06_00167540[];
 extern char D_L06_00167400[];
+typedef struct { char pad[0x140]; float position[4]; } L06ReferencePosition;
+extern L06ReferencePosition referencePosition __asm__("D_L06_00167400");
 extern float D_L06_001D3290[][4] __attribute__((section(".data")));
 extern short D_L06_001D3620[][8] __attribute__((section(".data")));
 extern float D_L06_001D38C0[][2] __attribute__((section(".data")));
@@ -181,7 +183,10 @@ typedef struct {
     int word70, word74, word78, word7C, word80, word84, word88;
     float float8C;
 } L06BackdropGlobals;
-extern L06BackdropGlobals D_L06_00161C64_globals __asm__("D_L06_00161C64") __attribute__((sda));
+extern int D_L06_00161C64_globals[] __asm__("D_L06_00161C64") __attribute__((sda));
+
+/* Word offsets within the checked shared globals base. */
+enum { word70 = 3, word74, word78, word7C, word80, word84, word88, float8C };
 
 typedef struct {
     float corner[4][4];
@@ -212,8 +217,8 @@ void FUN_L06_002d8738(char *moby) {
     pos[2] = *(float *)(moby + 0x18);
     pos[3] = 1.0f;
     near = 0;
-    if (FUN_001f99c0(*(float *)(D_L06_00167400 + 0x140) - pos[0]) < 16.0f &&
-        FUN_001f99c0(*(float *)(D_L06_00167400 + 0x144) - *(float *)(moby + 0x14)) < 16.0f) {
+    if (FUN_001f99c0(referencePosition.position[0] - pos[0]) < 16.0f &&
+        FUN_001f99c0(referencePosition.position[1] - *(float *)(moby + 0x14)) < 16.0f) {
         near = 1;
     }
     if (near) {
@@ -223,15 +228,21 @@ void FUN_L06_002d8738(char *moby) {
             FUN_001f9a28(direction, D_L06_001D4530[i], D_L06_00167540);
             FUN_001f9bf8(direction, direction, 1.0f);
             FUN_001f9d20(normal, D_L06_001D3D30[i], matrix);
-            FUN_001f9bf8(normal, normal, D_L06_00161C64_globals.float8C);
+            FUN_001f9bf8(normal, normal, *(float *)&D_L06_00161C64_globals[float8C]);
             scale = FUN_001f9ab0(normal, direction);
             FUN_001f9a68(projected, normal, scale + scale);
             FUN_001f9a28(projected, direction, projected);
             FUN_001f9bf8(projected, projected, 1.0f);
             projected[2] += 1.0f;
             scale = FUN_001f9988(projected[2] + projected[2]);
-            uv[1] = projected[1] / (scale + scale) + 0.5f;
-            uv[0] = projected[0] / (scale + scale) + 0.5f;
+            {
+                float x = projected[0];
+                float y = projected[1];
+                y = y / (scale + scale) + 0.5f;
+                x = x / (scale + scale) + 0.5f;
+                uv[1] = y;
+                uv[0] = x;
+            }
             uv += 2;
         }
     } else {
@@ -243,16 +254,16 @@ void FUN_L06_002d8738(char *moby) {
             src++;
         }
     }
-    quad.tex = FUN_001f44b8(D_L06_00161C64_globals.word84);
+    quad.tex = FUN_001f44b8(D_L06_00161C64_globals[word84]);
     quad.unk80 = 0xff9000000260L;
-    quad.unk88 = (long)D_L06_00161C64_globals.word70 | (long)D_L06_00161C64_globals.word74 << 2 |
-                 (long)D_L06_00161C64_globals.word78 << 4 | (long)D_L06_00161C64_globals.word7C << 6 |
-                 (long)D_L06_00161C64_globals.word80 << 32;
+    quad.unk88 = (long)D_L06_00161C64_globals[word70] | (long)D_L06_00161C64_globals[word74] << 2 |
+                 (long)D_L06_00161C64_globals[word78] << 4 | (long)D_L06_00161C64_globals[word7C] << 6 |
+                 (long)D_L06_00161C64_globals[word80] << 32;
     quad.unk70 = 0;
-    quad.color[0] = D_L06_00161C64_globals.word88;
-    quad.color[1] = D_L06_00161C64_globals.word88;
-    quad.color[2] = D_L06_00161C64_globals.word88;
-    quad.color[3] = D_L06_00161C64_globals.word88;
+    quad.color[0] = D_L06_00161C64_globals[word88];
+    quad.color[1] = D_L06_00161C64_globals[word88];
+    quad.color[2] = D_L06_00161C64_globals[word88];
+    quad.color[3] = D_L06_00161C64_globals[word88];
     i = 0;
     do {
         FUN_001f9d20(facePos, D_L06_001D40C0[i], matrix);
@@ -261,17 +272,22 @@ void FUN_L06_002d8738(char *moby) {
         FUN_001f9bf8(direction, direction, 1.0f);
         FUN_001f9cf8(facePos, D_L06_001D3A90[i - 1], matrix);
         if (!(0.0f < FUN_001f9ab0(direction, facePos))) {
-            for (j = 0; j < 4; j++) {
-                short *indices = D_L06_001D3620[i - 1];
-                short vertex = indices[j * 2];
-                qcopy(quad.corner[j], D_L06_001D4530[vertex]);
+            short *indices = D_L06_001D3620[i - 1];
+            float (*corner)[4] = quad.corner;
+            float *uvOut = &quad.uv[0][0];
+            float *uvOutSecond = &quad.uv[0][1];
+            for (j = 3; j >= 0; corner++, uvOutSecond += 2, uvOut += 2, j--, indices += 2) {
+                short vertex = indices[0];
+                qcopy(corner, D_L06_001D4530[vertex]);
                 if (near) {
-                    quad.uv[j][0] = D_L06_001D4360[vertex][0];
-                    quad.uv[j][1] = D_L06_001D4360[vertex][1];
+                    float *uv = D_L06_001D4360[vertex];
+                    uvOut[0] = uv[0];
+                    *uvOutSecond = uv[1];
                 } else {
-                    short uv = indices[j * 2 + 1];
-                    quad.uv[j][0] = D_L06_001D38C0[uv][0];
-                    quad.uv[j][1] = D_L06_001D38C0[uv][1];
+                    short uv = indices[1];
+                    float *uvSource = D_L06_001D38C0[uv];
+                    uvOut[0] = uvSource[0];
+                    *uvOutSecond = uvSource[1];
                 }
             }
             FUN_001f7d30(&quad, 0, 0);
@@ -1825,11 +1841,11 @@ void FUN_L06_002f2250(void) {
         }
     }
     if (moby_count > 0) {
+        int j, k, last;
+        GbMoby *moby, *target;
+        GbVars *vars;
+        GbClass *cls;
         for (i = 0; i < moby_count; i++) {
-            GbMoby *moby;
-            GbMoby *target;
-            GbVars *vars;
-            GbClass *cls;
             moby = mobys[i];
             vars = moby->vars;
             *(short *)((char *)vars + 0x192) = 0;
@@ -1851,7 +1867,8 @@ void FUN_L06_002f2250(void) {
                                 start[2] += 0.25f;
                                 end[2] += 0.25f;
                                 if (collision_line_2f2250(start, end, 2, moby, 0) == 0 || D_L06_001745C0.f18 == target) {
-                                    unsigned short count;
+                                    float score;
+                                    unsigned int count;
                                     float *scores;
                                     score = FUN_L06_002f2148((char *)moby, (char *)target, 5);
                                     count = *(unsigned short *)((char *)vars + 0x192);
@@ -1859,7 +1876,6 @@ void FUN_L06_002f2250(void) {
                                     for (k = 0; k < *(short *)((char *)vars + 0x192); k++, scores++, count = *(unsigned short *)((char *)vars + 0x192)) {
                                         if (score < *scores) {
                                             GbMoby **target_list;
-                                            float *scores;
                                             last = 6;
                                             if ((short)count - 1 < 7) last = (short)count - 1;
                                             target_list = (GbMoby **)((char *)vars + 0x1a4) + last;
@@ -1874,8 +1890,9 @@ void FUN_L06_002f2250(void) {
                                         }
                                     }
                                     if (k < 8) {
-                                        ((GbMoby **)((char *)vars + 0x1a0))[k] = target;
+                                        unsigned short count;
                                         ((float *)((char *)vars + 0x1c0))[k] = score;
+                                        ((GbMoby **)((char *)vars + 0x1a0))[k] = target;
                                         count = *(unsigned short *)((char *)vars + 0x192) + 1;
                                         *(short *)((char *)vars + 0x192) = count;
                                         if ((short)count > 8) *(short *)((char *)vars + 0x192) = 8;
@@ -1892,7 +1909,6 @@ void FUN_L06_002f2250(void) {
     }
     target_count = 0;
     for (i = 0; i < moby_count; i++) {
-        GbVars *vars;
         vars = mobys[i]->vars;
         for (j = 0; j < *(short *)((char *)vars + 0x192); j++) {
             if (target_count != 50) {
@@ -1913,7 +1929,7 @@ void FUN_L06_002f2250(void) {
     }
     {
         GbMoby **moby_list = mobys;
-        for (i = moby_count; i > 0; i--) {
+        if (moby_count > 0) for (i = moby_count; i != 0; i--) {
             *(int *)((char *)(*moby_list++)->vars + 0x178) = 0;
         }
     }
@@ -1921,61 +1937,73 @@ void FUN_L06_002f2250(void) {
         float spacing = 0.5235988f;
         float max_angle = 1.7453293f;
         GbMoby **target_list = targets;
-        GbMoby **selected_list = selected;
 
-        for (i = 0; i < target_count; i++) {
-            index = 0;
-            weight = 0;
-            for (j = 0; j < target_count; j++) {
-                if (weights[j] > weight) {
-                    weight = weights[j];
-                    index = j;
+        i = 0;
+        do {
+            int index, weight;
+            {
+                int j;
+                index = 0;
+                weight = 0;
+                for (j = 0; j < target_count; j++) {
+                    if (weights[j] > weight) {
+                        weight = weights[j];
+                        index = j;
+                    }
                 }
             }
             weights[index] = -1;
             target = target_list[index];
+            count = 0;
+            n = 1;
             cls = FUN_002141f8_2f2250(target);
-            n = cls != 0 ? *(short *)((char *)cls + 4) : 1;
-            for (count = 0; count < n; count++) {
-                best_score = 9999999.0f;
-                best_moby = 0;
+            if (cls != 0) n = *(short *)((char *)cls + 4);
+            for (; count < n; count++) {
+                float best_score = 9999999.0f;
+                GbMoby *best_moby = 0;
+                GbMoby *moby;
+                GbVars *vars;
+                int k, last;
                 for (k = 0; k < moby_count; k++) {
-                    GbMoby *moby;
-                    GbVars *vars;
                     moby = mobys[k];
                     vars = moby->vars;
                     if (*(int *)((char *)vars + 0x178) == 0) {
                         last = *(short *)((char *)vars + 0x192);
-                        for (index = 0; index < last; index++) {
-                            if (((GbMoby **)((char *)vars + 0x1a0))[index] == target &&
-                                ((float *)((char *)vars + 0x1c0))[index] < best_score) {
-                                best_score = ((float *)((char *)vars + 0x1c0))[index];
-                                best_moby = moby;
-                            }
+                        if (last > 0) {
+                            float *scores = (float *)((char *)vars + 0x1c0);
+                            do {
+                                if (((GbMoby **)scores)[-8] == target && *scores < best_score) {
+                                    best_score = *scores;
+                                    best_moby = moby;
+                                }
+                                scores++;
+                                last--;
+                            } while (last != 0);
                         }
                     }
                 }
                 if (best_moby == 0) break;
                 *(GbMoby **)((char *)best_moby->vars + 0x178) = target;
-                selected_list[count] = best_moby;
+                selected[count] = best_moby;
             }
             if (count != 0) {
                 angle = (float)(count - 1) * spacing;
                 if (angle > max_angle) angle = 1.7453293f;
                 step = 0.0f;
                 if (count > 1) step = angle / (float)(count - 1);
-                angle *= -0.5f;
+                score = angle * -0.5f;
                 for (j = 0; j < count; j++) {
                     GbVars *vars;
                     vars = selected[j]->vars;
-                    vars->f17C = fast_add_rotations_2f2250(angle, (float)j * step);
+                    vars->f17C = fast_add_rotations_2f2250(score, (float)j * step);
                 }
             }
-        }
+            i++;
+        } while (i < target_count);
     }
     {
         GbMoby **moby_list = mobys;
-        for (i = moby_count; i > 0; i--) {
+        if (moby_count > 0) for (i = moby_count; i != 0; i--) {
             GbVars *vars = (*moby_list++)->vars;
             vars->f18C = GB_FRAME;
             vars->target = *(GbMoby **)((char *)vars + 0x178);

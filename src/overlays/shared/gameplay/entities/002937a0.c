@@ -399,18 +399,20 @@ void FUN_L08_002d3878(char *m) {
     Packet_002d3878 pk;
     Vec_002d3878 matrix[3], direction, pos, delta, angles;
     float length;
+    u64 tag;
     Vec_002d3878 *points;
     char *source0;
     char *source1;
     float *v;
     int i;
-    pk.tag[1] = FUN_001f44b8_002d3878(14);
-    pk.color[1] = D_0015187C_002d3878;
+    tag = FUN_001f44b8_002d3878(14);
     pk.color[0] = D_00151878_002d3878;
+    pk.color[1] = D_0015187C_002d3878;
     pk.color[2] = D_00151880_002d3878;
     pk.color[3] = D_00151884_002d3878;
-    pk.tag[0] = 5;
+    pk.tag[1] = tag;
     pk.tag[2] = 0xff9000000260ULL;
+    pk.tag[0] = 5;
     pk.tag[3] = 0x8000000048ULL;
     pk.uv[0] = 0.0f; pk.uv[1] = 0.0f;
     pk.uv[2] = 1.0f; pk.uv[3] = 0.0f;
@@ -419,81 +421,81 @@ void FUN_L08_002d3878(char *m) {
     get_moby_position_002d3878(m, 2, &pos);
     fast_vec_sub(&delta, *(char **)(data + 0x218) + 0x10, &pos);
     scale_vector_002d3878(3.0f, &delta);
-    delta.v[3] = 1.0f;
     delta.v[2] = (*(float *)(*(char **)(data + 0x218) + 0x18) + 0.25f) - pos.v[2];
+    delta.v[3] = 1.0f;
     length = fast_vec_length(&delta);
     clear_vector_002d3878(&angles);
     angles.v[1] = -angle_atan2_002d3878(vector_length_xy_002d3878(&delta), delta.v[2]);
     angles.v[2] = angle_atan2_002d3878(delta.v[0], delta.v[1]);
     make_matrix_002d3878(matrix, &angles);
-    *(Vec_002d3878 *)&direction = pos;
+    qcopy(&direction, &pos);
     direction.v[3] = 1.0f;
 
     clear_vector_002d3878(&pk.vertices[0]);
     pk.vertices[0].v[2] = D_L08_00161894_002d3878;
     pk.vertices[0].v[3] = 1.0f;
-    source0 = data + 0x1d0;
-    source1 = data + 0x1e0;
-    pk.vertices[1] = *(Vec_002d3878 *)(source0);
-    pk.vertices[1].v[0] = length * *(float *)(source0 + 0xc);
+    qcopy(&pk.vertices[1], data + 0x1d0);
+    pk.vertices[1].v[0] = length * *(float *)(data + 0x1dc);
     pk.vertices[1].v[2] += -0.25f;
     pk.vertices[1].v[3] = 1.0f;
     clear_vector_002d3878(&pk.vertices[2]);
     pk.vertices[2].v[2] = 0.0f; pk.vertices[2].v[3] = 1.0f;
-    pk.vertices[3] = *(Vec_002d3878 *)(source0);
-    pk.vertices[3].v[0] = length * *(float *)(source0 + 0xc);
+    qcopy(&pk.vertices[3], data + 0x1d0);
+    pk.vertices[3].v[0] = length * *(float *)(data + 0x1dc);
     pk.vertices[3].v[2] += 0.25f; pk.vertices[3].v[3] = 1.0f;
-    points = pk.vertices;
-    FUN_001f7d30_002d3878(points, matrix, 1);
-    v = points[1].v;
-    for (i = 1; i < 4; i += 2, v += 8) {
-        float y, z;
-        if (i < 2) { y = -0.25f; z = 0.25f; }
-        else { y = 0.25f; z = -0.25f; }
-        v[1] = v[1] + y;
-        v[2] = v[2] + z;
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    {
+        float *v = pk.vertices[1].v;
+        for (i = 1; i < 4; i += 2, v += 8) {
+            if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
+            else { v[1] += 0.25f; v[2] += -0.25f; }
+        }
     }
-    FUN_001f7d30_002d3878(points, matrix, 1);
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
 
-    pk.vertices[0] = *(Vec_002d3878 *)(source0);
-    pk.vertices[0].v[0] = length * *(float *)(source0 + 0xc);
+    qcopy(&pk.vertices[0], data + 0x1d0);
+    pk.vertices[0].v[0] = length * *(float *)(data + 0x1dc);
     pk.vertices[0].v[2] += -0.25f; pk.vertices[0].v[3] = 1.0f;
-    pk.vertices[1] = *(Vec_002d3878 *)(source1);
-    pk.vertices[1].v[0] = length * *(float *)(source1 + 0xc);
+    qcopy(&pk.vertices[1], data + 0x1e0);
+    pk.vertices[1].v[0] = length * *(float *)(data + 0x1ec);
     pk.vertices[1].v[2] += -0.25f; pk.vertices[1].v[3] = 1.0f;
-    pk.vertices[2] = *(Vec_002d3878 *)(source0);
-    pk.vertices[2].v[0] = length * *(float *)(source0 + 0xc);
+    qcopy(&pk.vertices[2], data + 0x1d0);
+    pk.vertices[2].v[0] = length * *(float *)(data + 0x1dc);
     pk.vertices[2].v[2] += 0.25f; pk.vertices[2].v[3] = 1.0f;
-    pk.vertices[3] = *(Vec_002d3878 *)(source1);
-    pk.vertices[3].v[0] = length * *(float *)(source1 + 0xc);
+    qcopy(&pk.vertices[3], data + 0x1e0);
+    pk.vertices[3].v[0] = length * *(float *)(data + 0x1ec);
     pk.vertices[3].v[2] += 0.25f; pk.vertices[3].v[3] = 1.0f;
-    FUN_001f7d30_002d3878(points, matrix, 1);
-    for (i = 0; i < 4; i++) {
-        v = points[i].v;
-        if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
-        else { v[1] += 0.25f; v[2] += -0.25f; }
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    {
+        float *v;
+        for (i = 0, v = pk.vertices[0].v; i < 4; i++, v += 4) {
+            if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
+            else { v[1] += 0.25f; v[2] += -0.25f; }
+        }
     }
-    FUN_001f7d30_002d3878(points, matrix, 1);
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
 
-    pk.vertices[0] = *(Vec_002d3878 *)(source1);
-    pk.vertices[0].v[0] = length * *(float *)(source1 + 0xc);
+    qcopy(&pk.vertices[0], data + 0x1e0);
+    pk.vertices[0].v[0] = length * *(float *)(data + 0x1ec);
     pk.vertices[0].v[2] += -0.25f; pk.vertices[0].v[3] = 1.0f;
     clear_vector_002d3878(&pk.vertices[1]);
-    pk.vertices[1].v[0] = length * *(float *)(source0 + 0xc) * 3.0f;
+    pk.vertices[1].v[0] = length * *(float *)(data + 0x1dc) * 3.0f;
     pk.vertices[1].v[2] += D_L08_00161894_002d3878; pk.vertices[1].v[3] = 1.0f;
-    pk.vertices[2] = *(Vec_002d3878 *)(source1);
-    pk.vertices[2].v[0] = length * *(float *)(source1 + 0xc);
+    qcopy(&pk.vertices[2], data + 0x1e0);
+    pk.vertices[2].v[0] = length * *(float *)(data + 0x1ec);
     pk.vertices[2].v[2] += 0.25f; pk.vertices[2].v[3] = 1.0f;
     clear_vector_002d3878(&pk.vertices[3]);
-    pk.vertices[3].v[0] = length * *(float *)(source0 + 0xc) * 3.0f;
+    pk.vertices[3].v[0] = length * *(float *)(data + 0x1dc) * 3.0f;
     pk.vertices[3].v[2] = 0.0f; pk.vertices[3].v[3] = 1.0f;
-    FUN_001f7d30_002d3878(points, matrix, 1);
-    v = points[0].v;
-    for (i = 0; i < 4; i += 2, v += 8) {
-        if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
-        else { v[1] += 0.25f; v[2] += -0.25f; }
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    {
+        float *v = pk.vertices[0].v;
+        for (i = 0; i < 4; i += 2, v += 8) {
+            if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
+            else { v[1] += 0.25f; v[2] += -0.25f; }
+        }
     }
-    FUN_001f7d30_002d3878(points, matrix, 1);
+    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
 }
 #endif
 #define NOT_SDA
@@ -646,9 +648,6 @@ void FUN_L08_002d4108(char *arg) {
     }
     FUN_001f7d30_002d4108(&pk, 0, 0);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e7eb0.s", FUN_L08_002e7eb0);
-#else
 extern char *create_moby_002e7eb0(int) __asm__("FUN_0020c4f8");
 extern void set_moby_color_002e7eb0(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void update_moby_002e7eb0(void *) __asm__("FUN_L00_00250df8");
@@ -670,9 +669,20 @@ extern void FUN_00218888_002e7eb0(void *, void *, void *, int, int, int, int, in
 extern int D_L08_0015F5CC_002e7eb0 __asm__("D_L08_0015F5CC");
 extern int D_0015ED84_002e7eb0 __asm__("D_0015ED84");
 typedef union { float float_value; int int_value; } Data_002e7eb0;
-extern Data_002e7eb0 D_L08_001618D8_002e7eb0[] __asm__("D_L00_001618D8") __attribute__((sda));
-
-#define DATA_002e7eb0(type, offset) (D_L08_001618D8_002e7eb0[((offset) - 0x47c) / 4].type##_value)
+/* Retail inherits GP 0x166c00: these scalar labels preserve its GP-relative loads.
+   Keep the existing timer name while binding it to the checked level-08 address. */
+extern float D_L08_001618D8_002e7eb0 __asm__("D_L08_00161CD8") __attribute__((sda));
+extern float D_L08_00161CE0_002e7eb0 __asm__("D_L08_00161CE0") __attribute__((sda));
+extern int D_L08_00161CF0_002e7eb0 __asm__("D_L08_00161CF0") __attribute__((sda));
+extern int D_L08_00161CF4_002e7eb0 __asm__("D_L08_00161CF4") __attribute__((sda));
+extern int D_L08_00161CF8_002e7eb0 __asm__("D_L08_00161CF8") __attribute__((sda));
+extern int D_L08_00161CFC_002e7eb0 __asm__("D_L08_00161CFC") __attribute__((sda));
+extern float D_L08_00161D04_002e7eb0 __asm__("D_L08_00161D04") __attribute__((sda));
+extern int D_L08_00161D08_002e7eb0 __asm__("D_L08_00161D08") __attribute__((sda));
+extern int D_L08_00161D0C_002e7eb0 __asm__("D_L08_00161D0C") __attribute__((sda));
+extern int D_L08_00161D10_002e7eb0 __asm__("D_L08_00161D10") __attribute__((sda));
+extern float D_L08_00161D14_002e7eb0 __asm__("D_L08_00161D14") __attribute__((sda));
+extern float D_L08_00161D18_002e7eb0 __asm__("D_L08_00161D18") __attribute__((sda));
 typedef struct { unsigned int words[4]; } Vec_002e7eb0 __attribute__((aligned(16)));
 
 char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
@@ -686,9 +696,12 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
     char *moby;
     char *data;
     float * volatile particle_position_ptr;
+    float *velocity_ptr, *offset_ptr, *matrix_row_ptr;
 
-    qcopy_nc(position_copy, position);
-    qcopy_nc(rotation_copy, rotation);
+    *(u128 *)position_copy = *(u128 *)position;
+    *(u128 *)rotation_copy = *(u128 *)rotation;
+    position = position_copy;
+    rotation = rotation_copy;
     moby = create_moby_002e7eb0(0x1ca);
     if (moby != 0) {
         data = *(char **)(moby + 0x78);
@@ -696,12 +709,12 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
         *(int *)(data + 0x10) = value;
         set_moby_color_002e7eb0(moby, 0xa0, 0xa0, 0xa0);
         *(volatile int *)(moby + 0x40) = 0;
-        *(volatile short *)(moby + 0x32) = 0xff;
-        *(volatile unsigned char *)(moby + 0x30) = 0xff;
-        *(volatile unsigned char *)(moby + 0x31) = 1;
-        *(float *)(moby + 0x44) = -angle_atan2_002e7eb0(vector_length_xy_002e7eb0(rotation_copy), rotation_copy[2]);
-        *(float *)(moby + 0x48) = angle_atan2_002e7eb0(rotation_copy[0], rotation_copy[1]);
-        qcopy((moby + 0x10), position_copy);
+        *(unsigned char *)(moby + 0x30) = 0xff;
+        *(short *)(moby + 0x32) = 0xff;
+        *(unsigned char *)(moby + 0x31) = 1;
+        *(float *)(moby + 0x44) = -angle_atan2_002e7eb0(vector_length_xy_002e7eb0(rotation_copy), rotation[2]);
+        *(float *)(moby + 0x48) = angle_atan2_002e7eb0(rotation[0], rotation[1]);
+        qcopy(moby + 0x10, position_copy);
         qcopy(data, rotation_copy);
         if (D_L08_0015F5CC_002e7eb0 & 1)
             *(volatile int *)(data + 0x1c) = 1;
@@ -709,41 +722,41 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
             *(volatile int *)(data + 0x1c) = -1;
         make_matrix_002e7eb0(matrix, moby + 0x40);
         i = 0;
-        if (0.0f < DATA_002e7eb0(float, 8)) {
+        if ((float)i < D_L08_00161CE0_002e7eb0) {
+            /* Retail intentionally uses the matrix third row as the particle input. */
             particle_position_ptr = matrix[2];
+            velocity_ptr = velocity;
+            offset_ptr = offset;
+            matrix_row_ptr = matrix[1];
             do {
                 angle = random_angle_002e7eb0();
                 {
-                    float spread = DATA_002e7eb0(float, 44);
+                    float spread = D_L08_00161D04_002e7eb0;
                     magnitude = random_float_between_002e7eb0(spread, spread + spread) * frame_time;
                 }
-                normalize_vector_xyz_002e7eb0(velocity, particle_position_ptr, magnitude * fast_cos_002e7eb0(angle));
-                normalize_vector_xyz_002e7eb0(offset, matrix[1], magnitude * fast_sin_002e7eb0(angle));
-                add_vector_xyz_002e7eb0(velocity, velocity, offset);
-                qcopy(offset, velocity);
-                velocity[3] = DATA_002e7eb0(float, 60);
-                offset[3] = DATA_002e7eb0(float, 64);
+                normalize_vector_xyz_002e7eb0(velocity_ptr, particle_position_ptr, magnitude * fast_cos_002e7eb0(angle));
+                normalize_vector_xyz_002e7eb0(offset_ptr, matrix_row_ptr, magnitude * fast_sin_002e7eb0(angle));
+                add_vector_xyz_002e7eb0(velocity_ptr, velocity_ptr, offset_ptr);
+                qcopy(offset_ptr, velocity_ptr);
+                velocity[3] = D_L08_00161D14_002e7eb0;
+                offset[3] = D_L08_00161D18_002e7eb0;
                 i++;
-                spawn_particle_002e7eb0(moby + 0x10, velocity, DATA_002e7eb0(int, 32), DATA_002e7eb0(int, 36),
+                spawn_particle_002e7eb0(moby + 0x10, velocity_ptr, D_L08_00161CF8_002e7eb0, D_L08_00161CFC_002e7eb0,
                     random_integer_002e7eb0(scale_game_frames_int_002e7eb0(10), scale_game_frames_int_002e7eb0(20)), 1, 20000.0f);
-                a = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)DATA_002e7eb0(int, 48), (float)DATA_002e7eb0(int, 48) * 1.2f)));
-                b = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)DATA_002e7eb0(int, 52), (float)DATA_002e7eb0(int, 52) * 1.2f)));
-                c = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)DATA_002e7eb0(int, 56), (float)DATA_002e7eb0(int, 56) * 1.5f)));
-                FUN_00218888_002e7eb0(moby + 0x10, velocity, offset, DATA_002e7eb0(int, 24), DATA_002e7eb0(int, 28), a, b, c, -1);
-            } while ((float)i < DATA_002e7eb0(float, 8));
+                a = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D08_002e7eb0, (float)D_L08_00161D08_002e7eb0 * 1.2f)));
+                b = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D0C_002e7eb0, (float)D_L08_00161D0C_002e7eb0 * 1.2f)));
+                c = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D10_002e7eb0, (float)D_L08_00161D10_002e7eb0 * 1.5f)));
+                FUN_00218888_002e7eb0(moby + 0x10, velocity_ptr, offset_ptr, D_L08_00161CF0_002e7eb0, D_L08_00161CF4_002e7eb0, a, b, c, -1);
+            } while ((float)i < D_L08_00161CE0_002e7eb0);
         }
         if (D_0015ED84_002e7eb0 == 12)
             *(int *)(data + 0x18) = scale_game_frames_int_002e7eb0(120);
         else
-            *(int *)(data + 0x18) = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(DATA_002e7eb0(float, 0)));
+            *(int *)(data + 0x18) = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(D_L08_001618D8_002e7eb0));
         update_moby_002e7eb0(moby);
     }
     return moby;
 }
-#endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e8210.s", FUN_L08_002e8210);
-#else
 extern void scale_vector_xyz_002e8210(void *, void *, float) __asm__("FUN_001f9a68");
 extern float vector_distance_xyz_002e8210(void *, void *) __asm__("FUN_001f9b48");
 extern float random_angle_002e8210(void) __asm__("FUN_00213308");
@@ -791,7 +804,10 @@ void FUN_L08_002e8210(char *moby) {
     add_vector_xyz(position_ptr, position_ptr, data);
     if (*(float *)(moby + 0x10) < 10.0f || *(float *)(moby + 0x14) < 10.0f ||
         *(float *)(moby + 0x18) < 10.0f || 500.0f < *(float *)(moby + 0x10) ||
-        500.0f < *(float *)(moby + 0x14) || 500.0f < *(float *)(moby + 0x18)) goto remove;
+        500.0f < *(float *)(moby + 0x14) || 500.0f < *(float *)(moby + 0x18)) {
+        mark_moby_for_removal_002e8210(moby);
+        return;
+    }
     scale_vector_xyz_002e8210(direction, data, -1.0f / D_L08_00161CDC);
     qcopy(position, position_ptr);
     i = 0;
@@ -866,7 +882,6 @@ collision:
     }
     mark_moby_for_removal_002e8210(moby);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -1645,11 +1660,11 @@ void FUN_L08_003024d8(char *m) {
         case 3: case 4: case 5: case 6: case 7: case 8: {
             float pose_scale, timer_scale;
             timer_scale = frame_time * 3.0f;
-            pose_scale = frame_time * D_0016218C_3024d8;
-            *(float *)(d + 0xc0) = 5.0f;
-            *(float *)(d + 0xc4) = 10.0f;
+            pose_scale = D_0016218C_3024d8 * frame_time;
             *(float *)(d + 0x88) = pose_scale;
             *(float *)(d + 0x8c) = timer_scale;
+            *(float *)(d + 0xc0) = 5.0f;
+            *(float *)(d + 0xc4) = 10.0f;
             angle = angle_atan2_3024d8(*(float *)(m + 0x10) - *(float *)(*(char **)(h + 0x20) + 0x10),
                 *(float *)(m + 0x14) - *(float *)(*(char **)(h + 0x20) + 0x14));
             *(u128 *)pos = *(u128 *)(h + 0x10);

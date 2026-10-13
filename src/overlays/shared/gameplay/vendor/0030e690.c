@@ -204,7 +204,11 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     int *tag;
     unsigned long long *q;
     int sx, sy;
+    unsigned long long packed_position;
+    volatile int saved_depth[2];
+    unsigned long long packed_depth;
 
+    saved_depth[0] = z_and_fog;
     center[0] = x;
     center[1] = y;
     vertical[0] = height * fast_sin(angle);
@@ -232,6 +236,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     q[4] = (unsigned long long)(red & 0xff) | ((unsigned long long)(green & 0xff) << 8) |
            ((unsigned long long)(blue & 0xff) << 16) | ((unsigned long long)(alpha & 0xff) << 24);
     q[5] = 0x100010;
+    packed_depth = (unsigned long long)saved_depth[0] << 32;
     texture_width <<= 4;
     texture_height <<= 20;
     sx = ftoi_g(top_left[0] * 16.0f);
@@ -241,9 +246,10 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     sy -= 8;
     sx -= 8;
     q[7] = texture_width;
-    q[6] = (unsigned long long)(sx) |
-           ((unsigned long long)(sy) << 16) |
-           ((unsigned long long)z_and_fog << 32);
+    packed_position = (unsigned long long)sx;
+    packed_position |= (unsigned long long)sy << 16;
+    packed_position |= packed_depth;
+    q[6] = packed_position;
     sx = ftoi_g(bottom_left[0] * 16.0f);
     sy = ftoi_g(bottom_left[1] * 16.0f);
     sy += screen_extent[5];
@@ -251,9 +257,10 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     sy -= 8;
     sx -= 8;
     q[9] = texture_height;
-    q[8] = (unsigned long long)(sx) |
-           ((unsigned long long)(sy) << 16) |
-           ((unsigned long long)z_and_fog << 32);
+    packed_position = (unsigned long long)sx;
+    packed_position |= (unsigned long long)sy << 16;
+    packed_position |= packed_depth;
+    q[8] = packed_position;
     sx = ftoi_g(top_right[0] * 16.0f);
     sy = ftoi_g(top_right[1] * 16.0f);
     sy += screen_extent[5];
@@ -261,9 +268,10 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     sy -= 8;
     sx -= 8;
     q[11] = (texture_height) + (texture_width);
-    q[10] = (unsigned long long)(sx) |
-            ((unsigned long long)(sy) << 16) |
-            ((unsigned long long)z_and_fog << 32);
+    packed_position = (unsigned long long)sx;
+    packed_position |= (unsigned long long)sy << 16;
+    packed_position |= packed_depth;
+    q[10] = packed_position;
     sx = ftoi_g(bottom_right[0] * 16.0f);
     sy = ftoi_g(bottom_right[1] * 16.0f);
     sy += screen_extent[5];
@@ -271,10 +279,11 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     sy -= 8;
     sx -= 8;
     q[13] = 0;
-    q[12] = (unsigned long long)(sx) |
-            ((unsigned long long)(sy) << 16) |
-            ((unsigned long long)z_and_fog << 32);
-    D_L11_001611C0_g += 0x70;
+    packed_position = (unsigned long long)sx;
+    packed_position |= (unsigned long long)sy << 16;
+    packed_position |= packed_depth;
+    q[12] = packed_position;
+    D_L11_001611C0_g = (*(volatile int *)&D_L11_001611C0_g) + 0x70;
 }
 #undef FUN_L11_00310cf8
 #endif
@@ -404,7 +413,7 @@ void FUN_L11_003112b8(void *m, char *t) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003192c8.s", FUN_L11_003192c8);
 #else
-extern unsigned char D_0015EDB2[];
+extern unsigned char D_0015EDB2;
 extern float D_L11_001F1490[];
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
@@ -430,7 +439,7 @@ int FUN_L11_003192c8(char *moby) {
     if ((unsigned char)moby[0x21] == 0xff) {
         return;
     }
-    if (D_0015EDB2[0] != 0) {
+    if (D_0015EDB2 != 0) {
         *(float *)&D_L11_001623F0_d = 16.0f;
     } else {
         *(float *)&D_L11_001623F0_d = 5.0f;
@@ -460,16 +469,12 @@ int FUN_L11_003192c8(char *moby) {
         colors = colors_base + i * 0x24;
         for (; j < 4; j++) {
             float t;
-            position[0] = source[0];
-            *position_y = source[1];
+            position[j * 2] = source[j * 2];
+            position_y[j * 2] = source[j * 2 + 1];
             t = integer_to_float(i - ((j >> 1) - 1)) / *(float *)&D_L11_001623F0_d + phase;
             if (t > 1.0f) t = 1.0f;
             else if (t < 0.0f) t = 0.0f;
-            *colors = tween_color(t, 0x8c28aa28, 0x144646);
-            position_y += 2;
-            position += 2;
-            source += 2;
-            colors++;
+            colors[j] = tween_color(t, 0x8c28aa28, 0x144646);
         }
     }
     FUN_001153fc(offset, 0, 0x20);

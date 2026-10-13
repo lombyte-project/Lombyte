@@ -62,6 +62,7 @@ extern unsigned char D_0015EDD0[] __attribute__((sda));
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023d198.s", FUN_L00_0023d198);
 #else
+extern int D_00141660_23d028[] __asm__("D_00141660");
 void FUN_L00_00260860_23d028(int, int) __asm__("FUN_L00_00260860");
 void FUN_L00_0023d3d8(int i) __asm__("FUN_L00_0023d3d8");
 void FUN_L00_0023d198(void) {
@@ -103,7 +104,7 @@ void FUN_L00_0023d198(void) {
         if (item_available[10] == 0) {
             FUN_L00_00260860_23d028(10, 1);
             D_0015EDD0[0] = 0x4A;
-            D_00141660 = 10;
+            D_00141660_23d028[0] = 10;
         }
         for (i = 0; i < 12; i++) {
             entry = D_0015EDD0[i];

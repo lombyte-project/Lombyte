@@ -42,7 +42,7 @@ extern float FUN_001f96b0(float);
 extern float scale_timer_random(float) __asm__("FUN_L02_0020ff48");
 extern int FUN_001fa6d0(float);
 extern int FUN_001f9770(void *);
-extern char *FUN_L00_0026b230(void *, void *, int, float);
+extern char *FUN_L00_0026b230(void *, void *, unsigned long long, float);
 extern void FUN_L00_0026d598(void *, void *, int);
 
 void FUN_L02_00264e70(char *slots, float *position, float *direction, float distance) {
@@ -84,7 +84,7 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
         FUN_001f9a10(offset, offset, adjusted);
         FUN_001f9a68(velocity, adjusted, FUN_002132a8(0.0f, 1.0f));
         FUN_001f9a10(velocity, velocity, origin);
-        shot = FUN_L00_0026b230(velocity, offset, i >= first_count, travel);
+        shot = FUN_L00_0026b230(velocity, offset, i < first_count ? 1ULL : 0ULL, travel);
         if (i == 2 && *(volatile int *)&save_shot) {
             int j;
             for (j = 0; j < 7; j++) {

@@ -456,11 +456,7 @@ void FUN_L10_002be858(unsigned char *moby) {
     float velocity[4];
     float offset[4];
     float angle;
-    float size;
-    float size_scaled;
-    int red, green, blue, color, life, spin;
     int i;
-    char *effect;
     if ((unsigned char)moby[0x20] == 0) {
         D_L10_001618A8 = 0;
         D_001618A4 = FUN_001f96f8(D_001618A4);
@@ -470,6 +466,8 @@ void FUN_L10_002be858(unsigned char *moby) {
     if (hero.vehicle_mode == 1 && *data != -1 && vector_distance(moby + 0x10, &hero.motion.pos) < 0.5f) {
         i = 9;
         do {
+            float size, size_scaled;
+            int red, green, blue, color, life, spin;
             i--;
             size = random_float_between_alt(0.1f, 1.0f);
             red = random_int_between(0x40, 0xff);
@@ -483,24 +481,30 @@ void FUN_L10_002be858(unsigned char *moby) {
             normalize_vector_xyz(position, position, random_float_between_alt(0.0f, D_0015ED6C));
             position[2] = random_float_between_alt(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = FUN_001f96f8(random_int_between(15, 30));
-            color = red | ((blue << 16) | ((green << 8) | 0x7f000000));
+            color = (blue << 16) | ((green << 8) | 0x7f000000) | red;
             size_scaled = size * 0.07f;
             size *= 0.7f;
             spin = random_integer_below(2) ? 1 : -1;
             FUN_L00_00272060(velocity, life, size_scaled, size, color, 0, spin, position, D_0015ED70 * 15.0f);
         } while (i >= 0);
         allocate_voice_for_target_entry(0, 0, (int)moby);
-        effect = (char *)D_L10_0015FFD8 + (*data << 8);
-        FUN_L00_00216f90(effect + 0x10, effect + 0x40, 0x43, 0);
-        effect = D_00167280;
-        D_001618A8 = D_001618A0;
-        if (*(short *)(effect + 0x86) == 0) {
-            short *timer = (short *)(*(char **)(effect + 0x70) + 0x20);
-            *timer = FUN_001f96f8(0x5a);
-            qcopy(effect + 0x40, effect);
+        {
+            char *effect = (char *)D_L10_0015FFD8 + (*data << 8);
+            FUN_L00_00216f90(effect + 0x10, effect + 0x40, 0x43, 0);
+        }
+        {
+            char *effect = D_00167280;
+            D_001618A8 = D_001618A0;
+            if (*(short *)(effect + 0x86) == 0) {
+                short *timer = (short *)(*(char **)(effect + 0x70) + 0x20);
+                *timer = FUN_001f96f8(0x5a);
+                qcopy(effect + 0x40, effect);
+            }
         }
         i = 9;
         do {
+            float size, size_scaled;
+            int red, green, blue, color, life, spin;
             *(OvlQuad *)velocity = 0;
             velocity[0] = random_float_between_alt(-1.0f, 1.0f);
             i--;
@@ -518,7 +522,7 @@ void FUN_L10_002be858(unsigned char *moby) {
             normalize_vector_xyz(position, position, random_float_between_alt(0.0f, D_0015ED6C));
             position[2] = random_float_between_alt(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = FUN_001f96f8(random_int_between(15, 30));
-            color = red | ((blue << 16) | ((green << 8) | 0x7f000000));
+            color = (blue << 16) | ((green << 8) | 0x7f000000) | red;
             size_scaled = size * 0.07f;
             size *= 0.7f;
             spin = random_integer_below(2) ? 1 : -1;
@@ -1973,6 +1977,7 @@ void FUN_L10_002da690(struct Moby *moby) {
     char scratch[(unsigned int)*(int *)(data + 4) * 0x40];
     /* The draw helper reads UVs at quad + 0x50 and packet words at quad + 0x70. */
     struct {
+        unsigned char vertices[0x50];
         float matrix1[16];
         union {
             unsigned char quad[0x90];
@@ -1980,8 +1985,6 @@ void FUN_L10_002da690(struct Moby *moby) {
         } packet;
         float rotation[16];
     } buffers __attribute__((aligned(16)));
-    u64 *words1 = (u64 *)buffers.matrix1;
-    u64 *words2 = (u64 *)buffers.packet.fields.matrix2;
     int i, group, row, vertex;
     float fade, phase;
     char *transform;
@@ -1996,15 +1999,12 @@ void FUN_L10_002da690(struct Moby *moby) {
         *(OvlQuad *)(transform + 0x30) = *(OvlQuad *)&moby->pos;
         *(float *)(transform + 0x38) += convert_integer_to_float_da690(i + 1) * *(float *)(data + 8);
     }
-    words1[5] = get_effect_texture_da690(14);
-    words1[6] = 0xff9000000260ULL;
-    words1[7] = ((u64)*(int *)0x0015b070) | ((u64)*(int *)0x0015b074 << 2) |
+    ((u64 *)buffers.matrix1)[5] = ((u64 *)buffers.packet.fields.matrix2)[5] = get_effect_texture_da690(14);
+    ((u64 *)buffers.matrix1)[6] = ((u64 *)buffers.packet.fields.matrix2)[6] = 0xff9000000260ULL;
+    ((u64 *)buffers.matrix1)[7] = ((u64 *)buffers.packet.fields.matrix2)[7] = ((u64)*(int *)0x0015b070) | ((u64)*(int *)0x0015b074 << 2) |
                 ((u64)*(int *)0x0015b078 << 4) | ((u64)*(int *)0x0015b07c << 6) | 0x8000000000ULL;
-    words1[4] = 0;
-    words2[4] = 0;
-    words2[5] = words1[5];
-    words2[6] = words1[6];
-    words2[7] = words1[7];
+    ((u64 *)buffers.matrix1)[4] = 0;
+    ((u64 *)buffers.packet.fields.matrix2)[4] = 0;
     for (i = 0; i < 4; i++) {
         buffers.matrix1[i * 2 + 1] = buffers.packet.fields.matrix2[i * 2 + 1] = ((float *)0x001d9ff4)[i * 2];
     }
@@ -2072,7 +2072,7 @@ extern void FUN_L10_0024a7f0(float, float, void *) __asm__("FUN_L00_00257d78");
 void FUN_L10_002dcc58(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float scratch[0xC80 / 4];
-    int group, item, row;
+    int group, item;
     float phase;
 
     switch (moby->state) {
@@ -2081,6 +2081,8 @@ void FUN_L10_002dcc58(struct Moby *moby) {
             delete_moby(moby);
         } else {
             int value = 0;
+            long increment = 45;
+            int item;
             D_L10_00161D68 = 0x16;
             D_L10_00161D64 = 0x2d;
             for (item = 0; item < 10; item++) {
@@ -2089,7 +2091,7 @@ void FUN_L10_002dcc58(struct Moby *moby) {
                 *(int *)(data + 0x12c78 + item * 4) = quotient + 11;
                 *(int *)(data + 0x12cf0 + item * 4) = quotient + 23;
                 *(int *)(data + 0x12d68 + item * 4) = quotient + 34;
-                value += 45;
+                value += increment;
             }
             moby->state = 1;
         }
@@ -2099,42 +2101,63 @@ void FUN_L10_002dcc58(struct Moby *moby) {
         *(float *)(data + 0x12de0) = phase;
         if (phase > 1.0f) *(float *)(data + 0x12de0) = phase - 1.0f;
         {
-        char *group_table = data + 0x12c00;
-        for (group = 0; group < 4; group++) {
-            for (item = 0; item < 10; item++) {
-                char *entry = group_table + item * 4;
-                char *base = data + group * 0x2580 + item * 0x10;
-                char *other = base + 0x9600;
-                char *buffer = (char *)scratch + item * 0x10;
-                if (FUN_001f25d0(entry) != 0) {
-                    char *dst = base;
-                    char *out = buffer;
-                    for (row = 0; row < 20; row++) {
-                        FUN_001f28c8(dst);
-                        *(float *)(dst + 0xc) = 1.0f;
-                        *(float *)(dst + 4) = (float)row * (D_L10_00161D58 / 20.0f) - D_L10_00161D58 * 0.5f;
-                        FUN_L10_0024a7f0(0.0f, D_L10_00161D54 * frame_time, out);
-                        dst += 0x140;
-                        out += 0xa0;
+            int group_table = 0x12c00;
+            for (group = 0; group < 4; group++) {
+                int group_offset = group * 0x2580;
+                int timer_offset = group * 0x78;
+                for (item = 0; item < 10; item++) {
+                    char *entry = data + (timer_offset + group_table) + item * 4;
+                    char *base = data + group_offset;
+                    char *other = data + (group_offset + 0x9600);
+                    char *buffer = (char *)scratch + item * 0x10;
+                    if (FUN_001f25d0(entry) != 0) {
+                        char *dst = data + (item * 0x10 + group_offset);
+                        char *current = base + item * 0x10;
+                        char *out = buffer;
+                        int row;
+                        for (row = 0; row < 20; row++) {
+                            float phase;
+                            float value;
+                            float quotient, half;
+                            FUN_001f28c8(current);
+                            current += 0x140;
+                            phase = D_L10_00161D58;
+                            value = D_L10_00161D54 * frame_time;
+                            quotient = phase / 20.0f;
+                            half = phase * 0.5f;
+                            *(float *)(dst + 0xc) = 1.0f;
+                            *(float *)(dst + 4) = (float)row * quotient - half;
+                            FUN_L10_0024a7f0(0.0f, value, out);
+                            dst += 0x140;
+                            out += 0xa0;
+                        }
+                        {
+                            char *dst = other + item * 0x10 + 0x140;
+                            char *current = buffer;
+                            char *out = buffer + 0x140;
+                            int row;
+                            for (row = 17; row >= 0; row--) {
+                                FUN_001f28e0(dst, current, current + 0xa0);
+                                FUN_001f28e0(dst, dst, out);
+                                FUN_001f2968(0.333f, dst, dst);
+                                dst += 0x140;
+                                current += 0xa0;
+                                out += 0xa0;
+                            }
+                        }
+                        *(int *)entry = D_L10_00161D64;
+                    } else {
+                        char *dst = base + item * 0x10 + 0x140;
+                        char *out = other + item * 0x10 + 0x140;
+                        int row;
+                        for (row = 17; row >= 0; row--) {
+                            FUN_001f28e0(dst, dst, out);
+                            dst += 0x140;
+                            out += 0x140;
+                        }
                     }
-                    for (row = 0; row < 18; row++) {
-                        char *dst = other + (row + 1) * 0x140;
-                        char *current = buffer + row * 0xa0;
-                        FUN_001f28e0(dst, current, current + 0xa0);
-                        FUN_001f28e0(dst, dst, buffer + 0x140 + row * 0xa0);
-                        FUN_001f2968(0.333f, dst, dst);
-                    }
-                    *(int *)entry = D_L10_00161D64;
-                } else {
-                    for (row = 1; row < 19; row++) {
-                        char *dst = base + row * 0x140;
-                        FUN_001f28e0(dst, dst, other + row * 0x140);
-                    }
-
                 }
             }
-            group_table += 0x78;
-        }
         }
         break;
     }

@@ -80,45 +80,55 @@ typedef struct {
     s32 smoothed;
 } HudCounter;
 
+#include "rnc/gameplay/hero.h"
+
+/* Retail accesses these names through the shared Hero base at 0x0013f350. */
+#define D_001413D4 hero.state.current
+#define D_0013F65E hero.air_frames.s
+#define D_0013F650 hero.unk300
+#define D_0013FA40 hero.unk6E0[4]
+#define D_0013FA5C (*(s32 *)&hero.pad_6FC[0x10])
+#define D_0013FBB4 hero.unk864
+#define D_0013FBF8 hero.unk8A8
+#define D_0013FA30 hero.unk6E0
+
 void FUN_L05_00262b58(HudCounter *e) {
     f32 value;
     s32 i;
     s32 *src;
     s32 *dst;
     s32 limit;
+    u8 timer;
     u8 *counter = &e->timer;
 
     value = (f32)e->smoothed;
     approach_value(&value, (f32)*e->value, 6.0f);
     e->smoothed = truncate_float_to_s32(value);
 
-    if (counter[2] == 1) goto state_one;
-    if (counter[2] >= 2) {
-        if (counter[2] > 3) return;
-        goto tail;
-    }
-    if (counter[2] != 0) return;
-    if (D_0013F65E < 6 || (f32)D_0013FA5C < 1.0f) return;
-    D_L05_0015FAD4 = D_0013FA5C;
-    D_L05_0015FAD8 = 0;
-    i = 3;
-    dst = &D_L05_0015FAEC;
-    do { *dst-- = 0; } while (--i >= 0);
-    counter[2] = 1;
-    counter[0] = 0;
-    counter[1] = D_L05_0015F87C;
-    return;
-state_one:
+    switch (counter[2]) {
+    case 0:
+        if (D_0013F65E < 6 || ((f32)D_0013FA5C < 1.0f)) return;
+        D_L05_0015FAD4 = D_0013FA5C;
+        D_L05_0015FAD8 = 0;
+        i = 3;
+        dst = &D_L05_0015FAEC;
+        do { *dst-- = 0; } while (--i >= 0);
+        counter[2] = 1;
+        counter[1] = D_L05_0015F87C;
+        counter[0] = 0;
+        break;
+    case 1:
         if (counter[0] < 10) counter[0]++;
         if (counter[1] != 0) counter[1]--;
         D_L05_0015FAD8 = D_0013FA40;
-        i = 3;
         src = D_0013FA30;
         dst = D_L05_0015FAE0;
         for (i = 0; i < 4; i++) dst[i] = src[i];
-        if (D_L05_0015FAD4 < D_0013FA5C) {
-            D_L05_0015FAD4 = D_0013FA5C;
-            counter[1] = D_L05_0015F87C;
+        limit = D_0013FA5C;
+        timer = D_L05_0015F87C;
+        if (D_L05_0015FAD4 < limit) {
+            D_L05_0015FAD4 = limit;
+            counter[1] = timer;
         }
         if (D_0013F650 == 0) {
             if ((u32)(D_001413D4 - 0x6d) > 2) return;
@@ -149,32 +159,50 @@ state_one:
             counter[1] = D_L05_0015F87C;
             counter[0] = scale_game_frames(0x3c);
         }
-        return;
-tail:
+        break;
+    case 2:
+    case 3:
 
-    if (counter[0] == 0) {
-        D_L05_0015FB00 = 0;
-        D_L05_0015FAD4 = 0;
-        D_L05_0015FAD8 = 0;
-        i = 3;
-        dst = &D_L05_0015FAEC;
-        do { *dst-- = 0; } while (--i >= 0);
-        counter[2] = 0;
-        counter[0] = 0;
-    } else if (counter[2] == 3 && counter[0] == scale_game_frames(0x6e)) {
-        D_0013FBF8 += D_L05_0015FB00;
-        D_0013FBB4 += D_L05_0015FB00 * 5;
-        limit = (s32)((f32)scale_game_frames(0x11) * 60.0f);
-        if (D_0013FBB4 > limit) {
-            D_0013FBB4 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
+        timer = counter[0];
+        if (timer == 0) {
+            D_L05_0015FB00 = 0;
+            D_L05_0015FAD4 = 0;
+            D_L05_0015FAD8 = 0;
+            i = 3;
+            dst = &D_L05_0015FAEC;
+            do { *dst-- = 0; } while (--i >= 0);
+            counter[2] = 0;
+            counter[0] = 0;
+        } else {
+            if (counter[2] == 3) {
+                if (timer == scale_game_frames(0x6e)) {
+                    D_0013FBF8 += D_L05_0015FB00;
+                    D_0013FBB4 += D_L05_0015FB00 * 5;
+                    if ((s32)((f32)scale_game_frames(0x11) * 60.0f) < D_0013FBB4) {
+                        D_0013FBB4 = (s32)((f32)scale_game_frames(0x11) * 60.0f);
+                    }
+                }
+            }
         }
+        counter[0]--;
     }
-    counter[0]--;
 }
+#undef D_001413D4
+#undef D_0013F65E
+#undef D_0013F650
+#undef D_0013FA40
+#undef D_0013FA5C
+#undef D_0013FBB4
+#undef D_0013FBF8
+#undef D_0013FA30
+
 #endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262f50.s", FUN_L05_00262f50);
 #else
+#include "rnc/gameplay/hero.h"
+
+extern s32 D_L05_0015FAE4, D_L05_0015FAE8, D_L05_0015FAEC;
 extern s32 D_001413DC;
 extern u8 D_0013FBFE;
 extern s32 D_L05_0015F5CC;
@@ -208,54 +236,59 @@ extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30"
 
 /* Draws the counter text and its icon, then the optional pulsing label. */
 s32 FUN_L05_00262f50(char *e) {
-    char buf[136];
+    char buf[128];
     s32 indices[4];
-    s32 x, y, color, shadow, value, group, i, count, period;
+    s32 x, y, shadow, value, group, i, count, period;
     f32 fade, pulse;
-    volatile f32 ratio;
+    f32 ratio;
+    s32 *src, *dst;
+    u32 state;
     u8 *q = (u8 *)e + 0x70;
-    u8 *volatile base14;
 
     fade = (f32)q[0] / 10.0f;
     if (fade > 1.0f) fade = 1.0f;
-    base14 = (u8 *)0x0013f350;
-    if (*(s32 *)(base14 + 0x208c) != 0x16) return *(s32 *)((u8 *)e + 0x58);
+    if (hero.state.control_mode != 0x16) return *(s32 *)((u8 *)e + 0x58);
     if (q[2] != 0) {
+        s32 color, shadow;
         sprintf_alt(buf, D_L05_0015F860, D_L05_0015FAD4 * 0x168);
         pulse = convert_integer_to_float(q[1]);
         period = scale_game_frames(*(s32 *)&D_L05_0015F87C);
         ratio = pulse / (f32)period;
-        color = D_L05_0015F8A0;
-        if (q[2] == 1)
+        if (q[2] == 1 || q[2] == 3)
             color = fast_tween_color(D_L05_0015F894, D_L05_0015F898, ratio);
-        else if (q[2] == 3)
-            color = fast_tween_color(D_L05_0015F894, D_L05_0015F898, ratio);
+        else color = D_L05_0015F8A0;
         shadow = truncate_float_to_s32(fade * 128.0f) << 24;
         color += shadow;
-        if ((u32)(q[2] - 1) < 2) {
-            font_print_center_large(D_L05_0015F8B4 + 1, D_L05_0015F8B8 + 1, shadow, buf, -1);
+        state = q[2];
+        state--;
+        if (state < 2) {
+            x = D_L05_0015F8B4 + 1;
+            y = D_L05_0015F8B8 + 1;
+            font_print_center_large(x, y, shadow, buf, -1);
             font_print_center_large(D_L05_0015F8B4, D_L05_0015F8B8, color, buf, -1);
             sprintf_alt(buf, D_L05_0015F8D0, D_L05_0015FAD8);
             font_print_center_large(D_L05_0015F8BC + 1, D_L05_0015F8C0 + 1, shadow, buf, -1);
             font_print_center_large(D_L05_0015F8BC, D_L05_0015F8C0, color, buf, -1);
-        } else if (q[2] == 3) {
-            group = -1;
+        } else if ((u8)(state + 1) == 3) {
+            value = -1;
             if (D_L05_0015FAD8 == 3) {
-                group = 0;
-                if (D_L05_0015FAE0[3] != 0) {
-                    group = 2;
-                    if (D_L05_0015FAE0[2] == 0) group = 1;
-                    else if (D_L05_0015FAE0[1] != 0) group = 3;
+                value = 0;
+                if (D_L05_0015FAEC != 0) {
+                    value = 2;
+                    if (D_L05_0015FAE8 == 0) value = 1;
+                    else if (D_L05_0015FAE4 != 0) value = 3;
                 }
-            } else if (D_L05_0015FAD8 == 4) group = 4;
-            if (group >= 0) {
-                if (D_L05_0015FAD4 < 4) i = (D_L05_0015FAD4 < 2) ^ 1;
-                else i = 2;
-                group += i * 5;
+            } else if (D_L05_0015FAD8 == 4) value = 4;
+            if (value >= 0) {
+                if (D_L05_0015FAD4 >= 4) i = 2;
+                else i = (D_L05_0015FAD4 < 2) ^ 1;
+                group = value + i * 5;
                 D_L05_0015FAF0 = group;
                 D_L05_0015FB00 = D_L05_0017E918[group];
                 count = 1;
-                for (i = 0; i < 3; i++) if ((&D_L05_0015FAF4)[i] == group) count++;
+                src = &D_L05_0015FAF4;
+                i = 2;
+                do { count += (*src++ == group); } while (--i >= 0);
                 D_L05_0015FB00 = D_L05_0015FB00 / count;
                 sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
                 draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, color, buf);
@@ -263,8 +296,15 @@ s32 FUN_L05_00262f50(char *e) {
                 draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8, color, buf);
             } else if (D_L05_0015FAD8 > 0) {
                 count = 0;
-                for (i = 0; i < 4 && count < D_L05_0015FAD8; i++)
-                    if (D_L05_0015FAE0[i] != 0) indices[count++] = i;
+                i = 0;
+                src = D_L05_0015FAE0;
+                dst = indices;
+                if (D_L05_0015FAD8 > 0) {
+                    do {
+                        if (*src++ != 0) { *dst++ = i; count++; }
+                        i++;
+                    } while (i < 4 && count < D_L05_0015FAD8);
+                }
                 if (D_L05_0015FAD8 == 1) {
                     D_L05_0015FB00 = D_L05_0015FAD4 * 10;
                     sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
@@ -286,17 +326,22 @@ s32 FUN_L05_00262f50(char *e) {
     *(s32 *)((u8 *)e + 0x58) = 0x100;
     *(s32 *)((u8 *)e + 0x5c) = 0x40;
     FUN_L00_00235a70((char *)e, &x, &y);
-    value = *(s32 *)((u8 *)e + 0x74) * 0xdd / *(s32 *)((u8 *)e + 8) + 0x1b;
-    FUN_L00_0023b6c0(get_icon_frame(0x7558, 1), x, y, value, 0x40, 0x80);
+    value = *(s32 *)((u8 *)e + 0x74);
+    value *= 0xdd;
+    value /= *(s32 *)((u8 *)e + 8);
+    value += 0x1b;
+    group = get_icon_frame(0x7558, 1);
+    FUN_L00_0023b6c0(group, x, y, value, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 0), x, y, 0x100, 0x40, 0x80);
-    if (scale_game_frames(0x78) < *(u8 *)(base14 + 0x8ae)) {
+    value = hero.pad_8AE[0];
+    if (scale_game_frames(0x78) < value) {
         period = scale_game_frames(0x3c);
         pulse = fast_sin(convert_integer_to_float(D_L05_0015F5CC % period) / (f32)period *
                          6.28318f - 3.14159f);
-        color = fast_tween_color(D_L05_0015F8AC, D_L05_0015F8B0, pulse * 0.5f + 0.5f);
+        shadow = fast_tween_color(D_L05_0015F8AC, D_L05_0015F8B0, pulse * 0.5f + 0.5f);
         sprintf_alt(buf, get_help_message_text(0x531a));
         draw_framed_text(D_L05_0015F8A4 + 1, D_L05_0015F8A8 + 1, 0x80000000, buf);
-        draw_framed_text(D_L05_0015F8A4, D_L05_0015F8A8, color, buf);
+        draw_framed_text(D_L05_0015F8A4, D_L05_0015F8A8, shadow, buf);
     }
     return *(s32 *)((u8 *)e + 0x58);
 }

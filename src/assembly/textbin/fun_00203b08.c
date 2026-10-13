@@ -72,10 +72,10 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
         material_base = mip_packet->tex1.w[0];
         material_shift = mip_packet->tex1.w[1];
         if (mip_texture != 0) {
-            for (group_index = 0; group_index < 4; group_index++) {
-                mip_width_units[group_index] = mip_texture->width >> (group_index + 6);
-                if (mip_width_units[group_index] <= 0) {
-                    mip_width_units[group_index] = 1;
+            for (index = 0; index < 4; index++) {
+                mip_width_units[index] = mip_texture->width >> (index + 6);
+                if (mip_width_units[index] <= 0) {
+                    mip_width_units[index] = 1;
                 }
             }
 

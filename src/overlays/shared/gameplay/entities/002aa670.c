@@ -1248,8 +1248,7 @@ void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
             total = dot + length;
             distance = vector_distance(pos, *(char **)((char *)v + 0x60) + 0x10) / total;
             if (dot > 0.0f) {
-                distance *= dot;
-                scale_vector_xyz_2acfd8(direction, difference, distance);
+                scale_vector_xyz_2acfd8(direction, difference, distance * dot);
             } else {
                 scale_vector_xyz_2acfd8(direction, v + 0x10, distance);
             }
@@ -1264,9 +1263,9 @@ void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
             if (angle > 1.5707964f) {
                 working[0] = fast_cos_2acfd8(atan2_2acfd8(hero.unk670, hero.unk674)) *
                             vector_distance(&hero.motion.pos, direction) * 0.5f;
-                working[1] = fast_sin_2acfd8(atan2_2acfd8(hero.unk670, hero.unk674)) *
-                            vector_distance(&hero.motion.pos, direction) * 0.5f;
+                angle = fast_sin_2acfd8(atan2_2acfd8(hero.unk670, hero.unk674));
                 working[2] = 0.0f;
+                working[1] = angle * vector_distance(&hero.motion.pos, direction) * 0.5f;
                 add_vector_xyz_2acfd8(desired, working, &hero.motion.pos);
                 qcopy(direction, desired);
             }
@@ -1284,7 +1283,7 @@ void FUN_L00_002acfd8(float *pos, unsigned char *moby, float *velocity) {
         }
     }
     *(short *)((char *)v + 0x54) = scale_game_frames_2acfd8(300);
-    qcopy(moby + 0x10, pos);
+    *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)pos;
     qcopy_nc(difference, (char *)hero.moby + 0x10);
     difference[2] = pos[2];
     if (FUN_001efa68_2acfd8(difference, pos, 0, hero.moby, 0) != 0) {
@@ -2539,8 +2538,9 @@ void FUN_L00_002b03a0(unsigned char *m) {
     char *target;
     void * volatile hit_owner = 0;
     void *pos = m + 0x10;
-    int reduced = 0;
-    int count, mode, i, j, low, high, life, color1, color2;
+    volatile int i, count;
+    volatile int reduced = 0;
+    int mode, j, low, high, life, color1, color2;
     float ratio, factor, yaw, pitch, time, speed, coefficient, discriminant, root1, root2, angle, length, bias;
 
     up.q = 0;
@@ -2573,7 +2573,8 @@ void FUN_L00_002b03a0(unsigned char *m) {
                 FUN_L00_001ff2c0(&scratch.vectors.intercept, &scratch.vectors.velocity, &target_motion);
                 qcopy(v, &scratch.vectors.target_sample);
                 speed = FUN_L00_001ff430(&scratch.vectors.velocity);
-                speed = *(float *)&v->w20 * *(float *)&v->w20 - speed;
+                length = *(float *)&v->w20;
+                speed = length * length - speed;
                 coefficient = (scratch.vectors.velocity.f[0] * scratch.vectors.distance.f[0] + scratch.vectors.velocity.f[1] * scratch.vectors.distance.f[1] +
                                scratch.vectors.velocity.f[2] * scratch.vectors.distance.f[2]) * -2.0f;
                 length = FUN_L00_001ff430(&scratch.vectors.distance);
@@ -2581,8 +2582,8 @@ void FUN_L00_002b03a0(unsigned char *m) {
                 root1 = (-coefficient + discriminant) / (speed + speed);
                 root2 = (-coefficient - discriminant) / (speed + speed);
                 if (0.0f < root1 && 0.0f < root2) {
-                    time = root2;
                     if (root2 < root1) time = root1;
+                    else time = root2;
                 } else {
                     time = root1;
                     if (!(0.0f < root1)) {

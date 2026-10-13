@@ -54,8 +54,8 @@ void FUN_L00_002484e0(f32 *position) {
     s32 y_max;
     s32 level;
     s32 state;
-    s64 mode15;
-    s64 mode16;
+    s32 mode15;
+    s32 mode16;
     s32 i;
 
     if (D_L00_00184218 == 0) return;
@@ -75,10 +75,6 @@ void FUN_L00_002484e0(f32 *position) {
     state = (hero.state.control_mode == 17 || hero.state.control_mode == 18 || hero.base_condition == 1);
     mode15 = hero.state.control_mode == 15;
     mode16 = hero.state.control_mode == 16;
-    x_min = x - 16;
-    y_min = y - 16;
-    x_max = x + 16;
-    y_max = y + 16;
 
     for (i = 0; i < 16; i++) {
         u32 flags;
@@ -122,6 +118,11 @@ reject:
         filters[i] = 0;
     }
 
+    x_min = x - 16;
+    y_min = y - 16;
+    x_max = x + 16;
+    y_max = y + 16;
+
     {
         s64 column_start = x_min;
         s64 column_end = x_max;
@@ -131,8 +132,8 @@ reject:
         if (column_end > 511) column_end = 511;
         if (row_end > 511) row_end = 511;
         {
-            s32 test_start = (s32)column_start + 16;
             s32 byte_start = (s32)column_start + 23;
+            s32 test_start = (s32)column_start + 16;
             s32 column_offset = -x;
             for (; y_min < row_end; y_min++) {
                 s32 rowbase = (y_min >> 5) << 4;
@@ -142,9 +143,11 @@ reject:
                 s64 column = column_start;
                 s32 test_column = test_start + column_offset;
                 s32 byte_column = byte_start + column_offset;
-                for (; column < column_end; column = (s32)column + 1, test_column++, byte_column++) {
-                    s32 bitmap_column = column < 0 ? (s32)column + 7 : (s32)column;
-                    volatile u8 *pixel = D_L00_001841F0.mask + row + (bitmap_column >> 3);
+                for (; column < column_end; column = (s32)column + 1, byte_column++, test_column++) {
+                    s32 bitmap_column = (s32)column;
+                    volatile u8 *pixel;
+                    if (bitmap_column < 0) bitmap_column += 7;
+                    pixel = D_L00_001841F0.mask + row + (bitmap_column >> 3);
                     if (*pixel != 0) {
                         s32 bit = 1 << ((s32)column & 7);
                         if (*pixel & bit) {
@@ -154,7 +157,7 @@ reject:
                                 u8 packed;
                                 s32 selected;
                                 FUN_L00_00249d80(((s32)column >> 5) + rowbase);
-                                packed = D_L00_001841F0.packed[(((s32)column & 31) >> 1) + packed_row];
+                                packed = *(D_L00_001841F0.packed + (((s32)column & 31) >> 1) + packed_row);
                                 selected = ((s32)column & 1) ? packed >> 4 : packed & 15;
                                 if (filters[selected] != 0) *pixel &= ~bit;
                             }

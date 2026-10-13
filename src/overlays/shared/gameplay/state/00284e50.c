@@ -102,21 +102,23 @@ void FUN_L00_00285008(void) {
     *(int *)((char *)hero.moby + 0x38) = *(int *)(s + 0x30);
     *(int *)((char *)hero.moby + 0x3C) = *(int *)(s + 0x34);
     *(int *)((char *)hero.moby + 0x80) = *(int *)(s + 0x38);
-    D_0013E550[0x6B] |= 7;
-    *(int *)(D_0013E550 + 0x64) = *(int *)(s + 0x3C);
-    D_0013E550[0x69] = s[0x41];
-    D_0013E550[0x68] = s[0x40];
-    D_0013E550[0x6A] = s[0x42];
-    D_00151708 = *(unsigned short *)(s + 0xC54);
+    {
+        int v = D_0013E550[0x6B] | 7;
+        *(int *)(D_0013E550 + 0x64) = *(int *)(s + 0x3C);
+        D_0013E550[0x68] = s[0x40];
+        D_0013E550[0x69] = s[0x41];
+        D_0013E550[0x6A] = s[0x42];
+        D_0013E550[0x6B] = v;
+        D_00151708 = *(unsigned short *)(s + 0xC54);
+    }
     if (*(int *)(s + 0x44) != 0 && *(int *)(s + 0x44) != 3) {
         id = 0;
         if (*(int *)(s + 0x44) == 1)
             goto mode_one;
-        if (*(int *)(s + 0x44) == 2) {
-            id = 0x1A3;
-            goto scan;
-        }
-        goto invalid_mode;
+        if (*(int *)(s + 0x44) != 2)
+            goto invalid_mode;
+        id = 0x1A3;
+        goto scan;
 mode_one:
         id = 0x57;
         goto scan;

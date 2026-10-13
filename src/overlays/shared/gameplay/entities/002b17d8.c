@@ -348,6 +348,7 @@ void FUN_L14_002b2928(struct Moby *m)
     Vec4 *template;
     Vec4 *beam_start;
     Vec4 *beam_end;
+    u32 color;
     s32 i;
 
     {
@@ -446,10 +447,12 @@ void FUN_L14_002b2928(struct Moby *m)
     cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
     FUN_001f9a68(&offset, &basis[0], D_L14_001614BC);
     FUN_001f9a10(&pos, &pos, &offset);
-    quad.colors[3] = 0x40FF2020;
-    quad.colors[2] = 0x40FF2020;
-    quad.colors[1] = 0x40FF2020;
-    quad.colors[0] = 0x40FF2020;
+    color = 0x40;
+    color <<= 24;
+    quad.colors[3] = color | 0xFF2020;
+    quad.colors[2] = color | 0xFF2020;
+    quad.colors[1] = color | 0xFF2020;
+    quad.colors[0] = color | 0xFF2020;
     i = 3;
     corner = &quad.positions[0];
     template = &D_L14_001D8850[0];
@@ -470,10 +473,10 @@ void FUN_L14_002b2928(struct Moby *m)
     cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
     FUN_001f9a68(&offset, &basis[0], D_L14_001614BC);
     FUN_001f9a10(&pos, &pos, &offset);
-    quad.colors[3] = 0x40FF2020;
-    quad.colors[2] = 0x40FF2020;
-    quad.colors[1] = 0x40FF2020;
-    quad.colors[0] = 0x40FF2020;
+    quad.colors[3] = color | 0xFF2020;
+    quad.colors[2] = color | 0xFF2020;
+    quad.colors[1] = color | 0xFF2020;
+    quad.colors[0] = color | 0xFF2020;
     i = 3;
     corner = &quad.positions[0];
     template = &D_L14_001D8850[0];
@@ -938,6 +941,7 @@ void FUN_L14_002de670(struct Moby *moby) {
     f32 *position;
     s32 i;
     s32 n;
+    s32 alpha;
     s32 color;
     f32 size;
     f32 absolute_velocity;
@@ -975,13 +979,15 @@ void FUN_L14_002de670(struct Moby *moby) {
             goto particles;
         }
 effect:
+        i = -1;
         FUN_L00_0025e450(moby, velocity, position, 0.0f, 0.0f, 5, 2, 4,
-                            1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, -1, 0);
+                            1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, i, 0);
         coll_sphere(1.0f, position, 0, (void *)D_001413D0);
     }
     FUN_0020c828(moby);
     return;
 particles:
+    alpha = 0x60000000;
     FUN_L00_0026cbb0_de670(position, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
                          FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 60000.0f);
     for (i = 1; i >= 0; --i) {
@@ -991,7 +997,7 @@ particles:
         color = FUN_L00_00257b90(0x30, 0xFF);
         particle = FUN_L00_0026d000_de670(position, 0.025f, 1.0f, 1.0f, n,
                                        D_L14_0015F580, size,
-                                       0x60000000 | color | color << 8 | color << 16);
+                                       color | ((color << 16) | ((color << 8) | alpha)));
         if (particle != 0) {
             particle[3] = 0x44;
             fade = particle + 0x20;
@@ -1060,7 +1066,7 @@ extern void FUN_L14_002e03b8(struct Moby *);
 extern f32 D_L14_00161B40_dfd10 __asm__("D_L14_00161B40") __attribute__((sda));
 extern f32 D_L14_00161B44_dfd10 __asm__("D_L14_00161B44") __attribute__((sda));
 extern f32 D_L14_00161B48_dfd10 __asm__("D_L14_00161B48") __attribute__((sda));
-extern s32 D_001413D0;
+extern s32 D_001413D0 __attribute__((section(".data")));
 extern s32 FUN_001f9740(void *);
 extern f32 FUN_001f99c0(f32);
 extern void FUN_001f9a10(void *, void *, void *);
@@ -1078,6 +1084,7 @@ void FUN_L14_002dfd10(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float *velocity;
     float *position;
+    float *path_position;
     float pos[4];
     float vec[4];
     float absolute_velocity;
@@ -1086,23 +1093,24 @@ void FUN_L14_002dfd10(struct Moby *moby) {
     float zero;
 
     if (moby->state == 0) {
+        path_position = pos;
         position = (float *)&moby->pos;
         path = *(char **)(race_paths_2e0170 + *(int *)(data + 0xc) * 0x20 + 0x10);
-        qcopy(pos, position);
+        qcopy(path_position, position);
         FUN_L00_0025d808(path, position, data + 0x10, data + 0x14, 0, *(float *)(data + 8));
-        subtract_vector_xyz(vec, position, pos);
+        subtract_vector_xyz(vec, position, path_position);
         *(float *)(data + 0x18) = vec[0];
         *(float *)(data + 0x1c) = vec[1];
         FUN_L14_002e03b8(moby);
         if (FUN_001f9740(data + 4) == 0) return;
         zero = 0.5f;
         normalize_vector_xyz(vec, vec, zero);
-        qcopy(pos, position);
+        qcopy(path_position, position);
         pos[2] += 0.25f;
-        one = 1.0f;
+        *(int *)&one = 0x3f800000;
         zero = 0.0f;
         FUN_L00_0028dc90(1, 0, moby, *(short *)(*(char **)data + 0xa6));
-        FUN_L00_0025e450(moby, vec, pos, zero, zero, 5, 2, 4,
+        FUN_L00_0025e450(moby, vec, path_position, zero, zero, 5, 2, 4,
                             one, 0.5f, 9.0f, one, -1, 15.0f, 0, 3, -1, 0);
     } else {
         position = (float *)&moby->pos;
@@ -1135,7 +1143,7 @@ void FUN_L14_002dfd10(struct Moby *moby) {
                     goto random_check;
                 }
             }
-            one = 1.0f;
+            *(int *)&one = 0x3f800000;
             FUN_L00_0028dc90(0, 0, moby, *(short *)(*(char **)data + 0xa6));
             FUN_L00_0025e450(moby, velocity, position, zero, zero, 5, 2, 4,
                                 one, 0.5f, 9.0f, one, -1, 15.0f, 0, 3, -1, 0);
@@ -1150,9 +1158,6 @@ random_check:
     if (random_integer_below_de670(2) != 0) FUN_L14_002e03b8(moby);
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e0170.s", FUN_L14_002e0170);
-#else
 extern unsigned char *spawn_moby_2e0170(int) __asm__("FUN_0020c4f8");
 extern int scale_game_frames_2e0170(int) __asm__("FUN_001f96f8");
 extern void subtract_vector_2e0170(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1187,15 +1192,16 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
         if (m[0x20] == 0) {
             int index;
             char *path;
-            *(int *)(d + 4) = scale_game_frames_2e0170(90);
+            int *fields = (int *)d;
+            fields[1] = scale_game_frames_2e0170(90);
             path = race_paths_2e0170;
             *(float *)(d + 8) = *scale * D_0015ED6C;
             index = *(int *)(*(char **)(owner + 0x78) + 0x60);
-            *(int *)(d + 0x14) = 0;
-            *(int *)(d + 0x0C) = index;
-            *(int *)(d + 0x10) = 0;
+            fields[5] = 0;
+            fields[3] = index;
+            fields[4] = 0;
             create_effect_2e0170(*(void **)(path + index * 0x20 + 0x10),
-                pos, vec, d + 0x10, d + 0x14, 0, 20.0f, 5.0f, *(float *)(d + 0x14));
+                pos, vec, fields + 4, fields + 5, 0, 20.0f, 5.0f, *(float *)(d + 0x14));
         } else {
             float angle;
             *(int *)(d + 4) = scale_game_frames_2e0170(200);
@@ -1217,7 +1223,6 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
     }
     return m;
 }
-#endif /* NON_MATCHING */
 /* Ported from rac1-decomp src/overlays/shared/vendor_002B2A28.c (func_L14_002E17B8) */
 /* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
 

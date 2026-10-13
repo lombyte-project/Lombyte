@@ -480,7 +480,7 @@ extern void subtract_vector_xyz_44c0(void *, void *, void *) __asm__("FUN_001f9a
 extern void normalize_vector_xyz_44c0(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz_44c0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 scale_game_frames_44c0(s32) __asm__("FUN_001f96f8");
-extern void approach_value_44c0(void *, f32, f32) __asm__("FUN_00213ed8");
+extern f32 approach_value_44c0(void *, f32, f32) __asm__("FUN_00213ed8");
 extern void mark_moby_for_removal_44c0(struct Moby *) __asm__("FUN_0020c828");
 extern void allocate_voice_for_target_entry_44c0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void FUN_L00_00258278_44c0(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
@@ -687,6 +687,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
     Vec4 velocity, offset, position, wave, sag;
     Vec4 *grid;
     f32 *u, *v;
+    f32 *weight;
     f32 inv_x, inv_y, time, phase, amp_a, amp_b, phase_a, phase_b;
     f32 phase_step, amp_step_a, amp_step_b, step_a, step_b, height_a, height_b;
     f32 next_phase, next_amp_a, next_amp_b, next_a, next_b;
@@ -773,8 +774,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
     bend = d->levels_a[0];
     phase = f[5]; amp_a = f[7]; amp_b = f[8];
     phase_a = f[0x18]; phase_b = f[0x19];
-    i = 0;
-    do {
+    for (i = 0; i <= b[9]; i++) {
         y = convert_integer_to_float(i) / convert_integer_to_float(b[9]);
         qcopy(&point, &edge[0]);
         next_phase = phase + phase_step;
@@ -785,8 +785,9 @@ void FUN_L08_002f5e58(struct Moby *m) {
         subtract_vector_xyz(&across, &edge[1], &edge[0]);
         FUN_001f9a68(&across, &across, inv_x);
         noise_y = FUN_L08_002f5d98(y, (char *)d);
-        j = 0;
-        do {
+        k = i * stride;
+        weight = (f32 *)((char *)grid + k + 12);
+        for (j = 0; j <= b[8]; j++) {
             x = convert_integer_to_float(j) / convert_integer_to_float(b[8]);
             a = FUN_L00_0025e310(f[0x17] * time);
             angle = x * 3.1415927f;
@@ -812,18 +813,17 @@ void FUN_L08_002f5e58(struct Moby *m) {
             add_vector_xyz(&position, &velocity, &offset);
             add_vector_xyz(&position, &position, &wave);
             subtract_vector_xyz(&position, &position, &sag);
-            add_vector_xyz((char *)grid + i*stride + j*16, &point, &position);
-            ((Vec4 *)((char *)grid + i*stride + j*16))->f[3] = 1.0f /
+            add_vector_xyz((char *)grid + k + j*16, &point, &position);
+            *weight = 1.0f /
                 (((1.0f-f[0x56]) + f[0x56]*sine*sine*sine) * ((1.0f-f[0x57])+f[0x57]*y));
             add_vector_xyz(&point, &point, &across);
-            j++;
-        } while (j <= b[8]);
+            weight += 4;
+        }
         add_vector_xyz(&edge[0], &edge[0], &down[0]);
         phase = next_phase; amp_a = next_amp_a;
         add_vector_xyz(&edge[1], &edge[1], &down[1]);
         amp_b = next_amp_b; phase_a = next_a; phase_b = next_b;
-        i++;
-    } while (i <= b[9]);
+    }
     a = FUN_001f9de0(FUN_L00_0025e310(time * f[0x12]));
     a = FUN_L00_00200228(time*f[0x10] + f[0x11]*a, &temp);
     for (i=0; i<=b[8]; i++) { u[i] = a; a = a + inv_x / d->period_a; }
@@ -831,22 +831,24 @@ void FUN_L08_002f5e58(struct Moby *m) {
     a = FUN_L00_00200228(time*f[0x13] + f[0x14]*a, &temp);
     for (i=0; i<=b[9]; i++) { v[i] = a; a = a + inv_y / d->period_b; }
     for (i=0; i<b[9]; i++) {
+        k = i * stride;
+        count = (i + 1) * stride;
         for (j=0; j<b[8]; j++) {
             packet.uv[0][0] = u[j]; packet.uv[0][1] = v[i];
             packet.uv[1][0] = u[j+1]; packet.uv[1][1] = v[i];
             packet.uv[2][0] = u[j]; packet.uv[2][1] = v[i+1];
             packet.uv[3][0] = u[j+1]; packet.uv[3][1] = v[i+1];
-            add_vector_xyz(&packet.points[0], (char *)grid+i*stride+j*16, &m->pos);
-            add_vector_xyz(&packet.points[1], (char *)grid+i*stride+(j+1)*16, &m->pos);
-            add_vector_xyz(&packet.points[2], (char *)grid+(i+1)*stride+j*16, &m->pos);
-            add_vector_xyz(&packet.points[3], (char *)grid+(i+1)*stride+(j+1)*16, &m->pos);
-            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+i*stride+j*16))->f[3]);
+            add_vector_xyz(&packet.points[0], (char *)grid+(j*16+k), &m->pos);
+            add_vector_xyz(&packet.points[1], (char *)grid+((j+1)*16+k), &m->pos);
+            add_vector_xyz(&packet.points[2], (char *)grid+(j*16+count), &m->pos);
+            add_vector_xyz(&packet.points[3], (char *)grid+((j+1)*16+count), &m->pos);
+            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+(j*16+k)))->f[3]);
             packet.color[0] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+i*stride+(j+1)*16))->f[3]);
+            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+((j+1)*16+k)))->f[3]);
             packet.color[1] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+(i+1)*stride+j*16))->f[3]);
+            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+(j*16+count)))->f[3]);
             packet.color[2] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+(i+1)*stride+(j+1)*16))->f[3]);
+            temp = truncate_float_to_s32_u(((Vec4 *)((char *)grid+((j+1)*16+count)))->f[3]);
             packet.color[3] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
             FUN_001f7d30(&packet, NULL, 0);
         }

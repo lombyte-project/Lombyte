@@ -184,6 +184,7 @@ int FUN_L00_0025c698(void *moby, void *motion) {
     V4 moved, prior, probe, surface, normal, impulse;
     float speed, height, smoothing, target, duration, limit, time, value;
     float output, scratch;
+    float dot;
     int result = 0, count, *hit, state;
 
     F_25C698(motion, 8) -= F_25C698(motion, 0x10);
@@ -197,7 +198,7 @@ int FUN_L00_0025c698(void *moby, void *motion) {
         F_25C698(motion, 8) = F_25C698(motion, 0x1c);
 
     prior = *(V4 *)((u8 *)moby + 0x10);
-    prior.v[2] += F_25C698(motion, 0x28);
+    prior.v[2] = F_25C698(motion, 0x28) + prior.v[2];
     height = FUN_L00_00259698_0025c698(&prior, 0, 0.5f);
     if (FUN_001f35d8_0025c698() == 0) {
         if (F_25C698(motion, 0x5c) == 0.0f && height <= prior.v[2] &&
@@ -226,8 +227,7 @@ int FUN_L00_0025c698(void *moby, void *motion) {
         result = 0x100;
 
     if (F_25C698(motion, 0x54) != -1.0f && F_25C698(motion, 0x50) != -1.0f) {
-        state = H_25C698(motion, 0x3e);
-        switch (state) {
+        switch (H_25C698(motion, 0x3e)) {
         case 0: {
             duration = FUN_001ff218_0025c698(F_25C698(motion, 8) / F_25C698(motion, 0x10));
             if (duration > 2.0f) {
@@ -266,7 +266,6 @@ int FUN_L00_0025c698(void *moby, void *motion) {
         FUN_L00_00258278_0025c698(F_25C698(motion, 0x40), 0.02f, 0.3f,
             F_25C698(motion, 0x48), moby, (u8 *)motion + 0x44);
 
-    state = 0;
     moved = *(V4 *)((u8 *)moby + 0x10);
     moved.v[2] += F_25C698(motion, 0x28);
     FUN_001f9a68_0025c698((u8 *)moby + 0x10, (u8 *)moby + 0x10, motion);
@@ -275,19 +274,17 @@ int FUN_L00_0025c698(void *moby, void *motion) {
     FUN_001f9a68_0025c698(&surface, &probe, motion);
     count = FUN_L00_001f2868_0025c698(FUN_00200240_0025c698(I_25C698(motion, 0x20)) * 0.0010742188f,
         &surface, 0x10, moby, 0);
-    if (state < count) {
-        state = count;
-        hit = D_00177F00_0025c698;
-        do {
-            if (FUN_L00_0025e3b8_0025c698(*hit) == 0) {
-                if ((I_25C698(motion, 0x24) & 0x20) && H_25C698(motion, 0x3e) == 2)
-                    result |= 0x100;
-            } else {
-                FUN_L00_00259bc8_0025c698(1.0f, *hit, moby, 0x10000, (u8 *)moby + 0x10, motion);
-            }
-            hit++;
-            state--;
-        } while (state != 0);
+    state = count;
+    hit = D_00177F00_0025c698;
+    /* The query returns zero or a logical-right-shifted hit count. */
+    while (state-- > 0) {
+        if (FUN_L00_0025e3b8_0025c698(*hit) == 0) {
+            if ((I_25C698(motion, 0x24) & 0x20) && H_25C698(motion, 0x3e) == 2)
+                result |= 0x100;
+        } else {
+            FUN_L00_00259bc8_0025c698(1.0f, *hit, moby, 0x10000, (u8 *)moby + 0x10, motion);
+        }
+        hit++;
     }
     smoothing = FUN_001ff3d8_0025c698(motion);
     if ((float)I_25C698(motion, 0x20) * 0.0009765625f < smoothing) {
@@ -301,7 +298,7 @@ int FUN_L00_0025c698(void *moby, void *motion) {
         F_25C698(moby, 0x18) -= F_25C698(motion, 0x28);
         FUN_001f9bf8_0025c698(&normal, &D_00173E80_0025c698, 1.0f);
         if (normal.v[2] >= 0.707f) {
-            float dot = FUN_001f9ab0_0025c698(motion, &normal);
+            dot = FUN_001f9ab0_0025c698(motion, &normal);
             if (dot < 0.0f) {
                 if (D_00173E58_0025c698 == 0 || *(&D_00173E58_0025c698 + 1) > 0) {
                     result |= 1;
@@ -316,7 +313,7 @@ int FUN_L00_0025c698(void *moby, void *motion) {
                 }
             }
         } else {
-            float dot = FUN_001f9ab0_0025c698(motion, &normal);
+            dot = FUN_001f9ab0_0025c698(motion, &normal);
             if (dot < 0.0f) {
                 FUN_001f9bf8_0025c698(&impulse, &normal, dot * -(F_25C698(motion, 0x30) + 1.0f));
                 FUN_001f9a68_0025c698(motion, motion, &impulse);

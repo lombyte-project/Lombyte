@@ -584,7 +584,7 @@ segments:
           - [0x26388, c, assembly/sdk/math/rotations/sce_vu0_rot_matrix_y]
           - [0x26430, textbin, text_gap_00121ac8_post_vu]
           - [0x26470, c, assembly/sdk/library/_motionComp0]
-          - [0x266c0, c, assembly/sdk/library/_getAllRefs]
+          - [0x266c0, c, sdk/library/_getAllRefs]
           - [0x26dc4, textbin, text_gap_00125740_post_sdk_worker]
           - [0x26dc8, c, assembly/sdk/library/_getRef0]
           - [0x271e4, textbin, text_gap_00125e48_post_sdk_worker]

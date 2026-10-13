@@ -774,7 +774,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bc3b0.s", FUN_L00_002bc3b0);
 #else
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char D_0013F3D0[];
-extern char *D_001413D0;
+extern char D_001413D0[];
 extern float D_0013F634;
 extern float D_L00_001616D8 __attribute__((sda));
 extern float D_L00_001616DC __attribute__((sda));
@@ -795,7 +795,7 @@ extern float FUN_001f99c0(float);
 extern float FUN_001f9df8(float);
 extern float FUN_001fa6c0(int);
 extern void FUN_001f9a10(void *, void *, void *);
-extern char *FUN_002141f8(char *);
+extern int FUN_002141f8();
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern int FUN_001efa68_2bc3b0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
@@ -828,7 +828,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
             *(s16 *)(candidate + 0xA6) == 0x452)
             continue;
         qcopy(target, candidate + 0x10);
-        data = FUN_002141f8(candidate);
+        data = (char *)FUN_002141f8(candidate);
         if (!data)
             continue;
         target[2] += *(float *)(data + 0x10);
@@ -861,7 +861,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
         apparentAngle = FUN_001f9df8(FUN_001f9b48(offset, target) / (distance + distance));
         apparentAngle += apparentAngle;
         if (D_L00_001616D8 * 0.017453292f < apparentAngle) {
-            data = FUN_002141f8(candidate);
+            data = (char *)FUN_002141f8(candidate);
             if (data) {
                 radius = FUN_001fa6c0(*(u8 *)(data + 10)) * 0.125f;
                 reduction = FUN_001f9df8(radius / distance);
@@ -875,10 +875,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
         if (apparentAngle < D_L00_001616D8 * 0.017453292f) {
             int valid = 1;
             if (FUN_001efa68_2bc3b0(position, target, 6, self, 0)) {
-                if (D_L00_00173E40_2bc3b0.moby == 0)
-                    valid = 0;
-                if (D_L00_00173E40_2bc3b0.moby &&
-                    D_L00_00173E40_2bc3b0.moby != candidate)
+                if (!D_L00_00173E40_2bc3b0.moby || D_L00_00173E40_2bc3b0.moby != candidate)
                     valid = 0;
             }
             if (valid) {
@@ -1225,11 +1222,11 @@ extern f32 D_L00_001617CC __attribute__((sda));
 extern volatile s32 D_L00_00161718_i __asm__("D_L00_00161718") __attribute__((sda));
 extern volatile s32 D_L00_00161720_i __asm__("D_L00_00161720") __attribute__((sda));
 extern volatile s32 D_L00_00161724_i __asm__("D_L00_00161724") __attribute__((sda));
-extern volatile s32 D_L00_001617D0 __attribute__((section(".data")));
-extern volatile s32 D_L00_00161824 __attribute__((section(".data")));
-extern s32 D_L00_00161818[] __attribute__((section(".data")));
-extern u128 D_L00_001DBF50[] __attribute__((section(".data")));
-extern u128 D_L00_001DD0D0[] __attribute__((section(".data")));
+extern s32 D_L00_001617D0 __attribute__((section(".data")));
+extern s32 D_L00_00161824 __attribute__((section(".data")));
+extern s32 D_L00_00161818 __attribute__((section(".data")));
+extern s32 D_L00_001DBF50 __attribute__((section(".data")));
+extern s32 D_L00_001DD0D0 __attribute__((section(".data")));
 extern void scale_vector_2bcf98(float, void *, void *) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10(void *, void *, void *);
 
@@ -1246,20 +1243,25 @@ void FUN_L00_002bcf98(u8 *m) {
         scale = D_L00_001616DC / convert_integer_to_float(12);
         D_L00_001617CC = scale;
         scale_vector_2bcf98(-scale, &vec, m + 0xD0);
-        D_L00_001DBF50[1] = source[0];
+        qcopy((u128 *)&D_L00_001DBF50 + 1, (void *)source);
         for (i = 10; i >= 0; i--) {
-            FUN_001f9a10(&D_L00_001DBF50[12 - i], &D_L00_001DBF50[11 - i], &vec);
+            FUN_001f9a10(&((u128 *)&D_L00_001DBF50)[12 - i], &((u128 *)&D_L00_001DBF50)[11 - i], &vec);
         }
         D_L00_00161718_i = 0;
         D_L00_00161720_i = 0;
         D_L00_00161724_i = 0;
         D_L00_001617D0 = 0;
         D_L00_00161824 = 0;
-        copies = D_L00_001DD0D0;
-        clears = D_L00_00161818;
-        for (i = 2; i >= 0; i--) {
-            *clears++ = 0;
-            *copies++ = vec;
+        copies = (u128 *)&D_L00_001DD0D0;
+        clears = &D_L00_00161818;
+        {
+            s32 j;
+            for (j = 2; j >= 0; j--) {
+                *clears = 0;
+                qcopy(copies, &vec);
+                copies++;
+                clears++;
+            }
         }
     }
 }
@@ -1778,7 +1780,7 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sz, float s
     u.q2 = t.q2;
     u.q1 = t.q1;
     u.z4 = t.z4;
-    u.c[3] = u.c[2] = u.c[1] = u.c[0] = col1;
+    u.c[0] = u.c[1] = u.c[2] = u.c[3] = col1;
     u.f[0] = 0;
     u.f[1] = 0;
     u.f[2] = 0;
@@ -1887,14 +1889,11 @@ typedef struct {
     int unk50, unk54, unk58;
     float unk5C, unk60;
     int unk64;
-    float unk68, unk6C;
-    long unk70, tex, unk80, unk88;
+    float unk68;
+    float unk6C;
+    long unk70;
+    long tex, unk80, unk88;
 } Q_2be650;
-extern float D_L00_001617E8[] __attribute__((section(".data")));
-extern float D_L00_00161808[] __attribute__((section(".data")));
-extern int D_L00_00161818[] __attribute__((section(".data")));
-extern u128 D_L00_001DD0A0[] __attribute__((section(".data")));
-extern u128 D_L00_001DD0D0[] __attribute__((section(".data")));
 extern OvlVec4 D_L00_001DBF20_2be650[] __asm__("D_L00_001DBF20") __attribute__((section(".data")));
 extern OvlVec4 D_0013F5E0_2be650 __asm__("D_0013F5E0");
 extern int D_L00_00161760 __attribute__((sda));
@@ -1931,26 +1930,33 @@ void FUN_L00_002be650(void *o) {
     quad.unk64 = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
-    color = D_0013E535 ? D_L00_00161764 : D_L00_00161760;
-    color &= 0xFFFFFF;
+    {
+        int c;
+        if (D_0013E535)
+            c = D_L00_00161764;
+        else
+            c = D_L00_00161760;
+        i = 0;
+        color = c & 0xFFFFFF;
+    }
     vertexTarget = &vertex[0];
-    i = 0;
     do {
         nextIndex = i + 1;
-        if (D_L00_00161818[i] != 0) {
-            int c = color | (color_alpha_2be650(D_L00_001617E8[i]) << 24);
-            quad.color[0] = c;
-            quad.color[1] = c;
-            quad.color[2] = c;
+        if (((int *)&D_L00_00161818)[i] != 0) {
+            unsigned int c = color_alpha_2be650(((float *)&D_L00_001617E8)[i]);
+            c = (c << 24) | color;
             quad.color[3] = c;
-            qcopy(&scaled, &D_L00_001DD0D0[i]);
-            qcopy(vertexTarget, &D_L00_001DD0A0[i]);
+            quad.color[2] = c;
+            quad.color[1] = c;
+            quad.color[0] = c;
+            qcopy(vertexTarget, &((u128 *)&D_L00_001DD0A0)[i]);
+            qcopy(&scaled, &((u128 *)&D_L00_001DD0D0)[i]);
             vmul_2be650(-1.0f, &negativeUp, &D_0013F5E0_2be650);
             cross_2be650(&axis, &scaled, &negativeUp);
             normalize_2be650(&axis, &axis, 1.0f);
             cross_2be650(&negativeUp, &axis, &scaled);
             for (j = 0; j < 4; j++) {
-                vmul_2be650(D_L00_00161808[i], &vertex[1], &D_L00_001DBF20_2be650[j]);
+                vmul_2be650(((float *)&D_L00_00161808)[i], &vertex[1], &D_L00_001DBF20_2be650[j]);
                 xform_2be650(&quad.corner[j], &vertex[1], &scaled);
             }
             draw_2be650(&quad, 0, 0);

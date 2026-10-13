@@ -437,6 +437,9 @@ extern int FUN_L00_00261b48_260a88(int, void *, void *, void *) __asm__("FUN_L00
 extern void FUN_002a7438_260a88(void *, void *, void *, int, int, int) __asm__("FUN_L00_002a7438");
 extern char *FUN_0025c338_260a88(char *) __asm__("FUN_002141f8");
 extern int FUN_001fef20_260a88(int) __asm__("FUN_001f96f8");
+extern char D_L00_001600A0_260a88[] __asm__("D_L00_001600A0");
+extern char D_L00_001600B0_260a88[] __asm__("D_L00_001600B0");
+extern char D_L00_001600C0_260a88[] __asm__("D_L00_001600C0");
 extern void FUN_001eb078_260a88(int, ...) __asm__("FUN_001e93b0");
 extern float FUN_00200240_260a88(int) __asm__("FUN_001fa6c0");
 extern double FUN_00120478_260a88(float) __asm__("FUN_00120478");
@@ -464,7 +467,7 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
     if (flags & 4) {
         path = FUN_0025c338_260a88(moby);
         if (path)
-            base = *(Vec_260a88 *)(path + 0x20);
+            qcopy(&base, path + 0x20);
     }
     if (lower < 1)
         lower = 1;
@@ -477,25 +480,26 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
             multiplier /= 2;
         if (multiplier < 150) {
             if (multiplier < 91) {
-                FUN_001eb078_260a88(0x1600a0);
+                FUN_001eb078_260a88((int)D_L00_001600A0_260a88);
                 count *= 5;
             } else {
-                multiplier = (190 - multiplier) / 20;
-                FUN_001eb078_260a88(0x1600b0, multiplier);
-                count *= multiplier;
+                lower = 190 - multiplier;
+                lower /= 20;
+                FUN_001eb078_260a88((int)D_L00_001600B0_260a88, lower);
+                count *= lower;
             }
             if (D_L00_0015EEA0_260a88) {
                 if (count > 1000) count = 1000;
             } else if (count > 500) count = 500;
         } else if (multiplier >= 301) {
-            if (multiplier < 352) {
+            if (multiplier >= 352) {
+                FUN_001eb078_260a88((int)D_L00_001600C0_260a88, 0x3fb99999a0000000LL);
+                count /= 10;
+            } else {
                 int span = 360 - multiplier;
                 float scale = FUN_00200240_260a88(span);
-                FUN_001eb078_260a88(0x1600c0, FUN_00120478_260a88(scale / 20.0f));
+                FUN_001eb078_260a88((int)D_L00_001600C0_260a88, FUN_00120478_260a88(scale / 20.0f));
                 count *= span / 80;
-            } else {
-                FUN_001eb078_260a88(0x1600c0, 0x3fb99999a0000000LL);
-                count /= 10;
             }
             if (count < 1) count = 1;
         }
@@ -549,14 +553,16 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
         }
     }
     while (large || medium || small || single) {
-        position = *(Vec_260a88 *)(moby + 0x10);
+        qcopy(&position, moby + 0x10);
         position.f[2] += 0.5f;
         time = FUN_00257cb0_260a88();
         velocity.f[0] = FUN_001ff7e8_260a88(time) * (FUN_00257be8_260a88(0.0f, 3.0f) * D_L00_0015ED6C_260a88);
         velocity.f[1] = FUN_001ff800_260a88(time) * (FUN_00257be8_260a88(0.0f, 3.0f) * D_L00_0015ED6C_260a88);
+        velocity.f[2] = 0.0f;
         velocity.f[2] = FUN_00257be8_260a88(3.7f, 6.0f) * D_L00_0015ED6C_260a88;
-        velocity.f[3] = 0.0f;
-        offset = velocity;
+        offset.f[0] = velocity.f[0];
+        offset.f[1] = velocity.f[1];
+        offset.f[2] = 0.0f;
         FUN_001ff500_260a88(0.5f, &offset, &offset);
         FUN_001ff278_260a88(&position, &position, &offset);
         if (path_index >= 0) {
@@ -578,11 +584,19 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
             velocity.f[1] = adjusted.f[1];
         }
         FUN_001ff278_260a88(&velocity, &velocity, &base);
-        if (large) { multiplier = 50; large--; }
-        else if (medium) { multiplier = 20; medium--; }
-        else if (small) { multiplier = 5; small--; }
-        else { multiplier = 1; single--; }
-        FUN_002a7438_260a88(moby, &position, &velocity, flags, multiplier, gated);
+        if (large) {
+            large--;
+            FUN_002a7438_260a88(moby, &position, &velocity, flags, 50, gated);
+        } else if (medium) {
+            medium--;
+            FUN_002a7438_260a88(moby, &position, &velocity, flags, 20, gated);
+        } else if (small) {
+            small--;
+            FUN_002a7438_260a88(moby, &position, &velocity, flags, 5, gated);
+        } else {
+            single--;
+            FUN_002a7438_260a88(moby, &position, &velocity, flags, 1, gated);
+        }
     }
 }
 #endif
