@@ -356,6 +356,12 @@ extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
+extern int D_L14_001620DC __attribute__((sda));
+extern int D_L14_001620E0 __attribute__((sda));
+extern int D_L14_001620E4 __attribute__((sda));
+extern int D_L14_001620E8 __attribute__((sda));
+extern int D_L14_001620EC __attribute__((sda));
+
 void FUN_L14_00301fa8(char *m) {
     char *d = *(char **)(m + 0x78);
     VendorBeamFrame *frame = &D_L14_001600EC[*(int *)d];
@@ -367,20 +373,23 @@ void FUN_L14_00301fa8(char *m) {
     float start[4] __attribute__((aligned(16)));
     float work[4] __attribute__((aligned(16)));
     float side[4] __attribute__((aligned(16)));
-    int i, j, k, strip, point, rounded;
+    int i, j, k, strip, point;
+    int rounded;
     int color;
+    u8 *indices;
     void *src;
 
     FUN_001fa050(base, &frame->pad40[0x30]);
     FUN_001fa2d8(matrix, base);
-    *(u128 *)(base + 12) = *(u128 *)&frame->origin;
+    frame = &D_L14_001600EC[*(int *)d];
+    qcopy(base + 12, &frame->origin);
     subtract_vector_xyz(direction, (void *)0x1674c0, &frame->origin);
     transform_vector_xyz(direction, direction, matrix);
 
     {
-        u64 texture = get_effect_texture(*(int *)0x001fb4dc);
-        u64 gs_state = (u64)*(int *)0x001fb4e0 | (u64)*(int *)0x001fb4e4 << 2 |
-            (u64)*(int *)0x001fb4e8 << 4 | (u64)*(int *)0x001fb4ec << 6 | 0x8000000000ULL;
+        u64 texture = get_effect_texture(D_L14_001620DC);
+        u64 gs_state = (u64)D_L14_001620E0 | (u64)D_L14_001620E4 << 2 |
+            (u64)D_L14_001620E8 << 4 | (u64)D_L14_001620EC << 6 | 0x8000000000ULL;
         packet[0].texture_state = packet[1].texture_state = packet[2].texture_state = 0xff9000000260ULL;
         packet[0].texture = packet[1].texture = packet[2].texture = texture;
         packet[0].gs_state = packet[1].gs_state = packet[2].gs_state = gs_state;
@@ -398,6 +407,7 @@ void FUN_L14_00301fa8(char *m) {
     }
 
     clear_u64_value(start);
+    indices = (u8 *)(d + 0x18);
     for (point = 0; point < 31; point++) {
         qcopy(end, start);
         if (point < 30) {
@@ -409,9 +419,9 @@ void FUN_L14_00301fa8(char *m) {
             clear_u64_value(start);
         }
         rounded = point + 3;
-        if (point > -1) rounded = point;
+        if (-1 < point) rounded = point;
         rounded = (rounded >> 2) << 2;
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < 4;) {
             if (i < 2) {
                 packet[0].vertices[i] = *(u128 *)(d + 0x20 + (point << 4));
                 if (!(i & 1)) subtract_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], end);
@@ -428,14 +438,15 @@ add_main:
                     add_vector_xyz(&packet[0].vertices[i], &packet[0].vertices[i], src);
                 }
             }
-            packet[0].uv[i][0] = ((float *)0x001e5fd0)[i * 2] +
+            j = i++;
+            packet[0].uv[j][0] = ((float *)0x001e5fd0)[j * 2] +
                 convert_integer_to_float(point - rounded) * 0.25f;
         }
         draw_geometry_quad(&packet[0], base, 0);
     }
     for (strip = 0; strip < 4; strip++) {
         clear_u64_value(start);
-        if ((u8)d[0x18 + strip] < 31) {
+        if (indices[strip] < 31) {
             for (point = 0; point < 3; point++) {
                 qcopy(end, start);
                 if (point < 2) {
@@ -450,9 +461,9 @@ add_main:
                 }
                 if (point == 0) qcopy(end, start);
                 rounded = point + 3;
-                if (point > -1) rounded = point;
+                if (-1 < point) rounded = point;
                 rounded = (rounded >> 2) << 2;
-                for (k = 0; k < 4; k++) {
+                for (k = 0; k < 4;) {
                     if (k < 2) {
                         packet[0].vertices[k] = *(u128 *)(d + (point << 6) + 0x420 + (strip << 4));
                         if (!(k & 1)) subtract_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], end);
@@ -469,7 +480,8 @@ add_branch:
                             add_vector_xyz(&packet[0].vertices[k], &packet[0].vertices[k], src);
                         }
                     }
-                    packet[0].uv[k][0] = ((float *)0x001e5fd0)[k * 2] +
+                    j = k++;
+                    packet[0].uv[j][0] = ((float *)0x001e5fd0)[j * 2] +
                         convert_integer_to_float(point - rounded) * 0.25f;
                 }
                 draw_geometry_quad(&packet[0], base, 0);
