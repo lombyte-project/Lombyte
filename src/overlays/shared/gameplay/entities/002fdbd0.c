@@ -657,14 +657,15 @@ void FUN_L06_002ff2c8(char *moby) {
             weight += 4;
         } while (remaining >= 0);
     }
-    i = 0;
     offset = 0;
     {
+        s32 i = 0;
         f32 *entry = (f32 *)(data + 0x230);
         f32 *relative_ptr = relative;
         do {
             if (hero.vehicle_mode == 1) {
-                step = D_L06_00161FD0 * frame_time * 0.5f;
+                step = D_L06_00161FD0 * frame_time;
+                step *= 0.5f;
             } else {
                 step = D_L06_00161FD0 * frame_time;
             }
@@ -695,14 +696,14 @@ void FUN_L06_002ff2c8(char *moby) {
         f32 *next_entry;
         offset = i * 16;
         next = i + 1;
-        if (entry[3] >= 0.6f &&
+        if (*(f32 *)(data + i * 16 + 0x23C) >= 0.6f &&
             (next_entry = (f32 *)(data + 0x230 + next * 16), next_entry[3] >= 0.6f)) {
             point[0] = fast_cos(*(f32 *)(moby + 0x48));
             point[1] = fast_sin_c(*(f32 *)(moby + 0x48));
             point[2] = 1.0f;
             point[3] = 5627.925f;
             make_hit_descriptor(&shot, (struct Moby *)moby,
-                             entry[3] >= 1.0f && next_entry[3] >= 1.0f ? 0x10001 : 0x10000, point, 1.0f);
+                             *(f32 *)(data + i * 16 + 0x23C) >= 1.0f && next_entry[3] >= 1.0f ? 0x10001 : 0x10000, point, 1.0f);
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = *(s16 *)(moby + 0xA6);
