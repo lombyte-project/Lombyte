@@ -2624,11 +2624,10 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
     do {
         packet[i].texture = get_effect_texture((&D_L18_00161F08_flare)[i]);
         packet[i].state = 0xff9000000260ULL;
-        packet[i].flags = D_L18_00161EE4_flare |
-                          ((unsigned long long)D_L18_00161EE8_flare << 2) |
-                          ((unsigned long long)D_L18_00161EEC_flare << 4) |
-                          ((unsigned long long)D_L18_00161EF0_flare << 6) |
-                          0x8000000000ULL;
+        packet[i].flags = D_L18_00161EE4_flare | ((unsigned long long)D_L18_00161EE8_flare << 2);
+        packet[i].flags |= (unsigned long long)D_L18_00161EEC_flare << 4;
+        packet[i].flags |= (unsigned long long)D_L18_00161EF0_flare << 6;
+        packet[i].flags |= 0x8000000000ULL;
         packet[i].zero = 0;
         corner = &D_L18_001D9B70_flare[i * 4];
         j = 0;
