@@ -192,8 +192,8 @@ int render_configured_text_label(struct MenuScreen *label) {
 
     render_flags = label->data.label.flags;
     draw_flags = render_flags;
+    x = 4;
     y = 4;
-    text_style = 8;
     if ((draw_flags & 0x4004) == 0x4004 && label->data.label.text_id == 0x523E) {
         draw_flags |= 1;
         y = 12;
@@ -205,7 +205,7 @@ int render_configured_text_label(struct MenuScreen *label) {
     if (text == 0) {
         text = fallback_label_text;
     }
-    x = 4;
+    text_style = 8;
     if (draw_flags & 1) {
         text_style = 9;
         x = label->width / 2;
@@ -237,12 +237,12 @@ int render_configured_text_label(struct MenuScreen *label) {
         c.flags |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
         window->flags = c.flags ^ 4;
-        flags = label->data.label.flags;
+        draw_flags = label->data.label.flags;
         text_extent = c.rendered_height + 4;
         visible_height = c.bottom - c.top;
-        if (!(flags & 0x2000) && text_extent >= visible_height) {
-            if (!(flags & 0x400)) {
-                label->data.label.flags = flags | 0x400;
+        if (!(draw_flags & 0x2000) && text_extent >= visible_height) {
+            if (!(draw_flags & 0x400)) {
+                label->data.label.flags = draw_flags | 0x400;
                 label->data.label.scroll_offset = -(label->height * 8);
             }
         } else if (label->data.label.flags & 0x400) {
