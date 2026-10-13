@@ -716,85 +716,109 @@ void FUN_L11_0030a908(struct Moby *moby) {
     ((Fog_30a908 *)D_L11_0016D440_30a908)->f22C = s22C;
     FUN_00233980_30a908(0x47, 0x5360B);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_0030b358.s", FUN_L11_0030b358);
-#else
-extern float D_L11_001677C0[];
-extern float D_L11_00161E08[];
-extern float D_L11_00161E18;
-extern float D_L11_00161E1C;
-extern float D_L11_001D9AF0[];
-extern int D_L11_0015F5CC;
-extern float D_0015ED7C;
-#define D_L11_00167800 ((float *)((char *)D_L11_001677C0 + 0x40))
-#define D_L11_00166DB8 ((float *)((char *)D_L11_001677C0 - 0xa08))
-#define D_L11_00166DDC (*(float *)((char *)D_L11_001677C0 - 0x9e4))
-extern void subtract_vector_xyz_b358(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void scale_vector_xyz_b358(float, float *, void *) __asm__("FUN_001f9a68");
-extern int random_int_b358(void) __asm__("FUN_001fa6d0");
-extern float convert_integer_to_float_b358(int) __asm__("FUN_001fa6c0");
-extern float fast_sin_b358(float) __asm__("FUN_001f9de0");
-extern void enqueue_callback_list_1_b358(void *, void *) __asm__("FUN_001f4600");
-extern void FUN_L11_0030a908(struct Moby *);
+/* Ocean update: scrolls the two wave layers with the camera and the time, keeps their offsets in -1..1 and sets the level's tide values. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030C728), where it is exact; names translated to the US level program. */
+typedef struct { float u, v; } UV_30b358;
+typedef float V4_30b358[4] __attribute__((aligned(16)));
 
-void FUN_L11_0030b358(unsigned char *moby) {
-    char *data = *(char **)(moby + 0x78);
-    int i;
-    if (moby[0x20] == 0) {
-        moby[0x30] = 0xff;
-        moby[0x20] = 1;
-        {
-            float *a = D_L11_00161E08;
-            float *b = &D_L11_00161E08[1];
-            for (i = 1; i >= 0; i--) {
-                *a = 0.0f;
-                *b = 0.0f;
-                a += 2;
-                b += 2;
-            }
+typedef struct {
+    char pad00[0x14];
+    float level;            /* 0x14 */
+    float scale;            /* 0x18 */
+    char pad1C[0x4];
+    float limit;            /* 0x20 */
+} OceanVars_30b358;
+
+typedef struct {
+    char pad00[0x20];
+    unsigned char state;    /* 0x20 */
+    char pad21[0xF];
+    unsigned char f30;      /* 0x30 */
+    char pad31[0x47];
+    OceanVars_30b358 *vars; /* 0x78 */
+} OceanMoby_30b358;
+
+extern void subtract_vector_b358(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void scale_vector_b358(void *, void *, float) __asm__("FUN_001f9a68");
+extern int float_to_int_b358(float) __asm__("FUN_001fa6d0");
+extern float int_to_float_b358(int) __asm__("FUN_001fa6c0");
+extern float fast_sin_b358(float) __asm__("FUN_001f9de0");
+extern void enqueue_callback_b358(void *, void *) __asm__("FUN_001f4600");
+extern void FUN_L11_0030a908_b358(void) __asm__("FUN_L11_0030a908");
+extern UV_30b358 wave_offset[] __asm__("D_L11_00161E08") __attribute__((section(".sdata")));
+extern float camera_pos_b358[] __asm__("D_L11_001677C0");
+extern char last_camera_pos[4] __asm__("D_L11_00162840") __attribute__((sda)); /* a 16-byte vector; declared small so it is reached through $gp */
+extern float wave_speed[2] __asm__("D_L11_00161DF8") __attribute__((sda));
+extern float ocean_level __asm__("D_L11_00161E1C");
+extern UV_30b358 wave_drift[] __asm__("D_L11_001D9AF0");
+extern float tide_level __asm__("D_L11_00161E18");
+extern int level_frame_b358 __asm__("D_L11_0015F5CC");
+extern float frame_time_b358 __asm__("D_0015ED7C");
+
+void FUN_L11_0030b358(OceanMoby_30b358 *moby)
+{
+    OceanVars_30b358 *d = moby->vars;
+    float src[4];
+    float out[4];
+    int k;
+
+    if (moby->state == 0) {
+        moby->state = 1;
+        moby->f30 = 0xFF;
+        for (k = 0; k < 2; k++) {
+            wave_offset[k].u = 0.0f;
+            wave_offset[k].v = 0.0f;
         }
-        qcopy(D_L11_00167800, D_L11_001677C0);
-        D_L11_00166DDC = *(float *)(data + 0x14);
-    } else {
-        float difference[4];
-        subtract_vector_xyz_b358(difference, D_L11_001677C0, D_L11_00167800);
-        qcopy(D_L11_00167800, D_L11_001677C0);
-        {
-        float current_z = D_L11_001677C0[2];
-        if (*(float *)(data + 0x20) < current_z) {
-            float scaled[2];
-            float *phase_x = D_L11_00161E08;
-            float *phase_y = D_L11_00161E08 + 1;
-            float *velocity = D_L11_00166DB8;
-            i = 0;
-            do {
-                scale_vector_xyz_b358((*velocity + *velocity) / (*(float *)(data + 0x18) * 5.0f), scaled, difference);
-                if (1.0f < scaled[0] || scaled[0] < 1.0f) scaled[0] -= convert_integer_to_float_b358(random_int_b358());
-                if (1.0f < scaled[1] || scaled[1] < 1.0f) scaled[1] -= convert_integer_to_float_b358(random_int_b358());
-                *phase_x += scaled[0];
-                *phase_y += scaled[1];
-                if (*phase_x > 1.0f) *phase_x -= 1.0f;
-                if (*phase_x < -1.0f) *phase_x += 1.0f;
-                if (*phase_y > 1.0f) *phase_y -= 1.0f;
-                if (*phase_y < -1.0f) *phase_y += 1.0f;
-                phase_y += 2;
-                phase_x += 2;
-                velocity++;
-                i++;
-            } while (i < 2);
-            D_L11_00161E18 = D_L11_00161E1C + fast_sin_b358(convert_integer_to_float_b358(D_L11_0015F5CC % 0x168) * 0.017444445f - 3.14f) * 0.25f;
-            for (i = 0; i < 2; i++) {
-                float *phase = &D_L11_00161E08[i * 2];
-                phase[0] += D_L11_001D9AF0[i * 2] * D_0015ED7C;
-                if (phase[0] > 1.0f) phase[0] -= 1.0f;
-                if (phase[0] < -1.0f) phase[0] += 1.0f;
-                phase[1] += D_L11_001D9AF0[i * 2 + 1] * D_0015ED7C;
-                if (phase[1] > 1.0f) phase[1] -= 1.0f;
-                if (phase[1] < -1.0f) phase[1] += 1.0f;
-            }
-            enqueue_callback_list_1_b358((void *)FUN_L11_0030a908, moby);
+        qcopy(last_camera_pos, camera_pos_b358);
+        ocean_level = d->level;
+        return;
+    }
+    subtract_vector_b358(src, camera_pos_b358, last_camera_pos);
+    qcopy(last_camera_pos, camera_pos_b358);
+    if (!(d->limit < camera_pos_b358[2])) {
+        return;
+    }
+    for (k = 0; k < 2; k++) {
+        scale_vector_b358(out, src, (wave_speed[k] + wave_speed[k]) / (d->scale * 5.0f));
+        if (1.0f < out[0] || out[0] < 1.0f) {
+            out[0] = out[0] - int_to_float_b358(float_to_int_b358(out[0]));
         }
+        if (1.0f < out[1] || out[1] < 1.0f) {
+            out[1] = out[1] - int_to_float_b358(float_to_int_b358(out[1]));
+        }
+        wave_offset[k].u = wave_offset[k].u + out[0];
+        wave_offset[k].v = wave_offset[k].v + out[1];
+        if (1.0f < wave_offset[k].u) {
+            wave_offset[k].u = wave_offset[k].u - 1.0f;
+        }
+        if (wave_offset[k].u < -1.0f) {
+            wave_offset[k].u = wave_offset[k].u + 1.0f;
+        }
+        if (1.0f < wave_offset[k].v) {
+            wave_offset[k].v = wave_offset[k].v - 1.0f;
+        }
+        if (wave_offset[k].v < -1.0f) {
+            wave_offset[k].v = wave_offset[k].v + 1.0f;
         }
     }
+    tide_level = ocean_level + fast_sin_b358(int_to_float_b358(level_frame_b358 % 360) * 0.017444445f - 3.14f) * 0.25f;
+    for (k = 0; k < 2; k++) {
+        float sum = wave_offset[k].u + wave_drift[k].u * frame_time_b358;
+        wave_offset[k].u = sum;
+        if (1.0f < sum) {
+            wave_offset[k].u = sum - 1.0f;
+        }
+        if (wave_offset[k].u < -1.0f) {
+            wave_offset[k].u = wave_offset[k].u + 1.0f;
+        }
+        sum = wave_offset[k].v + wave_drift[k].v * frame_time_b358;
+        wave_offset[k].v = sum;
+        if (1.0f < sum) {
+            wave_offset[k].v = sum - 1.0f;
+        }
+        if (wave_offset[k].v < -1.0f) {
+            wave_offset[k].v = wave_offset[k].v + 1.0f;
+        }
+    }
+    enqueue_callback_b358((void *)FUN_L11_0030a908_b358, moby);
 }
-#endif
