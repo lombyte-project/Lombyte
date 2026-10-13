@@ -288,7 +288,7 @@ s32 FUN_L05_00262f50(char *e) {
                 count = 1;
                 src = &D_L05_0015FAF4;
                 i = 2;
-                do { if (*src++ == group) count++; } while (--i >= 0);
+                do { count += (*src++ == group); } while (--i >= 0);
                 D_L05_0015FB00 = D_L05_0015FB00 / count;
                 sprintf_alt(buf, D_L05_0015F860, D_L05_0015FB00);
                 draw_framed_text(D_L05_0015F8C4, D_L05_0015F8C8 - 0x18, color, buf);
