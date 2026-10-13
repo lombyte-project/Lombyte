@@ -2002,12 +2002,10 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
     FUN_0020c828(moby);
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030cdb8.s", FUN_L13_0030cdb8);
-#else
+#include "types.h"
 #include "rnc/gameplay/state/item_state.h"
 extern unsigned char D_0013D408[];
-extern float D_L13_0015F580[];
+extern float D_L13_0015F580[] __attribute__((section(".sdata")));
 extern void FUN_00213928(void *, void *, void *, int, void *, int, int, int);
 extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
@@ -2021,6 +2019,8 @@ extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void FUN_0020c828(void *);
 
+#include "qzero.h"
+extern s32 D_L13_001BA7D0_cdb8[] __asm__("D_L13_001BA7D0");
 void FUN_L13_0030cdb8(struct Moby *moby) {
     char *data;
     void *hit;
@@ -2054,31 +2054,31 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
         FUN_L00_0025d538(moby, data + 0x60);
         break;
     case 2: {
-            void *pos = &moby->pos;
-            void *rot = &moby->rot;
-            void *zero_vector = D_L13_0015F580;
+        void *pos;
+        void *rot;
+        void *zero_vector;
         if (moby->group != 0xff && FUN_L01_0026e008(moby->group, -1) == 1 && D_0013D408[0x16] == 0) {
             D_0013D408[0x16] = 1;
             FUN_0022db10(1, 0, 0);
             queue_dialogue_message(0x53d6, -1);
         }
         FUN_0022da68(0, 0, moby);
+        pos = &moby->pos;
+        rot = &moby->rot;
         FUN_L01_002787a0(moby);
+        zero_vector = D_L13_0015F580;
         D_0014C190_257218[current_level_index][(short)moby->save_id >> 5] |=
             1 << (moby->save_id & 31);
-        ((int *)0x001c0000)[((short)moby->save_id >> 5) - 0x160c] |= 1 << (moby->save_id & 31);
-        j = 0;
-        do {
-            i = 0x709;
-            do {
-                vector.q = 0;
+        D_L13_001BA7D0_cdb8[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
+        for (j = 0; j < 2; j++) {
+            for (i = 0x709; i < 0x70d; i++) {
+                qzero(&vector);
                 FUN_L00_0025f8e0(&vector, 1.5f);
                 vector.f[2] += 1.7f;
                 FUN_001f9a10(&vector, &vector, pos);
                 FUN_L00_00263fd8(moby, i, &vector, rot, 0, 0, 0.0f, zero_vector, zero_vector, zero_vector);
-                i++;
-            } while (i < 0x70d);
-        } while (j++ < 1);
+            }
+        }
         FUN_L00_0025e450(moby, pos, 0, 0.0f, 0.0f, 10, 3, 0x10,
                          6.0f, 3.0f, 9.0f, 1.1f, 0, 15.0f, 1, 3, -1, 0);
         FUN_0020c828(moby);
@@ -2086,4 +2086,3 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
     }
     }
 }
-#endif
