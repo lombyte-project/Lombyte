@@ -483,7 +483,8 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
                 FUN_001eb078_260a88((int)D_L00_001600A0_260a88);
                 count *= 5;
             } else {
-                multiplier = (190 - multiplier) / 20;
+                multiplier = 190 - multiplier;
+                multiplier /= 20;
                 FUN_001eb078_260a88((int)D_L00_001600B0_260a88, multiplier);
                 count *= multiplier;
             }
