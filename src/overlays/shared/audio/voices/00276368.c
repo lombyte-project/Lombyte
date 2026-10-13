@@ -12,7 +12,7 @@ typedef unsigned int u128_init __attribute__((mode(TI), aligned(16)));
 extern struct Own D_L00_001B71F0;
 extern s32 D_L00_00173E04;
 extern s32 D_L00_00173E08;
-extern u8 D_L00_00173E40[];
+extern u8 D_L00_00173E40[] __attribute__((section(".data")));
 extern void *D_L00_00197300[];
 extern s32 D_L00_0015F3F8_gp __asm__("D_L00_0015F3F8") __attribute__((sda));
 extern s32 frame_size __asm__("D_0013E504");
@@ -77,36 +77,39 @@ extern u8 D_L00_001841F0_init[] __asm__("D_L00_001841F0");
 void FUN_L00_00276368(void) {
     s32 i;
     s32 special = 0;
+    f32 *source = D_L00_00166DC0_init;
     s32 *handle;
     void *obj;
     u8 *table;
     s32 id;
+    struct Own *owner;
 
-    *(s32 *)(D_L00_00173E40 + 0x10) |= 0x80000000;
+    { s32 *table = (s32 *)D_L00_00173E40; table[4] |= 0x80000000; }
     D_L00_001B9CF0.unk124 = 0;
     D_L00_001B9CF0.unkD0 = 0;
     if (D_L00_001B9CF0.state == 10) {
         D_L00_001B9CF0.state = 11;
-        D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B3518;
+        owner = (struct Own *)D_L00_001B3518;
         special = 1;
     } else if (D_L00_001B9CF0.state == 14) {
         D_L00_001B9CF0.state = 15;
-        D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B6088;
+        owner = (struct Own *)D_L00_001B6088;
         special = 1;
     } else if (D_L00_001B9CF0.state == 0x21) {
         D_L00_001B9CF0.unk124 = 1;
-        D_L00_001B9CF0.unk8 = &D_L00_001B71F0;
+        owner = &D_L00_001B71F0;
         D_L00_001B9CF0.state = 0x22;
     } else if (D_L00_001B9CF0.state == 0x23) {
-        D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B6B38;
+        owner = (struct Own *)D_L00_001B6B38;
     } else {
         if (D_L00_001B9CF0.state == 0x2d) {
-            D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B86C8;
+            owner = (struct Own *)D_L00_001B86C8;
         } else {
-            D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B2588;
+            owner = (struct Own *)D_L00_001B2588;
         }
         D_L00_001B9CF0.state = 2;
     }
+    D_L00_001B9CF0.unk8 = owner;
     D_L00_001B9CF0.owner = D_L00_001B9CF0.unk8;
     if (D_L00_001B9DE0 != 0) {
         D_L00_0015EED8 = D_L00_001B9E20;
@@ -217,9 +220,9 @@ void FUN_L00_00276368(void) {
             if (obj != 0) {
                 *(u16 *)((u8 *)obj + 0x34) &= 0xfffd;
                 *(void **)((u8 *)*handle + 0x74) = (void *)0x002df638;
-                *(f32 *)((u8 *)*handle + 0x10) = D_L00_00166DC0_init[0];
-                *(f32 *)((u8 *)*handle + 0x14) = D_L00_00166DC0_init[1];
-                *(f32 *)((u8 *)*handle + 0x18) = D_L00_00166DC0_init[2];
+                *(f32 *)((u8 *)*handle + 0x10) = source[0];
+                *(f32 *)((u8 *)*handle + 0x14) = source[1];
+                *(f32 *)((u8 *)*handle + 0x18) = source[2];
                 *(s32 *)((u8 *)*handle + 0x40) = 0;
                 *(s32 *)((u8 *)*handle + 0x44) = 0;
                 *(s32 *)((u8 *)*handle + 0x48) = 0;
