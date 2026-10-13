@@ -456,11 +456,7 @@ void FUN_L10_002be858(unsigned char *moby) {
     float velocity[4];
     float offset[4];
     float angle;
-    float size;
-    float size_scaled;
-    int red, green, blue, color, life, spin;
     int i;
-    char *effect;
     if ((unsigned char)moby[0x20] == 0) {
         D_L10_001618A8 = 0;
         D_001618A4 = FUN_001f96f8(D_001618A4);
@@ -470,6 +466,8 @@ void FUN_L10_002be858(unsigned char *moby) {
     if (hero.vehicle_mode == 1 && *data != -1 && vector_distance(moby + 0x10, &hero.motion.pos) < 0.5f) {
         i = 9;
         do {
+            float size, size_scaled;
+            int red, green, blue, color, life, spin;
             i--;
             size = random_float_between_alt(0.1f, 1.0f);
             red = random_int_between(0x40, 0xff);
@@ -483,24 +481,30 @@ void FUN_L10_002be858(unsigned char *moby) {
             normalize_vector_xyz(position, position, random_float_between_alt(0.0f, D_0015ED6C));
             position[2] = random_float_between_alt(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = FUN_001f96f8(random_int_between(15, 30));
-            color = red | ((blue << 16) | ((green << 8) | 0x7f000000));
+            color = (blue << 16) | ((green << 8) | 0x7f000000) | red;
             size_scaled = size * 0.07f;
             size *= 0.7f;
             spin = random_integer_below(2) ? 1 : -1;
             FUN_L00_00272060(velocity, life, size_scaled, size, color, 0, spin, position, D_0015ED70 * 15.0f);
         } while (i >= 0);
         allocate_voice_for_target_entry(0, 0, (int)moby);
-        effect = (char *)D_L10_0015FFD8 + (*data << 8);
-        FUN_L00_00216f90(effect + 0x10, effect + 0x40, 0x43, 0);
-        effect = D_00167280;
-        D_001618A8 = D_001618A0;
-        if (*(short *)(effect + 0x86) == 0) {
-            short *timer = (short *)(*(char **)(effect + 0x70) + 0x20);
-            *timer = FUN_001f96f8(0x5a);
-            qcopy(effect + 0x40, effect);
+        {
+            char *effect = (char *)D_L10_0015FFD8 + (*data << 8);
+            FUN_L00_00216f90(effect + 0x10, effect + 0x40, 0x43, 0);
+        }
+        {
+            char *effect = D_00167280;
+            D_001618A8 = D_001618A0;
+            if (*(short *)(effect + 0x86) == 0) {
+                short *timer = (short *)(*(char **)(effect + 0x70) + 0x20);
+                *timer = FUN_001f96f8(0x5a);
+                qcopy(effect + 0x40, effect);
+            }
         }
         i = 9;
         do {
+            float size, size_scaled;
+            int red, green, blue, color, life, spin;
             *(OvlQuad *)velocity = 0;
             velocity[0] = random_float_between_alt(-1.0f, 1.0f);
             i--;
@@ -518,7 +522,7 @@ void FUN_L10_002be858(unsigned char *moby) {
             normalize_vector_xyz(position, position, random_float_between_alt(0.0f, D_0015ED6C));
             position[2] = random_float_between_alt(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = FUN_001f96f8(random_int_between(15, 30));
-            color = red | ((blue << 16) | ((green << 8) | 0x7f000000));
+            color = (blue << 16) | ((green << 8) | 0x7f000000) | red;
             size_scaled = size * 0.07f;
             size *= 0.7f;
             spin = random_integer_below(2) ? 1 : -1;
