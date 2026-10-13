@@ -286,7 +286,7 @@ void FUN_L05_002f87a8(unsigned char *moby) {
 
     if (state != 1) {
         if (state < 2 && state == 0) {
-        if (distance_xyz_87a8((void *)0x13f3d0, moby + 0x10) < 5.5f &&
+        if (distance_xyz_87a8(&hero.motion.pos, moby + 0x10) < 5.5f &&
             D_0014F5CC_87a8 > 3 && *(int *)0x1413dc != 0x15 &&
             *(int *)0x1413dc != 0x16) {
             *(char **)0x13fbbc = moby;
