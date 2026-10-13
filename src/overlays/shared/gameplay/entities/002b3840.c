@@ -508,17 +508,18 @@ void FUN_L05_0030c220(struct Moby *m) {
     Quad_30c220 a, b;
     float rotation[4];
     float position[4];
-    float side[4];
-    float direction[4];
-    float up[4];
-    float matrix[4];
+    /* Draw helper reads four consecutive vectors: side, direction, up, position. */
+    float matrix[16] __attribute__((aligned(16)));
+    float *side = matrix;
+    float *direction = matrix + 4;
+    float *up = matrix + 8;
     u64 texture;
     u64 flags;
     float phase;
     float sign;
     float pass;
+    float offset_a_x, offset_a_z, offset_b_x, offset_b_z;
     int i, j, color;
-    int next_pass;
     float *vertex_a, *vertex_b;
     int *color_a, *color_b;
     char *vars = (char *)m->pvars;
@@ -532,7 +533,7 @@ void FUN_L05_0030c220(struct Moby *m) {
     normalize_vector_xyz_30c220(direction, direction, 1.0f);
     cross_vector_xyz_30c220(side, direction, up);
     cross_vector_xyz_30c220(direction, up, side);
-    *(u128 *)matrix = *(u128 *)position;
+    *(u128 *)(matrix + 12) = *(u128 *)position;
 
     texture = get_effect_texture_30c220(D_L05_00161D0C);
     flags = (u64)(s64)D_L05_00161CF4 |
@@ -540,15 +541,19 @@ void FUN_L05_0030c220(struct Moby *m) {
             ((u64)(s64)D_L05_00161CFC << 4) |
             ((u64)(s64)D_L05_00161D00 << 6) |
             0x8000000000ULL;
-    a.control[0] = b.control[0] = 0;
-    a.control[1] = b.control[1] = texture;
-    a.control[2] = b.control[2] = 0xff9000000260ULL;
-    a.control[3] = b.control[3] = flags;
+    a.control[1] = texture;
+    b.control[1] = texture;
+    a.control[2] = 0xff9000000260ULL;
+    a.control[3] = flags;
+    b.control[2] = 0xff9000000260ULL;
+    b.control[3] = flags;
+    b.control[0] = 0;
+    a.control[0] = 0;
     {
-        float *texcoord_a = a.texcoord;
-        float *texcoord_a_v = a.texcoord + 1;
-        float *texcoord_b = b.texcoord;
         float *texcoord_b_v = b.texcoord + 1;
+        float *texcoord_b = b.texcoord;
+        float *texcoord_a_v = a.texcoord + 1;
+        float *texcoord_a = a.texcoord;
         float *texcoord = D_L05_001D67B0;
         int count = 3;
         do {
@@ -565,9 +570,7 @@ void FUN_L05_0030c220(struct Moby *m) {
             texcoord_b_v += 2;
         } while (--count >= 0);
     }
-    i = 0;
-    do {
-        next_pass = i + 1;
+    for (i = 0; i < 10; i++) {
         pass = (float)i;
         j = 0;
         vertex_a = a.vertex[0];
@@ -583,17 +586,20 @@ void FUN_L05_0030c220(struct Moby *m) {
             color = fast_tween_color(D_L05_00161D04, D_L05_00161D08, phase);
             *color_b++ = color;
             *color_a++ = color;
-            vertex_a[2] += pass * 10.0f;
-            vertex_a[0] += phase * 8.0f * sign;
-            vertex_b[0] += phase * 6.0f * sign;
-            vertex_b[2] += pass * 12.0f;
+            offset_a_x = phase * 8.0f * sign;
+            offset_a_z = pass * 10.0f;
+            offset_b_x = phase * 6.0f * sign;
+            offset_b_z = pass * 12.0f;
+            vertex_a[2] += offset_a_z;
+            vertex_a[0] += offset_a_x;
+            vertex_b[0] += offset_b_x;
+            vertex_b[2] += offset_b_z;
             vertex_a += 4;
             vertex_b += 4;
         } while (++j < 4);
         draw_quad_30c220(&a, matrix, 0);
         draw_quad_30c220(&b, matrix, 0);
-        i = next_pass;
-    } while (i < 10);
+    }
 }
 #endif
 #ifndef NON_MATCHING
