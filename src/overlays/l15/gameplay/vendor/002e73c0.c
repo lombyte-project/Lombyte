@@ -1456,185 +1456,174 @@ void FUN_L15_002edb20(struct Moby *m) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edbe0.s", FUN_L15_002edbe0);
-#else
-extern float D_L15_001DE860[];
-extern float D_L15_001DECB0[];
-extern float D_L15_001DEA88[][2];
-extern float D_L15_001DEED8[][2];
-extern int D_L15_001DF048[];
-extern Quad4 D_L15_00162208;
-extern int D_L15_001621B0[2] __attribute__((sda));
-extern int D_L15_001621D0[2] __attribute__((sda));
-extern int D_L15_001621D8[2] __attribute__((sda));
-extern int D_L15_001621E0[2] __attribute__((sda));
-extern int D_L15_001621E4 __attribute__((sda));
-extern int D_L15_001621E8 __attribute__((sda));
-extern int D_L15_001621EC __attribute__((sda));
-extern float D_L15_001621F0 __attribute__((sda));
-extern float D_L15_001621F4 __attribute__((sda));
-extern float D_L15_001621F8 __attribute__((sda));
-extern float D_L15_001621FC __attribute__((sda));
-extern float D_L15_00162200 __attribute__((sda));
+extern float FUN_001f9988_2edbe0(float) __asm__("FUN_001f9988");
+extern float FUN_001fa6c0_2edbe0(int) __asm__("FUN_001fa6c0");
+extern int FUN_001f44b8_2edbe0(int) __asm__("FUN_001f44b8");
+extern void FUN_00233980_2edbe0(int, long) __asm__("FUN_00233980");
+extern float FUN_001f96b0_2edbe0(float) __asm__("FUN_001f96b0");
+extern float FUN_001fa580_2edbe0(float, float) __asm__("FUN_001fa580");
+extern float FUN_001f9de0_2edbe0(float) __asm__("FUN_001f9de0");
+extern void FUN_L00_00250320_2edbe0(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
+extern float FUN_L00_00200260_2edbe0(float, float) __asm__("FUN_L00_00200260");
+extern float FUN_001fa610_2edbe0(float x) __asm__("FUN_001fa610");
+extern void FUN_001f76a0_2edbe0(void) __asm__("FUN_001f76a0");
+extern void FUN_L00_001fde98_2edbe0(int, int, int, void *, int) __asm__("FUN_L00_001fde98");
+extern float D_0015ED6C_2edbe0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern int D_L15_0015F5CC_2edbe0 __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
+extern float D_L15_001DECB0_2edbe0[][3] __asm__("D_L15_001DECB0");
+extern float D_L15_001DE860_2edbe0[][3] __asm__("D_L15_001DE860");
+extern int D_L15_001DF048_2edbe0[] __asm__("D_L15_001DF048");
+extern float D_L15_001DEA88_2edbe0[][2] __asm__("D_L15_001DEA88");
+extern float D_L15_001DEED8_2edbe0[][2] __asm__("D_L15_001DEED8");
+typedef struct { float f[2][2]; } Quad4_2edbe0;
+typedef struct {
+    float prev;
+    float angle;
+} RingVars_2edbe0;
+extern Quad4_2edbe0 D_L15_00162208_2edbe0 __asm__("D_L15_00162208");
+extern int D_L15_001621B0_2edbe0[1] __asm__("D_L15_001621B0") __attribute__((sda));
+extern int D_L15_001621D0_2edbe0[1] __asm__("D_L15_001621D0") __attribute__((sda));
+extern int D_L15_001621D8_2edbe0[1] __asm__("D_L15_001621D8") __attribute__((sda));
+extern int D_L15_001621E0_2edbe0[1] __asm__("D_L15_001621E0") __attribute__((sda));
+extern int D_L15_001621E4_2edbe0 __asm__("D_L15_001621E4") __attribute__((sda));
+extern int D_L15_001621E8_2edbe0 __asm__("D_L15_001621E8") __attribute__((sda));
+extern int D_L15_001621EC_2edbe0 __asm__("D_L15_001621EC") __attribute__((sda));
+extern float D_L15_001621F0_2edbe0 __asm__("D_L15_001621F0") __attribute__((sda));
+extern float D_L15_001621F4_2edbe0 __asm__("D_L15_001621F4") __attribute__((sda));
+extern float D_L15_001621F8_2edbe0 __asm__("D_L15_001621F8") __attribute__((sda));
+extern float D_L15_001621FC_2edbe0 __asm__("D_L15_001621FC") __attribute__((sda));
+extern float D_L15_00162200_2edbe0 __asm__("D_L15_00162200") __attribute__((sda));
 
+/* Builds and draws the animated ring of lights around a moby: 46 scaled vertices and colours, then two passes of 46 texture coordinates. */
 void FUN_L15_002edbe0(struct Moby *moby) {
-    unsigned int i = 0;
-    unsigned int off = 0;
-    RingVars *data = (RingVars *)moby->pvars;
+    RingVars_2edbe0 *data = (RingVars_2edbe0 *)moby->pvars;
+    unsigned int i;
     unsigned int n;
     int j;
     int k;
-    volatile int color;
-    Quad4 t;
     int r;
     int g;
     int b;
+    int color;
     float scale;
-    Quad4 *p;
-    float *o;
-    float *zout;
-    float *end;
-    float *s;
-    int *colors;
-
-    scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_001621FC * frame_time);
-    vu1_add_gs_register(6, get_effect_texture(D_L15_001621E8));
-    vu1_add_gs_register(0x42, ((long)D_L15_001621E4 << 32) | 0x44);
-    vu1_add_gs_register(8, 0);
-    vu1_add_gs_register(0x14, 0xFF9000000260L);
+    scale = FUN_001fa6c0_2edbe0(D_L15_0015F5CC_2edbe0) * (D_L15_001621FC_2edbe0 * D_0015ED6C_2edbe0);
+    FUN_00233980_2edbe0(6, FUN_001f44b8_2edbe0(D_L15_001621E8_2edbe0));
+    FUN_00233980_2edbe0(0x42, ((long)D_L15_001621E4_2edbe0 << 32) | 0x44);
+    FUN_00233980_2edbe0(8, 0);
+    FUN_00233980_2edbe0(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = fast_add_rotations(data->angle, 360.0f / FUN_001f96b0(D_L15_001621F4) *
-                                                      DEG_TO_RAD * frame_time);
-    FUN_L00_00250320(moby, &r, &g, &b);
-    p = (Quad4 *)&t.f[1];
-    color = (D_L15_001621EC << 24) | (b << 16) | (g << 8) | r;
-    end = D_L15_001DECB0 + 0x230 / 4;
-    o = D_L15_001DECB0;
-    zout = D_L15_001DECB0 + 2;
-    colors = D_L15_001DF048;
-    s = D_L15_001DE860;
-    do {
+    data->angle = FUN_001fa580_2edbe0(data->angle, 360.0f / FUN_001f96b0_2edbe0(D_L15_001621F4_2edbe0) * 0.017453292f * D_0015ED6C_2edbe0);
+    FUN_L00_00250320_2edbe0(moby, &r, &g, &b);
+    color = (D_L15_001621EC_2edbe0 << 24) | (b << 16) | (g << 8) | r;
+    for (i = 0; i < 46; i++) {
+        float *s = D_L15_001DE860_2edbe0[i];
         float x = s[0];
         float y = s[1];
-        float rad = FUN_001f9988(x * x + y * y);
-        float a = FUN_L00_00200260(rad, D_L15_001621F0);
-        float w = wrap_angle(a * 6.2831855f / D_L15_001621F0);
-        float z = fast_sin(fast_add_rotations(w, data->angle));
-        o[0] = D_L15_00162200 * s[0] + moby->pos.x;
-        *(float *)((char *)D_L15_001DECB0 + 4 + off) = D_L15_00162200 * s[1] + moby->pos.y;
-        *zout = D_L15_00162200 * s[2] + moby->pos.z + D_L15_001621F8 * z;
-        *colors++ = color;
-        off += 12;
-        o += 3;
-        zout += 3;
-        s += 3;
-    } while (zout < end);
+        float rad = FUN_001f9988_2edbe0(x * x + y * y);
+        float a = FUN_L00_00200260_2edbe0(rad, D_L15_001621F0_2edbe0);
+        float w = FUN_001fa610_2edbe0(a * 6.2831855f / D_L15_001621F0_2edbe0);
+        float z = FUN_001f9de0_2edbe0(FUN_001fa580_2edbe0(w, data->angle));
+        D_L15_001DECB0_2edbe0[i][0] = D_L15_00162200_2edbe0 * s[0] + moby->pos.x;
+        D_L15_001DECB0_2edbe0[i][1] = D_L15_00162200_2edbe0 * s[1] + moby->pos.y;
+        D_L15_001DECB0_2edbe0[i][2] = D_L15_00162200_2edbe0 * s[2] + moby->pos.z + D_L15_001621F8_2edbe0 * z;
+        D_L15_001DF048_2edbe0[i] = color;
+    }
     for (j = 0; j < 2; j++) {
         for (n = 0; n < 46; n++) {
-            t = D_L15_00162208;
-            D_L15_001DEED8[n][0] = D_L15_001DEA88[n][0] +
-                FUN_L00_00200260(scale * t.f[j * 2], 1.0f);
-            D_L15_001DEED8[n][1] = D_L15_001DEA88[n][1] +
-                FUN_L00_00200260(scale * p->f[j * 2], 1.0f);
+            Quad4_2edbe0 t = D_L15_00162208_2edbe0;
+            D_L15_001DEED8_2edbe0[n][0] = D_L15_001DEA88_2edbe0[n][0] + FUN_L00_00200260_2edbe0(scale * t.f[j][0], 1.0f);
+            D_L15_001DEED8_2edbe0[n][1] = D_L15_001DEA88_2edbe0[n][1] + FUN_L00_00200260_2edbe0(scale * t.f[j][1], 1.0f);
         }
-        font_queue_vu_state();
+        FUN_001f76a0_2edbe0();
         for (k = 0; k < 1; k++) {
-            FUN_L00_001fde98(D_L15_001621B0[k], D_L15_001621D0[k], D_L15_001621E0[k],
-                             (void *)D_L15_001621D8[k], 1);
+            FUN_L00_001fde98_2edbe0(D_L15_001621B0_2edbe0[k], D_L15_001621D0_2edbe0[k], D_L15_001621E0_2edbe0[k], (void *)D_L15_001621D8_2edbe0[k], 1);
         }
     }
 }
-#endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002edfc0.s", FUN_L15_002edfc0);
-#else
-extern float D_L15_001DF100[];
-extern float D_L15_001DF520[][2];
-extern float D_L15_001DF940[];
-extern float D_L15_001DFD60[][2];
-extern int D_L15_001E0020[];
-extern Quad4 D_L15_00162278;
-extern int D_L15_00162220[2] __attribute__((sda));
-extern int D_L15_00162240[2] __attribute__((sda));
-extern int D_L15_00162248[2] __attribute__((sda));
-extern int D_L15_00162250[2] __attribute__((sda));
-extern int D_L15_00162254 __attribute__((sda));
-extern int D_L15_00162258 __attribute__((sda));
-extern int D_L15_0016225C __attribute__((sda));
-extern float D_L15_00162260 __attribute__((sda));
-extern float D_L15_00162264 __attribute__((sda));
-extern float D_L15_00162268 __attribute__((sda));
-extern float D_L15_0016226C __attribute__((sda));
-extern float D_L15_00162270 __attribute__((sda));
+extern float D_0015ED6C_2edfc0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern int D_L15_0015F5CC_2edfc0 __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
+extern int FUN_001f44b8_2edfc0(int) __asm__("FUN_001f44b8");
+extern void FUN_001f76a0_2edfc0(void) __asm__("FUN_001f76a0");
+extern float FUN_001f96b0_2edfc0(float) __asm__("FUN_001f96b0");
+extern float FUN_001f9988_2edfc0(float) __asm__("FUN_001f9988");
+extern float FUN_001f9de0_2edfc0(float) __asm__("FUN_001f9de0");
+extern float FUN_001fa580_2edfc0(float, float) __asm__("FUN_001fa580");
+extern float FUN_001fa610_2edfc0(float x) __asm__("FUN_001fa610");
+extern float FUN_001fa6c0_2edfc0(int) __asm__("FUN_001fa6c0");
+extern void FUN_00233980_2edfc0(int, long) __asm__("FUN_00233980");
+extern void FUN_L00_001fde98_2edfc0(int, int, int, void *, int) __asm__("FUN_L00_001fde98");
+extern float FUN_L00_00200260_2edfc0(float, float) __asm__("FUN_L00_00200260");
+extern void FUN_L00_00250320_2edfc0(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
+extern float D_L15_001DF940_2edfc0[][3] __asm__("D_L15_001DF940");
+extern float D_L15_001DF100_2edfc0[][3] __asm__("D_L15_001DF100");
+extern int D_L15_001E0020_2edfc0[] __asm__("D_L15_001E0020");
+extern float D_L15_001DF520_2edfc0[][2] __asm__("D_L15_001DF520");
+extern float D_L15_001DFD60_2edfc0[][2] __asm__("D_L15_001DFD60");
+typedef struct { float f[2][2]; } Quad4_2edfc0;
+typedef struct {
+    float prev;
+    float angle;
+} RingVars_2edfc0;
+extern Quad4_2edfc0 D_L15_00162278_2edfc0 __asm__("D_L15_00162278");
+extern int D_L15_00162220_2edfc0[1] __asm__("D_L15_00162220") __attribute__((sda));
+extern int D_L15_00162240_2edfc0[1] __asm__("D_L15_00162240") __attribute__((sda));
+extern int D_L15_00162248_2edfc0[1] __asm__("D_L15_00162248") __attribute__((sda));
+extern int D_L15_00162250_2edfc0[1] __asm__("D_L15_00162250") __attribute__((sda));
+extern int D_L15_00162254_2edfc0 __asm__("D_L15_00162254") __attribute__((sda));
+extern int D_L15_00162258_2edfc0 __asm__("D_L15_00162258") __attribute__((sda));
+extern int D_L15_0016225C_2edfc0 __asm__("D_L15_0016225C") __attribute__((sda));
+extern float D_L15_00162260_2edfc0 __asm__("D_L15_00162260") __attribute__((sda));
+extern float D_L15_00162264_2edfc0 __asm__("D_L15_00162264") __attribute__((sda));
+extern float D_L15_00162268_2edfc0 __asm__("D_L15_00162268") __attribute__((sda));
+extern float D_L15_0016226C_2edfc0 __asm__("D_L15_0016226C") __attribute__((sda));
+extern float D_L15_00162270_2edfc0 __asm__("D_L15_00162270") __attribute__((sda));
 
+/* Builds and draws the animated ring of lights around a moby: 88 scaled vertices and colours, then two passes of 88 texture coordinates. */
 void FUN_L15_002edfc0(struct Moby *moby) {
-    int off = 0;
-    RingVars *data = (RingVars *)moby->pvars;
+    RingVars_2edfc0 *data = (RingVars_2edfc0 *)moby->pvars;
+    unsigned int i;
     unsigned int n;
     int j;
     int k;
-    struct { char pad[4]; Quad4 q; } t;
     int r;
     int g;
     int b;
-    volatile int color;
+    int color;
     float scale;
-    Quad4 *p;
-    float *o;
-    float *zout;
-    float *end;
-    float *s;
-    int *colors;
-
-    scale = convert_integer_to_float(D_L15_0015F5CC) * (D_L15_0016226C * frame_time);
-    vu1_add_gs_register(6, get_effect_texture(D_L15_00162258));
-    vu1_add_gs_register(0x42, ((long)D_L15_00162254 << 32) | 0x44);
-    vu1_add_gs_register(8, 0);
-    vu1_add_gs_register(0x14, 0xFF9000000260L);
+    scale = FUN_001fa6c0_2edfc0(D_L15_0015F5CC_2edfc0) * (D_L15_0016226C_2edfc0 * D_0015ED6C_2edfc0);
+    FUN_00233980_2edfc0(6, FUN_001f44b8_2edfc0(D_L15_00162258_2edfc0));
+    FUN_00233980_2edfc0(0x42, ((long)D_L15_00162254_2edfc0 << 32) | 0x44);
+    FUN_00233980_2edfc0(8, 0);
+    FUN_00233980_2edfc0(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = fast_add_rotations(data->angle, 360.0f / FUN_001f96b0(D_L15_00162264) *
-                                                      DEG_TO_RAD * frame_time);
-    FUN_L00_00250320(moby, &r, &g, &b);
-    p = (Quad4 *)&t.q.f[1];
-    color = (D_L15_0016225C << 24) | (b << 16) | (g << 8) | r;
-    end = D_L15_001DF940 + 0x428 / 4;
-    zout = D_L15_001DF940 + 2;
-    o = D_L15_001DF940;
-    s = D_L15_001DF100;
-    colors = D_L15_001E0020;
-    do {
+    data->angle = FUN_001fa580_2edfc0(data->angle, 360.0f / FUN_001f96b0_2edfc0(D_L15_00162264_2edfc0) * 0.017453292f * D_0015ED6C_2edfc0);
+    FUN_L00_00250320_2edfc0(moby, &r, &g, &b);
+    color = (D_L15_0016225C_2edfc0 << 24) | (b << 16) | (g << 8) | r;
+    for (i = 0; i < 88; i++) {
+        float *s = D_L15_001DF100_2edfc0[i];
         float x = s[0];
         float y = s[1];
-        float rad = FUN_001f9988(x * x + y * y);
-        float a = FUN_L00_00200260(rad, D_L15_00162260);
-        float w = wrap_angle(a * 6.2831855f / D_L15_00162260);
-        float z = fast_sin(fast_add_rotations(w, data->angle));
-        o[0] = D_L15_00162270 * s[0] + moby->pos.x;
-        *(float *)((char *)D_L15_001DF940 + 4 + off) = D_L15_00162270 * s[1] + moby->pos.y;
-        *zout = D_L15_00162270 * s[2] + moby->pos.z + D_L15_00162268 * z;
-        *colors++ = color;
-        off += 12;
-        o += 3;
-        s += 3;
-        zout += 3;
-    } while (zout < end);
+        float rad = FUN_001f9988_2edfc0(x * x + y * y);
+        float a = FUN_L00_00200260_2edfc0(rad, D_L15_00162260_2edfc0);
+        float w = FUN_001fa610_2edfc0(a * 6.2831855f / D_L15_00162260_2edfc0);
+        float z = FUN_001f9de0_2edfc0(FUN_001fa580_2edfc0(w, data->angle));
+        D_L15_001DF940_2edfc0[i][0] = D_L15_00162270_2edfc0 * s[0] + moby->pos.x;
+        D_L15_001DF940_2edfc0[i][1] = D_L15_00162270_2edfc0 * s[1] + moby->pos.y;
+        D_L15_001DF940_2edfc0[i][2] = D_L15_00162270_2edfc0 * s[2] + moby->pos.z + D_L15_00162268_2edfc0 * z;
+        D_L15_001E0020_2edfc0[i] = color;
+    }
     for (j = 0; j < 2; j++) {
         for (n = 0; n < 88; n++) {
-            t.q = D_L15_00162278;
-            D_L15_001DFD60[n][0] = D_L15_001DF520[n][0] +
-                FUN_L00_00200260(scale * t.q.f[j * 2], 1.0f);
-            D_L15_001DFD60[n][1] = D_L15_001DF520[n][1] +
-                FUN_L00_00200260(scale * p->f[j * 2], 1.0f);
+            Quad4_2edfc0 t = D_L15_00162278_2edfc0;
+            D_L15_001DFD60_2edfc0[n][0] = D_L15_001DF520_2edfc0[n][0] + FUN_L00_00200260_2edfc0(scale * t.f[j][0], 1.0f);
+            D_L15_001DFD60_2edfc0[n][1] = D_L15_001DF520_2edfc0[n][1] + FUN_L00_00200260_2edfc0(scale * t.f[j][1], 1.0f);
         }
-        font_queue_vu_state();
+        FUN_001f76a0_2edfc0();
         for (k = 0; k < 1; k++) {
-            FUN_L00_001fde98(D_L15_00162220[k], D_L15_00162240[k], D_L15_00162250[k],
-                             (void *)D_L15_00162248[k], 1);
+            FUN_L00_001fde98_2edfc0(D_L15_00162220_2edfc0[k], D_L15_00162240_2edfc0[k], D_L15_00162250_2edfc0[k], (void *)D_L15_00162248_2edfc0[k], 1);
         }
     }
 }
-#endif
 /* Tells whether the vendor menu lets this slot's item be bought (1) or not (0). */
 
 extern char *D_L15_00167400 __attribute__((section(".data")));
