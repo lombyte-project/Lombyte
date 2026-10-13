@@ -91,6 +91,7 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     OvlVec4 origin;
     OvlVec4 first;
     OvlVec4 next;
+    OvlVec4 *previous;
     OvlVec4 *current;
     SegmentPath_261b48 **entry;
     s32 i;
@@ -110,15 +111,17 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     entry = &D_L00_001B04B0_261b48[path_index];
     found = 0;
     i = 1;
-    FUN_001ff2a8_261b48(&first, &(*entry)->points[0], start);
     origin.f[2] = 1.0f;
-    FUN_001ff6d0_261b48(&first, &first, &direction);
+    current = &first;
+    FUN_001ff2a8_261b48(current, &(*entry)->points[0], start);
+    FUN_001ff6d0_261b48(current, current, &direction);
+    previous = current;
     current = &next;
     if (i < (*entry)->count) {
         offset = 0x20;
         do {
             FUN_001ff2a8_261b48(current, (OvlVec4 *)((u8 *)*entry + offset), start);
-            FUN_001ff6d0_261b48(current, &next, &direction);
+            FUN_001ff6d0_261b48(current, current, &direction);
             if (first.f[3] != 0.0f || current->f[3] != 0.0f) {
                 if (current->f[1] * first.f[1] < 0.0f) {
                     crossing = (first.f[0] - current->f[0]) / (first.f[1] - current->f[1]) * -current->f[1] + current->f[0];
@@ -128,7 +131,7 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
                     }
                 }
             }
-            first.q = ((volatile OvlVec4 *)current)->q;
+            previous->q = ((volatile OvlVec4 *)current)->q;
             i++;
             offset += 0x10;
         } while (i < (*entry)->count);
