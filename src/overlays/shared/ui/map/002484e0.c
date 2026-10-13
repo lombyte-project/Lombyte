@@ -54,8 +54,8 @@ void FUN_L00_002484e0(f32 *position) {
     s32 y_max;
     s32 level;
     s32 state;
-    s64 mode15;
-    s64 mode16;
+    s32 mode15;
+    s32 mode16;
     s32 i;
 
     if (D_L00_00184218 == 0) return;
