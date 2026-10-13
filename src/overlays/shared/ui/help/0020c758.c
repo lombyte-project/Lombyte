@@ -1339,7 +1339,7 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     /* Retail adds distances to these stack values without initializing them. */
     f32 scores[16];
     s32 i, j, n, chosen, ring, limit;
-    volatile s32 count;
+    s32 count;
     f32 maximum;
     s64 negative_one = -1;
     u8 *record;
@@ -1360,8 +1360,15 @@ void FUN_L00_0020f160(void *moby, void *matrix)
         if ((*(s32 *)(hero_ptr->pad_21B8 + 4)) > 16)
             (*(s32 *)(hero_ptr->pad_21B8 + 4)) = 16;
     }
-    for (i = 0; i < 3; i++)
-        FUN_001ff260_f160(sum + i * 16);
+    {
+        u8 *record = sum;
+        i = 2;
+        do {
+            FUN_001ff260_f160(record);
+            i--;
+            record += 16;
+        } while (i >= 0);
+    }
 
     if (hero.state.control_mode == 22)
         D_0013F694 = 14;
