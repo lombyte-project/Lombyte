@@ -2103,8 +2103,8 @@ child_ready:;
                     m[0x20] = 6;
                 } else {
                     FUN_0028dbe8_2c6158(2, 0, m);
-                    if (hero.unk978 == 0) FUN_002223f8_2c6158(37, 1);
-                    else FUN_002223f8_2c6158(38, 1);
+                    if (hero.unk978 != 0) FUN_002223f8_2c6158(38, 1);
+                    else FUN_002223f8_2c6158(37, 1);
                     m[0x20] = 5;
                 }
             } else {
