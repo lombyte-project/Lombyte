@@ -73,11 +73,10 @@ void build_resident_indexed_texture_warp_meshes(void) {
         s32 page;
         for (page = 0; page < level_render_state.history_count - 1; page++) {
             history_index = (level_render_state.history_index - page + 0x1F) & 0x1F;
-            primary_next = get_primary_history_position((history_index + 1) & 0x1F);
-            secondary_next =
-                &level_render_state.secondary_history[(history_index + 1) & 0x1F];
-            primary_current = get_primary_history_position(history_index);
             secondary_current = &level_render_state.secondary_history[history_index];
+            primary_current = get_primary_history_position(history_index);
+            secondary_next = &level_render_state.secondary_history[(history_index + 1) & 0x1F];
+            primary_next = get_primary_history_position((history_index + 1) & 0x1F);
             primary_after_next = get_primary_history_position((history_index + 2) & 0x1F);
             {
                 s32 strip;
