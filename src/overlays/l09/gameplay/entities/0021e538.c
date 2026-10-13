@@ -257,8 +257,8 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         *(float *)(packet + 52) = current[0x22c / 4];
         {
             float saved0 = current[0x228 / 4];
-            packet[57] = 0x020001d2;
             packet[56] = 0x03000000;
+            packet[57] = 0x020001d2;
             *(float *)(packet + 53) = saved0;
         }
         packet[58] = 0x15000000;
@@ -286,7 +286,8 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     words = (u64 *)(packet + 4);
     D_L09_001611C0 = packet + 4;
     color = (unsigned char)data[0x30] | (unsigned char)data[0x31] << 8 | (unsigned char)data[0x32] << 16;
-    if (D_L09_0015F458 == 1)
+    /* Retail reads the mode after the packet cursor stores. */
+    if (*(volatile int *)&D_L09_0015F458 == 1)
         color = (long)(*(int *)(current + 0x230 / 4) | (*(int *)(current + 0x234 / 4) << 8) |
                 (*(int *)(current + 0x238 / 4) << 16));
     {
