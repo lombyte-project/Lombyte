@@ -2242,6 +2242,7 @@ void FUN_L00_002d5160(unsigned char *m) {
     f32 angle;
     f32 vec[4] __attribute__((aligned(16)));
     f32 forceX, forceY, forceZ, forceW, health, duration;
+    f32 reactionC0, reactionC4;
     unsigned char *row;
     unsigned char *effect;
 
@@ -2260,8 +2261,8 @@ void FUN_L00_002d5160(unsigned char *m) {
     if (result != 1 && m[0x20] != 12 && damage != 0.0f) {
         forceX = D_L00_00161970_2d5160 * D_0015ED70_2d5160;
         forceY = D_L00_00161974_2d5160 * D_0015ED70_2d5160;
-        forceZ = D_L00_00161978_2d5160 * D_0015ED6C_2d5160;
         forceW = D_L00_0016197C_2d5160 * D_0015ED6C_2d5160;
+        forceZ = D_L00_00161978_2d5160 * D_0015ED6C_2d5160;
         health = *(f32 *)(v + 0x20) - damage;
         v[0xAD] = 0;
         duration = D_0015ED6C_2d5160 + D_0015ED6C_2d5160;
@@ -2278,8 +2279,10 @@ void FUN_L00_002d5160(unsigned char *m) {
         *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
         FUN_L00_0025ab48_2d5160(vec, &angle, v + 0x88, v + 0x8C);
         FUN_L00_0025c558_2d5160(angle, m, v + 0x70, FUN_L00_00257b50_2d5160(2) + 6, 1, 0);
-        *(f32 *)(v + 0xC0) = D_L00_0016198C_2d5160;
-        *(f32 *)(v + 0xC4) = D_L00_00161988_2d5160;
+        reactionC0 = D_L00_0016198C_2d5160;
+        reactionC4 = D_L00_00161988_2d5160;
+        *(f32 *)(v + 0xC0) = reactionC0;
+        *(f32 *)(v + 0xC4) = reactionC4;
         m[0x20] = 12;
         v[0x67] = 0x78;
         FUN_L00_0025d458_2d5160(m, v + 0x60);
