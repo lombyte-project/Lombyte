@@ -2157,95 +2157,103 @@ void FUN_L00_00209240(s32 a) {
     t = D_L00_001E7C10;
     FUN_L00_0024f8f0(a, 9, &t, (((char *)&hero) + 0xac0));
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002092c8.s", FUN_L00_002092c8);
-#else
-extern u64 FUN_001ff768_002092c8(int, float) __asm__("FUN_L00_001ff768");
-extern void FUN_00254b58_002092c8(int) __asm__("FUN_L00_00254b58");
-extern volatile s32 D_001413D0_002092c8 __asm__("D_001413D0");
+/* A packed pose: after this header come three lists of 64-bit entries, four
+   saturated s16 each. Rotations (quaternions * 32768) start with the root at
+   0x10; scales (4096 = 1.0) and translations follow, each entry tagged with
+   its joint index in the top s16 (scales also with 0x8000). */
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+    u16 unk4;
+    u16 size;               /* 0x6: quadwords from 0x10 to the end */
+    u16 scale_offset;       /* 0x8: bytes from 0x10 to the scale list */
+    u16 scale_count;        /* 0xA */
+    u16 translation_offset; /* 0xC: bytes from 0x10 to the translation list */
+    u16 translation_count;  /* 0xE */
+    u64 root_rotation;      /* 0x10 */
+} PackedPose;
 
-void FUN_L00_002092c8(s32 *indices, u16 *header, u8 *reference, s32 padding, s32 context) {
-    s32 *index;
-    s32 *first_index;
-    s32 *comparison_index;
+/* The identity quaternion, packed: w = 0x7FFF. */
+#define PACKED_IDENTITY 0x7fff000000000000ULL
+/* A packed scale of 1.0 (x = y = z = 0x1000), which the scale list leaves out. */
+#define PACKED_UNIT_SCALE 0x100010001000ULL
+#define PACKED_XYZ_MASK 0xffffffffffffULL
+
+/* Scratchpad joint records, 0x40 bytes each: rotation, scale, translation. */
+#define SPR_JOINT_ROTATION 0x70000000
+#define SPR_JOINT_SCALE 0x70000010
+#define SPR_JOINT_TRANSLATION 0x70000020
+
+extern u64 pack_vector_s16(s32 vector, f32 scale) __asm__("FUN_L00_001ff768");
+extern void FUN_00254b58_002092c8(s32) __asm__("FUN_L00_00254b58");
+
+/* Packs the scratchpad joints listed in joints[1..] (ended by a negative
+   entry) into pose: every rotation, padding identity rotations, the scales
+   that are not 1.0 and the translations that differ from the bind pose. */
+void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 context) __asm__("FUN_L00_002092c8");
+void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 context) {
     u64 *out;
-    s32 first_count;
-    s32 second_count;
-    s32 third_count;
+    s32 rotation_count;
+    s32 scale_count;
+    s32 translation_count;
     s32 i;
-    s32 third_index;
+    s32 joint;
+    s32 rotation_size;
     u64 value;
 
     if (context == 0)
-        context = *(volatile s32 *)D_001413D0;
-    out = (u64 *)((u8 *)header + 0x18);
+        context = D_001413D0_00209240;
+    out = (u64 *)(pose + 1);
     FUN_00254b58_002092c8(context);
-    *(u64 *)(header + 8) = 0x7fff000000000000ULL;
-    first_count = 1;
-    if (indices[1] >= 0) {
-        s32 source_address = 0x70000000;
-        first_index = indices + 1;
-        do {
-            first_count++;
-            *out = FUN_001ff768_002092c8((*first_index++ << 6) + source_address, 32768.0f);
-            out++;
-        } while (*first_index >= 0);
+    pose->root_rotation = PACKED_IDENTITY;
+    rotation_count = 1;
+    for (i = 1; joints[i] >= 0; i++) {
+        *out++ = pack_vector_s16((joints[i] << 6) + SPR_JOINT_ROTATION, 32768.0f);
+        rotation_count++;
     }
     if (padding > 0) {
         s32 remaining = padding;
         do {
-            *out = 0x7fff000000000000ULL;
+            *out = PACKED_IDENTITY;
             remaining--;
             out++;
-            first_count++;
+            rotation_count++;
         } while (remaining != 0);
     }
-    second_count = 0;
+    scale_count = 0;
     i = 1;
-    if (indices[1] >= 0) {
-        index = indices + 1;
-        do {
-            value = FUN_001ff768_002092c8(0x70000010 + (*index << 6), 4096.0f);
-            if ((value & 0xffffffffffffULL) != 0x100010001000ULL) {
-                *out = value & 0xffffffffffffULL;
-                second_count++;
-                *(u16 *)((u8 *)out + 6) = i | 0x8000;
-                out++;
-            }
-            index++;
-            i++;
-        } while (*index >= 0);
+    rotation_size = rotation_count << 3;
+    for (; joints[i] >= 0; i++) {
+        value = pack_vector_s16(SPR_JOINT_SCALE + (joints[i] << 6), 4096.0f);
+        if ((value & PACKED_XYZ_MASK) != PACKED_UNIT_SCALE) {
+            *out = value & PACKED_XYZ_MASK;
+            scale_count++;
+            *(u16 *)((u8 *)out + 6) = i | 0x8000;
+            out++;
+        }
     }
-    third_count = 0;
-    third_index = 1;
-    if (indices[1] >= 0) {
-        comparison_index = indices + 1;
-        do {
-            value = FUN_001ff768_002092c8(0x70000020 + (*comparison_index << 6), 1.0f);
-            if ((value & 0xffffffffffffULL) !=
-                (FUN_001ff768_002092c8(*(s32 *)(reference + 0x18) + (third_index << 4), 1.0f) &
-                 0xffffffffffffULL)) {
-                *out = value & 0xffffffffffffULL;
-                third_count++;
-                *(u16 *)((u8 *)out + 6) = third_index;
-                out++;
-            }
-            comparison_index++;
-            third_index++;
-        } while (*comparison_index >= 0);
+    translation_count = 0;
+    for (joint = 1; joints[joint] >= 0; joint++) {
+        value = pack_vector_s16(SPR_JOINT_TRANSLATION + (joints[joint] << 6), 1.0f);
+        if ((value & PACKED_XYZ_MASK) !=
+            (pack_vector_s16(*(s32 *)(model + 0x18) + (joint << 4), 1.0f) & PACKED_XYZ_MASK)) {
+            *out = value & PACKED_XYZ_MASK;
+            translation_count++;
+            *(u16 *)((u8 *)out + 6) = joint;
+            out++;
+        }
     }
     if ((u32)out & 0xf)
         *out++ = 0;
-    header[7] = third_count;
-    header[4] = first_count << 3;
-    header[3] = ((u8 *)out - ((u8 *)header + 0x10)) >> 4;
-    header[5] = second_count;
-    header[6] = (first_count + second_count) << 3;
-    header[1] = 0;
-    header[2] = 0;
-    header[0] = 0;
+    pose->translation_count = translation_count;
+    pose->scale_offset = rotation_size;
+    pose->size = ((u8 *)out - (u8 *)&pose->root_rotation) >> 4;
+    pose->scale_count = scale_count;
+    pose->translation_offset = (rotation_count + scale_count) << 3;
+    pose->unk2 = 0;
+    pose->unk4 = 0;
+    pose->unk0 = 0;
 }
-#endif
 typedef struct {
     float x, y, z, w_00209540;
 } V4_00209540;
