@@ -1310,18 +1310,18 @@ void FUN_L14_00314f00(char *moby) {
         lengths[7 - count] = 0.0f;
         indices[7 - count] = -1;
     }
+    vector30 = moby + 0x30;
     vector10 = moby + 0x10;
     vector20 = moby + 0x20;
-    vector30 = moby + 0x30;
     *(float *)((char *)indices + 0x30) = FUN_001f9e90_14f00(1.0f, D_L14_0016D140.fB0) * 2.0f;
 
     if (*(int *)(rec + 0x20) >= 0) {
         int count;
         path = D_L14_001B0BB0[*(int *)(rec + 0x20)];
+        i = 0;
         if (*(int *)path > 0) {
             short *saved_indices = indices;
             float *saved_lengths = lengths;
-            i = 0;
             do {
                 char *p = path + i * 16;
                 float previous_length = *(float *)(p + 0x1C);
