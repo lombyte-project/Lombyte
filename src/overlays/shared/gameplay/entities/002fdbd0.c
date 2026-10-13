@@ -647,10 +647,10 @@ void FUN_L06_002ff2c8(char *moby) {
         return;
     }
     if (frames == 20) {
-        f32 *weight = (f32 *)data;
+        f32 *weight = (f32 *)(data + 0x230);
         s32 remaining = 15;
         do {
-            f32 *value = (f32 *)((char *)weight + 0x23C);
+            f32 *value = weight + 3;
             if (*value >= 1.0f) {
                 *value = 0.98f;
             }
@@ -662,6 +662,7 @@ void FUN_L06_002ff2c8(char *moby) {
     offset = 0;
     {
         f32 *entry = (f32 *)(data + 0x230);
+        f32 *relative_ptr = relative;
         do {
             if (hero.vehicle_mode == 1) {
                 step = D_L06_00161FD0 * frame_time * 0.5f;
@@ -672,8 +673,8 @@ void FUN_L06_002ff2c8(char *moby) {
             point[2] = 0.0f;
             normalize_vector_xyz(point, point, step);
             add_vector_xyz(point, entry, point);
-            subtract_vector_xyz(relative, point, moby + 0x10);
-            alignment = dot_vectors_xyz(relative, data + 0x220);
+            subtract_vector_xyz(relative_ptr, point, moby + 0x10);
+            alignment = dot_vectors_xyz(relative_ptr, data + 0x220);
             if (alignment > 0.4f) {
                 point[2] -= frame_time + frame_time;
             } else if (alignment < 0.3f) {
