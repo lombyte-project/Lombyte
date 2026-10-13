@@ -452,8 +452,10 @@ void FUN_L00_002464a8(void) {
         source += 2;
         destination++;
     }
+    i = current_level_index;
     state->file_handle = -1;
-    state->archive_index = current_level_index > 0x12 ? 0 : current_level_index;
+    if (i > 0x12) i = 0;
+    state->archive_index = i;
     points = (f32 *)0x182810;
     coefficients = (f32 *)0x182a70;
     for (i = 0x12; i >= 0; i--) {
