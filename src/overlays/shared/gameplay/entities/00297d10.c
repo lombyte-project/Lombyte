@@ -377,7 +377,7 @@ extern f32 D_L06_0015F580[] __attribute__((section(".sdata")));
 extern f32 D_L06_00161C04 __attribute__((sda));
 extern int D_L06_00161C08 __attribute__((sda));
 extern int D_L06_00161C0C __attribute__((sda));
-extern struct Moby *D_L06_0015FFD8_e94f0 __asm__("D_L06_0015FFD8") __attribute__((sda));
+extern struct Moby *D_L06_0015FFD8_e94f0 __asm__("D_L06_0015FFD8");
 extern u8 D_001413F4_e94f0[] __asm__("D_001413F4");
 extern int D_L06_0015F5CC;
 extern int *D_L06_001B0C30[];
