@@ -475,21 +475,23 @@ int FUN_L00_002365a8(HudElem *e) {
     FUN_L00_0023bac0(image, x + e->unk48, y + e->unk4A,
                        D_L00_0015F760, D_L00_0015F764, 0x80);
 
+    origin.z = 1.0f;
+    origin.w = 1.0f;
     half_h = (float)D_L00_0015F764 * D_L00_0015F76C * 0.5f;
     offset = (float)(10000 - e->unk74) / 10000.0f;
     half_w = (float)D_L00_0015F760 * D_L00_0015F768 * 0.5f;
     origin.x = half_w / 17.0f;
     origin.y = -half_h / 116.0f;
-    direction.w = 0.0f;
     direction.z = 0.0f;
-    direction.x = (half_w + (float)(x + e->unk48) +
-                   (1.0f - D_L00_0015F768) * 0.5f * (float)D_L00_0015F760) * 16.0f;
-    direction.y = (half_h + (float)(y + e->unk4A) +
-                   (1.0f - D_L00_0015F76C) * 0.5f * (float)D_L00_0015F764) * 16.0f;
+    direction.w = 0.0f;
+    direction.y = half_h + (float)(y + e->unk4A);
+    direction.x = half_w + (float)(x + e->unk48);
+    direction.x += (1.0f - D_L00_0015F768) * 0.5f * (float)D_L00_0015F760;
+    direction.y += (1.0f - D_L00_0015F76C) * 0.5f * (float)D_L00_0015F764;
+    direction.x *= 16.0f;
+    direction.y *= 16.0f;
     origin.x *= 16.0f;
     origin.y *= 16.0f;
-    origin.w = 1.0f;
-    origin.z = 1.0f;
     offset = 116.0f - (offset + offset) * 116.0f;
     image = FUN_0023b208(*(int *)e, 2);
     FUN_001ff260(&first_step);
