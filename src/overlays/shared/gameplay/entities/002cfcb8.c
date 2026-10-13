@@ -2294,8 +2294,8 @@ void FUN_L00_002d5160(unsigned char *m) {
         *(f32 *)(v + 0x98) = 0.75f;
         *(f32 *)(v + 0x20) = health;
         *(f32 *)(v + 0x88) = forceZ;
-        *(f32 *)(v + 0x80) = forceX;
         *(f32 *)(v + 0x84) = forceY;
+        *(f32 *)(v + 0x80) = forceX;
         *(f32 *)(v + 0x8C) = forceW;
         *(f32 *)(v + 0xBC) = duration;
         *(s32 *)(v + 0x94) = 0x29;
