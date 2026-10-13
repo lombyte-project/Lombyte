@@ -553,8 +553,8 @@ void FUN_L05_0030c220(struct Moby *m) {
     b.control[0] = 0;
     a.control[0] = 0;
     {
-        float *texcoord_b_v = b.texcoord + 1;
         float *texcoord_b = b.texcoord;
+        float *texcoord_b_v = b.texcoord + 1;
         float *texcoord_a_v = a.texcoord + 1;
         float *texcoord_a = a.texcoord;
         float *texcoord = D_L05_001D67B0;
