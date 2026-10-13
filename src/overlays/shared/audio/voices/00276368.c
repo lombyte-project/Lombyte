@@ -288,9 +288,12 @@ void FUN_L00_00276908(void) {
                         : 0x26;
             }
         }
-        table = D_L00_0017E4D8;
-        D_0015EE78_gp = *(s32 *)D_L00_001B9CF0.pad18;
-        hud_send_resident_bank(0, *(s32 *)((u8 *)*(void **)(table + 0x18) + 0x74), 0);
+        {
+            struct GameState *state = &D_L00_001B9CF0;
+            table = D_L00_0017E4D8;
+            D_0015EE78_gp = *(s32 *)state->pad18;
+            hud_send_resident_bank(0, *(s32 *)((u8 *)*(void **)(table + 0x18) + 0x74), 0);
+        }
         FUN_L00_00235310(2);
         if (*(s32 *)((u8 *)*(void **)(table + 0x18) + 0x80) != 0) {
             FUN_L00_00235310(3);
@@ -301,7 +304,7 @@ void FUN_L00_00276908(void) {
         {
             s32 *saved;
             s32 remaining;
-            saved = (s32 *)D_L00_001B9E90;
+            saved = (s32 *)((u32)&D_L00_001B9CF0 + 0x1a0);
             remaining = 13;
             do {
                 remaining--;
@@ -316,20 +319,26 @@ void FUN_L00_00276908(void) {
         hud_keep_visible(handle, scale_game_frames(0xb4));
         D_L00_001B9CF0.state = 0x14;
         D_L00_001B9CF0.unk14 = 2;
-        value = *(s32 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
-        table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-        if (value < table[0xc]) {
-            do {
-                table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-                i = value++;
-                *(s32 *)(table + 0x48 + i * 4) = 0;
-                table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-            } while (value < table[0xc]);
+        {
+            u8 *table;
+            value = *(s32 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
+            table = (u8 *)D_L00_00197300[0];
+            if (value < table[0xc]) {
+                do {
+                    table = (u8 *)D_L00_00197300[0];
+                    i = value++;
+                    *(s32 *)(table + 0x48 + i * 4) = 0;
+                    table = (u8 *)D_L00_00197300[0];
+                } while (value < table[0xc]);
+            }
+            table = (u8 *)D_L00_00197300[0];
+            table[0xc] = *(u8 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
         }
-        table = (u8 *)*(void * volatile *)&D_L00_00197300[0];
-        table[0xc] = *(u8 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
         D_L00_0015F5D8 = 1;
-        *(s32 *)(D_L00_00173E40 + 0x10) &= 0x7fffffff;
+        {
+            u8 *table = D_L00_00173E40;
+            *(s32 *)(table + 0x10) &= 0x7fffffff;
+        }
         FUN_L00_002a08c8();
         FUN_L00_002a09d8(1);
     }
