@@ -1912,31 +1912,49 @@ void FUN_L00_002ce358(struct Moby *m)
     if (m->state < 5) {
         (*(u8 *)((u8 *)&hero + 0x1ff4))++;
         if (hero.ammo_used < *(u8 *)((u8 *)&hero + 0x1ff4)) {
+            f32 distance;
             count = 0;
             distance = 1000000.0f;
             closest = 0;
             *(u8 *)((u8 *)&hero + 0x1ff4) = 1;
             *(u8 *)((u8 *)&hero + 0x1ff7) = 0;
             *(f32 *)((u8 *)&hero + 0x1ff8) = FUN_002000e8_2ce358(*(f32 *)((u8 *)&hero + 0x1ff8), frame_scale * 0.05f);
-            slots = (struct Moby **)hero.unk2020;
-            exclusions = (struct Moby **)((u8 *)&hero + 0x1ffc);
-            for (i = 0; i < 6; i++, slots++) {
-                other = *slots;
-                if (other != 0) {
-                    if (other->oclass != 0x1df || other->state == 0xfe || other->state == 0xfd) {
+            {
+                struct Moby **slots, **exclusions;
+                s32 i;
+                slots = (struct Moby **)hero.unk2020;
+                exclusions = (struct Moby **)((u8 *)&hero + 0x1ffc);
+                for (i = 0; i < 6; i++, slots++) {
+                    other = *slots;
+                    if (!other)
+                        continue;
+                    if (other->oclass != 0x1df) {
                         *slots = 0;
-                    } else {
-                        count++;
-                        *exclusions++ = *(struct Moby **)(other->pvars + 0x30);
-                        if (other->state < 4)
-                            (*(u8 *)((u8 *)&hero + 0x1ff7))++;
-                        if (count > 8)
-                            break;
+                        continue;
                     }
+                    if (other->state == 0xfe) {
+                        *slots = 0;
+                        continue;
+                    }
+                    if (other->state == 0xfd) {
+                        *slots = 0;
+                        continue;
+                    }
+                    count++;
+                    *exclusions++ = *(struct Moby **)(other->pvars + 0x30);
+                    if (other->state < 4)
+                        (*(u8 *)((u8 *)&hero + 0x1ff7))++;
+                    if (count > 8)
+                        break;
                 }
-            }
-            for (i = count; i < 9; i++) {
-                ((struct Moby **)((u8 *)&hero + 0x1ffc))[i] = 0;
+                if (count < 9) {
+                    exclusions = (struct Moby **)((u8 *)&hero + 0x1ffc) + count;
+                    i = count;
+                    do {
+                        *exclusions++ = 0;
+                        i++;
+                    } while (i < 9);
+                }
             }
             other = (struct Moby *)FUN_L00_002cdf28((char *)&hero + 0x80, (int *)((u8 *)&hero + 0x1ffc));
             if (other != 0) {
