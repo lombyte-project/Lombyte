@@ -868,16 +868,16 @@ case 3:
 }
 #endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00304c80.s", FUN_L09_00304c80);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L09_00305a28.s", FUN_L09_00305a28);
-#else
 extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_001f9bf8(f32, void *, void *);
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_L00_00259858(f32, void *, void *, s32);
+extern void FUN_L00_00259858(void *, void *, s32, f32);
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-extern void print_vendor_contact(void *, s16, s16, s16, s32) __asm__("FUN_001e93b0");
+extern void print_vendor_contact(const char *, ...) __asm__("FUN_001e93b0");
 extern char D_L09_002090B0[];
+
+typedef struct { char pad[0x18]; char *hit; } CollisionState;
+extern CollisionState D_L09_00173FC0;
 
 void FUN_L09_00305a28(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -886,9 +886,6 @@ void FUN_L09_00305a28(struct Moby *moby) {
     float count_as_float;
     float start;
     float end;
-    int context_arg;
-    float context_float;
-    char *collision_state = (char *)0x00173fc0;
 
     if (moby->state == 0) {
         moby->state = 1;
@@ -910,24 +907,18 @@ void FUN_L09_00305a28(struct Moby *moby) {
     FUN_001f9cf8(work, work, (char *)moby + 0xc0);
     FUN_001f9bf8(F(data, 0), work + 8, work);
     FUN_001f9a10(work + 4, work + 4, work + 8);
-    context_arg = *(volatile s32 *)(data + 0x10);
-    context_float = *(volatile float *)(data + 0xc);
-    FUN_L00_00259858(context_float, work + 12, moby, context_arg);
+    FUN_L00_00259858(work + 12, moby, *(s32 *)(data + 0x10), *(float *)(data + 0xc));
     i = 0;
     if (*(s32 *)(data + 8) > 0) do {
         if (collect_mobies_in_sphere(F(data, 0), work + 4, 1, moby, work + 12) != 0) {
-            char *hit = *(char **)(collision_state + 0x18);
-            s16 hit_index = *(s16 *)(hit + 0xb2);
-            s16 hit_class = *(s16 *)(hit + 0xa6);
-            s16 moby_index = *(s16 *)((char *)moby + 0xb2);
-            s32 converted = FUN_00120478(F(data, 0xc));
-            print_vendor_contact(D_L09_002090B0, moby_index, hit_class, hit_index, converted);
+            char *hit = D_L09_00173FC0.hit;
+            print_vendor_contact(D_L09_002090B0, *(s16 *)((char *)moby + 0xb2), *(s16 *)(hit + 0xa6),
+                                 *(s16 *)(hit + 0xb2), F(data, 0xc));
         }
         i++;
         FUN_001f9a10(work + 4, work + 4, work);
     } while (i < *(s32 *)(data + 8));
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

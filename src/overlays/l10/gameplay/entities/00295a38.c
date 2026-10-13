@@ -1845,9 +1845,6 @@ void FUN_L10_002d9eb8(char *moby) {
         delete_moby(moby);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da2c8.s", FUN_L10_002da2c8);
-#else
 extern char D_L10_001DD1D0[] __asm__("D_L10_001DD1D0");
 extern char D_L10_001DD210[] __asm__("D_L10_001DD210");
 extern unsigned char D_L10_00161CA8[] __asm__("D_L10_00161CA8");
@@ -1861,7 +1858,7 @@ extern int FUN_001f96f8(int);
 extern int FUN_001fa6d0(float);
 extern float FUN_001f9988(float);
 extern float FUN_001f9b48(void *, void *);
-extern int FUN_001fa728(void *);
+extern int FUN_001fa728(void *, float);
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -1873,7 +1870,6 @@ void FUN_L10_002da2c8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     union { unsigned char order[10]; float position2[4]; } scratch;
     float position1[4];
-    float half_height, half_width, radius_squared;
     int pass, i, copy_index;
 
     if (*(int *)(data + 0xC) == -1) {
@@ -1916,20 +1912,23 @@ void FUN_L10_002da2c8(struct Moby *moby) {
 
         moby->flags |= 0x41;
         break;
-    case 1:
+    case 1: {
+        float half_height, half_width, radius_squared;
         half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
         half_width = *(float *)data * 0.5f;
         *(OvlQuad *)position1 = *(OvlQuad *)&moby->pos;
         radius_squared = half_height * half_height;
         position1[2] += half_height;
         position1[3] = FUN_001f9988(radius_squared + half_width * half_width);
-        if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(position1))
+        if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(position1, 80.0f))
             enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
         if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x30)) == 0)
             *(int *)(data + 0x30) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
+    }
     case 2: {
         int voice;
+        float half_height, half_width, radius_squared;
         tick_countdown_32(data + 0x34);
         voice = *(int *)(data + 0x30);
         if (voice != -1) {
@@ -1944,13 +1943,12 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         radius_squared = half_height * half_height;
         scratch.position2[2] += half_height;
         scratch.position2[3] = FUN_001f9988(radius_squared + half_width * half_width);
-        if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(scratch.position2))
+        if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(scratch.position2, 80.0f))
             enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
         break;
     }
     }
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002da690.s", FUN_L10_002da690);
 #else

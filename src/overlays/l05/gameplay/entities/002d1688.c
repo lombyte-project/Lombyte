@@ -1526,9 +1526,6 @@ loop_next:
 }
 #endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304320.s", FUN_L05_00304320);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00305178.s", FUN_L05_00305178);
-#else
 extern char *find_collision_part_305178(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void *FUN_L05_002899f8(void *, void *, void *, int);
 extern void hit_update_305178(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -1552,6 +1549,8 @@ extern float D_0013F3D0[];
 
 extern int D_L05_00161B74 __attribute__((sda));
 extern float D_L05_00161AF0 __attribute__((sda));
+extern const float frame_time_k __asm__("D_0015ED6C");
+extern const float AF0_k __asm__("D_L05_00161AF0") __attribute__((sda));
 extern float D_L05_00161AF4 __attribute__((sda));
 
 void FUN_L05_00305178(char *moby) {
@@ -1659,35 +1658,32 @@ mark_children:
         *(float *)(data + 0x174) = 14.0f;
     if (*(char **)(data + 0x184) != 0) {
         char *first;
+        float k;
         speed = vector_length_305178(data + 0x40);
-        frame_scale = frame_time;
-        frame_scale = frame_scale * D_L05_00161AF0;
-        speed /= frame_scale;
-        angle = D_L05_00161AF4;
+        speed /= D_L05_00161AF0 * frame_time_k;
+        k = D_L05_00161AF4;
         *(float *)(*(char **)(data + 0x184) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x184) + 0x58) +=
-            *(float *)(data + 0x84) * angle;
+            *(float *)(data + 0x84) * k;
         first = *(char **)(data + 0x184);
         qcopy(first + 0x40, moby + 0x40);
         qcopy(first + 0x10, moby + 0x10);
     }
     if (*(char **)(data + 0x188) != 0) {
         char *second;
+        float k;
         speed = vector_length_305178(data + 0x40);
-        frame_scale = frame_time;
-        frame_scale = frame_scale * D_L05_00161AF0;
-        speed /= frame_scale;
-        angle = D_L05_00161AF4;
+        speed /= D_L05_00161AF0 * frame_time_k;
+        k = D_L05_00161AF4;
         *(float *)(*(char **)(data + 0x188) + 0x58) = speed;
         *(float *)(*(char **)(data + 0x188) + 0x58) -=
-            *(float *)(data + 0x84) * angle;
+            *(float *)(data + 0x84) * k;
         second = *(char **)(data + 0x188);
         qcopy(second + 0x40, moby + 0x40);
         qcopy(second + 0x10, moby + 0x10);
     }
     finish_motion_305178(moby, data + 0x60);
 }
-#endif
 /* Drops stale entries from the moby's 8 slots, then pushes each remaining one away from the hero. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00306CF0), where it is exact; names translated to the US level program. */
 
