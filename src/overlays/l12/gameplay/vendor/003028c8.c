@@ -1550,8 +1550,8 @@ void FUN_L12_00308350(struct Moby *m) {
     second_flags = (long)D_L12_00161FCC | (long)D_L12_00161FD0 << 2 |
             (long)D_L12_00161FD4 << 4 | (long)D_L12_00161FD8 << 6 |
             0x8000000000L;
-    second.gs_state = second_flags;
     first.gs_state = flags;
+    second.gs_state = second_flags;
     first.texture_state = 0xFF9000000260L;
     second.texture_state = 0xFF9000000260L;
     second.texture = first.texture;
