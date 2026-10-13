@@ -1683,8 +1683,8 @@ void FUN_L08_003024d8(char *m) {
             *(unsigned short *)(m + 0x34) &= 0xefff;
             *(int *)(d + 0x90) = 0x200;
             *(float *)(d + 0xc4) = 16.0f;
-            *(float *)(d + 0xc0) = 11.0f;
             *(float *)(d + 0x98) = 0.25f;
+            *(float *)(d + 0xc0) = 11.0f;
             *(float *)(d + 0x80) = pose_scale;
             *(float *)(d + 0x88) = timer_scale;
             *(float *)(d + 0x8c) = angle;
