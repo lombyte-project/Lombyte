@@ -1493,10 +1493,10 @@ void FUN_L00_002ebe70(char *o) {
                         ((float *)&aim)[2] = 0.0f;
                         score = FUN_001ff398_2ebe70(&scaled, &aim);
                         if (score > 0.0f) {
-                            score = FUN_001ff3d8_2ebe70(&diff) - score * 10.0f;
-                            if (score < best) {
-                                best = score;
+                            target = FUN_001ff3d8_2ebe70(&diff) - score * 10.0f;
+                            if (target < best) {
                                 chosen = candidate;
+                                best = target;
                             }
                         }
                     }
