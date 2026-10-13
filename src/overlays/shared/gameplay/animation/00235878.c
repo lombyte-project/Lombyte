@@ -564,7 +564,7 @@ int FUN_L00_00237200(HudElem *e) {
     char text[64];
     const char *line;
     unsigned char *opacity = (unsigned char *)e + 0x70;
-    int text_y;
+    volatile int text_y;
 
     if (pal_mode != 0) {
         y = D_L00_0015F770 + 0xa;
@@ -578,40 +578,35 @@ int FUN_L00_00237200(HudElem *e) {
     text_y = y + 8;
     alpha = FUN_00200250(fade * 128.0f);
     color = (alpha << 24) | 0x40f040;
-    line = (const char *)D_L00_0017E530;
     i = 0;
     if (D_L00_0017E530[0] > 1) {
-        i = 1;
         do {
-            if (D_L00_0017E530[i] <= 1 || i >= 0x80) break;
             i++;
-        } while (1);
+        } while (D_L00_0017E530[i] > 1 && i < 0x80);
     }
     if (D_L00_0017E530[i] == 1) {
         D_L00_0017E530[i] = 0;
-        width = FUN_001fb090(line, -1);
+        width = FUN_001fb090((const char *)D_L00_0017E530, -1);
         left = 0xe0 - (width >> 1);
-        other_width = FUN_001fb090(line + i + 1, -1);
+        other_width = FUN_001fb090((const char *)&D_L00_0017E530[1] + i, -1);
         other_left = 0xe0 - (other_width >> 1);
-        if (left < other_left) {
-            other_left = left;
-        } else {
+        if (other_left <= left) {
+            left = other_left;
             width = other_width;
         }
-        left = other_left;
         FUN_0023b4d8(FUN_0023b208(0x7580, 0), left + 0x20, y, width, 0x36, alpha);
         FUN_0023b4d8(FUN_0023b208(0x7580, 1), left, y, 0x20, 0x36, alpha);
-        FUN_0023b860(FUN_0023b208(0x7580, 1), left + width + 0x20, y, 0x20, 0x36, alpha);
-        FUN_001fb9a8(0x100, text_y, color, line, -1);
-        FUN_001fb9a8(0x100, y + 0x1b, color, line + i + 1, -1);
+        FUN_0023b860(FUN_0023b208(0x7580, 1), left + (width + 0x20), y, 0x20, 0x36, alpha);
+        FUN_001fb9a8(0x100, text_y, color, (const char *)D_L00_0017E530, -1);
+        FUN_001fb9a8(0x100, y + 0x1b, color, (const char *)&D_L00_0017E530[1] + i, -1);
         level = current_level_index_sda;
     } else {
-        width = FUN_001fb090(line, -1);
+        width = FUN_001fb090((const char *)D_L00_0017E530, -1);
         left = 0xe0 - (width >> 1);
         FUN_0023b4d8(FUN_0023b208(0x7580, 1), left, y, 0x20, 0x20, alpha);
         FUN_0023b4d8(FUN_0023b208(0x7580, 0), left + 0x20, y, width, 0x20, alpha);
-        FUN_0023b860(FUN_0023b208(0x7580, 1), left + width + 0x20, y, 0x20, 0x20, alpha);
-        FUN_001fb9a8(0x100, text_y, color, line, -1);
+        FUN_0023b860(FUN_0023b208(0x7580, 1), left + (width + 0x20), y, 0x20, 0x20, alpha);
+        FUN_001fb9a8(0x100, text_y, color, (const char *)D_L00_0017E530, -1);
         level = current_level_index;
     }
     if (level == 5 || level == 0x10) {
@@ -641,8 +636,9 @@ int FUN_L00_00237200(HudElem *e) {
                 seconds = elapsed / interval;
                 remainder = elapsed - seconds * interval;
                 width = remainder / minute_scale;
-                FUN_00116248(text, (const char *)0x1e84c0, FUN_00203ad8(0x531b), seconds, width,
-                             (remainder - width * minute_scale) * 100 / minute_scale);
+                remainder = (remainder - width * minute_scale) * 100 / minute_scale;
+                line = (const char *)0x1e84c0;
+                FUN_00116248(text, line, FUN_00203ad8(0x531b), seconds, width, remainder);
                 FUN_0023cf80(0x100, y + 0x28, color, text);
                 if (extra != 0) {
                     FUN_00116248(text, (const char *)0x15f778, FUN_00203ad8(0x531c), extra);
