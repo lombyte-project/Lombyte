@@ -179,8 +179,7 @@ check_second_volume:
                     *(volatile unsigned short *)&D_00141A8A = scale_game_frames(D_L05_0015EEA4) / 600;
                     player = current_level_index;
                 }
-                player = (1u << player) | 0x80000000u;
-                D_00141A8C |= player;
+                D_00141A8C = (1u << player) | (0x80000000u | D_00141A8C);
             }
         }
         if (D_001413DC == 0x13) D_00141A88 = -1;
@@ -198,8 +197,7 @@ check_second_volume:
                 *(volatile unsigned short *)&D_00141A92 = scale_game_frames(D_L05_0015EEA4) / 600;
                 player = current_level_index;
             }
-            player = (1u << player) | 0x80000000u;
-            D_00141A94 |= player;
+            D_00141A94 = (1u << player) | (0x80000000u | D_00141A94);
         } else if (D_0014EE90[data[8]] > 2 && is_point_inside_clip_volume(D_0013F3D0, data[11])) {
             elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417A2 * 600;
             if (scale_game_frames(18000) < elapsed) {
@@ -234,8 +232,7 @@ check_second_volume:
                 *(volatile unsigned short *)&D_00141C5A = scale_game_frames(D_L05_0015EEA4) / 600;
                 player = current_level_index;
             }
-            player = (1u << player) | 0x80000000u;
-            D_00141C5C |= player;
+            D_00141C5C = (1u << player) | (0x80000000u | D_00141C5C);
         }
         if (hero.state.control_mode == 0x12) {
             if (is_point_inside_clip_volume(data + 4, data[13]) || is_point_inside_clip_volume(data + 4, data[14])) {
