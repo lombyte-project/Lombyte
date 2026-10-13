@@ -91,7 +91,6 @@ state_one:
             if (min_ratio <= ratio && ratio < *(float *)(data + 3) / 100.0f) {
                 float lower = scale * (*(float *)(data + 4) / 100.0f) - value;
                 float upper = scale * (*(float *)(data + 5) / 100.0f);
-                float chosen;
                 int total;
                 int batch;
                 int remaining;
@@ -101,10 +100,10 @@ state_one:
                 int segment;
                 char *path;
                 if (data[6] == 0)
-                    chosen = lower < upper ? lower : upper;
+                    lower = lower < upper ? lower : upper;
                 else
-                    chosen = upper < lower ? lower : upper;
-                total = truncate_float_to_s32(chosen + 0.5f);
+                    lower = upper < lower ? lower : upper;
+                total = truncate_float_to_s32(lower + 0.5f);
                 batch = total / data[7];
                 if (batch == 0)
                     batch = total;
