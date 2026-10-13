@@ -1831,7 +1831,7 @@ extern void FUN_L06_00303b68(struct Moby *);
 
 int FUN_L06_00303160(char *moby, int path) {
     char *data = *(char **)(moby + 0x78);
-    volatile int *ids = (volatile int *)(data + path * 4);
+    int *ids = (int *)(data + path * 4);
     float *first = D_L06_001B0C30_303160[ids[0x60 / 4]];
     float *middle = D_L06_001B0C30_303160[ids[0x74 / 4]];
     float *third = D_L06_001B0C30_303160[ids[0x88 / 4]];
@@ -1847,11 +1847,11 @@ int FUN_L06_00303160(char *moby, int path) {
     first_time = *(float *)(data + 0xf4) * (float)(*(int *)first - 1);
     first_index = truncate_float_303160(first_time);
     first_index_float = (float)(int)first_index;
-    first_fraction = first_time - first_index_float;
     middle_index = truncate_float_303160(*(float *)(data + 0xf4) * (float)(*(int *)middle - 1));
     third_time = *(float *)(data + 0xf4) * (float)(*(int *)third - 1);
     third_fraction = third_time - first_index_float;
     third_index = truncate_float_303160(third_time);
+    first_fraction = first_time - first_index_float;
     lerp_vector_303160(from, first + ((int)first_index * 4 + 4), first + ((int)first_index * 4 + 8), first_fraction);
     lerp_vector_303160((float *)(moby + 0x10), third + (int)third_index * 4 + 4,
                        third + (int)third_index * 4 + 8, third_fraction);
