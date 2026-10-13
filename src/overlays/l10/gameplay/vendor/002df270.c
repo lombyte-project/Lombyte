@@ -2341,7 +2341,7 @@ state_two:
     }
 state_three:
     {
-        unsigned int save_id;
+        unsigned short save_id;
         struct Moby *target;
         struct Moby *candidate;
         target = 0;
@@ -2367,10 +2367,10 @@ remove_candidate:
         if (candidate != 0)
             mark_moby_for_removal(candidate);
         save_id = moby->save_id;
-        bits = (int *)((char *)D_0014C190_8ab0 + (((int)(save_id << 16) >> 21) * 4 + (current_level_index << 8)));
+        bits = (int *)((char *)D_0014C190_8ab0 + (((int)((unsigned int)save_id << 16) >> 21) * 4 + (current_level_index << 8)));
         *bits |= 1 << (save_id & 31);
         save_id = moby->save_id;
-        D_L10_001BA950_8ab0[(int)(save_id << 16) >> 21] |= 1 << (save_id & 31);
+        D_L10_001BA950_8ab0[(int)((unsigned int)save_id << 16) >> 21] |= 1 << (save_id & 31);
         return;
     }
 }
