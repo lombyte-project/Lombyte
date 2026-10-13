@@ -313,8 +313,11 @@ void FUN_L05_002f87a8(unsigned char *moby) {
             moby[0x20] = 0;
         }
     }
-    subtract_vector_xyz_87a8(delta_ptr, moby + 0x10, data);
-    qcopy(data, moby + 0x10);
+    {
+        unsigned char *position_ptr = moby + 0x10;
+        subtract_vector_xyz_87a8(delta_ptr, position_ptr, data);
+        qcopy(data, position_ptr);
+    }
     delta_length = vector_length_xyz_87a8(delta_ptr);
     if ((unsigned char)moby[0xbc] != 2 && delta_length < 2.0f) {
         get_moby_position_87a8(moby, D_0014F5CC_87a8 & 1, position);
