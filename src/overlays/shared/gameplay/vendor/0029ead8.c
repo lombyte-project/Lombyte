@@ -53,28 +53,28 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     u16 ammo_cost;
 
     FUN_00201560(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
-    price_table = D_L00_001C40B0;
     FUN_001153fc((void *)&box, 0, 0x18);
     box.half_x = x / 2;
-    box.x = (s16)x;
     box.left = x - 8;
-    box.y = (s16)y;
     box.top = y - 8;
     box.half_y = y / 2;
     box.width = 0x10;
     box.style = 3;
+    box.y = (s16)y;
+    box.x = (s16)x;
 
     row = &vendor_menu.rows[vendor_menu.f58];
-    if (row->fD4 == 1 && weapon_ammo_counts[row->fD0] >= price_table[row->fD0].hE) {
+    price_table = &D_L00_001C40B0[row->fD0];
+    if (row->fD4 == 1 && weapon_ammo_counts[row->fD0] >= price_table->hE) {
         cost = 0x5236;
         goto message;
     }
     if (vendor_menu.rows[vendor_menu.f58].fD4 != 1)
         goto purchase;
     if (vendor_menu.f40)
-        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA;
+        ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].hA;
     else
-        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
+        ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].h8;
     if (current_bolt_count < ammo_cost) {
         cost = 0x5238;
         goto message;
@@ -99,17 +99,17 @@ quantity_done:
     FUN_001fb3f0(0xc, 0x32, 0x80f0f0f0ULL, D_L00_00161168, -1);
     FUN_001fb3f0(0x40, 0x32, 0x80f0f0f0ULL, D_L00_00161170, -1);
     if (vendor_menu.f40)
-        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].hA;
+        ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].hA;
     else
-        ammo_cost = price_table[vendor_menu.rows[vendor_menu.f58].fD0].h8;
-    FUN_00116248(text, D_L00_00161160, (s32)((s64)D_L00_00161E34 * ammo_cost));
+        ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].h8;
+    FUN_00116248(text, D_L00_00161160, D_L00_00161E34 * (s32)ammo_cost);
     FUN_001fb888(0x40, 0x4c, 0x80f0f0f0ULL, text, -1);
     return;
 message:
     FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(cost), -1);
     return;
 purchase:
-    cost = discount_purchase_pricing[0] ? price_table[vendor_menu.rows[vendor_menu.f58].fD0].f4 : price_table[vendor_menu.rows[vendor_menu.f58].fD0].f0;
+    cost = discount_purchase_pricing[0] ? D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].f4 : D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].f0;
     if (current_bolt_count >= cost) {
         FUN_001fb3f0(6, 6, 0x80f0f0f0ULL, FUN_00203ad8(0x5239), -1);
         FUN_001fb3f0(2, 0x20, 0x80f0f0f0ULL, FUN_00203ad8(0x524e), -1);
