@@ -1881,12 +1881,12 @@ extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
 extern void scale_vector_xyz(f32 *, f32 *, f32) __asm__("FUN_001f9a68");
 extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
 extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
-extern unsigned char *FUN_L00_002738e8(f32, f32, f32, void *, void *, s32, s32, s32, s32);
+extern unsigned char *FUN_L00_002738e8(void *, void *, s32, f32, f32, f32, s32, s32, s32);
 
 void FUN_L10_002e5be0(struct Moby *moby) {
     f32 *pvars = (f32 *)moby->pvars;
     Vec4 *moby_position = (Vec4 *)&moby->pos.x;
-    s32 i;
+    s64 i;
 
     moby->update_dist = 0x80;
     if (((s32 *)pvars)[3] > 0) {
@@ -1941,8 +1941,8 @@ void FUN_L10_002e5be0(struct Moby *moby) {
             x = random_float_between(0.25f, 0.5f);
             fade_color = fast_tween_color(x, D_L10_00161EF4, first_color);
             life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
-            FUN_L00_002738e8(amount, pvars[0], D_L10_00161F00 * frame_time_sq,
-                               &position, &velocity, life, color, fade_color, variant);
+            FUN_L00_002738e8(&position, &velocity, life, amount, pvars[0],
+                               D_L10_00161F00 * frame_time_sq, color, fade_color, variant);
         }
     }
 }
