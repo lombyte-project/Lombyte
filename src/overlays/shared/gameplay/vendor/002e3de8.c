@@ -128,6 +128,8 @@ void FUN_L10_002e91b8(unsigned char *m) {
     float *first_vectors;
     float *second_vectors;
     float *second_angles;
+    float *second_packet;
+    float *angle_vectors;
     int i, k;
     int j;
 
@@ -138,39 +140,41 @@ void FUN_L10_002e91b8(unsigned char *m) {
     *(long long *)(first + 0x80) = 0xff9000000260LL;
     *(long long *)(first + 0x70) = 0;
     *(long long *)(second + 0x78) = trail_effect_texture(0x2c);
+    second_packet = (float *)second;
     *(long long *)(second + 0x80) = 0xff9000000260LL;
     *(long long *)(second + 0x70) = 0;
     *(int *)(second + 0x4c) = 0;
     *(int *)(second + 0x44) = 0;
     second_source = D_L10_001DA310;
     first_source = D_L10_001DA350;
-    second_vectors = (float *)second;
-    second_angles = (float *)second;
+    second_vectors = second_packet;
+    second_angles = second_packet;
     first_vectors = (float *)first;
-    i = 3;
+    j = 3;
     do {
         qcopy(first_vectors, first_source);
         qcopy(second_angles, second_source);
         second_source += 4;
         second_angles += 4;
         first_source += 4;
-        i--;
+        j--;
         first_vectors[0] *= scale[0];
         second_vectors[0] *= scale[0];
         first_vectors[2] *= scale[1];
         second_vectors[2] *= scale[1];
         first_vectors += 4;
         second_vectors += 4;
-    } while (i >= 0);
+    } while (j >= 0);
 
     if (D_L10_0015B340 > 0) {
-        float *angle_vectors = (float *)(first + 0x50);
+
         float *angles = (float *)(first + 0x58);
         float *first_angles = (float *)(second + 0x50);
         float *first_offsets = (float *)(second + 0x58);
         float *offsets = (float *)(first + 0x68);
         float *second_angles = (float *)(second + 0x60);
         float *second_offsets = (float *)(second + 0x68);
+        angle_vectors = (float *)(first + 0x50);
         for (i = 0; i < D_L10_0015B340; i++) {
             int parity = i & 1;
             int *colors = D_L10_0015B348;
@@ -225,11 +229,11 @@ void FUN_L10_002e91b8(unsigned char *m) {
                 }
             }
             transform_vectors((float *)first, matrix, 0);
-            transform_vectors((float *)second, matrix, 0);
+            transform_vectors(second_packet, matrix, 0);
             {
-                float *second_vectors = (float *)second;
+                float *second_vectors = second_packet;
                 float *first_vectors = (float *)first;
-                int j = 3;
+                j = 3;
                 do {
                     first_vectors[1] += 0.1f;
                     first_vectors += 4;
