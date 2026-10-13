@@ -29,9 +29,6 @@ void FUN_L00_002df730(unsigned char *p) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002df808.s", FUN_L00_002df808);
-#else
 #include "qcopy.h"
 typedef struct {
     float x, y, z, w;
@@ -79,7 +76,6 @@ unsigned char *FUN_L00_002df808(int owner, V_2df808 *position, V_2df808 *vector,
     }
     return moby;
 }
-#endif
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 
@@ -2461,19 +2457,11 @@ float FUN_L00_002e86b0(char *a0, float *a1, float lim) {
     return r;
 }
 void FUN_001f9a28_c2(void *, void *, void *) __asm__("FUN_001f9a28");
-void FUN_L00_002e86b0_c(char *, void *, f32) __asm__("FUN_L00_002e86b0");
 /* Passes b minus the vector at +0x40 of p's object, with x, to FUN_L00_002e86b0. */
-void FUN_L00_002e88c8(char *p, void *b, f32 x) {
-    char buf[16];
-    char *m = *(char **)(p + 0x70);
-    f32 t;
-    if (x && x) {
-    }
-    t = x;
-    if (t && t && x) {
-    }
-    FUN_001f9a28_c2(buf, b, m + 0x40);
-    FUN_L00_002e86b0_c(p, buf, x);
+float FUN_L00_002e88c8(char *p, void *b, f32 x) {
+    float buf[4];
+    FUN_001f9a28_c2(buf, b, *(char **)(p + 0x70) + 0x40);
+    return FUN_L00_002e86b0(p, buf, x);
 }
 extern char *D_L00_00166E00_002e8918 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e86b0_002e8918(char *, char *, float) __asm__("FUN_L00_002e86b0");
