@@ -99,8 +99,8 @@ void FUN_L15_002e5958(struct Moby *moby) {
             if (vars->enabled != 0) {
                 FUN_L01_0026e0e0(moby->group, 4);
                 save_id = vars->restart_timer;
-                moby->state = 4;
                 vars->timer = save_id;
+                moby->state = 4;
                 break;
             }
         }
