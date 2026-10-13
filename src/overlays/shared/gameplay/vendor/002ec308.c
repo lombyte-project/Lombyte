@@ -1154,16 +1154,20 @@ int FUN_L02_002fb9c8(char *moby) {
             if (hit && fast_difference_between_rotations(angle, *(float *)(data + 0x40)) > 1.9198622f) {
                 if (*(float *)(data + 0x34) != 0.0f)
                     FUN_L00_002e8450(0, *(float *)(data + 0x34) + 3.36f, 0.003f);
-                else
+                else {
+                    goto zero_offset;
+invalid:
+                    *(short *)(data + 0x20) = -1;
+                    FUN_L00_002e8388(moby);
+                    return;
+zero_offset:
                     FUN_L00_002e8450(0, 8.0f, 0.003f);
+                }
             }
         }
         FUN_L02_002f6570(176);
     }
     return;
-invalid:
-    *(short *)(data + 0x20) = -1;
-    FUN_L00_002e8388(moby);
 }
 #endif
 #define NOT_SDA __attribute__((section(".data")))
