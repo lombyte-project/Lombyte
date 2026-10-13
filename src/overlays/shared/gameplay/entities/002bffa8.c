@@ -2228,11 +2228,6 @@ child_ready:;
     }
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c7548.s", FUN_L00_002c7548);
-#else
-#endif
-
 /* Vars of the carrier moby that picks up and holds another moby. */
 typedef struct {
     u8 pad0[0x40];
@@ -2241,88 +2236,118 @@ typedef struct {
     s32 timer;              /* 0x54 */
 } CarrierVars;
 
-#ifdef NON_MATCHING
-extern OvlVec4 D_L00_00166C80_2c7548[3] __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern s32 D_0013FDA0_2c7548 __asm__("D_0013FDA0");
-extern void matrix_from_basis_rows_2c7548(void *, void *) __asm__("FUN_001fa2d8");
-extern void setup_matrix_2c7548(void *, void *) __asm__("FUN_001fa2b8");
-extern void rotate_vector_2c7548(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void adjust_direction_2c7548(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern f32 vector_length_xy_2c7548(void *) __asm__("FUN_001f9b20");
-extern f32 fast_subtract_rotations_2c7548(f32, f32) __asm__("FUN_001fa5c8");
-extern void build_spherical_offset_2c7548(void *, f32, f32, f32) __asm__("FUN_00214db0");
+#include "rnc/input/pad_state.h"
 
-void FUN_L00_002c7548(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip) {
-    OvlVec4 pos, basis[3], matrix[4], direction, target, arc, saved, probe;
-    f32 angle, slope, distance, horizontal, vertical, radius, speed;
-    s32 hit = 0;
-    pos.q = grip->q;
-    setup_matrix_2c7548(basis, D_L00_00166C80_2c7548);
+typedef float Vec_2c7548[4] __attribute__((aligned(16)));
+typedef float Mat_2c7548[4][4] __attribute__((aligned(16)));
+typedef float Mat3_2c7548[3][4] __attribute__((aligned(16)));
+
+extern char camera_2c7548[] __asm__("D_L00_00166C80");
+extern char camera_pos_2c7548[] __asm__("D_L00_00166DC0");
+extern CollisionHit collision_hit_2c7548 __asm__("D_L00_00173E40");
+extern float frame_time_sq_2c7548 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern void setup_matrix_2c7548(void *, void *) __asm__("FUN_001fa2b8");
+extern void matrix_from_basis_rows_2c7548(void *, void *) __asm__("FUN_001fa2d8");
+extern void adjust_direction_2c7548(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern float atan2_2c7548(float, float) __asm__("FUN_001f9e90");
+extern float add_rotations_2c7548(float, float) __asm__("FUN_001fa580");
+extern float subtract_rotations_2c7548(float, float) __asm__("FUN_001fa5c8");
+extern float cos_2c7548(float) __asm__("FUN_001f9dc8");
+extern float sin_2c7548(float) __asm__("FUN_001f9de0");
+extern float sqrt_2c7548(float) __asm__("FUN_001f9988");
+extern void add_vector_2c7548(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_2c7548(void *, void *, float) __asm__("FUN_001f9a68");
+extern void rotate_vector_2c7548(void *, void *, void *) __asm__("FUN_001f9d20");
+extern float vector_length_xy_2c7548(void *) __asm__("FUN_001f9b20");
+extern void build_spherical_offset_2c7548(void *, float, float, float) __asm__("FUN_00214db0");
+extern int collision_line_2c7548(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern void FUN_L00_002c7320_2c7548(float *pos, float *tgt, float *out, float speed, float unused, float range) __asm__("FUN_L00_002c7320");
+
+/* Moves the moby the carrier holds toward its throw target: ahead of the hero,
+   or along the camera aim (and up to a collision hit) while pad bits 0x5 are held. */
+void FUN_L00_002c7548(struct Moby *moby, CarrierVars *vars, OvlVec4 *grip)
+{
+    Vec_2c7548 v0;
+    Mat3_2c7548 basis;
+    Mat_2c7548 matrix;
+    Vec_2c7548 direction, target, arc, saved, probe;
+    struct Moby *held;
+    float *out;
+    float horizontal, radius, angle, vertical, slope, distance, root;
+    int hit;
+    float speed;
+    float *pos = v0;
+
+    *(u128 *)pos = grip->q;
+    setup_matrix_2c7548(basis, camera_2c7548);
     matrix_from_basis_rows_2c7548(matrix, basis);
-    if (vars->held != 0) {
-        f32 *out = (f32 *)vars->held->pvars;
-        direction.q = 0;
-        direction.i[0] = 0x3f800000;
-        adjust_direction_2c7548(&direction, &direction, (u8 *)&hero + 0x640);
-        angle = fast_add_rotations(-0.361968f,
-                                   atan2_f(*(f32 *)((u8 *)&hero + 0x670), *(f32 *)((u8 *)&hero + 0x674)));
-        pos.f[0] = FUN_001f9dc8(angle) * 0.859039f;
-        angle = fast_add_rotations(-0.361968f,
-                                   atan2_f(*(f32 *)((u8 *)&hero + 0x670), *(f32 *)((u8 *)&hero + 0x674)));
-        pos.f[1] = FUN_001f9de0(angle) * 0.859039f;
-        pos.i[2] = 0;
-        add_vector_xyz(&pos, &pos, &hero.motion.pos);
-        pos.f[2] += 0.39082f;
-        angle = atan2_f(direction.f[0], direction.f[1]);
-        speed = (D_0013CAE0_2c7320[0] & 5) ? 3.5f : 2.5f;
-        scale_vector_xyz(&target, &direction, speed);
-        add_vector_xyz(&target, &target, &pos);
-        if ((D_0013CAE0_2c7320[0] & 5) && !hero.unk20AC) {
-            arc.q = 0;
-            arc.i[2] = 0x3f800000;
-            rotate_vector_2c7548(&arc, &arc, matrix);
-            angle = atan2_f(arc.f[0], arc.f[1]);
-            fast_subtract_rotations_2c7548(*(f32 *)((u8 *)hero.moby + 0x48), angle);
-            angle = atan2_f(arc.f[0], arc.f[1]);
-            slope = atan2_f(vector_length_xy_2c7548(&arc), arc.f[2]);
-            slope = slope > 0.5934119f ? 0.5934119f : slope;
-            if (slope < -1.3962634f) slope = -1.3962634f;
-            speed = (D_0013CAE0_2c7320[0] & 5) ? 3.5f : 2.5f;
-            build_spherical_offset_2c7548(&arc, speed, angle, slope);
-            saved.q = D_L00_00166DC0.q;
-            distance = vector_length_xy_2c7548(&arc);
-            if (distance == 0.0f) horizontal = arc.f[2] / 0.01f;
-            else horizontal = arc.f[2] / distance;
-            speed = (D_0013CAE0_2c7320[0] & 5) ? 3.5f : 2.5f;
-            radius = FUN_001f9988(D_0015ED70 * 9.0f * speed * 0.5f);
-            radius = ((radius + radius) * radius * (1.0f - horizontal)) / (D_0015ED70 * 9.0f);
-            vertical = horizontal * radius;
-            if (radius > 0.0f) {
-                arc.f[0] = FUN_001f9dc8(angle) * radius;
-                arc.f[1] = FUN_001f9de0(angle) * radius;
-                arc.f[2] = vertical;
-                add_vector_xyz(&probe, &D_L00_00166DC0, &arc);
-                if (collision_line(&D_L00_00166DC0, &probe, 2, moby, 0) && coll_hit.moby != (s32)hero.moby) {
-                    target.q = coll_hit.point.q;
-                    hit = 1;
-                    angle = atan2_f(target.f[0] - pos.f[0], target.f[1] - pos.f[1]);
+    held = vars->held;
+    if (held == 0) return;
+    out = (float *)held->pvars;
+    *(u128 *)direction = 0;
+    direction[0] = 1.0f;
+    adjust_direction_2c7548(direction, direction, hero.basis);
+    {
+        struct Hero *h = &hero;
+        pos[0] = cos_2c7548(add_rotations_2c7548(-0.361968011f, atan2_2c7548(h->unk670, h->unk674))) * 0.859039009f;
+        pos[1] = sin_2c7548(add_rotations_2c7548(-0.361968011f, atan2_2c7548(h->unk670, h->unk674))) * 0.859039009f;
+        pos[2] = 0.0f;
+        add_vector_2c7548(pos, pos, &hero.motion.pos);
+        pos[2] = pos[2] + 0.390819997f;
+        atan2_2c7548(direction[0], direction[1]);
+        speed = (controller_state.held & 5) ? 3.5f : 2.5f;
+        scale_vector_2c7548(target, direction, speed);
+        add_vector_2c7548(target, target, pos);
+        if ((controller_state.held & 5) && h->unk20AC == 0) {
+            *(u128 *)arc = 0;
+            arc[2] = 1.0f;
+            rotate_vector_2c7548(arc, arc, matrix);
+            hit = 0;
+            subtract_rotations_2c7548(h->moby->rot.z, atan2_2c7548(arc[0], arc[1]));
+            angle = atan2_2c7548(arc[0], arc[1]);
+            slope = atan2_2c7548(vector_length_xy_2c7548(arc), arc[2]);
+            if (0.593411922f < slope) slope = 0.593411922f;
+            if (slope < -1.39626336f) slope = -1.39626336f;
+            build_spherical_offset_2c7548(arc, (controller_state.held & 5) ? 3.5f : 2.5f, angle, slope);
+            qcopy(saved, camera_2c7548 + 0x140);
+            distance = vector_length_xy_2c7548(arc);
+            {
+                float z = arc[2];
+                if (distance != 0.0f) {
+                    horizontal = z / distance;
+                } else {
+                    horizontal = z / 0.00999999978f;
                 }
-                if (!hit) {
-                    target.f[0] = FUN_001f9dc8(angle) * radius * 5.0f;
-                    target.f[1] = FUN_001f9de0(angle) * radius * 5.0f;
-                    target.f[2] = vertical * 5.0f;
-                    add_vector_xyz(&target, &target, &D_L00_00166DC0);
+            }
+            root = sqrt_2c7548(frame_time_sq_2c7548 * 9.0f * ((controller_state.held & 5) ? 3.5f : 2.5f) * 0.5f);
+            radius = (root + root) * root * (1.0f - horizontal) / (frame_time_sq_2c7548 * 9.0f);
+            vertical = horizontal * radius;
+            if (0.0f < radius) {
+                arc[0] = cos_2c7548(angle) * radius;
+                arc[1] = sin_2c7548(angle) * radius;
+                arc[2] = vertical;
+                add_vector_2c7548(probe, camera_pos_2c7548, arc);
+                if (collision_line_2c7548(camera_pos_2c7548, probe, 2, (int)moby, 0)
+                    && collision_hit_2c7548.moby != (s32)hero.moby) {
+                    qcopy(target, collision_hit_2c7548.point.f);
+                    hit = 1;
+                    angle = atan2_2c7548(target[0] - pos[0], target[1] - pos[1]);
+                }
+                if (hit == 0) {
+                    horizontal = 5.0f;
+                    target[0] = cos_2c7548(angle) * radius * horizontal;
+                    target[1] = sin_2c7548(angle) * radius * horizontal;
+                    target[2] = vertical * horizontal;
+                    add_vector_2c7548(target, target, camera_pos_2c7548);
                 }
             }
         } else {
-            D_0013FDA0_2c7548 = 0;
+            hero.unkA50 = 0;
         }
-        speed = (D_0013CAE0_2c7320[0] & 5) ? 3.5f : 2.5f;
-        FUN_L00_002c7320((V2c7320 *)&pos, (V2c7320 *)&target, out,
-                          D_0015ED70 * 9.0f, 0.00001f, speed);
     }
+    FUN_L00_002c7320_2c7548(pos, target, out, frame_time_sq_2c7548 * 9.0f, 0.00000999999975f,
+                             (controller_state.held & 5) ? 3.5f : 2.5f);
 }
-#endif
 /* Counters kept at D_00141680 for the carrier's deliveries. */
 typedef struct {
     u8 pad0[0xA0];
