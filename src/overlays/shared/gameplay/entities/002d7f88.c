@@ -2013,6 +2013,13 @@ extern void FUN_L00_002d3838_002dbf28(void *, void *, int, int) __asm__("FUN_L00
 extern int FUN_L00_001f2868_002dbf28(float, void *, int, void *, int) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_0025a9f8_002dbf28(float, float, float, void *, void *, void *, int, int, int, int, int) __asm__("FUN_L00_0025a9f8");
 
+typedef struct {
+    char pad[0x160];
+    float f160;
+    int i164, i168;
+} G_002dbf28;
+extern G_002dbf28 D_L00_00166C80_002dbf28 __asm__("D_L00_00166C80");
+
 void FUN_L00_002dbf28(char *moby) {
     u128 matrix[5];
     Q_WORDDATA origin, position, axis, temporary, scaled, displacement;
@@ -2036,6 +2043,7 @@ void FUN_L00_002dbf28(char *moby) {
     range = fast_vec_length(&origin);
 
     for (i = 0; i < 10 / multiplier; i++) {
+        int a, b;
         displacement.ul128 = 0;
         displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
@@ -2053,6 +2061,7 @@ void FUN_L00_002dbf28(char *moby) {
         FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 0, item_text_variant.b9);
     }
     for (i = 0; i < 4 / multiplier; i++) {
+        int a, b;
         displacement.ul128 = 0;
         displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
@@ -2088,6 +2097,7 @@ void FUN_L00_002dbf28(char *moby) {
     deficit = 0.0f;
     if (range < 7.0f) deficit = 7.0f - range;
     for (i = 0; i < count; i++) {
+        int a, b;
         int red, green, blue;
         float effect_magnitude;
         speed = FUN_002132a8_002dbf28(8.0f, 10.0f);
@@ -2132,9 +2142,9 @@ void FUN_L00_002dbf28(char *moby) {
     speed = magnitude * 3.0f;
     a = FUN_001f96f8_002dbf28(29);
     FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 32);
-    if (range < 20.0f) *(float *)(D_L00_00166DC0_002dbf28 + 0x120) = 0.4f - range * 0.0175f;
-    else *(float *)(D_L00_00166DC0_002dbf28 + 0x120) = 0.050000012f;
-    *(int *)(D_L00_00166DC0_002dbf28 + 0x128) = FUN_001f96f8_002dbf28(25);
+    if (range < 20.0f) D_L00_00166C80_002dbf28.f160 = 0.4f - range * 0.0175f;
+    else D_L00_00166C80_002dbf28.f160 = 0.050000012f;
+    D_L00_00166C80_002dbf28.i168 = FUN_001f96f8_002dbf28(25);
     FUN_L00_002d3838_002dbf28(matrix, center, 0, 0);
     if (item_text_variant.b9) {
         a = FUN_L00_001f2868_002dbf28(3.0f, center, 16, moby, 0);
