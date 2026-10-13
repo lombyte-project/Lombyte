@@ -2636,6 +2636,7 @@ void FUN_L00_002dd8e8(void) {
     Quad_002dd8e8 quad;
     u128 following, edge, outward, normal;
     float phase, next_phase, offset, step, dot;
+    float previous_phase;
     int row, segment, next_segment, value, previous_value;
     int current;
     char *prior;
@@ -2673,6 +2674,8 @@ void FUN_L00_002dd8e8(void) {
                 offset += step;
                 continue;
             }
+            previous_phase = phase - 0.3f;
+            dot = offset + step;
             value = ((short *)(D_L00_001E6020_002dd8e8 - 0x18))[row];
             previous_value = ((short *)(D_L00_001E6020_002dd8e8 - 0x18))[row - 1];
             if (value < 0) value = 0;
@@ -2685,14 +2688,13 @@ void FUN_L00_002dd8e8(void) {
                 quad.colors[2] = quad.colors[3] = 0x20404040;
             else if (row == 9)
                 quad.colors[0] = quad.colors[1] = 0x00404040;
-            dot = offset + step;
             quad.texcoords[0] = phase;
             quad.texcoords[1] = offset;
             quad.texcoords[2] = phase;
             quad.texcoords[3] = dot;
-            quad.texcoords[4] = phase - 0.3f;
+            quad.texcoords[4] = previous_phase;
             quad.texcoords[5] = offset;
-            quad.texcoords[6] = phase - 0.3f;
+            quad.texcoords[6] = previous_phase;
             quad.texcoords[7] = dot;
             offset = dot;
             FUN_001fd228_002dd8e8(&quad, 0, 0);
