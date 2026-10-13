@@ -2,26 +2,16 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0031bf40.s", FUN_L05_0031bf40);
-#else
+#include "qcopy.h"
 #include "sda.h"
 #include "rnc/gameplay/hero.h"
 extern char D_0013F3D0[];
 extern char D_0013F350[];
-extern int D_001413D4 NOT_SDA, D_001413DC NOT_SDA, D_0013F64C, D_0013D464 NOT_SDA;
+extern int D_001413D4 NOT_SDA, D_001413DC NOT_SDA, D_0013D464 NOT_SDA;
 extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;
-extern unsigned short D_001418A8, D_001418A0, D_00141930;
-extern short D_00141A88, D_00141A90, D_0013F65E;
-extern unsigned short D_00141A78, D_00141C58;
-extern unsigned short D_001418D8, D_00141BB8;
-extern unsigned short D_00141892, D_00141A82, D_00141A8A, D_00141A92;
-extern unsigned short D_001417A2, D_0014179A, D_001417C2, D_00141772, D_001417AA;
-extern unsigned short D_00141A98, D_00141C5A;
-extern unsigned int D_00141B8C, D_00141BAC, D_00141A8C, D_00141A94, D_00141C5C;
-extern int D_00141BF4, D_00141CFC, D_00141A9C, D_L05_0015F5CC, D_L05_0015FFD8;
-extern unsigned short D_00141B88;
-extern int D_L05_0015ED84, D_L05_0015EEA4;
+extern int D_L05_0015F5CC, D_L05_0015FFD8;
+extern int current_level_index __asm__("D_L05_0015ED84");
+extern int game_frame_count __asm__("D_L05_0015EEA4");
 extern int D_001417E0[];
 extern int D_0014EE90[];
 extern unsigned char D_0014C050[];
@@ -32,8 +22,6 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_00203908(int, int) __asm__("FUN_L00_00203908");
 extern void FUN_L00_002d5830(void *) __asm__("FUN_L00_002d5830");
 extern void FUN_001f99f8(void *) __asm__("FUN_001f99f8");
-extern volatile int game_frame_count __asm__("D_L05_0015EEA4") NOT_SDA;
-extern volatile int current_level_index __asm__("D_L05_0015ED84") NOT_SDA;
 typedef unsigned int L05Vector __attribute__((mode(TI), aligned(16)));
 
 typedef struct { unsigned short count, best; int flags; } VendorEventRecord;
@@ -115,29 +103,21 @@ extern L05Fields_0013D4C0 l05_0013D4C0 __asm__("D_0013D4C0");
 
 void FUN_L05_0031bf40(unsigned char *moby) {
     int *data = *(int **)(moby + 0x78);
-    int value, elapsed, limit, index;
-    unsigned int player;
+    int value, elapsed, limit;
     moby[0x30] = 0xff;
 
     if (is_point_inside_clip_volume(D_0013F3D0, data[20])) {
-        int timer;
-        if (*(int *)(D_0013F3D0 + 0x200c) != 0x12)
-            goto set_hint_count;
-        timer = data[26]++;
-        if (timer <= scale_game_frames(0x168))
-            goto set_hint_count;
-        if ((unsigned int)(D_00141B8C & (1 << D_L05_0015ED84)) < 1)
-            FUN_L00_00203908(0x3f0, 0x44);
-        goto check_second_volume;
-set_hint_count:
-        if (D_001413DC == 0x11 || menu_item_enabled_1)
+        if (*(int *)(D_0013F3D0 + 0x200c) == 0x12 && data[26]++ > scale_game_frames(0x168)) {
+            if ((unsigned int)(D_00141B8C & (1 << current_level_index)) < 1)
+                FUN_L00_00203908(0x3f0, 0x44);
+        } else if (D_001413DC == 0x11 || menu_item_enabled_1) {
             D_00141B88 = 0xffff;
+        }
     }
-check_second_volume:
     if (is_point_inside_clip_volume(D_0013F3D0, data[16])) {
-        elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141892 * 600;
+        elapsed = scale_game_frames(game_frame_count) - D_00141892 * 600;
         limit = (int)((float)scale_game_frames(0xe10) * 60.0f);
-        if (limit < elapsed && (unsigned int)(D_00141BAC & (1 << D_L05_0015ED84)) < 1)
+        if (limit < elapsed && (unsigned int)(D_00141BAC & (1 << current_level_index)) < 1)
             FUN_L00_00203908(0x7dd, 0x48);
     }
     if (D_L05_0015F5CC < scale_game_frames(60) && D_001418A8 && !D_001418A0 && D_00141BF4 >= 0)
@@ -148,66 +128,57 @@ check_second_volume:
     }
     if (!D_0013D4D6) {
         if (is_point_inside_clip_volume(D_0013F3D0, data[9]) && !D_0013F64C) {
-            elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141A82 * 600;
+            elapsed = scale_game_frames(game_frame_count) - D_00141A82 * 600;
             limit = (int)((float)scale_game_frames(18) * 60.0f);
             if (limit < elapsed || D_00141A82 * 600 == 0)
                 FUN_L00_00203908(0x138a, 0x23);
             else {
-                value = scale_game_frames(D_L05_0015EEA4) / 600;
+                value = scale_game_frames(game_frame_count) / 600;
                 if (D_00141A82 < value)
-                    D_00141A82 = scale_game_frames(D_L05_0015EEA4) / 600;
+                    D_00141A82 = scale_game_frames(game_frame_count) / 600;
             }
         }
     }
     if (D_0013D4D6) {
         if (is_point_inside_clip_volume(D_0013F3D0, data[9]) && !D_0013F64C) {
             if (D_00141A88 != 0) {
-                elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141A8A * 600;
+                elapsed = scale_game_frames(game_frame_count) - D_00141A8A * 600;
                 limit = (int)((float)scale_game_frames(18) * 60.0f);
                 if (limit < elapsed || D_00141A8A * 600 == 0)
                     FUN_L00_00203908(0x138b, 0x24);
                 else {
-                    value = scale_game_frames(D_L05_0015EEA4) / 600;
+                    value = scale_game_frames(game_frame_count) / 600;
                     if (D_00141A8A < value)
-                        D_00141A8A = scale_game_frames(D_L05_0015EEA4) / 600;
+                        D_00141A8A = scale_game_frames(game_frame_count) / 600;
                 }
             } else {
                 D_00141A88++;
-                value = scale_game_frames(D_L05_0015EEA4) / 600;
-                player = D_L05_0015ED84;
-                if (D_00141A8A < value) {
-                    *(volatile unsigned short *)&D_00141A8A = scale_game_frames(D_L05_0015EEA4) / 600;
-                    player = current_level_index;
-                }
-                D_00141A8C = (1u << player) | (0x80000000u | D_00141A8C);
+                value = scale_game_frames(game_frame_count) / 600;
+                if (D_00141A8A < value)
+                    D_00141A8A = scale_game_frames(game_frame_count) / 600;
+                D_00141A8C = D_00141A8C | (1 << current_level_index) | 0x80000000;
             }
         }
         if (D_001413DC == 0x13) D_00141A88 = -1;
     }
     if (D_00141A98 < 2) {
-        if (D_0014C050[data[8] + D_L05_0015ED84 * 16] == 0xff) {
-            index = D_L05_0015EEA4;
-            if (D_00141A90 < 0xffff) {
-                *(volatile unsigned short *)&D_00141A90 = D_00141A90 + 1;
-                index = game_frame_count;
-            }
-            elapsed = scale_game_frames(index) / 600;
-            player = D_L05_0015ED84;
-            if (D_00141A92 < elapsed) {
-                *(volatile unsigned short *)&D_00141A92 = scale_game_frames(D_L05_0015EEA4) / 600;
-                player = current_level_index;
-            }
-            D_00141A94 = (1u << player) | (0x80000000u | D_00141A94);
+        if (D_0014C050[data[8] + current_level_index * 16] == 0xff) {
+            if (D_00141A90 < 0xffff)
+                D_00141A90 = D_00141A90 + 1;
+            value = scale_game_frames(game_frame_count) / 600;
+            if (D_00141A92 < value)
+                D_00141A92 = scale_game_frames(game_frame_count) / 600;
+            D_00141A94 = D_00141A94 | (1 << current_level_index) | 0x80000000;
         } else if (D_0014EE90[data[8]] > 2 && is_point_inside_clip_volume(D_0013F3D0, data[11])) {
-            elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417A2 * 600;
+            elapsed = scale_game_frames(game_frame_count) - D_001417A2 * 600;
             if (scale_game_frames(18000) < elapsed) {
-                elapsed = scale_game_frames(D_L05_0015EEA4) - D_0014179A * 600;
+                elapsed = scale_game_frames(game_frame_count) - D_0014179A * 600;
                 if (scale_game_frames(18000) < elapsed) {
-                    elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417C2 * 600;
+                    elapsed = scale_game_frames(game_frame_count) - D_001417C2 * 600;
                     if (scale_game_frames(18000) < elapsed) {
-                        elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141772 * 600;
+                        elapsed = scale_game_frames(game_frame_count) - D_00141772 * 600;
                         if (scale_game_frames(18000) < elapsed) {
-                            elapsed = scale_game_frames(D_L05_0015EEA4) - D_001417AA * 600;
+                            elapsed = scale_game_frames(game_frame_count) - D_001417AA * 600;
                             if (scale_game_frames(18000) < elapsed && D_00141A9C >= 0)
                                 FUN_L00_00203908(0x138d, 0x26);
                         }
@@ -221,18 +192,12 @@ check_second_volume:
     if (D_00141C58 == 0) {
         if (hero.state.current == 10 &&
             (is_point_inside_clip_volume(&hero.motion.pos, data[13]) || is_point_inside_clip_volume(&hero.motion.pos, data[14]))) {
-            index = D_L05_0015EEA4;
-            if (D_00141C58 < 0xffff) {
-                *(volatile unsigned short *)&D_00141C58 = D_00141C58 + 1;
-                index = game_frame_count;
-            }
-            elapsed = scale_game_frames(index) / 600;
-            player = D_L05_0015ED84;
-            if (D_00141C5A < elapsed) {
-                *(volatile unsigned short *)&D_00141C5A = scale_game_frames(D_L05_0015EEA4) / 600;
-                player = current_level_index;
-            }
-            D_00141C5C = (1u << player) | (0x80000000u | D_00141C5C);
+            if (D_00141C58 < 0xffff)
+                D_00141C58 = D_00141C58 + 1;
+            value = scale_game_frames(game_frame_count) / 600;
+            if (D_00141C5A < value)
+                D_00141C5A = scale_game_frames(game_frame_count) / 600;
+            D_00141C5C = D_00141C5C | (1 << current_level_index) | 0x80000000;
         }
         if (hero.state.control_mode == 0x12) {
             if (is_point_inside_clip_volume(data + 4, data[13]) || is_point_inside_clip_volume(data + 4, data[14])) {
@@ -247,17 +212,16 @@ check_second_volume:
         is_point_inside_clip_volume(D_0013F3D0, data[18]) && D_0013D464 >= 20)
         FUN_L00_00203908(20000, 0x4a);
     value = data[21];
-    if (value != -1 && D_0014C050[data[22] + D_L05_0015ED84 * 16] == 0xff &&
-        D_0014C050[data[8] + D_L05_0015ED84 * 16] == 0xff &&
+    if (value != -1 && D_0014C050[data[22] + current_level_index * 16] == 0xff &&
+        D_0014C050[data[8] + current_level_index * 16] == 0xff &&
         (D_L05_0015F5CC < 5 || (D_0013F64C &&
           (*(short *)(D_0013F64C + 0xa6) == 0x3e6 || *(short *)(D_0013F64C + 0xa6) == 0x33e)))) {
         FUN_L00_002d5830((void *)(D_L05_0015FFD8 + value * 256));
         data[21] = -1;
     }
-    *(L05Vector *)data = *(volatile L05Vector *)D_0013F3D0;
-    if (!D_0013F65E) *(L05Vector *)(data + 4) = *(volatile L05Vector *)D_0013F3D0;
+    qcopy(data, D_0013F3D0);
+    if (!D_0013F65E) qcopy(data + 4, D_0013F3D0);
 }
-#endif
 /* UpdateMoby_1550 (names.tsv role). State 0 arms it: state 1 and byte 0x30 = 0xFF. In state 1,
  * while the level flag is 2 and the word at +0x30 of D_L05_0016CD60 is 10 or 11, passes one
  * entry of that table to func_L00_00264870. The index select `s < t ? 0 : 3` is kept as retail

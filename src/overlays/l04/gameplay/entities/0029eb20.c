@@ -3,6 +3,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/audio/voice_pool.h"
@@ -169,9 +170,6 @@ s32 FUN_L04_0029eb20(struct Moby *m, PathPoints_eb20 *path, s32 i, s32 dir, f32 
     FUN_001f9a10(&m->pos, &seg, &path->point[i]);
     return i;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_0029ecf8.s", FUN_L04_0029ecf8);
-#else
 extern void *FUN_001153fc(void *, int, int);
 extern f32 int_to_float_29ecf8(s32) __asm__("FUN_001fa6c0");
 extern f32 fast_add_rotations_29ecf8(f32, f32) __asm__("FUN_001fa580");
@@ -188,6 +186,31 @@ extern void apply_child_motion_29ecf8(f32, struct Moby *, void *, void *) __asm_
 extern PathPoints_eb20 *D_L04_001b0630[];
 extern f32 D_L04_00166130[8];
 extern s32 D_L04_001513C0 __attribute__((sda));
+
+/* Variables of a swarm child (class 0x55). */
+typedef struct SwarmPartVars_29ecf8 {
+    u8 pad0[0x10];
+    Vec4f velocity;
+    u8 pad20[0x20];
+    f32 unk40;
+    s16 unk44;
+    u8 pad46[2];
+    f32 unk48;
+    f32 unk4C;
+    s32 unk50;
+    Vec4f *leader_pos;
+    s32 unk58;
+    s16 unk5C;
+    s16 unk5E;
+    s16 oclass;
+    s16 unk62;
+    u8 pad64[0xC];
+    f32 unk70;
+    f32 unk74;
+    u8 pad78[0x18];
+    f32 unk90;
+    f32 unk94;
+} SwarmPartVars_29ecf8;
 
 typedef struct PVars_29ecf8 {
     Vec4f origin;
@@ -224,7 +247,7 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
         __builtin_memcpy(effect_dest, effect, 0x20);
     }
     if (data->initialized == 0) {
-        *(volatile u128 *)&data->origin = *(volatile u128 *)&moby->pos;
+        qcopy(&data->origin, &moby->pos);
         data->angle = 0.0f;
     } else if (data->child_count == 0) {
         for (other = (struct Moby *)D_L04_0015FFE4; other != 0; other = other->next) {
@@ -238,9 +261,8 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
         data->angle = fast_add_rotations_29ecf8(data->angle, frame_scale * 0.0034906587f);
         moby->pos.x = data->origin.x + data->radius * fast_cos_29ecf8(data->angle);
         moby->pos.y = data->origin.y + data->radius * fast_sin_29ecf8(data->angle);
-    } else {
+    } else if (data->initialized != 0) {
         s32 i;
-        if (data->initialized == 0) goto initialize;
         distance = 10000.0f;
         for (i = 0; i < data->count; i++) {
             f32 d = vector_distance_29ecf8(&moby->pos, &data->children[i]->pos);
@@ -250,57 +272,50 @@ void FUN_L04_0029ecf8(struct Moby *moby) {
         if (distance < 3.0f) speed = 3.0f - distance;
         data->direction = FUN_L04_0029eb20(moby, D_L04_001b0630[data->path_index], data->direction, 1, speed);
     }
-    if (data->initialized != 0) goto update;
-initialize:
-    {
+    if (data->initialized == 0) {
     s32 i;
     struct Moby *child;
-    Vec4f *moby_pos;
     data->initialized = 1;
     data->child_count = 0;
     for (i = 0; i < data->count; i++) {
-        moby_pos = &moby->pos;
-        moby = (struct Moby *)((char *)moby_pos - 0x10);
         data->children[i] = 0;
         child = spawn_moby_29ecf8(0x55);
         if (child != 0) {
-            struct Moby *part = (struct Moby *)child->pvars;
+            SwarmPartVars_29ecf8 *part = (SwarmPartVars_29ecf8 *)child->pvars;
             data->children[i] = child;
             child->update_dist = 0x7f;
             child->draw_dist = 0x7f;
             child->scale *= random_float_between_29ecf8(0.7f, 1.3f);
             child->rot.z = random_angle_29ecf8();
-            *(volatile f32 *)&child->anim_speed = random_float_between_29ecf8(0.6f, 1.2f);
-            clear_vector_29ecf8(&part->pos);
-            *(s16 *)((char *)part + 0x44) = 0;
-            *(volatile f32 *)((char *)part + 0x4c) = 10.0f;
-            *(volatile u128 *)&child->pos = *(volatile u128 *)moby_pos;
+            child->anim_speed = random_float_between_29ecf8(0.6f, 1.2f);
+            clear_vector_29ecf8(&part->velocity);
+            part->unk44 = 0;
+            part->unk4C = 10.0f;
+            qcopy(&child->pos, &moby->pos);
             angle = random_angle_29ecf8();
             angle2 = random_angle_29ecf8();
             size = random_float_between_29ecf8(0.6f, 0.9f);
             child->pos.x += fast_cos_29ecf8(angle) * fast_sin_29ecf8(angle2) * size;
             child->pos.y += fast_sin_29ecf8(angle) * fast_sin_29ecf8(angle2) * size;
             child->pos.z += fast_cos_29ecf8(angle2) * size;
-            *(volatile s32 *)((char *)part + 0x50) = 0;
-            *(void *volatile *)((char *)part + 0x54) = moby_pos;
-            *(volatile s32 *)((char *)part + 0x58) = 0;
-            *(volatile f32 *)((char *)part + 0x70) = 1.694f;
-            *(volatile f32 *)((char *)part + 0x74) = 1.694f;
-            *(f32 *)((char *)part + 0x48) = 1.056f;
-            *(volatile s16 *)((char *)part + 0x5c) = -1;
-            *(f32 *)((char *)part + 0x40) = 0.003f;
-            *(s16 *)((char *)part + 0x5e) = 2;
-            *(s16 *)((char *)part + 0x60) = 0x55;
-            *(f32 *)((char *)part + 0x90) = 1.0f;
-            *(s16 *)((char *)part + 0x62) = 0x1ee;
-            *(f32 *)((char *)part + 0x94) = 5.0f;
+            part->unk50 = 0;
+            part->leader_pos = &moby->pos;
+            part->unk58 = 0;
+            part->unk70 = 1.694f;
+            part->unk74 = 1.694f;
+            part->unk48 = 1.056f;
+            part->unk5C = -1;
+            part->unk40 = 0.003f;
+            part->unk5E = 2;
+            part->oclass = 0x55;
+            part->unk90 = 1.0f;
+            part->unk62 = 0x1ee;
+            part->unk94 = 5.0f;
             update_spawned_moby_29ecf8(child);
         }
     }
-    }
-    return;
-update:
-    { s32 i;
+    } else {
+    s32 i;
     struct Moby *child;
     for (i = 0; i < data->count; i++) {
         void *part;
@@ -314,7 +329,6 @@ update:
     }
     }
 }
-#endif
 /* Sets the float at 0x58 on the moby and on the linked moby at data+0x424, if any. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB6D8), where it is exact; names translated to the US level program. */
 
