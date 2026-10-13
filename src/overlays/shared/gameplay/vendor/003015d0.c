@@ -310,7 +310,7 @@ void FUN_L14_00301de8(char *m) {
                 src += 0x40;
             }
             i = next_i;
-        } while ((float)i < 4.0f);
+        } while ((double)i < 4.0);
         src = (char *)indices;
         copy_i = 0;
         do {
