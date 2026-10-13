@@ -223,6 +223,7 @@ void FUN_L00_002c89e8(struct Moby *m)
     case 2: {
         f32 f, g, h;
         f32 half = 0.5f;
+        u8 *collision_point;
         f = FUN_001fa6c0(D_0013E534) + 1.0f;
         {
             f32 g = m->pclass->scale;
@@ -232,11 +233,8 @@ void FUN_L00_002c89e8(struct Moby *m)
         if (tick_countdown_2c8440((s32 *)v->pad_34)) {
             *(s32 *)v->pad_34 = scale_game_frames_2c8440(4);
             FUN_L00_0026ed28(m);
-            g = D_0015ED70_2c8440;
-        } else {
-            g = D_0015ED70_2c8440;
         }
-        v->vel.f[2] -= g * 9.0f;
+        v->vel.f[2] -= D_0015ED70_2c8440 * 9.0f;
         add_vector_xyz_2c8440(&d, &m->pos, v);
         FUN_L00_001ff290_2c89e8(&q, &m->pos, &hero.motion.platform_carry);
         qcopy_nc(&e, &m->pos);
@@ -247,18 +245,22 @@ void FUN_L00_002c89e8(struct Moby *m)
         qcopy_nc(&q, &d);
         q.f[2] += f * 0.2f;
         if (FUN_001f0d60_2c89e8(f * 0.3f, &q, 4, hero.moby)) {
-            qcopy_nc(&m->pos, (u8 *)&coll_hit_2c8440 + 0x30);
+            collision_point = (u8 *)&coll_hit_2c8440 + 0x30;
+            qcopy_nc(&m->pos, collision_point);
             m->pos.z -= f * 0.2f;
+            collision_point += 0x10;
         } else {
             if (!collision_line_2c8440(&e, &a, 0, hero.moby, 0)) {
                 qcopy_nc(&m->pos, &d);
                 return;
             }
-            qcopy_nc(&m->pos, &coll_hit_2c8440.point);
+            collision_point = (u8 *)&coll_hit_2c8440 + 0x20;
+            qcopy_nc(&m->pos, collision_point);
             m->pos.z += (frame_scale * 0.15f * m->scale) / m->pclass->scale;
+            collision_point += 0x20;
         }
         h = 0.01f;
-        reflect_vector_2cb418(v, v, &coll_hit_normal_2c8440);
+        reflect_vector_2cb418(v, v, collision_point);
         scale_vector_xyz_2c8440(v, v, half);
         g = vector_length_xyz_2cb418(v);
         if (g < frame_scale * h) goto settle;
