@@ -852,7 +852,10 @@ first_collision_timer:
     }
     }
     FUN_L00_00259fe8(m, m->scale * 0.3f / m->pclass->scale);
-    if (m->pos.z < 5.0f || m->pos.z > 500.0f) goto remove_moby;
+    if (m->pos.z < 5.0f || m->pos.z > 500.0f) {
+        FUN_0020c828(m);
+        return;
+    }
     if (m->pos.x < 5.0f) m->pos.x = 5.0f;
     if (m->pos.x > 1018.0f) m->pos.x = 1018.0f;
     if (m->pos.y < 5.0f) m->pos.y = 5.0f;
