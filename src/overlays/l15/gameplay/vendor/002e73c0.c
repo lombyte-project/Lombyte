@@ -1210,17 +1210,17 @@ ready:
     else if (pitch < -0.5235988f) pitch = -0.5235988f;
     {
     float half_yaw = yaw * 0.5f;
-    *(float *)(data + 0x248) = half_yaw;
-    *(float *)(data + 0x1c4) = pitch * 1.25f;
-    *(float *)(data + 0x1c8) = half_yaw;
+    *(volatile float *)(data + 0x248) = half_yaw;
+    *(volatile float *)(data + 0x1c4) = pitch * 1.25f;
+    *(volatile float *)(data + 0x1c8) = half_yaw;
     }
-    turn = frame_time;
+    {
     if (D_L15_0015EDB0 != 0) {
         *(float *)(data + 0x1d0) = 2.75f;
-        turn = D_L15_0015ED64;
     }
-    FUN_00251fd0(fast * turn, slow * turn, moby, data + 0x160, 1);
+    FUN_00251fd0(fast * D_L15_0015ED64, slow * D_L15_0015ED64, moby, data + 0x160, 1);
     FUN_00251fd0(fast * D_L15_0015ED64, slow * D_L15_0015ED64, moby, data + 0x1e0, 0);
+    }
     }
 }
 #endif
