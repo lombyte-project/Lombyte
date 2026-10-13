@@ -1612,190 +1612,171 @@ void FUN_L00_00208038(u128 *v, int b, float x, float y) {
     FUN_L00_00207d00_00208038();
     g->n++;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002080b0.s", FUN_L00_002080b0);
-#else
-extern char D_0013F350_002080b0[] __asm__("D_0013F350");
-extern f32 D_0015ED60_gp_002062b0 __asm__("D_0015ED60_gp") __attribute__((sda));
-extern f32 D_0015ED60_002080b0 __asm__("D_0015ED60");
-extern f32 D_0015ED6C_002080b0 __asm__("D_0015ED6C");
-extern f32 D_0015ED6C_gp_002080b0 __asm__("D_0015ED6C_gp") __attribute__((sda));
-extern void FUN_L00_0024f7c8_002080b0(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
-extern f32 FUN_002000e8_002080b0(f32, f32) __asm__("FUN_L00_002000e8");
-extern f32 FUN_001ff800_002080b0(f32) __asm__("FUN_L00_001ff800");
-extern u32 FUN_00200298_002080b0(f32, u32, u32) __asm__("FUN_L00_00200298");
-extern s32 FUN_00200250_002080b0(f32) __asm__("FUN_L00_00200250");
-extern s32 FUN_001fef20_002080b0(s32) __asm__("FUN_L00_001fef20");
-extern void FUN_001ff6d0_002080b0(void *, void *, void *) __asm__("FUN_L00_001ff6d0");
-extern void FUN_001ff278_002080b0(void *, void *, void *) __asm__("FUN_L00_001ff278");
+#include "rnc/gameplay/entities/moby.h"
 
+typedef int u128_2080b0 __attribute__((mode(TI)));
+typedef union { u128_2080b0 q; float f[4]; } Vec4_2080b0 __attribute__((aligned(16)));
+extern void func_L00_00250800_2080b0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void func_L00_00208650_2080b0(void *vec, int a, float f0, float f1) __asm__("FUN_L00_00208038");
+extern float func_001FA748_2080b0(float, float) __asm__("FUN_001fa580");
+extern float func_001F9FA8_2080b0(float) __asm__("FUN_001f9de0");
+extern int func_001FA8A8_2080b0(int, int, float) __asm__("FUN_001fa6e0");
+extern void func_001F9EC0_2080b0(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void func_001F9BD8_2080b0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int func_001FA898_2080b0(float) __asm__("FUN_001fa6d0");
+extern int func_001F9850_2080b0(int) __asm__("FUN_001f96f8");
+extern float D_0015ED6C_2080b0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED60_2080b0 __asm__("D_0015ED60");
+
+// Hero gadget glow: pulses the colour of the hero's gadget moby (hero state 13, 16, 17, 19, 20) and
+// queues its glow sprites. c and g are shared by cases 17 and 20 (one pseudo each, retail's $s0/$s1).
 void FUN_L00_002080b0(void) {
-    char *g;
-    char *moby;
-    u128 v;
-    f32 speed;
+    Vec4_2080b0 v;
+    struct Moby *m;
+    int i;
+    int c, g;
 
-    speed = D_0015ED6C_gp_002080b0;
-    {
-        char *g = D_0013F350_002080b0;
-        char *moby;
-        s32 i;
-        if (*(s32 *)(g + 0x1158) == 5) {
-            moby = *(char **)(g + 0x1130);
-            if (moby != 0 && ((*(u16 *)(moby + 0x34) ^ 1) & 1)) {
-                i = 0;
-                do {
-                    FUN_L00_0024f7c8_002080b0(moby, i, &v);
-                    FUN_L00_00208038(&v, 0x301eaa1e, 0.057f, 0.15f);
-                    i++;
-                } while (i < 2);
-                speed = D_0015ED6C_002080b0;
+    if (hero.items[2].item_id == 5) {
+        struct Moby *w = hero.items[2].moby;
+        if (w != 0 && ((w->flags ^ 1) & 1)) {
+            for (i = 0; i < 2; i++) {
+                func_L00_00250800_2080b0(w, i, &v);
+                func_L00_00208650_2080b0(&v, 0x301EAA1E, 0.057f, 0.15f);
             }
         }
     }
-    g = D_0013F350_002080b0;
-    {
-        f32 phase;
-        phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x1628), speed * 2.268928f);
-        *(f32 *)(g + 0x1628) = phase;
-        *(u32 *)(*(char **)(g + 0x2080) + 0x90) = FUN_00200298_002080b0(FUN_001ff800_002080b0(phase) * 0.5f + 0.5f, 0x806e8c6e, 0x805a3232);
-    }
 
-    moby = *(char **)(g + 0x1090);
-    if (moby == 0 || !((*(u16 *)(moby + 0x34) ^ 1) & 1))
-        return;
-    switch (*(u32 *)(g + 0x10b8)) {
-    case 0x11: {
-        char *g = D_0013F350_002080b0;
-        f32 phase;
-        u32 color, red;
-        s32 blue;
-        u8 channel;
-        phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x10bc), D_0015ED6C_002080b0 * 4.363323f);
-        *(f32 *)(g + 0x10bc) = phase;
-        color = 0x28c8c8c8;
-        if (0.0f < phase && phase < 2.268928f) color = 0x280a0a0a;
-        *(u32 *)(moby + 0x90) = FUN_00200298_002080b0(0.07f, *(u32 *)(moby + 0x90), color);
-        v = 0;
-        ((f32 *)&v)[0] = 0.0173452497f;
-        ((f32 *)&v)[1] = -0.0391772911f;
-        ((f32 *)&v)[2] = 0.0962345004f;
-        FUN_001ff6d0_002080b0(&v, &v, moby + 0xc0);
-        FUN_001ff278_002080b0(&v, &v, moby + 0x10);
-        {
-            u8 blue_channel;
-            channel = *(u8 *)(moby + 0x91);
-            blue_channel = *(u8 *)(moby + 0x92);
-            red = FUN_00200250_002080b0((f32)*(u8 *)(moby + 0x90) * 0.2f);
-            blue = FUN_00200250_002080b0((f32)blue_channel * 0.2f);
-        }
-        color = ((((channel << 5) / 200 << 24) | (blue << 16)) | ((u32)channel << 8)) | red;
-        FUN_L00_00208038(&v, color, 0.15f, 0.1f);
+    hero.glow_phase = func_001FA748_2080b0(hero.glow_phase, D_0015ED6C_2080b0 * 2.26892805f);
+    hero.moby->glow_color = func_001FA8A8_2080b0(0x806E8C6E, 0x805A3232, func_001F9FA8_2080b0(hero.glow_phase) * 0.5f + 0.5f);
+
+    m = hero.items[0].moby;
+    if (m == 0) return;
+    if (!((m->flags ^ 1) & 1)) return;
+
+    switch (hero.items[0].item_id) {
+    case 17: {
+        int c5;
+        int x1, x2, col;
+        float fr;
+        float f = func_001FA748_2080b0(hero.items[0].glow_phase, D_0015ED6C_2080b0 * 4.36332321f);
+        c5 = 0x28C8C8C8;
+        hero.items[0].glow_phase = f;
+        if (0.0f < f && f < 2.26892805f) c5 = 0x280A0A0A;
+        m->glow_color = func_001FA8A8_2080b0(m->glow_color, c5, 0.07f);
+        v.q = 0;
+        v.f[0] = 0.0173452497f;
+        v.f[1] = -0.0391772911f;
+        v.f[2] = 0.0962345004f;
+        func_001F9EC0_2080b0(&v, &v, &m->rot_row0);
+        func_001F9BD8_2080b0(&v, &v, &m->pos);
+        c = (*(unsigned char *)&m->glow_color);
+        g = ((unsigned char *)&m->glow_color)[1];
+        fr = (float)c;
+        c = ((unsigned char *)&m->glow_color)[2];
+        x1 = func_001FA898_2080b0(fr * 0.2f);
+        x2 = func_001FA898_2080b0((float)c * 0.2f);
+        col = ((g << 5) / 200) << 24;
+        col |= x2 << 16;
+        g <<= 8;
+        col |= g;
+        col |= x1;
+        func_L00_00208650_2080b0(&v, col, 0.15f, 0.1f);
         break;
     }
-    case 0x10: {
-        char *g = D_0013F350_002080b0;
-        f32 phase, amount;
-        u32 color, red;
-        s32 green, blue, alpha;
-        if (FUN_001fef20_002080b0(0x32) < *(s32 *)(g + 0x10b0)) {
-            amount = D_0015ED6C_gp_002080b0 * 3.1415927f;
-            if (*(u8 *)(g + 0x20a8)) amount = D_0015ED6C_gp_002080b0 * 4.712389f;
-            phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x10bc), amount);
-            *(f32 *)(g + 0x10bc) = phase;
-            red = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 20.0f) + 0x1e;
-            green = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 90.0f) + 0x96;
-            blue = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 20.0f) + 0x1e;
-            if (*(u8 *)(g + 0x20a8)) {
-                u32 t = red;
-                red = green;
-                green = t;
+    case 16:
+        if (func_001F9850_2080b0(50) < hero.items[0].unk20) {
+            float k, f;
+            int r, g, b, a, col, col1, bs, gs;
+            k = D_0015ED6C_2080b0 * 3.14159274f;
+            if (hero.unk20A8 != 0) k = D_0015ED6C_2080b0 * 4.71238899f;
+            f = func_001FA748_2080b0(hero.items[0].glow_phase, k);
+            hero.items[0].glow_phase = f;
+            r = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 20.0f) + 30;
+            g = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 90.0f) + 150;
+            b = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 20.0f) + 30;
+            if (hero.unk20A8 != 0) {
+                int tmp = r;
+                r = g;
+                g = tmp;
             }
-            blue <<= 16;
-            green <<= 8;
-            *(u32 *)(moby + 0x90) = FUN_00200298_002080b0(0.13f, *(u32 *)(moby + 0x90), ((blue | 0x20000000) | green) | red);
-            alpha = *(s32 *)(g + 0x10b0) - FUN_001fef20_002080b0(0x32);
-            alpha = alpha > 0x20 ? 0x20 : alpha;
-            color = (((alpha << 24) | blue) | green) | red;
-            FUN_L00_0024f7c8_002080b0(moby, 1, &v);
-            FUN_L00_00208038(&v, color, 0.15f, 0.04f);
-            return;
+            bs = b << 16;
+            col1 = bs | 0x20000000;
+            gs = g << 8;
+            col1 |= gs;
+            col1 |= r;
+            m->glow_color = func_001FA8A8_2080b0(m->glow_color, col1, 0.13f);
+            a = hero.items[0].unk20 - func_001F9850_2080b0(50);
+            if (a > 32) a = 32;
+            col = (a << 24) | bs | gs | r;
+            func_L00_00250800_2080b0(m, 1, &v);
+            func_L00_00208650_2080b0(&v, col, 0.15f, 0.04f);
         }
         break;
-    }
-    case 0x13: {
-        char *g = D_0013F350_002080b0;
-        f32 phase, amount;
-        u32 color, red;
-        s32 green, blue;
-        amount = D_0015ED6C_002080b0 * 2.268928f;
-        if (*(u8 *)(g + 0x20a8)) amount = D_0015ED6C_002080b0 * 7.330383f;
-        phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x10bc), amount);
-        *(f32 *)(g + 0x10bc) = phase;
-        if (*(u8 *)(g + 0x20a8)) {
-            red = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 30.0f) + 0x32;
-            green = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 30.0f) + 0x32;
-            blue = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 90.0f) + 0xaa;
+    case 19: {
+        float k, f;
+        int r, g, b, col;
+        k = D_0015ED6C_2080b0 * 2.26892805f;
+        if (hero.unk20A8 != 0) k = D_0015ED6C_2080b0 * 7.33038282f;
+        f = func_001FA748_2080b0(hero.items[0].glow_phase, k);
+        hero.items[0].glow_phase = f;
+        if (hero.unk20A8 != 0) {
+            r = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 30.0f) + 50;
+            g = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 30.0f) + 50;
+            b = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 90.0f) + 170;
         } else {
-            red = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 70.0f) + 0x64;
-            green = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 40.0f) + 0x46;
-            blue = FUN_00200250_002080b0(FUN_001ff800_002080b0(phase) * 40.0f) + 0x46;
+            r = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 70.0f) + 100;
+            g = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 40.0f) + 70;
+            b = func_001FA898_2080b0(func_001F9FA8_2080b0(f) * 40.0f) + 70;
         }
-        color = (((blue << 16) | 0x80000000) | (green << 8)) | red;
-        *(u32 *)(moby + 0x90) = FUN_00200298_002080b0(0.15f, *(u32 *)(moby + 0x90), color);
+        col = b << 16;
+        col |= 0x80000000;
+        col |= g << 8;
+        col |= r;
+        m->glow_color = func_001FA8A8_2080b0(m->glow_color, col, 0.15f);
         break;
     }
-    case 0x14: {
-        char *g = D_0013F350_002080b0;
-        f32 phase;
-        u32 color, red;
-        s32 blue;
-        u8 channel;
-        phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x10bc), D_0015ED6C_002080b0 * 4.363323f);
-        *(f32 *)(g + 0x10bc) = phase;
-        color = 0x00dcdcdc;
-        if (0.0f < phase && phase < 2.443461f) color = 0x000a0a0a;
-        *(u32 *)(moby + 0x90) = FUN_00200298_002080b0(0.07f, *(u32 *)(moby + 0x90), color);
-        v = 0;
-        ((f32 *)&v)[0] = 0.0171042103f;
-        ((f32 *)&v)[1] = -0.0939194188f;
-        ((f32 *)&v)[2] = 0.140954122f;
-        FUN_001ff6d0_002080b0(&v, &v, moby + 0xc0);
-        FUN_001ff278_002080b0(&v, &v, moby + 0x10);
-        {
-            u8 blue_channel;
-            channel = *(u8 *)(moby + 0x91);
-            blue_channel = *(u8 *)(moby + 0x92);
-            red = FUN_00200250_002080b0((f32)*(u8 *)(moby + 0x90) * 0.2f);
-            blue = FUN_00200250_002080b0((f32)blue_channel * 0.2f);
-        }
-        color = ((((channel << 5) / 200 << 24) | (blue << 16)) | ((u32)channel << 8)) | red;
-        FUN_L00_00208038(&v, color, 0.17f, 0.1f);
+    case 20: {
+        int c5;
+        int x1, x2, col;
+        float fr;
+        float f = func_001FA748_2080b0(hero.items[0].glow_phase, D_0015ED6C_2080b0 * 4.36332321f);
+        c5 = 0xDCDCDC;
+        hero.items[0].glow_phase = f;
+        if (0.0f < f && f < 2.44346094f) c5 = 0xA0A0A;
+        m->glow_color = func_001FA8A8_2080b0(m->glow_color, c5, 0.07f);
+        v.q = 0;
+        v.f[0] = 0.0171042103f;
+        v.f[1] = -0.0939194188f;
+        v.f[2] = 0.140954122f;
+        func_001F9EC0_2080b0(&v, &v, &m->rot_row0);
+        func_001F9BD8_2080b0(&v, &v, &m->pos);
+        c = (*(unsigned char *)&m->glow_color);
+        g = ((unsigned char *)&m->glow_color)[1];
+        fr = (float)c;
+        c = ((unsigned char *)&m->glow_color)[2];
+        x1 = func_001FA898_2080b0(fr * 0.2f);
+        x2 = func_001FA898_2080b0((float)c * 0.2f);
+        col = ((g << 5) / 200) << 24;
+        col |= x2 << 16;
+        g <<= 8;
+        col |= g;
+        col |= x1;
+        func_L00_00208650_2080b0(&v, col, 0.17f, 0.1f);
         break;
     }
-    case 0xD: {
-        char *g = D_0013F350_002080b0;
-        f32 phase, amount;
-        u32 color;
-        phase = FUN_002000e8_002080b0(*(f32 *)(g + 0x10bc), D_0015ED6C_002080b0 * 4.712389f);
-        *(f32 *)(g + 0x10bc) = phase;
-        color = 0x2814d214;
-        if (0.0f < phase) {
-            amount = D_0015ED60_gp_002062b0;
-            if (!(phase < 2.0943952f))
-                goto update_color;
-            color = 0x281414d2;
-        }
-        amount = D_0015ED60_002080b0;
-update_color:
-        *(u32 *)(moby + 0x90) = FUN_00200298_002080b0(amount * 0.05f, *(u32 *)(moby + 0x90), color);
-        FUN_L00_0024f7c8_002080b0(moby, 0, &v);
-        FUN_L00_00208038(&v, *(u32 *)(moby + 0x90), 0.1f, 0.03f);
+    case 13: {
+        int c5;
+        float f = func_001FA748_2080b0(hero.items[0].glow_phase, D_0015ED6C_2080b0 * 4.71238899f);
+        c5 = 0x2814D214;
+        hero.items[0].glow_phase = f;
+        if (0.0f < f && f < 2.09439516f) c5 = 0x281414D2;
+        m->glow_color = func_001FA8A8_2080b0(m->glow_color, c5, D_0015ED60_2080b0 * 0.05f);
+        func_L00_00250800_2080b0(m, 0, &v);
+        func_L00_00208650_2080b0(&v, m->glow_color, 0.1f, 0.03f);
         break;
     }
     }
 }
-#endif
 extern unsigned char D_0015EDB5_208820 __asm__("D_0015EDB5");
 extern void f32fe8_208820(void) __asm__("FUN_L00_00232fe8");
 extern void f330d0_208820(void) __asm__("FUN_L00_002330d0");

@@ -112,7 +112,7 @@ struct HeroItemSlot {
     s32 unk20;                     /* 0x20 */
     s32 state;                     /* 0x24: 0 empty, 2 ready, 3 released */
     s32 item_id;                   /* 0x28: item in the slot */
-    u8 pad_2C[0x4];
+    f32 glow_phase;                /* 0x2C: phase of the item moby's colour pulse (FUN_L00_002080b0) */
     f32 unk30;                     /* 0x30 */
     f32 unk34;                     /* 0x34 */
     s32 unk38;                     /* 0x38 */
@@ -681,7 +681,8 @@ struct Hero {
     u8 pad_1618[0x8];
     void *unk1620;                 /* 0x1620 */
     void *unk1624;                 /* 0x1624 */
-    u8 pad_1628[0x8];
+    f32 glow_phase;                /* 0x1628: phase of the hero moby's colour pulse (FUN_L00_002080b0) */
+    u8 pad_162C[0x4];
     s32 unk1630;                   /* 0x1630 */
     s16 unk1634;                   /* 0x1634 */
     s16 unk1636;                   /* 0x1636 */
