@@ -238,17 +238,18 @@ extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30"
 s32 FUN_L05_00262f50(char *e) {
     char buf[128];
     s32 indices[4];
-    s32 x, y, color, shadow, value, group, i, count, period;
+    s32 x, y, shadow, value, group, i, count, period;
     f32 fade, pulse;
     f32 ratio;
     s32 *src, *dst;
-    u8 state;
+    u32 state;
     u8 *q = (u8 *)e + 0x70;
 
     fade = (f32)q[0] / 10.0f;
     if (fade > 1.0f) fade = 1.0f;
     if (hero.state.control_mode != 0x16) return *(s32 *)((u8 *)e + 0x58);
     if (q[2] != 0) {
+        s32 color, shadow;
         sprintf_alt(buf, D_L05_0015F860, D_L05_0015FAD4 * 0x168);
         pulse = convert_integer_to_float(q[1]);
         period = scale_game_frames(*(s32 *)&D_L05_0015F87C);
@@ -325,8 +326,12 @@ s32 FUN_L05_00262f50(char *e) {
     *(s32 *)((u8 *)e + 0x58) = 0x100;
     *(s32 *)((u8 *)e + 0x5c) = 0x40;
     FUN_L00_00235a70((char *)e, &x, &y);
-    value = *(s32 *)((u8 *)e + 0x74) * 0xdd / *(s32 *)((u8 *)e + 8) + 0x1b;
-    FUN_L00_0023b6c0(get_icon_frame(0x7558, 1), x, y, value, 0x40, 0x80);
+    value = *(s32 *)((u8 *)e + 0x74);
+    value *= 0xdd;
+    value /= *(s32 *)((u8 *)e + 8);
+    value += 0x1b;
+    group = get_icon_frame(0x7558, 1);
+    FUN_L00_0023b6c0(group, x, y, value, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 0), x, y, 0x100, 0x40, 0x80);
     value = hero.pad_8AE[0];
     if (scale_game_frames(0x78) < value) {
