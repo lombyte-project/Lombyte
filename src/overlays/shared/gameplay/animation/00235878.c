@@ -633,18 +633,13 @@ int FUN_L00_00237200(HudElem *e) {
         points[1].z = 119.5f;
         {
             float *point_data;
-            if (level == 5) {
-                *(quadword *)&point = *(quadword *)&points[0];
-                point_data = (float *)&point;
-            } else {
-                *(quadword *)&point = *(quadword *)&points[1];
-                point_data = (float *)&point;
-            }
+            line = level == 5 ? memcpy(&point, &points[0], 16) : memcpy(&point, &points[1], 16);
+            point_data = (float *)line;
             if (FUN_001ff450(D_0013F3D0, point_data) < 5.0f) {
                 *(int *)0x15f648 = y + 100;
-                extra = current_level_index_sda == 0x10 ? 1 : 0;
-                elapsed = freeze_stats_time_ref_a[extra];
-                extra = freeze_stats_score_ref_a[extra];
+                extra = current_level_index_sda == 0x10 ? 4 : 0;
+                elapsed = *(int *)((char *)freeze_stats_time_ref_a + extra);
+                extra = *(int *)((char *)freeze_stats_score_ref_a + extra);
                 if (elapsed != 0) {
                     interval = pal_mode != 0 ? 3000 : 3600;
                     minute_scale = interval / 60;
