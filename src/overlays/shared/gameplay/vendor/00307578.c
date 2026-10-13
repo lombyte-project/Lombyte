@@ -241,7 +241,7 @@ void FUN_L06_00309860(char *self) {
 /* UpdateMoby: state 0 deletes, state 1 draws and times out */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_0030D2A0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L06_0030bfa8(void);
+void FUN_L06_0030bfa8(char *moby);
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -282,9 +282,6 @@ void FUN_L06_0030bef8(char *src, int a1, int a2, int a3) {
         m[0x20] = 1;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0030bfa8.s", FUN_L06_0030bfa8);
-#else
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -299,8 +296,7 @@ extern s32 D_L06_00162420 __attribute__((sda));
 extern s32 D_L06_00162424 __attribute__((sda));
 extern s32 D_L06_00162428 __attribute__((sda));
 
-#define FUN_L06_0030bfa8 FUN_L06_0030bfa8_c
-void FUN_L06_0030bfa8(char *moby) __asm__("FUN_L06_0030bfa8");
+/* Draws a screen-space sprite at the moby, grown and faded in by the first data float. */
 void FUN_L06_0030bfa8(char *moby) {
     float *d = *(float **)(moby + 0x78);
     OvlVec4 pos;
@@ -312,8 +308,6 @@ void FUN_L06_0030bfa8(char *moby) {
     float fade;
     s32 y, x, radius;
     s32 raw_x;
-    s32 left, right;
-    s64 upper_plus, upper_minus;
     u64 texture;
     u32 color;
     s32 *screen_center;
@@ -331,7 +325,7 @@ void FUN_L06_0030bfa8(char *moby) {
     raw_x = truncate_float_to_s32(screen[0] - (float)screen_center[4]);
     screen_offset = (float)screen_center[4];
     y = truncate_float_to_s32(screen[1] - screen_offset);
-    x = (s32)raw_x - 0x1000;
+    x = raw_x - 0x1000;
     y -= 0x1000;
     uvs[0] = D_L06_0016241C;
     uvs[1] = D_L06_00162420;
@@ -343,20 +337,22 @@ void FUN_L06_0030bfa8(char *moby) {
     colors[1] = color;
     colors[0] = color;
     radius = truncate_float_to_s32((float)(D_L06_00162418 << 4) * size);
-    upper_plus = 0xfffff080008000LL + (s64)(s32)((y + radius) << 16);
-    upper_minus = 0xfffff080008000LL + (s64)(s32)((y - radius) << 16);
-    right = x + radius;
-    left = x - radius;
-    corners[0] = upper_minus + right;
-    corners[2] = upper_plus + right;
-    corners[1] = upper_minus + left;
-    corners[3] = upper_plus + left;
-   texture = get_effect_texture(D_L06_00162414);
+    corners[3] = 0xfffff080008000LL;
+    corners[2] = 0xfffff080008000LL;
+    corners[1] = 0xfffff080008000LL;
+    corners[0] = 0xfffff080008000LL;
+    corners[0] += (y - radius) << 16;
+    corners[0] += x + radius;
+    corners[1] += (y - radius) << 16;
+    corners[1] += x - radius;
+    corners[2] += (y + radius) << 16;
+    corners[2] += x + radius;
+    corners[3] += (y + radius) << 16;
+    corners[3] += x - radius;
+    texture = get_effect_texture(D_L06_00162414);
     FUN_L02_0020bc88(corners, uvs, colors, texture, 1);
     vu1_add_g_sregister(0x47, 0x5360B);
 }
-#undef FUN_L06_0030bfa8
-#endif
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00317770), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0015EF50;
