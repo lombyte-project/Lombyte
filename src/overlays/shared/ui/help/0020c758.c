@@ -1066,15 +1066,12 @@ void FUN_L00_0020e728(void) {
         slot++;
     } while (i < 2);
     if (hero.state.control_mode == 15) {
-        if (hero.unk5D8 != 0) {
-            *(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q;
-            hero.unk688 = FUN_001ff8b0_e728(
-                *(f32 *)((u8 *)hero.unk5D8 + 0x10) - hero.motion.pos.f[0],
-                *(f32 *)((u8 *)hero.unk5D8 + 0x14) - hero.motion.pos.f[1]);
-        } else {
-            *(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q;
-            hero.unk688 = FUN_002000e8_e728(hero.unk57C, hero.unk5D0);
-        }
+        hero.unk688 = hero.unk5D8 != 0 ?
+            (*(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q,
+             FUN_001ff8b0_e728(*(f32 *)((u8 *)hero.unk5D8 + 0x10) - hero.motion.pos.f[0],
+                                *(f32 *)((u8 *)hero.unk5D8 + 0x14) - hero.motion.pos.f[1])) :
+            (*(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q,
+             FUN_002000e8_e728(hero.unk57C, hero.unk5D0));
         hero.unk684 = -hero.unk580;
         vu_euler_rotation_basis(hero.basis, (u8 *)&hero + 0x680);
         FUN_001ff260_e728((u8 *)&hero + 0x670);
