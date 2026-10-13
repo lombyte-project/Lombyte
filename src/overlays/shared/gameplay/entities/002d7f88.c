@@ -1315,47 +1315,44 @@ s32 FUN_L00_002db890(Obj_db890 *o) {
         return f(o);
     return 0;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002db8f8.s", FUN_L00_002db8f8);
-#else
-void FUN_001e93b0_002db8f8(void *) __asm__("FUN_001e93b0");
+void debug_print_2db8f8(void *) __asm__("FUN_001e93b0");
 u8 *FUN_L00_002db890_002db8f8(u8 *) __asm__("FUN_L00_002db890");
-s32 FUN_001f96f8_002db8f8(s32) __asm__("FUN_001f96f8");
-void FUN_00212f90_002db8f8(void *, s32, s32, s32) __asm__("FUN_00212f90");
-f32 FUN_001f9b80_002db8f8(void *, void *) __asm__("FUN_001f9b80");
-s32 FUN_L00_002db8f8(u8 *m, u8 *v, u8 *target) {
-    u8 *o = FUN_L00_002db890_002db8f8(m);
-    s32 c;
-    u8 byte;
+s32 scale_game_frames_2db8f8(s32) __asm__("FUN_001f96f8");
+void blend_moby_animation_2db8f8(void *, s32, s32, s32) __asm__("FUN_00212f90");
+f32 vector_distance_2db8f8(void *, void *) __asm__("FUN_001f9b80");
+s32 FUN_L00_002db8f8(u8 *moby, u8 *position, u8 *target) {
+    u8 *record = FUN_L00_002db890_002db8f8(moby);
     s16 state;
-    if (o == 0)
+    if (record == 0)
         goto missing;
-    if (m == 0 || m[0x20] == 0xFE || m[0x20] == 0xFD || *(s16 *)(o + 0x68) == 8)
+    if (moby == 0 || moby[0x20] == 0xFE || moby[0x20] == 0xFD || *(s16 *)(record + 0x68) == 8)
         goto fail;
-    qcopy_nc(o, v);
-    *(u8 **)(o + 0x60) = target;
-    *(f32 *)(o + 0xC) = 1.0f;
-    state = (s16)(*(u16 *)(o + 0x68) - 1);
+    qcopy_nc(record, position);
+    *(u8 **)(record + 0x60) = target;
+    *(f32 *)(record + 0xC) = 1.0f;
+    state = (s16)(*(u16 *)(record + 0x68) - 1);
     switch (state) {
     case 0:
-        if (1.0f <= *(f32 *)(o + 0x6C)) {
-            byte = (*(u8 **)(o + 0x70))[2];
-            if (m[0x53] != byte) {
-                c = byte;
-                FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
+        if (1.0f <= *(f32 *)(record + 0x6C)) {
+            {
+                u8 *seq = *(u8 **)(record + 0x70);
+                if (moby[0x53] != seq[2]) {
+                    blend_moby_animation_2db8f8(moby, seq[2], 0, scale_game_frames_2db8f8(10));
+                }
             }
-            *(s32 *)(o + 0x6C) = 0;
-            *(s16 *)(o + 0x68) = 2;
+            *(s32 *)(record + 0x6C) = 0;
+            *(s16 *)(record + 0x68) = 2;
             return 1;
         }
-        byte = (*(u8 **)(o + 0x70))[1];
-        if (m[0x53] != byte) {
-            c = byte;
-            FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
+        {
+            u8 *seq = *(u8 **)(record + 0x70);
+            if (moby[0x53] != seq[1]) {
+                blend_moby_animation_2db8f8(moby, seq[1], 0, scale_game_frames_2db8f8(10));
+            }
         }
         return 1;
     case 1:
-        if (!(1.0f <= *(f32 *)(o + 0x6C)))
+        if (!(1.0f <= *(f32 *)(record + 0x6C)))
             return 1;
         return 2;
     case 2:
@@ -1365,33 +1362,34 @@ s32 FUN_L00_002db8f8(u8 *m, u8 *v, u8 *target) {
     case 4:
     case 5:
     case 6:
-        byte = (*(u8 **)(o + 0x70))[3];
-        if (m[0x53] != byte) {
-            c = byte;
-            FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
+        {
+            u8 *seq = *(u8 **)(record + 0x70);
+            if (moby[0x53] != seq[3]) {
+                blend_moby_animation_2db8f8(moby, seq[3], 0, scale_game_frames_2db8f8(10));
+            }
         }
-        *(s16 *)(o + 0x68) = 3;
-        *(s32 *)(o + 0x6C) = 0;
-        *(f32 *)(m + 0x58) = 1.0f;
-        *(f32 *)(o + 0x64) = FUN_001f9b80_002db8f8(m + 0x10, target + 0x10);
+        *(s16 *)(record + 0x68) = 3;
+        *(s32 *)(record + 0x6C) = 0;
+        *(f32 *)(moby + 0x58) = 1.0f;
+        *(f32 *)(record + 0x64) = vector_distance_2db8f8(moby + 0x10, target + 0x10);
         break;
     default:
-        byte = (*(u8 **)(o + 0x70))[1];
-        if (m[0x53] != byte) {
-            c = byte;
-            FUN_00212f90_002db8f8(m, c, 0, FUN_001f96f8_002db8f8(10));
+        {
+            u8 *seq = *(u8 **)(record + 0x70);
+            if (moby[0x53] != seq[1]) {
+                blend_moby_animation_2db8f8(moby, seq[1], 0, scale_game_frames_2db8f8(10));
+            }
         }
-        *(s32 *)(o + 0x6C) = 0;
-        *(s16 *)(o + 0x68) = 1;
+        *(s32 *)(record + 0x6C) = 0;
+        *(s16 *)(record + 0x68) = 1;
         return 1;
     }
     return 2;
 missing:
-    FUN_001e93b0_002db8f8(D_L00_001EA030_002db8f8);
+    debug_print_2db8f8(D_L00_001EA030_002db8f8);
 fail:
     return 0;
 }
-#endif
 extern u32 D_L00_00161B20_002dbb20[1] __asm__("D_L00_00161B20") __attribute__((sda));
 extern u8 *D_001403E0_002dbb20 __asm__("D_001403E0") __attribute__((section(".data")));
 u8 *FUN_L00_002db890_002dbb20(u8 *) __asm__("FUN_L00_002db890");
