@@ -119,7 +119,8 @@ struct HeroItemSlot {
     s16 unk3C;                     /* 0x3C */
     u16 unk3E;                     /* 0x3E */
     s32 unk40;                     /* 0x40: on slot 6, nonzero makes the Ryno aim along unk4C */
-    u8 pad_44[0x8];
+    u8 pad_44[0x4];
+    struct Moby *lock_target;      /* 0x48: on slot 6, the moby the weapons lock on to while unk40 is set */
     f32 unk4C;                     /* 0x4C: yaw */
 };
 
