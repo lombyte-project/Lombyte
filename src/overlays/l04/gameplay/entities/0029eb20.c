@@ -285,7 +285,6 @@ initialize:
             *(volatile s32 *)((char *)part + 0x58) = 0;
             *(volatile f32 *)((char *)part + 0x70) = 1.694f;
             *(volatile f32 *)((char *)part + 0x74) = 1.694f;
-            *(f32 *)((char *)part + 0x94) = 5.0f;
             *(volatile f32 *)((char *)part + 0x48) = 1.056f;
             *(volatile s16 *)((char *)part + 0x5c) = -1;
             *(volatile f32 *)((char *)part + 0x40) = 0.003f;
@@ -293,6 +292,7 @@ initialize:
             *(volatile s16 *)((char *)part + 0x60) = 0x55;
             *(f32 *)((char *)part + 0x90) = 1.0f;
             *(s16 *)((char *)part + 0x62) = 0x1ee;
+            *(f32 *)((char *)part + 0x94) = 5.0f;
             update_spawned_moby_29ecf8(child);
         }
     }
