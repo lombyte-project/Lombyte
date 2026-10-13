@@ -201,7 +201,7 @@ extern float D_L09_00161304 __attribute__((section(".sdata")));
 void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     char *data = data_ptr;
     char *list = list_ptr;
-    unsigned int i;
+    int i;
     int j;
     int entry_offset;
     int *packet;
@@ -255,10 +255,12 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         packet_end = packet + 48;
         qcopy(packet_end, current + 0x1a0 / 4);
         *(float *)(packet + 52) = current[0x22c / 4];
-        saved0 = current[0x228 / 4];
-        packet[57] = 0x020001d2;
-        packet[56] = 0x03000000;
-        *(float *)(packet + 53) = saved0;
+        {
+            float saved0 = current[0x228 / 4];
+            packet[57] = 0x020001d2;
+            packet[56] = 0x03000000;
+            *(float *)(packet + 53) = saved0;
+        }
         packet[58] = 0x15000000;
         packet[54] = 0;
         packet[55] = 0;
@@ -294,9 +296,11 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         words[1] = 0xeeeeeeeeULL;
         blend = (unsigned char)data[0x3f];
         words[3] = 0x42;
-        words[2] = (blend << 32) | 100;
-        blend = 0x60U < alpha ? 0x5360a : 0x5370b;
-        words[4] = D_L09_001612F0;
+        /* Retail stores packed alpha before reading D_L09_001612F0. */
+        *(volatile u64 *)&words[2] = (blend << 32) | 100;
+        alpha = alpha <= 0x60U ? 0x5370b : 0x5360a;
+        blend = alpha;
+        words[4] = *(volatile u64 *)&D_L09_001612F0;
         words[5] = 6;
         words[6] = (long)color;
         words[7] = 0x3d;
@@ -333,7 +337,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
             FUN_L00_001fde98(n, *(int *)(entry_offset + (int)list + 0x10), 0x70000000,
                               (void *)0x70001000, visible == 0);
         }
-    } while (i < (unsigned int)count);
+    } while (i < count);
     FUN_L02_002a46e0(data);
 }
 #undef PACKET_CURSOR
