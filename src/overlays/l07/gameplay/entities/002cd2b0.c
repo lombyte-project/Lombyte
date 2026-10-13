@@ -846,8 +846,8 @@ void FUN_L07_002f5ba0(struct Moby *moby) {
             if (other && ((u8 *)other)[0x20] != 0xfe && ((u8 *)other)[0x20] != 0xfd)
                 goto check_state;
         }
-        next_state = 13;
         if (data[1] == -1) {
+            next_state = 13;
             goto store_state;
         }
         if (is_point_inside_clip_volume(D_0013F3D0, data[1])) {
