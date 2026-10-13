@@ -432,6 +432,7 @@ int FUN_L11_003192c8(char *moby) {
     float offset[8] __attribute__((aligned(16)));
     short *list;
     int i;
+    short *next_list;
     float phase;
     float *position_base;
     float *position_y_base;
@@ -445,8 +446,8 @@ int FUN_L11_003192c8(char *moby) {
     } else {
         *(float *)&D_L11_001623F0_d = 5.0f;
     }
-    position_base = (float *)(stack_data + 0x50);
     position_y_base = (float *)(stack_data + 0x54);
+    position_base = (float *)(stack_data + 0x50);
     colors_base = (int *)(stack_data + 0x40);
     for (i = 0; i < 16; i++) {
         long long texture;
@@ -488,6 +489,7 @@ int FUN_L11_003192c8(char *moby) {
         char *linked = (char *)(D_L11_0015FFD8 + ((entry & 0x7fff) << 8));
         int skip = *(short *)(linked + 0xa6) != *(short *)(moby + 0xa6);
         if (*(unsigned char *)(linked + 0x31) == 0) skip = 1;
+        next_list = list + 1;
         if (skip == 0) {
             char *trail = *(char **)(linked + 0x78);
             long limit = -1;
@@ -515,7 +517,8 @@ int FUN_L11_003192c8(char *moby) {
                 }
             }
         }
-        if (*list++ < 0) break;
+        if (*list < 0) break;
+        list = next_list;
     } while (1);
 }
 #endif
