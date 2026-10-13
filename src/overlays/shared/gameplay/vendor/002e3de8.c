@@ -142,34 +142,34 @@ void FUN_L10_002e91b8(unsigned char *m) {
     *(long long *)(second + 0x70) = 0;
     *(int *)(second + 0x4c) = 0;
     *(int *)(second + 0x44) = 0;
-    first_source = D_L10_001DA350;
     second_source = D_L10_001DA310;
-    first_vectors = (float *)first;
+    first_source = D_L10_001DA350;
     second_vectors = (float *)second;
     second_angles = (float *)second;
+    first_vectors = (float *)first;
     i = 3;
     do {
         qcopy(first_vectors, first_source);
         qcopy(second_angles, second_source);
+        second_source += 4;
         second_angles += 4;
         first_source += 4;
-        second_source += 4;
+        i--;
         first_vectors[0] *= scale[0];
         second_vectors[0] *= scale[0];
         first_vectors[2] *= scale[1];
         second_vectors[2] *= scale[1];
         first_vectors += 4;
         second_vectors += 4;
-        i--;
     } while (i >= 0);
 
     if (D_L10_0015B340 > 0) {
         float *angle_vectors = (float *)(first + 0x50);
-        float *first_angles = (float *)(second + 0x50);
         float *angles = (float *)(first + 0x58);
+        float *first_angles = (float *)(second + 0x50);
         float *first_offsets = (float *)(second + 0x58);
-        float *second_angles = (float *)(second + 0x60);
         float *offsets = (float *)(first + 0x68);
+        float *second_angles = (float *)(second + 0x60);
         float *second_offsets = (float *)(second + 0x68);
         for (i = 0; i < D_L10_0015B340; i++) {
             int parity = i & 1;
@@ -192,11 +192,11 @@ void FUN_L10_002e91b8(unsigned char *m) {
             ((int *)(first + 0x40))[1] = shade;
             j = 0;
             do {
-                int index = i * 8;
                 int offset = j * 8;
+                int index = i * 8;
                 int next_vector = j + 1;
-                float *first_vectors = (float *)((unsigned char *)angle_vectors + offset);
                 float *first_source = D_L10_001DA270 + i * 2;
+                float *first_vectors = (float *)((unsigned char *)angle_vectors + offset);
                 k = 1;
                 do {
                     int limit = float_to_integer(*first_source * 360.0f);
@@ -214,25 +214,30 @@ void FUN_L10_002e91b8(unsigned char *m) {
                 } while (k >= 0);
                 j = next_vector;
             } while (j < 4);
-            for (k = 0; k < 2; k++) {
-                float step = (float)k * 0.125f;
-                first_angles[k] = angles[k];
-                first_offsets[k] = angles[k] + step;
-                second_angles[k] = offsets[k];
-                second_offsets[k] = offsets[k] + step;
+            {
+                int k;
+                for (k = 0; k < 2; k++) {
+                    float step = (float)k * 0.125f;
+                    first_angles[k] = angles[k];
+                    first_offsets[k] = angles[k] + step;
+                    second_angles[k] = offsets[k];
+                    second_offsets[k] = offsets[k] + step;
+                }
             }
             transform_vectors((float *)first, matrix, 0);
             transform_vectors((float *)second, matrix, 0);
-            first_vectors = (float *)first;
-            second_vectors = (float *)second;
-            j = 3;
-            do {
-                first_vectors[1] += 0.1f;
-                first_vectors += 4;
-                second_vectors[1] += 0.1f;
-                second_vectors += 4;
-                j--;
-            } while (j >= 0);
+            {
+                float *first_vectors = (float *)first;
+                float *second_vectors = (float *)second;
+                int j = 3;
+                do {
+                    first_vectors[1] += 0.1f;
+                    first_vectors += 4;
+                    second_vectors[1] += 0.1f;
+                    second_vectors += 4;
+                    j--;
+                } while (j >= 0);
+            }
         }
     }
 }
