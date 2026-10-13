@@ -711,9 +711,9 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
         *(int *)(data + 0x10) = value;
         set_moby_color_002e7eb0(moby, 0xa0, 0xa0, 0xa0);
         *(volatile int *)(moby + 0x40) = 0;
+        *(unsigned char *)(moby + 0x30) = 0xff;
         *(short *)(moby + 0x32) = 0xff;
-        *(volatile unsigned char *)(moby + 0x30) = 0xff;
-        *(volatile unsigned char *)(moby + 0x31) = 1;
+        *(unsigned char *)(moby + 0x31) = 1;
         *(float *)(moby + 0x44) = -angle_atan2_002e7eb0(vector_length_xy_002e7eb0(rotation_copy), rotation[2]);
         *(float *)(moby + 0x48) = angle_atan2_002e7eb0(rotation[0], rotation[1]);
         qcopy(moby + 0x10, position_copy);
