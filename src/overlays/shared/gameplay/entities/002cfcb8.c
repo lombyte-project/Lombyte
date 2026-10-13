@@ -994,16 +994,17 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
         }
         qcopy(&trace_start, &D_L00_00166C80_2d2158[20]);
         length = vector_length_xy_2d2158(&velocity);
-        ratio = velocity.f[2];
-        if (length != 0.0f)
-            ratio /= length;
-        else
-            ratio /= 0.01f;
-        length = fast_sqrt_2d2158(D_0015ED70_2d2158 * 9.0f * ((controller_state.held & 5) ? 3.5f : 2.5f) * 0.5f);
-        amount = length + length;
-        amount = amount * length;
-        amount = amount * (1.0f - ratio);
-        amount = amount / (D_0015ED70_2d2158 * 9.0f);
+        {
+            f32 vertical = velocity.f[2];
+            if (length != 0.0f)
+                ratio = vertical / length;
+            else
+                ratio = vertical / 0.01f;
+        }
+        {
+            f32 length = fast_sqrt_2d2158(D_0015ED70_2d2158 * 9.0f * ((controller_state.held & 5) ? 3.5f : 2.5f) * 0.5f);
+            amount = ((length + length) * length * (1.0f - ratio)) / (D_0015ED70_2d2158 * 9.0f);
+        }
         vertical = ratio * amount;
         if (amount > 0.0f) {
             velocity.f[0] = fast_cos_2d2158(angle) * amount;
