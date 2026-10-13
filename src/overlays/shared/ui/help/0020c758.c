@@ -691,17 +691,16 @@ void FUN_L00_0020dd20(void) {
     f32 tenth = 0.1f;
     f32 one = 1.0f;
 
-    struct Hero *hero_ptr = &hero;
     i = 0;
     do {
         slot = (u8 **)&hero.unkD00 + i;
         if (*slot && *(s32 *)(*slot + 0x34)) {
             next = i + 1;
             if (FUN_00213ed8_20dd20((f32 *)(*slot + 8), zero, frame_scale * tenth) == zero)
-                FUN_L00_0024f0e8_20dd20((u8 *)hero_ptr->moby, slot);
+                FUN_L00_0024f0e8_20dd20((u8 *)hero.moby, slot);
         } else {
             active = 0;
-            if (hero_ptr->unk20AB && (i == 0 || hero_ptr->unk20AB == 2))
+            if (hero.unk20AB && (i == 0 || hero.unk20AB == 2))
                 active = 1;
             if (hero.unk20AF) {
                 active = 0;
@@ -713,7 +712,7 @@ void FUN_L00_0020dd20(void) {
                 slot = (u8 **)&hero.unkD00 + i;
                 next = i + 1;
                 if (*slot == 0) {
-                    *slot = FUN_L00_0024f028_20dd20((u8 *)hero_ptr->moby, D_L00_0015F6A0_20dd20[i]);
+                    *slot = FUN_L00_0024f028_20dd20((u8 *)hero.moby, D_L00_0015F6A0_20dd20[i]);
                     *(s32 *)(*slot + 8) = 0;
                     *(s32 *)(*slot + 0x18) = D_L00_00197300_20dd20[D_L00_00197BC0_20dd20[next]];
                 }
@@ -723,13 +722,13 @@ void FUN_L00_0020dd20(void) {
                 if (*slot == 0)
                     goto next_slot;
                 if (FUN_00213ed8_20dd20((f32 *)(*slot + 8), zero, frame_scale * tenth) == zero)
-                    FUN_L00_0024f0e8_20dd20((u8 *)hero_ptr->moby, slot);
+                    FUN_L00_0024f0e8_20dd20((u8 *)hero.moby, slot);
             }
         }
         obj = *((u8 **)&hero.unkD00 + i);
         if (obj) {
-            moby = (u8 *)hero_ptr->moby;
-            same = moby[0x52] != ((u8 *)hero_ptr->moby)[0x53];
+            moby = (u8 *)hero.moby;
+            same = moby[0x52] != ((u8 *)hero.moby)[0x53];
             if (hero.unkD08[0] && !hero.unkD14) {
                 FUN_00213ed8_20dd20((f32 *)(obj + 8), zero, frame_scale * tenth);
             } else if (*(s32 *)(obj + 0x34) == 0) {
@@ -737,11 +736,11 @@ void FUN_L00_0020dd20(void) {
             }
             change = 0;
             if (same && hero.unkA9C) {
-                if (FUN_L00_002050b8_20dd20(obj[0x23]) != FUN_L00_002050b8_20dd20(((u8 *)hero_ptr->moby)[0x53]))
+                if (FUN_L00_002050b8_20dd20(obj[0x23]) != FUN_L00_002050b8_20dd20(((u8 *)hero.moby)[0x53]))
                     change = obj[0x22] != obj[0x23];
             }
             *(u16 *)(obj + 0x30) = change;
-            handled = FUN_L00_0020d5d0_20dd20(((u8 *)hero_ptr->moby)[0x53], &angle);
+            handled = FUN_L00_0020d5d0_20dd20(((u8 *)hero.moby)[0x53], &angle);
             if (handled == 0 && obj[0x32] == 0)
                 goto ordinary_update;
             {
@@ -782,7 +781,7 @@ void FUN_L00_0020dd20(void) {
 unhandled_update:
                 {
                     if (obj[0x33] == 0) {
-                        obj[0x23] = FUN_L00_0020d5b8_20dd20((u8 *)hero_ptr->moby, ((u8 *)hero_ptr->moby)[0x53]);
+                        obj[0x23] = FUN_L00_0020d5b8_20dd20((u8 *)hero.moby, ((u8 *)hero.moby)[0x53]);
                         obj[0x21] = 0;
                         obj[0x33] = 1;
                         *(s32 *)(obj + 0x24) = 0;
@@ -815,7 +814,7 @@ special_textures:
                         enabled[1] = 0;
                     }
                 }
-                FUN_L00_0024f190_20dd20((u8 *)hero_ptr->moby, obj);
+                FUN_L00_0024f190_20dd20((u8 *)hero.moby, obj);
             }
             goto next_slot;
 ordinary_update:
@@ -824,7 +823,7 @@ ordinary_update:
                     j = 0;
                     do {
                         if (!same || j == 1)
-                            obj[0x22 + j] = FUN_L00_0020d5b8_20dd20((u8 *)hero_ptr->moby, ((u8 *)hero_ptr->moby)[0x52 + j]);
+                            obj[0x22 + j] = FUN_L00_0020d5b8_20dd20((u8 *)hero.moby, ((u8 *)hero.moby)[0x52 + j]);
                         j++;
                     } while (j < 2);
                 }
@@ -838,9 +837,9 @@ ordinary_update:
                     }
                 } else {
                     if (!same)
-                        obj[0x20] = ((u8 *)hero_ptr->moby)[0x50];
-                    obj[0x21] = ((u8 *)hero_ptr->moby)[0x51];
-                    *(f32 *)(obj + 0x24) = *(f32 *)((u8 *)hero_ptr->moby + 0x54);
+                        obj[0x20] = ((u8 *)hero.moby)[0x50];
+                    obj[0x21] = ((u8 *)hero.moby)[0x51];
+                    *(f32 *)(obj + 0x24) = *(f32 *)((u8 *)hero.moby + 0x54);
                 }
                 {
                     u8 *symbol = obj + 0x22;
@@ -860,7 +859,7 @@ ordinary_update:
                         enabled[1] = 0;
                     }
                 }
-                FUN_L00_0024f190_20dd20((u8 *)hero_ptr->moby, obj);
+                FUN_L00_0024f190_20dd20((u8 *)hero.moby, obj);
             }
         }
 next_slot:
