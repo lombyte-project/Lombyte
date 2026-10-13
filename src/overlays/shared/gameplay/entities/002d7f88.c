@@ -857,7 +857,7 @@ void FUN_L00_002d9810(u8 *m) {
     float *data = *(float **)(m + 0x78);
     char *shape;
     float ratio = data[0] / D_L00_00161A10_002d9810;
-    int i = 0x121, j, color;
+    int i, j = 0x121, color;
     short *indices;
     char *source;
     char *destination = D_L00_001E3DA0_002d9810;
@@ -878,8 +878,8 @@ void FUN_L00_002d9810(u8 *m) {
     ((float *)&position)[0] = *(float *)(m + 0x10);
     ((float *)&position)[1] = *(float *)(m + 0x14);
     ((float *)&position)[2] = *(float *)(m + 0x18) + 0.5f;
-    ((float *)&position)[3] = 1.0f;
     ((float *)&position)[2] += data[0];
+    ((float *)&position)[3] = 1.0f;
     FUN_001f9a10_002d9810(&position, &position, D_L00_00161AF0_002d9810);
     FUN_001f9a28_002d9810(&rotated, D_L00_00166DC0_002d9810, &position);
     FUN_001f9bf8_002d9810(1.0f, shiftedVector, &rotated);
@@ -901,7 +901,7 @@ void FUN_L00_002d9810(u8 *m) {
     do {
         FUN_001f9d20_002d9810(&transformed, source, shiftedVector);
         source += 16;
-        i--;
+        j--;
         {
             float x = transformed[0], y = transformed[1], z = transformed[2];
             ((float *)destination)[0] = x;
@@ -909,7 +909,7 @@ void FUN_L00_002d9810(u8 *m) {
             ((float *)destination)[2] = z;
         }
         destination += 12;
-    } while (i >= 0);
+    } while (j >= 0);
     FUN_L00_001fde98_002d9810(0x94, D_L00_001E3DA0_002d9810,
                                 D_L00_001E2FF0_002d9810, D_L00_001E26E0_002d9810, 1);
     FUN_L00_001fde98_002d9810(0x6d, D_L00_001E3DA0_002d9810 + 0x6d8,
@@ -928,18 +928,19 @@ void FUN_L00_002d9810(u8 *m) {
     quad.colors[1] = color;
     for (i = 0; i < 32; i++) {
         indices = (short *)(D_L00_001E3A80_002d9810 + i * 8);
-        pointA = (char *)quad.points;
         pointB = (char *)quad.points;
+        pointA = (char *)quad.points;
         for (j = 0; j < 4; j++) {
+            short index = *indices;
             if (j >= 2)
                 FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810 * D_L00_00161AEC_002d9810,
-                                        pointB, D_L00_001E3480_002d9810 + *indices * 16);
+                                        pointB, D_L00_001E3480_002d9810 + index * 16);
             else
                 FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810, pointA,
-                                        D_L00_001E3480_002d9810 + *indices * 16);
-            indices++;
+                                        D_L00_001E3480_002d9810 + index * 16);
             pointA += 16;
             pointB += 16;
+            indices++;
         }
         quad.texcoords[0] = 0.5f;
         quad.texcoords[1] = 0.5f;
