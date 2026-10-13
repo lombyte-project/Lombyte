@@ -2016,20 +2016,21 @@ extern void FUN_L00_0025a9f8_002dbf28(float, float, float, void *, void *, void 
 void FUN_L00_002dbf28(char *moby) {
     u128 matrix[5];
     Q_WORDDATA origin, position, axis, temporary, scaled, displacement;
-    u8 first_colors[32], second_colors[32];
+    u32 first_colors[8], second_colors[8];
     float magnitude, range, deficit, speed;
     int multiplier, count, i, a, b, red, green, blue;
-    char *center = moby + 0x10;
+    char *center;
 
     __builtin_memcpy(matrix, D_L00_001EA0B0_002dbf28, 80);
     axis.ul128 = 0;
     axis.fl32[2] = frame_time + frame_time;
-    position = axis;
+    position.ul128 = axis.ul128;
     axis.ul128 = 0;
     axis.fl32[2] = 1.0f;
-    magnitude = FUN_001fa6c0_002dbf28(D_0013E529) + 1.0f;
+    center = moby + 0x10;
+    magnitude = FUN_001fa6c0_002dbf28(item_text_variant.b9) + 1.0f;
     multiplier = 1;
-    if (!D_0013E529) multiplier = 2;
+    if (!item_text_variant.b9) multiplier = 2;
     FUN_001f9a68_002dbf28(magnitude, &position, &position);
     FUN_001f9a28_002dbf28(&origin, D_L00_00166DC0_002dbf28, center);
     range = fast_vec_length(&origin);
@@ -2038,7 +2039,7 @@ void FUN_L00_002dbf28(char *moby) {
         displacement.ul128 = 0;
         displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-        scaled = displacement;
+        scaled.ul128 = displacement.ul128;
         FUN_001f9bf8_002dbf28(fast_vec_dot(&scaled, &axis), &temporary, &axis);
         FUN_001f9a28_002dbf28(&scaled, &scaled, &temporary);
         FUN_001f9bf8_002dbf28(FUN_002132a8_002dbf28(0.0f, 1.0f), &temporary, &axis);
@@ -2049,13 +2050,13 @@ void FUN_L00_002dbf28(char *moby) {
         FUN_001f9a10_002dbf28(&scaled, &scaled, &position);
         a = FUN_001f96f8_002dbf28(60);
         b = FUN_001f96f8_002dbf28(120);
-        FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 0, D_0013E529);
+        FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 0, item_text_variant.b9);
     }
     for (i = 0; i < 4 / multiplier; i++) {
         displacement.ul128 = 0;
         displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
-        scaled = displacement;
+        scaled.ul128 = displacement.ul128;
         FUN_001f9bf8_002dbf28(fast_vec_dot(&scaled, &axis), &temporary, &axis);
         FUN_001f9a28_002dbf28(&scaled, &scaled, &temporary);
         FUN_001f9bf8_002dbf28(FUN_002132a8_002dbf28(0.0f, 1.0f), &temporary, &axis);
@@ -2066,69 +2067,76 @@ void FUN_L00_002dbf28(char *moby) {
         FUN_001f9a10_002dbf28(&scaled, &scaled, &position);
         a = FUN_001f96f8_002dbf28(60);
         b = FUN_001f96f8_002dbf28(90);
-        FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 1, D_0013E529);
+        FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 1, item_text_variant.b9);
     }
     displacement.ul128 = 0;
     displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
     displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
     displacement.fl32[2] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
     origin.fl32[2] += range * 0.5f;
-    scaled = displacement;
+    scaled.ul128 = displacement.ul128;
     FUN_001f9bf8_002dbf28((range / 5.0f) * frame_time, &scaled, &scaled);
     FUN_001f9bf8_002dbf28((range + range) * frame_time, &origin, &origin);
     FUN_001f9a10_002dbf28(&scaled, &scaled, &origin);
     FUN_001f9c90_002dbf28(&scaled, &scaled, frame_time * 10.0f);
     a = FUN_001f96f8_002dbf28(60);
     b = FUN_001f96f8_002dbf28(90);
-    FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 1, D_0013E529);
+    FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 1, item_text_variant.b9);
 
     count = 4;
     if (range < 6.0f) count = FUN_001fa6d0_002dbf28(range) + 1;
     deficit = 0.0f;
     if (range < 7.0f) deficit = 7.0f - range;
     for (i = 0; i < count; i++) {
+        int red, green, blue;
+        float effect_magnitude;
         speed = FUN_002132a8_002dbf28(8.0f, 10.0f);
         __builtin_memcpy(first_colors, D_L00_001EA100_002dbf28, 24);
         __builtin_memcpy(second_colors, D_L00_001EA118_002dbf28, 24);
         speed = magnitude * speed * frame_time - deficit * frame_time;
         a = FUN_00213260_002dbf28(6);
-        red = FUN_L00_0025c0e8_002dbf28(*(u32 *)(first_colors + a * 4), D_0013E529);
+        red = FUN_L00_0025c0e8_002dbf28(first_colors[a], item_text_variant.b9);
         a = FUN_00213260_002dbf28(6);
-        green = FUN_L00_0025c0e8_002dbf28(*(u32 *)(second_colors + a * 4), D_0013E529);
+        green = FUN_L00_0025c0e8_002dbf28(second_colors[a], item_text_variant.b9);
+        effect_magnitude = magnitude * 400000.0f;
         a = FUN_001f96f8_002dbf28(15);
         b = FUN_001f96f8_002dbf28(20);
         blue = FUN_L00_00257b90_002dbf28(a, b);
         a = FUN_001f96f8_002dbf28(25);
         b = FUN_001f96f8_002dbf28(30);
-        FUN_L00_0026a9f0_002dbf28(magnitude * 400000.0f, speed, center, &position,
+        FUN_L00_0026a9f0_002dbf28(effect_magnitude, speed, center, &position,
                                    red, green, blue, FUN_L00_00257b90_002dbf28(a, b), 0, 0);
     }
     if (range > 9.0f) {
         int effect_red, effect_green, effect_blue;
+        speed = magnitude * 4.0f;
         a = FUN_001f96f8_002dbf28(15);
-        FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, 127, 127, 127, 32);
+        FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, 127, 127, 127, 32);
         effect_red = 127; effect_green = 32; effect_blue = 0;
-        FUN_L00_0025c088_002dbf28(&effect_red, &effect_green, &effect_blue, D_0013E529);
+        FUN_L00_0025c088_002dbf28(&effect_red, &effect_green, &effect_blue, item_text_variant.b9);
         a = FUN_001f96f8_002dbf28(24);
-        FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, (u8)effect_red, (u8)effect_green, (u8)effect_blue, 32);
+        FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, (u8)effect_red, (u8)effect_green, (u8)effect_blue, 32);
     }
     red = 127; green = 63; blue = 0;
-    FUN_L00_0025c088_002dbf28(&red, &green, &blue, D_0013E529);
+    FUN_L00_0025c088_002dbf28(&red, &green, &blue, item_text_variant.b9);
+    speed = magnitude * 4.0f;
     a = FUN_001f96f8_002dbf28(20);
-    FUN_L00_002df808_002dbf28(magnitude * 4.0f, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 48);
+    FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 48);
     red = 96; green = 16; blue = 0;
-    FUN_L00_0025c088_002dbf28(&red, &green, &blue, D_0013E529);
+    FUN_L00_0025c088_002dbf28(&red, &green, &blue, item_text_variant.b9);
+    speed = magnitude * 3.5f;
     a = FUN_001f96f8_002dbf28(27);
-    FUN_L00_002df808_002dbf28(magnitude * 3.5f, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 64);
+    FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 64);
     red = 32; green = 0; blue = 0;
-    FUN_L00_0025c088_002dbf28(&red, &green, &blue, D_0013E529);
+    FUN_L00_0025c088_002dbf28(&red, &green, &blue, item_text_variant.b9);
+    speed = magnitude * 3.0f;
     a = FUN_001f96f8_002dbf28(29);
-    FUN_L00_002df808_002dbf28(magnitude * 3.0f, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 32);
+    FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 32);
     if (range < 20.0f) *(float *)(D_L00_00166DC0_002dbf28 + 0x120) = 0.4f - range * 0.0175f;
     else *(float *)(D_L00_00166DC0_002dbf28 + 0x120) = 0.050000012f;
     *(int *)(D_L00_00166DC0_002dbf28 + 0x128) = FUN_001f96f8_002dbf28(25);
     FUN_L00_002d3838_002dbf28(matrix, center, 0, 0);
-    if (D_0013E529) {
+    if (item_text_variant.b9) {
         a = FUN_L00_001f2868_002dbf28(3.0f, center, 16, moby, 0);
         scaled.ul128 = *(u128 *)(moby + 0x10);
         FUN_L00_0025a9f8_002dbf28(2.0f, 1.0f, 1.0f, moby, &scaled,
