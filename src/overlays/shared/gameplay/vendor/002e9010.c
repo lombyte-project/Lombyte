@@ -1477,7 +1477,7 @@ void FUN_L00_002ebe70(char *o) {
 
     if (hero.state.current == 0x2c) {
         if ((current_level_index == 14 || current_level_index == 7 || current_level_index == 9) &&
-            (hero.unk994 == 0 || *(signed char *)((char *)hero.unk994 + 0x21) != -1)) {
+            (hero.unk994 == 0 || *(unsigned char *)((char *)hero.unk994 + 0x21) != 255)) {
             chosen = 0;
             best = 1000.0f;
             list = D_L00_001AB840_2ebe70[*(unsigned char *)((char *)hero.unk994 + 0x21)];
