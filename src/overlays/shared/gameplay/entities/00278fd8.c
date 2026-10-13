@@ -2298,6 +2298,9 @@ int FUN_L15_002a3138(unsigned char *moby) {
     float position[4];
     int *data = *(int **)(moby + 0x78);
     int pass, corner, axis, component;
+    float (*secondVertices)[4];
+    float (*firstUv)[2];
+    float *firstUv1, *firstUv3, *secondUv1, *secondUv2, *secondUv3;
 
     copy_rotation_2a3138(transform, moby + 0xc0);
     qcopy(position, moby + 0x10);
@@ -2306,13 +2309,20 @@ int FUN_L15_002a3138(unsigned char *moby) {
     first.r80 = 0xff9000000260ULL;
     first.r70 = 0;
     second.texture = get_effect_texture(0x2c);
+    secondVertices = second.v;
+    firstUv = first.uv;
+    firstUv1 = first.uv[1];
+    firstUv3 = first.uv[3];
+    secondUv1 = second.uv[1];
+    secondUv2 = second.uv[2];
+    secondUv3 = second.uv[3];
     second.r70 = 0;
     second.r80 = 0xff9000000260ULL;
     second.col[3] = 0;
     second.col[1] = 0;
     for (corner = 0; corner < 4; corner++) {
         qcopy(first.v[corner], D_L15_001CE330[corner]);
-        qcopy(second.v[corner], D_L15_001CE2F0[corner]);
+        qcopy(secondVertices[corner], D_L15_001CE2F0[corner]);
     }
     for (pass = 0; pass < 6; pass++) {
         int parity = pass & 1;
@@ -2320,14 +2330,14 @@ int FUN_L15_002a3138(unsigned char *moby) {
         int level;
         first.alpha =
             (unsigned long long)pairs[4 + parity] |
-            ((unsigned long long)pairs[6 + parity] << 2) |
-            ((unsigned long long)pairs[8 + parity] << 4) |
+            (((unsigned long long)pairs[6 + parity] << 2) |
+            ((unsigned long long)pairs[8 + parity] << 4)) |
             ((unsigned long long)pairs[10 + parity] << 6) |
             0x8000000000ULL;
         second.alpha =
             (unsigned long long)pairs[4 + parity] |
-            ((unsigned long long)pairs[6 + parity] << 2) |
-            ((unsigned long long)pairs[8 + parity] << 4) |
+            (((unsigned long long)pairs[6 + parity] << 2) |
+            ((unsigned long long)pairs[8 + parity] << 4)) |
             ((unsigned long long)pairs[10 + parity] << 6) |
             0x8000000000ULL;
         if (data[5] == 0) {
@@ -2347,7 +2357,7 @@ int FUN_L15_002a3138(unsigned char *moby) {
         for (corner = 0; corner < 4; corner++) {
             float *frequency = D_L15_001CE250[pass];
             int waveform = pass * 8;
-            float *uv = first.uv[corner];
+            float *uv = firstUv[corner];
             int base = corner * 8;
             axis = 1;
             do {
@@ -2372,17 +2382,17 @@ int FUN_L15_002a3138(unsigned char *moby) {
         }
         for (component = 0; component < 2; component++) {
             float step = (float)component * 0.125f;
-            second.uv[1][component] = first.uv[0][component];
-            second.uv[2][component] = first.uv[0][component] + step;
-            second.uv[3][component] = first.uv[1][component];
-            first.uv[3][component] = first.uv[1][component] + step;
+            secondUv1[component] = firstUv[0][component];
+            secondUv2[component] = firstUv[0][component] + step;
+            secondUv3[component] = firstUv1[component];
+            firstUv3[component] = firstUv1[component] + step;
         }
         draw_geometry_quad(&first, transform, 0);
-        draw_geometry_quad(&second, transform, 0);
+        draw_geometry_quad(secondVertices, transform, 0);
         corner = 3;
         do {
             first.v[3 - corner][0] += 0.1f;
-            second.v[3 - corner][0] += 0.1f;
+            secondVertices[3 - corner][0] += 0.1f;
         } while (--corner >= 0);
     }
 }
