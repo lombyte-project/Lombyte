@@ -1153,9 +1153,6 @@ random_check:
     if (random_integer_below_de670(2) != 0) FUN_L14_002e03b8(moby);
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002e0170.s", FUN_L14_002e0170);
-#else
 extern unsigned char *spawn_moby_2e0170(int) __asm__("FUN_0020c4f8");
 extern int scale_game_frames_2e0170(int) __asm__("FUN_001f96f8");
 extern void subtract_vector_2e0170(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1190,15 +1187,16 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
         if (m[0x20] == 0) {
             int index;
             char *path;
-            *(int *)(d + 4) = scale_game_frames_2e0170(90);
+            int *fields = (int *)d;
+            fields[1] = scale_game_frames_2e0170(90);
             path = race_paths_2e0170;
             *(float *)(d + 8) = *scale * D_0015ED6C;
             index = *(int *)(*(char **)(owner + 0x78) + 0x60);
-            *(int *)(d + 0x14) = 0;
-            *(int *)(d + 0x0C) = index;
-            *(int *)(d + 0x10) = 0;
+            fields[5] = 0;
+            fields[3] = index;
+            fields[4] = 0;
             create_effect_2e0170(*(void **)(path + index * 0x20 + 0x10),
-                pos, vec, d + 0x10, d + 0x14, 0, 20.0f, 5.0f, *(float *)(d + 0x14));
+                pos, vec, fields + 4, fields + 5, 0, 20.0f, 5.0f, *(float *)(d + 0x14));
         } else {
             float angle;
             *(int *)(d + 4) = scale_game_frames_2e0170(200);
@@ -1220,7 +1218,6 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
     }
     return m;
 }
-#endif /* NON_MATCHING */
 /* Ported from rac1-decomp src/overlays/shared/vendor_002B2A28.c (func_L14_002E17B8) */
 /* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
 
