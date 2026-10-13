@@ -1827,6 +1827,10 @@ void FUN_L06_002f2250(void) {
         }
     }
     if (moby_count > 0) {
+        int i, j, k, last;
+        GbMoby *moby, *target;
+        GbVars *vars;
+        GbClass *cls;
         for (i = 0; i < moby_count; i++) {
             moby = mobys[i];
             vars = moby->vars;
@@ -1850,7 +1854,7 @@ void FUN_L06_002f2250(void) {
                                 end[2] += 0.25f;
                                 if (collision_line_2f2250(start, end, 2, moby, 0) == 0 || D_L06_001745C0.f18 == target) {
                                     float score;
-                                    unsigned short count;
+                                    unsigned int count;
                                     float *scores;
                                     score = FUN_L06_002f2148((char *)moby, (char *)target, 5);
                                     count = *(unsigned short *)((char *)vars + 0x192);
@@ -1872,6 +1876,7 @@ void FUN_L06_002f2250(void) {
                                         }
                                     }
                                     if (k < 8) {
+                                        unsigned short count;
                                         ((float *)((char *)vars + 0x1c0))[k] = score;
                                         ((GbMoby **)((char *)vars + 0x1a0))[k] = target;
                                         count = *(unsigned short *)((char *)vars + 0x192) + 1;
@@ -1919,19 +1924,20 @@ void FUN_L06_002f2250(void) {
         float max_angle = 1.7453293f;
         GbMoby **target_list = targets;
         GbMoby **selected_list = selected;
+        int i;
 
         i = 0;
         do {
-            int index, weight, j;
-            GbMoby *target;
-            GbClass *cls;
-            int n, count;
-            index = 0;
-            weight = 0;
-            for (j = 0; j < target_count; j++) {
-                if (weights[j] > weight) {
-                    weight = weights[j];
-                    index = j;
+            int index, weight;
+            {
+                int j;
+                index = 0;
+                weight = 0;
+                for (j = 0; j < target_count; j++) {
+                    if (weights[j] > weight) {
+                        weight = weights[j];
+                        index = j;
+                    }
                 }
             }
             weights[index] = -1;
