@@ -700,8 +700,10 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
     char *data;
     float * volatile particle_position_ptr;
 
-    *(Vec_002e7eb0 *)position_copy = *(Vec_002e7eb0 *)position;
-    *(Vec_002e7eb0 *)rotation_copy = *(Vec_002e7eb0 *)rotation;
+    *(u128 *)position_copy = *(u128 *)position;
+    *(u128 *)rotation_copy = *(u128 *)rotation;
+    position = position_copy;
+    rotation = rotation_copy;
     moby = create_moby_002e7eb0(0x1ca);
     if (moby != 0) {
         data = *(char **)(moby + 0x78);
@@ -709,11 +711,11 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
         *(int *)(data + 0x10) = value;
         set_moby_color_002e7eb0(moby, 0xa0, 0xa0, 0xa0);
         *(volatile int *)(moby + 0x40) = 0;
-        *(volatile short *)(moby + 0x32) = 0xff;
+        *(short *)(moby + 0x32) = 0xff;
         *(volatile unsigned char *)(moby + 0x30) = 0xff;
         *(volatile unsigned char *)(moby + 0x31) = 1;
-        *(float *)(moby + 0x44) = -angle_atan2_002e7eb0(vector_length_xy_002e7eb0(rotation_copy), rotation_copy[2]);
-        *(float *)(moby + 0x48) = angle_atan2_002e7eb0(rotation_copy[0], rotation_copy[1]);
+        *(float *)(moby + 0x44) = -angle_atan2_002e7eb0(vector_length_xy_002e7eb0(rotation_copy), rotation[2]);
+        *(float *)(moby + 0x48) = angle_atan2_002e7eb0(rotation[0], rotation[1]);
         qcopy(moby + 0x10, position_copy);
         qcopy(data, rotation_copy);
         if (D_L08_0015F5CC_002e7eb0 & 1)
