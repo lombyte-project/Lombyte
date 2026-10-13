@@ -1813,7 +1813,7 @@ void FUN_L07_0030d4d8(struct Moby *moby) {
     Vec4 offset;
     /* The target helper writes four vectors, a moby pointer and a result kind. */
     float target[18] __attribute__((aligned(16)));
-    Vec4 position, velocity, rotation;
+    Vec4 rotation, velocity, position;
     float matrix[16] __attribute__((aligned(16)));
     Vec4 best, point;
     int hit;
@@ -1838,7 +1838,7 @@ void FUN_L07_0030d4d8(struct Moby *moby) {
         /* Retail still reads damage at address 0x2c when src is null. */
         if (*health <= *(float *)(src + 0x2c)) {
             FUN_L00_00257470(moby, 0, -1);
-            *health = 0.0f;
+            *(float *)(data + 0x20) = 0.0f;
             FUN_001f99f8(&offset);
             FUN_L00_0025e450_l07(0.0f, 0.0f, 4.0f, 2.0f, 9.0f, 1.0f, 15.0f, moby, &offset, 0, 10, 3, 16, 1, 1, 1, -1, 0);
             FUN_L00_00263fd8(moby, 0x621, &moby->pos, &moby->rot, 0, 0, 0.0f, D_L07_0015F580, D_L07_0015F580, D_L07_0015F580);
@@ -1887,7 +1887,6 @@ animate:
                 best_difference = 3.1415927f;
                 offset.f[0] = random_float_between(3.0f, 11.0f);
                 offset.f[1] = random_float_between(-2.0f, 2.0f);
-                position_ptr = &position;
                 /* Retail initializes only w before selecting a point. */
                 best.f[3] = -1.0f;
                 offset.f[2] = 0.0f;
@@ -1901,7 +1900,7 @@ animate:
                         best_difference = angle;
                     }
                 }
-                qcopy(position_ptr, &best);
+                qcopy(&position, &best);
                 qzero(&rotation);
                 rotation.f[2] = *(float *)(data + 0xbc);
                 FUN_001fa050(matrix, &rotation);
