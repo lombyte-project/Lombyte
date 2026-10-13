@@ -1360,10 +1360,10 @@ mark_hit:
             return;
         }
         {
-            int start = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
+            long start = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
             i = 0;
             do {
-                int index = (i + start) % 24 + 10;
+                int index = (int)(i + start) % 24 + 10;
                 slot = &slots[index];
                 i++;
                 if (slot->moby != 0) {
