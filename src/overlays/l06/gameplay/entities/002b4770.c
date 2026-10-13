@@ -1306,8 +1306,8 @@ extern int D_L06_00161E54 __attribute__((section(".sdata")));
 extern float D_L06_00161E0C __attribute__((sda));
 extern float D_L06_00161E08 __attribute__((sda));
 extern float D_L06_00161E18 __attribute__((sda));
-extern float D_L06_00161E1C __attribute__((sda));
-extern float D_L06_00161E20 __attribute__((sda));
+extern int D_L06_00161E1C __attribute__((sda));
+extern int D_L06_00161E20 __attribute__((sda));
 extern float D_L06_00161E24 __attribute__((sda));
 extern float D_L06_00161E28 __attribute__((sda));
 extern int D_L06_00161E2C __attribute__((sda));
@@ -1319,7 +1319,6 @@ extern int D_L06_00161E48 __attribute__((section(".sdata")));
 extern int D_L06_00161E4C __attribute__((section(".sdata")));
 extern int D_L06_0015F58C __attribute__((sda));
 extern char D_0013F3D0[];
-extern int D_001413D0;
 extern short D_00141AC0;
 extern unsigned short D_00141AC2;
 extern unsigned int D_00141AC4;
@@ -1334,7 +1333,7 @@ extern float D_L06_001DAFD0[];
 extern float D_L06_001DB060[];
 extern void FUN_L06_002f7000(struct Moby *);
 extern void FUN_L06_002f6dd0(char *);
-extern void FUN_L00_0023e738(char *);
+extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void decrement_timer(short *) __asm__("FUN_001f9770");
 extern int check_voice_target_2f6470(char *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_2f6470(int, int, int) __asm__("FUN_0022da68");
@@ -1373,6 +1372,7 @@ void FUN_L06_002f6470(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int i, j, voice, index, color, frame;
     char *child;
+    float *pos;
     int all_done, all_same;
     float distance, dot;
     /* Retail reuses the collision vectors as matrix rows in state 2.
@@ -1405,9 +1405,10 @@ void FUN_L06_002f6470(char *moby) {
         voice = *(int *)(data + 0x10);
         if (check_voice_target_2f6470(moby, voice) == 0)
             *(int *)(data + 0x10) = allocate_voice_for_target_entry_2f6470(0, 4, (int)moby);
-        vectors.pos = (float *)(moby + 0x10);
+        pos = (float *)(moby + 0x10);
         FUN_L06_002f7000((struct Moby *)moby);
-        distance = distance_xyz_2f6470(moby + 0x10, D_L06_00167540);
+        vectors.pos = pos;
+        distance = distance_xyz_2f6470(pos, D_L06_00167540);
         if (distance < 48.0f) {
             approach_value_2f6470((float *)(data + 0x18), 1.0f, frame_time_2f6470 + frame_time_2f6470);
             vectors.matrix[2].f[0] = fast_cos_2f6470(*(float *)(moby + 0x48)) * 0.5f;
@@ -1473,14 +1474,14 @@ void FUN_L06_002f6470(char *moby) {
             ((unsigned char *)moby)[0xa4] = 255;
             if (*(short *)(data + 0x14) > 2) play_sound_2f6470(0x1774, 0x2b);
         }
-        all_done = all_same = 1;
+        all_same = all_done = 1;
         for (i = 0; i < 4; i++) {
             index = ((int *)data)[i];
             if (index >= 0) {
                 child = (char *)D_L06_0015FFD8_d + index * 256;
                 if (*(short *)(child + 0xa6) == 0x516) {
-                    if ((unsigned char)child[0x20] == 2) all_same = 0;
-                    else all_done = 0;
+                    if ((unsigned char)child[0x20] != 2) all_done = 0;
+                    else all_same = 0;
                 } else if (((unsigned char *)child)[0xbc] == 0) all_done = 0;
             }
         }
@@ -1495,11 +1496,13 @@ void FUN_L06_002f6470(char *moby) {
             if (all_same && D_00141968[43].count < 0xFFFF) D_00141968[43].count++;
             frame = scale_game_frames_2f6470(D_L06_0015EEA4);
             color = current_level_index;
-            if (D_00141968[43].best < frame / 600) {
+            frame /= 600;
+            if (frame > D_00141968[43].best) {
                 D_00141968[43].best = scale_game_frames_2f6470(D_L06_0015EEA4) / 600;
                 color = D_L06_0015ED84;
             }
-            D_00141968[43].flags = D_00141968[43].flags | (1 << color) | 0x80000000;
+            frame = 1 << color;
+            D_00141968[43].flags |= frame | 0x80000000;
         }
         return;
     case 2: {
@@ -1512,15 +1515,14 @@ void FUN_L06_002f6470(char *moby) {
         multiply_matrix_2f6470(vectors.matrix, vectors.matrix, vectors.shared.local_matrix);
         vectors.column = &vectors.shared.local_matrix[1];
         do {
-            index = i;
-            i++;
-            rotation_matrix_2f6470(vectors.shared.local_matrix, D_L06_001DB060 + index * 4);
-            vectors.i = i;
+            index = i * 4;
+            rotation_matrix_2f6470(vectors.shared.local_matrix, D_L06_001DB060 + index);
+            j = 19;
+            vectors.i = ++i;
             multiply_matrix_2f6470(vectors.shared.local_matrix, vectors.matrix, vectors.shared.local_matrix);
-            transform_vector_2f6470(&vectors.at, D_L06_001DAFD0 + index * 4, vectors.matrix);
+            transform_vector_2f6470(&vectors.at, D_L06_001DAFD0 + index, vectors.matrix);
             fast_vec_add(&vectors.shared.collision.delta, &vectors.at, vectors.pos);
             vectors.shared.collision.delta.f[3] = 1.0f;
-            j = 19;
             do {
                 float amount;
                 j--;
@@ -1539,7 +1541,7 @@ void FUN_L06_002f6470(char *moby) {
         return;
     }
     case 3:
-        FUN_L00_0023e738(moby);
+        mark_moby_for_removal((struct Moby *)moby);
         return;
     }
 }
