@@ -110,34 +110,48 @@ extern int D_L10_00161F50[2] __attribute__((sda));
 extern int D_L10_00161F58[2] __attribute__((sda));
 extern int D_L10_00161F60[2] __attribute__((sda));
 
+#include "qcopy.h"
+extern float D_L10_001DA350[];
+extern float D_L10_001DA310[];
+extern int D_L10_001DA250[];
+extern float D_L10_001DA270[];
+extern int D_L10_001DA2B0[];
+extern float D_L10_001DA2F0[];
 void FUN_L10_002e91b8(unsigned char *m) {
     unsigned char first[0x90] __attribute__((aligned(16)));
     unsigned char second[0x90] __attribute__((aligned(16)));
     float matrix[12] __attribute__((aligned(16)));
     float position[4] __attribute__((aligned(16)));
     float *scale = *(float **)(m + 0x78);
-    float *first_source = (float *)0x001da350;
-    float *second_source = (float *)0x001da310;
-    float *first_vectors = (float *)first;
-    float *second_vectors = (float *)second;
+    float *first_source;
+    float *second_source;
+    float *first_vectors;
+    float *second_vectors;
+    float *second_angles;
     int i, k;
     unsigned int j;
 
     copy_matrix(matrix, m + 0xc0);
-    *(aligned_vector *)position = *(aligned_vector *)(m + 0x10);
+    qcopy(position, m + 0x10);
     position[3] = 1.0f;
-    *(long long *)(first + 0x70) = 0;
     *(long long *)(first + 0x78) = trail_effect_texture(0x2c);
     *(long long *)(first + 0x80) = 0xff9000000260LL;
-    *(long long *)(second + 0x70) = 0;
+    *(long long *)(first + 0x70) = 0;
     *(long long *)(second + 0x78) = trail_effect_texture(0x2c);
     *(long long *)(second + 0x80) = 0xff9000000260LL;
-    *(int *)(second + 0x44) = 0;
+    *(long long *)(second + 0x70) = 0;
     *(int *)(second + 0x4c) = 0;
+    *(int *)(second + 0x44) = 0;
+    first_source = D_L10_001DA350;
+    second_source = D_L10_001DA310;
+    first_vectors = (float *)first;
+    second_vectors = (float *)second;
+    second_angles = (float *)second;
     i = 3;
     do {
-        *(aligned_vector *)first_vectors = *(aligned_vector *)first_source;
-        *(aligned_vector *)second_vectors = *(aligned_vector *)second_source;
+        qcopy(first_vectors, first_source);
+        qcopy(second_angles, second_source);
+        second_angles += 4;
         first_source += 4;
         second_source += 4;
         first_vectors[0] *= scale[0];
@@ -156,7 +170,7 @@ void FUN_L10_002e91b8(unsigned char *m) {
             ((long long)D_L10_00161F50[parity] << 2) |
             ((long long)D_L10_00161F58[parity] << 4) |
             ((long long)D_L10_00161F60[parity] << 6) | 0x8000000000ULL;
-        int shade = ((int *)0x001da250)[i];
+        int shade = (D_L10_001DA250)[i];
         float *angles = (float *)(first + 0x58);
         float *offsets = (float *)(first + 0x68);
         float *first_angles = (float *)(second + 0x50);
@@ -175,16 +189,18 @@ void FUN_L10_002e91b8(unsigned char *m) {
         ((int *)(first + 0x40))[2] = shade;
         ((int *)(first + 0x40))[1] = shade;
         for (j = 0; j < 4; j++) {
+            float *first_vectors = (float *)(first + 0x50) + j * 2;
+            float *first_source = D_L10_001DA2F0 + j * 2;
             for (k = 0; k != 2; k++) {
                 int index = i * 2 + k;
-                int limit = float_to_integer(((float *)0x001da270)[index] * 360.0f);
-                float angle = integer_to_float(*(int *)0x0015f3f8 % limit) / ((float *)0x001da270)[index] - 180.0f;
+                int limit = float_to_integer((D_L10_001DA270)[index] * 360.0f);
+                float angle = integer_to_float(*(int *)0x0015f3f8 % limit) / (D_L10_001DA270)[index] - 180.0f;
                 float wave;
-                if (((int *)0x001da2b0)[index] != 0)
+                if ((D_L10_001DA2B0)[index] != 0)
                     wave = FUN_001f9dc8(angle * 0.017453292f);
                 else
                     wave = FUN_001f9de0(angle * 0.017453292f);
-                ((float *)(first + 0x50))[j * 2 + k] = ((float *)0x001da2f0)[j * 2 + k] + wave * 0.125f;
+                *first_vectors++ = *first_source++ + wave * 0.125f;
             }
         }
         for (j = 0; j < 2; j++) {
