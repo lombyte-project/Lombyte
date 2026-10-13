@@ -1099,7 +1099,7 @@ void FUN_L14_002dfd10(struct Moby *moby) {
         normalize_vector_xyz(vec, vec, zero);
         qcopy(pos, position);
         pos[2] += 0.25f;
-        one = 1.0f;
+        *(int *)&one = 0x3f800000;
         zero = 0.0f;
         FUN_L00_0028dc90(1, 0, moby, *(short *)(*(char **)data + 0xa6));
         FUN_L00_0025e450(moby, vec, pos, zero, zero, 5, 2, 4,
@@ -1135,7 +1135,7 @@ void FUN_L14_002dfd10(struct Moby *moby) {
                     goto random_check;
                 }
             }
-            one = 1.0f;
+            *(int *)&one = 0x3f800000;
             FUN_L00_0028dc90(0, 0, moby, *(short *)(*(char **)data + 0xa6));
             FUN_L00_0025e450(moby, velocity, position, zero, zero, 5, 2, 4,
                                 one, 0.5f, 9.0f, one, -1, 15.0f, 0, 3, -1, 0);
