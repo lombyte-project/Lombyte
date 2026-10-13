@@ -1428,10 +1428,7 @@ char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
     }
     return moby;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc9a8.s", FUN_L08_002dc9a8);
-#else
-extern int FUN_L08_002dc9a8_collision(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
+extern int FUN_L08_002dc9a8_collision(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L08_002dc9a8_trace(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void FUN_L08_002dc9a8_transform(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L08_002dc9a8_setup(void *) __asm__("FUN_001f99f8");
@@ -1446,7 +1443,7 @@ extern int FUN_L08_002dc9a8_random_below(int) __asm__("FUN_00213260");
 extern int FUN_L08_002dc9a8_random_color(int) __asm__("FUN_001f96f8");
 extern int FUN_L08_002dc9a8_blend(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L08_002dc9a8_color(float, int, int) __asm__("FUN_L08_00264930");
-extern void FUN_L08_002dc9a8_emit(float, void *, void *, int, int, int, int) __asm__("FUN_L00_0026bed0");
+extern void FUN_L08_002dc9a8_emit(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 extern void FUN_L08_002dc9a8_special(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L08_002dc9a8_start(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L08_002dc9a8_finish(void *) __asm__("FUN_0020c828");
@@ -1490,7 +1487,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
     int i, axis;
     float angle;
 
-    if (FUN_L08_002dc9a8_collision(0.5f, m + 0x10, 0, m, 0) != 0 &&
+    if (FUN_L08_002dc9a8_collision(m + 0x10, 0.5f, 0, m, 0) != 0 &&
         D_L08_00174658_2DC9A8 != 0 &&
         (D_L08_00174658_2DC9A8 != *(int *)(data + 0x20) || *(int *)(data + 0x14) != 0)) {
         m[0x20] = 99;
@@ -1530,7 +1527,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         record.scale = 1.0f;
         FUN_L08_002dc9a8_setup(record.velocity);
         record.state = 0;
-        FUN_L08_002dc9a8_collision(1.0f, m + 0x10, 9, m, record.velocity);
+        FUN_L08_002dc9a8_collision(m + 0x10, 1.0f, 9, m, record.velocity);
         FUN_L08_002dc9a8_start(0, 0, m);
         for (i = 0; i < 50; i++) {
             axis = i % 4;
@@ -1552,6 +1549,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
             radius *= 0.717f;
             record.pos[2] -= radius;
             effect[2] -= frame_time * 8.0f;
+            position = effect;
             switch (axis) {
             case 0: {
                 int color, color2, alpha;
@@ -1559,14 +1557,14 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
                 color = FUN_L08_002dc9a8_random_color(60);
                 color2 = FUN_L08_002dc9a8_random_color(120);
                 alpha = FUN_L08_002dc9a8_blend(color, color2);
-                FUN_L08_002dc9a8_emit(size, record.pos, effect, 0x1f101820, 0x101010, alpha, 0);
+                FUN_L08_002dc9a8_emit(record.pos, position, 0x1f101820, 0x101010, size, alpha, 0);
             } break;
             case 2: {
                 int color, color2, alpha;
                 color = FUN_L08_002dc9a8_random_below(100) < 40 ? 0x5ff8f8f8 : 0x2f486078;
                 color2 = FUN_L08_002dc9a8_random_color(30);
                 alpha = FUN_L08_002dc9a8_random_color(45);
-                FUN_L08_002dc9a8_emit(150000.0f, record.pos, effect, color, 0x0f000020,
+                FUN_L08_002dc9a8_emit(record.pos, position, color, 0x0f000020, 150000.0f,
                                       FUN_L08_002dc9a8_blend(color2, alpha), 2);
             } break;
             case 3: {
@@ -1576,12 +1574,12 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
                 color2 = FUN_L08_002dc9a8_color(FUN_L08_002dc9a8_random(0.5f, 1.0f),
                                                    0, 0x5f5f5f);
                 radius = FUN_L08_002dc9a8_random(0.0f, 1.0f) * D_0015ED6C_2DC9A8;
-                FUN_L08_002dc9a8_special(effect, radius, angle,
+                FUN_L08_002dc9a8_special(position, radius, angle,
                                           FUN_L08_002dc9a8_random_word());
                 radius = FUN_L08_002dc9a8_random(150000.0f, 200000.0f);
                 alpha = FUN_L08_002dc9a8_random_color(60);
                 alpha = FUN_L08_002dc9a8_blend(alpha, FUN_L08_002dc9a8_random_color(120));
-                FUN_L08_002dc9a8_emit(radius, record.pos, effect, color, color2,
+                FUN_L08_002dc9a8_emit(record.pos, position, color, color2, radius,
                                       alpha, 3);
             } break;
             case 1: break;
@@ -1591,7 +1589,6 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
     } break;
     }
 }
-#endif
 #include "sda.h"
 
 /* Rocket guidance, route traversal, launch effects, and destruction. */
