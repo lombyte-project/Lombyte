@@ -1059,7 +1059,7 @@ void FUN_L00_00206e00(void) {
 append:
     if (input == 0)
         return;
-    history_count = (s32 *)((u8 *)g + 0x21D4);
+    history_count = (s32 *)((u8 *)&hero + 0x21D4);
     history = hero_base + 0x1514;
     history[*history_count] = input;
     (*history_count)++;
