@@ -910,7 +910,9 @@ void FUN_L00_002d1e80(M2d1e80 *m) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2158.s", FUN_L00_002d2158);
 #else
+#include "rnc/overlay/collision.h"
 #include "rnc/input/pad_state.h"
+extern CollisionHit collision_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
 typedef union {
     f32 f[4];
     u128 q;
@@ -923,9 +925,9 @@ extern Vec_2d2158 D_0013F990_2d2158 __asm__("D_0013F990");
 extern Vec_2d2158 D_0013F3D0_2d2158 __asm__("D_0013F3D0");
 extern f32 D_0013F9C0_2d2158[2] __asm__("D_0013F9C0");
 extern s32 D_0013CAE0_2d2158 __asm__("D_0013CAE0");
-extern s32 D_0013FDA0_2d2158 __asm__("D_0013FDA0");
+extern s32 D_0013FDA0_2d2158 __asm__("D_0013FDA0") __attribute__((section(".data")));
 extern s32 D_001413D0_2d2158 __asm__("D_001413D0");
-extern u8 D_001413FC_2d2158 __asm__("D_001413FC");
+extern u8 D_001413FC_2d2158 __asm__("D_001413FC") __attribute__((section(".data")));
 extern f32 D_0015ED70_2d2158 __asm__("D_0015ED70");
 extern void setup_matrix_2d2158(void *, void *) __asm__("FUN_001fa2b8");
 extern void matrix_from_basis_rows_2d2158(void *, void *) __asm__("FUN_001fa2d8");
@@ -958,6 +960,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
     if (tracked == 0)
         return;
     tracked = *(void **)((u8 *)tracked + 0x78);
+    vars = tracked;
     direction.q = 0;
     direction.f[0] = 1.0f;
     FUN_001f9cf8_2d2158(&direction, &direction, &hero.basis);
@@ -973,9 +976,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
     angle_atan2_2d2158(direction.f[0], direction.f[1]);
     scale_vector_2d2158(&offset, &direction, (controller_state.held & 5) ? 3.5f : 2.5f);
     add_vector_2d2158(&offset, &offset, &target);
-    if ((controller_state.held & 5) == 0 || D_001413FC_2d2158 != 0) {
-        D_0013FDA0_2d2158 = 0;
-    } else {
+    if ((controller_state.held & 5) != 0 && D_001413FC_2d2158 == 0) {
         velocity.q = 0;
         velocity.f[2] = 1.0f;
         transform_vector_2d2158(&velocity, &velocity, matrix);
@@ -993,12 +994,16 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
         }
         qcopy(&trace_start, &D_L00_00166C80_2d2158[20]);
         length = vector_length_xy_2d2158(&velocity);
-        if (length == 0.0f)
-            ratio = velocity.f[2] / 0.01f;
+        ratio = velocity.f[2];
+        if (length != 0.0f)
+            ratio /= length;
         else
-            ratio = velocity.f[2] / length;
-        amount = fast_sqrt_2d2158(D_0015ED70_2d2158 * 9.0f * ((controller_state.held & 5) ? 3.5f : 2.5f) * 0.5f);
-        amount = ((amount + amount) * amount * (1.0f - ratio)) / (D_0015ED70_2d2158 * 9.0f);
+            ratio /= 0.01f;
+        length = fast_sqrt_2d2158(D_0015ED70_2d2158 * 9.0f * ((controller_state.held & 5) ? 3.5f : 2.5f) * 0.5f);
+        amount = length + length;
+        amount = amount * length;
+        amount = amount * (1.0f - ratio);
+        amount = amount / (D_0015ED70_2d2158 * 9.0f);
         vertical = ratio * amount;
         if (amount > 0.0f) {
             velocity.f[0] = fast_cos_2d2158(angle) * amount;
@@ -1006,8 +1011,8 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
             velocity.f[2] = vertical;
             add_vector_2d2158(&trace_end, &D_L00_00166C80_2d2158[20], &velocity);
             if (trace_segment_2d2158(&D_L00_00166C80_2d2158[20], &trace_end, 2, saved_moby, 0) &&
-                D_L00_00173E58_2d2158 != D_001413D0_2d2158) {
-                qcopy(&offset, &D_L00_00173E60_2d2158);
+                (s32)collision_hit.moby != D_001413D0_2d2158) {
+                qcopy(&offset, &collision_hit.point);
                 hit = 1;
                 angle = angle_atan2_2d2158(offset.f[0] - target.f[0], offset.f[1] - target.f[1]);
             }
@@ -1019,7 +1024,10 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
             }
         }
     }
-    FUN_L00_002d1f30(&target, &offset, (u8 *)tracked + 0x10,
+    else {
+        D_0013FDA0_2d2158 = 0;
+    }
+    FUN_L00_002d1f30(&target, &offset, vars + 0x10,
                       D_0015ED70_2d2158 * 9.0f, 0.00001f,
                       (controller_state.held & 5) ? 3.5f : 2.5f);
 }
