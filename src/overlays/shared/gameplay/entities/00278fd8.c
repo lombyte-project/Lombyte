@@ -2554,7 +2554,8 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         *(u128 *)&moby->pos = next.q;
         magnitude = FUN_001f99c0(vars->travel);
         triple.bits = 0x40400000;
-        if (!(moby->scale * triple.value / moby->pclass->scale < magnitude))
+        __builtin_memcpy(&step, &triple.bits, sizeof(step));
+        if (!(moby->scale * step / moby->pclass->scale < magnitude))
             return;
         if (vars->trigger != -1) {
             moby->state = 3;
