@@ -1094,6 +1094,7 @@ void FUN_L14_002dfd10(struct Moby *moby) {
     float absolute_velocity;
     void *path;
     float one;
+    int one_bits;
     float zero;
 
     if (moby->state == 0) {
@@ -1111,7 +1112,8 @@ void FUN_L14_002dfd10(struct Moby *moby) {
         normalize_vector_xyz(vec, vec, zero);
         qcopy(path_position, position);
         pos[2] += 0.25f;
-        *(int *)&one = 0x3f800000;
+        one_bits = 0x3f800000;
+        one = *(float *)&one_bits;
         zero = 0.0f;
         FUN_L00_0028dc90(1, 0, moby, *(short *)(*(char **)data + 0xa6));
         FUN_L00_0025e450(moby, vec, path_position, zero, zero, 5, 2, 4,
@@ -1147,7 +1149,8 @@ void FUN_L14_002dfd10(struct Moby *moby) {
                     goto random_check;
                 }
             }
-            *(int *)&one = 0x3f800000;
+            one_bits = 0x3f800000;
+            one = *(float *)&one_bits;
             FUN_L00_0028dc90(0, 0, moby, *(short *)(*(char **)data + 0xa6));
             FUN_L00_0025e450(moby, velocity, position, zero, zero, 5, 2, 4,
                                 one, 0.5f, 9.0f, one, -1, 15.0f, 0, 3, -1, 0);
