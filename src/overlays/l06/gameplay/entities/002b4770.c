@@ -1358,7 +1358,7 @@ extern int random_int_2f6470(int) __asm__("FUN_00213260");
 extern int make_particle_color_2f6470(int, int, float) __asm__("FUN_001fa6e0");
 extern int make_particle_color2_2f6470(float) __asm__("FUN_001fa6d0");
 extern void random_vector_2f6470(void *, float, float) __asm__("FUN_L00_00257d78");
-extern void spawn_spark_2f6470(void *, void *, int, unsigned char, unsigned char, int, float) __asm__("FUN_L00_002730e0");
+extern void spawn_spark_2f6470(void *, void *, int, float, unsigned char, unsigned char, int) __asm__("FUN_L00_002730e0");
 extern void collision_setup_2f6470(void *, char *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void collision_response_2f6470(int, void *) __asm__("FUN_L00_00259a88");
 extern int collision_check_2f6470(char *, int, int) __asm__("FUN_L00_0025a420");
@@ -1534,7 +1534,7 @@ void FUN_L06_002f6470(char *moby) {
                 dot = random_float_between_alt_2f6470(D_L06_00161E24, D_L06_00161E28);
                 frame = make_particle_color2_2f6470(random_float_between_alt_2f6470((float)D_L06_00161E2C, (float)D_L06_00161E30));
                 random_vector_2f6470(&vectors.effect, D_L06_00161E34 * D_0015ED6C, D_L06_00161E38 * D_0015ED6C);
-                spawn_spark_2f6470(&vectors.offset, &vectors.effect, color, (unsigned char)scale_game_frames_2f6470(frame), (unsigned char)random_int_2f6470(255), 0, dot);
+                spawn_spark_2f6470(&vectors.offset, &vectors.effect, color, dot, (unsigned char)scale_game_frames_2f6470(frame), (unsigned char)random_int_2f6470(255), 0);
             } while (j >= 0);
         } while ((i = vectors.i) < 9);
         moby[0x20] = 3;
