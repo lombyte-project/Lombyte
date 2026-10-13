@@ -400,9 +400,10 @@ void FUN_L00_00269d20(unsigned char *m) {
             blue = limit;
             if (*(unsigned int *)(e + 0x70) & 0x40) p[0x1b] ^= 0x40;
         }
-        p[0x18] = particle_color_int_269d20(red * 65535.0f);
-        p[0x19] = particle_color_int_269d20(green * 65535.0f);
-        p[0x1a] = particle_color_int_269d20(blue * 65535.0f);
+        step = 65535.0f;
+        p[0x18] = particle_color_int_269d20(red * step);
+        p[0x19] = particle_color_int_269d20(green * step);
+        p[0x1a] = particle_color_int_269d20(blue * step);
         color = (particle_color_int_269d20(red * 255.0f) & 0xff) |
                 ((particle_color_int_269d20(green * 255.0f) & 0xff) << 8) |
                 ((particle_color_int_269d20(blue * 255.0f) & 0xff) << 16) |
