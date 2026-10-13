@@ -1168,12 +1168,12 @@ void FUN_L12_00304e00(struct Moby *moby) {
             direction[2] = 1.2f;
             func_L00_0025A8C0_304310(hit_info, moby, 0x10001, 1.0f, direction);
             *(volatile u128 *)position = *(volatile u128 *)position_source;
-            ((volatile float *)position)[2] += 0.4f;
+            position[2] = position_source[2] + 0.4f;
             if (!collect_mobies_in_sphere(position, 0x10, moby, hit_info, 0.4f) ||
                 !*(int *)0x001742d8 || *(short *)(*(int *)0x001742d8 + 0xa6) == 0x4f5 ||
                 *(int *)0x001742d8 == *(int *)((char *)moby + 0xb8)) {
                 *(volatile u128 *)position = *(volatile u128 *)position_source;
-                ((volatile float *)position)[2] += 0.35f;
+                position[2] = position_source[2] + 0.35f;
                 if (coll_sphere(position, 0, moby, 0.35f)) moby->state = 2;
             } else moby->state = 2;
         }
