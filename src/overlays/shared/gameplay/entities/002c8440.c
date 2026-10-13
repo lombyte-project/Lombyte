@@ -1100,7 +1100,8 @@ update_motion:
                     FUN_00200240_2caf70(i) / FUN_00200240_2caf70(16));
                 initial_value = *(f32 *)(effect + 0xc);
                 target = D_L00_00161878_2caf70;
-                *(f32 *)(effect + 0xc) = initial_value + (target - initial_value) * blend;
+                target = (target - initial_value) * blend;
+                *(f32 *)(effect + 0xc) = initial_value + target;
                 *(u32 *)(effect + 4) = (FUN_00200250_2caf70(128.0f + blend * -64.0f) << 24) | 0xffffff;
                 *handle = effect;
             } else {
