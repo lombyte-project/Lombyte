@@ -727,7 +727,7 @@ void FUN_L15_002aa280(struct Moby *moby)
         slot = entry;
         break;
     }
-    moby->unkA4 = 0xff;
+    moby->hit_slot = 0xff;
     if (slot == 0)
         goto no_hit;
 
@@ -819,11 +819,11 @@ void FUN_L15_002aa280(struct Moby *moby)
     return;
 
 no_hit:
-    moby->unkA4 = 0xff;
+    moby->hit_slot = 0xff;
     if (moby->state != 0)
         return;
-    moby->unk32 = 0x80;
-    moby->unk30 = 0xff;
+    moby->draw_dist = 0x80;
+    moby->update_dist = 0xff;
     moby->state = 1;
     if (D_0013DD50 != 0) {
         u16 save_id = moby->save_id;
