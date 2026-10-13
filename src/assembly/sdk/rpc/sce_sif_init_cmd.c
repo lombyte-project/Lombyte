@@ -68,18 +68,19 @@ void sceSifInitCmd(void) {
     return;
 block_3:
     *(s32 *)D_0012FC04 = 1;
-    temp_5_29 = (s32)D_00154E00 | 0x20000000;
     temp_6_30 = (s32)D_00154D80 | 0x20000000;
-    D_00154E58.unk0 = (u8 *)temp_6_30;
+    temp_5_29 = (s32)D_00154E00 | 0x20000000;
+    handlers = D_00154E80;
     D_00154E58.unk1C = D_00154F80;
+    D_00154E58.unk0 = (u8 *)temp_6_30;
     D_00154E58.unk4 = (u8 *)temp_5_29;
     D_00154E58.unk10 = 0x20;
     D_00154E58.unk8 = 0;
     ipval = 0x1F;
-    D_00154E58.unkC = D_00154E80;
+    D_00154E58.unkC = handlers;
     D_00154E58.unk14 = 0;
     D_00154E58.unk18 = 0;
-    var_3_42 = D_00154E80;
+    var_3_42 = handlers;
     do {
         var_3_42->unk0 = 0;
         ipval -= 1;
