@@ -124,8 +124,9 @@ void FUN_L05_00262b58(HudCounter *e) {
         src = D_0013FA30;
         dst = D_L05_0015FAE0;
         for (i = 0; i < 4; i++) dst[i] = src[i];
-        if (D_L05_0015FAD4 < D_0013FA5C) {
-            D_L05_0015FAD4 = D_0013FA5C;
+        limit = D_0013FA5C;
+        if (D_L05_0015FAD4 < limit) {
+            D_L05_0015FAD4 = limit;
             counter[1] = D_L05_0015F87C;
         }
         if (D_0013F650 == 0) {
@@ -158,10 +159,11 @@ void FUN_L05_00262b58(HudCounter *e) {
             counter[0] = scale_game_frames(0x3c);
         }
         break;
-    default:
-        if ((u32)(counter[2] - 2) > 1) return;
+    case 2:
+    case 3:
 
-        if (counter[0] == 0) {
+        timer = counter[0];
+        if (timer == 0) {
             D_L05_0015FB00 = 0;
             D_L05_0015FAD4 = 0;
             D_L05_0015FAD8 = 0;
@@ -172,7 +174,6 @@ void FUN_L05_00262b58(HudCounter *e) {
             counter[0] = 0;
         } else {
             if (counter[2] == 3) {
-                timer = counter[0];
                 if (timer == scale_game_frames(0x6e)) {
                     D_0013FBF8 += D_L05_0015FB00;
                     D_0013FBB4 += D_L05_0015FB00 * 5;
