@@ -2108,7 +2108,8 @@ extern void FUN_L10_0024a7f0(float, float, void *) __asm__("FUN_L00_00257d78");
 void FUN_L10_002dcc58(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float scratch[0xC80 / 4];
-    int group, item;
+    int group;
+    long item;
     float phase;
 
     switch (moby->state) {
