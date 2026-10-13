@@ -1359,8 +1359,8 @@ extern void FUN_L00_002c4328(void *);
 extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
 extern void FUN_L00_0025f8e0(float, void *);
-extern void FUN_L00_0025e450(float, float, float, float, float, float, float,
-                              void *, void *, int, int, int, int, int, int, int, int, int);
+extern void FUN_L00_0025e450(float, void *, void *, int, float, float, int, int, int,
+                              float, float, float, float, int, int, int, int, int);
 extern void FUN_L00_00259858(float, void *, void *, int);
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_0024eb68_2c4380(void *) __asm__("FUN_0020c828");
@@ -1583,8 +1583,8 @@ void FUN_L00_002c4380(char *moby) {
                         scratch.w[1] = scratch.w[0];
                         *(OvlQuad *)v = *(OvlQuad *)scratch.w;
                         FUN_L00_0025f8e0(scratch.w[0], v);
-                        FUN_L00_0025e450(0, 0, 4.0f, 3.0f, 9.0f, 1.0f, 12.0f,
-                                         moby, v, 0, 0, 0, 0, 2, 1, 1, -1, active);
+                        FUN_L00_0025e450(0, moby, v, 0, 0, 4.0f, 0, 0, 0,
+                                         3.0f, 9.0f, 1.0f, 12.0f, 2, 1, 1, -1, active);
                         if (active) {
                             FUN_L00_00259858(effect + effect, scratch.w, moby, 0x810000);
                             ((u8 *)scratch.x)[8] = 2;
