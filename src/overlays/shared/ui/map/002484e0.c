@@ -75,10 +75,6 @@ void FUN_L00_002484e0(f32 *position) {
     state = (hero.state.control_mode == 17 || hero.state.control_mode == 18 || hero.base_condition == 1);
     mode15 = hero.state.control_mode == 15;
     mode16 = hero.state.control_mode == 16;
-    x_min = x - 16;
-    y_min = y - 16;
-    x_max = x + 16;
-    y_max = y + 16;
 
     for (i = 0; i < 16; i++) {
         u32 flags;
@@ -121,6 +117,11 @@ void FUN_L00_002484e0(f32 *position) {
 reject:
         filters[i] = 0;
     }
+
+    x_min = x - 16;
+    y_min = y - 16;
+    x_max = x + 16;
+    y_max = y + 16;
 
     {
         s64 column_start = x_min;
