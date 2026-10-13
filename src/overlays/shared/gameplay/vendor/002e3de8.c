@@ -324,14 +324,15 @@ void FUN_L10_002f5b58(char *moby) {
                     angle_cursor++;
                     index_cursor++;
                 }
-                next = (i + 1) % *(int *)path;
+                count = i + 1;
+                next = count % *(int *)path;
                 distance = FUN_001f9b48(
                     (char *)((unsigned int)path + (offset + 0x10)),
                     (char *)((unsigned int)path + ((unsigned int)next * 0x10 + 0x10)));
                 *(float *)((unsigned int)path + offset + 0x1c) = distance;
                 if (i < *(int *)path - 1)
                     *(float *)(acc + 0x08) += distance;
-                i++;
+                i = count;
             } while (i < *(int *)path);
         }
     }
