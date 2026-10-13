@@ -68,16 +68,18 @@ extern u8 D_L00_001841F0_init[] __asm__("D_L00_001841F0");
 #define D_L00_00184434 (*(s32 *)(D_L00_001841F0_init + 580))
 #define D_L00_00184430 (*(s32 *)(D_L00_001841F0_init + 576))
 #define D_L00_00184438 ((s32 *)(D_L00_001841F0_init + 584))
-#define D_L00_0016CC5C (*(f32 *)(D_L00_0016CAF0_raw + 364))
-#define D_L00_0016CC68 (*(f32 *)(D_L00_0016CAF0_raw + 376))
-#define D_L00_0016CC58 (*(s32 *)(D_L00_0016CAF0_raw + 360))
-#define D_L00_0016CC6C (*(s32 *)(D_L00_0016CAF0_raw + 380))
+#define D_L00_0016CC5C (*(f32 *)(D_L00_0016CA40 + 0x21c))
+#define D_L00_0016CC68 (*(f32 *)(D_L00_0016CA40 + 0x228))
+#define D_L00_0016CC58 (*(s32 *)(D_L00_0016CA40 + 0x218))
+#define D_L00_0016CC6C (*(s32 *)(D_L00_0016CA40 + 0x22c))
 #define D_L00_00180240 ((s32 *)(D_L00_00180250 + -16))
 
+extern u8 D_L00_0016CA40[];
+extern u8 D_L00_00166C80[];
 void FUN_L00_00276368(void) {
     s32 i;
     s32 special = 0;
-    f32 *source = D_L00_00166DC0_init;
+    f32 *source;
     s32 *handle;
     void *obj;
     u8 *table;
@@ -89,27 +91,26 @@ void FUN_L00_00276368(void) {
     D_L00_001B9CF0.unkD0 = 0;
     if (D_L00_001B9CF0.state == 10) {
         D_L00_001B9CF0.state = 11;
-        owner = (struct Own *)D_L00_001B3518;
+        D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B3518;
         special = 1;
     } else if (D_L00_001B9CF0.state == 14) {
         D_L00_001B9CF0.state = 15;
-        owner = (struct Own *)D_L00_001B6088;
+        D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B6088;
         special = 1;
     } else if (D_L00_001B9CF0.state == 0x21) {
         D_L00_001B9CF0.unk124 = 1;
-        owner = &D_L00_001B71F0;
+        D_L00_001B9CF0.unk8 = &D_L00_001B71F0;
         D_L00_001B9CF0.state = 0x22;
     } else if (D_L00_001B9CF0.state == 0x23) {
-        owner = (struct Own *)D_L00_001B6B38;
+        D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B6B38;
     } else {
         if (D_L00_001B9CF0.state == 0x2d) {
-            owner = (struct Own *)D_L00_001B86C8;
+            D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B86C8;
         } else {
-            owner = (struct Own *)D_L00_001B2588;
+            D_L00_001B9CF0.unk8 = (struct Own *)D_L00_001B2588;
         }
         D_L00_001B9CF0.state = 2;
     }
-    D_L00_001B9CF0.unk8 = owner;
     D_L00_001B9CF0.owner = D_L00_001B9CF0.unk8;
     if (D_L00_001B9DE0 != 0) {
         D_L00_0015EED8 = D_L00_001B9E20;
@@ -129,8 +130,8 @@ void FUN_L00_00276368(void) {
     *(volatile u128_init *)(D_L00_00180260 + 4) = 0;
     qcopy((void *)D_L00_001B9D30, (void *)D_L00_00166DC0_init);
     qcopy((void *)(D_L00_001B9D30 + 4), (void *)(D_L00_00166DC0_init + 4));
-    D_L00_001B9DD8 = *(s32 *)D_L00_0016CAF0_raw;
-    *(f32 *)D_L00_0016CAF0_raw = 0.63f;
+    *(f32 *)((u8 *)&D_L00_001B9CF0 + 0xe8) = *(f32 *)(D_L00_0016CA40 + 0xb0);
+    *(f32 *)(D_L00_0016CA40 + 0xb0) = 0.63f;
     D_L00_0016CC5C = 524288.0f;
     D_L00_0016CC68 = 255.0f;
     D_L00_0016CC58 = 0;
@@ -178,7 +179,7 @@ void FUN_L00_00276368(void) {
         s32 *handle;
         D_L00_00184434 = D_L00_0015EE78 + 0x40000;
         D_L00_00184430 = D_L00_0015EE78;
-        D_L00_0015EE78 += 0x40400;
+        D_L00_0015EE78 = D_L00_00184434 + 0x400;
         handle = D_L00_00184438;
         i = 3;
         do {
@@ -213,6 +214,7 @@ void FUN_L00_00276368(void) {
         } while (i >= 0);
     }
     if (D_L00_001B9CF0.owner != 0) {
+        source = (f32 *)D_L00_00166C80;
         handle = D_L00_001B9E90_init;
         for (i = 0; i < 14; i++, handle++) {
             obj = FUN_L00_002830d8(0x472);
@@ -220,9 +222,9 @@ void FUN_L00_00276368(void) {
             if (obj != 0) {
                 *(u16 *)((u8 *)obj + 0x34) &= 0xfffd;
                 *(void **)((u8 *)*handle + 0x74) = (void *)0x002df638;
-                *(f32 *)((u8 *)*handle + 0x10) = source[0];
-                *(f32 *)((u8 *)*handle + 0x14) = source[1];
-                *(f32 *)((u8 *)*handle + 0x18) = source[2];
+                *(f32 *)((u8 *)*handle + 0x10) = source[80];
+                *(f32 *)((u8 *)*handle + 0x14) = source[81];
+                *(f32 *)((u8 *)*handle + 0x18) = source[82];
                 *(s32 *)((u8 *)*handle + 0x40) = 0;
                 *(s32 *)((u8 *)*handle + 0x44) = 0;
                 *(s32 *)((u8 *)*handle + 0x48) = 0;
