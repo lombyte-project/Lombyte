@@ -2246,7 +2246,7 @@ extern unsigned char *D_L00_001B04B0_2d5160[] __asm__("D_L00_001B04B0");
 extern void *FUN_L00_0025a420_2d5160(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_0025a478_2d5160(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_0025ab48_2d5160(void *, f32 *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void FUN_L00_0025c558_2d5160(f32, void *, void *, s32, s32, s32) __asm__("FUN_L00_0025c558");
+extern void FUN_L00_0025c558_2d5160(void *, void *, f32, s32, s32, s32) __asm__("FUN_L00_0025c558");
 extern void FUN_L00_0025d458_2d5160(void *, void *) __asm__("FUN_L00_0025d458");
 extern void FUN_L00_0025d538_2d5160(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025ff38_2d5160(f32, void *, void *, s32, s32, void *, s32) __asm__("FUN_L00_0025ff38");
@@ -2303,7 +2303,7 @@ void FUN_L00_002d5160(unsigned char *m) {
         *(u16 *)(m + 0x34) &= ~0x1000;
         *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
         FUN_L00_0025ab48_2d5160(vec, &angle, v + 0x88, v + 0x8C);
-        FUN_L00_0025c558_2d5160(angle, m, v + 0x70, FUN_L00_00257b50_2d5160(2) + 6, 1, 0);
+        FUN_L00_0025c558_2d5160(m, v + 0x70, angle, FUN_L00_00257b50_2d5160(2) + 6, 1, 0);
         reactionC0 = D_L00_0016198C_2d5160;
         reactionC4 = D_L00_00161988_2d5160;
         *(f32 *)(v + 0xC0) = reactionC0;
