@@ -103,7 +103,7 @@ void FUN_L00_002b2100(struct Moby *m) {
     Vec_2b2100 velocity;
     Vec_2b2100 launch;
     Vec_2b2100 point;
-    Vec_2b2100 tmp;
+    Vec_2b2100 probe;
     Devastator_2b2100 *data = (Devastator_2b2100 *)m->pvars;
     struct Moby *best;
     struct Moby *o;
@@ -214,9 +214,9 @@ void FUN_L00_002b2100(struct Moby *m) {
                             }
                             if (!(limit < distance)) {
                                 spread = convert_integer_to_float_2b2100(item_variant_2b2100.level) * 0.6981317f;
-                                build_spherical_offset_2b2100(&tmp, distance, yaw, pitch + hero.ground_pitch.f * 0.5f);
-                                add_vector_xyz_2b2100(&tmp, &tmp, &launch);
-                                off = approximate_arcsine_2b2100(distance_xyz_2b2100(&tmp, &point) / (distance + distance));
+                                build_spherical_offset_2b2100(&probe, distance, yaw, pitch + hero.ground_pitch.f * 0.5f);
+                                add_vector_xyz_2b2100(&probe, &probe, &launch);
+                                off = approximate_arcsine_2b2100(distance_xyz_2b2100(&probe, &point) / (distance + distance));
                                 off = off + off;
                                 if (spread + 0.17453292f < off) {
                                     if (r) {
@@ -274,10 +274,10 @@ void FUN_L00_002b2100(struct Moby *m) {
                         if (r) point.f.z += r->height;
                         else point.f.z += 0.5f;
                         pitch0 -= hero.ground_pitch.f * 0.5f;
-                        build_spherical_offset_2b2100(&tmp, limit, yaw0, pitch0);
-                        add_vector_xyz_2b2100(&tmp, &tmp, &launch);
-                        yaw = atan2_fast_2b2100(point.f.x - tmp.f.x, point.f.y - tmp.f.y);
-                        pitch = -atan2_fast_2b2100(distance_xy_2b2100(&tmp, &point), point.f.z - tmp.f.z);
+                        build_spherical_offset_2b2100(&probe, limit, yaw0, pitch0);
+                        add_vector_xyz_2b2100(&probe, &probe, &launch);
+                        yaw = atan2_fast_2b2100(point.f.x - probe.f.x, point.f.y - probe.f.y);
+                        pitch = -atan2_fast_2b2100(distance_xy_2b2100(&probe, &point), point.f.z - probe.f.z);
                     } else if (hero.state.current != 30) {
                         pitch -= hero.ground_pitch.f * 0.5f;
                         pitch0 -= hero.ground_pitch.f * 0.5f;

@@ -1297,8 +1297,8 @@ typedef struct { SuckVec row[3]; } SuckMatrix;
 typedef struct { SuckVec row[4]; } SuckMatrix4;
 
 typedef union {
-    struct { SuckVec velocity,end; SuckMatrix rotation; SuckMatrix4 inverse; SuckVec point,tmp; } aim;
-    struct { SuckVec velocity; SuckMatrix rotation; SuckMatrix4 inverse; SuckVec launch,point,tmp; } fire;
+    struct { SuckVec velocity,end; SuckMatrix rotation; SuckMatrix4 inverse; SuckVec point,offset; } aim;
+    struct { SuckVec velocity; SuckMatrix rotation; SuckMatrix4 inverse; SuckVec launch,point,offset; } fire;
 } SuckWork;
 
 typedef struct SuckMoby SuckMoby;
@@ -1641,20 +1641,20 @@ void FUN_L00_002da790(SuckMoby *self) {
             copy_matrix3x4(&work.fire.rotation,D_L00_00166C80);
             FUN_001fa2d8(&work.fire.inverse,&work.fire.rotation);
             if(suck_hero.state==30 && (suck_hero.moby->flags&1)) {
-                work.fire.tmp.q=0;
-                work.fire.tmp.f.z=frame_scale*0.4462f;
-                work.fire.point.q=work.fire.tmp.q;
+                work.fire.offset.q=0;
+                work.fire.offset.f.z=frame_scale*0.4462f;
+                work.fire.point.q=work.fire.offset.q;
                 transform_vector(&work.fire.velocity,&work.fire.point,&work.fire.inverse);
-                work.fire.tmp.q=0;
-                work.fire.tmp.f.x=0.15f;
-                work.fire.tmp.f.y=0.3f;
-                work.fire.tmp.f.z=1.0f;
-                transform_vector(&work.fire.launch,&work.fire.tmp,&work.fire.inverse);
+                work.fire.offset.q=0;
+                work.fire.offset.f.x=0.15f;
+                work.fire.offset.f.y=0.3f;
+                work.fire.offset.f.z=1.0f;
+                transform_vector(&work.fire.launch,&work.fire.offset,&work.fire.inverse);
                 add_vector_xyz(&work.fire.launch,&work.fire.launch,D_L00_00166C80+0x140);
             } else {
-                work.fire.tmp.q=0;
-                work.fire.tmp.f.x=frame_scale*0.4462f;
-                work.fire.point.q=work.fire.tmp.q;
+                work.fire.offset.q=0;
+                work.fire.offset.f.x=frame_scale*0.4462f;
+                work.fire.point.q=work.fire.offset.q;
                 transform_vector_by_basis(&work.fire.velocity,&work.fire.point,&suck_hero.basis);
                 FUN_L00_0024f7c8(self,0,&work.fire.launch);
             }
@@ -1689,9 +1689,9 @@ void FUN_L00_002da790(SuckMoby *self) {
                             }
                             if(!(limit<distance)) {
                                 float delta;
-                                build_spherical_offset(&work.fire.tmp,distance,yaw,pitch);
-                                add_vector_xyz(&work.fire.tmp,&work.fire.tmp,&work.fire.launch);
-                                delta=distance_xyz(&work.fire.tmp,&work.fire.point);
+                                build_spherical_offset(&work.fire.offset,distance,yaw,pitch);
+                                add_vector_xyz(&work.fire.offset,&work.fire.offset,&work.fire.launch);
+                                delta=distance_xyz(&work.fire.offset,&work.fire.point);
                                 offangle=1.5707964f-approximate_arcsine(1.0f-delta*delta/((distance+distance)*distance));
                                 if(0.4537856f<offangle) {
                                     float radius=m->radius*0.0009765625f;
