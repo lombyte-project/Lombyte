@@ -1468,7 +1468,7 @@ typedef struct {
     float damage;
     s16 unk4;
     u8 pad6[0xA];
-    float collision;
+    float unk10;
     u8 pad14[0x26];
     u8 unk3A;
     u8 unk3B;
@@ -1537,7 +1537,7 @@ void FUN_L14_002ff640(struct Moby *moby) {
         clear_ff640(&scratch.info, 0x40);
         scratch.info.unk4 = 1;
         scratch.info.damage = 1.0f;
-        scratch.info.collision = 0.5f;
+        scratch.info.unk10 = 0.5f;
         scratch.info.unk3A = 7;
         scratch.info.unk3B = 0xFF;
         take_damage_ff640(moby, hit, &scratch.info, 0, &count, 0, 0, 4);

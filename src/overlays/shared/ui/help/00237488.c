@@ -1138,7 +1138,6 @@ extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
 extern s32 D_0013D4B8;
 extern s32 weapon_ammo_counts[37] __asm__("D_0013D428");
 extern f32 D_0013F420[];
-extern f32 D_0013F3D0[];
 
 void FUN_L05_00253b48(void) {
     u8 *state;
