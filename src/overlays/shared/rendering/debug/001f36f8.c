@@ -456,8 +456,8 @@ extern u8 item_defs[] __asm__("D_L00_00179AC0") NOT_SDA;
 #define D_L00_00179AFE ((s16 *)(item_defs + 0x3E))
 #include "rnc/ui/vendor/vendor_item_info.h"
 #define D_L00_001C40BE ((u16 *)((u8 *)D_L00_001C40B0 + 0xE))
-extern u32 D_0013D428[];
-extern u8 D_0013E520[];
+extern char D_0013D428[];
+extern int D_0013E520[];
 extern u8 D_0014C050[];
 extern const char D_L00_0015EFE0[] __attribute__((sda));
 extern const char D_L00_0015EFF0[];
@@ -494,7 +494,7 @@ void FUN_L00_001f4598(void) {
     u8 *level;
     f32 *capture_positions;
     char *player_setting;
-    u8 byte_value;
+    u32 byte_value;
     f32 dimension, scale, angle;
     f64 formatted_x, formatted_y, formatted_z;
     s32 file, file_size;
@@ -534,8 +534,13 @@ void FUN_L00_001f4598(void) {
                 g_debug_menu.selected_column = 5;
         }
     }
-    if (((D_0013C940.buttons.w.pressed & 0x1000) == 0) || (g_debug_menu.selected_row = g_debug_menu.selected_row - 1,
-                                         -1 < (int)g_debug_menu.selected_row)) {
+    if ((D_0013C940.buttons.w.pressed & 0x1000) != 0 &&
+        --g_debug_menu.selected_row < 0) {
+        if (2 < g_debug_menu.selected_column) {
+            g_debug_menu.selected_column = (g_debug_menu.selected_column + 3) % 6;
+        }
+        g_debug_menu.selected_row = row_counts.rows[g_debug_menu.selected_column] - 1;
+    } else {
         if (((D_0013C940.buttons.w.pressed & 0x4000) != 0) &&
             (g_debug_menu.selected_row = g_debug_menu.selected_row + 1,
              row_counts.rows[g_debug_menu.selected_column] <= (int)g_debug_menu.selected_row)) {
@@ -544,11 +549,6 @@ void FUN_L00_001f4598(void) {
             }
             g_debug_menu.selected_row = 0;
         }
-    } else {
-        if (2 < g_debug_menu.selected_column) {
-            g_debug_menu.selected_column = (g_debug_menu.selected_column + 3) % 6;
-        }
-        g_debug_menu.selected_row = row_counts.rows[g_debug_menu.selected_column] - 1;
     }
     row_count = row_counts.rows[g_debug_menu.selected_column];
     if (row_count <= (int)g_debug_menu.selected_row) {
@@ -749,7 +749,7 @@ void FUN_L00_001f4598(void) {
     case 3:
         maximum_count = 999999;
         if ((int)g_debug_menu.selected_row < 0xd) {
-            counter = &D_0013D428[D_L00_0015EFD0[g_debug_menu.selected_row]];
+            counter = &((u32 *)D_0013D428)[D_L00_0015EFD0[g_debug_menu.selected_row]];
             maximum_count = (u32) * (u16 *)((u8 *)D_L00_001C40BE +
                                             (u32)D_L00_0015EFD0[g_debug_menu.selected_row] * 0x18);
         } else {
@@ -803,14 +803,14 @@ void FUN_L00_001f4598(void) {
             *counter = maximum_count;
         }
         if ((D_0013C940.buttons.w.pressed & 0x10) != 0) {
-            *(char *)(D_L00_0015EFD0[g_debug_menu.selected_row] + D_0013E520) =
-                *(char *)(D_L00_0015EFD0[g_debug_menu.selected_row] + D_0013E520) + '\x01';
+            *(char *)(D_L00_0015EFD0[g_debug_menu.selected_row] + (u8 *)D_0013E520) =
+                *(char *)(D_L00_0015EFD0[g_debug_menu.selected_row] + (u8 *)D_0013E520) + '\x01';
         }
         if ((D_0013C940.buttons.w.pressed & 0x80) != 0) {
-            *(char *)(D_L00_0015EFD0[g_debug_menu.selected_row] + D_0013E520) =
-                *(char *)(D_L00_0015EFD0[g_debug_menu.selected_row] + D_0013E520) + -1;
+            *(char *)(D_L00_0015EFD0[g_debug_menu.selected_row] + (u8 *)D_0013E520) =
+                *(char *)(D_L00_0015EFD0[g_debug_menu.selected_row] + (u8 *)D_0013E520) + -1;
         }
-        level = (u8 *)(D_L00_0015EFD0[g_debug_menu.selected_row] + D_0013E520);
+        level = (u8 *)(D_L00_0015EFD0[g_debug_menu.selected_row] + (u8 *)D_0013E520);
         index = (u32)D_L00_0015EFD0[g_debug_menu.selected_row] * 0x4c;
         if (*(s16 *)((u8 *)D_L00_00179AFE + index) < (short)(u16)*level) {
             *level = ((u8 *)D_L00_00179AFE)[index];
@@ -893,7 +893,7 @@ void FUN_L00_001f4598(void) {
             byte_value = D_L00_0015F446;
             if ((D_L00_0015F446 != 0xFF) &&
                 ((D_0013C940.buttons.held_pressed & 0x800000040) != 0)) {
-                byte_value = (u8)(byte_value + 1);
+                byte_value = byte_value + 1;
                 D_L00_0015F446 = byte_value;
             }
             if ((byte_value != '\0') &&
