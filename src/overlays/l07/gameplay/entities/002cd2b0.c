@@ -2011,7 +2011,7 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
         width = convert_integer_to_float_l07((int)(index + 1) > 5 ? 5 : index + 1);
         green = green - green_step;
         center = *(float *)(moby + 0x10);
-        *(float *)(packet + 0x38) = *(float *)(packet + 0x28) = *(float *)(moby + 0x18);
+        *(float *)(packet + 0x28) = *(float *)(packet + 0x38) = *(float *)(moby + 0x18);
         *(float *)(packet + 0x30) = center - radius;
         *(float *)(packet + 0x68) = *(float *)(packet + 0x58) = *(float *)(packet + 0x50) + width;
         *(float *)(packet + 0x34) = *(float *)(packet + 0x14) = *(float *)(moby + 0x14);
