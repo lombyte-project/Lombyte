@@ -392,7 +392,7 @@ extern float D_L10_0015F3FC_sda __asm__("D_L10_0015F3FC") __attribute__((sda));
 extern int D_L10_0015F404;
 extern float D_0015ED6C;
 extern char *D_L10_0015FFD8 __attribute__((sda));
-extern char *D_L10_0015FFD8_far __asm__("D_L10_0015FFD8");
+extern char *D_L10_0015FFD8_far __asm__("D_L10_0015FFD8") __attribute__((section(".data")));
 extern float D_L10_00167358;
 extern float D_L10_0016CF70;
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -416,59 +416,67 @@ extern void FUN_001e93e8_part(void *, void *) __asm__("FUN_001e93e8");
 extern float D_L10_00167450[];
 extern float D_0013F5E0[];
 
+extern char D_L10_0016CEC0[];
+extern float D_L10_0016CF70_far __asm__("D_L10_0016CF70") __attribute__((section(".data")));
+
 void FUN_L10_002f5f18(char *moby) {
     char *work = *(char **)(moby + 0x70);
-    char *acc = work + 0x40;
+    short *indices = (short *)(work + 0x58);
+    char *acc = (char *)indices - 0x18;
     int slot = *(short *)(moby + 0x84);
-    char *data = *(char **)(D_L10_0015EF50 + slot * 0x20 + 0x1c);
+    unsigned char *data = *(unsigned char **)(D_L10_0015EF50 + slot * 0x20 + 0x1c);
     char *path;
     float old_pos[4] __attribute__((aligned(16)));
-    float target[4] __attribute__((aligned(16)));
+    union { float target[4]; float direction[4]; } vectors __attribute__((aligned(16)));
     float transformed[4] __attribute__((aligned(16)));
-    float direction[4] __attribute__((aligned(16)));
     float point[4] __attribute__((aligned(16)));
-    float *scale = (float *)(moby + 0x30);
-    int i, segment, count, next, index;
-    int reached;
+    float *scale;
+    int i, count, next, index;
+    long long segment;
+    long long reached;
     float angle, first, total, distance, fade;
-    short *indices = (short *)(acc + 0x18);
+    float *distance_cursor;
 
     if (*(short *)(acc + 0x14) == 0) {
-        fade = D_L10_0015F3FC + 0.05f;
-        D_L10_0015F3FC_sda = fade;
-        if (!(1.0f <= fade)) return;
+        char *other;
+        D_L10_0015F3FC_sda = D_L10_0015F3FC + 0.05f;
+        if (!(1.0f <= D_L10_0015F3FC_sda)) return;
         path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
+        other = D_L10_001B0930_5a78[*(int *)(data + 0x24)];
+        scale = (float *)(moby + 0x30);
         D_L10_0015F3FC = 1.0f;
         D_L10_0015F404 = 1;
         *(short *)(acc + 0x14) = 1;
-        *(u128 *)scale = *(u128 *)(path + 0x10);
-        if (*(int *)(data + 0x28) < 0) {
-            subtract_vector_xyz(old_pos, D_L10_001B0930_5a78[*(int *)(data + 0x24)] + 0x10, scale);
-        } else {
-            target[0] = *(float *)(data + 0x2c);
-            target[1] = *(float *)(data + 0x30);
-            target[2] = *(float *)(data + 0x34);
-            target[3] = 0.0f;
-            transform_vector_by_basis(target, target, D_L10_00167450);
+        path += 0x10;
+        *(u128 *)scale = *(u128 *)path;
+        if (*(int *)(data + 0x28) >= 0) {
             path = D_L10_0015FFD8 + *(int *)(data + 0x28) * 0x100;
-            add_vector_xyz(transformed, path + 0x10, target);
+            vectors.target[0] = *(float *)(data + 0x2c);
+            vectors.target[1] = *(float *)(data + 0x30);
+            vectors.target[2] = *(float *)(data + 0x34);
+            vectors.target[3] = 0.0f;
+            transform_vector_by_basis(vectors.target, vectors.target, D_L10_00167450);
+            add_vector_xyz(transformed, path + 0x10, vectors.target);
             subtract_vector_xyz(old_pos, transformed, scale);
+        } else {
+            subtract_vector_xyz(old_pos, other + 0x10, scale);
         }
-        FUN_001f9a68(-1.0f, target, D_0013F5E0);
+        FUN_001f9a68(-1.0f, vectors.target, D_0013F5E0);
         scale_vector_xyz(1.0f, moby, old_pos);
-        cross_vectors_xyz(moby + 0x10, moby, target);
+        cross_vectors_xyz(moby + 0x10, moby, vectors.target);
         scale_vector_xyz(1.0f, moby + 0x10, moby + 0x10);
         cross_vectors_xyz(moby + 0x20, moby + 0x10, moby);
         return;
     }
     if (*(short *)(acc + 0x14) == 2) {
-        fade = D_L10_0015F3FC + 0.05f;
-        D_L10_0015F3FC_sda = fade;
-        if (fade >= 1.0f) {
+        D_L10_0015F3FC_sda = D_L10_0015F3FC + 0.05f;
+        if (D_L10_0015F3FC_sda >= 1.0f) {
             *(short *)(acc + 0x14) = 3;
             D_L10_0015F3FC = 1.0f;
-            angle = *(float *)(work + 0x88) * 0.5f;
-            D_L10_0016CF70 = FUN_001f9de0(angle) / FUN_001f9dc8(angle);
+            angle = *(float *)((char *)indices + 0x30) * 0.5f;
+            distance = FUN_001f9de0(angle);
+            fade = FUN_001f9dc8(angle);
+            D_L10_0016CF70_far = distance / fade;
             update_view_context();
             data[0x39] = 1;
             D_L10_00167358 = 0.05f;
@@ -479,11 +487,11 @@ void FUN_L10_002f5f18(char *moby) {
         if (*(int *)(data + 0x40) == 0) return;
     } else {
         if (*(short *)(acc + 0x14) == 3) return;
-        fade = D_L10_0015F3FC_sda - 0.05f;
-        D_L10_0015F3FC_sda = fade;
-        if (fade < 0.0f) D_L10_0015F3FC = 0.0f;
+        D_L10_0015F3FC_sda -= 0.05f;
+        if (D_L10_0015F3FC_sda < 0.0f) D_L10_0015F3FC = 0.0f;
     }
     path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
+    scale = (float *)(moby + 0x30);
     *(u128 *)old_pos = *(u128 *)scale;
     reached = FUN_L00_0025d808(path, scale, (int *)(acc + 0x00),
                                 (float *)(acc + 0x04), *(float *)(data + 0x3c) * D_0015ED6C, 0);
@@ -495,64 +503,74 @@ void FUN_L10_002f5f18(char *moby) {
                 reached = 1;
         }
     }
-    if (data[0x39] != 0) reached = 1;
+    if ((unsigned char)data[0x39] != 0) reached = 1;
     if (reached) {
         *(short *)(acc + 0x14) = 2;
         if (*(int *)(data + 0x40) == 0) return;
     }
     if (indices[0] >= 0 && indices[1] >= 0) {
-        for (i = 0; i < 7 && indices[i] >= 0 && indices[i + 1] >= 0; i++) {
+        i = 0;
+        do {
+            next = i + 1;
             segment = *(int *)(acc + 0x00);
-            if (indices[i] <= segment && segment < indices[i + 1]) {
-                total = 0.0f;
-                if (indices[i] < segment) {
-                    count = segment - indices[i];
-                    index = indices[i];
+            index = indices[i];
+            if (index <= segment && segment < indices[next]) {
+                first = 0.0f;
+                if (index < segment) {
+                    count = segment - index;
+                    distance_cursor = (float *)(path + (index * 0x10 + 0x1c));
                     do {
-                        total += *(float *)(path + index * 0x10 + 0x1c);
-                        index++;
+                        first += *distance_cursor;
+                        distance_cursor += 4;
                         count--;
                     } while (count != 0);
                 }
-                first = total + *(float *)(acc + 0x04);
-                if (segment < indices[i + 1]) {
-                    count = indices[i + 1] - segment;
+                total = first;
+                first = first + *(float *)(acc + 0x04);
+                if (segment < indices[next]) {
+                    count = indices[next] - segment;
                     index = segment;
+                    distance_cursor = (float *)(path + (index * 0x10 + 0x1c));
                     do {
-                        total += *(float *)(path + index * 0x10 + 0x1c);
-                        index++;
+                        total += *distance_cursor;
+                        distance_cursor += 4;
                         count--;
                     } while (count != 0);
                 }
-                angle = cosine_interpolate(((float *)(acc + 0x28))[i],
-                                            ((float *)(acc + 0x28))[i + 1], first / total);
+                angle = cosine_interpolate(((float *)((char *)indices + 0x10))[i],
+                                            ((float *)((char *)indices + 0x10))[next], first / total);
                 angle = angle * 0.017453292f * 0.5f;
-                D_L10_0016CF70 = FUN_001f9de0(angle) / FUN_001f9dc8(angle);
+                distance = FUN_001f9de0(angle);
+                fade = FUN_001f9dc8(angle);
+                *(float *)(D_L10_0016CEC0 + 0xb0) = distance / fade;
                 update_view_context();
             }
-        }
+            if (next >= 7) break;
+            i = next;
+        } while (indices[i] >= 0 && indices[i + 1] >= 0);
     }
     distance = FUN_001f9b48(old_pos, scale);
     *(float *)(acc + 0x10) += distance;
-    if (*(int *)(data + 0x28) < 0) {
+    if (*(int *)(data + 0x28) >= 0) {
+        path = D_L10_0015FFD8_far + *(int *)(data + 0x28) * 0x100;
+        transformed[0] = *(float *)(data + 0x2c);
+        transformed[1] = *(float *)(data + 0x30);
+        transformed[2] = *(float *)(data + 0x34);
+        transformed[3] = 0.0f;
+        transform_vector_by_basis(transformed, transformed, D_L10_00167450);
+        add_vector_xyz(point, path + 0x10, transformed);
+        subtract_vector_xyz(vectors.direction, point, scale);
+    } else {
         float zero_a = 0.0f, zero_b = 0.0f;
         char *other = D_L10_001B0930_5a78[*(int *)(data + 0x24)];
         FUN_L00_0025d808(other, transformed, (int *)&zero_a, &zero_b,
             (*(float *)(acc + 0x10) / *(float *)(acc + 0x08)) * *(float *)(acc + 0x0c), 0);
         FUN_001e93e8(0.2f, transformed);
         FUN_001e93e8_part(other + 0x10, other + *(int *)other * 0x10);
-        subtract_vector_xyz(direction, transformed, scale);
-    } else {
-        transformed[0] = *(float *)(data + 0x2c);
-        transformed[1] = *(float *)(data + 0x30);
-        transformed[2] = *(float *)(data + 0x34);
-        transformed[3] = 0.0f;
-        transform_vector_by_basis(transformed, transformed, D_L10_00167450);
-        add_vector_xyz(point, D_L10_0015FFD8_far + *(int *)(data + 0x28) * 0x100 + 0x10, transformed);
-        subtract_vector_xyz(direction, point, scale);
+        subtract_vector_xyz(vectors.direction, transformed, scale);
     }
     FUN_001f9a68(-1.0f, transformed, D_0013F5E0);
-    scale_vector_xyz(1.0f, moby, direction);
+    scale_vector_xyz(1.0f, moby, vectors.direction);
     cross_vectors_xyz(moby + 0x10, moby, transformed);
     scale_vector_xyz(1.0f, moby + 0x10, moby + 0x10);
     cross_vectors_xyz(moby + 0x20, moby + 0x10, moby);
