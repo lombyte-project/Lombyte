@@ -1092,7 +1092,7 @@ target_valid:
     if (hero.state.current == 1) FUN_L00_002223f8(0x1e, 1);
     if (FUN_001fef68_2d2670((s32 *)(vars + 0x54)) && hero.unk20AC == 0) {
         if ((hero.unk20A8 && hero.unk1BC == FUN_001fef20_2d2670(0x11)) ||
-            ((hero.items[0].button_mask & D_0013CAE4) && hero.state.current == 0x1e && get_ammo(-1)) ||
+            ((D_0013CAE4 & hero.items[0].button_mask) && hero.state.current == 0x1e && get_ammo(-1)) ||
             (hero.state.current == 0x23 && hero.state_timer == FUN_001fef20_2d2670(0x10))) {
             FUN_L00_00216de8(0x1a, 0);
             use_ammo(-1, 1);
@@ -1104,7 +1104,7 @@ target_valid:
     switch (moby[0x20]) {
     case 0:
         *(u8 **)(vars + 0x50) = 0;
-        moby[0x20] = (moby[0x70] & 2) ? 2 : 1;
+        moby[0x20] = !(moby[0x70] & 2) ? 1 : 2;
     case 1:
         if (moby[0x70] & 2) moby[0x20] = 2;
         break;
@@ -1140,10 +1140,10 @@ target_valid:
         qcopy(*(u8 **)(vars + 0x50) + 0x10, vars + 0x40);
     } else {
         if (get_ammo(-1)) {
-            *(u64 *)&velocity = 0;
+            *(volatile u64 *)&velocity = 0;
             *((u64 *)&velocity + 1) = 0;
         } else if (hero.unk20A8) {
-            *(u64 *)&velocity = 0;
+            *(volatile u64 *)&velocity = 0;
             *((u64 *)&velocity + 1) = 0;
         } else return;
         *(u8 **)(vars + 0x50) = FUN_L00_002c35c0((s32)moby, vars + 0x40, &velocity);
