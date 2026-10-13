@@ -2920,8 +2920,8 @@ void FUN_L00_002d73e8(P *p) {
                     source = &D_L00_001E12C0_2d73e8[index];
                     points->x = source->x;
                     points->y = source->y * x;
-                    points->z = source->z * y;
                     points->w = 1.0f;
+                    points->z = source->z * y;
                     FUN_001ff6f8_2d73e8(points, points, transform);
                     *texcoords = D_L00_001E1440_2d73e8[index][1] + *phase;
                     *texcoords_second = D_L00_001E1440_2d73e8[index][0];
@@ -2959,8 +2959,8 @@ void FUN_L00_002d73e8(P *p) {
                 source = (V *)(D_L00_001E11A0_2d73e8 + point * 16);
                 points->x = source->x;
                 points->y = source->y * x;
-                points->z = source->z * y;
                 points->w = 1.0f;
+                points->z = source->z * y;
                 f = source_texcoords[0] - *phase;
                 *texcoords_second = source_texcoords[1];
                 source_texcoords += 2;
