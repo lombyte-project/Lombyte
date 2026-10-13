@@ -1403,7 +1403,281 @@ next_point:
     direction[2] = FUN_001f9e90(path->points[selected + 1].x - path->points[selected].x, path->points[selected + 1].y - path->points[selected].y);
 }
 #endif
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254608.s", FUN_L05_00254608);
+extern int D_0015ED84_254608 __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int FUN_001f96f8_254608(int) __asm__("FUN_001f96f8");
+typedef int u128_254608 __attribute__((mode(TI)));
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Node_254608;
+typedef struct { int n; int pad[3]; Node_254608 p[1]; } Path_254608;
+typedef struct {
+    char pad0[0x20];
+    int f20;
+    int f24;
+    int f28;
+    int f2C[5];
+    int f40;
+} Data_254608;
+typedef struct {
+    char pad0[0x10];
+    float pos[4];
+    char pad20[0x10];
+    unsigned char f30;
+    char pad31[0xBC - 0x31];
+    unsigned char fBC;
+    char padBD[0x43];
+} Ent_254608;
+typedef struct { char pad0[9]; unsigned char f9; } Flags_254608;
+
+extern unsigned char D_0013D388_254608[] __asm__("D_0013D388") __attribute__((section(".data")));
+extern unsigned char D_0013D408_254608[] __asm__("D_0013D408") __attribute__((section(".data")));
+extern unsigned char D_0013D4DF_254608 __asm__("D_0013D4DF") __attribute__((section(".data")));
+extern Path_254608 *D_L05_001B0930_254608[] __asm__("D_L05_001B0930");
+extern Ent_254608 *D_L05_0015FFD8_254608 __asm__("D_L05_0015FFD8") __attribute__((section(".sdata")));
+extern float D_0015ED60_254608 __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern int D_0015EE38_254608 __asm__("D_0015EE38") __attribute__((section(".sdata")));
+extern int D_0015EE3C_254608 __asm__("D_0015EE3C") __attribute__((section(".sdata")));
+extern int D_0015ED80_254608 __asm__("D_0015ED80") __attribute__((section(".sdata")));
+extern int D_0015EE58_254608[2] __asm__("D_0015EE58") __attribute__((section(".sdata")));
+extern int D_0015ED98_254608 __asm__("D_0015ED98") __attribute__((section(".sdata")));
+extern int D_0015EE68_254608[2] __asm__("D_0015EE68") __attribute__((section(".sdata")));
+extern int D_L05_0015F680_254608 __asm__("D_L05_0015F680") __attribute__((sda));
+extern int D_L05_0015F684_254608 __asm__("D_L05_0015F684") __attribute__((sda));
+extern float D_L05_0015F67C_254608 __asm__("D_L05_0015F67C") __attribute__((sda));
+extern int D_L05_0015F6A8_254608 __asm__("D_L05_0015F6A8") __attribute__((sda));
+extern float func_001F9D10_254608(void *, void *) __asm__("FUN_001f9b48");
+extern float func_L00_001FF860_254608(float, float) __asm__("FUN_001f9e90");
+extern float func_001FA850_254608(float, float) __asm__("FUN_001fa688");
+extern void func_L05_00254B38_254608(void *, void *) __asm__("FUN_L05_00254358");
+extern void func_L00_00217718_254608(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern int func_L01_0028C2D8_254608(void *, void *, float) __asm__("FUN_L01_0028b510");
+extern int func_0022EE28_254608(int, int, int) __asm__("FUN_0022db10");
+extern void func_L00_00264DB8_254608(int, int) __asm__("FUN_L00_00263d40");
+extern void func_001FBC80_254608(int, void *) __asm__("FUN_001fbab8");
+extern void func_001FFDA0_254608(int, int) __asm__("FUN_001ff570");
+extern void func_001FFFA0_254608(void) __asm__("FUN_001ff768");
+
+/* Hoverboard race tick: advances the hero's and the opponents' path nodes and laps, handles wrong-way and fall resets, ranks everyone and finishes the race after three laps. */
+void FUN_L05_00254608(void) {
+    float v0[4] __attribute__((aligned(16)));
+    float v1[4] __attribute__((aligned(16)));
+    Data_254608 *d;
+    Path_254608 *path;
+    int near;
+    int j;
+    int k;
+    int m;
+    float ang;
+    float dir;
+
+    hero.unk894++;
+    if (((struct Moby *)hero.unk86C) == 0) {
+        return;
+    }
+    d = (Data_254608 *)((struct Moby *)hero.unk86C)->pvars;
+    if (d->f20 == -1) {
+        return;
+    }
+    path = D_L05_001B0930_254608[d->f20];
+    hero.unk8B4 = (void *)path;
+    if (D_0015ED84_254608 == 0x10) {
+        *(u128_254608 *)v0 = 0;
+        v0[0] = 163.0f;
+        v0[1] = 119.0f;
+        v0[2] = 80.0f;
+        if (func_001F9D10_254608(hero.motion.pos.f, v0) < 11.0f) {
+            if (hero.unk898 < 3 || hero.unk898 > 0x46) {
+                if (hero.unk898 >= 3) {
+                    hero.unk89A++;
+                }
+                hero.unk898 = 0xD;
+            }
+        }
+        *(u128_254608 *)v1 = 0;
+        v1[0] = 223.0f;
+        v1[1] = 281.0f;
+        v1[2] = 93.0f;
+        if (func_001F9D10_254608(hero.motion.pos.f, v1) < 7.0f) {
+            if (hero.unk898 < 0x3B) {
+                hero.unk898 = 0x3B;
+            }
+        }
+    }
+    {
+        int i;
+        int n1;
+        int next;
+
+        i = hero.unk898;
+        n1 = path->n + 1;
+        next = (i + n1) % path->n;
+        ang = func_L00_001FF860_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
+        if (func_001FA850_254608(ang, func_L00_001FF860_254608(hero.motion.pos.f[0] - path->p[i].x, hero.motion.pos.f[1] - path->p[i].y)) < 1.5707964f) {
+            hero.unk898 = next;
+            if (next == 0) {
+                hero.unk89A++;
+            }
+        }
+    }
+    near = 0;
+    if (D_0015ED84_254608 == 0x10) {
+        if (hero.motion.pos.f[2] < path->p[hero.unk898].z - 2.0f) {
+            near = 1;
+            if (hero.unk8AE < FUN_001f96f8_254608(0x46)) {
+                hero.unk8AE = FUN_001f96f8_254608(0x46);
+            }
+        }
+    }
+    {
+        int i;
+        int n1;
+        int next;
+
+        i = hero.unk8C8;
+        n1 = path->n + 1;
+        next = (i + n1) % path->n;
+        dir = func_L00_001FF860_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
+    }
+    if (near != 0 || (func_001FA850_254608(hero.motion.rot.f[2], dir) > 1.5707964f && hero.unk88D == 0)) {
+        hero.unk8AE++;
+        if (hero.unk8AE > FUN_001f96f8_254608(0xB4)) {
+            if (D_L05_0015F680_254608 == 0) {
+                D_L05_0015F680_254608 = 1;
+                D_L05_0015F684_254608 = 0;
+                D_L05_0015F67C_254608 = D_0015ED60_254608 * 0.08f;
+            }
+            hero.unk8AF = 1;
+            if (D_L05_0015F684_254608 == 1) {
+                hero.unk8AF = 0;
+                func_L05_00254B38_254608(v0, v1);
+                hero.unk8AE = 0;
+                hero.unk874 = v1[2];
+                func_L00_00217718_254608(v0, v1, 0x6B, 1);
+                if (((Path_254608 *)hero.unk8B4) != 0) {
+                    int r = func_L01_0028C2D8_254608(hero.motion.pos.f, (Path_254608 *)hero.unk8B4, 0.0f);
+
+                    if (r < hero.unk898) {
+                        hero.unk898 = r;
+                    }
+                }
+            }
+        }
+    } else if (hero.unk8AF == 0) {
+        hero.unk8AE = 0;
+    }
+    for (j = 0; j < d->f40; j++) {
+        int i;
+        int n1;
+        int next;
+
+        i = hero.unk7B0[j];
+        n1 = path->n + 1;
+        next = (i + n1) % path->n;
+        ang = func_L00_001FF860_254608(path->p[next].x - path->p[i].x, path->p[next].y - path->p[i].y);
+        qcopy(v0, D_L05_0015FFD8_254608[d->f2C[j]].pos);
+        if (func_001FA850_254608(ang, func_L00_001FF860_254608(v0[0] - path->p[i].x, v0[1] - path->p[i].y)) < 1.5707964f) {
+            hero.unk7B0[j] = next;
+            if (next == 0) {
+                hero.unk7A0[j]++;
+            }
+        }
+    }
+    hero.unk8C0 = 1;
+    for (j = 0; j < d->f40; j++) {
+        if (hero.unk89A < hero.unk7A0[j] || (hero.unk7A0[j] == hero.unk89A && hero.unk7B0[j] >= hero.unk898)) {
+            hero.unk8C0++;
+        }
+    }
+    for (k = 0; k < d->f40; k++) {
+        hero.unk7C0[k] = 1;
+        if (hero.unk89A > hero.unk7A0[k] || (hero.unk7A0[k] == hero.unk89A && hero.unk898 > hero.unk7B0[k])) {
+            hero.unk7C0[k] = 2;
+        }
+        for (m = 0; m < d->f40; m++) {
+            if (hero.unk7A0[k] < hero.unk7A0[m] || (hero.unk7A0[k] == hero.unk7A0[m] && hero.unk7B0[k] < hero.unk7B0[m])) {
+                hero.unk7C0[k]++;
+            }
+        }
+    }
+    if (hero.unk89A < 3) {
+        return;
+    }
+    if (*(D_0013D388_254608) != 0) {
+        D_L05_0015F6A8_254608 = 1;
+    }
+    if (D_0015ED84_254608 == 5) {
+        D_0015EE38_254608++;
+    } else if (D_0015ED84_254608 == 0x10) {
+        D_0015EE3C_254608++;
+    }
+    if (D_0015ED84_254608 == 5) {
+        int t;
+
+        if (D_0015ED80_254608 != 0) {
+            t = FUN_001f96f8_254608(0x1680);
+        } else {
+            t = FUN_001f96f8_254608(0x1644);
+        }
+        if (t >= hero.unk894) {
+            if (((Flags_254608 *)D_0013D408_254608)->f9 == 0) {
+                ((Flags_254608 *)D_0013D408_254608)->f9 = 1;
+                func_0022EE28_254608(1, 0, 0);
+                func_L00_00264DB8_254608(0x53D6, -1);
+            }
+        }
+        if (d->f28 == -1) {
+            return;
+        }
+        if (*(D_0013D388_254608) == 0 && hero.unk8C0 == 1) {
+            D_L05_0015FFD8_254608[d->f28].fBC = 1;
+        } else {
+            hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[d->f28]);
+            func_001FBC80_254608(0, 0);
+        }
+        if (D_0015EE58_254608[0] == 0) {
+            D_0015EE58_254608[0] = hero.unk894;
+            D_0015ED98_254608 += 0x3E8;
+        } else if (hero.unk894 < D_0015EE58_254608[0]) {
+            D_0015EE58_254608[0] = hero.unk894;
+            D_0015ED98_254608 += 0x3E8;
+        }
+        if (D_0015EE68_254608[0] < hero.unk8A8) {
+            D_0015EE68_254608[0] = hero.unk8A8;
+            D_0015ED98_254608 += 0x3E8;
+        }
+        D_L05_0015FFD8_254608[d->f28].f30 = 0xFF;
+        if (hero.unk880 != -1) {
+            func_001FFDA0_254608(hero.unk880, 0);
+            hero.unk880 = -1;
+        }
+        func_001FFFA0_254608();
+    } else if (D_0015ED84_254608 == 0x10) {
+        if (d->f28 == -1) {
+            return;
+        }
+        if (D_0013D4DF_254608 == 0 && hero.unk8C0 == 1) {
+            D_L05_0015FFD8_254608[d->f28].fBC = 1;
+        } else {
+            hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[d->f28]);
+            func_001FBC80_254608(0, 0);
+        }
+        if (D_0015EE58_254608[1] == 0) {
+            D_0015EE58_254608[1] = hero.unk894;
+            D_0015ED98_254608 += 0x3E8;
+        } else if (hero.unk894 < D_0015EE58_254608[1]) {
+            D_0015EE58_254608[1] = hero.unk894;
+            D_0015ED98_254608 += 0x3E8;
+        }
+        if (D_0015EE68_254608[1] < hero.unk8A8) {
+            D_0015EE68_254608[1] = hero.unk8A8;
+            D_0015ED98_254608 += 0x3E8;
+        }
+        D_L05_0015FFD8_254608[d->f28].f30 = 0xFF;
+        if (hero.unk880 != -1) {
+            func_001FFDA0_254608(hero.unk880, 0);
+            hero.unk880 = -1;
+        }
+        func_001FFFA0_254608();
+    }
+}
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_002559A0), where it is exact; names translated to the US level program. */

@@ -499,7 +499,7 @@ struct Hero {
     f32 unk8A4;                    /* 0x8A4 */
     s32 unk8A8;                    /* 0x8A8: count shown on the HUD (FUN_L05_00266710) */
     s16 unk8AC;                    /* 0x8AC */
-    u8 pad_8AE[0x1];
+    u8 unk8AE;                     /* 0x8AE */
     u8 unk8AF;                     /* 0x8AF */
     s16 unk8B0;                    /* 0x8B0 */
     s16 unk8B2;                    /* 0x8B2 */
@@ -509,7 +509,7 @@ struct Hero {
     s16 unk8BE;                    /* 0x8BE */
     s32 unk8C0;                    /* 0x8C0: 1..3 picks the HUD rank string (FUN_L05_00266320) */
     s32 unk8C4;                    /* 0x8C4 */
-    u8 pad_8C8[0x2];
+    s16 unk8C8;                    /* 0x8C8 */
     s16 unk8CA;                    /* 0x8CA */
     s16 unk8CC;                    /* 0x8CC */
     u8 unk8CE;                     /* 0x8CE */
