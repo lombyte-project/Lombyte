@@ -310,9 +310,6 @@ void FUN_L01_0022cd48(void) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0022d090.s", FUN_L01_0022d090);
-#else
 extern CollisionHit coll_hit __asm__("D_L01_001742C0") __attribute__((section(".data")));
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
@@ -329,7 +326,7 @@ extern s32 coll2_2d090(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 void FUN_L01_0022d090(void)
 {
     Vec4 probe, top, low, from, head, wall, to, edge;
-    f32 drop, fwd, up, reach, step, top_margin, max_slope, edge_offset;
+    f32 grab_drop, drop, fwd, up, reach, step, top_margin, max_slope, edge_offset;
     f32 wall_yaw, launch_scale, ang, five, one, limit, inc, d, half;
     int found, hit, i, j, material, allowed, moby_allowed, frames;
     u8 *moby_record;
@@ -354,6 +351,7 @@ void FUN_L01_0022d090(void)
         return;
 
     drop = -0.7f;
+    grab_drop = -1.43f;
     fwd = 0.3f;
     up = 1.5f;
     reach = 1.15f;
@@ -467,18 +465,15 @@ probe_next:
                 edge.f[1] += fast_sin(hero.unk4E4) * d;
                 qcopy(&hero.unk4D0, &edge);
                 hero.unk4D0.f[0] += fast_cos(hero.unk4E4) * edge_offset;
-                wall_yaw = fast_sin(hero.unk4E4) * edge_offset;
+                hero.unk4D0.f[1] += fast_sin(hero.unk4E4) * edge_offset;
                 hero.unk4E8 = 1;
-                hero.unk4D0.f[1] = wall_yaw + hero.unk4D0.f[1];
-                wall_yaw = -1.43f;
-                hero.unk4D0.f[2] += wall_yaw;
+                hero.unk4D0.f[2] += grab_drop;
                 return;
             }
             d += inc;
         } while (d < limit);
     }
 }
-#endif
 extern CollisionHit coll_hit __asm__("D_L01_001742C0") __attribute__((section(".data")));
 /* line query from -> to; fills the collision hit record, nonzero on a hit */
 extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
