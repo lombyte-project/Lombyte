@@ -420,12 +420,11 @@ s32 FUN_L00_002382a0(char *rec) {
                      (s32)(D_L00_0015F78C * fast_cos(angle) * D_L00_0015F7C4);
             icon_y = y + D_L00_0015F724 +
                      (s32)(D_L00_0015F78C * fast_sin(angle));
-            entry = D_L00_0015FAC0_c[D_L00_0015F72C];
-            if (*(s32 *)(rec + 0x74) == i && ((Ent *)(marker_offset + (char *)entry))->f0 != 0)
+            if (*(s32 *)(rec + 0x74) == i &&
+                ((Ent *)(marker_offset + (char *)D_L00_0015FAC0_c[D_L00_0015F72C]))->f0 != 0)
                 draw_hud_sprite(get_icon_frame(0xe99c, 0), icon_x - 0x13,
                                 icon_y - 0x13, 0x26, 0x26, marker_alpha);
-            entry = D_L00_0015FAC0_c[D_L00_0015F72C];
-            if (((Ent *)(normal_offset + (char *)entry))->f0 != 0) {
+            if (((Ent *)(normal_offset + (char *)D_L00_0015FAC0_c[D_L00_0015F72C]))->f0 != 0) {
                 s32 icon_alpha;
                 if (i != *(s32 *)(rec + 0x74))
                     icon_alpha = truncate_float_to_s32((f32)alpha * D_L00_0015F7C0);
@@ -479,7 +478,8 @@ s32 FUN_L00_002382a0(char *rec) {
                 suffix = text + 2;
                 prefix_length = 2;
             } else {
-                while (++j < text_length) {
+                while (j + 1 < text_length) {
+                    j++;
                     suffix++;
                     if (*(const u8 *)suffix == '-') {
                         prefix_length = j + 2;
@@ -498,7 +498,8 @@ s32 FUN_L00_002382a0(char *rec) {
                     suffix = text + 2;
                     prefix_length = 1;
                 } else {
-                    while (++j < text_length) {
+                    while (j + 1 < text_length) {
+                        j++;
                         suffix++;
                         if (*(const u8 *)suffix == ' ') {
                             prefix_length = j + 1;
