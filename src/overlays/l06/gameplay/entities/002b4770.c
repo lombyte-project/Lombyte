@@ -2413,9 +2413,6 @@ void FUN_L06_002fbc88(struct Moby *m) {
     add_vector_xyz(&m->pos, &m->pos, &step);
     FUN_L00_00261d78(1.0f, v->ground, &m->pos, &m->pos);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002fbfb0.s", FUN_L06_002fbfb0);
-#else
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L01_0026e0e0(int, int);
@@ -2551,8 +2548,8 @@ void FUN_L06_002fbfb0(char *moby) {
         goto phase_join;
         phase_two:
         target_a = D_L06_00161F24;
-        target_rot_a = D_L06_00161F2C;
         target_b = D_L06_00161F28;
+        target_rot_a = D_L06_00161F2C;
         target_rot_b = D_L06_00161F30;
         acceleration = D_L06_00161F34;
         max_speed = D_L06_00161F38;
@@ -2563,11 +2560,10 @@ void FUN_L06_002fbfb0(char *moby) {
         next_phase = 1;
         next_timer = func_001FA898_r(random_float_between_alt((float)D_L06_00161F4C, (float)D_L06_00161F50));
         phase_join:
-        target_delta = target_rot_b;
         FUN_00213f38(&phase_a, &((float *)data)[2], target_a, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
         FUN_00213f38(&phase_b, &((float *)data)[0x11], target_b, acceleration * frame_time_sq, max_speed * frame_time_sq, damping * frame_time);
         FUN_00213f38((float *)(moby + 0x44), &((float *)data)[3], target_rot_a, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
-        FUN_00213f38((float *)(*(char **)(data + 0x40) + 0x44), &((float *)data)[0x12], target_delta, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
+        FUN_00213f38((float *)(*(char **)(data + 0x40) + 0x44), &((float *)data)[0x12], target_rot_b, rotation_acceleration * DEG_TO_RAD * frame_time_sq, rotation_speed * DEG_TO_RAD * frame_time_sq, rotation_damping * DEG_TO_RAD * frame_time);
         FUN_001f9bf8(v, data + 0x30, phase_a);
         FUN_001f9a10(moby + 0x10, data + 0x10, v);
         FUN_001f9bf8(v, data + 0x30, -phase_b);
@@ -2597,7 +2593,6 @@ void FUN_L06_002fbfb0(char *moby) {
         return;
     }
 }
-#endif /* NON_MATCHING */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FDA70), where it is exact; names translated to the US level program. */
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2FDA70;
