@@ -445,7 +445,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
     struct Moby *other;
     struct Moby *fragment;
     s32 collision;
-    s32 fragment_count;
+
     struct {
         f32 position[4];
         f32 velocity[4];
@@ -530,7 +530,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
             angle = FUN_001f9e90(other->pos.x, other->pos.y);
             FUN_0026b368(angle, moby, vel, 9, 1, 0);
             vel = scratch.velocity;
-            for (fragment_count = 9; fragment_count >= 0; fragment_count--) {
+            for (collision = 9; collision >= 0; collision--) {
                 qcopy(scratch.position, &moby->pos);
                 scratch.position[2] += 2.5f;
                 scratch.position[0] += FUN_00266908(0.0f, 0.2f);
