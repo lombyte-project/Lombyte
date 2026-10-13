@@ -2571,12 +2571,12 @@ typedef struct {
 extern float D_L18_001677C0_flare[] __asm__("D_L18_001677C0");
 extern L18FlareUV D_L18_001D9B50_flare[] __asm__("D_L18_001D9B50");
 extern L18FlareVector D_L18_001D9B70_flare[] __asm__("D_L18_001D9B70");
-extern int D_L18_00161EE4_flare __asm__("D_L18_00161EE4") __attribute__((sda));
-extern int D_L18_00161EE8_flare __asm__("D_L18_00161EE8") __attribute__((sda));
-extern int D_L18_00161EEC_flare __asm__("D_L18_00161EEC") __attribute__((sda));
-extern int D_L18_00161EF0_flare __asm__("D_L18_00161EF0") __attribute__((sda));
-extern int D_L18_00161EF8_flare[] __asm__("D_L18_00161EF8") __attribute__((sda));
-extern int D_L18_00161F08_flare[] __asm__("D_L18_00161F08") __attribute__((sda));
+extern int D_L18_00161EE4_flare __asm__("D_L18_00161EE4") __attribute__((section(".sdata")));
+extern int D_L18_00161EE8_flare __asm__("D_L18_00161EE8") __attribute__((section(".sdata")));
+extern int D_L18_00161EEC_flare __asm__("D_L18_00161EEC") __attribute__((section(".sdata")));
+extern int D_L18_00161EF0_flare __asm__("D_L18_00161EF0") __attribute__((section(".sdata")));
+extern int D_L18_00161EF8_flare[4] __asm__("D_L18_00161EF8") __attribute__((section(".sdata")));
+extern int D_L18_00161F08_flare[4] __asm__("D_L18_00161F08") __attribute__((section(".sdata")));
 extern void clear_flare_vector(void *) __asm__("FUN_001f99f8");
 extern float flare_length(float, float) __asm__("FUN_001f9e90");
 extern float flare_dot(void *, void *) __asm__("FUN_001f9b80");
@@ -2636,8 +2636,7 @@ void FUN_L18_002ea1f8(struct Moby *moby) {
                 packet[i].color[j] = D_L18_00161EF8_flare[i];
             }
             *(OvlQuad *)&packet[i].corner[j] = *(OvlQuad *)&D_L18_001D9B70_flare[i * 4 + j];
-            j++;
-        } while (j < 4);
+        } while (++j < 4);
         i++;
     } while (i < 4);
     draw_flare_packet(&packet[0], &basis[0][0], 0);
