@@ -541,18 +541,20 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
     else if (D_L00_0015FFBC_2d09b8 >= 151) { count = 2; trail_count = 2; }
     else if (D_L00_0015FFBC_2d09b8 >= 101) { count = 2; trail_count = 1; }
     else { trail_count = 0; if (D_L00_0015FFBC_2d09b8 >= 51) count = 1; else count = 1; }
-    angle = FUN_001ff8b0_2d09b8(D_L00_00166DC0_2d09b8.f[0] - m->pos.x,
-                                   D_L00_00166DC0_2d09b8.f[1] - m->pos.y);
+    speed = D_L00_00166DC0_2d09b8.f[1] - m->pos.y;
+    angle = D_L00_00166DC0_2d09b8.f[0] - m->pos.x;
+    angle = FUN_001ff8b0_2d09b8(angle, speed);
     angle = FUN_00200130_2d09b8(angle, m->v40.z);
-    choice = FUN_00200250_2d09b8((angle + 3.1415925f) / 1.57f);
+    angle += 3.1415925f;
+    choice = FUN_00200250_2d09b8(angle / 1.57f);
     angle = FUN_00200178_2d09b8((f32)choice * 1.57f);
     FUN_001ff260_2d09b8(&rotation);
     rotation.f[2] = angle;
     FUN_001ffa50_2d09b8(&c, &rotation);
-    for (i = 0; i < count; i++) {
-        FUN_001ff6d0_2d09b8(&d, &D_L00_001DE6F0_2d09b8[i], &c);
+    for (i = count; i != 0; --i) {
+        FUN_001ff6d0_2d09b8(&d, &D_L00_001DE6F0_2d09b8[count - i], &c);
         FUN_001ff278_2d09b8(&d, &d, &m->pos);
-        qcopy(&e, &D_L00_001DE750_2d09b8[i]);
+        qcopy(&e, &D_L00_001DE750_2d09b8[count - i]);
         e.f[2] = FUN_002000e8_2d09b8(e.f[2], rotation.f[2]);
         FUN_001ff2a8_2d09b8(&a, &d, &m->pos);
         a.f[2] = 0.0f;
@@ -562,7 +564,7 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
         particle = FUN_00257b50_2d09b8(2);
         spawned = FUN_002af8b0_2d09b8(1.0f, 1.0f, m, &a, &d, &e, kind, particle);
         if (spawned) {
-            qcopy((u8 *)spawned + 0x40, &D_L00_001DE750_2d09b8[i]);
+            qcopy((u8 *)spawned + 0x40, &D_L00_001DE750_2d09b8[count - i]);
             *(f32 *)((u8 *)spawned + 0x48) = FUN_002000e8_2d09b8(*(f32 *)((u8 *)spawned + 0x48), rotation.f[2]);
             FUN_00250df8_2d09b8(spawned);
         }
@@ -596,12 +598,12 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
         FUN_001ff2a8_2d09b8(&d, &D_L00_00166DC0_2d09b8, &m->pos);
         FUN_001ff260_2d09b8(&e);
         distance = FUN_001ff3d8_2d09b8(&d);
-        count = 10;
-        if (distance < 8.0f) count = FUN_00200250_2d09b8(distance) + 2;
+        choice = 10;
+        if (distance < 8.0f) choice = FUN_00200250_2d09b8(distance) + 2;
         height = 0.0f;
         if (distance < 7.0f) height = 7.0f - distance;
-        if (close && count > 6) count = 6;
-        for (i = 0; i < count; i++) {
+        if (close && choice > 6) choice = 6;
+        for (i = 0; i < choice; i++) {
             speed = FUN_00257be8_2d09b8(8.0f, 10.0f);
             __builtin_memcpy(colors, D_L00_001E9E80_2d09b8, sizeof(colors));
             __builtin_memcpy(other_colors, D_L00_001E9E98_2d09b8, sizeof(other_colors));
