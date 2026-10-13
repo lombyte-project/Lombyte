@@ -1153,7 +1153,8 @@ pitch_ready:
             r[0x3C]++;
             n = D_0015EEA4_2b49a8;
         }
-        if (r[0x3D] < FUN_001f96f8_2b49a8(n) / 600) {
+        n = FUN_001f96f8_2b49a8(n) / 600;
+        if (r[0x3D] < n) {
             r[0x3D] = FUN_001f96f8_2b49a8(D_0015EEA4_2b49a8) / 600;
             index = D_0015ED84_2b49a8;
         } else index = D_0015ED84_2b49a8;
