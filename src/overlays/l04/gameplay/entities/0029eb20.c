@@ -260,6 +260,7 @@ initialize:
     data->child_count = 0;
     for (i = 0; i < data->count; i++) {
         moby_pos = &moby->pos;
+        moby = (struct Moby *)((char *)moby_pos - 0x10);
         data->children[i] = 0;
         child = spawn_moby_29ecf8(0x55);
         if (child != 0) {
@@ -285,11 +286,11 @@ initialize:
             *(volatile s32 *)((char *)part + 0x58) = 0;
             *(volatile f32 *)((char *)part + 0x70) = 1.694f;
             *(volatile f32 *)((char *)part + 0x74) = 1.694f;
-            *(volatile f32 *)((char *)part + 0x48) = 1.056f;
+            *(f32 *)((char *)part + 0x48) = 1.056f;
             *(volatile s16 *)((char *)part + 0x5c) = -1;
-            *(volatile f32 *)((char *)part + 0x40) = 0.003f;
-            *(volatile s16 *)((char *)part + 0x5e) = 2;
-            *(volatile s16 *)((char *)part + 0x60) = 0x55;
+            *(f32 *)((char *)part + 0x40) = 0.003f;
+            *(s16 *)((char *)part + 0x5e) = 2;
+            *(s16 *)((char *)part + 0x60) = 0x55;
             *(f32 *)((char *)part + 0x90) = 1.0f;
             *(s16 *)((char *)part + 0x62) = 0x1ee;
             *(f32 *)((char *)part + 0x94) = 5.0f;
