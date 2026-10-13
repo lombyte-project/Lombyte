@@ -456,7 +456,7 @@ segments:
           - [0x21658, c, storage/cd/handle_cd_read_callback]
           - [0x216f8, textbin, text_gap_00120778_after_fun_001206d8_prefix_00120778]
           - [0x21708, c, sdk/callbacks/process_native_cd_read_completion]
-          - [0x217a8, c, assembly/sdk/library/cmd_sem_init]
+          - [0x217a8, c, sdk/library/cmd_sem_init]
           - [0x2183c, textbin, text_gap_00120828_post_sdk_worker]
           - [0x21840, c, sdk/library/cdvd_exit]
           - [0x218d4, textbin, text_gap_001208c0_post_sdk_worker_prefix_00120954]
