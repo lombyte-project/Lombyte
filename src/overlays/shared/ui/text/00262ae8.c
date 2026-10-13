@@ -102,8 +102,8 @@ void FUN_L05_00262b58(HudCounter *e) {
     dst = &D_L05_0015FAEC;
     do { *dst-- = 0; } while (--i >= 0);
     counter[2] = 1;
-    counter[0] = 0;
     counter[1] = D_L05_0015F87C;
+    counter[0] = 0;
     break;
     case 1:
         if (counter[0] < 10) counter[0]++;
@@ -112,7 +112,7 @@ void FUN_L05_00262b58(HudCounter *e) {
         i = 3;
         src = D_0013FA30;
         dst = D_L05_0015FAE0;
-        for (i = 0; i < 4; i++) dst[i] = src[i];
+        do { *dst++ = *src++; } while (--i >= 0);
         if (D_L05_0015FAD4 < D_0013FA5C) {
             D_L05_0015FAD4 = D_0013FA5C;
             counter[1] = D_L05_0015F87C;
