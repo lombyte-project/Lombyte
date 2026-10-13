@@ -195,11 +195,11 @@ void FUN_L00_0029ff58(void) {
         D_L00_00161184 = D_L00_00161184 - 1.0f;
     }
     q.extra[0] = 0;
-    q.extra[2] = 1;
     q.extra[3] = 0x4000000044L;
+    indices = D_L00_001CA480[0];
+    q.extra[2] = 1;
     q.extra[1] = FUN_001f44b8_29ff58(0x18);
     i = 0;
-    indices = D_L00_001CA480[0];
     while (1) {
         offset = i * 16;
         i++;
