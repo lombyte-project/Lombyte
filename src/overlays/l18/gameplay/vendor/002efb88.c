@@ -6,6 +6,7 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "qcopy.h"
+#include "rnc/rendering/geometry_quad.h"
 
 
 #define NOT_SDA
@@ -266,9 +267,6 @@ void FUN_L18_002f02e8(char *moby, void *out) {
     FUN_001f9a10(out, v, data + 0x120);
     *(int *)(data + 0x160) = FUN_001f96f8(180);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002f0390.s", FUN_L18_002f0390);
-#else
 extern int D_L18_00162238 __attribute__((sda));
 extern int D_L18_0016223C __attribute__((sda));
 extern int D_L18_00162240 __attribute__((sda));
@@ -278,6 +276,7 @@ extern int D_L18_0016224C __attribute__((sda));
 extern int D_L18_00162250 __attribute__((sda));
 extern int D_L18_00162254 __attribute__((sda));
 extern int D_L18_0015F5CC;
+extern float D_L18_001DA2F0[4][2];
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float convert_integer_to_float_group_quad(int) __asm__("FUN_001fa6c0");
 extern int interpolate_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -285,63 +284,66 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern void clear_memory(void *, int, int) __asm__("FUN_001153fc");
 
+/* Draw callback: builds a 16-segment glow trail and draws it behind every class 0x54B moby in the group. */
 void FUN_L18_002f0390(struct Moby *moby) {
-    char quads[16][0x90];
+    struct GeometryQuad quads[16];
     float extra[8];
-    struct Moby * volatile saved_moby = moby;
     short *p;
-    int i, j, k;
-    if (D_L18_00162238 == 0) {
+    struct Moby *m;
+    char *data;
+    float offset;
+    float t;
+    int i;
+    int j;
+    int k;
+    int n;
+    int base;
+
+    if (D_L18_00162238 != 0) {
+        return;
+    }
     for (i = 0; i < 16; i++) {
-        char *quad = quads[i];
-        float offset;
-        *(long *)(quad + 0x70) = 0;
-        *(long *)(quad + 0x78) = get_effect_texture(19);
-        *(long *)(quad + 0x80) = 0xff9000000260LL;
-        *(long *)(quad + 0x88) = ((long)D_L18_00162240 | ((long)D_L18_00162244 << 2) |
-                                   ((long)D_L18_00162248 << 4) | ((long)D_L18_0016224C << 6) |
-                                   0x8000000000LL);
+        quads[i].texture = get_effect_texture(19);
+        quads[i].reserved.value = 0;
+        quads[i].texture_state = 0xFF9000000260ULL;
+        quads[i].primitive = (u64)D_L18_00162240 | ((u64)D_L18_00162244 << 2) | ((u64)D_L18_00162248 << 4) |
+                             ((u64)D_L18_0016224C << 6) | 0x8000000000ULL;
         offset = convert_integer_to_float_group_quad((D_L18_0015F5CC + 3) & 3) * 0.0625f;
-        { float *src = (float *)0x1da2f0;
-        char *dst = quad + 0x50;
-        for (j = 0; j < 4; j++, src += 2, dst += 8) {
-            float t;
-            *(float *)dst = src[0];
-            *(float *)(dst + 4) = src[1];
-            t = convert_integer_to_float_group_quad(i - ((j >> 1) - 1)) * 0.25f + offset;
-            if (t > 1.0f) t = 1.0f;
-            else if (t < 0.0f) t = 0.0f;
-            *(int *)(quad + 0x40 + j * 4) = interpolate_color(D_L18_00162250, D_L18_00162254, t);
-        } }
+        for (j = 0; j < 4; j++) {
+            quads[i].texture_coordinates[j][0] = D_L18_001DA2F0[j][0];
+            quads[i].texture_coordinates[j][1] = D_L18_001DA2F0[j][1];
+            t = convert_integer_to_float_group_quad(i + 1 - (j >> 1)) * 0.25f + offset;
+            if (t > 1.0f) {
+                t = 1.0f;
+            } else if (t < 0.0f) {
+                t = 0.0f;
+            }
+            quads[i].colors[j] = interpolate_color(D_L18_00162250, D_L18_00162254, t);
+        }
     }
     clear_memory(extra, 0, 0x20);
     extra[2] = 0.15f;
     extra[6] = -0.15f;
-    p = D_L18_001AC240[saved_moby->group];
+    p = D_L18_001AC240[moby->group];
     do {
-        unsigned char *m;
-        char *data;
-        unsigned int index = *(unsigned short *)p;
-        while (1) {
-            m = D_L18_0015FFD8 + ((index & 0x7fff) << 8);
-            if (*(short *)(m + 0xa6) == 0x54b) break;
-            index = *(volatile unsigned short *)p;
+    again:
+        m = (struct Moby *)(((*p & 0x7FFF) << 8) + (int)D_L18_0015FFD8);
+        if (m->oclass != 0x54B) {
+            goto again;
         }
-        data = *(char **)(m + 0x78);
-        for (i = 0; i < *(short *)(data + 0x164); i++) {
-            int base = (*(short *)(data + 0x166) - i + 15) & 15;
+        data = (char *)m->pvars;
+        for (n = 0; n < *(short *)(data + 0x164); n++) {
+            base = (*(short *)(data + 0x166) - n + 15) & 15;
             if (D_L18_0016223C == 0) {
                 for (k = 0; k < 4; k++) {
-                    add_vector_xyz(quads[i] + k * 16, data + 0x10 + (((base + (k >> 1)) & 15) << 4),
+                    add_vector_xyz(&quads[n].positions[k], data + 0x10 + (((base + (k >> 1)) & 15) << 4),
                                    extra + ((k & 1) << 2));
                 }
-                draw_geometry_quad(quads[i], 0, 0);
+                draw_geometry_quad(&quads[n], 0, 0);
             }
         }
     } while (*p++ >= 0);
-    }
 }
-#endif
 /* Per-frame callback: swings every class 0x54B moby in the group around its base point by its state. */
 extern int D_L18_00162238_c7 __asm__("D_L18_00162238") __attribute__((sda));
 extern float D_L18_00162258_c7 __asm__("D_L18_00162258") __attribute__((sda));
