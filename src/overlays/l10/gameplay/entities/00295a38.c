@@ -481,7 +481,8 @@ void FUN_L10_002be858(unsigned char *moby) {
             normalize_vector_xyz(position, position, random_float_between_alt(0.0f, D_0015ED6C));
             position[2] = random_float_between_alt(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = FUN_001f96f8(random_int_between(15, 30));
-            color = (blue << 16) | ((green << 8) | 0x7f000000) | red;
+            /* Channels are 64..255, so alpha and shifted green have disjoint bits. */
+            color = (blue << 16) | ((green << 8) + 0x7f000000) | red;
             size_scaled = size * 0.07f;
             size *= 0.7f;
             spin = random_integer_below(2) ? 1 : -1;
