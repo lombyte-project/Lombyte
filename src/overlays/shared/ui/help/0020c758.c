@@ -2068,14 +2068,14 @@ void FUN_L00_00210748(void) {
                 if (i == 0) {
                     int p = 0;
                     int end = 3;
-                    struct HeroEase *e = &hero_state->unk18F0[0];
+                    struct HeroEase *e;
                     do {
                         if (hero_state->unk18F0[p].unkA0 != -1) {
                             hero_state->unk18F0[p].kind = 5;
+                            e = &hero_state->unk18F0[p];
                             FUN_L00_00205168(e);
                         }
                         p++;
-                        e++;
                     } while (p < end);
                 }
                 if ((moby->anim_flags & 2) && moby->prev_seq == 0)
