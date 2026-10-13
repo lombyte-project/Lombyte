@@ -167,6 +167,8 @@ extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_001f7d30(void *, int, int);
 extern char D_L06_00167540[];
 extern char D_L06_00167400[];
+typedef struct { char pad[0x140]; float position[4]; } L06ReferencePosition;
+extern L06ReferencePosition referencePosition __asm__("D_L06_00167400");
 extern float D_L06_001D3290[][4] __attribute__((section(".data")));
 extern short D_L06_001D3620[][8] __attribute__((section(".data")));
 extern float D_L06_001D38C0[][2] __attribute__((section(".data")));
@@ -212,8 +214,8 @@ void FUN_L06_002d8738(char *moby) {
     pos[2] = *(float *)(moby + 0x18);
     pos[3] = 1.0f;
     near = 0;
-    if (FUN_001f99c0(*(float *)(D_L06_00167400 + 0x140) - pos[0]) < 16.0f &&
-        FUN_001f99c0(*(float *)(D_L06_00167400 + 0x144) - *(float *)(moby + 0x14)) < 16.0f) {
+    if (FUN_001f99c0(referencePosition.position[0] - pos[0]) < 16.0f &&
+        FUN_001f99c0(referencePosition.position[1] - *(float *)(moby + 0x14)) < 16.0f) {
         near = 1;
     }
     if (near) {
@@ -261,15 +263,15 @@ void FUN_L06_002d8738(char *moby) {
         FUN_001f9bf8(direction, direction, 1.0f);
         FUN_001f9cf8(facePos, D_L06_001D3A90[i - 1], matrix);
         if (!(0.0f < FUN_001f9ab0(direction, facePos))) {
-            for (j = 0; j < 4; j++) {
-                short *indices = D_L06_001D3620[i - 1];
-                short vertex = indices[j * 2];
+            short *indices = D_L06_001D3620[i - 1];
+            for (j = 0; j < 4; j++, indices += 2) {
+                short vertex = indices[0];
                 qcopy(quad.corner[j], D_L06_001D4530[vertex]);
                 if (near) {
                     quad.uv[j][0] = D_L06_001D4360[vertex][0];
                     quad.uv[j][1] = D_L06_001D4360[vertex][1];
                 } else {
-                    short uv = indices[j * 2 + 1];
+                    short uv = indices[1];
                     quad.uv[j][0] = D_L06_001D38C0[uv][0];
                     quad.uv[j][1] = D_L06_001D38C0[uv][1];
                 }
