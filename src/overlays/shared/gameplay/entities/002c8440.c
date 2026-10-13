@@ -155,7 +155,189 @@ ret0:
     /* a second return 0 block, as in retail */
     return 0;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c89e8.s", FUN_L00_002c89e8);
+#else
+extern u8 D_0013E534 __attribute__((section(".data")));
+extern int D_L00_0015FFE4;
+extern f32 vector_length_xyz_2cb418(void *) __asm__("FUN_001f9af0");
+extern f32 FUN_001fa6c0(int);
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern s32 tick_timer_2cb418(void *) __asm__("FUN_001f9770");
+extern void reflect_vector_2cb418(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void FUN_L00_001ff290_2c89e8(void *, void *, void *) __asm__("FUN_L00_001ff290");
+extern s32 FUN_001f0d60_2c89e8(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
+extern void FUN_L00_0026ed28(struct Moby *);
+extern void FUN_L00_002c8078(struct Moby *);
+extern void FUN_L00_002bfe08(struct Moby *, void *, void *);
+extern void FUN_L00_00260400(struct Moby *, s32, void *, void *, void *, void *);
+extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
+
+/* Six checked switch entries: state 5 shares the default state reset. */
+void FUN_L00_002c89e8(struct Moby *m)
+{
+    Vec4 d, e, a, q;
+    ThrowVars_2c8440 *v;
+    struct Moby *p;
+    s32 count;
+    s32 timer;
+
+    if (!m) return;
+    v = (ThrowVars_2c8440 *)m->pvars;
+    if (!v) return;
+    if (m->pos.x < 2.0f || 1021.0f < m->pos.x ||
+        m->pos.y < 2.0f || 1021.0f < m->pos.y ||
+        m->pos.z < 2.0f || 1021.0f < m->pos.z) goto remove;
+    if (hero.unk20A5 && m->state < 2)
+        m->flags |= 0x41;
+    else
+        m->flags &= 0xffbe;
+    if (v->holder->oclass == 0xe5 && v->unk46 == 0 && vector_length_xyz_2cb418(v) > 0.0f) {
+        if (!hero.ground_moby || !FUN_L00_002603d0_2c8440((int)hero.ground_moby))
+            FUN_L00_002c8440(v, m, 1);
+        else if (!FUN_L00_002c8440(v, m, 0))
+            FUN_L00_002c8440(v, m, 2);
+    }
+    switch (m->state) {
+    case 0:
+        m->state = 1;
+        *(s32 *)v->pad_34 = scale_game_frames_2c8440(4);
+        *(s32 *)((u8 *)v + 0x3c) = 0;
+        v->timer = 0;
+        break;
+    case 1: {
+        v->timer = 0;
+        {
+            f32 f = m->pclass->scale;
+            if (m->scale < f * 0.25f)
+                m->scale = m->scale + f * (frame_scale * 0.05f);
+        }
+        if (tick_countdown_2c8440((s32 *)v->pad_34)) {
+            *(s32 *)v->pad_34 = scale_game_frames_2c8440(4);
+            if (!hero.unk20A5) FUN_L00_0026ed28(m);
+        }
+        if (!hero.vehicle_mode && v->holder && (v->holder->state & 0xf0) != 0xf0 &&
+            hero.items[0].moby && hero.items[0].moby->oclass == 0xe5) return;
+        goto remove;
+    }
+    case 2: {
+        f32 f, g, h;
+        f32 half = 0.5f;
+        f = FUN_001fa6c0(D_0013E534) + 1.0f;
+        {
+            f32 g = m->pclass->scale;
+            if (m->scale < g * half * f)
+                m->scale = m->scale + g * (frame_scale * 0.05f) * f;
+        }
+        if (tick_countdown_2c8440((s32 *)v->pad_34)) {
+            *(s32 *)v->pad_34 = scale_game_frames_2c8440(4);
+            FUN_L00_0026ed28(m);
+            g = D_0015ED70_2c8440;
+        } else {
+            g = D_0015ED70_2c8440;
+        }
+        v->vel.f[2] -= g * 9.0f;
+        add_vector_xyz_2c8440(&d, &m->pos, v);
+        FUN_L00_001ff290_2c89e8(&q, &m->pos, &hero.motion.platform_carry);
+        qcopy_nc(&e, &m->pos);
+        h = frame_scale * 0.15f * m->scale;
+        e.f[2] -= h / m->pclass->scale;
+        qcopy_nc(&a, &d);
+        a.f[2] -= h / m->pclass->scale;
+        qcopy_nc(&q, &d);
+        q.f[2] += f * 0.2f;
+        if (FUN_001f0d60_2c89e8(f * 0.3f, &q, 4, hero.moby)) {
+            qcopy_nc(&m->pos, (u8 *)&coll_hit_2c8440 + 0x30);
+            m->pos.z -= f * 0.2f;
+        } else {
+            if (!collision_line_2c8440(&e, &a, 0, hero.moby, 0)) {
+                qcopy_nc(&m->pos, &d);
+                return;
+            }
+            qcopy_nc(&m->pos, &coll_hit_2c8440.point);
+            m->pos.z += (frame_scale * 0.15f * m->scale) / m->pclass->scale;
+        }
+        h = 0.01f;
+        reflect_vector_2cb418(v, v, &coll_hit_normal_2c8440);
+        scale_vector_xyz_2c8440(v, v, half);
+        g = vector_length_xyz_2cb418(v);
+        if (g < frame_scale * h) goto settle;
+        if (hero.ground_moby) {
+            if (FUN_L00_002603d0_2c8440((int)hero.ground_moby)) {
+                g = vector_length_xyz_2cb418(v);
+                f = vector_length_xyz_2cb418(&hero.motion.displacement);
+                if (g < frame_scale * h + f) {
+settle:
+                    timer = (u16)v->timer + 1;
+                    v->timer = timer;
+                    if (!coll_hit_2c8440.moby || coll_hit_2c8440.unk1C > 0 ||
+                        scale_game_frames_2c8440(240) < (s16)timer) {
+                        m->state = 3;
+                        v->timer = 0;
+                    }
+                }
+            }
+            if (hero.ground_moby && FUN_L00_002603d0_2c8440((int)hero.ground_moby))
+                add_vector_xyz_2c8440(v, v, &hero.motion.displacement);
+        }
+        add_vector_xyz_2c8440(&m->pos, &m->pos, v);
+        FUN_L00_002c8078(m);
+        break;
+    }
+    case 3: {
+        f32 f;
+        f = probe_ground_height(&m->pos, 0, 0.5f);
+        if (f != 0.0f && coll_hit_2c8440.moby)
+            FUN_L00_00260400(m, coll_hit_2c8440.moby, &m->pos, &m->rot, &m->pos, &m->rot);
+        if (tick_timer_2cb418(&v->timer)) {
+            count = 0;
+            for (p = (struct Moby *)D_L00_0015FFE4; p; p = p->next)
+                if (p->oclass == 0xba && (p->state & 0xf0) != 0xf0) count++;
+            if (count >= 8) {
+                v->timer = scale_game_frames_2c8440(15);
+                goto spawn_done;
+            }
+            {
+                e.f[0] = FUN_001f9dc8_2c8440((f32)*(s32 *)((u8 *)v + 0x3c) * 6.2831855f * 0.25f);
+                e.f[0] = frame_scale * 0.05f * e.f[0];
+                e.f[1] = FUN_001f9de0_2c8440((f32)*(s32 *)((u8 *)v + 0x3c) * 6.2831855f * 0.25f);
+                e.f[2] = frame_scale * 0.02f;
+                e.f[1] = frame_scale * 0.05f * e.f[1];
+                if (hero.ground_moby && FUN_L00_002603d0_2c8440((int)hero.ground_moby))
+                    add_vector_xyz_2c8440(&e, &e, &hero.motion.displacement);
+                add_vector_xyz_2c8440(&d, &e, &m->pos);
+                FUN_L00_002bfe08(v->holder, &d, &e);
+                v->timer = scale_game_frames_2c8440(8);
+                count = *(s32 *)((u8 *)v + 0x3c) + 1;
+                *(s32 *)((u8 *)v + 0x3c) = count;
+                if (count > 3) m->state = 4;
+            }
+        }
+spawn_done:
+        if (*(s32 *)((u8 *)v + 0x3c) < 2 && tick_countdown_2c8440((s32 *)v->pad_34)) {
+            *(s32 *)v->pad_34 = scale_game_frames_2c8440(4);
+            FUN_L00_0026ed28(m);
+        }
+        break;
+    }
+    case 4: {
+        f32 f;
+        m->alpha -= 4;
+        m->scale *= 0.92f;
+        f = probe_ground_height(&m->pos, 0, 0.5f);
+        if (f != 0.0f && coll_hit_2c8440.moby)
+            FUN_L00_00260400(m, coll_hit_2c8440.moby, &m->pos, &m->rot, &m->pos, &m->rot);
+        if (m->alpha) return;
+remove:
+        mark_moby_for_removal(m);
+        break;
+    }
+    case 5:
+    default:
+        m->state = 0;
+    }
+}
+#endif
 /* 0x002c92d8, 112 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
