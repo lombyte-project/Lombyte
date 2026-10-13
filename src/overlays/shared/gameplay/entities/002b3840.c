@@ -280,6 +280,7 @@ extern int D_00151910_87a8 __asm__("D_00151910") __attribute__((sda));
 void FUN_L05_002f87a8(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     float position[4], delta[4], effect_position[4], offset[4], second_position[4];
+    float *delta_ptr = delta;
     float angle, distance_scale, delta_length;
     int state = (u8)moby[0x20];
 
@@ -312,18 +313,18 @@ void FUN_L05_002f87a8(unsigned char *moby) {
             moby[0x20] = 0;
         }
     }
-    subtract_vector_xyz_87a8(delta, moby + 0x10, data);
+    subtract_vector_xyz_87a8(delta_ptr, moby + 0x10, data);
     qcopy(data, moby + 0x10);
-    delta_length = vector_length_xyz_87a8(delta);
+    delta_length = vector_length_xyz_87a8(delta_ptr);
     if ((unsigned char)moby[0xbc] != 2 && delta_length < 2.0f) {
         get_moby_position_87a8(moby, D_0014F5CC_87a8 & 1, position);
         angle = random_angle_radians_87a8();
         distance_scale = frame_time * 0.25f;
         normalize_vector_xyz_87a8(effect_position, moby + 0xe0, distance_scale * fast_cos_87a8(angle));
         normalize_vector_xyz_87a8(offset, moby + 0xd0, distance_scale * fast_sin_87a8(angle));
-        add_vector_xyz_87a8(effect_position, effect_position, delta);
+        add_vector_xyz_87a8(effect_position, effect_position, delta_ptr);
         add_vector_xyz_87a8(effect_position, effect_position, offset);
-        qcopy(effect_position, delta);
+        qcopy(effect_position, delta_ptr);
         effect_position[3] = (float)D_00151928_87a8;
         if ((unsigned char)moby[0xbc] == 0) {
             int size = random_int_between_87a8(scale_game_frames_87a8(10), scale_game_frames_87a8(13));
@@ -331,7 +332,7 @@ void FUN_L05_002f87a8(unsigned char *moby) {
             moby[0xbc] = 0;
             return;
         }
-        scale_vector_xyz_87a8(0.920f, second_position, delta);
+        scale_vector_xyz_87a8(0.920f, second_position, delta_ptr);
         {
             int size = random_int_between_87a8(scale_game_frames_87a8(15), scale_game_frames_87a8(18));
             spawn_effect_87a8(position, second_position, 0x5032f0d2, D_00151910_87a8, size, 30, 20, 1);
