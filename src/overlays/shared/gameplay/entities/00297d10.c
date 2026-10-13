@@ -267,16 +267,18 @@ void FUN_L06_002d8738(char *moby) {
         FUN_001f9cf8(facePos, D_L06_001D3A90[i - 1], matrix);
         if (!(0.0f < FUN_001f9ab0(direction, facePos))) {
             short *indices = D_L06_001D3620[i - 1];
-            for (j = 0; j < 4; j++, indices += 2) {
+            float (*corner)[4] = quad.corner;
+            float *uvOut = &quad.uv[0][0];
+            for (j = 3; j >= 0; j--, indices += 2, corner++, uvOut += 2) {
                 short vertex = indices[0];
-                qcopy(quad.corner[j], D_L06_001D4530[vertex]);
+                qcopy(corner, D_L06_001D4530[vertex]);
                 if (near) {
-                    quad.uv[j][0] = D_L06_001D4360[vertex][0];
-                    quad.uv[j][1] = D_L06_001D4360[vertex][1];
+                    uvOut[0] = D_L06_001D4360[vertex][0];
+                    uvOut[1] = D_L06_001D4360[vertex][1];
                 } else {
                     short uv = indices[1];
-                    quad.uv[j][0] = D_L06_001D38C0[uv][0];
-                    quad.uv[j][1] = D_L06_001D38C0[uv][1];
+                    uvOut[0] = D_L06_001D38C0[uv][0];
+                    uvOut[1] = D_L06_001D38C0[uv][1];
                 }
             }
             FUN_001f7d30(&quad, 0, 0);
