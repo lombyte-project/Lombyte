@@ -833,17 +833,19 @@ void FUN_L05_002d7920(char *moby) {
                 for (frame = 0; frame < *(short *)(data + 0x320); frame++) {
                     int i;
                     int vertex_index;
-                    char *vertices = (char *)packet + frame * 0x90;
+                    int packet_offset = frame * 0x90;
                     vertex_index = (*(short *)(data + 0x322) - frame + 15) & 15;
                     for (i = 0; i < 3; i++) {
                         if (D_L05_001613F4 == 0) {
                             int k;
+                            char *vertices;
                             char *vertex_source = data + (i * 0x100 + 0x20);
                             for (k = 0; k < 4; k++) {
-                                transform_glow_vertex_7920(vertices + k * 0x10,
+                                transform_glow_vertex_7920((char *)packet + packet_offset + k * 0x10,
                                                            vertex_source + (((vertex_index + (k >> 1)) & 15) << 4),
                                                            (char *)matrix + (k & 1) * 0x10);
                             }
+                            vertices = (char *)packet + frame * 0x90;
                             draw_geometry_quad_7920(vertices, 0, 0);
                         }
                     }
