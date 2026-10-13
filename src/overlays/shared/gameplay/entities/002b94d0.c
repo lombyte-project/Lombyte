@@ -1930,9 +1930,16 @@ void FUN_L00_002be650(void *o) {
     quad.unk64 = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
-    color = (D_0013E535 ? D_L00_00161764 : D_L00_00161760) & 0xFFFFFF;
+    {
+        int c;
+        if (D_0013E535)
+            c = D_L00_00161764;
+        else
+            c = D_L00_00161760;
+        i = 0;
+        color = c & 0xFFFFFF;
+    }
     vertexTarget = &vertex[0];
-    i = 0;
     do {
         nextIndex = i + 1;
         if (((int *)&D_L00_00161818)[i] != 0) {
