@@ -296,6 +296,7 @@ void FUN_L00_002a5040(u8 *moby) {
     Point_2a5040 basis[4];
     f32 rotation[3];
     f32 matrix[12];
+    s32 i;
     Point_2a5040 *basis0, *basis1, *basis2, *basis3;
     Point_2a5040 orbit_copy[4];
     Point_2a5040 orbit[4];
@@ -308,7 +309,7 @@ void FUN_L00_002a5040(u8 *moby) {
     f32 x, y, z, phase, angle;
     f32 uv0, uv1, uv2, uv3;
     f32 u0, u1, u2, u3;
-    s32 i, index;
+    s32 index;
     f32 zero;
     s32 *indices1, *indices2;
     s32 index1, index2, index3;
@@ -351,13 +352,16 @@ void FUN_L00_002a5040(u8 *moby) {
         quad.corners[1].z = z + basis[1].z;
         quad.corners[0].y = y + basis[0].y * vars->scale;
         quad.corners[2].z = z + basis[2].z;
-        quad.corners[3].z = z + basis[3].z;
+        z = z + basis[3].z;
+        quad.corners[3].z = z;
         quad.corners[1].x = x + basis[1].x * vars->scale;
         quad.corners[1].y = y + basis[1].y * vars->scale;
         quad.corners[2].x = x + basis[2].x * vars->scale;
         quad.corners[2].y = y + basis[2].y * vars->scale;
-        quad.corners[3].x = x + basis[3].x * vars->scale;
-        quad.corners[3].y = y + basis[3].y * vars->scale;
+        x = x + basis[3].x * vars->scale;
+        quad.corners[3].x = x;
+        y = y + basis[3].y * vars->scale;
+        quad.corners[3].y = y;
         index1 = *indices1;
         index2 = *indices2;
         index = indices[0];
