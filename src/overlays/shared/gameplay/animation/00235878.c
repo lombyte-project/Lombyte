@@ -605,7 +605,7 @@ int FUN_L00_00237200(HudElem *e) {
         FUN_0023b4d8(FUN_0023b208(0x7580, 0), other_left, y, width, 0x36, alpha);
         other_left = color;
         FUN_0023b4d8(FUN_0023b208(0x7580, 1), left, y, 0x20, 0x36, alpha);
-        FUN_0023b860(FUN_0023b208(0x7580, 1), left + (width + 0x20), y, 0x20, 0x36, alpha);
+        FUN_0023b860(FUN_0023b208(0x7580, 1), (width + 0x20) + left, y, 0x20, 0x36, alpha);
         FUN_001fb9a8(0x100, text_y, other_left, (const char *)D_L00_0017E530, -1);
         FUN_001fb9a8(0x100, y + 0x1b, other_left, (const char *)&D_L00_0017E530[1] + i, -1);
         level = current_level_index_sda;
