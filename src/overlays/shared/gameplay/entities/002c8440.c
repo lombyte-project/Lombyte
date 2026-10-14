@@ -862,41 +862,46 @@ animate:
                 FUN_L00_002cbf68_2c97e0(m, &offset, &velocity);
         return;
     }
-    if (!result) {
-        subtract_vector_xyz_2c8440(&velocity, &old_pos, &m->pos);
-        f = vector_length_xyz_2cb418(&velocity);
-        if (D_0015ED6C_2c8440 * scale < f)
-            normalize_2c97e0(&velocity, &velocity, D_0015ED6C_2c8440 * scale);
-        add_vector_xyz_2c8440(&old_pos, &m->pos, &velocity);
-        f = FUN_L00_00259710_2c97e0(&old_pos);
-        g = fabs_2c97e0(f - m->pos.z);
+    {
+        f32 f, g;
+        if (!result) {
+            subtract_vector_xyz_2c8440(&velocity, &old_pos, &m->pos);
+            f = vector_length_xyz_2cb418(&velocity);
+            if (D_0015ED6C_2c8440 * scale < f)
+                normalize_2c97e0(&velocity, &velocity, D_0015ED6C_2c8440 * scale);
+            add_vector_xyz_2c8440(&old_pos, &m->pos, &velocity);
+            f = FUN_L00_00259710_2c97e0(&old_pos);
+            g = fabs_2c97e0(f - m->pos.z);
+            f = D_0015ED70_2c8440;
+            if (!(g <= D_0015ED6C_2c8440 * scale)) goto gravity;
+        }
+        qcopy(&m->pos, &old_pos);
         f = D_0015ED70_2c8440;
-        if (!(g <= D_0015ED6C_2c8440 * scale)) goto gravity;
-    }
-    qcopy(&m->pos, &old_pos);
-    f = D_0015ED70_2c8440;
-gravity:
-    *(f32 *)((u8 *)s2 + 0x6c) += f * 9.8f;
-    m->pos.z -= *(f32 *)((u8 *)s2 + 0x6c);
-    f = probe_ground_height(&m->pos, 0, 0.5f);
-    if (m->pos.z < f && f < m->pos.z + scale * 0.25f) {
-        *(f32 *)((u8 *)s2 + 0x6c) = 0.0f; m->pos.z = f;
-    }
-    if (!FUN_001f0b58_2c8440()) s2->unk78 = 0.0f;
-    if (m->state != 5) {
-        m->pos.z = D_L00_00173E40.f28;
-        qcopy(&velocity, &D_L00_00173E40.v40);
-        f = FUN_001f9dc8(m->rot.z); g = FUN_001f9de0(m->rot.z);
-        offset.f[0] = velocity.f[0] * f + velocity.f[1] * g;
-        f = FUN_001f9dc8(m->rot.z); g = FUN_001f9de0(m->rot.z);
-        offset.f[1] = velocity.f[1] * f - velocity.f[0] * g;
-        offset.f[2] = velocity.f[2];
-        f = -atan2_f_2c8440(FUN_001f9988(offset.f[0] * offset.f[0] + offset.f[2] * offset.f[2]), offset.f[1]);
-        angle = atan2_f_2c8440(offset.f[2], offset.f[0]);
-        f = rotation_delta_2c97e0(f, m->rot.x);
-        m->rot.x = fast_add_rotations_2c8440(m->rot.x, f * (D_0015ED6C_2c8440 * 6.2831855f));
-        f = rotation_delta_2c97e0(angle, m->rot.y);
-        m->rot.y = fast_add_rotations_2c8440(m->rot.y, f * (D_0015ED6C_2c8440 * 6.2831855f));
+    gravity:
+        *(f32 *)((u8 *)s2 + 0x6c) += f * 9.8f;
+        m->pos.z -= *(f32 *)((u8 *)s2 + 0x6c);
+        f = probe_ground_height(&m->pos, 0, 0.5f);
+        if (m->pos.z < f && f < m->pos.z + scale * 0.25f) {
+            *(f32 *)((u8 *)s2 + 0x6c) = 0.0f; m->pos.z = f;
+        }
+        if (!FUN_001f0b58_2c8440()) s2->unk78 = 0.0f;
+        if (m->state != 5) {
+            f32 f, g, angle;
+            m->pos.z = D_L00_00173E40.f28;
+            qcopy(&velocity, &D_L00_00173E40.v40);
+            scale = 6.2831855f;
+            f = FUN_001f9dc8(m->rot.z); g = FUN_001f9de0(m->rot.z);
+            offset.f[0] = velocity.f[0] * f + velocity.f[1] * g;
+            f = FUN_001f9dc8(m->rot.z); g = FUN_001f9de0(m->rot.z);
+            offset.f[1] = velocity.f[1] * f - velocity.f[0] * g;
+            offset.f[2] = velocity.f[2];
+            f = -atan2_f_2c8440(FUN_001f9988(offset.f[0] * offset.f[0] + offset.f[2] * offset.f[2]), offset.f[1]);
+            angle = atan2_f_2c8440(offset.f[2], offset.f[0]);
+            f = rotation_delta_2c97e0(f, m->rot.x);
+            m->rot.x = fast_add_rotations_2c8440(m->rot.x, f * (D_0015ED6C_2c8440 * scale));
+            f = rotation_delta_2c97e0(angle, m->rot.y);
+            m->rot.y = fast_add_rotations_2c8440(m->rot.y, f * (D_0015ED6C_2c8440 * scale));
+        }
     }
     if (!(m->pos.z < 0.0f)) { m->anim_speed = anim_speed; return; }
 remove:
