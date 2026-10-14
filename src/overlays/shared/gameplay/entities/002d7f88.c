@@ -2098,6 +2098,7 @@ void FUN_L00_002dbf28(char *moby) {
         int a, b;
         int red, green, blue;
         float effect_magnitude;
+        float speed;
         speed = FUN_002132a8_002dbf28(8.0f, 10.0f);
         __builtin_memcpy(first_colors, D_L00_001EA100_002dbf28, 24);
         __builtin_memcpy(second_colors, D_L00_001EA118_002dbf28, 24);
