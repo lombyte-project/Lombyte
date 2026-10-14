@@ -2770,7 +2770,9 @@ reset_timer:
     if (!found) FUN_L01_002f5040(moby, (float *)(moby + 0x10));
     if (B2(data, 0x120) & 0x1f) {
         count = 0;
-        for (i = 0, link_offset = -4; i < 5; ++i, link_offset += 4) {
+        link_offset = -4;
+        i = 0;
+        do {
             if (B2(data, 0x120) & (1 << i)) {
                 FUN_002645a8_2f5168(moby, count++, point);
                 FUN_002211b8_2f5168(work, point, moby + 0x10);
@@ -2794,7 +2796,9 @@ reset_timer:
                     FUN_L01_0027f660(point, work);
                 }
             }
-        }
+            ++i;
+            link_offset += 4;
+        } while (i < 5);
         if (B2(data, 0x121) == 0) B2(data, 0x121) = FUN_00220e30_2f5168(7);
         B2(data, 0x121)--;
     }
