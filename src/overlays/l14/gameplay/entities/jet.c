@@ -94,15 +94,15 @@ void FUN_L14_002df138(u8 *moby) {
         p += 4;
     } while (i < 5);
 
-    mirror = (f32 *)((s32)((i - 1) * 4 + 2) * 4 + (s32)d);
+    mirror = (f32 *)((s32)((i - 1) * 16) + (s32)(d + 2));
     j = 5;
     tail = d + 0x14;
     do {
-        mirror_height = *mirror;
+        height = *mirror;
         mirror_index = (f32)j;
         tail[1] = 0.0f;
         j++;
-        tail[2] = mirror_height;
+        tail[2] = height;
         mirror -= 4;
         tail[0] = d[0x7c] * mirror_index + 1.6f;
         tail[3] = 1.0f;
