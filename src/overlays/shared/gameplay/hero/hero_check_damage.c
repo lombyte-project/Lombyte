@@ -1355,7 +1355,7 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     f32 maximum;
     s64 negative_one = -1;
     u8 *record;
-    void * volatile output;
+    void *output;
     f32 * volatile score_ptr;
     f32 *score;
 
