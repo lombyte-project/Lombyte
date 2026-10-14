@@ -517,7 +517,8 @@ int FUN_L11_003192c8(char *moby) {
                         int n = start + (k >> 1);
                         int q = n + 15;
                         if (limit < n) q = n;
-                        n -= (q >> 4) << 4;
+                        q = (q >> 4) << 4;
+                        n = n - q;
                         add_vector_xyz((float *)stack_data + i * 0x24 + k * 4, points + n * 16,
                                        (char *)offset + (k & 1) * 16);
                     }
