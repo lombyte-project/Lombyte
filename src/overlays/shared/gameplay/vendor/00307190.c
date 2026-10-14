@@ -467,6 +467,7 @@ void FUN_L08_00316fa8(char *moby) {
     int voice;
     char *slot;
     float smoothed;
+    float volume;
 
     radius[0] = 4.0f;
     radius[1] = 0.0f;
@@ -486,11 +487,13 @@ void FUN_L08_00316fa8(char *moby) {
 
     smoothed = D_L08_001625D8;
     if (smoothed < fraction) {
-        smoothed = smoothed + frame_delta_time * 0.2f;
+        volume = frame_delta_time * 0.2f;
+        volume = smoothed + volume;
     } else {
-        smoothed = smoothed - frame_delta_time * 0.75f;
+        volume = frame_delta_time * 0.75f;
+        volume = smoothed - volume;
     }
-    D_L08_001625D8 = smoothed;
+    D_L08_001625D8 = volume;
     if (D_L08_001625D8 > 1.0f) {
         D_L08_001625D8 = 1.0f;
     }
