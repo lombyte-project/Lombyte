@@ -234,7 +234,7 @@ void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, 
 extern char D_L15_001744C0_2E9358[] __asm__("D_L15_00174440");
 extern int D_L15_001744D8_2E9358 __asm__("D_L15_00174458") __attribute__((section(".data")));
 extern int D_001414D0_2E9358 __asm__("D_001413D0") __attribute__((section(".data")));
-extern char *D_L15_00178580_2E9358[] __asm__("D_L15_00178500");
+extern s32 D_L15_00178580_2E9358[] __asm__("D_L15_00178500");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern Res_2E9358 *trooper_find_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *c338_p(int) __asm__("FUN_L00_002603d0");

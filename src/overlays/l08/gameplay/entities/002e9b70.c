@@ -459,7 +459,7 @@ void FUN_L08_002f1548(struct Moby *moby) {
         break;
     }
 }
-extern char D_L08_0015F580[] __attribute__((section(".sdata")));
+extern f32 D_L08_0015F580[] __attribute__((section(".sdata")));
 extern struct Moby *D_0013F58C __attribute__((section(".data")));
 /* Retail loads gp - 0x4C90; GP 0x166C00 places this scalar at 0x161F70. */
 

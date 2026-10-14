@@ -1696,7 +1696,7 @@ typedef struct {
 extern Fade29FF90 D_L15_0015F330 __attribute__((section(".sdata")));
 extern Fade29FF90 D_L15_0015F320 __attribute__((section(".sdata")));
 extern Light29FF90 D_L15_001808C0[];
-extern char *D_L15_00178500[];
+extern s32 D_L15_00178500[];
 extern char *FUN_L00_00274948(void *, void *, int, void *);
 extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");

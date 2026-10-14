@@ -122,7 +122,7 @@ extern char D_L08_001746D8_2B94B0[] __asm__("D_L08_00174658");
 extern int D_L08_001746D8_2B94B0i __asm__("D_L08_00174658") __attribute__((section(".data")));
 extern char D_L08_00174700_2B94B0[] __asm__("D_L08_00174680");
 extern char D_0013F450_2B94B0[] __asm__("D_0013F350");
-extern char D_0013DF38_arr[] __asm__("D_0013DF38");
+extern s32 D_0013DF38_arr[] __asm__("D_0013DF38");
 
 void FUN_L08_002b82a0(Moby_2B94B0 *m)
 {
@@ -282,7 +282,7 @@ extern int D_L08_00174658;
 extern int D_L08_00174658_data __asm__("D_L08_00174658") __attribute__((section(".data")));
 extern float D_L08_00174660[4];
 extern float D_L08_00174680_vec[4] __asm__("D_L08_00174680");
-extern char D_L08_0015F580[];
+extern f32 D_L08_0015F580[];
 extern float D_L08_0016144C;
 
 extern float D_L08_00161860 __attribute__((sda));
@@ -917,7 +917,7 @@ void FUN_L08_002d6450(struct Moby *moby) {
 
 extern int D_L08_00161970 __attribute__((sda));
 extern float D_L08_001D7060[4];
-extern char D_L08_0015F580[] __attribute__((section(".sdata")));
+extern f32 D_L08_0015F580[] __attribute__((section(".sdata")));
 extern void FUN_L02_002a40d0(void *, float);
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L08_002da0d0(void *);
