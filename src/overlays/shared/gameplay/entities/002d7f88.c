@@ -2773,13 +2773,13 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
     next = (V_002ddcb8 *)(D_L00_001E5F40_002ddcb8 + 0x10);
     record = D_L00_001E5F30 + 0x10;
     halfword = (short *)(D_L00_001E5F40_002ddcb8 + 0xca);
-    i = 8;
+    i = 9;
     do {
         FUN_001ff278_002ddcb8(next, record, &scaled_first);
         ++next;
         *halfword++ = 0;
         record += 0x10;
-    } while (--i >= 0);
+    } while (--i != 0);
     FUN_001ff260_002ddcb8(D_L00_00161B60_002ddcb8);
     temp1.bits = 0;
     temp2.bits = 0;
@@ -2799,8 +2799,7 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
         {
             int i;
             for (i = 199; i >= 0; --i) {
-                *(int *)record = 0;
-                record -= 0x18;
+                *(int *)(D_L00_001E5F30_002ddcb8 + 0xC - (199 - i) * 0x18) = 0;
             }
         }
     }
