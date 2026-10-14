@@ -2040,7 +2040,8 @@ void FUN_L00_002dbf28(char *moby) {
     FUN_001f9a28_002dbf28(&origin, D_L00_00166DC0_002dbf28, center);
     range = fast_vec_length(&origin);
 
-    for (i = 0; i < 10 / multiplier; i++) {
+    i = 0;
+    if (10 / multiplier > 0) do {
         int a, b;
         displacement.ul128 = 0;
         displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
@@ -2057,7 +2058,8 @@ void FUN_L00_002dbf28(char *moby) {
         a = FUN_001f96f8_002dbf28(60);
         b = FUN_001f96f8_002dbf28(120);
         FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 0, item_text_variant.b9);
-    }
+        i++;
+    } while (i < 10 / multiplier);
     for (i = 0; i < 4 / multiplier; i++) {
         int a, b;
         displacement.ul128 = 0;
