@@ -2446,7 +2446,7 @@ void FUN_L00_002ce358(struct Moby *m)
     void *hit;
     f32 f, distance;
     s32 i, count, category, random, health;
-    u8 state;
+    s32 state;
     struct Moby **slots, **exclusions;
 
     if (D_L00_0015F5C4_2c8440 == 2 || D_L00_0015F5C4_2c8440 == 5 ||
@@ -2552,12 +2552,14 @@ void FUN_L00_002ce358(struct Moby *m)
         if (hit != 0) {
             char *h = *(char **)((char *)hit + 0x20);
             category = h && *(char **)(h + 0x24) ? *(s16 *)(*(char **)(h + 0x24) + 0x46) : 0;
-            if (category >= 5 && category <= 8) {
-                if (h == 0 || *(s16 *)(h + 0xa6) != 0x4d6 || FUN_001fef98_2ce358(&v->health))
+            if (category > 8) goto dispatch_state;
+            if (category >= 5) {
+                if (hit == 0 || h == 0 || *(s16 *)(h + 0xa6) != 0x4d6 || FUN_001fef98_2ce358(&v->health))
                     m->state = 4;
             }
         }
     }
+dispatch_state:
     state = m->state;
     if (state == 3) goto state3;
     if (state < 4) {
@@ -2649,11 +2651,9 @@ state3:
         m->collision = m->pclass->collision;
         FUN_L00_002cde78((char *)m);
         target = v->target;
-        if (target == 0 || target->oclass != v->target_oclass || target->state == 0xfe || target->state == 0xfd) {
-            m->state = 2;
-            v->target_oclass = -1;
-            v->target = 0;
-        } else {
+        if (target == 0 || target->oclass != v->target_oclass || target->state == 0xfe || target->state == 0xfd)
+            goto clear_target;
+        {
             char *h = (char *)FUN_002141f8_c((char *)target);
             qcopy(&target_pos, &v->target->pos);
             if (h != 0)
@@ -2696,6 +2696,12 @@ state3:
                 }
             }
         }
+        goto state3_rotations;
+clear_target:
+        m->state = 2;
+        v->target_oclass = -1;
+        v->target = 0;
+state3_rotations:
         m->rot.z = FUN_001ff8b0_2ce358(m->pos.x - old_pos.f[0], m->pos.y - old_pos.f[1]);
         m->rot.y = -FUN_001ff8b0_2ce358(FUN_001ff488_2ce358(&old_pos, &m->pos), m->pos.z - old_pos.f[2]);
         goto update_effects;
