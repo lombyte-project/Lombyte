@@ -2031,10 +2031,10 @@ void FUN_L05_00304320(char *moby) {
     float v[4] __attribute__((aligned(16)));
     float w[4] __attribute__((aligned(16)));
     float pos[4] __attribute__((aligned(16)));
-    void *rotation0;
-    void *rotation1;
     void *matrix0;
     void *matrix1;
+    void *rotation0;
+    void *rotation1;
     FUN_L05_00305178(moby);
     FUN_L05_00305898(moby);
     if ((*(unsigned char *)((char *)(data)+(0x2e))) == 2) {
@@ -2058,37 +2058,41 @@ void FUN_L05_00304320(char *moby) {
     default: return;
     }
 state_zero:
-    base=&hero;
     position=moby+0x10;
     if (*(char **)(data+0x184)==0) {
-        child=create_moby(0x368);
-        *(char **)(data+0x184)=child;
-        (*(unsigned char *)((char *)(child)+(0x30)))=0x40;
+        *(char **)(data+0x184)=create_moby(0x368);
+        (*(unsigned char *)((char *)(*(char **)(data+0x184))+(0x30)))=0x40;
         (*(unsigned short *)((char *)(*(char **)(data+0x184))+(0x32)))=0x40;
         (*(unsigned char *)((char *)(*(char **)(data+0x184))+(0x31)))=1;
+        base=&hero;
         *(unsigned long *)(*(char **)(data+0x184)+0x38)=*(unsigned long *)((char *)*(Moby **)((char *)base+0x2080)+0x38);
         (*(unsigned short *)((char *)(*(char **)(data+0x184))+(0x34)))=0x4000;
-        child=*(char **)(data+0x184);
+        {
+        char *child=*(char **)(data+0x184);
         qcopy(child+0x10,position);
         (*(int *)((char *)(child)+(0x94)))=0;
+        }
         FUN_L00_00250df8(*(char **)(data+0x184));
     }
     if (*(char **)(data+0x188)==0) {
-        child=create_moby(0x369);
-        *(char **)(data+0x188)=child;
-        (*(unsigned char *)((char *)(child)+(0x30)))=0x40;
+        *(char **)(data+0x188)=create_moby(0x369);
+        (*(unsigned char *)((char *)(*(char **)(data+0x188))+(0x30)))=0x40;
         (*(unsigned short *)((char *)(*(char **)(data+0x188))+(0x32)))=0x40;
         (*(unsigned char *)((char *)(*(char **)(data+0x188))+(0x31)))=1;
+        base=&hero;
         *(unsigned long *)(*(char **)(data+0x188)+0x38)=*(unsigned long *)((char *)*(Moby **)((char *)base+0x2080)+0x38);
         (*(unsigned short *)((char *)(*(char **)(data+0x188))+(0x34)))=0x4000;
-        child=*(char **)(data+0x188);
+        {
+        char *child=*(char **)(data+0x188);
         qcopy(child+0x10,position);
         (*(int *)((char *)(child)+(0x94)))=0;
+        }
         FUN_L00_00250df8(*(char **)(data+0x188));
     }
     attach_manipulator_304320(moby,0,data+0xf0);
     attach_manipulator_304320(moby,1,data+0x130);
     (*(unsigned short *)((char *)(moby)+(0x34)))|=0x1000;
+    base=&hero;
     *(unsigned long *)(moby+0x38)=*(unsigned long *)((char *)*(Moby **)((char *)base+0x2080)+0x38);
     FUN_L01_0026d930(data+0x70);
     (*(int *)((char *)(data)+(0x70)))=0x38d;
@@ -2098,8 +2102,8 @@ state_zero:
     (*(float *)((char *)(data)+(0xb0)))=0.3f;
     (*(float *)((char *)(data)+(0xb4)))=0.1f;
     path=D_L05_001B0930[(*(int *)((char *)(data)+(0xd4)))];
-    *path_entry=1;
-    *(char **)((char *)path_entry+0x10)=path;
+    *(int *)(data+0xc0)=1;
+    *(char **)(data+0xd0)=path;
     qcopy(position,path+0x10);
     (*(unsigned char *)((char *)(moby)+(0x20)))=1;
     if ((*(unsigned char *)((char *)(moby)+(0x53)))) blend_moby_animation(moby,0,0,0);
@@ -2204,11 +2208,11 @@ state_two:
         if (*(char **)(data+0x1a0)==0) *(char **)(data+0x1a0)=particle;
         else {
             j=0;
-            j++;
             do {
+                j++;
                 if (j>=8) goto slots_done;
                 child=data+0x1a0+j*4;
-            } while (*(char **)child && (++j,1));
+            } while (*(char **)child);
             *(char **)child=particle;
         }
     }
