@@ -1980,7 +1980,7 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
     int index = 0;
     unsigned int green = 0x80;
     float band = 0.0f;
-    unsigned char alpha = moby[0x23] / 5;
+    int alpha = ((unsigned char)(moby[0x23] / 5) << 24) | 0x80;
     char *data = *(char **)(moby + 0x78);
     unsigned int green_step = (green / 11) & 0xff;
     float radius_threshold = 0.9f;
@@ -1998,7 +1998,7 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
         float inner_radius;
         float width;
         float phase;
-        int color = ((alpha & 0xff) << 24) | (green << 8) | 0x80 | (green << 16);
+        int color = alpha | (green << 8) | (green << 16);
         *(int *)(packet + 0x40) = *(int *)(packet + 0x44) =
             *(int *)(packet + 0x48) = *(int *)(packet + 0x4c) = color;
         if (*(float *)(data + 8) < radius_threshold)
