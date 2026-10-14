@@ -1069,32 +1069,60 @@ def apply_la_gprel_policy(assembly):
 
 
 def hoist_sda_externs(assembly, source):
-    """Move `.extern NAME, SIZE` ahead of the code for every small-data symbol.
+    """Move `.extern NAME, SIZE` up to where the source declares NAME small.
 
     SN cc1 writes its `.extern` directives at the end of the file and leaves
     the choice between $gp and lui to the assembler.  Ps2EeAs is single-pass:
     it relaxes a bare symbol access to $gp only when the size is already
     known.  The source says which globals retail reads through $gp: those
     declared `__attribute__((sda))` (the game compiler's spelling, ignored by
-    SN cc1); their directives go first, the others stay where cc1 put them.
-    A NON_MATCHING `#else` draft is not compiled, so its declarations do not
+    SN cc1); their directives go first.  When a plain `<name>_lui` alias of
+    the symbol is declared before its first sda declaration, the functions
+    in between read it through lui (retail mixes both when a unit joins files
+    that did and did not define the symbol), so the directive goes in front
+    of the first function defined after the sda declaration instead.  A
+    NON_MATCHING `#else` draft is not compiled, so its declarations do not
     count.
     """
     source = re.sub(r"^(#ifndef NON_MATCHING\n(?:INCLUDE_ASM[^\n]*\n)*)#else\n.*?^#endif",
                     r"\1#endif", source, flags=re.M | re.S)
-    sda = set()
-    for decl in re.findall(r"^extern[^;]*__attribute__\(\(sda\)\)[^;]*;", source, re.M):
+    sda = {}
+    for match in re.finditer(r"^extern[^;]*__attribute__\(\(sda\)\)[^;]*;", source, re.M):
+        decl = match.group(0)
         label = re.search(r'__asm__\s*\(\s*"([\w.$]+)"', decl)
         name = re.search(r"([A-Za-z_]\w*)\s*(?:\[[^\]]*\]\s*)*(?:__asm__|__attribute__)", decl)
-        if label:
-            sda.add(label.group(1))
-        elif name:
-            sda.add(name.group(1))
+        key = label.group(1) if label else name.group(1) if name else None
+        if key and key not in sda:
+            sda[key] = match.start()
+    absolute = {}
+    for match in re.finditer(r'^extern[^;(]*\b\w+_lui\s*__asm__\s*\(\s*"([\w.$]+)"\s*\)\s*;', source, re.M):
+        absolute.setdefault(match.group(1), match.start())
     lines = assembly.split("\n")
-    first = [l for l in lines if re.match(r"\s*\.extern\s+([\w.$]+)\s*,", l)
-             and re.match(r"\s*\.extern\s+([\w.$]+)", l).group(1) in sda]
-    rest = [l for l in lines if l not in first]
-    return "\n".join(first + rest)
+    functions = []  # (asm line of the function's .globl/.ent, source offset of its definition)
+    for index, line in enumerate(lines):
+        match = re.match(r"\s*\.ent\s+([\w.$]+)", line)
+        if not match:
+            continue
+        start = index
+        while start > 0 and re.match(r"\s*\.(?:globl|align|type)\b", lines[start - 1]):
+            start -= 1
+        body = re.search(r"^[^\n;#]*\b" + re.escape(match.group(1)) + r"\s*\([^;{]*\)\s*\{", source, re.M)
+        functions.append((start, body.start() if body else -1))
+    placed = {}
+    for line in lines:
+        match = re.match(r"\s*\.extern\s+([\w.$]+)\s*,", line)
+        if match and match.group(1) in sda:
+            symbol = match.group(1)
+            after = [start for start, offset in functions if offset > sda[symbol]]
+            late = absolute.get(symbol, len(source)) < sda[symbol] and after
+            placed.setdefault(min(after) if late else 0, []).append(line)
+    result = []
+    for index, line in enumerate(lines):
+        result.extend(placed.get(index, []))
+        match = re.match(r"\s*\.extern\s+([\w.$]+)\s*,", line)
+        if not (match and match.group(1) in sda):
+            result.append(line)
+    return "\n".join(result)
 
 
 def reference_assembly(assembly):
