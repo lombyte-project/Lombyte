@@ -794,11 +794,11 @@ void FUN_L00_002bffa8(struct Moby *moby) {
             HF_2bffa8(0x1f30) = size_1;
             HF_2bffa8(0x1f34) = 7.5f;
             HF_2bffa8(0x1f38) = 11.5f;
+            HF_2bffa8(0x1f48) = scale_01;
             HF_2bffa8(0x1f00) = scale_01;
+            HF_2bffa8(0x1f44) = scale_02;
             HF_2bffa8(0x1efc) = scale_02;
             HF_2bffa8(0x1f04) = scale_045;
-            HF_2bffa8(0x1f44) = scale_02;
-            HF_2bffa8(0x1f48) = scale_01;
             }
             vars->target = 0; moby->state = 14; vars->timer = 0;
             vars->move_speed = frame_scale * 0.1f * speed;
