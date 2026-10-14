@@ -1624,7 +1624,7 @@ after_moby:
                         effect = (u8 *)D_001404DC_f580;
                         if (((*(u16 *)(effect + 0x34) ^ 1) & 1) != 0) {
                             FUN_0024f728_f580(moby, 6, source);
-                            *(u128 *)D_001410D0_f580 = *(u128 *)(source + 0x30);
+                            *(u128 *)((u8 *)&hero + 0x1d80) = *(u128 *)(source + 0x30);
                             FUN_00207d00_f580();
                             *(u128 *)(effect + 0x10) = *(u128 *)(source + 0x30);
                             FUN_001ffcd8_f580(effect + 0xc0, source);
