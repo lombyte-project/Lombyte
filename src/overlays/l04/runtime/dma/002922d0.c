@@ -347,176 +347,184 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
         mask <<= 2;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_00295778.s", FUN_L04_00295778);
-#else
-extern float FUN_0020c9e0(struct Moby *) __asm__("FUN_0020c9e0");
-extern float FUN_001fa6c0(int) __asm__("FUN_001fa6c0");
-extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
-extern float rig_turn(float, float, float *, float, float, float) __asm__("FUN_L00_00258110");
-extern int rig_pick_mode(struct Moby *, LegRig *, float) __asm__("FUN_L04_002927d0");
-extern void rig_animate(struct Moby *, LegRig *, int, float) __asm__("FUN_L04_00292d48");
-extern void transform_scaled_vertex_batch(struct Moby *, int, int *, void *) __asm__("FUN_0020cd48");
-extern void rig_zero_vector(float *) __asm__("FUN_001f99f8");
-extern void rig_sub_vector(float *, float *, float *) __asm__("FUN_001f9a28");
-extern void rig_divide_vector(float, float *, float *) __asm__("FUN_L00_001ff378");
-extern float rig_cos(float) __asm__("FUN_001f9dc8");
-extern float rig_sin(float) __asm__("FUN_001f9de0");
-extern void rig_probe_setup(struct Moby *, int, float *, int *, float *, float *) __asm__("FUN_L01_00263a28");
-extern int rig_probe(float *, float, float, int, struct Moby *) __asm__("FUN_L00_001f19a0");
-extern void rig_step(struct Moby *, LegRig *, float, float, float, int) __asm__("FUN_L00_002a1670");
-extern float rig_angle_difference(float, float) __asm__("FUN_001fa688");
-extern float FUN_001f99c0(float);
-extern float D_L04_0015ED60 __asm__("D_L04_0015ED60");
-extern float D_L04_0015ED68 __asm__("D_L04_0015ED68");
-/* Retail -0x7e94($gp), with $gp = 0x166c00, addresses 0x0015ed6c. */
-extern float D_L04_0015816C __asm__("D_L04_0015ED6C") __attribute__((sda));
-extern float D_L04_00173FF8 __asm__("D_L04_00173FF8");
-extern int D_L04_00173FF0[] __asm__("D_L04_00173FF0");
+typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) RigVec;
 
-int FUN_L04_00295778(struct Moby *m, LegRig *rig, float amount, float target, float step)
-{
-    union { int joints[8]; struct { int pad[4]; float offset[4]; } v; } local;
-    float transformed[6][4];
-    float position[4];
-    float result;
-    float probe_start;
-    float probe_end;
-    float time;
-    float height;
-    float count;
-    int mode;
-    int changed;
-    int flags;
-    int active_mask;
-    int i;
-    int bit;
-    LegRigAnim **entry;
-    LegRigAnim **first;
+extern f32 FUN_0020c9e0(struct Moby *);
+extern f32 FUN_001fa6c0(s32);
+extern s32 rig_pick_mode(struct Moby *, LegRig *, f32) __asm__("FUN_L04_002927d0");
+extern f32 spring_turn(f32 cur, f32 target, f32 k, f32 d, f32 max, f32 *vel) __asm__("FUN_L00_00258110");
+extern void rig_animate(struct Moby *, LegRig *, s32, f32) __asm__("FUN_L04_00292d48");
+extern void zero_vector(void *) __asm__("FUN_001f99f8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void divide_vector_xyz(void *, void *, f32) __asm__("FUN_L00_001ff378");
+extern f32 fast_cos_c(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin_c(f32) __asm__("FUN_001f9de0");
+extern s32 FUN_L04_00292828_c(struct Moby *, LegRig *) __asm__("FUN_L04_00292828");
+extern void rig_step(struct Moby *, LegRig *, f32, f32, f32, s32) __asm__("FUN_L00_002a1670");
+extern void rig_probe_setup(struct Moby *, s32, s32 *, void *, f32 *, f32 *) __asm__("FUN_L01_00263a28");
+extern s32 rig_probe(void *, s32, f32, struct Moby *, f32) __asm__("FUN_L00_001f19a0");
+extern f32 rig_angle_difference(f32, f32) __asm__("FUN_001fa688");
+extern f32 FUN_001f99c0(f32);
+extern f32 D_0015ED60;
+extern f32 D_0015ED68;
+extern f32 D_0015ED6C;
+extern RigVec D_L04_00173FF0 __attribute__((section(".data")));
 
-    if (m->seq != 0xff)
+s32 FUN_L04_00295778(struct Moby *m, LegRig *rig, f32 speed, f32 heading, f32 step) {
+    union {
+        s32 joints[6];
+        struct {
+            RigVec ground;
+            RigVec offset;
+        } v;
+    } local;
+    RigVec transformed[6];
+    RigVec shift;
+    s32 probe_kind;
+    f32 probe_start, probe_end;
+    s32 mode;
+    s32 flags;
+    s32 changed;
+    f32 time;
+    s32 i;
+    s32 tries;
+    Vec4f *pos;
+
+    if (m->seq != 0xFF) {
         time = FUN_0020c9e0(m);
-    else
+    } else {
         time = FUN_001fa6c0(m->prev_frame) + animation_start(m->class_slot, m->prev_seq);
+    }
     mode = rig_pick_mode(m, rig, time);
     if (rig->unkEE & 4) {
-        m->rot.z = rig_turn(m->rot.z, *(float *)((char *)rig + 0x6c), (float *)&rig->unkC8, rig->unkCC, rig->unkD0, rig->unkD4);
-    } else if (mode & 15) {
-        m->rot.z = rig_turn(m->rot.z, target, (float *)&rig->unkC8, rig->unkCC, rig->unkD0, rig->unkD4);
+        m->rot.z = spring_turn(m->rot.z, rig->heading, rig->unkCC, rig->unkD0, rig->unkD4,
+                               (f32 *)&rig->unkC8);
+    } else if (mode & 0xF) {
+        m->rot.z = spring_turn(m->rot.z, heading, rig->unkCC, rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
     } else {
-        m->rot.z = rig_turn(m->rot.z, target, (float *)&rig->unkC8, 0.0f, rig->unkD0 + rig->unkD0, rig->unkD4);
+        m->rot.z = spring_turn(m->rot.z, heading, 0.0f, rig->unkD0 + rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
     }
-    rig_animate(m, rig, mode, target);
-    m->rot.y = rig_turn(m->rot.y, *(float *)&rig->unkB8, (float *)&rig->unkBC, 0.005f, 0.01f,
-                        D_L04_0015ED60 * 0.017453292f);
-
+    rig_animate(m, rig, mode, heading);
+    m->rot.y = spring_turn(m->rot.y, *(f32 *)&rig->unkB8, 0.005f, 0.01f, D_0015ED60 * 0.017453292f,
+                           (f32 *)&rig->unkBC);
     local.joints[0] = rig->legs[0].joint;
     local.joints[1] = rig->legs[0].joint2;
-    local.joints[2] = ((u8 *)rig)[0x1a0];
-    local.joints[3] = ((u8 *)rig)[0x1a1];
+    local.joints[2] = rig->legs[1].joint;
+    local.joints[3] = rig->legs[1].joint2;
     local.joints[4] = rig->jointB4;
     local.joints[5] = rig->jointB5;
     transform_scaled_vertex_batch(m, 6, local.joints, transformed);
-    if ((rig->unkEE & 4) == 0) {
-        count = 0.0f;
-        bit = 1;
-        active_mask = mode | (rig->mode & 0x30);
-        rig_zero_vector(position);
-        for (i = 0; i < 6; i++) {
-            if (active_mask & bit) {
+    if (!(rig->unkEE & 4)) {
+        s32 active = mode | (rig->mode & 0x30);
+        s32 bit = 1;
+        f32 count = 0.0f;
+        RigVec *t = transformed;
+        RigVec *p = (RigVec *)rig->pts;
+
+        zero_vector(&shift);
+        pos = &m->pos;
+        for (i = 5; i >= 0; i--) {
+            if (active & bit) {
                 count += 1.0f;
-                add_vector_xyz(position, position, rig->pts[i]);
-                rig_sub_vector(position, position, transformed[i]);
+                add_vector_xyz(&shift, &shift, p);
+                subtract_vector_xyz(&shift, &shift, t);
             }
             bit <<= 1;
+            t++;
+            p++;
         }
-        rig_divide_vector(count, position, position);
+        divide_vector_xyz(&shift, &shift, count);
     } else {
-        position[0] = rig_cos(*(float *)((char *)rig + 0x6c)) * rig->speed;
-        position[1] = rig_sin(*(float *)((char *)rig + 0x6c)) * rig->speed;
-        position[2] = 0.0f;
+        pos = &m->pos;
+        shift.x = fast_cos_c(rig->heading) * rig->speed;
+        shift.y = fast_sin_c(rig->heading) * rig->speed;
+        *(s32 *)&shift.z = 0;
     }
-    for (i = 0; i < 6; i++)
-        add_vector_xyz(rig->pts[i], transformed[i], position);
-    add_vector_xyz((float *)&m->pos, (float *)&m->pos, position);
-    changed = (mode ^ rig->mode) & mode;
-    rig->mode = mode;
-    if (rig->unkC4 < step)
-        step = rig->unkC4;
-    if (rig->speed < amount) {
+    {
+        RigVec *t = transformed;
+        RigVec *p = (RigVec *)rig->pts;
+
+        for (i = 5; i >= 0; i--) {
+            add_vector_xyz(p, t, &shift);
+            t++;
+            p++;
+        }
+    }
+    add_vector_xyz(pos, pos, &shift);
+    {
+        f32 max_step = rig->unkC4;
+        s32 old = rig->mode;
+
+        rig->mode = mode;
+        changed = (mode ^ old) & mode;
+        if (max_step < step) step = max_step;
+    }
+    if (rig->speed < speed) {
         rig->speed += step;
-        if (amount < rig->speed)
-            rig->speed = amount;
-    } else if (amount < rig->speed) {
+        if (speed < rig->speed) rig->speed = speed;
+    } else if (speed < rig->speed) {
         rig->speed -= step;
-        if (rig->speed < amount)
-            rig->speed = amount;
+        if (rig->speed < speed) rig->speed = speed;
     }
-    flags = FUN_L04_00292828((StMoby_2939E8 *)m, (Steer_2939E8 *)rig);
-    rig_step(m, rig, amount, target, step, changed);
-    if ((rig->unkEE & 4) == 0) {
-        rig_probe_setup(m, 0, &result, local.joints, &probe_start, &probe_end);
-        if (m->prev_seq == rig->anims[3]->id ||
-            m->prev_seq == rig->anims[1]->id ||
+    flags = FUN_L04_00292828_c(m, rig);
+    rig_step(m, rig, speed, heading, step, changed);
+    if (!(rig->unkEE & 4)) {
+        rig_probe_setup(m, 0, &probe_kind, &local.v.ground, &probe_start, &probe_end);
+        if (m->prev_seq == rig->anims[3]->id || m->prev_seq == rig->anims[1]->id ||
             m->prev_seq == rig->anims[2]->id) {
-            *(float *)&rig->unkE8 = rig->unkE0 + rig->unkE0;
-        } else if (m->prev_seq == rig->anims[7]->id && (rig->mode & 15)) {
-            *(float *)&rig->unkE8 = rig->unkE0 + rig->unkE0;
+            *(f32 *)&rig->unkE8 = rig->unkE0 + rig->unkE0;
+        } else if (m->prev_seq == rig->anims[7]->id && (rig->mode & 0xF)) {
+            *(f32 *)&rig->unkE8 = rig->unkE0 + rig->unkE0;
         } else if (m->prev_seq == m->seq) {
-            *(float *)&rig->unkE8 *= 0.9f;
+            *(f32 *)&rig->unkE8 = *(f32 *)&rig->unkE8 * 0.9f;
         }
-        height = *(float *)&rig->unkE8;
-        *(float *)&local.joints[2] += height;
-        probe_end -= height;
-        rig_sub_vector(local.v.offset, (float *)&m->pos, (float *)local.joints);
-        {
-            int i;
-            for (i = 0; i < 8 && rig_probe((float *)local.joints, probe_start, probe_end, 4, m); i++) {
-                qcopy(local.joints, D_L04_00173FF0);
-                flags |= 1;
-            }
+        local.v.ground.z += *(f32 *)&rig->unkE8;
+        probe_end -= *(f32 *)&rig->unkE8;
+        subtract_vector_xyz(&local.v.offset, pos, &local.v.ground);
+        for (tries = 0; tries < 8 && rig_probe(&local.v.ground, 4, probe_start, m, probe_end); tries++) {
+            qcopy(&local.v.ground, &D_L04_00173FF0);
+            flags |= 1;
         }
-        rig_sub_vector((float *)transformed, (float *)local.joints, (float *)&m->pos);
-        add_vector_xyz((float *)&m->pos, (float *)local.joints, local.v.offset);
-        if (vector_length_xy((float *)transformed) < rig->speed * 0.5f)
-            flags |= 2;
+        subtract_vector_xyz(transformed, &local.v.ground, pos);
+        add_vector_xyz(pos, &local.v.ground, &local.v.offset);
+        if (vector_length_xy(transformed) < rig->speed * 0.5f) flags |= 2;
     }
     local.joints[0] = rig->legs[0].joint;
     local.joints[1] = rig->legs[0].joint2;
-    local.joints[2] = ((u8 *)rig)[0x1a0];
-    local.joints[3] = ((u8 *)rig)[0x1a1];
+    local.joints[2] = rig->legs[1].joint;
+    local.joints[3] = rig->legs[1].joint2;
     local.joints[4] = rig->jointB4;
     local.joints[5] = rig->jointB5;
     transform_scaled_vertex_batch(m, 6, local.joints, rig);
-    if (rig->unkB7 != 0x12 || m->seq != rig->anims[12]->id) {
-        m->anim_speed = 1.0f;
-        first = rig->anims;
-        if (rig->unkB7 != 0) {
-            i = 0;
-            entry = first;
-            for (; i < 13; i++, entry++, first++) {
-                if ((*entry)->id == m->seq) {
-                    if (rig->speed < *(float *)0x0015ed6c * 0.19f) {
-                        height = rig_angle_difference(m->rot.z, target);
-                        if (0.09239978f < height) {
-                            /* Retail retains this threshold as the rate numerator. */
-                            time = D_L04_0015816C * 0.19f;
-                            if (amount < time) {
-                                m->anim_speed = D_L04_0015ED68 * FUN_001f99c0(time / (*first)->rate);
-                                break;
-                            }
-                        }
-                    }
-                    time = rig->speed;
-                    m->anim_speed = D_L04_0015ED68 * FUN_001f99c0(time / (*entry)->rate);
-                    break;
+    if (rig->unkB7 == 0x12 && m->seq == rig->anims[12]->id) return flags;
+    m->anim_speed = 1.0f;
+    if (rig->unkB7 != 0) {
+        LegRigAnim **fallback = rig->anims;
+        LegRigAnim **entry;
+        s32 seq = m->seq;
+        f32 min_turn = 0.09239978f;
+
+        for (i = 0, entry = fallback; i < 13; i++) {
+            if ((*entry)->id == seq) {
+                LegRigAnim *anim;
+                f32 rate;
+
+                if (!(rig->speed < D_0015ED6C * 0.19f) || !(min_turn < rig_angle_difference(m->rot.z, heading)) ||
+                    !(speed < (rate = D_0015ED6C * 0.19f))) {
+                    anim = *entry;
+                    rate = rig->speed;
+                } else {
+                    anim = *fallback;
                 }
+                m->anim_speed = D_0015ED68 * FUN_001f99c0(rate / anim->rate);
+                break;
             }
+            entry++;
+            fallback++;
         }
     }
     return flags;
 }
-#endif
 u8 D_L04_001CA938[13][4] = {
     {1, 0, 0, 0},
     {2, 0, 0, 0},

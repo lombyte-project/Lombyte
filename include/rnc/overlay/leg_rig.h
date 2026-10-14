@@ -54,7 +54,8 @@ typedef struct {
 
 typedef struct {
     /* 0x000 */ f32 pts[6][4];        /* joint positions from FUN_0020cd48 */
-    /* 0x060 */ u8 pad60[0x10];
+    /* 0x060 */ u8 pad60[0xC];
+    /* 0x06C */ f32 heading;          /* turn target while unkEE & 4 is set */
     /* 0x070 */ LegRigAnim *anims[13];
     /* 0x0A4 */ u8 padA4[0xC];
     /* 0x0B0 */ u8 unkB0;
