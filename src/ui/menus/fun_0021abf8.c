@@ -77,8 +77,8 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
            which register keeps the copy of selected that actions 6 and 9 reuse. */
         switch (menu->data.list.items[menu->data.list.selected].action) {
         case 0:
-            break;
         case 1:
+            break;
         case 3:
             menu_system.next =
                 (struct MenuPage *)menu->data.list.items[menu->data.list.selected].param.value;
