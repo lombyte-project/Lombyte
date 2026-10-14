@@ -728,7 +728,7 @@ extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32_cf(int, int, int) __asm__("FUN_0022da68");
 extern int vector_length_xy_cf(float) __asm__("FUN_001fa6d0");
 extern short D_L02_0015F688 __attribute__((sda));
-short D_L02_0015F68C = {0};
+s32 D_L02_0015F68C = 0;
 extern unsigned char *FUN_L00_00250df8_cf(int) __asm__("FUN_0020c4f8");
 extern unsigned char D_0013D4C0[];
 extern void FUN_001efa68_cf(float *dst, float *src, float dz) __asm__("FUN_L00_00233810");
@@ -846,7 +846,7 @@ void FUN_L02_00225c20(void) {
                         }
                         D_00141848.stat[18].level_mask = D_00141848.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
                         *(int *)&D_L02_0015F688 = -1;
-                        (*(int *)&D_L02_0015F68C)++;
+                        D_L02_0015F68C++;
                     }
                 }
             }

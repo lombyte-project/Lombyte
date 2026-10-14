@@ -743,19 +743,25 @@ void FUN_L08_00308c90(struct Moby *moby) {
 
 extern Pair D_L08_00162408[] __attribute__((section(".sdata")));
 extern char D_L08_001F8560[];
-short D_L08_001623C8_gp __asm__("D_L08_001623C8") = 0x23;
-short D_L08_001623E8_gp __asm__("D_L08_001623E8") = 0xa8;
-extern void FUN_L00_001fde98(int, int, int, void *, int);
-extern void FUN_L08_00258090(void *, int, int, void *);
+extern float D_L08_001EF7D0[];
+extern float D_L08_001EF978[];
+extern float D_L08_001EFB20[];
+extern float D_L08_001EFC40[];
+extern int D_L08_001F00A8[];
+extern int D_L08_001F0138[];
+int D_L08_001623C8[2] = {0x23, 0x23};
+int *D_L08_001623E8[2] = {D_L08_001F00A8, D_L08_001F0138};
+extern void FUN_L00_001fde98(int, float *, int *, void *, int);
+extern void FUN_L08_00258090(void *, float *, int, void *);
 
-short D_L08_001623D0 = -2096;
-short D_L08_001623D8 = -1248;
+float *D_L08_001623D0[2] = {D_L08_001EF7D0, D_L08_001EF978};
+float *D_L08_001623D8[2] = {D_L08_001EFB20, D_L08_001EFC40};
 void FUN_L08_00308f68(int x) {
     int i;
-    int *a = (int *)&D_L08_001623C8_gp;
-    int *b = (int *)&D_L08_001623D8;
-    int *c = (int *)&D_L08_001623D0;
-    int *e = (int *)&D_L08_001623E8_gp;
+    int *a = D_L08_001623C8;
+    float **b = D_L08_001623D8;
+    float **c = D_L08_001623D0;
+    int **e = D_L08_001623E8;
 
     for (i = 0; i < 2; i++) {
         FUN_L08_00258090(D_L08_001F8560, b[i], a[i], &D_L08_00162408[x]);
@@ -781,9 +787,9 @@ extern int D_L08_001623F0;
 extern int FUN_001fa728(char *, float);
 extern int truncate_float_to_s32();
 extern short D_L08_00162380 __attribute__((sda));
-short D_L08_001623C4 = {0};
-extern short D_L08_001623E8_gp __asm__("D_L08_001623E8") __attribute__((sda));
-extern short D_L08_001623C8_gp __asm__("D_L08_001623C8") __attribute__((sda));
+int D_L08_001623C4 = 0;
+extern int *D_L08_001623E8[2] __attribute__((sda));
+extern int D_L08_001623C8[2] __attribute__((sda));
 extern void FUN_L08_002f0dc8(void);
 extern void FUN_L08_00309030(void);
 extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
@@ -802,11 +808,11 @@ void FUN_L08_003097b0(struct Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        if (*(int *)&D_L08_001623C4 == 0) {
+        if (D_L08_001623C4 == 0) {
             FUN_L08_002f0f68(D_L08_001F8528, 8, D_L08_001F4C60, 0.5f, 0.5f, 0.65f, 0.5f, 1);
-            FUN_L08_002f0f68(&D_L08_001623E8_gp, 2, &D_L08_001623C8_gp, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            FUN_L08_002f0f68(D_L08_001623E8, 2, D_L08_001623C8, 0.5f, 0.5f, 0.5f, 1.0f, 1);
             FUN_L08_002f0f68(D_L08_001F4C48, 6, D_L08_001F01C8, 0.25f, 0.25f, 0.25f, 1.0f, 1);
-            *(int *)&D_L08_001623C4 = 1;
+            D_L08_001623C4 = 1;
         }
         moby->state = 1;
         for (i = 0; i < 3; i++) {

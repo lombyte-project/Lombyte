@@ -64,7 +64,7 @@ extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
-int r1_repeat_timer __asm__("D_L05_0015F678") = {0};
+int r1_repeat_timer __asm__("D_L05_0015F678") = 0;
 extern int D_L05_0015F594 __attribute__((sda));
 extern int D_L05_0016CB80 __attribute__((section(".data")));
 extern int FUN_001f9770(void *);

@@ -48,8 +48,8 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L01_00226f10(int a);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-short D_L02_0015F6E8 = {0};
-short D_L02_0015F6D8 = 8;
+char D_L02_0015F6E8[4] = {0, 0, 0x40, 0x42};
+int D_L02_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 extern unsigned char D_L02_0017C3D8[];
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
@@ -320,7 +320,7 @@ int hero_set_state(int a, int b) {
                 if (b) {
                     struct Hero *v = &hero;
                     set_hero_animation(v->state.step + 3,
-                                     ((int *)&D_L02_0015F6D8)[v->state.step], (float)n);
+                                     D_L02_0015F6D8[v->state.step], (float)n);
                 }
             }
         }
@@ -354,7 +354,7 @@ int hero_set_state(int a, int b) {
                 set_hero_animation(2, 0, (float)scale_game_frames(8));
             } else if (p->vehicle_mode == 0) {
                 set_hero_animation(p->state.step + 3,
-                                 ((int *)&D_L02_0015F6D8)[p->state.step],
+                                 D_L02_0015F6D8[p->state.step],
                                  (float)scale_game_frames(8));
             }
         }
@@ -932,7 +932,7 @@ int hero_set_state(int a, int b) {
                     w->unk3D8 = 29.0f;
                     w->unk3DC = 50.0f;
                     w->unk3E0 = scale_game_frames(0x56);
-                    *(char **)&w->unk3E4 = (char *)&D_L02_0015F6E8;
+                    *(char **)&w->unk3E4 = D_L02_0015F6E8;
                     w->unk4AE = 1;
                 }
             } else if (u->state.current == 0xE) {
@@ -1810,7 +1810,7 @@ extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
-int r1_repeat_timer __asm__("D_L02_0015F678") = {0};
+int r1_repeat_timer __asm__("D_L02_0015F678") = 0;
 extern int D_L02_0015F6DC_d __asm__("D_L02_0015F6DC");
 extern int D_L02_0015F594 __attribute__((sda));
 extern int D_L02_0016CD80 __attribute__((section(".data")));

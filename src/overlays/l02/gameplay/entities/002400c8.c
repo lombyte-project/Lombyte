@@ -140,7 +140,7 @@ void FUN_L02_002d3a50(void *moby, void *a, void *b, int n, float sa, float sb) {
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D5098), where it is exact; names translated to the US level program. */
 
 extern float D_L02_001D3230[][4] __attribute__((section(".data")));
-short D_L02_001619C0 = {0};
+float D_L02_001619C0[4] __attribute__((section(".sdata"))) = {-3.25f, 0.0f, 0.2f, 0.0f};
 extern short D_L02_001619D0 __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -154,13 +154,13 @@ void FUN_L02_002d3c98(struct Moby *moby, int a, int b, int d) {
     float *pb;
     qcopy(va, pa);
     va[3] = 1.0f;
-    FUN_001f9a28(va, va, &D_L02_001619C0);
+    FUN_001f9a28(va, va, D_L02_001619C0);
     FUN_001f9cf8(va, va, &moby->rot_row0);
     FUN_001f9a10(va, va, &moby->pos);
     pb = D_L02_001D3230[b];
     qcopy(vb, pb);
     vb[3] = 1.0f;
-    FUN_001f9a28(vb, vb, &D_L02_001619C0);
+    FUN_001f9a28(vb, vb, D_L02_001619C0);
     FUN_001f9cf8(vb, vb, &moby->rot_row0);
     FUN_001f9a10(vb, vb, &moby->pos);
     FUN_L02_002d3a50(moby, va, vb, d, pa[3] * *(float *)&D_L02_001619D0,
@@ -170,16 +170,16 @@ void FUN_L02_002d3c98(struct Moby *moby, int a, int b, int d) {
 
 extern void FUN_L02_002d3c98(struct Moby *moby, int a, int b, int d);
 
-short D_L02_001619EC = 0xa;
-short D_L02_001619F0 = 0xa;
-short D_L02_001619F4 = 8;
-short D_L02_001619F8 = 8;
+int D_L02_001619EC = 0xa;
+int D_L02_001619F0 = 0xa;
+int D_L02_001619F4 = 8;
+int D_L02_001619F8 = 8;
 void FUN_L02_002d3dd0(void *moby) {
-    FUN_L02_002d3c98(moby, 0, 1, *(int *)&D_L02_001619F0);
-    FUN_L02_002d3c98(moby, 2, 3, *(int *)&D_L02_001619EC);
-    FUN_L02_002d3c98(moby, 4, 5, *(int *)&D_L02_001619F4);
-    FUN_L02_002d3c98(moby, 6, 7, *(int *)&D_L02_001619F4);
-    FUN_L02_002d3c98(moby, 8, 9, *(int *)&D_L02_001619F8);
+    FUN_L02_002d3c98(moby, 0, 1, D_L02_001619F0);
+    FUN_L02_002d3c98(moby, 2, 3, D_L02_001619EC);
+    FUN_L02_002d3c98(moby, 4, 5, D_L02_001619F4);
+    FUN_L02_002d3c98(moby, 6, 7, D_L02_001619F4);
+    FUN_L02_002d3c98(moby, 8, 9, D_L02_001619F8);
 }
 /* pvars of the Aridia enemy FUN_L02_002d3e50 updates (it leaves its burrow, walks, jumps and digs back in). */
 typedef struct {
@@ -299,7 +299,7 @@ extern void FUN_L02_002d5a68_e50(void *) __asm__("FUN_L02_002d5a68");
 extern void FUN_L02_002d5c88_e50(void *) __asm__("FUN_L02_002d5c88");
 extern void FUN_L02_002d63c0_e50(void *) __asm__("FUN_L02_002d63c0");
 
-int D_L02_001619A8 = {0};
+int D_L02_001619A8 = 0;
 extern unsigned char D_L02_00161900 __attribute__((sda));
 extern float D_L02_0016191C __attribute__((sda));
 int D_L02_001619B0 = 0xa000000;
@@ -1991,9 +1991,9 @@ extern float D_L02_00161BEC __attribute__((sda));
 extern float D_L02_00161BE8 __attribute__((sda));
 extern float D_L02_00161BF0 __attribute__((sda));
 extern float D_L02_00161C10 __attribute__((sda));
-int D_L02_00161BF4 = {0};
+int D_L02_00161BF4 = 0;
 int D_L02_00161BF8 = 2;
-int D_L02_00161BFC = {0};
+int D_L02_00161BFC = 0;
 int D_L02_00161C00 = 1;
 int D_L02_00161C04 = 0x206068;
 int D_L02_00161C08 = 0x40107020;
@@ -3292,8 +3292,8 @@ extern void clear_vector(void *) __asm__("func_001F99F8");
 void blend_moby_animation_c(void *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-short D_L02_00161C9C = 0x7070;
-short D_L02_00161CA0 = 0x7070;
+int D_L02_00161C9C = 0x6f707070;
+int D_L02_00161CA0 = 0x707070;
 void FUN_L02_002e0280(struct Moby *moby) {
     float u[4];
     float v[4];
@@ -3318,7 +3318,7 @@ void FUN_L02_002e0280(struct Moby *moby) {
             v[1] += random_float_between_alt(-0.15f, 0.15f);
             r = scale_game_frames(random_int_between(0x14, 0x28));
             s = random_int_between(0x14, 0x28);
-            FUN_L00_00269958(vp, u, *(int *)&D_L02_00161C9C, *(int *)&D_L02_00161CA0, r, 0x28,
+            FUN_L00_00269958(vp, u, D_L02_00161C9C, D_L02_00161CA0, r, 0x28,
                              s, 1);
             i--;
         } while (i >= 0);

@@ -2695,7 +2695,7 @@ typedef struct {
     u8 pad10[0x50];
 } BoundGroup;
 
-s32 D_L01_00161BA0 = {0};
+s32 D_L01_00161BA0 = 0;
 extern BoundGroup D_L01_001E3380[];
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);

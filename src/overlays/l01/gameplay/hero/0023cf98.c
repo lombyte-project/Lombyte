@@ -42,8 +42,8 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L01_00226f10(int a);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-short D_L01_0015F6D8 = 8;
-short D_L01_0015F6E8 = {0};
+int D_L01_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
+char D_L01_0015F6E8[4] = {0, 0, 0x40, 0x42};
 extern unsigned char D_L01_0017C258[];
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
@@ -537,7 +537,7 @@ int hero_set_state(int a, int b) {
                 if (b) {
                     struct Hero *v = &hero;
                     set_hero_animation(v->state.step + 3,
-                                     ((int *)&D_L01_0015F6D8)[v->state.step], (float)n);
+                                     D_L01_0015F6D8[v->state.step], (float)n);
                 }
             }
         }
@@ -558,7 +558,7 @@ int hero_set_state(int a, int b) {
                 set_hero_animation(2, 0, (float)scale_game_frames(8));
             } else if (p->vehicle_mode == 0) {
                 set_hero_animation(p->state.step + 3,
-                                 ((int *)&D_L01_0015F6D8)[p->state.step],
+                                 D_L01_0015F6D8[p->state.step],
                                  (float)scale_game_frames(8));
             }
         }
@@ -1033,7 +1033,7 @@ int hero_set_state(int a, int b) {
                     w->unk3D8 = 29.0f;
                     w->unk3DC = 50.0f;
                     w->unk3E0 = scale_game_frames(0x56);
-                    *(char **)&w->unk3E4 = (char *)&D_L01_0015F6E8;
+                    *(char **)&w->unk3E4 = D_L01_0015F6E8;
                     w->unk4AE = 1;
                 }
             } else if (u->state.current == 0xE) {
@@ -1602,7 +1602,7 @@ struct HeldGadgetVars {
 };
 
 extern int D_00141660 __attribute__((section(".data")));
-int r1_double_tap_timer __asm__("D_L01_0015F674") = {0};
+int r1_double_tap_timer __asm__("D_L01_0015F674") = 0;
 extern int FUN_001f9740(int *) __asm__("FUN_001f9740");
 extern int FUN_0022da68(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);

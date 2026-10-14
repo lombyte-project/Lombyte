@@ -47,9 +47,9 @@ extern int FUN_L00_0025d808(int *tab, float *out, int *a, float *b, int c, float
 extern int FUN_L01_00226f10(int a);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-short D_L03_0015F6D8 = 8;
+int D_L03_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 extern s32 D_L03_0015F688 __attribute__((sda));
-short D_L03_0015F6E8 = {0};
+char D_L03_0015F6E8[4] = {0, 0, 0x40, 0x42};
 extern unsigned char D_L03_0017BED8[];
 extern void *D_L03_001612D0;
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -551,7 +551,7 @@ int hero_set_state(int a, int b) {
                 if (b) {
                     struct Hero *v = &hero;
                     set_hero_animation(v->state.step + 3,
-                                     ((int *)&D_L03_0015F6D8)[v->state.step], (float)n);
+                                     D_L03_0015F6D8[v->state.step], (float)n);
                 }
             }
         }
@@ -572,7 +572,7 @@ int hero_set_state(int a, int b) {
                 set_hero_animation(2, 0, (float)scale_game_frames(8));
             } else if (p->vehicle_mode == 0) {
                 set_hero_animation(p->state.step + 3,
-                                 ((int *)&D_L03_0015F6D8)[p->state.step],
+                                 D_L03_0015F6D8[p->state.step],
                                  (float)scale_game_frames(8));
             }
         }
@@ -1194,7 +1194,7 @@ int hero_set_state(int a, int b) {
                     w->unk3D8 = 29.0f;
                     w->unk3DC = 50.0f;
                     w->unk3E0 = scale_game_frames(0x56);
-                    *(char **)&w->unk3E4 = (char *)&D_L03_0015F6E8;
+                    *(char **)&w->unk3E4 = D_L03_0015F6E8;
                     w->unk4AE = 1;
                 }
             } else if (u->state.current == 0xE) {

@@ -1029,7 +1029,7 @@ extern u128 pool_drips[] __asm__("D_L01_001FA650");
 extern u8 pool_wave[] __asm__("D_L01_001FA6A0");
 extern u8 camera_pos[] __asm__("D_L01_00167240");
 extern s32 level_frame_count __asm__("D_L01_0015F5CC") MACRO_ADDR;
-s32 pool_drip_timer __asm__("D_L01_00161C84") = {0};
+s32 pool_drip_timer __asm__("D_L01_00161C84") = 0;
 extern PoolTile *pool_draw_tiles __asm__("D_L01_001612D0") MACRO_ADDR;
 extern u8 *pool_draw_tex __asm__("D_L01_001612D4") MACRO_ADDR;
 extern s32 pool_draw_count __asm__("D_L01_001612D8") MACRO_ADDR;
@@ -1304,7 +1304,7 @@ typedef struct {
 } WaterLayer;
 
 extern WaterLayer D_L01_001FBC80[];
-s32 D_L01_00161CE0 = {0};
+s32 D_L01_00161CE0 = 0;
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 extern f32 FUN_001fa6c0(s32);
 extern f32 FUN_001f9de0(f32);

@@ -1621,7 +1621,7 @@ extern u64 get_effect_texture_l07(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister_l07(int, u64) __asm__("FUN_00233980");
 extern void draw_geometry_quad_l07(void *, int, int) __asm__("FUN_001f7d30");
 float scroll_phase __asm__("D_L07_00161B74") = 0;
-float row_wave_phase __asm__("D_L07_00161B78") = 0;
+float row_start_phase __asm__("D_L07_00161B78") = 0;
 float row_phase_step_gp __asm__("D_L07_00161B7C") = 0.006f;
 extern short D_L07_0020DBC8[];
 
@@ -1659,9 +1659,9 @@ void FUN_L07_00317910(void) {
     column_step = 0.05f;
     vu1_add_g_sregister_l07(0x4e, (depth_buffer_address >> 13) | 0x1000000 | ((u64)0x8000 << 17));
     for (row = 1; row < 10; row++) {
-        row_phase = row_wave_phase;
-        row_wave_phase += row_phase_step_gp;
-        if (row_wave_phase > 7.0f) row_wave_phase -= 7.0f;
+        row_phase = row_start_phase;
+        row_start_phase += row_phase_step_gp;
+        if (row_start_phase > 7.0f) row_start_phase -= 7.0f;
         for (column = 0; column < 20; column++) {
             qcopy(packet.pos[0], rope_grid[row][column]);
             qcopy(packet.pos[1], rope_grid[row][(column + 1) % 20]);
