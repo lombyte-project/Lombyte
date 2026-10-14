@@ -360,7 +360,7 @@ void FUN_L13_00306300(struct Moby *moby) {
     } work;
     extern L13TargetRow_6300 D_L13_00178400[];
     int stationary;
-    short flags;
+    int flags;
     float length;
     extern struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vector_6300 pos; L13Vector_6300 pad2; L13Vector_6300 matrix; } D_L13_00174140;
 
@@ -370,21 +370,22 @@ void FUN_L13_00306300(struct Moby *moby) {
     work.direction.z = 0.0f;
     normalize_vector_xyz_6300(&work.direction, &work.direction, 1.0f);
     work.direction.z = 1.0f;
-    flags = 1;
+    flags = 0x10001;
     /* Existing symbols for hero.ammo_used and hero.motion.pos at their retail addresses. */
     if (D_00141346 != 0 && *(float *)(data + 0xc) != 31337.602f &&
         fast_vec_dist(&moby->pos, D_0013F3D0) < 2.0f) {
         int i;
         scale_vector_xyz_6300(data, data, 0.5f);
         subtract_vector_xyz(&moby->pos, &moby->pos, data);
-        *(OvlQuad *)data = 0;
+        *(unsigned long long *)data = 0;
+        *(unsigned long long *)(data + 8) = 0;
         *(int *)(data + 0x2c) = 5;
         /* Preserve the sentinel bits without keeping the comparison constant live. */
         *(unsigned int *)(data + 0xc) = 0x46f4d334;
         for (i = 0; i < 6; i++) {
             struct Moby *target = (struct Moby *)hero.unk2020[i];
             if (target != 0) {
-                FUN_L00_00259888(&work.hit, moby, (unsigned short)flags | 0x10000, &work.direction, 1.0f);
+                FUN_L00_00259888(&work.hit, moby, flags | 1, &work.direction, 1.0f);
                 work.hit.oclass = moby->oclass;
                 work.hit.active = 1;
                 work.hit.valid = 1;
@@ -404,13 +405,13 @@ update_hit:
                     D_L13_00178400[target->hit_slot].valid = 1;
                     D_L13_00178400[target->hit_slot].oclass = moby->oclass;
                     previous = &D_L13_00178400[target->hit_slot];
-                    previous->flags = (unsigned short)flags | 0x10000;
+                    previous->flags = flags | 1;
                 }
                 break;
             }
         }
     }
-    FUN_L00_00259888(&work.hit, moby, (unsigned short)flags | 0x10000, &work.direction, 1.0f);
+    FUN_L00_00259888(&work.hit, moby, 0x10001, &work.direction, 1.0f);
     work.hit.oclass = moby->oclass;
     work.hit.active = 1;
     work.hit.valid = 1;
