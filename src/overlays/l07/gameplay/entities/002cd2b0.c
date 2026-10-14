@@ -1841,7 +1841,7 @@ void FUN_L07_0030d4d8(struct Moby *moby) {
             FUN_001f99f8(&offset);
             color = D_L07_0015F580;
             /* FUN_001f99f8 clears all four components to positive zero. */
-            FUN_L00_0025e450_l07(offset.f[3], offset.f[3], 4.0f, 2.0f, 9.0f, 1.0f, 15.0f, moby, &offset, 0, 10, 3, 16, 1, 1, 1, -1, 0);
+            FUN_L00_0025e450_l07(0.0f, 0.0f, 4.0f, 2.0f, 9.0f, 1.0f, 15.0f, moby, &offset, 0, 10, 3, 16, 1, 1, 1, -1, 0);
             FUN_L00_00263fd8(moby, 0x621, effect_position, effect_rotation, 0, 0, 0.0f, color, color, color);
             FUN_L00_00263fd8(moby, 0x622, effect_position, effect_rotation, 0, 0, 0.0f, color, color, color);
             mark_moby_for_removal(moby);
