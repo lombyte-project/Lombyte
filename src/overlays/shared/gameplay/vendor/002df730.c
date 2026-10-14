@@ -1066,12 +1066,11 @@ void FUN_L00_002e2c88(int a, int b, void *points, int alpha, int glow_alpha, int
     scale = 0.6f;
     glow.uv[0][1] = 0.0f;
     zero = glow.uv[0][1];
-    uv_start = D_L00_00161C78_f[idx] + zero;
-    uv_end = D_L00_00161C78_f[idx] + one;
-    q.uv[0][0] = uv_start; q.uv[2][0] = uv_end;
+    q.uv[0][0] = D_L00_00161C78_f[idx] + zero;
+    q.uv[2][0] = D_L00_00161C78_f[idx] + one;
     glow_color = ((u32)glow_alpha << 24) | 0x7f4040;
     texture3 = q.texture[3]; texture2 = q.texture[2]; texture0 = q.texture[0];
-    glow.texture[3] = texture3; glow.texture[2] = texture2; glow.texture[0] = texture0;
+    glow.texture[2] = texture2; glow.texture[3] = texture3; glow.texture[0] = texture0;
     glow.color[0] = glow.color[1] = glow.color[2] = glow.color[3] = glow_color;
     glow.uv[0][0] = one; glow.uv[0][1] = zero;
     glow.uv[1][0] = one; glow.uv[1][1] = one;
@@ -1083,7 +1082,7 @@ void FUN_L00_002e2c88(int a, int b, void *points, int alpha, int glow_alpha, int
     if (*(short *)(D_L00_00161C88_c2[idx] + 0xa6) == 0x1c) scale = 0.3f;
     width.q = 0; glow_width.q = 0;
     glow_width.f[2] = scale + scale;
-    width.f[3] = one; width.f[2] = scale; glow_width.f[3] = one;
+    width.f[2] = scale; glow_width.f[3] = one; width.f[3] = one;
     position = (OvlVec4 *)(D_L00_001E6D20_c[idx].b + 0x10);
     qcopy(&basis[0], position);
     one = width.f[3];
@@ -1103,7 +1102,7 @@ void FUN_L00_002e2c88(int a, int b, void *points, int alpha, int glow_alpha, int
     cross_vectors_xyz(&transform[2], &transform[1], &transform[0]);
     qcopy(&q.v[0], &width);
     fast_vec_scale(&q.v[1], &q.v[0], -1.0f);
-    qcopy(&glow.v[0], &glow_width);
+    glow.v[0].q = glow_width.q;
     fast_vec_scale(&glow.v[1], &glow.v[0], -1.0f);
     transform_vector_c(&from, points, transform);
     transform_vector_c(&to, (char *)points + 0x10, transform);
