@@ -407,6 +407,7 @@ void FUN_L06_002e8678(struct Moby *moby) {
     float intersection[4] __attribute__((aligned(16)));
     float f, angle, speed;
     int *path;
+    float *path_pos;
     int divisor;
     int flags, blocked, animation, frames, state;
 
@@ -434,9 +435,9 @@ void FUN_L06_002e8678(struct Moby *moby) {
     case 0: {
         float frame_scale;
         divisor = E8678_SHORT(0x240);
-        flags = D_L06_00161C14;
-        E8678_SHORT(0x20a) = flags % 8;
-        D_L06_00161C14 = flags + 1;
+        state = D_L06_00161C14;
+        E8678_SHORT(0x20a) = state % 8;
+        D_L06_00161C14 = state + 1;
         if (divisor != 0) moby->unkB4 /= divisor;
         moby->flags |= 0x100;
         vars[0x58] = truncate_float_to_s32(8.0f);
@@ -507,7 +508,8 @@ void FUN_L06_002e8678(struct Moby *moby) {
         break;
     case 4:
         path = D_L06_001B0C30[E8678_INT(0x1f8)];
-        qcopy(pos, (path + E8678_SHORT(0x208) * 4 + 4));
+        path_pos = (float *)(path + 4);
+        qcopy(pos, path_pos + E8678_SHORT(0x208) * 4);
         subtract_vector_xyz(direction, pos, &moby->pos);
         FUN_L06_002e9aa8((char *)moby);
         FUN_L06_002e9998((char *)moby, D_L06_00174600, direction);
@@ -578,14 +580,12 @@ remove:
         }
         if (E8678_INT(0x1c4) == 2 || random_integer_below(9) != 0) {
             if (E8678_SHORT(0x1e8) == 0) return;
-            f = random_float_between(-E8678_FLOAT(0x1d8), E8678_FLOAT(0x1d8));
-            state = 10;
+            E8678_FLOAT(0x1d4) = random_float_between(-E8678_FLOAT(0x1d8), E8678_FLOAT(0x1d8)) * 0.017453292f;
+            moby->state = 10;
         } else {
-            f = random_float_between(-E8678_FLOAT(0x1d8), E8678_FLOAT(0x1d8));
-            state = 9;
+            E8678_FLOAT(0x1d4) = random_float_between(-E8678_FLOAT(0x1d8), E8678_FLOAT(0x1d8)) * 0.017453292f;
+            moby->state = 9;
         }
-        E8678_FLOAT(0x1d4) = f * 0.017453292f;
-        moby->state = state;
         if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, 0);
         return;
     case 9:
