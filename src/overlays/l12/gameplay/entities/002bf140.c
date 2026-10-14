@@ -858,13 +858,12 @@ extern void spawn_particle(void *, void *, void *, int, int, int, int, int, int)
 
 void FUN_L12_002e3098(struct Moby *moby) {
     float pos[4] __attribute__((aligned(16)));
-    void *vars;
     float velocity[4] __attribute__((aligned(16)));
     float accel[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
     float angle, horizontal, vertical, radius;
     int i, j, count, a, b, c, d, life;
-    float *position;
+    void *volatile vars;
     float *direction_ptr;
 
     vars = *(void *volatile *)&moby->pvars;
@@ -874,12 +873,11 @@ void FUN_L12_002e3098(struct Moby *moby) {
         count = truncate_float_to_s32_e3098((float)count * 1.5f);
     i = 0;
     if (count > 0) {
-        position = pos;
         direction_ptr = direction;
 
         do {
         qcopy(pos, &moby->pos);
-        randomize_position(position, D_L12_00161844);
+        randomize_position(pos, D_L12_00161844);
         pos[2] += 0.55f;
         angle = random_angle_radians_e3098();
         horizontal = random_float_between_alt_e3098(D_L12_00161850, D_L12_00161854);
@@ -902,7 +900,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
             radius = random_float_between_alt_e3098(0.5f, 1.5f);
             velocity[3] = radius * D_L12_00161864;
             accel[3] = radius * D_L12_00161868;
-            randomize_position(position, D_L12_00161848);
+            randomize_position(pos, D_L12_00161848);
             randomize_position(accel, D_L12_0016184C * frame_time);
             a = random_integer_between(random_float_between_alt_e3098(0.0f, 1.0f),
                                        D_L12_0016186C, D_L12_00161874);
