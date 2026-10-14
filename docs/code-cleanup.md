@@ -84,20 +84,39 @@ make it clearer, add a comment that explains why it looks odd.
 - Name unused fields `pad_XXX[n]`.
 - Put offset checks in `src/check/*_layout_check.c`. `make check` runs them.
 
-**Data**
+## Data
 
-- Each variable has one definition and one `extern` in a header, with one
-  type and one name. A file that needs another placement keeps one alias,
+Data in C has its bytes checked too (`make elf`, `make overlays`), so a wrong
+edit fails at once.
+
+| Change | Risk | When to check |
+|---|---|---|
+| C name of a global (the `__asm__("D_...")` label stays) | none | once per batch |
+| How a value is written, same bytes (`enum`/`#define`, hex colour, `0` instead of `{0}` on a single value) | none | once per batch |
+| Element type to a struct with the same layout (`float t[8]` → `struct { float u, v; } t[4]`) | low: the code that reads it changes | after each unit |
+| Sign, size or `const` of a global | medium: reading code and section change | after each unit |
+| Moving a definition (in its file or to another file) | medium: `$gp` or `lui` access in readers can change | after each unit |
+
+- **One name, one type.** Each variable has one definition and one `extern`
+  in a header. A file that needs another placement keeps one alias,
   `<name>_gp` (sda), `<name>_lui` (`NOT_SDA`) or `<name>_macro` (`MACRO_ADDR`).
+  File suffixes (`_28efc8`, `_t`) and level prefixes on main-ELF data go.
   `scripts/data-decls.py` lists the labels that still disagree; fix the type
   when you move that data to C, and lower the count in `test_public_tools.py`.
-- Data that only one file reads is defined in that file and listed in
-  `DATA_OVERLAYS` in `configure.py` with its address and size. This command
-  writes both for you: `python3 scripts/data-refs.py --emit ADDR --into FILE`
-  Uninitialised data goes in `BSS_OVERLAYS` the same way.
-- Level data is listed in `config/overlays/us/data.tsv`; `make overlays` proves
-  its bytes. `data-refs.py --level N --emit ADDR --into FILE` writes both.
-- Shared data and raw bytes stay in assembly, with their type in a header.
+- **Names** come from what the reading code does with the data
+  (`camera_saved_states`, `panel_slot_enabled`). No evidence: the label is the
+  name.
+- **Copies in several levels** (`D_L05_X`, `D_L11_X`) share one type, and one
+  name when the same code reads them.
+- **Tables read as rows** become arrays of a struct with fields named by use.
+- **Values say what they mean:** `enum`/`#define` for ids and flags, hex for
+  colours and bit masks, floats exactly as `data-refs.py` prints them.
+- **Where it lives:** data that only one file reads is defined after that
+  file's functions and listed in `DATA_OVERLAYS` (`BSS_OVERLAYS` when
+  uninitialised) in `configure.py`; level data is a row in
+  `config/overlays/us/data.tsv`. `data-refs.py --emit ADDR --into FILE`
+  (`--level N` for level data) writes both. Shared data and raw bytes stay in
+  assembly, with their type in a header.
 - A variable defined in C is removed from `config/us/symbol_addrs.txt`.
 
 ## Moving files
