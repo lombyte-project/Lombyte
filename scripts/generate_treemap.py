@@ -1015,7 +1015,7 @@ def render_svg(
     )
     lines.append(f'<clipPath id="drawer-clip"><polygon points="{boot_poly}"/></clipPath>')
     placements = layout_boot(units, dx0, dy0, xb - dx0, ddy, min_bytes)
-    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.24"><g id="boot-tiles">')
+    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.24">')
     for tile, rect in placements:
         x, y = rect["x"], rect["y"]
         tdx, tdy = max(rect["dx"], 0.0), max(rect["dy"], 0.0)
@@ -1026,25 +1026,24 @@ def render_svg(
             f'fill="{tile_fill(tile)}" stroke="{STROKE}" stroke-width="0.6" '
             f'shape-rendering="geometricPrecision"><title>{esc(tile_tooltip(tile))}</title></rect>'
         )
-    lines.append("</g></g>")
+    lines.append("</g>")
     lines.append(f'<polygon points="{boot_poly}" fill="url(#sheen)" pointer-events="none"/>')
     cx, cy = (dx0 + xt) / 2, dy0 + ddy / 2
-    # Frosted glass behind the percentage: the treemap blurred under the same
-    # warm plate and orange glow as the whole-game panel.
+    # The whole-game panel's face, hatching and glow behind the percentage,
+    # fading out into the treemap.
     grx, gry = (xt - dx0) * 0.3, ddy * 0.62
     lines.append(
-        f'<defs><filter id="glass" x="-10%" y="-10%" width="120%" height="120%">'
-        f'<feGaussianBlur stdDeviation="5"/></filter>'
-        f'<radialGradient id="glass-fade"><stop offset="0.55" stop-color="#fff"/>'
+        f'<defs><radialGradient id="glass-fade"><stop offset="0.55" stop-color="#fff"/>'
         f'<stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
         f'<mask id="glass-mask"><ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{grx:.1f}" ry="{gry:.1f}" '
         f'fill="url(#glass-fade)"/></mask></defs>'
     )
     lines.append(
         f'<g clip-path="url(#drawer-clip)" mask="url(#glass-mask)" pointer-events="none">'
-        f'<use href="#boot-tiles" filter="url(#glass)" opacity="0.24"/>'
-        f'<rect x="{cx - grx:.1f}" y="{dy0}" width="{2 * grx:.1f}" height="{ddy}" fill="{PANEL_FACE_TOP}" fill-opacity="0.92"/>'
-        f'<ellipse cx="{cx:.1f}" cy="{cy + 4:.1f}" rx="{grx * 0.8:.1f}" ry="{gry:.1f}" fill="url(#panel-glow)" opacity="0.7"/></g>'
+        f'<rect x="{cx - grx:.1f}" y="{dy0}" width="{2 * grx:.1f}" height="{ddy}" fill="url(#panel-face)"/>'
+        f'<rect x="{cx - grx:.1f}" y="{dy0}" width="{2 * grx:.1f}" height="{ddy}" fill="url(#panel-hatch)"/>'
+        f'<ellipse cx="{cx:.1f}" cy="{dy0 + ddy / 2 + 4:.1f}" rx="{(right - xb) * 0.55:.1f}" '
+        f'ry="{ddy * 0.7:.1f}" fill="url(#panel-glow)"/></g>'
     )
     lines.append(
         f'<text x="{dx0 + 12}" y="{dy0 + 17}" font-family="{esc(FONT)}" font-size="10" '
