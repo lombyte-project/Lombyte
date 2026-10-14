@@ -127,8 +127,8 @@ struct HeroItemSlot {
 /*
  * One key of the hero's per-state vertical velocity curve (hero.unk3E4[i]),
  * run by hero_integrate_velocity between state frames unk3D0 and unk3D4. Entering a
- * key sets hero.unk3F0 to value * D_0015ED70 (-1000000 keeps it); each later
- * frame adds delta * D_0015ED70. A key lasts scale_game_frames(frames).
+ * key sets hero.unk3F0 to value * frame_time_sq (-999999 keeps it); each later
+ * frame adds delta * frame_time_sq. A key lasts scale_game_frames(frames).
  */
 struct HeroVelocityKey {
     f32 value;
