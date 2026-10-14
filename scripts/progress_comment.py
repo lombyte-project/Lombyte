@@ -23,6 +23,7 @@ MARKER = "<!-- lombyte-progress-report -->"
 ROWS = (("total", "All code"), ("boot", "Boot executable"), ("game", "Game"),
         ("sdk", "SDK"), ("overlays", "Level overlays"),
         ("shared", "Shared level code"), ("levels", "Per-level code"))
+DATA_ROWS = (("total", "All data"), ("boot", "Boot executable"), ("overlays", "Level overlays"))
 LIST_LIMIT = 40
 
 
@@ -92,6 +93,19 @@ def render(base: dict, head: dict, base_label: str) -> str:
             f"({signed(funcs_delta, '', 0)}) "
             f"| {float(n.get('fuzzy_match_percent', 0.0)):.2f} % |")
     lines.append("")
+    if any("total_data" in new.get(key, {}) for key, _ in DATA_ROWS):
+        lines += ["| | Data in C | Change | Matched bytes |", "| --- | ---: | ---: | ---: |"]
+        for key, label in DATA_ROWS:
+            n, o = new.get(key, {}), old.get(key, {})
+            if "total_data" not in n:
+                continue
+            percent = float(n.get("matched_data_percent", 0.0))
+            delta = percent - float(o.get("matched_data_percent", 0.0)) if o else 0.0
+            bytes_delta = int(n.get("matched_data", 0)) - int(o.get("matched_data", 0)) if o else 0
+            lines.append(f"| {label} | {percent:.2f} % | {signed(delta, ' pp')} "
+                         f"| {int(n.get('matched_data', 0)):,} / {int(n.get('total_data', 0)):,} B "
+                         f"({signed(bytes_delta, ' B', 0)}) |")
+        lines.append("")
 
     before, after = (functions(base), functions(head)) if base else ({}, {})
     gained = sorted(({"address": a[1], **f} for a, f in after.items()

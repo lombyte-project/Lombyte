@@ -333,6 +333,7 @@ class ProgressReportTests(unittest.TestCase):
             self.assertTrue(text.startswith(comment.MARKER))
             self.assertIn("1 newly matched function", text)
             self.assertIn("`P`", text)
+            self.assertIn("| All data |", text)
             self.assertIn("No report for main yet", comment.render({}, new, "main"))
 
     def test_data_counts_blobs_c_entries_and_levels(self):

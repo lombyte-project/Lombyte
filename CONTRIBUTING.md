@@ -128,7 +128,7 @@ Once the unit matches, make the C the only compiled code:
 
 There is no progress file to regenerate: CI rebuilds the decomp.dev report and
 the progress map from the tree, and the pull request gets a comment with the
-change in C_EXACT and the newly matched functions.
+change in C_EXACT, in data in C and the newly matched functions.
 
 ### 7. Open a pull request
 
