@@ -1309,12 +1309,13 @@ void FUN_L08_002e2250(struct Moby *moby) {
     int selected = 0;
     TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
     TargetSlot *slots = vars->slots;
-    TargetSlot *slot = slots;
+    TargetSlot *slot;
     int i = 0;
     int hits = 0;
     int sound = -1;
     int total;
 
+    slot = slots;
     do {
         if (slot->moby != 0) {
             if (target_board_check_hit(slot->moby, 0x10000, 0) != 0) {
@@ -1350,7 +1351,8 @@ mark_hit:
         sound = 0;
         if (selected != 0) {
             u8 *vector;
-            slot = &slots[selected];
+            slots += selected;
+            slot = slots;
             vector = slot->moby->pvars;
             FUN_L00_0025f090(moby, &slot->moby->pos, -1, 2.0f, 13.0f);
             FUN_001f9a28(vector, &slot->moby->pos, &vars->slots[selected].anchor->pos);
@@ -1360,11 +1362,13 @@ mark_hit:
             return;
         }
         {
-            long start = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
+            int start = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
+            TargetSlot *base = slots;
             i = 0;
             do {
-                int index = (int)(i + start) % 24 + 10;
-                slot = &slots[index];
+                int index = (int)((unsigned int)i + (unsigned int)start) % 24 + 10;
+                slots = base + index;
+                slot = slots;
                 i++;
                 if (slot->moby != 0) {
                     u8 *vector = slot->moby->pvars;
