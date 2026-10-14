@@ -710,14 +710,15 @@ void FUN_L08_002f5e58(struct Moby *m) {
         i = 7;
         do {
             f32 value = *current;
+            f32 t;
             if (value < *target) {
-                value = value + f[0x22] * f[0x23];
-                *current = value;
-                if (*target <= value) *target = random_float_between(1.0f-f[0x22], 1.0f);
+                t = value + f[0x22] * f[0x23];
+                *current = t;
+                if (*target <= t) *target = random_float_between(1.0f-f[0x22], 1.0f);
             } else {
-                value = value - f[0x22] * f[0x23];
-                *current = value;
-                if (value <= *target) *target = random_float_between(1.0f-f[0x22], 1.0f);
+                t = value - f[0x22] * f[0x23];
+                *current = t;
+                if (t <= *target) *target = random_float_between(1.0f-f[0x22], 1.0f);
             }
             target++;
             i--;
@@ -857,12 +858,10 @@ void FUN_L08_002f5e58(struct Moby *m) {
                 current = (Vec4 *)((char *)grid + k);
                 target = (Vec4 *)((char *)grid + count);
                 for (j=0; j<b[8]; j++) {
-                    a = u[j]; c = *current_v; t = u[j+1];
-                    packet.uv[0][0] = a; packet.uv[0][1] = c;
-                    packet.uv[1][0] = t; packet.uv[1][1] = c;
-                    c = *target_v;
-                    packet.uv[2][0] = a; packet.uv[2][1] = c;
-                    packet.uv[3][0] = t; packet.uv[3][1] = c;
+                    packet.uv[0][0] = u[j]; packet.uv[0][1] = *current_v;
+                    packet.uv[1][0] = u[j+1]; packet.uv[1][1] = *current_v;
+                    packet.uv[2][0] = u[j]; packet.uv[2][1] = *target_v;
+                    packet.uv[3][0] = u[j+1]; packet.uv[3][1] = *target_v;
                     add_vector_xyz(&packet.points[0], &current[j], &m->pos);
                     add_vector_xyz(&packet.points[1], &current[j+1], &m->pos);
                     add_vector_xyz(&packet.points[2], &target[j], &m->pos);
@@ -900,8 +899,10 @@ void FUN_L08_002f5e58(struct Moby *m) {
             t = random_float_between(f[0x39], f[0x3a]);
             lifetime = (s16)scale_game_frames(*(s16 *)(b+0xf0));
             red = b[0xec]; green = b[0xed]; blue = b[0xee];
-            temp = (u8)truncate_float_to_s32_u(convert_integer_to_float(b[0xef])*a);
-            FUN_L08_0027b450(m, &offset, &velocity, lifetime, red, green, blue, temp, t);
+            {
+                s32 temp = (u8)truncate_float_to_s32_u(convert_integer_to_float(b[0xef])*a);
+                FUN_L08_0027b450(m, &offset, &velocity, lifetime, red, green, blue, temp, t);
+            }
         } while (i < b[0xf2]);
     }
     if (tick_countdown_16((s16 *)(b+0x122))) {
@@ -936,9 +937,9 @@ void FUN_L08_002f5e58(struct Moby *m) {
             a = random_float_between((f32)-(s32)b[0x139], (f32)b[0x139]);
             a = (a+d->size_x)*0.5f;
             c = random_float_between((f32)-(s32)b[0x13a], (f32)b[0x13a]);
-            c = (c+d->size_y)*0.5f;
             normalize_vector_xyz(&velocity, &across, a);
-            normalize_vector_xyz(&offset, &down[0], -c);
+            a = (c+d->size_y)*0.5f;
+            normalize_vector_xyz(&offset, &down[0], -a);
             add_vector_xyz(&d->light_pos, &velocity, &offset);
             add_vector_xyz(&d->light_pos, &d->light_pos, &corners[0]);
             add_vector_xyz(&d->light_pos, &d->light_pos, &m->pos);
