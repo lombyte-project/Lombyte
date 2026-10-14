@@ -526,7 +526,8 @@ void FUN_L14_002b17d8(unsigned char *moby) {
         angle = fast_arc_tan(*(float *)(owner + 0x10) - *(float *)(moby + 0x10), *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
         f = FUN_001fa6c0(*(short *)(data + 0x262));
         duration = FUN_001fa6c0(FUN_001f96f8(D_L14_001614EC));
-        f = fast_subtract_rotations(*(float *)(data + 0x278), -D_L14_001614E8 + (D_L14_001614E8 + D_L14_001614E8) * (f / duration));
+        f = f / duration;
+        f = fast_subtract_rotations(*(float *)(data + 0x278), -D_L14_001614E8 + (D_L14_001614E8 + D_L14_001614E8) * f);
         if (data[0x24B] && (*(float *)(owner + 0x18) + 0.1f) - *(float *)(moby + 0x18) < 0.0f) flag = 1;
         FUN_L14_002b35d8(moby, flag, f);
         FUN_L14_002b37b0(moby, angle);
