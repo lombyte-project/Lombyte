@@ -2649,7 +2649,9 @@ reset_timer:
             if (FUN_00221360_2f5168(path + 0x10, path + (*(int *)path << 4)) < 0.5f) --*(int *)path;
         } else {
             path = (char *)0x0020b3e0;
-            index = FUN_00222160_2f5168((float)(((int)moby - (int)D_L01_0015FFD8) >> 8));
+            /* Retail uses an absolute load of D_L01_0015FFD8 here, despite its
+             * small-data declaration used by the other accesses in this file. */
+            index = FUN_00222160_2f5168((float)(((int)moby - I2((char *)0x0015ffd8, 0)) >> 8));
             type = H2(moby, 0xa6);
             FUN_0020cc78_2f5168(path, type, index);
         }
@@ -2667,7 +2669,7 @@ reset_timer:
                     if (path_state->index == *(int *)path_state->path - 1) path_state->index = 0;
                 } else if (path_state->index == 0) path_state->index = 0;
             }
-            path_state->distance = FUN_00221360_2f5168(moby + 0x10, path_state->path + ((path_state->index + 1) << 4));
+            path_state->distance = FUN_00221360_2f5168(moby + 0x10, path_state->path + (path_state->index << 4) + 0x10);
             node = path_state->path + (path_state->index << 4);
             path_state->angle = FUN_002217c0_2f5168(F2(node, 0x10) - F2(moby, 0x10), F2(node, 0x14) - F2(moby, 0x14));
             path_state->state = 2;
