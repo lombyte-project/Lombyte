@@ -1865,7 +1865,7 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     float along;
     float segment_length;
     float best;
-    struct { volatile s32 path_index; void *out; volatile int changed; } state;
+    struct { s32 path_index; void *out; volatile int changed; } state;
     int i;
     int next_index;
     char *path;
@@ -1873,13 +1873,13 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     int count;
     char **path_entry;
 
-    state.path_index = path_index;
+    *(volatile s32 *)&state.path_index = path_index;
     state.changed = 0;
     *(void * volatile *)&state.out = out;
     best = 512.0f;
     qcopy_nc(&from_point, position);
     /* Retain the saved-index read; the first lookup uses the incoming index. */
-    (void)state.path_index;
+    (void)*(volatile s32 *)&state.path_index;
     path_offset = path_index * 4;
     count = *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1;
     if (state.changed < count) {
@@ -1927,7 +1927,7 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
             from_point.f[2] = ((Vec4f *)position)->z;
     loop_next:
             i = next_index;
-            path_offset = *(volatile s32 *)&state.path_index * 4;
+            path_offset = state.path_index * 4;
             count = *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1;
             count = i < count;
         } while (count);
