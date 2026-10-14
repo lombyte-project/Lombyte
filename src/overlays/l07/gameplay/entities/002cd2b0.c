@@ -1667,6 +1667,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
     f32 distance;
     f32 step_size;
     Vec4f *position;
+    Vec4f *distance_position;
 
     origin.f[0] = vars->origin_x;
     origin.f[1] = vars->origin_y;
@@ -1702,14 +1703,18 @@ void FUN_L07_0030cf90(struct Moby *moby) {
     case 2:
         if (vars->target_index != -1 &&
             (target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100)) != 0 &&
-            target->state != 0xfe && target->state != 0xfd &&
-            (position = &moby->pos, target->state == vars->target_state_word)) {
-            play_moby_sound(vars->trigger_sound, 0, moby);
-            moby->state = 4;
-            break;
+            target->state != 0xfe && target->state != 0xfd) {
+            distance_position = &moby->pos;
+            if (target->state == vars->target_state_word) {
+                play_moby_sound(vars->trigger_sound, 0, moby);
+                moby->state = 4;
+                break;
+            }
+        } else {
+            distance_position = &moby->pos;
         }
+        distance = vector_distance(distance_position, &origin);
         position = &moby->pos;
-        distance = vector_distance(position, &origin);
         if (vars->radius < distance) {
             if (vars->arrival_sound != -1)
                 play_moby_sound(vars->arrival_sound, 0, moby);
