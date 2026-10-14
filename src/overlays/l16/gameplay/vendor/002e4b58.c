@@ -166,9 +166,15 @@ void FUN_L16_002e4f30(struct Moby *a) {
 extern char D_L16_001DF2D0[] __attribute__((section(".data")));
 extern int FUN_001fa728(char *, float);
 extern int get_effect_texture_l16(int) __asm__("FUN_001f44b8");
-short D_L16_00161FA0 = -6368;
-short D_L16_00161FA8 = -5384;
-short D_L16_00161FB0 = -3904;
+extern float D_L16_001DE720[];
+extern float D_L16_001DEA90[];
+float *D_L16_00161FA0[2] = {D_L16_001DE720, D_L16_001DEA90};
+extern float D_L16_001DEAF8[];
+extern float D_L16_001DF020[];
+float *D_L16_00161FA8[2] = {D_L16_001DEAF8, D_L16_001DF020};
+extern float D_L16_001DF0C0[];
+extern float D_L16_001DF278[];
+float *D_L16_00161FB0[2] = {D_L16_001DF0C0, D_L16_001DF278};
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
@@ -177,9 +183,9 @@ extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
 void FUN_L16_002e97a0(void) {
     int *a = (int *)&D_L16_00161F90;
     int *b = (int *)&D_L16_00161F98;
-    int *c = (int *)&D_L16_00161FA0;
-    int *d = (int *)&D_L16_00161FA8;
-    int *e = (int *)&D_L16_00161FB0;
+    int *c = (int *)D_L16_00161FA0;
+    int *d = (int *)D_L16_00161FA8;
+    int *e = (int *)D_L16_00161FB0;
     int i;
 
     vu1_add_g_sregister_l16(6, get_effect_texture_l16(0x29));

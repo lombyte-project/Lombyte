@@ -1077,7 +1077,7 @@ int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
 extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
-short D_L12_00161920 = {0};
+float D_L12_00161920[4] __attribute__((section(".sdata"))) = {-1.5f, 0.8f, -0.5f, 0.0f};
 void FUN_L12_002e3948(struct Moby *moby) {
     float a[4];
     float b[4];

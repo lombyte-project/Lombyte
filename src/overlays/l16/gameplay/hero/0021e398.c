@@ -52,9 +52,9 @@ extern int FUN_L05_002551b8(void);
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-char D_L16_0015F6E8[4] = {8, 0, 0, 0};
+int D_L16_0015F6E8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 extern short D_L16_0015F688 __attribute__((sda));
-char D_L16_0015F6F8[4] = {0, 0, 0x40, 0x42};
+struct HeroVelocityKey D_L16_0015F6F8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
 extern unsigned char D_0013D388[];
 extern unsigned char D_L16_0017C238[];
 extern void *D_L16_001612D0;
@@ -726,7 +726,7 @@ int hero_set_state(int a, int b) {
                 if (b) {
                     struct Hero *v = &hero;
                     set_hero_animation(v->state.step + 3,
-                                     ((int *)&D_L16_0015F6E8)[v->state.step], (float)n);
+                                     D_L16_0015F6E8[v->state.step], (float)n);
                 }
             }
         }
@@ -760,7 +760,7 @@ int hero_set_state(int a, int b) {
                 set_hero_animation(2, 0, (float)scale_game_frames(8));
             } else if (p->vehicle_mode == 0) {
                 set_hero_animation(p->state.step + 3,
-                                 ((int *)&D_L16_0015F6E8)[p->state.step],
+                                 D_L16_0015F6E8[p->state.step],
                                  (float)scale_game_frames(8));
             }
         }
@@ -1450,7 +1450,7 @@ int hero_set_state(int a, int b) {
                     w->unk3D8 = 29.0f;
                     w->unk3DC = 50.0f;
                     w->unk3E0 = scale_game_frames(0x56);
-                    *(char **)&w->unk3E4 = (char *)&D_L16_0015F6F8;
+                    w->unk3E4 = D_L16_0015F6F8;
                     w->unk4AE = 1;
                 }
             } else if (u->state.current == 0xE) {

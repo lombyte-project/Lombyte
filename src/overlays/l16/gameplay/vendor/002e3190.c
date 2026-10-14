@@ -963,7 +963,7 @@ extern float FUN_001fa580(float, float);
 extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
 extern int FUN_001f9740(int *);
 extern int FUN_001fa6e0_u(float, int, int) __asm__("FUN_001fa6e0");
-short D_L16_00161DF0 = {0};
+float D_L16_00161DF0[4] __attribute__((section(".sdata"))) = {0.0f, -1.0f, 1.0f, 0.0f};
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
@@ -2490,22 +2490,34 @@ extern char D_L16_001DC600[][16] __attribute__((section(".data")));
 extern char D_L16_001DC630[] __attribute__((section(".data")));
 extern int FUN_001fa728(char *, float);
 extern int get_effect_texture_l16(int) __asm__("FUN_001f44b8");
-short D_L16_00161EF0_gp __asm__("D_L16_00161EF0") = 0x94;
-short D_L16_00161F00_gp __asm__("D_L16_00161F00") = -26416;
-short D_L16_00161F10 = -22560;
-short D_L16_00161F20 = -19992;
-short D_L16_00161F30 = -16136;
+int D_L16_00161EF0_gp[4] __asm__("D_L16_00161EF0") __attribute__((section(".sdata"))) = {148, 148, 25, 0};
+extern float D_L16_001D98D0[];
+extern float D_L16_001D9FC0[];
+extern float D_L16_001DA6B0[];
+float *D_L16_00161F00_gp[4] __asm__("D_L16_00161F00") __attribute__((section(".sdata"))) = {D_L16_001D98D0, D_L16_001D9FC0, D_L16_001DA6B0, 0};
+extern float D_L16_001DA7E0[];
+extern float D_L16_001DAC80[];
+extern float D_L16_001DB120[];
+float *D_L16_00161F10[4] __attribute__((section(".sdata"))) = {D_L16_001DA7E0, D_L16_001DAC80, D_L16_001DB120, 0};
+extern float D_L16_001DB1E8[];
+extern float D_L16_001DB8D8[];
+extern float D_L16_001DBFC8[];
+float *D_L16_00161F20[4] __attribute__((section(".sdata"))) = {D_L16_001DB1E8, D_L16_001DB8D8, D_L16_001DBFC8, 0};
+extern float D_L16_001DC0F8[];
+extern float D_L16_001DC348[];
+extern float D_L16_001DC598[];
+float *D_L16_00161F30[4] __attribute__((section(".sdata"))) = {D_L16_001DC0F8, D_L16_001DC348, D_L16_001DC598, 0};
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
 
 void FUN_L16_002e8d40(void) {
-    int *a = (int *)&D_L16_00161EF0_gp;
-    int *b = (int *)&D_L16_00161F00_gp;
-    int *c = (int *)&D_L16_00161F10;
-    int *d = (int *)&D_L16_00161F20;
-    int *e = (int *)&D_L16_00161F30;
+    int *a = (int *)D_L16_00161EF0_gp;
+    int *b = (int *)D_L16_00161F00_gp;
+    int *c = (int *)D_L16_00161F10;
+    int *d = (int *)D_L16_00161F20;
+    int *e = (int *)D_L16_00161F30;
     int i;
 
     vu1_add_g_sregister_l16(6, get_effect_texture_l16(0x29));
@@ -2526,8 +2538,8 @@ typedef struct {
 } L16SingleSphere_2e8e80;
 
 void enqueue_callback_list_1_2e8e80(int arg0, int arg1) __asm__("FUN_001f4600");
-extern short D_L16_00161EF0_gp __asm__("D_L16_00161EF0") __attribute__((sda));
-extern short D_L16_00161F00_gp __asm__("D_L16_00161F00") __attribute__((sda));
+extern int D_L16_00161EF0_gp[] __asm__("D_L16_00161EF0") __attribute__((sda));
+extern float *D_L16_00161F00_gp[] __asm__("D_L16_00161F00") __attribute__((sda));
 extern L16SingleSphere_2e8e80 D_L16_00161F60_bounds_2e8e80[] __asm__("D_L16_001DC600")
     __attribute__((section(".data")));
 
@@ -2547,9 +2559,9 @@ void FUN_L16_002e8e80(struct Moby *m) {
             minx = miny = minz = 1024.0f;
             {
                 int k;
-                for (k = 0; k < ((int *)&D_L16_00161EF0_gp)[i]; k++) {
+                for (k = 0; k < D_L16_00161EF0_gp[i]; k++) {
                     float x, y, z;
-                    verts = ((float **)&D_L16_00161F00_gp)[i] + k * 3;
+                    verts = ((float **)D_L16_00161F00_gp)[i] + k * 3;
                     x = verts[0];
                     if (x > maxx)
                         maxx = x;
@@ -2575,12 +2587,12 @@ void FUN_L16_002e8e80(struct Moby *m) {
                 sphere->y = (maxy + miny) * 0.5f;
                 sphere->z = (maxz + minz) * 0.5f;
             }
-            for (j = 0; j < ((int *)&D_L16_00161EF0_gp)[i]; j++) {
+            for (j = 0; j < D_L16_00161EF0_gp[i]; j++) {
                 float dist;
                 out = (float *)(D_L16_00161F60_bounds_2e8e80 + i);
-                p[0] = ((float **)&D_L16_00161F00_gp)[i][j * 3 + 0];
-                p[1] = ((float **)&D_L16_00161F00_gp)[i][j * 3 + 1];
-                p[2] = ((float **)&D_L16_00161F00_gp)[i][j * 3 + 2];
+                p[0] = ((float **)D_L16_00161F00_gp)[i][j * 3 + 0];
+                p[1] = ((float **)D_L16_00161F00_gp)[i][j * 3 + 1];
+                p[2] = ((float **)D_L16_00161F00_gp)[i][j * 3 + 2];
                 dist = FUN_001f9b48(p, out);
                 if (dist > out[3])
                     out[3] = dist;
@@ -2602,17 +2614,21 @@ extern void FUN_L16_002e8b98_t(int, int, int, int, char *) __asm__("FUN_L16_002e
 extern void vu1_add_g_sregister_2e9270(int, long) __asm__("FUN_00233980");
 
 extern char D_L16_001DDC80[] __attribute__((section(".data")));
-short D_L16_00161F40 = 0x7d;
-short D_L16_00161F60 = -13600;
-short D_L16_00161F68 = -12096;
-short D_L16_00161F70 = -11096;
-short D_L16_00161F78 = -9592;
+int D_L16_00161F40[2] = {125, 0};
+extern float D_L16_001DCAE0[];
+float *D_L16_00161F60[2] = {D_L16_001DCAE0, 0};
+extern float D_L16_001DD0C0[];
+float *D_L16_00161F68[2] = {D_L16_001DD0C0, 0};
+extern float D_L16_001DD4A8[];
+float *D_L16_00161F70[2] = {D_L16_001DD4A8, 0};
+extern float D_L16_001DDA88[];
+float *D_L16_00161F78[2] = {D_L16_001DDA88, 0};
 void FUN_L16_002e9270(void) {
-    int *a = (int *)&D_L16_00161F40;
-    int *b = (int *)&D_L16_00161F60;
-    int *c = (int *)&D_L16_00161F68;
-    int *d = (int *)&D_L16_00161F70;
-    int *e = (int *)&D_L16_00161F78;
+    int *a = (int *)D_L16_00161F40;
+    int *b = (int *)D_L16_00161F60;
+    int *c = (int *)D_L16_00161F68;
+    int *d = (int *)D_L16_00161F70;
+    int *e = (int *)D_L16_00161F78;
     int i;
 
     vu1_add_g_sregister_2e9270(6, get_effect_texture_2e9270(0x29));
@@ -2653,9 +2669,9 @@ void FUN_L16_002e93b0(unsigned char *m) {
             minx = miny = minz = 1024.0f;
             {
                 int k;
-                for (k = 0; k < ((int *)&D_L16_00161F40)[i]; k++) {
+                for (k = 0; k < D_L16_00161F40[i]; k++) {
                     float x, y, z;
-                    verts = ((float **)&D_L16_00161F60)[i] + k * 3;
+                    verts = ((float **)D_L16_00161F60)[i] + k * 3;
                     x = verts[0];
                     if (x > maxx)
                         maxx = x;
@@ -2680,12 +2696,12 @@ void FUN_L16_002e93b0(unsigned char *m) {
                 sphere->y = (maxy + miny) * 0.5f;
                 sphere->z = (maxz + minz) * 0.5f;
             }
-            for (j = 0; j < ((int *)&D_L16_00161F40)[i]; j++) {
+            for (j = 0; j < D_L16_00161F40[i]; j++) {
                 float dist;
                 out = (float *)(D_L16_00161F60_bounds + i);
-                p[0] = ((float **)&D_L16_00161F60)[i][j * 3 + 0];
-                p[1] = ((float **)&D_L16_00161F60)[i][j * 3 + 1];
-                p[2] = ((float **)&D_L16_00161F60)[i][j * 3 + 2];
+                p[0] = ((float **)D_L16_00161F60)[i][j * 3 + 0];
+                p[1] = ((float **)D_L16_00161F60)[i][j * 3 + 1];
+                p[2] = ((float **)D_L16_00161F60)[i][j * 3 + 2];
                 dist = FUN_001f9b48(p, out);
                 if (dist > out[3])
                     out[3] = dist;
@@ -2783,11 +2799,23 @@ extern void FUN_L00_001fde98(int, int, int, char *, int);
 void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-short D_L16_00161FB8[1] = {0x94};
-short D_L16_00161FC8[1] = {-2128};
-short D_L16_00161FD8[1] = {0x810};
-short D_L16_00161FE8[1] = {0x12f8};
-short D_L16_00161FF8[1] = {0x2358};
+int D_L16_00161FB8[4] __attribute__((section(".sdata"))) = {148, 148, 53, 0};
+extern float D_L16_001DF7B0[];
+extern float D_L16_001DFEA0[];
+extern float D_L16_001E0590[];
+float *D_L16_00161FC8[4] __attribute__((section(".sdata"))) = {D_L16_001DF7B0, D_L16_001DFEA0, D_L16_001E0590, 0};
+extern float D_L16_001E0810[];
+extern float D_L16_001E0CB0[];
+extern float D_L16_001E1150[];
+float *D_L16_00161FD8[4] __attribute__((section(".sdata"))) = {D_L16_001E0810, D_L16_001E0CB0, D_L16_001E1150, 0};
+extern float D_L16_001E12F8[];
+extern float D_L16_001E19E8[];
+extern float D_L16_001E20D8[];
+float *D_L16_00161FE8[4] __attribute__((section(".sdata"))) = {D_L16_001E12F8, D_L16_001E19E8, D_L16_001E20D8, 0};
+extern float D_L16_001E2358[];
+extern float D_L16_001E25A8[];
+extern float D_L16_001E27F8[];
+float *D_L16_00161FF8[4] __attribute__((section(".sdata"))) = {D_L16_001E2358, D_L16_001E25A8, D_L16_001E27F8, 0};
 void FUN_L16_002e9ce0(void) {
     int i;
     vu1_add_g_sregister(6, get_effect_texture_alt(0x29));
@@ -2796,10 +2824,10 @@ void FUN_L16_002e9ce0(void) {
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     font_queue_vu_state();
     for (i = 0; i < 3; i++) {
-        FUN_L16_002e8b98(((int *)D_L16_00161FB8)[i], ((int *)D_L16_00161FE8)[i],
+        FUN_L16_002e8b98(D_L16_00161FB8[i], ((int *)D_L16_00161FE8)[i],
                          ((int *)D_L16_00161FC8)[i], ((int *)D_L16_00161FD8)[i],
                          D_L16_001E28D0);
-        FUN_L00_001fde98(((int *)D_L16_00161FB8)[i], ((int *)D_L16_00161FC8)[i],
+        FUN_L00_001fde98(D_L16_00161FB8[i], ((int *)D_L16_00161FC8)[i],
                          ((int *)D_L16_00161FF8)[i], D_L16_001E28D0, 1);
     }
 }
@@ -2810,8 +2838,11 @@ typedef struct {
 
 void enqueue_callback_list_1_2ea128(int arg0, int arg1) __asm__("FUN_001f4600");
 
-short D_L16_00162008 = 0x94;
-short D_L16_00162018 = 0x2db0;
+int D_L16_00162008[4] __attribute__((section(".sdata"))) = {148, 75, 45, 0};
+extern float D_L16_001E2DB0[];
+extern float D_L16_001E34A0[];
+extern float D_L16_001E3828[];
+float *D_L16_00162018[4] __attribute__((section(".sdata"))) = {D_L16_001E2DB0, D_L16_001E34A0, D_L16_001E3828, 0};
 extern L16SingleSphere_2ea128 D_L16_001E5390[] __attribute__((section(".data")));
 void FUN_L16_002ea128(unsigned char *m) {
     int i, j;
@@ -2827,9 +2858,9 @@ void FUN_L16_002ea128(unsigned char *m) {
             minx = miny = minz = 1024.0f;
             {
                 int k;
-                for (k = 0; k < ((int *)&D_L16_00162008)[i]; k++) {
+                for (k = 0; k < D_L16_00162008[i]; k++) {
                     float x, y, z;
-                    verts = ((float **)&D_L16_00162018)[i] + k * 3;
+                    verts = ((float **)D_L16_00162018)[i] + k * 3;
                     x = verts[0];
                     if (x > maxx)
                         maxx = x;
@@ -2855,12 +2886,12 @@ void FUN_L16_002ea128(unsigned char *m) {
                 sphere->y = (maxy + miny) * 0.5f;
                 sphere->z = (maxz + minz) * 0.5f;
             }
-            for (j = 0; j < ((int *)&D_L16_00162008)[i]; j++) {
+            for (j = 0; j < D_L16_00162008[i]; j++) {
                 float dist;
                 out = (float *)(D_L16_001E5390 + i);
-                p[0] = ((float **)&D_L16_00162018)[i][j * 3 + 0];
-                p[1] = ((float **)&D_L16_00162018)[i][j * 3 + 1];
-                p[2] = ((float **)&D_L16_00162018)[i][j * 3 + 2];
+                p[0] = ((float **)D_L16_00162018)[i][j * 3 + 0];
+                p[1] = ((float **)D_L16_00162018)[i][j * 3 + 1];
+                p[2] = ((float **)D_L16_00162018)[i][j * 3 + 2];
                 dist = FUN_001f9b48(p, out);
                 if (dist > out[3])
                     out[3] = dist;

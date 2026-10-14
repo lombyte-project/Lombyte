@@ -307,7 +307,7 @@ extern float fast_cos_c(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_c(float) __asm__("FUN_001f9de0");
 extern int FUN_001fa6e0(int, int, float);
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
-short D_L17_001623C0 = {0};
+float D_L17_001623C0[4] __attribute__((section(".sdata"))) = {-0.5f, -1.0f, 1.0f, 1.0f};
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
@@ -381,7 +381,7 @@ void FUN_L17_002f32f0(struct Moby *moby) {
             pu[j * 2] = D_L17_001E6FA0[j * 2] + D_L17_001DE0A0[i];
             pv[j * 2] = D_L17_001E6FA0[j * 2 + 1];
         }
-        D_L17_001DE0A0[i] += *(float *)((char *)&D_L17_001623C0 + i * 4) * frame_delta_time;
+        D_L17_001DE0A0[i] += D_L17_001623C0[i] * frame_delta_time;
         draw_geometry_quad(&pkt, 0, 0);
     }
     *(long *)&pkt.q[2] = get_effect_texture_alt(0x2F);
@@ -430,8 +430,8 @@ void FUN_L17_002f32f0(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
 
 
-extern short D_L17_001623D0  __attribute__((sda));
-extern short D_L17_001623D8  __attribute__((sda));
+extern short D_L17_001623D0 __attribute__((sda));
+extern short D_L17_001623D8 __attribute__((sda));
 extern void FUN_L17_002f32f0_c(char *) __asm__("FUN_L17_002f32f0");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
@@ -493,7 +493,7 @@ done:
                 fast_add_rotations(D_L17_001DE0D0[i], D_L17_001DDFE0[i] * 0.1f * frame_delta_time);
         }
         for (i = 0; i < 2; i++) {
-            D_L17_001DE0A0[i] += ((float *)&D_L17_001623C0)[i] * frame_delta_time;
+            D_L17_001DE0A0[i] += D_L17_001623C0[i] * frame_delta_time;
             if (1.0f <= D_L17_001DE0A0[i]) {
                 D_L17_001DE0A0[i] -= 1.0f;
             }
@@ -941,11 +941,19 @@ extern void FUN_L00_001fde98(int, int, int, void *, int);
 void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-short D_L17_001623F0 = 0x1a;
-short D_L17_001623F8 = -7856;
-short D_L17_00162400 = -7232;
-short D_L17_00162408 = -6816;
-short D_L17_00162410 = -6192;
+int D_L17_001623F0[2] = {26, 26};
+extern float D_L17_001DE150[];
+extern float D_L17_001DE288[];
+float *D_L17_001623F8[2] = {D_L17_001DE150, D_L17_001DE288};
+extern float D_L17_001DE3C0[];
+extern float D_L17_001DE490[];
+float *D_L17_00162400[2] = {D_L17_001DE3C0, D_L17_001DE490};
+extern float D_L17_001DE560[];
+extern float D_L17_001DE698[];
+float *D_L17_00162408[2] = {D_L17_001DE560, D_L17_001DE698};
+extern float D_L17_001DE7D0[];
+extern float D_L17_001DE838[];
+float *D_L17_00162410[2] = {D_L17_001DE7D0, D_L17_001DE838};
 void FUN_L17_002f5690(void) {
     int i;
     float *p;
@@ -956,23 +964,27 @@ void FUN_L17_002f5690(void) {
     font_queue_vu_state();
     p = (float *)D_L17_001DE8A0;
     for (i = 0; i < 2; i++) {
-        FUN_L17_002f54d8(((int *)&D_L17_001623F0)[i], ((int *)&D_L17_00162408)[i],
-                         ((int *)&D_L17_001623F8)[i], ((int *)&D_L17_00162400)[i], p);
-        FUN_L00_001fde98(((int *)&D_L17_001623F0)[i], ((int *)&D_L17_001623F8)[i],
-                         ((int *)&D_L17_00162410)[i], p, 1);
+        FUN_L17_002f54d8(D_L17_001623F0[i], ((int *)D_L17_00162408)[i],
+                         ((int *)D_L17_001623F8)[i], ((int *)D_L17_00162400)[i], p);
+        FUN_L00_001fde98(D_L17_001623F0[i], ((int *)D_L17_001623F8)[i],
+                         ((int *)D_L17_00162410)[i], p, 1);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F74E8), where it is exact; names translated to the US level program. */
 
 extern char D_L17_001DF6A0[];
-short D_L17_00162440 = -4784;
-short D_L17_00162450 = -3456;
-short D_L17_00162458 = -2664;
+extern float D_L17_001DED50[];
+float *D_L17_00162440[2] = {D_L17_001DED50, 0};
+extern float D_L17_001DF280[];
+float *D_L17_00162450[2] = {D_L17_001DF280, 0};
+extern float D_L17_001DF598[];
+float *D_L17_00162458[2] = {D_L17_001DF598, 0};
 void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-short D_L17_00162420 = 0x42;
-short D_L17_00162448 = -3984;
+int D_L17_00162420[2] = {66, 0};
+extern float D_L17_001DF070[];
+float *D_L17_00162448[2] = {D_L17_001DF070, 0};
 void FUN_L17_002f59a8(void) {
     int i;
     float *p;
@@ -983,10 +995,10 @@ void FUN_L17_002f59a8(void) {
     font_queue_vu_state();
     p = (float *)D_L17_001DF6A0;
     for (i = 0; i < 1; i++) {
-        FUN_L17_002f54d8(((int *)&D_L17_00162420)[i], (V3 *)((int *)&D_L17_00162450)[i],
-                         (V3 *)((int *)&D_L17_00162440)[i], ((int *)&D_L17_00162448)[i], p);
-        FUN_L00_001fde98(((int *)&D_L17_00162420)[i], ((int *)&D_L17_00162440)[i],
-                         ((int *)&D_L17_00162458)[i], p, 1);
+        FUN_L17_002f54d8(D_L17_00162420[i], (V3 *)((int *)D_L17_00162450)[i],
+                         (V3 *)((int *)D_L17_00162440)[i], ((int *)D_L17_00162448)[i], p);
+        FUN_L00_001fde98(D_L17_00162420[i], ((int *)D_L17_00162440)[i],
+                         ((int *)D_L17_00162458)[i], p, 1);
     }
 }
 /* Computes a per-vertex 2D sphere-map texture coordinate from position and normal arrays. */
