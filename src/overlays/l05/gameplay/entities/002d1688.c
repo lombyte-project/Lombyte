@@ -1929,7 +1929,8 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
             i = next_index;
             path_offset = *(volatile s32 *)&state.path_index * 4;
             count = *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1;
-        } while (i < count);
+            count = i < count;
+        } while (count);
     }
     if (state.changed)
         qcopy(state.out, &from_point);
