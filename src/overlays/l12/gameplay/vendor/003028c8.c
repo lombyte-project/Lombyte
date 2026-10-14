@@ -1516,6 +1516,8 @@ update_linked:
                 break;
             case 2: {
                 char *slot_data = data;
+                int i;
+                int *saved;
                 int index;
                 saved = D_L12_001FB688;
                 i = 16;
