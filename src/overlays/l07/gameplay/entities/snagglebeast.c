@@ -80,13 +80,15 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
     v = split_float_fraction(spin * -0.02f, &scratch);
     quad.texture_coordinates[0][1] = v;
     quad.texture_coordinates[1][1] = v;
-    quad.texture_coordinates[3][1] = v + 1.0f;
     quad.texture_coordinates[2][1] = v + 1.0f;
-    alpha_step = (end_alpha - row_alpha) * 0.0625f;
+    quad.texture_coordinates[3][1] = v + 1.0f;
+    end_alpha -= row_alpha;
+    alpha_step = end_alpha * 0.0625f;
     step = scratch.f[1] * 0.0625f;
     do {
         qcopy(&quad.positions[2], &center);
-        qcopy(&quad.positions[3], &center);
+        qcopy(&quad.positions[3], &quad.positions[2]);
+
         next_angle = angle + 0.3926991f;
         row_alpha = scratch.f[2];
         quad.colors[2] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | scratch.i[3];
@@ -94,13 +96,14 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
         latitude = step + -1.5707964f;
         quad.colors[3] = quad.colors[2];
         if (latitude <= (limit = scratch.f[1] - 1.5707964f)) {
+            u32 inner_color = color | 0x404040;
             do {
                 qcopy(&quad.positions[0], &quad.positions[2]);
                 qcopy(&quad.positions[1], &quad.positions[3]);
                 row_alpha += alpha_step;
                 quad.colors[0] = quad.colors[2];
                 quad.colors[1] = quad.colors[3];
-                quad.colors[2] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | (color | 0x404040);
+                quad.colors[2] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | inner_color;
                 quad.colors[3] = quad.colors[2];
                 wrapped = FUN_L00_0025e310(angle + spin * 0.02f);
                 build_spherical_offset(&quad.positions[2], radius, wrapped, latitude);
