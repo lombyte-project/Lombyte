@@ -2723,9 +2723,11 @@ reset_timer:
     case 2:
         if (path_state->path_id == -1) return;
         B2(moby, 0x20) = 0;
-        index = H2(data, 0x11e);
-        if (index != -1 && *(char **)(0x0013e5d8 + index * 0x70) == moby && B2((char *)0x0013e5c4 + index * 0x70, 0))
-            FUN_002a1348_2f5168(index);
+        {
+            short index = H2(data, 0x11e);
+            if (index != -1 && (entry = D_0013E550 + index * 0x70, *(char **)(entry + 0x88) == moby) && B2(entry, 0x74))
+                FUN_002a1348_2f5168(index);
+        }
         H2(data, 0x11e) = -1;
         return;
     case 3:
@@ -2840,9 +2842,11 @@ reset_timer:
     }
     I2(moby, 0x94) = 0;
     UH2(moby, 0x34) |= 0x41;
-    index = H2(data, 0x11e);
-    if (index != -1 && *(char **)(0x0013e5d8 + index * 0x70) == moby && B2((char *)0x0013e5c4 + index * 0x70, 0))
-        FUN_002a1348_2f5168(index);
+    {
+        short index = H2(data, 0x11e);
+        if (index != -1 && (entry = D_0013E550 + index * 0x70, *(char **)(entry + 0x88) == moby) && B2(entry, 0x74))
+            FUN_002a1348_2f5168(index);
+    }
     H2(data, 0x11e) = -1;
     UH2(moby, 0x34) &= 0xefff;
 
