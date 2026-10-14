@@ -843,9 +843,13 @@ void FUN_L00_002062b0(void) {
         blue = FUN_L00_00200250_002062b0(wave * 10.0f) + 0x14;
         {
             char *g = (char *)&hero;
-            if (green >= 0x100) green = 0xff;
-            *(u16 *)(*(char **)(g + 0x2080) + 0x34) |= 0x10;
-            if (red >= 0x100) red = 0xff;
+            {
+                s32 span = red < 0x100;
+                s32 i = green < 0x100;
+                green = i ? green : 0xff;
+                *(u16 *)(*(char **)(g + 0x2080) + 0x34) |= 0x10;
+                red = span ? red : 0xff;
+            }
             if (*(s16 *)(g + 0x22e0) == 2)
                 color = ((u32)alpha << 24) | ((u32)blue << 16) | ((u32)(red / 2) << 8) | (u32)green;
             else
