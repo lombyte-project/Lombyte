@@ -11,7 +11,7 @@ typedef struct {
     /* 0x00 */ u8 unk0;
     /* 0x01 */ u8 attached;
     /* 0x02 */ u8 pad2[0xE];
-    /* 0x10 */ f32 rot[4];            /* quaternion, turned by FUN_L04_00292d48 */
+    /* 0x10 */ sceVu0FVECTOR rot;     /* quaternion, turned by FUN_L04_00292d48 */
     /* 0x20 */ u8 pad20[0x20];
 } LegRigManip;
 

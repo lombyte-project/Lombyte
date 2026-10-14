@@ -40,113 +40,74 @@ void FUN_L04_00292370(void *unused, char *arg) {
     *(float *)(arg + 0x1BC) = -1.5707964f;
     *(float *)(arg + 0x1C0) = 0.19634955f;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L04_002923b8.s", FUN_L04_002923b8);
-#else
 extern char invalid_animation_message[] __asm__("D_L04_001DB360");
 extern char rig_size_message[] __asm__("D_L04_001DB3F0");
 extern void stub_printf() __asm__("FUN_001e93b0");
 extern void FUN_001f97b0(void);
-extern float animation_start_923b8(int, unsigned int) __asm__("FUN_L04_002418b0");
-extern float FUN_L04_00241910(int, unsigned int) __asm__("FUN_L04_00241910");
+extern float FUN_L04_002418b0(int, int);
+extern float FUN_L04_00241910(int, int);
 extern float FUN_001f96b0(float) __asm__("FUN_L04_001f1978");
-extern void transform_scaled_vertex_batch(char *, int, void *, char *) __asm__("FUN_0020cd48");
-extern void FUN_0020cca8(char *, int, void *);
+extern void transform_joint_points(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
+extern void get_joint_matrix(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
 extern float FUN_001f9e90(float, float);
-extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
+extern void attach_rig_manip(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");
 
-void FUN_L04_002923b8(char *arg0, char *arg1) {
+void FUN_L04_002923b8(struct Moby *m, LegRig *rig) {
     int joints[6];
-    float transformed[16];
-    LegRigAnim **entry = (LegRigAnim **)(arg1 + 0x70);
-    int *current;
+    float mtx[4][4];
     int i;
     int j;
-    int offset;
-    char *record;
-    char *upper;
-    char *lower;
+    int k;
 
     for (i = 0; i < 13; i++) {
-        LegRigAnim **slot;
-        offset = i * 4;
-        slot = (LegRigAnim **)((char *)entry + offset);
-        if ((*slot)->id < 0) {
-            stub_printf(invalid_animation_message, i, *(short *)(arg0 + 0xa6));
+        if (rig->anims[i]->id < 0) {
+            stub_printf(invalid_animation_message, i, m->oclass);
             FUN_001f97b0();
         }
-        (*slot)->start = animation_start_923b8((unsigned char)arg0[0x22], (*slot)->id);
-        (*slot)->len = FUN_L04_00241910((unsigned char)arg0[0x22], (*slot)->id) -
-                                                (*slot)->start;
-        if ((*slot)->len != 0.0f) {
-            j = 0;
-            do {
-                int offset = j * 4;
-                float difference;
-                float *current;
-                LegRigAnim *item = *slot;
-                float start = item->phase[1].from[j];
-                float end = item->phase[1].to[j];
-                current = &item->phase[1].span[j];
-                if (start <= end)
-                    difference = end - start;
-                else
-                    difference = (end + item->len) - start;
-                *current = difference;
-                item = *slot;
-                current = &item->phase[0].span[j];
-                start = item->phase[0].from[j];
-                end = item->phase[0].to[j];
-                if (start <= end)
-                    difference = end - start;
-                else
-                    difference = (end + item->len) - start;
-                *current = difference;
-                j++;
-            } while (j < 2);
-            slot = (LegRigAnim **)((char *)entry + offset);
-            (*slot)->rate = (*slot)->unk4 /
-                FUN_001f96b0((*slot)->len + (*slot)->len);
+        rig->anims[i]->start = FUN_L04_002418b0(m->class_slot, rig->anims[i]->id);
+        rig->anims[i]->len = FUN_L04_00241910(m->class_slot, rig->anims[i]->id) - rig->anims[i]->start;
+        if (rig->anims[i]->len != 0.0f) {
+            for (j = 0; j < 2; j++) {
+                rig->anims[i]->phase[1].span[j] = rig->anims[i]->phase[1].from[j] <= rig->anims[i]->phase[1].to[j]
+                    ? rig->anims[i]->phase[1].to[j] - rig->anims[i]->phase[1].from[j]
+                    : rig->anims[i]->phase[1].to[j] + rig->anims[i]->len - rig->anims[i]->phase[1].from[j];
+                rig->anims[i]->phase[0].span[j] = rig->anims[i]->phase[0].from[j] <= rig->anims[i]->phase[0].to[j]
+                    ? rig->anims[i]->phase[0].to[j] - rig->anims[i]->phase[0].from[j]
+                    : rig->anims[i]->phase[0].to[j] + rig->anims[i]->len - rig->anims[i]->phase[0].from[j];
+            }
+            rig->anims[i]->rate = rig->anims[i]->unk4 / FUN_001f96b0(rig->anims[i]->len + rig->anims[i]->len);
         }
     }
-
-    joints[0] = (unsigned char)arg1[0xf0];
-    joints[1] = (unsigned char)arg1[0xf1];
-    joints[2] = (unsigned char)arg1[0x1a0];
-    joints[3] = (unsigned char)arg1[0x1a1];
-    joints[4] = (unsigned char)arg1[0xb4];
-    joints[5] = (unsigned char)arg1[0xb5];
-    transform_scaled_vertex_batch(arg0, 6, joints, arg1);
-
-    record = arg1;
-    do {
-        upper = record + 0x160;
-        lower = record + 0x120;
-        FUN_0020cca8(arg0, (unsigned char)record[0xf0], transformed);
-        *(int *)(record + 0x104) = 0;
-        *(int *)(record + 0xfc) = 0;
-        *(float *)(record + 0xf8) = FUN_001f9e90(transformed[4], transformed[5]);
-        if (((LegRigManip *)(record + 0x160))->attached == 0)
-            attach_manipulator(arg0, (unsigned char)record[0xf3], upper);
-        if (((LegRigManip *)(record + 0x120))->attached == 0)
-            attach_manipulator(arg0, (unsigned char)record[0xf2], lower);
-        record += 0xb0;
-    } while ((int)record < (int)(arg1 + 0x160));
-
-    *(short *)(arg1 + 0xee) = 0;
-    *(unsigned char *)(arg1 + 0xb7) = 0;
-    *(int *)(arg1 + 0xb8) = 0;
-    *(int *)(arg1 + 0xbc) = 0;
-    *(int *)(arg1 + 0xc0) = 0;
-    *(int *)(arg1 + 0xc8) = 0;
-    *(int *)(arg1 + 0xe8) = 0;
-    *(int *)(arg1 + 0xd8) = 0;
-    *(int *)(arg1 + 0xe4) = 0;
-    *(short *)(arg1 + 0xec) = 0;
-    *(unsigned char *)(arg1 + 0xb6) = 5;
+    joints[0] = rig->legs[0].joint;
+    joints[1] = rig->legs[0].joint2;
+    joints[2] = rig->legs[1].joint;
+    joints[3] = rig->legs[1].joint2;
+    joints[4] = rig->jointB4;
+    joints[5] = rig->jointB5;
+    transform_joint_points(m, 6, joints, rig);
+    for (k = 0; k < 2; k++) {
+        get_joint_matrix(m, rig->legs[k].joint, mtx[0]);
+        rig->legs[k].upper_turn = 0;
+        rig->legs[k].lower_turn = 0;
+        rig->legs[k].yaw = FUN_001f9e90(mtx[1][0], mtx[1][1]);
+        if (rig->legs[k].manip_b.attached == 0)
+            attach_rig_manip(m, rig->legs[k].slot_b, &rig->legs[k].manip_b);
+        if (rig->legs[k].manip_a.attached == 0)
+            attach_rig_manip(m, rig->legs[k].slot_a, &rig->legs[k].manip_a);
+    }
+    rig->unkEE = 0;
+    rig->unkB7 = 0;
+    rig->unkB8 = 0;
+    rig->unkBC = 0;
+    rig->speed = 0.0f;
+    rig->unkC8 = 0;
+    rig->unkE8 = 0;
+    rig->unkD8 = 0;
+    rig->unkE4 = 0;
+    rig->unkEC = 0;
+    rig->mode = 5;
     stub_printf(rig_size_message, 0x250);
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293990), where it is exact; names translated to the US level program. */
 
 extern int walker_gait_mask(int *a, char *b) __asm__("FUN_L00_002a13f0");
