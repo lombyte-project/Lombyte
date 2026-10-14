@@ -318,21 +318,26 @@ state_two:
         tick_2d1688(data + 0x7c);
         height = absolute_2d1688(hero.water_surface_z - *(float *)(data + 0x74));
         if (height < 0.33f && hero.state.control_mode == 0x12) {
+            char *point;
             if (*(int *)(data + 0x7c) != 0) return;
+            point = D_L05_001671C0 - 0x140;
             *(float *)(moby + 0x44) = -1.5533431f;
-            *(float *)(moby + 0x48) = angle_from_2d1688(D_L05_001671D8, 1.5707964f);
+            *(float *)(moby + 0x48) = angle_from_2d1688(*(float *)(point + 0x158), 1.5707964f);
             copy_direction_2d1688(moby + 0xc0, moby + 0x40);
             qcopy(moby + 0x10, &hero.motion.pos);
             fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
             fast_vec_sub(moby + 0x10, moby + 0x10, v);
-            *(float *)(moby + 0x18) -= 2.0f;
-            *(float *)(data + 0x78) = frame_time * 10.0f;
+            {
+                float speed = frame_time * 10.0f;
+                *(float *)(moby + 0x18) -= 2.0f;
+                *(float *)(data + 0x78) = speed;
+            }
             *(unsigned short *)(moby + 0x34) &= 0xfffe;
             if (*(unsigned char *)(moby + 0x53) != state)
                 set_action_2d1688(moby, 2, 0, timer_2d1688(5));
             *(unsigned char *)(moby + 0xbc) = 0;
             *(unsigned char *)(moby + 0x20) = 3;
-            reset_2d1688(D_L05_001671C0, D_L05_001671D0, 0, 0, 0);
+            reset_2d1688(point + 0x140, point + 0x150, 0, 0, 0);
             return;
         }
         if (hero.state.current == 0x12) return;
