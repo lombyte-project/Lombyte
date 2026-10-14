@@ -1742,8 +1742,8 @@ void FUN_L07_0030cf90(struct Moby *moby) {
     case 4:
         target = (struct Moby *)((u32)level_mobys_gp + (u32)vars->target_index * 0x100);
         if (vars->target_index == -1 || target == 0 ||
-            (voice = target->state) == 0xfe || voice == 0xfd ||
-            voice == vars->target_state) {
+            (voice = target->state) == vars->target_state ||
+            voice == 0xfe || voice == 0xfd) {
             play_moby_sound(vars->trigger_sound, 0, moby);
             moby->state = 2;
             return;
