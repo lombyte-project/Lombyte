@@ -298,10 +298,10 @@ s32 FUN_L05_00262f50(char *e) {
                 src = D_L05_0015FAE0;
                 dst = indices;
                 if (D_L05_0015FAD8 > 0) {
-                    do {
+                    while (i < 4 && count < D_L05_0015FAD8) {
                         if (*src++ != 0) { *dst++ = i; count++; }
                         i++;
-                    } while (i < 4 && count < D_L05_0015FAD8);
+                    }
                 }
                 if (D_L05_0015FAD8 == 1) {
                     D_L05_0015FB00 = D_L05_0015FAD4 * 10;
