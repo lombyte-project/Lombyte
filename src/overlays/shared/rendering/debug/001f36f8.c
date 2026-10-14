@@ -580,12 +580,12 @@ void FUN_L00_001f4598(void) {
                     g_debug_menu.control_mode = 3;
                 }
                 switch (g_debug_menu.control_mode) {
-                case 1: {
-                    g_debug_menu.update_flags = 0;
-                break;
-                }
                 case 0: {
                     g_debug_menu.update_flags = 0xf;
+                    break;
+                }
+                case 1: {
+                    g_debug_menu.update_flags = 0;
                     break;
                 }
                 case 2: {
@@ -881,8 +881,8 @@ void FUN_L00_001f4598(void) {
             byte_value = D_L00_0015F446;
             if ((D_L00_0015F446 < 0xFF) &&
                 ((D_0013C940.buttons.held_pressed & 0x800000040) != 0)) {
-                byte_value = byte_value + 1;
-                D_L00_0015F446 = byte_value;
+                D_L00_0015F446 = byte_value + 1;
+                byte_value = D_L00_0015F446;
             }
             if ((byte_value != '\0') &&
                 ((D_0013C940.buttons.held_pressed & 0x400000010) != 0)) {
