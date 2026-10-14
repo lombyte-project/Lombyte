@@ -2634,8 +2634,8 @@ void FUN_L00_002dd8e8(void) {
     char *prior; u32 *colors;
 
     quad.texture[1] = FUN_001f9298_002dd8e8(0x15);
-    quad.texture[2] = 0xff9000000260ULL;
     quad.texture[3] = 0x8000000048ULL;
+    quad.texture[2] = 0xff9000000260ULL;
     quad.texture[0] = 0;
     phase = ((float *)&D_L00_00161B48_002dd8e8)[-2];
     ((float *)&D_L00_00161B48_002dd8e8)[-2] += 0.001f;
