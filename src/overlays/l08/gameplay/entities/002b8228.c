@@ -882,7 +882,178 @@ void FUN_L08_002d5950(char *moby, int joint, int count) {
         func_00219780_2D6C58(joint_pos, velocity, t70, D_L08_001618D4, D_L08_001618D8, frames1, frames2, frames3, -1);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5d08.s", FUN_L08_002d5d08);
+#else
+extern short *D_L08_001AC040[];
+extern int D_L08_0015FFBC __attribute__((section(".data")));
+extern int D_L08_0015FFBC_sda __asm__("D_L08_0015FFBC") __attribute__((sda));
+extern void *D_L08_001600EC;
+extern float D_L08_001675C0[];
+extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+extern int FUN_001fa6d0(float);
+extern void FUN_001f9d20(void *, void *, void *);
+extern void FUN_001f99f8(void *);
+extern void FUN_L05_00318648(void *, int, void *, void *, int);
+extern void FUN_L00_0025e450(void *,void *,void *,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int);
+
+/* Launch the selected group and a bounded burst of newly allocated mobys. */
+void FUN_L08_002d5d08(struct Moby *moby)
+{
+    char *data = (char *)moby->pvars;
+    short *list = D_L08_001AC040[((struct Moby *)D_L08_0015FFD8)[*(int *)(data + 0x144)].group];
+    short *next;
+    struct Moby *other, *spawned;
+    int i = 0;
+    float position[4], offset[4], velocity[4];
+    float angle, launch_yaw, center_yaw, min_frames, max_frames;
+    if (list == 0) return;
+    next = list + 1;
+    other = (struct Moby *)D_L08_0015FFD8 + (*list & 0x7fff);
+    if (D_L08_0015FFBC > 49) {
+        do {
+            if (random_integer_below(0xff) & 1) spawned = create_moby(0x310);
+            else spawned = create_moby(0x311);
+            if (spawned != 0) {
+                float angle;
+                spawned->update_dist = 0xff;
+                spawned->draw_dist = 0x40;
+                spawned->visible = 1;
+                spawned->rot.x = random_angle_radians();
+                spawned->rot.y = random_angle_radians();
+                spawned->rot.z = random_angle_radians();
+                position[0] = random_float_between(-1.0f, 1.0f);
+                position[1] = random_float_between(-1.0f, 1.0f);
+                position[2] = random_float_between(-1.0f, 1.0f);
+                position[3] = 1.0f;
+                FUN_001f9d20(position, position, (char *)D_L08_001600EC + *(int *)(data + 0x148) * 0x80);
+                qcopy(&spawned->pos, position);
+                angle = random_float_between(-0.2617994f, 0.2617994f);
+                FUN_001f99f8(offset);
+                velocity[0] = fast_cos(angle) * (D_0015ED6C * 15.0f);
+                velocity[1] = fast_sin(angle) * (D_0015ED6C * 15.0f);
+                velocity[2] = 0;
+                velocity[2] = random_float_between(D_0015ED6C * 8.0f, D_0015ED6C * 12.0f);
+                FUN_L05_00318648(spawned, (int)moby, velocity, offset,
+                    FUN_001fa6d0(random_float_between(60.0f, 90.0f)));
+            }
+            if (++i < 40 && D_L08_0015FFBC_sda > 49) continue;
+            break;
+        } while (1);
+    }
+    for (;;) {
+        if (other->state < 0x7f && other != moby) {
+            if ((unsigned int)((unsigned short)other->oclass - 0x24c) < 11) {
+                angle = random_float_between(-0.2617994f, 0.2617994f);
+                position[0] = fast_cos(angle) * (D_0015ED6C * 15.0f);
+                position[1] = fast_sin(angle) * (D_0015ED6C * 15.0f);
+                position[2] = 0;
+                position[2] = random_float_between(D_0015ED6C * 8.0f, D_0015ED6C * 12.0f);
+                switch ((short)(other->oclass - 0x24c)) {
+                case 0:
+                    *(u128 *)velocity = 0;
+                    velocity[0] = 1.629f;
+                    velocity[1] = -1.341f;
+                    velocity[2] = 11.48f;
+                    qcopy(offset, velocity);
+                    break;
+                case 1:
+                    *(u128 *)velocity = 0;
+                    velocity[0] = 1.299f;
+                    velocity[1] = -5.558f;
+                    velocity[2] = 11.48f;
+                    qcopy(offset, velocity);
+                    break;
+                case 2:
+                    *(u128 *)velocity = 0;
+                    velocity[0] = 0.629f;
+                    velocity[1] = -2.527f;
+                    velocity[2] = 3.409f;
+                    qcopy(offset, velocity);
+                    break;
+                case 3:
+                    *(u128 *)velocity = 0;
+                    velocity[0] = 0.019f;
+                    velocity[1] = -6.19f;
+                    velocity[2] = 3.409f;
+                    qcopy(offset, velocity);
+                    break;
+                case 4:
+                    *(u128 *)velocity = 0;
+                    velocity[0] = 3.196f;
+                    velocity[1] = -2.105f;
+                    velocity[2] = 7.784f;
+                    qcopy(offset, velocity);
+                    break;
+                case 5:
+                    *(u128 *)velocity = 0;
+                    velocity[0] = 2.11f;
+                    velocity[1] = -3.013f;
+                    velocity[2] = 2.625f;
+                    qcopy(offset, velocity);
+                    break;
+                case 6:
+                    *(u128 *)velocity = 0;
+                    velocity[0] = 4.33f;
+                    velocity[1] = -6.449f;
+                    velocity[2] = 7.397f;
+                    qcopy(offset, velocity);
+                    break;
+                case 7:
+                    *(u128 *)velocity = 0;
+                    velocity[0] = 3.286f;
+                    velocity[1] = -6.925f;
+                    velocity[2] = 2.96f;
+                    qcopy(offset, velocity);
+                    break;
+                case 8:
+                    *(u128 *)velocity = 0;
+                    velocity[0] = 1.539f;
+                    velocity[1] = -1.071f;
+                    velocity[2] = 13.144f;
+                    qcopy(offset, velocity);
+                    break;
+                case 9:
+                    *(u128 *)velocity = 0;
+                    velocity[0] = 1.596f;
+                    velocity[1] = -2.512f;
+                    velocity[2] = 8.359f;
+                    qcopy(offset, velocity);
+                    break;
+                case 10:
+                    *(u128 *)velocity = 0;
+                    velocity[0] = 0.885f;
+                    velocity[1] = -5.824f;
+                    velocity[2] = 8.224f;
+                    qcopy(offset, velocity);
+                    break;
+                }
+                launch_yaw = FUN_001f9e90(position[0], position[1]);
+                center_yaw = FUN_001f9e90(D_L08_001675C0[0] - moby->pos.x, D_L08_001675C0[1] - moby->pos.y);
+                if (fast_difference_between_rotations(launch_yaw, center_yaw) < 0.2617994f) {
+                    min_frames = 10.0f; max_frames = 20.0f;
+                } else {
+                    min_frames = 30.0f; max_frames = 45.0f;
+                }
+                FUN_L05_00318648(other, (int)moby, position, offset,
+                    FUN_001fa6d0(random_float_between(min_frames, max_frames)));
+            } else if (other->oclass == 0x1d8) {
+                FUN_001f99f8(position);
+                FUN_L00_0025e450(other, position, &other->pos, 0.0f, 0.0f,
+                    50, 60, 60, 12.0f, 8.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+                mark_moby_for_removal(other);
+            }
+        }
+        if (*list < -1) return;
+        other = (struct Moby *)D_L08_0015FFD8 + (*next & 0x7fff);
+        list = next;
+        next++;
+    }
+}
+#endif
 extern char *D_L08_0015FFD8;
 extern short *D_L08_001AC040[];
 
