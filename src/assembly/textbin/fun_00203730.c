@@ -97,12 +97,13 @@ void register_object_render_class(ObjectRenderClass *render_class,
                 width_units_128 = 1;
             }
             width_log2 = highest_set_bit_index((s16)texture->width);
+            tex0_word = (((u64)width_log2) << 26);
             height_log2 = highest_set_bit_index(texture->height);
             gs_block_base = gs_texture_allocation_base >> 8;
             mip_block_1 = texture->mip_block_offset_1 + gs_block_base;
             mip_block_0 = texture->mip_block_offset_0 + gs_block_base;
             texture_block = texture->clut_block_offset + gs_block_base;
-            tex0_word = ((((u64)width_log2) << 26) | 0x1300000) | (((u64)width_units_64) << 14);
+            tex0_word = (tex0_word | 0x1300000) | (((u64)width_units_64) << 14);
             tex0_word |= ((u64)height_log2) << 30;
             tex0_word |= (((u64)texture_block) << 37) | (((u64)1) << 34);
             tex0_word |= ((u64)1) << 63;

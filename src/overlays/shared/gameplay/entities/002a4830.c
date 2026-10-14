@@ -304,9 +304,8 @@ void FUN_L00_002a5040(u8 *moby) {
     s32 *indices;
     extern f32 points[] __asm__("D_L00_001D7360");
     f32 *uvs;
-    f32 *uvs_y;
     u32 *colors;
-    f32 x, y, z, phase, angle;
+    f32 phase, angle;
     f32 uv0, uv1, uv2, uv3;
     f32 u0, u1, u2, u3;
     s32 index;
@@ -328,15 +327,16 @@ void FUN_L00_002a5040(u8 *moby) {
     quad.draw = 0;
     i = 0;
     indices = (s32 *)0x1d7460;
-    quad.texture = get_effect_texture(0x18);
     basis0 = &basis[0];
+    quad.texture = get_effect_texture(0x18);
     basis1 = &basis[1];
     basis2 = &basis[2];
     basis3 = &basis[3];
     uvs = (f32 *)0x1d73f0;
-    uvs_y = (f32 *)0x1d73f4;
     colors = (u32 *)0x1d7438;
     do {
+        f32 x, y, z;
+        f32 *uvs_y = points + 37;
         index = i++ * 4;
         transform_point_2a5040(basis0, points + indices[0] * 4, matrix);
         indices1 = (s32 *)0x1d7464 + index;
@@ -353,7 +353,6 @@ void FUN_L00_002a5040(u8 *moby) {
         quad.corners[0].y = y + basis[0].y * vars->scale;
         quad.corners[2].z = z + basis[2].z;
         z = z + basis[3].z;
-        quad.corners[3].z = z;
         quad.corners[1].x = x + basis[1].x * vars->scale;
         quad.corners[1].y = y + basis[1].y * vars->scale;
         quad.corners[2].x = x + basis[2].x * vars->scale;
@@ -362,6 +361,7 @@ void FUN_L00_002a5040(u8 *moby) {
         quad.corners[3].x = x;
         y = y + basis[3].y * vars->scale;
         quad.corners[3].y = y;
+        quad.corners[3].z = z;
         index1 = *indices1;
         index2 = *indices2;
         index = indices[0];
@@ -430,21 +430,24 @@ void FUN_L00_002a5040(u8 *moby) {
     transform_point_2a5040(basis1, &orbit_copy[1], matrix);
     transform_point_2a5040(basis2, &orbit_copy[2], matrix);
     transform_point_2a5040(basis3, &orbit_copy[3], matrix);
-    x = *(f32 *)(moby + 0x10);
-    y = *(f32 *)(moby + 0x14);
-    z = *(f32 *)(moby + 0x18);
-    quad.corners[0].x = x + basis[0].x;
-    quad.corners[0].y = y + basis[0].y;
-    quad.corners[0].z = z + basis[0].z;
-    quad.corners[1].x = x + basis[1].x;
-    quad.corners[1].y = y + basis[1].y;
-    quad.corners[1].z = z + basis[1].z;
-    quad.corners[2].x = x + basis[2].x;
-    quad.corners[2].y = y + basis[2].y;
-    quad.corners[2].z = z + basis[2].z;
-    quad.corners[3].x = x + basis[3].x;
-    quad.corners[3].y = y + basis[3].y;
-    quad.corners[3].z = z + basis[3].z;
+    {
+        f32 x, y, z;
+        x = *(f32 *)(moby + 0x10);
+        y = *(f32 *)(moby + 0x14);
+        z = *(f32 *)(moby + 0x18);
+        quad.corners[0].x = x + basis[0].x;
+        quad.corners[0].y = y + basis[0].y;
+        quad.corners[0].z = z + basis[0].z;
+        quad.corners[1].x = x + basis[1].x;
+        quad.corners[1].y = y + basis[1].y;
+        quad.corners[1].z = z + basis[1].z;
+        quad.corners[2].x = x + basis[2].x;
+        quad.corners[2].y = y + basis[2].y;
+        quad.corners[2].z = z + basis[2].z;
+        quad.corners[3].x = x + basis[3].x;
+        quad.corners[3].y = y + basis[3].y;
+        quad.corners[3].z = z + basis[3].z;
+    }
     color = ((u32)(s32)((1.0f - D_L00_00161398_2a5040) * 128.0f) << 24) | 0x808080;
     quad.color[3] = color;
     quad.color[0] = color;
@@ -2109,7 +2112,80 @@ void wrench_update(WrenchMoby *m) {
     default: break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a96f8.s", FUN_L00_002a96f8);
+#else
+extern float D_L00_001613C4 __attribute__((sda));
+extern char D_0013F490[];
+extern short D_L00_001B0770[];
+extern unsigned char *FUN_L00_002630c8(void *, void *, void *, float *, float *, float *, float);
+extern void FUN_L00_0025f780(void *, void *, int);
+
+unsigned char *FUN_L00_002a96f8(float a, float b, float c, float d, float e,
+                              unsigned char *owner, void *pos, unsigned char *target) {
+    OvlVec4 direction, position;
+    unsigned char *m = create_moby(0x100);
+    unsigned char *data;
+    unsigned char *hit;
+    int frames;
+    int timer;
+    float length;
+    if (m != 0) {
+        m[0x30] = 0xff;
+        m[0x31] = 1;
+        m[0x20] = 0;
+        *(float *)(m + 0x2c) *= D_L00_001613C4;
+        *(unsigned short *)(m + 0x32) = 0xff;
+        data = *(unsigned char **)(m + 0x78);
+        *(float *)(m + 0x48) = d;
+        *(float *)(m + 0x44) = e;
+        if (target == 0) {
+            build_spherical_offset(&direction, D_0015ED6C * 20.0f, d, e);
+            position.q = *(OvlQuad *)pos;
+            target = FUN_L00_002630c8(owner, &position, &direction, &a, &b, &c, 0.34906584f);
+        }
+        *(unsigned char **)(data + 0x10) = owner;
+        qcopy(m + 0x10, pos);
+        length = D_0015ED6C * 100.0f;
+        *(int *)(data + 0x38) = 1;
+        *(int *)(data + 0x24) = 0;
+        *(int *)(data + 0x28) = 0;
+        *(int *)(data + 0x20) = 0;
+        *(float *)(data + 0x34) = length;
+        *(unsigned char **)(data + 0x18) = target;
+        if (target != 0 && (hit = (unsigned char *)FUN_002141f8(target)) != 0) {
+            *(unsigned short *)(hit + 0x1e) |= 0x80;
+            if (hit[0xb] != 0) *(int *)(data + 0x38) = 0;
+            if ((unsigned char)hit[0xc] != 0)
+                *(float *)(data + 0x34) = (float)(unsigned char)hit[0xc] * D_0015ED6C;
+        }
+        *(float *)(data + 0x2c) = a;
+        *(float *)(data + 0x30) = b;
+        *(int *)(data + 0x14) = scale_game_frames(0x96);
+        if (target != 0) {
+            qcopy(data, target + 0x10);
+            *(float *)(data + 8) += c;
+            *(float *)(data + 0x1c) = c;
+        }
+        length = vector_length_xyz(D_0013F490);
+        frames = 1;
+        if (D_0015ED6C * 0.1f < length) frames = 0x3c;
+        timer = scale_game_frames(frames);
+        *(volatile short *)(data + 0x3c) = timer;
+        *(volatile short *)(data + 0x3e) = timer;
+        direction.q = *(OvlQuad *)(owner + 0x10);
+        direction.f[2] = ((float *)pos)[2];
+        if (FUN_001efa68(&direction, pos, 0, (int)D_001413D0, 0) != 0) {
+            m[0xbc] = 1;
+            qcopy(m + 0x10, &D_L00_00173E60_2a8028);
+        }
+        FUN_L00_00250df8(m);
+        FUN_L00_0025f780(m, D_L00_001B0770, 0x1f);
+        *(float *)(m + 0x2c) += *(float *)(m + 0x2c);
+    }
+    return m;
+}
+#endif
 /* Creates a moby at a position with a scale, colour and a few data fields. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAC50), where it is exact; names translated to the US level program. */
 

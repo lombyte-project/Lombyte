@@ -267,16 +267,15 @@ void FUN_L06_002d8738(char *moby) {
     i = 0;
     do {
         FUN_001f9d20(facePos, D_L06_001D40C0[i], matrix);
-        i++;
         FUN_001f9a28(direction, facePos, D_L06_00167540);
         FUN_001f9bf8(direction, direction, 1.0f);
-        FUN_001f9cf8(facePos, D_L06_001D3A90[i - 1], matrix);
+        FUN_001f9cf8(facePos, D_L06_001D3A90[i++], matrix);
         if (!(0.0f < FUN_001f9ab0(direction, facePos))) {
             short *indices = D_L06_001D3620[i - 1];
             float (*corner)[4] = quad.corner;
             float *uvOut = &quad.uv[0][0];
             float *uvOutSecond = &quad.uv[0][1];
-            for (; corner != quad.corner + 4; uvOutSecond += 2, uvOut += 2, corner++, indices += 2) {
+            for (j = 4; j-- != 0; uvOutSecond += 2, uvOut += 2, corner++, indices += 2) {
                 short vertex = indices[0];
                 qcopy(corner, D_L06_001D4530[vertex]);
                 if (near) {
@@ -2194,9 +2193,12 @@ void FUN_L06_002f2250(void) {
         GbMoby *moby, *target;
         GbVars *vars;
         GbClass *cls;
+        float *score_list;
+        GbMoby **target_list = D_L06_001AC180_2f2250;
         for (i = 0; i < moby_count; i++) {
             moby = mobys[i];
             vars = moby->vars;
+            score_list = (float *)((char *)vars + 0x1c0);
             *(short *)((char *)vars + 0x192) = 0;
             j = 0;
             target = D_L06_001AC180_2f2250[0];
@@ -2228,7 +2230,7 @@ void FUN_L06_002f2250(void) {
                                             last = 6;
                                             if ((short)count - 1 < 7) last = (short)count - 1;
                                             target_list = (GbMoby **)((char *)vars + 0x1a4) + last;
-                                            scores = (float *)((char *)vars + 0x1c0) + last;
+                                            scores = score_list + last;
                                             for (; last >= k; last--) {
                                                 *target_list = target_list[-1];
                                                 target_list--;
@@ -2251,7 +2253,7 @@ void FUN_L06_002f2250(void) {
                         }
                     }
                     j++;
-                    target = D_L06_001AC180_2f2250[j];
+                    target = target_list[j];
                 } while (target != 0);
             }
         }
@@ -2352,7 +2354,7 @@ void FUN_L06_002f2250(void) {
     }
     {
         GbMoby **moby_list = mobys;
-        if (moby_count > 0) for (i = moby_count; i != 0; i--) {
+        if (moby_count > 0) for (n = moby_count; n != 0; n--) {
             GbVars *vars = (*moby_list)->vars;
             vars->f18C = level_frame_count;
             vars->target = *(GbMoby **)((char *)vars + 0x178);
@@ -2418,7 +2420,140 @@ void FUN_L06_002f2910(void *moby_arg) {
     }
     d->target_searched = 1;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002f2c28.s", FUN_L06_002f2c28);
+#else
+extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
+
+int FUN_L06_002f2c28(GbMoby *moby, GbVars *d, GbMoby *candidate, int flag, int *out) {
+    GbVec origin;
+    GbVec vel;
+    GbVec displacement;
+    GbVec pos;
+    GbVec end;
+    int count;
+    int *vars;
+    int index;
+    GbMoby *target;
+    float angle;
+    float s, fa, fb;
+    int cr, cg, cb, t;
+    int *id, *node, *cursor;
+    int i;
+
+    if (candidate->cls_id != 0x515 && candidate->cls_id != 0x15f) {
+        add_vector_xyz(&origin, candidate->pos, candidate->fC0);
+    } else {
+        origin.q = *(OvlQuad *)candidate->pos;
+    }
+    switch (candidate->cls_id) {
+    case 0x15f:
+    case 0x3b1:
+    case 0x515:
+        break;
+    case 0x400:
+    case 0x516:
+        goto special;
+    default:
+        return 0;
+    }
+    if (!(vector_distance(moby->pos, &origin) < 1.0f)) return 0;
+    vars = candidate->vars;
+    if (vars[0] < 0) return 0;
+    index = 0;
+    if (candidate->cls_id == 0x3b1) {
+        index = vars[1];
+        vars[1] = index + 1;
+    } else if (candidate->cls_id == 0x515 || candidate->cls_id == 0x15f) {
+        index = vars[1];
+        vars[1] = index + 1;
+    }
+    if (candidate->cls_id == 0x515) FUN_L00_0028dc90(0, 0, (int)candidate, 0x515);
+    count = 9;
+    do {
+        count--;
+        s = random_float_between(0.1f, 1.0f);
+        cr = random_int_between(0x40, 0xff);
+        cg = random_int_between(0x40, 0xff);
+        cb = random_int_between(0x40, 0xff);
+        fa = fast_cos(random_angle_radians());
+        fa *= random_float_between(0.0f, 0.25f);
+        displacement.f[0] = fa;
+        fa = fast_sin(random_angle_radians());
+        fa *= random_float_between(0.0f, 0.25f);
+        displacement.f[1] = fa;
+        displacement.f[2] = 0.0f;
+        displacement.f[2] += random_float_between(0.0f, 0.5f);
+        FUN_L00_001ff290(&pos, &displacement, moby->pos);
+        /* Retail reads this stack vector before its xyz are initialized. */
+        normalize_vector_xyz(&vel, &vel, random_float_between(0.0f, frame_time));
+        vel.f[2] = random_float_between(frame_time * 2.5f, frame_time * 5.0f);
+        t = scale_game_frames(random_int_between(0xf, 0x1e));
+        cg = (cg << 8) | 0x7f000000;
+        fa = s * 0.07f;
+        fb = s * 0.7f;
+        /* Retail passes displacement, even though pos holds the translated point. */
+        FUN_L00_00272060(&displacement, t, fa, fb, (cb << 16) | cg | cr, 0,
+                         random_integer_below(2) ? 1 : -1, frame_time_sq * 15.0f, &vel);
+    } while (count >= 0);
+    target = &D_L06_0015FFD8_u[vars[0]];
+    count = 9;
+    angle = fast_normalize_angle(convert_integer_to_float(index) * 60.0f * 0.017453292f);
+    vel.f[0] = fast_cos(fast_add_rotations(target->rot, angle));
+    vel.f[1] = fast_sin(fast_add_rotations(target->rot, angle));
+    vel.f[2] = 0.0f;
+    add_vector_xyz(moby->pos, &vel, target->pos);
+    d->f2F0.q = d->f2E0.q = *(OvlQuad *)moby->pos;
+    do {
+        count--;
+        s = random_float_between(0.1f, 1.0f);
+        cr = random_int_between(0x40, 0xff);
+        cg = random_int_between(0x40, 0xff);
+        cb = random_int_between(0x40, 0xff);
+        fa = fast_cos(random_angle_radians());
+        fa *= random_float_between(0.0f, 0.25f);
+        pos.f[0] = fa;
+        fa = fast_sin(random_angle_radians());
+        fa *= random_float_between(0.0f, 0.25f);
+        pos.f[1] = fa;
+        pos.f[2] = 0.0f;
+        pos.f[2] += random_float_between(0.0f, 0.5f);
+        FUN_L00_001ff290(&end, &pos, moby->pos);
+        normalize_vector_xyz(&displacement, &displacement, random_float_between(0.0f, frame_time));
+        displacement.f[2] = random_float_between(frame_time * 2.5f, frame_time * 5.0f);
+        t = scale_game_frames(random_int_between(0xf, 0x1e));
+        cg = (cg << 8) | 0x7f000000;
+        fa = s * 0.07f;
+        fb = s * 0.7f;
+        FUN_L00_00272060(&pos, t, fa, fb, (cb << 16) | cg | cr, 0,
+                         random_integer_below(2) ? 1 : -1, frame_time_sq * 15.0f, &displacement);
+    } while (count >= 0);
+    moby->state = 4;
+    *out = 1;
+    if (d->f310 > 1) {
+        id = d->paths.id;
+        i = 0;
+        node = d->paths.node;
+        cursor = id;
+        do {
+            if (*id >= 0 && FUN_L01_00276a48(0.0f, cursor, 1, *node, moby->pos)) d->f27C = i;
+            i++;
+            node++;
+            cursor++;
+            id++;
+        } while (i < 16);
+    }
+    return 0;
+special:
+    if (flag != 0) return 0;
+    if (candidate->state == 2) return 0;
+    if (!(vector_distance(moby->pos, &origin) < 1.0f)) return 0;
+    moby->state = 8;
+    d->f304 = candidate;
+    *out = 2;
+    return 0;
+}
+#endif
 extern int FUN_L00_002591d0_c(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int FUN_L00_002592b8_c(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L06_002f2c28_c(char *, char *, int, int, int *) __asm__("FUN_L06_002f2c28");

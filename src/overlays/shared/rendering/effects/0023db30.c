@@ -107,8 +107,8 @@ void FUN_L00_0023db30(void *m) {
     }
     {
         qcopy(&quad.points[0], &copied);
-        quarter = -0.25f;
         copied_x = four * copied.f[3];
+        quarter = -0.25f;
         quad.points[0].f[0] = copied_x;
         quad.points[0].f[2] += quarter;
         quad.points[0].f[3] = 1.0f;
@@ -149,7 +149,8 @@ void FUN_L00_0023db30(void *m) {
         quad.points[0].f[2] += minus_quarter;
         quad.points[0].f[3] = 1.0f;
         clear_0023db30(point1);
-        quad.points[1].f[0] = four * copied.f[3] * 3.0f;
+        other_x = 3.0f;
+        quad.points[1].f[0] = four * copied.f[3] * other_x;
         quad.points[1].f[2] += *(float *)(&D_L00_0015FC0A - 0x102);
         quad.points[1].f[3] = 1.0f;
         qcopy(&quad.points[2], &other);
@@ -158,7 +159,7 @@ void FUN_L00_0023db30(void *m) {
         quad.points[2].f[2] += quarter;
         quad.points[2].f[3] = 1.0f;
         clear_0023db30(&quad.points[3]);
-        quad.points[3].f[0] = four * copied.f[3] * 3.0f;
+        quad.points[3].f[0] = four * copied.f[3] * other_x;
         quad.points[3].i[2] = 0;
         quad.points[3].f[3] = 1.0f;
         draw_0023db30(&quad, &pos, 1);

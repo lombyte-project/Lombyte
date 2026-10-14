@@ -318,14 +318,11 @@ void FUN_L00_00276908(void) {
             FUN_L00_00235310(4);
         }
         {
-            s32 *saved;
             s32 remaining;
-            saved = (s32 *)((u32)&D_L00_001B9CF0 + 0x1a0);
             remaining = 13;
             do {
+                D_L00_001B9E90[13 - remaining] = delete_moby(D_L00_001B9E90[13 - remaining]);
                 remaining--;
-                *saved = (s32)delete_moby((struct Ent *)*saved);
-                saved++;
             } while (remaining >= 0);
         }
         handle = show_health_hud();
@@ -336,19 +333,18 @@ void FUN_L00_00276908(void) {
         D_L00_001B9CF0.state = 0x14;
         D_L00_001B9CF0.unk14 = 2;
         {
-            u8 *table;
-            value = *(s32 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
-            table = (u8 *)D_L00_00197300[0];
-            if (value < table[0xc]) {
+            s32 value = *(s32 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
+            if (value < ((u8 *)D_L00_00197300[0])[0xc]) {
                 do {
-                    table = (u8 *)D_L00_00197300[0];
-                    i = value++;
-                    *(s32 *)(table + 0x48 + i * 4) = 0;
-                    table = (u8 *)D_L00_00197300[0];
-                } while (value < table[0xc]);
+                    s32 *saved = (s32 *)(value * 4 + 0x48 + (u32)D_L00_00197300[0]);
+                    value++;
+                    *saved = 0;
+                } while (value < ((u8 *)D_L00_00197300[0])[0xc]);
             }
-            table = (u8 *)D_L00_00197300[0];
-            table[0xc] = *(u8 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
+            {
+                struct GameState *state = &D_L00_001B9CF0;
+                ((u8 *)D_L00_00197300[0])[0xc] = *(u8 *)((u8 *)state + 0xcc);
+            }
         }
         D_L00_0015F5D8 = 1;
         {
@@ -683,7 +679,7 @@ extern void FUN_L00_00299f40(void *, void *, s32 *, s32 *, s32 *, s32 *) __asm__
 extern void FUN_L00_0023caa8_772c0(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
 extern void FUN_L00_001fc928(f32, s32, s32, s32) __asm__("FUN_001f7888");
 extern void FUN_L00_0023cc30(s32, s32, s32, s32, u64, s32, s32) __asm__("FUN_00200f90");
-extern void FUN_L00_001fca18(void) __asm__("FUN_001f7978");
+extern void FUN_L00_001fca18(void) __asm__("FUN_L00_001fca18");
 extern void FUN_L00_001fa290(s32, s32, s32, s32, s32, s32, s32, s32, u64, u64) __asm__("FUN_001f5450");
 extern void FUN_L00_0024fe20(void) __asm__("FUN_L00_0024fe20");
 extern void FUN_L00_0024ff88(void) __asm__("FUN_L00_0024ff88");

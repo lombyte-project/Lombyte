@@ -707,7 +707,7 @@ extern void FUN_001f9a68(void *, void *, float);
 extern float FUN_001f9af0(void *);
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void FUN_0022da68(int, int, void *);
+extern int FUN_0022da68(int, int, void *);
 extern int FUN_001f9770(void *);
 extern float FUN_L00_0025e310(float);
 extern float FUN_00213508(void *, int, float);
@@ -725,7 +725,8 @@ void FUN_L03_002c4718(struct Moby *m)
     Vec4 old_pos;
     Vec4 next_pos;
     Vec4 delta;
-    struct { int old_m98, old_owner98, old_m94, old_owner94; } saved;
+    /* Keep each collision snapshot ordered before collision fields are disabled. */
+    volatile struct { int old_m98, old_owner98, old_m94, old_owner94; } saved;
     float angle;
     float distance;
     float time_step;
@@ -739,16 +740,16 @@ void FUN_L03_002c4718(struct Moby *m)
     old_pos = *pos;
     switch (m->state) {
     case 0: {
-        scale_step = frame_scale * 0.05f;
-        m->scale += (m->pclass->scale - m->scale) * scale_step;
+        m->scale += (m->pclass->scale - m->scale) * (frame_scale * 0.05f);
         FUN_001f9a10(pos, pos, d);
         FUN_001f9bf8(&next_pos, d, 0.2f);
         FUN_001f9a10(&next_pos, &next_pos, pos);
-        saved.old_m98 = m->collision_disable;
-        saved.old_owner94 = (*(struct Moby **)(d + 4))->collision;
-        saved.old_owner98 = (*(struct Moby **)(d + 4))->collision_disable;
-        saved.old_m94 = m->collision;
-        m->collision_disable = -1;
+        saved.old_m98 = *(volatile int *)&m->collision_disable;
+        saved.old_m94 = *(volatile int *)&m->collision;
+        owner = *(struct Moby **)(d + 4);
+        saved.old_owner94 = *(volatile int *)&owner->collision;
+        saved.old_owner98 = *(volatile int *)&owner->collision_disable;
+        *(volatile int *)&m->collision_disable = -1;
         (*(struct Moby **)(d + 4))->collision_disable = -1;
         m->collision = 0;
         (*(struct Moby **)(d + 4))->collision = 0;
@@ -780,10 +781,10 @@ first_collision_timer:
                 *(int *)(d + 8) = 12;
             }
         }
-        if (coll_sphere(0.2f, pos, 4, m)) {
+        if (coll_sphere(0.2f, (Vec4 *)&m->pos, 4, m)) {
             FUN_001f9a28(&next_pos, &D_L00_00173E40.point, &D_L00_00173E40.pad30);
             FUN_001f9bf8(&next_pos, &next_pos, 0.015f);
-            FUN_001f9a10(pos, &D_L00_00173E40.pad30, &next_pos);
+            FUN_001f9a10((Vec4 *)&m->pos, &D_L00_00173E40.pad30, &next_pos);
             if (D_L00_00173E40.moby == 0) {
                 FUN_L00_001ff660(d, d, &D_L00_00173E40.normal_x);
                 angle = FUN_001f9b20(&D_L00_00173E40.normal_x);
@@ -806,12 +807,12 @@ first_collision_timer:
         }
         for (other = D_L03_0015FFE4; other != NULL; other = other->next) {
             if (other == m || (int)other == 0 || other->state == 0xfe || other->state == 0xfd) continue;
-            FUN_001f9a28(&delta, pos, &other->pos);
+            FUN_001f9a28(&delta, (Vec4 *)&m->pos, &other->pos);
             delta.f[2] = 0.0f;
             distance = FUN_001f9af0(&delta);
             if (distance < 1.8f) {
                 FUN_001f9a68(&delta, &delta, (1.8f - distance) * (frame_scale * -0.5f + 1.0f));
-                FUN_001f9a10(pos, pos, &delta);
+                FUN_001f9a10((Vec4 *)&m->pos, (Vec4 *)&m->pos, &delta);
             }
         }
         if (FUN_001f9770(d + 5)) m->state = 2;
@@ -855,6 +856,7 @@ first_collision_timer:
     }
     FUN_L00_00259fe8(m, m->scale * 0.3f / m->pclass->scale);
     if (m->pos.z < 5.0f || m->pos.z > 500.0f) {
+remove_moby:
         FUN_0020c828(m);
         return;
     }
@@ -865,8 +867,6 @@ first_collision_timer:
     if (m->pos.z < 5.0f) m->pos.z = 5.0f;
     if (m->pos.z > 1018.0f) m->pos.z = 1018.0f;
     return;
-remove_moby:
-    FUN_0020c828(m);
 }
 #endif
 /* Recognize the active vendor object state. */

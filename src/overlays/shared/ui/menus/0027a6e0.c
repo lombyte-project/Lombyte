@@ -38,53 +38,53 @@ void FUN_L00_002831c0(void) {
     s32 matched;
 
     if (((*(u64 *)&D_0013C940.held_unmasked) & 15) == 6) {
-    pressed = D_0013C940.pressed_unmasked;
-    if (!(pressed & 0xF0A0)) return;
-    count = D_0015EF78;
-    if (count >= 20) return;
-    if (pressed & 0x1000) direction = 0;
-    else if (pressed & 0x4000) direction = 1;
-    else if (pressed & 0x8000) direction = 2;
-    else if (pressed & 0x2000) direction = 3;
-    else direction = (pressed & 0x80) ? 4 : 5;
-    D_0015EF78 = count + 1;
-    D_L00_001BA4A8[count] = direction;
-    if (count + 1 != 20) return;
+        pressed = D_0013C940.pressed_unmasked;
+        if ((pressed & 0xF0A0) && (D_0015EF78 < 20)) {
+            count = D_0015EF78;
+            if (pressed & 0x1000) direction = 0;
+            else if (pressed & 0x4000) direction = 1;
+            else if (pressed & 0x8000) direction = 2;
+            else if (pressed & 0x2000) direction = 3;
+            else direction = (pressed & 0x80) ? 4 : 5;
+            D_0015EF78 = count + 1;
+            D_L00_001BA4A8[count] = direction;
+            if (count + 1 != 20) return;
 
-    code = -1;
-    for (index = 2; index < 0x93; index++) {
-        if (D_L00_001BA4A8[0] == D_L00_001B9BA0[index & 0xff]) {
-            matched = 1;
-            count = 1;
-            do {
-                if (D_L00_001BA4A8[count] != D_L00_001B9BA0[(index * count + index) & 0xff]) {
-                    matched = 0;
-                    break;
+            code = -1;
+            for (index = 2; index < 0x93; index++) {
+                if (D_L00_001BA4A8[0] == D_L00_001B9BA0[index & 0xff]) {
+                    matched = 1;
+                    count = 1;
+                    do {
+                        if (D_L00_001BA4A8[count] != D_L00_001B9BA0[(index * count + index) & 0xff]) {
+                            matched = 0;
+                            break;
+                        }
+                        count++;
+                    } while (count < 20);
+                    if (matched) {
+                        code = index - 2;
+                        break;
+                    }
                 }
-                count++;
-            } while (count < 20);
-            if (matched) {
-                code = index - 2;
-                break;
+            }
+            if (code < 0) return;
+            if (code < 0x25) {
+                D_0013D4C0[code] = 1;
+                items_acquired[code] = 1;
+            } else if (code < 0x37) {
+                unlock_planet(code - 0x24);
+            } else if (code < 0x3d) {
+                D_0013D388[code - 0x37] = 1;
+            } else if (code < 0x5b) {
+                u8 *flag = &D_0013D408[code - 0x3d];
+                if (!*flag) {
+                    *flag = 1;
+                    FUN_L00_0028dd40(1, 0, 0);
+                    queue_dialogue_message(0x53d6, -1);
+                }
             }
         }
-    }
-    if (code < 0) return;
-    if (code < 0x25) {
-        D_0013D4C0[code] = 1;
-        items_acquired[code] = 1;
-    } else if (code < 0x37) {
-        unlock_planet(code - 0x24);
-    } else if (code < 0x3d) {
-        D_0013D388[code - 0x37] = 1;
-    } else if (code < 0x5b) {
-        u8 *flag = &D_0013D408[code - 0x3d];
-        if (!*flag) {
-            *flag = 1;
-            FUN_L00_0028dd40(1, 0, 0);
-            queue_dialogue_message(0x53d6, -1);
-        }
-    }
     } else D_0015EF78 = 0;
 }
 #endif

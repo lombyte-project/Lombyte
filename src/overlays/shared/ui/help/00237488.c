@@ -1258,8 +1258,7 @@ void FUN_L05_00254058(void) {
             stats->stat[30].unk2 = scale_game_frames(D_0015EEA4_gp) / 600;
             level = *(s32 *)0x0015ED84;
         }
-        stats->stat[30].level_mask |= 1U << level;
-        stats->stat[30].level_mask |= 0x80000000;
+        stats->stat[30].level_mask = 0x80000000U | (1U << level) | stats->stat[30].level_mask;
     }
     {
         counter = (s32 *)((char *)&hero + 0x6D0);
@@ -1279,7 +1278,8 @@ void FUN_L05_00254058(void) {
         struct Hero *g = &hero;
         *(s32 *)((char *)g + 0x70C) = 0;
         {
-            s32 *counter = (s32 *)((char *)g + 0x700);
+            s32 *counter = (s32 *)g;
+            counter += 0x700 / 4;
             i = 2;
             do {
                 if (*(s32 *)((char *)g + 0x70C) < *counter)
@@ -1305,6 +1305,7 @@ void FUN_L05_00254058(void) {
     }
     {
         struct Hero *g = &hero;
+        s32 *counter;
         *(s32 *)((char *)g + 0x6F0) = 0;
         counter = (s32 *)((char *)g + 0x6E0);
         i = 3;
@@ -1719,7 +1720,143 @@ int FUN_L05_002551d0(void) {
 
 #define MACRO_ADDR
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00255208.s", FUN_L05_00255208);
+#else
+extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
+extern float frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern int FUN_L00_0025d7a0(void *, int, int, int);
+extern int D_L05_0015F698 __attribute__((sda));
+
+int FUN_L05_00255208(void) {
+    struct Hero *g = &hero;
+    float start[4] __attribute__((aligned(16)));
+    float end[4] __attribute__((aligned(16)));
+    float velocity[4] __attribute__((aligned(16)));
+    int level;
+    int state;
+    int can_fall;
+    if (frame_time * 12.0f < g->motion.unk164) {
+        FUN_L00_0025c9d8(start, 0.0f, 0.0f, 0.75f);
+        qcopy(end, start);
+        qcopy(velocity, &g->motion.velocity);
+        fast_vec_normalize(velocity, velocity, 0.55f);
+        fast_vec_add(velocity, velocity, &g->motion.velocity);
+        velocity[2] = 0.0f;
+        fast_vec_add(end, start, velocity);
+        if (FUN_L00_0021e8d8(start, end, 2, 0, 0) &&
+            D_L05_00174240.moby == 0 && D_L05_00174240.unk1C != 0) {
+            CollisionHit *wall = &D_L05_00174240;
+            if (1.2217305f < FUN_L00_0022e598(wall->normal_z, FUN_L00_0022e0f0(&wall->normal_x))) {
+                g->unk8A4 = fast_add_rotations(FUN_L00_0022e598(wall->normal_x, wall->normal_y), 3.1415927f);
+                if (fast_difference_between_rotations(FUN_L00_0022e598(g->motion.velocity.f[0], g->motion.velocity.f[1]), g->unk8A4) < 0.7853982f) {
+                    state = 0x6F;
+                    if (!(g->ground_distance < 1.0f)) state = 0x6D;
+                    goto change_state;
+                }
+            }
+        }
+    }
+    level = current_level_index;
+    if ((&hero)->wall_hit) {
+        float distance = FUN_L00_0022e0f0(&(&hero)->motion.displacement);
+        if (distance < FUN_L00_0022e0f0(&(&hero)->motion.velocity) * 0.25f) {
+            state = 0x6D;
+            goto change_state;
+        }
+        level = *(int *)0x0015ED84;
+    }
+    if (level == 5) {
+        if ((&hero)->motion.pos.f[2] < 61.4f) {
+            (&hero)->unk8A0 = 61.4f;
+            state = 0x6E;
+            goto change_state;
+        }
+    }
+    if (level == 0x10) {
+        if ((&hero)->motion.pos.f[2] < 76.0f) {
+            (&hero)->unk8A0 = 76.0f;
+            state = 0x6E;
+            goto change_state;
+        }
+        if ((&hero)->on_slip_ground && (&hero)->ground_distance < 0.1f) {
+            state = 0x6D;
+            goto change_state;
+        }
+    }
+    if ((&hero)->frames_off_ground.s == 0) {
+        if ((&hero)->unk8B4 != 0) {
+            int index = func_L01_0028C2D8_254608(&(&hero)->motion.pos, (&hero)->unk8B4, 0.0f);
+            int next = FUN_L00_0025d7a0((&hero)->unk8B4, index, -1, 1);
+            (&hero)->unk8C8 = index;
+            if (*(int *)0x0015ED84 == 5) {
+                Path_254608 *path = (Path_254608 *)(&hero)->unk8B4;
+                float height = path->p[index].z;
+                float other = path->p[next].z;
+                float distance;
+                float minimum;
+                if (height < other) minimum = height;
+                else minimum = other;
+                distance = FUN_001f9b80(&(&hero)->motion.pos, &path->p[index]);
+                if (0.5f < minimum - (&hero)->motion.pos.f[2] && 4.0f < distance) {
+                    state = 0x6D;
+                    goto change_state;
+                }
+            }
+        }
+        if ((&hero)->frames_off_ground.s == 0 && (&hero)->unk8BC && (&hero)->unk89C == 0 &&
+            (*((unsigned char *)(&hero)->moby + 0x53) == 0x55 || *((unsigned char *)(&hero)->moby + 0x53) == 0x7F) &&
+            *((unsigned char *)(&hero)->moby + 0x51) < 13) {
+            int animation = FUN_L05_002551b8();
+            int frames = FUN_001f96f8(7);
+            set_hero_animation(animation, 14, (float)frames);
+        }
+    }
+    can_fall = (&hero)->frames_off_ground.s == 0;
+    if ((&hero)->wall_hit && absolute_float((&hero)->unk210.f[2] - (&hero)->ground_z.f) < 0.05f) can_fall = 1;
+    if (!can_fall) return 0;
+    if ((&hero)->unk89C == 0) return 0;
+    if (!((&hero)->motion.velocity.f[2] < 0.0f)) return 0;
+    if (1.0471976f < absolute_float((&hero)->motion.rot.f[1])) { state = 0x6D; goto change_state; }
+    if (1.0471976f < absolute_float((&hero)->motion.rot.f[0])) { state = 0x6D; goto change_state; }
+    if (1.3962634f < fast_difference_between_rotations((&hero)->motion.rot.f[2], (&hero)->unk874)) { state = 0x6D; goto change_state; }
+    if ((unsigned)(*((unsigned char *)(&hero)->moby + 0x53) - 0x69) < 4 &&
+        (&hero)->anim_frame < (float)(&D_L05_0015F698)[(&hero)->unk88F]) { state = 0x6D; goto change_state; }
+    goto continue_fall;
+change_state:
+    hero_set_state(state, 1);
+    return 1;
+continue_fall:
+    if (D_0013D388_254608[0]) {
+        if (current_level_index == 5 && (&hero)->unk6E0[4] == 4 && *(int *)((char *)&hero + 0x70C) > 3 && D_0013D408_254608[7] == 0) {
+            D_0013D408_254608[7] = 1;
+            allocate_voice_for_bank_entry_254608(1, 0, 0);
+            queue_dialogue_message_254608(0x53D6, -1);
+        }
+        {
+            struct Hero *g = &hero;
+            *(int *)((char *)g + 0x714) = 0;
+        }
+    }
+    if ((&hero)->state.current == 0x6C) {
+        hero_set_state(0x6B, 0);
+        if (*((unsigned char *)(&hero)->moby + 0x53) != 0x55 && *((unsigned char *)(&hero)->moby + 0x53) != 0x7F) {
+            int animation = FUN_L05_002551b8();
+            int frames = FUN_001f96f8(7);
+            set_hero_animation(animation, 14, (float)frames);
+        }
+        return 1;
+    }
+    if (*((unsigned char *)(&hero)->moby + 0x53) != 0x55 && *((unsigned char *)(&hero)->moby + 0x53) != 0x7F) {
+        int animation = FUN_L05_002551b8();
+        int frames = FUN_001f96f8(7);
+        set_hero_animation(animation, 14, (float)frames);
+    }
+    return 0;
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_0025BDA8), where it is exact; names translated to the US level program. */
 
 extern char D_L05_0017C068[];

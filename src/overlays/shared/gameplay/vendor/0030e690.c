@@ -198,10 +198,11 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     float bottom_right[4];
     int *tag;
     unsigned long long *q;
-    volatile int saved_depth[2];
+    union { volatile int saved_depth[2]; volatile float scale[2]; } saved;
     unsigned long long packed_depth;
+    float scale;
 
-    saved_depth[0] = z_and_fog;
+    saved.saved_depth[0] = z_and_fog;
     center[0] = x;
     center[1] = y;
     vertical[0] = height * fast_sin(angle);
@@ -219,7 +220,9 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[0] = 0x10000007;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[1] = 0;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[2] = 0;
-    packed_depth = (unsigned long long)saved_depth[0] << 32;
+    saved.saved_depth[1] = 0x41800000;
+    scale = saved.scale[1];
+    packed_depth = (unsigned long long)saved.saved_depth[0] << 32;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[3] = 0x50000007;
     tag = (int *)(*(volatile int *)&D_L11_001611C0_g);
     q = (unsigned long long *)(tag + 4);
@@ -236,8 +239,8 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     {
         int sx, sy;
         unsigned long long packed_position;
-        sx = ftoi_g(top_left[0] * 16.0f);
-        sy = ftoi_g(top_left[1] * 16.0f);
+        sx = ftoi_g(top_left[0] * scale);
+        sy = ftoi_g(top_left[1] * scale);
         sy += screen_extent[5];
         sx += screen_extent[4];
         sy -= 8;
@@ -251,8 +254,8 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     {
         int sx, sy;
         unsigned long long packed_position;
-        sx = ftoi_g(bottom_left[0] * 16.0f);
-        sy = ftoi_g(bottom_left[1] * 16.0f);
+        sx = ftoi_g(bottom_left[0] * scale);
+        sy = ftoi_g(bottom_left[1] * scale);
         sy += screen_extent[5];
         sx += screen_extent[4];
         sy -= 8;
@@ -266,8 +269,8 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     {
         int sx, sy;
         unsigned long long packed_position;
-        sx = ftoi_g(top_right[0] * 16.0f);
-        sy = ftoi_g(top_right[1] * 16.0f);
+        sx = ftoi_g(top_right[0] * scale);
+        sy = ftoi_g(top_right[1] * scale);
         sy += screen_extent[5];
         sx += screen_extent[4];
         sy -= 8;
@@ -281,8 +284,8 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     {
         int sx, sy;
         unsigned long long packed_position;
-        sx = ftoi_g(bottom_right[0] * 16.0f);
-        sy = ftoi_g(bottom_right[1] * 16.0f);
+        sx = ftoi_g(bottom_right[0] * scale);
+        sy = ftoi_g(bottom_right[1] * scale);
         sy += screen_extent[5];
         sx += screen_extent[4];
         sy -= 8;
@@ -517,7 +520,8 @@ int FUN_L11_003192c8(char *moby) {
                         int n = start + (k >> 1);
                         int q = n + 15;
                         if (limit < n) q = n;
-                        n -= (q >> 4) << 4;
+                        q = (q >> 4) << 4;
+                        n = n - q;
                         add_vector_xyz((float *)stack_data + i * 0x24 + k * 4, points + n * 16,
                                        (char *)offset + (k & 1) * 16);
                     }

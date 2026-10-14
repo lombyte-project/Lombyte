@@ -439,9 +439,9 @@ extern s32 D_L00_0015F614 MACRO_ADDR;
 extern u8 mission_state_lui[] __asm__("D_L00_0015FC88") NOT_SDA;
 extern s32 D_L00_0015FFF0 MACRO_ADDR;
 extern s32 D_L00_0016017C NOT_SDA;
-extern s32 D_L00_001604A4 MACRO_ADDR;
-extern s32 D_L00_00160F80 MACRO_ADDR;
-extern s32 D_L00_00160FE0 MACRO_ADDR;
+extern float D_L00_001604A4_macro __asm__("D_L00_001604A4") MACRO_ADDR;
+extern float D_L00_00160F80_macro __asm__("D_L00_00160F80") MACRO_ADDR;
+extern float D_L00_00160FE0_macro __asm__("D_L00_00160FE0") MACRO_ADDR;
 extern u8 D_L00_0016CA40[] NOT_SDA;
 #define D_L00_0016CC40 (*(f32 *)(D_L00_0016CA40 + 0x200))
 #define D_L00_0016CC44 (*(f32 *)(D_L00_0016CA40 + 0x204))
@@ -580,12 +580,12 @@ void FUN_L00_001f4598(void) {
                     g_debug_menu.control_mode = 3;
                 }
                 switch (g_debug_menu.control_mode) {
-                case 1: {
-                    g_debug_menu.update_flags = 0;
-                break;
-                }
                 case 0: {
                     g_debug_menu.update_flags = 0xf;
+                    break;
+                }
+                case 1: {
+                    g_debug_menu.update_flags = 0;
                     break;
                 }
                 case 2: {
@@ -650,16 +650,16 @@ void FUN_L00_001f4598(void) {
                 enabled = g_debug_menu.draw_distance_override == 0;
                 g_debug_menu.draw_distance_override = (u32)enabled;
                 if (enabled) {
-                    D_L00_00160F80 = 0x47800000;
+                    (*(s32 *)&D_L00_00160F80_macro) = 0x47800000;
                     D_L00_0015FFF0 = 0x40;
-                    D_L00_00160FE0 = 0x42800000;
-                    D_L00_001604A4 = 0x42200000;
+                    (*(s32 *)&D_L00_00160FE0_macro) = 0x42800000;
+                    (*(s32 *)&D_L00_001604A4_macro) = 0x42200000;
                     D_L00_0016017C = 0x40000;
                 } else {
-                    D_L00_00160F80 = 0x48fa0000;
-                    D_L00_00160FE0 = 0x44340000;
+                    (*(s32 *)&D_L00_00160F80_macro) = 0x48fa0000;
+                    (*(s32 *)&D_L00_00160FE0_macro) = 0x44340000;
                     D_L00_0015FFF0 = 500;
-                    D_L00_001604A4 = 0x43fa0000;
+                    (*(s32 *)&D_L00_001604A4_macro) = 0x43fa0000;
                     D_L00_0016017C = 0x1f4000;
                 }
             }
@@ -881,8 +881,8 @@ void FUN_L00_001f4598(void) {
             byte_value = D_L00_0015F446;
             if ((D_L00_0015F446 < 0xFF) &&
                 ((D_0013C940.buttons.held_pressed & 0x800000040) != 0)) {
-                byte_value = byte_value + 1;
-                D_L00_0015F446 = byte_value;
+                D_L00_0015F446 = byte_value + 1;
+                byte_value = D_L00_0015F446;
             }
             if ((byte_value != '\0') &&
                 ((D_0013C940.buttons.held_pressed & 0x400000010) != 0)) {

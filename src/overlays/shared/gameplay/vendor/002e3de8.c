@@ -129,7 +129,6 @@ void FUN_L10_002e91b8(unsigned char *m) {
     float *second_vectors;
     float *second_angles;
     float *second_packet;
-    float *angle_vectors;
     int i, k;
     int j;
 
@@ -168,13 +167,13 @@ void FUN_L10_002e91b8(unsigned char *m) {
 
     if (D_L10_0015B340 > 0) {
 
+        float *angle_vectors = (float *)(first + 0x50);
         float *angles = (float *)(first + 0x58);
+        float *offsets = (float *)(first + 0x68);
         float *first_angles = (float *)(second + 0x50);
         float *first_offsets = (float *)(second + 0x58);
-        float *offsets = (float *)(first + 0x68);
         float *second_angles = (float *)(second + 0x60);
         float *second_offsets = (float *)(second + 0x68);
-        angle_vectors = (float *)(first + 0x50);
         for (i = 0; i < D_L10_0015B340; i++) {
             int parity = i & 1;
             int *colors = D_L10_0015B348;
@@ -196,11 +195,11 @@ void FUN_L10_002e91b8(unsigned char *m) {
             ((int *)(first + 0x40))[1] = shade;
             j = 0;
             do {
-                int offset = j * 8;
-                int index = i * 8;
-                int next_vector = j + 1;
                 float *first_source = D_L10_001DA270 + i * 2;
+                int index = i * 8;
+                int offset = j * 8;
                 float *first_vectors = (float *)((unsigned char *)angle_vectors + offset);
+                int next_vector = j + 1;
                 k = 1;
                 do {
                     int limit = float_to_integer(*first_source * 360.0f);
@@ -298,6 +297,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L10_00167100[];
 
 extern char D_L10_0016CEC0[];
+#include "qcopy.h"
 void FUN_L10_002f5b58(char *moby) {
     char *data = *(char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 0x20 + 0x1c);
     char *work;
@@ -419,13 +419,13 @@ void FUN_L10_002f5b58(char *moby) {
     {
         char *source = *(char **)(D_L10_00167100 + 0x184);
         source += 0x30;
-        *(u128 *)moby_scale = *(u128 *)source;
+        qcopy(moby_scale, source);
         source -= 0x30;
-        *(u128 *)moby = *(u128 *)source;
+        qcopy(moby, source);
         source += 0x10;
-        *(u128 *)moby_pos = *(u128 *)source;
+        qcopy(moby_pos, source);
         source += 0x10;
-        *(u128 *)moby_rot = *(volatile u128 *)source;
+        qcopy(moby_rot, source);
     }
     if (*(int *)(data + 0x4c) == 0)
         hero_set_state(0x72, 1);

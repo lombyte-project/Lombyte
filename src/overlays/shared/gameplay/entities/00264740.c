@@ -41,10 +41,12 @@ void FUN_L00_00264740(void)
     current = D_L00_0015FFE4;
     while (current != 0) {
         if ((s8)current->state >= 0) {
+            update = current->update;
             if (!(current->flags & 0x40)) {
                 FUN_L00_00250480(current);
+                update = current->update;
             }
-            for (update = current->update; update != 0; update = 0) {
+            for (; update != 0; update = 0) {
                 update(current);
             }
             if (!(((volatile struct Moby *)current)->flags & 4)) {

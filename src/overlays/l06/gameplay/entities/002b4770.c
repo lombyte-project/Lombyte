@@ -1217,8 +1217,8 @@ void FUN_L06_002f5d78(char *moby) {
         angle = D_L06_00161D7C_gp * DEG_TO_RAD - (float)(i * 45) * DEG_TO_RAD;
         if (1.5707964f < angle) angle = 1.5707964f;
         else if (angle < 0.0f) angle = 0.0f;
-        left = (char **)(data + 0x70 + offset);
         right = (char **)(data + 0xc0 + offset);
+        left = (char **)(data + 0x70 + offset);
         i++;
         offset += 4;
         *(float *)(*left + 0x40) = -angle;
@@ -1230,7 +1230,7 @@ void FUN_L06_002f5d78(char *moby) {
         int i, offset;
         right = (char **)(data + 0x138);
         left = (char **)(data + 0x110);
-        for (i = 0, offset = 0; i < 10; i++, offset += 2, left++, right++) {
+        for (i = 0, offset = 0; i < 10; i++, offset = i + i, left++, right++) {
             float length = D_L06_00161D78_gp - ((float)i + (float)i);
             threshold = (float)(4 - i) * D_L06_00161D74 + D_L06_00161D70;
             upper = length;
@@ -1248,35 +1248,36 @@ void FUN_L06_002f5d78(char *moby) {
             add_vector_xyz(&result, &result, &second);
             qcopy(*right + 0x10, &result);
             angle = D_L06_00161D7C_gp * DEG_TO_RAD - (float)offset * 0.7853982f;
-            other = angle - (*(float *)&D_L06_00161DA0) * DEG_TO_RAD;
+            threshold = angle - (*(float *)&D_L06_00161DA0) * DEG_TO_RAD;
             if (1.5707964f < angle) angle = 1.5707964f;
             else if (angle < 0.0f) angle = 0.0f;
-            if (1.5707964f < other) other = 1.5707964f;
-            else if (other < 0.0f) other = 0.0f;
-            if (angle != 0.0f && other == 0.0f) allocate_voice_for_target_entry(1, 0, (int)*left);
+            if (1.5707964f < threshold) threshold = 1.5707964f;
+            else if (threshold < 0.0f) threshold = 0.0f;
+            if (angle != 0.0f && threshold == 0.0f) allocate_voice_for_target_entry(1, 0, (int)*left);
             upper = (D_L06_00161D7C_gp * DEG_TO_RAD - (float)(i + i) * 0.7853982f) - 0.7853982f;
-            other = upper - (*(float *)&D_L06_00161DA0) * DEG_TO_RAD;
+            threshold = upper - (*(float *)&D_L06_00161DA0) * DEG_TO_RAD;
             if (1.5707964f < upper) upper = 1.5707964f;
             else if (upper < 0.0f) upper = 0.0f;
-            if (1.5707964f < other) other = 1.5707964f;
-            else if (other < 0.0f) other = 0.0f;
-            if (upper != 0.0f && other == 0.0f) allocate_voice_for_target_entry(1, 0, (int)*right);
-            *(float *)(*left + 0x40) = -angle;
+            if (1.5707964f < threshold) threshold = 1.5707964f;
+            else if (threshold < 0.0f) threshold = 0.0f;
+            if (upper != 0.0f && threshold == 0.0f) allocate_voice_for_target_entry(1, 0, (int)*right);
+            other = -angle;
             angle = D_L06_00161D80_gp * DEG_TO_RAD - (float)(i + i) * 0.7853982f;
+            threshold = angle - (*(float *)&D_L06_00161DA4) * DEG_TO_RAD;
+            *(float *)(*left + 0x40) = other;
             *(float *)(*right + 0x40) = upper;
-            other = angle - (*(float *)&D_L06_00161DA4) * DEG_TO_RAD;
             if (1.5707964f < angle) angle = 1.5707964f;
             else if (angle < 0.0f) angle = 0.0f;
-            if (1.5707964f < other) other = 1.5707964f;
-            else if (other < 0.0f) other = 0.0f;
-            if (angle != 0.0f && other == 0.0f) allocate_voice_for_target_entry(2, 0, (int)*left);
+            if (1.5707964f < threshold) threshold = 1.5707964f;
+            else if (threshold < 0.0f) threshold = 0.0f;
+            if (angle != 0.0f && threshold == 0.0f) allocate_voice_for_target_entry(2, 0, (int)*left);
             upper = (D_L06_00161D80_gp * DEG_TO_RAD - (float)(i + i) * 0.7853982f) - 0.7853982f;
-            other = angle - (*(float *)&D_L06_00161DA4) * DEG_TO_RAD;
+            threshold = angle - (*(float *)&D_L06_00161DA4) * DEG_TO_RAD;
             if (1.5707964f < upper) upper = 1.5707964f;
             else if (upper < 0.0f) upper = 0.0f;
-            if (1.5707964f < other) other = 1.5707964f;
-            else if (other < 0.0f) other = 0.0f;
-            if (upper != 0.0f && other == 0.0f) allocate_voice_for_target_entry(2, 0, (int)*right);
+            if (1.5707964f < threshold) threshold = 1.5707964f;
+            else if (threshold < 0.0f) threshold = 0.0f;
+            if (upper != 0.0f && threshold == 0.0f) allocate_voice_for_target_entry(2, 0, (int)*right);
             *(float *)(*left + 0x44) = -angle;
             *(float *)(*right + 0x44) = -upper;
             FUN_L00_00250df8(*left);
@@ -1487,8 +1488,9 @@ void FUN_L06_002f6470(char *moby) {
             color = current_level_index;
             frame /= 600;
             if (frame > D_00141968[43].best) {
-                D_00141968[43].best = scale_game_frames_2f6470(D_L06_0015EEA4) / 600;
-                color = D_L06_0015ED84;
+                /* Retail stores best before reading the replacement level index. */
+                *(volatile unsigned short *)&D_00141968[43].best = scale_game_frames_2f6470(D_L06_0015EEA4) / 600;
+                color = *(volatile int *)&D_L06_0015ED84;
             }
             frame = 1 << color;
             D_00141968[43].flags |= frame | 0x80000000;

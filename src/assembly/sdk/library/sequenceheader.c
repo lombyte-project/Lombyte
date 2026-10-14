@@ -135,7 +135,7 @@ void func_0012C4C8(struct sceMpeg *arg0) {
         temp_20_71 = ((u8 *)mpeg + (0x250));
         temp_21_73 = ((u8 *)mpeg + (0x2B8));
         sp38 = ((u8 *)mpeg + (0x3F0));
-        temp_16_77 = (u32)((0x180 * temp_23_51) * temp_22_48) >> 8;
+        temp_16_77 = ((0x180U * (u32)temp_23_51) * (u32)temp_22_48) >> 8;
         sp3C = ((u8 *)mpeg + (0x458));
         width = temp_23_51;
         height = temp_22_48;

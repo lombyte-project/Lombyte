@@ -1876,7 +1876,99 @@ int FUN_L06_00303160(char *moby, int path) {
     }
     return ride->progress == 1.0f;
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303748.s", FUN_L06_00303748);
+#else
+typedef struct { int v[6]; } Colors_303748;
+extern Colors_303748 D_L06_00201948, D_L06_00201960;
+extern float D_L06_00162114 __attribute__((sda));
+extern float D_L06_00162118 __attribute__((sda));
+extern float D_L06_0016211C __attribute__((sda));
+extern float D_L06_00162120 __attribute__((sda));
+extern float D_L06_00162124 __attribute__((sda));
+extern float D_L06_00162128 __attribute__((sda));
+extern float D_L06_0016212C __attribute__((sda));
+extern float D_L06_00162130 __attribute__((sda));
+extern int D_L06_00162134 __attribute__((sda));
+extern int D_L06_00162138 __attribute__((sda));
+extern int D_L06_0016213C __attribute__((sda));
+extern int D_L06_00162140 __attribute__((sda));
+extern int D_L06_00162144 __attribute__((sda));
+extern int D_L06_00162148 __attribute__((sda));
+extern int D_L06_0016214C __attribute__((sda));
+extern int D_L06_00162150 __attribute__((sda));
+extern int D_L06_00162154 __attribute__((sda));
+extern int D_L06_00162158 __attribute__((sda));
+extern float frame_time_03b68 __asm__("D_0015ED6C");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
+extern void random_vector_03b68(void *, float, float) __asm__("FUN_L00_00257d78");
+extern float random_float_between_03b68(float, float) __asm__("FUN_002132a8");
+extern float scale_time_03b68(float) __asm__("FUN_001f96b0");
+extern int float_to_int_03b68(float) __asm__("FUN_001fa6d0");
+extern int fast_tween_color_03b68(int, int, float) __asm__("FUN_001fa6e0");
+extern u8 *emit_particle_03b68(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern void prepare_piece_effect_303748(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+
+void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count) {
+    float position[4], direction[4], velocity[4], acceleration[4];
+    Colors_303748 a, b;
+    int i;
+    float strength;
+    prepare_piece_effect_303748(moby, pos, -1, 2.0f, 13.0f);
+    a = D_L06_00201948;
+    b = D_L06_00201960;
+    if (count > 0) {
+        int left = count;
+        do {
+            int *pa = a.v + random_integer_below(6);
+            int *pb;
+            int r1, r2;
+            strength = scale * 400000.0f;
+            left--;
+            pb = b.v + random_integer_below(6);
+            {
+                int low, high;
+                low = scale_game_frames(15);
+                high = scale_game_frames(20);
+                r1 = random_int_between(low, high);
+            }
+            {
+                int low, high;
+                low = scale_game_frames(25);
+                high = scale_game_frames(30);
+                r2 = random_int_between(low, high);
+            }
+            FUN_L00_0026a9f0(pos, push, *pa, *pb, strength, r1, r2, 0, 0,
+                             frame_time_03b68 * 10.0f * scale);
+        } while (left != 0);
+    }
+    for (i = 0; i < count * D_L06_00162150;) {
+        int color1, color2, life, size, fade;
+        i++;
+        random_vector_03b68(position, 0.0f, 1.0f);
+        FUN_001f9a10(position, position, pos);
+        random_vector_03b68(direction, 0.0f, 0.9f);
+        FUN_001f9a10(direction, direction, push);
+        transform_2fd1a0(velocity, direction,
+            random_float_between_03b68(D_L06_00162114, D_L06_00162118) * frame_time_03b68);
+        random_vector_03b68(direction, 0.0f, 0.9f);
+        FUN_001f9a10(direction, direction, push);
+        transform_2fd1a0(acceleration, direction,
+            random_float_between_03b68(D_L06_00162124, D_L06_00162128) * frame_time_03b68);
+        velocity[3] = random_float_between_03b68(D_L06_0016211C, D_L06_00162120) * scale;
+        acceleration[3] = random_float_between_03b68(D_L06_0016212C, D_L06_00162130) * scale;
+        color1 = fast_tween_color_03b68(D_L06_00162134, D_L06_00162138, random_float_between_03b68(0.0f, 1.0f));
+        color2 = fast_tween_color_03b68(D_L06_0016213C, D_L06_00162140, random_float_between_03b68(0.0f, 1.0f));
+        life = float_to_int_03b68(scale_time_03b68(random_float_between_03b68((float)D_L06_00162144, (float)(D_L06_00162144 << 1))));
+        size = float_to_int_03b68(scale_time_03b68(random_float_between_03b68((float)D_L06_00162148, (float)D_L06_00162148 * 1.2f)));
+        fade = float_to_int_03b68(scale_time_03b68(random_float_between_03b68((float)D_L06_0016214C * 0.8f, (float)D_L06_0016214C)));
+        emit_particle_03b68(position, velocity, acceleration, color1, color2, life, size, fade,
+            D_L06_00162154 + (D_L06_00162158 << 16));
+    }
+}
+#endif
 extern char *D_L06_0015FFD8_03b68 __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_03b68[] __asm__("D_L06_001ABFC0");
 extern float D_L06_0016215C __attribute__((sda));

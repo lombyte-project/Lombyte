@@ -17,4 +17,59 @@ void FUN_L03_00250a78(float *p, float a, float b) {
     p[6] = (a + a) / x;
     p[5] = (a + a) / (x * x);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_00250ae8.s", FUN_L03_00250ae8);
+#else
+#include "eetypes.h"
+
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern void build_look_at_matrix(void *, void *, void *, f32) __asm__("FUN_00214890");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern void FUN_L00_001ff290(void *, void *, void *);
+extern void *FUN_L00_002712b8(f32, f32, f32, f32, f32, void *, void *, s32, s32, s32, s32);
+extern void *FUN_L00_0026cbb0(void *, void *, s32, s32, s32, s32, f32);
+
+void FUN_L03_00250ae8(char *param_1, u128 *param_2, void *param_3) {
+    struct { u128 position; u128 velocity; u128 temp; } vectors;
+    s32 i;
+    s32 j;
+    u128 *position = &vectors.position;
+    s32 spin;
+    s32 duration;
+    s32 minimum;
+    s32 maximum;
+    f32 angle;
+
+    vectors.position = *param_2;
+
+    for (i = 0; i < truncate_float_to_s32(24.0f); i++) {
+        build_look_at_matrix(&vectors.velocity, param_1 + 0xe0, param_1 + 0xc0,
+                             (f32)i * 0.2617994f + randf_sym(0.0f, 0.1308997f));
+        fast_vec_normalize(&vectors.velocity, &vectors.velocity, random_float_between(0.05f, 0.1f));
+        spin = random_int_between(0, 3);
+        if (random_integer_below(2)) spin = -spin;
+        minimum = scale_game_frames(30);
+        maximum = scale_game_frames(90);
+        duration = random_int_between(minimum, maximum);
+        if (param_3) FUN_L00_001ff290(&vectors.temp, &vectors.velocity, param_3);
+        FUN_L00_002712b8(60000.0f, 3000.0f, 0.85f, -0.001f, 0.85f,
+                         position, &vectors.velocity, duration, 30, 0xffffff, spin);
+    }
+    for (j = 0; j < truncate_float_to_s32(6.0f); ) {
+        angle = random_float_between(0.0f, 0.7853982f);
+        build_look_at_matrix(&vectors.velocity, param_1 + 0xe0, param_1 + 0xc0,
+                             (f32)j++ * 1.0471976f + angle);
+        fast_vec_normalize(&vectors.velocity, &vectors.velocity, random_float_between(0.05f, 0.1f));
+        minimum = scale_game_frames(20);
+        maximum = scale_game_frames(60);
+        duration = random_int_between(minimum, maximum);
+        if (param_3) FUN_L00_001ff290(&vectors.temp, &vectors.velocity, param_3);
+        FUN_L00_0026cbb0(position, &vectors.velocity, 0x4f007fff, 0x1fffffff, duration, 1, 10000.0f);
+    }
+}
+#endif

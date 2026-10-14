@@ -288,7 +288,7 @@ void FUN_L14_00301de8(char *m) {
     char *dst, *src;
     u8 *indices;
     int i, j, k, copy_i, next_i;
-    long offset;
+    int offset;
     float t;
 
     if (*(s16 *)(d + 0x12) != 0) {
@@ -304,8 +304,9 @@ void FUN_L14_00301de8(char *m) {
         i = 0;
         do {
             next_i = i + 1;
-            offset = (i << 4) + (int)d;
-            dst = (char *)offset + 0x460;
+            dst = (char *)((i << 4) + (int)d);
+            offset = (int)dst;
+            dst += 0x460;
             src = (char *)offset + 0x560;
             for (k = 2; k >= 0; k--) {
                 add_vector_xyz(dst, dst, src);
@@ -313,13 +314,16 @@ void FUN_L14_00301de8(char *m) {
                 src += 0x40;
             }
             i = next_i;
-        } while ((double)i < 4.0);
-        src = (char *)indices;
-        copy_i = 0;
-        do {
-            qcopy(d + 0x420 + (copy_i << 4), (char *)(((u8)src[copy_i] << 4) + (int)d) + 0x20);
-            copy_i++;
-        } while (copy_i < 4);
+        } while ((float)i < 4.0f);
+        {
+            char *src = (char *)indices;
+            indices = 0; /* End the saved index-base lifetime after the transfer. */
+            copy_i = 0;
+            do {
+                qcopy(d + 0x420 + (copy_i << 4), (char *)(((u8)src[copy_i] << 4) + (int)d) + 0x20);
+                copy_i++;
+            } while (copy_i < 4);
+        }
     }
     if (*(s16 *)(d + 0x12) > D_L14_001620C4) {
         t = convert_integer_to_float(*(s16 *)(d + 0x12) - D_L14_001620C4) /

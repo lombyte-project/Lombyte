@@ -94,7 +94,7 @@ void FUN_L14_002df138(u8 *moby) {
         p += 4;
     } while (i < 5);
 
-    mirror = d + ((i - 1) * 4 + 2);
+    mirror = (f32 *)((s32)((i - 1) * 4 + 2) * 4 + (s32)d);
     j = 5;
     tail = d + 0x14;
     do {

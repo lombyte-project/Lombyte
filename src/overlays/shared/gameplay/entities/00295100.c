@@ -859,7 +859,7 @@ extern char D_L00_001E9480[];
 
 void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     u8 buffer[0x60] __attribute__((aligned(16)));
-    s32 source, destination, count, second_count, pal, initial_count;
+    s32 source, destination, second_count, pal, initial_count;
 
     voice_pool.header[0x6B] |= 8;
     FUN_00118a80(0);
@@ -882,7 +882,7 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     initial_count = pal ? 14 : initial_count;
     second_count = pal ? 14 : second_count;
     if (initial_count != 0) {
-        count = initial_count;
+        s32 count = initial_count;
         do {
             count--;
             FUN_00122330(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
@@ -895,7 +895,7 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     }
     source = D_0015EE78_gp;
     if (second_count != 0) {
-        count = second_count;
+        s32 count = second_count;
         do {
             count--;
             FUN_00122330(buffer, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);

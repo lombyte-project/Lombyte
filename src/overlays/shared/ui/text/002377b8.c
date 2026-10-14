@@ -411,8 +411,8 @@ s32 FUN_L00_002382a0(char *rec) {
                     y + D_L00_0015F71C_gp, half_w, -half_h, alpha);
     if (D_L00_0015FA90 > 0) {
         entry_offset = 0;
-        marker_offset = 0;
         normal_offset = 0;
+        marker_offset = 0;
         for (; i < D_L00_0015FA90; i++) {
             angle = fast_add_rotations(((f32)i + (f32)i) * 3.1415927f /
                                        (f32)D_L00_0015FA90 - 3.1415927f, 1.5707964f);
@@ -436,8 +436,8 @@ s32 FUN_L00_002382a0(char *rec) {
                               D_0013E520[entry->f18] ? 4 : 0), icon_x, icon_y, 1, icon_alpha);
             }
             entry_offset += 0x1c;
-            marker_offset += 0x1c;
             normal_offset += 0x1c;
+            marker_offset += 0x1c;
         }
     }
     selected = *(s32 *)(rec + 0x74);

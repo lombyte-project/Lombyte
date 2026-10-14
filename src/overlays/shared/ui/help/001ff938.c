@@ -45,7 +45,6 @@ void FUN_L15_001ff938(void) {
     u32 copy[4] __attribute__((aligned(16)));
     int period, red, green, blue, alpha, i;
     u32 color;
-    u8 red_byte, green_byte, blue_byte;
     float pulse;
 
     FUN_L00_00232670();
@@ -75,54 +74,69 @@ void FUN_L15_001ff938(void) {
         }
     }
 
-    if (hero.vehicle_mode == 3) {
-        base = (struct Hero *)(D_0013E533 + 0xE1D);
-        if (D_0015EDB1 != 0)
-            *(float *)((u8 *)&D_L15_0017ACC0_d + 0x150C) = 1.9f;
-        alpha = 0x80;
-        period = FUN_001f96f8(0xAA);
-        if (base->unk22E0 == 2)
-            period = FUN_001f96f8(0x32);
-        else if (base->unk22E0 == 1)
-            period = FUN_001f96f8(0x5A);
+    base = &hero;
+    if (base->vehicle_mode == 3) {
+        {
+            struct Hero *base = (struct Hero *)(D_0013E533 + 0xE1D);
+            if (D_0015EDB1 != 0)
+                *(float *)((u8 *)&D_L15_0017ACC0_d + 0x150C) = 1.9f;
+            alpha = 0x80;
+            period = FUN_001f96f8(0xAA);
+            if (base->unk22E0 == 2)
+                period = FUN_001f96f8(0x32);
+            else if (base->unk22E0 == 1)
+                period = FUN_001f96f8(0x5A);
+        }
         pulse = FUN_001f9de0((((float)(D_L15_0015F5CC % period) / FUN_001fa6c0(period)) * 2.0f) * 3.1415927f + -3.1415927f);
         red = FUN_001fa6d0(pulse * 20.0f) + 0x32;
         green = FUN_001fa6d0(pulse * 70.0f) + 0xB4;
         blue = FUN_001fa6d0(pulse * 10.0f) + 0x14;
-        if (red > 0xFF) red = 0xFF;
         if (green > 0xFF) green = 0xFF;
+        if (red > 0xFF) red = 0xFF;
         *(u16 *)((u8 *)hero.moby + 0x34) |= 0x10;
-        if (hero.unk22E0 == 2)
-            color = (alpha << 24) | (blue << 16) | ((red / 2) << 8) | green;
-        else
-            color = (alpha << 24) | (blue << 16) | (green << 8) | red;
+        if (hero.unk22E0 == 2) {
+            u32 channels;
+            channels = (alpha << 24) | (blue << 16) | ((red / 2) << 8);
+            color = channels | green;
+        } else {
+            u32 channels;
+            channels = (alpha << 24) | (blue << 16) | (green << 8);
+            color = channels | red;
+        }
         *(u32 *)((u8 *)hero.moby + 0x90) = FUN_001fa6e0(0.1f, *(u32 *)((u8 *)hero.moby + 0x90), color);
         for (i = 0; i < 3; i++)
             moby_point_position(hero.moby, i, (u8 *)&hero + 0x1D50 + i * 16);
-        alpha = 0x30;
-        moby = (u8 *)base->moby;
-        red_byte = moby[0x90];
-        green_byte = moby[0x91];
-        blue_byte = moby[0x92];
-        if (base->unk22DE != 0)
-            alpha = FUN_001fa6d0((FUN_001fa6c0(base->unk22DE) / FUN_001fa6c0(0x12)) * (float)alpha);
-        *(u32 *)((u8 *)base + 0x22E4) = (alpha << 24) | (blue_byte << 16) | (green_byte << 8) | red_byte;
-        FUN_L00_00207d00();
-        base->unk22E0 = 0;
-        if (base->vehicle_mode == 3) {
-            int pending = base->pending_item[0];
-            if (pending != 0 && pending != 0x1F) {
-                if (base->unk22DE == 0) {
-                    FUN_L00_00216de8(0x19, 0);
-                    base->unk22DC = 1;
-                    base->unk22DE = 0x12;
-                }
-            } else {
-                hero.pending_item[0] = 0;
-                if (hero.unk12E7 != 0 && *(int *)((u8 *)&hero + 0x300) != 0 && D_0013D4DC[0] != 0 && hero.unk22DE == 0) {
-                    FUN_L00_00216de8(0x19, 0);
-                    hero.unk22DC = 1;
-                    hero.unk22DE = 0x12;
+        {
+            u32 color;
+            base = &hero;
+            alpha = 0x30;
+            moby = (u8 *)base->moby;
+            blue = moby[0x92];
+            green = moby[0x91];
+            red = moby[0x90];
+            if (base->unk22DE != 0)
+                alpha = FUN_001fa6d0((FUN_001fa6c0(base->unk22DE) / FUN_001fa6c0(0x12)) * (float)alpha);
+            color = (alpha << 24) | (blue << 16) | (green << 8);
+            color |= red;
+            *(u32 *)((u8 *)base + 0x22E4) = color;
+            FUN_L00_00207d00();
+            base->unk22E0 = 0;
+            if (base->vehicle_mode == 3) {
+                int pending = base->pending_item[0];
+                if (pending != 0 && pending != 0x1F) {
+                    if (base->unk22DE == 0) {
+                        FUN_L00_00216de8(0x19, 0);
+                        base->unk22DE = 0x12;
+                        base->unk22DC = 1;
+                    }
+                } else {
+                    hero.pending_item[0] = 0;
+                    if (hero.unk12E7 != 0 && *(int *)((u8 *)&hero + 0x300) != 0 && D_0013D4DC[0] != 0 && hero.unk22DE == 0) {
+                        FUN_L00_00216de8(0x19, 0);
+                        /* Keep this prompt path distinct and retain its ordered halfword stores. */
+                        hero.unk22DE = 0x12;
+                        hero.unk22DC = 1;
+                    }
                 }
             }
         }

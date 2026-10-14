@@ -419,7 +419,7 @@ void FUN_L00_002059d8(void) {
         low += truncate_float_to_s32_2059d8(f * 112.0f);
         high -= truncate_float_to_s32_2059d8(f * 72.0f);
     }
-    *(u32 *)(moby + 0x90) = (i << 16) | 0x80000000U | (high << 8) | low;
+    *(u32 *)(moby + 0x90) = ((0x80U << 24) | (i << 16)) | ((high << 8) | low);
     if (g[0x20A4] != 0)
         return;
     if (help_active_2059d8(g + 0xFFC) && moby[0x53] == 1) {
@@ -446,10 +446,10 @@ void FUN_L00_002059d8(void) {
             u8 *dst_a = g + 0xF00;
             u8 *dst_b = g + 0xF10;
             u8 *dst_c = g + 0xF20;
+            Quad_59d8 *src_b = (Quad_59d8 *)D_L00_0017C220_2059d8;
             Quad_59d8 *src_c = (Quad_59d8 *)D_L00_0017C260_2059d8;
             Quad_59d8 *src_a = (Quad_59d8 *)D_L00_0017C1E0_2059d8;
-            Quad_59d8 *src_b = (Quad_59d8 *)D_L00_0017C220_2059d8;
-            s32 *kind = (s32 *)0x140AF8;
+            s32 *kind = (s32 *)(g + 0x17A8);
             for (i = 0; i < 4; i++, dst_c += 0x40, src_c++,
                  src_a++, src_b++, dst_a += 0x40, kind++,
                  slot += 0x40, active += 0x40, dst_b += 0x40) {
@@ -457,7 +457,7 @@ void FUN_L00_002059d8(void) {
                     attach_manipulator_2059d8((s32)moby, *kind, slot);
                     active[2] = 1;
                     qcopy(dst_a, src_a);
-                    *(volatile Quad_59d8 *)dst_b = *(volatile Quad_59d8 *)src_b;
+                    qcopy(dst_b, src_b);
                     qcopy(dst_c, src_c);
                     transform_help_quad_2059d8(*(f32 *)(moby + 0x2C), dst_c, dst_c);
                 }
@@ -826,6 +826,7 @@ void FUN_L00_002062b0(void) {
         }
     }
     if (hero.vehicle_mode == 3) {
+        s32 color;
         /* D_0015EDB1 is the byte two bytes before the checked D_0015EDB3 base. */
         if (*((u8 *)&D_0015EDB3_macro - 2)) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x370) = 1.9f;
         {
@@ -842,27 +843,33 @@ void FUN_L00_002062b0(void) {
         blue = FUN_L00_00200250_002062b0(wave * 10.0f) + 0x14;
         {
             char *g = (char *)&hero;
-            if (green >= 0x100) green = 0xff;
-            *(u16 *)(*(char **)(g + 0x2080) + 0x34) |= 0x10;
-            if (red >= 0x100) red = 0xff;
+            {
+                s32 span = red < 0x100;
+                s32 i = green < 0x100;
+                green = i ? green : 0xff;
+                *(u16 *)(*(char **)(g + 0x2080) + 0x34) |= 0x10;
+                red = span ? red : 0xff;
+            }
             if (*(s16 *)(g + 0x22e0) == 2)
                 color = ((u32)alpha << 24) | ((u32)blue << 16) | ((u32)(red / 2) << 8) | (u32)green;
             else
                 color = ((u32)alpha << 24) | ((u32)blue << 16) | ((u32)green << 8) | (u32)red;
         }
         {
-            char *g = (char *)&hero;
-            *(u32 *)(*(char **)(g + 0x2080) + 0x90) = FUN_L00_00200298_002062b0(0.1f, *(u32 *)(*(char **)(g + 0x2080) + 0x90), color);
+            char *g;
+            {
+                char *g = (char *)&hero;
+                *(u32 *)(*(char **)(g + 0x2080) + 0x90) = FUN_L00_00200298_002062b0(0.1f, *(u32 *)(*(char **)(g + 0x2080) + 0x90), color);
+            }
+            g = (char *)&hero;
             for (i = 0; i < 3; i++)
-                FUN_L00_0024f7c8(*(char **)(g + 0x2080), i, g + 0x1d50 + i * 0x10);
-        }
-        {
-            char *g = (char *)&hero;
+                FUN_L00_0024f7c8(hero.moby, i, g + 0x1d50 + i * 0x10);
+            g = (char *)&hero;
             moby = *(char **)(g + 0x2080);
             /* Retail snapshots these channels before the alpha helper calls. */
-            red = *(u8 *)(moby + 0x90);
             blue = *(u8 *)(moby + 0x92);
             green = *(u8 *)(moby + 0x91);
+            red = *(u8 *)(moby + 0x90);
             alpha = 0x30;
             if (*(s16 *)(g + 0x22de))
                 alpha = FUN_L00_00200250_002062b0(FUN_L00_00200240_002062b0(*(s16 *)(g + 0x22de)) / FUN_L00_00200240_002062b0(0x12) * (f32)alpha);
@@ -994,11 +1001,17 @@ extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 
 void FUN_L00_00206e00(void) {
     struct Hero *g;
-    u8 *hero_base;
+    /* Retail appends at hero +0x21C4 and reloads the count at +0x21D4. */
+    struct {
+        u8 pad[0x21C4];
+        u8 history[16];
+        volatile s32 history_count;
+    } *history_view;
     s32 input;
     u32 state;
     s32 level;
-    s32 i, j, length, position;
+    s32 i, length, position, offset;
+    u32 j;
     u8 *end;
     u8 *sequence;
     u8 *history;
@@ -1006,7 +1019,6 @@ void FUN_L00_00206e00(void) {
     if (D_0015EEA0 == 0 && alternate_animation_sequence == 0)
         return;
     g = &hero;
-    hero_base = (u8 *)g + 0xCB0;
     level = FUN_001f96f8(15);
     input = 0;
     if (g->state_timer == level) {
@@ -1073,17 +1085,17 @@ reject:
 append:
     if (input == 0)
         return;
-    history_count = (s32 *)((u8 *)&hero + 0x21D4);
-    history = hero_base + 0x1514;
+    history_view = (void *)&hero;
+    history_count = &history_view->history_count;
+    history = history_view->history;
     history[*history_count] = input;
     (*history_count)++;
     sequence = D_L00_00179700;
-    for (i = 0; i < 12; i++, sequence += 16) {
+    for (i = 0, offset = 0; i < 12; i++, sequence += 16, offset += 16) {
         length = 0;
         if (*sequence != 0) {
-            end = sequence + 1;
-            length = 1;
-            while (*end != 0) { end++; length++; }
+            end = D_L00_00179700 + offset;
+            do { end++; length++; } while (*end != 0);
         }
         if (length != 0) {
             position = *history_count - length;
@@ -1091,20 +1103,20 @@ append:
                 position += 16;
             j = 0;
             if (length > 0) {
-                if (history[position] == sequence[0]) {
+                if (*(u8 *)(position + (s32)history) == sequence[0]) {
                     do {
                         position++;
                         j++;
                         if (position > 15)
                             position -= 16;
-                        if (j >= length)
+                        if ((s32)j >= length)
                             goto scan_result;
-                    } while (history[position] == sequence[j]);
+                    } while (sequence[j] == *(u8 *)(position + (s32)history));
                 }
                 j = -1;
             }
 scan_result:
-            if (j == length) {
+            if ((s32)j == length) {
                 selector_available[i] = 1;
                 big_head_cheat_enabled[i] = !big_head_cheat_enabled[i];
                 queue_dialogue_message(big_head_cheat_enabled[i] ? 0x4FBE : 0x4FBF, -1);
@@ -1112,8 +1124,9 @@ scan_result:
             }
         }
     }
-    if (*history_count > 15)
-        *history_count = 0;
+    history_view = (void *)&hero;
+    if (history_view->history_count > 15)
+        history_view->history_count = 0;
 }
 #endif
 int FUN_001f96f8(int);

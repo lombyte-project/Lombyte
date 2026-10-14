@@ -525,7 +525,78 @@ int FUN_L00_002365a8(HudElem *e) {
     return e->w;
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236e50.s", FUN_L00_00236e50);
+#else
+extern int D_L00_0015F760 __attribute__((sda));
+extern int D_L00_0015F764 __attribute__((sda));
+extern float D_L00_0015F768 __attribute__((sda));
+extern float D_L00_0015F76C __attribute__((sda));
+extern void *FUN_0023b208(int, int) __asm__("FUN_001ff960");
+extern void FUN_L00_0023bac0(void *, int, int, int, int, int);
+extern void FUN_L00_0023bd20(void *, int, int, int, int, int) __asm__("FUN_00200080");
+extern void FUN_L00_001ff348(void *, void *, void *);
+extern void FUN_001ff260(void *) __asm__("FUN_001f99f8");
+extern void FUN_001ff2a8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void FUN_001ff278(void *, void *, void *) __asm__("FUN_001f9a10");
+int FUN_L00_00236e50(HudElem *e) {
+    int x = e->unk50, y = e->unk54;
+    int i, star_width = 0;
+    float half_h, offset, half_w;
+    int xbase, ybase;
+    struct { float x, y, z, w; } origin, direction, first_step, second_step, third_step, star_position;
+    void *image;
+
+    e->w = D_L00_0015F760;
+    e->h = D_L00_0015F764;
+    FUN_L00_00235a70(e, &x, &y);
+    FUN_L00_00235ad8(e, &x, &y, e->unk6C, 0);
+    image = FUN_0023b208(*(int *)e, 0);
+    FUN_L00_0023bac0(image, x + e->unk48, y + e->unk4A,
+                       D_L00_0015F760, D_L00_0015F764, 0x80);
+    origin.z = 1.0f;
+    origin.w = 1.0f;
+    half_h = (float)D_L00_0015F764 * D_L00_0015F76C * 0.5f;
+    offset = (float)(10000 - e->unk74) / 10000.0f;
+    half_w = (float)D_L00_0015F760 * D_L00_0015F768 * 0.5f;
+    xbase = x + e->unk48;
+    ybase = y + e->unk4A;
+    origin.x = half_w / 17.0f;
+    origin.y = -half_h / 116.0f;
+    direction.z = 0.0f;
+    direction.w = 0.0f;
+    direction.y = half_h + (float)ybase;
+    direction.x = half_w + (float)xbase;
+    direction.x += (1.0f - D_L00_0015F768) * 0.5f * (float)D_L00_0015F760;
+    direction.y += (1.0f - D_L00_0015F76C) * 0.5f * (float)D_L00_0015F764;
+    direction.x *= 16.0f;
+    direction.y *= 16.0f;
+    origin.x *= 16.0f;
+    origin.y *= 16.0f;
+    offset = 116.0f - (offset + offset) * 116.0f;
+    image = FUN_0023b208(*(int *)e, 1);
+    FUN_001ff260(&first_step);
+    FUN_001ff260(&second_step);
+    FUN_001ff260(&third_step);
+    first_step.y = first_step.x = star_init_limit0_gp * 16.0f;
+    second_step.y = second_step.x = (star_init_limit1_gp - star_init_limit0_gp) * 16.0f;
+    third_step.y = third_step.x = (star_init_limit2_gp - star_init_limit1_gp) * 16.0f;
+    for (i = 0; i < 100; i++) {
+        if (i == 0) {
+            FUN_001ff2a8(&direction, &direction, &first_step);
+            offset += star_init_limit0_gp;
+            star_width = (int)(star_init_limit0_gp * 32.0f);
+        }
+        if (!(offset < D_L00_0017E660[i].y)) {
+            FUN_L00_001ff348(&star_position, &D_L00_0017E660[i], &origin);
+            FUN_001ff278(&star_position, &star_position, &direction);
+            FUN_L00_0023bd20(image, (int)star_position.x, (int)star_position.y,
+                              star_width, star_width, 0x80);
+        }
+    }
+    return e->w;
+}
+#endif
 void FUN_L00_00235ea0();
 /* Calls FUN_L00_00235ea0. */
 void FUN_L00_002371e0(void) {

@@ -427,6 +427,8 @@ void hud_send_resident_bank(s32, s32, s32) __asm__("FUN_001ff128");
 void FUN_L00_00248278(s32, s32, s32) __asm__("FUN_L00_00248278");
 void FUN_L00_00249f48(s32, void *, s32) __asm__("FUN_L00_00249f48");
 
+extern f32 D_L00_00182810[];
+extern f32 D_L00_00182A70[];
 extern u8 D_L00_00184394[];
 extern s32 D_L00_00183EF0[];
 extern char render_archive_source_file[] __asm__("D_L00_0015FE00");
@@ -466,8 +468,8 @@ void FUN_L00_002464a8(void) {
     D_L00_001841F0_load.file_handle = -1;
     i = 0x12 < i ? 0 : i;
     D_L00_001841F0_load.archive_index = i;
-    points = (f32 *)0x182810;
-    coefficients = (f32 *)0x182a70;
+    coefficients = D_L00_00182A70;
+    points = D_L00_00182810;
     for (i = 0x12; i >= 0; i--) {
         x0 = points[0];
         y0 = points[1];
@@ -534,15 +536,16 @@ void FUN_L00_002464a8(void) {
                 if ((15.5f - (f32)x) * (15.5f - (f32)x) +
                     (15.5f - (f32)y) * (15.5f - (f32)y) > 256.0f) {
                     i = x / 8;
-                    mask[i + y * 4] |= 1 << (x - i * 8);
+                    mask[i] |= 1 << (x - i * 8);
                 }
             }
+            mask += 4;
         }
     } else {
         D_L00_001841F0_load.first_data = 0;
         *(s32 *)0x184218 = 0;
-        state->scratch_data = 0;
-        state->mask_data = 0;
+        D_L00_001841F0_load.scratch_data = 0;
+        D_L00_001841F0_load.mask_data = 0;
         D_L00_001841F0_load.second_data = 0;
     }
 }
