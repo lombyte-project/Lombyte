@@ -120,8 +120,9 @@ void FUN_L15_001ff938(void) {
             if (pending != 0 && pending != 0x1F) {
                 if (base->unk22DE == 0) {
                     FUN_L00_00216de8(0x19, 0);
-                    base->unk22DC = 1;
-                    base->unk22DE = 0x12;
+                    /* Retail keeps these ordered halfword writes in this prompt path. */
+                    ((volatile struct Hero *)base)->unk22DC = 1;
+                    ((volatile struct Hero *)base)->unk22DE = 0x12;
                 }
             } else {
                 hero.pending_item[0] = 0;
