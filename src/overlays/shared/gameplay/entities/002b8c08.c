@@ -1868,11 +1868,11 @@ void FUN_L01_002eec68(char *moby) {
                 first_scale *= scale;
                 second_scale *= scale;
                 effect = *(u32 *)(other_data + 0x84) | 4;
-                *(float *)(other_data + 0x88) = speed;
-                *(float *)(other_data + 0x78) = first_scale;
+                *(volatile float *)(other_data + 0x88) = speed;
+                *(volatile float *)(other_data + 0x78) = first_scale;
                 *(float *)(other_data + 0xb0) = 7.0f;
                 *(float *)(other_data + 0xb4) = 13.0f;
-                *(float *)(other_data + 0x7c) = second_scale;
+                *(volatile float *)(other_data + 0x7c) = second_scale;
             }
             *(u32 *)(other_data + 0x84) = effect;
             *(u128 *)origin = *(u128 *)(hit + 0x10);
@@ -1898,11 +1898,11 @@ void FUN_L01_002eec68(char *moby) {
                 first_scale *= scale;
                 second_scale *= scale;
                 effect = *(u32 *)(other_data + 0x84) | 4;
-                *(float *)(other_data + 0x88) = speed;
-                *(float *)(other_data + 0x78) = first_scale;
+                *(volatile float *)(other_data + 0x88) = speed;
+                *(volatile float *)(other_data + 0x78) = first_scale;
                 *(float *)(other_data + 0xb0) = 7.0f;
                 *(float *)(other_data + 0xb4) = 13.0f;
-                *(float *)(other_data + 0x7c) = second_scale;
+                *(volatile float *)(other_data + 0x7c) = second_scale;
             }
             *(u32 *)(other_data + 0x84) = effect;
             *(u128 *)origin = *(u128 *)(hit + 0x10);
