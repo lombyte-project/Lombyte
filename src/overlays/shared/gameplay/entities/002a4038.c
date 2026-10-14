@@ -911,12 +911,12 @@ void FUN_L02_002d93e8(char *moby) {
 #undef DRAW_RING
 
     degrees = 0;
-    for (i = 0; i < 12; ++i, degrees += 30) {
+    for (i = 11; i >= 0; --i, degrees += 30) {
         angle = add_rotation_2d93e8(-0.08726646f, (float)degrees * 0.017453292f);
         phase = add_rotation_2d93e8(angle, 0.17453292f);
-        if (markers[i] != 0) {
+        if (markers[11 - i] != 0) {
             color = D_L02_00161BC4;
-            if (markers[i] != 2) {
+            if (markers[11 - i] != 2) {
                 color = D_L02_00161BC0;
                 if ((*(int *)0x0013cae4 & 0x20) == 0) color = D_L02_00161BBC;
             }
