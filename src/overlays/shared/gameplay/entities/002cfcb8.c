@@ -780,7 +780,7 @@ void FUN_L00_002d19b0(u8 *m) {
     Quad_2d19b0 quad;
     Vec_2d19b0 a, c, b;
     u8 *vars = *(u8 **)(m + 0x78);
-    s16 *indices = D_L00_001DEE10_2d19b0;
+    s16 *indices;
     f32 (*uv)[2];
     f32 *uv_y, *texcoords;
     f32 (*old_uv)[2];
@@ -853,9 +853,10 @@ void FUN_L00_002d19b0(u8 *m) {
         }
         *(s32 *)(vars + 0x40) = scale_game_frames_2d19b0(0x3c);
     }
+    indices = D_L00_001DEE10_2d19b0;
     for (i = 0; i < 0x4a; i++) {
-        f32 *uv_x = texcoords;
         f32 *uv_second = uv_y;
+        f32 *uv_x = texcoords;
         u128 *points = quad.points;
         s16 *face_indices = indices + i * 12;
         j = 3;
