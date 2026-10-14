@@ -266,14 +266,12 @@ state_zero:
             mark_moby_2d1688(moby);
             return;
         }
-        path = D_L05_001B0930[index];
-        *(int *)(data + 0x68) = step_path_2d1688(*(int *)path);
+        *(int *)(data + 0x68) = step_path_2d1688(*(int *)D_L05_001B0930[index]);
         *(int *)(data + 0x6c) = timer_2d1688(600);
         if (*(unsigned char *)(moby + 0x53) != 1) {
             set_action_2d1688(moby, 1, 0, timer_2d1688(10));
         }
-        path = D_L05_001B0930[*(int *)(data + 0x60)];
-        height = *(float *)(path + 0x18) - (*(float *)&D_L05_00161388);
+        height = *(float *)(D_L05_001B0930[*(int *)(data + 0x60)] + 0x18) - (*(float *)&D_L05_00161388);
         *(float *)(moby + 0x18) = height;
         *(float *)(data + 0x80) = height;
         *(unsigned char *)(moby + 0x20) = one;
@@ -284,17 +282,21 @@ state_one:
         path = D_L05_001B0930[*(int *)(data + 0x60)];
         qcopy(v, path + *(int *)(data + 0x68) * 16 + 0x10);
         point = moby + 0x48;
-        height = angle_2d1688(v[0] - *(float *)(moby + 0x10), v[1] - *(float *)(moby + 0x14));
-        steer_2d1688(height, frame_time_sq * 3.1415927f, frame_time_sq * 3.1415927f,
-                      frame_time * 3.1415927f, point, data + 0x70);
+        {
+            float y = v[1];
+            float x = v[0];
+            height = angle_2d1688(x - *(float *)(moby + 0x10), y - *(float *)(moby + 0x14));
+        }
+        {
+            float turn_step = frame_time_sq * 3.1415927f;
+            steer_2d1688(height, turn_step, turn_step, frame_time * 3.1415927f, point, data + 0x70);
+        }
         fast_vec_normalize(frame_time * 3.0f, w, moby + 0xc0);
         fast_vec_add(moby + 0x10, moby + 0x10, w);
         height = distance_2d1688(moby + 0x10, v);
         if (height < 3.0f || tick_2d1688(data + 0x6c) != 0) {
-            path = D_L05_001B0930[*(int *)(data + 0x60)];
-            index = step_path_2d1688(*(int *)path);
-            path = D_L05_001B0930[*(int *)(data + 0x60)];
-            *(int *)(data + 0x68) = (*(int *)(data + 0x68) + index) % *(int *)path;
+            index = step_path_2d1688(*(int *)D_L05_001B0930[*(int *)(data + 0x60)]);
+            *(int *)(data + 0x68) = (*(int *)(data + 0x68) + index) % *(int *)D_L05_001B0930[*(int *)(data + 0x60)];
             *(int *)(data + 0x6c) = timer_2d1688(600);
         }
         if ((hero.state.control_mode == 0x12 || hero.state.current == 0x12) &&
@@ -359,17 +361,21 @@ state_three:
         speed = *(float *)(data + 0x78);
         height = *(float *)(moby + 0x18);
         *(float *)(moby + 0x18) = height + speed;
-        speed = *(float *)(data + 0x78) - frame_time_sq * 10.0f;
-        *(float *)(data + 0x78) = speed;
-        if (speed < frame_time + frame_time) {
-            fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
-            steer_2d1688(1.5533431f, frame_time_sq * 12.566371f,
-                          frame_time_sq * 12.566371f, frame_time * 25.132742f,
-                          moby + 0x44, data + 0x70);
-            copy_direction_2d1688(moby + 0xc0, moby + 0x40);
-            fast_vec_normalize((*(float *)&D_L05_00161388), w, moby + 0xe0);
-            fast_vec_sub(z, w, v);
-            fast_vec_sub(moby + 0x10, moby + 0x10, z);
+        {
+            float acceleration = frame_time_sq * 10.0f;
+            float threshold = frame_time + frame_time;
+            speed = *(float *)(data + 0x78) - acceleration;
+            *(float *)(data + 0x78) = speed;
+            if (speed < threshold) {
+                fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
+                steer_2d1688(1.5533431f, frame_time_sq * 12.566371f,
+                              frame_time_sq * 12.566371f, frame_time * 25.132742f,
+                              moby + 0x44, data + 0x70);
+                copy_direction_2d1688(moby + 0xc0, moby + 0x40);
+                fast_vec_normalize((*(float *)&D_L05_00161388), w, moby + 0xe0);
+                fast_vec_sub(z, w, v);
+                fast_vec_sub(moby + 0x10, moby + 0x10, z);
+            }
         }
         if (*(float *)(data + 0x78) < 0.0f) {
             if (*(float *)(moby + 0x18) < hero.water_surface_z && *(unsigned char *)(moby + 0xbc) == 0) {
