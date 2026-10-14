@@ -95,8 +95,8 @@ LABEL_FILLS = {
 PARTIAL_ORANGE = "#d87620"
 # The executable's drawer: a warm, dim face (the page is already blue-black)
 # with sharp corners, edged in the bolt orange.
-DRAWER_FACE_TOP = "#3a2816"
-DRAWER_FACE_BOTTOM = "#2a1d10"
+DRAWER_FACE_TOP = "#231a12"
+DRAWER_FACE_BOTTOM = "#17110c"
 UNCLASSIFIED_LAYOUT_CAP_BYTES = 16 * 1024
 
 ROW_RE = re.compile(
@@ -894,7 +894,6 @@ def render_svg(
     *,
     width,
     margin,
-    header,
     footer,
     min_bytes,
     title,
@@ -908,7 +907,8 @@ def render_svg(
     Returns (svg, height)."""
     scale = 1.0
     text_scale = 1.0
-    margin_px, header_px, footer_px = margin, header, footer
+    # No header band: the drawer opens the map; the README carries the heading.
+    margin_px, header_px, footer_px = margin, margin, footer
     branches = overlay_branches(overlays, levels)
     tree_top = header_px + drawer_height + 26
     height = tree_top + branch_height * len(branches) + footer_px + margin_px
@@ -928,7 +928,6 @@ def render_svg(
     ov_percent = (100.0 * ov_exact_bytes / ov_bytes) if ov_bytes else 0.0
     total_bytes = boot_bytes + ov_bytes
     exact_bytes = boot_exact_bytes + ov_exact_bytes
-    pending_bytes = total_bytes - exact_bytes - asm_bytes
     recoverable = total_bytes - asm_bytes
     total_percent = (100.0 * exact_bytes / recoverable) if recoverable else 0.0
     exact_percent = (100.0 * exact_bytes / total_bytes) if total_bytes else 0.0
@@ -961,43 +960,6 @@ def render_svg(
         f'<stop offset="1" stop-color="{ORANGE}" stop-opacity="0"/>'
         "</radialGradient></defs>",
     ]
-
-    # Header: function count on the left, legend on the right. The README
-    # carries the heading, so the map has no title line of its own.
-    lines.append(
-        f'<text x="{margin_px}" y="24" font-family="{esc(FONT)}" '
-        f'font-size="12" '
-        f'fill="{MUTED}">{len(exact) + ov_exact:,} of {total_units + len(overlays):,} functions in C '
-        f"&#183; executable and 19 level overlays</text>"
-    )
-    legend_font = 10
-    swatch = 10
-    gap = 15
-    legend_rows = (
-        (ORANGE, f"matching C &#183; {exact_bytes:,} B"),
-        (CHROME, f"intentional asm &#183; {asm_bytes:,} B"),
-        ("url(#progress-range)", f"pending C &#183; {pending_bytes:,} B"),
-    )
-    widest = max(
-        len(html.unescape(text)) * legend_font * 0.56 for _, text in legend_rows
-    )
-    row_x = width - margin_px - round(widest) - gap
-    for offset, (color, text) in enumerate(legend_rows):
-        y = 9 + offset * 17  # three rows centred in the header band
-        row_title = (
-            '<title>Pending C: dark plate to copper shows C_EXACT coverage; '
-            'bolt orange marks 100% exact.</title>'
-            if color == "url(#progress-range)"
-            else ""
-        )
-        lines.append(
-            f'<rect x="{row_x}" y="{y}" width="{swatch}" height="{swatch}" rx="2" '
-            f'fill="{color}">{row_title}</rect>'
-        )
-        lines.append(
-            f'<text x="{row_x + gap}" y="{y + 9}" '
-            f'font-family="{esc(FONT)}" font-size="{legend_font}" fill="{MUTED}">{text}</text>'
-        )
 
     # The drawer: the executable on the left 3/4, cut with a "\"; the whole
     # game's figures (data, exe + overlays) on one centre axis right of the cut.
@@ -1052,7 +1014,7 @@ def render_svg(
     )
     lines.append(f'<clipPath id="drawer-clip"><polygon points="{boot_poly}"/></clipPath>')
     placements = layout_boot(units, dx0, dy0, xb - dx0, ddy, min_bytes)
-    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.75"><g id="boot-tiles">')
+    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.32"><g id="boot-tiles">')
     for tile, rect in placements:
         x, y = rect["x"], rect["y"]
         tdx, tdy = max(rect["dx"], 0.0), max(rect["dy"], 0.0)
@@ -1079,7 +1041,7 @@ def render_svg(
     )
     lines.append(
         f'<g clip-path="url(#drawer-clip)" mask="url(#glass-mask)" pointer-events="none">'
-        f'<use href="#boot-tiles" filter="url(#glass)" opacity="0.75"/>'
+        f'<use href="#boot-tiles" filter="url(#glass)" opacity="0.32"/>'
         f'<rect x="{cx - grx:.1f}" y="{dy0}" width="{2 * grx:.1f}" height="{ddy}" fill="{PLATE}" fill-opacity="0.7"/>'
         f'<ellipse cx="{cx:.1f}" cy="{cy + 4:.1f}" rx="{grx * 0.8:.1f}" ry="{gry:.1f}" fill="url(#panel-glow)"/></g>'
     )
@@ -1215,12 +1177,6 @@ def main(argv=None) -> int:
                         help="height of the executable's drawer")
     parser.add_argument("--margin", type=int, default=10)
     parser.add_argument(
-        "--header",
-        type=int,
-        default=62,
-        help="header band above the map; must fit the three legend rows",
-    )
-    parser.add_argument(
         "--footer",
         type=int,
         default=22,
@@ -1308,7 +1264,6 @@ def main(argv=None) -> int:
         levels,
         width=args.width,
         margin=args.margin,
-        header=args.header,
         footer=args.footer,
         min_bytes=args.min_bytes,
         title=args.title,
