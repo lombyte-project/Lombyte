@@ -943,43 +943,44 @@ extern s32 trace_segment_2d2158(void *, void *, s32, void *, s32) __asm__("FUN_0
 extern void FUN_L00_002d1f30(void *, void *, void *, f32, f32, f32);
 
 void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
-    void *volatile saved_moby;
     Vec_2d2158 target;
     Vec_2d2158 basis[3], matrix[4], direction, offset, velocity, trace_start, trace_end;
+    void *volatile saved_moby;
     void *tracked;
     f32 angle, length, ratio, amount, vertical;
     s32 hit;
     target = *position;
+    position = &target;
     saved_moby = moby;
     setup_matrix_2d2158(basis, &D_L00_00166C80_2d2158[0]);
     matrix_from_basis_rows_2d2158(matrix, basis);
-    tracked = *(void **)(vars + 0x50);
-    if (tracked == 0)
+    if (*(u8 **)(vars + 0x50) == 0)
         return;
-    tracked = *(void **)((u8 *)tracked + 0x78);
+    tracked = *(void **)(*(u8 **)(vars + 0x50) + 0x78);
 
     direction.q = 0;
     direction.f[0] = 1.0f;
     FUN_001f9cf8_2d2158(&direction, &direction, &hero.basis);
     angle = fast_add_rotations_2d2158(-0.361968f,
               angle_atan2_2d2158(hero.unk670, hero.unk674));
-    target.f[0] = fast_cos_2d2158(angle) * 0.859039f;
+    position->f[0] = fast_cos_2d2158(angle) * 0.859039f;
     angle = fast_add_rotations_2d2158(-0.361968f,
               angle_atan2_2d2158(hero.unk670, hero.unk674));
-    target.f[1] = fast_sin_2d2158(angle) * 0.859039f;
-    target.f[2] = 0.0f;
-    add_vector_2d2158(&target, &target, &hero.motion.pos);
-    target.f[2] += 0.39082f;
+    position->f[1] = fast_sin_2d2158(angle) * 0.859039f;
+    position->f[2] = 0.0f;
+    add_vector_2d2158(position, position, &hero.motion.pos);
+    position->f[2] += 0.39082f;
     angle_atan2_2d2158(direction.f[0], direction.f[1]);
     scale_vector_2d2158(&offset, &direction, (controller_state.held & 5) ? 3.5f : 2.5f);
-    add_vector_2d2158(&offset, &offset, &target);
-    if ((controller_state.held & 5) != 0 && D_001413FC_2d2158 == 0) {
+    add_vector_2d2158(&offset, &offset, position);
+    if ((controller_state.held & 5) != 0 && hero.unk20AC == 0) {
         velocity.q = 0;
         velocity.f[2] = 1.0f;
         transform_vector_2d2158(&velocity, &velocity, matrix);
         hit = 0;
+        moby = hero.moby;
         angle = angle_atan2_2d2158(velocity.f[0], velocity.f[1]);
-        fast_subtract_rotations_2d2158(*(f32 *)(D_001413D0_2d2158 + 0x48), angle);
+        fast_subtract_rotations_2d2158(*(f32 *)((u8 *)moby + 0x48), angle);
         angle = angle_atan2_2d2158(velocity.f[0], velocity.f[1]);
         length = vector_length_xy_2d2158(&velocity);
         {
@@ -1012,7 +1013,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
                 (s32)collision_hit.moby != D_001413D0_2d2158) {
                 qcopy(&offset, &collision_hit.point);
                 hit = 1;
-                angle = angle_atan2_2d2158(offset.f[0] - target.f[0], offset.f[1] - target.f[1]);
+                angle = angle_atan2_2d2158(offset.f[0] - position->f[0], offset.f[1] - position->f[1]);
             }
             if (!hit) {
                 offset.f[0] = fast_cos_2d2158(angle) * amount * 5.0f;
@@ -1025,7 +1026,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
     else {
         D_0013FDA0_2d2158 = 0;
     }
-    FUN_L00_002d1f30(&target, &offset, (u8 *)tracked + 0x10,
+    FUN_L00_002d1f30(position, &offset, (u8 *)tracked + 0x10,
                       D_0015ED70_2d2158 * 9.0f, 0.00001f,
                       (controller_state.held & 5) ? 3.5f : 2.5f);
 }
