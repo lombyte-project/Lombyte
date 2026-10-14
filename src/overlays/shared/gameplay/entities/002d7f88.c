@@ -2864,21 +2864,21 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     int next_row;
 
     FUN_L00_002ddcb8(frame_context, initial_vector);
-    global = (char *)&D_0013F350_c;
+    global = (char *)&D_0013F350_c + 0xcb0;
     {
-        int i = *(int *)(global + 0x2084);
-    if ((i == 30 || i == 1) && (*(u16 *)(*(char **)(global + 0x2080) + 0x34) & 1)) {
+        int i = *(int *)(global + (0x2084 - 0xcb0));
+    if ((i == 30 || i == 1) && (*(u16 *)(*(char **)(global + (0x2080 - 0xcb0)) + 0x34) & 1)) {
         qcopy(&first, D_L00_00166FD0_002ddcb8);
         qcopy(&second, D_L00_00166FD0_002ddcb8 + 0x10);
         qcopy(&third, D_L00_00166FD0_002ddcb8 + 0x20);
-    } else if (*(short *)(global + 0x22c8) == 1) {
+    } else if (*(short *)(global + (0x22c8 - 0xcb0)) == 1) {
         FUN_001ff300_002ddcb8(&first, (char *)frame_context + 0xd0, -1.0f);
         qcopy_nc(&second, (char *)frame_context + 0xc0);
         qcopy_nc(&third, (char *)frame_context + 0xe0);
     } else {
-        qcopy(&first, global + 0x640);
-        qcopy(&second, global + 0x650);
-        qcopy(&third, global + 0x660);
+        qcopy(&first, global + (0x640 - 0xcb0));
+        qcopy(&second, global + (0x650 - 0xcb0));
+        qcopy(&third, global + (0x660 - 0xcb0));
     }
     }
     FUN_001ff500_002ddcb8(&scaled_first, &first, D_L00_00161B84_lui);
@@ -2886,7 +2886,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     qcopy(D_L00_001E5F40_002ddcb8, initial_vector);
     FUN_001ff500_002ddcb8(&probe, &first, D_L00_00161B84_lui * 10.0f);
     FUN_001ff278_002ddcb8(&probe, &probe, initial_vector);
-    if (FUN_001efc70_002ddf60(initial_vector, &probe, 20, *(void **)(global + 0x2080), 0)) {
+    if (FUN_001efc70_002ddf60(initial_vector, &probe, 20, *(void **)(global + (0x2080 - 0xcb0)), 0)) {
         i = truncate_float_to_s32(FUN_001ff488_002ddf60(D_L00_00173E60_002ddf60, initial_vector) / D_L00_00161B84_lui);
         if (i < 10) {
             halfword = (short *)(D_L00_001E5F40_002ddcb8 + 0xc8) + i;
@@ -2986,7 +2986,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
         qcopy(&axis, &forward);
         spread = row_float * 0.3f;
         phase = row_float * 0.7f;
-        current = D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6);
+        current = D_L00_001E6020_002ddf60 + row * 320;
         prior = D_L00_001E4B40;
         next_row = row + 1;
         j = 0;
@@ -3023,7 +3023,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                     segment = random_integer_below(20);
                     sampled = FUN_00257be8_002ddf60(0.2f, 1.0f);
                     current = D_L00_001E6020_002ddf60 + segment * 16;
-                    FUN_001ff2d8_002ddf60(&temp1, current, current + (int)((unsigned int)(row * 5) << 6), sampled);
+                    FUN_001ff2d8_002ddf60(&temp1, current, current + row * 320, sampled);
                     FUN_001ff2d8_002ddf60(&edge, D_L00_001E5F40_002ddcb8, D_L00_001E5F40_002ddcb8 + row * 16, sampled);
                     sampled = FUN_00257be8_002ddf60(60000.0f, 180000.0f);
                     segment = random_integer_below(5);
