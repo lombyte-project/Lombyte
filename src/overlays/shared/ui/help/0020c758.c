@@ -818,11 +818,13 @@ special_textures:
             goto next_slot;
 ordinary_update:
             {
+                u8 *symbol = obj + 0x22;
+                u8 *enabled = obj + 6;
                 if (*(s16 *)(obj + 0x30) == 0) {
                     j = 0;
                     do {
                         if (!same || j == 1)
-                            obj[0x22 + j] = FUN_L00_0020d5b8_20dd20((u8 *)hero.moby, ((u8 *)hero.moby)[0x52 + j]);
+                            symbol[j] = FUN_L00_0020d5b8_20dd20((u8 *)hero.moby, ((u8 *)hero.moby)[0x52 + j]);
                         j++;
                     } while (j < 2);
                 }
@@ -841,8 +843,6 @@ ordinary_update:
                     *(f32 *)(obj + 0x24) = *(f32 *)((u8 *)hero.moby + 0x54);
                 }
                 {
-                    u8 *symbol = obj + 0x22;
-                    u8 *enabled = obj + 6;
                     u8 **texture = (u8 **)(obj + 0x38);
                     u8 *texture_base = D_L00_0017CA80_20dd20 + i * 0x800;
                     if (symbol[0] < 0x17) {
