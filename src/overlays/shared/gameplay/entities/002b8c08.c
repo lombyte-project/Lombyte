@@ -1531,7 +1531,8 @@ void FUN_L01_002edca0(unsigned char *moby) {
         move[1] = FUN_001f9de0(*(float *)(moby + 0x48));
         move[2] = 0.0f;
         FUN_L00_00258b50(moby, data + 0x170, move, data + 0x40, 1.0f);
-        if (*(int *)(data + 0x204) != 2 && FUN_00213260(4) == 0) {
+        result = *(int *)(data + 0x204);
+        if (result != 2 && FUN_00213260(4) == 0) {
             path_hit = FUN_L01_00276fe8((int *)(data + 0x240), 1, *(int *)(data + 0x244),
                                         *(float *)(data + 0x250) * 0.8f,
                                         moby + 0x10, target + 0x10, hit);
@@ -1588,6 +1589,7 @@ void FUN_L01_002edca0(unsigned char *moby) {
             FUN_00212f90(moby, 1, 0, FUN_001f96f8(20));
         return;
     case 4: {
+        char *target_position;
         unsigned char path_hit;
         target_position = target + 0x10;
         distance = FUN_001f9b80(moby + 0x10, target_position);
@@ -1640,14 +1642,14 @@ void FUN_L01_002edca0(unsigned char *moby) {
             move[2] = 0.0f;
             FUN_L00_00258b50(moby, data + 0x170, move, data + 0x40, 1.0f);
         }
-        if (FUN_00214cc8(15.5f, moby) != 0 && FUN_001f9b80(moby + 0x10, target + 0x10) < 2.0f &&
+        if (FUN_00214cc8(15.5f, moby) != 0 && FUN_001f9b80(moby + 0x10, (target_position = target + 0x10)) < 2.0f &&
             FUN_001f99c0(*(float *)(target + 0x18) - *(float *)(moby + 0x18)) <
                 *(float *)(data + 0x250) + *(float *)(data + 0x250)) {
             move[0] = FUN_001f9dc8(*rotation);
             move[1] = FUN_001f9de0(*rotation);
             move[2] = 0.0f;
             move[3] = 5627.9248f;
-            qcopy(hit, target + 0x10);
+            qcopy(hit, target_position);
             hit[2] += 0.75f;
             FUN_L00_00259bc8(target, moby, 0x10001, hit, move, 1.0f);
             return;
@@ -1668,8 +1670,7 @@ void FUN_L01_002edca0(unsigned char *moby) {
             FUN_00212f90(moby, 1, 0, FUN_001f96f8(10));
         return;
     case 5: {
-        target_position = data + 0x210;
-        distance = FUN_001f9b80(moby + 0x10, target_position);
+        distance = FUN_001f9b80(moby + 0x10, (target_position = data + 0x210));
         blocked = 0;
         if (distance < 1.0f) {
             moby[0x20] = 1;
