@@ -1158,6 +1158,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     OvlVec4 probe;
     f32 angle, slope, distance, horizontal, vertical, radius, speed;
     f32 gravity;
+    OvlVec4 *targetPosition;
 
 
     if (moby == 0)
@@ -1230,8 +1231,9 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
         add_vector_xyz(&pos, &pos, &hero.motion.pos);
         pos.f[2] += 0.49082f;
         atan2_f(direction.f[0], direction.f[1]);
-        scale_vector_xyz(&target, &direction, D_0015ED68 * 60.0f);
-        add_vector_xyz(&target, &target, &pos);
+        targetPosition = &target;
+        scale_vector_xyz(targetPosition, &direction, D_0015ED68 * 60.0f);
+        add_vector_xyz(targetPosition, targetPosition, &pos);
         if (controller_state.held & 5) {
             s32 hit;
             probe.q = 0;
@@ -1279,15 +1281,15 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
                 add_vector_xyz(&probe, &D_L00_00166DC0_2c1ad0, &temporary.arc);
                 if (collision_line(&D_L00_00166DC0_2c1ad0, &probe, 2, moby, 0) &&
                     coll_hit.moby != (s32)hero.moby) {
-                    target.q = coll_hit.point.q;
+                    targetPosition->q = coll_hit.point.q;
                     hit = 1;
-                    angle = atan2_f(target.f[0] - pos.f[0], target.f[1] - pos.f[1]);
+                    angle = atan2_f(targetPosition->f[0] - pos.f[0], targetPosition->f[1] - pos.f[1]);
                 }
                 if (!hit) {
-                    target.f[0] = FUN_001f9dc8(angle) * radius * 5.0f;
-                    target.f[1] = FUN_001f9de0(angle) * radius * 5.0f;
-                    target.f[2] = vertical * 5.0f;
-                    add_vector_xyz(&target, &target, &D_L00_00166DC0_2c1ad0);
+                    targetPosition->f[0] = FUN_001f9dc8(angle) * radius * 5.0f;
+                    targetPosition->f[1] = FUN_001f9de0(angle) * radius * 5.0f;
+                    targetPosition->f[2] = vertical * 5.0f;
+                    add_vector_xyz(targetPosition, targetPosition, &D_L00_00166DC0_2c1ad0);
                 }
             }
         }
@@ -1298,7 +1300,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
         } else {
             if (controller_state.held & 5) speed = 6.0f;
         }
-        FUN_L00_002c1928((f32 *)&pos, (OvlQuad *)&target, out,
+        FUN_L00_002c1928((f32 *)&pos, (OvlQuad *)targetPosition, out,
                           gravity, 1.0f, speed);
     }
     switch (moby->state) {
@@ -1312,11 +1314,14 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     case 3:
         if (vars->held != 0) {
             FUN_L00_002aa008(&pos, vars->held, vars->held->pvars);
-            if (D_00141680_2c1ad0.deliveries != 0xffff)
+            if (D_00141680_2c1ad0.deliveries < 0xffff)
                 ++D_00141680_2c1ad0.deliveries;
-            if (D_00141680_2c1ad0.unkA2 < scale_game_frames(D_0015EEA4) / 600)
-                D_00141680_2c1ad0.unkA2 = scale_game_frames(D_0015EEA4) / 600;
-            D_00141680_2c1ad0.levels |= (1 << current_level_index) | 0x80000000;
+            {
+                s32 frames = scale_game_frames(D_0015EEA4);
+                if (frames / 600 > D_00141680_2c1ad0.unkA2)
+                    D_00141680_2c1ad0.unkA2 = scale_game_frames(D_0015EEA4) / 600;
+            }
+            D_00141680_2c1ad0.levels = (D_00141680_2c1ad0.levels | (1u << current_level_index)) | 0x80000000u;
             FUN_L00_0025f780(vars->held, D_L00_001B07B0_lui, 0x3f);
             vars->held = 0;
             vars->timer = scale_game_frames(10);
