@@ -1805,119 +1805,125 @@ void FUN_L06_00302fd8(char *m) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303160.s", FUN_L06_00303160);
-#else
-extern void *D_L06_001B0C30_303160[] __asm__("D_L06_001B0C30");
+typedef struct {
+    float x, y, z, w;
+} __attribute__((aligned(16))) PathPoint_303160;
+typedef struct {
+    int n;
+    int pad[3];
+    PathPoint_303160 p[1];
+} Path_303160;
+struct PathRide_303160 {
+    char pad0[0x60];
+    int path_a[5];
+    int path_b[5];
+    int path_c[5];
+    char pad1[0x14];
+    float sway;
+    float sway_speed;
+    char pad2[0x0C];
+    float scale_start;
+    float scale_end;
+    char pad3[4];
+    int sound_slot[9];
+    float progress;
+};
+extern float approach_value_303160(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
+extern int scale_frames_303160(int) __asm__("FUN_001f96f8");
+extern int truncate_float_303160(float) __asm__("FUN_001fa6d0");
+extern void lerp_vector_303160(void *, void *, void *, float) __asm__("FUN_001f9a40");
+extern void set_position_303160(void *) __asm__("FUN_L00_002ea9d8");
+extern float angle_atan2_303160(float, float) __asm__("FUN_001f9e90");
+extern float fast_add_rotations_303160(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations_303160(float, float) __asm__("FUN_001fa5c8");
+extern float vector_distance_303160(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_cos_303160(float) __asm__("FUN_001f9dc8");
+extern void clear_vector_303160(void *) __asm__("FUN_001f99f8");
+extern void set_rotation_303160(void *) __asm__("FUN_L00_002eaa30");
+extern float approach_angle_303160(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
+extern int allocate_voice_for_group_entry_303160(int, int, void *) __asm__("FUN_0022dba0");
+extern void push_piece_303160(float, struct Moby *, void *, void *, int) __asm__("FUN_L06_00303748");
+extern void FUN_L06_00303b68(struct Moby *);
+extern char D_L06_001B0C30_303160[] __asm__("D_L06_001B0C30");
+extern char *D_L06_001600EC_303160 __asm__("D_L06_001600EC");
 extern float D_0015ED70_303160 __asm__("D_0015ED70");
 extern float D_0015ED6C_303160 __asm__("D_0015ED6C");
-extern char *D_L06_001600EC_303160 __asm__("D_L06_001600EC");
-extern int scale_frames_303160(int) __asm__("FUN_001f96f8");
-extern float approach_value_303160(float, float, float *) __asm__("FUN_00213ed8");
-extern int truncate_float_303160(float) __asm__("FUN_001fa6d0");
-extern void lerp_vector_303160(float *, float *, float *, float) __asm__("FUN_001f9a40");
-extern void set_position_303160(float *) __asm__("FUN_L00_002ea9d8");
-extern void set_rotation_303160(float *) __asm__("FUN_L00_002eaa30");
-extern float angle_atan2_303160(float, float) __asm__("FUN_001f9e90");
-extern float fast_subtract_rotations_303160(float, float) __asm__("FUN_001fa5c8");
-extern float fast_add_rotations_303160(float, float) __asm__("FUN_001fa580");
-extern float vector_distance_303160(float *, float *) __asm__("FUN_001f9b80");
-extern float fast_cos_303160(float) __asm__("FUN_001f9dc8");
-extern void clear_vector_303160(float *) __asm__("FUN_001f99f8");
-extern void approach_angle_303160(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
-extern void event_303160(int, int, char *) __asm__("FUN_0022dba0");
-extern void FUN_L06_00303748(float, char *, char *, char *, int);
-extern void FUN_L06_00303b68(char *);
-
+/* Moves the moby along three paths and plays the sound marked on the path points. */
 int FUN_L06_00303160(char *moby, int path) {
-    char *data = *(char **)(moby + 0x78);
-    volatile int *ids = (volatile int *)(data + path * 4);
-    float *first = D_L06_001B0C30_303160[ids[0x60 / 4]];
-    float *middle = D_L06_001B0C30_303160[ids[0x74 / 4]];
-    float *third = D_L06_001B0C30_303160[ids[0x88 / 4]];
-    float rot[4], from[4];
-    float first_time, third_time, first_fraction, third_fraction, first_index_float;
-    float a, b, c, d, heading;
-    float *prev, *cur, *next, *first_current;
-    long first_index, third_index;
-    int middle_index, event, previous_event;
-    int next_index;
+    float m[4], pos[4];
+    struct PathRide_303160 *d = *(struct PathRide_303160 **)(moby + 0x78);
+    Path_303160 *c1 = ((Path_303160 **)D_L06_001B0C30_303160)[d->path_a[path]];
+    Path_303160 *c2 = ((Path_303160 **)D_L06_001B0C30_303160)[d->path_b[path]];
+    Path_303160 *c3 = ((Path_303160 **)D_L06_001B0C30_303160)[d->path_c[path]];
+    float t, f, t1, t3, angle, rate;
+    int i1, i2, i3, marker, prev_marker;
+    char *base;
 
-    approach_value_303160(1.0f, 1.0f / (float)scale_frames_303160(0x4b0), (float *)(data + 0xf4));
-    first_time = *(float *)(data + 0xf4) * (float)(*(int *)first - 1);
-    first_index = truncate_float_303160(first_time);
-    first_index_float = (float)(int)first_index;
-    first_fraction = first_time - first_index_float;
-    middle_index = truncate_float_303160(*(float *)(data + 0xf4) * (float)(*(int *)middle - 1));
-    third_time = *(float *)(data + 0xf4) * (float)(*(int *)third - 1);
-    third_fraction = third_time - first_index_float;
-    third_index = truncate_float_303160(third_time);
-    lerp_vector_303160(from, first + ((int)first_index * 4 + 4), first + ((int)first_index * 4 + 8), first_fraction);
-    lerp_vector_303160((float *)(moby + 0x10), third + (int)third_index * 4 + 4,
-                       third + (int)third_index * 4 + 8, third_fraction);
-    set_position_303160(from);
-
-    if (third_index > 0) {
-        prev = third + ((int)third_index - 1) * 4;
-        cur = third + (int)third_index * 4;
-        next = third + ((int)third_index + 1) * 4;
-        a = angle_atan2_303160(cur[4] - prev[4], cur[5] - prev[5]);
-        b = angle_atan2_303160(next[4] - cur[4], next[5] - cur[5]);
+    approach_value_303160(&d->progress, 1.0f, 1.0f / (float)scale_frames_303160(0x4B0));
+    t = d->progress * (float)(c1->n - 1);
+    i1 = truncate_float_303160(t);
+    f = (float)i1;
+    t1 = t - f;
+    i2 = truncate_float_303160(d->progress * (float)(c2->n - 1));
+    t = d->progress * (float)(c3->n - 1);
+    t3 = t - f;
+    i3 = truncate_float_303160(t);
+    lerp_vector_303160(pos, &c1->p[i1], &c1->p[i1 + 1], t1);
+    lerp_vector_303160(moby + 0x10, &c3->p[i3], &c3->p[i3 + 1], t3);
+    set_position_303160(pos);
+    if (i3 > 0) {
+        angle = angle_atan2_303160(c3->p[i3].x - c3->p[i3 - 1].x, c3->p[i3].y - c3->p[i3 - 1].y);
         *(float *)(moby + 0x48) = fast_add_rotations_303160(
-            fast_subtract_rotations_303160(b, a) * third_fraction, a);
-        a = angle_atan2_303160(vector_distance_303160(cur, cur + 4), cur[6] - prev[6]);
-        b = angle_atan2_303160(vector_distance_303160(cur + 4, cur + 8), next[6] - cur[6]);
+            fast_subtract_rotations_303160(angle_atan2_303160(c3->p[i3 + 1].x - c3->p[i3].x, c3->p[i3 + 1].y - c3->p[i3].y), angle) * t3,
+            angle);
+        angle = -angle_atan2_303160(vector_distance_303160(&c3->p[i3 - 1], &c3->p[i3]), c3->p[i3].z - c3->p[i3 - 1].z);
         *(float *)(moby + 0x44) = fast_add_rotations_303160(
-            fast_subtract_rotations_303160(-b, -a) * third_fraction, -a);
-        *(float *)(moby + 0x44) *= fast_cos_303160(*(float *)(data + 0xb0));
-        *(float *)(moby + 0x48) = fast_add_rotations_303160(*(float *)(moby + 0x48), *(float *)(data + 0xb0));
+            fast_subtract_rotations_303160(-angle_atan2_303160(vector_distance_303160(&c3->p[i3], &c3->p[i3 + 1]), c3->p[i3 + 1].z - c3->p[i3].z),
+                           angle) * t3,
+            angle);
+        *(float *)(moby + 0x44) = *(float *)(moby + 0x44) * fast_cos_303160(d->sway);
+        *(float *)(moby + 0x48) = fast_add_rotations_303160(*(float *)(moby + 0x48), d->sway);
     } else {
-        a = vector_distance_303160(third + 4, third + 8);
-        *(float *)(moby + 0x44) = -angle_atan2_303160(a, third[10] - third[6]);
-        *(float *)(moby + 0x48) = angle_atan2_303160(third[8] - third[4], third[9] - third[5]);
+        *(float *)(moby + 0x44) =
+            -angle_atan2_303160(vector_distance_303160(&c3->p[0], &c3->p[1]), c3->p[1].z - c3->p[0].z);
+        *(float *)(moby + 0x48) = angle_atan2_303160(c3->p[1].x - c3->p[0].x, c3->p[1].y - c3->p[0].y);
     }
-    if (first_index > 0 && middle_index > 0) {
-        clear_vector_303160(rot);
-        cur = middle + middle_index * 4;
-        next = middle + (middle_index + 1) * 4;
-        a = angle_atan2_303160(cur[4] - from[0], cur[5] - from[1]);
-        b = angle_atan2_303160(next[4] - from[0], next[5] - from[1]);
-        rot[2] = fast_add_rotations_303160(fast_subtract_rotations_303160(b, a) * third_fraction, a);
-        a = angle_atan2_303160(vector_distance_303160(from, cur + 4), cur[6] - from[2]);
-        b = angle_atan2_303160(vector_distance_303160(from, next + 4), next[6] - from[2]);
-        rot[1] = fast_add_rotations_303160(fast_subtract_rotations_303160(-b, -a) * third_fraction, -a);
-        set_rotation_303160(rot);
+    if (i1 > 0 && i2 > 0) {
+        clear_vector_303160(m);
+        angle = angle_atan2_303160(c2->p[i2].x - pos[0], c2->p[i2].y - pos[1]);
+        m[2] = fast_add_rotations_303160(
+            fast_subtract_rotations_303160(angle_atan2_303160(c2->p[i2 + 1].x - pos[0], c2->p[i2 + 1].y - pos[1]), angle) * t3, angle);
+        angle = -angle_atan2_303160(vector_distance_303160(pos, &c2->p[i2]), c2->p[i2].z - pos[2]);
+        m[1] = fast_add_rotations_303160(
+            fast_subtract_rotations_303160(-angle_atan2_303160(vector_distance_303160(pos, &c2->p[i2 + 1]), c2->p[i2 + 1].z - pos[2]), angle) * t3,
+            angle);
+        set_rotation_303160(m);
     }
-    *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24) *
-        (*(float *)(data + 0xc4) - (*(float *)(data + 0xc4) - *(float *)(data + 0xc8)) * *(float *)(data + 0xf4));
-    if (*(float *)(data + 0xf4) > 0.8f) {
-        approach_angle_303160((float *)(data + 0xb0), (float *)(data + 0xb4), 3.1415927f,
-            D_0015ED70_303160 * 12.566371f, D_0015ED70_303160 * 12.566371f,
-            D_0015ED6C_303160 * 6.2831855f);
+    *(float *)(moby + 0x2C) =
+        *(float *)(*(char **)(moby + 0x24) + 0x24) * (d->scale_start - (d->scale_start - d->scale_end) * d->progress);
+    if (d->progress > 0.8f) {
+        rate = D_0015ED70_303160 * 12.566371f;
+        approach_angle_303160(&d->sway, &d->sway_speed, 3.1415927f, rate, rate, D_0015ED6C_303160 * 6.2831855f);
     }
-    event = truncate_float_303160(first[(int)first_index * 4 + 7]);
-    if (first_index != 0) {
-        float *previous = first + ((int)first_index - 1) * 4;
-        previous_event = truncate_float_303160(previous[7]);
-    } else {
-        previous_event = -1;
-    }
-    if (event >= 0 || previous_event >= 0) {
-        first[(int)first_index * 4 + 7] = -1.0f;
-        first[((int)first_index - 1) * 4 + 7] = -1.0f;
-        if (event < 8 && previous_event < 8) {
-            event_303160(0, 0, moby);
-            next_index = *(int *)(data + event * 4 + 0xd0);
-            FUN_L06_00303748(6.0f, moby, D_L06_001600EC_303160 + next_index * 0x80 + 0x30,
-                             D_L06_001600EC_303160 + next_index * 0x80, 6);
-        } else if (event == 10 || previous_event == 10) {
-            event_303160(1, 0, moby);
-            FUN_L06_00303b68(moby);
+    marker = truncate_float_303160(c1->p[i1].w);
+    if (i1 != 0)
+        prev_marker = truncate_float_303160(c1->p[i1 - 1].w);
+    else
+        prev_marker = -1;
+    if (marker >= 0 || prev_marker >= 0) {
+        c1->p[i1].w = -1.0f;
+        c1->p[i1 - 1].w = -1.0f;
+        if (marker < 8 && prev_marker < 8) {
+            allocate_voice_for_group_entry_303160(0, 0, moby);
+            base = D_L06_001600EC_303160 + (d->sound_slot[marker] << 7);
+            push_piece_303160(6.0f, (struct Moby *)moby, base + 0x30, base, 6);
+        } else if (marker == 10 || prev_marker == 10) {
+            allocate_voice_for_group_entry_303160(1, 0, moby);
+            FUN_L06_00303b68((struct Moby *)moby);
         }
     }
-    return *(float *)(data + 0xf4) == 1.0f;
+    return d->progress == 1.0f;
 }
-#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303748.s", FUN_L06_00303748);
 extern char *D_L06_0015FFD8_03b68 __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_03b68[] __asm__("D_L06_001ABFC0");
