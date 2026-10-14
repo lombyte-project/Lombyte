@@ -888,7 +888,7 @@ void FUN_L13_002b4fb8(Level13VendorMoby *moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B61A0), where it is exact; names translated to the US level program. */
 
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern short D_0015ED70;
+extern f32 D_0015ED70;
 
 void FUN_L13_002b4ff0(struct Moby *m, char *d) {
     float ground = probe_ground_height(&m->pos, 0, 0.5f);

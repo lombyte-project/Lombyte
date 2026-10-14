@@ -618,7 +618,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern short D_L00_0015F688 __attribute__((sda));
+extern s32 D_L00_0015F688 __attribute__((sda));
 extern short D_L00_0015F6D8 __attribute__((sda));
 extern unsigned char D_0013E533[];
 extern unsigned char D_L00_0017BDD8[];

@@ -306,7 +306,7 @@ extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_L00_00166E40[];
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern short D_L00_00161CC8;
+extern f32 D_L00_00161CC8;
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");

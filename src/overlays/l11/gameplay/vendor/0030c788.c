@@ -2110,7 +2110,7 @@ void FUN_L11_00311d50(struct Moby *moby) {
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L11_00308848(void *, void *, void *, float, float);
-extern short D_L11_00162090_d __asm__("D_L11_00162090") __attribute__((sda));
+extern f32 D_L11_00162090_d __asm__("D_L11_00162090") __attribute__((sda));
 extern unsigned char D_0013A4E0[];
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_001f9a10(void *, void *, void *);
@@ -2147,7 +2147,7 @@ void FUN_L11_003125a8(struct Moby *moby, char *obj, float p2, float p3) {
 
 extern int FUN_001f96f8(int);
 extern int FUN_L11_00309378(void *, void *, int, void *, float, int);
-extern short D_L11_00162090_d __asm__("D_L11_00162090") __attribute__((sda));
+extern f32 D_L11_00162090_d __asm__("D_L11_00162090") __attribute__((sda));
 extern unsigned char D_0013A4E0[];
 extern void FUN_001f9740(int *arg0);
 extern void FUN_001f9a10(void *, void *, void *);

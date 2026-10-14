@@ -2837,8 +2837,8 @@ void FUN_L02_002ddc88(unsigned char *moby) {
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float D_0015ED6C;
-extern short D_L02_00161C30_d __asm__("D_L02_00161C30") __attribute__((sda));
-extern short D_L02_00161C34_d __asm__("D_L02_00161C34") __attribute__((sda));
+extern f32 D_L02_00161C30_d __asm__("D_L02_00161C30") __attribute__((sda));
+extern f32 D_L02_00161C34_d __asm__("D_L02_00161C34") __attribute__((sda));
 
 extern short D_L02_00161C38 __attribute__((sda));
 extern short D_L02_00161C3C __attribute__((sda));

@@ -1953,7 +1953,7 @@ void FUN_L11_0030a840(unsigned char *arg) {
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern int FUN_L11_00316128(char *);
 extern short *D_L11_001AC240[];
-extern short D_L11_0015FFF4;
+extern s32 D_L11_0015FFF4;
 
 int FUN_L11_0030a850(struct Moby *m) {
     int idx = *(short *)((char *)m->pvars + 0xB4);

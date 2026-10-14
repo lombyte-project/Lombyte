@@ -1280,8 +1280,8 @@ void FUN_L14_002ae448(struct Moby *m) {
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
                                 float eps) __asm__("FUN_L00_0025b8c0");
 extern int *D_L14_001B0BB0[];
-extern short D_L14_001613A0_d __asm__("D_L14_001613A0") __attribute__((sda));
-extern short D_L14_001613A4_d __asm__("D_L14_001613A4") __attribute__((sda));
+extern f32 D_L14_001613A0_d __asm__("D_L14_001613A0") __attribute__((sda));
+extern f32 D_L14_001613A4_d __asm__("D_L14_001613A4") __attribute__((sda));
 extern void FUN_L00_0025d808(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 extern int FUN_L00_0025d808_2af918(int *tab, float *out, int *a, float *b, int c,
                                     float d) __asm__("FUN_L00_0025d808");
@@ -2500,7 +2500,7 @@ void FUN_L14_002b5290(struct Moby *m) {
 
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
                                 float eps) __asm__("FUN_L00_0025b8c0");
-extern short D_L14_00161540_d __asm__("D_L14_00161540") __attribute__((sda));
+extern f32 D_L14_00161540_d __asm__("D_L14_00161540") __attribute__((sda));
 extern void FUN_L00_00262b00_c(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void FUN_L00_00262b80_c(void *, char *, char *, float, float,
                                float) __asm__("FUN_L00_00262b80");

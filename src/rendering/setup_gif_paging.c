@@ -5,7 +5,7 @@
 #include "types.h"
 extern int *gif_page_marker_a __asm__("D_0015F450") MACRO_ADDR;
 extern int effect_tex_cnt __asm__("D_0015F45C") MACRO_ADDR;
-extern short D_0015F458;
+extern s32 D_0015F458;
 typedef struct {
     long unk0;
     long unk8;

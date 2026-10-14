@@ -2667,9 +2667,9 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L15_002cbac0_u() __asm__("FUN_L15_002cbac0");
 extern short D_0015ED84_d __asm__("D_0015ED84");
-extern short D_L15_00161AB8_d __asm__("D_L15_00161AB8");
+extern s32 D_L15_00161AB8_d __asm__("D_L15_00161AB8");
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
-extern short D_L15_00161AC0_d __asm__("D_L15_00161AC0") __attribute__((sda));
+extern s32 D_L15_00161AC0_d __asm__("D_L15_00161AC0") __attribute__((sda));
 extern void FUN_L15_002cbd88_u(void) __asm__("FUN_L15_002cbd88");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 

@@ -293,7 +293,7 @@ void FUN_L06_002fb090(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC6D8), where it is exact; names translated to the US level program. */
 
 extern char D_L06_00167540[] __attribute__((section(".data")));
-extern short D_0015ED70_s __asm__("D_0015ED70");
+extern f32 D_0015ED70_s __asm__("D_0015ED70");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_00213f38(float *, float *, float, float, float, float);
 extern float FUN_001f9e90(float, float);
@@ -788,7 +788,7 @@ typedef struct {
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
-extern short D_L06_00161CEC_d __asm__("D_L06_00161CEC") __attribute__((sda));
+extern f32 D_L06_00161CEC_d __asm__("D_L06_00161CEC") __attribute__((sda));
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern short D_L06_00161CF0 __attribute__((sda));
@@ -843,7 +843,7 @@ void FUN_L06_002f4130(char *m) {
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
-extern short D_L06_00161CEC_d __asm__("D_L06_00161CEC") __attribute__((sda));
+extern f32 D_L06_00161CEC_d __asm__("D_L06_00161CEC") __attribute__((sda));
 
 void FUN_L06_002f4390(char *m) {
     struct {

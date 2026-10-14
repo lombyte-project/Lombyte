@@ -813,7 +813,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L10_00161E24 __attribute__((sda));
 extern short D_L10_00161E28 __attribute__((sda));
 extern short D_L10_00161E34 __attribute__((sda));
-extern short D_L10_00161E40 __attribute__((sda));
+extern f32 D_L10_00161E40 __attribute__((sda));
 extern short D_L10_00161E44 __attribute__((sda));
 extern short D_L10_00161E4C __attribute__((sda));
 extern unsigned char D_0013E533[];

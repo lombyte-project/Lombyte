@@ -824,7 +824,7 @@ extern float FUN_L00_0025abf0_q(float *a, float *b, float *out, float speed,
                                 float g) __asm__("FUN_L00_0025abf0");
 extern int *D_L18_001AC240_q[] __asm__("D_L18_001AC240") __attribute__((section(".data")));
 extern int D_L18_0015FFD8_m __asm__("D_L18_0015FFD8");
-extern short D_L18_00161994_q __asm__("D_L18_00161994") __attribute__((sda));
+extern f32 D_L18_00161994_q __asm__("D_L18_00161994") __attribute__((sda));
 extern void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
 void blend_moby_animation_q(MobyAnim_q *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -2027,7 +2027,7 @@ void FUN_L18_002dc0c8(struct Moby *moby, void *a1, void *a2) {
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD848), where it is exact; names translated to the US level program. */
 
-extern short D_L18_00161C9C_d __asm__("D_L18_00161C9C") __attribute__((sda));
+extern s32 D_L18_00161C9C_d __asm__("D_L18_00161C9C") __attribute__((sda));
 
 void FUN_L18_002dc458(struct Moby *moby, void *pos, float f) {
     int *d = (int *)moby->pvars;
@@ -2795,19 +2795,19 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern float D_L18_00161FFC __attribute__((sda));
 extern float D_L18_00162000 __attribute__((sda));
 extern float D_L18_00162004 __attribute__((sda));
-extern float D_L18_00162008 __attribute__((sda));
+extern s32 D_L18_00162008 __attribute__((sda));
 extern float D_L18_0016200C __attribute__((sda));
-extern float D_L18_00162010 __attribute__((sda));
+extern s32 D_L18_00162010 __attribute__((sda));
 extern float D_L18_00162014 __attribute__((sda));
 extern float D_L18_00162018 __attribute__((sda));
 extern float D_L18_0016201C __attribute__((sda));
 extern float D_L18_00162020 __attribute__((sda));
-extern float D_L18_00162024 __attribute__((sda));
+extern s32 D_L18_00162024 __attribute__((sda));
 extern float D_L18_00162028 __attribute__((sda));
 extern float D_L18_0016202C __attribute__((sda));
 extern float D_L18_00162040 __attribute__((sda));
 extern float D_L18_00162044 __attribute__((sda));
-extern short D_L18_00162054_c __asm__("D_L18_00162054") __attribute__((sda));
+extern s32 D_L18_00162054_c __asm__("D_L18_00162054") __attribute__((sda));
 extern float D_L18_00162084 __attribute__((sda));
 extern float D_L18_0016208C __attribute__((sda));
 extern short D_L18_001620B8[] __attribute__((section(".sdata")));

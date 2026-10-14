@@ -628,7 +628,7 @@ extern int random_integer_below(int);
 extern int truncate_float_to_s32();
 extern short D_L17_00161B78 __attribute__((sda));
 extern short D_L17_00161B7C __attribute__((sda));
-extern short D_L17_00161B80 __attribute__((sda));
+extern f32 D_L17_00161B80 __attribute__((sda));
 extern short D_L17_00161B84 __attribute__((sda));
 extern short D_L17_00161B88 __attribute__((sda));
 extern short D_L17_00161B8C __attribute__((sda));

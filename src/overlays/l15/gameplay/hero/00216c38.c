@@ -45,7 +45,7 @@ extern int FUN_L06_0021d0a0(int a);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern short D_L15_0015F6D8 __attribute__((sda));
-extern short D_L15_0015F688 __attribute__((sda));
+extern s32 D_L15_0015F688 __attribute__((sda));
 extern short D_L15_0015F6E8 __attribute__((sda));
 extern unsigned char D_L15_0017C3D8[];
 extern void *D_L15_001612D0;

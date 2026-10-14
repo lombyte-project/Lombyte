@@ -2993,7 +2993,7 @@ void FUN_L12_002eb570(L16WatchMoby *m) {
 extern char D_0013D408[];
 extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
 extern short D_0015EE04 __attribute__((sda));
-extern short D_L12_001619B4 __attribute__((sda));
+extern s32 D_L12_001619B4 __attribute__((sda));
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int);
 extern void FUN_L00_00260a88(void *, int, int, int, int);

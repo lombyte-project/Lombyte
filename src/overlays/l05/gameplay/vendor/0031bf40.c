@@ -13,7 +13,7 @@ extern int frame_number __asm__("D_L05_0015F5CC"), D_L05_0015FFD8;
 extern int D_001417E0[];
 extern int D_0014EE90[];
 extern unsigned char D_0014C050[];
-extern int D_0013F3D8, D_0013F3DC;
+extern f32 D_0013F3D8, D_0013F3DC;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_00203908(int, int) __asm__("FUN_L00_00203908");

@@ -322,7 +322,7 @@ char *FUN_L06_002d8b98(char *owner) {
 extern float FUN_001f9de0(float);
 extern int D_L06_0015F5CC; /* no foreign declaration */
 extern int FUN_001fa6e0(int, int, float);
-extern short D_L06_0015F6B0_s __asm__("D_L06_0015F5CC");
+extern s32 D_L06_0015F6B0_s __asm__("D_L06_0015F5CC");
 
 void FUN_L06_002d8c20(char *moby) {
     char *p = *(char **)(moby + 0xB8);

@@ -841,7 +841,7 @@ typedef struct {
 } HudCounter;
 
 extern int FUN_L00_0023aaa8(char *);
-extern short D_L00_0015F7F0_d __asm__("D_L00_0015F7F0") __attribute__((sda));
+extern s32 D_L00_0015F7F0_d __asm__("D_L00_0015F7F0") __attribute__((sda));
 
 void FUN_L00_00239630(HudElem *e) {
     unsigned char *c = e->cnt;

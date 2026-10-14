@@ -194,8 +194,8 @@ extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022D
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L00_001612D0 __attribute__((sda));
-extern short D_L00_001612D8 __attribute__((sda));
+extern s32 D_L00_001612D0 __attribute__((sda));
+extern s32 D_L00_001612D8 __attribute__((sda));
 extern short D_L00_001613D0 __attribute__((sda));
 extern short D_L00_001613D4 __attribute__((sda));
 extern unsigned FUN_L00_0025c0e8(unsigned c, int mask);
@@ -1533,8 +1533,8 @@ typedef struct {
 extern float D_0015ED6C_2adb30 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float D_0015ED70_2adb30 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern int D_L00_0015F5CC_2adb30 __asm__("D_L00_0015F5CC");
-extern short D_L00_001612D0_2adb30 __asm__("D_L00_001612D0") __attribute__((sda));
-extern short D_L00_001612D8_2adb30 __asm__("D_L00_001612D8") __attribute__((sda));
+extern s32 D_L00_001612D0_2adb30 __asm__("D_L00_001612D0") __attribute__((sda));
+extern s32 D_L00_001612D8_2adb30 __asm__("D_L00_001612D8") __attribute__((sda));
 extern Cam910 player_camera __asm__("D_L00_00166C80");
 extern s32 g_debug_camera[] __asm__("D_L00_00166DC0");
 extern float D_L00_00173E68_2adb30[] __asm__("D_L00_00173E68");

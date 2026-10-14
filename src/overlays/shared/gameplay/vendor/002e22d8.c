@@ -350,7 +350,7 @@ void FUN_L16_002e2b60(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E42F0), where it is exact; names translated to the US level program. */
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern short D_0015ED70_u __asm__("D_0015ED70");
+extern f32 D_0015ED70_u __asm__("D_0015ED70");
 extern short D_L16_00161E44, D_L16_00161D80_q __asm__("D_L16_00161D80") __attribute__((sda));
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 extern void func_00215CA8_path42_q(float, void *, int, void *, void *, int) __asm__("FUN_00214e58");

@@ -228,8 +228,8 @@ extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, f
 extern int stub_printf() __asm__("FUN_001e93b0");
 extern int FUN_L00_0025c698(void *,void *);
 extern int FUN_L14_002fea80(struct Moby *moby);
-extern short D_L14_00161FBC_f __asm__("D_L14_00161FBC");
-extern short D_L14_00161FC0_f __asm__("D_L14_00161FC0") __attribute__((sda));
+extern f32 D_L14_00161FBC_f __asm__("D_L14_00161FBC");
+extern f32 D_L14_00161FC0_f __asm__("D_L14_00161FC0") __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
 extern void FUN_L00_0025d538(void *, void *);

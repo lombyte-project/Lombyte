@@ -1414,11 +1414,11 @@ void FUN_L01_00307ca0(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309758), where it is exact; names translated to the US level program. */
 
-extern short D_L01_00161F10_d __asm__("D_L01_00161F10") __attribute__((sda));
-extern short D_L01_00161F14_d __asm__("D_L01_00161F14") __attribute__((sda));
-extern short D_L01_00161F18_d __asm__("D_L01_00161F18") __attribute__((sda));
-extern short D_L01_00161F2C_d __asm__("D_L01_00161F2C") __attribute__((sda));
-extern short D_L01_00161F50_d __asm__("D_L01_00161F50") __attribute__((sda));
+extern f32 D_L01_00161F10_d __asm__("D_L01_00161F10") __attribute__((sda));
+extern f32 D_L01_00161F14_d __asm__("D_L01_00161F14") __attribute__((sda));
+extern f32 D_L01_00161F18_d __asm__("D_L01_00161F18") __attribute__((sda));
+extern f32 D_L01_00161F2C_d __asm__("D_L01_00161F2C") __attribute__((sda));
+extern s32 D_L01_00161F50_d __asm__("D_L01_00161F50") __attribute__((sda));
 void FUN_L01_00308550(char *m);
 extern void FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");

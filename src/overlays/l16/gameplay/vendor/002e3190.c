@@ -86,7 +86,7 @@ extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
-extern short D_L16_0015F5C4_u __asm__("D_L16_0015F5C4");
+extern s32 D_L16_0015F5C4_u __asm__("D_L16_0015F5C4");
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_002502a0(int);
@@ -342,8 +342,8 @@ extern int FUN_L00_0025c698(void *,void *);
 extern int FUN_L16_002e3fa0(struct Moby *moby);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern short D_L16_00161D94;
-extern short D_L16_00161D98 __attribute__((sda));
+extern f32 D_L16_00161D94;
+extern f32 D_L16_00161D98 __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
 extern void FUN_L00_0025d538(void *, void *);
@@ -598,7 +598,7 @@ extern float D_0015EE6C_u,
     D_0015ED70_c2 __asm__("D_0015ED70");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L05_003195f8(char *);
-extern short D_L16_0015F594;
+extern s32 D_L16_0015F594;
 extern unsigned char D_0013D4E1 __attribute__((section(".data")));
 extern void FUN_001f9a40(void *, void *, void *, float);
 extern void FUN_001f9d20(void *, void *, void *);
@@ -1646,7 +1646,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8538), where it is exact; names translated to the US level program. */
 
-extern short D_L16_0015F638_u __asm__("D_L16_0015F638");
+extern f32 D_L16_0015F638_u __asm__("D_L16_0015F638");
 extern void FUN_L01_0027a248(int, int);
 extern void FUN_L13_002650a8(int, int, int, int);
 extern void FUN_L16_002de3b8(float f);
@@ -2094,7 +2094,7 @@ extern float D_L16_00161EAC __attribute__((sda)); /* no foreign declaration */
 extern float D_L16_00161EBC __attribute__((sda)); /* no foreign declaration */
 extern int FUN_L00_0028d8c0(void *, int);
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern short D_L16_00161EB8 __attribute__((sda));
+extern f32 D_L16_00161EB8 __attribute__((sda));
 extern void FUN_L00_00260738(char *, void *, void *, void *);
 extern void FUN_L16_002e84e8(struct Moby *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");

@@ -899,7 +899,7 @@ void FUN_L06_002ff978(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00301FE8), where it is exact; names translated to the US level program. */
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern short D_L06_00162080_d __asm__("D_L06_00162080") __attribute__((sda));
+extern f32 D_L06_00162080_d __asm__("D_L06_00162080") __attribute__((sda));
 extern void FUN_001f9a10(float *, float *, float *);
 
 void FUN_L06_00300b90(struct Moby *moby) {

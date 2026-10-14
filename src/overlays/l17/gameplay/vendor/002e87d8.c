@@ -975,7 +975,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
 extern int FUN_001f9740(void *);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L11_00308848(void *, void *, void *, float, float);
-extern short D_L17_001620A0_d __asm__("D_L17_001620A0") __attribute__((sda));
+extern f32 D_L17_001620A0_d __asm__("D_L17_001620A0") __attribute__((sda));
 extern unsigned char D_0013A4E0_u[] __asm__("D_0013A4E0");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);

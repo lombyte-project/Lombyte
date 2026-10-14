@@ -233,7 +233,7 @@ typedef struct {
 
 extern float D_L05_00215C70[4][4];
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern short D_L05_00161FC8_d __asm__("D_L05_00161FC8") __attribute__((sda));
+extern f32 D_L05_00161FC8_d __asm__("D_L05_00161FC8") __attribute__((sda));
 extern void FUN_001f9d20(void *, void *, void *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");

@@ -1015,7 +1015,7 @@ extern short D_L18_0016231C __attribute__((sda));
 extern short D_L18_00162320 __attribute__((sda));
 extern short D_L18_00162324 __attribute__((sda));
 extern short D_L18_00162328 __attribute__((sda));
-extern short D_L18_00162308 __attribute__((sda));
+extern f32 D_L18_00162308 __attribute__((sda));
 extern float D_L18_001DA7A0[][2] __attribute__((section(".data")));
 extern FRow D_L18_001DA3C0[] __attribute__((section(".data")));
 extern short D_L18_001DA610[][4][2] __attribute__((section(".data")));
@@ -1114,7 +1114,7 @@ extern float D_L18_001DB3A0[][2] __attribute__((section(".data")));
 extern FRow_l18 D_L18_001DB030[] __attribute__((section(".data")));
 extern short D_L18_001DB240[][4][2] __attribute__((section(".data")));
 extern int get_effect_texture_l18(int) __asm__("FUN_001f44b8");
-extern short D_L18_00162308 __attribute__((sda));
+extern f32 D_L18_00162308 __attribute__((sda));
 extern void FUN_001f9fc8(void *);
 extern void FUN_001f7d30(void *, void *, int);
 
@@ -1419,7 +1419,7 @@ extern short D_L18_00162360 __attribute__((sda));
 extern short D_L18_00162390 __attribute__((sda));
 extern short D_L18_00162394 __attribute__((sda));
 extern short D_L18_00162398 __attribute__((sda));
-extern short D_L18_001623A0_c __asm__("D_L18_001623A0");
+extern s32 D_L18_001623A0_c __asm__("D_L18_001623A0");
 extern short D_L18_0016239C __attribute__((sda));
 extern unsigned char *D_L18_0015FFD8;
 extern unsigned char *FUN_L18_002f6e10(struct Moby *self);
@@ -2521,7 +2521,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
 /* Latches the target from the global block once, and counts a class 0x24B hit. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7278), where it is exact; names translated to the US level program. */
 
-extern short D_L18_001623A8_d __asm__("D_L18_001623A8") __attribute__((sda));
+extern s32 D_L18_001623A8_d __asm__("D_L18_001623A8") __attribute__((sda));
 
 void FUN_L18_002f5e18(struct Moby *moby) {
     char *d = (char *)moby->pvars;
@@ -3415,11 +3415,11 @@ typedef struct {
 
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern int FUN_001fa6e0(int, int, float);
-extern short D_L18_00162450_d __asm__("D_L18_00162450") __attribute__((sda));
-extern short D_L18_00162454_d __asm__("D_L18_00162454") __attribute__((sda));
-extern short D_L18_00162458_d __asm__("D_L18_00162458") __attribute__((sda));
-extern short D_L18_0016245C_d __asm__("D_L18_0016245C") __attribute__((sda));
-extern short D_L18_00162460_d __asm__("D_L18_00162460") __attribute__((sda));
+extern f32 D_L18_00162450_d __asm__("D_L18_00162450") __attribute__((sda));
+extern f32 D_L18_00162454_d __asm__("D_L18_00162454") __attribute__((sda));
+extern s32 D_L18_00162458_d __asm__("D_L18_00162458") __attribute__((sda));
+extern s32 D_L18_0016245C_d __asm__("D_L18_0016245C") __attribute__((sda));
+extern s32 D_L18_00162460_d __asm__("D_L18_00162460") __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00263618(void *, int, float, float);
 

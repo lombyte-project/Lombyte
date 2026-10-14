@@ -1484,7 +1484,7 @@ typedef struct {
 
 extern G D_L05_0016CC60;
 extern int D_L05_0015F5C4;
-extern short D_L05_00161ED0_d __asm__("D_L05_00161ED0") __attribute__((sda));
+extern s32 D_L05_00161ED0_d __asm__("D_L05_00161ED0") __attribute__((sda));
 extern unsigned char D_0015EDB0[] MACRO_ADDR;
 extern unsigned char D_L05_0017C8A0[];
 extern void FUN_L05_00316810(char *, int);

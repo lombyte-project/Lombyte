@@ -50,7 +50,7 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 extern short D_L14_0016219C_s __asm__("D_L14_001620CC") __attribute__((sda));
 extern short D_L14_00162188_s __asm__("D_L14_001620B8") __attribute__((sda));
 extern short D_L14_001621A0_s __asm__("D_L14_001620D0") __attribute__((sda));
-extern short D_L14_00162198_s __asm__("D_L14_001620C8") __attribute__((sda));
+extern s32 D_L14_00162198_s __asm__("D_L14_001620C8") __attribute__((sda));
 extern short D_L14_001621A4_s __asm__("D_L14_001620D4") __attribute__((sda));
 
 extern short D_L14_001620D8 __attribute__((sda));
