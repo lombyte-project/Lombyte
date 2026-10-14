@@ -860,9 +860,9 @@ void FUN_L00_002062b0(void) {
             char *g = (char *)&hero;
             moby = *(char **)(g + 0x2080);
             /* Retail snapshots these channels before the alpha helper calls. */
-            red = *(u8 *)(moby + 0x90);
             blue = *(u8 *)(moby + 0x92);
             green = *(u8 *)(moby + 0x91);
+            red = *(u8 *)(moby + 0x90);
             alpha = 0x30;
             if (*(s16 *)(g + 0x22de))
                 alpha = FUN_L00_00200250_002062b0(FUN_L00_00200240_002062b0(*(s16 *)(g + 0x22de)) / FUN_L00_00200240_002062b0(0x12) * (f32)alpha);
