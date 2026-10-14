@@ -314,6 +314,7 @@ state_one:
     }
 state_two:
     {
+        char *path;
         tick_2d1688(data + 0x7c);
         height = absolute_2d1688(hero.water_surface_z - *(float *)(data + 0x74));
         if (height < 0.33f && hero.state.control_mode == 0x12) {
@@ -337,11 +338,9 @@ state_two:
         if (hero.state.current == 0x12) return;
         path = D_L05_001B0930[*(int *)(data + 0x60)];
         if (check_path_2d1688(&hero.motion.pos, path + 0x10, *(int *)path) != 0)
-            duration = 600;
+            *(int *)(data + 0x7c) = timer_2d1688(600);
         else
-            duration = 180;
-set_timer:
-        *(int *)(data + 0x7c) = timer_2d1688(duration);
+            *(int *)(data + 0x7c) = timer_2d1688(180);
         return;
     }
 state_three:
