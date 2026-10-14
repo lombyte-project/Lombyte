@@ -2351,7 +2351,7 @@ int FUN_L15_002a3138(unsigned char *moby) {
         nextPass = pass + 1;
         pass *= 8;
         for (corner = 0; corner < 4; corner++) {
-            float *uv = firstUv[corner];
+            float *uv = (float *)(corner * 8 + (unsigned int)firstUv);
             float *frequency = (float *)((char *)D_L15_001CE250 + pass);
             int waveform = pass;
             int base = corner * 8;
@@ -2388,11 +2388,10 @@ int FUN_L15_002a3138(unsigned char *moby) {
         }
         draw_geometry_quad(&first, transform, 0);
         draw_geometry_quad(secondVertices, transform, 0);
-        corner = 3;
-        do {
-            first.v[3 - corner][0] += 0.1f;
-            secondVertices[3 - corner][0] += 0.1f;
-        } while (--corner >= 0);
+        for (corner = 0; corner < 4; corner++) {
+            first.v[corner][0] += 0.1f;
+            secondVertices[corner][0] += 0.1f;
+        }
     }
 }
 #endif
