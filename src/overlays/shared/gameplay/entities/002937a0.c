@@ -1209,7 +1209,7 @@ void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void FUN_L01_0026d930(char *p);
 void FUN_L08_003024d8(char *m);
 extern char D_0013F350[];
-extern int level_mode302618 __asm__("D_L08_0015F5C4");
+extern int level_game_mode __asm__("D_L08_0015F5C4");
 extern char *target302618 __asm__("D_L08_00174658") __attribute__((section(".data")));
 extern float D_L08_0015F5D4;
 extern float speed302618 __asm__("D_L08_001621C4") __attribute__((sda));
@@ -1276,7 +1276,7 @@ void FUN_L08_00301158(char *moby) {
         wake302618(moby);
         (*(unsigned char *)((char *)(moby)+0x7F))=23;
     }
-    if (level_mode302618 == 2) return;
+    if (level_game_mode == 2) return;
     path=0;
     helper302618(moby);
     target = data->f160;

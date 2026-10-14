@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-/* Player options and cheats. */
-
 extern int pause_sound_volume __asm__("D_0013E5A0") __attribute__((section(".data")));
 extern u8 big_head_cheat_enabled __asm__("D_0015EDB0");
 extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");

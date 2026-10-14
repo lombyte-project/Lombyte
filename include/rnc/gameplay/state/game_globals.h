@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-/* Game and level state. */
-
 extern s32 ship_substate[] __asm__("D_0013E050");
 extern s16 ship_index[] __asm__("D_0013E056");
 extern char item_usage[] __asm__("D_00141680");

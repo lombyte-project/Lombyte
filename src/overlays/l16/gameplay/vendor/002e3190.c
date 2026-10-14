@@ -1074,7 +1074,7 @@ void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm_
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
-short D_L16_00161E48 = {0};
+short D_L16_00161E48 = 0;
 void FUN_L16_002e5e08(struct Moby *m) {
     char *d = (char *)m->pvars;
     FUN_L16_002e6208(m);
@@ -2236,9 +2236,9 @@ extern float D_L16_00161EB8_gp __asm__("D_L16_00161EB8") __attribute__((sda));
 extern float D_L16_00161EC4 __attribute__((sda));
 extern float D_L16_00161EC8 __attribute__((sda));
 extern float D_L16_00161EE8 __attribute__((sda));
-int D_L16_00161ECC = {0};
+int D_L16_00161ECC = 0;
 int D_L16_00161ED0 = 2;
-int D_L16_00161ED4 = {0};
+int D_L16_00161ED4 = 0;
 int D_L16_00161ED8 = 1;
 int D_L16_00161EDC = 0x408000;
 int D_L16_00161EE0 = 0x40c08030;

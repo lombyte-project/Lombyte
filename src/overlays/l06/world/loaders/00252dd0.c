@@ -415,7 +415,7 @@ s32 FUN_L06_00252dd0(s32 full, s32 keep) {
     }
     ((Una252dd0 *)D_L06_00179880)->v = 0;
     FUN_L00_00264740();
-    GB_FRAME++;
+    D_L06_0015F5CC++;
     return 0;
 }
 #include "qcopy.h"

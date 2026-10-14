@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-/* Sound, music and CD stream state. */
-
 extern char voice_positions[] __asm__("D_0013E5E0");
 extern u8 sound_command_client[] __asm__("D_0015EBC0");
 extern s32 snd_cd_stream_active __asm__("D_0015EC8C") __attribute__((sda));

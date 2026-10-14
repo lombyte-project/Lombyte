@@ -326,7 +326,7 @@ extern void FUN_001f99f8(void *);
 extern float D_0015ED70;
 extern float D_0015ED6C;
 float D_L11_001613E0 = 3.2f;
-int D_L11_001613F0 = {0};
+int D_L11_001613F0 = 0;
 extern int D_L11_0016D260[];
 extern int D_L11_0015FFD8;
 
@@ -1399,9 +1399,9 @@ extern void draw_quad_2f2d58(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern float D_L11_001D3530[];
 
-int D_L11_00161920 = {0};
+int D_L11_00161920 = 0;
 int D_L11_00161924 = 2;
-int D_L11_00161928 = {0};
+int D_L11_00161928 = 0;
 int D_L11_0016192C = 1;
 int D_L11_00161930 = 0x13;
 extern unsigned int D_L11_00161934 __attribute__((sda));

@@ -74,7 +74,7 @@ void FUN_L08_00307298(char *m) {
         if (o == 0 || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD) {
             m[0x20] = 2;
         }
-        if (delay_random302618 < 0.9f && D_L08_0015F5D0 < 0.9f) {
+        if (D_L08_0015F5D4 < 0.9f && D_L08_0015F5D0 < 0.9f) {
             int a;
             float f = random_float_between_alt(0.95f, 0.985f);
             scale_vector_xyz(sc, d, f);
@@ -98,7 +98,7 @@ void FUN_L08_00307298(char *m) {
             m[0x20] = 2;
         break;
     case 2:
-        if ((delay_random302618 < 0.85f && D_L08_0015F5D0 < 0.85f) || *(int *)(d + 0x2C) == 1) {
+        if ((D_L08_0015F5D4 < 0.85f && D_L08_0015F5D0 < 0.85f) || *(int *)(d + 0x2C) == 1) {
             FUN_L00_0025f090(m, m + 0x10, -1, 0.25f, 13.0f);
         } else {
             FUN_L00_0025f090(m, m + 0x10, -1, 0.25f, 0.0f);

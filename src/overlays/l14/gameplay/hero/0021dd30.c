@@ -387,7 +387,7 @@ struct LevelTable_QS {
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
 extern struct UsageStats D_00141848;
 #define S D_00141848
-s32 D_L14_0015F68C = {0};
+s32 D_L14_0015F68C = 0;
 
 extern void FUN_L00_00209540(s32, s32);
 extern void FUN_L00_002132b8(f32, f32);

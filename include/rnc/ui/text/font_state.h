@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-/* Font and text drawing state. */
-
 extern unsigned short font_vu_program_tag[] __asm__("D_0010E800");
 extern u8 font_vu_program[] __asm__("D_0010E810");
 extern f32 font_depth_bias __asm__("D_0015F348") __attribute__((sda));

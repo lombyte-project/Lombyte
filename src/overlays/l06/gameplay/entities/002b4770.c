@@ -1737,7 +1737,7 @@ extern char D_0013F350[];
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern float FUN_001f96b0(float);
-extern int GB_FRAME __asm__("D_L06_0015F5CC"); /* no foreign declaration */
+extern int level_frame_count __asm__("D_L06_0015F5CC"); /* no foreign declaration */
 extern float D_L06_00161ED0 __attribute__((sda));
 extern int D_001413D0[];
 extern float D_L06_00161EE4 __attribute__((sda));
@@ -1854,7 +1854,7 @@ void FUN_L06_002f91e8(Moby *moby)
     case 9:
     case 12:
     case 13:
-        if (GB_FRAME % 4 == (((int)moby >> 8) & 3)) {
+        if (level_frame_count % 4 == (((int)moby >> 8) & 3)) {
             func_L00_0025A8E8_2FA618(moby, 0.7f, &moby->pos.x, 0x10000, 0.9f, 1.0f, 0, 1, 0);
         }
         break;

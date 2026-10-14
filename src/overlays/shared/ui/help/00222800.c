@@ -45,7 +45,7 @@ s32 FUN_L08_00222800(s32 arg) {
     if (G.invulnerable_frames != 0) {
         return 0;
     }
-    if (level_mode302618 != 0) {
+    if (D_L08_0015F5C4 != 0) {
         return 0;
     }
     G.unk2280 = 0;

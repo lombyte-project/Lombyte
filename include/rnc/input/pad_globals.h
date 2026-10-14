@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-/* Controller input state. */
-
 extern s32 pad_held[] __asm__("D_0013CAE0");
 
 #endif /* LOMBYTE_RNC_INPUT_PAD_GLOBALS_H */

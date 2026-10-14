@@ -448,7 +448,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("func_001FA
 extern int D_0015ED84;
 extern int D_0015EEA4;
 extern int D_L13_0015FFD8; /* no foreign declaration */
-int D_L13_00161950 = {0};
+int D_L13_00161950 = 0;
 int D_L13_00161954 = -1;
 extern int D_L13_001D3448[];
 extern int D_L13_001D34D8[];

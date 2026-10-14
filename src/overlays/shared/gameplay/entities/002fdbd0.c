@@ -958,7 +958,7 @@ unsigned char *FUN_L06_00300c60(char *m, float *pos, float *vel) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
 
-extern int GB_FRAME __asm__("D_L06_0015F5CC");
+extern int level_frame_count __asm__("D_L06_0015F5CC");
 extern short D_L06_001620C8 __attribute__((sda));
 extern short D_L06_001620CC __attribute__((sda));
 extern short D_L06_001620D0 __attribute__((sda));
@@ -989,7 +989,7 @@ void FUN_L06_003021d8(char *moby) {
     draw_ui_frame(W(D_L06_001620D8) + W(D_L06_001620CC), W(D_L06_001620DC) + W(D_L06_001620CC),
                 W(D_L06_001620E0) + W(D_L06_001620C8), W(D_L06_001620E4) + W(D_L06_001620C8),
                 W(D_L06_001620E8));
-    v = fast_sin(func_001FA888(GB_FRAME % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
+    v = fast_sin(func_001FA888(level_frame_count % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (v > 1.0f) {
         v = 1.0f;
     } else if (v < 0.0f) {

@@ -1569,8 +1569,8 @@ extern unsigned char D_L17_00162068 __attribute__((sda));
 extern float D_L17_00162084 __attribute__((sda));
 extern float D_L17_00162088 __attribute__((sda));
 int D_L17_00162178 = 180;
-char *hp_bar_clut __asm__("D_L17_00162180") = {0};
-int hp_bar_saved __asm__("D_L17_00162184") = {0};
+char *hp_bar_clut __asm__("D_L17_00162180") = 0;
+int hp_bar_saved __asm__("D_L17_00162184") = 0;
 typedef struct {
     char pad[0x160];
     float f160;

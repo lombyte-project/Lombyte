@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-/* Menu and item preview state. */
-
 extern unsigned char menu_item_enabled_0 __asm__("D_0013D394") __attribute__((section(".data")));
 extern unsigned char menu_item_enabled_9 __asm__("D_0013D39D") __attribute__((section(".data")));
 extern unsigned char menu_item_enabled_16 __asm__("D_0013D3A4") __attribute__((section(".data")));

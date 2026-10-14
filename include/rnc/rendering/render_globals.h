@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-/* Draw, fog, light and occlusion state. */
-
 extern int draw_buffer_address __asm__("D_0015EE84");
 extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern s32 screen_overlay_enabled __asm__("D_0015F34C") __attribute__((sda));

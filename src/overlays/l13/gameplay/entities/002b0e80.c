@@ -2592,7 +2592,7 @@ extern int D_L13_0015ED84;
 extern float D_L13_0016CDF0 __attribute__((section(".data")));
 extern JetTexture D_L13_0016D480[];
 extern unsigned int D_L13_0015F420;
-int hp_bar_saved __asm__("D_L13_001613C4") = {0};
+int hp_bar_saved __asm__("D_L13_001613C4") = 0;
 extern char D_L13_001CBDE8[];
 short D_L13_00161440 = 0x7f;
 extern float D_L13_0015F3FC;

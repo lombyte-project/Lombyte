@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-/* Camera state. */
-
 extern s32 camera_secondary_mode[] __asm__("D_001413D4");
 extern u8 camera_position[] __asm__("D_00187080");
 extern char cam_trans_state[] __asm__("D_001871B0");

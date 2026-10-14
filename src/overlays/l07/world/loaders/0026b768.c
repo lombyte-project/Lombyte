@@ -414,6 +414,6 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
     }
     ((Una26b768 *)D_L07_00179180)->v = 0;
     FUN_L00_00264740();
-    frame_count_l07++;
+    D_L07_0015F5CC++;
     return 0;
 }

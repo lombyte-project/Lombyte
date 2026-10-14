@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-/* Movie decoder state. */
-
 extern s32 decode_mode __asm__("D_0015EED8");
 extern volatile s32 movie_display_active __asm__("D_001611E0");
 extern s32 decoder_buffer_address __asm__("D_00161208");

@@ -33,7 +33,7 @@ void FUN_L07_00312dc8(char *moby) {
 #include "qcopy.h"
 #include "rnc/rendering/geometry_quad.h"
 
-extern s32 frame_count_l07 __asm__("D_L07_0015F5CC");
+extern s32 level_frame_count __asm__("D_L07_0015F5CC");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -56,7 +56,7 @@ void FUN_L07_00312e70(char *moby, float radius, int phase, float speed, int colo
     float wrapped;
     u64 texture;
 
-    spin = convert_integer_to_float(frame_count_l07 + phase) * speed;
+    spin = convert_integer_to_float(level_frame_count + phase) * speed;
     if (*(int *)(vars + 0x164) == 4) {
         float alpha = convert_integer_to_float(color >> 24);
         float fade = convert_integer_to_float(*(int *)(vars + 0x160));
@@ -386,7 +386,7 @@ struct HeroView_313af0 {
     f32 x, y;            /* 0x80 */
 };
 
-extern s32 frame_count_l07 __asm__("D_L07_0015F5CC");
+extern s32 level_frame_count __asm__("D_L07_0015F5CC");
 extern float D_0015ED6C;
 extern struct ChaserTarget D_L07_00173EC0;
 extern float FUN_001f9b80(void *, void *);
@@ -416,7 +416,7 @@ int FUN_L07_00313af0(struct Moby *m, struct ChaserVars *d, Vec4 *goal, int mode,
         FUN_L00_00258278(m, FUN_001f9e90(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y),
                            d->turn, frame_time_sq * 2.0943952f, frame_time_sq * 0.69813168f, D_0015ED6C * 2.0943952f);
     }
-    if ((frame_count_l07 & 3) == 3 && FUN_L00_002583f0(&m->pos, m, 0, 0.1f, 1.0f)) {
+    if ((level_frame_count & 3) == 3 && FUN_L00_002583f0(&m->pos, m, 0, 0.1f, 1.0f)) {
         o = D_L07_00173EC0.moby;
         if (o != 0 && D_L07_00173EC0.count > 0 && o->oclass == 0x42D && o->command == 0) {
             if (((struct ChaserTargetVars *)o->pvars)->sticky) {
@@ -885,8 +885,8 @@ void FUN_L07_00314150(unsigned char *moby) {
     case 2: {
         float rot;
         rot = *(float *)(moby + 0x48);
-        if (frame_count_l07 % 6 == 0) FUN_L07_0029b8d8((char *)moby, 0, 600000.0f, 5.0f);
-        if ((frame_count_l07 - 2) % 6 == 0) FUN_L07_0029b8d8((char *)moby, 1, 600000.0f, 5.0f);
+        if (level_frame_count % 6 == 0) FUN_L07_0029b8d8((char *)moby, 0, 600000.0f, 5.0f);
+        if ((level_frame_count - 2) % 6 == 0) FUN_L07_0029b8d8((char *)moby, 1, 600000.0f, 5.0f);
         if (FUN_L07_00313de8(moby, data, (float *)(((char *)&hero) + 0x80), 9, 0)) break;
         FUN_L00_00258278((struct Moby *)moby, target_angle, (float *)(data + 0x168), frame_time_sq * 2.0943952f, frame_time_sq * 0.6981317f, frame_time * 2.0943952f);
         if (fast_difference_between_rotations(*(float *)(moby + 0x48), rot) > frame_time * 0.17453292f) {
@@ -956,8 +956,8 @@ void FUN_L07_00314150(unsigned char *moby) {
         if (*(int *)(data + 0x160) < scale_ticks(0x3C) / 2) {
             FUN_L00_0024f7c8(moby, 2, &position);
             FUN_L07_00311eb8(moby, data, 2, &position, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
-            if ((frame_count_l07 & 7) == 0) FUN_L07_0029b8d8((char *)moby, 2, 0.0f, 0.2f);
-            if (((frame_count_l07 - 4) & 7) == 0) FUN_L07_0029b8d8((char *)moby, 3, 0.0f, 0.2f);
+            if ((level_frame_count & 7) == 0) FUN_L07_0029b8d8((char *)moby, 2, 0.0f, 0.2f);
+            if (((level_frame_count - 4) & 7) == 0) FUN_L07_0029b8d8((char *)moby, 3, 0.0f, 0.2f);
         }
         if (moby[0x52] == 5) {
             qcopy(&position, &sight);

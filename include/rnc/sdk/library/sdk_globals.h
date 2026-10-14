@@ -3,8 +3,6 @@
 
 #include "types.h"
 
-/* SDK library globals. */
-
 extern u8 RpcQueueData[] __asm__("D_0015B008");
 extern s32 SbrkErrno[] __asm__("D_0015EC10");
 
