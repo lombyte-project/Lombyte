@@ -1749,7 +1749,7 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void subtract_8808(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00257470(struct Moby *, int, int);
-extern Vec4 D_L12_0015F580;
+extern char D_L12_0015F580[];
 extern struct Moby *D_L12_00178380[];
 extern int coll_line_fix_72(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int query_mobys_72(void *, int, void *, int, float) __asm__("FUN_L00_001f2868");
@@ -1902,7 +1902,7 @@ hide:
             v.f[1] += fast_sin_e81e0(moby->rot.z);
             hit = query_mobys_72(&v, 0, moby, 0, 1.5f);
             if (hit) {
-                qcopy(delta.f, D_L12_0015F580.f);
+                qcopy(delta.f, D_L12_0015F580);
                 if (hit > 0) {
                     struct Moby **iterator = D_L12_00178380;
                     int count = hit;
