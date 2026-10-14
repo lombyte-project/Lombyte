@@ -1894,7 +1894,7 @@ extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
-extern int D_L15_00161AB8; /* no foreign declaration */
+extern int D_L15_00161AB8_lui __asm__("D_L15_00161AB8"); /* no foreign declaration */
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
@@ -1940,7 +1940,7 @@ void FUN_L15_002a2488(char *moby) {
         random_vector(va, 0.0f, D_0015ED6C + D_0015ED6C);
         qcopy(pb, moby + 0x10);
         pb[2] = pb[2] + *(float *)&D_L15_001614C4;
-        if (D_L15_00161AB8 == 0) {
+        if (D_L15_00161AB8_lui == 0) {
             ((unsigned char *)moby)[0x20] = 1;
             goto tailA;
         }
@@ -2802,15 +2802,10 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cb4c8.s", FUN_L15_002cb4c8);
-#else
-extern short D_L15_0015F5C4_macro __asm__("D_L15_0015F5C4") __attribute__((section(".data")));
 extern int interpolate_color_2a3138(float, int, int) __asm__("FUN_001fa6e0");
 extern int D_L15_00161AB4 __attribute__((sda));
 extern int D_L15_00161AB8 __attribute__((sda));
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
-extern int D_L15_0015F5C4_small __asm__("D_L15_0015F5C4") __attribute__((sda));
 extern void FUN_L15_002cbc30(void *);
 
 /* Advances the animation state, pulses the color, and updates the shared effect. */
@@ -2842,8 +2837,7 @@ void FUN_L15_002cb4c8(unsigned char *moby) {
         *(int *)(moby + 0x90) = color;
         *(float *)(data + 5) = fast_add_rotations(*(float *)(data + 5), step * 6.2831855f);
         if (data[2] == 0) goto update;
-        flag = *(int *)&D_L15_0015F5C4_macro != 2;
-        if (flag) {
+        if (D_L15_0015F5C4 != 2) {
             if (data[0] == 1) {
                 moby[0x20] = 6;
                 if (moby[0x53] != 4)
@@ -2862,7 +2856,7 @@ void FUN_L15_002cb4c8(unsigned char *moby) {
         break;
     case 3:
         if (data[2] == 0) goto update;
-        if (D_L15_0015F5C4_small != 2) {
+        if (D_L15_0015F5C4 != 2) {
             moby[0x20] = 4;
             if (moby[0x53] != 3)
                 blend_moby_animation(moby, 3, 0, FUN_001f96f8(10));
@@ -2870,7 +2864,7 @@ void FUN_L15_002cb4c8(unsigned char *moby) {
         break;
     case 4:
         if (moby[0x70] & 2) {
-            if (data[2] == 0 || D_L15_0015F5C4_small == 2) goto stop_animation;
+            if (data[2] == 0 || D_L15_0015F5C4 == 2) goto stop_animation;
             if (data[0] == 1) {
                 moby[0x20] = 7;
                 if (moby[0x53] != 5)
@@ -2894,9 +2888,7 @@ stop_animation:
         step = frame_time;
         *(int *)(moby + 0x90) = color;
         *(float *)(data + 5) = fast_add_rotations(*(float *)(data + 5), step * 12.566371f);
-        flag = tick_countdown_32_alt(data + 6);
-        if (flag == 0) flag = *(int *)&D_L15_0015F5C4_macro == 2;
-        if (flag) {
+        if (tick_countdown_32_alt(data + 6) || D_L15_0015F5C4 == 2) {
             FUN_L15_002cbac0((char *)moby, 0);
             data[2] = 0;
             if (moby[0x53] != 8)
@@ -2920,15 +2912,13 @@ stop_animation:
     case 8: {
         float *pos = (float *)(moby + 0x10);
         float *g = hero.motion.pos.f;
-        if (FUN_001f9b80(pos, g) < 16.0f && D_L15_0015F5C4_small != 2 && tick_countdown_32_alt(data + 3)) {
+        if (FUN_001f9b80(pos, g) < 16.0f && D_L15_0015F5C4 != 2 && tick_countdown_32_alt(data + 3)) {
             qcopy(position, pos);
             position[2] += 1.0f;
             if (FUN_001efa68(position, g + 20, 2, 0, 0) == 0 && FUN_L15_002a2868(data[1], pos))
                 data[3] = data[4];
         }
-        flag = tick_countdown_32_alt(data + 6);
-        if (flag == 0) flag = *(int *)&D_L15_0015F5C4_macro == 2;
-        if (flag) {
+        if (tick_countdown_32_alt(data + 6) || D_L15_0015F5C4 == 2) {
             FUN_L15_002cbac0((char *)moby, 0);
             data[2] = 0;
             moby[0x20] = 9;
@@ -2966,7 +2956,6 @@ update:
         D_L15_00161AB8 = 0;
     }
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */
 
 extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
