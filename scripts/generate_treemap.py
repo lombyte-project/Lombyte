@@ -993,18 +993,18 @@ def render_svg(
     pcx = (xt + cut_gap + slant / 2 + right) / 2
     if data and data[0]:
         lines.append(
-            f'<text x="{pcx:.1f}" y="{dy0 + 22}" text-anchor="middle" font-family="{esc(FONT)}" '
+            f'<text x="{pcx:.1f}" y="{dy0 + 25}" text-anchor="middle" font-family="{esc(FONT)}" '
             f'font-size="10" fill="{TEXT}"><tspan font-size="12" font-weight="800" fill="{CHROME}">'
             f'{100.0 * data[1] / data[0]:.1f}%</tspan> data in C'
             f'<title>Data in C: {data[1]:,} of {data[0]:,} B, of which {data[2]:,} B '
             f'are zeros (zero-initialised level data).</title></text>'
         )
     lines.append(
-        f'<text x="{pcx:.1f}" y="{dy0 + 58}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'<text x="{pcx:.1f}" y="{dy0 + 57}" text-anchor="middle" font-family="{esc(FONT)}" '
         f'font-size="30" font-weight="800" fill="{ORANGE}">{total_percent:.1f}%</text>'
     )
     lines.append(
-        f'<text x="{pcx:.1f}" y="{dy0 + 75}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'<text x="{pcx:.1f}" y="{dy0 + 73}" text-anchor="middle" font-family="{esc(FONT)}" '
         f'font-size="10" fill="{TEXT}">exe + overlays in C</text>'
     )
     lines.append(
