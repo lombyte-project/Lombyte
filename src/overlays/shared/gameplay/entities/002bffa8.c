@@ -815,8 +815,7 @@ void FUN_L00_002bffa8(struct Moby *moby) {
         vars->age = (s32)((u32)vars->age + 1);
         if (scale_game_frames(3600) < vars->age) moby->state = 11;
         tick_countdown(&vars->timer);
-        pos = &moby->pos;
-        qcopy(&vars->previous_pos,pos);
+        qcopy(&vars->previous_pos,&moby->pos);
         if (FUN_L00_002beab0(moby,5,0)) {
             if (!collision_hit_2bffa8.moby) goto land;
             target = (struct Moby *)collision_hit_2bffa8.moby;
@@ -837,6 +836,7 @@ land:
         }
 collision_done:
         if (moby->pos.z < 0.1f) goto destroy;
+        pos = &moby->pos;
         if (vars->timer > 4000) moby->state = 11;
     } else {
         pos = &moby->pos;
@@ -847,15 +847,17 @@ collision_done:
     case 15: goto reset;
     case 0:
         FUN_001e93b0_2bffa8(D_L00_001E9B48); moby->state = 1; goto finish;
-    case 8:
+    case 8: {
+        struct Hero *P = &hero;
         fast_vec_add(&probe,pos,&vars->velocity);
         vars->velocity.f[2] -= frame_time_sq * 9.0f;
         FUN_L00_002beb90(vars);
-        flags = FUN_L00_00258ad0_2bffa8(moby,&vars->velocity,HI_2bffa8(0x1ec0),0,size*0.7f,HF_2bffa8(0x1ef0));
+        flags = FUN_L00_00258ad0_2bffa8(moby,&vars->velocity,(*(int *)((u8 *)P + 0x1ec0)),0,size*0.7f,(*(float *)((u8 *)P + 0x1ef0)));
         if (flags & 2) { vars->velocity.f[2] = 0.0f; fast_vec_scale(&vars->velocity,&vars->velocity,0.5f); }
         FUN_L00_001ff600_2bffa8(&vars->velocity,&vars->velocity,frame_scale*0.05f);
         if (moby->anim_flags & 2) { if (flags & 2) moby->state = 2; else goto falling_anim; }
         goto turn;
+    }
     case 1: case 9: case 10:
         if (moby->anim_flags & 2) moby->state = 2;
         break;
