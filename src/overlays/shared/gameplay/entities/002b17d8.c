@@ -348,7 +348,7 @@ void FUN_L14_002b2928(struct Moby *m)
     Vec4 *template;
     Vec4 *beam_start;
     Vec4 *beam_end;
-    u64 color;
+    f32 color;
     s32 i;
 
     {
@@ -445,11 +445,11 @@ void FUN_L14_002b2928(struct Moby *m)
     FUN_001f9a68(&offset, &basis[0], D_L14_001614BC);
     FUN_001f9a10(&pos, &pos, &offset);
     color = 0x40;
-    color <<= 24;
-    quad.colors[3] = color | 0xFF2020;
-    quad.colors[2] = color | 0xFF2020;
-    quad.colors[1] = color | 0xFF2020;
-    quad.colors[0] = color | 0xFF2020;
+    color = (s32)color << 24;
+    quad.colors[3] = (s32)color | 0xFF2020;
+    quad.colors[2] = (s32)color | 0xFF2020;
+    quad.colors[1] = (s32)color | 0xFF2020;
+    quad.colors[0] = (s32)color | 0xFF2020;
     i = 3;
     corner = &quad.positions[0];
     do {
@@ -469,10 +469,10 @@ void FUN_L14_002b2928(struct Moby *m)
     cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
     FUN_001f9a68(&offset, &basis[0], D_L14_001614BC);
     FUN_001f9a10(&pos, &pos, &offset);
-    quad.colors[3] = color | 0xFF2020;
-    quad.colors[2] = color | 0xFF2020;
-    quad.colors[1] = color | 0xFF2020;
-    quad.colors[0] = color | 0xFF2020;
+    quad.colors[3] = (s32)color | 0xFF2020;
+    quad.colors[2] = (s32)color | 0xFF2020;
+    quad.colors[1] = (s32)color | 0xFF2020;
+    quad.colors[0] = (s32)color | 0xFF2020;
     i = 3;
     corner = &quad.positions[0];
     do {
