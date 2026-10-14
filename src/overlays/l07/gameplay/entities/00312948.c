@@ -765,9 +765,6 @@ void FUN_L07_00318e98(int target_entry) {
     }
     FUN_L00_002defe0(target_entry);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00319040.s", FUN_L07_00319040);
-#else
 extern Vec4 D_L07_00166E40;
 extern struct Moby *D_L07_00173ED8 __attribute__((section(".data")));
 extern Vec4 D_L07_00173EF0;
@@ -792,26 +789,40 @@ extern void FUN_00212f90(void *, int, int, int);
 extern f32 FUN_001fa580(f32, f32);
 extern void FUN_L01_0026e0e0(s32, s32);
 
+typedef struct {
+    u8 pad0[0x20];
+    f32 health;            /* 0x20: lowered by FUN_00213928 */
+    u8 pad24[0x14];
+    struct Moby *target;   /* 0x38 */
+    u8 pad3C[0x24];
+    Vec4 home;             /* 0x60: spawn position */
+    f32 speed;             /* 0x70 */
+    s32 sound;             /* 0x74: -1 when none */
+    s32 timeout;           /* 0x78 */
+    s32 bob_timer;         /* 0x7C */
+} Mine_19040;
+
+/* Floating mine: wakes when its target or a seen point comes close, then bobs and chases the seen
+   point. It blows up when a hit lands (not from classes 0x456/0x365/0x367), on contact with a
+   solid moby or when its timer runs out, and is removed once 64 units from home. */
 void FUN_L07_00319040(struct Moby *moby) {
-    u8 *vars;
-    u8 *collision;
+    Mine_19040 *vars;
+    f32 *health;
     char sight[0x50];
     char *hit;
     Vec4 dir;
     u8 contact[0x30];
     Vec4 probe;
     Vec4 push;
-    volatile s32 touching;
+    s32 touching;
     f32 speed;
-    union { s32 bits; f32 value; } one;
-    f32 stable_one;
     f32 turn;
     f32 new_speed;
     f32 max_speed;
     s32 timer;
 
     if (moby == NULL) return;
-    vars = moby->pvars;
+    vars = (Mine_19040 *)moby->pvars;
     if (vars == NULL) return;
 
     sight_19040(moby, sight, 8.0f);
@@ -819,11 +830,11 @@ void FUN_L07_00319040(struct Moby *moby) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x15;
     }
-    collision = vars + 0x20;
+    health = &vars->health;
     hit = hit_lookup_19040(moby, 0x230000, 0);
-    hit_test_19040(moby, hit, collision, 0, &touching, 0, 0, 4);
-    if (touching >= 2 && hit != NULL && *(s16 *)(*(char **)(hit + 0x20) + 0xa6) != 0x456 &&
-        *(s16 *)(*(char **)(hit + 0x20) + 0xa6) != 0x365 && *(s16 *)(*(char **)(hit + 0x20) + 0xa6) != 0x367) {
+    hit_test_19040(moby, hit, health, 0, &touching, 0, 0, 4);
+    if (touching >= 2 && hit != NULL && (*(struct Moby **)(hit + 0x20))->oclass != 0x456 &&
+        (*(struct Moby **)(hit + 0x20))->oclass != 0x365 && (*(struct Moby **)(hit + 0x20))->oclass != 0x367) {
         clear_u64_value(dir.f);
         FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
         FUN_L00_00257470(moby, 0, -1);
@@ -834,25 +845,25 @@ void FUN_L07_00319040(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         moby->flags |= 0x1000;
-        qcopy(vars + 0x60, &moby->pos);
+        qcopy(&vars->home, &moby->pos);
         moby->collision = moby->pclass->collision;
         moby->state = 1;
         break;
     case 1:
         timer = scale_ticks(600);
         turn = D_0015ED6C * 6.2831855f;
-        *(s32 *)(vars + 0x78) = timer;
+        vars->timeout = timer;
         moby->rot.z = FUN_001fa580(moby->rot.z, turn);
-        if ((*(struct Moby **)(vars + 0x38) != NULL &&
-             FUN_001f9b80(&moby->pos, &(*(struct Moby **)(vars + 0x38))->pos) < 20.0f &&
-             FUN_001f99c0(moby->pos.z - (*(struct Moby **)(vars + 0x38))->pos.z) < 3.0f) ||
+        if ((vars->target != NULL &&
+             FUN_001f9b80(&moby->pos, &(vars->target)->pos) < 20.0f &&
+             FUN_001f99c0(moby->pos.z - (vars->target)->pos.z) < 3.0f) ||
             (*(s32 *)(sight + 0x40) != 0 && FUN_001f9b48(&moby->pos, sight) < 8.0f)) {
-            *(f32 *)(vars + 0x70) = 0.0f;
-            *(s32 *)(vars + 0x78) = scale_ticks(600);
+            vars->speed = 0.0f;
+            vars->timeout = scale_ticks(600);
             moby->command = 1;
-            *(s32 *)(vars + 0x7c) = scale_ticks(7);
+            vars->bob_timer = scale_ticks(7);
             moby->state = 3;
-            if (*(s32 *)(vars + 0x74) != -1) FUN_L01_0026e0e0(*(s32 *)(vars + 0x74), 2);
+            if (vars->sound != -1) FUN_L01_0026e0e0(vars->sound, 2);
             moby->state = 2;
         }
         break;
@@ -864,47 +875,47 @@ void FUN_L07_00319040(struct Moby *moby) {
             FUN_00212f90(moby, 2, 0, 10);
         }
         speed = frame_time_sq;
-        new_speed = *(f32 *)(vars + 0x70) + speed * 30.0f;
+        new_speed = vars->speed + speed * 30.0f;
         max_speed = D_0015ED6C * 6.0f;
-        *(f32 *)(vars + 0x70) = new_speed;
+        vars->speed = new_speed;
         if (max_speed < new_speed)
-            *(f32 *)(vars + 0x70) = max_speed;
+            vars->speed = max_speed;
         if (moby->command == 1) {
             moby->pos.z += frame_scale * 0.1f;
-            if (tick_countdown_32_alt((s32 *)(vars + 0x7c))) {
-                *(s32 *)(vars + 0x7c) = scale_ticks(7);
+            if (tick_countdown_32_alt(&vars->bob_timer)) {
+                vars->bob_timer = scale_ticks(7);
                 moby->command = 2;
             }
         } else if (moby->command == 2) {
             moby->pos.z -= frame_scale * 0.1f;
-            if (tick_countdown_32_alt((s32 *)(vars + 0x7c))) moby->command = 0;
+            if (tick_countdown_32_alt(&vars->bob_timer)) moby->command = 0;
         }
         subtract_vector_xyz(&dir, sight, &moby->pos);
-        normalize_vector_xyz(&dir, &dir, *(f32 *)(vars + 0x70));
+        normalize_vector_xyz(&dir, &dir, vars->speed);
         add_vector_xyz(&moby->pos, &moby->pos, &dir);
-        if (!(FUN_001f9b48(&moby->pos, vars + 0x60) > 64.0f)) {
-            /* Keep the descriptor scale available across the contact probe. */
-            *(s32 *)&one = 0x3f800000;
-            stable_one = one.value;
-            make_hit_descriptor_19040(contact, moby, 0x10001, stable_one, &dir);
-            qcopy(&probe, &moby->pos);
-            probe.f[2] += 0.75f;
-            if (!probe_world_sphere(0.75f, &probe, 0x10, moby, contact) ||
-                D_L07_00173ED8 == NULL || D_L07_00173ED8->oclass == 0x363 ||
-                D_L07_00173ED8->oclass == 0x456 || D_L07_00173ED8->oclass == 0x458 ||
-                D_L07_00173ED8->oclass == 0x365 || D_L07_00173ED8->oclass == 0x367) {
-                qcopy(&probe, &moby->pos);
-                probe.f[2] += 0.55f;
-                if (coll_sphere(0.55f, &probe, 0, moby)) {
-                    subtract_vector_xyz(&push, &D_L07_00173EF0, &probe);
-                    add_vector_xyz(&moby->pos, &moby->pos, &push);
-                }
-                if (!tick_countdown_32_alt((s32 *)(vars + 0x78))) break;
-                /* The timeout path reloads the effect scale in retail. */
-                stable_one = 1.0f;
-            }
-            FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, stable_one, 2, 7.0f, 0, 1, -1, 0);
+        if (FUN_001f9b48(&moby->pos, &vars->home) > 64.0f) {
+            mark_moby_for_removal(moby);
+            return;
         }
+        make_hit_descriptor_19040(contact, moby, 0x10001, 1.0f, &dir);
+        qcopy(&probe, &moby->pos);
+        probe.f[2] += 0.75f;
+        if (probe_world_sphere(0.75f, &probe, 0x10, moby, contact) &&
+            D_L07_00173ED8 != NULL && D_L07_00173ED8->oclass != 0x363 &&
+            D_L07_00173ED8->oclass != 0x456 && D_L07_00173ED8->oclass != 0x458 &&
+            D_L07_00173ED8->oclass != 0x365 && D_L07_00173ED8->oclass != 0x367) {
+            FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
+            mark_moby_for_removal(moby);
+            return;
+        }
+        qcopy(&probe, &moby->pos);
+        probe.f[2] += 0.55f;
+        if (coll_sphere(0.55f, &probe, 0, moby)) {
+            subtract_vector_xyz(&push, &D_L07_00173EF0, &probe);
+            add_vector_xyz(&moby->pos, &moby->pos, &push);
+        }
+        if (!tick_countdown_32_alt(&vars->timeout)) break;
+        FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
         mark_moby_for_removal(moby);
         return;
     case 4:
@@ -912,7 +923,6 @@ void FUN_L07_00319040(struct Moby *moby) {
     }
     FUN_L00_00259fe8(moby, 0.7f);
 }
-#endif
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
