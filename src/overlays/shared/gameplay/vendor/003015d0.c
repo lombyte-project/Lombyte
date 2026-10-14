@@ -167,6 +167,7 @@ void FUN_L14_003017f8(char *m) {
     float length, t;
     float y;
     long offset;
+    u8 *indices;
     VendorBeamFrame *frame;
 
     D_L14_001600EC[*(int *)d].origin.f[3] = 1.0f;
@@ -202,19 +203,20 @@ void FUN_L14_003017f8(char *m) {
             }
         }
     }
+    indices = (u8 *)(d + 0x18);
     {
         int i;
         for (i = 0; i < 32; i++) {
-            if (i != 0 && i != 31) {
+            if (i == 0 || i == 31) {
+                qcopy(d + 0x20 + (i << 4), path_a[i]);
+                qcopy(d + 0x220 + (i << 4), path_b[i]);
+            } else {
                 add_vector_xyz(work, path_a[i - 1], path_a[i]);
                 add_vector_xyz(work, work, path_a[i + 1]);
                 scale_vector_xyz(d + 0x20 + (i << 4), work, 0.333f);
                 add_vector_xyz(work, path_b[i - 1], path_b[i]);
                 add_vector_xyz(work, work, path_b[i + 1]);
                 scale_vector_xyz(d + 0x220 + (i << 4), work, 0.333f);
-            } else {
-                qcopy(d + 0x20 + (i << 4), path_a[i]);
-                qcopy(d + 0x220 + (i << 4), path_b[i]);
             }
         }
     }
@@ -226,9 +228,9 @@ void FUN_L14_003017f8(char *m) {
             index = truncate_float_to_s32(random_float_between((float)i * 6.0f,
                 (float)next * 6.0f));
             index += 4;
-            d[0x18 + i] = index;
-            offset = (unsigned int)((i << 4) + (int)d);
-            qcopy((char *)offset + 0x420, d + 0x20 + (index << 4));
+            indices[i] = index;
+            offset = (i << 4) + (int)d;
+            qcopy(d + 0x420 + (i << 4), d + 0x20 + (index << 4));
             qcopy((char *)offset + 0x520, d + 0x220 + (index << 4));
             for (j = 2; j >= 0; j--) {
                 set_vector_xyz(delta_a, 0.1f, 0.1f);
@@ -259,14 +261,15 @@ void FUN_L14_003017f8(char *m) {
         }
         {
             int i;
+            float *point = delta_a;
             for (i = 0; i < 2; i++) {
                 transform_vector(work, d + 0x4e0 + (i << 4), matrix);
                 qcopy(delta_a, d + 0x5e0 + (i << 4));
                 delta_a[3] = D_L14_00162114;
                 random_integer_below(2);
                 index = random_integer_below(10);
-                spawn_spark(work, delta_a, delta_a, D_L14_00162108,
-                    D_L14_0016210C, (unsigned char)d[0x18 + i] >> 1, 15,
+                spawn_spark(work, point, point, D_L14_00162108,
+                    D_L14_0016210C, indices[i] >> 1, 15,
                     scale_game_frames(index + 20), D_L14_00162120);
             }
         }
