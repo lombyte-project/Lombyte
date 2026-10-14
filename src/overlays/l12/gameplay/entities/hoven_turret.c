@@ -1587,6 +1587,8 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
+extern struct Moby *D_L12_0015FFD8_abs __asm__("D_L12_0015FFD8") __attribute__((section(".data")));
+
 void FUN_L12_00306828(struct Moby *moby) {
     int i;
     int alpha = 0x80000000;
@@ -1602,10 +1604,10 @@ void FUN_L12_00306828(struct Moby *moby) {
         int packed_color;
         float phase;
         float divisor;
-        if (i >= 17) {
+        if (i == 17) {
             other = moby;
         } else {
-            other = (struct Moby *)(((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8) + (unsigned int)D_L12_0015FFD8_p);
+            other = (struct Moby *)(((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8) + (unsigned int)D_L12_0015FFD8_abs);
         }
         if (other->oclass != 0x4FE) {
             period = scale_ticks(0xAA);
