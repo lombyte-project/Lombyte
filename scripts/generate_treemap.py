@@ -1043,8 +1043,8 @@ def render_svg(
     lines.append(
         f'<g clip-path="url(#drawer-clip)" mask="url(#glass-mask)" pointer-events="none">'
         f'<use href="#boot-tiles" filter="url(#glass)" opacity="0.24"/>'
-        f'<rect x="{cx - grx:.1f}" y="{dy0}" width="{2 * grx:.1f}" height="{ddy}" fill="{PLATE}" fill-opacity="0.7"/>'
-        f'<ellipse cx="{cx:.1f}" cy="{cy + 4:.1f}" rx="{grx * 0.8:.1f}" ry="{gry:.1f}" fill="url(#panel-glow)"/></g>'
+        f'<rect x="{cx - grx:.1f}" y="{dy0}" width="{2 * grx:.1f}" height="{ddy}" fill="{PANEL_FACE_TOP}" fill-opacity="0.92"/>'
+        f'<ellipse cx="{cx:.1f}" cy="{cy + 4:.1f}" rx="{grx * 0.8:.1f}" ry="{gry:.1f}" fill="url(#panel-glow)" opacity="0.7"/></g>'
     )
     lines.append(
         f'<text x="{dx0 + 12}" y="{dy0 + 17}" font-family="{esc(FONT)}" font-size="10" '
