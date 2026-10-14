@@ -1282,8 +1282,9 @@ set_idle:
         angle = FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
         FUN_L08_00262778(angle, 0.02f, 0.3f, 0.2f, moby, d + 0x12c);
         if (distance < 20.0f && 8.0f < distance && FUN_001f9740((int *)(d + 0x128))) {
-            angle = FUN_001f9e90(moby->pos.x - *(float *)(camera_state_bytes + 0x140), moby->pos.y - *(float *)(camera_state_bytes + 0x144));
-            if (fast_difference_between_rotations(*(float *)(camera_state_bytes + 0x158), angle) < 0.55850536f) goto begin_attack;
+            old = camera_state_bytes;
+            angle = FUN_001f9e90(moby->pos.x - *(float *)(old + 0x140), moby->pos.y - *(float *)(old + 0x144));
+            if (fast_difference_between_rotations(*(float *)(old + 0x158), angle) < 0.55850536f) goto begin_attack;
         }
         if (!*(int *)(d + 0x38) || !(0.5f < distance)) break;
 begin_attack:
@@ -1302,8 +1303,9 @@ begin_attack:
             FUN_L08_002635a0(moby, d + 0xd0, point, d + 0x40);
         if (!(moby->anim_flags & 2)) break;
         if (FUN_001f9b80(&moby->pos, &target->pos) < 6.0f) goto select_target;
-        angle = FUN_001f9e90(moby->pos.x - *(float *)(camera_state_bytes + 0x140), moby->pos.y - *(float *)(camera_state_bytes + 0x144));
-        if (!(0.55850536f < fast_difference_between_rotations(*(float *)(camera_state_bytes + 0x158), angle))) goto fire_animation;
+        old = camera_state_bytes;
+        angle = FUN_001f9e90(moby->pos.x - *(float *)(old + 0x140), moby->pos.y - *(float *)(old + 0x144));
+        if (!(0.55850536f < fast_difference_between_rotations(*(float *)(old + 0x158), angle))) goto fire_animation;
 select_target:
         old = *(char **)(d + 0x120);
         next = FUN_L08_002daa10(moby);
