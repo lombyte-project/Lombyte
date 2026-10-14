@@ -2459,9 +2459,9 @@ void FUN_L00_002ce358(struct Moby *m)
         (*(u8 *)((u8 *)&hero + 0x1ff4))++;
         if (hero.ammo_used < *(u8 *)((u8 *)&hero + 0x1ff4)) {
             f32 distance;
+            closest = 0;
             count = 0;
             distance = 1000000.0f;
-            closest = 0;
             *(u8 *)((u8 *)&hero + 0x1ff4) = 1;
             *(u8 *)((u8 *)&hero + 0x1ff7) = 0;
             *(f32 *)((u8 *)&hero + 0x1ff8) = FUN_002000e8_2ce358(*(f32 *)((u8 *)&hero + 0x1ff8), frame_scale * 0.05f);
@@ -2574,8 +2574,9 @@ state2:
         m->collision = 0;
         qcopy(&old_pos, &m->pos);
         FUN_L00_002cde78((char *)m);
-        m->scale += (m->pclass->scale - m->scale) * (frame_scale * 0.05f);
-        v->strength = v->strength + (1.0f - v->strength) * (frame_scale * 0.05f);
+        f = frame_scale * 0.05f;
+        m->scale += (m->pclass->scale - m->scale) * f;
+        v->strength = v->strength + (1.0f - v->strength) * f;
         f = FUN_002000e8_2ce358(v->desired_yaw, *(f32 *)((u8 *)&hero + 0x1ff8));
         distance = FUN_00200130_2ce358(f, v->yaw);
         v->yaw = FUN_002000e8_2ce358(v->yaw, distance * (frame_scale * 0.05f));
@@ -2645,10 +2646,11 @@ update_rotations:
     }
 state3:
     {
-        m->collision = m->pclass->collision;
+        struct MobyClass *pclass = m->pclass;
+        m->collision = pclass->collision;
         qcopy(&old_pos, &m->pos);
-        m->scale += (m->pclass->scale - m->scale) * (frame_scale * 0.05f);
-        m->collision = m->pclass->collision;
+        m->scale += (pclass->scale - m->scale) * (frame_scale * 0.05f);
+        m->collision = pclass->collision;
         FUN_L00_002cde78((char *)m);
         target = v->target;
         if (target == 0 || target->oclass != v->target_oclass || target->state == 0xfe || target->state == 0xfd)
