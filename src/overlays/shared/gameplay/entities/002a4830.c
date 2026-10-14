@@ -304,9 +304,8 @@ void FUN_L00_002a5040(u8 *moby) {
     s32 *indices;
     extern f32 points[] __asm__("D_L00_001D7360");
     f32 *uvs;
-    f32 *uvs_y;
     u32 *colors;
-    f32 x, y, z, phase, angle;
+    f32 phase, angle;
     f32 uv0, uv1, uv2, uv3;
     f32 u0, u1, u2, u3;
     s32 index;
@@ -328,15 +327,16 @@ void FUN_L00_002a5040(u8 *moby) {
     quad.draw = 0;
     i = 0;
     indices = (s32 *)0x1d7460;
-    quad.texture = get_effect_texture(0x18);
     basis0 = &basis[0];
+    quad.texture = get_effect_texture(0x18);
     basis1 = &basis[1];
     basis2 = &basis[2];
     basis3 = &basis[3];
     uvs = (f32 *)0x1d73f0;
-    uvs_y = (f32 *)0x1d73f4;
     colors = (u32 *)0x1d7438;
     do {
+        f32 x, y, z;
+        f32 *uvs_y = points + 37;
         index = i++ * 4;
         transform_point_2a5040(basis0, points + indices[0] * 4, matrix);
         indices1 = (s32 *)0x1d7464 + index;
@@ -353,7 +353,6 @@ void FUN_L00_002a5040(u8 *moby) {
         quad.corners[0].y = y + basis[0].y * vars->scale;
         quad.corners[2].z = z + basis[2].z;
         z = z + basis[3].z;
-        quad.corners[3].z = z;
         quad.corners[1].x = x + basis[1].x * vars->scale;
         quad.corners[1].y = y + basis[1].y * vars->scale;
         quad.corners[2].x = x + basis[2].x * vars->scale;
@@ -362,6 +361,7 @@ void FUN_L00_002a5040(u8 *moby) {
         quad.corners[3].x = x;
         y = y + basis[3].y * vars->scale;
         quad.corners[3].y = y;
+        quad.corners[3].z = z;
         index1 = *indices1;
         index2 = *indices2;
         index = indices[0];
@@ -430,21 +430,24 @@ void FUN_L00_002a5040(u8 *moby) {
     transform_point_2a5040(basis1, &orbit_copy[1], matrix);
     transform_point_2a5040(basis2, &orbit_copy[2], matrix);
     transform_point_2a5040(basis3, &orbit_copy[3], matrix);
-    x = *(f32 *)(moby + 0x10);
-    y = *(f32 *)(moby + 0x14);
-    z = *(f32 *)(moby + 0x18);
-    quad.corners[0].x = x + basis[0].x;
-    quad.corners[0].y = y + basis[0].y;
-    quad.corners[0].z = z + basis[0].z;
-    quad.corners[1].x = x + basis[1].x;
-    quad.corners[1].y = y + basis[1].y;
-    quad.corners[1].z = z + basis[1].z;
-    quad.corners[2].x = x + basis[2].x;
-    quad.corners[2].y = y + basis[2].y;
-    quad.corners[2].z = z + basis[2].z;
-    quad.corners[3].x = x + basis[3].x;
-    quad.corners[3].y = y + basis[3].y;
-    quad.corners[3].z = z + basis[3].z;
+    {
+        f32 x, y, z;
+        x = *(f32 *)(moby + 0x10);
+        y = *(f32 *)(moby + 0x14);
+        z = *(f32 *)(moby + 0x18);
+        quad.corners[0].x = x + basis[0].x;
+        quad.corners[0].y = y + basis[0].y;
+        quad.corners[0].z = z + basis[0].z;
+        quad.corners[1].x = x + basis[1].x;
+        quad.corners[1].y = y + basis[1].y;
+        quad.corners[1].z = z + basis[1].z;
+        quad.corners[2].x = x + basis[2].x;
+        quad.corners[2].y = y + basis[2].y;
+        quad.corners[2].z = z + basis[2].z;
+        quad.corners[3].x = x + basis[3].x;
+        quad.corners[3].y = y + basis[3].y;
+        quad.corners[3].z = z + basis[3].z;
+    }
     color = ((u32)(s32)((1.0f - D_L00_00161398_2a5040) * 128.0f) << 24) | 0x808080;
     quad.color[3] = color;
     quad.color[0] = color;
