@@ -128,7 +128,8 @@ void FUN_L15_002d6810(unsigned char *moby) {
     int *triggers;
     int *p;
     int *best;
-    int count, i, index, found, active, color, ready = 1;
+    int count, i, index, found, active, color;
+    long ready = 1;
     char *target, *other;
     float distance, next_distance, radius, angle, rotation;
     unsigned short id;
@@ -234,7 +235,7 @@ next_path:      i -= 8; p += 8;
             shot.pos[0] = fast_cos(*(float *)(moby + 0x48)) * 0.2f;
             shot.pos[1] = fast_sin(*(float *)(moby + 0x48)) * 0.2f; shot.pos[2] = 0.0f;
             FUN_001f9c48(1.0f, shot.pos, shot.pos);
-            shot.oclass = *(unsigned short *)(moby + 0xa6); shot.type = 1;
+            shot.type = 1; shot.oclass = *(unsigned short *)(moby + 0xa6);
             shot.pos[2] = 1.0f; shot.pos[3] = 5627.9248046875f; shot.state = 0;
             FUN_L00_00259a88((int)hero.moby, &shot);
             if ((unsigned char)moby[0x20] == 2) {
