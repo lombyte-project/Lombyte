@@ -152,7 +152,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     right_x = 0x7200;
     strip_index = 0;
     do {
-        *packet_word++ = strip_index * 0x200;
+        *(u64 *)packet_word++ = strip_index * 0x200;
         strip_index++;
         *packet_word++ =
             left_x | ((u64)(0x8000 - (active_fs_aa_buffer->display_height << 3)) << 16);
