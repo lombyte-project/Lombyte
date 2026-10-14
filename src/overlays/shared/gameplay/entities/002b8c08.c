@@ -2647,7 +2647,10 @@ reset_timer:
             path = D_L01_001B0930[path_state->path_id];
             if (FUN_00221360_2f5168(path + 0x10, path + (*(int *)path << 4)) < 0.5f) --*(int *)path;
         } else {
-            FUN_0020cc78_2f5168((void *)0x0020b3e0, H2(moby, 0xa6), FUN_00222160_2f5168((float)(((int)moby - (int)D_L01_0015FFD8) >> 8)));
+            path = (char *)0x0020b3e0;
+            type = H2(moby, 0xa6);
+            index = FUN_00222160_2f5168((float)(((int)moby - (int)D_L01_0015FFD8) >> 8));
+            FUN_0020cc78_2f5168(path, type, index);
         }
         B2(moby, 0x30) = 0xff;
         H2(data, 0x11e) = -1;
