@@ -26,6 +26,8 @@ Data is matched when C defines it and a proof checks it: an entry in
 `RODATA_OVERLAYS`, `SDATA_OVERLAYS` or `DATA_OVERLAYS` (`configure.py`) links
 the unit's section in place of the blob bytes, so the boot ELF hash covers it;
 a level object in `config/overlays/us/data.tsv` is compared by `make overlays`.
+A `D_XXXXXXXX` row counts in every level. `decomp_map.json` also gives
+`bytes_matching_c_zero`: the part of the matched data that is zeros.
 
 ## Exact bytes are not enough: the source must be C
 
