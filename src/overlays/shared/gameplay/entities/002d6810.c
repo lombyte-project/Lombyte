@@ -106,7 +106,7 @@ extern float D_L15_00161BC8 __attribute__((sda));
 extern float D_L15_00161BCC __attribute__((sda));
 extern float D_L15_00161BD0 __attribute__((sda));
 extern unsigned char D_L15_0015F444, D_L15_0015F445, D_L15_0015F446;
-extern float D_L15_0015F448, D_L15_0015F44C, D_L15_0015F450, D_L15_0015F454;
+extern float D_L15_0015F448, D_L15_0015F44C, D_L15_0015F450, D_L15_0015F454 __attribute__((section(".data")));
 extern int D_L15_0015F448_gp __asm__("D_L15_0015F448") __attribute__((sda));
 extern int D_L15_0015F454_gp __asm__("D_L15_0015F454") __attribute__((sda));
 extern int current_level_index __asm__("D_0015ED84") __attribute__((sda));
@@ -133,7 +133,7 @@ void FUN_L15_002d6810(unsigned char *moby) {
     float distance, next_distance, radius, angle, rotation;
     unsigned short id;
     unsigned int *bits;
-    if ((unsigned char)moby[0x20] != 0 && !is_point_inside_clip_volume(D_0013F3D0, DATA_INT(0x124))) {
+    if ((unsigned char)moby[0x20] != 0 && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x124))) {
         if (DATA_INT(0x84)) { STOP_VOICE(0x14); STOP_VOICE(0x80); }
         if (DATA_INT(0x120) != -1) { FUN_L00_0023e838(DATA_INT(0x120)); DATA_INT(0x120) = -1; }
         return;
@@ -169,7 +169,7 @@ void FUN_L15_002d6810(unsigned char *moby) {
         }
         triggers = (int *)((char *)data + 0x60);
         for (i = 0; i < 12; i++) {
-            if (is_point_inside_clip_volume(D_0013F3D0, ((int *)data)[i + 8])) { found = 1; break; }
+            if (is_point_inside_clip_volume(&hero.motion.pos, ((int *)data)[i + 8])) { found = 1; break; }
         }
         p = (int *)((char *)data + 0x74);
         if ((unsigned char)moby[0x20] == 2) {
@@ -182,8 +182,8 @@ void FUN_L15_002d6810(unsigned char *moby) {
             do {
                 if (*p != -1) {
                     if (best) {
-                        distance = FUN_001f9b48(D_L15_001600EC + *best * 0x80 + 0x30, D_0013F3D0);
-                        next_distance = FUN_001f9b48(D_L15_001600EC + *p * 0x80 + 0x30, D_0013F3D0);
+                        distance = FUN_001f9b48(D_L15_001600EC + *best * 0x80 + 0x30, &hero.motion.pos);
+                        next_distance = FUN_001f9b48(D_L15_001600EC + *p * 0x80 + 0x30, &hero.motion.pos);
                         if (!(next_distance < distance)) goto next_path;
                     }
                     best = p;
@@ -211,10 +211,10 @@ next_path:      i -= 8; p += 8;
             }
         }
         if (found && active) {
-            if (DATA_INT(0x84) && DATA_INT(0x84) != D_001413D0) { STOP_VOICE(0x14); STOP_VOICE(0x80); }
-            DATA_INT(0x84) = D_001413D0;
-            DATA_INT(0x14) = FUN_L00_0028dc90(0, 4, D_001413D0, 0x28f);
-            DATA_INT(0x80) = FUN_L00_0028dc90(1, 4, D_001413D0, 0x28f);
+            if (DATA_INT(0x84) && DATA_INT(0x84) != (int)hero.moby) { STOP_VOICE(0x14); STOP_VOICE(0x80); }
+            DATA_INT(0x84) = (int)hero.moby;
+            DATA_INT(0x14) = FUN_L00_0028dc90(0, 4, (int)hero.moby, 0x28f);
+            DATA_INT(0x80) = FUN_L00_0028dc90(1, 4, (int)hero.moby, 0x28f);
             if (DATA_INT(0x1c) == 0) {
                 float x = D_L15_0015F448, y = D_L15_0015F44C, z = D_L15_0015F450, w = D_L15_0015F454;
                 DATA_FLOAT(0x50) = x; DATA_FLOAT(0x54) = y; DATA_FLOAT(0x58) = z; DATA_FLOAT(0x5c) = w;
@@ -226,17 +226,17 @@ next_path:      i -= 8; p += 8;
             D_L15_0015F450 = random_float_between(128.0f, 255.0f); D_L15_0015F454_gp = 0;
             radius = random_float_between(5.0f, 8.0f); angle = random_angle_radians(); rotation = random_angle_radians();
             build_spherical_offset((char *)data + 0x110, radius, angle, rotation);
-            FUN_L00_001ff290(vector, (char *)data + 0x110, D_0013F420);
+            FUN_L00_001ff290(vector, (char *)data + 0x110, &hero.motion.unkD0);
             *(u128 *)((char *)data + 0x100) = *(u128 *)((char *)data + 0x110);
-            *(u128 *)((char *)data + 0xf0) = *(u128 *)D_0013F420;
+            *(u128 *)((char *)data + 0xf0) = *(u128 *)&hero.motion.unkD0;
             FUN_L15_002d79e8((char *)moby); FUN_L15_002d7bb0((struct Moby *)moby); FUN_001f4600(FUN_L15_002d8710, moby);
             shot.owner = (int)moby; shot.flags = 0x10001; shot.scale = 1.0f;
             shot.pos[0] = fast_cos(*(float *)(moby + 0x48)) * 0.2f;
             shot.pos[1] = fast_sin(*(float *)(moby + 0x48)) * 0.2f; shot.pos[2] = 0.0f;
             FUN_001f9c48(1.0f, shot.pos, shot.pos);
             shot.oclass = *(unsigned short *)(moby + 0xa6); shot.type = 1;
-            shot.pos[2] = 1.0f; *(int *)&shot.pos[3] = 0x45afdf66; shot.state = 0;
-            FUN_L00_00259a88(D_001413D0, &shot);
+            shot.pos[2] = 1.0f; shot.pos[3] = 5627.9248046875f; shot.state = 0;
+            FUN_L00_00259a88((int)hero.moby, &shot);
             if ((unsigned char)moby[0x20] == 2) {
                 float x = DATA_FLOAT(0x50), y = DATA_FLOAT(0x54), z = DATA_FLOAT(0x58), w = DATA_FLOAT(0x5c);
                 D_L15_0015F448 = x; D_L15_0015F44C = y; D_L15_0015F450 = z; D_L15_0015F454 = w;
@@ -271,7 +271,7 @@ next_path:      i -= 8; p += 8;
                 p++;
             } while (--i >= 0);
             DATA_INT(0x8c) = ready;
-            if (!FUN_001f9770((char *)data + 0x12) && !(is_point_inside_clip_volume(D_0013F3D0, DATA_INT(0x70)) && D_0013F65E == 0) && !is_point_inside_clip_volume(D_0013F3D0, DATA_INT(0x128))) goto finish;
+            if (!FUN_001f9770((char *)data + 0x12) && !(is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x70)) && D_0013F65E == 0) && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x128))) goto finish;
             p = (int *)data; i = 3;
             do { if (*p != -1) { other = moby_array + *p * 0x100; if (*(short *)(other + 0xa6) == 0x33e) other[0x20] = 1; else FUN_L15_002d95a0(other); } p++; } while (--i >= 0);
             RESET_TIMERS(); goto finish;
@@ -315,7 +315,7 @@ next_moby: p++;
     } while (--i >= 0);
 finish:
     p = triggers; i = 3;
-    do { if (is_point_inside_clip_volume(D_0013F3D0, *p) && FUN_L00_0020d568()) D_0013F640 = *(float *)(entity_array + *p * 0x80 + 0x38); p++; } while (--i >= 0);
+    do { if (is_point_inside_clip_volume(&hero.motion.pos, *p) && FUN_L00_0020d568()) D_0013F640 = *(float *)(entity_array + *p * 0x80 + 0x38); p++; } while (--i >= 0);
 }
 #undef DATA_INT
 #undef DATA_SHORT
