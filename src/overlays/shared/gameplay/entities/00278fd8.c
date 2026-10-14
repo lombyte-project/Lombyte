@@ -2349,16 +2349,18 @@ int FUN_L15_002a3138(unsigned char *moby) {
             first.col[0] = second.col[2];
         }
         nextPass = pass + 1;
+        pass *= 8;
         for (corner = 0; corner < 4; corner++) {
             float *uv = firstUv[corner];
-            float *frequency = D_L15_001CE250[pass];
-            int waveform = pass * 8;
+            float *frequency = (float *)((char *)D_L15_001CE250 + pass);
+            int waveform = pass;
             int base = corner * 8;
             axis = 1;
             do {
                 int limit, value;
                 float angle, delta;
                 float step;
+                float radians;
                 axis--;
                 limit = truncate_float_2a3138(*frequency * 360.0f);
                 angle = integer_to_float_2a3138(*(int *)0x0015f3f8 % limit)
@@ -2366,11 +2368,12 @@ int FUN_L15_002a3138(unsigned char *moby) {
                 frequency++;
                 value = *(int *)((char *)D_L15_001CE290 + waveform);
                 waveform += 4;
+                radians = 0.017453292f;
                 step = 0.125f;
                 if (value != 0) {
-                    delta = fast_cos_2a3138(angle * 0.017453292f) * step;
+                    delta = fast_cos_2a3138(angle * radians) * step;
                 } else {
-                    delta = fast_sin_2a3138(angle * 0.017453292f) * step;
+                    delta = fast_sin_2a3138(angle * radians) * step;
                 }
                 *uv++ = *(float *)((char *)D_L15_001CE2D0 + base) + delta;
                 base += 4;
