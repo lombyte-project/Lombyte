@@ -371,7 +371,7 @@ state_three:
         {
             float acceleration = frame_time_sq * 10.0f;
             float threshold = frame_time + frame_time;
-            *(float *)(moby + 0x18) = height + speed;
+            *(float *)(moby + 0x18) = speed + height;
             {
                 float speed = *(float *)(data + 0x78) - acceleration;
                 *(float *)(data + 0x78) = speed;
