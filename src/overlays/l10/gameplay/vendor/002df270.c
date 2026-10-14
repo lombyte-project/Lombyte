@@ -1455,21 +1455,22 @@ extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void FUN_00218888(void *, void *, void *, s32, s32, s32, s32, s32, s32);
 
 /* The burst count is captured once; the inner count is reread after each emission. */
-extern f32 multiply_global_factor_ed64_2e3a90(f32) __asm__("func_001F96B0");
+extern f32 multiply_global_factor_ed64_2e3a90(f32) __asm__("FUN_L10_001f2578");
 
 void FUN_L10_002e3a90(void *arg)
 {
-    f32 position[4] __attribute__((aligned(16)));
-    f32 velocity[4] __attribute__((aligned(16)));
-    f32 acceleration[4] __attribute__((aligned(16)));
     f32 offset[4] __attribute__((aligned(16)));
+    f32 acceleration[4] __attribute__((aligned(16)));
+    f32 velocity[4] __attribute__((aligned(16)));
+    f32 position[4] __attribute__((aligned(16)));
     Moby *moby = (Moby *)arg;
-    u8 * volatile pvars = moby->pvars;
     s32 count = D_L10_00161E74;
+    u8 * volatile pvars = moby->pvars;
     s32 i = 0;
     s32 j;
     f32 angle, speed, vertical_speed, size;
     s32 color, color2, a, b;
+    f32 vertical_velocity;
 
     if (count > 0) {
         Vec4 *moby_position = (Vec4 *)&moby->pos;
@@ -1486,8 +1487,10 @@ void FUN_L10_002e3a90(void *arg)
                 position[2] -= 0.2f;
             }
             velocity[0] = fast_cos(angle) * (speed * D_0015ED6C);
-            velocity[1] = fast_sin(angle) * (speed * D_0015ED6C);
-            velocity[2] = vertical_speed * D_0015ED6C + 0.0f;
+            size = fast_sin(angle);
+            vertical_velocity = vertical_speed * D_0015ED6C + 0.0f;
+            velocity[1] = size * (speed * D_0015ED6C);
+            velocity[2] = vertical_velocity;
             scale_vector_xyz(offset, (f32 *)(pvars + 0x70), 0.5f);
             offset[2] = 0.0f;
             fast_vec_add(velocity, velocity, offset);
