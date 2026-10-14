@@ -1452,7 +1452,9 @@ void FUN_L12_003069d0(struct Moby *moby) {
         angle = FUN_001f9e90(*(float *)(row + (next + 1) * 16) - *(float *)(row + (*(short *)(data + 0x5f8) + 1) * 16),
                              *(float *)(row + (next + 1) * 16 + 4) - *(float *)(row + (*(short *)(data + 0x5f8) + 1) * 16 + 4));
         if (*(int *)row - 20 < *(short *)(data + 0x5f8)) angle = 3.054326f;
-        FUN_L00_00258278(moby, data + 0x5f4, angle, frame_scale_sq * 0.0015f, frame_scale_sq * 0.3f, frame_time * 0.17453292f);
+        distance = frame_scale_sq;
+        height = frame_time;
+        FUN_L00_00258278(moby, data + 0x5f4, angle, distance * 0.0015f, distance * 0.3f, height * 0.17453292f);
         distance = FUN_001f9b80(&moby->pos, row + (*(short *)(data + 0x5f8) + 1) * 16);
         if (!(distance < 5.0f)) {
             angle = FUN_001f9e90(*(float *)(row + (*(short *)(data + 0x5f8) + 1) * 16) - moby->pos.x,
