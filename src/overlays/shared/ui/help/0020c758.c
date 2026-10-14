@@ -1030,11 +1030,11 @@ void FUN_L00_0020e728(void) {
         if (*slot != 0) {
             int id = FUN_L00_0020d498_c(0);
             if (id == hero_state->unk2298) {
-                u32 anim;
+                s64 anim;
                 ID_20e4c8 *definition = &D_L00_00179AC0_c[id];
-                anim = definition->f28;
+                anim = (s32)definition->f28;
                 if (hero_state->state.control_mode == 12)
-                    anim = definition->f2C;
+                    anim = (s32)definition->f2C;
                 if (anim != -1 && (*slot)[0x23] != anim) {
                     hero_state->unk2294 = anim;
                     FUN_L00_0024f3e0((u8 *)hero_state->moby, *slot, hero_state->unk2294, 0,
