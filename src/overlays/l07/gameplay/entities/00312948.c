@@ -538,17 +538,13 @@ void FUN_L07_00314058(char *moby) {
     }
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00314150.s", FUN_L07_00314150);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00317910.s", FUN_L07_00317910);
-#else
 extern u64 get_effect_texture_l07(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister_l07(int, u64) __asm__("FUN_00233980");
 extern void draw_geometry_quad_l07(void *, int, int) __asm__("FUN_001f7d30");
 extern float D_L07_00161B74 __attribute__((sda));
 extern float D_L07_00161B78 __attribute__((sda));
 extern float D_L07_00161B7C __attribute__((sda));
-extern RopeVec D_L07_0020DAF0_c[] __asm__("D_L07_0020DAF0");
-extern RopeVec D_L07_0020DB00_c[] __asm__("D_L07_0020DB00");
+extern RopeVec rope_grid_317910[][20] __asm__("D_L07_0020DBE0");
 extern short D_L07_0020DBC8[];
 
 typedef struct {
@@ -558,17 +554,16 @@ typedef struct {
     u64 header[4];
 } L07RopeDrawPacket;
 
+/* Draws the rope grid as textured quads between neighbouring rows, each row faded by its level. */
 void FUN_L07_00317910(void) {
     L07RopeDrawPacket packet;
     float phase;
     float row_phase;
-    float next_phase;
+    float end_phase;
     int row;
     int column;
-    int next_column;
+    int k;
     int color;
-    int alpha;
-    int row_offset;
     float phase_step;
     float column_step;
 
@@ -584,34 +579,23 @@ void FUN_L07_00317910(void) {
     phase += phase_step;
     column_step = 0.05f;
     vu1_add_g_sregister_l07(0x4e, (depth_buffer_address >> 13) | 0x1000000 | ((u64)0x8000 << 17));
-
     for (row = 1; row < 10; row++) {
         row_phase = D_L07_00161B78;
         D_L07_00161B78 += D_L07_00161B7C;
         if (D_L07_00161B78 > 7.0f) D_L07_00161B78 -= 7.0f;
-        row_offset = row * 0x140;
         for (column = 0; column < 20; column++) {
-            float end_phase = row_phase + column_step;
-            qcopy(packet.pos[0], (char *)&D_L07_0020DB00_c[14] + row_offset + (column << 4));
-            next_column = (column + 1) % 20;
-            qcopy(packet.pos[1], (char *)&D_L07_0020DB00_c[14] + row_offset + (next_column << 4));
-            qcopy(packet.pos[2], (char *)&D_L07_0020DAF0_c[-5] + row_offset + (column << 4));
-            qcopy(packet.pos[3], (char *)&D_L07_0020DAF0_c[-5] + row_offset + (next_column << 4));
-            {
-                u32 previous = (u32)(u16)D_L07_0020DBC8[row - 1] << 16;
-                s32 current = D_L07_0020DBC8[row];
-                s32 j;
-                u32 *color_out = packet.color;
-                for (j = 1; j >= 0; j--) {
-                    alpha = current;
-                    if (alpha < 0) alpha = 0;
-                    if (alpha > 64) alpha = 64;
-                    color = ((u32)alpha << 24) | 0x404040;
-                    color_out[0] = color;
-                    color_out[1] = color;
-                    current = (s32)previous >> 16;
-                    color_out += 2;
-                }
+            qcopy(packet.pos[0], rope_grid_317910[row][column]);
+            qcopy(packet.pos[1], rope_grid_317910[row][(column + 1) % 20]);
+            qcopy(packet.pos[2], rope_grid_317910[row - 1][column]);
+            qcopy(packet.pos[3], rope_grid_317910[row - 1][(column + 1) % 20]);
+            end_phase = row_phase + column_step;
+            color = D_L07_0020DBC8[row];
+            for (k = 0; k < 2; k++) {
+                if (color < 0) color = 0;
+                if (color > 64) color = 64;
+                color = (color << 24) | 0x404040;
+                packet.color[k * 2 + 1] = packet.color[k * 2] = color;
+                color = D_L07_0020DBC8[row - 1];
             }
             if (row == 1) {
                 packet.color[3] = 0x20404040;
@@ -636,7 +620,6 @@ void FUN_L07_00317910(void) {
     vu1_add_g_sregister_l07(0x4e, (s64)(depth_buffer_address >> 13) | 0x1000000);
     vu1_add_g_sregister_l07(0x47, 0x5360b);
 }
-#endif
 
 extern int D_L07_00161B6C_c __asm__("D_L07_00161B6C") __attribute__((sda));
 extern int D_L07_00161B70_c __asm__("D_L07_00161B70") __attribute__((sda));
