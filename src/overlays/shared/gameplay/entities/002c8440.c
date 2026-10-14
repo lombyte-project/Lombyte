@@ -667,17 +667,17 @@ void FUN_L00_002c97e0(struct Moby *m)
         if (s2->unk74 == 0) {
             for (i = 0; i < (s32)FUN_001fa6d0_2c97e0(scale) * 20; i++) {
                 f = random_float_between(0.0f, 0.37f) * scale;
-                g = FUN_L00_00257cb0_2c97e0(); h = FUN_L00_00257cb0_2c97e0();
-                build_spherical_offset_2c97e0(&offset, f, g, h);
+                g = FUN_L00_00257cb0_2c97e0();
+                build_spherical_offset_2c97e0(&offset, f, g, FUN_L00_00257cb0_2c97e0());
                 offset.f[2] += random_float_between(0.25f, 0.5f) * scale;
                 add_vector_xyz_2c8440(&offset, &offset, &old_pos);
                 f = random_float_between(D_0015ED6C_2c8440 * 0.1f, D_0015ED6C_2c8440) * scale;
                 g = FUN_L00_00257cb0_2c97e0(); h = FUN_L00_00257cb0_2c97e0();
                 build_spherical_offset_2c97e0(&velocity, f, g, h);
-                f = scale * 150000.0f;
+                g = scale * 150000.0f;
                 a = scale_game_frames(30); b = scale_game_frames(57);
                 a = FUN_L00_00257b90(a, b);
-                FUN_L00_0026ced0_2c97e0(&offset, &velocity, 0x3f7f7f7f, 0x2f2f2f, a, f);
+                FUN_L00_0026ced0_2c97e0(&offset, &velocity, 0x3f7f7f7f, 0x2f2f2f, a, g);
             }
         } else {
             offset.q = 0;
@@ -696,11 +696,10 @@ void FUN_L00_002c97e0(struct Moby *m)
         }
         if (count > 0) {
             rotation = 0.017453292f;
-            do {
-                count--;
+            for (; count > 0; count--) {
                 f = random_float_between(D_L00_00161868_2c97e0, D_L00_0016186C_2c97e0) * scale;
-                g = FUN_L00_00257cb0_2c97e0(); h = FUN_L00_00257cb0_2c97e0();
-                build_spherical_offset_2c97e0(&offset, f, g, h);
+                g = FUN_L00_00257cb0_2c97e0();
+                build_spherical_offset_2c97e0(&offset, f, g, FUN_L00_00257cb0_2c97e0());
                 offset.f[2] += D_L00_00161864_2c97e0 * scale;
                 add_vector_xyz_2c8440(&offset, &offset, &old_pos);
                 f = random_float_between(D_L00_0016185C_2c97e0 * D_0015ED6C_2c8440, D_L00_00161860_2c97e0 * D_0015ED6C_2c8440);
@@ -708,7 +707,7 @@ void FUN_L00_002c97e0(struct Moby *m)
                 build_spherical_offset_2c97e0(&velocity, f, g, D_L00_00161858_2c97e0 * rotation);
                 velocity.f[2] = random_float_between(3.5f, 5.5f) * D_0015ED6C_2c8440;
                 FUN_L00_002cbf68_2c97e0(m, &offset, &velocity);
-            } while (count != 0);
+            }
         }
         FUN_0022da68_c(1, 0, m);
         if (s2->unk70 >= 0) goto remove;
@@ -852,8 +851,8 @@ animate:
         if (FUN_L00_00257b50_2c97e0(4)) return;
         rotation = 0.017453292f;
         f = random_float_between(D_L00_00161868_2c97e0, D_L00_0016186C_2c97e0) * scale;
-                g = FUN_L00_00257cb0_2c97e0(); h = FUN_L00_00257cb0_2c97e0();
-                build_spherical_offset_2c97e0(&offset, f, g, h);
+                g = FUN_L00_00257cb0_2c97e0();
+                build_spherical_offset_2c97e0(&offset, f, g, FUN_L00_00257cb0_2c97e0());
                 offset.f[2] += D_L00_00161864_2c97e0 * scale;
                 add_vector_xyz_2c8440(&offset, &offset, &old_pos);
                 f = random_float_between(D_L00_0016185C_2c97e0 * D_0015ED6C_2c8440, D_L00_00161860_2c97e0 * D_0015ED6C_2c8440);
