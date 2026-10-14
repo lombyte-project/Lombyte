@@ -1020,6 +1020,7 @@ void FUN_L00_0020e728(void) {
     int i;
     u128 *basis;
     struct Hero *hero_state;
+    f32 angle;
     if (hero.unk20A8 && hero.unk20AA && get_ammo(-1) == 0)
         FUN_L00_0020e698();
     i = 0;
@@ -1029,9 +1030,11 @@ void FUN_L00_0020e728(void) {
         if (*slot != 0) {
             int id = FUN_L00_0020d498_c(0);
             if (id == hero_state->unk2298) {
-                s32 anim;
+                u32 anim;
                 ID_20e4c8 *definition = &D_L00_00179AC0_c[id];
-                anim = *(hero_state->state.control_mode == 12 ? &definition->f2C : &definition->f28);
+                anim = definition->f28;
+                if (hero_state->state.control_mode == 12)
+                    anim = definition->f2C;
                 if (anim != -1 && (*slot)[0x23] != anim) {
                     hero_state->unk2294 = anim;
                     FUN_L00_0024f3e0((u8 *)hero_state->moby, *slot, hero_state->unk2294, 0,
@@ -1067,11 +1070,12 @@ void FUN_L00_0020e728(void) {
     if (hero.state.control_mode == 15) {
         hero.unk688 = hero.unk5D8 != 0 ?
             (*(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q,
-             FUN_001ff8b0_e728(*(f32 *)((u8 *)hero.unk5D8 + 0x10) - hero.motion.pos.f[0],
-                                *(f32 *)((u8 *)hero.unk5D8 + 0x14) - hero.motion.pos.f[1])) :
+             (angle = FUN_001ff8b0_e728(*(f32 *)((u8 *)hero.unk5D8 + 0x10) - hero.motion.pos.f[0],
+                                *(f32 *)((u8 *)hero.unk5D8 + 0x14) - hero.motion.pos.f[1]),
+              hero.unk684 = -hero.unk580, angle)) :
             (*(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q,
-             FUN_002000e8_e728(hero.unk57C, hero.unk5D0));
-        hero.unk684 = -hero.unk580;
+             (angle = FUN_002000e8_e728(hero.unk57C, hero.unk5D0),
+              hero.unk684 = -hero.unk580, angle));
         vu_euler_rotation_basis(hero.basis, (u8 *)&hero + 0x680);
         FUN_001ff260_e728((u8 *)&hero + 0x670);
         hero.unk670 = 1.0f;
