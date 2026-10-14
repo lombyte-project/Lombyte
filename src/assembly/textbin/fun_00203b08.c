@@ -101,10 +101,13 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                  template_index++) {
             }
 
-            material_word = ((((u64)material_base) << 32) | (((u64)material_shift) << 6)) |
-                            (resident_material_templates[(template_index * 3) + 1] & 0x1C) | 0x20;
-            mip_packet->tex0.d = resident_material_templates[template_index * 3];
-            mip_packet->miptbp1 = resident_material_templates[(template_index * 3) + 2];
+            material_word = (resident_material_templates[(template_index * 3) + 1] & 0x1C) |
+                            ((((u64)material_shift) << 6) | 0x20);
+            material_word |= ((u64)material_base) << 32;
+            texture_word = resident_material_templates[template_index * 3];
+            mip_word = resident_material_templates[(template_index * 3) + 2];
+            mip_packet->tex0.d = texture_word;
+            mip_packet->miptbp1 = mip_word;
             mip_packet->tex1.d = material_word;
         }
     }
@@ -158,15 +161,17 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                 *((u64 *)(&packet->material_index)) = mip_word;
                 *((u64 *)(((u8 *)packet) + 0x30)) = texture_word;
             } else {
-                draw_word = (((u64)draw_high) << 32) | (((u64)draw_shift) << 6) | 0x20 |
-                            (resident_material_templates[(material_index * 3) + 1] & 0x1C);
-                material_word = (((u64)material_index) << 24) |
-                                (packet_material_base | (((u64)material_shift) << 2));
-                *((u64 *)(((u8 *)packet) + 0x30)) = resident_material_templates[material_index * 3];
-                *((u64 *)(&packet->material_base)) = material_word;
+                draw_word = (((u64)draw_shift) << 6) | 0x20;
+                draw_word |= resident_material_templates[(material_index * 3) + 1] & 0x1C;
+                draw_word |= ((u64)draw_high) << 32;
+                material_word = (packet_material_base | (((u64)material_shift) << 2)) |
+                                (((u64)material_index) << 24);
+                texture_word = resident_material_templates[material_index * 3];
+                mip_word = resident_material_templates[(material_index * 3) + 2];
                 *((u64 *)(&packet->draw_high)) = draw_word;
-                *((u64 *)(&packet->material_index)) =
-                    resident_material_templates[(material_index * 3) + 2];
+                *((u64 *)(&packet->material_base)) = material_word;
+                *((u64 *)(&packet->material_index)) = mip_word;
+                *((u64 *)(((u8 *)packet) + 0x30)) = texture_word;
             }
             packet++;
         }
