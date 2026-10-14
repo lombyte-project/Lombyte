@@ -7,9 +7,6 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/level_labels.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002e5958.s", FUN_L15_002e5958);
-#else
 typedef struct {
     s16 timer;
     s16 delay;
@@ -31,20 +28,20 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern void FUN_001fa2d8(void *, void *);
 extern void FUN_001f9d20(void *, void *, void *);
-extern f32 FUN_001f9b48(void *, void *);
+extern f32 FUN_001f9b48_c(void *, void *) __asm__("FUN_001f9b48");
 extern s16 FUN_001f9770(s16 *);
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern s32 scale_game_frames_c(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_0024f7c8(struct Moby *, int, void *);
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern int FUN_L00_002591d0(struct Moby **, int, int, int);
 extern int FUN_L00_002592b8(struct Moby **, struct Moby *, int, int);
 extern void FUN_L01_0026e0e0(int, int);
-extern void allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern u8 D_0013F3D0[];
 extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_L15_001BB830[];
 extern u32 D_0014C190[];
-extern s32 D_L15_001BAAD0[];
+extern u32 D_L15_001BAAD0[];
 
 void FUN_L15_002e5958(struct Moby *moby) {
     VendorVars_2e5958 *vars = (VendorVars_2e5958 *)moby->pvars;
@@ -70,7 +67,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
     case 0:
         if (vars->initialized == 0) {
             FUN_L00_0024f7c8(moby, 0, delta);
-            vars->distance = FUN_001f9b48(&moby->pos, delta);
+            vars->distance = FUN_001f9b48_c(&moby->pos, delta);
             vars->notified_count = 0;
             vars->parent = moby;
             FUN_L00_002591d0(&child, moby->group, 0, 0);
@@ -113,7 +110,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
             if (parent->state == 1) {
                 vars->child_count = 0;
                 parent->state = 2;
-                parent_vars->timer = parent_vars->frame_count < 1 ? 900 : scale_game_frames(vars->frame_count);
+                parent_vars->timer = parent_vars->frame_count < 1 ? 900 : scale_game_frames_c(vars->frame_count);
             }
             parent_vars->child_count++;
             allocate_voice_for_target_entry(3, 0x31, moby);
@@ -124,8 +121,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
             if (vars->child_count >= vars->notified_count) {
                 FUN_L01_0026e0e0(moby->group, 4);
                 allocate_voice_for_target_entry(1, 0x31, moby);
-                near_parent = (u16)vars->restart_timer;
-                vars->timer = near_parent;
+                vars->timer = vars->restart_timer;
                 moby->state = 4;
                 break;
             } else {
@@ -136,14 +132,14 @@ void FUN_L15_002e5958(struct Moby *moby) {
                     FUN_L01_0026e0e0(moby->group, 3);
                 } else if (FUN_001f9770(&vars->delay) != 0) {
                     allocate_voice_for_target_entry(0, 0x31, moby);
-                    first = scale_game_frames(0x2d);
-                    second = scale_game_frames(5);
-                    divisor = scale_game_frames(0x28);
+                    first = scale_game_frames_c(0x2d);
+                    second = scale_game_frames_c(5);
+                    divisor = scale_game_frames_c(0x28);
                     if (first < second + vars->timer / divisor)
-                        vars->delay = scale_game_frames(0x2d);
+                        vars->delay = scale_game_frames_c(0x2d);
                     else {
-                        s32 delay = scale_game_frames(5);
-                        s32 delay_divisor = scale_game_frames(0x28);
+                        s32 delay = scale_game_frames_c(5);
+                        s32 delay_divisor = scale_game_frames_c(0x28);
                         delay_divisor = delay + vars->timer / delay_divisor;
                         vars->delay = delay_divisor;
                     }
@@ -161,7 +157,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
         u16 save_id;
         u32 *bits;
         if (FUN_001f9770(&vars->flash_timer) != 0) {
-            vars->flash_timer = scale_game_frames(0x14);
+            vars->flash_timer = scale_game_frames_c(0x14);
             if (vars->flash_color != 0) {
                 FUN_L00_002502f0(moby, 0, 0xff, 0);
                 vars->flash_color = 0;
@@ -179,7 +175,6 @@ void FUN_L15_002e5958(struct Moby *moby) {
     }
     }
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
