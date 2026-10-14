@@ -96,7 +96,6 @@ void FUN_L04_002ca420(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     unsigned char state = moby->state;
     int i, *p, *target;
-    struct Moby *other;
     float amount, length;
     int timer;
     qcopy(&old, &moby->pos);
@@ -215,7 +214,7 @@ void FUN_L04_002ca420(struct Moby *moby) {
         }
     }
     if (*(int *)(data + 0x17c) != -1) {
-        other = (struct Moby *)(D_L04_0015FFD8 + (*(int *)(data + 0x17c) << 8));
+        struct Moby *other = (struct Moby *)(D_L04_0015FFD8 + (*(int *)(data + 0x17c) << 8));
         other->draw_dist = 0x7f;
         if (moby->oclass == 0x1e0) {
             delta.q = 0;
@@ -401,7 +400,7 @@ hit:
             moby->flags &= 0xffbe;
             *(int *)(data + 0x174) = 0;
             if (*(int *)(data + 0x17c) != -1) {
-                other = (struct Moby *)(D_L04_0015FFD8 + (*(int *)(data + 0x17c) << 8));
+                struct Moby *other = (struct Moby *)(D_L04_0015FFD8 + (*(int *)(data + 0x17c) << 8));
                 other->flags &= 0xffbe;
             }
             moby->flags |= 0x1000;
@@ -411,7 +410,7 @@ hit:
     moby->collision = 0;
     moby->flags |= 0x41;
     if (*(int *)(data + 0x17c) != -1) {
-        other = (struct Moby *)(D_L04_0015FFD8 + (*(int *)(data + 0x17c) << 8));
+        struct Moby *other = (struct Moby *)(D_L04_0015FFD8 + (*(int *)(data + 0x17c) << 8));
         other->flags |= 0x41;
     }
     moby->flags &= 0xefff;
