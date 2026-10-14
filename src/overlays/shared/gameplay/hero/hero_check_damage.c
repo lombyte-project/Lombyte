@@ -1508,6 +1508,7 @@ void FUN_L00_0020f580(void)
     union { f32 direction[4]; u8 saved[0x20]; } scratch __attribute__((aligned(16)));
     struct { u8 position[0x30]; u8 rotation[0x10]; } transform __attribute__((aligned(16)));
     s32 i, j, index, offset, first, second, third, random_range;
+    u8 *definition;
     s32 color_red, color_green, color_blue;
     u8 *moby, *effect;
     u8 *volatile source;
@@ -1526,7 +1527,8 @@ void FUN_L00_0020f580(void)
                 if (j == 1) moby = *(u8 **)(slot + 0x1094);
                 if (moby != 0) {
                     *(u64 *)(moby + 0x38) = *(u64 *)((u8 *)hero.moby + 0x38);
-                    index = *(s32 *)(D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c + 0xc);
+                    definition = D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c;
+                    index = *(s32 *)(definition + 0xc);
                     if (i == 1 && j == 1) index = 3;
                     if (*(u8 *)(slot + 0x10aa) != 0) {
                         *(u128 *)((u8 *)&hero + offset + 0x1070) = *(u128 *)(D_0013FE40_f580 + index * 0x40);
@@ -1564,8 +1566,8 @@ void FUN_L00_0020f580(void)
                                 else
                                     FUN_L00_002092c8_f580(D_L00_0015F6A8, D_L00_0017C680, *(s32 *)(moby + 0x24), 0, 0);
                                 *(s32 *)(moby + 0x54) = 0;
-                                *(void **)(moby + 0x6c) = D_L00_0017C680;
                                 *(void **)(moby + 0x68) = D_L00_0017C680;
+                                *(void **)(moby + 0x6c) = D_L00_0017C680;
                                 *(s32 *)(moby + 0x50) = 0;
                             } else if (third != 0) {
                                 *(u128 *)scratch.saved = *(u128 *)D_0017A960_f580;
