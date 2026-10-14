@@ -24,7 +24,7 @@ extern unsigned char D_0013D390 NOT_SDA;
 extern struct UsageStat level_usage[] __asm__("D_00141680");
 extern short D_L00_0016C8B0 NOT_SDA;
 extern int D_0015EEA4;
-extern u64 frm_clock_time __asm__("D_0015ED40");
+extern long frm_clock_time __asm__("D_0015ED40");
 extern int D_L00_0015F3F8;
 extern int D_L00_0015F570;
 extern int D_L00_0015F5AC;

@@ -9,7 +9,7 @@ struct SndCommand {
     long arg;
 };
 
-extern s32 snd_current_buffer __asm__("D_0015EC80") __attribute__((sda));          /* pending RPC record */
+extern s32 *snd_current_buffer __asm__("D_0015EC80") __attribute__((sda));          /* pending RPC record */
 extern void (*snd_cd_status_callback)(s32) __asm__("D_0015EC90") __attribute__((sda)); /* stop callback */
 extern s32 snd_cd_sync_pending __asm__("D_0015EC94") __attribute__((sda));          /* stop requested */
 extern s32 snd_cd_stream_end_pending __asm__("D_0015EC98") __attribute__((sda));

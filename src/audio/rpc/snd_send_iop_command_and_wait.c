@@ -1,5 +1,5 @@
 #include "types.h"
-extern s32 snd_current_buffer __asm__("D_0015EC80") __attribute__((sda));
+extern s32 *snd_current_buffer __asm__("D_0015EC80") __attribute__((sda));
 extern s32 snd_batch_index __asm__("D_0015ECC0") __attribute__((sda));
 extern s32 D_0015ECC4 __attribute__((sda));
 extern s32 *snd_batch_command_buffers[2] __asm__("D_0015ECA0") __attribute__((sda));
