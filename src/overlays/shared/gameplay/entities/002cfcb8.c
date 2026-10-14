@@ -58,7 +58,7 @@ typedef struct { s32 n; s32 p4[3]; struct { s32 a, b, c, st; } e[1]; } R_2cfcb8;
 typedef struct { u8 p0[0x18]; M_2cfcb8 *hit; u8 p1c[0x28 - 0x1C]; f32 f28; } H_2cfcb8;
 
 extern s32 D_0014EE90_2cfcb8[] __asm__("D_0014EE90") __attribute__((section(".data")));
-extern H_2cfcb8 D_L00_00173E40_2cfcb8 __asm__("D_L00_00173E40") __attribute__((section(".data")));
+extern H_2cfcb8 coll_hit_2cfcb8 __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern R_2cfcb8 *D_L00_001B04B0_2cfcb8[] __asm__("D_L00_001B04B0") __attribute__((section(".data")));
 
 extern s32 FUN_00213260_2cfcb8(s32) __asm__("FUN_00213260");
@@ -74,172 +74,172 @@ extern void FUN_001f9a10_2cfcb8(V_2cfcb8 *, V_2cfcb8 *, void *) __asm__("FUN_001
 extern void FUN_001f97b0_2cfcb8(void) __asm__("FUN_001f97b0");
 extern f32 FUN_001f9b48_2cfcb8(V_2cfcb8 *, V_2cfcb8 *) __asm__("FUN_001f9b48");
 
-void FUN_L00_002cfcb8(M_2cfcb8 *a) {
-    V_2cfcb8 p0;
-    V_2cfcb8 p1;
+void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
+    V_2cfcb8 probe_top;
+    V_2cfcb8 probe_bottom;
     V_2cfcb8 q0;
     V_2cfcb8 q1;
     M_2cfcb8 *b;
     M_2cfcb8 *c;
-    D_2cfcb8 *d;
+    D_2cfcb8 *vars;
     D_2cfcb8 *e;
     H_2cfcb8 *g;
     V_2cfcb8 *src1, *src2, *src3, *src4;
     R_2cfcb8 *r;
-    s32 grp, v, i, fl;
+    s32 group, v, i, fl;
     M_2cfcb8 *hh;
 
-    d = a->data;
-    grp = a->grp;
-    d->flags |= 4;
-    if (grp == 0xFF) {
-        if (a->type == 0x1F4 && FUN_00213260_2cfcb8(2) != 0 && a->f40 == 0.0f && a->f44 == 0.0f) {
-            a->f48 = FUN_001fa580_2cfcb8(a->f48, 1.5707964f);
+    vars = moby->data;
+    group = moby->grp;
+    vars->flags |= 4;
+    if (group == 0xFF) {
+        if (moby->type == 0x1F4 && FUN_00213260_2cfcb8(2) != 0 && moby->f40 == 0.0f && moby->f44 == 0.0f) {
+            moby->f48 = FUN_001fa580_2cfcb8(moby->f48, 1.5707964f);
         }
-        if (a->type == 0x1F5 && a->bB0 != 0xFF && D_0014EE90_2cfcb8[a->bB0] < d->iF8) {
-            FUN_0020c828_2cfcb8(a);
+        if (moby->type == 0x1F5 && moby->bB0 != 0xFF && D_0014EE90_2cfcb8[moby->bB0] < vars->iF8) {
+            FUN_0020c828_2cfcb8(moby);
             return;
         }
-        v = d->flags;
-        d->hC4 = a->hA8;
-        d->fB0 = 1.0f;
-        d->flags = v | 1;
-        src1 = &a->pos;
-        qcopy(&p0, src1);
-        qcopy(&p1, src1);
-        p0.z += 0.5f;
-        p1.z = 0.1f;
-        if (FUN_001efa68_2cfcb8(&p0, &p1, 2, 0, 0) == 0) {
-            d->pA4 = 0;
+        v = vars->flags;
+        vars->hC4 = moby->hA8;
+        vars->fB0 = 1.0f;
+        vars->flags = v | 1;
+        src1 = &moby->pos;
+        qcopy(&probe_top, src1);
+        qcopy(&probe_bottom, src1);
+        probe_top.z += 0.5f;
+        probe_bottom.z = 0.1f;
+        if (FUN_001efa68_2cfcb8(&probe_top, &probe_bottom, 2, 0, 0) == 0) {
+            vars->pA4 = 0;
             return;
         }
-        if (D_L00_00173E40_2cfcb8.hit == 0) {
-            a->pos.z = D_L00_00173E40_2cfcb8.f28;
-            d->pA4 = 0;
+        if (coll_hit_2cfcb8.hit == 0) {
+            moby->pos.z = coll_hit_2cfcb8.f28;
+            vars->pA4 = 0;
             return;
         }
-        if (FUN_L00_0025e3b8_2cfcb8(D_L00_00173E40_2cfcb8.hit) != 0) return;
-        d->pA4 = 0;
-        d->flags |= 8;
-        if (FUN_L00_002603d0_2cfcb8(D_L00_00173E40_2cfcb8.hit) != 0) {
-            if (a != 0) a->h36 = 0x7F80;
-            FUN_L00_00260668_2cfcb8(b, D_L00_00173E40_2cfcb8.hit, &a->pos, &a->f40, &d->vD0, &d->vE0);
-            d->fF4 = 0;
-            d->pF0 = D_L00_00173E40_2cfcb8.hit;
+        if (FUN_L00_0025e3b8_2cfcb8(coll_hit_2cfcb8.hit) != 0) return;
+        vars->pA4 = 0;
+        vars->flags |= 8;
+        if (FUN_L00_002603d0_2cfcb8(coll_hit_2cfcb8.hit) != 0) {
+            if (moby != 0) moby->h36 = 0x7F80;
+            FUN_L00_00260668_2cfcb8(b, coll_hit_2cfcb8.hit, &moby->pos, &moby->f40, &vars->vD0, &vars->vE0);
+            vars->fF4 = 0;
+            vars->pF0 = coll_hit_2cfcb8.hit;
         }
         return;
     }
 
-    FUN_L00_002591d0_2cfcb8(&a, grp, 0, 0);
-    while (a != 0) {
-        d = a->data;
-        if (FUN_L00_0025e3b8_2cfcb8(a) != 0) {
-            if (a->type == 0x1F4 && FUN_00213260_2cfcb8(2) != 0 && a->f40 == 0.0f && a->f44 == 0.0f) {
-                a->f48 = FUN_001fa580_2cfcb8(a->f48, 1.5707964f);
+    FUN_L00_002591d0_2cfcb8(&moby, group, 0, 0);
+    while (moby != 0) {
+        vars = moby->data;
+        if (FUN_L00_0025e3b8_2cfcb8(moby) != 0) {
+            if (moby->type == 0x1F4 && FUN_00213260_2cfcb8(2) != 0 && moby->f40 == 0.0f && moby->f44 == 0.0f) {
+                moby->f48 = FUN_001fa580_2cfcb8(moby->f48, 1.5707964f);
             }
-            if (a->type == 0x1F5 && a->bB0 != 0xFF && D_0014EE90_2cfcb8[a->bB0] < d->iF8) {
-                FUN_0020c828_2cfcb8(a);
+            if (moby->type == 0x1F5 && moby->bB0 != 0xFF && D_0014EE90_2cfcb8[moby->bB0] < vars->iF8) {
+                FUN_0020c828_2cfcb8(moby);
             } else {
-                fl = d->flags;
-                d->hC4 = a->hA8;
-                d->fB0 = 1.0f;
-                d->flags = fl | 1;
-                src2 = &a->pos;
-                qcopy(&p0, src2);
-                qcopy(&p1, src2);
-                p0.z += 0.5f;
-                p1.z = 0.1f;
-                if (FUN_001efa68_2cfcb8(&p0, &p1, 2, 0, 0) == 0) {
-                    d->pA4 = 0;
+                fl = vars->flags;
+                vars->hC4 = moby->hA8;
+                vars->fB0 = 1.0f;
+                vars->flags = fl | 1;
+                src2 = &moby->pos;
+                qcopy(&probe_top, src2);
+                qcopy(&probe_bottom, src2);
+                probe_top.z += 0.5f;
+                probe_bottom.z = 0.1f;
+                if (FUN_001efa68_2cfcb8(&probe_top, &probe_bottom, 2, 0, 0) == 0) {
+                    vars->pA4 = 0;
                 } else {
-                    if (D_L00_00173E40_2cfcb8.hit == 0) {
-                        a->pos.z = D_L00_00173E40_2cfcb8.f28;
-                        d->pA4 = 0;
-                    } else if (FUN_L00_0025e3b8_2cfcb8(D_L00_00173E40_2cfcb8.hit) == 0 && (u16)(D_L00_00173E40_2cfcb8.hit->type - 0x128) >= 2) {
-                        d->pA4 = 0;
-                        a->b30 = 0xFF;
-                        d->flags |= 8;
-                    } else if (D_L00_00173E40_2cfcb8.hit->data == 0) {
-                        d->pA4 = 0;
-                    } else if (D_L00_00173E40_2cfcb8.hit->grp != a->grp) {
-                        d->pA4 = 0;
-                    } else if (FUN_L00_0025e3b8_2cfcb8(D_L00_00173E40_2cfcb8.hit) != 0) {
-                        d->pA4 = D_L00_00173E40_2cfcb8.hit;
-                        src3 = &a->pos;
-                        hh = D_L00_00173E40_2cfcb8.hit;
+                    if (coll_hit_2cfcb8.hit == 0) {
+                        moby->pos.z = coll_hit_2cfcb8.f28;
+                        vars->pA4 = 0;
+                    } else if (FUN_L00_0025e3b8_2cfcb8(coll_hit_2cfcb8.hit) == 0 && (u16)(coll_hit_2cfcb8.hit->type - 0x128) >= 2) {
+                        vars->pA4 = 0;
+                        moby->b30 = 0xFF;
+                        vars->flags |= 8;
+                    } else if (coll_hit_2cfcb8.hit->data == 0) {
+                        vars->pA4 = 0;
+                    } else if (coll_hit_2cfcb8.hit->grp != moby->grp) {
+                        vars->pA4 = 0;
+                    } else if (FUN_L00_0025e3b8_2cfcb8(coll_hit_2cfcb8.hit) != 0) {
+                        vars->pA4 = coll_hit_2cfcb8.hit;
+                        src3 = &moby->pos;
+                        hh = coll_hit_2cfcb8.hit;
                         qcopy(src3, &hh->pos);
                         FUN_001f9a10_2cfcb8(src3, src3, (u8 *)hh + 0xE0);
-                        d = D_L00_00173E40_2cfcb8.hit->data;
-                        if (FUN_L00_0025e3b8_2cfcb8(a) != 0) {
-                            d->pA0 = a;
+                        vars = coll_hit_2cfcb8.hit->data;
+                        if (FUN_L00_0025e3b8_2cfcb8(moby) != 0) {
+                            vars->pA0 = moby;
                         } else {
                             FUN_001f97b0_2cfcb8();
-                            d->pA0 = 0;
+                            vars->pA0 = 0;
                         }
                     } else {
-                        d->pA4 = 0;
-                        d->iCC = 0;
-                        a->pos.z = D_L00_00173E40_2cfcb8.f28;
+                        vars->pA4 = 0;
+                        vars->iCC = 0;
+                        moby->pos.z = coll_hit_2cfcb8.f28;
                     }
                 }
             }
         }
-        FUN_L00_002592b8_2cfcb8(&a, a, 0, 0);
+        FUN_L00_002592b8_2cfcb8(&moby, moby, 0, 0);
     }
 
-    FUN_L00_002591d0_2cfcb8(&b, grp, 0, 0);
+    FUN_L00_002591d0_2cfcb8(&b, group, 0, 0);
     while (b != 0) {
-        d = b->data;
-        if (FUN_L00_0025e3b8_2cfcb8(b) != 0 && d->pA4 == 0) {
+        vars = b->data;
+        if (FUN_L00_0025e3b8_2cfcb8(b) != 0 && vars->pA4 == 0) {
             src4 = &b->pos;
             qcopy(&q0, src4);
             qcopy(&q1, src4);
-            q0.z += d->fB0 * 0.5f;
+            q0.z += vars->fB0 * 0.5f;
             q1.z = 0.1f;
-            if (FUN_001efa68_2cfcb8(&q0, &q1, 2, a, 0) != 0) {
-                        if (D_L00_00173E40_2cfcb8.hit != 0 && FUN_L00_002603d0_2cfcb8(D_L00_00173E40_2cfcb8.hit) != 0) {
-                    if (a != 0) a->h36 = 0x7F80;
-                    FUN_L00_00260668_2cfcb8(b, D_L00_00173E40_2cfcb8.hit, &b->pos, &b->f40, &d->vD0, &d->vE0);
-                    d->fF4 = 0;
-                    d->pF0 = D_L00_00173E40_2cfcb8.hit;
-                    d->flags |= 8;
+            if (FUN_001efa68_2cfcb8(&q0, &q1, 2, moby, 0) != 0) {
+                        if (coll_hit_2cfcb8.hit != 0 && FUN_L00_002603d0_2cfcb8(coll_hit_2cfcb8.hit) != 0) {
+                    if (moby != 0) moby->h36 = 0x7F80;
+                    FUN_L00_00260668_2cfcb8(b, coll_hit_2cfcb8.hit, &b->pos, &b->f40, &vars->vD0, &vars->vE0);
+                    vars->fF4 = 0;
+                    vars->pF0 = coll_hit_2cfcb8.hit;
+                    vars->flags |= 8;
                 }
             }
-            for (a = b; a != 0; a = d->pA0) {
-                d = a->data;
+            for (moby = b; moby != 0; moby = vars->pA0) {
+                vars = moby->data;
                 e = 0;
-                if (d->pA4 != 0) e = d->pA4->data;
+                if (vars->pA4 != 0) e = vars->pA4->data;
                 if (e != 0) {
-                    d->iCC = e->iCC;
+                    vars->iCC = e->iCC;
                     if (e->pF0 != 0) {
-                        a->b30 = 0xFF;
-                        d->flags |= 8;
-                        qcopy(&d->vD0, &e->vD0);
-                        qcopy(&d->vE0, &e->vE0);
-                        d->pF0 = e->pF0;
-                        d->fF4 = e->fF4 + 1.0f;
+                        moby->b30 = 0xFF;
+                        vars->flags |= 8;
+                        qcopy(&vars->vD0, &e->vD0);
+                        qcopy(&vars->vE0, &e->vE0);
+                        vars->pF0 = e->pF0;
+                        vars->fF4 = e->fF4 + 1.0f;
                     }
                 }
-                if ((d->hC6 != 0 || a->type == 0x1F5) && d->pA0 != 0 && d->iC0 != -1) {
-                    r = D_L00_001B04B0_2cfcb8[d->iC0];
+                if ((vars->hC6 != 0 || moby->type == 0x1F5) && vars->pA0 != 0 && vars->iC0 != -1) {
+                    r = D_L00_001B04B0_2cfcb8[vars->iC0];
                     if (r->n == 0) {
-                        d->iC0 = -1;
+                        vars->iC0 = -1;
                     } else {
                         s32 st = r->e[0].st;
                         if (st == 1 || st == 3) {
-                            d->iC0 = -1;
+                            vars->iC0 = -1;
                         } else if (st == 0x111) {
-                            d->iC0 = -1;
+                            vars->iC0 = -1;
                         } else if ((u32)(st - 0x11) < 0x100) {
                             if (st - 0x10 >= r->n) {
-                                d->iC0 = -1;
+                                vars->iC0 = -1;
                             } else {
                                 r->e[0].st = st + 1;
                             }
                         } else {
                             r->e[0].st = 0x11;
-                            for (i = 0; i < D_L00_001B04B0_2cfcb8[d->iC0]->n; i++) {
-                                D_L00_001B04B0_2cfcb8[d->iC0]->e[i].st = 0;
+                            for (i = 0; i < D_L00_001B04B0_2cfcb8[vars->iC0]->n; i++) {
+                                D_L00_001B04B0_2cfcb8[vars->iC0]->e[i].st = 0;
                             }
                         }
                     }
@@ -249,18 +249,18 @@ void FUN_L00_002cfcb8(M_2cfcb8 *a) {
         FUN_L00_002592b8_2cfcb8(&b, b, 0, 0);
     }
 
-    FUN_L00_002591d0_2cfcb8(&a, grp, 0, 0);
-    while (a != 0) {
-        if (FUN_L00_0025e3b8_2cfcb8(a) != 0) {
-            FUN_L00_002592b8_2cfcb8(&c, a, 0, 0);
+    FUN_L00_002591d0_2cfcb8(&moby, group, 0, 0);
+    while (moby != 0) {
+        if (FUN_L00_0025e3b8_2cfcb8(moby) != 0) {
+            FUN_L00_002592b8_2cfcb8(&c, moby, 0, 0);
             while (c != 0) {
                 if (FUN_L00_0025e3b8_2cfcb8(c) != 0) {
-                    FUN_001f9b48_2cfcb8(&a->pos, &c->pos);
+                    FUN_001f9b48_2cfcb8(&moby->pos, &c->pos);
                 }
                 FUN_L00_002592b8_2cfcb8(&c, c, 0, 0);
             }
         }
-        FUN_L00_002592b8_2cfcb8(&a, a, 0, 0);
+        FUN_L00_002592b8_2cfcb8(&moby, moby, 0, 0);
     }
 }
 typedef struct {
