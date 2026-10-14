@@ -876,7 +876,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
     source_moby = moby;
 
     count = D_L12_0016183C;
-    if (moby->state == 15)
+    if (((volatile struct Moby *)moby)->state == 15)
         count = truncate_float_to_s32_e3098((float)count * 1.5f);
     i = 0;
     if (count > 0) {
