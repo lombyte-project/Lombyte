@@ -352,8 +352,8 @@ void FUN_L08_002d23f0(char *moby) {
         qcopy(record.motion.from, position);
         record.motion.from[2] -= 0.16f;
         add_vector_xyz(position, position, velocity);
-        *(float *)(data + 0x18) -= D_L08_00161860 * D_0015ED70;
-        qcopy(record.motion.collision.position, position);
+        *(float *)(data + 0x18) -= D_0015ED70 * D_L08_00161860;
+        *(OvlQuad *)record.motion.collision.position = *(OvlQuad *)position;
         record.motion.collision.position[2] -= 0.16f;
         record.motion.collision.flags = 0x810000;
         record.motion.collision.state = state;
