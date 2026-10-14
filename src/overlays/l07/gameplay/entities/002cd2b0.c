@@ -2565,8 +2565,8 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
     command = (unsigned char)command;
     if (old_command != command) {
         id = command + old_command * 3;
-        next_sequence = D_L07_00161B50[id];
         next_state = D_L07_00161B40[id];
+        next_sequence = D_L07_00161B50[id];
     }
     moby_point_position(moby, 0, point);
     if (FUN_L00_001f0d60(0.8f, point, 1, moby) && !FUN_001f0b58()) {
