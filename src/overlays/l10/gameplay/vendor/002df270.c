@@ -487,7 +487,6 @@ typedef struct Anim_2E1568 {
 } Anim_2E1568;
 
 extern OvlQuad_2e01a8 D_L10_00167240_2e01a8 __asm__("D_L10_00167240");
-extern char D_0013F3D8[];
 extern f32 fast_add_rotations_2e01a8(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos_2e01a8(f32) __asm__("func_001F9DC8");
 extern f32 random_float_between_2e01a8(f32, f32) __asm__("func_002132A8");

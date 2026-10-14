@@ -284,6 +284,11 @@ int FUN_L10_002f5a78(char *moby) {
     }
     return 0;
 }
+typedef struct {
+    char pad0[0xB0];
+    float fB0; /* tan of half the field of view */
+} VendorView_5f18;
+
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5b58.s", FUN_L10_002f5b58);
 #else
@@ -296,7 +301,7 @@ extern float s32_to_float(int) __asm__("FUN_001fa6c0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L10_00167100[];
 
-extern char D_L10_0016CEC0[];
+extern VendorView_5f18 D_L10_0016CEC0;
 #include "qcopy.h"
 void FUN_L10_002f5b58(char *moby) {
     char *data = *(char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 0x20 + 0x1c);
@@ -341,7 +346,7 @@ void FUN_L10_002f5b58(char *moby) {
     moby_scale = moby + 0x30;
     moby_pos = moby + 0x10;
     moby_rot = moby + 0x20;
-    angle = angle_atan2(1.0f, *(float *)(D_L10_0016CEC0 + 0xb0));
+    angle = angle_atan2(1.0f, D_L10_0016CEC0.fB0);
     *(float *)((char *)indices + 0x30) = angle + angle;
 
     if (*(int *)(data + 0x20) >= 0) {
@@ -453,12 +458,7 @@ typedef struct {
     s16 timer;    /* 0x56 */
 } VendorCamRun_5f18;
 
-typedef struct {
-    char pad0[0xB0];
-    float fB0; /* tan of half the field of view */
-} VendorView_5f18;
-
-extern char *D_L10_0015EF50_5f18 __asm__("D_L10_0015EF50");
+extern char *D_L10_0015EF50;
 extern char *D_L10_001B0930_5f18[] __asm__("D_L10_001B0930");
 extern char *D_L10_0015FFD8_5f18 __asm__("D_L10_0015FFD8");
 extern f32 D_L10_0015F3FC;
@@ -502,7 +502,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
     int i;
 
     p = (char *)cam->saved_state;
-    rec = *(char **)(D_L10_0015EF50_5f18 + cam->descriptor_index * 32 + 0x1C);
+    rec = *(char **)(D_L10_0015EF50 + cam->descriptor_index * 32 + 0x1C);
     q = (VendorCamRun_5f18 *)(p + 0x40);
     s = (VendorCamStops_5f18 *)(p + 0x58);
 

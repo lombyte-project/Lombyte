@@ -368,7 +368,7 @@ extern f32 FUN_001f99c0(f32);
 extern f32 D_0015ED60;
 extern f32 D_0015ED68;
 extern f32 D_0015ED6C;
-extern RigVec D_L04_00173FF0 __attribute__((section(".data")));
+extern s32 D_L04_00173FF0[] __attribute__((section(".data")));
 
 s32 FUN_L04_00295778(struct Moby *m, LegRig *rig, f32 speed, f32 heading, f32 step) {
     union {
@@ -482,7 +482,7 @@ s32 FUN_L04_00295778(struct Moby *m, LegRig *rig, f32 speed, f32 heading, f32 st
         probe_end -= *(f32 *)&rig->unkE8;
         subtract_vector_xyz(&local.v.offset, pos, &local.v.ground);
         for (tries = 0; tries < 8 && rig_probe(&local.v.ground, 4, probe_start, m, probe_end); tries++) {
-            qcopy(&local.v.ground, &D_L04_00173FF0);
+            qcopy(&local.v.ground, D_L04_00173FF0);
             flags |= 1;
         }
         subtract_vector_xyz(transformed, &local.v.ground, pos);

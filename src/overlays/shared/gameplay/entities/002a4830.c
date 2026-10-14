@@ -2125,7 +2125,7 @@ extern f32 D_L00_001613C4_2a96f8 __asm__("D_L00_001613C4") __attribute__((sda));
 extern u8 D_0013F490_2a96f8[] __asm__("D_0013F490");
 extern void *D_001413D0_2a96f8 __asm__("D_001413D0") __attribute__((section(".data")));
 extern V_2a96f8 D_L00_00173E60_2a96f8[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
-extern u8 D_L00_001B0770_2a96f8[] __asm__("D_L00_001B0770") __attribute__((section(".data")));
+extern s16 D_L00_001B0770_lui[] __asm__("D_L00_001B0770") __attribute__((section(".data")));
 M_2a96f8 *FUN_0020c4f8_2a96f8(s32) __asm__("FUN_0020c4f8");
 void FUN_00214db0_2a96f8(void *, f32, f32, f32) __asm__("FUN_00214db0");
 T_2a96f8 *FUN_L00_002630c8_2a96f8(void *, void *, void *, f32, f32 *, f32 *, f32 *) __asm__("FUN_L00_002630c8");
@@ -2192,7 +2192,7 @@ M_2a96f8 *FUN_L00_002a96f8(T_2a96f8 *src, V_2a96f8 *pos, T_2a96f8 *tgt, f32 x, f
             qcopy(&m->v10, &D_L00_00173E60_2a96f8[0]);
         }
         FUN_L00_00250df8_2a96f8(m);
-        FUN_L00_0025f780_2a96f8(m, D_L00_001B0770_2a96f8, 0x1F);
+        FUN_L00_0025f780_2a96f8(m, D_L00_001B0770_lui, 0x1F);
         m->f2C += m->f2C;
     }
     return m;

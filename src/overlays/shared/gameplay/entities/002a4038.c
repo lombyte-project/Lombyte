@@ -471,7 +471,7 @@ extern float D_0015EE70_2D9F08 __asm__("D_0015ED70") __attribute__((section(".sd
 extern float D_0015EE6C_2D9F08 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern int D_L02_0017EB88_2D9F08 __asm__("D_L02_0017EB08") __attribute__((section(".data")));
 extern Cam_2D9F08 D_L02_00167300_2D9F08 __asm__("D_L02_00167280");
-extern Idle_2D9F08 D_L02_00179A90_2D9F08 __asm__("D_L02_00179A10");
+extern Idle_2D9F08 D_L02_00179A10;
 extern int D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
 extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 extern int D_L02_00161B38_2D9F08 __asm__("D_L02_00161AA8") __attribute__((sda));
@@ -628,7 +628,7 @@ void FUN_L02_002d8ad0(Moby *moby) {
             func_L00_00232C10_2D9F08(0x58, 0, func_001F9850_2D9F08(6));
         }
         if (i != 12) {
-            if (((D_0013CAE4 & 0x10) && D_L02_00179A90_2D9F08.i0 == 0 && D_L02_00179A90_2D9F08.i24 == -1)
+            if (((D_0013CAE4 & 0x10) && D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1)
                 || ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->state.current != 0x72 || ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].item_id != 0x1A) {
                 moby->state = 1;
                 func_L00_002EC0C8_2D9F08(1);
@@ -1483,19 +1483,15 @@ extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
 extern void ea210_audio(int, int) __asm__("FUN_0020b178");
 extern void ea210_destroy(char *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;
-extern int D_L02_0015F5C4;
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern int D_L02_0015F640 __attribute__((sda));
 extern unsigned char items_acquired[] __asm__("D_0013D4E8");
 extern char D_0013F3D0[];
-extern float D_0013F3D8;
 extern float D_L02_00174468 __attribute__((section(".data")));
 extern int D_L02_00167400 __attribute__((section(".data")));
-extern int D_L02_00179A10 __attribute__((section(".data")));
 extern float D_0015ED70;
 extern float D_0015ED6C;
 extern float D_L02_0015F3FC;
-extern char D_0013F3E0[];
 
 void FUN_L02_002ea210(char *moby) {
     char *data;
@@ -1539,7 +1535,7 @@ void FUN_L02_002ea210(char *moby) {
         }
         return;
     case 3:
-        if (D_L02_0015F5C4 == 2) return;
+        if (level_game_mode == 2) return;
         if (D_001413F4 != 0) {
             if (which == 0x16) {
                 ea210_switch(0x16, 0);
@@ -1585,7 +1581,7 @@ void FUN_L02_002ea210(char *moby) {
             ea210_draw(position, output, 1, 0, 0);
         ea210_drawend(position);
         ea210_drawflush(output);
-        if (D_L02_00179A90_2D9F08.i0 == 0 && D_L02_00179A90_2D9F08.i24 == -1 &&
+        if (D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1 &&
             0.2f < *(float *)(data + 0x40)) {
             ea210_fade(1.0f, frame_time * 4.0f, &D_L02_0015F3FC);
         } else {

@@ -313,14 +313,14 @@ void FUN_L00_00236128(HudElem *e) {
     }
     FUN_L00_0023aaa8((char *)e + 0x40);
 }
+extern float star_init_limit0_gp __asm__("D_L00_0015F750") __attribute__((sda));
+extern float star_init_limit1_gp __asm__("D_L00_0015F754") __attribute__((sda));
+extern float star_init_limit2_gp __asm__("D_L00_0015F758") __attribute__((sda));
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00236268.s", FUN_L00_00236268);
 #else
 typedef struct { float x, y, z, w; } E_236268;
 extern E_236268 D_L00_0017E660_236268[] __asm__("D_L00_0017E660") __attribute__((section(".data")));
-extern float D_L00_0015F750_236268 __asm__("D_L00_0015F750") __attribute__((sda));
-extern float D_L00_0015F754_236268 __asm__("D_L00_0015F754") __attribute__((sda));
-extern float D_L00_0015F758_236268 __asm__("D_L00_0015F758") __attribute__((sda));
 extern int D_L00_0015F75C_236268 __asm__("D_L00_0015F75C") __attribute__((sda));
 void FUN_L00_00235d80_236268(void) __asm__("FUN_L00_00235d80");
 float FUN_002132a8_236268(float, float) __asm__("FUN_002132a8");
@@ -331,9 +331,9 @@ void FUN_L00_00236268(void) {
         float w, a, lo, hi;
         int n;
         float *z;
-        if (i < 10) w = D_L00_0015F750_236268;
-        else if (i < 20) w = D_L00_0015F754_236268;
-        else w = D_L00_0015F758_236268;
+        if (i < 10) w = star_init_limit0_gp;
+        else if (i < 20) w = star_init_limit1_gp;
+        else w = star_init_limit2_gp;
         n = D_L00_0015F75C_236268;
         a = 232.0f;
         lo = 116.0f;
@@ -359,9 +359,6 @@ typedef struct {
 
 extern int D_L00_0015F3F8;
 extern Star_236458 D_L00_0017E660[];
-extern float star_init_limit0_gp __asm__("D_L00_0015F750") __attribute__((sda));
-extern float star_init_limit1_gp __asm__("D_L00_0015F754") __attribute__((sda));
-extern float star_init_limit2_gp __asm__("D_L00_0015F758") __attribute__((sda));
 void FUN_L00_00235ea0();
 
 /* Moves every other star by its velocity and bounces it off a box whose size

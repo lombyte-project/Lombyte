@@ -29,7 +29,7 @@ typedef struct {
 } Moby257218;
 extern int D_0015ED84 __attribute__((sda));
 extern int D_0014C190[][64];
-extern u8 D_0015EDD0[] __attribute__((section(".sdata")));
+extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
 extern u8 D_0013D4C0[];
 extern int D_0013D428[];
 extern Item257218 D_L00_001C40B0[] __attribute__((section(".data")));
@@ -42,8 +42,8 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
     int r;
 
     if (*out <= 0 || (m != 0 && (D_0014C190[D_0015ED84][(s16)m->uid >> 5] >> (m->uid & 0x1F)) & 1)) {
-        for (i = 0; i < 12 && D_0015EDD0[i] != 0xFF; i++) {
-            x = D_0015EDD0[i] & 0x3F;
+        for (i = 0; i < 12 && D_0015EDD0_257218[i] != 0xFF; i++) {
+            x = D_0015EDD0_257218[i] & 0x3F;
             if (D_0013D4C0[x]) {
                 if (((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE) nC++;
                 nB++;
@@ -55,18 +55,18 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
             i = FUN_00213260(nA);
             while (i >= 0) {
                 idx++;
-                x = D_0015EDD0[idx] & 0x3F;
+                x = D_0015EDD0_257218[idx] & 0x3F;
                 if (D_0013D4C0[x]) i -= ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE > D_0013D428[x];
             }
-            *out = D_0015EDD0[idx] & 0x3F;
+            *out = D_0015EDD0_257218[idx] & 0x3F;
         } else if (nB) {
             i = FUN_00213260(nC);
             while (i >= 0) {
                 idx++;
-                x = D_0015EDD0[idx] & 0x3F;
+                x = D_0015EDD0_257218[idx] & 0x3F;
                 if (D_0013D4C0[x] && ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE) i--;
             }
-            *out = D_0015EDD0[idx] & 0x3F;
+            *out = D_0015EDD0_257218[idx] & 0x3F;
         } else {
             *out = 10;
         }

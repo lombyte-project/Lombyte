@@ -2248,8 +2248,7 @@ extern unsigned char D_0013F490_2afc70[] __asm__("D_0013F490") __attribute__((se
 extern void *D_001413D0_2afc70 __asm__("D_001413D0") __attribute__((section(".data")));
 extern unsigned char D_L00_00173E60_2afc70[] __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
-extern unsigned char D_L00_001B0770_2afc70[] __asm__("D_L00_001B0770")
-    __attribute__((section(".data")));
+extern s16 D_L00_001B0770_lui[] __asm__("D_L00_001B0770") __attribute__((section(".data")));
 extern unsigned char *FUN_0020c4f8_2afc70(int) __asm__("FUN_0020c4f8");
 extern unsigned char *FUN_002141f8_2afc70(void *) __asm__("FUN_002141f8");
 extern int FUN_001f96f8_2afc70(int) __asm__("FUN_001f96f8");
@@ -2326,7 +2325,7 @@ unsigned char *FUN_L00_002afc70(unsigned char *a, V_2afc70 *pos, unsigned char *
             qcopy(m + 0x10, D_L00_00173E60_2afc70);
         }
         FUN_L00_00250df8_2afc70(m);
-        FUN_L00_0025f780_2afc70(m, D_L00_001B0770_2afc70, 0x1F);
+        FUN_L00_0025f780_2afc70(m, D_L00_001B0770_lui, 0x1F);
         *(float *)(m + 0x2C) += *(float *)(m + 0x2C);
     }
     return m;

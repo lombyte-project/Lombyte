@@ -916,17 +916,15 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002997c8.s", FUN_L00_002997c8);
 #else
 typedef struct { u8 pad[0x38]; s16 h38; } S_2997c8;
-typedef struct { u8 pad[8]; s32 a; s32 b; } P_2997c8;
 typedef struct { u8 pad[0x6B]; u8 f; } M_2997c8;
 extern s32 D_L00_0015F5D8_2997c8 __asm__("D_L00_0015F5D8");
 extern s32 D_0015ED80_2997c8 __asm__("D_0015ED80");
-extern s32 D_L00_00161058_2997c8 __asm__("D_L00_00161058");
 extern s32 D_0015EE88_2997c8 __asm__("D_0015EE88");
 extern s32 D_0015EE78_2997c8 __asm__("D_0015EE78");
 extern s32 D_0015EED8_2997c8 __asm__("D_0015EED8");
 extern S_2997c8 D_001516D0_2997c8 __asm__("D_001516D0") __attribute__((section(".data")));
 extern s32 D_L00_0015F5C4_2997c8 __asm__("D_L00_0015F5C4");
-extern P_2997c8 D_L00_00179100_2997c8 __asm__("D_L00_00179100") __attribute__((section(".data")));
+extern struct ActiveSceneTrigger active_scene_trigger_lui __asm__("D_L00_00179100") __attribute__((section(".data")));
 extern M_2997c8 D_0013E550_2997c8 __asm__("D_0013E550") __attribute__((section(".data")));
 int FUN_00122298_2997c8(s32) __asm__("FUN_00122298");
 void FUN_00120558_2997c8(s32, s32) __asm__("FUN_00120558");
@@ -937,18 +935,18 @@ void FUN_00118a80_2997c8(int) __asm__("FUN_00118a80");
 void FUN_001227d8_2997c8(void *, int) __asm__("FUN_001227d8");
 void FUN_001f4a58_2997c8(s32) __asm__("FUN_001f4a58");
 void FUN_00215b68_2997c8(s32, s32, s32) __asm__("FUN_00215b68");
-void FUN_00216c48_2997c8(s32, s32, s32) __asm__("FUN_00216c48");
+void FUN_00216c48_2997c8(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
 void FUN_L00_002997c8(void) {
     char buf[0x70] __attribute__((aligned(16)));
     s32 n, m, src, t, i;
-    P_2997c8 *p;
+    struct ActiveSceneTrigger *p;
     D_L00_0015F5D8_2997c8 = 1;
     FUN_00122298_2997c8(0);
     FUN_00120558_2997c8(0, 0);
     FUN_00122e68_2997c8(FUN_0012f1c8_2997c8);
     n = D_0015ED80_2997c8 ? 14 : 13;
     m = D_0015ED80_2997c8 ? 14 : 17;
-    src = D_L00_00161058_2997c8;
+    src = D_L00_00161058;
     t = D_0015EE88_2997c8;
     for (i = 0; i < n; i++) {
         FUN_00122518_2997c8(buf, t >> 8, 2, 1, 0, 0, 0x80, 0x80);
@@ -973,13 +971,13 @@ void FUN_L00_002997c8(void) {
     FUN_001f4a58_2997c8(4);
     FUN_00215b68_2997c8(D_001516D0_2997c8.h38, 1, 0x400);
     D_L00_0015F5C4_2997c8 = 0;
-    p = &D_L00_00179100_2997c8;
-    if (p->a != 0) {
-        s32 b = p->b;
-        s32 a = p->a;
-        p->a = 0;
-        p->b = 0;
-        FUN_00216c48_2997c8(a, b, 1);
+    p = &active_scene_trigger_lui;
+    if (p->moby != 0) {
+        struct SceneTrigger *trigger = p->trigger;
+        struct Moby *moby = p->moby;
+        p->moby = 0;
+        p->trigger = 0;
+        FUN_00216c48_2997c8(moby, trigger, 1);
     }
     D_0013E550_2997c8.f |= 0x10;
 }

@@ -6,6 +6,7 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/overlay/collision.h"
 
 #define NOT_SDA
 
@@ -694,7 +695,6 @@ char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int arg) 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c4718.s", FUN_L03_002c4718);
 #else
-#include "rnc/overlay/collision.h"
 extern int FUN_001f9740(int *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -714,7 +714,7 @@ extern float FUN_00213508(void *, int, float);
 extern float FUN_002132a8(float, float);
 extern void FUN_L00_00259fe8(void *, float);
 extern void FUN_0020c828(void *);
-extern CollisionHit coll_hit_c4718 __asm__("D_L03_00173F60") __attribute__((section(".data")));
+extern CollisionHit coll_hit_lui __asm__("D_L03_00173F60") __attribute__((section(".data")));
 
 void FUN_L03_002c4718(struct Moby *m)
 {
@@ -754,23 +754,23 @@ void FUN_L03_002c4718(struct Moby *m)
         m->collision = 0;
         (*(struct Moby **)(d + 4))->collision = 0;
         if (FUN_001efa68(&old_pos, &next_pos, 4, m, 0)) {
-            FUN_001f9a28(&next_pos, &coll_hit_c4718.point, &next_pos);
+            FUN_001f9a28(&next_pos, &coll_hit_lui.point, &next_pos);
             FUN_001f9bf8(&next_pos, &next_pos, 0.215f);
             FUN_001f9a10(pos, pos, &next_pos);
-            if (coll_hit_c4718.moby == 0) {
-                FUN_L00_001ff660(d, d, &coll_hit_c4718.normal_x);
-                angle = FUN_001f9b20(&coll_hit_c4718.normal_x);
-                if (FUN_001f9e90(coll_hit_c4718.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
+            if (coll_hit_lui.moby == 0) {
+                FUN_L00_001ff660(d, d, &coll_hit_lui.normal_x);
+                angle = FUN_001f9b20(&coll_hit_lui.normal_x);
+                if (FUN_001f9e90(coll_hit_lui.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
                     FUN_001f9a68(d, d, 0.5f);
                     if (FUN_001f9af0(d) < 0.025f) {
                         m->state = 1;
                         goto first_collision_timer;
                     }
                 }
-            } else if (((struct Moby *)coll_hit_c4718.moby)->oclass != 0x221) {
-                FUN_L00_001ff660(d, d, &coll_hit_c4718.normal_x);
-                angle = FUN_001f9b20(&coll_hit_c4718.normal_x);
-                if (FUN_001f9e90(coll_hit_c4718.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
+            } else if (((struct Moby *)coll_hit_lui.moby)->oclass != 0x221) {
+                FUN_L00_001ff660(d, d, &coll_hit_lui.normal_x);
+                angle = FUN_001f9b20(&coll_hit_lui.normal_x);
+                if (FUN_001f9e90(coll_hit_lui.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
                     FUN_001f9a68(d, d, 1.2f);
             } else {
                 d[2] *= FUN_002132a8(0.9f, 1.1f);
@@ -782,20 +782,20 @@ first_collision_timer:
             }
         }
         if (coll_sphere(0.2f, (Vec4 *)&m->pos, 4, m)) {
-            FUN_001f9a28(&next_pos, &coll_hit_c4718.point, &coll_hit_c4718.pad30);
+            FUN_001f9a28(&next_pos, &coll_hit_lui.point, &coll_hit_lui.pad30);
             FUN_001f9bf8(&next_pos, &next_pos, 0.015f);
-            FUN_001f9a10((Vec4 *)&m->pos, &coll_hit_c4718.pad30, &next_pos);
-            if (coll_hit_c4718.moby == 0) {
-                FUN_L00_001ff660(d, d, &coll_hit_c4718.normal_x);
-                angle = FUN_001f9b20(&coll_hit_c4718.normal_x);
-                if (FUN_001f9e90(coll_hit_c4718.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
+            FUN_001f9a10((Vec4 *)&m->pos, &coll_hit_lui.pad30, &next_pos);
+            if (coll_hit_lui.moby == 0) {
+                FUN_L00_001ff660(d, d, &coll_hit_lui.normal_x);
+                angle = FUN_001f9b20(&coll_hit_lui.normal_x);
+                if (FUN_001f9e90(coll_hit_lui.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
                     FUN_001f9a68(d, d, 0.5f);
                     if (FUN_001f9af0(d) < 0.025f) m->state = 1;
                 }
-            } else if (((struct Moby *)coll_hit_c4718.moby)->oclass != 0x221) {
-                FUN_L00_001ff660(d, d, &coll_hit_c4718.normal_x);
-                angle = FUN_001f9b20(&coll_hit_c4718.normal_x);
-                if (FUN_001f9e90(coll_hit_c4718.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
+            } else if (((struct Moby *)coll_hit_lui.moby)->oclass != 0x221) {
+                FUN_L00_001ff660(d, d, &coll_hit_lui.normal_x);
+                angle = FUN_001f9b20(&coll_hit_lui.normal_x);
+                if (FUN_001f9e90(coll_hit_lui.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
                     FUN_001f9a68(d, d, 1.2f);
             } else {
                 d[2] *= FUN_002132a8(0.9f, 1.1f);
@@ -1473,7 +1473,7 @@ typedef struct {
 extern Moby *D_L03_00173F58 __attribute__((section(".data")));
 extern char *FUN_L00_0026dd20(void *pos, void *vel, int c, int d, float f);
 extern char D_0013E533[];
-extern char D_L03_00173F60[];
+extern CollisionHit coll_hit __asm__("D_L03_00173F60");
 extern char D_L03_00173F80[];
 extern f32 fast_add_rotations_c2(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
@@ -1606,7 +1606,7 @@ void FUN_L03_002d47c0(Moby *moby) {
                 normalize_vector_xyz(&tracer_vel, &tracer_vel, D_0015ED6C_c * 100.0f);
                 FUN_L03_00260130(data->target, &spark_vel, &spark_dir, &tracer_vel, scale_game_frames_alt(0x2D));
                 if (FUN_001efa68(&muzzle, &ray_end, 0, data->target, 0) != 0) {
-                    qcopy(&muzzle, D_L03_00173F60);
+                    qcopy(&muzzle, &coll_hit);
                     normalize_vector_xyz(&aim, &aim, D_0015ED6C_c * 10.0f);
                     for (j = 0; j < 10; j++) {
                         *(u128_2D5B88 *)&spark_dir = 0;
