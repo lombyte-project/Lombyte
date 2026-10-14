@@ -71,7 +71,7 @@ extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
-int D_L16_0015F678_t __asm__("D_L16_0015F678") = {0};
+int r1_repeat_timer __asm__("D_L16_0015F678") = {0};
 extern int D_L16_0015F594 __attribute__((sda));
 extern int D_L16_0016CB80 __attribute__((section(".data")));
 extern int FUN_001efa68(void *, void *, int, int, int);
@@ -1727,15 +1727,15 @@ void FUN_L16_002270c8(void) {
                     {
                         int both = 0;
 
-                        func_001F9908_r(&D_L16_0015F678_t);
-                        if (D_L16_0015F678_t != 0) {
+                        func_001F9908_r(&r1_repeat_timer);
+                        if (r1_repeat_timer != 0) {
                             both = 1;
                             if (!((controller_state.held & 8) && (controller_state.pressed & 8))) {
                                 both = 0;
                             }
                         }
                         if (controller_state.pressed & 8) {
-                            D_L16_0015F678_t = scale_game_frames(0x1E);
+                            r1_repeat_timer = scale_game_frames(0x1E);
                         }
                         if (!(hero.state_timer > scale_game_frames(0x14))) {
                             break;

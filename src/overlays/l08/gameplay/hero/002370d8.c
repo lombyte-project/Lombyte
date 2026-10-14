@@ -143,7 +143,7 @@ void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
-int D_L08_0015F678 = {0};
+int r1_repeat_timer __asm__("D_L08_0015F678") = {0};
 void FUN_L08_002370d8(void) {
     unsigned char *moby;
     int prevSub;
@@ -1719,15 +1719,15 @@ void FUN_L08_002370d8(void) {
                     {
                         int both = 0;
 
-                        func_001F9908_r(&D_L08_0015F678);
-                        if (D_L08_0015F678 != 0) {
+                        func_001F9908_r(&r1_repeat_timer);
+                        if (r1_repeat_timer != 0) {
                             both = 1;
                             if (!((controller_state.held & 8) && (controller_state.pressed & 8))) {
                                 both = 0;
                             }
                         }
                         if (controller_state.pressed & 8) {
-                            D_L08_0015F678 = scale_game_frames(0x1E);
+                            r1_repeat_timer = scale_game_frames(0x1E);
                         }
                         if (!(hero.state_timer > scale_game_frames(0x14))) {
                             break;

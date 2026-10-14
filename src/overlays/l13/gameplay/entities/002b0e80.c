@@ -2368,7 +2368,7 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 font_print_center_large(s32, s32, u64, s32, s32) __asm__("func_001F6C20");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s32 get_effect_texture_c(s32) __asm__("func_001F44B8");
-int *D_L13_001613C0[1] = {0};
+int *hp_bar_clut[1] __asm__("D_L13_001613C0") = {0};
 extern unsigned char D_0013E500[];
 extern unsigned char D_0013F350[];
 extern void FUN_L11_00310ad0(float, float, float, void *, int, int, long);
@@ -2472,9 +2472,9 @@ void FUN_L13_002b97f8(char *moby) {
     for (j = lo; j <= hi; j++) {
         idx = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
         if (j < v) {
-            D_L13_001613C0[0][idx] = D_L13_001CBE70[idx];
+            hp_bar_clut[0][idx] = D_L13_001CBE70[idx];
         } else {
-            D_L13_001613C0[0][idx] = 0x80000000;
+            hp_bar_clut[0][idx] = 0x80000000;
         }
     }
     s = (char *)D_0013E500;
@@ -2592,7 +2592,7 @@ extern int D_L13_0015ED84;
 extern float D_L13_0016CDF0 __attribute__((section(".data")));
 extern JetTexture D_L13_0016D480[];
 extern unsigned int D_L13_0015F420;
-int D_L13_001613C4 = {0};
+int hp_bar_saved __asm__("D_L13_001613C4") = {0};
 extern char D_L13_001CBDE8[];
 short D_L13_00161440 = 0x7f;
 extern float D_L13_0015F3FC;
@@ -2695,11 +2695,11 @@ void FUN_L13_002bb068(Jet *m) {
         d->blend=0.0f;
         texture_index+=40;
         palette_data=D_L13_0015F420;
-        initialized=D_L13_001613C4;
+        initialized=hp_bar_saved;
         palette=(int*)(palette_data+(texture_table[texture_index].palette<<4));
-        D_L13_001613C0[0]=palette;
+        hp_bar_clut[0]=palette;
         if (!initialized) __builtin_memcpy(D_L13_001CBE70,palette,1024);
-        D_L13_001613C4=1; d->wait_timer=1; d->energy=1;
+        hp_bar_saved=1; d->wait_timer=1; d->energy=1;
         if (m->persistent!=0xFF && (D_0014C050)[m->persistent+(D_L13_0015ED84<<4)]==0xFF) m->state=9;
         if (d->group_a>0) jet_group_state(d->group_a,0,0,0);
         if (d->group_b>0) jet_group_state(d->group_b,0,0,0);

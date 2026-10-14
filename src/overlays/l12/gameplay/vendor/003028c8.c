@@ -2016,7 +2016,7 @@ extern int D_L12_001620F0 __attribute__((sda));
 /* The ready flag is followed, 8 bytes on, by two pairs of phases. */
 extern float D_L12_001620E0[1] __attribute__((sda));
 extern float D_L12_001620D8[2] __attribute__((sda));
-extern float D_0015ED7C_macro __asm__("D_0015ED7C") __attribute__((section(".sdata")));
+extern float frame_delta_time __asm__("D_0015ED7C") __attribute__((section(".sdata")));
 extern int *D_L12_00208AE0[];
 extern int D_L12_00205A80[];
 extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
@@ -2050,14 +2050,14 @@ void FUN_L12_0030bff0(M_bff0 *m) {
         break;
     case 1:
         for (i = 0; i < 2; i++) {
-            ((float *)&D_L12_001620F0)[i * 2 + 2] += D_L12_001620E0[i * 2] * D_0015ED7C_macro;
+            ((float *)&D_L12_001620F0)[i * 2 + 2] += D_L12_001620E0[i * 2] * frame_delta_time;
             if (((float *)&D_L12_001620F0)[i * 2 + 2] > 1.0f) {
                 ((float *)&D_L12_001620F0)[i * 2 + 2] -= 1.0f;
             }
             if (((float *)&D_L12_001620F0)[i * 2 + 2] < -1.0f) {
                 ((float *)&D_L12_001620F0)[i * 2 + 2] += 1.0f;
             }
-            ((float *)&D_L12_001620F0)[i * 2 + 3] += D_L12_001620E0[i * 2 + 1] * D_0015ED7C_macro;
+            ((float *)&D_L12_001620F0)[i * 2 + 3] += D_L12_001620E0[i * 2 + 1] * frame_delta_time;
             if (((float *)&D_L12_001620F0)[i * 2 + 3] > 1.0f) {
                 ((float *)&D_L12_001620F0)[i * 2 + 3] -= 1.0f;
             }
@@ -2065,14 +2065,14 @@ void FUN_L12_0030bff0(M_bff0 *m) {
                 ((float *)&D_L12_001620F0)[i * 2 + 3] += 1.0f;
             }
         }
-        D_L12_00162108[0] += D_L12_001620D8[0] * D_0015ED7C_macro;
+        D_L12_00162108[0] += D_L12_001620D8[0] * frame_delta_time;
         if (D_L12_00162108[0] > 1.0f) {
             D_L12_00162108[0] -= 1.0f;
         }
         if (D_L12_00162108[0] < -1.0f) {
             D_L12_00162108[0] += 1.0f;
         }
-        D_L12_00162108[1] += D_L12_001620D8[1] * D_0015ED7C_macro;
+        D_L12_00162108[1] += D_L12_001620D8[1] * frame_delta_time;
         if (D_L12_00162108[1] > 1.0f) {
             D_L12_00162108[1] -= 1.0f;
         }

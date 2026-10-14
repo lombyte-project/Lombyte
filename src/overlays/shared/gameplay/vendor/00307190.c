@@ -452,7 +452,7 @@ extern void rotate_about_axis(void *, void *, void *, float) __asm__("FUN_002148
 extern float ground_height_at(void *) __asm__("FUN_L00_00263468");
 extern int play_voice(int, int, void *, int) __asm__("FUN_L00_0028ddd8");
 extern int set_voice_volume(int, int) __asm__("FUN_L01_002a1968");
-extern float D_0015ED7C;
+extern float frame_delta_time __asm__("D_0015ED7C");
 extern char D_0013E550[];
 #define D_L08_001675C8 (*(float *)(D_L08_001675C0 + 8))
 #define D_L08_001625D8 (*(float *)((char *)&D_L08_0016234C + 0x28c))
@@ -486,9 +486,9 @@ void FUN_L08_00316fa8(char *moby) {
 
     smoothed = D_L08_001625D8;
     if (smoothed < fraction) {
-        smoothed = smoothed + D_0015ED7C * 0.2f;
+        smoothed = smoothed + frame_delta_time * 0.2f;
     } else {
-        smoothed = smoothed - D_0015ED7C * 0.75f;
+        smoothed = smoothed - frame_delta_time * 0.75f;
     }
     D_L08_001625D8 = smoothed;
     if (D_L08_001625D8 > 1.0f) {

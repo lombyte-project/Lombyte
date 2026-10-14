@@ -734,7 +734,7 @@ extern float camera_pos_b358[] __asm__("D_L11_001677C0");
 extern char last_camera_pos[4] __asm__("D_L11_00162840") __attribute__((sda)); /* a 16-byte vector; declared small so it is reached through $gp */
 extern float ocean_level __asm__("D_L11_00161E1C");
 extern UV_30b358 wave_drift[] __asm__("D_L11_001D9AF0");
-extern float frame_time_b358 __asm__("D_0015ED7C");
+extern float frame_delta_time __asm__("D_0015ED7C");
 
 void FUN_L11_0030b358(OceanMoby_30b358 *moby)
 {
@@ -784,7 +784,7 @@ void FUN_L11_0030b358(OceanMoby_30b358 *moby)
     }
     tide_level = ocean_level + fast_sin_b358(int_to_float_b358(level_frame % 360) * 0.017444445f - 3.14f) * 0.25f;
     for (k = 0; k < 2; k++) {
-        float sum = wave_offset[k].u + wave_drift[k].u * frame_time_b358;
+        float sum = wave_offset[k].u + wave_drift[k].u * frame_delta_time;
         wave_offset[k].u = sum;
         if (1.0f < sum) {
             wave_offset[k].u = sum - 1.0f;
@@ -792,7 +792,7 @@ void FUN_L11_0030b358(OceanMoby_30b358 *moby)
         if (wave_offset[k].u < -1.0f) {
             wave_offset[k].u = wave_offset[k].u + 1.0f;
         }
-        sum = wave_offset[k].v + wave_drift[k].v * frame_time_b358;
+        sum = wave_offset[k].v + wave_drift[k].v * frame_delta_time;
         wave_offset[k].v = sum;
         if (1.0f < sum) {
             wave_offset[k].v = sum - 1.0f;

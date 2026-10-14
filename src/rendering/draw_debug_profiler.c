@@ -10,7 +10,7 @@ typedef struct {
 extern u8 D_00100AE0[];
 extern u16 D_0010FA90[];
 extern u8 D_0010FAA0[];
-extern u8 D_0015EE40 MACRO_ADDR;
+extern u8 subtitles_enabled __asm__("D_0015EE40") MACRO_ADDR;
 extern s32 screen_overlay_enabled __asm__("D_0015F34C") __attribute__((sda));
 extern s32 screen_color_effect_now __asm__("D_0015F350") __attribute__((sda));
 extern s32 occl_debug_overlay_enabled[2] __asm__("D_0015F370") __attribute__((sda));
@@ -231,7 +231,7 @@ void draw_debug_profiler(void) {
         draw_help();
         draw_letterbox_bars();
     }
-    if (game_mode_macro == 2 && D_0015EE40 != 0) {
+    if (game_mode_macro == 2 && subtitles_enabled != 0) {
         draw_subtitles();
     }
     func_001F21B8(D_0015F3F8, 0xE);
@@ -312,4 +312,4 @@ void draw_debug_profiler(void) {
 extern __typeof__(draw_debug_profiler) func_001F39D0 __attribute__((alias("FUN_001f39d0")));
 
 /* Defined below its only user, so retail reaches it with lui. */
-u8 D_0015EE40 MACRO_ADDR = 0;
+u8 subtitles_enabled __asm__("D_0015EE40") MACRO_ADDR = 0;

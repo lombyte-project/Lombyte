@@ -1602,7 +1602,7 @@ struct HeldGadgetVars {
 };
 
 extern int D_00141660 __attribute__((section(".data")));
-int D_L01_0015F674 = {0};
+int r1_double_tap_timer __asm__("D_L01_0015F674") = {0};
 extern int FUN_001f9740(int *) __asm__("FUN_001f9740");
 extern int FUN_0022da68(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);
@@ -1784,14 +1784,14 @@ int FUN_L01_00240ed8(void) {
     if (hero.state_timer == saved) {
         if (FUN_L00_0020d498(3) == 3 && hero.state.current != 0x81 &&
             (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.unk22D8 == 0) {
-            FUN_001f9740(&D_L01_0015F674);
-            if (D_L01_0015F674 != 0 &&
+            FUN_001f9740(&r1_double_tap_timer);
+            if (r1_double_tap_timer != 0 &&
                 ((unsigned int)hero.state.control_mode < 2 || hero.state.control_mode == 0xc ||
                  ((hero.state.control_mode == 2 || hero.state.control_mode == 4) && hero.grounded_frames != 0)) &&
                 (controller_state.held & 8) != 0 && (controller_state.pressed & 8) != 0)
                 hero_set_state(0x81, 1);
             if ((controller_state.pressed & 8) != 0 && hero.state.current != 0x81)
-                D_L01_0015F674 = scale_game_frames(0x1e);
+                r1_double_tap_timer = scale_game_frames(0x1e);
         } else if (hero.state.current != 0x13 && hero.state.current != 0x81 &&
                    hero.state.current != 0x15 && hero.state.current != 0x16) {
             hero.unk22CA = 0;

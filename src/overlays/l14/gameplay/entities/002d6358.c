@@ -176,7 +176,7 @@ typedef struct {
     int i20;
     int pad[3];
 } Ray_67e8;
-int D_L14_00161A3C_67e8 __asm__("D_L14_00161A3C") = 0x8c;
+int D_L14_00161A3C = 0x8c;
 extern float D_L14_00161A40 __attribute__((sda));
 extern float D_L14_00161A44 __attribute__((sda));
 extern float D_L14_00161A48 __attribute__((sda));
@@ -266,7 +266,7 @@ void FUN_L14_002d67e8(struct Moby *m) {
         m->command = 1;
     }
     if (m->command == 1) {
-        *(int *)(d + 0x1C0) = frames_67e8(D_L14_00161A3C_67e8);
+        *(int *)(d + 0x1C0) = frames_67e8(D_L14_00161A3C);
         *(int *)(d + 0x1C4) = 0;
         m->command = 2;
         joint_matrix_67e8(m, 4, v);
@@ -287,7 +287,7 @@ void FUN_L14_002d67e8(struct Moby *m) {
         float k;
         joint_matrix_67e8(m, 0, d + 0xA0);
         blend = 1.0f;
-        t = itof_67e8(*(int *)(d + 0x1C0)) / itof_67e8(frames_67e8(D_L14_00161A3C_67e8));
+        t = itof_67e8(*(int *)(d + 0x1C0)) / itof_67e8(frames_67e8(D_L14_00161A3C));
         k = D_L14_00161A40;
         ti = ((RacerSeg_67e8 *)d)->seg;
         tf = ((RacerSeg_67e8 *)d)->frac;

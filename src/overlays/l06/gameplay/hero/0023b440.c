@@ -92,7 +92,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-int D_L06_0015F678 = {0};
+int r1_repeat_timer __asm__("D_L06_0015F678") = {0};
 extern void FUN_L00_00206c08(void);
 extern void FUN_L00_00209ca8(int, int, int);
 extern void FUN_L00_0020e698(void);
@@ -1501,15 +1501,15 @@ void FUN_L06_0023b440(void) {
                     {
                         int both = 0;
 
-                        func_001F9908_r(&D_L06_0015F678);
-                        if (D_L06_0015F678 != 0) {
+                        func_001F9908_r(&r1_repeat_timer);
+                        if (r1_repeat_timer != 0) {
                             both = 1;
                             if (!((controller_state.held & 8) && (controller_state.pressed & 8))) {
                                 both = 0;
                             }
                         }
                         if (controller_state.pressed & 8) {
-                            D_L06_0015F678 = scale_game_frames(0x1E);
+                            r1_repeat_timer = scale_game_frames(0x1E);
                         }
                         if (!(hero.state_timer > scale_game_frames(0x14))) {
                             break;

@@ -831,8 +831,8 @@ extern int D_L17_001D9B68[];
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-short D_L17_00162170 = 0x1f4;
-short D_L17_00162174 = 0x64;
+short lock_hold_frames __asm__("D_L17_00162170") = 0x1f4;
+short lock_fade_frames __asm__("D_L17_00162174") = 0x64;
 extern short D_L17_00162180 __attribute__((sda));
 extern unsigned char D_0013E500[];
 extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, long, int, int,
@@ -891,9 +891,9 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
     FUN_L17_002eb768((int)moby, d);
     if (*(int *)(d + 0x88) != 0) {
         FUN_L11_00311210(*(char **)(d + 0x88) + 0x10, &sp10, &sp14, 0);
-        if (*(int *)(d + 0x8C) > *(int *)&D_L17_00162170) {
-            t = convert_integer_to_float(*(int *)(d + 0x8C) - *(int *)&D_L17_00162170);
-            t = t / convert_integer_to_float(*(int *)&D_L17_00162174);
+        if (*(int *)(d + 0x8C) > *(int *)&lock_hold_frames) {
+            t = convert_integer_to_float(*(int *)(d + 0x8C) - *(int *)&lock_hold_frames);
+            t = t / convert_integer_to_float(*(int *)&lock_fade_frames);
             m = 2.0f * (1.0f - t);
             k = t * 5.0f + 1.0f;
             if (m > 1.0f)
@@ -1569,8 +1569,8 @@ extern unsigned char D_L17_00162068 __attribute__((sda));
 extern float D_L17_00162084 __attribute__((sda));
 extern float D_L17_00162088 __attribute__((sda));
 int D_L17_00162178 = 0xb4;
-char *D_L17_00162180_ed __asm__("D_L17_00162180") = {0};
-int D_L17_00162184 = {0};
+char *hp_bar_clut __asm__("D_L17_00162180") = {0};
+int hp_bar_saved __asm__("D_L17_00162184") = {0};
 typedef struct {
     char pad[0x160];
     float f160;
@@ -1707,12 +1707,12 @@ void FUN_L17_002ed018(ShipMoby *moby) {
             qcopy_nc(v->home_pos, moby->pos);
             {
                 int n = v->i104 + 0x28;
-                D_L17_00162180_ed = D_L17_0015F420 + (D_L17_0016DA80 + n)->idx * 16;
+                hp_bar_clut = D_L17_0015F420 + (D_L17_0016DA80 + n)->idx * 16;
             }
-            if (D_L17_00162184 == 0) {
-                *(ShipBlock400 *)D_L17_001D9B68_ed = *(ShipBlock400 *)D_L17_00162180_ed;
+            if (hp_bar_saved == 0) {
+                *(ShipBlock400 *)D_L17_001D9B68_ed = *(ShipBlock400 *)hp_bar_clut;
             }
-            D_L17_00162184 = 1;
+            hp_bar_saved = 1;
             v->timerF8 = 1;
             v->iE8 = 1;
             if (moby->bB0 != 0xFF && D_0014C050_ed[current_level_index][moby->bB0] == 0xFF) {

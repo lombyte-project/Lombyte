@@ -302,12 +302,12 @@ typedef struct {
 
 extern char D_L17_001676C0[];
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float D_0015EE7C __asm__("D_0015ED7C");
+extern float frame_delta_time __asm__("D_0015ED7C");
 extern float fast_cos_c(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_c(float) __asm__("FUN_001f9de0");
 extern int FUN_001fa6e0(int, int, float);
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
-short D_L17_00162440 __asm__("D_L17_001623C0") = {0};
+short D_L17_001623C0 = {0};
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
@@ -381,7 +381,7 @@ void FUN_L17_002f32f0(struct Moby *moby) {
             pu[j * 2] = D_L17_001E6FA0[j * 2] + D_L17_001DE0A0[i];
             pv[j * 2] = D_L17_001E6FA0[j * 2 + 1];
         }
-        D_L17_001DE0A0[i] += *(float *)((char *)&D_L17_00162440 + i * 4) * D_0015EE7C;
+        D_L17_001DE0A0[i] += *(float *)((char *)&D_L17_001623C0 + i * 4) * frame_delta_time;
         draw_geometry_quad(&pkt, 0, 0);
     }
     *(long *)&pkt.q[2] = get_effect_texture_alt(0x2F);
@@ -430,8 +430,8 @@ void FUN_L17_002f32f0(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
 
 
-extern short D_L17_00162450 __asm__("D_L17_001623D0") __attribute__((sda));
-extern short D_L17_00162458 __asm__("D_L17_001623D8") __attribute__((sda));
+extern short D_L17_001623D0  __attribute__((sda));
+extern short D_L17_001623D8  __attribute__((sda));
 extern void FUN_L17_002f32f0_c(char *) __asm__("FUN_L17_002f32f0");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
@@ -466,9 +466,9 @@ done:
         }
         qcopy(d, &moby->pos);
         build_spherical_offset(
-            t0, (*(float *)&D_L17_001623D4 + *(float *)&D_L17_00162450) / *(float *)&D_L17_00162458,
+            t0, (*(float *)&D_L17_001623D4 + *(float *)&D_L17_001623D0) / *(float *)&D_L17_001623D8,
             moby->rot.z, 0.0f);
-        build_spherical_offset(t1, *(float *)&D_L17_00162450 / *(float *)&D_L17_00162458,
+        build_spherical_offset(t1, *(float *)&D_L17_001623D0 / *(float *)&D_L17_001623D8,
                                *(float *)(d + 0x44), 0.0f);
         add_vector_xyz(t2, t0, t1);
         *(OvlQuad *)t0 = *(OvlQuad *)t2;
@@ -478,7 +478,7 @@ done:
         *(float *)(d + 0x10) -= 300.0f;
     } else {
         for (i = 0; i < 5; i++) {
-            D_L17_001DE040[i] += D_L17_001DE070[i] * D_L17_001DE058[i] * D_0015EE7C;
+            D_L17_001DE040[i] += D_L17_001DE070[i] * D_L17_001DE058[i] * frame_delta_time;
             if (1.0f < D_L17_001DE040[i]) {
                 D_L17_001DE040[i] = 1.0f;
                 D_L17_001DE058[i] = -1.0f;
@@ -490,10 +490,10 @@ done:
         }
         for (i = 0; i < 5; i++) {
             D_L17_001DE0D0[i] =
-                fast_add_rotations(D_L17_001DE0D0[i], D_L17_001DDFE0[i] * 0.1f * D_0015EE7C);
+                fast_add_rotations(D_L17_001DE0D0[i], D_L17_001DDFE0[i] * 0.1f * frame_delta_time);
         }
         for (i = 0; i < 2; i++) {
-            D_L17_001DE0A0[i] += ((float *)&D_L17_00162440)[i] * D_0015EE7C;
+            D_L17_001DE0A0[i] += ((float *)&D_L17_001623C0)[i] * frame_delta_time;
             if (1.0f <= D_L17_001DE0A0[i]) {
                 D_L17_001DE0A0[i] -= 1.0f;
             }
@@ -965,9 +965,9 @@ void FUN_L17_002f5690(void) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F74E8), where it is exact; names translated to the US level program. */
 
 extern char D_L17_001DF6A0[];
-short D_L17_00162440_d __asm__("D_L17_00162440") = -4784;
-short D_L17_00162450_d __asm__("D_L17_00162450") = -3456;
-short D_L17_00162458_d __asm__("D_L17_00162458") = -2664;
+short D_L17_00162440 = -4784;
+short D_L17_00162450 = -3456;
+short D_L17_00162458 = -2664;
 void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
@@ -983,10 +983,10 @@ void FUN_L17_002f59a8(void) {
     font_queue_vu_state();
     p = (float *)D_L17_001DF6A0;
     for (i = 0; i < 1; i++) {
-        FUN_L17_002f54d8(((int *)&D_L17_00162420)[i], (V3 *)((int *)&D_L17_00162450_d)[i],
-                         (V3 *)((int *)&D_L17_00162440_d)[i], ((int *)&D_L17_00162448)[i], p);
-        FUN_L00_001fde98(((int *)&D_L17_00162420)[i], ((int *)&D_L17_00162440_d)[i],
-                         ((int *)&D_L17_00162458_d)[i], p, 1);
+        FUN_L17_002f54d8(((int *)&D_L17_00162420)[i], (V3 *)((int *)&D_L17_00162450)[i],
+                         (V3 *)((int *)&D_L17_00162440)[i], ((int *)&D_L17_00162448)[i], p);
+        FUN_L00_001fde98(((int *)&D_L17_00162420)[i], ((int *)&D_L17_00162440)[i],
+                         ((int *)&D_L17_00162458)[i], p, 1);
     }
 }
 /* Computes a per-vertex 2D sphere-map texture coordinate from position and normal arrays. */

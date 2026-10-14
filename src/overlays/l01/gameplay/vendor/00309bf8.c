@@ -690,7 +690,7 @@ typedef struct {
     u8 state;
 } ScrollMoby;
 
-extern f32 D_0015ED7C;
+extern f32 frame_delta_time __asm__("D_0015ED7C");
 void FUN_L01_0030f0e0(void);
 void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
 
@@ -704,7 +704,7 @@ void FUN_L01_0030f208(ScrollMoby *m) {
         m->state = 1;
         break;
     case 1:
-        d = D_0015ED7C * 0.025f;
+        d = frame_delta_time * 0.025f;
         D_L01_00162110[0] += d;
         D_L01_00162110[1] += d;
         if (D_L01_00162110[0] > 1.0f) {

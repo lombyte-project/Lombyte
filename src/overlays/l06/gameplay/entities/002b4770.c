@@ -1014,7 +1014,7 @@ extern float D_L06_00161E1C_2F69D0 __asm__("D_L06_00161D8C") __attribute__((sda)
 extern float D_L06_00161E20_2F69D0 __asm__("D_L06_00161D90") __attribute__((sda));
 extern float D_L06_00161E24_2F69D0 __asm__("D_L06_00161D94") __attribute__((sda));
 extern float D_L06_00161E28_2F69D0 __asm__("D_L06_00161D98") __attribute__((sda));
-float D_L06_00161E2C_2F69D0 __asm__("D_L06_00161D9C") = {0};
+float D_L06_00161D9C = {0};
 extern float D_L06_00161E30_2F69D0 __asm__("D_L06_00161DA0") __attribute__((sda));
 extern float D_L06_00161E34_2F69D0 __asm__("D_L06_00161DA4") __attribute__((sda));
 extern float D_L06_00161E3C_2F69D0 __asm__("D_L06_00161DAC") __attribute__((sda));
@@ -1118,7 +1118,7 @@ void FUN_L06_002f55a0(Moby *moby) {
     case 4:
         func_L00_002512D8_2F69D0(moby->mission);
         if (D_L06_00161D78_gp < 20.0f) {
-            func_00214D88_2F69D0(&D_L06_00161D78_gp, &D_L06_00161E2C_2F69D0, 20.0f, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E14_2F69D0 * D_0015EE6C_2F69D0);
+            func_00214D88_2F69D0(&D_L06_00161D78_gp, &D_L06_00161D9C, 20.0f, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E14_2F69D0 * D_0015EE6C_2F69D0);
         }
         if (D_L06_00161D78_gp > D_L06_00161E3C_2F69D0 && D_L06_00161D7C_gp < 1000.0f) {
             func_00214D88_2F69D0(&D_L06_00161D7C_gp, &D_L06_00161E30_2F69D0, 1000.0f, D_L06_00161E24_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E24_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E18_2F69D0 * D_0015EE6C_2F69D0);
@@ -2158,7 +2158,7 @@ extern int D_L06_001413D0 __attribute__((section(".data")));
 extern float D_L06_00161F0C __attribute__((sda));
 int D_L06_00161F10 = 0x80808080;
 int D_L06_00161F14 = 0x80804080;
-extern char *D_L06_001600EC __asm__("D_L06_001600EC");
+extern char *D_L06_001600EC ;
 extern int *D_L06_001B0C30[];
 
 /* Updates the object's health, hit response, recovery timer and path motion. */

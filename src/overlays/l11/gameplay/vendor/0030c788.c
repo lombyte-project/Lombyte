@@ -1854,8 +1854,8 @@ void FUN_L11_00311be8(void *moby, void *a1, void *a2) {
 }
 /* Keeps the moby's current target, picking a new one when it is lost and restarting the timer. */
 
-int D_L11_00162160 = 0x1f4;
-int D_L11_00162164 = 0x64;
+int lock_hold_frames __asm__("D_L11_00162160") = 0x1f4;
+int lock_fade_frames __asm__("D_L11_00162164") = 0x64;
 extern float D_L11_001677D0[];
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 
@@ -1878,7 +1878,7 @@ void FUN_L11_00311c80(void *self, char *moby) {
         qcopy(v, src);
         r = FUN_L11_00311948(self, moby, src - 4, v, 0.19634955f, 0.19634955f, 255.0f, *(void **)(moby + 0x88), 0);
         if (r != *(void **)(moby + 0x88)) {
-            int n = D_L11_00162160 + D_L11_00162164;
+            int n = lock_hold_frames + lock_fade_frames;
             *(void **)(moby + 0x88) = r;
             *(int *)(moby + 0x8C) = n;
         } else if (r != 0) {
@@ -1895,7 +1895,7 @@ void FUN_L11_00311c80(void *self, char *moby) {
 typedef struct {
     u8 pad0[0x88];
     struct Moby *target;    /* 0x88: lock-on candidate picked by FUN_L11_00311c80 */
-    s32 lock_timer;         /* 0x8C: counts down from D_L11_00162160 + D_L11_00162164 once targeted */
+    s32 lock_timer;         /* 0x8C: counts down from lock_hold_frames + lock_fade_frames once targeted */
     u8 pad90[0x50];
     s32 reticle_x;          /* 0xE0: screen position of the aim reticle (FUN_L11_003125a8) */
     s32 reticle_y;          /* 0xE4 */
@@ -2022,8 +2022,8 @@ void FUN_L11_00311d50(struct Moby *moby) {
     FUN_L11_00311c80(moby, (char *)vars);
     if (vars->target != NULL) {
         FUN_L11_00311210(&vars->target->pos, &sx, &sy, 0);
-        if (vars->lock_timer > D_L11_00162160) {
-            t = convert_integer_to_float(vars->lock_timer - D_L11_00162160) / convert_integer_to_float(D_L11_00162164);
+        if (vars->lock_timer > lock_hold_frames) {
+            t = convert_integer_to_float(vars->lock_timer - lock_hold_frames) / convert_integer_to_float(lock_fade_frames);
             fade = 2.0f * (1.0f - t);
             grow = t * 5.0f + 1.0f;
             if (fade > 1.0f) {

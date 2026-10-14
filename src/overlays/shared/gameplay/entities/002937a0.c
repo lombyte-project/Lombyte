@@ -958,18 +958,18 @@ void FUN_L08_002f0f68(int **tabs, int n, int *counts, int flat, float r, float g
 /* advance a 2-D wrapped phase by a and b and write scaled sines */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2618), where it is exact; names translated to the US level program. */
 
-extern float D_0015ED7C;
+extern float frame_delta_time __asm__("D_0015ED7C");
 extern float FUN_001f9de0(float);
 
 void FUN_L08_002f1158(float *out, float *ph, float a, float b, float scale) {
-    ph[0] += a * D_0015ED7C;
+    ph[0] += a * frame_delta_time;
     if (ph[0] > 1.0f) {
         ph[0] -= 2.0f;
     }
     if (ph[0] < -1.0f) {
         ph[0] += 2.0f;
     }
-    ph[1] += b * D_0015ED7C;
+    ph[1] += b * frame_delta_time;
     if (ph[1] > 1.0f) {
         ph[1] -= 2.0f;
     }
@@ -985,19 +985,19 @@ typedef struct {
 } V2_12a0;
 
 extern V2_12a0 D_L08_001E8348_12a0[] __asm__("D_L08_001E8348");
-extern float D_0015ED7C;
-extern float D_0015ED7C;
+extern float frame_delta_time __asm__("D_0015ED7C");
+extern float frame_delta_time __asm__("D_0015ED7C");
 
 extern V2_12a0 D_L08_001DB500[];
 void FUN_L08_002f12a0(int idx) {
-    D_L08_001E8348_12a0[idx].x += D_L08_001DB500[idx].x * D_0015ED7C;
+    D_L08_001E8348_12a0[idx].x += D_L08_001DB500[idx].x * frame_delta_time;
     if (D_L08_001E8348_12a0[idx].x > 1.0f) {
         D_L08_001E8348_12a0[idx].x -= 1.0f;
     }
     if (D_L08_001E8348_12a0[idx].x < -1.0f) {
         D_L08_001E8348_12a0[idx].x += 1.0f;
     }
-    D_L08_001E8348_12a0[idx].y += D_L08_001DB500[idx].y * D_0015ED7C;
+    D_L08_001E8348_12a0[idx].y += D_L08_001DB500[idx].y * frame_delta_time;
     if (D_L08_001E8348_12a0[idx].y > 1.0f) {
         D_L08_001E8348_12a0[idx].y -= 1.0f;
     }
@@ -1014,11 +1014,11 @@ extern float D_L08_00161DE4[] __attribute__((section(".sdata")));
 void FUN_L08_002f1378(int i) {
     float *p;
     p = &scroll_pos_x[i * 2];
-    *p += D_L08_00161DE0[i * 2] * D_0015ED7C;
+    *p += D_L08_00161DE0[i * 2] * frame_delta_time;
     if (*p > 1.0f) *p -= 1.0f;
     if (*p < -1.0f) *p += 1.0f;
     p = &scroll_pos_y[i * 2];
-    *p += D_L08_00161DE4[i * 2] * D_0015ED7C;
+    *p += D_L08_00161DE4[i * 2] * frame_delta_time;
     if (*p > 1.0f) *p -= 1.0f;
     if (*p < -1.0f) *p += 1.0f;
 }

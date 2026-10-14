@@ -1620,9 +1620,9 @@ void FUN_L07_00314150(unsigned char *moby) {
 extern u64 get_effect_texture_l07(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister_l07(int, u64) __asm__("FUN_00233980");
 extern void draw_geometry_quad_l07(void *, int, int) __asm__("FUN_001f7d30");
-float D_L07_00161B74 = {0};
-float D_L07_00161B78 = {0};
-float D_L07_00161B7C_gp __asm__("D_L07_00161B7C") = 0.006f;
+float scroll_phase __asm__("D_L07_00161B74") = 0;
+float row_wave_phase __asm__("D_L07_00161B78") = 0;
+float row_phase_step_gp __asm__("D_L07_00161B7C") = 0.006f;
 extern short D_L07_0020DBC8[];
 
 typedef struct {
@@ -1650,18 +1650,18 @@ void FUN_L07_00317910(void) {
     packet.header[2] = 0xff9000000260ULL;
     packet.header[3] = 0x8000000048ULL;
     packet.header[0] = 0;
-    phase = D_L07_00161B74;
-    D_L07_00161B74 += 0.001f;
-    if (D_L07_00161B74 > 7.0f) D_L07_00161B74 -= 7.0f;
+    phase = scroll_phase;
+    scroll_phase += 0.001f;
+    if (scroll_phase > 7.0f) scroll_phase -= 7.0f;
     vu1_add_g_sregister_l07(0x47, 0x5301b);
     phase_step = 0.3f;
     phase += phase_step;
     column_step = 0.05f;
     vu1_add_g_sregister_l07(0x4e, (depth_buffer_address >> 13) | 0x1000000 | ((u64)0x8000 << 17));
     for (row = 1; row < 10; row++) {
-        row_phase = D_L07_00161B78;
-        D_L07_00161B78 += D_L07_00161B7C_gp;
-        if (D_L07_00161B78 > 7.0f) D_L07_00161B78 -= 7.0f;
+        row_phase = row_wave_phase;
+        row_wave_phase += row_phase_step_gp;
+        if (row_wave_phase > 7.0f) row_wave_phase -= 7.0f;
         for (column = 0; column < 20; column++) {
             qcopy(packet.pos[0], rope_grid[row][column]);
             qcopy(packet.pos[1], rope_grid[row][(column + 1) % 20]);
@@ -1702,7 +1702,7 @@ void FUN_L07_00317910(void) {
 
 extern int D_L07_00161B6C_gp __asm__("D_L07_00161B6C") __attribute__((sda));
 extern int D_L07_00161B70_gp __asm__("D_L07_00161B70") __attribute__((sda));
-extern float D_L07_00161B7C_gp __asm__("D_L07_00161B7C") __attribute__((sda));
+extern float row_phase_step_gp __asm__("D_L07_00161B7C") __attribute__((sda));
 extern int D_L07_00161B80 __attribute__((sda));
 extern int D_L07_00161B84;
 extern float D_L07_00161BB0;
@@ -1753,7 +1753,7 @@ void FUN_L07_00317cb0(char *moby, void *anchor) {
     r = random_angle_radians();
     build_look_at_matrix(D_L07_00161BA0, pc, pd, r);
     D_L07_00161BB0 = r;
-    D_L07_00161B7C_gp = 0.006f;
+    row_phase_step_gp = 0.006f;
     D_L07_00161B80 = 0;
     D_L07_00161B84 = 0;
     if (D_L07_00161B70_gp != 0) {
@@ -1787,7 +1787,7 @@ extern float vector_length_xyz(void *);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int D_L07_00161B6C_gp __asm__("D_L07_00161B6C") __attribute__((sda));
 extern int D_L07_00161B70_gp __asm__("D_L07_00161B70") __attribute__((sda));
-extern float D_L07_00161B7C_gp __asm__("D_L07_00161B7C") __attribute__((sda));
+extern float row_phase_step_gp __asm__("D_L07_00161B7C") __attribute__((sda));
 extern void FUN_L00_002defe0(int arg0);
 extern char D_L07_0020DDC0_v[] __asm__("D_L07_0020DAF0");
 
@@ -1804,7 +1804,7 @@ void FUN_L07_00318e98(int target_entry) {
 
     D_L07_00161B6C_gp = 1;
     D_L07_00161B70_gp = 1;
-    D_L07_00161B7C_gp = D_L07_00161B7C_gp * 0.5f;
+    row_phase_step_gp = row_phase_step_gp * 0.5f;
     allocate_voice_for_target_entry(10, 0, target_entry);
     base = (char *)D_L07_0020C840;
     for (i = 0; i < 200; i++) {
