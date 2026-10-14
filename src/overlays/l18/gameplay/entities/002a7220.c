@@ -2311,9 +2311,6 @@ s32 FUN_L18_002dfba0(const u8 *moby) {
     }
     return result;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002e9768.s", FUN_L18_002e9768);
-#else
 extern int FUN_L00_0025a420(void *, int, int);
 extern void FUN_L18_002e9e50(int);
 extern void FUN_L00_0025f090(float, float, void *, void *, int);
@@ -2335,7 +2332,7 @@ extern void spawn_particle_9768(void *, void *, int, int, int, int, float, float
 extern void spawn_particle_alt_9768(float, void *, void *, int, int, int) __asm__("FUN_L00_0026a4c8");
 extern float D_0015ED70_9768 __asm__("D_0015ED70");
 extern int D_L18_0015F580;
-extern int D_0013F3D0_9768 __asm__("D_0013F3D0");
+extern float D_0013F3D0_9768[4] __asm__("D_0013F3D0");
 extern int D_0014C050_9768[] __asm__("D_0014C050");
 
 extern unsigned char D_L18_001F29A0_9768[] __asm__("D_L18_001F29A0");
@@ -2437,7 +2434,7 @@ remove:
             moby->state = 3;
             data[2] = FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
             data[3] = FUN_L00_00257c48(0.0f, 90.0f) * DEG_TO_RAD * frame_time;
-            subtract_vector_9768(data + 4, &moby->pos.x, (float *)&D_0013F3D0_9768);
+            subtract_vector_9768(data + 4, &moby->pos.x, D_0013F3D0_9768);
             data[6] = 0.0f;
             scale_vector_9768(data + 4, data + 4, speed);
             vector_from_angles_9768(vector, speed, speed);
@@ -2464,7 +2461,6 @@ remove:
     }
     return;
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB260), where it is exact; names translated to the US level program. */
 
 extern float approach_value_alt(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
