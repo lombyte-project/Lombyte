@@ -70,9 +70,9 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     } else {
         travel = distance;
     }
-    acceleration = frame_time_sq;
-    FUN_00213f38(&speed, &travel_step, travel, 1.0f, acceleration * 48.0f,
-                  D_L02_001600D0 * D_0015ED6C);
+    acceleration = D_L02_001600D0 * D_0015ED6C;
+    FUN_00213f38(&speed, &travel_step, travel, 1.0f, frame_time_sq * 48.0f,
+                  acceleration);
     FUN_001f9bf8(adjusted, adjusted, travel_step);
     first_count = D_L02_001600D4;
     if (travel < 4.0f) first_count = 1;
@@ -88,8 +88,8 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
             int j;
             char **slot = (char **)slots;
             for (j = 0; j < 7; j++) {
-                if (slot[j] == 0) {
-                    slot[j] = shot;
+                if (*(char **)((char *)slot + (j << 2)) == 0) {
+                    *(char **)((char *)slot + (j << 2)) = shot;
                     break;
                 }
             }
