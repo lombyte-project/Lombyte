@@ -1518,9 +1518,9 @@ void FUN_L00_0020f580(void)
     do {
         if ((D_L00_0015F5C4_f580 != 2 && D_L00_0015F5C4_f580 != 6) || i == 4 || i == 5) {
             offset = i * 0x50;
+            source = transform.position;
             slot = (u8 *)&hero + offset;
             j = 0;
-            source = transform.position;
             do {
                 moby = *(u8 **)(slot + 0x1090);
                 if (j == 1) moby = *(u8 **)(slot + 0x1094);
