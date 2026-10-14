@@ -784,7 +784,8 @@ void FUN_L00_002d19b0(u8 *m) {
     f32 (*uv)[2];
     f32 *uv_y, *texcoords;
     f32 (*old_uv)[2];
-    s32 i, j, index, active = 0;
+    s32 i, index, active = 0;
+    u32 j;
     f32 blend, len, x, y;
 
     quad.texture[1] = get_effect_texture_2d19b0(D_L00_001618F0);
@@ -857,6 +858,7 @@ void FUN_L00_002d19b0(u8 *m) {
         f32 *uv_second = uv_y;
         u128 *points = quad.points;
         s16 *face_indices = indices + i * 12;
+        j = 3;
         do {
             index = *face_indices;
             qcopy(points, &D_L00_001E04A0_2d19b0[index]);
@@ -866,7 +868,7 @@ void FUN_L00_002d19b0(u8 *m) {
             face_indices += 3;
             uv_x += 2;
             uv_second += 2;
-        } while (uv_x < texcoords + 8);
+        } while (j-- != 0);
         transform_vectors_2d19b0(&quad, 0, 0);
     }
 }
