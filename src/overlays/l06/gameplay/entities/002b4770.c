@@ -1487,8 +1487,9 @@ void FUN_L06_002f6470(char *moby) {
             color = current_level_index;
             frame /= 600;
             if (frame > D_00141968[43].best) {
-                D_00141968[43].best = scale_game_frames_2f6470(D_L06_0015EEA4) / 600;
-                color = D_L06_0015ED84;
+                /* Retail stores best before reading the replacement level index. */
+                *(volatile unsigned short *)&D_00141968[43].best = scale_game_frames_2f6470(D_L06_0015EEA4) / 600;
+                color = *(volatile int *)&D_L06_0015ED84;
             }
             frame = 1 << color;
             D_00141968[43].flags |= frame | 0x80000000;
