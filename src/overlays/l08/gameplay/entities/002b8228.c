@@ -93,7 +93,7 @@ extern float D_L08_0016145C __attribute__((sda));
 extern int D_L08_00161460 __attribute__((sda));
 extern float D_L08_00161464 __attribute__((sda));
 extern int D_L08_00174658;
-extern int D_L08_0015F5CC_c __asm__("D_L08_0015F5CC");
+extern int D_L08_0015F5CC ;
 extern int FUN_L00_001ff660();
 extern int FUN_L08_002025d0(void*,int,int,void*,int);
 extern int allocate_voice_for_target_entry(int,int,void*) __asm__("FUN_0022da68");
@@ -152,7 +152,7 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
         subtract_vector_xyz(B, P, B);
         fast_vec_normalize(C, d->vel, f20 + D_L08_0016144C);
         add_vector_xyz(C, C, P);
-        if (D_L08_0015F5CC_c % 2 == (((char *)m - D_L08_0015FFD8) >> 8) % 2
+        if (D_L08_0015F5CC % 2 == (((char *)m - D_L08_0015FFD8) >> 8) % 2
             && func_L00_001F39B0_2B94B0(B, C, 2, 0, 0) != 0) {
             ok = 1;
             if (D_L08_001746D8_2B94B0i == 0 || d->ticks >= 10) {
@@ -1613,7 +1613,7 @@ typedef struct { char pad0[0x2C]; unsigned char active; } Persistent46;
 typedef struct { char pad0[0x140]; float x,y,z,w; } Camera46;
 
 extern Camera46 D_L08_00167480;
-extern char *D_L08_0015FFD8_c __asm__("D_L08_0015FFD8") __attribute__((section(".sdata")));
+extern char *D_L08_0015FFD8_macro __asm__("D_L08_0015FFD8") __attribute__((section(".sdata")));
 extern char D_0013D388[] __attribute__((section(".data")));
 extern char D_0013F3D0[] __attribute__((section(".data")));
 extern f32 distance_xyz_c(void *, void *) __asm__("func_001F9B48");
@@ -1632,7 +1632,7 @@ extern float D_L08_00161A28 __attribute__((sda));
 extern float FUN_L00_0025bc00(float*,int,float,float);
 extern float approach_value(float*,float,float);
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
-extern int D_L08_0015F5C4_c __asm__("D_L08_0015F5C4") __attribute__((section(".sdata")));
+extern int D_L08_0015F5C4_macro __asm__("D_L08_0015F5C4") __attribute__((section(".sdata")));
 extern int D_L08_00161A20 __attribute__((sda));
 extern int D_L08_00161A2C __attribute__((sda));
 extern int D_L08_00161A30 __attribute__((sda));
@@ -1666,7 +1666,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         Persistent46 *state=(Persistent46*)(persistence_base+data->persistent);
         if (state->active) {
             short *link=D_L08_001AC040[moby->group];
-            do { mark_moby_for_removal(D_L08_0015FFD8_c+((*(unsigned short*)link&0x7FFF)<<8)); } while (*link++>=-1);
+            do { mark_moby_for_removal(D_L08_0015FFD8_macro+((*(unsigned short*)link&0x7FFF)<<8)); } while (*link++>=-1);
             return;
         }
         if (!data->persistent) data->timer=scale_game_frames_alt(10);
@@ -1735,7 +1735,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         return;
     }
     case 3:
-        if (D_L08_0015F5C4_c) return;
+        if (D_L08_0015F5C4_macro) return;
         if (distance_xyz_c(D_0013F3D0,(char*)data->path+(data->path->count<<4))<data->activation_range && timer46(&data->timer)) {
             moby->flags=0x40; moby->state=4; moby->animation=moby->model->animation;
             moby->rotation[2]=FUN_001f9e90(data->path->e[1][0]-moby->position[0],data->path->e[1][1]-moby->position[1]);
@@ -1746,7 +1746,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         RouteState46 *route;
         int next;
         float yaw;
-        if (D_L08_0015F5C4_c) return;
+        if (D_L08_0015F5C4_macro) return;
         route=(RouteState46*)&data->waypoint;
         next=(route->waypoint+route->path->count+route->direction)%route->path->count;
         yaw=FUN_001f9e90(*(float*)((char*)route->path+(next<<4)+0x10)-moby->position[0],*(float*)((char*)route->path+(next<<4)+0x14)-moby->position[1]);
@@ -1779,7 +1779,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
             M46 *other;
             if (!link) return;
             index=*(unsigned short*)link&0x7FFF;
-            other=(M46*)(D_L08_0015FFD8_c+(index<<8));
+            other=(M46*)(D_L08_0015FFD8_macro+(index<<8));
             ((Persistent46*)(D_0013D388+data->persistent))->active=1;
             linked_object:
                 if (other->state<0x7F && other!=moby) {
@@ -1818,7 +1818,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
                 }
                 if (*link++>=-1) {
                     index=*(unsigned short*)link&0x7FFF;
-                    other=(M46*)(D_L08_0015FFD8_c+(index<<8));
+                    other=(M46*)(D_L08_0015FFD8_macro+(index<<8));
                     goto linked_object;
                 }
             if (special) FUN_L08_002de528(moby,data->effect_path,30,1);

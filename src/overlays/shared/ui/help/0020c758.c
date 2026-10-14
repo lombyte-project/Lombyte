@@ -664,7 +664,7 @@ void FUN_L00_0020da68(void) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020dd20.s", FUN_L00_0020dd20);
 #else
-extern s32 D_L00_0015F6A0_20dd20[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
+extern s32 D_L00_0015F6A0_gp[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
 extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
 extern s32 D_L00_00197300_20dd20[] __asm__("D_L00_00197300") __attribute__((section(".data")));
 extern u8 D_L00_0017CA80_20dd20[] __asm__("D_L00_0017CA80") __attribute__((section(".data")));
@@ -711,7 +711,7 @@ void FUN_L00_0020dd20(void) {
                 slot = (u8 **)&hero.unkD00 + i;
                 next = i + 1;
                 if (*slot == 0) {
-                    *slot = FUN_L00_0024f028_20dd20((u8 *)hero.moby, D_L00_0015F6A0_20dd20[i]);
+                    *slot = FUN_L00_0024f028_20dd20((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
                     *(s32 *)(*slot + 8) = 0;
                     *(s32 *)(*slot + 0x18) = D_L00_00197300_20dd20[D_L00_00197BC0_lui[next]];
                 }
@@ -873,7 +873,7 @@ typedef struct {
 } R_0020e360;
 extern R_0020e360 D_L00_00179AC0_0020e360[] __asm__("D_L00_00179AC0")
     __attribute__((section(".data")));
-extern s32 D_L00_0015F6A0_0020e360[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
+extern s32 D_L00_0015F6A0_gp[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
 s32 FUN_L00_0020d498_0020e360(s32) __asm__("FUN_L00_0020d498");
 u8 *FUN_L00_0024f028_0020e360(u8 *, s32) __asm__("FUN_L00_0024f028");
 s32 FUN_001f96f8_0020e360(s32) __asm__("FUN_001f96f8");
@@ -901,7 +901,7 @@ void FUN_L00_0020e360(s32 a, s32 b) {
         if (i == 1 && hero.unk20AB != 2)
             break;
         {
-            o = FUN_L00_0024f028_0020e360((u8 *)hero.moby, D_L00_0015F6A0_0020e360[i]);
+            o = FUN_L00_0024f028_0020e360((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
             hero.unkD08[i] = o;
             if (o) {
                 hero.unkD14 = 0;
@@ -926,7 +926,7 @@ typedef struct {
 } ID_20e4c8;
 
 extern ID_20e4c8 D_L00_00179AC0_c[] __asm__("D_L00_00179AC0");
-extern s32 D_L00_0015F6A0[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
+extern s32 D_L00_0015F6A0_gp[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
 extern s32 FUN_L00_0020d498_c(s32) __asm__("FUN_L00_0020d498");
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern u8 *FUN_L00_0024f028(u8 *, s32);
@@ -966,7 +966,7 @@ void FUN_L00_0020e4c8(void) {
         if (hero.unkD08[i] != 0) {
             FUN_L00_0024f0e8((u8 *)hero.moby, &hero.unkD08[i]);
         }
-        o = FUN_L00_0024f028((u8 *)hero.moby, D_L00_0015F6A0[i]);
+        o = FUN_L00_0024f028((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
         hero.unkD08[i] = o;
         if (o != 0) {
             hero.unk2294 = v21;
@@ -1110,8 +1110,8 @@ typedef struct {
 
 extern ItemDef_ea80 item_defs_ea80[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
 extern s32 D_L00_0015F3F8_ea80 __asm__("D_L00_0015F3F8");
-extern s32 D_0015ED90_ea80 __asm__("D_0015ED90");
-extern s32 D_0015ED94_ea80 __asm__("D_0015ED94");
+extern s32 D_0015ED90 ;
+extern s32 D_0015ED94 ;
 extern s32 D_00141660_ea80[4] __asm__("D_00141660") __attribute__((section(".data")));
 extern u8 item_available[] __asm__("D_0013D4C0") __attribute__((section(".data")));
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
@@ -1138,7 +1138,7 @@ void spawn_hero_item_mobies(void) {
         (hero.pending_item[0] == 0 || hero.pending_item[0] == 0x24)) {
         id = hero.selected_item[0];
         if (id == 0) {
-            if (D_0015ED90_ea80 != 0 || (t = D_00141660_ea80[0]) == 0)
+            if (D_0015ED90 != 0 || (t = D_00141660_ea80[0]) == 0)
                 id = 8;
             else
                 id = t;
@@ -1177,7 +1177,7 @@ void spawn_hero_item_mobies(void) {
         if (id3 == 0) {
             id3 = D_00141660_ea80[3];
             if (id3 == 0)
-                id3 = D_0015ED94_ea80 != 0 ? 3 : 2;
+                id3 = D_0015ED94 != 0 ? 3 : 2;
         }
         hero.items[3].item_id = id3;
         m = create_moby(item_defs_ea80[id3].cls);

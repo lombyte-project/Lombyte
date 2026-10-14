@@ -314,7 +314,7 @@ extern char *D_L10_0015FFD8_98b68 __asm__("D_L10_0015FFD8");
 extern u8 D_0014C050_98b68[] __asm__("D_0014C050");
 extern LevelState_98b68 D_L10_001BB6B0_98b68 __asm__("D_L10_001BB6B0");
 extern int D_0014C190_98b68[][64] __asm__("D_0014C190");
-extern int D_L10_001BA950_98b68[] __asm__("D_L10_001BA950");
+extern int D_L10_001BA950[] ;
 extern struct UsageStats D_00141848;
 extern u8 D_001413F4_98b68[] __asm__("D_001413F4");
 extern char *D_L10_001600EC_98b68 __asm__("D_L10_001600EC");
@@ -379,7 +379,7 @@ void FUN_L10_00298b68(struct Moby *moby) {
         }
     }
     D_0014C190_98b68[current_level_index][(short)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
-    D_L10_001BA950_98b68[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
+    D_L10_001BA950[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
     if (vars->spot == -1 || vars->target == -1) {
         return;
     }
@@ -1181,7 +1181,7 @@ int FUN_L10_002d8170(char *m, char *c, float *a2);
 extern char D_0013E633_2D9988[] __asm__("D_0013F350");
 extern char *func_L00_0025B478_2D9988(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int func_L10_002D9530_2D9988(char *, char *, float *) __asm__("FUN_L10_002d8170");
-extern char D_L10_00178400_2D9988[] __asm__("D_L10_00178380");
+extern char D_L10_00178380[] ;
 extern void func_001F9BD8_2D9988(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
@@ -1307,7 +1307,7 @@ void FUN_L10_002d85c8(char *m) {
     case 3:
         rA = func_L00_001F2BE8_2D9988(1.5f, m + 0x10, 0x10, m, 0);
         *(u128_2D9988 *)v10 = *(u128_2D9988 *)(m + 0x10);
-        func_L00_0025BA50_2D9988(m, v10, D_L10_00178400_2D9988, rA, 0, 0x810001, 2, 1, 1.0f, 1.0f, 1.0f);
+        func_L00_0025BA50_2D9988(m, v10, D_L10_00178380, rA, 0, 0x810001, 2, 1, 1.0f, 1.0f, 1.0f);
         cart_burst(m, m + 0x10, 0, 0.5f, 13.0f);
         func_0020D678_2D9988(m);
         return;

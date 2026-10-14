@@ -427,7 +427,7 @@ extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f99c0(float);
 extern int FUN_001efa68(void *, void *, int, void *, int);
 extern char *D_L13_001B07B0[];
-extern int D_L13_0015F5CC;
+extern int frame_count __asm__("D_L13_0015F5CC");
 extern float D_L13_00161490 __attribute__((sda));
 
 void FUN_L13_002c2d30(unsigned char *moby) {
@@ -461,7 +461,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     *(Q_2C27B0 *)v2 = *(Q_2C27B0 *)z;
     FUN_L00_0024f7c8(moby, 2, v0);
     FUN_L00_0024f7c8(moby, 3, v1);
-    if (D_L13_0015F5CC & 1) {
+    if (frame_count & 1) {
         FUN_L00_00269958(v0, v2, 0xCF0000FF, 0xCF, scale_game_frames(FUN_L00_00257b90(0x12, 0x16)), 0x32, -0xA, 1);
         FUN_L00_00269958(v1, v2, 0xCF0000FF, 0xCF, scale_game_frames(FUN_L00_00257b90(0x12, 0x16)), 0x32, -0xA, 1);
     } else {
@@ -1826,7 +1826,7 @@ extern void FUN_L13_002e1348_1638(struct Moby *, struct BlobVars *, f32) __asm__
 extern struct Hero hero_1638 __asm__("D_0013F350");
 extern Vec4f hero_pos_1638 __asm__("D_0013F3D0");
 extern CollisionHit coll_hit_1638 __asm__("D_L13_00174140");
-extern s32 frame_count_1638 __asm__("D_L13_0015F5CC");
+extern s32 frame_count __asm__("D_L13_0015F5CC");
 extern char *moby_base_1638 __asm__("D_L13_0015FFD8");
 
 /* Blob update: waits on its home point, jumps out at the hero when the ship comes near, splits when it hits something, and respawns. */
@@ -1868,7 +1868,7 @@ void FUN_L13_002e1638(struct Moby *moby) {
             if (vars->cooldown == 0) {
                 moby->collision = moby->pclass->collision;
                 size = moby->scale / moby->pclass->scale;
-                if ((frame_count_1638 & 1) == (((char *)moby - moby_base_1638) >> 8 & 1)
+                if ((frame_count & 1) == (((char *)moby - moby_base_1638) >> 8 & 1)
                     && FUN_L00_001f0d60_1638(size * 6.2f, &moby->pos, 0, moby) != 0) {
                     if ((struct Moby *)coll_hit_1638.moby != vars->owner) {
                         reflect_vector_1638(vars, vars, &coll_hit_1638.normal_x);
@@ -2032,7 +2032,7 @@ extern void FUN_001e93b0(char *, short, short, int);
 extern char D_L13_001F4D90[];
 extern char D_L13_001F4DB0[];
 extern char D_L13_001F4DD0[];
-extern int D_L13_0015F5CC;
+extern int frame_count __asm__("D_L13_0015F5CC");
 
 
 typedef struct {
@@ -2116,7 +2116,7 @@ void FUN_L13_002e4448(char *moby) {
                 FUN_L01_0026e0e0((unsigned char)moby[0x21], 4);
                 FUN_0022da68(1, 0, moby);
                 data->unk70 = data->unk84;
-                FUN_001e93b0(D_L13_001F4D90, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC);
+                FUN_001e93b0(D_L13_001F4D90, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), frame_count);
                 moby[0x20] = 4;
             } else {
                 if (data->unk7C >= 0) {
@@ -2127,7 +2127,7 @@ void FUN_L13_002e4448(char *moby) {
 
                         FUN_0022da68(2, 0, moby);
                         FUN_L01_0026e0e0((unsigned char)moby[0x21], 3);
-                        FUN_001e93b0(D_L13_001F4DB0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC);
+                        FUN_001e93b0(D_L13_001F4DB0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), frame_count);
                         moby[0x20] = 3;
                     } else if (FUN_001f9770(&data->unk72) != 0) {
                         FUN_0022da68(0, 0, moby);
@@ -2155,7 +2155,7 @@ void FUN_L13_002e4448(char *moby) {
 
                 FUN_0022da68(2, 0, moby);
                 FUN_L01_0026e0e0((unsigned char)moby[0x21], 3);
-                FUN_001e93b0(D_L13_001F4DD0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), D_L13_0015F5CC);
+                FUN_001e93b0(D_L13_001F4DD0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6), frame_count);
                 moby[0x20] = 3;
             } else if (FUN_001f9770(&data->unk72) != 0) {
                 FUN_0022da68(0, 0, moby);
@@ -2322,7 +2322,7 @@ int FUN_L13_002e86f8(void *unused, unsigned char *p, int base, int n) {
 }
 /* Throws sparks from each of the moby's six vent bones that are open. */
 extern int D_L13_001D3478_v[] __asm__("D_L13_001D3478");
-extern int D_L13_0015F5CC_v __asm__("D_L13_0015F5CC");
+extern int frame_count __asm__("D_L13_0015F5CC");
 extern int rnd_v(int, int) __asm__("FUN_L00_00257b90");
 extern int below_v(int) __asm__("FUN_00213260");
 extern int frames_v(int) __asm__("FUN_001f96f8");
@@ -2349,7 +2349,7 @@ void FUN_L13_002e8920(struct Moby *m, char *d) {
             zv = 0;
             s = m->scale / (m->pclass->scale * 4.0f);
             bone_v(m, D_L13_001D3520[i], a);
-            if (D_L13_0015F5CC_v & 1) {
+            if (frame_count & 1) {
                 r = frames_v(rnd_v(0xF, 0x14));
                 spark_v(a, &zv, 0xCF0000FF, 0xCF, r, ftoi_v(s * 350.0f), -100, 1);
             } else if (m->command == 0 || D_L13_001D3478_v[m->command - 1] != D_L13_001D3508[i] ||
@@ -2366,7 +2366,7 @@ void FUN_L13_002e8920(struct Moby *m, char *d) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9F90), where it is exact; names translated to the US level program. */
 
 
-extern int D_L13_0015F5CC;
+extern int frame_count __asm__("D_L13_0015F5CC");
 extern int D_L13_001D3538[];
 extern int FUN_L00_00257b90(int, int);
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -2389,7 +2389,7 @@ void FUN_L13_002e8b58(struct Moby *moby) {
         s = s * random_float_between_alt(0.8f, 1.1f);
         moby_point_position(moby, D_L13_001D3538[i], a);
         FUN_L00_0025f8e0(a, s * 1.4f);
-        if (D_L13_0015F5CC & 1) {
+        if (frame_count & 1) {
             r = scale_game_frames(FUN_L00_00257b90(0x14, 0x3C));
             k = func_001FA898_r(random_float_between_alt(450.0f, 550.0f) * s);
             FUN_L00_00269958(a, z, 0xDF000FFF, 0xCF, r, k, -100, 1);
@@ -2838,7 +2838,7 @@ extern void FUN_L13_002e97e0();
 int FUN_L13_002e86f8_c(void *unused, unsigned char *p, int base, int n) __asm__("FUN_L13_002e86f8");
 void FUN_L13_002e9680_c(void *unused, char *p, int idx) __asm__("FUN_L13_002e9680");
 extern char D_0013F450_2EAE80[] __asm__("D_0013F350");
-extern char D_0013E633_2EAE80[] __asm__("D_00140940");
+extern char D_00140940[] ;
 extern int D_L13_001D3748_2EAE80[] __asm__("D_L13_001D3478");
 extern float func_001FA888_2EAE80(int) __asm__("FUN_001fa6c0");
 extern Hit_2EAE80 *func_L00_0025B478_2EAE80(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -2906,7 +2906,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                     m->bBC++;
                     rf = 1;
                     {
-                        Vars_2EAE80 *v = (*(Moby_2EAE80 **)D_0013E633_2EAE80)->vars;
+                        Vars_2EAE80 *v = (*(Moby_2EAE80 **)D_00140940)->vars;
 
                         v->f88 = 0;
                         v->fEC = 0;
@@ -2933,7 +2933,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                     }
                     rf = 1;
                     {
-                        Vars_2EAE80 *v = (*(Moby_2EAE80 **)D_0013E633_2EAE80)->vars;
+                        Vars_2EAE80 *v = (*(Moby_2EAE80 **)D_00140940)->vars;
 
                         v->f88 = 0;
                         v->fEC = 0;

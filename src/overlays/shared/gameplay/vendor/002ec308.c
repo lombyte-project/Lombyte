@@ -735,13 +735,13 @@ typedef struct {
 } S;
 
 extern S D_L02_00167600;
-extern short D_L02_0016238C_d __asm__("D_L02_0016238C") __attribute__((sda));
+extern short D_L02_0016238C_gp __asm__("D_L02_0016238C") __attribute__((sda));
 
 void FUN_L02_002fa770(void) {
     S *s = &D_L02_00167600;
     s->c = 10000.0f;
     if (s->b == 0) {
-        float v = s->d - *(float *)&D_L02_0016238C_d;
+        float v = s->d - *(float *)&D_L02_0016238C_gp;
         s->d = v;
         if (v < 0.0f) {
             s->d = 0.0f;
@@ -1171,12 +1171,12 @@ zero_offset:
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FD6D0), where it is exact; names translated to the US level program. */
 
-extern char *D_L02_0015EF50_c298 __asm__("D_L02_0015EF50");
+extern char *D_L02_0015EF50 ;
 extern char *D_L02_00167400_c298 __asm__("D_L02_00167400") NOT_SDA;
 extern int FUN_L02_002fb9c8(char *);
 
 int FUN_L02_002fc298(char *moby) {
-    char *cam = *(char **)(D_L02_0015EF50_c298 + *(short *)(moby + 0x84) * 32 + 0x1C);
+    char *cam = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
     if (*(short *)(D_L02_00167400_c298 + 0x86) == 0 && *(short *)(cam + 0x20) >= 0)
         FUN_L02_002fb9c8(moby);
     *(int *)(cam + 0x50) = 0;

@@ -564,7 +564,7 @@ typedef struct {
     s32 slot;     /* 0x40: -1 none, else index into D_L01_001DEB10 */
 } SaleVars_2e1ac0;
 
-extern s32 D_L01_0015F5C4_2e1ac0 __asm__("D_L01_0015F5C4");
+extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern u8 D_0013E520_2e1ac0[] __asm__("D_0013E520");
 extern void FUN_0020c828_2e1ac0(struct Moby *) __asm__("FUN_0020c828");
 extern s32 FUN_L00_002668a0_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FUN_L00_002668a0");
@@ -610,7 +610,7 @@ void FUN_L01_002e1ac0(struct Moby *m) {
     case 3: /* sold out or done: idle */
         break;
     case 4:
-        if (D_L01_0015F5C4_2e1ac0 == 0) {
+        if (cutscene_mode == 0) {
             FUN_0020b178_2e1ac0(0, -1);
             m->state = 3;
         }
@@ -758,7 +758,7 @@ extern float D_L01_0016190C __attribute__((sda));
 extern float D_L01_00161910 __attribute__((sda));
 extern float D_L01_00161914 __attribute__((sda));
 extern int D_L01_00161900 __attribute__((sda));
-extern int D_L01_0015F5C4;
+extern int cutscene_mode __asm__("D_L01_0015F5C4");
 
 typedef union {
     OvlQuad q;
@@ -786,7 +786,7 @@ void FUN_L01_002e35a8(char *moby, char *state) {
             t = FUN_001f9e90(*(float *)(e + 0x10) - *(float *)(moby + 0x10),
                              *(float *)(e + 0x14) - *(float *)(moby + 0x14));
             if (fast_difference_between_rotations(*(float *)(moby + 0x48), t) < 0.5235988f) {
-                if (D_L01_0015F5C4 != 2) {
+                if (cutscene_mode != 2) {
                     char *r;
                     qcopy(&q, e + 0x10);
                     r = FUN_002141f8(e);

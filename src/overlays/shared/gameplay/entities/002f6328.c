@@ -205,7 +205,7 @@ extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_L01_0015F5D0 __attribute__((section(".sdata")));
-extern int D_L01_0015F404_c __asm__("D_L01_0015F404") __attribute__((section(".sdata")));
+extern int cutscene_active_macro __asm__("D_L01_0015F404") __attribute__((section(".sdata")));
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90_c(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_002ac910(void *, void *, void *, float, int, int, int, int, int);
@@ -245,14 +245,14 @@ void FUN_L01_002f6a30(struct Moby *moby) {
     float fade;
 
     rate_divisor = 2;
-    if (D_L01_0015F404_c != 0) {
+    if (cutscene_active_macro != 0) {
         rate_divisor = 4;
     }
     data = (*(void **)&moby->pvars);
     qcopy(&old_pos, &(*(Vec_2F7E08 *)&moby->pos));
     add_vector_xyz(&(*(Vec_2F7E08 *)&moby->pos), &(*(Vec_2F7E08 *)&moby->pos), data);
     step_length = vector_length_xyz(data);
-    for (i = 0; D_L01_0015F404_c != 0 ? i < 2 : i < 4; i++) {
+    for (i = 0; cutscene_active_macro != 0 ? i < 2 : i < 4; i++) {
         Vec_2F7E08 smoke_vel;
         {
             Vec_2F7E08 random_dir;
@@ -287,11 +287,11 @@ void FUN_L01_002f6a30(struct Moby *moby) {
     if (moby->state != 0) {
         size_scale = 8.0f;
         camera_distance = distance_xyz(D_L01_00167240, &(*(Vec_2F7E08 *)&moby->pos));
-        if (D_L01_0015F404_c != 0) {
+        if (cutscene_active_macro != 0) {
             size_scale = 4.0f;
         }
         scale_vector_xyz_c(data, data, -0.55f);
-        if (D_L01_0015F404_c != 0) {
+        if (cutscene_active_macro != 0) {
             Dmg_2F7E08 damage;
             {
                 damage.owner = moby;
@@ -309,7 +309,7 @@ void FUN_L01_002f6a30(struct Moby *moby) {
         }
         view_distance = distance_xyz(&(*(Vec_2F7E08 *)&moby->pos), D_L01_00167240);
         max_rings = 5;
-        if (D_L01_0015F404_c != 0) {
+        if (cutscene_active_macro != 0) {
             max_rings = 2;
         }
         if (view_distance < convert_integer_to_float_c(max_rings) * 2.0f) {
@@ -365,7 +365,7 @@ void FUN_L01_002f6a30(struct Moby *moby) {
             FUN_L00_002ac910(moby, &(*(Vec_2F7E08 *)&moby->pos), data, 30.0f, scale_game_frames_alt(0x14), 0x7F, 0x7F, 0, 0x30);
             FUN_L00_002ac910(moby, &(*(Vec_2F7E08 *)&moby->pos), data, 15.0f, scale_game_frames_alt(0x13), 0xFF, 0xFF, 0xFF, 0x20);
         }
-        for (spark = 0; D_L01_0015F404_c != 0 ? spark < 10 : spark < 40; spark++) {
+        for (spark = 0; cutscene_active_macro != 0 ? spark < 10 : spark < 40; spark++) {
             Vec_2F7E08 spark_vel;
             float speed;
             float size;
@@ -378,10 +378,10 @@ void FUN_L01_002f6a30(struct Moby *moby) {
                 *(u128_f6 *)&spark_vel = *(u128_f6 *)&random_dir;
             }
             speed = random_float_between_c(10.0f, 40.0f) * D_0015ED6C;
-                normalize_vector_xyz_c(&spark_vel, &spark_vel, D_L01_0015F404_c != 0 ? speed * 0.2f : speed);
+                normalize_vector_xyz_c(&spark_vel, &spark_vel, cutscene_active_macro != 0 ? speed * 0.2f : speed);
                 size = 105000.0f;
                 add_vector_xyz(&spark_vel, &spark_vel, data);
-                if (D_L01_0015F404_c != 0) {
+                if (cutscene_active_macro != 0) {
                     size = 21000.0f;
                 }
                 FUN_L00_0026bb70(&(*(Vec_2F7E08 *)&moby->pos), &spark_vel, 0x4F007FFF, 0x1F00007F, size,
@@ -398,7 +398,7 @@ void FUN_L01_002f6a30(struct Moby *moby) {
             }
         }
         for (link = 0; link < 4; link++) {
-            if (D_L01_0015F404_c == 0 && data->ids[link] != -1) {
+            if (cutscene_active_macro == 0 && data->ids[link] != -1) {
                 if (((struct Moby *)D_L01_0015FFD8_c)[data->ids[link]].oclass == 0x2BC) {
                     Tgt_2F7E08 *target = (*(void **)&((struct Moby *)D_L01_0015FFD8_c)[data->ids[link]].pvars);
                     if (target->h4 == 0 && target->timer == 0 && is_point_inside_clip_volume_c(((char *)&D_0013F3D0), target->vol) != 0
@@ -592,7 +592,7 @@ typedef struct {
     f32 z;
 } Effect;
 
-extern s32 D_L01_0015F5C4;
+extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern u8 D_0015EDB0;
 extern MobyList D_L01_0016CCE0;
 extern Effect D_L01_0017C8C0;
@@ -601,7 +601,7 @@ extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 void FUN_L01_002fb4b8(void) {
     s32 i;
 
-    if (D_L01_0015F5C4 == 2 && D_0015EDB0 != 0) {
+    if (cutscene_mode == 2 && D_0015EDB0 != 0) {
         for (i = 0; i < D_L01_0016CCE0.count; i++) {
             int t = D_L01_0016CCE0.list[i]->type;
 
@@ -631,7 +631,7 @@ typedef struct {
 extern char D_L01_00167240[];
 extern char D_L01_0020B550[];
 extern int D_0015ED84; /* no foreign declaration */
-extern int D_L01_0015F404;
+extern int cutscene_active __asm__("D_L01_0015F404");
 extern int D_L01_001600EC_q __asm__("D_L01_001600EC");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 D_0014C190[][64];
@@ -701,7 +701,7 @@ void FUN_L01_002fb5b0(char *m) {
             char *o = D_L01_001600EC_q + *(int *)(d + 0x24) * 128;
             FUN_L00_002eaaa0(o + 0x30, o + 0x70, 0, 0, 0);
         }
-        D_L01_0015F404 = 1;
+        cutscene_active = 1;
         m[0x20] = 2;
         m[0xBC] = 1;
         {
@@ -720,7 +720,7 @@ void FUN_L01_002fb5b0(char *m) {
                 FUN_L00_002eac18(0);
             }
             FUN_L01_002405a0();
-            D_L01_0015F404 = 0;
+            cutscene_active = 0;
             m[0x20] = 3;
             m[0xBC] = 0;
         } else {
@@ -758,14 +758,14 @@ typedef struct {
 } G_q;
 
 extern G_q D_L01_0016CCE0_q __asm__("D_L01_0016CCE0");
-extern int D_L01_0015F5C4_q __asm__("D_L01_0015F5C4");
+extern int cutscene_mode __asm__("D_L01_0015F5C4");
 extern unsigned char D_0015EDB0_s __asm__("D_0015EDB0");
 extern unsigned char D_L01_0017C8C0_q[] __asm__("D_L01_0017C8C0") __attribute__((section(".data")));
 extern void attach_manipulator_q(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 extern short D_L01_00161D30 __attribute__((sda));
 void FUN_L01_002ff028(char *a) {
-    if (D_L01_0015F5C4_q == 2 && D_0015EDB0_s != 0) {
+    if (cutscene_mode == 2 && D_0015EDB0_s != 0) {
         int i;
         for (i = 0; i < D_L01_0016CCE0_q.n; i++) {
             char *moby = D_L01_0016CCE0_q.m[i];
@@ -860,7 +860,7 @@ extern char D_L01_00161D48[];
 extern char D_L01_00167240_c[] __asm__("D_L01_00167240");
 extern char D_L01_001BAAA0[];
 extern char *D_L01_001600EC_c __asm__("D_L01_001600EC");
-extern int D_L01_0015F5C4_c __asm__("D_L01_0015F5C4");
+extern int cutscene_mode __asm__("D_L01_0015F5C4");
 extern struct {
     char pad[0x80];
     float f80;
@@ -921,7 +921,7 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
         }
         break;
     case 2:
-        if (D_L01_0015F5C4_c == 2)
+        if (cutscene_mode == 2)
             break;
         if (D_0014C050_c[m->bB0 + D_0015ED84_c * 16] != 0xFF) {
             FUN_L00_002502a0(m->bB0);
@@ -949,7 +949,7 @@ void FUN_L01_002ff118(L01WatchMoby *m) {
         }
         break;
     case 5:
-        if (D_L01_0015F5C4_c == 2)
+        if (cutscene_mode == 2)
             break;
         if (d->h6 == 2) {
             D_0013F350_w.f80 = 130.5f;
@@ -1252,7 +1252,7 @@ extern f32 D_0015ED6C_f __asm__("D_0015ED6C") MACRO_ADDR;
 extern s32 D_0015ED84_n __asm__("D_0015ED84") MACRO_ADDR;
 extern u8 opt_mirror_anim __asm__("D_0015EDB5") MACRO_ADDR;
 extern s32 D_L01_0015F640 MACRO_ADDR;
-extern s32 D_L01_0015F404_n __asm__("D_L01_0015F404") MACRO_ADDR;
+extern s32 cutscene_active __asm__("D_L01_0015F404") MACRO_ADDR;
 extern f32 D_L01_00161F10_f __asm__("D_L01_00161F10") __attribute__((sda));
 extern f32 D_L01_00161F14_f __asm__("D_L01_00161F14") __attribute__((sda));
 extern f32 D_L01_00161F18_f __asm__("D_L01_00161F18") __attribute__((sda));
@@ -1370,7 +1370,7 @@ void FUN_L01_00307ca0(struct Moby *moby) {
             moby->flags |= 0x8000;
         }
         hero.unk20AF = 1;
-        D_L01_0015F404_n = 1;
+        cutscene_active = 1;
         moby->state = 2;
         vars->timer = FUN_001f96f8(60);
         return;
@@ -1404,7 +1404,7 @@ void FUN_L01_00307ca0(struct Moby *moby) {
         D_L01_0015F640 = FUN_001f96f8(180);
         queue_dialogue_message(0x53B3, -1);
         D_0014BEC0[vars->id + D_0015ED84_n * 4] = 1;
-        D_L01_0015F404 = 0;
+        cutscene_active = 0;
         FUN_L00_00216f90(&h->motion.pos, &h->motion.rot, 0, 0);
         FUN_L00_002eac18(0);
         memcard_save_data(0, -1);

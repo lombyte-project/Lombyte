@@ -394,7 +394,7 @@ typedef struct {
     u8 pad4[0x70 - 4];
 } Entry70_215e58;
 
-extern s32 D_L15_0015F5C4_215e58 __asm__("D_L15_0015F5C4");
+extern s32 D_L15_0015F5C4 ;
 extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") __attribute__((section(".data")));
 
 extern void FUN_L00_002165b8_215e58(void) __asm__("FUN_L00_002165b8");
@@ -475,7 +475,7 @@ void FUN_L15_00215e58(void) {
         hero.unk1A8++;
     }
     if (hero.unk22DE != 0 && FUN_001f9770_215e58(&hero.unk22DE) != 0 &&
-        hero.health.hp != 0 && D_L15_0015F5C4_215e58 == 0) {
+        hero.health.hp != 0 && D_L15_0015F5C4 == 0) {
         if (hero.vehicle_mode == 3) {
             FUN_L15_00208ca8_215e58();
             if (FUN_L00_00266d60_215e58(0x80, FUN_001f96f8_215e58(0x12), 0)) {

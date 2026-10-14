@@ -870,8 +870,8 @@ extern float vector_length_xy_301070(void *) __asm__("FUN_001f9b20");
 extern void update_joint_animation_301070(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
 extern char D_L06_00167540_301070[] __asm__("D_L06_00167540");
-extern int D_L06_0015F5C4_301070 __asm__("D_L06_0015F5C4") __attribute__((section(".sdata")));
-extern float D_L06_0015F3FC_301070 __asm__("D_L06_0015F3FC") __attribute__((section(".sdata")));
+extern int D_L06_0015F5C4_macro __asm__("D_L06_0015F5C4") __attribute__((section(".sdata")));
+extern float D_L06_0015F3FC_macro __asm__("D_L06_0015F3FC") __attribute__((section(".sdata")));
 extern s32 D_L06_00179B90_301070[] __asm__("D_L06_00179B90");
 extern unsigned char big_head_cheat_enabled_301070[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern unsigned char cheats_301070[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
@@ -941,7 +941,7 @@ void FUN_L06_00301070(struct Moby *m) {
         }
         break;
     case 2:
-        if (D_L06_0015F5C4_301070 != 2) {
+        if (D_L06_0015F5C4_macro != 2) {
             if (m->prev_seq != 0) {
                 blend_moby_animation_301070(m, 0, 0, scale_game_frames_301070(10));
             }
@@ -954,7 +954,7 @@ void FUN_L06_00301070(struct Moby *m) {
                 FUN_L00_00260860_301070(0x1D, 1);
                 memcard_save_data_301070(0, -1);
                 help_request_301070(0x1775, 0x2C);
-                D_L06_0015F3FC_301070 = 1.0f;
+                D_L06_0015F3FC_macro = 1.0f;
                 d->f178 = 0.0f;
                 {
                     VecQ_301070 pos;
@@ -1017,11 +1017,11 @@ void FUN_L06_00301070(struct Moby *m) {
         FUN_L00_002eaa30_301070(rot);
         if (d->f178 >= 1.0f
             || (((Busy_301070 *)D_L06_00179B90_301070)->f0 == 0 && ((Busy_301070 *)D_L06_00179B90_301070)->f24 == -1 && d->f178 > 0.2f)) {
-            approach_value_301070(&D_L06_0015F3FC_301070, 1.0f, frame_time_macro * 4.0f);
+            approach_value_301070(&D_L06_0015F3FC_macro, 1.0f, frame_time_macro * 4.0f);
         } else {
-            approach_value_301070(&D_L06_0015F3FC_301070, 0.0f, frame_time_macro * 4.0f);
+            approach_value_301070(&D_L06_0015F3FC_macro, 0.0f, frame_time_macro * 4.0f);
         }
-        if (D_L06_0015F3FC_301070 == 1.0f) {
+        if (D_L06_0015F3FC_macro == 1.0f) {
             FUN_L00_00216f90_301070(&hero.motion.pos, &hero.motion.rot, 0, 0);
             cutscene_camera_stop_301070(0);
             m->state = 4;
@@ -1030,8 +1030,8 @@ void FUN_L06_00301070(struct Moby *m) {
         break;
     }
     case 4:
-        approach_value_301070(&D_L06_0015F3FC_301070, 0.0f, frame_time_macro * 4.0f);
-        if (D_L06_0015F3FC_301070 == 0.0f) {
+        approach_value_301070(&D_L06_0015F3FC_macro, 0.0f, frame_time_macro * 4.0f);
+        if (D_L06_0015F3FC_macro == 0.0f) {
             m->state = 5;
         }
         break;
@@ -1399,7 +1399,7 @@ typedef struct {
 extern unsigned char D_0014C050[];
 extern int D_0015EE1D;
 extern int D_0015EE1C;
-extern int D_L06_0015F5C4_302578 __asm__("D_L06_0015F5C4");
+extern int D_L06_0015F5C4 ;
 extern int D_L06_0015F594_302578 __asm__("D_L06_0015F594");
 extern char *D_L06_001600EC_302578 __asm__("D_L06_001600EC");
 extern char *D_L06_0015FFD8_302578 __asm__("D_L06_0015FFD8");
@@ -1668,7 +1668,7 @@ void FUN_L06_00302578(struct Moby *moby) {
         }
         break;
     case 7:
-        if (D_L06_0015F5C4_302578 != 2) {
+        if (D_L06_0015F5C4 != 2) {
             if (D_0013D4D5[9] != 0) {
                 FUN_L00_00298840_302578(5);
                 moby->state = 9;
@@ -1681,14 +1681,14 @@ void FUN_L06_00302578(struct Moby *moby) {
         }
         break;
     case 9:
-        if (D_L06_0015F5C4_302578 != 2) {
+        if (D_L06_0015F5C4 != 2) {
             FUN_L00_00262d38_302578(5);
             memcard_Save_302578(0, -1);
             moby->state = 1;
         }
         break;
     case 8:
-        if (D_L06_0015F5C4_302578 != 2) {
+        if (D_L06_0015F5C4 != 2) {
             FUN_L00_00299460_302578(5);
             moby->state = 7;
         }

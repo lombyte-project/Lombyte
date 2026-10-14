@@ -84,7 +84,7 @@ typedef struct {
 } C_28e9c8;
 extern E_28e9c8 D_0013E030_28e9c8 __asm__("D_0013E030");
 extern C_28e9c8 D_L00_0016C860_28e9c8 __asm__("D_L00_0016C860") __attribute__((section(".data")));
-extern int D_L00_0015F5D8_28e9c8 __asm__("D_L00_0015F5D8");
+extern int D_L00_0015F5D8 ;
 extern struct {
     int x0, x4, x8;
 } D_L00_00173E00_28e9c8 __asm__("D_L00_00173E00") __attribute__((section(".data")));
@@ -105,7 +105,7 @@ void FUN_L00_0028e9c8(int a) {
     O_28e9c8 *o;
     int t, n, m, m2, u;
     D_0013E030_28e9c8.x24 = -1;
-    D_L00_0015F5D8_28e9c8 = 1;
+    D_L00_0015F5D8 = 1;
     D_0013E030_28e9c8.x20 = a;
     D_0013E030_28e9c8.x8 = 0;
     memset_28e9c8(&D_L00_0016C860_28e9c8, 0, 0x1C0);

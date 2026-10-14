@@ -2142,8 +2142,8 @@ void *FUN_L00_002a99b0(int unused, void *pos, int c, float scale, float a, float
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAD40), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m_q(int) __asm__("func_0020D348_m");
-extern int D_L00_0015F320_q __asm__("D_L00_0015F320");
-extern int D_L00_0015F330_q __asm__("D_L00_0015F330");
+extern int D_L00_0015F320 ;
+extern int D_L00_0015F330 ;
 extern int FUN_L00_0023e5e0_q(float *pos, float radius, float intensity,
                               int color) __asm__("FUN_L00_0023e5e0");
 extern short D_L00_001613C8_q __asm__("D_L00_001613C8") __attribute__((sda));
@@ -2167,8 +2167,8 @@ void *FUN_L00_002a9aa0(int unused, float *pos) {
         D_L00_0015F338 = 0x1F00000042L;
         *(int *)&D_L00_001613C8_q = (int)m;
         D_L00_0015F328 = 0;
-        D_L00_0015F320_q = 0;
-        D_L00_0015F330_q = 0;
+        D_L00_0015F320 = 0;
+        D_L00_0015F330 = 0;
         *(int *)(d + 0x10) = 0;
         *(short *)(d + 0x2C) = FUN_L00_0023e5e0_q(pos, 0.0f, 0.0f, 0);
     }

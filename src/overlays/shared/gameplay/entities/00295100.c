@@ -128,7 +128,7 @@ extern R_297f78 D_0013D388;
 extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_L00_00184214 __attribute__((section(".data")));
 extern H_297f78 D_00141848;
-extern s32 D_0015EEA4_c __asm__("D_0015EEA4");
+extern s32 D_0015EEA4 ;
 extern s32 D_L00_0015F630;
 extern u8 D_L00_00160FF8[], D_L00_00161008[], D_L00_00161018[], D_L00_00161028[], D_L00_00161038[];
 extern void mode_freeze_init(s32, s32) __asm__("FUN_001fbab8");
@@ -250,8 +250,8 @@ void handle_pause_input(void) {
         H_297f78 *h = &D_00141848;
         if (h->h48 < 0xFFFF)
             h->h48++;
-        if (FUN_001f96f8_c(D_0015EEA4_c) / 600 > h->h4A)
-            h->h4A = FUN_001f96f8_c(D_0015EEA4_c) / 600;
+        if (FUN_001f96f8_c(D_0015EEA4) / 600 > h->h4A)
+            h->h4A = FUN_001f96f8_c(D_0015EEA4) / 600;
         h->w4C = h->w4C | (1 << current_level_index) | 0x80000000;
     }
     if (D_L00_0015F630) {
@@ -459,7 +459,7 @@ extern struct {
     unsigned short x5a;
 } D_001516D0_298b18 __asm__("D_001516D0");
 extern int D_L00_0015F5D8_298b18 __asm__("D_L00_0015F5D8");
-extern float D_L00_0016CAF0_298b18 __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
+extern float D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
 extern int D_L00_0015F3FC_298b18 __asm__("D_L00_0015F3FC");
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") __attribute__((section(".data")));
@@ -485,7 +485,7 @@ void FUN_L00_00298b18(void) {
     f2335a0_298b18();
     f1f4a58_298b18(0xC);
     D_L00_0015F5C0_m[1] = 0;
-    D_L00_0016CAF0_298b18 = 0.63f;
+    D_L00_0016CAF0_lui = 0.63f;
     D_L00_0015F3FC_298b18 = 0;
     f1f2d98_298b18();
     for (i = 0; i < D_L00_0016C860_298b18.n; i++) {
@@ -1347,11 +1347,11 @@ extern VendorItem_29a6b0 vendor_items_29a6b0[] __asm__("D_L00_001C40B0");
 extern VendorSlot_29a6b0 vendor_slots_29a6b0[4] __asm__("D_L00_00165E80");
 typedef struct { u8 p[0x140]; f32 x; f32 y; f32 z; } VendorCam_29a6b0;
 extern VendorCam_29a6b0 D_L00_00166C80_29a6b0 __asm__("D_L00_00166C80");
-extern s32 D_L00_00161E18_29a6b0 __asm__("D_L00_00161E18");
-extern s32 D_L00_00161E20_29a6b0 __asm__("D_L00_00161E20");
+extern s32 D_L00_00161E18 ;
+extern s32 D_L00_00161E20 ;
 extern s32 D_L00_00161E24_29a6b0 __asm__("D_L00_00161E24");
-extern s32 D_L00_00161E30_29a6b0 __asm__("D_L00_00161E30");
-extern s32 D_L00_00161E34_29a6b0 __asm__("D_L00_00161E34");
+extern s32 D_L00_00161E30 ;
+extern s32 D_L00_00161E34 ;
 extern s32 D_0015ED98_29a6b0 __asm__("D_0015ED98");
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern s32 D_L00_00173E00_29a6b0[] __asm__("D_L00_00173E00");
@@ -1360,8 +1360,8 @@ extern f32 D_L00_0015F3FC_29a6b0 __asm__("D_L00_0015F3FC");
 extern s32 D_L00_0015F400_29a6b0 __asm__("D_L00_0015F400");
 extern u8 D_0013F350_29a6b0[] __asm__("D_0013F350");
 extern Vec4 D_L00_00180260_29a6b0 __asm__("D_L00_00180260");
-extern s32 D_L00_00161188_29a6b0 __asm__("D_L00_00161188");
-extern s32 D_L00_0016118C_29a6b0 __asm__("D_L00_0016118C");
+extern s32 D_L00_00161188 ;
+extern s32 D_L00_0016118C ;
 extern void memset_29a6b0(void *, s32, s32) __asm__("FUN_001f97e8");
 extern VendorMoby_29a6b0 *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void clear_vec_29a6b0(void *) __asm__("FUN_001f99f8");
@@ -1430,11 +1430,11 @@ void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m) {
     vendor_29a6b0.f44 = 0;
     vendor_29a6b0.f48 = vendor_29a6b0.title_text = vendor_29a6b0.item_text = -1;
     vendor_29a6b0.cursor = 0;
-    D_L00_00161E18_29a6b0 = 0;
-    D_L00_00161E20_29a6b0 = 0;
-    D_L00_00161E30_29a6b0 = 0;
+    D_L00_00161E18 = 0;
+    D_L00_00161E20 = 0;
+    D_L00_00161E30 = 0;
     vendor_29a6b0.f5C = 0;
-    D_L00_00161E34_29a6b0 = 0;
+    D_L00_00161E34 = 0;
     D_L00_00161E24_29a6b0 = 0;
     snd_pause_all_sounds_in_group(0x1D);
     FUN_00216050_29a6b0(0);
@@ -1511,8 +1511,8 @@ void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m) {
         vendor_slots_29a6b0[2].offset = 0;
         vendor_slots_29a6b0[3].offset = 0;
     }
-    D_L00_00161188_29a6b0 = 0;
-    D_L00_0016118C_29a6b0 = 0;
+    D_L00_00161188 = 0;
+    D_L00_0016118C = 0;
 }
 typedef struct {
     float x, y, z, w;
@@ -1796,7 +1796,7 @@ extern P_29b680 D_L00_001CA4C0_29b680 __asm__("D_L00_001CA4C0") __attribute__((s
 extern T_29b680 D_L00_00179AC0_29b680[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
 extern int D_L00_001C8FF0_29b680[][16] __asm__("D_L00_001C8FF0") __attribute__((section(".data")));
 extern unsigned char discount_purchase_pricing __asm__("D_0013D4E3") __attribute__((section(".data")));
-extern int D_L00_00161E38_29b680 __asm__("D_L00_00161E38");
+extern int D_L00_00161E38 ;
 extern void FUN_00204a40_29b680(int, int) __asm__("FUN_00204a40");
 extern void FUN_0020c5f0_29b680(void *, int) __asm__("FUN_0020c5f0");
 extern void FUN_001f9a10_29b680(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1880,7 +1880,7 @@ void FUN_L00_0029b680(void) {
     FUN_0020c880_29b680(P.p20 + 0x300);
     *(unsigned short *)(P.p20 + 0x334) |= 0x100;
     FUN_0020d4f0_29b680(P.p20 + 0x300, 0x202020, 0xE, 0xE, 0);
-    D_L00_00161E38_29b680 = 0;
+    D_L00_00161E38 = 0;
 }
 #undef P
 
@@ -1956,7 +1956,7 @@ extern s32 D_0015ED80;
 extern Vec4 D_L00_00165F80[3];
 extern void *D_L00_00197300[];
 extern ViewCamera D_L00_00166C80;
-extern f32 D_L00_0016CAF0 __attribute__((section(".data")));
+extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
 
 extern void FUN_L00_00297e30(void);
 extern void FUN_L00_00297e70(void);
@@ -2589,7 +2589,7 @@ void FUN_L00_0029c648(void) {
         if (cs->f34 >= cs->h40) {
             fade_level = 0.0f;
             FUN_002335a0();
-            D_L00_0016CAF0 = 0.63f;
+            D_L00_0016CAF0_lui = 0.63f;
             FUN_001f2d98();
             for (j = 0; j < D_L00_0016C860.h44; j++) {
                 m2 = D_L00_0016C860.f178[j];
@@ -2614,7 +2614,7 @@ void FUN_L00_0029c648(void) {
         cam = &cs->f54[cs->f38];
         rot = cam->rot;
         flag = cam->flag;
-        D_L00_0016CAF0 = rot[3];
+        D_L00_0016CAF0_lui = rot[3];
         FUN_001f2d98();
         qcopy(D_L00_00166C80.pos.f, cam);
         FUN_001f9cf8(D_L00_00166C80.pos.f, D_L00_00166C80.pos.f, vendor_menu.f80);

@@ -1656,7 +1656,7 @@ typedef struct {
 } FUN_L07_0030cf90_Vars;
 
 void FUN_L07_0030cf90(struct Moby *moby) {
-    extern char *D_L07_0015FFD8 __attribute__((sda));
+    extern char *level_mobys_gp __asm__("D_L07_0015FFD8") __attribute__((sda));
     FUN_L07_0030cf90_Vars *vars = (FUN_L07_0030cf90_Vars *)moby->pvars;
     Vec4 origin;
     Vec4 rotated;
@@ -1689,7 +1689,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
     }
     case 1:
         if (vars->target_index != -1) {
-            target = (struct Moby *)(D_L07_0015FFD8 + vars->target_index * 0x100);
+            target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100);
             if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
                 target->state != vars->target_state)
                 return;
@@ -1700,7 +1700,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         break;
     case 2:
         if (vars->target_index != -1 &&
-            (target = (struct Moby *)(D_L07_0015FFD8 + vars->target_index * 0x100)) != 0 &&
+            (target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100)) != 0 &&
             target->state != 0xfe && target->state != 0xfd &&
             (position = &moby->pos, target->state == vars->target_state_word)) {
             play_moby_sound(vars->trigger_sound, 0, moby);
@@ -1728,7 +1728,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         break;
     case 3:
         if (vars->target_index != -1) {
-            target = (struct Moby *)(D_L07_0015FFD8 + vars->target_index * 0x100);
+            target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100);
             if (target != 0 && target->state != 0xfe && target->state != 0xfd) {
                 if (target->state != vars->target_state_word)
                     return;
@@ -1739,7 +1739,7 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         }
         break;
     case 4:
-        target = (struct Moby *)((u32)D_L07_0015FFD8 + (u32)vars->target_index * 0x100);
+        target = (struct Moby *)((u32)level_mobys_gp + (u32)vars->target_index * 0x100);
         if (vars->target_index == -1 || target == 0 ||
             (voice = target->state) == 0xfe || voice == 0xfd ||
             voice == vars->target_state) {

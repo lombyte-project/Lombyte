@@ -462,7 +462,7 @@ extern int func_001F9938_2D9F08(void *) __asm__("FUN_001f9770");
 extern void func_L00_002EC0C8_2D9F08(int) __asm__("FUN_L00_002eac18");
 extern void func_L01_00240CE8_2D9F08(void) __asm__("FUN_L01_002405a0");
 extern void func_L00_0025E590_2D9F08(Moby *, Data_2D9F08 *) __asm__("FUN_L00_0025d538");
-extern float D_L02_001D3680_2D9F08[4][4] __asm__("D_L02_001D33B0");
+extern float D_L02_001D33B0[4][4] ;
 extern Lvl_2D9F08 D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
 extern int D_0015EE84_2D9F08 __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern char D_0014C290_2D9F08[] __asm__("D_0014C190");
@@ -473,7 +473,7 @@ extern int D_L02_0017EB88_2D9F08 __asm__("D_L02_0017EB08") __attribute__((sectio
 extern Cam_2D9F08 D_L02_00167300_2D9F08 __asm__("D_L02_00167280");
 extern Idle_2D9F08 D_L02_00179A90_2D9F08 __asm__("D_L02_00179A10");
 extern int D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
-extern int D_L02_00161BAC_2D9F08 __asm__("D_L02_00161B1C") __attribute__((sda));
+extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 extern int D_L02_00161B38_2D9F08 __asm__("D_L02_00161AA8") __attribute__((sda));
 extern int D_L02_00161B34_2D9F08 __asm__("D_L02_00161AA4") __attribute__((sda));
 extern int D_L02_00161B30_2D9F08 __asm__("D_L02_00161AA0") __attribute__((sda));
@@ -494,15 +494,15 @@ void FUN_L02_002d8ad0(Moby *moby) {
     case 0:
         data->h12 = 0;
         moby->state = 1;
-        D_L02_001D3680_2D9F08[2][1] = 17.0f;
-        D_L02_001D3680_2D9F08[0][1] = 17.0f;
-        D_L02_001D3680_2D9F08[1][0] = 17.0f;
-        D_L02_001D3680_2D9F08[1][1] = -17.0f;
-        D_L02_001D3680_2D9F08[2][0] = -17.0f;
-        D_L02_001D3680_2D9F08[3][0] = -17.0f;
-        D_L02_001D3680_2D9F08[3][1] = -17.0f;
-        D_L02_001D3680_2D9F08[0][0] = 17.0f;
-        D_L02_00161BAC_2D9F08 = data->iEC;
+        D_L02_001D33B0[2][1] = 17.0f;
+        D_L02_001D33B0[0][1] = 17.0f;
+        D_L02_001D33B0[1][0] = 17.0f;
+        D_L02_001D33B0[1][1] = -17.0f;
+        D_L02_001D33B0[2][0] = -17.0f;
+        D_L02_001D33B0[3][0] = -17.0f;
+        D_L02_001D33B0[3][1] = -17.0f;
+        D_L02_001D33B0[0][0] = 17.0f;
+        D_L02_00161B1C_gp = data->iEC;
         if (moby->mission != 0xFF) {
             if (D_L02_001BBB40_2D9F08.collected[(short)moby->save_id] != 0
                 || (((int *)(D_0014C290_2D9F08 + (D_0015EE84_2D9F08 << 8)))[(short)moby->save_id >> 5] >> (moby->save_id & 0x1F)) & 1) {
@@ -980,7 +980,7 @@ extern int D_L02_00161ADC __attribute__((sda));
 extern int D_L02_00161AE0 __attribute__((sda));
 extern int D_L02_00161AE4 __attribute__((sda));
 extern int D_L02_00161AE8 __attribute__((sda));
-extern int D_L02_00161B1C __attribute__((sda));
+extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 extern int D_L02_00161B9C __attribute__((sda));
 extern void FUN_001fa050(void *, void *);
 extern void FUN_001fa378(void *, void *, void *);
@@ -1043,7 +1043,7 @@ void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
     xy[2] += func_001FA898_r(M[2][1] * 16.0f);
     xy[3] += func_001FA898_r(M[3][0] * 16.0f) << 16;
     xy[3] += func_001FA898_r(M[3][1] * 16.0f);
-    tex = get_effect_texture(D_L02_00161B1C + 0x29);
+    tex = get_effect_texture(D_L02_00161B1C_gp + 0x29);
     FUN_L02_0020bc88(xy, uv, col, tex, 1);
     FUN_L02_0020bc88(xy, uv, col, tex, 1);
 }
@@ -1183,7 +1183,7 @@ void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
 }
 
 typedef struct { long a, b, c, d; } Q_2dae88;
-extern int D_L02_00161B1C_2dae88 __asm__("D_L02_00161B1C") __attribute__((sda));
+extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 int tex_2dae88(int) __asm__("FUN_001f44b8");
 void f20bc88_2dae88(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
 extern Q_2dae88 D_L02_001D3310[];
@@ -1205,7 +1205,7 @@ void FUN_L02_002dae88(void) {
         b[3] = D_L02_00161AB8;
         c[0] = c[1] = c[2] = c[3] = D_L02_00161B94;
         q = *p++;
-        f20bc88_2dae88(&q, b, c, tex_2dae88(D_L02_00161B1C_2dae88 + 0x28), 1);
+        f20bc88_2dae88(&q, b, c, tex_2dae88(D_L02_00161B1C_gp + 0x28), 1);
     }
 }
 

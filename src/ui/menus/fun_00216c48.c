@@ -37,7 +37,7 @@ typedef struct {
 
 extern s32 D_00160070 __attribute__((sda));
 extern s32 world_update_time __asm__("D_0015F60C");
-extern s32 D_0015F60C_far __asm__("D_0015F60C") MACRO_ADDR;
+extern s32 world_update_time_macro __asm__("D_0015F60C") MACRO_ADDR;
 extern s32 D_001993C0[];
 extern Suffixes D_001E8680;
 extern char D_00160088[];
@@ -158,7 +158,7 @@ void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
     }
     if (next != menu->unk36) {
         menu->unk36 = next;
-        menu->unk38 = D_0015F60C_far;
+        menu->unk38 = world_update_time_macro;
         e = (MenuItem *)(menu->unk3C + next * 0x1C);
         menu->unk8 = *(u8 *)&e->unk10 & 1;
         func_00216C48(arg0, menu, 0);

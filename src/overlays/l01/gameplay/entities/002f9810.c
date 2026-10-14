@@ -598,7 +598,7 @@ typedef struct {
     f32 z;
 } Effect;
 
-extern s32 D_L01_0015F5C4;
+extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern Effect D_L01_0017C8C0;
 extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 
@@ -606,7 +606,7 @@ extern MobyList fx_cutscene __asm__("D_L01_0016CCE0");
 void FUN_L01_002fac80(void) {
     s32 i;
 
-    if (D_L01_0015F5C4 == 2 && big_head_cheat_enabled != 0) {
+    if (cutscene_mode == 2 && big_head_cheat_enabled != 0) {
         for (i = 0; i < fx_cutscene.count; i++) {
             if (fx_cutscene.list[i]->type == 0x32B && D_L01_0017C8C0.active == 0) {
                 attach_manipulator(fx_cutscene.list[i], 0, &D_L01_0017C8C0);
@@ -683,7 +683,7 @@ typedef struct {
 typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } Lv_2FC140;
 extern Moby_2FC140 *D_L01_00160058_2FC140 __asm__("D_L01_0015FFD8") MACRO_ADDR;
 extern Rec_2FC140 *D_L01_0016016C_2FC140 __asm__("D_L01_001600EC") MACRO_ADDR;
-extern int D_L01_0015F6A8_2FC140 __asm__("D_L01_0015F5C4") MACRO_ADDR;
+extern int cutscene_mode __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern char D_L01_001BAD60_2FC140[] __asm__("D_L01_001BAA50");
 extern Lv_2FC140 D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB6B0");
 extern char D_L01_001BADB0_2FC140[] __asm__("D_L01_001BAAA0");
@@ -749,7 +749,7 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
             moby->f32 = r16;
             moby->f94 = moby->pclass->f10;
         } else {
-            if (D_L01_0015F6A8_2FC140 == 0) {
+            if (cutscene_mode == 0) {
                 unsigned char *pp = alternate_item_available;
                 if (pp[0xF] == 0) {
                     start_scene(5);
@@ -851,21 +851,21 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
         moby->state = 6;
         break;
     case 6:
-        if (D_L01_0015F6A8_2FC140 == 2) {
+        if (cutscene_mode == 2) {
             break;
         }
         func_L00_0029A7D0_2FC140(3);
         moby->state = 7;
         break;
     case 7:
-        if (D_L01_0015F6A8_2FC140 == 2) {
+        if (cutscene_mode == 2) {
             break;
         }
         start_scene(4);
         moby->state = 8;
         break;
     case 8:
-        if (D_L01_0015F6A8_2FC140 == 2) {
+        if (cutscene_mode == 2) {
             break;
         }
         func_L00_00261848_2FC140(3);
@@ -1305,7 +1305,7 @@ typedef struct {
 
 extern WaterLayer D_L01_001FBC80[];
 extern s32 D_L01_00161CE0 __attribute__((sda));
-extern s32 D_L01_0015F5CC;
+extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 extern f32 FUN_001fa6c0(s32);
 extern f32 FUN_001f9de0(f32);
 extern void FUN_L01_002feb28(void);
@@ -1353,7 +1353,7 @@ void FUN_L01_002feb58(void *arg) {
             }
         }
     }
-    s = FUN_001f9de0((FUN_001fa6c0(D_L01_0015F5CC & 0x3F) - 32.0f) * 0.09817477f);
+    s = FUN_001f9de0((FUN_001fa6c0(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
     s = s * 0.5f + 0.5f;
     for (g = 3; g >= 0; g--) {
         D_L01_001FBC80[g].glow = s;
@@ -1649,7 +1649,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern int D_L01_001612D8; /* no foreign declaration */
+extern int pool_draw_count __asm__("D_L01_001612D8"); /* no foreign declaration */
 extern int D_L01_001612D0; /* no foreign declaration */
 extern float D_L01_001742E8 __attribute__((section(".data"))); /* no foreign declaration */
 extern int FUN_001efa68(void *, void *, int, void *, void *);
@@ -1679,7 +1679,7 @@ void FUN_L01_002ffdc0(struct Moby *moby) {
             if (*(int *)(data + 0x18) == 0) {
                 allocate_voice_for_target_entry_alt(0, 0, (int)moby);
             }
-            FUN_L00_002a3ec8(D_L01_001612D0, D_L01_001612D8, 1, moby->pos.x, moby->pos.y, 0.5f, -0.35f);
+            FUN_L00_002a3ec8(D_L01_001612D0, pool_draw_count, 1, moby->pos.x, moby->pos.y, 0.5f, -0.35f);
             {
                 float pos_unit = frame_time;
                 float pos_unit2 = frame_time_sq;

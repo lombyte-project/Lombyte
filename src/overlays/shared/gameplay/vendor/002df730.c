@@ -133,7 +133,7 @@ void FUN_L00_002eac18_c(int mode) __asm__("FUN_L00_002eac18");
 extern char D_0013E633_2E0E50[] __asm__("D_0013F350");
 extern char D_0013A5E0_2E0E50[] __asm__("D_0013CAE0");
 extern int D_L00_0015F6A8_2E0E50 __asm__("D_L00_0015F5C4") __attribute__((section(".sdata")));
-extern int D_L00_0015F504_2E0E50 __asm__("D_L00_0015F404") __attribute__((section(".sdata")));
+extern int D_L00_0015F404_macro __asm__("D_L00_0015F404") __attribute__((section(".sdata")));
 extern char *D_L00_00160098_2E0E50 __asm__("D_L00_0015FFD8") __attribute__((section(".sdata")));
 extern char *D_L00_001601AC_2E0E50 __asm__("D_L00_001600EC") __attribute__((section(".sdata")));
 extern float D_L00_0015F4FC_2E0E50 __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
@@ -296,7 +296,7 @@ void FUN_L00_002df9a0(Moby *moby) {
             moby->command = 1;
             func_L00_002EBE88_2E0E50(D_L00_001601AC_2E0E50 + (data->i8 << 7) + 0x30);
             func_L00_002EBEE0_2E0E50(D_L00_001601AC_2E0E50 + (data->i8 << 7) + 0x70);
-            D_L00_0015F504_2E0E50 = 1;
+            D_L00_0015F404_macro = 1;
             if (((Hero *)D_0013E633_2E0E50)->unk20B0 == 0) {
                 ((Moby *)linked)->command = 8;
                 ((Hero *)D_0013E633_2E0E50)->unk20B0 = 1;
@@ -328,7 +328,7 @@ void FUN_L00_002df9a0(Moby *moby) {
                 return;
             }
             moby->command = 2;
-            D_L00_0015F504_2E0E50 = 0;
+            D_L00_0015F404_macro = 0;
             func_L00_002EC0C8_2E0E50(3);
             return;
         case 2:
@@ -1583,18 +1583,18 @@ extern int FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L00_00161D24 __attribute__((sda));
 extern short D_L00_00161D38 __attribute__((sda));
-extern short D_L00_00161D3C __attribute__((sda));
-extern short D_L00_00161D40 __attribute__((sda));
+extern short D_L00_00161D3C_gp __asm__("D_L00_00161D3C") __attribute__((sda));
+extern short D_L00_00161D40_gp __asm__("D_L00_00161D40") __attribute__((sda));
 extern short D_L00_00161D48 __attribute__((sda));
 extern short D_L00_00161D4C __attribute__((sda));
 extern short D_L00_00161D50 __attribute__((sda));
-extern short D_L00_00161D54 __attribute__((sda));
+extern short D_L00_00161D54_gp __asm__("D_L00_00161D54") __attribute__((sda));
 extern short D_L00_00161D58 __attribute__((sda));
 extern short D_L00_00161D5C __attribute__((sda));
 extern short D_L00_00161D60 __attribute__((sda));
 extern short D_L00_00161D64 __attribute__((sda));
 extern short D_L00_00161D68 __attribute__((sda));
-extern short D_L00_00161D6C __attribute__((sda));
+extern short D_L00_00161D6C_gp __asm__("D_L00_00161D6C") __attribute__((sda));
 extern short D_L00_00161D78 __attribute__((sda));
 extern short D_L00_00161D7C __attribute__((sda));
 extern void FUN_L00_002e48a0_c(void *out, float f) __asm__("FUN_L00_002e48a0");
@@ -1611,7 +1611,7 @@ void FUN_L00_002e4930(char *m) {
         if (p0->state.control_mode == 2) {
             e->prev = e->state;
             e->state = 1;
-            e->timer = D_L00_00161D3C;
+            e->timer = D_L00_00161D3C_gp;
             e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
         } else {
             struct Hero *p1 = &hero;
@@ -1640,7 +1640,7 @@ void FUN_L00_002e4930(char *m) {
                     if (p3->state.current == 0xB && D_L00_00166EEC == 0.0f) {
                         e->prev = e->state;
                         e->state = 6;
-                        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40);
+                        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
                         e->invMove = 1.0f / convert_integer_to_float_c(e->moveTimer);
                         e->timer = D_L00_00161D50;
                         inv = 1.0f / convert_integer_to_float_c(e->timer);
@@ -1685,7 +1685,7 @@ void FUN_L00_002e4930(char *m) {
         float r;
         e->prev = e->state;
         e->state = 9;
-        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D6C);
+        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D6C_gp);
         r = 1.0f / convert_integer_to_float_c(e->moveTimer);
         y = *(float *)&D_L00_00161D7C;
         e->hit = 0;
@@ -1709,7 +1709,7 @@ void FUN_L00_002e4930(char *m) {
         if (p->unk41E == 0) {
             e->prev = e->state;
             e->state = 6;
-            e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40);
+            e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
             e->invMove = 1.0f / convert_integer_to_float_c(e->moveTimer);
             e->timer = D_L00_00161D50;
             inv = 1.0f / convert_integer_to_float_c(e->timer);
@@ -1724,7 +1724,7 @@ void FUN_L00_002e4930(char *m) {
         if (p->state.control_mode == 2) {
             e->prev = e->state;
             e->state = 1;
-            e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+            e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
             e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
             return;
         }
@@ -1733,12 +1733,12 @@ void FUN_L00_002e4930(char *m) {
         if (D_001413DC == 2) {
             e->prev = 4;
             e->state = 1;
-            e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+            e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
             e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
         } else {
             e->prev = 4;
             e->state = 0;
-            e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+            e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
             e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
         }
         return;
@@ -1746,7 +1746,7 @@ void FUN_L00_002e4930(char *m) {
     if (e->state == 3 && D_001413D4 == 0xB) {
         e->prev = e->state;
         e->state = 6;
-        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40);
+        e->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
         e->invMove = 1.0f / convert_integer_to_float_c(e->moveTimer);
         e->timer = D_L00_00161D50;
         inv = 1.0f / convert_integer_to_float_c(e->timer);
@@ -1775,14 +1775,14 @@ void FUN_L00_002e4930(char *m) {
     if (e->state == 6 && D_001413D4 != 0xB) {
         e->prev = e->state;
         e->state = 0;
-        e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+        e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
         e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
         return;
     }
     if ((e->state == 3 || e->state == 5) && D_001413DC != 4) {
         e->prev = e->state;
         e->state = 0;
-        e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+        e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
         e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
         return;
     }
@@ -1799,7 +1799,7 @@ void FUN_L00_002e4930(char *m) {
         to_one:
             e->prev = e->state;
             e->state = 1;
-            e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+            e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
             r = 1.0f / convert_integer_to_float_c(e->timer);
             t = *(int *)&D_L00_00161D24;
             e->invTimer = r;
@@ -1819,7 +1819,7 @@ void FUN_L00_002e4930(char *m) {
     if (e->state == 0xA && FUN_001f9770_c2(&e->moveTimer)) {
         e->prev = e->state;
         e->state = 0;
-        e->timer = scale_game_frames(*(int *)&D_L00_00161D54);
+        e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
         e->invTimer = 1.0f / convert_integer_to_float_c(e->timer);
         return;
     }
@@ -1840,10 +1840,10 @@ extern int FUN_001f9770_c(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern float FUN_L00_002e4580_u(void *, float) __asm__("FUN_L00_002e4580");
 extern short D_L00_00161D24_d __asm__("D_L00_00161D24") __attribute__((sda));
-extern short D_L00_00161D3C_d __asm__("D_L00_00161D3C") __attribute__((sda));
-extern short D_L00_00161D40_d __asm__("D_L00_00161D40") __attribute__((sda));
-extern short D_L00_00161D54_d __asm__("D_L00_00161D54") __attribute__((sda));
-extern short D_L00_00161D6C_d __asm__("D_L00_00161D6C") __attribute__((sda));
+extern short D_L00_00161D3C_gp __asm__("D_L00_00161D3C") __attribute__((sda));
+extern short D_L00_00161D40_gp __asm__("D_L00_00161D40") __attribute__((sda));
+extern short D_L00_00161D54_gp __asm__("D_L00_00161D54") __attribute__((sda));
+extern short D_L00_00161D6C_gp __asm__("D_L00_00161D6C") __attribute__((sda));
 extern void FUN_001f9a40(float, void *, void *, void *);
 extern void FUN_001f9a68_c2(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_L00_002e4168_c(char *, void *) __asm__("FUN_L00_002e4168");
@@ -1895,7 +1895,7 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
               *(float *)&D_L00_00161D0C < y))) {
             int v;
             *(unsigned char *)(e + 0xC4) = 1;
-            v = *(unsigned short *)&D_L00_00161D3C_d;
+            v = *(unsigned short *)&D_L00_00161D3C_gp;
             *(short *)(e + 0xC6) = v;
             *(float *)(e + 0xC8) = 1.0f / convert_integer_to_float((short)v);
         }
@@ -1952,19 +1952,19 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
         if (FUN_001f9770_c(e + 0xD4)) {
             if (*(unsigned char *)(e + 0xC4) == 9) {
                 *(unsigned char *)(e + 0xC4) = 0xA;
-                *(short *)(e + 0xD4) = FUN_001f96f8_c2(*(int *)&D_L00_00161D6C_d);
+                *(short *)(e + 0xD4) = FUN_001f96f8_c2(*(int *)&D_L00_00161D6C_gp);
                 qcopy(e + 0x20, e + 0x10);
                 FUN_001f9a68_c2(tmp, g + 0x30, *(float *)(e + 0xD0));
                 FUN_001f9a28(e + 0x30, e + 0x20, tmp);
             } else if (*(unsigned char *)(e + 0xC4) == 6) {
                 *(unsigned char *)(e + 0xC4) = 7;
-                *(short *)(e + 0xD4) = FUN_001f96f8_c2(*(int *)&D_L00_00161D40_d);
+                *(short *)(e + 0xD4) = FUN_001f96f8_c2(*(int *)&D_L00_00161D40_gp);
                 qcopy(e + 0x30, e + 0x20);
                 qcopy(e + 0x20, e + 0x10);
             } else {
                 int v;
                 *(unsigned char *)(e + 0xC4) = 4;
-                v = *(unsigned short *)&D_L00_00161D54_d;
+                v = *(unsigned short *)&D_L00_00161D54_gp;
                 *(short *)(e + 0xC6) = v;
                 *(float *)(e + 0xC8) = 1.0f / convert_integer_to_float((short)v);
             }

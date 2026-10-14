@@ -487,7 +487,7 @@ void FUN_L12_002e19a8_c(void *pos) __asm__("FUN_L12_002e19a8");
 void FUN_L12_002e3528_c(struct Moby *moby) __asm__("FUN_L12_002e3528");
 extern char D_0013E633_2E2EF0[] __asm__("D_001413D0");
 extern char *D_L12_001B0C30_2E2EF0[] __asm__("D_L12_001B0930");
-extern char D_L12_001672C0_2E2EF0[] __asm__("D_L12_00167240");
+extern char D_L12_00167240[] ;
 extern void func_L12_002E4838_2E2EF0(void *) __asm__("FUN_L12_002e3528");
 extern void func_L00_00264BB0_2E2EF0(void *,float) __asm__("FUN_L00_00263b38");
 extern int select54(char *,char *,float) __asm__("FUN_L01_00274b78");
@@ -763,7 +763,7 @@ void FUN_L12_002e1be0(TrollMoby54_2E2EF0 *moby) {
     }
     if(moby->enabled && moby->state!=9 && moby->state!=8) {
         func_L00_00263950_2E2EF0((char *)moby,data->collision_data,0,D_0015ED64*0.018f,D_0015ED64*0.3f);
-        if(moby->enabled && func_001F9D10_2E2EF0(moby->pos,D_L12_001672C0_2E2EF0)<28.0f) { func_L00_0025B178_2E2EF0(moby); moby->active=22; }
+        if(moby->enabled && func_001F9D10_2E2EF0(moby->pos,D_L12_00167240)<28.0f) { func_L00_0025B178_2E2EF0(moby); moby->active=22; }
     }
     return;
 }

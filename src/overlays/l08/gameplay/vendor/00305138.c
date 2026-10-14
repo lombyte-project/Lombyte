@@ -291,9 +291,9 @@ struct G_3063f0 {
     char *objs[1];
 };
 
-extern float D_L08_0015F59C_c __asm__("D_L08_0015F59C");
-extern float D_L08_0015F5A0_c __asm__("D_L08_0015F5A0");
-extern int D_L08_0015F5C4_c __asm__("D_L08_0015F5C4");
+extern float D_L08_0015F59C ;
+extern float D_L08_0015F5A0 ;
+extern int D_L08_0015F5C4 ;
 extern struct G_3063f0 D_L08_0016D060_d __asm__("D_L08_0016D060") __attribute__((section(".data")));
 extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__((section(".data")));
@@ -301,18 +301,18 @@ extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__(
 extern short D_L08_00162300 __attribute__((sda));
 void FUN_L08_003063f0(struct Moby *moby) {
     int i;
-    if (D_L08_0015F5C4_c == 2 && D_0015EDB0_c[0]) {
+    if (D_L08_0015F5C4 == 2 && D_0015EDB0_c[0]) {
         if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x26C && D_L08_0016D060_d.b < 0x2CC) {
-            D_L08_0015F59C_c = 1.0f;
-            D_L08_0015F5A0_c = -0.2f;
+            D_L08_0015F59C = 1.0f;
+            D_L08_0015F5A0 = -0.2f;
         }
         if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x47E && D_L08_0016D060_d.b < 0x5F1) {
-            D_L08_0015F59C_c = 1.0f;
-            D_L08_0015F5A0_c = 0.5f;
+            D_L08_0015F59C = 1.0f;
+            D_L08_0015F5A0 = 0.5f;
         }
         if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x5FA && D_L08_0016D060_d.b < 0x6AE) {
-            D_L08_0015F59C_c = 1.0f;
-            D_L08_0015F5A0_c = -0.1f;
+            D_L08_0015F59C = 1.0f;
+            D_L08_0015F5A0 = -0.1f;
         }
         for (i = 0; i < D_L08_0016D060_d.n; i++) {
             char *o = D_L08_0016D060_d.objs[i];
@@ -743,8 +743,8 @@ void FUN_L08_00308c90(struct Moby *moby) {
 
 extern Pair D_L08_00162408[] __attribute__((section(".sdata")));
 extern char D_L08_001F8560[];
-extern short D_L08_001623C8_d __asm__("D_L08_001623C8") __attribute__((sda));
-extern short D_L08_001623E8_d __asm__("D_L08_001623E8") __attribute__((sda));
+extern short D_L08_001623C8_gp __asm__("D_L08_001623C8") __attribute__((sda));
+extern short D_L08_001623E8_gp __asm__("D_L08_001623E8") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
@@ -752,10 +752,10 @@ extern short D_L08_001623D0 __attribute__((sda));
 extern short D_L08_001623D8 __attribute__((sda));
 void FUN_L08_00308f68(int x) {
     int i;
-    int *a = (int *)&D_L08_001623C8_d;
+    int *a = (int *)&D_L08_001623C8_gp;
     int *b = (int *)&D_L08_001623D8;
     int *c = (int *)&D_L08_001623D0;
-    int *e = (int *)&D_L08_001623E8_d;
+    int *e = (int *)&D_L08_001623E8_gp;
 
     for (i = 0; i < 2; i++) {
         FUN_L08_00258090(D_L08_001F8560, b[i], a[i], &D_L08_00162408[x]);
@@ -782,8 +782,8 @@ extern int FUN_001fa728(char *, float);
 extern int truncate_float_to_s32();
 extern short D_L08_00162380 __attribute__((sda));
 extern short D_L08_001623C4 __attribute__((sda));
-extern short D_L08_001623E8 __attribute__((sda));
-extern short D_L08_001623C8 __attribute__((sda));
+extern short D_L08_001623E8_gp __asm__("D_L08_001623E8") __attribute__((sda));
+extern short D_L08_001623C8_gp __asm__("D_L08_001623C8") __attribute__((sda));
 extern void FUN_L08_002f0dc8(void);
 extern void FUN_L08_00309030(void);
 extern void FUN_L08_002f0f68(void *, int, void *, float, float, float, float, int);
@@ -804,7 +804,7 @@ void FUN_L08_003097b0(struct Moby *moby) {
     case 0:
         if (*(int *)&D_L08_001623C4 == 0) {
             FUN_L08_002f0f68(D_L08_001F8528, 8, D_L08_001F4C60, 0.5f, 0.5f, 0.65f, 0.5f, 1);
-            FUN_L08_002f0f68(&D_L08_001623E8, 2, &D_L08_001623C8, 0.5f, 0.5f, 0.5f, 1.0f, 1);
+            FUN_L08_002f0f68(&D_L08_001623E8_gp, 2, &D_L08_001623C8_gp, 0.5f, 0.5f, 0.5f, 1.0f, 1);
             FUN_L08_002f0f68(D_L08_001F4C48, 6, D_L08_001F01C8, 0.25f, 0.25f, 0.25f, 1.0f, 1);
             *(int *)&D_L08_001623C4 = 1;
         }

@@ -151,7 +151,7 @@ typedef struct {
 } MissileHit_089d0;
 
 extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
-extern char D_L11_00174880_089d0[] __asm__("D_L11_00174880");
+extern char D_L11_00174880[] ;
 extern int ftoi_089d0(float) __asm__("FUN_001fa6d0");
 extern float distance_089d0(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_length_089d0(void *) __asm__("FUN_001f9af0");
@@ -246,7 +246,7 @@ void FUN_L11_003089d0(struct Moby *moby) {
             r[1] = random_float_between_089d0(-1.0f, 1.0f);
             r[2] = random_float_between_089d0(-1.0f, 1.0f);
             *(OvlQuad *)q = *(OvlQuad *)r;
-            reflect_089d0(r, vars, D_L11_00174880_089d0);
+            reflect_089d0(r, vars, D_L11_00174880);
             normalize_vector_089d0(q, q, vector_length_089d0(r) * 0.5f);
             add_vector_089d0(q, r, q);
             normalize_vector_089d0(q, q, random_float_between_089d0(frame_time * 5.0f, frame_time * 9.0f));

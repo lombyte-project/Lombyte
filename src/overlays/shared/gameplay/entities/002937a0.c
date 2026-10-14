@@ -668,9 +668,9 @@ extern int D_L08_0015F5CC_002e7eb0 __asm__("D_L08_0015F5CC");
 typedef union { float float_value; int int_value; } Data_002e7eb0;
 /* Retail inherits GP 0x166c00: these scalar labels preserve its GP-relative loads.
    Keep the existing timer name while binding it to the checked level-08 address. */
-extern int D_L08_00161D08_002e7eb0 __asm__("D_L08_00161D08") __attribute__((sda));
-extern int D_L08_00161D0C_002e7eb0 __asm__("D_L08_00161D0C") __attribute__((sda));
-extern int D_L08_00161D10_002e7eb0 __asm__("D_L08_00161D10") __attribute__((sda));
+extern int D_L08_00161D08_gp __asm__("D_L08_00161D08") __attribute__((sda));
+extern int D_L08_00161D0C_gp __asm__("D_L08_00161D0C") __attribute__((sda));
+extern int D_L08_00161D10_gp __asm__("D_L08_00161D10") __attribute__((sda));
 typedef struct { unsigned int words[4]; } Vec_002e7eb0 __attribute__((aligned(16)));
 
 extern float D_L08_00161CD8 __attribute__((sda));
@@ -740,9 +740,9 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
                 i++;
                 spawn_particle_002e7eb0(moby + 0x10, velocity_ptr, D_L08_00161CF8, D_L08_00161CFC,
                     random_integer_002e7eb0(scale_game_frames_int_002e7eb0(10), scale_game_frames_int_002e7eb0(20)), 1, 20000.0f);
-                a = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D08_002e7eb0, (float)D_L08_00161D08_002e7eb0 * 1.2f)));
-                b = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D0C_002e7eb0, (float)D_L08_00161D0C_002e7eb0 * 1.2f)));
-                c = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D10_002e7eb0, (float)D_L08_00161D10_002e7eb0 * 1.5f)));
+                a = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D08_gp, (float)D_L08_00161D08_gp * 1.2f)));
+                b = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D0C_gp, (float)D_L08_00161D0C_gp * 1.2f)));
+                c = truncate_float_to_s32_002e7eb0(scale_game_frames_002e7eb0(random_float_between_002e7eb0((float)D_L08_00161D10_gp, (float)D_L08_00161D10_gp * 1.5f)));
                 FUN_00218888_002e7eb0(moby + 0x10, velocity_ptr, offset_ptr, D_L08_00161CF0, D_L08_00161CF4, a, b, c, -1);
             } while ((float)i < D_L08_00161CE0);
         }
@@ -776,9 +776,9 @@ extern float D_L08_00161CE4 __attribute__((sda));
 extern int D_L08_00161CE8 __attribute__((sda));
 extern int D_L08_00161CEC __attribute__((sda));
 extern float D_L08_00161D00 __attribute__((sda));
-extern int D_L08_00161D08 __attribute__((sda));
-extern int D_L08_00161D0C __attribute__((sda));
-extern int D_L08_00161D10 __attribute__((sda));
+extern int D_L08_00161D08_gp __asm__("D_L08_00161D08") __attribute__((sda));
+extern int D_L08_00161D0C_gp __asm__("D_L08_00161D0C") __attribute__((sda));
+extern int D_L08_00161D10_gp __asm__("D_L08_00161D10") __attribute__((sda));
 extern float D_L08_00161D1C __attribute__((sda));
 extern float D_L08_00161D20 __attribute__((sda));
 typedef struct { unsigned int words[4]; } Vec_002e8210 __attribute__((aligned(16)));
@@ -822,11 +822,11 @@ void FUN_L08_002e8210(char *moby) {
         offset[3] = D_L08_00161D20;
         i++;
         a = truncate_float_to_s32_002e8210(scale_game_frames_002e8210(random_float_between_002e8210(
-            (float)D_L08_00161D08, (float)D_L08_00161D08 * 1.2f)));
+            (float)D_L08_00161D08_gp, (float)D_L08_00161D08_gp * 1.2f)));
         b = truncate_float_to_s32_002e8210(scale_game_frames_002e8210(random_float_between_002e8210(
-            (float)D_L08_00161D0C, (float)D_L08_00161D0C * 1.2f)));
+            (float)D_L08_00161D0C_gp, (float)D_L08_00161D0C_gp * 1.2f)));
         c = truncate_float_to_s32_002e8210(scale_game_frames_002e8210(random_float_between_002e8210(
-            (float)D_L08_00161D10, (float)D_L08_00161D10 * 1.5f)));
+            (float)D_L08_00161D10_gp, (float)D_L08_00161D10_gp * 1.5f)));
         spawn_particle_002e8210(position, velocity, offset, D_L08_00161CE8,
                                D_L08_00161CEC, a, b, c, -1);
     }
@@ -985,19 +985,19 @@ typedef struct {
 } V2_12a0;
 
 extern V2_12a0 D_L08_001E8348_12a0[] __asm__("D_L08_001E8348");
-extern float D_0015ED7C_12a0 __asm__("D_0015ED7C");
-extern float D_0015ED7C_12a0_b __asm__("D_0015ED7C");
+extern float D_0015ED7C ;
+extern float D_0015ED7C ;
 
 extern V2_12a0 D_L08_001DB500[];
 void FUN_L08_002f12a0(int idx) {
-    D_L08_001E8348_12a0[idx].x += D_L08_001DB500[idx].x * D_0015ED7C_12a0;
+    D_L08_001E8348_12a0[idx].x += D_L08_001DB500[idx].x * D_0015ED7C;
     if (D_L08_001E8348_12a0[idx].x > 1.0f) {
         D_L08_001E8348_12a0[idx].x -= 1.0f;
     }
     if (D_L08_001E8348_12a0[idx].x < -1.0f) {
         D_L08_001E8348_12a0[idx].x += 1.0f;
     }
-    D_L08_001E8348_12a0[idx].y += D_L08_001DB500[idx].y * D_0015ED7C_12a0_b;
+    D_L08_001E8348_12a0[idx].y += D_L08_001DB500[idx].y * D_0015ED7C;
     if (D_L08_001E8348_12a0[idx].y > 1.0f) {
         D_L08_001E8348_12a0[idx].y -= 1.0f;
     }
@@ -1211,7 +1211,7 @@ void FUN_L08_003024d8(char *m);
 extern char D_0013F350[];
 extern int level_mode302618 __asm__("D_L08_0015F5C4");
 extern char *target302618 __asm__("D_L08_00174658") __attribute__((section(".data")));
-extern float delay_random302618 __asm__("D_L08_0015F5D4");
+extern float D_L08_0015F5D4 ;
 extern float speed302618 __asm__("D_L08_001621C4") __attribute__((sda));
 extern float accel302618 __asm__("D_L08_001621C0") __attribute__((sda));
 extern int delay302618 __asm__("D_L08_001621BC") __attribute__((sda));
@@ -1438,7 +1438,7 @@ void FUN_L08_00301158(char *moby) {
             if((*(unsigned char *)((char *)(moby)+0x53))==13) break;
             goto animate_melee;
         } else if(timer302618((char *)data+0x1EC)) {
-            data->f1EC=scale302618(delay302618+randomf302618(delay_random302618*1.3f+D_L08_0015F5D0));
+            data->f1EC=scale302618(delay302618+randomf302618(D_L08_0015F5D4*1.3f+D_L08_0015F5D0));
             data->f1E8+=accel302618;
             if((D_L08_0015F5D4<0.8f && D_L08_0015F5D0<0.8f)||!((*(unsigned short *)&data->f20E)&1)) {
                 char *shot;

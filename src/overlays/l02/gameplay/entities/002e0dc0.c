@@ -57,7 +57,7 @@ typedef struct {
 
 extern u8 D_0013D506 __attribute__((section(".data")));
 extern u8 D_0015EDB0 __attribute__((section(".sdata")));
-extern s32 D_L02_0015F5C4 __attribute__((section(".sdata")));
+extern s32 level_game_mode_macro __asm__("D_L02_0015F5C4") __attribute__((section(".sdata")));
 extern WatcherReward D_L02_0016CE60;
 extern char D_L02_00161D00[];
 extern void FUN_L02_002e0cd8(struct Moby *);
@@ -410,7 +410,7 @@ void FUN_L02_002e1950(struct Moby *m) {
             D_L02_0016CE60.vel.z = angle_add(m->rot.z, 3.14159f);
             D_L02_0016CE60.placed = 1;
         }
-        if (D_L02_0015F5C4 != 2)
+        if (level_game_mode_macro != 2)
             m->state = 1;
         break;
     }

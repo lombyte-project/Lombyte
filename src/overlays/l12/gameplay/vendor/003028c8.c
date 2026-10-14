@@ -270,7 +270,7 @@ extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
 extern void func_L00_0025A8C0_304310(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int func_L00_001EFFF0_304310(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern Row_304310 *D_L12_001B0C30_304310[] __asm__("D_L12_001B0930");
-extern char D_L12_001672C0_304310[] __asm__("D_L12_00167240");
+extern char D_L12_00167240[] ;
 extern float D_0013F4D0_304310[] __asm__("D_0013F3D0");
 
 void FUN_L12_00302f30(Moby *moby) {
@@ -331,7 +331,7 @@ void FUN_L12_00302f30(Moby *moby) {
                 return;
             }
         }
-        if (data->f2330 != -1 && func_00215570_304310(D_L12_001672C0_304310, data->f2330) != 0) {
+        if (data->f2330 != -1 && func_00215570_304310(D_L12_00167240, data->f2330) != 0) {
             return;
         }
         if (data->f2320 == 0) {
@@ -520,7 +520,7 @@ extern float D_L12_00161EE8 __attribute__((sda));
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float approach_value(float *, float, float);
 extern float D_L12_0015F580_f[] __asm__("D_L12_0015F580") __attribute__((section(".sdata")));
-extern int D_L12_0015F5C4_i __asm__("D_L12_0015F5C4") __attribute__((section(".sdata")));
+extern int D_L12_0015F5C4_macro __asm__("D_L12_0015F5C4") __attribute__((section(".sdata")));
 extern int D_L12_001619A0 __attribute__((section(".sdata")));
 extern int D_L12_00161F00 __attribute__((sda));
 extern int D_L12_00161F04 __attribute__((sda));
@@ -635,7 +635,7 @@ void FUN_L12_00303540(struct Moby *moby) {
         ((Hero *)(D_0013E633_304920 + 0xE1D))->unk20A5 = 1;
         ((Hero *)(D_0013E633_304920 + 0xE1D))->unk1CC = scale_game_frames_alt(0x78);
         ((Hero *)(D_0013E633_304920 + 0xE1D))->invulnerable_frames = scale_game_frames_alt(0x78);
-        if (D_L12_0015F5C4_i != 2 && D_L12_001619A0 == 0) {
+        if (D_L12_0015F5C4_macro != 2 && D_L12_001619A0 == 0) {
             enqueue_callback_list_1(FUN_L12_00304218_c, moby);
         }
         FUN_L12_00303370(moby);
@@ -663,7 +663,7 @@ void FUN_L12_00303540(struct Moby *moby) {
             }
         }
         if (data->f94 != -1 && (signed char)((struct Moby *)((data->f94 << 8) + D_L12_00160058_m))->state < 0) {
-            if (D_L12_0015F5C4_i == 2) {
+            if (D_L12_0015F5C4_macro == 2) {
                 if (data->b1 != 0) {
                     detach_manipulator(moby, data);
                 }
@@ -805,13 +805,13 @@ void FUN_L12_00303540(struct Moby *moby) {
         }
         break;
     case 5:
-        if (D_L12_0015F5C4_i != 2) {
+        if (D_L12_0015F5C4_macro != 2) {
             FUN_L00_00298840(1);
             moby->state = 8;
         }
         break;
     case 8:
-        if (D_L12_0015F5C4_i != 2) {
+        if (D_L12_0015F5C4_macro != 2) {
             func_0020BFC8_304920(0, -1);
             moby->state = 6;
         }

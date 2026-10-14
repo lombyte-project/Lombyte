@@ -254,7 +254,7 @@ void FUN_L10_002f5a50(int i) {
     q[0x38] = 1;
     q[0x39] = 0;
 }
-extern char *D_L10_0015EF50_5a78 __asm__("D_L10_0015EF50");
+extern char *D_L10_0015EF50 ;
 extern char *D_L10_001B0930_5a78[] __asm__("D_L10_001B0930");
 extern int FUN_00214720_5a78(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_0025fa38_5a78(void *, int) __asm__("FUN_L00_0025fa38");
@@ -263,7 +263,7 @@ extern int FUN_L00_00259740_5a78(float *, float *, int) __asm__("FUN_L00_0025974
 
 int FUN_L10_002f5a78(char *moby) {
     unsigned char *e =
-        *(unsigned char **)(D_L10_0015EF50_5a78 + *(short *)(moby + 0x84) * 32 + 0x1C);
+        *(unsigned char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
 
     if (*(int *)(e + 0x0C) >= 0) {
         if (FUN_00214720_5a78(&hero.motion.pos, *(int *)(e + 0x0C)))
@@ -435,8 +435,8 @@ void FUN_L10_002f5b58(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
 #else
 #include "qcopy.h"
-extern float D_L10_0015F3FC __attribute__((section(".data")));
-extern float D_L10_0015F3FC_sda __asm__("D_L10_0015F3FC") __attribute__((sda));
+extern float D_L10_0015F3FC_lui __asm__("D_L10_0015F3FC") __attribute__((section(".data")));
+extern float D_L10_0015F3FC_gp __asm__("D_L10_0015F3FC") __attribute__((sda));
 extern int D_L10_0015F404;
 extern float D_0015ED6C;
 extern char *D_L10_0015FFD8 __attribute__((sda));
@@ -486,12 +486,12 @@ void FUN_L10_002f5f18(char *moby) {
 
     if (*(short *)(acc + 0x14) == 0) {
         char *other;
-        D_L10_0015F3FC_sda = D_L10_0015F3FC + 0.05f;
-        if (!(1.0f <= D_L10_0015F3FC_sda)) return;
+        D_L10_0015F3FC_gp = D_L10_0015F3FC_lui + 0.05f;
+        if (!(1.0f <= D_L10_0015F3FC_gp)) return;
         path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
         other = D_L10_001B0930_5a78[*(int *)(data + 0x24)];
         scale = (float *)(moby + 0x30);
-        D_L10_0015F3FC = 1.0f;
+        D_L10_0015F3FC_lui = 1.0f;
         D_L10_0015F404 = 1;
         *(short *)(acc + 0x14) = 1;
         path += 0x10;
@@ -516,10 +516,10 @@ void FUN_L10_002f5f18(char *moby) {
         return;
     }
     if (*(short *)(acc + 0x14) == 2) {
-        D_L10_0015F3FC_sda = D_L10_0015F3FC + 0.05f;
-        if (D_L10_0015F3FC_sda >= 1.0f) {
+        D_L10_0015F3FC_gp = D_L10_0015F3FC_lui + 0.05f;
+        if (D_L10_0015F3FC_gp >= 1.0f) {
             *(short *)(acc + 0x14) = 3;
-            D_L10_0015F3FC = 1.0f;
+            D_L10_0015F3FC_lui = 1.0f;
             angle = *(float *)((char *)indices + 0x30) * 0.5f;
             distance = FUN_001f9de0(angle);
             fade = FUN_001f9dc8(angle);
@@ -534,8 +534,8 @@ void FUN_L10_002f5f18(char *moby) {
         if (*(int *)(data + 0x40) == 0) return;
     } else {
         if (*(short *)(acc + 0x14) == 3) return;
-        D_L10_0015F3FC_sda -= 0.05f;
-        if (D_L10_0015F3FC_sda < 0.0f) D_L10_0015F3FC = 0.0f;
+        D_L10_0015F3FC_gp -= 0.05f;
+        if (D_L10_0015F3FC_gp < 0.0f) D_L10_0015F3FC_lui = 0.0f;
     }
     path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
     scale = (float *)(moby + 0x30);
@@ -627,11 +627,11 @@ void FUN_L10_002f5f18(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
 
-extern char *D_L10_0015F050 __asm__("D_L10_0015EF50");
+extern char *D_L10_0015EF50 ;
 extern int FUN_L10_002f5a78_u(char *, char *) __asm__("FUN_L10_002f5a78");
 
 int FUN_L10_002f65f8(char *a, char *b) {
-    unsigned char *d = *(unsigned char **)(D_L10_0015F050 + *(short *)(a + 0x84) * 32 + 0x1C);
+    unsigned char *d = *(unsigned char **)(D_L10_0015EF50 + *(short *)(a + 0x84) * 32 + 0x1C);
     int x;
     int y;
     if (d[0x39] != 0) {

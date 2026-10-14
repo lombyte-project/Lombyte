@@ -452,7 +452,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L18_00162454;
 extern float D_L18_00162450;
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int D_L18_0015F5CC;
+extern int game_frame __asm__("D_L18_0015F5CC");
 extern int D_L18_00162458;
 extern int D_L18_0016245C;
 extern int D_L18_00162460;
@@ -473,7 +473,7 @@ void FUN_L18_002f9a98(void *moby) {
     char d[16];
     char e[16];
     int n = scale_game_frames(D_L18_00162460);
-    float f = convert_integer_to_float(D_L18_0015F5CC % n);
+    float f = convert_integer_to_float(game_frame % n);
     int h;
     f = f / convert_integer_to_float(n);
     f = f * 6.18318f;
@@ -1106,8 +1106,8 @@ void FUN_L18_002fbb98(unsigned char *m) {
 }
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
-extern int D_L18_0015F5CC_c100 __asm__("D_L18_0015F5CC");
-extern int D_L18_0015F5C4_c100 __asm__("D_L18_0015F5C4");
+extern int game_frame __asm__("D_L18_0015F5CC");
+extern int D_L18_0015F5C4 ;
 extern int *D_L18_001B0EB0_c100[] __asm__("D_L18_001B0EB0");
 extern void FUN_L18_002fca98(struct Moby *moby);
 extern float fast_add_rotations_c100(float, float) __asm__("FUN_001fa580");
@@ -1181,8 +1181,8 @@ void FUN_L18_002fc100(struct Moby *m) {
     if (m->state == 0 || m->state == 8) {
         return;
     }
-    if (m->state != 7 && D_L18_0015F5CC_c100 != D_L18_00162604) {
-        D_L18_00162604 = D_L18_0015F5CC_c100;
+    if (m->state != 7 && game_frame != D_L18_00162604) {
+        D_L18_00162604 = game_frame;
         enqueue_callback_list_1(FUN_L18_002fca98, m);
     }
     speed = D_L18_00162614;
@@ -1196,7 +1196,7 @@ void FUN_L18_002fc100(struct Moby *m) {
         m->state = 6;
     }
     m->scale = m->pclass->scale * D_L18_001625FC;
-    if (hero.state.current == 0x72 || D_L18_0015F5C4_c100 == 2) {
+    if (hero.state.current == 0x72 || D_L18_0015F5C4 == 2) {
         if (m->state != 7) {
             m->state = 8;
             if (m->prev_seq != 0) {

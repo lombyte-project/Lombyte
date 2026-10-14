@@ -611,10 +611,10 @@ void FUN_L15_002eb108(struct Moby *moby) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 /* Cutscene trigger moby: waits for the hero in its clip volume, then steps through the scene stages and saves at the end. */
-extern int D_L15_0015F5C4_v __asm__("D_L15_0015F5C4");
+extern int D_L15_0015F5C4 ;
 extern int D_L15_00161AC0_v __asm__("D_L15_00161AC0");
 extern unsigned char *D_L15_0015FFD8_v __asm__("D_L15_0015FFD8");
-extern char *D_L15_001600EC_v __asm__("D_L15_001600EC");
+extern char *D_L15_001600EC ;
 extern unsigned char D_0014C050_v[] __asm__("D_0014C050");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void start_scene_p(int) __asm__("FUN_L00_00298840");
@@ -648,27 +648,27 @@ void FUN_L15_002eb4c0(struct Moby *m) {
         FUN_L00_00232fe8_v();
         break;
     case 2:
-        if (D_L15_0015F5C4_v != 2) {
+        if (D_L15_0015F5C4 != 2) {
             FUN_L00_00299460_v(0x11);
             m->state = 1;
         }
         break;
     case 1:
-        if (D_L15_0015F5C4_v != 2) {
+        if (D_L15_0015F5C4 != 2) {
             start_scene_p(4);
             m->state = 3;
             FUN_L00_002330d0_v();
             if (*(int *)(d + 4) != -1) {
-                char *o = D_L15_001600EC_v + (*(int *)(d + 4) << 7);
+                char *o = D_L15_001600EC + (*(int *)(d + 4) << 7);
                 FUN_L00_00216f90_v(o + 0x30, o + 0x70, 0, 1);
             }
         }
         break;
     case 3:
-        if (D_L15_0015F5C4_v != 2) {
+        if (D_L15_0015F5C4 != 2) {
             FUN_L00_002607d0_v(0x11);
             if (*(int *)(d + 4) != -1) {
-                char *o = D_L15_001600EC_v + (*(int *)(d + 4) << 7);
+                char *o = D_L15_001600EC + (*(int *)(d + 4) << 7);
                 FUN_L00_00284e50_v(o + 0x30, o + 0x70);
             }
             FUN_L00_00262d38_v(0x11);
@@ -679,7 +679,7 @@ void FUN_L15_002eb4c0(struct Moby *m) {
     case 4:
         break;
     }
-    if (D_L15_0015F5C4_v == 2)
+    if (D_L15_0015F5C4 == 2)
         enqueue_callback_list_1(FUN_L15_002eb6b8, m);
 }
 #define NOT_SDA __attribute__((section(".data")))
@@ -1465,7 +1465,7 @@ extern float FUN_001fa610_2edbe0(float x) __asm__("FUN_001fa610");
 extern void FUN_001f76a0_2edbe0(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98_2edbe0(int, int, int, void *, int) __asm__("FUN_L00_001fde98");
 extern float D_0015ED6C_2edbe0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern int D_L15_0015F5CC_2edbe0 __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
+extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
 typedef struct { float f[2][2]; } Quad4_2edbe0;
 typedef struct {
     float prev;
@@ -1502,7 +1502,7 @@ void FUN_L15_002edbe0(struct Moby *moby) {
     int b;
     int color;
     float scale;
-    scale = FUN_001fa6c0_2edbe0(D_L15_0015F5CC_2edbe0) * (D_L15_001621FC * D_0015ED6C_2edbe0);
+    scale = FUN_001fa6c0_2edbe0(D_L15_0015F5CC_macro) * (D_L15_001621FC * D_0015ED6C_2edbe0);
     FUN_00233980_2edbe0(6, FUN_001f44b8_2edbe0(D_L15_001621E8));
     FUN_00233980_2edbe0(0x42, ((long)D_L15_001621E4 << 32) | 0x44);
     FUN_00233980_2edbe0(8, 0);
@@ -1537,7 +1537,7 @@ void FUN_L15_002edbe0(struct Moby *moby) {
     }
 }
 extern float D_0015ED6C_2edfc0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern int D_L15_0015F5CC_2edfc0 __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
+extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
 extern int FUN_001f44b8_2edfc0(int) __asm__("FUN_001f44b8");
 extern void FUN_001f76a0_2edfc0(void) __asm__("FUN_001f76a0");
 extern float FUN_001f96b0_2edfc0(float) __asm__("FUN_001f96b0");
@@ -1586,7 +1586,7 @@ void FUN_L15_002edfc0(struct Moby *moby) {
     int b;
     int color;
     float scale;
-    scale = FUN_001fa6c0_2edfc0(D_L15_0015F5CC_2edfc0) * (D_L15_0016226C * D_0015ED6C_2edfc0);
+    scale = FUN_001fa6c0_2edfc0(D_L15_0015F5CC_macro) * (D_L15_0016226C * D_0015ED6C_2edfc0);
     FUN_00233980_2edfc0(6, FUN_001f44b8_2edfc0(D_L15_00162258));
     FUN_00233980_2edfc0(0x42, ((long)D_L15_00162254 << 32) | 0x44);
     FUN_00233980_2edfc0(8, 0);
@@ -1622,13 +1622,13 @@ void FUN_L15_002edfc0(struct Moby *moby) {
 }
 /* Tells whether the vendor menu lets this slot's item be bought (1) or not (0). */
 
-extern char *D_L15_00167400 __attribute__((section(".data")));
+extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
 extern char *D_L15_0015EF50;
 extern float D_L15_0015F3FC;
 
 int FUN_L15_002f78e0(int slot) {
     char *o;
-    if (*(short *)(D_L15_00167400 + 0x86) != 0x13)
+    if (*(short *)(D_L15_00167400_lui + 0x86) != 0x13)
         return 1;
     o = *(char **)(*(char **)(*(char **)(D_L15_0015EF50 + slot * 32 + 0x1C) + 4) + 0x70) + 0x40;
     if (*(short *)(o + 0x14) == 1 && D_L15_0015F3FC != 0.0f)
@@ -1741,7 +1741,7 @@ int FUN_L15_002f8698(char *moby, float a, float b) {
     }
     return 0;
 }
-extern char *D_L15_00167400_s __asm__("D_L15_00167400") __attribute__((section(".data")));
+extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
 typedef struct { char pad[0x100]; float x; float y; } G_88e8;
 extern G_88e8 D_0013C940_s __asm__("D_0013C940") __attribute__((section(".data")));
 extern int ready_s(char *) __asm__("FUN_L00_002e83c0");
@@ -1775,7 +1775,7 @@ void FUN_L15_002f88e8(char *m) {
         release_s(m);
         return;
     }
-    *(int *)(*(char **)(D_L15_00167400_s + 0x70) + 0x230) = 2;
+    *(int *)(*(char **)(D_L15_00167400_lui + 0x70) + 0x230) = 2;
     done = 1;
     (*(short *)(s + 0x20))++;
     t1 = frames_s(300);
@@ -1817,13 +1817,13 @@ void FUN_L15_002f88e8(char *m) {
 }
 /* Hands a vendor moby to the shop handler when the menu is idle and its slot is live. */
 
-extern char *D_L15_00167400 __attribute__((section(".data")));
+extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 void FUN_L15_002f88e8(char *m);
 
 int FUN_L15_002f8ba8(char *moby) {
     char *e = *(char **)(D_L15_0015EF48[2] + *(short *)(moby + 0x84) * 32 + 0x1C);
-    if (*(short *)(D_L15_00167400 + 0x86) == 0 && *(short *)(e + 0x20) >= 0 &&
+    if (*(short *)(D_L15_00167400_lui + 0x86) == 0 && *(short *)(e + 0x20) >= 0 &&
         D_001413F4 == 2)
         FUN_L15_002f88e8(moby);
     return -1;

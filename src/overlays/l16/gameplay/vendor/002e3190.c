@@ -541,7 +541,7 @@ extern int FUN_L00_0025d808_path54(char *, float *, float *, float *, int,
                                     float) __asm__("FUN_L00_0025d808");
 extern void func_L00_002592B0_path54(char *, float, float *, float, float,
                                      float) __asm__("FUN_L00_00258278");
-extern char *D_L16_001B0C30_path54[] __asm__("D_L16_001B0930");
+extern char *D_L16_001B0930[] ;
 
 int FUN_L16_002e3fa0(struct Moby *moby) {
     float pos[4];
@@ -551,9 +551,9 @@ int FUN_L16_002e3fa0(struct Moby *moby) {
     int r;
     char *path;
     if (moby->state == 5)
-        path = D_L16_001B0C30_path54[*(int *)(data + 0xDC)];
+        path = D_L16_001B0930[*(int *)(data + 0xDC)];
     else
-        path = D_L16_001B0C30_path54[*(int *)(data + 0xD8)];
+        path = D_L16_001B0930[*(int *)(data + 0xD8)];
     r = FUN_L00_0025d808_path54(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, t);
     FUN_L00_0025b8c0(&moby->pos.x, (float *)(data + 0xE4), pos[0], D_L16_00161D94_u,
                      D_L16_00161D98_u, 0.0f);
@@ -828,7 +828,7 @@ void FUN_L16_002e4a58(struct Moby *moby) {
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L16_001D9750[];
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int D_L16_0015F5CC_c __asm__("D_L16_0015F5CC");
+extern int D_L16_0015F5CC ;
 extern int FUN_001fa6e0_u(float, int, int) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_001f9d20(void *, void *, void *);
@@ -848,7 +848,7 @@ void FUN_L16_002e5010(struct Moby *m) {
     float mat[4];
     float f;
     int period = scale_game_frames(30);
-    f = convert_integer_to_float(D_L16_0015F5CC_c % period) / convert_integer_to_float(period);
+    f = convert_integer_to_float(D_L16_0015F5CC % period) / convert_integer_to_float(period);
     m->glow_color = FUN_001fa6e0_u(fast_sin(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
                                         *(int *)&D_L16_00161DDC, *(int *)&D_L16_00161DE0);
     switch (m->state) {
@@ -886,7 +886,7 @@ void FUN_L16_002e5010(struct Moby *m) {
 extern f32 convert_integer_to_float_q(s32) __asm__("FUN_001fa6c0");
 extern float FUN_001f9b48_q(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_sin_q(float) __asm__("FUN_001f9de0");
-extern int D_L16_0015F5CC_q __asm__("D_L16_0015F5CC");
+extern int D_L16_0015F5CC ;
 extern int FUN_001fa6e0_q(float, int, int) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
 extern void FUN_001f9d20_q(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -908,7 +908,7 @@ void FUN_L16_002e5258(struct Moby *m) {
     float mat[4];
     float f;
     int period = scale_game_frames_q(30);
-    f = convert_integer_to_float_q(D_L16_0015F5CC_q % period) / convert_integer_to_float_q(period);
+    f = convert_integer_to_float_q(D_L16_0015F5CC % period) / convert_integer_to_float_q(period);
     m->glow_color = FUN_001fa6e0_q(fast_sin_q(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
                                         *(int *)&D_L16_00161DE8, *(int *)&D_L16_00161DEC);
     switch (m->state) {
@@ -2490,8 +2490,8 @@ extern char D_L16_001DC600[][16] __attribute__((section(".data")));
 extern char D_L16_001DC630[] __attribute__((section(".data")));
 extern int FUN_001fa728(char *, float);
 extern int get_effect_texture_l16(int) __asm__("FUN_001f44b8");
-extern short D_L16_00161EF0 __attribute__((sda));
-extern short D_L16_00161F00 __attribute__((sda));
+extern short D_L16_00161EF0_gp __asm__("D_L16_00161EF0") __attribute__((sda));
+extern short D_L16_00161F00_gp __asm__("D_L16_00161F00") __attribute__((sda));
 extern short D_L16_00161F10 __attribute__((sda));
 extern short D_L16_00161F20 __attribute__((sda));
 extern short D_L16_00161F30 __attribute__((sda));
@@ -2501,8 +2501,8 @@ extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e
 extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
 
 void FUN_L16_002e8d40(void) {
-    int *a = (int *)&D_L16_00161EF0;
-    int *b = (int *)&D_L16_00161F00;
+    int *a = (int *)&D_L16_00161EF0_gp;
+    int *b = (int *)&D_L16_00161F00_gp;
     int *c = (int *)&D_L16_00161F10;
     int *d = (int *)&D_L16_00161F20;
     int *e = (int *)&D_L16_00161F30;
@@ -2526,8 +2526,8 @@ typedef struct {
 } L16SingleSphere_2e8e80;
 
 void enqueue_callback_list_1_2e8e80(int arg0, int arg1) __asm__("FUN_001f4600");
-extern short D_L16_00162000_bounds_2e8e80 __asm__("D_L16_00161EF0") __attribute__((sda));
-extern short D_L16_00162020_bounds_2e8e80 __asm__("D_L16_00161F00") __attribute__((sda));
+extern short D_L16_00161EF0_gp __asm__("D_L16_00161EF0") __attribute__((sda));
+extern short D_L16_00161F00_gp __asm__("D_L16_00161F00") __attribute__((sda));
 extern L16SingleSphere_2e8e80 D_L16_00161F60_bounds_2e8e80[] __asm__("D_L16_001DC600")
     __attribute__((section(".data")));
 
@@ -2547,9 +2547,9 @@ void FUN_L16_002e8e80(struct Moby *m) {
             minx = miny = minz = 1024.0f;
             {
                 int k;
-                for (k = 0; k < ((int *)&D_L16_00162000_bounds_2e8e80)[i]; k++) {
+                for (k = 0; k < ((int *)&D_L16_00161EF0_gp)[i]; k++) {
                     float x, y, z;
-                    verts = ((float **)&D_L16_00162020_bounds_2e8e80)[i] + k * 3;
+                    verts = ((float **)&D_L16_00161F00_gp)[i] + k * 3;
                     x = verts[0];
                     if (x > maxx)
                         maxx = x;
@@ -2575,12 +2575,12 @@ void FUN_L16_002e8e80(struct Moby *m) {
                 sphere->y = (maxy + miny) * 0.5f;
                 sphere->z = (maxz + minz) * 0.5f;
             }
-            for (j = 0; j < ((int *)&D_L16_00162000_bounds_2e8e80)[i]; j++) {
+            for (j = 0; j < ((int *)&D_L16_00161EF0_gp)[i]; j++) {
                 float dist;
                 out = (float *)(D_L16_00161F60_bounds_2e8e80 + i);
-                p[0] = ((float **)&D_L16_00162020_bounds_2e8e80)[i][j * 3 + 0];
-                p[1] = ((float **)&D_L16_00162020_bounds_2e8e80)[i][j * 3 + 1];
-                p[2] = ((float **)&D_L16_00162020_bounds_2e8e80)[i][j * 3 + 2];
+                p[0] = ((float **)&D_L16_00161F00_gp)[i][j * 3 + 0];
+                p[1] = ((float **)&D_L16_00161F00_gp)[i][j * 3 + 1];
+                p[2] = ((float **)&D_L16_00161F00_gp)[i][j * 3 + 2];
                 dist = FUN_001f9b48(p, out);
                 if (dist > out[3])
                     out[3] = dist;

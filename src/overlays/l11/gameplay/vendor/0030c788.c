@@ -39,7 +39,7 @@ extern float D_L11_00161EEC __attribute__((sda));
 extern float D_L11_00161EF0 __attribute__((sda));
 extern float D_L11_00161EF4 __attribute__((sda));
 extern float D_L11_00161EF8 __attribute__((sda));
-extern float D_L11_0015F3FC_c788 __asm__("D_L11_0015F3FC");
+extern float D_L11_0015F3FC ;
 extern int D_L11_0015FFD8_c788 __asm__("D_L11_0015FFD8");
 extern int D_L11_001600EC_c788 __asm__("D_L11_001600EC");
 extern u8 alternate_item_available_c788[128] __asm__("D_0013D388");
@@ -139,7 +139,7 @@ void FUN_L11_0030c788(struct Moby *m) {
         break;
     case 2:
         approach_value_c788(&pv->fade, 1.0f, frame_time * 4.0f);
-        D_L11_0015F3FC_c788 = pv->fade;
+        D_L11_0015F3FC = pv->fade;
         if (1.0f <= pv->fade) {
             int j;
             m->state = 3;
@@ -213,7 +213,7 @@ void FUN_L11_0030c788(struct Moby *m) {
         } else {
             approach_value_c788(&pv->fade, 1.0f, frame_time * 4.0f);
         }
-        D_L11_0015F3FC_c788 = pv->fade;
+        D_L11_0015F3FC = pv->fade;
         approach_c788(&D_L11_00161EDC, &D_L11_00161EF8, 1.0f, frame_time_sq * 0.2f, frame_time_sq * 0.2f,
                       frame_time * 0.2f);
         lerp_vector_c788(&pos, (char *)(D_L11_001600EC_c788 + (pv->from << 7)) + 0x30,
@@ -238,7 +238,7 @@ void FUN_L11_0030c788(struct Moby *m) {
         break;
     case 4:
         approach_value_c788(&pv->fade, 0.0f, frame_time * 4.0f);
-        D_L11_0015F3FC_c788 = pv->fade;
+        D_L11_0015F3FC = pv->fade;
         if (pv->fade == 0.0f) {
             m->state = 5;
         }
@@ -2714,14 +2714,14 @@ void FUN_L11_00313290(struct Moby *moby) {
                 v->i118 = -1;
                 if (v->fade != 0.0f) {
                     approach_value_c788(&v->fade, 0.0f, frame_time * 4.0f);
-                    D_L11_0015F3FC_c788 = v->fade;
+                    D_L11_0015F3FC = v->fade;
                 }
             }
             break;
         }
         case 2:
             approach_value_c788(&v->fade, 1.0f, frame_time * 4.0f);
-            D_L11_0015F3FC_c788 = v->fade;
+            D_L11_0015F3FC = v->fade;
             if (v->fade == 1.0f) {
                 struct Hero *g;
                 ship_set_hero_state_3290(0x32, 1);
@@ -2773,7 +2773,7 @@ void FUN_L11_00313290(struct Moby *moby) {
         case 4:
             if (v->fade != 0.0f) {
                 approach_value_c788(&v->fade, 0.0f, frame_time * 4.0f);
-                D_L11_0015F3FC_c788 = v->fade;
+                D_L11_0015F3FC = v->fade;
             }
             D_L11_0015F608 = 2;
             FUN_L11_00312838(moby, v);
@@ -2825,7 +2825,7 @@ void FUN_L11_00313290(struct Moby *moby) {
             v->voice2 = -1;
             moby->state = 1;
             v->fade = 0.99f;
-            D_L11_0015F3FC_c788 = 0.99f;
+            D_L11_0015F3FC = 0.99f;
             break;
         }
         case 7:
@@ -2839,7 +2839,7 @@ void FUN_L11_00313290(struct Moby *moby) {
             FUN_L11_00312838(moby, v);
             if (timer_3290(&v->iF8)) {
                 approach_value_c788(&v->fade, 1.0f, frame_time * 4.0f);
-                D_L11_0015F3FC_c788 = v->fade;
+                D_L11_0015F3FC = v->fade;
                 if (v->fade >= 1.0f) {
                     char *p;
                     struct Hero *g = &hero;
@@ -2876,7 +2876,7 @@ void FUN_L11_00313290(struct Moby *moby) {
         case 9:
             if (v->fade != 0.0f) {
                 approach_value_c788(&v->fade, 0.0f, frame_time * 4.0f);
-                D_L11_0015F3FC_c788 = v->fade;
+                D_L11_0015F3FC = v->fade;
             }
             break;
         case 10:

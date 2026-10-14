@@ -399,7 +399,7 @@ extern char *spawn_2d1e30(void *, void *, void *, float, float) __asm__("FUN_L00
 extern int frames_2d1e30(int) __asm__("FUN_001f96f8");
 extern int ftoi_2d1e30(float) __asm__("FUN_001fa6d0");
 extern float D_L05_001612E8_2d1e30 __asm__("D_L05_001612E8");
-extern char D_L05_0015F580_2d1e30[] __asm__("D_L05_0015F580") __attribute__((section(".sdata")));
+extern char D_L05_0015F580_macro[] __asm__("D_L05_0015F580") __attribute__((section(".sdata")));
 
 /* When the timer runs out, spawns two effects beside the moby, one to each side, and restarts the timer. */
 void FUN_L05_002d1e30(char *moby) {
@@ -421,7 +421,7 @@ void FUN_L05_002d1e30(char *moby) {
         vadd_2d1e30(v, v, moby + 0x10);
         v[2] = D_L05_001612E8_2d1e30 + 0.05f;
         h = &D_L05_001612E8_2d1e30;
-        p = spawn_2d1e30(v, D_L05_0015F580_2d1e30, h, rand_2d1e30(0.7f, 1.0f), i == 0 ? 2.0f : -2.0f);
+        p = spawn_2d1e30(v, D_L05_0015F580_macro, h, rand_2d1e30(0.7f, 1.0f), i == 0 ? 2.0f : -2.0f);
         if (p != 0) {
             *(short *)(p + 0xA) = frames_2d1e30(15);
         }
@@ -437,7 +437,7 @@ void FUN_L05_002d1e30(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D3220), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_002d7e90(void *, float);
-extern char D_L05_0015F580[] __attribute__((section(".sdata")));
+extern char D_L05_0015F580_macro[]  __asm__("D_L05_0015F580")__attribute__((section(".sdata")));
 extern float FUN_001f96b0(float);
 extern float fast_cos(float);
 extern float fast_sin(float);
@@ -476,7 +476,7 @@ void FUN_L05_002d1fd8(int unused, char *p) {
         random_vector(v, 1.0f, 1.0f);
         add_vector_xyz(v, v, p);
         v[2] = D_L05_001612E8 + 0.05f;
-        q = FUN_L00_002718d0(v, D_L05_0015F580, base, random_float_between(0.7f, 1.0f),
+        q = FUN_L00_002718d0(v, D_L05_0015F580_macro, base, random_float_between(0.7f, 1.0f),
                              i == 0 ? 2.0f : -2.0f);
         if (q) {
             *(short *)(q + 0xA) = func_001FA898_r(FUN_001f96b0(random_float_between(30.0f, 60.0f)));
@@ -727,7 +727,7 @@ void FUN_L05_002d7140(char *moby) {
     }
     case 2: {
         func_0022ED80_2D8388(0, 0, (int)moby);
-        tab = (float *)D_L05_0015F580;
+        tab = (float *)D_L05_0015F580_macro;
         pos = (float *)(moby + 0x10);
         rot = (float *)(moby + 0x40);
         func_001F9C30_2D8388(&left_offset, moby + 0xC0, D_L05_001613E8 * frame_scale);
@@ -1028,7 +1028,7 @@ extern void spawn_particle_305178(void *, int, void *, void *, int, int, float, 
 extern int D_L05_0015F5C4;
 extern char *D_L05_0015FFD8_7920 __asm__("D_L05_0015FFD8");
 extern int D_L05_00161A84 __attribute__((sda));
-extern float D_L05_00161A98 __attribute__((sda));
+extern float D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
 extern int D_L05_00161A9C __attribute__((sda));
 extern int D_L05_00161AA0 __attribute__((sda));
 extern int D_L05_00161AA4 __attribute__((sda));
@@ -1106,7 +1106,7 @@ freeze_done:
     }
     FUN_L05_00303390(moby);
     target = *(struct Moby **)(data + 0x160);
-    moby->scale = moby->pclass->scale * D_L05_00161A98;
+    moby->scale = moby->pclass->scale * D_L05_00161A98_gp;
     switch (moby->state) {
     case 0:
         moby->flags |= 0x1000;
@@ -1120,7 +1120,7 @@ freeze_done:
         B301(data,0x58) = func_001FA898_r(14.0f);
         B301(data,0x5a) = func_001FA898_r(11.2f);
         FUN_L01_0026d930(data + 0xd0);
-        distance = D_L05_00161A98 * 409.6f;
+        distance = D_L05_00161A98_gp * 409.6f;
         F301(data,0xdc) = 2.0f;
         F301(data,0xd8) = 2.0f;
         timer = func_001FA898_r(distance);
@@ -1154,7 +1154,7 @@ freeze_done:
     case 1:
         if (I301(data,0x164) != 2) {
             if (random_integer_below(9) == 0) {
-                if (follow_path(data+0x2c0,1,I301(data,0x2c4),(char *)moby+0x10,(int)((char *)target+0x10),v,D_L05_00161A98*0.4f) != 0) {
+                if (follow_path(data+0x2c0,1,I301(data,0x2c4),(char *)moby+0x10,(int)((char *)target+0x10),v,D_L05_00161A98_gp*0.4f) != 0) {
                     if (random_integer_below(0x100)&1) F301(data,0x298) = -F301(data,0x298);
                     F301(data,0x294) = F301(data,0x298)*0.017453292f;
                     I301(data,0x2ac) = FUN_001f96f8((int)random_float_between(30.0f,90.0f));
@@ -1193,7 +1193,7 @@ check_mode:
             v[1] = FUN_001f9de0(moby->rot.z); v[1] += v[1];
             v[2] = 0.0f;
             FUN_L00_00258b50(moby,data+0xd0,v,w,1.0f);
-            FUN_L00_00261d78(I301(data,0x2c0),(char *)moby+0x10,(char *)moby+0x10,D_L05_00161A98*0.4f);
+            FUN_L00_00261d78(I301(data,0x2c0),(char *)moby+0x10,(char *)moby+0x10,D_L05_00161A98_gp*0.4f);
         }
         H301(data,0x2d2) += 1;
         distance=distance_to_2d1688((char *)moby+0x10,data+0x280);
@@ -1217,7 +1217,7 @@ finish_wander:
             v[1]=FUN_001f9de0(moby->rot.z); v[1]+=v[1];
             v[2]=0.0f;
             FUN_L00_00258b50(moby,data+0xd0,v,w,1.0f);
-            FUN_L00_00261d78(I301(data,0x2c0),(char *)moby+0x10,(char *)moby+0x10,D_L05_00161A98*0.4f);
+            FUN_L00_00261d78(I301(data,0x2c0),(char *)moby+0x10,(char *)moby+0x10,D_L05_00161A98_gp*0.4f);
         }
         blocked = 0;
         if (FUN_L00_00261b48(I301(data,0x2c0),(char *)moby+0x10,(char *)target+0x10,point) && distance_2d1688((char *)moby+0x10,point)<1.5f) blocked = 1;
@@ -1371,7 +1371,7 @@ finish_wander:
         break;
     case 11:
         if (FUN_L00_0025c698(moby,data+0x70)&0x60) {
-            if (follow_path(data+0x2c0,1,I301(data,0x2c4),(char *)moby+0x10,(int)(data+0x270),v,D_L05_00161A98*0.4f)!=0) {
+            if (follow_path(data+0x2c0,1,I301(data,0x2c4),(char *)moby+0x10,(int)(data+0x270),v,D_L05_00161A98_gp*0.4f)!=0) {
                 moby->state=4;
                 if (moby->prev_seq != 1) blend_moby_animation(moby,1,0,FUN_001f96f8(10));
                 goto done;
@@ -1389,9 +1389,9 @@ finish_wander:
     case 14:
         if (FUN_L00_0025c698(moby,data+0x70)&0x60) {
             FUN_L00_0025f090(moby,(char *)moby+0x10,-1,0.5f,13.0f);
-            spawn_particle_305178((char *)moby,0x6da,(float *)((char *)moby+0x10),(char *)moby+0x40,0,0,0.0f,(float *)D_L05_0015F580,(float *)D_L05_0015F580,(float *)D_L05_0015F580);
-            spawn_particle_305178((char *)moby,0x6db,(float *)((char *)moby+0x10),(char *)moby+0x40,0,0,0.0f,(float *)D_L05_0015F580,(float *)D_L05_0015F580,(float *)D_L05_0015F580);
-            spawn_particle_305178((char *)moby,0x6dc,(float *)((char *)moby+0x10),(char *)moby+0x40,0,0,0.0f,(float *)D_L05_0015F580,(float *)D_L05_0015F580,(float *)D_L05_0015F580);
+            spawn_particle_305178((char *)moby,0x6da,(float *)((char *)moby+0x10),(char *)moby+0x40,0,0,0.0f,(float *)D_L05_0015F580_macro,(float *)D_L05_0015F580_macro,(float *)D_L05_0015F580_macro);
+            spawn_particle_305178((char *)moby,0x6db,(float *)((char *)moby+0x10),(char *)moby+0x40,0,0,0.0f,(float *)D_L05_0015F580_macro,(float *)D_L05_0015F580_macro,(float *)D_L05_0015F580_macro);
+            spawn_particle_305178((char *)moby,0x6dc,(float *)((char *)moby+0x10),(char *)moby+0x40,0,0,0.0f,(float *)D_L05_0015F580_macro,(float *)D_L05_0015F580_macro,(float *)D_L05_0015F580_macro);
             goto remove;
         }
         height=moby->pos.z;
@@ -1508,7 +1508,7 @@ extern float D_L05_00161A88 __attribute__((sda));
 extern float D_L05_00161A8C __attribute__((sda));
 extern float D_L05_00161A90 __attribute__((sda));
 extern float D_L05_00161A94 __attribute__((sda));
-extern float D_L05_00161A98_c __asm__("D_L05_00161A98") __attribute__((sda));
+extern float D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
 extern float D_L05_00161AD0 __attribute__((sda));
 extern float D_L05_00161AD4 __attribute__((sda));
 extern int FUN_001efa68();
@@ -1592,8 +1592,8 @@ void FUN_L05_00303390(Moby *m) {
         if (d->hp <= 0.0f) {
             res = 1;
         }
-        k = func_001FA898_3047E8(D_L05_00161A98_c * 409.6f);
-        d->f98 = D_L05_00161A98_c * 0.4f;
+        k = func_001FA898_3047E8(D_L05_00161A98_gp * 409.6f);
+        d->f98 = D_L05_00161A98_gp * 0.4f;
         d->f80 = D_L05_00161AD0 * D_0015ED70;
         d->f90 = k;
         d->f94 = 9;
@@ -1724,7 +1724,7 @@ typedef struct {
     s32 stuck_timer;      /* 0x2D4 */
 } PathWalkerVars;
 
-extern f32 D_L05_00161A98 __attribute__((sda));
+extern f32 D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
 extern s32 follow_path(void *, s32, s32, void *, s32, void *, f32) __asm__("FUN_L01_00276fe8");
 extern f32 angle_diff(f32, f32) __asm__("FUN_001fa688");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
@@ -1742,12 +1742,12 @@ void FUN_L05_00303b08(struct Moby *m, s32 node, f32 side) {
     f32 dist;
 
     if ((((s32)m >> 8) & 3) == (D_L05_0015F5CC_2d7020 & 3)) {
-        if (follow_path(&v->path, 1, v->path_pos, &m->pos, node, &v->goal, D_L05_00161A98 * 0.4f) == 0)
+        if (follow_path(&v->path, 1, v->path_pos, &m->pos, node, &v->goal, D_L05_00161A98_gp * 0.4f) == 0)
             v->mode = 2;
     }
     qcopy(&goal, &v->goal);
     dist = FUN_001f9b80(&m->pos, &goal);
-    if (dist > 5.0f && side != 0.0f && FUN_L05_00303e50((char *)m, (float *)&goal, D_L05_00161A98 * 0.4f)) {
+    if (dist > 5.0f && side != 0.0f && FUN_L05_00303e50((char *)m, (float *)&goal, D_L05_00161A98_gp * 0.4f)) {
         a = FUN_001fa580(FUN_001f9e90(goal.x - m->pos.x, goal.y - m->pos.y), side);
         approach_angle(&m->rot.z, a, &v->yaw_vel, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
                        frame_time * 25.132742f);
@@ -1764,7 +1764,7 @@ void FUN_L05_00303b08(struct Moby *m, s32 node, f32 side) {
     dir.z = 0.0f;
     FUN_L00_00258b50(m, v->move, &dir, &out, 1.0f);
     if (v->stuck_timer == 0) {
-        if (FUN_L05_00304058(v->path, &m->pos, &m->pos, D_L05_00161A98 * 0.4f) > 2.0f)
+        if (FUN_L05_00304058(v->path, &m->pos, &m->pos, D_L05_00161A98_gp * 0.4f) > 2.0f)
             v->stuck_timer = FUN_001f96f8(5);
     }
 }
@@ -2009,21 +2009,21 @@ void FUN_L05_00305178(char *moby) {
             clear_vector_305178(effect_data);
             *(float *)(effect_data + 8) = *(float *)(data + 0x194);
             spawn_particle_305178(moby, 0x6dd, moby + 0x10, moby + 0x40, 0, 0, 0.0f,
-                              D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
+                              D_L05_0015F580_macro, D_L05_0015F580_macro, D_L05_0015F580_macro);
             spawn_particle_305178(moby, 0x6df, moby + 0x10, moby + 0x40, 0, 0, 0.0f,
-                              D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
+                              D_L05_0015F580_macro, D_L05_0015F580_macro, D_L05_0015F580_macro);
             spawn_particle_305178(moby, 0x6e0, moby + 0x10, moby + 0x40, 0, 0, 0.0f,
-                              D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
+                              D_L05_0015F580_macro, D_L05_0015F580_macro, D_L05_0015F580_macro);
             spawn_particle_305178(moby, 0x6fe, moby + 0x10, moby + 0x40, 0, 0, 0.0f,
-                              D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
+                              D_L05_0015F580_macro, D_L05_0015F580_macro, D_L05_0015F580_macro);
             spawn_particle_305178(moby, 0x6fe, moby + 0x10, moby + 0x40, 0, 0, 0.0f,
-                              D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
+                              D_L05_0015F580_macro, D_L05_0015F580_macro, D_L05_0015F580_macro);
             spawn_particle_305178(moby, 0x6ff, moby + 0x10, moby + 0x40, 0, 0, 0.0f,
-                              D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
+                              D_L05_0015F580_macro, D_L05_0015F580_macro, D_L05_0015F580_macro);
             spawn_particle_305178(moby, 0x6ff, moby + 0x10, moby + 0x40, 0, 0, 0.0f,
-                              D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
+                              D_L05_0015F580_macro, D_L05_0015F580_macro, D_L05_0015F580_macro);
             spawn_particle_305178(moby, 0x6ff, moby + 0x10, moby + 0x40, 0, 0, 0.0f,
-                              D_L05_0015F580, D_L05_0015F580, D_L05_0015F580);
+                              D_L05_0015F580_macro, D_L05_0015F580_macro, D_L05_0015F580_macro);
             return;
         }
     }

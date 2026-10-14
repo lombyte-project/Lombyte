@@ -300,7 +300,7 @@ typedef struct {
     int q[8];
 } Pkt;
 
-extern char D_L17_00167740[] __asm__("D_L17_001676C0");
+extern char D_L17_001676C0[] ;
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float D_0015EE7C __asm__("D_0015ED7C");
 extern float fast_cos_c(float) __asm__("FUN_001f9dc8");
@@ -346,8 +346,8 @@ void FUN_L17_002f32f0(struct Moby *moby) {
     *(float *)(data + 0x14) = -8000.0f;
     for (i = 0; i < 2; i++) {
         subtract_vector_xyz(vb, data, pos);
-        subtract_vector_xyz(&vv[0], data, D_L17_00167740);
-        subtract_vector_xyz(&vv[1], pos, D_L17_00167740);
+        subtract_vector_xyz(&vv[0], data, D_L17_001676C0);
+        subtract_vector_xyz(&vv[1], pos, D_L17_001676C0);
         cross_vectors_xyz(&vv[0], &vv[0], vb);
         normalize_vector_xyz(&vv[0], &vv[0], D_L17_001DE0B8[i]);
         cross_vectors_xyz(&vv[1], &vv[1], vb);

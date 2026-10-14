@@ -1741,7 +1741,7 @@ void FUN_L09_002f86a0(Moby *moby)
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00301C38), where it is exact; names translated to the US level program. */
 
 extern int D_0015EEA4_q __asm__("D_0015EEA4");
-extern int D_L09_0015F5CC_q __asm__("D_L09_0015F5CC");
+extern int D_L09_0015F5CC ;
 extern int give_reward(int a, int b) __asm__("FUN_L00_00203908");
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
 extern unsigned char item_unlocked[] __asm__("D_0013D408") __attribute__((section(".data")));
@@ -1758,7 +1758,7 @@ void FUN_L09_00300888(struct Moby *moby) {
     unsigned char *b;
     unsigned short *tp;
     int n;
-    if (D_L09_0015F5CC_q > 0) {
+    if (D_L09_0015F5CC > 0) {
         if (D_L09_001613C8 == 0) {
             q = item_unlocked;
             if (q[0xE] == 0) {

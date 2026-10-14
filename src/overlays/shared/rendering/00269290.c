@@ -573,7 +573,7 @@ typedef union {
     OvlQuad q;
     float f[4];
 } V_26a9f0;
-extern float D_L00_0015F5D0_26a9f0 __asm__("D_L00_0015F5D0");
+extern float D_L00_0015F5D0 ;
 unsigned char *FUN_L00_002678b8_26a9f0(int) __asm__("FUN_L00_002678b8");
 int FUN_00213260_26a9f0(int) __asm__("FUN_00213260");
 int FUN_001fa6d0_26a9f0(float) __asm__("FUN_001fa6d0");
@@ -593,17 +593,17 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int 
     if (0 == n) {
         return;
     }
-    if (0.85f < D_L00_0015F5D0_26a9f0 || 0.85f < D_L00_0015F5D4) {
+    if (0.85f < D_L00_0015F5D0 || 0.85f < D_L00_0015F5D4) {
         if (FUN_00213260_26a9f0(3) == 0) {
             return;
         }
     }
-    if (0.9f < D_L00_0015F5D0_26a9f0 || 0.9f < D_L00_0015F5D4) {
+    if (0.9f < D_L00_0015F5D0 || 0.9f < D_L00_0015F5D4) {
         if (FUN_00213260_26a9f0(2) == 0) {
             return;
         }
     }
-    if (1.0f < D_L00_0015F5D0_26a9f0 || 1.0f < D_L00_0015F5D4) {
+    if (1.0f < D_L00_0015F5D0 || 1.0f < D_L00_0015F5D4) {
         if (FUN_00213260_26a9f0(1) == 0) {
             return;
         }
@@ -772,14 +772,14 @@ extern int D_L00_001601A8 __attribute__((sda));
 extern int D_L00_001601AC __attribute__((sda));
 extern int D_L00_001601B0 __attribute__((sda));
 extern int D_L00_001601B4 __attribute__((sda));
-extern float D_L00_001601B8 __attribute__((sda));
+extern float D_L00_001601B8_gp __asm__("D_L00_001601B8") __attribute__((sda));
 extern int D_L00_001601C0 __attribute__((sda));
 extern int D_L00_001601C4 __attribute__((sda));
 extern int D_L00_001601C8 __attribute__((sda));
 extern int D_L00_001601CC __attribute__((sda));
 extern int D_L00_001601D0 __attribute__((sda));
 extern int D_L00_001601D4 __attribute__((sda));
-extern float D_L00_001601D8 __attribute__((sda));
+extern float D_L00_001601D8_gp __asm__("D_L00_001601D8") __attribute__((sda));
 extern int D_L00_001601E0 __attribute__((sda));
 extern int D_L00_001601E4 __attribute__((sda));
 extern unsigned char *D_L00_001B20E0 __attribute__((section(".data")));
@@ -793,7 +793,7 @@ unsigned char *FUN_L00_0026b230(void *pos, void *vel, unsigned char flags, float
         if (flags & 1) {
             float one = 1.0f;
             float zero = 0.0f;
-            float scale = D_L00_001601D8;
+            float scale = D_L00_001601D8_gp;
             float hi = (float)D_L00_001601E4;
             float lo = (float)D_L00_001601E0;
             *(int *)(particle + 4) = D_L00_001601C8;
@@ -812,7 +812,7 @@ unsigned char *FUN_L00_0026b230(void *pos, void *vel, unsigned char flags, float
             int offset = 0;
             float one = 1.0f;
             float zero = 0.0f;
-            float scale = D_L00_001601B8;
+            float scale = D_L00_001601B8_gp;
             float hi = (float)D_L00_001601C4;
             float lo = (float)D_L00_001601C0;
             *(int *)(particle + 4) = D_L00_001601A8;
@@ -862,9 +862,9 @@ extern int FUN_001f96f8_26b500(int) __asm__("FUN_001f96f8");
 extern int FUN_001f9770_26b500(void *) __asm__("FUN_001f9770");
 extern void FUN_L00_00267a08_26b500(void *) __asm__("FUN_L00_00267a08");
 extern unsigned char D_0013E530_26b500 __asm__("D_0013E530") __attribute__((section(".data")));
-extern float D_L00_001601B8_26b500 __asm__("D_L00_001601B8") __attribute__((sda));
+extern float D_L00_001601B8_gp __asm__("D_L00_001601B8") __attribute__((sda));
 extern float D_L00_001601BC_26b500 __asm__("D_L00_001601BC") __attribute__((sda));
-extern float D_L00_001601D8_26b500 __asm__("D_L00_001601D8") __attribute__((sda));
+extern float D_L00_001601D8_gp __asm__("D_L00_001601D8") __attribute__((sda));
 extern float D_L00_001601DC_26b500 __asm__("D_L00_001601DC") __attribute__((sda));
 extern float D_L00_001601E8_gp __asm__("D_L00_001601E8") __attribute__((sda));
 extern float D_L00_001601EC_26b500 __asm__("D_L00_001601EC") __attribute__((sda));
@@ -891,10 +891,10 @@ void FUN_L00_0026b500(unsigned char *m) {
     life = FUN_001fa6c0_26b500(*(short *)(m + 0xa));
     duration = FUN_001fa6c0_26b500(p[0x1d]);
     t = life / duration;
-    end = D_L00_001601B8_26b500;
+    end = D_L00_001601B8_gp;
     start = D_L00_001601BC_26b500;
     if (p[0x1f] & 1) {
-        end = D_L00_001601D8_26b500;
+        end = D_L00_001601D8_gp;
         start = D_L00_001601DC_26b500;
     }
     scale = start * scale;
@@ -1129,7 +1129,7 @@ void FUN_L00_0026bca8(unsigned char *m) {
         FUN_001f9a68_26bca8(o, o, 0.96f);
     }
 }
-extern float D_L00_0015F5D0_26bed0 __asm__("D_L00_0015F5D0");
+extern float D_L00_0015F5D0 ;
 extern unsigned char *FUN_L00_002678b8_26bed0(int) __asm__("FUN_L00_002678b8");
 extern int FUN_001fa6d0_26bed0(float) __asm__("FUN_001fa6d0");
 extern int FUN_001160d8_26bed0(void) __asm__("FUN_001160d8");
@@ -1142,11 +1142,11 @@ unsigned char *FUN_L00_0026bed0(void *a, void *b, int c, int d, float f, int n, 
     if (n == 0) {
         return 0;
     }
-    if (D_L00_0015F5D0_26bed0 > 0.9f && FUN_00213260_26bed0(3) == 0)
+    if (D_L00_0015F5D0 > 0.9f && FUN_00213260_26bed0(3) == 0)
         return 0;
-    if (D_L00_0015F5D0_26bed0 > 0.95f && FUN_00213260_26bed0(2) == 0)
+    if (D_L00_0015F5D0 > 0.95f && FUN_00213260_26bed0(2) == 0)
         return 0;
-    if (D_L00_0015F5D0_26bed0 > 1.0f && FUN_00213260_26bed0(1) == 0)
+    if (D_L00_0015F5D0 > 1.0f && FUN_00213260_26bed0(1) == 0)
         return 0;
     m = FUN_L00_002678b8_26bed0(0x10);
     if (m) {
@@ -1196,7 +1196,7 @@ typedef struct {
 } Data_0026CF28;
 
 extern float D_0015ED70;
-extern float D_L00_0015F5D0_c __asm__("D_L00_0015F5D0");
+extern float D_L00_0015F5D0 ;
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9770");
 extern f32 convert_integer_to_float_c2(s32) __asm__("FUN_001fa6c0");
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
@@ -1213,7 +1213,7 @@ void FUN_L00_0026c088(Part_0026CF28 *m) {
     int c, r, k;
     float f;
 
-    if (p->kind == 3 && D_L00_0015F5D0_c > 0.95f)
+    if (p->kind == 3 && D_L00_0015F5D0 > 0.95f)
         tick_countdown_32_alt(&m->timer);
     if (tick_countdown_32_alt(&m->timer)) {
         FUN_L00_00267a08(m);

@@ -15,11 +15,11 @@
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA2C8), where it is exact; names translated to the US level program. */
 
 
-extern char D_L17_00167740[] __asm__("D_L17_001676C0");
+extern char D_L17_001676C0[] ;
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern int D_L17_0015F6A8 __asm__("D_L17_0015F5C4");
+extern int D_L17_0015F5C4 ;
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0028d8c0(void *, int);
 extern unsigned char D_0013E633[] __asm__("D_0013F3D0");
@@ -43,7 +43,7 @@ void FUN_L17_002e87d8(struct Moby *m) {
         mark_moby_for_removal(m);
         return;
     }
-    if (D_L17_0015F6A8 == 2)
+    if (D_L17_0015F5C4 == 2)
         return;
     switch (m->state) {
     case 0:
@@ -133,7 +133,7 @@ void FUN_L17_002e87d8(struct Moby *m) {
         (*(int *)(d + ((0x20)))) = -1;
         if (is_point_inside_clip_volume(&hero.motion.pos, (*(int *)(d + ((0x1C))))))
             break;
-        if (is_point_inside_clip_volume(D_L17_00167740, (*(int *)(d + ((0x1C))))))
+        if (is_point_inside_clip_volume(D_L17_001676C0, (*(int *)(d + ((0x1C))))))
             break;
         if ((*(int *)(d + ((0x10)))) != -1 &&
             is_point_inside_clip_volume(D_L17_0015FFD8 + (*(int *)(d + ((0x10)))) * 0x100 + 0x10,
@@ -151,7 +151,7 @@ void FUN_L17_002e87d8(struct Moby *m) {
             (*(int *)(d + ((0x20)))) = allocate_voice_for_target_entry(0, 4, (int)m);
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, (*(int *)(d + ((0x18))))) ||
-            is_point_inside_clip_volume(D_L17_00167740, (*(int *)(d + ((0x18))))) ||
+            is_point_inside_clip_volume(D_L17_001676C0, (*(int *)(d + ((0x18))))) ||
             ((*(int *)(d + ((0x10)))) != -1 &&
              is_point_inside_clip_volume(D_L17_0015FFD8 + (*(int *)(d + ((0x10)))) * 0x100 + 0x10,
                                          (*(int *)(d + ((0x18))))))) {
@@ -211,7 +211,7 @@ void FUN_L17_002e87d8(struct Moby *m) {
 /* Updates moby 1368: a drone that drifts toward the hero, tags what it hits and sprays sparks until its timer runs out. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA8F8), where it is exact; names translated to the US level program. */
 
-extern char D_L17_00174740_q[] __asm__("D_L17_00174740") __attribute__((section(".data")));
+extern char D_L17_00174740_lui[] __asm__("D_L17_00174740") __attribute__((section(".data")));
 extern float FUN_001f9b80_q(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_q(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa688_q(float, float) __asm__("FUN_001fa688");
@@ -291,7 +291,7 @@ void FUN_L17_002e8e08(struct Moby *moby) {
         func_L00_0025A8C0_alt_q((char *)w, (int)moby, 1, 6.0f, d);
         *(short *)((char *)w + 0x1A) = moby->oclass;
         qcopy(&moby->pos, a);
-        r = D_L17_00174740_q;
+        r = D_L17_00174740_lui;
         *(int *)(r + 0x18) = 0;
         if (FUN_001efa68_q(b, a, 0, moby, w) != 0 ||
             FUN_L00_001f0d60_q(0.5f, &moby->pos, 0, moby) != 0) {
@@ -3662,14 +3662,14 @@ extern void func_001F9BC0_f2180(void *) __asm__("FUN_001f99f8");
 extern void func_L00_002EBEE0_f2180(void *) __asm__("FUN_L00_002eaa30");
 extern float func_L00_0025CE58_f2180(float *p, float *v, float a, float b, float c,
                                      float d) __asm__("FUN_L00_0025be00");
-extern char D_L17_001B10B0_f2180[] __asm__("D_L17_001B0DB0");
-extern char *D_L17_0016016C_f2180 __asm__("D_L17_001600EC");
+extern char D_L17_001B0DB0[] ;
+extern char *D_L17_001600EC ;
 int FUN_L17_002f2180(char *moby, int idx) {
     float m[4], pos[4];
     struct Dat_3CC0_f2180 *d = *(struct Dat_3CC0_f2180 **)(moby + 0x78);
-    Path_3CC0_f2180 *c1 = ((Path_3CC0_f2180 **)D_L17_001B10B0_f2180)[d->a[idx]];
-    Path_3CC0_f2180 *c2 = ((Path_3CC0_f2180 **)D_L17_001B10B0_f2180)[d->b[idx]];
-    Path_3CC0_f2180 *c3 = ((Path_3CC0_f2180 **)D_L17_001B10B0_f2180)[d->c[idx]];
+    Path_3CC0_f2180 *c1 = ((Path_3CC0_f2180 **)D_L17_001B0DB0)[d->a[idx]];
+    Path_3CC0_f2180 *c2 = ((Path_3CC0_f2180 **)D_L17_001B0DB0)[d->b[idx]];
+    Path_3CC0_f2180 *c3 = ((Path_3CC0_f2180 **)D_L17_001B0DB0)[d->c[idx]];
     float t, f, t1, t2, t3, ang, turn;
     int i1, i2, i3;
 
@@ -3691,7 +3691,7 @@ int FUN_L17_002f2180(char *moby, int idx) {
     func_001F9C08_f2180(moby + 0x10, &c3->p[i3], &c3->p[i3 + 1], t3);
     func_L00_002EBE88_f2180(pos);
     {
-        char *base = D_L17_0016016C_f2180 + (d->e84 << 7);
+        char *base = D_L17_001600EC + (d->e84 << 7);
         func_L00_00217718_f2180(base + 0x30, base + 0x70, 0x72, 0);
     }
     if (i3 > 0) {

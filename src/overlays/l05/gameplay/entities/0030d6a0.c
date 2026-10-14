@@ -1304,21 +1304,21 @@ extern void FUN_L02_002a40d0(void *, float);
 void FUN_L05_00316070_c(char *moby) __asm__("FUN_L05_00316070");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern void func_L05_00317538_3175D8(void) __asm__("FUN_L05_00316070");
-extern float D_L05_00211E60_3175D8[] __asm__("D_L05_00211B20");
+extern float D_L05_00211B20[] ;
 
 void FUN_L05_00316110(char *moby) {
     switch ((unsigned char)moby[0x20]) {
     case 0:
-        FUN_L02_002a40d0(D_L05_00211E60_3175D8, 1.0f);
+        FUN_L02_002a40d0(D_L05_00211B20, 1.0f);
         moby[0x20] = 1;
         ((unsigned char *)moby)[0x30] = 0xFF;
         break;
     case 1:
         if (hero.state.control_mode == 0x16) {
-            D_L05_00211E60_3175D8[2] =
+            D_L05_00211B20[2] =
                 fast_sin((float)(D_L05_0015F5CC_c % 360) * 0.017444444f - 3.14f) * 0.25f + 61.5f;
         } else {
-            D_L05_00211E60_3175D8[2] =
+            D_L05_00211B20[2] =
                 fast_sin((float)(D_L05_0015F5CC_c % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
         }
         enqueue_callback_list_1(func_L05_00317538_3175D8, moby);

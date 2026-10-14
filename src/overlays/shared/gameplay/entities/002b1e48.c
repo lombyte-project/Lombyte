@@ -206,7 +206,7 @@ void FUN_L07_0030bf90(unsigned char *moby)
         break;
     }
 }
-extern char *D_L07_0015FFD8_310df0 __asm__("D_L07_0015FFD8");
+extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern void add_vector_xyz_310df0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 vector_length_xyz_310df0(void *) __asm__("FUN_001f9af0");
 extern void scale_vector_xyz_310df0(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -240,7 +240,7 @@ void FUN_L07_00310df0(u8 *moby)
         if (*(s32 *)(data + 0x38) != -1)
             D_L07_00184528[*(s32 *)(data + 0x38)] = 0;
         if (*(s32 *)(data + 0x10) != -1) {
-            other = D_L07_0015FFD8_310df0 + *(s32 *)(data + 0x10) * 0x100;
+            other = level_mobys + *(s32 *)(data + 0x10) * 0x100;
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
                 other[0x20] != *(u32 *)(data + 0x14))
                 return;
@@ -259,7 +259,7 @@ void FUN_L07_00310df0(u8 *moby)
         if (*(s32 *)(data + 0x38) != -1)
             D_L07_00184528[*(s32 *)(data + 0x38)] = 1;
         if (*(s32 *)(data + 0x10) != -1) {
-            other = D_L07_0015FFD8_310df0 + *(s32 *)(data + 0x10) * 0x100;
+            other = level_mobys + *(s32 *)(data + 0x10) * 0x100;
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
                 other[0x20] == *(u32 *)(data + 0x18)) {
                 if (*(s32 *)(data + 0x30) != -1)
@@ -290,7 +290,7 @@ void FUN_L07_00310df0(u8 *moby)
             D_L07_00184528[*(s32 *)(data + 0x38)] = 1;
         if (*(s32 *)(data + 0x10) == -1)
             return;
-        other = D_L07_0015FFD8_310df0 + *(s32 *)(data + 0x10) * 0x100;
+        other = level_mobys + *(s32 *)(data + 0x10) * 0x100;
         if (other == 0 || other[0x20] == 0xfe || other[0x20] == 0xfd ||
             other[0x20] != *(u32 *)(data + 0x18))
             return;
@@ -303,7 +303,7 @@ void FUN_L07_00310df0(u8 *moby)
         if (*(s32 *)(data + 0x38) != -1)
             D_L07_00184528[*(s32 *)(data + 0x38)] = 0;
         if (*(s32 *)(data + 0x10) == -1 ||
-            (other = D_L07_0015FFD8_310df0 + *(s32 *)(data + 0x10) * 0x100) == 0 ||
+            (other = level_mobys + *(s32 *)(data + 0x10) * 0x100) == 0 ||
             other[0x20] == 0xfe || other[0x20] == 0xfd ||
             other[0x20] == *(u32 *)(data + 0x14)) {
             if (*(s32 *)(data + 0x30) != -1)
@@ -342,7 +342,7 @@ extern void scale_vector_xyz_alt_31aee0(f32, void *, void *) __asm__("FUN_001f9b
 extern void subtract_vector_xyz_31aee0(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void play_sound_31aee0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void update_moby_motion_31aee0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern char *D_L07_0015FFD8_31aee0 __asm__("D_L07_0015FFD8");
+extern char *level_mobys __asm__("D_L07_0015FFD8");
 
 void FUN_L07_0031aee0(u8 *moby)
 {
@@ -373,7 +373,7 @@ void FUN_L07_0031aee0(u8 *moby)
         break;
     case 1:
         if (*(s32 *)(data + 0xb0) != -1) {
-            other = D_L07_0015FFD8_31aee0 + *(s32 *)(data + 0xb0) * 0x100;
+            other = level_mobys + *(s32 *)(data + 0xb0) * 0x100;
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
                 other[0x20] != *(u32 *)(data + 0xb4))
                 break;
@@ -390,7 +390,7 @@ void FUN_L07_0031aee0(u8 *moby)
         break;
     case 2:
         if (*(s32 *)(data + 0xb0) != -1) {
-            other = D_L07_0015FFD8_31aee0 + *(s32 *)(data + 0xb0) * 0x100;
+            other = level_mobys + *(s32 *)(data + 0xb0) * 0x100;
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
                 other[0x20] == *(u32 *)(data + 0xb8)) {
                 if (*(s32 *)(data + 0xd0) != -1)
@@ -420,7 +420,7 @@ void FUN_L07_0031aee0(u8 *moby)
         break;
     case 3:
         if (*(s32 *)(data + 0xb0) != -1) {
-            other = D_L07_0015FFD8_31aee0 + *(s32 *)(data + 0xb0) * 0x100;
+            other = level_mobys + *(s32 *)(data + 0xb0) * 0x100;
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
                 other[0x20] == *(u32 *)(data + 0xb8)) {
                 *(s32 *)(data + 0xac) = 0;
@@ -432,7 +432,7 @@ void FUN_L07_0031aee0(u8 *moby)
         break;
     case 4:
         if (*(s32 *)(data + 0xb0) == -1 ||
-            (other = D_L07_0015FFD8_31aee0 + *(s32 *)(data + 0xb0) * 0x100) == 0 ||
+            (other = level_mobys + *(s32 *)(data + 0xb0) * 0x100) == 0 ||
             other[0x20] == 0xfe || other[0x20] == 0xfd ||
             other[0x20] == *(u32 *)(data + 0xb4)) {
             if (*(s32 *)(data + 0xd0) != -1)

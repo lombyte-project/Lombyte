@@ -641,7 +641,7 @@ void FUN_L01_00231348(int a, int b, int c) {
 /* resets the hero state and default camera fields */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00231A68), where it is exact; names translated to the US level program. */
 
-extern int D_L01_0015F5C4;
+extern int cutscene_mode __asm__("D_L01_0015F5C4");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L01_00231450(void) {
@@ -670,14 +670,14 @@ void FUN_L01_00231450(void) {
     *(float *)(g + 0xA94) = 1.0f;
     FUN_L00_00232628();
     if (*(int *)(g + 0x2084) == 0x64) {
-        if (D_L01_0015F5C4 == 2)
+        if (cutscene_mode == 2)
             return;
-        if (D_L01_0015F5C4 == 6)
+        if (cutscene_mode == 6)
             return;
     }
     hero_set_state(HERO_STATE_IDLE, 1);
 }
-extern s32 D_L01_0015F5C4_8 __asm__("D_L01_0015F5C4");
+extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
 
@@ -715,7 +715,7 @@ s32 FUN_L01_00231580(s32 arg) {
     if (G.invulnerable_frames != 0) {
         return 0;
     }
-    if (D_L01_0015F5C4_8 != 0) {
+    if (cutscene_mode != 0) {
         return 0;
     }
     G.unk2280 = 0;
@@ -1387,7 +1387,7 @@ typedef struct {
     u8 pad4[0x70 - 4];
 } Entry70_23c710;
 
-extern s32 D_L01_0015F5C4_23c710 __asm__("D_L01_0015F5C4");
+extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern u8 D_0013D4C0_23c710[] __asm__("D_0013D4C0");
 
 extern void FUN_L00_002165b8_23c710(void) __asm__("FUN_L00_002165b8");
@@ -1467,7 +1467,7 @@ void FUN_L01_0023c710(void) {
         hero.unk1A8++;
     }
     if (hero.unk22DE != 0 && FUN_001f9770_23c710(&hero.unk22DE) != 0 &&
-        hero.health.hp != 0 && D_L01_0015F5C4_23c710 == 0) {
+        hero.health.hp != 0 && cutscene_mode == 0) {
         if (hero.vehicle_mode == 3) {
             FUN_L01_00231450_23c710();
             if (FUN_L00_00266d60_23c710(0x80, FUN_001f96f8_23c710(0x12), 0)) {

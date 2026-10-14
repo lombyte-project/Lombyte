@@ -88,7 +88,7 @@ int FUN_L04_001f3038_c(char *a, char *b, int n) __asm__("FUN_L04_001f3038");
 int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n);
 extern PathEl_1F3010 *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
 extern Coll_1F3010 D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
-extern s32 D_L04_00174070_1F3010[] __asm__("D_L04_00173FF0");
+extern s32 D_L04_00173FF0[] ;
 extern char D_0013F450_1F3010[] __asm__("D_0013F350");
 extern void func_001F9BC0_1F3010(void *) __asm__("FUN_001f99f8");
 extern float func_001F9D10_1F3010(void *, void *) __asm__("FUN_001f9b48");
@@ -287,7 +287,7 @@ void FUN_L04_001f30e0(Moby **others, int other_count, Moby *moby, Steer_1F3010 *
         }
     } else {
         if (func_L00_001F10E0_1F3010(params[4], &moby->pos, 4, moby) != 0) {
-            fast_vec_sub(&force, D_L04_00174070_1F3010, &moby->pos);
+            fast_vec_sub(&force, D_L04_00173FF0, &moby->pos);
             force.z = force.z + params[3];
             fast_vec_normalize(&force, &force, params[3]);
             fast_vec_add(steer, steer, &force);

@@ -400,13 +400,13 @@ extern TieInst *D_L00_00160FC0 MACRO_ADDR;
 extern TieInst *D_L00_00160FC4 MACRO_ADDR;
 extern TieMatrix *D_L00_00160FC8 MACRO_ADDR;
 extern char *D_L00_0015F310  MACRO_ADDR;
-extern char *D_L00_0015FFE8 MACRO_ADDR;
+extern char *D_L00_0015FFE8_macro __asm__("D_L00_0015FFE8") MACRO_ADDR;
 extern char *D_L00_001600E4 MACRO_ADDR;
 extern char *D_L00_001600EC MACRO_ADDR;
 extern char *D_L00_001600F4 MACRO_ADDR;
 extern char *D_L00_001600FC MACRO_ADDR;
-extern char *D_L00_00160108 MACRO_ADDR;
-extern char *D_L00_0016016C MACRO_ADDR;
+extern char *D_L00_00160108_macro __asm__("D_L00_00160108") MACRO_ADDR;
+extern char *D_L00_0016016C_macro __asm__("D_L00_0016016C") MACRO_ADDR;
 extern char *D_L00_0015F318  MACRO_ADDR;
 extern char *D_L00_001B04B0[];
 extern char *func_0020D348_m(int);
@@ -1103,7 +1103,7 @@ char *load_level_gameplay(int arg0) {
         D_L00_0015FFDC = D_L00_0015FFD8 + count;
         D_L00_0015FFDC->f20 = 0xFF;
         mem += (count + n2) << 8;
-        D_L00_0015FFE8 = mem;
+        D_L00_0015FFE8_macro = mem;
         mem += n2 << 7;
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
         D_L00_0015FFE0 = (MobyInst *)((int)D_L00_0015FFD8 + ((count + n2) << 8) - 0x100);
@@ -1289,15 +1289,15 @@ char *load_level_gameplay(int arg0) {
         D_L00_00160104 = *(int *)q;
         src = q + *(int *)(q + 4);
         size = *(int *)(q + 8);
-        D_L00_00160108 = mem;
+        D_L00_00160108_macro = mem;
         mem += size;
         q += 0x10;
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
         if (size != 0) {
-            copy_blocks_16_forward(D_L00_00160108, src, size);
+            copy_blocks_16_forward(D_L00_00160108_macro, src, size);
         }
         for (i = 0; i < D_L00_00160104; i++) {
-            D_L00_001B04B0[i] = D_L00_00160108 + *(int *)q;
+            D_L00_001B04B0[i] = D_L00_00160108_macro + *(int *)q;
             q += 4;
         }
     }
@@ -1460,7 +1460,7 @@ char *load_level_gameplay(int arg0) {
             FUN_001f9838(D_L00_00160040, q, n * 0x30);
         }
     }
-    D_L00_0016016C = mem;
+    D_L00_0016016C_macro = mem;
     mem += 0x20000;
     D_L00_00160174 = -1;
     D_L00_00160170 = 0;
@@ -1785,9 +1785,9 @@ extern char *D_L00_001BC030_244110[] __asm__("D_L00_001BC030");
 extern char *D_L00_00160FC0_244110 __asm__("D_L00_00160FC0");
 extern char *D_L00_00160494_244110 __asm__("D_L00_00160494");
 extern char *D_L00_0015FFD8_244110 __asm__("D_L00_0015FFD8");
-extern char *D_L00_0015FFE8_244110 __asm__("D_L00_0015FFE8");
-extern char *D_L00_00160108_244110 __asm__("D_L00_00160108");
-extern char *D_L00_0016016C_244110 __asm__("D_L00_0016016C");
+extern char *D_L00_0015FFE8 ;
+extern char *D_L00_00160108 ;
+extern char *D_L00_0016016C ;
 extern s32 D_0014EE90[16];
 typedef struct { u8 pad[0x10]; u32 v __attribute__((packed, aligned(1))); } Una244110;
 extern u8 D_L00_00179100[];
@@ -2062,12 +2062,12 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         printf_1e93b0(D_L00_001E8988, KB(D_L00_00160FC0_244110 - D_L00_00197300[0]->seqs[0]));
         printf_1e93b0(D_L00_001E89A0, KB(D_L00_00160494_244110 - D_L00_00160FC0_244110));
         printf_1e93b0(D_L00_001E89B8, KB(D_L00_0015FFD8_244110 - D_L00_00160494_244110));
-        printf_1e93b0(D_L00_001E89D0, KB(D_L00_0015FFE8_244110 - D_L00_0015FFD8_244110));
-        printf_1e93b0(D_L00_001E89E8, KB(D_L00_00160108_244110 - D_L00_0015FFE8_244110));
-        printf_1e93b0(D_L00_001E8A00, KB(D_L00_0016016C_244110 - D_L00_00160108_244110));
+        printf_1e93b0(D_L00_001E89D0, KB(D_L00_0015FFE8 - D_L00_0015FFD8_244110));
+        printf_1e93b0(D_L00_001E89E8, KB(D_L00_00160108 - D_L00_0015FFE8));
+        printf_1e93b0(D_L00_001E8A00, KB(D_L00_0016016C - D_L00_00160108));
         printf_1e93b0(D_L00_001E8A18, 128.0);
         printf_1e93b0(D_L00_0015FC80);
-        printf_1e93b0(D_L00_001E8A30, int_to_float((s32)D_L00_0016016C_244110 + 0x20000) * (1.0f / 1048576.0f));
+        printf_1e93b0(D_L00_001E8A30, int_to_float((s32)D_L00_0016016C + 0x20000) * (1.0f / 1048576.0f));
         printf_1e93b0(D_L00_0015FC80);
         {
             char *lo = D_L00_00173E00_244110.f0 - 0x2D0000;

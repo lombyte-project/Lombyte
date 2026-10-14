@@ -645,7 +645,7 @@ extern float fast_sin(float);
 extern float probe_ground_height(void *, int, float);
 extern float vector_length_xy_cf(void *) __asm__("FUN_001f9b20");
 extern float vector_length_xyz(void *);
-extern int D_L01_0015F404;
+extern int cutscene_active __asm__("D_L01_0015F404");
 extern int DebugPrint();
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int FUN_001f0b58(void);
@@ -939,7 +939,7 @@ void FUN_L01_002e6bf0(PeMoby *m) {
         if (v->w1C8 == 0 && v->w1C4 != -1) {
             FUN_L00_002eac18(0);
             hero_set_state(HERO_STATE_IDLE, 1);
-            D_L01_0015F404 = 0;
+            cutscene_active = 0;
             v->w1C4 = -1;
         }
         break;
@@ -953,7 +953,7 @@ void FUN_L01_002e6bf0(PeMoby *m) {
                 hero_set_state(0x1F, 0);
                 p = D_L01_001600EC + (v->w1C4 << 7);
                 FUN_L00_002eaaa0(p + 0x30, p + 0x70, 0, 0, 0);
-                D_L01_0015F404 = 1;
+                cutscene_active = 1;
                 v->w1C8 = scale_game_frames(0x168);
             }
             m->w94 = *(int *)(m->w24 + 0x10);
@@ -3479,8 +3479,8 @@ extern CapLevelState D_L01_001BB6B0;
 extern CapCamera D_L01_00167100;
 extern CapColors D_L01_00161C40;
 extern s32 D_0014C190[][64];
-extern s32 D_L01_001BA950[];
-extern s32 D_L01_0015F404;
+extern s32 moby_killed[] __asm__("D_L01_001BA950");
+extern s32 cutscene_active __asm__("D_L01_0015F404");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L01_002f9000(Obj *obj);
 extern void FUN_L00_002eac18(s32);
@@ -3567,7 +3567,7 @@ void FUN_L01_002f9080(CapMoby *m) {
             allocate_voice_for_target_entry(0, 0, m);
             m->pos.f[2] = v->home.f[2] - 20.0f;
             D_0014C190[current_level_index_macro][m->id >> 5] |= 1 << (m->id & 0x1F);
-            D_L01_001BA950[m->id >> 5] |= 1 << (m->id & 0x1F);
+            moby_killed[m->id >> 5] |= 1 << (m->id & 0x1F);
         }
         m->pos.f[2] += 0.0f;
         break;
@@ -3576,7 +3576,7 @@ void FUN_L01_002f9080(CapMoby *m) {
         if (v->wait == 0 && v->music != -1) {
             FUN_L00_002eac18(0);
             hero_set_state(HERO_STATE_IDLE, 1);
-            D_L01_0015F404 = 0;
+            cutscene_active = 0;
             v->music = -1;
         }
         break;

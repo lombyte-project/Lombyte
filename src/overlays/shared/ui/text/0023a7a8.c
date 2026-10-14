@@ -206,9 +206,9 @@ int FUN_L00_0023ac78(int call) {
     } while ((int)e < (int)(hud_elements + 13));
     return n;
 }
-extern int D_L00_0015F968_23adb8 __asm__("D_L00_0015F968") __attribute__((sda));
-extern int D_L00_0015F96C_23adb8 __asm__("D_L00_0015F96C");
-extern int D_L00_0015F970_23adb8 __asm__("D_L00_0015F970");
+extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
+extern int D_L00_0015F96C ;
+extern int D_L00_0015F970 ;
 extern int D_0013D428_23adb8[] __asm__("D_0013D428");
 extern int FUN_001ff308_23adb8(int, int, void *, void *, void *, void *,
                                int) __asm__("FUN_001ff308");
@@ -223,7 +223,7 @@ extern void FUN_L00_0023a640_23adb8(void) __asm__("FUN_L00_0023a640");
 void FUN_L00_0023adb8(void) {
     struct Hero *g;
     int n, mode, k;
-    if (D_L00_0015F968_23adb8 != 0) {
+    if (D_L00_0015F968_gp != 0) {
         return;
     }
     g = &hero;
@@ -232,33 +232,33 @@ void FUN_L00_0023adb8(void) {
     n = (&D_L00_001C40B0[0] + n)->h8 ? n : 0;
     n = mode ? 0 : n;
     if (n != 0) {
-        D_L00_0015F96C_23adb8 = n;
-        *(volatile int *)&D_L00_0015F970_23adb8 = FUN_001ff308_23adb8(
+        D_L00_0015F96C = n;
+        *(volatile int *)&D_L00_0015F970 = FUN_001ff308_23adb8(
             0x10, n + 60000, FUN_L00_0023a760_23adb8, FUN_L00_0023cdb8_23adb8,
             FUN_L00_0023a7a8_23adb8, &D_0013D428_23adb8[n], D_L00_001C40B0[n].hE);
     } else if (k = -1, mode == 2) {
-        if (D_L00_0015F970_23adb8 != k) {
-            FUN_001ff570_23adb8(D_L00_0015F970_23adb8, 0);
-            D_L00_0015F970_23adb8 = k;
+        if (D_L00_0015F970 != k) {
+            FUN_001ff570_23adb8(D_L00_0015F970, 0);
+            D_L00_0015F970 = k;
         }
         g->unk1634 =
             FUN_001ff308_23adb8(0x10, 0xFFFF, FUN_L00_00235d80_23adb8, FUN_L00_00235ea0_23adb8,
                                 FUN_L00_0023a640_23adb8, &g->unk1630, 200);
     } else {
-        if (D_L00_0015F970_23adb8 != k) {
-            FUN_001ff570_23adb8(D_L00_0015F970_23adb8, 0);
-            D_L00_0015F970_23adb8 = k;
+        if (D_L00_0015F970 != k) {
+            FUN_001ff570_23adb8(D_L00_0015F970, 0);
+            D_L00_0015F970 = k;
         }
     }
 }
 void FUN_L00_00235878();
-extern int D_L00_0015F968 __attribute__((sda));
+extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
 extern int D_L00_0015F970;
 extern int D_L00_0015F96C;
 /* Resets via FUN_L00_00235878, then sets the three state words to 1, -1 and 0. */
 void FUN_L00_0023aef8(void) {
     FUN_L00_00235878();
-    D_L00_0015F968 = 1;
+    D_L00_0015F968_gp = 1;
     D_L00_0015F970 = -1;
     D_L00_0015F96C = 0;
 }

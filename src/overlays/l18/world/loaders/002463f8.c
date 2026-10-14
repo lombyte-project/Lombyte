@@ -414,7 +414,7 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
 #include "sda.h"
 #define W(x) (*(int *)&(x))
 
-extern int D_L18_0015F5CC;
+extern int game_frame __asm__("D_L18_0015F5CC");
 extern short D_L18_00161A1C __attribute__((sda));
 extern short D_L18_00161A20 __attribute__((sda));
 extern short D_L18_00161A24 __attribute__((sda));
@@ -446,7 +446,7 @@ void FUN_L18_002d8098(struct Moby *moby) {
     draw_ui_frame(W(D_L18_00161A2C) + W(D_L18_00161A20), W(D_L18_00161A30) + W(D_L18_00161A20),
                 W(D_L18_00161A34) + W(D_L18_00161A1C), W(D_L18_00161A38) + W(D_L18_00161A1C),
                 W(D_L18_00161A3C));
-    v = fast_sin(func_001FA888(D_L18_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
+    v = fast_sin(func_001FA888(game_frame % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (v > 1.0f) {
         v = 1.0f;
     } else if (v < 0.0f) {

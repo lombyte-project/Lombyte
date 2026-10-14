@@ -12,14 +12,14 @@ extern int FUN_L00_001f0d60(float, void *, int, void *);
 
 /* Resets the follow camera to its defaults: springs the orbit and target
    values back toward the defaults table, then clears the pending inputs. */
-extern float D_L00_0015EF44_2e5e38 __asm__("D_L00_0015EF44") __attribute__((section(".sdata")));
+extern float D_L00_0015EF44_macro __asm__("D_L00_0015EF44") __attribute__((section(".sdata")));
 extern unsigned char *D_L00_00168FC0_2e5e38 __asm__("D_L00_00168FC0") __attribute__((section(".data")));
-extern int D_L00_0015EF60_2e5e38 __asm__("D_L00_0015EF60") __attribute__((section(".sdata")));
-extern float D_L00_00161CA0_2e5e38 __asm__("D_L00_00161CA0") __attribute__((sda));
-extern float D_L00_00161CDC_2e5e38 __asm__("D_L00_00161CDC") __attribute__((sda));
-extern float D_L00_00161CE0_2e5e38 __asm__("D_L00_00161CE0") __attribute__((sda));
-extern float D_L00_00161CE4_2e5e38 __asm__("D_L00_00161CE4") __attribute__((sda));
-extern float D_L00_00161D1C_2e5e38 __asm__("D_L00_00161D1C") __attribute__((sda));
+extern int D_L00_0015EF60_macro __asm__("D_L00_0015EF60") __attribute__((section(".sdata")));
+extern float D_L00_00161CA0_gp __asm__("D_L00_00161CA0") __attribute__((sda));
+extern float D_L00_00161CDC_gp __asm__("D_L00_00161CDC") __attribute__((sda));
+extern float D_L00_00161CE0_gp __asm__("D_L00_00161CE0") __attribute__((sda));
+extern float D_L00_00161CE4_gp __asm__("D_L00_00161CE4") __attribute__((sda));
+extern float D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
 typedef struct { char pad0[0x2C]; float unk2C; char pad30[0xC]; short unk3C; short unk3E; int unk40; char pad44[8]; int unk4C; char pad50[8]; float unk58; } CamOrbit_2e5e38;
 typedef struct { char pad0[0xB4]; int unkB4; char padB8[0x1E]; unsigned char unkD6; char padD7[3]; short unkDA; float unkDC; float unkE0; float unkE4; float unkE8; } CamTarget_2e5e38;
 typedef struct { char pad0[0x10]; short unk10; char pad12[0x10]; short unk22; } Cam_2e5e38;
@@ -35,7 +35,7 @@ void follow_camera_approach(unsigned char *moby)
     unsigned char *init, *cam, *defaults, *orbit, *target, *default_target, *default_orbit, *reset;
     CamSpring_2e5e38 *spring_reset;
     init = *(unsigned char **)(moby + 0x70) + 0x1A8;
-    *(float *)(init + 0x14) = D_L00_0015EF44_2e5e38;
+    *(float *)(init + 0x14) = D_L00_0015EF44_macro;
     *(int *)(init + 0x1C) = 0;
     *(int *)(init + 0x20) = 0;
     *(int *)(init + 0x10) = 0;
@@ -70,18 +70,18 @@ void follow_camera_approach(unsigned char *moby)
     ((CamTarget_2e5e38 *)target)->unkB4 = 0;
     (*(Cam_2e5e38 **)(moby + 0x70))->unk10 = 1;
     (*(Cam_2e5e38 **)(moby + 0x70))->unk22 = 0;
-    ((CamTarget_2e5e38 *)target)->unkDC = D_L00_00161CA0_2e5e38;
-    ((CamTarget_2e5e38 *)target)->unkE4 = D_L00_00161CA0_2e5e38;
+    ((CamTarget_2e5e38 *)target)->unkDC = D_L00_00161CA0_gp;
+    ((CamTarget_2e5e38 *)target)->unkE4 = D_L00_00161CA0_gp;
     ((CamTarget_2e5e38 *)target)->unkE0 = 0.2f;
     ((CamTarget_2e5e38 *)target)->unkE8 = 0.2f;
     ((CamTarget_2e5e38 *)target)->unkD6 = 0;
     spring_reset = (CamSpring_2e5e38 *)(*(unsigned char **)(moby + 0x70) + 0x1D0);
-    spring_reset->unk44 = D_L00_00161CDC_2e5e38;
-    spring_reset->unk3C = D_L00_00161CE4_2e5e38;
-    spring_reset->unk40 = D_L00_00161CE0_2e5e38;
-    spring_reset->unk48 = D_L00_0015EF60_2e5e38;
+    spring_reset->unk44 = D_L00_00161CDC_gp;
+    spring_reset->unk3C = D_L00_00161CE4_gp;
+    spring_reset->unk40 = D_L00_00161CE0_gp;
+    spring_reset->unk48 = D_L00_0015EF60_macro;
     reset = *(unsigned char **)(moby + 0x70) + 0x220;
-    ((CamEnd_2e5e38 *)reset)->unkC = D_L00_00161D1C_2e5e38;
+    ((CamEnd_2e5e38 *)reset)->unkC = D_L00_00161D1C_gp;
     ((CamEnd_2e5e38 *)reset)->unk6 = 0;
 }
 typedef struct { u8 pad[0xB0]; f32 fB0; } S40_2e6000;
@@ -624,11 +624,11 @@ extern int D_L00_00161D90 __attribute__((sda));
 extern float D_L00_0015EF40; /* no foreign declaration */
 extern float D_L00_0015EF44; /* no foreign declaration */
 extern int D_L00_0015EF60;
-extern float D_L00_00161CA0 __attribute__((sda));
-extern float D_L00_00161CDC __attribute__((sda));
-extern float D_L00_00161CE0 __attribute__((sda));
-extern float D_L00_00161CE4 __attribute__((sda));
-extern float D_L00_00161D1C __attribute__((sda));
+extern float D_L00_00161CA0_gp __asm__("D_L00_00161CA0") __attribute__((sda));
+extern float D_L00_00161CDC_gp __asm__("D_L00_00161CDC") __attribute__((sda));
+extern float D_L00_00161CE0_gp __asm__("D_L00_00161CE0") __attribute__((sda));
+extern float D_L00_00161CE4_gp __asm__("D_L00_00161CE4") __attribute__((sda));
+extern float D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
 extern int D_L00_00161D24 __attribute__((sda));
 extern int D_L00_00161D8C __attribute__((sda));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -672,8 +672,8 @@ void follow_camera_setup(Moby_2E8210 *m) {
     a->bC4 = 0;
     a->bD6 = 0;
     a->fE0 = 0.2f;
-    a->fDC = D_L00_00161CA0;
-    a->fE4 = D_L00_00161CA0;
+    a->fDC = D_L00_00161CA0_gp;
+    a->fE4 = D_L00_00161CA0_gp;
     a->fE8 = 0.2f;
     a->fB8 = 0.005f;
     a->hC6 = 0;
@@ -743,7 +743,7 @@ void follow_camera_setup(Moby_2E8210 *m) {
     ((Cam220_2E8210 *)q3)->h4 = 0;
     ((Cam220_2E8210 *)q3)->h6 = 0;
     ((Cam220_2E8210 *)q3)->f8 = b->f2C;
-    ((Cam220_2E8210 *)q3)->fC = D_L00_00161D1C;
+    ((Cam220_2E8210 *)q3)->fC = D_L00_00161D1C_gp;
 
     d = m->cam;
     r = scale_game_frames(0x7D0);
@@ -754,9 +754,9 @@ void follow_camera_setup(Moby_2E8210 *m) {
     g->h38 = 0;
     g->i4C = 0;
     g->h34 = r;
-    g->f44 = D_L00_00161CDC;
-    g->f3C = D_L00_00161CE4;
-    g->f40 = D_L00_00161CE0;
+    g->f44 = D_L00_00161CDC_gp;
+    g->f3C = D_L00_00161CE4_gp;
+    g->f40 = D_L00_00161CE0_gp;
     g->i48 = D_L00_0015EF60;
     clear_u64_value(d->g.v10);
 
@@ -871,7 +871,7 @@ typedef struct G002e7318 {
     s32 i114;
 } G002e7318;
 extern G002e7318 D_L00_00166E10_c __asm__("D_L00_00166E10");
-extern f32 D_L00_00161CD8 __attribute__((sda));
+extern f32 follow_cam_min_distance_gp __asm__("D_L00_00161CD8") __attribute__((sda));
 extern V002e7318 D_L00_00173E60_c __asm__("D_L00_00173E60");
 extern V002e7318 D_L00_00173E70;
 extern s32 FUN_L00_002e4180_c(V002e7318 *, f32) __asm__("FUN_L00_002e4180");
@@ -898,7 +898,7 @@ s32 FUN_L00_002e7318(O002e7318 *o) {
     x->s38 = 2;
     p = (P002e7318 *)((O002e7318 **)g)[-4]->p70;
     w = x->i48;
-    lim = D_L00_00161CD8 + p->c * p->a * (p->b - 1.0f);
+    lim = follow_cam_min_distance_gp + p->c * p->a * (p->b - 1.0f);
     i = 0;
     while (i < 3) {
         if (FUN_L00_002e4180_c(&pos, lim)) {
@@ -978,7 +978,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
     orbit = (V002e7530 *)(m + 0x130);
     range = m + 0x1d0;
     found = 0;
-    lim = D_L00_00161CD8 + *(float *)(g + 0x214) * *(float *)(g + 0x20c) * (*(float *)(g + 0x210) - 1.0f);
+    lim = follow_cam_min_distance_gp + *(float *)(g + 0x214) * *(float *)(g + 0x20c) * (*(float *)(g + 0x210) - 1.0f);
     clear_u64_value_2e7618(&delta);
     qcopy(&start, out);
     qcopy(&hit, &D_L00_00173E60);
@@ -988,7 +988,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
     measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
     radius = distance_xyz(path, &temp) /
               (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
-    radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) * radius) * 0.75f;
+    radius = (follow_cam_min_distance_gp + (lim - follow_cam_min_distance_gp) * radius) * 0.75f;
     if (measure < radius) {
         found = 1;
         FUN_L00_002e7530(o, &delta, &temp, &hit, &start, radius - measure, dist);
@@ -999,7 +999,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
             measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
             radius = distance_xyz(path, &temp) /
                       (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
-            radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) * radius) * 0.75f;
+            radius = (follow_cam_min_distance_gp + (lim - follow_cam_min_distance_gp) * radius) * 0.75f;
             if (measure < radius) {
                 FUN_L00_002e7530(o, &next, &temp, &hit, &start, radius - measure, dist);
                 add_vector_xyz_2e7618(&delta, &delta, &next);
@@ -1010,7 +1010,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
                     measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
                     radius = distance_xyz(path, &temp) /
                               (*(float *)((u8 *)orbit + 0x2c) - *(float *)(range + 0x30));
-                    radius = (D_L00_00161CD8 + (lim - D_L00_00161CD8) * radius) * 0.75f;
+                    radius = (follow_cam_min_distance_gp + (lim - follow_cam_min_distance_gp) * radius) * 0.75f;
                     if (measure < radius) {
                         FUN_L00_002e7530(o, &next, &temp, &hit, &start, radius - measure, dist);
                         add_vector_xyz_2e7618(&delta, &delta, &next);
@@ -1049,7 +1049,7 @@ int FUN_L00_002e79c8(void *arg0, int arg1, float *arg2) {
     return 0;
 }
 typedef float V_2e7a30[4] __attribute__((aligned(16)));
-extern float follow_cam_min_distance __asm__("D_L00_00161CD8") __attribute__((sda));
+extern float follow_cam_min_distance_gp __asm__("D_L00_00161CD8") __attribute__((sda));
 extern float D_L00_00161CC8_2e7a30 __asm__("D_L00_00161CC8") __attribute__((sda));
 extern float D_0013CA40_2e7a30 __asm__("D_0013CA40") __attribute__((section(".data")));
 extern int D_L00_0015EF5C_2e7a30 __asm__("D_L00_0015EF5C");
@@ -1090,7 +1090,7 @@ int FUN_L00_002e7a30(unsigned char *a) {
     qcopy(dir, c);
     dist = 0.0f;
     qcopy(pos, base + 0x90);
-    spd = follow_cam_min_distance;
+    spd = follow_cam_min_distance_gp;
     FUN_001f9bf8_2e7a30(ndir, dir, 1.0f);
     for (i = 0; i < truncate_float_to_s32(*(float *)(e + 0x40) - 1.0f); i++) {
         if (i > 0 && FUN_L00_002e4290_2e7a30(pos) == 0) {

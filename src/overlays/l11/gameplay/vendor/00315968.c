@@ -20,7 +20,7 @@ extern float D_L11_001622D4 __attribute__((sda));
 extern float D_L11_001622D8 __attribute__((sda));
 extern float D_L11_001622DC __attribute__((sda));
 extern float D_L11_001622E0 __attribute__((sda));
-extern float D_L11_001622FC __attribute__((sda));
+extern float D_L11_001622FC_gp __asm__("D_L11_001622FC") __attribute__((sda));
 
 /* Private variables of the moby FUN_L11_00315968 updates (only the fields it uses). */
 struct L11PatrolVars {
@@ -101,7 +101,7 @@ void FUN_L11_00315968(struct Moby *moby) {
     char *path;
 
     moby->scale = moby->pclass->scale * D_L11_001622CC;
-    d->unk1A4 = D_L11_001622FC * frame_time;
+    d->unk1A4 = D_L11_001622FC_gp * frame_time;
     if (d->carrier != -1 && moby->state != 0xB && moby->state != 9 && moby->state != 0x12 &&
         moby->state != 0x11 && moby->state != 0 && moby->state != 0xC && moby->state != 0xD) {
         if (moby->pos.z < ((struct Moby *)D_L11_0015FFD8)[d->carrier].pos.z + 0.5f) {
@@ -235,7 +235,7 @@ void FUN_L11_00315968(struct Moby *moby) {
     }
 }
 extern float D_6C_e[] __asm__("D_0015ED68") __attribute__((section(".sdata")));
-extern float D_L11_001622FC_g __asm__("D_L11_001622FC") __attribute__((sda));
+extern float D_L11_001622FC_gp __asm__("D_L11_001622FC") __attribute__((sda));
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f9dc8_c(float) __asm__("FUN_001f9dc8");
@@ -254,7 +254,7 @@ void FUN_L11_00315f58(char *a0, float *a1)
     FUN_L00_0025be00_c(a0 + 0x48, d + 0x250, f, frame_time_sq * 8.726646f, frame_time_sq * 8.726646f, D_6C_e[1] * 12.566371f);
     f = FUN_0020c9e0_c(a0);
     if (*(u8 *)(a0 + 0x52) == *(u8 *)(a0 + 0x53) && 8.0f < f && f < 22.0f) {
-        *(float *)(d + 0x1A4) = D_L11_001622FC_g * frame_time;
+        *(float *)(d + 0x1A4) = D_L11_001622FC_gp * frame_time;
         v[0] = FUN_001f9dc8_c(*(float *)(a0 + 0x48)) * 2.0f;
         v[1] = FUN_001f9de0_c(*(float *)(a0 + 0x48)) * 2.0f;
         *(int *)&v[2] = 0;
@@ -1191,7 +1191,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern float D_L11_0015F580[] MACRO_ADDR;
 extern float D_L11_001677C0_c[] __asm__("D_L11_001677C0");
-extern float D_L11_001677D0_c[] __asm__("D_L11_001677D0");
+extern float D_L11_001677D0[] ;
 extern float FUN_001f9b48(void *, void *);
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float FUN_L00_0025be00(float *p, float *v, float a, float b, float c, float d);
@@ -1312,7 +1312,7 @@ void FUN_L11_00319838(struct Moby *moby) {
         break;
     case 5:
         c0 = 0.0f;
-        qcopy(s30, D_L11_001677D0_c);
+        qcopy(s30, D_L11_001677D0);
         s30[0] = 0.0f;
         if (s30[1] > 0.2617994f) {
             s30[1] = 0.2617994f;

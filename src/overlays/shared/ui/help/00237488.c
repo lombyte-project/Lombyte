@@ -650,7 +650,7 @@ extern int D_L05_0015F674_g __asm__("D_L05_0015F674") __attribute__((sda));
 extern int func_L05_0024D680_2523C8(int, int) __asm__("FUN_L05_0024cee8");
 extern int func_001F9908_2523C8(int *) __asm__("FUN_001f9740");
 extern Moby *D_L05_00160098_2523C8 __asm__("D_L05_0015FFD8") __attribute__((section(".sdata")));
-extern int D_0015EFA4_2523C8 __asm__("D_0015EEA4") __attribute__((section(".sdata")));
+extern int D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata")));
 extern int D_0015EE84_2523C8 __asm__("D_0015ED84") __attribute__((section(".sdata")));
 
 int FUN_L05_00251be8(void) {
@@ -995,10 +995,10 @@ int FUN_L05_00251be8(void) {
             if (stats->hD8 < 0xFFFF) {
                 stats->hD8++;
             }
-            play_time = scale_game_frames_alt(D_0015EFA4_2523C8);
+            play_time = scale_game_frames_alt(D_0015EEA4_macro);
             unit = 600;
             if (play_time / unit > stats->hDA) {
-                stats->hDA = scale_game_frames_alt(D_0015EFA4_2523C8) / 600;
+                stats->hDA = scale_game_frames_alt(D_0015EEA4_macro) / 600;
             }
             stats->fDC = stats->fDC | (1 << D_0015EE84_2523C8) | 0x80000000;
             allocate_voice_for_target_entry_alt(0, 0, (int)item);
@@ -1230,7 +1230,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
 extern u8 D_0013D388;
 
 extern s32 D_0015ED84 __attribute__((sda));
-extern s32 D_0015EEA4_sda __asm__("D_0015EEA4") __attribute__((sda));
+extern s32 D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda));
 extern f32 D_L05_002169F8[] __asm__("D_L05_002169F8");
 extern f32 FUN_001f96b0(f32) __asm__("FUN_L05_0022dbc8");
 
@@ -1245,7 +1245,7 @@ void FUN_L05_00254058(void) {
     if (D_0013D388 == 0) return;
     if (hero.unk8A8 != 0) {
         struct UsageStats *stats = (struct UsageStats *)D_00141848;
-        s32 duration = D_0015EEA4_sda;
+        s32 duration = D_0015EEA4_gp;
         s32 frame_count;
         s32 level;
         if (stats->stat[30].count <= 0xFFFE) {
@@ -1255,7 +1255,7 @@ void FUN_L05_00254058(void) {
         frame_count = scale_game_frames(duration) / 600;
         level = D_0015ED84;
         if (stats->stat[30].unk2 < frame_count) {
-            stats->stat[30].unk2 = scale_game_frames(D_0015EEA4_sda) / 600;
+            stats->stat[30].unk2 = scale_game_frames(D_0015EEA4_gp) / 600;
             level = *(s32 *)0x0015ED84;
         }
         stats->stat[30].level_mask |= 1U << level;

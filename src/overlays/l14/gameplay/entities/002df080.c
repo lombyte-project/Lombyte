@@ -1255,7 +1255,7 @@ void FUN_L14_002ed280(struct Moby *moby) {
 /* Arc state shared by FUN_L14_002ed530 and its draw callback FUN_L14_002edc18. */
 extern f32 D_L14_00161C68 __attribute__((sda));
 extern f32 D_L14_00161C6C __attribute__((sda));
-extern s32 D_L14_00161C70_d530 __asm__("D_L14_00161C70") __attribute__((sda));
+extern s32 D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
 extern f32 D_L14_00161C74 __attribute__((sda));
 extern f32 D_L14_00161C8C __attribute__((sda));
 extern f32 D_L14_00161C90 __attribute__((sda));
@@ -1269,9 +1269,9 @@ extern char *D_L14_00161CE8;
 extern s32 D_L14_00161CEC;
 extern f32 D_L14_00161CF0;
 extern s32 D_L14_00161CF4;
-extern s32 D_L14_00161CF8_d530[] __asm__("D_L14_00161CF8") __attribute__((section(".sdata")));
+extern s32 D_L14_00161CF8_macro[] __asm__("D_L14_00161CF8") __attribute__((section(".sdata")));
 extern f32 D_L14_001DFD80_d530[40][4] __asm__("D_L14_001DFD80");
-extern s16 D_L14_001E0000_d530[40] __asm__("D_L14_001E0000");
+extern s16 D_L14_001E0000[40] ;
 extern f32 D_L14_001E0050_d530[3][16][4] __asm__("D_L14_001E0050");
 extern u16 D_L14_001E0350_d530[3][16] __asm__("D_L14_001E0350");
 extern void arc_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1315,14 +1315,14 @@ void FUN_L14_002ed530(char *moby) {
         D_L14_00161CF4 = 1;
         D_L14_00161CE8 = moby;
         i = 0;
-        starts = D_L14_00161CF8_d530;
+        starts = D_L14_00161CF8_macro;
         *(int *)&D_L14_00161C6C = 0;
         arc_sub(&delta, D_L14_00161CD0_d530, D_L14_00161CC0);
         len = arc_length(&delta);
         D_L14_00161C74 = len / arc_itof(40);
         D_L14_00161CE0_d530 = 0;
         for (; i < 40; i++) {
-            e = &D_L14_001E0000_d530[i];
+            e = &D_L14_001E0000[i];
             p = D_L14_001DFD80_d530[i];
             p[1] = p[2] = 0.0f;
             p[3] = 1.0f;
@@ -1336,12 +1336,12 @@ void FUN_L14_002ed530(char *moby) {
                 }
             }
             t = arc_itof(i) / arc_itof(40);
-            *e = arc_ftoi((float)-arc_frames(D_L14_00161C70_d530) * t + 0.0f);
+            *e = arc_ftoi((float)-arc_frames(D_L14_00161C70_gp) * t + 0.0f);
         }
         arc_lerp(D_L14_001DFFE0, D_L14_001DFFE0 - 4, D_L14_001DFFE0 + 4, 0.5f);
         sign = -1.0f;
         D_L14_00161CB4 = D_L14_00161CEC = arc_frames(FUN_L00_00257b90_d530(D_L14_00161C98, D_L14_00161C9C));
-        D_L14_00161CF0 = 1.0f / arc_itof(D_L14_00161CB4 - arc_frames(D_L14_00161C70_d530));
+        D_L14_00161CF0 = 1.0f / arc_itof(D_L14_00161CB4 - arc_frames(D_L14_00161C70_gp));
         if (arc_rand(2) != 0) {
             sign = 1.0f;
         }
@@ -1351,7 +1351,7 @@ void FUN_L14_002ed530(char *moby) {
             float (*row)[4] = D_L14_001E0050_d530[j];
             u16 *sq = D_L14_001E0350_d530[j];
             starts[j] = k;
-            sq[0] = D_L14_001E0000_d530[k];
+            sq[0] = D_L14_001E0000[k];
             row[0][0] = 0.0f;
             row[0][2] = 0.0f;
             r = arc_random(1.0f, 10.0f);
@@ -1371,7 +1371,7 @@ void FUN_L14_002ed530(char *moby) {
                 }
                 D_L14_001E0050_d530[j][m][0] = r * arc_cos(ang);
                 D_L14_001E0050_d530[j][m][2] = r * arc_sin(ang);
-                D_L14_001E0350_d530[j][m] = D_L14_001E0000_d530[starts[j] + m];
+                D_L14_001E0350_d530[j][m] = D_L14_001E0000[starts[j] + m];
             }
             sign = -sign;
         }
@@ -1379,9 +1379,9 @@ void FUN_L14_002ed530(char *moby) {
     if (moby == D_L14_00161CE8) {
         arc_tick(&D_L14_00161CB4);
         for (i = 0; i < 40; i++) {
-            s16 v = ++D_L14_001E0000_d530[i];
-            if (arc_frames(D_L14_00161C70_d530) < v) {
-                D_L14_001E0000_d530[i] = arc_frames(D_L14_00161C70_d530);
+            s16 v = ++D_L14_001E0000[i];
+            if (arc_frames(D_L14_00161C70_gp) < v) {
+                D_L14_001E0000[i] = arc_frames(D_L14_00161C70_gp);
             }
             if (i != 0) {
                 if (i >= 35) {
@@ -1391,16 +1391,16 @@ void FUN_L14_002ed530(char *moby) {
                 }
             }
         }
-        arc_frames(D_L14_00161C70_d530);
+        arc_frames(D_L14_00161C70_gp);
         for (j = 0; j < 3; j++) {
             for (n = 0; n < 16; n++) {
                 s16 v = ++D_L14_001E0350_d530[j][n];
-                if (arc_frames(D_L14_00161C70_d530) < v) {
-                    D_L14_001E0350_d530[j][n] = arc_frames(D_L14_00161C70_d530);
+                if (arc_frames(D_L14_00161C70_gp) < v) {
+                    D_L14_001E0350_d530[j][n] = arc_frames(D_L14_00161C70_gp);
                 }
             }
         }
-        if (D_L14_00161CB4 < D_L14_00161CEC - arc_frames(D_L14_00161C70_d530)) {
+        if (D_L14_00161CB4 < D_L14_00161CEC - arc_frames(D_L14_00161C70_gp)) {
             if (arc_frames(60) < D_L14_00161CEC) {
                 if (D_L14_00161C6C < 6.2831855f) {
                     D_L14_00161CE2 = arc_ftoi(arc_sin(D_L14_00161CE4) * 128.0f);
@@ -1450,13 +1450,13 @@ extern char D_L14_001674C0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L14_00161CD0_c[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
 extern float FUN_L00_00257e20(float, float, float, float, float);
-extern int D_L14_00161C70 __attribute__((sda));
+extern int D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
 extern int D_L14_00161C78 __attribute__((sda));
 extern int D_L14_00161C7C __attribute__((sda));
 extern float D_L14_00161C80 __attribute__((sda));
 extern float D_L14_00161C84 __attribute__((sda));
 extern float D_L14_00161C88 __attribute__((sda));
-extern int D_L14_00161CF8[] __attribute__((section(".sdata")));
+extern int D_L14_00161CF8_macro[]  __asm__("D_L14_00161CF8")__attribute__((section(".sdata")));
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -1491,7 +1491,7 @@ void FUN_L14_002edc18(void) {
     q[0].r88 = 0x8000000048L;
     q[0].r80 = 0xFF9000000260L;
     q[0].r70 = 0;
-    a = func_001FA898_r(convert_integer_to_float(D_L14_001E0000[0]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70)) * 255.0f) - D_L14_00161CE0[0];
+    a = func_001FA898_r(convert_integer_to_float(D_L14_001E0000[0]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp)) * 255.0f) - D_L14_00161CE0[0];
     if (a < 0) a = 0;
     if (a > 0xFF) a = 0xFF;
     c = D_L14_00161C78 | (a << 24);
@@ -1567,7 +1567,7 @@ void FUN_L14_002edc18(void) {
         if (i == 0x27) {
             b = 0;
         } else {
-            b = func_001FA898_r(convert_integer_to_float(D_L14_001E0000[i]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70)) * 255.0f) - D_L14_00161CE0[0];
+            b = func_001FA898_r(convert_integer_to_float(D_L14_001E0000[i]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp)) * 255.0f) - D_L14_00161CE0[0];
             if (b < 0) b = 0;
             if (b > 0xFF) b = 0xFF;
         }
@@ -1593,7 +1593,7 @@ void FUN_L14_002edc18(void) {
         V_2EF078 *os = D_L14_001E0050;
         V_2EF078 *o;
 
-        t = convert_integer_to_float(as[j * 16]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70));
+        t = convert_integer_to_float(as[j * 16]) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp));
         a = func_001FA898_r(t * 255.0f) - D_L14_00161CE0[0];
         if (a < 0) a = 0;
         if (a > 0xFF) a = 0xFF;
@@ -1601,13 +1601,13 @@ void FUN_L14_002edc18(void) {
         q[0].col[1] = c;
         q[0].col[0] = c;
         q[1].col[0] = q[1].col[1] = D_L14_00161C7C | ((a >> 1) << 24);
-        sz[0].z = (D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(D_L14_00161CF8[j]) / convert_integer_to_float(0x28))) * 0.75f;
+        sz[0].z = (D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(D_L14_00161CF8_macro[j]) / convert_integer_to_float(0x28))) * 0.75f;
         sz[1].z = sz[0].z * 4.0f;
         qcopy(&q[0].v[0], &sz[0]);
         scale_vector_xyz(&q[0].v[1], &q[0].v[0], -1.0f);
         qcopy(&q[1].v[0], &sz[1]);
         scale_vector_xyz(&q[1].v[1], &q[1].v[0], -1.0f);
-        qcopy(&r[0], &D_L14_001DFD80[D_L14_00161CF8[j]]);
+        qcopy(&r[0], &D_L14_001DFD80[D_L14_00161CF8_macro[j]]);
         transform_vector(&r[1], &r[0], &m[0]);
         o = &os[j * 16];
         r[0].x += o->x;
@@ -1634,7 +1634,7 @@ void FUN_L14_002edc18(void) {
             transform_vector(&q[0].v[3], &q[0].v[3], &m2[0]);
             transform_vector(&q[1].v[2], &q[1].v[2], &m2[0]);
             transform_vector(&q[1].v[3], &q[1].v[3], &m2[0]);
-            t = convert_integer_to_float(*s) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70));
+            t = convert_integer_to_float(*s) / convert_integer_to_float(scale_game_frames_alt(D_L14_00161C70_gp));
             a = func_001FA898_r(t * 255.0f) - D_L14_00161CE0[0];
             if (a < 0) a = 0;
             if (a > 0xFF) a = 0xFF;

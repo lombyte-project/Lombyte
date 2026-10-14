@@ -945,7 +945,7 @@ typedef struct {
     OvlQuad rest[4];
 } Goal_52b8;
 
-extern char *D_L15_0015FFE4_52b8 __asm__("D_L15_0015FFE4");
+extern char *D_L15_0015FFE4 ;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void add_vector_xyz_52b8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -969,7 +969,7 @@ float FUN_L15_002c52b8(struct Moby *m, float *out, Goal_52b8 goal) {
     clear = 1;
     clear_u64_value(out);
     wsum = 0.0f;
-    for (o = D_L15_0015FFE4_52b8; o != 0; o = *(char **)(o + 0x28)) {
+    for (o = D_L15_0015FFE4; o != 0; o = *(char **)(o + 0x28)) {
         if (o == m)
             continue;
         if (*(short *)(o + 0xA6) != m->oclass)

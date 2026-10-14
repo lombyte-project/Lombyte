@@ -614,12 +614,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002062b0.s", FUN_L00_002062b0);
 #else
 #include "rnc/overlay/quad.h"
 extern char D_0013F350_002062b0[] __asm__("D_0013F350");
-extern f32 D_0015EE18_002062b0 __asm__("D_0015EE18") __attribute__((section(".sdata")));
+extern f32 D_0015EE18_macro __asm__("D_0015EE18") __attribute__((section(".sdata")));
 extern volatile f32 D_0015ED6C_002062b0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 D_0015ED60_002062b0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern f32 D_0015ED60_gp_002062b0 __asm__("D_0015ED60_gp") __attribute__((sda));
 extern f32 D_0015EE18_gp_002062b0 __asm__("D_0015EE18_gp") __attribute__((sda));
-extern u8 D_0015EDB3_002062b0 __asm__("D_0015EDB3") __attribute__((section(".sdata")));
+extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F5CC_002062b0 __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
 extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((section(".data")));
 extern void FUN_L00_00232670(void);
@@ -699,7 +699,7 @@ void FUN_L00_002062b0(void) {
     FUN_L00_00207c48();
     FUN_L00_00207a58();
     if (*(u8 *)(g + 0x20a4) == 1) {
-        D_L00_0017B85C_002062b0 = D_0015EE18_002062b0;
+        D_L00_0017B85C_002062b0 = D_0015EE18_macro;
         FUN_L00_002059d8();
         if (*(char **)(g + 0x1624) == 0) {
             *(char **)(g + 0x1624) = FUN_0020c4f8_002062b0(0x4b4);
@@ -735,7 +735,7 @@ void FUN_L00_002062b0(void) {
                     *(f32 *)(*(char **)(g + 0x1624) + 0x18) -= ((f32 *)&scratch.help.offset)[2];
                     FUN_L00_00250df8(*(char **)(g + 0x1624));
                     scale = 1.7f;
-                    if (D_0015EDB3_002062b0) scale = 3.1f;
+                    if (D_0015EDB3_macro) scale = 3.1f;
                     if (*(s16 *)(g + 0x22fc)) scale *= 1.4f;
                     FUN_L00_0025b868_002062b0(*(f32 *)(*(char **)(*(char **)(g + 0x1624) + 0x24) + 0x24) * scale, 0.02f, *(char **)(g + 0x1624) + 0x2c);
                 }
@@ -814,7 +814,7 @@ void FUN_L00_002062b0(void) {
     FUN_L00_002484e0(&hero.motion.pos);
     if (hero.vehicle_mode == 2) {
         char *g = (char *)&hero;
-        if (D_0015EDB3_002062b0) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x210) = 1.4f * D_0015EE18_gp_002062b0;
+        if (D_0015EDB3_macro) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x210) = 1.4f * D_0015EE18_gp_002062b0;
         FUN_L00_002059d8();
         FUN_L00_002061f0();
         g = (char *)&hero;
@@ -827,7 +827,7 @@ void FUN_L00_002062b0(void) {
     }
     if (hero.vehicle_mode == 3) {
         /* D_0015EDB1 is the byte two bytes before the checked D_0015EDB3 base. */
-        if (*((u8 *)&D_0015EDB3_002062b0 - 2)) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x370) = 1.9f;
+        if (*((u8 *)&D_0015EDB3_macro - 2)) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x370) = 1.9f;
         {
             char *g = (char *)&hero;
             alpha = 0x80;

@@ -734,7 +734,7 @@ extern char D_0013E550[];
 extern char D_L01_001BB6B0[];
 extern s32 D_0014C190[][64];
 extern s32 D_L01_001742D8;
-extern char *D_L01_00167280_df40 __asm__("D_L01_00167280");
+extern char *D_L01_00167280_lui ;
 extern char D_L01_0020BA10[], D_L01_0020BA30[];
 extern s32 D_L01_00162098 __attribute__((sda));
 extern s32 D_L01_0016209C __attribute__((sda));
@@ -965,7 +965,7 @@ void FUN_L01_0030df40(struct Moby *m) {
                 m->anim_speed = random_float_between_alt(0.95f, 1.05f);
             }
         }
-        if (*(s32 *)(g + 0x1130) == 0 || *(s32 *)(g + 0x1158) != 5 || hero.state.control_mode == 22 || hero.state.control_mode == 20 || hero.vehicle_mode != 0 || *(s16 *)(D_L01_00167280_df40 + 0x86) == 20 || FUN_001f9740(p + 0x58) || D_L01_0016209C <= HOVER_I(0x5c)) {
+        if (*(s32 *)(g + 0x1130) == 0 || *(s32 *)(g + 0x1158) != 5 || hero.state.control_mode == 22 || hero.state.control_mode == 20 || hero.vehicle_mode != 0 || *(s16 *)(D_L01_00167280_lui + 0x86) == 20 || FUN_001f9740(p + 0x58) || D_L01_0016209C <= HOVER_I(0x5c)) {
             qzero(p + 0x10);
             HOVER_S(0x52) = D_L01_001620A4;
             if (HOVER_I(0x64) != -1 && HOVER_SOUND_VALID) FUN_0022d798(HOVER_I(0x64));
@@ -1656,9 +1656,9 @@ void FUN_L01_00316030(CamUser_316030 *o) {
 
 extern char *FUN_L00_001eb1f8(int);
 
-extern char *D_L01_00167280 __attribute__((section(".data")));
+extern char *D_L01_00167280_lui __asm__("D_L01_00167280") __attribute__((section(".data")));
 void FUN_L01_00316e88(float a, float b) {
-    char *m = D_L01_00167280;
+    char *m = D_L01_00167280_lui;
     char *t;
     char *d;
     if (*(short *)(m + 0x86) != 5)

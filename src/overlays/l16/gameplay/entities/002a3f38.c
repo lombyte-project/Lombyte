@@ -920,7 +920,7 @@ extern void func_001F9BD8_c9a50(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_0022ED80_cae18_c9a50(int, int, void *) __asm__("FUN_0022da68");
 extern int *D_L16_001ABFC0_c9a50[] __asm__("D_L16_001ABCC0");
 extern char *D_L16_00160098_c9a50 __asm__("D_L16_0015FFD8");
-extern char D_L16_00167240_c9a50[] __asm__("D_L16_001671C0");
+extern char D_L16_001671C0[] ;
 extern char D_0013E633_c9a50[] __asm__("D_0013E550");
 void FUN_L16_002c9a50(struct Moby *m) {
     short *p = (short *)D_L16_001ABFC0_c9a50[m->group];
@@ -933,14 +933,14 @@ void FUN_L16_002c9a50(struct Moby *m) {
     do {
         char *other = D_L16_00160098_c9a50 + (((unsigned short)*p & 0x7FFF) << 8);
         if (*(short *)(other + 0xA6) == 0x1D7) {
-            float dist = func_001F9D10_c9a50(D_L16_00167240_c9a50, other + 0x10);
+            float dist = func_001F9D10_c9a50(D_L16_001671C0, other + 0x10);
             if (dist < best) {
                 nearest = other;
                 best = dist;
             }
         }
     } while (*p++ >= 0);
-    if (func_001F9D10_c9a50(nearest + 0x10, D_L16_00167240_c9a50) < 64.0f) {
+    if (func_001F9D10_c9a50(nearest + 0x10, D_L16_001671C0) < 64.0f) {
         int idx = *(int *)(d + 0x74);
         char *slot;
         if (idx >= 0) {
@@ -1150,7 +1150,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float vector_length_xyz(void *a);
 extern int D_L16_0015F580_c __asm__("D_L16_0015F580");
 extern char *D_L16_001600EC_c __asm__("D_L16_001600EC");
-extern int D_L16_001619C8 __attribute__((sda));
+extern int D_L16_001619C8_gp __asm__("D_L16_001619C8") __attribute__((sda));
 extern float D_L16_001619CC __attribute__((sda));
 extern float D_L16_001619D0 __attribute__((sda));
 extern float D_L16_001619D4 __attribute__((sda));
@@ -1322,7 +1322,7 @@ void FUN_L16_002cddb8(unsigned char *m) {
             subtract_vector_xyz(v0.f, path + (d->node * 16 + 16), position);
             FUN_L00_0025f730(v0.f, D_L16_001619D0 * D_0015ED6C);
             add_vector_xyz(position, position, v0.f);
-            moby_point_position(m, D_L16_001619C8, v1.f);
+            moby_point_position(m, D_L16_001619C8_gp, v1.f);
             func_L00_0025A8E8_2cf180(m, 0.333f, v1.f, 1, 1.0f, 1.0f, 0, 1, 0);
             g = &hero;
             if (D_L16_00174258 == ((char *)g->moby) && g->invulnerable_frames == 0) {
@@ -1512,7 +1512,7 @@ typedef struct L16HitMoby {
 } L16HitMoby;
 
 extern float FUN_001f9e90_c2(float,float) __asm__("FUN_001f9e90");
-extern int D_L16_001619C8_d __asm__("D_L16_001619C8") __attribute__((sda)); /* no foreign declaration */
+extern int D_L16_001619C8_gp __asm__("D_L16_001619C8") __attribute__((sda)); /* no foreign declaration */
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern void FUN_L16_002cee70_c(char *) __asm__("FUN_L16_002cee70");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -1592,8 +1592,8 @@ void FUN_L16_002ce9f0(void *moby) {
     m->opacity = 255;
     FUN_L00_0025d538(m, d->reaction);
     if (d->child) {
-        moby_point_position(m, D_L16_001619C8_d, d->child->position);
-        build_moby_bone_transform((char *)m, D_L16_001619C8_d, (char *)matrix);
+        moby_point_position(m, D_L16_001619C8_gp, d->child->position);
+        build_moby_bone_transform((char *)m, D_L16_001619C8_gp, (char *)matrix);
         copy_matrix3x4(d->child->matrix[0], matrix);
         normalize_vector_xyz_c2(d->child->matrix[0], d->child->matrix[0], 1.0f);
         normalize_vector_xyz_c2(d->child->matrix[1], d->child->matrix[1], 1.0f);
@@ -2699,7 +2699,7 @@ void *FUN_L16_002d5db0(int index, void *position) {
             return nearest;
     }
 }
-extern int D_L16_0015F5CC_g5e80 __asm__("D_L16_0015F5CC");
+extern int D_L16_0015F5CC ;
 extern s32 FUN_001f99a8_5e80(s32) __asm__("FUN_001f99a8");
 extern s32 FUN_001f96f8_5e80(s32) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_5e80(int, int, void *) __asm__("FUN_0022da68");
@@ -2707,8 +2707,8 @@ extern void FUN_0022da68_5e80(int, int, void *) __asm__("FUN_0022da68");
 void FUN_L16_002d5e80(struct Moby *m) {
     char *d = (char *)m->pvars;
     if (*(int *)(d + 8) == 0) {
-        if (FUN_001f99a8_5e80(*(int *)&D_L16_00161A88 - D_L16_0015F5CC_g5e80) >= 4) {
-            *(int *)&D_L16_00161A88 = D_L16_0015F5CC_g5e80;
+        if (FUN_001f99a8_5e80(*(int *)&D_L16_00161A88 - D_L16_0015F5CC) >= 4) {
+            *(int *)&D_L16_00161A88 = D_L16_0015F5CC;
             FUN_0022da68_5e80(0, 0, m);
         }
     }
@@ -2728,7 +2728,7 @@ typedef struct {
 
 extern char D_0013E633_q[], D_0014171B[], D_0013D388[], D_L16_00167240[] __asm__("D_0013E633");
 extern char D_0014162A_q[] __asm__("D_0014162A") __attribute__((section(".data")));
-extern char D_L16_001671C0_q[] __asm__("D_L16_001671C0") __attribute__((section(".data")));
+extern char D_L16_001671C0_lui[] __asm__("D_L16_001671C0") __attribute__((section(".data")));
 extern int D_L16_001600EC_m __asm__("D_L16_001600EC");
 extern int FUN_L01_0026e008_q(int, int) __asm__("FUN_L01_0026e008");
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
@@ -2777,7 +2777,7 @@ void FUN_L16_002d5ef8(struct Moby *m) {
         m->state = 2;
         if (d->camera >= 0)
             *(unsigned short *)(player + 0x225A) = *(unsigned short *)&d->camera;
-        FUN_L00_002eaaa0_q(D_L16_001671C0_q, D_L16_001671C0_q + 0x10, 1, 0, 0);
+        FUN_L00_002eaaa0_q(D_L16_001671C0_lui, D_L16_001671C0_lui + 0x10, 1, 0, 0);
         helper = FUN_L16_002d5bc8_q(d->helper, 0);
         goto notify;
     }

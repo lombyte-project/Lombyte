@@ -329,9 +329,9 @@ extern float FUN_L00_0025abf0_2bef68(void *, void *, void *, float, float) __asm
 extern char *FUN_L03_002c45d8_2bef68(char *owner, float *pos, float *dir, short ang, int arg) __asm__("FUN_L03_002c45d8");
 extern int FUN_001f96f8_2bef68(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0025d538_2bef68(void *, void *) __asm__("FUN_L00_0025d538");
-extern char D_L03_00166EC0_2bef68[] __asm__("D_L03_00166EC0");
+extern char D_L03_00166EC0[] ;
 extern char D_0013E533_2bef68[] __asm__("D_0013E533");
-extern float D_L03_0015F580_2bef68[] __asm__("D_L03_0015F580") __attribute__((section(".sdata")));
+extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") __attribute__((section(".sdata")));
 extern float D_0015ED70_2bef68 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
@@ -361,7 +361,7 @@ void FUN_L03_002bef68(struct Moby *moby) {
 
     if (moby == 0) return;
     d = (Data_2C0330 *)moby->pvars;
-    if (moby->visible != 0 && FUN_001f9b48_2bef68(&moby->pos, D_L03_00166EC0_2bef68) < 28.0f) {
+    if (moby->visible != 0 && FUN_001f9b48_2bef68(&moby->pos, D_L03_00166EC0) < 28.0f) {
         FUN_L00_0025a120_2bef68(moby);
         moby->shadow_range = 0x16;
     }
@@ -495,7 +495,7 @@ void FUN_L03_002bef68(struct Moby *moby) {
         float *p;
         Vec4A_2bef68 *vel;
         z = 0.0f;
-        p = D_L03_0015F580_2bef68;
+        p = D_L03_0015F580_macro;
         FUN_L00_0025e450_2bef68(moby, d->f70, 0, 0.0f, 0.0f, 0x1E, 8, 0x14, 8.0f, 4.0f, 18.0f, 1.0f, 1, 15.0f, 1, 1, -1, 0);
         vel = (Vec4A_2bef68 *)&moby->rot;
         FUN_L00_00263fd8_2bef68(moby, 0x6C5, &moby->pos, vel, 0, 0, z, p, p, p);
@@ -947,7 +947,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern float D_L03_0015F580_c[] __asm__("D_L03_0015F580") __attribute__((section(".sdata")));
+extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") __attribute__((section(".sdata")));
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -1039,7 +1039,7 @@ extern void func_L00_001FF240_2CDDC8(void *, void *, void *) __asm__("FUN_L00_00
 extern void func_L00_0025F4A8_2CDDC8(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void func_L00_002584A8_2CDDC8(void *, int, int) __asm__("FUN_L00_00257470");
 extern void func_L00_00265050_2CDDC8(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
-extern char D_L03_00166F40_2CDDC8[] __asm__("D_L03_00166EC0");
+extern char D_L03_00166EC0[] ;
 extern void func_L00_0025B178_2CDDC8(void *) __asm__("FUN_L00_0025a120");
 extern void func_L00_00251E30_2CDDC8(void *) __asm__("FUN_L00_00250df8");
 
@@ -1294,9 +1294,9 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *moby) {
         }
         func_L00_0025F4A8_2CDDC8(moby,work.movement,moby->position,0.0f,0.0f,20,3,4,4.0f,2.0f,100000.0f,3.0f,2,15.0f,1,1,-1,0);
         func_L00_002584A8_2CDDC8(moby,0,-1);
-        func_L00_00265050_2CDDC8(moby,0x637,moby->position,moby->rotation,0,0,0.0f,D_L03_0015F580_c,D_L03_0015F580_c,D_L03_0015F580_c);
-        func_L00_00265050_2CDDC8(moby,0x638,moby->position,moby->rotation,0,0,0.0f,D_L03_0015F580_c,D_L03_0015F580_c,D_L03_0015F580_c);
-        func_L00_00265050_2CDDC8(moby,0x639,moby->position,moby->rotation,0,0,0.0f,D_L03_0015F580_c,D_L03_0015F580_c,D_L03_0015F580_c);
+        func_L00_00265050_2CDDC8(moby,0x637,moby->position,moby->rotation,0,0,0.0f,D_L03_0015F580_macro,D_L03_0015F580_macro,D_L03_0015F580_macro);
+        func_L00_00265050_2CDDC8(moby,0x638,moby->position,moby->rotation,0,0,0.0f,D_L03_0015F580_macro,D_L03_0015F580_macro,D_L03_0015F580_macro);
+        func_L00_00265050_2CDDC8(moby,0x639,moby->position,moby->rotation,0,0,0.0f,D_L03_0015F580_macro,D_L03_0015F580_macro,D_L03_0015F580_macro);
         func_0020D9D8_2CDDC8(moby,data->gun_yaw_matrix); func_0020D9D8_2CDDC8(moby,data->gun_pitch_matrix);
         if (data->sound!=-1) {
             unsigned char *audio=(unsigned char*)(D_0013E633_2CDDC8+0x1D+data->sound*0x70);
@@ -1306,7 +1306,7 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *moby) {
     }
     default: break;
     }
-    if (moby->nearby && func_001F9D10_2CDDC8(moby->position,D_L03_00166F40_2CDDC8)<40.0f) func_L00_0025B178_2CDDC8(moby);
+    if (moby->nearby && func_001F9D10_2CDDC8(moby->position,D_L03_00166EC0)<40.0f) func_L00_0025B178_2CDDC8(moby);
     moby->position[2]-=D_L03_00161998*func_001F9F90_2CDDC8(data->bob);
     data->bob=func_001FA748_2CDDC8(data->bob,6.2831855f/func_001F9878_2CDDC8(D_L03_00161994*60.0f));
     moby->position[2]+=D_L03_00161998*func_001F9F90_2CDDC8(data->bob);

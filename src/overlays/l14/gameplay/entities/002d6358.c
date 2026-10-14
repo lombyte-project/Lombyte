@@ -23,7 +23,7 @@ typedef struct {
 extern int *D_L14_001B0BB0[];
 extern int D_L14_0015F70C;
 extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
-extern float D_L14_00161A38 __attribute__((sda));
+extern float D_L14_00161A38_gp __asm__("D_L14_00161A38") __attribute__((sda));
 
 void FUN_L14_002d6358(struct Moby *m) {
     char *d = (char *)m->pvars;
@@ -33,7 +33,7 @@ void FUN_L14_002d6358(struct Moby *m) {
     int k;
     float z;
     unsigned short n;
-    *(float *)(d + 0x74) = D_L14_00161A38;
+    *(float *)(d + 0x74) = D_L14_00161A38_gp;
     *(int *)(d + 0x68) = 0;
     *(int *)(d + 0x64) = 0;
     z = *(float *)(d + 0x68);
@@ -83,7 +83,7 @@ extern unsigned short *D_L14_001ABF40_6570[] __asm__("D_L14_001ABF40");
 extern char *D_L14_0015FFD8_6570 __asm__("D_L14_0015FFD8");
 extern char *D_L14_0015F70C_6570 __asm__("D_L14_0015F70C");
 extern char *D_L14_001B0BB0_6570[] __asm__("D_L14_001B0BB0");
-extern float D_L14_00161A38_6570 __asm__("D_L14_00161A38") __attribute__((sda));
+extern float D_L14_00161A38_gp __asm__("D_L14_00161A38") __attribute__((sda));
 typedef struct { char p[0x48]; float f48; } M_6570;
 typedef struct {
     char p0[0x80];
@@ -143,7 +143,7 @@ void FUN_L14_002d6570(struct Moby *m) {
         char *path = *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10);
         o[0x20] = 6;
         ((M_6570 *)o)->f48 = angle_atan2(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
-        s = -D_L14_00161A38_6570;
+        s = -D_L14_00161A38_gp;
         *(int *)(od + 0x64) = hero.unk564;
         *(float *)(od + 0x68) = hero.unk568;
         FUN_L00_0025d808_6570(path, o + 0x10, od + 0x64, od + 0x68, 0, s);
@@ -184,7 +184,7 @@ extern float D_L14_00161A4C __attribute__((sda));
 extern float D_L14_00161A50 __attribute__((sda));
 extern float D_L14_00161A54 __attribute__((sda));
 extern float D_L14_00161A58 __attribute__((sda));
-extern char D_L14_001809C0_67e8[] __asm__("D_L14_001809C0");
+extern char D_L14_001809C0[] ;
 extern char D_L14_0015F580_67e8[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void spring_67e8(void *, void *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
@@ -246,7 +246,7 @@ void FUN_L14_002d67e8(struct Moby *m) {
         if (sum > 1.0f) {
             sum = 1.0f;
         }
-        *(float *)(d + 0x74) = D_L14_00161A38 + (-3.0f - D_L14_00161A38) * sum;
+        *(float *)(d + 0x74) = D_L14_00161A38_gp + (-3.0f - D_L14_00161A38_gp) * sum;
     }
     *(int *)(d + 0x68) = 0;
     *(int *)(d + 0x64) = 0;
@@ -401,7 +401,7 @@ void FUN_L14_002d67e8(struct Moby *m) {
                 *(int *)(d + 0xF0) = light_67e8(&ray.self, r, 0.0f, D_L14_00161A50, D_L14_00161A54, D_L14_00161A58);
             }
             if (*(int *)(d + 0xF0) >= 0) {
-                float *l = (float *)(D_L14_001809C0_67e8 + (*(int *)(d + 0xF0) << 5));
+                float *l = (float *)(D_L14_001809C0 + (*(int *)(d + 0xF0) << 5));
                 qcopy(l + 4, &ray.self);
                 l[7] = r;
                 l[0] = D_L14_00161A50;
