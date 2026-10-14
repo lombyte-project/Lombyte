@@ -543,9 +543,9 @@ int FUN_L00_00236e50(HudElem *e) {
     int x = e->unk50, y = e->unk54;
     int i, star_width = 0;
     float half_h, offset, half_w;
+    int xbase, ybase;
     struct { float x, y, z, w; } origin, direction, first_step, second_step, third_step, star_position;
     void *image;
-    float *star_y;
 
     e->w = D_L00_0015F760;
     e->h = D_L00_0015F764;
@@ -554,19 +554,25 @@ int FUN_L00_00236e50(HudElem *e) {
     image = FUN_0023b208(*(int *)e, 0);
     FUN_L00_0023bac0(image, x + e->unk48, y + e->unk4A,
                        D_L00_0015F760, D_L00_0015F764, 0x80);
+    origin.z = 1.0f;
+    origin.w = 1.0f;
     half_h = (float)D_L00_0015F764 * D_L00_0015F76C * 0.5f;
     offset = (float)(10000 - e->unk74) / 10000.0f;
     half_w = (float)D_L00_0015F760 * D_L00_0015F768 * 0.5f;
-    direction.x = (half_w + (float)(x + e->unk48) +
-        (1.0f - D_L00_0015F768) * 0.5f * (float)D_L00_0015F760) * 16.0f;
-    direction.y = (half_h + (float)(y + e->unk4A) +
-        (1.0f - D_L00_0015F76C) * 0.5f * (float)D_L00_0015F764) * 16.0f;
-    origin.z = 1.0f;
-    origin.w = 1.0f;
+    xbase = x + e->unk48;
+    ybase = y + e->unk4A;
+    origin.x = half_w / 17.0f;
+    origin.y = -half_h / 116.0f;
     direction.z = 0.0f;
     direction.w = 0.0f;
-    origin.x = (half_w / 17.0f) * 16.0f;
-    origin.y = (-half_h / 116.0f) * 16.0f;
+    direction.y = half_h + (float)ybase;
+    direction.x = half_w + (float)xbase;
+    direction.x += (1.0f - D_L00_0015F768) * 0.5f * (float)D_L00_0015F760;
+    direction.y += (1.0f - D_L00_0015F76C) * 0.5f * (float)D_L00_0015F764;
+    direction.x *= 16.0f;
+    direction.y *= 16.0f;
+    origin.x *= 16.0f;
+    origin.y *= 16.0f;
     offset = 116.0f - (offset + offset) * 116.0f;
     image = FUN_0023b208(*(int *)e, 1);
     FUN_001ff260(&first_step);
@@ -575,14 +581,13 @@ int FUN_L00_00236e50(HudElem *e) {
     first_step.y = first_step.x = D_L00_0015F750 * 16.0f;
     second_step.y = second_step.x = (D_L00_0015F754 - D_L00_0015F750) * 16.0f;
     third_step.y = third_step.x = (D_L00_0015F758 - D_L00_0015F754) * 16.0f;
-    star_y = &D_L00_0017E660[0].y;
-    for (i = 0; i < 100; i++, star_y += 4) {
+    for (i = 0; i < 100; i++) {
         if (i == 0) {
             FUN_001ff2a8(&direction, &direction, &first_step);
             offset += D_L00_0015F750;
             star_width = (int)(D_L00_0015F750 * 32.0f);
         }
-        if (!(offset < *star_y)) {
+        if (!(offset < D_L00_0017E660[i].y)) {
             FUN_L00_001ff348(&star_position, &D_L00_0017E660[i], &origin);
             FUN_001ff278(&star_position, &star_position, &direction);
             FUN_L00_0023bd20(image, (int)star_position.x, (int)star_position.y,
