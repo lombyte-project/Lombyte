@@ -460,11 +460,8 @@ void FUN_L08_002f1548(struct Moby *moby) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002f44c0.s", FUN_L08_002f44c0);
-#else
 extern char D_0013F3D0[];
-extern char D_L08_0015F580[];
+extern char D_L08_0015F580[] __attribute__((section(".sdata")));
 extern s32 D_001413D4 __attribute__((section(".data")));
 extern struct Moby *D_0013F58C __attribute__((section(".data")));
 /* Retail loads gp - 0x4C90; GP 0x166C00 places this scalar at 0x161F70. */
@@ -484,8 +481,8 @@ extern f32 approach_value_44c0(void *, f32, f32) __asm__("FUN_00213ed8");
 extern void mark_moby_for_removal_44c0(struct Moby *) __asm__("FUN_0020c828");
 extern void allocate_voice_for_target_entry_44c0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void FUN_L00_00258278_44c0(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
-extern void FUN_L00_0025e450_44c0(void *, void *, void *, f32, f32, s32, s32, s32,
-                         f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+extern void FUN_L00_0025e450_44c0(char *, void *, char *, f32, f32, s32, s32, s32,
+                         f32, f32, f32, f32, s32, f32, s32, s32, s32, u8) __asm__("FUN_L00_0025e450");
 
 void FUN_L08_002f44c0(struct Moby *moby)
 {
@@ -498,35 +495,31 @@ void FUN_L08_002f44c0(struct Moby *moby)
     f32 distance;
 
     switch (moby->state) {
-    case 0: goto state_zero;
-    case 1: goto state_one;
-    case 2: goto state_two;
-    case 3: goto state_three;
-    default: return;
-    }
-state_zero: {
+    case 0: {
         fade = moby->pos.z;
         moby->state = 1;
         moby->pos.z = fade + 0.4f;
         return;
     }
-state_one: {
+    case 1: {
         s32 active = find_moby_hit_44c0(moby, 0x330000, 0);
         distance = FUN_001f9b80_44c0(&moby->pos, D_0013F3D0);
         if ((distance < 2.0f && *(s32 *)(D_0013F3D0 + 0x2004) == 0x42) || *(struct Moby **)(D_0013F3D0 + 0x1bc) == moby) {
             allocate_voice_for_target_entry_44c0(0, 0, moby);
             FUN_L00_0025e450_44c0(moby, D_L08_0015F580, &moby->pos, 3.0f, 1.0f, 10, 20, 60,
                           3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-        } else {
-            if (active == 0) return;
+            mark_moby_for_removal_44c0(moby);
+            return;
+        }
+        if (active != 0) {
             allocate_voice_for_target_entry_44c0(0, 0, moby);
             FUN_L00_0025e450_44c0(moby, D_L08_0015F580, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                           1.0f, 3.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
+            mark_moby_for_removal_44c0(moby);
         }
-        mark_moby_for_removal_44c0(moby);
         return;
     }
-state_two: {
+    case 2: {
         moby->pos.z -= 0.4f;
         if (follower->path_id == -1 || follower->path->count == 0) {
             mark_moby_for_removal_44c0(moby);
@@ -568,15 +561,15 @@ state_two: {
         moby->pos.z += 0.4f;
         return;
     }
-state_three: {
+    case 3: {
         Vec4 timer;
         timer.f[0] = (f32)moby->alpha;
         approach_value_44c0(&timer, 0.0f, 128.0f / (f32)scale_game_frames_44c0(30));
         moby->alpha = (u8)(s32)timer.f[0];
         if (moby->alpha == 0) mark_moby_for_removal_44c0(moby);
     }
+    }
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
