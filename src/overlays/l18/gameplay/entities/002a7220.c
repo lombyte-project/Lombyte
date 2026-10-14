@@ -2691,7 +2691,143 @@ void FUN_L18_002ea598(struct Moby *moby) {
         FUN_00218888(v10, v20, v30, c1, c2, a, b, c, (*(int *)&(D_L18_00161F68)));
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea800.s", FUN_L18_002ea800);
+#else
+extern void FUN_L06_0030bef8(void *, int, int, int);
+extern void FUN_00214db0(void *, float, float, float);
+extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
+extern int D_L18_00161F6C __attribute__((sda));
+extern int D_L18_00161F78 __attribute__((sda));
+extern int D_L18_00161F7C __attribute__((sda));
+extern int D_L18_00161F80 __attribute__((sda));
+extern int D_L18_00161F84 __attribute__((sda));
+extern int D_L18_00161F88 __attribute__((sda));
+extern int D_L18_00161F98 __attribute__((sda));
+extern int D_L18_00161FAC __attribute__((sda));
+extern int D_L18_00161FB0 __attribute__((sda));
+extern int D_L18_00161FB4 __attribute__((sda));
+extern int D_L18_00161FB8 __attribute__((sda));
+extern int D_L18_00161FC4 __attribute__((sda));
+extern int D_L18_00161FD0 __attribute__((sda));
+extern int D_L18_00161FDC __attribute__((sda));
+extern int D_L18_00161FE8 __attribute__((sda));
+extern float D_L18_00161F70 __attribute__((sda));
+extern float D_L18_00161F74 __attribute__((sda));
+extern float D_L18_00161F8C __attribute__((sda));
+extern float D_L18_00161F90 __attribute__((sda));
+extern float D_L18_00161F94 __attribute__((sda));
+extern float D_L18_00161FA0 __attribute__((sda));
+extern float D_L18_00161FA4 __attribute__((sda));
+extern float D_L18_00161FA8 __attribute__((sda));
+extern float D_L18_00161FBC __attribute__((sda));
+extern float D_L18_00161FC0 __attribute__((sda));
+extern float D_L18_00161FCC __attribute__((sda));
+extern float D_L18_00161FD8 __attribute__((sda));
+extern float D_L18_00161FE4 __attribute__((sda));
+extern volatile unsigned char D_L18_00161FC8 __attribute__((sda));
+extern volatile unsigned char D_L18_00161FD4 __attribute__((sda));
+extern volatile unsigned char D_L18_00161FE0 __attribute__((sda));
+extern volatile unsigned char D_L18_00161FC9 __attribute__((section(".sdata")));
+extern volatile unsigned char D_L18_00161FCA __attribute__((section(".sdata")));
+extern volatile unsigned char D_L18_00161FCB __attribute__((section(".sdata")));
+extern volatile unsigned char D_L18_00161FD5 __attribute__((section(".sdata")));
+extern volatile unsigned char D_L18_00161FD6 __attribute__((section(".sdata")));
+extern volatile unsigned char D_L18_00161FD7 __attribute__((section(".sdata")));
+extern volatile unsigned char D_L18_00161FE1 __attribute__((section(".sdata")));
+extern volatile unsigned char D_L18_00161FE2 __attribute__((section(".sdata")));
+extern volatile unsigned char D_L18_00161FE3 __attribute__((section(".sdata")));
+extern int D_L18_001D9C70[];
+extern int D_L18_001D9C88[];
+extern char D_L18_00167680_effect[] __asm__("D_L18_00167680") __attribute__((section(".data")));
+
+void FUN_L18_002ea800(void *arg) {
+    float v10[4] __attribute__((aligned(16)));
+    float v20[4] __attribute__((aligned(16)));
+    struct Moby *moby = arg;
+    int i = 0;
+    int j;
+    void *pos;
+    int a;
+    volatile char *effect;
+    *(Q128 *)v10 = *(Q128 *)&moby->pos;
+    FUN_L06_0030bef8(v10, scale_ticks(30), 0x80806060, 0x801010);
+    FUN_L00_0028dc90(0x10, 0, (int)arg, 0x58E);
+    if (D_L18_00161F6C > 0) {
+        int a, b, c;
+        float angle, elevation, scale, speed;
+        do {
+            ++i;
+            elevation = random_float_between(-0.34906584f, 0.34906584f);
+            angle = random_angle_radians();
+            speed = random_float_between(D_L18_00161F70, D_L18_00161F74);
+            FUN_00214db0(v10, speed * frame_time, angle, elevation);
+            scale_vector_xyz(v20, v10, D_L18_00161F94);
+            scale = random_float_between(0.8f, 1.2f);
+            v20[3] = v10[3] = D_L18_00161F8C;
+            v20[2] += D_L18_00161F90 * scale * frame_time;
+            scale = random_float_between(0.8f, 1.2f);
+            a = truncate_float_to_s32((float)scale_ticks(D_L18_00161F80) * scale);
+            b = truncate_float_to_s32((float)scale_ticks(D_L18_00161F84) * scale);
+            c = truncate_float_to_s32((float)scale_ticks(D_L18_00161F88) * scale);
+            FUN_00218888(&moby->pos, v10, v20, D_L18_00161F78, D_L18_00161F7C, a, b, c, *(int *)&D_L18_00161F68_d);
+        } while (i < D_L18_00161F6C);
+    }
+    j = 0;
+    if (D_L18_00161F98 > 0) {
+        int a, b, color1, color2;
+        float value_x, value_y;
+        float angle, elevation, scale, speed;
+        do {
+            ++j;
+            speed = random_float_between(D_L18_00161FA0, D_L18_00161FA4) * frame_time;
+            elevation = random_float_between(1.0471976f, 1.3962634f);
+            angle = random_angle_radians();
+            FUN_00214db0(v10, speed, angle, elevation);
+            angle = random_angle_radians();
+            value_x = FUN_001f9dc8(angle);
+            v20[0] = random_float_between(0.0f, D_L18_00161FBC);
+            value_x *= v20[0];
+            v20[0] = value_x;
+            value_y = fast_sin(angle);
+            v20[1] = random_float_between(0.0f, D_L18_00161FBC);
+            value_y *= v20[1];
+            v20[1] = value_y;
+            v20[2] = 0.0f;
+            add_vector_xyz(v20, v20, &moby->pos);
+            color1 = D_L18_001D9C70[random_integer_below(6)];
+            color2 = D_L18_001D9C88[random_integer_below(6)];
+            scale = D_L18_00161FA8 * 400000.0f;
+            a = scale_ticks(random_int_between(D_L18_00161FAC, D_L18_00161FB0));
+            b = scale_ticks(random_int_between(D_L18_00161FB4, D_L18_00161FB8));
+            spawn_particle_9768(v20, v10, color1, color2, a, b, scale, speed, 0, 0);
+        } while (j < D_L18_00161F98);
+    }
+    if (D_L18_00161FC0 > 0.0f) {
+        pos = &moby->pos;
+        a = scale_ticks(D_L18_00161FC4);
+        spawn_glow_particle(arg, pos, &D_L18_0015F580, D_L18_00161FC0, a,
+            D_L18_00161FC8, D_L18_00161FC9, D_L18_00161FCA, D_L18_00161FCB);
+    }
+    if (D_L18_00161FCC > 0.0f) {
+        pos = &moby->pos;
+        a = scale_ticks(D_L18_00161FD0);
+        spawn_glow_particle(arg, pos, &D_L18_0015F580, D_L18_00161FCC, a,
+            D_L18_00161FD4, D_L18_00161FD5, D_L18_00161FD6, D_L18_00161FD7);
+    }
+    if (D_L18_00161FD8 > 0.0f) {
+        pos = &moby->pos;
+        a = scale_ticks(D_L18_00161FDC);
+        spawn_glow_particle(arg, pos, &D_L18_0015F580, D_L18_00161FD8, a,
+            D_L18_00161FE0, D_L18_00161FE1, D_L18_00161FE2, D_L18_00161FE3);
+    }
+    if (D_L18_00161FE4 > 0.0f) {
+        effect = D_L18_00167680_effect;
+        *(volatile float *)(effect + 0x160) = D_L18_00161FE4;
+        *(volatile int *)(effect + 0x168) = scale_ticks(D_L18_00161FE8);
+    }
+}
+#endif
 /* Starts the moby's trail when requested: resets the trail points and the counters. */
 extern int D_L18_00162008_q __asm__("D_L18_00162008") __attribute__((sda));
 extern int D_L18_00162010_q __asm__("D_L18_00162010") __attribute__((sda));
