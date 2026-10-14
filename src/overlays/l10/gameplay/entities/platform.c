@@ -421,10 +421,11 @@ extern struct Moby *D_L10_0015FFD8;
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern unsigned char D_001413F4[];
-extern float D_0013F3D0[];
+extern char D_0013F3D0[];
 extern int D_L10_001618A8 __attribute__((sda));
 #define D_001618A8 (*(int *)0x001618a8)
-#define D_00167280 (*(char **)0x00167280)
+extern struct { char pad[0x180]; char *effect; } D_L10_00167100;
+#define D_00167280 D_L10_00167100.effect
 extern int D_001618A0 __asm__("D_L10_001618A0") __attribute__((sda));
 extern int D_001618A4 __asm__("D_L10_001618A4") __attribute__((sda));
 extern int FUN_001f96f8(int);
