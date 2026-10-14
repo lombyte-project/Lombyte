@@ -1899,7 +1899,8 @@ void FUN_L00_002be650(void *o) {
         else
             c = D_L00_00161760;
         i = 0;
-        state.color = c & 0xFFFFFF;
+        c &= 0xFFFFFF;
+        state.color = c;
     }
     state.vertexTarget = &vertex[0];
     do {
