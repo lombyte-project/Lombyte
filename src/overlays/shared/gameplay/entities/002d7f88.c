@@ -3054,30 +3054,30 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                     effect[0x2a] = 127;
                     effect[0x2b] = 200;
                 }
-                *(volatile short *)record = row;
+                *(short *)record = row;
                 *(volatile int *)(record + 4) = 0;
                 *(volatile int *)(record + 8) = 0;
-                *(volatile short *)(record + 2) = random_integer_below(20);
+                *(short *)(record + 2) = random_integer_below(20);
                 *(volatile float *)(record + 12) = FUN_00257be8_002ddf60(0.1f, 0.8f);
                 *(volatile float *)(record + 16) = FUN_00257be8_002ddf60(0.1f, 0.4f);
             }
         }
         if (*(char **)(record + 20)) {
-            row = *(volatile short *)record;
+            row = *(short *)record;
             FUN_001ff2a8_002ddf60(&temp1, D_L00_001E5F30 + row * 16, D_L00_001E5F40_002ddcb8 + row * 16);
             length = FUN_001ff3d8_002ddf60(&temp1);
             *(volatile float *)(record + 4) += *(volatile float *)(record + 16);
             *(short *)(*(char **)(record + 20) + 10) = 200;
             if (length < *(volatile float *)(record + 4)) {
-                index = (unsigned short)*(volatile short *)record - 1;
-                *(volatile short *)record = index;
+                index = (unsigned short)*(short *)record - 1;
+                *(short *)record = index;
                 /* Test the wrapped signed halfword, including the original zero case. */
                 if ((int)((unsigned int)index << 16) <= 0) {
                     func_L00_002688A8_2D9EA0(*(char **)(record + 20));
                     *(char **)(record + 20) = 0;
                 } else {
                     *(volatile float *)(record + 4) -= length;
-                    row = *(volatile short *)record;
+                    row = *(short *)record;
                     FUN_001ff2a8_002ddf60(&temp1, D_L00_001E5F30 + row * 16, D_L00_001E5F40_002ddcb8 + row * 16);
                     length = FUN_001ff3d8_002ddf60(&temp1);
                 }
@@ -3085,14 +3085,14 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
             if (*(char **)(record + 20)) {
                 record = D_L00_001E4C80_002ddf60 + (i * 3 << 3);
                 fraction = *(volatile float *)(record + 4) / length;
-                if (*(volatile short *)record == 2) *(short *)(*(char **)(record + 20) + 10) = 100;
-                else if (*(volatile short *)record < 2) {
+                if (*(short *)record == 2) *(short *)(*(char **)(record + 20) + 10) = 100;
+                else if (*(short *)record < 2) {
                     *(short *)(*(char **)(record + 20) + 10) = truncate_float_to_s32((1.0f - fraction) * 100.0f);
                     if (*(short *)(*(char **)(record + 20) + 10) < 61) *(short *)(*(char **)(record + 20) + 10) = 60;
                 }
                 i = (i * 3 << 3);
                 record = D_L00_001E4C80_002ddf60 + i;
-                if (*(volatile short *)record == 1) {
+                if (*(short *)record == 1) {
                     effect = *(char **)(record + 20);
                     FUN_001ff2a8_002ddf60(&temp2, initial_vector, effect + 16);
                     FUN_001ff500_002ddcb8(&temp2, &temp2, *(volatile float *)(record + 16));
@@ -3100,14 +3100,18 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                     *(float *)(effect + 12) *= frame_scale * -0.050000012f + 1.0f;
                 } else {
                     FUN_001ff300_002ddcb8(&temp1, &temp1, fraction);
-                    row = *(volatile short *)record;
+                    row = *(short *)record;
                     FUN_001ff278_002ddcb8(*(char **)(record + 20) + 16, D_L00_001E5F40_002ddcb8 + row * 16, &temp1);
-                    segment = *(volatile short *)(record + 2);
+                    row = *(short *)record;
+                    segment = *(short *)(record + 2);
                     FUN_001ff2a8_002ddf60(&temp2, D_L00_001E6020_002ddf60 + row * 320 + segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    row = *(short *)record;
                     FUN_001ff2a8_002ddf60(&edge, D_L00_001E6020_002ddf60 + row * 320 + segment * 16 - 0x140, D_L00_001E5F30 + row * 16);
                     interpolate_vector4_linear_002ddf60(&offset, &temp2, &edge, fraction);
                     next_segment = (segment + 19) % 20;
+                    row = *(short *)record;
                     FUN_001ff2a8_002ddf60(&direction, D_L00_001E6020_002ddf60 + row * 320 + next_segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    row = *(short *)record;
                     FUN_001ff2a8_002ddf60(&tangent, D_L00_001E6020_002ddf60 + row * 320 + next_segment * 16 - 0x140, D_L00_001E5F30 + row * 16);
                     interpolate_vector4_linear_002ddf60(&following, &direction, &tangent, fraction);
                     interpolate_vector4_linear_002ddf60(&offset, &offset, &following, *(volatile float *)(record + 8));
@@ -3115,7 +3119,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                     *(volatile float *)(record + 8) = value;
                     if (value >= 1.0f) {
                         *(volatile float *)(record + 8) = value - 1.0f;
-                        *(volatile short *)(record + 2) = next_segment;
+                        *(short *)(record + 2) = next_segment;
                     }
                     effect = *(char **)(record + 20);
                     FUN_001ff278_002ddcb8(effect + 16, effect + 16, &offset);
