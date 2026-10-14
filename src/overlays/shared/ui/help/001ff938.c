@@ -92,13 +92,17 @@ void FUN_L15_001ff938(void) {
         if (red > 0xFF) red = 0xFF;
         if (green > 0xFF) green = 0xFF;
         *(u16 *)((u8 *)hero.moby + 0x34) |= 0x10;
-        if (hero.unk22E0 == 2)
-            color = (alpha << 24) | (blue << 16) | ((red / 2) << 8) | green;
-        else
-            color = (alpha << 24) | (blue << 16) | (green << 8) | red;
+        if (hero.unk22E0 == 2) {
+            color = (alpha << 24) | (blue << 16) | ((red / 2) << 8);
+            color |= green;
+        } else {
+            color = (alpha << 24) | (blue << 16) | (green << 8);
+            color |= red;
+        }
         *(u32 *)((u8 *)hero.moby + 0x90) = FUN_001fa6e0(0.1f, *(u32 *)((u8 *)hero.moby + 0x90), color);
         for (i = 0; i < 3; i++)
             moby_point_position(hero.moby, i, (u8 *)&hero + 0x1D50 + i * 16);
+        base = &hero;
         alpha = 0x30;
         moby = (u8 *)base->moby;
         red_byte = moby[0x90];
@@ -106,7 +110,9 @@ void FUN_L15_001ff938(void) {
         blue_byte = moby[0x92];
         if (base->unk22DE != 0)
             alpha = FUN_001fa6d0((FUN_001fa6c0(base->unk22DE) / FUN_001fa6c0(0x12)) * (float)alpha);
-        *(u32 *)((u8 *)base + 0x22E4) = (alpha << 24) | (blue_byte << 16) | (green_byte << 8) | red_byte;
+        color = (alpha << 24) | (blue_byte << 16) | (green_byte << 8);
+        color |= red_byte;
+        *(u32 *)((u8 *)base + 0x22E4) = color;
         FUN_L00_00207d00();
         base->unk22E0 = 0;
         if (base->vehicle_mode == 3) {
