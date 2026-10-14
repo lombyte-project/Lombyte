@@ -1433,9 +1433,6 @@ void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, 
         out[2] = v;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c26c8.s", FUN_L00_002c26c8);
-#else
 typedef struct {
     u8 pad0[0x40];
     OvlVec4 grip;
@@ -1597,10 +1594,10 @@ void FUN_L00_002c26c8(struct Moby *moby) {
                 }
             }
         } else {
-            struct Moby **entry = D_L00_001ABA00_2c26c8;
+            s32 entry = 0;
             struct Moby *candidate;
             hero.unkA50 = 0;
-            while ((candidate = *entry) != 0) {
+            while ((candidate = D_L00_001ABA00_2c26c8[entry]) != 0) {
                 u8 *data = FUN_002141f8_2c26c8(candidate);
                 if ((s8)candidate->state >= 0 && data && (candidate->flags & 0x1000)) {
                     f32 candidateAngle, elevation, difference;
@@ -1672,7 +1669,6 @@ void FUN_L00_002c26c8(struct Moby *moby) {
     else if (FUN_L00_00233e98_2c1ad0(-1) || hero.unk20A8)
         vars->held = FUN_L00_002ace70(moby, &vars->grip);
 }
-#endif
 extern u8 D_0013E539;
 extern s32 D_L00_0015FFD8_2c35c0 __asm__("D_L00_0015FFD8");
 extern s16 D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section(".data")));
