@@ -36,7 +36,7 @@ void font_print_window(FontWindow *window, u64 color, u8 *text, s32 character_li
     s16 line_ends[32];
     s16 line_colors[32];
     s32 wrap_width;
-    volatile s32 initial_wrap_width;
+    s32 initial_wrap_width;
     s32 using_initial_width;
     s32 initial_line_count;
     s32 last_line_width;
@@ -76,16 +76,15 @@ void font_print_window(FontWindow *window, u64 color, u8 *text, s32 character_li
     initial_line_count = 0;
     last_line_width = 0;
     balance_divisor = 3;
-retry:
-    line_count = 0;
-    position = 0;
-    while (position != character_limit && text[position] != 0) {
-        line_starts[line_count] = position;
-        line_colors[line_count] = current_color;
-        break_position = position;
-        line_width = 0;
-        if (wrap_width > 0) {
-            do {
+    for (;;) {
+        line_count = 0;
+        position = 0;
+        while (position != character_limit && text[position] != 0) {
+            line_starts[line_count] = position;
+            line_colors[line_count] = current_color;
+            break_position = position;
+            line_width = 0;
+            while (line_width < wrap_width) {
                 if (text[position] == ' ' || text[position] < 0x10) {
                     break_position = position;
                 }
@@ -100,49 +99,50 @@ retry:
                 if (advance != 0) {
                     line_width += advance;
                 }
-            } while (line_width < wrap_width);
-        }
-        line_ends[line_count] = break_position;
-        if (line_ends[line_count] == line_starts[line_count]) {
-            line_ends[line_count] = position;
-        }
-        position = line_ends[line_count];
-        if (text[position] == ' ' || text[position] < 0x10) {
-            line_ends[line_count]--;
-        }
-        line_count++;
-        if (text[position] == 0) {
+            }
+            line_ends[line_count] = break_position;
+            if (line_ends[line_count] == line_starts[line_count]) {
+                line_ends[line_count] = position;
+            }
+            position = line_ends[line_count];
+            if (text[position] == ' ' || text[position] < 0x10) {
+                line_ends[line_count]--;
+            }
+            line_count++;
+            if (text[position] == 0) {
                 goto terminal_line;
+            }
+            position++;
         }
-        position++;
-    }
-after_scan:
-    next_line_count = line_count < 2;
-    if (using_initial_width) {
-        goto layout;
-    }
-    initial_line_count = initial_line_count ? initial_line_count : line_count;
-    if (next_line_count) {
-        goto layout;
-    }
-    if (initial_line_count < line_count) {
-        wrap_width = initial_wrap_width;
-        using_initial_width = 1;
-        goto retry;
-    }
-    goto compare_width;
+    after_scan:
+        next_line_count = line_count < 2;
+        if (using_initial_width) {
+            goto layout;
+        }
+        initial_line_count = initial_line_count ? initial_line_count : line_count;
+        if (next_line_count) {
+            goto layout;
+        }
+        if (initial_line_count < line_count) {
+            wrap_width = initial_wrap_width;
+            using_initial_width = 1;
+            continue;
+        }
+        goto compare_width;
 
-terminal_line:
-    /* Retail saves this width before testing whether to rebalance. */
-    last_line_width = line_width;
-    goto after_scan;
+    terminal_line:
+        /* Retail saves this width before testing whether to rebalance. */
+        last_line_width = line_width;
+        goto after_scan;
 
-compare_width:
-    if (last_line_width < wrap_width / balance_divisor) {
-        wrap_width -= 0x10;
-        goto retry;
+    compare_width:
+        if (last_line_width < wrap_width / balance_divisor) {
+            wrap_width -= 0x10;
+            continue;
+        }
+
+        break;
     }
-
 layout:
     draw_window = window;
     draw_window->measured_width = 0;
