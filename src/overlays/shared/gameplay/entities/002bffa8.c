@@ -2096,10 +2096,11 @@ void FUN_L00_002c4380(char *moby) {
                     FUN_001ff300_2c4380(1.05f, vars + 0x10, vars + 0x10);
                 else
                     FUN_001ff300_2c4380(0.2f, vars + 0x10, vars + 0x10);
+                rate = 0.01f;
                 len = FUN_001ff3d8_2c4380(vars + 0x10);
-                if (len < D_0015ED60_2c4380 * 0.01f ||
+                if (len < D_0015ED60_2c4380 * rate ||
                     (hero.ground_moby && FUN_L00_002603d0((int)hero.ground_moby) &&
-                     FUN_001ff3d8_2c4380(vars + 0x10) < D_0015ED60_2c4380 * 0.01f +
+                     FUN_001ff3d8_2c4380(vars + 0x10) < D_0015ED60_2c4380 * rate +
                            FUN_001ff3d8_2c4380(&hero.motion.displacement))) {
                     angle = FUN_001ff8b0_2c4380(coll_hit.normal_z,
                                                  FUN_001ff408_2c4380(&coll_hit.normal_x));
@@ -2261,20 +2262,21 @@ void FUN_L00_002c4380(char *moby) {
         if (FUN_001fef98_2c4380(vars + 0x44) || (moby[0x70] & 2))
             moby[0x20] = 6;
         break;
-    case 6:
+    case 6: {
+        float len;
         len = FUN_L00_00259698_2c4380(moby + 0x10, 0, 0.5f);
-        rate = D_0015ED60_2c4380;
         if (len != 0.0f && coll_hit.moby) {
             FUN_L00_00260400(moby, coll_hit.moby, moby + 0x10,
                              moby + 0x40, moby + 0x10, moby + 0x40);
-            rate = D_0015ED60_2c4380;
         }
-        *(float *)(moby + 0x2c) -= *(float *)(moby + 0x2c) * (rate * 0.02f);
+        len = D_0015ED60_2c4380;
+        *(float *)(moby + 0x2c) -= *(float *)(moby + 0x2c) * (len * 0.02f);
         if (!(*(float *)(moby + 0x2c) <
             *(float *)(*(char **)(moby + 0x24) + 0x24) * 0.1f))
             return;
         FUN_L00_0024eb68_2c4380(moby);
         break;
+    }
     case 7:
     default:
         moby[0x20] = 0;
