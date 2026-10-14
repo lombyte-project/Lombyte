@@ -1052,17 +1052,17 @@ void FUN_L07_0030b000(struct Moby *moby) {
         next = 0;
         qcopy(&position, path + 0x10);
         path_count = *(s32 *)path;
-        if (path_count > 0) {
+        {
             s32 j = 0;
             s32 k;
-            do {
+            while (j < path_count) {
                 k = j + 1;
                 *(f32 *)(path + 0x1c + j * 16) =
                     FUN_001f9b48(path + 0x10 + j * 16,
                                   path + 0x10 + (k % path_count) * 16);
                 j = k;
                 path_count = *(s32 *)path;
-            } while (j < path_count);
+            }
         }
         if (FUN_L00_002591d0(&current, *(s32 *)(data + 0x74), 1, 0)) {
             FUN_001e93b0(D_L07_00211550, *(s32 *)(data + 0x74));
