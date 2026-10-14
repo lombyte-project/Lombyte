@@ -2092,8 +2092,7 @@ move:
     {
         collision_scratch.tracking.rotation.f[1] = v->strength * FUN_001ff800_2cd1f0(v->yaw) * FUN_001ff7e8_2cd1f0(v->pitch);
         collision_scratch.tracking.rotation.f[2] = v->strength * FUN_001ff7e8_2cd1f0(v->yaw) * FUN_001ff7e8_2cd1f0(v->pitch);
-        collision_scratch.tracking.rotation.f[0] = 0.0f;
-        collision_scratch.tracking.rotation.f[3] = collision_scratch.tracking.rotation.f[0];
+        collision_scratch.tracking.rotation.f[0] = collision_scratch.tracking.rotation.f[3] = 0.0f;
         FUN_001ffa70_2cd1f0(matrix, &m->rot);
         FUN_001ff6f8_2cd1f0(&collision_scratch.tracking.rotation, &collision_scratch.tracking.rotation, matrix);
         add_vector_xyz_2c8440(&m->pos, &v->offset, &collision_scratch.tracking.rotation);
