@@ -1995,9 +1995,7 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
         float inner_radius;
         float width;
         float phase;
-        int color = (green << 8) | 0x80;
-        color |= (alpha & 0xff) << 24;
-        color |= green << 16;
+        int color = ((alpha & 0xff) << 24) | (green << 8) | 0x80 | (green << 16);
         *(int *)(packet + 0x40) = *(int *)(packet + 0x44) =
             *(int *)(packet + 0x48) = *(int *)(packet + 0x4c) = color;
         if (*(float *)(data + 8) < radius_threshold)
@@ -2012,11 +2010,11 @@ void FUN_L07_0030dcf0(unsigned char *moby) {
         width = convert_integer_to_float_l07((int)(index + 1) > 5 ? 5 : index + 1);
         green = green - green_step;
         center = *(float *)(moby + 0x10);
+        *(float *)(packet + 0x5c) = 0.0f;
         *(float *)(packet + 0x28) = *(float *)(packet + 0x38) = *(float *)(moby + 0x18);
         *(float *)(packet + 0x68) = *(float *)(packet + 0x58) = *(float *)(packet + 0x50) + width;
         *(float *)(packet + 0x34) = *(float *)(packet + 0x14) = *(float *)(moby + 0x14);
         *(float *)(packet + 0x6c) = *(float *)(packet + 0x64) = 1.0f;
-        *(float *)(packet + 0x5c) = 0.0f;
         *(float *)(packet + 0x10) = center - radius * (inner_scale - band * 0.03f);
         *(float *)(packet + 0x54) = 0.0f;
         *(float *)(packet + 0x08) = *(float *)(packet + 0x18) = side + *(float *)(moby + 0x18);
