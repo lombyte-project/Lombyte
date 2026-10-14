@@ -1029,19 +1029,9 @@ def render_svg(
     lines.append("</g>")
     lines.append(f'<polygon points="{boot_poly}" fill="url(#sheen)" pointer-events="none"/>')
     cx, cy = (dx0 + xt) / 2, dy0 + ddy / 2
-    # The whole-game panel's face, hatching and glow behind the percentage,
-    # fading out into the treemap.
-    grx, gry = (xt - dx0) * 0.3, ddy * 0.62
+    # The whole-game panel's orange glow behind the percentage.
     lines.append(
-        f'<defs><radialGradient id="glass-fade"><stop offset="0.55" stop-color="#fff"/>'
-        f'<stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
-        f'<mask id="glass-mask"><ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{grx:.1f}" ry="{gry:.1f}" '
-        f'fill="url(#glass-fade)"/></mask></defs>'
-    )
-    lines.append(
-        f'<g clip-path="url(#drawer-clip)" mask="url(#glass-mask)" pointer-events="none">'
-        f'<rect x="{cx - grx:.1f}" y="{dy0}" width="{2 * grx:.1f}" height="{ddy}" fill="url(#panel-face)"/>'
-        f'<rect x="{cx - grx:.1f}" y="{dy0}" width="{2 * grx:.1f}" height="{ddy}" fill="url(#panel-hatch)"/>'
+        f'<g clip-path="url(#drawer-clip)" pointer-events="none">'
         f'<ellipse cx="{cx:.1f}" cy="{dy0 + ddy / 2 + 4:.1f}" rx="{(right - xb) * 0.55:.1f}" '
         f'ry="{ddy * 0.7:.1f}" fill="url(#panel-glow)"/></g>'
     )
