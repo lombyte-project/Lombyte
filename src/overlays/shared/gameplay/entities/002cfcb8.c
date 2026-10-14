@@ -34,15 +34,16 @@ extern void FUN_L00_002592b8_2cfcb8(u8 **, u8 *, s32, s32) __asm__("FUN_L00_0025
 
 void FUN_L00_002cfcb8(u8 *moby) {
     u8 *first = moby, *second, *next;
-    u8 *vars = *(u8 **)(first + 0x78);
+    u8 *vars = *(u8 **)(moby + 0x78);
     u8 *other, *other_vars, *row;
     Vec_2cfcb8 probe, start, second_probe, second_start;
-    s32 group = *(u8 *)(first + 0x21);
+    s32 group = *(u8 *)(moby + 0x21);
     s32 i, state;
 
     *(u32 *)(vars + 0xAC) |= 4;
+    moby = first;
     if (group == 0xFF) {
-        if (*(s16 *)(first + 0xA6) == 0x1F4 && FUN_L00_00257b50_2cfcb8(2) &&
+        if (*(s16 *)(moby + 0xA6) == 0x1F4 && FUN_L00_00257b50_2cfcb8(2) &&
             *(f32 *)(first + 0x40) == 0.0f && *(f32 *)(first + 0x44) == 0.0f)
             *(f32 *)(first + 0x48) = FUN_L00_002000e8_2cfcb8(*(f32 *)(first + 0x48), 1.57079637f);
         if (*(s16 *)(first + 0xA6) == 0x1F5 && *(u8 *)(first + 0xB0) != 0xFF &&
@@ -181,21 +182,25 @@ advance_first:
                 if ((*(s16 *)(vars + 0xC6) != 0 || *(s16 *)(first + 0xA6) == 0x1F5) &&
                     *(u8 **)(vars + 0xA0)) {
                     if (*(s32 *)(vars + 0xC0) != -1) {
-                    row = D_L00_001B04B0_2cfcb8[*(s32 *)(vars + 0xC0)];
-                    if (*(s32 *)row == 0 || (state = *(s32 *)(row + 0x1C)) == 1 || state == 3) {
-                        *(s32 *)(vars + 0xC0) = -1;
-                    } else if (state != 0x111 && (u32)(state - 0x11) <= 0xFF) {
-                        if (state - 0x10 >= *(s32 *)row) *(s32 *)(vars + 0xC0) = -1;
-                        else *(s32 *)(row + 0x1C) = state + 1;
-                    } else if (state == 0x111) {
-                        *(s32 *)(vars + 0xC0) = -1;
-                    } else {
-                        *(s32 *)(row + 0x1C) = 0x11;
-                        for (i = 0; i < *(s32 *)D_L00_001B04B0_2cfcb8[*(s32 *)(vars + 0xC0)]; i++)
-                        *(s32 *)(D_L00_001B04B0_2cfcb8[*(s32 *)(vars + 0xC0)] + i * 0x10 + 0x1C) = 0;
+                        row = D_L00_001B04B0_2cfcb8[*(s32 *)(vars + 0xC0)];
+                        if (*(s32 *)row == 0) {
+                            *(s32 *)(vars + 0xC0) = -1;
+                        } else {
+                            state = *(s32 *)(row + 0x1C);
+                            if (state == 1) *(s32 *)(vars + 0xC0) = -1;
+                            else if (state == 3) *(s32 *)(vars + 0xC0) = -1;
+                            else if (state == 0x111) *(s32 *)(vars + 0xC0) = -1;
+                            else if ((u32)(state - 0x11) <= 0xFF) {
+                                if (state - 0x10 >= *(s32 *)row) *(s32 *)(vars + 0xC0) = -1;
+                                else *(s32 *)(row + 0x1C) = state + 1;
+                            } else {
+                                *(s32 *)(row + 0x1C) = 0x11;
+                                for (i = 0; i < *(s32 *)D_L00_001B04B0_2cfcb8[*(s32 *)(vars + 0xC0)]; i++)
+                                    *(s32 *)(D_L00_001B04B0_2cfcb8[*(s32 *)(vars + 0xC0)] + i * 0x10 + 0x1C) = 0;
+                            }
+                        }
                     }
                 }
-            }
                 first = *(u8 **)(vars + 0xA0);
             }
         }
