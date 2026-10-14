@@ -2360,7 +2360,7 @@ extern void FUN_L12_002eae00(struct Moby *);
 extern int FUN_L12_002eaf68(struct Moby *, int);
 extern void FUN_L12_0027ba70(int);
 extern struct Moby *FUN_L12_00308670(struct Moby *);
-extern void FUN_L12_00308708(struct Moby *);
+extern void FUN_L12_00308708(struct Moby *, struct Moby *);
 extern int allocate_voice_for_target_entry_e9f68(int, int, int) __asm__("FUN_0022da68");
 extern void release_voice(int) __asm__("FUN_0022d798");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
@@ -2369,16 +2369,16 @@ extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern char *FUN_L12_002ecce8(void *, void *, int, int, float, float, float);
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
 extern unsigned char D_001413F4 __attribute__((section(".data")));
-extern int D_L12_00161F00 __attribute__((section(".data")));
-extern int D_L12_00161F20 __attribute__((section(".data")));
+extern int D_L12_00161F00 __attribute__((section(".sdata")));
+extern int D_L12_00161F20 __attribute__((section(".sdata")));
 extern int D_L12_001619A0 __attribute__((sda));
 typedef struct { char pad[0x25c]; struct Moby *moby; int count; } Tracking_e9f68;
 extern Tracking_e9f68 D_L12_00167100;
 extern unsigned char D_0014C050[];
 #include "rnc/audio/voice_pool.h"
 extern unsigned char D_0013E550[];
-extern unsigned char D_0013D4CB;
-extern unsigned short D_00141C50;
+extern unsigned char D_0013D4CB __attribute__((section(".data")));
+extern unsigned short D_00141C50 __attribute__((section(".data")));
 extern char D_L12_0015F580[];
 
 void FUN_L12_002e9f68(struct Moby *moby) {
@@ -2446,7 +2446,7 @@ check_mode:
     if (index == 0) goto update_state;
     if (D_L12_001619A0 != 0) {
         if (*(struct Moby **)(data + 0xac)) {
-            FUN_L12_00308708(moby);
+            FUN_L12_00308708(moby, *(struct Moby **)(data + 0xac));
             *(struct Moby **)(data + 0xac) = 0;
         }
         mark_moby_for_removal(moby);
@@ -2456,9 +2456,9 @@ update_state:
     switch (moby->state) {
     case 0: {
         int a, b, limit;
-        data[0x28] = 2;
-        *(int *)(data + 0x20) = 0x40c00000; /* 6.0f */
         *(short *)(data + 0x24) = 6;
+        *(float *)(data + 0x20) = 6.0f;
+        data[0x28] = 2;
         data[0x29] = 0;
         *(float *)(data + 0x94) = 0.0f;
         *(float *)(data + 0x98) = 0.0f;
@@ -2512,8 +2512,8 @@ update_state:
     }
     case 2:
         if (*(int *)(data + 0xc0) == 0 && D_L12_00167100.moby == 0) {
-            D_L12_00167100.count = 0;
             D_L12_00167100.moby = moby;
+            D_L12_00167100.count = 0;
         }
         if (*(int *)(data + 0xc0)) {
             count = *(short *)(data + 0x8c);
@@ -2533,7 +2533,7 @@ update_state:
         if (*(int *)(data + 0xc0) == 0) {
             if (distance < 21.0f && moby->pos.z - hero.motion.pos.f[2] > 1.0f) {
                 if (D_L12_00167100.moby == 0) {
-                    D_L12_00167100.count = 0; D_L12_00167100.moby = moby;
+                    D_L12_00167100.moby = moby; D_L12_00167100.count = 0;
                 }
             } else if (D_L12_00167100.moby == moby) D_L12_00167100.moby = 0;
         }
@@ -2633,7 +2633,7 @@ update_state:
         int index;
         if (D_L12_00167100.moby == moby) D_L12_00167100.moby = 0;
         if (*(struct Moby **)(data + 0xac)) {
-            FUN_L12_00308708(moby);
+            FUN_L12_00308708(moby, *(struct Moby **)(data + 0xac));
             *(struct Moby **)(data + 0xac) = 0;
         }
         FUN_L00_0025e450(moby, D_L12_0015F580, &moby->pos, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, 2, 3.0f, 15.0f, 1, 1, -1, 0);
