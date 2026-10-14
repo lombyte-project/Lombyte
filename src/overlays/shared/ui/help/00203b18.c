@@ -852,8 +852,12 @@ void FUN_L00_002062b0(void) {
                 color = ((u32)alpha << 24) | ((u32)blue << 16) | ((u32)green << 8) | (u32)red;
         }
         {
-            char *g = (char *)&hero;
-            *(u32 *)(*(char **)(g + 0x2080) + 0x90) = FUN_L00_00200298_002062b0(0.1f, *(u32 *)(*(char **)(g + 0x2080) + 0x90), color);
+            char *g;
+            {
+                char *g = (char *)&hero;
+                *(u32 *)(*(char **)(g + 0x2080) + 0x90) = FUN_L00_00200298_002062b0(0.1f, *(u32 *)(*(char **)(g + 0x2080) + 0x90), color);
+            }
+            g = (char *)&hero;
             for (i = 0; i < 3; i++)
                 FUN_L00_0024f7c8(hero.moby, i, g + 0x1d50 + i * 0x10);
             g = (char *)&hero;
