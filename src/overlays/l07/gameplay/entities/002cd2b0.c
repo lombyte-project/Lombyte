@@ -2582,8 +2582,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         } else distance = 1.0f;
         if (D_L07_0015F5CC % 45 == *(short *)(moby + 0xb2) && !FUN_00213260(2))
             func_L00_002A5158_30D8E8(D_L07_001612D0, D_L07_001612D8, 1, F(moby, 0x10), F(moby, 0x14), distance, height);
-        id = (rand_e50() & 7) + 20;
-        if (D_L07_0015F5CC % id == 0) {
+        if (D_L07_0015F5CC % ((rand_e50() & 7) + 20) == 0) {
             scale = random_float_between(1.5f, 2.4f);
             point[0] += random_float_between(-0.15f, 0.15f);
             point[1] += random_float_between(-0.15f, 0.15f);
@@ -2681,7 +2680,8 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             moby[0x20] = next_state;
         }
         goto bounds;
-    case 5:
+    case 5: {
+        float angle;
         moby_point_position(moby, 0, point);
         subtract_vector_xyz(offset, point, position);
         angle = FUN_001f9e90(target[0] - point[0], target[1] - point[1]);
@@ -2709,6 +2709,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             moby[0x20] = 2;
         }
         goto bounds;
+    }
     case 6:
         FUN_L07_0030eee8(moby, data);
         FUN_L07_0030f1e0(moby, data, F(data, 0x13c), 0.20943952f, frame_time_sq * 6.0f, 0.5235988f, frame_time_sq * 4.0f, frame_time * 7.0f, frame_time * 3.0f);
