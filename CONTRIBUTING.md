@@ -166,6 +166,26 @@ set up without it.
 5. `make overlays` must end with `PASS`. Open a pull request
    (`overlay: FUN_L00_002678b8 (8 B)`).
 
+## Data
+
+Data can move to C too; its bytes are checked like code.
+
+1. Find it: `python3 scripts/data-refs.py --catalog` lists the boot data the
+   code touches in `build/data-refs/boot/data.yaml`; add
+   `--level N --overlays config/us/overlays` for one level.
+2. Define it: `python3 scripts/data-refs.py --emit ADDR --into FILE` writes
+   the C definition after the reader's functions and prints the entry to add
+   to a `*_OVERLAYS` table in `configure.py`. With `--level N` it writes level
+   data and adds its `name<TAB>size` row to `config/overlays/us/data.tsv`.
+   A `D_XXXXXXXX` row is data every level holds at that address, such as
+   `src/overlays/shared/data/level_globals.c`.
+3. `make elf` (boot) or `make overlays` (levels) must end with `PASS`.
+
+Names, types and placement: [docs/code-cleanup.md](docs/code-cleanup.md#data);
+level rows: [docs/overlays.md](docs/overlays.md#sources-and-the-proof); how
+data is counted in the report and the map:
+[docs/progress-metrics.md](docs/progress-metrics.md#data).
+
 ## Continuous integration
 
 Every pull request runs the public `tools` job in
@@ -181,7 +201,7 @@ contributor-run gate (see above); CI does not run it for you.
 
 The `progress` workflow in
 [`.github/workflows/progress.yml`](.github/workflows/progress.yml) needs no
-game data for C_EXACT, which follows from the tree, so on every
+game data for C_EXACT and data in C, which follow from the tree, so on every
 run it generates the objdiff report (`scripts/gen_progress_report.py`) and the
 progress map (`scripts/generate_treemap.py`), validates the report with objdiff
 and uploads it as the `SCUS_971.99_report` artifact that
