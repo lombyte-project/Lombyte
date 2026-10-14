@@ -1157,7 +1157,6 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     union { OvlVec4 launch; OvlVec4 arc; } temporary;
     OvlVec4 probe;
     f32 angle, slope, distance, horizontal, vertical, radius, speed;
-    f32 gravity;
     OvlVec4 *targetPosition;
 
 
@@ -1236,6 +1235,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
         add_vector_xyz(targetPosition, targetPosition, &pos);
         if (controller_state.held & 5) {
             s32 hit;
+            f32 gravity;
             probe.q = 0;
             probe.f[2] = item_text_variant[0x11] ? 12.0f : 6.0f;
             hit = 0;
@@ -1293,15 +1293,17 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
                 }
             }
         }
-        gravity = frame_time_sq_macro * 9.8f;
-        speed = 4.0f;
-        if (item_text_variant[0x11]) {
-            if (controller_state.held & 5) speed = 12.0f;
+        {
+            f32 gravity = frame_time_sq_macro * 9.8f;
+            speed = 4.0f;
+            if (item_text_variant[0x11]) {
+                if (controller_state.held & 5) speed = 12.0f;
         } else {
             if (controller_state.held & 5) speed = 6.0f;
         }
         FUN_L00_002c1928((f32 *)&pos, (OvlQuad *)targetPosition, out,
                           gravity, 1.0f, speed);
+        }
     }
     switch (moby->state) {
     case 0:
