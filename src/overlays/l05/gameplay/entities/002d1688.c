@@ -1870,6 +1870,7 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     int next_index;
     char *path;
     int path_offset;
+    int count;
     char **path_entry;
 
     state.path_index = path_index;
@@ -1880,52 +1881,56 @@ float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
     /* Retain the saved-index read; the first lookup uses the incoming index. */
     (void)state.path_index;
     path_offset = path_index * 4;
-    i = state.changed;
-    if (i < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1) do {
-        int next;
-        int segment_offset = i * 16;
-        next_index = i + 1;
-        path_entry = (char **)((char *)D_L05_001B0930 + path_offset);
-        path = *(char **)((char *)D_L05_001B0930 + path_offset);
+    count = *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1;
+    if (state.changed < count) {
+        i = 0;
+        do {
+            int next;
+            int segment_offset = i * 16;
+            next_index = i + 1;
+            path_entry = (char **)((char *)D_L05_001B0930 + path_offset);
+            path = *(char **)((char *)D_L05_001B0930 + path_offset);
 
-        if (*(float *)(path + segment_offset + 0x1c) == 0.0f &&
-            *(float *)(path + next_index * 16 + 0x1c) == 0.0f)
-            goto loop_next;
-
-        next = segment_offset + 0x10;
-        subtract_vector_304058(&segment, &from_point, path + next);
-        segment.f[2] = 0.0f;
-        subtract_vector_304058(&normal, *path_entry + (segment_offset + 0x20),
-                               *path_entry + next);
-        normal.f[2] = 0.0f;
-        scale_vector_304058(1.0f, &projection, &normal);
-        fast_vec_cross(&cross, &segment, &projection);
-        separation = absolute_float_304058(cross.f[2]);
-        if (separation < best)
-            best = separation;
-        if (reach < separation)
-            goto loop_next;
-        segment_length = fast_vec_length(&normal);
-        along = fast_vec_dot(&segment, &projection);
-        if (segment_length < along || along < 0.0f) {
-            if (!(fast_vec_length(&segment) < reach))
+            if (*(float *)(path + segment_offset + 0x1c) == 0.0f &&
+                *(float *)(path + next_index * 16 + 0x1c) == 0.0f)
                 goto loop_next;
-            state.changed = 1;
-            scale_vector_304058(reach, &result, &segment);
-        } else {
-            state.changed = 1;
-            scale_vector_304058(along, &offset, &projection);
-            subtract_vector_304058(&result, &segment, &offset);
-            scale_vector_304058(reach, &result, &result);
-            add_vector_304058(&result, &result, &offset);
-        }
-        add_vector_304058(&from_point, &result,
-                          *path_entry + next);
-        from_point.f[2] = ((Vec4f *)position)->z;
-loop_next:
-        i = next_index;
-        path_offset = *(volatile s32 *)&state.path_index * 4;
-    } while (i < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1);
+
+            next = segment_offset + 0x10;
+            subtract_vector_304058(&segment, &from_point, path + next);
+            segment.f[2] = 0.0f;
+            subtract_vector_304058(&normal, *path_entry + (segment_offset + 0x20),
+                                   *path_entry + next);
+            normal.f[2] = 0.0f;
+            scale_vector_304058(1.0f, &projection, &normal);
+            fast_vec_cross(&cross, &segment, &projection);
+            separation = absolute_float_304058(cross.f[2]);
+            if (separation < best)
+                best = separation;
+            if (reach < separation)
+                goto loop_next;
+            segment_length = fast_vec_length(&normal);
+            along = fast_vec_dot(&segment, &projection);
+            if (segment_length < along || along < 0.0f) {
+                if (!(fast_vec_length(&segment) < reach))
+                    goto loop_next;
+                state.changed = 1;
+                scale_vector_304058(reach, &result, &segment);
+            } else {
+                state.changed = 1;
+                scale_vector_304058(along, &offset, &projection);
+                subtract_vector_304058(&result, &segment, &offset);
+                scale_vector_304058(reach, &result, &result);
+                add_vector_304058(&result, &result, &offset);
+            }
+            add_vector_304058(&from_point, &result,
+                              *path_entry + next);
+            from_point.f[2] = ((Vec4f *)position)->z;
+    loop_next:
+            i = next_index;
+            path_offset = *(volatile s32 *)&state.path_index * 4;
+            count = *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1;
+        } while (i < count);
+    }
     if (state.changed)
         qcopy(state.out, &from_point);
     return best;
