@@ -86,7 +86,11 @@ make it clearer, add a comment that explains why it looks odd.
 
 **Data**
 
-- Each variable has one definition and one `extern` in a header.
+- Each variable has one definition and one `extern` in a header, with one
+  type and one name. A file that needs another placement keeps one alias,
+  `<name>_gp` (sda), `<name>_lui` (`NOT_SDA`) or `<name>_macro` (`MACRO_ADDR`).
+  `scripts/data-decls.py` lists the labels that still disagree; fix the type
+  when you move that data to C, and lower the count in `test_public_tools.py`.
 - Data that only one file reads is defined in that file and listed in
   `DATA_OVERLAYS` in `configure.py` with its address and size. This command
   writes both for you: `python3 scripts/data-refs.py --emit ADDR --into FILE`

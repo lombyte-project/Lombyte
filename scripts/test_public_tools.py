@@ -425,6 +425,32 @@ class ConfigureDataLayoutTests(unittest.TestCase):
         self.assertIn("glabel D_00161298", once)
 
 
+class DataDeclarationTests(unittest.TestCase):
+    """No new data label may get a second type or name (scripts/data-decls.py)."""
+
+    # Labels that still disagree; lower it when you fix some, never raise it.
+    KNOWN_CONFLICTS = 1162
+
+    def test_no_new_conflicting_declarations(self):
+        decls = load_module("rnc_data_decls", ROOT / "scripts" / "data-decls.py")
+        found = len(decls.conflicts(ROOT))
+        self.assertLessEqual(found, self.KNOWN_CONFLICTS,
+                             "a data label got a second type or name: run scripts/data-decls.py")
+
+    def test_aliases_with_a_placement_count_as_one_name(self):
+        decls = load_module("rnc_data_decls", ROOT / "scripts" / "data-decls.py")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "include").mkdir()
+            (root / "src").mkdir()
+            (root / "include" / "g.h").write_text('extern s32 frame_count __asm__("D_0015ED00");\n')
+            (root / "src" / "a.c").write_text(
+                'extern s32 frame_count_gp __asm__("D_0015ED00") __attribute__((sda));\n')
+            self.assertEqual(decls.conflicts(root), {})
+            (root / "src" / "b.c").write_text('extern short frame_count __asm__("D_0015ED00");\n')
+            self.assertEqual(list(decls.conflicts(root)), ["D_0015ED00"])
+
+
 class OverlaySourceStateTests(unittest.TestCase):
     """overlay_units.source_state must count a C-named function bound to its label."""
 
