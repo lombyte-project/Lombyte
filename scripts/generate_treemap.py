@@ -1001,7 +1001,7 @@ def render_svg(
         )
     lines.append(
         f'<text x="{pcx:.1f}" y="{dy0 + 58}" text-anchor="middle" font-family="{esc(FONT)}" '
-        f'font-size="34" font-weight="800" fill="{ORANGE}">{total_percent:.1f}%</text>'
+        f'font-size="30" font-weight="800" fill="{ORANGE}">{total_percent:.1f}%</text>'
     )
     lines.append(
         f'<text x="{pcx:.1f}" y="{dy0 + 75}" text-anchor="middle" font-family="{esc(FONT)}" '
@@ -1047,19 +1047,18 @@ def render_svg(
     )
     lines.append(
         f'<text x="{dx0 + 12}" y="{dy0 + 17}" font-family="{esc(FONT)}" font-size="10" '
-        f'font-weight="700" fill="{CHROME}" style="paint-order:stroke" stroke="{BACKGROUND}" '
-        f'stroke-width="3.15" stroke-opacity="0.7">BOOT ELF &#183; SCUS_971.99</text>'
+        f'font-weight="700" fill="{CHROME}">BOOT ELF &#183; SCUS_971.99</text>'
     )
     lines.append(
-        f'<text x="{cx:.1f}" y="{cy + 4:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
-        f'font-size="24" font-weight="800" fill="{ORANGE}">'
+        f'<text x="{cx:.1f}" y="{cy + 7:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'font-size="30" font-weight="800" fill="{ORANGE}">'
         f"{boot_percent:.1f}%</text>"
     )
     caption = "executable in C"
     if fuzzy_percent is not None:
         caption += f" &#183; C_FUZZY {fuzzy_percent:.1f}%"
     lines.append(
-        f'<text x="{cx:.1f}" y="{cy + 18:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'<text x="{cx:.1f}" y="{cy + 23:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
         f'font-size="10" fill="{TEXT}">{caption}</text>'
     )
 
