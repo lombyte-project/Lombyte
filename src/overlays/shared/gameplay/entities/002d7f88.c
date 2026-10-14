@@ -2765,7 +2765,7 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
     }
     FUN_001ff500_002ddcb8(&scaled_first, &first, *(volatile float *)&D_L00_00161B84_gp);
     FUN_001ff500_002ddcb8(&scaled_third, &third, 1.0f);
-    qcopy(D_L00_001E5F40_002ddcb8, initial_vector);
+    *(V_002ddcb8 *)D_L00_001E5F40_002ddcb8 = *(V_002ddcb8 *)initial_vector;
     *(short *)(D_L00_001E5F40_002ddcb8 + 0xc8) = 0;
     next = (V_002ddcb8 *)(D_L00_001E5F40_002ddcb8 + 0x10);
     record = D_L00_001E5F30 + 0x10;
