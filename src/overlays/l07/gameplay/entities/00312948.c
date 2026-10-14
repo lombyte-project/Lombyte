@@ -47,8 +47,8 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
     float u, v;
     u32 color;
     u32 base_color;
-    u64 primitive = 0xa000000029ULL;
     u64 texture_state = 0xff9000000260ULL;
+    u64 primitive = 0xa000000029ULL;
     u64 texture;
 
     color = *(u8 *)(*(char **)(moby + 0x78) + 0x1c6);
