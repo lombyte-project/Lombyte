@@ -2489,6 +2489,8 @@ void FUN_L15_002a6e68(unsigned char *moby) {
     unsigned int life;
     unsigned char alpha, life_byte;
     int i;
+    Vec4 *endpoint_ptr;
+    void *temporary;
 
     position.q = *(u128 *)(moby + 0x10);
     data = *(unsigned char **)(moby + 0x78);
@@ -2580,25 +2582,27 @@ void FUN_L15_002a6e68(unsigned char *moby) {
     collision.work.motion.query.scale = 1.0f;
     collision.work.motion.query.active = 1;
     normalize_vector_xyz(&collision.angles, &offset, 1.0f);
+    temporary = collision.work.motion.temporary;
     collision.work.motion.query.id = *(unsigned short *)(moby + 0xa6);
     collision.angles.f[2] = 1.0f;
     collision.angles.f[3] = 5627.925f;
     collision.work.motion.query.enabled = 1;
     collision.work.motion.query.mode = 1;
-    subtract_vector_xyz(collision.work.motion.temporary, moby + 0x10, &position);
+    subtract_vector_xyz(temporary, moby + 0x10, &position);
     axis.q = collision.work.motion.temporary[0].q;
     FUN_001efa68(moby + 0x10, &endpoint, 9, moby, &collision.angles);
     if (FUN_001efa68(moby + 0x10, &endpoint, 2, 0, 0) != 0)
         *(u128 *)(data + 0x10) = *(u128 *)D_L15_00174460;
     else
         *(u128 *)(data + 0x10) = endpoint.q;
+    endpoint_ptr = &endpoint;
     i = 0;
     if (D_L15_00161558 > 0) {
         do {
             sign = -1.0f;
             if (rand() & 1) sign = 1.0f;
             life = truncate_float_to_s32_u(multiply_global_factor_ed68(random_float_between(D_L15_00161560 * 0.5f, D_L15_00161560)));
-            subtract_vector_xyz(collision.work.motion.temporary, data + 0x10, position_ptr);
+            subtract_vector_xyz(temporary, data + 0x10, position_ptr);
             offset.q = collision.work.motion.temporary[0].q;
             scale_vector_xyz(&offset, &offset, sign);
             length = vector_length_xyz(&offset);
@@ -2608,12 +2612,12 @@ void FUN_L15_002a6e68(unsigned char *moby) {
             i++;
             scale_vector_xyz(&offset, &offset, random_float_between(0.0f, 0.9f));
             /* Retail discards this sum and emits at the chosen endpoint. */
-            FUN_L00_001ff290(collision.work.motion.temporary, &endpoint, &offset);
+            FUN_L00_001ff290(temporary, endpoint_ptr, &offset);
             speed = D_0015ED6C * 10.0f;
             speed = random_float_between(speed, length / convert_integer_to_float(life << 2));
             normalize_vector_xyz(&offset, &offset, speed);
             alpha = random_integer_below(255);
-            FUN_L00_002730e0((float *)&endpoint, (char *)&offset, 0x604040ff, life_byte, alpha, 0, D_L15_0016155C);
+            FUN_L00_002730e0((float *)endpoint_ptr, (char *)&offset, 0x604040ff, life_byte, alpha, 0, D_L15_0016155C);
         } while (i < D_L15_00161558);
     }
     enqueue_callback_list_1_2a6e68((void (*)(void))FUN_L15_002a7628, moby);
