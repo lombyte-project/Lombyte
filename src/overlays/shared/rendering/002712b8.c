@@ -1995,7 +1995,8 @@ void FUN_L00_00275aa0(unsigned char *m) {
         h -= originalAlpha;
         alpha = (float)h;
         alpha *= f;
-        alpha = (float)originalAlpha + alpha;
+        f = (float)originalAlpha + alpha;
+        alpha = f;
     } else {
         f = (float)*(short *)(m + 0xa) / FUN_001fa6c0_275aa0(h - 6);
         *(float *)(m + 0xc) = *(float *)q +
