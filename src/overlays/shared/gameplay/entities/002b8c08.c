@@ -1748,8 +1748,8 @@ void FUN_L01_002edca0(unsigned char *moby) {
             *(float *)(moby + 0x18) = distance;
             result = *(int *)(*(char **)(moby + 0x24) + 0x10);
             *(int *)(moby + 0x94) = result;
-            moby[0x31] = 1;
             *(u16 *)(moby + 0x34) = flags & 0xfffe;
+            moby[0x31] = 1;
         }
         return;
     case 14:
