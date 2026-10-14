@@ -2094,10 +2094,10 @@ void FUN_L10_002da690(void *moby) {
                             color = (truncate_float_to_s32_da690(alpha * 255.0f / duration) << 24) | 0xffffff;
                         }
 
-                        *(unsigned int *)(buffers.packet.quad + 0x40) = color;
-                        *(unsigned int *)(buffers.packet.quad + 0x4c) = color;
-                        *(unsigned int *)(buffers.packet.quad + 0x48) = color;
-                        *(unsigned int *)(buffers.packet.quad + 0x44) = color;
+                        ((unsigned int *)(buffers.packet.quad + 0x40))[0] =
+                        ((unsigned int *)(buffers.packet.quad + 0x40))[1] =
+                        ((unsigned int *)(buffers.packet.quad + 0x40))[2] =
+                        ((unsigned int *)(buffers.packet.quad + 0x40))[3] = color;
                         for (vertex = 0; vertex < 4; vertex++) {
                             add_vector_xyz_da690(buffers.packet.quad + vertex * 0x10, (char *)0x001da010 + vertex * 0x10,
                                 base + group_vertices + (row + (vertex >> 1)) * 0x140 + order[i] * 0x10);
