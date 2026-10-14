@@ -860,6 +860,7 @@ void FUN_L00_002d9810(u8 *m) {
     char *destination = D_L00_001E3DA0_002d9810;
     char *pointB, *pointA;
     float *u, *v;
+    float *uBase, *vBase;
     float *shiftedVector = shifted;
 
     quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AD4_002d9810);
@@ -961,10 +962,12 @@ void FUN_L00_002d9810(u8 *m) {
         qcopy(shiftedVector, shape + 0xc0);
         qcopy(&cross, shape + 0xd0);
         qcopy(&normal, shape + 0xe0);
+        uBase = &quad.texcoords[1];
+        vBase = &quad.texcoords[0];
         ((float *)&position)[2] = *(float *)(m + 0x18);
         for (i = 0; i < 4; i++) {
-            u = &quad.texcoords[1];
-            v = &quad.texcoords[0];
+            v = vBase;
+            u = uBase;
             indices = (short *)(D_L00_001E3C80_002d9810 + i * 8);
             source = (char *)quad.points;
             for (j = 3; j >= 0; j--) {
