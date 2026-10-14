@@ -2179,9 +2179,6 @@ char *FUN_L13_0030c138(void *a, void *b, int c, int d) {
     }
     return (char *)m;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_0030c3b8.s", FUN_L13_0030c3b8);
-#else
 extern float FUN_001f9e90(float, float);
 extern float FUN_001fa580(float, float);
 extern float FUN_001f9dc8(float);
@@ -2239,14 +2236,14 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
     if (moby->command == 1) {
         velocity.f[3] = D_L13_00161F5C;
         acceleration.f[3] = D_L13_00161F60;
-        i = 1;
+        i = 0;
         do {
             qcopy(&position, &moby->pos);
             position.f[0] += random_float_between_alt(-0.065f, 0.065f);
             position.f[1] += random_float_between_alt(-0.065f, 0.065f);
             position.f[2] += random_float_between_alt(-0.065f, 0.065f);
             qzero(&velocity);
-            i--;
+            i++;
             velocity.f[2] = random_float_between_alt(D_L13_00161F30 * frame_time * 0.9f,
                                                        D_L13_00161F30 * frame_time * 1.1f);
             angle = random_float_between_alt(-D_L13_00161F50, D_L13_00161F50) * 0.017453292f;
@@ -2265,7 +2262,7 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
                                                                      D_L13_00161F20 * 1.2f)));
             FUN_00218888(&position, &velocity, &acceleration, D_L13_00161F08,
                            D_L13_00161F0C, a, b, c, -1);
-        } while (i >= 0);
+        } while (i < 2);
         amount = 0.017453292f;
         velocity.f[3] = D_L13_00161F64;
         acceleration.f[3] = D_L13_00161F68;
@@ -2321,7 +2318,6 @@ collision:
     FUN_L13_0030c2b0(moby);
     FUN_0020c828(moby);
 }
-#endif
 #include "types.h"
 #include "rnc/gameplay/state/item_state.h"
 extern unsigned char D_0013D408[];
