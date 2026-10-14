@@ -707,7 +707,7 @@ extern void FUN_001f9a68(void *, void *, float);
 extern float FUN_001f9af0(void *);
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void FUN_0022da68(int, int, void *);
+extern int FUN_0022da68(int, int, void *);
 extern int FUN_001f9770(void *);
 extern float FUN_L00_0025e310(float);
 extern float FUN_00213508(void *, int, float);
