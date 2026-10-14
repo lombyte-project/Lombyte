@@ -49,7 +49,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 int D_L08_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 extern short D_L08_0015F688 __attribute__((sda));
-char D_L08_0015F6E8[4] = {0, 0, 0x40, 0x42};
+struct HeroVelocityKey D_L08_0015F6E8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
 extern unsigned char D_L08_0017C5D8[];
 extern void *D_L08_001612D0;
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -1279,7 +1279,7 @@ int hero_set_state(int a, int b) {
                     w->unk3D8 = 29.0f;
                     w->unk3DC = 50.0f;
                     w->unk3E0 = scale_game_frames(0x56);
-                    *(char **)&w->unk3E4 = D_L08_0015F6E8;
+                    w->unk3E4 = D_L08_0015F6E8;
                     w->unk4AE = 1;
                 }
             } else if (u->state.current == 0xE) {

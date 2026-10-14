@@ -50,7 +50,7 @@ extern int FUN_L06_0021d0a0(int a);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-char D_L06_0015F6E8[4] = {0, 0, 0x40, 0x42};
+struct HeroVelocityKey D_L06_0015F6E8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
 extern s32 D_L06_0015F688 __attribute__((sda));
 int D_L06_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 extern unsigned char D_L06_0017C558[];
@@ -1066,7 +1066,7 @@ int hero_set_state(int a, int b) {
                     w->unk3D8 = 29.0f;
                     w->unk3DC = 50.0f;
                     w->unk3E0 = scale_game_frames(0x56);
-                    *(char **)&w->unk3E4 = D_L06_0015F6E8;
+                    w->unk3E4 = D_L06_0015F6E8;
                     w->unk4AE = 1;
                 }
             } else if (u->state.current == 0xE) {
