@@ -54,16 +54,16 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
 
     color_byte = *(u8 *)(*(char **)(moby + 0x78) + 0x1c6);
     color = ((u32)color_byte << 24) | ((u32)color_byte << 16) | ((u32)color_byte << 8) | color_byte;
+    scratch.f[1] = ang;
+    scratch.f[2] = alpha;
     vu1_add_g_sregister_l07(0x4e, (s64)((depth_buffer_address >> 13) | 0x1000000) | ((u64)0x8000 << 17));
-    row_alpha = alpha;
+    row_alpha = scratch.f[2];
     texture = get_effect_texture(0x3c);
-    quad.colors[0] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | (base_color = color | 0x404040);
+    quad.colors[0] = quad.colors[1] = quad.colors[2] = quad.colors[3] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | (base_color = color | 0x404040);
     quad.texture = texture;
     quad.texture_state = texture_state;
     quad.primitive = primitive;
-    quad.colors[1] = quad.colors[0];
-    quad.colors[2] = quad.colors[0];
-    quad.colors[3] = quad.colors[0];
+
     quad.reserved.value = 0;
     spin = convert_integer_to_float(frame_count_l07 + phase) * speed;
     FUN_L00_0024f7c8(moby, 9, &position);
@@ -74,26 +74,26 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
     scratch.i[3] = base_color;
     u = split_float_fraction(spin * -0.01f, &scratch);
     quad.texture_coordinates[0][0] = u;
-    quad.texture_coordinates[1][0] = u + 1.0f;
     quad.texture_coordinates[2][0] = u;
     quad.texture_coordinates[3][0] = u + 1.0f;
+    quad.texture_coordinates[1][0] = u + 1.0f;
     v = split_float_fraction(spin * -0.02f, &scratch);
     quad.texture_coordinates[0][1] = v;
-    quad.texture_coordinates[2][1] = v + 1.0f;
-    alpha_step = (end_alpha - row_alpha) * 0.0625f;
-    step = ang * 0.0625f;
     quad.texture_coordinates[1][1] = v;
     quad.texture_coordinates[3][1] = v + 1.0f;
+    quad.texture_coordinates[2][1] = v + 1.0f;
+    alpha_step = (end_alpha - row_alpha) * 0.0625f;
+    step = scratch.f[1] * 0.0625f;
     do {
         qcopy(&quad.positions[2], &center);
         qcopy(&quad.positions[3], &center);
         next_angle = angle + 0.3926991f;
-        row_alpha = alpha;
-        quad.colors[2] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * alpha) << 24) | scratch.i[3];
-        limit = ang - 1.5707964f;
+        row_alpha = scratch.f[2];
+        quad.colors[2] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | scratch.i[3];
+
         latitude = step + -1.5707964f;
         quad.colors[3] = quad.colors[2];
-        if (latitude <= limit) {
+        if (latitude <= (limit = scratch.f[1] - 1.5707964f)) {
             do {
                 qcopy(&quad.positions[0], &quad.positions[2]);
                 qcopy(&quad.positions[1], &quad.positions[3]);
