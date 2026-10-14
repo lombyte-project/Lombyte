@@ -511,7 +511,9 @@ int FUN_L11_003192c8(char *moby) {
                 int start;
                 int j;
                 if (limit < a) b = a;
-                start = a - ((b >> 4) << 4);
+                start = b >> 4;
+                next = start << 4;
+                start = a - next;
                 for (j = 0; j < 2; j++) {
                     int k;
                     char *packet = stack_data + i * 0x90;
