@@ -367,11 +367,15 @@ void FUN_L11_00309098(char *moby) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_003094f8.s", FUN_L11_003094f8);
-#else
-typedef int Q_94f8 __attribute__((mode(TI)));
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_94f8;
+typedef struct {
+    Vec4 step;             /* moved by this each frame; its length is speed */
+    Vec4 target_pos;       /* 0x10 */
+    void *collision;       /* 0x20 */
+    struct Moby *target;   /* 0x24 */
+    s32 timer;             /* 0x28 */
+    f32 speed;             /* 0x2C */
+    f32 turn_speed;        /* 0x30 */
+} Missile_94f8;
 
 extern float random_angle_radians_94f8(void) __asm__("FUN_00213308");
 extern float distance_xyz_94f8(void *, void *) __asm__("FUN_001f9b48");
@@ -391,97 +395,79 @@ extern void FUN_L00_0025e450_94f8(void *, void *, void *, float, float, int, int
 extern char D_L11_001B2A80_94f8[] __asm__("D_L11_001B2A80");
 extern char D_L11_00174860_94f8[] __asm__("D_L11_00174860");
 
-void FUN_L11_003094f8(char *moby) {
-    char *data = *(char **)(moby + 0x78);
-    char *pos;
-    V4_94f8 old, spray, temp, velocity, random;
+/* Homing missile: turns toward its target while the target lives and stays within 3 units of
+   where it was last frame, leaves a smoke trail, and bursts on a hit, when its timer runs out
+   or outside the level box. */
+void FUN_L11_003094f8(struct Moby *moby) {
+    Missile_94f8 *data = (Missile_94f8 *)moby->pvars;
+    Vec4f *pos;
+    Vec4 old, spray, temp, velocity, random;
     float t;
-    float yaw;
-    float pitch;
-    char *target;
+    struct Moby *target;
     char *texture;
 
-    qcopy(&old, moby + 0x10);
-    *(float *)(moby + 0x2c) +=
-        (*(float *)(*(char **)(moby + 0x24) + 0x24) - *(float *)(moby + 0x2c)) * 0.1f;
-    *(Q_94f8 *)&random = 0;
-    random.x = random_float_between(-1.0f, 1.0f);
-    random.y = random_float_between(-1.0f, 1.0f);
-    random.z = random_float_between(-1.0f, 1.0f);
-    *(Q_94f8 *)&velocity = *(Q_94f8 *)&random;
-    normalize_vector_xyz(&velocity, &velocity,
-                         random_float_between(0.1f, 0.2f) * frame_time);
-    normalize_vector_xyz(&temp, data, -random_float_between(frame_time * 0.1f, frame_time));
+    qcopy(&old, &moby->pos);
+    moby->scale += (moby->pclass->scale - moby->scale) * 0.1f;
+    random.q = 0;
+    random.f[0] = random_float_between(-1.0f, 1.0f);
+    random.f[1] = random_float_between(-1.0f, 1.0f);
+    random.f[2] = random_float_between(-1.0f, 1.0f);
+    velocity.q = random.q;
+    normalize_vector_xyz(&velocity, &velocity, random_float_between(0.1f, 0.2f) * frame_time);
+    normalize_vector_xyz(&temp, &data->step, -random_float_between(frame_time * 0.1f, frame_time));
     add_vector_xyz(&velocity, &velocity, &temp);
-    FUN_L00_002712b8_94f8(moby + 0x10, &velocity, scale_game_frames(6), 0x7f, 0xb0b0b0,
+    FUN_L00_002712b8_94f8(&moby->pos, &velocity, scale_game_frames(6), 0x7f, 0xb0b0b0,
                            3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
     texture = D_L11_001B2A80_94f8;
     for (t = 0.0f; t < 1.0f; t += 0.33333334f) {
         unsigned char *particle;
-        normalize_vector_xyz(&temp, data,
-                             random_float_between(t, t + 0.33333334f) *
-                                 *(float *)(data + 0x2c));
-        add_vector_xyz(&temp, &temp, moby + 0x10);
-        particle = FUN_L00_002712b8_94f8(&temp, &velocity, scale_game_frames(60),
-                                          0x7f, 0x606060, 3, 40000.0f, 1000.0f,
-                                          1.0f, -0.0002f, 0.0f);
+        normalize_vector_xyz(&temp, &data->step, random_float_between(t, t + 0.33333334f) * data->speed);
+        add_vector_xyz(&temp, &temp, &moby->pos);
+        particle = FUN_L00_002712b8_94f8(&temp, &velocity, scale_game_frames(60), 0x7f, 0x606060, 3, 40000.0f,
+                                          1000.0f, 1.0f, -0.0002f, 0.0f);
         if (particle != 0) {
             unsigned char *texture_pixels = *(unsigned char **)(texture + 0x5c);
             unsigned char texture_pixel = texture_pixels[0];
             particle[3] = 0x44;
             particle[2] = texture_pixel;
         }
-        *(Q_94f8 *)&random = 0;
-        random.z = 0.02f;
-        transform_vector_by_basis_94f8(&random, &random, moby + 0xc0);
-        build_look_at_matrix_94f8(&random, &random, moby + 0xc0,
-                                  random_angle_radians_94f8());
-        FUN_L00_0026cbb0_94f8(&temp, &random, 0x4f007fff, 0x1fffffff,
-                               scale_game_frames(5), 1, 20000.0f);
+        random.q = 0;
+        random.f[2] = 0.02f;
+        transform_vector_by_basis_94f8(&random, &random, &moby->rot_row0);
+        build_look_at_matrix_94f8(&random, &random, &moby->rot_row0, random_angle_radians_94f8());
+        FUN_L00_0026cbb0_94f8(&temp, &random, 0x4f007fff, 0x1fffffff, scale_game_frames(5), 1, 20000.0f);
     }
-    pos = moby + 0x10;
-    target = *(char **)(data + 0x24);
-    if (target != 0 && (unsigned char)target[0x20] != 0xfe &&
-        (unsigned char)target[0x20] != 0xfd &&
-        distance_xyz_94f8(data + 0x10, target + 0x10) < 3.0f) {
-        yaw = angle_xy_94f8(*(float *)(*(char **)(data + 0x24) + 0x10) - *(float *)(moby + 0x10),
-                             *(float *)(*(char **)(data + 0x24) + 0x14) - *(float *)(moby + 0x14));
-        *(float *)(moby + 0x48) = yaw;
-        pitch = -angle_xy_94f8(distance_xy_94f8(pos, *(char **)(data + 0x24) + 0x10),
-                                *(float *)(*(char **)(data + 0x24) + 0x18) - *(float *)(moby + 0x18));
-        *(float *)(moby + 0x44) = pitch;
-        qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
+    pos = &moby->pos;
+    target = data->target;
+    if (target != 0 && target->state != 0xfe && target->state != 0xfd &&
+        distance_xyz_94f8(&data->target_pos, &target->pos) < 3.0f) {
+        moby->rot.z = angle_xy_94f8(data->target->pos.x - moby->pos.x, data->target->pos.y - moby->pos.y);
+        moby->rot.y = -angle_xy_94f8(distance_xy_94f8(pos, &data->target->pos), data->target->pos.z - moby->pos.z);
+        qcopy(&data->target_pos, &data->target->pos);
     } else {
-        FUN_L00_0025be00_94f8((float *)(moby + 0x48), (float *)(data + 0x30),
-                               *(float *)(moby + 0x48), frame_time_sq * 251.32741f,
+        FUN_L00_0025be00_94f8(&moby->rot.z, &data->turn_speed, moby->rot.z, frame_time_sq * 251.32741f,
                                frame_time_sq * 251.32741f, frame_time * 2513.2742f);
-        FUN_L00_0025be00_94f8((float *)(moby + 0x44), (float *)(data + 0x30),
-                               *(float *)(moby + 0x44), frame_time_sq * 251.32741f,
+        FUN_L00_0025be00_94f8(&moby->rot.y, &data->turn_speed, moby->rot.y, frame_time_sq * 251.32741f,
                                frame_time_sq * 251.32741f, frame_time * 2513.2742f);
-        *(char **)(data + 0x24) = 0;
+        data->target = 0;
     }
-    build_spherical_offset_94f8(data, *(float *)(data + 0x2c),
-                                *(float *)(moby + 0x48), -*(float *)(moby + 0x44));
-    add_vector_xyz(pos, pos, data);
-    if (*(float *)(moby + 0x10) < 2.0f || 1021.0f < *(float *)(moby + 0x10) ||
-        *(float *)(moby + 0x14) < 2.0f || 1021.0f < *(float *)(moby + 0x14) ||
-        *(float *)(moby + 0x18) < 2.0f || 1021.0f < *(float *)(moby + 0x18)) goto remove;
+    build_spherical_offset_94f8(&data->step, data->speed, moby->rot.z, -moby->rot.y);
+    add_vector_xyz(pos, pos, &data->step);
+    if (moby->pos.x < 2.0f || 1021.0f < moby->pos.x || moby->pos.y < 2.0f || 1021.0f < moby->pos.y ||
+        moby->pos.z < 2.0f || 1021.0f < moby->pos.z) {
+        mark_moby_for_removal(moby);
+        return;
+    }
     moby_point_position_94f8(moby, 1, &spray);
-    if (FUN_001efa68(&old, &spray, 0, *(void **)(data + 0x20), 0)) {
-        {
-            int spray_count = 1;
-            int tint = -1;
-            FUN_L00_0025e450_94f8(pos - 0x10, data, D_L11_00174860_94f8, 2.0f, 10.0f,
-                                   10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
-                                   -1, 20.0f, 0, spray_count, tint, 0);
-        }
-remove:
+    if (FUN_001efa68(&old, &spray, 0, data->collision, 0)) {
+        FUN_L00_0025e450_94f8(moby, data, D_L11_00174860_94f8, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
+                               -1, 20.0f, 0, 1, -1, 0);
         mark_moby_for_removal(moby);
-    } else if (tick_countdown_32_alt(data + 0x28)) {
-        mark_moby_for_removal(moby);
+        return;
     }
+    if (tick_countdown_32_alt(&data->timer))
+        mark_moby_for_removal(moby);
 }
-#endif
 extern void FUN_001f97b0_30a908(void) __asm__("FUN_001f97b0");
 extern void FUN_001f9a10_30a908(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a68_30a908(void *, void *, float) __asm__("FUN_001f9a68");
