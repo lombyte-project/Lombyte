@@ -2034,8 +2034,8 @@ void FUN_L10_002da690(void *moby) {
         ((u64 *)buffers.matrix1)[6] = 0xff9000000260ULL;
         ((u64 *)buffers.packet.fields.matrix2)[6] = 0xff9000000260ULL;
         ((u64 *)buffers.matrix1)[7] = packet_flags;
-        ((u64 *)buffers.packet.fields.matrix2)[4] = 0;
         ((u64 *)buffers.matrix1)[4] = 0;
+        ((u64 *)buffers.packet.fields.matrix2)[4] = 0;
         ((u64 *)buffers.packet.fields.matrix2)[7] = packet_flags;
     }
     {
