@@ -1022,12 +1022,12 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
     if (m != 0) {
     vars = m->pvars;
     *(struct Moby **)(vars + 0x20) = source;
-    m->visible = 1;
-    m->update_dist = 0x7f;
-    m->draw_dist = 0x7f;
-    m->spawn_frame = source->spawn_frame;
+    ((volatile struct Moby *)m)->draw_dist = 0x7f;
+    ((volatile struct Moby *)m)->update_dist = 0x7f;
+    ((volatile struct Moby *)m)->visible = 1;
+    ((volatile struct Moby *)m)->spawn_frame = source->spawn_frame;
     *(f32 *)((u8 *)m + 0x40) = D_L00_00161890_2caf70;
-    *(f32 *)((u8 *)m + 0x44) = FUN_002000e8_2caf70(speed, D_L00_00161894_2caf70);
+    *(f32 *)((u8 *)m + 0x44) = FUN_002000e8_2caf70(speed, *(volatile f32 *)&D_L00_00161894_2caf70);
     *(f32 *)((u8 *)m + 0x48) = height;
     qcopy(&m->pos, start);
     if (other != 0) {
