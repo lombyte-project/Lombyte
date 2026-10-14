@@ -2361,7 +2361,7 @@ void FUN_L06_002f2250(void) {
     }
     {
         GbMoby **moby_list = mobys;
-        if (moby_count > 0) for (i = moby_count; i != 0; i--) {
+        if (moby_count > 0) for (n = moby_count; n != 0; n--) {
             GbVars *vars = (*moby_list)->vars;
             vars->f18C = level_frame_count;
             vars->target = *(GbMoby **)((char *)vars + 0x178);
