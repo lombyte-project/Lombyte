@@ -866,57 +866,63 @@ void FUN_L12_002e3098(struct Moby *moby) {
     float direction[4] __attribute__((aligned(16)));
     float angle, horizontal, vertical, radius;
     int i, j, count, a, b, c, d, life;
+    struct Moby *volatile source_moby;
     void *volatile vars;
+    float *volatile pos_ptr;
+    void *volatile position_source;
     float *direction_ptr;
 
-    vars = *(void *volatile *)&(*(struct Moby *volatile *)&moby)->pvars;
+    vars = moby->pvars;
+    source_moby = moby;
 
     count = D_L12_0016183C;
-    if ((*(struct Moby *volatile *)&moby)->state == 15)
+    if (moby->state == 15)
         count = truncate_float_to_s32_e3098((float)count * 1.5f);
     i = 0;
     if (count > 0) {
+        pos_ptr = pos;
         direction_ptr = direction;
+        position_source = &source_moby->pos;
 
-        do {
-        qcopy(pos, &(*(struct Moby *volatile *)&moby)->pos);
-        randomize_position(pos, D_L12_00161844);
-        pos[2] += 0.55f;
-        angle = random_angle_radians_e3098();
-        horizontal = random_float_between_alt_e3098(D_L12_00161850, D_L12_00161854);
-        vertical = random_float_between_alt_e3098(D_L12_00161858, D_L12_0016185C);
-        if ((*(struct Moby *volatile *)&moby)->state == 15) {
-            vertical *= 0.55f;
-            horizontal *= 0.55f;
-            pos[2] -= 0.2f;
+        for (; i < count; ++i) {
+            qcopy(pos_ptr, position_source);
+            randomize_position(pos_ptr, D_L12_00161844);
+            pos[2] += 0.55f;
+            angle = random_angle_radians_e3098();
+            horizontal = random_float_between_alt_e3098(D_L12_00161850, D_L12_00161854);
+            vertical = random_float_between_alt_e3098(D_L12_00161858, D_L12_0016185C);
+            if (source_moby->state == 15) {
+                vertical *= 0.55f;
+                horizontal *= 0.55f;
+                pos[2] -= 0.2f;
+            }
+            velocity[0] = fast_cos_e3098(angle) * (horizontal * frame_time);
+            velocity[1] = fast_sin_e3098(angle) * (horizontal * frame_time);
+            velocity[2] = vertical * frame_time + 0.0f;
+            set_direction(0.5f, direction_ptr, (char *)vars + 0x120);
+            direction[2] = 0.0f;
+            rotate_vector(velocity, velocity, direction_ptr);
+            qcopy(accel, velocity);
+            accel[2] -= D_L12_00161860 * frame_time_sq *
+                        (float)scale_game_frames_e3098(D_L12_00161880);
+            for (j = 0; j < D_L12_00161840; j++) {
+                radius = random_float_between_alt_e3098(0.5f, 1.5f);
+                velocity[3] = radius * D_L12_00161864;
+                accel[3] = radius * D_L12_00161868;
+                randomize_position(pos, D_L12_00161848);
+                randomize_position(accel, D_L12_0016184C * frame_time);
+                a = random_integer_between(random_float_between_alt_e3098(0.0f, 1.0f),
+                                           D_L12_0016186C, D_L12_00161874);
+                b = random_integer_between(random_float_between_alt_e3098(0.0f, 1.0f),
+                                           D_L12_00161870, D_L12_00161878);
+                c = scale_game_frames_e3098(D_L12_0016187C);
+                d = scale_game_frames_e3098(D_L12_00161880);
+                life = truncate_float_to_s32_e3098(FUN_001f96b0(
+                    random_float_between_alt_e3098(
+                        (float)D_L12_00161884 * 0.5f, (float)D_L12_00161884 * 2.5f)));
+                spawn_particle(pos, velocity, accel, a, b, c, d, life, -1);
+            }
         }
-        velocity[0] = fast_cos_e3098(angle) * (horizontal * frame_time);
-        velocity[1] = fast_sin_e3098(angle) * (horizontal * frame_time);
-        velocity[2] = vertical * frame_time + 0.0f;
-        set_direction(0.5f, direction_ptr, (char *)vars + 0x120);
-        direction[2] = 0.0f;
-        rotate_vector(velocity, velocity, direction_ptr);
-        qcopy(accel, velocity);
-        accel[2] -= D_L12_00161860 * frame_time_sq *
-                    (float)scale_game_frames_e3098(D_L12_00161880);
-        for (j = 0; j < D_L12_00161840; j++) {
-            radius = random_float_between_alt_e3098(0.5f, 1.5f);
-            velocity[3] = radius * D_L12_00161864;
-            accel[3] = radius * D_L12_00161868;
-            randomize_position(pos, D_L12_00161848);
-            randomize_position(accel, D_L12_0016184C * frame_time);
-            a = random_integer_between(random_float_between_alt_e3098(0.0f, 1.0f),
-                                       D_L12_0016186C, D_L12_00161874);
-            b = random_integer_between(random_float_between_alt_e3098(0.0f, 1.0f),
-                                       D_L12_00161870, D_L12_00161878);
-            c = scale_game_frames_e3098(D_L12_0016187C);
-            d = scale_game_frames_e3098(D_L12_00161880);
-            life = truncate_float_to_s32_e3098(FUN_001f96b0(
-                random_float_between_alt_e3098(
-                    (float)D_L12_00161884 * 0.5f, (float)D_L12_00161884 * 2.5f)));
-            spawn_particle(pos, velocity, accel, a, b, c, d, life, -1);
-        }
-        } while (++i < count);
     }
 }
 #endif
