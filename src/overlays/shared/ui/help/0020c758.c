@@ -798,9 +798,9 @@ unhandled_update:
                     } else {
                         value = *(f32 *)(obj + 0x24) + tenth * frame_scale;
                         *(f32 *)(obj + 0x24) = value;
-                        if (1.0f < value)
-                            *(f32 *)(obj + 0x24) = 1.0f;
-                        if (*(f32 *)(obj + 0x24) == 1.0f)
+                        if (one < value)
+                            *(f32 *)(obj + 0x24) = one;
+                        if (*(f32 *)(obj + 0x24) == one)
                             obj[0x32] = 0;
                     }
                 }
