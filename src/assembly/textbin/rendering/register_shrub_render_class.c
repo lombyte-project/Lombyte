@@ -146,10 +146,10 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                             (((u64)draw_shift) << 6) | 0x20;
                 material_word = (packet_material_base | (((u64)material_shift) << 2)) |
                                 (((u64)material_index) << 24);
-                mip_word = (((u64)(texture->mip_block_offset_1 + gs_block_base) << 40) |
-                            (((u64)1) << 34)) |
-                           (((u64)width_units_128 << 14) |
-                            (((u64)(texture->mip_block_offset_0 + gs_block_base)) << 20));
+                mip_word = (((u64)width_units_128 << 14) |
+                            (((u64)(texture->mip_block_offset_0 + gs_block_base)) << 20)) |
+                           (((u64)(texture->mip_block_offset_1 + gs_block_base) << 40) |
+                            (((u64)1) << 34));
                 mip_word |= ((u64)1) << 54;
                 texture_word =
                     ((((u64)width_units_64 << 14) | (((u64)width_log2 << 26) | 0x1300000)) |
