@@ -2112,7 +2112,80 @@ void wrench_update(WrenchMoby *m) {
     default: break;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a96f8.s", FUN_L00_002a96f8);
+#else
+extern float D_L00_001613C4 __attribute__((sda));
+extern char D_0013F490[];
+extern char D_L00_001B0770[];
+extern unsigned char *FUN_L00_002630c8(void *, void *, void *, float *, float *, float *, float);
+extern void FUN_L00_0025f780(void *, void *, int);
+
+unsigned char *FUN_L00_002a96f8(float a, float b, float c, float d, float e,
+                              unsigned char *owner, void *pos, unsigned char *target) {
+    OvlVec4 direction, position;
+    unsigned char *m = create_moby(0x100);
+    unsigned char *data;
+    unsigned char *hit;
+    int frames;
+    int timer;
+    float length;
+    if (m != 0) {
+        m[0x30] = 0xff;
+        m[0x31] = 1;
+        m[0x20] = 0;
+        *(float *)(m + 0x2c) *= D_L00_001613C4;
+        *(unsigned short *)(m + 0x32) = 0xff;
+        data = *(unsigned char **)(m + 0x78);
+        *(float *)(m + 0x48) = d;
+        *(float *)(m + 0x44) = e;
+        if (target == 0) {
+            build_spherical_offset(&direction, D_0015ED6C * 20.0f, d, e);
+            position.q = *(OvlQuad *)pos;
+            target = FUN_L00_002630c8(owner, &position, &direction, &a, &b, &c, 0.34906584f);
+        }
+        *(unsigned char **)(data + 0x10) = owner;
+        qcopy(m + 0x10, pos);
+        length = D_0015ED6C * 100.0f;
+        *(int *)(data + 0x38) = 1;
+        *(int *)(data + 0x24) = 0;
+        *(int *)(data + 0x28) = 0;
+        *(int *)(data + 0x20) = 0;
+        *(float *)(data + 0x34) = length;
+        *(unsigned char **)(data + 0x18) = target;
+        if (target != 0 && (hit = (unsigned char *)FUN_002141f8(target)) != 0) {
+            *(unsigned short *)(hit + 0x1e) |= 0x80;
+            if (hit[0xb] != 0) *(int *)(data + 0x38) = 0;
+            if ((unsigned char)hit[0xc] != 0)
+                *(float *)(data + 0x34) = (float)(unsigned char)hit[0xc] * D_0015ED6C;
+        }
+        *(float *)(data + 0x2c) = a;
+        *(float *)(data + 0x30) = b;
+        *(int *)(data + 0x14) = scale_game_frames(0x96);
+        if (target != 0) {
+            qcopy(data, target + 0x10);
+            *(float *)(data + 8) += c;
+            *(float *)(data + 0x1c) = c;
+        }
+        length = vector_length_xyz(D_0013F490);
+        frames = 1;
+        if (D_0015ED6C * 0.1f < length) frames = 0x3c;
+        timer = scale_game_frames(frames);
+        *(volatile short *)(data + 0x3c) = timer;
+        *(volatile short *)(data + 0x3e) = timer;
+        direction.q = *(OvlQuad *)(owner + 0x10);
+        direction.f[2] = ((float *)pos)[2];
+        if (FUN_001efa68(&direction, pos, 0, (int)D_001413D0, 0) != 0) {
+            m[0xbc] = 1;
+            qcopy(m + 0x10, &D_L00_00173E60_2a8028);
+        }
+        FUN_L00_00250df8(m);
+        FUN_L00_0025f780(m, D_L00_001B0770, 0x1f);
+        *(float *)(m + 0x2c) += *(float *)(m + 0x2c);
+    }
+    return m;
+}
+#endif
 /* Creates a moby at a position with a scale, colour and a few data fields. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAC50), where it is exact; names translated to the US level program. */
 
