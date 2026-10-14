@@ -1860,10 +1860,9 @@ void FUN_L12_00308350(struct Moby *m) {
         jitter = 0.0f;
         for (row = -3; row < 3; row++) {
             float x = (float)row + jitter;
-            jitter = 0.0f;
             ((float *)&first.vertices[0])[1] = x;
             ((float *)&first.vertices[1])[1] = x;
-            if (row < 4) jitter = random_float_between(-0.2f, 0.2f);
+            jitter = row < 4 ? random_float_between(-0.2f, 0.2f) : 0.0f;
             x = (float)(row + 1) + jitter;
             ((float *)&first.vertices[2])[1] = x;
             ((float *)&first.vertices[3])[1] = x;
