@@ -2215,7 +2215,8 @@ extern f32 D_L10_00161EF8 __attribute__((sda));
 extern f32 D_L10_00161EFC __attribute__((sda));
 extern f32 D_L10_00161F00 __attribute__((sda));
 extern s32 D_L10_00161F04 __attribute__((sda));
-extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
+extern f32 frame_time_absolute_4a88 __asm__("D_L10_0015ED6C") __attribute__((section(".sdata")));
+extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_L10_001f2578");
 extern void scale_vector_xyz(f32 *, f32 *, f32) __asm__("FUN_001f9a68");
 extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
 extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
@@ -2262,7 +2263,7 @@ void FUN_L10_002e5be0(struct Moby *moby) {
             radius = x;
             if (radius < y) radius = y;
             if (radius < z) radius = z;
-            build_spherical_offset(velocity.f, radius * frame_time, moby->rot.z,
+            build_spherical_offset(velocity.f, radius * frame_time_absolute_4a88, moby->rot.z,
                                    -moby->rot.y);
 
             if (variant) {
