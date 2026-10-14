@@ -79,7 +79,8 @@ void FUN_L00_002b94d0(u8 *o) {
     char *collided[128];
     Vec4 target_delta;
     union { struct { Vec4 origin; HitDescriptor_2b94d0 hit0; } first; HitDescriptor_2b94d0 hit1; } effects;
-    Vec4 differences[4];
+    /* Retail uses a five-vector scratch span with differences beginning at slot 1. */
+    Vec4 differences[5];
     u8 *v = *(u8 **)(o + 0x78);
     char *best = 0, *second = 0, *candidate, **list, *data;
     float best_score = 0.0f, second_score = 0.0f;
@@ -180,11 +181,13 @@ void FUN_L00_002b94d0(u8 *o) {
     collided_count = 0;
     fast_vec_scale(spacing, &step, &direction);
     qcopy(D_L00_001DB5C0, v); qcopy(D_L00_001DB5C0 + 0x140, v);
-    collision_previous = (char *)D_L00_001DB5C0 - 16;
+    difference = 16;
     point = (char *)D_L00_001DB5C0 + 16;
     previous = (char *)D_L00_001DB5C0;
     side = (char *)D_L00_001DB5C0 + 0x150;
-    for (i = 1; i < 20; i++, collision_previous += 16, point += 16, previous += 16, side += 16) {
+    for (i = 1; i < 20; i++, difference += 16, point += 16, side += 16) {
+        previous = (char *)D_L00_001DB5C0 - 16 + difference;
+        collision_previous = (char *)D_L00_001DB5C0 - 32 + difference;
         n = (float)i;
         amplitude = D_L00_001615A4 + (D_L00_001615A8 - D_L00_001615A4) *
                     (FUN_001fa6c0(i) * 0.05f);
@@ -324,14 +327,14 @@ void FUN_L00_002b94d0(u8 *o) {
         point = (char *)D_L00_001DBA20 + i * 0x50;
         if (!FUN_001f9770(&D_L00_00161658[i])) {
             for (j = 0; j < 4; j++) {
-                fast_vec_sub(&differences[j], point + (j + 1) * 16, point + j * 16);
-                differences[j].f[0] += FUN_L00_00257c48(0.0f, 0.1f);
-                differences[j].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
-                differences[j].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
+                fast_vec_sub(&differences[j + 1], point + (j + 1) * 16, point + j * 16);
+                differences[j + 1].f[0] += FUN_L00_00257c48(0.0f, 0.1f);
+                differences[j + 1].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
+                differences[j + 1].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
             }
             qcopy(point, &effects.first.origin);
             for (j = 0; j < 4; j++)
-                fast_vec_add(point + (j + 1) * 16, point + j * 16, &differences[j]);
+                fast_vec_add(point + (j + 1) * 16, point + j * 16, &differences[j + 1]);
             if (D_L00_00161670[i] < D_L00_00161658[i])
                 difference = D_L00_00161658[i] - D_L00_00161670[i];
             else difference = D_L00_00161670[i] - D_L00_00161658[i];
