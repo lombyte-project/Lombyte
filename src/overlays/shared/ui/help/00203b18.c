@@ -856,9 +856,7 @@ void FUN_L00_002062b0(void) {
             *(u32 *)(*(char **)(g + 0x2080) + 0x90) = FUN_L00_00200298_002062b0(0.1f, *(u32 *)(*(char **)(g + 0x2080) + 0x90), color);
             for (i = 0; i < 3; i++)
                 FUN_L00_0024f7c8(hero.moby, i, g + 0x1d50 + i * 0x10);
-        }
-        {
-            char *g = (char *)&hero;
+            g = (char *)&hero;
             moby = *(char **)(g + 0x2080);
             /* Retail snapshots these channels before the alpha helper calls. */
             blue = *(u8 *)(moby + 0x92);
