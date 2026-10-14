@@ -6,6 +6,8 @@
 #include "asm.h"
 #include "rnc/overlay/collision.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/text/font_state.h"
+#include "rnc/ui/menus/menu_globals.h"
 #include "rnc/overlay/level_labels.h"
 
 

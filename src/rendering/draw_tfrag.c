@@ -3,6 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 
 struct Locals {
     u8 pad0[0x30];

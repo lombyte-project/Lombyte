@@ -4,6 +4,9 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/rendering/render_globals.h"
+#include "rnc/video/decoder/decoder_globals.h"
 #include "rnc/overlay/level_globals.h"
 
 #ifndef NON_MATCHING

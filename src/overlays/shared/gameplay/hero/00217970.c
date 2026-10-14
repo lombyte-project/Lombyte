@@ -11,6 +11,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/data_labels.h"
+#include "rnc/input/pad_globals.h"
 
 struct MobyView {
     u8 pad0[0xC];

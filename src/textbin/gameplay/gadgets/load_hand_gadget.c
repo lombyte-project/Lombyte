@@ -8,6 +8,7 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 typedef struct Moby {
     u8 pad00[0x20];

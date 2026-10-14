@@ -9,6 +9,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
 #define MOBY(p) ((struct Moby *)(p))
 
 #define NOT_SDA

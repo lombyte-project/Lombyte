@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 func_001FA6E0(s32, s32, f32);
 

@@ -10,6 +10,8 @@
 #include "rnc/overlay/entities.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 extern float D_0015ED6C_n[] __asm__("D_0015ED68") __attribute__((section(".sdata")));
 
 extern char *D_L11_0015FFD8;

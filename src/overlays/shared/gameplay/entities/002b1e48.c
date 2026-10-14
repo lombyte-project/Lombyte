@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
 

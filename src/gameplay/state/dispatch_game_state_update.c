@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 extern void prepare_debug_profiler_render(void) __asm__("func_001F4248");
 extern void draw_debug_profiler(void) __asm__("func_001F39D0");

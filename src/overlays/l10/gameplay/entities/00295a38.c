@@ -6,6 +6,8 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/audio/sound_state.h"
 #include "rnc/overlay/level_globals.h"
 
 #define NOT_SDA

@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/help/message_state.h"
 extern s32 find_help_entry(s16, s32, u16 *) __asm__("func_001FECC8");
 void push_help_history(s32 id) __asm__("FUN_001fed30");
 

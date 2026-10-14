@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/video/decoder/video_dec.h"
 #include "rnc/data_labels.h"
+#include "rnc/video/decoder/decoder_globals.h"
 
 struct Code4 {
     u8 b[4];

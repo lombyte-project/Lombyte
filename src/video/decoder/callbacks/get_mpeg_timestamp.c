@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/video/decoder/decoder_globals.h"
 extern void vi_buf_get_ts(s32, u64 *) __asm__("func_0023C920");
 struct Out {
     u8 pad[8];

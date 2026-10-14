@@ -3,6 +3,7 @@
 #include "qcopy.h"
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_001f0b58(void);
 extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0");

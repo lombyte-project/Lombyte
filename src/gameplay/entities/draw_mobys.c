@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 extern u8 vu_chain_overflow_message[] __asm__("D_001E8400");
 extern s32 D_0018A2D8[];
 extern s32 DebugPrint();

@@ -1,6 +1,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 extern s32 request_audio_stream_break() __asm__("FUN_002166e8");
 

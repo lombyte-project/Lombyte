@@ -3,6 +3,7 @@
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 void vu1_init_chain(void) __asm__("FUN_002335d0");
 

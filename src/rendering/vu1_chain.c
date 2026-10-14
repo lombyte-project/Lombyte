@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 /* The SDK DMA channel registers; only CHCR (offset 0) is touched here. */
 struct DmaChannel {

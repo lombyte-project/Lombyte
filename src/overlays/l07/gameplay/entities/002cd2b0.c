@@ -6,6 +6,7 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 

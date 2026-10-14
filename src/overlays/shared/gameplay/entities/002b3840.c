@@ -8,6 +8,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
 extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");

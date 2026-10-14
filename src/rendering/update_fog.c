@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/view.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 /* D_001872D4 is the fog-source selector, a field 0x2D4 into this block. */
 struct FogMode {

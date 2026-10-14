@@ -6,6 +6,7 @@
 #include "rnc/ui/text/text_region.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 
 /* State of the level's message box (D_L00_00173040). */

@@ -2,6 +2,8 @@
 #include "rnc/globals.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/text/font_state.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 extern u8 D_00100080[];
 extern u8 D_0015FED0[];

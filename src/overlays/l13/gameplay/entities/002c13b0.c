@@ -11,6 +11,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 extern char *create_moby_c13(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(void *);

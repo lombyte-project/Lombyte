@@ -6,6 +6,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312948.s", FUN_L07_00312948);
 #define NOT_SDA

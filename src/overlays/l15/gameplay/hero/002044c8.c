@@ -6,6 +6,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/data_labels.h"
+#include "rnc/input/pad_globals.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks. */
 extern int D_0015ED84_d __asm__("D_0015ED84");

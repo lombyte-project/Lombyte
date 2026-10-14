@@ -1,5 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/rendering/render_globals.h"
 
 extern void draw_debug_profiler() __asm__("func_001F39D0");
 extern void append_gif_transfer_packet() __asm__("func_001FB368");

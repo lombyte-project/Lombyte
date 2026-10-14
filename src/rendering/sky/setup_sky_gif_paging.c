@@ -3,6 +3,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 struct SkyVisibilityEntry {
     u64 flags;
     u8 pad8[8];

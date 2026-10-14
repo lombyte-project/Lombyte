@@ -3,6 +3,7 @@
 #include "eetypes.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 /* One image of a texture upload list. */
 struct TextureImage {

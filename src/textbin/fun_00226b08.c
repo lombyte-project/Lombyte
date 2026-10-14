@@ -3,6 +3,8 @@
 #include "sda.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Preserves selected state across func_00209370 using scratchpad copies.
    Only listed bytes of item_available are restored; each D_00141EA0 entry is

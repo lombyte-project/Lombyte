@@ -10,6 +10,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/data_labels.h"
+#include "rnc/input/pad_globals.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00223630.c: func_L06_00223630), where it is exact; names translated to the US level program. */
 

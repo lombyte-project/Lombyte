@@ -4,6 +4,7 @@
 #include "types.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 
 /* One glow billboard; append_billboard_batch draws the active ones. */
 typedef struct BillboardRecord {

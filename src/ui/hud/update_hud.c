@@ -2,6 +2,7 @@
 #include "rnc/ui/hud/hud_state.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 struct HudSlot {
     u8 pad_0[0x18];

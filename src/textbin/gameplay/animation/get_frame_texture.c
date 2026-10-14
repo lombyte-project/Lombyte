@@ -5,6 +5,7 @@
 #include "rnc/globals.h"
 #include "rnc/rendering/texture_upload.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 struct FrameTextureRef {
     s16 palette_index;

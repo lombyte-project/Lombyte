@@ -7,6 +7,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 extern Vec4 D_0013E090[2] NOT_SDA; /* camera start: position, rotation */
 extern s32 D_00141660 NOT_SDA;

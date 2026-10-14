@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/audio/sound_state.h"
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 extern s32 snd_send_iop_command_and_wait() __asm__("func_0012E548");
 extern s32 snd_stream_safe_cd_sync() __asm__("func_0012EE08");

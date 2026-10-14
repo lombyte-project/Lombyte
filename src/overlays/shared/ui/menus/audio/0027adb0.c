@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/help/message_state.h"
 
 typedef struct {
     s16 a;

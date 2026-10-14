@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 extern s32 SubtractIntegerWithClamp();
 extern void setup_gif_paging() __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");

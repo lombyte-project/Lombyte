@@ -2,6 +2,7 @@
 #include "qcopy.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 extern void FUN_001f9bf8(void *dst, void *src, float len); /* dst = normalize(src) * len */
 extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1,
                                   void *axis) __asm__("func_001EC530");

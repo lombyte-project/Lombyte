@@ -1,6 +1,7 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 typedef struct {
     char pad00[0x10];

@@ -1,5 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/rendering/render_globals.h"
 
 struct CameraProbePosition {
     f32 x;

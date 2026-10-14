@@ -1,5 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/text/font_state.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/rendering/render_globals.h"
 
 struct Globals_0016045C {
     u8 pad_0[0x4];

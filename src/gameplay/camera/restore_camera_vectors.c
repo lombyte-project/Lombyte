@@ -1,6 +1,7 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001ECC10). */
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 /* When the flag at +2 is set, copies the 16-byte vectors at +0xC0 and
    +0xD0 back to +0x50 and +0x60 with retail's qcopy (see common.h). */
 void restore_camera_vectors(void) __asm__("FUN_001ec868");

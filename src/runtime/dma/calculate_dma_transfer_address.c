@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 extern s32 vu_chain_table[] __asm__("D_001DDFB8");
 
 void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");

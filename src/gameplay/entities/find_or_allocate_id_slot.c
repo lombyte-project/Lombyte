@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 s32 find_or_allocate_id_slot(s32 id) __asm__("FUN_0020cc18");
 
 s32 find_or_allocate_id_slot(s32 id) {

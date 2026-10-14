@@ -5,6 +5,9 @@
 #include "asm.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/audio/sound_state.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/rendering/render_globals.h"
 #include "rnc/globals.h"
 
 typedef struct {

@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 typedef struct {
     u8 pad_0[0x140];

@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/text/font_state.h"
 struct AnimSeq {
     u8 pad0[0x11];
     u8 unk11;

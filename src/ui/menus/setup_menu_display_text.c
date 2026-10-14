@@ -2,6 +2,7 @@
 
 #include "rnc/ui/map/map_state.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void draw_moby_list(int, int) __asm__("func_0020D330");

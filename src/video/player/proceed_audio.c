@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/video/decoder/decoder_globals.h"
 
 extern s32 audio_dec_send() __asm__("func_0023AEF0");
 

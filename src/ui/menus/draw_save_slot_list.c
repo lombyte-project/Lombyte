@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 typedef struct {
     u8 pad_0[0x20];

@@ -5,6 +5,8 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/text/font_state.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 struct LevelProjectionState {
     u8 pad_0[0xB0];

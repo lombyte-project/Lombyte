@@ -3,6 +3,8 @@
 #include "rnc/rendering/view.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/text/font_state.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 
 
 extern void FUN_001f9ff8(f32 (*)[4], f32);

@@ -2,6 +2,7 @@
 #include "rnc/rendering/screen.h"
 #include "rnc/ui/text/text_region.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/text/font_state.h"
 
 typedef struct {
     u8 pad0[0x20];

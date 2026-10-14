@@ -5,6 +5,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 /* gp-relative here, so not the plain rnc/globals.h spellings. */
 

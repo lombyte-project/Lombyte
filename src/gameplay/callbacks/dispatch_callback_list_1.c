@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 void dispatch_callback_list_1(void) __asm__("FUN_001f4650");
 
 void dispatch_callback_list_1(void) {

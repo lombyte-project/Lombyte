@@ -3,6 +3,7 @@
 
 #include "rnc/rendering/fs_aa_packets.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");

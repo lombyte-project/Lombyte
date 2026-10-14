@@ -1,6 +1,7 @@
 /* Ported from rac1-decomp (src/game/mobyutil.c, func_00213DE0). */
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 extern int find_or_allocate_id_slot(int v) __asm__("func_0020CC18");
 typedef struct {
     char _pad00[0x10];

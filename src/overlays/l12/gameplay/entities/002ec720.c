@@ -5,6 +5,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/input/pad_globals.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
 

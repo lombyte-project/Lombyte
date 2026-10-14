@@ -3,6 +3,7 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 
 #include "rnc/gameplay/camera/update_cam.h"
 extern int step_camera_blend(void *, void *) __asm__("func_001ECAF8");

@@ -13,6 +13,8 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
+#include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/help_0022BE40.c: func_L02_0022BE40), where it is exact; names translated to the US level program. */

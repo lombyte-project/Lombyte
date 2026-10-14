@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/video/decoder/video_dec.h"
 #include "rnc/data_labels.h"
+#include "rnc/video/decoder/decoder_globals.h"
 
 extern s32 vi_buf_put_ts(s32, struct ViBufTimeStamp *) __asm__("func_0023C810");
 /* Retail 0x0023cc98 passes a 0x18-byte timestamp record (PTS/DTS at

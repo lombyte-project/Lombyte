@@ -10,6 +10,8 @@
 
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Ported from rac1-decomp (src/overlays/l15_quartu/help_00217348.c: func_L15_00217348), where it is exact; names translated to the US level program. */
 

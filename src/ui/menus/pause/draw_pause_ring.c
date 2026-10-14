@@ -1,5 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Draws the pause menu's ring of 8 icons and the quick-select overlay.
    arg0 is the pause-state object: unk20/unk24 give the viewport

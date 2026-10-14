@@ -3,6 +3,8 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/gameplay/state/game_globals.h"
 #include "rnc/globals.h"
 
 typedef struct {

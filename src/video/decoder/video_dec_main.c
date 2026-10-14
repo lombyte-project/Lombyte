@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/video/decoder/decoder_globals.h"
 
 /* Movie decoder context at *D_0016120C (VideoDec lives at +0xD9048). */
 struct MovieGlobals {

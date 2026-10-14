@@ -3,6 +3,7 @@
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 struct AmmoPreviewMoby;
 struct AmmoPreviewOwner {

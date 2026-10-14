@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/storage/memory_card/mc_data.h"
 extern char D_001E81D0[];
 extern s32 get_dma_packet_span_bytes(void *) __asm__("GetDmaPacketSpanBytes");
 extern void DebugPrint(char *, ...);

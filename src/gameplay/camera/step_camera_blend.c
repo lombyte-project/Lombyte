@@ -3,6 +3,7 @@
 #include "qcopy.h"
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 extern void FUN_001f9a10(void *, void *, void *);
 extern char D_00187080[];
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");

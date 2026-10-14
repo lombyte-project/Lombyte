@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/audio/sound_state.h"
 
 /* The IOP return buffer this file owns: both functions below reach these
    gp-relative, which needs their definitions ahead of them. */

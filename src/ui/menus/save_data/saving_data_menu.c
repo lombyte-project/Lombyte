@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
 typedef struct __attribute__((packed)) {
     s64 v;
 } Unaligned64;

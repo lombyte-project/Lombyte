@@ -8,6 +8,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/watch.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 #define NOT_SDA __attribute__((section(".data")))
 

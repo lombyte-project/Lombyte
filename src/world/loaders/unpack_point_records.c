@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 struct Point {
     u64 flags;
     s16 y;

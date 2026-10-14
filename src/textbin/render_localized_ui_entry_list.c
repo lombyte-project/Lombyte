@@ -3,6 +3,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/text/font_metrics.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/text/font_state.h"
 
 
 

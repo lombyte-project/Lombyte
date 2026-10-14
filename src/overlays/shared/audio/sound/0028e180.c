@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Per-frame update of a pickup-like moby: pulses its colour, tracks the player's range and collects items. */
 extern char D_L00_00166DC0[];

@@ -1,6 +1,7 @@
 #include "sda.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
 extern int D_0015EEB4_s[] __asm__("D_0015EEB4") __attribute__((sda));
 extern int mode_freeze_flags __asm__("D_0015EEB4");
 extern int mode_freeze_state __asm__("D_0015EEB0") MACRO_ADDR;

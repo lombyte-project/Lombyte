@@ -7,6 +7,7 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 
 /* Register this level's vendor data set. */

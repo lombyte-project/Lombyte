@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/resident_class.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 #include "rnc/rendering/material_templates.h"
 extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");

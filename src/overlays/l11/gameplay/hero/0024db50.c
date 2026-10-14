@@ -10,6 +10,8 @@
 
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/help_0024E240.c: func_L11_0024E240), where it is exact; names translated to the US level program. */
 

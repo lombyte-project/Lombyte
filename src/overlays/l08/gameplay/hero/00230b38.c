@@ -10,6 +10,8 @@
 
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/help_00231228.c: func_L08_00231228), where it is exact; names translated to the US level program. */
 

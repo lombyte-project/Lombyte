@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 extern s32 D_0015F330;
 extern s32 D_0015F334;
 extern s32 D_0015F360 __attribute__((sda));

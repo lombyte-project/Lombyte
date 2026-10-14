@@ -4,6 +4,7 @@
 
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, s64 color,
                         s64 extra) __asm__("FUN_001f5450");

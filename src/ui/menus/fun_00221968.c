@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 FUN_00221968(struct MenuScreen *arg0) {

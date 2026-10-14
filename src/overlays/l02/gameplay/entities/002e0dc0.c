@@ -10,6 +10,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
 
 /* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
 typedef struct {

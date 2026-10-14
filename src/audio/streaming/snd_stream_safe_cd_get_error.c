@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/audio/sound_read_work.h"
 #include "rnc/data_labels.h"
+#include "rnc/audio/sound_state.h"
 extern s32 sceCdGetError();
 s32 snd_stream_safe_cd_get_error(s32 arg0) __asm__("FUN_0012eef0");
 

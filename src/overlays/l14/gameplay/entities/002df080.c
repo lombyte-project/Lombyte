@@ -8,6 +8,7 @@
 #include "rnc/overlay/moby_anim.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 #define MOBY(p) ((struct Moby *)(p))
 
 /* 0x002DF080, 180 bytes.  Initialises two tables of spaced vectors in the

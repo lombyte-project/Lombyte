@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
 extern char D_L00_001C5B00_23d028[] __asm__("D_L00_001C5B00") __attribute__((section(".data")));

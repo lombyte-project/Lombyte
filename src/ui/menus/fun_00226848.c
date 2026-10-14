@@ -2,6 +2,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 extern u8 preview_resource_ids[] __asm__("D_001D5D38");
 extern s32 LookupResourceEntry();

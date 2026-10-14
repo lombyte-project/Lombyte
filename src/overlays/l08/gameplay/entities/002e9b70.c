@@ -11,6 +11,9 @@
 
 #include "rnc/overlay/swarm_path.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/gameplay/state/options.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 typedef struct {
     SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */

@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 struct Obj {
     u8 pad0[0x30];
     s32 slots[19];

@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 struct CameraEnvironmentRegion {
     u8 pad0[0x50];

@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/video/decoder/decoder_globals.h"
 
 extern void switch_thread() __asm__("func_0023A770");
 extern void vi_buf_add_dma() __asm__("func_0023BF70");

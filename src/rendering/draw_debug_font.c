@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/text/font_state.h"
 extern s32 font_quad_count __asm__("D_0015F478");
 extern s32 font_queue_vu_state() __asm__("func_001F76A0");
 extern s32 func_001F89A4();

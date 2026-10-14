@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 
 /* Lens flare: 16 sprites along the line from the flare source's screen
    position through the screen centre, faded by distance and by how far

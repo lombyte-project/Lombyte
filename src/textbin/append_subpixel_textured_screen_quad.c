@@ -7,6 +7,7 @@
 
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
 
 void append_subpixel_textured_screen_quad(f32 screen_x, f32 screen_y, f32 screen_width,

@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
 
 typedef struct {
     u8 pad0[0x20];

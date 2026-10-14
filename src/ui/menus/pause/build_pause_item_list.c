@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 typedef struct {
     unsigned short a; /* +0 */
     short b;          /* +2 */

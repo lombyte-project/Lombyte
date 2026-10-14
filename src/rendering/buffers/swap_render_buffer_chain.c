@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 extern s32 D_00160F04;
 void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 

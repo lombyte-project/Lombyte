@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/audio/sound_state.h"
 extern s32 sceCdBreak(void);
 extern s32 snd_send_iop_command_no_wait() __asm__("func_0012E6E0");
 s32 snd_stream_safe_cd_break(void) __asm__("FUN_0012eea8");

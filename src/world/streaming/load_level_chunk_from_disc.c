@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 extern u8 D_1FF7FF0[];
 extern void submit_audio_stream_io_request(void *, s32, s32) __asm__("func_00216728");
 s32 load_level_chunk_from_disc(void) __asm__("FUN_002043b0");

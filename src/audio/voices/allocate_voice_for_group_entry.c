@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/audio/sound_state.h"
 
 /* These offsets include the 0x70-byte pool header before each slot. */
 struct VoiceGroupEntryWindow {

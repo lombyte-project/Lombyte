@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/audio/sound_read_work.h"
 #include "rnc/data_labels.h"
+#include "rnc/audio/sound_state.h"
 extern s32 sceCdRead();
 extern s32 snd_stream_safe_cd_sync() __asm__("func_0012EE08");
 extern s32 snd_send_iop_command_no_wait() __asm__("func_0012E6E0");

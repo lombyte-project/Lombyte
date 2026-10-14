@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/video/decoder/decoder_globals.h"
 struct AudioSystemState {
     u8 pad_0[0xD90F8];
     s32 unkD90F8;

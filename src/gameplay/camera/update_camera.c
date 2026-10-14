@@ -3,6 +3,8 @@
 #include "qcopy.h"
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 extern int text_screen_active[] __asm__("D_001E6400");
 extern char D_001870A0[];
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;

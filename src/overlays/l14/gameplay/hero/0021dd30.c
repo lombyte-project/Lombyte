@@ -9,6 +9,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/data_labels.h"
+#include "rnc/input/pad_globals.h"
 #include "rnc/overlay/level_labels.h"
 
 #define NOT_SDA

@@ -1,6 +1,7 @@
 #include "sda.h"
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
 
 extern s32 sound_volume_macro __asm__("D_0015EDF0") MACRO_ADDR;
 int FUN_0021cb00(void) {

@@ -3,6 +3,8 @@
 #include "rnc/storage/disc_table.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/rendering/render_globals.h"
 extern u8 vu0_micro_program[] __asm__("D_0010E4C0");
 extern void count_vsync() __asm__("FUN_0012f1c8");
 extern u8 rebooted_iop_message[] __asm__("D_0015FA88");

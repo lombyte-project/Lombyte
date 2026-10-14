@@ -3,6 +3,7 @@
 #include "rnc/globals.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 extern u8 D_001996D0[];
 

@@ -6,6 +6,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 
 #define NOT_SDA

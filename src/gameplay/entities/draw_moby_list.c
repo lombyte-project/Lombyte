@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 extern s32 func_00118A80();
 extern void stash_moby_class_dists(void) __asm__("func_0020D218");
 extern s32 restore_moby_class_dists() __asm__("func_0020D248");

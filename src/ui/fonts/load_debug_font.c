@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/text/font_state.h"
 
 extern u64 debug_font_pif_header __asm__("D_0015EEC8") MACRO_ADDR;
 extern void load_pif_as_psmt8_h() __asm__("func_001E9168");

@@ -10,6 +10,8 @@
 
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
+#include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/help_0023D688.c: func_L01_0023D688), where it is exact; names translated to the US level program. */

@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 /* Ported from rac1-decomp (src/game/draw.c:func_001F7A50), which matched our retail at the instruction level before the address space was translated. */
 

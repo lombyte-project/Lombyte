@@ -7,6 +7,8 @@
 
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 extern s32 FUN_001f97a0(s32);
 extern s64 FUN_00204e30(s32, s32, u8 *, u8 *, s32, s32);

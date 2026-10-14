@@ -8,6 +8,7 @@
 #include "qzero.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
 
 typedef union {
     u128 q;

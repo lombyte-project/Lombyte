@@ -2,6 +2,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 void clear_preview_resource_bindings(void) __asm__("FUN_002267b8");
 void clear_preview_resource_bindings(void) {

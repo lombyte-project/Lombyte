@@ -6,6 +6,8 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/ui/text/font_metrics.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* State of the level's message box (D_00193300). */
 typedef struct {

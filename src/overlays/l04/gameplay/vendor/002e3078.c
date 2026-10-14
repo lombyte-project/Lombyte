@@ -8,6 +8,7 @@
 #include "rnc/math/vector.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
  * its phase reaches 2, and closes when the slot is already used. */

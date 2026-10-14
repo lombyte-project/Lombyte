@@ -3,6 +3,7 @@
 #include "eetypes.h"
 #include "qzero.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
 
 /* The 0x70-byte header in front of the voices, then thirty 0x70-byte voices. */
 typedef struct {

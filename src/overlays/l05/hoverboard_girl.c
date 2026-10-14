@@ -6,6 +6,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/options.h"
 
 /* Class 918 (hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.

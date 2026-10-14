@@ -4,6 +4,7 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 typedef struct {
     u8 pad0[0x5C];

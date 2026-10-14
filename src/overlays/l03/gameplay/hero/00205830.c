@@ -6,6 +6,7 @@
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/math/vector.h"
 #include "rnc/data_labels.h"
+#include "rnc/input/pad_globals.h"
 #include "rnc/overlay/level_labels.h"
 
 

@@ -8,6 +8,7 @@
 
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Spawns the effect pieces for a moby: two sparks, the ring of three and a final coloured one. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_002FF358), where it is exact; names translated to the US level program. */
