@@ -134,8 +134,8 @@ void FUN_L15_001ff938(void) {
                     if (hero.unk12E7 != 0 && *(int *)((u8 *)&hero + 0x300) != 0 && D_0013D4DC[0] != 0 && hero.unk22DE == 0) {
                         FUN_L00_00216de8(0x19, 0);
                         /* Keep this prompt path distinct and retain its ordered halfword stores. */
-                        ((volatile struct Hero *)&hero)->unk22DC = 1;
-                        ((volatile struct Hero *)&hero)->unk22DE = 0x12;
+                        hero.unk22DE = 0x12;
+                        hero.unk22DC = 1;
                     }
                 }
             }
