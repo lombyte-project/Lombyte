@@ -1725,7 +1725,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00255208.s", FUN_L05_00255208);
 #else
 extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern float frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void normalize_probe(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_0025d7a0(void *, int, int, int);
 extern int D_L05_0015F698 __attribute__((sda));
@@ -1742,7 +1742,7 @@ int FUN_L05_00255208(void) {
         FUN_L00_0025c9d8(start, 0.0f, 0.0f, 0.75f);
         qcopy(end, start);
         qcopy(velocity, &g->motion.velocity);
-        fast_vec_normalize(velocity, velocity, 0.55f);
+        normalize_probe(velocity, velocity, 0.55f);
         fast_vec_add(velocity, velocity, &g->motion.velocity);
         velocity[2] = 0.0f;
         fast_vec_add(end, start, velocity);
@@ -1781,7 +1781,7 @@ int FUN_L05_00255208(void) {
             state = 0x6E;
             goto change_state;
         }
-        if ((&hero)->on_slip_ground && (&hero)->ground_distance < 0.1f) {
+        if (*(unsigned char *)((char *)&hero + 0x12EA) && (&hero)->ground_distance < 0.1f) {
             state = 0x6D;
             goto change_state;
         }
