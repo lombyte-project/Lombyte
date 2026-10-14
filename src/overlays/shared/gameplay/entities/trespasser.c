@@ -859,7 +859,8 @@ collision_done:
     case 1: case 9: case 10:
         if (moby->anim_flags & 2) moby->state = 2;
         break;
-    case 2: case 3: case 4: case 5:
+    case 2: case 3: case 4: case 5: {
+        struct Moby *target;
         target = vars->target;
         if (target && target->state != 254 && target->state != 253) {
             height = target->pos.z;
@@ -974,6 +975,7 @@ collision_done:
             moby->state = 6;
         }
         break;
+    }
     case 6:
         angle = atan2_f(vars->target_pos.f[0]-moby->pos.x,vars->target_pos.f[1]-moby->pos.y);
         FUN_L00_002beb90(vars);
