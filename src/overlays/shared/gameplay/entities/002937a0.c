@@ -389,7 +389,7 @@ extern float vector_length_xy_002d3878(void *) __asm__("FUN_001f9b20");
 extern float angle_atan2_002d3878(float, float) __asm__("FUN_001f9e90");
 extern void make_matrix_002d3878(void *, void *) __asm__("FUN_001fa050");
 extern void FUN_001f7d30_002d3878(void *, void *, int) __asm__("FUN_001f7d30");
-extern float D_L08_00161894_002d3878 __asm__("D_L08_00161894");
+extern float D_L08_00161894_002d3878 __asm__("D_L08_00161894") __attribute__((section(".data")));
 extern u32 D_00151878_002d3878 __asm__("D_00151878") __attribute__((sda));
 extern u32 D_0015187C_002d3878 __asm__("D_0015187C") __attribute__((sda));
 extern u32 D_00151880_002d3878 __asm__("D_00151880") __attribute__((sda));
@@ -445,10 +445,9 @@ void FUN_L08_002d3878(char *m) {
     pk.vertices[3].v[2] += 0.25f; pk.vertices[3].v[3] = 1.0f;
     FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
     {
-        float *v = pk.vertices[1].v;
-        for (i = 1; i < 4; i += 2, v += 8) {
-            if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
-            else { v[1] += 0.25f; v[2] += -0.25f; }
+        for (i = 1; i < 4; i += 2) {
+            if (i < 2) { pk.vertices[i].v[1] += -0.25f; pk.vertices[i].v[2] += 0.25f; }
+            else { pk.vertices[i].v[1] += 0.25f; pk.vertices[i].v[2] += -0.25f; }
         }
     }
     FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
@@ -489,8 +488,8 @@ void FUN_L08_002d3878(char *m) {
     pk.vertices[3].v[2] = 0.0f; pk.vertices[3].v[3] = 1.0f;
     FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
     {
-        float *v = pk.vertices[0].v;
-        for (i = 0; i < 4; i += 2, v += 8) {
+        float *v;
+        for (i = 0, v = pk.vertices[0].v; i < 4; i += 2, v += 8) {
             if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
             else { v[1] += 0.25f; v[2] += -0.25f; }
         }
@@ -1683,11 +1682,11 @@ void FUN_L08_003024d8(char *m) {
             pose_scale = D_00162184_3024d8 * frame_time_sq;
             *(unsigned short *)(m + 0x34) &= 0xefff;
             *(int *)(d + 0x90) = 0x200;
-            *(float *)(d + 0x80) = pose_scale;
-            *(float *)(d + 0x88) = timer_scale;
-            *(float *)(d + 0xc0) = 11.0f;
             *(float *)(d + 0xc4) = 16.0f;
             *(float *)(d + 0x98) = 0.25f;
+            *(float *)(d + 0xc0) = 11.0f;
+            *(float *)(d + 0x80) = pose_scale;
+            *(float *)(d + 0x88) = timer_scale;
             *(float *)(d + 0x8c) = angle;
             angle = angle_atan2_3024d8(*(float *)(m + 0x10) - *(float *)(*(char **)(h + 0x20) + 0x10),
                 *(float *)(m + 0x14) - *(float *)(*(char **)(h + 0x20) + 0x14));

@@ -2363,7 +2363,7 @@ void FUN_L18_002e9768(struct Moby *moby) {
         return;
     case 2:
         if (moby->oclass == 0x37c) {
-            float *pos = &moby->pos.x;
+            float *pos;
             {
                 int i;
                 int *first, *second;
@@ -2371,6 +2371,7 @@ void FUN_L18_002e9768(struct Moby *moby) {
                 float colors2[6];
                 float position[4];
                 i = 0;
+                pos = &moby->pos.x;
                 do {
                     magnitude = random_float_between_9768(8.0f, 10.0f) * frame_time;
                     __builtin_memcpy(colors, D_L18_001F29A0_9768, 24);

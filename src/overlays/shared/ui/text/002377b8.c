@@ -420,19 +420,18 @@ s32 FUN_L00_002382a0(char *rec) {
                      (s32)(D_L00_0015F78C * fast_cos(angle) * D_L00_0015F7C4);
             icon_y = y + D_L00_0015F724 +
                      (s32)(D_L00_0015F78C * fast_sin(angle));
-            entry = D_L00_0015FAC0_c[D_L00_0015F72C];
-            if (*(s32 *)(rec + 0x74) == i && ((Ent *)(marker_offset + (char *)entry))->f0 != 0)
+            if (*(s32 *)(rec + 0x74) == i &&
+                ((Ent *)(marker_offset + (s32)D_L00_0015FAC0_c[D_L00_0015F72C]))->f0 != 0)
                 draw_hud_sprite(get_icon_frame(0xe99c, 0), icon_x - 0x13,
                                 icon_y - 0x13, 0x26, 0x26, marker_alpha);
-            entry = D_L00_0015FAC0_c[D_L00_0015F72C];
-            if (((Ent *)(normal_offset + (char *)entry))->f0 != 0) {
+            if (((Ent *)(normal_offset + (s32)D_L00_0015FAC0_c[D_L00_0015F72C]))->f0 != 0) {
                 s32 icon_alpha;
                 if (i != *(s32 *)(rec + 0x74))
                     icon_alpha = truncate_float_to_s32((f32)alpha * D_L00_0015F7C0);
                 else
                     icon_alpha = alpha;
                 entry = D_L00_0015FAC0_c[D_L00_0015F72C];
-                entry = (Ent *)(entry_offset + (char *)entry);
+                entry = (Ent *)(entry_offset + (s32)entry);
                 draw_hud_icon(rec, get_icon_frame(entry->f0,
                               D_0013E520[entry->f18] ? 4 : 0), icon_x, icon_y, 1, icon_alpha);
             }
@@ -443,7 +442,9 @@ s32 FUN_L00_002382a0(char *rec) {
     }
     selected = *(s32 *)(rec + 0x74);
     if (selected >= 0 && D_L00_0015FAC0_c[D_L00_0015F72C][selected].f0 != 0) {
-        f32 opacity = open * fade;
+        f32 opacity;
+        open *= fade;
+        opacity = open;
         color = fast_tween_color_alpha_first(opacity, D_L00_0015F798, D_L00_0015F79C);
         id = pause_iop_sprite_lists[selected];
         if (D_L00_001C40B0[id].h8 != 0) {
@@ -468,8 +469,8 @@ s32 FUN_L00_002382a0(char *rec) {
                 id = ((TitleItem_2382a0 *)D_L00_00179AC0)[item].h46;
             text = get_text(id);
         }
-        if (text == 0) return *(s32 *)(rec + 0x58);
-        if (strlen_alt(text) == 0) return *(s32 *)(rec + 0x58);
+        if (text == 0) goto out;
+        if (strlen_alt(text) == 0) goto out;
         text_length = strlen_alt(text);
         suffix = text;
         j = 0;
@@ -479,7 +480,8 @@ s32 FUN_L00_002382a0(char *rec) {
                 suffix = text + 2;
                 prefix_length = 2;
             } else {
-                while (++j < text_length) {
+                while (j + 1 < text_length) {
+                    j++;
                     suffix++;
                     if (*(const u8 *)suffix == '-') {
                         prefix_length = j + 2;
@@ -491,21 +493,12 @@ s32 FUN_L00_002382a0(char *rec) {
         }
         if (prefix_length == 0) {
             suffix = text;
-            j = 0;
-            if (prefix_length < text_length) {
-                suffix = text + 1;
-                if ((u8)text[1] == ' ') {
-                    suffix = text + 2;
-                    prefix_length = 1;
-                } else {
-                    while (++j < text_length) {
-                        suffix++;
-                        if (*(const u8 *)suffix == ' ') {
-                            prefix_length = j + 1;
-                            suffix++;
-                            break;
-                        }
-                    }
+            for (j = 0; j < text_length; j++) {
+                suffix++;
+                if (*(const u8 *)suffix == ' ') {
+                    suffix++;
+                    prefix_length = j + 1;
+                    break;
                 }
             }
         }
@@ -527,6 +520,7 @@ s32 FUN_L00_002382a0(char *rec) {
             font_print_right_2382a0(x + D_L00_0015F720, text_y, shadow, text, -1);
         }
     }
+out:
     return *(s32 *)(rec + 0x58);
 }
 #endif

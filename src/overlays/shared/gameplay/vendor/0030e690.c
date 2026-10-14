@@ -203,8 +203,6 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     float bottom_right[4];
     int *tag;
     unsigned long long *q;
-    int sx, sy;
-    unsigned long long packed_position;
     volatile int saved_depth[2];
     unsigned long long packed_depth;
 
@@ -214,7 +212,8 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     vertical[0] = height * fast_sin(angle);
     vertical[1] = height * fast_cos(angle);
     horizontal[0] = width * fast_cos(angle);
-    horizontal[1] = -width * fast_sin(angle);
+    width = -width;
+    horizontal[1] = width * fast_sin(angle);
     add_vector_xyz(top_left, center, vertical);
     subtract_vector_xyz(top_left, top_left, horizontal);
     add_vector_xyz(bottom_left, center, vertical);
@@ -225,6 +224,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[0] = 0x10000007;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[1] = 0;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[2] = 0;
+    packed_depth = (unsigned long long)saved_depth[0] << 32;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[3] = 0x50000007;
     tag = (int *)(*(volatile int *)&D_L11_001611C0_g);
     q = (unsigned long long *)(tag + 4);
@@ -236,53 +236,68 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     q[4] = (unsigned long long)(red & 0xff) | ((unsigned long long)(green & 0xff) << 8) |
            ((unsigned long long)(blue & 0xff) << 16) | ((unsigned long long)(alpha & 0xff) << 24);
     q[5] = 0x100010;
-    packed_depth = (unsigned long long)saved_depth[0] << 32;
     texture_width <<= 4;
     texture_height <<= 20;
-    sx = ftoi_g(top_left[0] * 16.0f);
-    sy = ftoi_g(top_left[1] * 16.0f);
-    sy += screen_extent[5];
-    sx += screen_extent[4];
-    sy -= 8;
-    sx -= 8;
-    q[7] = texture_width;
-    packed_position = (unsigned long long)sx;
-    packed_position |= (unsigned long long)sy << 16;
-    packed_position |= packed_depth;
-    q[6] = packed_position;
-    sx = ftoi_g(bottom_left[0] * 16.0f);
-    sy = ftoi_g(bottom_left[1] * 16.0f);
-    sy += screen_extent[5];
-    sx += screen_extent[4];
-    sy -= 8;
-    sx -= 8;
-    q[9] = texture_height;
-    packed_position = (unsigned long long)sx;
-    packed_position |= (unsigned long long)sy << 16;
-    packed_position |= packed_depth;
-    q[8] = packed_position;
-    sx = ftoi_g(top_right[0] * 16.0f);
-    sy = ftoi_g(top_right[1] * 16.0f);
-    sy += screen_extent[5];
-    sx += screen_extent[4];
-    sy -= 8;
-    sx -= 8;
-    q[11] = (texture_height) + (texture_width);
-    packed_position = (unsigned long long)sx;
-    packed_position |= (unsigned long long)sy << 16;
-    packed_position |= packed_depth;
-    q[10] = packed_position;
-    sx = ftoi_g(bottom_right[0] * 16.0f);
-    sy = ftoi_g(bottom_right[1] * 16.0f);
-    sy += screen_extent[5];
-    sx += screen_extent[4];
-    sy -= 8;
-    sx -= 8;
-    q[13] = 0;
-    packed_position = (unsigned long long)sx;
-    packed_position |= (unsigned long long)sy << 16;
-    packed_position |= packed_depth;
-    q[12] = packed_position;
+    {
+        int sx, sy;
+        unsigned long long packed_position;
+        sx = ftoi_g(top_left[0] * 16.0f);
+        sy = ftoi_g(top_left[1] * 16.0f);
+        sy += screen_extent[5];
+        sx += screen_extent[4];
+        sy -= 8;
+        sx -= 8;
+        q[7] = texture_width;
+        packed_position = (unsigned long long)sx;
+        packed_position |= (unsigned long long)sy << 16;
+        packed_position |= packed_depth;
+        q[6] = packed_position;
+    }
+    {
+        int sx, sy;
+        unsigned long long packed_position;
+        sx = ftoi_g(bottom_left[0] * 16.0f);
+        sy = ftoi_g(bottom_left[1] * 16.0f);
+        sy += screen_extent[5];
+        sx += screen_extent[4];
+        sy -= 8;
+        sx -= 8;
+        q[9] = texture_height;
+        packed_position = (unsigned long long)sx;
+        packed_position |= (unsigned long long)sy << 16;
+        packed_position |= packed_depth;
+        q[8] = packed_position;
+    }
+    {
+        int sx, sy;
+        unsigned long long packed_position;
+        sx = ftoi_g(top_right[0] * 16.0f);
+        sy = ftoi_g(top_right[1] * 16.0f);
+        sy += screen_extent[5];
+        sx += screen_extent[4];
+        sy -= 8;
+        sx -= 8;
+        q[11] = (texture_height) + (texture_width);
+        packed_position = (unsigned long long)sx;
+        packed_position |= (unsigned long long)sy << 16;
+        packed_position |= packed_depth;
+        q[10] = packed_position;
+    }
+    {
+        int sx, sy;
+        unsigned long long packed_position;
+        sx = ftoi_g(bottom_right[0] * 16.0f);
+        sy = ftoi_g(bottom_right[1] * 16.0f);
+        sy += screen_extent[5];
+        sx += screen_extent[4];
+        sy -= 8;
+        sx -= 8;
+        q[13] = 0;
+        packed_position = (unsigned long long)sx;
+        packed_position |= (unsigned long long)sy << 16;
+        packed_position |= packed_depth;
+        q[12] = packed_position;
+    }
     D_L11_001611C0_g = (*(volatile int *)&D_L11_001611C0_g) + 0x70;
 }
 #undef FUN_L11_00310cf8
@@ -430,7 +445,8 @@ int FUN_L11_003192c8(char *moby) {
     char stack_data[0x900] __attribute__((aligned(16)));
     float offset[8] __attribute__((aligned(16)));
     short *list;
-    int i, j;
+    int i;
+    short *next_list;
     float phase;
     float *position_base;
     float *position_y_base;
@@ -444,23 +460,24 @@ int FUN_L11_003192c8(char *moby) {
     } else {
         *(float *)&D_L11_001623F0_d = 5.0f;
     }
-    position_base = (float *)(stack_data + 0x50);
     position_y_base = (float *)(stack_data + 0x54);
+    position_base = (float *)(stack_data + 0x50);
     colors_base = (int *)(stack_data + 0x40);
     for (i = 0; i < 16; i++) {
         long long texture;
-        char *packet = stack_data + 0x40 + i * 0x90;
+        long long *packet = (long long *)(stack_data + 0x70);
         float *source;
         float *position;
         float *position_y;
         int *colors;
         float span;
+        int j;
         j = 0;
         texture = trail_effect_texture(0x13);
-        *(long long *)(packet + 0x38) = texture;
-        *(long long *)(packet + 0x48) = 0x8000000048LL;
-        *(long long *)(packet + 0x40) = 0xff9000000260LL;
-        *(long long *)(packet + 0x30) = 0;
+        packet[i * 18 + 1] = texture;
+        packet[i * 18 + 3] = 0x8000000048LL;
+        packet[i * 18 + 2] = 0xff9000000260LL;
+        packet[i * 18] = 0;
         span = *(float *)&D_L11_001623F0_d * 4.0f;
         phase = integer_to_float((D_L11_0015F5CC + 3) & 3) / span;
         source = D_L11_001F1490;
@@ -486,6 +503,7 @@ int FUN_L11_003192c8(char *moby) {
         char *linked = (char *)(D_L11_0015FFD8 + ((entry & 0x7fff) << 8));
         int skip = *(short *)(linked + 0xa6) != *(short *)(moby + 0xa6);
         if (*(unsigned char *)(linked + 0x31) == 0) skip = 1;
+        next_list = list + 1;
         if (skip == 0) {
             char *trail = *(char **)(linked + 0x78);
             long limit = -1;
@@ -494,6 +512,7 @@ int FUN_L11_003192c8(char *moby) {
                 int a = next + 15;
                 int b = next + 30;
                 int start;
+                int j;
                 if (limit < a) b = a;
                 start = a - ((b >> 4) << 4);
                 for (j = 0; j < 2; j++) {
@@ -512,7 +531,8 @@ int FUN_L11_003192c8(char *moby) {
                 }
             }
         }
-        if (*list++ < 0) break;
+        if (*list < 0) break;
+        list = next_list;
     } while (1);
 }
 #endif

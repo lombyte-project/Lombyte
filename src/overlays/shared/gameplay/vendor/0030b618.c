@@ -726,7 +726,318 @@ void FUN_L01_0030ded0(char *moby) {
     }
     enqueue_callback_list_1_alt(FUN_L01_0030de68, moby);
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030df40.s", FUN_L01_0030df40);
+#else
+extern u8 D_0013D4C5;
+extern u8 D_0015EDB0;
+extern char D_0013E550[];
+extern char D_L01_001BB6B0[];
+extern s32 D_0014C190[][64];
+extern s32 D_L01_001742D8;
+extern char *D_L01_00167280_df40 __asm__("D_L01_00167280");
+extern char D_L01_0020BA10[], D_L01_0020BA30[];
+extern s32 D_L01_00162098 __attribute__((sda));
+extern s32 D_L01_0016209C __attribute__((sda));
+extern s32 D_L01_001620A4 __attribute__((sda));
+extern s32 D_L01_001620A8 __attribute__((sda));
+extern s32 D_L01_001620AC __attribute__((sda));
+extern f32 D_L01_001620B0 __attribute__((sda));
+extern f32 D_L01_001620B4 __attribute__((sda));
+extern f32 D_L01_001620B8 __attribute__((sda));
+extern s32 D_L01_001620BC __attribute__((sda));
+extern f32 D_L01_001620C0 __attribute__((sda));
+extern void FUN_001e93b0(void *);
+extern void FUN_0020cb10(void *, s32, void *);
+extern void FUN_0020cb88(void *, void *);
+extern void FUN_00212f90(void *, s32, s32, s32);
+extern void FUN_L01_0026d930(void *);
+extern void FUN_L01_002e30b8(void *, void *) __asm__("FUN_L01_0030d208");
+extern void FUN_L01_0023cf98(s32, s32);
+extern void FUN_L00_002323b8(f32, s32, s32);
+
+extern void FUN_0022d798(s32);
+extern s32 FUN_L00_00259028(void *, void *, void *, void *);
+extern void FUN_L00_00259fe8(void *, f32);
+extern void FUN_L00_0025f8e0(void *, f32);
+extern s32 FUN_001160d8(void);
+extern void FUN_L01_0030dda0_with_vars(char *, char *) __asm__("FUN_L01_0030dda0");
+extern s32 FUN_0022da68_sound(s32, s32, void *) __asm__("FUN_0022da68");
+extern void FUN_L00_00272060(void *, s32, u32, s32, s32, void *, f32, f32, f32);
+extern f32 FUN_001fa580(f32, f32);
+extern s32 FUN_001efa68(void *, void *, s32, void *, s32);
+
+#define HOVER_I(off) (*(s32 *)(p + (off)))
+#define HOVER_S(off) (*(s16 *)(p + (off)))
+#define HOVER_F(off) (*(f32 *)(p + (off)))
+#define HOVER_SOUND_VALID ( *(struct Moby **)(D_0013E550 + HOVER_I(0x64) * 0x70 + 0x88) == m && *(u8 *)(D_0013E550 + HOVER_I(0x64) * 0x70 + 0x74) != 0 )
+void FUN_L01_0030df40(struct Moby *m) {
+    char *p;
+    struct Moby *e;
+    OvlVec4 v, q;
+    struct HoverTuning *t;
+    s64 hit;
+    s32 n, r, duration;
+    u32 color;
+    f32 angle;
+    char *g;
+    if (m == 0) return;
+    p = (char *)m->pvars;
+    if (p == 0) return;
+    if (HOVER_I(0x48) != -1) {
+        if (m->state < 5) {
+            e = (struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100);
+            angle = FUN_001f9e90(hero.motion.pos.f[0] - e->pos.x, hero.motion.pos.f[1] - e->pos.y);
+        } else {
+            e = (struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100);
+            angle = FUN_001f9e90(m->pos.x - e->pos.x, m->pos.y - e->pos.y);
+        }
+        *(f32 *)((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->pvars = angle;
+        if (HOVER_I(0x48) != -1)
+            ((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->collision = 0;
+    }
+    if (m->state >= 3) {
+        if (D_0015EDB0 != 0) {
+            if (*(u8 *)(p + 0x91) == 0) FUN_0020cb10(m, 5, p + 0x90);
+            HOVER_F(0xb8) = 2.1f;
+            HOVER_F(0xb0) = 2.1f;
+            HOVER_F(0xb4) = 2.1f;
+        } else if (*(u8 *)(p + 0x91) != 0) FUN_0020cb88(m, p + 0x90);
+        FUN_L01_0030ded0((char *)m);
+    }
+    switch (m->state) {
+    case 0:
+        qzero(p);
+        qzero(p + 0x10);
+        HOVER_S(0x50) = 0;
+        HOVER_S(0x52) = 0;
+        if (m->prev_seq != 0) FUN_00212f90(m, 0, 0, FUN_001f96f8(10));
+        m->update_dist = 0xff;
+        m->draw_dist = 0xff;
+        if (HOVER_I(0x48) == -1) {
+            FUN_001e93b0(D_L01_0020BA30);
+            mark_moby_for_removal_b618(m);
+            return;
+        }
+        qcopy(&m->pos, D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100 + 0x10);
+        m->pos.z += 0.02f;
+        n = (s16)m->save_id;
+        if (*(u8 *)(D_L01_001BB6B0 + n + 0x454) != 0 || ((D_0014C190[current_level_index][n >> 5] >> (m->save_id & 31)) & 1)) {
+            FUN_001e93b0(D_L01_0020BA10);
+            mark_moby_for_removal_b618(m);
+            return;
+        }
+        qcopy(p + 0x20, &m->pos);
+        qcopy(p + 0x30, &m->pos);
+        t = &D_L01_001DEB38;
+        FUN_L01_0026d930(t);
+        {
+            f32 scale = frame_scale;
+            f32 time = frame_time;
+            f32 time_sq = frame_time_sq;
+            f32 turn = time_sq * 3.1415927f;
+            f32 speed = scale * 0.4f;
+            f32 limit = time * 2.7f;
+            f32 rate = scale * 0.01f;
+            f32 turn_speed = time_sq * 6.2831855f;
+            f32 turn_limit = time * 11.519173f;
+            s32 flags = *(s32 *)((char *)t + 0x38) | 8;
+            t->unk0 = 500;
+            *(f32 *)((char *)t + 0xc) = 0.15f;
+            t->yaw_speed = speed;
+            *(f32 *)((char *)t + 0x24) = limit;
+            *(f32 *)((char *)t + 0x1c) = rate;
+            *(f32 *)((char *)t + 4) = 0.3f;
+            t->unk30 = 0.005f;
+            *(s32 *)((char *)t + 0x38) = flags;
+            *(f32 *)((char *)t + 0x3c) = turn_speed;
+            *(f32 *)((char *)t + 0x40) = turn;
+            *(f32 *)((char *)t + 0x44) = turn_limit;
+            *(f32 *)((char *)t + 8) = 0.15f;
+            *(f32 *)((char *)t + 0x10) = rate;
+        }
+        *(s32 *)((char *)t + 0x48) = FUN_001f96f8(4);
+        *(f32 *)((char *)t + 0x28) = 3.1415927f;
+        m->state = 1;
+        m->draw_dist = 0;
+        break;
+    case 1:
+        g = (char *)&hero;
+        if (D_0013D4C5 == 0) break;
+        if (*(s32 *)(g + 0x1158) != 5) break;
+        HOVER_I(0x5c) = 0;
+        HOVER_I(0x58) = FUN_001f96f8(D_L01_00162098);
+        if (m->visible != 0 && (m->anim_flags & 2) && m->prev_seq != 2)
+            FUN_00212f90(m, 2, 0, FUN_001f96f8(10));
+        if (HOVER_I(0x48) != -1) {
+            n = is_point_inside_clip_volume_b618(&hero.motion.pos, HOVER_I(0x40)) ? 3 : 1;
+            ((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->command = n;
+        }
+        if (*(s32 *)(g + 0x1130) == 0 || *(s32 *)(g + 0x1158) != 5) break;
+        angle = FUN_001f9e90(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
+        FUN_L00_00258278(m, &D_L01_001DEB4C, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+        qcopy(&v, D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100 + 0x10);
+        v.f[2] += 0.5f;
+        qcopy(&q, &hero.motion.pos);
+        q.f[2] += 0.2f;
+        if (!is_point_inside_clip_volume_b618(&hero.motion.pos, HOVER_I(0x40))) break;
+        if (FUN_001efa68(&v, &q, 0, m, 0) && D_L01_001742D8 != (s32)hero.moby) break;
+        FUN_L01_002e30b8(m, p);
+        e = *(struct Moby **)(g + 0x1130);
+        if (e != 0 && e->oclass == 0x1b1 && e->state != 0xfe && e->state != 0xfd) e->state = 1;
+        *(struct Moby **)((char *)&D_L01_001DEB38 + 0x50) = m;
+        FUN_L01_0023cf98(0x1f, 0);
+        FUN_L00_002323b8((f32)FUN_001f96f8(6), 0, 0);
+        if (HOVER_I(0x48) == -1) {
+            m->draw_dist = 0xff;
+            if (m->prev_seq != 0) FUN_00212f90(m, 0, 0, FUN_001f96f8(10));
+            m->state = 3;
+        } else {
+            ((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->command = 5;
+            m->state = 2;
+        }
+        break;
+    case 2:
+        if (HOVER_I(0x48) == -1) {
+            HOVER_S(0x52) = 0;
+            m->draw_dist = 0xff;
+            if (m->prev_seq != 0) FUN_00212f90(m, 0, 0, FUN_001f96f8(20));
+            if (HOVER_I(0x64) == -1) HOVER_I(0x64) = FUN_0022da68_sound(1, 4, m);
+            m->state = 3;
+        } else {
+            if (((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->state != 5) break;
+            if (m->prev_seq != 0) FUN_00212f90(m, 0, 0, FUN_001f96f8(10));
+            m->state = 3;
+            HOVER_S(0x52) = 0;
+            m->draw_dist = 0xff;
+        }
+        break;
+    case 3:
+        if (!HOVER_SOUND_VALID) {
+            HOVER_I(0x64) = -1;
+            HOVER_I(0x64) = FUN_0022da68_sound(1, 4, m);
+        }
+        if (FUN_001f9b80(&m->pos, p + 0x30) > 0.6f && HOVER_S(0x52) == 0) {
+            *(f32 *)((char *)&D_L01_001DEB38 + 4) = 0.7f;
+            FUN_L01_0030d260(m, (f32 *)p);
+            FUN_L01_0030d880(m, (struct HoverVars *)p);
+            hit = HOVER_S(0x50) < 21 ? 0 : 2;
+        } else {
+            FUN_L01_002e30b8(m, p);
+            angle = FUN_001f9e90(HOVER_F(0) - m->pos.x, HOVER_F(4) - m->pos.y);
+            FUN_L00_00258278(m, &D_L01_001DEB4C, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+            HOVER_F(0x18) = 0.0f;
+            hit = FUN_L00_00259028(m, &D_L01_001DEB38, p, p + 0x10);
+        }
+        if ((hit & 6) != 0 || distance_xyz_30d308(&m->pos, p) < 0.25f) {
+            if (m->prev_seq != 2) FUN_00212f90(m, 2, 0, FUN_001f96f8(10));
+            qzero(p + 0x10);
+            m->state = 4;
+            HOVER_S(0x52) = FUN_001f96f8(120);
+        }
+        if (m->anim_flags & 2) {
+            if (m->prev_seq != 1) FUN_00212f90(m, 1, 0, FUN_001f96f8(random_integer_between_b618(7, 12)));
+            m->anim_speed = random_float_between_alt(0.95f, 1.05f);
+        }
+        break;
+    case 4:
+        if (!HOVER_SOUND_VALID) {
+            HOVER_I(0x64) = -1;
+            HOVER_I(0x64) = FUN_0022da68_sound(1, 4, m);
+        }
+        FUN_L01_0023cf98(0, 1);
+        m->flags &= 0xffbe;
+        if (HOVER_I(0x48) != -1) ((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->flags &= 0xffbe;
+        m->state = 5;
+        break;
+    case 5:
+        g = (char *)&hero;
+        if (!HOVER_SOUND_VALID) {
+            HOVER_I(0x64) = -1;
+            HOVER_I(0x64) = FUN_0022da68_sound(1, 4, m);
+        }
+        n = HOVER_S(0x52);
+        if (n == FUN_001f96f8(20) || D_L01_0016209C - 5 < HOVER_I(0x5c)) {
+            if (m->prev_seq != 2) FUN_00212f90(m, 2, 0, FUN_001f96f8(5));
+        } else {
+            n = HOVER_S(0x52);
+            if (FUN_001f96f8(20) < n && (m->anim_flags & 2)) {
+                if (m->prev_seq != 1) FUN_00212f90(m, 1, 0, FUN_001f96f8(random_integer_between_b618(7, 12)));
+                m->anim_speed = random_float_between_alt(0.95f, 1.05f);
+            }
+        }
+        if (*(s32 *)(g + 0x1130) == 0 || *(s32 *)(g + 0x1158) != 5 || hero.state.control_mode == 22 || hero.state.control_mode == 20 || hero.vehicle_mode != 0 || *(s16 *)(D_L01_00167280_df40 + 0x86) == 20 || FUN_001f9740(p + 0x58) || D_L01_0016209C <= HOVER_I(0x5c)) {
+            qzero(p + 0x10);
+            HOVER_S(0x52) = D_L01_001620A4;
+            if (HOVER_I(0x64) != -1 && HOVER_SOUND_VALID) FUN_0022d798(HOVER_I(0x64));
+            HOVER_I(0x64) = -1;
+            FUN_0022da68_sound(2, 0, m);
+            m->state = 6;
+            if (HOVER_I(0x48) != -1) ((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->command = 5;
+        } else {
+            FUN_L01_0030d260(m, (f32 *)p);
+            FUN_L01_0030d880(m, (struct HoverVars *)p);
+        }
+        FUN_L01_0030d5f0((char *)m, p);
+        break;
+    case 6:
+        if (HOVER_I(0x64) != -1 && HOVER_SOUND_VALID) FUN_0022d798(HOVER_I(0x64));
+        HOVER_I(0x64) = -1;
+        if (FUN_001f9770(p + 0x52)) {
+            m->alpha = 0x80;
+            qcopy(&m->pos, p + 0x30);
+            qcopy(p, p + 0x30);
+            qzero(p + 0x10);
+            m->state = 7;
+            m->flags &= 0xfdff;
+        } else {
+            q.q = 0;
+            qcopy(&v, &m->pos);
+            FUN_L00_0025f8e0(&v, D_L01_001620B0);
+            color = (FUN_001160d8() + 0x30u) & 0x3f;
+            color |= ((FUN_001160d8() + 0x20u) & 0x3f) << 8;
+            color |= (FUN_001160d8() & 0x2fu) << 16;
+            color |= D_L01_001620BC << 24;
+            r = FUN_001160d8() % 2;
+            if (*(u16 *)(p + 0x52) & 1) r = -r;
+            n = random_integer_between_b618(D_L01_001620A8, D_L01_001620AC);
+            angle = random_float_between_alt(D_L01_001620B4, D_L01_001620B8);
+            FUN_L00_00272060(&v, n, color, 2, r, &q, angle, 0.001f, D_L01_001620C0 * frame_time_sq);
+            m->flags |= 0x200;
+            m->alpha -= 0x80 / D_L01_001620A4;
+            m->rot.z = FUN_001fa580(m->rot.z, frame_time * 25.132742f);
+        }
+        break;
+    case 7:
+        if (HOVER_I(0x64) != -1 && HOVER_SOUND_VALID) FUN_0022d798(HOVER_I(0x64));
+        HOVER_I(0x64) = -1;
+        qzero(p + 0x10);
+        qcopy(p, D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100 + 0x10);
+        *(s32 *)((char *)&D_L01_001DEB38 + 0x50) = 0;
+        angle = FUN_001f9e90(HOVER_F(0) - m->pos.x, HOVER_F(4) - m->pos.y);
+        FUN_L00_00258278(m, &D_L01_001DEB4C, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+        if (m->prev_seq != 0) FUN_00212f90(m, 0, 0, FUN_001f96f8(6));
+        ((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->command = 1;
+        m->state = 1;
+        m->draw_dist = 0;
+        break;
+    case 8:
+        break;
+    }
+    if (m->state >= 2) {
+        FUN_L00_00259fe8(m, 0.3f);
+        FUN_L01_0030dda0_with_vars((char *)m, p);
+    }
+    if (HOVER_I(0x48) != -1) {
+        e = (struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100);
+        e->collision = e->pclass->collision;
+    }
+}
+#undef HOVER_I
+#undef HOVER_S
+#undef HOVER_F
+#undef HOVER_SOUND_VALID
+#endif
 /* Camera blocks FUN_L01_00314e98 resets (camera + 0x70 and its preset row in D_L01_0015EF50) */
 typedef struct {
     Vec4 pos;           /* 0x00 */

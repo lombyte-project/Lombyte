@@ -1216,16 +1216,17 @@ void FUN_L00_002bc7e8(Moby *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bcf98.s", FUN_L00_002bcf98);
 #else
 extern s32 D_L00_001617BC __attribute__((sda));
-#define D_L00_001617BC_abs (*(volatile s32 *)0x001617BC)
+extern s32 D_L00_001617BC_abs __asm__("D_L00_001617BC") __attribute__((section(".data")));
 extern f32 D_L00_001616DC __attribute__((sda));
 extern f32 D_L00_001617CC __attribute__((sda));
-extern volatile s32 D_L00_00161718_i __asm__("D_L00_00161718") __attribute__((sda));
-extern volatile s32 D_L00_00161720_i __asm__("D_L00_00161720") __attribute__((sda));
-extern volatile s32 D_L00_00161724_i __asm__("D_L00_00161724") __attribute__((sda));
-extern s32 D_L00_001617D0 __attribute__((section(".data")));
-extern s32 D_L00_00161824 __attribute__((section(".data")));
-extern s32 D_L00_00161818 __attribute__((section(".data")));
+extern s32 D_L00_00161718_i __asm__("D_L00_00161718") __attribute__((sda));
+extern s32 D_L00_00161720_i __asm__("D_L00_00161720") __attribute__((sda));
+extern s32 D_L00_00161724_i __asm__("D_L00_00161724") __attribute__((sda));
+extern s32 D_L00_001617D0;
+extern s32 D_L00_00161824;
+extern s32 D_L00_00161818;
 extern s32 D_L00_001DBF50 __attribute__((section(".data")));
+extern u128 D_L00_001DBF60_2bcf98 __asm__("D_L00_001DBF60") __attribute__((section(".data")));
 extern s32 D_L00_001DD0D0 __attribute__((section(".data")));
 extern void scale_vector_2bcf98(float, void *, void *) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10(void *, void *, void *);
@@ -1237,19 +1238,21 @@ void FUN_L00_002bcf98(u8 *m) {
     f32 scale;
     u128 *copies;
     s32 *clears;
+    u128 *scaled_vector;
 
     if (D_L00_001617BC_abs != 0) {
         D_L00_001617BC = 0;
         scale = D_L00_001616DC / convert_integer_to_float(12);
         D_L00_001617CC = scale;
         scale_vector_2bcf98(-scale, &vec, m + 0xD0);
-        qcopy((u128 *)&D_L00_001DBF50 + 1, (void *)source);
+        qcopy(&D_L00_001DBF60_2bcf98, (void *)source);
         for (i = 10; i >= 0; i--) {
-            FUN_001f9a10(&((u128 *)&D_L00_001DBF50)[12 - i], &((u128 *)&D_L00_001DBF50)[11 - i], &vec);
+            FUN_001f9a10((&D_L00_001DBF60_2bcf98 + (11 - i)), &((u128 *)&D_L00_001DBF50)[11 - i], &vec);
         }
         D_L00_00161718_i = 0;
         D_L00_00161720_i = 0;
         D_L00_00161724_i = 0;
+        scaled_vector = &vec;
         D_L00_001617D0 = 0;
         D_L00_00161824 = 0;
         copies = (u128 *)&D_L00_001DD0D0;
@@ -1258,7 +1261,7 @@ void FUN_L00_002bcf98(u8 *m) {
             s32 j;
             for (j = 2; j >= 0; j--) {
                 *clears = 0;
-                qcopy(copies, &vec);
+                qcopy(copies, scaled_vector);
                 copies++;
                 clears++;
             }
@@ -1912,10 +1915,12 @@ void FUN_L00_002be650(void *o) {
     OvlVec4 axis;
     OvlVec4 negativeUp;
     OvlVec4 vertex[2];
-    volatile int color;
-    OvlVec4 * volatile vertexTarget;
+    struct {
+        volatile int color;
+        OvlVec4 * volatile vertexTarget;
+        int nextIndex;
+    } state;
     int i, j;
-    int nextIndex;
 
     (void)o;
     quad.tex = tex_2be650(8);
@@ -1937,19 +1942,19 @@ void FUN_L00_002be650(void *o) {
         else
             c = D_L00_00161760;
         i = 0;
-        color = c & 0xFFFFFF;
+        state.color = c & 0xFFFFFF;
     }
-    vertexTarget = &vertex[0];
+    state.vertexTarget = &vertex[0];
     do {
-        nextIndex = i + 1;
+        state.nextIndex = i + 1;
         if (((int *)&D_L00_00161818)[i] != 0) {
             unsigned int c = color_alpha_2be650(((float *)&D_L00_001617E8)[i]);
-            c = (c << 24) | color;
+            c = (c << 24) | state.color;
             quad.color[3] = c;
             quad.color[2] = c;
             quad.color[1] = c;
             quad.color[0] = c;
-            qcopy(vertexTarget, &((u128 *)&D_L00_001DD0A0)[i]);
+            qcopy(state.vertexTarget, &((u128 *)&D_L00_001DD0A0)[i]);
             qcopy(&scaled, &((u128 *)&D_L00_001DD0D0)[i]);
             vmul_2be650(-1.0f, &negativeUp, &D_0013F5E0_2be650);
             cross_2be650(&axis, &scaled, &negativeUp);
@@ -1961,7 +1966,7 @@ void FUN_L00_002be650(void *o) {
             }
             draw_2be650(&quad, 0, 0);
         }
-        i = nextIndex;
+        i = state.nextIndex;
     } while (i < 3);
 }
 #endif

@@ -49,6 +49,8 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     char text[256];
     VendorItemInfo *price_table;
     s32 cost;
+    s32 message_id;
+    s32 text_x;
     VendorDisplayItem *row;
     u16 ammo_cost;
 
@@ -65,7 +67,7 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
 
     row = &vendor_menu.rows[vendor_menu.f58];
     if (row->fD4 == 1 && weapon_ammo_counts[row->fD0] >= D_L00_001C40B0[row->fD0].hE) {
-        cost = 0x5236;
+        message_id = 0x5236;
         goto message;
     }
     if (vendor_menu.rows[vendor_menu.f58].fD4 != 1)
@@ -75,7 +77,7 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     else
         ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].h8;
     if (current_bolt_count < ammo_cost) {
-        cost = 0x5238;
+        message_id = 0x5238;
         goto message;
     }
     FUN_0024ff08(vendor_menu.f20 + 0x500, 1);
@@ -86,13 +88,13 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5237), -1);
     FUN_00116248(text, D_L00_00161160, D_L00_00161E34);
     if (D_L00_00161E34 >= 100)
-        cost = 0x17;
+        text_x = 0x17;
     else {
         if (D_L00_00161E34 < 10)
             goto quantity_small;
-        cost = 0x1e;
+        text_x = 0x1e;
     }
-    FUN_001fb3f0(cost, 0x32, 0x80f0f0f0ULL, text, -1);
+    FUN_001fb3f0(text_x, 0x32, 0x80f0f0f0ULL, text, -1);
     goto quantity_done;
 quantity_small:
     FUN_001fb3f0(0x25, 0x32, 0x80f0f0f0ULL, text, -1);
@@ -107,7 +109,7 @@ quantity_done:
     FUN_001fb888(0x40, 0x4c, 0x80f0f0f0ULL, text, -1);
     return;
 message:
-    FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(cost), -1);
+    FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(message_id), -1);
     return;
 purchase:
     cost = discount_purchase_pricing[0] ? D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].f4 : D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].f0;

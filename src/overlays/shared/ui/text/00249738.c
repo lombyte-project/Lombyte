@@ -26,11 +26,13 @@ s32 FUN_L06_00249738(u8 *p) {
     s32 center_x = D_L06_0015F8E8;
     f32 alpha, scaled_alpha, fill, step, limit;
 
-    if (pal_mode == 0) y = screen_y - 50;
-    if (current_level_index == 7 || current_level_index == 13) segments = 6;
-    if (current_level_index == 18) segments = 7;
-    if (p[0x70] != 0) {
-        if (current_level_index == 13) {
+    y = pal_mode ? screen_y - 42 : screen_y - 50;
+    screen_y = current_level_index;
+    if (screen_y == 7 || screen_y == 13) segments = 6;
+    if (screen_y == 18) segments = 7;
+    if (p[0x70] == 0) return *(s32 *)(p + 0x58);
+    {
+        if (screen_y == 13) {
             y = 18;
             if (pal_mode != 0) y = 10;
         }

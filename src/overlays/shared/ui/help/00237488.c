@@ -1274,7 +1274,8 @@ void FUN_L05_00254058(void) {
         stats->stat[30].level_mask |= 0x80000000;
     }
     {
-        counter = (s32 *)((char *)&hero + 0x700);
+        counter = (s32 *)((char *)&hero + 0x6D0);
+        counter += 12;
         for (i = 2; i >= 0; i--, counter++) {
             if (absolute_float(*(f32 *)(counter - 12)) > 3.3161256f) {
                 f32 rotation = *(f32 *)(counter - 12);
@@ -1290,7 +1291,7 @@ void FUN_L05_00254058(void) {
         struct Hero *g = &hero;
         *(s32 *)((char *)g + 0x70C) = 0;
         {
-            counter = (s32 *)((char *)g + 0x700);
+            s32 *counter = (s32 *)((char *)g + 0x700);
             i = 2;
             do {
                 if (*(s32 *)((char *)g + 0x70C) < *counter)
@@ -1358,7 +1359,7 @@ typedef struct {
 } HelpPath;
 
 void FUN_L05_00254358(f32 *position, f32 *direction) {
-    struct Hero *g = &hero;
+    struct Hero *g;
     HelpPath *path;
     f32 height_limit;
     f32 best;
@@ -1367,40 +1368,47 @@ void FUN_L05_00254358(f32 *position, f32 *direction) {
     HelpPathPoint point;
     HelpPathPoint *p;
     HelpPath *cursor;
-    char *origin = (char *)g + 0x80;
 
-    if (g->unk86C == 0) {
-        *(HelpPathPoint *)position = *(HelpPathPoint *)origin;
-        *(HelpPathPoint *)direction = *(HelpPathPoint *)(origin + 0x10);
+
+    if (hero.unk86C == 0) {
+        qcopy(position, (char *)&hero + 0x80);
+        qcopy(direction, (char *)&hero + 0x90);
         return;
     }
-    path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(g->unk86C + 0x78) + 0x24)];
+    path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(hero.unk86C + 0x78) + 0x24)];
     best = 9999999.0f;
     index = 0;
     selected = 0;
-    p = path->points;
+
     if (path->count > 0) {
         height_limit = 4.0f;
+        p = path->points;
         cursor = path;
         do {
             f32 a;
             s32 next;
+            s32 count;
             f32 b;
-            a = FUN_001f9e90(cursor->points[0].x - *(f32 *)origin, cursor->points[0].y - *(f32 *)(origin + 4));
-            next = (s32)((u32)index + ((u32)path->count + 2U)) % path->count;
+            g = &hero;
+            a = FUN_001f9e90(cursor->points[0].x - g->motion.pos.f[0], cursor->points[0].y - g->motion.pos.f[1]);
+            count = path->count;
+            next = (s32)((u32)count + 2U);
+            next = (s32)((u32)index + (u32)next) % count;
             b = FUN_001f9e90(path->points[next].x - cursor->points[0].x, path->points[next].y - cursor->points[0].y);
             if (!(fast_difference_between_rotations(a, b) > 1.5707964f)) goto next_point;
             {
                 if (current_level_index == 0x10 && g->unk8B4 != 0) {
-                    f32 a = *(f32 *)((char *)g->unk8B4 + *(s16 *)((char *)g + 0x8C8) * 16 + 0x18);
-                    f32 b = *(f32 *)((char *)g->unk8B4 + g->unk898 * 16 + 0x18);
-                    f32 high = (a < b ? b : a) - cursor->points[0].z;
+                    f32 a = ((HelpPath *)g->unk8B4)->points[*(s16 *)((char *)g + 0x8C8)].z;
+                    f32 b = ((HelpPath *)g->unk8B4)->points[g->unk898].z;
+                    f32 high = cursor->points[0].z;
+                    if (a < b) high = b - high;
+                    else high = a - high;
                     if (absolute_float(high) > height_limit) {
                         goto next_point;
                     }
                 }
                 {
-                    f32 distance = FUN_001f9b80(origin, p);
+                    f32 distance = FUN_001f9b80((char *)&hero + 0x80, p);
                     if (distance < best) {
                         best = distance;
                         selected = index;
@@ -1408,14 +1416,13 @@ void FUN_L05_00254358(f32 *position, f32 *direction) {
                 }
             }
 next_point:
-            index = (s32)((u32)((char *)cursor - (char *)path) / 16U) + 2;
+            index += 2;
             p += 2;
             cursor = (HelpPath *)((char *)cursor + 0x20);
         } while (index < path->count);
     }
-    p = &path->points[selected];
-    *(HelpPathPoint *)position = *p;
-    point = *(HelpPathPoint *)position;
+    qcopy(position, &path->points[selected]);
+    qcopy(&point, position);
     point.z += 2.0f;
     position[2] = find_ground_height(0.5f, &point, 0);
     clear_u64_value(direction);

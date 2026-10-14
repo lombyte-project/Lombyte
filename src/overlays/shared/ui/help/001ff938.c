@@ -7,6 +7,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_001ff938.s", FUN_L15_001ff938);
 #else
+#include "qcopy.h"
 extern void FUN_L00_00232670(void);
 extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L15_002044c8(void);
@@ -30,14 +31,17 @@ extern u32 FUN_001fa6e0(f32, u32, u32);
 extern void FUN_L00_00216de8(int, int);
 extern void FUN_L00_00208b60(void);
 extern void FUN_L00_00257024(void *);
+extern float D_L15_0017ACC0_d __asm__("D_L15_0017ACC0") __attribute__((section(".data")));
+extern unsigned char D_0013E533[];
 extern u8 D_0015EDB3;
-extern u8 D_0015EDB1;
+extern u8 D_0015EDB1 __attribute__((section(".data")));
 extern float D_0015EE18_001ff938 __asm__("D_0015EE18_gp") __attribute__((sda));
 extern int D_L15_0015F5CC;
 extern u8 D_0013D4DC[];
 
 void FUN_L15_001ff938(void) {
     u8 *moby;
+    struct Hero *base;
     u32 copy[4] __attribute__((aligned(16)));
     int period, red, green, blue, alpha, i;
     u32 color;
@@ -61,58 +65,57 @@ void FUN_L15_001ff938(void) {
 
     if (hero.vehicle_mode == 2) {
         if (D_0015EDB3 != 0)
-            *(float *)(0x0017C06C + (((u32)&FUN_L15_001ff938 == 0x0020EFA8) ? 0x400 : 0)) = D_0015EE18_001ff938 * 1.4f;
+            *(float *)((u8 *)&D_L15_0017ACC0_d + 0x13AC) = D_0015EE18_001ff938 * 1.4f;
         FUN_L00_002059d8();
         FUN_L00_002061f0();
-        moby = (u8 *)hero.moby;
-        if (((*(u16 *)(moby + 0x34) ^ 1) & 1) != 0) {
-            moby_point_position(moby, 6, copy);
-            *(u128 *)((u8 *)&hero + 0x1D80) = *(u128 *)copy;
+        if (((*(u16 *)((u8 *)hero.moby + 0x34) ^ 1) & 1) != 0) {
+            moby_point_position(hero.moby, 6, copy);
+            qcopy((u8 *)&hero + 0x1D80, copy);
             FUN_L00_00207d00();
         }
     }
 
     if (hero.vehicle_mode == 3) {
+        base = (struct Hero *)(D_0013E533 + 0xE1D);
         if (D_0015EDB1 != 0)
-            *(u32 *)(0x0017C1CC + (((u32)&FUN_L15_001ff938 == 0x0020EFA8) ? 0x400 : 0)) = 0x3ff33333;
+            *(float *)((u8 *)&D_L15_0017ACC0_d + 0x150C) = 1.9f;
         alpha = 0x80;
         period = FUN_001f96f8(0xAA);
-        if (hero.unk22E0 == 2)
+        if (base->unk22E0 == 2)
             period = FUN_001f96f8(0x32);
-        else if (hero.unk22E0 == 1)
+        else if (base->unk22E0 == 1)
             period = FUN_001f96f8(0x5A);
         pulse = FUN_001f9de0((((float)(D_L15_0015F5CC % period) / FUN_001fa6c0(period)) * 2.0f) * 3.1415927f + -3.1415927f);
         red = FUN_001fa6d0(pulse * 20.0f) + 0x32;
         green = FUN_001fa6d0(pulse * 70.0f) + 0xB4;
         blue = FUN_001fa6d0(pulse * 10.0f) + 0x14;
-        moby = (u8 *)hero.moby;
         if (red > 0xFF) red = 0xFF;
         if (green > 0xFF) green = 0xFF;
-        *(u16 *)(moby + 0x34) |= 0x10;
+        *(u16 *)((u8 *)hero.moby + 0x34) |= 0x10;
         if (hero.unk22E0 == 2)
             color = (alpha << 24) | (blue << 16) | ((red / 2) << 8) | green;
         else
             color = (alpha << 24) | (blue << 16) | (green << 8) | red;
-        *(u32 *)(moby + 0x90) = FUN_001fa6e0(0.1f, *(u32 *)(moby + 0x90), color);
+        *(u32 *)((u8 *)hero.moby + 0x90) = FUN_001fa6e0(0.1f, *(u32 *)((u8 *)hero.moby + 0x90), color);
         for (i = 0; i < 3; i++)
             moby_point_position(hero.moby, i, (u8 *)&hero + 0x1D50 + i * 16);
         alpha = 0x30;
-        moby = (u8 *)hero.moby;
+        moby = (u8 *)base->moby;
         red_byte = moby[0x90];
         green_byte = moby[0x91];
         blue_byte = moby[0x92];
-        if (hero.unk22DE != 0)
-            alpha = FUN_001fa6d0((FUN_001fa6c0(hero.unk22DE) / FUN_001fa6c0(0x12)) * (float)alpha);
-        *(u32 *)((u8 *)&hero + 0x22E4) = (alpha << 24) | (blue_byte << 16) | (green_byte << 8) | red_byte;
+        if (base->unk22DE != 0)
+            alpha = FUN_001fa6d0((FUN_001fa6c0(base->unk22DE) / FUN_001fa6c0(0x12)) * (float)alpha);
+        *(u32 *)((u8 *)base + 0x22E4) = (alpha << 24) | (blue_byte << 16) | (green_byte << 8) | red_byte;
         FUN_L00_00207d00();
-        hero.unk22E0 = 0;
-        if (hero.vehicle_mode == 3) {
-            int pending = hero.pending_item[0];
+        base->unk22E0 = 0;
+        if (base->vehicle_mode == 3) {
+            int pending = base->pending_item[0];
             if (pending != 0 && pending != 0x1F) {
-                if (hero.unk22DE == 0) {
+                if (base->unk22DE == 0) {
                     FUN_L00_00216de8(0x19, 0);
-                    hero.unk22DC = 1;
-                    hero.unk22DE = 0x12;
+                    base->unk22DC = 1;
+                    base->unk22DE = 0x12;
                 }
             } else {
                 hero.pending_item[0] = 0;

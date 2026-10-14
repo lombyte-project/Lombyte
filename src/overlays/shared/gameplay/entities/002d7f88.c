@@ -857,13 +857,13 @@ void FUN_L00_002d9810(u8 *m) {
     float *data = *(float **)(m + 0x78);
     char *shape;
     float ratio = data[0] / D_L00_00161A10_002d9810;
-    int i, j = 0x121, color;
+    int i, j, color;
     short *indices;
     char *source;
     char *destination = D_L00_001E3DA0_002d9810;
-    char *pointA, *pointB;
+    char *pointB, *pointA;
     float *u, *v;
-    float *shiftedVector;
+    float *shiftedVector = shifted;
 
     quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AD4_002d9810);
     quad.texture[2] = 0xff9000000260ULL;
@@ -874,7 +874,6 @@ void FUN_L00_002d9810(u8 *m) {
                       ((u64)D_L00_00161AD0_002d9810 << 32);
     quad.texture[0] = 0;
     FUN_00233980_002d9810(0x47, 0x53001);
-    shiftedVector = shifted;
     ((float *)&position)[0] = *(float *)(m + 0x10);
     ((float *)&position)[1] = *(float *)(m + 0x14);
     ((float *)&position)[2] = *(float *)(m + 0x18) + 0.5f;
@@ -897,6 +896,7 @@ void FUN_L00_002d9810(u8 *m) {
     FUN_00233980_002d9810(0x14, 0xff9000000260ULL);
     FUN_00233980_002d9810(0x4a, 0);
     FUN_001f76a0_002d9810();
+    j = 0x121;
     source = D_L00_001E14C0_002d9810;
     do {
         FUN_001f9d20_002d9810(&transformed, source, shiftedVector);
@@ -921,16 +921,17 @@ void FUN_L00_002d9810(u8 *m) {
     quad.texture[1] = FUN_001f44b8_002d9810(0xb);
     quad.texture[3] = 0x8000000048ULL;
     color = FUN_001fa6d0_002d9810(ratio * 64.0f + 128.0f);
-    color = ((u32)(color + D_L00_00161B10_002d9810) << 24) | D_L00_00161AE0_002d9810;
+    color = ((u32)(D_L00_00161B10_002d9810 + color) << 24) | D_L00_00161AE0_002d9810;
     quad.colors[3] = 0;
     quad.colors[2] = 0;
-    quad.colors[0] = color;
     quad.colors[1] = color;
+    quad.colors[0] = color;
     for (i = 0; i < 32; i++) {
         indices = (short *)(D_L00_001E3A80_002d9810 + i * 8);
+        j = 0;
         pointB = (char *)quad.points;
         pointA = (char *)quad.points;
-        for (j = 0; j < 4; j++) {
+        for (; j < 4; j++) {
             short index = *indices;
             if (j >= 2)
                 FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810 * D_L00_00161AEC_002d9810,
@@ -938,8 +939,8 @@ void FUN_L00_002d9810(u8 *m) {
             else
                 FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810, pointA,
                                         D_L00_001E3480_002d9810 + index * 16);
-            pointA += 16;
             pointB += 16;
+            pointA += 16;
             indices++;
         }
         quad.texcoords[0] = 0.5f;
@@ -2013,6 +2014,13 @@ extern void FUN_L00_002d3838_002dbf28(void *, void *, int, int) __asm__("FUN_L00
 extern int FUN_L00_001f2868_002dbf28(float, void *, int, void *, int) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_0025a9f8_002dbf28(float, float, float, void *, void *, void *, int, int, int, int, int) __asm__("FUN_L00_0025a9f8");
 
+typedef struct {
+    char pad[0x160];
+    float f160;
+    int i164, i168;
+} G_002dbf28;
+extern G_002dbf28 D_L00_00166C80_002dbf28 __asm__("D_L00_00166C80");
+
 void FUN_L00_002dbf28(char *moby) {
     u128 matrix[5];
     Q_WORDDATA origin, position, axis, temporary, scaled, displacement;
@@ -2036,6 +2044,7 @@ void FUN_L00_002dbf28(char *moby) {
     range = fast_vec_length(&origin);
 
     for (i = 0; i < 10 / multiplier; i++) {
+        int a, b;
         displacement.ul128 = 0;
         displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
@@ -2053,6 +2062,7 @@ void FUN_L00_002dbf28(char *moby) {
         FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 0, item_text_variant.b9);
     }
     for (i = 0; i < 4 / multiplier; i++) {
+        int a, b;
         displacement.ul128 = 0;
         displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
         displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
@@ -2088,6 +2098,7 @@ void FUN_L00_002dbf28(char *moby) {
     deficit = 0.0f;
     if (range < 7.0f) deficit = 7.0f - range;
     for (i = 0; i < count; i++) {
+        int a, b;
         int red, green, blue;
         float effect_magnitude;
         speed = FUN_002132a8_002dbf28(8.0f, 10.0f);
@@ -2132,9 +2143,9 @@ void FUN_L00_002dbf28(char *moby) {
     speed = magnitude * 3.0f;
     a = FUN_001f96f8_002dbf28(29);
     FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 32);
-    if (range < 20.0f) *(float *)(D_L00_00166DC0_002dbf28 + 0x120) = 0.4f - range * 0.0175f;
-    else *(float *)(D_L00_00166DC0_002dbf28 + 0x120) = 0.050000012f;
-    *(int *)(D_L00_00166DC0_002dbf28 + 0x128) = FUN_001f96f8_002dbf28(25);
+    if (range < 20.0f) D_L00_00166C80_002dbf28.f160 = 0.4f - range * 0.0175f;
+    else D_L00_00166C80_002dbf28.f160 = 0.050000012f;
+    D_L00_00166C80_002dbf28.i168 = FUN_001f96f8_002dbf28(25);
     FUN_L00_002d3838_002dbf28(matrix, center, 0, 0);
     if (item_text_variant.b9) {
         a = FUN_L00_001f2868_002dbf28(3.0f, center, 16, moby, 0);
@@ -2612,7 +2623,7 @@ typedef struct {
     float texcoords[8];
     u64 texture[4];
 } __attribute__((aligned(16))) Quad_002dd8e8;
-extern float D_L00_00161B48_002dd8e8 __asm__("D_L00_00161B48") __attribute__((sda));
+extern float D_L00_00161B48_002dd8e8 __asm__("D_L00_00161B48") __attribute__((section(".data")));
 extern char D_L00_001E6020_002dd8e8[] __asm__("D_L00_001E6020") __attribute__((section(".data")));
 extern char D_L00_001E5EE0_002dd8e8[] __asm__("D_L00_001E5EE0") __attribute__((section(".data")));
 u64 FUN_001f9298_002dd8e8(int) __asm__("FUN_L00_001f9298");
@@ -2626,8 +2637,10 @@ void FUN_L00_002dd8e8(void) {
     Quad_002dd8e8 quad;
     u128 following, edge, outward, normal;
     float phase, next_phase, offset, step, dot;
+    float previous_phase;
     int row, segment, next_segment, value, previous_value;
-    char *current, *prior;
+    int current, segment_offset;
+    char *prior;
 
     quad.texture[1] = FUN_001f9298_002dd8e8(0x15);
     quad.texture[2] = 0xff9000000260ULL;
@@ -2640,49 +2653,53 @@ void FUN_L00_002dd8e8(void) {
     step = 0.05f;
     for (row = 1; row < 10; row++) {
         offset = ((float *)&D_L00_00161B48_002dd8e8)[-1];
-        next_phase = phase + 0.3f;
-        phase = next_phase;
-        next_phase = phase + 0.3f;
+        phase += 0.3f;
         ((float *)&D_L00_00161B48_002dd8e8)[-1] += D_L00_00161B48_002dd8e8;
         if (((float *)&D_L00_00161B48_002dd8e8)[-1] > 7.0f)
             ((float *)&D_L00_00161B48_002dd8e8)[-1] -= 7.0f;
-        current = D_L00_001E6020_002dd8e8 + row * 0x140;
-        prior = D_L00_001E5EE0_002dd8e8 + row * 0x140;
+        next_phase = phase + 0.3f;
+        current = row * 0x140;
+        prior = D_L00_001E5EE0_002dd8e8;
         for (segment = 0; segment < 20; segment++) {
-            next_segment = (segment + 1) % 20;
-            qcopy(&quad.points[0], current + segment * 16);
-            qcopy(&quad.points[1], current + next_segment * 16);
-            qcopy(&quad.points[2], prior + segment * 16);
-            qcopy(&quad.points[3], prior + next_segment * 16);
+            segment_offset = segment * 16;
+            qcopy(&quad.points[0], D_L00_001E6020_002dd8e8 + (current + segment_offset));
+            next_segment = ((segment + 1) % 20) * 16;
+            qcopy(&quad.points[1], D_L00_001E6020_002dd8e8 + (current + next_segment));
+            qcopy(&quad.points[2], prior + (current + segment_offset));
+            qcopy(&quad.points[3], prior + (current + next_segment));
             FUN_001ff2a8_002dd8e8(&edge, &quad.points[0], &quad.points[1]);
             FUN_001ff2a8_002dd8e8(&outward, &quad.points[2], &quad.points[1]);
             FUN_001ff3c0_002dd8e8(&normal, &outward, &edge);
             FUN_001ff2a8_002dd8e8(&following, &quad.points[1], g_debug_camera);
             dot = FUN_001ff398_002dd8e8(&normal, &following);
-            if (!(0.0f <= dot)) {
-                value = ((short *)(D_L00_001E6020_002dd8e8 - 0x18))[row];
-                previous_value = ((short *)(D_L00_001E6020_002dd8e8 - 0x18))[row - 1];
-                if (value < 0) value = 0;
-                if (value > 0x40) value = 0x40;
-                if (previous_value < 0) previous_value = 0;
-                if (previous_value > 0x40) previous_value = 0x40;
-                quad.colors[0] = quad.colors[1] = (value << 24) | 0x404040;
-                quad.colors[2] = quad.colors[3] = (previous_value << 24) | 0x404040;
-                if (row == 1)
-                    quad.colors[2] = quad.colors[3] = 0x20404040;
-                else if (row == 9)
-                    quad.colors[0] = quad.colors[1] = 0x00404040;
-                quad.texcoords[0] = phase;
-                quad.texcoords[1] = offset;
-                quad.texcoords[2] = phase;
-                quad.texcoords[3] = offset + step;
-                quad.texcoords[4] = phase - 0.3f;
-                quad.texcoords[5] = offset;
-                quad.texcoords[6] = phase - 0.3f;
-                quad.texcoords[7] = offset + step;
-                FUN_001fd228_002dd8e8(&quad, 0, 0);
+            if (0.0f <= dot) {
+                offset += step;
+                continue;
             }
-            offset += step;
+            previous_phase = phase - 0.3f;
+            dot = offset + step;
+            value = ((short *)(D_L00_001E6020_002dd8e8 - 0x18))[row];
+            previous_value = ((short *)(D_L00_001E6020_002dd8e8 - 0x18))[row - 1];
+            if (value < 0) value = 0;
+            if (value > 0x40) value = 0x40;
+            if (previous_value < 0) previous_value = 0;
+            if (previous_value > 0x40) previous_value = 0x40;
+            quad.colors[0] = quad.colors[1] = (value << 24) | 0x404040;
+            quad.colors[2] = quad.colors[3] = (previous_value << 24) | 0x404040;
+            if (row == 1)
+                quad.colors[2] = quad.colors[3] = 0x20404040;
+            else if (row == 9)
+                quad.colors[0] = quad.colors[1] = 0x00404040;
+            quad.texcoords[0] = phase;
+            quad.texcoords[1] = offset;
+            quad.texcoords[2] = phase;
+            quad.texcoords[3] = dot;
+            quad.texcoords[4] = previous_phase;
+            quad.texcoords[5] = offset;
+            quad.texcoords[6] = previous_phase;
+            quad.texcoords[7] = dot;
+            offset = dot;
+            FUN_001fd228_002dd8e8(&quad, 0, 0);
         }
         phase = next_phase;
     }
@@ -2853,6 +2870,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     short *halfword;
     int i, j, row, segment, count, small_count, index, next_segment;
     float fraction, sampled, angle, delta, length, row_float, spread, phase, value;
+    int next_row;
 
     FUN_L00_002ddcb8(frame_context, initial_vector);
     global = (char *)&D_0013F350_c;
@@ -2979,7 +2997,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
         phase = row_float * 0.7f;
         current = D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6);
         prior = D_L00_001E4B40;
-        ++row;
+        next_row = row + 1;
         j = 0;
         do {
             value = spread + 0.1f;
@@ -2993,6 +3011,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
             prior += 16;
         } while (j < 20);
         FUN_001ff500_002ddcb8(&scaled_first, &offset, D_L00_00161B84);
+        row = next_row;
     } while (row < 10);
     FUN_001f9598_002ddf60(FUN_L00_002dd8e8, frame_context);
     count = 0;
@@ -3086,12 +3105,12 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                     row = *(volatile short *)record;
                     FUN_001ff278_002ddcb8(*(char **)(record + 20) + 16, D_L00_001E5F40_002ddcb8 + row * 16, &temp1);
                     segment = *(volatile short *)(record + 2);
-                    FUN_001ff2a8_002ddf60(&temp2, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
-                    FUN_001ff2a8_002ddf60(&edge, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&temp2, D_L00_001E6020_002ddf60 + row * 320 + segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&edge, D_L00_001E6020_002ddf60 + row * 320 + segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
                     interpolate_vector4_linear_002ddf60(&offset, &temp2, &edge, fraction);
                     next_segment = (segment + 19) % 20;
-                    FUN_001ff2a8_002ddf60(&direction, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + next_segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
-                    FUN_001ff2a8_002ddf60(&tangent, D_L00_001E6020_002ddf60 + (int)((unsigned int)(row * 5) << 6) + next_segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&direction, D_L00_001E6020_002ddf60 + row * 320 + next_segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&tangent, D_L00_001E6020_002ddf60 + row * 320 + next_segment * 16 - 0x140, D_L00_001E5F30_002ddcb8 + row * 16);
                     interpolate_vector4_linear_002ddf60(&following, &direction, &tangent, fraction);
                     interpolate_vector4_linear_002ddf60(&offset, &offset, &following, *(volatile float *)(record + 8));
                     value = *(volatile float *)(record + 8) + *(volatile float *)(record + 12);

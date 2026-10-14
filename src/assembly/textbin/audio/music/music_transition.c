@@ -9,7 +9,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/audio/music/music_transitio
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/storage/disc_table.h"
 extern void music_transition_start_callback() __asm__("FUN_00216a80");
-extern void snd_play_vag_stream_by_loc_ex_cb(s32, s32, s32, s32, s16, s32, s32, s32, s32,
+extern s32 snd_play_vag_stream_by_loc_ex_cb(s32, s32, s32, s32, s16, s32, s32, s32, s32,
                                              void (*)(), u64) __asm__("func_0012EC08");
 s32 music_transition(s32 target_track, s32 transition_track, s32 flags,
                      s32 volume) __asm__("FUN_00215e00");
@@ -17,6 +17,7 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
     volatile s32 *location_entry;
     s64 stream_location;
     u64 callback_context;
+    s16 stream_volume;
     void (*callback)();
     u8 *track_table;
     s32 track_table_offset;
@@ -34,8 +35,8 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
         return 0;
     }
     *(u32 *)&music_stream_state.transition.handle = 0xFFFFFFFF;
-    sample_rate = 48000;
     poll_interval = 10;
+    sample_rate = 48000;
     music_stream_state.transition.poll_interval = poll_interval;
     music_stream_state.transition.remaining_time = sample_rate;
     music_stream_state.transition.track = target_track;
@@ -43,10 +44,11 @@ s32 music_transition(s32 target_track, s32 transition_track, s32 flags, s32 volu
     music_stream_state.transition.volume = volume;
     music_stream_state.transition.crossfade_enabled = 1;
     music_stream_state.transition.flags = flags;
+    stream_volume = volume;
     stream_location = *location_entry;
     callback_context = (u32)&music_stream_state.transition.handle;
     callback = music_transition_start_callback;
-    snd_play_vag_stream_by_loc_ex_cb(stream_location, 0, 0, 0, volume, 0, 1, 0, 0x20, callback,
+    snd_play_vag_stream_by_loc_ex_cb(stream_location, 0, 0, 0, stream_volume, 0, 1, 0, 0x20, callback,
                                      callback_context);
     return 1;
 }

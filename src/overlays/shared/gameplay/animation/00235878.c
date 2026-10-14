@@ -542,6 +542,7 @@ extern unsigned char D_L00_0017E530[];
 extern int freeze_stats_time_ref_a[] __asm__("D_0015EE58");
 extern int freeze_stats_score_ref_a[] __asm__("D_0015EE68");
 extern float D_0013F3D0[];
+extern void *memcpy(void *, const void *, unsigned int);
 
 extern float FUN_00200240(unsigned int) __asm__("FUN_001fa6c0");
 extern float FUN_001fef10(float) __asm__("FUN_001f96b0");
@@ -552,6 +553,8 @@ extern void FUN_0023b4d8(void *, int, int, int, int, int) __asm__("FUN_001ffc30"
 extern void FUN_0023b860(void *, int, int, int, int, int) __asm__("FUN_001ffe18");
 extern void FUN_001fb9a8(int, int, int, const char *, int) __asm__("FUN_001f6af0");
 extern float FUN_001ff450(float *, float *) __asm__("FUN_001f9b48");
+extern const char freeze_stats_score_format[] __asm__("D_L00_0015F778");
+extern const char freeze_stats_time_format[] __asm__("D_L00_001E84C0");
 extern char *FUN_00203ad8(int) __asm__("FUN_001fdd10");
 extern int FUN_00116248(char *, const char *, ...);
 extern void FUN_0023cf80(int, int, int, char *) __asm__("FUN_00201200");
@@ -592,24 +595,29 @@ int FUN_L00_00237200(HudElem *e) {
         left = 0xe0 - (width >> 1);
         other_width = FUN_001fb090((const char *)&D_L00_0017E530[1] + i, -1);
         other_left = 0xe0 - (other_width >> 1);
-        if (left < other_left) {
-            other_left = left;
-        } else {
+        if (left >= other_left) {
             width = other_width;
+        } else {
+            other_left = left;
         }
         left = other_left;
-        FUN_0023b4d8(FUN_0023b208(0x7580, 0), left + 0x20, y, width, 0x36, alpha);
+        other_left = left + 0x20;
+        FUN_0023b4d8(FUN_0023b208(0x7580, 0), other_left, y, width, 0x36, alpha);
+        other_left = color;
         FUN_0023b4d8(FUN_0023b208(0x7580, 1), left, y, 0x20, 0x36, alpha);
-        FUN_0023b860(FUN_0023b208(0x7580, 1), left + (width + 0x20), y, 0x20, 0x36, alpha);
-        FUN_001fb9a8(0x100, text_y, color, (const char *)D_L00_0017E530, -1);
-        FUN_001fb9a8(0x100, y + 0x1b, color, (const char *)&D_L00_0017E530[1] + i, -1);
+        FUN_0023b860(FUN_0023b208(0x7580, 1), (width + 0x20) + left, y, 0x20, 0x36, alpha);
+        FUN_001fb9a8(0x100, text_y, other_left, (const char *)D_L00_0017E530, -1);
+        FUN_001fb9a8(0x100, y + 0x1b, other_left, (const char *)&D_L00_0017E530[1] + i, -1);
         level = current_level_index_sda;
     } else {
+        int width, left;
         width = FUN_001fb090((const char *)D_L00_0017E530, -1);
         left = 0xe0 - (width >> 1);
         FUN_0023b4d8(FUN_0023b208(0x7580, 1), left, y, 0x20, 0x20, alpha);
         FUN_0023b4d8(FUN_0023b208(0x7580, 0), left + 0x20, y, width, 0x20, alpha);
-        FUN_0023b860(FUN_0023b208(0x7580, 1), left + (width + 0x20), y, 0x20, 0x20, alpha);
+        line = FUN_0023b208(0x7580, 1);
+        width += 0x20;
+        FUN_0023b860((void *)line, left + width, y, 0x20, 0x20, alpha);
         FUN_001fb9a8(0x100, text_y, color, (const char *)D_L00_0017E530, -1);
         level = *(int *)0x15ed84;
     }
@@ -623,30 +631,31 @@ int FUN_L00_00237200(HudElem *e) {
         points[1].x = 115.7f;
         points[1].y = 287.0f;
         points[1].z = 119.5f;
-        if (level == 5) {
-            point = points[0];
-        } else {
-            point = points[1];
-        }
-        if (FUN_001ff450(D_0013F3D0, &point.x) < 5.0f) {
-            *(int *)0x15f648 = y + 100;
-            extra = 4;
-            if (current_level_index_sda != 0x10) extra = 0;
-            elapsed = *(int *)((char *)freeze_stats_time_ref_a + extra);
-            extra = *(int *)((char *)freeze_stats_score_ref_a + extra);
-            if (elapsed != 0) {
-                interval = pal_mode != 0 ? 3000 : 3600;
-                minute_scale = interval / 60;
-                seconds = elapsed / interval;
-                remainder = elapsed - seconds * interval;
-                width = remainder / minute_scale;
-                remainder = (remainder - width * minute_scale) * 100 / minute_scale;
-                line = (const char *)0x1e84c0;
-                FUN_00116248(text, line, FUN_00203ad8(0x531b), seconds, width, remainder);
-                FUN_0023cf80(0x100, y + 0x28, color, text);
-                if (extra != 0) {
-                    FUN_00116248(text, (const char *)0x15f778, FUN_00203ad8(0x531c), extra);
-                    FUN_0023cf80(0x100, y + 0x48, color, text);
+        {
+            float *point_data;
+            line = level == 5 ? memcpy(&point, &points[0], 16) : memcpy(&point, &points[1], 16);
+            point_data = (float *)line;
+            if (FUN_001ff450(D_0013F3D0, point_data) < 5.0f) {
+                *(int *)0x15f648 = y + 100;
+                extra = current_level_index_sda == 0x10 ? 1 : 0;
+                elapsed = freeze_stats_time_ref_a[extra];
+                extra = freeze_stats_score_ref_a[extra];
+                if (elapsed != 0) {
+                    const char *message;
+                    interval = pal_mode != 0 ? 3000 : 3600;
+                    seconds = elapsed / interval;
+                    other_width = interval / 60;
+                    remainder = elapsed - seconds * interval;
+                    other_left = remainder / other_width;
+                    remainder = (remainder - other_left * other_width) * 100 / other_width;
+                    line = freeze_stats_time_format;
+                    message = FUN_00203ad8(0x531b);
+                    FUN_00116248(text, line, message, seconds, other_left, remainder);
+                    FUN_0023cf80(0x100, y + 0x28, color, text);
+                    if (extra != 0) {
+                        FUN_00116248(text, freeze_stats_score_format, FUN_00203ad8(0x531c), extra);
+                        FUN_0023cf80(0x100, y + 0x48, color, text);
+                    }
                 }
             }
         }

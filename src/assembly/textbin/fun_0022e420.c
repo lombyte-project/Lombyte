@@ -73,11 +73,10 @@ void build_resident_indexed_texture_warp_meshes(void) {
         s32 page;
         for (page = 0; page < level_render_state.history_count - 1; page++) {
             history_index = (level_render_state.history_index - page + 0x1F) & 0x1F;
-            primary_next = get_primary_history_position((history_index + 1) & 0x1F);
-            secondary_next =
-                &level_render_state.secondary_history[(history_index + 1) & 0x1F];
-            primary_current = get_primary_history_position(history_index);
             secondary_current = &level_render_state.secondary_history[history_index];
+            primary_current = get_primary_history_position(history_index);
+            secondary_next = &level_render_state.secondary_history[(history_index + 1) & 0x1F];
+            primary_next = get_primary_history_position((history_index + 1) & 0x1F);
             primary_after_next = get_primary_history_position((history_index + 2) & 0x1F);
             {
                 s32 strip;
@@ -88,10 +87,10 @@ void build_resident_indexed_texture_warp_meshes(void) {
                     subtract_vectors(&cross_strip_differences[1], primary_current, secondary_current);
                     subtract_vectors(&cross_strip_differences[2], secondary_next, primary_next);
                     subtract_vectors(&cross_strip_differences[3], primary_next, secondary_next);
-                    subtract_vectors(&edge_normals[1], primary_next + strip_offset,
-                                     primary_current + strip_offset);
-                    subtract_vectors(&edge_normals[3], primary_after_next + strip_offset,
-                                     primary_next + strip_offset);
+                    subtract_vectors(&edge_normals[1], (Vec4 *)(strip_offset * sizeof(Vec4) + (u32)primary_next),
+                                     (Vec4 *)(strip_offset * sizeof(Vec4) + (u32)primary_current));
+                    subtract_vectors(&edge_normals[3], (Vec4 *)(strip_offset * sizeof(Vec4) + (u32)primary_after_next),
+                                     (Vec4 *)(strip_offset * sizeof(Vec4) + (u32)primary_next));
                     if (page == 0) {
                         qcopy(&edge_normals[3], &edge_normals[1]);
                     }
@@ -110,8 +109,8 @@ void build_resident_indexed_texture_warp_meshes(void) {
                                          progress *
                                              (&D_001604D0)[level_render_state.content_variant]);
                         add_vectors(&quad.positions[vertex], &quad.positions[vertex],
-                                    get_primary_history_position((history_index + history_step) & 0x1F) +
-                                        strip_offset);
+                                    (Vec4 *)(strip_offset * sizeof(Vec4) +
+                                        (u32)get_primary_history_position((history_index + history_step) & 0x1F)));
                     }
                     draw_geometry_quad(&quad, 0, 0);
                     for (side_vertex = 0; side_vertex < 4; side_vertex++) {
@@ -123,8 +122,8 @@ void build_resident_indexed_texture_warp_meshes(void) {
                                              (&D_001604D0)[level_render_state.content_variant]);
                         add_vectors(
                             &quad.positions[side_vertex], &quad.positions[side_vertex],
-                            get_primary_history_position((history_index + side_history_step) & 0x1F) +
-                                strip_offset);
+                            (Vec4 *)(strip_offset * sizeof(Vec4) +
+                                (u32)get_primary_history_position((history_index + side_history_step) & 0x1F)));
                     }
                     draw_geometry_quad(&quad, 0, 0);
                 }

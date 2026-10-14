@@ -67,7 +67,6 @@ int render_configured_text_label(struct MenuScreen *label) {
     int remaining_frames;
     int visible_height;
     int text_extent;
-    struct MenuScreen *page;
     struct MenuGridCell *entry;
     u8 *availability_table;
     int item_id;
@@ -102,24 +101,25 @@ int render_configured_text_label(struct MenuScreen *label) {
         label->data.label.cached_value = 0;
         label->data.label.value_variant = 0;
     } else if (selector_flags & 0x80) {
-        page = menu_system.current->focus;
+        struct MenuScreen *page = menu_system.current->focus;
         value_index = page->data.list.selected;
         if (selector_flags & 0x8000) {
             value_variant = pal_mode != 0;
         }
     } else if (selector_flags & 0x100) {
-        page = menu_system.current->focus;
+        struct MenuScreen *page = menu_system.current->focus;
         value_index = page->data.grid.selected_cell;
         entry = &page->data.grid.cells[value_index];
-        item_id = entry->id;
+        flags = entry->id;
         availability_table = entry->kind == 0 ? item_available : alternate_item_available;
-        if (availability_table[item_id] != 0) {
+        flags = availability_table[flags];
+        if (flags != 0) {
             value_index = page->data.grid.selected_cell;
         } else {
             value_index = -1;
         }
     } else if (selector_flags & 0x1000) {
-        page = menu_system.current->focus;
+        struct MenuScreen *page = menu_system.current->focus;
         value_index = page->data.list.selected;
         {
             short sid = page->data.list.items[value_index].text;
@@ -127,7 +127,7 @@ int render_configured_text_label(struct MenuScreen *label) {
             find_help_entry(sid, 1, (u16 *)&label->data.label.text_id);
         }
     } else {
-        page = menu_system.current->focus;
+        struct MenuScreen *page = menu_system.current->focus;
         item_id = page->data.grid.cells[page->data.grid.selected_cell].id;
         value_variant = item_text_variant[item_id] != 0;
         value_index = item_id;
@@ -182,7 +182,7 @@ int render_configured_text_label(struct MenuScreen *label) {
         text = unavailable_label_text;
     }
     if (label->data.label.flags & 0x200) {
-        item_id = *((int *)label->data.label.text_id +
+        int item_id = *((int *)label->data.label.text_id +
                     value_index * label->data.label.text_stride / sizeof(int));
         if (item_id != 0x4ED2 && item_id != 0x4ED9 && item_id != 0x4EDD) {
             sprintf(formatted_text, label_format, get_help_message_text(0x4ECC), text);
@@ -192,8 +192,8 @@ int render_configured_text_label(struct MenuScreen *label) {
 
     render_flags = label->data.label.flags;
     draw_flags = render_flags;
+    x = 4;
     y = 4;
-    text_style = 8;
     if ((draw_flags & 0x4004) == 0x4004 && label->data.label.text_id == 0x523E) {
         draw_flags |= 1;
         y = 12;
@@ -205,7 +205,7 @@ int render_configured_text_label(struct MenuScreen *label) {
     if (text == 0) {
         text = fallback_label_text;
     }
-    x = 4;
+    text_style = 8;
     if (draw_flags & 1) {
         text_style = 9;
         x = label->width / 2;
@@ -237,12 +237,12 @@ int render_configured_text_label(struct MenuScreen *label) {
         c.flags |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
         window->flags = c.flags ^ 4;
-        flags = label->data.label.flags;
+        draw_flags = label->data.label.flags;
         text_extent = c.rendered_height + 4;
         visible_height = c.bottom - c.top;
-        if (!(flags & 0x2000) && text_extent >= visible_height) {
-            if (!(flags & 0x400)) {
-                label->data.label.flags = flags | 0x400;
+        if (!(draw_flags & 0x2000) && text_extent >= visible_height) {
+            if (!(draw_flags & 0x400)) {
+                label->data.label.flags = draw_flags | 0x400;
                 label->data.label.scroll_offset = -(label->height * 8);
             }
         } else if (label->data.label.flags & 0x400) {

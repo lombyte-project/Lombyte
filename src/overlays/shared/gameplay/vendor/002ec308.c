@@ -1033,8 +1033,8 @@ int FUN_L02_002fb9c8(char *moby) {
             fast_add_rotations(heading, 3.1415927f);
     }
     if (*(short *)(data + 0x3c) == 4) {
-        heading = *(float *)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x18);
         angle = FUN_001f9e90(*(float *)D_L02_00167400, *(float *)(D_L02_00167400 + 4));
+        heading = *(float *)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x18);
         if (fast_difference_between_rotations(heading, angle) > 1.5707964f)
             heading = fast_add_rotations(heading, 3.1415927f);
         *(float *)(data + 0x40) = heading;

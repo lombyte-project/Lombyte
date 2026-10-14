@@ -73,7 +73,7 @@ int FUN_L00_00257218(u8 *m, s32 *item) {
                     if (scan_index < 0) break;
                 }
             }
-            selected_item = D_0015EDD0_257218[i] & 0x3F;
+            selected_item = *(D_0015EDD0_257218 + i);
         } else {
             selected_item = 10;
             if (available != 0) {
@@ -93,10 +93,11 @@ int FUN_L00_00257218(u8 *m, s32 *item) {
                 selected_item = D_0015EDD0_257218[i] & 0x3F;
             }
         }
-        *item = selected_item;
+        *item = selected_item & 0x3F;
     }
-    choice = 2;
-    if (random_integer_below(5) != 0) choice = 1;
+    choice = random_integer_below(5);
+    if (choice) choice = 1;
+    else choice = 2;
     return choice;
 }
 #endif

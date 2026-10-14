@@ -538,7 +538,8 @@ void FUN_L00_002464a8(void) {
             for (x = 0; x < 32; x++) {
                 if ((15.5f - (f32)x) * (15.5f - (f32)x) +
                     (15.5f - (f32)y) * (15.5f - (f32)y) > 256.0f) {
-                    mask[x / 8 + y * 4] |= 1 << (x % 8);
+                    i = x / 8;
+                    mask[i + y * 4] |= 1 << (x - i * 8);
                 }
             }
         }
@@ -547,7 +548,7 @@ void FUN_L00_002464a8(void) {
         *(s32 *)0x184218 = 0;
         state->scratch_data = 0;
         state->mask_data = 0;
-        state->second_data = 0;
+        D_L00_001841F0_load.second_data = 0;
     }
 }
 #endif

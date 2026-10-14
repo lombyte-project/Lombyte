@@ -172,7 +172,11 @@ extern int D_L00_001CA480[4][4];
 extern float D_L00_001CA380[16][4];
 extern float D_L00_001CA410[8][2];
 extern int D_L00_001CA458[];
-extern char D_L00_001CA4C0_29ff58[] __asm__("D_L00_001CA4C0");
+typedef struct {
+    char pad[0x1c];
+    char *f1C;
+} L00ObjectState29ff58;
+extern L00ObjectState29ff58 D_L00_001CA4C0_29ff58 __asm__("D_L00_001CA4C0");
 extern long FUN_001f44b8_29ff58(int) __asm__("FUN_001f44b8");
 extern void FUN_001f9cf8_29ff58(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_001f7d30_29ff58(void *, int, int) __asm__("FUN_001f7d30");
@@ -183,7 +187,7 @@ void FUN_L00_0029ff58(void) {
     float *position;
 
     int offset;
-    volatile int i;
+    int i;
     int index0, index1, index2, index3;
     int *indices, *second, *third;
     D_L00_00161184 = D_L00_00161184 + 0.01f;
@@ -191,21 +195,22 @@ void FUN_L00_0029ff58(void) {
         D_L00_00161184 = D_L00_00161184 - 1.0f;
     }
     q.extra[0] = 0;
-    q.extra[2] = 1;
     q.extra[3] = 0x4000000044L;
+    indices = D_L00_001CA480[0];
+    q.extra[2] = 1;
     q.extra[1] = FUN_001f44b8_29ff58(0x18);
     i = 0;
-    indices = D_L00_001CA480[0];
     while (1) {
         offset = i * 16;
         i++;
-        FUN_001f9cf8_29ff58(transformed[0], D_L00_001CA380[indices[0]], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
-        second = (int *)((int)D_L00_001CA480 + offset + 4);
-        FUN_001f9cf8_29ff58(transformed[1], D_L00_001CA380[*second], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
-        third = (int *)((int)D_L00_001CA480 + offset + 8);
-        FUN_001f9cf8_29ff58(transformed[2], D_L00_001CA380[*third], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
-        FUN_001f9cf8_29ff58(transformed[3], D_L00_001CA380[indices[3]], *(char **)(D_L00_001CA4C0_29ff58 + 0x1c) + 0xc0);
-        position = (float *)(*(char **)(D_L00_001CA4C0_29ff58 + 0x1c));
+        FUN_001f9cf8_29ff58(transformed[0], D_L00_001CA380[indices[0]], D_L00_001CA4C0_29ff58.f1C + 0xc0);
+        /* Each row is 16 bytes, so the low offset bits select its fields. */
+        second = (int *)((int)D_L00_001CA480 + (offset | 4));
+        FUN_001f9cf8_29ff58(transformed[1], D_L00_001CA380[*second], D_L00_001CA4C0_29ff58.f1C + 0xc0);
+        third = (int *)((int)D_L00_001CA480 + (offset | 8));
+        FUN_001f9cf8_29ff58(transformed[2], D_L00_001CA380[*third], D_L00_001CA4C0_29ff58.f1C + 0xc0);
+        FUN_001f9cf8_29ff58(transformed[3], D_L00_001CA380[indices[3]], D_L00_001CA4C0_29ff58.f1C + 0xc0);
+        position = (float *)(D_L00_001CA4C0_29ff58.f1C);
 #define SET_POSITION(n) \
         q.position[n][0] = position[4] + transformed[n][0]; \
         q.position[n][1] = position[5] + transformed[n][1]; \

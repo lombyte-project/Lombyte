@@ -91,6 +91,7 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     OvlVec4 origin;
     OvlVec4 first;
     OvlVec4 next;
+    OvlVec4 *previous;
     OvlVec4 *current;
     SegmentPath_261b48 **entry;
     s32 i;
@@ -98,11 +99,11 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     s32 found;
     f32 nearest;
     f32 crossing;
+    f32 zero;
 
     FUN_001ff2a8_261b48(&direction, end, start);
     direction.i[2] = 0;
     FUN_001ff500_261b48(&direction, &direction, 1.0f / FUN_001ff3d8_261b48(&direction));
-    nearest = 1.0f;
     FUN_001ff260_261b48(&axis);
     axis.f[0] = direction.f[1];
     axis.f[1] = -direction.f[0];
@@ -110,25 +111,29 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     entry = &D_L00_001B04B0_261b48[path_index];
     found = 0;
     i = 1;
-    FUN_001ff2a8_261b48(&first, &(*entry)->points[0], start);
     origin.f[2] = 1.0f;
-    FUN_001ff6d0_261b48(&first, &first, &direction);
+    nearest = origin.f[2];
+    current = &first;
+    FUN_001ff2a8_261b48(current, &(*entry)->points[0], start);
+    previous = current;
+    FUN_001ff6d0_261b48(current, current, &direction);
     current = &next;
     if (i < (*entry)->count) {
         offset = 0x20;
+        zero = 0.0f;
         do {
             FUN_001ff2a8_261b48(current, (OvlVec4 *)((u8 *)*entry + offset), start);
-            FUN_001ff6d0_261b48(current, &next, &direction);
-            if (first.f[3] != 0.0f || current->f[3] != 0.0f) {
+            FUN_001ff6d0_261b48(current, current, &direction);
+            if (first.f[3] != zero || next.f[3] != zero) {
                 if (current->f[1] * first.f[1] < 0.0f) {
-                    crossing = (first.f[0] - current->f[0]) / (first.f[1] - current->f[1]) * -current->f[1] + current->f[0];
+                    crossing = (first.f[0] - next.f[0]) / (first.f[1] - current->f[1]) * -current->f[1] + next.f[0];
                     if (crossing > 0.0f && crossing < nearest) {
                         nearest = crossing;
                         found = 1;
                     }
                 }
             }
-            first.q = ((volatile OvlVec4 *)current)->q;
+            qcopy(previous, current);
             i++;
             offset += 0x10;
         } while (i < (*entry)->count);
@@ -205,9 +210,6 @@ s32 FUN_L00_00261d78(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
         qcopy(out, &working);
     return found;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00262030.s", FUN_L00_00262030);
-#else
 #include "rnc/overlay/quad.h"
 
 typedef struct {
@@ -240,20 +242,21 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     s32 next;
     s32 i;
     s32 offset;
-    OvlVec4 *volatile saved_out;
-    volatile s32 found;
+    OvlVec4 *saved_out;
+    s32 found;
     f32 original_height;
     f32 segment_length;
     f32 projection;
 
+    found = 0;
     saved_out = out;
     qcopy(&working, point);
-    found = 0;
     entry = D_L00_001B04B0_262030[path_index];
-    original_height = FUN_001ff398_262030(&working, &D_0013F5E0_262030);
+    offset = (s32)&D_0013F5E0_262030;
+    original_height = FUN_001ff398_262030(&working, (OvlVec4 *)offset);
+    i = 0;
     if (entry->count - 1 > found) {
-        i = 0;
-        height_axis = &D_0013F5E0_262030;
+        height_axis = (OvlVec4 *)offset;
         do {
             offset = i << 4;
             next = i + 1;
@@ -278,9 +281,9 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
                     segment_length = FUN_001ff3d8_262030(&difference);
                     if (!(segment_length < distance))
                         goto next_segment_262030;
-                    found = 1;
                     FUN_001ff500_262030(distance, &scaled_difference, &difference);
                     FUN_001ff278_262030(&working, &scaled_difference, current);
+                    found = 1;
                 } else {
                     found = 1;
                     FUN_001ff500_262030(projection, &scaled_cross, &scaled_segment);
@@ -301,7 +304,6 @@ next_segment_262030:
     }
     return found;
 }
-#endif /* NON_MATCHING */
 #include "rnc/math/vector.h"
 
 /* A polyline of evenly spaced points. */

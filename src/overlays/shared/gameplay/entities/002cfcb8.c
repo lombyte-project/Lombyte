@@ -144,8 +144,8 @@ advance_first:
         if (FUN_L00_0025e3b8_2cfcb8(second) && !*(u8 **)(vars + 0xA4)) {
             qcopy_nc(&second_probe, second + 0x10);
             qcopy(&second_start, second + 0x10);
-            second_probe.z += *(f32 *)(vars + 0xB0) * 0.5f;
             second_start.z = 0.1f;
+            second_probe.z += *(f32 *)(vars + 0xB0) * 0.5f;
             if (FUN_L00_001efc70_2cfcb8(&second_probe, &second_start, 2, first, 0) &&
                 D_L00_00173E58_2cfcb8 && FUN_L00_002603d0_2cfcb8(D_L00_00173E58_2cfcb8)) {
                 if (first) *(u16 *)(first + 0x36) = 0x7F80;
@@ -175,8 +175,7 @@ advance_first:
                     *(u8 **)(vars + 0xA0)) {
                     if (*(s32 *)(vars + 0xC0) != -1) {
                     row = D_L00_001B04B0_2cfcb8[*(s32 *)(vars + 0xC0)];
-                    state = *(s32 *)(row + 0x1C);
-                    if (*(s32 *)row == 0 || state == 1 || state == 3) {
+                    if (*(s32 *)row == 0 || (state = *(s32 *)(row + 0x1C)) == 1 || state == 3) {
                         *(s32 *)(vars + 0xC0) = -1;
                     } else if (state != 0x111 && (u32)(state - 0x11) <= 0xFF) {
                         if (state - 0x10 >= *(s32 *)row) *(s32 *)(vars + 0xC0) = -1;
@@ -450,6 +449,7 @@ extern f32 D_0015ED6C_2d09b8 __asm__("D_0015ED6C");
 extern f32 D_L00_0015F5D0_2d09b8 __asm__("D_L00_0015F5D0");
 extern s32 D_001413DC_2d09b8 __asm__("D_001413DC") __attribute__((section(".data")));
 extern u8 *D_001413D0_2d09b8 __asm__("D_001413D0") __attribute__((section(".data")));
+extern f32 D_L00_00166C80_2d19b0[] __asm__("D_L00_00166C80");
 extern V2d09b8 D_L00_00166DC0_2d09b8 __asm__("D_L00_00166DC0");
 extern V2d09b8 D_L00_001DE6F0_2d09b8[] __asm__("D_L00_001DE6F0");
 extern V2d09b8 D_L00_001DE750_2d09b8[] __asm__("D_L00_001DE750");
@@ -474,15 +474,15 @@ extern f32 FUN_002000e8_2d09b8(f32, f32) __asm__("FUN_001fa580");
 extern f32 FUN_00257be8_2d09b8(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_001ff500_2d09b8(f32, void *, void *) __asm__("FUN_001f9bf8");
 extern s32 FUN_00257b50_2d09b8(s32) __asm__("FUN_00213260");
-extern void *FUN_002af8b0_2d09b8(f32, f32, void *, void *, void *, void *, s32, s32) __asm__("FUN_L00_002af8b0");
+extern void *FUN_002af8b0_2d09b8(void *, void *, void *, void *, s32, s32, f32, f32) __asm__("FUN_L00_002af8b0");
 extern void FUN_00250df8_2d09b8(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_00257d78_2d09b8(f32, f32, void *) __asm__("FUN_L00_00257d78");
 extern f32 FUN_00257cb0_2d09b8(void) __asm__("FUN_00213308");
 extern u8 FUN_001fef20_2d09b8(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_001ff3d8_2d09b8(void *) __asm__("FUN_001f9af0");
 extern s32 FUN_00257b90_2d09b8(s32, s32) __asm__("FUN_L00_00257b90");
-extern void FUN_0026a9f0_2d09b8(f32, f32, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0026a9f0");
-extern void FUN_002ac910_2d09b8(f32, void *, void *, void *, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
+extern void FUN_0026a9f0_2d09b8(void *, void *, s32, s32, s32, s32, s32, s32, f32, f32) __asm__("FUN_L00_0026a9f0");
+extern void FUN_002ac910_2d09b8(void *, void *, void *, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
 
 void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
     u8 *vars = (u8 *)m->vars;
@@ -526,11 +526,10 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
     else
         FUN_001ff2a8_2d09b8(&b, &m->pos, D_001413D0_2d09b8 + 0x10);
     switch ((s16)((u16)m->oclass - 500)) {
-    case 0: kind = 0x165; break;
-    case 11: kind = 0x165; break;
     case 1: kind = 0x15C; break;
-    case 2: kind = 0x162; break;
     case 3: kind = 0x15F; break;
+    case 2: kind = 0x162; break;
+    case 0: case 11: kind = 0x165; break;
     case 4: kind = 0x168; break;
     case 5: kind = 0x16B; break;
     case 6: kind = 0x16E; break;
@@ -540,9 +539,10 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
     if (D_L00_0015FFBC_2d09b8 >= 201) { count = 4; trail_count = 4; }
     else if (D_L00_0015FFBC_2d09b8 >= 151) { count = 2; trail_count = 2; }
     else if (D_L00_0015FFBC_2d09b8 >= 101) { count = 2; trail_count = 1; }
-    else { trail_count = 0; if (D_L00_0015FFBC_2d09b8 >= 51) count = 1; else count = 1; }
-    speed = D_L00_00166DC0_2d09b8.f[1] - m->pos.y;
-    angle = D_L00_00166DC0_2d09b8.f[0] - m->pos.x;
+    else if (D_L00_0015FFBC_2d09b8 >= 51) { count = 1; trail_count = 0; }
+    else { count = 1; trail_count = 0; }
+    angle = D_L00_00166C80_2d19b0[80] - m->pos.x;
+    speed = D_L00_00166C80_2d19b0[81] - m->pos.y;
     angle = FUN_001ff8b0_2d09b8(angle, speed);
     angle = FUN_00200130_2d09b8(angle, m->v40.z);
     angle += 3.1415925f;
@@ -551,10 +551,10 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
     FUN_001ff260_2d09b8(&rotation);
     rotation.f[2] = angle;
     FUN_001ffa50_2d09b8(&c, &rotation);
-    for (i = count; i != 0; --i) {
-        FUN_001ff6d0_2d09b8(&d, &D_L00_001DE6F0_2d09b8[count - i], &c);
+    for (i = 0; i < count; ++i) {
+        FUN_001ff6d0_2d09b8(&d, &D_L00_001DE6F0_2d09b8[i], &c);
         FUN_001ff278_2d09b8(&d, &d, &m->pos);
-        qcopy(&e, &D_L00_001DE750_2d09b8[count - i]);
+        qcopy(&e, &D_L00_001DE750_2d09b8[i]);
         e.f[2] = FUN_002000e8_2d09b8(e.f[2], rotation.f[2]);
         FUN_001ff2a8_2d09b8(&a, &d, &m->pos);
         a.f[2] = 0.0f;
@@ -562,9 +562,9 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
         FUN_001ff500_2d09b8(speed * D_0015ED6C_2d09b8, &a, &a);
         a.f[2] = FUN_00257be8_2d09b8(4.0f, 9.0f) * D_0015ED6C_2d09b8;
         particle = FUN_00257b50_2d09b8(2);
-        spawned = FUN_002af8b0_2d09b8(1.0f, 1.0f, m, &a, &d, &e, kind, particle);
+        spawned = FUN_002af8b0_2d09b8(m, &a, &d, &e, kind, particle, 1.0f, 1.0f);
         if (spawned) {
-            qcopy((u8 *)spawned + 0x40, &D_L00_001DE750_2d09b8[count - i]);
+            qcopy((u8 *)spawned + 0x40, &D_L00_001DE750_2d09b8[i]);
             *(f32 *)((u8 *)spawned + 0x48) = FUN_002000e8_2d09b8(*(f32 *)((u8 *)spawned + 0x48), rotation.f[2]);
             FUN_00250df8_2d09b8(spawned);
         }
@@ -582,7 +582,7 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
         particle = 1;
         if (FUN_00257b50_2d09b8(6) == 0)
             particle = FUN_00200250_2d09b8(FUN_00257be8_2d09b8(3.0f, 6.0f));
-        FUN_002af8b0_2d09b8(0.25f, 0.5f, m, &a, &d, &e, kind + 1, particle);
+        FUN_002af8b0_2d09b8(m, &a, &d, &e, kind + 1, particle, 0.25f, 0.5f);
     }
     *(u32 *)((u8 *)m + 0x94) = 0;
     m->state = 3;
@@ -616,15 +616,15 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
             first = FUN_001fef20_2d09b8(25);
             second = FUN_001fef20_2d09b8(30);
             second_color = FUN_00257b90_2d09b8(first, second);
-            FUN_0026a9f0_2d09b8(400000.0f, rise, &a, &e, *effect, *velocity, first_color, second_color, 0, 0);
+            FUN_0026a9f0_2d09b8(&a, &e, *effect, *velocity, first_color, second_color, 0, 0, 400000.0f, rise);
         }
         if (D_L00_0015F5D0_2d09b8 < 0.95f && distance > 9.0f && !close) {
-            FUN_002ac910_2d09b8(4.0f, m, &a, &e, FUN_001fef20_2d09b8(15), 127, 127, 127, 32);
-            FUN_002ac910_2d09b8(4.0f, m, &a, &e, FUN_001fef20_2d09b8(24), 127, 32, 0, 32);
-            FUN_002ac910_2d09b8(4.0f, m, &a, &e, FUN_001fef20_2d09b8(20), 127, 64, 0, 48);
+            FUN_002ac910_2d09b8(m, &a, &e, FUN_001fef20_2d09b8(15), 4.0f, 127, 127, 127, 32);
+            FUN_002ac910_2d09b8(m, &a, &e, FUN_001fef20_2d09b8(24), 4.0f, 127, 32, 0, 32);
+            FUN_002ac910_2d09b8(m, &a, &e, FUN_001fef20_2d09b8(20), 4.0f, 127, 64, 0, 48);
         }
-        FUN_002ac910_2d09b8(3.5f, m, &a, &e, FUN_001fef20_2d09b8(27), 96, 16, 0, 64);
-        FUN_002ac910_2d09b8(3.0f, m, &a, &e, FUN_001fef20_2d09b8(29), 32, 0, 0, 32);
+        FUN_002ac910_2d09b8(m, &a, &e, FUN_001fef20_2d09b8(27), 3.5f, 96, 16, 0, 64);
+        FUN_002ac910_2d09b8(m, &a, &e, FUN_001fef20_2d09b8(29), 3.0f, 32, 0, 0, 32);
     }
 }
 #endif
@@ -781,8 +781,9 @@ void FUN_L00_002d19b0(u8 *m) {
     Vec_2d19b0 a, c, b;
     u8 *vars = *(u8 **)(m + 0x78);
     s16 *indices = D_L00_001DEE10_2d19b0;
-    f32 (*uv)[2], (*old_uv)[2];
+    f32 (*uv)[2];
     f32 *uv_y, *texcoords;
+    f32 (*old_uv)[2];
     s32 i, j, index, active = 0;
     f32 blend, len, x, y;
 
@@ -791,11 +792,8 @@ void FUN_L00_002d19b0(u8 *m) {
     quad.texture[3] = (u64)(s64)D_L00_001618DC | ((u64)(s64)D_L00_001618E0 << 2) |
                       ((u64)(s64)D_L00_001618E4 << 4) | ((u64)(s64)D_L00_001618E8 << 6) |
                       ((u64)(s64)D_L00_001618EC << 32);
-    quad.colors[0] = D_L00_001618F4;
     quad.texture[0] = 0;
-    quad.colors[1] = D_L00_001618F4;
-    quad.colors[2] = D_L00_001618F4;
-    quad.colors[3] = D_L00_001618F4;
+    quad.colors[0] = quad.colors[1] = quad.colors[2] = quad.colors[3] = D_L00_001618F4;
     if (absolute_float_2d19b0(D_L00_00166C80_2d19b0[80] - *(f32 *)(m + 0x10)) < 16.0f &&
         absolute_float_2d19b0(D_L00_00166C80_2d19b0[81] - *(f32 *)(m + 0x14)) < 16.0f)
         active = 1;
@@ -805,6 +803,8 @@ void FUN_L00_002d19b0(u8 *m) {
         blend = convert_integer_to_float_2d19b0(*(s32 *)(vars + 0x40));
         blend /= convert_integer_to_float_2d19b0(scale_game_frames_2d19b0(0x3c));
         uv = D_L00_001E0B00_2d19b0;
+        texcoords = quad.texcoords;
+        uv_y = quad.texcoords + 1;
         old_uv = D_L00_001E0E30_2d19b0;
         for (i = 0; i < 0x66; i++) {
             transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
@@ -820,18 +820,16 @@ void FUN_L00_002d19b0(u8 *m) {
             len = fast_sqrt_2d19b0(c.z + c.z);
             len += len;
             if (m[0x20] == 1 || *(s32 *)(vars + 0x40) == 0) {
-                x = c.x / len + 0.5f;
-                y = c.y / len + 0.5f;
-                uv[0][0] = x;
+                uv[0][0] = c.x / len + 0.5f;
+                uv[0][1] = c.y / len + 0.5f;
             } else {
                 x = c.x / len;
                 y = c.y / len;
                 x += 0.5f;
                 uv[0][0] = x + (old_uv[0][0] - x) * blend;
                 x = y + 0.5f;
-                y = x + (old_uv[0][1] - x) * blend;
+                uv[0][1] = x + (old_uv[0][1] - x) * blend;
             }
-            uv[0][1] = y;
             uv++;
             old_uv++;
         }
@@ -840,19 +838,21 @@ void FUN_L00_002d19b0(u8 *m) {
     } else {
         if (m[0xbc] == 1) {
             m[0xbc] = 0;
+            texcoords = quad.texcoords;
+            uv_y = quad.texcoords + 1;
             for (i = 0; i < 0x66; i++) {
                 D_L00_001E0E30_2d19b0[i][0] = D_L00_001E0B00_2d19b0[i][0];
                 D_L00_001E0E30_2d19b0[i][1] = D_L00_001E0B00_2d19b0[i][1];
                 transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
             }
         } else {
+            texcoords = quad.texcoords;
+            uv_y = quad.texcoords + 1;
             for (i = 0; i < 0x66; i++)
                 transform_vector_2d19b0(&D_L00_001E04A0_2d19b0[i], &D_L00_001DE7B0_2d19b0[i], vars);
         }
         *(s32 *)(vars + 0x40) = scale_game_frames_2d19b0(0x3c);
     }
-    texcoords = quad.texcoords;
-    uv_y = quad.texcoords + 1;
     for (i = 0; i < 0x4a; i++) {
         f32 *uv_x = texcoords;
         f32 *uv_second = uv_y;
@@ -2246,7 +2246,7 @@ extern unsigned char *D_L00_001B04B0_2d5160[] __asm__("D_L00_001B04B0");
 extern void *FUN_L00_0025a420_2d5160(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_0025a478_2d5160(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_0025ab48_2d5160(void *, f32 *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void FUN_L00_0025c558_2d5160(f32, void *, void *, s32, s32, s32) __asm__("FUN_L00_0025c558");
+extern void FUN_L00_0025c558_2d5160(void *, void *, f32, s32, s32, s32) __asm__("FUN_L00_0025c558");
 extern void FUN_L00_0025d458_2d5160(void *, void *) __asm__("FUN_L00_0025d458");
 extern void FUN_L00_0025d538_2d5160(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025ff38_2d5160(f32, void *, void *, s32, s32, void *, s32) __asm__("FUN_L00_0025ff38");
@@ -2269,6 +2269,7 @@ void FUN_L00_002d5160(unsigned char *m) {
     f32 forceX, forceY, forceZ, forceW, health, duration;
     f32 reactionC0, reactionC4;
     unsigned char *row;
+    s32 index;
     unsigned char *effect;
 
     if (m[0x20] == 0)
@@ -2303,7 +2304,7 @@ void FUN_L00_002d5160(unsigned char *m) {
         *(u16 *)(m + 0x34) &= ~0x1000;
         *(OvlQuad *)vec = *(OvlQuad *)(hit + 0x10);
         FUN_L00_0025ab48_2d5160(vec, &angle, v + 0x88, v + 0x8C);
-        FUN_L00_0025c558_2d5160(angle, m, v + 0x70, FUN_L00_00257b50_2d5160(2) + 6, 1, 0);
+        FUN_L00_0025c558_2d5160(m, v + 0x70, angle, FUN_L00_00257b50_2d5160(2) + 6, 1, 0);
         reactionC0 = D_L00_0016198C_2d5160;
         reactionC4 = D_L00_00161988_2d5160;
         *(f32 *)(v + 0xC0) = reactionC0;
@@ -2316,20 +2317,21 @@ void FUN_L00_002d5160(unsigned char *m) {
     m[0xA4] = 0xFF;
     FUN_L00_0025d538_2d5160(m, v + 0x60);
     if (m[0x20] == 3) {
-        row = D_L00_001B04B0_2d5160[*(s32 *)(v + 0x1E4)];
+        index = *(s32 *)(v + 0x1E4);
         effect = v + 0x180;
-        FUN_L00_0025ff38_2d5160(64.0f, m, effect, 0, 0, row + 0x10, *(s32 *)row);
+        FUN_L00_0025ff38_2d5160(64.0f, m, effect, 0, 0, D_L00_001B04B0_2d5160[index] + 0x10, *(s32 *)D_L00_001B04B0_2d5160[index]);
     } else {
-        row = D_L00_001B04B0_2d5160[*(s32 *)(v + 0x1E0)];
+        index = *(s32 *)(v + 0x1E0);
         effect = v + 0x180;
-        FUN_L00_0025ff38_2d5160(24.0f, m, effect, 0, 0, row + 0x10, *(s32 *)row);
+        FUN_L00_0025ff38_2d5160(24.0f, m, effect, 0, 0, D_L00_001B04B0_2d5160[index] + 0x10, *(s32 *)D_L00_001B04B0_2d5160[index]);
     }
     if (*(s32 *)(v + 0x1C0) == 0) {
         *(s32 *)(v + 0x1C0) = (s32)hero.moby;
         qcopy(effect, &hero.motion.pos);
     }
     FUN_001fef98_2d5160(v + 0x276);
-    if (*(s32 *)(v + 0x38) != 0) {
+    index = *(s32 *)(v + 0x38);
+    if (index != 0) {
         *(s16 *)(v + 0x276) = FUN_00200250_2d5160(FUN_001fef10_2d5160(FUN_L00_00257be8_2d5160(180.0f, 240.0f)));
     }
     *(s32 *)(v + 0x38) = 0;
@@ -3255,9 +3257,10 @@ float FUN_00200240_2d73e8(s32) __asm__("FUN_001fa6c0");
 s32 FUN_00200250_2d73e8(float) __asm__("FUN_001fa6d0");
 s32 FUN_00257b50_2d73e8(s32) __asm__("FUN_00213260");
 
+extern T *D_L00_001600EC_2d73e8 __asm__("D_L00_001600EC") __attribute__((section(".data")));
 void FUN_L00_002d73e8(P *p) {
     Q *q = p->q;
-    T *t = &D_L00_001600EC[q->idx];
+    T *t = &D_L00_001600EC_2d73e8[q->idx];
     V position, zero_vector;
     V positive_transform[4], negative_transform[4];
     Quad_2d73e8 quad;
@@ -3317,9 +3320,11 @@ void FUN_L00_002d73e8(P *p) {
                     index = D_L00_001E1380_2d73e8[row][point];
                     source = &D_L00_001E12C0_2d73e8[index];
                     points->x = source->x;
-                    points->y = source->y * x;
+                    f = source->y * x;
+                    points->y = f;
                     points->w = 1.0f;
-                    points->z = source->z * y;
+                    f = source->z * y;
+                    points->z = f;
                     FUN_001ff6f8_2d73e8(points, points, transform);
                     *texcoords = D_L00_001E1440_2d73e8[index][1] + *phase;
                     *texcoords_second = D_L00_001E1440_2d73e8[index][0];
@@ -3356,9 +3361,11 @@ void FUN_L00_002d73e8(P *p) {
             for (point = 0, points = quad.points, texcoords = quad.texcoords, texcoords_second = quad.texcoords + 1, colors = quad.colors; point < 4; point++, points++, texcoords += 2, texcoords_second += 2, colors++) {
                 source = (V *)(D_L00_001E11A0_2d73e8 + point * 16);
                 points->x = source->x;
-                points->y = source->y * x;
+                f = source->y * x;
+                points->y = f;
                 points->w = 1.0f;
-                points->z = source->z * y;
+                f = source->z * y;
+                points->z = f;
                 f = source_texcoords[0] - *phase;
                 *texcoords_second = source_texcoords[1];
                 source_texcoords += 2;

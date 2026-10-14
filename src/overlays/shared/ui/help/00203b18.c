@@ -446,13 +446,13 @@ void FUN_L00_002059d8(void) {
             u8 *dst_a = g + 0xF00;
             u8 *dst_b = g + 0xF10;
             u8 *dst_c = g + 0xF20;
+            Quad_59d8 *src_c = (Quad_59d8 *)D_L00_0017C260_2059d8;
             Quad_59d8 *src_a = (Quad_59d8 *)D_L00_0017C1E0_2059d8;
             Quad_59d8 *src_b = (Quad_59d8 *)D_L00_0017C220_2059d8;
-            Quad_59d8 *src_c = (Quad_59d8 *)D_L00_0017C260_2059d8;
             s32 *kind = (s32 *)0x140AF8;
-            for (i = 0; i < 4; i++, slot += 0x40, active += 0x40,
-                 dst_a += 0x40, dst_b += 0x40, dst_c += 0x40,
-                 src_a++, src_b++, src_c++, kind++) {
+            for (i = 0; i < 4; i++, dst_c += 0x40, src_c++,
+                 src_a++, src_b++, dst_a += 0x40, kind++,
+                 slot += 0x40, active += 0x40, dst_b += 0x40) {
                 if (*active == 0) {
                     attach_manipulator_2059d8((s32)moby, *kind, slot);
                     active[2] = 1;
@@ -998,8 +998,10 @@ void FUN_L00_00206e00(void) {
     struct Hero *g;
     u8 *hero_base;
     s32 input;
+    u32 state;
     s32 level;
     s32 i, j, length, position;
+    u8 *end;
     u8 *sequence;
     u8 *history;
     volatile s32 *history_count;
@@ -1024,9 +1026,9 @@ void FUN_L00_00206e00(void) {
                         input = 1;
                     goto append;
                 }
+                state = g->unk450 ^ 3;
                 input = 3;
-                if (g->unk450 != 3)
-                    input = 0;
+                goto reject;
             } else if (g->state.current == 0x11) {
                 input = 9;
                 goto append;
@@ -1034,7 +1036,9 @@ void FUN_L00_00206e00(void) {
                 input = 10;
                 goto append;
             } else {
-                input = (g->state.current == 0xE) ? 5 : 0;
+                state = g->state.current ^ 0xE;
+                input = 5;
+                goto reject;
             }
         } else if (g->state.control_mode == 6) {
             if (g->state.current == HERO_STATE_WRENCH_SLAM) {
@@ -1045,12 +1049,13 @@ void FUN_L00_00206e00(void) {
                 input = g->attack_record + 12;
                 goto append;
             }
+            state = g->state.current ^ HERO_STATE_CROUCH_SWING;
             input = 4;
-            if (g->state.current != HERO_STATE_CROUCH_SWING) input = 0;
+            goto reject;
         } else {
+            state = g->state.current ^ 0x22;
             input = 11;
-            if (g->state.current != 0x22)
-                input = 0;
+            goto reject;
         }
     } else {
         level = FUN_001f96f8(0x3C);
@@ -1059,11 +1064,14 @@ void FUN_L00_00206e00(void) {
                 input = 7;
                 goto append;
             }
+            state = g->state.current ^ HERO_STATE_LAND;
             input = 8;
-            if (g->state.current != HERO_STATE_LAND)
-                input = 0;
+            goto reject;
         }
     }
+    goto append;
+reject:
+    if (state != 0) input = 0;
 append:
     if (input == 0)
         return;
@@ -1075,7 +1083,9 @@ append:
     for (i = 0; i < 12; i++, sequence += 16) {
         length = 0;
         if (*sequence != 0) {
-            for (length = 1; sequence[length] != 0; length++) { }
+            end = sequence + 1;
+            length = 1;
+            while (*end != 0) { end++; length++; }
         }
         if (length != 0) {
             position = *history_count - length;
@@ -2798,7 +2808,7 @@ extern s32 FUN_001fef20_a9e8(s32) __asm__("FUN_L00_001fef20");
 extern f32 FUN_L00_00257be8_a9e8(f32, f32) __asm__("FUN_L00_00257be8");
 
 void FUN_L00_0020a9e8(void) {
-    G_a540 *g = &D_0013F350_a540;
+    struct Hero *g = &hero;
     char *base = (char *)g;
     s32 *timers;
     s32 *check_timer;
@@ -2807,13 +2817,13 @@ void FUN_L00_0020a9e8(void) {
     struct HeroEase *output;
     s32 i;
 
-    if (g->i2084 != 0 || *(u8 *)((char *)g->p2080 + 0x53) != 0)
+    if (g->state.current != 0 || *(u8 *)((char *)g->moby + 0x53) != 0)
         return;
 
     timers = (s32 *)(base + 0x1060);
-    check_timer = timers;
     output = D_L00_0017A680_002054e8;
     i = 0;
+    check_timer = timers;
     record = base;
     store_timer = check_timer;
     do {
@@ -2868,6 +2878,7 @@ fourth_sign_done:
         i++;
     } while (i < 4);
 }
+
 #endif
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020B310), where it is exact; names translated to the US level program. */
 

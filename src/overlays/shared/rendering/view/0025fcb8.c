@@ -448,6 +448,7 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
     Vec_260a88 base, position, velocity, offset, adjusted, difference, quarter;
     float crossings[2];
     float time;
+    float scale;
     int large = 0, medium = 0, small = 0, single;
     int count, remaining, multiplier, near_count, far_count;
     int near_large, near_medium, near_small, near_single;
@@ -504,8 +505,9 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
             if (count < 1) count = 1;
         }
     }
-    remaining = count;
-    if (count >= 300) {
+    single = count;
+    remaining = single;
+    if (remaining >= 300) {
         do {
             remaining -= 50;
             large++;
@@ -520,31 +522,33 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
         int b_large = 0, b_medium = 0, b_small = 0, b_single = 3;
         near_value = 150;
         far_value = 3;
-        if (count < 150) {
-            int value_large = 150, value_medium = 0, value_small = 0, value_single = 0;
-            do {
-                if (a_large) {
-                    value_large -= 50; a_large--; value_medium += 20; a_medium++;
-                } else if (a_medium) {
-                    value_medium -= 20; a_medium--; value_small += 5; a_small++;
-                } else if (a_small) {
-                    value_small -= 5; a_small--; a_single++;
-                }
-                near_value = value_large + value_medium + value_small + a_single;
-            } while (count < near_value && near_value > 3);
-        }
-        if (count > 3) {
-            int value_large = 0, value_medium = 0, value_small = 0;
-            do {
-                if (b_single) {
-                    b_single--; value_small += 5; b_small++;
-                } else if (b_small) {
-                    value_small -= 5; b_small--; value_medium += 20; b_medium++;
-                } else if (b_medium) {
-                    value_medium -= 20; b_medium--; value_large += 50; b_large++;
-                }
-                far_value = value_large + value_medium + value_small + b_single;
-            } while (far_value < count && far_value < 150);
+        if (single + small + medium + large > 3) {
+            if (count < 150) {
+                int value_large = 150, value_medium = 0, value_small = 0, value_single = 0;
+                do {
+                    if (a_large) {
+                        value_large -= 50; a_large--; value_medium += 20; a_medium++;
+                    } else if (a_medium) {
+                        value_medium -= 20; a_medium--; value_small += 5; a_small++;
+                    } else if (a_small) {
+                        value_small -= 5; a_small--; a_single++;
+                    }
+                    near_value = value_large + value_medium + value_small + a_single;
+                } while (count < near_value && near_value > 3);
+            }
+            if (count > 3) {
+                int value_large = b_large * 50, value_medium = b_medium * 20, value_small = b_small * 5;
+                do {
+                    if (b_single) {
+                        b_single--; value_small += 5; b_small++;
+                    } else if (b_small) {
+                        value_small -= 5; b_small--; value_medium += 20; b_medium++;
+                    } else if (b_medium) {
+                        value_medium -= 20; b_medium--; value_large += 50; b_large++;
+                    }
+                    far_value = value_large + value_medium + value_small + b_single;
+                } while (far_value < count && far_value < 150);
+            }
         }
         if (near_value - count < count - far_value) {
             large = a_large; medium = a_medium; small = a_small; single = a_single;
@@ -556,8 +560,10 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
         qcopy(&position, moby + 0x10);
         position.f[2] += 0.5f;
         time = FUN_00257cb0_260a88();
-        velocity.f[0] = FUN_001ff7e8_260a88(time) * (FUN_00257be8_260a88(0.0f, 3.0f) * D_L00_0015ED6C_260a88);
-        velocity.f[1] = FUN_001ff800_260a88(time) * (FUN_00257be8_260a88(0.0f, 3.0f) * D_L00_0015ED6C_260a88);
+        scale = FUN_001ff7e8_260a88(time);
+        velocity.f[0] = scale * (FUN_00257be8_260a88(0.0f, 3.0f) * D_L00_0015ED6C_260a88);
+        scale = FUN_001ff800_260a88(time);
+        velocity.f[1] = scale * (FUN_00257be8_260a88(0.0f, 3.0f) * D_L00_0015ED6C_260a88);
         velocity.f[2] = 0.0f;
         velocity.f[2] = FUN_00257be8_260a88(3.7f, 6.0f) * D_L00_0015ED6C_260a88;
         offset.f[0] = velocity.f[0];
@@ -586,17 +592,18 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
         FUN_001ff278_260a88(&velocity, &velocity, &base);
         if (large) {
             large--;
-            FUN_002a7438_260a88(moby, &position, &velocity, flags, 50, gated);
+            remaining = 50;
         } else if (medium) {
             medium--;
-            FUN_002a7438_260a88(moby, &position, &velocity, flags, 20, gated);
+            remaining = 20;
         } else if (small) {
             small--;
-            FUN_002a7438_260a88(moby, &position, &velocity, flags, 5, gated);
+            remaining = 5;
         } else {
             single--;
-            FUN_002a7438_260a88(moby, &position, &velocity, flags, 1, gated);
+            remaining = 1;
         }
+        FUN_002a7438_260a88(moby, &position, &velocity, flags, remaining, gated);
     }
 }
 #endif

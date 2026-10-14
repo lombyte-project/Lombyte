@@ -358,7 +358,7 @@ void FUN_L08_002d23f0(char *moby) {
         qcopy(record.motion.from, position);
         record.motion.from[2] -= 0.16f;
         add_vector_xyz(position, position, velocity);
-        ((float *)velocity)[2] -= D_L08_00161860 * D_0015ED70;
+        *(float *)(data + 0x18) -= D_L08_00161860 * D_0015ED70;
         qcopy(record.motion.collision.position, position);
         record.motion.collision.position[2] -= 0.16f;
         record.motion.collision.flags = 0x810000;
@@ -381,7 +381,7 @@ void FUN_L08_002d23f0(char *moby) {
                 if (*(unsigned char *)(moby + 0xbc) & 1) {
                     allocate_voice_for_target_entry(1, 0, moby);
                     qcopy(position, collision_result + 0x20);
-                    ((float *)position)[2] += 0.16f;
+                    *(float *)(moby + 0x18) += 0.16f;
                     rotate_vector_2d23f0(velocity, velocity, collision_result + 0x40);
                     fast_vec_cross(impulse, velocity, collision_result + 0x40);
                     normalize_vector_xyz(impulse, impulse, random_float_between(-(D_0015ED6C * 1.5f), D_0015ED6C * 1.5f));
@@ -1428,10 +1428,7 @@ char *FUN_L08_002dc8a0(char *src, char *pos, char *vec) {
     }
     return moby;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dc9a8.s", FUN_L08_002dc9a8);
-#else
-extern int FUN_L08_002dc9a8_collision(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
+extern int FUN_L08_002dc9a8_collision(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L08_002dc9a8_trace(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void FUN_L08_002dc9a8_transform(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L08_002dc9a8_setup(void *) __asm__("FUN_001f99f8");
@@ -1446,13 +1443,14 @@ extern int FUN_L08_002dc9a8_random_below(int) __asm__("FUN_00213260");
 extern int FUN_L08_002dc9a8_random_color(int) __asm__("FUN_001f96f8");
 extern int FUN_L08_002dc9a8_blend(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L08_002dc9a8_color(float, int, int) __asm__("FUN_L08_00264930");
-extern void FUN_L08_002dc9a8_emit(float, void *, void *, int, int, int, int) __asm__("FUN_L00_0026bed0");
+extern void FUN_L08_002dc9a8_emit(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 extern void FUN_L08_002dc9a8_special(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L08_002dc9a8_start(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L08_002dc9a8_finish(void *) __asm__("FUN_0020c828");
 extern float D_0015ED6C_2DC9A8 __asm__("D_0015ED6C");
 extern float D_0015ED70_2DC9A8 __asm__("D_0015ED70");
-extern char D_L08_00174640_2DC9A8[] __asm__("D_L08_00174640");
+#include "rnc/overlay/collision.h"
+extern CollisionHit D_L08_00174640_2DC9A8 __asm__("D_L08_00174640");
 extern int D_L08_00174658_2DC9A8 __asm__("D_L08_00174658") __attribute__((section(".data")));
 
 typedef struct __attribute__((packed)) EffectVectorCopy_2DC9A8 {
@@ -1482,7 +1480,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
     int i, axis;
     float angle;
 
-    if (FUN_L08_002dc9a8_collision(0.5f, m + 0x10, 0, m, 0) != 0 &&
+    if (FUN_L08_002dc9a8_collision(m + 0x10, 0.5f, 0, m, 0) != 0 &&
         D_L08_00174658_2DC9A8 != 0 &&
         (D_L08_00174658_2DC9A8 != *(int *)(data + 0x20) || *(int *)(data + 0x14) != 0)) {
         m[0x20] = 99;
@@ -1490,23 +1488,25 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
     switch ((unsigned char)m[0x20]) {
     case 1: {
         position = (float *)(m + 0x10);
-        *(volatile u128 *)original = *(volatile u128 *)position;
+        qcopy(original, position);
         FUN_L08_002dc9a8_transform(position, position, data);
         *(float *)(data + 8) -= D_0015ED70_2DC9A8 * 10.8f;
-        *(volatile u128 *)record.pos = *(volatile u128 *)position;
+        qcopy(record.pos, position);
         record.owner = m;
         record.flags = 0x810000;
-        record.scale = 1.0f;
         record.state = 1;
-        *(volatile u128 *)record.velocity = *(volatile u128 *)data;
-        if (FUN_L08_002dc9a8_trace(original, &record, 0, m, 0) == 0) {
+        record.scale = 1.0f;
+        qcopy(record.velocity, data);
+        if (FUN_L08_002dc9a8_trace(original, &record, 0, m, 0) != 0) {
+            if (*(int *)(data + 0x20) != 0 &&
+                D_L08_00174640_2DC9A8.moby != *(int *)(data + 0x20)) {
+                m[0x20] = 99;
+                qcopy(position, D_L08_00174640_2DC9A8.point.f);
+                FUN_L08_002dc9a8_add(data, data, &D_L08_00174640_2DC9A8.normal_x);
+                FUN_L08_002dc9a8_scale(D_0015ED6C_2DC9A8 + D_0015ED6C_2DC9A8, data, data);
+            }
+        } else {
             if (FUN_L08_002dc9a8_test(data + 0x10) != 0) m[0x20] = 99;
-        } else if (*(int *)(data + 0x20) != 0 &&
-                   *(int *)(data + 0x20) != D_L08_00174658_2DC9A8) {
-            m[0x20] = 99;
-            *(volatile u128 *)position = *(volatile u128 *)(D_L08_00174640_2DC9A8 + 0x20);
-            FUN_L08_002dc9a8_add(data, data, D_L08_00174640_2DC9A8 + 0x40);
-            FUN_L08_002dc9a8_scale(D_0015ED6C_2DC9A8 + D_0015ED6C_2DC9A8, data, data);
         }
     } break;
     case 99: {
@@ -1520,7 +1520,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         record.scale = 1.0f;
         FUN_L08_002dc9a8_setup(record.velocity);
         record.state = 0;
-        FUN_L08_002dc9a8_collision(1.0f, m + 0x10, 9, m, record.velocity);
+        FUN_L08_002dc9a8_collision(m + 0x10, 1.0f, 9, m, record.velocity);
         FUN_L08_002dc9a8_start(0, 0, m);
         for (i = 0; i < 50; i++) {
             axis = i % 4;
@@ -1542,6 +1542,7 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
             radius *= 0.717f;
             record.pos[2] -= radius;
             effect[2] -= frame_time * 8.0f;
+            position = effect;
             switch (axis) {
             case 0: {
                 int color, color2, alpha;
@@ -1549,14 +1550,14 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
                 color = FUN_L08_002dc9a8_random_color(60);
                 color2 = FUN_L08_002dc9a8_random_color(120);
                 alpha = FUN_L08_002dc9a8_blend(color, color2);
-                FUN_L08_002dc9a8_emit(size, record.pos, effect, 0x1f101820, 0x101010, alpha, 0);
+                FUN_L08_002dc9a8_emit(record.pos, position, 0x1f101820, 0x101010, size, alpha, 0);
             } break;
             case 2: {
                 int color, color2, alpha;
                 color = FUN_L08_002dc9a8_random_below(100) < 40 ? 0x5ff8f8f8 : 0x2f486078;
                 color2 = FUN_L08_002dc9a8_random_color(30);
                 alpha = FUN_L08_002dc9a8_random_color(45);
-                FUN_L08_002dc9a8_emit(150000.0f, record.pos, effect, color, 0x0f000020,
+                FUN_L08_002dc9a8_emit(record.pos, position, color, 0x0f000020, 150000.0f,
                                       FUN_L08_002dc9a8_blend(color2, alpha), 2);
             } break;
             case 3: {
@@ -1566,12 +1567,12 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
                 color2 = FUN_L08_002dc9a8_color(FUN_L08_002dc9a8_random(0.5f, 1.0f),
                                                    0, 0x5f5f5f);
                 radius = FUN_L08_002dc9a8_random(0.0f, 1.0f) * D_0015ED6C_2DC9A8;
-                FUN_L08_002dc9a8_special(effect, radius, angle,
+                FUN_L08_002dc9a8_special(position, radius, angle,
                                           FUN_L08_002dc9a8_random_word());
                 radius = FUN_L08_002dc9a8_random(150000.0f, 200000.0f);
                 alpha = FUN_L08_002dc9a8_random_color(60);
                 alpha = FUN_L08_002dc9a8_blend(alpha, FUN_L08_002dc9a8_random_color(120));
-                FUN_L08_002dc9a8_emit(radius, record.pos, effect, color, color2,
+                FUN_L08_002dc9a8_emit(record.pos, position, color, color2, radius,
                                       alpha, 3);
             } break;
             case 1: break;
@@ -1581,7 +1582,6 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
     } break;
     }
 }
-#endif
 #include "sda.h"
 
 /* Rocket guidance, route traversal, launch effects, and destruction. */

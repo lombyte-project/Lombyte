@@ -1362,18 +1362,18 @@ ratio_done:
     } else if (factor > 3.0f) {
         factor = 3.0f;
     }
-    if (factor < min_factor)
-        factor = min_factor;
+    if (!(factor < min_factor))
+        min_factor = factor;
     velocity = &hero.motion.velocity;
-    amount *= factor;
     subtract_vector_xyz_34358(delta, delta, velocity);
+    amount *= min_factor;
     length = vector_length_xy_34358(delta);
     if (amount < length)
         FUN_001f9c48_34358(delta, delta, amount);
     add_vector_xyz_34358(velocity, velocity, delta);
     /* velocity is at hero + 0xE0; retail keeps this base for the copy. */
     saved.q = ((struct Hero *)((char *)velocity - 0xE0))->move_impulse.q;
-    ((struct Hero *)((char *)velocity - 0xE0))->ground_speed = ((struct Hero *)((char *)velocity - 0xE0))->motion.unk168 - FUN_L00_00213350_34358(&saved);
+    hero.ground_speed = hero.motion.unk168 - FUN_L00_00213350_34358(&saved);
     return;
 nonzero_mode:
         velocity = &hero.motion.velocity;

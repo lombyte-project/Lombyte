@@ -348,7 +348,7 @@ void FUN_L14_002b2928(struct Moby *m)
     Vec4 *template;
     Vec4 *beam_start;
     Vec4 *beam_end;
-    u32 color;
+    u64 color;
     s32 i;
 
     {
@@ -380,12 +380,11 @@ void FUN_L14_002b2928(struct Moby *m)
         quad.texture_coordinates[3][0] = 1.0f;
         quad.texture_coordinates[3][1] = 1.0f;
         corner = &quad.positions[0];
-        template = &D_L14_001D8850[0];
         do {
+            template = &D_L14_001D8850[3 - i];
             FUN_001f9a68(corner, template, 0.4f);
             transform_vector_l14(corner, corner, &basis[0]);
             corner++;
-            template++;
             i--;
         } while (i >= 0);
         draw_geometry_quad_l14(&quad, 0, 0);
@@ -405,12 +404,11 @@ void FUN_L14_002b2928(struct Moby *m)
     quad.colors[0] = 0x202020FF;
     i = 3;
     corner = &quad.positions[0];
-    template = &D_L14_001D8850[0];
     do {
+        template = &D_L14_001D8850[3 - i];
         FUN_001f9a68(corner, template, 0.2f);
         transform_vector_l14(corner, corner, &basis[0]);
         corner++;
-        template++;
         i--;
     } while (i >= 0);
     draw_geometry_quad_l14(&quad, 0, 0);
@@ -429,12 +427,11 @@ void FUN_L14_002b2928(struct Moby *m)
     quad.colors[0] = 0x4020FF20;
     i = 3;
     corner = &quad.positions[0];
-    template = &D_L14_001D8850[0];
     do {
+        template = &D_L14_001D8850[3 - i];
         FUN_001f9a68(corner, template, 0.2f);
         transform_vector_l14(corner, corner, &basis[0]);
         corner++;
-        template++;
         i--;
     } while (i >= 0);
     draw_geometry_quad_l14(&quad, 0, 0);
@@ -455,12 +452,11 @@ void FUN_L14_002b2928(struct Moby *m)
     quad.colors[0] = color | 0xFF2020;
     i = 3;
     corner = &quad.positions[0];
-    template = &D_L14_001D8850[0];
     do {
+        template = &D_L14_001D8850[3 - i];
         FUN_001f9a68(corner, template, D_L14_001614C0);
         transform_vector_l14(corner, corner, &basis[0]);
         corner++;
-        template++;
         i--;
     } while (i >= 0);
     draw_geometry_quad_l14(&quad, 0, 0);
@@ -479,12 +475,11 @@ void FUN_L14_002b2928(struct Moby *m)
     quad.colors[0] = color | 0xFF2020;
     i = 3;
     corner = &quad.positions[0];
-    template = &D_L14_001D8850[0];
     do {
+        template = &D_L14_001D8850[3 - i];
         FUN_001f9a68(corner, template, D_L14_001614C0);
         transform_vector_l14(corner, corner, &basis[0]);
         corner++;
-        template++;
         i--;
     } while (i >= 0);
     draw_geometry_quad_l14(&quad, 0, 0);

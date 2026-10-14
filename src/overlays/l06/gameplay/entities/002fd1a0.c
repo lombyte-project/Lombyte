@@ -2412,7 +2412,8 @@ void FUN_L06_003049f8(char *m) {
                 float *p = points;
                 float *q = scratch;
                 int j;
-                for (j = 29; j >= 0; j--) {
+                int index;
+                for (index = 29; index >= 0; index--) {
                     float scale;
                     FUN_L06_00217300(p);
                     p += 4;
@@ -2427,7 +2428,7 @@ void FUN_L06_003049f8(char *m) {
                     /* The completed countdown is -1: these cursors start at
                      * the second and third scratch vectors. */
                     float *second, *third;
-                    j += 2;
+                    j = index + 2;
                     second = scratch + j * 4;
                     third = scratch + (j + 1) * 4;
                     q = scratch;

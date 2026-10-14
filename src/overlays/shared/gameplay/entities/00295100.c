@@ -857,6 +857,8 @@ extern void FUN_00120558(s32, s32);
 extern void FUN_L00_001eb078(s32, s32);
 extern void FUN_L00_001ff008(void);
 
+extern char D_L00_001E9480[];
+
 void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     u8 buffer[0x60] __attribute__((aligned(16)));
     s32 source, destination, count, second_count, pal, initial_count;
@@ -907,7 +909,7 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
         } while (count != 0);
     }
     if (source > 0x400000) {
-        FUN_L00_001eb078(0x1e9480, source - 0x400000);
+        FUN_L00_001eb078((s32)D_L00_001E9480, source - 0x400000);
         FUN_L00_001ff008();
     }
 }

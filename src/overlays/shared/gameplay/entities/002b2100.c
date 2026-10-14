@@ -1153,7 +1153,8 @@ pitch_ready:
             r[0x3C]++;
             n = D_0015EEA4_2b49a8;
         }
-        if (r[0x3D] < FUN_001f96f8_2b49a8(n) / 600) {
+        n = FUN_001f96f8_2b49a8(n) / 600;
+        if (r[0x3D] < n) {
             r[0x3D] = FUN_001f96f8_2b49a8(D_0015EEA4_2b49a8) / 600;
             index = D_0015ED84_2b49a8;
         } else index = D_0015ED84_2b49a8;
@@ -2376,7 +2377,7 @@ void FUN_L00_002b77f0(unsigned char *m) {
     f32 speed, length, strength, response_scale;
     struct { f32 response[2]; s32 gate, initial_count, count; } counts;
     s32 i;
-    s32 state;
+    u8 state;
     s16 h;
     s32 divisor;
     void *effect;
@@ -2528,10 +2529,10 @@ void FUN_L00_002b77f0(unsigned char *m) {
         divisor = FUN_001f96f8_2b77f0(D_L00_00161530_2b77f0);
         if (D_L00_0015F5CC % divisor == 0)
             FUN_L00_00233db8_2b77f0(-1, 1);
-        state = FUN_L00_00233e98_2b77f0(-1);
+        divisor = FUN_L00_00233e98_2b77f0(-1);
         if (FUN_001f9740_2b77f0(v + 0x4C)) {
             if ((D_0013CAE0[0] & g->items[0].button_mask) &&
-                !g->unk20AC && state)
+                !g->unk20AC && divisor)
                 goto tail;
             m[0x20] = 2;
             FUN_L00_0020e698_2b77f0();
@@ -2542,7 +2543,7 @@ void FUN_L00_002b77f0(unsigned char *m) {
                     FUN_L00_0028d918_2b77f0(h);
             }
             *(s16 *)(v + 0x4A) = -1;
-            if (!state)
+            if (!divisor)
                 FUN_L00_0028dbe8_2b77f0(0, 0, m);
         }
         break;

@@ -85,7 +85,7 @@ typedef struct {
 /* Retail accesses these names through the shared Hero base at 0x0013f350. */
 #define D_001413D4 hero.state.current
 #define D_0013F65E hero.air_frames.s
-#define D_0013F650 hero.unk300
+#define D_0013F650 hero.grounded_frames
 #define D_0013FA40 hero.unk6E0[4]
 #define D_0013FA5C (*(s32 *)&hero.pad_6FC[0x10])
 #define D_0013FBB4 hero.unk864
@@ -280,8 +280,7 @@ s32 FUN_L05_00262f50(char *e) {
                 }
             } else if (D_L05_0015FAD8 == 4) value = 4;
             if (value >= 0) {
-                if (D_L05_0015FAD4 >= 4) i = 2;
-                else i = (D_L05_0015FAD4 < 2) ^ 1;
+                i = D_L05_0015FAD4 >= 4 ? 2 : (D_L05_0015FAD4 < 2) ^ 1;
                 group = value + i * 5;
                 D_L05_0015FAF0 = group;
                 D_L05_0015FB00 = D_L05_0017E918[group];
@@ -333,7 +332,7 @@ s32 FUN_L05_00262f50(char *e) {
     group = get_icon_frame(0x7558, 1);
     FUN_L00_0023b6c0(group, x, y, value, 0x40, 0x80);
     draw_hud_sprite(get_icon_frame(0x7558, 0), x, y, 0x100, 0x40, 0x80);
-    value = hero.pad_8AE[0];
+    value = hero.unk8AE;
     if (scale_game_frames(0x78) < value) {
         period = scale_game_frames(0x3c);
         pulse = fast_sin(convert_integer_to_float(D_L05_0015F5CC % period) / (f32)period *

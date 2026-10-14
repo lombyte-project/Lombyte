@@ -1419,8 +1419,8 @@ extern float D_0015ED70 __attribute__((section(".sdata")));
 extern float D_0013F420[4];
 extern float D_L01_0015F580[] __attribute__((section(".sdata")));
 
-extern char D_L01_00161A40[16] __attribute__((section(".sdata")));
-extern char D_L01_00161A50[16] __attribute__((section(".sdata")));
+extern char D_L01_00161A40 __attribute__((sda));
+extern char D_L01_00161A50 __attribute__((sda));
 extern float D_L01_001619AC __attribute__((sda));
 
 void FUN_L01_002edca0(unsigned char *moby) {
@@ -1469,15 +1469,15 @@ void FUN_L01_002edca0(unsigned char *moby) {
         *(float *)(data + 0x30) = *(float *)(data + 0x250);
         *(float *)(data + 0x254) = FUN_00213308();
         if (*(short *)(moby + 0xa6) == 0x362)
-            *(void **)(data + 0x130) = D_L01_00161A50;
+            *(void **)(data + 0x130) = &D_L01_00161A50;
         else
-            *(void **)(data + 0x130) = D_L01_00161A40;
+            *(void **)(data + 0x130) = &D_L01_00161A40;
         data[0x29] = 1;
-        if (*(int *)(data + 0x258) == 0) {
-            *(float *)(data + 0x20) = 3.0f;
-        } else {
+        if (*(int *)(data + 0x258) != 0) {
             *(float *)(data + 0x20) = 1.0f;
             *(int *)(data + 0x230) = 1;
+        } else {
+            *(float *)(data + 0x20) = 3.0f;
         }
         if (*(float *)(data + 0x224) == 0.0f)
             *(float *)(data + 0x224) = 15.0f;
@@ -1485,19 +1485,21 @@ void FUN_L01_002edca0(unsigned char *moby) {
         *(float *)(data + 0x17c) = 2.0f;
         *(float *)(data + 0x178) = 2.0f;
         result = FUN_001fa6d0(*(float *)(data + 0x250) * 0.8f * 1024.0f);
-        distance = *(float *)(data + 0x23c) * D_0015ED6C;
+        angle = *(float *)(data + 0x23c) * D_0015ED6C;
         *(int *)(data + 0x170) = result;
-        *(float *)(data + 0x194) = distance;
+        *(float *)(data + 0x194) = angle;
         if (*(int *)(data + 0x230) != 0) {
             moby[0x20] = 1;
             *(u16 *)(moby + 0x34) |= 0x1000;
         } else {
-            moby[0x20] = *(int *)(data + 0x25c) == -1 ? 12 : 13;
+            if (*(int *)(data + 0x25c) == -1) moby[0x20] = 12;
+            else moby[0x20] = 13;
             *(int *)(moby + 0x94) = 0;
             *(int *)(moby + 0x58) = 0;
             moby[0x31] = 0;
-            *(float *)(moby + 0x18) -= 20.0f;
+            distance = *(float *)(moby + 0x18) - 20.0f;
             *(u16 *)(moby + 0x34) = (*(u16 *)(moby + 0x34) & 0xefff) | 1;
+            *(float *)(moby + 0x18) = distance;
         }
         break;
     case 1:
@@ -1547,8 +1549,10 @@ void FUN_L01_002edca0(unsigned char *moby) {
                 if (moby[0x53] != 0)
                     FUN_00212f90(moby, 0, 0, FUN_001f96f8(10));
                 FUN_001f99f8(data + 0x40);
-                *(float *)(data + 0x234) = FUN_002132a8(-0.34906584f, 0.34906584f);
-                *(float *)(data + 0x194) = *(float *)(data + 0x23c) * D_0015ED6C;
+                angle = FUN_002132a8(-0.34906584f, 0.34906584f);
+                distance = *(float *)(data + 0x23c) * D_0015ED6C;
+                *(float *)(data + 0x234) = angle;
+                *(float *)(data + 0x194) = distance;
             } else {
                 *(int *)(data + 0x204) = 2;
             }
@@ -1592,7 +1596,8 @@ void FUN_L01_002edca0(unsigned char *moby) {
         if (moby[0x53] != 1)
             FUN_00212f90(moby, 1, 0, FUN_001f96f8(20));
         return;
-    case 4:
+    case 4: {
+        unsigned char path_hit;
         target_position = target + 0x10;
         distance = FUN_001f9b80(moby + 0x10, target_position);
         if (distance < D_L01_001619AC) {
@@ -1627,6 +1632,7 @@ void FUN_L01_002edca0(unsigned char *moby) {
             FUN_L01_002ef560(moby);
             return;
         }
+    }
     case 6: {
         float *rotation = (float *)(moby + 0x48);
         angle = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
@@ -1670,21 +1676,21 @@ void FUN_L01_002edca0(unsigned char *moby) {
         if (moby[0x53] != 1)
             FUN_00212f90(moby, 1, 0, FUN_001f96f8(10));
         return;
-    case 5:
+    case 5: {
         target_position = data + 0x210;
         distance = FUN_001f9b80(moby + 0x10, target_position);
-        path_hit = 0;
+        blocked = 0;
         if (distance < 1.0f) {
             moby[0x20] = 1;
         } else {
             if (FUN_L01_00276fe8((int *)(data + 0x240), 1, *(int *)(data + 0x244),
                                         *(float *)(data + 0x250) * 0.8f, moby + 0x10, target_position, hit) != 0)
-                path_hit = 1;
+                blocked = 1;
             else
-                path_hit = FUN_L01_00276fe8((int *)(data + 0x240), 1, *(int *)(data + 0x244),
+                blocked = FUN_L01_00276fe8((int *)(data + 0x240), 1, *(int *)(data + 0x244),
                                             0.0f, target_position, target_position, hit) != 0;
         }
-        if (path_hit != 0) {
+        if (blocked != 0) {
             angle = FUN_001f9e90(hit[0] - *(float *)(moby + 0x10), hit[1] - *(float *)(moby + 0x14));
             angle = FUN_001fa580(angle, *(float *)(data + 0x234));
             FUN_L00_0025be00((float *)(moby + 0x48), (float *)(data + 0x220), angle,
@@ -1701,12 +1707,13 @@ void FUN_L01_002edca0(unsigned char *moby) {
             FUN_00212f90(moby, 1, 0, FUN_001f96f8(3));
         FUN_L01_002ef560(moby);
         return;
+    }
     case 8:
         result = FUN_L00_0025c698(moby, data + 0x60);
         if (result & 1) {
             path_hit = FUN_L01_00276fe8((int *)(data + 0x240), 1, *(int *)(data + 0x244),
                                         *(float *)(data + 0x250) * 0.8f,
-                                        moby + 0x10, data + 0x210, hit);
+                                        moby + 0x10, data + 0x210, move);
             if (path_hit != 0) {
                 FUN_0022da68(4, 0, (char *)moby);
                 *(float *)(data + 0x194) = *(float *)(data + 0x23c) * D_0015ED6C;
@@ -1729,21 +1736,23 @@ void FUN_L01_002edca0(unsigned char *moby) {
             if (moby[0x53] != 1)
                 FUN_00212f90(moby, 1, 0, FUN_001f96f8(10));
             FUN_001f99f8(data + 0x40);
-            *(float *)(data + 0x234) = FUN_002132a8(-0.34906584f, 0.34906584f);
-            *(float *)(data + 0x194) = *(float *)(data + 0x23c) * D_0015ED6C;
+            angle = FUN_002132a8(-0.34906584f, 0.34906584f);
+            distance = *(float *)(data + 0x23c) * D_0015ED6C;
+            *(float *)(data + 0x234) = angle;
+            *(float *)(data + 0x194) = distance;
         }
         break;
     case 13:
         *(u16 *)(moby + 0x34) |= 1;
         if (FUN_00214720(D_0013F420, *(int *)(data + 0x25c)) != 0) {
-            u16 flags = *(u16 *)(moby + 0x34);
+            u16 flags = *(u16 *)(moby + 0x34) | 0x1000;
             moby[0x20] = 1;
             *(u16 *)(moby + 0x34) = flags | 0x1000;
             *(float *)(moby + 0x58) = 1.0f;
             *(float *)(moby + 0x18) += 20.0f;
             moby[0x31] = 1;
             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
-            *(u16 *)(moby + 0x34) = (flags & 0xfffe) | 0x1000;
+            *(u16 *)(moby + 0x34) = flags & 0xfffe;
         }
         return;
     case 14:
@@ -1995,8 +2004,9 @@ char *FUN_L01_002ef350(char *self) {
     } else if (*(short *)(self + 0xA6) == 0x361) {
         type = 0x362;
     }
-    list = (short *)(lists_2ef478 + (unsigned char)self[0x21]);
-    list = *(short **)list;
+    entry = (unsigned char)self[0x21];
+    entities = (char *)(lists_2ef478 + entry);
+    list = *(short **)entities;
     entities = ents_2ef478;
     if (list == 0) return 0;
     goto scan;
@@ -2689,24 +2699,27 @@ reset_timer:
         FUN_L01_0028bb90(path_state, B2(data, 0x120) & 0x20, moby, F2(data, 0xf4), F2(data, 0xf8));
         if ((B2(data, 0x120) & 0x1e) && !(B2(data, 0x120) & 1)) {
             link = (int *)(data + 0x140);
-            for (i = 0; i < 4; ++i) {
-                if ((B2(data, 0x120) & (2 << i)) && link[i] != -1) {
-                    child = D_L01_0015FFD8 + (link[i] << 8);
+            node = (char *)point;
+            for (i = 0; i < 4; ++i, node += 0x10, ++link) {
+                if ((B2(data, 0x120) & (2 << i)) && *link != -1) {
+                    child = D_L01_0015FFD8 + (*link << 8);
                     if (child && (child_data = *(char **)(child + 0x78)) != 0) {
                         I2(child_data, 0x70) |= 0x1000;
-                        FUN_002645a8_2f5168(moby, i, point + i * 4);
-                        FUN_002211b8_2f5168(work_init, point + i * 4, moby + 0x10);
+                        FUN_002645a8_2f5168(moby, i, node);
+                        FUN_002211b8_2f5168(work_init, node, moby + 0x10);
                         FUN_00221410_2f5168(work_init, work_init, 1.0f);
-                        Q2(child, 0x10) = *(OvlQuad *)(point + i * 4);
+                        Q2(child, 0x10) = *(OvlQuad *)node;
                         Q2(child_data, 0x80) = *(OvlQuad *)work_init;
                     }
                 }
             }
         }
-        if (H2(data, 0x11c) <= 0) {
-            if (D_L01_0015ED84 == 3 || D_L01_0015ED84 == 9) H2(data, 0x13a) = 0;
-            B2(moby, 0x20) = 1;
-        } else B2(moby, 0x20) = 3;
+        if (H2(data, 0x11c) > 0) {
+            B2(moby, 0x20) = 3;
+            return;
+        }
+        if (D_L01_0015ED84 == 3 || D_L01_0015ED84 == 9) H2(data, 0x13a) = 0;
+        B2(moby, 0x20) = 1;
         return;
     case 2:
         if (path_state->path_id == -1) return;
@@ -2843,15 +2856,8 @@ reset_timer:
 #undef Q2
 #endif
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002b91c8.s", FUN_L01_002b91c8);
-#else
 #include "rnc/rendering/dma_tag.h"
-#define D_0015F620 (*(s32 *)0x0015F620)
-#define D_0015F628 (*(u32 *)0x0015F628)
-#define D_0015F62C (*(u32 *)0x0015F62C)
-#define D_0015F630 (*(u32 *)0x0015F630)
-#define D_0015F634 (*(u32 *)0x0015F634)
+extern s32 D_0015F620 __asm__("D_L01_00161220") __attribute__((sda));
 extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
 extern void FUN_L01_00261c10(void *, void *) __asm__("FUN_L01_00261c10");
 extern void FUN_L01_00261df8(f32 *) __asm__("FUN_L01_00261df8");
@@ -2862,9 +2868,9 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
     f32 corners[4][4];
     f32 near_clip[4];
     f32 far_clip[4];
-    f32 x_offset, y_offset, x_end, y_end;
+    f32 x_offset, y_offset, x_end, y_end, z;
     u32 near_bits, far_bits;
-    u16 mask;
+    s32 mask;
     s32 i, j, mode;
     s32 height_index, index;
     f32 *height;
@@ -2874,6 +2880,7 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
     FUN_L01_002b8f98();
     i = 0;
     if (count > 0) do {
+        f32 *next_pos = pos + 0x464;
         u16 active = *(u16 *)((u8 *)pos + 0x1e);
         if (active == 0) goto next_entity;
         x_offset = pos[0] + D_L01_001CAD00[2];
@@ -2882,19 +2889,20 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
         y_offset = pos[1] + D_L01_001CAD00[3];
         y_end = pos[1] - D_L01_001CAD00[3];
         corners[0][1] = y_offset;
-        corners[0][2] = pos[2];
+        z = pos[2];
+        corners[0][2] = z;
         corners[0][3] = 1.0f;
         corners[1][0] = x_end;
         corners[1][1] = y_offset;
-        corners[1][2] = pos[2];
+        corners[1][2] = z;
         corners[1][3] = 1.0f;
         corners[2][0] = x_offset;
         corners[2][1] = y_end;
-        corners[2][2] = pos[2];
+        corners[2][2] = z;
         corners[2][3] = 1.0f;
         corners[3][0] = x_end;
         corners[3][1] = y_end;
-        corners[3][2] = pos[2];
+        corners[3][2] = z;
         corners[3][3] = 1.0f;
         near_bits = 0;
         far_bits = 0;
@@ -2913,7 +2921,7 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
         if ((near_bits & 0x08080808) == 0x08080808) goto next_entity;
         if ((near_bits & 0x20202020) == 0x20202020) goto next_entity;
 
-        FUN_L01_00261c10((void *)0x70000000, pos + D_0015F620 * 0x170 + 0x14);
+        FUN_L01_00261c10((void *)0x70000000, (u8 *)pos + (D_0015F620 * 0x5c0 + 0x50));
         FUN_L01_00261df8(pos);
         FUN_L01_002b8c08(pos);
         FUN_L01_002b80d0(pos);
@@ -2933,10 +2941,14 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
             height = (f32 *)0x70002008;
             for (height_index = 0x10; height_index >= 0; height_index--, height += 0x33) *height = pos[2];
         }
-        mode = (far_bits & 0x2f2f2f2f) ? 1 : ((near_bits & 0x2f2f2f2f) ? 2 : 0);
+        mode = (far_bits & 0x2f2f2f2f) != 0;
+        if (!mode) {
+            mode = 2;
+            if (!(near_bits & 0x2f2f2f2f)) mode = 0;
+        }
         mask = *(u16 *)((u8 *)pos + 0x1e);
-        if (*(u32 *)(pos + 5) != D_0015F628 || *(u32 *)(pos + 6) != D_0015F62C ||
-            *(u8 *)(pos + 7) != D_0015F630 || *(u8 *)((u8 *)pos + 0x1d) != D_0015F634) {
+        if (*(u32 *)(pos + 5) != D_L01_00161228 || *(u32 *)(pos + 6) != D_L01_0016122C ||
+            *(u8 *)(pos + 7) != D_L01_00161230 || *(u8 *)((u8 *)pos + 0x1d) != D_L01_00161234) {
             l01_packet.words[0] = 0x10000005;
             l01_packet.words[1] = 0;
             l01_packet.words[2] = 0x11000000;
@@ -2955,17 +2967,21 @@ void FUN_L01_002b91c8(f32 *pos, s32 count) {
             data[8] = get_effect_texture(*(s32 *)(pos + 5));
             data[9] = 7;
             l01_packet.words = packet + 0x18;
-            D_0015F628 = *(u32 *)(pos + 5);
-            D_0015F62C = *(u32 *)(pos + 6);
-            D_0015F630 = *(u8 *)(pos + 7);
-            D_0015F634 = *(u8 *)((u8 *)pos + 0x1d);
+            {
+                u32 texture_id = *(u32 *)(pos + 5);
+                u32 second_texture_id = *(u32 *)(pos + 6);
+                D_L01_00161228 = texture_id;
+                D_L01_0016122C = second_texture_id;
+            }
+            D_L01_00161230 = *(u8 *)(pos + 7);
+            D_L01_00161234 = *(u8 *)((u8 *)pos + 0x1d);
         }
         for (index = 0; index < 16; index++, mask = (s32)mask >> 1) {
             if (mask & 1) FUN_L01_002b8cb0(pos, index, mode);
         }
 next_entity:
         i++;
-        pos += 0x464;
+        pos = next_pos;
     } while (i < count);
     l01_packet.words[0] = 0x10000000;
     l01_packet.words[1] = 0;
@@ -2973,4 +2989,3 @@ next_entity:
     l01_packet.words[3] = 0;
     l01_packet.words += 4;
 }
-#endif

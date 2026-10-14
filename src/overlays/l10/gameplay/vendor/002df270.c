@@ -1881,12 +1881,12 @@ extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
 extern void scale_vector_xyz(f32 *, f32 *, f32) __asm__("FUN_001f9a68");
 extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
 extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
-extern unsigned char *FUN_L00_002738e8(f32, f32, f32, void *, void *, s32, s32, s32, s32);
+extern unsigned char *FUN_L00_002738e8(void *, void *, s32, f32, f32, f32, s32, s32, s32);
 
 void FUN_L10_002e5be0(struct Moby *moby) {
     f32 *pvars = (f32 *)moby->pvars;
     Vec4 *moby_position = (Vec4 *)&moby->pos.x;
-    s32 i;
+    s64 i;
 
     moby->update_dist = 0x80;
     if (((s32 *)pvars)[3] > 0) {
@@ -1941,8 +1941,8 @@ void FUN_L10_002e5be0(struct Moby *moby) {
             x = random_float_between(0.25f, 0.5f);
             fade_color = fast_tween_color(x, D_L10_00161EF4, first_color);
             life = truncate_float_to_s32(multiply_global_factor_ed64(pvars[2] * 60.0f));
-            FUN_L00_002738e8(amount, pvars[0], D_L10_00161F00 * frame_time_sq,
-                               &position, &velocity, life, color, fade_color, variant);
+            FUN_L00_002738e8(&position, &velocity, life, amount, pvars[0],
+                               D_L10_00161F00 * frame_time_sq, color, fade_color, variant);
         }
     }
 }
@@ -1963,7 +1963,6 @@ extern int D_L10_0013F640 __asm__("D_L10_0013F640") __attribute__((section(".sda
 
 void FUN_L10_002e8358(struct Moby *moby) {
     int *timer;
-    int accepted;
     float angle;
     int purchase;
     int upgrade_level;
@@ -1983,7 +1982,7 @@ void FUN_L10_002e8358(struct Moby *moby) {
             FUN_L00_00266858_vendor(moby, 1);
             if (alternate_item_available[4] == 0) {
                 if (current_bolt_count >= 4001) {
-                    accepted = try_set_help_message_vendor(1, 0x271e) != 0;
+                    int accepted = try_set_help_message_vendor(1, 0x271e) != 0;
                     if (!(D_0013CAE4 & 0x10)) return;
                     if (accepted == 0) return;
                     alternate_item_available[4] = 1;
@@ -2000,7 +1999,7 @@ void FUN_L10_002e8358(struct Moby *moby) {
             } else {
                 if (alternate_item_available[5] != 0 || timer[1] != 0) return;
                 if (current_bolt_count >= 30001) {
-                    accepted = try_set_help_message_vendor(1, 0x271f) != 0;
+                    int accepted = try_set_help_message_vendor(1, 0x271f) != 0;
                     if (!(D_0013CAE4 & 0x10)) return;
                     if (accepted == 0) return;
                     alternate_item_available[5] = 1;
@@ -2023,8 +2022,9 @@ state_one:
     if (D_L10_0015F5C4_vendor != 2) {
         memcard_save_data_vendor(0, -1);
         switch (alternate_item_available[5]) {
-        case 0: purchase = 0x271c; break;
         default: purchase = 0x271d; break;
+        case 1: purchase = 0x271d; break;
+        case 0: purchase = 0x271c; break;
         }
         FUN_L00_00263d40_vendor(purchase, -1);
         D_L10_0013F640 = 0xb4;
@@ -2197,9 +2197,6 @@ void FUN_L10_002e85b8(Moby *moby)
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8ab0.s", FUN_L10_002e8ab0);
-#else
 typedef struct {
     int linked;
     int targets[3];
@@ -2280,19 +2277,23 @@ state_two:
         {
             struct Moby *candidate;
             candidate = 0;
+            if (vars->targets[0] != -1) {
+                struct Moby *target;
+                target = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
+                candidate = (target != 0 && target->state != 0xfe && target->state != 0xfd) ? target : 0;
+            }
             {
                 struct Moby *target;
-                if (vars->targets[0] != -1) {
-                    target = (struct Moby *)((char *)D_L10_0015FFD0_e[2] + (vars->targets[0] << 8));
-                    candidate = (target != 0 && target->state != 0xfe && target->state != 0xfd) ? target : 0;
-                }
+                target = candidate;
                 if (candidate == 0) {
                     if (vars->targets[1] != -1) {
-                        target = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
-                        if (target != 0 && target->state != 0xfe && target->state != 0xfd)
-                            candidate = target;
+                        struct Moby *candidate;
+                        candidate = (struct Moby *)((char *)D_L10_0015FFD8_8ab0 + (vars->targets[1] << 8));
+                        if (candidate != 0 && candidate->state != 0xfe && candidate->state != 0xfd)
+                            target = candidate;
                     }
                 }
+                candidate = target;
             }
             target = candidate;
         }
@@ -2375,7 +2376,6 @@ remove_candidate:
         return;
     }
 }
-#endif
 typedef struct {
     int unk0;
     float home_yaw;

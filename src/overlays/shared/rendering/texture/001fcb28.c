@@ -90,33 +90,35 @@ void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
     source = get_help_message_text(entry->text_id);
     if (entry->separator_mode == 1) {
         out = buffer;
-        next = out;
-        ch = (u8)*source;
-        while (ch != 0) {
-            out = next;
-            if (ch == 1) {
-                *out++ = ' ';
-                *out++ = '-';
-                *out++ = ' ';
-                ch = *source;
-                while ((u8)ch == 1) {
-                    source++;
+        ch = *source;
+joined_text:
+        if (ch != 0) {
+            do {
+                if ((u8)ch == 1) {
+                    *out++ = ' ';
+                    *out++ = '-';
+                    *out++ = ' ';
+                    while (*source == 1)
+                        source++;
                     ch = *source;
+                    if (ch != 0)
+                        goto joined_text;
+                    out -= 3;
+                    break;
+                } else {
+                    *out = ch;
+                    source++;
+                    out++;
                 }
-                next = out;
-                if (ch == 0)
-                    next -= 3;
-            } else {
-                *out = ch;
-                source++;
-                out++;
-                next = out;
-                ch = *source;
-            }
+            } while ((ch = *source) != 0);
         }
-        out = next;
-        *out = 0;
-        FUN_L00_001fcb28(entry->x, entry->y, entry->mode, buffer, scale, alpha);
+        {
+            s32 mode = entry->mode;
+            s32 x = entry->x;
+            y = entry->y;
+            *out = 0;
+            FUN_L00_001fcb28(x, y, mode, buffer, scale, alpha);
+        }
     } else {
         y = entry->y;
         out = buffer;

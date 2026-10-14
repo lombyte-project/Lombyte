@@ -110,94 +110,138 @@ extern int D_L10_00161F50[2] __attribute__((sda));
 extern int D_L10_00161F58[2] __attribute__((sda));
 extern int D_L10_00161F60[2] __attribute__((sda));
 
+#include "qcopy.h"
+extern float D_L10_001DA350[];
+extern float D_L10_001DA310[];
+extern int D_L10_001DA250[];
+extern float D_L10_001DA270[];
+extern int D_L10_001DA2B0[];
+extern float D_L10_001DA2F0[];
 void FUN_L10_002e91b8(unsigned char *m) {
     unsigned char first[0x90] __attribute__((aligned(16)));
     unsigned char second[0x90] __attribute__((aligned(16)));
     float matrix[12] __attribute__((aligned(16)));
     float position[4] __attribute__((aligned(16)));
     float *scale = *(float **)(m + 0x78);
-    float *first_source = (float *)0x001da350;
-    float *second_source = (float *)0x001da310;
-    float *first_vectors = (float *)first;
-    float *second_vectors = (float *)second;
-    int i, j, k;
+    float *first_source;
+    float *second_source;
+    float *first_vectors;
+    float *second_vectors;
+    float *second_angles;
+    float *second_packet;
+    float *angle_vectors;
+    int i, k;
+    int j;
 
     copy_matrix(matrix, m + 0xc0);
-    *(aligned_vector *)position = *(aligned_vector *)(m + 0x10);
+    qcopy(position, m + 0x10);
     position[3] = 1.0f;
-    *(long long *)(first + 0x70) = 0;
     *(long long *)(first + 0x78) = trail_effect_texture(0x2c);
     *(long long *)(first + 0x80) = 0xff9000000260LL;
-    *(long long *)(second + 0x70) = 0;
+    *(long long *)(first + 0x70) = 0;
     *(long long *)(second + 0x78) = trail_effect_texture(0x2c);
+    second_packet = (float *)second;
     *(long long *)(second + 0x80) = 0xff9000000260LL;
-    *(int *)(second + 0x44) = 0;
+    *(long long *)(second + 0x70) = 0;
     *(int *)(second + 0x4c) = 0;
-    i = 3;
+    *(int *)(second + 0x44) = 0;
+    second_source = D_L10_001DA310;
+    first_source = D_L10_001DA350;
+    second_vectors = second_packet;
+    second_angles = second_packet;
+    first_vectors = (float *)first;
+    j = 3;
     do {
-        *(aligned_vector *)first_vectors = *(aligned_vector *)first_source;
-        *(aligned_vector *)second_vectors = *(aligned_vector *)second_source;
-        first_source += 4;
+        qcopy(first_vectors, first_source);
+        qcopy(second_angles, second_source);
         second_source += 4;
+        second_angles += 4;
+        first_source += 4;
+        j--;
         first_vectors[0] *= scale[0];
         second_vectors[0] *= scale[0];
         first_vectors[2] *= scale[1];
         second_vectors[2] *= scale[1];
         first_vectors += 4;
         second_vectors += 4;
-        i--;
-    } while (i >= 0);
+    } while (j >= 0);
 
-    for (i = 0; i < D_L10_0015B340; i++) {
-        int parity = i & 1;
-        int *colors = D_L10_0015B348;
-        unsigned long long color = (long long)colors[parity] |
-            ((long long)D_L10_00161F50[parity] << 2) |
-            ((long long)D_L10_00161F58[parity] << 4) |
-            ((long long)D_L10_00161F60[parity] << 6) | 0x8000000000ULL;
-        int shade = ((int *)0x001da250)[i];
+    if (D_L10_0015B340 > 0) {
+
         float *angles = (float *)(first + 0x58);
-        float *offsets = (float *)(first + 0x68);
         float *first_angles = (float *)(second + 0x50);
-        float *second_angles = (float *)(second + 0x60);
         float *first_offsets = (float *)(second + 0x58);
+        float *offsets = (float *)(first + 0x68);
+        float *second_angles = (float *)(second + 0x60);
         float *second_offsets = (float *)(second + 0x68);
-        *(unsigned long long *)(first + 0x88) = color;
-        *(unsigned long long *)(second + 0x88) =
-            (long long)colors[parity] | ((long long)D_L10_00161F50[parity] << 2) |
-            ((long long)D_L10_00161F58[parity] << 4) | ((long long)D_L10_00161F60[parity] << 6) |
-            0x8000000000ULL;
-        ((int *)(first + 0x40))[0] = shade;
-        ((int *)(second + 0x40))[2] = shade;
-        ((int *)(second + 0x40))[0] = shade;
-        ((int *)(first + 0x40))[3] = shade;
-        ((int *)(first + 0x40))[2] = shade;
-        ((int *)(first + 0x40))[1] = shade;
-        for (j = 0; j < 4; j++) {
-            for (k = 0; k != 2; k++) {
-                int index = i * 2 + k;
-                int limit = float_to_integer(((float *)0x001da270)[index] * 360.0f);
-                float angle = integer_to_float(*(int *)0x0015f3f8 % limit) / ((float *)0x001da270)[index] - 180.0f;
-                float wave;
-                if (((int *)0x001da2b0)[index] == 0)
-                    wave = FUN_001f9de0(angle * 0.017453292f);
-                else
-                    wave = FUN_001f9dc8(angle * 0.017453292f);
-                ((float *)(first + 0x50))[j * 2 + k] = ((float *)0x001da2f0)[j * 2 + k] + wave * 0.125f;
+        angle_vectors = (float *)(first + 0x50);
+        for (i = 0; i < D_L10_0015B340; i++) {
+            int parity = i & 1;
+            int *colors = D_L10_0015B348;
+            unsigned long long color = (long long)colors[parity] |
+                ((long long)D_L10_00161F50[parity] << 2) |
+                ((long long)D_L10_00161F58[parity] << 4) |
+                ((long long)D_L10_00161F60[parity] << 6) | 0x8000000000ULL;
+            int shade = (D_L10_001DA250)[i];
+            *(unsigned long long *)(first + 0x88) = color;
+            *(unsigned long long *)(second + 0x88) =
+                (long long)colors[parity] | ((long long)D_L10_00161F50[parity] << 2) |
+                ((long long)D_L10_00161F58[parity] << 4) | ((long long)D_L10_00161F60[parity] << 6) |
+                0x8000000000ULL;
+            ((int *)(first + 0x40))[0] = shade;
+            ((int *)(second + 0x40))[2] = shade;
+            ((int *)(second + 0x40))[0] = shade;
+            ((int *)(first + 0x40))[3] = shade;
+            ((int *)(first + 0x40))[2] = shade;
+            ((int *)(first + 0x40))[1] = shade;
+            j = 0;
+            do {
+                int offset = j * 8;
+                int index = i * 8;
+                int next_vector = j + 1;
+                float *first_source = D_L10_001DA270 + i * 2;
+                float *first_vectors = (float *)((unsigned char *)angle_vectors + offset);
+                k = 1;
+                do {
+                    int limit = float_to_integer(*first_source * 360.0f);
+                    float angle = integer_to_float(*(int *)0x0015f3f8 % limit) / *first_source - 180.0f;
+                    float wave;
+                    if (*(int *)((unsigned char *)D_L10_001DA2B0 + index) != 0)
+                        wave = FUN_001f9dc8(angle * 0.017453292f);
+                    else
+                        wave = FUN_001f9de0(angle * 0.017453292f);
+                    first_source++;
+                    index += 4;
+                    *first_vectors++ = *(float *)((unsigned char *)D_L10_001DA2F0 + offset) + wave * 0.125f;
+                    offset += 4;
+                    k--;
+                } while (k >= 0);
+                j = next_vector;
+            } while (j < 4);
+            {
+                int k;
+                for (k = 0; k < 2; k++) {
+                    float step = (float)k * 0.125f;
+                    first_angles[k] = angles[k];
+                    first_offsets[k] = angles[k] + step;
+                    second_angles[k] = offsets[k];
+                    second_offsets[k] = offsets[k] + step;
+                }
             }
-        }
-        for (j = 0; j < 2; j++) {
-            float step = (float)j * 0.125f;
-            first_angles[j] = angles[j];
-            first_offsets[j] = angles[j] + step;
-            second_angles[j] = offsets[j];
-            second_offsets[j] = offsets[j] + step;
-        }
-        transform_vectors((float *)first, matrix, 0);
-        transform_vectors((float *)second, matrix, 0);
-        for (j = 3; j >= 0; j--) {
-            ((float *)(first + j * 16))[1] += 0.1f;
-            ((float *)(second + j * 16))[1] += 0.1f;
+            transform_vectors((float *)first, matrix, 0);
+            transform_vectors(second_packet, matrix, 0);
+            {
+                float *second_vectors = second_packet;
+                float *first_vectors = (float *)first;
+                j = 3;
+                do {
+                    first_vectors[1] += 0.1f;
+                    first_vectors += 4;
+                    second_vectors[1] += 0.1f;
+                    second_vectors += 4;
+                    j--;
+                } while (j >= 0);
+            }
         }
     }
 }
@@ -254,6 +298,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern float D_L10_0016CF70;
 extern char D_L10_00167100[];
 
+extern char D_L10_0016CEC0[];
 void FUN_L10_002f5b58(char *moby) {
     char *data = *(char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 0x20 + 0x1c);
     char *work;
@@ -297,7 +342,7 @@ void FUN_L10_002f5b58(char *moby) {
     moby_scale = moby + 0x30;
     moby_pos = moby + 0x10;
     moby_rot = moby + 0x20;
-    angle = angle_atan2(1.0f, D_L10_0016CF70);
+    angle = angle_atan2(1.0f, *(float *)(D_L10_0016CEC0 + 0xb0));
     *(float *)((char *)indices + 0x30) = angle + angle;
 
     if (*(int *)(data + 0x20) >= 0) {
@@ -324,14 +369,15 @@ void FUN_L10_002f5b58(char *moby) {
                     angle_cursor++;
                     index_cursor++;
                 }
-                next = (i + 1) % *(int *)path;
+                count = i + 1;
+                next = count % *(int *)path;
                 distance = FUN_001f9b48(
                     (char *)((unsigned int)path + (offset + 0x10)),
                     (char *)((unsigned int)path + ((unsigned int)next * 0x10 + 0x10)));
                 *(float *)((unsigned int)path + offset + 0x1c) = distance;
                 if (i < *(int *)path - 1)
                     *(float *)(acc + 0x08) += distance;
-                i++;
+                i = count;
             } while (i < *(int *)path);
         }
     }
@@ -373,10 +419,14 @@ void FUN_L10_002f5b58(char *moby) {
     FUN_001f99f8(work + 0x30);
     {
         char *source = *(char **)(D_L10_00167100 + 0x184);
-        *(u128 *)moby_scale = *(u128 *)(source + 0x30);
-        *(u128 *)(moby + 0x00) = *(u128 *)(source + 0x00);
-        *(u128 *)moby_pos = *(u128 *)(source + 0x10);
-        *(u128 *)moby_rot = *(u128 *)(source + 0x20);
+        source += 0x30;
+        *(u128 *)moby_scale = *(u128 *)source;
+        source -= 0x30;
+        *(u128 *)moby = *(u128 *)source;
+        source += 0x10;
+        *(u128 *)moby_pos = *(u128 *)source;
+        source += 0x10;
+        *(u128 *)moby_rot = *(volatile u128 *)source;
     }
     if (*(int *)(data + 0x4c) == 0)
         hero_set_state(0x72, 1);
@@ -385,12 +435,13 @@ void FUN_L10_002f5b58(char *moby) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
 #else
+#include "qcopy.h"
 extern float D_L10_0015F3FC __attribute__((section(".data")));
 extern float D_L10_0015F3FC_sda __asm__("D_L10_0015F3FC") __attribute__((sda));
 extern int D_L10_0015F404;
 extern float D_0015ED6C;
 extern char *D_L10_0015FFD8 __attribute__((sda));
-extern char *D_L10_0015FFD8_far __asm__("D_L10_0015FFD8");
+extern char *D_L10_0015FFD8_far __asm__("D_L10_0015FFD8") __attribute__((section(".data")));
 extern float D_L10_00167358;
 extern float D_L10_0016CF70;
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -414,59 +465,67 @@ extern void FUN_001e93e8_part(void *, void *) __asm__("FUN_001e93e8");
 extern float D_L10_00167450[];
 extern float D_0013F5E0[];
 
+extern char D_L10_0016CEC0[];
+extern float D_L10_0016CF70_far __asm__("D_L10_0016CF70") __attribute__((section(".data")));
+
 void FUN_L10_002f5f18(char *moby) {
     char *work = *(char **)(moby + 0x70);
     char *acc = work + 0x40;
+    short *indices = (short *)(acc + 0x18);
     int slot = *(short *)(moby + 0x84);
-    char *data = *(char **)(D_L10_0015EF50 + slot * 0x20 + 0x1c);
+    unsigned char *data = *(unsigned char **)(D_L10_0015EF50 + slot * 0x20 + 0x1c);
     char *path;
     float old_pos[4] __attribute__((aligned(16)));
-    float target[4] __attribute__((aligned(16)));
+    union { float target[4]; float direction[4]; } vectors __attribute__((aligned(16)));
     float transformed[4] __attribute__((aligned(16)));
-    float direction[4] __attribute__((aligned(16)));
     float point[4] __attribute__((aligned(16)));
-    float *scale = (float *)(moby + 0x30);
-    int i, segment, count, next, index;
-    int reached;
+    float * volatile scale;
+    int i, count, next, index;
+    long long segment;
+    long long reached;
     float angle, first, total, distance, fade;
-    short *indices = (short *)(acc + 0x18);
+    float *distance_cursor;
 
     if (*(short *)(acc + 0x14) == 0) {
-        fade = D_L10_0015F3FC + 0.05f;
-        D_L10_0015F3FC_sda = fade;
-        if (!(1.0f <= fade)) return;
+        char *other;
+        D_L10_0015F3FC_sda = D_L10_0015F3FC + 0.05f;
+        if (!(1.0f <= D_L10_0015F3FC_sda)) return;
         path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
+        other = D_L10_001B0930_5a78[*(int *)(data + 0x24)];
+        scale = (float *)(moby + 0x30);
         D_L10_0015F3FC = 1.0f;
         D_L10_0015F404 = 1;
         *(short *)(acc + 0x14) = 1;
-        *(u128 *)scale = *(u128 *)(path + 0x10);
-        if (*(int *)(data + 0x28) < 0) {
-            subtract_vector_xyz(old_pos, D_L10_001B0930_5a78[*(int *)(data + 0x24)] + 0x10, scale);
-        } else {
-            target[0] = *(float *)(data + 0x2c);
-            target[1] = *(float *)(data + 0x30);
-            target[2] = *(float *)(data + 0x34);
-            target[3] = 0.0f;
-            transform_vector_by_basis(target, target, D_L10_00167450);
+        path += 0x10;
+        qcopy(scale, path);
+        if (*(int *)(data + 0x28) >= 0) {
             path = D_L10_0015FFD8 + *(int *)(data + 0x28) * 0x100;
-            add_vector_xyz(transformed, path + 0x10, target);
+            vectors.target[0] = *(float *)(data + 0x2c);
+            vectors.target[1] = *(float *)(data + 0x30);
+            vectors.target[2] = *(float *)(data + 0x34);
+            vectors.target[3] = 0.0f;
+            transform_vector_by_basis(vectors.target, vectors.target, D_L10_00167450);
+            add_vector_xyz(transformed, path + 0x10, vectors.target);
             subtract_vector_xyz(old_pos, transformed, scale);
+        } else {
+            subtract_vector_xyz(old_pos, other + 0x10, scale);
         }
-        FUN_001f9a68(-1.0f, target, D_0013F5E0);
+        FUN_001f9a68(-1.0f, vectors.target, D_0013F5E0);
         scale_vector_xyz(1.0f, moby, old_pos);
-        cross_vectors_xyz(moby + 0x10, moby, target);
+        cross_vectors_xyz(moby + 0x10, moby, vectors.target);
         scale_vector_xyz(1.0f, moby + 0x10, moby + 0x10);
         cross_vectors_xyz(moby + 0x20, moby + 0x10, moby);
         return;
     }
     if (*(short *)(acc + 0x14) == 2) {
-        fade = D_L10_0015F3FC + 0.05f;
-        D_L10_0015F3FC_sda = fade;
-        if (fade >= 1.0f) {
+        D_L10_0015F3FC_sda = D_L10_0015F3FC + 0.05f;
+        if (D_L10_0015F3FC_sda >= 1.0f) {
             *(short *)(acc + 0x14) = 3;
             D_L10_0015F3FC = 1.0f;
-            angle = *(float *)(work + 0x88) * 0.5f;
-            D_L10_0016CF70 = FUN_001f9de0(angle) / FUN_001f9dc8(angle);
+            angle = *(float *)((char *)indices + 0x30) * 0.5f;
+            distance = FUN_001f9de0(angle);
+            fade = FUN_001f9dc8(angle);
+            D_L10_0016CF70_far = distance / fade;
             update_view_context();
             data[0x39] = 1;
             D_L10_00167358 = 0.05f;
@@ -477,12 +536,12 @@ void FUN_L10_002f5f18(char *moby) {
         if (*(int *)(data + 0x40) == 0) return;
     } else {
         if (*(short *)(acc + 0x14) == 3) return;
-        fade = D_L10_0015F3FC_sda - 0.05f;
-        D_L10_0015F3FC_sda = fade;
-        if (fade < 0.0f) D_L10_0015F3FC = 0.0f;
+        D_L10_0015F3FC_sda -= 0.05f;
+        if (D_L10_0015F3FC_sda < 0.0f) D_L10_0015F3FC = 0.0f;
     }
     path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
-    *(u128 *)old_pos = *(u128 *)scale;
+    scale = (float *)(moby + 0x30);
+    qcopy(old_pos, scale);
     reached = FUN_L00_0025d808(path, scale, (int *)(acc + 0x00),
                                 (float *)(acc + 0x04), *(float *)(data + 0x3c) * D_0015ED6C, 0);
     if (*(short *)(acc + 0x16) != 0) {
@@ -493,64 +552,74 @@ void FUN_L10_002f5f18(char *moby) {
                 reached = 1;
         }
     }
-    if (data[0x39] != 0) reached = 1;
+    if ((unsigned char)data[0x39] != 0) reached = 1;
     if (reached) {
         *(short *)(acc + 0x14) = 2;
         if (*(int *)(data + 0x40) == 0) return;
     }
     if (indices[0] >= 0 && indices[1] >= 0) {
-        for (i = 0; i < 7 && indices[i] >= 0 && indices[i + 1] >= 0; i++) {
+        i = 0;
+        do {
+            next = i + 1;
             segment = *(int *)(acc + 0x00);
-            if (indices[i] <= segment && segment < indices[i + 1]) {
-                total = 0.0f;
-                if (indices[i] < segment) {
-                    count = segment - indices[i];
-                    index = indices[i];
+            index = indices[i];
+            if (index <= segment && segment < indices[next]) {
+                first = 0.0f;
+                if (index < segment) {
+                    count = segment - index;
+                    distance_cursor = (float *)(path + (index * 0x10 + 0x1c));
                     do {
-                        total += *(float *)(path + index * 0x10 + 0x1c);
-                        index++;
+                        first += *distance_cursor;
+                        distance_cursor += 4;
                         count--;
                     } while (count != 0);
                 }
-                first = total + *(float *)(acc + 0x04);
-                if (segment < indices[i + 1]) {
-                    count = indices[i + 1] - segment;
+                total = first;
+                first = first + *(float *)(acc + 0x04);
+                if (segment < indices[next]) {
+                    count = indices[next] - segment;
                     index = segment;
+                    distance_cursor = (float *)(path + (index * 0x10 + 0x1c));
                     do {
-                        total += *(float *)(path + index * 0x10 + 0x1c);
-                        index++;
+                        total += *distance_cursor;
+                        distance_cursor += 4;
                         count--;
                     } while (count != 0);
                 }
-                angle = cosine_interpolate(((float *)(acc + 0x28))[i],
-                                            ((float *)(acc + 0x28))[i + 1], first / total);
+                angle = cosine_interpolate(((float *)((char *)indices + 0x10))[i],
+                                            ((float *)((char *)indices + 0x10))[next], first / total);
                 angle = angle * 0.017453292f * 0.5f;
-                D_L10_0016CF70 = FUN_001f9de0(angle) / FUN_001f9dc8(angle);
+                distance = FUN_001f9de0(angle);
+                fade = FUN_001f9dc8(angle);
+                *(float *)(D_L10_0016CEC0 + 0xb0) = distance / fade;
                 update_view_context();
             }
-        }
+            if (next >= 7) break;
+            i = next;
+        } while (indices[i] >= 0 && indices[i + 1] >= 0);
     }
     distance = FUN_001f9b48(old_pos, scale);
     *(float *)(acc + 0x10) += distance;
-    if (*(int *)(data + 0x28) < 0) {
+    if (*(int *)(data + 0x28) >= 0) {
+        path = D_L10_0015FFD8_far + *(int *)(data + 0x28) * 0x100;
+        transformed[0] = *(float *)(data + 0x2c);
+        transformed[1] = *(float *)(data + 0x30);
+        transformed[2] = *(float *)(data + 0x34);
+        transformed[3] = 0.0f;
+        transform_vector_by_basis(transformed, transformed, D_L10_00167450);
+        add_vector_xyz(point, path + 0x10, transformed);
+        subtract_vector_xyz(vectors.direction, point, scale);
+    } else {
         float zero_a = 0.0f, zero_b = 0.0f;
         char *other = D_L10_001B0930_5a78[*(int *)(data + 0x24)];
         FUN_L00_0025d808(other, transformed, (int *)&zero_a, &zero_b,
             (*(float *)(acc + 0x10) / *(float *)(acc + 0x08)) * *(float *)(acc + 0x0c), 0);
         FUN_001e93e8(0.2f, transformed);
         FUN_001e93e8_part(other + 0x10, other + *(int *)other * 0x10);
-        subtract_vector_xyz(direction, transformed, scale);
-    } else {
-        transformed[0] = *(float *)(data + 0x2c);
-        transformed[1] = *(float *)(data + 0x30);
-        transformed[2] = *(float *)(data + 0x34);
-        transformed[3] = 0.0f;
-        transform_vector_by_basis(transformed, transformed, D_L10_00167450);
-        add_vector_xyz(point, D_L10_0015FFD8_far + *(int *)(data + 0x28) * 0x100 + 0x10, transformed);
-        subtract_vector_xyz(direction, point, scale);
+        subtract_vector_xyz(vectors.direction, transformed, scale);
     }
     FUN_001f9a68(-1.0f, transformed, D_0013F5E0);
-    scale_vector_xyz(1.0f, moby, direction);
+    scale_vector_xyz(1.0f, moby, vectors.direction);
     cross_vectors_xyz(moby + 0x10, moby, transformed);
     scale_vector_xyz(1.0f, moby + 0x10, moby + 0x10);
     cross_vectors_xyz(moby + 0x20, moby + 0x10, moby);

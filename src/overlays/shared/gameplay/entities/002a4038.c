@@ -1472,7 +1472,7 @@ extern float ea210_clamp(float, float) __asm__("FUN_001fa580");
 extern void ea210_draw(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
 extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
-extern void ea210_fade(float, float, void *) __asm__("FUN_00213ed8");
+extern float ea210_fade(float, float, void *) __asm__("FUN_00213ed8");
 extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
 extern void ea210_audio(int, int) __asm__("FUN_0020b178");
 extern void ea210_destroy(char *) __asm__("FUN_0020c828");
