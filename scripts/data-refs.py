@@ -527,7 +527,9 @@ def type_size(kind: str) -> int:
 
 SCALARS = {"u8": "<B", "s8": "<b", "char": "<b", "u16": "<H", "s16": "<h", "u32": "<I",
            "s32": "<i", "int": "<i", "u64": "<Q", "s64": "<q", "f32": "<f", "float": "<f",
-           "f64": "<d", "double": "<d"}
+           "f64": "<d", "double": "<d", "short": "<h", "unsigned short": "<H",
+           "unsigned char": "<B", "signed char": "<b", "unsigned int": "<I", "long": "<i",
+           "unsigned long": "<I", "long long": "<q", "unsigned long long": "<Q"}
 
 
 def layout_tree(dump: str, record: str) -> list | None:
@@ -620,9 +622,13 @@ def find_declaration(label: str, files: list[Path]) -> tuple[Path, str, str] | N
     pattern = re.compile(
         r'^[ \t]*(?:extern[ \t]+)?([^;=\n]*?[ \t*])([A-Za-z_]\w*)[ \t]*((?:\[[^\]]*\])*)[ \t]*'
         rf'__asm__\("{label}"\)', re.M)
+    # or named by the label itself, at file scope: extern T D_x[N] <attributes>;
+    plain = re.compile(rf'^extern[ \t]+([^;=\n]*?[ \t*])({label})[ \t]*((?:\[[^\]]*\])*)[^;=\n(]*'
+                       rf'(?:\(\([^;=\n]*\)\))?[^;=\n]*;', re.M)
     found = None
     for path in files:
-        for prefix, name, dims in pattern.findall(path.read_text(errors="replace")):
+        text = path.read_text(errors="replace")
+        for prefix, name, dims in pattern.findall(text) or plain.findall(text):
             found = (path, name, " ".join((prefix + dims).split()))
     return found
 
@@ -753,8 +759,11 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path, level: int | Non
         definition = f"{const}{decl}{small} = {body};"
     if header == out:
         # the file declared it itself: the definition replaces that extern
-        decl_re = re.compile(rf'^[ \t]*extern[^;=\n]*__asm__\("{label}"\)[^;\n]*;[ \t]*$', re.M)
-        definition = definition.replace(f"{name}{dims}", f'{name}{dims} __asm__("{label}")', 1)
+        if name == label:
+            decl_re = re.compile(rf'^extern[^;=\n]*\b{label}\b[^;\n]*;[ \t]*$', re.M)
+        else:
+            decl_re = re.compile(rf'^[ \t]*extern[^;=\n]*__asm__\("{label}"\)[^;\n]*;[ \t]*$', re.M)
+            definition = definition.replace(f"{name}{dims}", f'{name}{dims} __asm__("{label}")', 1)
         out.write_text(decl_re.sub(lambda _m: definition, "\n".join(lines) + "\n", count=1))
     else:
         out.write_text("\n".join(lines) + f"\n\n{definition}\n")
@@ -929,9 +938,14 @@ def main(argv=None) -> int:
         if args.into is None:
             parser.error("--emit needs --into FILE")
         _code, data = ([], []) if args.level is not None else read_sections(args.elf)
+        failed = 0
         for addr in args.emit:
-            print(f"wrote {shown(emit_data(int(addr, 16), args.elf, data, args.into, args.level))}")
-        return 0
+            try:
+                print(f"wrote {shown(emit_data(int(addr, 16), args.elf, data, args.into, args.level))}")
+            except (SystemExit, ValueError) as e:  # report it and go on with the next address
+                print(f"{addr}: {e}", file=sys.stderr)
+                failed += 1
+        return 1 if failed else 0
 
     if args.level is None:
         if not args.elf.exists():
