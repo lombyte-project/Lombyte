@@ -603,21 +603,31 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
         } while (i != 0);
     }
     if (distance > 9.0f) {
+        float amount;
         amount = scale * 4.0f;
         duration = FUN_001f96f8(15);
         FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 127,127,127,32, amount);
         duration = FUN_001f96f8(24);
         FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 32,127,0,32, amount);
     }
-    amount = scale * 4.0f;
-    duration = FUN_001f96f8(20);
-    FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 63,127,0,48, amount);
-    amount = scale * 3.5f;
-    duration = FUN_001f96f8(27);
-    FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 16,96,0,64, amount);
-    amount = scale * 3.0f;
-    duration = FUN_001f96f8(29);
-    FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 0,32,0,32, amount);
+    {
+        float amount;
+        amount = scale * 4.0f;
+        duration = FUN_001f96f8(20);
+        FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 63,127,0,48, amount);
+    }
+    {
+        float amount;
+        amount = scale * 3.5f;
+        duration = FUN_001f96f8(27);
+        FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 16,96,0,64, amount);
+    }
+    {
+        float amount;
+        amount = scale * 3.0f;
+        duration = FUN_001f96f8(29);
+        FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 0,32,0,32, amount);
+    }
 }
 #endif
 struct BlastHit {
