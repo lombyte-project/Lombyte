@@ -407,9 +407,6 @@ void FUN_L13_002c2048(Moby_2C27B0 *m) {
         mark_moby_for_removal(m);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L13_002c25b8.s", FUN_L13_002c25b8);
-#else
 extern void FUN_L13_002c2d30(unsigned char *);
 extern unsigned char *FUN_L13_003058a8(void *, int);
 extern void FUN_L13_00305988(void *, void *, void *, float);
@@ -434,9 +431,9 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         qcopy(d + 0xC0, moby + 0x10);
         *(unsigned short *)(moby + 0x34) |= 0x5000;
         *(float *)(d + 0x20) = 4.0f;
-        *(float *)(d + 0xEC) = 15.0f;
         *(short *)(d + 0x24) = 4;
         d[0x28] = 3;
+        *(float *)(d + 0xEC) = 15.0f;
         d[0x58] = 50;
         d[0x5A] = 0;
         *(short *)(moby + 0x32) = 255;
@@ -571,7 +568,6 @@ void FUN_L13_002c25b8(unsigned char *moby) {
         break;
     }
 }
-#endif
 extern int FUN_L13_002c2d30_update(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L13_002c2d30_allocate(int, int, void *) __asm__("FUN_L13_00297fa0");
 extern void FUN_L00_00262b00(float, float, void *, float *, float *);
