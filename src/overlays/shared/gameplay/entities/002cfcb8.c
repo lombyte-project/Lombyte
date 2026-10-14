@@ -2581,7 +2581,383 @@ void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d5de8.s", FUN_L00_002d5de8);
+#include "types.h"
+#include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
+
+/* Infobot (class 750) update: flies the path set D_L00_001B04B0 between
+   planets, then plays the unlock sequence. */
+
+typedef union {
+    u128 q;
+    f32 f[4];
+    struct {
+        f32 x, y, z, w;
+    } v;
+} Vec;
+
+/* The moby position, read and written as one quadword. */
+#define MPOS(m) ((Vec *)&(m)->pos)
+
+typedef struct {
+    s32 count;
+    u8 pad4[0xC];
+    Vec pts[1]; /* pts[i].v.w: length of segment i */
+} Path;
+
+typedef struct {
+    s32 arrived;    /* 0x00 */
+    s32 planet;     /* 0x04 */
+    s32 cutscene;   /* 0x08 */
+    s8 msg0;        /* 0x0C */
+    s8 msg1;        /* 0x0D */
+    s8 msg2;        /* 0x0E */
+    u8 pad0F[0x41];
+    s32 attach;     /* 0x50 */
+    s32 carrier;    /* 0x54 */
+    s32 path;       /* 0x58 */
+    f32 bob;        /* 0x5C */
+    f32 speed;      /* 0x60 */
+    f32 spin[3];    /* 0x64: x, y, z turn rates */
+    s32 slots[8];   /* 0x70 */
+    u8 pad90[0x14];
+    f32 sway;       /* 0xA4 */
+    s32 seg;        /* 0xA8 */
+    f32 yaw;        /* 0xAC */
+    s32 waiting;    /* 0xB0 */
+    u8 padB4[0xC];
+    u128 home;      /* 0xC0 */
+} Infobot;
+
+typedef struct {
+    Vec pos;
+    u8 pad10[0x2218];
+    s32 active;     /* 0x2228 */
+} Player;
+
+typedef struct {
+    u8 pad0[0x80];
+    Vec target;     /* 0x80 */
+} Camera;
+
+typedef struct {
+    u8 pad0[0x30];
+    Vec pos;        /* 0x30 */
+    u8 pad40[0x30];
+    Vec dir;        /* 0x70 */
+} Cutscene;         /* 0x80 */
+
+extern Path *D_L00_001B04B0[];
+extern u8 D_0013DD40[];
+extern Player D_0013F3D0;
+extern Camera D_0013F350;
+extern f32 D_0015ED6C;
+extern f32 D_0015ED70;
+extern s32 D_L00_0015F5C4;
+extern struct Moby *D_L00_0015FFD8;   /* the level's moby array */
+extern Cutscene *D_L00_001600EC_2d5de8 __asm__("D_L00_001600EC");
+
+extern void FUN_L00_002d6bf0_2d5de8(struct Moby *) __asm__("FUN_L00_002d6bf0");
+extern void FUN_L00_002d6cd0_2d5de8(struct Moby *) __asm__("FUN_L00_002d6cd0");
+extern void FUN_L00_002d5988_2d5de8(struct Moby *, Path *, s32) __asm__("FUN_L00_002d5988");
+extern f32 FUN_001f9b48(void *, void *);
+extern void FUN_001f9a10(void *, void *, void *);
+extern void FUN_001f9a28(void *, void *, void *);
+extern void FUN_001f9a68(void *, void *, f32);
+extern void FUN_001f9bf8(void *, void *, f32);
+extern f32 FUN_001f9af0(void *);
+extern f32 FUN_001f9e90(f32, f32);
+extern f32 FUN_001f9dc8(f32);
+extern f32 FUN_001f9de0(f32);
+extern f32 FUN_001fa580(f32, f32);
+extern f32 FUN_001fa5c8(f32, f32);
+extern s32 FUN_001fa6d0(f32);
+extern f32 FUN_001fa6c0(s32);
+extern f32 spring_turn_2d5de8(f32 angle, f32 target, f32 accel, f32 damping, f32 limit, f32 *speed) __asm__("FUN_L00_00258110");
+extern void FUN_L00_0025df68(Path *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
+extern s32 FUN_L00_00260400(struct Moby *, struct Moby *, void *, void *, void *, void *);
+extern void FUN_L00_002607d0(s32);
+extern void FUN_L00_002502a0(s32);
+extern void FUN_L00_00284e50(void *, void *);
+extern void FUN_L00_00298840(s32);
+extern void FUN_L00_00299460(s32);
+extern void FUN_L00_00262d38(s32);
+extern void FUN_L00_00266858(struct Moby *, s32);
+extern void FUN_0020b178(s32, s32);
+extern void FUN_0020c828(struct Moby *);
+
+/* Store each segment's length in its start point's w. */
+static inline void measure_path(Path *path) {
+    s32 j;
+
+    for (j = 0; j < path->count - 2; j++) {
+        path->pts[j].v.w = FUN_001f9b48(&path->pts[j], &path->pts[j + 1]);
+    }
+}
+
+void FUN_L00_002d5de8(struct Moby *m)
+{
+    Vec offset;
+    Vec step;
+    Vec point;
+    s32 seg;
+    f32 frac;
+    Infobot *ib;
+    Path *path;
+    Vec *pos;
+    Vec *dst;
+    struct Moby *carrier;
+    Cutscene *cs;
+    s32 i;
+    s32 j;
+    f32 range;
+    f32 dist;
+    f32 end;
+    f32 accel;
+    f32 speed;
+    f32 a;
+    f32 tilt_y;
+    f32 tilt_x;
+    f32 max_speed;
+
+    offset.q = 0;
+    ib = (Infobot *)m->pvars;
+    switch (m->state) {
+    case 0:
+        m->update_dist = 0xFF;
+        ib->yaw = m->rot.z;
+        ib->home = MPOS(m)->q;
+        if (ib->arrived != 0) {
+            m->state = 2;
+            FUN_L00_002d6bf0_2d5de8(m);
+        } else {
+            if (ib->waiting != 0) {
+                m->state = 2;
+            } else {
+                m->state = 1;
+            }
+            m->flags |= 0x41;
+        }
+        if (ib->attach != -1) {
+            m->state = 5;
+            FUN_L00_002d6bf0_2d5de8(m);
+            break;
+        }
+        if (ib->slots[0] == -1) {
+            break;
+        }
+        for (i = 0; i < 8; i++) {
+            if (ib->slots[i] == -1) {
+                continue;
+            }
+            measure_path(D_L00_001B04B0[ib->slots[i]]);
+        }
+        MPOS(m)->q = D_L00_001B04B0[ib->slots[0]]->pts[0].q;
+        ib->seg = 0;
+        m->state = 3;
+        break;
+    case 1:
+        break;
+    case 2:
+        range = 1.0f;
+        if (ib->waiting != 0 && (m->flags & 1)) {
+            range = 3.0f;
+        }
+        if (ib->planet == 0xC) {
+            range = 3.0f;
+        }
+        m->rot.z = spring_turn_2d5de8(m->rot.z, ib->yaw, 0.01f, 0.3f, 0.1f, &ib->spin[2]);
+        m->rot.y = spring_turn_2d5de8(m->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &ib->spin[1]);
+        m->rot.x = spring_turn_2d5de8(m->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &ib->spin[0]);
+        FUN_L00_002d6cd0_2d5de8(m);
+        if (D_0013DD40[ib->planet] != 0) {
+            FUN_0020c828(m);
+            return;
+        }
+        if (FUN_001f9b48(&D_0013F3D0, &m->pos) < range && D_0013F3D0.active != 0) {
+            m->state = 8;
+        }
+        break;
+    case 3:
+        FUN_L00_002d6cd0_2d5de8(m);
+        if (D_0013DD40[ib->planet] != 0) {
+            FUN_0020c828(m);
+            return;
+        }
+        if (ib->slots[ib->seg] == -1) {
+            m->state = 2;
+            break;
+        }
+        a = FUN_001f9e90(D_0013F350.target.v.x - m->pos.x, D_0013F350.target.v.y - m->pos.y);
+        m->rot.z = spring_turn_2d5de8(m->rot.z, a, 0.01f, 0.3f, 0.1f, &ib->spin[2]);
+        m->rot.y = spring_turn_2d5de8(m->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &ib->spin[1]);
+        m->rot.x = spring_turn_2d5de8(m->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &ib->spin[0]);
+        if (FUN_001f9b48(&D_0013F350.target, &m->pos) < 8.0f) {
+            m->state = 4;
+            FUN_L00_00266858(m, 1);
+        }
+        break;
+    case 4:
+        FUN_L00_002d5988_2d5de8(m, D_L00_001B04B0[ib->slots[ib->seg]], 3);
+        FUN_L00_002d6cd0_2d5de8(m);
+        if (m->state != 4) {
+            ib->seg++;
+        }
+        break;
+    case 5:
+        FUN_L00_002d6cd0_2d5de8(m);
+        if (D_0013DD40[ib->planet] != 0) {
+            FUN_0020c828(m);
+            return;
+        }
+        ib->bob = FUN_001fa580(ib->bob, D_0015ED6C * 3.1415927f);
+        offset.v.x = FUN_001f9dc8(ib->bob);
+        offset.v.y = FUN_001f9de0(ib->bob);
+        offset.v.z = 3.0f;
+        m->rot.z = FUN_001fa580(ib->bob, 1.5707964f);
+        if (ib->carrier == -1) {
+            break;
+        }
+        if (D_L00_0015FFD8[ib->carrier].oclass != 0x336) {
+            break;
+        }
+        if (D_L00_0015FFD8[ib->carrier].command != 6) {
+            break;
+        }
+        if (ib->path == -1) {
+            break;
+        }
+        m->state = 6;
+        ib->attach = -1;
+        MPOS(m)->q = D_L00_001B04B0[ib->path]->pts[0].q;
+        m->rot.z = FUN_001f9e90(D_L00_001B04B0[ib->path]->pts[1].v.x - D_L00_001B04B0[ib->path]->pts[0].v.x,
+                                D_L00_001B04B0[ib->path]->pts[1].v.y - D_L00_001B04B0[ib->path]->pts[0].v.y);
+        measure_path(D_L00_001B04B0[ib->path]);
+        break;
+    case 6:
+        path = D_L00_001B04B0[ib->path];
+        pos = (Vec *)&m->pos;
+        FUN_L00_002d6cd0_2d5de8(m);
+        FUN_L00_0025df68(path, pos, &point, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
+        end = FUN_001fa6c0(seg) * path->pts[0].v.w + frac + 2.0f;
+        dist = FUN_001f9b48(pos, &path->pts[path->count - 1]);
+        accel = D_0015ED70 * 16.0f;
+        speed = ib->speed;
+        if (dist <= speed * speed / (accel + accel)) {
+            ib->speed = speed - accel;
+            if (speed - accel < 0.0f) {
+                ib->speed = 0.0f;
+            }
+        } else {
+            max_speed = D_0015ED6C * 16.0f;
+            ib->speed = speed + accel;
+            if (max_speed < speed + accel) {
+                ib->speed = max_speed;
+            }
+        }
+        seg = FUN_001fa6d0(end / path->pts[0].v.w);
+        frac = (end - FUN_001fa6c0(seg) * path->pts[0].v.w) / path->pts[0].v.w;
+        if (seg >= path->count - 1) {
+            if (ib->speed <= D_0015ED70 * 16.0f) {
+                MPOS(m)->q = ((Vec *)path)[path->count].q;
+                m->state = 7;
+                break;
+            }
+            seg = path->count - 2;
+            frac = 1.0f;
+        }
+        FUN_001f9a28(&point, &path->pts[seg + 1], &path->pts[seg]);
+        FUN_001f9a68(&point, &point, frac);
+        FUN_001f9a10(&point, &point, &path->pts[seg]);
+        a = FUN_001f9e90(path->pts[seg + 1].v.x - path->pts[seg].v.x,
+                         path->pts[seg + 1].v.y - path->pts[seg].v.y);
+        m->rot.z = spring_turn_2d5de8(m->rot.z, a, 0.01f, 0.3f, 0.1f, &ib->spin[2]);
+        pos = &step;
+        FUN_001f9a28(pos, &point, MPOS(m));
+        dist = FUN_001f9af0(pos);
+        if (ib->speed < dist) {
+            dist = ib->speed;
+        }
+        FUN_001f9bf8(pos, pos, dist);
+        FUN_001f9a10(MPOS(m), MPOS(m), pos);
+        a = FUN_001fa5c8(FUN_001f9e90(step.v.x, step.v.y), m->rot.z);
+        tilt_y = ib->speed * 0.34906584f * FUN_001f9dc8(a) / (D_0015ED6C * 16.0f);
+        tilt_x = ib->speed * -0.34906584f * FUN_001f9de0(a) / (D_0015ED6C * 16.0f);
+        m->rot.y = spring_turn_2d5de8(m->rot.y, tilt_y, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &ib->spin[1]);
+        m->rot.x = spring_turn_2d5de8(m->rot.x, tilt_x, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &ib->spin[0]);
+        break;
+    case 7: {
+        Path *p = D_L00_001B04B0[ib->path];
+        FUN_L00_002d6cd0_2d5de8(m);
+        ib->sway = ib->sway + D_0015ED6C;
+        if (1.0f < ib->sway) {
+            ib->sway = 1.0f;
+        }
+        ib->bob = FUN_001fa580(ib->bob, D_0015ED6C * 3.1415927f);
+        offset.v.x = FUN_001f9dc8(ib->bob) * ib->sway;
+        offset.v.y = FUN_001f9de0(ib->bob) * ib->sway;
+        offset.v.z = 0.0f;
+        a = FUN_001fa580(ib->bob, 1.5707964f);
+        m->rot.z = spring_turn_2d5de8(m->rot.z, a, D_0015ED6C * 25.132742f, D_0015ED6C * 25.132742f, D_0015ED6C * 12.566371f, &ib->spin[2]);
+        FUN_001f9a10(&step, &offset, &p->pts[p->count - 1]);
+        MPOS(m)->q = step.q;
+        if (FUN_001f9b48(&D_0013F3D0, &p->pts[p->count - 1]) < 2.0f && D_0013F3D0.active != 0) {
+            m->state = 8;
+        }
+        m->rot.y = spring_turn_2d5de8(m->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &ib->spin[1]);
+        m->rot.x = spring_turn_2d5de8(m->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &ib->spin[0]);
+        break;
+    }
+    case 8:
+        m->flags |= 0x41;
+        FUN_L00_002607d0(ib->planet);
+        FUN_L00_002502a0(m->mission);
+        if (ib->cutscene != -1) {
+            FUN_L00_00284e50(&D_L00_001600EC_2d5de8[ib->cutscene].pos, &D_L00_001600EC_2d5de8[ib->cutscene].dir);
+        }
+        m->state = 9;
+        if (ib->msg0 != -1) {
+            FUN_L00_00298840(ib->msg0);
+        }
+        break;
+    case 9:
+        if (D_L00_0015F5C4 == 2) {
+            break;
+        }
+        m->state = 10;
+        if (ib->msg1 != -1) {
+            FUN_L00_00299460(ib->msg1);
+        }
+        break;
+    case 10:
+        if (D_L00_0015F5C4 == 2) {
+            break;
+        }
+        if (ib->msg2 != -1) {
+            FUN_L00_00298840(ib->msg2);
+        }
+        m->state = 11;
+        break;
+    case 11:
+        if (D_L00_0015F5C4 == 2) {
+            return;
+        }
+        FUN_0020b178(0, -1);
+        FUN_L00_00262d38(ib->planet);
+        FUN_0020c828(m);
+        return;
+    }
+    if (ib->attach != -1 && ib->carrier != -1) {
+        carrier = &D_L00_0015FFD8[ib->carrier];
+        if (carrier->oclass == 0x336) {
+            step.q = 0;
+            FUN_L00_00260400(m, carrier, &D_L00_001600EC_2d5de8[ib->attach].pos, &step,
+                             &D_L00_001600EC_2d5de8[ib->attach].pos, &step);
+            FUN_001f9a10(&point, &offset, &D_L00_001600EC_2d5de8[ib->attach].pos);
+            MPOS(m)->q = point.q;
+        }
+    }
+}
 typedef struct {
     u8 p0[0x10];
     f32 r[4];
