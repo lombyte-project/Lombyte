@@ -685,7 +685,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
     f32 inv_x, inv_y;
     f32 phase, phase_step, amp_a, amp_step_a, amp_b, amp_step_b;
     f32 step_a, step_b, time, height_a, height_b, phase_a, phase_b;
-    f32 x, y, noise_x, noise_y, angle, base, sine, shape, bend, a, c, t;
+    f32 x, y, noise_x, angle, base, sine, shape, bend, a, c, t;
     s32 i, j, k, stride, alpha, timer, count, lifetime;
     u32 color_a, color_b;
     s32 temp;
@@ -778,6 +778,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
     phase_a = f[0x18]; phase_b = f[0x19];
     for (i = 0; i <= b[9]; i = next_i) {
         f32 next_phase, next_amp_a, next_amp_b, next_a, next_b;
+        f32 noise_y;
         y = convert_integer_to_float(i) / convert_integer_to_float(b[9]);
         qcopy(&point, &edge[0]);
         next_i = i + 1;
@@ -797,8 +798,8 @@ void FUN_L08_002f5e58(struct Moby *m) {
             a = FUN_L00_0025e310(f[0x17] * time);
             angle = x * 3.1415927f;
             c = FUN_001f9de0(a);
-            base = time * phase;
-            base = base + f[0x16] * c;
+            t = f[0x16] * c;
+            base = time * phase + t;
             noise_x = FUN_L08_002f5d98(x, (char *)d);
             base = base + (noise_x * f[0x34] + noise_y * f[0x35] + bend * f[0x36]);
             shape = height_a * x + height_b * (1.0f-x);
