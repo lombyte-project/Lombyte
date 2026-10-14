@@ -467,7 +467,7 @@ extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
 extern void FUN_L00_0025c558(void *, void *, float, int, int, int);
 extern void FUN_L00_0025fcb8(char *, float *, float);
 extern void FUN_L00_002628d8_c(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void FUN_L12_002e3098(struct Moby *);
+extern void FUN_L12_002e3098_u(struct Moby *) __asm__("FUN_L12_002e3098");
 extern void approach_value_alt(void *, float, float) __asm__("FUN_00213ed8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
@@ -823,9 +823,9 @@ int FUN_L12_002e2eb8(struct Moby *m, float speed) {
     }
     return r;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e3098.s", FUN_L12_002e3098);
-#else
+#include "rnc/overlay/level_globals.h"
+#include "rnc/gameplay/state/item_state.h"
+
 extern int D_L12_0016183C __attribute__((sda));
 extern int D_L12_00161840 __attribute__((sda));
 extern float D_L12_00161844 __attribute__((sda));
@@ -845,87 +845,86 @@ extern int D_L12_00161878 __attribute__((sda));
 extern int D_L12_0016187C __attribute__((sda));
 extern int D_L12_00161880 __attribute__((sda));
 extern int D_L12_00161884 __attribute__((sda));
-extern int scale_game_frames_e3098(int) __asm__("FUN_001f96f8");
-extern float FUN_001f96b0(float);
+extern void FUN_L00_0025f8e0_e3098(void *, float) __asm__("FUN_L00_0025f8e0");
+extern float random_float_between_e3098(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians_e3098(void) __asm__("FUN_00213308");
-extern float random_float_between_alt_e3098(float, float) __asm__("FUN_002132a8");
 extern float fast_cos_e3098(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_e3098(float) __asm__("FUN_001f9de0");
-extern int truncate_float_to_s32_e3098(float) __asm__("FUN_001fa6d0");
-extern int random_integer_between(float, int, int) __asm__("FUN_001fa6e0");
-extern void randomize_position(float *, float) __asm__("FUN_L00_0025f8e0");
-extern void set_direction(float, float *, void *) __asm__("FUN_001f9a68");
-extern void rotate_vector(float *, float *, void *) __asm__("FUN_001f9a10");
-extern void spawn_particle(void *, void *, void *, int, int, int, int, int, int)
-    __asm__("FUN_00218888");
+extern void scale_vector_xyz_e3098(void *, void *, float) __asm__("FUN_001f9a68");
+extern void add_vector_xyz_e3098(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int scale_game_frames_e3098(int) __asm__("FUN_001f96f8");
+extern float scale_time_e3098(float) __asm__("FUN_001f96b0");
+extern int truncate_float_e3098(float) __asm__("FUN_001fa6d0");
+extern int fast_tween_color_e3098(int, int, float) __asm__("FUN_001fa6e0");
+extern char *spawn_particle_e3098(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
 void FUN_L12_002e3098(struct Moby *moby) {
-    float pos[4] __attribute__((aligned(16)));
-    float velocity[4] __attribute__((aligned(16)));
-    float accel[4] __attribute__((aligned(16)));
-    float direction[4] __attribute__((aligned(16)));
-    float angle, horizontal, vertical, radius;
-    int i, j, count, a, b, c, d, life;
-    struct Moby *volatile source_moby;
-    void *volatile vars;
-    float *volatile pos_ptr;
-    void *volatile position_source;
-    float *direction_ptr;
-
-    vars = moby->pvars;
-    source_moby = moby;
+    float pos[4];
+    float vel[4];
+    float accel[4];
+    float push[4];
+    char *vars;
+    int count;
+    float *p;
+    void *src;
+    int i;
+    int j;
+    float angle;
+    float speed;
+    float rise;
+    float size;
+    float n;
+    int c0;
+    int c1;
+    int life;
+    int fade;
 
     count = D_L12_0016183C;
-    if (((volatile struct Moby *)moby)->state == 15)
-        count = truncate_float_to_s32_e3098((float)count * 1.5f);
-    i = 0;
-    if (count > 0) {
-        pos_ptr = pos;
-        direction_ptr = direction;
-        position_source = &source_moby->pos;
-
-        for (; i < count; ++i) {
-            qcopy(pos_ptr, position_source);
-            randomize_position(pos_ptr, D_L12_00161844);
-            pos[2] += 0.55f;
-            angle = random_angle_radians_e3098();
-            horizontal = random_float_between_alt_e3098(D_L12_00161850, D_L12_00161854);
-            vertical = random_float_between_alt_e3098(D_L12_00161858, D_L12_0016185C);
-            if (source_moby->state == 15) {
-                vertical *= 0.55f;
-                horizontal *= 0.55f;
-                pos[2] -= 0.2f;
-            }
-            velocity[0] = fast_cos_e3098(angle) * (horizontal * frame_time);
-            velocity[1] = fast_sin_e3098(angle) * (horizontal * frame_time);
-            velocity[2] = vertical * frame_time + 0.0f;
-            set_direction(0.5f, direction_ptr, (char *)vars + 0x120);
-            direction[2] = 0.0f;
-            rotate_vector(velocity, velocity, direction_ptr);
-            qcopy(accel, velocity);
-            accel[2] -= D_L12_00161860 * frame_time_sq *
-                        (float)scale_game_frames_e3098(D_L12_00161880);
-            for (j = 0; j < D_L12_00161840; j++) {
-                radius = random_float_between_alt_e3098(0.5f, 1.5f);
-                velocity[3] = radius * D_L12_00161864;
-                accel[3] = radius * D_L12_00161868;
-                randomize_position(pos, D_L12_00161848);
-                randomize_position(accel, D_L12_0016184C * frame_time);
-                a = random_integer_between(random_float_between_alt_e3098(0.0f, 1.0f),
-                                           D_L12_0016186C, D_L12_00161874);
-                b = random_integer_between(random_float_between_alt_e3098(0.0f, 1.0f),
-                                           D_L12_00161870, D_L12_00161878);
-                c = scale_game_frames_e3098(D_L12_0016187C);
-                d = scale_game_frames_e3098(D_L12_00161880);
-                life = truncate_float_to_s32_e3098(FUN_001f96b0(
-                    random_float_between_alt_e3098(
-                        (float)D_L12_00161884 * 0.5f, (float)D_L12_00161884 * 2.5f)));
-                spawn_particle(pos, velocity, accel, a, b, c, d, life, -1);
-            }
+    vars = (char *)moby->pvars;
+    if (moby->state == 15)
+        count = truncate_float_e3098((float)count * 1.5f);
+    for (i = 0; i < count; i++) {
+        p = pos;
+        src = &moby->pos;
+        /* Fakematch: the block copy of p adds the loop luids that let loop.c hoist src. */
+        {
+            void *d = p;
+            qcopy_nc(d, src);
+        }
+        FUN_L00_0025f8e0_e3098(p, D_L12_00161844);
+        pos[2] += 0.55f;
+        angle = random_angle_radians_e3098();
+        speed = random_float_between_e3098(D_L12_00161850, D_L12_00161854);
+        rise = random_float_between_e3098(D_L12_00161858, D_L12_0016185C);
+        if (moby->state == 15) {
+            speed *= 0.55f;
+            rise *= 0.55f;
+            pos[2] -= 0.2f;
+        }
+        vel[0] = fast_cos_e3098(angle) * (speed * D_0015ED6C);
+        vel[1] = fast_sin_e3098(angle) * (speed * D_0015ED6C);
+        vel[2] = 0.0f + rise * D_0015ED6C;
+        scale_vector_xyz_e3098(push, vars + 0x120, 0.5f);
+        push[2] = 0.0f;
+        add_vector_xyz_e3098(vel, vel, push);
+        qcopy(accel, vel);
+        accel[2] -= D_L12_00161860 * D_0015ED70 * (float)scale_game_frames_e3098(D_L12_00161880);
+        for (j = 0; j < D_L12_00161840; j++) {
+            size = random_float_between_e3098(0.5f, 1.5f);
+            vel[3] = size * D_L12_00161864;
+            accel[3] = size * D_L12_00161868;
+            FUN_L00_0025f8e0_e3098(pos, D_L12_00161848);
+            FUN_L00_0025f8e0_e3098(accel, D_L12_0016184C * D_0015ED6C);
+            c0 = fast_tween_color_e3098(D_L12_0016186C, D_L12_00161874, random_float_between_e3098(0.0f, 1.0f));
+            c1 = fast_tween_color_e3098(D_L12_00161870, D_L12_00161878, random_float_between_e3098(0.0f, 1.0f));
+            life = scale_game_frames_e3098(D_L12_0016187C);
+            fade = scale_game_frames_e3098(D_L12_00161880);
+            n = (float)D_L12_00161884;
+            spawn_particle_e3098(pos, vel, accel, c0, c1, life, fade,
+                truncate_float_e3098(scale_time_e3098(random_float_between_e3098(n * 0.5f, n * 2.5f))), -1);
         }
     }
 }
-#endif
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/gameplay/entities/moby.h"
