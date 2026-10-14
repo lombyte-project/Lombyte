@@ -820,9 +820,8 @@ void FUN_L00_002d19b0(u8 *m) {
                 uv[0][0] = c.x / len + 0.5f;
                 uv[0][1] = c.y / len + 0.5f;
             } else {
-                x = c.x / len;
                 y = c.y / len;
-                x += 0.5f;
+                x = c.x / len + 0.5f;
                 uv[0][0] = x + (old_uv[0][0] - x) * blend;
                 x = y + 0.5f;
                 uv[0][1] = x + (old_uv[0][1] - x) * blend;
@@ -855,15 +854,16 @@ void FUN_L00_002d19b0(u8 *m) {
         f32 *uv_second = uv_y;
         u128 *points = quad.points;
         s16 *face_indices = indices + i * 12;
-        for (j = 0; j < 4; j++) {
+        do {
             index = *face_indices;
-            face_indices += 3;
-            *points++ = *(u128 *)&D_L00_001E04A0_2d19b0[index];
+            qcopy(points, &D_L00_001E04A0_2d19b0[index]);
+            points++;
             *uv_x = D_L00_001E0B00_2d19b0[index][0];
             *uv_second = D_L00_001E0B00_2d19b0[index][1];
+            face_indices += 3;
             uv_x += 2;
             uv_second += 2;
-        }
+        } while (uv_x < texcoords + 8);
         transform_vectors_2d19b0(&quad, 0, 0);
     }
 }
