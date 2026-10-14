@@ -635,6 +635,7 @@ void FUN_L00_002c97e0(struct Moby *m)
     if (s2->unk70 >= 0) {
         if (tick_countdown_2c8440(&s2->unk70) && !m->visible) goto remove;
         if (s2->unk70 >= 0) {
+            f32 f;
             f = D_L00_0015F5D4_sda_2c97e0;
             if ((f > 0.9f || D_L00_0015F5D0_macro > 0.9f) && !m->visible && s2->unk70 != -1) {
                 if (!FUN_L00_00257b50_2c97e0(199)) goto remove;
@@ -849,7 +850,6 @@ animate:
         result = FUN_L00_002dc9f0_2c97e0(m, s2->unk10);
         if (result) { m->state = 0; *(u16 *)((u8 *)s2->unk14 + 0x68) = 0; }
         if (FUN_L00_00257b50_2c97e0(4)) return;
-        rotation = 0.017453292f;
         f = random_float_between(D_L00_00161868_2c97e0, D_L00_0016186C_2c97e0) * scale;
                 g = FUN_L00_00257cb0_2c97e0();
                 build_spherical_offset_2c97e0(&offset, f, g, FUN_L00_00257cb0_2c97e0());
@@ -857,7 +857,7 @@ animate:
                 add_vector_xyz_2c8440(&offset, &offset, &old_pos);
                 f = random_float_between(D_L00_0016185C_2c97e0 * D_0015ED6C_2c8440, D_L00_00161860_2c97e0 * D_0015ED6C_2c8440);
                 g = FUN_L00_00257cb0_2c97e0();
-                build_spherical_offset_2c97e0(&velocity, f, g, D_L00_00161858_2c97e0 * rotation);
+                build_spherical_offset_2c97e0(&velocity, f, g, D_L00_00161858_2c97e0 * 0.017453292f);
                 velocity.f[2] = random_float_between(3.5f, 5.5f) * D_0015ED6C_2c8440;
                 FUN_L00_002cbf68_2c97e0(m, &offset, &velocity);
         return;
