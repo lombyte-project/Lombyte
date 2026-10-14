@@ -17,7 +17,7 @@ void draw_boot_image(u32 image_address) {
     s64 image_quadword_count;
 
     remaining_rows = pal_mode ? 0x1C0 : 0x1A0;
-    destination_block = D_0015EE84 >> 8;
+    destination_block = draw_buffer_address >> 8;
     do {
         rows_after_upload = remaining_rows - 0x80;
         upload_rows = 0x80;

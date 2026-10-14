@@ -204,7 +204,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262f50.s", FUN_L05_00262f50);
 
 extern s32 D_L05_0015FAE4, D_L05_0015FAE8, D_L05_0015FAEC;
 extern u8 D_0013FBFE;
-extern s32 D_L05_0015F5CC;
+extern s32 frame_number __asm__("D_L05_0015F5CC");
 extern s32 D_L05_0015FAD4, D_L05_0015FAD8;
 extern s32 D_L05_0015FAE0[4], D_L05_0015FAF0, D_L05_0015FAF4, D_L05_0015FAF8, D_L05_0015FB00;
 extern s32 D_L05_0015FAFC;
@@ -334,7 +334,7 @@ s32 FUN_L05_00262f50(char *e) {
     value = hero.unk8AE;
     if (scale_game_frames(0x78) < value) {
         period = scale_game_frames(0x3c);
-        pulse = fast_sin(convert_integer_to_float(D_L05_0015F5CC % period) / (f32)period *
+        pulse = fast_sin(convert_integer_to_float(frame_number % period) / (f32)period *
                          6.28318f - 3.14159f);
         shadow = fast_tween_color(D_L05_0015F8AC, D_L05_0015F8B0, pulse * 0.5f + 0.5f);
         sprintf_alt(buf, get_help_message_text(0x531a));

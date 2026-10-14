@@ -629,7 +629,7 @@ void FUN_L03_002cbea8(struct Moby *m) {
 
 #include "qcopy.h"
 extern char *create_moby_2cc888(int) __asm__("FUN_0020c4f8");
-extern float D_0015ED64_2cc888 __asm__("D_0015ED64");
+extern float frame_scale_sq __asm__("D_0015ED64");
 extern float vlen_2cc888(void *) __asm__("FUN_001f9b20");
 extern float atan2_2cc888(float, float) __asm__("FUN_001f9e90");
 extern void set_path_2cc888(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
@@ -650,7 +650,7 @@ char *FUN_L03_002cc888(char *p, void *pos, float *dir) {
     *(long long *)(m + 0x38) = *(long long *)(p + 0x38);
     qcopy(m + 0x10, pos);
     v = *(char **)(m + 0x78);
-    s = D_0015ED64_2cc888;
+    s = frame_scale_sq;
     *(float *)(v + 0x10) = s * 0.008f;
     *(float *)(v + 0x14) = s * 0.0005f;
     *(float *)(v + 0x18) = vlen_2cc888(dir);
@@ -1225,7 +1225,7 @@ extern u8 D_0014C050[];
 extern u8 D_L03_0015FC88[];
 extern L03LevelState D_L03_001BA6D0;
 extern char *D_L03_001600EC;
-extern float D_0015ED64;
+extern float frame_scale_sq __asm__("D_0015ED64");
 extern void FUN_L01_0029b0a0(void *, int, struct Moby *, int, void *);
 extern void FUN_L00_002668a0(struct Moby *, struct TalkState *);
 extern int FUN_L00_00266448(struct Moby *, struct TalkState *);
@@ -1428,8 +1428,8 @@ void FUN_L03_002da870(struct Moby *m) {
     }
     if (D_0015EDB0)
         v->height = 2.75f;
-    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, v->body, 0);
-    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, v->head, 1);
+    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, v->body, 0);
+    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, v->head, 1);
 }
 
 extern float cos_2db020(float) __asm__("FUN_001f9dc8");
@@ -1609,7 +1609,7 @@ extern struct Moby *D_L03_0015FFD8;
 extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
 extern u8 D_0014C050[];
 extern char *D_L03_001600EC;
-extern float D_0015ED64;
+extern float frame_scale_sq __asm__("D_0015ED64");
 extern void FUN_L03_002db480(struct Moby *);
 extern void FUN_L02_0025c758(struct Moby *);
 extern void FUN_L01_002783a8(struct Moby *, f32);
@@ -1804,8 +1804,8 @@ void FUN_L03_002db558(struct Moby *m) {
     }
     if (D_0015EDB0)
         v->head.height = 2.75f;
-    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, &v->head, 1);
-    FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, &v->body, 0);
+    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, &v->head, 1);
+    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, &v->body, 0);
 }
 
 /* Pvars of the dialogue moby FUN_L03_002dbd90 drives (FUN_L00_002668a0 / FUN_L00_00266448 state). */

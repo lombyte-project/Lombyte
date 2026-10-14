@@ -405,7 +405,7 @@ void FUN_L05_0023dc88(int i) {
         }
     }
 }
-extern int D_L05_0015F5CC;
+extern int frame_number __asm__("D_L05_0015F5CC");
 extern CollisionHit D_L05_00174240 __attribute__((section(".data")));
 extern u8 D_L05_00174260[] __attribute__((section(".data")));
 extern u8 D_L05_0017AB20[] __attribute__((section(".data")));
@@ -434,7 +434,7 @@ void FUN_L05_0024bdc0(void) {
     if (hero.unk20AD == 0) {
         FUN_L05_002413e0();
     }
-    if (D_L05_0015F5CC % 3 == 0) {
+    if (frame_number % 3 == 0) {
         hero.wall_probe_distance = 4.0f;
         hero.unk254 = 0;
         hero.unk255 = 0;
@@ -448,7 +448,7 @@ void FUN_L05_0024bdc0(void) {
             }
         }
     }
-    if (D_L05_0015F5CC % 5 == 0) {
+    if (frame_number % 5 == 0) {
         hero.unk260 = 0;
         hero.unk258 = 0.0f;
         if (hero.grounded_frames) {
@@ -488,7 +488,7 @@ void FUN_L05_0024bdc0(void) {
 /* Adapted from the exact FUN_L00_002279b0 (src/overlays/shared/ui/help/00221310.c): L05 has a wider head guard and its own level data. */
 
 extern float D_L05_00174268 __attribute__((section(".data")));
-extern int D_L05_0015F5CC;
+extern int frame_number __asm__("D_L05_0015F5CC");
 extern int FUN_001f0b58(void);
 extern int FUN_L00_00216de8_c(int a, int b) __asm__("FUN_L00_00216de8");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -557,9 +557,9 @@ int FUN_L05_002515d0(void) {
     u = &hero;
     if (u->state.control_mode - 0x11 >= 2u && u->state.control_mode != 7 &&
         u->state.control_mode != 0x14 && u->state.current != 0x12 &&
-        (D_L05_0015F5CC & 0xF) == 0) {
+        (frame_number & 0xF) == 0) {
         scale = 4.0f;
-        if ((D_L05_0015F5CC & 0x3F) == 0) {
+        if ((frame_number & 0x3F) == 0) {
             scale = 16.0f;
         }
         FUN_L00_002126b8(v1, v2, 0, scale, 1.3f);
@@ -1448,7 +1448,7 @@ extern Path_254608 *D_L05_001B0930_254608[] __asm__("D_L05_001B0930");
 extern Ent_254608 *D_L05_0015FFD8_254608 __asm__("D_L05_0015FFD8") __attribute__((section(".sdata")));
 extern int D_0015EE38_macro __asm__("D_0015EE38") __attribute__((section(".sdata")));
 extern int D_0015EE3C_macro __asm__("D_0015EE3C") __attribute__((section(".sdata")));
-extern int D_0015EE58_254608[2] __asm__("D_0015EE58") __attribute__((section(".sdata")));
+extern int freeze_stats_time_ref_macro[2] __asm__("D_0015EE58") __attribute__((section(".sdata")));
 extern int freeze_stats_score_ref_a_macro[2] __asm__("D_0015EE68") __attribute__((section(".sdata")));
 extern float distance_xyz_254608(void *, void *) __asm__("FUN_001f9b48");
 extern float angle_atan2_254608(float, float) __asm__("FUN_001f9e90");
@@ -1646,11 +1646,11 @@ void FUN_L05_00254608(void) {
             hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[d->f28]);
             mode_freeze_init_254608(0, 0);
         }
-        if (D_0015EE58_254608[0] == 0) {
-            D_0015EE58_254608[0] = hero.unk894;
+        if (freeze_stats_time_ref_macro[0] == 0) {
+            freeze_stats_time_ref_macro[0] = hero.unk894;
             current_bolt_count_macro += 0x3E8;
-        } else if (hero.unk894 < D_0015EE58_254608[0]) {
-            D_0015EE58_254608[0] = hero.unk894;
+        } else if (hero.unk894 < freeze_stats_time_ref_macro[0]) {
+            freeze_stats_time_ref_macro[0] = hero.unk894;
             current_bolt_count_macro += 0x3E8;
         }
         if (freeze_stats_score_ref_a_macro[0] < hero.unk8A8) {
@@ -1673,11 +1673,11 @@ void FUN_L05_00254608(void) {
             hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[d->f28]);
             mode_freeze_init_254608(0, 0);
         }
-        if (D_0015EE58_254608[1] == 0) {
-            D_0015EE58_254608[1] = hero.unk894;
+        if (freeze_stats_time_ref_macro[1] == 0) {
+            freeze_stats_time_ref_macro[1] = hero.unk894;
             current_bolt_count_macro += 0x3E8;
-        } else if (hero.unk894 < D_0015EE58_254608[1]) {
-            D_0015EE58_254608[1] = hero.unk894;
+        } else if (hero.unk894 < freeze_stats_time_ref_macro[1]) {
+            freeze_stats_time_ref_macro[1] = hero.unk894;
             current_bolt_count_macro += 0x3E8;
         }
         if (freeze_stats_score_ref_a_macro[1] < hero.unk8A8) {

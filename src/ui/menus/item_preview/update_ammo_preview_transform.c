@@ -79,10 +79,10 @@ void update_ammo_preview_transform(struct AmmoPreviewMoby *moby) {
     } else {
         phase_index = (moby->slot * 2 + 1) % 6;
     }
-    orbit_angle = (((f32)(D_0015F438 % 200) / convert_integer_to_float(200)) * 6.28318f) - 3.14159f;
+    orbit_angle = (((f32)(game_frame_counter % 200) / convert_integer_to_float(200)) * 6.28318f) - 3.14159f;
     phase = (f32)phase_index;
     phase_angle = ((phase * 6.28318f) / convert_integer_to_float(6)) - 3.14159f;
-    bob_angle = (((f32)(D_0015F438 % 170) / convert_integer_to_float(170)) * 6.28318f) - 3.14159f;
+    bob_angle = (((f32)(game_frame_counter % 170) / convert_integer_to_float(170)) * 6.28318f) - 3.14159f;
     double_phase = (phase * 12.56636f) / convert_integer_to_float(6);
     wrap_angle(double_phase);
     zero = 0.0f;

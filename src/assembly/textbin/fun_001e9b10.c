@@ -133,7 +133,7 @@ typedef struct S160AB0 {
 extern u8 D_00100AE0[];
 extern u8 D_0013F350[];
 extern s32 D_0015ED80;
-extern f32 D_0015F43C;
+extern f32 sequence __asm__("D_0015F43C");
 extern u8 fog_color_red __asm__("D_0015F484");
 extern u8 fog_color_green __asm__("D_0015F485");
 extern u8 fog_color_blue __asm__("D_0015F486");
@@ -538,7 +538,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     func_00217020();
     func_001F61E8();
     world_update_time = 0;
-    D_0015F43C = 1.0f;
+    sequence = 1.0f;
     return p;
 }
 #endif /* NON_MATCHING */

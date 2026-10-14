@@ -1729,7 +1729,7 @@ extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") __attribute__((section
 extern s32 D_L00_0015F40C;
 extern s32 sound_bank_handle __asm__("D_0015ED5C");
 extern s32 D_L00_00160004;
-extern s32 D_0015EE8C;
+extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L00_001827C0[3];
 extern u64 D_L00_001827D8[3];
 extern u64 D_L00_001827F0[3];
@@ -1884,16 +1884,16 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         used = FUN_L00_0024d8d0_244110((char *)(src[0x14] + (s32)src), base);
         D_L00_0015F40C = (s32)(base + h[0x18]);
 
-        D_L00_001827C0[0] = GS_TEX0((D_0015EE8C + h[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
-            (D_0015EE8C + h[0x25]) >> 8, 0, 0, 0, 4);
+        D_L00_001827C0[0] = GS_TEX0((gs_texture_allocation_base + h[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
+            (gs_texture_allocation_base + h[0x25]) >> 8, 0, 0, 0, 4);
         D_L00_001827C0[1] = 0x0000FFA0000000E0;
         D_L00_001827C0[2] = 0x0040000400004000;
-        D_L00_001827D8[0] = GS_TEX0((D_0015EE8C + h[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
-            (D_0015EE8C + h[0x27]) >> 8, 0, 0, 0, 4);
+        D_L00_001827D8[0] = GS_TEX0((gs_texture_allocation_base + h[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
+            (gs_texture_allocation_base + h[0x27]) >> 8, 0, 0, 0, 4);
         D_L00_001827D8[1] = 0x0000FFA0000000E0;
         D_L00_001827D8[2] = 0x0040000400004000;
-        D_L00_001827F0[0] = GS_TEX0((D_0015EE8C + h[0x30]) >> 8, 2, 0x13, 7, 7, 1, 0,
-            (D_0015EE8C + h[0x31]) >> 8, 0, 0, 0, 4);
+        D_L00_001827F0[0] = GS_TEX0((gs_texture_allocation_base + h[0x30]) >> 8, 2, 0x13, 7, 7, 1, 0,
+            (gs_texture_allocation_base + h[0x31]) >> 8, 0, 0, 0, 4);
         D_L00_001827F0[1] = 0x0000FFA0000000E0;
         D_L00_001827F0[2] = 0x0040000400004000;
 

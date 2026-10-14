@@ -23,7 +23,7 @@ void fade_to_black(s32 n) {
 
     vu1_sync_chain(1);
     sceGsSyncV(0);
-    D_0015F438 += 1;
+    game_frame_counter += 1;
     vu1_init_chain();
     for (i = n - 1; i >= 0; i--) {
         put_draw_buffer_large();
@@ -38,13 +38,13 @@ void fade_to_black(s32 n) {
         render_packet_cursor.bytes = VP + 0x10;
         vu1_sync_chain(1);
         sceGsSyncV(0);
-        D_0015F438 += 1;
+        game_frame_counter += 1;
         vu1_send_chain();
         swap_render_buffer_chain();
     }
     vu1_sync_chain(1);
     sceGsSyncV(0);
-    D_0015F438 += 1;
+    game_frame_counter += 1;
     vu1_init_chain();
     put_draw_buffer_large();
     append_gif_transfer_packet();

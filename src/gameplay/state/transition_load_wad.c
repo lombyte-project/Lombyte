@@ -97,7 +97,7 @@ typedef struct
   u8 padE[0x1A];
   void *x28;
 } MobyClass;
-extern s32 D_0015EE8C;
+extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern s64 D_0015EF48;
 extern s32 intro_overlay_timer __asm__("D_0015EF58");
 extern s32 help_msg_data __asm__("D_0015EF60");
@@ -187,7 +187,7 @@ void transition_load_wad(void)
   calculate_dma_transfer_address();
   init_mem_slots();
   current_vu_chain = 0x100000;
-  D_0015EE8C = 0x2C0000;
+  gs_texture_allocation_base = 0x2C0000;
   gs_texture_allocation_start = 0x2C0000;
   gs_texture_allocation_cursor = 0x2C0000;
   fill_transfer_words(D_00194180, 0x87654321, 0x10);
@@ -204,8 +204,8 @@ void transition_load_wad(void)
   FlushCache(0);
   hdr = (WadHeader *) D_001940C0.hdr;
   upload_texture_images(((u8 *) hdr) + hdr->x0, hdr->x8, ((u8 *) hdr) + hdr->xC);
-  t = ((s64) ((D_0015EE8C + hdr->x70) >> 8)) | 0x1D308000;
-  u = (((s64) ((D_0015EE8C + hdr->x74) >> 8)) << 37) | (((s64) 0xB800) << 19);
+  t = ((s64) ((gs_texture_allocation_base + hdr->x70) >> 8)) | 0x1D308000;
+  u = (((s64) ((gs_texture_allocation_base + hdr->x74) >> 8)) << 37) | (((s64) 0xB800) << 19);
   data = ((u8 *) hdr) + hdr->data;
   base = data + hdr->x60;
   special_material_template[0] = (t | u) | (((s64) (-1)) << 63);

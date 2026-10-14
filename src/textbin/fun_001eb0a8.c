@@ -43,7 +43,7 @@ typedef struct {
 } RenderSequenceState;
 
 extern RenderSequenceState render_sequence __asm__("D_0018CB20");
-extern f32 sequence_fade __asm__("D_0015F43C");
+extern f32 sequence __asm__("D_0015F43C");
 extern s32 intro_overlay_alpha __asm__("D_0015EF50");
 extern s32 language_intro_overlay_alpha __asm__("D_0015EF54");
 extern s32 intro_overlay_timer __asm__("D_0015EF58");
@@ -76,12 +76,12 @@ void update_gameplay_frame(void) {
     f32 half;
 
     func_001E9430();
-    fade = sequence_fade - 0.0625f;
+    fade = sequence - 0.0625f;
     render_sequence.frame++;
     render_sequence.time++;
-    sequence_fade = fade;
+    sequence = fade;
     if (fade < 0.0f) {
-        sequence_fade = 0.0f;
+        sequence = 0.0f;
     }
     if (render_sequence.time >= render_sequence.end_time) {
         render_sequence.time = 0;

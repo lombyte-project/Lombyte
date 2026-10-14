@@ -4,7 +4,7 @@
 /* Retail forms the queue head from the address one request before it. */
 extern PreviewAnimationRequest preview_request_address_base[] __asm__("D_001D5E88");
 extern s32 preview_request_count __asm__("D_00160350");
-extern s32 preview_request_count_absolute __asm__("D_00160350") MACRO_ADDR;
+extern s32 preview_request_count_macro __asm__("D_00160350") MACRO_ADDR;
 s32 advance_preview_animation_queue(void) __asm__("FUN_00226670");
 
 s32 advance_preview_animation_queue(void) {
@@ -20,7 +20,7 @@ s32 advance_preview_animation_queue(void) {
             *(PreviewAnimationRequest *)(request_address + 0x38);
         request_address += 0x38;
     } while (request_address < end_address);
-    preview_request_count = preview_request_count_absolute - 1;
+    preview_request_count = preview_request_count_macro - 1;
     return 0;
 }
 

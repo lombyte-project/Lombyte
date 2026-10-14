@@ -40,7 +40,7 @@ typedef struct {
 } CdReadState;
 
 extern s32 preview_request_count __asm__("D_00160350");
-extern s32 preview_request_count_address __asm__("D_00160350") MACRO_ADDR;
+extern s32 preview_request_count_macro __asm__("D_00160350") MACRO_ADDR;
 extern CdReadState cd_read_state __asm__("D_001516D0");
 typedef struct {
     u8 pad0[0x48];
@@ -88,7 +88,7 @@ s32 update_preview_animation_and_attachments(Moby *source_moby, Moby *primary_it
     animation_complete = 0;
     delay_expired = 0;
     activate_request = 0;
-    if (preview_request_count_address == 0) {
+    if (preview_request_count_macro == 0) {
         return 0;
     }
     if (source_moby->transition_flags & 2) {

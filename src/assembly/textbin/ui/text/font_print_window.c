@@ -18,7 +18,7 @@ struct Glyph {
 };
 
 extern s32 font_window_active __asm__("D_0015F4A0");
-extern s32 font_color_codes_enabled __asm__("D_0015F49C");
+extern s32 GlobalStateFlag __asm__("D_0015F49C");
 #include "rnc/ui/text/font_palette.h"
 #include "rnc/rendering/screen.h"
 extern void vu1_set_scissor(s32, s32, s32, s32) __asm__("func_00233A40");
@@ -89,7 +89,7 @@ retry:
                 if (text[position] == ' ' || text[position] < 0x10) {
                     break_position = position;
                 }
-                if (font_color_codes_enabled != 0 &&
+                if (GlobalStateFlag != 0 &&
                     (text[position] >= 8 && text[position] < 0x10)) {
                     current_color = text[position] - 8;
                 }

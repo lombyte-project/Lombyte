@@ -116,7 +116,7 @@ typedef struct {
 #include "rnc/audio/music/music_stream_state.h"
 extern u8 D_001413F5[];
 extern u8 D_0015EDB4;
-extern f32 sequence_fade __asm__("D_0015F43C");
+extern f32 sequence __asm__("D_0015F43C");
 extern f32 D_0015F440;
 extern s32 space_load_pending __asm__("D_0015F5B0");
 extern s32 space_load_in_progress[1] __asm__("D_0015F618");
@@ -234,16 +234,16 @@ void update_resident_gameplay_state(void) {
         enqueue_voice_request();
         func_001E9420();
         func_00217B88();
-        sequence_fade -= 0.125f;
+        sequence -= 0.125f;
         render_sequence.frame++;
         render_sequence.time++;
-        if (sequence_fade < 0.0f) {
-            sequence_fade = 0.0f;
+        if (sequence < 0.0f) {
+            sequence = 0.0f;
         }
         ticks_per_bank = pal_mode ? 0x50 : 0x60;
         skip = level_render_state.skip;
         if ((controller_state.pressed & (PAD_TRIANGLE | PAD_CROSS)) && scale_ticks(30) < render_sequence.time &&
-            sequence_fade == 0.0f) {
+            sequence == 0.0f) {
             if (level_render_state.state == 0 &&
                 render_sequence.time <
                     scale_ticks(D_00160510[level_render_state.content_variant] - 30)) {
@@ -268,7 +268,7 @@ void update_resident_gameplay_state(void) {
                 } else {
                     fade_to_black(4);
                 }
-                sequence_fade = 1.0f;
+                sequence = 1.0f;
             } else {
                 render_sequence.time = render_sequence.end;
             }
@@ -679,10 +679,10 @@ void update_resident_gameplay_state(void) {
                     fast_subtract_rotations(level_render_state.rotZ,
                                             level_render_state.startRot.f[2]) *
                         blend);
-                if (sequence_fade > 0.0f) {
-                    sequence_fade -= 0.125f;
-                    if (sequence_fade < 0.0f) {
-                        sequence_fade = 0.0f;
+                if (sequence > 0.0f) {
+                    sequence -= 0.125f;
+                    if (sequence < 0.0f) {
+                        sequence = 0.0f;
                     }
                 }
                 if (blend < 1.0f) {
@@ -695,12 +695,12 @@ void update_resident_gameplay_state(void) {
                 if (level_render_state.speed > 100.0f) {
                     level_render_state.speed = 100.0f;
                 }
-                if ((controller_state.pressed & (PAD_TRIANGLE | PAD_CROSS)) && sequence_fade < 0.0625f) {
-                    sequence_fade = 0.0625f;
+                if ((controller_state.pressed & (PAD_TRIANGLE | PAD_CROSS)) && sequence < 0.0625f) {
+                    sequence = 0.0625f;
                 }
                 if ((f32)(active_path->point_count - 6) < level_render_state.path_progress &&
-                    sequence_fade < 0.0625f) {
-                    sequence_fade = 0.0625f;
+                    sequence < 0.0625f) {
+                    sequence = 0.0625f;
                 }
                 if (level_render_state.content_variant < 2) {
                     level_render_state.player->unkBC = 0x32;
@@ -710,7 +710,7 @@ void update_resident_gameplay_state(void) {
                 level_render_state.path_progress +=
                     level_render_state.speed * frame_time / level_render_state.path_segment_length;
                 if ((f32)(active_path->point_count - 1) < level_render_state.path_progress ||
-                    sequence_fade >= 1.0f) {
+                    sequence >= 1.0f) {
                     space_load_pending = 1;
                     space_load_in_progress[0] = 1;
                 } else {
@@ -739,10 +739,10 @@ void update_resident_gameplay_state(void) {
                     level_render_state.secondary_history[level_render_state.history_index].f[3] = 1.0f;
                     enqueue_callback_list_1(build_resident_indexed_texture_warp_meshes,
                                             level_render_state.player);
-                    if (sequence_fade > 0.0f) {
-                        sequence_fade += 0.0625f;
-                        if (sequence_fade > 1.0f) {
-                            sequence_fade = 1.0f;
+                    if (sequence > 0.0f) {
+                        sequence += 0.0625f;
+                        if (sequence > 1.0f) {
+                            sequence = 1.0f;
                         }
                     }
                 }

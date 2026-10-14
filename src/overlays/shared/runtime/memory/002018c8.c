@@ -393,7 +393,7 @@ void FUN_L00_002018c8(void) {
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A2));
                 font_print_center(0x100, D_L00_0015F4DC + 0x30, c3, line, -1);
             }
-            record = D_0015EE68[(current_level_index ^ 0x10) ? 0 : 1];
+            record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
             if (record != 0 && record == hero.unk8A8) {
                 sprintf(line, D_L00_0015F548, get_help_message_text(0x50A5));
                 font_print_center(0x100, D_L00_0015F4DC + 0x56, c2, line, -1);

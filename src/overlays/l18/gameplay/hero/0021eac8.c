@@ -570,10 +570,10 @@ void FUN_L18_0021eac8(void) {
                 hero.unk90C = 0;
             }
             if (PD.u1A0.i1A4.v & 0x40) {
-                if (D_L18_0015F5CC - hero.unk914 < scale_game_frames(70)) {
+                if (game_frame - hero.unk914 < scale_game_frames(70)) {
                     hero.unk910++;
                 }
-                hero.unk914 = D_L18_0015F5CC;
+                hero.unk914 = game_frame;
             }
             if (hero.unk90E > scale_game_frames(70)) {
                 hero.unk910 = 0;

@@ -265,7 +265,7 @@ void FUN_L01_002b9eb0(unsigned char *moby) {
             if (*(int *)(data + 0xC0) != -1) {
                 D_0014C190_257218[current_level_index][(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
                     1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-                D_L01_001BA950[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
+                moby_killed[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
                     1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
                 *(int *)(data + 0xC0) = -1;
             }

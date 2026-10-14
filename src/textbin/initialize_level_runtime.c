@@ -72,12 +72,12 @@ typedef struct {
     s32 chunks[70];
 } SceneInfo;
 
-extern f32 D_0015F43C;
+extern f32 sequence __asm__("D_0015F43C");
 extern s32 D_001413D0[];
 extern s32 current_vu_chain __asm__("D_00160F0C");
 extern s32 space_load_in_progress __asm__("D_0015F618");
 extern s32 D_0015F440;
-extern s32 D_0015EE8C;
+extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u8 D_00194180[];
 #include "rnc/rendering/resident_class.h"
 extern s32 D_001B6180[];
@@ -168,14 +168,14 @@ void initialize_level_runtime(void) {
 
     level_render_state.state = 4;
     level_render_state.timer = -1;
-    D_0015F43C = 1.0f;
+    sequence = 1.0f;
     D_001413D0[0] = 0;
     current_vu_chain = 0x100000;
     space_load_in_progress = 0;
     D_0015F440 = 0;
     init_mem_slots();
-    gs_texture_allocation_cursor = D_0015EE8C;
-    gs_texture_allocation_start = D_0015EE8C;
+    gs_texture_allocation_cursor = gs_texture_allocation_base;
+    gs_texture_allocation_start = gs_texture_allocation_base;
     fill_transfer_words(D_00194180, 0x87654321, 0x10);
     fill_transfer_words(resident_class_slot_by_id, -1, 0x800);
     fill_transfer_words(resident_class_material_maps, -1, 0xE00);
@@ -195,8 +195,8 @@ void initialize_level_runtime(void) {
                           (s32)header + header->texInfo);
     data_base = (s32)header + header->data_offset;
     class_data_base = data_base + header->unk30;
-    special_material_template[0] = (s32)((D_0015EE8C + header->unk40) >> 8) | 0x1D308000 | ((s64)0xB800 << 19) |
-                    ((s64)((D_0015EE8C + header->unk44) >> 8) << 37) | 0x8000000000000000LL;
+    special_material_template[0] = (s32)((gs_texture_allocation_base + header->unk40) >> 8) | 0x1D308000 | ((s64)0xB800 << 19) |
+                    ((s64)((gs_texture_allocation_base + header->unk44) >> 8) << 37) | 0x8000000000000000LL;
     special_material_template[1] = 0x0000FFA0000000E0LL;
     special_material_template[2] = 0x0040000400004000LL;
     class_entries = (ClassEntry *)((s32)header + header->classes);

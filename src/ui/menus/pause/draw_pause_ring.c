@@ -70,7 +70,7 @@ s32 draw_pause_ring(struct PauseState *arg0) {
         x = cx + fast_cos(t) * radius;
         y = cy + fast_sin(t) * radius;
         if (i == arg0->sel) {
-            u64 color = ((SubtractIntegerWithClamp((D_0015F438 & 0x3F) - 0x20) + 0x40) * 0x10202) |
+            u64 color = ((SubtractIntegerWithClamp((game_frame_counter & 0x3F) - 0x20) + 0x40) * 0x10202) |
                         0x80000000;
 
             append_screen_rect_packet((s32)x - 0x13, (s32)y - 0x13, (s32)x + 0x13, (s32)y + 0x13,

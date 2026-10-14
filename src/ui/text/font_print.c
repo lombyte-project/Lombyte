@@ -24,7 +24,7 @@ void font_print(s32 x, s32 y, u64 color, u8 *text, s32 character_limit, s64 text
     s32 gray_value;
     s32 gray_color;
 
-    if (D_0015F4A0 == 0) {
+    if (font_window_active == 0) {
         font_palette_colors[0] = color;
     }
     character_count = 0;

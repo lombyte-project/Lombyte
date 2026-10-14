@@ -134,7 +134,7 @@ void draw_dialog_text(void) {
         top = mid - 0x20;
         draw_hud_sprite(find_valid_animation_frame_index_alt(0x755D, 0), 0xE0, top, 0x40, 0x40, 0x80);
         pos = (f32)(mid << 4);
-        angle = (f32)(D_0015F438 % 55) * -6.2831855f / 55.0f;
+        angle = (f32)(game_frame_counter % 55) * -6.2831855f / 55.0f;
         draw_rotated_sprite(4096.0f, pos, pivot, pivot, angle, 0x40, 0x40,
                             get_frame_texture(find_valid_animation_frame_index_alt(0x755D, 1)));
         break;
@@ -325,7 +325,7 @@ void draw_dialog_text(void) {
         f32 f;
 
         pulse = func_001FA6E0(D_0015F524, D_0015F528,
-                             fast_sin((f32)(D_0015F438 % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f - 3.14159f) *
+                             fast_sin((f32)(game_frame_counter % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f - 3.14159f) *
                                      0.5f +
                                  0.5f);
         scale = (f32)freeze.unk20 * 0.125f;
@@ -393,7 +393,7 @@ void draw_dialog_text(void) {
                 sprintf(line, D_0015F588, get_help_message_text(0x50A2));
                 font_print_center(0x100, freeze_stats_text + 0x30, c3, line, -1);
             }
-            record = D_0015EE68[(current_level_index ^ 0x10) ? 0 : 1];
+            record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
             if (record != 0 && record == hero.unk8A8) {
                 sprintf(line, D_0015F588, get_help_message_text(0x50A5));
                 font_print_center(0x100, freeze_stats_text + 0x56, c2, line, -1);
@@ -411,7 +411,7 @@ void draw_dialog_text(void) {
     case 2:
         draw_outlined_rect(0x64, 0xA0, 0xB0, 0x150,
                      func_001FA6E0(D_0015F524, D_0015F528,
-                                  fast_sin((f32)(D_0015F438 % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f -
+                                  fast_sin((f32)(game_frame_counter % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f));
@@ -422,7 +422,7 @@ void draw_dialog_text(void) {
         s32 pulse;
 
         pulse = func_001FA6E0(D_0015F524, D_0015F528,
-                                  fast_sin((f32)(D_0015F438 % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f -
+                                  fast_sin((f32)(game_frame_counter % freeze_wave_period) / convert_integer_to_float(freeze_wave_period) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f);

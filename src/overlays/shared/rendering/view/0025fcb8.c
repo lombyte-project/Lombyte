@@ -333,7 +333,7 @@ typedef struct {
 } ItemDef;
 
 extern ItemDef item_defs[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
-extern int D_0013D428[];
+extern int weapon_ammo_counts[] __asm__("D_0013D428");
 extern int pause_iop_sprite_lists[] __asm__("D_00141EA0");
 extern int D_L00_001B0340[] __attribute__((section(".data")));
 extern int D_L00_001C3E98[] __attribute__((section(".data")));
@@ -367,7 +367,7 @@ void FUN_L00_00260860(int id, int flag) {
         r = &D_L00_001C40B0[id];
         *pb = 1;
         if (r->h8 != 0) {
-            int *q = &D_0013D428[id];
+            int *q = &weapon_ammo_counts[id];
             int v = r->h12;
             if (v < *q) {
                 v = *q;

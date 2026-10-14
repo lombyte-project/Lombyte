@@ -17,7 +17,7 @@ INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_0021a328/FUN_0021a328.s
 #include "rnc/gameplay/state/item_state.h"
 extern int pal_mode __asm__("D_0015ED80") __attribute__((sda));
 extern int current_level_index __asm__("D_0015ED84") __attribute__((sda));
-extern int menu_text_color __asm__("D_001601B0") __attribute__((sda));
+extern int panel_clear_color_gp __asm__("D_001601B0") __attribute__((sda));
 extern int menu_fade_duration __asm__("D_001601B4") __attribute__((sda));
 extern int text_shadow_x_gp __asm__("D_001601B8") __attribute__((sda));
 extern int text_shadow_y_gp __asm__("D_001601BC") __attribute__((sda));
@@ -233,7 +233,7 @@ int render_configured_text_label(struct MenuScreen *label) {
             c.bottom = label->height - 1;
         }
         color = func_0021B6D8(label->data.label.fade_timer,
-                              func_001FA6E0(menu_text_color, 0x80FFA888, 0.5f), 0x80FFA888);
+                              func_001FA6E0(panel_clear_color_gp, 0x80FFA888, 0.5f), 0x80FFA888);
         c.flags |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
         window->flags = c.flags ^ 4;

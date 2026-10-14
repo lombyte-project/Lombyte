@@ -93,7 +93,7 @@ s32 draw_menu_item_grid(struct MenuScreen *grid) {
             left = scale * x;
             right = left + icon_width;
             if (focused && grid->data.grid.selected_cell == cell - grid->data.grid.cells) {
-                color = ((SubtractIntegerWithClamp((D_0015F438 & 0x3F) - 0x20) + 0x40) * 0x10202) |
+                color = ((SubtractIntegerWithClamp((game_frame_counter & 0x3F) - 0x20) + 0x40) * 0x10202) |
                         0x80000000;
                 append_screen_sprite(left - 0x30, top - 0x30, right + 0x30, bottom + 0x30, color,
                                      1);

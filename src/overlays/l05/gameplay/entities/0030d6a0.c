@@ -365,7 +365,7 @@ extern float D_L05_00161E00 __asm__("D_L05_00161E00") __attribute__((sda));
 extern float D_L05_00161DD4 __asm__("D_L05_00161DD4") __attribute__((sda));
 extern float D_0013F3D0[];
 extern int D_L05_0015F5C4;
-extern int D_L05_0015F5CC;
+extern int frame_number __asm__("D_L05_0015F5CC");
 
 typedef struct {
     char pad00[0x10];
@@ -488,7 +488,7 @@ void FUN_L05_0030e7f8(DrainCoverMoby *moby) {
         }
         break;
     case 2:
-        if ((D_L05_0015F5CC & 3) == 0) {
+        if ((frame_number & 3) == 0) {
             play_entity_sound((int)moby, 1.0f, moby->pos, 0x10000, 2.0f, 1.0f, 0, 1, 0);
         }
         FUN_L05_0030f218((char *)moby, data->home[2], data->vel[2] * (float)scale_game_frames_30e7f8(*(int *)&D_L05_00161DB8) * 0.5f + moby->pos[2]);
@@ -1299,7 +1299,7 @@ void FUN_L05_00316070(char *moby) {
 /* Updates the pulsing marker: spawns it, then each frame animates its height and queues the draw. */
 extern char D_L05_00211B28[];
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int D_L05_0015F5CC_c __asm__("D_L05_0015F5CC");
+extern int frame_number __asm__("D_L05_0015F5CC");
 extern void FUN_L02_002a40d0(void *, float);
 void FUN_L05_00316070_c(char *moby) __asm__("FUN_L05_00316070");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
@@ -1316,10 +1316,10 @@ void FUN_L05_00316110(char *moby) {
     case 1:
         if (hero.state.control_mode == 0x16) {
             D_L05_00211B20[2] =
-                fast_sin((float)(D_L05_0015F5CC_c % 360) * 0.017444444f - 3.14f) * 0.25f + 61.5f;
+                fast_sin((float)(frame_number % 360) * 0.017444444f - 3.14f) * 0.25f + 61.5f;
         } else {
             D_L05_00211B20[2] =
-                fast_sin((float)(D_L05_0015F5CC_c % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
+                fast_sin((float)(frame_number % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
         }
         enqueue_callback_list_1(func_L05_00317538_3175D8, moby);
         break;

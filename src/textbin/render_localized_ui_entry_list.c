@@ -140,7 +140,7 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
                 x = half_width - (maximum_text_width >> 1);
             }
             func_001F61F8();
-            font_print(x + D_001601B8, y + D_001601BC, 0x80000000L, text_id, -1,
+            font_print(x + text_shadow_x, y + text_shadow_y, 0x80000000L, text_id, -1,
                        get_effect_texture(font_texture_index), glyphs);
             func_001F61E8();
             if (menu->data.list.flags & 0x80) {
@@ -150,8 +150,8 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
             y += row_height;
             if (menu->data.list.items[entry_index].subtext != 0) {
                 func_001F61F8();
-                shadow_x = x + D_001601B8;
-                shadow_y = y + D_001601BC;
+                shadow_x = x + text_shadow_x;
+                shadow_y = y + text_shadow_y;
                 secondary_text = get_help_message_text(menu->data.list.items[entry_index].subtext);
                 font_print(shadow_x, shadow_y, 0x80000000L, secondary_text, -1,
                            get_effect_texture(font_texture_index), glyphs);

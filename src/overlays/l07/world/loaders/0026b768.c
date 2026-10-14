@@ -57,7 +57,7 @@ typedef struct { s16 a; s16 b; s32 *file; } Ldg26b768;
 extern Ldg26b768 D_0015EE48;
 extern s32 D_L07_0015F40C;
 extern s32 D_L07_00160004;
-extern s32 D_0015EE8C;
+extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L07_00182840[3];
 extern u64 D_L07_00182858[3];
 extern u64 D_L07_00182870[3];
@@ -211,16 +211,16 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
         used = FUN_L00_0024d8d0_26b768((char *)(src[0x14] + (s32)src), base);
         D_L07_0015F40C = (s32)(base + h[0x18]);
 
-        D_L07_00182840[0] = GS_TEX0((D_0015EE8C + h[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
-            (D_0015EE8C + h[0x25]) >> 8, 0, 0, 0, 4);
+        D_L07_00182840[0] = GS_TEX0((gs_texture_allocation_base + h[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
+            (gs_texture_allocation_base + h[0x25]) >> 8, 0, 0, 0, 4);
         D_L07_00182840[1] = 0x0000FFA0000000E0;
         D_L07_00182840[2] = 0x0040000400004000;
-        D_L07_00182858[0] = GS_TEX0((D_0015EE8C + h[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
-            (D_0015EE8C + h[0x27]) >> 8, 0, 0, 0, 4);
+        D_L07_00182858[0] = GS_TEX0((gs_texture_allocation_base + h[0x26]) >> 8, 1, 0x13, 6, 6, 1, 0,
+            (gs_texture_allocation_base + h[0x27]) >> 8, 0, 0, 0, 4);
         D_L07_00182858[1] = 0x0000FFA0000000E0;
         D_L07_00182858[2] = 0x0040000400004000;
-        D_L07_00182870[0] = GS_TEX0((D_0015EE8C + h[0x30]) >> 8, 2, 0x13, 7, 7, 1, 0,
-            (D_0015EE8C + h[0x31]) >> 8, 0, 0, 0, 4);
+        D_L07_00182870[0] = GS_TEX0((gs_texture_allocation_base + h[0x30]) >> 8, 2, 0x13, 7, 7, 1, 0,
+            (gs_texture_allocation_base + h[0x31]) >> 8, 0, 0, 0, 4);
         D_L07_00182870[1] = 0x0000FFA0000000E0;
         D_L07_00182870[2] = 0x0040000400004000;
 
@@ -411,6 +411,6 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
     }
     ((Una26b768 *)D_L07_00179180)->v = 0;
     FUN_L00_00264740();
-    D_L07_0015F5CC++;
+    frame_count_l07++;
     return 0;
 }

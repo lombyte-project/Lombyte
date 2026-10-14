@@ -27,7 +27,7 @@ void process_bgm_display_text_event(u64 color, u8 *str, s32 n, s32 tex, struct G
     s32 avg;
     s32 mk;
 
-    if (D_0015F4A0 == 0) {
+    if (font_window_active == 0) {
         font_palette_colors[0] = color;
     }
     size = scale * 16.0f;

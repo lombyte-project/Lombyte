@@ -188,7 +188,7 @@ struct VoiceSlot {
 extern u8 D_0013E550[];
 extern s32 D_L05_001612D0;
 extern s32 D_L05_001612D8;
-extern s32 D_L05_0015F5CC;
+extern s32 frame_number __asm__("D_L05_0015F5CC");
 extern u8 D_L05_0017C420[];
 
 extern void FUN_L00_00216e48(s32, struct MobyView *, s32);
@@ -624,10 +624,10 @@ void FUN_L05_00244a70(void) {
                 hero.unk90C = 0;
             }
             if (PD.u1A0.i1A4.v & 0x40) {
-                if (D_L05_0015F5CC - hero.unk914 < scale_game_frames(70)) {
+                if (frame_number - hero.unk914 < scale_game_frames(70)) {
                     hero.unk910++;
                 }
-                hero.unk914 = D_L05_0015F5CC;
+                hero.unk914 = frame_number;
             }
             if (hero.unk90E > scale_game_frames(70)) {
                 hero.unk910 = 0;

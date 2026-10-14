@@ -139,7 +139,7 @@ extern char *D_L00_001601AC_2E0E50 __asm__("D_L00_001600EC") __attribute__((sect
 extern float D_L00_0015F4FC_2E0E50 __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
 extern float D_L00_00161C84_2E0E50 __asm__("D_L00_00161BB4") __attribute__((section(".sdata")));
 extern float D_0015EE6C_2E0E50 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_0015EE64_2E0E50 __asm__("D_0015ED64") __attribute__((section(".sdata")));
+extern float frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
 extern float D_0015EE70_2E0E50 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern char D_L00_00166EC0_2E0E50[] __asm__("D_L00_00166DC0");
 extern void func_L00_002E1660_2E0E50(Moby *) __asm__("FUN_L00_002e01b0");
@@ -177,8 +177,8 @@ void FUN_L00_002df9a0(Moby *moby) {
             func_L00_002E1660_2E0E50(moby);
         }
         if (((Hero *)D_0013E633_2E0E50)->unk20B0 != 0) {
-            float accel = D_0015EE64_2E0E50 * 0.02f;
-            float max_speed = D_0015EE64_2E0E50 * 0.3f;
+            float accel = frame_scale_sq_macro * 0.02f;
+            float max_speed = frame_scale_sq_macro * 0.3f;
 
             ((Hero *)D_0013E633_2E0E50)->unk18F0[0].unkA0 = 1;
             ((Hero *)D_0013E633_2E0E50)->unk18F0[0].scale = 2.3f;

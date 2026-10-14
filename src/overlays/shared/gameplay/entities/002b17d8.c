@@ -112,7 +112,7 @@ void FUN_L14_002b37b0(char *a, float x) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4AE0), where it is exact; names translated to the US level program. */
 
-extern char *D_L14_ffd0_s[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
+extern char *D_L14_ffd0_e_macro[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
 extern int FUN_001f96f8(int);
 extern short *D_L14_001ABF40[];
 extern short D_L14_001614E0;
@@ -123,7 +123,7 @@ void FUN_L14_002b3890(int idx) {
         p = D_L14_001ABF40[idx];
         if (p != 0) {
             do {
-                char *moby = D_L14_ffd0_s[2] + ((*(unsigned short *)p & 0x7FFF) << 8);
+                char *moby = D_L14_ffd0_e_macro[2] + ((*(unsigned short *)p & 0x7FFF) << 8);
                 char *data = *(char **)(moby + 0x78);
                 if (*(short *)(moby + 0xA6) == 0x1C) {
                     *(short *)(data + 0x260) = FUN_001f96f8(*(int *)&D_L14_001614E0);
@@ -890,7 +890,7 @@ typedef struct {
 void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8");
 
 int FUN_L14_002d9870(int i) {
-    unsigned char *moby = (unsigned char *)(D_L14_ffd0_s[2] + i * 256);
+    unsigned char *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
     int *data = *(int **)(moby + 0x78);
     int r = 0;
     if (moby[0x20] == 0) {

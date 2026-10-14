@@ -94,7 +94,7 @@ void render_level_frame(void) {
         draw_textured_quad(0x2C, display_state->height - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40,
                            0x80808080, texture);
         screen_y = (f32)((display_state->height - 0x40) * 16);
-        rotation_angle = ((D_0015F438 % 55) * (-6.2831855f)) / 55.0f;
+        rotation_angle = ((game_frame_counter % 55) * (-6.2831855f)) / 55.0f;
         /* The frame counter contributes only the sprite angle modulo 55. */
         /* Retail passes the full texture value in a2 and the five floats in f12-f16. */
         draw_rotated_sprite(1216.0f, screen_y, quad_extent, 272.0f, 0x40, 0x40,

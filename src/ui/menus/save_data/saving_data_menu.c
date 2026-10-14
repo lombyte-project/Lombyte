@@ -53,7 +53,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
                 *((Unaligned64 *)((((u8 *)&memory_card_state) + (memory_card_state.card[0].save_index * 0x1C)) + 0x30)) =
                     D_0015EE98[0];
                 *((s32 *)((((u8 *)&memory_card_state) + (memory_card_state.card[0].save_index * 0x1C)) + 0x28)) =
-                    (s32)D_0015EE20;
+                    (s32)alternate_animation_sequence;
                 goto block_13;
             }
             return 0;

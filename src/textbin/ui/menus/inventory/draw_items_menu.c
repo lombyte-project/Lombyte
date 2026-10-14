@@ -98,33 +98,33 @@ s32 draw_items_menu(ItemsMenu *menu) {
         text_window.anchor_y = (screen_extent.height - text_window.rendered_height) >> 1;
         font_print_window_regular(&text_window, 0x8000C0C0L, text_buffer, -1);
     }
-    x = add_offset(D_001601B8, 0xC8);
-    y = add_offset(D_001601BC, 0x1D);
+    x = add_offset(text_shadow_x, 0xC8);
+    y = add_offset(text_shadow_y, 0x1D);
     font_print_right(x, y, 0x80000000L, get_help_message_text(0x4F4F), -1);
-    x = add_offset(D_001601B8, 0xC8);
-    y = add_offset(D_001601BC, 0x36);
+    x = add_offset(text_shadow_x, 0xC8);
+    y = add_offset(text_shadow_y, 0x36);
     font_print_right(x, y, 0x80000000L, get_help_message_text(0x4F50), -1);
-    x = add_offset(D_001601B8, 0xC8);
-    y = add_offset(D_001601BC, 0x54);
+    x = add_offset(text_shadow_x, 0xC8);
+    y = add_offset(text_shadow_y, 0x54);
     font_print_right(x, y, 0x80000000L, get_help_message_text(0x4F51), -1);
     font_print_right(0xC8, 0x1D, 0x80FFA888L, get_help_message_text(0x4F4F), -1);
     font_print_right(0xC8, 0x36, 0x80FFA888L, get_help_message_text(0x4F50), -1);
     font_print_right(0xC8, 0x54, 0x80FFA888L, get_help_message_text(0x4F51), -1);
     collected_count = count_nonzero_entries_up_to_40();
     sprintf(text_buffer, D_001602A0, collected_count);
-    font_print_left(add_offset(D_001601B8, 0xF0), add_offset(D_001601BC, 0x1D), 0x80000000L,
+    font_print_left(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x1D), 0x80000000L,
                     text_buffer, -1);
     font_print_left(0xF0, 0x1D, 0x80FFA888L, text_buffer, -1);
     sprintf(text_buffer, D_001602A0, count_nonzero_entries_up_to_10() * 4);
-    font_print_left(add_offset(D_001601B8, 0xF0), add_offset(D_001601BC, 0x36), 0x80000000L,
+    font_print_left(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x36), 0x80000000L,
                     text_buffer, -1);
     font_print_left(0xF0, 0x36, 0x80FFA888L, text_buffer, -1);
     sprintf(text_buffer, D_001602A0, compute_clamped_count_difference());
-    font_print_left(add_offset(D_001601B8, 0xF0), add_offset(D_001601BC, 0x54), 0x80000000L,
+    font_print_left(add_offset(text_shadow_x, 0xF0), add_offset(text_shadow_y, 0x54), 0x80000000L,
                     text_buffer, -1);
     font_print_left(0xF0, 0x54, 0x80FFA888L, text_buffer, -1);
-    append_screen_rect_packet(add_offset(D_001601B8, 0xD0), add_offset(D_001601BC, 0x4D),
-                              add_offset(D_001601B8, 0xF2), add_offset(D_001601BC, 0x50),
+    append_screen_rect_packet(add_offset(text_shadow_x, 0xD0), add_offset(text_shadow_y, 0x4D),
+                              add_offset(text_shadow_x, 0xF2), add_offset(text_shadow_y, 0x50),
                               0x80000000L, 0);
     append_screen_rect_packet(0xD0, 0x4D, 0xF2, 0x50, 0x80FFA888L, 0);
     do_gif_paging();

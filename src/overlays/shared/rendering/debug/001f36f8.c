@@ -455,7 +455,7 @@ extern u8 item_defs[] __asm__("D_L00_00179AC0") NOT_SDA;
 #define D_L00_00179AFE ((s16 *)(item_defs + 0x3E))
 #include "rnc/ui/vendor/vendor_item_info.h"
 #define D_L00_001C40BE ((u16 *)((u8 *)D_L00_001C40B0 + 0xE))
-extern s32 D_0013D428[];
+extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern int D_0013E520[];
 extern u8 D_0014C050[];
 extern const char D_L00_0015EFE0[] __attribute__((sda));
@@ -754,7 +754,7 @@ void FUN_L00_001f4598(void) {
     case 3:
         maximum_count = 999999;
         if ((int)g_debug_menu.selected_row < 0xd) {
-            counter = &((u32 *)D_0013D428)[D_L00_0015EFD0[g_debug_menu.selected_row]];
+            counter = &((u32 *)weapon_ammo_counts)[D_L00_0015EFD0[g_debug_menu.selected_row]];
             maximum_count = (u32) * (u16 *)((u8 *)D_L00_001C40BE +
                                             (u32)D_L00_0015EFD0[g_debug_menu.selected_row] * 0x18);
         } else {
@@ -1009,7 +1009,7 @@ extern char *D_L00_00160CE0[];
 extern char *D_L00_00160CF0[];
 extern char *D_L00_00160D08[];
 extern char *D_L00_001C3E28[];
-extern s32 D_0013D428[];
+extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern s32 D_0015ED84;
 extern char D_L00_0015F008[];
 extern char D_L00_0015F010[];
@@ -1202,7 +1202,7 @@ void FUN_L00_001f58e0(void) {
         sprintf(buf, D_L00_0015F0D8, (s32) weapon_order[0x19]);
         print_debug_text(0x7A, 0xD8, 0x80406080, buf);
         print_debug_text(0x14, 0xE7, 0x8000C0C0, D_L00_0015F1A0);
-        ammo = (AmmoDisplay60 *)(D_0013D428);
+        ammo = (AmmoDisplay60 *)(weapon_ammo_counts);
         sprintf(buf, D_L00_0015F0D8, ammo->ammo5C);
         print_debug_text(0x8C, 0xE7, 0x80F0F0F0, buf);
         print_debug_text(0x14, 0xF6, 0x8000C0C0, D_L00_0015F1B0);

@@ -72,7 +72,7 @@ extern s32 sceGsSyncV(s32);
 void do_space_transition(void) __asm__("FUN_00231ff0");
 
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
-extern s32 space_load __asm__("D_0015F600") MACRO_ADDR;
+extern s32 space_load_macro __asm__("D_0015F600") MACRO_ADDR;
 void do_space_transition(void) {
     s32 lvl;
     s32 ok;
@@ -85,10 +85,10 @@ void do_space_transition(void) {
     coll_output.unk10 |= 0x80000000;
     game_mode = 6;
     level_render_state.content_variant = 0;
-    if (level_available[8] != 0 || space_load >= 8) {
+    if (level_available[8] != 0 || space_load_macro >= 8) {
         level_render_state.content_variant = 1;
     }
-    if (level_available[14] != 0 || space_load >= 14) {
+    if (level_available[14] != 0 || space_load_macro >= 14) {
         level_render_state.content_variant = 2;
     }
     FlushCache(0);
@@ -114,29 +114,29 @@ void do_space_transition(void) {
     view_context.fog_near_dist = 0;
     view_context.fog_far_int = 128.0f;
     PackDmaTag(0, 0, 0);
-    if (space_load < 0) {
+    if (space_load_macro < 0) {
         while (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
             memcard_update_state();
             run_state_handler();
         }
         fade_to_black(scale_game_frames(6));
-        current_level_index_macro = space_load;
+        current_level_index_macro = space_load_macro;
         load_level_chunk_from_disc();
         sceCdSync(0);
         music_stream_state.updates_suspended = 0;
         dmac_vif1_disable();
         return;
     }
-    if (space_load == 0 && level_visit_state[0] == 0) {
+    if (space_load_macro == 0 && level_visit_state[0] == 0) {
         fade_to_black(scale_game_frames(6));
         play_level_loading_slides(lvl, 0, 1, scale_game_frames(240), 0);
         play_level_transition_movie(0);
         play_level_loading_slides(lvl, 2, 2, scale_game_frames(180), 0);
         play_level_transition_movie(1);
-        current_level_index_macro = space_load;
+        current_level_index_macro = space_load_macro;
         play_level_loading_slides(lvl, 3, 4, scale_game_frames(240), 1);
         play_level_transition_movie(2);
-    } else if (current_level_index_macro == 0 && space_load == 1 && level_visit_state[1] == 0) {
+    } else if (current_level_index_macro == 0 && space_load_macro == 1 && level_visit_state[1] == 0) {
         fade_to_black(scale_game_frames(6));
         play_level_loading_slides(lvl, 5, 6, scale_game_frames(240), 0);
         play_level_transition_movie(3);
@@ -144,10 +144,10 @@ void do_space_transition(void) {
         play_level_loading_slides(lvl, 7, 7, scale_game_frames(180), 0);
         play_level_transition_movie(5);
         level_visit_state[current_level_index_macro] = 2;
-        current_level_index_macro = space_load;
+        current_level_index_macro = space_load_macro;
         play_level_loading_slides(lvl, 8, 8, scale_game_frames(240), 1);
     } else {
-        if (space_load == 4 && level_visit_state[4] == 0) {
+        if (space_load_macro == 4 && level_visit_state[4] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 9, 10, scale_game_frames(240), 0);
             play_level_transition_movie(6);
@@ -157,7 +157,7 @@ void do_space_transition(void) {
             play_level_loading_slides(lvl, 11, 11, scale_game_frames(240), 0);
             play_level_transition_movie(7);
         }
-        if (space_load == 13 && level_visit_state[13] == 0) {
+        if (space_load_macro == 13 && level_visit_state[13] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 12, 13, scale_game_frames(240), 0);
             play_level_transition_movie(8);
@@ -167,7 +167,7 @@ void do_space_transition(void) {
             play_level_loading_slides(lvl, 14, 14, scale_game_frames(240), 0);
             play_level_transition_movie(9);
         }
-        if (space_load == 16 && level_visit_state[16] == 0) {
+        if (space_load_macro == 16 && level_visit_state[16] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 15, 16, scale_game_frames(240), 0);
             play_level_transition_movie(10);
@@ -186,7 +186,7 @@ void do_space_transition(void) {
         }
         D_0015EE4A = 1;
         done = 0;
-        current_level_index_macro = space_load;
+        current_level_index_macro = space_load_macro;
         D_0015EE48 = 0;
         initialize_level_runtime();
         read_file_entry_with_retry(current_level_index_macro);

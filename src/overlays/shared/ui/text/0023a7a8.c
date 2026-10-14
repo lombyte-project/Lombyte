@@ -209,7 +209,7 @@ int FUN_L00_0023ac78(int call) {
 extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
 extern int D_L00_0015F96C;
 extern int D_L00_0015F970;
-extern int D_0013D428_23adb8[] __asm__("D_0013D428");
+extern int weapon_ammo_counts[] __asm__("D_0013D428");
 extern int FUN_001ff308_23adb8(int, int, void *, void *, void *, void *,
                                int) __asm__("FUN_001ff308");
 extern void FUN_001ff570_23adb8(int, int) __asm__("FUN_001ff570");
@@ -235,7 +235,7 @@ void FUN_L00_0023adb8(void) {
         D_L00_0015F96C = n;
         *(volatile int *)&D_L00_0015F970 = FUN_001ff308_23adb8(
             0x10, n + 60000, FUN_L00_0023a760_23adb8, FUN_L00_0023cdb8_23adb8,
-            FUN_L00_0023a7a8_23adb8, &D_0013D428_23adb8[n], D_L00_001C40B0[n].hE);
+            FUN_L00_0023a7a8_23adb8, &weapon_ammo_counts[n], D_L00_001C40B0[n].hE);
     } else if (k = -1, mode == 2) {
         if (D_L00_0015F970 != k) {
             FUN_001ff570_23adb8(D_L00_0015F970, 0);

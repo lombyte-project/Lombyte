@@ -48,7 +48,7 @@ typedef struct {
 extern s32 runtime_resource_tag __asm__("D_0015FF44") MACRO_ADDR;
 extern s32 class_resource_count __asm__("D_0015FF48") MACRO_ADDR;
 extern s32 active_class_resource_index_macro __asm__("D_0015FF4C") MACRO_ADDR;
-extern s32 active_decode_buffer __asm__("D_0015FF50") MACRO_ADDR;
+extern s32 resource_request_state_macro __asm__("D_0015FF50") MACRO_ADDR;
 #include "rnc/rendering/resident_class.h"
 typedef struct {
     u8 pad0[0x10];
@@ -88,9 +88,9 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
         }
     }
     if (buffer_index == -1) {
-        buffer_index = active_decode_buffer == 0;
+        buffer_index = resource_request_state_macro == 0;
     }
-    active_decode_buffer = buffer_index;
+    resource_request_state_macro = buffer_index;
     resource_data = (ClassResourceHeader *)(level_resource_buffers.decode_buffers + buffer_index * 0x18000);
     FlushCache(0);
     decompress_wad(compressed_class_resources[active_class_resource_index_macro], resource_data);

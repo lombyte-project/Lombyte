@@ -9,7 +9,7 @@
 extern char D_0013F3D0[];
 extern int D_001413D4 NOT_SDA, D_001413DC NOT_SDA, D_0013D464 NOT_SDA;
 extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;
-extern int D_L05_0015F5CC, D_L05_0015FFD8;
+extern int frame_number __asm__("D_L05_0015F5CC"), D_L05_0015FFD8;
 extern int D_001417E0[];
 extern int D_0014EE90[];
 extern unsigned char D_0014C050[];
@@ -119,9 +119,9 @@ void FUN_L05_0031bf40(unsigned char *moby) {
         if (limit < elapsed && (unsigned int)(D_00141BAC & (1 << D_L05_0015ED84)) < 1)
             FUN_L00_00203908(0x7dd, 0x48);
     }
-    if (D_L05_0015F5CC < scale_game_frames(60) && D_001418A8 && !D_001418A0 && D_00141BF4 >= 0)
+    if (frame_number < scale_game_frames(60) && D_001418A8 && !D_001418A0 && D_00141BF4 >= 0)
         FUN_L00_00203908(0x4e27, 0x51);
-    if (D_L05_0015F5CC < scale_game_frames(60) && D_00141930) {
+    if (frame_number < scale_game_frames(60) && D_00141930) {
         if (D_00141CFC >= 0) FUN_L00_00203908(0x4e28, 0x72);
         D_00141930 = 0;
     }
@@ -213,7 +213,7 @@ void FUN_L05_0031bf40(unsigned char *moby) {
     value = data[21];
     if (value != -1 && D_0014C050[data[22] + D_L05_0015ED84 * 16] == 0xff &&
         D_0014C050[data[8] + D_L05_0015ED84 * 16] == 0xff &&
-        (D_L05_0015F5CC < 5 || (D_0013F64C &&
+        (frame_number < 5 || (D_0013F64C &&
           (*(short *)(D_0013F64C + 0xa6) == 0x3e6 || *(short *)(D_0013F64C + 0xa6) == 0x33e)))) {
         FUN_L00_002d5830((void *)(D_L05_0015FFD8 + value * 256));
         data[21] = -1;

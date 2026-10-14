@@ -1180,9 +1180,9 @@ f32 FUN_L00_00233d30(f32 *v) {
     return 0.0f;
 }
 extern s32 D_00140408[];
-extern s32 D_0013D428[];
+extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern s32 D_0013DEA0[];
-/* Moves amount from D_0013D428[idx] to D_0013DEA0[idx]; 0 if too little, else 1. */
+/* Moves amount from weapon_ammo_counts[idx] to D_0013DEA0[idx]; 0 if too little, else 1. */
 s32 use_ammo(s32 idx, s32 amount) __asm__("FUN_L00_00233db8");
 s32 use_ammo(s32 idx, s32 amount) {
     s32 n;
@@ -1196,11 +1196,11 @@ s32 use_ammo(s32 idx, s32 amount) {
     if (e->hE == 0) {
         return 1;
     }
-    v = D_0013D428[idx];
+    v = weapon_ammo_counts[idx];
     if (v < amount) {
         return 0;
     }
-    D_0013D428[idx] = v - amount;
+    weapon_ammo_counts[idx] = v - amount;
     D_0013DEA0[idx] = D_0013DEA0[idx] + amount;
     return 1;
 }
@@ -1225,7 +1225,7 @@ int add_ammo(int a, int b) {
 }
 extern s32 D_00140408_c __asm__("D_00140408") __attribute__((section(".data")));
 
-/* 1 if entry idx of D_L00_001C40B0 has no limit at 0xE, else D_0013D428[idx]; -1: D_00140408. */
+/* 1 if entry idx of D_L00_001C40B0 has no limit at 0xE, else weapon_ammo_counts[idx]; -1: D_00140408. */
 s32 get_ammo(s32 idx) __asm__("FUN_L00_00233e98");
 s32 get_ammo(s32 idx) {
     u8 *p;
@@ -1234,7 +1234,7 @@ s32 get_ammo(s32 idx) {
     p = ((u8 *)D_L00_001C40B0) + idx * 0x18;
     if (*(u16 *)(p + 0xE) == 0)
         return 1;
-    return D_0013D428[idx];
+    return weapon_ammo_counts[idx];
 }
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* Stores v, f and n in hero; calls 002223f8(0x65, 1) unless state is 0x65..0x67. */

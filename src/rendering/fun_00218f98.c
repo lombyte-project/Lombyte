@@ -60,7 +60,7 @@ void FUN_00218f98(void) {
     qzero(D_0019C160);
     vu1_sync_chain(1);
     sceGsSyncV(0);
-    D_0015F438++;
+    game_frame_counter++;
     a = D_001940C0[1] + 0xA0000;
     b = D_001940C0[2] + 0xA0000;
     c = a + 0x3C000;

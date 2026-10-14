@@ -559,7 +559,7 @@ extern Vec4 D_L07_00166E40;
 extern int D_L07_00161B64 __attribute__((sda));
 extern ChaserSpawnRecord D_L07_00179B40[];
 extern int D_L07_0020C600[][4];
-extern int spawn_counts[] __asm__("D_0013D428");
+extern int weapon_ammo_counts[] __asm__("D_0013D428");
 extern void FUN_L00_00263ac8(float, int, int, void *);
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
 extern int FUN_00214720(void *, int);
@@ -1403,17 +1403,17 @@ void FUN_L07_00314150(unsigned char *moby) {
                     int rem;
                     int pos;
                     if (*(short *)(data + 0x19E) == 0) {
-                        *(short *)(data + 0x19E) = spawn_counts[slot] / 8;
+                        *(short *)(data + 0x19E) = weapon_ammo_counts[slot] / 8;
                         if (*(short *)(data + 0x19E) < cnt) *(short *)(data + 0x19E) = cnt;
                         *(float *)(data + 0x1AC) = random_float_between(*(float *)(data + 0x1AC) + 20.0f, *(float *)(data + 0x1AC) + 100.0f);
                     }
                     cnt = *(short *)(data + 0x19E);
-                    if (spawn_counts[slot] < cnt) {
-                        cnt = spawn_counts[slot];
+                    if (weapon_ammo_counts[slot] < cnt) {
+                        cnt = weapon_ammo_counts[slot];
                         *(short *)(data + 0x19E) = 0;
                         *(int *)(data + 0x164) += 1;
                     }
-                    rem = spawn_counts[slot] - cnt * 8;
+                    rem = weapon_ammo_counts[slot] - cnt * 8;
                     pos = rem > 0;
                     cnt = cnt + pos * rem;
                     if (cnt > 0) {
@@ -1453,7 +1453,7 @@ void FUN_L07_00314150(unsigned char *moby) {
                             if (obj != 0) {
                                 qcopy_nc(*(char **)(obj + 0x78) + 0x10, &velocity);
                                 *(float *)(*(char **)(obj + 0x78) + 0x28) = zv;
-                                spawn_counts[slot] -= cnt;
+                                weapon_ammo_counts[slot] -= cnt;
                                 *(int *)(data + 0x160) = scale_ticks(0);
                             }
                         }

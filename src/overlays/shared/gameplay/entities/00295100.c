@@ -1930,7 +1930,7 @@ typedef struct { char pad0[0x140]; Vec4 pos; char pad150[0x200]; f32 basis[12]; 
 
 extern VendorMenu vendor_menu __asm__("D_L00_001CA4C0");
 extern struct PadState pad_state __asm__("D_0013C940");
-extern s32 D_0013D428[];
+extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern VendorItemSound D_L00_001C2108[];
 extern VendorItemSlot40 D_L00_001C8FF0[];
 extern VendorItemSlot30 D_L00_001C9930[];
@@ -2020,7 +2020,7 @@ extern void FUN_0022ca50(void);
 
 /* FUN_L00_0029ba78 - Level-00 shared: per-frame state machine (states 0..4) that
  * drives FUN_0020d580/FUN_L00_00250df8 on g->f20+0x400 and updates the
- * progress tables D_L00_001C40B0 / D_0013D428 / D_0013DD70 / D_0015ED98. */
+ * progress tables D_L00_001C40B0 / weapon_ammo_counts / D_0013DD70 / D_0015ED98. */
 
 
 extern s32 ammo_bought_stats[] __asm__("D_0013DD70");
@@ -2086,7 +2086,7 @@ void FUN_L00_0029ba78(void) {
         FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
         FUN_0020d4f0_2ba78(&vendor_menu.f20[4], 0x101010, 0xE, 0xE, 0);
         D_L00_00161E10 = 0;
-        if (CUR_ITEM.fD4 == 1 && !(D_0013D428[CUR_ITEM.fD0] < CUR_TB.hE)) {
+        if (CUR_ITEM.fD4 == 1 && !(weapon_ammo_counts[CUR_ITEM.fD0] < CUR_TB.hE)) {
             FUN_0022da68_2ba78(2, 0, vendor_menu.f1c);
         } else if (CUR_ITEM.fD4 == 1) {
             s32 nn = vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8;
@@ -2130,7 +2130,7 @@ void FUN_L00_0029ba78(void) {
                 if ((vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8) > 0) {
                     s32 cnt = D_0015ED98 / (vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8);
                     s32 i = CUR_ITEM.fD0;
-                    s32 left = D_L00_001C40B0[i].hE - D_0013D428[i];
+                    s32 left = D_L00_001C40B0[i].hE - weapon_ammo_counts[i];
                     if (left < cnt) cnt = left;
                     if (D_L00_00161E34 < cnt) {
                         D_L00_00161E34++;
@@ -2190,18 +2190,18 @@ void FUN_L00_0029ba78(void) {
             } else {
                 need = CUR_TB.f0;
             }
-            if (D_0015ED98 < need && !(D_0013D428[CUR_ITEM.fD0] < CUR_TB.hE)) {
+            if (D_0015ED98 < need && !(weapon_ammo_counts[CUR_ITEM.fD0] < CUR_TB.hE)) {
                 FUN_0022da68_2ba78(0, 0, vendor_menu.f1c);
             } else if (CUR_ITEM.fD4 == 1) {
                 s32 i;
                 VendorItemInfo *t;
 
-                if (D_0013D428[CUR_ITEM.fD0] < (t = &CUR_TB)->hE) {
+                if (weapon_ammo_counts[CUR_ITEM.fD0] < (t = &CUR_TB)->hE) {
                     n = (vendor_menu.f40 ? t->hA : t->h8) * D_L00_00161E34;
                     if (D_0015ED98 >= n) {
                         i = CUR_ITEM.fD0;
-                        if (D_0013D428[i] > D_L00_001C40B0[i].hE) {
-                            D_0013D428[i] = D_L00_001C40B0[i].hE;
+                        if (weapon_ammo_counts[i] > D_L00_001C40B0[i].hE) {
+                            weapon_ammo_counts[i] = D_L00_001C40B0[i].hE;
                         }
                         k = D_L00_00161E34;
                         k -= FUN_L00_00233e40_2ba78(CUR_ITEM.fD0, k);
@@ -2239,7 +2239,7 @@ void FUN_L00_0029ba78(void) {
 
                         vendor_menu.f50 = FUN_001ff308_2ba78(0x30, 0xEA60 + i, FUN_L00_0023a760_2ba78,
                                            FUN_L00_00235ea0_2ba78, FUN_L00_0023a7a8_2ba78,
-                                           &D_0013D428[i], D_L00_001C40B0[i].hE);
+                                           &weapon_ammo_counts[i], D_L00_001C40B0[i].hE);
                     } else {
                         m = vendor_menu.f210 - 1;
                         if (m < vendor_menu.f58) {
@@ -2453,7 +2453,7 @@ void FUN_L00_0029c648(void) {
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
                             vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
-                                                  FUN_L00_0023a7a8, &D_0013D428[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                                                  FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
                 }
@@ -2470,7 +2470,7 @@ void FUN_L00_0029c648(void) {
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
                             vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
-                                                  FUN_L00_0023a7a8, &D_0013D428[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                                                  FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
                 }
@@ -2493,7 +2493,7 @@ void FUN_L00_0029c648(void) {
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
                             vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
-                                                  FUN_L00_0023a7a8, &D_0013D428[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                                                  FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
                 }
@@ -2515,7 +2515,7 @@ void FUN_L00_0029c648(void) {
                         vendor_menu.f50 = -1;
                         if (CUR_ITEM.fD4 == 1) {
                             vendor_menu.f50 = FUN_001ff308(0x30, CUR_ITEM.fD0 + 0xEA60, FUN_L00_0023a760, FUN_L00_00235ea0,
-                                                  FUN_L00_0023a7a8, &D_0013D428[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
+                                                  FUN_L00_0023a7a8, &weapon_ammo_counts[CUR_ITEM.fD0], D_L00_001C40B0[CUR_ITEM.fD0].hE);
                         }
                     }
                 }

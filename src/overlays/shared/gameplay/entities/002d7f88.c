@@ -2269,7 +2269,7 @@ void FUN_L00_0026c3d0(void *pos, void *mat);
 void FUN_L00_002dc938_c(char *p, char *q, int flag) __asm__("FUN_L00_002dc938");
 void no_op_main_callback(void *) __asm__("FUN_001e93e8");
 extern float D_0015EE60_2DDEA0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
-extern float D_0015EE64_2DDEA0 __asm__("D_0015ED64") __attribute__((section(".sdata")));
+extern float frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
 extern float D_0015EE70_2DDEA0 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern unsigned char D_0013E629_2DDEA0[] __asm__("D_0013E529");
 extern unsigned char D_001404FC_2DDEA0[] __asm__("D_001403FC");
@@ -2342,7 +2342,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             float yaw, tolerance;
             tolerance = 0.01f;
             yaw = func_001FA748_2DDEA0(func_L00_001FF860_2DDEA0(record->x - moby->pos.x, record->y - moby->pos.y), 3.1415927f);
-            func_L00_002592B0_2DDEA0(moby, vars + 0x44, yaw, D_0015EE64_2DDEA0 * 0.19634955f, D_0015EE64_2DDEA0 * 0.19634955f, D_0015EE60_2DDEA0 * 0.3927f);
+            func_L00_002592B0_2DDEA0(moby, vars + 0x44, yaw, frame_scale_sq_macro * 0.19634955f, frame_scale_sq_macro * 0.19634955f, D_0015EE60_2DDEA0 * 0.3927f);
             if (func_001FA790_2DDEA0(yaw, tolerance) < moby->rot.z && moby->rot.z < func_001FA748_2DDEA0(yaw, tolerance)) {
                 record->state = 2;
                 record->f6C = 0.0f;
@@ -2383,7 +2383,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             half = 0.5f;
             distance = func_001F9D48_2DDEA0(&moby->pos, &work.v[0]);
             moby->scale = ((Cls_2DDEA0 *)moby->pclass)->f24 * (distance / (record->f64 + record->f64) + half);
-            record->f98 = record->f98 + D_0015EE64_2DDEA0 * 0.11f;
+            record->f98 = record->f98 + frame_scale_sq_macro * 0.11f;
             if (D_0015EE60_2DDEA0 * 0.75f < record->f98) record->f98 = D_0015EE60_2DDEA0 * 0.75f;
             if (distance < record->f98 * 70.0f) {
                 func_00213DE0_2DDEA0(record->owner, 4, 0, func_001F9850_2DDEA0(2));
@@ -2563,7 +2563,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 func_L00_002DDDE8_2DDEA0(moby, record, 1);
                 return 0;
             }
-            record->vel.z = record->vel.z - D_0015EE64_2DDEA0 * 0.00925f;
+            record->vel.z = record->vel.z - frame_scale_sq_macro * 0.00925f;
             func_L00_0026D270_2DDEA0(&moby->pos, &moby->rot_row0);
             break;
         }
@@ -2571,7 +2571,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             int landed;
             moby->visible = 1;
             moby->flags &= 0xFFFE;
-            record->vel.z = record->vel.z - D_0015EE64_2DDEA0 * 0.013f;
+            record->vel.z = record->vel.z - frame_scale_sq_macro * 0.013f;
             if (moby->pos.z < 2.0f) {
                 func_L00_002DDDE8_2DDEA0(moby, record, 1);
                 return 0;

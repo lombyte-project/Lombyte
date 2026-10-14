@@ -38,7 +38,7 @@ extern volatile SoundSlot boot_sound_defs_b[] __asm__("D_001861E0");
 extern volatile SoundSlot * volatile level_sound_defs __asm__("D_0015F634");
 extern volatile s32 level_sound_def_count __asm__("D_0015F630");
 extern u8 requested_video_mode __asm__("D_0016034C");
-extern s32 space_load_id __asm__("D_0015F600");
+extern s32 space_load __asm__("D_0015F600");
 
 extern void init_once(void) __asm__("func_00201650");
 extern void InitializeStreamingState(void);
@@ -202,7 +202,7 @@ void startlevel(void) {
         set_pal_mode();
         put_disp_buffer();
     }
-    space_load_id = current_level_index_macro;
+    space_load = current_level_index_macro;
     level_render_state.unk2A = 1;
     current_level_index_macro = -1;
     do_space_transition();

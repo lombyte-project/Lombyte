@@ -107,7 +107,7 @@ extern void func_00237A70(void);
 void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 
 extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
-extern float sequence __asm__("D_0015F43C") MACRO_ADDR;
+extern float sequence_macro __asm__("D_0015F43C") MACRO_ADDR;
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void draw_debug_profiler(void) {
     f32 t;
@@ -243,11 +243,11 @@ void draw_debug_profiler(void) {
             if (use_alt_fog[0] != 0) {
                 emit_rgba_draw_packet(D_001610C0, D_001610C1, D_001610C2, D_001610C3);
             }
-            if (sequence > 0.0f) {
-                if (sequence > 1.0f) {
-                    sequence = 1.0f;
+            if (sequence_macro > 0.0f) {
+                if (sequence_macro > 1.0f) {
+                    sequence_macro = 1.0f;
                 }
-                emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(sequence * 128.0f));
+                emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(sequence_macro * 128.0f));
             }
             if (D_0015F440 > 0.0f) {
                 if (D_0015F440 > 1.0f) {

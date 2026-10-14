@@ -26,7 +26,7 @@ extern char D_L07_00211BA8[];
 extern int D_L07_00161CA0[] __attribute__((section(".sdata")));
 extern char *level_mobys_gp __asm__("D_L07_0015FFD8") __attribute__((sda));
 extern char D_0013F3D0[];
-extern int D_0013D428[];
+extern int weapon_ammo_counts[] __asm__("D_0013D428");
 
 typedef struct { char pad[0xe]; unsigned short scale; char tail[8]; } L07ScaleRow;
 extern L07ScaleRow D_L07_001C4130[];
@@ -82,7 +82,7 @@ state_one:
             return;
         for (i = 0; list[i] != -1; i++) {
             int id = list[i];
-            float value = convert_integer_to_float(D_0013D428[id]);
+            float value = convert_integer_to_float(weapon_ammo_counts[id]);
             float scale = convert_integer_to_float(((L07ScaleRow *)((char *)D_L07_001C4130 + id * 0x18))->scale);
             float ratio = value / scale;
             float step = random_float_between(0.0f, *(float *)(data + 8));

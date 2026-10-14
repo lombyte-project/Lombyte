@@ -538,7 +538,7 @@ extern int pal_mode __asm__("D_0015ED80");
 extern int current_level_index_sda __asm__("D_0015ED84") __attribute__((sda));
 extern int D_L00_0015F770 __attribute__((sda));
 extern unsigned char D_L00_0017E530[];
-extern int freeze_stats_time_ref_a[] __asm__("D_0015EE58");
+extern int freeze_stats_time_ref[] __asm__("D_0015EE58");
 extern int freeze_stats_score_ref_a[] __asm__("D_0015EE68");
 extern float D_0013F3D0[];
 extern void *memcpy(void *, const void *, unsigned int);
@@ -637,7 +637,7 @@ int FUN_L00_00237200(HudElem *e) {
             if (FUN_001ff450(D_0013F3D0, point_data) < 5.0f) {
                 *(int *)0x15f648 = y + 100;
                 extra = current_level_index_sda == 0x10 ? 1 : 0;
-                elapsed = freeze_stats_time_ref_a[extra];
+                elapsed = freeze_stats_time_ref[extra];
                 extra = freeze_stats_score_ref_a[extra];
                 if (elapsed != 0) {
                     const char *message;

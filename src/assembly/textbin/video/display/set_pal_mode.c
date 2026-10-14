@@ -20,7 +20,7 @@ extern s32 first_image_buffer_address __asm__("D_0015EE74");
 extern s32 second_image_buffer_address __asm__("D_0015EE78");
 extern s32 display_buffer_address __asm__("D_0015EE80");
 extern s32 draw_buffer_address __asm__("D_0015EE84");
-extern s32 image_buffer_address __asm__("D_0015EE8C");
+extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern void fill_transfer_words(u8 *, s32, s32) __asm__("func_001F97E8");
 extern void FlushCache(s32);
 /* Retail returns zero after the graphics pipeline becomes idle. */
@@ -48,13 +48,13 @@ void set_pal_mode(void) {
         draw_buffer_address = 0x100000;
         depth_buffer_address = 0x1E0000;
         display_buffer_address = 0;
-        image_buffer_address = 0x2C0000;
+        gs_texture_allocation_base = 0x2C0000;
         setup_fs_aa_buffer(0x200, 0x1C0, 0x200, 0x200, 4, 0);
     } else {
         draw_buffer_address = 0xE0000;
         depth_buffer_address = 0x1B0000;
         display_buffer_address = 0;
-        image_buffer_address = 0x280000;
+        gs_texture_allocation_base = 0x280000;
         setup_fs_aa_buffer(0x200, 0x1A0, 0x200, 0x1C0, 0, 0);
     }
     /* Retail sign-extends the 16-bit dimensions before halving them. */
@@ -71,10 +71,10 @@ void set_pal_mode(void) {
     zbuf = (depth_buffer_address >> 13) | 0x1000000;
     frame = (draw_buffer_address >> 13) | ((u64)(screen_extent.width >> 6) << 16);
     scissor = ((u64)(screen_extent.width - 1) << 16) | ((u64)(screen_extent.height - 1) << 48);
-    first_image_buffer_address = image_buffer_address;
+    first_image_buffer_address = gs_texture_allocation_base;
     draw_environment.scissor1 = scissor;
     masked_depth_buffer_register = zbuf | ((u64)0x8000 << 17);
-    second_image_buffer_address = image_buffer_address;
+    second_image_buffer_address = gs_texture_allocation_base;
     draw_environment.zbuf1 = zbuf;
     draw_environment.zbuf2 = zbuf;
     depth_buffer_register = zbuf;
