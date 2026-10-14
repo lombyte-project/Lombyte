@@ -25,6 +25,9 @@ RAM_END = 0x02000000
 
 OVERLAY_FUNC = re.compile(r"^FUN_L(\d{2})_([0-9A-Fa-f]{8})$")
 OVERLAY_DATA = re.compile(r"^D_L(\d{2})_([0-9A-Fa-f]{8})$")
+# Data every level holds at the same address (an engine global the executable
+# reads there): one definition, proven in all levels.
+SHARED_DATA = re.compile(r"^D_([0-9A-Fa-f]{8})$")
 OVERLAY_JTBL = re.compile(r"^jtbl_L(\d{2})_([0-9A-Fa-f]{8})$")
 EXE_FUNC = re.compile(r"^(?:FUN|func)_([0-9A-Fa-f]{8})$")
 
@@ -118,7 +121,7 @@ def read_catalogue(path: Path = CATALOGUE) -> dict[str, Row]:
 
 
 def read_data_catalogue(path: Path = DATA_CATALOGUE) -> dict[str, int]:
-    """Level data defined in C (D_LNN_XXXXXXXX): name -> size in bytes."""
+    """Level data defined in C (D_LNN_XXXXXXXX, or D_XXXXXXXX in every level): name -> size."""
     rows = {}
     if path.is_file():
         for line in path.read_text().splitlines():

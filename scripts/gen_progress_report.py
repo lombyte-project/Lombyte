@@ -189,6 +189,10 @@ def read_level_data(repo: Path) -> dict[int, int]:
             m = re.match(r"^D_L(\d{2})_[0-9A-Fa-f]{8}\t(\d+)", line)
             if m:
                 out[int(m.group(1))] = out.get(int(m.group(1)), 0) + int(m.group(2))
+            m = re.match(r"^D_[0-9A-Fa-f]{8}\t(\d+)", line)
+            if m:  # data every level holds at that address, proven in all of them
+                for level in (int(p.stem[-2:]) for p in path.parent.glob("level-??.json")):
+                    out[level] = out.get(level, 0) + int(m.group(1))
     return out
 
 

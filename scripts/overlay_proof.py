@@ -745,6 +745,38 @@ def data_symbols(elf: ELFFile) -> list:
     return out
 
 
+def check_shared_data(obj_path, name: str) -> dict:
+    """The verdict for D_XXXXXXXX defined in OBJ_PATH: data every level holds
+    at XXXXXXXX. Its bytes (no pointers) must equal what each level loads there."""
+    result = {"method": DATA_METHOD, "exact": False, "symbol": name}
+    address = int(ov.SHARED_DATA.match(name).group(1), 16)
+    elf = open_elf(obj_path)
+    found = [(sym, sec) for sym, sec in data_symbols(elf) if sym.name == name]
+    if not found:
+        result["verdict"] = f"LINK {name} is not defined in this file"
+        return result
+    sym, _secname = found[0]
+    size, start = sym["st_size"], sym["st_value"]
+    result.update(address=address, size=size)
+    section = elf.get_section(sym["st_shndx"])
+    ours = bytes(section.data()[start:start + size]) if section["sh_type"] != "SHT_NOBITS" else bytes(size)
+    for rel_sec in elf.iter_sections():
+        if isinstance(rel_sec, RelocationSection) and rel_sec["sh_info"] == sym["st_shndx"] and any(
+                start <= rel["r_offset"] < start + size for rel in rel_sec.iter_relocations()):
+            result["verdict"] = "LINK data in every level holds no pointers"
+            return result
+    for level in ov.level_ids():
+        retail = ov.level_data_bytes(level, address, size)
+        if retail is None:
+            result["verdict"] = f"LINK {address:#x}+{size} is not in level {level:02d} data"
+            return result
+        if retail != ours:
+            result["verdict"] = f"BYTES level {level:02d}"
+            return result
+    result.update(verdict="EXACT", exact=True)
+    return result
+
+
 def check_data(obj_path, name: str) -> dict:
     """The verdict for level data NAME (D_LNN_XXXXXXXX) defined in OBJ_PATH.
 

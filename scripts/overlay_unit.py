@@ -169,11 +169,12 @@ def verify_all() -> int:
         # level data defined in C: its bytes, pointers resolved, equal the level's
         for sym, _section in proof.data_symbols(proof.open_elf(obj)):
             where = obj.relative_to(BUILD)
-            if not ov.OVERLAY_DATA.match(sym.name):
-                bad.append(f"{sym.name:24s} needs its D_LNN_XXXXXXXX label  ({where})")
+            if not ov.OVERLAY_DATA.match(sym.name) and not ov.SHARED_DATA.match(sym.name):
+                bad.append(f"{sym.name:24s} needs its D_LNN_XXXXXXXX or D_XXXXXXXX label  ({where})")
                 continue
             data_defined[sym.name] = sym["st_size"]
-            verdict = proof.check_data(obj, sym.name)
+            verdict = (proof.check_data(obj, sym.name) if ov.OVERLAY_DATA.match(sym.name)
+                       else proof.check_shared_data(obj, sym.name))
             if not verdict["exact"]:
                 bad.append(f"{sym.name:24s} {verdict['verdict']}  ({where})")
         for name in names:
