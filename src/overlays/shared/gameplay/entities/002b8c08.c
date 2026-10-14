@@ -2649,8 +2649,8 @@ reset_timer:
             if (FUN_00221360_2f5168(path + 0x10, path + (*(int *)path << 4)) < 0.5f) --*(int *)path;
         } else {
             path = (char *)0x0020b3e0;
-            type = H2(moby, 0xa6);
             index = FUN_00222160_2f5168((float)(((int)moby - (int)D_L01_0015FFD8) >> 8));
+            type = H2(moby, 0xa6);
             FUN_0020cc78_2f5168(path, type, index);
         }
         B2(moby, 0x30) = 0xff;
