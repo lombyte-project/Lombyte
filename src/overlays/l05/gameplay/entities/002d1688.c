@@ -1735,7 +1735,7 @@ extern f32 angle_diff(f32, f32) __asm__("FUN_001fa688");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
 extern s32 FUN_L05_00303e50(char *moby, float *goal, float s);
-extern f32 FUN_L05_00304058(s32, void *, void *, f32);
+extern f32 FUN_L05_00304058_u(s32, void *, void *, f32) __asm__("FUN_L05_00304058");
 
 /* Walks m toward its next path node, steering `side` radians off the direct heading while
    FUN_L05_00303e50 reports the way blocked; slows near the goal and arms the stuck timer
@@ -1769,7 +1769,7 @@ void FUN_L05_00303b08(struct Moby *m, s32 node, f32 side) {
     dir.z = 0.0f;
     FUN_L00_00258b50(m, v->move, &dir, &out, 1.0f);
     if (v->stuck_timer == 0) {
-        if (FUN_L05_00304058(v->path, &m->pos, &m->pos, D_L05_00161A98_gp * 0.4f) > 2.0f)
+        if (FUN_L05_00304058_u(v->path, &m->pos, &m->pos, D_L05_00161A98_gp * 0.4f) > 2.0f)
             v->stuck_timer = FUN_001f96f8(5);
     }
 }
@@ -1841,89 +1841,99 @@ char *FUN_L05_00303f80(char *self, int idx) {
     }
     return res;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304058.s", FUN_L05_00304058);
-#else
-extern float absolute_float_304058(float) __asm__("FUN_001f99c0");
-extern void subtract_vector_304058(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void add_vector_304058(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void scale_vector_304058(float, void *, void *) __asm__("FUN_001f9bf8");
+/* Pushes a point clear of a path and returns the nearest wall distance.
+ * Adapted from the matched func_L00_00262DF0, based on Lombyte (MIT):
+ * src/overlays/shared/gameplay/state/00261968.c, FUN_L00_00261d78. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003054B0), where it is exact; names translated to the US level program. */
 
-float FUN_L05_00304058(s32 path_index, void *position, void *out, float reach) {
-    Vec4 segment, result, from_point, normal, projection, cross, offset;
-    float separation;
-    float along;
-    float segment_length;
-    float best;
-    struct { volatile s32 path_index; void *out; volatile int changed; } state;
-    int i;
-    int next_index;
-    char *path;
-    int path_offset;
-    char **path_entry;
+typedef int Quad_3054B0 __attribute__((mode(TI)));
 
-    state.path_index = path_index;
-    state.changed = 0;
-    *(void * volatile *)&state.out = out;
-    best = 512.0f;
-    qcopy_nc(&from_point, position);
-    /* Retain the saved-index read; the first lookup uses the incoming index. */
-    (void)state.path_index;
-    path_offset = path_index * 4;
-    i = state.changed;
-    if (i < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1) do {
-        int next;
-        int segment_offset = i * 16;
-        next_index = i + 1;
-        path_entry = (char **)((char *)D_L05_001B0930 + path_offset);
-        path = *(char **)((char *)D_L05_001B0930 + path_offset);
+typedef union {
+    Quad_3054B0 q;
+    f32 f[4];
+    s32 i[4];
+} PathVec_3054B0;
 
-        if (*(float *)(path + segment_offset + 0x1c) == 0.0f &&
-            *(float *)(path + next_index * 16 + 0x1c) == 0.0f)
-            goto loop_next;
+typedef struct {
+    s32 count;
+    u8 pad[12];
+    PathVec_3054B0 points[1];
+} SegmentPath_3054B0;
 
-        next = segment_offset + 0x10;
-        subtract_vector_304058(&segment, &from_point, path + next);
-        segment.f[2] = 0.0f;
-        subtract_vector_304058(&normal, *path_entry + (segment_offset + 0x20),
-                               *path_entry + next);
-        normal.f[2] = 0.0f;
-        scale_vector_304058(1.0f, &projection, &normal);
-        fast_vec_cross(&cross, &segment, &projection);
-        separation = absolute_float_304058(cross.f[2]);
-        if (separation < best)
-            best = separation;
-        if (reach < separation)
-            goto loop_next;
-        segment_length = fast_vec_length(&normal);
-        along = fast_vec_dot(&segment, &projection);
-        if (segment_length < along || along < 0.0f) {
-            if (!(fast_vec_length(&segment) < reach))
-                goto loop_next;
-            state.changed = 1;
-            scale_vector_304058(reach, &result, &segment);
-        } else {
-            state.changed = 1;
-            scale_vector_304058(along, &offset, &projection);
-            subtract_vector_304058(&result, &segment, &offset);
-            scale_vector_304058(reach, &result, &result);
-            add_vector_304058(&result, &result, &offset);
+extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
+float absolute_float(float input) __asm__("func_001F99C0");
+extern SegmentPath_3054B0 *D_L05_001B0CB0_3054B0[] __asm__("D_L05_001B0930");
+extern f32 abs_3054B0(f32) __asm__("FUN_001f99c0");
+extern void func_001F9BD8_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, PathVec_3054B0 *) __asm__("FUN_001f9a10");
+extern void func_001F9BF0_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, PathVec_3054B0 *) __asm__("FUN_001f9a28");
+extern f32 dot_3054B0(PathVec_3054B0 *, PathVec_3054B0 *) __asm__("FUN_001f9ab0");
+extern void func_001F9CA0_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, PathVec_3054B0 *) __asm__("FUN_001f9ad8");
+extern f32 func_001F9CB8_3054B0(PathVec_3054B0 *) __asm__("FUN_001f9af0");
+extern void func_L00_001FF4B0_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, f32) __asm__("FUN_001f9bf8");
+
+f32 FUN_L05_00304058(s32 path_index, void *input, void *output, f32 distance) {
+    PathVec_3054B0 *point = input;
+    PathVec_3054B0 *out = output;
+    PathVec_3054B0 difference;
+    PathVec_3054B0 scaled_difference;
+    PathVec_3054B0 working;
+    PathVec_3054B0 segment;
+    PathVec_3054B0 scaled_segment;
+    PathVec_3054B0 cross;
+    PathVec_3054B0 scaled_cross;
+    SegmentPath_3054B0 **entry;
+    s32 i;
+    s32 found;
+    f32 best = 512.0f;
+
+    found = 0;
+    qcopy_nc(&working, point);
+    for (i = 0; i < D_L05_001B0CB0_3054B0[path_index]->count - 1; i++) {
+        entry = &D_L05_001B0CB0_3054B0[path_index];
+        if ((*entry)->points[i].f[3] == 0.0f && (*entry)->points[i + 1].f[3] == 0.0f)
+            continue;
+        func_001F9BF0_3054B0(&difference, &working, &(*entry)->points[i]);
+        difference.i[2] = 0;
+        func_001F9BF0_3054B0(&segment, &(*entry)->points[i + 1], &(*entry)->points[i]);
+        segment.i[2] = 0;
+        func_L00_001FF4B0_3054B0(&scaled_segment, &segment, 1.0f);
+        func_001F9CA0_3054B0(&cross, &difference, &scaled_segment);
+        {
+            f32 wall_distance = abs_3054B0(cross.f[2]);
+            if (wall_distance < best)
+                best = wall_distance;
+            if (distance < wall_distance)
+                continue;
         }
-        add_vector_304058(&from_point, &result,
-                          *path_entry + next);
-        from_point.f[2] = ((Vec4f *)position)->z;
-loop_next:
-        i = next_index;
-        path_offset = *(volatile s32 *)&state.path_index * 4;
-    } while (i < *(int *)*(char **)((char *)D_L05_001B0930 + path_offset) - 1);
-    if (state.changed)
-        qcopy(state.out, &from_point);
+        {
+            f32 segment_length = func_001F9CB8_3054B0(&segment);
+            f32 projection = dot_3054B0(&difference, &scaled_segment);
+            if (segment_length < projection || projection < 0.0f) {
+                if (!(func_001F9CB8_3054B0(&difference) < distance))
+                    continue;
+                found = 1;
+                func_L00_001FF4B0_3054B0(&scaled_difference, &difference, distance);
+                func_001F9BD8_3054B0(&working, &scaled_difference, &(*entry)->points[i]);
+                working.f[2] = point->f[2];
+            } else {
+                found = 1;
+                func_L00_001FF4B0_3054B0(&scaled_cross, &scaled_segment, projection);
+                func_001F9BF0_3054B0(&scaled_difference, &difference, &scaled_cross);
+                func_L00_001FF4B0_3054B0(&scaled_difference, &scaled_difference, distance);
+                func_001F9BD8_3054B0(&scaled_difference, &scaled_difference, &scaled_cross);
+                func_001F9BD8_3054B0(&working, &scaled_difference, &(*entry)->points[i]);
+                working.f[2] = point->f[2];
+            }
+        }
+    }
+    if (found)
+        qcopy(out, &working);
     return best;
 }
-#endif
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304320.s", FUN_L05_00304320);
 extern char *find_collision_part_305178(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void *FUN_L05_002899f8(void *, void *, void *, int);
