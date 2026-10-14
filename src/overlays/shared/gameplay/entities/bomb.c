@@ -1005,12 +1005,12 @@ extern f32 cubic_hermite_scalar_2caf70(f32, f32, f32, f32, f32) __asm__("FUN_L00
 extern void FUN_L00_002cbcc0(u8 *, s32);
 extern void FUN_0024eb68_2caf70(void *) __asm__("FUN_L00_0024eb68");
 extern f32 D_L00_00161890_2caf70 __asm__("D_L00_00161890") __attribute__((sda));
-extern f32 D_L00_00161894_2caf70 __asm__("D_L00_00161894") __attribute__((section(".data")));
+extern f32 D_L00_00161894_2caf70 __asm__("D_L00_00161894") __attribute__((section(".sdata")));
 extern f32 D_L00_00161888_2caf70 __asm__("D_L00_00161888") __attribute__((sda));
 extern f32 D_L00_00161870_2caf70 __asm__("D_L00_00161870") __attribute__((sda));
 extern f32 D_L00_00161874_2caf70 __asm__("D_L00_00161874") __attribute__((sda));
 extern f32 D_L00_00161878_2caf70 __asm__("D_L00_00161878") __attribute__((sda));
-extern char D_L00_0015F580_2caf70[] __asm__("D_L00_0015F580");
+extern char D_L00_0015F580_2caf70[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
 
 struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Moby *other,
                               f32 vx, f32 vy, f32 height, f32 speed)
@@ -1029,10 +1029,10 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
     vars = m->pvars;
     *(struct Moby **)(vars + 0x20) = source;
     ((volatile struct Moby *)m)->draw_dist = 0x7f;
-    ((volatile struct Moby *)m)->update_dist = 0x7f;
-    ((volatile struct Moby *)m)->visible = 1;
-    ((volatile struct Moby *)m)->spawn_frame = source->spawn_frame;
-    *(f32 *)((u8 *)m + 0x40) = D_L00_00161890_2caf70;
+    m->update_dist = 0x7f;
+    m->visible = 1;
+    ((volatile struct Moby *)m)->spawn_frame = ((volatile struct Moby *)source)->spawn_frame;
+    *(f32 *)((u8 *)m + 0x40) = *(volatile f32 *)&D_L00_00161890_2caf70;
     *(f32 *)((u8 *)m + 0x44) = FUN_002000e8_2caf70(speed, *(volatile f32 *)&D_L00_00161894_2caf70);
     *(f32 *)((u8 *)m + 0x48) = height;
     qcopy(&m->pos, start);
@@ -1106,9 +1106,7 @@ update_motion:
         i = 0;
         do {
             u8 *effect = FUN_L00_00275158_2caf70(0.0f, &m->pos, D_L00_0015F580_2caf70, 1);
-            if (effect == 0) {
-                *handle = 0;
-            } else {
+            if (effect != 0) {
                 f32 blend;
                 *(f32 *)(effect + 0xc) = FUN_L00_00257be8_2caf70(D_L00_00161870_2caf70, D_L00_00161874_2caf70);
                 blend = cubic_hermite_scalar_2caf70(-1.5f, 0.0f, 1.0f, 0.0f,
@@ -1119,10 +1117,12 @@ update_motion:
                 *(f32 *)(effect + 0xc) = initial_value + target;
                 *(u32 *)(effect + 4) = (FUN_00200250_2caf70(128.0f + blend * -64.0f) << 24) | 0xffffff;
                 *handle = effect;
+            } else {
+                *handle = 0;
             }
             i++;
             handle++;
-        } while (i != 17);
+        } while (i < 17);
     }
     }
     return m;
