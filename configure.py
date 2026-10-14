@@ -467,7 +467,7 @@ DATA_OVERLAYS = {
     "textbin/append_billboard_batch": (0x18ED00, 0x8FC80),
     "textbin/passes_projected_region_callback_0": (0x1A03B0, 0xA1330),
     "textbin/initialize_level_runtime": (0x1CAAC0, 0xCBA40),
-    "assembly/textbin/world/data/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60),
+    "textbin/world/data/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60),
     "assembly/textbin/fun_002196b8": (0x1CE2C0, 0xCF240),
     "textbin/gameplay/gadgets/load_hand_gadget": (0x1D52E8, 0xD6268),
     "assembly/textbin/fun_00225e70": (0x1D6080, 0xD7000),

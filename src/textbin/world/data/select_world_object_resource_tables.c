@@ -4,10 +4,7 @@
 #include "rnc/rendering/material_templates.h"
 #include "rnc/rendering/resident_class.h"
 
-#include "rnc/gameplay/entities/moby_class_tables.h"
-#include "types.h"
 /* Verified against the US retail body at 0x00204a40. */
-#include "sda.h"
 
 typedef struct {
     char pad00[0x10];
@@ -43,7 +40,6 @@ extern s32 runtime_resource_tag __asm__("D_0015FF44") MACRO_ADDR;
 extern s32 class_resource_count __asm__("D_0015FF48") MACRO_ADDR;
 extern s32 active_class_resource_index __asm__("D_0015FF4C") MACRO_ADDR;
 extern s32 active_decode_buffer __asm__("D_0015FF50") MACRO_ADDR;
-#include "rnc/rendering/resident_class.h"
 typedef struct {
     u8 pad0[0x10];
     char *decode_buffers;
@@ -57,7 +53,6 @@ extern s32 D_001B6180[];
 extern void *D_001B3200[];
 extern GadgetRec vendor_item_definitions[] __asm__("D_001863D0");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
-#include "rnc/rendering/material_templates.h"
 extern void FlushCache(s32);
 extern void decompress_wad(s32, void *) __asm__("func_0020B618");
 extern void prepare_resident_class_render_data(void *, void *, void *,
