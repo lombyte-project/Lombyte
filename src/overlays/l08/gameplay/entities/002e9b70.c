@@ -726,8 +726,8 @@ void FUN_L08_002f5e58(struct Moby *m) {
     a = convert_integer_to_float(b[0x13]);
     c = convert_integer_to_float(m->alpha);
     alpha = truncate_float_to_s32_u(d->intensity * a * c * 0.0078125f) & 0xff;
-    if (b[0xd] == 0) b[0xf] = b[0xc];
-    else b[0xf] = b[0xc] + (D_L08_0015F3F8_gp / (b[0xe]+1)) % b[0xd];
+    if (b[0xd] != 0) b[0xf] = b[0xc] + (D_L08_0015F3F8_gp / (b[0xe]+1)) % b[0xd];
+    else b[0xf] = b[0xc];
     temp = b[0xf];
     if (!(d->flags & 1)) temp += 0x28;
     packet.gs[1] = get_effect_texture(temp);
@@ -785,14 +785,16 @@ void FUN_L08_002f5e58(struct Moby *m) {
             a = FUN_L00_0025e310(f[0x17] * time);
             angle = x * 3.1415927f;
             c = FUN_001f9de0(a);
-            base = time * phase + f[0x16] * c;
+            base = time * phase;
+            base = base + f[0x16] * c;
             noise_x = FUN_L08_002f5d98(x, (char *)d);
             base = base + (noise_x * f[0x34] + noise_y * f[0x35] + bend * f[0x36]);
             shape = height_a * x + height_b * (1.0f-x);
             a = FUN_L00_0025e310(base + phase_a + f[0xb] * x + f[0xd] * y);
             c = FUN_L00_0025e310(base + phase_b + f[0xc] * y + f[0xe] * x);
             sine = FUN_001f9988(FUN_001f9de0(angle));
-            shape = shape * sine * (1.0f-y);
+            shape = shape * sine;
+            shape = shape * (1.0f-y);
             t = FUN_001f9dc8(a);
             normalize_vector_xyz(&velocity, &across, amp_a * t * sine * noise_x);
             t = FUN_001f9de0(c);
@@ -817,12 +819,25 @@ void FUN_L08_002f5e58(struct Moby *m) {
         add_vector_xyz(&edge[1], &edge[1], &down[1]);
         amp_b = next_amp_b; phase_a = next_a; phase_b = next_b;
     }
-    a = FUN_001f9de0(FUN_L00_0025e310(time * f[0x12]));
-    a = FUN_L00_00200228(time*f[0x10] + f[0x11]*a, &temp);
-    { s32 count = 0; f32 *weight = u; do { *weight++ = a; count++; a = a + inv_x / d->period_a; } while (count <= b[8]); }
-    a = FUN_001f9de0(FUN_L00_0025e310(time * f[0x15]));
-    a = FUN_L00_00200228(time*f[0x13] + f[0x14]*a, &temp);
-    { s32 count = 0; f32 *weight = v; do { *weight++ = a; count++; a = a + inv_y / d->period_b; } while (count <= b[9]); }
+    {
+        f32 a;
+        s32 count;
+        f32 *weight;
+        a = FUN_001f9de0(FUN_L00_0025e310(time * f[0x12]));
+        a = FUN_L00_00200228(time*f[0x10] + f[0x11]*a, &temp);
+        weight = u;
+        for (count = 0; count <= b[8]; count++) {
+            *weight++ = a;
+            a = a + inv_x / d->period_a;
+        }
+        a = FUN_001f9de0(FUN_L00_0025e310(time * f[0x15]));
+        a = FUN_L00_00200228(time*f[0x13] + f[0x14]*a, &temp);
+        weight = v;
+        for (count = 0; count <= b[9]; count++) {
+            *weight++ = a;
+            a = a + inv_y / d->period_b;
+        }
+    }
     for (i=0; i<b[9]; i++) {
         {
             Vec4 *current;
@@ -835,22 +850,24 @@ void FUN_L08_002f5e58(struct Moby *m) {
                 current = (Vec4 *)((char *)grid + k);
                 target = (Vec4 *)((char *)grid + count);
                 for (j=0; j<b[8]; j++) {
-                    packet.uv[0][0] = u[j]; packet.uv[0][1] = *current_v;
-                    packet.uv[1][0] = u[j+1]; packet.uv[1][1] = *current_v;
-                    packet.uv[2][0] = u[j]; packet.uv[2][1] = *target_v;
-                    packet.uv[3][0] = u[j+1]; packet.uv[3][1] = *target_v;
+                    a = u[j]; c = *current_v; t = u[j+1];
+                    packet.uv[0][0] = a; packet.uv[0][1] = c;
+                    packet.uv[1][0] = t; packet.uv[1][1] = c;
+                    c = *target_v;
+                    packet.uv[2][0] = a; packet.uv[2][1] = c;
+                    packet.uv[3][0] = t; packet.uv[3][1] = c;
                     add_vector_xyz(&packet.points[0], &current[j], &m->pos);
                     add_vector_xyz(&packet.points[1], &current[j+1], &m->pos);
                     add_vector_xyz(&packet.points[2], &target[j], &m->pos);
                     add_vector_xyz(&packet.points[3], &target[j+1], &m->pos);
-                    temp = truncate_float_to_s32_u((&current[j])->f[3]);
-                    packet.color[0] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-                    temp = truncate_float_to_s32_u((&current[j+1])->f[3]);
-                    packet.color[1] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-                    temp = truncate_float_to_s32_u((&target[j])->f[3]);
-                    packet.color[2] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-                    temp = truncate_float_to_s32_u((&target[j+1])->f[3]);
-                    packet.color[3] = (u32)(alpha/temp) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+                    timer = truncate_float_to_s32_u((&current[j])->f[3]);
+                    packet.color[0] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+                    timer = truncate_float_to_s32_u((&current[j+1])->f[3]);
+                    packet.color[1] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+                    timer = truncate_float_to_s32_u((&target[j])->f[3]);
+                    packet.color[2] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
+                    timer = truncate_float_to_s32_u((&target[j+1])->f[3]);
+                    packet.color[3] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
                     FUN_001f7d30(&packet, NULL, 0);
                 }
             }
