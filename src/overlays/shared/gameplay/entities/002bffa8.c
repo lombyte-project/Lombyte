@@ -1150,7 +1150,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     OvlVec4 probe;
     f32 angle, slope, distance, horizontal, vertical, radius, speed;
     f32 gravity;
-    s32 hit = 0;
+
 
     if (moby == 0)
         return;
@@ -1225,6 +1225,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
         scale_vector_xyz(&target, &direction, D_0015ED68 * 60.0f);
         add_vector_xyz(&target, &target, &pos);
         if (controller_state.held & 5) {
+            s32 hit;
             probe.q = 0;
             probe.f[2] = item_text_variant[0x11] ? 12.0f : 6.0f;
             hit = 0;
