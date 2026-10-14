@@ -1876,9 +1876,6 @@ int FUN_L06_00303160(char *moby, int path) {
     }
     return ride->progress == 1.0f;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00303748.s", FUN_L06_00303748);
-#else
 typedef struct { int v[6]; } Colors_303748;
 extern Colors_303748 D_L06_00201948, D_L06_00201960;
 extern float D_L06_00162114 __attribute__((sda));
@@ -1919,14 +1916,13 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
     prepare_piece_effect_303748(moby, pos, -1, 2.0f, 13.0f);
     a = D_L06_00201948;
     b = D_L06_00201960;
-    if (count > 0) {
-        int left = count;
-        do {
+    {
+        int piece;
+        for (piece = 0; piece < count; piece++) {
             int *pa = a.v + random_integer_below(6);
             int *pb;
             int r1, r2;
             strength = scale * 400000.0f;
-            left--;
             pb = b.v + random_integer_below(6);
             {
                 int low, high;
@@ -1942,7 +1938,7 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
             }
             FUN_L00_0026a9f0(pos, push, *pa, *pb, strength, r1, r2, 0, 0,
                              frame_time_03b68 * 10.0f * scale);
-        } while (left != 0);
+        }
     }
     for (i = 0; i < count * D_L06_00162150;) {
         int color1, color2, life, size, fade;
@@ -1968,7 +1964,6 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
             D_L06_00162154 + (D_L06_00162158 << 16));
     }
 }
-#endif
 extern char *D_L06_0015FFD8_03b68 __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_03b68[] __asm__("D_L06_001ABFC0");
 extern float D_L06_0016215C __attribute__((sda));
