@@ -543,11 +543,11 @@ int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out) {
     }
     return r;
 }
-extern int D_L00_0015FFF4 ;
+extern int D_L00_0015FFF4;
 extern unsigned short *D_L00_001AB840_2591d0[] __asm__("D_L00_001AB840");
-extern char *D_L00_00160114 ;
+extern char *D_L00_00160114;
 extern unsigned short *D_L00_0016010C_2591d0 __asm__("D_L00_0016010C");
-extern short D_L00_00160110 ;
+extern short D_L00_00160110;
 extern char *D_L00_0015FFD8_2591d0 __asm__("D_L00_0015FFD8");
 int f2592b8_2591d0(char **, char *) __asm__("FUN_L00_002592b8");
 /* Looks up table entry idx and makes it current; the flag test reads the

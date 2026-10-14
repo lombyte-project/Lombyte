@@ -945,7 +945,7 @@ typedef struct {
     OvlQuad rest[4];
 } Goal_52b8;
 
-extern char *D_L15_0015FFE4 ;
+extern char *D_L15_0015FFE4;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void add_vector_xyz_52b8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");

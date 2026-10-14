@@ -254,7 +254,7 @@ void FUN_L10_002f5a50(int i) {
     q[0x38] = 1;
     q[0x39] = 0;
 }
-extern char *D_L10_0015EF50 ;
+extern char *D_L10_0015EF50;
 extern char *D_L10_001B0930_5a78[] __asm__("D_L10_001B0930");
 extern int FUN_00214720_5a78(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_0025fa38_5a78(void *, int) __asm__("FUN_L00_0025fa38");
@@ -627,7 +627,7 @@ void FUN_L10_002f5f18(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
 
-extern char *D_L10_0015EF50 ;
+extern char *D_L10_0015EF50;
 extern int FUN_L10_002f5a78_u(char *, char *) __asm__("FUN_L10_002f5a78");
 
 int FUN_L10_002f65f8(char *a, char *b) {

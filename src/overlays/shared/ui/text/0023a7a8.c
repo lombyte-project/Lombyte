@@ -207,8 +207,8 @@ int FUN_L00_0023ac78(int call) {
     return n;
 }
 extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
-extern int D_L00_0015F96C ;
-extern int D_L00_0015F970 ;
+extern int D_L00_0015F96C;
+extern int D_L00_0015F970;
 extern int D_0013D428_23adb8[] __asm__("D_0013D428");
 extern int FUN_001ff308_23adb8(int, int, void *, void *, void *, void *,
                                int) __asm__("FUN_001ff308");

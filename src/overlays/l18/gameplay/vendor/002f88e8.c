@@ -1107,7 +1107,7 @@ void FUN_L18_002fbb98(unsigned char *m) {
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
 extern int game_frame __asm__("D_L18_0015F5CC");
-extern int D_L18_0015F5C4 ;
+extern int D_L18_0015F5C4;
 extern int *D_L18_001B0EB0_c100[] __asm__("D_L18_001B0EB0");
 extern void FUN_L18_002fca98(struct Moby *moby);
 extern float fast_add_rotations_c100(float, float) __asm__("FUN_001fa580");

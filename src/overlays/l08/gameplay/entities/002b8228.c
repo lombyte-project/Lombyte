@@ -93,7 +93,7 @@ extern float D_L08_0016145C __attribute__((sda));
 extern int D_L08_00161460 __attribute__((sda));
 extern float D_L08_00161464 __attribute__((sda));
 extern int D_L08_00174658;
-extern int D_L08_0015F5CC ;
+extern int D_L08_0015F5CC;
 extern int FUN_L00_001ff660();
 extern int FUN_L08_002025d0(void*,int,int,void*,int);
 extern int allocate_voice_for_target_entry(int,int,void*) __asm__("FUN_0022da68");

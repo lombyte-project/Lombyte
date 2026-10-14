@@ -1297,7 +1297,7 @@ extern int D_L00_001DBF50;
 extern int D_L00_001DBF70;
 extern int D_L00_001DD0A0;
 extern int D_L00_001DD0D0;
-extern int FUN_001efa68_c_c(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68") ;
+extern int FUN_001efa68_c_c(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
 extern int FUN_001f9a40();
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");

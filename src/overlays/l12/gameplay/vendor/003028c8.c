@@ -270,7 +270,7 @@ extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
 extern void func_L00_0025A8C0_304310(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int func_L00_001EFFF0_304310(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern Row_304310 *D_L12_001B0C30_304310[] __asm__("D_L12_001B0930");
-extern char D_L12_00167240[] ;
+extern char D_L12_00167240[];
 extern float D_0013F4D0_304310[] __asm__("D_0013F3D0");
 
 void FUN_L12_00302f30(Moby *moby) {

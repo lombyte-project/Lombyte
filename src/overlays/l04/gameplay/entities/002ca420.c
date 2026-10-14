@@ -1669,7 +1669,7 @@ extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, 
                                                float) __asm__("FUN_L00_00272f68");
 extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
 extern char D_L10_00167240_298940[] __asm__("D_L04_00166F40");
-extern int D_L04_0015F5C4 ;
+extern int D_L04_0015F5C4;
 void FUN_L04_002e1d00(char *m) {
     L10SpriteData_298940 *p = *(L10SpriteData_298940 **)(m + 0x78);
     float d[4] __attribute__((aligned(16)));

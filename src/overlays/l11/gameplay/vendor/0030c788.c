@@ -39,7 +39,7 @@ extern float D_L11_00161EEC __attribute__((sda));
 extern float D_L11_00161EF0 __attribute__((sda));
 extern float D_L11_00161EF4 __attribute__((sda));
 extern float D_L11_00161EF8 __attribute__((sda));
-extern float D_L11_0015F3FC ;
+extern float D_L11_0015F3FC;
 extern int D_L11_0015FFD8_c788 __asm__("D_L11_0015FFD8");
 extern int D_L11_001600EC_c788 __asm__("D_L11_001600EC");
 extern u8 alternate_item_available_c788[128] __asm__("D_0013D388");

@@ -734,7 +734,7 @@ extern char D_0013E550[];
 extern char D_L01_001BB6B0[];
 extern s32 D_0014C190[][64];
 extern s32 D_L01_001742D8;
-extern char *D_L01_00167280_lui ;
+extern char *D_L01_00167280_lui;
 extern char D_L01_0020BA10[], D_L01_0020BA30[];
 extern s32 D_L01_00162098 __attribute__((sda));
 extern s32 D_L01_0016209C __attribute__((sda));

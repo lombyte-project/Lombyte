@@ -1271,7 +1271,7 @@ extern f32 D_L14_00161CF0;
 extern s32 D_L14_00161CF4;
 extern s32 D_L14_00161CF8_macro[] __asm__("D_L14_00161CF8") __attribute__((section(".sdata")));
 extern f32 D_L14_001DFD80_d530[40][4] __asm__("D_L14_001DFD80");
-extern s16 D_L14_001E0000[40] ;
+extern s16 D_L14_001E0000[40];
 extern f32 D_L14_001E0050_d530[3][16][4] __asm__("D_L14_001E0050");
 extern u16 D_L14_001E0350_d530[3][16] __asm__("D_L14_001E0350");
 extern void arc_sub(void *, void *, void *) __asm__("FUN_001f9a28");

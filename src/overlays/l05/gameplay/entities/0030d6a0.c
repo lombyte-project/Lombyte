@@ -1304,7 +1304,7 @@ extern void FUN_L02_002a40d0(void *, float);
 void FUN_L05_00316070_c(char *moby) __asm__("FUN_L05_00316070");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern void func_L05_00317538_3175D8(void) __asm__("FUN_L05_00316070");
-extern float D_L05_00211B20[] ;
+extern float D_L05_00211B20[];
 
 void FUN_L05_00316110(char *moby) {
     switch ((unsigned char)moby[0x20]) {

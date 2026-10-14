@@ -300,7 +300,7 @@ typedef struct {
     int q[8];
 } Pkt;
 
-extern char D_L17_001676C0[] ;
+extern char D_L17_001676C0[];
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float D_0015EE7C __asm__("D_0015ED7C");
 extern float fast_cos_c(float) __asm__("FUN_001f9dc8");

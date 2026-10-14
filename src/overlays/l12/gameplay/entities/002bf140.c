@@ -487,7 +487,7 @@ void FUN_L12_002e19a8_c(void *pos) __asm__("FUN_L12_002e19a8");
 void FUN_L12_002e3528_c(struct Moby *moby) __asm__("FUN_L12_002e3528");
 extern char D_0013E633_2E2EF0[] __asm__("D_001413D0");
 extern char *D_L12_001B0C30_2E2EF0[] __asm__("D_L12_001B0930");
-extern char D_L12_00167240[] ;
+extern char D_L12_00167240[];
 extern void func_L12_002E4838_2E2EF0(void *) __asm__("FUN_L12_002e3528");
 extern void func_L00_00264BB0_2E2EF0(void *,float) __asm__("FUN_L00_00263b38");
 extern int select54(char *,char *,float) __asm__("FUN_L01_00274b78");

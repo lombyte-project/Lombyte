@@ -291,9 +291,9 @@ struct G_3063f0 {
     char *objs[1];
 };
 
-extern float D_L08_0015F59C ;
-extern float D_L08_0015F5A0 ;
-extern int D_L08_0015F5C4 ;
+extern float D_L08_0015F59C;
+extern float D_L08_0015F5A0;
+extern int D_L08_0015F5C4;
 extern struct G_3063f0 D_L08_0016D060_d __asm__("D_L08_0016D060") __attribute__((section(".data")));
 extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__((section(".data")));

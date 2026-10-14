@@ -113,8 +113,8 @@ extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__(
 extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
 extern f32 fast_add_rotations_c2(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations_c2(f32, f32) __asm__("func_001FA5C8");
-extern int FUN_001f96b0_c() __asm__("FUN_001f96b0") ;
-extern int FUN_001f9a40_c() __asm__("FUN_001f9a40") ;
+extern int FUN_001f96b0_c() __asm__("FUN_001f96b0");
+extern int FUN_001f9a40_c() __asm__("FUN_001f9a40");
 extern int FUN_L00_002223f8();
 extern int FUN_L00_00266d60();
 extern int allocate_voice_for_target_entry_alt(int,int,int) __asm__("FUN_0022da68");

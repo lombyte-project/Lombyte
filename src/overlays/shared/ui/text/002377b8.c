@@ -174,7 +174,7 @@ typedef struct {
 } G_t;
 extern G_t D_0013C940;
 extern int D_L00_0017E504 __attribute__((section(".data")));
-extern int D_L00_0015FA90 ;
+extern int D_L00_0015FA90;
 extern int D_L00_0015F780_gp __asm__("D_L00_0015F780") __attribute__((sda));
 extern int D_L00_0015FA9C __attribute__((sda));
 extern Ent **D_L00_0015FAC0_c __asm__("D_L00_0015FAC0");

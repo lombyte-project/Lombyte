@@ -541,7 +541,7 @@ extern int FUN_L00_0025d808_path54(char *, float *, float *, float *, int,
                                     float) __asm__("FUN_L00_0025d808");
 extern void func_L00_002592B0_path54(char *, float, float *, float, float,
                                      float) __asm__("FUN_L00_00258278");
-extern char *D_L16_001B0930[] ;
+extern char *D_L16_001B0930[];
 
 int FUN_L16_002e3fa0(struct Moby *moby) {
     float pos[4];
@@ -828,7 +828,7 @@ void FUN_L16_002e4a58(struct Moby *moby) {
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L16_001D9750[];
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int D_L16_0015F5CC ;
+extern int D_L16_0015F5CC;
 extern int FUN_001fa6e0_u(float, int, int) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_001f9d20(void *, void *, void *);
@@ -886,7 +886,7 @@ void FUN_L16_002e5010(struct Moby *m) {
 extern f32 convert_integer_to_float_q(s32) __asm__("FUN_001fa6c0");
 extern float FUN_001f9b48_q(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_sin_q(float) __asm__("FUN_001f9de0");
-extern int D_L16_0015F5CC ;
+extern int D_L16_0015F5CC;
 extern int FUN_001fa6e0_q(float, int, int) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames_q(s32) __asm__("FUN_001f96f8");
 extern void FUN_001f9d20_q(void *, void *, void *) __asm__("FUN_001f9d20");

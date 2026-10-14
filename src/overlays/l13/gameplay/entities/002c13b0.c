@@ -2838,7 +2838,7 @@ extern void FUN_L13_002e97e0();
 int FUN_L13_002e86f8_c(void *unused, unsigned char *p, int base, int n) __asm__("FUN_L13_002e86f8");
 void FUN_L13_002e9680_c(void *unused, char *p, int idx) __asm__("FUN_L13_002e9680");
 extern char D_0013F450_2EAE80[] __asm__("D_0013F350");
-extern char D_00140940[] ;
+extern char D_00140940[];
 extern int D_L13_001D3748_2EAE80[] __asm__("D_L13_001D3478");
 extern float func_001FA888_2EAE80(int) __asm__("FUN_001fa6c0");
 extern Hit_2EAE80 *func_L00_0025B478_2EAE80(void *, int, int) __asm__("FUN_L00_0025a420");

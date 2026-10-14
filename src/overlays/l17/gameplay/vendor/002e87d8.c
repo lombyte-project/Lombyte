@@ -15,11 +15,11 @@
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA2C8), where it is exact; names translated to the US level program. */
 
 
-extern char D_L17_001676C0[] ;
+extern char D_L17_001676C0[];
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern int D_L17_0015F5C4 ;
+extern int D_L17_0015F5C4;
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0028d8c0(void *, int);
 extern unsigned char D_0013E633[] __asm__("D_0013F3D0");
@@ -3662,8 +3662,8 @@ extern void func_001F9BC0_f2180(void *) __asm__("FUN_001f99f8");
 extern void func_L00_002EBEE0_f2180(void *) __asm__("FUN_L00_002eaa30");
 extern float func_L00_0025CE58_f2180(float *p, float *v, float a, float b, float c,
                                      float d) __asm__("FUN_L00_0025be00");
-extern char D_L17_001B0DB0[] ;
-extern char *D_L17_001600EC ;
+extern char D_L17_001B0DB0[];
+extern char *D_L17_001600EC;
 int FUN_L17_002f2180(char *moby, int idx) {
     float m[4], pos[4];
     struct Dat_3CC0_f2180 *d = *(struct Dat_3CC0_f2180 **)(moby + 0x78);

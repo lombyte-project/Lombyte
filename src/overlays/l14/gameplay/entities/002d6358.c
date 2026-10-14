@@ -184,7 +184,7 @@ extern float D_L14_00161A4C __attribute__((sda));
 extern float D_L14_00161A50 __attribute__((sda));
 extern float D_L14_00161A54 __attribute__((sda));
 extern float D_L14_00161A58 __attribute__((sda));
-extern char D_L14_001809C0[] ;
+extern char D_L14_001809C0[];
 extern char D_L14_0015F580_67e8[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void spring_67e8(void *, void *, float, float, float, float) __asm__("FUN_L00_0025b8c0");

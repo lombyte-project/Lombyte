@@ -84,7 +84,7 @@ typedef struct {
 } C_28e9c8;
 extern E_28e9c8 D_0013E030_28e9c8 __asm__("D_0013E030");
 extern C_28e9c8 D_L00_0016C860_28e9c8 __asm__("D_L00_0016C860") __attribute__((section(".data")));
-extern int D_L00_0015F5D8 ;
+extern int D_L00_0015F5D8;
 extern struct {
     int x0, x4, x8;
 } D_L00_00173E00_28e9c8 __asm__("D_L00_00173E00") __attribute__((section(".data")));

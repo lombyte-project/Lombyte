@@ -985,8 +985,8 @@ typedef struct {
 } V2_12a0;
 
 extern V2_12a0 D_L08_001E8348_12a0[] __asm__("D_L08_001E8348");
-extern float D_0015ED7C ;
-extern float D_0015ED7C ;
+extern float D_0015ED7C;
+extern float D_0015ED7C;
 
 extern V2_12a0 D_L08_001DB500[];
 void FUN_L08_002f12a0(int idx) {
@@ -1211,7 +1211,7 @@ void FUN_L08_003024d8(char *m);
 extern char D_0013F350[];
 extern int level_mode302618 __asm__("D_L08_0015F5C4");
 extern char *target302618 __asm__("D_L08_00174658") __attribute__((section(".data")));
-extern float D_L08_0015F5D4 ;
+extern float D_L08_0015F5D4;
 extern float speed302618 __asm__("D_L08_001621C4") __attribute__((sda));
 extern float accel302618 __asm__("D_L08_001621C0") __attribute__((sda));
 extern int delay302618 __asm__("D_L08_001621BC") __attribute__((sda));

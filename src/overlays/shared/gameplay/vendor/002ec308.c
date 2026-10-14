@@ -1171,7 +1171,7 @@ zero_offset:
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FD6D0), where it is exact; names translated to the US level program. */
 
-extern char *D_L02_0015EF50 ;
+extern char *D_L02_0015EF50;
 extern char *D_L02_00167400_c298 __asm__("D_L02_00167400") NOT_SDA;
 extern int FUN_L02_002fb9c8(char *);
 

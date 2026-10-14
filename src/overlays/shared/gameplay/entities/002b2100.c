@@ -55,7 +55,7 @@ extern struct Moby *D_L00_001ABA00_2b2100[] __asm__("D_L00_001ABA00");
 extern Light_2b2100 lights_2b2100[] __asm__("D_L00_001802C0");
 extern int D_L00_0015F5CC_2b2100 __asm__("D_L00_0015F5CC");
 extern float frame_time_2b2100 __asm__("D_0015ED6C");
-extern int D_0015EEA4 ;
+extern int D_0015EEA4;
 extern int level_index_2b2100 __asm__("D_0015ED84");
 extern void FUN_L00_002b1af0_2b2100(struct Moby *) __asm__("FUN_L00_002b1af0");
 extern void copy_matrix3x4_2b2100(void *, void *) __asm__("FUN_001fa2b8");
@@ -382,7 +382,7 @@ typedef struct {
 extern C_b3058 D_0013C940_b3058 __asm__("D_0013C940");
 extern S_b3058 D_L00_00166C80_b3058 __asm__("D_L00_00166C80");
 extern R_b3058 D_00141680_b3058 __asm__("D_00141680");
-extern s32 D_0015EEA4 ;
+extern s32 D_0015EEA4;
 extern s32 D_0015ED84_b3058 __asm__("D_0015ED84");
 
 s32 FUN_001f9740_b3058(void *) __asm__("FUN_001f9740");
@@ -947,9 +947,9 @@ extern u32 D_0013CAE0_2b49a8 __asm__("D_0013CAE0");
 extern u32 D_001403F0_2b49a8 __asm__("D_001403F0");
 extern u8 *D_L00_00173E58_2b49a8 __asm__("D_L00_00173E58") __attribute__((section(".data")));
 extern f32 D_0015ED6C_2b49a8 __asm__("D_0015ED6C");
-extern s32 D_0015EEA4 ;
+extern s32 D_0015EEA4;
 extern s32 D_0015ED84_2b49a8 __asm__("D_0015ED84");
-extern f32 D_L00_0017ACF4 ;
+extern f32 D_L00_0017ACF4;
 extern u8 D_001802C0_2b49a8[] __asm__("D_L00_001802C0");
 extern u8 D_L00_00166DC0_2b49a8[] __asm__("D_L00_00166DC0");
 extern u8 D_0013F990_2b49a8[] __asm__("D_0013F990");
@@ -2175,7 +2175,7 @@ typedef struct {
 extern E_2b7568 D_L00_001DB440_2b7568[] __asm__("D_L00_001DB440") __attribute__((section(".data")));
 extern V_2b7568 D_L00_001614E0_2b7568[] __asm__("D_L00_001614E0")
     __attribute__((section(".sdata")));
-extern f32 D_L00_001614DC ;
+extern f32 D_L00_001614DC;
 extern s32 D_L00_001614BC_2b7568 __asm__("D_L00_001614BC") __attribute__((sda));
 extern V_2b7568 D_0013F5E0_2b7568 __asm__("D_0013F5E0");
 extern long tex_2b7568(int) __asm__("FUN_001f44b8");
@@ -2531,7 +2531,7 @@ tail:
 #endif
 extern unsigned char D_0013E550_2b8230[] __asm__("D_0013E550");
 extern unsigned char D_00141848_2b8230[] __asm__("D_00141848");
-extern int D_0015EEA4 ;
+extern int D_0015EEA4;
 extern int D_0015ED84_2b8230 __asm__("D_0015ED84");
 void FUN_0020c828_2b8230(void *) __asm__("FUN_0020c828");
 void FUN_L00_0023e838_2b8230(int) __asm__("FUN_L00_0023e838");
@@ -2783,7 +2783,7 @@ void FUN_L00_0020e4c8(void);
 void FUN_L00_0020e698(void);
 void FUN_L00_0023e838(int);
 void FUN_L00_002b9310(char *moby);
-extern int D_0015EEA4 ;
+extern int D_0015EEA4;
 extern int D_0015ED84_2b2100 __asm__("D_0015ED84");
 extern char D_0013F350_2b2100[] __asm__("D_0013F350");
 extern float D_0015ED60_2b2100 __asm__("D_0015ED60");

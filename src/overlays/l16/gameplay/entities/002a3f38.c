@@ -920,7 +920,7 @@ extern void func_001F9BD8_c9a50(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_0022ED80_cae18_c9a50(int, int, void *) __asm__("FUN_0022da68");
 extern int *D_L16_001ABFC0_c9a50[] __asm__("D_L16_001ABCC0");
 extern char *D_L16_00160098_c9a50 __asm__("D_L16_0015FFD8");
-extern char D_L16_001671C0[] ;
+extern char D_L16_001671C0[];
 extern char D_0013E633_c9a50[] __asm__("D_0013E550");
 void FUN_L16_002c9a50(struct Moby *m) {
     short *p = (short *)D_L16_001ABFC0_c9a50[m->group];
@@ -2699,7 +2699,7 @@ void *FUN_L16_002d5db0(int index, void *position) {
             return nearest;
     }
 }
-extern int D_L16_0015F5CC ;
+extern int D_L16_0015F5CC;
 extern s32 FUN_001f99a8_5e80(s32) __asm__("FUN_001f99a8");
 extern s32 FUN_001f96f8_5e80(s32) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_5e80(int, int, void *) __asm__("FUN_0022da68");

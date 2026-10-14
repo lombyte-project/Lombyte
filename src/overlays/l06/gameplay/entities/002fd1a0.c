@@ -1399,7 +1399,7 @@ typedef struct {
 extern unsigned char D_0014C050[];
 extern int D_0015EE1D;
 extern int D_0015EE1C;
-extern int D_L06_0015F5C4 ;
+extern int D_L06_0015F5C4;
 extern int D_L06_0015F594_302578 __asm__("D_L06_0015F594");
 extern char *D_L06_001600EC_302578 __asm__("D_L06_001600EC");
 extern char *D_L06_0015FFD8_302578 __asm__("D_L06_0015FFD8");

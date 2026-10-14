@@ -394,7 +394,7 @@ typedef struct {
     u8 pad4[0x70 - 4];
 } Entry70_215e58;
 
-extern s32 D_L15_0015F5C4 ;
+extern s32 D_L15_0015F5C4;
 extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") __attribute__((section(".data")));
 
 extern void FUN_L00_002165b8_215e58(void) __asm__("FUN_L00_002165b8");

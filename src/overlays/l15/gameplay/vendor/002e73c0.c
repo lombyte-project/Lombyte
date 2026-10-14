@@ -611,10 +611,10 @@ void FUN_L15_002eb108(struct Moby *moby) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 /* Cutscene trigger moby: waits for the hero in its clip volume, then steps through the scene stages and saves at the end. */
-extern int D_L15_0015F5C4 ;
+extern int D_L15_0015F5C4;
 extern int D_L15_00161AC0_v __asm__("D_L15_00161AC0");
 extern unsigned char *D_L15_0015FFD8_v __asm__("D_L15_0015FFD8");
-extern char *D_L15_001600EC ;
+extern char *D_L15_001600EC;
 extern unsigned char D_0014C050_v[] __asm__("D_0014C050");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void start_scene_p(int) __asm__("FUN_L00_00298840");

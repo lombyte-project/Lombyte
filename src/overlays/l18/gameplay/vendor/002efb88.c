@@ -2870,7 +2870,7 @@ int FUN_L18_002f6878(char *moby, float arg, void *x) {
 /* Moves a moby's follow distance toward a target, clamped to a range, then applies it. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7DC0), where it is exact; names translated to the US level program. */
 
-extern char *D_L18_001600EC ;
+extern char *D_L18_001600EC;
 extern float freeze_stats_score_ref_b __asm__("D_0015ED6C");
 extern float FUN_001f9b80(void *, void *);
 extern short D_L18_001623DC __asm__("D_L18_0016234C") __attribute__((sda));

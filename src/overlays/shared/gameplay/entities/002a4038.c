@@ -462,7 +462,7 @@ extern int func_001F9938_2D9F08(void *) __asm__("FUN_001f9770");
 extern void func_L00_002EC0C8_2D9F08(int) __asm__("FUN_L00_002eac18");
 extern void func_L01_00240CE8_2D9F08(void) __asm__("FUN_L01_002405a0");
 extern void func_L00_0025E590_2D9F08(Moby *, Data_2D9F08 *) __asm__("FUN_L00_0025d538");
-extern float D_L02_001D33B0[4][4] ;
+extern float D_L02_001D33B0[4][4];
 extern Lvl_2D9F08 D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
 extern int D_0015EE84_2D9F08 __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern char D_0014C290_2D9F08[] __asm__("D_0014C190");

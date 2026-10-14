@@ -373,8 +373,8 @@ void FUN_L00_00263b70(void *p0, void *p1, void *vel, float a, float b) {
         }
     }
 }
-extern int D_L00_0015F640 ;
-extern u8 D_L00_00179118[] ;
+extern int D_L00_0015F640;
+extern u8 D_L00_00179118[];
 int FUN_001f96f8_00263d40(int) __asm__("FUN_001f96f8");
 int FUN_001fdd10_00263d40(int) __asm__("FUN_001fdd10");
 void FUN_001165b8_00263d40(char *, int) __asm__("FUN_001165b8");

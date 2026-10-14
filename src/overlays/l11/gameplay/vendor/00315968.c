@@ -1191,7 +1191,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern float D_L11_0015F580[] MACRO_ADDR;
 extern float D_L11_001677C0_c[] __asm__("D_L11_001677C0");
-extern float D_L11_001677D0[] ;
+extern float D_L11_001677D0[];
 extern float FUN_001f9b48(void *, void *);
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float FUN_L00_0025be00(float *p, float *v, float a, float b, float c, float d);

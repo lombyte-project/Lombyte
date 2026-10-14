@@ -329,7 +329,7 @@ extern float FUN_L00_0025abf0_2bef68(void *, void *, void *, float, float) __asm
 extern char *FUN_L03_002c45d8_2bef68(char *owner, float *pos, float *dir, short ang, int arg) __asm__("FUN_L03_002c45d8");
 extern int FUN_001f96f8_2bef68(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0025d538_2bef68(void *, void *) __asm__("FUN_L00_0025d538");
-extern char D_L03_00166EC0[] ;
+extern char D_L03_00166EC0[];
 extern char D_0013E533_2bef68[] __asm__("D_0013E533");
 extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") __attribute__((section(".sdata")));
 extern float D_0015ED70_2bef68 __asm__("D_0015ED70") __attribute__((section(".sdata")));
@@ -1039,7 +1039,7 @@ extern void func_L00_001FF240_2CDDC8(void *, void *, void *) __asm__("FUN_L00_00
 extern void func_L00_0025F4A8_2CDDC8(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void func_L00_002584A8_2CDDC8(void *, int, int) __asm__("FUN_L00_00257470");
 extern void func_L00_00265050_2CDDC8(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
-extern char D_L03_00166EC0[] ;
+extern char D_L03_00166EC0[];
 extern void func_L00_0025B178_2CDDC8(void *) __asm__("FUN_L00_0025a120");
 extern void func_L00_00251E30_2CDDC8(void *) __asm__("FUN_L00_00250df8");
 

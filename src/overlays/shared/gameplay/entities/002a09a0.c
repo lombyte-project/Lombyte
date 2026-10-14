@@ -50,7 +50,7 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
 /* Steer a projectile toward its target and emit its impact effects. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1C50), where it is exact; names translated to the US level program. */
 
-extern char D_L16_001671C0[] ;
+extern char D_L16_001671C0[];
 extern char D_0013E633[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");

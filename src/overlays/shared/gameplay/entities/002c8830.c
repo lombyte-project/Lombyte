@@ -151,7 +151,7 @@ typedef struct {
 } MissileHit_089d0;
 
 extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
-extern char D_L11_00174880[] ;
+extern char D_L11_00174880[];
 extern int ftoi_089d0(float) __asm__("FUN_001fa6d0");
 extern float distance_089d0(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_length_089d0(void *) __asm__("FUN_001f9af0");

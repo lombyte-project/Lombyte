@@ -1110,8 +1110,8 @@ typedef struct {
 
 extern ItemDef_ea80 item_defs_ea80[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
 extern s32 D_L00_0015F3F8_ea80 __asm__("D_L00_0015F3F8");
-extern s32 D_0015ED90 ;
-extern s32 D_0015ED94 ;
+extern s32 D_0015ED90;
+extern s32 D_0015ED94;
 extern s32 D_00141660_ea80[4] __asm__("D_00141660") __attribute__((section(".data")));
 extern u8 item_available[] __asm__("D_0013D4C0") __attribute__((section(".data")));
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");

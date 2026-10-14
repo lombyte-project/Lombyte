@@ -2715,7 +2715,7 @@ extern int D_L00_00161B54_002ddcb8 __asm__("D_L00_00161B54") __attribute__((sda)
 extern int D_L00_00161B58_002ddcb8 __asm__("D_L00_00161B58") __attribute__((sda));
 extern char D_L00_00166FD0_002ddcb8[] __asm__("D_L00_00166FD0");
 extern char D_L00_001E5F40_002ddcb8[] __asm__("D_L00_001E5F40");
-extern char D_L00_001E5F30[] ;
+extern char D_L00_001E5F30[];
 extern char D_L00_00161B60_002ddcb8[] __asm__("D_L00_00161B60");
 extern char D_L00_00161B70_002ddcb8[] __asm__("D_L00_00161B70");
 void FUN_001ff300_002ddcb8(void *, void *, float) __asm__("FUN_L00_001ff300");
@@ -2811,7 +2811,7 @@ extern int D_L00_00161B54_002ddcb8 __asm__("D_L00_00161B54") __attribute__((sda)
 extern int D_L00_00161B58_002ddcb8 __asm__("D_L00_00161B58") __attribute__((sda));
 extern char D_L00_00166FD0_002ddcb8[] __asm__("D_L00_00166FD0");
 extern char D_L00_001E5F40_002ddcb8[] __asm__("D_L00_001E5F40");
-extern char D_L00_001E5F30[] ;
+extern char D_L00_001E5F30[];
 extern char D_L00_00161B60_002ddcb8[] __asm__("D_L00_00161B60");
 extern char D_L00_00161B70_002ddcb8[] __asm__("D_L00_00161B70");
 void FUN_001ff300_002ddcb8(void *, void *, float) __asm__("FUN_L00_001ff300");

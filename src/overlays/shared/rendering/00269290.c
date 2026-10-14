@@ -573,7 +573,7 @@ typedef union {
     OvlQuad q;
     float f[4];
 } V_26a9f0;
-extern float D_L00_0015F5D0 ;
+extern float D_L00_0015F5D0;
 unsigned char *FUN_L00_002678b8_26a9f0(int) __asm__("FUN_L00_002678b8");
 int FUN_00213260_26a9f0(int) __asm__("FUN_00213260");
 int FUN_001fa6d0_26a9f0(float) __asm__("FUN_001fa6d0");
@@ -1129,7 +1129,7 @@ void FUN_L00_0026bca8(unsigned char *m) {
         FUN_001f9a68_26bca8(o, o, 0.96f);
     }
 }
-extern float D_L00_0015F5D0 ;
+extern float D_L00_0015F5D0;
 extern unsigned char *FUN_L00_002678b8_26bed0(int) __asm__("FUN_L00_002678b8");
 extern int FUN_001fa6d0_26bed0(float) __asm__("FUN_001fa6d0");
 extern int FUN_001160d8_26bed0(void) __asm__("FUN_001160d8");
@@ -1196,7 +1196,7 @@ typedef struct {
 } Data_0026CF28;
 
 extern float D_0015ED70;
-extern float D_L00_0015F5D0 ;
+extern float D_L00_0015F5D0;
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9770");
 extern f32 convert_integer_to_float_c2(s32) __asm__("FUN_001fa6c0");
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");

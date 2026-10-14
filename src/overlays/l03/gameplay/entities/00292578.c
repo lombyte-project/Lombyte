@@ -177,7 +177,7 @@ void FUN_L03_00292578(struct Moby *moby, float *pos, float heading) {
     *(unsigned short *)(coupling + 0x34) |= 6;
 }
 extern char *D_L03_0015FFD8_292890 __asm__("D_L03_0015FFD8");
-extern char D_L03_001E2410[] ;
+extern char D_L03_001E2410[];
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9b80(void *, void *);
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
@@ -2184,7 +2184,7 @@ extern float truncate_float_to_s32_cf(float) __asm__("FUN_001f96b0");
 extern int absolute_float_cf(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int convert_integer_to_float_cf(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int D_L03_0015F5C4;
-extern int D_L03_0015F5CC ;
+extern int D_L03_0015F5CC;
 extern Moby2C8398 *D_L03_0015FFD8_m __asm__("D_L03_0015FFD8");
 extern int D_L03_001618F4_i __asm__("D_L03_001618F4") __attribute__((sda));
 extern int FUN_001f9770_cf(float, unsigned char *, char *) __asm__("FUN_L03_002c6e18");
