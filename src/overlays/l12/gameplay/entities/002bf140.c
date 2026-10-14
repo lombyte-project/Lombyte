@@ -34,6 +34,7 @@ extern void initialize_slots_c(void *, int) __asm__("FUN_L01_002b7a48");
 extern void initialize_slot_data_c(float) __asm__("FUN_L01_002b7ef0");
 extern void copy_slot_c(void *, void *) __asm__("FUN_L01_002b7c68");
 extern void finish_slots_c(void *, int) __asm__("FUN_L01_002b7fe0");
+extern float D_L12_00180340[8];
 extern float angle_c(float, float) __asm__("FUN_001f9e90");
 extern float sine_c(float) __asm__("FUN_001f9dc8");
 extern float cosine_c(float) __asm__("FUN_001f9de0");
@@ -83,7 +84,7 @@ void FUN_L12_002bf140(struct Moby *moby) {
             *(float *)(D_L12_001CAD00_c + 0x14) = 1.0f;
             *(float *)(D_L12_001CAD00_c + 0x18) = 0.9f;
             *(float *)(D_L12_001CAD00_c + 0x20) = 0.1f;
-            value = angle_c(*(float *)0x00180350, *(float *)0x00180354);
+            value = angle_c(D_L12_00180340[4], D_L12_00180340[5]);
             *(float *)(D_L12_001CAD00_c + 0x30) = sine_c(value) * 0.57735f;
             *(float *)(D_L12_001CAD00_c + 0x34) = cosine_c(value) * 0.57735f;
             *(float *)(D_L12_001CAD00_c + 0x38) = -0.57735f;
