@@ -866,25 +866,25 @@ void FUN_L12_002e3098(struct Moby *moby) {
     void *volatile vars;
     float *direction_ptr;
 
-    vars = *(void *volatile *)&moby->pvars;
+    vars = *(void *volatile *)&(*(struct Moby *volatile *)&moby)->pvars;
 
     count = D_L12_0016183C;
-    if (moby->state == 15)
+    if ((*(struct Moby *volatile *)&moby)->state == 15)
         count = truncate_float_to_s32_e3098((float)count * 1.5f);
     i = 0;
     if (count > 0) {
         direction_ptr = direction;
 
         do {
-        qcopy(pos, &moby->pos);
+        qcopy(pos, &(*(struct Moby *volatile *)&moby)->pos);
         randomize_position(pos, D_L12_00161844);
         pos[2] += 0.55f;
         angle = random_angle_radians_e3098();
         horizontal = random_float_between_alt_e3098(D_L12_00161850, D_L12_00161854);
         vertical = random_float_between_alt_e3098(D_L12_00161858, D_L12_0016185C);
-        if (moby->state == 15) {
-            horizontal *= 0.55f;
+        if ((*(struct Moby *volatile *)&moby)->state == 15) {
             vertical *= 0.55f;
+            horizontal *= 0.55f;
             pos[2] -= 0.2f;
         }
         velocity[0] = fast_cos_e3098(angle) * (horizontal * frame_time);
