@@ -611,7 +611,7 @@ void FUN_L00_002c97e0(struct Moby *m)
 {
     V4 old_pos, next_pos, velocity, offset;
     Sub *s2 = (Sub *)m->pvars;
-    s32 result = 0;
+    s32 result;
     s32 i, count, a, b, mode;
     void *hit;
     f32 angle, scale, speed, f, g, h, rotation;
@@ -717,6 +717,7 @@ void FUN_L00_002c97e0(struct Moby *m)
         s2->unk74 = 0; m->state = 6; m->command = 0;
         return;
     }
+    result = 0;
     if (tick_timer_2cb418(&s2->unk64)) {
         a = FUN_L00_00257b50_2c97e0(100);
         FUN_0022da68_c(a > 74, 0, m);
