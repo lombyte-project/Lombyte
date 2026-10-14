@@ -3252,7 +3252,7 @@ void FUN_L00_002d73e8(P *p) {
     int end = q->start + q->count + q->extra;
     V *transform;
     float x, y, f;
-    float *phase;
+    float * volatile phase;
     float *source_texcoords;
     s16 *timer;
     V *points, *source;
@@ -3291,8 +3291,8 @@ void FUN_L00_002d73e8(P *p) {
         if (f <= -8.0f)
             D_L00_001D31C0[i] = f + 8.0f;
         FUN_001ff6f8_2d73e8(&transform[3], &D_L00_001CB7E0[i], t);
-        x = D_L00_001D02E0[i];
         y = D_L00_001D15A0[i];
+        x = D_L00_001D02E0[i];
         phase = &D_L00_001D31C0[i];
         if (D_L00_001D2D10[i] != 0) {
             quad.texture[3] = 0x8000000044ULL;
