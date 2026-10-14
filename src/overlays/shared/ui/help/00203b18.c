@@ -446,9 +446,9 @@ void FUN_L00_002059d8(void) {
             u8 *dst_a = g + 0xF00;
             u8 *dst_b = g + 0xF10;
             u8 *dst_c = g + 0xF20;
+            Quad_59d8 *src_b = (Quad_59d8 *)D_L00_0017C220_2059d8;
             Quad_59d8 *src_c = (Quad_59d8 *)D_L00_0017C260_2059d8;
             Quad_59d8 *src_a = (Quad_59d8 *)D_L00_0017C1E0_2059d8;
-            Quad_59d8 *src_b = (Quad_59d8 *)D_L00_0017C220_2059d8;
             s32 *kind = (s32 *)(g + 0x17A8);
             for (i = 0; i < 4; i++, dst_c += 0x40, src_c++,
                  src_a++, src_b++, dst_a += 0x40, kind++,
@@ -457,7 +457,7 @@ void FUN_L00_002059d8(void) {
                     attach_manipulator_2059d8((s32)moby, *kind, slot);
                     active[2] = 1;
                     qcopy(dst_a, src_a);
-                    *(volatile Quad_59d8 *)dst_b = *(volatile Quad_59d8 *)src_b;
+                    qcopy(dst_b, src_b);
                     qcopy(dst_c, src_c);
                     transform_help_quad_2059d8(*(f32 *)(moby + 0x2C), dst_c, dst_c);
                 }
