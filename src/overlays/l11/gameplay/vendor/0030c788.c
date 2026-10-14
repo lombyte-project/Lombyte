@@ -811,7 +811,6 @@ typedef struct {
 
 extern char *func_0020D348_m(int);
 extern float fast_add_rotations(float, float);
-extern int D_0013D388; /* no foreign declaration */
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern int advance_accelerated_scalar() __asm__("FUN_00213f38");
 extern int allocate_voice_for_target_entry();

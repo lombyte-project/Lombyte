@@ -439,7 +439,6 @@ extern float D_L00_00160FE0 MACRO_ADDR;
 extern float FUN_001f99c8(float, float);
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_0015ED84 MACRO_ADDR;
-extern int D_0015EE50; /* no foreign declaration */
 extern int D_L00_0015EF54 MACRO_ADDR;
 extern char *level_root[2] __asm__("D_0015EE4C") MACRO_ADDR;
 extern int D_L00_0015F444 MACRO_ADDR;

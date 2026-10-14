@@ -1161,7 +1161,6 @@ typedef struct {
 } Shot_2D9988;
 
 extern char *FUN_001f9e90(void *, int, int);
-extern char D_0013F350[];
 extern char D_L10_00178380[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");

@@ -316,7 +316,6 @@ typedef struct { int count; int pad[3]; float pts[1][4]; } Path_2C73D0;
 typedef int OvlQuad __attribute__((mode(TI)));
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern char D_001413D0[];
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float D_0015ED70;
@@ -325,7 +324,6 @@ extern float D_L09_00161400 __attribute__((sda));
 extern float D_L09_00161404 __attribute__((sda));
 extern float D_L09_00161408 __attribute__((sda));
 extern float D_L09_0016140C __attribute__((sda));
-extern int D_L09_001B0630;
 extern int FUN_001f96b0();
 extern int FUN_001f9b80_c() __asm__("FUN_001f9b80");
 extern int FUN_00213928(void *, void *, void *, int, int *, int, int, int);
@@ -577,8 +575,6 @@ typedef struct { char pad0[0x20]; Moby *moby; char pad24[6]; unsigned short kind
 
 typedef struct { float x, y, z; char padC[0x34]; Moby *who; char pad44[0xC]; } __attribute__((aligned(16))) Target_2E39E0;
 
-extern char D_0013F3D0[];
-extern f32 D_0015ED70_c __asm__("D_0015ED70");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
@@ -589,12 +585,7 @@ extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height_c(void *, int, float) __asm__("func_00213508");
-extern int D_0015ED6C_c __asm__("D_0015ED6C");
-extern int D_L09_0015FFE4; /* no foreign declaration */
-extern int D_L09_001618C8; /* no foreign declaration */
-extern int D_L09_001618CC; /* no foreign declaration */
 extern int D_L09_001618D8; /* no foreign declaration */
-extern int D_L09_00166F40_c __asm__("D_L09_00166F40");
 extern int FUN_001f9b80_c2() __asm__("FUN_001f9b80");
 extern int FUN_L00_002dc9f0();
 extern s32 FUN_001f0b58(void);

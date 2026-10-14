@@ -977,26 +977,13 @@ extern char *func_0020D348_m(int);
 extern char D_0013F350[];
 extern unsigned char D_0013D4D6[];
 extern f32 approach_value_c(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
-extern float D_0015ED6C_c2 __asm__("D_0015ED6C");
-extern float D_0015ED70_c __asm__("D_0015ED70");
-extern int D_0013E550_c __asm__("D_0013E550");
 extern unsigned char D_001413F4;
 extern int D_0014C050;
-extern int D_0015ED84;
 extern float D_L06_00161D78 __attribute__((sda));
 extern float D_L06_00161D7C __attribute__((sda));
 extern float D_L06_00161D80 __attribute__((sda));
-extern float D_L06_00161D84 __attribute__((sda));
-extern float D_L06_00161D88 __attribute__((sda));
-extern float D_L06_00161D8C __attribute__((sda));
-extern float D_L06_00161D90 __attribute__((sda));
-extern float D_L06_00161D94 __attribute__((sda));
-extern float D_L06_00161D98 __attribute__((sda));
-extern int D_L06_00161D9C __attribute__((sda));
 extern int D_L06_00161DA0 __attribute__((sda));
 extern int D_L06_00161DA4 __attribute__((sda));
-extern float D_L06_00161DAC __attribute__((sda));
-extern float D_L06_00161DB0 __attribute__((sda));
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
@@ -1319,7 +1306,6 @@ extern int D_L06_00161E44 __attribute__((section(".sdata")));
 extern int D_L06_00161E48 __attribute__((section(".sdata")));
 extern int D_L06_00161E4C __attribute__((section(".sdata")));
 extern int D_L06_0015F58C __attribute__((sda));
-extern char D_0013F3D0[];
 extern short D_00141AC0;
 extern unsigned short D_00141AC2;
 extern unsigned int D_00141AC4;
@@ -2679,7 +2665,6 @@ extern char *D_L06_0015FFD8_c __asm__("D_L06_0015FFD8") __attribute__((section("
 extern char D_0013F350[];
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_0015ED70 __attribute__((section(".sdata")));
-extern int D_0013CAE4; /* no foreign declaration */
 extern int D_0013D388; /* no foreign declaration */
 extern int D_0013D3A8; /* no foreign declaration */
 extern int D_0013D4C6; /* no foreign declaration */

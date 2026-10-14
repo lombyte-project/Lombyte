@@ -216,12 +216,8 @@ typedef struct Tb_2E9358 {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern int D_001413D0; /* no foreign declaration */
 extern float D_0015ED6C;
 extern float D_L15_00161FBC __attribute__((sda));
-extern int D_L15_00174440; /* no foreign declaration */
-extern int D_L15_00174458; /* no foreign declaration */
-extern int D_L15_00178500; /* no foreign declaration */
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int FUN_L00_001f0d60();
 extern int FUN_L00_001ff660();

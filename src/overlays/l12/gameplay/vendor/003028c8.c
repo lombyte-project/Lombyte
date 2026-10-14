@@ -51,7 +51,6 @@ extern float D_L12_00161DF4 __attribute__((sda));
 extern float D_L12_00161DF8 __attribute__((sda));
 extern int D_L12_00161E04;
 extern int D_L12_00161E08;
-extern int D_L12_001FB510;
 extern int FUN_001fa050();
 extern int FUN_001fa378();
 extern int FUN_001fa6e0(int, int, float);
@@ -507,7 +506,6 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_L12_0015F5C4_c[] __asm__("D_L12_0015F5C4")  __attribute__((section(".sdata")));
 extern float D_L12_00161E60 __attribute__((sda));
 extern float D_L12_00161E64 __attribute__((sda));
 extern float D_L12_00161EA8 __attribute__((sda));
@@ -521,8 +519,6 @@ extern float D_L12_00161EE4 __attribute__((sda));
 extern float D_L12_00161EE8 __attribute__((sda));
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float approach_value(float *, float, float);
-extern int D_0013CAE0; /* no foreign declaration */
-extern int D_0014C050_c __asm__("D_0014C050") ; /* no foreign declaration */
 extern float D_L12_0015F580_f[] __asm__("D_L12_0015F580") __attribute__((section(".sdata")));
 extern int D_L12_0015F5C4_i __asm__("D_L12_0015F5C4") __attribute__((section(".sdata")));
 extern int D_L12_001619A0 __attribute__((section(".sdata")));
@@ -530,12 +526,10 @@ extern int D_L12_00161F00 __attribute__((sda));
 extern int D_L12_00161F04 __attribute__((sda));
 extern int D_L12_00161F20 __attribute__((section(".sdata")));
 extern int D_L12_00161F24 __attribute__((section(".sdata")));
-extern int D_L12_00167100; /* no foreign declaration */
 extern int FUN_001f9770(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L12_002400d0(int, int);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern short D_0015ED84;
 extern void FUN_L00_001fff28(void *, int, float);
 extern void FUN_L00_00211250(void);
 extern void FUN_L00_00216f90(void *, void *, int, int);

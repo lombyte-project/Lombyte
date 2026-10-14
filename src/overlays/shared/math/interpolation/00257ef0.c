@@ -276,7 +276,6 @@ extern float FUN_001f9e90(float, float);
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern int D_L00_00173E40[];
-extern int D_L00_00173E60; /* no foreign declaration */
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_L00_001f0d60();
 extern void add_vector_xyz(void *, void *, void *);

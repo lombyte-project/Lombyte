@@ -398,7 +398,6 @@ extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt_c(float, float) __asm__("FUN_002132a8");
 extern int D_L16_0015F580_spark __asm__("D_L16_0015F580"); /* no foreign declaration */
-extern int D_L16_00174240;                                 /* no foreign declaration */
 extern int FUN_001efa68();
 extern int FUN_001f9770(void *);
 extern s32 scale_game_frames_c(s32) __asm__("FUN_001f96f8");
@@ -1832,7 +1831,6 @@ void FUN_L16_002cf198(struct Moby *m) {
 /* first other moby of type 0x228 in m's list whose 0x18 is within 0.1 of m's */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0A40), where it is exact; names translated to the US level program. */
 
-extern int *D_L16_001ABCC0_c4[] __asm__("D_L16_001ABCC0");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern short *D_L16_001ABFC0_2d0a40[] __asm__("D_L16_001ABCC0");
 

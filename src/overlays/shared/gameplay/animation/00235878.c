@@ -535,7 +535,6 @@ void FUN_L00_002371e0(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237200.s", FUN_L00_00237200);
 #else
 extern int pal_mode __asm__("D_0015ED80");
-extern int current_level_index __asm__("D_0015ED84");
 extern int current_level_index_sda __asm__("D_0015ED84") __attribute__((sda));
 extern int D_L00_0015F770 __attribute__((sda));
 extern unsigned char D_L00_0017E530[];

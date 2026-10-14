@@ -568,7 +568,6 @@ extern float D_L05_001613E0 __attribute__((sda));
 extern int D_L05_001613E4 __attribute__((sda));
 extern float D_L05_001613E8 __attribute__((sda));
 extern float D_L05_001613EC __attribute__((sda));
-extern float D_L05_001671C8;
 extern int FUN_001fa6e0(int, int, float);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1494,7 +1493,6 @@ typedef struct Wing_3047E8 {
 
 char *FUN_L05_00303f80_c(char *self, int idx) __asm__("FUN_L05_00303f80");
 extern char *FUN_L00_0025a420(void *, int, int);
-extern char D_0013F420[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin_c3(f32) __asm__("func_001F9DE0");

@@ -938,7 +938,6 @@ extern int D_L02_001ABE40[];
 extern char *D_L02_00167400;
 extern char *D_L02_0015EF50;
 extern char *D_0013F64C;
-extern float D_0013CA40;
 extern char D_0013CA44[];
 extern void FUN_L00_002e8388(char *) __asm__("FUN_L00_002e8388");
 extern int FUN_L00_002e83c0(char *) __asm__("FUN_L00_002e83c0");

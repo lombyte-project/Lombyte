@@ -628,7 +628,6 @@ typedef struct {
     unsigned char collected[1];
 } TpLevelState;
 
-extern TpLevelState D_L01_001BB6B0_c __asm__("D_L01_001BB6B0");
 extern char D_L01_00167240[];
 extern char D_L01_0020B550[];
 extern int D_0015ED84; /* no foreign declaration */

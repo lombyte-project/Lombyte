@@ -203,7 +203,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00262f50.s", FUN_L05_00262f50);
 #include "rnc/gameplay/hero.h"
 
 extern s32 D_L05_0015FAE4, D_L05_0015FAE8, D_L05_0015FAEC;
-extern s32 D_001413DC;
 extern u8 D_0013FBFE;
 extern s32 D_L05_0015F5CC;
 extern s32 D_L05_0015FAD4, D_L05_0015FAD8;

@@ -2145,7 +2145,6 @@ extern unsigned char D_0014C190[];
 extern int D_0015ED84;
 extern int FUN_001fa2d8();
 extern int FUN_L15_002a3138();
-extern u8 D_0013E550_c[] __asm__("D_0013E550");
 unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int f, int g, int h, char *owner);
 extern KillFlags_2A3DD0 D_L15_001BBB40_2A3DD0 __asm__("D_L15_001BB830");
 extern unsigned char D_0013E650_2A3DD0[] __asm__("D_0013E550");

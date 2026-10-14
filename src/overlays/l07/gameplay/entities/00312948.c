@@ -1782,7 +1782,6 @@ typedef struct {
 } L07Ent;
 
 extern L07Ent D_L07_0020C840[];
-extern L07Ent D_L07_0020DAF0[];
 extern char D_L07_0020DB00[];
 extern float vector_length_xyz(void *);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");

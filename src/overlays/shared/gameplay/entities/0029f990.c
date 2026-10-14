@@ -282,7 +282,6 @@ typedef struct {
 } A02b0_tab;
 
 extern A02b0_obj D_L00_001CA4C0;
-extern s32 D_L00_001CA4C0_w __asm__("D_L00_001CA4C0");
 extern s32 D_L00_0015F3F4;
 extern s32 D_L00_0015F3F8[];
 extern s32 D_L00_0015F3F8_s __asm__("D_L00_0015F3F8");

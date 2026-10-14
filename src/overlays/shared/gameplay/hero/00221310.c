@@ -591,7 +591,6 @@ extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
 extern T2C_222B80 attack_records[] __asm__("D_L00_0017BC28");
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern char D_00141680[];
-extern char D_L00_0017BF60[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L00_0017BDF0[][25];
 extern float FUN_001f9b48(void *, void *);
@@ -620,7 +619,6 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern short D_L00_0015F688 __attribute__((sda));
-extern short D_L00_0017BC28_1 __asm__("D_L00_0017BC28");
 extern short D_L00_0015F6D8 __attribute__((sda));
 extern unsigned char D_0013E533[];
 extern unsigned char D_L00_0017BDD8[];
@@ -3647,7 +3645,6 @@ typedef struct {
 } SpeedStepThreshold_228c18;
 
 extern SpeedStepThreshold_228c18 D_L00_0017BDB8_228c18[] __asm__("D_L00_0017BDB8");
-extern u8 *D_001413D0_228c18 __asm__("D_001413D0");
 extern s32 D_L00_0015F6C8_228c18 __asm__("D_L00_0015F6C8") __attribute__((sda));
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");

@@ -351,7 +351,6 @@ void FUN_L16_002e2b60(struct Moby *m) {
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_0015ED70_u __asm__("D_0015ED70");
-extern short D_L16_00161E40_q __asm__("D_L16_00161E40");
 extern short D_L16_00161E44, D_L16_00161D80_q __asm__("D_L16_00161D80") __attribute__((sda));
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 extern void func_00215CA8_path42_q(float, void *, int, void *, void *, int) __asm__("FUN_00214e58");

@@ -214,7 +214,6 @@ void FUN_L00_00214ed8(float a, float b, float c) {
         hero.unkA5C = r;
     }
 }
-extern char D_0013F350_214fe8[] __asm__("D_0013F350");
 extern struct { f32 f[0xB68 / 4]; } D_L00_0017A680_214fe8 __asm__("D_L00_0017A680");
 extern void FUN_001f9d20_214fe8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_L00_0020a1f8_214fe8(f32, f32) __asm__("FUN_L00_0020a1f8");

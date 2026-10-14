@@ -632,7 +632,6 @@ extern float D_L00_00161D1C __attribute__((sda));
 extern int D_L00_00161D24 __attribute__((sda));
 extern int D_L00_00161D8C __attribute__((sda));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern u8 D_0013F5E0[];
 void follow_camera_reset(char *o) __asm__("FUN_L00_002e4430");
 void FUN_L00_002e66b8_c(int snap) __asm__("FUN_L00_002e66b8");
 void FUN_L00_002e6bf8_c(char *m) __asm__("FUN_L00_002e6bf8");

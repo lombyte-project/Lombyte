@@ -620,7 +620,6 @@ extern f32 D_0015ED60_002062b0 __asm__("D_0015ED60") __attribute__((section(".sd
 extern f32 D_0015ED60_gp_002062b0 __asm__("D_0015ED60_gp") __attribute__((sda));
 extern f32 D_0015EE18_gp_002062b0 __asm__("D_0015EE18_gp") __attribute__((sda));
 extern u8 D_0015EDB3_002062b0 __asm__("D_0015EDB3") __attribute__((section(".sdata")));
-extern u8 D_0015EDB1_002062b0 __asm__("D_0015EDB1") __attribute__((section(".data")));
 extern s32 D_L00_0015F5CC_002062b0 __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
 extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((section(".data")));
 extern void FUN_L00_00232670(void);
@@ -3105,7 +3104,6 @@ typedef struct {
 
 extern f32 D_0015ED6C_20b5b8 __asm__("D_0015ED6C");
 extern V4_20b5b8 coll_hit_normal[] __asm__("D_L00_00173E80");
-extern S2_20b5b8 D_L00_00173E40_20b5b8[] __asm__("D_L00_00173E40");
 
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern s32 FUN_L00_0020c758_20b5b8(void *, void *) __asm__("FUN_L00_0020c758");
@@ -3420,7 +3418,6 @@ typedef struct {
     int i3C;
 } Obj_20C568;
 
-extern U_208b60 D_L00_00173E40;
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");

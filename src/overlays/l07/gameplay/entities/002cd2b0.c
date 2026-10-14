@@ -1355,7 +1355,6 @@ extern Rec_30D8E8 *D_L07_001612D0;
 extern char D_0013D4EC[];
 extern float D_0015ED6C;
 extern char D_0013D4C0[];
-extern char D_L07_001DCE40_c[] __asm__("D_L07_001DCE40");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L07_0016120C;
@@ -3181,9 +3180,7 @@ typedef struct Packet_313800 {
     long x138;
 } Packet_313800;
 
-extern Vec4_30CA88 D_L07_00173EE0_c __asm__("D_L07_00173EE0");
 extern int D_L07_0015F5CC_c __asm__("D_L07_0015F5CC");
-extern int D_L07_00167050; /* no foreign declaration */
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");

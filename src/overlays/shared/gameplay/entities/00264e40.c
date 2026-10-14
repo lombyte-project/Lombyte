@@ -22,7 +22,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00264e70.s", FUN_L02_00264e70);
 #include "qcopy.h"
 extern int D_L00_0015F5CC;
 extern float D_0015ED6C;
-extern float D_0015ED68;
 extern float D_0015ED70;
 extern float D_L02_00174460[] __attribute__((section(".data")));
 extern float D_L02_001600D0 __attribute__((sda));

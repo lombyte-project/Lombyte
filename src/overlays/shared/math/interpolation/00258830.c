@@ -15,7 +15,6 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9e90(float, float);
 extern int D_L00_00173E40[];
-extern int D_L00_00173E60; /* no foreign declaration */
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_L00_001f0d60();
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");

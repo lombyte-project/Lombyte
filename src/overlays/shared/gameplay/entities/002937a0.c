@@ -1179,17 +1179,8 @@ extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern float D_L08_0015F580[4] __attribute__((section(".sdata")));
-extern float D_L08_001621C0 __attribute__((sda));
 extern float D_L08_0015F5D0;
 extern float D_L08_0015F5D4;
-extern int D_L08_001621B4 __attribute__((sda)); /* no foreign declaration */
-extern int D_L08_0015F5C4; /* no foreign declaration */
-extern int D_L08_001621C8 __attribute__((sda)); /* no foreign declaration */
-extern int D_L08_001621BC __attribute__((sda)); /* no foreign declaration */
-extern int D_L08_001621CC __attribute__((sda)); /* no foreign declaration */
-extern int D_L08_001621D0 __attribute__((sda)); /* no foreign declaration */
-extern int D_L08_001621C4 __attribute__((sda)); /* no foreign declaration */
-extern int D_L08_00174658; /* no foreign declaration */
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_001f9a40();
 extern int FUN_L00_001f2868();

@@ -1751,7 +1751,6 @@ extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 typedef struct { char pad[0x28]; float height; char pad2[0x14]; float vector[4]; } S173E40;
 extern S173E40 D_L00_00173E40;
-extern int D_L00_00173E60; /* no foreign declaration */
 extern int FUN_001efa68(void *,void *,int,int,int);
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned char *FUN_L00_002603d0(int);
@@ -1939,12 +1938,6 @@ ret0:
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c4380.s", FUN_L00_002c4380);
 #else
-extern u8 D_001413F4_2c4380 __asm__("D_001413F4");
-extern u8 D_001413F5_2c4380 __asm__("D_001413F5");
-extern void *D_001403E0_2c4380 __asm__("D_001403E0");
-extern void *D_0013F64C_2c4380 __asm__("D_0013F64C");
-extern void *D_001413D0_2c4380 __asm__("D_001413D0");
-extern int D_001413D4_2c4380 __asm__("D_001413D4");
 extern char *D_0015FFD8_2c4380 __asm__("D_L00_0015FFD8");
 extern float D_0015ED60_2c4380 __asm__("D_0015ED60");
 extern float D_0015ED70_2c4380 __asm__("D_0015ED70");
@@ -2571,10 +2564,8 @@ typedef struct Data_2C74B8 {
     float size;
 } Data_2C74B8;
 
-extern char D_0013F350[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float D_0015ED60;
 extern float D_0015ED6C;
 extern int FUN_001efa68(void *,void *,int,int,int);
 extern int FUN_L00_00205000();
@@ -2852,8 +2843,6 @@ void FUN_L00_002c6158(Moby *m) {
     }
 }
 #else
-extern s32 D_001413D4_2c6158 __asm__("D_001413D4");
-extern s32 D_001413DC_2c6158 __asm__("D_001413DC");
 extern s32 D_001413E4_2c6158 __asm__("D_001413E4");
 extern s32 D_0013F4E8_2c6158 __asm__("D_0013F4E8");
 extern s32 D_0013FCB8_2c6158 __asm__("D_0013FCB8");
@@ -2865,14 +2854,11 @@ extern s32 D_00140400_2c6158 __asm__("D_00140400");
 extern s32 D_0013FCC8_2c6158 __asm__("D_0013FCC8");
 extern s32 D_0013FCD8_2c6158 __asm__("D_0013FCD8");
 extern s32 D_0013FCEC_2c6158 __asm__("D_0013FCEC");
-extern s16 D_0013F65E_2c6158 __asm__("D_0013F65E");
 extern u32 D_0013CAE0_2c6158 __asm__("D_0013CAE0") __attribute__((section(".data")));
-extern u32 D_001403F0_2c6158 __asm__("D_001403F0");
 extern float D_0015ED6C_2c6158 __asm__("D_0015ED6C");
 extern float D_0015ED60_2c6158 __asm__("D_0015ED60");
 extern float D_0013F8C4_2c6158 __asm__("D_0013F8C4");
 extern float D_0013F62C_2c6158 __asm__("D_0013F62C");
-extern OvlVec4 D_0013F3D0_2c6158 __asm__("D_0013F3D0");
 extern void FUN_002223f8_2c6158(s32, s32) __asm__("FUN_L00_002223f8");
 extern void FUN_001edf60_2c6158(void *, float, u32, void *, s32, float, s32, float, s32) __asm__("FUN_L00_001edf60");
 extern s32 FUN_001fef20_2c6158(s32) __asm__("FUN_001f96f8");

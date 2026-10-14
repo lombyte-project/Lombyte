@@ -342,7 +342,6 @@ void FUN_L12_002ece00(struct Moby *moby) {
  * awards them (one for staying airborne long enough). */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EE600), where it is exact; names translated to the US level program. */
 
-extern char D_00141968[];
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern char D_00141968_h[] __asm__("D_00141968");
 extern int FUN_L01_0026e008(int, int);

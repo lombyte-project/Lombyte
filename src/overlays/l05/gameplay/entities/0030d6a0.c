@@ -1297,7 +1297,6 @@ void FUN_L05_00316070(char *moby) {
         FUN_L03_00291918(D_L05_00211B20);
 }
 /* Updates the pulsing marker: spawns it, then each frame animates its height and queues the draw. */
-extern char D_0013E533[];
 extern char D_L05_00211B28[];
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int D_L05_0015F5CC_c __asm__("D_L05_0015F5CC");
@@ -1781,7 +1780,6 @@ typedef struct {
     unsigned char mission;
 } L16WatchFlags;
 
-extern char D_0013E533[];
 extern char D_L05_001671C0[];
 extern unsigned char D_0013D4FF __attribute__((section(".data")));
 extern f32 FUN_001f9b48(void *, void *);
@@ -1824,7 +1822,6 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
-extern L16WatchFlags D_0013D355_watch __asm__("D_0013D24D");
 
 void FUN_L05_003180a0(WM *m) {
     L16WatchScratch scratch;

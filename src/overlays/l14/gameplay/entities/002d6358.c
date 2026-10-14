@@ -176,7 +176,6 @@ typedef struct {
     int i20;
     int pad[3];
 } Ray_67e8;
-extern float D_L14_00161A3C_f __asm__("D_L14_00161A3C");
 extern int D_L14_00161A3C_67e8 __asm__("D_L14_00161A3C") __attribute__((sda));
 extern float D_L14_00161A40 __attribute__((sda));
 extern float D_L14_00161A44 __attribute__((sda));

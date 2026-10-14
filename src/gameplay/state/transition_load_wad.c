@@ -154,7 +154,6 @@ extern s32 sceGsExecLoadImage(void *, u8 *);
 
 
 
-extern s32 D_0015EF64_far __asm__("D_0015EF64") __attribute__((section(".data")));
 void transition_load_wad(void) __asm__("FUN_001ea830");
 
 void transition_load_wad(void)

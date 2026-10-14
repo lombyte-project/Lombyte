@@ -3031,7 +3031,6 @@ typedef struct {
 
 extern u8 *D_L00_001B20B0_26ff10 __asm__("D_L00_001B20B0") __attribute__((section(".data")));
 extern f32 D_L00_00173E80_26ff10[] __asm__("D_L00_00173E80");
-extern f32 D_L00_00173E60_26ff10[] __asm__("D_L00_00173E60");
 extern f32 D_0015ED60_26ff10 __asm__("D_0015ED60");
 
 extern s32 FUN_001f9770_26ff10(s16 *) __asm__("FUN_001f9770");

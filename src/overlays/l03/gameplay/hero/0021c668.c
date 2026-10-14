@@ -93,7 +93,6 @@ extern int hero_set_state(int, int) __asm__("FUN_L03_00216648");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern int D_L03_0015F6DC __attribute__((section(".data")));
 extern unsigned char D_0013D4C0[];
 extern void FUN_L00_00206c08(void);
 extern void FUN_L00_00209ca8(int, int, int);

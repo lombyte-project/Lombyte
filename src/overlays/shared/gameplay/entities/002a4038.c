@@ -416,31 +416,19 @@ typedef struct {
 
 extern char D_0013C940[];
 extern char D_0013FDE8[];
-extern char D_L02_00167280[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_0015ED70 __attribute__((section(".sdata")));
-extern float D_L02_00161AA0[4][4];
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int D_0013F350; /* no foreign declaration */
-extern int D_0014C190; /* no foreign declaration */
 extern int D_0015ED84; /* no foreign declaration */
-extern int D_L02_00161AA4 __attribute__((sda)); /* no foreign declaration */
-extern int D_L02_00161AA8 __attribute__((sda)); /* no foreign declaration */
-extern int D_L02_00179A10; /* no foreign declaration */
-extern int D_L02_0017EB08; /* no foreign declaration */
-extern int D_L02_001BAAD0; /* no foreign declaration */
-extern int D_L02_001BB830; /* no foreign declaration */
-extern int D_L02_001D33B0_c __asm__("D_L02_001D33B0") ; /* no foreign declaration */
 extern int FUN_001f9770();
 extern int FUN_001f9a40();
 extern int FUN_L00_002323b8();
 extern int FUN_L02_0022b728();
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 force_help_message(s32 arg0, s32 arg1) __asm__("FUN_002151d8");
-extern short D_L02_00161B1C_c __asm__("D_L02_00161B1C") __attribute__((sda));
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 void FUN_L00_0025d538(s32 id, void *s);
@@ -1477,14 +1465,11 @@ extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern int D_L02_0015F640 __attribute__((sda));
 extern unsigned char items_acquired[] __asm__("D_0013D4E8");
 extern char D_0013F3D0[];
-extern float D_0013F3D8;
 extern float D_L02_00174468 __attribute__((section(".data")));
 extern int D_L02_00167400;
-extern int D_L02_00179A10 __attribute__((section(".data")));
 extern float D_0015ED70;
 extern float D_0015ED6C;
 extern float D_L02_0015F3FC;
-extern char D_0013F3E0[];
 
 void FUN_L02_002ea210(char *moby) {
     char *data;

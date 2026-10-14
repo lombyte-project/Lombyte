@@ -9,7 +9,6 @@
 typedef struct { char pad[0x30]; int state; int n; char pad38[0x140]; struct Moby *objects[8]; } L18SequenceState;
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int D_L18_0015F5C4;
-extern char D_L18_001677C0_9780[] __asm__("D_L18_001677C0");
 extern int frames_9780(int) __asm__("FUN_001f96f8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -355,7 +354,6 @@ typedef struct {
 } Pk_9780;
 typedef struct { char pad[0x30]; int state; int n; } ML_9780;
 extern ML_9780 D_L18_0016D260_9780 __asm__("D_L18_0016D260");
-extern char D_L18_001677C0_9780[] __asm__("D_L18_001677C0");
 extern int frames_9780(int) __asm__("FUN_001f96f8");
 extern unsigned long tex_9780(int) __asm__("FUN_001f44b8");
 extern void gs_9780(int, long) __asm__("FUN_00233980");

@@ -485,7 +485,6 @@ struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax
 extern void FUN_L01_0030c898_c(void *, void *, float, float, float,
                                float) __asm__("FUN_L01_0030c898");
 
-extern float D_L01_00162080 __attribute__((sda));
 extern float D_L01_00162084 __attribute__((sda));
 extern float D_L01_00162088 __attribute__((sda));
 extern float D_L01_0016208C __attribute__((sda));
@@ -1342,14 +1341,12 @@ typedef struct {
 
 extern Ent50_316730 *D_L01_0015EF50_c __asm__("D_L01_0015EF50") __attribute__((section(".sdata")));
 extern Ent7EC_316730 *D_L01_0015F70C_c __asm__("D_L01_0015F70C") __attribute__((section(".sdata")));
-extern char *D_L01_001B0930_c[] __asm__("D_L01_001B0930");
 extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_L01_001672B0[];
 extern float FUN_L00_001eb328(void *, float, float, float, float, float);
 extern float cam_interp_values(float a, float b, float *p, float c, float d, float e);
-extern int D_0015ED84; /* no foreign declaration */
 extern int FUN_L00_0025d808(void *, void *, int *, float *, float, int);
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");

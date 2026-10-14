@@ -326,7 +326,6 @@ typedef struct {
     char pad[0x22];
     short h26;
 } G_28efc8;
-extern G_28efc8 D_0013E030_28efc8 __asm__("D_0013E030");
 void FUN_001f9a68_28efc8(float, void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9a10_28efc8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9cf8_28efc8(void *, void *, void *) __asm__("FUN_001f9cf8");

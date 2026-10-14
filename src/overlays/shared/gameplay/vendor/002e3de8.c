@@ -295,7 +295,6 @@ extern float FUN_001f9b48(void *, void *);
 extern void FUN_001f99f8(void *);
 extern float s32_to_float(int) __asm__("FUN_001fa6c0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern float D_L10_0016CF70;
 extern char D_L10_00167100[];
 
 extern char D_L10_0016CEC0[];
@@ -443,7 +442,6 @@ extern float D_0015ED6C;
 extern char *D_L10_0015FFD8 __attribute__((sda));
 extern char *D_L10_0015FFD8_far __asm__("D_L10_0015FFD8") __attribute__((section(".data")));
 extern float D_L10_00167358;
-extern float D_L10_0016CF70;
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");

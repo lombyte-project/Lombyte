@@ -1314,9 +1314,7 @@ typedef struct {
 } LandingVars_2ad410;
 
 extern float D_0015ED70_2ad410 __asm__("D_0015ED70");
-extern U910 D_L00_00173E60_2ad410 __asm__("D_L00_00173E60");
 extern U910 D_L00_00173E80_2ad410 __asm__("D_L00_00173E80");
-extern void *D_001413D0_2ad410 __asm__("D_001413D0") __attribute__((section(".data")));
 extern int FUN_001f0b58_2ad410(void) __asm__("FUN_001f0b58");
 extern float fast_cos_2ad410(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2ad410(float) __asm__("FUN_001f9de0");

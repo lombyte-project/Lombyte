@@ -423,8 +423,6 @@ typedef struct {
     s32 rows[6];
 } DebugRowCounts;
 extern DebugRowCounts D_L00_001E7920;
-extern u32 D_0013CAE0 NOT_SDA;
-extern u32 D_0013CAE4 NOT_SDA;
 extern u16 occl_cam_param0 __asm__("D_001518D0") NOT_SDA;
 extern u16 occl_cam_param1 __asm__("D_001518D2") NOT_SDA;
 extern s32 D_0015ED84 MACRO_ADDR;
@@ -1078,7 +1076,6 @@ extern char D_L00_0015F298[];
 extern char D_L00_0015F2A8[];
 extern char D_L00_0015F2B8[];
 extern float D_L00_0015F448;
-extern char D_L00_0016C058_c[] __asm__("D_L00_0016C058");
 extern char D_L00_0015F248[];
 extern float D_L00_0015F44C;
 extern float D_L00_0015F450;

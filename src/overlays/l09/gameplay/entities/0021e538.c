@@ -935,7 +935,6 @@ typedef struct {
 } Path_2ECC50;
 
 char *FUN_L09_002ea778_c(void) __asm__("FUN_L09_002ea778");
-extern char *D_L09_001B0630[];
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_add_rotations_c2(f32, f32) __asm__("func_001FA580");
 extern f32 random_float_between_c3(f32, f32) __asm__("func_002132A8");

@@ -366,8 +366,6 @@ extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
-extern int D_L13_00174160;
-extern int D_L13_001B2380;
 extern int FUN_001efa68();
 extern int FUN_001f9b80();
 extern int FUN_001f9e90();

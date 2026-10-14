@@ -188,8 +188,6 @@ typedef struct { char pad[0xF0]; V_2d8fa0 a; V_2d8fa0 b; V_2d8fa0 c; } Data_2d8f
 typedef struct { float f[4]; } __attribute__((aligned(16))) V2d8e48;
 
 extern H_2d8fa0 D_L15_001D3BA0[];
-extern V2d8e48 D_0013F5E0;
-extern V2d8e48 D_L15_001673C0_c __asm__("D_L15_001673C0");
 extern V_2d8fa0 D_L15_001D3740[];
 extern V_2d8fa0 D_L15_001D3750[2][20];
 extern V_2d8fa0 D_L15_001D3A20[];
@@ -230,7 +228,6 @@ extern short D_L15_00161C34 __attribute__((sda));
 extern short D_L15_00161C38 __attribute__((sda));
 extern short D_L15_00161C4C __attribute__((sda));
 extern short D_L15_00161C50 __attribute__((sda));
-extern short D_L15_00161C60_c __asm__("D_L15_00161C60") __attribute__((sda));
 extern short D_L15_00161C90 __attribute__((sda));
 extern short D_L15_00161C98 __attribute__((sda));
 extern short D_L15_00161CC0[] __attribute__((section(".sdata")));

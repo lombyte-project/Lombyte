@@ -956,8 +956,6 @@ extern int D_0015ED68_e[] __asm__("D_0015ED68") __attribute__((section(".sdata")
 extern float D_L03_00161994 __attribute__((sda)); /* no foreign declaration */
 extern float D_L03_00161998 __attribute__((sda)); /* no foreign declaration */
 extern float D_L03_0016199C __attribute__((sda));
-extern int D_L03_001BA5D0; /* no foreign declaration */
-extern int D_L03_001B05B0; /* no foreign declaration */
 extern int FUN_001fa2d8();
 extern int FUN_L00_001fff28();
 extern int FUN_L00_00258110();

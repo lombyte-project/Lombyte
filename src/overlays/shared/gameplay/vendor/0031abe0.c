@@ -749,10 +749,7 @@ typedef struct { char pad0[0x48]; float vel; } Preset_32B1F8;
 
 typedef struct { char pad0[0x1C]; Preset_32B1F8 *preset; } Row_32B1F8;
 
-extern char D_0013F5E0[];
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
-extern int D_L05_0015EF50_c __asm__("D_L05_0015EF50") ; /* no foreign declaration */
-extern int D_L05_001621A8 __attribute__((sda)); /* no foreign declaration */
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");

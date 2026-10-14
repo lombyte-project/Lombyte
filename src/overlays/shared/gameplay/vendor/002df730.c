@@ -113,16 +113,6 @@ extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__(
 extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
 extern f32 fast_add_rotations_c2(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations_c2(f32, f32) __asm__("func_001FA5C8");
-extern float D_0015ED6C __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
-extern int D_0013CAE0; /* no foreign declaration */
-extern int D_0015ED64; /* no foreign declaration */
-extern int D_L00_0015F3FC_c __asm__("D_L00_0015F3FC") ; /* no foreign declaration */
-extern int D_L00_0015F404_c __asm__("D_L00_0015F404");
-extern int D_L00_0015F5C4; /* no foreign declaration */
-extern int D_L00_0015FFD8_c __asm__("D_L00_0015FFD8") ; /* no foreign declaration */
-extern int D_L00_001600EC; /* no foreign declaration */
-extern int D_L00_00161BB4; /* no foreign declaration */
 extern int FUN_001f96b0_c() __asm__("FUN_001f96b0") ;
 extern int FUN_001f9a40_c() __asm__("FUN_001f9a40") ;
 extern int FUN_L00_002223f8();
@@ -784,13 +774,8 @@ typedef struct {
     u8 pad[0x30];
 } T_e3388;
 
-extern B002E3640 D_L00_001E6D20_c[] __asm__("D_L00_001E6D20");
 extern Pane_2e3fa0 D_L00_001E6E40[];
-extern Q002E3640 D_L00_001E6DE0_c[] __asm__("D_L00_001E6DE0");
-extern T_e3388 D_L00_001E6D50[];
-extern char D_0013F5E0[];
 extern char D_L00_0015F580[] __attribute__((section(".sdata")));
-extern f32 D_L00_001E6E10[][4];
 extern f32 convert_integer_to_float_c2(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -798,19 +783,8 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations_c(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float D_L00_00161BF0 __attribute__((sda));
-extern int D_L00_001802C0;
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
-extern s32_2e1f28 D_L00_00161BF8_c3[] __asm__("D_L00_00161BF8") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_L00_00161C08[] __attribute__((section(".sdata")));
-extern s32_2e1f28 D_L00_00161C18[] __attribute__((section(".sdata")));
-extern s32_2e1f28 D_L00_00161C28[] __attribute__((section(".sdata")));
-extern s32_2e1f28 D_L00_00161C38_c2[] __asm__("D_L00_00161C38") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_L00_00161C48_c2[] __asm__("D_L00_00161C48") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_L00_00161C58[] __attribute__((section(".sdata")));
-extern s32_2e1f28 D_L00_00161C68[] __attribute__((section(".sdata")));
-extern s32_2e1f28 D_L00_00161C88_c3[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");

@@ -144,7 +144,6 @@ struct LedgeSpot_20cd08 {
 
 extern struct LedgeSpot_20cd08 *D_L00_0015F70C;
 extern s32 D_L00_0015F710;
-extern s32 D_001413DC __attribute__((section(".data")));
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f99c0(f32);
@@ -1322,8 +1321,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f160.s", FUN_L00_0020f160);
 extern volatile s32 D_00141508 __attribute__((section(".data")));
 extern s32 D_0014150C __attribute__((section(".data")));
 extern s32 D_00141510 __attribute__((section(".data")));
-extern s32 D_001413D4 __attribute__((section(".data")));
-extern s32 D_001413DC __attribute__((section(".data")));
 extern volatile s32 D_0013F694 __attribute__((sda));
 extern u8 D_00140640[] __asm__("D_00140640") __attribute__((section(".data")));
 extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
@@ -1454,8 +1451,6 @@ extern u8 D_0017C980_f580[] __asm__("D_L00_0017C980");
 extern u8 D_0017A960_f580[] __asm__("D_L00_0017A960");
 extern u8 D_0015F6A8_f580[] __asm__("D_L00_0015F6A8");
 extern s32 D_001404DC_f580 __asm__("D_001404DC");
-extern u8 D_0013F3D0_f580[] __asm__("D_0013F3D0");
-extern u8 D_0013F3E0_f580[] __asm__("D_0013F3E0");
 extern u8 D_001410D0_f580[] __asm__("D_001410D0");
 extern u8 D_0015EDB5_f580 __asm__("D_0015EDB5");
 extern s32 large_font_height __asm__("D_L00_0015F690");

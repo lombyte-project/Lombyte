@@ -65,7 +65,6 @@ extern s32 D_0015F604;
 extern s32 D_0015F648;
 extern u8 requested_video_mode __asm__("D_0016034C");
 extern struct S_00193300 freeze __asm__("D_00193300");
-extern s32 D_0015EEB8[];
 extern s32 pause_current_action_list[] __asm__("D_001D5BF8");
 extern char sound_update() __asm__("func_0022CA50");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");

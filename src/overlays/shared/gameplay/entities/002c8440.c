@@ -1000,7 +1000,6 @@ extern f32 D_L00_00161870_2caf70 __asm__("D_L00_00161870") __attribute__((sda));
 extern f32 D_L00_00161874_2caf70 __asm__("D_L00_00161874") __attribute__((sda));
 extern f32 D_L00_00161878_2caf70 __asm__("D_L00_00161878") __attribute__((sda));
 extern char D_L00_0015F580_2caf70[] __asm__("D_L00_0015F580");
-extern u8 D_0013E52F_2caf70 __asm__("D_0013E52F");
 
 struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Moby *other,
                               f32 vx, f32 vy, f32 height, f32 speed)

@@ -55,7 +55,6 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern short D_L05_0015F688 __attribute__((sda));
 extern char D_L05_0015F6E8[4] __attribute__((sda));
 extern char D_L05_0015F6F8[4] __attribute__((sda));
-extern short D_L05_0017C380;
 extern unsigned char D_0013D388[];
 extern unsigned char D_L05_0017C238[];
 extern void *D_L05_001612D0;

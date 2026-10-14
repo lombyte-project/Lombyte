@@ -84,8 +84,6 @@ extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9b80(void *, void *);
-extern int D_0013DF38;
-extern int D_0013F350;
 extern float D_0015ED70;
 extern int D_0015ED84;
 extern char *D_L08_0015FFD8;
@@ -96,7 +94,6 @@ extern int D_L08_00161460 __attribute__((sda));
 extern float D_L08_00161464 __attribute__((sda));
 extern int D_L08_00174658;
 extern int D_L08_0015F5CC_c __asm__("D_L08_0015F5CC");
-extern int D_L08_00174680;
 extern int FUN_L00_001ff660();
 extern int FUN_L08_002025d0(void*,int,int,void*,int);
 extern int allocate_voice_for_target_entry(int,int,void*) __asm__("FUN_0022da68");
@@ -280,7 +277,6 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_0022da68(void *, void *);
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern float D_L08_00161868[4];
 extern f32 D_L08_00161868_bytes[] __asm__("D_L08_00161868");
 extern int D_L08_00174658;
 extern int D_L08_00174658_data __asm__("D_L08_00174658") __attribute__((section(".data")));
@@ -492,17 +488,9 @@ typedef struct { char pad0[0x20]; Moby *moby; } Hit_2D5FA8;
 typedef struct { int count; char pad4[0xC]; char list[1]; } Path_2D5FA8;
 
 void *FUN_L05_002899f8(void *a, void *b, void *c, void *d);
-extern char D_001413D0[];
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
-extern int item_unlocked __asm__("D_0013D408");
-extern int D_0015ED84_c __asm__("D_0015ED84");
-extern int D_L08_0015F580_c __asm__("D_L08_0015F580");
-extern int D_L08_0015F5B0; /* no foreign declaration */
-extern int D_L08_0015F5B0; /* no foreign declaration */
-extern int D_L08_0015F5B4 __attribute__((sda)); /* no foreign declaration */
-extern int D_L08_0015F5BC __attribute__((sda)); /* no foreign declaration */
 extern int D_L08_001B0CB0[];
 extern int FUN_001fa3c0();
 extern int FUN_00213928();

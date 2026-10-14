@@ -165,7 +165,6 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float FUN_001f9e90(float, float);
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern int D_L04_00173FC0; /* no foreign declaration */
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -370,7 +369,6 @@ extern float rig_angle_difference(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f99c0(float);
 extern float D_L04_0015ED60 __asm__("D_L04_0015ED60");
 extern float D_L04_0015ED68 __asm__("D_L04_0015ED68");
-extern float D_L04_0015ED6C __asm__("D_L04_0015ED6C");
 /* Retail -0x7e94($gp), with $gp = 0x166c00, addresses 0x0015ed6c. */
 extern float D_L04_0015816C __asm__("D_L04_0015ED6C") __attribute__((sda));
 extern float D_L04_00173FF8 __asm__("D_L04_00173FF8");

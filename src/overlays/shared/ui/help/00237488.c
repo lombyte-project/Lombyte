@@ -617,15 +617,7 @@ typedef struct {
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int D_0013C940_c __asm__("D_0013C940") ; /* no foreign declaration */
-extern int D_0013CAE0_c __asm__("D_0013CAE0") ; /* no foreign declaration */
-extern int D_0013F350; /* no foreign declaration */
-extern int D_00141660_c __asm__("D_00141660") ; /* no foreign declaration */
 extern int D_0015ED84; /* no foreign declaration */
-extern int D_0015EEA4; /* no foreign declaration */
-extern int D_L05_0015F674; /* no foreign declaration */
-extern int D_L05_0015FFD8; /* no foreign declaration */
-extern int D_L05_0017C088;
 extern int FUN_L00_001fefc8(void *);
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d498(int);
@@ -1237,7 +1229,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
 #include "rnc/gameplay/state/usage_stats.h"
 extern u8 D_0013D388;
 
-extern s32 D_0015EEA4;
 extern s32 D_0015ED84 __attribute__((sda));
 extern s32 D_0015EEA4_sda __asm__("D_0015EEA4") __attribute__((sda));
 extern f32 D_L05_002169F8[] __asm__("D_L05_002169F8");

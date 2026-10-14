@@ -1687,7 +1687,6 @@ void FUN_L00_00234d40(void) {
 void FUN_L00_002395b0();
 void FUN_L00_00239630();
 void FUN_L00_00239810();
-extern u8 D_001415F8[];
 void queue_animation_update() __asm__("FUN_001ff308");
 /* Queues animation update 0x7535 with three FUN_L00_ callbacks and D_001415F8. */
 void show_health_hud(void) __asm__("FUN_L00_00234e00");

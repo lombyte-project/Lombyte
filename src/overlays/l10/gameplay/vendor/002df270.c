@@ -66,14 +66,11 @@ extern float D_0015ED70;
 extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern float probe_ground_height_c(void *, int, float) __asm__("func_00213508");
-extern int *D_L10_001B0930[];
-extern int D_L10_001742E0; /* no foreign declaration */
 extern int FUN_001f9b80_c() __asm__("FUN_001f9b80");
 extern int FUN_L00_001f0d60();
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt_c(int *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern u128 D_L10_00167240_c __asm__("D_L10_00167240");
 extern void add_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
@@ -512,8 +509,6 @@ extern char D_0013F3D0[];
 extern float FUN_001f96b0(float);
 extern float FUN_001f9e90(float, float);
 extern float truncate_float_to_s32_alt(float, float) __asm__("FUN_001fa6d0");
-extern int *D_L10_001B0930[];
-extern int D_001413D0; /* no foreign declaration */
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int FUN_00213928();
@@ -1499,14 +1494,11 @@ typedef struct Hit_2E52B0 {
 
 typedef struct { char p0[0x11]; unsigned char b11; } Flags_2E52B0;
 
-extern char *D_L10_001B0930_c[] __asm__("D_L10_001B0930");
 extern char *FUN_L00_0025a420(void *,int,int);
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern float dot_vectors_xyz(float) __asm__("FUN_001f9ab0");
-extern int D_0013F350;
 extern float D_L10_00161E2C __attribute__((sda));
 extern float D_L10_00161E40_c __asm__("D_L10_00161E40") __attribute__((sda));
-extern int D_L10_00174300;
 extern int FUN_001f9770(void *);
 extern int FUN_00213928_c(void *,void *,void *,int,int *,float *,int,int) __asm__("FUN_00213928");
 extern int FUN_L00_0025ff38_c(float,char *,void *,int,int,void *,int) __asm__("FUN_L00_0025ff38");
@@ -1549,7 +1541,6 @@ extern int func_L00_00260FB0_2E52B0(float, void *, void *, int, int, void *, int
 extern float func_001F9D48_2E52B0(void *, void *) __asm__("FUN_001f9b80");
 extern float func_001F9D10_2E52B0(void *, void *) __asm__("FUN_001f9b48");
 extern void func_00213DE0_2E52B0(void *, int, int, int) __asm__("FUN_00212f90");
-extern char D_0013E633_2E52B0[] __asm__("D_0013D408");
 extern char D_hero_2E52B0[] __asm__("D_0013F350");
 extern char D_0013D50F_2E52B0[] __asm__("D_0013D408");
 extern V_2E52B0 D_L10_00174380_2E52B0 __asm__("D_L10_00174300");
@@ -1954,7 +1945,6 @@ extern int try_set_help_message_vendor(int, int) __asm__("FUN_00215130");
 extern void FUN_L00_00298840_vendor(int) __asm__("FUN_L00_00298840");
 extern void memcard_save_data_vendor(int, int) __asm__("FUN_0020b178");
 extern void FUN_L00_00263d40_vendor(int, int) __asm__("FUN_L00_00263d40");
-extern int D_001415F8 __attribute__((section(".data")));
 extern int D_0013ED98 __attribute__((section(".sdata")));
 extern int D_0013EDA0 __attribute__((sda));
 extern int D_L10_0013F640 __asm__("D_L10_0013F640") __attribute__((section(".sdata")));
@@ -2083,8 +2073,6 @@ extern int D_00141B28; /* no foreign declaration */
 extern int D_0015EEA4 __attribute__((sda)); /* no foreign declaration */
 extern Moby *D_L10_0015FFE4;
 extern int D_L10_00161F38 __attribute__((sda)); /* no foreign declaration */
-extern int D_L10_00179890;
-extern int D_L10_00179890; /* no foreign declaration */
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern unsigned char D_0013D504[];
 extern unsigned char D_00141B20[];
@@ -2098,7 +2086,6 @@ extern char D_0013E633_2E9978[] __asm__("D_00141B20");
 extern unsigned char D_0014171B_2E9978[] __asm__("D_0013D504");
 extern unsigned char D_0013D5CA_2E9978[] __asm__("D_0015EEA4") __attribute__((sda));
 extern unsigned char D_0013D605_2E9978[] __asm__("D_0013D388");
-extern char D_0013D355_2E9978[] __asm__("D_00141B28");
 
 extern unsigned char D_00141B10[];
 extern unsigned char D_00141B18[];
@@ -2496,8 +2483,6 @@ extern float fast_cos_local(float, float) __asm__("FUN_001f9dc8");
 extern int D_0013DD4C; /* no foreign declaration */
 extern unsigned char D_0014C190_c[] __asm__("D_0014C190");
 extern GateMoby_2EAD50 *D_L10_0015FFD8_c __asm__("D_L10_0015FFD8") __attribute__((sda));
-extern int D_L10_001BA950; /* no foreign declaration */
-extern int D_L10_001BB6B0; /* no foreign declaration */
 extern s32 FUN_001f96b0_c(f32) __asm__("FUN_001f96b0");
 extern unsigned char D_001413F4[];
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");

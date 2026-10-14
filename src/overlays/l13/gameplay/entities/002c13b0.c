@@ -2034,7 +2034,6 @@ extern char D_L13_001F4DB0[];
 extern char D_L13_001F4DD0[];
 extern int D_L13_0015F5CC;
 
-extern int D_L13_0015F5CC_absolute __asm__("D_L13_0015F5CC") __attribute__((section(".data")));
 
 typedef struct {
     u8 pad0[0x20];
@@ -2835,8 +2834,6 @@ typedef struct {
 } Hero_2EAE80;
 
 extern char D_00140940[];
-extern int D_0013F350_c __asm__("D_0013F350");
-extern int D_L13_001D3478; /* no foreign declaration */
 extern void FUN_L13_002e97e0();
 int FUN_L13_002e86f8_c(void *unused, unsigned char *p, int base, int n) __asm__("FUN_L13_002e86f8");
 void FUN_L13_002e9680_c(void *unused, char *p, int idx) __asm__("FUN_L13_002e9680");

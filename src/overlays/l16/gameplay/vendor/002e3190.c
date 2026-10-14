@@ -67,7 +67,6 @@ typedef struct {
     unsigned char mission;
 } L16WatchFlags;
 
-extern char D_0013E533[];
 extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[];
 extern float D_L16_001D96C0[8];
 extern float FUN_001f96b0(float);
@@ -330,7 +329,6 @@ typedef struct {
 extern char *D_L16_001B0930[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L14_002ffaf8(void *, void *);
-extern char D_0013E533[];
 extern char D_L16_001E86A0[], D_L16_001E89D8[], D_L16_001E8A20[], D_L16_001E8A58[], D_L16_001E8AA0[];
 extern char D_L16_001E89A0[], D_L16_001E86D8[], D_L16_001E8A20[], D_L16_001E8A58[], D_L16_001E8AA0[] __asm__("D_L16_001E8AA0");
 extern char D_L16_001E89A0[], D_L16_001E89D8[], D_L16_001E8720[], D_L16_001E8A58[], D_L16_001E8AA0[] __asm__("D_L16_001E8AA0");
@@ -345,8 +343,6 @@ extern int FUN_L16_002e3fa0(struct Moby *moby);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L16_00161D94;
-extern short D_L16_00161E58_u __asm__("D_L16_00161E58");
-extern short D_L16_00161E54_u __asm__("D_L16_00161E54") __attribute__((sda));
 extern short D_L16_00161D98 __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
@@ -1221,7 +1217,6 @@ typedef struct {
 
 extern char *D_L16_001B0930[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern float D_0015EE6C_c __asm__("D_0015EE6C");
 extern float D_L16_00161E58 __attribute__((sda));
 extern float D_0015EE70;
 extern float FUN_001f9b80(void*,void*);
@@ -1401,7 +1396,6 @@ typedef struct {
 } L16ChallengeScratch;
 
 extern char D_0013D50F[], D_0014161B[];
-extern char D_0013E533[];
 extern char D_L16_001D9840[];
 extern char D_L16_001671C0[];
 extern char D_L16_001D9860[];

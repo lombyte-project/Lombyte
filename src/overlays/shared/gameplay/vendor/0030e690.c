@@ -64,17 +64,13 @@ extern unsigned char D_0014C190_r[] __asm__("D_0014C190");
 extern unsigned char D_0013F350_r[] __asm__("D_0013F350");
 extern unsigned char D_0014C050_r[] __asm__("D_0014C050");
 extern unsigned char D_0013F3D0_r[] __asm__("D_0013F3D0");
-extern char D_00141968_c[] __asm__("D_00141968");
 extern float FUN_001f9b80(void *, void *);
 extern int D_0014C050; /* no foreign declaration */
 extern int D_L11_0015FC88; /* no foreign declaration */
-extern int D_L11_001BAFD0; /* no foreign declaration */
-extern int D_L11_001BBC30; /* no foreign declaration */
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern unsigned char D_0013F350[];
 s32 FUN_L00_00203908(s32 a, s32 b);
-extern char D_0013E633_3102C8[] __asm__("D_00141968");
 extern u8 D_0013D4C0[];
 extern unsigned char D_0014171B_3102C8[] __asm__("D_0013F350");
 extern LvState_3102C8 D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");

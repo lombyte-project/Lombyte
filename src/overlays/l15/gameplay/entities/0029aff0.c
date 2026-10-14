@@ -218,7 +218,6 @@ typedef struct {
 extern float D_0015ED6C;
 extern float D_L15_001614F8 __attribute__((sda));
 extern int D_L15_00161AC0;
-extern int D_L15_00184AA8;
 extern unsigned char D_001413F4[];
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int func_0022ED80_2A48B0(int, int, GateMoby_2A48B0 *) __asm__("FUN_0022da68");

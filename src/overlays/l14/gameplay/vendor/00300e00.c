@@ -626,7 +626,6 @@ typedef struct Snd_3071B0 {
     Moby_3071B0 *f88;
 } Snd_3071B0;
 
-extern char D_0013E550[];
 extern float FUN_L00_0025b750(float, float, float);
 extern int D_L14_0015FFD8_c __asm__("D_L14_0015FFD8");
 extern float D_L14_001621F4 __attribute__((sda)); /* no foreign declaration */

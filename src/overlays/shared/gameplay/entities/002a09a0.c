@@ -52,7 +52,6 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
 
 extern char D_L16_001671C0_c[] __asm__("D_L16_001671C0");
 extern char D_0013E633[];
-extern char D_L16_00167240_c[] __asm__("D_L16_00167240");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");

@@ -1595,7 +1595,6 @@ char *FUN_L14_002aef28(int index, int *ids) {
 /* counts table entries through the first negative terminator */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B0288), where it is exact; names translated to the US level program. */
 
-extern int *D_L14_001ABF40_c[] __asm__("D_L14_001ABF40");
 
 int FUN_L14_002af048(struct Moby *moby) {
     short *table = D_L14_001AC2C0_2B0168[moby->group];
@@ -1627,8 +1626,6 @@ extern float D_L14_00161528 __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_0016152C __attribute__((sda)); /* no foreign declaration */
 extern int D_L14_00161530 __attribute__((sda)); /* no foreign declaration */
 extern int D_L14_00161534 __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_001FBD50; /* no foreign declaration */
-extern int D_L14_001FBD78; /* no foreign declaration */
 extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern int FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_002502f0();
@@ -1983,7 +1980,6 @@ int FUN_L14_002b4500(int index) {
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B58C0), where it is exact; names translated to the US level program. */
 
-extern int *D_L14_001ABF40[];
 extern char *D_L14_ffd0_e[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
 extern short *D_L14_001AC2C0_2B0168[] __asm__("D_L14_001ABF40");
 
@@ -2848,7 +2844,6 @@ extern f32 D_L14_001615D0 __attribute__((sda));
 extern f32 D_L14_001615D4 __attribute__((sda));
 extern f32 D_L14_001615D8 __attribute__((sda));
 extern char D_L14_001809C0[];
-extern float D_L14_0015F580_d[] __asm__("D_L14_0015F580");
 extern int tick_countdown_16_d(void *) __asm__("FUN_001f9770");
 extern void add_d(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void sub_d(void *, void *, void *) __asm__("FUN_001f9a28");

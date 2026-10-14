@@ -149,9 +149,7 @@ typedef struct {
     unsigned int mask;
 } Help_2E57F8;
 
-extern char *D_L04_0015FFD8 __attribute__((section(".sdata")));
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
-extern int D_L04_0015FFE4; /* no foreign declaration */
 extern int D_L04_00179590[] __attribute__((section(".data")));
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");

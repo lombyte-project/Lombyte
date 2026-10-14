@@ -677,7 +677,6 @@ typedef struct {
 } Elem_239918;
 
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern char D_L00_0017E4D8[];
 extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -695,7 +694,6 @@ extern float D_L00_0015F7C4 __attribute__((sda));
 extern int D_L00_0015F7D4 __attribute__((sda)); /* no foreign declaration */
 extern int D_L00_0015F7D8 __attribute__((sda)); /* no foreign declaration */
 extern int D_L00_0015F7DC __attribute__((sda)); /* no foreign declaration */
-extern int D_L00_0015F7E0;
 extern Ent_239918 **D_L00_0015FAC0_c2 __asm__("D_L00_0015FAC0");
 extern int FUN_001fa6e0(int, int, f32);
 extern s32 find_valid_animation_frame_index_alt(s32, s32) __asm__("func_001FF960");

@@ -29,9 +29,6 @@ extern void FUN_L12_002bf770(int);
 extern int D_L12_00151388 __attribute__((sda));
 extern float D_0015ED70_c __asm__("D_0015ED70");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
-extern float D_0013F3D0_c __asm__("D_0013F3D0");
-extern float D_0013F3D4_c __asm__("D_0013F3D4");
-extern float D_0013F640_c __asm__("D_0013F640");
 extern void slot_limit_c(int) __asm__("FUN_001e93b0");
 extern void initialize_slots_c(void *, int) __asm__("FUN_L01_002b7a48");
 extern void initialize_slot_data_c(float) __asm__("FUN_L01_002b7ef0");
@@ -435,7 +432,6 @@ typedef struct {
 
 extern unsigned char D_0013F3D0_r[] __asm__("D_0013F3D0");
 extern char *D_L12_001B0930[];
-extern char D_001413D0[];
 extern char D_L12_00167240[];
 extern int D_L12_001618E8 __attribute__((sda));
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
@@ -1570,7 +1566,6 @@ extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
-extern L16WatchFlags D_0013D355_watch __asm__("D_0013D24D");
 
 extern char *D_L12_001600EC;
 void FUN_L12_002e6c48(L16WatchMoby *m) {

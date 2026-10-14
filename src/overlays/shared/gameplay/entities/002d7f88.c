@@ -425,7 +425,6 @@ extern Moby *D_L00_0015F63C;
 extern V_2D9EA0 D_L00_001E3CA0_c[] __asm__("D_L00_001E3CA0");
 extern char D_0013F350_c2[] __asm__("D_0013F350");
 extern char D_L00_00166DC0[];
-extern char D_L00_001E3D20_c[] __asm__("D_L00_001E3D20");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
@@ -448,7 +447,6 @@ extern float D_L00_00161A50 __attribute__((sda));
 extern float D_L00_00161A54 __attribute__((sda));
 extern int D_L00_00161A58 __attribute__((sda));
 extern float D_L00_00161A5C __attribute__((sda));
-extern int D_L00_001E14A0;
 extern int FUN_001fa728();
 extern int FUN_L00_00267a08();
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
@@ -2231,14 +2229,8 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 square_root_scalar(f32) __asm__("func_001F9988");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
-extern float D_0015ED60 __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
 extern int D_0013E529_c __asm__("D_0013E529");
-extern int D_0013F3D0; /* no foreign declaration */
-extern int D_0013F990; /* no foreign declaration */
 extern int D_001403FC; /* no foreign declaration */
-extern int D_0015ED64; /* no foreign declaration */
-extern int D_L00_001EA130; /* no foreign declaration */
 extern int FUN_001f9c48();
 extern int FUN_001fa3c0();
 extern int FUN_001fa400();

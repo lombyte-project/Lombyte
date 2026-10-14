@@ -66,7 +66,6 @@ extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
 extern int D_L01_0015F6DC_d __asm__("D_L01_0015F6DC");
 extern int D_L01_0015F594 __attribute__((sda));
-extern int D_L01_0015F6DC __attribute__((section(".data")));
 extern int D_L01_0016CC00 __attribute__((section(".data")));
 extern int FUN_001f9770(void *);
 extern int FUN_L00_002050b8(int);

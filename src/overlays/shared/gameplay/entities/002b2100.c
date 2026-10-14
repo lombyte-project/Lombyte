@@ -937,7 +937,6 @@ unsigned char *FUN_L00_002b46a8(int ign, V_2b46a8 *from, float *yaw, float *pitc
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b49a8.s", FUN_L00_002b49a8);
 #else
-extern u8 *D_001413D0_2b49a8 __asm__("D_001413D0");
 extern s16 D_001416F8_2b49a8 __asm__("D_001416F8");
 extern u16 D_001416FA_2b49a8 __asm__("D_001416FA");
 extern u32 D_001416FC_2b49a8 __asm__("D_001416FC");
@@ -1525,7 +1524,6 @@ void FUN_L00_002b5d00(char *m, int flag) {
     }
 }
 #include "rnc/input/pad_state.h"
-extern char D_0013C940_2b6140[] __asm__("D_0013C940");
 extern float D_0015ED6C_2b6140 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern char D_L00_00173E40_2b6140[] __asm__("D_L00_00173E40");
 
@@ -1571,7 +1569,6 @@ typedef struct Hit_2b6140 {
 } Hit_2b6140;
 typedef struct Hit2_2b6140 { char p0[0x24]; Tgt_2b6140 *f24; } Hit2_2b6140;
 typedef struct Row_2b6140 { char p0[0x74]; unsigned char f74; char p1[0x13]; struct Moby *f88; } Row_2b6140;
-extern char D_0013F350_2b6140[] __asm__("D_0013F350");
 extern char D_0013E550_2b6140[] __asm__("D_0013E550");
 extern Hit2_2b6140 *D_L00_00173E58_2b6140 __asm__("D_L00_00173E58") __attribute__((section(".data")));
 extern char D_L00_00177F00_2b6140[] __asm__("D_L00_00177F00");
@@ -2256,8 +2253,6 @@ typedef union {
     f32 f[4];
 } Vec_2b77f0;
 
-extern u32 D_001403F0_2b77f0 __asm__("D_001403F0");
-extern u8 D_001413FC_2b77f0 __asm__("D_001413FC");
 extern s32 D_001413D4_2b77f0 __asm__("D_001413D4");
 extern u8 D_0013E530_2b77f0 __asm__("D_0013E530");
 extern void *D_001413D0_2b77f0 __asm__("D_001413D0");
@@ -2283,12 +2278,10 @@ extern s32 D_L00_00161518_2b77f0 __asm__("D_L00_00161518") __attribute__((sda));
 extern s32 D_L00_0016151C_2b77f0 __asm__("D_L00_0016151C") __attribute__((sda));
 extern f32 D_L00_00161520_2b77f0 __asm__("D_L00_00161520") __attribute__((sda));
 extern f32 D_L00_00161514_2b77f0 __asm__("D_L00_00161514") __attribute__((sda));
-extern f32 D_L00_0016152C_2b77f0 __asm__("D_L00_0016152C") __attribute__((sda));
 extern f32 D_L00_00161528_2b77f0 __asm__("D_L00_00161528") __attribute__((sda));
 extern f32 D_L00_00161524_2b77f0 __asm__("D_L00_00161524") __attribute__((sda));
 extern s32 D_L00_00161530_2b77f0 __asm__("D_L00_00161530") __attribute__((sda));
 extern f32 D_L00_00161534_2b77f0 __asm__("D_L00_00161534") __attribute__((sda));
-extern s32 D_L00_00161538_2b77f0 __asm__("D_L00_00161538") __attribute__((sda));
 
 void FUN_L00_002b8230(unsigned char *);
 void FUN_L00_002b8438(char *);
@@ -2758,16 +2751,13 @@ typedef struct Aim_2B9AD8 { char pad0[4]; short kind; } Aim_2B9AD8;
 
 typedef struct Light_2B9AD8 { float x, y, z, b; V_2B9AD8 pos; } Light_2B9AD8;
 
-extern G_B4F40 D_0013F350;
 extern char D_0013E533[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
-extern float D_0015ED60;
 extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_00141918; /* no foreign declaration */
 extern int D_00141D70; /* no foreign declaration */
-extern int D_0015ED84;
 extern int D_0015EEA4;
 extern int FUN_001f9770(void *);
 extern int FUN_L00_00233db8(int, int);
@@ -2778,7 +2768,6 @@ extern void FUN_L00_002ba970(char *);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
 extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
-extern short D_L00_00161590;
 extern u32 D_0013C940[];
 extern u8 D_0013E550[];
 extern unsigned char *FUN_002141f8(void *);
@@ -2796,7 +2785,6 @@ void FUN_L00_0023e838(int);
 void FUN_L00_002b9310(char *moby);
 extern int D_0015EEA4_2b2100a __asm__("D_0015EEA4");
 extern int D_0015ED84_2b2100 __asm__("D_0015ED84");
-extern char D_0013C940_2b2100[] __asm__("D_0013C940");
 extern char D_0013F350_2b2100[] __asm__("D_0013F350");
 extern float D_0015ED60_2b2100 __asm__("D_0015ED60");
 extern Voice_2B9AD8 D_0013E550_2b2100[] __asm__("D_0013E550");

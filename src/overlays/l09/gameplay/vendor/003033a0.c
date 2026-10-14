@@ -1420,7 +1420,6 @@ extern float D_L09_00161DDC __attribute__((sda));
 extern float D_L09_00161DE0 __attribute__((sda));
 extern float D_L09_00161DE4 __attribute__((sda));
 extern float D_L09_00161DE8 __attribute__((sda));
-extern int D_L09_00209228;
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern unsigned char D_0013F350[];
@@ -1606,7 +1605,6 @@ extern void attach_manipulator(struct Moby *, s32, void *) __asm__("FUN_0020cb10
 extern void scale_vector_00309c08(f32, void *, void *) __asm__("FUN_001f9a68");
 extern s32 check_voice_target_00309c08(void *, s32) __asm__("FUN_L00_0028d8c0");
 extern void FUN_L00_00260738(void *, void *, void *, void *);
-extern s16 D_0013F65E __attribute__((section(".data")));
 extern u8 D_0013F3D0[];
 extern u8 D_0014C050[];
 extern s32 D_L09_0015F5CC __attribute__((section(".data")));

@@ -1108,7 +1108,6 @@ extern char D_0015172A[] __asm__("D_0015172A");
 extern int D_L06_0015F5C4 __asm__("D_L06_0015F5C4");
 extern float D_L06_00167560 __asm__("D_L06_00167560");
 extern int D_L06_00167568 __asm__("D_L06_00167568");
-extern char D_0013F3D0_301b90[] __asm__("D_0013F3D0");
 extern float D_L06_00162098 __asm__("D_L06_00162098") __attribute__((sda));
 extern float D_L06_0016209C __asm__("D_L06_0016209C") __attribute__((sda));
 extern float D_L06_001620A0 __asm__("D_L06_001620A0") __attribute__((sda));

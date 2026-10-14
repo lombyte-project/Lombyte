@@ -35,7 +35,6 @@ void FUN_L07_002f8058(unsigned char *moby) {
 
 
 
-extern int D_0013F350; /* no foreign declaration */
 extern int FUN_001f9770();
 extern int FUN_001f9b80();
 extern int FUN_001f9fc8();

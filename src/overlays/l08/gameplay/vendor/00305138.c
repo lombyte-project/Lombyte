@@ -56,7 +56,6 @@ void FUN_L08_00305138(struct Moby *moby) {
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
-extern char D_0013E533[];
 #include "sda.h"
 typedef struct {
     char pad00[4];
@@ -767,7 +766,6 @@ void FUN_L08_00308f68(int x) {
 
 extern int D_L08_001623F0_e[] __asm__("D_L08_001623F0") __attribute__((section(".sdata")));
 extern Pair D_L08_001623F8[];
-extern Pair D_L08_00162408_c[] __asm__("D_L08_00162408");
 extern Pair D_L08_001F8548[];
 extern char D_L08_001675C0[];
 extern s32 D_L08_001F01C8[];

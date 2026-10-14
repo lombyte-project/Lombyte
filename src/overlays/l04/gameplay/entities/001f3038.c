@@ -74,9 +74,6 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9e90(float, float);
-extern int D_0013F350; /* no foreign declaration */
-extern int D_L04_00173FC0; /* no foreign declaration */
-extern int D_L04_001B0630; /* no foreign declaration */
 extern int FUN_001efa68();
 extern int FUN_001f9770();
 extern int FUN_001f9c48();

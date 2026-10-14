@@ -468,9 +468,7 @@ struct LevelTable_QS {
     s32 i168;
 };
 
-extern f32 D_0015ED64_a __asm__("D_0015ED64");
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
-extern f32 D_0015ED70_a __asm__("D_0015ED70");
 extern s32 D_0015EEA4;
 extern u8 D_0013D4DC[];
 extern struct UsageStats D_00141848;
