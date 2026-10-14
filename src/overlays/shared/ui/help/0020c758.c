@@ -1399,28 +1399,34 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     if ((*(s32 *)(hero.pad_21B8 + 4)) < n)
         return;
 
+    /* The completed triplet countdown leaves the signed remainder sentinel. */
+    negative_one = i;
     output = (u8 *)moby + 0x40;
     count = 0;
     if (n > 0)
         score_ptr = scores;
     for (i = 0; i < n; i++) {
-        s32 a = (*(volatile s32 *)(hero.pad_21B8)) - (i - 15);
+        s32 a = (s32)((s64)(*(volatile s32 *)(hero.pad_21B8)) - (s64)(i - 15));
         a %= 16;
-        score = score_ptr;
-        score += i;
 
-        for (j = 0; j < n; j++) {
-            if (i != j) {
-                s32 b = (*(volatile s32 *)(hero.pad_21B8)) - (j - 15);
-                {
-                    s32 ring = b + 15;
-                    if (negative_one < b)
-                        ring = b;
-                    b -= (ring >> 4) * 16;
+        if (n > 0) {
+            score = score_ptr;
+            score += i;
+            j = 0;
+            do {
+                if (i != j) {
+                    s32 b = (*(volatile s32 *)(hero.pad_21B8)) - (j - 15);
+                    {
+                        s32 ring = b + 15;
+                        if (negative_one < b)
+                            ring = b;
+                        b -= (ring >> 4) * 16;
+                    }
+                    *score += FUN_L00_0020f0b8((f32 *)((hero.pad_12EF + 1) + a * 0x30),
+                                              (f32 *)((hero.pad_12EF + 1) + b * 0x30));
                 }
-                *score += FUN_L00_0020f0b8((f32 *)((hero.pad_12EF + 1) + a * 0x30),
-                                                  (f32 *)((hero.pad_12EF + 1) + b * 0x30));
-            }
+                j++;
+            } while (j < n);
         }
     }
     maximum = 0.0f;
@@ -1441,7 +1447,7 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     limit = count < 3;
     for (i = 0; i < n; i++) {
         if (!(maximum * 0.2f < scores[i]) || count < 1 || !limit) {
-            s32 a = (*(volatile s32 *)(hero.pad_21B8)) - (i - 15);
+            s32 a = (s32)((s64)(*(volatile s32 *)(hero.pad_21B8)) - (s64)(i - 15));
             a %= 16;
             record = (hero.pad_12EF + 1) + a * 0x30;
             chosen++;
