@@ -519,7 +519,8 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
             i--;
             work.random_vector.f[1] = FUN_002132a8(-1.0f, 1.0f);
             work.random_direction.q = work.random_vector.q;
-            FUN_001f9bf8(&work.offset, &work.axis, dot_vector_xyz(&work.random_direction, &work.axis));
+            amount = dot_vector_xyz(&work.random_direction, &work.axis);
+            FUN_001f9bf8(&work.offset, &work.axis, amount);
             subtract_vector_xyz(&work.random_direction, &work.random_direction, &work.offset);
             FUN_001f9bf8(&work.offset, &work.axis, FUN_002132a8(0.0f, 1.0f));
             add_vector_xyz(&work.random_direction, &work.random_direction, &work.offset);
