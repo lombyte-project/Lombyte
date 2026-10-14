@@ -682,7 +682,7 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path) -> Path:
     out.write_text("\n".join(lines) + f"\n\n{elem} {name}{dims}{small} = {body};\n")
     unit = os.path.relpath(out.resolve().with_suffix(""), ROOT / "src")
     print(f'add to DATA_OVERLAYS in configure.py: "{unit}": '
-          f"(0x{addr:X}, 0x{addr - 0xFF080:X})")
+          f"(0x{addr:X}, 0x{addr - 0xFF080:X}, {len(raw)})")
     return out
 
 

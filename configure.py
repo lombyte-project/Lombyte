@@ -379,54 +379,50 @@ OVERLAY_SN_UNITS = {
 
 # Recovered C units that own the small .rodata retail kept inside the
 # preserved `core_rdata` blob.  Key: configured unit-name suffix; value:
-# (retail VMA, retail file offset) of the unit's compiled `.rodata` bytes.
-# apply_retail_link_layout emits an overlay section for any configured `c`
-# unit matching the suffix, so both the assembly-backed and the promoted
-# (normalized) unit names resolve to the same retail bytes.
+# (retail VMA, retail file offset, size) of the unit's compiled `.rodata`.
+# apply_retail_link_layout links that section at the address and cuts the
+# same bytes out of the blob, so the gate hashes what the C compiled to; the
+# link fails when the section is not SIZE bytes.  Both the assembly-backed and
+# the promoted (normalized) unit names resolve to the same retail bytes.
 RODATA_OVERLAYS = {
-    "_dtoa_r": (0x152330, 0x532B0),
+    "_dtoa_r": (0x152330, 0x532B0, 56),
     # _getpic's switch emits a 5-entry jump table (0x14 bytes) that retail
     # stored at 0x153AA0 inside core_rdata; the expected object references it
     # as the splat symbol jtbl_00153AA0, so the compiled .rodata must land at
     # the same VMA/file offset for the relocations to resolve content-equal.
-    "_getpic": (0x153AA0, 0x54A20),
-    "sdk/debug/printfloat": (0x152798, 0x53718),  # its three f64 literals (0.1, 0.1, 1e6)
-    "audio/rpc/snd_send_iop_command_and_wait": (0x153D20, 0x54CA0),  # its RPC-collision message
-    "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28),  # its two error messages
-    "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90),  # its buffer-full message
-    "rendering/image/jump_to_image_setup": (0x153AD8, 0x54A58),  # its error message
-    "fun_0021fdc8": (0x1E87F0, 0xE9770),  # stream-state switch table
+    "_getpic": (0x153AA0, 0x54A20, 20),
+    "sdk/debug/printfloat": (0x152798, 0x53718, 24),  # its three f64 literals (0.1, 0.1, 1e6)
+    "audio/rpc/snd_send_iop_command_and_wait": (0x153D20, 0x54CA0, 26),  # its RPC-collision message
+    "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28, 77),  # its two error messages
+    "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90, 96),  # its buffer-full message
+    "rendering/image/jump_to_image_setup": (0x153AD8, 0x54A58, 16),  # its error message
+    "fun_0021fdc8": (0x1E87F0, 0xE9770, 28),  # stream-state switch table
     # vfprintf_r: blanks/zeroes, the xdigs strings, the short literals (kept in
     # .rodata via section attributes, in source order) and its switch table.
-    "runtime/newlib/vfprintf_r": (0x1524E0, 0x53460),
-    "dispatch_game_state_update": (0x1E8960, 0xE98E0),  # retail switch table
-    "gameplay/missions/check_mission_condition": (0x1E8390, 0xE9310),  # unlock-condition switch table
-    "draw_menu_preview_objects": (0x1E87A0, 0xE9720),  # item-handle release switch table
-    "update_resident_gameplay_state": (0x1E8930, 0xE98B0),  # gameplay-state switch table
-    "fun_00222768": (0x1E8860, 0xE97E0),  # switch table
-    "camera_activation_check_priority": (0x1E7730, 0xE86B0),  # camera-mode switch table
-    "ui/help/draw_help": (0x1E7A70, 0xE89F0),  # switch table (PAL import)
-    "ui/help/dismiss_help": (0x1E7A20, 0xE89A0),  # switch table (PAL import)
-    # A switch's jump table is a literal pool that retail placed at a fixed VMA
-    # (jtbl_001528E0 = 0x1528E0); the expected object references it by that
-    # splat symbol, so the compiled .rodata has to land at the same VMA and
-    # file offset for the relocation to resolve content-equal. Same shape as
-    # _getpic above. This only fixes the PLACEMENT, so it unblocks objdiff
-    # pairing; it does not by itself make the unit match.
-    "_sceFs_Rcv_Intr": (0x1528E0, 0x53860),  # retail switch table (jtbl_001528E0)
-    "fun_00216c48": (0x1E86A0, 0xE9620),  # retail switch table (jtbl_001E86A0)
-    "draw_sky_shells": (0x1E8910, 0xE9890),  # switch table
-    "fun_002223f0": (0x1E8810, 0xE9790),  # switch table
-    "fun_00237ed0": (0x1E8A90, 0xE9A10),  # switch table
-    "update_help_state": (0x1E7A40, 0xE89C0),  # switch table
-    "memcard_update_state": (0x1E8200, 0xE9180),  # switch table
-    "init_once": (0x1E7B30, 0xE8AB0),  # switch table
-    "actuator_calc_power": (0x1E7640, 0xE85C0),  # switch table
-    "fun_00213928": (0x1E84E0, 0xE9460),  # switch table
-    "fun_00204428": (0x1E7CE0, 0xE8C60),  # switch table
-    "mode_freeze_init": (0x1E78D0, 0xE8850),  # switch table
-    "fun_0021abf8": (0x1E8770, 0xE96F0),  # menu action switch table
-    "draw_dialog_text": (0x1E7920, 0xE88A0),  # switch table
+    "runtime/newlib/vfprintf_r": (0x1524E0, 0x53460, 516),
+    "dispatch_game_state_update": (0x1E8960, 0xE98E0, 36),  # retail switch table
+    "gameplay/missions/check_mission_condition": (0x1E8390, 0xE9310, 40),  # unlock-condition switch table
+    "draw_menu_preview_objects": (0x1E87A0, 0xE9720, 48),  # item-handle release switch table
+    "update_resident_gameplay_state": (0x1E8930, 0xE98B0, 36),  # gameplay-state switch table
+    "fun_00222768": (0x1E8860, 0xE97E0, 80),  # switch table
+    "camera_activation_check_priority": (0x1E7730, 0xE86B0, 32),  # camera-mode switch table
+    "ui/help/draw_help": (0x1E7A70, 0xE89F0, 28),  # switch table (PAL import)
+    "ui/help/dismiss_help": (0x1E7A20, 0xE89A0, 32),  # switch table (PAL import)
+    # Still assembly: 0 bytes until its C (and switch table) is promoted.
+    "_sceFs_Rcv_Intr": (0x1528E0, 0x53860, 0),  # retail switch table (jtbl_001528E0)
+    "fun_00216c48": (0x1E86A0, 0xE9620, 24),  # retail switch table (jtbl_001E86A0)
+    "draw_sky_shells": (0x1E8910, 0xE9890, 24),  # switch table
+    "fun_002223f0": (0x1E8810, 0xE9790, 80),  # switch table
+    "fun_00237ed0": (0x1E8A90, 0xE9A10, 52),  # switch table
+    "update_help_state": (0x1E7A40, 0xE89C0, 36),  # switch table
+    "memcard_update_state": (0x1E8200, 0xE9180, 348),  # switch table
+    "init_once": (0x1E7B30, 0xE8AB0, 20),  # switch table
+    "actuator_calc_power": (0x1E7640, 0xE85C0, 24),  # switch table
+    "fun_00213928": (0x1E84E0, 0xE9460, 128),  # switch table
+    "fun_00204428": (0x1E7CE0, 0xE8C60, 32),  # switch table
+    "mode_freeze_init": (0x1E78D0, 0xE8850, 28),  # switch table
+    "fun_0021abf8": (0x1E8770, 0xE96F0, 48),  # menu action switch table
+    "draw_dialog_text": (0x1E7920, 0xE88A0, 124),  # switch table
 }
 
 # Recovered C units that define the small-data variables their original
@@ -434,54 +430,129 @@ RODATA_OVERLAYS = {
 # where the assembler already knew its size, i.e. after the definition in
 # the same file; a unit that defines it reproduces that and needs no
 # `.extern`.  Key: configured unit-name suffix; value: (retail VMA, retail
-# file offset) of the unit's `.sdata`, which retail kept inside the preserved
-# small-data blobs (core.lit / .lit).  Placed like RODATA_OVERLAYS.
+# file offset, size) of the unit's `.sdata`, which retail kept inside the
+# preserved small-data blobs (core.lit / .lit).  Placed like RODATA_OVERLAYS.
 SDATA_OVERLAYS = {
-    "audio/rpc/snd_returns": (0x15EC80, 0x5FC00),
-    "rendering/debug/print_debug_text": (0x15F000, 0x5FF80),
-    "runtime/resources/update_resource_counter": (0x15F8F8, 0x60878),
-    "runtime/callbacks/count_vsync": (0x15ED40, 0x5FCC0),
-    "runtime/time/set_video_timing": (0x15ED60, 0x5FCE0),
-    "ui/fonts/load_debug_font": (0x15EEC8, 0x5FE48),
-    "gameplay/state/fun_00204428": (0x15EE50, 0x5FDD0),
-    "rendering/draw_debug_profiler": (0x15EE40, 0x5FDC0),
-    "gameplay/camera/camera_activation_check_priority": (0x15EF40, 0x5FEC0),
-    "gameplay/camera/execute_camera_post_update_callbacks": (0x15EF8C, 0x5FF0C),
-    "gameplay/camera/refresh_camera_control_flags": (0x15EF98, 0x5FF18),
-    "audio/voices/pause_all_sounds": (0x15F674, 0x605F4),
-    "gameplay/entities/create_moby": (0x15FEFC, 0x60E7C),
-    "rendering/vu1_chain": (0x160EE0, 0x61E60),
+    "audio/rpc/snd_returns": (0x15EC80, 0x5FC00, 8),
+    "rendering/debug/print_debug_text": (0x15F000, 0x5FF80, 8),
+    "runtime/resources/update_resource_counter": (0x15F8F8, 0x60878, 4),
+    "runtime/callbacks/count_vsync": (0x15ED40, 0x5FCC0, 24),
+    "runtime/time/set_video_timing": (0x15ED60, 0x5FCE0, 32),
+    "ui/fonts/load_debug_font": (0x15EEC8, 0x5FE48, 8),
+    "gameplay/state/fun_00204428": (0x15EE50, 0x5FDD0, 8),
+    "rendering/draw_debug_profiler": (0x15EE40, 0x5FDC0, 1),
+    "gameplay/camera/camera_activation_check_priority": (0x15EF40, 0x5FEC0, 4),
+    "gameplay/camera/execute_camera_post_update_callbacks": (0x15EF8C, 0x5FF0C, 4),
+    "gameplay/camera/refresh_camera_control_flags": (0x15EF98, 0x5FF18, 12),
+    "audio/voices/pause_all_sounds": (0x15F674, 0x605F4, 4),
+    "gameplay/entities/create_moby": (0x15FEFC, 0x60E7C, 4),
+    "rendering/vu1_chain": (0x160EE0, 0x61E60, 4),
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.
+# `scripts/data-refs.py --emit` writes the definition and prints the entry.
 DATA_OVERLAYS = {
-    "sdk/library/supplement_crt0": (0x130320, 0x312A0),
-    "runtime/data/get_core_data_table": (0x132D40, 0x33CC0),
-    "sdk/video/ipu/send_ipu_command": (0x132E70, 0x33DF0),
-    "sdk/debug/sce_scf_get_language": (0x1330D4, 0x34054),
-    "assembly/textbin/video/display/set_pal_mode": (0x13D100, 0x3E080),
-    "rendering/texture/append_palette_transfer_packet": (0x151B60, 0x52AE0),
-    "textbin/render_queued_rotated_sprites": (0x189300, 0x8A280),
-    "gameplay/camera/backup_current_cam": (0x1893D0, 0x8A350),
-    "textbin/append_billboard_batch": (0x18ED00, 0x8FC80),
-    "textbin/passes_projected_region_callback_0": (0x1A03B0, 0xA1330),
-    "textbin/initialize_level_runtime": (0x1CAAC0, 0xCBA40),
-    "assembly/textbin/world/data/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60),
-    "assembly/textbin/fun_002196b8": (0x1CE2C0, 0xCF240),
-    "textbin/gameplay/gadgets/load_hand_gadget": (0x1D52E8, 0xD6268),
-    "assembly/textbin/fun_00225e70": (0x1D6080, 0xD7000),
-    "assembly/textbin/fun_00203b08": (0x1D8030, 0xD8FB0),
-    "gameplay/fun_0022e1b0": (0x1D9890, 0xDA810),
-    "assembly/textbin/fun_0022e420": (0x1D9A10, 0xDA990),
-    "assembly/textbin/fun_001fd748": (0x1DDE28, 0xDEDA8),
-    "assembly/textbin/fun_00203730": (0x1E1900, 0xE2880),
-    "assembly/textbin/fun_00238310": (0x1E6018, 0xE6F98),
-    "assembly/textbin/fun_00239780": (0x1E6218, 0xE7198),
-    "textbin/render_vendor_capture_texture_overlays_pass": (0x1E6620, 0xE75A0),
-    "textbin/rebuild_configured_text_label_list": (0x1E8728, 0xE96A8),
-    "textbin/fun_0021fdc8": (0x1E87D0, 0xE9750),
-    "textbin/video/player/init_all": (0x1E8AF0, 0xE9A70),
+    "sdk/library/supplement_crt0": (0x130320, 0x312A0, 8),
+    "runtime/data/get_core_data_table": (0x132D40, 0x33CC0, 16),
+    "sdk/video/ipu/send_ipu_command": (0x132E70, 0x33DF0, 64),
+    "sdk/debug/sce_scf_get_language": (0x1330D4, 0x34054, 1),
+    "assembly/textbin/video/display/set_pal_mode": (0x13D100, 0x3E080, 8),
+    "rendering/texture/append_palette_transfer_packet": (0x151B60, 0x52AE0, 656),
+    "textbin/render_queued_rotated_sprites": (0x189300, 0x8A280, 196),
+    "gameplay/camera/backup_current_cam": (0x1893D0, 0x8A350, 1920),
+    "textbin/append_billboard_batch": (0x18ED00, 0x8FC80, 512),
+    "textbin/passes_projected_region_callback_0": (0x1A03B0, 0xA1330, 4),
+    "textbin/initialize_level_runtime": (0x1CAAC0, 0xCBA40, 4096),
+    "assembly/textbin/world/data/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60, 1152),
+    "ui/menus/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
+    "textbin/gameplay/gadgets/load_hand_gadget": (0x1D52E8, 0xD6268, 1776),
+    "assembly/textbin/fun_00225e70": (0x1D6080, 0xD7000, 56),
+    "assembly/textbin/fun_00203b08": (0x1D8030, 0xD8FB0, 128),
+    "gameplay/fun_0022e1b0": (0x1D9890, 0xDA810, 384),
+    "assembly/textbin/fun_0022e420": (0x1D9A10, 0xDA990, 32),
+    "assembly/textbin/fun_001fd748": (0x1DDE28, 0xDEDA8, 320),
+    "assembly/textbin/fun_00203730": (0x1E1900, 0xE2880, 256),
+    "assembly/textbin/fun_00238310": (0x1E6018, 0xE6F98, 512),
+    "assembly/textbin/fun_00239780": (0x1E6218, 0xE7198, 96),
+    "textbin/render_vendor_capture_texture_overlays_pass": (0x1E6620, 0xE75A0, 64),
+    "textbin/rebuild_configured_text_label_list": (0x1E8728, 0xE96A8, 60),
+    "textbin/fun_0021fdc8": (0x1E87D0, 0xE9750, 24),
+    "textbin/video/player/init_all": (0x1E8AF0, 0xE9A70, 18),
 }
+
+# The preserved data blobs of the main segment: (output section, blob,
+# retail VMA, retail file offset).  Bytes a C unit owns (the tables above) are
+# cut out of its blob, so the gate hashes what the C compiled to.
+PRESERVED_DATA = [
+    ("core.data", "core_data", 0x12F480, 0x30400),
+    ("core.rdata", "core_rdata", 0x152200, 0x53180),
+    ("core.lit", "core_lit", 0x15EC80, 0x5FC00),
+    (".lit", "lit", 0x15EF00, 0x5FE80),
+    (".data", "data", 0x165480, 0x66400),
+    ("lvl.vtbl", "lvl_vtbl", 0x1E8B80, 0xE9B00),
+    ("lvl.camvtbl", "lvl_camvtbl", 0x1E8C00, 0xE9B80),
+    ("lvl.sndvtbl", "lvl_sndvtbl", 0x1E8C80, 0xE9C00),
+]
+
+C_DATA_TABLES = (
+    (".rodata", "rdata", RODATA_OVERLAYS),
+    (".sdata", "sdata", SDATA_OVERLAYS),
+    (".data", "data", DATA_OVERLAYS),
+)
+
+def c_data_sections(c_units: list[str]) -> list[tuple[str, str, str, int, int, int]]:
+    """(output section, unit, input section, VMA, file offset, size) of every
+    *_OVERLAYS entry, by VMA.  An entry must name exactly one configured unit."""
+    owned = []
+    for section, kind, table in C_DATA_TABLES:
+        for suffix, (vram, at, size) in table.items():
+            units = [unit for unit in c_units
+                     if unit == suffix or unit.endswith("/" + suffix.lstrip("/"))]
+            if len(units) != 1:
+                raise SystemExit(f"{kind.upper()} entry {suffix!r} names {len(units)} "
+                                 "configured units, not one: fix the key in configure.py")
+            unit = units[0]
+            owned.append((f"{unit.replace('/', '.')}.{kind}", unit, section, vram, at, size))
+    owned.sort(key=lambda row: row[3])
+    return owned
+
+def preserved_data_sections(config_dir: Path, out_name: str, blob: str, vram: int,
+                            at: int, owned: list) -> list[tuple[int, str]]:
+    """Write BLOB's asm as the pieces between the C-owned holes; return their
+    linker sections."""
+    size = (config_dir / "assets" / f"{blob}.databin.bin").stat().st_size
+    holes = [(v - vram, n) for _, _, _, v, _, n in owned if vram <= v < vram + size and n]
+    pieces, cursor = [], 0
+    for offset, length in holes:
+        if offset < cursor or offset + length > size:
+            raise SystemExit(f"{blob}: C data at 0x{vram + offset:X} overlaps other "
+                             "C data or the end of the blob")
+        if offset > cursor:
+            pieces.append((cursor, offset - cursor))
+        cursor = offset + length
+    if cursor < size:
+        pieces.append((cursor, size - cursor))
+    asm = config_dir / "asm" / "data" / f"{blob}.s"
+    labels = [line for line in asm.read_text().splitlines() if line.startswith("glabel ")]
+    if labels and pieces[0][0] != 0:
+        raise SystemExit(f"{blob}: C data at its start would drop {labels[0]}")
+    lines, sections = ['.include "macro.inc"', ""], []
+    for index, (offset, length) in enumerate(pieces):
+        single = len(pieces) == 1
+        section = ".data" if single else f".data.{index}"
+        name = out_name if single else f"{out_name}.{index}"
+        lines += [f'.section {section}, "wa"', ""]
+        if index == 0:
+            lines += labels
+        lines += [f'.incbin "assets/{blob}.databin.bin", 0x{offset:X}, 0x{length:X}', ""]
+        sections.append((vram + offset,
+            f"    {name} 0x{vram + offset:X} : AT(0x{at + offset:X}) SUBALIGN(1)\n"
+            "    {\n"
+            f"        build/asm/data/{blob}.s.o({section});\n"
+            "    } :data"
+        ))
+    asm.write_text("\n".join(lines))
+    return sections
 
 # —— Code ——
 
@@ -1729,7 +1800,6 @@ def apply_retail_link_layout(config: dict[str, Any], linkerscript_path: Path):
     source no longer depends on the preserved blob for those bytes.
     """
 
-    overlays = {name: (vram, at) for name, (vram, at) in RODATA_OVERLAYS.items()}
     text = linkerscript_path.read_text()
     entry_re = re.compile(
         r"^\s*(build/(?:asm|src)(?:/data)?/.*\.[sc]\.o\(\.text\);)$",
@@ -1777,53 +1847,36 @@ def apply_retail_link_layout(config: dict[str, Any], linkerscript_path: Path):
         )
     linked_text = "\n\n".join(text_sections)
 
-    # Recovered C units may own small .rodata regions that retail kept inside
-    # the preserved core_rdata blob.  Emit an overlay section for each
-    # configured unit that matches the overlay map, keyed by the configured
-    # unit name so both the assembly-backed and the normalized/promoted name
-    # resolve to the same retail bytes.
-    c_units: list[str] = []
-    for segment in config["segments"]:
-        if not (isinstance(segment, dict) and segment.get("name") == "main"):
-            continue
-        for subsegment in segment.get("subsegments", []):
-            if (
-                isinstance(subsegment, list)
-                and len(subsegment) >= 3
-                and subsegment[1] == "c"
-            ):
-                c_units.append(str(subsegment[2]))
-    rodata_overlay_sections = []
-    for unit in c_units:
-        for suffix, (vram, at) in overlays.items():
-            if unit.endswith(suffix):
-                rodata_overlay_sections.append(
-                    f"    {suffix.lstrip('_')}.rdata 0x{vram:X} : AT(0x{at:X}) SUBALIGN(4)\n"
-                    "    {\n"
-                    f"        build/src/{unit}.c.o(.rodata);\n"
-                    "    } :data_alt"
-                )
-    for unit in c_units:
-        for suffix, (vram, at) in SDATA_OVERLAYS.items():
-            if unit.endswith(suffix):
-                rodata_overlay_sections.append(
-                    f"    {suffix.replace('/', '.')}.sdata 0x{vram:X} : AT(0x{at:X}) SUBALIGN(4)\n"
-                    "    {\n"
-                    f"        build/src/{unit}.c.o(.sdata);\n"
-                    "    } :data_alt"
-                )
-    for unit in c_units:
-        for suffix, (vram, at) in DATA_OVERLAYS.items():
-            if unit.endswith(suffix):
-                rodata_overlay_sections.append(
-                    f"    {suffix.replace('/', '.')}.data 0x{vram:X} : AT(0x{at:X}) SUBALIGN(4)\n"
-                    "    {\n"
-                    f"        build/src/{unit}.c.o(.data);\n"
-                    "    } :data_alt"
-                )
-    rodata_overlay = (
-        "\n\n".join(rodata_overlay_sections) if rodata_overlay_sections else ""
-    )
+    c_units: list[str] = [
+        str(subsegment[2])
+        for subsegment in main_segment["subsegments"]
+        if isinstance(subsegment, list) and len(subsegment) >= 3 and subsegment[1] == "c"
+    ]
+    owned = c_data_sections(c_units)
+    config_dir = linkerscript_path.parent
+    # In VMA order: dot never moves back, and with the C-owned bytes cut out
+    # of the blobs no two sections share an address.
+    data_sections: list[tuple[int, str]] = [
+        (0x154100, "    core.bss 0x154100 (NOLOAD) : SUBALIGN(4)\n"
+                   "    {\n        build/asm/data/core_bss.bss.s.o(.bss);\n    } :data"),
+        (0x161280, "    .bss 0x161280 (NOLOAD) : SUBALIGN(4)\n"
+                   "    {\n        build/asm/data/bss.bss.s.o(.bss);\n    } :data"),
+    ]
+    asserts = []
+    for name, unit, section, vram, at, size in owned:
+        data_sections.append((vram,
+            f"    {name} 0x{vram:X} : AT(0x{at:X}) SUBALIGN(4)\n"
+            "    {\n"
+            f"        build/src/{unit}.c.o({section});\n"
+            "    } :data"
+        ))
+        asserts.append(f'ASSERT(SIZEOF({name}) == {size}, "{unit}: its {section} is not '
+                       f'the configured {size} bytes (configure.py)");')
+    asserts.append('ASSERT(SIZEOF(.c_data_unplaced) == 0, "a unit defines data no '
+                   '*_OVERLAYS entry places (see .c_data_unplaced in the link map)");')
+    for out_name, blob, vram, at in PRESERVED_DATA:
+        data_sections += preserved_data_sections(config_dir, out_name, blob, vram, at, owned)
+    linked_data = "\n\n".join(text for _, text in sorted(data_sections))
     script = f"""ENTRY(entry)
 PHDRS
 {{
@@ -1831,7 +1884,6 @@ PHDRS
     text PT_LOAD FLAGS(5);
     text_alt PT_LOAD FLAGS(5);
     data PT_LOAD FLAGS(6);
-    data_alt PT_LOAD FLAGS(6);
     tail PT_LOAD FLAGS(6);
 }}
 
@@ -1846,57 +1898,7 @@ SECTIONS
 
 {linked_text}
 
-{rodata_overlay}
-
-    core.data 0x12F480 : AT(0x30400) SUBALIGN(4)
-    {{
-        build/asm/data/core_data.s.o(.data);
-    }} :data
-
-    core.rdata 0x152200 : AT(0x53180) SUBALIGN(4)
-    {{
-        build/asm/data/core_rdata.s.o(.data);
-    }} :data
-
-    core.bss 0x154100 (NOLOAD) : SUBALIGN(4)
-    {{
-        build/asm/data/core_bss.bss.s.o(.bss);
-    }} :data
-
-    core.lit 0x15EC80 : AT(0x5FC00) SUBALIGN(4)
-    {{
-        build/asm/data/core_lit.s.o(.data);
-    }} :data
-
-    .lit 0x15EF00 : AT(0x5FE80) SUBALIGN(4)
-    {{
-        build/asm/data/lit.s.o(.data);
-    }} :data
-
-    .bss 0x161280 (NOLOAD) : SUBALIGN(4)
-    {{
-        build/asm/data/bss.bss.s.o(.bss);
-    }} :data
-
-    .data 0x165480 : AT(0x66400) SUBALIGN(4)
-    {{
-        build/asm/data/data.s.o(.data);
-    }} :data
-
-    lvl.vtbl 0x1E8B80 : AT(0xE9B00) SUBALIGN(4)
-    {{
-        build/asm/data/lvl_vtbl.s.o(.data);
-    }} :data
-
-    lvl.camvtbl 0x1E8C00 : AT(0xE9B80) SUBALIGN(4)
-    {{
-        build/asm/data/lvl_camvtbl.s.o(.data);
-    }} :data
-
-    lvl.sndvtbl 0x1E8C80 : AT(0xE9C00) SUBALIGN(4)
-    {{
-        build/asm/data/lvl_sndvtbl.s.o(.data);
-    }} :data
+{linked_data}
 
     .reg_info 0x300000 : AT(0x13E2E0) SUBALIGN(4)
     {{
@@ -1918,11 +1920,20 @@ SECTIONS
         build/asm/data/section_strings.s.o(.data);
     }} :tail
 
+    /* Data a C unit defines that no *_OVERLAYS entry places: it would be
+       dropped without a word, so it fails the link instead. */
+    .c_data_unplaced 0 (INFO) :
+    {{
+        *(.data .rodata .sdata .sbss .bss .lit4 .lit8 .scommon COMMON);
+    }}
+
     /DISCARD/ :
     {{
         *(*);
     }}
 }}
+
+{chr(10).join(asserts)}
 """
     linkerscript_path.write_text(script)
 
