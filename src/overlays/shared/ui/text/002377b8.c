@@ -43,8 +43,8 @@ int FUN_L00_00237840(char *rec) {
         h = D_L00_0015F764;
         x = *(int *)(rec + 0x50);
         y = *(int *)(rec + 0x54);
-        *(int *)(rec + 0x58) = w;
         *(int *)(rec + 0x5c) = h;
+        *(int *)(rec + 0x58) = w;
     }
     FUN_L00_00235a70(rec, &x, &y);
     FUN_L00_00235ad8(rec, &x, &y, *(int *)(rec + 0x6c), 0);

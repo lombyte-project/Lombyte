@@ -915,67 +915,73 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002997c8.s", FUN_L00_002997c8);
 #else
-extern s32 D_L00_0015F5D8 __attribute__((section(".sdata")));
-extern s32 D_0015EE78_gp __asm__("D_0015EE78_gp") __attribute__((sda));
-extern void FUN_00122518(void *, s16, s32, s32, s32, s32, s32, s32);
-extern void FUN_001227d8(void *, s32);
-extern void FUN_00122e68(s32);
-extern void count_vsync(void) __asm__("FUN_0012f1c8");
-extern void music_start_track(s32, s32, s32) __asm__("FUN_00215c40");
-extern void FUN_00266970(s32, s32, s32) __asm__("FUN_00216c48");
-
+typedef struct { u8 pad[0x38]; s16 h38; } S_2997c8;
+typedef struct { u8 pad[8]; s32 a; s32 b; } P_2997c8;
+typedef struct { u8 pad[0x6B]; u8 f; } M_2997c8;
+extern s32 D_L00_0015F5D8_2997c8 __asm__("D_L00_0015F5D8");
+extern s32 D_0015ED80_2997c8 __asm__("D_0015ED80");
+extern s32 D_L00_00161058_2997c8 __asm__("D_L00_00161058");
+extern s32 D_0015EE88_2997c8 __asm__("D_0015EE88");
+extern s32 D_0015EE78_2997c8 __asm__("D_0015EE78");
+extern s32 D_0015EED8_2997c8 __asm__("D_0015EED8");
+extern S_2997c8 D_001516D0_2997c8 __asm__("D_001516D0") __attribute__((section(".data")));
+extern s32 D_L00_0015F5C4_2997c8 __asm__("D_L00_0015F5C4");
+extern P_2997c8 D_L00_00179100_2997c8 __asm__("D_L00_00179100") __attribute__((section(".data")));
+extern M_2997c8 D_0013E550_2997c8 __asm__("D_0013E550") __attribute__((section(".data")));
+int FUN_00122298_2997c8(s32) __asm__("FUN_00122298");
+void FUN_00120558_2997c8(s32, s32) __asm__("FUN_00120558");
+void FUN_00122e68_2997c8(void *) __asm__("FUN_00122e68");
+void FUN_0012f1c8_2997c8(void) __asm__("FUN_0012f1c8");
+void FUN_00122518_2997c8(void *, short, int, int, int, int, int, int) __asm__("FUN_00122518");
+void FUN_00118a80_2997c8(int) __asm__("FUN_00118a80");
+void FUN_001227d8_2997c8(void *, int) __asm__("FUN_001227d8");
+void FUN_001f4a58_2997c8(s32) __asm__("FUN_001f4a58");
+void FUN_00215b68_2997c8(s32, s32, s32) __asm__("FUN_00215b68");
+void FUN_00216c48_2997c8(s32, s32, s32) __asm__("FUN_00216c48");
 void FUN_L00_002997c8(void) {
-    u8 buffer[0x70] __attribute__((aligned(16)));
-    s32 source, destination, count, second_count, pal, initial_count;
-    s32 callback, callback_arg;
-
-    D_L00_0015F5D8 = 1;
-    FUN_00122298(0);
-    FUN_00120558(0, 0);
-    FUN_00122e68((s32)count_vsync);
-    initial_count = 13;
-    second_count = 17;
-    pal = D_0015ED80;
-    source = depth_buffer_address;
-    destination = D_L00_00161058;
-    initial_count = pal ? 14 : initial_count;
-    second_count = pal ? 14 : second_count;
-    count = initial_count;
-    for (; count != 0;) {
-        count--;
-        FUN_00122518(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
-        source += 0x10000;
-        FUN_00118a80(0);
-        FUN_001227d8(buffer, destination);
-        destination += 0xc000;
-        FUN_00120558(0, 0);
+    char buf[0x70] __attribute__((aligned(16)));
+    s32 n, m, src, t, i;
+    P_2997c8 *p;
+    D_L00_0015F5D8_2997c8 = 1;
+    FUN_00122298_2997c8(0);
+    FUN_00120558_2997c8(0, 0);
+    FUN_00122e68_2997c8(FUN_0012f1c8_2997c8);
+    n = D_0015ED80_2997c8 ? 14 : 13;
+    m = D_0015ED80_2997c8 ? 14 : 17;
+    src = D_L00_00161058_2997c8;
+    t = D_0015EE88_2997c8;
+    for (i = 0; i < n; i++) {
+        FUN_00122518_2997c8(buf, t >> 8, 2, 1, 0, 0, 0x80, 0x80);
+        t += 0x10000;
+        FUN_00118a80_2997c8(0);
+        FUN_001227d8_2997c8(buf, src);
+        src += 0xC000;
+        FUN_00120558_2997c8(0, 0);
     }
-    source = D_0015EE78_gp;
-    if (second_count != 0) {
-        count = second_count;
-        do {
-            count--;
-            FUN_00122518(buffer, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);
-            source += 0x4000;
-            FUN_00118a80(0);
-            FUN_001227d8(buffer, destination);
-            destination += 0x4000;
-            FUN_00120558(0, 0);
-        } while (count != 0);
+    t = D_0015EE78_2997c8;
+    for (i = 0; i < m; i++) {
+        FUN_00122518_2997c8(buf, t >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        t += 0x4000;
+        FUN_00118a80_2997c8(0);
+        FUN_001227d8_2997c8(buf, src);
+        src += 0x4000;
+        FUN_00120558_2997c8(0, 0);
     }
-    if (decode_mode == 2)
-        decode_mode = 0;
-    FUN_L00_001f9838(4);
-    music_start_track(music_stream_state.primary.track, 1, 0x400);
-    *(volatile s32 *)&D_L00_0015F5C4 = 0;
-    callback = (s32)active_scene_trigger.moby;
-    if (callback != 0) {
-        callback_arg = (s32)active_scene_trigger.trigger;
-        active_scene_trigger.moby = 0;
-        active_scene_trigger.trigger = 0;
-        FUN_00266970(callback, callback_arg, 1);
+    if (D_0015EED8_2997c8 == 2) {
+        D_0015EED8_2997c8 = 0;
     }
-    voice_pool.header[0x6B] |= 0x10;
+    FUN_001f4a58_2997c8(4);
+    FUN_00215b68_2997c8(D_001516D0_2997c8.h38, 1, 0x400);
+    D_L00_0015F5C4_2997c8 = 0;
+    p = &D_L00_00179100_2997c8;
+    if (p->a != 0) {
+        s32 b = p->b;
+        s32 a = p->a;
+        p->a = 0;
+        p->b = 0;
+        FUN_00216c48_2997c8(a, b, 1);
+    }
+    D_0013E550_2997c8.f |= 0x10;
 }
 #endif
 /* Stop sound, wait for the loader to go idle, then start the movie load. */

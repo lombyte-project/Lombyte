@@ -69,8 +69,6 @@ s32 FUN_L00_00261968(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261b48.s", FUN_L00_00261b48);
 #else
-#include "rnc/overlay/quad.h"
-
 typedef struct {
     s32 count;
     u8 pad[12];
@@ -113,10 +111,9 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     i = 1;
     origin.f[2] = 1.0f;
     nearest = origin.f[2];
-    current = &first;
-    FUN_001ff2a8_261b48(current, &(*entry)->points[0], start);
-    previous = current;
-    FUN_001ff6d0_261b48(current, current, &direction);
+    FUN_001ff2a8_261b48(&first, &(*entry)->points[0], start);
+    FUN_001ff6d0_261b48(&first, &first, &direction);
+    previous = &first;
     current = &next;
     if (i < (*entry)->count) {
         offset = 0x20;
@@ -125,8 +122,8 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
             FUN_001ff2a8_261b48(current, (OvlVec4 *)((u8 *)*entry + offset), start);
             FUN_001ff6d0_261b48(current, current, &direction);
             if (first.f[3] != zero || next.f[3] != zero) {
-                if (current->f[1] * first.f[1] < 0.0f) {
-                    crossing = (first.f[0] - next.f[0]) / (first.f[1] - current->f[1]) * -current->f[1] + next.f[0];
+                if (next.f[1] * first.f[1] < 0.0f) {
+                    crossing = (first.f[0] - next.f[0]) / (first.f[1] - next.f[1]) * -next.f[1] + next.f[0];
                     if (crossing > 0.0f && crossing < nearest) {
                         nearest = crossing;
                         found = 1;
@@ -141,7 +138,7 @@ s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out)
     FUN_001ff2d8_261b48(out, start, end, nearest);
     return found;
 }
-#endif /* NON_MATCHING */
+#endif
 #include "rnc/overlay/quad.h"
 
 typedef struct {

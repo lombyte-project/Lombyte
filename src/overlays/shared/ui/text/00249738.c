@@ -6,7 +6,7 @@
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00249738.s", FUN_L06_00249738);
 #else
 #include "rnc/globals.h"
-extern s32 frame_size __asm__("D_0013E504");
+extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
 extern s32 D_L06_0015F8E8 __attribute__((sda));
 extern f32 D_L06_0015F8F0 __attribute__((sda));
 extern f32 D_L06_0015F8F4 __attribute__((sda));
@@ -19,20 +19,21 @@ extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_0
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
 
 s32 FUN_L06_00249738(u8 *p) {
-    s32 screen_y = frame_size;
-    s32 y = screen_y - 42;
+    s32 y;
+    s32 level;
     s32 segments = 3;
-    s32 x, start_x, inner, i, color, remaining, tile_count;
+    s32 x, start_x, inner, i, color, remaining, tile_count, k;
     s32 center_x = D_L06_0015F8E8;
     f32 alpha, scaled_alpha, fill, step, limit;
 
-    y = pal_mode ? screen_y - 42 : screen_y - 50;
-    screen_y = current_level_index;
-    if (screen_y == 7 || screen_y == 13) segments = 6;
-    if (screen_y == 18) segments = 7;
+    y = frame_size - 42;
+    if (!pal_mode) y = frame_size - 50;
+    level = current_level_index;
+    if (level == 7 || level == 13) segments = 6;
+    if (level == 18) segments = 7;
     if (p[0x70] == 0) return *(s32 *)(p + 0x58);
     {
-        if (screen_y == 13) {
+        if (level == 13) {
             y = 18;
             if (pal_mode != 0) y = 10;
         }
@@ -45,12 +46,10 @@ s32 FUN_L06_00249738(u8 *p) {
         inner = truncate_float_to_s32(scaled_alpha);
         start_x = center_x - segments * 16;
         x = start_x;
-        tile_count = segments;
-        if (tile_count > 0) do {
+        for (k = 0; k < segments; k++) {
             draw_hud_sprite_flipped(get_icon_frame(0x7562, 3), x, y + 6, 32, 18, i);
             x += 32;
-            tile_count--;
-        } while (tile_count != 0);
+        }
         x = 0;
         color = 0x800000ff;
         if (*(s32 *)(p + 0x74) != 0) {

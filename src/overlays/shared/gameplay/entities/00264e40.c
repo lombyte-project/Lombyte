@@ -20,7 +20,7 @@ void FUN_L02_00264e40(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00264e70.s", FUN_L02_00264e70);
 #else
 #include "qcopy.h"
-extern int D_L00_0015F5CC;
+extern int D_L02_0015F5CC;
 extern float D_0015ED6C;
 extern float frame_time_sq __asm__("D_0015ED70");
 extern float D_L02_00174460[] __attribute__((section(".data")));
@@ -50,8 +50,8 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     float adjusted[4] __attribute__((aligned(16)));
     float velocity[4] __attribute__((aligned(16)));
     float offset[4] __attribute__((aligned(16)));
-    float speed = 0.0f;
-    float travel_step = 0.0f;
+    float speed;
+    float travel_step;
     float travel;
     float acceleration;
     int count;
@@ -60,7 +60,9 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     int save_shot;
     char *shot;
 
-    save_shot = (D_L00_0015F5CC & 3) == 0;
+    travel_step = 0.0f;
+    speed = 0.0f;
+    save_shot = (D_L02_0015F5CC % 4) == 0;
     qcopy(origin, position);
     FUN_001f9bf8(adjusted, direction, distance + 0.75f);
     FUN_001f9a10(end, adjusted, origin);
@@ -75,16 +77,16 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
                   acceleration);
     FUN_001f9bf8(adjusted, adjusted, travel_step);
     first_count = D_L02_001600D4;
+    count = D_L02_001600D8;
     if (travel < 4.0f) first_count = 1;
-    count = D_L02_001600D8 + first_count;
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < count + first_count; i++) {
         random_vector(offset, 0.0f,
             ((D_L02_001600DC - D_L02_001600E0) * (travel / distance) + D_L02_001600E0) * D_0015ED6C);
         FUN_001f9a10(offset, offset, adjusted);
         FUN_001f9a68(velocity, adjusted, FUN_002132a8(0.0f, 1.0f));
         FUN_001f9a10(velocity, velocity, origin);
         shot = FUN_L00_0026b230(velocity, offset, i < first_count ? 1ULL : (unsigned long long)(i < first_count), travel);
-        if (i == 2 && *(volatile int *)&save_shot) {
+        if (i == 2 && save_shot) {
             int j;
             char **slot = (char **)slots;
             for (j = 0; j < 7; j++) {

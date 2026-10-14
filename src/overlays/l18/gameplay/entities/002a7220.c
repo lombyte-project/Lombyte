@@ -2547,8 +2547,9 @@ typedef struct {
 } L18FlarePacket;
 typedef struct { char pad[0x140]; float position[4]; } L18FlareView;
 extern L18FlareView D_L18_00167680;
+extern float D_L18_001677C0_flare[] __asm__("D_L18_001677C0");
 extern L18FlareUV D_L18_001D9B50_flare[] __asm__("D_L18_001D9B50");
-extern L18FlareVector D_L18_001D9B70_flare[] __asm__("D_L18_001D9B70");
+extern L18FlareVector D_L18_001D9B70_flare[] __asm__("D_L18_001D9B70") __attribute__((section(".sdata")));
 extern int D_L18_00161EE4_flare __asm__("D_L18_00161EE4") __attribute__((sda));
 extern int D_L18_00161EE8_flare __asm__("D_L18_00161EE8") __attribute__((sda));
 extern int D_L18_00161EEC_flare __asm__("D_L18_00161EEC") __attribute__((sda));

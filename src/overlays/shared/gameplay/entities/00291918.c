@@ -714,7 +714,7 @@ extern float FUN_00213508(void *, int, float);
 extern float FUN_002132a8(float, float);
 extern void FUN_L00_00259fe8(void *, float);
 extern void FUN_0020c828(void *);
-extern CollisionHit D_L00_00173E40 __attribute__((section(".data")));
+extern CollisionHit coll_hit_c4718 __asm__("D_L03_00173F60") __attribute__((section(".data")));
 
 void FUN_L03_002c4718(struct Moby *m)
 {
@@ -754,23 +754,23 @@ void FUN_L03_002c4718(struct Moby *m)
         m->collision = 0;
         (*(struct Moby **)(d + 4))->collision = 0;
         if (FUN_001efa68(&old_pos, &next_pos, 4, m, 0)) {
-            FUN_001f9a28(&next_pos, &D_L00_00173E40.point, &next_pos);
+            FUN_001f9a28(&next_pos, &coll_hit_c4718.point, &next_pos);
             FUN_001f9bf8(&next_pos, &next_pos, 0.215f);
             FUN_001f9a10(pos, pos, &next_pos);
-            if (D_L00_00173E40.moby == 0) {
-                FUN_L00_001ff660(d, d, &D_L00_00173E40.normal_x);
-                angle = FUN_001f9b20(&D_L00_00173E40.normal_x);
-                if (FUN_001f9e90(D_L00_00173E40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
+            if (coll_hit_c4718.moby == 0) {
+                FUN_L00_001ff660(d, d, &coll_hit_c4718.normal_x);
+                angle = FUN_001f9b20(&coll_hit_c4718.normal_x);
+                if (FUN_001f9e90(coll_hit_c4718.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
                     FUN_001f9a68(d, d, 0.5f);
                     if (FUN_001f9af0(d) < 0.025f) {
                         m->state = 1;
                         goto first_collision_timer;
                     }
                 }
-            } else if (((struct Moby *)D_L00_00173E40.moby)->oclass != 0x221) {
-                FUN_L00_001ff660(d, d, &D_L00_00173E40.normal_x);
-                angle = FUN_001f9b20(&D_L00_00173E40.normal_x);
-                if (FUN_001f9e90(D_L00_00173E40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
+            } else if (((struct Moby *)coll_hit_c4718.moby)->oclass != 0x221) {
+                FUN_L00_001ff660(d, d, &coll_hit_c4718.normal_x);
+                angle = FUN_001f9b20(&coll_hit_c4718.normal_x);
+                if (FUN_001f9e90(coll_hit_c4718.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
                     FUN_001f9a68(d, d, 1.2f);
             } else {
                 d[2] *= FUN_002132a8(0.9f, 1.1f);
@@ -782,20 +782,20 @@ first_collision_timer:
             }
         }
         if (coll_sphere(0.2f, (Vec4 *)&m->pos, 4, m)) {
-            FUN_001f9a28(&next_pos, &D_L00_00173E40.point, &D_L00_00173E40.pad30);
+            FUN_001f9a28(&next_pos, &coll_hit_c4718.point, &coll_hit_c4718.pad30);
             FUN_001f9bf8(&next_pos, &next_pos, 0.015f);
-            FUN_001f9a10((Vec4 *)&m->pos, &D_L00_00173E40.pad30, &next_pos);
-            if (D_L00_00173E40.moby == 0) {
-                FUN_L00_001ff660(d, d, &D_L00_00173E40.normal_x);
-                angle = FUN_001f9b20(&D_L00_00173E40.normal_x);
-                if (FUN_001f9e90(D_L00_00173E40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
+            FUN_001f9a10((Vec4 *)&m->pos, &coll_hit_c4718.pad30, &next_pos);
+            if (coll_hit_c4718.moby == 0) {
+                FUN_L00_001ff660(d, d, &coll_hit_c4718.normal_x);
+                angle = FUN_001f9b20(&coll_hit_c4718.normal_x);
+                if (FUN_001f9e90(coll_hit_c4718.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
                     FUN_001f9a68(d, d, 0.5f);
                     if (FUN_001f9af0(d) < 0.025f) m->state = 1;
                 }
-            } else if (((struct Moby *)D_L00_00173E40.moby)->oclass != 0x221) {
-                FUN_L00_001ff660(d, d, &D_L00_00173E40.normal_x);
-                angle = FUN_001f9b20(&D_L00_00173E40.normal_x);
-                if (FUN_001f9e90(D_L00_00173E40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
+            } else if (((struct Moby *)coll_hit_c4718.moby)->oclass != 0x221) {
+                FUN_L00_001ff660(d, d, &coll_hit_c4718.normal_x);
+                angle = FUN_001f9b20(&coll_hit_c4718.normal_x);
+                if (FUN_001f9e90(coll_hit_c4718.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
                     FUN_001f9a68(d, d, 1.2f);
             } else {
                 d[2] *= FUN_002132a8(0.9f, 1.1f);

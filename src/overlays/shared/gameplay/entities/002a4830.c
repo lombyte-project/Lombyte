@@ -2115,73 +2115,85 @@ void wrench_update(WrenchMoby *m) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a96f8.s", FUN_L00_002a96f8);
 #else
-extern float D_L00_001613C4 __attribute__((sda));
-extern char D_0013F490[];
-extern short D_L00_001B0770[];
-extern unsigned char *FUN_L00_002630c8(void *, void *, void *, float *, float *, float *, float);
-extern void FUN_L00_0025f780(void *, void *, int);
-
-unsigned char *FUN_L00_002a96f8(float a, float b, float c, float d, float e,
-                              unsigned char *owner, void *pos, unsigned char *target) {
-    OvlVec4 direction, position;
-    unsigned char *m = create_moby(0x100);
-    unsigned char *data;
-    unsigned char *hit;
-    int frames;
-    int timer;
-    float length;
-    if (m != 0) {
-        m[0x30] = 0xff;
-        m[0x31] = 1;
-        m[0x20] = 0;
-        *(float *)(m + 0x2c) *= D_L00_001613C4;
-        *(unsigned short *)(m + 0x32) = 0xff;
-        data = *(unsigned char **)(m + 0x78);
-        *(float *)(m + 0x48) = d;
-        *(float *)(m + 0x44) = e;
-        if (target == 0) {
-            build_spherical_offset(&direction, D_0015ED6C * 20.0f, d, e);
-            position.q = *(OvlQuad *)pos;
-            target = FUN_L00_002630c8(owner, &position, &direction, &a, &b, &c, 0.34906584f);
+typedef union { u128 q; f32 f[4]; } V_2a96f8;
+typedef struct { V_2a96f8 v0; void *p10; s32 i14; void *p18; f32 f1C; s32 i20; s32 i24; s32 i28; f32 f2C; f32 f30; f32 f34; s32 i38; s16 h3C; s16 h3E; } O_2a96f8;
+typedef struct { u8 pad[0x10]; V_2a96f8 v10; u8 b20; u8 pad2[0x2C - 0x21]; f32 f2C; u8 b30; u8 b31; s16 h32; u8 pad3[0x44 - 0x34]; f32 f44; f32 f48; u8 pad4[0x78 - 0x4C]; O_2a96f8 *p78; u8 pad5[0xBC - 0x7C]; u8 bBC; } M_2a96f8;
+typedef struct { u8 pad[0xB]; u8 bB; u8 bC; u8 pad2[0x1E - 0xD]; u16 h1E; } R_2a96f8;
+typedef struct { u8 pad[0x10]; V_2a96f8 v10; } T_2a96f8;
+extern f32 D_0015ED6C_2a96f8 __asm__("D_0015ED6C");
+extern f32 D_L00_001613C4_2a96f8 __asm__("D_L00_001613C4") __attribute__((sda));
+extern u8 D_0013F490_2a96f8[] __asm__("D_0013F490");
+extern void *D_001413D0_2a96f8 __asm__("D_001413D0") __attribute__((section(".data")));
+extern V_2a96f8 D_L00_00173E60_2a96f8[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern u8 D_L00_001B0770_2a96f8[] __asm__("D_L00_001B0770") __attribute__((section(".data")));
+M_2a96f8 *FUN_0020c4f8_2a96f8(s32) __asm__("FUN_0020c4f8");
+void FUN_00214db0_2a96f8(void *, f32, f32, f32) __asm__("FUN_00214db0");
+T_2a96f8 *FUN_L00_002630c8_2a96f8(void *, void *, void *, f32, f32 *, f32 *, f32 *) __asm__("FUN_L00_002630c8");
+R_2a96f8 *FUN_L00_0025c338_2a96f8(void *) __asm__("FUN_002141f8");
+s32 FUN_001f96f8_2a96f8(s32) __asm__("FUN_001f96f8");
+f32 FUN_001f9af0_2a96f8(void *) __asm__("FUN_001f9af0");
+s32 FUN_L00_001efc70_2a96f8(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
+void FUN_L00_00250df8_2a96f8(void *) __asm__("FUN_L00_00250df8");
+void FUN_L00_0025f780_2a96f8(void *, void *, s32) __asm__("FUN_L00_0025f780");
+M_2a96f8 *FUN_L00_002a96f8(T_2a96f8 *src, V_2a96f8 *pos, T_2a96f8 *tgt, f32 x, f32 y, f32 z, f32 w, f32 v) {
+    M_2a96f8 *m;
+    O_2a96f8 *o;
+    R_2a96f8 *r;
+    V_2a96f8 a, b;
+    f32 f;
+    s32 k;
+    m = FUN_0020c4f8_2a96f8(0x100);
+    if (m) {
+        m->b30 = 0xFF;
+        m->b31 = 1;
+        m->b20 = 0;
+        m->h32 = 0xFF;
+        m->f2C *= D_L00_001613C4_2a96f8;
+        o = m->p78;
+        m->f48 = w;
+        m->f44 = v;
+        if (!tgt) {
+            FUN_00214db0_2a96f8(&a, 20.0f * D_0015ED6C_2a96f8, w, v);
+            b.q = pos->q;
+            tgt = FUN_L00_002630c8_2a96f8(src, &b, &a, 0.34906585f, &x, &y, &z);
         }
-        *(unsigned char **)(data + 0x10) = owner;
-        qcopy(m + 0x10, pos);
-        length = D_0015ED6C * 100.0f;
-        *(int *)(data + 0x38) = 1;
-        *(int *)(data + 0x24) = 0;
-        *(int *)(data + 0x28) = 0;
-        *(int *)(data + 0x20) = 0;
-        *(float *)(data + 0x34) = length;
-        *(unsigned char **)(data + 0x18) = target;
-        if (target != 0 && (hit = (unsigned char *)FUN_002141f8(target)) != 0) {
-            *(unsigned short *)(hit + 0x1e) |= 0x80;
-            if (hit[0xb] != 0) *(int *)(data + 0x38) = 0;
-            if ((unsigned char)hit[0xc] != 0)
-                *(float *)(data + 0x34) = (float)(unsigned char)hit[0xc] * D_0015ED6C;
+        o->p10 = src;
+        qcopy(&m->v10, pos);
+        o->i38 = 1;
+        o->f34 = D_0015ED6C_2a96f8 * 100.0f;
+        o->i24 = 0;
+        o->i28 = 0;
+        o->i20 = 0;
+        o->p18 = tgt;
+        if (tgt) {
+            r = FUN_L00_0025c338_2a96f8(tgt);
+            if (r) {
+                r->h1E |= 0x80;
+                if (r->bB) o->i38 = 0;
+                if (r->bC) o->f34 = r->bC * D_0015ED6C_2a96f8;
+            }
         }
-        *(float *)(data + 0x2c) = a;
-        *(float *)(data + 0x30) = b;
-        *(int *)(data + 0x14) = scale_game_frames(0x96);
-        if (target != 0) {
-            qcopy(data, target + 0x10);
-            *(float *)(data + 8) += c;
-            *(float *)(data + 0x1c) = c;
+        o->f2C = x;
+        o->f30 = y;
+        o->i14 = FUN_001f96f8_2a96f8(0x96);
+        if (tgt) {
+            qcopy(&o->v0, &tgt->v10);
+            o->v0.f[2] += z;
+            o->f1C = z;
         }
-        length = vector_length_xyz(D_0013F490);
-        frames = 1;
-        if (D_0015ED6C * 0.1f < length) frames = 0x3c;
-        timer = scale_game_frames(frames);
-        *(volatile short *)(data + 0x3c) = timer;
-        *(volatile short *)(data + 0x3e) = timer;
-        direction.q = *(OvlQuad *)(owner + 0x10);
-        direction.f[2] = ((float *)pos)[2];
-        if (FUN_001efa68(&direction, pos, 0, (int)D_001413D0, 0) != 0) {
-            m[0xbc] = 1;
-            qcopy(m + 0x10, &D_L00_00173E60_2a8028);
+        f = FUN_001f9af0_2a96f8(D_0013F490_2a96f8);
+        k = FUN_001f96f8_2a96f8(D_0015ED6C_2a96f8 * 0.1f < f ? 0x3C : 1);
+        o->h3E = k;
+        o->h3C = k;
+        a.f[2] = pos->f[2];
+        a.q = src->v10.q;
+        if (FUN_L00_001efc70_2a96f8(&a, pos, 0, D_001413D0_2a96f8, 0)) {
+            m->bBC = 1;
+            qcopy(&m->v10, &D_L00_00173E60_2a96f8[0]);
         }
-        FUN_L00_00250df8(m);
-        FUN_L00_0025f780(m, D_L00_001B0770, 0x1f);
-        *(float *)(m + 0x2c) += *(float *)(m + 0x2c);
+        FUN_L00_00250df8_2a96f8(m);
+        FUN_L00_0025f780_2a96f8(m, D_L00_001B0770_2a96f8, 0x1F);
+        m->f2C += m->f2C;
     }
     return m;
 }

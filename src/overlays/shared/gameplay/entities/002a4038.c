@@ -1461,7 +1461,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea210.s", FUN_L02_002ea210);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void ea210_init(char *) __asm__("FUN_L02_002ea7d0");
 extern void ea210_update(char *) __asm__("FUN_L02_002ea8b0");
-extern float ea210_vec(float, void *, int) __asm__("FUN_00213508");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float ea210_addrot(float, float) __asm__("FUN_001fa580");
 extern float ea210_dist(void *, void *) __asm__("FUN_001f9b80");
 extern float ea210_abs(float) __asm__("FUN_001f99c0");
@@ -1483,16 +1483,19 @@ extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
 extern void ea210_audio(int, int) __asm__("FUN_0020b178");
 extern void ea210_destroy(char *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;
-extern int level_game_mode __asm__("D_L02_0015F5C4");
+extern int D_L02_0015F5C4;
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern int D_L02_0015F640 __attribute__((sda));
 extern unsigned char items_acquired[] __asm__("D_0013D4E8");
 extern char D_0013F3D0[];
+extern float D_0013F3D8;
 extern float D_L02_00174468 __attribute__((section(".data")));
-extern int D_L02_00167400;
+extern int D_L02_00167400 __attribute__((section(".data")));
+extern int D_L02_00179A10 __attribute__((section(".data")));
 extern float D_0015ED70;
 extern float D_0015ED6C;
 extern float D_L02_0015F3FC;
+extern char D_0013F3E0[];
 
 void FUN_L02_002ea210(char *moby) {
     char *data;
@@ -1508,7 +1511,7 @@ void FUN_L02_002ea210(char *moby) {
         ea210_init(moby);
         if (items_acquired[which] == 0) {
             float height;
-            ea210_vec(0.5f, moby + 0x10, 0);
+            probe_ground_height(moby + 0x10, 0, 0.5f);
             *(float *)(moby + 0x44) = 3.14159274f;
             *(float *)(moby + 0x40) = 1.57079637f;
             height = D_L02_00174468;
@@ -1536,7 +1539,7 @@ void FUN_L02_002ea210(char *moby) {
         }
         return;
     case 3:
-        if (level_game_mode == 2) return;
+        if (D_L02_0015F5C4 == 2) return;
         if (D_001413F4 != 0) {
             if (which == 0x16) {
                 ea210_switch(0x16, 0);
