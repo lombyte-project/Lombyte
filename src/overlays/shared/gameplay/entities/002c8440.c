@@ -2568,9 +2568,8 @@ state2:
         m->collision = 0;
         qcopy(&old_pos, &m->pos);
         FUN_L00_002cde78((char *)m);
-        f = frame_scale * 0.05f;
-        m->scale += (m->pclass->scale - m->scale) * f;
-        v->strength = v->strength + (1.0f - v->strength) * f;
+        m->scale += (m->pclass->scale - m->scale) * (frame_scale * 0.05f);
+        v->strength = v->strength + (1.0f - v->strength) * (frame_scale * 0.05f);
         f = FUN_002000e8_2ce358(v->desired_yaw, *(f32 *)((u8 *)&hero + 0x1ff8));
         distance = FUN_00200130_2ce358(f, v->yaw);
         v->yaw = FUN_002000e8_2ce358(v->yaw, distance * (frame_scale * 0.05f));
