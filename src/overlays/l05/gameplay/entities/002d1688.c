@@ -1145,10 +1145,10 @@ freeze_done:
         else moby->flags &= 0x7fff;
         if (I301(data,0x2b4)) {
             moby->state = 12;
-            moby->collision = 0;
+            moby->visible = 0;
             moby->flags &= 0xefff;
             moby->pos.z -= 20.0f;
-            moby->visible = 0;
+            moby->collision = 0;
             moby->draw_dist = 0;
         } else {
             if (*(long *)(data + 0x2b8) != -1) {
@@ -1348,8 +1348,8 @@ finish_wander:
             v[1]=FUN_001f9de0(moby->rot.z);
             v[2]=0.0f; v[3]=5627.925f;
             qcopy(w,(char *)target+0x10);
-            flags=0x10001;
-            if (D_001404A8==6) flags=0x10000;
+            flags=0x10000;
+            if (D_001404A8!=6) flags=0x10001;
             w[2]+=0.75f;
             FUN_L00_00259bc8(target,(int)moby,flags,w,v,1.0f);
         }
