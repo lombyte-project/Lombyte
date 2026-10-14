@@ -968,7 +968,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
               angle_atan2_2d2158(hero.unk670, hero.unk674));
     position->f[1] = fast_sin_2d2158(angle) * 0.859039f;
     position->f[2] = 0.0f;
-    add_vector_2d2158(position, position, &hero.motion.pos);
+    add_vector_2d2158(position, position, &D_0013F3D0_2d2158);
     position->f[2] += 0.39082f;
     angle_atan2_2d2158(direction.f[0], direction.f[1]);
     scale_vector_2d2158(&offset, &direction, (controller_state.held & 5) ? 3.5f : 2.5f);
@@ -1010,7 +1010,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
             velocity.f[2] = vertical;
             add_vector_2d2158(&trace_end, &D_L00_00166C80_2d2158[20], &velocity);
             if (trace_segment_2d2158(&D_L00_00166C80_2d2158[20], &trace_end, 2, saved_moby, 0) &&
-                (s32)collision_hit.moby != D_001413D0_2d2158) {
+                collision_hit.moby != hero.moby) {
                 qcopy(&offset, &collision_hit.point);
                 hit = 1;
                 angle = angle_atan2_2d2158(offset.f[0] - position->f[0], offset.f[1] - position->f[1]);
