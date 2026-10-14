@@ -129,7 +129,6 @@ void FUN_L10_002e91b8(unsigned char *m) {
     float *second_vectors;
     float *second_angles;
     float *second_packet;
-    float *angle_vectors;
     int i, k;
     int j;
 
@@ -168,13 +167,13 @@ void FUN_L10_002e91b8(unsigned char *m) {
 
     if (D_L10_0015B340 > 0) {
 
+        float *angle_vectors = (float *)(first + 0x50);
         float *angles = (float *)(first + 0x58);
+        float *offsets = (float *)(first + 0x68);
         float *first_angles = (float *)(second + 0x50);
         float *first_offsets = (float *)(second + 0x58);
-        float *offsets = (float *)(first + 0x68);
         float *second_angles = (float *)(second + 0x60);
         float *second_offsets = (float *)(second + 0x68);
-        angle_vectors = (float *)(first + 0x50);
         for (i = 0; i < D_L10_0015B340; i++) {
             int parity = i & 1;
             int *colors = D_L10_0015B348;
@@ -196,11 +195,11 @@ void FUN_L10_002e91b8(unsigned char *m) {
             ((int *)(first + 0x40))[1] = shade;
             j = 0;
             do {
-                int offset = j * 8;
-                int index = i * 8;
-                int next_vector = j + 1;
                 float *first_source = D_L10_001DA270 + i * 2;
+                int index = i * 8;
+                int offset = j * 8;
                 float *first_vectors = (float *)((unsigned char *)angle_vectors + offset);
+                int next_vector = j + 1;
                 k = 1;
                 do {
                     int limit = float_to_integer(*first_source * 360.0f);
