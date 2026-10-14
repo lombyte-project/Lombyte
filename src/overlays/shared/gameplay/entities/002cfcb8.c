@@ -50,10 +50,12 @@ void FUN_L00_002cfcb8(u8 *moby) {
             FUN_L00_0024eb68_2cfcb8(first);
             return;
         }
-        state = *(u32 *)(vars + 0xAC);
-        *(u16 *)(vars + 0xC4) = *(u16 *)(first + 0xA8);
-        *(f32 *)(vars + 0xB0) = 1.0f;
-        *(u32 *)(vars + 0xAC) = state | 1;
+        {
+            u32 flags = *(u32 *)(vars + 0xAC);
+            *(u16 *)(vars + 0xC4) = *(u16 *)(first + 0xA8);
+            *(f32 *)(vars + 0xB0) = 1.0f;
+            *(u32 *)(vars + 0xAC) = flags | 1;
+        }
         qcopy_nc(&probe, first + 0x10);
         qcopy(&start, first + 0x10);
         probe.z += 0.5f;
@@ -91,10 +93,12 @@ void FUN_L00_002cfcb8(u8 *moby) {
                 D_0014EE90_2cfcb8[*(u8 *)(first + 0xB0)] < *(s32 *)(vars + 0xF8)) {
                 FUN_L00_0024eb68_2cfcb8(first);
             } else {
-                state = *(u32 *)(vars + 0xAC);
-                *(u16 *)(vars + 0xC4) = *(u16 *)(first + 0xA8);
-                *(f32 *)(vars + 0xB0) = 1.0f;
-                *(u32 *)(vars + 0xAC) = state | 1;
+                {
+                    u32 flags = *(u32 *)(vars + 0xAC);
+                    *(u16 *)(vars + 0xC4) = *(u16 *)(first + 0xA8);
+                    *(f32 *)(vars + 0xB0) = 1.0f;
+                    *(u32 *)(vars + 0xAC) = flags | 1;
+                }
                 qcopy_nc(&probe, first + 0x10);
                 qcopy(&start, first + 0x10);
                 probe.z += 0.5f;
