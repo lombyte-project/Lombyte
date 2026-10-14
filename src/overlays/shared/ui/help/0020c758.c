@@ -1605,23 +1605,23 @@ void FUN_L00_0020f580(void)
                 }
 after_moby:
                 if (i == 3 && j == 1 && moby != 0) {
-                    if (D_001404DC_f580 == 0) {
-                        D_001404DC_f580 = (s32)FUN_0024e838_f580(0x4b4);
-                        if (D_001404DC_f580 != 0) {
-                            effect = (u8 *)D_001404DC_f580;
+                    if (*(s32 *)((u8 *)&hero + 0x118c) == 0) {
+                        *(s32 *)((u8 *)&hero + 0x118c) = (s32)FUN_0024e838_f580(0x4b4);
+                        if (*(s32 *)((u8 *)&hero + 0x118c) != 0) {
+                            effect = (u8 *)*(s32 *)((u8 *)&hero + 0x118c);
                             *(u32 *)(effect + 0x90) = 0x801432d7;
                             qcopy(effect + 0x10, &hero.motion.pos);
                             qcopy(effect + 0x40, &hero.motion.rot);
                             *(u16 *)(effect + 0x32) = 0x40;
-                            *(u8 *)(effect + 0x31) = 1;
-                            *(u8 *)(effect + 0x30) = 0;
-                            *(u16 *)(effect + 0x34) = 0;
-                            *(f32 *)(effect + 0x2c) *= 1.3f;
-                            FUN_00250df8_f580(effect);
+                            *(u8 *)((u8 *)*(s32 *)((u8 *)&hero + 0x118c) + 0x31) = 1;
+                            *(u8 *)((u8 *)*(s32 *)((u8 *)&hero + 0x118c) + 0x30) = 0;
+                            *(u16 *)((u8 *)*(s32 *)((u8 *)&hero + 0x118c) + 0x34) = 0;
+                            *(f32 *)((u8 *)*(s32 *)((u8 *)&hero + 0x118c) + 0x2c) *= 1.3f;
+                            FUN_00250df8_f580((u8 *)*(s32 *)((u8 *)&hero + 0x118c));
                         }
                     }
-                    if (D_001404DC_f580 != 0) {
-                        effect = (u8 *)D_001404DC_f580;
+                    if (*(s32 *)((u8 *)&hero + 0x118c) != 0) {
+                        effect = (u8 *)*(s32 *)((u8 *)&hero + 0x118c);
                         if (((*(u16 *)(effect + 0x34) ^ 1) & 1) != 0) {
                             FUN_0024f728_f580(moby, 6, source);
                             *(u128 *)((u8 *)&hero + 0x1d80) = *(u128 *)(source + 0x30);
