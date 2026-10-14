@@ -2422,6 +2422,7 @@ void FUN_L15_002d0fa8(void *arg) {
     UVec origin;
     UVec effect;
     float direction;
+    float reaction_product;
     unsigned char state;
 
     *(float *)((char *)m + 0x2C) = D_L15_00161B2C * *(float *)(m->cls + 0x24);
@@ -2432,34 +2433,33 @@ void FUN_L15_002d0fa8(void *arg) {
         if (*(UMoby **)(entry + 0x34) == m) {
             unsigned int flags = *(unsigned int *)(entry + 0x24);
             if (flags & 0xA0000) {
-                if (*(int *)(entry + 0x20) != D_001413D0) {
-                    slot = entry;
-                    break;
+                if (*(int *)(entry + 0x20) == D_001413D0) {
+                    if (!(flags & 0x80000)) {
+                        *(int *)(entry + 0x34) = 0;
+                        continue;
+                    }
                 }
-                if (flags & 0x80000) {
-                    slot = entry;
-                    break;
-                }
-                *(int *)(entry + 0x34) = 0;
+                slot = entry;
+                break;
             }
         }
     }
-    hit = FUN_00249d60(m, slot, &d->f20, 0, &kind, &impact, 0, 4);
+    code = FUN_00249d60(m, slot, &d->f20, 0, &kind, &impact, 0, 4);
     if (slot != 0) {
-        state = m->state;
-        if (kind != 1 && state != 10 && state != 0x40 &&
+        if (kind != 1 && (state = m->state) != 10 && state != 0x40 &&
             *(short *)(*(char **)(slot + 0x20) + 0xA6) != 0x350) {
             d->f20 -= impact;
-            code = hit;
             if (*(unsigned short *)(slot + 0x2A) == 0x100)
                 code = 9;
-            if (state == 2)
+            if (m->state == 2)
                 code = 9;
             if (d->f20 <= 0.0f)
                 code = 1;
-            *(int *)((char *)d + 0x90) = FUN_001f99c8_f(2560.0f);
+            hit = FUN_001f99c8_f(2560.0f);
+            angle = D_L15_00161B00 * D_0015ED70;
+            *(int *)((char *)d + 0x90) = hit;
             *(float *)((char *)d + 0x98) = 2.5f;
-            *(float *)((char *)d + 0x80) = D_L15_00161B00 * D_0015ED70;
+            *(float *)((char *)d + 0x80) = angle;
             *(float *)((char *)d + 0x84) = 0.0005f;
             *(int *)((char *)d + 0x94) = 9;
             *(unsigned char *)((char *)d + 0xAD) = 0;
@@ -2479,10 +2479,10 @@ void FUN_L15_002d0fa8(void *arg) {
             case 7:
             case 8:
                 angle = D_L15_00161B08 * D_0015ED6C;
-                direction = D_L15_00161B04 * D_0015ED6C;
+                reaction_product = D_L15_00161B04 * D_0015ED6C;
                 d->w1C8 = 1;
                 *(float *)((char *)d + 0x88) = angle;
-                *(float *)((char *)d + 0x8C) = direction;
+                *(float *)((char *)d + 0x8C) = reaction_product;
                 FUN_00251c90((char *)d + 0x70, 4.0f, 1.0f);
                 *(float *)((char *)d + 0xC0) = 12.0f;
                 *(float *)((char *)d + 0xC4) = 16.0f;
@@ -2511,26 +2511,27 @@ void FUN_L15_002d0fa8(void *arg) {
             }
             FUN_0024cd00(m, (char *)d + 0x60);
         }
-        *(int *)(slot + 0x34) = 0;
+        if (slot != 0)
+            *(int *)(slot + 0x34) = 0;
     }
     *(unsigned char *)((char *)m + 0xA4) = 0xFF;
     FUN_0024cde0(m, (char *)d + 0x60);
     *(float *)((char *)m + 0x2C) = *(float *)(m->cls + 0x24) * D_L15_00161B30;
     d->w164 = 0;
-    if (m->state == 1) {
-        angle = d->f174;
-    } else {
+    if (m->state != 1) {
         if (d->w1D0 != -1)
             goto follow_path;
-        angle = *(float *)((char *)d + 0x178);
+        d->f1B8 = *(float *)((char *)d + 0x178);
+    } else {
+        d->f1B8 = d->f174;
     }
-    d->f1B8 = angle;
     FUN_0024f560(d->f1B8, m, (char *)d + 0x120);
     goto check_path;
 follow_path:
     {
-        UPath *path = D_L15_001B0AB0[d->w1D0];
+        UPath *path;
         d->f1B8 = *(float *)((char *)d + 0x178);
+        path = D_L15_001B0AB0[d->w1D0];
         FUN_0024f7e0(d->f1B8, m, (char *)d + 0x120, 0, 0, &path->pt[0], path->n);
     }
 check_path:
