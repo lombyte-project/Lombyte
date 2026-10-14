@@ -9,6 +9,7 @@ import hashlib
 import importlib.util
 import io
 import json
+import re
 import os
 import shutil
 import struct
@@ -333,6 +334,72 @@ class ProgressReportTests(unittest.TestCase):
             self.assertIn("1 newly matched function", text)
             self.assertIn("`P`", text)
             self.assertIn("No report for main yet", comment.render({}, new, "main"))
+
+
+    def test_data_counts_blobs_c_entries_and_levels(self):
+        """Data totals come from the preserved blobs and the level records;
+        matched data from the *_OVERLAYS sizes and config/overlays/us/data.tsv."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self._repo(Path(tmp))
+            config = repo / "config" / "us" / "rnc1.us.yaml"
+            config.write_text(re.sub(
+                r"( +)- \[0x13680, textbin, text_gap_end\]",
+                r"\1- [0x13680, databin, core_data]\n\1- [0x13780, databin, lvl_vtbl]\n"
+                r"\1- [0x13800, databin, reg_info]\n\1- [0x13900, textbin, text_gap_end]",
+                config.read_text()))
+            (repo / "configure.py").write_text(
+                'DATA_OVERLAYS = {\n    "textbin/promoted": (0x112680, 0x13680, 16),\n'
+                '    "gone/unit": (0x112690, 0x13690, 8),\n}\n')
+            overlays = repo / "config" / "overlays" / "us"
+            overlays.mkdir(parents=True)
+            (overlays / "level-02.json").write_text(json.dumps({"sections": [
+                {"name": ".lit", "size": 64}, {"name": ".bss", "size": 999},
+                {"name": ".data", "size": 192}, {"name": ".text", "size": 4096}]}))
+            (overlays / "data.tsv").write_text("# name\tsize\nD_L02_00160000\t12\n")
+            report = self._build(repo, {})
+        self.assertEqual(report["measures"]["total_data"], str(0x100 + 0x80 + 64 + 192))
+        self.assertEqual(report["measures"]["matched_data"], str(16 + 12))
+        categories = {c["id"]: c["measures"] for c in report["categories"]}
+        self.assertEqual(categories["boot"]["matched_data"], "16")
+        self.assertEqual(categories["levels"]["total_data"], "256")
+        self.assertEqual(categories["overlays"]["matched_data"], "12")
+        self.assertNotIn("total_data", categories["game"])
+
+
+class ConfigureDataLayoutTests(unittest.TestCase):
+    """configure.py cuts C-owned bytes out of the preserved data blobs."""
+
+    @classmethod
+    def setUpClass(cls):
+        if importlib.util.find_spec("splat") is None:
+            raise unittest.SkipTest("splat is not installed")
+        cls.configure = load_module("rnc_configure", ROOT / "configure.py")
+
+    def test_entry_must_name_one_configured_unit(self):
+        with mock.patch.object(self.configure, "C_DATA_TABLES",
+                               ((".data", "data", {"old/name": (0x100, 0x80, 4)}),)):
+            with self.assertRaises(SystemExit):
+                self.configure.c_data_sections(["new/name"])
+
+    def test_blob_is_linked_around_the_c_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            config_dir = Path(tmp)
+            (config_dir / "assets").mkdir()
+            (config_dir / "asm" / "data").mkdir(parents=True)
+            (config_dir / "assets" / "data.databin.bin").write_bytes(bytes(0x40))
+            asm = config_dir / "asm" / "data" / "data.s"
+            asm.write_text('.include "macro.inc"\n\n.section .data, "wa"\n\n'
+                           'glabel D_00165480\n.incbin "assets/data.databin.bin"\n')
+            owned = [("u.data", "u", ".data", 0x165490, 0x66410, 0x10),
+                     ("v.data", "v", ".data", 0x1654A0, 0x66420, 0)]
+            sections = self.configure.preserved_data_sections(
+                config_dir, ".data", "data", 0x165480, 0x66400, owned)
+            text = asm.read_text()
+        self.assertEqual([vram for vram, _ in sections], [0x165480, 0x1654A0])
+        self.assertIn("glabel D_00165480", text)
+        self.assertIn('.incbin "assets/data.databin.bin", 0x0, 0x10', text)
+        self.assertIn('.incbin "assets/data.databin.bin", 0x20, 0x20', text)
+        self.assertIn("AT(0x66420)", sections[1][1])
 
 
 class OverlaySourceStateTests(unittest.TestCase):

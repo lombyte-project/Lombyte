@@ -28,7 +28,12 @@ What the report counts (the same contract as ``assets/decomp_map.json``):
   Assembly-backed units build from their retail oracle, so the ordinary
   objdiff report of the baseline shows them as 100 %; this report does not;
 * intentional low-level asm units are left out, as in the C_EXACT metric;
-* pending functions carry their measured ``.text`` similarity as the fuzzy score.
+* pending functions carry their measured ``.text`` similarity as the fuzzy score;
+* data (``total_data``/``matched_data``): the executable's preserved data
+  (``core_data`` .. ``lvl_sndvtbl``) and each level's ``.lit``, ``.data`` and
+  vtables; matched are the bytes C defines and the proofs check: the
+  ``*_OVERLAYS`` entries of ``configure.py`` (the boot gate) and
+  ``config/overlays/us/data.tsv`` (``make overlays``). bss is not counted.
 * report units are grouped by the logical subsystem in
   ``recovered_names.json``; a clicked group shows its member functions;
 * only entries with status ``proposed`` replace the function's current symbol
@@ -52,13 +57,15 @@ Usage::
 from __future__ import annotations
 
 import argparse
+import ast
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from rnc_units import INCLUDE_ASM_RE, classify_units, source_symbol  # noqa: E402
+from rnc_units import INCLUDE_ASM_RE, classify_units, parse_config_rows, source_symbol  # noqa: E402
 from overlay_units import category_of, group_of, load_levels, overlay_functions  # noqa: E402
 from progress_groups import (  # noqa: E402
     canonical_owner,
@@ -80,6 +87,12 @@ CATEGORIES = (("boot", "Boot executable"), ("game", "Game"), ("sdk", "SDK"),
               ("overlays", "Level overlays"), ("shared", "Shared level code"),
               ("levels", "Per-level code"))
 LEVEL_CATEGORIES = tuple((f"level_{i:02d}", f"Level {i:02d}") for i in range(19))
+# Data the report counts: the executable's preserved data blobs and each
+# level's loaded data records (bss holds no bytes and is left out).
+BOOT_DATA = ("core_data", "core_rdata", "core_lit", "lit", "data",
+             "lvl_vtbl", "lvl_camvtbl", "lvl_sndvtbl")
+LEVEL_DATA = (".lit", ".data", "lvl.vtbl", "lvl.camvtbl", "lvl.sndvtbl")
+C_DATA_TABLES = ("RODATA_OVERLAYS", "SDATA_OVERLAYS", "DATA_OVERLAYS")
 
 
 def unit_categories(function: dict) -> list[str]:
@@ -129,6 +142,60 @@ def measure_pending(workspace: Path) -> dict[str, float]:
 
 def committed_scores(path: Path) -> dict[object, float]:
     return committed_function_scores(path)
+
+
+def c_data_tables(repo: Path) -> dict[str, tuple]:
+    """Every *_OVERLAYS entry of configure.py: unit suffix -> (VMA, offset, size)."""
+    path = repo / "configure.py"
+    entries: dict[str, tuple] = {}
+    if not path.is_file():
+        return entries
+    for node in ast.parse(path.read_text()).body:
+        if (isinstance(node, ast.Assign) and len(node.targets) == 1
+                and getattr(node.targets[0], "id", None) in C_DATA_TABLES):
+            for suffix, value in ast.literal_eval(node.value).items():
+                entries[f"{node.targets[0].id}:{suffix}"] = value
+    return entries
+
+
+def data_totals(repo: Path) -> dict[str, tuple[int, int]]:
+    """Category -> (total, matched) data bytes."""
+    rows = parse_config_rows(repo / "config" / "us" / "rnc1.us.yaml")
+    units = [owner for _, kind, owner in rows if kind == "c"]
+    boot = sum(rows[i + 1][0] - offset for i, (offset, kind, name) in enumerate(rows[:-1])
+               if kind == "databin" and name in BOOT_DATA)
+    owned = sum(size for key, (_, _, size) in c_data_tables(repo).items()
+                if any(unit == key.split(":", 1)[1] or unit.endswith("/" + key.split(":", 1)[1])
+                       for unit in units))
+    totals = {"boot": (boot, owned)}
+    level_c = read_level_data(repo)
+    for path in sorted((repo / "config" / "overlays" / "us").glob("level-??.json")):
+        level = int(path.stem[-2:])
+        sections = json.loads(path.read_text()).get("sections", [])
+        total = sum(sec["size"] for sec in sections if sec["name"] in LEVEL_DATA)
+        totals[f"level_{level:02d}"] = (total, level_c.get(level, 0))
+    levels = [v for k, v in totals.items() if k.startswith("level_")]
+    totals["levels"] = totals["overlays"] = (sum(t for t, _ in levels), sum(m for _, m in levels))
+    totals["all"] = tuple(a + b for a, b in zip(totals["boot"], totals["overlays"]))
+    return totals
+
+
+def read_level_data(repo: Path) -> dict[int, int]:
+    """Level -> bytes of its data defined in C (config/overlays/us/data.tsv)."""
+    path = repo / "config" / "overlays" / "us" / "data.tsv"
+    out: dict[int, int] = {}
+    if path.is_file():
+        for line in path.read_text().splitlines():
+            m = re.match(r"^D_L(\d{2})_[0-9A-Fa-f]{8}\t(\d+)", line)
+            if m:
+                out[int(m.group(1))] = out.get(int(m.group(1)), 0) + int(m.group(2))
+    return out
+
+
+def data_measures(total: int, matched: int) -> dict:
+    pct = round(100.0 * matched / total, 6) if total else 0.0
+    return {"total_data": str(total), "matched_data": str(matched), "matched_data_percent": pct,
+            "complete_data": str(matched), "complete_data_percent": pct}
 
 
 def measures(functions: list[dict], groups: list[dict]) -> dict:
@@ -242,15 +309,16 @@ def build_report(scores: dict[object, float]) -> dict:
         (cid, cname) for cid, cname in LEVEL_CATEGORIES
         if any(function["category"] == cid for function in functions)
     ]
+    data = data_totals(REPO)
     return {
-        "measures": measures(functions, report_groups),
+        "measures": {**measures(functions, report_groups), **data_measures(*data["all"])},
         "units": report_units,
         "version": 2,
         "categories": [{"id": cid, "name": cname,
-                        "measures": measures(
+                        "measures": {**measures(
                             [function for function in functions if cid in unit_categories(function)],
                             [group for group in report_groups if cid in unit_categories(group["functions"][0])],
-                        )}
+                        ), **(data_measures(*data[cid]) if cid in data else {})}}
                        for cid, cname in categories],
     }
 
@@ -281,7 +349,8 @@ def main(argv: list[str] | None = None) -> int:
     m = report["measures"]
     print(f"wrote {display(args.report)}: {m['matched_code']} / {m['total_code']} B "
           f"({m['matched_code_percent']:.2f} %), fuzzy {m['fuzzy_match_percent']:.2f} %, "
-          f"{m['complete_units']} / {m['total_units']} groups")
+          f"{m['complete_units']} / {m['total_units']} groups, data {m['matched_data']} / "
+          f"{m['total_data']} B ({m['matched_data_percent']:.2f} %)")
     return 0
 
 

@@ -17,6 +17,16 @@ figures from the [progress map](https://github.com/lombyte-project/lombyte/blob/
 the [report](https://github.com/lombyte-project/lombyte/blob/progress/report.json), or from
 [decomp.dev](https://decomp.dev/lombyte-project/lombyte) — never from prose.
 
+## Data
+
+The report also counts data (`total_data`, `matched_data`): the executable's
+preserved data (`core_data` to `lvl_sndvtbl` in `config/us/rnc1.us.yaml`) and
+each level's `.lit`, `.data` and vtables; bss holds no bytes and is left out.
+Data is matched when C defines it and a proof checks it: an entry in
+`RODATA_OVERLAYS`, `SDATA_OVERLAYS` or `DATA_OVERLAYS` (`configure.py`) links
+the unit's section in place of the blob bytes, so the boot ELF hash covers it;
+a level object in `config/overlays/us/data.tsv` is compared by `make overlays`.
+
 ## Exact bytes are not enough: the source must be C
 
 A promoted unit counts toward C_EXACT only when its source is C. Inline asm is
