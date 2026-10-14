@@ -1014,7 +1014,7 @@ def render_svg(
     )
     lines.append(f'<clipPath id="drawer-clip"><polygon points="{boot_poly}"/></clipPath>')
     placements = layout_boot(units, dx0, dy0, xb - dx0, ddy, min_bytes)
-    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.32"><g id="boot-tiles">')
+    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.24"><g id="boot-tiles">')
     for tile, rect in placements:
         x, y = rect["x"], rect["y"]
         tdx, tdy = max(rect["dx"], 0.0), max(rect["dy"], 0.0)
@@ -1041,7 +1041,7 @@ def render_svg(
     )
     lines.append(
         f'<g clip-path="url(#drawer-clip)" mask="url(#glass-mask)" pointer-events="none">'
-        f'<use href="#boot-tiles" filter="url(#glass)" opacity="0.32"/>'
+        f'<use href="#boot-tiles" filter="url(#glass)" opacity="0.24"/>'
         f'<rect x="{cx - grx:.1f}" y="{dy0}" width="{2 * grx:.1f}" height="{ddy}" fill="{PLATE}" fill-opacity="0.7"/>'
         f'<ellipse cx="{cx:.1f}" cy="{cy + 4:.1f}" rx="{grx * 0.8:.1f}" ry="{gry:.1f}" fill="url(#panel-glow)"/></g>'
     )
