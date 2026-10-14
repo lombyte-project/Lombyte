@@ -1345,15 +1345,23 @@ void FUN_L12_003069d0(struct Moby *moby) {
         *(float *)(data + 0x618) = moby->pos.z;
         moby->rot.z = FUN_001f9e90(*(float *)(row + 0x20) - *(float *)(row + 0x10),
                                   *(float *)(row + 0x24) - *(float *)(row + 0x14));
-        if (((float *)&D_0013F3D0)[2] < 52.0f) moby->pos.z += 3.0f;
-        slot = (int *)(data + 0x5d0);
-        i = 4;
-        do {
-            int index = *slot++;
-            other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + index * 0x30 + 0x20) * 0x100);
-            *(float *)(other->pvars + 0x80) = 10.0f;
-            i--;
-        } while (i >= 0);
+        {
+            char *moby_base = D_L12_0015FFD8_p;
+            if (((float *)&D_0013F3D0)[2] < 52.0f) {
+                moby->pos.z += 3.0f;
+                moby_base = (char *)D_L12_0015FFD8;
+            }
+            {
+                int *slot = (int *)(data + 0x5d0);
+                int i = 4;
+                do {
+                    int index = *slot++;
+                    other = (struct Moby *)(moby_base + *(int *)(data + index * 0x30 + 0x20) * 0x100);
+                    *(float *)(other->pvars + 0x80) = 10.0f;
+                    i--;
+                } while (i >= 0);
+            }
+        }
         D_L12_00161F40 = -1.0f;
         saved = D_L12_001FB688;
         saved += 17;
@@ -1411,13 +1419,16 @@ void FUN_L12_003069d0(struct Moby *moby) {
         FUN_L12_0027b370(moby, data, 17);
         if (FUN_00214720(pos, *(int *)(data + 0x5ec)) || D_L12_00161F00) {
             D_L12_001619B4 = 1;
-            slot = (int *)(data + 0x5d0); i = 4;
-            do {
-                int index = *slot++;
-                other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + index * 0x30 + 0x20) * 0x100);
-                other->hit_slot = 0xff;
-                i--;
-            } while (i >= 0);
+            {
+                int *slot = (int *)(data + 0x5d0);
+                int i = 4;
+                do {
+                    int index = *slot++;
+                    other = (struct Moby *)(D_L12_0015FFD8_p + *(int *)(data + index * 0x30 + 0x20) * 0x100);
+                    other->hit_slot = 0xff;
+                    i--;
+                } while (i >= 0);
+            }
             moby->state = 2;
         }
         break;
@@ -1529,7 +1540,9 @@ remove_moby:
             }
         }
         if (*(short *)(data + 0x5fa) == 0) {
-            slot = (int *)(data + 0x20); saved = D_L12_001FB688; i = 16;
+            int *slot = (int *)(data + 0x20);
+            int *saved = D_L12_001FB688;
+            int i = 16;
             do {
                 if (*saved == 0) *saved = *slot;
                 *slot = -1;
