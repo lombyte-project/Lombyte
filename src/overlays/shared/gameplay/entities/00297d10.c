@@ -524,9 +524,8 @@ void FUN_L06_002e8678(struct Moby *moby) {
         qcopy((vars + 0x210), (path + *path * 4));
         qcopy((vars + 0x230), (vars + 0x210));
         f = FUN_001f9b80(&moby->pos, vars + 0x210);
-        f /= (float)FUN_001f96f8(30);
+        f = E8678_FLOAT(0x138) = f / (float)FUN_001f96f8(30);
         path_pos = (float *)(vars + 0x120);
-        E8678_FLOAT(0x138) = f;
         E8678_FLOAT(0x13c) = FUN_L00_0025abf0(&moby->pos, vars + 0x210, 0, f, -E8678_FLOAT(0x130));
         vars[0x15d] = 3;
         E8678_INT(0x144) = 5;
