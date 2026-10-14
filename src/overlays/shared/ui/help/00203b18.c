@@ -998,7 +998,8 @@ void FUN_L00_00206e00(void) {
     s32 input;
     u32 state;
     s32 level;
-    s32 i, j, length, position;
+    s32 i, length, position;
+    u32 j;
     u8 *end;
     u8 *sequence;
     u8 *history;
@@ -1097,14 +1098,14 @@ append:
                         j++;
                         if (position > 15)
                             position -= 16;
-                        if (j >= length)
+                        if ((s32)j >= length)
                             goto scan_result;
                     } while (history[position] == sequence[j]);
                 }
                 j = -1;
             }
 scan_result:
-            if (j == length) {
+            if ((s32)j == length) {
                 selector_available[i] = 1;
                 big_head_cheat_enabled[i] = !big_head_cheat_enabled[i];
                 queue_dialogue_message(big_head_cheat_enabled[i] ? 0x4FBE : 0x4FBF, -1);
