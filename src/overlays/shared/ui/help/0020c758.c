@@ -668,8 +668,18 @@ extern s32 D_L00_0015F6A0_gp[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
 extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
 extern s32 D_L00_00197300_20dd20[] __asm__("D_L00_00197300") __attribute__((section(".data")));
 extern u8 D_L00_0017CA80_20dd20[] __asm__("D_L00_0017CA80") __attribute__((section(".data")));
-extern u8 D_L00_0017A680_20dd20[] __asm__("D_L00_0017A680") __attribute__((section(".data")));
-#define ANGLE_FIELD_20DD20(offset) (*(f32 *)(D_L00_0017A680_20dd20 + (offset)))
+struct AngleFields_20dd20 {
+    u8 pad[0x5e4];
+    f32 unk5E4;
+    u8 pad5E8[0x3c];
+    f32 unk624, unk628;
+    u8 pad62C[0x68];
+    f32 unk694;
+    u8 pad698[0x3c];
+    f32 unk6D4, unk6D8;
+};
+extern struct AngleFields_20dd20 D_L00_0017A680_20dd20 __asm__("D_L00_0017A680") __attribute__((section(".data")));
+#define ANGLE_FIELD_20DD20(offset) (*(f32 *)((u8 *)&D_L00_0017A680_20dd20 + (offset)))
 extern f32 D_0015ED64_20dd20 __asm__("D_0015ED64");
 extern u8 *FUN_L00_0024f028_20dd20(u8 *, s32) __asm__("FUN_L00_0024f028");
 extern void FUN_L00_0024f0e8_20dd20(u8 *, u8 **) __asm__("FUN_L00_0024f0e8");
@@ -746,12 +756,12 @@ void FUN_L00_0020dd20(void) {
                 if (angle != zero) {
                     f32 angle_scale_small = D_0015ED64_20dd20 * 0.05f;
                     f32 angle_scale_large = D_0015ED64_20dd20 * 0.3f;
-                    ANGLE_FIELD_20DD20(0x5e4) = angle;
-                    ANGLE_FIELD_20DD20(0x694) = angle;
-                    ANGLE_FIELD_20DD20(0x624) = angle_scale_small;
-                    ANGLE_FIELD_20DD20(0x628) = angle_scale_large;
-                    ANGLE_FIELD_20DD20(0x6d4) = angle_scale_small;
-                    ANGLE_FIELD_20DD20(0x6d8) = angle_scale_large;
+                    D_L00_0017A680_20dd20.unk694 = angle;
+                    D_L00_0017A680_20dd20.unk5E4 = angle;
+                    D_L00_0017A680_20dd20.unk6D4 = angle_scale_small;
+                    D_L00_0017A680_20dd20.unk6D8 = angle_scale_large;
+                    D_L00_0017A680_20dd20.unk624 = angle_scale_small;
+                    D_L00_0017A680_20dd20.unk628 = angle_scale_large;
                 }
                 if (handled == 0)
                     goto unhandled_update;
@@ -800,18 +810,18 @@ special_textures:
                     u8 *symbol = obj + 0x22;
                     u8 **texture = (u8 **)(obj + 0x38);
                     u8 *texture_base = D_L00_0017CA80_20dd20 + i * 0x800;
-                    if (symbol[0] < 0x17) {
-                        enabled[0] = 1;
-                        texture[0] = texture_base;
-                    } else {
-                        enabled[0] = 0;
-                    }
-                    if (symbol[1] < 0x17) {
-                        enabled[1] = 1;
-                        texture[1] = texture_base + 0x400;
-                    } else {
-                        enabled[1] = 0;
-                    }
+                    do {
+                        if (*symbol < 0x17) {
+                            *enabled = 1;
+                            *texture = texture_base;
+                        } else {
+                            *enabled = 0;
+                        }
+                        symbol++;
+                        enabled++;
+                        texture++;
+                        texture_base += 0x400;
+                    } while (enabled != obj + 8);
                 }
                 FUN_L00_0024f190_20dd20((u8 *)hero.moby, obj);
             }
@@ -845,18 +855,18 @@ ordinary_update:
                 {
                     u8 **texture = (u8 **)(obj + 0x38);
                     u8 *texture_base = D_L00_0017CA80_20dd20 + i * 0x800;
-                    if (symbol[0] < 0x17) {
-                        enabled[0] = 1;
-                        texture[0] = texture_base;
-                    } else {
-                        enabled[0] = 0;
-                    }
-                    if (symbol[1] < 0x17) {
-                        enabled[1] = 1;
-                        texture[1] = texture_base + 0x400;
-                    } else {
-                        enabled[1] = 0;
-                    }
+                    do {
+                        if (*symbol < 0x17) {
+                            *enabled = 1;
+                            *texture = texture_base;
+                        } else {
+                            *enabled = 0;
+                        }
+                        symbol++;
+                        enabled++;
+                        texture++;
+                        texture_base += 0x400;
+                    } while (enabled != obj + 8);
                 }
                 FUN_L00_0024f190_20dd20((u8 *)hero.moby, obj);
             }
