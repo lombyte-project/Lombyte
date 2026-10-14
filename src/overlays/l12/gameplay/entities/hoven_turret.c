@@ -1591,24 +1591,23 @@ void FUN_L12_00306828(struct Moby *moby) {
     int i;
     int alpha = 0x80000000;
     char *data = (char *)moby->pvars;
-    for (i = 0; i != 18; i++) {
+    for (i = 0; i < 18; i++) {
         struct Moby *other;
         int period;
         float sine;
         float color;
-        int red;
+        unsigned int red;
         int green;
         int blue;
         int packed_color;
         float phase;
         float divisor;
-        if (i == 17) {
+        if (i >= 17) {
             other = moby;
         } else {
             other = (struct Moby *)(((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8) + (unsigned int)D_L12_0015FFD8_p);
         }
-        if (other->oclass == 0x4FE) continue;
-        {
+        if (other->oclass != 0x4FE) {
             period = scale_ticks(0xAA);
             divisor = convert_integer_to_float(period);
             phase = (float)(D_L12_0015F5CC % period) / divisor;
@@ -1619,7 +1618,7 @@ void FUN_L12_00306828(struct Moby *moby) {
             blue = truncate_float_to_s32(sine * 10.0f);
             packed_color = ((blue + 0x46) << 16) | alpha |
                 ((green + 0xB4 > 0xFF ? 0xFF : green + 0xB4) << 8) |
-                (red + 0xB4 > 0xFF ? 0xFF : red + 0xB4);
+                ((int)(red + 0xB4) > 0xFF ? 0xFF : red + 0xB4);
             other->flags |= 0x10;
             other->glow_color = packed_color;
         }
