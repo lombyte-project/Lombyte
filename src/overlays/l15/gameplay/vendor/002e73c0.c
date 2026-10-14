@@ -1268,7 +1268,7 @@ extern unsigned char D_0013D388_2ed398[] __asm__("D_0013D388");
 extern int D_L15_0015F5A4 __attribute__((section(".sdata")));
 extern char D_L15_00179A10[];
 extern unsigned char D_0013D4C4[];
-extern int D_0015EEA4 __attribute__((section(".sdata")));
+extern int D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata")));
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 /* Quartu moby update (class 1469): hint and dialogue triggers from the hero's zones, with the play-time
    records of the two hint messages. */
@@ -1293,34 +1293,34 @@ void FUN_L15_002ed398(struct Moby *m) {
                 && ((Help_2ed398 *)D_L15_00179A10)->busy == 0 && ((Help_2ed398 *)D_L15_00179A10)->cur == -1) {
                 if (D_0013D4DF_2ed398[0] == 0) {
                     int lim, now;
-                    now = scale_game_frames_2ed398(D_0015EEA4);
+                    now = scale_game_frames_2ed398(D_0015EEA4_macro);
                     lim = now - ((Stats_2ed398 *)D_00141968_2ed398)->t3DA * 600;
                     if ((int)((float)scale_game_frames_2ed398(0x12) * 60.0f) < lim || ((Stats_2ed398 *)D_00141968_2ed398)->t3DA * 600 == 0) {
                         show_help_message_2ed398(0x3A98, 0x7B);
                     } else {
-                        now = scale_game_frames_2ed398(D_0015EEA4);
+                        now = scale_game_frames_2ed398(D_0015EEA4_macro);
                         if (now / 600 > ((Stats_2ed398 *)D_00141968_2ed398)->t3DA) {
-                            ((Stats_2ed398 *)D_00141968_2ed398)->t3DA = scale_game_frames_2ed398(D_0015EEA4) / 600;
+                            ((Stats_2ed398 *)D_00141968_2ed398)->t3DA = scale_game_frames_2ed398(D_0015EEA4_macro) / 600;
                         }
                     }
                 } else if (((Stats_2ed398 *)D_00141968_2ed398)->n3E0 != 0) {
                     int lim, now;
-                    now = scale_game_frames_2ed398(D_0015EEA4);
+                    now = scale_game_frames_2ed398(D_0015EEA4_macro);
                     lim = now - ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 * 600;
                     if ((int)((float)scale_game_frames_2ed398(0x12) * 60.0f) < lim || ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 * 600 == 0) {
                         show_help_message_2ed398(0x3A99, 0x7C);
                     } else {
-                        now = scale_game_frames_2ed398(D_0015EEA4);
+                        now = scale_game_frames_2ed398(D_0015EEA4_macro);
                         if (now / 600 > ((Stats_2ed398 *)D_00141968_2ed398)->t3E2) {
-                            ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 = scale_game_frames_2ed398(D_0015EEA4) / 600;
+                            ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 = scale_game_frames_2ed398(D_0015EEA4_macro) / 600;
                         }
                     }
                 } else {
                     int now;
                     ((Stats_2ed398 *)D_00141968_2ed398)->n3E0++;
-                    now = scale_game_frames_2ed398(D_0015EEA4);
+                    now = scale_game_frames_2ed398(D_0015EEA4_macro);
                     if (now / 600 > ((Stats_2ed398 *)D_00141968_2ed398)->t3E2) {
-                        ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 = scale_game_frames_2ed398(D_0015EEA4) / 600;
+                        ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 = scale_game_frames_2ed398(D_0015EEA4_macro) / 600;
                     }
                     ((Stats_2ed398 *)D_00141968_2ed398)->lv3E4 = ((Stats_2ed398 *)D_00141968_2ed398)->lv3E4 | (1 << current_level_index_macro) | 0x80000000;
                 }

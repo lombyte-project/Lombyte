@@ -1117,7 +1117,7 @@ void FUN_L03_0029cff0(struct Moby *m) {
 }
 extern char D_0013E550_29d2e0[] __asm__("D_0013E550");
 extern unsigned char D_0013D408_29d2e0[] __asm__("D_0013D408");
-extern float D_L03_0015F580[] __attribute__((section(".sdata")));
+extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
 extern void *D_L03_00160770;
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float FUN_001f9dc8(float);
@@ -1136,7 +1136,7 @@ void FUN_L03_0029dba8(char *moby);
 
 #define SPAWN_DEBRIS(id) \
     spawn_debris_29d2e0(moby, (id), (float *)(moby + 0x10), moby + 0x40, FUN_001f96f8(90), 0, frame_time_sq * 12.0f, push, \
-                        D_L03_0015F580, D_L03_0015F580)
+                        D_L03_0015F580_macro, D_L03_0015F580_macro)
 
 /* Wreck reaction for the Kerwan train and turret classes: when hit by a qualifying attack it bursts into
  * the class debris, starts the shake/smoke effects and arms the respawn countdown (0x14A); once that runs
@@ -1563,7 +1563,7 @@ extern char *D_L03_0015FFD8_c5bb8 __asm__("D_L03_0015FFD8");
 extern char *D_L03_001B05B0_c5bb8[] __asm__("D_L03_001B05B0");
 extern char D_L03_001618D0 __attribute__((sda));
 extern char D_L03_00166EC0[];
-extern float D_L03_0015F580[] __attribute__((section(".sdata")));
+extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
 extern float absolute_float_c5bb8(float) __asm__("FUN_001f99c0");
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
@@ -1843,8 +1843,8 @@ void FUN_L03_002c5bb8(char *moby) {
         if (FUN_L00_0025c698(moby, data->m120) & 0x60) {
             clear_vector(dir);
             FUN_L00_0025f090(moby, moby + 0x10, -1, 0.5f, 13.0f);
-            spawn_debris_c5bb8(moby, 0x6CE, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L03_0015F580, D_L03_0015F580, D_L03_0015F580);
-            spawn_debris_c5bb8(moby, 0x6CF, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L03_0015F580, D_L03_0015F580, D_L03_0015F580);
+            spawn_debris_c5bb8(moby, 0x6CE, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
+            spawn_debris_c5bb8(moby, 0x6CF, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
             FUN_L00_00263e30(moby, 0x77D, 1, 0x77D, 1, 3, 2);
             FUN_L00_00257470(moby, 0, -1);
             mark_moby_for_removal_c5bb8(moby);
@@ -2163,7 +2163,7 @@ extern char D_L03_00173F40[];
 extern char D_L03_00173F60[];
 extern char D_L03_00173F70[];
 extern char D_L03_00173F80[];
-extern float D_L03_0015F580[] __attribute__((section(".sdata")));
+extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
 extern float FUN_001efa68_cf(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa5c8");
@@ -2752,12 +2752,12 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                 v[2] += 1.0f;
                 FUN_L00_00263fd8_cf(m, d->v40, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6, 1.0f,
                                     15.0f, 1, 1, -1, 0);
-                FUN_L00_00257470_cf((char *)m, 0x6D0, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580,
-                                    D_L03_0015F580, D_L03_0015F580);
-                FUN_L00_00257470_cf((char *)m, 0x6D1, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580,
-                                    D_L03_0015F580, D_L03_0015F580);
-                FUN_L00_00257470_cf((char *)m, 0x6D2, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580,
-                                    D_L03_0015F580, D_L03_0015F580);
+                FUN_L00_00257470_cf((char *)m, 0x6D0, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
+                                    D_L03_0015F580_macro, D_L03_0015F580_macro);
+                FUN_L00_00257470_cf((char *)m, 0x6D1, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
+                                    D_L03_0015F580_macro, D_L03_0015F580_macro);
+                FUN_L00_00257470_cf((char *)m, 0x6D2, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
+                                    D_L03_0015F580_macro, D_L03_0015F580_macro);
                 FUN_L00_00259710_cf(m, 0, -1);
                 if (d->i264 == -1) {
                     FUN_L03_002c95a8_cf(m);
@@ -2818,11 +2818,11 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                     FUN_L00_00263fd8_cf(m, d->v40, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6,
                                         1.0f, 15.0f, 1, 1, -1, 0);
                     FUN_L00_00257470_cf((char *)m, 0x6D0, m->pos, m->rot, 0, 0, 0.0f,
-                                        D_L03_0015F580, D_L03_0015F580, D_L03_0015F580);
+                                        D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
                     FUN_L00_00257470_cf((char *)m, 0x6D1, m->pos, m->rot, 0, 0, 0.0f,
-                                        D_L03_0015F580, D_L03_0015F580, D_L03_0015F580);
+                                        D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
                     FUN_L00_00257470_cf((char *)m, 0x6D2, m->pos, m->rot, 0, 0, 0.0f,
-                                        D_L03_0015F580, D_L03_0015F580, D_L03_0015F580);
+                                        D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
                     FUN_L00_00259710_cf(m, 0x200, -1);
                     if (d->i264 == -1) {
                         FUN_L03_002c95a8_cf(m);
@@ -2906,12 +2906,12 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                 v[2] += 1.0f;
                 FUN_L00_00263fd8_cf(m, d->v40, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6, 1.0f,
                                     15.0f, 1, 1, -1, 0);
-                FUN_L00_00257470_cf((char *)m, 0x6D0, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580,
-                                    D_L03_0015F580, D_L03_0015F580);
-                FUN_L00_00257470_cf((char *)m, 0x6D1, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580,
-                                    D_L03_0015F580, D_L03_0015F580);
-                FUN_L00_00257470_cf((char *)m, 0x6D2, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580,
-                                    D_L03_0015F580, D_L03_0015F580);
+                FUN_L00_00257470_cf((char *)m, 0x6D0, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
+                                    D_L03_0015F580_macro, D_L03_0015F580_macro);
+                FUN_L00_00257470_cf((char *)m, 0x6D1, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
+                                    D_L03_0015F580_macro, D_L03_0015F580_macro);
+                FUN_L00_00257470_cf((char *)m, 0x6D2, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
+                                    D_L03_0015F580_macro, D_L03_0015F580_macro);
                 FUN_L00_00259710_cf(m, 0, -1);
                 if (d->i264 == -1) {
                     FUN_L03_002c95a8_cf(m);
@@ -3052,12 +3052,12 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
                 p[2] += 1.0f;
                 FUN_L00_00263fd8_cf(m, d->v40, p, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6, 1.0f,
                                     15.0f, 1, 1, -1, 0);
-                FUN_L00_00257470_cf((char *)m, 0x6D0, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580,
-                                    D_L03_0015F580, D_L03_0015F580);
-                FUN_L00_00257470_cf((char *)m, 0x6D1, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580,
-                                    D_L03_0015F580, D_L03_0015F580);
-                FUN_L00_00257470_cf((char *)m, 0x6D2, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580,
-                                    D_L03_0015F580, D_L03_0015F580);
+                FUN_L00_00257470_cf((char *)m, 0x6D0, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
+                                    D_L03_0015F580_macro, D_L03_0015F580_macro);
+                FUN_L00_00257470_cf((char *)m, 0x6D1, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
+                                    D_L03_0015F580_macro, D_L03_0015F580_macro);
+                FUN_L00_00257470_cf((char *)m, 0x6D2, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
+                                    D_L03_0015F580_macro, D_L03_0015F580_macro);
                 FUN_L00_00259710_cf(m, 0x200, -1);
                 if (d->i264 == -1) {
                     FUN_L03_002c95a8_cf(m);

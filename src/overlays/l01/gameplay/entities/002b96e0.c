@@ -1459,7 +1459,7 @@ typedef struct {
     u8 pad44[0xC];
 } Mob577Target;
 
-extern s32 D_L01_0015F5C4;
+extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern f32 D_L01_00161A60 __attribute__((sda));
 extern f32 D_L01_00161A64 __attribute__((sda));
 extern f32 D_L01_00161A68 __attribute__((sda));
@@ -1562,7 +1562,7 @@ void FUN_L01_002efc60(Mob577 *self) {
 
     v = self->vars;
     FUN_L00_00263ac8(self, 0, v->x230, 1.5f);
-    if (D_L01_0015F5C4 == 2) {
+    if (cutscene_mode == 2) {
         self->id = 0;
         self->flags |= 0x41;
         return;

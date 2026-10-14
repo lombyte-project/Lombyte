@@ -12,7 +12,7 @@ extern char *D_L00_001DD100_25fcb8[] __asm__("D_L00_001DD100") __attribute__((se
 extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-extern short D_L00_001B0830[] __attribute__((section(".data")));
+extern short D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section(".data")));
 int FUN_L00_0025fcb8(char *a, char *o, float best) {
     struct Hero *g = &hero_lui;
     char *m;
@@ -28,8 +28,8 @@ int FUN_L00_0025fcb8(char *a, char *o, float best) {
         m = 0;
         res = 2;
     }
-    for (i = 1; i <= D_L00_001B0830[0]; i++) {
-        p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830[i] << 8);
+    for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
+        p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_lui[i] << 8);
         if (p == 0)
             continue;
         if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C)
@@ -122,8 +122,8 @@ int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, i
             res = 2;
         }
     }
-    for (i = 1; i <= D_L00_001B0830[0]; i++) {
-        p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830[i] << 8);
+    for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
+        p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_lui[i] << 8);
         if (p == 0) continue;
         if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C) continue;
         if (*(unsigned char *)(p + 0x20) == 0xFE) continue;
@@ -304,19 +304,19 @@ void FUN_L00_00260738(char *out, OvlQuad *pos, void *m1, void *m2) {
     FUN_00214598(c, out);
     qcopy(out + 0x10, pos);
 }
-extern u8 D_0013DD40_2607d0[] __asm__("D_0013DD40");
+extern u8 level_available[] __asm__("D_0013DD40");
 extern s32 D_0013D510_2607d0[] __asm__("D_0013D510");
 void FUN_L00_00262d38(s32);
 void unlock_planet(s32 id) __asm__("FUN_L00_002607d0");
 void unlock_planet(s32 id) {
     s32 n, i;
     n = 0;
-    if (D_0013DD40_2607d0[id] == 0) {
+    if (level_available[id] == 0) {
         for (i = 0; i < 20; i++) {
-            if (D_0013DD40_2607d0[i])
+            if (level_available[i])
                 n++;
         }
-        D_0013DD40_2607d0[id] = 1;
+        level_available[id] = 1;
         D_0013D510_2607d0[n] = id;
         if (id != *(volatile s32 *)&current_level_index)
             FUN_L00_00262d38(id);
@@ -416,7 +416,7 @@ typedef OvlVec4 Vec_260a88;
 extern int D_L00_0015F598_260a88 __asm__("D_L00_0015F598");
 extern unsigned char D_L00_0015FC88_260a88[] __asm__("D_L00_0015FC88");
 extern int D_L00_0015EEA0_260a88 __asm__("D_0015EEA0");
-extern int D_L00_0015EE20_260a88 __asm__("D_0015EE20");
+extern int alternate_animation_sequence __asm__("D_0015EE20");
 extern int D_L00_0015EE28_260a88 __asm__("D_0015EE28");
 extern int D_L00_0015EE2C_260a88 __asm__("D_0015EE2C");
 extern float D_L00_0015ED6C_260a88 __asm__("D_0015ED6C");
@@ -473,11 +473,11 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
     if (lower < 1)
         lower = 1;
     count = FUN_00257b50_260a88(upper - lower + 1) + lower;
-    if (D_L00_0015EEA0_260a88 || D_L00_0015EE20_260a88)
+    if (D_L00_0015EEA0_260a88 || alternate_animation_sequence)
         count *= 2;
     if (count < 500 && gated && D_L00_0015EE28_260a88) {
         multiplier = (int)((float)FUN_001fef20_260a88(60) * 60.0f) * D_L00_0015EE2C_260a88 / D_L00_0015EE28_260a88;
-        if (D_L00_0015EEA0_260a88 || D_L00_0015EE20_260a88)
+        if (D_L00_0015EEA0_260a88 || alternate_animation_sequence)
             multiplier /= 2;
         if (multiplier < 150) {
             if (multiplier < 91) {

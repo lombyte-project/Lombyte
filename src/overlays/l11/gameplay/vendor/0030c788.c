@@ -946,7 +946,7 @@ void FUN_L11_0030eb90(struct Moby *m) {
 }
 /* Waits for its linked moby, then either hands off to a cutscene or turns toward its target. */
 extern char *D_L11_0015FFD8_t __asm__("D_L11_0015FFD8");
-extern int D_L11_0015F5CC_t __asm__("D_L11_0015F5CC");
+extern int level_frame __asm__("D_L11_0015F5CC");
 extern char D_0013D3E3_t[] __asm__("D_0013D3E3");
 extern int FUN_L11_0030f270(char *);
 extern void FUN_0022da68_t(int, int, unsigned char *) __asm__("FUN_0022da68");
@@ -966,7 +966,7 @@ void FUN_L11_0030f2a8(struct Moby *m) {
         break;
     case 1:
         if (FUN_L11_0030f270(D_L11_0015FFD8_t + (*(int *)d << 8))) {
-            if (D_L11_0015F5CC_t >= 11) {
+            if (level_frame >= 11) {
                 D_0013D3E3_t[0] = s;
                 m->state = 2;
                 FUN_0022da68_t(0, 0, m);
@@ -2031,7 +2031,7 @@ void FUN_L11_00311d50(struct Moby *moby) {
             }
             alpha = truncate_float_to_s32(fade * 96.0f);
             FUN_L11_00311048(convert_integer_to_float(sx), convert_integer_to_float(sy), grow,
-                             FUN_L00_0025e310(convert_integer_to_float(D_L11_0015F5CC_t) / 30.0f), 0, 0xFF, 0, alpha);
+                             FUN_L00_0025e310(convert_integer_to_float(level_frame) / 30.0f), 0, 0xFF, 0, alpha);
             vars->locked = NULL;
         } else {
             blink = 0xFF;

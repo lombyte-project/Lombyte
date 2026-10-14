@@ -134,13 +134,13 @@ extern u8 D_00100AE0[];
 extern u8 D_0013F350[];
 extern s32 D_0015ED80;
 extern f32 D_0015F43C;
-extern u8 D_0015F484;
-extern u8 D_0015F485;
-extern u8 D_0015F486;
-extern f32 D_0015F488;
-extern f32 D_0015F48C;
-extern f32 D_0015F490;
-extern f32 D_0015F494;
+extern u8 fog_color_red __asm__("D_0015F484");
+extern u8 fog_color_green __asm__("D_0015F485");
+extern u8 fog_color_blue __asm__("D_0015F486");
+extern f32 fog_near_distance __asm__("D_0015F488");
+extern f32 fog_far_distance __asm__("D_0015F48C");
+extern f32 fog_near_intensity __asm__("D_0015F490");
+extern f32 fog_far_intensity __asm__("D_0015F494");
 extern s32 world_update_time __asm__("D_0015F60C");
 extern Ent100 *D_0015FF18;
 extern Ent100 *moby_instance_end __asm__("D_0015FF1C");
@@ -174,7 +174,7 @@ extern Display D_0018CD00;
 extern u8 *D_001940D8 NOT_SDA;
 extern Buf194100 coll_output __asm__("D_00194100");
 extern u8 D_00194180[];
-extern u8 D_001941C0[];
+extern u8 image_clear_buffer[] __asm__("D_001941C0");
 extern char dir_lights[] __asm__("D_0019BDC0");
 extern u8 point_lights[] __asm__("D_0019C1C0");
 extern u8 point_light_data[] __asm__("D_0019C3C0");
@@ -185,7 +185,7 @@ extern u8 D_001CD780[];
 extern TieClass *D_001D7F30[];
 #include "rnc/rendering/shrub_render_class.h"
 extern ShrubClass *D_001E1700[];
-extern u8 D_001E1A00[];
+extern u8 object_render_class_slot_by_id[] __asm__("D_001E1A00");
 extern char D_001E76D8[];
 
 extern void DebugPrint(char *fmt, ...);
@@ -265,7 +265,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         set_video_timing(0);
     }
     requested_video_mode = *(u8 *)&D_0015ED80;
-    coll_output.x4 = D_001941C0;
+    coll_output.x4 = image_clear_buffer;
     coll_output.x8 = D_00194180;
     coll_output.xC = 0;
     coll_output.x10 = 0;
@@ -280,16 +280,16 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     c += 4;
     D_0018CD00.x244 = *(s32 *)c;
     c += 4;
-    D_0015F484 = *c;
+    fog_color_red = *c;
     c += 4;
-    D_0015F485 = *c;
+    fog_color_green = *c;
     c += 4;
-    D_0015F486 = *c;
+    fog_color_blue = *c;
     c += 4;
-    D_0015F488 = *(f32 *)c;
-    D_0015F48C = *(f32 *)(c + 4);
-    D_0015F490 = *(f32 *)(c + 8);
-    D_0015F494 = *(f32 *)(c + 12);
+    fog_near_distance = *(f32 *)c;
+    fog_far_distance = *(f32 *)(c + 4);
+    fog_near_intensity = *(f32 *)(c + 8);
+    fog_far_intensity = *(f32 *)(c + 12);
     update_fog();
     D_00160EC0 = 512000.0f;
     D_00160F70 = 720.0f;
@@ -347,7 +347,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     for (i2 = 0; i2 < D_00160F5C; i2++) {
         sh = &D_00160F50[i2];
         sd = &D_00160F58[i2];
-        sh->cls = D_001E1A00[*(s32 *)sc];
+        sh->cls = object_render_class_slot_by_id[*(s32 *)sc];
         if (sh->cls != last) {
             D_001E1700[sh->cls]->first = sh;
             D_001E1700[sh->cls]->count = 0;

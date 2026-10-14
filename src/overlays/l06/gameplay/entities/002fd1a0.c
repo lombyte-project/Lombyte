@@ -875,7 +875,7 @@ extern float D_L06_0015F3FC_301070 __asm__("D_L06_0015F3FC") __attribute__((sect
 extern s32 D_L06_00179B90_301070[] __asm__("D_L06_00179B90");
 extern unsigned char big_head_cheat_enabled_301070[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern unsigned char cheats_301070[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
-extern int D_0013D8AC_301070 __asm__("D_0013D8AC") __attribute__((section(".data")));
+extern int D_0013D8AC_lui __asm__("D_0013D8AC") __attribute__((section(".data")));
 
 extern char D_L06_00201880[];
 extern Obj_301070 *D_L06_00167580 __attribute__((section(".data")));
@@ -896,7 +896,7 @@ void FUN_L06_00301070(struct Moby *m) {
     switch (m->state) {
     case 0:
         if (D_0013D505[0] != 0) goto del;
-        if (D_0013D8AC_301070 == 0) {
+        if (D_0013D8AC_lui == 0) {
             if (m->prev_seq != 1) {
                 blend_moby_animation_301070(m, 1, 0, scale_game_frames_301070(10));
             }

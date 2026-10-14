@@ -26,14 +26,14 @@ extern void func_001F9AD8(void *, void *, void *);
    D_0015EDB4 set, the matrix's third row as a cross product. */
 void update_camera(void) __asm__("FUN_001edaa8");
 
-extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
+extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void update_camera(void) {
     char *c;
     char *target;
     char *v;
     float m[16];
 
-    if (game_mode == 5) {
+    if (game_mode_macro == 5) {
         if (text_screen_active[0] != 0) {
             return;
         }

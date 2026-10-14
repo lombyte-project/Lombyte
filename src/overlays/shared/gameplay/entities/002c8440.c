@@ -565,7 +565,7 @@ struct Moby *FUN_L00_002c9348(State *a) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c97e0.s", FUN_L00_002c97e0);
 #else
 extern f32 D_L00_0015F5D4_sda_2c97e0 __asm__("D_L00_0015F5D4") __attribute__((sda));
-extern f32 D_L00_0015F5D0_2c97e0 __asm__("D_L00_0015F5D0") __attribute__((section(".sdata")));
+extern f32 D_L00_0015F5D0_macro __asm__("D_L00_0015F5D0") __attribute__((section(".sdata")));
 extern f32 D_L00_0015F5D4_2c97e0 __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
 
 extern s32 D_L00_00161850_2c97e0 __asm__("D_L00_00161850") __attribute__((sda));
@@ -632,12 +632,12 @@ void FUN_L00_002c97e0(struct Moby *m)
         if (tick_countdown_2c8440(&s2->unk70) && !m->visible) goto remove;
         if (s2->unk70 >= 0) {
             f = D_L00_0015F5D4_sda_2c97e0;
-            if ((f > 0.9f || D_L00_0015F5D0_2c97e0 > 0.9f) && !m->visible && s2->unk70 != -1) {
+            if ((f > 0.9f || D_L00_0015F5D0_macro > 0.9f) && !m->visible && s2->unk70 != -1) {
                 if (!FUN_L00_00257b50_2c97e0(199)) goto remove;
                 s2->unk70 = FUN_L00_00257b90(20, 30);
                 f = D_L00_0015F5D4_2c97e0;
             }
-            if (f > 1.0f || D_L00_0015F5D0_2c97e0 > 1.0f) {
+            if (f > 1.0f || D_L00_0015F5D0_macro > 1.0f) {
                 if (!m->visible) {
                     if (!FUN_L00_00257b50_2c97e0(24)) goto remove;
                 } else if (!FUN_L00_00257b50_2c97e0(99)) s2->unk78 = 0.0f;
@@ -686,8 +686,8 @@ void FUN_L00_002c97e0(struct Moby *m)
             FUN_L00_0025a9f8_2c97e0(m, &offset, 0x177f00, a, 0, 0x830000, 2, 1, 1.0f, 1.0f, 1.0f);
         }
         count = FUN_L00_00257b90(5, 8);
-        if (D_L00_0015F5D0_2c97e0 > 0.85f || D_L00_0015F5D4_2c97e0 > 0.85f) {
-            if (D_L00_0015F5D0_2c97e0 > 1.0f || D_L00_0015F5D4_2c97e0 > 1.0f) count = 1;
+        if (D_L00_0015F5D0_macro > 0.85f || D_L00_0015F5D4_2c97e0 > 0.85f) {
+            if (D_L00_0015F5D0_macro > 1.0f || D_L00_0015F5D4_2c97e0 > 1.0f) count = 1;
             else count /= 2;
         }
         if (count > 0) {

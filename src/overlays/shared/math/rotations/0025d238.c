@@ -519,8 +519,8 @@ extern void func_L00_002D4CE8_25e450(void *, void *, int, int) __asm__("FUN_L00_
 extern char D_L00_001B0250[];
 extern char D_L00_001B02A0[];
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_L00_0015F5D4 __attribute__((section(".sdata")));
-extern float D_L00_0015F5D0 __attribute__((section(".sdata")));
+extern float D_L00_0015F5D4_macro __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
+extern float D_L00_0015F5D0_macro __asm__("D_L00_0015F5D0") __attribute__((section(".sdata")));
 /* Beam explosion at moby m: a spark burst from a spawn event, optional glow sparks and a flash, with a cam tint. */
 void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9,
                        float fC, float fD, float fE, float fF, int k10, float fG, int k11,
@@ -535,7 +535,7 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
 
     *(u128_25e450 *)&v0 = 0;
     v0.f[2] = frame_time_macro * 8.0f * fF;
-    f3 = D_L00_0015F5D4 + D_L00_0015F5D0;
+    f3 = D_L00_0015F5D4_macro + D_L00_0015F5D0_macro;
     *(u128_25e450 *)&vb = *(u128_25e450 *)&v0;
     if (s18 == -1) {
         s18 = 0;
@@ -663,7 +663,7 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
             r3 = 60;
         }
         u = r3 & 0xFF;
-        if (D_L00_0015F5D0 < 0.95f && fE < dist) {
+        if (D_L00_0015F5D0_macro < 0.95f && fE < dist) {
             spawn_glow_particle_25e450(m, pos, &vb, fC, scale_game_frames_25e450(0x10), r1, 0x96, r2, 0x20);
             spawn_glow_particle_25e450(m, pos, &vb, fC, scale_game_frames_25e450(0x16), u, 0x7F, 0x50, 0x20);
         }

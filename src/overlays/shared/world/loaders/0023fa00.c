@@ -21,7 +21,7 @@ typedef struct TexRecord_23fa00 {
 typedef struct TexEntry_23fa00 {
     s32 w[4];
 } TexEntry_23fa00;
-extern u8 *resident_bank_23fa00 __asm__("D_0015EE54") __attribute__((section(".sdata")));
+extern u8 *D_0015EE54_macro __asm__("D_0015EE54") __attribute__((section(".sdata")));
 extern s32 vram_base_23fa00[2] __asm__("D_0015EE88") __attribute__((section(".sdata")));
 extern TexEntry_23fa00 texture_table_23fa00[] __asm__("D_L00_001AEBC0");
 /* $gp scalar aliases: retail takes the records' addresses through $gp. */
@@ -59,7 +59,7 @@ char *FUN_L00_0023fa00(char *bank, s32 *header) {
     char *base;
     s32 index;
     s32 next_index;
-    hud_send_resident_bank_23fa00(bank, resident_bank_23fa00,
+    hud_send_resident_bank_23fa00(bank, D_0015EE54_macro,
                                   disc_table.level_archives[level_render_state.content_variant + 1].size << 11);
     sky_offset = ((ImageBank_23fa00 *)bank)->sky_offset;
     first_offset = ((ImageBank_23fa00 *)bank)->first_offset;

@@ -10,9 +10,9 @@ typedef struct __attribute__((packed)) {
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
 extern volatile u16 D_0013E05A[];
-extern s32 D_0015EE20;
+extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_0015EE24;
-extern s32 D_0015EE34;
+extern s32 selected_save_slot __asm__("D_0015EE34");
 extern Unaligned64 D_0015EE98[1];
 extern s32 D_001D2640[];
 extern struct MenuPage D_001D4E38[];
@@ -69,7 +69,7 @@ s32 saving_data_menu2(struct MenuScreen *w) {
         *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x20) = current_level_index;
         *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x2C) = D_0015EE24;
         *(Unaligned64 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x30) = D_0015EE98[0];
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x28) = D_0015EE20;
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x28) = alternate_animation_sequence;
         InitializeGlobalStateEntry(0);
         D_0013E05A[0] = 1;
     }
@@ -98,9 +98,9 @@ s32 saving_data_menu2(struct MenuScreen *w) {
     } else {
         pad = controller_state.pressed;
     }
-    w->data.save.slot = D_0015EE34;
-    if ((pad & 0x1000) && D_0015EE34 != 0) {
-        w->data.save.slot = D_0015EE34 - 1;
+    w->data.save.slot = selected_save_slot;
+    if ((pad & 0x1000) && selected_save_slot != 0) {
+        w->data.save.slot = selected_save_slot - 1;
     }
     if (pad & 0x4000) {
         cur = w->data.save.slot;
@@ -109,7 +109,7 @@ s32 saving_data_menu2(struct MenuScreen *w) {
         }
     }
     cursor = w->data.save.slot;
-    D_0015EE34 = cursor;
+    selected_save_slot = cursor;
     if ((pad & 0x40) && memory_card_state.card[0].type == 2) {
         if (*(s32 *)((u8 *)&memory_card_state + cursor * 0x1C + 0x20) != -1) {
             menu_system.next = (w->data.save.flags & 0x2000) ? D_001D4F98 : D_001D4E38;

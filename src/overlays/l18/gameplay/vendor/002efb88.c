@@ -276,7 +276,7 @@ extern int D_L18_00162248 __attribute__((sda));
 extern int D_L18_0016224C __attribute__((sda));
 extern int D_L18_00162250 __attribute__((sda));
 extern int D_L18_00162254 __attribute__((sda));
-extern int D_L18_0015F5CC;
+extern int game_frame __asm__("D_L18_0015F5CC");
 extern float D_L18_001DA2F0[4][2];
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float convert_integer_to_float_group_quad(int) __asm__("FUN_001fa6c0");
@@ -309,7 +309,7 @@ void FUN_L18_002f0390(struct Moby *moby) {
         quads[i].texture_state = 0xFF9000000260ULL;
         quads[i].primitive = (u64)D_L18_00162240 | ((u64)D_L18_00162244 << 2) | ((u64)D_L18_00162248 << 4) |
                              ((u64)D_L18_0016224C << 6) | 0x8000000000ULL;
-        offset = convert_integer_to_float_group_quad((D_L18_0015F5CC + 3) & 3) * 0.0625f;
+        offset = convert_integer_to_float_group_quad((game_frame + 3) & 3) * 0.0625f;
         for (j = 0; j < 4; j++) {
             quads[i].texture_coordinates[j][0] = D_L18_001DA2F0[j][0];
             quads[i].texture_coordinates[j][1] = D_L18_001DA2F0[j][1];
@@ -404,7 +404,7 @@ void FUN_L18_002f06c0(struct Moby *m) {
 /* Advance a ring of recorded positions, store the moby's position, and register draw callbacks once per frame. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F1C38), where it is exact; names translated to the US level program. */
 
-extern int D_L18_0015F5CC;
+extern int game_frame __asm__("D_L18_0015F5CC");
 extern void FUN_L18_002f0390(struct Moby *moby);
 void FUN_L18_002f06c0(struct Moby *m);
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -415,7 +415,7 @@ void FUN_L18_002f0848(struct Moby *moby) {
     int off;
     int cur;
     int old;
-    if ((D_L18_0015F5CC & 3) == 0) {
+    if ((game_frame & 3) == 0) {
         *(unsigned short *)(data + 0x166) = (*(unsigned short *)(data + 0x166) + 1) & 0xF;
         if ((float)*(short *)(data + 0x164) < 4.0f) {
             *(unsigned short *)(data + 0x164) = *(unsigned short *)(data + 0x164) + 1;
@@ -423,7 +423,7 @@ void FUN_L18_002f0848(struct Moby *moby) {
     }
     off = *(short *)(data + 0x166) << 4;
     qcopy((char *)(off + (int)data) + 0x10, &moby->pos);
-    cur = D_L18_0015F5CC;
+    cur = game_frame;
     old = *(int *)&D_L18_00162230;
     *(float *)(data + off + 0x1C) = 1.0f;
     if (cur != old) {
@@ -3433,7 +3433,7 @@ void FUN_L18_002f7880(struct Moby *moby) {
     char b[16];
     L18Q *q = (L18Q *)moby->pvars;
     int n = FUN_001f96f8(*(int *)&D_L18_00162460_d);
-    float f = convert_integer_to_float(D_L18_0015F5CC % n);
+    float f = convert_integer_to_float(game_frame % n);
     int h;
     int i;
     f = f / convert_integer_to_float(n);
@@ -3446,7 +3446,7 @@ void FUN_L18_002f7880(struct Moby *moby) {
     FUN_L00_00263618(a, h, *(float *)&D_L18_00162450_d, *(float *)&D_L18_00162454_d);
     if ((unsigned)(moby->prev_seq - 11) < 3) {
         int n2 = FUN_001f96f8(*(int *)&D_L18_00162474);
-        float g = convert_integer_to_float(D_L18_0015F5CC % n2);
+        float g = convert_integer_to_float(game_frame % n2);
         int h2;
         g = g / convert_integer_to_float(n2);
         g = g * 6.18318f;
@@ -3504,7 +3504,7 @@ typedef struct {
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int D_L18_0015F5C4;
-extern int D_L18_0015F5CC;
+extern int game_frame __asm__("D_L18_0015F5CC");
 extern int D_L18_001623A0_g __asm__("D_L18_001623A0") __attribute__((sda));
 extern int D_L18_00162384_w[] __asm__("D_L18_00162384") __attribute__((section(".sdata")));
 extern int D_L18_0016D290_d __asm__("D_L18_0016D290") __attribute__((section(".data")));
@@ -3515,7 +3515,7 @@ void FUN_L18_002f7ad8(M *moby) {
         moby->state = 1;
     case 1:
         if ((D_L18_0015F5C4 == 2 && D_L18_0016D290_d == 3) ||
-            (D_L18_0015F5CC < 5 && D_L18_001623A0_g != 0 && moby->f40 == 0.0f)) {
+            (game_frame < 5 && D_L18_001623A0_g != 0 && moby->f40 == 0.0f)) {
             moby->state = 2;
             moby->flags |= 1;
             moby->substate = 0;

@@ -1409,7 +1409,7 @@ typedef struct {
     char *mobys[1];
 } Level02MobyList;
 
-extern int D_L02_0015F5C4;
+extern int level_game_mode __asm__("D_L02_0015F5C4");
 extern unsigned char D_0015EDB0;
 extern unsigned char D_L02_0017CA40[];
 void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
@@ -1417,7 +1417,7 @@ void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10"
 extern Level02MobyList talk_camera __asm__("D_L02_0016CE60");
 void FUN_L02_002e0cd8(char *moby) {
     int i;
-    if (D_L02_0015F5C4 == 2 && D_0015EDB0 != 0) {
+    if (level_game_mode == 2 && D_0015EDB0 != 0) {
         for (i = 0; i < talk_camera.count; i++) {
             char *e = talk_camera.mobys[i];
             if (*(short *)(e + 0xA6) == *(short *)(moby + 0xA6)) {
@@ -1460,7 +1460,7 @@ extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
 extern void ea210_audio(int, int) __asm__("FUN_0020b178");
 extern void ea210_destroy(char *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;
-extern int D_L02_0015F5C4;
+extern int level_game_mode __asm__("D_L02_0015F5C4");
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern int D_L02_0015F640 __attribute__((sda));
 extern unsigned char items_acquired[] __asm__("D_0013D4E8");
@@ -1513,7 +1513,7 @@ void FUN_L02_002ea210(char *moby) {
         }
         return;
     case 3:
-        if (D_L02_0015F5C4 == 2) return;
+        if (level_game_mode == 2) return;
         if (D_001413F4 != 0) {
             if (which == 0x16) {
                 ea210_switch(0x16, 0);

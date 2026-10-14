@@ -19,7 +19,7 @@ extern char D_L01_0017C7C0[];
 extern char D_L01_001CA940[];
 extern float D_L01_0015F3FC;
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int D_L01_0015F5C4;
+extern int cutscene_mode __asm__("D_L01_0015F5C4");
 extern int D_L01_001611CC;
 extern int D_L01_00174280[];
 extern int D_L01_001CA4A0[];
@@ -66,7 +66,7 @@ void FUN_L01_002aea70(char *m, int lvl) {
     D_L01_0015F5D8 = 1;
     fill_transfer_words_alt(s, 0, 0x220);
     *(int *)D_L01_001CA940 = 3;
-    D_L01_0015F5C4 = 5;
+    cutscene_mode = 5;
     *(int *)(s + 4) = 0;
     *(char **)(s + 0x28) = m;
     sc = s + 0xC0;

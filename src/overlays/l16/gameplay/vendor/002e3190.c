@@ -2706,8 +2706,8 @@ typedef struct {
 } L16SingleSphere_2e98e0;
 
 void enqueue_callback_list_1_2e98e0(int arg0, int arg1) __asm__("FUN_001f4600");
-extern short D_L16_00162000_bounds_2e98e0 __asm__("D_L16_00161F90") __attribute__((sda));
-extern short D_L16_00162020_bounds_2e98e0 __asm__("D_L16_00161F98") __attribute__((sda));
+extern short D_L16_00161F90_gp __asm__("D_L16_00161F90") __attribute__((sda));
+extern short D_L16_00161F98_gp __asm__("D_L16_00161F98") __attribute__((sda));
 extern L16SingleSphere_2e98e0 D_L16_00161F60_bounds_2e98e0[] __asm__("D_L16_001DF2B0")
     __attribute__((section(".data")));
 
@@ -2725,9 +2725,9 @@ void FUN_L16_002e98e0(unsigned char *m) {
             minx = miny = minz = 1024.0f;
             {
                 int k;
-                for (k = 0; k < ((int *)&D_L16_00162000_bounds_2e98e0)[i]; k++) {
+                for (k = 0; k < ((int *)&D_L16_00161F90_gp)[i]; k++) {
                     float x, y, z;
-                    verts = ((float **)&D_L16_00162020_bounds_2e98e0)[i] + k * 3;
+                    verts = ((float **)&D_L16_00161F98_gp)[i] + k * 3;
                     x = verts[0];
                     if (x > maxx)
                         maxx = x;
@@ -2753,12 +2753,12 @@ void FUN_L16_002e98e0(unsigned char *m) {
                 sphere->y = (maxy + miny) * 0.5f;
                 sphere->z = (maxz + minz) * 0.5f;
             }
-            for (j = 0; j < ((int *)&D_L16_00162000_bounds_2e98e0)[i]; j++) {
+            for (j = 0; j < ((int *)&D_L16_00161F90_gp)[i]; j++) {
                 float dist;
                 out = (float *)(D_L16_00161F60_bounds_2e98e0 + i);
-                p[0] = ((float **)&D_L16_00162020_bounds_2e98e0)[i][j * 3 + 0];
-                p[1] = ((float **)&D_L16_00162020_bounds_2e98e0)[i][j * 3 + 1];
-                p[2] = ((float **)&D_L16_00162020_bounds_2e98e0)[i][j * 3 + 2];
+                p[0] = ((float **)&D_L16_00161F98_gp)[i][j * 3 + 0];
+                p[1] = ((float **)&D_L16_00161F98_gp)[i][j * 3 + 1];
+                p[2] = ((float **)&D_L16_00161F98_gp)[i][j * 3 + 2];
                 dist = FUN_001f9b48(p, out);
                 if (dist > out[3])
                     out[3] = dist;

@@ -68,7 +68,7 @@ struct L01HelpRecord {
 extern struct L01HelpState help_state __asm__("D_L01_00179890");
 extern struct L01HelpRecord help_records[] __asm__("D_00141968");
 extern struct UsageStats usage_stats __asm__("D_00141848");
-extern s32 cutscene_mode __asm__("D_L01_0015F5C4") MACRO_ADDR;
+extern s32 cutscene_mode_macro __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern s32 D_L01_0015F688 MACRO_ADDR;
 extern s32 D_L01_0015F68C MACRO_ADDR;
 extern struct Moby *moby_list __asm__("D_L01_0015FFE4") MACRO_ADDR;
@@ -109,7 +109,7 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                 help_request(0x4E28, 0x72);
             }
         }
-        if (cutscene_mode == 0) {
+        if (cutscene_mode_macro == 0) {
             if (level_available[3] != 0 && level_available[2] == 0 && help_state.state == 0 &&
                 help_state.cur == -1 && help_records[4].id == 0) {
                 help_request(0x3E8, 4);
@@ -461,7 +461,7 @@ void FUN_L01_0030c190(struct Moby *moby) {
         moby->state = 1;
         break;
     case 1:
-        if (cutscene_mode == 2) {
+        if (cutscene_mode_macro == 2) {
             if (fx_cutscene.scene == 1 || (fx_cutscene.scene == 2 && fx_cutscene.frame <= scale_game_frames(148)) ||
                 fx_cutscene.scene == 3 || fx_cutscene.scene == 4) {
                 s32 target = 3;

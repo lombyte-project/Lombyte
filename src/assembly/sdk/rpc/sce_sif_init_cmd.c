@@ -37,7 +37,7 @@ extern struct M2c_D_00154E40 D_00154E40;
 extern u32 D_00154E54[];
 extern struct M2c_D_00154E58 D_00154E58;
 extern struct M2c_var_3_42 D_00154E80[32];
-extern s32 D_00154F80[32];
+extern s32 LookupTable[32] __asm__("D_00154F80");
 extern s32 AddDmacHandler();
 extern s32 DIntr();
 extern s32 EnableInterrupts();
@@ -71,7 +71,7 @@ block_3:
     temp_6_30 = (s32)D_00154D80 | 0x20000000;
     temp_5_29 = (s32)D_00154E00 | 0x20000000;
     handlers = D_00154E80;
-    D_00154E58.unk1C = D_00154F80;
+    D_00154E58.unk1C = LookupTable;
     D_00154E58.unk10 = 0x20;
     D_00154E58.unk14 = 0;
     D_00154E58.unk0 = (u8 *)temp_6_30;
@@ -88,7 +88,7 @@ block_3:
         var_3_42 += 1;
     } while (ipval >= 0);
     ipval = 0x1F;
-    var_2_61 = D_00154F80 + 0x1F;
+    var_2_61 = LookupTable + 0x1F;
 loop_6:
     *var_2_61 = 0;
     ipval -= 1;

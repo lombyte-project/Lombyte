@@ -2,7 +2,7 @@
 #include "sda.h"
 #include "rnc/storage/disc_table.h"
 #include "types.h"
-extern int decode_mode __asm__("D_0015EED8") MACRO_ADDR;
+extern int decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
 extern char D_0013E550[];
 #include "rnc/storage/memory_card/memory_card_state.h"
 extern char D_001940C0[];
@@ -27,7 +27,7 @@ extern void hud_send_texture(int, int, int, int, int, int) __asm__("func_00200B1
 void start_level(int level) __asm__("FUN_001e9488");
 
 extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
-extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
+extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 extern s32 depth_buffer_address __asm__("D_0015EE88") MACRO_ADDR;
 void start_level(int level) {
     int a;
@@ -44,13 +44,13 @@ void start_level(int level) {
         b = disc_table.start_movies[level].sector;
         a = disc_table.start_movies[level].size;
     }
-    decode_mode = 2;
+    decode_mode_macro = 2;
     D_0013E550[0x6B] |= 8;
     FlushCache(0);
     sound_stop_all_sounds();
     music_stop();
     fade_to_black(scale_game_frames(12));
-    game_mode = 1;
+    game_mode_macro = 1;
     FlushCache(0);
     sound_stop_all_sounds();
     music_stop();
@@ -72,9 +72,9 @@ void start_level(int level) {
     FUN_00120558(0, 0);
     sceGsSyncVCallback(count_vsync);
     hud_send_texture(0x1000000, depth_buffer_address, 0x1B, 6, 6, 1);
-    decode_mode = 0;
+    decode_mode_macro = 0;
     fade_to_black(4);
-    game_mode = 0;
+    game_mode_macro = 0;
     D_0013E550[0x6B] |= 0x10;
 }
 

@@ -5,7 +5,7 @@
 
 extern struct Globals_0013E550 D_0013E550;
 extern struct PadStateWords pad_words __asm__("D_0013C940");
-extern s32 D_0015EE20;
+extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_0015EEA0;
 /* Movie skip mode: -1 no skipping, 2 any new button. Declared volatile
    here because retail reads it once for the -1 and 2 tests and then
@@ -86,7 +86,7 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
         mode = decode_mode;
         if (mode != -1) {
             if ((mode == 2 && pad_pressed(&pad_words, -1))
-                || ((D_0015EEA0 != 0 || D_0015EE20 != 0 || decode_mode != 0
+                || ((D_0015EEA0 != 0 || alternate_animation_sequence != 0 || decode_mode != 0
                      || current_level_index <= 0)
                     && pad_pressed(&pad_words, 0x800))) {
                 skip = 1;

@@ -13,14 +13,14 @@ extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0")
    set. */
 void update_camera_underwater_flag(void) __asm__("FUN_001ed7f0");
 
-extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
+extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void update_camera_underwater_flag(void) {
     char *cam = preview_camera;
     float a[4];
     float b[4];
     int i;
 
-    if (*(short *)(*(char **)(cam + 0x180) + 0x86) == 6 || game_mode != 0) {
+    if (*(short *)(*(char **)(cam + 0x180) + 0x86) == 6 || game_mode_macro != 0) {
         *(int *)(cam + 0x394) = 0;
         return;
     }

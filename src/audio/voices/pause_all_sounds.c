@@ -6,8 +6,8 @@
 extern s32 D_0015F674 MACRO_ADDR;
 extern s32 D_00141660[];
 extern u8 D_0014161B NOT_SDA;
-extern s32 D_0015EEA0 MACRO_ADDR;
-extern s32 D_0015EE20 MACRO_ADDR;
+extern s32 D_0015EEA0_macro __asm__("D_0015EEA0") MACRO_ADDR;
+extern s32 alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
 extern char D_001CE5B8[];
 extern char D_001CE748[];
 extern char D_001CE798[];
@@ -23,7 +23,7 @@ extern void func_00226E58();
 void pause_all_sounds(s32 mode) __asm__("FUN_00218d78");
 
 extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
-extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
+extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void pause_all_sounds(s32 mode) {
     struct MenuSystem *g;
     snd_pause_all_sounds_in_group(0x1D);
@@ -46,7 +46,7 @@ void pause_all_sounds(s32 mode) {
     }
     {
         struct MenuSystem *g = &menu_system;
-        g->unkD8 = D_0015EEA0 != 0 || D_0015EE20 != 0 || g->unkF8 != 0;
+        g->unkD8 = D_0015EEA0_macro != 0 || alternate_animation_sequence_macro != 0 || g->unkF8 != 0;
     }
     {
         struct MenuSystem *g = &menu_system;
@@ -61,7 +61,7 @@ void pause_all_sounds(s32 mode) {
     }
     {
         struct MenuSystem *g = &menu_system;
-        game_mode = 3;
+        game_mode_macro = 3;
         g->state = mode;
         g->close_request = 0;
         g->unk10 = 0;

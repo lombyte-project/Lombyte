@@ -467,7 +467,7 @@ typedef struct {
     u8 pad[0x454];
     u8 arr[1];
 } T_2e03a0_2e03a0;
-extern u8 D_L00_0015FC88_2e03a0[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
+extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
 extern u8 D_0014C050_2e03a0[] __asm__("D_0014C050");
 extern s32 D_00141410_2e03a0[] __asm__("D_00141410");
 extern u8 item_available[] __asm__("D_0013D4C0");
@@ -542,7 +542,7 @@ void FUN_L00_002e03a0(M_2e03a0_2e03a0 *m) {
             D_L00_001BA5D0.arr[D_L00_0015FFD8_2e03a0[p->b].h] =
                 D_L00_0015FFD8_2e03a0[p->b].b0 + 2;
             if (D_L00_0015FFD8_2e03a0[p->b].b0 == 0xFF ||
-                (D_L00_0015FC88_2e03a0[D_L00_0015FFD8_2e03a0[p->b].b0] != 0xFF &&
+                (mission_state_macro[D_L00_0015FFD8_2e03a0[p->b].b0] != 0xFF &&
                  D_0014C050_2e03a0[D_L00_0015FFD8_2e03a0[p->b].b0 + current_level_index_gp * 16] ==
                      0xFF)) {
                 D_L00_001BB230.arr[D_L00_0015FFD8_2e03a0[p->b].h] =
@@ -2078,7 +2078,7 @@ void follow_camera_transition(O002e5730 *o, void *a) {
 
 /* The camera view: +0x20 its forward axis, +0x30 its up axis. */
 extern u8 camera_view[] __asm__("D_L00_00166E10");
-extern f32 follow_cam_min_distance __asm__("D_L00_00161CD8") __attribute__((sda));
+extern f32 follow_cam_min_distance_gp __asm__("D_L00_00161CD8") __attribute__((sda));
 extern s32 follow_cam_blend_frames __asm__("D_L00_00161D20");
 extern s32 camera_collision_mask __asm__("D_L00_0015EF58");
 /* Point where the last collision line stopped (CollisionHit.point). */
@@ -2152,7 +2152,7 @@ void follow_camera_springs(void *cam) {
     add_vector_xyz(base, hero_pos, look);
     scale_vector_xyz(look, view + 0x20, t->distance);
     add_vector_xyz(q->eye, look, q);
-    len = follow_cam_min_distance + FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_range * FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_scale * (FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom - 1.0f);
+    len = follow_cam_min_distance_gp + FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_range * FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_scale * (FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom - 1.0f);
     scale_vector_xyz(probe, view + 0x20, 20.0f);
     add_vector_xyz(probe, base, probe);
     if (collision_line(base, probe, camera_collision_mask, (s32)hero.moby, 0)) {

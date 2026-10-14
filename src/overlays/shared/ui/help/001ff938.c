@@ -395,7 +395,7 @@ typedef struct {
 } Entry70_215e58;
 
 extern s32 D_L15_0015F5C4_215e58 __asm__("D_L15_0015F5C4");
-extern u8 D_0013D4E2_215e58 __asm__("D_0013D4E2") __attribute__((section(".data")));
+extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") __attribute__((section(".data")));
 
 extern void FUN_L00_002165b8_215e58(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_215e58(s32 *) __asm__("FUN_001f9740");
@@ -531,7 +531,7 @@ skip:
         hero.reach_height = 3.0f;
     } else {
         FUN_L00_00233660_215e58(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
-        if (D_0013D4E2_215e58) {
+        if (D_0013D4E2_lui) {
             hero.reach_distance = 12.0f;
             hero.reach_height = 4.5f;
         } else {

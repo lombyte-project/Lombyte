@@ -22,7 +22,7 @@ extern void func_001F21B0(void *, int); /* empty profiling marker */
 extern void FUN_00235be8(void);
 extern void WriteDmaChannel(void *, int, int);
 extern void dma_tie_textures(void) __asm__("func_00235640"); /* DmaTieTextures */
-extern int D_00160F4C MACRO_ADDR;
+extern int registered_object_render_class_count_macro __asm__("D_00160F4C") MACRO_ADDR;
 /* DrawTies_2: DrawTies_1's two passes, the first with the odd ties' 0x8
    flag set (and the saved tie data swapped in around it), the second with
    the even ones'. Each flag loop reads the tie count into its own local
@@ -35,7 +35,7 @@ extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
 void draw_ties_2(void) {
     {
         int i;
-        int n = D_00160F4C;
+        int n = registered_object_render_class_count_macro;
         for (i = 1; i < n; i += 2) {
             *(short *)(D_001E1700[i] + 0x24) |= 8;
         }
@@ -61,14 +61,14 @@ void draw_ties_2(void) {
     FUN_001f98d0(D_001E3E00, D_001E2A00, 0x400);
     {
         int i;
-        int n = D_00160F4C;
+        int n = registered_object_render_class_count_macro;
         for (i = 1; i < n; i += 2) {
             *(short *)(D_001E1700[i] + 0x24) &= ~8;
         }
     }
     {
         int i;
-        int n = D_00160F4C;
+        int n = registered_object_render_class_count_macro;
         for (i = 0; i < n; i += 2) {
             *(short *)(D_001E1700[i] + 0x24) |= 8;
         }
@@ -90,7 +90,7 @@ void draw_ties_2(void) {
     dma_tie_textures();
     {
         int i;
-        int n = D_00160F4C;
+        int n = registered_object_render_class_count_macro;
         for (i = 0; i < n; i += 2) {
             *(short *)(D_001E1700[i] + 0x24) &= ~8;
         }

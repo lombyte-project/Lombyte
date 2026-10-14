@@ -117,7 +117,7 @@ typedef struct {
 
 #include "rnc/gameplay/state/level_state.h"
 extern LevelRenderState level_render_state __asm__("D_0013E030");
-extern u8 D_0013E5C0[];
+extern u8 voice_volume_records[] __asm__("D_0013E5C0");
 extern s32 sound_bank_handle __asm__("D_0015ED5C");
 extern s16 D_0015EE48 __attribute__((sda));
 #define D_0015EE4A (*(s16 *)0x0015EE4A)
@@ -219,7 +219,7 @@ void update_level_gameplay_frame(void) {
         first_position.sound_bank = sound_bank_handle;
         sound_bank = first_position.sound_bank;
         mode_advance = level_render_state.mode;
-        snd_play_sound_vol_pan_pmpb(sound_bank, mode_advance, 0x400, 0, 0, 0, 0, D_0013E5C0);
+        snd_play_sound_vol_pan_pmpb(sound_bank, mode_advance, 0x400, 0, 0, 0, 0, voice_volume_records);
         snd_reset_state_and_flush_commands();
         snd_flush_sound_commands();
     }

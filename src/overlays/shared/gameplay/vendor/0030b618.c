@@ -497,7 +497,7 @@ typedef union {
     float f[4];
 } V4_w22c;
 
-extern s32 cutscene_mode __asm__("D_L01_0015F5C4") __attribute__((sda));
+extern s32 cutscene_mode_gp __asm__("D_L01_0015F5C4") __attribute__((sda));
 void FUN_L01_0030d5f0(char *moby, char *state) {
     V4_w22c v;
     V4_w22c q;
@@ -518,7 +518,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
             t = FUN_001f9e90(*(float *)(e + 0x10) - *(float *)(moby + 0x10),
                              *(float *)(e + 0x14) - *(float *)(moby + 0x14));
             if (fast_difference_between_rotations(*(float *)(moby + 0x48), t) < 0.5235988f) {
-                if (cutscene_mode != 2) {
+                if (cutscene_mode_gp != 2) {
                     char *r;
                     qcopy(&q, e + 0x10);
                     r = FUN_002141f8(e);

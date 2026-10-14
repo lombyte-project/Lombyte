@@ -86,7 +86,7 @@ extern MemInfo D_001940C0;
 extern s32 D_0015FF08;
 extern s32 D_001B5980[];
 extern s32 D_0015FF00;
-extern s32 D_0015F460;
+extern s32 level_texture_payload_address __asm__("D_0015F460");
 extern u64 D_00160580;
 extern s64 D_00160588;
 extern u8 point_lights[] __asm__("D_0019C1C0");
@@ -215,7 +215,7 @@ void initialize_level_runtime(void) {
                             moby_entry->oclass);
         moby_entry++;
     }
-    D_0015F460 = data_base + header->unk38;
+    level_texture_payload_address = data_base + header->unk38;
     unpack_point_records((s32)header + header->points, header->pointCount);
     {
         s32 particle_data_base = data_base + header->unk34;

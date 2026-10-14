@@ -431,7 +431,7 @@ extern int tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern void FUN_001153fc(void *, int, int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_packet(void *, int, int) __asm__("FUN_001f7d30");
-extern int D_L11_0015F5CC;
+extern int level_frame __asm__("D_L11_0015F5CC");
 extern int D_L11_0015FFD8;
 extern short *D_L11_001AC240[];
 
@@ -473,7 +473,7 @@ int FUN_L11_003192c8(char *moby) {
         packet[i * 18 + 2] = 0xff9000000260LL;
         packet[i * 18] = 0;
         span = *(float *)&D_L11_001623F0_d * 4.0f;
-        phase = integer_to_float((D_L11_0015F5CC + 3) & 3) / span;
+        phase = integer_to_float((level_frame + 3) & 3) / span;
         source = D_L11_001F1490;
         position = position_base + i * 0x24;
         position_y = position_y_base + i * 0x24;
@@ -534,7 +534,7 @@ int FUN_L11_003192c8(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
 
 
-extern int D_L11_0015F5CC;
+extern int level_frame __asm__("D_L11_0015F5CC");
 extern int FUN_L11_003192c8();
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern void FUN_001f9cf8(void *, void *, void *);
@@ -548,7 +548,7 @@ void FUN_L11_00319670(char *moby) {
     float v[4];
     float w[4];
     int t;
-    if ((D_L11_0015F5CC & 3) == 0) {
+    if ((level_frame & 3) == 0) {
         int cnt;
         float lim = *(float *)&D_L11_001623F0_d;
         cnt = *(int *)(d + 0x2C0);
@@ -570,7 +570,7 @@ void FUN_L11_00319670(char *moby) {
     w[2] = 0.3f;
     FUN_001f9cf8(w, w, moby + 0xC0);
     add_vector_xyz(d + ((*(int *)(d + 0x2C4) << 4) + 0x1C0), w, moby + 0x10);
-    t = D_L11_0015F5CC;
+    t = level_frame;
     *(float *)(d + (*(int *)(d + 0x2C4) << 4) + 0x1CC) = 1.0f;
     if (t != 0) {
         int *p = *(int **)(d + 0x2C8);

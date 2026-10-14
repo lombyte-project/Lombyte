@@ -59,7 +59,7 @@ extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
 extern int D_L11_0015F678_t __asm__("D_L11_0015F678") __attribute__((sda));
 extern int D_L11_0015F6DC_d __asm__("D_L11_0015F6DC");
-extern int D_L11_0015F594 __attribute__((sda));
+extern int D_L11_0015F594_gp __asm__("D_L11_0015F594") __attribute__((sda));
 extern int D_L11_0016D180 __attribute__((section(".data")));
 extern int FUN_001f9770(void *);
 extern int FUN_L00_002050b8(int);
@@ -147,7 +147,7 @@ void FUN_L11_00253a18(void) {
         } else if (FUN_L02_0022ee00() == 0 && FUN_L00_002279b0() == 0 && FUN_L00_00227778() == 0 &&
                    FUN_L00_002276c0() == 0) {
             if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
-                if (hero.items[0].unk1C != 2 && D_L11_0015F594 == 0 &&
+                if (hero.items[0].unk1C != 2 && D_L11_0015F594_gp == 0 &&
                     (hero.unk20AC == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.unk20A7 == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.vehicle_mode == 0 || hero.vehicle_mode == 3)) {

@@ -1446,10 +1446,10 @@ extern unsigned char D_0013D408_254608[] __asm__("D_0013D408") __attribute__((se
 extern unsigned char D_0013D4DF_254608 __asm__("D_0013D4DF") __attribute__((section(".data")));
 extern Path_254608 *D_L05_001B0930_254608[] __asm__("D_L05_001B0930");
 extern Ent_254608 *D_L05_0015FFD8_254608 __asm__("D_L05_0015FFD8") __attribute__((section(".sdata")));
-extern int D_0015EE38_254608 __asm__("D_0015EE38") __attribute__((section(".sdata")));
-extern int D_0015EE3C_254608 __asm__("D_0015EE3C") __attribute__((section(".sdata")));
+extern int D_0015EE38_macro __asm__("D_0015EE38") __attribute__((section(".sdata")));
+extern int D_0015EE3C_macro __asm__("D_0015EE3C") __attribute__((section(".sdata")));
 extern int D_0015EE58_254608[2] __asm__("D_0015EE58") __attribute__((section(".sdata")));
-extern int D_0015EE68_254608[2] __asm__("D_0015EE68") __attribute__((section(".sdata")));
+extern int freeze_stats_score_ref_a_macro[2] __asm__("D_0015EE68") __attribute__((section(".sdata")));
 extern float distance_xyz_254608(void *, void *) __asm__("FUN_001f9b48");
 extern float angle_atan2_254608(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations_254608(float, float) __asm__("FUN_001fa688");
@@ -1468,7 +1468,7 @@ extern float D_L05_0015F67C __attribute__((sda));
 extern int D_L05_0015F6A8 __attribute__((sda));
 extern f32 frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern s32 pal_mode __asm__("D_0015ED80") __attribute__((section(".sdata")));
-extern s32 current_bolt_count __asm__("D_0015ED98") __attribute__((section(".sdata")));
+extern s32 current_bolt_count_macro __asm__("D_0015ED98") __attribute__((section(".sdata")));
 /* Hoverboard race tick: advances the hero's and the opponents' path nodes and laps, handles wrong-way and fall resets, ranks everyone and finishes the race after three laps. */
 void FUN_L05_00254608(void) {
     float v0[4] __attribute__((aligned(16)));
@@ -1618,9 +1618,9 @@ void FUN_L05_00254608(void) {
         D_L05_0015F6A8 = 1;
     }
     if (D_0015ED84_254608 == 5) {
-        D_0015EE38_254608++;
+        D_0015EE38_macro++;
     } else if (D_0015ED84_254608 == 0x10) {
-        D_0015EE3C_254608++;
+        D_0015EE3C_macro++;
     }
     if (D_0015ED84_254608 == 5) {
         int t;
@@ -1648,14 +1648,14 @@ void FUN_L05_00254608(void) {
         }
         if (D_0015EE58_254608[0] == 0) {
             D_0015EE58_254608[0] = hero.unk894;
-            current_bolt_count += 0x3E8;
+            current_bolt_count_macro += 0x3E8;
         } else if (hero.unk894 < D_0015EE58_254608[0]) {
             D_0015EE58_254608[0] = hero.unk894;
-            current_bolt_count += 0x3E8;
+            current_bolt_count_macro += 0x3E8;
         }
-        if (D_0015EE68_254608[0] < hero.unk8A8) {
-            D_0015EE68_254608[0] = hero.unk8A8;
-            current_bolt_count += 0x3E8;
+        if (freeze_stats_score_ref_a_macro[0] < hero.unk8A8) {
+            freeze_stats_score_ref_a_macro[0] = hero.unk8A8;
+            current_bolt_count_macro += 0x3E8;
         }
         D_L05_0015FFD8_254608[d->f28].f30 = 0xFF;
         if (hero.unk880 != -1) {
@@ -1675,14 +1675,14 @@ void FUN_L05_00254608(void) {
         }
         if (D_0015EE58_254608[1] == 0) {
             D_0015EE58_254608[1] = hero.unk894;
-            current_bolt_count += 0x3E8;
+            current_bolt_count_macro += 0x3E8;
         } else if (hero.unk894 < D_0015EE58_254608[1]) {
             D_0015EE58_254608[1] = hero.unk894;
-            current_bolt_count += 0x3E8;
+            current_bolt_count_macro += 0x3E8;
         }
-        if (D_0015EE68_254608[1] < hero.unk8A8) {
-            D_0015EE68_254608[1] = hero.unk8A8;
-            current_bolt_count += 0x3E8;
+        if (freeze_stats_score_ref_a_macro[1] < hero.unk8A8) {
+            freeze_stats_score_ref_a_macro[1] = hero.unk8A8;
+            current_bolt_count_macro += 0x3E8;
         }
         D_L05_0015FFD8_254608[d->f28].f30 = 0xFF;
         if (hero.unk880 != -1) {

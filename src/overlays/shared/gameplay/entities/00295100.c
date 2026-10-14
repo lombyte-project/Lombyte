@@ -125,7 +125,7 @@ extern s32 D_L00_001B9DE0 __attribute__((section(".data")));
 extern P_297f78 *D_L00_00166E00 __attribute__((section(".data")));
 extern s32 D_0013D384 __attribute__((section(".data")));
 extern R_297f78 D_0013D388;
-extern s32 D_0015EE20;
+extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_L00_00184214 __attribute__((section(".data")));
 extern H_297f78 D_00141848;
 extern s32 D_0015EEA4_c __asm__("D_0015EEA4");
@@ -229,7 +229,7 @@ void handle_pause_input(void) {
         pause_all_sounds(10);
         return;
     }
-    if (D_0013D384 && !D_0013D388.b10 && level_timer >= 8 && !D_0015EE20 &&
+    if (D_0013D384 && !D_0013D388.b10 && level_timer >= 8 && !alternate_animation_sequence &&
         !hero.unk20B1 && hero.health.hp && FUN_001f96f8_c(0x1E) < game_frame &&
         current_level_index) {
         mode_freeze_init(5, 0);
@@ -339,7 +339,7 @@ typedef struct {
 extern C_298840 D_L00_0016C860_298840 __asm__("D_L00_0016C860") __attribute__((section(".data")));
 extern int D_L00_0015F5D8_298840 __asm__("D_L00_0015F5D8");
 extern char D_L00_0017C340_298840[] __asm__("D_L00_0017C340") __attribute__((section(".data")));
-extern char D_L00_0017C380_298840[] __asm__("D_L00_0017C380") __attribute__((section(".data")));
+extern char D_L00_0017C380_lui[] __asm__("D_L00_0017C380") __attribute__((section(".data")));
 extern char D_L00_0017C400_298840[] __asm__("D_L00_0017C400") __attribute__((section(".data")));
 extern char D_L00_0017C3C0_298840[] __asm__("D_L00_0017C3C0") __attribute__((section(".data")));
 extern struct {
@@ -380,7 +380,7 @@ void FUN_L00_00298840(int a) {
     memset_298840(&D_L00_0016C860_298840, 0, 0x1C0);
     memset_298840(D_L00_0017C440, 0, 0x40);
     memset_298840(D_L00_0017C340_298840, 0, 0x40);
-    memset_298840(D_L00_0017C380_298840, 0, 0x40);
+    memset_298840(D_L00_0017C380_lui, 0, 0x40);
     memset_298840(D_L00_0017C400_298840, 0, 0x40);
     memset_298840(D_L00_0017C3C0_298840, 0, 0x40);
     t = D_L00_001611CC - 0x3C000;
@@ -714,7 +714,7 @@ void FUN_L00_00298f90(void) {
     done = cs->f34 >= cs->h40;
     if (cs->f34 >= scale_game_frames(0x12) && fade_level == 0.0f) {
 
-        if ((D_0015EEA0 || D_0015EE20 || decode_mode || current_level_index <= 0) && (D_0013C940.buttons.w.pressed & 0x800)) {
+        if ((D_0015EEA0 || alternate_animation_sequence || decode_mode || current_level_index <= 0) && (D_0013C940.buttons.w.pressed & 0x800)) {
             done = 1;
         } else if ((D_0013C940.buttons.held_pressed & 0x8000000000FUL) == 0x8000000000FUL) {
             done = 1;
@@ -1089,7 +1089,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299c48.s", FUN_L00_00299c48);
 extern s16 D_L00_0015F620;
 extern s16 D_L00_0015F624;
 extern s16 D_L00_0015F626;
-extern s16 D_001516D8[];
+extern s16 cd_read_active[] __asm__("D_001516D8");
 extern u8 D_0013D1D2;
 extern s32 D_L00_00173BF0[];
 extern void FUN_L00_0028cc08(void);
@@ -1113,7 +1113,7 @@ void FUN_L00_00299c48(void) {
     pal = D_0013D1D2 == 'A';
     if (stage == 0) {
         if (D_L00_0015F626 >= D_L00_00173BF0[(s16)D_L00_0015F622] - 0x24) {
-            if (D_001516D8[0] != 0) {
+            if (cd_read_active[0] != 0) {
                 FUN_L00_002660c0(1);
             }
             if (!pal && (s16)D_L00_0015F622 == 0x27) {
@@ -1935,7 +1935,7 @@ extern VendorItemSound D_L00_001C2108[];
 extern VendorItemSlot40 D_L00_001C8FF0[];
 extern VendorItemSlot30 D_L00_001C9930[];
 extern VendorRow D_L00_00165E80[];
-extern s16 D_001516D8[];
+extern s16 cd_read_active[] __asm__("D_001516D8");
 extern u8 D_L00_00161128[];
 extern u8 D_L00_00161138[];
 extern u8 D_L00_00161148[];
@@ -2363,7 +2363,7 @@ void FUN_L00_0029c648(void) {
         }
         break;
     case 1:
-        if (D_L00_00161188 == 0 && D_001516D8[0] == 0 && D_L00_0016118C != 0) {
+        if (D_L00_00161188 == 0 && cd_read_active[0] == 0 && D_L00_0016118C != 0) {
             FUN_L00_0029a330();
             vendor_menu.f24 = vendor_menu.f14;
             FUN_0020c5f0(vendor_menu.f24, 0xC);

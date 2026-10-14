@@ -22,7 +22,7 @@ extern u16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A;
 extern struct LevelArchiveHeader *level_root __asm__("D_0015EE4C");
 extern u8 *D_0015EE50 MACRO_ADDR;
-extern u8 *D_0015EE54 MACRO_ADDR;
+extern u8 *D_0015EE54_macro __asm__("D_0015EE54") MACRO_ADDR;
 extern s32 D_0015EEBC __attribute__((sda));
 extern s32 D_0015EEC0 MACRO_ADDR;
 extern u8 D_1FF8000[];
@@ -101,7 +101,7 @@ s32 service_level_archive_load(void) {
         sound_aligned_bytes = ((archive_start_or_sectors << 11) + 0xFFF) & 0xFFFFF000;
         shared_archive_buffer = level_archive_buffer - sound_aligned_bytes;
         archive_start_or_bytes = disc_table.shared_archive.sector;
-        D_0015EE54 = level_archive_buffer;
+        D_0015EE54_macro = level_archive_buffer;
         D_0015EE50 = sound_archive_buffer;
         *(struct LevelArchiveHeader **)0x0015EE4C =
             (struct LevelArchiveHeader *)shared_archive_buffer;
@@ -111,7 +111,7 @@ s32 service_level_archive_load(void) {
         break;
     case 1:
         next_disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&disc_table + level_index * 8);
-        submit_audio_stream_io_request(D_0015EE54, *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12C8), *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12CC));
+        submit_audio_stream_io_request(D_0015EE54_macro, *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12C8), *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12CC));
         D_0015EE48 = D_0015EE48 + 1;
         break;
     case 2:
@@ -180,4 +180,4 @@ extern __typeof__(service_level_archive_load) func_00204428 __attribute__((alias
 
 /* Defined below their only user, so retail reaches them with lui. */
 u8 *D_0015EE50 MACRO_ADDR = 0;
-u8 *D_0015EE54 MACRO_ADDR = 0;
+u8 *D_0015EE54_macro MACRO_ADDR = 0;

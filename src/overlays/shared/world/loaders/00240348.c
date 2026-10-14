@@ -457,7 +457,7 @@ extern int D_L00_00160178 MACRO_ADDR;
 extern int D_L00_0016017C MACRO_ADDR;
 extern int D_L00_00160490 MACRO_ADDR;
 extern int D_L00_00160540 MACRO_ADDR;
-extern int D_L00_00160548[];
+extern int first_class_ids[] __asm__("D_L00_00160548");
 extern int D_L00_00160B70[];
 extern int D_L00_00160F50 MACRO_ADDR;
 extern int D_L00_00160FCC MACRO_ADDR;
@@ -1473,7 +1473,7 @@ char *load_level_gameplay(int arg0) {
         if (D_0015ED84 == 13 && D_0013E030.f26 == 2) {
             if (D_L00_00160540 != 0) {
                 for (m = D_L00_0015FFD8; m->f20 != 0xFF; m++) {
-                    if (m->fA6 == D_L00_00160548[D_0013E030.f26]) {
+                    if (m->fA6 == first_class_ids[D_0013E030.f26]) {
                         FUN_L00_0028e8a0((char *)m);
                         set_moby_animation(m, 1, 0);
                         break;
@@ -1484,7 +1484,7 @@ char *load_level_gameplay(int arg0) {
         if (D_0013E030.f0 == 0) {
             float rot;
 
-            m = func_0020D348_m(D_L00_00160548[D_0013E030.f26]);
+            m = func_0020D348_m(first_class_ids[D_0013E030.f26]);
             m->f10 = ship[0];
             m->f14 = ship[1];
             m->f18 = ship[2];
@@ -1725,7 +1725,7 @@ typedef struct { s16 a; s16 b; s32 *file; } Ldg244110;
 extern Ldg244110 D_0015EE48;
 extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_0014C050[];
-extern u8 D_L00_0015FC88_244110[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
+extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F40C;
 extern s32 sound_bank_handle __asm__("D_0015ED5C");
 extern s32 D_L00_00160004;
@@ -1735,7 +1735,7 @@ extern u64 D_L00_001827D8[3];
 extern u64 D_L00_001827F0[3];
 extern s32 D_L00_00160F54;
 extern s32 D_L00_001C4A00[];
-extern s32 D_L00_0015FFC8;
+extern s32 texture_count __asm__("D_L00_0015FFC8");
 extern u32 D_L00_00199A80[];
 extern u8 D_L00_001AEBC0[];
 extern s32 D_L00_00160FD4;
@@ -1877,7 +1877,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
     if (full) {
         FUN_001f98d0(h, (char *)(src[4] + (s32)src), src[5]);
         D_L00_0015F40C = 0;
-        FUN_001f9838_244110(D_L00_0015FC88_244110, D_0014C050 + current_level_index * 16, 0x10);
+        FUN_001f9838_244110(mission_state_macro, D_0014C050 + current_level_index * 16, 0x10);
         FUN_00203120((char *)(src[6] + (s32)src), h[0], (char *)h + h[1]);
         D_L00_00160004 = sound_bank_handle;
         FUN_00118a80(0);
@@ -1902,10 +1902,10 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         for (c1 = 0; c1 < D_L00_00160F54; c1++)
             D_L00_001C4A00[c1] = D_L00_0015F40C + t1[c1].offset + (FUN_001f97a0(t1[c1].kind) << 28);
         tex = (TexRef244110 *)((char *)h + h[0xF]);
-        D_L00_0015FFC8 = h[0xE];
-        for (c2 = 0; c2 < D_L00_0015FFC8; c2++)
+        texture_count = h[0xE];
+        for (c2 = 0; c2 < texture_count; c2++)
             D_L00_00199A80[c2] = D_L00_0015F40C + tex[c2].offset + (FUN_001f97a0(tex[c2].kind) << 28);
-        FUN_001f98d0(D_L00_001AEBC0, tex, D_L00_0015FFC8 * 16);
+        FUN_001f98d0(D_L00_001AEBC0, tex, texture_count * 16);
         t3 = (TexRef244110 *)((char *)h + h[0x11]);
         D_L00_00160FD4 = h[0x10];
         for (c3 = 0; c3 < D_L00_00160FD4; c3++)

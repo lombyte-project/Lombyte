@@ -167,7 +167,7 @@ int FUN_L18_002d8858(Level18State *obj) {
 
 extern char D_0013E533[];
 extern float FUN_001f9b80(void *, void *);
-extern int D_L18_0015F5CC;
+extern int game_frame __asm__("D_L18_0015F5CC");
 extern int FUN_001f9740(int *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -201,7 +201,7 @@ void FUN_L18_002dc260(struct Moby *moby) {
         make_hit_descriptor(buf, (int)moby, 0x10001, v, 1.0f);
         FUN_L00_00259a88(*(int *)(tgt + 0x2000), buf);
     }
-    flag = D_L18_0015F5CC & 4;
+    flag = game_frame & 4;
     d[1] = d[1] + *(float *)&D_L18_00161CA0 * frame_time;
     if (flag == 0) {
         FUN_L00_002598b0(*(int *)(d + 3), d[0], pos, 0x10000, 1.0f, 1.0f, 0, 1, 0);
@@ -1114,7 +1114,7 @@ extern float D_0015ED70_d __asm__("D_0015ED70");
 extern float FUN_001fa580_q(float, float) __asm__("FUN_001fa580");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern int D_L18_0015F5C4_d __asm__("D_L18_0015F5C4");
-extern int D_L18_0016D290_q __asm__("D_L18_0016D290") __attribute__((section(".data")));
+extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
 extern void FUN_001f9bf8_q(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
@@ -1184,7 +1184,7 @@ void FUN_L18_002d6600(char *moby) {
         float v[4];
         if (D_L18_0015F5C4_d == 2) {
             if (d->i38 != 0) {
-                if (D_L18_0016D290_q == 3) {
+                if (D_L18_0016D290_lui == 3) {
                     if (d->p14 != 0)
                         mmr_q(d->p14);
                     if (d->p18 != 0)
@@ -1197,7 +1197,7 @@ void FUN_L18_002d6600(char *moby) {
         }
         if (d->f24 != 0.0f) {
             if ((d->i30 == 0 && fast_dec_timer((int *)&d->f2C) == 2) ||
-                (D_L18_0015F5C4_d == 2 && D_L18_0016D290_q >= 4)) {
+                (D_L18_0015F5C4_d == 2 && D_L18_0016D290_lui >= 4)) {
                 allocate_voice_for_target_entry(0, 0, (int)moby);
                 d->f24 = 0;
             }

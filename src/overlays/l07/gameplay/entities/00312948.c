@@ -513,14 +513,14 @@ typedef struct {
 } L07MobyList;
 
 extern L07MobyList D_L07_0016C8E0;
-extern int D_L07_0015F5C4;
+extern int scene_state __asm__("D_L07_0015F5C4");
 extern unsigned char D_L07_0020C6C0[];
 extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
 void FUN_L07_00314058(char *moby) {
     int i;
 
-    if (D_L07_0015F5C4 == 2 && big_head_cheat_enabled != 0) {
+    if (scene_state == 2 && big_head_cheat_enabled != 0) {
         for (i = 0; i < D_L07_0016C8E0.count; i++) {
             char *e = D_L07_0016C8E0.mobys[i];
 
@@ -554,7 +554,7 @@ typedef struct {
 #include "rnc/overlay/swarm_path.h"
 typedef struct { char pad[0x1D4]; unsigned char path_points[4]; int linked_mobys[6]; } ChaserPathPoints;
 typedef struct { char pad[0x3C]; short count; char pad2[0xE]; } ChaserSpawnRecord;
-extern char *D_L07_0015FFD8;
+extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern Vec4 D_L07_00166E40;
 extern int D_L07_00161B64 __attribute__((sda));
 extern ChaserSpawnRecord D_L07_00179B40[];
@@ -638,7 +638,7 @@ void FUN_L07_00314150(unsigned char *moby) {
 
     FUN_L00_00263ac8(2.5f, (int)moby, 0xB, data + 0x2A0);
     FUN_L07_00314058((char *)moby);
-    if (D_L07_0015F5C4 == 2) return;
+    if (scene_state == 2) return;
     if (*(int *)(data + 0x1A4) != -1 && !FUN_00214720(((char *)&hero) + 0x80, *(int *)(data + 0x1A4))) return;
     if (moby[0x31] != 0) {
         if (FUN_001f9b48(moby + 0x10, &D_L07_00166E40) < 35.0f) {
@@ -1197,8 +1197,8 @@ void FUN_L07_00314150(unsigned char *moby) {
             k = data[0x19D];
             k2 = k + 3;
             if (((ChaserPathPoints *)data)->linked_mobys[k2] != -1) {
-                char *o1 = *(char **)(D_L07_0015FFD8 + (((ChaserPathPoints *)data)->linked_mobys[k] << 8) + 0x78);
-                char *o2 = *(char **)(D_L07_0015FFD8 + (((ChaserPathPoints *)data)->linked_mobys[k2] << 8) + 0x78);
+                char *o1 = *(char **)(level_mobys + (((ChaserPathPoints *)data)->linked_mobys[k] << 8) + 0x78);
+                char *o2 = *(char **)(level_mobys + (((ChaserPathPoints *)data)->linked_mobys[k2] << 8) + 0x78);
                 if (*(int *)(o1 + 0x28) != -1 && *(int *)(o2 + 0x28) != -1) {
                     float d1 = FUN_001f9b80(((char *)&hero) + 0x80, D_L07_001600EC + (*(int *)(o1 + 0x28) << 7) + 0x30);
                     int sel;
@@ -1212,7 +1212,7 @@ void FUN_L07_00314150(unsigned char *moby) {
                                                              *(float *)(D_L07_001600EC + sel * 0x80 + 0x34) - *(float *)(moby + 0x14));
                 }
             }
-            *(unsigned char *)(D_L07_0015FFD8 + ((ChaserPathPoints *)data)->linked_mobys[k] * 0x100 + 0xBC) = 1;
+            *(unsigned char *)(level_mobys + ((ChaserPathPoints *)data)->linked_mobys[k] * 0x100 + 0xBC) = 1;
         }
         break;
     }
@@ -1326,7 +1326,7 @@ void FUN_L07_00314150(unsigned char *moby) {
             qcopy(moby + 0x10, data + 0xC0);
             *(float *)(moby + 0x48) = *(float *)(data + 0xCC);
             if (((ChaserPathPoints *)data)->linked_mobys[data[0x19D]] != -1) {
-                *(unsigned char *)(D_L07_0015FFD8 + ((ChaserPathPoints *)data)->linked_mobys[data[0x19D]] * 0x100 + 0xBC) = 0;
+                *(unsigned char *)(level_mobys + ((ChaserPathPoints *)data)->linked_mobys[data[0x19D]] * 0x100 + 0xBC) = 0;
             }
             *(float *)(moby + 0x58) = 1.5f;
             moby[0xBC] += 1;
@@ -1583,7 +1583,7 @@ void FUN_L07_00314150(unsigned char *moby) {
             position.f[2] = *(float *)(data + 0x1B8) + 1.0f;
             FUN_L00_0025e450(moby, data + 0x100, &position, 0.0f, 0.0f, 0x14, 0xC, 0x40, 7.0f, 5.0f, 10.0f, 1.0f, -1, 50.0f, 1, 1, -1, 0);
             *(unsigned short *)(moby + 0x34) |= 0x41;
-            if (*(int *)(data + 0x1CC) != -1) FUN_L06_002e6148(D_L07_0015FFD8 + (*(int *)(data + 0x1CC) << 8));
+            if (*(int *)(data + 0x1CC) != -1) FUN_L06_002e6148(level_mobys + (*(int *)(data + 0x1CC) << 8));
             moby[0x20] = 0x10;
             *(float *)(moby + 0x18) = 20.0f;
         }
@@ -1602,12 +1602,12 @@ void FUN_L07_00314150(unsigned char *moby) {
         break;
     case 16:
         if (*(short *)(data + 0x280) != -1) FUN_L00_0023e838(*(short *)(data + 0x280));
-        if (*(int *)(data + 0x1D0) == -1 || !(*(float *)(D_L07_0015FFD8 + (*(int *)(data + 0x1D0) << 8) + 0x18) < 34.5f)) {
+        if (*(int *)(data + 0x1D0) == -1 || !(*(float *)(level_mobys + (*(int *)(data + 0x1D0) << 8) + 0x18) < 34.5f)) {
             mark_moby_for_removal(moby);
             return;
         }
-        *(float *)(D_L07_0015FFD8 + (*(int *)(data + 0x1D0) << 8) + 0x18) +=
-            (34.6f - *(float *)(D_L07_0015FFD8 + (*(int *)(data + 0x1D0) << 8) + 0x18)) * 0.1f;
+        *(float *)(level_mobys + (*(int *)(data + 0x1D0) << 8) + 0x18) +=
+            (34.6f - *(float *)(level_mobys + (*(int *)(data + 0x1D0) << 8) + 0x18)) * 0.1f;
         break;
     case 17:
         break;
@@ -2268,7 +2268,7 @@ extern void FUN_00212f90(void *, int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern int FUN_0022da68(int, int, void *);
-extern char *D_L07_0015FFD8;
+extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern void FUN_L07_0030b538(void *, void *, void *, int);
 extern float D_0015ED6C;
 
@@ -2305,13 +2305,13 @@ void FUN_L07_0031a250(unsigned char *moby) {
     switch ((u8)moby[0x20]) {
     case 0:
         if (*(int *)(data + 0x70) != -1) {
-            char *target = (char *)(*(int *)(data + 0x70) * 0x100 + (int)D_L07_0015FFD8);
+            char *target = (char *)(*(int *)(data + 0x70) * 0x100 + (int)level_mobys);
             *(float *)(data + 0x80) = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
                                       *(float *)(target + 0x14) - *(float *)(moby + 0x14));
             if (*(float *)(data + 0x80) < 0.0f) *(float *)(data + 0x80) += 6.2831855f;
         }
         if (*(int *)(data + 0x74) != -1) {
-            char *target = (char *)(*(int *)(data + 0x74) * 0x100 + (int)D_L07_0015FFD8);
+            char *target = (char *)(*(int *)(data + 0x74) * 0x100 + (int)level_mobys);
             *(float *)(data + 0x84) = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
                                       *(float *)(target + 0x14) - *(float *)(moby + 0x14));
             if (*(float *)(data + 0x84) < 0.0f) *(float *)(data + 0x84) += 6.2831855f;

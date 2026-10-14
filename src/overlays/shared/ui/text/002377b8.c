@@ -929,7 +929,7 @@ extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_0
 extern void FUN_001ffc30_c(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void FUN_L00_0023b120_c(Hud *, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b120");
 extern s32 D_0015ED80_c __asm__("D_0015ED80");
-extern s32 D_0015EDA0;
+extern s32 hero_max_health __asm__("D_0015EDA0");
 extern s32 D_L00_0015F808 __attribute__((sda));
 extern s32 D_L00_0015F7F0 __attribute__((sda));
 extern s32 D_L00_0015F820 __attribute__((sda));
@@ -990,7 +990,7 @@ s32 FUN_L00_00239810(Hud *m) {
     w = truncate_float_to_s32((f32)D_L00_0015F820 * f21);
     p = m->p;
     sel = p[0] >> 1;
-    mode = D_0015EDA0;
+    mode = hero_max_health;
     if (cnt == 0)
         sel = 0x1E;
     if (hero.vehicle_mode == 1)

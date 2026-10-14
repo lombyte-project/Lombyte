@@ -47,7 +47,7 @@ extern S17C2B8 D_L01_0017C238;
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L01_0015F638;
-extern float D_L01_00167258 __attribute__((section(".data")));
+extern float D_L01_00167258_lui __asm__("D_L01_00167258") __attribute__((section(".data")));
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -375,7 +375,7 @@ void FUN_L01_00242930(void) {
                             if (scale_game_frames(0x18) > hero.state_timer && hero.unk308 == 0) {
                                 stick_target(0, 1.0f);
                                 if (fast_difference_between_rotations(
-                                        hero.motion.move_yaw, D_L01_00167258) > 1.2217305f) {
+                                        hero.motion.move_yaw, D_L01_00167258_lui) > 1.2217305f) {
                                     ok = 0;
                                 }
                             }

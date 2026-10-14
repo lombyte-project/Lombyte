@@ -1,10 +1,10 @@
 /* Ported from rac1-decomp (src/game/movie/disp.c, func_0023C5E0). */
 #include "sda.h"
-extern int D_0015EE84 MACRO_ADDR;
+extern int draw_buffer_address_macro __asm__("D_0015EE84") MACRO_ADDR;
 extern void *D_0015EEB8 MACRO_ADDR;
 #include "rnc/rendering/fs_aa_packets.h"
 /* setImageTag (SDK ezmpeg sample): builds the DMA/GIF chain that uploads a
-   decoded frame to VRAM: a header packet (BITBLTBUF from D_0015EE84), one
+   decoded frame to VRAM: a header packet (BITBLTBUF from draw_buffer_address_macro), one
    0x60-byte packet per 16x16 block (TRXPOS = block x/y, TRXDIR, an IMAGE
    tag and a REF tag to the next 0x400 bytes of `texbuf`), then the closing
    tags. The TRXPOS value is built inside the inner loop and the packet is
@@ -24,7 +24,7 @@ void set_image_tag(void *p, int texbuf, int image_w, int image_h) {
     *(long *)(out + 0x8) = 0;
     *(long *)(out + 0x10) = 0x1000000000000002L;
     *(long *)(out + 0x18) = 0xEL;
-    *(long *)(out + 0x20) = ((long)(D_0015EE84 >> 8) << 32) | 0x8000000000000L;
+    *(long *)(out + 0x20) = ((long)(draw_buffer_address_macro >> 8) << 32) | 0x8000000000000L;
     *(long *)(out + 0x28) = 0x50L;
     *(long *)(out + 0x30) = 0x1000000010L;
     *(long *)(out + 0x38) = 0x52L;

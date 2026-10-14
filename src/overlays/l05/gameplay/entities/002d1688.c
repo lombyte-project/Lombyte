@@ -2369,7 +2369,7 @@ extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")
 extern float D_0015ED70_c __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern int D_0015EE38 __attribute__((section(".sdata")));
+extern int D_0015EE38_macro __asm__("D_0015EE38") __attribute__((section(".sdata")));
 extern int D_L05_00178300[];
 extern int FUN_001f9770(void *);
 extern int FUN_L00_0025e3b8(int);
@@ -2416,7 +2416,7 @@ void FUN_L05_00307910(Moby *moby) {
         data->cruise_speed = D_0015ED6C_c * 17.0f + (float)data->racer_index * (D_0015ED6C_c * 1.55f);
         data->launch_speed = D_0015ED6C_c * 24.0f + (float)data->racer_index * (D_0015ED6C_c * 1.55f);
         if (D_0013D388[0] == 0) {
-            float handicap = (float)(D_0015EE38 - 4);
+            float handicap = (float)(D_0015EE38_macro - 4);
 
             if (handicap < 0.0f) {
                 handicap = 0.0f;

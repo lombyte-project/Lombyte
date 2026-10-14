@@ -574,13 +574,13 @@ extern s32 FUN_0020b178_2e1ac0(s32, s32) __asm__("FUN_0020b178");
 
 extern s32 D_L01_001DEB10[];
 extern ItemPrice_2e1ac0 D_L01_001C4530[];
-extern s32 D_0015EE20_gp __asm__("D_0015EE20") __attribute__((sda));
+extern s32 alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
 void FUN_L01_002e1ac0(struct Moby *m) {
     SaleVars_2e1ac0 *v = (SaleVars_2e1ac0 *)m->pvars;
     s32 item;
     ItemPrice_2e1ac0 *price;
 
-    if (v != 0 && v->slot != -1 && ((v->slot ^ 1) & 1) && D_0015EE20_gp == 0) {
+    if (v != 0 && v->slot != -1 && ((v->slot ^ 1) & 1) && alternate_animation_sequence_gp == 0) {
         FUN_0020c828_2e1ac0(m);
         return;
     }
@@ -2232,15 +2232,15 @@ int FUN_L01_002efa88(unsigned char *moby) {
     }
     return value;
 }
-extern s32 D_L01_0015F5CC;
+extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 
 /* Search backward for the first entry below the loaded threshold. */
 s32 FUN_L01_002efbf8(s32 *values, s32 count, s32 offset) {
     s32 index = (s32)((u32)count - 1);
     if (index >= 0) {
         for (; index >= 0; index--) {
-            if (values[index] < D_L01_0015F5CC) {
-                values[index] = (s32)((u32)D_L01_0015F5CC + (u32)offset);
+            if (values[index] < level_frame_count) {
+                values[index] = (s32)((u32)level_frame_count + (u32)offset);
                 break;
             }
         }
@@ -2543,7 +2543,7 @@ extern void FUN_00273310_2f5168(void *, void *, void *, float, float, int, int, 
 extern int FUN_00222160_2f5168(float) __asm__("FUN_001fa6d0");
 extern void FUN_0020cc78_2f5168(void *, short, int) __asm__("FUN_001e93b0");
 extern int D_L01_00161B00 __attribute__((sda));
-extern int D_L01_0015F5CC __asm__("D_L01_0015F5CC");
+extern int level_frame_count __asm__("D_L01_0015F5CC");
 #define D_L01_0015ED84 (*(int *)0x0015ed84)
 extern char *D_L01_0015FFD8 __asm__("D_L01_0015FFD8");
 extern char *D_L01_001B0930[];
@@ -2612,7 +2612,7 @@ void FUN_L01_002f5168(char *moby) {
     }
     type = H2(moby, 0xa6);
     if ((type == 0x33 || type == 0x46a) || (type == 0x473 || type == 0x474)) {
-        if ((D_L01_0015F5CC & 7) == (((int)moby >> 8) & 7) && H2(data, 0x13a) <= 0 && B2(moby, 0x20) != 0) {
+        if ((level_frame_count & 7) == (((int)moby >> 8) & 7) && H2(data, 0x13a) <= 0 && B2(moby, 0x20) != 0) {
             if (FUN_002a12f0_2f5168(moby, H2(data, 0x11e)) == 0)
                 H2(data, 0x11e) = FUN_002a1618_2f5168(0, 4, moby);
         }

@@ -5,7 +5,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 
-extern u8 D_L00_00197BC0_23d028[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
+extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
 extern char D_L00_001C5B00_23d028[] __asm__("D_L00_001C5B00") __attribute__((section(".data")));
 extern char D_L00_001BC1B0_23d028[] __asm__("D_L00_001BC1B0") __attribute__((section(".data")));
 void FUN_00215420_23d028(void) __asm__("FUN_00215420");
@@ -35,7 +35,7 @@ void FUN_L00_0023d028(void) {
     gs_texture_allocation_cursor = t;
     D_0015EE78_gp = t;
     FUN_001f97e8_23d028(D_L00_00173EC0, 0x87654321, 0x10);
-    FUN_001f97e8_23d028(D_L00_00197BC0_23d028, -1, 0x800);
+    FUN_001f97e8_23d028(D_L00_00197BC0_lui, -1, 0x800);
     FUN_001f97e8_23d028(D_L00_0019A980, -1, 0xE00);
     FUN_001f97e8_23d028(D_L00_0019A280, 0, 0xE0);
     FUN_001f97e8_23d028(D_L00_001C5B00_23d028, -1, 0xC00);

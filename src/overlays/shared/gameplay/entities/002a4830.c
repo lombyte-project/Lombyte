@@ -138,13 +138,13 @@ extern int D_L00_00161390;
 extern int D_L00_00161368 __attribute__((sda));
 extern int D_L00_0016136C __attribute__((sda));
 extern int D_L00_00161370 __attribute__((sda));
-extern int D_L00_0016137C __attribute__((sda));
+extern int D_L00_0016137C_gp __asm__("D_L00_0016137C") __attribute__((sda));
 extern int D_L00_00161380 __attribute__((sda));
 extern int D_L00_00161388;
-extern float D_L00_00161374 __attribute__((sda));
+extern float D_L00_00161374_gp __asm__("D_L00_00161374") __attribute__((sda));
 extern float D_L00_00161378 __attribute__((sda));
-extern float D_L00_00161384 __attribute__((sda));
-extern float D_L00_0016138C __attribute__((sda));
+extern float D_L00_00161384_gp __asm__("D_L00_00161384") __attribute__((sda));
+extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
 extern float D_0015ED60;
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 float FUN_001fa6c0(int);
@@ -157,18 +157,18 @@ void FUN_L00_002a4cd8(unsigned char *p) {
         p[0x20] = 1;
         p[0x30] = 0xFF;
         one = 1.0f;
-        D_L00_0016137C = scale_game_frames(D_L00_00161368);
+        D_L00_0016137C_gp = scale_game_frames(D_L00_00161368);
         r = scale_game_frames(D_L00_0016136C);
         D_L00_00161380 = r;
-        D_L00_00161384 = one / FUN_001fa6c0(r);
+        D_L00_00161384_gp = one / FUN_001fa6c0(r);
         r = scale_game_frames(D_L00_00161370);
         D_L00_00161388 = r;
-        D_L00_0016138C = one / (float)r;
+        D_L00_0016138C_gp = one / (float)r;
         break;
     case 1:
-        D_L00_00161374 -= D_L00_00161378 * D_0015ED60;
-        if (D_L00_00161374 <= -8.0f)
-            D_L00_00161374 += 8.0f;
+        D_L00_00161374_gp -= D_L00_00161378 * D_0015ED60;
+        if (D_L00_00161374_gp <= -8.0f)
+            D_L00_00161374_gp += 8.0f;
         break;
     }
 }
@@ -739,7 +739,7 @@ extern BoltTrailSlot glints[] __asm__("D_L00_0016EA40");
 extern u8 *D_L00_0015FFDC;
 extern s32 D_L00_0015FFBC;
 extern u8 *D_L00_0015FFD8;
-extern u8 mission_state[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
+extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
 extern s32 D_0015ED84;
 extern MobyKillTable D_L00_001BA5D0 __attribute__((section(".data")));
 extern MobyKillTable D_L00_001BB230 __attribute__((section(".data")));
@@ -1026,7 +1026,7 @@ void FUN_L00_002a5dd8(Bolt *obj) {
         FUN_L00_002a6b70_c(obj);
         if ((u8 *)obj < D_L00_0015FFDC) {
             D_L00_001BA5D0.killed[obj->unkB2] = obj->unkB0 + 2;
-            if (obj->unkB0 == 0xFF || (mission_state[obj->unkB0] != 0xFF && D_0014C050[D_0015ED84][obj->unkB0] == 0xFF)) {
+            if (obj->unkB0 == 0xFF || (mission_state_macro[obj->unkB0] != 0xFF && D_0014C050[D_0015ED84][obj->unkB0] == 0xFF)) {
                 D_L00_001BB230.killed[obj->unkB2] = obj->unkB0 + 2;
             }
         }
@@ -1809,7 +1809,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C MACRO_ADDR;
 extern float D_0015ED70 MACRO_ADDR;
-extern float D_0015ED74 MACRO_ADDR;
+extern float frame_time_cube __asm__("D_0015ED74") MACRO_ADDR;
 extern float FUN_001f9e90(float, float);
 extern float approach_value_alt(float*,float,float) __asm__("FUN_00213ed8");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
@@ -2053,7 +2053,7 @@ void wrench_update(WrenchMoby *m) {
             scale_vector_xyz(work.v[1],work.v[1],0.7f);
             add_vector_xyz(position,position,work.v[1]);
             normalize_vector_xyz(work.v[1],d->direction,d->speed); add_vector_xyz(position,position,work.v[1]);
-            d->acceleration+=D_0015ED74*170.0f;
+            d->acceleration+=frame_time_cube*170.0f;
             approach_value_alt(&d->speed,0.0f,d->acceleration);
             if (d->speed==0.0f) m->state=11;
         } else {

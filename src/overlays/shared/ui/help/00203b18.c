@@ -985,7 +985,7 @@ void FUN_L00_00206cf8(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206e00.s", FUN_L00_00206e00);
 #else
 extern s32 D_0015EEA0 MACRO_ADDR;
-extern s32 D_0015EE20 MACRO_ADDR;
+extern s32 alternate_animation_sequence __asm__("D_0015EE20") MACRO_ADDR;
 extern u8 D_0015EDB4 MACRO_ADDR;
 extern u8 big_head_cheat_enabled[] __asm__("D_0015EDB0") MACRO_ADDR;
 extern u8 selector_available[] __asm__("D_0015EDC0") MACRO_ADDR;
@@ -1003,7 +1003,7 @@ void FUN_L00_00206e00(void) {
     u8 *sequence;
     u8 *history;
     volatile s32 *history_count;
-    if (D_0015EEA0 == 0 && D_0015EE20 == 0)
+    if (D_0015EEA0 == 0 && alternate_animation_sequence == 0)
         return;
     g = &hero;
     hero_base = (u8 *)g + 0xCB0;

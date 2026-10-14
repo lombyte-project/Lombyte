@@ -740,7 +740,7 @@ void FUN_L18_002fa250(void *a, void *b, void *c, float f0, float f1) {
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int D_L18_0015F5C4;
-extern int D_L18_0016D290_d __asm__("D_L18_0016D290") __attribute__((section(".data")));
+extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
 
 void FUN_L18_002fa640(struct Moby *moby) {
     switch (moby->state) {
@@ -748,7 +748,7 @@ void FUN_L18_002fa640(struct Moby *moby) {
         moby->state = 1;
         break;
     case 1:
-        if (D_L18_0015F5C4 == 2 && D_L18_0016D290_d == 3) {
+        if (D_L18_0015F5C4 == 2 && D_L18_0016D290_lui == 3) {
             moby->flags |= 1;
             moby->visible = 0;
             moby->rot.x = fast_add_rotations(moby->rot.x, 3.1415927f);

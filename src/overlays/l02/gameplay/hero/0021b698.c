@@ -132,7 +132,7 @@ void FUN_L02_0021b698(void) {
 #define G hero
 
 /* Same source as the exact FUN_L08_00222800, with only the 0x16 animation in mode 0 and no 0xF exit. */
-extern s32 D_L08_0015F5C4_8 __asm__("D_L02_0015F5C4");
+extern s32 level_game_mode __asm__("D_L02_0015F5C4");
 extern s32 D_0015ED84_8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
@@ -171,7 +171,7 @@ s32 FUN_L02_0021ff70(s32 arg) {
     if (G.invulnerable_frames != 0) {
         return 0;
     }
-    if (D_L08_0015F5C4_8 != 0) {
+    if (level_game_mode != 0) {
         return 0;
     }
     G.unk2280 = 0;

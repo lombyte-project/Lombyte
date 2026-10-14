@@ -878,7 +878,7 @@ extern void FUN_L00_002718d0(float, float, void *, void *, void *);
 extern unsigned char D_0014C050[][16];
 extern struct Moby *D_L05_0015FFD8;
 extern struct FloorRow *D_L05_001612D0;
-extern char D_L05_0015F580[] __attribute__((section(".sdata")));
+extern char D_L05_0015F580_macro[]  __asm__("D_L05_0015F580")__attribute__((section(".sdata")));
 extern int D_L05_00161E98 __attribute__((sda));
 extern int D_L05_00161E9C __attribute__((sda));
 extern float D_L05_00161EA0 __attribute__((sda));
@@ -990,7 +990,7 @@ void FUN_L05_003150f0(struct Moby *m) {
                     v[1] += FUN_001f9de0(ang) * r;
                     v[2] = floor + 0.05f;
                     FUN_L00_002718d0(random_float_between(1.0f, 1.5f), random_integer_below(2) ? 2.0f : -2.0f, v,
-                                     D_L05_0015F580, &D_L05_001612D0[d->floor].z);
+                                     D_L05_0015F580_macro, &D_L05_001612D0[d->floor].z);
                 }
             }
         }

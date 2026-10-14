@@ -40,13 +40,13 @@ extern s32 D_0015ED80 MACRO_ADDR;
 extern s32 D_0015ED88 __attribute__((sda));
 extern WadHeader *level_root __asm__("D_0015EE4C");
 extern volatile s32 D_0015EE8C;
-extern s32 D_0015EF50;
-extern s32 D_0015EF54;
-extern s32 D_0015EF58 MACRO_ADDR;
+extern s32 intro_overlay_alpha __asm__("D_0015EF50");
+extern s32 language_intro_overlay_alpha __asm__("D_0015EF54");
+extern s32 intro_overlay_timer_macro __asm__("D_0015EF58") MACRO_ADDR;
 extern f32 D_0015F43C MACRO_ADDR;
-extern s32 D_0015F438 MACRO_ADDR;
+extern s32 game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
 extern s32 space_load_pending __asm__("D_0015F5B0") MACRO_ADDR;
-extern s32 D_0015F604 MACRO_ADDR;
+extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 extern s32 space_load_in_progress __asm__("D_0015F618");
 extern u8 requested_video_mode __asm__("D_0016034C") MACRO_ADDR;
 extern SoundCue D_001862B0[];
@@ -184,7 +184,7 @@ void transition_do_transition(void) {
         }
         update_gameplay_frame();
         transition_default_draw();
-        if (D_0015F604 != 0) {
+        if (game_mode_macro != 0) {
             wait = 0;
         } else if (++wait >= scale_game_frames(0x5DC)) {
             start_level(level);
@@ -194,9 +194,9 @@ void transition_do_transition(void) {
             D_0018CB20.time = 0;
             D_0018CB20.f3C = 0;
             parse_space_scene_chunk(0);
-            D_0015EF50 = 0;
-            D_0015EF54 = 0;
-            D_0015EF58 = 0;
+            intro_overlay_alpha = 0;
+            language_intro_overlay_alpha = 0;
+            intro_overlay_timer_macro = 0;
             vu1_init_chain();
             continue;
         }
@@ -212,7 +212,7 @@ void transition_do_transition(void) {
         }
         vu1_sync_chain(1);
         sceGsSyncV(0);
-        D_0015F438++;
+        game_frame_counter_macro++;
     }
     if (D_0015ED80 == 0) {
         D_0015EE8C = 0x280000;

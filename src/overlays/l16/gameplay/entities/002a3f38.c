@@ -2258,7 +2258,7 @@ extern float probe_ground_height(void *, int, float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int D_00159F4C; /* no foreign declaration */
 extern int D_L16_00161A0C __attribute__((sda));
-extern int D_0015EE3C __attribute__((sda));
+extern int D_0015EE3C_gp __asm__("D_0015EE3C") __attribute__((sda));
 extern char *D_L16_001B0930[];
 extern int FUN_001f9770(void *);
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -2325,7 +2325,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
         *(float *)(d + 0x2B4) = time * 17.0f + offset;
         *(float *)(d + 0x2B8) = time * 24.0f + offset;
         if (D_0013D4DF == 0) {
-            slow = (float)(D_0015EE3C - 5);
+            slow = (float)(D_0015EE3C_gp - 5);
             if (slow < 0.0f) {
                 slow = 0.0f;
             }

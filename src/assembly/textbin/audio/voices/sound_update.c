@@ -78,7 +78,7 @@ typedef struct {
 extern VoiceRuntimeState D_0013E550;
 extern f32 D_0013F640[];
 extern s32 boot_level_active __asm__("D_0015F5E8");
-extern s32 D_0015F604;
+extern s32 game_mode __asm__("D_0015F604");
 extern s32 world_update_time __asm__("D_0015F60C");
 extern VoiceVector D_00187080;
 extern char camera_rows[] __asm__("D_00187290");
@@ -166,7 +166,7 @@ s32 sound_update(void) {
     }
     D_0013E550.reverb_commands = 0;
 
-    if ((D_0015F604 == 0 || D_0015F604 == 2) && boot_level_active == 0) {
+    if ((game_mode == 0 || game_mode == 2) && boot_level_active == 0) {
         clamp_voice_position_to_collision(&listener_occlusion_position);
     }
 
@@ -198,7 +198,7 @@ s32 sound_update(void) {
                          1.0f / convert_integer_to_float(listener_sample_count));
     }
 
-    if (D_0015F604 == 2) {
+    if (game_mode == 2) {
         snd_set_master_volume(1, 0);
         snd_set_master_volume(0, D_0013E550.group_0_volume / 2);
         snd_set_master_volume(3, D_0013E550.group_3_volume / 2);
@@ -252,7 +252,7 @@ s32 sound_update(void) {
             voice_flags[slot_index] = 0x20;
             continue;
         }
-        if (D_0015F604 != 0 && D_0015F604 != 2 && D_0015F604 != 6 &&
+        if (game_mode != 0 && game_mode != 2 && game_mode != 6 &&
             D_0013E550.voices[slot_index].state != 7) {
             voice_flags[slot_index] = 0x10;
             continue;
@@ -321,7 +321,7 @@ s32 sound_update(void) {
             continue;
         }
         if (D_0013E550.voices[slot_index].state == 7) {
-            if ((D_0015F604 != 0 && D_0015F604 != 2) || boot_level_active != 0) {
+            if ((game_mode != 0 && game_mode != 2) || boot_level_active != 0) {
                 continue;
             }
             occluded_samples = 0;
@@ -352,7 +352,7 @@ s32 sound_update(void) {
                 volumes[slot_index] = (36 - occluded_samples) * volumes[slot_index] / 18;
             }
         } else {
-            if ((D_0015F604 == 0 || D_0015F604 == 2) && boot_level_active == 0) {
+            if ((game_mode == 0 || game_mode == 2) && boot_level_active == 0) {
                 D_0013E550.voices[slot_index].occlusion_history_position =
                     (D_0013E550.voices[slot_index].occlusion_history_position + 1) % 36;
                 /* Active sources test every other frame; other voices every fourth. */

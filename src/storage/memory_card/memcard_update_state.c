@@ -20,7 +20,7 @@ extern char D_0013D240[];
 extern char D_0013D270[];
 extern u8 D_0014EED0[];
 extern u8 D_001506D0[];
-extern s16 D_001516D8[];
+extern s16 cd_read_active[] __asm__("D_001516D8");
 extern s32 pause_action_list_mode __asm__("D_0015EE90");
 extern char D_0015FE98[];
 extern char D_0015FEA0[];
@@ -321,7 +321,7 @@ void memcard_update_state(void) {
             break;
         }
         case 4:
-            if (D_001516D8[0] == 0) {
+            if (cd_read_active[0] == 0) {
                 MC.sub = 5;
             }
             MC.busy = 0;
@@ -910,7 +910,7 @@ void memcard_update_state(void) {
     }
 
     case 18:
-        if (D_001516D8[0] == 0) {
+        if (cd_read_active[0] == 0) {
             McChunk *chunk;
             s32 size;
 

@@ -665,7 +665,7 @@ void FUN_L00_0020da68(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020dd20.s", FUN_L00_0020dd20);
 #else
 extern s32 D_L00_0015F6A0_20dd20[2] __asm__("D_L00_0015F6A0") __attribute__((sda));
-extern u8 D_L00_00197BC0_20dd20[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
+extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
 extern s32 D_L00_00197300_20dd20[] __asm__("D_L00_00197300") __attribute__((section(".data")));
 extern u8 D_L00_0017CA80_20dd20[] __asm__("D_L00_0017CA80") __attribute__((section(".data")));
 extern u8 D_L00_0017A680_20dd20[] __asm__("D_L00_0017A680") __attribute__((section(".data")));
@@ -713,7 +713,7 @@ void FUN_L00_0020dd20(void) {
                 if (*slot == 0) {
                     *slot = FUN_L00_0024f028_20dd20((u8 *)hero.moby, D_L00_0015F6A0_20dd20[i]);
                     *(s32 *)(*slot + 8) = 0;
-                    *(s32 *)(*slot + 0x18) = D_L00_00197300_20dd20[D_L00_00197BC0_20dd20[next]];
+                    *(s32 *)(*slot + 0x18) = D_L00_00197300_20dd20[D_L00_00197BC0_lui[next]];
                 }
             } else {
                 slot = (u8 **)&hero.unkD00 + i;
@@ -1452,7 +1452,7 @@ extern u8 D_0017A960_f580[] __asm__("D_L00_0017A960");
 extern u8 D_0015F6A8_f580[] __asm__("D_L00_0015F6A8");
 extern s32 D_001404DC_f580 __asm__("D_001404DC");
 extern u8 D_001410D0_f580[] __asm__("D_001410D0");
-extern u8 D_0015EDB5_f580 __asm__("D_0015EDB5");
+extern u8 opt_mirror_anim __asm__("D_0015EDB5");
 extern s32 large_font_height __asm__("D_L00_0015F690");
 extern void FUN_00250480_f580(void *) __asm__("FUN_0020d580");
 extern void FUN_00250df8_f580(void *) __asm__("FUN_L00_00250df8");
@@ -1567,7 +1567,7 @@ void FUN_L00_0020f580(void)
                         else
                             FUN_L00_0020f160(moby, source);
                         FUN_00250df8_f580(moby);
-                        if (D_0015EDB5_f580) FUN_001ff3c0_f580(moby + 0xe0, moby + 0xc0, moby + 0xd0);
+                        if (opt_mirror_anim) FUN_001ff3c0_f580(moby + 0xe0, moby + 0xc0, moby + 0xd0);
                         FUN_00250f98_f580(moby);
                         *(u16 *)(moby + 0x34) |= 6;
                     }

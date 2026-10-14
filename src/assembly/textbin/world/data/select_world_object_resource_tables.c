@@ -47,7 +47,7 @@ typedef struct {
 
 extern s32 runtime_resource_tag __asm__("D_0015FF44") MACRO_ADDR;
 extern s32 class_resource_count __asm__("D_0015FF48") MACRO_ADDR;
-extern s32 active_class_resource_index __asm__("D_0015FF4C") MACRO_ADDR;
+extern s32 active_class_resource_index_macro __asm__("D_0015FF4C") MACRO_ADDR;
 extern s32 active_decode_buffer __asm__("D_0015FF50") MACRO_ADDR;
 #include "rnc/rendering/resident_class.h"
 typedef struct {
@@ -76,14 +76,14 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     s32 resource_tag;
     s32 vendor_item_index;
 
-    if (active_class_resource_index >= 0 &&
-        class_resource_ids[active_class_resource_index] == class_id) {
+    if (active_class_resource_index_macro >= 0 &&
+        class_resource_ids[active_class_resource_index_macro] == class_id) {
         return;
     }
     /* Retail leaves the index at class_resource_count if the class is absent. */
-    for (active_class_resource_index = 0; active_class_resource_index < class_resource_count;
-         active_class_resource_index++) {
-        if (class_resource_ids[active_class_resource_index] == class_id) {
+    for (active_class_resource_index_macro = 0; active_class_resource_index_macro < class_resource_count;
+         active_class_resource_index_macro++) {
+        if (class_resource_ids[active_class_resource_index_macro] == class_id) {
             break;
         }
     }
@@ -93,7 +93,7 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     active_decode_buffer = buffer_index;
     resource_data = (ClassResourceHeader *)(level_resource_buffers.decode_buffers + buffer_index * 0x18000);
     FlushCache(0);
-    decompress_wad(compressed_class_resources[active_class_resource_index], resource_data);
+    decompress_wad(compressed_class_resources[active_class_resource_index_macro], resource_data);
     FlushCache(0);
     /* The byte-sized class slot selects both the published pointer and the saved +0x2C word. */
     resource_table = moby_class_resources;
@@ -101,8 +101,8 @@ void select_world_object_resource_tables(s32 class_id, s32 buffer_index) {
     resource_table[class_slot] = resource_data;
     D_001B6180[class_slot] = resource_data->original_field_2c;
     prepare_resident_class_render_data(resource_data, resident_indexed_textures,
-                                       class_material_maps[active_class_resource_index], class_id);
-    resource_table_index = active_class_resource_index;
+                                       class_material_maps[active_class_resource_index_macro], class_id);
+    resource_table_index = active_class_resource_index_macro;
     resource_tag = runtime_resource_tag;
     /* Retail reloads the published resource pointer for each enabled entry. */
     for (runtime_index = 0; runtime_index < 16; runtime_index++) {

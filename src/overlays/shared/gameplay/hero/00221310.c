@@ -97,7 +97,7 @@ typedef struct {
 
 extern struct PadState D_0013C940_2215c8 __asm__("D_0013C940");
 extern s32 D_L00_0015F5C4_2215c8 __asm__("D_L00_0015F5C4");
-extern u8 D_0013D4E2_2215c8 __asm__("D_0013D4E2") __attribute__((section(".data")));
+extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") __attribute__((section(".data")));
 
 extern void FUN_L00_002165b8_2215c8(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_2215c8(s32 *) __asm__("FUN_001f9740");
@@ -239,7 +239,7 @@ skip:
         break;
     default:
         FUN_L00_00233660_2215c8(&hero.motion.unkD0, 0.0f, 0.0f, 0.7f);
-        if (D_0013D4E2_2215c8) {
+        if (D_0013D4E2_lui) {
             hero.reach_distance = 12.0f;
             hero.reach_height = 4.5f;
         } else {

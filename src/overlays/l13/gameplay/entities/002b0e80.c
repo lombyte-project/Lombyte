@@ -580,7 +580,7 @@ void FUN_L13_002b41b8(Moby_2B5368 *m) {
 extern char *FUN_L13_003061c8(float, float *, float *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int D_L13_0015F5CC;
+extern int frame_count __asm__("D_L13_0015F5CC");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 extern short D_L13_00161388 __attribute__((sda));
@@ -591,7 +591,7 @@ void FUN_L13_002b47a0(struct Moby *moby) {
     char *data;
     float d, x, ang;
     data = (char *)moby->pvars;
-    if (D_L13_0015F5CC % *(int *)&D_L13_0016138C == 0) {
+    if (frame_count % *(int *)&D_L13_0016138C == 0) {
         moby_point_position(moby, 0, v);
         d = FUN_001f9b80(&moby->pos, *(char **)(data + 0x40) + 0x10);
         x = (20.0f - d) / 20.0f * 5.0f + 2.5f;
@@ -2087,7 +2087,7 @@ extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025e310(float);
 extern float seg_sqrt(float) __asm__("func_001F9988");
-extern int D_L13_0015F5CC;
+extern int frame_count __asm__("D_L13_0015F5CC");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short D_L13_001613C8 __attribute__((sda));
 extern unsigned char D_0013E500[];
@@ -2177,13 +2177,13 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
+                        float ang = FUN_L00_0025e310(convert_integer_to_float(frame_count) / 20.0f);
                         FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
                     }
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
+                        float ang = FUN_L00_0025e310(convert_integer_to_float(frame_count) / 20.0f);
                         FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
                     }
                 }
@@ -2217,13 +2217,13 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                         {
                             float x = (v[0] - scr[4]) * 0.0625f;
                             float y = (v[1] - scr[5]) * 0.0625f;
-                            float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
+                            float ang = FUN_L00_0025e310(convert_integer_to_float(frame_count) / 20.0f);
                             FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
                         }
                         {
                             float x = (v[0] - scr[4]) * 0.0625f;
                             float y = (v[1] - scr[5]) * 0.0625f;
-                            float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
+                            float ang = FUN_L00_0025e310(convert_integer_to_float(frame_count) / 20.0f);
                             FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
                         }
                     } else {
@@ -2244,7 +2244,7 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
+                        float ang = FUN_L00_0025e310(convert_integer_to_float(frame_count) / 20.0f);
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
@@ -2258,7 +2258,7 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 20.0f);
+                        float ang = FUN_L00_0025e310(convert_integer_to_float(frame_count) / 20.0f);
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
@@ -2421,7 +2421,7 @@ void FUN_L13_002b97f8(char *moby) {
             k = t * 5.0f + 1.0f;
             if (m > 1.0f) m = 1.0f;
             c = func_001FA898_r(m * 96.0f);
-            func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k, FUN_L00_0025e310(convert_integer_to_float(D_L13_0015F5CC) / 30.0f), 0, 0xFF, 0, c);
+            func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k, FUN_L00_0025e310(convert_integer_to_float(frame_count) / 30.0f), 0, 0xFF, 0, c);
             *(int *)(d + 0xEC) = 0;
         } else {
             a = 0xFF;
@@ -2455,7 +2455,7 @@ void FUN_L13_002b97f8(char *moby) {
     append_rotated_sprite_quad(ex, ey, 40.0f, 40.0f, 0.0f, 0x3F, 0x3F, get_effect_texture_c(0x12), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
     append_rotated_sprite_quad(ex, ey, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, get_effect_texture_c(8), 0xFFFFF3, 0xFF20FF20, 0, 0, 0.5f, 0.5f);
     b = D_0013F350;
-    if (*(float *)(b + 0x15FC) < *(float *)(b + 0x1600) / 10.0f && (D_L13_0015F5CC / 90) & 1) {
+    if (*(float *)(b + 0x15FC) < *(float *)(b + 0x1600) / 10.0f && (frame_count / 90) & 1) {
         font_print_center_small(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
     }
     h = D_0013F350;

@@ -289,9 +289,9 @@ extern volatile s32 D_L00_0015F3F8_v[1] __asm__("D_L00_0015F3F8");
 extern s32 D_L00_0016118C;
 extern s32 D_L00_00161E38;
 extern s32 D_L00_001BA4C0;
-extern s16 D_001516D8[];
+extern s16 cd_read_active[] __asm__("D_001516D8");
 extern u32 frame_size[] __asm__("D_0013E504");
-extern s32 D_0015EE84;
+extern s32 draw_buffer_address __asm__("D_0015EE84");
 extern u128 D_L00_00166DD0[];
 extern u128 D_L00_00165F80[];
 extern u128 D_L00_00166FE0[];
@@ -400,7 +400,7 @@ void FUN_L00_002a02b0(void) {
         p->f2C = p->f14 + 0x1400;
         FUN_001f9810(p->f2C, 0x400);
         p->f18 = p->f2C + 0x400;
-        if (D_001516D8[0] == 0) {
+        if (cd_read_active[0] == 0) {
             if (start_audio_stream_read(p->f18 + 0x80000, disc_table.animation_streams[48].sector,
                                         disc_table.animation_streams[48].size) != 0) {
                 D_L00_0016118C = 1;
@@ -416,7 +416,7 @@ void FUN_L00_002a02b0(void) {
     default:
         return;
     }
-    FUN_L00_002a0fc8(p->f10, D_0015EE84, frame_size[0] << 11);
+    FUN_L00_002a0fc8(p->f10, draw_buffer_address, frame_size[0] << 11);
     setup_gif_paging(0);
     FUN_001f2260();
     reset_gs_registers();

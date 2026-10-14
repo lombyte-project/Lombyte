@@ -27,7 +27,7 @@ extern float D_001D97D0[][4][4];
    func_00213508. The corners are D_001D97D0[set]. */
 void draw_light_flare(char *object) __asm__("FUN_0022df40");
 
-extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
+extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void draw_light_flare(char *object) {
     float scaled_position[4];
     FlareQuad quad;
@@ -41,7 +41,7 @@ void draw_light_flare(char *object) {
     if (FUN_001fa820(scaled_position, &alpha, 32.0f) < 0) {
         return;
     }
-    if (game_mode == 6 && level_render_state.state == 3 &&
+    if (game_mode_macro == 6 && level_render_state.state == 3 &&
         level_render_state.timer > scale_game_frames(150)) {
         alpha -= (level_render_state.timer - scale_game_frames(150)) * 4;
         if (alpha <= 0) {
@@ -55,7 +55,7 @@ void draw_light_flare(char *object) {
     copy_blocks_16_forward(quad.texture_coordinates, D_001D97B0, 0x20);
     scale_vector_xyz(scaled_position_copy, object, 1.0f / 1024.0f);
     depth = *(float *)(object + 0x18) + 0.1f;
-    if (game_mode == 6) {
+    if (game_mode_macro == 6) {
         depth = probe_ground_height(object + 0x10, 0, 0.5f) + 0.1f;
     }
     for (corner_index = 0; corner_index < 4; corner_index++) {

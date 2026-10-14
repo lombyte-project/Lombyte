@@ -24,7 +24,7 @@ extern char D_L07_00211B50[];
 extern char D_L07_00211B78[];
 extern char D_L07_00211BA8[];
 extern int D_L07_00161CA0[] __attribute__((section(".sdata")));
-extern char *D_L07_0015FFD8 __attribute__((sda));
+extern char *level_mobys_gp __asm__("D_L07_0015FFD8") __attribute__((sda));
 extern char D_0013F3D0[];
 extern int D_0013D428[];
 
@@ -118,7 +118,7 @@ state_one:
                         do {
                             sample_path((int *)path, position, &segment, &fraction, step, 1);
                             if (data[9] == -1 ||
-                                12.0f < vector_distance(D_L07_0015FFD8 + data[9] * 0x100 + 0x10, position))
+                                12.0f < vector_distance(level_mobys_gp + data[9] * 0x100 + 0x10, position))
                                 accepted = 1;
                             else
                                 step += 10.0f;

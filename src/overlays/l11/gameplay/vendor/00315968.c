@@ -1197,7 +1197,7 @@ extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float FUN_L00_0025be00(float *p, float *v, float a, float b, float c, float d);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern int D_L11_0015F5CC;
+extern int level_frame __asm__("D_L11_0015F5CC");
 extern int FUN_001fa728_u(char *, float) __asm__("FUN_001fa728");
 extern int random_integer_below_c2(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -1365,12 +1365,12 @@ void FUN_L11_00319838(struct Moby *moby) {
             ang = -FUN_001f9e90(vector_length_xy(s70), s70[2]);
             FUN_L00_0025be00(pitch, (float *)(d + 0x90), ang, frame_time_sq * 12.566371f,
                              frame_time_sq * 12.566371f, D_0015ED6C_n[1] * 12.566371f);
-            if (D_L11_0015F5CC % 10 == 0) {
+            if (level_frame % 10 == 0) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 approach_value((float *)(d + 0x94), 0.0f, 0.25f);
                 normalize_vector_xyz(sB0, s20, *(float *)(d + 0x94));
                 add_vector_xyz(sB0, sB0, tgt);
-                if (D_L11_0015F5CC % 20 == 0) {
+                if (level_frame % 20 == 0) {
                     transform_vector_by_basis(sA0, D_L11_001F14B0, &moby->rot_row0);
                 } else {
                     transform_vector_by_basis(sA0, D_L11_001F14C0, &moby->rot_row0);
@@ -1512,7 +1512,7 @@ void FUN_L11_0031aa80(struct Moby *moby) {
 extern float approach_value(float *p, float target, float maxstep);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern int D_L11_0015F5CC;
+extern int level_frame __asm__("D_L11_0015F5CC");
 extern int random_integer_below_c3(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern void FUN_001f9c48(void *, void *, float);
@@ -1564,7 +1564,7 @@ void FUN_L11_0031ab08(struct Moby *m) {
     case 2:
         *(float *)(d + 8) -= *(float *)&D_L11_00162404 * frame_time_sq;
         rate = m->pclass->scale / (float)scale_game_frames(0x3C);
-        if ((D_L11_0015F5CC & 3) == 0) {
+        if ((level_frame & 3) == 0) {
             FUN_L11_0031ae68((struct Moby *)m, *(float **)(d + 0x24), 0, 1);
             random_vector(v, 0.0f, D_0015ED6C_n[1]);
             v[2] = absolute_float(v[2]);

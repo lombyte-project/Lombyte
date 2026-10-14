@@ -27,7 +27,7 @@ struct Globals_00194100 {
 extern s32 sound_bank_handle __asm__("D_0015ED5C") MACRO_ADDR;
 extern s16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A MACRO_ADDR;
-extern s32 D_0015F438 MACRO_ADDR;
+extern s32 game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
 extern s32 space_load_in_progress __asm__("D_0015F618") MACRO_ADDR;
 extern struct Globals_0015F634 *level_sound_defs __asm__("D_0015F634");
 extern struct Globals_00194100 coll_output __asm__("D_00194100");
@@ -203,7 +203,7 @@ void do_space_transition(void) {
             run_state_handler();
             vu1_sync_chain(1);
             sceGsSyncV(0);
-            D_0015F438++;
+            game_frame_counter_macro++;
             FUN_00226e08();
             if (!done) {
                 done = service_level_archive_load();

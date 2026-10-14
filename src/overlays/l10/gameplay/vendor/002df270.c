@@ -2070,7 +2070,7 @@ extern Moby *D_L10_0015FFD8_c2 __asm__("D_L10_0015FFD8");
 extern Moby *D_L10_0015FFD0_m[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
 extern int D_0013D388; /* no foreign declaration */
 extern int D_00141B28; /* no foreign declaration */
-extern int D_0015EEA4 __attribute__((sda)); /* no foreign declaration */
+extern int D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda)); /* no foreign declaration */
 extern Moby *D_L10_0015FFE4;
 extern int D_L10_00161F38 __attribute__((sda)); /* no foreign declaration */
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
@@ -2163,19 +2163,19 @@ void FUN_L10_002e85b8(Moby *moby)
         if (D_L10_0015FFD8_c2[data->f20].oclass != 0x3F7) break;
         if (D_L10_0015FFD8_c2[data->f20].state == 4) break;
         if (((Save_2E9978 *)(D_00141968_r))->f358 != 0) {
-            elapsed = func_001F9850_2E9978(D_0015EEA4) - ((Save_2E9978 *)(D_00141968_r))->f35A * 600;
+            elapsed = func_001F9850_2E9978(D_0015EEA4_gp) - ((Save_2E9978 *)(D_00141968_r))->f35A * 600;
             if ((int)((float)func_001F9850_2E9978(0x12) * 60.0f) < elapsed || ((Save_2E9978 *)(D_00141968_r))->f35A * 600 == 0) {
                 func_L00_00203F20_2E9978(0x2718, 0x6B);
                 break;
             }
-            if (func_001F9850_2E9978(D_0015EEA4) / 600 > ((Save_2E9978 *)(D_00141968_r))->f35A) {
-                ((Save_2E9978 *)(D_00141968_r))->f35A = func_001F9850_2E9978(D_0015EEA4) / 600;
+            if (func_001F9850_2E9978(D_0015EEA4_gp) / 600 > ((Save_2E9978 *)(D_00141968_r))->f35A) {
+                ((Save_2E9978 *)(D_00141968_r))->f35A = func_001F9850_2E9978(D_0015EEA4_gp) / 600;
             }
             break;
         }
         ((Save_2E9978 *)(D_00141968_r))->f358++;
-        if (func_001F9850_2E9978(D_0015EEA4) / 600 > ((Save_2E9978 *)(D_00141968_r))->f35A) {
-            ((Save_2E9978 *)(D_00141968_r))->f35A = func_001F9850_2E9978(D_0015EEA4) / 600;
+        if (func_001F9850_2E9978(D_0015EEA4_gp) / 600 > ((Save_2E9978 *)(D_00141968_r))->f35A) {
+            ((Save_2E9978 *)(D_00141968_r))->f35A = func_001F9850_2E9978(D_0015EEA4_gp) / 600;
         }
         ((Save_2E9978 *)(D_00141968_r))->f35C = ((Save_2E9978 *)(D_00141968_r))->f35C | (1 << current_level_index) | 0x80000000;
         break;

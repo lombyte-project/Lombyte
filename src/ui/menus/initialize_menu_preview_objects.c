@@ -4,7 +4,7 @@
 
 extern u8 D_00186310[];
 extern char D_00186F40[];
-extern int D_0015FF4C;
+extern int active_class_resource_index __asm__("D_0015FF4C");
 extern void FUN_00224b60();
 extern int func_001E9410();
 extern int update_menu_preview_animation_pose() __asm__("FUN_00224fc0");
@@ -28,7 +28,7 @@ int initialize_menu_preview_objects(char *preview) {
     {
         struct MenuSystem *g = &menu_system;
 
-        D_0015FF4C = -1;
+        active_class_resource_index = -1;
         g->unk11C = -1;
         g->unk120 = -1;
         g->stream_buffer[0] = select_next_stream_buffer(1);

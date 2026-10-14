@@ -1872,7 +1872,7 @@ extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void FUN_L00_0026f080(float *, float *, float, float);
 extern float fast_cos_a500(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_a500(float) __asm__("FUN_001f9de0");
-extern int D_L11_0015F5CC;
+extern int level_frame __asm__("D_L11_0015F5CC");
 
 struct PartA500 {
     u8 unk0;
@@ -1914,7 +1914,7 @@ void FUN_L11_0030a500(struct Moby *moby) {
     }
     if (FUN_001f9b80(&moby->pos, D_L11_001677C0) > 38.0f)
         return;
-    if (moby->state == 1 && (D_L11_0015F5CC & 1))
+    if (moby->state == 1 && (level_frame & 1))
         return;
     if (!(moby->pos.z < 224.5f))
         return;

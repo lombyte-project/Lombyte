@@ -866,7 +866,7 @@ extern float D_L00_001601B8_26b500 __asm__("D_L00_001601B8") __attribute__((sda)
 extern float D_L00_001601BC_26b500 __asm__("D_L00_001601BC") __attribute__((sda));
 extern float D_L00_001601D8_26b500 __asm__("D_L00_001601D8") __attribute__((sda));
 extern float D_L00_001601DC_26b500 __asm__("D_L00_001601DC") __attribute__((sda));
-extern float D_L00_001601E8_26b500 __asm__("D_L00_001601E8") __attribute__((sda));
+extern float D_L00_001601E8_gp __asm__("D_L00_001601E8") __attribute__((sda));
 extern float D_L00_001601EC_26b500 __asm__("D_L00_001601EC") __attribute__((sda));
 
 void FUN_L00_0026b500(unsigned char *m) {
@@ -883,7 +883,7 @@ void FUN_L00_0026b500(unsigned char *m) {
     FUN_001f9a10_26b500(m + 0x10, m + 0x10, p);
     rotation = -FUN_001f9af0_26b500(p);
     advance_accelerated_scalar_26b500(0.0f, 0.0f,
-                                       D_L00_001601E8_26b500 * frame_time_sq,
+                                       D_L00_001601E8_gp * frame_time_sq,
                                        rotation, (float *)(p + 0x10), &rotation);
     FUN_001f9bf8_26b500(p, p, -rotation);
     *(float *)(m + 0x18) += D_L00_001601EC_26b500 * frame_time;

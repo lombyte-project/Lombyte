@@ -13,7 +13,7 @@ extern char D_0015EE98[] MACRO_ADDR;
 extern char D_00141EC0[];
 #include "rnc/gameplay/state/level_state.h"
 extern int D_0015EE24 MACRO_ADDR;
-extern int D_0015EE20 MACRO_ADDR;
+extern int alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
 extern int mode_freeze_flags __asm__("D_0015EEB4") MACRO_ADDR;
 extern u8 D_0014EED0[];
 extern u8 D_001506D0[];
@@ -33,7 +33,7 @@ extern u8 D_001506D0[];
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
 extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
-extern s32 current_bolt_count __asm__("D_0015ED98") MACRO_ADDR;
+extern s32 current_bolt_count_macro __asm__("D_0015ED98") MACRO_ADDR;
 int memcard_save_data(int slot, int flags) {
     unsigned char saved;
 
@@ -77,11 +77,11 @@ int memcard_save_data(int slot, int flags) {
         char *q = D_0013D290;
         char *names = q + 0x30;
 
-        *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x24) = current_bolt_count;
+        *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x24) = current_bolt_count_macro;
         *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x20) = current_level_index;
         *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x2C) = D_0015EE24;
         memcpy(names + *(int *)(q + 0x14) * 0x1C, D_0015EE98, 8);
-        *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x28) = D_0015EE20;
+        *(int *)(q + *(int *)(q + 0x14) * 0x1C + 0x28) = alternate_animation_sequence_macro;
         memcard_prepare_data(D_0014EED0, 0, mc_gamedata);
         memcard_prepare_data(D_001506D0, *(int *)(q + 0xC8), mc_leveldata);
         if (flags >= 0) {

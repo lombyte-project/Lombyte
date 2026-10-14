@@ -14,14 +14,14 @@ typedef struct { char pad0[0x30]; int x30; char pad34[0xC]; int x40; } P_27f448;
 extern E_27f448 D_L00_001BA3B8[] NOT_SDA;
 extern T_27f448 D_L00_001C1E40[] NOT_SDA;
 extern int *D_L00_001602A0 __attribute__((sda));
-extern s32 D_0013D510[] NOT_SDA;
+extern s32 D_0013D510_lui[]  __asm__("D_0013D510")NOT_SDA;
 int FUN_L00_0027f448(P_27f448 *p) {
     int i;
-    for (i = 0; i < 20 && D_0013D510[i]; i++) {
+    for (i = 0; i < 20 && D_0013D510_lui[i]; i++) {
         D_L00_001BA3B8[i].b = 1;
         D_L00_001BA3B8[i].c = 0;
-        D_L00_001BA3B8[i].a = D_L00_001C1E40[D_0013D510[i]].a;
-        D_L00_001BA3B8[i].d = D_L00_001C1E40[D_0013D510[i]].b;
+        D_L00_001BA3B8[i].a = D_L00_001C1E40[D_0013D510_lui[i]].a;
+        D_L00_001BA3B8[i].d = D_L00_001C1E40[D_0013D510_lui[i]].b;
     }
     D_L00_001BA3B8[i].a = 0;
     p->x40 = 0;

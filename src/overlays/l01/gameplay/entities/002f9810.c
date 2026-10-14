@@ -203,7 +203,7 @@ typedef struct {
 } BurstMoby;
 
 extern s32 D_0015ED84_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")));
-extern s32 D_L01_001BA950[];
+extern s32 moby_killed[] __asm__("D_L01_001BA950");
 typedef struct {
     u8 pad0[0x454];
     u8 collected[1];
@@ -255,7 +255,7 @@ void FUN_L01_002f9d80(BurstMoby *self) {
                              FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
         }
         D_0014C190_257218[D_0015ED84_e[1]][self->id >> 5] |= 1 << (self->id & 0x1F);
-        D_L01_001BA950[self->id >> 5] |= 1 << (self->id & 0x1F);
+        moby_killed[self->id >> 5] |= 1 << (self->id & 0x1F);
         mark_moby_for_removal(self);
     } else {
         self->bA4 = 0xFF;
@@ -572,7 +572,7 @@ void FUN_L01_002fa800(struct Moby *m) {
                                FUN_L00_00257b90(60, 180), 1.0f, 1.0f, 0.75f, 0);
         }
         D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
-        D_L01_001BA950[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+        moby_killed[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
         D_0013D388[0xE] = 1;
         mark_moby_for_removal(m);
     }

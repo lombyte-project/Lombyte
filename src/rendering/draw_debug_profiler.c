@@ -108,7 +108,7 @@ void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 
 extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 extern float sequence __asm__("D_0015F43C") MACRO_ADDR;
-extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
+extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void draw_debug_profiler(void) {
     f32 t;
     f32 div;
@@ -209,7 +209,7 @@ void draw_debug_profiler(void) {
                 vu1_gs_regs_alt();
                 dispatch_callback_list_4();
             }
-            if (game_mode == 0) {
+            if (game_mode_macro == 0) {
                 append_billboard_batch();
             }
             vu1_add_g_sregister(0x42, 0x8000000044);
@@ -231,7 +231,7 @@ void draw_debug_profiler(void) {
         draw_help();
         draw_letterbox_bars();
     }
-    if (game_mode == 2 && D_0015EE40 != 0) {
+    if (game_mode_macro == 2 && D_0015EE40 != 0) {
         draw_subtitles();
     }
     func_001F21B8(D_0015F3F8, 0xE);

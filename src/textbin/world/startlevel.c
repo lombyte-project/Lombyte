@@ -27,9 +27,9 @@ typedef struct {
 
 extern s32 boot_level_active __asm__("D_0015F5E8") MACRO_ADDR;
 extern u8 level_bss_start[] __asm__("D_00161280");
-extern s32 D_0015F438 MACRO_ADDR;
+extern s32 game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
 extern s32 boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR;
-extern s32 decode_mode __asm__("D_0015EED8") MACRO_ADDR;
+extern s32 decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
 extern u8 D_24135F[];
 extern s32 boot_intro_movie_ntsc[] __asm__("D_00139378");
 extern s32 boot_intro_movie_pal[] __asm__("D_00139380");
@@ -109,7 +109,7 @@ void startlevel(void) {
     vu1_init_chain();
     dmac_vif1_enable();
     ClearDmaQueueEntry();
-    D_0015F438 = 0;
+    game_frame_counter_macro = 0;
     sceGsSyncV(0);
     game_mode_macro = 0;
     put_disp_buffer();
@@ -144,7 +144,7 @@ void startlevel(void) {
     if (prev != 0) {
         fade_to_black(10);
     }
-    decode_mode = -1;
+    decode_mode_macro = -1;
     code = hdr->code + (s32)hdr;
     boot_image_buffer = code;
     if (pal_mode_macro == 0) {
@@ -154,7 +154,7 @@ void startlevel(void) {
         play_mpeg_movie(boot_intro_movie_pal[0], boot_intro_movie_pal[1], (code + 0x3F) & ~0x3F,
                         (code + 0x2C003F) & ~0x3F, 0);
     }
-    decode_mode = 0;
+    decode_mode_macro = 0;
     fade_to_black(scale_game_frames(0x12));
     FlushCache(0);
     if (pal_mode_macro != 0) {
@@ -174,7 +174,7 @@ void startlevel(void) {
     swap_render_buffer_chain();
     vu1_sync_chain(1);
     sceGsSyncV(0);
-    D_0015F438++;
+    game_frame_counter_macro++;
     DebugPrint(loading_boot_sound_bank_message);
     bank = load_audio_bank_by_location(disc_table.sound_bank);
     snd_resolve_bank_xrefs();

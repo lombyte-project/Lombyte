@@ -2521,7 +2521,7 @@ typedef struct {
 
 extern Nodedc88 *D_L02_001600EC_n __asm__("D_L02_001600EC");
 
-extern int D_0015EEA4 __attribute__((sda));
+extern int D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda));
 /* Aridia lift: carries the hero between two stops, with its two rail mobys, gears and a camera path. */
 void FUN_L02_002ddc88(unsigned char *moby) {
     Varsdc88 *d = *(Varsdc88 **)(moby + 0x78);
@@ -2753,7 +2753,7 @@ void FUN_L02_002ddc88(unsigned char *moby) {
         if (absolute_float_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
             absolute_float_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
             {
-                t = scale_ticks(D_0015EEA4) - D_00141848.stat[9].unk2 * 600;
+                t = scale_ticks(D_0015EEA4_gp) - D_00141848.stat[9].unk2 * 600;
             }
             lim = scale_ticks(3600) * 60.0f;
             if (lim < t) {
@@ -3136,7 +3136,7 @@ typedef struct {
     f32 t;              /* 0x24: 0..1 along the turn */
 } TurnerVars;
 
-extern s32 D_L02_0015F5C4;
+extern s32 level_game_mode __asm__("D_L02_0015F5C4");
 extern s32 D_0015ED84;
 extern u8 D_0014C050[][16];
 extern void FUN_L00_001fff28(void *, int, float);
@@ -3154,7 +3154,7 @@ void FUN_L02_002df948(struct Moby *m) {
     Vec4 rxy;
     TurnerVars *v = (TurnerVars *)m->pvars;
 
-    if (D_L02_0015F5C4 == 2 && m->command == 0) {
+    if (level_game_mode == 2 && m->command == 0) {
         m->visible = 0;
         m->flags |= 1;
     } else {

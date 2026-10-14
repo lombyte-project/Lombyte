@@ -431,7 +431,7 @@ extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float FUN_001f9b80(void *, void *);
-extern int D_0015EDA0;
+extern int hero_max_health __asm__("D_0015EDA0");
 extern unsigned char D_L00_001619F4 __attribute__((sda));
 extern float D_L00_001619F8 __attribute__((sda));
 extern float D_L00_001619FC __attribute__((sda));
@@ -596,7 +596,7 @@ void FUN_L00_002d89f0(Moby *moby) {
         }
         {
             Hero *hero = (Hero *)D_0013F350_c2;
-            int max_hp = D_0015EDA0;
+            int max_hp = hero_max_health;
             if (hero->vehicle_mode == 1) max_hp = 4;
             if (moby->state != 1 && D_L00_0015F63C != 0 && ((D_2D9EA0 *)D_L00_0015F63C->pvars) != 0 && hero->health.hp != 0
                 && (hero->health.hp + ((D_2D9EA0 *)D_L00_0015F63C->pvars)->f7C < max_hp || (D_0015EDB6 != 0 && hero->invulnerable_frames == 0))
@@ -694,7 +694,7 @@ void FUN_L00_002d89f0(Moby *moby) {
         }
         {
             Hero *hero = (Hero *)D_0013F350_c2;
-            int max_hp = D_0015EDA0;
+            int max_hp = hero_max_health;
             if (hero->vehicle_mode == 1) max_hp = 4;
             if (hero->health.hp == max_hp && hero->invulnerable_frames != 0 && D_0015EDB6 != 0) {
                 int duration = func_001F9850_2D9EA0(D_L00_00161A40);
@@ -727,7 +727,7 @@ void FUN_L00_002d89f0(Moby *moby) {
                 if (func_001F9938_2D9EA0(&ext->h1E)) {
                     if (data->h56 == 0) {
                         Hero *hero = (Hero *)D_0013F350_c2;
-                        int max_hp = D_0015EDA0;
+                        int max_hp = hero_max_health;
                         if (hero->vehicle_mode == 1) max_hp = 4;
                         if (hero->health.hp != 0) {
                             int new_hp = hero->health.hp + 1;

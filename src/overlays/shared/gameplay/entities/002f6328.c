@@ -1044,7 +1044,7 @@ typedef struct {
 
 extern L01LevelState D_L01_001BB6B0;
 extern L01LevelState D_L01_001BAA50;
-extern s32 D_L01_001BA950[];
+extern s32 moby_killed[] __asm__("D_L01_001BA950");
 extern s32 D_0014C190[][64];
 extern u8 D_0014C050[];
 extern u8 D_001413F4 __attribute__((section(".data")));
@@ -1106,7 +1106,7 @@ void FUN_L01_00300220(struct Moby *moby) {
             D_L01_001BB6B0.collected[(s16)moby->save_id] = 0;
             D_0014C190[current_level_index][(s16)moby->save_id >> 5] &=
                 ~(armed << (moby->save_id & 0x1F));
-            D_L01_001BA950[(s16)moby->save_id >> 5] &= ~(armed << (moby->save_id & 0x1F));
+            moby_killed[(s16)moby->save_id >> 5] &= ~(armed << (moby->save_id & 0x1F));
         }
     } else {
         vars->armed = 0;
@@ -1630,7 +1630,7 @@ void FUN_L01_003089f0(char *m) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309F00), where it is exact; names translated to the US level program. */
 
 extern int D_0015ED84; /* no foreign declaration */
-extern int D_L01_001BA950[];
+extern int moby_killed[] __asm__("D_L01_001BA950");
 extern s32 D_0014C190[][64];
 extern void FUN_L01_0026e0e0(char *arg, int val);
 
@@ -1639,7 +1639,7 @@ void FUN_L01_00308b28(char *moby) {
     unsigned char t;
     *(int *)((u8 *)D_0014C190 + (((short)*(unsigned short *)(moby + 0xB2) >> 5) * 4 + d)) |=
         1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-    D_L01_001BA950[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
+    moby_killed[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
         1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
     t = *(unsigned char *)(moby + 0x21);
     if (t != 0xFF)
@@ -1658,7 +1658,7 @@ extern L01LevelState D_L01_001BB6B0;
 extern int D_0015ED84_c __asm__("D_0015ED84");
 extern s32 D_0014C190_c[][64] __asm__("D_0014C190");
 extern unsigned char D_0014C050[];
-extern int D_0015EE20 __attribute__((sda));
+extern int alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
 extern int D_0013CAE4[];
 extern char *D_L01_0015FFD8;
 extern int D_L01_0015F594 __attribute__((sda));
@@ -1705,7 +1705,7 @@ void FUN_L01_00308bd8(struct Moby *moby) {
             moby->state = active;
     }
     if (*(int *)(data + 0x3C) != 0) {
-        if (D_0015EE20 == 0) {
+        if (alternate_animation_sequence_gp == 0) {
             moby->collision = 0;
             moby->flags |= 0x41;
             return;
