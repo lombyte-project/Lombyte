@@ -1921,48 +1921,51 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
     b = D_L06_00201960;
     if (count > 0) {
         int left = count;
-        strength = scale * 400000.0f;
         do {
             int *pa = a.v + random_integer_below(6);
             int *pb;
-            int r1, r2, low, high;
+            int r1, r2;
+            strength = scale * 400000.0f;
             left--;
             pb = b.v + random_integer_below(6);
-            low = scale_game_frames(15);
-            high = scale_game_frames(20);
-            r1 = random_int_between(low, high);
-            low = scale_game_frames(25);
-            high = scale_game_frames(30);
-            r2 = random_int_between(low, high);
+            {
+                int low, high;
+                low = scale_game_frames(15);
+                high = scale_game_frames(20);
+                r1 = random_int_between(low, high);
+            }
+            {
+                int low, high;
+                low = scale_game_frames(25);
+                high = scale_game_frames(30);
+                r2 = random_int_between(low, high);
+            }
             FUN_L00_0026a9f0(pos, push, *pa, *pb, strength, r1, r2, 0, 0,
                              frame_time_03b68 * 10.0f * scale);
         } while (left != 0);
     }
-    i = 0;
-    if (count * D_L06_00162150 > 0) {
-        do {
-            int color1, color2, life, size, fade;
-            i++;
-            random_vector_03b68(position, 0.0f, 1.0f);
-            FUN_001f9a10(position, position, pos);
-            random_vector_03b68(direction, 0.0f, 0.9f);
-            FUN_001f9a10(direction, direction, push);
-            transform_2fd1a0(velocity, direction,
-                random_float_between_03b68(D_L06_00162114, D_L06_00162118) * frame_time_03b68);
-            random_vector_03b68(direction, 0.0f, 0.9f);
-            FUN_001f9a10(direction, direction, push);
-            transform_2fd1a0(acceleration, direction,
-                random_float_between_03b68(D_L06_00162124, D_L06_00162128) * frame_time_03b68);
-            velocity[3] = random_float_between_03b68(D_L06_0016211C, D_L06_00162120) * scale;
-            acceleration[3] = random_float_between_03b68(D_L06_0016212C, D_L06_00162130) * scale;
-            color1 = fast_tween_color_03b68(D_L06_00162134, D_L06_00162138, random_float_between_03b68(0.0f, 1.0f));
-            color2 = fast_tween_color_03b68(D_L06_0016213C, D_L06_00162140, random_float_between_03b68(0.0f, 1.0f));
-            life = float_to_int_03b68(scale_time_03b68(random_float_between_03b68((float)D_L06_00162144, (float)(D_L06_00162144 << 1))));
-            size = float_to_int_03b68(scale_time_03b68(random_float_between_03b68((float)D_L06_00162148, (float)D_L06_00162148 * 1.2f)));
-            fade = float_to_int_03b68(scale_time_03b68(random_float_between_03b68((float)D_L06_0016214C * 0.8f, (float)D_L06_0016214C)));
-            emit_particle_03b68(position, velocity, acceleration, color1, color2, life, size, fade,
-                D_L06_00162154 + (D_L06_00162158 << 16));
-        } while (i < count * D_L06_00162150);
+    for (i = 0; i < count * D_L06_00162150;) {
+        int color1, color2, life, size, fade;
+        i++;
+        random_vector_03b68(position, 0.0f, 1.0f);
+        FUN_001f9a10(position, position, pos);
+        random_vector_03b68(direction, 0.0f, 0.9f);
+        FUN_001f9a10(direction, direction, push);
+        transform_2fd1a0(velocity, direction,
+            random_float_between_03b68(D_L06_00162114, D_L06_00162118) * frame_time_03b68);
+        random_vector_03b68(direction, 0.0f, 0.9f);
+        FUN_001f9a10(direction, direction, push);
+        transform_2fd1a0(acceleration, direction,
+            random_float_between_03b68(D_L06_00162124, D_L06_00162128) * frame_time_03b68);
+        velocity[3] = random_float_between_03b68(D_L06_0016211C, D_L06_00162120) * scale;
+        acceleration[3] = random_float_between_03b68(D_L06_0016212C, D_L06_00162130) * scale;
+        color1 = fast_tween_color_03b68(D_L06_00162134, D_L06_00162138, random_float_between_03b68(0.0f, 1.0f));
+        color2 = fast_tween_color_03b68(D_L06_0016213C, D_L06_00162140, random_float_between_03b68(0.0f, 1.0f));
+        life = float_to_int_03b68(scale_time_03b68(random_float_between_03b68((float)D_L06_00162144, (float)(D_L06_00162144 << 1))));
+        size = float_to_int_03b68(scale_time_03b68(random_float_between_03b68((float)D_L06_00162148, (float)D_L06_00162148 * 1.2f)));
+        fade = float_to_int_03b68(scale_time_03b68(random_float_between_03b68((float)D_L06_0016214C * 0.8f, (float)D_L06_0016214C)));
+        emit_particle_03b68(position, velocity, acceleration, color1, color2, life, size, fade,
+            D_L06_00162154 + (D_L06_00162158 << 16));
     }
 }
 #endif
