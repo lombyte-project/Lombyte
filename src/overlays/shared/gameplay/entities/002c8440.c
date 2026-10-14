@@ -241,7 +241,8 @@ void FUN_L00_002c89e8(struct Moby *m)
         h = frame_scale * 0.15f * m->scale;
         e.f[2] -= h / m->pclass->scale;
         qcopy_nc(&a, &d);
-        a.f[2] -= h / m->pclass->scale;
+        h = h / m->pclass->scale;
+        a.f[2] -= h;
         qcopy_nc(&q, &d);
         q.f[2] += f * 0.2f;
         if (FUN_001f0d60_2c89e8(f * 0.3f, &q, 4, hero.moby)) {
@@ -249,17 +250,17 @@ void FUN_L00_002c89e8(struct Moby *m)
             qcopy_nc(&m->pos, collision_point);
             m->pos.z -= f * 0.2f;
             collision_point += 0x10;
+            h = 0.01f;
         } else {
             if (!collision_line_2c8440(&e, &a, 0, hero.moby, 0)) {
-                qcopy_nc(&m->pos, &d);
-                return;
+                goto collision_miss;
             }
             collision_point = (u8 *)&coll_hit_2c8440 + 0x20;
             qcopy_nc(&m->pos, collision_point);
             m->pos.z += (frame_scale * 0.15f * m->scale) / m->pclass->scale;
             collision_point += 0x20;
+            h = 0.01f;
         }
-        h = 0.01f;
         reflect_vector_2cb418(v, v, collision_point);
         scale_vector_xyz_2c8440(v, v, half);
         g = vector_length_xyz_2cb418(v);
@@ -273,7 +274,7 @@ settle:
                     timer = (u16)v->timer + 1;
                     v->timer = timer;
                     if (!coll_hit_2c8440.moby || coll_hit_2c8440.unk1C > 0 ||
-                        scale_game_frames_2c8440(240) < (s16)timer) {
+                        (timer = (s16)timer, scale_game_frames_2c8440(240) < timer)) {
                         m->state = 3;
                         v->timer = 0;
                     }
@@ -285,6 +286,9 @@ settle:
         add_vector_xyz_2c8440(&m->pos, &m->pos, v);
         FUN_L00_002c8078(m);
         break;
+collision_miss:
+        qcopy_nc(&m->pos, &d);
+        return;
     }
     case 3: {
         f32 f;
