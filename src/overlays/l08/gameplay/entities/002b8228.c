@@ -1301,14 +1301,10 @@ begin_attack:
         if (0.2f < FUN_001f9b80(&moby->pos, point))
             FUN_L08_002635a0(moby, d + 0xd0, point, d + 0x40);
         if (!(moby->anim_flags & 2)) break;
-        if (!(FUN_001f9b80(&moby->pos, &target->pos) < 6.0f)) {
-            angle = FUN_001f9e90(moby->pos.x - *(float *)(camera_state_bytes + 0x140), moby->pos.y - *(float *)(camera_state_bytes + 0x144));
-            if (!(0.55850536f < fast_difference_between_rotations(*(float *)(camera_state_bytes + 0x158), angle))) {
-                if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(6));
-                moby->state = 5;
-                break;
-            }
-        }
+        if (FUN_001f9b80(&moby->pos, &target->pos) < 6.0f) goto select_target;
+        angle = FUN_001f9e90(moby->pos.x - *(float *)(camera_state_bytes + 0x140), moby->pos.y - *(float *)(camera_state_bytes + 0x144));
+        if (!(0.55850536f < fast_difference_between_rotations(*(float *)(camera_state_bytes + 0x158), angle))) goto fire_animation;
+select_target:
         old = *(char **)(d + 0x120);
         next = FUN_L08_002daa10(moby);
         *(char **)(d + 0x120) = next;
@@ -1318,6 +1314,10 @@ begin_attack:
         if (moby->prev_seq != 4) { hit_duration = scale_game_frames(7); goto change_animation; }
         moby->state = 1;
         goto reset_timer;
+fire_animation:
+        if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(6));
+        moby->state = 5;
+        break;
     case 5:
         angle = FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
         FUN_L08_00262778(angle, 0.02f, 0.3f, 0.2f, moby, d + 0x12c);
