@@ -288,8 +288,9 @@ state_one:
             height = angle_2d1688(x - *(float *)(moby + 0x10), y - *(float *)(moby + 0x14));
         }
         {
-            float turn_step = frame_time_sq * 3.1415927f;
-            steer_2d1688(height, turn_step, turn_step, frame_time * 3.1415927f, point, data + 0x70);
+            float pi = 3.1415927f;
+            float turn_step = frame_time_sq * pi;
+            steer_2d1688(height, turn_step, turn_step, frame_time * pi, point, data + 0x70);
         }
         fast_vec_normalize(frame_time * 3.0f, w, moby + 0xc0);
         fast_vec_add(moby + 0x10, moby + 0x10, w);
