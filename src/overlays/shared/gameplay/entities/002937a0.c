@@ -369,9 +369,6 @@ void FUN_L08_002d36e0(char *m) {
         *(int *)(d + 0x1B0) = ((int)hero.moby);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d3878.s", FUN_L08_002d3878);
-#else
 typedef struct { float v[4]; } Vec_002d3878 __attribute__((aligned(16)));
 typedef struct {
     Vec_002d3878 vertices[4];
@@ -496,7 +493,6 @@ void FUN_L08_002d3878(char *m) {
     }
     FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
 }
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
