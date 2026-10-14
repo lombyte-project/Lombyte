@@ -297,7 +297,7 @@ state_three:
             if (DATA_INT(0x84)) { STOP_VOICE(0x14); STOP_VOICE(0x80); DATA_INT(0x84) = 0; }
             p = (int *)data; i = 3;
             do {
-                if (*p != -1 && D_0013F64C == (int)(D_L15_0015FFD8 + *p * 0x100) && *(short *)(D_0013F64C + 0xa6) == 0x33e && D_0013F65E == 0) {
+                if (*p != -1 && (int)hero.ground_moby == (int)(D_L15_0015FFD8 + *p * 0x100) && *(short *)((int)hero.ground_moby + 0xa6) == 0x33e && hero.air_frames.s == 0) {
                     ready = 0;
                     if (DATA_INT(0x8c)) {
                         int timer = DATA_SHORT(0x12);
@@ -312,7 +312,7 @@ state_three:
                 p++;
             } while (--i >= 0);
             DATA_INT(0x8c) = ready;
-            if (!FUN_001f9770((char *)data + 0x12) && !(is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x70)) && D_0013F65E == 0) && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x128))) goto finish;
+            if (!FUN_001f9770((char *)data + 0x12) && !(is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x70)) && hero.air_frames.s == 0) && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x128))) goto finish;
             p = (int *)data; i = 3;
             do { if (*p != -1) { other = moby_array + *p * 0x100; if (*(short *)(other + 0xa6) == 0x33e) other[0x20] = 1; else FUN_L15_002d95a0(other); } p++; } while (--i >= 0);
             RESET_TIMERS(); goto finish;
