@@ -1000,32 +1000,28 @@ def render_svg(
             f'font-family="{esc(FONT)}" font-size="{legend_font}" fill="{MUTED}">{text}</text>'
         )
 
-    # Hero stat: the whole game (executable + overlays), HUD-style.
+    # Stats, one right-aligned column: data in C above the whole game's code
+    # (executable + overlays), each value over its caption.
     status_x = row_x - 10
-    lines.append(
-        f'<text x="{status_x}" y="38" text-anchor="end" '
-        f'font-family="{esc(FONT)}" font-size="28" font-weight="800" '
-        f'fill="{ORANGE}">{total_percent:.1f}%</text>'
-    )
-    lines.append(
-        f'<text x="{status_x}" y="52" text-anchor="end" '
-        f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}">'
-        f"C_EXACT &#183; exe + overlays</text>"
-    )
+    stats = []
     if data and data[0]:
-        # Data next to the code stat: bytes of preserved data defined in C.
-        data_x = status_x - 124
+        stats.append((
+            CHROME, f"{100.0 * data[1] / data[0]:.1f}%", "data in C",
+            f'<title>Data in C: {data[1]:,} of {data[0]:,} B, of which {data[2]:,} B '
+            f'are zeros (zero-initialised level data).</title>',
+        ))
+    stats.append((ORANGE, f"{total_percent:.1f}%", "C_EXACT &#183; exe + overlays", ""))
+    top = 31 if len(stats) == 1 else 3
+    for row, (color, value, caption, tip) in enumerate(stats):
+        y = top + row * 29
         lines.append(
-            f'<text x="{data_x}" y="38" text-anchor="end" '
-            f'font-family="{esc(FONT)}" font-size="20" font-weight="800" '
-            f'fill="{CHROME}">{100.0 * data[1] / data[0]:.1f}%<title>Data in C: '
-            f'{data[1]:,} of {data[0]:,} B, of which {data[2]:,} B are zeros '
-            f'(zero-initialised level data).</title></text>'
+            f'<text x="{status_x}" y="{y + 15}" text-anchor="end" '
+            f'font-family="{esc(FONT)}" font-size="17" font-weight="800" '
+            f'fill="{color}">{value}{tip}</text>'
         )
         lines.append(
-            f'<text x="{data_x}" y="52" text-anchor="end" '
-            f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}">'
-            f"data in C</text>"
+            f'<text x="{status_x}" y="{y + 25}" text-anchor="end" '
+            f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}">{caption}</text>'
         )
 
     # The drawer: the executable, its own percentage over its dimmed treemap.
