@@ -2551,6 +2551,7 @@ void FUN_L00_002ce358(struct Moby *m)
         }
         hit = FUN_0025a420_2ce358(m, 1, 0);
         if (hit != 0) {
+            s32 category;
             char *h = *(char **)((char *)hit + 0x20);
             category = h && *(char **)(h + 0x24) ? *(s16 *)(*(char **)(h + 0x24) + 0x46) : 0;
             if (category > 8) goto dispatch_state;
