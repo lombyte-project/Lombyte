@@ -304,10 +304,10 @@ void FUN_L14_00301de8(char *m) {
         i = 0;
         do {
             next_i = i + 1;
-            dst = (char *)((i << 4) + (int)d);
-            offset = (int)dst;
-            dst += 0x460;
-            src = (char *)offset + 0x560;
+            src = (char *)((i << 4) + (int)d);
+            offset = (int)src;
+            src += 0x560;
+            dst = (char *)offset + 0x460;
             for (k = 2; k >= 0; k--) {
                 add_vector_xyz(dst, dst, src);
                 dst += 0x40;
