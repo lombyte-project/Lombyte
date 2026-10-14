@@ -198,11 +198,11 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     float bottom_right[4];
     int *tag;
     unsigned long long *q;
-    union { volatile int saved_depth[2]; volatile float scale[2]; } saved;
     unsigned long long packed_depth;
     float scale;
 
-    saved.saved_depth[0] = z_and_fog;
+    volatile int saved_depth[2] __attribute__((aligned(16)));
+    saved_depth[0] = z_and_fog;
     center[0] = x;
     center[1] = y;
     vertical[0] = height * fast_sin(angle);
@@ -220,9 +220,12 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[0] = 0x10000007;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[1] = 0;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[2] = 0;
-    saved.saved_depth[1] = 0x41800000;
-    scale = saved.scale[1];
-    packed_depth = (unsigned long long)saved.saved_depth[0] << 32;
+    {
+        union { volatile int saved_depth; volatile float scale; } saved;
+        saved.saved_depth = 0x41800000;
+        scale = saved.scale;
+    }
+    packed_depth = (unsigned long long)saved_depth[0] << 32;
     ((int *)(*(volatile int *)&D_L11_001611C0_g))[3] = 0x50000007;
     tag = (int *)(*(volatile int *)&D_L11_001611C0_g);
     q = (unsigned long long *)(tag + 4);
