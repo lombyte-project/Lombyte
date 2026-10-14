@@ -1418,7 +1418,7 @@ next_point:
     direction[2] = FUN_001f9e90(path->points[selected + 1].x - path->points[selected].x, path->points[selected + 1].y - path->points[selected].y);
 }
 #endif
-extern int D_0015ED84_254608 __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_lui __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern int FUN_001f96f8_254608(int) __asm__("FUN_001f96f8");
 typedef int u128_254608 __attribute__((mode(TI)));
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Node_254608;
@@ -1493,7 +1493,7 @@ void FUN_L05_00254608(void) {
     }
     path = D_L05_001B0930_254608[d->f20];
     hero.unk8B4 = (void *)path;
-    if (D_0015ED84_254608 == 0x10) {
+    if (D_0015ED84_lui == 0x10) {
         *(u128_254608 *)v0 = 0;
         v0[0] = 163.0f;
         v0[1] = 119.0f;
@@ -1533,7 +1533,7 @@ void FUN_L05_00254608(void) {
         }
     }
     near = 0;
-    if (D_0015ED84_254608 == 0x10) {
+    if (D_0015ED84_lui == 0x10) {
         if (hero.motion.pos.f[2] < path->p[hero.unk898].z - 2.0f) {
             near = 1;
             if (hero.unk8AE < FUN_001f96f8_254608(0x46)) {
@@ -1618,12 +1618,12 @@ void FUN_L05_00254608(void) {
     if (*(D_0013D388_254608) != 0) {
         D_L05_0015F6A8 = 1;
     }
-    if (D_0015ED84_254608 == 5) {
+    if (D_0015ED84_lui == 5) {
         D_0015EE38_macro++;
-    } else if (D_0015ED84_254608 == 0x10) {
+    } else if (D_0015ED84_lui == 0x10) {
         D_0015EE3C_macro++;
     }
-    if (D_0015ED84_254608 == 5) {
+    if (D_0015ED84_lui == 5) {
         int t;
 
         if (pal_mode != 0) {
@@ -1664,7 +1664,7 @@ void FUN_L05_00254608(void) {
             hero.unk880 = -1;
         }
         func_001FFFA0_254608();
-    } else if (D_0015ED84_254608 == 0x10) {
+    } else if (D_0015ED84_lui == 0x10) {
         if (d->f28 == -1) {
             return;
         }

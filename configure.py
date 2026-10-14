@@ -1076,7 +1076,7 @@ def hoist_sda_externs(assembly, source):
     it relaxes a bare symbol access to $gp only when the size is already
     known.  The source says which globals retail reads through $gp: those
     declared `__attribute__((sda))` (the game compiler's spelling, ignored by
-    SN cc1); their directives go first.  When a plain `<name>_lui` alias of
+    SN cc1); their directives go first.  When a `<name>_lui` alias of
     the symbol is declared before its first sda declaration, the functions
     in between read it through lui (retail mixes both when a unit joins files
     that did and did not define the symbol), so the directive goes in front
@@ -1095,7 +1095,7 @@ def hoist_sda_externs(assembly, source):
         if key and key not in sda:
             sda[key] = match.start()
     absolute = {}
-    for match in re.finditer(r'^extern[^;(]*\b\w+_lui\s*__asm__\s*\(\s*"([\w.$]+)"\s*\)\s*;', source, re.M):
+    for match in re.finditer(r'^extern[^;(]*\b\w+_lui\s*__asm__\s*\(\s*"([\w.$]+)"\s*\)[^;]*;', source, re.M):
         absolute.setdefault(match.group(1), match.start())
     lines = assembly.split("\n")
     functions = []  # (asm line of the function's .globl/.ent, source offset of its definition)
