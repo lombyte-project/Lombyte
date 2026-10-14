@@ -679,14 +679,14 @@ void FUN_L08_002f5e58(struct Moby *m) {
     FlickerDrawPacket packet;
     Vec4 velocity, offset, position, wave, sag;
     Vec4 *grid;
-    f32 *u, *v;
     f32 *weight;
     s32 next_i;
     f32 inv_x, inv_y;
+    f32 *u, *v;
     f32 phase, phase_step, amp_a, amp_step_a, amp_b, amp_step_b;
     f32 step_a, step_b, time, height_a, height_b, phase_a, phase_b;
     f32 x, y, noise_x, angle, base, sine, shape, bend, a, c, t;
-    s32 i, j, k, stride, alpha, timer, count, lifetime;
+    s32 stride, alpha, i, j, k, timer, count, lifetime;
     u32 color_a, color_b;
     s32 temp;
     u8 red, green, blue;
@@ -709,16 +709,15 @@ void FUN_L08_002f5e58(struct Moby *m) {
     {
         f32 *target = d->levels_b;
         f32 *current = d->levels_a;
-        i = 7;
+        s32 i = 7;
         do {
             f32 value = *current;
-            f32 t;
             if (value < *target) {
-                t = value + f[0x22] * f[0x23];
+                f32 t = value + f[0x22] * f[0x23];
                 *current = t;
                 if (*target <= t) *target = random_float_between(1.0f-f[0x22], 1.0f);
             } else {
-                t = value - f[0x22] * f[0x23];
+                f32 t = value - f[0x22] * f[0x23];
                 *current = t;
                 if (t <= *target) *target = random_float_between(1.0f-f[0x22], 1.0f);
             }
@@ -776,61 +775,64 @@ void FUN_L08_002f5e58(struct Moby *m) {
     bend = d->levels_a[0];
     phase = f[5]; amp_a = f[7]; amp_b = f[8];
     phase_a = f[0x18]; phase_b = f[0x19];
-    for (i = 0; i <= b[9]; i = next_i) {
-        f32 next_phase, next_amp_a, next_amp_b, next_a, next_b;
-        f32 noise_y;
-        y = convert_integer_to_float(i) / convert_integer_to_float(b[9]);
-        qcopy(&point, &edge[0]);
-        next_i = i + 1;
-        next_phase = phase + phase_step;
-        next_amp_b = amp_b + amp_step_b;
-        next_a = phase_a + step_a;
-        next_amp_a = amp_a + amp_step_a;
-        next_b = phase_b + step_b;
-        subtract_vector_xyz(&across, &edge[1], &edge[0]);
-        FUN_001f9a68(&across, &across, inv_x);
-        noise_y = FUN_L08_002f5d98(y, (char *)d);
-        k = i * stride;
-        weight = (f32 *)((char *)grid + k + 12);
-        for (j = 0; j <= b[8]; j++) {
-            f32 a, c, t, base, angle, shape;
-            x = convert_integer_to_float(j) / convert_integer_to_float(b[8]);
-            a = FUN_L00_0025e310(f[0x17] * time);
-            angle = x * 3.1415927f;
-            c = FUN_001f9de0(a);
-            t = f[0x16] * c;
-            base = time * phase + t;
-            noise_x = FUN_L08_002f5d98(x, (char *)d);
-            base = base + (noise_x * f[0x34] + noise_y * f[0x35] + bend * f[0x36]);
-            shape = height_a * x + height_b * (1.0f-x);
-            a = FUN_L00_0025e310(base + phase_a + f[0xb] * x + f[0xd] * y);
-            c = FUN_L00_0025e310(base + phase_b + f[0xc] * y + f[0xe] * x);
-            sine = FUN_001f9988(FUN_001f9de0(angle));
-            shape = shape * sine;
-            shape = shape * (1.0f-y);
-            t = FUN_001f9dc8(a);
-            normalize_vector_xyz(&velocity, &across, amp_a * t * sine * noise_x);
-            t = FUN_001f9de0(c);
-            normalize_vector_xyz(&offset, &down[0], amp_b * t * sine * noise_x);
-            a = FUN_001f9de0(y * 3.1415927f);
-            c = FUN_001f9de0(angle);
-            t = FUN_001f9de0(FUN_L00_0025e310(base + f[0xb] * x));
-            base = FUN_001f9de0(FUN_L00_0025e310(base + f[0xd] * y));
-            normalize_vector_xyz(&wave, &normal, a * c * (f[0x1e] * t + f[0x1f] * base));
-            normalize_vector_xyz(&sag, &down[0], shape);
-            add_vector_xyz(&position, &velocity, &offset);
-            add_vector_xyz(&position, &position, &wave);
-            subtract_vector_xyz(&position, &position, &sag);
-            add_vector_xyz((char *)grid + k + j*16, &point, &position);
-            *weight = 1.0f /
-                (((1.0f-f[0x56]) + f[0x56]*sine*sine*sine) * ((1.0f-f[0x57])+f[0x57]*y));
-            add_vector_xyz(&point, &point, &across);
-            weight += 4;
+    {
+        s32 i;
+        for (i = 0; i <= b[9]; i = next_i) {
+            f32 next_phase, next_amp_a, next_amp_b, next_a, next_b;
+            f32 noise_y;
+            y = convert_integer_to_float(i) / convert_integer_to_float(b[9]);
+            qcopy(&point, &edge[0]);
+            next_i = i + 1;
+            next_phase = phase + phase_step;
+            next_amp_b = amp_b + amp_step_b;
+            next_a = phase_a + step_a;
+            next_amp_a = amp_a + amp_step_a;
+            next_b = phase_b + step_b;
+            subtract_vector_xyz(&across, &edge[1], &edge[0]);
+            FUN_001f9a68(&across, &across, inv_x);
+            noise_y = FUN_L08_002f5d98(y, (char *)d);
+            k = i * stride;
+            weight = (f32 *)((char *)grid + k + 12);
+            for (j = 0; j <= b[8]; j++) {
+                f32 a, c, t, base, angle, shape;
+                x = convert_integer_to_float(j) / convert_integer_to_float(b[8]);
+                a = FUN_L00_0025e310(f[0x17] * time);
+                angle = x * 3.1415927f;
+                c = FUN_001f9de0(a);
+                t = f[0x16] * c;
+                base = time * phase + t;
+                noise_x = FUN_L08_002f5d98(x, (char *)d);
+                base = base + (noise_x * f[0x34] + noise_y * f[0x35] + bend * f[0x36]);
+                shape = height_a * x + height_b * (1.0f-x);
+                a = FUN_L00_0025e310(base + phase_a + f[0xb] * x + f[0xd] * y);
+                c = FUN_L00_0025e310(base + phase_b + f[0xc] * y + f[0xe] * x);
+                sine = FUN_001f9988(FUN_001f9de0(angle));
+                shape = shape * sine;
+                shape = shape * (1.0f-y);
+                t = FUN_001f9dc8(a);
+                normalize_vector_xyz(&velocity, &across, amp_a * t * sine * noise_x);
+                t = FUN_001f9de0(c);
+                normalize_vector_xyz(&offset, &down[0], amp_b * t * sine * noise_x);
+                a = FUN_001f9de0(y * 3.1415927f);
+                c = FUN_001f9de0(angle);
+                t = FUN_001f9de0(FUN_L00_0025e310(base + f[0xb] * x));
+                base = FUN_001f9de0(FUN_L00_0025e310(base + f[0xd] * y));
+                normalize_vector_xyz(&wave, &normal, a * c * (f[0x1e] * t + f[0x1f] * base));
+                normalize_vector_xyz(&sag, &down[0], shape);
+                add_vector_xyz(&position, &velocity, &offset);
+                add_vector_xyz(&position, &position, &wave);
+                subtract_vector_xyz(&position, &position, &sag);
+                add_vector_xyz((char *)grid + k + j*16, &point, &position);
+                *weight = 1.0f /
+                    (((1.0f-f[0x56]) + f[0x56]*sine*sine*sine) * ((1.0f-f[0x57])+f[0x57]*y));
+                add_vector_xyz(&point, &point, &across);
+                weight += 4;
+            }
+            add_vector_xyz(&edge[0], &edge[0], &down[0]);
+            phase = next_phase; amp_a = next_amp_a;
+            add_vector_xyz(&edge[1], &edge[1], &down[1]);
+            amp_b = next_amp_b; phase_a = next_a; phase_b = next_b;
         }
-        add_vector_xyz(&edge[0], &edge[0], &down[0]);
-        phase = next_phase; amp_a = next_amp_a;
-        add_vector_xyz(&edge[1], &edge[1], &down[1]);
-        amp_b = next_amp_b; phase_a = next_a; phase_b = next_b;
     }
     {
         f32 a;
