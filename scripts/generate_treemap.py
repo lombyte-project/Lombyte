@@ -61,7 +61,7 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gen_progress_report import data_totals  # noqa: E402
+from gen_progress_report import data_totals, zero_level_data  # noqa: E402
 from overlay_units import category_of, load_levels, overlay_functions  # noqa: E402
 from progress_groups import (  # noqa: E402
     committed_function_scores,
@@ -1018,7 +1018,9 @@ def render_svg(
         lines.append(
             f'<text x="{data_x}" y="38" text-anchor="end" '
             f'font-family="{esc(FONT)}" font-size="20" font-weight="800" '
-            f'fill="{CHROME}">{100.0 * data[1] / data[0]:.1f}%</text>'
+            f'fill="{CHROME}">{100.0 * data[1] / data[0]:.1f}%<title>Data in C: '
+            f'{data[1]:,} of {data[0]:,} B, of which {data[2]:,} B are zeros '
+            f'(zero-initialised level data).</title></text>'
         )
         lines.append(
             f'<text x="{data_x}" y="52" text-anchor="end" '
@@ -1293,7 +1295,7 @@ def main(argv=None) -> int:
         min_bytes=args.min_bytes,
         title=args.title,
         fuzzy_percent=fuzzy_percent,
-        data=data["all"] if data else None,
+        data=(*data["all"], zero_level_data(repo)) if data else None,
         drawer_height=args.drawer_height,
     )
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -1410,6 +1412,8 @@ def main(argv=None) -> int:
             total, matched = data[key]
             section["data"] = {"bytes_total": total, "bytes_matching_c": matched,
                                "c_exact_percent": round(100.0 * matched / total, 4) if total else 0.0}
+            if key != "boot":  # zero-initialised level globals among the matched bytes
+                section["data"]["bytes_matching_c_zero"] = zero_level_data(repo)
     # The header fields describe the whole game (executable + overlays); the
     # executable alone is under "boot", as the drawer shows it.
     stats = {

@@ -196,6 +196,24 @@ def read_level_data(repo: Path) -> dict[int, int]:
     return out
 
 
+def zero_level_data(repo: Path) -> int:
+    """Bytes of the level data in C that are zero (defined `= {0}`), counted per
+    level like the matched bytes: a D_XXXXXXXX row counts once for every level."""
+    zero = set()
+    for path in (repo / "src" / "overlays").rglob("*.c"):
+        for label, bare in re.findall(r'(?:__asm__\("(D_\w+)"\)|\b(D_(?:L\d\d_)?[0-9A-Fa-f]{8})(?:\[\w*\])*)'
+                                      r'\s*=\s*\{\s*0\s*\}\s*;', path.read_text(errors="replace")):
+            zero.add(label or bare)
+    levels = len(list((repo / "config" / "overlays" / "us").glob("level-??.json")))
+    rows = (repo / "config" / "overlays" / "us" / "data.tsv")
+    total = 0
+    for line in rows.read_text().splitlines() if rows.is_file() else []:
+        name, _, size = line.partition("\t")
+        if name in zero:
+            total += int(size) * (1 if name.startswith("D_L") else levels)
+    return total
+
+
 def data_measures(total: int, matched: int) -> dict:
     pct = round(100.0 * matched / total, 6) if total else 0.0
     return {"total_data": str(total), "matched_data": str(matched), "matched_data_percent": pct,
