@@ -2459,6 +2459,7 @@ void FUN_L00_002ce358(struct Moby *m)
         (*(u8 *)((u8 *)&hero + 0x1ff4))++;
         if (hero.ammo_used < *(u8 *)((u8 *)&hero + 0x1ff4)) {
             f32 distance;
+            struct Moby *other;
             closest = 0;
             count = 0;
             distance = 1000000.0f;
@@ -2587,8 +2588,8 @@ state2:
         scratch.vectors.direction.f[2] = 0.0f;
         scratch.vectors.rotated.f[0] = 0.0f;
         scratch.vectors.rotated.f[2] = 0.0f;
-        scratch.vectors.rotated.f[3] = 0.0f;
         scratch.vectors.rotated.f[1] = v->elevation;
+        scratch.vectors.rotated.f[3] = 0.0f;
         FUN_001ffa70_2ce358(matrix, &scratch.vectors.rotated);
         FUN_001ff6f8_2ce358(&scratch.vectors.direction, &scratch.vectors.direction, matrix);
         add_vector_xyz_2c8440(&target_pos, (u8 *)&hero + 0x80, (u8 *)hero.moby + 0xe0);
@@ -2711,11 +2712,11 @@ state3_rotations:
 state4:
     {
         target = v->target;
-        if (target == 0 || target->oclass != v->target_oclass) {
-            v->target = 0;
-        } else if (target->state == 0xfe || target->state == 0xfd) {
-            v->target = 0;
-        } else {
+        if (target == 0) goto fade_clear;
+        if (target->oclass != v->target_oclass) goto fade_clear;
+        if (target->state == 0xfe) goto fade_clear;
+        if (target->state == 0xfd) goto fade_clear;
+        {
             char *h = (char *)FUN_002141f8_c((char *)target);
             qcopy(&old_pos, &v->target->pos);
             if (h != 0)
@@ -2725,6 +2726,10 @@ state4:
             FUN_001ff598_2ce358(&v->position, &v->position, frame_scale * 0.9f);
             add_vector_xyz_2c8440(&m->pos, &m->pos, &v->position);
         }
+        goto fade_alpha;
+fade_clear:
+        v->target = 0;
+fade_alpha:
         m->alpha -= 4;
         if (m->alpha < 6)
             m->state = 5;
