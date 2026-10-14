@@ -578,14 +578,14 @@ int FUN_L00_00236e50(HudElem *e) {
     FUN_001ff260(&first_step);
     FUN_001ff260(&second_step);
     FUN_001ff260(&third_step);
-    first_step.y = first_step.x = D_L00_0015F750 * 16.0f;
-    second_step.y = second_step.x = (D_L00_0015F754 - D_L00_0015F750) * 16.0f;
-    third_step.y = third_step.x = (D_L00_0015F758 - D_L00_0015F754) * 16.0f;
+    first_step.y = first_step.x = star_init_limit0_gp * 16.0f;
+    second_step.y = second_step.x = (star_init_limit1_gp - star_init_limit0_gp) * 16.0f;
+    third_step.y = third_step.x = (star_init_limit2_gp - star_init_limit1_gp) * 16.0f;
     for (i = 0; i < 100; i++) {
         if (i == 0) {
             FUN_001ff2a8(&direction, &direction, &first_step);
-            offset += D_L00_0015F750;
-            star_width = (int)(D_L00_0015F750 * 32.0f);
+            offset += star_init_limit0_gp;
+            star_width = (int)(star_init_limit0_gp * 32.0f);
         }
         if (!(offset < D_L00_0017E660[i].y)) {
             FUN_L00_001ff348(&star_position, &D_L00_0017E660[i], &origin);

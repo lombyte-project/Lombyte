@@ -2497,10 +2497,10 @@ extern unsigned char D_L07_00161B50[] __attribute__((sda, section(".sdata")));
 extern char D_L07_002117F8[];
 extern char D_L07_00211838[];
 extern char D_0013F3D0[];
-extern int D_001413D0 __attribute__((section(".data")));
+extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
 extern short D_0013F65C __attribute__((section(".data")));
 extern int D_001415F8 __attribute__((section(".data")));
-extern unsigned char D_001413F5 __attribute__((section(".data")));
+extern u8 D_001413F5_lui[] __asm__("D_001413F5") __attribute__((section(".data")));
 extern int D_L07_001612D8;
 extern char D_L07_00173EE0_30f5f0[] __asm__("D_L07_00173EE0");
 
@@ -2598,12 +2598,12 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
     case 1:
         if ((moby[0x70] & 2) && moby[0x53] != 0) blend_moby_animation(moby, 0, 0, 10);
         if (inside && *(int *)(target + 16)) {
-            if (*(int *)(target + 16) == D_001413D0 && !FUN_L07_0030f540(moby, 4, 6)) {
+            if (*(int *)(target + 16) == D_001413D0_lui[0] && !FUN_L07_0030f540(moby, 4, 6)) {
                 if (moby[0x53] != 1) blend_moby_animation(moby, 1, 0, 10);
                 moby[0x20] = 4;
             }
         } else if (inside) goto wander_one;
-        if (*(int *)(target + 16) && *(int *)(target + 16) == D_001413D0 && FUN_L07_0030f4d0(moby, *(int *)(target + 16), 1.5f)) {
+        if (*(int *)(target + 16) && *(int *)(target + 16) == D_001413D0_lui[0] && FUN_L07_0030f4d0(moby, *(int *)(target + 16), 1.5f)) {
             if (moby[0x53] != 2) blend_moby_animation(moby, 2, 0, 2);
             moby[0x20] = 5;
         } else {
@@ -2624,7 +2624,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         goto bounds;
     case 2:
         if ((moby[0x70] & 2) && moby[0x53] != 1) blend_moby_animation(moby, 1, 0, 10);
-        if (inside && *(int *)(target + 16) && *(int *)(target + 16) == D_001413D0) {
+        if (inside && *(int *)(target + 16) && *(int *)(target + 16) == D_001413D0_lui[0]) {
             if (!FUN_L07_0030f540(moby, 4, 6)) {
                 if (moby[0x53] != 1) blend_moby_animation(moby, 1, 0, 10);
                 moby[0x20] = 4;
@@ -2644,7 +2644,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             *(int *)(data + 0x134) = rand_e50() % 120 + 60;
             moby[0x20] = 1;
         }
-        if (*(int *)(target + 16) && *(int *)(target + 16) == D_001413D0 && FUN_L07_0030f4d0(moby, *(int *)(target + 16), 1.5f)) {
+        if (*(int *)(target + 16) && *(int *)(target + 16) == D_001413D0_lui[0] && FUN_L07_0030f4d0(moby, *(int *)(target + 16), 1.5f)) {
             if (moby[0x53] != 2) blend_moby_animation(moby, 2, 0, 2);
             moby[0x20] = 5;
         }
@@ -2704,8 +2704,8 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         if (1.0f <= F(data, 0x14c)) {
             D_001415F8 = 0;
             hero_set_state(0x3d, 1);
-            *(int *)(D_001413D0 + 0x98) = -1;
-            D_001413F5 = 1;
+            *(int *)(D_001413D0_lui[0] + 0x98) = -1;
+            D_001413F5_lui[0] = 1;
             moby[0x20] = 6;
         } else F(data, 0x13c) = angle;
         if (!inside && D_0013F65C == 0) {

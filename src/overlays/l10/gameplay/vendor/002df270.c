@@ -1892,7 +1892,7 @@ extern char D_L10_00179910_2E9978[] __asm__("D_L10_00179890");
 extern s32 D_L10_001798B4;
 extern s32 D_L10_001742D8 __attribute__((section(".data")));
 extern unsigned char D_001413F4[];
-extern unsigned short D_00141C48[];
+extern unsigned char D_00141C48[];
 extern unsigned char D_0013D4CB[];
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_value_within_interpolated_window(Moby *, float) __asm__("FUN_00214cc8");
@@ -1930,7 +1930,7 @@ void FUN_L10_002e4a88(Moby *moby)
         data[0x29] = 0;
         *(float *)(data + 0x19C) = 0.0f;
         moby->draw_dist = 0x7F;
-        qcopy(&moby->pos, D_L10_001B0930[*(int *)(data + 0x140)] + 4);
+        qcopy(&moby->pos, ((int **)D_L10_001B0C30_2E52B0)[*(int *)(data + 0x140)] + 4);
         *(short *)(data + 0x196) = scale_game_frames(D_L10_00161EE4);
         moby->collision = 0;
         moby->flags |= 0x41;
@@ -1945,7 +1945,7 @@ void FUN_L10_002e4a88(Moby *moby)
             moby->flags &= 0xFFBE;
             moby->collision = *(int *)((char *)moby->pclass + 0x10);
             if (*(int *)D_L10_00179910_2E9978 == 0 && *(int *)(D_L10_00179910_2E9978 + 0x24) == -1 && D_001413F4[0] == 0 &&
-                D_00141C48[0] == 0 && D_0013D4CB[0] == 0) FUN_L00_00203908(10005, 92);
+                *(unsigned short *)D_00141C48 == 0 && D_0013D4CB[0] == 0) FUN_L00_00203908(10005, 92);
         }
         break;
     case 2: {
@@ -1965,7 +1965,7 @@ void FUN_L10_002e4a88(Moby *moby)
         timer = frame_time_absolute_4a88;
 rise:
         moby->pos.z += timer * 4.0f;
-        if (FUN_001f9b48(&moby->pos, D_L10_001B0930[*(int *)(data + 0x140)] + 4) < 0.5f) {
+        if (FUN_001f9b48(&moby->pos, ((int **)D_L10_001B0C30_2E52B0)[*(int *)(data + 0x140)] + 4) < 0.5f) {
             moby->state = 3;
             if (moby->prev_seq != 2) blend_moby_animation(moby, 2, 0, scale_game_frames(10));
         }
@@ -1974,7 +1974,7 @@ rise:
     case 3: {
         int node_index;
         float *moby_position;
-        qcopy(&waypoint, D_L10_001B0930[*(int *)(data + 0x140)] + *(int *)(data + 0x158) * 4 + 4);
+        qcopy(&waypoint, ((int **)D_L10_001B0C30_2E52B0)[*(int *)(data + 0x140)] + *(int *)(data + 0x158) * 4 + 4);
         moby_position = &moby->pos.x;
         angle = FUN_001f9e90(waypoint.f[0] - moby->pos.x, waypoint.f[1] - moby->pos.y);
         FUN_L00_00258278((char *)moby, (float *)(data + 0x198), angle, 0.02f, 0.3f, frame_time_absolute_4a88 * 12.566371f);
@@ -1986,7 +1986,7 @@ rise:
         fast_vec_add(moby_position, moby_position, data + 0x120);
         if (!(fast_vec_length(&velocity) < 0.5f)) break;
         node_index = *(int *)(data + 0x158) + 1;
-        if (node_index < *D_L10_001B0930[*(int *)(data + 0x140)]) {
+        if (node_index < *((int **)D_L10_001B0C30_2E52B0)[*(int *)(data + 0x140)]) {
             *(int *)(data + 0x158) = node_index;
         } else {
             *(int *)(data + 0x158) = 0;
@@ -2088,13 +2088,13 @@ set_move_timer:
             *(int *)(data + 0x168) = truncate_float_to_s32(scale_time_4a88(timer));
         }
 move_path:
-        qcopy(&velocity, D_L10_001B0930[*(int *)(data + 0x144)] + *(int *)(data + 0x158) * 4 + 4);
+        qcopy(&velocity, ((int **)D_L10_001B0C30_2E52B0)[*(int *)(data + 0x144)] + *(int *)(data + 0x158) * 4 + 4);
         fast_vec_sub(&position, &velocity, moby_position);
         FUN_L00_0025f730(&position, frame_time_absolute_4a88 * 8.0f);
         fast_vec_add(moby_position, moby_position, &position);
         if (!(fast_vec_length(&position) < frame_time_absolute_4a88)) break;
         node_index = *(int *)(data + 0x158) + 1;
-        if (node_index < *D_L10_001B0930[*(int *)(data + 0x144)]) *(int *)(data + 0x158) = node_index;
+        if (node_index < *((int **)D_L10_001B0C30_2E52B0)[*(int *)(data + 0x144)]) *(int *)(data + 0x158) = node_index;
         break;
     case 6:
         moby->pos.z += frame_time_absolute_4a88 * 10.0f;

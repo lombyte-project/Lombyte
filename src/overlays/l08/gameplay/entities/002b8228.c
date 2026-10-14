@@ -1093,7 +1093,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d5d08.s", FUN_L08_002d5d08);
 #else
 extern short *D_L08_001AC040[];
 extern int D_L08_0015FFBC __attribute__((section(".data")));
-extern int D_L08_0015FFBC_sda __asm__("D_L08_0015FFBC") __attribute__((sda));
+extern int D_L08_0015FFBC_gp __asm__("D_L08_0015FFBC") __attribute__((sda));
 extern void *D_L08_001600EC;
 extern float D_L08_001675C0[];
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
@@ -1146,7 +1146,7 @@ void FUN_L08_002d5d08(struct Moby *moby)
                 FUN_L05_00318648(spawned, (int)moby, velocity, offset,
                     FUN_001fa6d0(random_float_between(60.0f, 90.0f)));
             }
-            if (++i < 40 && D_L08_0015FFBC_sda > 49) continue;
+            if (++i < 40 && D_L08_0015FFBC_gp > 49) continue;
             break;
         } while (1);
     }
@@ -1497,6 +1497,7 @@ char *FUN_L08_002daa10(struct Moby *moby) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002dabf0.s", FUN_L08_002dabf0);
 #else
+#include "rnc/data_labels.h"
 #include "rnc/overlay/quad.h"
 extern void FUN_L08_0026dae0(void *, int, void *, float);
 extern void FUN_L08_00264650(void *);

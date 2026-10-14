@@ -1047,7 +1047,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00301f48.s", FUN_L05_00301f48);
 #else
 extern void spawn_particle_305178(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern int D_L05_0015F5C4;
-extern char *D_L05_0015FFD8_7920 __asm__("D_L05_0015FFD8");
 extern int D_L05_00161A84 __attribute__((sda));
 extern float D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
 extern int D_L05_00161A9C __attribute__((sda));
@@ -1269,7 +1268,7 @@ finish_wander:
         }
         break;
     case 15:
-        if ((I301(data,0x2b8)!=-1 && B301(D_L05_0015FFD8_7920+I301(data,0x2b8)*256,0xbc)) || (I301(data,0x2bc)!=-1 && is_point_inside_clip_volume(D_0013F3D0,I301(data,0x2bc)))) {
+        if ((I301(data,0x2b8)!=-1 && B301(((char *)D_L05_0015FFD8_7920)+I301(data,0x2b8)*256,0xbc)) || (I301(data,0x2bc)!=-1 && is_point_inside_clip_volume(D_0013F3D0,I301(data,0x2bc)))) {
             moby->draw_dist=0x40; moby->state=1; moby->flags|=0x1000;
             break;
         }
@@ -1952,7 +1951,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00304320.s", FUN_L05_00304320);
 extern char D_L05_001671C0[];
 extern char *D_L05_001B0930[];
 extern float D_0013F3D0[4];
-extern int D_L05_0015F5CC;
+extern int frame_number __asm__("D_L05_0015F5CC");
 extern float distance_2d1688(void *, void *) __asm__("FUN_001f9b48");
 extern float distance_to_2d1688(void *, void *) __asm__("FUN_001f9b80");
 extern float absolute_2d1688(float) __asm__("FUN_001f99c0");
@@ -2200,7 +2199,7 @@ state_two:
     n2=func_001FA898_r(scale_particle_time(random_float_between(D_L05_00161B18,D_L05_00161B18*1.2f)));
     n3=func_001FA898_r(scale_particle_time(random_float_between(D_L05_00161B1C,D_L05_00161B1C*1.2f)));
     particle=FUN_00218888(pos,v,w,D_L05_00161B0C,D_L05_00161B10,n1,n2,n3,-1);
-    if (!(D_L05_0015F5CC&7) && particle && i==0) {
+    if (!(frame_number&7) && particle && i==0) {
         if (*(char **)(data+0x1a0)==0) *(char **)(data+0x1a0)=particle;
         else {
             j=0;

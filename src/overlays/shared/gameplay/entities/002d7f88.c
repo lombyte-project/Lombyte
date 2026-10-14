@@ -2804,7 +2804,7 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
         {
             int i;
             for (i = 199; i >= 0; --i) {
-                *(int *)(D_L00_001E5F30_002ddcb8 + 0xC - (199 - i) * 0x18) = 0;
+                *(int *)(D_L00_001E5F30 + 0xC - (199 - i) * 0x18) = 0;
             }
         }
     }

@@ -252,7 +252,7 @@ extern void FUN_L00_002e2190(void *, void *, void *);
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern unsigned char D_001413F4[];
 extern int D_L14_0015F5C4 __attribute__((section(".data")));
-extern int D_L14_0015F5C4_sda __asm__("D_L14_0015F5C4") __attribute__((sda));
+extern int D_L14_0015F5C4_gp __asm__("D_L14_0015F5C4") __attribute__((sda));
 extern int D_L14_001614F0 __attribute__((sda));
 extern int D_L14_001614EC __attribute__((sda));
 extern float D_L14_001614E8 __attribute__((sda));
@@ -310,7 +310,7 @@ void FUN_L14_002b17d8(unsigned char *moby) {
         moby[0x30] = 0x40;
         *(unsigned short *)(moby + 0x34) |= 0x1000;
     }
-    mode = D_L14_0015F5C4_sda;
+    mode = D_L14_0015F5C4_gp;
     if ((unsigned char)moby[0x20] != 0) {
         FUN_L14_002b2f60(moby);
         FUN_L14_002b3268(moby);

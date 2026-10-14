@@ -9,13 +9,15 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002b94d0.s", FUN_L00_002b94d0);
 #else
 #include "qcopy.h"
 #include "rnc/math/vector.h"
+#include "rnc/overlay/beam_vector.h"
+extern int D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
+extern int D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
+extern int D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
 extern char D_0013E533[];
 extern char D_0013F3D0[], D_001413D0[];
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
 extern u8 D_L00_001DB5C0[], D_L00_001DBA20[];
-extern float D_L00_001DB840[], D_L00_001DB9D0[];
-extern Vec4 D_L00_001DB890[];
 extern char *D_L00_00173E58;
 extern Vec4 collision_position_2b94d0 __asm__("D_L00_00173E60");
 extern float D_L00_00161594 __attribute__((sda));
@@ -24,14 +26,11 @@ extern float D_L00_0016159C __attribute__((sda));
 extern float D_L00_001615A0 __attribute__((sda));
 extern float D_L00_001615A4 __attribute__((sda));
 extern float D_L00_001615A8 __attribute__((sda));
-extern float D_L00_001615AC __attribute__((sda));
 extern float D_L00_001615B0 __attribute__((sda));
-extern float D_L00_001615B4 __attribute__((sda));
 extern float D_L00_001615B8 __attribute__((sda));
 extern float D_L00_001615BC __attribute__((sda));
 extern float D_L00_001615C0 __attribute__((sda));
 extern float D_L00_001615C4 __attribute__((sda));
-extern float D_L00_001615C8 __attribute__((sda));
 extern float D_L00_001615CC __attribute__((sda));
 extern float D_L00_001615D0 __attribute__((sda));
 extern float D_L00_001615E4 __attribute__((sda));
@@ -94,9 +93,9 @@ void FUN_L00_002b94d0(u8 *o) {
     int i, j, hit_result, collided_count, spin, timer, difference;
     char *point, *previous, *side;
     char *collision_previous;
-    D_L00_001615AC = fast_add_rotations(D_L00_001615AC, D_L00_001615B0);
-    D_L00_001615B4 = fast_subtract_rotations(D_L00_001615B4, D_L00_001615B8);
-    D_L00_001615C8 = fast_add_rotations(D_L00_001615C8, D_L00_001615CC);
+    (*(float *)&D_L00_001615AC_gp) = fast_add_rotations((*(float *)&D_L00_001615AC_gp), D_L00_001615B0);
+    (*(float *)&D_L00_001615B4_gp) = fast_subtract_rotations((*(float *)&D_L00_001615B4_gp), D_L00_001615B8);
+    (*(float *)&D_L00_001615C8_gp) = fast_add_rotations((*(float *)&D_L00_001615C8_gp), D_L00_001615CC);
     if (!*(char **)(v + 0x20) || (enabled && !*(char **)(v + 0x38))) {
         if (*(char **)(v + 0x38)) {
             *(char **)(v + 0x20) = *(char **)(v + 0x38);
@@ -189,12 +188,12 @@ void FUN_L00_002b94d0(u8 *o) {
         n = (float)i;
         amplitude = D_L00_001615A4 + (D_L00_001615A8 - D_L00_001615A4) *
                     (FUN_001fa6c0(i) * 0.05f);
-        phase = FUN_L00_0025e310(D_L00_001615AC + n * D_L00_001615A0);
+        phase = FUN_L00_0025e310((*(float *)&D_L00_001615AC_gp) + n * D_L00_001615A0);
         wave = amplitude * FUN_001f9de0(phase);
         wave += FUN_L00_00257c48(D_L00_001615E4, D_L00_001615E8);
 
-        score = *(float *)(point + 8) - D_L00_001DB840[i];
-        D_L00_001DB840[i] = wave;
+        score = *(float *)(point + 8) - ((float *)D_L00_001DB840)[i];
+        ((float *)D_L00_001DB840)[i] = wave;
         *(float *)(point + 8) = score;
         fast_vec_sub(&delta, point, previous);
         blend_vector_2b94d0(0.85f, &blend, &delta, &step);
@@ -232,14 +231,14 @@ void FUN_L00_002b94d0(u8 *o) {
             }
         }
         if (i < 10) {
-            phase = FUN_L00_0025e310(D_L00_001615B4 + n * D_L00_001615BC);
-            angle = FUN_L00_0025e310(D_L00_001615C8 + n * D_L00_001615D0);
+            phase = FUN_L00_0025e310((*(float *)&D_L00_001615B4_gp) + n * D_L00_001615BC);
+            angle = FUN_L00_0025e310((*(float *)&D_L00_001615C8_gp) + n * D_L00_001615D0);
             amplitude = D_L00_001615C0 * FUN_001f9de0(angle);
             qcopy(side, point);
             wave = FUN_001f9de0(phase);
             side_wave = FUN_L00_00257c48(0.0f, 0.1f);
             side_wave = amplitude * wave + side_wave;
-            D_L00_001DB9D0[i] = side_wave;
+            ((float *)D_L00_001DB9D0)[i] = side_wave;
             *(float *)(point + 0x148) += side_wave;
             angle = fast_add_rotations(FUN_001f9e90(delta.f[0], delta.f[1]), 1.5707964f);
             amplitude = D_L00_001615C4 * FUN_001f9dc8(phase);
@@ -250,7 +249,7 @@ void FUN_L00_002b94d0(u8 *o) {
             fast_vec_add(side, side, &offset);
         } else {
             qcopy(side, point);
-            *(float *)(point + 0x148) += D_L00_001DB9D0[21 - i];
+            *(float *)(point + 0x148) += ((float *)D_L00_001DB9D0)[21 - i];
             fast_vec_add(side, side, &D_L00_001DB890[21 - i]);
             qcopy(&offset, &D_L00_001DB890[i]);
         }

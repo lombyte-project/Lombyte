@@ -2117,7 +2117,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a96f8.s", FUN_L00_002a96f8);
 #else
 extern float D_L00_001613C4 __attribute__((sda));
 extern char D_0013F490[];
-extern char D_L00_001B0770[];
+extern short D_L00_001B0770[];
 extern unsigned char *FUN_L00_002630c8(void *, void *, void *, float *, float *, float *, float);
 extern void FUN_L00_0025f780(void *, void *, int);
 

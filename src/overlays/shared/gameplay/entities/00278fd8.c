@@ -2449,7 +2449,7 @@ extern float wrap_rotation(float) __asm__("FUN_001fa610");
 extern unsigned int FUN_001160d8(void);
 extern float multiply_global_factor_ed68(float) __asm__("FUN_L15_001f8648");
 extern void enqueue_callback_list_1_2a6e68(void (*)(void), void *) __asm__("FUN_L15_001f2ac8");
-extern Vec4 D_L15_00174460;
+extern unsigned char D_L15_00174460[];
 extern int D_L15_00161558 __attribute__((sda));
 extern float D_L15_0016155C __attribute__((sda));
 extern float D_L15_00161560 __attribute__((sda));
@@ -2589,7 +2589,7 @@ void FUN_L15_002a6e68(unsigned char *moby) {
     axis.q = collision.work.motion.temporary[0].q;
     FUN_001efa68(moby + 0x10, &endpoint, 9, moby, &collision.angles);
     if (FUN_001efa68(moby + 0x10, &endpoint, 2, 0, 0) != 0)
-        *(u128 *)(data + 0x10) = D_L15_00174460.q;
+        *(u128 *)(data + 0x10) = *(u128 *)D_L15_00174460;
     else
         *(u128 *)(data + 0x10) = endpoint.q;
     i = 0;
@@ -2809,7 +2809,7 @@ extern short D_L15_0015F5C4_macro __asm__("D_L15_0015F5C4") __attribute__((secti
 extern int interpolate_color_2a3138(float, int, int) __asm__("FUN_001fa6e0");
 extern int D_L15_00161AB4 __attribute__((sda));
 extern int D_L15_00161AB8 __attribute__((sda));
-extern int D_L15_00161ABC __attribute__((sda));
+extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
 extern int D_L15_0015F5C4_small __asm__("D_L15_0015F5C4") __attribute__((sda));
 extern void FUN_L15_002cbc30(void *);
 
@@ -2825,7 +2825,7 @@ void FUN_L15_002cb4c8(unsigned char *moby) {
         flag = data[0];
         D_L15_00161AB4 = 0;
         D_L15_00161AB8 = 0;
-        D_L15_00161ABC = 0;
+        *(int *)&D_L15_00161ABC_gp = 0;
         if (flag == 2) {
             moby[0x20] = 6;
             if (moby[0x53] != 4)

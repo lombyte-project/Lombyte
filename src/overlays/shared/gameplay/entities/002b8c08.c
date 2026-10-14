@@ -1767,7 +1767,6 @@ extern void FUN_00213928(char *, char *, char *, int, int *, float *, int, int);
 extern void FUN_L00_0025ab48(void *, void *, void *, void *);
 extern void FUN_L00_0025c558(float, char *, char *, int, int, int);
 extern int FUN_L00_0025ff38(float, char *, char *, int, int, void *, int);
-extern void FUN_L00_00257470(char *, int, int);
 extern float FUN_001fa5c8(float, float);
 extern float FUN_001fa580(float, float);
 extern float FUN_001f9de0(float);
@@ -1794,7 +1793,7 @@ extern float D_L01_001619A4 __attribute__((sda));
 extern int D_L01_00161998 __attribute__((sda));
 extern int D_L01_0016199C __attribute__((sda));
 extern float frame_time __attribute__((sda));
-extern char *D_001413D0;
+extern s32 D_001413D0[];
 extern char *D_L01_001B0930[];
 
 void FUN_L01_002eec68(char *moby) {
@@ -1974,7 +1973,7 @@ void FUN_L01_002eec68(char *moby) {
     }
     angle_step = frame_time;
     if (effect == 0) {
-        *(char **)(data + 0x200) = D_001413D0;
+        *(char **)(data + 0x200) = (char *)D_001413D0[0];
         angle_step = D_L01_0015ED6C;
     }
     *(float *)(data + 0x254) = FUN_001fa580(*(float *)(data + 0x254), angle_step * 9.424778f);

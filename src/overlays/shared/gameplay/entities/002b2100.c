@@ -3062,9 +3062,10 @@ void FUN_L00_002b87e0(struct Moby *m) {
     if (done && s->light == -1) m->state = 4;
 }
 
-typedef struct {
-    float f[4];
-} __attribute__((aligned(16))) V2b9310;
+#include "rnc/overlay/beam_vector.h"
+extern int D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
+extern int D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
+extern int D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
 extern int D_L00_00161590_gp __asm__("D_L00_00161590") __attribute__((sda));
 extern int frames_2b9310(int) __asm__("FUN_001f96f8");
 extern void vsub_2b9310(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -3076,9 +3077,6 @@ extern int D_L00_0016167C __attribute__((sda));
 extern int D_L00_00161624 __attribute__((sda));
 extern int D_L00_00161678;
 extern float D_L00_00161594 __attribute__((sda));
-extern int D_L00_001615AC __attribute__((sda));
-extern int D_L00_001615B4 __attribute__((sda));
-extern int D_L00_001615C8 __attribute__((sda));
 extern short D_L00_00161658[] __attribute__((section(".sdata")));
 extern short D_L00_00161668;
 extern short D_L00_0016166A;
@@ -3090,9 +3088,6 @@ extern short D_L00_00161674;
 extern short D_L00_00161676;
 extern V2b9310 D_L00_001DB5B0[];
 extern V2b9310 D_L00_001DB5C0[];
-extern int D_L00_001DB840[];
-extern V2b9310 D_L00_001DB890[];
-extern int D_L00_001DB9D0[];
 /* Starts the beam when one is pending: lays 19 points from the moby toward its target and resets the segment state. */
 void FUN_L00_002b9310(char *moby) {
     V2b9310 d;
@@ -3129,9 +3124,9 @@ void FUN_L00_002b9310(char *moby) {
     D_L00_00161674 = 4;
     D_L00_0016166E = 4;
     D_L00_00161676 = 2;
-    D_L00_001615AC = 0;
-    D_L00_001615B4 = 0;
-    D_L00_001615C8 = 0;
+    D_L00_001615AC_gp = 0;
+    D_L00_001615B4_gp = 0;
+    D_L00_001615C8_gp = 0;
 }
 
 /* D_0013F350, the shared Level-00 state block; only the offsets the listing

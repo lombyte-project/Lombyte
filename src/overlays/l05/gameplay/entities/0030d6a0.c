@@ -141,14 +141,8 @@ void FUN_L05_0030dc68(char *m) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030de90.s", FUN_L05_0030de90);
 #else
+#include "rnc/rendering/geometry_quad.h"
 #include "eetypes.h"
-typedef union { u128 q; float f[4]; } QuadVector;
-typedef struct {
-    QuadVector vertices[4];
-    int colors[4];
-    float uv[4][2];
-    u64 flags[4];
-} GroupQuad;
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float angle_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -166,11 +160,11 @@ extern int D_L05_00161D78 __attribute__((sda));
 extern int D_L05_00161D7C __attribute__((sda));
 extern int D_L05_00161D98 __attribute__((sda));
 extern float D_L05_0020B740[4][2];
-extern QuadVector D_L05_0020B760[4];
-extern QuadVector D_L05_0020B7A0[4];
+extern Vec4 D_L05_0020B760[4];
+extern Vec4 D_L05_0020B7A0[4];
 extern short *D_L05_001ABCC0[];
 void FUN_L05_0030de90(char *moby) {
-    GroupQuad quads[2][5];
+    struct GeometryQuad quads[2][5];
     float matrix[4][4] __attribute__((aligned(16)));
     float angle, blend;
     int color0, color1;
@@ -178,7 +172,7 @@ void FUN_L05_0030de90(char *moby) {
     short *list;
     int offset;
     char *entry;
-    GroupQuad *a, *b;
+    struct GeometryQuad *a, *b;
     angle = (convert_integer_to_float(D_L05_0015F5CC_e[2] & 63) / 63.0f) * 6.28318f;
     i = 0;
     do {
@@ -189,24 +183,24 @@ void FUN_L05_0030de90(char *moby) {
         j = 0;
         do {
             u64 texture = get_effect_texture(D_L05_00161D98);
-            GroupQuad *quad = &quads[j][i];
-            quad->flags[3] = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) |
+            struct GeometryQuad *quad = &quads[j][i];
+            quad->primitive = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) |
                 ((s64)D_L05_00161D78 << 4) | ((s64)D_L05_00161D7C << 6) | 0x8000000000ULL;
-            quad->flags[1] = texture;
-            quad->flags[2] = 0xff9000000260ULL;
-            quad->flags[0] = 0;
+            quad->texture = texture;
+            quad->texture_state = 0xff9000000260ULL;
+            quad->reserved.value = 0;
             k = 0;
             do {
-                quad->uv[k][0] = D_L05_0020B740[k][0];
-                quad->uv[k][1] = D_L05_0020B740[k][1];
+                quad->texture_coordinates[k][0] = D_L05_0020B740[k][0];
+                quad->texture_coordinates[k][1] = D_L05_0020B740[k][1];
                 if (j == 0) {
                     quads[0][i].colors[k] = color1;
-                    quads[0][i].vertices[k].q = D_L05_0020B7A0[k].q;
-                    quads[0][i].vertices[k].f[2] += (float)(i + 1);
+                    quads[0][i].positions[k].q = D_L05_0020B7A0[k].q;
+                    quads[0][i].positions[k].f[2] += (float)(i + 1);
                 } else {
                     quad->colors[k] = color0;
-                    quad->vertices[k].q = D_L05_0020B760[k].q;
-                    quad->vertices[k].f[2] += (float)(i + 1);
+                    quad->positions[k].q = D_L05_0020B760[k].q;
+                    quad->positions[k].f[2] += (float)(i + 1);
                 }
                 k++;
             } while (k < 4);

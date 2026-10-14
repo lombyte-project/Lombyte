@@ -97,18 +97,17 @@ extern unsigned char D_0013F420[];
 extern int D_001413D0;
 extern int D_0013F64C;
 extern short D_0013F65E;
-extern float D_0013F640;
 extern char *D_L15_0015FFD8;
 extern char *moby_array __asm__("D_L15_0015FFD8") __attribute__((sda));
 extern char *D_L15_001600EC;
-extern char *entity_array __asm__("D_L15_001600EC") __attribute__((sda));
+extern char *D_L15_001600EC_gp __asm__("D_L15_001600EC") __attribute__((sda));
 extern float D_L15_00161BC8 __attribute__((sda));
 extern float D_L15_00161BCC __attribute__((sda));
 extern float D_L15_00161BD0 __attribute__((sda));
 extern unsigned char D_L15_0015F444, D_L15_0015F445, D_L15_0015F446;
 extern float D_L15_0015F448, D_L15_0015F44C, D_L15_0015F450, D_L15_0015F454 __attribute__((section(".data")));
-extern int D_L15_0015F448_gp __asm__("D_L15_0015F448") __attribute__((sda));
-extern int D_L15_0015F454_gp __asm__("D_L15_0015F454") __attribute__((sda));
+extern float D_L15_0015F448_gp __asm__("D_L15_0015F448") __attribute__((sda));
+extern float D_L15_0015F454_gp __asm__("D_L15_0015F454") __attribute__((sda));
 extern int current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern unsigned char D_L15_001BB024[], D_L15_001BBC84[];
 extern unsigned int D_0014C190[], D_L15_001BAAD0[];
@@ -223,8 +222,8 @@ next_path:      i -= 8; p += 8;
             }
             DATA_INT(0x1c)++;
             D_L15_0015F446 = 0x7f; D_L15_0015F444 = 0x7f; D_L15_0015F445 = 0x7f;
-            D_L15_0015F44C = 131072.0f; D_L15_0015F448_gp = 0;
-            D_L15_0015F450 = random_float_between(128.0f, 255.0f); D_L15_0015F454_gp = 0;
+            D_L15_0015F44C = 131072.0f; *(int *)&D_L15_0015F448_gp = 0;
+            D_L15_0015F450 = random_float_between(128.0f, 255.0f); *(int *)&D_L15_0015F454_gp = 0;
             radius = random_float_between(5.0f, 8.0f); angle = random_angle_radians(); rotation = random_angle_radians();
             build_spherical_offset((char *)data + 0x110, radius, angle, rotation);
             FUN_L00_001ff290(vector, (char *)data + 0x110, &hero.motion.unkD0);
@@ -320,7 +319,7 @@ state_three:
 
 finish:
     data = triggers; i = 3; other = (char *)&hero;
-    do { if (is_point_inside_clip_volume(&hero.motion.pos, *data) && FUN_L00_0020d568()) ((struct Hero *)other)->water_surface_z = *(float *)(entity_array + *data * 0x80 + 0x38); data++; } while (--i >= 0);
+    do { if (is_point_inside_clip_volume(&hero.motion.pos, *data) && FUN_L00_0020d568()) ((struct Hero *)other)->water_surface_z = *(float *)(D_L15_001600EC_gp + *data * 0x80 + 0x38); data++; } while (--i >= 0);
 }
 #undef DATA_INT
 #undef DATA_SHORT

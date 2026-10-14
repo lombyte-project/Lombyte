@@ -925,6 +925,7 @@ void FUN_L00_002d1e80(M2d1e80 *m) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2158.s", FUN_L00_002d2158);
 #else
+extern char D_0013F3D0_lui[] __asm__("D_0013F3D0");
 #include "rnc/overlay/collision.h"
 #include "rnc/input/pad_state.h"
 extern CollisionHit collision_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
@@ -980,7 +981,7 @@ void FUN_L00_002d2158(void *moby, u8 *vars, Vec_2d2158 *position) {
               angle_atan2_2d2158(hero.unk670, hero.unk674));
     position->f[1] = fast_sin_2d2158(angle) * 0.859039f;
     position->f[2] = 0.0f;
-    add_vector_2d2158(position, position, &D_0013F3D0_2d2158);
+    add_vector_2d2158(position, position, D_0013F3D0_lui);
     position->f[2] += 0.39082f;
     angle_atan2_2d2158(direction.f[0], direction.f[1]);
     scale_vector_2d2158(&offset, &direction, (controller_state.held & 5) ? 3.5f : 2.5f);

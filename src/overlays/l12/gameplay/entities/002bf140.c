@@ -1749,7 +1749,6 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void subtract_8808(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00257470(struct Moby *, int, int);
-extern char D_L12_0015F580[];
 extern struct Moby *D_L12_00178380[];
 extern int coll_line_fix_72(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int query_mobys_72(void *, int, void *, int, float) __asm__("FUN_L00_001f2868");
@@ -1902,7 +1901,7 @@ hide:
             v.f[1] += fast_sin_e81e0(moby->rot.z);
             hit = query_mobys_72(&v, 0, moby, 0, 1.5f);
             if (hit) {
-                qcopy(delta.f, D_L12_0015F580);
+                qcopy(delta.f, ((char *)&D_L12_0015F580));
                 if (hit > 0) {
                     struct Moby **iterator = D_L12_00178380;
                     int count = hit;
@@ -2377,7 +2376,7 @@ extern unsigned char D_0014C050[];
 extern unsigned char D_0013E550[];
 extern unsigned char D_0013D4CB __attribute__((section(".data")));
 extern unsigned short D_00141C50 __attribute__((section(".data")));
-extern char D_L12_0015F580[] __attribute__((section(".sdata")));
+extern int D_L12_0015F580_gp __asm__("D_L12_0015F580") __attribute__((section(".sdata")));
 
 void FUN_L12_002e9f68(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -2632,7 +2631,7 @@ update_state:
             FUN_L12_00308708(moby, *(struct Moby **)(data + 0xac));
             *(struct Moby **)(data + 0xac) = 0;
         }
-        FUN_L00_0025e450(moby, D_L12_0015F580, &moby->pos, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, 2, 3.0f, 15.0f, 1, 1, -1, 0);
+        FUN_L00_0025e450(moby, ((char *)&D_L12_0015F580_gp), &moby->pos, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, 2, 3.0f, 15.0f, 1, 1, -1, 0);
         if (*(int *)(data + 0xc0) == 0) FUN_L00_00257470(moby, 0, -1);
         index = *(int *)(data + 0xb0);
         if (index != -1 && (void *)((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.owner == (void *)moby && ((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.state) release_voice(index);

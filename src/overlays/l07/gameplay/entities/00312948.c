@@ -1904,7 +1904,7 @@ extern float rope_spring_turn(void *, float, float, float, float, float) __asm__
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern void release_particle(void *) __asm__("FUN_L00_00267a08");
 extern char *FUN_L00_0026d000(void *, int, void *, int, float, float, float, float);
-extern float D_L07_00161B84_f __asm__("D_L07_00161B84") __attribute__((sda));
+extern int D_L07_00161B84_gp __asm__("D_L07_00161B84") __attribute__((sda));
 extern float D_L07_0020DBA0[];
 
 /* Updates the rope points, its ring mesh and the particles travelling along it. */
@@ -1994,7 +1994,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         D_L07_00161BB0 = turn;
         D_L07_00161B80 = 0;
     }
-    D_L07_00161B84_f = FUN_001fa580(D_L07_00161B84_f, 0.1f);
+    (*(float *)&D_L07_00161B84_gp) = FUN_001fa580((*(float *)&D_L07_00161B84_gp), 0.1f);
     normalize_vector_xyz(&up, D_0013F5E0, -1.0f);
     qcopy(&ring_basis.reference, &up);
     fast_vec_cross(&ring_basis.cross, &step, &ring_basis.reference);
@@ -2064,7 +2064,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         do {
             radius = index * 0.2f + 0.02f;
             j++;
-            wave = FUN_001fa580(D_L07_00161B84_f + phase, 0.0f);
+            wave = FUN_001fa580((*(float *)&D_L07_00161B84_gp) + phase, 0.0f);
             wave = fast_sin(wave);
             scale_vector_xyz(&offset, point, radius + radius * 0.25f * wave);
             transform_vector_by_basis(&offset, &offset, &point_basis.side);

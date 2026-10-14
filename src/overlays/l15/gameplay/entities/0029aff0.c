@@ -1226,7 +1226,6 @@ extern void FUN_0020cb88(void *, void *);
 extern void FUN_0020d580(void *);
 extern void FUN_L00_00250df8(void *);
 extern int FUN_L03_002d5208(float, void *, void *, void *, int);
-extern void FUN_L00_00257470(void *, int, long long);
 extern void FUN_L00_0025e450_5630(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_001fff28(float, void *, int);
 extern void FUN_L15_002c52b8_goal(void *, void *, void *) __asm__("FUN_L15_002c52b8");
@@ -1535,7 +1534,7 @@ apply_delta:
             *(int *)(vars + 0x160) = 0;
         }
         FUN_L00_0025e450_5630(moby, &delta, &moby->pos, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, 2, 3.0f, 15.0f, 1, 1, -1, 0);
-        FUN_L00_00257470(moby, 0x200, -1);
+        FUN_L00_00257470_7880(moby, 0x200, -1);
         FUN_0020cb88(moby, manip0);
         FUN_0020cb88(moby, manip1);
         moby->state = 0x40;

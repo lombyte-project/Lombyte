@@ -2770,7 +2770,7 @@ void FUN_L18_002ea800(void *arg) {
             a = truncate_float_to_s32((float)scale_ticks(D_L18_00161F80) * scale);
             b = truncate_float_to_s32((float)scale_ticks(D_L18_00161F84) * scale);
             c = truncate_float_to_s32((float)scale_ticks(D_L18_00161F88) * scale);
-            FUN_00218888(&moby->pos, v10, v20, D_L18_00161F78, D_L18_00161F7C, a, b, c, *(int *)&D_L18_00161F68_d);
+            FUN_00218888(&moby->pos, v10, v20, D_L18_00161F78, D_L18_00161F7C, a, b, c, *(int *)&D_L18_00161F68);
         } while (i < D_L18_00161F6C);
     }
     j = 0;
