@@ -2749,7 +2749,7 @@ void FUN_L18_002ea800(void *arg) {
     int j;
     void *pos;
     int a;
-    volatile char *effect;
+    char *effect;
     *(Q128 *)v10 = *(Q128 *)&moby->pos;
     FUN_L06_0030bef8(v10, scale_ticks(30), 0x80806060, 0x801010);
     FUN_L00_0028dc90(0x10, 0, (int)arg, 0x58E);
@@ -2804,27 +2804,33 @@ void FUN_L18_002ea800(void *arg) {
         } while (j < D_L18_00161F98);
     }
     if (D_L18_00161FC0 > 0.0f) {
+        float scale;
         pos = &moby->pos;
         a = scale_ticks(D_L18_00161FC4);
-        spawn_glow_particle(arg, pos, &D_L18_0015F580, D_L18_00161FC0, a,
+        scale = *(volatile float *)&D_L18_00161FC0;
+        spawn_glow_particle(arg, pos, &D_L18_0015F580, scale, a,
             D_L18_00161FC8, D_L18_00161FC9, D_L18_00161FCA, D_L18_00161FCB);
     }
     if (D_L18_00161FCC > 0.0f) {
+        float scale;
         pos = &moby->pos;
         a = scale_ticks(D_L18_00161FD0);
-        spawn_glow_particle(arg, pos, &D_L18_0015F580, D_L18_00161FCC, a,
+        scale = *(volatile float *)&D_L18_00161FCC;
+        spawn_glow_particle(arg, pos, &D_L18_0015F580, scale, a,
             D_L18_00161FD4, D_L18_00161FD5, D_L18_00161FD6, D_L18_00161FD7);
     }
     if (D_L18_00161FD8 > 0.0f) {
+        float scale;
         pos = &moby->pos;
         a = scale_ticks(D_L18_00161FDC);
-        spawn_glow_particle(arg, pos, &D_L18_0015F580, D_L18_00161FD8, a,
+        scale = *(volatile float *)&D_L18_00161FD8;
+        spawn_glow_particle(arg, pos, &D_L18_0015F580, scale, a,
             D_L18_00161FE0, D_L18_00161FE1, D_L18_00161FE2, D_L18_00161FE3);
     }
     if (D_L18_00161FE4 > 0.0f) {
         effect = D_L18_00167680_effect;
-        *(volatile float *)(effect + 0x160) = D_L18_00161FE4;
-        *(volatile int *)(effect + 0x168) = scale_ticks(D_L18_00161FE8);
+        *(float *)(effect + 0x160) = D_L18_00161FE4;
+        *(int *)(effect + 0x168) = scale_ticks(D_L18_00161FE8);
     }
 }
 #endif
