@@ -2489,8 +2489,7 @@ void FUN_L06_002f9a28(unsigned char *moby) {
             v[0] = FUN_001f9dc8(*(float *)(moby + 0x48)) * 0.45f;
             v[1] = FUN_001f9de0(*(float *)(moby + 0x48)) * 0.45f;
             { float angle = *(float *)(moby + 0x48);
-              hit.enabled = 1; hit.scale = 1.0f;
-              hit.owner = moby; v[2] = 0.0f; hit.flags = 1;
+              v[2] = 0.0f; hit.scale = 1.0f; hit.owner = moby; hit.flags = 1; hit.enabled = 1;
               hit.direction[0] = FUN_001f9dc8(angle); }
             hit.direction[1] = FUN_001f9de0(*(float *)(moby + 0x48)); hit.direction[2] = 0.0f;
             FUN_L00_0024f7c8(moby, 0, pos); FUN_L00_001f2868(0.5f, pos, 0, moby, &hit);
