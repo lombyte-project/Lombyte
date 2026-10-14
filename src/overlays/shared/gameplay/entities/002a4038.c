@@ -853,11 +853,13 @@ void FUN_L02_002d93e8(char *moby) {
             if (third[slot] == 2) {
                 int extent = D_L02_00161B38;
 
-                if (third[(index + 6) % 12] == 0 &&
+                if (third[(index + 6) % 12] != 0 ||
                     (extent = D_L02_00161B44,
-                     second[(i + *(int *)(data + 0x18) + third_step - second_step + 6) % 12] == 0) &&
+                     second[(i + *(int *)(data + 0x18) + third_step - second_step + 6) % 12] != 0) ||
                     (extent = D_L02_00161B50,
-                     first[(i + *(int *)(data + 0x14) + third_step - first_step + 6) % 12] == 0)) {
+                     first[(i + *(int *)(data + 0x14) + third_step - first_step + 6) % 12] != 0)) {
+                    distance = (float)-extent;
+                } else {
                     distance = (float)-D_L02_00161B5C;
                     draw_second = 0;
                     if (markers[(i + third_step + 6) % 12] != 0) {
@@ -865,7 +867,7 @@ void FUN_L02_002d93e8(char *moby) {
                         markers[(i + third_step + 6) % 12] = 2;
                         color = D_L02_00161BB0;
                     }
-                } else distance = (float)-extent;
+                }
                 phase = add_rotation_2d93e8(angle, 0.31415927f);
                 draw_bar_2d93e8(texture, phase, (float)D_L02_00161B38, distance, color);
                 if (draw_second) {
