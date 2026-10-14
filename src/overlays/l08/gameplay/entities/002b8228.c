@@ -345,9 +345,9 @@ void FUN_L08_002d23f0(char *moby) {
             impulse[2] = random_float_between(-1.0f, 1.0f);
             qcopy(particle, impulse);
             normalize_vector_xyz(particle, particle, D_0015ED6C);
-            index = random_integer_below(4);
+            index = ((int *)direction)[random_integer_below(4)];
             time = scale_game_frames(0x2d);
-            FUN_L00_00269958(position, particle, ((int *)direction)[index], 0x4fff, time, 0x32, 0x78, 1);
+            FUN_L00_00269958(position, particle, index, 0x4fff, time, 0x32, 0x78, 1);
         }
         qcopy(record.motion.from, position);
         record.motion.from[2] -= 0.16f;
