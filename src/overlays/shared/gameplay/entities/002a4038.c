@@ -761,16 +761,17 @@ void FUN_L02_002d93e8(char *moby) {
     {
         int i, index, other, slot, draw_second, color;
         float angle, distance, phase;
-        for (i = 0; i < 12; ++i) {
+        for (i = 0; i != 12; ++i) {
+            draw_second = 1;
             phase = -0.31415927f;
             if (*(int *)(data + 0xe0) == 1) phase = add_rotation_2d93e8(phase, *(float *)(data + 0xe4));
             angle = add_rotation_2d93e8(phase, (float)(i * 30) * 0.017453292f);
             index = i + *(int *)(data + 0x14);
             slot = index % 12;
             if (first[slot] == 2) {
-                other = i + *(int *)(data + 0x18) + first_step - second_step;
-                draw_second = 1;
                 color = D_L02_00161BAC;
+                other = i + *(int *)(data + 0x18) + first_step - second_step;
+
                 if (second[other % 12] != 0) distance = (float)D_L02_00161B44;
                 else {
                     int third_index = i + *(int *)(data + 0x1c) + first_step - third_step;
@@ -802,7 +803,9 @@ void FUN_L02_002d93e8(char *moby) {
     {
         int i, index, other, slot, draw_second, color;
         float angle, distance, phase;
-        for (i = 0; i < 12; ++i) {
+        for (i = 0; i != 12; ++i) {
+            color = D_L02_00161BAC;
+            draw_second = 1;
             phase = -0.31415927f;
             if (*(int *)(data + 0xe0) == 2) phase = add_rotation_2d93e8(phase, *(float *)(data + 0xe4));
             angle = add_rotation_2d93e8(phase, (float)(i * 30) * 0.017453292f);
@@ -810,8 +813,7 @@ void FUN_L02_002d93e8(char *moby) {
             slot = index % 12;
             if (second[slot] == 2) {
                 other = i + *(int *)(data + 0x1c) + second_step - third_step;
-                draw_second = 1;
-                color = D_L02_00161BAC;
+
                 if (third[other % 12] != 0) distance = (float)D_L02_00161B38;
                 else {
                     int extent = D_L02_00161B38;
@@ -840,7 +842,9 @@ void FUN_L02_002d93e8(char *moby) {
     {
         int i, index, other, slot, draw_second, color;
         float angle, distance, phase;
-        for (i = 0; i < 12; ++i) {
+        for (i = 0; i != 12; ++i) {
+            color = D_L02_00161BAC;
+            draw_second = 1;
             phase = -0.31415927f;
             if (*(int *)(data + 0xe0) == 3) phase = add_rotation_2d93e8(phase, *(float *)(data + 0xe4));
             angle = add_rotation_2d93e8(phase, (float)(i * 30) * 0.017453292f);
@@ -848,8 +852,7 @@ void FUN_L02_002d93e8(char *moby) {
             slot = index % 12;
             if (third[slot] == 2) {
                 int extent = D_L02_00161B38;
-                draw_second = 1;
-                color = D_L02_00161BAC;
+
                 if (third[(index + 6) % 12] == 0 &&
                     (extent = D_L02_00161B44,
                      second[(i + *(int *)(data + 0x18) + third_step - second_step + 6) % 12] == 0) &&
@@ -875,7 +878,7 @@ void FUN_L02_002d93e8(char *moby) {
 
 #define DRAW_RING(active, slots, offset, outer_start, outer_end, radius) \
     { int i, color; float angle, phase; \
-    for (i = 0; i < 12; ++i) { \
+    for (i = 0; i != 12; ++i) { \
         int value; \
         int ring_index; \
         angle = -0.2617994f; \
