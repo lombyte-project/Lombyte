@@ -2000,19 +2000,20 @@ char *FUN_L01_002ef350(char *self) {
     } else if (*(short *)(self + 0xA6) == 0x361) {
         type = 0x362;
     }
-    entry = (unsigned char)self[0x21];
+    entry = *(volatile unsigned char *)(self + 0x21);
     entities = (char *)(lists_2ef478 + entry);
     list = *(short **)entities;
     entities = ents_2ef478;
     if (list == 0) return 0;
     goto scan;
-advance:
-    if ((short)entry < 0) return 0;
-    list++;
-scan:
-    {
+    do {
         char *other;
-        int index = *(unsigned short *)list;
+        int index;
+advance:
+        if ((short)entry < 0) return 0;
+        list++;
+scan:
+        index = *(unsigned short *)list;
         entry = index;
         index &= 0x7FFF;
         other = entities + (index << 8);
@@ -2038,7 +2039,7 @@ scan:
             FUN_L00_00250df8(other);
             return other;
         }
-    }
+    } while (1);
     return 0;
 }
 #endif /* NON_MATCHING */
