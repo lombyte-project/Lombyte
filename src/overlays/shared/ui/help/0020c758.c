@@ -1485,7 +1485,8 @@ void FUN_L00_0020f580(void)
     struct { u8 position[0x30]; u8 rotation[0x10]; } transform __attribute__((aligned(16)));
     s32 i, j, index, offset, first, second, third, random_range;
     s32 color_red, color_green, color_blue;
-    u8 *moby, *effect, *source, *slot;
+    u8 *moby, *effect, *source;
+    u8 *volatile slot;
     f32 angle;
 
     i = 0;
@@ -1501,10 +1502,9 @@ void FUN_L00_0020f580(void)
                     *(u64 *)(moby + 0x38) = *(u64 *)(*(u8 **)((u8 *)&hero + 0x2080) + 0x38);
                     index = *(s32 *)(D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c + 0xc);
                     if (i == 1 && j == 1) index = 3;
-                    source = D_0013FE10_f580 + index * 0x40;
                     if (*(u8 *)(slot + 0x10aa) != 0) {
                         *(u128 *)((u8 *)&hero + offset + 0x1070) = *(u128 *)(D_0013FE40_f580 + index * 0x40);
-                        FUN_0025d330_f580(source, (u8 *)&hero + offset + 0x1080);
+                        FUN_0025d330_f580(D_0013FE10_f580 + index * 0x40, (u8 *)&hero + offset + 0x1080);
                         FUN_00250480_f580(moby);
                         FUN_00250df8_f580(moby);
                         *(u16 *)(moby + 0x34) &= 0xfffb;
@@ -1516,7 +1516,7 @@ void FUN_L00_0020f580(void)
                             third = FUN_L00_0020d540_f580(i);
                             if (first == 0 && second == 0 && third == 0) FUN_00250480_f580(moby);
                             FUN_00250df8_f580(moby);
-                            FUN_001ffcd8_f580(moby + 0xc0, source);
+                            FUN_001ffcd8_f580(moby + 0xc0, D_0013FE10_f580 + index * 0x40);
                             if (first == 0 && second == 0 && third == 0) FUN_0025c170_f580(moby + 0xc0);
                             scratch.direction[0] = 1.0f;
                             scratch.direction[1] = 0.0f;
@@ -1568,9 +1568,9 @@ void FUN_L00_0020f580(void)
                         }
                         FUN_00250480_f580(moby);
                         if (large_font_height == 0 || i != 0)
-                            FUN_0025d330_f580(source, moby + 0x40);
+                            FUN_0025d330_f580(D_0013FE10_f580 + index * 0x40, moby + 0x40);
                         else
-                            FUN_L00_0020f160(moby, source);
+                            FUN_L00_0020f160(moby, D_0013FE10_f580 + index * 0x40);
                         FUN_00250df8_f580(moby);
                         if (opt_mirror_anim) FUN_001ff3c0_f580(moby + 0xe0, moby + 0xc0, moby + 0xd0);
                         FUN_00250f98_f580(moby);
@@ -1609,15 +1609,17 @@ after_moby:
                             color_red = FUN_00200250_f580(angle * 90.0f);
                             color_green = FUN_00200250_f580(angle * 50.0f);
                             color_blue = FUN_00200250_f580(angle * 10.0f);
+                            color_blue += 0x14;
+                            color_green += 0x32;
                             color_red += 0xd7;
                             if (color_red > 0xff) color_red = 0xff;
-                            *(u32 *)(effect + 0x90) = ((color_blue + 0x14) << 16) | 0x80000000 | ((color_green + 0x32) << 8) | color_red;
+                            *(u32 *)(effect + 0x90) = (color_blue << 16) | 0x80000000 | (color_green << 8) | color_red;
                             *(u16 *)(effect + 0x34) |= 0x10;
                         }
                     }
                 }
                 j++;
-            } while (j < 2 && (j < 1 || i == 1 || i == 3 || i == 4));
+            } while ((j < 1 || i == 1 || i == 3 || i == 4) && j < 2);
         }
         i++;
     } while (i < 7);
