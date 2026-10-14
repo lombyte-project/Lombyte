@@ -763,15 +763,19 @@ void FUN_L00_002bffa8(struct Moby *moby) {
         if (moby->state == 0) {
             memset((u8 *)&hero + 0x1f10,0,0x40);
             {
-            float scale_01 = frame_scale * 0.01f;
-            float scale_02 = frame_scale * 0.02f;
-            float scale_045 = frame_scale * 0.045f;
-            float scale_066 = frame_scale * 0.066f;
-            float scale_2 = frame_scale * 0.2f;
+            float scale_01;
+            float scale_02;
+            float scale_045;
+            float scale_066;
+            float scale_2;
             float size_25 = size * 0.25f;
             float size_01 = size * 0.01f * frame_scale;
             float time_297 = frame_time_sq * 29.7f;
             float size_1 = size * 0.1f;
+            scale_01 = frame_scale * 0.01f;
+            scale_02 = frame_scale * 0.02f;
+            scale_066 = frame_scale * 0.066f;
+            scale_2 = frame_scale * 0.2f;
             HF_2bffa8(0x1ecc) = size_25;
             HF_2bffa8(0x1ec8) = size_25;
             vars->speed = scale_2;
@@ -784,6 +788,7 @@ void FUN_L00_002bffa8(struct Moby *moby) {
             HB_2bffa8(0x1f3e) = 4;
             HB_2bffa8(0x1f3c) = 2;
             HB_2bffa8(0x1f3d) = 3;
+            scale_045 = frame_scale * 0.045f;
             HF_2bffa8(0x1f4c) = scale_045;
             HF_2bffa8(0x1ee8) = 3.1415927f;
             HF_2bffa8(0x1f2c) = time_297;
@@ -946,8 +951,8 @@ collision_done:
         } else {
             result.f[0] = 0.0f; flags = 2;
             vars->velocity.f[0] = moby->pos.x-vars->target_pos.f[0];
-            vars->velocity.f[2] = 0.01f;
             vars->velocity.f[1] = moby->pos.y-vars->target_pos.f[1];
+            vars->velocity.f[2] = 0.01f;
             fast_vec_normalize(&vars->velocity,&vars->velocity,0.1f);
         }
         FUN_L00_002bebc8(vars);
@@ -955,8 +960,8 @@ collision_done:
             if (!FUN_L00_002bf9f0(moby,vars,vars,0)) {
                 if (vars->target) { vars->previous_target = vars->target; vars->timer = (s32)((u32)vars->timer + 500); }
                 vars->velocity.f[0] = moby->pos.x-vars->target_pos.f[0];
-                vars->velocity.f[2] = 0.01f;
                 vars->velocity.f[1] = moby->pos.y-vars->target_pos.f[1];
+                vars->velocity.f[2] = 0.01f;
                 fast_vec_normalize(&vars->velocity,&vars->velocity,0.1f);
                 moby->state = 8; if (moby->prev_seq != 5) ANIM_2bffa8(5,5); goto finish;
             }
@@ -989,7 +994,8 @@ collision_done:
             /* The query returns its integer result in v0. */
             qcopy(&delta,pos);
             FUN_L00_0025a9f8_2bffa8(moby,&delta,D_L00_00177F00,hit,0,0x10000,2,3,3.0f,1.0f,1.0f);
-            FUN_0028dbe8_2c4380(item_text_variant[20] ? 4 : 0,0,moby);
+            if (item_text_variant[20]) FUN_0028dbe8_2c4380(4,0,moby);
+            else FUN_0028dbe8_2c4380(0,0,moby);
         }
 destroy:
         FUN_L00_0024eb68_2c4380(moby);
