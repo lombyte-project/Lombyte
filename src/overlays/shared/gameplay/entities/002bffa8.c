@@ -807,8 +807,10 @@ void FUN_L00_002bffa8(struct Moby *moby) {
             if (moby->prev_seq != 5) ANIM_2bffa8(5,5);
         }
         if (moby->state == 13) {
-            if (!vars->owner || vars->owner->state == 254 || vars->owner->state == 253 || OUTSIDE_2bffa8) goto destroy;
-            return;
+            if (vars->owner && vars->owner->state != 254 && vars->owner->state != 253) {
+                if (!OUTSIDE_2bffa8) return;
+            }
+            goto destroy;
         }
         vars->age = (s32)((u32)vars->age + 1);
         if (scale_game_frames(3600) < vars->age) moby->state = 11;
@@ -914,12 +916,12 @@ collision_done:
                 }
                 vars->move_speed = rate * 0.0273f * speed;
             }
-            if (distance < 8.0f || !(20.0f < distance)) {
-                moby->state = 4; if (moby->prev_seq != 7) ANIM_2bffa8(7,10);
-                limit = 0.1f; rate = frame_scale;
-            } else {
+            if (!(distance < 8.0f) && 20.0f < distance) {
                 moby->state = 5; if (moby->prev_seq != 0) ANIM_2bffa8(0,10);
                 limit = 0.0273f; rate = frame_scale;
+            } else {
+                moby->state = 4; if (moby->prev_seq != 7) ANIM_2bffa8(7,10);
+                limit = 0.1f; rate = frame_scale;
             }
             vars->move_speed = rate * limit * speed;
             if (!FUN_00213260_2bffa8(4)) vars->angle = FUN_L00_002bf050(moby,pos,&vars->target->pos,&result,moby->rot.z,1.847995638847351f,4.0f,0.35f,4.0f,convert_integer_to_float(HI_2bffa8(0x1ec0))*0.0009765625f);
@@ -992,7 +994,7 @@ collision_done:
             /* The unused prepared start vector is present in retail. */
             hit = collect_mobies_in_sphere_2bffa8(speed,pos,21,moby,0);
             /* The query returns its integer result in v0. */
-            qcopy(&delta,pos);
+            delta.q = *(OvlQuad *)&moby->pos;
             FUN_L00_0025a9f8_2bffa8(moby,&delta,D_L00_00177F00,hit,0,0x10000,2,3,3.0f,1.0f,1.0f);
             if (item_text_variant[20]) FUN_0028dbe8_2c4380(4,0,moby);
             else FUN_0028dbe8_2c4380(0,0,moby);
