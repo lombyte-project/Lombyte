@@ -418,7 +418,7 @@ extern f32 D_L06_00161FB4 __attribute__((sda));
 extern f32 D_L06_00161FB8 __attribute__((sda));
 extern f32 D_L06_00161FBC __attribute__((sda));
 extern f32 D_0015ED6C __asm__("D_0015ED6C");
-extern s32 D_001413D0 __asm__("D_001413D0");
+extern s32 D_001413D0[] __asm__("D_001413D0");
 #include "rnc/gameplay/state/item_state.h"
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time_for_update(f32) __asm__("FUN_001f96b0");
@@ -573,7 +573,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
         }
     }
     if (vars->target == 0) {
-        vars->target = (struct Moby *)D_001413D0;
+        vars->target = (struct Moby *)D_001413D0[0];
     }
 }
 #endif
