@@ -120,9 +120,9 @@ void FUN_L05_00262b58(HudCounter *e) {
     case 1:
         if (counter[0] < 10) counter[0]++;
         if (counter[1] != 0) counter[1]--;
-        D_L05_0015FAD8 = D_0013FA40;
         src = D_0013FA30;
         dst = D_L05_0015FAE0;
+        D_L05_0015FAD8 = D_0013FA40;
         for (i = 0; i < 4; i++) dst[i] = src[i];
         limit = D_0013FA5C;
         timer = D_L05_0015F87C;
