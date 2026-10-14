@@ -1365,6 +1365,7 @@ void FUN_L12_003069d0(struct Moby *moby) {
         break;
     }
     case 1: {
+        struct Moby *other;
         float *pos = (float *)&D_0013F3D0;
         triggered = FUN_00214720(D_L12_00167240, *(int *)(data + 0x624));
         if (triggered) {
@@ -1391,7 +1392,10 @@ void FUN_L12_003069d0(struct Moby *moby) {
             } while (i >= 0);
         }
         triggered = FUN_00214720(pos, *(int *)(data + 0x628));
-        if (!(52.0f < pos[2]) || triggered) {
+        if (52.0f < pos[2] && !triggered) {
+            approach_value(&moby->pos.z, *(float *)(data + 0x618), frame_time + frame_time);
+            height = frame_time;
+        } else {
             height = 3.0f;
             if (triggered) height = 10.0f;
             if (FUN_00214720(pos, *(int *)(data + 0x61c)))
@@ -1399,9 +1403,6 @@ void FUN_L12_003069d0(struct Moby *moby) {
             if (!tick_countdown_32_alt((int *)(data + 0x620))) height = 19.0f;
             FUN_L00_0025b8c0(&moby->pos.z, data + 0x62c, *(float *)(data + 0x618) + height,
                 frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, frame_time * 2.7f);
-            height = frame_time;
-        } else {
-            approach_value(&moby->pos.z, *(float *)(data + 0x618), frame_time + frame_time);
             height = frame_time;
         }
         FUN_L00_00262b00(moby, data + 0x5cc, data + 0x5c8, 0.7f, height * 1.2217305f);
@@ -1464,6 +1465,14 @@ update_linked:
     case 4:
         if (*(int *)(data + 0x608) != -1 && *(int *)(data + 0x60c) != -1) {
             switch (moby->command) {
+            case 0: {
+                    moby->command = 1;
+                    FUN_L00_002ea9d8(D_L12_001600EC + *(int *)(data + 0x608) * 128 + 0x30);
+                    FUN_L00_002eaa30(D_L12_001600EC + *(int *)(data + 0x608) * 128 + 0x70);
+                    D_L12_001619A0 = 1;
+                    D_L12_0015F404 = 1;
+                break;
+            }
             case 1:
                 if (*(float *)(data + 0x610) < 1.0f) {
                     advance_accelerated_scalar_l12(data + 0x610, data + 0x614, 1.0f,
@@ -1494,14 +1503,6 @@ update_linked:
                     FUN_L00_002eac18(3);
                 }
                 break;
-            case 0: {
-                    moby->command = 1;
-                    FUN_L00_002ea9d8(D_L12_001600EC + *(int *)(data + 0x608) * 128 + 0x30);
-                    FUN_L00_002eaa30(D_L12_001600EC + *(int *)(data + 0x608) * 128 + 0x70);
-                    D_L12_001619A0 = 1;
-                    D_L12_0015F404 = 1;
-                break;
-            }
             case 2: {
                 char *slot_data = data;
                 int index;
