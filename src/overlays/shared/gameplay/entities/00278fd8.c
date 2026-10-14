@@ -2278,15 +2278,21 @@ extern float D_L15_001CE2D0[][2];
 extern float D_L15_001CE2F0[4][4];
 extern float D_L15_001CE330[4][4];
 
+extern int D_L15_001614D8[2] __attribute__((sda));
+extern int D_L15_001614E0[2] __attribute__((sda));
+extern int D_L15_001614E8[2] __attribute__((sda));
+extern int D_L15_001614F0[2] __attribute__((sda));
+
 int FUN_L15_002a3138(unsigned char *moby) {
     EffectQuad first, second;
     float transform[12];
     float position[4];
     int *data = *(int **)(moby + 0x78);
     int pass, corner, axis, component;
+    int nextPass;
     float (*secondVertices)[4];
     float (*firstUv)[2];
-    float *firstUv1, *firstUv3, *secondUv1, *secondUv2, *secondUv3;
+    float *firstUv1, *firstUv3, *secondUv0, *secondUv1, *secondUv2, *secondUv3;
 
     copy_rotation_2a3138(transform, moby + 0xc0);
     qcopy(position, moby + 0x10);
@@ -2295,13 +2301,14 @@ int FUN_L15_002a3138(unsigned char *moby) {
     first.r80 = 0xff9000000260ULL;
     first.r70 = 0;
     second.texture = get_effect_texture(0x2c);
-    secondVertices = second.v;
-    firstUv = first.uv;
     firstUv1 = first.uv[1];
     firstUv3 = first.uv[3];
+    secondUv0 = second.uv[0];
     secondUv1 = second.uv[1];
     secondUv2 = second.uv[2];
     secondUv3 = second.uv[3];
+    secondVertices = second.v;
+    firstUv = first.uv;
     second.r70 = 0;
     second.r80 = 0xff9000000260ULL;
     second.col[3] = 0;
@@ -2310,40 +2317,41 @@ int FUN_L15_002a3138(unsigned char *moby) {
         qcopy(first.v[corner], D_L15_001CE330[corner]);
         qcopy(secondVertices[corner], D_L15_001CE2F0[corner]);
     }
-    for (pass = 0; pass < 6; pass++) {
+    for (pass = 0; pass < 6; pass = nextPass) {
         int parity = pass & 1;
-        int *pairs = &D_L15_001614C8;
-        int level;
         first.alpha =
-            (unsigned long long)pairs[4 + parity] |
-            (((unsigned long long)pairs[6 + parity] << 2) |
-            ((unsigned long long)pairs[8 + parity] << 4)) |
-            ((unsigned long long)pairs[10 + parity] << 6) |
+            (unsigned long long)D_L15_001614D8[parity] |
+            ((unsigned long long)D_L15_001614E0[parity] << 2) |
+            ((unsigned long long)D_L15_001614E8[parity] << 4) |
+            ((unsigned long long)D_L15_001614F0[parity] << 6) |
             0x8000000000ULL;
         second.alpha =
-            (unsigned long long)pairs[4 + parity] |
-            (((unsigned long long)pairs[6 + parity] << 2) |
-            ((unsigned long long)pairs[8 + parity] << 4)) |
-            ((unsigned long long)pairs[10 + parity] << 6) |
+            (unsigned long long)D_L15_001614D8[parity] |
+            ((unsigned long long)D_L15_001614E0[parity] << 2) |
+            ((unsigned long long)D_L15_001614E8[parity] << 4) |
+            ((unsigned long long)D_L15_001614F0[parity] << 6) |
             0x8000000000ULL;
-        if (data[5] == 0) {
-            level = D_L15_001CE230[pass];
+        if (data[5] != 0) {
+            first.col[1] = interpolate_color_2a3138((float)data[5] / 60.0f,
+                                                   D_L15_001CE230[pass], 0);
+            second.col[2] = first.col[1];
+            second.col[0] = first.col[1];
+            first.col[3] = first.col[1];
+            first.col[2] = first.col[1];
+            first.col[0] = first.col[1];
         } else {
-            level = interpolate_color_2a3138((float)data[5] / 60.0f,
-                                          D_L15_001CE230[pass], 0);
+            first.col[1] = D_L15_001CE230[pass];
+            second.col[2] = first.col[1];
+            second.col[0] = first.col[1];
+            first.col[3] = first.col[1];
+            first.col[2] = first.col[1];
+            first.col[0] = first.col[1];
         }
-        for (corner = 3; corner >= 0; corner--) {
-            first.col[corner] = level;
-            if (corner == 0 || corner == 2) {
-                second.col[corner] = level;
-            }
-        }
-        second.col[0] = level;
-        second.col[2] = level;
+        nextPass = pass + 1;
         for (corner = 0; corner < 4; corner++) {
             float *frequency = D_L15_001CE250[pass];
-            int waveform = pass * 8;
             float *uv = firstUv[corner];
+            int waveform = pass * 8;
             int base = corner * 8;
             axis = 1;
             do {
@@ -2368,10 +2376,10 @@ int FUN_L15_002a3138(unsigned char *moby) {
         }
         for (component = 0; component < 2; component++) {
             float step = (float)component * 0.125f;
-            secondUv1[component] = firstUv[0][component];
-            secondUv2[component] = firstUv[0][component] + step;
-            secondUv3[component] = firstUv1[component];
-            firstUv3[component] = firstUv1[component] + step;
+            secondUv0[component] = firstUv1[component];
+            secondUv1[component] = firstUv1[component] + step;
+            secondUv2[component] = firstUv3[component];
+            secondUv3[component] = firstUv3[component] + step;
         }
         draw_geometry_quad(&first, transform, 0);
         draw_geometry_quad(secondVertices, transform, 0);
