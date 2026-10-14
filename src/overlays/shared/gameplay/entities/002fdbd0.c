@@ -646,10 +646,10 @@ void FUN_L06_002ff2c8(char *moby) {
         return;
     }
     if (frames == 20) {
-        f32 *weight = (f32 *)(data + 0x230);
+        f32 *weight = (f32 *)(data + 0x23C);
         s32 remaining = 15;
         do {
-            f32 *value = weight + 3;
+            f32 *value = weight;
             if (*value >= 1.0f) {
                 *value = 0.98f;
             }
