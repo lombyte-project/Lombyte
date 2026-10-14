@@ -2630,7 +2630,7 @@ void FUN_L00_002dd8e8(void) {
     Quad_002dd8e8 quad;
     u128 following, edge, outward, normal;
     float phase, next_phase, offset, step, dot;
-    float previous_phase;
+    float previous_phase, wrapped_phase;
     int row, segment, next_segment, value, previous_value;
     int current, segment_offset;
     char *prior; u32 *colors;
@@ -2640,9 +2640,9 @@ void FUN_L00_002dd8e8(void) {
     quad.texture[2] = 0xff9000000260ULL;
     quad.texture[0] = 0;
     phase = ((float *)&D_L00_00161B48_002dd8e8)[-2];
-    ((float *)&D_L00_00161B48_002dd8e8)[-2] += 0.001f;
-    if (((float *)&D_L00_00161B48_002dd8e8)[-2] > 7.0f)
-        ((float *)&D_L00_00161B48_002dd8e8)[-2] -= 7.0f;
+    wrapped_phase = phase + 0.001f;
+    if (wrapped_phase > 7.0f) wrapped_phase -= 7.0f;
+    ((float *)&D_L00_00161B48_002dd8e8)[-2] = wrapped_phase;
     step = 0.05f;
     for (row = 1; row < 10; row++) {
         offset = ((float *)&D_L00_00161B48_002dd8e8)[-1];
@@ -2673,10 +2673,10 @@ void FUN_L00_002dd8e8(void) {
             dot = offset + step;
             value = ((short *)(D_L00_001E6020_lui - 0x18))[row];
             previous_value = ((short *)(D_L00_001E6020_lui - 0x18))[row - 1];
-            if (value < 0) value = 0;
             if (value > 0x40) value = 0x40;
-            if (previous_value < 0) previous_value = 0;
+            if (value < 0) value = 0;
             if (previous_value > 0x40) previous_value = 0x40;
+            if (previous_value < 0) previous_value = 0;
             colors = quad.colors;
             *colors++ = (value << 24) | 0x404040;
             *colors++ = (value << 24) | 0x404040;
