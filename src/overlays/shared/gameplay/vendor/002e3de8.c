@@ -298,6 +298,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L10_00167100[];
 
 extern char D_L10_0016CEC0[];
+#include "qcopy.h"
 void FUN_L10_002f5b58(char *moby) {
     char *data = *(char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 0x20 + 0x1c);
     char *work;
@@ -419,13 +420,13 @@ void FUN_L10_002f5b58(char *moby) {
     {
         char *source = *(char **)(D_L10_00167100 + 0x184);
         source += 0x30;
-        *(u128 *)moby_scale = *(u128 *)source;
+        qcopy(moby_scale, source);
         source -= 0x30;
-        *(u128 *)moby = *(u128 *)source;
+        qcopy(moby, source);
         source += 0x10;
-        *(u128 *)moby_pos = *(u128 *)source;
+        qcopy(moby_pos, source);
         source += 0x10;
-        *(u128 *)moby_rot = *(volatile u128 *)source;
+        qcopy(moby_rot, source);
     }
     if (*(int *)(data + 0x4c) == 0)
         hero_set_state(0x72, 1);
