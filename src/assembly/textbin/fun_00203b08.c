@@ -131,11 +131,11 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                 texture = &textures[material_index];
                 width_units_64 = (s32)((u32)(u16)texture->width << 16) >> 22;
                 width_units_128 = (s32)((u32)(u16)texture->width << 16) >> 23;
-                if (width_units_64 <= 0) {
-                    width_units_64 = 1;
-                }
                 if (width_units_128 <= 0) {
                     width_units_128 = 1;
+                }
+                if (width_units_64 <= 0) {
+                    width_units_64 = 1;
                 }
                 width_log2 = highest_set_bit_index((s16)texture->width);
                 height_log2 = highest_set_bit_index(texture->height);
