@@ -2709,7 +2709,7 @@ void FUN_L00_002ddca0(void) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddcb8.s", FUN_L00_002ddcb8);
 #else
-extern float D_L00_00161B80_gp __asm__("D_L00_00161B80") __attribute__((sda));
+extern float D_L00_00161B80_lui __asm__("D_L00_00161B80") __attribute__((section(".data")));
 extern float D_L00_00161B84_gp __asm__("D_L00_00161B84") __attribute__((sda));
 extern float D_L00_00161B50_gp __asm__("D_L00_00161B50") __attribute__((sda));
 extern int D_L00_00161B54_002ddcb8 __asm__("D_L00_00161B54") __attribute__((sda));
@@ -2786,16 +2786,19 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
     temp2.f[0] = 1.0f;
     sampled = FUN_00257cb0_002ddcb8();
     FUN_0025fc08_002ddcb8(D_L00_00161B70_002ddcb8, sampled, &temp1, &temp2);
-    D_L00_00161B80_gp = sampled;
+    D_L00_00161B80_lui = sampled;
     D_L00_00161B50_gp = 0.006f;
     D_L00_00161B54_002ddcb8 = 0;
     D_L00_00161B58_002ddcb8 = 0;
     if (*(int *)((char *)&D_L00_00161B84_gp - 0x40)) {
         *(int *)((char *)&D_L00_00161B84_gp - 0x40) = 0;
         record = D_L00_001E5F30 + 0xC;
-        for (i = 199; i >= 0; --i) {
-            *(int *)record = 0;
-            record -= 0x18;
+        {
+            int i;
+            for (i = 199; i >= 0; --i) {
+                *(int *)record = 0;
+                record -= 0x18;
+            }
         }
     }
 }
