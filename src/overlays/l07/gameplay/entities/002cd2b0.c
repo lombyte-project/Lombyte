@@ -3175,8 +3175,10 @@ void FUN_L07_00311eb8(float size, void *moby, void *state, int sequence, void *p
     }
     if (next_color != -1)
         *(int *)(s + 0x28c) = next_color;
-    if (position)
-        qcopy(effect + 0x10, position);
+    if (position) {
+        effect += 0x10;
+        qcopy(effect, position);
+    }
     if (sequence != -1)
         *(short *)(s + 0x282) = sequence;
 }
