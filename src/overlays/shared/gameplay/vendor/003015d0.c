@@ -166,7 +166,7 @@ void FUN_L14_003017f8(char *m) {
     int i, j, index, next, color;
     float length, t;
     float y;
-    long offset;
+    int offset;
     u8 *indices;
     VendorBeamFrame *frame;
 
@@ -229,15 +229,15 @@ void FUN_L14_003017f8(char *m) {
                 (float)next * 6.0f));
             index += 4;
             indices[i] = index;
-            offset = (i << 4) + (int)d;
+            offset = (i << 4);
             qcopy(d + 0x420 + (i << 4), d + 0x20 + (index << 4));
-            qcopy((char *)offset + 0x520, d + 0x220 + (index << 4));
+            qcopy((char *)(offset + (int)d) + 0x520, d + 0x220 + (index << 4));
             for (j = 2; j >= 0; j--) {
                 set_vector_xyz(delta_a, 0.1f, 0.1f);
                 set_vector_xyz(d + 0x560 + (i << 4) + ((2 - j) << 6), 0.0f,
                     D_L14_00162100 * D_0015ED6C);
                 add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
-                    (char *)offset + 0x420 + ((2 - j) << 6), work);
+                    d + offset + 0x420 + ((2 - j) << 6), work);
                 add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
                     d + 0x460 + (i << 4) + ((2 - j) << 6), delta_a);
             }
