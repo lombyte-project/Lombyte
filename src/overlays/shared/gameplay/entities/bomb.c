@@ -666,7 +666,9 @@ void FUN_L00_002c97e0(struct Moby *m)
     m->hit_slot = 255;
     if (s2->unk78 < 1.0f) {
         if (s2->unk74 == 0) {
-            for (i = 0; i < (s32)FUN_001fa6d0_2c97e0(scale) * 20; i++) {
+            i = 0;
+            while (i < (s32)FUN_001fa6d0_2c97e0(scale) * 20) {
+                i++;
                 f = random_float_between(0.0f, 0.37f) * scale;
                 g = FUN_L00_00257cb0_2c97e0();
                 build_spherical_offset_2c97e0(&offset, f, g, FUN_L00_00257cb0_2c97e0());
@@ -729,9 +731,9 @@ void FUN_L00_002c97e0(struct Moby *m)
     switch (m->state) {
     case 1:
         if (m->anim_flags & 2) {
-            a = FUN_L00_00257b50_2c97e0(2);
+            a = FUN_L00_00257b50_2c97e0(2) == 0;
             b = scale_game_frames(5);
-            FUN_L00_00257880_2c97e0(m, a == 0, 0, b);
+            FUN_L00_00257880_2c97e0(m, a, 0, b);
         }
         if (tick_timer_2cb418(&s2->unk66) && distance_xy_2c97e0(&m->pos, &hero.motion.pos) < scale * 5.0f) {
             next_pos.f[0] = fast_cos(m->rot.z) * D_0015ED6C_2c8440 * scale;
@@ -777,8 +779,8 @@ idle_move:
             m->state = 1;
             a = scale_game_frames(60); b = scale_game_frames(180);
             s2->unk66 = FUN_L00_00257b90(a, b);
-            a = FUN_L00_00257b50_2c97e0(2); b = scale_game_frames(5);
-            FUN_L00_00257880_2c97e0(m, a == 0, 0, b);
+            a = FUN_L00_00257b50_2c97e0(2) == 0; b = scale_game_frames(5);
+            FUN_L00_00257880_2c97e0(m, a, 0, b);
             goto idle_move;
         }
         if (!(distance_xy_2c97e0(&m->pos, &hero.motion.pos) < scale * 3.0f)) {
@@ -837,7 +839,7 @@ reset_state:
         m->state = 1;
         a = scale_game_frames(60); b = scale_game_frames(180);
         s2->unk66 = FUN_L00_00257b90(a, b);
-        a = FUN_L00_00257b50_2c97e0(2); mode = a == 0; a = scale_game_frames(5);
+        a = FUN_L00_00257b50_2c97e0(2) == 0; mode = a; a = scale_game_frames(5);
         goto animate;
 reset_timer_only:
         a = scale_game_frames(60); b = scale_game_frames(180);
