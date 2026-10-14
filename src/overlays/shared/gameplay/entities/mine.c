@@ -1332,7 +1332,9 @@ extern void FUN_00259698_2ad410(void *, int, float) __asm__("FUN_00213508");
 
 int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
     U910 position, velocity, previous, hero_position, offset, start;
-    int timer, found = 0, object_hit = 0, i;
+    struct { int timer; int object_hit; } hit;
+    int found = 0, i;
+    hit.object_hit = 0;
 
     if (hero.state.current == 0x72)
         return 0;
@@ -1352,14 +1354,14 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
             FUN_001ff278_2ad410(&velocity, &velocity, &hero.motion.displacement);
         if (hero.ground_moby && FUN_L00_002603d0_2ad410((M910 *)hero.ground_moby) && mode)
             FUN_001ff278_2ad410(&velocity, &velocity, &hero.motion.displacement);
-        timer = FUN_001fef20_2ad410(300);
+        hit.timer = FUN_001fef20_2ad410(300);
     } else {
         W910 *holder_vars = v->holder->v;
         int holder_flag;
         qcopy(&position, &m->pos);
         qcopy(&velocity, &v->vel);
         holder_flag = *(int *)((char *)holder_vars + 0x50);
-        timer = v->timer;
+        hit.timer = v->timer;
         if (holder_flag)
             v->holder_flag = 1;
     }
@@ -1372,7 +1374,7 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
         (FUN_001f0b58_2ad410() || 0.0f < velocity.f[2])) {
         if (coll_hit.moby && coll_hit.i1C <= 0) {
             if ((coll_hit.moby != hero.moby && coll_hit.moby != v->holder) ||
-                timer < FUN_001fef20_2ad410(300) - FUN_001fef20_2ad410(10)) {
+                hit.timer < FUN_001fef20_2ad410(300) - FUN_001fef20_2ad410(10)) {
                 offset.q = 0;
                 offset.f[2] = 0.5f;
                 {
@@ -1387,7 +1389,7 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
                     }
                     v->previous_hit.q = h->moby->pos.q;
                 }
-                object_hit = 1;
+                hit.object_hit = 1;
                 qcopy(&v->landing, (char *)coll_hit.moby + 0x10);
                 found = 1;
                 FUN_001ff278_2ad410(&offset, &offset, &v->landing);
@@ -1404,7 +1406,7 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
         velocity.f[2] = z / 1.5f;
     }
     hero_position.q = position.q;
-    while (!FUN_001fef68_2ad410(&timer) && !found) {
+    while (!FUN_001fef68_2ad410(&hit.timer) && !found) {
         qcopy(&previous, &position);
         for (i = 9; i >= 0; i--) {
             FUN_001ff278_2ad410(&position, &position, &velocity);
@@ -1418,7 +1420,7 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
             if (!(position.f[2] - hero_position.f[2] < 2.0f))
                 goto check_surface_2ad410;
             if ((coll_hit.moby == hero.moby || coll_hit.moby == v->holder) &&
-                timer >= FUN_001fef20_2ad410(300) - FUN_001fef20_2ad410(10))
+                hit.timer >= FUN_001fef20_2ad410(300) - FUN_001fef20_2ad410(10))
                 continue;
             offset.q = 0;
             offset.f[2] = 0.5f;
@@ -1434,7 +1436,7 @@ int FUN_L00_002ad410(LandingVars_2ad410 *v, M910 *m, int mode) {
                 }
                 v->previous_hit.q = h->moby->pos.q;
             }
-            object_hit = 1;
+            hit.object_hit = 1;
             qcopy(&v->landing, (char *)coll_hit.moby + 0x10);
             FUN_001ff278_2ad410(&offset, &offset, &v->landing);
             FUN_00259698_2ad410(&offset, 0, 0.5f);
@@ -1447,7 +1449,7 @@ check_surface_2ad410:
         }
     }
 landing_done_2ad410:
-    if (!timer)
+    if (!hit.timer)
         goto return_zero_2ad410;
     if (!mode) {
         if (!coll_hit.moby)
@@ -1457,7 +1459,7 @@ landing_done_2ad410:
     }
     if (mode != 2 || !coll_hit.moby || !FUN_L00_002603d0_2ad410(coll_hit.moby))
         FUN_001f93e0_2ad410(FUN_L00_002acbf0, m);
-    if (!object_hit && v->last_hit) {
+    if (!hit.object_hit && v->last_hit) {
         if (v->last_hit->state == 0xfe) {
             v->hit_count = 0;
         } else if (v->last_hit->state == 0xfd) {
