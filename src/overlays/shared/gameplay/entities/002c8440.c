@@ -1077,15 +1077,16 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
         } while (i >= 0);
         }
         if (D_0013E520[15] == 0) {
-            lifetime = 0;
+            FUN_L00_002cbcc0((u8 *)m, 0);
+            FUN_0024eb68_2caf70(m);
+            return 0;
         } else {
             s32 i = *(s32 *)(vars + 0x28) + 1;
             *(s32 *)(vars + 0x28) = i;
             if (i <= D_0013E520[15] + 5)
                 goto update_motion;
-            lifetime = 1;
+            FUN_L00_002cbcc0((u8 *)m, 1);
         }
-        FUN_L00_002cbcc0((u8 *)m, lifetime);
         FUN_0024eb68_2caf70(m);
         return 0;
 update_motion:
@@ -1098,9 +1099,13 @@ update_motion:
         s32 i;
         FUN_L00_0026daa0_2caf70(m, 0x2f4f7f7f, *(s16 *)(vars + 0x24), -1, D_L00_00161888_2caf70);
         handle = (void **)(vars + 0x2c);
-        for (i = 0; i < 17; i++, handle++) {
+        i = 0;
+        do {
             u8 *effect = FUN_L00_00275158_2caf70(0.0f, &m->pos, D_L00_0015F580_2caf70, 1);
-            if (effect != 0) {
+            if (effect == 0) {
+                *handle = 0;
+            } else {
+                f32 blend;
                 *(f32 *)(effect + 0xc) = FUN_L00_00257be8_2caf70(D_L00_00161870_2caf70, D_L00_00161874_2caf70);
                 blend = cubic_hermite_scalar_2caf70(-1.5f, 0.0f, 1.0f, 0.0f,
                     FUN_00200240_2caf70(i) / FUN_00200240_2caf70(16));
@@ -1110,10 +1115,10 @@ update_motion:
                 *(f32 *)(effect + 0xc) = initial_value + target;
                 *(u32 *)(effect + 4) = (FUN_00200250_2caf70(128.0f + blend * -64.0f) << 24) | 0xffffff;
                 *handle = effect;
-            } else {
-                *handle = 0;
             }
-        }
+            i++;
+            handle++;
+        } while (i != 17);
     }
     }
     return m;
