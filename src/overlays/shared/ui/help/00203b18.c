@@ -995,11 +995,16 @@ extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 
 void FUN_L00_00206e00(void) {
     struct Hero *g;
-    u8 *hero_base;
+    /* Retail appends at hero +0x21C4 and reloads the count at +0x21D4. */
+    struct {
+        u8 pad[0x21C4];
+        u8 history[16];
+        volatile s32 history_count;
+    } *history_view;
     s32 input;
     u32 state;
     s32 level;
-    s32 i, length, position;
+    s32 i, length, position, offset;
     u32 j;
     u8 *end;
     u8 *sequence;
@@ -1008,7 +1013,6 @@ void FUN_L00_00206e00(void) {
     if (D_0015EEA0 == 0 && alternate_animation_sequence == 0)
         return;
     g = &hero;
-    hero_base = (u8 *)g + 0xCB0;
     level = FUN_001f96f8(15);
     input = 0;
     if (g->state_timer == level) {
@@ -1075,17 +1079,17 @@ reject:
 append:
     if (input == 0)
         return;
-    history_count = (s32 *)((u8 *)&hero + 0x21D4);
-    history = hero_base + 0x1514;
+    history_view = (void *)&hero;
+    history_count = &history_view->history_count;
+    history = history_view->history;
     history[*history_count] = input;
     (*history_count)++;
     sequence = D_L00_00179700;
-    for (i = 0; i < 12; i++, sequence += 16) {
+    for (i = 0, offset = 0; i < 12; i++, sequence += 16, offset += 16) {
         length = 0;
         if (*sequence != 0) {
-            end = sequence + 1;
-            length = 1;
-            while (*end != 0) { end++; length++; }
+            end = D_L00_00179700 + offset;
+            do { end++; length++; } while (*end != 0);
         }
         if (length != 0) {
             position = *history_count - length;
@@ -1114,8 +1118,9 @@ scan_result:
             }
         }
     }
-    if (*history_count > 15)
-        *history_count = 0;
+    history_view = (void *)&hero;
+    if (history_view->history_count > 15)
+        history_view->history_count = 0;
 }
 #endif
 int FUN_001f96f8(int);
