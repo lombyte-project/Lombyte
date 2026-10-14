@@ -785,9 +785,9 @@ void FUN_L00_002bffa8(struct Moby *moby) {
             HF_2bffa8(0x1edc) = size_01;
             HI_2bffa8(0x1ed8) = 0;
             vars->move_speed = scale_066 * speed;
-            HB_2bffa8(0x1f3e) = 4;
             HB_2bffa8(0x1f3c) = 2;
             HB_2bffa8(0x1f3d) = 3;
+            HB_2bffa8(0x1f3e) = 4;
             scale_045 = frame_scale * 0.045f;
             HF_2bffa8(0x1f4c) = scale_045;
             HF_2bffa8(0x1ee8) = 3.1415927f;
@@ -795,11 +795,11 @@ void FUN_L00_002bffa8(struct Moby *moby) {
             HF_2bffa8(0x1f30) = size_1;
             HF_2bffa8(0x1f34) = 7.5f;
             HF_2bffa8(0x1f38) = 11.5f;
-            HF_2bffa8(0x1f44) = scale_02;
-            HF_2bffa8(0x1f48) = scale_01;
             HF_2bffa8(0x1f00) = scale_01;
             HF_2bffa8(0x1efc) = scale_02;
             HF_2bffa8(0x1f04) = scale_045;
+            HF_2bffa8(0x1f44) = scale_02;
+            HF_2bffa8(0x1f48) = scale_01;
             }
             vars->target = 0; moby->state = 14; vars->timer = 0;
             vars->move_speed = frame_scale * 0.1f * speed;
@@ -966,8 +966,8 @@ collision_done:
             if (!FUN_L00_002bf9f0(moby,vars,vars,0)) {
                 if (vars->target) { vars->previous_target = vars->target; vars->timer = (s32)((u32)vars->timer + 500); }
                 vars->velocity.f[0] = moby->pos.x-vars->target_pos.f[0];
-                vars->velocity.f[1] = moby->pos.y-vars->target_pos.f[1];
                 vars->velocity.f[2] = 0.01f;
+                vars->velocity.f[1] = moby->pos.y-vars->target_pos.f[1];
                 fast_vec_normalize(&vars->velocity,&vars->velocity,0.1f);
                 moby->state = 8; if (moby->prev_seq != 5) ANIM_2bffa8(5,5); goto finish;
             }
