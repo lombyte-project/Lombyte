@@ -2203,6 +2203,7 @@ void FUN_L06_002f2250(void) {
         GbVars *vars;
         GbClass *cls;
         float *score_list;
+        GbMoby **target_list = D_L06_001AC180_2f2250;
         for (i = 0; i < moby_count; i++) {
             moby = mobys[i];
             vars = moby->vars;
@@ -2261,7 +2262,7 @@ void FUN_L06_002f2250(void) {
                         }
                     }
                     j++;
-                    target = D_L06_001AC180_2f2250[j];
+                    target = target_list[j];
                 } while (target != 0);
             }
         }
