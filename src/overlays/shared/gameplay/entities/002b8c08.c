@@ -1645,8 +1645,8 @@ void FUN_L01_002edca0(unsigned char *moby) {
         if (FUN_00214cc8(15.5f, moby) != 0 && FUN_001f9b80(moby + 0x10, (target_position = target + 0x10)) < 2.0f &&
             FUN_001f99c0(*(float *)(target + 0x18) - *(float *)(moby + 0x18)) <
                 *(float *)(data + 0x250) + *(float *)(data + 0x250)) {
-            move[0] = FUN_001f9dc8(*rotation);
-            move[1] = FUN_001f9de0(*rotation);
+            move[0] = FUN_001f9dc8(*(float *)(moby + 0x48));
+            move[1] = FUN_001f9de0(*(float *)(moby + 0x48));
             move[2] = 0.0f;
             move[3] = 5627.9248f;
             qcopy(hit, target_position);
