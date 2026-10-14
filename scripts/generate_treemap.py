@@ -61,6 +61,7 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gen_progress_report import data_totals  # noqa: E402
 from overlay_units import category_of, load_levels, overlay_functions  # noqa: E402
 from progress_groups import (  # noqa: E402
     committed_function_scores,
@@ -898,6 +899,7 @@ def render_svg(
     min_bytes,
     title,
     fuzzy_percent=None,
+    data=None,
     drawer_height=86,
     branch_height=44,
 ) -> tuple[str, int]:
@@ -1010,6 +1012,19 @@ def render_svg(
         f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}">'
         f"C_EXACT &#183; executable + overlays</text>"
     )
+    if data and data[0]:
+        # Data next to the code stat: bytes of preserved data defined in C.
+        data_x = status_x - 160
+        lines.append(
+            f'<text x="{data_x}" y="38" text-anchor="end" '
+            f'font-family="{esc(FONT)}" font-size="20" font-weight="800" '
+            f'fill="{CHROME}">{100.0 * data[1] / data[0]:.1f}%</text>'
+        )
+        lines.append(
+            f'<text x="{data_x}" y="52" text-anchor="end" '
+            f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}">'
+            f"data in C</text>"
+        )
 
     # The drawer: the executable, its own percentage over its dimmed treemap.
     dx0, dy0 = margin_px, header_px
@@ -1276,6 +1291,7 @@ def main(argv=None) -> int:
         min_bytes=args.min_bytes,
         title=args.title,
         fuzzy_percent=fuzzy_percent,
+        data=data_totals(repo)["all"],
         drawer_height=args.drawer_height,
     )
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -1387,6 +1403,14 @@ def main(argv=None) -> int:
         "c_exact_percent_of_recoverable": round(100.0 * all_exact / all_recoverable, 4) if all_recoverable else 0.0,
         "c_fuzzy_percent_of_recoverable": round(total_fuzzy, 4) if total_fuzzy is not None else None,
     }
+    def data_stats(key):
+        total, matched = data_totals(repo)[key]
+        return {"bytes_total": total, "bytes_matching_c": matched,
+                "c_exact_percent": round(100.0 * matched / total, 4) if total else 0.0}
+
+    boot["data"] = data_stats("boot")
+    overlays_stats["data"] = data_stats("overlays")
+    total_stats["data"] = data_stats("all")
     # The header fields describe the whole game (executable + overlays); the
     # executable alone is under "boot", as the drawer shows it.
     stats = {
