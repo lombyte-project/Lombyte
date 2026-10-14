@@ -557,14 +557,14 @@ int FUN_L00_00236e50(HudElem *e) {
     half_h = (float)D_L00_0015F764 * D_L00_0015F76C * 0.5f;
     offset = (float)(10000 - e->unk74) / 10000.0f;
     half_w = (float)D_L00_0015F760 * D_L00_0015F768 * 0.5f;
-    origin.z = 1.0f;
-    origin.w = 1.0f;
-    direction.z = 0.0f;
-    direction.w = 0.0f;
     direction.x = (half_w + (float)(x + e->unk48) +
         (1.0f - D_L00_0015F768) * 0.5f * (float)D_L00_0015F760) * 16.0f;
     direction.y = (half_h + (float)(y + e->unk4A) +
         (1.0f - D_L00_0015F76C) * 0.5f * (float)D_L00_0015F764) * 16.0f;
+    origin.z = 1.0f;
+    origin.w = 1.0f;
+    direction.z = 0.0f;
+    direction.w = 0.0f;
     origin.x = (half_w / 17.0f) * 16.0f;
     origin.y = (-half_h / 116.0f) * 16.0f;
     offset = 116.0f - (offset + offset) * 116.0f;
