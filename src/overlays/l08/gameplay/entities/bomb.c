@@ -343,7 +343,7 @@ void FUN_L08_002d23f0(char *moby) {
             impulse[0] = random_float_between(-1.0f, 1.0f);
             impulse[1] = random_float_between(-1.0f, 1.0f);
             impulse[2] = random_float_between(-1.0f, 1.0f);
-            qcopy(particle, impulse);
+            *(volatile OvlQuad *)particle = *(OvlQuad *)impulse;
             normalize_vector_xyz(particle, particle, D_0015ED6C);
             index = ((int *)direction)[random_integer_below(4)];
             time = scale_game_frames(0x2d);
