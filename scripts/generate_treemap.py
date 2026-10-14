@@ -1000,29 +1000,27 @@ def render_svg(
             f'font-family="{esc(FONT)}" font-size="{legend_font}" fill="{MUTED}">{text}</text>'
         )
 
-    # Stats, one right-aligned column: data in C above the whole game's code
-    # (executable + overlays), each value over its caption.
+    # Stats, right-aligned beside the legend and on its rows: data in C as a
+    # small line on the first row, the whole game's code (executable +
+    # overlays) as the main figure over the last row.
     status_x = row_x - 10
-    stats = []
     if data and data[0]:
-        stats.append((
-            CHROME, f"{100.0 * data[1] / data[0]:.1f}%", "data in C",
+        lines.append(
+            f'<text x="{status_x}" y="18" text-anchor="end" font-family="{esc(FONT)}" '
+            f'font-size="{legend_font}" fill="{MUTED}">'
+            f'<tspan font-size="12" font-weight="800" fill="{CHROME}">'
+            f'{100.0 * data[1] / data[0]:.1f}%</tspan> data in C'
             f'<title>Data in C: {data[1]:,} of {data[0]:,} B, of which {data[2]:,} B '
-            f'are zeros (zero-initialised level data).</title>',
-        ))
-    stats.append((ORANGE, f"{total_percent:.1f}%", "exe + overlays in C", ""))
-    top = 31 if len(stats) == 1 else 3
-    for row, (color, value, caption, tip) in enumerate(stats):
-        y = top + row * 29
-        lines.append(
-            f'<text x="{status_x}" y="{y + 15}" text-anchor="end" '
-            f'font-family="{esc(FONT)}" font-size="17" font-weight="800" '
-            f'fill="{color}">{value}{tip}</text>'
+            f'are zeros (zero-initialised level data).</title></text>'
         )
-        lines.append(
-            f'<text x="{status_x}" y="{y + 25}" text-anchor="end" '
-            f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}">{caption}</text>'
-        )
+    lines.append(
+        f'<text x="{status_x}" y="42" text-anchor="end" font-family="{esc(FONT)}" '
+        f'font-size="24" font-weight="800" fill="{ORANGE}">{total_percent:.1f}%</text>'
+    )
+    lines.append(
+        f'<text x="{status_x}" y="52" text-anchor="end" font-family="{esc(FONT)}" '
+        f'font-size="{legend_font}" fill="{TEXT}">exe + overlays in C</text>'
+    )
 
     # The drawer: the executable, its own percentage over its dimmed treemap.
     dx0, dy0 = margin_px, header_px
@@ -1065,8 +1063,8 @@ def render_svg(
         f'stroke-width="3.15" stroke-opacity="0.7">BOOT ELF &#183; SCUS_971.99</text>'
     )
     lines.append(
-        f'<text x="{cx:.1f}" y="{cy + 7:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
-        f'font-size="36" font-weight="800" fill="{ORANGE}" '
+        f'<text x="{cx:.1f}" y="{cy + 4:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'font-size="24" font-weight="800" fill="{ORANGE}" '
         f'style="paint-order:stroke" stroke="{BACKGROUND}" stroke-width="2.1" stroke-opacity="0.6">'
         f"{boot_percent:.1f}%</text>"
     )
@@ -1074,7 +1072,7 @@ def render_svg(
     if fuzzy_percent is not None:
         caption += f" &#183; C_FUZZY {fuzzy_percent:.1f}%"
     lines.append(
-        f'<text x="{cx:.1f}" y="{cy + 25:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'<text x="{cx:.1f}" y="{cy + 18:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
         f'font-size="10" fill="{TEXT}" fill-opacity="0.95" style="paint-order:stroke" '
         f'stroke="{BACKGROUND}" stroke-width="2.1" stroke-opacity="0.7">{caption}</text>'
     )

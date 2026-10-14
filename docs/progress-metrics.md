@@ -70,8 +70,8 @@ texture (every logical group is a tile sized by its bytes; the colour is the
 group's state). Below it the **tree** lists the shared level code first and then
 the 19 levels in game order, each with its planet, a one-line description, its
 C_EXACT percentage and a bar of blocks, one per `src/overlays/` file, sized by
-bytes. The header shows data in C (see Data below) above
-the C_EXACT of the whole game. Everywhere the
+bytes. The header's main figure is the C_EXACT of the whole game
+(exe + overlays in C), with data in C (see Data below) above it. Everywhere the
 same scale applies: **orange** is all recoverable C matching exactly, **chrome**
 is intentional low-level assembly only, and **dark steel** to **copper** is
 pending C by its exact coverage.
