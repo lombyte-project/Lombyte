@@ -2842,7 +2842,8 @@ void FUN_L15_002cb4c8(unsigned char *moby) {
         *(int *)(moby + 0x90) = color;
         *(float *)(data + 5) = fast_add_rotations(*(float *)(data + 5), step * 6.2831855f);
         if (data[2] == 0) goto update;
-        if (*(int *)&D_L15_0015F5C4_macro != 2) {
+        flag = *(int *)&D_L15_0015F5C4_macro != 2;
+        if (flag) {
             if (data[0] == 1) {
                 moby[0x20] = 6;
                 if (moby[0x53] != 4)
@@ -2893,7 +2894,9 @@ stop_animation:
         step = frame_time;
         *(int *)(moby + 0x90) = color;
         *(float *)(data + 5) = fast_add_rotations(*(float *)(data + 5), step * 12.566371f);
-        if (tick_countdown_32_alt(data + 6) || *(int *)&D_L15_0015F5C4_macro == 2) {
+        flag = tick_countdown_32_alt(data + 6);
+        if (flag == 0) flag = *(int *)&D_L15_0015F5C4_macro == 2;
+        if (flag) {
             FUN_L15_002cbac0((char *)moby, 0);
             data[2] = 0;
             if (moby[0x53] != 8)
@@ -2923,7 +2926,9 @@ stop_animation:
             if (FUN_001efa68(position, g + 20, 2, 0, 0) == 0 && FUN_L15_002a2868(data[1], pos))
                 data[3] = data[4];
         }
-        if (tick_countdown_32_alt(data + 6) || *(int *)&D_L15_0015F5C4_macro == 2) {
+        flag = tick_countdown_32_alt(data + 6);
+        if (flag == 0) flag = *(int *)&D_L15_0015F5C4_macro == 2;
+        if (flag) {
             FUN_L15_002cbac0((char *)moby, 0);
             data[2] = 0;
             moby[0x20] = 9;
