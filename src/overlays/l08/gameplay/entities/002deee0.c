@@ -2064,8 +2064,6 @@ default:
         int timer;
         float angle, turn, scale;
         char *data;
-        unsigned char *position;
-        position = (unsigned char *)&moby->pos;
         data = (char *)moby->pvars;
         if (DATA_P(0x7c)) {
             FUN_L00_002604f0(moby, DATA_P(0x7c), data + 0x20, data + 0x30, data, data + 0x10);
@@ -2079,13 +2077,13 @@ default:
             }
         }
         if (FUN_001f99c0(moby->pos.z - hero.motion.pos.f[2]) < hero.reach_distance &&
-            FUN_001f9b80(position, &hero.motion.pos) < hero.reach_height) {
+            FUN_001f9b80(&moby->pos, &hero.motion.pos) < hero.reach_height) {
             DATA_I(0x68) = scale_game_frames_alt(1);
             moby->state = 2;
         }
         if (!moby->visible) {
             if ((unsigned int)moby <= (unsigned int)D_L08_0015FFDC) return;
-            if (!(24.0f < FUN_001f9b80(position, &hero.motion.pos))) return;
+            if (!(24.0f < FUN_001f9b80(&moby->pos, &hero.motion.pos))) return;
             goto remove;
         }
         switch (moby->oclass) {
@@ -2104,7 +2102,7 @@ default:
         }
         DATA_F(0x60) = angle;
         DATA_F(0x64) = fast_add_rotations(DATA_F(0x64), turn * 0.017453292f * frame_time);
-        FUN_L08_002e4e90(moby, (float *)position, &moby->rot.x);
+        FUN_L08_002e4e90(moby, (float *)&moby->pos, &moby->rot.x);
         if (DATA_S(0x6c) != 0) {
             DATA_F(0x74) = fast_add_rotations(DATA_F(0x74), frame_time * 5.2359877f);
             if (DATA_I(0x70) < 13) DATA_I(0x78) += -0x5000000;
