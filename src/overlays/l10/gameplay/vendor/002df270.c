@@ -1874,12 +1874,13 @@ extern unsigned char *FUN_L00_002738e8(void *, void *, s32, f32, f32, f32, s32, 
 
 void FUN_L10_002e5be0(struct Moby *moby) {
     f32 *pvars = (f32 *)moby->pvars;
-    Vec4 *moby_position = (Vec4 *)&moby->pos.x;
-    s64 i;
+    Vec4 *moby_position;
+    s32 i = 0;
 
     moby->update_dist = 0x80;
     if (((s32 *)pvars)[3] > 0) {
-        for (i = 0; i < ((s32 *)pvars)[3]; ++i) {
+        moby_position = (Vec4 *)&moby->pos.x;
+        for (; i < ((s32 *)pvars)[3]; ++i) {
             Vec4 position;
             Vec4 velocity;
             Vec4 offset;
