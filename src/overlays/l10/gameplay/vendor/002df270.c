@@ -2209,9 +2209,6 @@ void FUN_L10_002e5968(struct Moby *m) {
         *(int *)(d + 0x110) = (int)hero.moby;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e5be0.s", FUN_L10_002e5be0);
-#else
 extern s32 D_L10_00161EF0 __attribute__((sda));
 extern s32 D_L10_00161EF4 __attribute__((sda));
 extern f32 D_L10_00161EF8 __attribute__((sda));
@@ -2242,15 +2239,17 @@ void FUN_L10_002e5be0(struct Moby *moby) {
             f32 x;
             f32 y;
             f32 z;
-            f32 lower;
-            f32 upper;
             s32 color;
             s32 fade_color;
             s32 first_color;
             s32 life;
             s32 variant;
 
-            variant = random_integer_below(100) < D_L10_00161F04;
+            /* Save the loop counter while selecting the particle variant. */
+            life = i;
+            i = random_integer_below(100);
+            variant = i < D_L10_00161F04;
+            i = life;
             qcopy(&position, moby_position);
             offset.f[0] = fast_cos(fast_add_rotations(moby->rot.z, 1.5707964f)) *
                             random_float_between(-pvars[4], pvars[4]);
@@ -2271,13 +2270,12 @@ void FUN_L10_002e5be0(struct Moby *moby) {
 
             if (variant) {
                 scale_vector_xyz(velocity.f, velocity.f, random_float_between(0.5f, 1.5f));
-                lower = 0.24f;
-                upper = 0.36f;
+                x = random_float_between(0.24f, 0.36f);
+                amount = pvars[1] * x;
             } else {
-                lower = 0.8f;
-                upper = 1.2f;
+                x = random_float_between(0.8f, 1.2f);
+                amount = pvars[1] * x;
             }
-            amount = random_float_between(lower, upper) * pvars[1];
             x = random_float_between(0.5f, 1.0f);
             color = fast_tween_color(x, D_L10_00161EF0, D_L10_00161EF4);
             first_color = D_L10_00161EF4 & 0xff000000;
@@ -2289,7 +2287,6 @@ void FUN_L10_002e5be0(struct Moby *moby) {
         }
     }
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8358.s", FUN_L10_002e8358);
 #else
