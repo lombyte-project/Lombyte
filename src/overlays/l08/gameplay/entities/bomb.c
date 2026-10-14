@@ -481,7 +481,7 @@ void FUN_L08_002d42d8(struct Moby *moby) {
     struct Moby *target;
     struct Moby *other;
     int state;
-    float frame, speed, angle;
+    float angle, speed, frame;
     qcopy(old_position, position);
     qcopy(old_rotation, &moby->rot);
     if (*(unsigned char *)(data + 0x2e) == 2) {
@@ -597,10 +597,12 @@ void FUN_L08_002d42d8(struct Moby *moby) {
             else FUN_L00_0024f7c8(moby, 2, joint_pos);
             speed = D_L08_001618A8 * D_0015ED6C;
             angle = fast_cos(fast_add_rotations(*(float *)(data + 0x170), moby->rot.z));
-            velocity[0] = angle * (fast_cos(*(float *)(data + 0x178)) * speed);
+            angle *= (fast_cos(*(float *)(data + 0x178)) * speed);
+            velocity[0] = angle;
             angle = fast_sin(fast_add_rotations(*(float *)(data + 0x170), moby->rot.z));
+            angle *= (fast_cos(*(float *)(data + 0x178)) * speed);
             velocity[2] = 0.0f;
-            velocity[1] = angle * (fast_cos(*(float *)(data + 0x178)) * speed);
+            velocity[1] = angle;
             velocity[2] = -fast_sin(*(float *)(data + 0x178)) * speed;
             other = (struct Moby *)FUN_L08_002dc8a0((char *)moby, (char *)joint_pos, (char *)velocity);
             if (other) other->state = 1;
