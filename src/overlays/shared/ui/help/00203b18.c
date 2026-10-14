@@ -419,7 +419,7 @@ void FUN_L00_002059d8(void) {
         low += truncate_float_to_s32_2059d8(f * 112.0f);
         high -= truncate_float_to_s32_2059d8(f * 72.0f);
     }
-    *(u32 *)(moby + 0x90) = (i << 16) | 0x80000000U | (high << 8) | low;
+    *(u32 *)(moby + 0x90) = ((0x80U << 24) | (i << 16)) | ((high << 8) | low);
     if (g[0x20A4] != 0)
         return;
     if (help_active_2059d8(g + 0xFFC) && moby[0x53] == 1) {
