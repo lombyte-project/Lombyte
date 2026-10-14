@@ -248,33 +248,7 @@ next_path:      i -= 8; p += 8;
         triggers = (int *)((char *)data + 0x60);
         goto target_selection;
     case 3:
-        triggers = (int *)((char *)data + 0x60);
-            p = (int *)((char *)data + 0x74); i = 2;
-            do { if (*p != -1) FUN_L00_002502f0(moby_array + *p * 0x100, 0x40, 0x40, 0x40); p++; } while (--i >= 0);
-            if (DATA_INT(0x120) != -1) { FUN_L00_0023e838(DATA_INT(0x120)); DATA_INT(0x120) = -1; }
-            if (DATA_SHORT(0x12)) enqueue_timer_display(FUN_L15_002d77c0, moby);
-            if (DATA_INT(0x84)) { STOP_VOICE(0x14); STOP_VOICE(0x80); DATA_INT(0x84) = 0; }
-            p = (int *)data; i = 3;
-            do {
-                if (*p != -1 && D_0013F64C == (int)(D_L15_0015FFD8 + *p * 0x100) && *(short *)(D_0013F64C + 0xa6) == 0x33e && D_0013F65E == 0) {
-                    ready = 0;
-                    if (DATA_INT(0x8c)) {
-                        int timer = DATA_SHORT(0x12);
-                        int limit = FUN_001fa6d0(scale_game_frames_float(DATA_FLOAT(0x18) * 60.0f));
-                        int interval = scale_game_frames(60);
-                        if (timer < limit - interval) {
-                            DATA_SHORT(0x12) = FUN_001fa6d0(scale_game_frames_float(DATA_FLOAT(0x18) * 60.0f));
-                            FUN_L00_0028dc90(2, 0, (int)(D_L15_0015FFD8 + *p * 0x100), 0x28f); ready = 0;
-                        }
-                    }
-                }
-                p++;
-            } while (--i >= 0);
-            DATA_INT(0x8c) = ready;
-            if (!FUN_001f9770((char *)data + 0x12) && !(is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x70)) && D_0013F65E == 0) && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x128))) goto finish;
-            p = (int *)data; i = 3;
-            do { if (*p != -1) { other = moby_array + *p * 0x100; if (*(short *)(other + 0xa6) == 0x33e) other[0x20] = 1; else FUN_L15_002d95a0(other); } p++; } while (--i >= 0);
-            RESET_TIMERS(); goto finish;
+        goto state_three;
     default:
         triggers = (int *)((char *)data + 0x60);
         goto finish;
@@ -313,9 +287,39 @@ next_target: p++;
         }
 next_moby: p++;
     } while (--i >= 0);
+    goto finish;
+state_three:
+        triggers = (int *)((char *)data + 0x60);
+            p = (int *)((char *)data + 0x74); i = 2;
+            do { if (*p != -1) FUN_L00_002502f0(moby_array + *p * 0x100, 0x40, 0x40, 0x40); p++; } while (--i >= 0);
+            if (DATA_INT(0x120) != -1) { FUN_L00_0023e838(DATA_INT(0x120)); DATA_INT(0x120) = -1; }
+            if (DATA_SHORT(0x12)) enqueue_timer_display(FUN_L15_002d77c0, moby);
+            if (DATA_INT(0x84)) { STOP_VOICE(0x14); STOP_VOICE(0x80); DATA_INT(0x84) = 0; }
+            p = (int *)data; i = 3;
+            do {
+                if (*p != -1 && D_0013F64C == (int)(D_L15_0015FFD8 + *p * 0x100) && *(short *)(D_0013F64C + 0xa6) == 0x33e && D_0013F65E == 0) {
+                    ready = 0;
+                    if (DATA_INT(0x8c)) {
+                        int timer = DATA_SHORT(0x12);
+                        int limit = FUN_001fa6d0(scale_game_frames_float(DATA_FLOAT(0x18) * 60.0f));
+                        int interval = scale_game_frames(60);
+                        if (timer < limit - interval) {
+                            DATA_SHORT(0x12) = FUN_001fa6d0(scale_game_frames_float(DATA_FLOAT(0x18) * 60.0f));
+                            FUN_L00_0028dc90(2, 0, (int)(D_L15_0015FFD8 + *p * 0x100), 0x28f); ready = 0;
+                        }
+                    }
+                }
+                p++;
+            } while (--i >= 0);
+            DATA_INT(0x8c) = ready;
+            if (!FUN_001f9770((char *)data + 0x12) && !(is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x70)) && D_0013F65E == 0) && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x128))) goto finish;
+            p = (int *)data; i = 3;
+            do { if (*p != -1) { other = moby_array + *p * 0x100; if (*(short *)(other + 0xa6) == 0x33e) other[0x20] = 1; else FUN_L15_002d95a0(other); } p++; } while (--i >= 0);
+            RESET_TIMERS(); goto finish;
+
 finish:
-    p = triggers; i = 3;
-    do { if (is_point_inside_clip_volume(&hero.motion.pos, *p) && FUN_L00_0020d568()) D_0013F640 = *(float *)(entity_array + *p * 0x80 + 0x38); p++; } while (--i >= 0);
+    data = triggers; i = 3; other = (char *)&hero;
+    do { if (is_point_inside_clip_volume(&hero.motion.pos, *data) && FUN_L00_0020d568()) ((struct Hero *)other)->water_surface_z = *(float *)(entity_array + *data * 0x80 + 0x38); data++; } while (--i >= 0);
 }
 #undef DATA_INT
 #undef DATA_SHORT
