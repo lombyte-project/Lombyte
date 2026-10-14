@@ -957,8 +957,8 @@ def render_svg(
         f'<stop offset="0" stop-color="{DRAWER_FACE_TOP}"/>'
         f'<stop offset="1" stop-color="{DRAWER_FACE_BOTTOM}"/>'
         '</linearGradient><radialGradient id="drawer-halo">'
-        f'<stop offset="0" stop-color="{ORANGE}" stop-opacity="0.55"/>'
-        f'<stop offset="1" stop-color="{ORANGE}" stop-opacity="0"/>'
+        f'<stop offset="0" stop-color="{BACKGROUND}" stop-opacity="0.6"/>'
+        f'<stop offset="1" stop-color="{BACKGROUND}" stop-opacity="0"/>'
         "</radialGradient></defs>",
     ]
 
@@ -1029,9 +1029,12 @@ def render_svg(
     lines.append("</g>")
     lines.append(f'<polygon points="{boot_poly}" fill="url(#sheen)" pointer-events="none"/>')
     cx, cy = (dx0 + xt) / 2, dy0 + ddy / 2
-    # The whole-game panel's orange glow behind the percentage.
+    # A soft dark centre, then the whole-game panel's orange glow, behind the
+    # percentage.
     lines.append(
         f'<g clip-path="url(#drawer-clip)" pointer-events="none">'
+        f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{(xt - dx0) * 0.28:.1f}" ry="{ddy * 0.6:.1f}" '
+        f'fill="url(#drawer-halo)"/>'
         f'<ellipse cx="{cx:.1f}" cy="{dy0 + ddy / 2 + 4:.1f}" rx="{(right - xb) * 0.55:.1f}" '
         f'ry="{ddy * 0.7:.1f}" fill="url(#panel-glow)"/></g>'
     )
