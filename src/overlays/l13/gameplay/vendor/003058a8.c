@@ -582,12 +582,9 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
         do {
             int lo, hi, duration, duration2;
             i--;
-            speed = FUN_002132a8(8.0f, 10.0f);
-            amount = extra * D_0015ED6C;
+            speed = (scale * FUN_002132a8(8.0f, 10.0f)) * D_0015ED6C - extra * D_0015ED6C;
             colors = D_L13_001F5560;
-            speed = scale * speed * D_0015ED6C;
             second_colors = D_L13_001F5578;
-            speed -= amount;
             amount = scale * magnitude;
             color = &colors.v[random_integer_below(6)];
             second_color = &second_colors.v[random_integer_below(6)];
