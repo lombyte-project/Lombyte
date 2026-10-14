@@ -1010,7 +1010,7 @@ def render_svg(
             f'<title>Data in C: {data[1]:,} of {data[0]:,} B, of which {data[2]:,} B '
             f'are zeros (zero-initialised level data).</title>',
         ))
-    stats.append((ORANGE, f"{total_percent:.1f}%", "C_EXACT &#183; exe + overlays", ""))
+    stats.append((ORANGE, f"{total_percent:.1f}%", "exe + overlays in C", ""))
     top = 31 if len(stats) == 1 else 3
     for row, (color, value, caption, tip) in enumerate(stats):
         y = top + row * 29
