@@ -1217,8 +1217,8 @@ void FUN_L06_002f5d78(char *moby) {
         angle = D_L06_00161D7C_gp * DEG_TO_RAD - (float)(i * 45) * DEG_TO_RAD;
         if (1.5707964f < angle) angle = 1.5707964f;
         else if (angle < 0.0f) angle = 0.0f;
-        left = (char **)(data + 0x70 + offset);
         right = (char **)(data + 0xc0 + offset);
+        left = (char **)(data + 0x70 + offset);
         i++;
         offset += 4;
         *(float *)(*left + 0x40) = -angle;
