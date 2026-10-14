@@ -1736,13 +1736,18 @@ void FUN_L01_002edca0(unsigned char *moby) {
     case 13:
         *(u16 *)(moby + 0x34) |= 1;
         if (FUN_00214720(D_0013F420, *(int *)(data + 0x25c)) != 0) {
-            u16 flags = *(u16 *)(moby + 0x34) | 0x1000;
+            u16 flags;
+            float distance;
+            int result;
+            distance = *(float *)(moby + 0x18) + 20.0f;
+            flags = *(u16 *)(moby + 0x34) | 0x1000;
             moby[0x20] = 1;
-            *(u16 *)(moby + 0x34) = flags | 0x1000;
+            *(u16 *)(moby + 0x34) = flags;
             *(float *)(moby + 0x58) = 1.0f;
-            *(float *)(moby + 0x18) += 20.0f;
+            *(float *)(moby + 0x18) = distance;
+            result = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            *(int *)(moby + 0x94) = result;
             moby[0x31] = 1;
-            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
             *(u16 *)(moby + 0x34) = flags & 0xfffe;
         }
         return;
