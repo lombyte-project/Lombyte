@@ -4,7 +4,160 @@
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307578.s", FUN_L06_00307578);
+#else
+#include "rnc/overlay/quad.h"
+extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+extern void FUN_001fa030(void *, void *);
+extern void FUN_001f9cf8(void *, void *, void *);
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
+extern int D_L06_001fe9d0[];
+extern OvlVec4 D_L06_001fe8d0[];
+extern float D_L06_001fe960[][2];
+extern u32 D_L06_001fe9a8[];
+extern struct { char pad[0x158]; float f158; } D_L00_00166C80 __attribute__((section(".data")));
+typedef struct {
+    OvlVec4 corner[4];
+    u32 color[4];
+    float uv[4][2];
+    u64 unk70, tex, unk80, unk88;
+} VendorQuad;
+void FUN_L06_00307578(char *moby) {
+    struct {
+    VendorQuad quad;
+    OvlVec4 result[4];
+    float rotation[3];
+    float matrix[12] __attribute__((aligned(16)));
+    OvlVec4 pos[4];
+    OvlVec4 corners[4];
+    int i;
+    OvlVec4 * volatile pos0, * volatile pos1, * volatile pos2, * volatile pos3;
+    OvlVec4 * volatile result0, * volatile result1, * volatile result2, * volatile result3;
+    } work;
+    float *data = *(float **)(moby + 0x78);
+    int *indices;
+    int *index1, *index2;
+    OvlVec4 *vertices;
+    float (*uvs)[2];
+    u32 *colors;
+    float *uvs_v;
+    work.rotation[0] = 0.0f;
+    work.rotation[1] = 0.0f;
+    work.rotation[2] = D_L00_00166C80.f158;
+    FUN_001fa030(work.matrix, work.rotation);
+    data[7] += 0.01f;
+    if (1.0f < data[7]) data[7] -= 1.0f;
+    work.quad.unk80 = 1;
+    work.quad.unk88 = 0x4000000044ULL;
+    work.i = 0;
+    work.quad.unk70 = 0;
+    work.quad.tex = get_effect_texture(0x18);
+    work.result0 = &work.result[0];
+    work.result1 = &work.result[1];
+    work.result2 = &work.result[2];
+    work.result3 = &work.result[3];
+    work.pos0 = &work.pos[0];
+    work.pos1 = &work.pos[1];
+    work.pos2 = &work.pos[2];
+    work.pos3 = &work.pos[3];
+    indices = D_L06_001fe9d0;
+    vertices = D_L06_001fe8d0;
+    uvs = D_L06_001fe960;
+    colors = D_L06_001fe9a8;
+    uvs_v = &uvs[0][1];
+    do {
+        int offset = work.i * 4;
+        work.i++;
+        FUN_001f9cf8(work.result0, &vertices[indices[0]], work.matrix);
+        index1 = (D_L06_001fe9d0 + 1) + offset;
+        FUN_001f9cf8(work.result1, &vertices[*index1], work.matrix);
+        index2 = (D_L06_001fe9d0 + 2) + offset;
+        FUN_001f9cf8(work.result2, &vertices[*index2], work.matrix);
+        FUN_001f9cf8(work.result3, &vertices[indices[3]], work.matrix);
+        work.quad.corner[0].f[0] = *(float *)(moby + 16) + work.result[0].f[0] * data[9];
+        work.quad.corner[0].f[1] = *(float *)(moby + 20) + work.result[0].f[1] * data[9];
+        work.quad.corner[0].f[2] = *(float *)(moby + 24) + work.result[0].f[2];
+        work.quad.corner[1].f[0] = *(float *)(moby + 16) + work.result[1].f[0] * data[9];
+        work.quad.corner[1].f[1] = *(float *)(moby + 20) + work.result[1].f[1] * data[9];
+        work.quad.corner[1].f[2] = *(float *)(moby + 24) + work.result[1].f[2];
+        work.quad.corner[2].f[0] = *(float *)(moby + 16) + work.result[2].f[0] * data[9];
+        work.quad.corner[2].f[1] = *(float *)(moby + 20) + work.result[2].f[1] * data[9];
+        work.quad.corner[2].f[2] = *(float *)(moby + 24) + work.result[2].f[2];
+        work.quad.corner[3].f[0] = *(float *)(moby + 16) + work.result[3].f[0] * data[9];
+        work.quad.corner[3].f[1] = *(float *)(moby + 20) + work.result[3].f[1] * data[9];
+        work.quad.corner[3].f[2] = *(float *)(moby + 24) + work.result[3].f[2];
+        work.quad.color[0] = colors[indices[0]];
+        work.quad.color[1] = colors[*index1];
+        work.quad.color[2] = colors[*index2];
+        work.quad.color[3] = colors[indices[3]];
+        work.quad.uv[0][0] = uvs[indices[0]][0];
+        work.quad.uv[0][1] = uvs_v[(indices[0]) * 2] + data[7];
+        work.quad.uv[1][0] = uvs[*index1][0];
+        work.quad.uv[1][1] = uvs_v[(*index1) * 2] + data[7];
+        work.quad.uv[2][0] = uvs[*index2][0];
+        work.quad.uv[2][1] = uvs_v[(*index2) * 2] + data[7];
+        work.quad.uv[3][0] = uvs[indices[3]][0];
+        work.quad.uv[3][1] = uvs_v[(indices[3]) * 2] + data[7];
+        indices += 4;
+        draw_geometry_quad(&work.quad, 0, 1);
+    } while (work.i < 4);
+    work.quad.tex = get_effect_texture(0x1b);
+    data[8] += 0.01f;
+    if (1.0f < data[8]) data[8] = 0.0f;
+    work.corners[0].q = 0;
+    work.corners[0].f[0] = -data[8] * 1.2f * data[9];
+    work.corners[0].f[1] = -data[8] * 1.2f * data[9];
+    work.corners[0].f[2] = data[8] * 1.4f + 1.1f;
+    work.corners[1].q = 0;
+    work.corners[1].f[0] = data[8] * 1.2f * data[9];
+    work.corners[1].f[1] = -data[8] * 1.2f * data[9];
+    work.corners[1].f[2] = data[8] * 1.4f + 1.1f - 0.2f;
+    work.corners[2].q = 0;
+    work.corners[2].f[0] = -data[8] * 1.2f * data[9];
+    work.corners[2].f[1] = data[8] * 1.2f * data[9];
+    work.corners[2].f[2] = data[8] * 1.4f + 1.1f;
+    work.corners[3].q = 0;
+    work.corners[3].f[0] = data[8] * 1.2f * data[9];
+    work.corners[3].f[1] = data[8] * 1.2f * data[9];
+    work.corners[3].f[2] = data[8] * 1.4f + 1.1f - 0.2f;
+    work.rotation[0] = 0.0f;
+    work.rotation[1] = 0.0f;
+    work.rotation[2] = D_L00_00166C80.f158;
+    work.pos[0].q = work.corners[0].q;
+    work.pos[1].q = work.corners[1].q;
+    work.pos[2].q = work.corners[2].q;
+    work.pos[3].q = work.corners[3].q;
+    FUN_001fa030(work.matrix, work.rotation);
+    FUN_001f9cf8(work.result0, work.pos0, work.matrix);
+    FUN_001f9cf8(work.result1, work.pos1, work.matrix);
+    FUN_001f9cf8(work.result2, work.pos2, work.matrix);
+    FUN_001f9cf8(work.result3, work.pos3, work.matrix);
+    work.quad.corner[0].f[0] = *(float *)(moby + 16) + work.result[0].f[0];
+    work.quad.corner[0].f[1] = *(float *)(moby + 20) + work.result[0].f[1];
+    work.quad.corner[0].f[2] = *(float *)(moby + 24) + work.result[0].f[2];
+    work.quad.corner[1].f[0] = *(float *)(moby + 16) + work.result[1].f[0];
+    work.quad.corner[1].f[1] = *(float *)(moby + 20) + work.result[1].f[1];
+    work.quad.corner[1].f[2] = *(float *)(moby + 24) + work.result[1].f[2];
+    work.quad.corner[2].f[0] = *(float *)(moby + 16) + work.result[2].f[0];
+    work.quad.corner[2].f[1] = *(float *)(moby + 20) + work.result[2].f[1];
+    work.quad.corner[2].f[2] = *(float *)(moby + 24) + work.result[2].f[2];
+    work.quad.corner[3].f[0] = *(float *)(moby + 16) + work.result[3].f[0];
+    work.quad.corner[3].f[1] = *(float *)(moby + 20) + work.result[3].f[1];
+    work.quad.corner[3].f[2] = *(float *)(moby + 24) + work.result[3].f[2];
+    work.quad.color[3] = ((u32)(int)((1.0f - data[8]) * 128.0f) << 24) | 0x808080;
+    work.quad.color[0] = work.quad.color[1] = work.quad.color[2] = work.quad.color[3];
+    work.quad.uv[0][0] = 0.0f;
+    work.quad.uv[0][1] = 0.0f;
+    work.quad.uv[3][1] = 1.0f;
+    work.quad.uv[1][0] = 1.0f;
+    work.quad.uv[2][1] = 1.0f;
+    work.quad.uv[3][0] = 1.0f;
+    work.quad.uv[1][1] = 0.0f;
+    work.quad.uv[2][0] = 0.0f;
+    draw_geometry_quad(&work.quad, 0, 1);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -38,7 +191,7 @@ void FUN_L06_00307c48(unsigned char *a, unsigned char *m) {
     }
 }
 #include "rnc/overlay/quad.h"
-extern void FUN_L06_00307578(void);
+extern void FUN_L06_00307578(char *moby);
 extern float D_L06_001622DC __attribute__((sda));
 extern float D_L06_001622E0 __attribute__((sda));
 extern float D_L06_001622E4 __attribute__((sda));
