@@ -2339,7 +2339,7 @@ extern float D_L06_00161F04 __attribute__((sda));
 extern float D_L06_00161F08 __attribute__((sda));
 extern unsigned char D_0013D3AB;
 extern unsigned char D_0013D505 __attribute__((section(".data")));
-extern unsigned char D_0013D412 __attribute__((section(".data")));
+#include "rnc/gameplay/state/item_state.h"
 extern char D_L06_001678D0[];
 extern int D_L06_0016A010[];
 extern int D_L06_0015F5C4;
@@ -2358,7 +2358,8 @@ void FUN_L06_002f9a28(unsigned char *moby) {
     int i, out;
     FUN_L06_002fa9c0(moby);
     focus = *(char **)(data + 0xb0);
-    FUN_L00_00263ac8(1.9f, moby, D_L06_00161EF0, data + 0x130);
+    out = *(volatile int *)&D_L06_00161EF0;
+    FUN_L00_00263ac8(1.9f, moby, out, data + 0x130);
     if ((unsigned char)moby[0x31] != 0) {
         if (FUN_001f9b48(moby + 0x10, D_L06_00167540) < 45.0f) {
             FUN_L00_0025a120(moby);
@@ -2378,12 +2379,13 @@ void FUN_L06_002f9a28(unsigned char *moby) {
         *(int *)(data + 0x120) = scale_game_frames_alt(1200);
         *(int *)(data + 0x178) = 0;
         target = data + 0xc0;
-        *(CirclerQuad *)target = *(CirclerQuad *)(moby + 0x10);
+        { struct { float value[4]; } __attribute__((aligned(16))) *focus = (void *)target;
+          *focus = *(typeof(*focus) *)(moby + 0x10); }
         *(int *)(data + 0x10c) = -1;
         path = D_L06_001B0C30[*(int *)(data + 0xec)];
         *(int *)(data + 0x114) = *path;
         path = D_L06_001B0C30[*(int *)(data + 0xec)];
-        FUN_001f9a40(data + 0xd0, path + 4, path + (*path / 2) * 4 + 4, 0.5f);
+        FUN_001f9a40(data + 0xd0, path + 4, (int *)((char *)path + ((*path / 2) * 16 + 16)), 0.5f);
         *(float *)(data + 0xdc) = FUN_001f9b80(target, data + 0xd0);
         *(float *)(data + 0x128) = FUN_00213308();
         *(int *)(data + 0x12c) = scale_game_frames_alt(30);
@@ -2535,13 +2537,17 @@ void FUN_L06_002f9a28(unsigned char *moby) {
         FUN_L06_002d9e78(*(int *)(data + 0x104)); moby[0x20] = 15;
         if ((unsigned char)moby[0x53] != 1) FUN_00212f90(moby, 1, 0, scale_game_frames_alt(20));
         *(int *)(moby + 0x94) = 0; moby[0x31] = 0; *(unsigned short *)(moby + 0x34) |= 1;
-        if (*(int *)(data + 0x178) != 0 || D_0013D412 != 0) return;
-        D_0013D412 = 1; allocate_voice_for_bank_entry(1, 0, 0); FUN_L00_00263d40(0x53d6, -1); return;
+        if (*(int *)(data + 0x178) != 0 || item_unlocked[10] != 0) return;
+        item_unlocked[10] = 1; allocate_voice_for_bank_entry(1, 0, 0); FUN_L00_00263d40(0x53d6, -1); return;
     case 15:
         target = D_L06_001678D0; path = D_L06_0016A010;
         for (i = 0; i < 48; i++) {
-            if (*path != 0 && *(short *)(target + 0x86) == 18) { FUN_L06_00316330(target); break; }
-            path++; target += 0xa0;
+            if (*path != 0) {
+                char *focus = target;
+                target += 0xa0;
+                if (*(short *)(focus + 0x86) == 18) { FUN_L06_00316330(focus); break; }
+            } else target += 0xa0;
+            path++;
         }
         if (D_L06_0015F5C4 == 2) {
             FUN_L06_002f5360(D_L06_0015FFD8 + (*(int *)(data + 0xfc) << 8)); mark_moby_for_removal((struct Moby *)moby);
