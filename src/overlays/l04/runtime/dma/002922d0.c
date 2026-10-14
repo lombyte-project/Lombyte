@@ -52,20 +52,20 @@ extern void get_joint_matrix(struct Moby *m, int joint, float *mtx) __asm__("FUN
 extern float FUN_001f9e90(float, float);
 extern void attach_rig_manip(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");
 
-void FUN_L04_002923b8(struct Moby *m, LegRig *rig) {
+void FUN_L04_002923b8(struct Moby *moby, LegRig *rig) {
     int joints[6];
-    float mtx[4][4];
+    float matrix[4][4];
     int i;
     int j;
     int k;
 
     for (i = 0; i < 13; i++) {
         if (rig->anims[i]->id < 0) {
-            stub_printf(invalid_animation_message, i, m->oclass);
+            stub_printf(invalid_animation_message, i, moby->oclass);
             FUN_001f97b0();
         }
-        rig->anims[i]->start = FUN_L04_002418b0(m->class_slot, rig->anims[i]->id);
-        rig->anims[i]->len = FUN_L04_00241910(m->class_slot, rig->anims[i]->id) - rig->anims[i]->start;
+        rig->anims[i]->start = FUN_L04_002418b0(moby->class_slot, rig->anims[i]->id);
+        rig->anims[i]->len = FUN_L04_00241910(moby->class_slot, rig->anims[i]->id) - rig->anims[i]->start;
         if (rig->anims[i]->len != 0.0f) {
             for (j = 0; j < 2; j++) {
                 rig->anims[i]->phase[1].span[j] = rig->anims[i]->phase[1].from[j] <= rig->anims[i]->phase[1].to[j]
@@ -84,16 +84,16 @@ void FUN_L04_002923b8(struct Moby *m, LegRig *rig) {
     joints[3] = rig->legs[1].joint2;
     joints[4] = rig->jointB4;
     joints[5] = rig->jointB5;
-    transform_joint_points(m, 6, joints, rig);
+    transform_joint_points(moby, 6, joints, rig);
     for (k = 0; k < 2; k++) {
-        get_joint_matrix(m, rig->legs[k].joint, mtx[0]);
+        get_joint_matrix(moby, rig->legs[k].joint, matrix[0]);
         rig->legs[k].upper_turn = 0;
         rig->legs[k].lower_turn = 0;
-        rig->legs[k].yaw = FUN_001f9e90(mtx[1][0], mtx[1][1]);
+        rig->legs[k].yaw = FUN_001f9e90(matrix[1][0], matrix[1][1]);
         if (rig->legs[k].manip_b.attached == 0)
-            attach_rig_manip(m, rig->legs[k].slot_b, &rig->legs[k].manip_b);
+            attach_rig_manip(moby, rig->legs[k].slot_b, &rig->legs[k].manip_b);
         if (rig->legs[k].manip_a.attached == 0)
-            attach_rig_manip(m, rig->legs[k].slot_a, &rig->legs[k].manip_a);
+            attach_rig_manip(moby, rig->legs[k].slot_a, &rig->legs[k].manip_a);
     }
     rig->unkEE = 0;
     rig->unkB7 = 0;

@@ -2697,266 +2697,264 @@ static inline void measure_path(Path *path) {
     }
 }
 
-void FUN_L00_002d5de8(struct Moby *m)
+void FUN_L00_002d5de8(struct Moby *moby)
 {
     Vec offset;
     Vec step;
     Vec point;
-    s32 seg;
-    f32 frac;
-    Infobot *ib;
+    s32 segment;
+    f32 fraction;
+    Infobot *infobot;
     Path *path;
     Vec *pos;
-    Vec *dst;
     struct Moby *carrier;
-    Cutscene *cs;
+    Cutscene *scene;
     s32 i;
-    s32 j;
     f32 range;
-    f32 dist;
+    f32 distance;
     f32 end;
     f32 accel;
     f32 speed;
-    f32 a;
+    f32 heading;
     f32 tilt_y;
     f32 tilt_x;
     f32 max_speed;
 
     offset.q = 0;
-    ib = (Infobot *)m->pvars;
-    switch (m->state) {
+    infobot = (Infobot *)moby->pvars;
+    switch (moby->state) {
     case 0:
-        m->update_dist = 0xFF;
-        ib->yaw = m->rot.z;
-        ib->home = MPOS(m)->q;
-        if (ib->arrived != 0) {
-            m->state = 2;
-            FUN_L00_002d6bf0_2d5de8(m);
+        moby->update_dist = 0xFF;
+        infobot->yaw = moby->rot.z;
+        infobot->home = MPOS(moby)->q;
+        if (infobot->arrived != 0) {
+            moby->state = 2;
+            FUN_L00_002d6bf0_2d5de8(moby);
         } else {
-            if (ib->waiting != 0) {
-                m->state = 2;
+            if (infobot->waiting != 0) {
+                moby->state = 2;
             } else {
-                m->state = 1;
+                moby->state = 1;
             }
-            m->flags |= 0x41;
+            moby->flags |= 0x41;
         }
-        if (ib->attach != -1) {
-            m->state = 5;
-            FUN_L00_002d6bf0_2d5de8(m);
+        if (infobot->attach != -1) {
+            moby->state = 5;
+            FUN_L00_002d6bf0_2d5de8(moby);
             break;
         }
-        if (ib->slots[0] == -1) {
+        if (infobot->slots[0] == -1) {
             break;
         }
         for (i = 0; i < 8; i++) {
-            if (ib->slots[i] == -1) {
+            if (infobot->slots[i] == -1) {
                 continue;
             }
-            measure_path(D_L00_001B04B0[ib->slots[i]]);
+            measure_path(D_L00_001B04B0[infobot->slots[i]]);
         }
-        MPOS(m)->q = D_L00_001B04B0[ib->slots[0]]->pts[0].q;
-        ib->seg = 0;
-        m->state = 3;
+        MPOS(moby)->q = D_L00_001B04B0[infobot->slots[0]]->pts[0].q;
+        infobot->seg = 0;
+        moby->state = 3;
         break;
     case 1:
         break;
     case 2:
         range = 1.0f;
-        if (ib->waiting != 0 && (m->flags & 1)) {
+        if (infobot->waiting != 0 && (moby->flags & 1)) {
             range = 3.0f;
         }
-        if (ib->planet == 0xC) {
+        if (infobot->planet == 0xC) {
             range = 3.0f;
         }
-        m->rot.z = spring_turn_2d5de8(m->rot.z, ib->yaw, 0.01f, 0.3f, 0.1f, &ib->spin[2]);
-        m->rot.y = spring_turn_2d5de8(m->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &ib->spin[1]);
-        m->rot.x = spring_turn_2d5de8(m->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &ib->spin[0]);
-        FUN_L00_002d6cd0_2d5de8(m);
-        if (D_0013DD40[ib->planet] != 0) {
-            FUN_0020c828(m);
+        moby->rot.z = spring_turn_2d5de8(moby->rot.z, infobot->yaw, 0.01f, 0.3f, 0.1f, &infobot->spin[2]);
+        moby->rot.y = spring_turn_2d5de8(moby->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &infobot->spin[1]);
+        moby->rot.x = spring_turn_2d5de8(moby->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
+        FUN_L00_002d6cd0_2d5de8(moby);
+        if (D_0013DD40[infobot->planet] != 0) {
+            FUN_0020c828(moby);
             return;
         }
-        if (FUN_001f9b48(&D_0013F3D0, &m->pos) < range && D_0013F3D0.active != 0) {
-            m->state = 8;
+        if (FUN_001f9b48(&D_0013F3D0, &moby->pos) < range && D_0013F3D0.active != 0) {
+            moby->state = 8;
         }
         break;
     case 3:
-        FUN_L00_002d6cd0_2d5de8(m);
-        if (D_0013DD40[ib->planet] != 0) {
-            FUN_0020c828(m);
+        FUN_L00_002d6cd0_2d5de8(moby);
+        if (D_0013DD40[infobot->planet] != 0) {
+            FUN_0020c828(moby);
             return;
         }
-        if (ib->slots[ib->seg] == -1) {
-            m->state = 2;
+        if (infobot->slots[infobot->seg] == -1) {
+            moby->state = 2;
             break;
         }
-        a = FUN_001f9e90(D_0013F350.target.v.x - m->pos.x, D_0013F350.target.v.y - m->pos.y);
-        m->rot.z = spring_turn_2d5de8(m->rot.z, a, 0.01f, 0.3f, 0.1f, &ib->spin[2]);
-        m->rot.y = spring_turn_2d5de8(m->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &ib->spin[1]);
-        m->rot.x = spring_turn_2d5de8(m->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &ib->spin[0]);
-        if (FUN_001f9b48(&D_0013F350.target, &m->pos) < 8.0f) {
-            m->state = 4;
-            FUN_L00_00266858(m, 1);
+        heading = FUN_001f9e90(D_0013F350.target.v.x - moby->pos.x, D_0013F350.target.v.y - moby->pos.y);
+        moby->rot.z = spring_turn_2d5de8(moby->rot.z, heading, 0.01f, 0.3f, 0.1f, &infobot->spin[2]);
+        moby->rot.y = spring_turn_2d5de8(moby->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &infobot->spin[1]);
+        moby->rot.x = spring_turn_2d5de8(moby->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
+        if (FUN_001f9b48(&D_0013F350.target, &moby->pos) < 8.0f) {
+            moby->state = 4;
+            FUN_L00_00266858(moby, 1);
         }
         break;
     case 4:
-        FUN_L00_002d5988_2d5de8(m, D_L00_001B04B0[ib->slots[ib->seg]], 3);
-        FUN_L00_002d6cd0_2d5de8(m);
-        if (m->state != 4) {
-            ib->seg++;
+        FUN_L00_002d5988_2d5de8(moby, D_L00_001B04B0[infobot->slots[infobot->seg]], 3);
+        FUN_L00_002d6cd0_2d5de8(moby);
+        if (moby->state != 4) {
+            infobot->seg++;
         }
         break;
     case 5:
-        FUN_L00_002d6cd0_2d5de8(m);
-        if (D_0013DD40[ib->planet] != 0) {
-            FUN_0020c828(m);
+        FUN_L00_002d6cd0_2d5de8(moby);
+        if (D_0013DD40[infobot->planet] != 0) {
+            FUN_0020c828(moby);
             return;
         }
-        ib->bob = FUN_001fa580(ib->bob, D_0015ED6C * 3.1415927f);
-        offset.v.x = FUN_001f9dc8(ib->bob);
-        offset.v.y = FUN_001f9de0(ib->bob);
+        infobot->bob = FUN_001fa580(infobot->bob, D_0015ED6C * 3.1415927f);
+        offset.v.x = FUN_001f9dc8(infobot->bob);
+        offset.v.y = FUN_001f9de0(infobot->bob);
         offset.v.z = 3.0f;
-        m->rot.z = FUN_001fa580(ib->bob, 1.5707964f);
-        if (ib->carrier == -1) {
+        moby->rot.z = FUN_001fa580(infobot->bob, 1.5707964f);
+        if (infobot->carrier == -1) {
             break;
         }
-        if (D_L00_0015FFD8[ib->carrier].oclass != 0x336) {
+        if (D_L00_0015FFD8[infobot->carrier].oclass != 0x336) {
             break;
         }
-        if (D_L00_0015FFD8[ib->carrier].command != 6) {
+        if (D_L00_0015FFD8[infobot->carrier].command != 6) {
             break;
         }
-        if (ib->path == -1) {
+        if (infobot->path == -1) {
             break;
         }
-        m->state = 6;
-        ib->attach = -1;
-        MPOS(m)->q = D_L00_001B04B0[ib->path]->pts[0].q;
-        m->rot.z = FUN_001f9e90(D_L00_001B04B0[ib->path]->pts[1].v.x - D_L00_001B04B0[ib->path]->pts[0].v.x,
-                                D_L00_001B04B0[ib->path]->pts[1].v.y - D_L00_001B04B0[ib->path]->pts[0].v.y);
-        measure_path(D_L00_001B04B0[ib->path]);
+        moby->state = 6;
+        infobot->attach = -1;
+        MPOS(moby)->q = D_L00_001B04B0[infobot->path]->pts[0].q;
+        moby->rot.z = FUN_001f9e90(D_L00_001B04B0[infobot->path]->pts[1].v.x - D_L00_001B04B0[infobot->path]->pts[0].v.x,
+                                D_L00_001B04B0[infobot->path]->pts[1].v.y - D_L00_001B04B0[infobot->path]->pts[0].v.y);
+        measure_path(D_L00_001B04B0[infobot->path]);
         break;
     case 6:
-        path = D_L00_001B04B0[ib->path];
-        pos = (Vec *)&m->pos;
-        FUN_L00_002d6cd0_2d5de8(m);
-        FUN_L00_0025df68(path, pos, &point, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
-        end = FUN_001fa6c0(seg) * path->pts[0].v.w + frac + 2.0f;
-        dist = FUN_001f9b48(pos, &path->pts[path->count - 1]);
+        path = D_L00_001B04B0[infobot->path];
+        pos = (Vec *)&moby->pos;
+        FUN_L00_002d6cd0_2d5de8(moby);
+        FUN_L00_0025df68(path, pos, &point, &segment, &fraction, 0, 999.0f, 5.0f, 0.0f);
+        end = FUN_001fa6c0(segment) * path->pts[0].v.w + fraction + 2.0f;
+        distance = FUN_001f9b48(pos, &path->pts[path->count - 1]);
         accel = D_0015ED70 * 16.0f;
-        speed = ib->speed;
-        if (dist <= speed * speed / (accel + accel)) {
-            ib->speed = speed - accel;
+        speed = infobot->speed;
+        if (distance <= speed * speed / (accel + accel)) {
+            infobot->speed = speed - accel;
             if (speed - accel < 0.0f) {
-                ib->speed = 0.0f;
+                infobot->speed = 0.0f;
             }
         } else {
             max_speed = D_0015ED6C * 16.0f;
-            ib->speed = speed + accel;
+            infobot->speed = speed + accel;
             if (max_speed < speed + accel) {
-                ib->speed = max_speed;
+                infobot->speed = max_speed;
             }
         }
-        seg = FUN_001fa6d0(end / path->pts[0].v.w);
-        frac = (end - FUN_001fa6c0(seg) * path->pts[0].v.w) / path->pts[0].v.w;
-        if (seg >= path->count - 1) {
-            if (ib->speed <= D_0015ED70 * 16.0f) {
-                MPOS(m)->q = ((Vec *)path)[path->count].q;
-                m->state = 7;
+        segment = FUN_001fa6d0(end / path->pts[0].v.w);
+        fraction = (end - FUN_001fa6c0(segment) * path->pts[0].v.w) / path->pts[0].v.w;
+        if (segment >= path->count - 1) {
+            if (infobot->speed <= D_0015ED70 * 16.0f) {
+                MPOS(moby)->q = ((Vec *)path)[path->count].q;
+                moby->state = 7;
                 break;
             }
-            seg = path->count - 2;
-            frac = 1.0f;
+            segment = path->count - 2;
+            fraction = 1.0f;
         }
-        FUN_001f9a28(&point, &path->pts[seg + 1], &path->pts[seg]);
-        FUN_001f9a68(&point, &point, frac);
-        FUN_001f9a10(&point, &point, &path->pts[seg]);
-        a = FUN_001f9e90(path->pts[seg + 1].v.x - path->pts[seg].v.x,
-                         path->pts[seg + 1].v.y - path->pts[seg].v.y);
-        m->rot.z = spring_turn_2d5de8(m->rot.z, a, 0.01f, 0.3f, 0.1f, &ib->spin[2]);
+        FUN_001f9a28(&point, &path->pts[segment + 1], &path->pts[segment]);
+        FUN_001f9a68(&point, &point, fraction);
+        FUN_001f9a10(&point, &point, &path->pts[segment]);
+        heading = FUN_001f9e90(path->pts[segment + 1].v.x - path->pts[segment].v.x,
+                         path->pts[segment + 1].v.y - path->pts[segment].v.y);
+        moby->rot.z = spring_turn_2d5de8(moby->rot.z, heading, 0.01f, 0.3f, 0.1f, &infobot->spin[2]);
         pos = &step;
-        FUN_001f9a28(pos, &point, MPOS(m));
-        dist = FUN_001f9af0(pos);
-        if (ib->speed < dist) {
-            dist = ib->speed;
+        FUN_001f9a28(pos, &point, MPOS(moby));
+        distance = FUN_001f9af0(pos);
+        if (infobot->speed < distance) {
+            distance = infobot->speed;
         }
-        FUN_001f9bf8(pos, pos, dist);
-        FUN_001f9a10(MPOS(m), MPOS(m), pos);
-        a = FUN_001fa5c8(FUN_001f9e90(step.v.x, step.v.y), m->rot.z);
-        tilt_y = ib->speed * 0.34906584f * FUN_001f9dc8(a) / (D_0015ED6C * 16.0f);
-        tilt_x = ib->speed * -0.34906584f * FUN_001f9de0(a) / (D_0015ED6C * 16.0f);
-        m->rot.y = spring_turn_2d5de8(m->rot.y, tilt_y, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &ib->spin[1]);
-        m->rot.x = spring_turn_2d5de8(m->rot.x, tilt_x, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &ib->spin[0]);
+        FUN_001f9bf8(pos, pos, distance);
+        FUN_001f9a10(MPOS(moby), MPOS(moby), pos);
+        heading = FUN_001fa5c8(FUN_001f9e90(step.v.x, step.v.y), moby->rot.z);
+        tilt_y = infobot->speed * 0.34906584f * FUN_001f9dc8(heading) / (D_0015ED6C * 16.0f);
+        tilt_x = infobot->speed * -0.34906584f * FUN_001f9de0(heading) / (D_0015ED6C * 16.0f);
+        moby->rot.y = spring_turn_2d5de8(moby->rot.y, tilt_y, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &infobot->spin[1]);
+        moby->rot.x = spring_turn_2d5de8(moby->rot.x, tilt_x, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
         break;
     case 7: {
-        Path *p = D_L00_001B04B0[ib->path];
-        FUN_L00_002d6cd0_2d5de8(m);
-        ib->sway = ib->sway + D_0015ED6C;
-        if (1.0f < ib->sway) {
-            ib->sway = 1.0f;
+        Path *p = D_L00_001B04B0[infobot->path];
+        FUN_L00_002d6cd0_2d5de8(moby);
+        infobot->sway = infobot->sway + D_0015ED6C;
+        if (1.0f < infobot->sway) {
+            infobot->sway = 1.0f;
         }
-        ib->bob = FUN_001fa580(ib->bob, D_0015ED6C * 3.1415927f);
-        offset.v.x = FUN_001f9dc8(ib->bob) * ib->sway;
-        offset.v.y = FUN_001f9de0(ib->bob) * ib->sway;
+        infobot->bob = FUN_001fa580(infobot->bob, D_0015ED6C * 3.1415927f);
+        offset.v.x = FUN_001f9dc8(infobot->bob) * infobot->sway;
+        offset.v.y = FUN_001f9de0(infobot->bob) * infobot->sway;
         offset.v.z = 0.0f;
-        a = FUN_001fa580(ib->bob, 1.5707964f);
-        m->rot.z = spring_turn_2d5de8(m->rot.z, a, D_0015ED6C * 25.132742f, D_0015ED6C * 25.132742f, D_0015ED6C * 12.566371f, &ib->spin[2]);
+        heading = FUN_001fa580(infobot->bob, 1.5707964f);
+        moby->rot.z = spring_turn_2d5de8(moby->rot.z, heading, D_0015ED6C * 25.132742f, D_0015ED6C * 25.132742f, D_0015ED6C * 12.566371f, &infobot->spin[2]);
         FUN_001f9a10(&step, &offset, &p->pts[p->count - 1]);
-        MPOS(m)->q = step.q;
+        MPOS(moby)->q = step.q;
         if (FUN_001f9b48(&D_0013F3D0, &p->pts[p->count - 1]) < 2.0f && D_0013F3D0.active != 0) {
-            m->state = 8;
+            moby->state = 8;
         }
-        m->rot.y = spring_turn_2d5de8(m->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &ib->spin[1]);
-        m->rot.x = spring_turn_2d5de8(m->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &ib->spin[0]);
+        moby->rot.y = spring_turn_2d5de8(moby->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &infobot->spin[1]);
+        moby->rot.x = spring_turn_2d5de8(moby->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
         break;
     }
     case 8:
-        m->flags |= 0x41;
-        FUN_L00_002607d0(ib->planet);
-        FUN_L00_002502a0(m->mission);
-        if (ib->cutscene != -1) {
-            FUN_L00_00284e50(&D_L00_001600EC_2d5de8[ib->cutscene].pos, &D_L00_001600EC_2d5de8[ib->cutscene].dir);
+        moby->flags |= 0x41;
+        FUN_L00_002607d0(infobot->planet);
+        FUN_L00_002502a0(moby->mission);
+        if (infobot->cutscene != -1) {
+            FUN_L00_00284e50(&D_L00_001600EC_2d5de8[infobot->cutscene].pos, &D_L00_001600EC_2d5de8[infobot->cutscene].dir);
         }
-        m->state = 9;
-        if (ib->msg0 != -1) {
-            FUN_L00_00298840(ib->msg0);
+        moby->state = 9;
+        if (infobot->msg0 != -1) {
+            FUN_L00_00298840(infobot->msg0);
         }
         break;
     case 9:
         if (D_L00_0015F5C4 == 2) {
             break;
         }
-        m->state = 10;
-        if (ib->msg1 != -1) {
-            FUN_L00_00299460(ib->msg1);
+        moby->state = 10;
+        if (infobot->msg1 != -1) {
+            FUN_L00_00299460(infobot->msg1);
         }
         break;
     case 10:
         if (D_L00_0015F5C4 == 2) {
             break;
         }
-        if (ib->msg2 != -1) {
-            FUN_L00_00298840(ib->msg2);
+        if (infobot->msg2 != -1) {
+            FUN_L00_00298840(infobot->msg2);
         }
-        m->state = 11;
+        moby->state = 11;
         break;
     case 11:
         if (D_L00_0015F5C4 == 2) {
             return;
         }
         FUN_0020b178(0, -1);
-        FUN_L00_00262d38(ib->planet);
-        FUN_0020c828(m);
+        FUN_L00_00262d38(infobot->planet);
+        FUN_0020c828(moby);
         return;
     }
-    if (ib->attach != -1 && ib->carrier != -1) {
-        carrier = &D_L00_0015FFD8[ib->carrier];
+    if (infobot->attach != -1 && infobot->carrier != -1) {
+        carrier = &D_L00_0015FFD8[infobot->carrier];
         if (carrier->oclass == 0x336) {
             step.q = 0;
-            FUN_L00_00260400(m, carrier, &D_L00_001600EC_2d5de8[ib->attach].pos, &step,
-                             &D_L00_001600EC_2d5de8[ib->attach].pos, &step);
-            FUN_001f9a10(&point, &offset, &D_L00_001600EC_2d5de8[ib->attach].pos);
-            MPOS(m)->q = point.q;
+            FUN_L00_00260400(moby, carrier, &D_L00_001600EC_2d5de8[infobot->attach].pos, &step,
+                             &D_L00_001600EC_2d5de8[infobot->attach].pos, &step);
+            FUN_001f9a10(&point, &offset, &D_L00_001600EC_2d5de8[infobot->attach].pos);
+            MPOS(moby)->q = point.q;
         }
     }
 }

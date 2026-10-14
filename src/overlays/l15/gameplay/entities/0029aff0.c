@@ -708,11 +708,11 @@ extern void *mine_debris(void *pos, void *vel, int color, int color2, float size
 void FUN_L15_002aa280(struct Moby *moby)
 {
     char *hit = 0;
-    Vec4 velocity, dir, push, pos, center;
+    Vec4 velocity, hit_direction, push, offset, center;
     u32 palette[4];
     u32 colors[4];
     Vec4 delta;
-    int spark, puff, k, n;
+    int spark, puff, pick, n;
     u32 *color;
     float size;
     void *debris;
@@ -732,8 +732,8 @@ void FUN_L15_002aa280(struct Moby *moby)
     moby->hit_slot = 0xff;
     if (hit != 0) {
         __builtin_memcpy(palette, &D_L15_001615B8, 16);
-        fast_vec_normalize(&dir, hit + 0x10, frame_time * 10.0f);
-        fast_vec_scale(&push, &dir, 2.0f);
+        fast_vec_normalize(&hit_direction, hit + 0x10, frame_time * 10.0f);
+        fast_vec_scale(&push, &hit_direction, 2.0f);
         if (fast_vec_length(hit) != 0.0f) {
             center.q = *(u128 *)hit;
         } else {
@@ -747,27 +747,27 @@ void FUN_L15_002aa280(struct Moby *moby)
             angle = random_float_between(moby->rot.z, 1.5707963267948966f);
             radius = fast_cos(angle);
             radius *= random_float_between(-3.0f, 3.0f);
-            pos.f[0] = radius;
+            offset.f[0] = radius;
             angle = random_float_between(moby->rot.z, 1.5707963267948966f);
             radius = fast_sin(angle);
             radius *= random_float_between(-3.0f, 3.0f);
-            pos.f[1] = radius;
-            pos.f[2] = 0.0f;
-            pos.f[2] = random_float_between(1.0f, 7.0f);
-            add_vectors(colors, &pos, &moby->pos);
-            fast_vec_sub(colors, &center, &pos);
+            offset.f[1] = radius;
+            offset.f[2] = 0.0f;
+            offset.f[2] = random_float_between(1.0f, 7.0f);
+            add_vectors(colors, &offset, &moby->pos);
+            fast_vec_sub(colors, &center, &offset);
             velocity.q = *(u128 *)colors;
             fast_vec_normalize(&velocity, &velocity, frame_time * 5.0f);
             add_vectors(colors, &velocity, &push);
             velocity.f[2] += frame_time * 3.0f;
             size = random_float_between(0.75f, 1.25f);
             fast_vec_scale(&velocity, &velocity, size);
-            k = random_integer_below(4);
-            color = &palette[k];
+            pick = random_integer_below(4);
+            color = &palette[pick];
             radius = random_float_between(0.1f, 0.3f);
             life = random_int_between(100, 160);
             size = random_float_between(3.0f, 7.0f);
-            spawn_debris_chunk(&pos, &velocity, *color, radius, life, size, 0.15f, 2.0f, 1);
+            spawn_debris_chunk(&offset, &velocity, *color, radius, life, size, 0.15f, 2.0f, 1);
         }
         clear_vector_2aa280(&velocity);
         FUN_L00_0025e450(moby, &velocity, &center, 0.0f, 0.0f, 20, 3, 4, 10.0f, 5.0f, 100000.0f, 3.0f, 0,
@@ -780,18 +780,18 @@ void FUN_L15_002aa280(struct Moby *moby)
             angle = random_float_between(moby->rot.z, 1.5707963267948966f);
             radius = fast_cos(angle);
             radius *= random_float_between(-3.0f, 3.0f);
-            pos.f[0] = radius;
+            offset.f[0] = radius;
             angle = random_float_between(moby->rot.z, 1.5707963267948966f);
             radius = fast_sin(angle);
             radius *= random_float_between(-3.0f, 3.0f);
-            pos.f[1] = radius;
-            pos.f[2] = 0.0f;
-            fast_vec_add(&pos, &pos, &moby->pos);
-            pos.f[2] += random_float_between(1.0f, 5.5f);
-            fast_vec_sub(&delta, &center, &pos);
+            offset.f[1] = radius;
+            offset.f[2] = 0.0f;
+            fast_vec_add(&offset, &offset, &moby->pos);
+            offset.f[2] += random_float_between(1.0f, 5.5f);
+            fast_vec_sub(&delta, &center, &offset);
             velocity.q = delta.q;
             fast_vec_normalize(&velocity, &velocity, frame_time * 5.0f);
-            add_vectors(&delta, &velocity, &dir);
+            add_vectors(&delta, &velocity, &hit_direction);
             size = random_float_between(0.75f, 1.25f);
             fast_vec_scale(&velocity, &velocity, size);
             size = random_float_between(0.25f, 1.0f);
@@ -800,8 +800,8 @@ void FUN_L15_002aa280(struct Moby *moby)
             color2 = blend_color(size, 0, 0x5f5f5f);
             size = random_float_between(1.0f, 3.0f) * 210000.0f;
             life = scale_game_frames_2aa280(180);
-            k = random_integer_below(3);
-            debris = mine_debris(&pos, &velocity, color1, color2, size, life, colors[k]);
+            pick = random_integer_below(3);
+            debris = mine_debris(&offset, &velocity, color1, color2, size, life, colors[pick]);
             if (debris != 0)
                 *(float *)((char *)debris + 0x2c) = moby->pos.z - 0.5f;
         }

@@ -401,12 +401,12 @@ extern char D_L11_00174860_94f8[] __asm__("D_L11_00174860");
 void FUN_L11_003094f8(struct Moby *moby) {
     Missile_94f8 *data = (Missile_94f8 *)moby->pvars;
     Vec4f *pos;
-    Vec4 old, spray, temp, velocity, random;
-    float t;
+    Vec4 previous_pos, spray, offset, velocity, random;
+    float fraction;
     struct Moby *target;
     char *texture;
 
-    qcopy(&old, &moby->pos);
+    qcopy(&previous_pos, &moby->pos);
     moby->scale += (moby->pclass->scale - moby->scale) * 0.1f;
     random.q = 0;
     random.f[0] = random_float_between(-1.0f, 1.0f);
@@ -414,16 +414,16 @@ void FUN_L11_003094f8(struct Moby *moby) {
     random.f[2] = random_float_between(-1.0f, 1.0f);
     velocity.q = random.q;
     normalize_vector_xyz(&velocity, &velocity, random_float_between(0.1f, 0.2f) * frame_time);
-    normalize_vector_xyz(&temp, &data->step, -random_float_between(frame_time * 0.1f, frame_time));
-    add_vector_xyz(&velocity, &velocity, &temp);
+    normalize_vector_xyz(&offset, &data->step, -random_float_between(frame_time * 0.1f, frame_time));
+    add_vector_xyz(&velocity, &velocity, &offset);
     FUN_L00_002712b8_94f8(&moby->pos, &velocity, scale_game_frames(6), 0x7f, 0xb0b0b0,
                            3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
     texture = D_L11_001B2A80_94f8;
-    for (t = 0.0f; t < 1.0f; t += 0.33333334f) {
+    for (fraction = 0.0f; fraction < 1.0f; fraction += 0.33333334f) {
         unsigned char *particle;
-        normalize_vector_xyz(&temp, &data->step, random_float_between(t, t + 0.33333334f) * data->speed);
-        add_vector_xyz(&temp, &temp, &moby->pos);
-        particle = FUN_L00_002712b8_94f8(&temp, &velocity, scale_game_frames(60), 0x7f, 0x606060, 3, 40000.0f,
+        normalize_vector_xyz(&offset, &data->step, random_float_between(fraction, fraction + 0.33333334f) * data->speed);
+        add_vector_xyz(&offset, &offset, &moby->pos);
+        particle = FUN_L00_002712b8_94f8(&offset, &velocity, scale_game_frames(60), 0x7f, 0x606060, 3, 40000.0f,
                                           1000.0f, 1.0f, -0.0002f, 0.0f);
         if (particle != 0) {
             unsigned char *texture_pixels = *(unsigned char **)(texture + 0x5c);
@@ -435,7 +435,7 @@ void FUN_L11_003094f8(struct Moby *moby) {
         random.f[2] = 0.02f;
         transform_vector_by_basis_94f8(&random, &random, &moby->rot_row0);
         build_look_at_matrix_94f8(&random, &random, &moby->rot_row0, random_angle_radians_94f8());
-        FUN_L00_0026cbb0_94f8(&temp, &random, 0x4f007fff, 0x1fffffff, scale_game_frames(5), 1, 20000.0f);
+        FUN_L00_0026cbb0_94f8(&offset, &random, 0x4f007fff, 0x1fffffff, scale_game_frames(5), 1, 20000.0f);
     }
     pos = &moby->pos;
     target = data->target;
@@ -459,7 +459,7 @@ void FUN_L11_003094f8(struct Moby *moby) {
         return;
     }
     moby_point_position_94f8(moby, 1, &spray);
-    if (FUN_001efa68(&old, &spray, 0, data->collision, 0)) {
+    if (FUN_001efa68(&previous_pos, &spray, 0, data->collision, 0)) {
         FUN_L00_0025e450_94f8(moby, data, D_L11_00174860_94f8, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
                                -1, 20.0f, 0, 1, -1, 0);
         mark_moby_for_removal(moby);
