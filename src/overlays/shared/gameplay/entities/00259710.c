@@ -575,11 +575,9 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
     if (limit < 1) return limit;
     for (emitted = 0; emitted < limit; emitted++) {
         random = FUN_002132a8_25aca0(0.0f, total);
-        chosen = 0;
-        if (count > 0 && !(random < weights[0])) {
-            do {
-                random -= weights[chosen++];
-            } while (chosen < count && !(random < weights[chosen]));
+        for (chosen = 0; chosen < count; chosen++) {
+            if (random < weights[chosen]) break;
+            random -= weights[chosen];
         }
         entry = entries[chosen];
         switch (type = *entry) {
@@ -598,7 +596,8 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                 FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
                 radius = *(float *)(entry + 0xc);
             }
-            extent = radius * *(float *)(entity + 0x2c) * 0.0009765625f;
+            extent = radius * *(float *)(entity + 0x2c);
+            extent = extent * 0.0009765625f;
             FUN_L00_001ff378_25aca0(1024.0f, &first, &first);
             do {
                 second.f[0] = FUN_002132a8_25aca0(-extent, extent);
@@ -632,14 +631,16 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
         }
         case 4: {
             float extent, weight;
-            FUN_001251e8_25aca0(*(float *)(entity + 0x2c), &first, (void *)(0x70000000 + (*(short *)(entry + 4) << 4)));
-            FUN_001251e8_25aca0(*(float *)(entity + 0x2c), &second, (void *)(0x70000000 + (*(short *)(entry + 6) << 4)));
+            list = entry + 4;
+            FUN_001251e8_25aca0(*(float *)(entity + 0x2c), &first, (void *)(0x70000000 + (*(short *)list << 4)));
+            FUN_001251e8_25aca0(*(float *)(entity + 0x2c), &second, (void *)(0x70000000 + (*(short *)(list + 2) << 4)));
             FUN_001f9a28_25aca0(&third, &second, &first);
             weight = FUN_002132a8_25aca0(0.0f, 1.0f);
             FUN_001f9a68_25aca0(weight, &third, &third);
             FUN_001f9a10_25aca0(&fourth, &third, &first);
             FUN_L00_001ff378_25aca0(1024.0f, &fourth, &fourth);
-            extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c) * 0.0009765625f;
+            extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c);
+            extent = extent * 0.0009765625f;
             do {
                 fifth.f[0] = FUN_002132a8_25aca0(-extent, extent);
                 fifth.f[1] = FUN_002132a8_25aca0(-extent, extent);
