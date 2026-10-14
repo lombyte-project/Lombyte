@@ -1621,7 +1621,10 @@ void FUN_L00_002c26c8(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         vars->held = 0;
-        moby->state = !(moby->anim_flags & 2) ? 1 : 2;
+        if (!(moby->anim_flags & 2))
+            moby->state = 1;
+        else
+            moby->state = 2;
     case 1:
         if (moby->anim_flags & 2)
             moby->state = 2;
@@ -1635,10 +1638,11 @@ void FUN_L00_002c26c8(struct Moby *moby) {
                 ++D_00141680_2c26c8.deliveries;
             {
                 s32 frames = scale_game_frames(D_0015EEA4);
-                if (D_00141680_2c26c8.unkA2 < frames / 600)
+                frames /= 600;
+                if (D_00141680_2c26c8.unkA2 < frames)
                     D_00141680_2c26c8.unkA2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            D_00141680_2c26c8.levels = (D_00141680_2c26c8.levels | (1u << (current_level_index & 31))) | 0x80000000;
+            D_00141680_2c26c8.levels = (D_00141680_2c26c8.levels | (1u << current_level_index)) | 0x80000000;
             vars->held = 0;
             moby->state = 4;
             vars->timer = scale_game_frames(0x14);
