@@ -1369,9 +1369,6 @@ void FUN_L01_002eda00(char *m) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002edca0.s", FUN_L01_002edca0);
-#else
 extern void FUN_L00_00263ac8(float, void *, int, void *);
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L01_002eec68(char *);
@@ -1627,6 +1624,7 @@ void FUN_L01_002edca0(unsigned char *moby) {
         }
     }
     case 6: {
+        char *target_position;
         float *rotation = (float *)(moby + 0x48);
         angle = FUN_001f9e90(*(float *)(target + 0x10) - *(float *)(moby + 0x10),
                               *(float *)(target + 0x14) - *(float *)(moby + 0x14));
@@ -1670,8 +1668,9 @@ void FUN_L01_002edca0(unsigned char *moby) {
             FUN_00212f90(moby, 1, 0, FUN_001f96f8(10));
         return;
     case 5: {
+        int blocked = 0;
+        char *target_position;
         distance = FUN_001f9b80(moby + 0x10, (target_position = data + 0x210));
-        blocked = 0;
         if (distance < 1.0f) {
             moby[0x20] = 1;
         } else {
@@ -1760,7 +1759,6 @@ void FUN_L01_002edca0(unsigned char *moby) {
         break;
     }
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002eec68.s", FUN_L01_002eec68);
 #else
