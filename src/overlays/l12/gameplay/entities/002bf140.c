@@ -2559,7 +2559,6 @@ update_state:
                 subtract_vector_xyz_c3(&delta, &aim, &position);
                 if (*(int *)(data + 0xc0)) fast_vec_normalize(&delta, &delta, frame_time * 22.0f);
                 else fast_vec_normalize(&delta, &delta, frame_time * 15.0f);
-                count = 24;
                 angle = FUN_001f9e90(delta.f[0], delta.f[1]);
                 spread = 1.3f;
                 a = scale_game_frames_alt(130);
@@ -2567,19 +2566,18 @@ update_state:
                 allocate_voice_for_target_entry_e9f68(0, 0, (int)moby);
                 fast_vec_normalize(&delta, &delta, 0.5f);
                 fast_vec_add(&position, &position, &delta);
-                do {
-                    --count;
+                for (count = 24; count >= 0; --count) {
                     velocity.f[0] = FUN_L00_00257c48(0.0f, frame_time * spread);
                     velocity.f[1] = FUN_L00_00257c48(0.0f, frame_time * spread);
                     velocity.f[2] = FUN_L00_00257c48(0.0f, frame_time * spread);
                     a = FUN_L00_00257b90(170, 240);
                     b = FUN_L00_00257b90(110, 180);
-                    color = (b << 8) | (a + 0x7f000000);
+                    color = (b << 8) | ((long)a | 0x7f000000L);
                     a = FUN_L00_00257b90(30, 70);
                     life = scale_game_frames_alt(a);
                     size = FUN_L00_00257b90(120, 170);
                     FUN_L00_00269958(&position, &velocity, color, 255, life, 30, size, 1);
-                } while (count >= 0);
+                }
                 limit = 4;
                 if (*(int *)(data + 0xc0)) {
                     if (D_L12_00161F20 > 10) limit = 2;
