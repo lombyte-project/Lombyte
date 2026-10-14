@@ -826,6 +826,7 @@ void FUN_L00_002062b0(void) {
         }
     }
     if (hero.vehicle_mode == 3) {
+        s32 color;
         /* D_0015EDB1 is the byte two bytes before the checked D_0015EDB3 base. */
         if (*((u8 *)&D_0015EDB3_macro - 2)) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x370) = 1.9f;
         {
@@ -854,7 +855,7 @@ void FUN_L00_002062b0(void) {
             char *g = (char *)&hero;
             *(u32 *)(*(char **)(g + 0x2080) + 0x90) = FUN_L00_00200298_002062b0(0.1f, *(u32 *)(*(char **)(g + 0x2080) + 0x90), color);
             for (i = 0; i < 3; i++)
-                FUN_L00_0024f7c8(*(char **)(g + 0x2080), i, g + 0x1d50 + i * 0x10);
+                FUN_L00_0024f7c8(hero.moby, i, g + 0x1d50 + i * 0x10);
         }
         {
             char *g = (char *)&hero;
