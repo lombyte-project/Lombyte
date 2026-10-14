@@ -3,6 +3,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/overlay/level_labels.h"
 
 typedef union {
     OvlQuad q;
@@ -13,7 +14,6 @@ typedef union {
 extern void FUN_001f9a28(void *, void *, void *);
 extern f32 FUN_001f9b20(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 *D_L00_0015EF80;
 extern void FUN_001e93b0(char *);
 extern char D_L00_001E78B0[];
 extern s32 FUN_L00_001ee318_c(V *, s32 *, f32) __asm__("FUN_L00_001ee318");
@@ -61,7 +61,6 @@ typedef union {
 extern unsigned char *D_L00_001600EC_1ee318 __asm__("D_L00_001600EC");
 extern unsigned char *D_L00_001600FC_1ee318 __asm__("D_L00_001600FC");
 extern unsigned char *D_L00_001600F4_1ee318 __asm__("D_L00_001600F4");
-extern unsigned char *D_L00_001600E4_1ee318 __asm__("D_L00_001600E4");
 extern void FUN_001f9a28_1ee318(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_1ee318(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9cf8_1ee318(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -113,7 +112,7 @@ int FUN_L00_001ee318(V_1ee318 *pt, int *vol, float rad) {
     }
     case 7: {
         unsigned char *e;
-        e = D_L00_001600E4_1ee318 + vol[5] * 0x90;
+        e = D_L00_001600E4 + vol[5] * 0x90;
         FUN_001f9a28_1ee318(&d, pt, e + 0x30);
         d.i[3] = 0;
         FUN_001f9cf8_1ee318(&l, &d, e + 0x40);

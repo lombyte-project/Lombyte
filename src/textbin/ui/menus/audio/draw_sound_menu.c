@@ -2,6 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/data_labels.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -10,10 +11,6 @@ typedef struct {
     u8 pad28[0x18];
     s32 selected_option;
 } SoundMenu;
-
-extern s32 playback_mode __asm__("D_0015EDE8");
-extern s32 music_volume __asm__("D_0015EDEC");
-extern s32 sound_volume __asm__("D_0015EDF0");
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");

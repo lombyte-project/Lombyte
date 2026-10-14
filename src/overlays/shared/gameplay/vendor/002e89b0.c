@@ -2,6 +2,9 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/level_labels.h"
 
 typedef struct {
     unsigned char pad0[0x10];
@@ -19,12 +22,6 @@ typedef struct {
     int i44;
 } G_2e89b0;
 extern float D_0013CA40_2e89b0[] __asm__("D_0013CA40") __attribute__((section(".data")));
-extern int D_0015EDE0_2e89b0 __asm__("D_0015EDE0");
-extern int D_0015EDDC_2e89b0 __asm__("D_0015EDDC");
-extern int D_0015EEA4_2e89b0 __asm__("D_0015EEA4");
-extern float D_L00_0015EF44_2e89b0 __asm__("D_L00_0015EF44");
-extern int D_L00_00161D8C_2e89b0 __asm__("D_L00_00161D8C") __attribute__((sda));
-extern int D_L00_00161D90_2e89b0 __asm__("D_L00_00161D90") __attribute__((sda));
 extern G_2e89b0 D_00141848_2e89b0 __asm__("D_00141848");
 extern int FUN_001f96f8_2e89b0(int) __asm__("FUN_001f96f8");
 
@@ -37,29 +34,29 @@ void follow_camera_read_stick(char *o, float *a, float *b) {
         *a = 0.0f;
     } else {
         *a = D_0013CA40_2e89b0[0];
-        if (D_0015EDE0_2e89b0 == 0) {
+        if (opt_cam_invert == 0) {
             *a = -*a;
         }
     }
     if (*a == 0.0f) {
-        D_L00_00161D8C_2e89b0 = 0;
-        D_L00_00161D90_2e89b0 = 0;
+        D_L00_00161D8C = 0;
+        D_L00_00161D90 = 0;
         if (s->f1C != 0.0f) {
             *a = s->f1C;
         }
     } else {
-        s->f14 = D_L00_0015EF44_2e89b0;
+        s->f14 = D_L00_0015EF44;
         g = &D_00141848_2e89b0;
         if (g->u40 < 3) {
-            D_L00_00161D8C_2e89b0++;
-            if (D_L00_00161D90_2e89b0 == 0 && FUN_001f96f8_2e89b0(0x3C) < D_L00_00161D8C_2e89b0) {
+            D_L00_00161D8C++;
+            if (D_L00_00161D90 == 0 && FUN_001f96f8_2e89b0(0x3C) < D_L00_00161D8C) {
                 if (g->u40 <= 0xFFFE) {
                     g->u40++;
                 }
-                if (FUN_001f96f8_2e89b0(D_0015EEA4_2e89b0) / 600 > g->u42) {
-                    g->u42 = FUN_001f96f8_2e89b0(D_0015EEA4_2e89b0) / 600;
+                if (FUN_001f96f8_2e89b0(D_0015EEA4) / 600 > g->u42) {
+                    g->u42 = FUN_001f96f8_2e89b0(D_0015EEA4) / 600;
                 }
-                D_L00_00161D90_2e89b0 = 1;
+                D_L00_00161D90 = 1;
                 g->i44 = g->i44 | (1 << current_level_index) | 0x80000000;
             }
         }
@@ -70,7 +67,7 @@ void follow_camera_read_stick(char *o, float *a, float *b) {
     } else {
         float t = D_0013CA40_2e89b0[1];
         *b = -t;
-        if (D_0015EDDC_2e89b0 == 0) {
+        if (invert52 == 0) {
             *b = t;
         }
         if (*b == 0.0f) {
@@ -79,11 +76,6 @@ void follow_camera_read_stick(char *o, float *a, float *b) {
     }
 }
 typedef float V_2e8bb8[4] __attribute__((aligned(16)));
-extern float D_L00_00161CAC_2e8bb8 __asm__("D_L00_00161CAC") __attribute__((sda));
-extern float D_L00_00161CB0_2e8bb8 __asm__("D_L00_00161CB0") __attribute__((sda));
-extern float D_L00_00161CBC_2e8bb8 __asm__("D_L00_00161CBC") __attribute__((sda));
-extern float D_L00_00161CC0_2e8bb8 __asm__("D_L00_00161CC0") __attribute__((sda));
-extern float D_L00_00161CC4_2e8bb8 __asm__("D_L00_00161CC4") __attribute__((sda));
 extern unsigned char D_L00_00166E10_2e8bb8[] __asm__("D_L00_00166E10")
     __attribute__((section(".data")));
 extern float FUN_001ebd78_2e8bb8(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
@@ -98,6 +90,11 @@ extern float FUN_001fa580_2e8bb8(float, float) __asm__("FUN_001fa580");
 extern float FUN_001fa5c8_2e8bb8(float, float) __asm__("FUN_001fa5c8");
 
 void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) __asm__("FUN_L00_002e8bb8");
+extern float D_L00_00161CAC __attribute__((sda));
+extern float D_L00_00161CB0 __attribute__((sda));
+extern float D_L00_00161CBC __attribute__((sda));
+extern float D_L00_00161CC0 __attribute__((sda));
+extern float D_L00_00161CC4 __attribute__((sda));
 void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) {
     V_2e8bb8 axis;
     unsigned char *e;
@@ -116,8 +113,8 @@ void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) {
     base = D_L00_00166E10_2e8bb8;
     s = e + 0x1A8;
     c = e + 0x130;
-    r = FUN_001ebd78_2e8bb8(e + 0x1AC, *(float *)(e + 0x1A8), k, D_L00_00161CAC_2e8bb8,
-                            D_L00_00161CB0_2e8bb8, 0.0f);
+    r = FUN_001ebd78_2e8bb8(e + 0x1AC, *(float *)(e + 0x1A8), k, D_L00_00161CAC,
+                            D_L00_00161CB0, 0.0f);
     *(float *)(e + 0x1A8) = r;
     *(float *)(c + 0x34) = *(float *)(s + 0x14) * r;
     if (in < -0.3f) {
@@ -129,18 +126,18 @@ void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) {
     }
     z = 0.0f;
     if (in == z) {
-        sel = D_L00_00161CC0_2e8bb8;
+        sel = D_L00_00161CC0;
     } else if (!(FUN_001f99c0_2e8bb8(in) < FUN_001f99c0_2e8bb8(*(float *)(s + 8)))) {
-        sel = D_L00_00161CBC_2e8bb8;
+        sel = D_L00_00161CBC;
     } else if (z < in && z < *(float *)(s + 8)) {
-        sel = D_L00_00161CC0_2e8bb8;
+        sel = D_L00_00161CC0;
     } else if (in < z && *(float *)(s + 8) < z) {
-        sel = D_L00_00161CC0_2e8bb8;
+        sel = D_L00_00161CC0;
     } else {
-        sel = D_L00_00161CBC_2e8bb8;
+        sel = D_L00_00161CBC;
     }
-    *(float *)(s + 8) = FUN_001ebd78_2e8bb8(s + 0xC, *(float *)(s + 8), in, D_L00_00161CAC_2e8bb8,
-                                            D_L00_00161CB0_2e8bb8, sel);
+    *(float *)(s + 8) = FUN_001ebd78_2e8bb8(s + 0xC, *(float *)(s + 8), in, D_L00_00161CAC,
+                                            D_L00_00161CB0, sel);
     lim = *(float *)(s + 8) * 0.69813168f;
     if (k == 0.0f) {
         FUN_00214890_2e8bb8(c, c, base + 0x20, *(float *)(s + 0x20));
@@ -152,22 +149,22 @@ void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) {
     FUN_001f9ad8_2e8bb8(axis, base + 0x20, c);
     FUN_001f9bf8_2e8bb8(axis, axis, 1.0f);
     ang = FUN_001f9e90_2e8bb8(b, a);
-    if (FUN_001f99c0_2e8bb8(ang) < FUN_001f99c0_2e8bb8(lim) && sel == D_L00_00161CC0_2e8bb8) {
+    if (FUN_001f99c0_2e8bb8(ang) < FUN_001f99c0_2e8bb8(lim) && sel == D_L00_00161CC0) {
         *(float *)(s + 8) = ang / 0.69813168f;
     }
     if (ang < lim) {
-        if (lim < FUN_001fa580_2e8bb8(ang, D_L00_00161CC4_2e8bb8)) {
+        if (lim < FUN_001fa580_2e8bb8(ang, D_L00_00161CC4)) {
             *(float *)(c + 0x38) = FUN_001fa5c8_2e8bb8(lim, ang);
         } else {
-            *(float *)(c + 0x38) = D_L00_00161CC4_2e8bb8;
+            *(float *)(c + 0x38) = D_L00_00161CC4;
         }
     } else if (lim < ang) {
         if (*(short *)(*(unsigned char **)(o + 0x70) + 0x208) < 0) {
             *(float *)(c + 0x38) = 0.0f;
-        } else if (FUN_001fa580_2e8bb8(ang, -D_L00_00161CC4_2e8bb8) < lim) {
+        } else if (FUN_001fa580_2e8bb8(ang, -D_L00_00161CC4) < lim) {
             *(float *)(c + 0x38) = FUN_001fa5c8_2e8bb8(lim, ang);
         } else {
-            *(float *)(c + 0x38) = -D_L00_00161CC4_2e8bb8;
+            *(float *)(c + 0x38) = -D_L00_00161CC4;
         }
     } else {
         *(float *)(c + 0x38) = 0.0f;
@@ -183,7 +180,6 @@ void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EA3F0), where it is exact; names translated to the US level program. */
 
-extern float D_L00_0015EF40;
 extern float FUN_001f9af0(void *);
 extern void FUN_001f9a28(float *, float *, float *);
 extern void FUN_001f9a40(float, void *, void *, void *);

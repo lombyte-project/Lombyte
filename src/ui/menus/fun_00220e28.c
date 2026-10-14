@@ -3,8 +3,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/input/pad_state.h"
-extern f32 D_0015F43C;
-extern u8 requested_video_mode __asm__("D_0016034C");
+#include "rnc/data_labels.h"
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
@@ -21,7 +20,7 @@ s32 FUN_00220e28(struct MenuScreen *m) {
         t = m->data.options.fade_timer - 1;
         v = t < 5 ? t : 4;
         m->data.options.fade_timer = t;
-        D_0015F43C = (f32)v * 0.25f;
+        sequence = (f32)v * 0.25f;
         return 0;
     }
     if (!active) {

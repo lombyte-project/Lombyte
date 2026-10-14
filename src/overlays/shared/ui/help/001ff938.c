@@ -237,9 +237,6 @@ void FUN_L15_00208ca8(void) {
     }
 }
 extern f32 D_0013F570_209450[] __asm__("D_0013F570");
-extern f32 D_0015ED60_209450 __asm__("D_0015ED60");
-extern f32 D_0015ED64_209450 __asm__("D_0015ED64");
-extern f32 D_0015ED6C_209450 __asm__("D_0015ED6C");
 f32 FUN_001f9b80_209450(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_209450(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_209450(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
@@ -278,10 +275,10 @@ void FUN_L15_00209450(void) {
         FUN_001f9b80_209450(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
         f32 *q = D_0013F570_209450;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
-        approach_value_209450(b->unk228, D_0015ED60_209450 * 0.02f, q);
-        approach_value_209450(b->unk22C, D_0015ED60_209450 * 0.02f, q + 1);
-        FUN_L00_0025b8c0_209450(q + 5, q + 6, b->unk230, D_0015ED64_209450 * 0.02f,
-                                D_0015ED64_209450 * 0.3f, D_0015ED6C_209450 * 4.0f);
+        approach_value_209450(b->unk228, frame_scale * 0.02f, q);
+        approach_value_209450(b->unk22C, frame_scale * 0.02f, q + 1);
+        FUN_L00_0025b8c0_209450(q + 5, q + 6, b->unk230, frame_scale_sq * 0.02f,
+                                frame_scale_sq * 0.3f, frame_time * 4.0f);
     }
 }
 typedef struct {
@@ -311,10 +308,7 @@ typedef struct {
     V_20a328 v40;
 } X_20a328;
 extern P_20a328 D_0013F350_20a328 __asm__("D_0013F350") __attribute__((section(".data")));
-extern char D_0013F3D0_20a328[] __asm__("D_0013F3D0") __attribute__((section(".data")));
 extern X_20a328 D_L15_00174440_20a328 __asm__("D_L15_00174440") __attribute__((section(".data")));
-extern s32 D_L15_0017445C_20a328 __asm__("D_L15_0017445C") __attribute__((section(".data")));
-extern f32 D_0015ED6C_20a328 __asm__("D_0015ED6C");
 extern f32 FUN_L00_002339d0_20a328(void *) __asm__("FUN_L00_002339d0");
 extern f32 FUN_001f9b20_20a328(void *) __asm__("FUN_001f9b20");
 extern f32 FUN_001f9dc8_20a328(f32) __asm__("FUN_001f9dc8");
@@ -328,6 +322,8 @@ extern void FUN_00125180_20a328(void *, void *) __asm__("FUN_00125180");
 #define P D_0013F350_20a328
 #define X D_L15_00174440_20a328
 
+extern s32 D_L15_0017445C __attribute__((section(".data")));
+extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L15_0020a328(int force) {
     V_20a328 a, d1, b, d2;
     char *src;
@@ -337,7 +333,7 @@ void FUN_L15_0020a328(int force) {
 
     if (P.h308 != 0)
         return;
-    if (FUN_L00_002339d0_20a328(&P.vE0) < D_0015ED6C_20a328 * 0.1f)
+    if (FUN_L00_002339d0_20a328(&P.vE0) < frame_time * 0.1f)
         return;
     off = 0.3700000047683716f;
     k = 0.5f;
@@ -348,7 +344,7 @@ void FUN_L15_0020a328(int force) {
         off = 1.5f;
         k = 5.0f;
     }
-    src = D_0013F3D0_20a328;
+    src = D_0013F3D0;
     qcopy(&a, src);
     a.f[2] += off;
     qcopy(&b, src);
@@ -372,7 +368,7 @@ void FUN_L15_0020a328(int force) {
     FUN_001f9a10_20a328(&d1, &d1, &a);
     FUN_001f9a10_20a328(&d2, &d2, &b);
     r = -1;
-    if (FUN_001efa68_20a328(&b, &d2, 4, P.p2080, 0) && D_L15_0017445C_20a328 > 0)
+    if (FUN_001efa68_20a328(&b, &d2, 4, P.p2080, 0) && D_L15_0017445C > 0)
         r = FUN_001f0b58_20a328();
     ang = 0.0f;
     if (FUN_001efa68_20a328(&a, &d1, 4, P.p2080, 0) && X.i1C > 0)
@@ -398,11 +394,8 @@ typedef struct {
     u8 pad4[0x70 - 4];
 } Entry70_215e58;
 
-extern struct PadState D_0013C940_215e58 __asm__("D_0013C940");
-extern Entry70_215e58 D_L15_00179EF0_215e58[] __asm__("D_L15_00179EF0");
 extern s32 D_L15_0015F5C4_215e58 __asm__("D_L15_0015F5C4");
 extern u8 D_0013D4E2_215e58 __asm__("D_0013D4E2") __attribute__((section(".data")));
-extern f32 D_0015ED6C_215e58 __asm__("D_0015ED6C");
 
 extern void FUN_L00_002165b8_215e58(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_215e58(s32 *) __asm__("FUN_001f9740");
@@ -423,6 +416,7 @@ extern void FUN_L00_00221b68_215e58(void) __asm__("FUN_L00_00221b68");
 extern void FUN_L00_00233660_215e58(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_215e58(void) __asm__("FUN_L00_00211250");
 
+extern Entry70_215e58 D_L15_00179EF0[];
 /* Per-frame hero upkeep: tick the hero timers, spawn the respawn marker, track sinking, and set the camera follow target. Clone of FUN_L00_002215c8 without the case-1 camera tuning. */
 void FUN_L15_00215e58(void) {
     Vec4 sum;
@@ -465,7 +459,7 @@ void FUN_L15_00215e58(void) {
     FUN_001f9770_215e58(&hero.unk1F6);
     FUN_001f9770_215e58(&hero.unk1DA);
     FUN_001f9770_215e58(&hero.unk1F8);
-    if (!(D_0013C940_215e58.held & 5)) {
+    if (!(controller_state.held & 5)) {
         hero.unk1EC = 0;
     }
     if (hero.unk20A8 != 0) {
@@ -473,7 +467,7 @@ void FUN_L15_00215e58(void) {
     } else {
         hero.unk1BC = 0;
     }
-    if (D_0013C940_215e58.no_direction != 0) {
+    if (controller_state.no_direction != 0) {
         hero.unk1A8 = 0;
         hero.unk1AC++;
     } else {
@@ -506,7 +500,7 @@ void FUN_L15_00215e58(void) {
         FUN_001f9770_215e58(&hero.unk1636);
     }
     for (i = 0; i < 5; i++) {
-        FUN_001f9740_215e58(&D_L15_00179EF0_215e58[i].w0);
+        FUN_001f9740_215e58(&D_L15_00179EF0[i].w0);
     }
     hero.unk22B8 = 9999.0f;
     if (hero.air_frames.s != 0 && FUN_L00_00233a78_215e58(&hero.motion.velocity) < 0.0f) {
@@ -523,7 +517,7 @@ void FUN_L15_00215e58(void) {
             FUN_001f9a10_215e58(&sum, &sum, &d);
         }
         FUN_001f9a68_215e58(&sum, &sum, 1.0f / (f32)n8);
-        if (FUN_001f9af0_215e58(&sum) < D_0015ED6C_215e58) {
+        if (FUN_001f9af0_215e58(&sum) < frame_time) {
             hero.unk1E2++;
             goto skip;
         }

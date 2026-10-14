@@ -1,6 +1,5 @@
 #include "types.h"
-extern s32 D_00160F18;
-extern s32 D_00160F1C;
+#include "rnc/data_labels.h"
 extern s32 AddDmacHandler();
 extern s32 enable_dmac() __asm__("func_00119160");
 extern void func_00233E00();

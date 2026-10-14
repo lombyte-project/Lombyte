@@ -4,6 +4,7 @@
 #include "qcopy.h"
 #include "qzero.h"
 #include "rnc/globals.h"
+#include "rnc/data_labels.h"
 
 struct S {
     u8 pad_0[0x140];
@@ -33,9 +34,6 @@ struct O2 {
 extern struct MenuPage D_001D45C8; /* page made current and next at init */
 extern u8 D_0019C150[];
 extern u8 D_0019C160[];
-extern s32 D_001940C0[];
-extern s32 D_0015F438;
-extern s32 current_vu_chain __asm__("D_00160F0C");
 extern void FUN_0023a2c0();
 extern struct S D_00186F40;
 extern u8 D_001601C0 __attribute__((sda));

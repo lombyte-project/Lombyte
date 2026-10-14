@@ -161,8 +161,6 @@ typedef struct {
     u64 a, b, c, d;
 } Pk_00263618;
 extern u8 D_L00_00166DC0_00263618[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
-extern float D_L00_001B0470_00263618[4][4] __asm__("D_L00_001B0470")
-    __attribute__((section(".data")));
 u64 FUN_001f44b8_00263618(s32) __asm__("FUN_001f44b8");
 void FUN_001f9a28_00263618(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_00263618(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -171,6 +169,7 @@ void FUN_001f9a68_00263618(void *, void *, float) __asm__("FUN_001f9a68");
 void FUN_001f9a10_00263618(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9d20_00263618(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_00263618(void *, s32, s32) __asm__("FUN_001f7d30");
+extern float D_L00_001B0470[4][4] __attribute__((section(".data")));
 void FUN_L00_00263618(float *pos, u32 col, float s, float r) {
     Pk_00263618 pk;
     float up[4];
@@ -206,7 +205,7 @@ void FUN_L00_00263618(float *pos, u32 col, float s, float r) {
     pk.col[1] = col;
     pk.col[0] = col;
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_00263618(pk.m[i], D_L00_001B0470_00263618[i], s);
+        FUN_001f9a68_00263618(pk.m[i], D_L00_001B0470[i], s);
         FUN_001f9d20_00263618(pk.m[i], pk.m[i], M);
     }
     FUN_001f7d30_00263618(&pk, 0, 0);

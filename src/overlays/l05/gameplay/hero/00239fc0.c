@@ -6,7 +6,6 @@
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
 
-extern s32 D_0015ED84_239fc0 __asm__("D_0015ED84");
 void FUN_001f9810_239fc0(void *, int) __asm__("FUN_001f9810");
 int FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
 int FUN_001f0b58_239fc0(void) __asm__("FUN_001f0b58");
@@ -46,7 +45,7 @@ void FUN_L05_00239fc0(void) {
     }
     if (t == 3)
         hero.selector_3 = 1;
-    if (D_0015ED84_239fc0 == 13 && hero.state.current != 0x7B &&
+    if (current_level_index == 13 && hero.state.current != 0x7B &&
         FUN_L00_001f0d60_239fc0((u8 *)&hero.motion.unkD0, 2, 0, hero.unk234 + 0.03f) &&
         FUN_001f0b58_239fc0() == 11) {
         goto s7B;
@@ -340,7 +339,6 @@ typedef union {
     u128_2133a8 q;
     f32 f[4];
 } V_2133a8;
-extern u128_2133a8 coll_2133a8[] __asm__("D_L05_00174270") __attribute__((section(".data")));
 extern void vzero_2133a8(void *) __asm__("FUN_001f99f8");
 extern void f2347c0_2133a8(void) __asm__("FUN_L00_002347c0");
 extern void f233660_2133a8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
@@ -353,6 +351,7 @@ extern s32 coll1_2133a8(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 coll2_2133a8(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 coll3_2133a8(void *, f32) __asm__("FUN_L00_001f3170");
 extern void vscl_2133a8(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern u128_2133a8 D_L05_00174270[] __attribute__((section(".data")));
 s32 FUN_L05_00240ed0(s32 mode) {
     V_2133a8 old;
     V_2133a8 v;
@@ -410,7 +409,7 @@ s32 FUN_L05_00240ed0(s32 mode) {
             if (!(a | coll3_2133a8(&hero.motion.pos.q, hero.unk234)))
                 break;
         }
-        c = coll_2133a8;
+        c = D_L05_00174270;
         qcopy(&hero.motion.pos.q, c);
         qcopy(&hero.unk200.q, c + 1);
         qcopy(&hero.unk210.q, c - 1);

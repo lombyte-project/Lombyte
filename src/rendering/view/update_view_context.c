@@ -5,6 +5,7 @@
 
 #include "rnc/math/vector.h"
 #include "rnc/rendering/view.h"
+#include "rnc/globals.h"
 
 struct FogRegs2 {
     u8 pad0[0x28];
@@ -17,7 +18,6 @@ struct Clip {
     Vec4 constants[3];
 };
 
-extern s32 D_0015ED80;
 extern Vec4 D_0018CFC0[4];
 extern f32 D_00160720[4];
 extern f32 D_00160B30;
@@ -75,7 +75,7 @@ void update_view_context(void) {
 
     depth_scale = -8388080.0f;
     depth_bias = 8388112.0f;
-    if (D_0015ED80 != 0) {
+    if (pal_mode != 0) {
         view_context.fov.f[1] = view_context.fov.f[0] * 0.756f;
     } else {
         view_context.fov.f[1] = view_context.fov.f[0] * 0.775f;

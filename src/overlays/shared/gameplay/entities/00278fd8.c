@@ -1589,19 +1589,19 @@ void FUN_L15_0029ae18(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029C168), where it is exact; names translated to the US level program. */
 
 extern float D_L15_0015F580[] __attribute__((section(".sdata")));
-extern short D_L15_00161458_d __asm__("D_L15_00161458") __attribute__((sda));
-extern short D_L15_0016145C_d __asm__("D_L15_0016145C") __attribute__((sda));
-extern unsigned char D_L15_00161460_d __asm__("D_L15_00161460") __attribute__((sda));
-extern unsigned char D_L15_00161464_d __asm__("D_L15_00161464") __attribute__((sda));
-extern unsigned char D_L15_00161468_d __asm__("D_L15_00161468") __attribute__((sda));
-extern unsigned char D_L15_0016146C_d __asm__("D_L15_0016146C") __attribute__((sda));
 extern void spawn_glow_particle(char *, char *, int, int, float, int, int, int, int) __asm__("FUN_L00_002ac910");
 
+extern short D_L15_00161458 __attribute__((sda));
+extern short D_L15_0016145C __attribute__((sda));
+extern unsigned char D_L15_00161460 __attribute__((sda));
+extern unsigned char D_L15_00161464 __attribute__((sda));
+extern unsigned char D_L15_00161468 __attribute__((sda));
+extern unsigned char D_L15_0016146C __attribute__((sda));
 void FUN_L15_0029af88(char *moby) {
     char *pos = moby + 0x10;
-    int t = scale_game_frames(*(int *)&D_L15_0016145C_d);
-    spawn_glow_particle(moby, pos, (int)&D_L15_0015F580, t, *(float *)&D_L15_00161458_d,
-                     D_L15_00161464_d, D_L15_00161468_d, D_L15_0016146C_d, D_L15_00161460_d);
+    int t = scale_game_frames(*(int *)&D_L15_0016145C);
+    spawn_glow_particle(moby, pos, (int)&D_L15_0015F580, t, *(float *)&D_L15_00161458,
+                     D_L15_00161464, D_L15_00161468, D_L15_0016146C, D_L15_00161460);
 }
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_0029d6c0.s", FUN_L15_0029d6c0);
 /* update: scale and fade a moby, spawn an effect, delete it when done */
@@ -1698,12 +1698,10 @@ extern Fade29FF90 D_L15_0015F320 __attribute__((section(".sdata")));
 extern Light29FF90 D_L15_001808C0[];
 extern char *D_L15_00178500[];
 extern char *FUN_L00_00274948(void *, void *, int, void *);
-extern char D_0013E533[];
 extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED60 __attribute__((section(".sdata")));
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern int D_L15_0015F5CC_c2 __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
 extern int D_L15_00161484; /* no foreign declaration */
@@ -1730,6 +1728,7 @@ extern int func_L00_001F2BE8_29FF90(void *, float, int, void *, void *) __asm__(
 extern char *func_L00_0026E940_29FF90(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
 extern void *func_L00_0026CA10_29FF90(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 
+extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 void FUN_L15_0029edb0(Moby29FF90 *moby) {
     float w[4];
     float v[4];
@@ -1820,7 +1819,7 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
 
         d->f14++;
         if (d->light != -1) {
-            (D_L15_001808C0 + d->light)->f1C = (D_L15_001808C0 + d->light)->f1C * (D_0015ED60 * -0.6f + 1.0f);
+            (D_L15_001808C0 + d->light)->f1C = (D_L15_001808C0 + d->light)->f1C * (frame_scale_macro * -0.6f + 1.0f);
             if ((D_L15_001808C0 + d->light)->f1C < 0.0001f) {
                 FUN_L00_0023e838(d->light);
                 d->light = -1;
@@ -1890,7 +1889,6 @@ void FUN_L15_0029edb0(Moby29FF90 *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3668), where it is exact; names translated to the US level program. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern char D_0013E533[];
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
@@ -2070,7 +2068,6 @@ typedef struct {
     float position[4];
 } LevelView;
 extern LevelView D_L15_00167280;
-extern float D_L15_001614C4 __attribute__((sda));
 extern int D_L15_001614C8 __attribute__((sda));
 extern long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
@@ -2674,11 +2671,11 @@ extern short D_0015ED84_d __asm__("D_0015ED84");
 extern short D_L15_00161AB8_d __asm__("D_L15_00161AB8");
 extern short D_L15_00161ABC_d __asm__("D_L15_00161ABC") __attribute__((sda));
 extern short D_L15_00161AC0_d __asm__("D_L15_00161AC0") __attribute__((sda));
-extern short D_L15_00161AC4_d __asm__("D_L15_00161AC4") __attribute__((sda));
-extern short D_L15_00161AC8_d __asm__("D_L15_00161AC8") __attribute__((sda));
 extern void FUN_L15_002cbd88_u(void) __asm__("FUN_L15_002cbd88");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
+extern short D_L15_00161AC4 __attribute__((sda));
+extern short D_L15_00161AC8 __attribute__((sda));
 void FUN_L15_002cbc30(void *arg) {
     struct Hero *base = &hero;
     if (base->state.current == 0x65) {
@@ -2692,16 +2689,16 @@ void FUN_L15_002cbc30(void *arg) {
     }
     if (*(float *)&D_L15_00161ABC_d != 0.0f) {
         *(int *)&D_L15_00161AC0_d = 1;
-        if (FUN_L00_0028d8c0(*(void **)&D_L15_00161AC8_d, *(int *)&D_L15_00161AC4_d) == 0) {
-            *(int *)&D_L15_00161AC4_d = allocate_voice_for_target_entry(5, 0x11, (int)arg);
-            *(void **)&D_L15_00161AC8_d = arg;
+        if (FUN_L00_0028d8c0(*(void **)&D_L15_00161AC8, *(int *)&D_L15_00161AC4) == 0) {
+            *(int *)&D_L15_00161AC4 = allocate_voice_for_target_entry(5, 0x11, (int)arg);
+            *(void **)&D_L15_00161AC8 = arg;
         }
         enqueue_callback_list_1_alt(FUN_L15_002cbd88_u, arg);
     } else {
-        if (FUN_L00_0028d8c0(*(void **)&D_L15_00161AC8_d, *(int *)&D_L15_00161AC4_d) != 0) {
-            release_voice_slot(*(int *)&D_L15_00161AC4_d);
-            *(int *)&D_L15_00161AC8_d = 0;
-            *(int *)&D_L15_00161AC4_d = -1;
+        if (FUN_L00_0028d8c0(*(void **)&D_L15_00161AC8, *(int *)&D_L15_00161AC4) != 0) {
+            release_voice_slot(*(int *)&D_L15_00161AC4);
+            *(int *)&D_L15_00161AC8 = 0;
+            *(int *)&D_L15_00161AC4 = -1;
         }
         *(int *)&D_L15_00161AC0_d = 0;
     }

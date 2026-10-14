@@ -1,6 +1,5 @@
 #include "rnc/ui/menus/item_preview/preview_animation.h"
-
-extern s32 preview_request_count __asm__("D_00160350");
+#include "rnc/data_labels.h"
 
 s32 queue_preview_animation(s32 animation_id, s32 trigger_mode, s32 delay_frames, s32 item_index,
                             s32 item_animation, s32 attachment0_class, s32 attachment0_animation,

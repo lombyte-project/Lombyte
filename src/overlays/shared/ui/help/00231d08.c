@@ -1307,7 +1307,6 @@ typedef struct {
     int i3C;
 } Plat_234800;
 extern char hero_233f80[] __asm__("D_0013F350");
-extern float frame_time_sq __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern int scale_game_frames_233f80(int) __asm__("FUN_001f96f8");
 extern void scale_game_frames_v_233f80(int) __asm__("FUN_001f96f8");
 extern float f_001fa6c0(int) __asm__("FUN_001fa6c0");
@@ -1328,6 +1327,7 @@ extern void f_001f9a10(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float f_001f9e90(float, float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 /* The hero on a moving platform: finds the platform the hero stands on or hangs from, tracks the platform's motion
    between frames (its attach points at 0x310-0x330) and carries the hero (position, facing, ledge-grab point) with it. */
 void FUN_L00_00233f80(void) {
@@ -1415,8 +1415,8 @@ void FUN_L00_00233f80(void) {
         sB4 = f_001f9b20(&((Hero_234800 *)hero_233f80)->v350);
         sB0 = ((Hero_234800 *)hero_233f80)->v350.z;
         if (!(plat->i3C & 2)) {
-            approach_value(&sB0, 0.0f, frame_time_sq * 25.0f * amt);
-            approach_value(&sB4, 0.0f, (frame_time_sq + frame_time_sq) * amt);
+            approach_value(&sB0, 0.0f, frame_time_sq_macro * 25.0f * amt);
+            approach_value(&sB4, 0.0f, (frame_time_sq_macro + frame_time_sq_macro) * amt);
             trooper_scale(&v20, &((Hero_234800 *)hero_233f80)->v350, sB4);
             v20.z = sB0;
         } else {
@@ -1495,7 +1495,6 @@ void FUN_L00_002347c0(void) {
     }
 }
 extern s32 D_L00_0015F5C4_234808 __asm__("D_L00_0015F5C4");
-extern f32 frame_time __asm__("D_0015ED6C");
 f32 FUN_001fa580_234808(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9de0_234808(f32) __asm__("FUN_001f9de0");
 s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");

@@ -2,6 +2,8 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/data_labels.h"
+#include "rnc/globals.h"
 
 typedef struct {
     s32 values[6];
@@ -10,9 +12,6 @@ typedef struct {
 extern LanguageResourceOffsets menu_language_resource_offsets __asm__("D_001E87D0");
 
 extern u8 skill_point_completed[] __asm__("D_0013D408");
-extern s16 cd_read_active[] __asm__("D_001516D8");
-extern s32 dialogue_language_column __asm__("D_0015ED88");
-extern s32 menu_resource_selection[] __asm__("D_001A0314");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern s32 decompress_wad() __asm__("func_0020B618");
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");
@@ -69,7 +68,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
         goto process_stream_state;
     } else {
         if (selection_flags & 2) {
-            resource_index = menu_resource_selection[0];
+            resource_index = selected_level_index[0];
         } else if (selection_flags & 4) {
             resource_index = menu_system.current->focus->data.grid.selected_cell;
         } else if (selection_flags & 0x100) {
@@ -113,7 +112,7 @@ s32 update_menu_resource_stream(struct MenuScreen *stream) {
         } else if (selection_flags & 0x1000) {
             language_offsets = menu_language_resource_offsets;
             resource_index = *stream->data.stream.language_base +
-                             language_offsets.values[dialogue_language_column];
+                             language_offsets.values[game_language];
         } else {
             item_selection = menu_system.current->focus;
             resource_index = item_selection->data.list.selected;

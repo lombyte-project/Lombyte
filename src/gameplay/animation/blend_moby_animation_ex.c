@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/mobyutil.c, func_00213F28). */
 #include "qcopy.h"
+#include "rnc/data_labels.h"
 extern int find_or_allocate_id_slot(int v) __asm__("func_0020CC18");
 typedef struct {
     char _pad00[0x10];
@@ -27,7 +28,6 @@ typedef struct {
 extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 extern float func_001FA6C0(int arg0);
 extern void FUN_0020ede8(void *, int);
-extern char D_001B2C00[];
 /* Re-registers this MobyAnim in the shared slot table (D_001B2F40, via
    func_0020CC18) when it hasn't settled yet (unk54 > 0.025, or unk60/unk64
    nonzero) or the caller forces it (arg4 & 4): builds a flags byte from

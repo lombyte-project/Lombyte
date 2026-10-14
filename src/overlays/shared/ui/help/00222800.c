@@ -8,11 +8,8 @@
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/entities.h"
-extern s32 D_L08_0015F5C4_8 __asm__("D_L08_0015F5C4");
-extern OvlMobyEntry40 D_L08_00178900_8[] __asm__("D_L08_00178900");
-extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
-extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
-extern f32 D_0015ED6C_8 __asm__("D_0015ED6C");
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 void FUN_L00_00206c08_8(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -26,6 +23,7 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 #define G hero
 
+extern OvlMobyEntry40 D_L08_00178900[];
 s32 FUN_L08_00222800(s32 arg) {
     u8 *m;
     OvlMobyEntry40 *tbl;
@@ -47,7 +45,7 @@ s32 FUN_L08_00222800(s32 arg) {
     if (G.invulnerable_frames != 0) {
         return 0;
     }
-    if (D_L08_0015F5C4_8 != 0) {
+    if (level_mode302618 != 0) {
         return 0;
     }
     G.unk2280 = 0;
@@ -55,16 +53,16 @@ s32 FUN_L08_00222800(s32 arg) {
     if (m[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &D_L08_00178900_8[m[0xA4]];
+    tbl = &D_L08_00178900[m[0xA4]];
     if (tbl->owner != m) {
         return 0;
     }
     if ((tbl->unk24 ^ 1) & 1) {
         return 0;
     }
-    D_0013DF88_8[current_level_index]++;
+    D_0013DF88[current_level_index]++;
     G.unk2280 = (struct Moby *)tbl->target;
-    D_0015EEA8_8++;
+    D_0015EEA8++;
     if (G.state.control_mode == 0xF) {
         G.unk5BE = 1;
         return 0;
@@ -97,7 +95,7 @@ s32 FUN_L08_00222800(s32 arg) {
         }
         if (G.state.control_mode == 0x16) {
             hero_set_state(0x6D, 1);
-            G.motion.unk120.f[2] = D_0015ED6C_8 * 7.0f;
+            G.motion.unk120.f[2] = frame_time * 7.0f;
             return 1;
         }
         if (G.state.control_mode == 0x12) {
@@ -133,7 +131,7 @@ s32 FUN_L08_00222800(s32 arg) {
         } else {
             hero_set_state(HERO_STATE_HURT, 1);
         }
-        e = D_0015ED6C_8;
+        e = frame_time;
         a = e * 5.7f;
         b = e * 2.4f;
         if (G.unk12E7 != 0) {
@@ -147,7 +145,7 @@ s32 FUN_L08_00222800(s32 arg) {
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_8(&v, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
+        FUN_L00_00210c80_8(&v, flag, frame_time * 5.0f, frame_time * 2.4f);
         break;
     }
     FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &v);

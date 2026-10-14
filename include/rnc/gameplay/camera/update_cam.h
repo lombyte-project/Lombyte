@@ -55,4 +55,6 @@ extern struct CameraSavedState camera_saved_states[3] __asm__("D_001893D0");
    (update_camera_blend then skips its vector copy). */
 extern s32 camera_position_publication_suppressed[1] __asm__("D_0018C32C") NOT_SDA;
 
+extern struct CameraType camera_types[] __asm__("D_001E8C00");
+
 #endif /* LOMBYTE_RNC_GAMEPLAY_CAMERA_UPDATE_CAM_H */

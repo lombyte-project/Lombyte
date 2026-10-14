@@ -3,6 +3,7 @@
 #include "rnc/input/pad_state.h"
 #include "sda.h"
 #include "rnc/globals.h"
+#include "rnc/data_labels.h"
 
 typedef struct {
     s32 state;    /* 0x00 */
@@ -29,8 +30,6 @@ typedef struct {
 #include "rnc/ui/help/help_record.h"
 
 
-extern u8 D_0015EE1D;
-extern s32 D_0015EEA4;
 extern TextEntry *help_msgs __asm__("D_0015F6A0");
 extern HelpState D_001996D0;
 

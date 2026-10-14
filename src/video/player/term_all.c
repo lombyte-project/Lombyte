@@ -1,11 +1,11 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 struct AudioSystemState {
     u8 pad_0[0xD90F8];
     s32 unkD90F8;
     s32 unkD90FC;
 };
 extern struct AudioSystemState *D_0016120C;
-extern s32 D_00161210;
 extern s32 DeleteThread();
 extern s32 RemoveDmacHandler();
 extern s32 RemoveIntcHandler();
@@ -25,8 +25,8 @@ void term_all(void) {
     func_0023B958(D_0016120C);
     func_0023D1E0((u8 *)D_0016120C + 0xD9168);
 
-    TerminateThread(D_00161210);
-    DeleteThread(D_00161210);
+    TerminateThread(decoder_thread);
+    DeleteThread(decoder_thread);
     disable_dmac(2);
     RemoveDmacHandler(2, *(s32 *)((u8 *)D_0016120C + 0xD90F8));
     disable_intc(2);

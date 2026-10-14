@@ -5,7 +5,6 @@ struct StreamBufferEntry {
     s32 unk4;
 };
 
-extern u8 D_001D60B8[];
 s32 get_stream_buffer_size(s32 stream_id) __asm__("FUN_00225d88");
 
 s32 get_stream_buffer_size(s32 stream_id) {

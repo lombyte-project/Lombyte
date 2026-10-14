@@ -3,6 +3,8 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L15_002044c8). */
 extern int D_0015ED84_d __asm__("D_0015ED84");
@@ -158,12 +160,7 @@ typedef union {
     s32 i[4];
 } V_210ce8;
 
-extern s32 D_L18_0015F5C4_210ce8 __asm__("D_L18_0015F5C4");
-extern T_210ce8 D_L18_00178B00_210ce8[] __asm__("D_L18_00178B00");
 extern s32 D_0015ED84_210ce8 __asm__("D_0015ED84");
-extern s32 D_0013DF88_210ce8[] __asm__("D_0013DF88");
-extern s32 D_0015EEA8_210ce8 __asm__("D_0015EEA8");
-extern f32 D_0015ED6C_210ce8 __asm__("D_0015ED6C");
 
 s32 FUN_001fa6d0_210ce8(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_00206c08_210ce8(void) __asm__("FUN_L00_00206c08");
@@ -178,6 +175,7 @@ void FUN_L00_002a9be0_210ce8(void) __asm__("FUN_L00_002a9be0");
 void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
+extern T_210ce8 D_L18_00178B00[];
 s32 FUN_L18_00218a90(s32 arg) {
     u8 *m;
     T_210ce8 *tbl;
@@ -199,7 +197,7 @@ s32 FUN_L18_00218a90(s32 arg) {
     if (hero.invulnerable_frames != 0) {
         return 0;
     }
-    if (D_L18_0015F5C4_210ce8 != 0) {
+    if (D_L18_0015F5C4 != 0) {
         return 0;
     }
     hero.unk2280 = 0;
@@ -207,7 +205,7 @@ s32 FUN_L18_00218a90(s32 arg) {
     if (m[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &D_L18_00178B00_210ce8[m[0xA4]];
+    tbl = &D_L18_00178B00[m[0xA4]];
     if (tbl->p34 != m) {
         return 0;
     }
@@ -218,9 +216,9 @@ s32 FUN_L18_00218a90(s32 arg) {
     } else if ((tbl->i24 ^ 1) & 1) {
         return 0;
     }
-    D_0013DF88_210ce8[D_0015ED84_210ce8]++;
+    D_0013DF88[D_0015ED84_210ce8]++;
     hero.unk2280 = (struct Moby *)tbl->p20;
-    D_0015EEA8_210ce8++;
+    D_0015EEA8++;
     if (hero.state.control_mode == 0xF) {
         hero.unk5BE = 1;
         return 0;
@@ -259,7 +257,7 @@ s32 FUN_L18_00218a90(s32 arg) {
         }
         if (hero.state.control_mode == 0x16) {
             hero_set_state(0x6D, 1);
-            hero.motion.unk120.f[2] = D_0015ED6C_210ce8 * 7.0f;
+            hero.motion.unk120.f[2] = frame_time * 7.0f;
             return 1;
         }
         if (hero.state.control_mode == 0x12) {
@@ -295,7 +293,7 @@ s32 FUN_L18_00218a90(s32 arg) {
         } else {
             hero_set_state(HERO_STATE_HURT, 1);
         }
-        e = D_0015ED6C_210ce8;
+        e = frame_time;
         a = e * 5.7f;
         b = e * 2.4f;
         if (hero.unk12E7 != 0) {
@@ -312,8 +310,8 @@ s32 FUN_L18_00218a90(s32 arg) {
             hero_set_state(0x5D, 1);
             FUN_L00_002a9be0_210ce8();
             if (hero.air_frames.s == 0) {
-                FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 7.0f,
-                                        D_0015ED6C_210ce8 * 3.5f);
+                FUN_L00_00210c80_210ce8(&v, flag, frame_time * 7.0f,
+                                        frame_time * 3.5f);
                 break;
             }
         }
@@ -321,7 +319,7 @@ s32 FUN_L18_00218a90(s32 arg) {
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_210ce8(&v, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 2.4f);
+        FUN_L00_00210c80_210ce8(&v, flag, frame_time * 5.0f, frame_time * 2.4f);
         break;
     }
     FUN_001f9a10_210ce8(&hero.motion.velocity, &hero.motion.velocity, &v);

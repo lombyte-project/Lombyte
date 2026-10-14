@@ -2,6 +2,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/vector.h"
+#include "rnc/globals.h"
 
 typedef float FloatVector4[4] __attribute__((aligned(16)));
 
@@ -29,7 +30,6 @@ typedef struct {
 } EnvironmentCameraState;
 
 extern s32 ship_substate[] __asm__("D_0013E050");
-extern s32 game_stage __asm__("D_0015F604");
 extern s32 D_001604A4 __attribute__((sda));
 extern s32 D_001604A8 __attribute__((sda));
 extern s32 D_001604AC __attribute__((sda));
@@ -91,7 +91,7 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     indexed_quads = environment_mesh_quads[class_index];
     quad_count = environment_mesh_quad_counts[class_index];
     vertex_count = environment_mesh_vertex_counts[class_index];
-    if (game_stage == 6 && ship_substate[0] == 4) {
+    if (game_mode == 6 && ship_substate[0] == 4) {
         quad_state[1] = get_effect_texture(1);
     } else {
         quad_state[1] = get_effect_texture(0x15);
@@ -106,11 +106,11 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     colors[1] = color;
     colors[0] = color;
     calculate_object_transform(object, 0, object_transform);
-    if (game_stage != 0 || (absolute_float(D_00186F40.position_x - object->position_x) < 16.0f &&
+    if (game_mode != 0 || (absolute_float(D_00186F40.position_x - object->position_x) < 16.0f &&
                             absolute_float(D_00186F40.position_y - object->position_y) < 16.0f)) {
         mapping_enabled = 1;
     }
-    if (game_stage == 6 && ship_substate[0] == 4) {
+    if (game_mode == 6 && ship_substate[0] == 4) {
         mapping_enabled = 0;
     }
     if (mapping_enabled != 0 || D_001604A4 == 1) {

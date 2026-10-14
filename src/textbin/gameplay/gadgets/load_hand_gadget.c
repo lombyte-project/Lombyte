@@ -7,6 +7,7 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/data_labels.h"
 
 typedef struct Moby {
     u8 pad00[0x20];
@@ -49,7 +50,6 @@ typedef struct HandGadgetDefinition {
 } HandGadgetDefinition;
 extern u8 gadget_available[] __asm__("D_0013D4C0");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
-extern s32 resource_request_state __asm__("D_0015FF50");
 extern HandGadgetDefinition gadget_definitions[] __asm__("D_001863D0");
 extern void func_001E9470(s32, s32);
 extern void func_001E9478(Moby *, s32);

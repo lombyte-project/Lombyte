@@ -3,6 +3,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/overlay/level_globals.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -172,7 +173,6 @@ typedef struct {
     f32 pos[4];
 } VendHit;
 
-extern f32 D_0015ED64 __attribute__((sda));
 extern f32 D_L00_00161BE4 __attribute__((sda));
 extern s32 D_L00_00161BE8 __attribute__((sda));
 extern f32 D_L00_00161BEC __attribute__((sda));
@@ -224,6 +224,7 @@ extern void FUN_L00_002e1aa8();
     if ((m)->anim != (a))                                                                          \
     blend_moby_animation((m), (a), 0, (t))
 
+extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((sda));
 void FUN_L00_002e0b88(VendMoby *moby) {
     VendVars *vars;
     VendTarget *target;
@@ -241,7 +242,7 @@ void FUN_L00_002e0b88(VendMoby *moby) {
     target = vars->target;
     FUN_L00_00263b38(vars->unk120, 2.5f);
     if (*(u8 *)0x15EDB7 != 0) {
-        FUN_L00_002628d8(moby, vars->unk120, 2, D_0015ED64 * 0.03f, D_0015ED64 * 0.3f);
+        FUN_L00_002628d8(moby, vars->unk120, 2, frame_scale_sq_gp * 0.03f, frame_scale_sq_gp * 0.3f);
     }
     if (moby->unk31 != 0 && FUN_001f9b48(&moby->pos, &D_L00_00166DC0) < 27.0f) {
         FUN_L00_0025a120(moby);
@@ -846,7 +847,6 @@ typedef struct {
     FlockTail tail;
 } FlockPart;
 
-extern s32 D_L00_0015F5C4;
 extern FlockGame D_L00_0016C860;
 
 extern void FUN_L00_002637f8(void *);

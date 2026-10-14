@@ -3,6 +3,7 @@
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/overlay/level_labels.h"
 
 struct AnimSeq670 {
     u8 pad0[0x10];
@@ -25,7 +26,6 @@ struct AnimClass670 {
 };
 #define SEQ(m, s) (((struct AnimClass670 *)(m)->pclass)->seqs[s])
 
-extern f32 D_L00_0017BDF0[][25];
 extern s32 D_L00_0015F5C4 __attribute__((sda));
 extern u8 D_0013E550[];
 extern void FUN_L00_002321a8(void);

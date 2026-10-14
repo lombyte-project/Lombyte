@@ -1,9 +1,8 @@
 #include "types.h"
 #include "sifrpc.h"
+#include "rnc/data_labels.h"
 extern s32 D_0012FCB0[];
-extern u8 D_00158200[];
 extern struct sceSifClientData D_00158400;
-extern u8 D_00158428[];
 extern s32 sceSifBindRpc();
 extern s32 sceSifCallRpc();
 extern void *memcpy();

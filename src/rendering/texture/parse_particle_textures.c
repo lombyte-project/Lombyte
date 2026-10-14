@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 struct ParticleHdr {
     s32 count;
@@ -14,7 +15,6 @@ struct ParticleTex {
 
 extern s32 D_001600C0;
 extern u8 D_001CE180[];
-extern s32 D_001CDF80[];
 extern struct ParticleTex D_001CD980[];
 extern void FUN_001f9838(void *, void *, s32);
 extern s32 FUN_001f97a0(s32);

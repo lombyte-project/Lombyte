@@ -10,6 +10,7 @@
 
 #include "types.h"
 #include "rnc/sdk/library/malloc_chunk.h"
+#include "rnc/data_labels.h"
 
 struct _reent;
 
@@ -18,12 +19,8 @@ extern void func_001154C8(struct _reent *);
 extern void *_sbrk_r(struct _reent *ptr, s32 delta);
 extern void _free_r(struct _reent *ptr, void *mem);
 
-extern u32 D_0012F788[]; /* __malloc_av_ bins (top at +8) */
-extern u64 D_0012FB98[]; /* top_pad */
-extern u32 D_0012FBA0[]; /* sbrk_base */
 extern u64 D_0012FBA8[]; /* max_sbrked_mem */
 extern u64 D_0012FBB0[]; /* max_total_mem */
-extern s32 D_0012FBB8[]; /* current_mallinfo.arena (sbrked_mem, int) */
 
 typedef unsigned long POINTER_UINT;
 

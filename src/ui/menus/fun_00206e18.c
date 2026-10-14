@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/data_labels.h"
 
-extern s32 D_001A03A8[];
 extern s32 point_is_clockwise() __asm__("func_00208818");
 
 s32 FUN_00206e18(s32 px, s32 py, f32 unused1, f32 unused2, f32 arg3) {

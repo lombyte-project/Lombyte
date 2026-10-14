@@ -703,7 +703,6 @@ extern int FUN_L04_00295778(void *, void *, float, float, float);
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char D_0013E533[];
 extern void *memset(void *, int, unsigned int);
 extern void FUN_001efa68(void *, void *, int, void *, void *);
 extern void FUN_001f9770(void *);
@@ -1345,7 +1344,6 @@ void FUN_L04_002d16b8(WBMoby *m) {
 /* update: blend two keyframes of a path and write the result to a position */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D8348), where it is exact; names translated to the US level program. */
 
-extern char *D_L04_0015FFD0_e[] __asm__("D_L04_0015FFD0") __attribute__((section(".sdata")));
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_L00_00200260(float, float);
 extern int *D_L04_001B0630[];
@@ -1354,10 +1352,11 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
+extern char *D_L04_0015FFD0[] __attribute__((section(".sdata")));
 void FUN_L04_002d6f68(char *moby) {
     int *p = *(int **)(moby + 0x78);
     int *t = D_L04_001B0630[p[2]];
-    char *base = D_L04_0015FFD0_e[2];
+    char *base = D_L04_0015FFD0[2];
     int o0 = p[0] * 256;
     float *src = *(float **)(base + o0 + 0x78);
     char *dst = base + p[1] * 256;
@@ -1527,7 +1526,6 @@ struct RiserVars {
     s32 timer;
 };
 
-extern s32 D_0014C190[][64];
 extern s32 D_L04_001BA650[];
 extern LevelCollected D_L04_001BB3B0;
 extern int FUN_L00_0028dc90(int, int, struct Moby *, int);
@@ -1535,6 +1533,7 @@ extern int FUN_001f96f8(int);
 extern int FUN_001f9740(s32 *);
 extern int FUN_0022da68(int, int, struct Moby *);
 
+extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void FUN_L04_002e17d8(struct Moby *m) {
     struct RiserVars *d = (struct RiserVars *)m->pvars;
     struct Moby *t;
@@ -1549,7 +1548,7 @@ void FUN_L04_002e17d8(struct Moby *m) {
     case 1:
         id = m->save_id;
         idx = id;
-        if (D_L04_001BB3B0.collected[idx] == 0 && !((D_0014C190[current_level_index][idx >> 5] >> (id & 0x1F)) & 1)) {
+        if (D_L04_001BB3B0.collected[idx] == 0 && !((D_0014C190_257218[current_level_index][idx >> 5] >> (id & 0x1F)) & 1)) {
             if (d->trigger == -1)
                 break;
             t = (struct Moby *)((d->trigger << 8) + D_L04_0015FFD8);
@@ -1564,7 +1563,7 @@ void FUN_L04_002e17d8(struct Moby *m) {
     case 2:
         m->pos.z += riser_rise_speed(m) * frame_time;
         if (FUN_001f9740(&d->timer)) {
-            D_0014C190[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+            D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
             D_L04_001BA650[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
             if (m->oclass == 0x44D)
                 FUN_0022da68(1, 0, m);

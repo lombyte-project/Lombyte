@@ -3,6 +3,7 @@
 #include "rnc/sdk/library/sif_file_slot.h"
 #include "sifrpc.h"
 #include "rnc/sdk/library/sdk_state.h"
+#include "rnc/data_labels.h"
 
 struct FsReadRequest {
     s32 completion_semaphore;
@@ -18,9 +19,6 @@ struct FsReadRequest {
 
 extern struct FsReadRequest D_00156880;
 /* Also accessed by the asynchronous completion interrupt handler. */
-extern volatile s32 D_0012FC10[];
-extern s32 D_0012FCA4[];
-extern u8 D_001574C0[];
 extern struct SifFileSlot D_00157D80[];
 extern struct sceSifClientData D_00157F80;
 extern struct SifFileSlot *get_iob(s32 fd);

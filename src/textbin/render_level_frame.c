@@ -4,6 +4,7 @@
 
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/data_labels.h"
 
 struct LevelProjectionState {
     u8 pad_0[0xB0];
@@ -12,9 +13,6 @@ struct LevelProjectionState {
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/gameplay/state/level_state.h"
 #include "rnc/rendering/screen.h"
-extern s32 game_frame_counter __asm__("D_0015F438");
-extern f32 sequence_fade __asm__("D_0015F43C");
-extern s32 font_state __asm__("D_0015F620");
 extern s32 D_0018CB54[];
 extern s32 D_0018CC98[];
 extern struct LevelProjectionState view_context __asm__("D_0018CD00");
@@ -96,18 +94,18 @@ void render_level_frame(void) {
         draw_textured_quad(0x2C, display_state->height - 0x60, 0x40, 0x40, 0, 0, 0x40, 0x40,
                            0x80808080, texture);
         screen_y = (f32)((display_state->height - 0x40) * 16);
-        rotation_angle = ((game_frame_counter % 55) * (-6.2831855f)) / 55.0f;
+        rotation_angle = ((D_0015F438 % 55) * (-6.2831855f)) / 55.0f;
         /* The frame counter contributes only the sprite angle modulo 55. */
         /* Retail passes the full texture value in a2 and the five floats in f12-f16. */
         draw_rotated_sprite(1216.0f, screen_y, quad_extent, 272.0f, 0x40, 0x40,
                             get_effect_texture(3), rotation_angle);
     }
     do_gif_paging();
-    if (sequence_fade > 0.0f) {
-        if (sequence_fade > 1.0f) {
-            sequence_fade = 1.0f;
+    if (sequence > 0.0f) {
+        if (sequence > 1.0f) {
+            sequence = 1.0f;
         }
-        emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(sequence_fade * 128.0f));
+        emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(sequence * 128.0f));
     }
     vu1_sync_chain(0x10);
     patch_moby_gifs();

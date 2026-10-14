@@ -3,9 +3,9 @@
 
 #include "types.h"
 #include "sda.h"
+#include "rnc/data_labels.h"
 extern void (*D_00159744)(void *) NOT_SDA;
 extern void *D_00159748 NOT_SDA;
-extern u32 D_001312E4[];
 
 void dispatch_native_cd_power_event(void) __asm__("FUN_00120960");
 

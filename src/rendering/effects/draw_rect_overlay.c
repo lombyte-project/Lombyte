@@ -6,8 +6,7 @@
 #include "rnc/rendering/dma_tag.h"
 
 #include "rnc/rendering/screen.h"
-extern char D_00160820[];
-extern char D_00160830[];
+#include "rnc/data_labels.h"
 
 /* Append a GIF packet drawing the rectangle x0..x1, y0..y1 (in 16ths,
    offset by the viewport origin screen_extent.left/[5] - 8) as a PRIM 0x144

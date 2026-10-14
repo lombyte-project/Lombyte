@@ -3,9 +3,9 @@
    as byte offsets. */
 #include "types.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/globals.h"
 typedef struct { f32 f[0x300]; } T_215340;
 extern T_215340 D_L00_0017A680;
-extern f32 D_0015ED6C;
 extern void FUN_L00_0020a1e0(f32, f32);
 extern void FUN_L00_0020a1f8(f32, f32);
 extern void FUN_L00_0020a210(f32, f32);
@@ -36,7 +36,7 @@ void FUN_L00_00215340(void) {
             else if (v < -1.4f) v = -1.4f;
             nv = -v;
             TF(0x60) = nv * 0.14f;
-            k = hero.motion.unk164 / (D_0015ED6C * 5.7f);
+            k = hero.motion.unk164 / (frame_time * 5.7f);
             if (1.0f < k) k = 1.0f;
             if (k < 0.0f) k = 0.0f;
             TF(0x60) = nv * 0.14f * k;
@@ -95,7 +95,7 @@ void FUN_L00_00215340(void) {
         else if (c3 < -0.2f) TF(0x274) = -0.2f;
         TF(0x270) = FUN_001f99c0(b) * 0.16f;
         if (hero.state.current == 0x81) {
-            if (D_0015ED6C * 0.5f < hero.motion.unk164) {
+            if (frame_time * 0.5f < hero.motion.unk164) {
                 ang = FUN_001fa5c8(FUN_001f9e90(hero.motion.displacement.f[0], hero.motion.displacement.f[1]), hero.motion.rot.f[2]);
                 s = hero.motion.unk164 * 3.0f;
                 TF(0x60) = -FUN_001f9de0(ang) * s;

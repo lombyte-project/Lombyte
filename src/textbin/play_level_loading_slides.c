@@ -8,7 +8,6 @@
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/screen.h"
-extern s32 D_0015ED84 __attribute__((sda));
 extern s16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A MACRO_ADDR;
 extern void read_file_entry_with_retry(s32) __asm__("func_0012F368");
@@ -36,6 +35,7 @@ extern void sceGsSyncV(s32);
 void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_slide,
                                s32 duration_ticks, s32 preload_level) __asm__("FUN_00231bd8");
 
+extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
 void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_slide,
                                s32 duration_ticks, s32 preload_level) {
     u64 shared_texture;
@@ -51,7 +51,7 @@ void play_level_loading_slides(s32 language_index, s32 first_slide, s32 second_s
     prepare_loading_slide_textures(language_index, first_slide, second_slide, &shared_texture,
                                    &first_texture, &second_texture);
     if (preload_level != 0) {
-        read_file_entry_with_retry(D_0015ED84);
+        read_file_entry_with_retry(current_level_index);
         D_0015EE48 = 0;
         D_0015EE4A = 0;
     }

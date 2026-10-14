@@ -2,32 +2,31 @@
 #include "types.h"
 #include "rnc/gameplay/state/overlay_game_state.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/level_labels.h"
 
 typedef struct {
     char pad[0x1C4];
     volatile s32 f1C4;
 } G_7c410;
 extern G_7c410 D_0013C940_7c410 __asm__("D_0013C940");
-extern s32 D_0013D384_7c410 __asm__("D_0013D384") __attribute__((section(".data")));
-extern s32 D_L00_0015F5C0_7c410 __asm__("D_L00_0015F5C0");
-extern s32 D_L00_0015F5D8_7c410 __asm__("D_L00_0015F5D8");
-extern s32 D_L00_0015F570_7c410 __asm__("D_L00_0015F570");
-extern s32 D_L00_00184414_7c410 __asm__("D_L00_00184414") __attribute__((section(".data")));
-extern s32 D_0015ED84_7c410 __asm__("D_0015ED84") __attribute__((sda));
 
+extern s32 D_L00_00184414 __attribute__((section(".data")));
+extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
 s32 FUN_L00_0027c410(s32 o) {
     s32 f = D_0013C940_7c410.f1C4;
     s32 v;
     struct GameState *h;
     if (f & 0xD00) {
         if (*(s32 *)(o + 0x30) & 0x20) {
-            D_L00_00184414_7c410 = D_0015ED84_7c410;
+            D_L00_00184414 = current_level_index;
         }
         return -1;
     }
     if (f & 0x10) {
         if (*(s32 *)(o + 0x30) & 0x20) {
-            D_L00_00184414_7c410 = D_0015ED84_7c410;
+            D_L00_00184414 = current_level_index;
         }
         h = &D_L00_001B9CF0;
         v = (s32)h->owner->unk38;
@@ -38,10 +37,10 @@ s32 FUN_L00_0027c410(s32 o) {
         }
     }
     if (D_0013C940_7c410.f1C4 & 0x20) {
-        D_0013D384_7c410 = 0;
-        D_L00_0015F5C0_7c410 = -1;
-        D_L00_0015F570_7c410 = 1;
-        D_L00_0015F5D8_7c410 = 1;
+        D_0013D384 = 0;
+        D_L00_0015F5C0 = -1;
+        D_L00_0015F570 = 1;
+        D_L00_0015F5D8 = 1;
     }
     return 0;
 }

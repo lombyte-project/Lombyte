@@ -28,7 +28,6 @@ typedef struct {
 
 extern s32 D_001516EC NOT_SDA;
 extern s16 D_0015172A NOT_SDA;
-extern u8 D_0015EDB0 MACRO_ADDR;
 extern s32 D_00161030[2] __attribute__((sda));
 extern s32 D_00161038[2] __attribute__((sda));
 extern s32 D_00161040[2] __attribute__((sda));
@@ -48,11 +47,12 @@ extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 
 void FUN_00237ed0(Moby *m) __asm__("FUN_00237ed0");
 
+extern u8 big_head_cheat_enabled __asm__("D_0015EDB0") MACRO_ADDR;
 void FUN_00237ed0(Moby *m) {
     s32 r;
     s32 a;
 
-    if (D_0015EDB0 != 0) {
+    if (big_head_cheat_enabled != 0) {
         if (D_001E65E0.active == 0) {
             attach_manipulator(m, 0, &D_001E65E0);
         }

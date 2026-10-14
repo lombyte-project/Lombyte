@@ -43,7 +43,6 @@ extern Suffixes D_001E8680;
 extern char D_00160088[];
 extern char D_00160090[];
 extern Weapon D_001DFFB0[];
-extern u8 items_acquired[] __asm__("D_0013D4E8");
 #include "rnc/gameplay/state/item_state.h"
 extern void func_001E9458(s32);
 extern s32 remove_hud_item(s32) __asm__("FUN_001ff480");

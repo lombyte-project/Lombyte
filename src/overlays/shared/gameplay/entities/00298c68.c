@@ -14,7 +14,6 @@ typedef struct {
     P2_00298c68 y[3];
 } Tab_00298c68;
 extern Tab_00298c68 D_00137B80_00298c68 __asm__("D_00137B80");
-extern s32 D_0015ED80;
 void FUN_L00_002995d0(s32, s32, s32);
 void hero_respawn() __asm__("FUN_L00_00211250");
 /* Picks a disc table entry pair by D_0015ED80 and passes it with the language to FUN_L00_002995d0. */
@@ -23,7 +22,7 @@ void FUN_L02_00298c68(s32 i) {
     struct Hero *s;
     if (i < 0)
         return;
-    if (D_0015ED80) {
+    if (pal_mode) {
         a = D_00137B80_00298c68.y[i].a;
         b = D_00137B80_00298c68.y[i].b;
     } else {

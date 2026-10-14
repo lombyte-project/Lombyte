@@ -1,9 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
+#include "rnc/data_labels.h"
 extern sceCdRMode D_00151700[];
-extern u8 D_0015ED58;
-extern s32 D_0015EEBC;
-extern s32 D_0015EEC0;
 extern s32 sceCdRead(u32, u32, void *, sceCdRMode *);
 s32 submit_audio_stream_io_request(void *buf, u32 lsn, u32 sectors) __asm__("FUN_00216728");
 

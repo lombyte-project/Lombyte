@@ -1,8 +1,8 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/data_labels.h"
 
-extern u8 debug_font_buffer[] __asm__("D_001AABC0");
 extern u64 debug_font_pif_header __asm__("D_0015EEC8") MACRO_ADDR;
 extern void load_pif_as_psmt8_h() __asm__("func_001E9168");
 extern s32 load() __asm__("func_00216828");

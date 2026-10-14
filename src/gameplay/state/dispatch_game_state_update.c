@@ -1,14 +1,13 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
-extern s32 ship_substate[] __asm__("D_0013E050");
-extern s32 draw_enable_mask __asm__("D_0015F434") __attribute__((sda));
-extern s32 space_load_in_progress __asm__("D_0015F618");
 extern void prepare_debug_profiler_render(void) __asm__("func_001F4248");
 extern void draw_debug_profiler(void) __asm__("func_001F39D0");
 extern void render_level_frame(void) __asm__("func_0022F288");
 
 void dispatch_game_state_update(void) __asm__("FUN_00230ee8");
 
+extern s32 draw_enable_mask_gp __asm__("D_0015F434") __attribute__((sda));
 void dispatch_game_state_update(void) {
     s32 state;
 
@@ -26,7 +25,7 @@ void dispatch_game_state_update(void) {
         return;
     case 3:
     case 7:
-        draw_enable_mask = 0x7F;
+        draw_enable_mask_gp = 0x7F;
         draw_debug_profiler();
         return;
     case 4:

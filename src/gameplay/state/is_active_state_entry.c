@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 struct StateEntry {
     u8 pad_0[0x74];
     u8 unk74;
@@ -7,7 +8,6 @@ struct StateEntry {
 };
 
 extern u8 D_0013E550[];
-extern s32 D_0015F5B4;
 
 s32 is_active_state_entry(s32 entry_index, s32 id) __asm__("FUN_001eb740");
 

@@ -25,11 +25,9 @@ struct Globals_00194100 {
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/gameplay/state/level_state.h"
 extern s32 sound_bank_handle __asm__("D_0015ED5C") MACRO_ADDR;
-extern s32 D_0015ED84 MACRO_ADDR;
 extern s16 D_0015EE48 MACRO_ADDR;
 extern s16 D_0015EE4A MACRO_ADDR;
 extern s32 D_0015F438 MACRO_ADDR;
-extern s32 space_load_id __asm__("D_0015F600") MACRO_ADDR;
 extern s32 space_load_in_progress __asm__("D_0015F618") MACRO_ADDR;
 extern struct Globals_0015F634 *level_sound_defs __asm__("D_0015F634");
 extern struct Globals_00194100 coll_output __asm__("D_00194100");
@@ -73,6 +71,8 @@ extern s32 sceGsSyncV(s32);
 
 void do_space_transition(void) __asm__("FUN_00231ff0");
 
+extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
+extern s32 space_load __asm__("D_0015F600") MACRO_ADDR;
 void do_space_transition(void) {
     s32 lvl;
     s32 ok;
@@ -85,10 +85,10 @@ void do_space_transition(void) {
     coll_output.unk10 |= 0x80000000;
     game_mode = 6;
     level_render_state.content_variant = 0;
-    if (level_available[8] != 0 || space_load_id >= 8) {
+    if (level_available[8] != 0 || space_load >= 8) {
         level_render_state.content_variant = 1;
     }
-    if (level_available[14] != 0 || space_load_id >= 14) {
+    if (level_available[14] != 0 || space_load >= 14) {
         level_render_state.content_variant = 2;
     }
     FlushCache(0);
@@ -114,82 +114,82 @@ void do_space_transition(void) {
     view_context.fog_near_dist = 0;
     view_context.fog_far_int = 128.0f;
     PackDmaTag(0, 0, 0);
-    if (space_load_id < 0) {
+    if (space_load < 0) {
         while (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
             memcard_update_state();
             run_state_handler();
         }
         fade_to_black(scale_game_frames(6));
-        D_0015ED84 = space_load_id;
+        current_level_index_macro = space_load;
         load_level_chunk_from_disc();
         sceCdSync(0);
         music_stream_state.updates_suspended = 0;
         dmac_vif1_disable();
         return;
     }
-    if (space_load_id == 0 && level_visit_state[0] == 0) {
+    if (space_load == 0 && level_visit_state[0] == 0) {
         fade_to_black(scale_game_frames(6));
         play_level_loading_slides(lvl, 0, 1, scale_game_frames(240), 0);
         play_level_transition_movie(0);
         play_level_loading_slides(lvl, 2, 2, scale_game_frames(180), 0);
         play_level_transition_movie(1);
-        D_0015ED84 = space_load_id;
+        current_level_index_macro = space_load;
         play_level_loading_slides(lvl, 3, 4, scale_game_frames(240), 1);
         play_level_transition_movie(2);
-    } else if (D_0015ED84 == 0 && space_load_id == 1 && level_visit_state[1] == 0) {
+    } else if (current_level_index_macro == 0 && space_load == 1 && level_visit_state[1] == 0) {
         fade_to_black(scale_game_frames(6));
         play_level_loading_slides(lvl, 5, 6, scale_game_frames(240), 0);
         play_level_transition_movie(3);
         play_level_transition_movie(4);
         play_level_loading_slides(lvl, 7, 7, scale_game_frames(180), 0);
         play_level_transition_movie(5);
-        level_visit_state[D_0015ED84] = 2;
-        D_0015ED84 = space_load_id;
+        level_visit_state[current_level_index_macro] = 2;
+        current_level_index_macro = space_load;
         play_level_loading_slides(lvl, 8, 8, scale_game_frames(240), 1);
     } else {
-        if (space_load_id == 4 && level_visit_state[4] == 0) {
+        if (space_load == 4 && level_visit_state[4] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 9, 10, scale_game_frames(240), 0);
             play_level_transition_movie(6);
         }
-        if (D_0015ED84 == 7 && level_visit_state[7] != 2 && level_available[8] != 0) {
+        if (current_level_index_macro == 7 && level_visit_state[7] != 2 && level_available[8] != 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 11, 11, scale_game_frames(240), 0);
             play_level_transition_movie(7);
         }
-        if (space_load_id == 13 && level_visit_state[13] == 0) {
+        if (space_load == 13 && level_visit_state[13] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 12, 13, scale_game_frames(240), 0);
             play_level_transition_movie(8);
         }
-        if (D_0015ED84 == 14 && level_visit_state[14] != 2 && level_available[15] != 0) {
+        if (current_level_index_macro == 14 && level_visit_state[14] != 2 && level_available[15] != 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 14, 14, scale_game_frames(240), 0);
             play_level_transition_movie(9);
         }
-        if (space_load_id == 16 && level_visit_state[16] == 0) {
+        if (space_load == 16 && level_visit_state[16] == 0) {
             fade_to_black(scale_game_frames(12));
             play_level_loading_slides(lvl, 15, 16, scale_game_frames(240), 0);
             play_level_transition_movie(10);
         }
-        if ((u32)D_0015ED84 < 19) {
+        if ((u32)current_level_index_macro < 19) {
             ok = 1;
-            if (D_0015ED84 == 7 && level_available[8] == 0) {
+            if (current_level_index_macro == 7 && level_available[8] == 0) {
                 ok = 0;
             }
-            if (D_0015ED84 == 14 && level_available[15] == 0) {
+            if (current_level_index_macro == 14 && level_available[15] == 0) {
                 ok = 0;
             }
             if (ok) {
-                level_visit_state[D_0015ED84] = 2;
+                level_visit_state[current_level_index_macro] = 2;
             }
         }
         D_0015EE4A = 1;
         done = 0;
-        D_0015ED84 = space_load_id;
+        current_level_index_macro = space_load;
         D_0015EE48 = 0;
         initialize_level_runtime();
-        read_file_entry_with_retry(D_0015ED84);
+        read_file_entry_with_retry(current_level_index_macro);
         while (space_load_in_progress == 0) {
             vu1_send_chain();
             swap_render_buffer_chain();

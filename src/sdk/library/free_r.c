@@ -10,6 +10,7 @@
 
 #include "types.h"
 #include "rnc/sdk/library/malloc_chunk.h"
+#include "rnc/data_labels.h"
 
 struct _reent;
 
@@ -17,9 +18,7 @@ extern void func_001154C0(struct _reent *);
 extern void func_001154C8(struct _reent *);
 extern s32 _malloc_trim_r(struct _reent *ptr, u32 pad);
 
-extern u32 D_0012F788[]; /* __malloc_av_ bins */
 extern u64 D_0012FB90[]; /* trim_threshold */
-extern u64 D_0012FB98[]; /* top_pad */
 
 #define SIZE_SZ               4
 #define MINSIZE               16

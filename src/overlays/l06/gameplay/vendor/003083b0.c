@@ -6,10 +6,10 @@
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/data_labels.h"
 
 extern struct UsageStat help_stats_83b0[] __asm__("D_00141968");
 extern char *D_L06_0015FFD8_83b0 __asm__("D_L06_0015FFD8");
-extern s32 D_0015EEA4;
 extern u8 D_0013D4CE[];
 extern u8 D_0013D388_83b0[] __asm__("D_0013D388");
 extern int is_point_inside_clip_volume_83b0(void *, int) __asm__("FUN_00214720");
@@ -113,7 +113,6 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void emit_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
-extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_L06_001622F0 __attribute__((sda));
 extern float D_L06_001622F4 __attribute__((sda));
 extern float D_L06_001622F8 __attribute__((sda));
@@ -151,6 +150,7 @@ extern int D_L06_00162374 __attribute__((sda));
 extern int D_L06_00162378 __attribute__((sda));
 extern int D_L06_0016237C __attribute__((sda));
 
+extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /* Level 06 moby update: a spark emitter; state 4 bursts on a random timer, state 3 sprays continuously. */
 void FUN_L06_00308c68(struct Moby *m) {
     SparkData *d = *(void **)&m->pvars;
@@ -198,11 +198,11 @@ void FUN_L06_00308c68(struct Moby *m) {
         for (k = 0; k < n; k++) {
                 int c19, c18, c17, c16, c2;
                 float z;
-                normalize_vector_xyz(&v2, &*(SparkVector *)&m->rot_row0, D_L06_001622F0 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * D_0015ED6C);
-                z = D_L06_001622F4 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * D_0015ED6C;
+                normalize_vector_xyz(&v2, &*(SparkVector *)&m->rot_row0, D_L06_001622F0 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * frame_time_macro);
+                z = D_L06_001622F4 * (random_float_between_alt(-D_L06_001622FC, D_L06_001622FC) + 1.0f) * frame_time_macro;
                 clear_u64_value(&v3);
                 v3.z = z;
-                normalize_vector_xyz(&v4, &*(SparkVector *)&m->rot_row1, random_float_between_alt(-D_L06_001622F8, D_L06_001622F8) * D_0015ED6C);
+                normalize_vector_xyz(&v4, &*(SparkVector *)&m->rot_row1, random_float_between_alt(-D_L06_001622F8, D_L06_001622F8) * frame_time_macro);
                 add_vector_xyz(&v3, &v3, &v4);
                 v2.w = random_float_between_alt(D_L06_00162310, D_L06_00162314);
                 v3.w = random_float_between_alt(D_L06_00162318, D_L06_0016231C);
@@ -223,11 +223,11 @@ void FUN_L06_00308c68(struct Moby *m) {
             cnt = random_integer_below(7) ? 1 : random_integer_below(5) + 5;
             for (k = 0; k < cnt; k++) {
                     int c19, c18, c17, c16, c2;
-                    random_vector(&v4, 0.0f, D_L06_00162340 * D_0015ED6C);
-                    normalize_vector_xyz(&v2, &*(SparkVector *)&m->rot_row0, D_L06_00162330 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * D_0015ED6C);
+                    random_vector(&v4, 0.0f, D_L06_00162340 * frame_time_macro);
+                    normalize_vector_xyz(&v2, &*(SparkVector *)&m->rot_row0, D_L06_00162330 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * frame_time_macro);
                     add_vector_xyz(&v2, &v2, &v4);
-                    normalize_vector_xyz(&v3, &v2, D_L06_00162334 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * D_0015ED6C);
-                    v3.z = v3.z - D_L06_00162338 * D_0015ED6C;
+                    normalize_vector_xyz(&v3, &v2, D_L06_00162334 * (random_float_between_alt(-D_L06_0016233C, D_L06_0016233C) + 1.0f) * frame_time_macro);
+                    v3.z = v3.z - D_L06_00162338 * frame_time_macro;
                     v2.w = random_float_between_alt(D_L06_00162354, D_L06_00162358);
                     v3.w = random_float_between_alt(D_L06_0016235C, D_L06_00162360);
                     c19 = fast_tween_color(D_L06_00162364, D_L06_00162368, random_float_between_alt(0.0f, 1.0f));

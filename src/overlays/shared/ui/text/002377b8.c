@@ -204,7 +204,6 @@ typedef struct {
     u16 hA2;
     int wA4;
 } Stats;
-extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
 extern Stats D_00141848 __attribute__((section(".data")));
 extern int D_0013D428[] __attribute__((section(".data")));
 extern u8 D_00141622[] __attribute__((section(".data")));
@@ -222,6 +221,7 @@ extern float FUN_001fa688(float, float);
 extern int FUN_001fa6d0(float);
 extern float FUN_001fa610(float);
 
+extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 /* Picks slot w74 from the stick angle (or steps it with the 0x1000-0x8000 pad bits), counts hold frames in b71/b70, records the slot's entry when released, and closes when b70 runs out. */
 void FUN_L00_00237ba0(Obj *p) {
     float x, y, mag, ang, a, f, r;
@@ -290,14 +290,14 @@ void FUN_L00_00237ba0(Obj *p) {
         if (sel >= 0 && (id = D_L00_0015FAC0_c[D_L00_0015F72C][sel].f18) != 0) {
             VendorItemInfo *rr;
             int ri = id;
-            if (hero_data.items[0].item_id != id) {
+            if (hero_lui.items[0].item_id != id) {
                 if (D_00141848.hA0 < 0xFFFF) D_00141848.hA0++;
             }
             if (FUN_001f96f8(D_0015EEA4) / 600 > D_00141848.hA2)
                 D_00141848.hA2 = FUN_001f96f8(D_0015EEA4) / 600;
             D_00141848.wA4 = D_00141848.wA4 | (1 << current_level_index) | 0x80000000;
-            if (id == 0x18) hero_data.unk1FF5 = 1;
-            else hero_data.pending_item[0] = id;
+            if (id == 0x18) hero_lui.unk1FF5 = 1;
+            else hero_lui.pending_item[0] = id;
             rr = &D_L00_001C40B0[ri];
             if (rr->h8 && rr->hE < D_0013D428[id]) D_0013D428[id] = rr->hE;
         }
@@ -1115,18 +1115,10 @@ extern s32 bolt_panel_open_steps __asm__("D_L00_0015F824") __attribute__((sda));
 extern s32 bolt_text_fade_steps __asm__("D_L00_0015F828") __attribute__((sda));
 extern s32 bolt_text_color_clear __asm__("D_L00_0015F82C") __attribute__((sda));
 extern s32 bolt_text_color_opaque __asm__("D_L00_0015F830") __attribute__((sda));
-extern s32 bolt_text_dx __asm__("D_L00_0015F834") __attribute__((sda));
-extern s32 bolt_text_dy __asm__("D_L00_0015F838") __attribute__((sda));
 /* separator offsets: apostrophe, then dot */
-extern s32 separator_apostrophe_dx __asm__("D_L00_0015F83C") __attribute__((sda));
-extern s32 separator_apostrophe_dy __asm__("D_L00_0015F840") __attribute__((sda));
-extern s32 separator_dot_dx __asm__("D_L00_0015F844") __attribute__((sda));
-extern s32 separator_dot_dy __asm__("D_L00_0015F848") __attribute__((sda));
 extern s32 digit_width __asm__("D_L00_0015F84C") __attribute__((sda));
 /* "%d" */
 extern char bolt_count_format[] __asm__("D_L00_0015F850") __attribute__((section(".data")));
-extern char separator_apostrophe[] __asm__("D_L00_0015F858") __attribute__((section(".data")));
-extern char separator_dot[] __asm__("D_L00_0015F860") __attribute__((section(".data")));
 
 extern f32 convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
@@ -1137,6 +1129,14 @@ extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023
 extern int sprintf_alt() __asm__("FUN_00116248");
 extern void font_print_right(int, int, int, char *, int) __asm__("FUN_001f6940");
 
+extern s32 D_L00_0015F834 __attribute__((sda));
+extern s32 D_L00_0015F838 __attribute__((sda));
+extern s32 D_L00_0015F83C __attribute__((sda));
+extern s32 D_L00_0015F840 __attribute__((sda));
+extern s32 D_L00_0015F844 __attribute__((sda));
+extern s32 D_L00_0015F848 __attribute__((sda));
+extern char D_L00_0015F858[] __attribute__((section(".data")));
+extern char D_L00_0015F860[] __attribute__((section(".data")));
 int FUN_L00_00239df8(HudElem *m)
 {
     char buf[16];
@@ -1190,15 +1190,15 @@ int FUN_L00_00239df8(HudElem *m)
     color = fast_tween_color(bolt_text_color_clear, bolt_text_color_opaque, text);
     shadow = fast_tween_color(0, 0x80000000, text);
     sprintf_alt(buf, bolt_count_format, current_bolt_count);
-    font_print_right(x + bolt_text_dx + 1, y + bolt_text_dy + 1, shadow, buf, -1);
-    font_print_right(x + bolt_text_dx, y + bolt_text_dy, color, buf, -1);
+    font_print_right(x + D_L00_0015F834 + 1, y + D_L00_0015F838 + 1, shadow, buf, -1);
+    font_print_right(x + D_L00_0015F834, y + D_L00_0015F838, color, buf, -1);
 
     /* thousands separators */
     if (game_language != 3)
         apostrophe = game_language != 5;
-    sprintf_alt(buf, apostrophe ? separator_apostrophe : separator_dot);
-    dy = apostrophe ? separator_apostrophe_dy : separator_dot_dy;
-    dx = apostrophe ? separator_apostrophe_dx : separator_dot_dx;
+    sprintf_alt(buf, apostrophe ? D_L00_0015F858 : D_L00_0015F860);
+    dy = apostrophe ? D_L00_0015F840 : D_L00_0015F848;
+    dx = apostrophe ? D_L00_0015F83C : D_L00_0015F844;
     for (i = 3; i < digits; i += 3) {
         sx = x + dx;
         sy = y + dy;

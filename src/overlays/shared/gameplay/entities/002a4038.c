@@ -5,12 +5,12 @@
 #include "asm.h"
 
 extern u8 D_L02_001CB9C0[];
-extern float D_L02_001CB500f[] __asm__("D_L02_001CB500");
 extern s32 D_L02_001612A0 __attribute__((sda));
 extern s32 D_L02_001612A4;
 extern s32 D_L02_001612A8;
 extern s32 D_L02_001612AC;
 
+extern float D_L02_001CB500[];
 void FUN_L02_002a4058(char *arg, int val, float scale) {
     int i;
     float *p;
@@ -22,7 +22,7 @@ void FUN_L02_002a4058(char *arg, int val, float scale) {
     *(s32 *)(D_L02_001CB9C0 + 0x8) = D_L02_001612A8;
     *(s32 *)(D_L02_001CB9C0 + 0xC) = D_L02_001612AC;
     p = (float *)(D_L02_001CB9C0 + 0x10);
-    base = D_L02_001CB500f;
+    base = D_L02_001CB500;
     q = base + 4;
     for (i = 0xF7; i >= 0; i--) {
         *p = *q * scale;
@@ -250,11 +250,6 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002A58C0), where it is exact; names translated to the US level program. */
 
-extern char D_L02_0016D040[];
-extern float D_L02_001612F8;
-extern float D_L02_001612FC;
-extern float D_L02_00161300;
-extern float D_L02_00161304;
 extern int *D_L02_001611C0;
 extern void FUN_001f2260(void);
 extern void vu1_add_vif_code(int) __asm__("FUN_00233938");
@@ -1200,27 +1195,27 @@ void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
 }
 
 typedef struct { long a, b, c, d; } Q_2dae88;
-extern Q_2dae88 D_L02_001D3310_2dae88[] __asm__("D_L02_001D3310") NOT_SDA;
-extern int D_L02_00161B94_2dae88 __asm__("D_L02_00161B94") __attribute__((sda));
-extern int D_L02_00161AAC_2dae88 __asm__("D_L02_00161AAC") __attribute__((sda));
-extern int D_L02_00161AB0_2dae88 __asm__("D_L02_00161AB0") __attribute__((sda));
-extern int D_L02_00161AB4_2dae88 __asm__("D_L02_00161AB4") __attribute__((sda));
-extern int D_L02_00161AB8_2dae88 __asm__("D_L02_00161AB8") __attribute__((sda));
 extern int D_L02_00161B1C_2dae88 __asm__("D_L02_00161B1C") __attribute__((sda));
 int tex_2dae88(int) __asm__("FUN_001f44b8");
 void f20bc88_2dae88(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
+extern Q_2dae88 D_L02_001D3310[];
+extern int D_L02_00161B94 __attribute__((sda));
+extern int D_L02_00161AAC __attribute__((sda));
+extern int D_L02_00161AB0 __attribute__((sda));
+extern int D_L02_00161AB4 __attribute__((sda));
+extern int D_L02_00161AB8 __attribute__((sda));
 void FUN_L02_002dae88(void) {
     Q_2dae88 q;
     int c[4];
     int b[4];
-    Q_2dae88 *p = D_L02_001D3310_2dae88;
+    Q_2dae88 *p = D_L02_001D3310;
     int i;
     for (i = 3; i >= 0; i--) {
-        b[0] = D_L02_00161AAC_2dae88;
-        b[1] = D_L02_00161AB0_2dae88;
-        b[2] = D_L02_00161AB4_2dae88;
-        b[3] = D_L02_00161AB8_2dae88;
-        c[0] = c[1] = c[2] = c[3] = D_L02_00161B94_2dae88;
+        b[0] = D_L02_00161AAC;
+        b[1] = D_L02_00161AB0;
+        b[2] = D_L02_00161AB4;
+        b[3] = D_L02_00161AB8;
+        c[0] = c[1] = c[2] = c[3] = D_L02_00161B94;
         q = *p++;
         f20bc88_2dae88(&q, b, c, tex_2dae88(D_L02_00161B1C_2dae88 + 0x28), 1);
     }
@@ -1426,17 +1421,17 @@ typedef struct {
     char *mobys[1];
 } Level02MobyList;
 
-extern Level02MobyList D_L02_0016CE60;
 extern int D_L02_0015F5C4;
 extern unsigned char D_0015EDB0;
 extern unsigned char D_L02_0017CA40[];
 void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
+extern Level02MobyList talk_camera __asm__("D_L02_0016CE60");
 void FUN_L02_002e0cd8(char *moby) {
     int i;
     if (D_L02_0015F5C4 == 2 && D_0015EDB0 != 0) {
-        for (i = 0; i < D_L02_0016CE60.count; i++) {
-            char *e = D_L02_0016CE60.mobys[i];
+        for (i = 0; i < talk_camera.count; i++) {
+            char *e = talk_camera.mobys[i];
             if (*(short *)(e + 0xA6) == *(short *)(moby + 0xA6)) {
                 unsigned char *s = D_L02_0017CA40;
                 if (s[1] == 0) {

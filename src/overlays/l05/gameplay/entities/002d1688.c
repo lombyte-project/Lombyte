@@ -39,12 +39,12 @@ void FUN_L05_002d6f48(unsigned char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8AD8), where it is exact; names translated to the US level program. */
 
-extern short D_L05_001613D0_d __asm__("D_L05_001613D0") __attribute__((sda));
 extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
 
+extern short D_L05_001613D0 __attribute__((sda));
 void FUN_L05_002d7890(char *moby, int *path) {
     float *d = *(float **)(moby + 0x78);
-    d[2] = d[2] + *(float *)&D_L05_001613D0_d * frame_time / d[3];
+    d[2] = d[2] + *(float *)&D_L05_001613D0 * frame_time / d[3];
     if ((float)path[0] < d[2]) {
         d[2] = d[2] - (float)path[0];
     }
@@ -558,7 +558,6 @@ extern f32 fast_add_rotations_c2(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin_c4(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_angle_radians_c2(void) __asm__("func_00213308");
-extern float D_0015ED60;
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int D_L05_0015F5CC;
@@ -732,8 +731,8 @@ void FUN_L05_002d7140(char *moby) {
         tab = (float *)D_L05_0015F580;
         pos = (float *)(moby + 0x10);
         rot = (float *)(moby + 0x40);
-        func_001F9C30_2D8388(&left_offset, moby + 0xC0, D_L05_001613E8 * D_0015ED60);
-        left_offset.f[2] = left_offset.f[2] + D_L05_001613EC * D_0015ED60;
+        func_001F9C30_2D8388(&left_offset, moby + 0xC0, D_L05_001613E8 * frame_scale);
+        left_offset.f[2] = left_offset.f[2] + D_L05_001613EC * frame_scale;
         lifetime = func_001F9850_2D8388(0x5A);
         func_L00_00265050_2D8388(moby, 0x72E, pos, rot, lifetime, 0, left_offset.f, tab, D_0015ED70 * 12.0f, tab);
         lifetime = func_001F9850_2D8388(0x5A);
@@ -758,7 +757,6 @@ typedef struct {
 } L05GlowPacket;
 
 extern int D_L05_001613F0 __attribute__((sda));
-extern float D_L05_001613E0 __attribute__((sda));
 extern int D_L05_001613F4 __attribute__((sda));
 extern int D_L05_001613F8 __attribute__((sda));
 extern int D_L05_001613FC __attribute__((sda));
@@ -2608,16 +2606,16 @@ void FUN_L05_00307910(Moby *moby) {
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float FUN_001f96b0(float);
 extern int fast_dec_timer(int *arg0) __asm__("FUN_001f9740");
-extern short D_L05_00161CD4_d __asm__("D_L05_00161CD4") __attribute__((sda));
-extern short D_L05_00161CD8_d __asm__("D_L05_00161CD8") __attribute__((sda));
-extern short D_L05_00161CDC_d __asm__("D_L05_00161CDC") __attribute__((sda));
-extern short D_L05_00161CE0_d __asm__("D_L05_00161CE0") __attribute__((sda));
-extern short D_L05_00161CE4_d __asm__("D_L05_00161CE4") __attribute__((sda));
-extern short D_L05_00161CE8_d __asm__("D_L05_00161CE8") __attribute__((sda));
 extern void FUN_L00_00260738(char *, void *, void *, void *);
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
+extern short D_L05_00161CD4 __attribute__((sda));
+extern short D_L05_00161CD8 __attribute__((sda));
+extern short D_L05_00161CDC __attribute__((sda));
+extern short D_L05_00161CE0 __attribute__((sda));
+extern short D_L05_00161CE4 __attribute__((sda));
+extern short D_L05_00161CE8 __attribute__((sda));
 void FUN_L05_0030bdd8(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     float v[4];
@@ -2631,7 +2629,7 @@ void FUN_L05_0030bdd8(unsigned char *moby) {
     switch (moby[0x20]) {
     case 0:
         *(int *)(data + 0x78) = func_001FA898_r(FUN_001f96b0(random_float_between_alt(
-            (float)*(int *)&D_L05_00161CE4_d, (float)*(int *)&D_L05_00161CE8_d)));
+            (float)*(int *)&D_L05_00161CE4, (float)*(int *)&D_L05_00161CE8)));
         *(float *)(data + 0x60) = random_angle_radians();
         *(float *)(data + 0x6C) = random_angle_radians();
         moby[0x20] = 1;
@@ -2640,7 +2638,7 @@ void FUN_L05_0030bdd8(unsigned char *moby) {
         if (fast_dec_timer((int *)(data + 0x78))) {
             allocate_voice_for_target_entry_alt(0, 0, (int)moby);
             *(int *)(data + 0x78) = func_001FA898_r(FUN_001f96b0(random_float_between_alt(
-                (float)*(int *)&D_L05_00161CE4_d, (float)*(int *)&D_L05_00161CE8_d)));
+                (float)*(int *)&D_L05_00161CE4, (float)*(int *)&D_L05_00161CE8)));
         }
         p = (char *)moby + 0x10;
         qcopy(v, p);
@@ -2648,14 +2646,14 @@ void FUN_L05_0030bdd8(unsigned char *moby) {
         q = (char *)moby + 0x40;
         qcopy(r, q);
         t = fast_add_rotations(*(float *)(data + 0x60),
-                               *(float *)&D_L05_00161CD4_d * DEG_TO_RAD * frame_time);
-        k = *(float *)&D_L05_00161CD8_d * DEG_TO_RAD * frame_time;
+                               *(float *)&D_L05_00161CD4 * DEG_TO_RAD * frame_time);
+        k = *(float *)&D_L05_00161CD8 * DEG_TO_RAD * frame_time;
         *(float *)(data + 0x60) = t;
         *(float *)(data + 0x6C) = fast_add_rotations(*(float *)(data + 0x6C), k);
         *(float *)(moby + 0x44) =
-            *(float *)&D_L05_00161CDC_d * DEG_TO_RAD * fast_sin(*(float *)(data + 0x60));
+            *(float *)&D_L05_00161CDC * DEG_TO_RAD * fast_sin(*(float *)(data + 0x60));
         *(float *)(moby + 0x40) =
-            *(float *)&D_L05_00161CE0_d * DEG_TO_RAD * fast_sin(*(float *)(data + 0x6C));
+            *(float *)&D_L05_00161CE0 * DEG_TO_RAD * fast_sin(*(float *)(data + 0x6C));
         subtract_vector_xyz(d, p, v);
         FUN_L00_00260738(data + 0x20, d, r, q);
         break;
@@ -2748,36 +2746,9 @@ typedef struct {
     float f14;
 } Cam_30ca80;
 
-extern int current_level_index_30ca80 __asm__("D_0015ED84");
 extern unsigned char mission_states_30ca80[] __asm__("D_0014C050");
 extern WaterRecord_30ca80 water_records_30ca80[] __asm__("D_L05_001D6880");
-extern Cam_30ca80 D_L05_00180340_30ca80 __asm__("D_L05_00180340");
-extern Light_30ca80 light_30ca80 __asm__("D_L05_001CAD00");
-extern int D_L05_0020B440_30ca80[][4] __asm__("D_L05_0020B440");
-extern unsigned short record_draw_values_30ca80[] __asm__("D_L05_0020B380");
-extern int rise_frames_30ca80[] __asm__("D_L05_0020B3E0");
-extern float rise_speeds_30ca80[] __asm__("D_L05_0020B3F8");
-extern int base_rise_frames_30ca80[] __asm__("D_L05_0020B410");
-extern float base_rise_speeds_30ca80[] __asm__("D_L05_0020B428");
-extern int D_L05_001612D8_30ca80 __asm__("D_L05_001612D8") __attribute__((section(".sdata")));
 extern void *D_L05_001612D0_30ca80 __asm__("D_L05_001612D0") __attribute__((section(".sdata")));
-extern void *D_L05_001612D4_30ca80 __asm__("D_L05_001612D4") __attribute__((section(".sdata")));
-extern unsigned char D_L05_00161204_30ca80[] __asm__("D_L05_00161204") __attribute__((section(".sdata")));
-extern unsigned char D_L05_00161205_30ca80[] __asm__("D_L05_00161205") __attribute__((section(".sdata")));
-extern unsigned char D_L05_00161206_30ca80[] __asm__("D_L05_00161206") __attribute__((section(".sdata")));
-extern int D_L05_00161208_30ca80 __asm__("D_L05_00161208") __attribute__((section(".sdata")));
-extern float D_L05_0016120C_30ca80 __asm__("D_L05_0016120C") __attribute__((section(".sdata")));
-extern float D_L05_00161210_30ca80 __asm__("D_L05_00161210") __attribute__((section(".sdata")));
-extern float D_L05_00161214_30ca80 __asm__("D_L05_00161214") __attribute__((section(".sdata")));
-extern int D_L05_00161D10_30ca80 __asm__("D_L05_00161D10") __attribute__((sda));
-extern unsigned short D_L05_00161D14_30ca80 __asm__("D_L05_00161D14") __attribute__((sda));
-extern int hero_hits_30ca80 __asm__("D_L05_00161D1C") __attribute__((sda));
-extern int rise_step_30ca80 __asm__("D_L05_00161D20") __attribute__((sda));
-extern float rise_checkpoint_z_30ca80 __asm__("D_L05_00161D24") __attribute__((sda));
-extern float water_z_30ca80 __asm__("D_L05_00161D28") __attribute__((sda));
-extern int rise_checkpoint_hit_30ca80 __asm__("D_L05_00161D2C") __attribute__((sda));
-extern float move_speed_30ca80 __asm__("D_L05_00161D30") __attribute__((sda));
-extern float move_accel_30ca80 __asm__("D_L05_00161D34") __attribute__((sda));
 extern void initialize_slots_30ca80(void *, int) __asm__("FUN_L01_002b7a48");
 extern void initialize_slot_data_30ca80(float) __asm__("FUN_L01_002b7ef0");
 extern void copy_slot_30ca80(float *, int *) __asm__("FUN_L01_002b7c68");
@@ -2790,6 +2761,32 @@ extern int FUN_L01_00275690_30ca80(char *, float) __asm__("FUN_L01_00275690");
 extern void finish_slots_30ca80(char *, int) __asm__("FUN_L01_002b7fe0");
 extern void FUN_L05_0030d678_30ca80(void) __asm__("FUN_L05_0030d678");
 
+extern Cam_30ca80 D_L05_00180340;
+extern Light_30ca80 light __asm__("D_L05_001CAD00");
+extern int D_L05_0020B440[][4];
+extern unsigned short record_draw_values[] __asm__("D_L05_0020B380");
+extern int rise_frames[] __asm__("D_L05_0020B3E0");
+extern float rise_speeds[] __asm__("D_L05_0020B3F8");
+extern int base_rise_frames[] __asm__("D_L05_0020B410");
+extern float base_rise_speeds[] __asm__("D_L05_0020B428");
+extern void *D_L05_001612D4 __attribute__((section(".sdata")));
+extern unsigned char D_L05_00161204[] __attribute__((section(".sdata")));
+extern unsigned char D_L05_00161205[] __attribute__((section(".sdata")));
+extern unsigned char D_L05_00161206[] __attribute__((section(".sdata")));
+extern int D_L05_00161208 __attribute__((section(".sdata")));
+extern float D_L05_0016120C __attribute__((section(".sdata")));
+extern float D_L05_00161210 __attribute__((section(".sdata")));
+extern float D_L05_00161214 __attribute__((section(".sdata")));
+extern int D_L05_00161D10 __attribute__((sda));
+extern unsigned short D_L05_00161D14 __attribute__((sda));
+extern int hero_hits __asm__("D_L05_00161D1C") __attribute__((sda));
+extern int rise_step __asm__("D_L05_00161D20") __attribute__((sda));
+extern float rise_checkpoint __asm__("D_L05_00161D24") __attribute__((sda));
+extern float water __asm__("D_L05_00161D28") __attribute__((sda));
+extern int rise_checkpoint_hit __asm__("D_L05_00161D2C") __attribute__((sda));
+extern float move_speed __asm__("D_L05_00161D30") __attribute__((sda));
+extern float move_accel __asm__("D_L05_00161D34") __attribute__((sda));
+extern s32 D_L05_001612D8 __attribute__((section(".sdata")));
 /* Update of the level 05 water mobys: sets up the 48-record water chain, moves the surface by state and keeps its record in step. */
 void FUN_L05_0030ca80(struct Moby *moby) {
     WaterVars_30ca80 *d = *(WaterVars_30ca80 **)&moby->pvars;
@@ -2801,40 +2798,40 @@ void FUN_L05_0030ca80(struct Moby *moby) {
             int j;
             float a;
 
-            water_z_30ca80 = moby->pos.z;
-            rise_step_30ca80 = 0;
-            rise_checkpoint_hit_30ca80 = 0;
+            water = moby->pos.z;
+            rise_step = 0;
+            rise_checkpoint_hit = 0;
             initialize_slots_30ca80(water_records_30ca80, 0x30);
             initialize_slot_data_30ca80(1.0f);
-            light_30ca80.f0 = 16.0f;
-            light_30ca80.f4 = 16.0f;
-            light_30ca80.f8 = -8.0f;
-            light_30ca80.fC = -8.0f;
-            light_30ca80.f10 = 1.0f;
-            light_30ca80.f14 = 1.0f;
-            light_30ca80.f18 = 0.9f;
-            light_30ca80.f20 = 0.1f;
-            a = angle_atan2_30ca80(D_L05_00180340_30ca80.f10, D_L05_00180340_30ca80.f14);
-            light_30ca80.dir_x = fast_cos_30ca80(a) * 0.57735002f;
-            light_30ca80.dir_y = fast_sin_30ca80(a) * 0.57735002f;
-            light_30ca80.dir_z = -0.57735002f;
-            light_30ca80.f28 = 0x29;
-            light_30ca80.f2C = 0x2A;
-            light_30ca80.b3C = 0x1C;
-            light_30ca80.b3D = 0x40;
+            light.f0 = 16.0f;
+            light.f4 = 16.0f;
+            light.f8 = -8.0f;
+            light.fC = -8.0f;
+            light.f10 = 1.0f;
+            light.f14 = 1.0f;
+            light.f18 = 0.9f;
+            light.f20 = 0.1f;
+            a = angle_atan2_30ca80(D_L05_00180340.f10, D_L05_00180340.f14);
+            light.dir_x = fast_cos_30ca80(a) * 0.57735002f;
+            light.dir_y = fast_sin_30ca80(a) * 0.57735002f;
+            light.dir_z = -0.57735002f;
+            light.f28 = 0x29;
+            light.f2C = 0x2A;
+            light.b3C = 0x1C;
+            light.b3D = 0x40;
             D_L05_001612D0_30ca80 = water_records_30ca80;
-            D_L05_001612D4_30ca80 = D_L05_0020B440_30ca80;
-            D_L05_001612D8_30ca80 = 0x30;
-            D_L05_00161204_30ca80[0] = 0;
-            D_L05_00161205_30ca80[0] = 0xB;
-            D_L05_00161206_30ca80[0] = 0x3E;
-            D_L05_00161208_30ca80 = 0;
-            D_L05_0016120C_30ca80 = 20480.0f;
-            D_L05_00161210_30ca80 = 255.0f;
-            D_L05_00161214_30ca80 = 26.0f;
+            D_L05_001612D4 = D_L05_0020B440;
+            D_L05_001612D8 = 0x30;
+            D_L05_00161204[0] = 0;
+            D_L05_00161205[0] = 0xB;
+            D_L05_00161206[0] = 0x3E;
+            D_L05_00161208 = 0;
+            D_L05_0016120C = 20480.0f;
+            D_L05_00161210 = 255.0f;
+            D_L05_00161214 = 26.0f;
             for (i = 0; i < 0x30; i++) {
-                copy_slot_30ca80(&water_records_30ca80[i].x, D_L05_0020B440_30ca80[i]);
-                water_records_30ca80[d->record_index].h1E = record_draw_values_30ca80[d->record_index];
+                copy_slot_30ca80(&water_records_30ca80[i].x, D_L05_0020B440[i]);
+                water_records_30ca80[d->record_index].h1E = record_draw_values[d->record_index];
             }
             for (j = 0; j < 0x30; j++) {
                 FUN_L05_0030d6a0_30ca80(j);
@@ -2845,19 +2842,19 @@ void FUN_L05_0030ca80(struct Moby *moby) {
         if (d->rises != 0) {
             if (d->f10 >= 0) {
                 moby->update_dist = 0xFF;
-                if (hero_hits_30ca80 >= 2) {
+                if (hero_hits >= 2) {
                     int k;
-                    float s = (float)(hero_hits_30ca80 - 1) * 0.014285714f + 1.0f;
+                    float s = (float)(hero_hits - 1) * 0.014285714f + 1.0f;
                     if (s > 1.4f) {
                         s = 1.4f;
                     }
                     for (k = 0; k < 6; k++) {
-                        rise_frames_30ca80[k] = truncate_float_to_s32_30ca80((float)base_rise_frames_30ca80[k] * s);
-                        rise_speeds_30ca80[k] = base_rise_speeds_30ca80[k] / s;
+                        rise_frames[k] = truncate_float_to_s32_30ca80((float)base_rise_frames[k] * s);
+                        rise_speeds[k] = base_rise_speeds[k] / s;
                     }
                 }
             }
-            if (mission_states_30ca80[moby->mission + (current_level_index_30ca80 << 4)] == 0xFF) {
+            if (mission_states_30ca80[moby->mission + (current_level_index << 4)] == 0xFF) {
                 moby->state = 7;
                 moby->pos.z = 44.0f;
             } else {
@@ -2893,13 +2890,13 @@ void FUN_L05_0030ca80(struct Moby *moby) {
             d->moving = 1;
             set_group_state_30ca80(moby->group, 1);
         } else if (d->f10 >= 0) {
-            if (mission_states_30ca80[moby->mission + (current_level_index_30ca80 << 4)] == 0xFF) {
+            if (mission_states_30ca80[moby->mission + (current_level_index << 4)] == 0xFF) {
                 moby->state = 1;
                 moby->pos.z = d->raised_z;
             }
         }
         if (d->moving != 0) {
-            advance_accelerated_scalar_30ca80(&moby->pos.z, &d->speed, d->lowered_z, move_speed_30ca80 * frame_time_sq_30ca80, move_speed_30ca80 * frame_time_sq_30ca80, move_accel_30ca80 * frame_time_30ca80);
+            advance_accelerated_scalar_30ca80(&moby->pos.z, &d->speed, d->lowered_z, move_speed * frame_time_sq_30ca80, move_speed * frame_time_sq_30ca80, move_accel * frame_time_30ca80);
             update_group_30ca80((char *)moby);
         }
         moby->command = 1;
@@ -2918,7 +2915,7 @@ void FUN_L05_0030ca80(struct Moby *moby) {
             moby->command = 2;
         }
         if (d->moving != 0) {
-            advance_accelerated_scalar_30ca80(&moby->pos.z, &d->speed, d->raised_z, move_speed_30ca80 * frame_time_sq_30ca80, move_speed_30ca80 * frame_time_sq_30ca80, move_accel_30ca80 * frame_time_30ca80);
+            advance_accelerated_scalar_30ca80(&moby->pos.z, &d->speed, d->raised_z, move_speed * frame_time_sq_30ca80, move_speed * frame_time_sq_30ca80, move_accel * frame_time_30ca80);
             update_group_30ca80((char *)moby);
         }
         if (random_integer_below_30ca80(0xC8) == 0) {
@@ -2945,8 +2942,8 @@ void FUN_L05_0030ca80(struct Moby *moby) {
                 if (h->ground_moby != 0 && h->air_frames.s == 0 && h->ground_moby->oclass == 0x33E) {
                     d->f1C = 0;
                     moby->state = 8;
-                    rise_step_30ca80 = 0;
-                    d->timer = scale_game_frames_30ca80(rise_frames_30ca80[0]);
+                    rise_step = 0;
+                    d->timer = scale_game_frames_30ca80(rise_frames[0]);
                 }
             }
         }
@@ -2961,7 +2958,7 @@ void FUN_L05_0030ca80(struct Moby *moby) {
         if (d->f10 >= 0) {
             Hero *h = &hero;
             if (h->state.current == 0x6A && h->state_timer == 2) {
-                hero_hits_30ca80++;
+                hero_hits++;
             }
         } else if (d->raised_z < moby->pos.z) {
             water_records_30ca80[d->record_index].h1E = 0;
@@ -2971,14 +2968,14 @@ void FUN_L05_0030ca80(struct Moby *moby) {
         break;
     case 8:
         if (func_001F9908_v(&d->timer) != 0) {
-            if (rise_step_30ca80 < 5) {
-                rise_step_30ca80++;
-                d->timer = scale_game_frames_30ca80(rise_frames_30ca80[rise_step_30ca80]);
+            if (rise_step < 5) {
+                rise_step++;
+                d->timer = scale_game_frames_30ca80(rise_frames[rise_step]);
             }
         }
-        moby->pos.z += rise_speeds_30ca80[rise_step_30ca80] * frame_time_30ca80;
+        moby->pos.z += rise_speeds[rise_step] * frame_time_30ca80;
         update_group_30ca80((char *)moby);
-        water_z_30ca80 = moby->pos.z;
+        water = moby->pos.z;
         {
             Vec4 v;
 
@@ -2987,10 +2984,10 @@ void FUN_L05_0030ca80(struct Moby *moby) {
             v.f[1] = 338.0f;
             v.f[2] = 25.0f;
             if (distance_xyz_30ca80(v.f, &hero.motion.pos) < 6.0f) {
-                if (rise_checkpoint_hit_30ca80 == 0) {
-                    rise_checkpoint_hit_30ca80 = 1;
-                    if (moby->pos.z > rise_checkpoint_z_30ca80) {
-                        rise_step_30ca80 = 5;
+                if (rise_checkpoint_hit == 0) {
+                    rise_checkpoint_hit = 1;
+                    if (moby->pos.z > rise_checkpoint) {
+                        rise_step = 5;
                     }
                 }
             }
@@ -2998,7 +2995,7 @@ void FUN_L05_0030ca80(struct Moby *moby) {
         if (d->f10 >= 0) {
             Hero *h = &hero;
             if (h->state.current == 0x6A && h->state_timer == 2) {
-                hero_hits_30ca80++;
+                hero_hits++;
             }
         }
         if (moby->pos.z >= 44.0f) {
@@ -3019,15 +3016,15 @@ void FUN_L05_0030ca80(struct Moby *moby) {
         if (t == 0.0f) {
             water_records_30ca80[d->record_index].h1E = 0;
         } else {
-            water_records_30ca80[d->record_index].h1E = record_draw_values_30ca80[d->record_index];
+            water_records_30ca80[d->record_index].h1E = record_draw_values[d->record_index];
         }
         if (d->record_index == 0) {
             finish_slots_30ca80((char *)water_records_30ca80, 0x30);
             enqueue_callback_list_1_30ca80(FUN_L05_0030d678_30ca80, moby);
         }
-        if (d->record_index == D_L05_00161D10_30ca80) {
-            water_records_30ca80[d->record_index].h1E = D_L05_00161D14_30ca80;
-            record_draw_values_30ca80[d->record_index] = D_L05_00161D14_30ca80;
+        if (d->record_index == D_L05_00161D10) {
+            water_records_30ca80[d->record_index].h1E = D_L05_00161D14;
+            record_draw_values[d->record_index] = D_L05_00161D14;
         }
     }
 }

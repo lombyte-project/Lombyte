@@ -4,6 +4,7 @@
 
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/data_labels.h"
 
 struct Ent3 {
     u8 pad0[0x10];
@@ -21,10 +22,6 @@ struct Ent {
     u8 pad28[0x30];
     f32 unk58;
 };
-
-extern s16 D_001516D8[];
-extern s32 D_0015F5B8;
-extern s32 space_load_in_progress __asm__("D_0015F618");
 
 extern void func_00218D10(void);
 extern void func_00218F98(void) __asm__("FUN_00218f98");
@@ -54,7 +51,7 @@ void FUN_002192a8(void) {
                 return;
             }
         }
-        if (D_001516D8[0] != 0) {
+        if (cd_read_active[0] != 0) {
             return;
         }
         D_0015F5B8 = 0x1E000;

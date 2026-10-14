@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/data_labels.h"
 
 /* The SDK DMA channel registers; only CHCR (offset 0) is touched here. */
 struct DmaChannel {
@@ -10,9 +11,6 @@ struct DmaChannel {
 /* The DMA-busy mask this file owns: both functions below read it
    gp-relative, which needs its definition ahead of them. */
 volatile s32 vif_chain_flags __asm__("D_00160EE0") = 0;
-extern s32 D_00160EF8[];
-extern s32 current_vu_chain __asm__("D_00160F0C");
-extern s32 D_00160F10;
 extern s32 D_00160F14;
 extern char D_001E89E0[];
 extern u8 D_001E89C8[];

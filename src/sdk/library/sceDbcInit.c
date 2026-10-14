@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 typedef struct {
     u8 pad0[0x24];
     void *server;
@@ -6,8 +7,6 @@ typedef struct {
 
 extern SifClientData D_0015B008;
 extern SifClientData D_0015B030;
-extern u8 D_0015B480[];
-extern s32 D_0015B500[];
 extern char D_001534D8[];
 extern char D_001534F0[];
 extern char D_00153518[];

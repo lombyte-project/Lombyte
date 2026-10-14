@@ -14,7 +14,6 @@ struct SkyTransform {
 };
 
 extern f32 D_00160404 __attribute__((sda));
-extern struct SkyShellSet *D_0016045C;
 extern struct SkyTransform sky_matrix __asm__("D_001D96E0");
 extern void clear_u64_value(f32 *) __asm__("func_001F99F8");
 extern void FUN_001f9a80(void *, void *, f32);
@@ -32,6 +31,7 @@ extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
  * bigger (1.25 to 2 times). */
 void draw_sky_shells(void) __asm__("FUN_0022b288");
 
+extern struct SkyShellSet *level_sky_effect_data __asm__("D_0016045C");
 void draw_sky_shells(void) {
     f32 rotation_angles[4];
     f32 shell_scale;
@@ -40,10 +40,10 @@ void draw_sky_shells(void) {
 
     shell_index = 0;
     setup_sky_gif_paging();
-    D_0016045C->relocation_state = 0;
+    level_sky_effect_data->relocation_state = 0;
     FUN_001f9fc8(&sky_matrix);
     clear_u64_value(rotation_angles);
-    if (D_0016045C->shell_count > 0) {
+    if (level_sky_effect_data->shell_count > 0) {
         do {
             shell_scale = 1.0f;
             switch (shell_index) {
@@ -85,7 +85,7 @@ void draw_sky_shells(void) {
             qcopy(transform_row, &D_00160460);
             sky_draw_shell(shell_index);
             shell_index++;
-        } while (shell_index < D_0016045C->shell_count);
+        } while (shell_index < level_sky_effect_data->shell_count);
     }
     do_sky_gif_paging();
     vu1_add_g_sregister(0x47, 0x5360B);

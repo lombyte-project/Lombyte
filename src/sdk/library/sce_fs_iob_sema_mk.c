@@ -1,9 +1,8 @@
 #include "types.h"
 #include "kernel.h"
+#include "rnc/data_labels.h"
 
 extern s32 CreateSema();
-extern s32 D_0012FCA0[];
-extern s32 D_0012FCA4[];
 
 
 void _sceFsIobSemaMK(void) {

@@ -1,5 +1,6 @@
 #include "types.h"
 #include "sifrpc.h"
+#include "rnc/data_labels.h"
 struct SifRpcPacket {
     u8 pad_0[0x14];
     s32 unk14;
@@ -8,7 +9,6 @@ struct SifRpcPacket {
     s32 unk20;
 };
 
-extern u8 D_00156800[];
 extern s32 CreateSema();
 extern s32 DeleteSema();
 extern s32 WaitSema();

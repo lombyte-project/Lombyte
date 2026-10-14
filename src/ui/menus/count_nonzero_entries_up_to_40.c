@@ -1,5 +1,5 @@
 #include "types.h"
-extern u8 D_0014BEC0[];
+#include "rnc/data_labels.h"
 s32 count_nonzero_entries_up_to_40(void) __asm__("FUN_00215290");
 
 s32 count_nonzero_entries_up_to_40(void) {

@@ -142,10 +142,8 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
-extern float D_L12_00161DF8 __attribute__((sda));
 extern float D_L12_00161DFC __attribute__((sda));
 extern float D_L12_00161E00 __attribute__((sda));
-extern int D_L12_00161E04;
 extern void FUN_L12_003028c8_u(struct Moby *) __asm__("FUN_L12_003028c8");
 
 void FUN_L12_00302c58(struct Moby *moby) {
@@ -248,8 +246,6 @@ extern float D_L12_0015F580[] __attribute__((section(".sdata")));
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern int D_0013F3D0; /* no foreign declaration */
-extern int D_L12_00161E08;
-extern int D_L12_00161E04;
 extern int D_L12_001B0930; /* no foreign declaration */
 extern int FUN_001efa68();
 extern int FUN_001fa728();
@@ -360,7 +356,6 @@ void FUN_L12_00302f30(Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003046C8), where it is exact; names translated to the US level program. */
 
-extern char D_L12_00161EF0_d __asm__("D_L12_00161EF0") __attribute__((sda));
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
@@ -368,11 +363,12 @@ extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L08_00313ba8(void *);
 
+extern char D_L12_00161EF0 __attribute__((sda));
 void FUN_L12_003032e8(struct Moby *moby) {
     float m[8];
     char *data = (char *)moby->pvars;
     FUN_L08_00313ba8(moby);
-    FUN_001f9cf8(m, &D_L12_00161EF0_d, &moby->rot_row0);
+    FUN_001f9cf8(m, &D_L12_00161EF0, &moby->rot_row0);
     FUN_001f9a10(m, m, &moby->pos);
     FUN_L00_002ea9d8(m);
     m[4] = 0;
@@ -510,9 +506,7 @@ extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float D_0015ED60 __attribute__((section(".sdata")));
 extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
 extern float D_L12_0015F5C4_c[] __asm__("D_L12_0015F5C4")  __attribute__((section(".sdata")));
 extern float D_L12_00161E60 __attribute__((sda));
 extern float D_L12_00161E64 __attribute__((sda));
@@ -528,7 +522,6 @@ extern float D_L12_00161EE8 __attribute__((sda));
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float approach_value(float *, float, float);
 extern int D_0013CAE0; /* no foreign declaration */
-extern int D_0013F350; /* no foreign declaration */
 extern int D_0014C050_c __asm__("D_0014C050") ; /* no foreign declaration */
 extern float D_L12_0015F580_f[] __asm__("D_L12_0015F580") __attribute__((section(".sdata")));
 extern int D_L12_0015F5C4_i __asm__("D_L12_0015F5C4") __attribute__((section(".sdata")));
@@ -579,6 +572,8 @@ extern char D_L12_00167180_304920[] __asm__("D_L12_00167100");
 extern int func_001F9908_304920(void *) __asm__("FUN_001f9740");
 extern int func_0020BFC8_304920(int, int) __asm__("FUN_0020b178");
 
+extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 void FUN_L12_00303540(struct Moby *moby) {
     Data_304920 *data = *(Data_304920 **)&moby->pvars;
 
@@ -722,16 +717,16 @@ void FUN_L12_00303540(struct Moby *moby) {
             joy[1] = y;
             tgt = D_L12_00161ED0 * 0.017453292f * D_0015ED6C_c * -joy[0];
             if ((data->f7C >= 0.0f && data->f7C < tgt) || (data->f7C <= 0.0f && tgt < data->f7C)) {
-                approach_value(&data->f7C, tgt, D_L12_00161ED8 * 0.017453292f * D_0015ED70);
+                approach_value(&data->f7C, tgt, D_L12_00161ED8 * 0.017453292f * frame_time_sq_macro);
             } else {
-                approach_value(&data->f7C, tgt, D_L12_00161EE0 * 0.017453292f * D_0015ED70);
+                approach_value(&data->f7C, tgt, D_L12_00161EE0 * 0.017453292f * frame_time_sq_macro);
             }
             moby->rot.z = fast_add_rotations_c3(moby->rot.z, data->f7C);
             tgt2 = -(D_L12_00161ED4 * 0.017453292f * D_0015ED6C_c) * -joy[1];
             if ((data->f78 >= 0.0f && data->f78 < tgt2) || (data->f78 <= 0.0f && tgt2 < data->f78)) {
-                approach_value(&data->f78, tgt2, D_L12_00161EDC * 0.017453292f * D_0015ED70);
+                approach_value(&data->f78, tgt2, D_L12_00161EDC * 0.017453292f * frame_time_sq_macro);
             } else {
-                approach_value(&data->f78, tgt2, D_L12_00161EE4 * 0.017453292f * D_0015ED70);
+                approach_value(&data->f78, tgt2, D_L12_00161EE4 * 0.017453292f * frame_time_sq_macro);
             }
             data->f74 = fast_add_rotations_c3(data->f74, data->f78);
             if (data->f74 > D_L12_00161EAC) {
@@ -780,7 +775,7 @@ void FUN_L12_00303540(struct Moby *moby) {
                     rnd[1] = random_float_between_c(-1.0f, 1.0f);
                     rnd[2] = random_float_between_c(-1.0f, 1.0f);
                     *(u128 *)vel = *(u128 *)rnd;
-                    normalize_vector_xyz(vel, vel, vector_length_xyz(dir) * (D_0015ED60 * (0.65f - 1.0f) + 1.0f));
+                    normalize_vector_xyz(vel, vel, vector_length_xyz(dir) * (frame_scale_macro * (0.65f - 1.0f) + 1.0f));
                     add_vector_xyz(vel, dir, vel);
                     normalize_vector_xyz(vel, vel, random_float_between_c(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 6.0f));
                     FUN_L00_0026dd20(muz, vel, 0x5F2F4F6F, random_int_between(scale_game_frames_alt(5), scale_game_frames_alt(0xA)), 50000.0f);
@@ -1074,7 +1069,6 @@ extern void spawn_explosion_304e00(struct Moby *, void *, void *, float, float, 
 extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void FUN_L00_00259fe8(float, struct Moby *);
 extern void mark_moby_for_removal_304e00(struct Moby *) __asm__("FUN_0020c828");
-extern struct Moby *hit_moby_304e00 __asm__("D_L12_001742D8") __attribute__((section(".data")));
 
 typedef struct {
     u8 pad0[0x20];
@@ -1093,6 +1087,7 @@ typedef struct {
     struct Moby *moby;
 } HitSource_304e00;
 
+extern struct Moby *hit_moby __asm__("D_L12_001742D8") __attribute__((section(".data")));
 /* A homing mine: rises, then steers toward the point ahead and blows up near it or on contact. */
 void FUN_L12_00304e00(struct Moby *moby) {
     Data_304e00 *data = (Data_304e00 *)moby->pvars;
@@ -1175,8 +1170,8 @@ void FUN_L12_00304e00(struct Moby *moby) {
             func_L00_0025A8C0_304310(hit_info, moby, 0x10001, 1.0f, &direction);
             qcopy(&probe, &moby->pos);
             probe.f[2] += 0.4f;
-            if (!collect_mobies_in_sphere(&probe, 0x10, moby, hit_info, 0.4f) || hit_moby_304e00 == NULL ||
-                hit_moby_304e00->oclass == 0x4F5 || hit_moby_304e00 == moby->parent) {
+            if (!collect_mobies_in_sphere(&probe, 0x10, moby, hit_info, 0.4f) || hit_moby == NULL ||
+                hit_moby->oclass == 0x4F5 || hit_moby == moby->parent) {
                 qcopy(&probe, &moby->pos);
                 probe.f[2] += 0.35f;
                 if (coll_sphere(&probe, 0, moby, 0.35f))

@@ -1,5 +1,5 @@
 #include "types.h"
-extern u8 moby_backup_buffer[] __asm__("D_001B2E80");
+#include "rnc/data_labels.h"
 extern s32 FUN_001f98d0();
 void restore_moby_class_dists(void) __asm__("FUN_0020d248");
 

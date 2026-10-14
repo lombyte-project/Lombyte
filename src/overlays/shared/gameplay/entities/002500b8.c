@@ -2,6 +2,8 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 #define NOT_SDA
 
@@ -10,12 +12,8 @@
 /* Finds the table entry nearest the object's position (within 8 units) and applies its fields to the object and globals. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002510F0), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_00160040;
-extern char D_0013E533[];
 extern char D_L00_001E8ED8[];
 extern float FUN_001f9af0(void *);
-extern int D_L00_00160014;
-extern unsigned char D_0014161B[];
 extern void debug_print_alt() __asm__("FUN_001e93b0");
 extern void FUN_001f9a28(void *, void *, void *);
 extern void pack_render_command_fields(struct RenderEntry *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
@@ -77,11 +75,9 @@ void FUN_L00_002500b8(char *o) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002512D8), where it is exact; names translated to the US level program. */
 
-extern unsigned char D_0014C050[];
-
 /* Clears slot idx of this level's 16-entry table to 0xFF. */
 void FUN_L00_002502a0(int idx) {
     if (idx != 0xFF) {
-        D_0014C050[idx + current_level_index * 16] = 0xFF;
+        visited52[idx + current_level_index * 16] = 0xFF;
     }
 }

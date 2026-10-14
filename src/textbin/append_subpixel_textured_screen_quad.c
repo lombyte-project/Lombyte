@@ -6,7 +6,7 @@
 #include "qcopy.h"
 
 #include "rnc/rendering/dma_tag.h"
-extern char textured_quad_header[] __asm__("D_00160840");
+#include "rnc/data_labels.h"
 extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
 
 void append_subpixel_textured_screen_quad(f32 screen_x, f32 screen_y, f32 screen_width,

@@ -2,6 +2,7 @@
 #include "kernel.h"
 #include "rnc/sdk/library/sif_file_slot.h"
 #include "rnc/sdk/library/sdk_state.h"
+#include "rnc/data_labels.h"
 
 typedef char *va_list;
 
@@ -16,9 +17,7 @@ struct FsOpenRequest {
 };
 
 
-extern s32 D_0012FCA0[];
 extern struct FsOpenRequest D_00156880;
-extern u8 D_001574C0[];
 extern struct SifFileSlot D_00157D80[];
 extern u8 D_00157F80[];
 extern s32 CreateSema(struct SemaParam *);

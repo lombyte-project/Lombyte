@@ -9,6 +9,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/overlay/hero_tables.h"
+#include "rnc/data_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00223630.c: func_L06_00223630), where it is exact; names translated to the US level program. */
 
@@ -102,10 +103,6 @@ void FUN_L06_00222fb8(void) {
 
 /* Same source as the exact FUN_L08_00222800, with only the 0x16 animation in mode 0 and a mode 1 case. */
 extern s32 D_L08_0015F5C4_8 __asm__("D_L06_0015F5C4");
-extern OvlMobyEntry40 D_L08_00178900_8[] __asm__("D_L06_00178880");
-extern s32 D_0015ED84_8 __asm__("D_0015ED84");
-extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
-extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
 extern f32 D_0015ED6C_8 __asm__("D_0015ED6C");
 
 void FUN_L00_00206c08_8(void) __asm__("FUN_L00_00206c08");
@@ -120,6 +117,7 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 #define G hero
 
+extern OvlMobyEntry40 D_L06_00178880[];
 s32 FUN_L06_00227e78(s32 arg) {
     u8 *m;
     OvlMobyEntry40 *tbl;
@@ -149,16 +147,16 @@ s32 FUN_L06_00227e78(s32 arg) {
     if (m[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &D_L08_00178900_8[m[0xA4]];
+    tbl = &D_L06_00178880[m[0xA4]];
     if (tbl->owner != m) {
         return 0;
     }
     if ((tbl->unk24 ^ 1) & 1) {
         return 0;
     }
-    D_0013DF88_8[D_0015ED84_8]++;
+    D_0013DF88[current_level_index]++;
     G.unk2280 = (struct Moby *)tbl->target;
-    D_0015EEA8_8++;
+    D_0015EEA8++;
     if (G.state.control_mode == 0xF) {
         G.unk5BE = 1;
         return 0;
@@ -222,9 +220,6 @@ s32 FUN_L06_00227e78(s32 arg) {
 }
 #include "qcopy.h"
 /* Same source as the exact FUN_L15_00209450, with mode 1 in place of mode 2 and no 0x11/0x12 branch. */
-extern f32 D_0013F570_209450[] __asm__("D_0013F570");
-extern f32 D_0015ED60_209450 __asm__("D_0015ED60");
-extern f32 D_0015ED64_209450 __asm__("D_0015ED64");
 extern f32 D_0015ED6C_209450 __asm__("D_0015ED6C");
 f32 FUN_001f9b80_209450(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_209450(f32, f32, f32 *) __asm__("FUN_00213ed8");
@@ -259,12 +254,12 @@ void FUN_L06_00228360(void) {
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
         FUN_001f9b80_209450(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
-        f32 *q = D_0013F570_209450;
+        f32 *q = D_0013F570;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
-        approach_value_209450(b->unk228, D_0015ED60_209450 * 0.02f, q);
-        approach_value_209450(b->unk22C, D_0015ED60_209450 * 0.02f, q + 1);
-        FUN_L00_0025b8c0_209450(q + 5, q + 6, b->unk230, D_0015ED64_209450 * 0.02f,
-                                D_0015ED64_209450 * 0.3f, D_0015ED6C_209450 * 4.0f);
+        approach_value_209450(b->unk228, frame_scale * 0.02f, q);
+        approach_value_209450(b->unk22C, frame_scale * 0.02f, q + 1);
+        FUN_L00_0025b8c0_209450(q + 5, q + 6, b->unk230, frame_scale_sq * 0.02f,
+                                frame_scale_sq * 0.3f, D_0015ED6C_209450 * 4.0f);
     }
 }
 #define NOT_SDA
@@ -273,7 +268,6 @@ void FUN_L06_00228360(void) {
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00223630.c: func_L06_002291D8), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
 extern float D_L06_0017C538[];
 extern void FUN_L00_002118c8(int, float);
 
@@ -297,7 +291,6 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V;
-extern struct Hero hero_data2 __asm__("D_0013F350") __attribute__((section(".data")));
 extern u8 D_L06_001745C0[] __attribute__((section(".data")));
 extern u8 D_L06_001745E0[] __attribute__((section(".data")));
 extern f32 D_L06_001745E8 __attribute__((section(".data")));
@@ -393,11 +386,11 @@ typedef struct {
     u8 pad20b3[0x23];
     u8 xB20b3;
 } GS;
-extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
 extern CollisionHit HH __asm__("D_L06_001745C0") __attribute__((section(".data")));
 #define HI(o) (*(s32 *)(D_L06_001745C0 + (o)))
 #define HF(o) (*(f32 *)(D_L06_001745C0 + (o)))
 
+extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 void FUN_L06_00229650(void) {
     V v0, v10, v20, v30, v40, v50, v60;
     f32 f;
@@ -409,136 +402,136 @@ void FUN_L06_00229650(void) {
     s32 k;
     f32 g;
 
-    hero_data.unk270.f[2] = 1.0f;
-    hero_data.air_frames.u++;
-    hero_data.frames_off_ground.u++;
-    hero_data.unk270.i[0] = 0;
-    hero_data.unk270.i[1] = 0;
-    hero_data.ground_slope.i = 0;
-    hero_data.ground_z.i = 0;
-    FUN_001f99f8_c((u8 *)&hero_data + 0x2A0);
-    hero_data.unk30A = 0;
-    hero_data.ground_distance = 32.0f;
-    hero_data.ground_moby = 0;
-    if (hero_data.unk2F8 != 0) {
-        hero_data.unk2F8++;
+    hero_lui.unk270.f[2] = 1.0f;
+    hero_lui.air_frames.u++;
+    hero_lui.frames_off_ground.u++;
+    hero_lui.unk270.i[0] = 0;
+    hero_lui.unk270.i[1] = 0;
+    hero_lui.ground_slope.i = 0;
+    hero_lui.ground_z.i = 0;
+    FUN_001f99f8_c((u8 *)&hero_lui + 0x2A0);
+    hero_lui.unk30A = 0;
+    hero_lui.ground_distance = 32.0f;
+    hero_lui.ground_moby = 0;
+    if (hero_lui.unk2F8 != 0) {
+        hero_lui.unk2F8++;
     }
     k = 0;
-    if (hero_data.unk20B3)
+    if (hero_lui.unk20B3)
         k = 1;
-    g = hero_data.unk234 * 2.2f;
-    if (hero_data.state.control_mode == 2) {
-        g = hero_data.unk234 * 2.9f;
+    g = hero_lui.unk234 * 2.2f;
+    if (hero_lui.state.control_mode == 2) {
+        g = hero_lui.unk234 * 2.9f;
     }
     FUN_L00_002126b8_c(&v10, &v0, k, g, -48.0f);
-    if (FUN_001efa68(&v10, &v0, 2, hero_data.moby, 0) == 0) {
+    if (FUN_001efa68(&v10, &v0, 2, hero_lui.moby, 0) == 0) {
         goto tail;
     }
     r = coll_sound_class();
     if (r == -1) {
         r = 3;
     }
-    hero_data.unk12ED = r;
-    hero_data.ground_type = FUN_001f0b58();
-    if (hero_data.ground_type == 0) {
-        hero_data.water_surface_z = resolve_camera_surface_height(D_L06_001745E0, (u8 *)&hero_data + 0x280);
-        if (hero_data.motion.pos.f[2] < hero_data.water_surface_z && hero_data.unk2F8 <= 0) {
-            hero_data.unk2F8 = 1;
+    hero_lui.unk12ED = r;
+    hero_lui.ground_type = FUN_001f0b58();
+    if (hero_lui.ground_type == 0) {
+        hero_lui.water_surface_z = resolve_camera_surface_height(D_L06_001745E0, (u8 *)&hero_lui + 0x280);
+        if (hero_lui.motion.pos.f[2] < hero_lui.water_surface_z && hero_lui.unk2F8 <= 0) {
+            hero_lui.unk2F8 = 1;
         }
-        if (FUN_001efa68(&v10, &v0, 0x24, hero_data.moby, 0) == 0) {
+        if (FUN_001efa68(&v10, &v0, 0x24, hero_lui.moby, 0) == 0) {
             goto d1;
         }
         r = coll_sound_class();
         if (current_level_index == 1 || current_level_index == 0x12) {
             r = 3;
         }
-        hero_data.unk12ED = r;
+        hero_lui.unk12ED = r;
     }
-    if (hero_data.ground_type == 0xD) {
-        hero_data.water_surface_z = D_L06_001745E8;
+    if (hero_lui.ground_type == 0xD) {
+        hero_lui.water_surface_z = D_L06_001745E8;
         v10.f[2] = D_L06_001745E8 - 0.01f;
-        if (FUN_001efa68(&v10, &v0, 4, hero_data.moby, 0) == 0) {
+        if (FUN_001efa68(&v10, &v0, 4, hero_lui.moby, 0) == 0) {
             goto d1;
         }
     }
-    if (hero_data.ground_type == 1 && (u32)(hero_data.state.current - 0x7C) < 2) {
+    if (hero_lui.ground_type == 1 && (u32)(hero_lui.state.current - 0x7C) < 2) {
         goto d1;
     }
     if (HH.moby != 0) {
         if (FUN_L00_0025e3b8(HH.moby)) {
-            hero_data.unk30A = 1;
+            hero_lui.unk30A = 1;
         }
         p = FUN_002141f8(HH.moby);
         if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
-            hero_data.unk30A = 1;
+            hero_lui.unk30A = 1;
         }
     }
     if (HH.unk1C > 0) {
-        qcopy((u8 *)&hero_data + 0x2A0, &HH.point);
-        hero_data.ground_z.f = HH.point.f[2];
-        hero_data.ground_distance = FUN_001f9b48((u8 *)&hero_data + 0x80, ((u8 *)&hero_data + 0x2A0));
-        hero_data.ground_moby = HH.moby;
-        FUN_00125180((u8 *)&hero_data + 0x270, (u8 *)&HH.normal_x);
-        hero_data.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
-        hero_data.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        FUN_001f9a28(&v20, ((u8 *)&hero_data + 0x2A0), (u8 *)&hero_data + 0x80);
-        if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero_data + 0x270)) {
-            hero_data.ground_distance = -hero_data.ground_distance;
+        qcopy((u8 *)&hero_lui + 0x2A0, &HH.point);
+        hero_lui.ground_z.f = HH.point.f[2];
+        hero_lui.ground_distance = FUN_001f9b48((u8 *)&hero_lui + 0x80, ((u8 *)&hero_lui + 0x2A0));
+        hero_lui.ground_moby = HH.moby;
+        FUN_00125180((u8 *)&hero_lui + 0x270, (u8 *)&HH.normal_x);
+        hero_lui.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
+        hero_lui.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
+        FUN_001f9a28(&v20, ((u8 *)&hero_lui + 0x2A0), (u8 *)&hero_lui + 0x80);
+        if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero_lui + 0x270)) {
+            hero_lui.ground_distance = -hero_lui.ground_distance;
         }
-        if (hero_data.ground_distance < 0.02f) {
-            hero_data.frames_off_ground.s = 0;
-            if (hero_data.ground_slope.f <= 0.87266463f || hero_data.unk20B3 == 1 || hero_data.state.control_mode == 0x16) {
-                hero_data.air_frames.s = 0;
-                hero_data.unkA80 = HH.moby;
+        if (hero_lui.ground_distance < 0.02f) {
+            hero_lui.frames_off_ground.s = 0;
+            if (hero_lui.ground_slope.f <= 0.87266463f || hero_lui.unk20B3 == 1 || hero_lui.state.control_mode == 0x16) {
+                hero_lui.air_frames.s = 0;
+                hero_lui.unkA80 = HH.moby;
             }
         }
     }
 tail:
-    if (hero_data.air_frames.s != 0) {
-        hero_data.grounded_frames = 0;
+    if (hero_lui.air_frames.s != 0) {
+        hero_lui.grounded_frames = 0;
     } else {
-        hero_data.grounded_frames++;
-        qcopy((u8 *)&hero_data + 0x2B0, (u8 *)&hero_data + 0x2A0);
+        hero_lui.grounded_frames++;
+        qcopy((u8 *)&hero_lui + 0x2B0, (u8 *)&hero_lui + 0x2A0);
     }
-    if (hero_data.motion.pos.f[2] > hero_data.water_surface_z) {
-        hero_data.unk2F8 = 0;
+    if (hero_lui.motion.pos.f[2] > hero_lui.water_surface_z) {
+        hero_lui.unk2F8 = 0;
     }
 d1:
-    FUN_001f99f8_c(((u8 *)&hero_data + 0x290));
-    switch (hero_data.unk20B3) {
+    FUN_001f99f8_c(((u8 *)&hero_lui + 0x290));
+    switch (hero_lui.unk20B3) {
     case 0:
-        hero_data.gravity_dir.f[2] = -1.0f;
+        hero_lui.gravity_dir.f[2] = -1.0f;
         break;
     case 1:
-        qcopy((u8 *)&hero_data + 0x290, ((u8 *)&hero_data + 0x290) - 0x20);
-        FUN_001f9a68_c(((u8 *)&hero_data + 0x290), ((u8 *)&hero_data + 0x290), -1.0f);
+        qcopy((u8 *)&hero_lui + 0x290, ((u8 *)&hero_lui + 0x290) - 0x20);
+        FUN_001f9a68_c(((u8 *)&hero_lui + 0x290), ((u8 *)&hero_lui + 0x290), -1.0f);
         break;
     case 2:
-        FUN_001f9a28(((u8 *)&hero_data + 0x290), ((u8 *)&hero_data + 0x290) - 0x1E0, ((u8 *)&hero_data + 0x290) - 0x210);
-        FUN_001f9bf8_c(((u8 *)&hero_data + 0x290), ((u8 *)&hero_data + 0x290), 1.0f);
+        FUN_001f9a28(((u8 *)&hero_lui + 0x290), ((u8 *)&hero_lui + 0x290) - 0x1E0, ((u8 *)&hero_lui + 0x290) - 0x210);
+        FUN_001f9bf8_c(((u8 *)&hero_lui + 0x290), ((u8 *)&hero_lui + 0x290), 1.0f);
         break;
     }
-    hero_data.ground_pitch.i = 0;
-    hero_data.unk2E8.i = 0;
-    hero_data.unk2D0.i[0] = 0;
-    hero_data.unk2D0.i[1] = 0;
-    hero_data.unk2C8.i[0] = 0;
-    hero_data.unk2C8.i[1] = 0;
-    hero_data.unk2C0.i[0] = 0;
-    hero_data.unk2C0.i[1] = 0;
-    if (hero_data.state.control_mode == 0xF || hero_data.state.control_mode == 0x15 || hero_data.state.control_mode == 6 || hero_data.state.control_mode == 4 ||
-        hero_data.state.control_mode == 5 || hero_data.state.control_mode == 3) {
+    hero_lui.ground_pitch.i = 0;
+    hero_lui.unk2E8.i = 0;
+    hero_lui.unk2D0.i[0] = 0;
+    hero_lui.unk2D0.i[1] = 0;
+    hero_lui.unk2C8.i[0] = 0;
+    hero_lui.unk2C8.i[1] = 0;
+    hero_lui.unk2C0.i[0] = 0;
+    hero_lui.unk2C0.i[1] = 0;
+    if (hero_lui.state.control_mode == 0xF || hero_lui.state.control_mode == 0x15 || hero_lui.state.control_mode == 6 || hero_lui.state.control_mode == 4 ||
+        hero_lui.state.control_mode == 5 || hero_lui.state.control_mode == 3) {
         return;
     }
-    if (!(hero_data.ground_distance < 0.25f)) {
+    if (!(hero_lui.ground_distance < 0.25f)) {
         return;
     }
-    FUN_L00_00216078((u8 *)&hero_data + 0x270, &v20);
+    FUN_L00_00216078((u8 *)&hero_lui + 0x270, &v20);
     if (-0.78539819f < v20.f[1] && v20.f[1] < 0.78539819f) {
-        hero_data.ground_pitch.f = v20.f[1];
+        hero_lui.ground_pitch.f = v20.f[1];
     }
     if (-0.78539819f < v20.f[0] && v20.f[0] < 0.78539819f) {
-        hero_data.unk2E8.f = v20.f[0];
+        hero_lui.unk2E8.f = v20.f[0];
     }
     for (i = 0; i < 2; i++) {
         a = 1.5707964f;
@@ -547,24 +540,24 @@ d1:
         }
         FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
-        if (FUN_001efa68(&v30, &v0, 0x22, hero_data.moby, 0)) {
-            f = HH.point.f[2] - hero_data.ground_z.f;
-            hero_data.unk2C0.f[i] = f;
+        if (FUN_001efa68(&v30, &v0, 0x22, hero_lui.moby, 0)) {
+            f = HH.point.f[2] - hero_lui.ground_z.f;
+            hero_lui.unk2C0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
-                hero_data.unk2C0.f[i] = 0.0f;
+                hero_lui.unk2C0.f[i] = 0.0f;
             }
             FUN_00125180(&v60, (u8 *)&HH.normal_x);
             FUN_L00_00216078(&v60, &v50);
             if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
-                hero_data.unk2C8.f[i] = v50.f[1];
+                hero_lui.unk2C8.f[i] = v50.f[1];
             }
             if (-0.78539819f < v50.f[0] && v50.f[0] < 0.78539819f) {
-                hero_data.unk2D0.f[i] = v50.f[0];
+                hero_lui.unk2D0.f[i] = v50.f[0];
             }
         } else {
-            hero_data.unk2C0.f[i] = 0;
-            hero_data.unk2C8.f[i] = hero_data.ground_pitch.f;
-            hero_data.unk2D0.f[i] = hero_data.unk2E8.f;
+            hero_lui.unk2C0.f[i] = 0;
+            hero_lui.unk2C8.f[i] = hero_lui.ground_pitch.f;
+            hero_lui.unk2D0.f[i] = hero_lui.unk2E8.f;
         }
     }
 }
@@ -576,10 +569,7 @@ typedef union {
     f32 f[4];
 } HopVec_2b438;
 
-extern f32 D_0015ED64_2b438 __asm__("D_0015ED64");
 extern f32 D_0015ED6C_2b438 __asm__("D_0015ED6C");
-extern f32 D_0015ED70_2b438 __asm__("D_0015ED70");
-extern f32 D_L06_0017C550_2b438[] __asm__("D_L06_0017C550");
 extern s32 FUN_001f96f8_2b438(s32) __asm__("FUN_001f96f8");
 extern float FUN_001f9dc8_2b438(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2b438(float) __asm__("FUN_001f9de0");
@@ -601,10 +591,11 @@ extern void FUN_001f9c48_2b438(float *, float *, float) __asm__("FUN_001f9c48");
 extern void FUN_001f9a10_2b438(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L01_00234358_2b438(f32) __asm__("FUN_L01_00234358");
 
-#define ED64 D_0015ED64_2b438
+#define ED64 frame_scale_sq
 #define ED6C D_0015ED6C_2b438
-#define ED70 D_0015ED70_2b438
+#define ED70 frame_time_sq
 
+extern f32 D_L06_0017C550[];
 void FUN_L06_0022b438(void) {
     HopVec_2b438 tmp;
     f32 x;
@@ -707,7 +698,7 @@ void FUN_L06_0022b438(void) {
         FUN_L00_002132b8_2b438(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
         arg = ED70 * 20.0f;
-        if (hero.target_speed < D_L06_0017C550_2b438[0] * ED6C * 0.2f) {
+        if (hero.target_speed < D_L06_0017C550[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 d = hero.unk944;
                 speed = FUN_001f9b20_2b438(&hero.motion.velocity);
@@ -843,12 +834,8 @@ struct LevelTable_QS {
     s32 i168;
 };
 
-extern f32 D_0015ED64_a __asm__("D_0015ED64");
 extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
-extern f32 D_0015ED70_a __asm__("D_0015ED70");
-extern s32 D_0015EEA4;
-extern u8 D_0013D4DC[];
 extern struct UsageStats D_00141848;
 #define S D_00141848
 extern s32 D_L06_0015F688 __attribute__((sda));
@@ -951,7 +938,6 @@ extern f32 FUN_L00_00213350(void *);
 extern struct HeroTableRow2C D_L06_0017C3A8[];
 extern struct LevelTable_QS D_L06_00167400;
 #define Q D_L06_00167400
-extern s32 D_0013CAE0[];
 extern void FUN_L00_00233ba0(void *, void *, f32);
 extern void FUN_L00_00233b20(void *, void *, f32);
 extern void FUN_L00_002336e8(void *, void *, f32);
@@ -979,7 +965,6 @@ extern s32 FUN_L00_00216de8(s32, s32);
 extern void FUN_L00_00233708(void *, void *, f32);
 extern void FUN_L00_00233810(void *, void *, f32);
 extern s32 FUN_001efa68_c(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");
-extern s32 D_0013CB14[];
 extern void FUN_L00_00215b68(void);
 extern void FUN_L00_00233660(void *, f32, f32, f32);
 extern s32 FUN_L00_0025e3b8_c(s32) __asm__("FUN_L00_0025e3b8");
@@ -1626,7 +1611,7 @@ void FUN_L06_0022e020(void) {
             if (FUN_L00_00211870(84.0f) != 0) {
                 f32 a = fast_add_rotations(hero.motion.rot.f[2], 3.1415927f);
                 f32 s = D_0015ED6C_c * 2.5f;
-                if (D_0013CAE0[0] & 0xA) {
+                if (pad_held[0] & 0xA) {
                     s = D_0015ED6C_c * 3.0f;
                 }
                 hero.motion.velocity.f[0] += FUN_001f9dc8(a) * s;

@@ -1,7 +1,7 @@
 #include "types.h"
 #include "eetypes.h"
 #include "rnc/math/vector.h"
-extern s32 D_001A03A8[];
+#include "rnc/data_labels.h"
 extern f32 FUN_001f9b80(Vec4 *, Vec4 *);
 s32 FUN_00207a18(s32 x, s32 y) {
     Vec4 a;

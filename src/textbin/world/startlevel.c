@@ -27,18 +27,13 @@ typedef struct {
 
 extern s32 boot_level_active __asm__("D_0015F5E8") MACRO_ADDR;
 extern u8 level_bss_start[] __asm__("D_00161280");
-extern u8 level_bss_end[] __asm__("D_00165430");
 extern s32 D_0015F438 MACRO_ADDR;
-extern s32 D_0015F604 MACRO_ADDR;
 extern s32 boot_image_buffer __asm__("D_0015EF5C") MACRO_ADDR;
 extern s32 decode_mode __asm__("D_0015EED8") MACRO_ADDR;
-extern s32 D_0015ED80 MACRO_ADDR;
-extern s32 D_0015ED84 MACRO_ADDR;
 extern u8 D_24135F[];
 extern s32 boot_intro_movie_ntsc[] __asm__("D_00139378");
 extern s32 boot_intro_movie_pal[] __asm__("D_00139380");
 extern char loading_boot_sound_bank_message[] __asm__("D_001E76C0");
-extern volatile SoundSlot boot_sound_defs_a[] __asm__("D_00186100");
 extern volatile SoundSlot boot_sound_defs_b[] __asm__("D_001861E0");
 extern volatile SoundSlot * volatile level_sound_defs __asm__("D_0015F634");
 extern volatile s32 level_sound_def_count __asm__("D_0015F630");
@@ -87,6 +82,11 @@ static inline void clear_bytes(u8 *p, s32 n) {
 
 void startlevel(void) __asm__("FUN_001e9658");
 
+extern u8 D_00165430[];
+extern volatile SoundSlot D_00186100[];
+extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
+extern s32 pal_mode_macro __asm__("D_0015ED80") MACRO_ADDR;
+extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 void startlevel(void) {
     LevelHeader *hdr;
     LevelChunk *tbl;
@@ -101,7 +101,7 @@ void startlevel(void) {
     boot_level_active = 1;
     init_once();
     InitializeStreamingState();
-    for (i = 0; i < level_bss_end - level_bss_start; i++) {
+    for (i = 0; i < D_00165430 - level_bss_start; i++) {
         level_bss_start[i] = 0;
     }
     prev = 0;
@@ -111,7 +111,7 @@ void startlevel(void) {
     ClearDmaQueueEntry();
     D_0015F438 = 0;
     sceGsSyncV(0);
-    D_0015F604 = 0;
+    game_mode_macro = 0;
     put_disp_buffer();
     PackDmaTag(0, 0, 0);
     hdr = (LevelHeader *)(((u32)D_24135F & 0xFFFFC000) + 0x2C0000);
@@ -147,7 +147,7 @@ void startlevel(void) {
     decode_mode = -1;
     code = hdr->code + (s32)hdr;
     boot_image_buffer = code;
-    if (D_0015ED80 == 0) {
+    if (pal_mode_macro == 0) {
         play_mpeg_movie(boot_intro_movie_ntsc[0], boot_intro_movie_ntsc[1], (code + 0x3F) & ~0x3F,
                         (code + 0x2C003F) & ~0x3F, 0);
     } else {
@@ -157,7 +157,7 @@ void startlevel(void) {
     decode_mode = 0;
     fade_to_black(scale_game_frames(0x12));
     FlushCache(0);
-    if (D_0015ED80 != 0) {
+    if (pal_mode_macro != 0) {
         func_0020B618(hdr->gfx_alt + (s32)hdr, hdr->code + (s32)hdr);
     } else {
         func_0020B618(hdr->gfx + (s32)hdr, hdr->code + (s32)hdr);
@@ -180,31 +180,31 @@ void startlevel(void) {
     snd_resolve_bank_xrefs();
     /* Publish the slot tables and metadata in retail order. */
     boot_sound_defs_b[4].bank = bank;
-    boot_sound_defs_a[6].bank = bank;
-    level_sound_defs = boot_sound_defs_a;
+    D_00186100[6].bank = bank;
+    level_sound_defs = D_00186100;
     level_sound_def_count = 7;
-    boot_sound_defs_a[0].bank = bank;
-    boot_sound_defs_a[1].bank = bank;
-    boot_sound_defs_a[2].bank = bank;
-    boot_sound_defs_a[3].bank = bank;
-    boot_sound_defs_a[4].bank = bank;
-    boot_sound_defs_a[5].bank = bank;
+    D_00186100[0].bank = bank;
+    D_00186100[1].bank = bank;
+    D_00186100[2].bank = bank;
+    D_00186100[3].bank = bank;
+    D_00186100[4].bank = bank;
+    D_00186100[5].bank = bank;
     boot_sound_defs_b[0].bank = bank;
     /* The ordinary view lets the last bank store fill the call delay slot. */
     ((SoundSlot *)boot_sound_defs_b)[2].bank = bank;
     ((SoundSlot *)boot_sound_defs_b)[3].bank = bank;
     boot_sound_defs_b[1].bank = bank;
     transition_do_transition();
-    if (D_0015ED80 != requested_video_mode) {
-        D_0015ED80 = requested_video_mode;
+    if (pal_mode_macro != requested_video_mode) {
+        pal_mode_macro = requested_video_mode;
         func_001204B8();
-        sceGsResetGraph(0, 1, D_0015ED80 != 0 ? 3 : 2, 0);
+        sceGsResetGraph(0, 1, pal_mode_macro != 0 ? 3 : 2, 0);
         set_pal_mode();
         put_disp_buffer();
     }
-    space_load_id = D_0015ED84;
+    space_load_id = current_level_index_macro;
     level_render_state.unk2A = 1;
-    D_0015ED84 = -1;
+    current_level_index_macro = -1;
     do_space_transition();
 }
 

@@ -3,9 +3,9 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/overlay/level_globals.h"
 
 extern u8 D_L00_00166E10_2e9010[] __asm__("D_L00_00166E10");
-extern u8 D_L00_00166E30_2e9010[] __asm__("D_L00_00166E30");
 extern u8 D_0013F3D0_2e9010[] __asm__("D_0013F3D0");
 extern s32 D_L00_00161D24_2e9010 __asm__("D_L00_00161D24") __attribute__((sda));
 
@@ -29,6 +29,7 @@ void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 /* Follow-camera orientation update: rebuilds the basis vectors at p from the
  * target moby, eases pitch/yaw and renormalises. */
 void follow_camera_build_view(u8 *p) __asm__("FUN_L00_002e9010");
+extern u8 D_L00_00166E30[];
 void follow_camera_build_view(u8 *p) {
     u8 *q40;
     u8 *q;
@@ -60,9 +61,9 @@ void follow_camera_build_view(u8 *p) {
         FUN_001f9bf8_2e9010(p, p, 1.0f);
         p20 = p + 0x20;
         fast_dec_timer(q20);
-        up = D_L00_00166E30_2e9010;
+        up = D_L00_00166E30;
     } else {
-        up = D_L00_00166E30_2e9010;
+        up = D_L00_00166E30;
         tb = base + 0x20;
         g = FUN_001f9ab0_2e9010(q + 0x80, tb);
         FUN_001f9a68_2e9010(v0, tb, g);
@@ -150,16 +151,16 @@ typedef struct {
 extern C_2e9518 D_166E10_2e9518 __asm__("D_L00_00166E10") __attribute__((section(".data")));
 extern char *D_001413D0_2e9518 __asm__("D_001413D0") __attribute__((section(".data")));
 extern unsigned char D_001413F4_2e9518 __asm__("D_001413F4") __attribute__((section(".data")));
-extern float D_161CEC_2e9518 __asm__("D_L00_00161CEC") __attribute__((sda));
-extern float D_161CF0_2e9518 __asm__("D_L00_00161CF0") __attribute__((sda));
-extern float D_161D14_2e9518 __asm__("D_L00_00161D14") __attribute__((sda));
-extern float D_161D18_2e9518 __asm__("D_L00_00161D18") __attribute__((sda));
 extern float dot_2e9518(void *, void *) __asm__("FUN_001f9ab0");
 extern float fabs_2e9518(float) __asm__("FUN_001f99c0");
 extern int fr_2e9518(int) __asm__("FUN_001f96f8");
 extern void pitch_s(int, float, float) __asm__("FUN_L00_002e8450");
 
 void follow_camera_pull_back(char *o, float *x, float *y) __asm__("FUN_L00_002e9518");
+extern float D_L00_00161CEC __attribute__((sda));
+extern float D_L00_00161CF0 __attribute__((sda));
+extern float D_L00_00161D14 __attribute__((sda));
+extern float D_L00_00161D18 __attribute__((sda));
 void follow_camera_pull_back(char *o, float *x, float *y) {
     C_2e9518 *C = &D_166E10_2e9518;
     char *v = *(char **)(o + 0x70);
@@ -182,8 +183,8 @@ void follow_camera_pull_back(char *o, float *x, float *y) {
             if (s->f8 < f)
                 s->f8 = f;
             pitch_s(0, s->f8, 0.003f);
-            *x = D_161CEC_2e9518 + (D_161D14_2e9518 - D_161CEC_2e9518) * k;
-            *y = D_161CF0_2e9518 + (D_161D18_2e9518 - D_161CF0_2e9518) * k;
+            *x = D_L00_00161CEC + (D_L00_00161D14 - D_L00_00161CEC) * k;
+            *y = D_L00_00161CF0 + (D_L00_00161D18 - D_L00_00161CF0) * k;
             return;
         }
     }
@@ -191,8 +192,8 @@ void follow_camera_pull_back(char *o, float *x, float *y) {
         s->h4 = 0;
         s->f8 = *(float *)(t + 0x58);
     }
-    *x = D_161CEC_2e9518;
-    *y = D_161CF0_2e9518;
+    *x = D_L00_00161CEC;
+    *y = D_L00_00161CF0;
 }
 #define NOT_SDA
 
@@ -207,10 +208,6 @@ extern float FUN_001f9af0(void *);
 extern float FUN_001f9df8(float);
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_L00_001eb328(void *, float, float, float, float, float);
-extern short D_L00_00161CF4_d __asm__("D_L00_00161CF4") __attribute__((sda));
-extern short D_L00_00161CF8_d __asm__("D_L00_00161CF8") __attribute__((sda));
-extern short D_L00_00161CFC_d __asm__("D_L00_00161CFC") __attribute__((sda));
-extern short D_L00_00161D00_d __asm__("D_L00_00161D00") __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(float *, float *, float *);
 extern void FUN_001f9a68(void *, void *, float);
@@ -224,6 +221,10 @@ f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void follow_camera_orbit(int arg) __asm__("FUN_L00_002e9720");
+extern short D_L00_00161CF4 __attribute__((sda));
+extern short D_L00_00161CF8 __attribute__((sda));
+extern short D_L00_00161CFC __attribute__((sda));
+extern short D_L00_00161D00 __attribute__((sda));
 void follow_camera_orbit(int arg) {
     char *m = (char *)arg;
     char *d = *(char **)(m + 0x70);
@@ -255,7 +256,7 @@ void follow_camera_orbit(int arg) {
     y = FUN_001f9df8(e1 / x);
     h = FUN_001f9ab0(p140, up);
     r = FUN_001f9df8(h / bc);
-    i = FUN_L00_001eb328(d + 0x154, r, y, *(float *)&D_L00_00161CFC_d, *(float *)&D_L00_00161D00_d,
+    i = FUN_L00_001eb328(d + 0x154, r, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
                          0.0f);
     FUN_001f9a68(t0, up, e1);
     FUN_001f9a28(t1, p130, t0);
@@ -265,8 +266,8 @@ void follow_camera_orbit(int arg) {
     x = FUN_001f9af0(t1);
     x = x * FUN_001f9af0(t3);
     r = 1.5707964f - FUN_001f9df8(e / x);
-    x = FUN_L00_001eb328(d + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4_d,
-                         *(float *)&D_L00_00161CF8_d, 0.0f);
+    x = FUN_L00_001eb328(d + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4,
+                         *(float *)&D_L00_00161CF8, 0.0f);
     fast_vec_cross(t4, t3, up);
     s = (FUN_001f9ab0(t4, t1) >= 0.0f) ? 1.0f : -1.0f;
     base2 = D_L00_00166E10;
@@ -347,7 +348,6 @@ void FUN_L00_002e9bb0(int a) {
     FUN_L00_002e9010_u(a);
 }
 extern s32 opt_cam_yaw_rate __asm__("D_0015EDE4");
-extern f32 D_L00_0015EF44 __attribute__((sda));
 extern f32 D_L00_00161DB0[2] __attribute__((sda));
 void FUN_L00_002e46b8();
 void follow_camera_apply_overrides() __asm__("FUN_L00_002e6000");
@@ -356,9 +356,10 @@ void follow_camera_springs() __asm__("FUN_L00_002e5830");
 void FUN_L00_002e9bb0();
 void follow_camera_approach() __asm__("FUN_L00_002e5e38");
 void follow_camera_update(u8 *m) __asm__("FUN_L00_002e9c28");
+extern f32 D_L00_0015EF44_gp __asm__("D_L00_0015EF44") __attribute__((sda));
 void follow_camera_update(u8 *m) {
     u8 *p = *(u8 **)(m + 0x70) + 0x1D0;
-    D_L00_0015EF44 = D_L00_00161DB0[opt_cam_yaw_rate];
+    D_L00_0015EF44_gp = D_L00_00161DB0[opt_cam_yaw_rate];
     FUN_L00_002e46b8();
     follow_camera_apply_overrides(m);
     FUN_001e93e8(m);
@@ -1174,7 +1175,6 @@ void FUN_L00_002eb480(char *a) {
 #undef F
 extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
 extern char D_L00_00166C80_2eb648[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern float D_L00_00161DD4_2eb648 __asm__("D_L00_00161DD4") __attribute__((section(".data")));
 void FUN_001f9cf8_2eb648(void *, void *, void *) __asm__("FUN_001f9cf8");
 void FUN_001f9a10_2eb648(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_001eb0c8_2eb648(void *, void *, float) __asm__("FUN_L00_001eb0c8");
@@ -1183,6 +1183,7 @@ float FUN_001fa580_2eb648(float, float) __asm__("FUN_001fa580");
 float FUN_001f9e90_2eb648(float, float) __asm__("FUN_001f9e90");
 float FUN_001fa688_2eb648(float, float) __asm__("FUN_001fa688");
 float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern float D_L00_00161DD4 __attribute__((section(".data")));
 int FUN_L00_002eb648(char *a, char *t) {
     u128 v[1];
     u128 w[1];
@@ -1201,7 +1202,7 @@ int FUN_L00_002eb648(char *a, char *t) {
         goto one;
     v[0] = 0;
     ((float *)v)[2] = 0.12f;
-    ((float *)v)[0] = D_L00_00161DD4_2eb648;
+    ((float *)v)[0] = D_L00_00161DD4;
     n = *(char **)(t + 0x78);
     FUN_001f9cf8_2eb648(v, v, t + 0xC0);
     FUN_001f9a10_2eb648(w, t + 0x10, v);
@@ -1252,15 +1253,15 @@ one:
     return 1;
 }
 extern short D_L00_00166EF0_002eb930[] __asm__("D_L00_00166EF0");
-extern char D_L00_001E77C0_002eb930[] __asm__("D_L00_001E77C0");
-extern char D_L00_001E77D8_002eb930[] __asm__("D_L00_001E77D8");
-extern char D_L00_001E77F0_002eb930[] __asm__("D_L00_001E77F0");
 char *FUN_L00_001eb1f8_002eb930(int) __asm__("FUN_L00_001eb1f8");
 void FUN_001ebf10_002eb930(char *) __asm__("FUN_001ebf10");
 void FUN_L00_002eb648_002eb930(char *, void *) __asm__("FUN_L00_002eb648");
 void FUN_L00_001eb0c8_002eb930(void *, void *, float) __asm__("FUN_L00_001eb0c8");
 void FUN_L00_002eb3b0_002eb930(char *) __asm__("FUN_L00_002eb3b0");
 void FUN_L00_001eb0b0_002eb930(void *) __asm__("FUN_L00_001eb0b0");
+extern char D_L00_001E77C0[];
+extern char D_L00_001E77D8[];
+extern char D_L00_001E77F0[];
 char *FUN_L00_002eb930(void *arg) {
     char *o = FUN_L00_001eb1f8_002eb930(6);
     char *m;
@@ -1269,12 +1270,12 @@ char *FUN_L00_002eb930(void *arg) {
     FUN_L00_002eb648_002eb930(o, arg);
     m = *(char **)(o + 0x70);
     qcopy(m + 0xB0, m + 0x80);
-    FUN_L00_001eb0c8_002eb930(m + 0x14, D_L00_001E77C0_002eb930, 0.0f);
+    FUN_L00_001eb0c8_002eb930(m + 0x14, D_L00_001E77C0, 0.0f);
     FUN_L00_001eb0c8_002eb930(o + 0x50, m + 0x14, 0.0f);
     FUN_L00_002eb3b0_002eb930(o);
     *(int *)(m + 0x9C) = 1;
-    FUN_L00_001eb0c8_002eb930(m + 0x28, D_L00_001E77D8_002eb930, 0.0f);
-    FUN_L00_001eb0c8_002eb930(m + 0x3C, D_L00_001E77F0_002eb930, 0.0f);
+    FUN_L00_001eb0c8_002eb930(m + 0x28, D_L00_001E77D8, 0.0f);
+    FUN_L00_001eb0c8_002eb930(m + 0x3C, D_L00_001E77F0, 0.0f);
     FUN_L00_001eb0b0_002eb930(m + 0x50);
     return o;
 }
@@ -1544,8 +1545,6 @@ typedef union {
     OvlQuad q;
     float f[4];
 } V_2ec4a8;
-extern unsigned char D_L00_00166E30_2ec4a8[] __asm__("D_L00_00166E30")
-    __attribute__((section(".data")));
 void FUN_001f9a28_2ec4a8(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_2ec4a8(void *, void *, float) __asm__("FUN_001f9bf8");
 float FUN_001f9ab0_2ec4a8(void *, void *) __asm__("FUN_001f9ab0");
@@ -1555,6 +1554,7 @@ float FUN_L00_001eb328_2ec4a8(void *, float, float, float, float,
 void FUN_001f9ad8_2ec4a8(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_00214890_2ec4a8(void *, void *, void *, float) __asm__("FUN_00214890");
 
+extern u8 D_L00_00166E30_lui[] __asm__("D_L00_00166E30") __attribute__((section(".data")));
 void FUN_L00_002ec4a8(unsigned char *m) {
     V_2ec4a8 v;
     V_2ec4a8 w;
@@ -1581,7 +1581,7 @@ void FUN_L00_002ec4a8(unsigned char *m) {
     FUN_00214890_2ec4a8(m, m + 0x40, &x, k);
     FUN_001f9bf8_2ec4a8(m + 0x40, m, 1.0f);
     qcopy(m, m + 0x40);
-    FUN_001f9ad8_2ec4a8(m + 0x10, m, D_L00_00166E30_2ec4a8);
+    FUN_001f9ad8_2ec4a8(m + 0x10, m, D_L00_00166E30_lui);
     FUN_001f9bf8_2ec4a8(m + 0x10, m + 0x10, 1.0f);
     FUN_001f9ad8_2ec4a8(m + 0x20, m + 0x10, m);
 }
@@ -2142,7 +2142,6 @@ run:
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EED60), where it is exact; names translated to the US level program. */
 
-extern s32 D_L00_0015F5C4;
 
 /* Runs volume_camera_aim unless the camera is done. While D_L00_0015F5C4 is
    set and the hero is in the volumes, resets the camera instead. */

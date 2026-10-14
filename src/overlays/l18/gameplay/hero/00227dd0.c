@@ -9,6 +9,7 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/data_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/help_002284E0.c: func_L18_002284E0), where it is exact; names translated to the US level program. */
 
@@ -19,12 +20,8 @@ typedef struct {
     char pad[0x20];
 } T2C_2284E0;
 
-extern char D_L18_0017C920_e[] __asm__("D_L18_0017C920");
-extern char D_L18_0017C960_e[] __asm__("D_L18_0017C960");
 extern T2C_2284E0 D_L18_0017C628[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
-extern char D_0013E533[];
-extern char D_00141680[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L18_0017C7F0[][25];
 extern float FUN_001f9b48(void *, void *);
@@ -37,10 +34,7 @@ extern float dot_vectors_xyz(void *a, void *b);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
-extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
-extern int D_0015ED80;
 extern int D_L18_001612D8;
-extern int D_0015EEA4;
 extern int D_L18_0015F5C4;
 extern int FUN_L00_002050b8(int);
 extern int FUN_L00_0020d568(void);
@@ -89,6 +83,8 @@ extern char D_00141848[];
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
+extern char D_L18_0017C920[];
+extern char D_L18_0017C960[];
 int hero_set_state(int a, int b) {
     int old2088;
     char *moby;
@@ -685,7 +681,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
         {
-            char *h = ((char *)&D_00141680);
+            char *h = ((char *)&item_usage);
             if (*(unsigned short *)(h + 0x60) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x60) = *(unsigned short *)(h + 0x60) + 1;
             }
@@ -733,7 +729,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0xE;
         p->unk2284 = 7;
         {
-            char *h = ((char *)&D_00141680);
+            char *h = ((char *)&item_usage);
             if (*(unsigned short *)(h + 0x60) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x60) = *(unsigned short *)(h + 0x60) + 1;
             }
@@ -1097,7 +1093,7 @@ int hero_set_state(int a, int b) {
                     u->unk3D8 = 0.0f;
                     u->unk3DC = 18.0f;
                     u->unk3E0 = scale_game_frames(0x28);
-                    u->unk3E4 = D_L18_0017C960_e;
+                    u->unk3E4 = D_L18_0017C960;
                 }
                 {
                     struct Hero *w = &hero;
@@ -1289,7 +1285,7 @@ int hero_set_state(int a, int b) {
                 u->unk3DC = 26.0f;
                 u->unk3D8 = 0.0f;
                 u->unk3E0 = scale_game_frames(0x2D);
-                u->unk3E4 = D_L18_0017C920_e;
+                u->unk3E4 = D_L18_0017C920;
                 u->unk4AE = 1;
             } else if (u->state.current == 0xF) {
                 u->unk430 = 1.9f;
@@ -1307,7 +1303,7 @@ int hero_set_state(int a, int b) {
                 u->unk4A6 = scale_game_frames(0x55);
                 u->unk1B0 = scale_game_frames(0x46);
                 u->unk41C = 1;
-                if (D_0015ED80 != 0) {
+                if (pal_mode != 0) {
                     u->unk3D0 = scale_game_frames(0x22);
                 } else {
                     u->unk3D0 = scale_game_frames(0x23);
@@ -1499,7 +1495,7 @@ int hero_set_state(int a, int b) {
             }
             *(unsigned int *)(h + 0xC) =
                 *(unsigned int *)(h + 0xC) | (1 << current_level_index) | 0x80000000;
-            h2 = D_00141680;
+            h2 = item_usage;
             if (*(unsigned short *)(h2 + 0x128) <= 0xFFFE) {
                 *(unsigned short *)(h2 + 0x128) = *(unsigned short *)(h2 + 0x128) + 1;
             }
@@ -1536,7 +1532,7 @@ int hero_set_state(int a, int b) {
             break;
         }
         case 0x13: {
-            char *h = ((char *)&D_00141680);
+            char *h = ((char *)&item_usage);
             struct Hero *q;
             T2C_2284E0 *e;
             int k;

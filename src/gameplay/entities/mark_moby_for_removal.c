@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/data_labels.h"
 extern struct Moby *moby_instance_end __asm__("D_0015FF1C");
-extern s32 world_update_time __asm__("D_0015F60C");
 extern void func_0020DC20(struct Moby *, u32);
 void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 

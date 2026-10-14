@@ -9,6 +9,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
@@ -44,8 +45,6 @@ char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308758), where it is exact; names translated to the US level program. */
 
 extern char D_L08_00174640[];
-extern float D_L08_0015F5D0;
-extern float D_L08_0015F5D4;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -75,7 +74,7 @@ void FUN_L08_00307298(char *m) {
         if (o == 0 || ((unsigned char *)o)[0x20] == 0xFE || ((unsigned char *)o)[0x20] == 0xFD) {
             m[0x20] = 2;
         }
-        if (D_L08_0015F5D4 < 0.9f && D_L08_0015F5D0 < 0.9f) {
+        if (delay_random302618 < 0.9f && D_L08_0015F5D0 < 0.9f) {
             int a;
             float f = random_float_between_alt(0.95f, 0.985f);
             scale_vector_xyz(sc, d, f);
@@ -99,7 +98,7 @@ void FUN_L08_00307298(char *m) {
             m[0x20] = 2;
         break;
     case 2:
-        if ((D_L08_0015F5D4 < 0.85f && D_L08_0015F5D0 < 0.85f) || *(int *)(d + 0x2C) == 1) {
+        if ((delay_random302618 < 0.85f && D_L08_0015F5D0 < 0.85f) || *(int *)(d + 0x2C) == 1) {
             FUN_L00_0025f090(m, m + 0x10, -1, 0.25f, 13.0f);
         } else {
             FUN_L00_0025f090(m, m + 0x10, -1, 0.25f, 0.0f);
@@ -116,9 +115,9 @@ extern float FUN_001f96b0(float);
 extern float FUN_001f9af0(void *);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int D_L08_00162374;
-extern short D_L08_0016234C_d __asm__("D_L08_0016234C") __attribute__((sda));
-extern short D_L08_00162350_d __asm__("D_L08_00162350") __attribute__((sda));
 
+extern short D_L08_0016234C __attribute__((sda));
+extern short D_L08_00162350 __attribute__((sda));
 void FUN_L08_00307b90(int arg) {
     float a, b, c, d;
     float v[2];
@@ -134,10 +133,10 @@ void FUN_L08_00307b90(int arg) {
         c = 3.0f;
         d = 2.0f;
     }
-    if (*(float *)&D_L08_0016234C_d >= 0.0f)
-        d = *(float *)&D_L08_0016234C_d;
-    if (*(float *)&D_L08_00162350_d >= 0.0f)
-        c = *(float *)&D_L08_00162350_d;
+    if (*(float *)&D_L08_0016234C >= 0.0f)
+        d = *(float *)&D_L08_0016234C;
+    if (*(float *)&D_L08_00162350 >= 0.0f)
+        c = *(float *)&D_L08_00162350;
     D_L08_00162360[0] = random_float_between_alt(-(a * frame_time), a * frame_time);
     D_L08_00162360[1] = random_float_between_alt(-(a * frame_time), a * frame_time);
     b = FUN_001f96b0(b);
@@ -167,9 +166,7 @@ extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float D_0015ED6C;
 extern float D_L08_00162364;
-extern int D_0015ED84;
 extern float D_L08_00160260 __attribute__((sda));
 extern float D_L08_00162340 __attribute__((sda));
 extern float D_L08_00162344 __attribute__((sda));
@@ -219,7 +216,7 @@ void FUN_L08_00307cf0(Moby *m) {
     float w;
     float zero;
 
-    if (D_0015ED84 == 0xC || D_0015ED84 == 0x200) {
+    if (current_level_index == 0xC || current_level_index == 0x200) {
         flag = 1;
     } else {
         flag = 0;
@@ -229,13 +226,13 @@ void FUN_L08_00307cf0(Moby *m) {
         fall = 0.2f;
         big = 0;
         hi = 5.0f;
-        spread = D_0015ED6C;
+        spread = frame_time;
         lo = 0.5f;
         break;
     case 0:
     default:
         {
-            float k = D_0015ED6C;
+            float k = frame_time;
             big = 1;
             spread = k + k;
         }
@@ -285,7 +282,7 @@ void FUN_L08_00307cf0(Moby *m) {
                     w = -spread;
                     par.x = D_L08_00162360[0] + func_002140F8_3091B0(w, spread);
                     par.y = D_L08_00162364 + func_002140F8_3091B0(w, spread);
-                    par.z = -(hi * D_0015ED6C);
+                    par.z = -(hi * frame_time);
                     par.w = 0.0f;
                 } else {
                     float h = (d - 8.0f) * fall;
@@ -295,7 +292,7 @@ void FUN_L08_00307cf0(Moby *m) {
                     w = -w;
                     par.x = D_L08_00162360[0] + func_002140F8_3091B0(w, spread);
                     par.y = D_L08_00162364 + func_002140F8_3091B0(w, spread);
-                    par.z = -(h * D_0015ED6C);
+                    par.z = -(h * frame_time);
                     par.w = 0.0f;
                 }
                 D_L08_00160260 = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 - D_L08_0016235C;
@@ -325,7 +322,7 @@ void FUN_L08_00307cf0(Moby *m) {
                 float t;
                 off.x = D_L08_00162360[0] + func_002140F8_3091B0(s, spread);
                 u = func_002140F8_3091B0(s, spread);
-                t = hi * D_0015ED6C;
+                t = hi * frame_time;
                 *(int *)&off.w = 0;
                 *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
                 off.y = D_L08_00162364 + u;
@@ -401,7 +398,6 @@ void FUN_L08_00307cf0(Moby *m) {
 extern char D_L08_001675C0[];
 extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float D_L08_00162364;
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern void FUN_L08_00272cb8(void *, void *, void *, float);
@@ -444,10 +440,10 @@ void FUN_L08_003085f0(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00315068), where it is exact; names translated to the US level program. */
 
-extern char *D_L08_00167600_d __asm__("D_L08_00167600") __attribute__((section(".data")));
 
+extern char *D_L08_00167600 __attribute__((section(".data")));
 void FUN_L08_00313ba8(void) {
-    D_L08_00167600_d[0x88] = 1;
+    D_L08_00167600[0x88] = 1;
 }
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00316fa8.s", FUN_L08_00316fa8);
@@ -459,7 +455,7 @@ extern int set_voice_volume(int, int) __asm__("FUN_L01_002a1968");
 extern float D_0015ED7C;
 extern char D_0013E550[];
 #define D_L08_001675C8 (*(float *)(D_L08_001675C0 + 8))
-#define D_L08_001625D8 (*(float *)((char *)&D_L08_0016234C_d + 0x28c))
+#define D_L08_001625D8 (*(float *)((char *)&D_L08_0016234C + 0x28c))
 
 void FUN_L08_00316fa8(char *moby) {
     float point[4];

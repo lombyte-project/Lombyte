@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 struct LightLinkEntryB {
     u8 pad_0[0x1B];
     u8 unk1B;
@@ -29,10 +30,6 @@ struct LightRecord {
     s32 unkC;
 };
 
-extern s32 D_001603D4[];
-extern s32 D_00160E8C[];
-extern s32 D_00160F50[];
-extern u8 point_light_data[] __asm__("D_0019C3C0");
 extern u8 D_001E7B50[];
 extern u8 D_001E7B70[];
 extern u8 D_001E7B98[];

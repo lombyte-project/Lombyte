@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
+#include "rnc/globals.h"
 
 #define NOT_SDA
 
@@ -64,9 +65,6 @@ unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
 
 /* Queues a GIF packet that draws a line strip through the points, rotated, scaled and offset to the screen. */
 typedef unsigned int u128_7d50 __attribute__((mode(TI)));
-extern int D_L13_001611C0_7d50 __asm__("D_L13_001611C0");
-extern u128_7d50 D_L13_001608E0_7d50 __asm__("D_L13_001608E0");
-extern u128_7d50 D_L13_001608F0_7d50 __asm__("D_L13_001608F0");
 extern int D_0013E500_7d50[] __asm__("D_0013E500");
 extern float itof_7d50(int) __asm__("FUN_001fa6c0");
 extern int ftoi_7d50(float) __asm__("FUN_001fa6d0");
@@ -74,6 +72,9 @@ extern void rotmat_7d50(void *, void *) __asm__("FUN_001fa050");
 extern void xform_7d50(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void scale_7d50(void *, void *, float) __asm__("FUN_001f9a68");
 
+extern int D_L13_001611C0;
+extern u128_7d50 D_L13_001608E0;
+extern u128_7d50 D_L13_001608F0;
 void FUN_L13_002b7d50(short *pts, int n, float x0, float y0, unsigned int col, unsigned long long prim, float scale, float ang) {
     float mat[4][4];
     float rot[4];
@@ -84,32 +85,32 @@ void FUN_L13_002b7d50(short *pts, int n, float x0, float y0, unsigned int col, u
     unsigned long long *o;
     int x, y;
     int i;
-    *(int *)(D_L13_001611C0_7d50 + 0) = q | 0x10000000;
-    *(int *)(D_L13_001611C0_7d50 + 4) = 0;
-    *(int *)(D_L13_001611C0_7d50 + 8) = 0;
-    *(int *)(D_L13_001611C0_7d50 + 12) = q | 0x50000000;
+    *(int *)(D_L13_001611C0 + 0) = q | 0x10000000;
+    *(int *)(D_L13_001611C0 + 4) = 0;
+    *(int *)(D_L13_001611C0 + 8) = 0;
+    *(int *)(D_L13_001611C0 + 12) = q | 0x50000000;
     {
-        char *t1 = (char *)D_L13_001611C0_7d50;
-        D_L13_001611C0_7d50 = (int)(t1 + 0x10);
-        qcopy((void *)D_L13_001611C0_7d50, &D_L13_001608E0_7d50);
+        char *t1 = (char *)D_L13_001611C0;
+        D_L13_001611C0 = (int)(t1 + 0x10);
+        qcopy((void *)D_L13_001611C0, &D_L13_001608E0);
         *(short *)(t1 + 0x10) = -0x7FFF;
     }
     {
-        unsigned long long *t2 = (unsigned long long *)((char *)D_L13_001611C0_7d50 + 0x10);
-        D_L13_001611C0_7d50 = (int)t2;
+        unsigned long long *t2 = (unsigned long long *)((char *)D_L13_001611C0 + 0x10);
+        D_L13_001611C0 = (int)t2;
         t2[0] = 0x144;
         t2[1] = prim;
     }
     {
-        char *t3 = (char *)D_L13_001611C0_7d50;
-        D_L13_001611C0_7d50 = (int)(t3 + 0x10);
-        qcopy((void *)D_L13_001611C0_7d50, &D_L13_001608F0_7d50);
+        char *t3 = (char *)D_L13_001611C0;
+        D_L13_001611C0 = (int)(t3 + 0x10);
+        qcopy((void *)D_L13_001611C0, &D_L13_001608F0);
         *(short *)(t3 + 0x10) = n - 0x8000;
     }
     *(u128_7d50 *)rot = 0;
     rot[2] = ang;
-    D_L13_001611C0_7d50 += 0x10;
-    o = (unsigned long long *)D_L13_001611C0_7d50;
+    D_L13_001611C0 += 0x10;
+    o = (unsigned long long *)D_L13_001611C0;
     rotmat_7d50(mat, rot);
     for (i = 0; i < n; i++) {
         *(u128_7d50 *)v = 0;
@@ -124,7 +125,7 @@ void FUN_L13_002b7d50(short *pts, int n, float x0, float y0, unsigned int col, u
         y = ftoi_7d50(w[1] * 16.0f);
         o[i] = (unsigned long long)(x + D_0013E500_7d50[4] - 8) | ((unsigned long long)(y + D_0013E500_7d50[5] - 8) << 16) | ((unsigned long long)col << 32);
     }
-    D_L13_001611C0_7d50 += ((n + 1) / 2) * 16;
+    D_L13_001611C0 += ((n + 1) / 2) * 16;
 }
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -365,7 +366,6 @@ extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
-extern float D_0015ED70;
 extern int D_L13_00174160;
 extern int D_L13_001B2380;
 extern int FUN_001efa68();
@@ -456,8 +456,8 @@ void FUN_L13_002e6c08(Moby *m) {
         m->rot.y = -angle_atan2(vector_distance(&*(V4_2E8040 *)&m->pos, &*(V4_2E8040 *)&d->target->pos), d->target->pos.z - m->pos.z);
         qcopy(&d->tpos, &*(V4_2E8040 *)&d->target->pos);
     } else {
-        approach_angle(&m->rot.z, m->rot.z, &d->yawv, D_0015ED70 * 251.32741f, D_0015ED70 * 251.32741f, D_0015ED6C * 2513.2742f);
-        approach_angle(&m->rot.y, m->rot.y, &d->pitchv, D_0015ED70 * 251.32741f, D_0015ED70 * 251.32741f, D_0015ED6C * 2513.2742f);
+        approach_angle(&m->rot.z, m->rot.z, &d->yawv, frame_time_sq * 251.32741f, frame_time_sq * 251.32741f, D_0015ED6C * 2513.2742f);
+        approach_angle(&m->rot.y, m->rot.y, &d->pitchv, frame_time_sq * 251.32741f, frame_time_sq * 251.32741f, D_0015ED6C * 2513.2742f);
         d->target = 0;
     }
     func_00215C00_2E8040(d, d->speed, m->rot.z, -m->rot.y);

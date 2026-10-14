@@ -4,9 +4,9 @@
 #include "qcopy.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/math/vector.h"
+#include "rnc/overlay/level_labels.h"
 extern unsigned char D_0013D4C0[];
 extern unsigned int D_0013CAE0 __attribute__((section(".data")));
-extern int D_L00_00167014[];
 extern f32 frame_time __asm__("D_0015ED6C") __attribute__((sda));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");

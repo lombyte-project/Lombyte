@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 /* Draws the pause menu's ring of 8 icons and the quick-select overlay.
    arg0 is the pause-state object: unk20/unk24 give the viewport
@@ -22,8 +23,6 @@ struct PauseState {
     s32 sel;
 };
 
-extern s32 D_0015F438;
-extern s32 D_001601B0 __attribute__((sda));
 #include "rnc/gameplay/state/item_state.h"
 extern u8 D_001602D8[];
 extern u8 D_001602E0[];
@@ -77,7 +76,7 @@ s32 draw_pause_ring(struct PauseState *arg0) {
             append_screen_rect_packet((s32)x - 0x13, (s32)y - 0x13, (s32)x + 0x13, (s32)y + 0x13,
                                       color, 0);
             append_screen_rect_packet((s32)x - 0x12, (s32)y - 0x12, (s32)x + 0x12, (s32)y + 0x12,
-                                      D_001601B0, 0);
+                                      panel_clear_color, 0);
         }
         if (arg0->slots[i] == 0) {
             append_screen_rect_packet((s32)x - 0xF, (s32)y - 0xF, (s32)x + 0xF, (s32)y + 0xF,

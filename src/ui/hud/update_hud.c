@@ -1,22 +1,21 @@
 #include "types.h"
 #include "rnc/ui/hud/hud_state.h"
 #include "rnc/globals.h"
+#include "rnc/data_labels.h"
 
 struct HudSlot {
     u8 pad_0[0x18];
     s32 unk18;
 };
-extern s32 occl_chain_active __asm__("D_0015F444");
 extern s32 hud_msg_count __asm__("D_0015F680");
-extern s32 hud_msg_fade __asm__("D_0015F684");
-extern s32 hud_msg_y __asm__("D_0015F688");
 extern u8 hud_msg_text1[] __asm__("D_001993D8");
 extern u8 hud_msg_text2[] __asm__("D_00199428");
-extern u8 hud_chan_slots[] __asm__("D_00199B60");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern s32 draw_framed_text() __asm__("func_00201200");
 void update_hud(void) __asm__("FUN_001ff780");
 
+extern s32 D_0015F684;
+extern s32 D_0015F688;
 void update_hud(void) {
     s32 update_fn;
     short new_var2;
@@ -59,7 +58,7 @@ block_8:
     if (hud_msg_count != 0) {
         goto block_11;
     }
-    if (hud_msg_fade == 0) {
+    if (D_0015F684 == 0) {
         goto block_27;
     }
 block_11:
@@ -70,32 +69,32 @@ block_11:
     if (hud_msg_count == 0) {
         goto block_15;
     }
-    temp_2_59 = hud_msg_fade + (0x80 / scale_game_frames(8));
-    hud_msg_fade = temp_2_59;
+    temp_2_59 = D_0015F684 + (0x80 / scale_game_frames(8));
+    D_0015F684 = temp_2_59;
     if (temp_2_59 < 0x81) {
         goto block_17;
     }
-    hud_msg_fade = 0x80;
+    D_0015F684 = 0x80;
     goto block_17;
 block_15:
-    temp_2_76 = hud_msg_fade - (0x80 / scale_game_frames(8));
+    temp_2_76 = D_0015F684 - (0x80 / scale_game_frames(8));
 
-    hud_msg_fade = temp_2_76;
+    D_0015F684 = temp_2_76;
     if (temp_2_76 >= 0) {
         goto block_17;
     }
-    hud_msg_fade = 0;
+    D_0015F684 = 0;
 block_17:
-    text_color = (hud_msg_fade << 0x18) + 0xF0F0F0;
+    text_color = (D_0015F684 << 0x18) + 0xF0F0F0;
 
-    draw_framed_text(0x100, hud_msg_y, text_color, hud_msg_text1);
+    draw_framed_text(0x100, D_0015F688, text_color, hud_msg_text1);
     if (hud_msg_text2[0] == 0) {
         goto block_20;
     }
     if (hud_msg_count < 0x3E9) {
         goto block_21;
     }
-    draw_framed_text(0x100, hud_msg_y, text_color, hud_msg_text2);
+    draw_framed_text(0x100, D_0015F688, text_color, hud_msg_text2);
 block_20:
 block_21:
     if (hud_msg_count == 0) {
@@ -115,7 +114,7 @@ block_25:
 
 block_27:
 block_28:
-    hud_msg_y = 0x64;
+    D_0015F688 = 0x64;
 
     return;
 }

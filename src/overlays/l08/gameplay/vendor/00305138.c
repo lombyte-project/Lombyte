@@ -7,6 +7,7 @@
 #include "asm.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/watch.h"
+#include "rnc/data_labels.h"
 
 #define NOT_SDA __attribute__((section(".data")))
 
@@ -147,7 +148,6 @@ typedef struct {
     int target_timer;
 } WD8;
 extern unsigned char D_0013DD49 __attribute__((section(".data")));
-extern unsigned char D_0014C050[];
 extern char D_L08_001622E8[];
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L08_00305138_c(void *) __asm__("FUN_L08_00305138");
@@ -181,7 +181,7 @@ void FUN_L08_00305270(WM *m) {
     case 0:
         if (m->animation != 1)
             blend_moby_animation(m, 1, 0, FUN_001f96f8(20));
-        if (D_0013DD49 && D_0014C050[((unsigned char *)m)[0xB0] + current_level_index * 16] == 0xFF) {
+        if (D_0013DD49 && visited52[((unsigned char *)m)[0xB0] + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(m);
             return;
         }
@@ -295,11 +295,11 @@ struct G_3063f0 {
 extern float D_L08_0015F59C_c __asm__("D_L08_0015F59C");
 extern float D_L08_0015F5A0_c __asm__("D_L08_0015F5A0");
 extern int D_L08_0015F5C4_c __asm__("D_L08_0015F5C4");
-extern short D_L08_00162300_d __asm__("D_L08_00162300") __attribute__((sda));
 extern struct G_3063f0 D_L08_0016D060_d __asm__("D_L08_0016D060") __attribute__((section(".data")));
 extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__((section(".data")));
 
+extern short D_L08_00162300 __attribute__((sda));
 void FUN_L08_003063f0(struct Moby *moby) {
     int i;
     if (D_L08_0015F5C4_c == 2 && D_0015EDB0_c[0]) {
@@ -321,7 +321,7 @@ void FUN_L08_003063f0(struct Moby *moby) {
                 if (D_L08_0017CC40_d[1] == 0) {
                     float f;
                     attach_manipulator(o, 0, D_L08_0017CC40_d);
-                    f = *(float *)&D_L08_00162300_d;
+                    f = *(float *)&D_L08_00162300;
                     *(float *)(D_L08_0017CC40_d + 0x20) = f;
                     *(float *)(D_L08_0017CC40_d + 0x24) = f;
                     *(float *)(D_L08_0017CC40_d + 0x28) = f;
@@ -398,7 +398,6 @@ extern int FUN_001fa6d0(float);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
 extern void FUN_L00_00284e50(void *, void *);
-extern int D_0015ED84_s __asm__("D_0015ED84");
 extern char D_L08_00162308[];
 extern char *D_L08_001600EC;
 extern unsigned char *D_L08_0015FFD8;
@@ -420,7 +419,7 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
     switch (m->state) {
     case 0:
         m->opacity = 0xFF;
-        if (D_0014C050[m->bB0 + D_0015ED84_s * 16] == 0xFF) {
+        if (visited52[m->bB0 + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(m);
             return;
         }
@@ -548,16 +547,8 @@ typedef struct {
 
 #include "rnc/gameplay/state/item_state.h"
 extern VendorEventRecord help_records[] __asm__("D_00141968");
-extern s32 game_frame_count __asm__("D_0015EEA4");
-extern s32 D_001413DC NOT_SDA;
-extern s32 D_001413D4 NOT_SDA;
 extern u8 D_0013D413 NOT_SDA;
-extern u8 D_0013D4DD NOT_SDA;
-extern u8 D_0013D4DC NOT_SDA;
 extern u8 D_0013D3B7 NOT_SDA;
-extern u8 D_0013DD4A NOT_SDA;
-extern s32 D_0013F5E0[];
-extern char D_0013F3D0[];
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
@@ -596,45 +587,45 @@ void FUN_L08_00307540(struct Moby *moby) {
     }
     if (item_available[29] == 0) {
         if (is_point_inside_clip_volume(&hero.motion.pos, data->first)) {
-            elapsed = scale_game_frames(game_frame_count) - help_records[48].best * 600;
+            elapsed = scale_game_frames(D_0015EEA4) - help_records[48].best * 600;
             if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed || help_records[48].best * 600 == 0) {
                 help_request(8000, 0x30);
             } else {
-                time = scale_game_frames(game_frame_count) / 600;
+                time = scale_game_frames(D_0015EEA4) / 600;
                 if (help_records[48].best < time)
-                    help_records[48].best = scale_game_frames(game_frame_count) / 600;
+                    help_records[48].best = scale_game_frames(D_0015EEA4) / 600;
             }
         }
     }
     if (item_available[29] != 0) {
         if (is_point_inside_clip_volume(&hero.motion.pos, data->first) && alternate_item_available[47] == 0) {
             if (help_records[49].count != 0) {
-                elapsed = scale_game_frames(game_frame_count) - help_records[49].best * 600;
+                elapsed = scale_game_frames(D_0015EEA4) - help_records[49].best * 600;
                 if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed || help_records[49].best * 600 == 0) {
                     help_request(8001, 0x31);
                 } else {
-                    time = scale_game_frames(game_frame_count) / 600;
+                    time = scale_game_frames(D_0015EEA4) / 600;
                     if (help_records[49].best < time)
-                        help_records[49].best = scale_game_frames(game_frame_count) / 600;
+                        help_records[49].best = scale_game_frames(D_0015EEA4) / 600;
                 }
             } else {
                 help_records[49].count++;
-                time = scale_game_frames(game_frame_count) / 600;
+                time = scale_game_frames(D_0015EEA4) / 600;
                 if (help_records[49].best < time)
-                    help_records[49].best = scale_game_frames(game_frame_count) / 600;
+                    help_records[49].best = scale_game_frames(D_0015EEA4) / 600;
                 help_records[49].flags = help_records[49].flags | (1 << current_level_index) | 0x80000000;
             }
         }
     }
     if (item_available[28] == 0) {
         if (is_point_inside_clip_volume(&hero.motion.pos, data->second) && D_0013DD4A != 0) {
-            elapsed = scale_game_frames(game_frame_count) - help_records[50].best * 600;
+            elapsed = scale_game_frames(D_0015EEA4) - help_records[50].best * 600;
             if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed || help_records[50].best * 600 == 0) {
                 help_request(8002, 0x32);
             } else {
-                time = scale_game_frames(game_frame_count) / 600;
+                time = scale_game_frames(D_0015EEA4) / 600;
                 if (help_records[50].best < time)
-                    help_records[50].best = scale_game_frames(game_frame_count) / 600;
+                    help_records[50].best = scale_game_frames(D_0015EEA4) / 600;
             }
             goto sample_volume;
         }
@@ -642,19 +633,19 @@ void FUN_L08_00307540(struct Moby *moby) {
     if (item_available[28] != 0) {
         if (is_point_inside_clip_volume(&hero.motion.pos, data->second) && D_0013DD4A != 0) {
             if (help_records[112].count != 0) {
-                elapsed = scale_game_frames(game_frame_count) - help_records[112].best * 600;
+                elapsed = scale_game_frames(D_0015EEA4) - help_records[112].best * 600;
                 if ((s32)((f32)scale_game_frames(18) * 60.0f) < elapsed || help_records[112].best * 600 == 0) {
                     help_request(8005, 0x70);
                 } else {
-                    time = scale_game_frames(game_frame_count) / 600;
+                    time = scale_game_frames(D_0015EEA4) / 600;
                     if (help_records[112].best < time)
-                        help_records[112].best = scale_game_frames(game_frame_count) / 600;
+                        help_records[112].best = scale_game_frames(D_0015EEA4) / 600;
                 }
             } else {
                 help_records[112].count++;
-                time = scale_game_frames(game_frame_count) / 600;
+                time = scale_game_frames(D_0015EEA4) / 600;
                 if (help_records[112].best < time)
-                    help_records[112].best = scale_game_frames(game_frame_count) / 600;
+                    help_records[112].best = scale_game_frames(D_0015EEA4) / 600;
                 help_records[112].flags = help_records[112].flags | (1 << current_level_index) | 0x80000000;
             }
         }
@@ -754,17 +745,17 @@ void FUN_L08_00308c90(struct Moby *moby) {
 extern Pair D_L08_00162408[] __attribute__((section(".sdata")));
 extern char D_L08_001F8560[];
 extern short D_L08_001623C8_d __asm__("D_L08_001623C8") __attribute__((sda));
-extern short D_L08_001623D0_d __asm__("D_L08_001623D0") __attribute__((sda));
-extern short D_L08_001623D8_d __asm__("D_L08_001623D8") __attribute__((sda));
 extern short D_L08_001623E8_d __asm__("D_L08_001623E8") __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
+extern short D_L08_001623D0 __attribute__((sda));
+extern short D_L08_001623D8 __attribute__((sda));
 void FUN_L08_00308f68(int x) {
     int i;
     int *a = (int *)&D_L08_001623C8_d;
-    int *b = (int *)&D_L08_001623D8_d;
-    int *c = (int *)&D_L08_001623D0_d;
+    int *b = (int *)&D_L08_001623D8;
+    int *c = (int *)&D_L08_001623D0;
     int *e = (int *)&D_L08_001623E8_d;
 
     for (i = 0; i < 2; i++) {

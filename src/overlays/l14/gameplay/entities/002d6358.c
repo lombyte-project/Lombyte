@@ -429,14 +429,14 @@ void FUN_L14_002d67e8(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
 
 extern int D_L14_0015F70C;
-extern short D_L14_00161A30_d __asm__("D_L14_00161A30") __attribute__((sda));
 extern void FUN_L00_0025d808(int a, char *pos, char *b, char *c, int d, float f);
 
+extern short D_L14_00161A30 __attribute__((sda));
 void FUN_L14_002d7198(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int idx = *(int *)(data + 0x60);
     FUN_L00_0025d808(*(int *)((idx << 5) + D_L14_0015F70C + 0x10), &moby->pos, data + 0x64,
-                     data + 0x68, 0, *(float *)&D_L14_00161A30_d * frame_time);
+                     data + 0x68, 0, *(float *)&D_L14_00161A30 * frame_time);
 }
 /* Draws the racer's two glow quads, at its lamp (0xE0) and its tail (0x200), turned to face the camera. */
 typedef struct {
@@ -446,7 +446,6 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk_2d71f0;
 
-extern char D_L14_001674C0_g[] __asm__("D_L14_001674C0");
 extern float D_L14_001DE540[4][4];
 extern void scale_g(void *, void *, float) __asm__("FUN_001f9a68");
 extern void sub_g(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -464,7 +463,7 @@ void FUN_L14_002d71f0(struct Moby *m) {
     int j;
     qcopy(mat[3], d + 0xE0);
     mat[3][3] = 1.0f;
-    sub_g(mat[0], D_L14_001674C0_g, mat[3]);
+    sub_g(mat[0], D_L14_001674C0, mat[3]);
     normalize_g(mat[0], mat[0], 1.0f);
     cross_g(mat[1], mat[0], &hero.gravity_dir);
     normalize_g(mat[1], mat[1], -1.0f);
@@ -491,7 +490,7 @@ void FUN_L14_002d71f0(struct Moby *m) {
     }
     draw_g(&pk, 0, 0);
     qcopy(mat[3], d + 0x200);
-    sub_g(mat[0], D_L14_001674C0_g, mat[3]);
+    sub_g(mat[0], D_L14_001674C0, mat[3]);
     normalize_g(mat[0], mat[0], 1.0f);
     cross_g(mat[1], mat[0], &hero.gravity_dir);
     normalize_g(mat[1], mat[1], -1.0f);
@@ -615,7 +614,6 @@ void FUN_L14_002de1f8(struct Moby *moby) {
 
 typedef int u128_s07 __attribute__((mode(TI)));
 
-extern char D_0013E533[];
 extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");

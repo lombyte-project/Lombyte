@@ -3,6 +3,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/data_labels.h"
 
 #define NOT_SDA
 
@@ -15,8 +16,6 @@ typedef struct {
     char pad0[0x75];
     unsigned char flags;
 } Level13SoundEffectTarget;
-
-extern char D_0013E533[];
 
 int FUN_L13_002982e8(int index, const void *vector) {
     int offset = index * 0x70;

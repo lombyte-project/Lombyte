@@ -514,7 +514,6 @@ extern int is_point_inside_clip_volume_cf(int) __asm__("FUN_00213260");
 extern int mark_moby_for_removal_cf() __asm__("FUN_L04_002ba470");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern struct Path5BD0 *D_L04_001B0630[];
-extern unsigned char D_0013E533[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
                               float *);
 extern void *FUN_L04_002ce080(void *, void *);
@@ -1226,7 +1225,6 @@ void FUN_L04_002c1d70(struct Moby *moby) {
  * to out and returns the yaw toward it. (The passed speed is recomputed from the moby's state.) */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C3338), where it is exact; names translated to the US level program. */
 
-extern short D_L04_00161884_d __asm__("D_L04_00161884") __attribute__((sda));
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -1234,6 +1232,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_00260D30_k(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 
+extern short D_L04_00161884 __attribute__((sda));
 float FUN_L04_002c1fb8(struct Moby *moby, void *out, float speed) {
     float away[4];
     float target[4];
@@ -1260,9 +1259,9 @@ float FUN_L04_002c1fb8(struct Moby *moby, void *out, float speed) {
         if (other == moby || *(short *)(other + 0xA6) != moby->oclass) continue;
         if (FUN_001f9b80((float *)(other + 0x10), (float *)&moby->pos) < 3.0f) {
             subtract_vector_xyz_c(away, &moby->pos, other + 0x10);
-            scale_vector_xyz(away, away, *(float *)&D_L04_00161884_d);
+            scale_vector_xyz(away, away, *(float *)&D_L04_00161884);
             add_vector_xyz_c(out, out, away);
-            weight += *(float *)&D_L04_00161884_d;
+            weight += *(float *)&D_L04_00161884;
         }
         if (FUN_001f9b80((float *)(other + 0x10), target) < target_dist) is_closest = 0;
     }
@@ -1499,7 +1498,6 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern short D_L04_00161878 __attribute__((sda));
 extern struct Path5BD0 *D_L04_001B0630[];
-extern unsigned char D_0013E533[];
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_0025a120(void *);
@@ -2246,7 +2244,6 @@ extern int rand(void);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern struct Path5BD0 *D_L04_001B0630[];
-extern unsigned char D_0013E533[];
 extern void *FUN_L04_002ce080(void *, void *);
 extern void FUN_001f9c48(void *, void *, float);
 extern void FUN_L00_00250df8(void *);

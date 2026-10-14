@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 struct Pad2Data {
     u8 pad_0[0x2];
@@ -8,7 +9,6 @@ struct Pad2Data {
 };
 
 extern u8 D_0015B540[];
-extern u8 D_0015B550[];
 extern void *memcpy();
 extern struct Pad2Data *scePad2GetSide();
 extern s32 scePad2LinkDriver();

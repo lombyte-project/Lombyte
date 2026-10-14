@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/storage/disc_table.h"
-extern u8 D_0015ED58;
+#include "rnc/data_labels.h"
 extern s32 sceCdGetError();
 extern s32 sceCdRead();
 extern s32 sceCdSync();

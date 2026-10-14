@@ -5,6 +5,7 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/overlay/entities.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Stage machine for a three-state effect moby: wait, activate, burst and delete. */
 
@@ -28,7 +29,6 @@ typedef struct {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *func_0020D348_m(int);
-extern float D_L07_0015F580[] __attribute__((section(".sdata")));
 extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);

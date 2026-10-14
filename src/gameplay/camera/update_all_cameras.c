@@ -4,7 +4,6 @@
 extern struct UpdateCam *cur_cam[] __asm__("D_001870C0");
 extern struct UpdateCam D_00187410[];
 extern s32 D_00189B50[];
-extern struct CameraType camera_types[] __asm__("D_001E8C00");
 extern void camera_exit(struct UpdateCam *) __asm__("func_001EC3D8");
 extern s32 camera_activation_check_priority(struct UpdateCam *,
                                             struct UpdateCam *) __asm__("func_001EC210");

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 struct Globals_0016045C {
     u8 pad_0[0x4];
@@ -6,20 +7,9 @@ struct Globals_0016045C {
     u8 pad_6[0x2];
 };
 #include "rnc/globals.h"
-extern u8 D_00100AE0[];
 #include "rnc/rendering/screen.h"
-extern s64 D_0015EF48;
-extern s32 D_0015EF50;
-extern s32 D_0015EF54;
-extern f32 D_0015F43C;
-extern s32 draw_callback_count __asm__("D_0015F464");
-extern s32 font_state __asm__("D_0015F620");
 extern struct Globals_0016045C *D_0016045C;
 extern s32 D_0018A2E8[];
-extern u8 occl_visibility[] __asm__("D_00193FC0");
-extern u8 D_001D8EB0[];
-extern u8 D_001E1300[];
-extern u8 tie_light_data[] __asm__("D_001E3200");
 extern s32 AppendDmaTag();
 extern s32 fill_transfer_words() __asm__("func_001F97E8");
 extern s32 FlushCache();
@@ -100,24 +90,24 @@ void transition_default_draw(s32 *arg0) {
     }
     aa_blur_pass();
     reset_gs_registers();
-    if (D_0015EF50 != 0) {
+    if (intro_overlay_alpha != 0) {
         draw_textured_quad(0xEC, 0x10, 0x100, 0x80, 0, 0, 0x100, 0x80,
-                           (long)(D_0015EF50 << 24 | 0x808080), D_0015EF48);
+                           (long)(intro_overlay_alpha << 24 | 0x808080), D_0015EF48);
     }
-    if (D_0015EF54 != 0) {
+    if (language_intro_overlay_alpha != 0) {
         n = game_language - 1;
         if (n < 0) {
             n = 0;
         }
         draw_textured_quad(0xA0, screen_extent.height - 0x50, 0xC0, 0x60, 0, 0, 0x100, 0x80,
-                           (long)(D_0015EF54 << 24 | 0x808080), get_effect_texture(n + 4));
+                           (long)(language_intro_overlay_alpha << 24 | 0x808080), get_effect_texture(n + 4));
     }
     do_gif_paging();
-    if (D_0015F43C > 0.0f) {
-        if (D_0015F43C > 1.0f) {
-            D_0015F43C = 1.0f;
+    if (sequence > 0.0f) {
+        if (sequence > 1.0f) {
+            sequence = 1.0f;
         }
-        emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(D_0015F43C * 128.0f));
+        emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(sequence * 128.0f));
     }
     vu0_load_micro_program(D_00100AE0);
     FlushCache(0);

@@ -1,14 +1,13 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
+#include "rnc/data_labels.h"
 
 /* Class data block of a moby class in the level file (not a Moby instance). */
 typedef struct MobyClassData {
     u8 pad[0x2C];
     s32 unk2C;
 } MobyClassData;
-extern s32 D_0015FF00;
 extern s16 D_001B3900[];
-extern s32 D_001B6180[];
 extern void assign_moby_class_data(s32) __asm__("FUN_00212d68");
 extern void prepare_resident_class_render_data(MobyClassData *, s32, s32,
                                                s32) __asm__("FUN_00203338");

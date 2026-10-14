@@ -10,7 +10,6 @@ typedef struct {
 extern u8 D_00100AE0[];
 extern u16 D_0010FA90[];
 extern u8 D_0010FAA0[];
-extern s32 D_0015ED80 MACRO_ADDR;
 extern u8 D_0015EE40 MACRO_ADDR;
 extern s32 screen_overlay_enabled __asm__("D_0015F34C") __attribute__((sda));
 extern s32 screen_color_effect_now __asm__("D_0015F350") __attribute__((sda));
@@ -29,13 +28,11 @@ extern u8 D_0015F410[];
 extern u8 D_0015F418[];
 extern u8 D_0015F428[];
 extern s32 draw_enable_mask __asm__("D_0015F434") MACRO_ADDR;
-extern f32 D_0015F43C MACRO_ADDR;
 extern f32 D_0015F440 MACRO_ADDR;
 extern s32 draw_callback_count __asm__("D_0015F464") __attribute__((sda));
 extern s32 draw_callback2_count __asm__("D_0015F468") __attribute__((sda));
 extern s32 draw_callback3_count __asm__("D_0015F46C") __attribute__((sda));
 extern s32 draw_callback4_count __asm__("D_0015F470") __attribute__((sda));
-extern s32 D_0015F604 MACRO_ADDR;
 extern f32 D_0015F614 MACRO_ADDR;
 extern s32 font_state __asm__("D_0015F620") MACRO_ADDR;
 extern s32 D_0015F648 MACRO_ADDR;
@@ -109,6 +106,9 @@ extern void func_00237A70(void);
 
 void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 
+extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
+extern float sequence __asm__("D_0015F43C") MACRO_ADDR;
+extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
 void draw_debug_profiler(void) {
     f32 t;
     f32 div;
@@ -136,7 +136,7 @@ void draw_debug_profiler(void) {
     }
     AppendDmaTag(0x02010000);
     if (draw_enable_mask & 4) {
-        if (D_0015ED80 != 0) {
+        if (pal_mode != 0) {
             draw_ties_2();
         } else {
             draw_ties_1();
@@ -209,7 +209,7 @@ void draw_debug_profiler(void) {
                 vu1_gs_regs_alt();
                 dispatch_callback_list_4();
             }
-            if (D_0015F604 == 0) {
+            if (game_mode == 0) {
                 append_billboard_batch();
             }
             vu1_add_g_sregister(0x42, 0x8000000044);
@@ -231,7 +231,7 @@ void draw_debug_profiler(void) {
         draw_help();
         draw_letterbox_bars();
     }
-    if (D_0015F604 == 2 && D_0015EE40 != 0) {
+    if (game_mode == 2 && D_0015EE40 != 0) {
         draw_subtitles();
     }
     func_001F21B8(D_0015F3F8, 0xE);
@@ -243,11 +243,11 @@ void draw_debug_profiler(void) {
             if (use_alt_fog[0] != 0) {
                 emit_rgba_draw_packet(D_001610C0, D_001610C1, D_001610C2, D_001610C3);
             }
-            if (D_0015F43C > 0.0f) {
-                if (D_0015F43C > 1.0f) {
-                    D_0015F43C = 1.0f;
+            if (sequence > 0.0f) {
+                if (sequence > 1.0f) {
+                    sequence = 1.0f;
                 }
-                emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(D_0015F43C * 128.0f));
+                emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(sequence * 128.0f));
             }
             if (D_0015F440 > 0.0f) {
                 if (D_0015F440 > 1.0f) {
@@ -264,7 +264,7 @@ void draw_debug_profiler(void) {
     vu0_load_micro_program(D_00100AE0);
     FlushCache(0);
     t = func_001FA6C0(*(volatile s32 *)0x10000800);
-    D_0015F614 = t / (D_0015ED80 != 0 ? 11520.0f : 9600.0f);
+    D_0015F614 = t / (pal_mode != 0 ? 11520.0f : 9600.0f);
     vu1_sync_chain(2);
     func_001F21B0(D_0015F410, 0x11);
     if (draw_enable_mask & 2) {
@@ -278,7 +278,7 @@ void draw_debug_profiler(void) {
     func_001F21B0(D_0015F410, 0x11);
     if (draw_enable_mask & 4) {
         if (draw_config.tie.enabled != 0) {
-            if (D_0015ED80 != 0) {
+            if (pal_mode != 0) {
                 register_entity_render_resources();
                 copy_render_buffer_pair();
             } else {

@@ -1,10 +1,5 @@
 #include "types.h"
-extern char D_0013D1D0[];
-extern char D_0013D1E8[];
-extern char D_0013D200[];
-extern char D_0013D220[];
-extern char D_0013D240[];
-extern char D_0013D270[];
+#include "rnc/data_labels.h"
 extern char *strncpy(char *, const char *, u32);
 void memcard_get_name(u8 *src) __asm__("FUN_00209030");
 

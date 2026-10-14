@@ -4,6 +4,8 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
 #include "qcopy.h"
+#include "rnc/data_labels.h"
+#include "rnc/globals.h"
 
 typedef struct {
     char *f0;     /* 0x00 */
@@ -49,11 +51,7 @@ extern Load2463f8 D_L18_00174800_2463f8 __asm__("D_L18_00174800");
 extern char *D_L18_00174840_2463f8[] __asm__("D_L18_00174840");
 typedef struct { s16 a; s16 b; s32 *file; } Ldg2463f8;
 extern Ldg2463f8 D_0015EE48;
-extern s32 current_level_index __asm__("D_0015ED84");
-extern u8 D_0014C050[];
-extern u8 D_L18_0015FC88_2463f8[] __asm__("D_L18_0015FC88") __attribute__((section(".sdata")));
 extern s32 D_L18_0015F40C;
-extern s32 sound_bank_handle __asm__("D_0015ED5C");
 extern s32 D_L18_00160004;
 extern s32 D_0015EE8C;
 extern u64 D_L18_001831C0[3];
@@ -114,7 +112,6 @@ extern char *D_L18_0015FFD8_2463f8 __asm__("D_L18_0015FFD8");
 extern char *D_L18_0015FFE8_2463f8 __asm__("D_L18_0015FFE8");
 extern char *D_L18_00160108_2463f8 __asm__("D_L18_00160108");
 extern char *D_L18_0016016C_2463f8 __asm__("D_L18_0016016C");
-extern s32 D_0014EE90[16];
 typedef struct { u8 pad[0x10]; u32 v __attribute__((packed, aligned(1))); } Una2463f8;
 extern u8 D_L18_00179B00[];
 extern s32 game_frame __asm__("D_L18_0015F5CC");
@@ -154,6 +151,7 @@ extern void FUN_L00_00264740(void);
      | ((u64)(cpsm) << 51) | ((u64)(csm) << 55) | ((u64)(csa) << 56) | ((u64)(cld) << 61))
 #define KB(x) (int_to_float((s32)(x)) * (1.0f / 1024.0f))
 
+extern u8 D_L18_0015FC88[] __attribute__((section(".sdata")));
 /* Reads the level's core data. Its index lists the object classes:
  *   0x18  moby classes, 0x20 bytes per entry
  *   0x20  tie classes, 0x20 bytes per entry
@@ -203,7 +201,7 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
     if (full) {
         FUN_001f98d0(h, (char *)(src[4] + (s32)src), src[5]);
         D_L18_0015F40C = 0;
-        FUN_001f9838_2463f8(D_L18_0015FC88_2463f8, D_0014C050 + current_level_index * 16, 0x10);
+        FUN_001f9838_2463f8(D_L18_0015FC88, visited52 + current_level_index * 16, 0x10);
         FUN_00203120((char *)(src[6] + (s32)src), h[0], (char *)h + h[1]);
         D_L18_00160004 = sound_bank_handle;
         FUN_00118a80(0);

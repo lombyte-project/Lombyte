@@ -7,6 +7,7 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Spawns a type-10 particle at a position and sets its colour, size, life and velocity. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */
@@ -15,10 +16,10 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0025bfe0(float, float, float, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *D_L01_001B250C_d __asm__("D_L01_001B250C") __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8(int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
+extern unsigned char *D_L01_001B250C __attribute__((section(".data")));
 void FUN_L01_0027f660(char *pos, char *vel) {
     unsigned char *p = FUN_L00_002678b8(10);
     if (p != 0) {
@@ -30,7 +31,7 @@ void FUN_L01_0027f660(char *pos, char *vel) {
         p[3] = 0x48;
         *(float *)(p + 0xC) = random_float_between_alt(60900.0f, 90300.0f);
         p[8] = 0;
-        p[2] = *D_L01_001B250C_d;
+        p[2] = *D_L01_001B250C;
         *(float *)(q + 0x10) = 0.425f;
         *(float *)(q + 0x14) = 0.425f;
         *(float *)(q + 0x18) = 0.225f;
@@ -50,8 +51,7 @@ extern float func_L00_00258C80_80970(float, float) __asm__("FUN_L00_00257c48");
 extern int func_001FA898_r_80970(float) __asm__("FUN_001fa6d0");
 extern int func_002140B0_80970(int) __asm__("FUN_00213260");
 extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
-extern unsigned char *D_L01_001B2838_80970 __asm__("D_L01_001B2538")
-    __attribute__((section(".data")));
+extern unsigned char *D_L01_001B2538 __attribute__((section(".data")));
 char *FUN_L01_00280970(int a, char *b) {
     char *p = func_00218928_80970(0xE);
     int r;
@@ -68,7 +68,7 @@ char *FUN_L01_00280970(int a, char *b) {
         p[3] = 0x48;
         *(float *)(p + 0xC) = 29400.0f;
         p[8] = func_002140B0_80970(0xFF);
-        p[2] = *D_L01_001B2838_80970;
+        p[2] = *D_L01_001B2538;
         *(short *)(p + 0xA) = func_001F9850_80970(6);
         q = (int *)(p + 0x20);
         q[2] = (int)b;
@@ -126,8 +126,7 @@ extern unsigned char *func_00218928_87158(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_87158(float) __asm__("FUN_001fa6d0");
 extern int func_002140B0_87158(int) __asm__("FUN_00213260");
 extern float func_001FA888_87158(int) __asm__("FUN_001fa6c0");
-extern unsigned char *D_L01_001B28D0_87158 __asm__("D_L01_001B25D0")
-    __attribute__((section(".data")));
+extern unsigned char *D_L01_001B25D0 __attribute__((section(".data")));
 unsigned char *FUN_L01_00287158(void *a, int b, int c, int d, float f, float g) {
     unsigned char *r = func_00218928_87158(0x34);
     if (r != 0) {
@@ -138,7 +137,7 @@ unsigned char *FUN_L01_00287158(void *a, int b, int c, int d, float f, float g) 
         r[3] = 0x44;
         r[9] = func_001FA898_87158(4.0f) + 0x20;
         r[1] = 1;
-        r[2] = *D_L01_001B28D0_87158;
+        r[2] = *D_L01_001B25D0;
         *(short *)(r + 0xA) = d;
         *(float *)(r + 0xC) = f * 210000.0f;
         r[8] = func_002140B0_87158(0xFF);
@@ -203,7 +202,6 @@ unsigned char *FUN_L01_0028a7a8(char *m, char *pos, float *vel, char *cfg, int f
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C1D8), where it is exact; names translated to the US level program. */
 
-extern char *D_L01_001B0930[];
 extern float FUN_001f9b48(void *, void *);
 
 void FUN_L01_0028b410(char *p) {
@@ -212,7 +210,7 @@ void FUN_L01_0028b410(char *p) {
     char *q;
     p[5] = 0;
     *(int *)(p + 8) = 0;
-    *(char **)(p + 0x10) = D_L01_001B0930[*(int *)(p + 0x14)];
+    *(char **)(p + 0x10) = paths[*(int *)(p + 0x14)];
     for (i = 0; i < **(int **)(p + 0x10); i++) {
         q = *(char **)(p + 0x10);
         off = i << 4;

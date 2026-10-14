@@ -1,8 +1,8 @@
+#include "rnc/data_labels.h"
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c, func_L00_00284620). */
 extern void *func_00226720_a(int) __asm__("func_00225490");
 extern int select_next_stream_buffer(int) __asm__("FUN_00225c18");
 extern void func_00225AB8(void *);
-extern char D_00186F40[];
 /* sets up a pause-menu helper moby in front of the camera */
 int FUN_00225588(char *h) {
     char *m;
@@ -11,7 +11,7 @@ int FUN_00225588(char *h) {
     *(int *)(h + 0x34) = 0;
     if (m != 0) {
         char *d;
-        char *g = D_00186F40;
+        char *g = preview_camera;
         *(char **)(h + 0x44) = m;
         *(short *)(m + 0x34) = 0;
         *(float *)(m + 0x10) = *(float *)(g + 0x140) + 2.2f;

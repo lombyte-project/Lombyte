@@ -3,10 +3,9 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
 
 /* Per-frame update of a pickup-like moby: pulses its colour, tracks the player's range and collects items. */
-extern char D_0013A4E0[];
-extern char D_0013E533[];
 extern char D_L00_0015F630[];
 extern char D_L00_00166DC0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -17,10 +16,8 @@ extern int D_L00_0015F5C4;
 extern char D_L00_001BD880[];
 extern int D_L00_0015F630_i __asm__("D_L00_0015F630");
 extern int FUN_L00_002644e0(int);
-extern short ship_index[] __asm__("D_0013E056");
 extern unsigned char D_0013CAE4[];
 extern unsigned char D_0013D388[];
-extern unsigned char D_0013D4DC[];
 extern unsigned char D_0013DD4B[];
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 extern void FUN_L00_00298840(int);

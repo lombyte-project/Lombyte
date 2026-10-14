@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/mobyutil.c, func_00213DE0). */
 #include "qcopy.h"
+#include "rnc/data_labels.h"
 extern int find_or_allocate_id_slot(int v) __asm__("func_0020CC18");
 typedef struct {
     char _pad00[0x10];
@@ -27,7 +28,6 @@ typedef struct {
 extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 extern float func_001FA6C0(int arg0);
 extern void FUN_0020ede8(void *, int);
-extern char D_001B2C00[];
 /* As func_00213F28 below, for a plain sequence change: clamp the frame
    to the sequence's last one; if the moby hasn't settled, park the
    current pose in a D_001B2C00 blend slot (seq 0xFF, frame = slot). Then

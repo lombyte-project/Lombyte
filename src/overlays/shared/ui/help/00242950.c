@@ -5,6 +5,7 @@
 
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/overlay/level_labels.h"
 typedef int V4q_32b90 __attribute__((mode(TI), aligned(16)));
 typedef union {
     V4q_32b90 q;
@@ -16,7 +17,6 @@ typedef union {
    scalar, 0xE0 likewise with .f[2], 0x270 is a 16-byte value, and 0x20B3 is
    the u8 the switch is on. */
 extern u8 D_L00_00173E80_32b90[] __asm__("D_L06_00174600") __attribute__((section(".data")));
-extern f32 D_L00_00173E60_32b90 __asm__("D_L06_001745E0") __attribute__((section(".data")));
 extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_32b90(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -73,7 +73,7 @@ f32 FUN_L06_00242950(f32 a, f32 b, f32 c) {
             nb = b * -0.5f;
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
-            y = FUN_L00_00233a78_32b90(&D_L00_00173E60_32b90);
+            y = FUN_L00_00233a78_32b90(&D_L06_001745E0);
             if (FUN_L00_002595a0_32b90(&o[2], &o[3], nb, z, x - y) > 0 && o[2] > 0.0f) {
                 return o[2];
             }
@@ -97,7 +97,7 @@ f32 FUN_L06_00242950(f32 a, f32 b, f32 c) {
             nb = b * -0.5f;
             z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
             x = FUN_L00_00233a78_32b90(&hero.motion.pos);
-            y = FUN_L00_00233a78_32b90(&D_L00_00173E60_32b90);
+            y = FUN_L00_00233a78_32b90(&D_L06_001745E0);
             if (FUN_L00_002595a0_32b90(&o[4], &o[5], nb, z, x - y) > 0 && o[4] > 0.0f) {
                 return o[4];
             }

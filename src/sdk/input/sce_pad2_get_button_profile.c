@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 typedef struct {
     u64 size : 14;
     u64 mode : 2;
@@ -20,7 +21,6 @@ typedef struct {
 } Pad2Info;
 
 extern Pad2Info D_0015B540[];
-extern u8 D_0015B550[];
 extern s32 sceDbcReceiveData(s32 port, s32 cmd, void *buf, void *data);
 extern s32 scePad2LinkDriver(s32 socket);
 extern void scePad2SetButtonOrder(u8 *profile, u8 *order);

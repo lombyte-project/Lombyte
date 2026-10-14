@@ -3,9 +3,8 @@
 #include "qcopy.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/data_labels.h"
 extern char *delete_moby(char *) __asm__("FUN_00225530");
-extern char D_001863D0[];
-extern char D_00186F40[];
 extern void *create_menu_preview_moby(int) __asm__("func_00225490");
 extern void rotate_item_preview_moby(struct MenuScreen *) __asm__("FUN_0021e1f8");
 /* Keeps the item preview moby in step with the highlighted entry: drop it
@@ -22,13 +21,13 @@ int update_item_preview_moby(struct MenuScreen *menu) {
     short want;
 
     cur = menu->data.preview.moby != 0 ? *(short *)(menu->data.preview.moby + 0xA6) : -1;
-    rec = D_001863D0 + item * 0x4C;
+    rec = preview_binding_table + item * 0x4C;
     want = *(short *)(rec + 0x3A);
     if (want != -1 && cur == -1) {
         char *o = create_menu_preview_moby(want);
 
         if (o != 0) {
-            char *t = D_00186F40;
+            char *t = preview_camera;
 
             menu->data.preview.moby = o;
             *(short *)(o + 0x34) = 0;

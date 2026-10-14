@@ -15,8 +15,8 @@
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
-extern short D_L15_00161EC0_d __asm__("D_L15_00161EC0") __attribute__((sda));
 
+extern short D_L15_00161EC0 __attribute__((sda));
 void FUN_L15_002e46b0(struct Moby *moby) {
     int idx = *(int *)moby->pvars;
     if (idx != -1) {
@@ -25,11 +25,11 @@ void FUN_L15_002e46b0(struct Moby *moby) {
         int st = (unsigned char)other[0x20];
         float step;
         if (st == 2) {
-            step = *(float *)&D_L15_00161EC0_d * DEG_TO_RAD * frame_time;
+            step = *(float *)&D_L15_00161EC0 * DEG_TO_RAD * frame_time;
             if (*(int *)(d + 0x10) != 0)
                 step = -step;
         } else if (st == 4) {
-            step = *(float *)&D_L15_00161EC0_d * DEG_TO_RAD * frame_time;
+            step = *(float *)&D_L15_00161EC0 * DEG_TO_RAD * frame_time;
             if (*(int *)(d + 0x10) == 0)
                 step = -step;
         } else {
@@ -1301,7 +1301,6 @@ extern short D_L15_00161B34 __attribute__((sda));
 extern short D_L15_00161B38 __attribute__((sda));
 extern short D_L15_00161B3C __attribute__((sda));
 extern short D_L15_00161B1C __attribute__((sda));
-extern unsigned char D_0013E533[];
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void FUN_001f9c48(void *, void *, float);
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");

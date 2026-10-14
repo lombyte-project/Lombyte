@@ -6,6 +6,8 @@
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Help message playback state (same layout as S00203908 in shared/ui/help/00203880.c). */
 struct L03HelpState {
@@ -34,10 +36,6 @@ extern struct L03HelpRecord help_records[] __asm__("D_00141968");
 extern struct L03ItemEntry D_L03_00179BC0[];
 extern struct UsageStats D_00141848;
 extern struct Moby *D_L03_0015FFE4;
-extern s32 D_L03_0015F5C4;
-extern s32 D_L03_0015F688;
-extern s32 D_L03_0015F68C;
-extern s32 D_0015EEA4;
 extern u8 D_0013D388[];
 extern u8 D_0013D408[];
 extern u8 D_0013D4C0[];
@@ -230,7 +228,6 @@ struct L03Cutscene {
     char *mobys[4];
 };
 
-extern int D_L03_0015F5C4;
 extern struct L03Cutscene D_L03_0016C960;
 extern void FUN_L00_002637f8(void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -320,7 +317,6 @@ void FUN_L03_002eb7e0(char *m) {
 extern void clear_u64_value_eb978(void *) __asm__("FUN_001f99f8");
 extern void FUN_001fa030(void *, void *);
 extern s32 D_L03_00167074 NOT_SDA;
-extern int D_L03_0015EF50;
 /* vendor camera init: aims the camera data at the hero, resets its blend state and places it (FUN_L03_002eb7e0) */
 void FUN_L03_002eb978(void *arg) {
     char *m = arg;
@@ -475,8 +471,6 @@ void FUN_L03_002ebdb0(void *arg) {
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
-extern int D_L03_0015EF50;
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 
 void FUN_L03_002ebde8(char *moby) {

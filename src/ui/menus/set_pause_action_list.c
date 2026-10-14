@@ -1,15 +1,16 @@
 #include "sda.h"
+#include "types.h"
 extern int pause_action_list_mode __asm__("D_0015EE90") MACRO_ADDR;
-extern int pause_action_list_a[] __asm__("D_001D4810");
-extern int pause_action_list_b[] __asm__("D_001D4840");
 
 int set_pause_action_list(int *p) __asm__("FUN_0021a1b0");
 
+extern int D_001D4810[];
+extern int D_001D4840[];
 int set_pause_action_list(int *p) {
     if (pause_action_list_mode != 0) {
-        p[0xD] = (int)pause_action_list_a;
+        p[0xD] = (int)D_001D4810;
     } else {
-        p[0xD] = (int)pause_action_list_b;
+        p[0xD] = (int)D_001D4840;
     }
     return 0;
 }

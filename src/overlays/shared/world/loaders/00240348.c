@@ -428,7 +428,6 @@ extern char D_L00_001E8708[];
 extern char D_L00_001E8740[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float D_0015ED60 MACRO_ADDR;
 extern float D_L00_0015F448 MACRO_ADDR;
 extern float D_L00_0015F44C MACRO_ADDR;
 extern float D_L00_0015F450 MACRO_ADDR;
@@ -439,10 +438,7 @@ extern float D_L00_00160F80 MACRO_ADDR;
 extern float D_L00_00160FE0 MACRO_ADDR;
 extern float FUN_001f99c8(float, float);
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern int D_0014C190[][64];
-extern int D_0015ED80 MACRO_ADDR;
 extern int D_0015ED84 MACRO_ADDR;
-extern int D_0015ED88 MACRO_ADDR;
 extern int D_0015EE50; /* no foreign declaration */
 extern int D_L00_0015EF54 MACRO_ADDR;
 extern char *level_root[2] __asm__("D_0015EE4C") MACRO_ADDR;
@@ -482,7 +478,6 @@ extern unsigned char *D_L00_001604A0 MACRO_ADDR;
 extern unsigned char mission_state[] __asm__("D_L00_0015FC88") MACRO_ADDR;
 extern unsigned char D_L00_001802C0[];
 extern unsigned char D_L00_001804C0[];
-extern unsigned char moby_killed[] __asm__("D_L00_001BB684");
 extern unsigned char D_L00_001BC1B0[];
 extern unsigned char D_L00_001C5B00[];
 extern void enable_global_state_flag(void) __asm__("func_001F61E8");
@@ -520,6 +515,11 @@ extern void load(void *, int, int) __asm__("FUN_00216828");
 extern GameState137B80 D_00137B80;
 
 char *load_level_gameplay(int arg0) __asm__("FUN_L00_00241940");
+extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
+extern unsigned char D_L00_001BB684[];
+extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
+extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
+extern s32 game_language __asm__("D_0015ED88") MACRO_ADDR;
 char *load_level_gameplay(int arg0) {
     LevelHeader *hdr;
     char *mem;
@@ -530,7 +530,7 @@ char *load_level_gameplay(int arg0) {
     hdr = D_L00_00173E00.f4;
     mem = D_L00_00173E00.f18;
     if (arg0 == 0) {
-        if (D_0015ED80 != 0) {
+        if (pal_mode != 0) {
             load(mem, D_00137B80.f2978, D_00137B80.f297C);
         } else {
             load(mem, D_00137B80.f2970, D_00137B80.f2974);
@@ -544,12 +544,12 @@ char *load_level_gameplay(int arg0) {
     FillTransferWords(D_L00_00166C80, 0, 0x3A0);
     FillTransferWords(D_L00_0018EB40, 0, 0x180);
     set_global_state_slot(0x4D2);
-    if (D_0015ED80 != 0) {
-        if (D_0015ED60 == 1.0f) {
+    if (pal_mode != 0) {
+        if (frame_scale == 1.0f) {
             set_video_timing(1);
         }
     } else {
-        if (D_0015ED60 != 1.0f) {
+        if (frame_scale != 1.0f) {
             set_video_timing(0);
         }
     }
@@ -654,7 +654,7 @@ char *load_level_gameplay(int arg0) {
         }
     }
     if (hdr->f10[0] != 0) {
-        int lang = D_0015ED88 * 4;
+        int lang = game_language * 4;
         char *p = (char *)hdr + *(int *)((char *)hdr + lang + 0x10);
         int size;
         int i;
@@ -980,7 +980,7 @@ char *load_level_gameplay(int arg0) {
                 } else {
                     vis = 0xFF;
                 }
-                if (moby_killed[uid] != 0) {
+                if (D_L00_001BB684[uid] != 0) {
                     skip = 1;
                 } else if (flags & 3) {
                     if (mission_state[mission] == 0xFF) {
@@ -996,7 +996,7 @@ char *load_level_gameplay(int arg0) {
                         }
                     } else {
                         if (flags & 1) {
-                            if ((D_0014C190[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
+                            if ((D_0014C190_257218[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
                                 b2 = (bolts + 1) / 2;
                             }
                         } else {
@@ -1008,7 +1008,7 @@ char *load_level_gameplay(int arg0) {
                         skip = 1;
                     }
                 } else if ((flags & 0xC) == 4) {
-                    if ((D_0014C190[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
+                    if ((D_0014C190_257218[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
                         skip = 1;
                     }
                 }
@@ -2102,7 +2102,6 @@ struct StreamLoader {
     u8 pad34[0x28];
     u8 *buf;                    /* 0x5C */
 };
-extern s32 D_0015ED80;
 extern struct SectorListTable disc_table __asm__("D_00137B80");
 extern struct StreamLoader D_L00_0016C860;
 extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
@@ -2114,7 +2113,7 @@ s32 FUN_L00_002451b8(s32 i) {
     s32 start;
     s32 size;
 
-    if (D_0015ED80 != 0) {
+    if (pal_mode != 0) {
         size = disc_table.lists[D_L00_0016C860.list].y[i + 1] - disc_table.lists[D_L00_0016C860.list].y[i];
         start = disc_table.lists[D_L00_0016C860.list].y[i];
     } else {

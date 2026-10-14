@@ -7,6 +7,7 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
+#include "rnc/data_labels.h"
 extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");
@@ -723,14 +724,13 @@ typedef struct {
 
 extern ML D_L05_0016CC60;
 extern int D_L05_0015F5C4;
-extern unsigned char D_0015EDB0;
 extern unsigned char D_L05_0017C8A0[];
 extern short D_L05_00161EE8 __attribute__((sda));
 
 void FUN_L05_00317398(char *moby) {
     int i;
 
-    if (D_L05_0015F5C4 == 2 && D_0015EDB0 != 0) {
+    if (D_L05_0015F5C4 == 2 && big_head_cheat_enabled != 0) {
         for (i = 0; i < D_L05_0016CC60.count; i++) {
             char *e = D_L05_0016CC60.mobys[i];
 
@@ -775,7 +775,6 @@ extern char D_L05_00174240[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
-extern float D_0015ED70;
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void FUN_001fa050(void *, void *);
@@ -846,7 +845,7 @@ void FUN_L05_003186f8(char *moby)
                 mark_moby_for_removal(moby);
             }
         }
-        *(float *)(data + 0x38) = *(float *)(data + 0x38) - D_0015ED70 * 10.8f;
+        *(float *)(data + 0x38) = *(float *)(data + 0x38) - frame_time_sq * 10.8f;
         add_vector_xyz(moby + 0x10, moby + 0x10, data + 0x30);
         add_vector_xyz(moby + 0x10, moby + 0x10, buf + 0x60);
         if (*(float *)(moby + 0x18) < 5.0f)

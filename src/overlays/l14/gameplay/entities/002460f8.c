@@ -7,6 +7,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/entities.h"
+#include "rnc/data_labels.h"
 
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
@@ -122,7 +123,6 @@ typedef struct {
 
 extern int *D_L14_001B0BB0[];
 extern L14LevelState D_L14_001BB930;
-extern s32 D_0014C190[][64];
 extern s32 D_L14_001BABD0[];
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -144,6 +144,7 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 
+extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void FUN_L14_002aba80(struct Moby *moby) {
     PathMoverVars *vars = (PathMoverVars *)moby->pvars;
     MoverPath *path;
@@ -175,9 +176,9 @@ void FUN_L14_002aba80(struct Moby *moby) {
 
         if (vars->trigger == -1 || is_point_inside_clip_volume(&hero.motion.pos, vars->trigger) ||
             D_L14_001BB930.collected[(s16)(id = moby->save_id)] != 0 ||
-            (D_0014C190[current_level_index][(s16)id >> 5] >> (id & 0x1F)) & 1) {
+            (D_0014C190_257218[current_level_index][(s16)id >> 5] >> (id & 0x1F)) & 1) {
             if (vars->trigger != -1) {
-                D_0014C190[current_level_index][(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
+                D_0014C190_257218[current_level_index][(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
                 D_L14_001BABD0[(s16)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
                 vars->trigger = -1;
             }
@@ -405,11 +406,9 @@ typedef struct {
 extern LockOn_c618 D_L14_00174540;
 extern char D_L14_001674C0[];
 extern f32 D_L14_0016139C __attribute__((sda));
-extern Vec4 D_L14_00174560_c618 __asm__("D_L14_00174560");
 extern char *D_001413D0_c618 __asm__("D_001413D0") __attribute__((section(".data")));
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
-extern f32 D_0015ED64_c618 __asm__("D_0015ED64");
 extern s32 D_L14_001613D0 __attribute__((sda));
 extern s32 D_L14_001613D4 __attribute__((sda));
 extern f32 D_L14_001613D8 __attribute__((sda));
@@ -430,6 +429,7 @@ extern s32 D_L14_00161414 __attribute__((sda));
 extern f32 D_L14_001613A0_c618 __asm__("D_L14_001613A0") __attribute__((sda));
 extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
 
+extern Vec4 D_L14_00174560;
 void FUN_L14_002ac618(struct Moby *m) {
     char *d = (char *)m->pvars;
     float v[4];
@@ -579,7 +579,7 @@ void FUN_L14_002ac618(struct Moby *m) {
             qcopy(w, v);
             w[2] -= 4.0f;
             if (FUN_001efa68_c618(v, w, 0x12, 0, 0)) {
-                qcopy(v, &D_L14_00174560_c618);
+                qcopy(v, &D_L14_00174560);
             } else {
                 v[2] -= 0.5f;
             }
@@ -743,7 +743,7 @@ void FUN_L14_002ac618(struct Moby *m) {
         if (*(float *)(d + 0x1E8) > 0.0f) {
             *(float *)(d + 0x1E8) *= (D_L14_001613EC - 1.0f) * D_0015ED60_c618 + 1.0f;
         }
-        *(float *)(d + 0x1E8) -= D_L14_001613E8 * D_0015ED64_c618;
+        *(float *)(d + 0x1E8) -= D_L14_001613E8 * frame_scale_sq;
         m->rot.z = fast_add_rotations(m->rot.z, *(float *)(d + 0x1FC));
         *(float *)(d + 0x140) = 10.0f;
         *(float *)(d + 0x144) = 10.0f;
@@ -963,7 +963,6 @@ extern int D_L14_00161458 __attribute__((sda));
 extern int D_L14_0016145C __attribute__((sda));
 extern int D_L14_00161460 __attribute__((sda));
 extern char D_L14_001674C0_b[] __asm__("D_L14_001674C0");
-extern float D_L14_001D8600_b[4][4] __asm__("D_L14_001D8600");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -978,6 +977,7 @@ extern void rotmat_b(void *, void *) __asm__("FUN_001fa030");
 extern void xform_b(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_b(void *, int, int) __asm__("FUN_001f7d30");
 
+extern float D_L14_001D8600[4][4];
 void FUN_L14_002add48(char *moby) {
     char *d = *(char **)(moby + 0x78);
     float src[4][4];
@@ -1042,7 +1042,7 @@ void FUN_L14_002add48(char *moby) {
         pk.col[0] = col;
         scale_b(t, dir, step);
         for (j = 0; j < 4; j++) {
-            scale_b(pk.m[j], D_L14_001D8600_b[j], size);
+            scale_b(pk.m[j], D_L14_001D8600[j], size);
             xform_b(pk.m[j], pk.m[j], mat);
             add_b(pk.m[j], pk.m[j], t);
         }
@@ -1076,10 +1076,7 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk_2ae0a8;
 
-extern float D_L14_00161474_e __asm__("D_L14_00161474") __attribute__((sda));
-extern float D_L14_00161478_e __asm__("D_L14_00161478") __attribute__((sda));
 extern char D_L14_001674C0_e[] __asm__("D_L14_001674C0");
-extern float D_L14_001D8600_e[4][4] __asm__("D_L14_001D8600");
 extern void scale_e(void *, void *, float) __asm__("FUN_001f9a68");
 extern void add_e(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void sub_e(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1091,6 +1088,8 @@ extern void rotmat_e(void *, void *) __asm__("FUN_001fa030");
 extern void xform_e(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_e(void *, int, int) __asm__("FUN_001f7d30");
 
+extern float D_L14_00161474 __attribute__((sda));
+extern float D_L14_00161478 __attribute__((sda));
 void FUN_L14_002ae0a8(struct Moby *m) {
     char *d = (char *)m->pvars;
     float mat[4][4];
@@ -1102,7 +1101,7 @@ void FUN_L14_002ae0a8(struct Moby *m) {
     int i;
     qcopy(mat[3], d + 0xD0);
     mat[3][3] = 1.0f;
-    scale_e(t, d + 0xA0, D_L14_00161478_e);
+    scale_e(t, d + 0xA0, D_L14_00161478);
     add_e(mat[3], mat[3], t);
     pk.b = tex_e(0xB);
     pk.c = 0x0000FF9000000260ULL;
@@ -1136,7 +1135,7 @@ void FUN_L14_002ae0a8(struct Moby *m) {
         pk.col[0] = col;
     }
     for (i = 0; i < 4; i++) {
-        scale_e(pk.m[i], D_L14_001D8600_e[i], D_L14_00161474_e);
+        scale_e(pk.m[i], D_L14_001D8600[i], D_L14_00161474);
         xform_e(pk.m[i], pk.m[i], mat);
     }
     draw_e(&pk, 0, 0);
@@ -1154,8 +1153,6 @@ typedef struct {
 extern char D_L14_001674C0_d[] __asm__("D_L14_001674C0") __attribute__((section(".data")));
 extern float D_L14_001D8640[4][4];
 extern float vector_length_xyz(void *a);
-extern short D_L14_0016147C_d __asm__("D_L14_0016147C") __attribute__((sda));
-extern short D_L14_00161480_d __asm__("D_L14_00161480") __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *);
 extern void draw_geometry_quad(void *, void *, int);
 extern void normalize_vector_xyz(void *, void *, float);
@@ -1164,6 +1161,8 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 u64 get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
+extern short D_L14_0016147C __attribute__((sda));
+extern short D_L14_00161480 __attribute__((sda));
 void FUN_L14_002ae260(struct Moby *m) {
     char *d = (char *)m->pvars;
     float pos[4];
@@ -1186,7 +1185,7 @@ void FUN_L14_002ae260(struct Moby *m) {
     len = vector_length_xyz(v);
     if (0.0f < len) {
         float s = *(float *)(d + 0x218);
-        float f = len - *(float *)&D_L14_0016147C_d;
+        float f = len - *(float *)&D_L14_0016147C;
         if (f < s) {
             s = f;
             if (f < 0.0f)
@@ -1210,7 +1209,7 @@ void FUN_L14_002ae260(struct Moby *m) {
         pk.col[1] = col;
         pk.col[0] = col;
     } else {
-        col = *(u32 *)&D_L14_00161480_d;
+        col = *(u32 *)&D_L14_00161480;
         pk.col[3] = col;
         pk.col[2] = col;
         pk.col[1] = col;
@@ -1345,10 +1344,10 @@ void FUN_L14_002ae7d8(struct Moby *moby) {
 
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
                                 float eps) __asm__("FUN_L00_0025b8c0");
-extern short D_L14_001613FC_d __asm__("D_L14_001613FC") __attribute__((sda));
 extern int FUN_L00_0025d808_2afb40(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
+extern short D_L14_001613FC __attribute__((sda));
 void FUN_L14_002ae900(struct Moby *moby, float a, float b, float c) {
     char *data = (char *)moby->pvars;
     int *list = D_L14_001B0BB0[*(int *)(data + 0x204)];
@@ -1362,11 +1361,11 @@ void FUN_L14_002ae900(struct Moby *moby, float a, float b, float c) {
         }
     }
     FUN_L00_0025b8c0_c(&moby->pos.x, (float *)(data + 0x194), tmp[0], a,
-                       *(float *)&D_L14_001613FC_d, 0.0f);
+                       *(float *)&D_L14_001613FC, 0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.y, (float *)(data + 0x198), tmp[1], a,
-                       *(float *)&D_L14_001613FC_d, 0.0f);
+                       *(float *)&D_L14_001613FC, 0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.z, (float *)(data + 0x19C), tmp[2], a,
-                       *(float *)&D_L14_001613FC_d, 0.0f);
+                       *(float *)&D_L14_001613FC, 0.0f);
 }
 extern f32 D_L14_001613A8 __attribute__((sda));
 extern f32 D_L14_001613AC __attribute__((sda));
@@ -1411,7 +1410,6 @@ void FUN_L14_002aea08(u8 *moby) {
     }
 }
 extern s32 random_integer_below(s32 n) __asm__("FUN_00213260");
-extern f32 D_L14_0016139C __attribute__((sda));
 extern f32 FUN_001fa6c0(s16);
 extern s32 FUN_001fa728(u8 *, f32);
 extern void FUN_0020cca8(u8 *, s32, u8 *);
@@ -1488,9 +1486,7 @@ int FUN_L14_002aeba0(struct Moby *moby, int flag) {
     return ok;
 }
 extern s32 truncate_float_to_s32(f32 f) __asm__("FUN_001fa6d0");
-extern s32 D_L14_00161418 __attribute__((sda));
 extern s32 D_L14_001D8210[];
-extern s32 D_L14_001D80C8[];
 
 /* 0x002AED50, 212 bytes.  Advances the blink phase and fades each light
  * entry's alpha up and down.  Its counter and its 1.0f constant are small
@@ -1618,7 +1614,6 @@ typedef struct Moby Moby;
 char *FUN_L14_002eccf0(void *a, float *b, int c, int d);
 extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
-extern float D_0015ED6C; /* no foreign declaration */
 extern int D_L14_0015F5CC __attribute__((section(".sdata"))); /* no foreign declaration */
 extern int D_L14_001600EC; /* no foreign declaration */
 extern float D_L14_00161508 __attribute__((sda)); /* no foreign declaration */
@@ -1815,7 +1810,7 @@ void FUN_L14_002b3bf0(char *moby) {
             func_L00_001FF4B0_2B4E40(v40, moby + 0xC0, D_L14_00161528);
             func_001F9BD8_2B4E40(v30, v30, v40);
             func_001F9BD8_2B4E40(v30, v30, moby + 0x10);
-            func_L00_001FF4B0_2B4E40(v40, moby + 0xC0, D_L14_0016151C * D_0015ED6C);
+            func_L00_001FF4B0_2B4E40(v40, moby + 0xC0, D_L14_0016151C * frame_time);
             if (*(short *)(data + 0x9C) == 0) {
                 func_L00_00251328_2B4E40(func_L14_002EE150_2B4E40(v30, v40, (int)moby, 1), 0xE0, 0xE0, 0xE0);
             }
@@ -2112,7 +2107,6 @@ extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED60;
 extern float D_L14_00161568 __attribute__((sda));
 extern float blend_scalar_alt(float, float, float) __asm__("FUN_002133d0");
-extern float D_0015ED70;
 extern float D_L14_0016154C __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161550 __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161554 __attribute__((sda)); /* no foreign declaration */
@@ -2405,7 +2399,7 @@ void FUN_L14_002b46e8(Moby_2B5938 *moby) {
             subtract_vector_xyz_c(v + 4, D_L14_001B0F30_2B5938[d->fD8] + (d->f100 + 1), v);
             v[6] = 0.0f;
             scale_vector_xyz_c(v + 4, v + 4, 1.0f / n);
-            g = D_L14_00161568 * D_0015ED70;
+            g = D_L14_00161568 * frame_time_sq;
             q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
             d->f48 = -((v[2] - q[1].v[2]) + -g * (n * n) * 0.5f) / n;
             func_L14_00302968_2B5938((int)moby, v, v + 4, g, scale_game_frames_c(D_L14_0016156C));
@@ -2510,15 +2504,15 @@ void FUN_L14_002b5290(struct Moby *m) {
 
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
                                 float eps) __asm__("FUN_L00_0025b8c0");
-extern short D_L14_00161538_d __asm__("D_L14_00161538") __attribute__((sda));
-extern short D_L14_0016153C_d __asm__("D_L14_0016153C") __attribute__((sda));
 extern short D_L14_00161540_d __asm__("D_L14_00161540") __attribute__((sda));
-extern short D_L14_00161544_d __asm__("D_L14_00161544") __attribute__((sda));
-extern short D_L14_00161548_d __asm__("D_L14_00161548") __attribute__((sda));
 extern void FUN_L00_00262b00_c(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void FUN_L00_00262b80_c(void *, char *, char *, float, float,
                                float) __asm__("FUN_L00_00262b80");
 
+extern short D_L14_00161538 __attribute__((sda));
+extern short D_L14_0016153C __attribute__((sda));
+extern short D_L14_00161544 __attribute__((sda));
+extern short D_L14_00161548 __attribute__((sda));
 void FUN_L14_002b5428(struct Moby *moby) {
     int raw = moby->state;
     unsigned char state = raw;
@@ -2531,17 +2525,16 @@ void FUN_L14_002b5428(struct Moby *moby) {
         t = t * 1.5f;
     } else {
         FUN_L00_0025b8c0_c((float *)(data + 0x168), (float *)(data + 0x16C),
-                           *(float *)&D_L14_0016153C_d, 0.002f, 0.2f, 0.0f);
-        FUN_L00_00262b00_c(*(float *)&D_L14_00161538_d, *(float *)(data + 0x168), moby,
+                           *(float *)&D_L14_0016153C, 0.002f, 0.2f, 0.0f);
+        FUN_L00_00262b00_c(*(float *)&D_L14_00161538, *(float *)(data + 0x168), moby,
                            (float *)(data + 0xC0), (float *)(data + 0xC4));
     }
     FUN_L00_0025b8c0_c((float *)(data + 0x160), (float *)(data + 0x164), t, 0.003f, 0.2f, 0.0f);
     FUN_L00_00262b80_c(moby, data + 0xC8, data + 0xCC, *(float *)(data + 0x160),
-                       *(float *)&D_L14_00161544_d, *(float *)&D_L14_00161548_d);
+                       *(float *)&D_L14_00161544, *(float *)&D_L14_00161548);
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6780), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
 extern int *D_L14_001B0BB0[];
 extern int FUN_L00_0025ff38(float a, char *m, char *b, int c, int d, int *e, int f);
 

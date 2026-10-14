@@ -214,12 +214,8 @@ typedef struct {
 typedef struct {
     f32 f[4];
 } V_2d0538;
-extern T_2d0538 D_L00_001E9E30_2d0538 __asm__("D_L00_001E9E30");
 extern s32 D_0015ED84_2d0538 __asm__("D_0015ED84");
 extern s32 D_L00_0015F598_2d0538 __asm__("D_L00_0015F598");
-extern f32 D_L00_001618C8_2d0538 __asm__("D_L00_001618C8") __attribute__((sda));
-extern f32 D_L00_001618CC_2d0538 __asm__("D_L00_001618CC") __attribute__((sda));
-extern f32 D_L00_001618D0_2d0538 __asm__("D_L00_001618D0") __attribute__((sda));
 extern volatile f32 D_0015ED6C_a[1] __asm__("D_0015ED6C");
 #define D_0015ED6C_2d0538 D_0015ED6C_a[0]
 extern f32 D_0015ED70_2d0538 __asm__("D_0015ED70");
@@ -242,6 +238,10 @@ void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 u8 *FUN_L00_002c52a8_2d0538(u8 *, s32, s32, s32) __asm__("FUN_L00_002c52a8");
 
 void crate_drop_bolts(u8 *a) __asm__("FUN_L00_002d0538");
+extern T_2d0538 D_L00_001E9E30;
+extern f32 D_L00_001618C8 __attribute__((sda));
+extern f32 D_L00_001618CC __attribute__((sda));
+extern f32 D_L00_001618D0 __attribute__((sda));
 void crate_drop_bolts(u8 *a) {
     T_2d0538 tmp;
     V_2d0538 v20, v30, v40;
@@ -254,7 +254,7 @@ void crate_drop_bolts(u8 *a) {
 
     b = *(u8 **)(a + 0x78);
     h = *(s16 *)(a + 0xA6);
-    tmp = D_L00_001E9E30_2d0538;
+    tmp = D_L00_001E9E30;
     n = *(s16 *)(b + 0xC6) == 0;
     if (h == 0x1F5)
         n = 0;
@@ -325,12 +325,12 @@ void crate_drop_bolts(u8 *a) {
             q = *(u8 **)(p + 0x78);
             *(s16 *)(q + 4) = *(s16 *)(b + 0xC4);
             t = FUN_00213308_2d0538();
-            r = FUN_002132a8_2d0538(0.0f, D_L00_001618C8_2d0538) * D_0015ED6C_2d0538;
+            r = FUN_002132a8_2d0538(0.0f, D_L00_001618C8) * D_0015ED6C_2d0538;
             *(f32 *)(q + 0x10) = fast_cos(t) * r;
             {
                 f32 sn = fast_sin(t) * r;
                 {
-                    f32 hi = D_L00_001618D0_2d0538, lo = D_L00_001618CC_2d0538;
+                    f32 hi = D_L00_001618D0, lo = D_L00_001618CC;
                     *(f32 *)(q + 0x18) = 0.0f;
                     *(f32 *)(q + 0x14) = sn;
                     *(f32 *)(q + 0x18) = FUN_002132a8_2d0538(lo, hi) * D_0015ED6C_2d0538;
@@ -1345,7 +1345,6 @@ typedef struct VoiceSlot2d2ee8 {
     struct Moby *owner; /* 0x88 */
 } VoiceSlot2d2ee8;
 
-extern struct PadState D_0013C940 __attribute__((section(".data")));
 extern u8 D_0013E550[] __attribute__((section(".data")));
 extern u128 D_L00_001E1160 __attribute__((section(".data")));
 extern u8 D_L00_001E1170[] __attribute__((section(".data")));
@@ -1385,6 +1384,7 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void FUN_L00_002d2a90_u(void) __asm__("FUN_L00_002d2a90");
 extern s32 FUN_001f96f8(s32);
 
+extern struct PadState controller_state_lui __asm__("D_0013C940") __attribute__((section(".data")));
 void FUN_L00_002d2ee8(struct Moby *moby) {
     Vars2d2ee8 *vars;
     struct Moby *t;
@@ -1420,7 +1420,7 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
         vars->voice1 = -1;
         vars->voice2 = -1;
         vars->unk8 = 0x7FFF;
-        vars->unk20 = D_0013C940.unk189;
+        vars->unk20 = controller_state_lui.unk189;
         vars->unk24 = 0;
         vars->unk28 = 0;
         qzero(&D_L00_001E1160);
@@ -1487,11 +1487,11 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
         FUN_001fa400(D_L00_001E1170, D_L00_001E1170, u, 0.1f);
         FUN_0020cca8(moby, 3, w);
         qcopy(&vars->unk30, w);
-        if (D_0013C940.pressed & 0x20) {
+        if (controller_state_lui.pressed & 0x20) {
             vars->unk24 = 0;
             vars->unk28 = 0;
         }
-        if ((D_0013C940.held & 0x20) && hero.items[0].unk20 > FUN_001f96f8(0xF)) {
+        if ((controller_state_lui.held & 0x20) && hero.items[0].unk20 > FUN_001f96f8(0xF)) {
             if (hero.unk2044 < 10.0f) {
                 if (FUN_L00_0028d8c0(moby, vars->voice2) == 0 && vars->voice2 == -1) {
                     vars->voice2 = allocate_voice_for_target_entry(1, 4, moby);
@@ -1988,10 +1988,6 @@ typedef struct {
     s16 unk276;
 } ToadVars;
 
-extern float D_L00_0016196C_2d4610 __asm__("D_L00_0016196C") __attribute__((sda));
-extern float D_L00_00161980_2d4610 __asm__("D_L00_00161980") __attribute__((sda));
-extern float D_L00_00161984_2d4610 __asm__("D_L00_00161984") __attribute__((sda));
-extern short D_L00_00161960_2d4610 __asm__("D_L00_00161960") __attribute__((sda));
 extern char camera_position[] __asm__("D_L00_00166DC0");
 extern char *moby_table __asm__("D_L00_0015FFD8") MACRO_ADDR;
 extern ToadPath *toad_paths[] __asm__("D_L00_001B04B0");
@@ -2028,6 +2024,10 @@ extern float FUN_00213ed8_2d4610(float, float, float *) __asm__("FUN_00213ed8");
 
 /* Class 749 update (horny toad): state machine that walks a path or follows a target moby, hops, turns and dies; then settles its height and checks a pickup moby. */
 void horny_toad_update(Moby *moby) __asm__("FUN_L00_002d4610");
+extern float D_L00_0016196C __attribute__((sda));
+extern float D_L00_00161980 __attribute__((sda));
+extern float D_L00_00161984 __attribute__((sda));
+extern short D_L00_00161960 __attribute__((sda));
 void horny_toad_update(Moby *moby) {
     ToadVars *data;
     Moby *target;
@@ -2044,11 +2044,11 @@ void horny_toad_update(Moby *moby) {
     switch (moby->state) {
     case 0: {
         float k;
-        moby->scale = ((ToadClass *)moby->pclass)->unk24 * D_L00_0016196C_2d4610;
+        moby->scale = ((ToadClass *)moby->pclass)->unk24 * D_L00_0016196C;
         qcopy(data->home, (*(ToadVec *)&moby->pos));
         if (moby->prev_seq != 1) FUN_00212f90_2d4610(moby, 1, 0, 0);
         data->unk29 = 1;
-        data->unk140 = &D_L00_00161960_2d4610;
+        data->unk140 = &D_L00_00161960;
         qcopy(data->unk240, (*(ToadVec *)&moby->pos));
         k = frame_time;
         data->unk25C = 1.5f;
@@ -2140,10 +2140,10 @@ void horny_toad_update(Moby *moby) {
         }
         break;
     case 6:
-        if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->unk180, 0.5f) < D_L00_00161980_2d4610
+        if (FUN_L00_002d54c8_2d4610((unsigned char *)moby, data->unk180, 0.5f) < D_L00_00161980
             && fast_difference_between_rotations(moby->rot.z, angle_atan2((*(ToadVec *)&target->pos)[0] - (*(ToadVec *)&moby->pos)[0], (*(ToadVec *)&target->pos)[1] - (*(ToadVec *)&moby->pos)[1])) < 0.17453292f) {
             moby->state = 7;
-            if (moby->prev_seq != 5) FUN_00212f90_2d4610(moby, 5, (int)D_L00_00161984_2d4610, scale_game_frames(10));
+            if (moby->prev_seq != 5) FUN_00212f90_2d4610(moby, 5, (int)D_L00_00161984, scale_game_frames(10));
         } else if (data->unk1C4 == 2) {
             moby->state = 8;
             if (moby->prev_seq != 4) FUN_00212f90_2d4610(moby, 4, 0, scale_game_frames(10));
@@ -2488,7 +2488,6 @@ typedef struct {
 extern float D_0015ED6C_2d5988 __asm__("D_0015ED6C");
 extern float D_0015ED6C_pair_2d5988[2] __asm__("D_0015ED6C");
 #define D_0015ED70_2d5988 D_0015ED6C_pair_2d5988[1]
-extern float D_L00_00161990_2d5988 __asm__("D_L00_00161990") __attribute__((sda));
 
 extern void FUN_L00_0025df68_2d5988(void *, void *, void *, s32 *, f32 *, s32, f32, f32,
                                     f32) __asm__("FUN_L00_0025df68");
@@ -2503,6 +2502,7 @@ extern float FUN_001f9e90_2d5988(f32, f32) __asm__("FUN_001f9e90");
 extern float FUN_001fa5c8_2d5988(f32, f32) __asm__("FUN_001fa5c8");
 extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 
+extern float D_L00_00161990 __attribute__((sda));
 void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
     St_2d5988 *st;
     s32 idx;
@@ -2527,7 +2527,7 @@ void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
     c = st->v60;
     if (l <= (c * c) / (s + s)) {
         f32 a1 = c - s;
-        f32 b1 = D_L00_00161990_2d5988 * D_0015ED6C_2d5988;
+        f32 b1 = D_L00_00161990 * D_0015ED6C_2d5988;
         st->v60 = a1;
         if (a1 < b1)
             st->v60 = b1;
@@ -2549,7 +2549,7 @@ void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
     add_vector_xyz(&w, &w, &path->a[idx]);
     l = vector_distance((void *)((char *)path + path->n * 16), &o->v[0]);
     if (l < 1.0f) {
-        if (st->v60 <= D_L00_00161990_2d5988 * D_0015ED6C_2d5988) {
+        if (st->v60 <= D_L00_00161990 * D_0015ED6C_2d5988) {
             o->flag = p;
         }
     }
@@ -3400,16 +3400,16 @@ void FUN_L00_002d73e8(P *p) {
 }
 #endif
 
-extern float D_L00_001D02E0_2d7bf0[] __asm__("D_L00_001D02E0");
-extern float D_L00_001D15A0_2d7bf0[] __asm__("D_L00_001D15A0");
-extern float D_L00_001D31C0_2d7bf0[] __asm__("D_L00_001D31C0");
-extern float D_L00_001D4480_2d7bf0[] __asm__("D_L00_001D4480");
 extern s16 D_L00_001D60A0[];
-extern u8 D_L00_001D2D10_2d7bf0[] __asm__("D_L00_001D2D10");
 extern s16 D_L00_001D6A00[];
 extern u16 D_L00_00161380_2d7bf0 __asm__("D_L00_00161380");
 extern int D_L00_0016137C_2d7bf0 __asm__("D_L00_0016137C");
 
+extern float D_L00_001D02E0[];
+extern float D_L00_001D15A0[];
+extern float D_L00_001D31C0[];
+extern float D_L00_001D4480[];
+extern u8 D_L00_001D2D10[];
 /* Resets particle i of the emitter: random direction, random speeds from
  * the emitter's ranges, and a start delay staggered by index. */
 void FUN_L00_002d7bf0(P *m, int i) {
@@ -3421,29 +3421,28 @@ void FUN_L00_002d7bf0(P *m, int i) {
     p->x = f;
     p->y = FUN_L00_00257c48(0.0f, 1.0f);
     p->z = FUN_L00_00257c48(0.0f, 1.0f);
-    D_L00_001D02E0_2d7bf0[i] = random_float_between(*(float *)(v + 0x10), *(float *)(v + 0x14));
-    D_L00_001D15A0_2d7bf0[i] = random_float_between(*(float *)(v + 0x18), *(float *)(v + 0x1C));
-    D_L00_001D31C0_2d7bf0[i] = 0.0f;
-    D_L00_001D4480_2d7bf0[i] = random_float_between(*(float *)(v + 0x8), *(float *)(v + 0xC));
+    D_L00_001D02E0[i] = random_float_between(*(float *)(v + 0x10), *(float *)(v + 0x14));
+    D_L00_001D15A0[i] = random_float_between(*(float *)(v + 0x18), *(float *)(v + 0x1C));
+    D_L00_001D31C0[i] = 0.0f;
+    D_L00_001D4480[i] = random_float_between(*(float *)(v + 0x8), *(float *)(v + 0xC));
     D_L00_001D5740[i] = D_L00_00161380_2d7bf0;
     D_L00_001D60A0[i] = 0;
     t = i - *(s16 *)v;
     D_L00_001D6A00[i] = (t + 1) * D_L00_0016137C_2d7bf0;
-    D_L00_001D2D10_2d7bf0[i] = 0;
+    D_L00_001D2D10[i] = 0;
 }
 
 typedef struct {
     float x, y, z, w;
 } V_2d7d58;
 extern V_2d7d58 D_L00_001CB7E0_2d7d58[] __asm__("D_L00_001CB7E0") __attribute__((section(".data")));
-extern float D_L00_001D02E0_2d7d58[] __asm__("D_L00_001D02E0") __attribute__((section(".data")));
-extern float D_L00_001D15A0_2d7d58[] __asm__("D_L00_001D15A0") __attribute__((section(".data")));
-extern float D_L00_001D31C0_2d7d58[] __asm__("D_L00_001D31C0") __attribute__((section(".data")));
-extern float D_L00_001D4480_2d7d58[] __asm__("D_L00_001D4480") __attribute__((section(".data")));
-extern unsigned char D_L00_001D2D10_2d7d58[] __asm__("D_L00_001D2D10")
-    __attribute__((section(".data")));
 float spread_k(float, float) __asm__("FUN_L00_00257c48");
 float FUN_002132a8_2d7d58(float, float) __asm__("FUN_002132a8");
+extern float D_L00_001D02E0_lui[] __asm__("D_L00_001D02E0") __attribute__((section(".data")));
+extern float D_L00_001D15A0_lui[] __asm__("D_L00_001D15A0") __attribute__((section(".data")));
+extern float D_L00_001D31C0_lui[] __asm__("D_L00_001D31C0") __attribute__((section(".data")));
+extern float D_L00_001D4480_lui[] __asm__("D_L00_001D4480") __attribute__((section(".data")));
+extern u8 D_L00_001D2D10_lui[] __asm__("D_L00_001D2D10") __attribute__((section(".data")));
 void FUN_L00_002d7d58(char *m, int i) {
     char *v = *(char **)(m + 0x78);
     float b;
@@ -3454,12 +3453,12 @@ void FUN_L00_002d7d58(char *m, int i) {
     p->y = spread_k(0.0f, 1.0f);
     p->z = spread_k(0.0f, 1.0f);
     b = *(float *)(v + 0x4C);
-    D_L00_001D02E0_2d7d58[i] =
+    D_L00_001D02E0_lui[i] =
         FUN_002132a8_2d7d58(*(float *)(v + 0x44), *(float *)(v + 0x44) + 2.0f);
-    D_L00_001D15A0_2d7d58[i] = FUN_002132a8_2d7d58(b, b + 4.0f);
-    D_L00_001D31C0_2d7d58[i] = 0.0f;
-    D_L00_001D4480_2d7d58[i] = FUN_002132a8_2d7d58(0.003f, 0.005f);
-    D_L00_001D2D10_2d7d58[i] = 1;
+    D_L00_001D15A0_lui[i] = FUN_002132a8_2d7d58(b, b + 4.0f);
+    D_L00_001D31C0_lui[i] = 0.0f;
+    D_L00_001D4480_lui[i] = FUN_002132a8_2d7d58(0.003f, 0.005f);
+    D_L00_001D2D10_lui[i] = 1;
 }
 #include "eetypes.h"
 #include "qcopy.h"

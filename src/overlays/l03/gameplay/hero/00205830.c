@@ -5,6 +5,8 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/math/vector.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 
 struct LedgeSpot {
@@ -178,16 +180,9 @@ struct LevelTable_QS {
     s32 i168;
 };
 
-extern f32 D_0015ED64_a __asm__("D_0015ED64");
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
-extern f32 D_0015ED70_a __asm__("D_0015ED70");
-extern s32 D_0015EEA4;
-extern u8 D_0013D4DC[];
 extern struct UsageStats D_00141848;
 #define S D_00141848
-extern s32 D_L03_0015F688 __attribute__((sda));
-extern s32 D_L03_0015F68C __attribute__((sda));
-extern u8 D_L03_00166ED8[];
 
 extern void FUN_L00_00209540(s32, s32);
 extern void FUN_L00_002132b8(f32, f32);
@@ -228,9 +223,6 @@ struct VoiceSlot {
     struct MobyView *pm88;
 };
 extern u8 D_0013E550[];
-extern s32 D_L03_001612D0;
-extern s32 D_L03_001612D8;
-extern s32 D_L03_0015F5CC;
 extern u8 D_L03_0017C0C0[];
 
 extern void FUN_L00_00216e48(s32, struct MobyView *, s32);
@@ -289,7 +281,6 @@ extern f32 FUN_L00_00213350(void *);
 extern struct HeroTableRow2C D_L03_0017BD28[];
 extern struct LevelTable_QS D_L03_00166D80;
 #define Q D_L03_00166D80
-extern s32 D_0013CAE0[];
 extern void FUN_L00_00233ba0(void *, void *, f32);
 extern void FUN_L00_00233b20(void *, void *, f32);
 extern void FUN_L00_002336e8(void *, void *, f32);
@@ -302,7 +293,6 @@ extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L00_002a9b80(struct MobyView *, void *);
 extern s32 FUN_L00_002a96f8(struct MobyView *, void *, f32, f32, s32, f32, f32, f32);
 extern void FUN_L00_002335c8(void *, f32, f32, f32);
-extern f32 D_L00_001C3CF0[];
 extern s32 FUN_L00_002598b0(struct MobyView *, f32, void *, s32, f32, f32, s32, s32, s32);
 extern f32 FUN_001f9ab0(void *, void *);
 struct PlayerSpeedTuning {
@@ -317,12 +307,10 @@ extern s32 FUN_L00_00216de8(s32, s32);
 extern void FUN_L00_00233708(void *, void *, f32);
 extern void FUN_L00_00233810(void *, void *, f32);
 extern s32 FUN_001efa68(void *, void *, s32, struct MobyView *, s32);
-extern s32 D_0013CB14[];
 extern void FUN_L00_00215340(void);
 extern void FUN_L00_00233660(void *, f32, f32, f32);
 extern s32 FUN_L00_0025e3b8(s32);
 extern void FUN_L00_00259bc8(s32, struct MobyView *, s32, void *, void *, f32);
-extern s32 D_L03_00178000[];
 extern void FUN_L00_00209ec8(void);
 extern void FUN_L00_002338d0(void *, void *);
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
@@ -341,8 +329,6 @@ extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
-extern u8 item_defs[] __asm__("D_L00_00179AC0");
-extern struct HeroAnimRow D_L00_00179AC0_t[] __asm__("D_L00_00179AC0");
 extern void FUN_L00_00271b18(void *, void *, f32);
 extern void FUN_L00_00215340(void);
 extern void FUN_L00_00215ef8(void);
@@ -357,6 +343,8 @@ extern void FUN_L00_00217658(void);
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
 extern s32 FUN_L00_00211870(f32);
 
+extern s32 D_L03_0015F688_gp __asm__("D_L03_0015F688") __attribute__((sda));
+extern s32 D_L03_0015F68C_gp __asm__("D_L03_0015F68C") __attribute__((sda));
 void FUN_L03_0020ef60(void) {
     struct MobyView *moby = MV(hero.moby);
     s32 sub = hero.state.step;
@@ -402,7 +390,7 @@ void FUN_L03_0020ef60(void) {
                 FUN_001f9cf8(&hero.motion.unk170, &v0, &D_L03_00166ED8[0x1F8]);
                 hero.motion.move_yaw = *(f32 *)D_L03_00166ED8;
                 turn_to(0, frame_scale_sq, frame_scale_sq * 0.0f, frame_time * 174.53293f);
-                if (D_L03_0015F688 > 0 && FUN_001f9740(&D_L03_0015F688) != 0) {
+                if (D_L03_0015F688_gp > 0 && FUN_001f9740(&D_L03_0015F688_gp) != 0) {
                     s32 t;
                     if (S.stat[18].count < 0xFFFF) {
                         S.stat[18].count++;
@@ -411,9 +399,9 @@ void FUN_L03_0020ef60(void) {
                     if (S.stat[18].unk2 < t) {
                         S.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
-                    D_L03_0015F688 = -1;
+                    D_L03_0015F688_gp = -1;
                     S.stat[18].level_mask = S.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
-                    D_L03_0015F68C++;
+                    D_L03_0015F68C_gp++;
                 }
             }
         }
@@ -1324,7 +1312,7 @@ void FUN_L03_0020ef60(void) {
             if (FUN_L00_00211870(84.0f) != 0) {
                 f32 a = fast_add_rotations(hero.motion.rot.f[2], 3.1415927f);
                 f32 s = frame_time * 2.5f;
-                if (D_0013CAE0[0] & 0xA) {
+                if (pad_held[0] & 0xA) {
                     s = frame_time * 3.0f;
                 }
                 hero.motion.velocity.f[0] += FUN_001f9dc8(a) * s;

@@ -3,6 +3,8 @@
 #include "rnc/gameplay/state/overlay_game_state.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_globals.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00276368.s", FUN_L00_00276368);
@@ -416,11 +418,8 @@ extern Own D_L00_001B63F8;
 extern Own D_L00_001B78F0;
 extern Own D_L00_001B6820;
 extern G841F0 D_L00_001841F0;
-extern s16 D_001516D8[];
-extern s32 decode_mode __asm__("D_0015EED8");
 extern s32 D_L00_0015F5AC;
 extern s32 D_L00_0015F578 __attribute__((sda));
-extern s32 D_L00_0015F5C4;
 extern s32 level_timer __asm__("D_L00_0015F5C8") __attribute__((sda));
 extern s32 D_L00_0015F5D8;
 extern s32 D_L00_0016000C __attribute__((sda));
@@ -481,7 +480,7 @@ void FUN_L00_00276bd0(void) {
                 return;
             }
         }
-        if (D_001516D8[0] != 0) {
+        if (cd_read_active[0] != 0) {
             return;
         }
         D_L00_0015F578 = 0x1E000;

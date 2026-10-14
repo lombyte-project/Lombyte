@@ -1,6 +1,7 @@
 #include "types.h"
 #include "kernel.h"
 #include "rnc/sdk/library/sdk_state.h"
+#include "rnc/data_labels.h"
 struct SifFileState {
     s32 unk0;
     s32 unk4;
@@ -13,7 +14,6 @@ struct SifFileEntry {
     s32 unk4;
 };
 extern struct SifFileState D_00156880;
-extern u8 D_001574C0[];
 extern u8 D_00157D80[];
 extern u8 D_00157F80[];
 extern struct SifFileEntry *get_iob(s32);

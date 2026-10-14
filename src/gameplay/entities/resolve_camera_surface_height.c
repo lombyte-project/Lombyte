@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 struct CameraProbePosition {
     f32 x;
@@ -6,8 +7,6 @@ struct CameraProbePosition {
     f32 z;
 };
 
-extern s32 occl_cell_count __asm__("D_00161198");
-extern s32 moby_occl_cluster_count __asm__("D_0016119C");
 extern s32 D_001611A0;
 extern f32 D_001611AC;
 extern f32 absolute_float(f32) __asm__("func_001F99C0");

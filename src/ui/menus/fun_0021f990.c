@@ -6,8 +6,7 @@
 #include "rnc/rendering/texture_upload.h"
 
 #include "rnc/storage/memory_card/memory_card_state.h"
-extern s16 D_001516D8[];
-extern s32 D_001A0314[];
+#include "rnc/data_labels.h"
 
 extern s32 FUN_001f97a0(s32);
 extern s64 FUN_00204e30(s32, s32, u8 *, u8 *, s32, s32);
@@ -36,7 +35,7 @@ s32 FUN_0021f990(struct MenuScreen *stream) {
             return 0;
         }
     } else if (flags & 2) {
-        idx = D_001A0314[0];
+        idx = selected_level_index[0];
     } else if (flags & 4) {
         idx = menu_system.current->focus->data.grid.selected_cell;
     } else if (flags & 0x100) {
@@ -71,7 +70,7 @@ s32 FUN_0021f990(struct MenuScreen *stream) {
         if (stream->data.stream.buffer[0] == 0) {
             break;
         }
-        if (D_001516D8[0] != 0) {
+        if (cd_read_active[0] != 0) {
             break;
         }
         if (stream->data.stream.entries[idx].sector_count == 0) {
@@ -101,7 +100,7 @@ s32 FUN_0021f990(struct MenuScreen *stream) {
         break;
     case 1:
     case 3:
-        if (D_001516D8[0] != 0) {
+        if (cd_read_active[0] != 0) {
             break;
         }
         clear_record_flag_by_key(stream->data.stream.buffer[0]);

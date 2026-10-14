@@ -7,7 +7,6 @@
 #include "rnc/math/vector.h"
 
 
-extern f32 D_0015ED6C MACRO_ADDR;
 extern u128 D_001D9B60[][6];
 
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -19,6 +18,7 @@ extern s32 func_00218888(void *, void *, void *, s32, s32, s32, s32, s32, s32);
 
 void FUN_0022f5b0(u8 *m, f32 z) __asm__("FUN_0022f5b0");
 
+extern f32 frame_time __asm__("D_0015ED6C") MACRO_ADDR;
 void FUN_0022f5b0(u8 *m, f32 z) {
     Vec4 vel;
     Vec4 vel2;
@@ -29,9 +29,9 @@ void FUN_0022f5b0(u8 *m, f32 z) {
     s32 c;
 
     for (i = 0; i < 6; i++) {
-        vel.f[0] = random_float_between(-D_0015ED6C, D_0015ED6C);
-        vel.f[1] = random_float_between(-D_0015ED6C, D_0015ED6C);
-        vel.f[2] = z + random_float_between(D_0015ED6C * -0.25f, D_0015ED6C * 0.25f);
+        vel.f[0] = random_float_between(-frame_time, frame_time);
+        vel.f[1] = random_float_between(-frame_time, frame_time);
+        vel.f[2] = z + random_float_between(frame_time * -0.25f, frame_time * 0.25f);
         vel.f[3] = 0.4f;
         qcopy(&vel2, &vel);
         vel2.f[3] = 0.6f;

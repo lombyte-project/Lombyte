@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/missionfunc.c, func_0020CD58). */
 #include "sda.h"
-extern unsigned char D_0013D3E9 NOT_SDA;
+#include "rnc/data_labels.h"
 #include "rnc/gameplay/state/level_state.h"
 int FUN_0020bf08(void) {
     if (D_0013D3E9 != 0 && level_available[13] != 0)

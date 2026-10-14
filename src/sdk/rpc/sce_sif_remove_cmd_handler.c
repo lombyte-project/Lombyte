@@ -1,7 +1,5 @@
 #include "types.h"
-
-extern u32 D_00154E64[];
-extern u32 D_00154E6C[];
+#include "rnc/data_labels.h"
 
 void sceSifRemoveCmdHandler(s32 idx) {
     u32 off = idx << 3;

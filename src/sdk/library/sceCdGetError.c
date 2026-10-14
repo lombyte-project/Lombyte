@@ -1,7 +1,5 @@
 #include "types.h"
-extern u32 D_001312EC[];
-extern u8 D_001324C0[];
-extern u8 D_00132D08[];
+#include "rnc/data_labels.h"
 extern s32 SignalSema();
 extern s32 cd_check_scmd() __asm__("func_00120D40");
 extern s32 sceSifCallRpc();

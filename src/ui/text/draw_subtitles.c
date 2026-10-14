@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/draw.c, func_001F4F90). */
 #include "sda.h"
+#include "types.h"
 typedef struct {
     short start;   /* 0x0 */
     short end;     /* 0x2 */
@@ -12,7 +13,6 @@ typedef struct {
     char *subs; /* 0x4C */
 } SubState;
 extern SubState D_0018CB20;
-extern int D_0015ED88 MACRO_ADDR;
 #include "rnc/rendering/screen.h"
 extern void font_set_window(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7,
                                 int a8);
@@ -30,6 +30,7 @@ extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
    bottom-first, which gives retail's registers. */
 void draw_subtitles(void) __asm__("FUN_001f4be0");
 
+extern s32 game_language __asm__("D_0015ED88") MACRO_ADDR;
 void draw_subtitles(void) {
     Subtitle *p;
     int lang;
@@ -38,7 +39,7 @@ void draw_subtitles(void) {
     if (D_0018CB20.subs == 0) {
         return;
     }
-    lang = D_0015ED88;
+    lang = game_language;
     idx = (lang >= 2 && lang <= 5) ? lang - 1 : 0;
     for (p = (Subtitle *)D_0018CB20.subs; p->start >= 0; p++) {
         if (D_0018CB20.time < p->start) {

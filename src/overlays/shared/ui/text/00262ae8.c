@@ -10,16 +10,16 @@
 
 extern int D_L05_0015F97C;
 extern int D_L05_0015F980;
-extern short D_L05_0015F978_d __asm__("D_L05_0015F978") __attribute__((sda));
 void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 
+extern short D_L05_0015F978 __attribute__((sda));
 void FUN_L05_00264298(void) {
     if (D_L05_0015F980 != -1) {
         set_animation_parameter(D_L05_0015F980, 0);
         D_L05_0015F980 = -1;
     }
     D_L05_0015F97C = 0;
-    *(int *)&D_L05_0015F978_d = *(int *)&D_L05_0015F978_d + 1;
+    *(int *)&D_L05_0015F978 = *(int *)&D_L05_0015F978 + 1;
 }
 
 typedef struct {

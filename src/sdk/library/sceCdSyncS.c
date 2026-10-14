@@ -1,6 +1,5 @@
 #include "types.h"
-extern s32 D_001312D0[];
-extern u8 D_00132D08[];
+#include "rnc/data_labels.h"
 extern u8 D_00152F00[];
 extern s32 SceSifCheckStatRpc();
 extern s32 sceCdDelayThread();

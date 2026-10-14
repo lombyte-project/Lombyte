@@ -19,14 +19,14 @@ typedef struct {
     void *mobys[1];
 } Level15State;
 
-extern Level15State D_L15_0016CE60;
 extern void FUN_L00_00257024(void *);
 
+extern Level15State mission __asm__("D_L15_0016CE60");
 void FUN_L15_0022db50(void) {
     int i;
-    if (current_level_index == 15 && (unsigned)(D_L15_0016CE60.state - 3) < 2) {
-        for (i = 0; i < D_L15_0016CE60.count; i++) {
-            FUN_L00_00257024(D_L15_0016CE60.mobys[i]);
+    if (current_level_index == 15 && (unsigned)(mission.state - 3) < 2) {
+        for (i = 0; i < mission.count; i++) {
+            FUN_L00_00257024(mission.mobys[i]);
         }
     }
 }

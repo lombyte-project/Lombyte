@@ -1,6 +1,5 @@
 #include "types.h"
-extern s32 active_message_record_count __asm__("D_0015EE30");
-extern u8 active_message_records[] __asm__("D_00141E08");
+#include "rnc/data_labels.h"
 extern s32 find_help_entry(s16, s32, u16 *) __asm__("func_001FECC8");
 void push_help_history(s32 id) __asm__("FUN_001fed30");
 

@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
-extern s32 D_0015EE24;
+#include "rnc/data_labels.h"
 extern s32 D_0015F5EC;
 void FUN_00226e08(void) {
     s32 new_value;

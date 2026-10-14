@@ -15,7 +15,6 @@ typedef struct {
     struct { float u, v; } uv[4];
     long unk70, tex, unk80, unk88;
 } Q_28efc8;
-extern int D_L00_00160580_28efc8[1] __asm__("D_001604C0") __attribute__((sda));
 void FUN_001f9a68_28efc8(float, void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9a10_28efc8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9cf8_28efc8(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -23,6 +22,7 @@ long FUN_001f44b8_28efc8(int) __asm__("FUN_001f44b8");
 int FUN_00213260_28efc8(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_28efc8(int) __asm__("func_001FA6C0");
 void FUN_L00_001fd228_28efc8(void *, void *, int) __asm__("func_001F7D30");
+extern int D_001604C0[1] __attribute__((sda));
 void FUN_0022e1b0(unsigned char *m) {
     Q_28efc8 quad;
     V_28efc8 v;
@@ -40,7 +40,7 @@ void FUN_0022e1b0(unsigned char *m) {
         quad.uv[j].v = ((float (*)[2])D_L00_001BD990_28efc8)[j][1];
     }
     FUN_001f9a68_28efc8(0.0009765625f, &v, m);
-    for (i = 0; i < D_L00_00160580_28efc8[level_render_state.content_variant]; i++) {
+    for (i = 0; i < D_001604C0[level_render_state.content_variant]; i++) {
         int c = m[0xBC];
         unsigned int col;
         float s;

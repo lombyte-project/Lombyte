@@ -1,7 +1,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
+#include "rnc/data_labels.h"
 
-extern s16 cd_read_active[] __asm__("D_001516D8");
 extern s32 request_audio_stream_break() __asm__("FUN_002166e8");
 
 s32 clear_preview_animation_queue(void) __asm__("FUN_00226718");

@@ -115,7 +115,6 @@ typedef struct {
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/audio/music/music_stream_state.h"
 extern u8 D_001413F5[];
-extern f32 D_0015ED70 __attribute__((sda));
 extern u8 D_0015EDB4;
 extern f32 sequence_fade __asm__("D_0015F43C");
 extern f32 D_0015F440;
@@ -200,6 +199,7 @@ extern void render_environment_mapped_object() __asm__("func_002327A0");
 
 void update_resident_gameplay_state(void) __asm__("FUN_0022f778");
 
+extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
 void update_resident_gameplay_state(void) {
     Vector4 scratch_vectors[4];
     s32 keyframe_flags;
@@ -628,7 +628,7 @@ void update_resident_gameplay_state(void) {
         }
         if (level_render_state.source_camera_index >= 0 &&
             level_render_state.destination_camera_index >= 0) {
-            camera_blend_step = D_0015ED70 * 0.666f;
+            camera_blend_step = frame_time_sq_gp * 0.666f;
             advance_accelerated_scalar(&level_render_state.blend,
                                        &level_render_state.interpolation_velocity, 1.0f,
                                        camera_blend_step, camera_blend_step, frame_time * 0.5f);

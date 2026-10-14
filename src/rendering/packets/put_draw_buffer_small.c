@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
-extern s32 D_0015EEB8;
+#include "rnc/data_labels.h"
 void put_draw_buffer_small(void) __asm__("FUN_001fb3d0");
 
 void put_draw_buffer_small(void) {

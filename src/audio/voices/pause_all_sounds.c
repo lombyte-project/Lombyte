@@ -2,7 +2,6 @@
 #include "sda.h"
 #include "rnc/ui/menus/menu_system.h"
 
-extern s32 D_0015ED84 MACRO_ADDR;
 #include "rnc/gameplay/camera/update_cam.h"
 extern s32 D_0015F674 MACRO_ADDR;
 extern s32 D_00141660[];
@@ -14,7 +13,6 @@ extern char D_001CE748[];
 extern char D_001CE798[];
 extern s32 D_001A0314[];
 extern s32 D_001D0398[];
-extern s32 D_0015F604 MACRO_ADDR;
 
 extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern void music_pause(s32);
@@ -24,6 +22,8 @@ extern void func_00226E58();
 
 void pause_all_sounds(s32 mode) __asm__("FUN_00218d78");
 
+extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
+extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
 void pause_all_sounds(s32 mode) {
     struct MenuSystem *g;
     snd_pause_all_sounds_in_group(0x1D);
@@ -38,11 +38,11 @@ void pause_all_sounds(s32 mode) {
     }
     {
         struct MenuSystem *g = &menu_system;
-        g->unk134 = *(volatile s32 *)&D_0015ED84 == 0xD || D_0014161B != 0;
+        g->unk134 = *(volatile s32 *)&current_level_index == 0xD || D_0014161B != 0;
     }
     {
         struct MenuSystem *g = &menu_system;
-        g->unk138 = D_0015ED84 == 0 || D_0015ED84 == 0xE;
+        g->unk138 = current_level_index == 0 || current_level_index == 0xE;
     }
     {
         struct MenuSystem *g = &menu_system;
@@ -61,14 +61,14 @@ void pause_all_sounds(s32 mode) {
     }
     {
         struct MenuSystem *g = &menu_system;
-        D_0015F604 = 3;
+        game_mode = 3;
         g->state = mode;
         g->close_request = 0;
         g->unk10 = 0;
         g->update_count = 0;
     }
     {
-        s32 m = *(volatile s32 *)&D_0015ED84;
+        s32 m = *(volatile s32 *)&current_level_index;
         if (m < 0x13) {
             D_001A0314[0] = m;
         } else {

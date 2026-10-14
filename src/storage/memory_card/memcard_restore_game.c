@@ -1,6 +1,5 @@
 #include "types.h"
-extern u8 mc_gamedata[] __asm__("D_001A04C0");
-extern u8 mc_leveldata[] __asm__("D_001A07C0");
+#include "rnc/data_labels.h"
 extern char D_001E81D0[];
 extern s32 get_dma_packet_span_bytes(void *) __asm__("GetDmaPacketSpanBytes");
 extern void DebugPrint(char *, ...);

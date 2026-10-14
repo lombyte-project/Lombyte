@@ -20,11 +20,11 @@
 /* new_iob n2: game FS I/O buffer allocator; get_iob sibling. */
 
 #include "types.h"
+#include "rnc/data_labels.h"
 
 extern s32 _sceFsIobSemaMK();
 extern s32 WaitSema();
 extern s32 SignalSema();
-extern s32 D_0012FCA0[];
 extern u8 D_00157D80[];
 
 void *new_iob(void) {

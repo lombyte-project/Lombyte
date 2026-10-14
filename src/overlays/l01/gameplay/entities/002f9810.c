@@ -7,6 +7,7 @@
 #include "qcopy.h"
 #include "qzero.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/data_labels.h"
 
 typedef union {
     u128 q;
@@ -202,7 +203,6 @@ typedef struct {
 } BurstMoby;
 
 extern s32 D_0015ED84_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")));
-extern s32 D_0014C190[][64];
 extern s32 D_L01_001BA950[];
 typedef struct {
     u8 pad0[0x454];
@@ -221,6 +221,7 @@ extern void FUN_001f9a10(void *, void *, void *);
 extern int FUN_L00_00257b90(int lo, int hi);
 extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
 
+extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void FUN_L01_002f9d80(BurstMoby *self) {
     BurstTarget *t;
     BurstColors colors;
@@ -232,7 +233,7 @@ void FUN_L01_002f9d80(BurstMoby *self) {
 
     t = trooper_find_hit(self, 0x830000, 0);
     if (D_L01_001BB6B0.collected[self->id] != 0 ||
-        (D_0014C190[current_level_index][self->id >> 5] >> (self->id & 0x1F)) & 1) {
+        (D_0014C190_257218[current_level_index][self->id >> 5] >> (self->id & 0x1F)) & 1) {
         mark_moby_for_removal(self);
     }
     if (t != NULL && t->moby->oclass == 0x2AE) {
@@ -253,7 +254,7 @@ void FUN_L01_002f9d80(BurstMoby *self) {
             FUN_L01_002f8530(&pos, &dir, colors.c[random_integer_below(3)],
                              FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
         }
-        D_0014C190[D_0015ED84_e[1]][self->id >> 5] |= 1 << (self->id & 0x1F);
+        D_0014C190_257218[D_0015ED84_e[1]][self->id >> 5] |= 1 << (self->id & 0x1F);
         D_L01_001BA950[self->id >> 5] |= 1 << (self->id & 0x1F);
         mark_moby_for_removal(self);
     } else {
@@ -511,7 +512,7 @@ void FUN_L01_002fa800(struct Moby *m) {
     f32 s;
 
     if (D_L01_001BB6B0.collected[(s16)m->save_id] != 0 ||
-        (D_0014C190[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
+        (D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
         mark_moby_for_removal(m);
         return;
     }
@@ -570,7 +571,7 @@ void FUN_L01_002fa800(struct Moby *m) {
             spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)], random_float_between(0.05f, 0.15f),
                                FUN_L00_00257b90(60, 180), 1.0f, 1.0f, 0.75f, 0);
         }
-        D_0014C190[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+        D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
         D_L01_001BA950[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
         D_0013D388[0xE] = 1;
         mark_moby_for_removal(m);
@@ -598,18 +599,17 @@ typedef struct {
 } Effect;
 
 extern s32 D_L01_0015F5C4;
-extern u8 D_0015EDB0;
-extern MobyList D_L01_0016CCE0;
 extern Effect D_L01_0017C8C0;
 extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 
+extern MobyList fx_cutscene __asm__("D_L01_0016CCE0");
 void FUN_L01_002fac80(void) {
     s32 i;
 
-    if (D_L01_0015F5C4 == 2 && D_0015EDB0 != 0) {
-        for (i = 0; i < D_L01_0016CCE0.count; i++) {
-            if (D_L01_0016CCE0.list[i]->type == 0x32B && D_L01_0017C8C0.active == 0) {
-                attach_manipulator(D_L01_0016CCE0.list[i], 0, &D_L01_0017C8C0);
+    if (D_L01_0015F5C4 == 2 && big_head_cheat_enabled != 0) {
+        for (i = 0; i < fx_cutscene.count; i++) {
+            if (fx_cutscene.list[i]->type == 0x32B && D_L01_0017C8C0.active == 0) {
+                attach_manipulator(fx_cutscene.list[i], 0, &D_L01_0017C8C0);
                 D_L01_0017C8C0.z = D_L01_0017C8C0.y = D_L01_0017C8C0.x = 2.75f;
             }
         }
@@ -683,16 +683,11 @@ typedef struct {
 typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } Lv_2FC140;
 extern Moby_2FC140 *D_L01_00160058_2FC140 __asm__("D_L01_0015FFD8") MACRO_ADDR;
 extern Rec_2FC140 *D_L01_0016016C_2FC140 __asm__("D_L01_001600EC") MACRO_ADDR;
-extern float D_0015EE6C_2FC140 __asm__("D_0015ED6C") MACRO_ADDR;
 extern int D_L01_0015F6A8_2FC140 __asm__("D_L01_0015F5C4") MACRO_ADDR;
-extern int D_0015EE84_2FC140 __asm__("D_0015ED84") MACRO_ADDR;
 extern char D_L01_001BAD60_2FC140[] __asm__("D_L01_001BAA50");
 extern Lv_2FC140 D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB6B0");
-extern unsigned char D_L01_0015FD08_2FC140[] __asm__("D_L01_0015FC88") MACRO_ADDR;
 extern char D_L01_001BADB0_2FC140[] __asm__("D_L01_001BAAA0");
 extern unsigned char D_0014C050_u[] __asm__("D_0014C050");
-extern char hero_pos[] __asm__("D_0013F3D0");
-extern int D_001413DC_u[] __asm__("D_001413DC");
 extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern void func_L01_002FC058_2FC140(void) __asm__("FUN_L01_002fac80");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9770");
@@ -714,6 +709,9 @@ extern void func_L00_00286128_2FC140(void *, void *) __asm__("FUN_L00_00284e50")
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void func_L01_002A3680_2FC140(void) __asm__("FUN_L01_002a2480");
 
+extern unsigned char D_L01_0015FC88[] __attribute__((section(".sdata")));
+extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 void FUN_L01_002fad68(Moby_2FC140 *moby) {
     Data_2FC140 *data;
     Link_2FC140 *q;
@@ -741,7 +739,7 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
         moby->pos.z = moby->pos.z + fd;
         break;
     case 1:
-        r16 = *(unsigned char *)(moby->fB0 + (D_0015EE84_2FC140 << 4) + D_0014C050_u);
+        r16 = *(unsigned char *)(moby->fB0 + (current_level_index_macro << 4) + D_0014C050_u);
         if (r16 == 0xFF) {
             if (moby->f53 != 2) {
                 blend_moby_animation(moby, 2, 0, scale_game_frames(0x14));
@@ -759,7 +757,7 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
                 }
             }
             func_L00_0028FC68_2FC140();
-            if (is_point_inside_clip_volume(hero_pos, data->f10) != 0) {
+            if (is_point_inside_clip_volume(D_0013F3D0, data->f10) != 0) {
                 moby->flags = moby->flags & 0xFFBE;
                 moby->f94 = moby->pclass->f10;
                 if (data->link != -1) {
@@ -780,7 +778,7 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
         }
         break;
     case 2:
-        moby->pos.z = moby->pos.z - D_0015EE6C_2FC140 * 5.0f;
+        moby->pos.z = moby->pos.z - frame_time_macro * 5.0f;
         if (data->link != -1) {
             q = D_L01_00160058_2FC140[data->link].data;
             q->v.y = -angle_atan2(
@@ -833,7 +831,7 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
         if (flag == 0) {
             break;
         }
-        n4 = D_001413DC_u[0];
+        n4 = D_001413DC[0];
         if (n4 == 7) {
             break;
         }
@@ -876,8 +874,8 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
         if (data->link != -1) {
             ((Lv_2FC140 *)D_L01_001BAD60_2FC140)->collected[D_L01_00160058_2FC140[data->link].fB2] = D_L01_00160058_2FC140[data->link].fB0 + 2;
             if (D_L01_00160058_2FC140[data->link].fB0 == 0xFF
-                || (D_L01_0015FD08_2FC140[D_L01_00160058_2FC140[data->link].fB0] != 0xFF
-                    && D_0014C050_u[D_L01_00160058_2FC140[data->link].fB0 + (D_0015EE84_2FC140 << 4)] == 0xFF)) {
+                || (D_L01_0015FC88[D_L01_00160058_2FC140[data->link].fB0] != 0xFF
+                    && D_0014C050_u[D_L01_00160058_2FC140[data->link].fB0 + (current_level_index_macro << 4)] == 0xFF)) {
                 D_L01_001BB9C0_2FC140.collected[D_L01_00160058_2FC140[data->link].fB2] = D_L01_00160058_2FC140[data->link].fB0 + 2;
             }
         }
@@ -1032,17 +1030,6 @@ extern u8 pool_wave[] __asm__("D_L01_001FA6A0");
 extern u8 camera_pos[] __asm__("D_L01_00167240");
 extern s32 level_frame_count __asm__("D_L01_0015F5CC") MACRO_ADDR;
 extern s32 pool_drip_timer __asm__("D_L01_00161C84") __attribute__((sda));
-extern u8 water_tint0_r __asm__("D_L01_00161200") MACRO_ADDR;
-extern u8 water_tint0_g __asm__("D_L01_00161201") MACRO_ADDR;
-extern u8 water_tint0_b __asm__("D_L01_00161202") MACRO_ADDR;
-extern u8 water_tint_a __asm__("D_L01_00161203") MACRO_ADDR;
-extern u8 water_tint1_r __asm__("D_L01_00161204") MACRO_ADDR;
-extern u8 water_tint1_g __asm__("D_L01_00161205") MACRO_ADDR;
-extern u8 water_tint1_b __asm__("D_L01_00161206") MACRO_ADDR;
-extern f32 pool_f208 __asm__("D_L01_00161208") MACRO_ADDR;
-extern f32 pool_f20C __asm__("D_L01_0016120C") MACRO_ADDR;
-extern f32 pool_f210 __asm__("D_L01_00161210") MACRO_ADDR;
-extern f32 pool_f214 __asm__("D_L01_00161214") MACRO_ADDR;
 extern PoolTile *pool_draw_tiles __asm__("D_L01_001612D0") MACRO_ADDR;
 extern u8 *pool_draw_tex __asm__("D_L01_001612D4") MACRO_ADDR;
 extern s32 pool_draw_count __asm__("D_L01_001612D8") MACRO_ADDR;
@@ -1063,6 +1050,17 @@ extern void pool_drip(void *, f32) __asm__("FUN_L01_002ffcd0");
 extern void pool_bubble(void *, void *, f32) __asm__("FUN_L01_00287b00");
 extern void pool_bubbles(void *, void *, f32, f32) __asm__("FUN_L01_00287c80");
 
+extern u8 D_L01_00161200 __attribute__((section(".sdata")));
+extern u8 D_L01_00161201 __attribute__((section(".sdata")));
+extern u8 D_L01_00161202 __attribute__((section(".sdata")));
+extern u8 water_tint __asm__("D_L01_00161203") __attribute__((section(".sdata")));
+extern u8 D_L01_00161204 __attribute__((section(".sdata")));
+extern u8 D_L01_00161205 __attribute__((section(".sdata")));
+extern u8 D_L01_00161206 __attribute__((section(".sdata")));
+extern f32 D_L01_00161208 __attribute__((section(".sdata")));
+extern f32 D_L01_0016120C __attribute__((section(".sdata")));
+extern f32 D_L01_00161210 __attribute__((section(".sdata")));
+extern f32 D_L01_00161214 __attribute__((section(".sdata")));
 void FUN_L01_002fd0e8(struct Moby *moby) {
     s32 *volumes;
     s32 found;
@@ -1119,11 +1117,11 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
             l->c3D = 0x40;
         }
         pool_draw_count = 21;
-        pool_f208 = zero;
+        D_L01_00161208 = zero;
         tex = pool_tile_tex;
-        pool_f20C = 32768.0f;
-        pool_f210 = 255.0f;
-        pool_f214 = 48.0f;
+        D_L01_0016120C = 32768.0f;
+        D_L01_00161210 = 255.0f;
+        D_L01_00161214 = 48.0f;
         pool_draw_tiles = pool_tiles;
         pool_draw_tex = pool_tile_tex;
         for (m = 0; m < 21; m++) {
@@ -1164,21 +1162,21 @@ void FUN_L01_002fd0e8(struct Moby *moby) {
         }
         if (found >= 0) {
             if (found > 0 && found < 4) {
-                water_tint0_r = 0;
-                water_tint0_g = 0x28;
-                water_tint0_b = 0x30;
-                water_tint_a = 0x40;
-                water_tint1_r = 0;
-                water_tint1_g = 0x28;
-                water_tint1_b = 0x30;
+                D_L01_00161200 = 0;
+                D_L01_00161201 = 0x28;
+                D_L01_00161202 = 0x30;
+                water_tint = 0x40;
+                D_L01_00161204 = 0;
+                D_L01_00161205 = 0x28;
+                D_L01_00161206 = 0x30;
             } else {
-                water_tint0_r = 0x18;
-                water_tint0_g = 0x30;
-                water_tint0_b = 0x90;
-                water_tint_a = 0x30;
-                water_tint1_r = 0x18;
-                water_tint1_g = 0x30;
-                water_tint1_b = 0x90;
+                D_L01_00161200 = 0x18;
+                D_L01_00161201 = 0x30;
+                D_L01_00161202 = 0x90;
+                water_tint = 0x30;
+                D_L01_00161204 = 0x18;
+                D_L01_00161205 = 0x30;
+                D_L01_00161206 = 0x90;
             }
         }
         pool_flush(pool_tiles, 21);

@@ -4,6 +4,8 @@
 #include "rnc/globals.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "asm.h"
+#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/level_labels.h"
 
 #define NOT_SDA
 
@@ -13,15 +15,15 @@
 /* Ported from rac1-decomp (src/overlays/shared/space_0028FB78.c: func_L00_0028FB78), where it is exact; names translated to the US level program. */
 
 extern char D_0013E030_c[] __asm__("D_0013E030");
-__attribute__((sda)) extern int D_L00_00160540;
 extern void FUN_L00_0028e990_c(void) __asm__("FUN_L00_0028e990");
 extern void FUN_L00_0028e180(void);
 void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8");
 
+extern s32 D_L00_00160540_gp __asm__("D_L00_00160540") __attribute__((sda));
 void FUN_L00_0028e8a0(char *m) {
     char *g;
     int *src;
-    D_L00_00160540 = 1;
+    D_L00_00160540_gp = 1;
     FUN_L00_0028e990_c();
     if (current_level_index == 0xD) {
         char *q = D_0013E030_c;
@@ -83,18 +85,11 @@ typedef struct {
 extern E_28e9c8 D_0013E030_28e9c8 __asm__("D_0013E030");
 extern C_28e9c8 D_L00_0016C860_28e9c8 __asm__("D_L00_0016C860") __attribute__((section(".data")));
 extern int D_L00_0015F5D8_28e9c8 __asm__("D_L00_0015F5D8");
-extern char D_L00_0017C340_28e9c8[] __asm__("D_L00_0017C340") __attribute__((section(".data")));
-extern char D_L00_0017C380_28e9c8[] __asm__("D_L00_0017C380") __attribute__((section(".data")));
 extern struct {
     int x0, x4, x8;
 } D_L00_00173E00_28e9c8 __asm__("D_L00_00173E00") __attribute__((section(".data")));
-extern int D_L00_001611CC_28e9c8 __asm__("D_L00_001611CC");
-extern int D_L00_0015F5C4_28e9c8 __asm__("D_L00_0015F5C4");
-extern float D_L00_0015F3FC_28e9c8 __asm__("D_L00_0015F3FC");
-extern int D_L00_0015F400_28e9c8 __asm__("D_L00_0015F400");
 extern unsigned char D_001413F5_28e9c8 __asm__("D_001413F5") __attribute__((section(".data")));
 extern O_28e9c8 *D_L00_0015FFDC_28e9c8 __asm__("D_L00_0015FFDC");
-extern int D_0015ED84_28e9c8 __asm__("D_0015ED84");
 extern unsigned char D_0013D4C6_28e9c8 __asm__("D_0013D4C6") __attribute__((section(".data")));
 void memset_28e9c8(void *, int, int) __asm__("FUN_001f97e8");
 void f2335a0_28e9c8(void) __asm__("FUN_002335a0");
@@ -114,16 +109,16 @@ void FUN_L00_0028e9c8(int a) {
     D_0013E030_28e9c8.x20 = a;
     D_0013E030_28e9c8.x8 = 0;
     memset_28e9c8(&D_L00_0016C860_28e9c8, 0, 0x1C0);
-    memset_28e9c8(D_L00_0017C340_28e9c8, 0, 0x40);
-    memset_28e9c8(D_L00_0017C380_28e9c8, 0, 0x40);
+    memset_28e9c8(D_L00_0017C340, 0, 0x40);
+    memset_28e9c8(D_L00_0017C380, 0, 0x40);
     f2335a0_28e9c8();
-    u = D_L00_001611CC_28e9c8 - 0x60000;
+    u = D_L00_001611CC - 0x60000;
     D_L00_0016C860_28e9c8.x58 = D_L00_00173E00_28e9c8.x4 + u;
     D_L00_0016C860_28e9c8.x5c = D_L00_00173E00_28e9c8.x8 + u;
-    D_L00_0015F3FC_28e9c8 = 1.0f;
-    D_L00_0015F5C4_28e9c8 = 6;
-    D_L00_001611CC_28e9c8 = u;
-    D_L00_0015F400_28e9c8 = 0;
+    fade_level = 1.0f;
+    D_L00_0015F5C4 = 6;
+    D_L00_001611CC = u;
+    D_L00_0015F400 = 0;
     hero_set_state(100, 2);
     D_001413F5_28e9c8 = 1;
     f232fe8_28e9c8();
@@ -136,10 +131,10 @@ void FUN_L00_0028e9c8(int a) {
         n = D_0013E030_28e9c8.x26;
         m = n + 1;
         t = n + 6;
-        if (D_0015ED84_28e9c8 == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
+        if (current_level_index == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
             m = 0;
             t = 11;
-        } else if (D_0015ED84_28e9c8 == 14 && D_0013E030_28e9c8.x26 == 2) {
+        } else if (current_level_index == 14 && D_0013E030_28e9c8.x26 == 2) {
             m = 8;
             t = 14;
         }
@@ -152,12 +147,12 @@ void FUN_L00_0028e9c8(int a) {
         if (k)
             t = n;
         m2 = n + 5;
-        if (D_0015ED84_28e9c8 == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
+        if (current_level_index == 10 && n == 1 && D_0013D4C6_28e9c8 == 0) {
             t = 10;
             if (k)
                 t = 9;
             m2 = 4;
-        } else if (D_0015ED84_28e9c8 == 14 && D_0013E030_28e9c8.x26 == 2) {
+        } else if (current_level_index == 14 && D_0013E030_28e9c8.x26 == 2) {
             t = 13;
             if (D_0013E030_28e9c8.x2c)
                 t = 12;
@@ -206,13 +201,6 @@ typedef struct {
 } A_0028ed58;
 extern A_0028ed58 D_0013E030_0028ed58 __asm__("D_0013E030") __attribute__((section(".data")));
 
-extern s32 D_L00_0015F5C4_0028ed58 __asm__("D_L00_0015F5C4");
-extern s32 D_L00_0015F5C0_0028ed58 __asm__("D_L00_0015F5C0");
-extern f32 D_L00_0015F3FC_0028ed58 __asm__("D_L00_0015F3FC");
-extern s32 D_L00_0015F400_0028ed58 __asm__("D_L00_0015F400");
-extern s32 D_L00_001611CC_0028ed58 __asm__("D_L00_001611CC");
-extern s32 D_0015ED84_0028ed58 __asm__("D_0015ED84");
-extern s32 D_0015ED80_0028ed58 __asm__("D_0015ED80");
 typedef struct {
     s32 i0;
     s32 i4;
@@ -231,39 +219,39 @@ typedef struct {
 } C_0028ed58;
 extern C_0028ed58 D_L00_0016C860_0028ed58 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
-extern s32 D_L00_00160570_0028ed58[1] __asm__("D_L00_00160570") __attribute__((sda));
 void FUN_002335a0_0028ed58(void) __asm__("FUN_002335a0");
 void FUN_L00_0028e9c8_0028ed58(s32) __asm__("FUN_L00_0028e9c8");
 s32 FUN_001f96f8_0028ed58(s32) __asm__("FUN_001f96f8");
 void FUN_002049f0_0028ed58(s32) __asm__("FUN_002049f0");
 s32 FUN_0020b178_0028ed58(s32, s32) __asm__("FUN_0020b178");
+extern s32 D_L00_00160570[1] __attribute__((sda));
 void FUN_L00_0028ed58(s32 a) {
     A_0028ed58 *p = &D_0013E030_0028ed58;
     C_0028ed58 *c;
     s32 t;
-    (&D_L00_0015F5C4_0028ed58)[5] = 1; /* D_L00_0015F5D8: the unit declares it sda */
-    D_L00_0015F5C4_0028ed58 = 6;
-    D_L00_0015F3FC_0028ed58 = 1.0f;
-    D_L00_0015F400_0028ed58 = 0;
+    (&D_L00_0015F5C4)[5] = 1; /* D_L00_0015F5D8: the unit declares it sda */
+    D_L00_0015F5C4 = 6;
+    fade_level = 1.0f;
+    D_L00_0015F400 = 0;
     p->i20 = 0;
     p->h24 = -1;
     FUN_002335a0_0028ed58();
-    t = D_L00_001611CC_0028ed58 - 0x60000;
+    t = D_L00_001611CC - 0x60000;
     c = &D_L00_0016C860_0028ed58;
     c->i58 = D_L00_00173E00_0028ed58.i4 + t;
     c->i5C = D_L00_00173E00_0028ed58.i8 + t;
-    D_L00_001611CC_0028ed58 = t;
-    if (D_0015ED84_0028ed58 == a) {
+    D_L00_001611CC = t;
+    if (current_level_index == a) {
         s32 d;
         FUN_L00_0028e9c8_0028ed58(8);
-        d = D_0015ED80_0028ed58 ? 0x50 : 0x60;
-        c->i34 = FUN_001f96f8_0028ed58(D_L00_00160570_0028ed58[p->h26]);
+        d = pal_mode ? 0x50 : 0x60;
+        c->i34 = FUN_001f96f8_0028ed58(D_L00_00160570[p->h26]);
         c->i3C = c->i34 / d;
         FUN_002049f0_0028ed58(c->i3C);
         c->i38 = c->i34 % d;
     } else {
         FUN_0020b178_0028ed58(0, a);
-        D_L00_0015F5C0_0028ed58 = a;
+        D_L00_0015F5C0 = a;
         p->i20 = 3;
         p->h24 = -1;
     }
@@ -285,45 +273,41 @@ extern struct {
     char p[0x58];
     int x58, x5c;
 } D_L00_0016C860_eed0 __asm__("D_L00_0016C860") __attribute__((section(".data")));
-extern int D_L00_001611CC_eed0 __asm__("D_L00_001611CC");
-extern int D_L00_0015F5C4_eed0 __asm__("D_L00_0015F5C4");
-extern float D_L00_0015F3FC_eed0 __asm__("D_L00_0015F3FC");
-extern int D_0015ED84_eed0 __asm__("D_0015ED84");
-extern u8 D_0013DD43_eed0 __asm__("D_0013DD43") __attribute__((section(".data")));
-extern u8 D_0013D3F0_eed0[] __asm__("D_0013D3F0");
 void FUN_002335a0_eed0(void) __asm__("FUN_002335a0");
 void FUN_L00_0028e9c8_eed0(s32) __asm__("FUN_L00_0028e9c8");
+extern u8 D_0013DD43 __attribute__((section(".data")));
+extern u8 D_0013D3F0[];
 void FUN_L00_0028eed0(void) {
     int m, u;
     D_0013E030_eed0.x2c = 1;
     if (D_0013E030_eed0.x2a != 0)
         D_0013E030_eed0.x2a = 0;
-    m = D_0015ED84_eed0;
-    if (m == 1 && D_0013DD43_eed0 == 0) {
-        D_L00_0015F5C4_eed0 = 0;
+    m = current_level_index;
+    if (m == 1 && D_0013DD43 == 0) {
+        D_L00_0015F5C4 = 0;
         return;
     }
     if (m != 0) {
         if (m == 0xE) {
-            if (D_0013D3F0_eed0[0] == 0)
+            if (D_0013D3F0[0] == 0)
                 goto out;
         }
         if (m < 0x14)
             goto in;
     }
 out:
-    D_L00_0015F5C4_eed0 = 0;
+    D_L00_0015F5C4 = 0;
     return;
 in:
     D_0013E030_eed0.x24 = -1;
-    D_L00_0015F5C4_eed0 = 6;
-    D_L00_0015F3FC_eed0 = 1.0f;
+    D_L00_0015F5C4 = 6;
+    fade_level = 1.0f;
     D_0013E030_eed0.x20 = 0;
     FUN_002335a0_eed0();
-    u = D_L00_001611CC_eed0 - 0x60000;
+    u = D_L00_001611CC - 0x60000;
     D_L00_0016C860_eed0.x58 = D_L00_00173E00_eed0.x4 + u;
     D_L00_0016C860_eed0.x5c = D_L00_00173E00_eed0.x8_c + u;
-    D_L00_001611CC_eed0 = u;
+    D_L00_001611CC = u;
     FUN_L00_0028e9c8_eed0(8);
 }
 typedef struct {
@@ -343,12 +327,6 @@ typedef struct {
     short h26;
 } G_28efc8;
 extern G_28efc8 D_0013E030_28efc8 __asm__("D_0013E030");
-extern V_28efc8 D_L00_001BD9B0_28efc8[] __asm__("D_L00_001BD9B0") __attribute__((section(".data")));
-extern V_28efc8 D_L00_001BDA30_28efc8[] __asm__("D_L00_001BDA30") __attribute__((section(".data")));
-extern V_28efc8 D_L00_001BDA50_28efc8[] __asm__("D_L00_001BDA50") __attribute__((section(".data")));
-extern float D_L00_001BD990_28efc8[] __asm__("D_L00_001BD990") __attribute__((section(".data")));
-extern V_28efc8 D_L00_001BDA70_28efc8[] __asm__("D_L00_001BDA70") __attribute__((section(".data")));
-extern int D_L00_00160580_28efc8[1] __asm__("D_L00_00160580") __attribute__((sda));
 void FUN_001f9a68_28efc8(float, void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9a10_28efc8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9cf8_28efc8(void *, void *, void *) __asm__("FUN_001f9cf8");

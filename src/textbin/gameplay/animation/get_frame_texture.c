@@ -4,6 +4,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/texture_upload.h"
+#include "rnc/data_labels.h"
 
 struct FrameTextureRef {
     s16 palette_index;
@@ -22,8 +23,6 @@ struct FrameImagePage {
     u8 height_log2;
 };
 
-extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
-extern s32 pending_texture_upload_count __asm__("D_0015F458");
 struct FrameTextureTables {
     u8 pad00[0x20];
     s32 frame_references_address;

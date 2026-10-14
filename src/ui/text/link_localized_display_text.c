@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 typedef struct {
     int state;  /* 0x00 */
@@ -15,8 +16,6 @@ typedef struct {
 } TextEntry;
 
 extern HelpState D_001996D0;
-extern u8 D_0015EE1C;
-extern u8 D_0015EE1D;
 extern TextEntry *help_msgs __asm__("D_0015F6A0");
 #include "rnc/rendering/screen.h"
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("func_0022DB10");

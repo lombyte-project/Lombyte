@@ -133,11 +133,9 @@ void FUN_L02_0021b698(void) {
 
 /* Same source as the exact FUN_L08_00222800, with only the 0x16 animation in mode 0 and no 0xF exit. */
 extern s32 D_L08_0015F5C4_8 __asm__("D_L02_0015F5C4");
-extern OvlMobyEntry40 D_L08_00178900_8[] __asm__("D_L02_00178700");
 extern s32 D_0015ED84_8 __asm__("D_0015ED84");
 extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
-extern f32 D_0015ED6C_8 __asm__("D_0015ED6C");
 
 void FUN_L00_00206c08_8(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -151,6 +149,7 @@ void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 #define G hero
 
+extern OvlMobyEntry40 D_L02_00178700[];
 s32 FUN_L02_0021ff70(s32 arg) {
     u8 *m;
     OvlMobyEntry40 *tbl;
@@ -180,7 +179,7 @@ s32 FUN_L02_0021ff70(s32 arg) {
     if (m[0xA4] == 0xFF) {
         return 0;
     }
-    tbl = &D_L08_00178900_8[m[0xA4]];
+    tbl = &D_L02_00178700[m[0xA4]];
     if (tbl->owner != m) {
         return 0;
     }
@@ -218,11 +217,11 @@ s32 FUN_L02_0021ff70(s32 arg) {
         }
         if (G.state.control_mode == 0x16) {
             hero_set_state(0x6D, 1);
-            G.motion.unk120.f[2] = D_0015ED6C_8 * 7.0f;
+            G.motion.unk120.f[2] = frame_time * 7.0f;
             return 1;
         }
         hero_set_state(HERO_STATE_HURT, 1);
-        e = D_0015ED6C_8;
+        e = frame_time;
         a = e * 5.7f;
         b = e * 2.4f;
         if (G.unk12E7 != 0) {
@@ -236,7 +235,7 @@ s32 FUN_L02_0021ff70(s32 arg) {
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_8(&v, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
+        FUN_L00_00210c80_8(&v, flag, frame_time * 5.0f, frame_time * 2.4f);
         break;
     }
     FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &v);
@@ -247,9 +246,6 @@ s32 FUN_L02_0021ff70(s32 arg) {
 /* Same source as the exact FUN_L01_00231ae0, without its 0x11/0x12 mode branch. */
 
 extern f32 D_0013F570_231ae0[] __asm__("D_0013F570");
-extern f32 D_0015ED60_231ae0 __asm__("D_0015ED60");
-extern f32 D_0015ED64_231ae0 __asm__("D_0015ED64");
-extern f32 D_0015ED6C_231ae0 __asm__("D_0015ED6C");
 f32 FUN_001f9b80_231ae0(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_231ae0(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_231ae0(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
@@ -280,10 +276,10 @@ void FUN_L02_002203e8(void) {
         FUN_001f9b80_231ae0(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
         f32 *q = D_0013F570_231ae0;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
-        approach_value_231ae0(b->unk228, D_0015ED60_231ae0 * 0.02f, q);
-        approach_value_231ae0(b->unk22C, D_0015ED60_231ae0 * 0.02f, q + 1);
-        FUN_L00_0025b8c0_231ae0(q + 5, q + 6, b->unk230, D_0015ED64_231ae0 * 0.02f,
-                                D_0015ED64_231ae0 * 0.3f, D_0015ED6C_231ae0 * 4.0f);
+        approach_value_231ae0(b->unk228, frame_scale * 0.02f, q);
+        approach_value_231ae0(b->unk22C, frame_scale * 0.02f, q + 1);
+        FUN_L00_0025b8c0_231ae0(q + 5, q + 6, b->unk230, frame_scale_sq * 0.02f,
+                                frame_scale_sq * 0.3f, frame_time * 4.0f);
     }
 }
 #include "qcopy.h"
@@ -530,7 +526,6 @@ typedef union {
     u128_222270 q;
     f32 f[4];
 } V_222270;
-extern u128_222270 coll_222270[] __asm__("D_L02_00174470") __attribute__((section(".data")));
 extern void vzero_222270(void *) __asm__("FUN_001f99f8");
 extern void f2347c0_222270(void) __asm__("FUN_L00_002347c0");
 extern void f233810_222270(void *, void *, f32) __asm__("FUN_L00_00233810");
@@ -542,6 +537,7 @@ extern s32 coll1_222270(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 coll2_222270(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 coll3_222270(void *, f32) __asm__("FUN_L00_001f3170");
 extern void vscl_222270(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern u128_222270 D_L02_00174470[] __attribute__((section(".data")));
 s32 FUN_L02_00222270(s32 mode) {
     V_222270 old;
     V_222270 v;
@@ -589,7 +585,7 @@ s32 FUN_L02_00222270(s32 mode) {
             if (!(a | coll3_222270(&hero.motion.pos.q, hero.unk234)))
                 break;
         }
-        c = coll_222270;
+        c = D_L02_00174470;
         qcopy(&hero.motion.pos.q, c);
         qcopy(&hero.unk200.q, c + 1);
         qcopy(&hero.unk210.q, c - 1);
@@ -699,11 +695,9 @@ typedef struct {
 
 extern Cam D_L02_00167280;
 extern Moby *D_L02_00178500[];
-extern struct PadState D_0013C940;
 extern HeroTableRow2C D_L02_0017C228[];
 extern struct UsageStats D_00141848;
 extern S17BEB8 D_L02_0017C3B8;
-extern char D_0013A4E0[];
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L02_001673D8 __attribute__((section(".data")));
@@ -1935,11 +1929,11 @@ void FUN_L02_00225c20(void) {
             b = a;
         }
         stick_target(hero.unk229C * b, 0);
-        if (hero.unk229C > 0.2f && !(D_0013C940.held & 3)) {
+        if (hero.unk229C > 0.2f && !(controller_state.held & 3)) {
             turn_to(0, frame_scale_sq * 0.027f, frame_scale_sq * 0.3f,
                              frame_time * 5.934119f * hero.unk229C);
         }
-        if (D_0013C940.held & 3) {
+        if (controller_state.held & 3) {
             float keep;
 
             keep = hero.motion.move_yaw;

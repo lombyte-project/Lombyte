@@ -6,10 +6,11 @@
 
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Register this level's vendor data set. */
 
-extern char D_L07_001DCE40[];
 extern void FUN_L01_002b91c8(char *, int);
 
 void FUN_L07_0030cd20(void) {
@@ -28,16 +29,11 @@ struct L07MovingVars {
     int forceReturn;
 };
 
-extern u8 D_0014C050[];
-extern u8 D_L07_0015FC88[];
-extern s32 D_L07_00184528[] NOT_SDA;
 extern struct Moby *D_L07_0015FFD8;
 extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void transform_vector_xyz(void *, void *, void *) __asm__("FUN_001f9cf8");
-
-extern s32 D_L07_00184528[];
 
 void FUN_L07_0031a9e8(struct Moby *moby) {
     struct L07MovingVars *vars = (struct L07MovingVars *)moby->pvars;
@@ -51,7 +47,7 @@ void FUN_L07_0031a9e8(struct Moby *moby) {
     u8 spawn_id;
     int no_spawn;
 
-    if (moby->mission != 0xff && D_0014C050[moby->mission + current_level_index * 16] == 0xff)
+    if (moby->mission != 0xff && visited52[moby->mission + current_level_index * 16] == 0xff)
         vars->target = -1;
     spawn_id = moby->mission;
     force_end = 0;

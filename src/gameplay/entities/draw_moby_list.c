@@ -1,5 +1,5 @@
 #include "types.h"
-extern s32 moby_anim_head __asm__("D_0015FF14");
+#include "rnc/data_labels.h"
 extern s32 func_00118A80();
 extern void stash_moby_class_dists(void) __asm__("func_0020D218");
 extern s32 restore_moby_class_dists() __asm__("func_0020D248");

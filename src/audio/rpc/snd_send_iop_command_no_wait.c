@@ -4,7 +4,6 @@ struct SndCb {
     s32 pad;
     s64 data;
 };
-extern s32 D_0015ECC4 __attribute__((sda));
 extern s32 *snd_current_buffer __asm__("D_0015EC80") __attribute__((sda));
 extern s32 snd_batch_index __asm__("D_0015ECC0") __attribute__((sda));
 extern s32 *snd_batch_command_buffers[2] __asm__("D_0015ECA0") __attribute__((sda));
@@ -24,6 +23,7 @@ extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, voi
 void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb,
                                   s64 cb_data) __asm__("FUN_0012e6e0");
 
+extern s32 GlobalTableStatus __asm__("D_0015ECC4") __attribute__((sda));
 void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_data) {
     s32 need;
     s32 tries;
@@ -32,7 +32,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
     u8 *p;
 
     held = 0;
-    if (D_0015ECC4 == 0 && snd_current_buffer == 0 && size == 0 && cb == 0) {
+    if (GlobalTableStatus == 0 && snd_current_buffer == 0 && size == 0 && cb == 0) {
         StoreObjectIndex(snd_sync_buffer, 1);
         while (SceSifCheckStatRpc(D_0015EBC0) != 0) {
             printf(snd_non_idle_error_string);
@@ -48,8 +48,8 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
         need += 4 - need % 4;
     }
     while (*snd_batch_command_buffers[snd_batch_index] == 0x100 || snd_batch_free_bytes[snd_batch_index] < need) {
-        if (D_0015ECC4 != 0) {
-            D_0015ECC4 = 0;
+        if (GlobalTableStatus != 0) {
+            GlobalTableStatus = 0;
             held = 1;
         }
         snd_flush_sound_commands();
@@ -62,7 +62,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
         printf(snd_no_wait_continuing_string, tries);
     }
     if (held != 0) {
-        D_0015ECC4 = 1;
+        GlobalTableStatus = 1;
     }
     p = (u8 *)snd_batch_command_buffers[snd_batch_index] - (snd_batch_free_bytes[snd_batch_index] - 0x1000);
     *(s16 *)p = cmd;

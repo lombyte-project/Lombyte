@@ -19,6 +19,7 @@
 
 #include "types.h"
 #include "rnc/sdk/library/stdio.h"
+#include "rnc/data_labels.h"
 
 /* Only mode is accessed here; the remaining SDK stat fields are opaque.
  * Retail reserves 0x70 bytes before the saved registers. */
@@ -28,7 +29,6 @@ struct RncStatBuffer {
     u32 st_mode;
     u8 remaining[0x68];
 };
-extern u8 D_00113AC8[];
 extern void *_malloc_r();
 extern s32 reentrant_syscall_with_two_arguments() __asm__("func_00114000");
 extern s32 func_00118EC0();

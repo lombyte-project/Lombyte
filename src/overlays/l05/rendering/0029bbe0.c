@@ -43,10 +43,10 @@ unsigned char *FUN_L05_0029bbe0(float a, void *pos, void *vel, int life, int siz
 extern float random_float_between_alt_q(float, float) __asm__("FUN_002132a8");
 extern s32 scale_game_frames_q(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *D_L05_001B25C8_q __asm__("D_L05_001B25C8") __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
 extern int truncate_float_to_s32_q(float) __asm__("FUN_001fa6d0");
 
+extern unsigned char *D_L05_001B25C8 __attribute__((section(".data")));
 unsigned char *FUN_L05_0029be70(void *pos, void *vel, int arg2, int arg3, float a, float b,
                                 float c) {
     unsigned char *p = FUN_L00_002678b8_q(0x32);
@@ -57,7 +57,7 @@ unsigned char *FUN_L05_0029be70(void *pos, void *vel, int arg2, int arg3, float 
         p[9] = truncate_float_to_s32_q(1.0f) + 0x40;
         p[3] = 0x44;
         p[1] = 0;
-        p[2] = D_L05_001B25C8_q[arg3];
+        p[2] = D_L05_001B25C8[arg3];
         *(int *)(p + 4) = arg2;
         *(float *)(p + 0xC) = a * 210000.0f;
         p[8] = (int)random_float_between_alt_q(0.0f, 255.0f);

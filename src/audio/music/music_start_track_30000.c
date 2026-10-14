@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
+#include "rnc/data_labels.h"
 extern s32 D_0011C178[];
-extern u8 D_0015EE1C;
 extern u8 music_player_dialogue[] __asm__("D_00151720");
 extern void func_002169C0();
 extern void snd_play_vag_stream_by_loc_ex_cb(s32, s32, s32, s32, s16, s32, s32, s32, s32,

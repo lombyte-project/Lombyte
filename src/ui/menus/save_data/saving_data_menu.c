@@ -1,15 +1,12 @@
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/data_labels.h"
 typedef struct __attribute__((packed)) {
     s64 v;
 } Unaligned64;
 extern Unaligned64 D_0015EE98[1];
 #include "rnc/storage/memory_card/memory_card_state.h"
-extern s32 D_0015EE20;
-extern s32 D_0015EE24;
-extern s32 D_0015EE34;
 extern u8 D_001D2578[];
-extern s32 D_001D2640[];
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_screen.h"
@@ -95,9 +92,9 @@ s32 saving_data_menu(struct MenuScreen *menu) {
             } else {
                 pad_buttons = controller_state.pressed;
             }
-            menu->data.save.slot = (s32)D_0015EE34;
-            if ((pad_buttons & 0x1000) && (D_0015EE34 != 0)) {
-                menu->data.save.slot = (s32)(D_0015EE34 - 1);
+            menu->data.save.slot = (s32)selected_save_slot;
+            if ((pad_buttons & 0x1000) && (selected_save_slot != 0)) {
+                menu->data.save.slot = (s32)(selected_save_slot - 1);
             }
             if (pad_buttons & 0x4000) {
                 slot = menu->data.save.slot;
@@ -106,7 +103,7 @@ s32 saving_data_menu(struct MenuScreen *menu) {
                 }
             }
             selected_slot = menu->data.save.slot;
-            D_0015EE34 = selected_slot;
+            selected_save_slot = selected_slot;
             if ((pad_buttons & 0x40) && (memory_card_state.card[0].type == 2)) {
                 new_var = (((u8 *)&memory_card_state) + (selected_slot * 0x1C)) + 0x20;
                 if ((*((s32 *)new_var)) != (-1)) {

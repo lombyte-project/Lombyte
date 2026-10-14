@@ -34,13 +34,13 @@ extern s32 music_volume __asm__("D_0015EDEC") MACRO_ADDR;
 extern s32 sound_volume __asm__("D_0015EDF0") MACRO_ADDR;
 extern s32 playback_mode __asm__("D_0015EDE8") MACRO_ADDR;
 extern s32 D_001A0314 NOT_SDA;
-extern s32 *D_001601E0 __attribute__((sda));
 extern s32 allocate_voice_for_target_entry(s32 flags, s32 sound_index,
                                            s32 sound_owner) __asm__("func_0022DA68");
 void snd_set_playback_mode(s32 menu) __asm__("FUN_0012e240");
 
 s32 sound_options_menu(struct SoundMenu *menu) __asm__("FUN_0021cb30");
 
+extern s32 *menu_level_indices __asm__("D_001601E0") __attribute__((sda));
 s32 sound_options_menu(struct SoundMenu *menu) {
     s32 previous_selection;
     s32 *sound_volume_ptr;
@@ -70,7 +70,7 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     if ((menu->selected_option != previous_selection) || (menu_system.current->pending_focus != 0)) {
         allocate_voice_for_target_entry(1, 0x11, menu->sound_owner);
         if (menu->flags & 0x20) {
-            D_001A0314 = D_001601E0[menu->selected_option];
+            D_001A0314 = menu_level_indices[menu->selected_option];
         }
     }
     previous_music_volume = music_volume;

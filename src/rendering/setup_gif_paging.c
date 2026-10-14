@@ -2,17 +2,14 @@
 #include "sda.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
+#include "types.h"
 extern int *gif_page_marker_a __asm__("D_0015F450") MACRO_ADDR;
-extern int D_0015EE78 MACRO_ADDR;
-extern int D_0015EE74 MACRO_ADDR;
 extern int effect_tex_cnt __asm__("D_0015F45C") MACRO_ADDR;
-extern int D_0015EE8C MACRO_ADDR;
 extern short D_0015F458;
 typedef struct {
     long unk0;
     long unk8;
 } PageSlot;
-extern PageSlot D_0018D440[];
 extern char D_0019A3E8[];
 static inline char *PagingArena(void) {
     return D_0019A3E8;
@@ -31,6 +28,10 @@ static inline char *PagingArena(void) {
    %hi retail keeps. */
 void setup_gif_paging(int arg0) __asm__("FUN_001f4280");
 
+extern PageSlot effect_texture_definitions[] __asm__("D_0018D440");
+extern s32 gs_texture_allocation_start __asm__("D_0015EE78") MACRO_ADDR;
+extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
+extern s32 gs_texture_allocation_base __asm__("D_0015EE8C") MACRO_ADDR;
 void setup_gif_paging(int arg0) {
     int *p = render_packet_cursor.words;
     int i;
@@ -38,20 +39,20 @@ void setup_gif_paging(int arg0) {
     gif_page_marker_a = p;
     p += 4;
     render_packet_cursor.words = p;
-    D_0015EE74 = D_0015EE78;
+    gs_texture_allocation_cursor = gs_texture_allocation_start;
     *(int *)&D_0015F458 = 0;
     {
         int k;
 
         for (k = 0; k < effect_tex_cnt; k++) {
-            D_0018D440[k].unk0 = 0;
+            effect_texture_definitions[k].unk0 = 0;
         }
     }
     if (arg0 == 0) {
         for (i = 0; i < *(int *)(*(char **)(PagingArena() + 0x18) + 0x44); i++) {
             unsigned short *el = (unsigned short *)(i * 8 + *(int *)(PagingArena() + 0x24) + 4);
 
-            if (*el >= (D_0015EE8C >> 8)) {
+            if (*el >= (gs_texture_allocation_base >> 8)) {
                 *el = 0;
             }
         }

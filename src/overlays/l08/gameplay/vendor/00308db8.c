@@ -5,15 +5,13 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/entities.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Runs the two per-entry update calls over a 13-entry table. */
 
 extern Pair D_L08_001F8548[];
-extern char D_L08_001F8560[];
-extern int D_L08_001F4C60[];
 extern int D_L08_001F84C8[];
 extern int D_L08_001F84E8[];
-extern int D_L08_001F8528[];
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
@@ -26,10 +24,8 @@ void FUN_L08_00308db8(int a) {
     }
 }
 extern Pair D_L08_001623F8[] __attribute__((section(".sdata")));
-extern int D_L08_001F01C8[];
 extern int D_L08_001F4C18[];
 extern int D_L08_001F4C00[];
-extern int D_L08_001F4C48[];
 void FUN_L08_00308e90(int a) {
     int i;
     for (i = 0; i < 0x6; i++) {

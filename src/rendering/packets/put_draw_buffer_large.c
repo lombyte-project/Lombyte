@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
-extern s32 D_0015EEB8;
+#include "rnc/data_labels.h"
 extern void sceGsPutDrawEnv(s32);
 void put_draw_buffer_large(void) __asm__("FUN_001fb2d0");
 

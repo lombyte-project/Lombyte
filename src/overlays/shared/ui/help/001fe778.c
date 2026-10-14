@@ -50,18 +50,17 @@ int FUN_L15_001fe778(int a) {
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-#define GI(o) (*(s32 *)(D_0013F350_c2 + (o)))
-#define GF(o) (*(f32 *)(D_0013F350_c2 + (o)))
-#define GH(o) (*(s16 *)(D_0013F350_c2 + (o)))
-#define GU(o) (*(u16 *)(D_0013F350_c2 + (o)))
-#define GB(o) (D_0013F350_c2[o])
+#define GI(o) (*(s32 *)(hero_lui + (o)))
+#define GF(o) (*(f32 *)(hero_lui + (o)))
+#define GH(o) (*(s16 *)(hero_lui + (o)))
+#define GU(o) (*(u16 *)(hero_lui + (o)))
+#define GB(o) (hero_lui[o])
 #define HI(o) (*(s32 *)(D_L15_00174440 + (o)))
 #define HF(o) (*(f32 *)(D_L15_00174440 + (o)))
 typedef union {
     OvlQuad q;
     f32 f[4];
 } V;
-extern u8 D_0013F350_c2[] __asm__("D_0013F350") __attribute__((section(".data")));
 extern u8 D_L15_00174440[] __attribute__((section(".data")));
 extern u8 D_L15_00174460[] __attribute__((section(".data")));
 
@@ -85,15 +84,16 @@ void FUN_L00_00216078(void *, void *);
 void FUN_L00_002335c8(void *, f32, f32, f32);
 f32 FUN_001f99c0(f32);
 
-#define GI(o) (*(s32 *)(D_0013F350_c2 + (o)))
-#define GF(o) (*(f32 *)(D_0013F350_c2 + (o)))
-#define GH(o) (*(s16 *)(D_0013F350_c2 + (o)))
-#define GU(o) (*(u16 *)(D_0013F350_c2 + (o)))
-#define GB(o) (D_0013F350_c2[o])
+#define GI(o) (*(s32 *)(hero_lui + (o)))
+#define GF(o) (*(f32 *)(hero_lui + (o)))
+#define GH(o) (*(s16 *)(hero_lui + (o)))
+#define GU(o) (*(u16 *)(hero_lui + (o)))
+#define GB(o) (hero_lui[o])
 extern CollisionHit HH __asm__("D_L15_00174440") __attribute__((section(".data")));
 #define HI(o) (*(s32 *)(D_L15_00174440 + (o)))
 #define HF(o) (*(f32 *)(D_L15_00174440 + (o)))
 
+extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 void FUN_L15_0020a7a0(void) {
     V v0, v10, v20, v30, v40, v50, v60;
     f32 f;

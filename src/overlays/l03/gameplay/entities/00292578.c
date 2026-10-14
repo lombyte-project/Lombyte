@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/data_labels.h"
 
 #define NOT_SDA
 
@@ -177,8 +178,6 @@ void FUN_L03_00292578(struct Moby *moby, float *pos, float heading) {
 }
 extern char *D_L03_0015FFD8_292890 __asm__("D_L03_0015FFD8");
 extern char D_L03_001E2410_292890[] __asm__("D_L03_001E2410");
-extern float D_0015ED6C;
-extern float D_0015ED70;
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9b80(void *, void *);
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
@@ -265,13 +264,13 @@ void FUN_L03_00292890(char *moby) {
                                3.1415927f);
         *(float *)(moby + 0x48) =
             spring_turn(&data->fCC, *(float *)(moby + 0x48), d,
-                             (data->fC8 * 60.0f / data->fC0) * 0.25f * DEG_TO_RAD * D_0015ED70, (data->fC8 * 60.0f / data->fC0) * 0.5f * DEG_TO_RAD * D_0015ED70,
-                             (data->fC8 * 60.0f / data->fC0) * D_0015ED6C);
+                             (data->fC8 * 60.0f / data->fC0) * 0.25f * DEG_TO_RAD * frame_time_sq, (data->fC8 * 60.0f / data->fC0) * 0.5f * DEG_TO_RAD * frame_time_sq,
+                             (data->fC8 * 60.0f / data->fC0) * frame_time);
         d = FUN_001f9e90(FUN_001f9b80(moby + 0x10, target), *(float *)(coupling + 0x18) - *(float *)(moby + 0x18));
         *(float *)(moby + 0x44) =
             spring_turn(&data->fD0, *(float *)(moby + 0x44), d,
-                             (data->fC8 * 60.0f / data->fC0) * 0.25f * DEG_TO_RAD * D_0015ED70, (data->fC8 * 60.0f / data->fC0) * 0.5f * DEG_TO_RAD * D_0015ED70,
-                             (data->fC8 * 60.0f / data->fC0) * D_0015ED6C);
+                             (data->fC8 * 60.0f / data->fC0) * 0.25f * DEG_TO_RAD * frame_time_sq, (data->fC8 * 60.0f / data->fC0) * 0.5f * DEG_TO_RAD * frame_time_sq,
+                             (data->fC8 * 60.0f / data->fC0) * frame_time);
         moby_point_position(moby, 0, front);
         do {
             car = D_L03_0015FFD8_292890 + (id << 8);
@@ -2203,7 +2202,6 @@ extern int probe_ground_height_cf(int unused, char *m, char *a, void *b, char *c
 extern int vector_length_xy_cf(int, int, int) __asm__("FUN_0022da68");
 extern short D_L03_001618F4 __attribute__((sda));
 extern unsigned char *FUN_L03_0024fba8_cf(int) __asm__("FUN_L00_002603d0");
-extern unsigned char D_0014C050[];
 extern void *FUN_L00_00257470_cf(char *, int, float *, void *, int, int, float, float *, float *,
                                  float *) __asm__("FUN_L00_00263fd8");
 extern void FUN_001f96b0_cf(char *p) __asm__("FUN_L01_0026d930");
@@ -2246,7 +2244,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
     dist = FUN_001f9b80(m->pos, &tgt);
     FUN_L00_00263b38(&d->look0, 2.5f);
     if (d->b262 == 1) {
-        if ((D_0014C050)[m->bB0 + (current_level_index << 4)] == 0xFF) {
+        if ((visited52)[m->bB0 + (current_level_index << 4)] == 0xFF) {
             m->flags |= 0x41;
             m->i94 = 0;
         }
@@ -2349,7 +2347,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             m->rot[2] = FUN_L00_002628d8_cf(*(float *)(np + 0x20) - *(float *)(np + 0x10),
                                             *(float *)(np + 0x24) - *(float *)(np + 0x14));
             if (is_point_inside_clip_volume_cf(m->b21) || absolute_float_cf(&tgt, d->i29C) ||
-                (D_0014C050)[m->bB0 + (current_level_index << 4)] == 0xFF ||
+                (visited52)[m->bB0 + (current_level_index << 4)] == 0xFF ||
                 (dist < d->f294 && FUN_L03_002c6e18_cf(tgt.pos[2] - m->pos[2]) < 4.0f)) {
                 d->i298 = 0;
                 m->state = 9;
@@ -2956,7 +2954,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         break;
     }
     case 15:
-        if ((D_0014C050)[m->bB0 + (current_level_index << 4)] == 0xFF) {
+        if ((visited52)[m->bB0 + (current_level_index << 4)] == 0xFF) {
             FUN_L03_002c95a8_cf(m);
             return;
         }

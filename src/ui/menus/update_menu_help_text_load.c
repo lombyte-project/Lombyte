@@ -2,8 +2,8 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/globals.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/data_labels.h"
 
-extern s16 D_001516D8[];
 extern u8 D_001996D0[];
 
 extern s32 help_msgs __asm__("D_0015F6A0");
@@ -21,7 +21,7 @@ int update_menu_help_text_load(char *menu) __asm__("FUN_0021d338");
 int update_menu_help_text_load(char *menu) {
     switch (*(int *)(menu + 0x50)) {
     case 0:
-        if (D_001516D8[0] == 0) {
+        if (cd_read_active[0] == 0) {
             if (start_audio_stream_read(menu_system.help_text_buffer, disc_table.help_text.sector,
                                         disc_table.help_text.size) != 0) {
                 *(int *)(menu + 0x50) = 1;
@@ -31,7 +31,7 @@ int update_menu_help_text_load(char *menu) {
         }
         break;
     case 1:
-        if (D_001516D8[0] == 0) {
+        if (cd_read_active[0] == 0) {
             struct MenuSystem *g = &menu_system;
             int *archive = (int *)g->help_text_buffer;
             int *language_entries = (int *)((char *)archive + archive[game_language]);

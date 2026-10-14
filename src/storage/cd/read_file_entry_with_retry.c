@@ -1,12 +1,11 @@
 #include "types.h"
 #include "rnc/sdk/libcdvd.h"
+#include "rnc/data_labels.h"
 struct FileEntry {
     u32 lsn;
     u32 size;
 };
-extern u8 D_0015ED58;
 extern struct FileEntry D_0013A448[];
-extern u8 D_0013A4E0[];
 extern s32 sceCdRead(u32, u32, void *, sceCdRMode *);
 extern s32 sceCdSync(s32);
 extern s32 sceCdGetError(void);

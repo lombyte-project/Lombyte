@@ -4,12 +4,12 @@
 
 #include "types.h"
 #include "rnc/sdk/library/malloc_chunk.h"
+#include "rnc/data_labels.h"
 
 struct _reent;
 extern void func_001154C0(struct _reent *);
 extern void func_001154C8(struct _reent *);
 extern void malloc_extend_top(struct _reent *ptr, u32 nb);
-extern u32 D_0012F788[];
 struct malloc_chunk;
 extern struct malloc_chunk D_0012F790;
 typedef struct malloc_chunk *mchunkptr;

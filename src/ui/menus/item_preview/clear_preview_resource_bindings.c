@@ -1,8 +1,8 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/item_preview/preview_animation.h"
+#include "rnc/data_labels.h"
 
-extern u8 preview_resource_bindings[] __asm__("D_001D59D8");
 void clear_preview_resource_bindings(void) __asm__("FUN_002267b8");
 void clear_preview_resource_bindings(void) {
     register s32 class_slot;

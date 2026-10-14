@@ -1,7 +1,6 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_screen.h"
-extern s32 D_0015F438;
-extern s32 D_001601B0 __attribute__((sda));
+#include "rnc/data_labels.h"
 extern s32 SubtractIntegerWithClamp();
 extern void setup_gif_paging() __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
@@ -42,7 +41,7 @@ s32 FUN_00219fa0(struct MenuScreen *menu) {
                                0x80000000),
                     1);
                 append_screen_rect_packet(x - 0x10, y - 0x10, x + 0x210,
-                                          y + 0x210, (u64)D_001601B0, 1);
+                                          y + 0x210, (u64)panel_clear_color, 1);
             }
             i = i + 1;
             byte_offset += 0xA;
@@ -53,7 +52,7 @@ s32 FUN_00219fa0(struct MenuScreen *menu) {
         } while (i < menu->data.icons.count);
     }
     if (start_y < new_var) {
-        append_screen_rect_packet(new_var, new_var, menu->width, 0x14, (u64)D_001601B0, new_var);
+        append_screen_rect_packet(new_var, new_var, menu->width, 0x14, (u64)panel_clear_color, new_var);
         draw_hud_sprite(get_icon_frame(0xE99EU, 6), (x >> 4), 2, 0x20,
                         0x10, 0x80);
     }
@@ -61,7 +60,7 @@ s32 FUN_00219fa0(struct MenuScreen *menu) {
     if ((height * 0x10) < y) {
         byte_offset = new_var;
         append_screen_rect_packet(byte_offset, height - 0x14, menu->width, height,
-                                  (u64)D_001601B0, byte_offset);
+                                  (u64)panel_clear_color, byte_offset);
         draw_hud_sprite_flipped(get_icon_frame(0xE99EU, 6), (x >> 4),
                                 menu->height - 0x12, 0x20, 0x10, 0x80);
     }

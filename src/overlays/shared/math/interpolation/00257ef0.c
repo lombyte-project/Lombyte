@@ -390,8 +390,6 @@ typedef struct {
 } Glob;
 
 extern Glob D_L00_00173E40_c __asm__("D_L00_00173E40");
-extern f32 D_0015ED70 __attribute__((sda));
-extern f32 D_0015ED60 __attribute__((sda));
 
 extern void FUN_001f9a28(void *, void *, void *);
 extern f32 FUN_001f9b20(void *);
@@ -405,6 +403,8 @@ extern void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L00_00258ad0");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
+extern f32 frame_time_sq __asm__("D_0015ED70") __attribute__((sda));
+extern f32 frame_scale __asm__("D_0015ED60") __attribute__((sda));
 s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     Vec4 save;
     Vec4 d;
@@ -449,7 +449,7 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
         d.f[2] = 0.0f;
     } else {
         d.f[2] = c->f18;
-        c->f18 = c->f18 - D_0015ED70 * 9.0f;
+        c->f18 = c->f18 - frame_time_sq * 9.0f;
     }
     lim = m->pos.f[2] + 0.04f;
     FUN_001f9a10(&p, &m->pos, &d);
@@ -490,7 +490,7 @@ done:
         FUN_001f9a68_c(&p, &d, 1.0f / l2);
         r = FUN_L00_00258ad0_c(m, &d, c->f04, c->i00, c->f30, c->i38);
         if (r & 2)
-            c->f18 = D_0015ED60 * -0.01f;
+            c->f18 = frame_scale * -0.01f;
         if (r & 1) {
             mask |= 1;
             if (d.f[0] * p.f[0] + d.f[1] * p.f[1] < l2 * 0.2f)
@@ -504,7 +504,7 @@ done:
         qcopy(out, &d);
     } else {
         if ((c->i38 ^ 1) & 1)
-            c->f18 = D_0015ED60 * -0.01f;
+            c->f18 = frame_scale * -0.01f;
     }
     if (len < c->f2C)
         mask |= 4;

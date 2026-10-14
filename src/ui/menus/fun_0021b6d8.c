@@ -1,5 +1,5 @@
 #include "types.h"
-extern s32 D_001601B4 __attribute__((sda));
+#include "rnc/data_labels.h"
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 func_001FA6E0(s32, s32, f32);
 
@@ -19,9 +19,9 @@ s32 FUN_0021b6d8(s32 delay, s32 from, s32 to) {
     if (to == -1) {
         to = 0x8020FFFF;
     }
-    if (scale_game_frames(D_001601B4) >= delay) {
-        now = scale_game_frames(D_001601B4);
-        t = 1.0f - (f32)(now - delay) / (f32)scale_game_frames(D_001601B4);
+    if (scale_game_frames(menu_fade_duration) >= delay) {
+        now = scale_game_frames(menu_fade_duration);
+        t = 1.0f - (f32)(now - delay) / (f32)scale_game_frames(menu_fade_duration);
     } else {
         t = 1.0f;
     }

@@ -1,6 +1,8 @@
 /* Ported from rac1-decomp (src/game/space.c, func_0022F258). */
 #include "sda.h"
 #include "rnc/rendering/level_render_state.h"
+#include "types.h"
+#include "rnc/data_labels.h"
 extern void copy_blocks_16_forward(void *, void *, int) __asm__("FUN_001f98d0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
@@ -12,9 +14,7 @@ typedef struct {
     char texture_coordinates[0x20]; /* 0x50 */
     long gs_state[4];               /* 0x70 */
 } FlareQuad;
-extern char D_001D97B0[];
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern int D_0015F604 MACRO_ADDR;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_001f9a80(void *, void *, float);
 extern int FUN_001fa820(void *, int *, float);
@@ -27,6 +27,7 @@ extern float D_001D97D0[][4][4];
    func_00213508. The corners are D_001D97D0[set]. */
 void draw_light_flare(char *object) __asm__("FUN_0022df40");
 
+extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
 void draw_light_flare(char *object) {
     float scaled_position[4];
     FlareQuad quad;
@@ -40,7 +41,7 @@ void draw_light_flare(char *object) {
     if (FUN_001fa820(scaled_position, &alpha, 32.0f) < 0) {
         return;
     }
-    if (D_0015F604 == 6 && level_render_state.state == 3 &&
+    if (game_mode == 6 && level_render_state.state == 3 &&
         level_render_state.timer > scale_game_frames(150)) {
         alpha -= (level_render_state.timer - scale_game_frames(150)) * 4;
         if (alpha <= 0) {
@@ -54,7 +55,7 @@ void draw_light_flare(char *object) {
     copy_blocks_16_forward(quad.texture_coordinates, D_001D97B0, 0x20);
     scale_vector_xyz(scaled_position_copy, object, 1.0f / 1024.0f);
     depth = *(float *)(object + 0x18) + 0.1f;
-    if (D_0015F604 == 6) {
+    if (game_mode == 6) {
         depth = probe_ground_height(object + 0x10, 0, 0.5f) + 0.1f;
     }
     for (corner_index = 0; corner_index < 4; corner_index++) {

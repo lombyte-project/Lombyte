@@ -4,14 +4,12 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/entities.h"
-extern char D_L08_001E8360[];
+#include "rnc/overlay/level_labels.h"
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 extern Pair D_L08_00161E20[] __attribute__((section(".sdata")));
-extern int D_L08_001DB518[];
 extern int D_L08_001DDEE0[];
 extern int D_L08_001DDEC0[];
-extern int D_L08_001DDF20[];
 void FUN_L08_002f0cf0(int a) {
     int i;
     for (i = 0; i < 0x8; i++) {

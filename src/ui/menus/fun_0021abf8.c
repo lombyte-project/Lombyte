@@ -4,16 +4,9 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/menus/menu_system.h"
+#include "rnc/data_labels.h"
 
 /* gp-relative here, so not the plain rnc/globals.h spellings. */
-extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
-extern s32 game_language __asm__("D_0015ED88") __attribute__((sda));
-extern s32 mode_freeze_state __asm__("D_0015EEB0");
-extern s32 mode_freeze_flags __asm__("D_0015EEB4");
-extern s32 menu_fade_duration __asm__("D_001601B4") __attribute__((sda));
-extern s32 *menu_level_indices __asm__("D_001601E0") __attribute__((sda));
-extern s32 menu_action_messages[] __asm__("D_00199478");
-extern s32 selected_level_index[] __asm__("D_001A0314");
 
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void mode_freeze_init(s32, s32) __asm__("func_001FBAB8");
@@ -26,6 +19,9 @@ extern s32 allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68
  */
 s32 update_menu_entry_actions(struct MenuScreen *menu) __asm__("FUN_0021abf8");
 
+extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
+extern s32 game_language_gp __asm__("D_0015ED88") __attribute__((sda));
+extern s32 *menu_level_indices_gp __asm__("D_001601E0") __attribute__((sda));
 s32 update_menu_entry_actions(struct MenuScreen *menu) {
     s32 focused;
     s32 entry_index;
@@ -58,13 +54,13 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
     }
     if (controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) {
         if (menu->data.list.flags & 0x20) {
-            selected_level_index[0] = current_level_index;
+            selected_level_index[0] = current_level_index_gp;
         }
         return -1;
     }
     if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
         if (menu->data.list.flags & 0x20) {
-            selected_level_index[0] = current_level_index;
+            selected_level_index[0] = current_level_index_gp;
         }
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
@@ -144,7 +140,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
             allocate_voice_for_target_entry(0, 0x11, menu->moby);
             return 0;
         case 9:
-            game_language = menu->data.list.items[menu->data.list.selected].param.value;
+            game_language_gp = menu->data.list.items[menu->data.list.selected].param.value;
             return 0;
         case 2:
             allocate_voice_for_target_entry(2, 0x11, menu->moby);
@@ -184,7 +180,7 @@ s32 update_menu_entry_actions(struct MenuScreen *menu) {
     if (menu->data.list.selected != previous_selection || menu_system.current->pending_focus != 0) {
         allocate_voice_for_target_entry(1, 0x11, menu->moby);
         if (menu->data.list.flags & 0x20) {
-            selected_level_index[0] = menu_level_indices[menu->data.list.selected];
+            selected_level_index[0] = menu_level_indices_gp[menu->data.list.selected];
         }
     }
     return 0;

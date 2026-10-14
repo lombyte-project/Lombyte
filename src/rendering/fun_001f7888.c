@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 /* Ported from rac1-decomp (src/game/draw.c:func_001F7A50), which matched our retail at the instruction level before the address space was translated. */
 
@@ -8,7 +9,6 @@ extern void FUN_001fb440(s32 arg0, s32 arg1, s32 arg2);
 extern void configure_graphics_projection(s32 arg0, s32 arg1, f32 fparg0, f32 fparg1, f32 fparg2,
                                           f32 fparg3, f32 fparg4) __asm__("FUN_001f33b8");
 extern s16 D_001518EE[];
-extern s32 D_0015EE8C;
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 void FUN_001f7888(s32 tw, s32 th, s32 fixed, f32 scale) {
@@ -21,7 +21,7 @@ void FUN_001f7888(s32 tw, s32 th, s32 fixed, f32 scale) {
         if (t > 16) {
             t = 16;
         }
-        base = D_0015EE8C - (4 << t);
+        base = gs_texture_allocation_base - (4 << t);
         base = (base >> 13) << 13;
     }
     FUN_001fb440(tw, th, base);

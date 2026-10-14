@@ -7,6 +7,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/vector.h"
 #include "qcopy.h"
+#include "rnc/data_labels.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
  * its phase reaches 2, and closes when the slot is already used. */
@@ -150,23 +151,13 @@ typedef struct {
 
 extern char *D_L04_0015FFD8 __attribute__((section(".sdata")));
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
-extern int D_0015ED84 __attribute__((section(".sdata")));
-extern int D_0015EEA4 __attribute__((section(".sdata")));
-extern int D_0015EEAC __attribute__((section(".sdata")));
 extern int D_L04_0015FFE4; /* no foreign declaration */
 extern int D_L04_00179590[] __attribute__((section(".data")));
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern unsigned char menu_item_enabled_16 __asm__("D_0013D3A4") __attribute__((section(".data")));
-extern unsigned char menu_item_enabled_17 __asm__("D_0013D3A5") __attribute__((section(".data")));
-extern unsigned char menu_item_enabled_18 __asm__("D_0013D3A6") __attribute__((section(".data")));
-extern unsigned char menu_item_enabled_19 __asm__("D_0013D3A7") __attribute__((section(".data")));
 extern unsigned char D_0013D4D4 __attribute__((section(".data")));
-extern unsigned char D_0013D4DA __attribute__((section(".data")));
 extern unsigned char D_0013D4E3[];
-extern unsigned char D_0013E533[];
-extern unsigned char D_0014161B[];
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
 extern unsigned short D_001417C2 __attribute__((section(".data")));
 extern unsigned short D_00141892 __attribute__((section(".data")));
@@ -174,14 +165,15 @@ extern unsigned short D_001418D0 __attribute__((section(".data")));
 extern unsigned short D_00141908 __attribute__((section(".data")));
 extern unsigned short D_00141910 __attribute__((section(".data")));
 extern unsigned short D_00141940 __attribute__((section(".data")));
-extern char D_0013F3D0[];
 extern char D_00141848[];
 extern char D_00141968[];
-extern char D_0013F350[];
 extern char items_acquired[] __asm__("D_0013D4E8");
 extern Moby *D_L04_00160064_2E57F8 __asm__("D_L04_0015FFE4");
 extern Moby *D_L04_00160058_2E57F8 __asm__("D_L04_0015FFD8");
 
+extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
+extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
+extern s32 D_0015EEAC_macro __asm__("D_0015EEAC") MACRO_ADDR;
 void FUN_L04_002e4418(Moby *moby) {
     Data_2E57F8 *data = *(void **)&moby->pvars;
 
@@ -194,17 +186,17 @@ void FUN_L04_002e4418(Moby *moby) {
     case 1:
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f0) != 0
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1
-            && D_0014C050_c[moby->mission + (D_0015ED84 << 4)] != 0xFF) {
+            && D_0014C050_c[moby->mission + (current_level_index_macro << 4)] != 0xFF) {
             if (data->f14 == -1) {
                 Help_2E57F8 *usage = (Help_2E57F8 *)(((char *)&D_00141848));
-                data->f14 = D_0015EEAC;
+                data->f14 = D_0015EEAC_macro;
                 if (usage[0x18].count < 0xFFFF) {
                     usage[0x18].count++;
                 }
-                if (scale_game_frames_alt(D_0015EEA4) / 600 > usage[0x18].time) {
-                    usage[0x18].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                if (scale_game_frames_alt(D_0015EEA4_macro) / 600 > usage[0x18].time) {
+                    usage[0x18].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                 }
-                usage[0x18].mask = usage[0x18].mask | (1 << D_0015ED84) | 0x80000000;
+                usage[0x18].mask = usage[0x18].mask | (1 << current_level_index_macro) | 0x80000000;
             } else if (D_00141908 >= 3) {
                 if (D_0013D4D4 == 0) {
                     Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
@@ -212,7 +204,7 @@ void FUN_L04_002e4418(Moby *moby) {
                         help_request(0xFA1, 0x1D);
                     }
                 } else {
-                    int elapsed = scale_game_frames_alt(D_0015EEA4) - D_001417C2 * 600;
+                    int elapsed = scale_game_frames_alt(D_0015EEA4_macro) - D_001417C2 * 600;
                     if (scale_game_frames_alt(0x4650) < elapsed) {
                         Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
                         if (help[0x1C].count == 0) {
@@ -290,13 +282,13 @@ void FUN_L04_002e4418(Moby *moby) {
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
             if (D_0013D4DA == 0) {
                 Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
-                int elapsed = scale_game_frames_alt(D_0015EEA4) - help[0x1F].time * 600;
+                int elapsed = scale_game_frames_alt(D_0015EEA4_macro) - help[0x1F].time * 600;
                 if ((int)(scale_game_frames_alt(0x12) * 60.0f) < elapsed || help[0x1F].time * 600 == 0) {
                     help_request(0xFA3, 0x1F);
                 } else {
-                    int now = scale_game_frames_alt(D_0015EEA4) / 600;
+                    int now = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                     if (help[0x1F].time < now) {
-                        help[0x1F].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                        help[0x1F].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                     }
                 }
             } else {
@@ -306,33 +298,33 @@ void FUN_L04_002e4418(Moby *moby) {
                     if (count <= 0xFFFE) {
                         usage[0x11].count = count + 1;
                     }
-                    if (scale_game_frames_alt(D_0015EEA4) / 600 > usage[0x11].time) {
-                        usage[0x11].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                    if (scale_game_frames_alt(D_0015EEA4_macro) / 600 > usage[0x11].time) {
+                        usage[0x11].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                     }
-                    usage[0x11].mask = usage[0x11].mask | (1 << D_0015ED84) | 0x80000000;
+                    usage[0x11].mask = usage[0x11].mask | (1 << current_level_index_macro) | 0x80000000;
                 } else if (data->fC == 0) {
                     if (D_001418D0 == 0) {
                         Help_2E57F8 *help;
                         data->f8++;
                         help = (Help_2E57F8 *)(((char *)&D_00141968));
                         if (help[0x20].count != 0) {
-                            int elapsed = scale_game_frames_alt(D_0015EEA4) - help[0x20].time * 600;
+                            int elapsed = scale_game_frames_alt(D_0015EEA4_macro) - help[0x20].time * 600;
                             if ((int)(scale_game_frames_alt(0x12) * 60.0f) < elapsed || help[0x20].time * 600 == 0) {
                                 help_request(0xFA4, 0x20);
                             } else {
-                                int now = scale_game_frames_alt(D_0015EEA4) / 600;
+                                int now = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                                 if (help[0x20].time < now) {
-                                    help[0x20].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                                    help[0x20].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                                 }
                             }
                         } else {
                             int now;
                             help[0x20].count++;
-                            now = scale_game_frames_alt(D_0015EEA4) / 600;
+                            now = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                             if (help[0x20].time < now) {
-                                help[0x20].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                                help[0x20].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                             }
-                            help[0x20].mask = help[0x20].mask | (1 << D_0015ED84) | 0x80000000;
+                            help[0x20].mask = help[0x20].mask | (1 << current_level_index_macro) | 0x80000000;
                         }
                     }
                 }
@@ -346,10 +338,10 @@ void FUN_L04_002e4418(Moby *moby) {
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f50) != 0
             && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
-            int elapsed = scale_game_frames_alt(D_0015EEA4) - D_00141892 * 600;
+            int elapsed = scale_game_frames_alt(D_0015EEA4_macro) - D_00141892 * 600;
             if (scale_game_frames_alt(0x34BC0) < elapsed) {
                 Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
-                if (!(help[0x43].mask & (1 << D_0015ED84))) {
+                if (!(help[0x43].mask & (1 << current_level_index_macro))) {
                     help_request(0x3EF, 0x43);
                 }
             }
@@ -382,11 +374,11 @@ void FUN_L04_002e4418(Moby *moby) {
                 && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)) {
                 int now;
                 usage[0x19].count++;
-                now = scale_game_frames_alt(D_0015EEA4) / 600;
+                now = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                 if (usage[0x19].time < now) {
-                    usage[0x19].time = scale_game_frames_alt(D_0015EEA4) / 600;
+                    usage[0x19].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                 }
-                usage[0x19].mask = usage[0x19].mask | (1 << D_0015ED84) | 0x80000000;
+                usage[0x19].mask = usage[0x19].mask | (1 << current_level_index_macro) | 0x80000000;
             }
         }
 

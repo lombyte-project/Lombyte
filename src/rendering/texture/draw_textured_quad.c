@@ -3,7 +3,7 @@
 #include "qcopy.h"
 
 #include "rnc/rendering/dma_tag.h"
-extern char D_00160840[];
+#include "rnc/data_labels.h"
 
 void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, s64 color,
                         s64 extra) __asm__("FUN_001f5450");
@@ -37,7 +37,7 @@ void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh
     render_packet_cursor.tag->vif1 = 0x50000007;
     tag = render_packet_cursor.tag;
     render_packet_cursor.tag = tag + 1;
-    qcopy(tag + 1, D_00160840);
+    qcopy(tag + 1, textured_quad_header);
     q = (u64 *)(tag + 2);
     render_packet_cursor.tag = tag + 2;
     q[0] = extra;

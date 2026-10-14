@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
+#include "rnc/overlay/level_labels.h"
 
 #define NOT_SDA
 
@@ -62,8 +63,6 @@ void FUN_L12_0027b9c0(struct Moby *parent, unsigned char *child, int mode) {
     *(unsigned short *)(child + 0x34) |= 6;
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027CA68), where it is exact; names translated to the US level program. */
-
-extern char *D_L12_001B0930[];
 
 void FUN_L12_0027ba70(int idx) {
     char *p;

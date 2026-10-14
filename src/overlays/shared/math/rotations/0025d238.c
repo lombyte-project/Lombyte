@@ -487,13 +487,8 @@ typedef struct { char p0[0x18]; unsigned char b18; unsigned char b19; unsigned s
 typedef struct { int v[6]; } S6_25e450;
 typedef struct { char pad[0x160]; float f160; int f164; int f168; } Cam_25e450;
 typedef struct { float f[11]; } Fl_25e450;
-extern float D_0015ED6C_25e450 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_L00_0015F5D4_25e450 __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
-extern float D_L00_0015F5D0_25e450 __asm__("D_L00_0015F5D0") __attribute__((section(".sdata")));
 extern char D_L00_00166DC0_25e450[] __asm__("D_L00_00166DC0");
 extern char D_L00_00166C80_25e450[] __asm__("D_L00_00166C80");
-extern char D_L00_001B0250_25e450[] __asm__("D_L00_001B0250");
-extern char D_L00_001B02A0_25e450[] __asm__("D_L00_001B02A0");
 extern S6_25e450 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
 extern S6_25e450 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
 extern int scale_game_frames_25e450(int) __asm__("FUN_001f96f8");
@@ -521,6 +516,11 @@ extern int func_L00_00200290_25e450(void *, float) __asm__("FUN_001fa728");
 extern int allocate_voice_for_target_entry_25e450(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L00_002D4CE8_25e450(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 
+extern char D_L00_001B0250[];
+extern char D_L00_001B02A0[];
+extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_L00_0015F5D4 __attribute__((section(".sdata")));
+extern float D_L00_0015F5D0 __attribute__((section(".sdata")));
 /* Beam explosion at moby m: a spark burst from a spawn event, optional glow sparks and a flash, with a cam tint. */
 void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9,
                        float fC, float fD, float fE, float fF, int k10, float fG, int k11,
@@ -534,8 +534,8 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
     int i;
 
     *(u128_25e450 *)&v0 = 0;
-    v0.f[2] = D_0015ED6C_25e450 * 8.0f * fF;
-    f3 = D_L00_0015F5D4_25e450 + D_L00_0015F5D0_25e450;
+    v0.f[2] = frame_time_macro * 8.0f * fF;
+    f3 = D_L00_0015F5D4 + D_L00_0015F5D0;
     *(u128_25e450 *)&vb = *(u128_25e450 *)&v0;
     if (s18 == -1) {
         s18 = 0;
@@ -562,8 +562,8 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
         float b;
         a = random_float_between_25e450(0.2617994f, 1.3962634f);
         b = random_angle_radians_25e450();
-        build_spherical_offset_25e450(&dir, fF * (random_float_between_25e450(7.0f, 10.5f) * D_0015ED6C_25e450), b, a);
-        dir.f[2] += D_0015ED6C_25e450 * 3.0f;
+        build_spherical_offset_25e450(&dir, fF * (random_float_between_25e450(7.0f, 10.5f) * frame_time_macro), b, a);
+        dir.f[2] += frame_time_macro * 3.0f;
         dist = fF * 40000.0f;
         func_L00_0026CA10_25e450(pos, &dir, func_L00_0025D140_25e450(0x4F007FFF, flag), func_L00_0025D140_25e450(0x1F00007F, flag),
             random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x78)) - s18 * 10, 1, -1, -1, dist);
@@ -583,10 +583,10 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
         *(u128_25e450 *)&d2 = *(u128_25e450 *)&rnd;
         if (dist < 14.0f) {
             v0.f[2] += dist * 0.5f;
-            normalize_vector_xyz_25e450(&d2, &d2, dist / 5.0f * D_0015ED6C_25e450);
-            normalize_vector_xyz_25e450(&v0, &v0, (dist + dist) * D_0015ED6C_25e450);
+            normalize_vector_xyz_25e450(&d2, &d2, dist / 5.0f * frame_time_macro);
+            normalize_vector_xyz_25e450(&v0, &v0, (dist + dist) * frame_time_macro);
             add_vector_xyz_25e450(&d2, &d2, &v0);
-            func_L00_001FF548_25e450(&d2, &d2, D_0015ED6C_25e450 * 10.0f);
+            func_L00_001FF548_25e450(&d2, &d2, frame_time_macro * 10.0f);
             func_L00_002B0738_25e450(pos, &d2, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), 0, 0);
         }
         s16 = s16 - 1;
@@ -596,8 +596,8 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
             int sel;
             a = random_float_between_25e450(0.2617994f, 1.3089969f);
             b = random_angle_radians_25e450();
-            build_spherical_offset_25e450(&rnd, fF * (random_float_between_25e450(7.0f, 10.5f) * D_0015ED6C_25e450), b, a);
-            rnd.f[2] += D_0015ED6C_25e450 + D_0015ED6C_25e450;
+            build_spherical_offset_25e450(&rnd, fF * (random_float_between_25e450(7.0f, 10.5f) * frame_time_macro), b, a);
+            rnd.f[2] += frame_time_macro + frame_time_macro;
             sel = 0;
             if (i % 3 == 0) sel = 1;
             func_L00_002B0738_25e450(pos, &rnd, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), sel, 0);
@@ -617,10 +617,10 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
         S6_25e450 c0;
         S6_25e450 c1;
         float sp;
-        sp = random_float_between_25e450(8.0f, 10.0f) * D_0015ED6C_25e450;
+        sp = random_float_between_25e450(8.0f, 10.0f) * frame_time_macro;
         c0 = D_L00_001E9030_25e450;
         c1 = D_L00_001E9048_25e450;
-        sp = sp - t * D_0015ED6C_25e450;
+        sp = sp - t * frame_time_macro;
         sp = sp * fF;
         func_L00_0026B890_25e450(pos, &vb, func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag),
             func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag), fF * 400000.0f,
@@ -645,7 +645,7 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
         rnd.f[1] = random_float_between_25e450(-1.0f, 1.0f);
         rnd.f[2] = random_float_between_25e450(-1.0f, 1.0f);
         *(u128_25e450 *)&vel = *(u128_25e450 *)&rnd;
-        normalize_vector_xyz_25e450(&vel, &vel, fF * (random_float_between_25e450(0.0f, 3.0f) * D_0015ED6C_25e450));
+        normalize_vector_xyz_25e450(&vel, &vel, fF * (random_float_between_25e450(0.0f, 3.0f) * frame_time_macro));
         p1 = func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag);
         p2 = func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag);
         func_L00_0026B368_25e450(pos, &vel, p1, p2,
@@ -663,7 +663,7 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
             r3 = 60;
         }
         u = r3 & 0xFF;
-        if (D_L00_0015F5D0_25e450 < 0.95f && fE < dist) {
+        if (D_L00_0015F5D0 < 0.95f && fE < dist) {
             spawn_glow_particle_25e450(m, pos, &vb, fC, scale_game_frames_25e450(0x10), r1, 0x96, r2, 0x20);
             spawn_glow_particle_25e450(m, pos, &vb, fC, scale_game_frames_25e450(0x16), u, 0x7F, 0x50, 0x20);
         }
@@ -693,18 +693,18 @@ void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int 
             v.f[3] = fG;
             if (func_L00_00200290_25e450(&v, 100.0f) != -1) {
                 if (0.0f < fG) {
-                    ((Fl_25e450 *)D_L00_001B0250_25e450)->f[9] = fG;
-                    ((Fl_25e450 *)D_L00_001B0250_25e450)->f[10] = fG;
-                    ((Fl_25e450 *)D_L00_001B0250_25e450)->f[8] = fG;
+                    ((Fl_25e450 *)D_L00_001B0250)->f[9] = fG;
+                    ((Fl_25e450 *)D_L00_001B0250)->f[10] = fG;
+                    ((Fl_25e450 *)D_L00_001B0250)->f[8] = fG;
                 } else {
-                    ((Fl_25e450 *)D_L00_001B0250_25e450)->f[9] = 15.0f;
-                    ((Fl_25e450 *)D_L00_001B0250_25e450)->f[10] = 15.0f;
-                    ((Fl_25e450 *)D_L00_001B0250_25e450)->f[8] = 15.0f;
+                    ((Fl_25e450 *)D_L00_001B0250)->f[9] = 15.0f;
+                    ((Fl_25e450 *)D_L00_001B0250)->f[10] = 15.0f;
+                    ((Fl_25e450 *)D_L00_001B0250)->f[8] = 15.0f;
                 }
                 if (flag) {
-                    func_L00_002D4CE8_25e450(D_L00_001B02A0_25e450, pos, 0, 0);
+                    func_L00_002D4CE8_25e450(D_L00_001B02A0, pos, 0, 0);
                 } else {
-                    func_L00_002D4CE8_25e450(D_L00_001B0250_25e450, pos, 0, 0);
+                    func_L00_002D4CE8_25e450(D_L00_001B0250, pos, 0, 0);
                 }
             }
         }

@@ -3,6 +3,7 @@
 #include "sda.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/fs_aa_buffer.h"
+#include "types.h"
 
 /* Sets up a (1 << a) x (1 << b) render target at GS address c: records
    TEX0 for it in D_0015EED0 (buffer width 1 << max(a - 6, 1) pages,
@@ -22,10 +23,10 @@ typedef struct {
     unsigned long FBMSK : 32;
 } GsFrame; /* sceGsFrame */
 
-extern long D_0015EED0 MACRO_ADDR;
 extern void FUN_001f9810(void *, int);
 extern int sceGsSetDefDrawEnv(void *, short, short, short, short, short);
 
+extern long capture_texture_tex0 __asm__("D_0015EED0") MACRO_ADDR;
 void FUN_001fb440(int a, int b, int c) {
     int x;
     long *q;
@@ -39,7 +40,7 @@ void FUN_001fb440(int a, int b, int c) {
     fs_aa_buffer.target_fbp = c >> 13;
     fs_aa_buffer.target_width = 1 << a;
     fs_aa_buffer.target_height = 1 << b;
-    D_0015EED0 = (long)(c >> 8) | ((long)(1 << x) << 14) | ((long)a << 26) |
+    capture_texture_tex0 = (long)(c >> 8) | ((long)(1 << x) << 14) | ((long)a << 26) |
                  ((unsigned long)b << 30) | ((unsigned long)1 << 34);
     FUN_001f9810(render_packet_cursor.words, 0xF0);
     render_packet_cursor.words[0] = 0x1000000E;

@@ -6,10 +6,10 @@
 #include "sda.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/entities.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Register this level's vendor data set. */
 
-extern char D_L11_001DA880[];
 extern void FUN_L01_002b91c8(char *, int);
 
 void FUN_L11_0030e708(void) {
@@ -49,11 +49,8 @@ void FUN_L11_0031d7d8(struct Moby *m) {
 /* Runs the two per-entry update calls over a 13-entry table. */
 
 extern Pair D_L11_00217758[];
-extern char D_L11_00217770[];
-extern int D_L11_00207900[];
 extern int D_L11_00215148[];
 extern int D_L11_00215190[];
-extern int D_L11_00215220[];
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
@@ -66,10 +63,8 @@ void FUN_L11_0031e6a8(int a) {
     }
 }
 extern Pair D_L11_00162618[] __attribute__((section(".sdata")));
-extern int D_L11_00200728[];
 extern int D_L11_00207888[];
 extern int D_L11_00207860[];
-extern int D_L11_002078D8[];
 void FUN_L11_0031e780(int a) {
     int i;
     for (i = 0; i < 0x9; i++) {

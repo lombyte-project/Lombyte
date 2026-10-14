@@ -18,11 +18,11 @@
 /* Source: newlib (UC Berkeley). */
 
 #include "types.h"
+#include "rnc/data_labels.h"
 
 extern s32 _sceFsIobSemaMK();
 extern s32 WaitSema();
 extern s32 SignalSema();
-extern s32 D_0012FCA0[];
 extern u8 D_00157D80[];
 
 void *get_iob(u32 arg0) {

@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/overlay/level_globals.h"
 
 #define NOT_SDA
 
@@ -133,7 +134,6 @@ typedef struct {
 } TrooperVars;
 
 extern struct RailPath *D_L03_001B05B0[];
-extern float D_0015ED70;
 extern s32 D_L03_00161918 __attribute__((sda));
 extern f32 D_L03_0016191C __attribute__((sda));
 extern f32 D_L03_00161920 __attribute__((sda));
@@ -200,9 +200,9 @@ void FUN_L03_002c9eb8(struct Moby *m) {
     switch (m->state) {
     case 0:
         FUN_L01_0026d930(v->walk);
-        v->unk10C = D_0015ED70 * 6.2831855f;
+        v->unk10C = frame_time_sq * 6.2831855f;
         v->unk114 = frame_time * 6.2831855f;
-        v->unk110 = D_0015ED70 * 18.849556f;
+        v->unk110 = frame_time_sq * 18.849556f;
         v->unkF4 = frame_time * 5.0f;
         v->unk58 = 8;
         v->unk5A = 8;
@@ -313,7 +313,7 @@ void FUN_L03_002c9eb8(struct Moby *m) {
         break;
     }
     if (m->state < 4) {
-        v->fall_speed += D_0015ED70 * 9.8f;
+        v->fall_speed += frame_time_sq * 9.8f;
         m->pos.z -= v->fall_speed - 2.0f;
         ground = probe_ground_height(&m->pos, 0, 0.5f);
         m->pos.z -= 2.0f;
@@ -339,7 +339,6 @@ typedef struct {
     struct Moby *source;  /* 0x20: moby that dealt it */
 } TrooperHit;
 
-extern float D_0015ED70 __attribute__((section(".sdata")));
 extern f32 D_L03_001618F8 __attribute__((sda));
 extern f32 D_L03_001618FC __attribute__((sda));
 extern f32 D_L03_00161900 __attribute__((sda));
@@ -355,6 +354,7 @@ extern void trooper_start_knockback(f32, struct Moby *, void *, s32, s32, s32) _
 extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 /* Trooper hit handler: takes damage, then knocks back away from the attacker by hit strength (dying on lethal hits). */
 void FUN_L03_002ca808(struct Moby *m) {
     TrooperVars *v = (TrooperVars *)m->pvars;
@@ -383,7 +383,7 @@ void FUN_L03_002ca808(struct Moby *m) {
         switch (r) {
         case 3:
         case 6:
-            v->kb_speed = D_L03_001618FC * D_0015ED70;
+            v->kb_speed = D_L03_001618FC * frame_time_sq_macro;
             trooper_set_knockback(v->knockback, D_L03_00161900, D_L03_00161904);
             v->kb_landed = 0;
             v->kb_frames = 9;
@@ -397,7 +397,7 @@ void FUN_L03_002ca808(struct Moby *m) {
             break;
         case 4:
         case 5:
-            v->kb_speed = D_L03_001618FC * D_0015ED70;
+            v->kb_speed = D_L03_001618FC * frame_time_sq_macro;
             trooper_set_knockback(v->knockback, D_L03_00161900, D_L03_00161904);
             v->kb_landed = 0;
             v->kb_frames = 9;
@@ -410,7 +410,7 @@ void FUN_L03_002ca808(struct Moby *m) {
             m->state = 4;
             break;
         case 1:
-            v->kb_speed = D_L03_001618F8 * D_0015ED70;
+            v->kb_speed = D_L03_001618F8 * frame_time_sq_macro;
             trooper_set_knockback(v->knockback, D_L03_00161908, D_L03_0016190C);
             v->kb_landed = 0;
             v->kb_frames = 9;
@@ -711,11 +711,7 @@ extern s32 D_L03_00161B04 __attribute__((sda));
 extern f32 D_L03_00161B08 __attribute__((sda));
 extern f32 D_L03_00161B10 __attribute__((sda));
 extern f32 D_L03_00161B18 __attribute__((sda));
-extern float D_0015ED70;
-extern s32 D_0014C190[][64];
-extern s32 D_0015ED84_d3198 __asm__("D_0015ED84");
 extern L03LevelState D_L03_001BB330;
-extern u32 D_0013CAE4 __attribute__((section(".data")));
 extern s32 D_L03_0015F594 __attribute__((sda));
 extern void FUN_L00_00266858(void *, int);
 extern void FUN_L01_00285768(void *, struct Moby *, s32, u32, s32, s32, s32, f32);
@@ -732,6 +728,7 @@ extern f32 taxi_dist2(void *, void *) __asm__("FUN_001f9b80");
 extern f32 taxi_approach_angle(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0025be00");
 s32 FUN_L03_002d3918(struct Moby *m, s32 path, s32 *snd);
 
+extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Rail taxi: waits at its stop until the hero enters a route's trigger volume,
    flies the outbound path, lets the hero off, flies back (or onward) and returns
    to waiting. With the debug flag set it draws its first route's paths. */
@@ -771,7 +768,7 @@ void FUN_L03_002d3198(struct Moby *m) {
         m->state = 1;
         m->collision = 0;
         if (D_L03_001BB330.collected[(s16)m->save_id] != 0 ||
-            (D_0014C190[D_0015ED84_d3198][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
+            (D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
             taxi_kill(m);
             return;
         }
@@ -810,10 +807,10 @@ void FUN_L03_002d3198(struct Moby *m) {
         }
         break;
     case 3:
-        taxi_approach_angle(&m->rot.y, 0.0f, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * D_0015ED70,
-                            D_L03_00161B10 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
-        taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * D_0015ED70,
-                            D_L03_00161B18 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
+        taxi_approach_angle(&m->rot.y, 0.0f, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
+                            D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
+        taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
+                            D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
         if (hero.ground_moby == m && hero.air_frames.s == 0) {
             FUN_L03_002d3100(m, v->help[m->command]);
             if ((D_0013CAE4 & 0x10) && D_L03_0015F594 == 8) {
@@ -838,10 +835,10 @@ void FUN_L03_002d3198(struct Moby *m) {
         }
         break;
     case 6:
-        taxi_approach_angle(&m->rot.y, 0.0f, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * D_0015ED70,
-                            D_L03_00161B10 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
-        taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * D_0015ED70,
-                            D_L03_00161B18 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
+        taxi_approach_angle(&m->rot.y, 0.0f, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
+                            D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
+        taxi_approach_angle(&m->rot.x, 0.0f, &v->roll_vel, D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
+                            D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
         if (v->onward[m->command] != -1 && taxi_dist(&m->pos, &hero.motion.pos) > 15.0f) {
             m->state = 7;
             v->idx = 1;
@@ -882,12 +879,8 @@ typedef struct {
 
 extern struct RailPath *D_L03_001B05B0[];
 extern u8 D_0013E550[];
-extern float D_0015ED70;
-extern f32 D_L03_00161B08 __attribute__((sda));
 extern f32 D_L03_00161B0C __attribute__((sda));
-extern f32 D_L03_00161B10 __attribute__((sda));
 extern f32 D_L03_00161B14 __attribute__((sda));
-extern f32 D_L03_00161B18 __attribute__((sda));
 extern f32 D_L03_00161B1C __attribute__((sda));
 extern void vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -924,7 +917,7 @@ s32 FUN_L03_002d3918(struct Moby *m, s32 path, s32 *snd) {
     }
     dist = vec_dist(&m->pos, &(*pp)->pts[(*pp)->count - 1]);
     approach_speed(&acc, dist,
-                   D_L03_00161B0C * D_0015ED70, D_L03_00161B0C * D_0015ED70,
+                   D_L03_00161B0C * frame_time_sq_macro, D_L03_00161B0C * frame_time_sq_macro,
                    D_L03_00161B08 * frame_time, &v->speed);
     vec_set_len(&d, &d, v->speed);
     vec_add(&m->pos, &d, &m->pos);
@@ -933,14 +926,14 @@ s32 FUN_L03_002d3918(struct Moby *m, s32 path, s32 *snd) {
         ang = 0.2617994f;
     else if (ang < -0.2617994f)
         ang = -0.2617994f;
-    approach_angle(&m->rot.y, ang, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * D_0015ED70,
-                   D_L03_00161B10 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
+    approach_angle(&m->rot.y, ang, &v->pitch_vel, D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro,
+                   D_L03_00161B10 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
     approach_angle(&m->rot.z, angle_atan2(tgt.x - m->pos.x, tgt.y - m->pos.y), &v->yaw_vel,
-                   D_L03_00161B14 * DEG_TO_RAD * D_0015ED70,
-                   D_L03_00161B14 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
+                   D_L03_00161B14 * DEG_TO_RAD * frame_time_sq_macro,
+                   D_L03_00161B14 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
     approach_angle(&m->rot.x, v->yaw_vel * v->speed * D_L03_00161B1C, &v->roll_vel,
-                   D_L03_00161B18 * DEG_TO_RAD * D_0015ED70,
-                   D_L03_00161B18 * DEG_TO_RAD * D_0015ED70, frame_time * 12.566371f);
+                   D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro,
+                   D_L03_00161B18 * DEG_TO_RAD * frame_time_sq_macro, frame_time * 12.566371f);
     h = *snd;
     if (!done) {
         if (sound_is_playing(m, h) == 0)
@@ -1046,7 +1039,6 @@ typedef struct {
     u8 pad1C[0x14];
 } RocketHit;
 
-extern float D_0015ED70;
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void FUN_L03_0024e830(void *, void *, f32);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1112,8 +1104,8 @@ void FUN_L03_002d43c8(struct Moby *m) {
                          0x28, FUN_L00_00257b90(0x32, 0x4B), 0);
         if (target.found != 0) {
             pitch = -FUN_001f9e90(vector_distance(pos, &target.pos), target.pos.f[2] - m->pos.z);
-            m->rot.y = spring_turn(&v->turn_vel, m->rot.y, pitch, D_0015ED70 * 0.7853982f,
-                                        D_0015ED70 * 3.1415927f, frame_time * 0.5235988f);
+            m->rot.y = spring_turn(&v->turn_vel, m->rot.y, pitch, frame_time_sq_macro * 0.7853982f,
+                                        frame_time_sq_macro * 3.1415927f, frame_time * 0.5235988f);
             m->pos.z += FUN_001f9de0(-m->rot.y) * v->speed;
         }
         if (FUN_001efa68(pos, &old, 0, v->ignore, 0) != 0 ||
@@ -1440,7 +1432,6 @@ void FUN_L03_002da870(struct Moby *m) {
     FUN_L00_002628d8(rate * D_0015ED64, head_rate * D_0015ED64, m, v->head, 1);
 }
 
-extern float D_L03_00161BC0_2db020 __asm__("D_L03_00161BC0");
 extern float cos_2db020(float) __asm__("FUN_001f9dc8");
 extern float sin_2db020(float) __asm__("FUN_001f9de0");
 extern void vadd_2db020(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1451,6 +1442,7 @@ extern float itof_2db020(int) __asm__("FUN_001fa6c0");
 extern void kill_2db020(char *) __asm__("FUN_0020c828");
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 
+extern float D_L03_00161BC0;
 /* Moves the moby along its path: advances the distance, places it on the
  * current segment, and dies at the end of the path. */
 void FUN_L03_002db020(struct Moby *m) {
@@ -1464,7 +1456,7 @@ void FUN_L03_002db020(struct Moby *m) {
 
     *(OvlQuad *)old = *(OvlQuad *)&m->pos;
     v = (char *)m->pvars;
-    *(float *)(v + 0x64) += D_L03_00161BC0_2db020;
+    *(float *)(v + 0x64) += D_L03_00161BC0;
     a[0] = cos_2db020(m->rot.z) * *(float *)(v + 0x64);
     a[1] = sin_2db020(m->rot.z) * *(float *)(v + 0x64);
     *(int *)&a[2] = 0;
@@ -1553,7 +1545,7 @@ void FUN_L03_002db280(struct RailSpawnerMoby *moby) {
             return;
         }
         path = D_L03_001B05B0[vars->path];
-        D_L03_00161BC0_2db020 = frame_time * 3.0f;
+        D_L03_00161BC0 = frame_time * 3.0f;
         for (i = 0; i < path->count - 2; i++)
             path->pts[i].f[3] = FUN_001f9b48(&path->pts[i], &path->pts[i + 1]);
         vars->timer = 0;
@@ -1564,7 +1556,7 @@ void FUN_L03_002db280(struct RailSpawnerMoby *moby) {
         moby->unk30 = 0x60;
     }
     if (FUN_001f9740(&vars->timer)) {
-        vars->timer = ftoi_2db020(2.9f / D_L03_00161BC0_2db020);
+        vars->timer = ftoi_2db020(2.9f / D_L03_00161BC0);
         FUN_L03_002db198(D_L03_001B05B0[vars->path], 0.0f);
     }
     if (!FUN_L00_0028d8c0(moby, vars->voice))
@@ -1610,15 +1602,12 @@ typedef struct {
     s32 unk14C;
 } GameFlags_db558;
 
-extern GameFlags_db558 D_0013D5B0_db558 __asm__("D_0013D5B0");
 extern u8 item_available[] __asm__("D_0013D4C0");
 extern u8 D_0013D4C2[];
 extern char *D_001413D0_db558[] __asm__("D_001413D0");
 extern struct Moby *D_L03_0015FFD8;
 extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
 extern u8 D_0014C050[];
-extern u8 D_L03_0015FC88[];
-extern L03LevelState D_L03_001BA6D0;
 extern char *D_L03_001600EC;
 extern float D_0015ED64;
 extern void FUN_L03_002db480(struct Moby *);
@@ -1639,6 +1628,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
 
+extern GameFlags_db558 race_gates __asm__("D_0013D5B0");
 /* Kerwan guide: talks when approached (turning round to face the hero first),
    releases its reward moby once the item is owned, can warp the hero, and turns
    its head toward the hero or random points while idle. */
@@ -1661,7 +1651,7 @@ void FUN_L03_002db558(struct Moby *m) {
     FUN_L03_002db480(m);
     switch (m->state) {
     case 0:
-        if (D_0013D5B0_db558.unk14C == 0) {
+        if (race_gates.unk14C == 0) {
             m->rot.z = fast_add_rotations(m->rot.z, 3.1415927f);
             v->turned = 0;
         } else {
@@ -1835,12 +1825,9 @@ typedef struct {
     u8 type;              /* 0x28 */
 } TalkerHit;
 
-extern L03LevelState D_L03_001BB330;
-extern s32 D_0014C190[][64];
 extern s32 D_L03_001BA5D0[];
 extern u8 D_0013D388[];
 extern u8 D_0013D408[];
-extern u8 D_0013D4CC[];
 extern char *D_001413D0[];
 extern char D_L03_00166EC0[];
 extern char *D_L03_001600EC;
@@ -1879,7 +1866,7 @@ void FUN_L03_002dbd90(struct Moby *m) {
         m->shadow_range = 0x15;
     }
     if (D_L03_001BB330.collected[(s16)m->save_id] != 0 ||
-        (D_0014C190[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
+        (D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) & 1) {
         if (m->state != 3) {
             m->state = 3;
             FUN_00212ed8(m, 1, 0);
@@ -1888,7 +1875,7 @@ void FUN_L03_002dbd90(struct Moby *m) {
     hit = talker_find_hit(m, -1, 0);
     if (hit != 0 && hit->source != 0 && (type = hit->type) == 3 &&
         D_L03_001BB330.collected[(s16)m->save_id] == 0 &&
-        (((D_0014C190[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) ^ 1) & 1)) {
+        (((D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] >> (m->save_id & 0x1F)) ^ 1) & 1)) {
         if (D_0013D408[5] == 0) {
             D_0013D408[5] = 1;
             FUN_0022db10(1, 0, 0);
@@ -1900,7 +1887,7 @@ void FUN_L03_002dbd90(struct Moby *m) {
         talker_spawn_debris(m, &vel, &pos, 0.0f, 0.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
         m->state = type;
         FUN_00212ed8(m, 1, 0);
-        D_0014C190[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
+        D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
         D_L03_001BA5D0[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
     }
     m->hit_slot = 0xFF;
@@ -2018,7 +2005,6 @@ struct RailLiftVars {
     s32 hud;           /* 0xA4: hud queue entry (FUN_L03_002dcbc8) */
 };
 
-extern u32 D_0013CAE4 __attribute__((section(".data")));
 extern s32 D_L03_0015F594 __attribute__((sda));
 extern void FUN_L00_00266858(void *, int);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");

@@ -1,7 +1,6 @@
 #include "types.h"
 #include "rnc/gameplay/camera/update_cam.h"
 
-extern struct CameraType camera_types[] __asm__("D_001E8C00");
 void camera_run_setup_to_new_cam(struct UpdateCam *cam) __asm__("FUN_001ebec8");
 
 void camera_run_setup_to_new_cam(struct UpdateCam *cam) {

@@ -3,20 +3,11 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
 
-extern int D_0015EE8C_23d028 __asm__("D_0015EE8C");
-extern int D_0015EE78_23d028 __asm__("D_0015EE78_gp");
-extern int D_0015EE24_23d028 __asm__("D_0015EE24");
-extern char D_L00_00173EC0_23d028[] __asm__("D_L00_00173EC0") __attribute__((section(".data")));
 extern char D_L00_00197BC0_23d028[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
-extern char D_L00_0019A980_23d028[] __asm__("D_L00_0019A980") __attribute__((section(".data")));
-extern char D_L00_0019A280_23d028[] __asm__("D_L00_0019A280") __attribute__((section(".data")));
 extern char D_L00_001C5B00_23d028[] __asm__("D_L00_001C5B00") __attribute__((section(".data")));
-extern char D_L00_001C7700_23d028[] __asm__("D_L00_001C7700") __attribute__((section(".data")));
-extern char D_L00_001C6F00_23d028[] __asm__("D_L00_001C6F00") __attribute__((section(".data")));
 extern char D_L00_001BC1B0_23d028[] __asm__("D_L00_001BC1B0") __attribute__((section(".data")));
-extern char D_L00_001BD3B0_23d028[] __asm__("D_L00_001BD3B0") __attribute__((section(".data")));
-extern char D_L00_001BCDB0_23d028[] __asm__("D_L00_001BCDB0") __attribute__((section(".data")));
 void FUN_00215420_23d028(void) __asm__("FUN_00215420");
 void FUN_002335a0_23d028(void) __asm__("FUN_002335a0");
 void FUN_002015d8_23d028(void) __asm__("FUN_002015d8");
@@ -28,24 +19,31 @@ void FUN_L00_00268900_23d028(void) __asm__("FUN_L00_00268900");
 void FUN_00233d00_23d028(void) __asm__("FUN_00233d00");
 void FUN_L00_0023d198_23d028(void) __asm__("FUN_L00_0023d198");
 void FUN_L00_002607d0_23d028(int) __asm__("FUN_L00_002607d0");
+extern char D_L00_0019A980[] __attribute__((section(".data")));
+extern char D_L00_0019A280[] __attribute__((section(".data")));
+extern char D_L00_001C7700[] __attribute__((section(".data")));
+extern char D_L00_001C6F00[] __attribute__((section(".data")));
+extern char D_L00_001BD3B0[] __attribute__((section(".data")));
+extern char D_L00_001BCDB0[] __attribute__((section(".data")));
+extern char D_L00_00173EC0[] __attribute__((section(".data")));
 void FUN_L00_0023d028(void) {
     int t;
     FUN_00215420_23d028();
     FUN_002335a0_23d028();
     FUN_002015d8_23d028();
-    t = D_0015EE8C_23d028;
+    t = gs_texture_allocation_base;
     gs_texture_allocation_cursor = t;
-    D_0015EE78_23d028 = t;
-    FUN_001f97e8_23d028(D_L00_00173EC0_23d028, 0x87654321, 0x10);
+    D_0015EE78_gp = t;
+    FUN_001f97e8_23d028(D_L00_00173EC0, 0x87654321, 0x10);
     FUN_001f97e8_23d028(D_L00_00197BC0_23d028, -1, 0x800);
-    FUN_001f97e8_23d028(D_L00_0019A980_23d028, -1, 0xE00);
-    FUN_001f97e8_23d028(D_L00_0019A280_23d028, 0, 0xE0);
+    FUN_001f97e8_23d028(D_L00_0019A980, -1, 0xE00);
+    FUN_001f97e8_23d028(D_L00_0019A280, 0, 0xE0);
     FUN_001f97e8_23d028(D_L00_001C5B00_23d028, -1, 0xC00);
-    FUN_001f97e8_23d028(D_L00_001C7700_23d028, -1, 0x800);
-    FUN_001f97e8_23d028(D_L00_001C6F00_23d028, 0, 0x80);
+    FUN_001f97e8_23d028(D_L00_001C7700, -1, 0x800);
+    FUN_001f97e8_23d028(D_L00_001C6F00, 0, 0x80);
     FUN_001f97e8_23d028(D_L00_001BC1B0_23d028, -1, 0x400);
-    FUN_001f97e8_23d028(D_L00_001BD3B0_23d028, -1, 0x400);
-    FUN_001f97e8_23d028(D_L00_001BCDB0_23d028, 0, 0x40);
+    FUN_001f97e8_23d028(D_L00_001BD3B0, -1, 0x400);
+    FUN_001f97e8_23d028(D_L00_001BCDB0, 0, 0x40);
     FUN_001f2c60_23d028();
     FUN_001f2d98_23d028();
     FUN_002335d0_23d028();
@@ -55,7 +53,7 @@ void FUN_L00_0023d028(void) {
     if (current_level_index != 0) {
         FUN_L00_002607d0_23d028(current_level_index);
     }
-    D_0015EE24_23d028 += 0xB4;
+    D_0015EE24 += 0xB4;
 }
 extern int D_L00_001C3E98[];
 extern unsigned char D_0015EDD0[] __attribute__((sda));

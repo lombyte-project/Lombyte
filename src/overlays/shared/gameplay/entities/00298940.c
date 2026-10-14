@@ -3,6 +3,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/overlay/level_labels.h"
 
 typedef struct {
     float pad0[4];
@@ -22,7 +23,6 @@ extern float func_001F9B88_298940(float) __asm__("FUN_001f99c0");
 extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, int, int, int,
                                                float) __asm__("FUN_L00_00272f68");
 extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
-extern char D_L10_00167240_298940[] __asm__("D_L10_00167240");
 void FUN_L10_00298940(char *m) {
     L10SpriteData_298940 *p = *(L10SpriteData_298940 **)(m + 0x78);
     float d[4] __attribute__((aligned(16)));
@@ -31,7 +31,7 @@ void FUN_L10_00298940(char *m) {
     float f;
 
     *(float *)(m + 0x18) += 0.5f;
-    func_001F9BF0_298940(d, D_L10_00167240_298940, m + 0x10);
+    func_001F9BF0_298940(d, D_L10_00167240, m + 0x10);
     func_L00_001FF4B0_298940(d, d, -0.3f);
     func_L00_001FF4B0_298940(e, d, 0.1f);
     func_001F9BD8_298940(d, d, m + 0x10);
@@ -115,7 +115,6 @@ typedef struct {
 } Rot_cc2e8;
 
 extern unsigned char D_0013F350_cc2e8[] __asm__("D_0013F350");
-extern char D_L10_001742C0_cc2e8[] __asm__("D_L10_001742C0");
 extern float vlen_cc2e8(void *) __asm__("FUN_001f9af0");
 extern float vlenxy_cc2e8(void *) __asm__("FUN_001f9b20");
 extern float vdist_cc2e8(void *, void *) __asm__("FUN_001f9b48");
@@ -225,7 +224,7 @@ void FUN_L10_002cc2e8(char *m) {
             d->passed = 1;
         d->dist = dist;
         if (hit_cc2e8(p, pos0, 0x10, d->owner, 0)) {
-            tb = D_L10_001742C0_cc2e8;
+            tb = ground_hit;
             if (*(int *)(tb + 0x18) != d->owner) {
                 if (*(int *)(tb + 0x18) != 0) {
                     vdir_cc2e8(diff, d, 1.0f);

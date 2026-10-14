@@ -15,11 +15,11 @@ extern B_00284e50 D_L00_001BB280 __attribute__((section(".data")));
 extern int D_L00_001BA4D0[] __attribute__((section(".data")));
 extern char D_L00_001BB230[] __attribute__((section(".data")));
 extern unsigned char D_0014C050[][16];
-extern int D_0014C190[][64];
 extern char D_001516D0[];
 extern char D_0013E550[];
 extern void FUN_001f9838(int, void *, unsigned short);
 
+extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void FUN_L00_00284e50(OvlQuad *a, OvlQuad *b) {
     unsigned char *src;
     int i;
@@ -40,7 +40,7 @@ void FUN_L00_00284e50(OvlQuad *a, OvlQuad *b) {
         if ((unsigned char)v != 1 && D_0014C050[lvl][(unsigned char)v - 2] != 0xFF)
             continue;
         D_L00_001BB280.f[i] = v;
-        D_0014C190[lvl][i >> 5] |= 1 << (i & 0x1F);
+        D_0014C190_257218[lvl][i >> 5] |= 1 << (i & 0x1F);
         D_L00_001BA4D0[i >> 5] |= 1 << (i & 0x1F);
     }
     s = D_L00_001BB230;

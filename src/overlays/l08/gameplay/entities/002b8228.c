@@ -14,13 +14,13 @@
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L08_00279f00(char *);
-extern short D_L08_00161468_d __asm__("D_L08_00161468") __attribute__((sda));
-extern short D_L08_0016146C_d __asm__("D_L08_0016146C") __attribute__((sda));
 extern void FUN_L00_0025d1b8(void *);
 
+extern short D_L08_00161468 __attribute__((sda));
+extern short D_L08_0016146C __attribute__((sda));
 void FUN_L08_002b8228(struct Moby *moby) {
-    float a = *(float *)&D_L08_00161468_d;
-    float b = *(float *)&D_L08_0016146C_d;
+    float a = *(float *)&D_L08_00161468;
+    float b = *(float *)&D_L08_0016146C;
     char *d;
     moby->rot.x = 0.0f;
     moby->rot.y = 0.5235988f;
@@ -86,10 +86,8 @@ extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9b80(void *, void *);
 extern int D_0013DF38;
 extern int D_0013F350;
-extern float D_0015ED60;
 extern float D_0015ED70;
 extern int D_0015ED84;
-extern int D_0015ED98;
 extern char *D_L08_0015FFD8;
 extern float D_L08_0016144C __attribute__((sda));
 extern float D_L08_00161458 __attribute__((sda));
@@ -148,9 +146,9 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
         qcopy(P, m->pos);
         d->vel[2] = d->vel[2] - D_0015ED70 * 9.8f;
         f20 = fast_vec_length(d->vel);
-        if (D_L08_0016144C * 1.8f * D_0015ED60 < f20) {
-            fast_vec_normalize(d->vel, d->vel, D_L08_0016144C * 1.8f * D_0015ED60);
-            f20 = D_L08_0016144C * 1.8f * D_0015ED60;
+        if (D_L08_0016144C * 1.8f * frame_scale < f20) {
+            fast_vec_normalize(d->vel, d->vel, D_L08_0016144C * 1.8f * frame_scale);
+            f20 = D_L08_0016144C * 1.8f * frame_scale;
         }
         add_vector_xyz(A, P, d->vel);
         fast_vec_normalize(B, d->vel, D_L08_0016144C);
@@ -200,11 +198,11 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
         }
         if (hit == 0) break;
         if (d->target != 0) d->target->fA = 0;
-        D_0015ED98 = D_0015ED98 + d->f20;
+        current_bolt_count = current_bolt_count + d->f20;
         ((int *)D_0013DF38_arr)[D_0015ED84] = ((int *)D_0013DF38_arr)[D_0015ED84] + d->f20;
         allocate_voice_for_target_entry(0, 0, m);
         func_001FFB38_2B94B0(2, 0x754E, func_L00_0023A658_2B94B0, func_L00_0023A690_2B94B0,
-                             func_L00_0023A788_2B94B0, &D_0015ED98, 0x98967F);
+                             func_L00_0023A788_2B94B0, &current_bolt_count, 0x98967F);
         mark_moby_for_removal(m);
         return;
     case 3:
@@ -527,7 +525,6 @@ extern float D_0015EE70_2D5FA8 __asm__("D_0015ED70");
 extern float D_0015EE6C_2D5FA8 __asm__("D_0015ED6C");
 extern int D_L08_0015F694_2D5FA8 __asm__("D_L08_0015F5B0");
 extern int D_L08_0015F698_2D5FA8 __asm__("D_L08_0015F5B4") __attribute__((sda));
-extern int D_L08_0015F69C_2D5FA8 __asm__("D_L08_0015F5B8") __attribute__((sda));
 extern int D_L08_0015F6A0_2D5FA8 __asm__("D_L08_0015F5BC") __attribute__((sda));
 extern float D_L08_0015F660_2D5FA8[] __asm__("D_L08_0015F580") __attribute__((section(".sdata")));
 extern Path_2D5FA8 *D_L08_001B0FB0_2D5FA8[] __asm__("D_L08_001B0CB0");
@@ -557,6 +554,7 @@ extern void rotation_2D5FA8(float *, int, float) __asm__("FUN_L00_001fff28");
 extern void matmul_2D5FA8(float *, float *, float *) __asm__("FUN_001fa3c0");
 extern void effects_update_2D5FA8(Moby *, short *) __asm__("FUN_L00_0025d538");
 
+extern int D_L08_0015F5B8 __attribute__((sda));
 void FUN_L08_002d4ca0(Moby *moby) {
     Data_2D5FA8 *data = (Data_2D5FA8 *)moby->pvars;
     Hit_2D5FA8 *source;
@@ -629,7 +627,7 @@ void FUN_L08_002d4ca0(Moby *moby) {
                     if (part != 0 && source != 0 && source->moby != 0 && source->moby->oclass == 0x661) {
                         if (part == one) D_L08_0015F694_2D5FA8 = one;
                         if (part == 2) D_L08_0015F698_2D5FA8 = one;
-                        if (part == 3) D_L08_0015F69C_2D5FA8 = one;
+                        if (part == 3) D_L08_0015F5B8 = one;
                         if (part == 4) D_L08_0015F6A0_2D5FA8 = one;
                         if (D_L08_0015F694_2D5FA8 != 0 && D_L08_0015F698_2D5FA8 != 0) {
                             unsigned char *flags = D_0013D50F_2D5FA8;
@@ -1072,7 +1070,6 @@ void FUN_L08_002da3f0(struct Moby *moby, void *from, void *to, int count, f32 si
 extern char *D_L08_0015FFD8;
 extern float FUN_001f9b48(void *, void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern short *D_L08_001AC040[];
 
 char *FUN_L08_002daa10(struct Moby *moby) {
     short *t = D_L08_001AC040[moby->group];
@@ -1450,7 +1447,6 @@ extern void FUN_L08_002dc9a8_finish(void *) __asm__("FUN_0020c828");
 extern float D_0015ED6C_2DC9A8 __asm__("D_0015ED6C");
 extern float D_0015ED70_2DC9A8 __asm__("D_0015ED70");
 #include "rnc/overlay/collision.h"
-extern CollisionHit D_L08_00174640_2DC9A8 __asm__("D_L08_00174640");
 extern int D_L08_00174658_2DC9A8 __asm__("D_L08_00174658") __attribute__((section(".data")));
 
 typedef struct __attribute__((packed)) EffectVectorCopy_2DC9A8 {
@@ -1467,6 +1463,7 @@ typedef struct EffectRecord_2DC9A8 {
     int state;
 } EffectRecord_2DC9A8;
 
+extern CollisionHit D_L08_00174640;
 void FUN_L08_002dc9a8(struct Moby *moby) {
     char *m = (char *)moby;
     char *data = *(char **)(m + 0x78);
@@ -1499,10 +1496,10 @@ void FUN_L08_002dc9a8(struct Moby *moby) {
         qcopy(record.velocity, data);
         if (FUN_L08_002dc9a8_trace(original, &record, 0, m, 0) != 0) {
             if (*(int *)(data + 0x20) != 0 &&
-                D_L08_00174640_2DC9A8.moby != *(int *)(data + 0x20)) {
+                D_L08_00174640.moby != *(int *)(data + 0x20)) {
                 m[0x20] = 99;
-                qcopy(position, D_L08_00174640_2DC9A8.point.f);
-                FUN_L08_002dc9a8_add(data, data, &D_L08_00174640_2DC9A8.normal_x);
+                qcopy(position, D_L08_00174640.point.f);
+                FUN_L08_002dc9a8_add(data, data, &D_L08_00174640.normal_x);
                 FUN_L08_002dc9a8_scale(D_0015ED6C_2DC9A8 + D_0015ED6C_2DC9A8, data, data);
             }
         } else {

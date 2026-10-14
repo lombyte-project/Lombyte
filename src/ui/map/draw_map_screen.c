@@ -26,7 +26,6 @@ struct MapEntry {
 #include "rnc/ui/menus/menu_screen.h"
 extern u8 D_001CF678[];
 extern u8 D_001CF418[];
-extern s32 *D_001601E0 __attribute__((sda));
 extern u8 D_0013D4E1[];
 #include "rnc/gameplay/state/level_state.h"
 extern u8 D_00141EC0[];
@@ -56,6 +55,7 @@ extern void allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 draw_map_screen(struct MenuScreen *screen) __asm__("FUN_0021be60");
 
+extern s32 *menu_level_indices __asm__("D_001601E0") __attribute__((sda));
 s32 draw_map_screen(struct MenuScreen *screen) {
     s32 prev;
     s32 idx;
@@ -108,15 +108,15 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         if (idx >= 0) {
             if (controller_state.pressed_unmasked & 8) {
                 if (idx < 0x13) {
-                    t = D_001601E0[idx + 1];
+                    t = menu_level_indices[idx + 1];
                     if (t != 0) {
                         level_map_selection.level = t;
                     }
                 }
             }
             if ((controller_state.pressed_unmasked & 4) && idx != 0) {
-                if (D_001601E0[idx - 1] != 0) {
-                    level_map_selection.level = D_001601E0[idx - 1];
+                if (menu_level_indices[idx - 1] != 0) {
+                    level_map_selection.level = menu_level_indices[idx - 1];
                 }
             }
         }

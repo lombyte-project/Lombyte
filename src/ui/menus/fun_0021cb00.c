@@ -1,9 +1,10 @@
 #include "sda.h"
-extern int D_0015EDF0 MACRO_ADDR;
-extern int pause_sound_volume __asm__("D_0013E5A0") NOT_SDA;
+#include "types.h"
+#include "rnc/data_labels.h"
 
+extern s32 sound_volume_macro __asm__("D_0015EDF0") MACRO_ADDR;
 int FUN_0021cb00(void) {
-    pause_sound_volume = D_0015EDF0 * 8 / 10;
+    pause_sound_volume = sound_volume_macro * 8 / 10;
     return 0;
 }
 

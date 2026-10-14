@@ -1,7 +1,5 @@
 #include "types.h"
-
-extern u32 D_00154E64[];
-extern u32 D_00154E6C[];
+#include "rnc/data_labels.h"
 
 void sceSifAddCmdHandler(s32 idx, u32 handler, u32 data) {
     u32 off = idx << 3;

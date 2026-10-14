@@ -1,10 +1,10 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/data_labels.h"
 
 // D_002169C0 is a code address retail passes as a pointer, not a data symbol;
 // config/us/pinned.yaml binds its absolute value so this extern links.
-extern u8 D_002169C0[];
 extern s32 snd_play_vag_stream_by_loc_ex_cb() __asm__("func_0012EC08");
 
 void music_start_track_60000(s32 track, s32 track_flags, s32 volume) __asm__("FUN_00215440");

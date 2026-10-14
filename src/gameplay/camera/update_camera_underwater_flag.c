@@ -1,9 +1,8 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001EDB98). */
 #include "sda.h"
 #include "qcopy.h"
-extern char D_00186F40[];
-extern char D_00194120[];
-extern int D_0015F604 MACRO_ADDR;
+#include "types.h"
+#include "rnc/data_labels.h"
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_001f0b58(void);
 extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0");
@@ -14,13 +13,14 @@ extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0")
    set. */
 void update_camera_underwater_flag(void) __asm__("FUN_001ed7f0");
 
+extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
 void update_camera_underwater_flag(void) {
-    char *cam = D_00186F40;
+    char *cam = preview_camera;
     float a[4];
     float b[4];
     int i;
 
-    if (*(short *)(*(char **)(cam + 0x180) + 0x86) == 6 || D_0015F604 != 0) {
+    if (*(short *)(*(char **)(cam + 0x180) + 0x86) == 6 || game_mode != 0) {
         *(int *)(cam + 0x394) = 0;
         return;
     }
@@ -32,7 +32,7 @@ void update_camera_underwater_flag(void) {
     while (i < 6 && FUN_001efa68(a, b, 0x12, 0, 0) != 0) {
         if (FUN_001f0b58() == 0) {
             float h = resolve_camera_surface_height(D_00194120, 0) + 0.04f;
-            char *c2 = D_00186F40;
+            char *c2 = preview_camera;
 
             if (*(float *)(c2 + 0x148) < h) {
                 *(int *)(c2 + 0x394) = 1;

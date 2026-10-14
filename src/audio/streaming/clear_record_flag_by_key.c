@@ -5,7 +5,6 @@ struct KeyedFlagRecord {
     s32 flags;
 };
 
-extern struct KeyedFlagRecord D_001D60B8[];
 s32 clear_record_flag_by_key(s32 arg0) __asm__("FUN_00225e20");
 
 s32 clear_record_flag_by_key(s32 arg0) {

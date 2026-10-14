@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/menu.c, func_002073D8). */
 #include "sda.h"
-extern unsigned char menu_item_enabled_18 __asm__("D_0013D3A6") NOT_SDA;
+#include "rnc/data_labels.h"
 int FUN_00206ba8(void) {
     return menu_item_enabled_18 != 0;
 }

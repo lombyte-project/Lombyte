@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/hud.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/data_labels.h"
 
 #define NOT_SDA
 
@@ -21,8 +22,6 @@ void FUN_L05_002661a0(HudElem *e) {
     e->unk4A = 0;
 }
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00266BD8), where it is exact; names translated to the US level program. */
-
-extern char D_0013E533[];
 
 void FUN_L05_002661e8(char *moby) {
     if (*(int *)(D_0013E533 + 0x2EA9) == 0x16) {

@@ -157,12 +157,12 @@ void FUN_L08_002e8788(char *moby) {
 
 extern float D_0015ED6C_d __asm__("D_0015ED6C");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern short D_L08_00161D28_d __asm__("D_L08_00161D28") __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 
+extern short D_L08_00161D28 __attribute__((sda));
 void FUN_L08_002e8ba0(struct Moby *a) {
     char *data = (char *)a->pvars;
     float v0[4], v10[4], v20[4];
@@ -183,7 +183,7 @@ void FUN_L08_002e8ba0(struct Moby *a) {
         char *r = *(char **)(data + 0x90);
         *(float *)(*(char **)(data + 0x90) + 0x40) = fast_add_rotations(
             *(float *)(r + 0x40),
-            *(float *)&D_L08_00161D28_d * DEG_TO_RAD * D_0015ED6C_d);
+            *(float *)&D_L08_00161D28 * DEG_TO_RAD * D_0015ED6C_d);
     }
     for (i = 0; i < 12; i++) {
         char *m = *(char **)(base + 0x10 + i * 16);
@@ -193,9 +193,9 @@ void FUN_L08_002e8ba0(struct Moby *a) {
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EADF0), where it is exact; names translated to the US level program. */
 
-extern short D_L08_00161D38_d __asm__("D_L08_00161D38") __attribute__((sda));
 extern void FUN_001f9a68(void *, void *, float);
 
+extern short D_L08_00161D38 __attribute__((sda));
 void FUN_L08_002e9a18(struct Moby *arg) {
     char *data = (char *)arg->pvars;
     float v0[4];
@@ -218,7 +218,7 @@ void FUN_L08_002e9a18(struct Moby *arg) {
     if (*(char **)(data + 0x90) != 0) {
         *(float *)(*(char **)(data + 0x90) + 0x40) =
             fast_add_rotations(*(float *)(*(char **)(data + 0x90) + 0x40),
-                               *(float *)&D_L08_00161D38_d * DEG_TO_RAD * D_0015ED6C_d);
+                               *(float *)&D_L08_00161D38 * DEG_TO_RAD * D_0015ED6C_d);
     }
     p = parts + 0x10;
     for (i = 0; i < 16; i++) {
@@ -589,7 +589,6 @@ typedef struct CannonCamera52_2E16A0 { char pad0[0x160]; float mag0; int pad164,
 
 char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
 char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value);
-extern unsigned char D_0014095F_r[] __asm__("D_0014095F");
 extern char *D_L08_0015FFD8;
 extern char D_0013CAE0[];
 extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
@@ -715,6 +714,7 @@ extern void func_L00_00251E30_2E16A0(void *) __asm__("FUN_L00_00250df8");
 extern void func_001F49B0_2E16A0(void *,void *) __asm__("FUN_001f4600");
 extern void func_L08_002E0258_2E16A0(void *) __asm__("FUN_L08_002deee0");
 
+extern unsigned char D_0014095F[];
 void FUN_L08_002e0328(Moby *moby) {
     float position[4], offset[4], work[4], direction[4], muzzle[4], scatter[4], random_vec[4];
     CannonData52_2E16A0 *data = (*(CannonData52_2E16A0 **)&moby->pvars);
@@ -745,7 +745,7 @@ void FUN_L08_002e0328(Moby *moby) {
             return;
         }
         if (visited52[D_0015EE84_2E16A0][moby->mission] != 0xFF && (hero52.interact & 1)) func_L00_00211908_2E16A0();
-        if (((*(int *)D_0013A5E0_2E16A0 & 0x10) || (*(unsigned char *)(D_0014095F_r) & 1)) && visited52[D_0015EE84_2E16A0][moby->mission] == 0xFF) {
+        if (((*(int *)D_0013A5E0_2E16A0 & 0x10) || (*(unsigned char *)(D_0014095F) & 1)) && visited52[D_0015EE84_2E16A0][moby->mission] == 0xFF) {
             hero52.interact = 0;
             hero_state52(0, 1);
             moby->command = 2; (*(float (*)[4])&moby->rot)[1] = 0.0f;
@@ -1617,7 +1617,6 @@ void FUN_L08_002e2da0(struct Moby *moby) {
         ++ids;
     }
 }
-extern float D_0013F3D0;
 extern float D_0013F3D4;
 extern float D_0015ED6C;
 extern float D_L08_00161C50 __attribute__((sda));

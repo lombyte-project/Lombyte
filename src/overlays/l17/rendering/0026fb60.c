@@ -15,7 +15,7 @@ extern int func_001F9850_6fb60(int) __asm__("FUN_001f96f8");
 extern unsigned char *func_00218928_6fb60(int) __asm__("FUN_L00_002678b8");
 extern void func_001F9BF0_6fb60(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int func_001FA898_r_6fb60(float) __asm__("FUN_001fa6d0");
-extern unsigned char *D_L17_001B2D54_6fb60 __asm__("D_L17_001B2A54") NOT_SDA;
+extern unsigned char *D_L17_001B2A54 __attribute__((section(".data")));
 unsigned char *FUN_L17_0026fb60(struct Moby *parent, void *pos, float *vec) {
     int r = func_002140B0_6fb60(5);
     unsigned char a = func_001F9850_6fb60(r + 2);
@@ -40,7 +40,7 @@ unsigned char *FUN_L17_0026fb60(struct Moby *parent, void *pos, float *vec) {
         *(float *)(p + 0xC) = 42000.0f;
         p[8] = b;
         p[1] = 0;
-        p[2] = *D_L17_001B2D54_6fb60;
+        p[2] = *D_L17_001B2A54;
     }
     return p;
 }
@@ -54,7 +54,6 @@ extern f32 convert_integer_to_float_q(s32) __asm__("func_001FA6C0");
 extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_integer_below_q(int) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *D_L17_001B2A54_q __asm__("D_L17_001B2A54") __attribute__((section(".data")));
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
 
@@ -98,7 +97,7 @@ unsigned char *FUN_L17_0026fdd0(char *pos, int mode, int step) {
             }
             p[1] = 0;
             p[8] = random_integer_below_q(0xFF);
-            p[2] = *D_L17_001B2A54_q;
+            p[2] = *D_L17_001B2A54;
         }
         return p;
     }

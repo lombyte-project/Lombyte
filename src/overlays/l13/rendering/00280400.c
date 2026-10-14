@@ -10,11 +10,11 @@
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/partupd_002811B0.c: func_L13_002811B0), where it is exact; names translated to the US level program. */
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *D_L13_001B2490_x __asm__("D_L13_001B2490") __attribute__((section(".data")));
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
+extern unsigned char *D_L13_001B2490 NOT_SDA;
 unsigned char *FUN_L13_00280400(char *moby, unsigned char a, int b, int c, unsigned char d, float x,
                                 float y, float z) {
     unsigned char *e = create_part(0x44);
@@ -30,7 +30,7 @@ unsigned char *FUN_L13_00280400(char *moby, unsigned char a, int b, int c, unsig
         e[9] = (((short)*(unsigned short *)(moby + 0x32) >> 5) << 4) + v;
         e[3] = 0x48;
         e[1] = 3;
-        e[2] = *D_L13_001B2490_x;
+        e[2] = *D_L13_001B2490;
         moby_point_position(moby, a, p);
         qcopy(e + 0x20, p);
         *(float *)(e + 0x2C) = y;

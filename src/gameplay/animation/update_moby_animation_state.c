@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 struct AnimSeq {
     u8 pad0[0x11];
     u8 unk11;
@@ -7,7 +8,6 @@ struct AnimSeq {
     void *frames[1];
 };
 #include "rnc/gameplay/entities/moby.h"
-extern u8 debug_font_buffer[] __asm__("D_001AABC0");
 void update_moby_animation_state(struct Moby *m) __asm__("FUN_0020c880");
 
 void update_moby_animation_state(struct Moby *m) {

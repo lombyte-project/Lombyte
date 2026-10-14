@@ -4,12 +4,12 @@
 
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Register this level's vendor data set. */
 
-extern char D_L05_001D6880[];
 extern void FUN_L01_002b91c8(char *, int);
 
 void FUN_L05_0030d678(void) {
-    FUN_L01_002b91c8(D_L05_001D6880, 0x30);
+    FUN_L01_002b91c8(water_records, 0x30);
 }

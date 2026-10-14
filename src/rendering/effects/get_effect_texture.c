@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/texture_upload.h"
+#include "rnc/data_labels.h"
 
 struct EffectTextureDefinition {
     u64 tex0;
@@ -10,8 +11,6 @@ struct EffectTextureDefinition {
     s16 height_log2;
 };
 
-extern s32 pending_texture_upload_count __asm__("D_0015F458");
-extern s32 level_texture_payload_address __asm__("D_0015F460");
 extern struct EffectTextureDefinition effect_texture_definitions[] __asm__("D_0018D440");
 
 u64 get_effect_texture(s32 index) __asm__("FUN_001f44b8");

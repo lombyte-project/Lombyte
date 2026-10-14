@@ -1,13 +1,13 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 extern f32 func_001F9B48(s32, u32);
 extern s32 calculate_voice_distance_volume(f32 *, f32, f32, f32) __asm__("FUN_0022c6f8");
-extern u8 D_00187080[];
 
 s32 calculate_voice_volume(s32 *voice, s32 position) __asm__("FUN_0022c7e8");
 
 s32 calculate_voice_volume(s32 *voice, s32 position) {
-    f32 distance = func_001F9B48(position, (u32)D_00187080);
+    f32 distance = func_001F9B48(position, (u32)camera_position);
     f32 *definition_values = (f32 *)voice[2];
 
     return calculate_voice_distance_volume(definition_values, distance, definition_values[0],

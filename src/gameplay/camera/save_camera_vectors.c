@@ -1,8 +1,7 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001ECB98). */
 #include "qcopy.h"
-extern char cam_trans_state[] __asm__("D_001871B0");
+#include "rnc/data_labels.h"
 extern void FUN_001f9a10(void *, void *, void *);
-extern char D_0013F490[];
 /* When the flag at +2 is clear, copies the 16-byte vector at +0x50 to
    +0xC0 with retail's qcopy, optionally runs FUN_001f9a10 on +0x60,
    then copies +0x60 to +0xD0. Sibling of func_001ECC10 just above it. */

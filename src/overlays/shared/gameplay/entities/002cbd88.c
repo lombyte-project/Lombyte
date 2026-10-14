@@ -4,33 +4,32 @@
 #include "asm.h"
 #include "sda.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CD118), where it is exact; names translated to the US level program. */
 
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern int D_L15_0015F5CC;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern short D_L15_00161ABC_d __asm__("D_L15_00161ABC") __attribute__((sda));
-extern short D_L15_00161ACC_d __asm__("D_L15_00161ACC") __attribute__((sda));
-extern short D_L15_00161AD0_d __asm__("D_L15_00161AD0") __attribute__((sda));
-extern short D_L15_00161AD4_d __asm__("D_L15_00161AD4") __attribute__((sda));
 extern signed char D_L15_00161ACF[] MACRO_ADDR;
 void emit_rgba_draw_packet(s32 r, s32 g, s32 b, s32 a) __asm__("FUN_001f5210");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
+extern short D_L15_00161ACC __attribute__((sda));
+extern short D_L15_00161AD0 __attribute__((sda));
+extern short D_L15_00161AD4 __attribute__((sda));
 void FUN_L15_002cbd88(void) {
-    int n = scale_game_frames(*(int *)&D_L15_00161AD4_d);
+    int n = scale_game_frames(*(int *)&D_L15_00161AD4);
     float d = convert_integer_to_float(n);
     float s = fast_sin((float)(D_L15_0015F5CC % n) / d * 6.28318f);
-    float v = *(float *)&D_L15_00161ABC_d + *(float *)&D_L15_00161AD0_d * s;
+    float v = *(float *)&D_L15_00161ABC + *(float *)&D_L15_00161AD0 * s;
     int r;
     int k;
     if (v < 0.0f)
         v = 0.0f;
     r = func_001FA898_r((float)D_L15_00161ACF[0] * v);
-    k = *(int *)&D_L15_00161ACC_d;
+    k = *(int *)&D_L15_00161ACC;
     emit_rgba_draw_packet(k & 0xFF, k >= 9, k >= 17, r);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */

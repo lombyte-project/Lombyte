@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 struct Point {
     u64 flags;
     s16 y;
@@ -6,7 +7,6 @@ struct Point {
     s16 u;
     s16 v;
 };
-extern s32 effect_tex_cnt __asm__("D_0015F45C");
 extern struct Point D_0018D440[];
 extern s16 FUN_001f97a0(s32);
 void unpack_point_records(s32 *src, s32 count) __asm__("FUN_00202800");

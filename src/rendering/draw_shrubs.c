@@ -1,17 +1,16 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/data_labels.h"
 
 extern volatile s32 D_0015EE74;
 extern u8 D_001603B0[];
 extern u8 D_001603C0[];
-extern s32 D_001603F0;
 struct ShrubDrawState {
     s32 unk0;
     s32 pad[2];
 };
 extern struct ShrubDrawState D_0018A2D0;
-extern u8 D_001D8EB0[];
 extern void func_00118A80(s32);
 extern void WriteDmaChannel(u32, u32, u32);
 extern void func_001F21B0(void *, s32);

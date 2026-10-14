@@ -1,11 +1,11 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
+#include "rnc/data_labels.h"
 
 extern u8 scene_sounds[] __asm__("D_0013A664");
 // D_002169C0 is a code address retail passes as a pointer, not a data symbol;
 // config/us/pinned.yaml binds its absolute value so this extern links.
-extern u8 D_002169C0[];
 extern s32 snd_play_vag_stream_by_loc_ex_cb() __asm__("func_0012EC08");
 extern void music_start_track_60000(s32, s32, s32) __asm__("FUN_00215440");
 extern void music_start_track_50000(s32, s32, s32) __asm__("FUN_00215518");

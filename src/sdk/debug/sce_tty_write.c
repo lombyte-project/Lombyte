@@ -2,6 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/data_labels.h"
 
 struct TtyState {
     volatile s32 unk0; /* deci2 handle from sceDeci2Open */
@@ -24,7 +25,6 @@ struct Mmio {
 };
 
 extern struct TtyState D_00154A50;
-extern u8 D_00154A80[];
 extern s32 CallDebugCharacter(s32, s32);
 extern s32 DIntr();
 extern s32 EnableInterrupts();

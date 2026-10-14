@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/globals.h"
 
 struct FreezeModeState {
     s32 unk0;
@@ -14,7 +15,6 @@ struct FreezeModeState {
     s32 unk28;
 };
 
-extern s32 D_0015F604;
 extern struct FreezeModeState freeze __asm__("D_00193300");
 extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern s32 music_pause();
@@ -27,13 +27,13 @@ void mode_freeze_init(u32 mode, s32 arg1) __asm__("FUN_001fbab8");
 void mode_freeze_init(u32 mode, s32 arg1) {
     struct FreezeModeState *st;
 
-    if (D_0015F604 != 3) {
+    if (game_mode != 3) {
         snd_pause_all_sounds_in_group(0x1D);
         music_pause(0);
     }
-    freeze.unk14 = D_0015F604;
+    freeze.unk14 = game_mode;
     freeze.unk18 = arg1;
-    D_0015F604 = 4;
+    game_mode = 4;
     freeze.unk0 = mode;
     switch (mode) {
     case 0:

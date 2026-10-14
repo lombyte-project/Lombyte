@@ -1,11 +1,12 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00222D70). */
 #include "sda.h"
-extern int D_0015ED84 MACRO_ADDR;
+#include "types.h"
 extern int pause_level_sprite_lists[] __asm__("D_001D4528");
+extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
 /* `D_001D4528[(unsigned)D_0015ED84 % 19]`; the older near-miss
    predated MACRO_ADDR. */
 int FUN_00221d28(char *arg0) {
-    *(int *)(arg0 + 0x34) = pause_level_sprite_lists[(unsigned int)D_0015ED84 % 19];
+    *(int *)(arg0 + 0x34) = pause_level_sprite_lists[(unsigned int)current_level_index % 19];
     return 0;
 }
 

@@ -9,6 +9,8 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/help_0023D688.c: func_L01_0023D688), where it is exact; names translated to the US level program. */
 
@@ -19,12 +21,8 @@ typedef struct {
     char pad[0x20];
 } T2C_23D688;
 
-extern char D_L01_0017C3A0_e[] __asm__("D_L01_0017C3A0");
-extern char D_L01_0017C3E0_e[] __asm__("D_L01_0017C3E0");
 extern T2C_23D688 D_L01_0017C0A8[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
-extern char D_0013E533[];
-extern char D_00141680[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L01_0017C270[][25];
 extern float FUN_001f9e90(float, float);
@@ -34,12 +32,6 @@ extern float FUN_L00_002339d0(float *v);
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
-extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
-extern int D_0015ED80;
-extern int D_L01_001612D0;
-extern int D_L01_001612D8;
-extern int D_0015EEA4;
-extern int D_L01_0015F5C4;
 extern int FUN_L00_002050b8(int);
 extern int FUN_L00_0020d568(void);
 extern int FUN_L00_00211360(char *);
@@ -51,7 +43,6 @@ extern int FUN_L01_00226f10(int a);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern short D_L01_0015F6D8 __attribute__((sda));
-extern short D_L01_0015F688 __attribute__((sda));
 extern short D_L01_0015F6E8 __attribute__((sda));
 extern unsigned char D_L01_0017C258[];
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
@@ -82,6 +73,8 @@ extern char D_00141848[];
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
+extern char D_L01_0017C3A0[];
+extern char D_L01_0017C3E0[];
 int hero_set_state(int a, int b) {
     int old2088;
     char *moby;
@@ -91,7 +84,7 @@ int hero_set_state(int a, int b) {
         if (p->state.control_mode == 0x14 && (a != 0x64 || b != 2))
             return 0;
     }
-    if ((D_L01_0015F5C4 == 2 || D_L01_0015F5C4 == 6) && b != 2)
+    if ((cutscene_mode == 2 || cutscene_mode == 6) && b != 2)
         return 0;
     {
         struct Hero *p = &hero;
@@ -292,15 +285,15 @@ int hero_set_state(int a, int b) {
         p->unk90A = 0;
         if (p->state.prev_control_mode == 0x11) {
             FUN_L00_00209ca8(3, 0xA, 0);
-            if (D_L01_001612D0 != 0) {
-                FUN_L00_002a3ec8(D_L01_001612D0, D_L01_001612D8, 0, p->motion.pos.f[0],
+            if (pool_draw_tiles != 0) {
+                FUN_L00_002a3ec8(pool_draw_tiles, pool_draw_count, 0, p->motion.pos.f[0],
                                  p->motion.pos.f[1], 0.4f, 0.3f);
             }
         } else if (p->motion.displacement.f[2] < frame_time * -0.5f) {
             int n = truncate_float_to_s32(absolute_float(p->motion.displacement.f[2]) * 300.0f);
             FUN_L00_00209ca8(3, n < 0x28 ? n : 0x28, 1);
-            if (D_L01_001612D0 != 0) {
-                FUN_L00_002a3ec8(D_L01_001612D0, D_L01_001612D8, 0, p->motion.pos.f[0],
+            if (pool_draw_tiles != 0) {
+                FUN_L00_002a3ec8(pool_draw_tiles, pool_draw_count, 0, p->motion.pos.f[0],
                                  p->motion.pos.f[1], 0.5f, -0.4f);
             }
             p->unk90A = scale_game_frames(0x4B);
@@ -897,7 +890,7 @@ int hero_set_state(int a, int b) {
                     u->unk3D8 = 0.0f;
                     u->unk3DC = 18.0f;
                     u->unk3E0 = scale_game_frames(0x28);
-                    u->unk3E4 = D_L01_0017C3E0_e;
+                    u->unk3E4 = D_L01_0017C3E0;
                 }
                 {
                     struct Hero *w = &hero;
@@ -1011,7 +1004,7 @@ int hero_set_state(int a, int b) {
                 u->unk3DC = 26.0f;
                 u->unk3D8 = 0.0f;
                 u->unk3E0 = scale_game_frames(0x2D);
-                u->unk3E4 = D_L01_0017C3A0_e;
+                u->unk3E4 = D_L01_0017C3A0;
                 u->unk4AE = 1;
             } else if (u->state.current == 0xF) {
                 u->unk430 = 1.9f;
@@ -1029,7 +1022,7 @@ int hero_set_state(int a, int b) {
                 u->unk4A6 = scale_game_frames(0x55);
                 u->unk1B0 = scale_game_frames(0x46);
                 u->unk41C = 1;
-                if (D_0015ED80 != 0) {
+                if (pal_mode != 0) {
                     u->unk3D0 = scale_game_frames(0x22);
                 } else {
                     u->unk3D0 = scale_game_frames(0x23);
@@ -1206,7 +1199,7 @@ int hero_set_state(int a, int b) {
             }
             *(unsigned int *)(h + 0xC) =
                 *(unsigned int *)(h + 0xC) | (1 << current_level_index) | 0x80000000;
-            h2 = D_00141680;
+            h2 = item_usage;
             if (*(unsigned short *)(h2 + 0x128) <= 0xFFFE) {
                 *(unsigned short *)(h2 + 0x128) = *(unsigned short *)(h2 + 0x128) + 1;
             }
@@ -1243,7 +1236,7 @@ int hero_set_state(int a, int b) {
             break;
         }
         case 0x13: {
-            char *h = ((char *)&D_00141680);
+            char *h = ((char *)&item_usage);
             struct Hero *q;
             T2C_23D688 *e;
             int k;
@@ -1609,7 +1602,6 @@ struct HeldGadgetVars {
 };
 
 extern int D_00141660 __attribute__((section(".data")));
-extern unsigned char D_0013D4DC[];
 extern int D_L01_0015F674 __attribute__((sda));
 extern int FUN_001f9740(int *) __asm__("FUN_001f9740");
 extern int FUN_0022da68(int, int, struct Moby *) __asm__("FUN_0022da68");

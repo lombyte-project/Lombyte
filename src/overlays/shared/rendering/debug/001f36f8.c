@@ -4,6 +4,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/overlay/level_labels.h"
 
 typedef struct {
     s32 a, b, c, d;
@@ -1085,9 +1086,7 @@ extern float D_L00_0015F454;
 extern int D_0013E520[];
 extern int fptodp(float) __asm__("FUN_00120478");
 extern int print_debug_text_centered(int,int,int,char*) __asm__("FUN_001f0c50");
-extern s32 D_0015ED98;
 extern char D_L00_0015F0F0[];
-extern s32 D_L00_0015F5D8;
 extern s32 sprintf(char *, const char *, ...);
 extern u8 D_0014C050[];
 extern u8 D_L00_0015F444;
@@ -1095,7 +1094,6 @@ extern u8 D_L00_0015F445;
 extern u8 D_L00_0015F446;
 extern void FUN_L00_001f36f8(void);
 extern void append_gif_transfer_packet() __asm__("func_001FB368");
-extern volatile s32 D_L00_001611A0;
 void print_debug_text(s32 x, s32 y, s32 color, char *text) __asm__("FUN_001f0bd0");
 extern DebugMenu60 debug_menu60 __asm__("D_L00_0016C058");
 extern double promote_float60(float) __asm__("FUN_00120478");
@@ -1252,7 +1250,7 @@ void FUN_L00_001f58e0(void) {
         sprintf(buf, fmt, (s32) weapon_order[0xF]);
         print_debug_text(0x7A, 0x16E, 0x80406080, buf);
         print_debug_text(0x14, 0x17D, 0x8000C0C0, D_L00_0015F228);
-        sprintf(buf, fmt, D_0015ED98);
+        sprintf(buf, fmt, current_bolt_count);
         print_debug_text(0x8C, 0x17D, 0x80F0F0F0, buf);
         print_debug_text(0xBC, 0x100, 0x8000C000, D_L00_0015F230);
         print_debug_text(0xBC, 0x106, 0x8000C000, D_L00_0015F238);

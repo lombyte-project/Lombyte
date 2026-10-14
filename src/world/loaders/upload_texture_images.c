@@ -2,6 +2,7 @@
 #include "rnc/sdk/libgraph.h"
 #include "eetypes.h"
 #include "rnc/globals.h"
+#include "rnc/data_labels.h"
 
 /* One image of a texture upload list. */
 struct TextureImage {
@@ -11,7 +12,6 @@ struct TextureImage {
     s32 data_offset; /* 0xC: pixel data offset from the list's base address */
 };
 
-extern s32 D_0015EE8C;
 extern void FlushCache(s32 a0);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *img, s32 dbp, s32 dbw, s32 psm, s32 x, s32 y, s32 w,
                                 s32 h);
@@ -32,8 +32,8 @@ void upload_texture_images(s32 base, s32 count, struct TextureImage *p) {
     s32 one;
     s32 size;
 
-    gs_texture_allocation_cursor = D_0015EE8C;
-    gs_texture_allocation_start = D_0015EE8C;
+    gs_texture_allocation_cursor = gs_texture_allocation_base;
+    gs_texture_allocation_start = gs_texture_allocation_base;
     if (count > 0) {
         i = count;
         one = 1;

@@ -3,10 +3,11 @@
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
+#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EB5B0), where it is exact; names translated to the US level program. */
 
-extern char *D_L10_001B0930[];
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void FUN_L10_002ea4e8_c(void *,short *,short *) __asm__("FUN_L10_002ea4e8");
 extern void FUN_L10_002ea7b0_c(void *,short *) __asm__("FUN_L10_002ea7b0");
@@ -63,7 +64,6 @@ void FUN_L10_002ea1f0(char *m) {
 }
 #include "qcopy.h"
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
-extern char D_L10_00167240[];
 extern float FUN_001f9b48(void *, void *);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_001f9770(void *);
@@ -146,7 +146,6 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EBB70), where it is exact; names translated to the US level program. */
 
 extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
-extern char D_L10_00167240[];
 extern float FUN_001f9b48(void *, void *);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_001f9770(void *);
@@ -291,7 +290,6 @@ struct L10Data {
     int slot[4];
 };
 
-extern int D_L10_0015F5C4;
 extern struct L10Data D_L10_0016CCE0;
 extern void FUN_L00_002637f8(int);
 
@@ -302,7 +300,7 @@ void FUN_L10_002eacd8(struct Moby *m) {
         m->state = 1;
         break;
     case 1:
-        if (D_L10_0015F5C4 == 2) {
+        if (D_L10_0015F5C4_vendor == 2) {
             if (D_L10_0016CCE0.mode == 3 || D_L10_0016CCE0.mode == 5 || D_L10_0016CCE0.mode == 6 ||
                 D_L10_0016CCE0.mode == 7) {
                 int v = D_L10_0016CCE0.mode;

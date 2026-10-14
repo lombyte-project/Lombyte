@@ -2,9 +2,8 @@
 
 #include "sda.h"
 #include "qcopy.h"
+#include "rnc/data_labels.h"
 
-extern char cam_trans_state[] __asm__("D_001871B0");
-extern char camera_rows[] __asm__("D_00187290");
 #include "rnc/gameplay/camera/update_cam.h"
 extern int step_camera_blend(void *, void *) __asm__("func_001ECAF8");
 extern int advance_alternate_camera_transition(void *, void *) __asm__("FUN_001eccd8");

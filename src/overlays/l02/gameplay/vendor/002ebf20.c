@@ -6,6 +6,7 @@
 
 #include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
+#include "rnc/overlay/level_labels.h"
 typedef struct {
     Vec4f vel;
     s32 timer;
@@ -134,7 +135,6 @@ extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013D4C0[];
-extern unsigned char D_0013E533[];
 extern unsigned char D_0014C050[][16];
 extern unsigned char D_0015EDDC[4];
 extern unsigned char opt_cam_invert_x[4] __asm__("D_0015EDE0");
@@ -567,7 +567,6 @@ void FUN_L02_002ef020(struct Moby *moby) {
     }
 }
 extern void FUN_L00_001ed630(void *, void *, void *);
-extern char D_L02_00167280[];
 
 /* Sets the vendor camera mode; mode 3 also aims it from the hero's position. */
 void FUN_L02_002f8a18(int mode, int arg) {

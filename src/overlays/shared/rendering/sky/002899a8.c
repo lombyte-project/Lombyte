@@ -3,13 +3,11 @@
 #include "asm.h"
 
 #include "qzero.h"
+#include "rnc/overlay/level_labels.h"
 
 /* refreshes two rotating shrub transform layers */
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028AC80), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_0016051C;
-extern char D_L00_001BD7E0[];
-extern int D_L00_0015F5CC;
 extern void FUN_001f9fc8(void *);
 extern void sky_draw_shell(s32) __asm__("func_0022B690");
 void FUN_001fa070(void *,void *);

@@ -4,6 +4,7 @@
 #include "asm.h"
 
 #include "rnc/gameplay/hero.h"
+#include "rnc/data_labels.h"
 
 /* 1 when m is the hero's current moby of interest: unk4F8 in control mode 3
    or state 0x1C, otherwise unk2FC while unk30E is clear. */
@@ -57,7 +58,6 @@ void FUN_L01_002783a8(float scale, char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279790), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
 extern float FUN_001f9b80(void *, void *);
 extern void FUN_L00_00260a88(void *, int, int, int, int);
 

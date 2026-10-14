@@ -1,6 +1,5 @@
 #include "types.h"
-extern s32 snd_cd_stream_active __asm__("D_0015EC8C") __attribute__((sda));
-extern s32 snd_cd_callback_pending __asm__("D_0015ECC8") __attribute__((sda));
+#include "rnc/data_labels.h"
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 extern s32 snd_send_iop_command_and_wait() __asm__("func_0012E548");
 extern s32 snd_stream_safe_cd_sync() __asm__("func_0012EE08");

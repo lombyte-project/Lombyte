@@ -1,12 +1,10 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001ECEA0). */
 #include "sda.h"
 #include "qcopy.h"
+#include "types.h"
+#include "rnc/data_labels.h"
 extern void FUN_001f9a10(void *, void *, void *);
-extern char D_0013F490[];
 extern char D_00187080[];
-extern char occl_cam_state[] __asm__("D_0018C318");
-extern char camera_rows[] __asm__("D_00187290");
-extern float D_0015ED60 MACRO_ADDR;
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void func_002144D8(void *, void *);
 extern void FUN_001fa400(void *, void *, void *, float);
@@ -21,6 +19,7 @@ extern void func_001FA2B8(void *, void *);
    Returns 1 once both are complete. */
 int step_camera_blend(void *to_blend, void *cam_blend) __asm__("FUN_001ecaf8");
 
+extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
 int step_camera_blend(void *to_blend, void *cam_blend) {
     float *to = to_blend;
     float *cam = cam_blend;
@@ -50,11 +49,11 @@ int step_camera_blend(void *to_blend, void *cam_blend) {
     if (*(int *)(st + 0x14) == 0) {
         func_001FA2B8(camera_rows, q);
     }
-    cam[3] += cam[4] * D_0015ED60;
+    cam[3] += cam[4] * frame_scale;
     if (1.0f < cam[3]) {
         cam[3] = 1.0f;
     }
-    cam[0] += cam[1] * D_0015ED60;
+    cam[0] += cam[1] * frame_scale;
     if (1.0f < cam[0]) {
         cam[0] = 1.0f;
     }

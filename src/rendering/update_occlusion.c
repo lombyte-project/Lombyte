@@ -1,6 +1,6 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 extern u32 occl_update[] __asm__("D_0018C334");
-extern u8 occl_visibility[] __asm__("D_00193FC0");
 extern s32 build_occlusion_visibility() __asm__("FUN_001f2820");
 extern s32 FUN_001f97e8();
 void update_occlusion(void) __asm__("FUN_001f2c10");

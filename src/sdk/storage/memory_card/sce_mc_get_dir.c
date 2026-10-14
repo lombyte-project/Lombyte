@@ -1,5 +1,6 @@
 #include "types.h"
 #include "sifrpc.h"
+#include "rnc/data_labels.h"
 struct McGetDirRequest {
     s32 unk0;
     s32 unk4;
@@ -10,11 +11,8 @@ struct McGetDirRequest {
     s32 unk413;
 };
 
-extern u32 D_00132DA8[];
-extern u32 D_00132DAC[];
 extern struct sceSifClientData D_00159A00;
 extern struct McGetDirRequest D_00159AB0;
-extern u8 D_0015AFC0[];
 extern s32 PollSema();
 extern s32 SignalSema();
 extern s32 sceSifCallRpc();

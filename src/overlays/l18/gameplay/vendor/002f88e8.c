@@ -9,12 +9,6 @@
 typedef struct { char pad[0x30]; int state; int n; char pad38[0x140]; struct Moby *objects[8]; } L18SequenceState;
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int D_L18_0015F5C4;
-extern int D_L18_00162498_9780 __asm__("D_L18_00162498") __attribute__((sda));
-extern int D_L18_001624BC_9c20 __asm__("D_L18_001624BC") __attribute__((sda));
-extern int D_L18_00162524_9c20 __asm__("D_L18_00162524");
-extern float D_L18_00162520_9780 __asm__("D_L18_00162520");
-extern float D_L18_0016252C_9eb8 __asm__("D_L18_0016252C");
-extern char D_L18_001679D0_9780[] __asm__("D_L18_001679D0");
 extern char D_L18_001677C0_9780[] __asm__("D_L18_001677C0");
 extern int frames_9780(int) __asm__("FUN_001f96f8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -73,6 +67,12 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void rotate_vector_about_axis(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void FUN_L00_002bd0a0(void *);
 
+extern int D_L18_00162498 __attribute__((sda));
+extern int D_L18_001624BC __attribute__((sda));
+extern int D_L18_00162524;
+extern float D_L18_00162520;
+extern float D_L18_0016252C;
+extern char D_L18_001679D0[];
 /* Preserve the state-4 frame conversion and the state-7 raw-frame arithmetic. */
 void FUN_L18_002f88e8(struct Moby *moby) {
     union { EffectRadii radii; struct { Vec4 pos, velocity; } vectors; } scratch;
@@ -85,9 +85,9 @@ void FUN_L18_002f88e8(struct Moby *moby) {
 
     switch (moby->state) {
     case 0:
-        D_L18_00162498_9780 = 355;
+        D_L18_00162498 = 355;
         D_L18_0016249C = 365;
-        D_L18_001624BC_9c20 = 60;
+        D_L18_001624BC = 60;
         D_L18_001624C0 = 200;
         D_L18_001624C4 = 190;
         D_L18_001624C8 = 365;
@@ -182,12 +182,12 @@ void FUN_L18_002f88e8(struct Moby *moby) {
             func_L00_0025F4A8_alt(moby, &scratch.vectors.velocity, &scratch.vectors.pos, 0.0f, 0.0f, 300, 200, 200,
                 12.0f, 6.0f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
         }
-        if (frames_9780(D_L18_001624BC_9c20) <= D_L18_0016D260_update.n &&
+        if (frames_9780(D_L18_001624BC) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(D_L18_001624C0)) {
-            numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(D_L18_001624BC_9c20));
-            denominator = convert_integer_to_float(frames_9780(D_L18_001624C0 - D_L18_001624BC_9c20));
+            numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(D_L18_001624BC));
+            denominator = convert_integer_to_float(frames_9780(D_L18_001624C0 - D_L18_001624BC));
             numerator = numerator / denominator;
-            D_L18_00162524_9c20 = truncate_float_to_s32(numerator * 255.0f);
+            D_L18_00162524 = truncate_float_to_s32(numerator * 255.0f);
             enqueue_callback_list_1_overlay(FUN_L18_002f9c20, D_L18_00162528);
         }
         if (frames_9780(D_L18_001624C4) <= D_L18_0016D260_update.n &&
@@ -197,29 +197,29 @@ void FUN_L18_002f88e8(struct Moby *moby) {
             numerator = numerator / denominator;
             numerator *= 200.0f;
             numerator += 0.25f;
-            D_L18_0016252C_9eb8 = numerator;
+            D_L18_0016252C = numerator;
             enqueue_callback_list_1_overlay(FUN_L18_002f9eb8, D_L18_00162528);
         }
-        if (frames_9780(D_L18_00162498_9780) <= D_L18_0016D260_update.n &&
+        if (frames_9780(D_L18_00162498) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(D_L18_001624A0)) {
             enqueue_callback_list_1_overlay(FUN_L18_002f9780, D_L18_0016D260_update.objects[0]);
             if (D_L18_0016D260_update.n >= frames_9780(D_L18_0016249C)) {
-                D_L18_00162520_9780 = 10.0f;
+                D_L18_00162520 = 10.0f;
             } else {
-                numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(D_L18_00162498_9780));
-                denominator = convert_integer_to_float(frames_9780(D_L18_0016249C - D_L18_00162498_9780));
+                numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(D_L18_00162498));
+                denominator = convert_integer_to_float(frames_9780(D_L18_0016249C - D_L18_00162498));
                 numerator = numerator / denominator;
-                D_L18_00162520_9780 = D_L18_00162490 + (D_L18_00162494 - D_L18_00162490) * numerator;
+                D_L18_00162520 = D_L18_00162490 + (D_L18_00162494 - D_L18_00162490) * numerator;
             }
         }
     }
     if (D_L18_0016D260_update.state == 7) {
         if (D_L18_0016D260_update.n == 1) {
-            D_L18_001624BC_9c20 = D_L18_001624A4;
+            D_L18_001624BC = D_L18_001624A4;
             D_L18_001624C0 = D_L18_001624A8;
             D_L18_001624C4 = D_L18_001624AC;
             D_L18_001624C8 = D_L18_001624B0;
-            D_L18_00162498_9780 = D_L18_001624B4;
+            D_L18_00162498 = D_L18_001624B4;
             D_L18_0016249C = D_L18_001624B8;
             {
                 struct Moby *target;
@@ -231,12 +231,12 @@ void FUN_L18_002f88e8(struct Moby *moby) {
                 }
             }
         }
-        if (frames_9780(D_L18_001624BC_9c20) <= D_L18_0016D260_update.n &&
+        if (frames_9780(D_L18_001624BC) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(D_L18_001624C0)) {
-            numerator = convert_integer_to_float(D_L18_0016D260_update.n - D_L18_001624BC_9c20);
-            denominator = convert_integer_to_float(D_L18_001624C0 - D_L18_001624BC_9c20);
+            numerator = convert_integer_to_float(D_L18_0016D260_update.n - D_L18_001624BC);
+            denominator = convert_integer_to_float(D_L18_001624C0 - D_L18_001624BC);
             numerator = numerator / denominator;
-            D_L18_00162524_9c20 = truncate_float_to_s32(numerator * 255.0f);
+            D_L18_00162524 = truncate_float_to_s32(numerator * 255.0f);
             enqueue_callback_list_1_overlay(FUN_L18_002f9c20, D_L18_00162528);
         }
         if (frames_9780(D_L18_001624C4) <= D_L18_0016D260_update.n &&
@@ -246,19 +246,19 @@ void FUN_L18_002f88e8(struct Moby *moby) {
             numerator = numerator / denominator;
             numerator *= 200.0f;
             numerator += 0.25f;
-            D_L18_0016252C_9eb8 = numerator;
+            D_L18_0016252C = numerator;
             enqueue_callback_list_1_overlay(FUN_L18_002f9eb8, D_L18_00162528);
         }
-        if (frames_9780(D_L18_00162498_9780) <= D_L18_0016D260_update.n &&
+        if (frames_9780(D_L18_00162498) <= D_L18_0016D260_update.n &&
             D_L18_0016D260_update.n < frames_9780(D_L18_001624A0)) {
             enqueue_callback_list_1_overlay(FUN_L18_002f9780, D_L18_0016D260_update.objects[0]);
             if (D_L18_0016D260_update.n >= D_L18_0016249C) {
-                D_L18_00162520_9780 = 10.0f;
+                D_L18_00162520 = 10.0f;
             } else {
-                numerator = convert_integer_to_float(D_L18_0016D260_update.n - D_L18_00162498_9780);
-                denominator = convert_integer_to_float(D_L18_0016249C - D_L18_00162498_9780);
+                numerator = convert_integer_to_float(D_L18_0016D260_update.n - D_L18_00162498);
+                denominator = convert_integer_to_float(D_L18_0016249C - D_L18_00162498);
                 numerator = numerator / denominator;
-                D_L18_00162520_9780 = D_L18_00162490 + (D_L18_00162494 - D_L18_00162490) * numerator;
+                D_L18_00162520 = D_L18_00162490 + (D_L18_00162494 - D_L18_00162490) * numerator;
             }
         }
     }
@@ -321,12 +321,12 @@ void FUN_L18_002f88e8(struct Moby *moby) {
     enqueue_callback_list_1_overlay(FUN_L18_002f9a98, D_L18_0016D260_update.objects[2]);
 burst:
     if (D_L18_0016D260_update.state == 3 && D_L18_0016D260_update.n == frames_9780(586)) {
-        char *matrix = D_L18_001679D0_9780;
+        char *matrix = D_L18_001679D0;
         rot_9780(&scratch.vectors.pos, &D_L18_001624E0, matrix);
         add_9780(&scratch.vectors.pos, &scratch.vectors.pos, matrix - 0x210);
         qcopy(&scratch.vectors.velocity, matrix + 0x10);
         for (i = 0; i < 32; i++) {
-            rotate_vector_about_axis(&direction, &scratch.vectors.velocity, D_L18_001679D0_9780,
+            rotate_vector_about_axis(&direction, &scratch.vectors.velocity, D_L18_001679D0,
                 convert_integer_to_float(i) * 0.19634955f);
             norm_9780(&direction, &direction, D_L18_001624F0 * D_L18_0015ED60);
             n = random_integer_below(16);
@@ -345,14 +345,6 @@ burst:
         }
     }
 }
-extern float D_L18_00162520_9780 __asm__("D_L18_00162520");
-extern float D_L18_00162550_9780 __asm__("D_L18_00162550");
-extern volatile float D_L18_00162554_9780 __asm__("D_L18_00162554");
-extern volatile float D_L18_00162558_9780 __asm__("D_L18_00162558");
-extern float D_L18_0016255C_9780 __asm__("D_L18_0016255C");
-extern char D_L18_001679D0_9780[] __asm__("D_L18_001679D0");
-extern int D_L18_001624F8_9780 __asm__("D_L18_001624F8") __attribute__((sda));
-extern int D_L18_001624FC_9780 __asm__("D_L18_001624FC") __attribute__((sda));
 
 typedef unsigned int u128_9780 __attribute__((mode(TI)));
 typedef struct {
@@ -363,8 +355,6 @@ typedef struct {
 } Pk_9780;
 typedef struct { char pad[0x30]; int state; int n; } ML_9780;
 extern ML_9780 D_L18_0016D260_9780 __asm__("D_L18_0016D260");
-extern int D_L18_00162498_9780 __asm__("D_L18_00162498") __attribute__((sda));
-extern float D_L18_001DFB90_9780[4][4] __asm__("D_L18_001DFB90");
 extern char D_L18_001677C0_9780[] __asm__("D_L18_001677C0");
 extern int frames_9780(int) __asm__("FUN_001f96f8");
 extern unsigned long tex_9780(int) __asm__("FUN_001f44b8");
@@ -377,6 +367,13 @@ extern void cross_9780(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void scale_9780(void *, void *, float) __asm__("FUN_001f9a68");
 extern void xform_9780(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_9780(void *, void *, int) __asm__("FUN_001f7d30");
+extern float D_L18_00162550;
+extern volatile float D_L18_00162554;
+extern volatile float D_L18_00162558;
+extern float D_L18_0016255C;
+extern int D_L18_001624F8 __attribute__((sda));
+extern int D_L18_001624FC __attribute__((sda));
+extern float D_L18_001DFB90[4][4];
 void FUN_L18_002f9780(void) {
     Pk_9780 pk;
     float mat[4][4];
@@ -386,16 +383,16 @@ void FUN_L18_002f9780(void) {
     float tilt;
     char *target;
 
-    if (D_L18_0016D260_9780.n == frames_9780(D_L18_00162498_9780 + 1)) {
-        D_L18_00162550_9780 = 1.0f;
-        D_L18_00162554_9780 = 0.0f;
+    if (D_L18_0016D260_9780.n == frames_9780(D_L18_00162498 + 1)) {
+        D_L18_00162550 = 1.0f;
+        D_L18_00162554 = 0.0f;
         if (D_L18_0016D260_9780.state == 7) {
             tilt = -0.15f;
         } else {
             tilt = 0.15f;
         }
-        D_L18_00162558_9780 = tilt;
-        D_L18_0016255C_9780 = 1.0f;
+        D_L18_00162558 = tilt;
+        D_L18_0016255C = 1.0f;
     }
     pk.b = tex_9780(0xB);
     pk.c = 0x0000FF9000000260ULL;
@@ -403,8 +400,8 @@ void FUN_L18_002f9780(void) {
     pk.a = 0;
     gs_9780(0x4A, 0);
     gs_9780(0x47, 0x51001);
-    rot_9780(mat[3], &D_L18_00162550_9780, D_L18_001679D0_9780);
-    target = D_L18_001679D0_9780;
+    rot_9780(mat[3], &D_L18_00162550, D_L18_001679D0);
+    target = D_L18_001679D0;
     target -= 0x210;
     add_9780(mat[3], mat[3], target);
     sub_9780(mat[0], mat[3], target);
@@ -423,28 +420,28 @@ void FUN_L18_002f9780(void) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 0.0f;
     pk.uv[7] = 0.0f;
-    color = D_L18_001624F8_9780;
+    color = D_L18_001624F8;
     pk.col[3] = color;
     pk.col[2] = color;
     pk.col[1] = color;
     pk.col[0] = color;
     for (i = 0; i < 4; i++) {
-        scale_9780(pk.m[i], D_L18_001DFB90_9780[i], D_L18_00162520_9780);
+        scale_9780(pk.m[i], D_L18_001DFB90[i], D_L18_00162520);
         xform_9780(pk.m[i], pk.m[i], mat);
     }
     draw_9780(&pk, 0, 0);
-    color = D_L18_001624FC_9780;
+    color = D_L18_001624FC;
     pk.col[3] = color;
     pk.col[2] = color;
     pk.col[1] = color;
     pk.col[0] = color;
     for (i = 0; i < 4; i++) {
-        scale_9780(pk.m[i], D_L18_001DFB90_9780[i], D_L18_00162520_9780 * 0.75f);
+        scale_9780(pk.m[i], D_L18_001DFB90[i], D_L18_00162520 * 0.75f);
         xform_9780(pk.m[i], pk.m[i], mat);
     }
     draw_9780(&pk, 0, 0);
     for (i = 0; i < 4; i++) {
-        scale_9780(pk.m[i], D_L18_001DFB90_9780[i], D_L18_00162520_9780 * 0.5f);
+        scale_9780(pk.m[i], D_L18_001DFB90[i], D_L18_00162520 * 0.5f);
         xform_9780(pk.m[i], pk.m[i], mat);
     }
     draw_9780(&pk, 0, 0);
@@ -463,7 +460,6 @@ extern int D_L18_0016245C;
 extern int D_L18_00162460;
 extern int FUN_001fa6e0(int, int, float);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern short D_L18_00162500_x __asm__("D_L18_00162500") __attribute__((sda));
 extern void FUN_L00_00263618(void *, int, float, float);
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -471,6 +467,7 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 extern float D_L18_001624E4_b __asm__("D_L18_00162454");
 extern float D_L18_001624E0_b __asm__("D_L18_00162450");
 
+extern short D_L18_00162500 __attribute__((sda));
 void FUN_L18_002f9a98(void *moby) {
     char a[16];
     char b[32];
@@ -485,11 +482,11 @@ void FUN_L18_002f9a98(void *moby) {
     f = fast_sin(f - 3.14159f);
     h = FUN_001fa6e0(D_L18_00162458, D_L18_0016245C, f * 0.5f + 0.5f);
     build_moby_bone_transform(moby, 1, b);
-    scale_vector_xyz(e, c, *(float *)&D_L18_00162500_x);
+    scale_vector_xyz(e, c, *(float *)&D_L18_00162500);
     subtract_vector_xyz(a, d, e);
     FUN_L00_00263618(a, h, D_L18_00162450, D_L18_00162454);
     build_moby_bone_transform(moby, 2, b);
-    scale_vector_xyz(e, c, *(float *)&D_L18_00162500_x);
+    scale_vector_xyz(e, c, *(float *)&D_L18_00162500);
     subtract_vector_xyz(a, d, e);
     FUN_L00_00263618(a, h, D_L18_001624E0_b, D_L18_001624E4_b);
 }
@@ -506,17 +503,6 @@ typedef struct {
     int n;
 } ML_9c20;
 extern ML_9c20 D_L18_0016D260_9c20 __asm__("D_L18_0016D260");
-extern int D_L18_001624BC_9c20 __asm__("D_L18_001624BC") __attribute__((sda));
-extern int D_L18_00162560_9c20 __asm__("D_L18_00162560");
-extern int D_L18_00162564_9c20 __asm__("D_L18_00162564");
-extern float D_L18_00162568_9c20 __asm__("D_L18_00162568");
-extern float D_L18_0016256C_9c20 __asm__("D_L18_0016256C");
-extern int D_L18_00162524_9c20 __asm__("D_L18_00162524");
-extern int D_L18_00162504_9c20 __asm__("D_L18_00162504") __attribute__((sda));
-extern float D_L18_00162508_9c20 __asm__("D_L18_00162508") __attribute__((sda));
-extern float D_L18_0016250C_9c20 __asm__("D_L18_0016250C") __attribute__((sda));
-extern int D_L18_00162510_9c20 __asm__("D_L18_00162510") __attribute__((sda));
-extern float D_L18_001DFB90_9c20[4][4] __asm__("D_L18_001DFB90");
 extern char D_L18_001677C0_9c20[] __asm__("D_L18_001677C0");
 extern int frames_9c20(int) __asm__("FUN_001f96f8");
 extern unsigned long tex_9c20(int) __asm__("FUN_001f44b8");
@@ -530,6 +516,14 @@ extern void scale_9c20(void *, void *, float) __asm__("FUN_001f9a68");
 extern void xform_9c20(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_9c20(void *, void *, int) __asm__("FUN_001f7d30");
 
+extern int D_L18_00162560;
+extern int D_L18_00162564;
+extern float D_L18_00162568;
+extern float D_L18_0016256C;
+extern int D_L18_00162504 __attribute__((sda));
+extern float D_L18_00162508 __attribute__((sda));
+extern float D_L18_0016250C __attribute__((sda));
+extern int D_L18_00162510 __attribute__((sda));
 void FUN_L18_002f9c20(struct Moby *m) {
     Pk_9c20 pk;
     float mat[4][4];
@@ -537,11 +531,11 @@ void FUN_L18_002f9c20(struct Moby *m) {
     int c;
     int c2;
     int i;
-    if (D_L18_0016D260_9c20.n == frames_9c20(D_L18_001624BC_9c20 + 1)) {
-        D_L18_00162568_9c20 = -45.0f;
-        D_L18_0016256C_9c20 = 1.0f;
-        D_L18_00162560_9c20 = 0;
-        D_L18_00162564_9c20 = 0;
+    if (D_L18_0016D260_9c20.n == frames_9c20(D_L18_001624BC + 1)) {
+        D_L18_00162568 = -45.0f;
+        D_L18_0016256C = 1.0f;
+        D_L18_00162560 = 0;
+        D_L18_00162564 = 0;
     }
     pk.b = tex_9c20(0xB);
     pk.c = 0x0000FF9000000260ULL;
@@ -549,7 +543,7 @@ void FUN_L18_002f9c20(struct Moby *m) {
     pk.a = 0;
     gs_9c20(0x4A, 0);
     gs_9c20(0x47, 0x51001);
-    rot_9c20(mat[3], &D_L18_00162560_9c20, &m->rot_row0);
+    rot_9c20(mat[3], &D_L18_00162560, &m->rot_row0);
     add_9c20(mat[3], mat[3], &m->pos);
     sub_9c20(mat[0], mat[3], D_L18_001677C0_9c20);
     norm_9c20(mat[0], mat[0], 1.0f);
@@ -559,7 +553,7 @@ void FUN_L18_002f9c20(struct Moby *m) {
     cross_9c20(mat[1], mat[0], up);
     norm_9c20(mat[1], mat[1], 1.0f);
     cross_9c20(mat[2], mat[1], mat[0]);
-    c = D_L18_00162504_9c20 | (D_L18_00162524_9c20 << 24);
+    c = D_L18_00162504 | (D_L18_00162524 << 24);
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[2] = 0.0f;
@@ -573,29 +567,26 @@ void FUN_L18_002f9c20(struct Moby *m) {
     pk.col[1] = c;
     pk.col[0] = c;
     for (i = 0; i < 4; i++) {
-        scale_9c20(pk.m[i], D_L18_001DFB90_9c20[i], D_L18_00162508_9c20);
+        scale_9c20(pk.m[i], D_L18_001DFB90[i], D_L18_00162508);
         xform_9c20(pk.m[i], pk.m[i], mat);
     }
     draw_9c20(&pk, 0, 0);
-    c2 = D_L18_00162510_9c20 | (D_L18_00162524_9c20 << 24);
+    c2 = D_L18_00162510 | (D_L18_00162524 << 24);
     pk.col[3] = c2;
     pk.col[2] = c2;
     pk.col[1] = c2;
     pk.col[0] = c2;
     for (i = 0; i < 4; i++) {
-        scale_9c20(pk.m[i], D_L18_001DFB90_9c20[i], D_L18_0016250C_9c20);
+        scale_9c20(pk.m[i], D_L18_001DFB90[i], D_L18_0016250C);
         xform_9c20(pk.m[i], pk.m[i], mat);
     }
     draw_9c20(&pk, 0, 0);
 }
-extern float D_L18_0016252C_9eb8 __asm__("D_L18_0016252C");
-extern float D_L18_00162514_9eb8 __asm__("D_L18_00162514") __attribute__((sda));
-extern float D_L18_00162518_9eb8 __asm__("D_L18_00162518") __attribute__((sda));
-extern float D_L18_0016251C_9eb8 __asm__("D_L18_0016251C") __attribute__((sda));
-extern int D_L18_00162504_9eb8 __asm__("D_L18_00162504") __attribute__((sda));
-extern int D_L18_00162510_9eb8 __asm__("D_L18_00162510") __attribute__((sda));
-extern float D_L18_001DFBD0_9eb8[4][4] __asm__("D_L18_001DFBD0");
 
+extern float D_L18_00162514 __attribute__((sda));
+extern float D_L18_00162518 __attribute__((sda));
+extern float D_L18_0016251C __attribute__((sda));
+extern float D_L18_001DFBD0[4][4];
 void FUN_L18_002f9eb8(struct Moby *m) {
     Pk_9c20 pk;
     float mat[4][4];
@@ -610,7 +601,7 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     pk.a = 0;
     gs_9c20(0x4A, 0);
     gs_9c20(0x47, 0x51001);
-    rot_9c20(mat[3], &D_L18_00162560_9c20, &m->rot_row0);
+    rot_9c20(mat[3], &D_L18_00162560, &m->rot_row0);
     add_9c20(mat[3], mat[3], &m->pos);
     *(u128_9c20 *)up = 0;
     up[2] = -1.0f;
@@ -621,7 +612,7 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     norm_9c20(mat[2], mat[2], 1.0f);
     cross_9c20(mat[1], mat[0], mat[2]);
 
-    color = D_L18_00162504_9eb8 | 0xFF000000;
+    color = D_L18_00162504 | 0xFF000000;
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[2] = 0.0f;
@@ -637,10 +628,10 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     pk.col[0] = color;
     i = 0;
     do {
-        qcopy_nc(&vertices[i], D_L18_001DFBD0_9eb8[i]);
+        qcopy_nc(&vertices[i], D_L18_001DFBD0[i]);
         {
-            vertices[i].f[2] *= D_L18_00162514_9eb8;
-            vertices[i].f[0] *= D_L18_0016252C_9eb8;
+            vertices[i].f[2] *= D_L18_00162514;
+            vertices[i].f[0] *= D_L18_0016252C;
         }
         i++;
     } while (i < 4);
@@ -649,16 +640,16 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     }
     draw_9c20(&pk, 0, 0);
 
-    pk.col[3] = D_L18_00162510_9eb8 | 0x7F000000;
+    pk.col[3] = D_L18_00162510 | 0x7F000000;
     pk.col[2] = pk.col[3];
     pk.col[1] = pk.col[3];
     pk.col[0] = pk.col[3];
     i = 0;
     do {
-        qcopy_nc(&vertices[i], D_L18_001DFBD0_9eb8[i]);
+        qcopy_nc(&vertices[i], D_L18_001DFBD0[i]);
         {
-            vertices[i].f[2] *= D_L18_00162518_9eb8;
-            vertices[i].f[0] *= D_L18_0016252C_9eb8;
+            vertices[i].f[2] *= D_L18_00162518;
+            vertices[i].f[0] *= D_L18_0016252C;
         }
         i++;
     } while (i < 4);
@@ -667,16 +658,16 @@ void FUN_L18_002f9eb8(struct Moby *m) {
     }
     draw_9c20(&pk, 0, 0);
 
-    pk.col[3] = D_L18_00162510_9eb8 | 0x7F000000;
+    pk.col[3] = D_L18_00162510 | 0x7F000000;
     pk.col[2] = pk.col[3];
     pk.col[1] = pk.col[3];
     pk.col[0] = pk.col[3];
     i = 0;
     do {
-        qcopy_nc(&vertices[i], D_L18_001DFBD0_9eb8[i]);
+        qcopy_nc(&vertices[i], D_L18_001DFBD0[i]);
         {
-            vertices[i].f[2] *= D_L18_0016251C_9eb8;
-            vertices[i].f[0] *= D_L18_0016252C_9eb8;
+            vertices[i].f[2] *= D_L18_0016251C;
+            vertices[i].f[0] *= D_L18_0016252C;
         }
         i++;
     } while (i < 4);
@@ -895,13 +886,13 @@ typedef struct {
 
 extern ML D_L18_0016D260;
 extern int D_L18_0015F5C4;
-extern short D_L18_00162578_d __asm__("D_L18_00162578") __attribute__((sda));
-extern short D_L18_0016257C_d __asm__("D_L18_0016257C") __attribute__((sda));
-extern short D_L18_00162580_d __asm__("D_L18_00162580") __attribute__((sda));
 extern void FUN_001f9bf8(void *, void *, float);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00263b70(void *, void *, void *, float, float);
 
+extern short D_L18_00162578 __attribute__((sda));
+extern short D_L18_0016257C __attribute__((sda));
+extern short D_L18_00162580 __attribute__((sda));
 void FUN_L18_002fad28(M2 *m) {
     char buf[16];
     char buf2[16];
@@ -926,9 +917,9 @@ void FUN_L18_002fad28(M2 *m) {
                 moby_point_position(p, 8, buf);
                 moby_point_position(p, 9, buf2);
                 FUN_001f9a28(buf3, buf, buf2);
-                FUN_001f9bf8(buf3, buf3, *(float *)&D_L18_00162578_d);
-                FUN_L00_00263b70(buf, buf, buf3, *(float *)&D_L18_0016257C_d,
-                                 *(float *)&D_L18_00162580_d);
+                FUN_001f9bf8(buf3, buf3, *(float *)&D_L18_00162578);
+                FUN_L00_00263b70(buf, buf, buf3, *(float *)&D_L18_0016257C,
+                                 *(float *)&D_L18_00162580);
             }
         }
         break;
@@ -1119,18 +1110,6 @@ void FUN_L18_002fbb98(unsigned char *m) {
 #include "rnc/math_consts.h"
 extern int D_L18_0015F5CC_c100 __asm__("D_L18_0015F5CC");
 extern int D_L18_0015F5C4_c100 __asm__("D_L18_0015F5C4");
-extern int D_L18_00162604_c100 __asm__("D_L18_00162604") __attribute__((sda));
-extern int D_L18_0016260C_c100 __asm__("D_L18_0016260C") __attribute__((sda));
-extern int D_L18_00162610_c100 __asm__("D_L18_00162610") __attribute__((sda));
-extern float D_L18_001625FC_c100 __asm__("D_L18_001625FC") __attribute__((sda));
-extern float D_L18_00162614_c100 __asm__("D_L18_00162614") __attribute__((sda));
-extern float D_L18_00162618_c100 __asm__("D_L18_00162618") __attribute__((sda));
-extern float D_L18_0016261C_c100 __asm__("D_L18_0016261C") __attribute__((sda));
-extern float D_L18_00162620_c100 __asm__("D_L18_00162620") __attribute__((sda));
-extern float D_L18_00162624_c100 __asm__("D_L18_00162624") __attribute__((sda));
-extern float D_L18_00162628_c100 __asm__("D_L18_00162628") __attribute__((sda));
-extern float D_0015ED70_c100 __asm__("D_0015ED70");
-extern float D_0015ED6C_c100 __asm__("D_0015ED6C");
 extern int *D_L18_001B0EB0_c100[] __asm__("D_L18_001B0EB0");
 extern void FUN_L18_002fca98(struct Moby *moby);
 extern float fast_add_rotations_c100(float, float) __asm__("FUN_001fa580");
@@ -1179,6 +1158,16 @@ typedef struct {
     float spin;                /* 0x1F8 */
 } SentryVars_c100;
 
+extern int D_L18_00162604 __attribute__((sda));
+extern int D_L18_0016260C __attribute__((sda));
+extern int D_L18_00162610 __attribute__((sda));
+extern float D_L18_001625FC __attribute__((sda));
+extern float D_L18_00162614 __attribute__((sda));
+extern float D_L18_00162618 __attribute__((sda));
+extern float D_L18_0016261C __attribute__((sda));
+extern float D_L18_00162620 __attribute__((sda));
+extern float D_L18_00162624 __attribute__((sda));
+extern float D_L18_00162628 __attribute__((sda));
 /* Sentry update: spins and tints the moby, takes hits (knockback, then a fall), and follows its path toward the hero. */
 void FUN_L18_002fc100(struct Moby *m) {
     SentryVars_c100 *d = (SentryVars_c100 *)m->pvars;
@@ -1194,21 +1183,21 @@ void FUN_L18_002fc100(struct Moby *m) {
     if (m->state == 0 || m->state == 8) {
         return;
     }
-    if (m->state != 7 && D_L18_0015F5CC_c100 != D_L18_00162604_c100) {
-        D_L18_00162604_c100 = D_L18_0015F5CC_c100;
+    if (m->state != 7 && D_L18_0015F5CC_c100 != D_L18_00162604) {
+        D_L18_00162604 = D_L18_0015F5CC_c100;
         enqueue_callback_list_1(FUN_L18_002fca98, m);
     }
-    speed = D_L18_00162614_c100;
+    speed = D_L18_00162614;
     if (m->state == 4 || m->state == 5) {
-        speed = D_L18_00162618_c100;
+        speed = D_L18_00162618;
     }
-    d->spin = fast_add_rotations_c100(d->spin, speed * DEG_TO_RAD * D_0015ED6C_c100);
-    m->glow_color = tween_color_c100(D_L18_0016260C_c100, D_L18_00162610_c100,
+    d->spin = fast_add_rotations_c100(d->spin, speed * DEG_TO_RAD * frame_time);
+    m->glow_color = tween_color_c100(D_L18_0016260C, D_L18_00162610,
                                 fast_sin_c100(d->spin) * 0.5f + 0.5f);
     if (m->pos.z < 100.0f && m->state != 7) {
         m->state = 6;
     }
-    m->scale = m->pclass->scale * D_L18_001625FC_c100;
+    m->scale = m->pclass->scale * D_L18_001625FC;
     if (hero.state.current == 0x72 || D_L18_0015F5C4_c100 == 2) {
         if (m->state != 7) {
             m->state = 8;
@@ -1232,14 +1221,14 @@ void FUN_L18_002fc100(struct Moby *m) {
                 b = 0x200;
                 d->unk90 = b;
                 d->unk98 = 0.5f;
-                d->unk80 = D_L18_0016261C_c100 * D_0015ED70_c100;
-                d->unk84 = D_L18_00162620_c100 * D_0015ED70_c100;
-                d->unk88 = D_L18_00162624_c100 * D_0015ED6C_c100;
-                d->unk8C = D_L18_00162628_c100 * D_0015ED6C_c100;
+                d->unk80 = D_L18_0016261C * frame_time_sq;
+                d->unk84 = D_L18_00162620 * frame_time_sq;
+                d->unk88 = D_L18_00162624 * frame_time;
+                d->unk8C = D_L18_00162628 * frame_time;
                 a = 0x29;
                 d->unk94 = a;
                 d->unkAD = 0;
-                d->unkBC = D_0015ED6C_c100 + D_0015ED6C_c100;
+                d->unkBC = frame_time + frame_time;
                 m->flags &= ~0x1000;
                 v.q = *(u128 *)(coll + 0x10);
                 knockback_c100(&v, &angle, &d->unk88, &d->unk8C);
@@ -1393,18 +1382,7 @@ typedef struct {
     float uv[4][2];
     unsigned long a, b, c, d;
 } Pk_c860;
-extern int D_L18_0016262C_g __asm__("D_L18_0016262C") __attribute__((sda));
-extern int D_L18_00162630_g __asm__("D_L18_00162630") __attribute__((sda));
-extern int D_L18_00162634_g __asm__("D_L18_00162634") __attribute__((sda));
-extern int D_L18_00162638_g __asm__("D_L18_00162638") __attribute__((sda));
-extern int D_L18_0016263C_g __asm__("D_L18_0016263C") __attribute__((sda));
-extern int D_L18_00162640_g __asm__("D_L18_00162640") __attribute__((sda));
-extern int D_L18_00162644_g __asm__("D_L18_00162644") __attribute__((sda));
-extern float D_L18_00162648_g __asm__("D_L18_00162648") __attribute__((sda));
-extern float D_L18_0016264C_g __asm__("D_L18_0016264C") __attribute__((sda));
-extern float D_L18_00162650_g __asm__("D_L18_00162650") __attribute__((sda));
 extern char D_L18_001677C0_g[] __asm__("D_L18_001677C0");
-extern float D_L18_001EFCD0_g[4][2] __asm__("D_L18_001EFCD0");
 extern void clear_g(void *) __asm__("FUN_001f99f8");
 extern void sub_g(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void cross_g(void *, void *, void *) __asm__("FUN_001f9ad8");
@@ -1412,6 +1390,17 @@ extern void norm_g(void *, void *, float) __asm__("FUN_001f9bf8");
 extern unsigned long tex_g(int) __asm__("FUN_001f44b8");
 extern void draw_g(void *, void *, int) __asm__("FUN_001f7d30");
 
+extern int D_L18_0016262C __attribute__((sda));
+extern int D_L18_00162630 __attribute__((sda));
+extern int D_L18_00162634 __attribute__((sda));
+extern int D_L18_00162638 __attribute__((sda));
+extern int D_L18_0016263C __attribute__((sda));
+extern int D_L18_00162640 __attribute__((sda));
+extern int D_L18_00162644 __attribute__((sda));
+extern float D_L18_00162648 __attribute__((sda));
+extern float D_L18_0016264C __attribute__((sda));
+extern float D_L18_00162650 __attribute__((sda));
+extern float D_L18_001EFCD0[4][2];
 void FUN_L18_002fc860(struct Moby *m) {
     char *d = (char *)m->pvars;
     Pk_c860 pk;
@@ -1421,10 +1410,10 @@ void FUN_L18_002fc860(struct Moby *m) {
     int c;
     int i;
     float *p;
-    h = *(float *)(d + 0x1F4) + 1.0f + D_L18_0016264C_g;
-    w = 1.0f - *(float *)(d + 0x1F4) + D_L18_00162650_g;
+    h = *(float *)(d + 0x1F4) + 1.0f + D_L18_0016264C;
+    w = 1.0f - *(float *)(d + 0x1F4) + D_L18_00162650;
     qcopy(mat[3], &m->pos);
-    mat[3][2] -= D_L18_00162648_g;
+    mat[3][2] -= D_L18_00162648;
     clear_g(mat[2]);
     mat[2][2] = h;
     sub_g(mat[0], D_L18_001677C0_g, &m->pos);
@@ -1432,15 +1421,15 @@ void FUN_L18_002fc860(struct Moby *m) {
     cross_g(mat[0], mat[1], mat[2]);
     norm_g(mat[0], mat[0], w);
     norm_g(mat[1], mat[1], w);
-    pk.b = tex_g(D_L18_00162644_g);
+    pk.b = tex_g(D_L18_00162644);
     pk.c = 0x0000FF9000000260ULL;
     pk.a = 0;
-    pk.d = (unsigned long)D_L18_0016262C_g | ((unsigned long)D_L18_00162630_g << 2) | ((unsigned long)D_L18_00162634_g << 4) |
-           ((unsigned long)D_L18_00162638_g << 6) | 0x8000000000ULL;
-    c = FUN_001fa6e0(D_L18_0016263C_g, D_L18_00162640_g, *(float *)(d + 0x1F4));
+    pk.d = (unsigned long)D_L18_0016262C | ((unsigned long)D_L18_00162630 << 2) | ((unsigned long)D_L18_00162634 << 4) |
+           ((unsigned long)D_L18_00162638 << 6) | 0x8000000000ULL;
+    c = FUN_001fa6e0(D_L18_0016263C, D_L18_00162640, *(float *)(d + 0x1F4));
     for (i = 0; i < 4; i++) {
-        pk.uv[i][0] = D_L18_001EFCD0_g[i][0];
-        pk.uv[i][1] = D_L18_001EFCD0_g[i][1];
+        pk.uv[i][0] = D_L18_001EFCD0[i][0];
+        pk.uv[i][1] = D_L18_001EFCD0[i][1];
         p = pk.m[i];
         clear_g(p);
         if (i & 1)

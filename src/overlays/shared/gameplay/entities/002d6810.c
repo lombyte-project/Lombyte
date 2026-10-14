@@ -2,6 +2,7 @@
 #include "rnc/gameplay/hero.h"
 #include "types.h"
 #include "asm.h"
+#include "rnc/globals.h"
 
 #define NOT_SDA
 
@@ -105,25 +106,13 @@ void FUN_L15_002d77c0(char *moby) {
     font_print_center_large_001f6c20(W(D_L15_00161BD4), W(D_L15_00161BD8), col, (int)buf, 8);
 }
 /* Starts the moby's trail when requested: resets the trail points and the counters. */
-extern int D_L15_00161BF8_r __asm__("D_L15_00161BF8") __attribute__((sda));
-extern float D_L15_00161BFC_r __asm__("D_L15_00161BFC") __attribute__((sda));
 extern int D_L15_00161C14_r __asm__("D_L15_00161C14") __attribute__((sda));
 extern int D_L15_00161C1C_r __asm__("D_L15_00161C1C") __attribute__((sda));
 extern int D_L15_00161C30_r __asm__("D_L15_00161C30") __attribute__((sda));
 extern int D_L15_00161C60_r __asm__("D_L15_00161C60");
-extern int D_L15_00161C8C_r __asm__("D_L15_00161C8C") __attribute__((sda));
-extern short D_L15_00161CC6_r[] __asm__("D_L15_00161CC6");
 extern short D_L15_00161CD0_r __asm__("D_L15_00161CD0");
-extern short D_L15_00161CD2_r __asm__("D_L15_00161CD2");
-extern short D_L15_00161CD4_r __asm__("D_L15_00161CD4");
-extern short D_L15_00161CD6_r __asm__("D_L15_00161CD6");
 extern short D_L15_00161CD8_r __asm__("D_L15_00161CD8");
-extern short D_L15_00161CDA_r __asm__("D_L15_00161CDA");
-extern short D_L15_00161CDC_r __asm__("D_L15_00161CDC");
-extern short D_L15_00161CDE_r __asm__("D_L15_00161CDE");
 extern short D_L15_00161CC0_a[4] __asm__("D_L15_00161CC0");
-extern int D_L15_00161CE0_r __asm__("D_L15_00161CE0");
-extern int D_L15_00161CE4_r __asm__("D_L15_00161CE4");
 extern float D_L15_001D3740_r[][4] __asm__("D_L15_001D3740");
 extern float D_L15_001D3750_r[][4] __asm__("D_L15_001D3750");
 extern int D_L15_001D39D0_r[] __asm__("D_L15_001D39D0");
@@ -135,19 +124,30 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void zero_r(void *) __asm__("FUN_001f99f8");
 
+extern int D_L15_00161BF8 __attribute__((sda));
+extern float D_L15_00161BFC __attribute__((sda));
+extern int D_L15_00161C8C __attribute__((sda));
+extern short D_L15_00161CD2;
+extern short D_L15_00161CD4;
+extern short D_L15_00161CD6;
+extern short D_L15_00161CDA;
+extern short D_L15_00161CDC;
+extern short D_L15_00161CDE;
+extern int D_L15_00161CE0;
+extern int D_L15_00161CE4;
 void FUN_L15_002d79e8(char *m) {
     char *d = *(char **)(m + 0x78);
     float v[4];
     float step[4];
     int i;
     int j;
-    if (D_L15_00161BF8_r != 0) {
-        D_L15_00161BF8_r = 0;
-        D_L15_00161CE4_r = 0;
-        D_L15_00161CE0_r = scale_frames_r(D_L15_00161C8C_r);
+    if (D_L15_00161BF8 != 0) {
+        D_L15_00161BF8 = 0;
+        D_L15_00161CE4 = 0;
+        D_L15_00161CE0 = scale_frames_r(D_L15_00161C8C);
         D_L15_00161C60_r = 0x7F2020;
         fast_vec_sub(v, d + 0x100, d + 0xF0);
-        fast_vec_normalize(step, v, D_L15_00161BFC_r / 20.0f);
+        fast_vec_normalize(step, v, D_L15_00161BFC / 20.0f);
         qcopy(D_L15_001D3750_r, d + 0xF0);
         for (i = 1; i < 20; i++) {
             fast_vec_add(D_L15_001D3750_r[i], D_L15_001D3740_r[i], step);
@@ -159,12 +159,12 @@ void FUN_L15_002d79e8(char *m) {
             D_L15_00161CC0_a[j] = -1;
         D_L15_00161CD0_r = 8;
         D_L15_00161CD8_r = 4;
-        D_L15_00161CD2_r = 4;
-        D_L15_00161CDA_r = 2;
-        D_L15_00161CDC_r = 4;
-        D_L15_00161CD4_r = 8;
-        D_L15_00161CD6_r = 4;
-        D_L15_00161CDE_r = 2;
+        D_L15_00161CD2 = 4;
+        D_L15_00161CDA = 2;
+        D_L15_00161CDC = 4;
+        D_L15_00161CD4 = 8;
+        D_L15_00161CD6 = 4;
+        D_L15_00161CDE = 2;
         D_L15_00161C14_r = 0;
         D_L15_00161C1C_r = 0;
         D_L15_00161C30_r = 0;
@@ -427,9 +427,6 @@ extern float frame_scale __asm__("D_0015ED60");
 extern char D_L15_001D3750_8710[] __asm__("D_L15_001D3750");
 extern char D_L15_001D3BB0_8710[] __asm__("D_L15_001D3BB0");
 extern int D_L15_00161CC8_8710 __asm__("D_L15_00161CC8");
-extern int D_L15_00161CCA_8710 __asm__("D_L15_00161CCA");
-extern int D_L15_00161CCC_8710 __asm__("D_L15_00161CCC");
-extern int D_L15_00161CCE_8710 __asm__("D_L15_00161CCE");
 extern short D_L15_00161C58_8710 __asm__("D_L15_00161C58") __attribute__((sda));
 extern short D_L15_00161C54_8710 __asm__("D_L15_00161C54") __attribute__((sda));
 extern short D_L15_00161C3C_8710 __asm__("D_L15_00161C3C") __attribute__((sda));
@@ -446,6 +443,9 @@ extern void FUN_L00_002baae0_8710(char *, int, int, int, float, float,
                                   float) __asm__("FUN_L00_002baae0");
 extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
 #define F(x) (*(float *)&(x))
+extern int D_L15_00161CCA;
+extern int D_L15_00161CCC;
+extern int D_L15_00161CCE;
 void FUN_L15_002d8710(char *moby) {
     float v = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * frame_scale;
     F(D_L15_00161C54_8710) = v;
@@ -460,14 +460,14 @@ void FUN_L15_002d8710(char *moby) {
     FUN_L00_002baae0_8710(D_L15_001D3BB0_8710, *(short *)&D_L15_00161CC8_8710,
                           *(short *)&D_L15_00161CC8_8710, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
-    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0x50, *(short *)&D_L15_00161CCA_8710,
-                          *(short *)&D_L15_00161CCA_8710, 5, F(D_L15_00161C74_8710),
+    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0x50, *(short *)&D_L15_00161CCA,
+                          *(short *)&D_L15_00161CCA, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
-    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0xA0, *(short *)&D_L15_00161CCC_8710,
-                          *(short *)&D_L15_00161CCC_8710, 5, F(D_L15_00161C74_8710),
+    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0xA0, *(short *)&D_L15_00161CCC,
+                          *(short *)&D_L15_00161CCC, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
-    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0xF0, *(short *)&D_L15_00161CCE_8710,
-                          *(short *)&D_L15_00161CCE_8710, 5, F(D_L15_00161C74_8710),
+    FUN_L00_002baae0_8710(D_L15_001D3BB0_8710 + 0xF0, *(short *)&D_L15_00161CCE,
+                          *(short *)&D_L15_00161CCE, 5, F(D_L15_00161C74_8710),
                           F(D_L15_00161C78_8710), 0.2f);
     FUN_L15_002d8e48_8710(moby);
 }
@@ -550,7 +550,6 @@ void FUN_L15_002d8e48(void *mv) {
 #include "qcopy.h"
 extern int D_L15_00174458_s[] __asm__("D_L15_00174458");
 extern int D_L15_0015F5CC_s __asm__("D_L15_0015F5CC");
-extern float D_0015ED6C_s __asm__("D_0015ED6C");
 extern float addrot_s(float, float) __asm__("FUN_001fa580");
 extern void add_s(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void setupcol_s(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
@@ -574,7 +573,7 @@ void FUN_L15_002e4380(unsigned char *m) {
     }
     if (m[0x20] != 0)
         return;
-    *(float *)(m + 0x40) = addrot_s(*(float *)(m + 0x40), D_0015ED6C_s * 6.2831855f);
+    *(float *)(m + 0x40) = addrot_s(*(float *)(m + 0x40), frame_time * 6.2831855f);
     add_s(next, m + 0x10, d);
     setupcol_s(col, m, 1, 2.0f, d);
     *(short *)(col + 0x1A) = *(short *)(m + 0xA6);

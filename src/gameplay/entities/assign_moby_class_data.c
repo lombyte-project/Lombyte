@@ -1,5 +1,6 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
+#include "rnc/data_labels.h"
 struct MapEntry {
     s32 id;
     s32 value;
@@ -9,8 +10,6 @@ struct Obj {
     u8 pad0[0x2C];
     s32 extra;
 };
-extern s32 D_0015FF00;
-extern s32 D_001B3580[];
 extern struct MapEntry D_001E8B80[];
 
 void assign_moby_class_data(s32 id) __asm__("FUN_00212d68");

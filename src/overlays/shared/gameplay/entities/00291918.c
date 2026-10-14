@@ -5,6 +5,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
 
 #define NOT_SDA
 
@@ -254,7 +255,6 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4A_2bef68;
 extern char * D_L03_00160064_p __asm__("D_L03_0015FFE4") __attribute__((section(".sdata")));
 extern char * D_L03_00160058_p __asm__("D_L03_0015FFD8") __attribute__((section(".sdata")));
-extern float D_0015ED60_2bef68 __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern int FUN_001f9770_2bef68(void *) __asm__("FUN_001f9770");
 extern void FUN_001f9a10_2bef68(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float FUN_001fa6c0_2bef68(int) __asm__("FUN_001fa6c0");
@@ -334,6 +334,7 @@ extern char D_0013E533_2bef68[] __asm__("D_0013E533");
 extern float D_L03_0015F580_2bef68[] __asm__("D_L03_0015F580") __attribute__((section(".sdata")));
 extern float D_0015ED70_2bef68 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 
+extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 /* Update of moby class 455 (spawner): counts its living children, takes hits, runs its state machine and spawns class 0x221 children at a point picked by its mode. */
 void FUN_L03_002bef68(struct Moby *moby) {
     int used[4];
@@ -640,7 +641,7 @@ void FUN_L03_002bef68(struct Moby *moby) {
             {
                 float speed;
                 char *m;
-                speed = FUN_001f9af0_2bef68(&v40) * (d->fE4 * D_0015ED60_2bef68);
+                speed = FUN_001f9af0_2bef68(&v40) * (d->fE4 * frame_scale_macro);
                 v40.z = 0.0f;
                 FUN_001f9bf8_2bef68(&v40, &v40, speed);
                 FUN_001f9bf8_2bef68(&v60, &v40, 0.05f);
@@ -934,7 +935,6 @@ typedef struct {
 
 char *FUN_L03_002d5208_c(char *a, char *pos, int c, int d, float f) __asm__("FUN_L03_002d5208");
 extern char *D_L03_0015FFD8_c __asm__("D_L03_0015FFD8") __attribute__((sda));
-extern char D_0013F3D0[];
 extern char D_L03_00166EC0[];
 extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
@@ -945,7 +945,6 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float D_0015ED64;
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float D_L03_0015F580_c[] __asm__("D_L03_0015F580") __attribute__((section(".sdata")));
@@ -1070,7 +1069,7 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *moby) {
         if (child->class_id==0x23E && (signed char)child->state>=0) {
             char *gun=(char*)child->data+0x150;
             func_L00_00264BB0_2CDDC8(gun,2.5f);
-            func_L00_00263950_2CDDC8((char*)child,gun,2,D_0015ED64*0.03f,D_0015ED64*0.3f);
+            func_L00_00263950_2CDDC8((char*)child,gun,2,frame_scale_sq*0.03f,frame_scale_sq*0.3f);
         }
     }
     func_L03_002CF600_2CDDC8((char*)moby);
@@ -1947,10 +1946,10 @@ typedef struct {
     u8 collected[1];
 } LevelCollected;
 
-extern s32 D_0015ED84 __attribute__((sda));   /* current level */
-extern s32 D_0014C190[][64];                  /* per-level bitsets, bit unkB2 */
 extern LevelCollected D_L03_001BB330;
 
+extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
+extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 /*
  * Rises once its moby (unkB2) is collected: waits in state 0 (keeping the
  * target point at its position), then climbs D_0015ED6C per frame until 4
@@ -1969,7 +1968,7 @@ void FUN_L03_002dca30(struct Moby *m)
         id = m->save_id;
         idx = id;
         if (D_L03_001BB330.collected[idx] == 0) {
-            if (!((D_0014C190[D_0015ED84][idx >> 5] >> (id & 0x1F)) & 1))
+            if (!((D_0014C190_257218[current_level_index_gp][idx >> 5] >> (id & 0x1F)) & 1))
                 return;
         }
         m->state = 1;

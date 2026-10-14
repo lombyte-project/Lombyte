@@ -1,6 +1,5 @@
 #include "types.h"
-extern s32 snd_batch_command_buffers __asm__("D_0015ECA0");
-extern s32 snd_batch_index __asm__("D_0015ECC0");
+#include "rnc/data_labels.h"
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 void snd_post_message(void) __asm__("FUN_0012e9a0");
 

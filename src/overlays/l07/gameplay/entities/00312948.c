@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/data_labels.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00312948.s", FUN_L07_00312948);
 #define NOT_SDA
@@ -513,21 +514,20 @@ typedef struct {
 
 extern L07MobyList D_L07_0016C8E0;
 extern int D_L07_0015F5C4;
-extern unsigned char D_0015EDB0;
 extern unsigned char D_L07_0020C6C0[];
 extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
 void FUN_L07_00314058(char *moby) {
     int i;
 
-    if (D_L07_0015F5C4 == 2 && D_0015EDB0 != 0) {
+    if (D_L07_0015F5C4 == 2 && big_head_cheat_enabled != 0) {
         for (i = 0; i < D_L07_0016C8E0.count; i++) {
             char *e = D_L07_0016C8E0.mobys[i];
 
             if (*(short *)(e + 0xA6) == *(short *)(moby + 0xA6)) {
                 unsigned char *s = D_L07_0020C6C0;
 
-                if (D_0015EDB0 != 0 && s[1] == 0) {
+                if (big_head_cheat_enabled != 0 && s[1] == 0) {
                     attach_manipulator(e, 0xB, s);
                     *(float *)(s + 0x20) = 2.75f;
                     *(float *)(s + 0x24) = 2.75f;
@@ -1623,7 +1623,6 @@ extern void draw_geometry_quad_l07(void *, int, int) __asm__("FUN_001f7d30");
 extern float D_L07_00161B74 __attribute__((sda));
 extern float D_L07_00161B78 __attribute__((sda));
 extern float D_L07_00161B7C __attribute__((sda));
-extern RopeVec rope_grid_317910[][20] __asm__("D_L07_0020DBE0");
 extern short D_L07_0020DBC8[];
 
 typedef struct {
@@ -1633,6 +1632,7 @@ typedef struct {
     u64 header[4];
 } L07RopeDrawPacket;
 
+extern RopeVec rope_grid[][20] __asm__("D_L07_0020DBE0");
 /* Draws the rope grid as textured quads between neighbouring rows, each row faded by its level. */
 void FUN_L07_00317910(void) {
     L07RopeDrawPacket packet;
@@ -1663,10 +1663,10 @@ void FUN_L07_00317910(void) {
         D_L07_00161B78 += D_L07_00161B7C;
         if (D_L07_00161B78 > 7.0f) D_L07_00161B78 -= 7.0f;
         for (column = 0; column < 20; column++) {
-            qcopy(packet.pos[0], rope_grid_317910[row][column]);
-            qcopy(packet.pos[1], rope_grid_317910[row][(column + 1) % 20]);
-            qcopy(packet.pos[2], rope_grid_317910[row - 1][column]);
-            qcopy(packet.pos[3], rope_grid_317910[row - 1][(column + 1) % 20]);
+            qcopy(packet.pos[0], rope_grid[row][column]);
+            qcopy(packet.pos[1], rope_grid[row][(column + 1) % 20]);
+            qcopy(packet.pos[2], rope_grid[row - 1][column]);
+            qcopy(packet.pos[3], rope_grid[row - 1][(column + 1) % 20]);
             end_phase = row_phase + column_step;
             color = D_L07_0020DBC8[row];
             for (k = 0; k < 2; k++) {
@@ -1710,7 +1710,6 @@ extern char D_L07_00161B90[] __attribute__((section(".sdata")));
 extern char D_L07_00161BA0[] __attribute__((section(".sdata")));
 extern RopeVec D_L07_0020DAF0_c[] __asm__("D_L07_0020DAF0");
 extern RopeVec D_L07_0020DB00_c[] __asm__("D_L07_0020DB00");
-extern short D_L07_0020DBC8[];
 typedef struct {
     int pad[5];
     char *moby;
@@ -1828,7 +1827,6 @@ void FUN_L07_00318e98(int target_entry) {
     FUN_L00_002defe0(target_entry);
 }
 extern Vec4 D_L07_00166E40;
-extern struct Moby *D_L07_00173ED8 __attribute__((section(".data")));
 extern Vec4 D_L07_00173EF0;
 extern f32 D_0015ED6C;
 extern s32 sight_19040(struct Moby *, void *, f32) __asm__("FUN_L07_002886d8");
@@ -1864,6 +1862,7 @@ typedef struct {
     s32 bob_timer;         /* 0x7C */
 } Mine_19040;
 
+extern struct Moby *debris_target __asm__("D_L07_00173ED8") __attribute__((section(".data")));
 /* Floating mine: wakes when its target or a seen point comes close, then bobs and chases the seen
    point. It blows up when a hit lands (not from classes 0x456/0x365/0x367), on contact with a
    solid moby or when its timer runs out, and is removed once 64 units from home. */
@@ -1963,9 +1962,9 @@ void FUN_L07_00319040(struct Moby *moby) {
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.75f;
         if (probe_world_sphere(0.75f, &probe, 0x10, moby, contact) &&
-            D_L07_00173ED8 != NULL && D_L07_00173ED8->oclass != 0x363 &&
-            D_L07_00173ED8->oclass != 0x456 && D_L07_00173ED8->oclass != 0x458 &&
-            D_L07_00173ED8->oclass != 0x365 && D_L07_00173ED8->oclass != 0x367) {
+            debris_target != NULL && debris_target->oclass != 0x363 &&
+            debris_target->oclass != 0x456 && debris_target->oclass != 0x458 &&
+            debris_target->oclass != 0x365 && debris_target->oclass != 0x367) {
             FUN_L00_0025e450(moby, &dir, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
             mark_moby_for_removal(moby);
             return;
@@ -2053,8 +2052,6 @@ void FUN_L07_00319698(struct Moby *moby, SwooperSpawnerVars *spawner_vars) {
 }
 
 extern Vec4 D_L07_00166E40;
-extern struct Moby *D_L07_00173ED8 __attribute__((section(".data")));
-extern Vec4 D_L07_00173EF0;
 extern f32 D_0015ED6C;
 
 extern s32 FUN_L07_002886d8(struct Moby *, SwooperSight *, f32);
@@ -2182,10 +2179,10 @@ void FUN_L07_003196e0(struct Moby *moby) {
         make_hit_descriptor(contact, moby, 0x10001, 1.0f, &vars->velocity);
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.75f;
-        if (probe_world_sphere(0.75f, &probe, 0x10, moby, contact) && D_L07_00173ED8 != NULL &&
-            D_L07_00173ED8->oclass != 0x363 && D_L07_00173ED8->oclass != 0x456 &&
-            D_L07_00173ED8->oclass != 0x458 && D_L07_00173ED8->oclass != 0x365 &&
-            D_L07_00173ED8->oclass != 0x367) {
+        if (probe_world_sphere(0.75f, &probe, 0x10, moby, contact) && debris_target != NULL &&
+            debris_target->oclass != 0x363 && debris_target->oclass != 0x456 &&
+            debris_target->oclass != 0x458 && debris_target->oclass != 0x365 &&
+            debris_target->oclass != 0x367) {
             FUN_L00_0025e450(moby, &vars->velocity, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
             FUN_L07_00319698(moby, spawner_vars);
         }
@@ -2273,7 +2270,6 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern int FUN_0022da68(int, int, void *);
 extern char *D_L07_0015FFD8;
-extern char D_0013F3D0[];
 extern void FUN_L07_0030b538(void *, void *, void *, int);
 extern float D_0015ED6C;
 

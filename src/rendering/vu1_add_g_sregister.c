@@ -1,8 +1,8 @@
 #include "types.h"
 #include "sda.h"
+#include "rnc/data_labels.h"
 
 extern s32 *D_00160F00[4] MACRO_ADDR; /* packet cursor, reloaded per store */
-extern s32 *D_00160F00_store;
 
 #define PACKET_CURSOR D_00160F00[0]
 

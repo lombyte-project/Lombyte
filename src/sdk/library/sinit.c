@@ -18,6 +18,7 @@
 /* Source: newlib (UC Berkeley). */
 
 #include "types.h"
+#include "rnc/data_labels.h"
 struct Reent {
     u8 pad_0[0x38];
     s32 unk38;
@@ -28,7 +29,6 @@ struct Reent {
     s32 unk1E0;
 };
 
-extern u8 D_00113AC8[];
 extern void std();
 void __sinit(struct Reent *arg0) {
     s32 *temp_17_9;

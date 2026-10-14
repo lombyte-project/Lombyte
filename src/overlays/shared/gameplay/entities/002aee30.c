@@ -17,11 +17,11 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
 
 extern char D_L04_001D2C90[];
-extern short D_L04_001618B0_d __asm__("D_L04_001618B0") __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_L04_002c41e0(void *, void *, void *, int, float, float);
 
+extern short D_L04_001618B0 __attribute__((sda));
 void FUN_L04_002c45b8(char *a, int i, int j, int k) {
     float v0[4], v10[4];
     char *pi, *pj;
@@ -35,36 +35,36 @@ void FUN_L04_002c45b8(char *a, int i, int j, int k) {
     v10[3] = 1.0f;
     FUN_001f9cf8(v10, v10, a + 0xC0);
     FUN_001f9a10(v10, v10, a + 0x10);
-    FUN_L04_002c41e0(a, v0, v10, k, *(float *)(pi + 0xC) * *(float *)&D_L04_001618B0_d,
-                     *(float *)(pj + 0xC) * *(float *)&D_L04_001618B0_d);
+    FUN_L04_002c41e0(a, v0, v10, k, *(float *)(pi + 0xC) * *(float *)&D_L04_001618B0,
+                     *(float *)(pj + 0xC) * *(float *)&D_L04_001618B0);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5A50), where it is exact; names translated to the US level program. */
 
-extern short D_L04_001618C0_d __asm__("D_L04_001618C0") __attribute__((sda));
-extern short D_L04_001618C4_d __asm__("D_L04_001618C4") __attribute__((sda));
-extern short D_L04_001618C8_d __asm__("D_L04_001618C8") __attribute__((sda));
-extern short D_L04_001618CC_d __asm__("D_L04_001618CC") __attribute__((sda));
-extern short D_L04_001618D0_d __asm__("D_L04_001618D0") __attribute__((sda));
-extern short D_L04_001618D4_d __asm__("D_L04_001618D4") __attribute__((sda));
-extern short D_L04_001618D8_d __asm__("D_L04_001618D8") __attribute__((sda));
-extern short D_L04_001618DC_d __asm__("D_L04_001618DC") __attribute__((sda));
 extern void FUN_L04_002c45b8(char *a, int i, int j, int k);
 
+extern short D_L04_001618C0 __attribute__((sda));
+extern short D_L04_001618C4 __attribute__((sda));
+extern short D_L04_001618C8 __attribute__((sda));
+extern short D_L04_001618CC __attribute__((sda));
+extern short D_L04_001618D0 __attribute__((sda));
+extern short D_L04_001618D4 __attribute__((sda));
+extern short D_L04_001618D8 __attribute__((sda));
+extern short D_L04_001618DC __attribute__((sda));
 void FUN_L04_002c46d0(char *a) {
-    FUN_L04_002c45b8(a, 0, 1, *(int *)&D_L04_001618C0_d);
-    FUN_L04_002c45b8(a, 2, 3, *(int *)&D_L04_001618C4_d);
-    FUN_L04_002c45b8(a, 4, 5, *(int *)&D_L04_001618C8_d);
-    FUN_L04_002c45b8(a, 5, 6, *(int *)&D_L04_001618CC_d);
-    FUN_L04_002c45b8(a, 6, 7, *(int *)&D_L04_001618D0_d);
-    FUN_L04_002c45b8(a, 8, 9, *(int *)&D_L04_001618C8_d);
-    FUN_L04_002c45b8(a, 9, 10, *(int *)&D_L04_001618CC_d);
-    FUN_L04_002c45b8(a, 10, 11, *(int *)&D_L04_001618D0_d);
-    FUN_L04_002c45b8(a, 12, 13, *(int *)&D_L04_001618D4_d);
-    FUN_L04_002c45b8(a, 14, 15, *(int *)&D_L04_001618D4_d);
-    FUN_L04_002c45b8(a, 16, 17, *(int *)&D_L04_001618D8_d);
-    FUN_L04_002c45b8(a, 20, 21, *(int *)&D_L04_001618D8_d);
-    FUN_L04_002c45b8(a, 18, 19, *(int *)&D_L04_001618DC_d);
-    FUN_L04_002c45b8(a, 22, 23, *(int *)&D_L04_001618DC_d);
+    FUN_L04_002c45b8(a, 0, 1, *(int *)&D_L04_001618C0);
+    FUN_L04_002c45b8(a, 2, 3, *(int *)&D_L04_001618C4);
+    FUN_L04_002c45b8(a, 4, 5, *(int *)&D_L04_001618C8);
+    FUN_L04_002c45b8(a, 5, 6, *(int *)&D_L04_001618CC);
+    FUN_L04_002c45b8(a, 6, 7, *(int *)&D_L04_001618D0);
+    FUN_L04_002c45b8(a, 8, 9, *(int *)&D_L04_001618C8);
+    FUN_L04_002c45b8(a, 9, 10, *(int *)&D_L04_001618CC);
+    FUN_L04_002c45b8(a, 10, 11, *(int *)&D_L04_001618D0);
+    FUN_L04_002c45b8(a, 12, 13, *(int *)&D_L04_001618D4);
+    FUN_L04_002c45b8(a, 14, 15, *(int *)&D_L04_001618D4);
+    FUN_L04_002c45b8(a, 16, 17, *(int *)&D_L04_001618D8);
+    FUN_L04_002c45b8(a, 20, 21, *(int *)&D_L04_001618D8);
+    FUN_L04_002c45b8(a, 18, 19, *(int *)&D_L04_001618DC);
+    FUN_L04_002c45b8(a, 22, 23, *(int *)&D_L04_001618DC);
 }
 
 /* sda.h here, after the unit's empty MACRO_ADDR: D_0015ED6C needs the real one */
@@ -89,8 +89,8 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float FUN_001f9b48(void *, void *);  /* distance between two points */
 extern void FUN_L00_0026daa0(struct Moby *, int color, int life, int, float size);
 extern void FUN_L00_00250df8(void *);
-extern float D_0015ED6C MACRO_ADDR;        /* frame-rate scale */
 
+extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /*
  * Spawns a class 0xB8 shot for `owner` at `pos` heading along `dir`, living
  * `life` frames, with two glows (bluish, or reddish for an owner of class
@@ -121,7 +121,7 @@ struct Moby *FUN_L04_002aee30(struct Moby *owner, void *pos, void *dir, int life
         m->rot.z = atan2_f(d->x, d->y);
         qcopy(&m->pos, p);
         qcopy(&vars->dir, d);
-        vars->spin = random_float_between(-(D_0015ED6C * 1.5707964f), D_0015ED6C * 1.5707964f);
+        vars->spin = random_float_between(-(frame_time_macro * 1.5707964f), frame_time_macro * 1.5707964f);
         vars->unk14 = 0;
         vars->time = life;
         vars->time_max = life;
@@ -250,7 +250,7 @@ void FUN_L04_002af058(struct Moby *m)
             FUN_L00_001ff660(&r, v, D_L04_00174000);
             normalize_vector_xyz(&push, &push, vector_length_xyz(&r) * 0.5f);
             FUN_001f9a10(&push, &r, &push);
-            normalize_vector_xyz(&push, &push, random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
+            normalize_vector_xyz(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
             FUN_L00_0026dd20(&m->pos, &push, 0x7F2F4F6F,
                              random_int_between(scale_game_frames(10), scale_game_frames(15)), 30000.0f);
         }

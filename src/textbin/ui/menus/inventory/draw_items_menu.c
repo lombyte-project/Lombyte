@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/ui/text/text_region.h"
+#include "rnc/data_labels.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -12,10 +13,6 @@ typedef struct {
 
 extern s32 D_0015ED88[] __attribute__((section(".sdata")));
 
-extern s32 D_001601B8 __attribute__((sda));
-
-extern s32 D_001601BC __attribute__((sda));
-extern char D_001602A0[];
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 

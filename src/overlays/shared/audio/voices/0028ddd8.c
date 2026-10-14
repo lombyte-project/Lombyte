@@ -2,6 +2,8 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 #define NOT_SDA
 
@@ -9,9 +11,6 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028F0B0), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_0015F5F4;
-extern char D_0013E533[];
-extern int D_L00_0015F5F0;
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 
 int FUN_L00_0028ddd8(int a, int b, int c, int d) {
@@ -32,8 +31,6 @@ extern char D_0013E550_c[] __asm__("D_0013E550");
 
 extern unsigned char D_L00_001BD820[];
 extern int D_L00_0015F574;
-extern int D_L00_0015F5F0;
-extern char *D_L00_0015F5F4;
 
 int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4) {
     int idx;

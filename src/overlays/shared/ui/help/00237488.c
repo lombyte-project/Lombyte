@@ -409,7 +409,6 @@ extern int D_L05_0015F5CC;
 extern CollisionHit D_L05_00174240 __attribute__((section(".data")));
 extern u8 D_L05_00174260[] __attribute__((section(".data")));
 extern u8 D_L05_0017AB20[] __attribute__((section(".data")));
-extern u128 D_0013F3D0;
 extern int FUN_L05_002388a0(float, float, float *) __asm__("FUN_L00_0020a240");
 extern float FUN_L00_0022e0f0(void *) __asm__("FUN_001f9b20");
 extern float FUN_L00_0022e598(float, float) __asm__("FUN_001f9e90");
@@ -615,7 +614,6 @@ typedef struct {
     int fDC;
 } Stats_2523C8;
 
-extern char D_0014161B[] __attribute__((section(".data")));
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
@@ -1137,7 +1135,6 @@ extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da
 extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
 extern s32 D_0013D4B8;
 extern s32 weapon_ammo_counts[37] __asm__("D_0013D428");
-extern f32 D_0013F420[];
 
 void FUN_L05_00253b48(void) {
     u8 *state;
@@ -1458,17 +1455,10 @@ extern unsigned char D_0013D408_254608[] __asm__("D_0013D408") __attribute__((se
 extern unsigned char D_0013D4DF_254608 __asm__("D_0013D4DF") __attribute__((section(".data")));
 extern Path_254608 *D_L05_001B0930_254608[] __asm__("D_L05_001B0930");
 extern Ent_254608 *D_L05_0015FFD8_254608 __asm__("D_L05_0015FFD8") __attribute__((section(".sdata")));
-extern float D_0015ED60_254608 __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern int D_0015EE38_254608 __asm__("D_0015EE38") __attribute__((section(".sdata")));
 extern int D_0015EE3C_254608 __asm__("D_0015EE3C") __attribute__((section(".sdata")));
-extern int D_0015ED80_254608 __asm__("D_0015ED80") __attribute__((section(".sdata")));
 extern int D_0015EE58_254608[2] __asm__("D_0015EE58") __attribute__((section(".sdata")));
-extern int D_0015ED98_254608 __asm__("D_0015ED98") __attribute__((section(".sdata")));
 extern int D_0015EE68_254608[2] __asm__("D_0015EE68") __attribute__((section(".sdata")));
-extern int D_L05_0015F680_254608 __asm__("D_L05_0015F680") __attribute__((sda));
-extern int D_L05_0015F684_254608 __asm__("D_L05_0015F684") __attribute__((sda));
-extern float D_L05_0015F67C_254608 __asm__("D_L05_0015F67C") __attribute__((sda));
-extern int D_L05_0015F6A8_254608 __asm__("D_L05_0015F6A8") __attribute__((sda));
 extern float distance_xyz_254608(void *, void *) __asm__("FUN_001f9b48");
 extern float angle_atan2_254608(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations_254608(float, float) __asm__("FUN_001fa688");
@@ -1481,6 +1471,13 @@ extern void mode_freeze_init_254608(int, void *) __asm__("FUN_001fbab8");
 extern void set_animation_parameter_254608(int, int) __asm__("FUN_001ff570");
 extern void func_001FFFA0_254608(void) __asm__("FUN_001ff768");
 
+extern int D_L05_0015F680 __attribute__((sda));
+extern int D_L05_0015F684 __attribute__((sda));
+extern float D_L05_0015F67C __attribute__((sda));
+extern int D_L05_0015F6A8 __attribute__((sda));
+extern f32 frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern s32 pal_mode __asm__("D_0015ED80") __attribute__((section(".sdata")));
+extern s32 current_bolt_count __asm__("D_0015ED98") __attribute__((section(".sdata")));
 /* Hoverboard race tick: advances the hero's and the opponents' path nodes and laps, handles wrong-way and fall resets, ranks everyone and finishes the race after three laps. */
 void FUN_L05_00254608(void) {
     float v0[4] __attribute__((aligned(16)));
@@ -1565,13 +1562,13 @@ void FUN_L05_00254608(void) {
     if (near != 0 || (fast_difference_between_rotations_254608(hero.motion.rot.f[2], dir) > 1.5707964f && hero.unk88D == 0)) {
         hero.unk8AE++;
         if (hero.unk8AE > FUN_001f96f8_254608(0xB4)) {
-            if (D_L05_0015F680_254608 == 0) {
-                D_L05_0015F680_254608 = 1;
-                D_L05_0015F684_254608 = 0;
-                D_L05_0015F67C_254608 = D_0015ED60_254608 * 0.08f;
+            if (D_L05_0015F680 == 0) {
+                D_L05_0015F680 = 1;
+                D_L05_0015F684 = 0;
+                D_L05_0015F67C = frame_scale * 0.08f;
             }
             hero.unk8AF = 1;
-            if (D_L05_0015F684_254608 == 1) {
+            if (D_L05_0015F684 == 1) {
                 hero.unk8AF = 0;
                 func_L05_00254B38_254608(v0, v1);
                 hero.unk8AE = 0;
@@ -1627,7 +1624,7 @@ void FUN_L05_00254608(void) {
         return;
     }
     if (*(D_0013D388_254608) != 0) {
-        D_L05_0015F6A8_254608 = 1;
+        D_L05_0015F6A8 = 1;
     }
     if (D_0015ED84_254608 == 5) {
         D_0015EE38_254608++;
@@ -1637,7 +1634,7 @@ void FUN_L05_00254608(void) {
     if (D_0015ED84_254608 == 5) {
         int t;
 
-        if (D_0015ED80_254608 != 0) {
+        if (pal_mode != 0) {
             t = FUN_001f96f8_254608(0x1680);
         } else {
             t = FUN_001f96f8_254608(0x1644);
@@ -1660,14 +1657,14 @@ void FUN_L05_00254608(void) {
         }
         if (D_0015EE58_254608[0] == 0) {
             D_0015EE58_254608[0] = hero.unk894;
-            D_0015ED98_254608 += 0x3E8;
+            current_bolt_count += 0x3E8;
         } else if (hero.unk894 < D_0015EE58_254608[0]) {
             D_0015EE58_254608[0] = hero.unk894;
-            D_0015ED98_254608 += 0x3E8;
+            current_bolt_count += 0x3E8;
         }
         if (D_0015EE68_254608[0] < hero.unk8A8) {
             D_0015EE68_254608[0] = hero.unk8A8;
-            D_0015ED98_254608 += 0x3E8;
+            current_bolt_count += 0x3E8;
         }
         D_L05_0015FFD8_254608[d->f28].f30 = 0xFF;
         if (hero.unk880 != -1) {
@@ -1687,14 +1684,14 @@ void FUN_L05_00254608(void) {
         }
         if (D_0015EE58_254608[1] == 0) {
             D_0015EE58_254608[1] = hero.unk894;
-            D_0015ED98_254608 += 0x3E8;
+            current_bolt_count += 0x3E8;
         } else if (hero.unk894 < D_0015EE58_254608[1]) {
             D_0015EE58_254608[1] = hero.unk894;
-            D_0015ED98_254608 += 0x3E8;
+            current_bolt_count += 0x3E8;
         }
         if (D_0015EE68_254608[1] < hero.unk8A8) {
             D_0015EE68_254608[1] = hero.unk8A8;
-            D_0015ED98_254608 += 0x3E8;
+            current_bolt_count += 0x3E8;
         }
         D_L05_0015FFD8_254608[d->f28].f30 = 0xFF;
         if (hero.unk880 != -1) {

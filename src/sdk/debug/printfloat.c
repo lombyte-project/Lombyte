@@ -1,9 +1,9 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 extern char D_00152780[];
 extern char D_00152788[];
 extern char D_00152790[];
-extern void (*D_0012FC00[])(s32);
 extern s32 dpcmp_f(f64 left, f64 right) __asm__("dpcmp");
 extern f64 dpsub_f(f64 left, f64 right) __asm__("dpsub");
 extern f64 dpmul_f(f64 left, f64 right) __asm__("dpmul");

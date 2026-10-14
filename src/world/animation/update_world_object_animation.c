@@ -3,6 +3,7 @@
 #include "sda.h"
 #include "rnc/rendering/level_render_state.h"
 #include "rnc/gameplay/hero.h"
+#include "types.h"
 
 extern void FlushCache(int);
 
@@ -74,12 +75,12 @@ struct TransferState {
 };
 
 extern struct TransferState D_0018CB20_t __asm__("D_0018CB20") NOT_SDA;
-extern int D_0015F604 MACRO_ADDR;
 extern int D_00160488[];
 extern int func_0020C468_2(int, int) __asm__("FUN_0020b618");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 void update_world_object_animation(void *arg0) __asm__("FUN_00204790");
 
+extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
 void update_world_object_animation(void *arg0) {
     struct ModelRec *rec;
     struct Moby *mob;
@@ -118,7 +119,7 @@ void update_world_object_animation(void *arg0) {
         sp = (int *)((unsigned char *)sp + 0xC);
         endp = (int)rec + sp[0];
         sp = (int *)((unsigned char *)sp + 4);
-        if (D_0015F604 == 6 && i == 0 && id == 0x215) {
+        if (game_mode == 6 && i == 0 && id == 0x215) {
             id = D_00160488[level_render_state.content_variant];
         }
         mob = D_0018CB20_t.slots[i];

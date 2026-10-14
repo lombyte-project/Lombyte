@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 struct Glyph {
     u8 u;
@@ -8,7 +9,6 @@ struct Glyph {
 };
 
 #include "rnc/ui/text/font_palette.h"
-extern s32 D_0015F49C;
 extern void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, u64 color,
                                u64 extra) __asm__("FUN_001f5450");
 
@@ -47,7 +47,7 @@ s32 font_print_wrapped(s32 x, s32 y, s32 width, s32 height, u64 color, u8 *text,
             cx = x;
             cy += 16;
         } else if ((u8)(*p - 8) < 8) {
-            if (D_0015F49C != 0) {
+            if (GlobalStateFlag != 0) {
                 color &= 0xFF000000;
                 color |= font_palette_colors[*p - 8] & 0xFFFFFF;
             }

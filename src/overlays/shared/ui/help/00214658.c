@@ -14,10 +14,6 @@ typedef union {
     f32 f[4];
 } HopVec_214658;
 
-extern f32 D_0015ED64_214658 __asm__("D_0015ED64");
-extern f32 D_0015ED6C_214658 __asm__("D_0015ED6C");
-extern f32 D_0015ED70_214658 __asm__("D_0015ED70");
-extern f32 D_L00_0017BDD0_214658[] __asm__("D_L00_0017BDD0");
 extern s32 FUN_001f96f8_214658(s32) __asm__("FUN_001f96f8");
 extern float FUN_001f9dc8_214658(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_214658(float) __asm__("FUN_001f9de0");
@@ -39,10 +35,11 @@ extern void trooper_scale(float *, float *, float) __asm__("FUN_001f9c48");
 extern void FUN_001f9a10_214658(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00213e68_214658(f32) __asm__("FUN_L00_00213e68");
 
-#define ED64 D_0015ED64_214658
-#define ED6C D_0015ED6C_214658
-#define ED70 D_0015ED70_214658
+#define ED64 frame_scale_sq
+#define ED6C frame_time
+#define ED70 frame_time_sq
 
+extern f32 D_L00_0017BDD0[];
 void FUN_L00_00214658(void) {
     HopVec_214658 tmp;
     f32 x;
@@ -145,7 +142,7 @@ void FUN_L00_00214658(void) {
         FUN_L00_002132b8_214658(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
         arg = ED70 * 20.0f;
-        if (hero.target_speed < D_L00_0017BDD0_214658[0] * ED6C * 0.2f) {
+        if (hero.target_speed < D_L00_0017BDD0[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 d = hero.unk944;
                 if (hero.unk12E2)
@@ -217,11 +214,6 @@ void FUN_L00_00214ed8(float a, float b, float c) {
         hero.unkA5C = r;
     }
 }
-extern s16 D_0013F658_214fe8 __asm__("D_0013F658");
-extern s32 camera_secondary_mode __asm__("D_001413D4");
-extern s32 D_0013F64C_214fe8 __asm__("D_0013F64C");
-extern f32 D_0015ED64_214fe8 __asm__("D_0015ED64");
-extern char D_0013F390_214fe8[] __asm__("D_0013F390");
 extern char D_0013F350_214fe8[] __asm__("D_0013F350");
 extern struct { f32 f[0xB68 / 4]; } D_L00_0017A680_214fe8 __asm__("D_L00_0017A680");
 extern void FUN_001f9d20_214fe8(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -236,7 +228,7 @@ void FUN_L00_00214fe8(void) {
     vec.q = 0;
     v[2] = -1.0f;
     FUN_001f9d20_214fe8(v, v, (char *)state + 0x40);
-    FUN_L00_0020a1f8_214fe8(D_0015ED64_214fe8 * 0.013f, D_0015ED64_214fe8 * 0.3f);
+    FUN_L00_0020a1f8_214fe8(frame_scale_sq * 0.013f, frame_scale_sq * 0.3f);
     limit = 0.43633232f;
     if (state->state.current == 0x3f) limit = 0.29670596f;
     else if (state->state.current == 0x70) limit = 0.08726646f;
@@ -290,7 +282,6 @@ typedef struct {
     f32 f1240;
 } X_215b68;
 extern X_215b68 D_L00_0017A680_215b68 __asm__("D_L00_0017A680") __attribute__((section(".data")));
-extern f32 D_0015ED6C_215b68 __asm__("D_0015ED6C");
 extern f32 FUN_001f99c0_215b68(f32) __asm__("FUN_001f99c0");
 #define X D_L00_0017A680_215b68
 
@@ -305,7 +296,7 @@ void FUN_L00_00215b68(void) {
         else if (t < -0.7f)
             t = -0.7f;
         t = t * FUN_001f99c0_215b68(t) * 1.25f;
-        r = hero.motion.unk164 / (D_0015ED6C_215b68 * 3.0f);
+        r = hero.motion.unk164 / (frame_time * 3.0f);
         n = -t;
         X.f1240 = n * 0.3f;
         if (1.0f < r)
@@ -540,7 +531,6 @@ typedef struct {
     unsigned char b20B3;
 } P_2163f0;
 extern P_2163f0 D_0013F350_2163f0 __asm__("D_0013F350");
-extern float D_0015ED64_2163f0 __asm__("D_0015ED64");
 extern void FUN_001f9d20_2163f0(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_001f9a68_2163f0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -563,7 +553,7 @@ void FUN_L00_002163f0(void) {
     a.f[2] = 1.0f;
     b.f[2] = 0.8f;
     c.f[2] = 0.8f;
-    s = D_0015ED64_2163f0 * 0.3f;
+    s = frame_scale_sq * 0.3f;
     FUN_001f9d20_2163f0(&b, &b, &P);
     a.q = P.v270.q;
     if (P.b20B3 == 2) {
@@ -575,7 +565,7 @@ void FUN_L00_002163f0(void) {
         }
     }
     if (P.s30E != 0 && P.s1F8 != 0) {
-        s = D_0015ED64_2163f0 * 0.001f;
+        s = frame_scale_sq * 0.001f;
     }
     FUN_L00_00216130_2163f0(&a, m, s, s, 0.0f, 0);
     if (P.b20B3 == 1 && P.s30E != 0) {
@@ -584,8 +574,6 @@ void FUN_L00_002163f0(void) {
         FUN_001f9a10_2163f0(&P.v80, &P.v80, &b);
     }
 }
-extern float D_0015ED64_2165b8 __asm__("D_0015ED64");
-extern float D_0015ED6C_2165b8 __asm__("D_0015ED6C");
 extern float FUN_L00_0025bc98_2165b8(void *, void *, int, float, float, float,
                                      float) __asm__("FUN_L00_0025bc98");
 extern void FUN_L00_002163f0_2165b8(void) __asm__("FUN_L00_002163f0");
@@ -613,10 +601,10 @@ void FUN_L00_002165b8(void) {
         }
         v[0] = 0.0f;
         v[1] = 0.0f;
-        FUN_L00_0025bc98_2165b8(&g->motion.rot, &g->motion.unkA0, 0, -v[0], D_0015ED64_2165b8 * 0.015f,
-                                D_0015ED64_2165b8 * 0.3f, D_0015ED6C_2165b8 * 5.2359877f);
-        FUN_L00_0025bc98_2165b8(&g->motion.rot.f[1], &g->motion.unkA0.f[1], 0, -v[1], D_0015ED64_2165b8 * 0.015f,
-                                D_0015ED64_2165b8 * 0.3f, D_0015ED6C_2165b8 * 5.2359877f);
+        FUN_L00_0025bc98_2165b8(&g->motion.rot, &g->motion.unkA0, 0, -v[0], frame_scale_sq * 0.015f,
+                                frame_scale_sq * 0.3f, frame_time * 5.2359877f);
+        FUN_L00_0025bc98_2165b8(&g->motion.rot.f[1], &g->motion.unkA0.f[1], 0, -v[1], frame_scale_sq * 0.015f,
+                                frame_scale_sq * 0.3f, frame_time * 5.2359877f);
         break;
     case 1:
     case 2:
@@ -881,7 +869,6 @@ void FUN_L00_00216f10(void) {
 typedef struct {
     float f[4];
 } __attribute__((aligned(16))) Vec4_00216f90;
-extern char D_0013F3D0_00216f90[] __asm__("D_0013F3D0") __attribute__((section(".data")));
 extern int D_L00_00167014_00216f90 __asm__("D_L00_00167014") __attribute__((section(".data")));
 extern int D_001413D0_00216f90 __asm__("D_001413D0") __attribute__((section(".data")));
 void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
@@ -897,8 +884,9 @@ void FUN_L00_002325a0_00216f90(int, int) __asm__("FUN_L00_002325a0");
 void FUN_L00_002127b8_00216f90(void) __asm__("FUN_L00_002127b8");
 void FUN_L00_001ed280_00216f90(void) __asm__("FUN_L00_001ed280");
 void FUN_L00_002500b8_00216f90(int) __asm__("FUN_L00_002500b8");
+extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) {
-    char *q = D_0013F3D0_00216f90;
+    char *q = D_0013F3D0;
     char *g;
     char *r;
     qcopy(q, pos);
@@ -1030,8 +1018,6 @@ typedef union {
     u128_217450 q;
     float f[4];
 } V_217450;
-extern char D_0013F3D0_217450[] __asm__("D_0013F3D0") __attribute__((section(".data")));
-extern float D_0015ED6C_217450 __asm__("D_0015ED6C");
 extern int FUN_001f96f8_217450(int) __asm__("FUN_001f96f8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -1053,13 +1039,13 @@ void FUN_L00_00217450(void) {
     float s, ang, e, r;
 
     t = FUN_001f96f8_217450(0x28);
-    q = D_0013F3D0_217450;
+    q = D_0013F3D0;
     g = q - 0x80;
     i = 9;
     do {
         a = truncate_float_to_s32(random_float_between(4200.0f, 7350.0f) / 1000.0f);
         b = truncate_float_to_s32(random_float_between(21000.0f, 31500.002f) / 1000.0f);
-        s = random_float_between(D_0015ED6C_217450 * 0.15f, D_0015ED6C_217450 * 0.7f);
+        s = random_float_between(frame_time * 0.15f, frame_time * 0.7f);
         qcopy(pos, q);
         if (current_level_index != 6) {
             pos[0].f[2] = *(float *)(g + 0x2F4);
@@ -1088,7 +1074,6 @@ typedef struct {
     s16 unk7E;
 } ThrowPvars_217658;
 
-extern f32 D_0015ED6C_217658 __asm__("D_0015ED6C");
 extern f32 player_camera[] __asm__("D_L00_00166C80");
 extern int FUN_L00_00211360(void *);
 extern void FUN_L00_00233660(void *, f32, f32, f32);
@@ -1175,7 +1160,7 @@ void FUN_L00_00217658(void) {
     FUN_001fa298(out_mat, mat);
     FUN_00214598(out_mat, &item->rot);
     pv->unk64 = 0;
-    pv->unk60 = D_0015ED6C_217658 * 23.0f;
+    pv->unk60 = frame_time * 23.0f;
     FUN_L00_00262500(item, hero.unk17B0);
     FUN_L00_00262528(hero.unk17B0, 0x30, 3);
     FUN_L00_00262528(hero.unk17B0, 0x17, 5);

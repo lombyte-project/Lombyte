@@ -18,11 +18,9 @@ extern s32 *snd_batch_command_buffers[2] __asm__("D_0015ECA0") __attribute__((sd
 extern struct SndCommand *snd_stream_buffers[2] __asm__("D_0015ECB0") __attribute__((sda));
 extern s32 *snd_batch_return_buffers[2] __asm__("D_0015ECB8") __attribute__((sda)); /* replies */
 extern s32 snd_batch_index __asm__("D_0015ECC0") __attribute__((sda));     /* current buffer */
-extern s32 D_0015ECC4 __attribute__((sda));
 extern s32 snd_cd_callback_pending __asm__("D_0015ECC8") __attribute__((sda));         /* CD read pending */
 extern SndCallback snd_cd_callback_fn __asm__("D_0015ECD0") __attribute__((sda)); /* CD read callback */
 extern volatile long snd_cd_callback_data __asm__("D_0015ECD8") MACRO_ADDR;         /* its argument */
-extern SndCallback snd_return_callback_fn __asm__("D_0015ECE0") __attribute__((sda)); /* abort callback */
 extern long snd_return_callback_data __asm__("D_0015ECE8") __attribute__((sda));        /* its argument */
 extern u32 snd_cd_callback_arg __asm__("D_0015ED00") MACRO_ADDR;                   /* CD read reply */
 extern s32 snd_iop_return_word[] __asm__("D_00133104");
@@ -33,6 +31,8 @@ extern void FlushCache(s32);
 
 s32 snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 
+extern SndCallback snd_return_callback __asm__("D_0015ECE0") __attribute__((sda));
+extern s32 GlobalTableStatus __asm__("D_0015ECC4") __attribute__((sda));
 /* Once the pending RPC completes, run the callbacks queued with the other
    command buffer (or the abort callback); finish a CD read (FlushCache,
    then its callback with the reply word); send the next batch when idle;
@@ -46,10 +46,10 @@ s32 snd_flush_sound_commands(void) {
 
     if (snd_current_buffer != 0 && snd_got_returns() != 0) {
         if (snd_return_callback_pending != 0) {
-            if (snd_return_callback_fn != 0) {
-                snd_return_callback_fn(snd_iop_return_word[0], snd_return_callback_data);
+            if (snd_return_callback != 0) {
+                snd_return_callback(snd_iop_return_word[0], snd_return_callback_data);
             }
-            snd_return_callback_fn = 0;
+            snd_return_callback = 0;
             snd_return_callback_pending = 0;
         } else {
             idx = snd_batch_index != 1;
@@ -75,7 +75,7 @@ s32 snd_flush_sound_commands(void) {
         }
     }
     if (snd_current_buffer == 0) {
-        if (*snd_batch_command_buffers[snd_batch_index] != 0 && D_0015ECC4 == 0) {
+        if (*snd_batch_command_buffers[snd_batch_index] != 0 && GlobalTableStatus == 0) {
             snd_send_current_batch();
         }
     }

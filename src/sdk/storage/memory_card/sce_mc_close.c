@@ -1,10 +1,7 @@
 #include "types.h"
 #include "sifrpc.h"
-extern u32 D_00132DA8[];
-extern u32 D_00132DAC[];
+#include "rnc/data_labels.h"
 extern struct sceSifClientData D_00159A00;
-extern u8 D_00159A80[];
-extern u8 D_0015AFC0[];
 extern s32 PollSema();
 extern s32 SignalSema();
 extern s32 sceSifCallRpc();

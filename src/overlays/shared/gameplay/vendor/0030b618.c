@@ -21,8 +21,8 @@ extern void FUN_L00_0023e838(s32);
 extern void mark_moby_for_removal_b618(void *) __asm__("FUN_0020c828");
 extern char D_L01_00167240_b618[] __asm__("D_L01_00167240");
 extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8") __attribute__((sda));
-extern char D_L01_00180740_b618[] __asm__("D_L01_00180740");
 
+extern char D_L01_00180740[];
 void FUN_L01_0030b618(u8 *m) {
     s32 state = m[0x20];
     char *e = *(char **)(m + 0x78);
@@ -127,7 +127,7 @@ void FUN_L01_0030b618(u8 *m) {
             return;
         }
         {
-            char *p = D_L01_00180740_b618 + slot * 0x20;
+            char *p = D_L01_00180740 + slot * 0x20;
             qcopy(p + 0x10, m + 0x10);
             *(f32 *)(p + 0x1c) = *(f32 *)(e + 0x60);
             qcopy(p, e + 0x40);
@@ -301,9 +301,9 @@ extern s32 collision_line_30c9a8(void *, void *, s32, void *, void *) __asm__("F
 extern s32 FUN_001f0b58(void);
 extern void mark_moby_for_removal_30c9a8(void *) __asm__("FUN_0020c828");
 extern f32 D_L01_00167240_30c9a8[] __asm__("D_L01_00167240");
-extern OvlQuad D_L01_001742E0_30c9a8 __asm__("D_L01_001742E0");
 extern OvlQuad D_0013F3D0_30c9a8 __asm__("D_0013F3D0");
 
+extern OvlQuad D_L01_001742E0;
 void FUN_L01_0030c9a8(char *m) {
     char *e = *(char **)(m + 0x78);
     f32 *pos;
@@ -374,7 +374,7 @@ void FUN_L01_0030c9a8(char *m) {
                 *(s16 *)(e + 0x14) = scale_game_frames(3);
             return;
         }
-        qcopy(pos, &D_L01_001742E0_30c9a8);
+        qcopy(pos, &D_L01_001742E0);
     }
     mark_moby_for_removal_30c9a8(m);
 }
@@ -409,8 +409,6 @@ typedef struct {
     s16 kind;      /* 0x46: 5 for lock-on targets */
 } TargetClass_30d308;
 
-extern struct Moby *D_L01_001ABE80_30d308[] __asm__("D_L01_001ABE80");
-extern CollisionHit D_L01_001742C0_30d308 __asm__("D_L01_001742C0");
 extern f32 distance_xyz_30d308(void *, void *) __asm__("FUN_001f9b48");
 extern f32 FUN_001f9988_30d308(f32) __asm__("FUN_001f9988");
 extern f32 atan2_30d308(f32, f32) __asm__("FUN_001f9e90");
@@ -418,6 +416,8 @@ extern f32 fast_difference_between_rotations_30d308(f32, f32) __asm__("FUN_001fa
 extern f32 *FUN_002141f8_30d308(struct Moby *) __asm__("FUN_002141f8");
 extern s32 collision_line_30d308(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 
+extern struct Moby *D_L01_001ABE80[];
+extern CollisionHit D_L01_001742C0;
 /* FUN_L01_002e32a8 over the null-terminated moby table D_L01_001ABE80: the
    best lock-on target for moby seen from `from` along `ang`. */
 struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax, f32 pitchMax,
@@ -428,7 +428,7 @@ struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax
     s32 i;
     struct Moby *t;
 
-    for (i = 0; (t = D_L01_001ABE80_30d308[i]) != 0; i++) {
+    for (i = 0; (t = D_L01_001ABE80[i]) != 0; i++) {
         f32 *hp;
         s32 cls;
         f32 dist, score, p2;
@@ -457,7 +457,7 @@ struct Moby *FUN_L01_0030d308(struct Moby *moby, f32 *from, f32 *ang, f32 yawMax
         score *= FUN_001f9988_30d308(distance_xyz_30d308(from, tp));
         if (!(score < bestScore)) continue;
         if (collision_line_30d308(from, tp, 0, moby, 0)) {
-            hit = (struct Moby *)D_L01_001742C0_30d308.moby;
+            hit = (struct Moby *)D_L01_001742C0.moby;
             if (hit == 0 || hit == hero.moby || hit == 0 || hit->pclass == 0
                 || ((TargetClass_30d308 *)hit->pclass)->kind != cls) {
                 continue;
@@ -492,13 +492,13 @@ extern float D_L01_0016208C __attribute__((sda));
 extern float D_L01_00162090 __attribute__((sda));
 extern float D_L01_00162094 __attribute__((sda));
 extern int D_L01_00162080_i __asm__("D_L01_00162080") __attribute__((sda));
-extern int D_L01_0015F5C4 __attribute__((sda));
 
 typedef union {
     OvlQuad q;
     float f[4];
 } V4_w22c;
 
+extern s32 cutscene_mode __asm__("D_L01_0015F5C4") __attribute__((sda));
 void FUN_L01_0030d5f0(char *moby, char *state) {
     V4_w22c v;
     V4_w22c q;
@@ -519,7 +519,7 @@ void FUN_L01_0030d5f0(char *moby, char *state) {
             t = FUN_001f9e90(*(float *)(e + 0x10) - *(float *)(moby + 0x10),
                              *(float *)(e + 0x14) - *(float *)(moby + 0x14));
             if (fast_difference_between_rotations(*(float *)(moby + 0x48), t) < 0.5235988f) {
-                if (D_L01_0015F5C4 != 2) {
+                if (cutscene_mode != 2) {
                     char *r;
                     qcopy(&q, e + 0x10);
                     r = FUN_002141f8(e);
@@ -1657,11 +1657,11 @@ void FUN_L01_00316030(CamUser_316030 *o) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00318260), where it is exact; names translated to the US level program. */
 
-extern char *D_L01_00167280_d __asm__("D_L01_00167280") __attribute__((section(".data")));
 extern char *FUN_L00_001eb1f8(int);
 
+extern char *D_L01_00167280 __attribute__((section(".data")));
 void FUN_L01_00316e88(float a, float b) {
-    char *m = D_L01_00167280_d;
+    char *m = D_L01_00167280;
     char *t;
     char *d;
     if (*(short *)(m + 0x86) != 5)

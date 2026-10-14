@@ -10,6 +10,7 @@
 #include "rnc/gameplay/entities/moby.h"
 
 #include "rnc/overlay/swarm_path.h"
+#include "rnc/data_labels.h"
 
 typedef struct {
     SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
@@ -24,7 +25,6 @@ typedef struct {
 
 extern s32 D_L08_00161D40 __attribute__((sda));
 extern f32 D_L08_00161D34 __attribute__((sda));
-extern u8 D_0014C050[];
 extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8;
 
@@ -83,7 +83,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
     }
     switch (moby->state) {
     case 0:
-        if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
+        if (visited52[moby->mission + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -207,7 +207,6 @@ void FUN_L08_002e9b70(struct Moby *moby) {
 }
 
 extern char *D_L08_0015FFD8_g __asm__("D_L08_0015FFD8");
-extern u8 D_0013D3BD_c __asm__("D_0013D3BD") __attribute__((section(".data")));
 extern int FUN_0022da68_c(int, int, char *) __asm__("FUN_0022da68");
 extern void FUN_00213ed8_c(char *, float, float) __asm__("FUN_00213ed8");
 
@@ -227,7 +226,7 @@ void FUN_L08_002ea398(char *m)
         o = (char *)((i << 8) + (int)D_L08_0015FFD8_g);
         if (*(short *)(o + 0xA6) == 0x267 || *(short *)(o + 0xA6) == 0x23F) {
             if (*(u8 *)(o + 0x20) != 4) break;
-            D_0013D3BD_c = 1;
+            menu_item_enabled_41 = 1;
             FUN_0022da68_c(0, 0, m);
             *(u8 *)(m + 0x20) = 2;
         } else {
@@ -368,7 +367,6 @@ void FUN_L08_002f0dc8(void) {
 extern Pair D_L08_00161E10[] __attribute__((section(".sdata")));
 extern Pair D_L08_00161E14[] __attribute__((section(".sdata")));
 extern Pair D_L08_00161E24[] __attribute__((section(".sdata")));
-extern Pair D_L08_00162408_c[] __asm__("D_L08_00161E20") __attribute__((section(".sdata")));
 extern Pair D_L08_001E8348[];
 extern Pair D_L08_00161E28;
 extern char D_L08_001675C0[];
@@ -397,6 +395,7 @@ extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f460
 extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
+extern Pair D_L08_00161E20[] __attribute__((section(".sdata")));
 void FUN_L08_002f1548(struct Moby *moby) {
     int i;
     float v[4];
@@ -423,7 +422,7 @@ void FUN_L08_002f1548(struct Moby *moby) {
             *(float *)&D_L08_00161E14[i].a = i * 0.4f;
         }
         for (i = 0; i < 1; i++) {
-            D_L08_00162408_c[i].a = 0;
+            D_L08_00161E20[i].a = 0;
             *(float *)&D_L08_00161E24[i].a = i * 0.4f;
         }
         break;
@@ -460,12 +459,9 @@ void FUN_L08_002f1548(struct Moby *moby) {
         break;
     }
 }
-extern char D_0013F3D0[];
 extern char D_L08_0015F580[] __attribute__((section(".sdata")));
-extern s32 D_001413D4 __attribute__((section(".data")));
 extern struct Moby *D_0013F58C __attribute__((section(".data")));
 /* Retail loads gp - 0x4C90; GP 0x166C00 places this scalar at 0x161F70. */
-extern f32 D_0015B370 __asm__("D_L08_00161F70") __attribute__((sda));
 
 extern s32 find_moby_hit_44c0(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern f32 FUN_001f9b80_44c0(void *, void *) __asm__("FUN_001f9b80");
@@ -484,6 +480,7 @@ extern void FUN_L00_00258278_44c0(struct Moby *, f32, f32 *, f32, f32, f32) __as
 extern void FUN_L00_0025e450_44c0(char *, void *, char *, f32, f32, s32, s32, s32,
                          f32, f32, f32, f32, s32, f32, s32, s32, s32, u8) __asm__("FUN_L00_0025e450");
 
+extern f32 D_L08_00161F70 __attribute__((sda));
 void FUN_L08_002f44c0(struct Moby *moby)
 {
     SwarmPathFollower *follower = (SwarmPathFollower *)moby->pvars;
@@ -525,7 +522,7 @@ void FUN_L08_002f44c0(struct Moby *moby)
             mark_moby_for_removal_44c0(moby);
             return;
         }
-        moby->rot.y = fast_add_rotations_44c0(moby->rot.y, D_0015B370 * 0.017453292f * frame_time);
+        moby->rot.y = fast_add_rotations_44c0(moby->rot.y, D_L08_00161F70 * 0.017453292f * frame_time);
         distance = FUN_001f9b80_44c0(&moby->pos, D_0013F3D0);
         if (distance < 2.0f && *(s32 *)(D_0013F3D0 + 0x2004) == 0x42) {
             clear_u64_value_44c0(&velocity);
@@ -1072,7 +1069,6 @@ extern int FUN_L00_00266448(void *, void *);
 extern int FUN_L00_002668a0(void *, void *);
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int tick_countdown_32(int *);
-extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("subtract_vector_xyz");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
@@ -1102,14 +1098,12 @@ typedef struct {
     int moving_timer;
     int target_timer;
 } WD8;
-extern unsigned char D_0013DD4A_w __asm__("D_0013DD4A") __attribute__((section(".data")));
 extern unsigned char D_0013D3B4 __attribute__((section(".data")));
 extern char D_L08_001621E0[];
 extern int D_L08_001621D8 __attribute__((sda));
 extern char *D_L08_001600EC;
 extern void FUN_L00_00262d38(int);
 extern void FUN_L00_00284e50(void *, void *);
-extern unsigned char D_0014C050[];
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L08_00305138_c(void *) __asm__("FUN_L02_002e0cd8");
 extern void FUN_L00_0025a120(void *);
@@ -1138,7 +1132,7 @@ void FUN_L08_00302ce8(WM *m) {
         ((unsigned char *)m)[0x30] = 0xFF;
         if (m->animation != 1)
             blend_moby_animation(m, 1, 0, scale_game_frames(10));
-        if (D_0013DD4A_w && D_0014C050[((unsigned char *)m)[0xB0] + current_level_index * 16] == 0xFF) {
+        if (D_0013DD4A && visited52[((unsigned char *)m)[0xB0] + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(m);
             return;
         }
@@ -1250,7 +1244,7 @@ void FUN_L08_00302ce8(WM *m) {
         d->yaw = yaw * 0.6f;
         d->head_yaw = yaw * 0.4f;
     }
-    if (D_0015EDB0_b)
+    if (big_head_cheat_enabled)
         d->height = 2.75f;
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);

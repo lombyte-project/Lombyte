@@ -15,13 +15,13 @@ typedef struct {
     T_234fd0 *t;
 } G_234fd0;
 extern G_234fd0 D_L00_0017E4D8_234fd0 __asm__("D_L00_0017E4D8") __attribute__((section(".data")));
-extern int D_L00_0017E510_234fd0 __asm__("D_L00_0017E510") __attribute__((section(".data")));
-extern int D_L00_0017E518_234fd0 __asm__("D_L00_0017E518") __attribute__((section(".data")));
-extern int D_L00_0017E51C_234fd0 __asm__("D_L00_0017E51C") __attribute__((section(".data")));
-extern int D_L00_0017E520_234fd0 __asm__("D_L00_0017E520") __attribute__((section(".data")));
 void FUN_00232f20_234fd0(void *, void *, int, int, int) __asm__("FUN_00232f20");
 void FUN_L00_0024d8d0_234fd0(void *, int) __asm__("FUN_L00_0024d8d0");
 void FUN_001fefc0_234fd0(int, int) __asm__("FUN_001fefc0");
+extern int D_L00_0017E510 __attribute__((section(".data")));
+extern int D_L00_0017E518 __attribute__((section(".data")));
+extern int D_L00_0017E51C __attribute__((section(".data")));
+extern int D_L00_0017E520 __attribute__((section(".data")));
 void FUN_L00_00234fd0(int mode) {
     G_234fd0 *g = &D_L00_0017E4D8_234fd0;
     int off = D_L00_001B9CF0.unk104;
@@ -29,7 +29,7 @@ void FUN_L00_00234fd0(int mode) {
     {
         int n1;
         if ((n1 = g->t->sz[1])) {
-            FUN_00232f20_234fd0(h, g->t->p[1], 0, D_L00_0017E510_234fd0 / 16, 0);
+            FUN_00232f20_234fd0(h, g->t->p[1], 0, D_L00_0017E510 / 16, 0);
             FUN_L00_0024d8d0_234fd0(h, off);
             FUN_001fefc0_234fd0(0, off);
             off += n1;
@@ -38,7 +38,7 @@ void FUN_L00_00234fd0(int mode) {
     {
         int n3;
         if ((n3 = g->t->sz[3])) {
-            FUN_00232f20_234fd0(h, g->t->p[3], 0, D_L00_0017E518_234fd0 / 16, 0);
+            FUN_00232f20_234fd0(h, g->t->p[3], 0, D_L00_0017E518 / 16, 0);
             FUN_L00_0024d8d0_234fd0(h, off);
             FUN_001fefc0_234fd0(2, off);
             off += n3;
@@ -48,7 +48,7 @@ void FUN_L00_00234fd0(int mode) {
         {
             int n4;
             if ((n4 = g->t->sz[4])) {
-                FUN_00232f20_234fd0(h, g->t->p[4], 0, D_L00_0017E51C_234fd0 / 16, 0);
+                FUN_00232f20_234fd0(h, g->t->p[4], 0, D_L00_0017E51C / 16, 0);
                 FUN_L00_0024d8d0_234fd0(h, off);
                 FUN_001fefc0_234fd0(3, off);
                 off += n4;
@@ -58,7 +58,7 @@ void FUN_L00_00234fd0(int mode) {
     if ((unsigned)(mode - 1) < 2) {
         G_234fd0 *g2 = &D_L00_0017E4D8_234fd0;
         if (g2->t->sz[5]) {
-            FUN_00232f20_234fd0(h, g2->t->p[5], 0, D_L00_0017E520_234fd0 / 16, 0);
+            FUN_00232f20_234fd0(h, g2->t->p[5], 0, D_L00_0017E520 / 16, 0);
             FUN_L00_0024d8d0_234fd0(h, off);
             FUN_001fefc0_234fd0(4, off);
         }

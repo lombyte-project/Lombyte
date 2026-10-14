@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "qcopy.h"
+#include "rnc/data_labels.h"
 
 /* One glow billboard; append_billboard_batch draws the active ones. */
 typedef struct BillboardRecord {
@@ -30,7 +31,6 @@ typedef struct {
 #include "rnc/rendering/dma_tag.h"
 
 extern char billboard_quad_header[] __asm__("D_001608E0");
-extern u8 camera_position[] __asm__("D_00187080");
 extern BillboardViewContext view_context __asm__("D_0018CD00");
 extern s32 clip_transform __asm__("D_0018CE80");
 extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");

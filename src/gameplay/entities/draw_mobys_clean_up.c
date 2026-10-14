@@ -1,10 +1,10 @@
 #include "types.h"
 #include "rnc/rendering/draw_config.h"
+#include "rnc/data_labels.h"
 
 extern u8 D_0015FEE0[];
 extern u8 D_0015FEF0[];
 extern s32 D_0015FF38;
-extern s32 D_0015FF40;
 extern void func_001F21B0();
 extern s32 func_001F21B8();
 extern s32 dma_moby_textures() __asm__("FUN_0020cdf0");

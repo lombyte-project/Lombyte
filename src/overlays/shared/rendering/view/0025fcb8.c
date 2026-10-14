@@ -7,14 +7,14 @@
 
 #include "qcopy.h"
 #include "qzero.h"
-extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
-extern short D_L00_001B0830_25fcb8[] __asm__("D_L00_001B0830") __attribute__((section(".data")));
 extern char *D_L00_0015FFD8_25fcb8 __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_25fcb8[] __asm__("D_L00_001DD100") __attribute__((section(".data")));
 extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
+extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
+extern short D_L00_001B0830[] __attribute__((section(".data")));
 int FUN_L00_0025fcb8(char *a, char *o, float best) {
-    struct Hero *g = &hero_data;
+    struct Hero *g = &hero_lui;
     char *m;
     char *p;
     int res;
@@ -28,8 +28,8 @@ int FUN_L00_0025fcb8(char *a, char *o, float best) {
         m = 0;
         res = 2;
     }
-    for (i = 1; i <= D_L00_001B0830_25fcb8[0]; i++) {
-        p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_25fcb8[i] << 8);
+    for (i = 1; i <= D_L00_001B0830[0]; i++) {
+        p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830[i] << 8);
         if (p == 0)
             continue;
         if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C)
@@ -70,7 +70,7 @@ int FUN_L00_0025fcb8(char *a, char *o, float best) {
         *(char **)(o + 0x40) = m;
         qcopy(o, m + 0x10);
         qcopy(o + 0x10, m + 0x40);
-        g = &hero_data;
+        g = &hero_lui;
         if (m == ((char *)g->moby)) {
             qcopy(o + 0x20, &g->motion.unkC0);
             qcopy(o + 0x30, &g->motion.unkD0);
@@ -92,7 +92,7 @@ int FUN_L00_0025fcb8(char *a, char *o, float best) {
 extern int FUN_00214720_25ff38(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_00259740_25ff38(void *, void *, int) __asm__("FUN_L00_00259740");
 int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv) {
-    struct Hero *g = &hero_data;
+    struct Hero *g = &hero_lui;
     char *m;
     char *p;
     char *q;
@@ -110,20 +110,20 @@ int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, i
         res = 2;
     } else if (n > 0) {
         for (k = 0; k < n - 1; k++) {
-            if (FUN_00214720_25ff38(&hero_data.motion.pos, list[k]) != 0) {
+            if (FUN_00214720_25ff38(&hero_lui.motion.pos, list[k]) != 0) {
                 m = 0;
                 res = 2;
                 break;
             }
         }
     } else if (v != 0 && nv > 0) {
-        if (FUN_L00_00259740_25ff38(&hero_data.motion.pos, v, nv) == 0) {
+        if (FUN_L00_00259740_25ff38(&hero_lui.motion.pos, v, nv) == 0) {
             m = 0;
             res = 2;
         }
     }
-    for (i = 1; i <= D_L00_001B0830_25fcb8[0]; i++) {
-        p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_25fcb8[i] << 8);
+    for (i = 1; i <= D_L00_001B0830[0]; i++) {
+        p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830[i] << 8);
         if (p == 0) continue;
         if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C) continue;
         if (*(unsigned char *)(p + 0x20) == 0xFE) continue;
@@ -180,7 +180,7 @@ int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, i
         *(char **)(o + 0x40) = m;
         qcopy(o, m + 0x10);
         qcopy(o + 0x10, m + 0x40);
-        g = &hero_data;
+        g = &hero_lui;
         if (m == (char *)g->moby) {
             qcopy(o + 0x20, &g->motion.unkC0);
             qcopy(o + 0x30, &g->motion.unkD0);
@@ -343,9 +343,9 @@ extern unsigned char items_acquired[] __asm__("D_0013D4E8");
 extern int D_00141408 __attribute__((section(".data")));
 extern int D_00141410 __attribute__((section(".data")));
 extern int D_00141414 __attribute__((section(".data")));
-extern unsigned char D_0015EDD0[] __attribute__((section(".sdata")));
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 
+extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
 void FUN_L00_00260860(int id, int flag) {
     unsigned char *pa = &D_0013D4C0[id];
     unsigned char *pb = &items_acquired[id];
@@ -378,9 +378,9 @@ void FUN_L00_00260860(int id, int flag) {
             if (id != 0 && D_L00_001C3E98[i] == id) {
                 int j;
                 for (j = 0;; j++) {
-                    unsigned char b = D_0015EDD0[j];
+                    unsigned char b = D_0015EDD0_257218[j];
                     if ((b & 0x3F) == id || b == 0xFF) {
-                        D_0015EDD0[j] = id | 0x40;
+                        D_0015EDD0_257218[j] = id | 0x40;
                         break;
                     }
                 }

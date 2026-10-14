@@ -3,21 +3,22 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/overlay/level_labels.h"
 
-extern unsigned char D_0013D389_b7[] __asm__("D_0013D389");
-extern char D_L11_00179B18_b7[] __asm__("D_L11_00179B18");
-extern char D_L11_0021A900_b7[] __asm__("D_L11_0021A900");
-extern int D_L11_0015F640_b7 __asm__("D_L11_0015F640");
 extern float FUN_001f9b48_b7(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_001f96f8_b7(int) __asm__("FUN_001f96f8");
 extern int FUN_00116248_b7(void *, void *) __asm__("FUN_00116248");
 extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
 
+extern unsigned char D_0013D389[];
+extern char D_L11_00179B18[];
+extern char D_L11_0021A900[];
+extern int D_L11_0015F640;
 void FUN_L11_002cb790(char *a0) {
     if (FUN_001f9b48_b7(a0 + 0x10, &hero.motion.pos) < 2.0f) {
-        D_0013D389_b7[0] = 1;
-        FUN_00116248_b7(D_L11_00179B18_b7, D_L11_0021A900_b7);
-        D_L11_0015F640_b7 = FUN_001f96f8_b7(0xB4);
+        D_0013D389[0] = 1;
+        FUN_00116248_b7(D_L11_00179B18, D_L11_0021A900);
+        D_L11_0015F640 = FUN_001f96f8_b7(0xB4);
         FUN_0020c828_b7(a0);
     }
 }
@@ -149,7 +150,6 @@ typedef struct {
     u8 pad1C[0x14];
 } MissileHit_089d0;
 
-extern int D_L11_0015F5CC_089d0 __asm__("D_L11_0015F5CC");
 extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
 extern char D_L11_00174880_089d0[] __asm__("D_L11_00174880");
 extern int ftoi_089d0(float) __asm__("FUN_001fa6d0");
@@ -196,7 +196,7 @@ void FUN_L11_003089d0(struct Moby *moby) {
 
     moby->scale += (moby->pclass->scale - moby->scale) * 0.1f;
     qcopy(old, &moby->pos);
-    if (D_L11_0015F5CC_089d0 % 6 == (((char *)moby - D_L11_0015FFD8_089d0) >> 8) % 6)
+    if (level_frame % 6 == (((char *)moby - D_L11_0015FFD8_089d0) >> 8) % 6)
         vars->target = 0;
     moby->alpha = ftoi_089d0(vars->size * 24.0f);
     copy_xyz_089d0(look, vars->target_pos);
@@ -392,9 +392,9 @@ extern void moby_point_position_94f8(void *, int, void *) __asm__("FUN_L00_0024f
 extern void FUN_L00_0025e450_94f8(void *, void *, void *, float, float, int, int, int,
                                     float, float, float, float, int, float, int, int, int, int)
     __asm__("FUN_L00_0025e450");
-extern char D_L11_001B2A80_94f8[] __asm__("D_L11_001B2A80");
-extern char D_L11_00174860_94f8[] __asm__("D_L11_00174860");
 
+extern char D_L11_001B2A80[];
+extern char D_L11_00174860[];
 /* Homing missile: turns toward its target while the target lives and stays within 3 units of
    where it was last frame, leaves a smoke trail, and bursts on a hit, when its timer runs out
    or outside the level box. */
@@ -418,7 +418,7 @@ void FUN_L11_003094f8(struct Moby *moby) {
     add_vector_xyz(&velocity, &velocity, &offset);
     FUN_L00_002712b8_94f8(&moby->pos, &velocity, scale_game_frames(6), 0x7f, 0xb0b0b0,
                            3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
-    texture = D_L11_001B2A80_94f8;
+    texture = D_L11_001B2A80;
     for (fraction = 0.0f; fraction < 1.0f; fraction += 0.33333334f) {
         unsigned char *particle;
         normalize_vector_xyz(&offset, &data->step, random_float_between(fraction, fraction + 0.33333334f) * data->speed);
@@ -460,7 +460,7 @@ void FUN_L11_003094f8(struct Moby *moby) {
     }
     moby_point_position_94f8(moby, 1, &spray);
     if (FUN_001efa68(&previous_pos, &spray, 0, data->collision, 0)) {
-        FUN_L00_0025e450_94f8(moby, data, D_L11_00174860_94f8, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
+        FUN_L00_0025e450_94f8(moby, data, D_L11_00174860, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
                                -1, 20.0f, 0, 1, -1, 0);
         mark_moby_for_removal(moby);
         return;
@@ -510,21 +510,19 @@ extern void FUN_001f9a28_30a908(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float FUN_001fa6c0_30a908(int) __asm__("FUN_001fa6c0");
 extern void func_L00_001FDE48_30a908(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
 extern void FUN_001f7d30_30a908(void *, void *, int) __asm__("FUN_001f7d30");
-extern char D_L11_0016D440_30a908[] __asm__("D_L11_0016D440");
-extern int D_L11_0016D180_30a908 __asm__("D_L11_0016D180") __attribute__((section(".data")));
-extern char D_L11_001679D0_30a908[] __asm__("D_L11_001679D0");
 extern float D_L11_001677C0_30a908[] __asm__("D_L11_001677C0");
-extern float D_L11_00161E18_30a908 __asm__("D_L11_00161E18") __attribute__((section(".sdata")));
-extern char D_L11_00167680_30a908[] __asm__("D_L11_00167680");
-extern Pos_30a908 D_L11_001D9B08_30a908[] __asm__("D_L11_001D9B08");
-extern int D_L11_001D9E08_30a908[] __asm__("D_L11_001D9E08");
-extern UV_30a908 D_L11_001DA310_30a908[] __asm__("D_L11_001DA310");
-extern Pos_30a908 D_L11_001D9F08_30a908[] __asm__("D_L11_001D9F08");
-extern int D_L11_001DA208_30a908[] __asm__("D_L11_001DA208");
-extern UV_30a908 D_L11_001DA510_30a908[] __asm__("D_L11_001DA510");
-extern float D_L11_00161DF8_30a908[2] __asm__("D_L11_00161DF8") __attribute__((sda));
 extern UV_30a908 D_L11_00161E08_30a908[] __asm__("D_L11_00161E08") __attribute__((section(".sdata")));
 
+extern char D_L11_0016D440[];
+extern char D_L11_001679D0[];
+extern Pos_30a908 D_L11_001D9B08[];
+extern int D_L11_001D9E08[];
+extern UV_30a908 D_L11_001DA310[];
+extern Pos_30a908 D_L11_001D9F08[];
+extern int D_L11_001DA208[];
+extern UV_30a908 D_L11_001DA510[];
+extern float wave_speed[2] __asm__("D_L11_00161DF8") __attribute__((sda));
+extern float tide_level_macro __asm__("D_L11_00161E18") __attribute__((section(".sdata")));
 /* Draws the level's water sheet: a fading edge strip, a far quad, and two scrolling layers of grid cells around the camera. */
 void FUN_L11_0030a908(struct Moby *moby) {
     Vec4f v0;
@@ -536,8 +534,8 @@ void FUN_L11_0030a908(struct Moby *moby) {
     Vec4f d1;
     Quad_30a908 q;
     Data_30a908 *d = (Data_30a908 *)moby->pvars;
-    float s228 = ((Fog_30a908 *)D_L11_0016D440_30a908)->f228;
-    float s22C = ((Fog_30a908 *)D_L11_0016D440_30a908)->f22C;
+    float s228 = ((Fog_30a908 *)D_L11_0016D440)->f228;
+    float s22C = ((Fog_30a908 *)D_L11_0016D440)->f22C;
     int i;
     int layer;
     int colA;
@@ -547,9 +545,9 @@ void FUN_L11_0030a908(struct Moby *moby) {
     float x;
     float y;
 
-    if (hero.state.current != 0x1D && D_L11_0016D180_30a908 == 0) {
-        ((Fog_30a908 *)D_L11_0016D440_30a908)->f228 = 255.0f;
-        ((Fog_30a908 *)D_L11_0016D440_30a908)->f22C = 249.9f;
+    if (hero.state.current != 0x1D && D_L11_0016D180 == 0) {
+        ((Fog_30a908 *)D_L11_0016D440)->f228 = 255.0f;
+        ((Fog_30a908 *)D_L11_0016D440)->f22C = 249.9f;
     }
     FUN_00233980_30a908(0x42, 0x3200000044L);
     FUN_00233980_30a908(8, 0);
@@ -561,12 +559,12 @@ void FUN_L11_0030a908(struct Moby *moby) {
     a.y = 0.0f;
     a.z = 0.0f;
     a.w = 1.0f;
-    FUN_001f9cf8_30a908(&a, &a, D_L11_001679D0_30a908);
+    FUN_001f9cf8_30a908(&a, &a, D_L11_001679D0);
     b.x = 0.0f;
     b.y = 1.0f;
     b.z = 0.0f;
     b.w = 1.0f;
-    FUN_001f9cf8_30a908(&b, &b, D_L11_001679D0_30a908);
+    FUN_001f9cf8_30a908(&b, &b, D_L11_001679D0);
     a.z = 0.0f;
     FUN_001f9bf8_30a908(&a, &a, 1.0f);
     b.z = 0.0f;
@@ -584,7 +582,7 @@ void FUN_L11_0030a908(struct Moby *moby) {
     for (i = 0; i < 4; i++) {
         Vec4f *p = &c[i];
         FUN_001f9a10_30a908(p, p, D_L11_001677C0_30a908);
-        p->z = D_L11_00161E18_30a908;
+        p->z = tide_level_macro;
     }
     FUN_001f9a28_30a908(&d0, &c[1], &c[0]);
     FUN_001f9a28_30a908(&d1, &c[3], &c[2]);
@@ -593,29 +591,29 @@ void FUN_L11_0030a908(struct Moby *moby) {
         float f = FUN_001fa6c0_30a908(i) / 10.0f;
         int col = FUN_001fa6e0_30a908(d->f0, d->f4, FUN_001fa6c0_30a908(i) / t);
         FUN_001f9a68_30a908(&v0, &d0, f);
-        D_L11_001D9E08_30a908[i] = col;
-        D_L11_001DA310_30a908[i].u = 0.0f;
-        D_L11_001DA310_30a908[i].v = 0.0f;
+        D_L11_001D9E08[i] = col;
+        D_L11_001DA310[i].u = 0.0f;
+        D_L11_001DA310[i].v = 0.0f;
         FUN_001f9a10_30a908(&v0, &v0, &c[0]);
-        D_L11_001D9B08_30a908[i].x = v0.x;
-        D_L11_001D9B08_30a908[i].y = v0.y;
-        D_L11_001D9B08_30a908[i].z = v0.z;
+        D_L11_001D9B08[i].x = v0.x;
+        D_L11_001D9B08[i].y = v0.y;
+        D_L11_001D9B08[i].z = v0.z;
         FUN_001f9a68_30a908(&v0, &d1, f);
-        D_L11_001D9E08_30a908[i + 1] = col;
-        D_L11_001DA310_30a908[i + 1].u = 0.0f;
-        D_L11_001DA310_30a908[i + 1].v = 0.0f;
+        D_L11_001D9E08[i + 1] = col;
+        D_L11_001DA310[i + 1].u = 0.0f;
+        D_L11_001DA310[i + 1].v = 0.0f;
         FUN_001f9a10_30a908(&v0, &v0, &c[2]);
-        D_L11_001D9B08_30a908[i + 1].x = v0.x;
-        D_L11_001D9B08_30a908[i + 1].y = v0.y;
-        D_L11_001D9B08_30a908[i + 1].z = v0.z;
+        D_L11_001D9B08[i + 1].x = v0.x;
+        D_L11_001D9B08[i + 1].y = v0.y;
+        D_L11_001D9B08[i + 1].z = v0.z;
     }
-    func_L00_001FDE48_30a908(0xC, D_L11_001D9B08_30a908, D_L11_001D9E08_30a908, D_L11_001DA310_30a908, 1);
+    func_L00_001FDE48_30a908(0xC, D_L11_001D9B08, D_L11_001D9E08, D_L11_001DA310, 1);
     q.z78 = FUN_001f44b8_30a908(0x16);
     q.q80 = 0xFF9000000260L;
     q.q88 = 0x8000000044L;
     q.z70 = 0;
-    if (d->f14 < ((Cam_30a908 *)D_L11_00167680_30a908)->z - d->f24 &&
-        hero.state.current != 0x1D && D_L11_0016D180_30a908 == 0) {
+    if (d->f14 < ((Cam_30a908 *)D_L11_00167680)->z - d->f24 &&
+        hero.state.current != 0x1D && D_L11_0016D180 == 0) {
         q.uv[0].u = 0.0f;
         q.uv[0].v = 0.0f;
         q.uv[1].u = 0.0f;
@@ -630,10 +628,10 @@ void FUN_L11_0030a908(struct Moby *moby) {
         q.col[3] = q.col[1];
         *(u128 *)&q.v[0] = *(u128 *)&c[1];
         *(u128 *)&q.v[1] = *(u128 *)&c[1];
-        q.v[1].z = ((Cam_30a908 *)D_L11_00167680_30a908)->z - d->f24;
+        q.v[1].z = ((Cam_30a908 *)D_L11_00167680)->z - d->f24;
         *(u128 *)&q.v[2] = *(u128 *)&c[3];
         *(u128 *)&q.v[3] = *(u128 *)&c[3];
-        q.v[3].z = ((Cam_30a908 *)D_L11_00167680_30a908)->z - d->f24;
+        q.v[3].z = ((Cam_30a908 *)D_L11_00167680)->z - d->f24;
         FUN_001f7d30_30a908(&q, 0, 0);
     }
     FUN_00233980_30a908(0x42, 0x8000000048L);
@@ -642,7 +640,7 @@ void FUN_L11_0030a908(struct Moby *moby) {
     FUN_00233980_30a908(0x47, 0x513F1);
     colA = d->fC;
     colB = d->f10;
-    t = 1.0f - (((Cam_30a908 *)D_L11_00167680_30a908)->z - D_L11_00161E18_30a908) / d->f2C;
+    t = 1.0f - (((Cam_30a908 *)D_L11_00167680)->z - tide_level_macro) / d->f2C;
     if (t > 1.0f) {
         t = 1.0f;
     }
@@ -655,51 +653,51 @@ void FUN_L11_0030a908(struct Moby *moby) {
             for (y = d->f18 * -2.0f; y < d->f18 * 2.0f; y += d->f18) {
                 n = 0;
                 for (x = d->f18 * -2.0f; x < d->f18 * 2.0f; x += d->f18) {
-                    D_L11_001DA510_30a908[n].u = x / (d->f18 * 2.0f) * D_L11_00161DF8_30a908[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510_30a908[n].v = y / (d->f18 * 2.0f) * D_L11_00161DF8_30a908[layer] + D_L11_00161E08_30a908[layer].v;
-                    D_L11_001D9F08_30a908[n].x = x + ((Cam_30a908 *)D_L11_00167680_30a908)->x + 1.0f;
-                    D_L11_001D9F08_30a908[n].y = y + ((Cam_30a908 *)D_L11_00167680_30a908)->y + 1.0f;
-                    D_L11_001D9F08_30a908[n].z = D_L11_00161E18_30a908;
+                    D_L11_001DA510[n].u = x / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    D_L11_001DA510[n].v = y / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    D_L11_001D9F08[n].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
+                    D_L11_001D9F08[n].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    D_L11_001D9F08[n].z = tide_level_macro;
                     i = n + 1;
-                    D_L11_001DA510_30a908[i].u = x / (d->f18 * 2.0f) * D_L11_00161DF8_30a908[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510_30a908[i].v = (y + d->f18) / (d->f18 * 2.0f) * D_L11_00161DF8_30a908[layer] + D_L11_00161E08_30a908[layer].v;
-                    D_L11_001D9F08_30a908[i].x = x + ((Cam_30a908 *)D_L11_00167680_30a908)->x + 1.0f;
-                    D_L11_001D9F08_30a908[i].y = y + d->f18 + ((Cam_30a908 *)D_L11_00167680_30a908)->y + 1.0f;
-                    D_L11_001D9F08_30a908[i].z = D_L11_00161E18_30a908;
+                    D_L11_001DA510[i].u = x / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    D_L11_001DA510[i].v = (y + d->f18) / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    D_L11_001D9F08[i].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
+                    D_L11_001D9F08[i].y = y + d->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    D_L11_001D9F08[i].z = tide_level_macro;
                     i = n + 2;
-                    D_L11_001DA510_30a908[i].u = (x + d->f18) / (d->f18 * 2.0f) * D_L11_00161DF8_30a908[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510_30a908[i].v = y / (d->f18 * 2.0f) * D_L11_00161DF8_30a908[layer] + D_L11_00161E08_30a908[layer].v;
-                    D_L11_001D9F08_30a908[i].x = x + d->f18 + ((Cam_30a908 *)D_L11_00167680_30a908)->x + 1.0f;
-                    D_L11_001D9F08_30a908[i].y = y + ((Cam_30a908 *)D_L11_00167680_30a908)->y + 1.0f;
-                    D_L11_001D9F08_30a908[i].z = D_L11_00161E18_30a908;
+                    D_L11_001DA510[i].u = (x + d->f18) / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    D_L11_001DA510[i].v = y / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    D_L11_001D9F08[i].x = x + d->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
+                    D_L11_001D9F08[i].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    D_L11_001D9F08[i].z = tide_level_macro;
                     i = n + 3;
-                    D_L11_001DA510_30a908[i].u = (x + d->f18) / (d->f18 * 2.0f) * D_L11_00161DF8_30a908[layer] + D_L11_00161E08_30a908[layer].u;
-                    D_L11_001DA510_30a908[i].v = (y + d->f18) / (d->f18 * 2.0f) * D_L11_00161DF8_30a908[layer] + D_L11_00161E08_30a908[layer].v;
-                    D_L11_001D9F08_30a908[i].x = x + d->f18 + ((Cam_30a908 *)D_L11_00167680_30a908)->x + 1.0f;
-                    D_L11_001D9F08_30a908[i].y = y + d->f18 + ((Cam_30a908 *)D_L11_00167680_30a908)->y + 1.0f;
-                    D_L11_001D9F08_30a908[i].z = D_L11_00161E18_30a908;
+                    D_L11_001DA510[i].u = (x + d->f18) / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
+                    D_L11_001DA510[i].v = (y + d->f18) / (d->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    D_L11_001D9F08[i].x = x + d->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
+                    D_L11_001D9F08[i].y = y + d->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    D_L11_001D9F08[i].z = tide_level_macro;
                     for (i = n; i < n + 4; i++) {
-                        v0.x = D_L11_001D9F08_30a908[i].x - ((Cam_30a908 *)D_L11_00167680_30a908)->x;
-                        v0.y = D_L11_001D9F08_30a908[i].y - ((Cam_30a908 *)D_L11_00167680_30a908)->y;
-                        v0.z = D_L11_001D9F08_30a908[i].z - ((Cam_30a908 *)D_L11_00167680_30a908)->z;
+                        v0.x = D_L11_001D9F08[i].x - ((Cam_30a908 *)D_L11_00167680)->x;
+                        v0.y = D_L11_001D9F08[i].y - ((Cam_30a908 *)D_L11_00167680)->y;
+                        v0.z = D_L11_001D9F08[i].z - ((Cam_30a908 *)D_L11_00167680)->z;
                         v0.w = 1.0f;
                         t = FUN_001f9b20_30a908(&v0) / (d->f18 * 2.0f);
                         if (t > 1.0f) {
                             t = 1.0f;
                         }
-                        D_L11_001DA208_30a908[i] = FUN_001fa6e0_30a908(colA, colB, t);
+                        D_L11_001DA208[i] = FUN_001fa6e0_30a908(colA, colB, t);
                     }
                     n += 4;
                     if (n >= 0x40) {
                         FUN_001f97b0_30a908();
                     }
                 }
-                func_L00_001FDE48_30a908(n, D_L11_001D9F08_30a908, D_L11_001DA208_30a908, D_L11_001DA510_30a908, 1);
+                func_L00_001FDE48_30a908(n, D_L11_001D9F08, D_L11_001DA208, D_L11_001DA510, 1);
             }
         }
     }
-    ((Fog_30a908 *)D_L11_0016D440_30a908)->f228 = s228;
-    ((Fog_30a908 *)D_L11_0016D440_30a908)->f22C = s22C;
+    ((Fog_30a908 *)D_L11_0016D440)->f228 = s228;
+    ((Fog_30a908 *)D_L11_0016D440)->f22C = s22C;
     FUN_00233980_30a908(0x47, 0x5360B);
 }
 /* Ocean update: scrolls the two wave layers with the camera and the time, keeps their offsets in -1..1 and sets the level's tide values. */
@@ -734,11 +732,8 @@ extern void FUN_L11_0030a908_b358(void) __asm__("FUN_L11_0030a908");
 extern UV_30b358 wave_offset[] __asm__("D_L11_00161E08") __attribute__((section(".sdata")));
 extern float camera_pos_b358[] __asm__("D_L11_001677C0");
 extern char last_camera_pos[4] __asm__("D_L11_00162840") __attribute__((sda)); /* a 16-byte vector; declared small so it is reached through $gp */
-extern float wave_speed[2] __asm__("D_L11_00161DF8") __attribute__((sda));
 extern float ocean_level __asm__("D_L11_00161E1C");
 extern UV_30b358 wave_drift[] __asm__("D_L11_001D9AF0");
-extern float tide_level __asm__("D_L11_00161E18");
-extern int level_frame_b358 __asm__("D_L11_0015F5CC");
 extern float frame_time_b358 __asm__("D_0015ED7C");
 
 void FUN_L11_0030b358(OceanMoby_30b358 *moby)
@@ -787,7 +782,7 @@ void FUN_L11_0030b358(OceanMoby_30b358 *moby)
             wave_offset[k].v = wave_offset[k].v + 1.0f;
         }
     }
-    tide_level = ocean_level + fast_sin_b358(int_to_float_b358(level_frame_b358 % 360) * 0.017444445f - 3.14f) * 0.25f;
+    tide_level = ocean_level + fast_sin_b358(int_to_float_b358(level_frame % 360) * 0.017444445f - 3.14f) * 0.25f;
     for (k = 0; k < 2; k++) {
         float sum = wave_offset[k].u + wave_drift[k].u * frame_time_b358;
         wave_offset[k].u = sum;

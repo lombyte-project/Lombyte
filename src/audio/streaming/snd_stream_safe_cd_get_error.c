@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/audio/sound_read_work.h"
-extern s32 snd_cd_stream_active __asm__("D_0015EC8C") __attribute__((sda));
+#include "rnc/data_labels.h"
 extern s32 sceCdGetError();
 s32 snd_stream_safe_cd_get_error(s32 arg0) __asm__("FUN_0012eef0");
 

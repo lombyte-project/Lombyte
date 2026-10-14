@@ -5,14 +5,15 @@
 #include "sda.h"
 
 #include "qcopy.h"
+#include "rnc/globals.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0029B070.c: func_L07_0029B070), where it is exact; names translated to the US level program. */
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *D_L07_001B21CC_x __asm__("D_L07_001B21CC") __attribute__((section(".data")));
 extern void *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
+extern unsigned char *D_L07_001B21CC NOT_SDA;
 unsigned char *FUN_L07_0029a2a0(char *pos, char *vec) {
     unsigned char *p = create_part(0x33);
     if (p != 0) {
@@ -25,7 +26,7 @@ unsigned char *FUN_L07_0029a2a0(char *pos, char *vec) {
         p[3] = 0x48;
         p[1] = 0;
         p[8] = 0;
-        p[2] = *D_L07_001B21CC_x;
+        p[2] = *D_L07_001B21CC;
         *(short *)(p + 0xA) = 0x78;
         *(float *)(p + 0xC) = 6300.0f;
     }
@@ -40,7 +41,6 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern unsigned char *D_L07_001B21F4 __asm__("D_L07_001B21F4") __attribute__((section(".data")));
-extern float D_0015ED60;
 extern float D_L07_00166E40[];
 
 unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor) {
@@ -65,7 +65,7 @@ unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor
         *(volatile unsigned char *)(p + 1) = 0;
         *(volatile float *)(p + 0xc) = amount;
         p[2] = D_L07_001B21F4[*(short *)(q + 0xc)];
-        *(float *)(q + 0x10) = D_0015ED60 * 0.015f;
+        *(float *)(q + 0x10) = frame_scale * 0.015f;
         *(short *)(q + 0xe) = index;
         p[8] = func_001FA898_r(*(float *)(q + 8) * 255.0f);
         moby_point_position(*(void **)q, *(short *)(q + 0xe), v);

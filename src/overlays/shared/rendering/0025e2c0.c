@@ -50,12 +50,12 @@ void FUN_L15_0025e2c0(int color, u128 *pos, char *owner) {
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0025F0A0.c: func_L15_002655D0), where it is exact; names translated to the US level program. */
 
-extern int *D_L15_001B2770_x __asm__("D_L15_001B2770") __attribute__((section(".data")));
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void FUN_00214a98(float *, int *);
 void load_display_text_resource_entry(void *arg0, s32 *arg1) __asm__("FUN_00214bc0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
+extern int *D_L15_001B2770 NOT_SDA;
 unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int f, int g, int h,
                                 char *owner) {
     unsigned char *r = create_part(0x47);
@@ -71,7 +71,7 @@ unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int
         r[1] = 0;
         *(float *)(r + 0xC) = func_001FA898_r(p[3] * 210000.0f);
         r[8] = random_integer_below(0xFF);
-        r[2] = *(unsigned char *)D_L15_001B2770_x;
+        r[2] = *(unsigned char *)D_L15_001B2770;
         *(short *)(r + 0xA) = f;
         FUN_00214a98(p, q);
         FUN_00214a98(c, q2);

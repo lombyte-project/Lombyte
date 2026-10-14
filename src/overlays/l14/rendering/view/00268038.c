@@ -5,15 +5,15 @@
 
 #include "qcopy.h"
 #include "qzero.h"
+#include "rnc/overlay/level_labels.h"
 
-extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
-extern short D_L00_001B0830_25fcb8[] __asm__("D_L14_001B0F30") __attribute__((section(".data")));
-extern char *D_L00_0015FFD8_25fcb8 __asm__("D_L14_0015FFD8");
-extern char *D_L00_001DD100_25fcb8[] __asm__("D_L14_001DE5C0") __attribute__((section(".data")));
 extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
+extern short D_L14_001B0F30[] __attribute__((section(".data")));
+extern char *D_L14_001DE5C0[] __attribute__((section(".data")));
+extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 int FUN_L14_00268038(char *a, char *o, float best) {
-    struct Hero *g = &hero_data;
+    struct Hero *g = &hero_lui;
     char *m;
     char *p;
     int res;
@@ -27,8 +27,8 @@ int FUN_L14_00268038(char *a, char *o, float best) {
         m = 0;
         res = 2;
     }
-    for (i = 1; i <= D_L00_001B0830_25fcb8[0]; i++) {
-        p = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_25fcb8[i] << 8);
+    for (i = 1; i <= D_L14_001B0F30[0]; i++) {
+        p = D_L14_0015FFD8 + (D_L14_001B0F30[i] << 8);
         if (p == 0)
             continue;
         if (*(short *)(p + 0xA6) != 0xCB && *(short *)(p + 0xA6) != 0x76C)
@@ -47,7 +47,7 @@ int FUN_L14_00268038(char *a, char *o, float best) {
         }
     }
     for (j = 0; j < 20; j++) {
-        p = D_L00_001DD100_25fcb8[j];
+        p = D_L14_001DE5C0[j];
         if (p == 0)
             continue;
         if (*(short *)(p + 0xA6) != 0x10E)
@@ -69,7 +69,7 @@ int FUN_L14_00268038(char *a, char *o, float best) {
         *(char **)(o + 0x40) = m;
         qcopy(o, m + 0x10);
         qcopy(o + 0x10, m + 0x40);
-        g = &hero_data;
+        g = &hero_lui;
         if (m == ((char *)g->moby)) {
             qcopy(o + 0x20, &g->motion.unkC0);
             qcopy(o + 0x30, &g->motion.unkD0);

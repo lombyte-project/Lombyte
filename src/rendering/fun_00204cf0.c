@@ -1,10 +1,9 @@
 /* Ported from rac1-decomp (src/game/map.c, func_00205520). */
 #include "sda.h"
 #include "rnc/rendering/texture_upload.h"
+#include "types.h"
 
 extern int FUN_001f97a0(int);
-extern int D_0015EE74 MACRO_ADDR;
-extern int D_0015F458 MACRO_ADDR;
 typedef struct {
     char *clut; /* 0x00 */
     char *pix;  /* 0x04 */
@@ -23,6 +22,8 @@ typedef struct {
    TEX0 value returned. */
 long FUN_00204cf0(char *p) __asm__("FUN_00204cf0");
 
+extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
+extern s32 pending_texture_upload_count __asm__("D_0015F458") MACRO_ADDR;
 long FUN_00204cf0(char *p) {
     TexDesc t;
     int w;
@@ -38,11 +39,11 @@ long FUN_00204cf0(char *p) {
     t.tw = FUN_001f97a0(*(int *)(p + 8));
     t.th = FUN_001f97a0(*(int *)(p + 0xC));
     t.pix = p + 0x20 + t.clutSize;
-    addr = D_0015EE74;
+    addr = gs_texture_allocation_cursor;
     cbp = addr >> 8;
     addr += 0x400;
     tbp = addr >> 8;
-    D_0015EE74 = addr + (1 << (t.tw + t.th));
+    gs_texture_allocation_cursor = addr + (1 << (t.tw + t.th));
     w = t.tw - 6;
     if (w < 0) {
         w = 0;
@@ -52,15 +53,15 @@ long FUN_00204cf0(char *p) {
     pt = &tex0;
     tex0 = *pt | ((long)t.th << 30) | ((long)1 << 34) | ((long)cbp << 37);
     reg = *pt | ((long)4 << 61);
-    if (D_0015F458 < TEXTURE_UPLOAD_MAX) {
-        pending_texture_uploads[D_0015F458].clut_data = (int)t.clut;
-        pending_texture_uploads[D_0015F458].cbp = cbp;
-        pending_texture_uploads[D_0015F458].unk4 = 0;
-        pending_texture_uploads[D_0015F458].image_data = (int)t.pix;
-        pending_texture_uploads[D_0015F458].tw = t.tw;
-        pending_texture_uploads[D_0015F458].th = t.th;
-        pending_texture_uploads[D_0015F458].tbp = tbp;
-        D_0015F458++;
+    if (pending_texture_upload_count < TEXTURE_UPLOAD_MAX) {
+        pending_texture_uploads[pending_texture_upload_count].clut_data = (int)t.clut;
+        pending_texture_uploads[pending_texture_upload_count].cbp = cbp;
+        pending_texture_uploads[pending_texture_upload_count].unk4 = 0;
+        pending_texture_uploads[pending_texture_upload_count].image_data = (int)t.pix;
+        pending_texture_uploads[pending_texture_upload_count].tw = t.tw;
+        pending_texture_uploads[pending_texture_upload_count].th = t.th;
+        pending_texture_uploads[pending_texture_upload_count].tbp = tbp;
+        pending_texture_upload_count++;
     }
     return reg;
 }

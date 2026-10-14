@@ -1,6 +1,7 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/data_labels.h"
 
 typedef struct {
     u8 pad_0[0x20];
@@ -11,10 +12,6 @@ typedef struct {
 
 
 
-extern s32 D_0015ED80 MACRO_ADDR;
-extern s32 D_001601B0 __attribute__((sda));
-extern char D_001602A0[];
-extern char D_001602D0[];
 extern char D_00160300[];
 extern char D_00160310[];
 extern char D_00160320[];
@@ -31,6 +28,7 @@ extern s32 sprintf(char *, const char *, ...);
 
 s32 draw_save_slot_list(SaveMenu *menu) __asm__("FUN_002239e0");
 
+extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 s32 draw_save_slot_list(SaveMenu *menu) {
     char text[0x50];
     struct MemoryCardSaveEntry *slot;
@@ -59,7 +57,7 @@ s32 draw_save_slot_list(SaveMenu *menu) {
         inner_bottom = y + 0x31;
         if (memory_card_state.state < 3 && memory_card_state.pending_state < 0 && menu->selected_slot == i) {
             append_screen_sprite(0, highlight_top, width, highlight_bottom, 0x8020FFFF, 0);
-            append_screen_sprite(3, inner_top, inner_right, inner_bottom, D_001601B0, 0);
+            append_screen_sprite(3, inner_top, inner_right, inner_bottom, panel_clear_color, 0);
         }
         append_screen_sprite(3, inner_top, inner_right, inner_bottom, 0x80303030, 0);
         slot = &memory_card_state.card[0].entries[i];
@@ -113,7 +111,7 @@ s32 draw_save_slot_list(SaveMenu *menu) {
                 y += 0x10;
             }
         }
-        if (D_0015ED80 != 0) {
+        if (pal_mode != 0) {
             y += 0x24;
         } else {
             y += 0x1B;

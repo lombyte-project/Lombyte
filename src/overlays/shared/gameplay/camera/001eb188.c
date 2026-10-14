@@ -2,6 +2,8 @@
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 typedef struct {
     char pad09[0x86];
@@ -96,7 +98,6 @@ typedef struct {
 
 extern S_u D_L00_00166C80_c __asm__("D_L00_00166C80");
 extern char *FUN_L00_001eb1f8_u(int) __asm__("FUN_L00_001eb1f8");
-extern char D_0013E533[];
 extern char D_L00_00169110[];
 extern void FUN_001ed470(void);
 void backup_current_cam(void) __asm__("FUN_001ebc90");
@@ -169,18 +170,15 @@ typedef struct {
 
 extern Elem D_L00_00167150[];
 extern S D_L00_00166C80;
-extern char *D_L00_0015EF50;
-extern char D_L00_00166EF0[];
 extern int D_L00_0015EF4C;
-extern int D_L00_0015EF54;
 extern int D_L00_00169890[];
-extern float D_L00_0015EF40 __attribute__((sda));
 extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
 s32 FUN_L00_001ed230(s32 id);
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
 void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
+extern f32 D_L00_0015EF40_gp __asm__("D_L00_0015EF40") __attribute__((sda));
 void setup_level_cameras(void) {
     char *g = (char *)&D_L00_00166C80;
     char *g1;
@@ -192,7 +190,7 @@ void setup_level_cameras(void) {
 
     *(int *)(g + 0x394) = 0;
     *(int *)(g + 0x398) = 0;
-    D_L00_0015EF40 = 0.75f;
+    D_L00_0015EF40_gp = 0.75f;
     D_L00_0015EF4C = 0;
     for (k = 0; k < 48; k++) {
         D_L00_00167150[k].s8E = 0;
@@ -318,11 +316,9 @@ typedef struct {
     char *o;
 } C_1ed6a8;
 extern C_1ed6a8 D_166C80_1ed6a8 __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern int D_16C06C_1ed6a8 __asm__("D_L00_0016C06C") __attribute__((section(".data")));
 extern OvlQuad D_173E70_1ed6a8 __asm__("D_L00_00173E70") __attribute__((section(".data")));
 extern OvlQuad D_166DC0_1ed6a8 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern int D_16C058_1ed6a8[] __asm__("D_L00_0016C058") __attribute__((section(".data")));
-extern int D_15EF5C_1ed6a8 __asm__("D_L00_0015EF5C") __attribute__((sda));
 extern void f9a28_1ed6a8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float f9af0_1ed6a8(void *) __asm__("FUN_001f9af0");
 extern int fa6d0_1ed6a8(float) __asm__("FUN_001fa6d0");
@@ -331,6 +327,8 @@ extern void ff378_1ed6a8(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern void f9a10_1ed6a8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int f0d60_1ed6a8(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
+extern int D_L00_0016C06C __attribute__((section(".data")));
+extern int D_L00_0015EF5C_gp __asm__("D_L00_0015EF5C") __attribute__((sda));
 void FUN_L00_001ed6a8(OvlQuad *pos, float r) {
     OvlQuad d[1];
     float v[4] __attribute__((aligned(16)));
@@ -343,7 +341,7 @@ void FUN_L00_001ed6a8(OvlQuad *pos, float r) {
     v[2] = src[2];
     ((int *)v)[3] = 0;
     if (*(short *)(o + 0x8A) != 0) {
-        if (D_16C06C_1ed6a8 == 0) {
+        if (D_L00_0016C06C == 0) {
             qcopy(&D_166C80_1ed6a8.q, pos);
         }
         *(short *)(o + 0x8A) = 0;
@@ -355,7 +353,7 @@ void FUN_L00_001ed6a8(OvlQuad *pos, float r) {
     qcopy(pos, v);
     for (i = 0; i < n; i++) {
         f9a10_1ed6a8(pos, pos, d);
-        for (j = 0; j < 6 && f0d60_1ed6a8(pos, D_15EF5C_1ed6a8, ((int)hero.moby), r); j++) {
+        for (j = 0; j < 6 && f0d60_1ed6a8(pos, D_L00_0015EF5C_gp, ((int)hero.moby), r); j++) {
             qcopy(pos, &D_173E70_1ed6a8);
             {
                 char *t = D_166C80_1ed6a8.o;

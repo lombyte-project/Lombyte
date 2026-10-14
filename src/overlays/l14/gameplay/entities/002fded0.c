@@ -7,6 +7,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/data_labels.h"
 
 /* Spawns the effect pieces for a moby: two sparks, the ring of three and a final coloured one. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_002FF358), where it is exact; names translated to the US level program. */
@@ -534,10 +535,8 @@ typedef struct {
     u8 collected[1];
 } L14LevelState;
 extern L14LevelState D_L14_001BB930;
-extern s32 D_0014C190[][64];
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L14_001BABD0[];
-extern unsigned char D_0014C050[];
 extern char D_L14_00161FE8[];
 extern char *D_L14_001600EC;
 extern int D_L14_0015F5C4;
@@ -559,6 +558,7 @@ extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_L00_00262d38(int);
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
+extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Watcher moby update: gated by its collectable and trigger, primes a camera target, then turns its head toward the hero. */
 void FUN_L14_002fefe0(L14WatchMoby *m) {
     L14WatchScratch scratch;
@@ -576,7 +576,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
         }
         id = m->hB2;
         if (D_L14_001BB930.collected[(short)id] != 0 ||
-            (D_0014C190[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
+            (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
             mark_moby_for_removal(m);
             return;
         }
@@ -592,7 +592,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
     }
     case 1:
         if (d->b8 == 1 && is_point_inside_clip_volume(&hero.motion.pos, d->i40)) {
-            if (D_0014C050[m->bB0 + current_level_index * 16] != 0xFF) {
+            if (visited52[m->bB0 + current_level_index * 16] != 0xFF) {
                 char *t;
                 FUN_L00_002502a0(m->bB0);
                 t = D_L14_001600EC + d->i44 * 128;
@@ -617,7 +617,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
             if ((short)d->sub == 4) {
                 unlock_planet(0xF);
                 FUN_L00_00262d38(0xF);
-                D_0014C190[D_0015ED84_m][(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);
+                D_0014C190_257218[D_0015ED84_m][(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);
                 D_L14_001BABD0[(short)m->hB2 >> 5] |= 1 << (m->hB2 & 0x1F);
                 memcard_save_data(0, -1);
                 mark_moby_for_removal(m);

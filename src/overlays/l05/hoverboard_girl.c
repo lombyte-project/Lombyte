@@ -5,6 +5,7 @@
 #include "sda.h"
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/data_labels.h"
 
 /* Class 918 (hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.
@@ -83,7 +84,6 @@ typedef struct {
     f32 frame_scale;
     f32 movement_sampling_scale;
 } FrameTiming;
-extern u8 big_head_cheat_enabled __asm__("D_0015EDB0");
 extern s32 breast_growth_count __asm__("D_L05_00161ED0") __attribute__((sda));
 extern s32 game_mode __asm__("D_L05_0015F5C4");
 extern s32 game_mode_absolute __asm__("D_L05_0015F5C4");

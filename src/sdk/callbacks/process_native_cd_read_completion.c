@@ -2,8 +2,8 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/data_labels.h"
 
-extern s32 D_00131314[];
 extern void handle_cd_read_callback(s32 *descriptor) __asm__("FUN_001206d8");
 
 void process_native_cd_read_completion(void *descriptor) __asm__("FUN_00120788");

@@ -10,12 +10,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00258090.s", FUN_L08_00258090);
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *D_L08_001B2880_d __asm__("D_L08_001B2880") __attribute__((section(".data")));
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
+extern unsigned char *D_L08_001B2880 __attribute__((section(".data")));
 void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
     float v[4];
     float *vp = v;
@@ -60,7 +60,7 @@ void FUN_L08_00272cb8(float *pos, int kind, float *vec, float scale) {
         p[9] = func_001FA898_r(4.0f) + 0x60;
         p[3] = 0x44;
         p[1] = 3;
-        p[2] = D_L08_001B2880_d[k];
+        p[2] = D_L08_001B2880[k];
         *(OvlQuad *)(p + 0x10) = *(OvlQuad *)pos;
         add_vector_xyz(u, pos, w);
         *(OvlQuad *)(p + 0x20) = *(OvlQuad *)u;

@@ -8,10 +8,11 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
-extern char D_L05_0015F580[] MACRO_ADDR;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_001fa728(char *, float);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -74,11 +75,9 @@ struct Spark_c8e0 {
     } draw;
 };
 
-extern char D_L05_001671C0_c8e0[] __asm__("D_L05_001671C0");
 extern f32 D_L05_00161FC8_c8e0 __asm__("D_L05_00161FC8") __attribute__((sda));
 extern f32 D_L05_00161FD0 __attribute__((sda));
 extern f32 D_L05_00161FD4 __attribute__((sda));
-extern f32 D_0015ED60;
 extern f32 vector_distance_c8e0(void *, void *) __asm__("FUN_001f9b80");
 extern f32 distance_xyz_c8e0(void *, void *) __asm__("FUN_001f9b48");
 extern f32 int_to_float_c8e0(s32) __asm__("FUN_001fa6c0");
@@ -133,7 +132,7 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
     }
     /* Fakematch: the distance passes through a second variable; assigned directly,
        the compiler keeps it in $f0 and picks other registers for the fade below. */
-    camera_distance = vector_distance_c8e0(D_L05_001671C0_c8e0, &moby->pos);
+    camera_distance = vector_distance_c8e0(D_L05_001671C0, &moby->pos);
     distance = camera_distance;
     if (48.0f <= distance) {
         return;
@@ -169,8 +168,8 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
         debris->spawn_frame = moby->spawn_frame;
     }
     FUN_L01_002787a0_c8e0(moby);
-    scale_vector_xyz_c8e0(&vel, &moby->rot_row0, D_L05_00161FD0 * D_0015ED60);
-    vel.f[2] += D_L05_00161FD4 * D_0015ED60;
+    scale_vector_xyz_c8e0(&vel, &moby->rot_row0, D_L05_00161FD0 * frame_scale);
+    vel.f[2] += D_L05_00161FD4 * frame_scale;
     debris = spawn_debris_c8e0(frame_time_sq * 12.0f, moby, 0x5EE, &moby->pos, &moby->rot, scale_game_frames_c8e0(0x5A), 0,
                                &vel, D_L05_0015F580, D_L05_0015F580);
     if (debris != 0) {
@@ -192,7 +191,7 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
         }
         yaw = random_angle_c8e0();
         pitch = random_float_between_c8e0(0.34906584f, 1.5358897f);
-        build_spherical_offset_c8e0(&dir, random_float_between_c8e0(0.05f, 0.1f) * D_0015ED60, yaw, pitch);
+        build_spherical_offset_c8e0(&dir, random_float_between_c8e0(0.05f, 0.1f) * frame_scale, yaw, pitch);
         qcopy(&start, &tip);
         start.f[0] += random_float_c8e0(0.0f, 0.15f);
         start.f[1] += random_float_c8e0(0.0f, 0.15f);
@@ -204,7 +203,7 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
         spawn_trail_c8e0(&start, frames, size * 0.07f, size * 0.7f, 0x7F7F7F7F, 1, sign, &dir, 0.003f);
         dir.f[1] = 0.0f;
         dir.f[0] = 0.0f;
-        dir.f[2] = random_float_between_c8e0(0.01f, 0.05f) * D_0015ED60;
+        dir.f[2] = random_float_between_c8e0(0.01f, 0.05f) * frame_scale;
         speed = random_float_between_c8e0(60000.0f, 200000.0f);
         turn = random_integer_below_c8e0(2);
         spark = spawn_spark_c8e0(&tip, 0.3f, 1.0f, 1.02f, random_integer_below_c8e0(2) ? -turn : turn, &dir, speed, 0x407F7F7F);
@@ -232,11 +231,9 @@ typedef struct {
     u64 a, b, c, d;
 } Pk_31e468;
 
-extern char D_L05_001671C0_d[] __asm__("D_L05_001671C0") __attribute__((section(".data")));
 extern float D_L05_00215C70[4][4];
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern short D_L05_00161FC8_d __asm__("D_L05_00161FC8") __attribute__((sda));
-extern short D_L05_00161FCC_d __asm__("D_L05_00161FCC") __attribute__((sda));
 extern void FUN_001f9d20(void *, void *, void *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -246,6 +243,8 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 u64 get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
+extern short D_L05_00161FCC __attribute__((sda));
+extern char D_L05_001671C0_lui[] __asm__("D_L05_001671C0") __attribute__((section(".data")));
 void FUN_L05_0031cf58(char *m) {
     char *d = *(char **)(m + 0x78);
     Pk_31e468 pk;
@@ -272,12 +271,12 @@ void FUN_L05_0031cf58(char *m) {
     pk.uv[7] = 1.0f;
     scale_vector_xyz(t, m + 0xE0, *(float *)&D_L05_00161FC8_d);
     add_vector_xyz(M[3], m + 0x10, t);
-    subtract_vector_xyz(M[0], D_L05_001671C0_d, M[3]);
+    subtract_vector_xyz(M[0], D_L05_001671C0_lui, M[3]);
     normalize_vector_xyz(M[0], M[0], 1.0f);
     cross_vectors_xyz(M[1], M[0], up);
     normalize_vector_xyz(M[1], M[1], 1.0f);
     cross_vectors_xyz(M[2], M[1], M[0]);
-    scale_vector_xyz(w, M[0], *(float *)&D_L05_00161FCC_d);
+    scale_vector_xyz(w, M[0], *(float *)&D_L05_00161FCC);
     add_vector_xyz(M[3], M[3], w);
     if (((unsigned char *)d)[0x67] != 0 && random_integer_below(8) == 0) {
         *(int *)(d + 0x60) >>= 1;
@@ -522,7 +521,6 @@ typedef struct {
 } CameraPresetRow;
 
 extern CameraPresetRow *D_L05_0015EF50;
-extern s32 D_001413D0[];
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Resets the camera from its preset (row cam->preset of D_L05_0015EF50): distances,
@@ -761,7 +759,6 @@ f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E633_32B1F8[] __asm__("D_0013F5E0");
 extern Row_32B1F8 *D_L05_0015F050_32B1F8 __asm__("D_L05_0015EF50") __attribute__((section(".sdata")));
-extern float D_L05_00174378_32B1F8 __asm__("D_L05_00174278") __attribute__((section(".data")));
 extern float D_L05_00162268_32B1F8 __asm__("D_L05_001621A8") __attribute__((sda));
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -774,6 +771,7 @@ extern float fabs_32B1F8(float) __asm__("FUN_001f99c0");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void orbit_32B1F8(Camera_32B1F8 *) __asm__("FUN_L05_003298d8");
 
+extern float D_L05_00174278 __attribute__((section(".data")));
 void FUN_L05_00329ce8(Camera_32B1F8 *camera) {
     V_32B1F8 down;
     V_32B1F8 focus;
@@ -828,7 +826,7 @@ void FUN_L05_00329ce8(Camera_32B1F8 *camera) {
         fast_vec_scale(&step, &step, 0.16666667f);
         while (probe_step < 6) {
             if (collide_32B1F8(0.5f, &probe, 18, 0) != 0) {
-                spring->height = spring_32B1F8(spring->height, D_L05_00174378_32B1F8 - focus.z, &preset->vel, 0.05f, 0.2f, 0.0f);
+                spring->height = spring_32B1F8(spring->height, D_L05_00174278 - focus.z, &preset->vel, 0.05f, 0.2f, 0.0f);
                 break;
             }
             probe_step++;
@@ -916,12 +914,12 @@ void FUN_L05_00329ce8(Camera_32B1F8 *camera) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032BBF0), where it is exact; names translated to the US level program. */
 
-extern char *D_L05_00167204_d __asm__("D_L05_00167204") __attribute__((section(".data")));
 extern void FUN_002144d8(void *, void *);
 extern void FUN_L05_003296e0(Camera *);
 
+extern char *D_L05_00167204 __attribute__((section(".data")));
 void FUN_L05_0032a6e0(char *out) {
-    char *src = D_L05_00167204_d;
+    char *src = D_L05_00167204;
     qcopy(out + 0x30, src + 0x30);
     qcopy(out, src);
     qcopy(out + 0x10, src + 0x10);

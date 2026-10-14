@@ -1,5 +1,5 @@
 #include "types.h"
-extern s32 draw_callback3_count __asm__("D_0015F46C");
+#include "rnc/data_labels.h"
 extern void (*draw_callback3_funcs[])(s32) __asm__("D_0018DF40");
 extern s32 draw_callback3_args[] __asm__("D_0018E040");
 void dispatch_callback_list_2(void) __asm__("FUN_001f46c8");

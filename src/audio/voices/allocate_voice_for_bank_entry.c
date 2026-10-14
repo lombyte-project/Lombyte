@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 /* These offsets include the 0x70-byte pool header before each slot. */
 struct VoiceBankEntryWindow {
@@ -9,8 +10,6 @@ struct VoiceBankEntryWindow {
 };
 
 extern u8 D_0013E550[];
-extern s32 D_0015F5B4;
-extern u8 *level_sound_defs __asm__("D_0015F634");
 extern s32 allocate_voice_slot(u8 *, s32, s32, s32, s32) __asm__("func_0022D7F0");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 

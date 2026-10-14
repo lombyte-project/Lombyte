@@ -2,6 +2,9 @@
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
+#include "rnc/globals.h"
+#include "rnc/overlay/level_labels.h"
 
 #define NOT_SDA
 
@@ -9,8 +12,6 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/help_002284A8.c: func_L12_002284A8), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
-extern char D_L12_00179F40[];
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 
 int FUN_L12_00227f10(int a) {
@@ -50,10 +51,6 @@ typedef union {
     f32 f[4];
 } HopVec_235c08;
 
-extern f32 D_0015ED64_235c08 __asm__("D_0015ED64");
-extern f32 D_0015ED6C_235c08 __asm__("D_0015ED6C");
-extern f32 D_0015ED70_235c08 __asm__("D_0015ED70");
-extern f32 D_L12_0017C250_235c08[] __asm__("D_L12_0017C250");
 extern s32 FUN_001f96f8_235c08(s32) __asm__("FUN_001f96f8");
 extern float FUN_001f9dc8_235c08(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_235c08(float) __asm__("FUN_001f9de0");
@@ -75,10 +72,11 @@ extern void FUN_001f9c48_235c08(float *, float *, float) __asm__("FUN_001f9c48")
 extern void FUN_001f9a10_235c08(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00213e68_235c08(f32) __asm__("FUN_L00_00213e68");
 
-#define ED64 D_0015ED64_235c08
-#define ED6C D_0015ED6C_235c08
-#define ED70 D_0015ED70_235c08
+#define ED64 frame_scale_sq
+#define ED6C frame_time
+#define ED70 frame_time_sq
 
+extern f32 D_L12_0017C250[];
 void FUN_L12_00235c08(void) {
     HopVec_235c08 tmp;
     f32 x;
@@ -171,7 +169,7 @@ void FUN_L12_00235c08(void) {
         FUN_L00_002132b8_235c08(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.unk150, &hero.move_impulse);
         arg = ED70 * 20.0f;
-        if (hero.target_speed < D_L12_0017C250_235c08[0] * ED6C * 0.2f) {
+        if (hero.target_speed < D_L12_0017C250[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 d = hero.unk944;
                 if (hero.unk12E2)

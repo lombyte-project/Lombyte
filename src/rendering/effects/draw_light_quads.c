@@ -2,6 +2,7 @@
 
 #include "sda.h"
 #include "qcopy.h"
+#include "types.h"
 
 extern int effect_quad_count __asm__("D_0015F474") MACRO_ADDR;
 
@@ -17,7 +18,6 @@ typedef struct {
 } LightRec;
 
 extern FRow D_0018CAA0[4];
-extern LightRec D_0018E340_l[] __asm__("D_0018E340");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void FUN_001f9bf8(void *dst, void *src, float len);
 extern void func_001F7D30(void *, int, int);
@@ -31,6 +31,7 @@ extern void func_001F7D30(void *, int, int);
    needs its own counter, not the one the setup loop used. */
 void draw_light_quads(void) __asm__("FUN_001f4880");
 
+extern LightRec D_0018E340[];
 void draw_light_quads(void) {
     FRow m[4];
     int colors[4];
@@ -53,16 +54,16 @@ void draw_light_quads(void) {
         float s;
         int k;
 
-        qcopy(&dir, &D_0018E340_l[i].dir);
+        qcopy(&dir, &D_0018E340[i].dir);
         FUN_001f9bf8(&dir, &dir, 1.0f);
-        s = D_0018E340_l[i].pos.v[3];
+        s = D_0018E340[i].pos.v[3];
         for (k = 0; k < 4; k++) {
             float cx = D_0018CAA0[k].v[0];
             float vx = dir.v[0];
             float cy = D_0018CAA0[k].v[1];
             float d = cx * vx + cy * dir.v[1];
 
-            qcopy(&m[k], &D_0018E340_l[i].pos);
+            qcopy(&m[k], &D_0018E340[i].pos);
             m[k].v[0] += (cx - vx * d) * s;
             m[k].v[1] += (cy - dir.v[1] * d) * s;
             m[k].v[2] -= dir.v[2] * d * s;

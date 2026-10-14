@@ -6,9 +6,8 @@
 #include "rnc/gameplay/state/item_state.h"
 
 #include "rnc/input/pad_state.h"
-extern u8 D_0013E05A[];
+#include "rnc/data_labels.h"
 extern u8 D_0014BF08[];
-extern s32 D_0015EEA0;
 extern u8 D_001D4EC0[];
 extern void InitializeGlobalStateEntry(s32);
 extern void fade_to_black(s32) __asm__("func_001F4A58");

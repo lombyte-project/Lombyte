@@ -1,6 +1,5 @@
 #include "types.h"
 #include "rnc/ui/hud/hud_state.h"
-extern u32 level_root[] __asm__("D_0015EE4C");
 extern s32 func_0020B618();
 void load_compressed_hud_bank(s32 bank, s32 raw_size) __asm__("FUN_00202d10");
 

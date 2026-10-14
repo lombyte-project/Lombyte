@@ -1,11 +1,8 @@
 /* Ported from rac1-decomp (src/game/camera.c, func_001EDE50). */
 #include "sda.h"
 #include "qcopy.h"
-extern char cam_trans_state[] __asm__("D_001871B0");
-extern char occl_cam_state[] __asm__("D_0018C318");
-extern char camera_rows[] __asm__("D_00187290");
-extern char D_00186F40[];
-extern int D_0015F604 MACRO_ADDR;
+#include "types.h"
+#include "rnc/data_labels.h"
 extern int text_screen_active[] __asm__("D_001E6400");
 extern char D_001870A0[];
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
@@ -29,20 +26,21 @@ extern void func_001F9AD8(void *, void *, void *);
    D_0015EDB4 set, the matrix's third row as a cross product. */
 void update_camera(void) __asm__("FUN_001edaa8");
 
+extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
 void update_camera(void) {
     char *c;
     char *target;
     char *v;
     float m[16];
 
-    if (D_0015F604 == 5) {
+    if (game_mode == 5) {
         if (text_screen_active[0] != 0) {
             return;
         }
         *(short *)cam_trans_state = 0;
         cam_trans_state[2] = 0;
     }
-    c = D_00186F40;
+    c = preview_camera;
     (*(int *)(c + 0x398))++;
     advance_timed_camera_control();
     refresh_camera_control_flags();

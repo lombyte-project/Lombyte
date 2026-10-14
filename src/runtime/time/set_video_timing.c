@@ -2,37 +2,37 @@
 #include "sda.h"
 #include "rnc/globals.h"
 
-extern f32 D_0015ED60 MACRO_ADDR;
-extern f32 D_0015ED64 MACRO_ADDR;
-extern f32 D_0015ED68 MACRO_ADDR;
-extern f32 D_0015ED6C MACRO_ADDR;
-extern f32 D_0015ED70 MACRO_ADDR;
-extern f32 D_0015ED74 MACRO_ADDR;
 extern s32 D_0015ED78 MACRO_ADDR;
 extern f32 D_0015ED7C MACRO_ADDR;
 
 void set_video_timing(s32 arg0) __asm__("FUN_00214970");
 
+extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
+extern f32 frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
+extern f32 frame_scale_inv_macro __asm__("D_0015ED68") MACRO_ADDR;
+extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
+extern f32 frame_time_cube_macro __asm__("D_0015ED74") MACRO_ADDR;
 void set_video_timing(s32 arg0) {
     if (arg0 == 0) {
         pal_mode = 0;
-        D_0015ED60 = 1.0f;
-        D_0015ED64 = 1.0f;
-        D_0015ED68 = 1.0f;
-        D_0015ED6C = 0.016666668f;
-        D_0015ED70 = 0.00027777778f;
-        D_0015ED74 = 0.0000046296295f;
+        frame_scale_macro = 1.0f;
+        frame_scale_sq_macro = 1.0f;
+        frame_scale_inv_macro = 1.0f;
+        frame_time_macro = 0.016666668f;
+        frame_time_sq_macro = 0.00027777778f;
+        frame_time_cube_macro = 0.0000046296295f;
         D_0015ED78 = 5;
         D_0015ED7C = 0.016666668f;
         return;
     }
     pal_mode = 1;
-    D_0015ED60 = 1.2f;
-    D_0015ED64 = 1.44f;
-    D_0015ED68 = 0.8333333f;
-    D_0015ED6C = 0.020000001f;
-    D_0015ED70 = 0.00040000002f;
-    D_0015ED74 = 0.000008f;
+    frame_scale_macro = 1.2f;
+    frame_scale_sq_macro = 1.44f;
+    frame_scale_inv_macro = 0.8333333f;
+    frame_time_macro = 0.020000001f;
+    frame_time_sq_macro = 0.00040000002f;
+    frame_time_cube_macro = 0.000008f;
     D_0015ED78 = 6;
     D_0015ED7C = 0.02f;
 }

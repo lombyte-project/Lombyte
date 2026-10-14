@@ -1,10 +1,8 @@
 /* Ported from rac1-decomp (src/game/bmain.c, func_001E9808). */
 #include "sda.h"
 #include "rnc/storage/disc_table.h"
-extern int D_0015ED80 MACRO_ADDR;
+#include "types.h"
 extern int decode_mode __asm__("D_0015EED8") MACRO_ADDR;
-extern int D_0015F604 MACRO_ADDR;
-extern int D_0015EE88 MACRO_ADDR;
 extern char D_0013E550[];
 #include "rnc/storage/memory_card/memory_card_state.h"
 extern char D_001940C0[];
@@ -28,6 +26,9 @@ extern void hud_send_texture(int, int, int, int, int, int) __asm__("func_00200B1
    (func_0023A3B8) and reset the display state. */
 void start_level(int level) __asm__("FUN_001e9488");
 
+extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
+extern s32 game_mode __asm__("D_0015F604") MACRO_ADDR;
+extern s32 depth_buffer_address __asm__("D_0015EE88") MACRO_ADDR;
 void start_level(int level) {
     int a;
     int b;
@@ -36,7 +37,7 @@ void start_level(int level) {
     if (level < 0) {
         return;
     }
-    if (D_0015ED80 != 0) {
+    if (pal_mode != 0) {
         b = disc_table.start_movies_alt[level].sector;
         a = disc_table.start_movies_alt[level].size;
     } else {
@@ -49,7 +50,7 @@ void start_level(int level) {
     sound_stop_all_sounds();
     music_stop();
     fade_to_black(scale_game_frames(12));
-    D_0015F604 = 1;
+    game_mode = 1;
     FlushCache(0);
     sound_stop_all_sounds();
     music_stop();
@@ -70,10 +71,10 @@ void start_level(int level) {
     sceGsSyncV(0);
     FUN_00120558(0, 0);
     sceGsSyncVCallback(count_vsync);
-    hud_send_texture(0x1000000, D_0015EE88, 0x1B, 6, 6, 1);
+    hud_send_texture(0x1000000, depth_buffer_address, 0x1B, 6, 6, 1);
     decode_mode = 0;
     fade_to_black(4);
-    D_0015F604 = 0;
+    game_mode = 0;
     D_0013E550[0x6B] |= 0x10;
 }
 

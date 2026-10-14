@@ -1,10 +1,10 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 struct Vec3 {
     f32 x;
     f32 y;
     f32 z;
 };
-extern s32 D_001413D0[];
 extern struct Vec3 D_001CAA80;
 extern void FUN_0020d510(s32, f32 *);
 extern f32 FUN_001f9e90(f32, f32);

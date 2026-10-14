@@ -2,6 +2,7 @@
 #include "rnc/rendering/draw_config.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/data_labels.h"
 
 struct Locals {
     u8 pad0[0x30];
@@ -12,9 +13,6 @@ struct Locals {
 
 extern u8 D_00160E70[];
 extern u8 D_00160E80[];
-extern s32 D_00160EBC;
-extern u8 D_00187080[];
-extern u8 D_001E1300[];
 extern void FlushCache(s32);
 extern void WriteDmaChannel(u32, u32, u32);
 extern void func_001F21B0(void *, s32);
@@ -47,7 +45,7 @@ void draw_tfrag(void) {
     render_packet_cursor.addr = packet;
     func_001F21B8(D_00160E70, 1);
     FUN_001f9fc8(&L);
-    p = D_00187080;
+    p = camera_position;
     FUN_001f9a68(&L.v30, p, -1024.0f);
     L.v3C = 1.0f;
     FUN_001fa378(&L, p - 0x100, &L);

@@ -2,7 +2,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/ui/menus/menu_screen.h"
-extern u8 D_001DDD40[];
+#include "rnc/data_labels.h"
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern s32 do_gif_paging() __asm__("func_001F4398");
 extern s32 font_print_center(s32, s32, u64, s32, s32) __asm__("func_001F6AF0");

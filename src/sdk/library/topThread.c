@@ -1,6 +1,7 @@
 /* topThread t1: kernel thread dispatcher loop. */
 
 #include "types.h"
+#include "rnc/data_labels.h"
 
 typedef struct ThreadEntry {
     u8 type;
@@ -13,7 +14,6 @@ typedef struct TopThreadCtx {
     ThreadEntry entries[0x200];
 } TopThreadCtx;
 
-extern s32 D_00154500[];
 extern u8 D_001526E8[];
 
 extern s32 WaitSema(s32 sema);

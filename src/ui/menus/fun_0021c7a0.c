@@ -6,8 +6,8 @@
 #include "rnc/gameplay/state/usage_stats.h"
 
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/data_labels.h"
 extern struct UsageStats D_00141848;
-extern s32 D_0015EEA4;
 extern s32 scale_game_frames() __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 

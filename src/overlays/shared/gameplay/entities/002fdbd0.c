@@ -585,12 +585,12 @@ extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern short D_L06_00161FD4_d __asm__("D_L06_00161FD4") __attribute__((sda));
-extern short D_L06_00161FD8_d __asm__("D_L06_00161FD8") __attribute__((sda));
 extern void add_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
+extern short D_L06_00161FD4 __attribute__((sda));
+extern short D_L06_00161FD8 __attribute__((sda));
 void FUN_L06_002ff100(char *m) {
     char *d = *(char **)(m + 0x78);
     float v[4];
@@ -601,7 +601,7 @@ void FUN_L06_002ff100(char *m) {
     *(float *)(d + 0x218) = *(float *)(m + 0x18);
     for (i = 0; i < 16; i++) {
         float f = convert_integer_to_float(i) * 0.0625f - 0.5f;
-        f = f * (*(float *)&D_L06_00161FD4_d * 0.017453292f);
+        f = f * (*(float *)&D_L06_00161FD4 * 0.017453292f);
         v[0] = fast_cos(fast_add_rotations(f, *(float *)(m + 0x48))) * 0.2f;
         v[1] = fast_sin_c(fast_add_rotations(f, *(float *)(m + 0x48))) * 0.2f;
         v[2] = 0.15f;
@@ -613,7 +613,7 @@ void FUN_L06_002ff100(char *m) {
             *(float *)(d + 0x23C + i * 16) = 1.0f;
         }
     }
-    *(float *)(d + 0x21C) = (float)scale_game_frames(*(int *)&D_L06_00161FD8_d);
+    *(float *)(d + 0x21C) = (float)scale_game_frames(*(int *)&D_L06_00161FD8);
 }
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff2c8.s", FUN_L06_002ff2c8);
@@ -922,7 +922,6 @@ void FUN_L06_00300b90(struct Moby *moby) {
 #include "eetypes.h"
 extern unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void upd_a(unsigned char *) __asm__("FUN_L00_00250df8");
-extern float D_0015ED6C_300c60 __asm__("D_0015ED6C");
 extern float D_L06_00162080_300c60 __asm__("D_L06_00162080") __attribute__((sda));
 extern int ftoi_300c60(float) __asm__("FUN_001fa6d0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -948,9 +947,9 @@ unsigned char *FUN_L06_00300c60(char *m, float *pos, float *vel) {
         n[0x31] = 1;
         qcopy(n + 0x10, pp);
         qcopy(d, pv);
-        *(float *)(d + 0x10) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * D_0015ED6C_300c60;
-        *(float *)(d + 0x14) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * D_0015ED6C_300c60;
-        *(float *)(d + 0x18) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * D_0015ED6C_300c60;
+        *(float *)(d + 0x10) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
+        *(float *)(d + 0x14) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
+        *(float *)(d + 0x18) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
         n[0xBC] = ftoi_300c60(scale_time(random_float_between(60.0f, 120.0f)));
         upd_a(n);
     }

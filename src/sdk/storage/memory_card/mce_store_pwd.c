@@ -1,5 +1,5 @@
 #include "types.h"
-extern u8 D_00159FC0[];
+#include "rnc/data_labels.h"
 extern u32 strlen(const char *);
 extern void *memcpy(void *, const void *, u32);
 

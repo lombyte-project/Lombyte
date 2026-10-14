@@ -1,8 +1,8 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 struct Vec4 {
     f32 x, y, z, w;
 };
-extern s32 D_00160034;
 extern void func_001F9A28(void *, s32, void *);
 extern void func_001F9CF8(void *, void *, void *);
 s32 is_point_inside_clip_volume(s32 point, s32 volume_index) __asm__("FUN_00214720");

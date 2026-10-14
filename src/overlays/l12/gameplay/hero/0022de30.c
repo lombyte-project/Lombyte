@@ -7,6 +7,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/overlay/hero_tables.h"
+#include "rnc/data_labels.h"
 
 /* Per-frame update of the player state flags from the current state; same source as FUN_L11_0023c7a0 with states 2 and 7 and without the water check. */
 extern void FUN_001f9810(void *, int);
@@ -96,7 +97,6 @@ void FUN_L12_0022de30(void) {
 #include "qcopy.h"
 /* Same source as the exact FUN_L01_00231ae0, with a b12E2/i300 branch. */
 
-extern f32 D_0013F570_231ae0[] __asm__("D_0013F570");
 extern f32 D_0015ED60_231ae0 __asm__("D_0015ED60");
 extern f32 D_0015ED64_231ae0 __asm__("D_0015ED64");
 extern f32 D_0015ED6C_231ae0 __asm__("D_0015ED6C");
@@ -134,7 +134,7 @@ void FUN_L12_00232b18(void) {
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
         FUN_001f9b80_231ae0(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
-        f32 *q = D_0013F570_231ae0;
+        f32 *q = D_0013F570;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
         approach_value_231ae0(b->unk228, D_0015ED60_231ae0 * 0.02f, q);
         approach_value_231ae0(b->unk22C, D_0015ED60_231ae0 * 0.02f, q + 1);
@@ -592,7 +592,6 @@ extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L00_002a9b80(struct MobyView *, void *);
 extern s32 FUN_L00_002a96f8(struct MobyView *, void *, f32, f32, s32, f32, f32, f32);
 extern void FUN_L00_002335c8(void *, f32, f32, f32);
-extern f32 D_L00_001C3CF0[];
 extern s32 FUN_L00_002598b0(struct MobyView *, f32, void *, s32, f32, f32, s32, s32, s32);
 extern f32 FUN_001f9ab0(void *, void *);
 struct PlayerSpeedTuning {
@@ -631,8 +630,6 @@ extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN
 extern s32 FUN_L00_0025d7a0(void *, s32, s32, s32);
 extern f32 FUN_001f96b0(f32);
 extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
-extern u8 item_defs[] __asm__("D_L00_00179AC0");
-extern struct HeroAnimRow D_L00_00179AC0_t[] __asm__("D_L00_00179AC0");
 extern void FUN_L00_00271b18(void *, void *, f32);
 extern void FUN_L00_00215340(void);
 extern void FUN_L00_00215ef8(void);

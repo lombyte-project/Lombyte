@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 struct Globals_0015FA00 {
     u8 pad_0[0x20];
@@ -22,7 +23,6 @@ extern struct Globals_0015FA00 *hud_bank_main __asm__("D_0015FA00");
 extern s32 D_0015FA04 __attribute__((sda));
 extern s32 hud_bank_end __asm__("D_0015FA08");
 extern s32 hud_bank_aux __asm__("D_0015FA0C");
-extern u8 hud_chan_slots[] __asm__("D_00199B60");
 extern s32 func_001F9810();
 extern s32 hud_heap_alloc() __asm__("func_001FF288");
 extern s32 queue_animation_update() __asm__("func_001FF308");

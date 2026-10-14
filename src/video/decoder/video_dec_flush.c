@@ -1,11 +1,11 @@
 #include "types.h"
 #include "rnc/video/decoder/video_dec.h"
+#include "rnc/data_labels.h"
 
 struct Code4 {
     u8 b[4];
 };
 extern struct Code4 D_00161218[];
-extern s32 D_0016120C;
 extern void video_dec_begin_put(struct VideoDec *, u32 *, s32 *, u32 *,
                                 s32 *) __asm__("func_0023CBF0");
 extern s32 cpy2area(u32, s32, u32, s32, void *, s32, s32,
@@ -28,7 +28,7 @@ s32 video_dec_flush(struct VideoDec *vd) {
     }
     r = cpy2area((p0 & 0x0FFFFFFF) | 0x20000000, n0, (p1 & 0x0FFFFFFF) | 0x20000000,
                                  n1, &code, 4, 0, 0);
-    video_dec_end_put(D_0016120C + 0xD9048, r);
+    video_dec_end_put(decoder_state + 0xD9048, r);
     vi_buf_flush(&vd->vi_buf);
     if (vd->state == 0) {
         vd->state = 2;

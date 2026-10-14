@@ -96,10 +96,8 @@ typedef struct {
 } Entry70_2215c8;
 
 extern struct PadState D_0013C940_2215c8 __asm__("D_0013C940");
-extern Entry70_2215c8 D_L00_001798F0_2215c8[] __asm__("D_L00_001798F0");
 extern s32 D_L00_0015F5C4_2215c8 __asm__("D_L00_0015F5C4");
 extern u8 D_0013D4E2_2215c8 __asm__("D_0013D4E2") __attribute__((section(".data")));
-extern f32 D_0015ED6C_2215c8 __asm__("D_0015ED6C");
 
 extern void FUN_L00_002165b8_2215c8(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_2215c8(s32 *) __asm__("FUN_001f9740");
@@ -120,6 +118,7 @@ extern void FUN_L00_00221b68_2215c8(void) __asm__("FUN_L00_00221b68");
 extern void FUN_L00_00233660_2215c8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_2215c8(void) __asm__("FUN_L00_00211250");
 
+extern Entry70_2215c8 D_L00_001798F0[];
 void FUN_L00_002215c8(void) {
     Vec4 sum;
     Vec4 d;
@@ -202,7 +201,7 @@ void FUN_L00_002215c8(void) {
         fast_dec_timer(&hero.unk1636);
     }
     for (i = 0; i < 5; i++) {
-        FUN_001f9740_2215c8(&D_L00_001798F0_2215c8[i].w0);
+        FUN_001f9740_2215c8(&D_L00_001798F0[i].w0);
     }
     hero.unk22B8 = 9999.0f;
     if (hero.air_frames.s != 0 && gravity_z(&hero.motion.velocity) < 0.0f) {
@@ -219,7 +218,7 @@ void FUN_L00_002215c8(void) {
             add_vector_xyz(&sum, &sum, &d);
         }
         scale_vector_xyz(&sum, &sum, 1.0f / (f32)n8);
-        if (FUN_001f9af0_2215c8(&sum) < D_0015ED6C_2215c8) {
+        if (FUN_001f9af0_2215c8(&sum) < frame_time) {
             hero.unk1E2++;
             goto skip;
         }
@@ -587,7 +586,6 @@ typedef struct {
 } __attribute__((aligned(16))) V4_222B80;
 
 extern char D_L00_0015F6E8[4] __attribute__((sda));
-extern char D_L00_0017BF20_e[] __asm__("D_L00_0017BF20");
 extern char D_L00_0017BF60_e[] __asm__("D_L00_0017BF60");
 extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
 extern T2C_222B80 attack_records[] __asm__("D_L00_0017BC28");
@@ -606,7 +604,6 @@ extern float dot_vectors_xyz(void *a, void *b);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
-extern int D_0015ED80;
 extern int D_0015EEA4;
 extern int D_L00_001612D0;
 extern int D_L00_001612D8;
@@ -661,6 +658,7 @@ extern char D_00141848[];
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
+extern char D_L00_0017BF20[];
 int hero_set_state(int a, int b) {
     int old2088;
     char *moby;
@@ -2002,7 +2000,7 @@ int hero_set_state(int a, int b) {
                 u->unk3DC = 26.0f;
                 u->unk3D8 = 0.0f;
                 u->unk3E0 = scale_game_frames(0x2D);
-                u->unk3E4 = D_L00_0017BF20_e;
+                u->unk3E4 = D_L00_0017BF20;
                 u->unk4AE = 1;
             } else if (u->state.current == 0xF) {
                 u->unk430 = 1.9f;
@@ -2020,7 +2018,7 @@ int hero_set_state(int a, int b) {
                 u->unk4A6 = scale_game_frames(0x55);
                 u->unk1B0 = scale_game_frames(0x46);
                 u->unk41C = 1;
-                if (D_0015ED80 != 0) {
+                if (pal_mode != 0) {
                     u->unk3D0 = scale_game_frames(0x22);
                 } else {
                     u->unk3D0 = scale_game_frames(0x23);
@@ -3159,9 +3157,6 @@ typedef struct {
     s32 i20A0;
 } G_227d40;
 extern G_227d40 D_0013F350_227d40 __asm__("D_0013F350") __attribute__((section(".data")));
-extern f32 D_0015ED60_227d40 __asm__("D_0015ED60");
-extern f32 D_0015ED64_227d40 __asm__("D_0015ED64");
-extern f32 D_0015ED6C_227d40 __asm__("D_0015ED6C");
 s32 FUN_001f96f8_227d40(s32) __asm__("FUN_001f96f8");
 f32 FUN_001f99c0_227d40(f32) __asm__("FUN_001f99c0");
 void FUN_L00_0025b8c0_227d40(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
@@ -3170,11 +3165,11 @@ void approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 void FUN_L00_00227d40(void) {
     if (G.i198 > FUN_001f96f8_227d40(10) || G.f690 < 0.0f || G.i2094 == 0x11 || G.i20A0 == 0x11) {
         if (G.i2084 == 0x36) {
-            FUN_L00_0025b8c0_227d40(&G.f690, &G.f8FC, 0.0f, D_0015ED64_227d40 * 0.03f,
-                                    D_0015ED64_227d40 * 0.3f, D_0015ED6C_227d40 * 1.5f);
+            FUN_L00_0025b8c0_227d40(&G.f690, &G.f8FC, 0.0f, frame_scale_sq * 0.03f,
+                                    frame_scale_sq * 0.3f, frame_time * 1.5f);
             G.f694 = 0.0f;
         } else {
-            G.f694 -= D_0015ED64_227d40 * 0.005f * G.f690 + D_0015ED60_227d40 * 0.045f * G.f694;
+            G.f694 -= frame_scale_sq * 0.005f * G.f690 + frame_scale * 0.045f * G.f694;
             if (FUN_001f99c0_227d40(G.f690) < 0.001f && G.f694 < 0.0001f)
                 G.f694 = 0.0f;
         }
@@ -3183,14 +3178,14 @@ void FUN_L00_00227d40(void) {
     if (G.i2084 == 0x36 && 0.0f < G.f690) {
         if (0.0f < G.f694)
             G.f694 = 0.0f;
-        approach_value(&G.f690, 0.0f, D_0015ED6C_227d40 * 0.7f);
+        approach_value(&G.f690, 0.0f, frame_time * 0.7f);
     }
     if (G.i2084 != 0x7F) {
         f32 h = G.f2F0;
         if (G.i208C == 0x16)
             h = G.f8A0;
-        FUN_L00_0025b8c0_227d40(&G.f69C, &G.f6A0, h, D_0015ED64_227d40 * 0.027f,
-                                D_0015ED64_227d40 * 0.3f, 0.0f);
+        FUN_L00_0025b8c0_227d40(&G.f69C, &G.f6A0, h, frame_scale_sq * 0.027f,
+                                frame_scale_sq * 0.3f, 0.0f);
     }
     G.f88 = G.f69C + -0.12f + G.f690;
 }
@@ -3289,10 +3284,8 @@ typedef struct {
 } Rec2C_228770;
 extern Hero_228770 D_0013F450_h228770 __asm__("D_0013F350");
 extern Pad_228770 D_0013CA40_p228770 __asm__("D_0013C940");
-extern int D_00141760_228770 __asm__("D_00141660") __attribute__((section(".data")));
 extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern Rec2C_228770 D_L00_0017BD28_228770[] __asm__("D_L00_0017BC28");
-extern int D_L00_0015F674_227fa0 __asm__("D_L00_0015F674") __attribute__((sda));
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
 extern int f_fun_l00_00211360_227fa0(char *) __asm__("FUN_L00_00211360");
@@ -3313,6 +3306,8 @@ extern int f_fun_001f9740_227fa0(int *) __asm__("FUN_001f9740");
 extern int f_fun_001f96f8_227fa0(int) __asm__("FUN_001f96f8");
 extern int f_fun_001fa6d0_227fa0(float) __asm__("FUN_001fa6d0");
 
+extern int D_L00_0015F674 __attribute__((sda));
+extern s32 D_00141660 __attribute__((section(".data")));
 int FUN_L00_00227fa0(void) {
     int out[3];
     int start;
@@ -3484,7 +3479,7 @@ int FUN_L00_00227fa0(void) {
         if (!f_fun_l00_00266d60_227fa0(mask, f_fun_001f96f8_227fa0(7), 0)) {
             break;
         }
-        if (D_00141760_228770 != 0x1F) {
+        if (D_00141660 != 0x1F) {
             break;
         }
         if (D_0013F450_h228770.f1090->oclass != 0x1E3) {
@@ -3591,8 +3586,8 @@ int FUN_L00_00227fa0(void) {
     if (D_0013F450_h228770.f198 == start) {
         if (f_fun_l00_0020d498_227fa0(3) == 3 && D_0013F450_h228770.f2084 != 0x81 && (D_0013F450_h228770.f308 == 0 || item_available[0x1C] == 0)
             && D_0013F450_h228770.f22D8 == 0) {
-            f_fun_001f9740_227fa0(&D_L00_0015F674_227fa0);
-            if (D_L00_0015F674_227fa0 != 0) {
+            f_fun_001f9740_227fa0(&D_L00_0015F674);
+            if (D_L00_0015F674 != 0) {
                 if (D_0013F450_h228770.f208C < 2U || D_0013F450_h228770.f208C == 0xC
                     || ((D_0013F450_h228770.f208C == 2 || D_0013F450_h228770.f208C == 4) && D_0013F450_h228770.f300 != 0)) {
                     if ((D_0013CA40_p228770.f1A0 & 8) && (D_0013CA40_p228770.f1A4 & 8)) {
@@ -3601,7 +3596,7 @@ int FUN_L00_00227fa0(void) {
                 }
             }
             if ((D_0013CA40_p228770.f1A4 & 8) && D_0013F450_h228770.f2084 != 0x81) {
-                D_L00_0015F674_227fa0 = f_fun_001f96f8_227fa0(0x1E);
+                D_L00_0015F674 = f_fun_001f96f8_227fa0(0x1E);
             }
         } else if (D_0013F450_h228770.f2084 != 0x13 && D_0013F450_h228770.f2084 != 0x81 && D_0013F450_h228770.f2084 != 0x15 && D_0013F450_h228770.f2084 != 0x16) {
             D_0013F450_h228770.f22CA = 0;

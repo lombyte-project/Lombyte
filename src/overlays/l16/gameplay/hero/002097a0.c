@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
+#include "rnc/data_labels.h"
 
 #define NOT_SDA
 
@@ -141,7 +142,6 @@ void FUN_L16_002097a0(void) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_0020FEC8), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_0025f730(void *a, float x);
@@ -163,7 +163,6 @@ typedef union {
 } V_u;
 extern u8 D_L16_00174240[] __attribute__((section(".data")));
 extern u8 D_L16_00174260[] __attribute__((section(".data")));
-extern s32 D_0015ED84_c __asm__("D_0015ED84");
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void FUN_L00_002126b8_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
@@ -241,7 +240,7 @@ void FUN_L16_0020ffb0(void) {
             goto d1;
         }
         r = coll_sound_class();
-        if (D_0015ED84_c == 1 || D_0015ED84_c == 0x12) {
+        if (current_level_index == 1 || current_level_index == 0x12) {
             r = 3;
         }
         hero.unk12ED = r;
@@ -371,7 +370,6 @@ typedef union {
     u128_2133a8 q;
     f32 f[4];
 } V_2133a8;
-extern u128_2133a8 coll_2133a8[] __asm__("D_L16_00174270") __attribute__((section(".data")));
 extern void vzero_2133a8(void *) __asm__("FUN_001f99f8");
 extern void f2347c0_2133a8(void) __asm__("FUN_L00_002347c0");
 extern void f233660_2133a8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
@@ -384,6 +382,7 @@ extern s32 coll1_2133a8(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 coll2_2133a8(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 coll3_2133a8(void *, f32) __asm__("FUN_L00_001f3170");
 extern void vscl_2133a8(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern u128_2133a8 D_L16_00174270[] __attribute__((section(".data")));
 s32 FUN_L16_00210b60(s32 mode) {
     V_2133a8 old;
     V_2133a8 v;
@@ -444,7 +443,7 @@ s32 FUN_L16_00210b60(s32 mode) {
             if (!(a | coll3_2133a8(&hero.motion.pos.q, hero.unk234)))
                 break;
         }
-        c = coll_2133a8;
+        c = D_L16_00174270;
         qcopy(&hero.motion.pos.q, c);
         qcopy(&hero.unk200.q, c + 1);
         qcopy(&hero.unk210.q, c - 1);
@@ -526,7 +525,6 @@ typedef struct {
 } L16MovementPlayer;
 
 extern char *D_L16_00174258[];
-extern char D_0013E533[];
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");

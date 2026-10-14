@@ -10,14 +10,14 @@
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/state/level_state.h"
+#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Level main loop (shared by every level): clears the level's work area, sets up the level and counts the visit
    and play time of the planet, then runs one frame per pass, dispatching on the game mode, until the level asks to
    quit. */
 /* Ported from rac1-decomp (src/overlays/shared/map_002465F8.c: func_L00_002465F8), where it is exact; names translated to the US level program. */
 
-extern char level_bss_end[] __asm__("D_L00_00165FB0");
-extern char level_bss_start[] __asm__("D_L00_00161E00");
 extern char level_bss_clear_args[] __asm__("D_L00_0015FCB0");
 extern char level_frame_callback_args[] __asm__("D_L00_0015FCB8");
 extern unsigned char D_0013D390 NOT_SDA;
@@ -25,15 +25,8 @@ extern struct UsageStat level_usage[] __asm__("D_00141680");
 extern short D_L00_0016C8B0 NOT_SDA;
 extern int D_0015EEA4;
 extern long frm_clock_time __asm__("D_0015ED40");
-extern int D_L00_0015F3F8;
-extern int D_L00_0015F570;
-extern int D_L00_0015F5AC;
 /* lower alias of D_L00_0015F5AC: retail stores the float view with lui, the int view through $gp */
 extern float D_L00_0015F5A8_e[] __asm__("D_L00_0015F5A8") MACRO_ADDR;
-extern int D_L00_0015F5C4_m __asm__("D_L00_0015F5C4");
-extern int D_L00_0015F5C8;
-extern float D_L00_0015F5D0;
-extern int D_L00_0015F5D8_m __asm__("D_L00_0015F5D8");
 
 extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern int FUN_001e93b0(void *);
@@ -98,6 +91,8 @@ extern void vu1_send_chain(void) __asm__("FUN_L00_002a08c8");
 extern void vu1_sync_chain(int) __asm__("FUN_L00_002a09d8");
 extern void FUN_00226e08(void);
 
+extern char D_L00_00165FB0[];
+extern char D_L00_00161E00[];
 void FUN_L00_00245c28(void) {
     int i;
     int v;
@@ -106,17 +101,17 @@ void FUN_L00_00245c28(void) {
     int one;
     int per;
 
-    if (((level_bss_end - level_bss_start) & 0xF) == 0 && ((unsigned int)level_bss_start & 0xF) == 0) {
-        clear_blocks_16(level_bss_start, level_bss_end - level_bss_start);
+    if (((D_L00_00165FB0 - D_L00_00161E00) & 0xF) == 0 && ((unsigned int)D_L00_00161E00 & 0xF) == 0) {
+        clear_blocks_16(D_L00_00161E00, D_L00_00165FB0 - D_L00_00161E00);
     } else {
         FUN_001e93b0(level_bss_clear_args);
-        for (i = 0; i < level_bss_end - level_bss_start; i++) {
-            level_bss_start[i] = 0;
+        for (i = 0; i < D_L00_00165FB0 - D_L00_00161E00; i++) {
+            D_L00_00161E00[i] = 0;
         }
     }
     FUN_00232d00();
-    D_L00_0015F5C8 = 0;
-    D_L00_0015F5C4_m = 6;
+    level_timer = 0;
+    D_L00_0015F5C4 = 6;
     one = 1;
     FUN_L00_0023d028();
     music_stream_state.primary.track = 0;
@@ -161,14 +156,14 @@ void FUN_L00_00245c28(void) {
         frm_clock_time += (unsigned int)*(volatile int *)0x10000800;
         *(volatile int *)0x10000800 = 0;
         FUN_L00_001f6d70();
-        D_L00_0015F5D8_m = 0;
+        D_L00_0015F5D8 = 0;
         vu1_send_chain();
         swap_render_buffer_chain();
         put_draw_buffer_small();
         append_palette_transfer_packet();
         put_draw_buffer_large();
         snd_flush_sound_commands();
-        v = D_L00_0015F5C4_m;
+        v = D_L00_0015F5C4;
         switch (v) {
         case -1:
             register_audio_stream_callback();
@@ -214,12 +209,12 @@ void FUN_L00_00245c28(void) {
             FUN_L00_001f8f78();
             break;
         }
-        if (D_L00_0015F5C4_m != v) {
-            D_L00_0015F5C8 = 0;
+        if (D_L00_0015F5C4 != v) {
+            level_timer = 0;
         } else {
-            D_L00_0015F5C8 = D_L00_0015F5C8 + 1;
+            level_timer = level_timer + 1;
         }
-        if (D_L00_0015F5D8_m != 0) {
+        if (D_L00_0015F5D8 != 0) {
             vu1_sync_chain(1);
             vu1_init_chain();
             continue;
@@ -250,11 +245,11 @@ void FUN_L00_00245c28(void) {
         FUN_001e93e8(level_frame_callback_args, 0x10);
         vu1_sync_chain(1);
         D_L00_0015F5D0 = convert_integer_to_float(*(volatile int *)0x10000800) / (pal_mode != 0 ? 11520.0f : 9600.0f);
-        if (D_L00_0015F5C4_m == 0 && g_debug_menu.profiler_mode != 0) {
+        if (D_L00_0015F5C4 == 0 && g_debug_menu.profiler_mode != 0) {
             FUN_001e93e8();
         }
         if (hero.unk20B1 == 0) {
-            int mode = D_L00_0015F5C4_m;
+            int mode = D_L00_0015F5C4;
 
             if (mode == 0 || mode == 2) {
                 int lim = 9600;
@@ -283,7 +278,7 @@ void FUN_L00_00245c28(void) {
             }
         }
         reset_gs_registers_pr();
-        if (D_L00_0015F5C4_m == 0 && hero.unk20B1 != 0) {
+        if (D_L00_0015F5C4 == 0 && hero.unk20B1 != 0) {
             quit = 1;
             full = 1;
         }
@@ -294,7 +289,7 @@ void FUN_L00_00245c28(void) {
             sound_stop_all_sounds();
             music_stop();
             FUN_L00_00244110(0, full);
-            D_L00_0015F5C4_m = 0;
+            D_L00_0015F5C4 = 0;
             music_start_track(music_stream_state.primary.track, 1, 0x400);
             init_hud();
         }

@@ -1,7 +1,6 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
-extern s32 draw_enable_mask __asm__("D_0015F434");
-extern s32 space_load_in_progress __asm__("D_0015F618");
 extern void draw_debug_profiler() __asm__("func_001F39D0");
 extern void append_gif_transfer_packet() __asm__("func_001FB368");
 

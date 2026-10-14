@@ -1,11 +1,8 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 struct unaligned64 {
     u64 v;
 } __attribute__((packed));
-extern s32 D_001312D0[];
-extern u32 D_001312EC[];
-extern u8 D_001324C0[];
-extern u8 D_00132D08[];
 extern u8 D_00152FF0[];
 extern u8 D_00153010[];
 extern s32 SignalSema();

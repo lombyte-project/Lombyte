@@ -5,6 +5,8 @@
 
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/level_labels.h"
 typedef union {
     u128 q_002acbf0;
     f32 f[4];
@@ -27,8 +29,6 @@ typedef struct {
     u8 pad0[0x78];
     PV_2acbf0_002acbf0 *pv;
 } M_2acbf0_002acbf0;
-extern s32 D_L00_0015F5C4_002acbf0 __asm__("D_L00_0015F5C4");
-extern s32 D_L00_0015F5CC_002acbf0 __asm__("D_L00_0015F5CC");
 extern f32 sqrt_2acbf0(f32) __asm__("FUN_001f9988");
 extern f32 atan2_2acbf0(f32, f32) __asm__("FUN_001f9e90");
 extern f32 appr_2acbf0(f32, f32) __asm__("FUN_001fa580");
@@ -50,7 +50,7 @@ void FUN_L00_002c31c0(M_2acbf0_002acbf0 *m) {
     s32 i;
     s32 odd;
     f32 a, t;
-    if (D_L00_0015F5C4_002acbf0 == 2) {
+    if (D_L00_0015F5C4 == 2) {
         return;
     }
     for (i = 0; i < 2; i++) {
@@ -61,7 +61,7 @@ void FUN_L00_002c31c0(M_2acbf0_002acbf0 *m) {
         rot.f[2] = 0.0f;
         rot.f[3] = 0.0f;
         rz.f[0] = 0.0f;
-        t = FUN_001fa6c0_002acbf0(D_L00_0015F5CC_002acbf0 % FUN_001f96f8_002acbf0(180));
+        t = FUN_001fa6c0_002acbf0(D_L00_0015F5CC % FUN_001f96f8_002acbf0(180));
         {
             f32 d = i2f_2acbf0(180.0f);
             f32 r;

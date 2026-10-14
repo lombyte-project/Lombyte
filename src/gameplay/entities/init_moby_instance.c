@@ -1,5 +1,6 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
+#include "rnc/data_labels.h"
 
 typedef struct {
     char pad00[0x10];
@@ -71,8 +72,6 @@ typedef struct {
     char padBE[0x42];
 } MobyI;
 
-extern s32 D_001B3580[];
-extern char *D_0015FF18;
 extern void fill_transfer_words() __asm__("func_001F97E8");
 extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 
@@ -105,7 +104,7 @@ void init_moby_instance(void *moby_mem, int oClass) {
     m->unkA6 = oClass;
     m->unk38 = 0x40404000000000L;
     m->unk36 = 0x7F80;
-    idx = ((char *)m - (char *)D_0015FF18) >> 8;
+    idx = ((char *)m - (char *)resident_object_pool) >> 8;
     m->unkA8 = idx << 16;
     m->unkAC = idx;
     m->unk7E = 0;

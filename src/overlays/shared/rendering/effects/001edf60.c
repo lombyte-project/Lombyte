@@ -4,6 +4,7 @@
 #include "rnc/overlay/quad.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/level_globals.h"
 typedef struct {
     OvlQuad pos;
     float f10;
@@ -20,7 +21,6 @@ typedef struct {
     E1edf60 e[4];
     int count;
 } T1edf60;
-extern int D_L00_0015F5C4;
 extern T1edf60 D_L00_00169040;
 void FUN_L00_001edf60(int a, int b, OvlQuad *pos, int kind, int mode, float x, float y, float z) {
     E1edf60 *e;

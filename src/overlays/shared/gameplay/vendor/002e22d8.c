@@ -12,6 +12,7 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/data_labels.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E3740), where it is exact; names translated to the US level program. */
 
@@ -36,7 +37,6 @@ extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int FUN_L16_002e2e88(char *, char *);
 extern int fast_dec_timer(int*) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char D_001413F4[];
 extern short D_L16_00161D7C __attribute__((sda));
 extern short D_L16_00161D80;
 extern short D_L16_00161D88 __attribute__((sda));
@@ -244,13 +244,9 @@ void FUN_L16_002e22d8(char *m) {
 }
 #include "qcopy.h"
 
-extern float D_L16_00161D78_sda __asm__("D_L16_00161D78") __attribute__((sda));
 extern char *D_L16_0015FFD8_sda __asm__("D_L16_0015FFD8");
-extern u8 D_001413F4[];
-extern s32 D_001413DC[];
 extern char *D_L16_001B0930[];
 extern u8 D_0013E550[];
-extern float D_0015ED6C_e __asm__("D_0015ED6C");
 
 typedef struct {
     char pad[0x74];
@@ -276,6 +272,7 @@ typedef struct {
     float amount;
 } L16Hit_e;
 
+extern float D_L16_00161D78_gp __asm__("D_L16_00161D78") __attribute__((sda));
 /* Update interaction ownership, damage responses and pursuit tracking. */
 void FUN_L16_002e2b60(struct Moby *m) {
     L16Hit_e hit;
@@ -284,7 +281,7 @@ void FUN_L16_002e2b60(struct Moby *m) {
     char *record;
     int response;
 
-    m->scale = m->pclass->scale * D_L16_00161D78_sda;
+    m->scale = m->pclass->scale * D_L16_00161D78_gp;
     if ((unsigned int)(m->state - 2) < 4) {
         if (!FUN_L00_0028d8c0(m, *(int *)(d + 0x190)))
             *(int *)(d + 0x190) = FUN_0022da68_i(0, 4, m);
@@ -310,7 +307,7 @@ void FUN_L16_002e2b60(struct Moby *m) {
                     FUN_0022da68_i(3, 0, m);
                     *(unsigned char *)(d + 0x67) = 120;
                     *(float *)(d + 0x188) =
-                        randf_sym(30.0f, 50.0f) * DEG_TO_RAD * D_0015ED6C_e;
+                        randf_sym(30.0f, 50.0f) * DEG_TO_RAD * frame_time;
                 }
             } else {
                 FUN_0022da68_i(3, 0, m);
@@ -352,8 +349,6 @@ void FUN_L16_002e2b60(struct Moby *m) {
 /* Advance a path segment and ease the remaining travel distance. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E42F0), where it is exact; names translated to the US level program. */
 
-extern float D_0015ED6C_q __asm__("D_0015ED6C");
-extern float D_L16_00161D84_q __asm__("D_L16_00161D84") __attribute__((sda));
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_0015ED70_u __asm__("D_0015ED70");
 extern short D_L16_00161E40_q __asm__("D_L16_00161E40");
@@ -364,6 +359,7 @@ extern float func_001F9D10_path42_q(void *, void *) __asm__("FUN_001f9b48");
 extern float func_00214D88_path42_q(float, float, float, float, float *,
                                     float *) __asm__("FUN_00213f38");
 
+extern float D_L16_00161D84 __attribute__((sda));
 int FUN_L16_002e2e88(char *m, char *path) {
     char *d = *(char **)(m + 0x78);
     float progress = (float)*(int *)(d + 0x168) + *(float *)(d + 0x16C) +
@@ -380,8 +376,8 @@ int FUN_L16_002e2e88(char *m, char *path) {
         *(float *)(d + 0x194) = *(float *)(m + 0x18);
         speed = 0.0f;
         distance = func_001F9D10_path42_q(position, path + (*(int *)path << 4));
-        rate = D_L16_00161D84_q * *(float *)&D_0015ED70_u;
-        func_00214D88_path42_q(distance, rate, rate, *(float *)&D_L16_00161D80_q * D_0015ED6C_q,
+        rate = D_L16_00161D84 * *(float *)&D_0015ED70_u;
+        func_00214D88_path42_q(distance, rate, rate, *(float *)&D_L16_00161D80_q * frame_time,
                                &speed, (float *)(d + 0x170));
         return 0;
     }
@@ -436,14 +432,14 @@ void FUN_L16_002e3050(char *moby) {
 
 extern int FUN_L00_0028d8c0(void *, int);
 int FUN_L16_002e5cd0(int idx);
-extern short D_L16_00161E00_d __asm__("D_L16_00161E00") __attribute__((sda));
-extern short D_L16_00161E04_d __asm__("D_L16_00161E04") __attribute__((sda));
-extern short D_L16_00161E08_d __asm__("D_L16_00161E08") __attribute__((sda));
 extern void FUN_L16_002e58d8_u(void) __asm__("FUN_L16_002e58d8");
 extern void FUN_L16_002e5d30_c(int) __asm__("FUN_L16_002e5d30");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int func_0022ED80_6B70(int, int, void *) __asm__("FUN_0022da68");
 
+extern short D_L16_00161E00 __attribute__((sda));
+extern short D_L16_00161E04 __attribute__((sda));
+extern short D_L16_00161E08 __attribute__((sda));
 void FUN_L16_002e5708(struct Moby *m) {
     char *d = (char *)m->pvars;
     float cycle;
@@ -455,19 +451,19 @@ void FUN_L16_002e5708(struct Moby *m) {
         m->update_dist = 0xFF;
         break;
     case 1:
-        cycle = *(float *)(d + 0xC) + *(float *)&D_L16_00161E04_d * frame_time;
+        cycle = *(float *)(d + 0xC) + *(float *)&D_L16_00161E04 * frame_time;
         *(float *)(d + 0xC) = cycle;
         if (cycle > 1.0f)
             *(float *)(d + 0xC) = cycle - 1.0f;
         if (FUN_L00_0028d8c0(m, *(int *)(d + 0x24)) == 0) {
             *(int *)(d + 0x24) = func_0022ED80_6B70(0, 4, m);
         }
-        *(float *)(d + 8) = fast_add_rotations(*(float *)(d + 8), *(float *)&D_L16_00161E00_d *
+        *(float *)(d + 8) = fast_add_rotations(*(float *)(d + 8), *(float *)&D_L16_00161E00 *
                                                                       DEG_TO_RAD * frame_time);
         p = (float *)(d + 0x10);
         for (i = 0; i < 4; i++) {
             p[i] = fast_add_rotations(p[i],
-                                      ((float *)&D_L16_00161E08_d)[i] * DEG_TO_RAD * frame_time);
+                                      ((float *)&D_L16_00161E08)[i] * DEG_TO_RAD * frame_time);
         }
         if (m->visible)
             enqueue_callback_list_1_alt(FUN_L16_002e58d8_u, m);
@@ -622,13 +618,12 @@ int FUN_L16_002e5cd0(int idx) {
 /* D_L16_0015FFD8 is declared sda above (FUN_L16_002e2b60 loads it off $gp), but
    here retail loads it absolute: reach it from a neighbour, past whose size the
    assembler no longer uses $gp. */
-extern float D_L16_00161D78_far __asm__("D_L16_00161D78");
-#define D_L16_0015FFD8 (((char **)&D_L16_00161D78_far)[-(0x161D78 - 0x15FFD8) / 4])
-extern char D_0013E533[];
+#define D_L16_0015FFD8 (((char **)&D_L16_00161D78)[-(0x161D78 - 0x15FFD8) / 4])
 extern float FUN_001f9b48(void *);
 extern short *D_L16_001ABCC0[];
 extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
 
+extern float D_L16_00161D78;
 void FUN_L16_002e5d30(int idx) {
     short *p = D_L16_001ABCC0[idx];
     char *best = 0;

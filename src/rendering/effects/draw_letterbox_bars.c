@@ -6,10 +6,8 @@
 #include "rnc/rendering/dma_tag.h"
 
 #include "rnc/rendering/screen.h"
-extern int occl_chain_active __asm__("D_0015F444") MACRO_ADDR;
-extern int occl_chain_frames __asm__("D_0015F448") MACRO_ADDR;
-extern char D_00160820[];
-extern char D_00160830[];
+#include "types.h"
+#include "rnc/data_labels.h"
 
 /* Letterbox bars: while D_0015F444 is set the bar height D_0015F448
    grows to 24, otherwise it shrinks to 0. While it is non-zero, append
@@ -19,20 +17,22 @@ extern char D_00160830[];
    steps as FUN_001f52a0. */
 void draw_letterbox_bars(void) __asm__("FUN_001f4d98");
 
+extern s32 occl_chain_active_macro __asm__("D_0015F444") MACRO_ADDR;
+extern s32 occl_chain_frames_macro __asm__("D_0015F448") MACRO_ADDR;
 void draw_letterbox_bars(void) {
     int h;
 
-    if (occl_chain_active != 0) {
-        if (occl_chain_frames < 24) {
-            occl_chain_frames++;
+    if (occl_chain_active_macro != 0) {
+        if (occl_chain_frames_macro < 24) {
+            occl_chain_frames_macro++;
         }
     } else {
-        if (occl_chain_frames == 0) {
+        if (occl_chain_frames_macro == 0) {
             return;
         }
-        occl_chain_frames--;
+        occl_chain_frames_macro--;
     }
-    h = occl_chain_frames;
+    h = occl_chain_frames_macro;
     if (h == 0) {
         return;
     }

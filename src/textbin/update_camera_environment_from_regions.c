@@ -2,6 +2,7 @@
 #include "asm.h"
 
 #include "types.h"
+#include "rnc/data_labels.h"
 
 struct CameraEnvironmentRegion {
     u8 pad0[0x50];
@@ -20,13 +21,6 @@ struct CameraEnvironmentRegion {
 };
 
 extern struct CameraEnvironmentRegion camera_environment_regions[] __asm__("D_0019ADC0");
-extern u8 fog_color_red __asm__("D_0015F484");
-extern u8 fog_color_green __asm__("D_0015F485");
-extern u8 fog_color_blue __asm__("D_0015F486");
-extern f32 fog_near_distance __asm__("D_0015F488");
-extern f32 fog_far_distance __asm__("D_0015F48C");
-extern f32 fog_near_intensity __asm__("D_0015F490");
-extern f32 fog_far_intensity __asm__("D_0015F494");
 extern s32 find_camera_environment_region(void *, f32 *, s32 *) __asm__("func_00212C28");
 extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
 

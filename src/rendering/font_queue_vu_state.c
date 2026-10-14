@@ -2,13 +2,9 @@
 #include "qcopy.h"
 #include "rnc/rendering/view.h"
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/data_labels.h"
 
 
-extern u16 font_vu_program_tag[] __asm__("D_0010E800");
-extern u8 font_vu_program[] __asm__("D_0010E810");
-extern s32 font_state __asm__("D_0015F620");
-extern f32 font_depth_bias __asm__("D_0015F348") __attribute__((sda));
-extern u8 D_00187080[];
 extern void FUN_001f9ff8(f32 (*)[4], f32);
 extern void FUN_001f9a68(f32 *, u8 *, f32);
 extern void FUN_001fa378(void *, u8 *, f32 (*)[4]);
@@ -23,7 +19,7 @@ void font_queue_vu_state(void) {
     u8 *p;
 
     FUN_001f9ff8(m, 1024.0f);
-    FUN_001f9a68(m[3], D_00187080, -1024.0f);
+    FUN_001f9a68(m[3], camera_position, -1024.0f);
     m[3][3] = 1.0f;
     if (font_state != 7) {
         vu1_add_data_ref(font_vu_program, font_vu_program_tag[0]);
@@ -39,10 +35,10 @@ void font_queue_vu_state(void) {
     base[1].vif0 = 0;
     base[1].vif1 = 0x6C0C43A4;
     p = (u8 *)(base + 2);
-    FUN_001fa378(p, D_00187080 - 0x100, m);
+    FUN_001fa378(p, camera_position - 0x100, m);
     *(f32 *)(p + 0x38) += font_depth_bias;
     p = (u8 *)(base + 6);
-    FUN_001fa378(p, D_00187080 - 0x80, m);
+    FUN_001fa378(p, camera_position - 0x80, m);
     *(f32 *)(p + 0x38) += font_depth_bias;
     base[10].tag = 0x8000;
     base[10].addr = 0x303EC000;

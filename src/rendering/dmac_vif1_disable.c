@@ -1,8 +1,7 @@
 #include "types.h"
 
 #include "types.h"
-extern s32 D_00160F18;
-extern s32 D_00160F1C;
+#include "rnc/data_labels.h"
 extern s32 RemoveDmacHandler();
 extern s32 disable_dmac() __asm__("func_001190F8");
 void dmac_vif1_disable(void) __asm__("FUN_00233d90");

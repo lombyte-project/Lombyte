@@ -1,5 +1,6 @@
 #include "types.h"
 #include "sifrpc.h"
+#include "rnc/data_labels.h"
 struct MemoryCardNameParam {
     s32 port;
     s32 slot;
@@ -8,11 +9,7 @@ struct MemoryCardNameParam {
     s32 unk10;
     char name[0x400];
 };
-extern u32 D_00132DA8[];
-extern u32 D_00132DAC[];
 extern struct sceSifClientData D_00159A00;
-extern u8 D_00159AC4[];
-extern u8 D_0015AFC0[];
 extern s32 PollSema();
 extern s32 SignalSema();
 extern s32 sceSifCallRpc();

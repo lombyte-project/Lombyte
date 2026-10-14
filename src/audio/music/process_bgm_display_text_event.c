@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 struct Glyph {
     u8 u;
@@ -7,8 +8,6 @@ struct Glyph {
     s8 adv;
 };
 
-extern s32 D_0015F4A0;
-extern s32 D_0015F49C;
 #include "rnc/ui/text/font_palette.h"
 extern f32 func_001FA6C0(s32);
 extern void FUN_001f5808(f32, f32, f32, f32, s32, s32, s32, s32, u64, s32);
@@ -39,7 +38,7 @@ void process_bgm_display_text_event(u64 color, u8 *str, s32 n, s32 tex, struct G
     s = str;
     do {
         if ((u8)(*s - 8) < 8) {
-            if (D_0015F49C != 0) {
+            if (GlobalStateFlag != 0) {
                 color &= 0xFF000000;
                 color |= font_palette_colors[*s - 8] & 0xFFFFFF;
             }

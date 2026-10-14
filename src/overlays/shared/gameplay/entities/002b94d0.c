@@ -211,15 +211,9 @@ typedef struct {
     UV_2bb0b0 uv[4];
     long unk70, tex, unk80, unk88;
 } Q_2bb0b0;
-extern unsigned int D_L00_00161640_2bb0b0 __asm__("D_L00_00161640") __attribute__((sda));
 extern unsigned int D_L00_001615F8_2bb0b0 __asm__("D_L00_001615F8") __attribute__((sda));
-extern float D_L00_00161648_2bb0b0 __asm__("D_L00_00161648") __attribute__((sda));
-extern float D_L00_0016164C_2bb0b0 __asm__("D_L00_0016164C") __attribute__((sda));
 extern V_2bb0b0 D_L00_00166DC0_2bb0b0 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern V_2bb0b0 D_0013F5E0_2bb0b0 __asm__("D_0013F5E0");
-extern V_2bb0b0 D_L00_001DB560_2bb0b0[] __asm__("D_L00_001DB560") __attribute__((section(".data")));
-extern UV_2bb0b0 D_L00_001DB5A0_2bb0b0[] __asm__("D_L00_001DB5A0")
-    __attribute__((section(".data")));
 void vsub_2bb0b0(void *, void *, void *) __asm__("FUN_001f9a28");
 void vadd_2bb0b0(void *, void *, void *) __asm__("FUN_001f9a10");
 void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -229,6 +223,11 @@ void xform_2bb0b0(void *, void *, void *) __asm__("FUN_001f9d20");
 long tex_2bb0b0(int) __asm__("FUN_001f44b8");
 float rnd_2bb0b0(float, float) __asm__("FUN_L00_00257c48");
 void draw_2bb0b0(void *, void *, int) __asm__("FUN_001f7d30");
+extern unsigned int D_L00_00161640 __attribute__((sda));
+extern float D_L00_00161648 __attribute__((sda));
+extern float D_L00_0016164C __attribute__((sda));
+extern V_2bb0b0 D_L00_001DB560[] __attribute__((section(".data")));
+extern UV_2bb0b0 D_L00_001DB5A0[] __attribute__((section(".data")));
 void FUN_L00_002bb0b0(void *mv) {
     Q_2bb0b0 quad;
     V_2bb0b0 mat[4];
@@ -249,17 +248,17 @@ void FUN_L00_002bb0b0(void *mv) {
     cross_2bb0b0(&mat[1], &mat[0], &D_0013F5E0_2bb0b0);
     fast_vec_normalize(&mat[1], &mat[1], -1.0f);
     cross_2bb0b0(&mat[2], &mat[1], &mat[0]);
-    c = D_L00_00161640_2bb0b0;
+    c = D_L00_00161640;
     quad.color[3] = c;
     quad.color[2] = c;
     quad.color[1] = c;
     quad.color[0] = c;
-    s = D_L00_00161648_2bb0b0 + rnd_2bb0b0(0.0f, 0.025f);
+    s = D_L00_00161648 + rnd_2bb0b0(0.0f, 0.025f);
     for (i = 0; i < 4; i++) {
-        vmul_2bb0b0(s, &quad.corner[i], &D_L00_001DB560_2bb0b0[i]);
+        vmul_2bb0b0(s, &quad.corner[i], &D_L00_001DB560[i]);
         xform_2bb0b0(&quad.corner[i], &quad.corner[i], &mat[0]);
-        quad.uv[i].u = D_L00_001DB5A0_2bb0b0[i].u;
-        quad.uv[i].v = D_L00_001DB5A0_2bb0b0[i].v;
+        quad.uv[i].u = D_L00_001DB5A0[i].u;
+        quad.uv[i].v = D_L00_001DB5A0[i].v;
     }
     draw_2bb0b0(&quad, 0, 0);
     c = D_L00_001615F8_2bb0b0;
@@ -267,12 +266,12 @@ void FUN_L00_002bb0b0(void *mv) {
     quad.color[2] = c;
     quad.color[1] = c;
     quad.color[0] = c;
-    s = D_L00_0016164C_2bb0b0 + rnd_2bb0b0(0.0f, 0.05f);
+    s = D_L00_0016164C + rnd_2bb0b0(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
-        vmul_2bb0b0(s, &quad.corner[i], &D_L00_001DB560_2bb0b0[i]);
+        vmul_2bb0b0(s, &quad.corner[i], &D_L00_001DB560[i]);
         xform_2bb0b0(&quad.corner[i], &quad.corner[i], &mat[0]);
-        quad.uv[i].u = D_L00_001DB5A0_2bb0b0[i].u;
-        quad.uv[i].v = D_L00_001DB5A0_2bb0b0[i].v;
+        quad.uv[i].u = D_L00_001DB5A0[i].u;
+        quad.uv[i].v = D_L00_001DB5A0[i].v;
     }
     draw_2bb0b0(&quad, 0, 0);
 }
@@ -396,9 +395,9 @@ extern void build_look_at_matrix(void *dst, void *vec, void *axis,
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
-extern SparkleRowC860 D_L00_001DBE90_rows[] __asm__("D_L00_001DBB90");
 extern int func_001F9908_r(void *) __asm__("FUN_001f9740");
 
+extern SparkleRowC860 D_L00_001DBB90[];
 void FUN_L00_002bb558(char *m) {
     int flag = 0;
     float vec0[4] __attribute__((aligned(16)));
@@ -480,12 +479,12 @@ void FUN_L00_002bb558(char *m) {
                 sign = 1.0f;
                 for (k = 1; k < 5; k++) {
                     float ang;
-                    subtract_vector_xyz(t, D_L00_001DBE90_rows[i].point[k - 1], D_L00_00166DC0);
+                    subtract_vector_xyz(t, D_L00_001DBB90[i].point[k - 1], D_L00_00166DC0);
                     ang = random_float_between(0.17453292f, 0.7853982f) * sign;
                     sign = -sign;
                     build_look_at_matrix(vec1, vec1, t, ang);
                     add_vector_xyz(((float(*)[4])(D_L00_001DBBA0 + i * 0x50))[k],
-                                   D_L00_001DBE90_rows[i].point[k - 1], vec1);
+                                   D_L00_001DBB90[i].point[k - 1], vec1);
                 }
             } else {
                 n = i + 1;
@@ -496,7 +495,7 @@ void FUN_L00_002bb558(char *m) {
             for (k = 1; k < 5; k++) {
                 float *v = workspace[k];
                 subtract_vector_xyz(v, ((float(*)[4])(D_L00_001DBBA0 + i * 0x50))[k],
-                                    D_L00_001DBE90_rows[i].point[k - 1]);
+                                    D_L00_001DBB90[i].point[k - 1]);
                 v[0] += FUN_L00_00257c48(0.0f, 0.1f);
                 v[1] += FUN_L00_00257c48(0.0f, 0.1f);
                 v[2] += FUN_L00_00257c48(0.0f, 0.1f);
@@ -505,7 +504,7 @@ void FUN_L00_002bb558(char *m) {
             qcopy(D_L00_001DBBA0 + i * 0x50, vec0);
             for (k = 1; k < 5; k++) {
                 add_vector_xyz(((float(*)[4])(D_L00_001DBBA0 + i * 0x50))[k],
-                               D_L00_001DBE90_rows[i].point[k - 1], workspace[k]);
+                               D_L00_001DBB90[i].point[k - 1], workspace[k]);
             }
             if (D_L00_001DBEC0[i] > 0)
                 D_L00_001DBED8[i] = 0x20;
@@ -518,8 +517,6 @@ void FUN_L00_002bb558(char *m) {
 typedef struct {
     u8 b[0x50];
 } E002bbb00;
-extern s16 D_L00_001DBEC0[];
-extern s16 D_L00_001DBED8[];
 extern E002bbb00 D_L00_001DBBA0_u[] __asm__("D_L00_001DBBA0");
 extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
 extern f32 D_L00_00161690 __attribute__((sda));
@@ -704,14 +701,8 @@ typedef struct {
     float unk68, unk6C;
     long unk70, tex, unk80, unk88;
 } Q_2bc1a0;
-extern float D_L00_001616BC_2bc1a0 __asm__("D_L00_001616BC") __attribute__((sda));
-extern float D_L00_001616B8_2bc1a0 __asm__("D_L00_001616B8") __attribute__((sda));
-extern int D_L00_001616C8_2bc1a0 __asm__("D_L00_001616C8") __attribute__((sda));
-extern unsigned int D_L00_001616C0_2bc1a0 __asm__("D_L00_001616C0") __attribute__((sda));
-extern unsigned int D_L00_001616C4_2bc1a0 __asm__("D_L00_001616C4") __attribute__((sda));
 extern V_2bc1a0 D_L00_00166DC0_2bc1a0 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern V_2bc1a0 D_0013F5E0_2bc1a0 __asm__("D_0013F5E0");
-extern V_2bc1a0 D_L00_001DBB60_2bc1a0[] __asm__("D_L00_001DBB60") __attribute__((section(".data")));
 void FUN_001f9a68_2bc1a0(float, void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9a10_2bc1a0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a28_2bc1a0(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -723,6 +714,12 @@ int FUN_00213260_2bc1a0(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_2bc1a0(int) __asm__("FUN_001fa6c0");
 int FUN_001fa6d0_2bc1a0(float) __asm__("FUN_001fa6d0");
 void FUN_001f7d30_2bc1a0(void *, void *, int) __asm__("FUN_001f7d30");
+extern float D_L00_001616BC __attribute__((sda));
+extern float D_L00_001616B8 __attribute__((sda));
+extern int D_L00_001616C8 __attribute__((sda));
+extern unsigned int D_L00_001616C0 __attribute__((sda));
+extern unsigned int D_L00_001616C4 __attribute__((sda));
+extern V_2bc1a0 D_L00_001DBB60[] __attribute__((section(".data")));
 void FUN_L00_002bc1a0(void *mv) {
     char *m = mv;
     Q_2bc1a0 quad;
@@ -732,9 +729,9 @@ void FUN_L00_002bc1a0(void *mv) {
     V_2bc1a0 e;
     unsigned int c;
     int i;
-    FUN_001f9a68_2bc1a0(D_L00_001616BC_2bc1a0, &d, m + 0xD0);
+    FUN_001f9a68_2bc1a0(D_L00_001616BC, &d, m + 0xD0);
     FUN_001f9a10_2bc1a0(&mat[3], &d, m + 0x10);
-    quad.tex = FUN_001f44b8_2bc1a0(D_L00_001616C8_2bc1a0);
+    quad.tex = FUN_001f44b8_2bc1a0(D_L00_001616C8);
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
@@ -747,9 +744,9 @@ void FUN_L00_002bc1a0(void *mv) {
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
     if (!FUN_00213260_2bc1a0(4))
-        c = D_L00_001616C4_2bc1a0;
+        c = D_L00_001616C4;
     else
-        c = D_L00_001616C0_2bc1a0;
+        c = D_L00_001616C0;
     c = (c & 0xFFFFFF) |
         (FUN_001fa6d0_2bc1a0(FUN_001fa6c0_2bc1a0((int)c >> 24) * D_L00_00161660_f[29]) << 24);
     quad.color[3] = c;
@@ -764,7 +761,7 @@ void FUN_L00_002bc1a0(void *mv) {
     FUN_001f9a68_2bc1a0(0.2f, &e, &mat[0]);
     FUN_001f9a10_2bc1a0(&mat[3], &mat[3], &e);
     for (i = 3; i >= 0; i--) {
-        FUN_001f9a68_2bc1a0(D_L00_001616B8_2bc1a0, &t, &D_L00_001DBB60_2bc1a0[3 - i]);
+        FUN_001f9a68_2bc1a0(D_L00_001616B8, &t, &D_L00_001DBB60[3 - i]);
         FUN_001f9d20_2bc1a0(&quad.corner[3 - i], &t, &mat[0]);
     }
     FUN_001f7d30_2bc1a0(&quad, 0, 0);
@@ -956,7 +953,6 @@ extern int D_0013CAE0;
 extern int D_0013D408;
 extern int D_0013E550;
 extern int D_00141680;
-extern int D_0015ED84;
 extern int D_0015EEA4;
 extern float D_L00_001616E0 __attribute__((sda));
 extern int D_L00_001616EC __attribute__((sda));
@@ -1082,7 +1078,7 @@ void FUN_L00_002bc7e8(Moby *moby) {
             if (((Stats_2BDAF0 *)(D_00141680_r))->best < now) {
                 ((Stats_2BDAF0 *)(D_00141680_r))->best = func_001F9850_2BDAF0(D_0015EEA4) / 600;
             }
-            ((Stats_2BDAF0 *)(D_00141680_r))->levels = ((Stats_2BDAF0 *)(D_00141680_r))->levels | (1 << D_0015ED84) | 0x80000000;
+            ((Stats_2BDAF0 *)(D_00141680_r))->levels = ((Stats_2BDAF0 *)(D_00141680_r))->levels | (1 << current_level_index) | 0x80000000;
         }
         if (data->timer == 0) {
             data->timer = func_001F9850_2BDAF0(15);
@@ -1144,7 +1140,7 @@ void FUN_L00_002bc7e8(Moby *moby) {
             D_L00_001616EC = 10000 - func_001FA898_2BDAF0(data->left * 10000.0f / data->total);
         }
         if (data->target != 0 && data->left <= 0.0f) {
-            if (D_0015ED84 == 5 && data->target->oclass == 0x271 && ((Skill_2BDAF0 *)item_unlocked)->f8 == 0) {
+            if (current_level_index == 5 && data->target->oclass == 0x271 && ((Skill_2BDAF0 *)item_unlocked)->f8 == 0) {
                 ((Skill_2BDAF0 *)item_unlocked)->f8 = 1;
                 func_0022EE28_2BDAF0(1, 0, 0);
                 func_L00_00264DB8_2BDAF0(0x53D6, -1);
@@ -1367,7 +1363,6 @@ extern float D_L00_00161800_2BE3A8 __asm__("D_L00_00161730") __attribute__((sda)
 extern float D_L00_00161804_2BE3A8 __asm__("D_L00_00161734") __attribute__((sda));
 extern float D_L00_0016180C_2BE3A8 __asm__("D_L00_0016173C") __attribute__((sda));
 extern float D_L00_00161810_2BE3A8 __asm__("D_L00_00161740") __attribute__((sda));
-extern int D_L00_00161814_2BE3A8 __asm__("D_L00_00161744") __attribute__((sda));
 extern float D_L00_00161818_2BE3A8 __asm__("D_L00_00161748") __attribute__((sda));
 extern int D_L00_0016181C_2BE3A8 __asm__("D_L00_0016174C") __attribute__((sda));
 extern int D_L00_00161820_2BE3A8 __asm__("D_L00_00161750") __attribute__((sda));
@@ -1376,7 +1371,6 @@ extern float D_L00_0016182C_2BE3A8 __asm__("D_L00_0016175C") __attribute__((sda)
 extern float D_L00_00161838_2BE3A8 __asm__("D_L00_00161768") __attribute__((sda));
 extern signed char D_L00_00161833_2BE3A8[] __asm__("D_L00_00161763") __attribute__((section(".sdata")));
 extern float D_L00_0016189C_2BE3A8 __asm__("D_L00_001617CC") __attribute__((section(".sdata")));
-extern float D_L00_001618A0_2BE3A8 __asm__("D_L00_001617D0") __attribute__((section(".sdata")));
 extern int D_L00_001618F4_2BE3A8 __asm__("D_L00_00161824") __attribute__((section(".sdata")));
 extern float D_0015EE60_2BE3A8 __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern float D_0015EE6C_2BE3A8 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
@@ -1394,7 +1388,6 @@ extern Vec_2BE3A8 D_L00_001DD3A0_2BE3A8[3] __asm__("D_L00_001DD0A0");
 extern Vec_2BE3A8 D_L00_001DD3D0_2BE3A8[3] __asm__("D_L00_001DD0D0");
 extern Vec_2BE3A8 D_L00_00173F60_2BE3A8 __asm__("D_L00_00173E60");
 extern char D_L00_0015F660_2BE3A8[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
-extern Tab_2BE3A8 D_L00_001E9E30_2BE3A8 __asm__("D_L00_001E9AB0");
 extern char D_0013E633_2BE3A8[] __asm__("D_001413D0");
 extern void func_L00_002BE2A0_2BE3A8(void) __asm__("FUN_L00_002bcf98");
 extern float func_L00_0025F368_2BE3A8(float) __asm__("FUN_L00_0025e310");
@@ -1425,6 +1418,9 @@ extern int func_001FA898_2BE3A8(float) __asm__("FUN_001fa6d0");
 extern void func_L00_002767B0_2BE3A8(void *, int, int, int, int, void *, struct Moby *, float, float) __asm__("FUN_L00_00275910");
 extern int func_001F9908_2BE3A8(int *) __asm__("FUN_001f9740");
 
+extern int D_L00_00161744 __attribute__((sda));
+extern float D_L00_001617D0 __attribute__((section(".sdata")));
+extern Tab_2BE3A8 D_L00_001E9AB0;
 void FUN_L00_002bd0a0(struct Moby *moby) {
     Vec_2BE3A8 aim;
     Vec_2BE3A8 segment;
@@ -1451,7 +1447,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
     wave_offset.w = 1.0f;
     wave_offset.x = 0.0f;
     func_L00_002BE2A0_2BE3A8();
-    D_L00_001618A0_2BE3A8 = func_L00_0025F368_2BE3A8(D_L00_001618A0_2BE3A8 + D_L00_001617C8_2BE3A8);
+    D_L00_001617D0 = func_L00_0025F368_2BE3A8(D_L00_001617D0 + D_L00_001617C8_2BE3A8);
     func_00215C00_2BE3A8(&aim, D_L00_0016189C_2BE3A8, data->f48, data->f4C);
     if (data->target != 0 && (info = func_L00_0025D390_2BE3A8(data->target)) != 0) {
         qcopy(&beam_end, &data->target->pos);
@@ -1514,7 +1510,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
                 func_001F9CA0_2BE3A8(&up, &out, &fwd);
                 wave_width = D_L00_001617FC_2BE3A8;
                 wave_width = wave_width + (D_L00_00161800_2BE3A8 - wave_width) * progress;
-                factor = func_L00_0025F368_2BE3A8(D_L00_001618A0_2BE3A8 + D_L00_001617CC_2BE3A8 * func_001FA888_2BE3A8(i));
+                factor = func_L00_0025F368_2BE3A8(D_L00_001617D0 + D_L00_001617CC_2BE3A8 * func_001FA888_2BE3A8(i));
                 wave_offset.y = wave_width * func_001F9FA8_2BE3A8(factor);
                 wave_width = wave_width * func_001F9F90_2BE3A8(factor);
                 wave_offset.z = wave_width;
@@ -1552,7 +1548,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
             Vec_2BE3A8 out;
             Vec_2BE3A8 up;
 
-            colors = D_L00_001E9E30_2BE3A8;
+            colors = D_L00_001E9AB0;
             color = colors.c[func_002140B0_2BE3A8(5)];
             wave_width = func_L00_00258C80_2BE3A8(0.0f, D_L00_0016180C_2BE3A8);
             func_002156E0_2BE3A8(&out, &dir, D_0013F5E0_r, func_L00_00258C80_2BE3A8(0.0f, D_L00_0016180C_2BE3A8));
@@ -1567,7 +1563,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
         }
     }
     if (func_001F9908_2BE3A8(&D_L00_001618F4_2BE3A8) != 0) {
-        D_L00_001618F4_2BE3A8 = func_001F9850_2BE3A8(D_L00_00161814_2BE3A8);
+        D_L00_001618F4_2BE3A8 = func_001F9850_2BE3A8(D_L00_00161744);
         for (slot = 0; slot < 3; slot++) {
             if (D_L00_001618E8_2BE3A8[slot] == 0) {
                 D_L00_001618E8_2BE3A8[slot] = 1;
@@ -1982,14 +1978,9 @@ typedef struct {
     float unk68, unk6C;
     long unk70, tex, unk80, unk88;
 } Q_2be890;
-extern float D_L00_001617B4_2be890 __asm__("D_L00_001617B4") __attribute__((sda));
-extern float D_L00_001617AC_2be890 __asm__("D_L00_001617AC") __attribute__((sda));
-extern float D_L00_001617B0_2be890 __asm__("D_L00_001617B0") __attribute__((sda));
-extern int D_L00_001617B8_2be890 __asm__("D_L00_001617B8") __attribute__((sda));
 extern V_2be890 D_L00_00166DC0_2be890 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern V_2be890 D_L00_001DBF60_2be890 __asm__("D_L00_001DBF60") __attribute__((section(".data")));
 extern V_2be890 D_0013F5E0_2be890 __asm__("D_0013F5E0");
-extern V_2be890 D_L00_001DBF20_2be890[] __asm__("D_L00_001DBF20") __attribute__((section(".data")));
 void FUN_001f9a68_2be890(float, void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9a10_2be890(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a28_2be890(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1998,6 +1989,11 @@ void FUN_001f9ad8_2be890(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_001f9d20_2be890(void *, void *, void *) __asm__("FUN_001f9d20");
 long FUN_001f44b8_2be890(int) __asm__("FUN_001f44b8");
 void FUN_001f7d30_2be890(void *, void *, int) __asm__("FUN_001f7d30");
+extern float D_L00_001617B4 __attribute__((sda));
+extern float D_L00_001617AC __attribute__((sda));
+extern float D_L00_001617B0 __attribute__((sda));
+extern int D_L00_001617B8 __attribute__((sda));
+extern V_2be890 D_L00_001DBF20[] __attribute__((section(".data")));
 void FUN_L00_002be890(void *mv) {
     char *m = mv;
     Q_2be890 quad;
@@ -2007,7 +2003,7 @@ void FUN_L00_002be890(void *mv) {
     int c;
     int i, j;
     quad.tex = FUN_001f44b8_2be890(11);
-    c = D_L00_001617B8_2be890;
+    c = D_L00_001617B8;
     quad.unk88 = 0x8000000048L;
     quad.unk80 = 0xFF9000000260L;
     quad.unk70 = 0;
@@ -2023,7 +2019,7 @@ void FUN_L00_002be890(void *mv) {
     quad.unk64 = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
-    FUN_001f9bf8_2be890(&e, m + 0xD0, D_L00_001617B4_2be890);
+    FUN_001f9bf8_2be890(&e, m + 0xD0, D_L00_001617B4);
     FUN_001f9a10_2be890(&mat[3], &D_L00_001DBF60_2be890, &e);
     FUN_001f9a28_2be890(&e, &D_L00_00166DC0_2be890, &mat[3]);
     FUN_001f9bf8_2be890(&mat[0], &e, 1.0f);
@@ -2031,7 +2027,7 @@ void FUN_L00_002be890(void *mv) {
     FUN_001f9bf8_2be890(&mat[1], &mat[1], -1.0f);
     FUN_001f9ad8_2be890(&mat[2], &mat[1], &mat[0]);
     for (i = 3; i >= 0; i--) {
-        FUN_001f9a68_2be890(D_L00_001617AC_2be890, &t, &D_L00_001DBF20_2be890[3 - i]);
+        FUN_001f9a68_2be890(D_L00_001617AC, &t, &D_L00_001DBF20[3 - i]);
         FUN_001f9d20_2be890(&quad.corner[3 - i], &t, &mat[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);
@@ -2040,7 +2036,7 @@ void FUN_L00_002be890(void *mv) {
     quad.color[1] = -1;
     quad.color[0] = -1;
     for (j = 3; j >= 0; j--) {
-        FUN_001f9a68_2be890(D_L00_001617B0_2be890, &t, &D_L00_001DBF20_2be890[3 - j]);
+        FUN_001f9a68_2be890(D_L00_001617B0, &t, &D_L00_001DBF20[3 - j]);
         FUN_001f9d20_2be890(&quad.corner[3 - j], &t, &mat[0]);
     }
     FUN_001f7d30_2be890(&quad, 0, 0);

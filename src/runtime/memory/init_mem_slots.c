@@ -1,8 +1,5 @@
 #include "types.h"
-
-extern int D_001940C0[];
-extern s32 current_vu_chain __asm__("D_00160F0C");
-extern u8 D_24135F[];
+#include "rnc/data_labels.h"
 
 void init_mem_slots(void) __asm__("FUN_002015d8");
 

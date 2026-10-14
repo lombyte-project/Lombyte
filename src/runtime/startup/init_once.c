@@ -2,16 +2,13 @@
 #include "rnc/rendering/image_clear_buffer.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/globals.h"
+#include "rnc/data_labels.h"
 extern u8 vu0_micro_program[] __asm__("D_0010E4C0");
 extern void count_vsync() __asm__("FUN_0012f1c8");
-extern s32 pause_action_list_mode __asm__("D_0015EE90");
 extern u8 rebooted_iop_message[] __asm__("D_0015FA88");
-extern s32 current_vu_chain __asm__("D_00160F0C");
 extern u8 iop_reboot_image_path[] __asm__("D_001E7AE0");
 extern u8 loaded_irx_modules_message[] __asm__("D_001E7AF8");
 extern u8 unsupported_lang_message[] __asm__("D_001E7B10");
-extern u8 D_1FF8000[];
-extern u8 D_24135F[];
 extern s32 DIntr();
 extern s32 DebugPrint();
 extern s32 EnableCache();

@@ -2,6 +2,8 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 typedef struct {
     s32 state;
@@ -36,9 +38,7 @@ s32 help_request(s32 a, s32 b) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00203FB8), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_0015F660;
 extern char D_L00_00179410[];
-extern unsigned char D_0014161B[];
 
 /* When D_L00_00179410 is active, may set the 0x5A state to 5, then clears and resets the record. */
 void FUN_L00_002039a0(void) {

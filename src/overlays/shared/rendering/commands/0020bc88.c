@@ -3,24 +3,24 @@
 #include "asm.h"
 
 #include "qcopy.h"
-extern int *D_L02_001611C0_s __asm__("D_L02_001611C0");
-extern int *D_L02_001611C0_p[] __asm__("D_L02_001611B8") __attribute__((section(".sdata")));
-extern char D_L02_001609A0_i[] __asm__("D_L02_001609A0");
+#include "rnc/overlay/level_labels.h"
 
+extern int *D_L02_001611B8[] __attribute__((section(".sdata")));
+extern char D_L02_001609A0[];
 /* Append a 0x154-tagged packet to the display list: header, qcopy of a static block,
    then four vector triples (a, b, m rows), a value `c` and a flag-dependent word. */
 void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag) {
     int *p;
     long *q;
-    D_L02_001611C0_p[2][0] = 0x10000009;
-    D_L02_001611C0_p[2][1] = 0;
-    D_L02_001611C0_p[2][2] = 0;
-    D_L02_001611C0_p[2][3] = 0x50000009;
-    p = D_L02_001611C0_p[2];
-    D_L02_001611C0_p[2] = p + 4;
-    qcopy(p + 4, D_L02_001609A0_i);
+    D_L02_001611B8[2][0] = 0x10000009;
+    D_L02_001611B8[2][1] = 0;
+    D_L02_001611B8[2][2] = 0;
+    D_L02_001611B8[2][3] = 0x50000009;
+    p = D_L02_001611B8[2];
+    D_L02_001611B8[2] = p + 4;
+    qcopy(p + 4, D_L02_001609A0);
     q = (long *)(p + 8);
-    D_L02_001611C0_s = (int *)q;
+    D_L02_001611C0 = (int *)q;
     if (flag)
         q[0] = 5;
     else
@@ -40,5 +40,5 @@ void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag) {
     q[13] = b[3];
     q[14] = m[3];
     q[15] = 0;
-    D_L02_001611C0_s = D_L02_001611C0_p[2] + 0x20;
+    D_L02_001611C0 = D_L02_001611B8[2] + 0x20;
 }

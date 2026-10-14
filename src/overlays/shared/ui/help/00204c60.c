@@ -6,13 +6,13 @@
 #include "sda.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/data_labels.h"
 
 extern Vec4 D_0013E090[2] NOT_SDA; /* camera start: position, rotation */
 extern s32 D_00141660 NOT_SDA;
 extern struct Moby *D_L00_0015FFD8; /* first moby */
 extern struct Moby *D_L00_0015FFDC; /* end of the moby table */
 extern s32 D_L00_00160540;
-extern s32 D_0015EDA0; /* starting hit points */
 extern struct HeroEase D_L00_0017A680[] NOT_SDA;
 extern void memset_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern f32 probe_ground_height(Vec4f *, s32, f32) __asm__("FUN_00213508");
@@ -74,7 +74,7 @@ void FUN_L00_00204c60(void) {
     /* the eight voice slots unk2218..unk2234 as one array, indexed from the hero base */
     for (i = 0; i < 8; i++)
         ((struct { u8 pad[0x2218]; s32 v[8]; } *)&hero)->v[i] = -1;
-    hero.health.hp = D_0015EDA0;
+    hero.health.hp = hero_max_health;
     hero.reach_distance = 2.125f;
     hero.reach_height = 1.25f;
     hero.health.unk22AC = 4;

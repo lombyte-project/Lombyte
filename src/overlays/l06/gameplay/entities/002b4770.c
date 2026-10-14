@@ -180,9 +180,9 @@ extern float FUN_001fa5c8(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9e90(float, float);
 extern short *D_L06_001ABFC0_p[] __asm__("D_L06_001ABFC0");
-extern short D_L06_00161ED8_d __asm__("D_L06_00161ED8") __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 
+extern short D_L06_00161ED8 __attribute__((sda));
 float FUN_L06_002f96f8(char *self) {
     char *owner = *(char **)(*(char **)(self + 0x78) + 0x160);
     float hi, lo, ang, dist, v[3];
@@ -191,8 +191,8 @@ float FUN_L06_002f96f8(char *self) {
         return FUN_001f9e90(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                             *(float *)(self + 0x14) - *(float *)(owner + 0x14));
     }
-    lo = -(*(float *)&D_L06_00161ED8_d * DEG_TO_RAD);
-    hi = *(float *)&D_L06_00161ED8_d * DEG_TO_RAD;
+    lo = -(*(float *)&D_L06_00161ED8 * DEG_TO_RAD);
+    hi = *(float *)&D_L06_00161ED8 * DEG_TO_RAD;
     ang = FUN_001f9e90(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
                        *(float *)(self + 0x14) - *(float *)(owner + 0x14));
     dist = FUN_001f9b48(owner + 0x10, self + 0x10);
@@ -609,8 +609,6 @@ extern int FUN_L00_0028d8c0(void *, int);
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L06_00161D24_d __asm__("D_L06_00161D24") __attribute__((sda));
-extern short D_L06_00161D28_d __asm__("D_L06_00161D28") __attribute__((sda));
 extern void FUN_L06_002f3d70(char *);
 extern void FUN_L06_002f4130_c(char *) __asm__("FUN_L06_002f4130");
 extern void FUN_L06_002f4390_c(char *) __asm__("FUN_L06_002f4390");
@@ -618,13 +616,15 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern char D_0013E550[];
 extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
 
+extern short D_L06_00161D24 __attribute__((sda));
+extern short D_L06_00161D28 __attribute__((sda));
 void FUN_L06_002f3ad8(char *m) {
     char *d = *(char **)(m + 0x78);
     float s;
     if (*(int *)(d + 0x90) >= 0) {
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x90)) != 0) {
-            float x = *(float *)&D_L06_00161D24_d;
-            float y = *(float *)&D_L06_00161D28_d;
+            float x = *(float *)&D_L06_00161D24;
+            float y = *(float *)&D_L06_00161D28;
             *(float *)(d + 0x50) = x;
             *(float *)(d + 0x54) = y;
         } else {
@@ -697,8 +697,6 @@ extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float spark_speed __asm__("D_L06_00161CEC") __attribute__((sda));
-extern float spark_dir_w __asm__("D_L06_00161CF4") __attribute__((sda));
-extern float spark_vel_w __asm__("D_L06_00161CF8") __attribute__((sda));
 extern int spark_color0 __asm__("D_L06_00161CFC") __attribute__((sda));
 extern int spark_color1 __asm__("D_L06_00161D00") __attribute__((sda));
 extern int spark_life_min __asm__("D_L06_00161D04") __attribute__((sda));
@@ -706,10 +704,12 @@ extern int spark_life_max __asm__("D_L06_00161D08") __attribute__((sda));
 extern int spark_fade_min __asm__("D_L06_00161D0C") __attribute__((sda));
 extern int spark_fade_max __asm__("D_L06_00161D10") __attribute__((sda));
 extern int spark_frames __asm__("D_L06_00161D14") __attribute__((sda));
-extern float spark_drift_z __asm__("D_L06_00161D18") __attribute__((sda));
 extern float spark_drift_scale __asm__("D_L06_00161D1C") __attribute__((sda));
 extern float spark_spread __asm__("D_L06_00161D20") __attribute__((sda));
 
+extern float spark_dir __asm__("D_L06_00161CF4") __attribute__((sda));
+extern float spark_vel __asm__("D_L06_00161CF8") __attribute__((sda));
+extern float spark_drift __asm__("D_L06_00161D18") __attribute__((sda));
 void FUN_L06_002f3d70(char *m) {
     Vec4 mat[4];
     Vec4 at;
@@ -738,10 +738,10 @@ void FUN_L06_002f3d70(char *m) {
     clear_u64_value(&dir);
     dir.f[0] = spark_speed * frame_time;
     transform_vector(&dir, &dir, mat);
-    dir.f[3] = spark_dir_w;
+    dir.f[3] = spark_dir;
     scale_vector_xyz(&drift, &dir, spark_drift_scale);
-    drift.f[2] = spark_drift_z * frame_time;
-    vel.f[3] = spark_vel_w;
+    drift.f[2] = spark_drift * frame_time;
+    vel.f[3] = spark_vel;
 
     life = truncate_float_to_s32(scale_time(random_float_between(spark_life_min, spark_life_max)));
     fade = truncate_float_to_s32(scale_time(random_float_between(spark_fade_min, spark_fade_max)));
@@ -789,9 +789,9 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern short D_L06_00161CEC_d __asm__("D_L06_00161CEC") __attribute__((sda));
-extern short D_L06_00161CF0_d __asm__("D_L06_00161CF0") __attribute__((sda));
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
+extern short D_L06_00161CF0 __attribute__((sda));
 void FUN_L06_002f4130(char *m) {
     Sx s;
     Vx a;
@@ -803,11 +803,11 @@ void FUN_L06_002f4130(char *m) {
     int n;
     float f25, f27, cur, prev, ang, ra, rb;
     d = *(char **)(m + 0x78);
-    n = func_001FA898_r(*(float *)&D_L06_00161CF0_d / (*(float *)&D_L06_00161CEC_d * frame_time) *
+    n = func_001FA898_r(*(float *)&D_L06_00161CF0 / (*(float *)&D_L06_00161CEC_d * frame_time) *
                         0.25f);
     f25 = *(float *)(d + 0x80) * (float)n;
-    f27 = *(float *)&D_L06_00161CF0_d * 0.25f;
-    cur = *(float *)&D_L06_00161CF0_d;
+    f27 = *(float *)&D_L06_00161CF0 * 0.25f;
+    cur = *(float *)&D_L06_00161CF0;
     ang = fast_subtract_rotations(*(float *)(d + 0x7C), f25 * 4.0f);
     s.m = m;
     s.f1C = 1.0f;
@@ -844,7 +844,6 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern short D_L06_00161CEC_d __asm__("D_L06_00161CEC") __attribute__((sda));
-extern short D_L06_00161CF0_d __asm__("D_L06_00161CF0") __attribute__((sda));
 
 void FUN_L06_002f4390(char *m) {
     struct {
@@ -881,8 +880,8 @@ void FUN_L06_002f4390(char *m) {
     q.s1A = *(unsigned short *)(m + 0xA6);
     sp = (*(float *)(d + 0x70) * 60.0f - (float)*(int *)(d + 0x88)) *
          (*(float *)&D_L06_00161CEC_d * frame_time);
-    if (*(float *)&D_L06_00161CF0_d < sp)
-        sp = *(float *)&D_L06_00161CF0_d;
+    if (*(float *)&D_L06_00161CF0 < sp)
+        sp = *(float *)&D_L06_00161CF0;
     normalize_vector_xyz(v, m + 0xD0, 0.125f);
     add_vector_xyz(v, v, m + 0x10);
     v[2] = v[2] + 0.125f;
@@ -1649,13 +1648,11 @@ void FUN_L06_002f6dd0(char *moby) {
 
 extern f32 D_L06_00161E10 __attribute__((sda));
 extern f32 D_L06_00161E00 __attribute__((sda));
-extern f32 D_L06_00161DFC __attribute__((sda));
 extern f32 D_L06_00161E14 __attribute__((sda));
 extern f32 D_L06_00161E08 __attribute__((sda));
 extern f32 D_L06_00161E04 __attribute__((sda));
 extern int D_L06_00161E40[4] __attribute__((section(".sdata")));
 extern int D_L06_00161E50;
-extern Vec4 D_L06_001DB0F0[4][30];
 extern Vec4 D_L06_001DB870[4][30];
 extern float fast_add_rotations(float, float);
 extern void FUN_L06_00217300(void *);

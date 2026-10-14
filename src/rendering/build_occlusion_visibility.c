@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
 typedef struct {
     u8 pad_0[0x140];
@@ -8,10 +9,8 @@ typedef struct {
 } Camera;
 
 extern Camera D_00186F40;
-extern u8 occl_visibility[] __asm__("D_00193FC0");
 extern u8 occl_visibility_merged[] __asm__("D_00194040");
 extern f32 *occl_oct __asm__("D_0015F644");
-extern s32 D_0015F648;
 extern s32 occl_invalid_grid __asm__("D_0015F64C");
 extern u8 *occl_previous_grid __asm__("D_0015F650");
 #include "rnc/gameplay/camera/update_cam.h"

@@ -1,5 +1,5 @@
 #include "types.h"
-extern s32 D_0016120C;
+#include "rnc/data_labels.h"
 extern void vi_buf_get_ts(s32, u64 *) __asm__("func_0023C920");
 struct Out {
     u8 pad[8];
@@ -11,7 +11,7 @@ s32 get_mpeg_timestamp(s32 arg0, struct Out *out) __asm__("FUN_0023d140");
 s32 get_mpeg_timestamp(s32 arg0, struct Out *out) {
     u64 tmp[3];
 
-    vi_buf_get_ts(D_0016120C + 0xD9090, tmp);
+    vi_buf_get_ts(decoder_state + 0xD9090, tmp);
     out->a = tmp[0];
     out->b = tmp[1];
     return 1;

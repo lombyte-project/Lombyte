@@ -3,6 +3,7 @@
 #include "sda.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/data_labels.h"
 
 struct SkyTile {
     u128 bounds; /* 16-byte aligned: tile fields are addressed from the tile base */
@@ -21,8 +22,6 @@ struct Shell {
     struct SkyTile tiles[1];
 };
 
-extern s32 D_00160408[2] __attribute__((sda));
-extern s32 D_00160410 __attribute__((sda));
 extern u8 sky_textured_gs_block[] __asm__("D_0013D160");
 
 extern void FUN_0022c4c8(struct SkyTile *tiles, s32 count, u8 *visibility) __asm__("FUN_0022c4c8");

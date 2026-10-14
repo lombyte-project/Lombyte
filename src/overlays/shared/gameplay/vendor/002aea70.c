@@ -14,20 +14,17 @@ typedef struct {
 } R_2afd00;
 
 extern R_2afd00 D_L01_00179F40[];
-extern char D_L01_00161100_d __asm__("D_L01_00161100") __attribute__((sda));
 extern char D_L01_0016CCE0[];
 extern char D_L01_0017C7C0[];
 extern char D_L01_001CA940[];
 extern float D_L01_0015F3FC;
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int D_L01_0015F5C4;
-extern int D_L01_0015F5D8_d __asm__("D_L01_0015F5D8") __attribute__((sda));
 extern int D_L01_001611CC;
 extern int D_L01_00174280[];
 extern int D_L01_001CA4A0[];
 extern int sceGsSyncV_alt(int) __asm__("FUN_00122298");
 extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
-extern short D_L01_0015F400_d __asm__("D_L01_0015F400") __attribute__((sda));
 extern void select_world_object_resource_tables(int, int) __asm__("FUN_00204a40");
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void FUN_L00_002039a0(void);
@@ -49,6 +46,9 @@ void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress")
 void parse_space_scene_chunk(s32 index) __asm__("FUN_002049f0");
 void snd_pause_all_sounds_in_group(s32 arg0) __asm__("FUN_0012e3e8");
 
+extern char D_L01_00161100 __attribute__((sda));
+extern int D_L01_0015F5D8 __attribute__((sda));
+extern short D_L01_0015F400 __attribute__((sda));
 void FUN_L01_002aea70(char *m, int lvl) {
     struct Hero *g = &hero;
     char *s = D_L01_001CA940;
@@ -63,7 +63,7 @@ void FUN_L01_002aea70(char *m, int lvl) {
     snd_pause_all_sounds_in_group(0x1D);
     music_pause(0);
     snd_flush_sound_commands_alt();
-    D_L01_0015F5D8_d = 1;
+    D_L01_0015F5D8 = 1;
     fill_transfer_words_alt(s, 0, 0x220);
     *(int *)D_L01_001CA940 = 3;
     D_L01_0015F5C4 = 5;
@@ -76,7 +76,7 @@ void FUN_L01_002aea70(char *m, int lvl) {
     *(char *)&g->unk20AC = 1;
     *(char *)&g->unk20A5 = 1;
     FUN_L00_00232fe8();
-    transform_vector_by_basis(sc, &D_L01_00161100_d, m + 0xC0);
+    transform_vector_by_basis(sc, &D_L01_00161100, m + 0xC0);
     add_vector_xyz(sc, sc, m + 0x10);
     *(float *)(s + 0xC8) = probe_ground_height(sc, 0, 0.5f);
     clear_vector(s + 0xB0);
@@ -91,7 +91,7 @@ void FUN_L01_002aea70(char *m, int lvl) {
     *(int *)(c + 0x5C) = D_L01_00174280[2] + n;
     D_L01_0015F3FC = 1.0f;
     D_L01_001611CC = n;
-    *(int *)&D_L01_0015F400_d = 0;
+    *(int *)&D_L01_0015F400 = 0;
     FUN_L00_0020fca8(0, 0);
     g->pending_item[0] = lvl;
     select_world_object_resource_tables(D_L01_00179F40[lvl].f10, -1);

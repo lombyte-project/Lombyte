@@ -4,6 +4,8 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/level_labels.h"
 
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
@@ -215,9 +217,6 @@ typedef union {
     f32 f[4];
 } SkyRotVec;
 
-extern char *D_L00_0016051C;
-extern char D_L00_001BD7E0[];
-extern int D_L00_0015F5CC;
 extern void FUN_001f9fc8(void *);
 extern void FUN_0022bba0(void);
 extern void FUN_L00_00288ec0(int, int);
@@ -269,7 +268,6 @@ typedef struct {
     DoorVars *vars;
 } DoorMoby;
 
-extern int D_L00_0015F5C4;
 extern u8 D_0013D388[];
 extern s16 D_00141628[];
 extern s32 FUN_L00_002668a0(DoorMoby *, void *);

@@ -1,8 +1,6 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
-extern s32 D_0015F5D0;
-extern s32 D_0015F5D4;
-extern s32 D_00161288;
 extern s32 get_help_message_text() __asm__("func_001FDD10");
 extern s32 copy_text_to_shared_buffer() __asm__("FUN_001ff658");
 extern s32 try_set_help_message() __asm__("FUN_00215130");

@@ -39,7 +39,6 @@ struct CameraTransitionState {
 };
 
 extern struct CameraTransitionState camera_transition_state __asm__("D_00186F40");
-extern CameraDescriptor *camera_descriptors __asm__("D_0015EF90");
 
 extern void backup_current_cam(void) __asm__("FUN_001ebc90");
 extern void camera_run_setup_to_new_cam(struct UpdateCam *next_camera) __asm__("func_001EBEC8");
@@ -48,6 +47,7 @@ extern s32 convert_float_to_word(f32 transition_duration) __asm__("func_001FA6D0
 
 void switch_active_camera_record(struct UpdateCam *next_camera) __asm__("FUN_001ebf10");
 
+extern CameraDescriptor *D_0015EF90;
 void switch_active_camera_record(struct UpdateCam *next_camera) {
 
     struct UpdateCam *previous_camera;
@@ -60,7 +60,7 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     s32 descriptor_kind = 0;
     s32 previous_transition_state;
 
-    descriptor = camera_descriptors[next_camera->descriptor_index].descriptor;
+    descriptor = D_0015EF90[next_camera->descriptor_index].descriptor;
     previous_camera = camera_transition_state.current;
     previous_transition_state = previous_camera->transition_state;
     if (descriptor != 0) {

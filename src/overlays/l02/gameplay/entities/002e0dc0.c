@@ -9,6 +9,7 @@
 #include "rnc/math_consts.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
+#include "rnc/data_labels.h"
 
 /* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
 typedef struct {
@@ -56,7 +57,6 @@ typedef struct {
 
 extern u8 D_0013D506 __attribute__((section(".data")));
 extern u8 D_0015EDB0 __attribute__((section(".sdata")));
-extern f32 D_0015ED64 __attribute__((section(".sdata")));
 extern s32 D_L02_0015F5C4 __attribute__((section(".sdata")));
 extern WatcherReward D_L02_0016CE60;
 extern char D_L02_00161D00[];
@@ -100,7 +100,6 @@ extern WatcherReward talk_camera __asm__("D_L02_0016CE60") __attribute__((sectio
 extern char D_L02_00161CF0[];
 extern char *D_L02_001600EC;
 extern f32 D_L02_0015F3FC;
-extern s32 D_0015EEA4;
 extern f32 D_L02_00161CE0[2] __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
 extern struct UsageStat D_00141968[] __attribute__((section(".data"))); /* usage records 36 on (D_00141848 + 0x120) */
 extern u8 items_owned[] __asm__("D_0013D4C0") __attribute__((section(".data"))); /* by item id */
@@ -348,6 +347,7 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
     }
 }
 
+extern f32 frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
 /* Watcher NPC update (twin of FUN_L05_00317470): idles with random animations, talks to the hero and drops its reward, and turns its head toward the hero or a random look target. */
 void FUN_L02_002e1950(struct Moby *m) {
     WatcherVars *v = (WatcherVars *)m->pvars;
@@ -467,8 +467,8 @@ void FUN_L02_002e1950(struct Moby *m) {
     }
     if (D_0015EDB0)
         v->height = 2.75f;
-    drive_joint(rate * D_0015ED64, head_rate * D_0015ED64, m, v->body, 0);
-    drive_joint(rate * D_0015ED64, head_rate * D_0015ED64, m, v->head, 1);
+    drive_joint(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, m, v->body, 0);
+    drive_joint(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, m, v->head, 1);
 }
 #include "qcopy.h"
 extern char *D_L02_001600EC_n __asm__("D_L02_001600EC");

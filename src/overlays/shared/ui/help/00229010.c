@@ -89,7 +89,6 @@ s32 pick_idle_fidget(s32 *index) {
     return 0;
 }
 extern u8 D_0013F350_002293a8[] __asm__("D_0013F350");
-extern f32 D_0015ED6C_002293a8 __asm__("D_0015ED6C");
 extern s32 D_0013CAE0_002293a8 __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern s32 D_L00_0015F6DC_002293a8 __asm__("D_L00_0015F6DC");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -104,7 +103,7 @@ void FUN_L00_002293a8(void) {
     s32 n;
     b = D_0013F350_002293a8;
     *(s32 *)(b + 0x2284) = 0;
-    if (b[0x12E2] != 0 && D_0015ED6C_002293a8 * 0.5f < *(f32 *)(b + 0x164)) {
+    if (b[0x12E2] != 0 && frame_time * 0.5f < *(f32 *)(b + 0x164)) {
         hero_set_state(0x2F, 1);
         return;
     }
@@ -132,12 +131,12 @@ void FUN_L00_002293a8(void) {
         return;
     }
     d = D_0013F350_002293a8;
-    if ((D_0015ED6C_002293a8 * 3.0f < *(f32 *)(d + 0x168) &&
+    if ((frame_time * 3.0f < *(f32 *)(d + 0x168) &&
          FUN_001f96f8_002293a8(3) < *(s32 *)(d + 0x418)) ||
         *(s32 *)(d + 0x2084) == 0x10) {
         if (hero_set_state(HERO_STATE_STOP, 0)) {
             FUN_L00_002323b8_002293a8(5, 0, -1.0f);
-            FUN_L00_0025f730_002293a8(&hero.motion.unk150, D_0015ED6C_002293a8 * 5.0f);
+            FUN_L00_0025f730_002293a8(&hero.motion.unk150, frame_time * 5.0f);
         }
         return;
     }
@@ -154,7 +153,6 @@ void FUN_L00_002293a8(void) {
 }
 extern s32 D_0013CAE0_229660 __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern u8 D_0013D4C2_229660 __asm__("D_0013D4C2") __attribute__((section(".data")));
-extern f32 D_0015ED6C_229660 __asm__("D_0015ED6C");
 extern int FUN_L00_00221d98_229660(void) __asm__("FUN_L00_00221d98");
 extern int FUN_001f96f8_229660(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_00266e00_229660(int, void *, int, int) __asm__("FUN_L00_00266e00");
@@ -186,13 +184,13 @@ int hero_handle_jump_press(void) {
             return 0;
         if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_229660 != 0 && hero.unk22D8 == 0) {
             if ((2.5f < hero.wall_probe_distance || hero.unk250 < 0.7853982f) && 0.7f < hero.unk229C &&
-                D_0015ED6C_229660 * 0.9f < hero.motion.unk168) {
+                frame_time * 0.9f < hero.motion.unk168) {
                 m = 0xA;
                 goto found;
             }
         }
         if (FUN_L00_0020d498_229660(3) == 3 && hero.unk22D8 == 0 && 0.7f < hero.unk229C &&
-            (2.5f < hero.wall_probe_distance || hero.unk254) && D_0015ED6C_229660 * 0.9f < hero.motion.unk168) {
+            (2.5f < hero.wall_probe_distance || hero.unk254) && frame_time * 0.9f < hero.motion.unk168) {
             if (hero.unk1B8)
                 return 1;
             m = 0x10;

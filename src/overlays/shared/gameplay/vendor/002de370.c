@@ -3,6 +3,8 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 #define NOT_SDA
 
@@ -114,9 +116,7 @@ void FUN_L03_002e8730(char *m) {
     normalize_vector_xyz(m + 0x10, m + 0x10, 1.0f);
     cross_vectors_xyz(m + 0x20, m + 0x10, m);
 }
-extern char D_0013E533[];
 extern int D_L03_0015EF50;
-extern char D_L03_00166EC0[];
 extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
 
 int FUN_L03_002e8870(char *a0, char *a1) {
@@ -144,7 +144,6 @@ int FUN_L03_002e8870(char *a0, char *a1) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002E9D48), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
 extern int D_L03_0015EF50;
 extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
 

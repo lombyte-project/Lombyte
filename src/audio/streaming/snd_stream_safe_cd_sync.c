@@ -1,7 +1,6 @@
 #include "types.h"
 #include "rnc/audio/sound_read_work.h"
-extern s32 snd_cd_stream_active __asm__("D_0015EC8C") __attribute__((sda));
-extern s32 snd_cd_stream_end_pending __asm__("D_0015EC98") __attribute__((sda));
+#include "rnc/data_labels.h"
 extern void FlushCache(s32);
 extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern s32 sceCdSync(s32);

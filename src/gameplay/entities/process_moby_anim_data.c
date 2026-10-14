@@ -1,5 +1,5 @@
 #include "types.h"
-extern s32 D_0015F63C;
+#include "rnc/data_labels.h"
 extern u8 normal_lut[] __asm__("D_00165500");
 extern s32 FlushCache();
 extern s32 FUN_001f98d0();

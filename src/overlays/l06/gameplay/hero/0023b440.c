@@ -13,6 +13,8 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 06 build). */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_0023BBE8.c: func_L06_0023BBE8), where it is exact; names translated to the US level program. */
@@ -32,7 +34,6 @@ typedef struct {
 
 
 
-extern struct PadState D_0013C940;
 extern HeroTableRow2C D_L06_0017C3A8[];
 extern HeroAnimRow D_L06_0017A240[];
 extern HeroTableEntry70 D_L06_0017A010[];
@@ -41,7 +42,6 @@ extern S17AF00 D_L06_0017AE00;
 extern S17C638 D_L06_0017C538;
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L06_0015F638;
-extern float D_L06_00167558 __attribute__((section(".data")));
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
@@ -63,9 +63,6 @@ extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
-extern int D_0015ED8C;
-extern int D_0015EEA4;
-extern int D_L06_0015F594;
 extern int D_L06_0015F6DC;
 extern int D_L06_0016CF00 __attribute__((section(".data")));
 extern int FUN_001efa68(void *, void *, int, int, int);
@@ -96,7 +93,6 @@ extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FU
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int D_L06_0015F678 __attribute__((sda));
-extern unsigned char D_0013D4DC[];
 extern void FUN_L00_00206c08(void);
 extern void FUN_L00_00209ca8(int, int, int);
 extern void FUN_L00_0020e698(void);
@@ -136,6 +132,7 @@ void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
+extern float D_L06_00167558_lui __asm__("D_L06_00167558") __attribute__((section(".data")));
 void FUN_L06_0023b440(void) {
     unsigned char *moby;
     int prevSub;
@@ -173,7 +170,7 @@ void FUN_L06_0023b440(void) {
             (hero.state.current == HERO_STATE_IDLE || hero.state.current == HERO_STATE_RUN)) {
             hero_set_state(HERO_STATE_DYING, 1);
         } else if (FUN_L02_0022ee00() == 0 && FUN_L00_002276c0() == 0) {
-            if ((D_0013C940.pressed & 0x10) || (D_0013C940.pressed_unmasked & 0x10)) {
+            if ((controller_state.pressed & 0x10) || (controller_state.pressed_unmasked & 0x10)) {
                 if (hero.items[0].unk1C != 2 && D_L06_0015F594 == 0 &&
                     (hero.unk20AC == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0) &&
                     (hero.unk20A7 == 0 || hero.vehicle_mode == 1 || hero.unk1B2 != 0)) {
@@ -205,10 +202,10 @@ void FUN_L06_0023b440(void) {
             }
             FUN_001f9770(&hero.unk22D4);
             FUN_001f9770(&hero.unk22D6);
-            if (D_0013C940.pressed & 0x10) {
+            if (controller_state.pressed & 0x10) {
                 hero.unk22D4 = scale_game_frames(0x14);
             }
-            if ((hero.unk22D4 != 0 || hero.unk22D6 != 0) && (D_0013C940.raw_released & 0x10)) {
+            if ((hero.unk22D4 != 0 || hero.unk22D6 != 0) && (controller_state.raw_released & 0x10)) {
                 if (hero.unk22D6 == 0) {
                     hero.unk22D6 = scale_game_frames(0x14);
                 } else {
@@ -238,7 +235,7 @@ void FUN_L06_0023b440(void) {
             } else {
                 switch (hero.state.current) {
                 case 0:
-                    if (D_0013C940.held & 5) {
+                    if (controller_state.held & 5) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
                     }
@@ -390,7 +387,7 @@ void FUN_L06_0023b440(void) {
                             break;
                         }
                     }
-                    if ((D_0013C940.held & 0xA) && hero.grounded_frames != 0) {
+                    if ((controller_state.held & 0xA) && hero.grounded_frames != 0) {
                         if (((unsigned char *)hero.moby)[0x53] != 0x1A || !(hero.anim_frame < 108.0f)) {
                             hero_set_state(HERO_STATE_CROUCH, 1);
                             break;
@@ -406,7 +403,7 @@ void FUN_L06_0023b440(void) {
                             if (scale_game_frames(0x18) > hero.state_timer && hero.unk308 == 0) {
                                 stick_target(0, 1.0f);
                                 if (fast_difference_between_rotations(
-                                        hero.motion.move_yaw, D_L06_00167558) > 1.2217305f) {
+                                        hero.motion.move_yaw, D_L06_00167558_lui) > 1.2217305f) {
                                     ok = 0;
                                 }
                             }
@@ -422,7 +419,7 @@ void FUN_L06_0023b440(void) {
                     }
                     break;
                 case 0x40:
-                    if (D_0013C940.held & 5) {
+                    if (controller_state.held & 5) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
                     }
@@ -430,11 +427,11 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(HERO_STATE_FIDGET_ALT, 1);
                         break;
                     }
-                    if (D_0013C940.held & 0x40) {
+                    if (controller_state.held & 0x40) {
                         hero_set_state(HERO_STATE_FIDGET_ALT, 1);
                         break;
                     }
-                    if (D_0013C940.held & 0xA) {
+                    if (controller_state.held & 0xA) {
                         hero_set_state(HERO_STATE_FIDGET_ALT, 1);
                         break;
                     }
@@ -458,7 +455,7 @@ void FUN_L06_0023b440(void) {
                         if (FUN_L00_00228b78(scale_game_frames(7), 0)) {
                             break;
                         }
-                        if (D_0013C940.held & 0xA) {
+                        if (controller_state.held & 0xA) {
                             hero_set_state(HERO_STATE_CROUCH, 1);
                             break;
                         }
@@ -491,7 +488,7 @@ void FUN_L06_0023b440(void) {
                 case 1:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
-                            if (D_0013C940.held & 0xA) {
+                            if (controller_state.held & 0xA) {
                                 if (((unsigned char *)hero.moby)[0x53] != 0xD) {
                                     set_hero_animation(0xD, 0, scale_game_frames(8));
                                 }
@@ -509,7 +506,7 @@ void FUN_L06_0023b440(void) {
                         if (m != 0 && FUN_L00_00211360(m) && m[0x20] != 0) {
                             ok = 0;
                         }
-                        if (D_0013C940.held & 5) {
+                        if (controller_state.held & 5) {
                             break;
                         }
                         if (!ok) {
@@ -520,7 +517,7 @@ void FUN_L06_0023b440(void) {
                         FUN_L06_00239528();
                         break;
                     }
-                    if (D_0013C940.held & 0xA) {
+                    if (controller_state.held & 0xA) {
                         hero_set_state(HERO_STATE_CROUCH, 1);
                         break;
                     }
@@ -533,7 +530,7 @@ void FUN_L06_0023b440(void) {
                     }
                     break;
                 case 23:
-                    if (D_0013C940.held & hero.items[0].button_mask) {
+                    if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
                     if (hero.unk1D0 != 0) {
@@ -542,7 +539,7 @@ void FUN_L06_0023b440(void) {
                     hero_set_state(HERO_STATE_IDLE, 1);
                     break;
                 case 48:
-                    if (D_0013C940.held & hero.items[0].button_mask) {
+                    if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
                     if (hero.unk1D0 != 0) {
@@ -557,7 +554,7 @@ void FUN_L06_0023b440(void) {
                 case 46: {
                     int mask = hero.items[0].button_mask;
                     if (((unsigned char *)hero.moby)[0x52] == 0x2E && hero.anim_frame > 28.0f) {
-                        if (D_0013C940.held & mask) {
+                        if (controller_state.held & mask) {
                             hero_set_state(0x17, 1);
                             break;
                         }
@@ -591,7 +588,7 @@ void FUN_L06_0023b440(void) {
                         if ((float)rec->f14 < hero.anim_frame && hero.unkA9C == 0 &&
                             !(hero.state.current == HERO_STATE_CROUCH_SWING && hero.unk308 != 0)) {
                             if (pad_pressed_within(0x40, t, 0)) {
-                                if (D_0013C940.held & 0xA) {
+                                if (controller_state.held & 0xA) {
                                     if (hero_handle_jump_press()) {
                                         break;
                                     }
@@ -675,12 +672,12 @@ void FUN_L06_0023b440(void) {
                     }
                     if (hero.unk12E2 == 0 ||
                         (frame_time * 2.0f > hero.motion.unk164 && hero.ground_slope.f < 0.08726646f)) {
-                        if (D_0013C940.held & 5) {
+                        if (controller_state.held & 5) {
                             hero_set_state(HERO_STATE_LOOK, 1);
                             break;
                         }
                     }
-                    if (D_0013C940.held & 0xA) {
+                    if (controller_state.held & 0xA) {
                         hero_set_state(HERO_STATE_CROUCH, 1);
                         break;
                     }
@@ -690,7 +687,7 @@ void FUN_L06_0023b440(void) {
                     }
                     if (hero.state_timer > scale_game_frames(0xF) ||
                         (hero.state.prev_control_mode != 0 && hero.state.prev_control_mode != 1)) {
-                        if ((D_0013C940.pressed & 0x10000) && hero.unk20AA == 0) {
+                        if ((controller_state.pressed & 0x10000) && hero.unk20AA == 0) {
                             hero.unk3BE = 1;
                         }
                     }
@@ -777,16 +774,16 @@ void FUN_L06_0023b440(void) {
                     }
                     break;
                 case 3:
-                    if (D_0013C940.held & 5) {
+                    if (controller_state.held & 5) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
                     }
                     if (hero.unk1C4 == 0) {
-                        if (D_0013C940.pressed & 0x40) {
+                        if (controller_state.pressed & 0x40) {
                             hero_set_state(HERO_STATE_JUMP, 1);
                             break;
                         }
-                        if (D_0013C940.held & 0xA) {
+                        if (controller_state.held & 0xA) {
                             hero_set_state(HERO_STATE_CROUCH, 1);
                             break;
                         }
@@ -821,11 +818,11 @@ void FUN_L06_0023b440(void) {
                     }
                     break;
                 case 4:
-                    if (D_0013C940.held & 5) {
+                    if (controller_state.held & 5) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
                     }
-                    if (hero.state_timer > scale_game_frames(0xB) && !(D_0013C940.held & 0xA)) {
+                    if (hero.state_timer > scale_game_frames(0xB) && !(controller_state.held & 0xA)) {
                         hero_set_state(HERO_STATE_IDLE, 0);
                         set_hero_animation(FUN_L06_0021d0a0(0), 0, -2.0f);
                         break;
@@ -871,7 +868,7 @@ void FUN_L06_0023b440(void) {
                     }
                     {
                         int go = 0;
-                        if (!(D_0013C940.held & hero.items[0].button_mask)) {
+                        if (!(controller_state.held & hero.items[0].button_mask)) {
                             if ((float)scale_game_frames(0x19) < hero.unk96C) {
                                 hero.unk988 = 1;
                             }
@@ -904,7 +901,7 @@ void FUN_L06_0023b440(void) {
                     hero.unk940 = frame_time_sq * 29.0f;
                     break;
                 case 38:
-                    if (D_0013C940.held & hero.items[0].button_mask) {
+                    if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
                     hero.ground_speed = hero.unk960;
@@ -919,7 +916,7 @@ void FUN_L06_0023b440(void) {
                     hero.unk2284 = 0;
                     break;
                 case 44:
-                    if (D_0013C940.held & hero.items[0].button_mask) {
+                    if (controller_state.held & hero.items[0].button_mask) {
                         break;
                     }
                     if (scale_game_frames(0xA) < hero.state_timer) {
@@ -937,7 +934,7 @@ void FUN_L06_0023b440(void) {
                          (hero.state.prev != 8 && hero.state.prev != 6)) &&
                         hero.state.prev != 0xF && hero.state.prev != 0xA &&
                         hero.state.prev != 0x10 && hero.state.prev != 0x12 &&
-                        hero.state.prev != 0x3C && (D_0013C940.pressed & 0x40)) {
+                        hero.state.prev != 0x3C && (controller_state.pressed & 0x40)) {
                         hero_set_state(HERO_STATE_PACK_LONG_JUMP, 1);
                     }
                     {
@@ -1284,7 +1281,7 @@ void FUN_L06_0023b440(void) {
                          pad_pressed_within(0x40, scale_game_frames(9), 0) &&
                          2.3561945f < fast_difference_between_rotations(hero.motion.move_yaw,
                                                                         hero.motion.rot.f[2])) ||
-                        (D_0013C940.pressed & 0xA)) {
+                        (controller_state.pressed & 0xA)) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         hero.unk1B0 = scale_game_frames(0xA);
                         break;
@@ -1450,7 +1447,7 @@ void FUN_L06_0023b440(void) {
                     if (hero.health.hp <= 0) {
                         break;
                     }
-                    if ((D_0013C940.held & 0x40) && D_0013D4DC[-0x1A] != 0 &&
+                    if ((controller_state.held & 0x40) && D_0013D4DC[-0x1A] != 0 &&
                         hero_slot_item_id(3) != 4 && hero.unk22D8 == 0 && hero.unk1C4 == 0 &&
                         hero.ground_distance > 0.6f) {
                         hero_set_state(HERO_STATE_LAND, 1);
@@ -1468,7 +1465,7 @@ void FUN_L06_0023b440(void) {
                     if (hero_slot_item_id(3) == 3 && hero.unk22D8 == 0) {
                         if (FUN_L00_00266e00(0x40, 0xA, scale_game_frames(9),
                                              scale_game_frames(8))) {
-                            if ((D_0013C940.held & 0xA) && (D_0013C940.pressed & 0x40)) {
+                            if ((controller_state.held & 0xA) && (controller_state.pressed & 0x40)) {
                                 if (hero.unk41E == 0 || hero.ground_distance > 1.5f) {
                                     hero_set_state(HERO_STATE_PACK_LONG_JUMP, 1);
                                     break;
@@ -1507,17 +1504,17 @@ void FUN_L06_0023b440(void) {
                         func_001F9908_r(&D_L06_0015F678);
                         if (D_L06_0015F678 != 0) {
                             both = 1;
-                            if (!((D_0013C940.held & 8) && (D_0013C940.pressed & 8))) {
+                            if (!((controller_state.held & 8) && (controller_state.pressed & 8))) {
                                 both = 0;
                             }
                         }
-                        if (D_0013C940.pressed & 8) {
+                        if (controller_state.pressed & 8) {
                             D_L06_0015F678 = scale_game_frames(0x1E);
                         }
                         if (!(hero.state_timer > scale_game_frames(0x14))) {
                             break;
                         }
-                        if (!(D_0013C940.pressed & 0x40) && !both) {
+                        if (!(controller_state.pressed & 0x40) && !both) {
                             break;
                         }
                     }
@@ -1551,8 +1548,8 @@ void FUN_L06_0023b440(void) {
                             break;
                         }
                     }
-                    if (hero.state_timer > scale_game_frames(0x1E) && !(D_0013C940.held & 0x40) &&
-                        !(D_0013C940.held_unmasked & 0x40)) {
+                    if (hero.state_timer > scale_game_frames(0x1E) && !(controller_state.held & 0x40) &&
+                        !(controller_state.held_unmasked & 0x40)) {
                         hero_set_state(HERO_STATE_FALL, 1);
                         break;
                     }
@@ -1575,7 +1572,7 @@ void FUN_L06_0023b440(void) {
                         hero.unk1C4 = scale_game_frames(0x22);
                         break;
                     }
-                    if (D_0013C940.held & 0xA) {
+                    if (controller_state.held & 0xA) {
                         hero_set_state(HERO_STATE_CROUCH, 1);
                         FUN_L00_00233288(0.016f, 0.002f, 5, 2, 0, 1);
                         break;
@@ -1656,7 +1653,7 @@ void FUN_L06_0023b440(void) {
                                 }
                                 if (ok) {
                                     if (pad_pressed_within(0x1F000, scale_game_frames(5), 0)) {
-                                        if (D_0013C940.held & 0xA) {
+                                        if (controller_state.held & 0xA) {
                                             hero_set_state(HERO_STATE_HIGH_JUMP, 1);
                                             break;
                                         }
@@ -1671,7 +1668,7 @@ void FUN_L06_0023b440(void) {
                         hero.state.current != 0xF && hero.state.current != HERO_STATE_PACK_JUMP &&
                         hero.state.current != 0x69 &&
                         (hero.state.current == 0xE || scale_game_frames(9) < hero.state_timer) &&
-                        (D_0013C940.held & 0xA)) {
+                        (controller_state.held & 0xA)) {
                         if (pad_pressed_within(0x40, scale_game_frames(8), 0)) {
                             hero_set_state(HERO_STATE_PACK_LONG_JUMP, 1);
                             break;
@@ -1930,7 +1927,7 @@ void FUN_L06_0023b440(void) {
                                           frame_time * 5.8f))) {
                                     hero_set_state(0xE, 1);
                                 } else if (D_0013D4DC[-0x1A] != 0 && hero_slot_item_id(3) != 4 &&
-                                           hero.unk22D8 == 0 && (D_0013C940.held & 0x40) &&
+                                           hero.unk22D8 == 0 && (controller_state.held & 0x40) &&
                                            delay < hero.state_timer &&
                                            hero.unk4A6 < hero.state_timer) {
                                     float lim = 0.6f;
@@ -1993,7 +1990,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(0x52, 1);
                         break;
                     }
-                    if (D_0013C940.held & 5) {
+                    if (controller_state.held & 5) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
                     }
@@ -2151,7 +2148,7 @@ void FUN_L06_0023b440(void) {
                     }
                     break;
                 case 79:
-                    if (hero.state_timer > scale_game_frames(0x1E) && !(D_0013C940.held & 0x40)) {
+                    if (hero.state_timer > scale_game_frames(0x1E) && !(controller_state.held & 0x40)) {
                         hero_set_state(0x45, 1);
                         break;
                     }
@@ -2304,7 +2301,7 @@ void FUN_L06_0023b440(void) {
                          pad_pressed_within(0x40, scale_game_frames(9), 0) &&
                          2.3561945f < fast_difference_between_rotations(hero.motion.move_yaw,
                                                                         hero.motion.rot.f[2])) ||
-                        (D_0013C940.held & 0xA)) {
+                        (controller_state.held & 0xA)) {
                         hero_set_state(0x45, 1);
                         hero.unk1B0 = scale_game_frames(0xA);
                         break;
@@ -2385,7 +2382,7 @@ void FUN_L06_0023b440(void) {
                             set_hero_animation(5, 0, scale_game_frames(8));
                         }
                     }
-                    if (D_0013C940.held & 5) {
+                    if (controller_state.held & 5) {
                         hero_set_state(HERO_STATE_LOOK, 1);
                         break;
                     }
@@ -2393,7 +2390,7 @@ void FUN_L06_0023b440(void) {
                         hero_set_state(0x55, 1);
                         break;
                     }
-                    if (D_0013C940.pressed & 0x20) {
+                    if (controller_state.pressed & 0x20) {
                         hero_set_state(0x59, 1);
                         break;
                     }
@@ -2425,7 +2422,7 @@ void FUN_L06_0023b440(void) {
                     hero_set_state(0x53, 1);
                     break;
                 case 89:
-                    if (hero.state_timer > scale_game_frames(0x2D) && !(D_0013C940.held & 0x20)) {
+                    if (hero.state_timer > scale_game_frames(0x2D) && !(controller_state.held & 0x20)) {
                         hero_set_state(0x53, 0);
                         set_hero_animation(0, 0, scale_game_frames(0x14));
                     }
@@ -2471,7 +2468,7 @@ void FUN_L06_0023b440(void) {
                         hero_switch_item(0);
                         break;
                     }
-                    if (D_0013C940.pressed & 0x20) {
+                    if (controller_state.pressed & 0x20) {
                         hero_set_state(0x59, 1);
                         break;
                     }
@@ -2500,7 +2497,7 @@ void FUN_L06_0023b440(void) {
                 case 30:
                     if (hero.vehicle_mode == 0) {
                         if (hero.unk20AA == 0 || hero.unk20A5 != 0) {
-                            if (D_0013C940.held & 0xA) {
+                            if (controller_state.held & 0xA) {
                                 if (((unsigned char *)hero.moby)[0x53] != 0xD) {
                                     set_hero_animation(0xD, 0, scale_game_frames(8));
                                 }
@@ -2512,7 +2509,7 @@ void FUN_L06_0023b440(void) {
                             }
                         }
                     }
-                    if (D_0013C940.held & 5) {
+                    if (controller_state.held & 5) {
                         break;
                     }
                     if (hero.state.current == 0x1E) {
@@ -2534,7 +2531,7 @@ void FUN_L06_0023b440(void) {
                 case 35:
                     if (19.0f < hero.anim_frame &&
                         pad_pressed_within(0x40, scale_game_frames(0xB), 0)) {
-                        if (D_0013C940.held & 0xA) {
+                        if (controller_state.held & 0xA) {
                             hero_handle_jump_press();
                             break;
                         }

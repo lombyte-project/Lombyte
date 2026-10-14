@@ -2,5 +2,3 @@
 #include "types.h"
 #include "asm.h"
 
-extern int D_0015EDF0;
-extern int pause_sound_volume __asm__("D_0013E5A0") __attribute__((section(".data")));

@@ -1,6 +1,6 @@
 #include "types.h"
+#include "rnc/data_labels.h"
 
-extern volatile s32 movie_display_active __asm__("D_001611E0");
 extern volatile s32 D_001611E4;
 extern s32 sceGsSyncV();
 

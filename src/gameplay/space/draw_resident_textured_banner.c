@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/rendering/screen.h"
-extern s64 D_00160588;
+#include "rnc/data_labels.h"
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
 extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");

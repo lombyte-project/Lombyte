@@ -2,6 +2,7 @@
 #include "types.h"
 #include "eetypes.h"
 #include "qzero.h"
+#include "rnc/data_labels.h"
 
 /* The 0x70-byte header in front of the voices, then thirty 0x70-byte voices. */
 typedef struct {
@@ -19,9 +20,6 @@ typedef struct {
 } VoicePoolSlot;
 
 extern u8 voice_pool[] __asm__("D_0013E550");
-extern s32 playback_mode __asm__("D_0015EDE8");
-extern s32 music_volume __asm__("D_0015EDEC");
-extern s32 sound_volume __asm__("D_0015EDF0");
 extern s32 snd_start_sound_system(void) __asm__("FUN_0012da28");
 extern void snd_set_master_volume(s32, s32) __asm__("FUN_0012e208");
 extern void snd_set_playback_mode(s32) __asm__("FUN_0012e240");

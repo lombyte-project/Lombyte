@@ -1,8 +1,5 @@
 #include "types.h"
-extern s32 D_0012FCAC[];
-extern u8 D_00158040[];
-extern u32 D_00158080[];
-extern u32 D_001580C0[];
+#include "rnc/data_labels.h"
 extern s32 sceSifCallRpc();
 
 s32 free_sif_system_memory(void *addr) __asm__("FUN_0011c938");
