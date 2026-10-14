@@ -1026,7 +1026,146 @@ void FUN_L00_002e2af0(char *m) {
         FUN_L00_002e2c88(a, b, &D_L00_001E6E40[k1], 0x30, 0x10, i);
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002e2c88.s", FUN_L00_002e2c88);
+#else
+typedef struct {
+    OvlVec4 v[4];
+    u32 color[4];
+    f32 uv[4][2];
+    u64 texture[4];
+} Quad_2e2c88;
+extern u8 g_debug_camera[] __asm__("D_L00_00166DC0");
+s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
+extern f32 cubic_hermite_scalar(f32, f32, f32, f32, f32) __asm__("FUN_L00_00257e20");
+void FUN_L00_002e2c88(int a, int b, void *points, int alpha, int glow_alpha, int idx) {
+    Quad_2e2c88 q, glow;
+    OvlVec4 width, glow_width;
+    OvlVec4 basis[4];
+    OvlVec4 transform[4];
+    OvlVec4 direction, from, to;
+    f32 one;
+    OvlVec4 *position;
+    f32 zero;
+    f32 scale;
+    f32 f, numerator, denominator, uv_start, uv_end;
+    u64 texture0, texture2, texture3;
+    u32 color, glow_color;
+    int i;
+    char *current, *next;
+
+    q.texture[1] = get_effect_texture(a);
+    one = 1.0f;
+    q.texture[3] = 0x8000000048ULL;
+    q.texture[2] = 0xff9000000260ULL;
+    q.texture[0] = 0;
+    color = ((u32)alpha << 24) | 0x7f7f7f;
+    q.color[0] = q.color[1] = q.color[2] = q.color[3] = color;
+    glow.texture[1] = get_effect_texture(b);
+    scale = 0.6f;
+    glow.uv[0][1] = 0.0f;
+    zero = glow.uv[0][1];
+    uv_start = D_L00_00161C78_f[idx] + zero;
+    uv_end = D_L00_00161C78_f[idx] + one;
+    q.uv[0][0] = uv_start; q.uv[2][0] = uv_end;
+    glow_color = ((u32)glow_alpha << 24) | 0x7f4040;
+    texture3 = q.texture[3]; texture2 = q.texture[2]; texture0 = q.texture[0];
+    glow.texture[3] = texture3; glow.texture[2] = texture2; glow.texture[0] = texture0;
+    glow.color[0] = glow.color[1] = glow.color[2] = glow.color[3] = glow_color;
+    glow.uv[0][0] = one; glow.uv[0][1] = zero;
+    glow.uv[1][0] = one; glow.uv[1][1] = one;
+    *(u32 *)&glow.uv[2][0] = 0; *(u32 *)&glow.uv[2][1] = 0;
+    *(u32 *)&glow.uv[3][0] = 0; glow.uv[3][1] = one;
+    q.uv[1][0] = q.uv[0][0]; q.uv[0][1] = zero;
+    q.uv[1][1] = one; q.uv[3][0] = q.uv[2][0];
+    q.uv[2][1] = zero; q.uv[3][1] = one;
+    if (*(short *)(D_L00_00161C88_c2[idx] + 0xa6) == 0x1c) scale = 0.3f;
+    width.q = 0; glow_width.q = 0;
+    glow_width.f[2] = scale + scale;
+    width.f[3] = one; width.f[2] = scale; glow_width.f[3] = one;
+    position = (OvlVec4 *)(D_L00_001E6D20_c[idx].b + 0x10);
+    qcopy(&basis[0], position);
+    one = width.f[3];
+    position += 2;
+    subtract_vector_xyz(&basis[1], g_debug_camera, position);
+    fast_vec_scale(&basis[1], &basis[1], one);
+    cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
+    normalize_vector_xyz(&basis[2], &basis[2], one);
+    cross_vectors_xyz(&basis[0], &basis[2], &basis[1]);
+    qcopy(&basis[3], position);
+    qcopy(&transform[3], position);
+    /* The copied fourth vector is the third subtraction input in retail. */
+    subtract_vector_xyz(&direction, &D_L00_001E6DE0_c[idx], &transform[3]);
+    normalize_vector_xyz(&transform[0], &direction, one);
+    cross_vectors_xyz(&transform[1], &transform[0], D_0013F5E0);
+    normalize_vector_xyz(&transform[1], &transform[1], -1.0f);
+    cross_vectors_xyz(&transform[2], &transform[1], &transform[0]);
+    qcopy(&q.v[0], &width);
+    fast_vec_scale(&q.v[1], &q.v[0], -1.0f);
+    qcopy(&glow.v[0], &glow_width);
+    fast_vec_scale(&glow.v[1], &glow.v[0], -1.0f);
+    transform_vector_c(&from, points, transform);
+    transform_vector_c(&to, (char *)points + 0x10, transform);
+    subtract_vector_xyz(&basis[0], &to, &from);
+    normalize_vector_xyz(&basis[0], &basis[0], one);
+    subtract_vector_xyz(&basis[1], g_debug_camera, &from);
+    cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
+    normalize_vector_xyz(&basis[2], &basis[2], one);
+    cross_vectors_xyz(&basis[1], &basis[0], &basis[2]);
+    qcopy(&basis[3], &from);
+    transform_vector_c(&q.v[0], &q.v[0], basis);
+    transform_vector_c(&q.v[1], &q.v[1], basis);
+    transform_vector_c(&glow.v[0], &glow.v[0], basis);
+    transform_vector_c(&glow.v[1], &glow.v[1], basis);
+    next = (char *)points + 0x20; current = (char *)points + 0x10;
+    i = 1;
+    do {
+        qcopy(&q.v[2], &width);
+        fast_vec_scale(&q.v[3], &q.v[2], -1.0f);
+        qcopy(&glow.v[2], &glow_width);
+        fast_vec_scale(&glow.v[3], &glow.v[2], -1.0f);
+        transform_vector_c(&from, current, transform);
+        transform_vector_c(&to, next, transform);
+        subtract_vector_xyz(&basis[0], &to, &from);
+        normalize_vector_xyz(&basis[0], &basis[0], one);
+        subtract_vector_xyz(&basis[1], g_debug_camera, &from);
+        cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
+        normalize_vector_xyz(&basis[2], &basis[2], one);
+        cross_vectors_xyz(&basis[1], &basis[0], &basis[2]);
+        qcopy(&basis[3], &from);
+        transform_vector_c(&q.v[2], &q.v[2], basis);
+        transform_vector_c(&q.v[3], &q.v[3], basis);
+        transform_vector_c(&glow.v[2], &glow.v[2], basis);
+        transform_vector_c(&glow.v[3], &glow.v[3], basis);
+        if (i == 1) {
+            color = q.color[0]; glow_color = glow.color[0];
+            q.color[0] = q.color[1] = 0xffffff;
+            glow.color[0] = glow.color[1] = 0x7f4040;
+            draw_geometry_quad(&q, 0, 0); draw_geometry_quad(&glow, 0, 0);
+            q.color[0] = q.color[1] = q.color[2] = q.color[3] = color;
+            glow.color[0] = glow.color[1] = glow.color[2] = glow.color[3] = glow_color;
+        } else {
+            draw_geometry_quad(&q, 0, 0); draw_geometry_quad(&glow, 0, 0);
+        }
+        qcopy(&q.v[0], &q.v[2]); qcopy(&q.v[1], &q.v[3]);
+        qcopy(&glow.v[0], &glow.v[2]); qcopy(&glow.v[1], &glow.v[3]);
+        next += 0x10;
+        numerator = func_001FA888_2E3700(i);
+        i++;
+        denominator = func_001FA888_2E3700(20);
+        current += 0x10;
+        f = cubic_hermite_scalar(-1.0f, zero, one, zero, numerator / denominator);
+        uv_start = D_L00_00161C78_f[idx] + zero;
+        uv_end = D_L00_00161C78_f[idx] + one;
+        q.uv[0][0] = uv_start; q.uv[2][0] = uv_end;
+        width.f[2] = scale + (0.05f - scale) * f;
+        glow_width.f[2] = width.f[2] + width.f[2];
+        q.uv[0][1] = zero; q.uv[1][0] = q.uv[0][0]; q.uv[1][1] = one;
+        q.uv[2][1] = zero; q.uv[3][0] = q.uv[2][0]; q.uv[3][1] = one;
+    } while (i < 19);
+}
+#endif
 typedef struct {
     f32 v[4][4];
     s32 col[4];
