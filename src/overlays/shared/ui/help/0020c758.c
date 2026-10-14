@@ -1618,9 +1618,11 @@ after_moby:
                             color_red = FUN_00200250_f580(angle * 90.0f);
                             color_green = FUN_00200250_f580(angle * 50.0f);
                             color_blue = FUN_00200250_f580(angle * 10.0f);
+                            color_blue += 0x14;
+                            color_green += 0x32;
                             color_red += 0xd7;
                             if (color_red > 0xff) color_red = 0xff;
-                            *(u32 *)(effect + 0x90) = ((color_blue + 0x14) << 16) | 0x80000000 | ((color_green + 0x32) << 8) | color_red;
+                            *(u32 *)(effect + 0x90) = (color_blue << 16) | 0x80000000 | (color_green << 8) | color_red;
                             *(u16 *)(effect + 0x34) |= 0x10;
                         }
                     }
