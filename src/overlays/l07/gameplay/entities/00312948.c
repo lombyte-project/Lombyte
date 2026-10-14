@@ -46,18 +46,18 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
     float wrapped;
     float u, v;
     u32 color;
+    u8 color_byte;
     u32 base_color;
     u64 texture_state = 0xff9000000260ULL;
     u64 primitive = 0xa000000029ULL;
     u64 texture;
 
-    color = *(u8 *)(*(char **)(moby + 0x78) + 0x1c6);
-    color = ((color << 24) | (color << 16)) | ((color << 8) | color);
+    color_byte = *(u8 *)(*(char **)(moby + 0x78) + 0x1c6);
+    color = ((u32)color_byte << 24) | ((u32)color_byte << 16) | ((u32)color_byte << 8) | color_byte;
     vu1_add_g_sregister_l07(0x4e, (s64)((depth_buffer_address >> 13) | 0x1000000) | ((u64)0x8000 << 17));
     row_alpha = alpha;
     texture = get_effect_texture(0x3c);
-    base_color = color | 0x404040;
-    quad.colors[0] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | base_color;
+    quad.colors[0] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | (base_color = color | 0x404040);
     quad.texture = texture;
     quad.texture_state = texture_state;
     quad.primitive = primitive;
