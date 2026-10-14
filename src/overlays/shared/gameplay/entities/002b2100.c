@@ -2267,7 +2267,7 @@ extern Vec_2b77f0 D_00166DC0_2b77f0 __asm__("D_L00_00166DC0");
 extern Vec_2b77f0 D_00166FD0_2b77f0 __asm__("D_L00_00166FD0");
 extern Vec_2b77f0 D_00173E60_2b77f0 __asm__("D_L00_00173E60");
 extern f32 D_001601E8_2b77f0 __asm__("D_L00_001601E8");
-extern f32 D_0015ED70_2b77f0 __asm__("D_0015ED70");
+extern f32 frame_time_sq __asm__("D_0015ED70");
 extern Vec_2b77f0 D_L00_0015F580_2b77f0 __asm__("D_L00_0015F580");
 extern s32 D_L00_001614F8_2b77f0 __asm__("D_L00_001614F8") __attribute__((sda));
 extern s32 D_L00_00161500_2b77f0 __asm__("D_L00_00161500") __attribute__((sda));
@@ -2446,7 +2446,7 @@ void FUN_L00_002b77f0(unsigned char *m) {
             length = D_L00_00161520_2b77f0 + speed;
             response_scale = D_001601E8_2b77f0;
         }
-        FUN_L00_00259bc8_2b77f0(length, 1.0f, response_scale * D_0015ED70_2b77f0,
+        FUN_L00_00259bc8_2b77f0(length, 1.0f, response_scale * frame_time_sq,
                                   D_L00_00161514_2b77f0 * D_0015ED6C_c, &counts.response[0], &counts.response[1]);
         FUN_001f9bf8_2b77f0(&dir, &dir, counts.response[1]);
         counts.initial_count = D_L00_00161518_2b77f0;

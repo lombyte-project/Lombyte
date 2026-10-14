@@ -1259,7 +1259,7 @@ extern int is_point_inside_clip_volume_2ed398(void *, int) __asm__("FUN_00214720
 extern int show_help_message_2ed398(int, int) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d568_2ed398(void) __asm__("FUN_L00_0020d568");
 extern unsigned char D_0013D4DF_2ed398[] __asm__("D_0013D4DF");
-extern int D_L15_00161AC0_2ed398 __asm__("D_L15_00161AC0") __attribute__((section(".sdata")));
+extern int D_L15_00161AC0_macro __asm__("D_L15_00161AC0") __attribute__((section(".sdata")));
 extern char *moby_list_2ed398 __asm__("D_L15_0015FFD8") __attribute__((section(".sdata")));
 extern char D_00141680_2ed398[] __asm__("D_00141680");
 extern char D_00141968_2ed398[] __asm__("D_00141968");
@@ -1333,7 +1333,7 @@ void FUN_L15_002ed398(struct Moby *m) {
         }
         if (is_point_inside_clip_volume_2ed398(&hero.motion.pos, t->vol54) != 0
             && hero.vehicle_mode == 3 && hero.unk22E0 == 0
-            && D_L15_00161AC0_2ed398 == 0 && *(unsigned short *)(D_00141680_2ed398 + 0x728) == 0) {
+            && D_L15_00161AC0_macro == 0 && *(unsigned short *)(D_00141680_2ed398 + 0x728) == 0) {
             show_help_message_2ed398(0x3A9E, 0x88);
         }
         pick = -1;

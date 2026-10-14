@@ -2366,7 +2366,7 @@ extern f32 fast_sin_c5(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians_c3(void) __asm__("func_00213308");
 extern float frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
 extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_0015ED70_c __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_0015EE38_macro __asm__("D_0015EE38") __attribute__((section(".sdata")));
@@ -2490,11 +2490,11 @@ void FUN_L05_00307910(Moby *moby) {
                         path_length += FUN_001f9b80((float (*)[4])data->path + (i + 1), (float (*)[4])data->path + (next + 1));
                     }
                     air_time = path_length / data->speed;
-                    jump_speed = (data->path->points[data->jump_point].z - data->path->points[data->point_index].z) / air_time + D_0015ED70_c * 21.0f * air_time * 0.5f;
+                    jump_speed = (data->path->points[data->jump_point].z - data->path->points[data->point_index].z) / air_time + frame_time_sq_macro * 21.0f * air_time * 0.5f;
                     if (data->vertical_speed < 0.0f) {
                         data->vertical_speed = 0.0f;
                     }
-                    approach_value(&data->vertical_speed, jump_speed, D_0015ED70_c * 110.0f);
+                    approach_value(&data->vertical_speed, jump_speed, frame_time_sq_macro * 110.0f);
                 }
             }
             FUN_L05_00307570_c((unsigned char *)moby);
@@ -2522,7 +2522,7 @@ void FUN_L05_00307910(Moby *moby) {
             ground = probe_ground_height(data->pos, 0, 0.5f);
             diff = data->pos[2] - ground;
             if (diff > 0.0f || data->vertical_speed > 0.0f) {
-                data->vertical_speed -= D_0015ED70_c * 21.0f;
+                data->vertical_speed -= frame_time_sq_macro * 21.0f;
             } else if (absolute_float(diff) < 0.5f) {
                 data->vertical_speed = 0.0f;
                 data->pos[2] = ground;
@@ -2546,12 +2546,12 @@ void FUN_L05_00307910(Moby *moby) {
                     target += D_0015ED6C_c;
                 }
                 if (target < data->speed) {
-                    approach_value(&data->speed, target, D_0015ED70_c * 7.0f);
+                    approach_value(&data->speed, target, frame_time_sq_macro * 7.0f);
                 } else {
-                    approach_value(&data->speed, target, D_0015ED70_c * 15.0f);
+                    approach_value(&data->speed, target, frame_time_sq_macro * 15.0f);
                 }
             } else {
-                approach_value(&data->speed, data->launch_speed, D_0015ED70_c * 20.0f);
+                approach_value(&data->speed, data->launch_speed, frame_time_sq_macro * 20.0f);
             }
             if (diff < 0.2f && data->vertical_speed < 0.0f) {
                 data->pos[2] = ground;

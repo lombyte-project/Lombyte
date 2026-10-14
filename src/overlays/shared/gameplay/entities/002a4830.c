@@ -744,7 +744,7 @@ extern s32 D_0015ED84;
 extern MobyKillTable D_L00_001BA5D0 __attribute__((section(".data")));
 extern MobyKillTable D_L00_001BB230 __attribute__((section(".data")));
 extern u8 D_0014C050[][16];
-extern f32 D_0015ED70;
+extern f32 frame_time_sq __asm__("D_0015ED70");
 extern f32 D_0015ED6C;
 
 extern s32 FUN_00213260(s32);
@@ -865,7 +865,7 @@ void FUN_L00_002a5dd8(Bolt *obj) {
         }
         break;
     case 1:
-        v->vel.f[2] -= D_0015ED70 * 10.8f;
+        v->vel.f[2] -= frame_time_sq * 10.8f;
         FUN_001f9a10(&obj->pos, &obj->pos, &v->vel);
         FUN_001fa480(&v->spin, &c);
         FUN_001fa328(&obj->rot, &c, &obj->rot);
@@ -990,15 +990,15 @@ void FUN_L00_002a5dd8(Bolt *obj) {
         if (flag) {
             FUN_001f9bf8(&a, &hero.unk0[8], D_0015ED6C * 7.0f);
             FUN_001f9a28(&b, &a, &v->vel);
-            FUN_L00_0025f730(&b, D_0015ED70 * 50.0f);
+            FUN_L00_0025f730(&b, frame_time_sq * 50.0f);
             FUN_001f9a10(&v->vel, &v->vel, &b);
         } else {
-            t = D_0015ED70 * 10.0f;
+            t = frame_time_sq * 10.0f;
             if (t < FUN_001f9af0(&v->vel)) {
                 FUN_001f9bf8(&a, &v->vel, t);
                 FUN_001f9a28(&v->vel, &v->vel, &a);
             }
-            FUN_00213ed8(&v->speed, D_0015ED6C * 48.0f, D_0015ED70 * 16.0f);
+            FUN_00213ed8(&v->speed, D_0015ED6C * 48.0f, frame_time_sq * 16.0f);
             x = D_0015ED6C * 8.0f;
             if (x < hero.motion.speed_xy) {
                 FUN_001f9bf8(&b, &hero.motion.displacement, (hero.motion.speed_xy - x) * 0.5f);
@@ -1808,7 +1808,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C MACRO_ADDR;
-extern float D_0015ED70 MACRO_ADDR;
+extern float frame_time_sq __asm__("D_0015ED70") MACRO_ADDR;
 extern float frame_time_cube __asm__("D_0015ED74") MACRO_ADDR;
 extern float FUN_001f9e90(float, float);
 extern float approach_value_alt(float*,float,float) __asm__("FUN_00213ed8");
@@ -2061,7 +2061,7 @@ void wrench_update(WrenchMoby *m) {
             float length,steps;
             FUN_L00_002a82c0((char*)m);
             subtract_vector_xyz(work.v[1],((char *)&D_001403C0),position);
-            d->acceleration+=D_0015ED70*0.9f; d->speed+=d->acceleration;
+            d->acceleration+=frame_time_sq*0.9f; d->speed+=d->acceleration;
             length=vector_length_xyz(work.v[1]); steps=d->speed; steps=length/steps;
             if (steps<(float)scale_game_frames_alt(5) && m->current_animation!=1) blend_moby_animation(m,1,0,scale_game_frames_alt(5));
             if (length<=d->speed) { d->speed=length; arrived=1; }
@@ -2480,7 +2480,7 @@ extern char *FUN_L00_002603d0_u(void *) __asm__("FUN_L00_002603d0");
 extern char D_0013F350[];
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern float D_0015ED70;
+extern float frame_time_sq __asm__("D_0015ED70");
 extern float D_L00_00173E80[];
 extern int D_L00_0015F5C4_c __asm__("D_L00_0015F5C4");
 extern int D_L00_00173E40_u[] __asm__("D_L00_00173E40");
@@ -2543,7 +2543,7 @@ int FUN_L00_002aa2a8(char *a0, char *o, int mode) {
         i = 9;
         do {
             add_vector_xyz(w, w, B);
-            B[2] = B[2] - D_0015ED70 * 9.8f;
+            B[2] = B[2] - frame_time_sq * 9.8f;
         } while (--i >= 0);
         if (FUN_001efa68(C, w, 0x12, (int)o, 0) == 0) continue;
         if (FUN_001f0b58() == 0 && 0.0f < B[2]) continue;

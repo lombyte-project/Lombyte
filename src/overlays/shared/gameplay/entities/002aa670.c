@@ -194,8 +194,8 @@ extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022D
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern s32 D_L00_001612D0 __attribute__((sda));
-extern s32 D_L00_001612D8 __attribute__((sda));
+extern s32 D_L00_001612D0_gp __asm__("D_L00_001612D0") __attribute__((sda));
+extern s32 D_L00_001612D8_gp __asm__("D_L00_001612D8") __attribute__((sda));
 extern short D_L00_001613D0 __attribute__((sda));
 extern short D_L00_001613D4 __attribute__((sda));
 extern unsigned FUN_L00_0025c0e8(unsigned c, int mask);
@@ -349,7 +349,7 @@ void mine_update(M910 *m) {
                         int i;
                         char *p;
 
-                        FUN_L00_002a3ec8(*(int *)&D_L00_001612D0, *(int *)&D_L00_001612D8, 1,
+                        FUN_L00_002a3ec8(*(int *)&D_L00_001612D0_gp, *(int *)&D_L00_001612D8_gp, 1,
                                          m->pos.f[0], m->pos.f[1], 0.5f, -0.35f);
                         v->h50 = 1;
                         clear_vector((float *)v);
@@ -1531,10 +1531,10 @@ typedef struct {
     int iE0;
 } BombHit_2adb30;
 extern float D_0015ED6C_2adb30 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_0015ED70_2adb30 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern int D_L00_0015F5CC_2adb30 __asm__("D_L00_0015F5CC");
-extern s32 D_L00_001612D0_2adb30 __asm__("D_L00_001612D0") __attribute__((sda));
-extern s32 D_L00_001612D8_2adb30 __asm__("D_L00_001612D8") __attribute__((sda));
+extern s32 D_L00_001612D0_gp __asm__("D_L00_001612D0") __attribute__((sda));
+extern s32 D_L00_001612D8_gp __asm__("D_L00_001612D8") __attribute__((sda));
 extern Cam910 player_camera __asm__("D_L00_00166C80");
 extern s32 g_debug_camera[] __asm__("D_L00_00166DC0");
 extern float D_L00_00173E68_2adb30[] __asm__("D_L00_00173E68");
@@ -1690,7 +1690,7 @@ void bomb_update(BombMoby_2adb30 *m) {
                     n0 = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_001613FC * FUN_002132a8_2adb30(0.0f, 1.0f) + 1.0f));
                     n1 = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161400 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
                     n2 = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161404 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
-                    v2.f[2] -= *(float *)&D_L00_001613F0 * D_0015ED70_2adb30 * (float)n1;
+                    v2.f[2] -= *(float *)&D_L00_001613F0 * frame_time_sq_macro * (float)n1;
                     spawn_spark(&m->pos, &v1, &v2, p0, p1, n0, n1, n2, *(int *)&D_L00_00161430);
                 }
             }
@@ -1702,9 +1702,9 @@ void bomb_update(BombMoby_2adb30 *m) {
             qcopy_nc(&old, &m->pos);
             FUN_001f9a10_2adb30(&m->pos, &m->pos, d);
             if (d->h68 == 0) {
-                d->v.f[2] -= D_0015ED70_2adb30 * 11.0f;
+                d->v.f[2] -= frame_time_sq_macro * 11.0f;
             } else {
-                d->v.f[2] -= D_0015ED70_2adb30 * 11.0f / 10.0f;
+                d->v.f[2] -= frame_time_sq_macro * 11.0f / 10.0f;
                 if (FUN_00213260_2adb30(FUN_001f96f8_2adb30(6) - 1) == 0) {
                     float h = FUN_002135f0_2adb30((float *)&m->pos, &q);
                     FUN_001f9a68_2adb30(&q, d, 0.25f);
@@ -1734,7 +1734,7 @@ void bomb_update(BombMoby_2adb30 *m) {
                     Vec_2adb30 vel;
                     char *s;
                     int i;
-                    FUN_L00_002a3ec8_2adb30(*(int *)&D_L00_001612D0_2adb30, *(int *)&D_L00_001612D8_2adb30, 1, m->pos.f[0], m->pos.f[1], 0.5f, -0.35f);
+                    FUN_L00_002a3ec8_2adb30(*(int *)&D_L00_001612D0_gp, *(int *)&D_L00_001612D8_gp, 1, m->pos.f[0], m->pos.f[1], 0.5f, -0.35f);
                     d->h68 = 1;
                     FUN_001f99f8_2adb30(d->v.f);
                     d->v.f[2] = D_0015ED6C_2adb30 * -1.5f;
@@ -1959,7 +1959,7 @@ void bomb_update(BombMoby_2adb30 *m) {
                             FUN_001f9a10_2adb30(&w, &w, &m->pos);
                             w.f[2] = gz + 0.5f;
                             v2.f[2] -= r * D_0015ED6C_2adb30 * 8.0f;
-                            FUN_L00_002738e8_2adb30(&w, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, D_0015ED70_2adb30 * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
+                            FUN_L00_002738e8_2adb30(&w, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
                         }
                         for (j = 0; j < 20; j++) {
                             int c0 = mine_blend_color(0x7F << 24, (0x7F << 24) | (cb << 16) | (cg << 8) | cr, FUN_002132a8_2adb30(0.25f, 1.0f));

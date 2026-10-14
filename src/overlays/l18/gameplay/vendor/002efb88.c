@@ -877,7 +877,7 @@ void FUN_L18_002f1fd8(struct Moby *moby) {
 }
 /* Runs the lift's state machine, then queues the draw callback for its current look. */
 typedef struct { char p0[0x34]; unsigned short h34; } M_2310;
-extern float D_L18_00162308_2310 __asm__("D_L18_00162308") __attribute__((sda));
+extern float D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
 extern float D_0015ED6C_2310 __asm__("D_0015ED6C");
 extern float approach_2310(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void enqueue_2310(void *, void *) __asm__("FUN_001f4600");
@@ -946,9 +946,9 @@ void FUN_L18_002f2310(struct Moby *m) {
     }
     switch (*(int *)(d + 0x14)) {
     case 1:
-        D_L18_00162308_2310 = D_L18_00162308_2310 + D_L18_0016230C * D_0015ED6C_2310;
-        if (1.0f < D_L18_00162308_2310) {
-            D_L18_00162308_2310 -= 1.0f;
+        D_L18_00162308_gp = D_L18_00162308_gp + D_L18_0016230C * D_0015ED6C_2310;
+        if (1.0f < D_L18_00162308_gp) {
+            D_L18_00162308_gp -= 1.0f;
         }
         enqueue_2310(FUN_L18_002f2620, m);
         break;
@@ -1015,7 +1015,7 @@ extern short D_L18_0016231C __attribute__((sda));
 extern short D_L18_00162320 __attribute__((sda));
 extern short D_L18_00162324 __attribute__((sda));
 extern short D_L18_00162328 __attribute__((sda));
-extern f32 D_L18_00162308 __attribute__((sda));
+extern f32 D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
 extern float D_L18_001DA7A0[][2] __attribute__((section(".data")));
 extern FRow D_L18_001DA3C0[] __attribute__((section(".data")));
 extern short D_L18_001DA610[][4][2] __attribute__((section(".data")));
@@ -1047,7 +1047,7 @@ void FUN_L18_002f2620(struct Moby *moby) {
     colors[1] = (*(int *)&D_L18_00162328);
     colors[0] = (*(int *)&D_L18_00162328);
     for (i = 0; i < 25; i++) {
-        float ofs = *(float *)&D_L18_00162308;
+        float ofs = *(float *)&D_L18_00162308_gp;
         for (j = 0; j < 4; j++) {
             int a = D_L18_001DA610[i][j][0];
             int b = D_L18_001DA610[i][j][1];
@@ -1093,7 +1093,7 @@ void FUN_L18_002f27c8(struct Moby *moby) {
     colors[1] = (*(int *)&D_L18_00162328);
     colors[0] = (*(int *)&D_L18_00162328);
     for (i = 0; i < 38; i++) {
-        float ofs = *(float *)&D_L18_00162308;
+        float ofs = *(float *)&D_L18_00162308_gp;
         for (j = 0; j < 4; j++) {
             int a = D_L18_001DAC20[i][j][0];
             int b = D_L18_001DAC20[i][j][1];
@@ -1114,7 +1114,7 @@ extern float D_L18_001DB3A0[][2] __attribute__((section(".data")));
 extern FRow_l18 D_L18_001DB030[] __attribute__((section(".data")));
 extern short D_L18_001DB240[][4][2] __attribute__((section(".data")));
 extern int get_effect_texture_l18(int) __asm__("FUN_001f44b8");
-extern f32 D_L18_00162308 __attribute__((sda));
+extern f32 D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
 extern void FUN_001f9fc8(void *);
 extern void FUN_001f7d30(void *, void *, int);
 
@@ -1142,7 +1142,7 @@ void FUN_L18_002f2970(struct Moby *moby) {
     colors[1] = (*(int *)&D_L18_00162328);
     colors[0] = (*(int *)&D_L18_00162328);
     for (i = 0; i < 22; i++) {
-        float ofs = *(float *)&D_L18_00162308;
+        float ofs = *(float *)&D_L18_00162308_gp;
         for (j = 0; j < 4; j++) {
             int a = D_L18_001DB240[i][j][0];
             int b = D_L18_001DB240[i][j][1];
@@ -2521,7 +2521,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
 /* Latches the target from the global block once, and counts a class 0x24B hit. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7278), where it is exact; names translated to the US level program. */
 
-extern s32 D_L18_001623A8_d __asm__("D_L18_001623A8") __attribute__((sda));
+extern s32 D_L18_001623A8_gp __asm__("D_L18_001623A8") __attribute__((sda));
 
 void FUN_L18_002f5e18(struct Moby *moby) {
     char *d = (char *)moby->pvars;
@@ -2535,7 +2535,7 @@ void FUN_L18_002f5e18(struct Moby *moby) {
             *(int *)(d + 0x3E4) = 1;
             if (t != 0) {
                 if (*(short *)(t + 0xA6) == 0x24B) {
-                    *(int *)&D_L18_001623A8_d = *(int *)&D_L18_001623A8_d + 1;
+                    *(int *)&D_L18_001623A8_gp = *(int *)&D_L18_001623A8_gp + 1;
                 }
             }
         }
@@ -3176,7 +3176,7 @@ void FUN_L18_002f7220(struct Moby *source, char *dest, L18Vector *from, L18Vecto
         fast_subtract_rotations(FUN_001f9e90(b.f[0] - a.f[0], b.f[1] - a.f[1]), source->rot.z);
 }
 extern char *D_L18_0015EF50;
-extern int D_L18_001623A0_target __asm__("D_L18_001623A0") __attribute__((sda));
+extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
 extern float D_L18_001623B0 __attribute__((sda));
 extern short D_L18_001623B4 __attribute__((sda));
 extern float D_L18_001623B8 __attribute__((sda));
@@ -3285,7 +3285,7 @@ void FUN_L18_002f7288(char *moby) {
                         *(int *)(d + 0x368) = -1;
                     }
                     if (*(unsigned char *)(moby + 0x20) >= 2) {
-                        if (*(int *)(d + 0x3ec) != 0 || D_L18_001623A0_target != 0) {
+                        if (*(int *)(d + 0x3ec) != 0 || D_L18_001623A0_gp != 0) {
                             char *w;
                             q = D_L18_00167680;
                             w = *(char **)(q + 0x180);
@@ -3415,11 +3415,11 @@ typedef struct {
 
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern int FUN_001fa6e0(int, int, float);
-extern f32 D_L18_00162450_d __asm__("D_L18_00162450") __attribute__((sda));
-extern f32 D_L18_00162454_d __asm__("D_L18_00162454") __attribute__((sda));
-extern s32 D_L18_00162458_d __asm__("D_L18_00162458") __attribute__((sda));
-extern s32 D_L18_0016245C_d __asm__("D_L18_0016245C") __attribute__((sda));
-extern s32 D_L18_00162460_d __asm__("D_L18_00162460") __attribute__((sda));
+extern f32 D_L18_00162450_gp __asm__("D_L18_00162450") __attribute__((sda));
+extern f32 D_L18_00162454_gp __asm__("D_L18_00162454") __attribute__((sda));
+extern s32 D_L18_00162458_gp __asm__("D_L18_00162458") __attribute__((sda));
+extern s32 D_L18_0016245C_gp __asm__("D_L18_0016245C") __attribute__((sda));
+extern s32 D_L18_00162460_gp __asm__("D_L18_00162460") __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00263618(void *, int, float, float);
 
@@ -3432,18 +3432,18 @@ void FUN_L18_002f7880(struct Moby *moby) {
     char a[16];
     char b[16];
     L18Q *q = (L18Q *)moby->pvars;
-    int n = FUN_001f96f8(*(int *)&D_L18_00162460_d);
+    int n = FUN_001f96f8(*(int *)&D_L18_00162460_gp);
     float f = convert_integer_to_float(game_frame % n);
     int h;
     int i;
     f = f / convert_integer_to_float(n);
     f = f * 6.18318f;
     f = FUN_001f9de0(f - 3.14159f);
-    h = FUN_001fa6e0(*(int *)&D_L18_00162458_d, *(int *)&D_L18_0016245C_d, f * 0.5f + 0.5f);
+    h = FUN_001fa6e0(*(int *)&D_L18_00162458_gp, *(int *)&D_L18_0016245C_gp, f * 0.5f + 0.5f);
     moby_point_position(q->p3A0, 1, a);
-    FUN_L00_00263618(a, h, *(float *)&D_L18_00162450_d, *(float *)&D_L18_00162454_d);
+    FUN_L00_00263618(a, h, *(float *)&D_L18_00162450_gp, *(float *)&D_L18_00162454_gp);
     moby_point_position(q->p3A0, 2, a);
-    FUN_L00_00263618(a, h, *(float *)&D_L18_00162450_d, *(float *)&D_L18_00162454_d);
+    FUN_L00_00263618(a, h, *(float *)&D_L18_00162450_gp, *(float *)&D_L18_00162454_gp);
     if ((unsigned)(moby->prev_seq - 11) < 3) {
         int n2 = FUN_001f96f8(*(int *)&D_L18_00162474);
         float g = convert_integer_to_float(game_frame % n2);
@@ -3505,7 +3505,7 @@ typedef struct {
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int D_L18_0015F5C4;
 extern int game_frame __asm__("D_L18_0015F5CC");
-extern int D_L18_001623A0_g __asm__("D_L18_001623A0") __attribute__((sda));
+extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
 extern int D_L18_00162384_w[] __asm__("D_L18_00162384") __attribute__((section(".sdata")));
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
 
@@ -3515,7 +3515,7 @@ void FUN_L18_002f7ad8(M *moby) {
         moby->state = 1;
     case 1:
         if ((D_L18_0015F5C4 == 2 && D_L18_0016D290_lui == 3) ||
-            (game_frame < 5 && D_L18_001623A0_g != 0 && moby->f40 == 0.0f)) {
+            (game_frame < 5 && D_L18_001623A0_gp != 0 && moby->f40 == 0.0f)) {
             moby->state = 2;
             moby->flags |= 1;
             moby->substate = 0;

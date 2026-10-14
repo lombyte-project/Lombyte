@@ -813,7 +813,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L10_00161E24 __attribute__((sda));
 extern short D_L10_00161E28 __attribute__((sda));
 extern short D_L10_00161E34 __attribute__((sda));
-extern f32 D_L10_00161E40 __attribute__((sda));
+extern f32 D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
 extern short D_L10_00161E44 __attribute__((sda));
 extern short D_L10_00161E4C __attribute__((sda));
 extern unsigned char D_0013E533[];
@@ -919,7 +919,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
         if (m->anim != 0) {
             blend_moby_animation(m, 0, 0, 0);
         }
-        d->f1A0 = *(float *)&D_L10_00161E40;
+        d->f1A0 = *(float *)&D_L10_00161E40_gp;
         break;
     case 1:
         FUN_L00_00258278((char *)m, &d->f190, d->v170[3], 0.02f, 0.3f, frame_time * 6.2831855f);
@@ -962,7 +962,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                 }
             }
         } else if (m->b70 & 2) {
-            if (FUN_001f9b80(m->pos, &hero.motion.pos) < *(float *)&D_L10_00161E40) {
+            if (FUN_001f9b80(m->pos, &hero.motion.pos) < *(float *)&D_L10_00161E40_gp) {
                 float x;
                 m->state = 5;
                 d->i1D8 = 0;
@@ -1498,7 +1498,7 @@ extern char *FUN_L00_0025a420(void *,int,int);
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern float dot_vectors_xyz(float) __asm__("FUN_001f9ab0");
 extern float D_L10_00161E2C __attribute__((sda));
-extern float D_L10_00161E40_c __asm__("D_L10_00161E40") __attribute__((sda));
+extern float D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
 extern int FUN_001f9770(void *);
 extern int FUN_00213928_c(void *,void *,void *,int,int *,float *,int,int) __asm__("FUN_00213928");
 extern int FUN_L00_0025ff38_c(float,char *,void *,int,int,void *,int) __asm__("FUN_L00_0025ff38");
@@ -1692,7 +1692,7 @@ void FUN_L10_002e3ef0(void *mv) {
         return;
     }
     if (d->f1AC != 0) {
-        d->f1A0 = D_L10_00161E40_c + 6.0f;
+        d->f1A0 = D_L10_00161E40_gp + 6.0f;
     } else if (m->state == 1) {
         if (m == ((Moby *)((Hero *)(D_hero_2E52B0))->unk240) || m == ((Moby *)((Hero *)(D_hero_2E52B0))->coll_hit_moby)) {
             d->f1A0 = 6.0f;
@@ -1701,7 +1701,7 @@ void FUN_L10_002e3ef0(void *mv) {
         }
         if (((Hero *)(D_hero_2E52B0))->vehicle_mode == 1) func_L10_002E14F8_2E52B0(m);
     } else {
-        d->f1A0 = D_L10_00161E40_c;
+        d->f1A0 = D_L10_00161E40_gp;
     }
     if (d->f1AC != 0) {
         func_L00_00260D30_2E52B0(m, &d->a120, d->f1A0);

@@ -271,7 +271,7 @@ void FUN_L16_002cff48(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7080), where it is exact; names translated to the US level program. */
 
-extern float D_0015ED70;
+extern float frame_time_sq __asm__("D_0015ED70");
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern int D_L16_0015F5CC;
@@ -301,7 +301,7 @@ void FUN_L16_002d5cb8(struct Moby *moby) {
         } else {
             f = *(float *)data + *(float *)&D_L16_00161A84;
         }
-        advance_accelerated_scalar(f, D_0015ED70 * 10.0f, D_0015ED70 * 10.0f, D_0015ED6C * 10.0f,
+        advance_accelerated_scalar(f, frame_time_sq * 10.0f, frame_time_sq * 10.0f, D_0015ED6C * 10.0f,
                                    &moby->pos.z, (float *)(data + 4));
         break;
     }
@@ -391,7 +391,7 @@ extern char *FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, 
                               float);
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, D_0015EE70;
-extern float freeze_stats_score_ref_b __asm__("D_0015ED6C"), D_0015ED70;
+extern float freeze_stats_score_ref_b __asm__("D_0015ED6C"), frame_time_sq;
 extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
@@ -431,7 +431,7 @@ void FUN_L16_002a3f38(unsigned char *m) {
     case 0: {
         float step, time;
         step = D_0015ED6C;
-        time = D_0015ED70;
+        time = frame_time_sq;
         position = m + 0x10;
         (*(unsigned short *)(d + 6))++;
         approach_value((float *)(d + 0x10), step * 30.0f, time * 70.0f);
@@ -1140,7 +1140,7 @@ extern char *D_L16_00174258 __attribute__((section(".data")));
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED6C, D_0015EE70;
-extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70;
+extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), frame_time_sq;
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
@@ -1284,7 +1284,7 @@ void FUN_L16_002cddb8(unsigned char *m) {
         }
         if (is_value_within_interpolated_window(m, 15.0f) && d->child) {
             float speed = D_L16_001619CC * D_0015ED6C;
-            float gravity = D_0015ED70 * 10.0f;
+            float gravity = frame_time_sq * 10.0f;
             v0.f[2] = probe_ground_height(v0.f, 0, 0.5f);
             moby_point_position(d->child, 0, v1.f);
             subtract_vector_xyz(v2.f, v0.f, v1.f);
@@ -1347,7 +1347,7 @@ void FUN_L16_002cddb8(unsigned char *m) {
         int next = d->node + d->step;
         float angle = FUN_001f9e90(((float *)(path + (next << 4)))[4] - *(float *)(m + 16),
                                    ((float *)(path + (next << 4)))[5] - *(float *)(m + 20));
-        FUN_L00_0025be00(yaw, &d->turn, angle, D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f,
+        FUN_L00_0025be00(yaw, &d->turn, angle, frame_time_sq * 12.566371f, frame_time_sq * 12.566371f,
                          D_0015ED6C * 25.132742f);
         if (tick_countdown_32_alt(&d->timer)) {
             d->node = next;
@@ -1425,7 +1425,7 @@ void FUN_L16_002cddb8(unsigned char *m) {
         float burst;
         d->f20 = 2.0f;
         d->timer = scale_game_frames(60);
-        burst = D_0015ED70 * 12.0f;
+        burst = frame_time_sq * 12.0f;
         FUN_L00_00263fd8(m, 0x655, position, rot, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c,
                          &D_L16_0015F580_c);
         FUN_L00_00263fd8(m, 0x656, position, rot, 0, 0, burst, &D_L16_0015F580_c, &D_L16_0015F580_c,
@@ -1611,7 +1611,7 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern float D_0015ED6C, D_0015EE70;
-extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70;
+extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), frame_time_sq;
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -1624,11 +1624,11 @@ int FUN_L16_002ced20(char *moby, void *vec, float angle) {
     char *data = *(char **)(moby + 0x78);
     *(OvlQuad *)a = *(OvlQuad *)vec;
     FUN_L00_0025be00((float *)(moby + 0x48), (float *)(data + 0x100), angle,
-                     D_0015ED70 * 12.566371f, D_0015ED70 * 12.566371f, D_0015ED6C * 25.132742f);
+                     frame_time_sq * 12.566371f, frame_time_sq * 12.566371f, D_0015ED6C * 25.132742f);
     speed = 0.0f;
     subtract_vector_xyz(b, a, moby + 0x10);
     dist = vector_length_xyz(b);
-    advance_accelerated_scalar(dist, D_0015ED70 * 12.0f, D_0015ED70 * 12.0f, D_0015ED6C * 6.0f,
+    advance_accelerated_scalar(dist, frame_time_sq * 12.0f, frame_time_sq * 12.0f, D_0015ED6C * 6.0f,
                                &speed, (float *)(data + 0xFC));
     normalize_vector_xyz(b, b, *(float *)(data + 0xFC));
     add_vector_xyz(moby + 0x10, moby + 0x10, b);
@@ -2127,7 +2127,7 @@ void FUN_L16_002d0058(L16LeapMoby_u *m) {
             func_L00_00237B70_anim(m, 5, 4, scale_game_frames(5));
             d->sequence = -1;
         }
-        acceleration = D_0015ED70 * 21.0f * -0.5f;
+        acceleration = frame_time_sq * 21.0f * -0.5f;
         duration = 30.0f;
         if (FUN_L00_002595a0(&root0, &root1, acceleration, d->vertical_speed - acceleration,
                              d->height - d->target_height) > 0 &&
@@ -2247,7 +2247,7 @@ extern char D_0013E533[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED6C, D_0015EE70;
-extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70;
+extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), frame_time_sq;
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -2428,12 +2428,12 @@ void FUN_L16_002d04a0(unsigned char *m) {
                                  *(float *)(path - (-(first * 16)) + 0x18);
 
                     duration = distance / *(float *)(d + 0x2BC);
-                    target = rise / duration + D_0015ED70 * 21.0f * duration * 0.5f;
+                    target = rise / duration + frame_time_sq * 21.0f * duration * 0.5f;
                 }
                 if (*(float *)(d + 0x2C8) < 0.0f) {
                     *(float *)(d + 0x2C8) = 0.0f;
                 }
-                approach_value((float *)(d + 0x2C8), target, D_0015ED70 * 110.0f);
+                approach_value((float *)(d + 0x2C8), target, frame_time_sq * 110.0f);
             }
         }
         FUN_L16_002d0058_c((L16LeapMoby *)m);
@@ -2463,7 +2463,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
         z = probe_ground_height(d + 0x260, 0, 0.5f);
         gap = *(float *)(d + 0x268) - z;
         if (gap > 0.0f || *(float *)(d + 0x2C8) > 0.0f) {
-            *(float *)(d + 0x2C8) -= D_0015ED70 * 21.0f;
+            *(float *)(d + 0x2C8) -= frame_time_sq * 21.0f;
         } else if (absolute_float(gap) < 0.5f) {
             *(float *)(d + 0x2C8) = 0.0f;
             *(float *)(d + 0x268) = z;
@@ -2485,12 +2485,12 @@ void FUN_L16_002d04a0(unsigned char *m) {
                 speed += D_0015ED6C;
             }
             if (speed < *(float *)(d + 0x2BC)) {
-                approach_value((float *)(d + 0x2BC), speed, D_0015ED70 * 7.0f);
+                approach_value((float *)(d + 0x2BC), speed, frame_time_sq * 7.0f);
             } else {
-                approach_value((float *)(d + 0x2BC), speed, D_0015ED70 * 15.0f);
+                approach_value((float *)(d + 0x2BC), speed, frame_time_sq * 15.0f);
             }
         } else {
-            approach_value((float *)(d + 0x2BC), *(float *)(d + 0x2B8), D_0015ED70 * 20.0f);
+            approach_value((float *)(d + 0x2BC), *(float *)(d + 0x2B8), frame_time_sq * 20.0f);
         }
         if (gap < 0.2f && *(float *)(d + 0x2C8) < 0.0f) {
             *(float *)(d + 0x268) = z;
@@ -2565,7 +2565,7 @@ void FUN_L16_002d04a0(unsigned char *m) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D6DA8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C, D_0015EE70;
-extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70;
+extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), frame_time_sq;
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern void add_vector_xyz(void *, void *, void *);
@@ -2583,7 +2583,7 @@ void FUN_L16_002d59e0(unsigned char *moby) {
     case 1:
         pos = (char *)moby + 0x10;
         qcopy(pos, d);
-        advance_accelerated_scalar(*(float *)(d + 0x14), D_0015ED70 * 4.0f, D_0015ED70 * 4.0f,
+        advance_accelerated_scalar(*(float *)(d + 0x14), frame_time_sq * 4.0f, frame_time_sq * 4.0f,
                                    D_0015ED6C * 8.0f, (float *)(d + 0x18), (float *)(d + 0x10));
         normalize_vector_xyz(buf, moby + 0xC0, *(float *)(d + 0x18));
         add_vector_xyz(pos, pos, buf);
@@ -2858,7 +2858,7 @@ void FUN_L16_002d6260(struct Moby *moby, void *out1, float *out2) {
     FUN_001f9a28(v, &hero.motion.pos, entry + 0x30);
     v[3] = 0;
     FUN_001f9cf8(v, v, entry + 0x40);
-    advance_accelerated_scalar((v[1] + 1.0f) * 0.5f, D_0015ED70, D_0015ED70,
+    advance_accelerated_scalar((v[1] + 1.0f) * 0.5f, frame_time_sq, frame_time_sq,
                                D_0015ED6C + D_0015ED6C, (float *)(data + 0x1C),
                                (float *)(data + 0x20));
     FUN_001f9a40(out1, tbl + 0x10, tbl + 0x20, *(float *)(data + 0x1C));

@@ -2667,9 +2667,9 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L15_002cbac0_u() __asm__("FUN_L15_002cbac0");
 extern short D_0015ED84_d __asm__("D_0015ED84");
-extern s32 D_L15_00161AB8_d __asm__("D_L15_00161AB8");
+extern s32 D_L15_00161AB8 ;
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
-extern s32 D_L15_00161AC0_d __asm__("D_L15_00161AC0") __attribute__((sda));
+extern s32 D_L15_00161AC0_gp __asm__("D_L15_00161AC0") __attribute__((sda));
 extern void FUN_L15_002cbd88_u(void) __asm__("FUN_L15_002cbd88");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
@@ -2680,14 +2680,14 @@ void FUN_L15_002cbc30(void *arg) {
     if (base->state.current == 0x65) {
         approach_value(&D_L15_00161ABC_gp, 0.0f, frame_time * 2);
         FUN_L15_002cbac0_u(arg, 0);
-    } else if (*(int *)&D_L15_00161AB8_d != 0 &&
+    } else if (*(int *)&D_L15_00161AB8 != 0 &&
                (*(int *)&D_0015ED84_d != 0xF || 240.0f < base->motion.pos.f[1])) {
         approach_value(&D_L15_00161ABC_gp, 1.0f, frame_time * 2);
     } else {
         approach_value(&D_L15_00161ABC_gp, 0.0f, frame_time * 2);
     }
     if (*(float *)&D_L15_00161ABC_gp != 0.0f) {
-        *(int *)&D_L15_00161AC0_d = 1;
+        *(int *)&D_L15_00161AC0_gp = 1;
         if (FUN_L00_0028d8c0(*(void **)&D_L15_00161AC8, *(int *)&D_L15_00161AC4) == 0) {
             *(int *)&D_L15_00161AC4 = allocate_voice_for_target_entry(5, 0x11, (int)arg);
             *(void **)&D_L15_00161AC8 = arg;
@@ -2699,6 +2699,6 @@ void FUN_L15_002cbc30(void *arg) {
             *(int *)&D_L15_00161AC8 = 0;
             *(int *)&D_L15_00161AC4 = -1;
         }
-        *(int *)&D_L15_00161AC0_d = 0;
+        *(int *)&D_L15_00161AC0_gp = 0;
     }
 }

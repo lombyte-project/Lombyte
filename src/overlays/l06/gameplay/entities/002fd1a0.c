@@ -734,7 +734,7 @@ extern void FUN_001f9a68(void *, void *, float);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern short D_L06_00162090 __attribute__((sda));
-extern int GB_FRAME __asm__("D_L06_0015F5CC") __attribute__((sda));
+extern int GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
 void FUN_L06_00300df0(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int state;
@@ -754,7 +754,7 @@ void FUN_L06_00300df0(char *moby) {
         if (*(int *)(D_0013E533 + 0x2EA1) == 0x72) {
             *(float *)(moby + 0x18) = *(float *)(data + 0xC);
         } else {
-            float f = convert_integer_to_float(GB_FRAME % 600) / 600.0f;
+            float f = convert_integer_to_float(GB_FRAME_gp % 600) / 600.0f;
             float g = FUN_001f9de0(f * 6.28318f);
             *(float *)(moby + 0x18) = *(float *)(data + 0xC) + *(float *)&D_L06_00162090 * g;
         }
@@ -2267,11 +2267,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_003049f8.s", FUN_L06_003049f8);
 #else
 
 #include "rnc/audio/voice_pool.h"
-extern float D_L06_001621F8_3049f8 __asm__("D_L06_001621F8") __attribute__((sda));
+extern float D_L06_001621F8_gp __asm__("D_L06_001621F8") __attribute__((sda));
 extern float D_L06_001621FC __attribute__((sda));
 extern float D_L06_00162200 __attribute__((sda));
 extern float D_L06_00162204 __attribute__((sda));
-extern float D_L06_00162208_3049f8 __asm__("D_L06_00162208") __attribute__((sda));
+extern float D_L06_00162208_gp __asm__("D_L06_00162208") __attribute__((sda));
 extern float D_L06_00162210 __attribute__((sda));
 extern int D_L06_00162214 __attribute__((sda));
 extern int D_L06_00162218 __attribute__((sda));
@@ -2344,8 +2344,8 @@ void FUN_L06_003049f8(char *m) {
         if (voice_active_3049f8(m, *(int *)(data + 0xf18)) == 0)
             *(int *)(data + 0xf18) = allocate_voice_3049f8(0, 4, m);
         FUN_L06_00305000(m);
-        D_L06_001621F8_3049f8 += D_L06_001621FC * frame_time;
-        if (D_L06_001621F8_3049f8 > 1.0f) D_L06_001621F8_3049f8 -= 1.0f;
+        D_L06_001621F8_gp += D_L06_001621FC * frame_time;
+        if (D_L06_001621F8_gp > 1.0f) D_L06_001621F8_gp -= 1.0f;
         timers = (int *)(data + 0xf00);
         increment = D_L06_00162204 / 30.0f;
         position = -(D_L06_00162204 * 0.5f);
@@ -2423,7 +2423,7 @@ void FUN_L06_003049f8(char *m) {
         int i;
         FUN_001fa050(scratch, (float *)(m + 0x40));
         b = scratch + 16;
-        FUN_001f9ff8(b, D_L06_00162208_3049f8);
+        FUN_001f9ff8(b, D_L06_00162208_gp);
         FUN_001fa378(scratch, scratch, b);
         e = scratch + 36;
         d = scratch + 32;
@@ -2512,8 +2512,8 @@ extern short D_L06_001621CC __attribute__((sda));
 extern short D_L06_001621E0 __attribute__((sda));
 extern short D_L06_001621E4 __attribute__((sda));
 extern short D_L06_001621F4 __attribute__((sda));
-extern f32 D_L06_001621F8 __attribute__((sda));
-extern f32 D_L06_00162208 __attribute__((sda));
+extern f32 D_L06_001621F8_gp __asm__("D_L06_001621F8") __attribute__((sda));
+extern f32 D_L06_00162208_gp __asm__("D_L06_00162208") __attribute__((sda));
 extern void FUN_001f9ff8(float *, float);
 extern void FUN_001fa050(float *, float *);
 extern void FUN_001fa378(void *, void *, void *);
@@ -2537,7 +2537,7 @@ void FUN_L06_00305170(char *m) {
     int j;
     data = *(char **)(m + 0x78);
     FUN_001fa050(a, (float *)(m + 0x40));
-    FUN_001f9ff8(b, *(float *)&D_L06_00162208);
+    FUN_001f9ff8(b, *(float *)&D_L06_00162208_gp);
     FUN_001fa378(a, a, b);
     vu1_add_g_sregister(6, get_effect_texture(0xE));
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
@@ -2567,7 +2567,7 @@ void FUN_L06_00305170(char *m) {
     s[3] = *(int *)&D_L06_001621E0;
     s[4] = *(int *)&D_L06_001621E4;
     *(float *)&s[7] = *(float *)&D_L06_001621F4;
-    *(float *)&s[8] = *(float *)&D_L06_001621F8;
+    *(float *)&s[8] = *(float *)&D_L06_001621F8_gp;
     s[5] = 0x1E;
     s[6] = (int)data;
     pp = m0;

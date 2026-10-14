@@ -1253,11 +1253,11 @@ extern s32 D_0015ED84_n __asm__("D_0015ED84") MACRO_ADDR;
 extern u8 opt_mirror_anim __asm__("D_0015EDB5") MACRO_ADDR;
 extern s32 D_L01_0015F640 MACRO_ADDR;
 extern s32 cutscene_active __asm__("D_L01_0015F404") MACRO_ADDR;
-extern f32 D_L01_00161F10_f __asm__("D_L01_00161F10") __attribute__((sda));
-extern f32 D_L01_00161F14_f __asm__("D_L01_00161F14") __attribute__((sda));
-extern f32 D_L01_00161F18_f __asm__("D_L01_00161F18") __attribute__((sda));
-extern f32 D_L01_00161F2C_f __asm__("D_L01_00161F2C") __attribute__((sda));
-extern s32 D_L01_00161F50_i __asm__("D_L01_00161F50") __attribute__((sda));
+extern f32 D_L01_00161F10_gp __asm__("D_L01_00161F10") __attribute__((sda));
+extern f32 D_L01_00161F14_gp __asm__("D_L01_00161F14") __attribute__((sda));
+extern f32 D_L01_00161F18_gp __asm__("D_L01_00161F18") __attribute__((sda));
+extern f32 D_L01_00161F2C_gp __asm__("D_L01_00161F2C") __attribute__((sda));
+extern s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") __attribute__((sda));
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 FUN_001f99c0(f32);
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
@@ -1305,14 +1305,14 @@ void FUN_L01_00307ca0(struct Moby *moby) {
         FUN_L01_00308470(moby);
         return;
     case 1:
-        moby->scale = moby->pclass->scale * D_L01_00161F10_f;
-        moby->pos.z = vars->home.z + D_L01_00161F14_f + D_L01_00161F18_f * FUN_001f9de0(moby->rot.w);
+        moby->scale = moby->pclass->scale * D_L01_00161F10_gp;
+        moby->pos.z = vars->home.z + D_L01_00161F14_gp + D_L01_00161F18_gp * FUN_001f9de0(moby->rot.w);
         moby->rot.x = FUN_001fa580_c(moby->rot.x, D_L01_00161F20 * 0.017453292f * D_0015ED6C_f);
         moby->rot.y = FUN_001fa580_c(moby->rot.y, D_L01_00161F24 * 0.017453292f * D_0015ED6C_f);
         moby->rot.z = FUN_001fa580_c(moby->rot.z, D_L01_00161F28 * 0.017453292f * D_0015ED6C_f);
-        moby->rot.w = FUN_001fa580_c(moby->rot.w, D_L01_00161F2C_f * 0.017453292f * D_0015ED6C_f);
+        moby->rot.w = FUN_001fa580_c(moby->rot.w, D_L01_00161F2C_gp * 0.017453292f * D_0015ED6C_f);
         FUN_L01_00308550_f(moby);
-        if (!random_integer_below(D_L01_00161F50_i)) {
+        if (!random_integer_below(D_L01_00161F50_gp)) {
             FUN_L01_003089f0_f(moby);
         }
         if (!(FUN_001f9b80(&moby->pos, &hero.motion.pos) < 3.0f)) {
@@ -1414,11 +1414,11 @@ void FUN_L01_00307ca0(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309758), where it is exact; names translated to the US level program. */
 
-extern f32 D_L01_00161F10_d __asm__("D_L01_00161F10") __attribute__((sda));
-extern f32 D_L01_00161F14_d __asm__("D_L01_00161F14") __attribute__((sda));
-extern f32 D_L01_00161F18_d __asm__("D_L01_00161F18") __attribute__((sda));
-extern f32 D_L01_00161F2C_d __asm__("D_L01_00161F2C") __attribute__((sda));
-extern s32 D_L01_00161F50_d __asm__("D_L01_00161F50") __attribute__((sda));
+extern f32 D_L01_00161F10_gp __asm__("D_L01_00161F10") __attribute__((sda));
+extern f32 D_L01_00161F14_gp __asm__("D_L01_00161F14") __attribute__((sda));
+extern f32 D_L01_00161F18_gp __asm__("D_L01_00161F18") __attribute__((sda));
+extern f32 D_L01_00161F2C_gp __asm__("D_L01_00161F2C") __attribute__((sda));
+extern s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") __attribute__((sda));
 void FUN_L01_00308550(char *m);
 extern void FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
@@ -1429,22 +1429,22 @@ void FUN_L01_00308380(struct Moby *moby) {
     float s;
     float k;
     moby->scale =
-        moby->pclass->scale * *(float *)&D_L01_00161F10_d;
+        moby->pclass->scale * *(float *)&D_L01_00161F10_gp;
     if (moby->state == 1) {
         s = FUN_001f9de0(moby->rot.w);
         moby->pos.z =
-            *(float *)(data + 0x18) + *(float *)&D_L01_00161F14_d + *(float *)&D_L01_00161F18_d * s;
+            *(float *)(data + 0x18) + *(float *)&D_L01_00161F14_gp + *(float *)&D_L01_00161F18_gp * s;
         moby->rot.x =
             fast_add_rotations(moby->rot.x, *(float *)(data + 0x68));
         moby->rot.y =
             fast_add_rotations(moby->rot.y, *(float *)(data + 0x64));
         r = fast_add_rotations(moby->rot.z, *(float *)(data + 0x60));
-        k = *(float *)&D_L01_00161F2C_d * DEG_TO_RAD * frame_time;
+        k = *(float *)&D_L01_00161F2C_gp * DEG_TO_RAD * frame_time;
         moby->rot.z = r;
         moby->rot.w = fast_add_rotations(moby->rot.w, k);
     }
     FUN_L01_00308550(moby);
-    if (random_integer_below(*(int *)&D_L01_00161F50_d) == 0) {
+    if (random_integer_below(*(int *)&D_L01_00161F50_gp) == 0) {
         FUN_L01_003089f0_u(moby);
     }
 }

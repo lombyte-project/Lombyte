@@ -629,7 +629,7 @@ extern float D_L00_00161CDC_gp __asm__("D_L00_00161CDC") __attribute__((sda));
 extern float D_L00_00161CE0_gp __asm__("D_L00_00161CE0") __attribute__((sda));
 extern float D_L00_00161CE4_gp __asm__("D_L00_00161CE4") __attribute__((sda));
 extern float D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
-extern int D_L00_00161D24 __attribute__((sda));
+extern int D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
 extern int D_L00_00161D8C __attribute__((sda));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 void follow_camera_reset(char *o) __asm__("FUN_L00_002e4430");
@@ -772,7 +772,7 @@ void follow_camera_setup(Moby_2E8210 *m) {
         if (D_L00_00166F04_2E8210->h86 == 7 && D_0013F450_2E8210.h30C == 0) {
             e->e.h0 = 0;
         } else {
-            f->h0 = scale_game_frames(D_L00_00161D24);
+            f->h0 = scale_game_frames(D_L00_00161D24_gp);
         }
     } else {
         func_L00_002E58E0_2E8210(m);
@@ -800,7 +800,7 @@ typedef struct {
     unsigned char b20A4;
 } G_2e7138;
 extern float D_0013CA40_2e7138 __asm__("D_0013CA40") __attribute__((section(".data")));
-extern float D_L00_00161CC8_2e7138 __asm__("D_L00_00161CC8") __attribute__((sda));
+extern float D_L00_00161CC8_gp __asm__("D_L00_00161CC8") __attribute__((sda));
 float FUN_001f9af0_2e7138(void *) __asm__("FUN_001f9af0");
 void FUN_L00_001ff500_2e7138(void *, void *, float) __asm__("FUN_L00_001ff500");
 float absolute_float(float) __asm__("FUN_001f99c0");
@@ -825,7 +825,7 @@ int FUN_L00_002e7138(unsigned char *m, void *b, int c, int d) {
         dist -= D_L00_00161CB8 * frame_scale;
         *(short *)(B + 0x34) = FUN_001f96f8_2e7138(0x884);
     }
-    k = D_L00_00161CC8_2e7138;
+    k = D_L00_00161CC8_gp;
     if (!c && hero.state.control_mode != 2 && len < dist) {
         scale_vector_xyz(A, A, len / dist);
         *(float *)(B + 0x30) = *(float *)(A + 0x2C) - len;
@@ -836,7 +836,7 @@ int FUN_L00_002e7138(unsigned char *m, void *b, int c, int d) {
             FUN_L00_001ff500_2e7138(A, *(unsigned char **)(C + 0xC0) + 0xC0, -k);
         else
             scale_vector_xyz(A, A, k / dist);
-        dist = D_L00_00161CC8_2e7138;
+        dist = D_L00_00161CC8_gp;
     }
     *(float *)(B + 0x30) = *(float *)(A + 0x2C) - dist;
     return 1;
@@ -1050,7 +1050,7 @@ int FUN_L00_002e79c8(void *arg0, int arg1, float *arg2) {
 }
 typedef float V_2e7a30[4] __attribute__((aligned(16)));
 extern float follow_cam_min_distance_gp __asm__("D_L00_00161CD8") __attribute__((sda));
-extern float D_L00_00161CC8_2e7a30 __asm__("D_L00_00161CC8") __attribute__((sda));
+extern float D_L00_00161CC8_gp __asm__("D_L00_00161CC8") __attribute__((sda));
 extern float D_0013CA40_2e7a30 __asm__("D_0013CA40") __attribute__((section(".data")));
 extern int D_L00_0015EF5C_2e7a30 __asm__("D_L00_0015EF5C");
 extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
@@ -1110,7 +1110,7 @@ int FUN_L00_002e7a30(unsigned char *a) {
                             float cf;
                             int n = scale_game_frames(0x884);
                             float t = D_L00_00161CB8 * frame_scale;
-                            lim = D_L00_00161CC8_2e7a30;
+                            lim = D_L00_00161CC8_gp;
                             *(short *)(e + 0x34) = n;
                             *(float *)(e + 0x30) += t;
                             cf = *(float *)(c + 0x2C);

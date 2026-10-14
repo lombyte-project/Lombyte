@@ -462,8 +462,8 @@ extern void FUN_L00_00263618(void *, int, float, float);
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-extern float D_L18_001624E4_b __asm__("D_L18_00162454");
-extern float D_L18_001624E0_b __asm__("D_L18_00162450");
+extern float D_L18_00162454 ;
+extern float D_L18_00162450 ;
 
 extern short D_L18_00162500 __attribute__((sda));
 void FUN_L18_002f9a98(void *moby) {
@@ -486,7 +486,7 @@ void FUN_L18_002f9a98(void *moby) {
     build_moby_bone_transform(moby, 2, b);
     scale_vector_xyz(e, c, *(float *)&D_L18_00162500);
     subtract_vector_xyz(a, d, e);
-    FUN_L00_00263618(a, h, D_L18_001624E0_b, D_L18_001624E4_b);
+    FUN_L00_00263618(a, h, D_L18_00162450, D_L18_00162454);
 }
 /* Draws the moby's two glow quads facing the camera, in the inner and outer tints. */
 typedef unsigned int u128_9c20 __attribute__((mode(TI)));

@@ -75,7 +75,7 @@ struct Spark_c8e0 {
     } draw;
 };
 
-extern f32 D_L05_00161FC8_c8e0 __asm__("D_L05_00161FC8") __attribute__((sda));
+extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
 extern f32 D_L05_00161FD0 __attribute__((sda));
 extern f32 D_L05_00161FD4 __attribute__((sda));
 extern f32 vector_distance_c8e0(void *, void *) __asm__("FUN_001f9b80");
@@ -150,7 +150,7 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
     if (hit == 0) {
         return;
     }
-    scale_vector_xyz_c8e0(&tip, &moby->rot_row2, D_L05_00161FC8_c8e0);
+    scale_vector_xyz_c8e0(&tip, &moby->rot_row2, D_L05_00161FC8_gp);
     add_vector_xyz_c8e0(&tip, &moby->pos, &tip);
     if (!(*(s32 *)(hit + 0x24) & 0x800000) && !(distance_xyz_c8e0(&tip, hit) <= 0.8f)) {
         if ((*(struct Moby **)(hit + 0x20))->oclass != 0x47) {
@@ -233,7 +233,7 @@ typedef struct {
 
 extern float D_L05_00215C70[4][4];
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern f32 D_L05_00161FC8_d __asm__("D_L05_00161FC8") __attribute__((sda));
+extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
 extern void FUN_001f9d20(void *, void *, void *);
 extern void add_vector_xyz(void *, void *, void *);
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -269,7 +269,7 @@ void FUN_L05_0031cf58(char *m) {
     pk.uv[5] = 0.0f;
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
-    scale_vector_xyz(t, m + 0xE0, *(float *)&D_L05_00161FC8_d);
+    scale_vector_xyz(t, m + 0xE0, *(float *)&D_L05_00161FC8_gp);
     add_vector_xyz(M[3], m + 0x10, t);
     subtract_vector_xyz(M[0], D_L05_001671C0_lui, M[3]);
     normalize_vector_xyz(M[0], M[0], 1.0f);

@@ -14,8 +14,8 @@ extern int FUN_001fa6e0(int, int, float);
 extern int find_valid_animation_frame_index_alt(int, int) __asm__("FUN_001ff960");
 extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 D_L00_0015F91C_d __asm__("D_L00_0015F91C") __attribute__((sda));
-extern s32 D_L00_0015F920_d __asm__("D_L00_0015F920") __attribute__((sda));
+extern s32 D_L00_0015F91C_gp __asm__("D_L00_0015F91C") __attribute__((sda));
+extern s32 D_L00_0015F920_gp __asm__("D_L00_0015F920") __attribute__((sda));
 extern void hud_frame(char *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffc30");
 void draw_hud_sprite_flipped(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffe18");
@@ -43,13 +43,13 @@ int FUN_L00_0023a7a8(char *m) {
         return *(int *)(m + 0x58);
     {
         f20 = convert_integer_to_float(*(unsigned char *)(m + 0x70));
-        f21 = f20 / convert_integer_to_float(*(int *)&D_L00_0015F91C_d);
+        f21 = f20 / convert_integer_to_float(*(int *)&D_L00_0015F91C_gp);
         if (f21 > 1.0f)
             f21 = 1.0f;
         else if (f21 < 0.0f)
             f21 = 0.0f;
         f20 = convert_integer_to_float(*(unsigned char *)(q + 1));
-        f20 = f20 / convert_integer_to_float(*(int *)&D_L00_0015F920_d);
+        f20 = f20 / convert_integer_to_float(*(int *)&D_L00_0015F920_gp);
         if (f20 > 1.0f)
             f20 = 1.0f;
         else if (f20 < 0.0f)

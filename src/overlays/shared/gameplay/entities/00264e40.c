@@ -22,7 +22,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00264e70.s", FUN_L02_00264e70);
 #include "qcopy.h"
 extern int D_L00_0015F5CC;
 extern float D_0015ED6C;
-extern float D_0015ED70;
+extern float frame_time_sq __asm__("D_0015ED70");
 extern float D_L02_00174460[] __attribute__((section(".data")));
 extern float D_L02_001600D0 __attribute__((sda));
 extern int D_L02_001600D4 __attribute__((sda));
@@ -70,7 +70,7 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     } else {
         travel = distance;
     }
-    acceleration = D_0015ED70;
+    acceleration = frame_time_sq;
     FUN_00213f38(&speed, &travel_step, travel, 1.0f, acceleration * 48.0f,
                   D_L02_001600D0 * D_0015ED6C);
     FUN_001f9bf8(adjusted, adjusted, travel_step);

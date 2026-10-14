@@ -332,7 +332,7 @@ extern void FUN_L00_0025d538_2bef68(void *, void *) __asm__("FUN_L00_0025d538");
 extern char D_L03_00166EC0[];
 extern char D_0013E533_2bef68[] __asm__("D_0013E533");
 extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") __attribute__((section(".sdata")));
-extern float D_0015ED70_2bef68 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 /* Update of moby class 455 (spawner): counts its living children, takes hits, runs its state machine and spawns class 0x221 children at a point picked by its mode. */
@@ -647,7 +647,7 @@ void FUN_L03_002bef68(struct Moby *moby) {
                 FUN_001f9bf8_2bef68(&v60, &v40, 0.05f);
                 FUN_L00_0025f8e0_2bef68((float *)&v60, 0.025f);
                 FUN_L00_001ff290_2bef68(&v70, &v60, &v30);
-                v40.z = FUN_L00_0025abf0_2bef68(&v60, &v50, 0, speed, -(d->fDC * D_0015ED70_2bef68));
+                v40.z = FUN_L00_0025abf0_2bef68(&v60, &v50, 0, speed, -(d->fDC * frame_time_sq_macro));
                 m = FUN_L03_002c45d8_2bef68((char *)moby, (float *)&v60, (float *)&v40, d->h8C, d->b83);
                 if (m != 0) {
                     *(unsigned char *)(m + 0x30) = 0xFF;

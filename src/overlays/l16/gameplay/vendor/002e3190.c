@@ -86,7 +86,7 @@ extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
-extern s32 D_L16_0015F5C4_u __asm__("D_L16_0015F5C4");
+extern s32 D_L16_0015F5C4 ;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_002502a0(int);
@@ -127,7 +127,7 @@ void FUN_L16_002e3190(L16WatchMoby *m) {
         break;
     }
     case 2:
-        if (*(int *)&D_L16_0015F5C4_u != 2) {
+        if (*(int *)&D_L16_0015F5C4 != 2) {
             char *player;
             m->state = 1;
             FUN_L00_00216f90(D_L16_001D96C0, D_L16_001D96C0 + 4, 0, 1);
@@ -343,7 +343,7 @@ extern int FUN_L16_002e3fa0(struct Moby *moby);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 D_L16_00161D94;
-extern f32 D_L16_00161D98 __attribute__((sda));
+extern f32 D_L16_00161D98_gp __asm__("D_L16_00161D98") __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
 extern void FUN_L00_0025d538(void *, void *);
@@ -469,9 +469,9 @@ void FUN_L16_002e37a0(L16CrateMoby *moby) {
             FUN_L14_002fec28(moby);
         qcopy(target, path + *(int *)path * 16);
         zero = 0.0f;
-        FUN_L00_0025b8c0(moby->position, &a->vx, target[0], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98, zero);
-        FUN_L00_0025b8c0(moby->position + 1, &a->vy, target[1], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98, zero);
-        FUN_L00_0025b8c0(moby->position + 2, &a->vz, target[2], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98, zero);
+        FUN_L00_0025b8c0(moby->position, &a->vx, target[0], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98_gp, zero);
+        FUN_L00_0025b8c0(moby->position + 1, &a->vy, target[1], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98_gp, zero);
+        FUN_L00_0025b8c0(moby->position + 2, &a->vz, target[2], *(float *)&D_L16_00161D94, *(float *)&D_L16_00161D98_gp, zero);
         if ((moby->status & 2) && moby->frame == moby->animation) {
             if (a->mode == 1) {
                 moby->state = 1;
@@ -533,8 +533,8 @@ extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern int FUN_L00_0025d808() __asm__("FUN_L00_0025d808");
 extern float D_L16_00161D90 __attribute__((sda));
-extern float D_L16_00161D94_u __asm__("D_L16_00161D94") __attribute__((sda));
-extern float D_L16_00161D98_u __asm__("D_L16_00161D98") __attribute__((sda));
+extern float D_L16_00161D94_gp __asm__("D_L16_00161D94") __attribute__((sda));
+extern float D_L16_00161D98_gp __asm__("D_L16_00161D98") __attribute__((sda));
 extern void subtract_vector_xyz(void *, void *, void *);
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 extern int FUN_L00_0025d808_path54(char *, float *, float *, float *, int,
@@ -555,17 +555,17 @@ int FUN_L16_002e3fa0(struct Moby *moby) {
     else
         path = D_L16_001B0930[*(int *)(data + 0xD8)];
     r = FUN_L00_0025d808_path54(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, t);
-    FUN_L00_0025b8c0(&moby->pos.x, (float *)(data + 0xE4), pos[0], D_L16_00161D94_u,
-                     D_L16_00161D98_u, 0.0f);
-    FUN_L00_0025b8c0(&moby->pos.y, (float *)(data + 0xE8), pos[1], D_L16_00161D94_u,
-                     D_L16_00161D98_u, 0.0f);
-    FUN_L00_0025b8c0(&moby->pos.z, (float *)(data + 0xEC), pos[2], D_L16_00161D94_u,
-                     D_L16_00161D98_u, 0.0f);
+    FUN_L00_0025b8c0(&moby->pos.x, (float *)(data + 0xE4), pos[0], D_L16_00161D94_gp,
+                     D_L16_00161D98_gp, 0.0f);
+    FUN_L00_0025b8c0(&moby->pos.y, (float *)(data + 0xE8), pos[1], D_L16_00161D94_gp,
+                     D_L16_00161D98_gp, 0.0f);
+    FUN_L00_0025b8c0(&moby->pos.z, (float *)(data + 0xEC), pos[2], D_L16_00161D94_gp,
+                     D_L16_00161D98_gp, 0.0f);
     subtract_vector_xyz(delta, pos, &moby->pos);
     if (absolute_float(delta[0]) > 0.01f) {
         if (absolute_float(delta[1]) > 0.01f) {
             func_L00_002592B0_path54(moby, FUN_001f9e90(delta[0], delta[1]), (float *)(data + 0xF0),
-                                     D_L16_00161D94_u, D_L16_00161D98_u, 0.0f);
+                                     D_L16_00161D94_gp, D_L16_00161D98_gp, 0.0f);
         }
     }
     return r;
@@ -1509,7 +1509,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
         break;
     }
     case 2:
-        if (*(int *)&D_L16_0015F5C4_u != 2) {
+        if (*(int *)&D_L16_0015F5C4 != 2) {
             int previous;
             m->state = 1;
             previous = activation->previous;
@@ -1520,7 +1520,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
         }
         break;
     case 4:
-        if (*(int *)&D_L16_0015F5C4_u == 0) {
+        if (*(int *)&D_L16_0015F5C4 == 0) {
             m->state = 1;
             FUN_L00_00260860(31, 1);
             memcard_save_data(0, -1);
@@ -1646,7 +1646,7 @@ void FUN_L16_002e6808(L16ChallengeMoby *m) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8538), where it is exact; names translated to the US level program. */
 
-extern f32 D_L16_0015F638_u __asm__("D_L16_0015F638");
+extern f32 D_L16_0015F638 ;
 extern void FUN_L01_0027a248(int, int);
 extern void FUN_L13_002650a8(int, int, int, int);
 extern void FUN_L16_002de3b8(float f);
@@ -1664,7 +1664,7 @@ void FUN_L16_002e70c0(struct Moby *moby) {
         FUN_L13_002650a8(*p, 0, 0, 0);
         p++;
     }
-    *(float *)&D_L16_0015F638_u = 74.0f;
+    *(float *)&D_L16_0015F638 = 74.0f;
     FUN_L16_002de3b8(76.0f);
     FUN_L01_0027a248(2, 6);
 }
@@ -2094,7 +2094,7 @@ extern float D_L16_00161EAC __attribute__((sda)); /* no foreign declaration */
 extern float D_L16_00161EBC __attribute__((sda)); /* no foreign declaration */
 extern int FUN_L00_0028d8c0(void *, int);
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern f32 D_L16_00161EB8 __attribute__((sda));
+extern f32 D_L16_00161EB8_gp __asm__("D_L16_00161EB8") __attribute__((sda));
 extern void FUN_L00_00260738(char *, void *, void *, void *);
 extern void FUN_L16_002e84e8(struct Moby *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2171,11 +2171,11 @@ void FUN_L16_002e7f80(L16PlatformMoby *moby) {
                 || moby->position[2] < d->goal) {
                 speed = advance_accelerated_scalar(&moby->position[2], &d->speed, d->goal,
                                       D_L16_00161EBC * frame_time_sq, D_L16_00161EBC * frame_time_sq,
-                                      *(float *)&D_L16_00161EB8 * D_0015ED6C);
+                                      *(float *)&D_L16_00161EB8_gp * D_0015ED6C);
             } else {
                 speed = advance_accelerated_scalar(&moby->position[2], &d->speed, moby->position[2],
                                       D_L16_00161EBC * 4.0f * frame_time_sq, D_L16_00161EBC * 4.0f * frame_time_sq,
-                                      *(float *)&D_L16_00161EB8 * D_0015ED6C);
+                                      *(float *)&D_L16_00161EB8_gp * D_0015ED6C);
             }
             clear_u64_value(motion.v);
             motion.v[2] = speed;
@@ -2232,7 +2232,7 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float wrap_angle(float);
 extern int D_L16_0015F5CC;
-extern float D_L16_00161EB8_u __asm__("D_L16_00161EB8") __attribute__((sda));
+extern float D_L16_00161EB8_gp __asm__("D_L16_00161EB8") __attribute__((sda));
 extern float D_L16_00161EC4 __attribute__((sda));
 extern float D_L16_00161EC8 __attribute__((sda));
 extern float D_L16_00161EE8 __attribute__((sda));
@@ -2268,7 +2268,7 @@ void FUN_L16_002e84e8(struct Moby *m) {
     lower += translation;
     color =
         FUN_001fa6e0(D_L16_00161EDC, D_L16_00161EE0,
-                     absolute_float((*(float *)((char *)d + 0xB0))) / (D_L16_00161EB8_u * D_0015ED6C));
+                     absolute_float((*(float *)((char *)d + 0xB0))) / (D_L16_00161EB8_gp * D_0015ED6C));
     FUN_001fa298(&matrix, &m->rot_row0);
     qcopy(matrix.position, &m->pos);
     matrix.position[2] = lower;

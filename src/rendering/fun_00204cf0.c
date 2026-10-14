@@ -23,7 +23,7 @@ typedef struct {
 long FUN_00204cf0(char *p) __asm__("FUN_00204cf0");
 
 extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
-extern s32 pending_texture_upload_count __asm__("D_0015F458") MACRO_ADDR;
+extern s32 pending_texture_upload_count_macro __asm__("D_0015F458") MACRO_ADDR;
 long FUN_00204cf0(char *p) {
     TexDesc t;
     int w;
@@ -53,15 +53,15 @@ long FUN_00204cf0(char *p) {
     pt = &tex0;
     tex0 = *pt | ((long)t.th << 30) | ((long)1 << 34) | ((long)cbp << 37);
     reg = *pt | ((long)4 << 61);
-    if (pending_texture_upload_count < TEXTURE_UPLOAD_MAX) {
-        pending_texture_uploads[pending_texture_upload_count].clut_data = (int)t.clut;
-        pending_texture_uploads[pending_texture_upload_count].cbp = cbp;
-        pending_texture_uploads[pending_texture_upload_count].unk4 = 0;
-        pending_texture_uploads[pending_texture_upload_count].image_data = (int)t.pix;
-        pending_texture_uploads[pending_texture_upload_count].tw = t.tw;
-        pending_texture_uploads[pending_texture_upload_count].th = t.th;
-        pending_texture_uploads[pending_texture_upload_count].tbp = tbp;
-        pending_texture_upload_count++;
+    if (pending_texture_upload_count_macro < TEXTURE_UPLOAD_MAX) {
+        pending_texture_uploads[pending_texture_upload_count_macro].clut_data = (int)t.clut;
+        pending_texture_uploads[pending_texture_upload_count_macro].cbp = cbp;
+        pending_texture_uploads[pending_texture_upload_count_macro].unk4 = 0;
+        pending_texture_uploads[pending_texture_upload_count_macro].image_data = (int)t.pix;
+        pending_texture_uploads[pending_texture_upload_count_macro].tw = t.tw;
+        pending_texture_uploads[pending_texture_upload_count_macro].th = t.th;
+        pending_texture_uploads[pending_texture_upload_count_macro].tbp = tbp;
+        pending_texture_upload_count_macro++;
     }
     return reg;
 }

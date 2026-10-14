@@ -420,7 +420,7 @@ extern int alternate_animation_sequence __asm__("D_0015EE20");
 extern int D_L00_0015EE28_260a88 __asm__("D_0015EE28");
 extern int D_L00_0015EE2C_260a88 __asm__("D_0015EE2C");
 extern float D_L00_0015ED6C_260a88 __asm__("D_0015ED6C");
-extern float D_L00_0015ED70_260a88 __asm__("D_0015ED70");
+extern float frame_time_sq __asm__("D_0015ED70");
 extern char *D_L00_001B04B0_260a88[] __asm__("D_L00_001B04B0");
 extern void FUN_001ff260_260a88(void *) __asm__("FUN_001f99f8");
 extern void FUN_001ff500_260a88(float, void *, void *) __asm__("FUN_001f9bf8");
@@ -572,7 +572,7 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
         FUN_001ff500_260a88(0.5f, &offset, &offset);
         FUN_001ff278_260a88(&position, &position, &offset);
         if (path_index >= 0) {
-            float half = D_L00_0015ED70_260a88 * 10.8f * -0.5f;
+            float half = frame_time_sq * 10.8f * -0.5f;
             time = 120.0f;
             if ((float)FUN_002595a0_260a88(half, velocity.f[2] - half,
                 position.f[2] - *(float *)(D_L00_001B04B0_260a88[path_index] + 0x18),

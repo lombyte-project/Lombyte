@@ -7,7 +7,7 @@
 
 extern u8 D_L00_00166E10_2e9010[] __asm__("D_L00_00166E10");
 extern u8 D_0013F3D0_2e9010[] __asm__("D_0013F3D0");
-extern s32 D_L00_00161D24_2e9010 __asm__("D_L00_00161D24") __attribute__((sda));
+extern s32 D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
 
 void FUN_001f9a28_2e9010(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9ab0_2e9010(void *, void *) __asm__("FUN_001f9ab0");
@@ -129,7 +129,7 @@ void follow_camera_build_view(u8 *p) {
     if (*(s16 *)q20 != 0) {
         fast_dec_timer(q20);
         e2 = FUN_001fa6c0_2e9010(*(s16 *)q20);
-        h2 = e2 / FUN_001fa6c0_2e9010(FUN_001f96f8_2e9010(D_L00_00161D24_2e9010));
+        h2 = e2 / FUN_001fa6c0_2e9010(FUN_001f96f8_2e9010(D_L00_00161D24_gp));
         lerp_vector(p, p, p + 0x40, h2);
         FUN_001f9bf8_2e9010(p, p, 1.0f);
     }

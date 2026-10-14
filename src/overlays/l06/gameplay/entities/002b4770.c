@@ -696,7 +696,7 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float spark_speed __asm__("D_L06_00161CEC") __attribute__((sda));
+extern float spark_speed_gp __asm__("D_L06_00161CEC") __attribute__((sda));
 extern int spark_color0 __asm__("D_L06_00161CFC") __attribute__((sda));
 extern int spark_color1 __asm__("D_L06_00161D00") __attribute__((sda));
 extern int spark_life_min __asm__("D_L06_00161D04") __attribute__((sda));
@@ -736,7 +736,7 @@ void FUN_L06_002f3d70(char *m) {
     qcopy(&at, pos);
     rotation_matrix(mat, m + 0x40);
     clear_u64_value(&dir);
-    dir.f[0] = spark_speed * frame_time;
+    dir.f[0] = spark_speed_gp * frame_time;
     transform_vector(&dir, &dir, mat);
     dir.f[3] = spark_dir;
     scale_vector_xyz(&drift, &dir, spark_drift_scale);
@@ -788,7 +788,7 @@ typedef struct {
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
-extern f32 D_L06_00161CEC_d __asm__("D_L06_00161CEC") __attribute__((sda));
+extern f32 spark_speed_gp __asm__("D_L06_00161CEC") __attribute__((sda));
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern short D_L06_00161CF0 __attribute__((sda));
@@ -803,7 +803,7 @@ void FUN_L06_002f4130(char *m) {
     int n;
     float f25, f27, cur, prev, ang, ra, rb;
     d = *(char **)(m + 0x78);
-    n = func_001FA898_r(*(float *)&D_L06_00161CF0 / (*(float *)&D_L06_00161CEC_d * frame_time) *
+    n = func_001FA898_r(*(float *)&D_L06_00161CF0 / (*(float *)&spark_speed_gp * frame_time) *
                         0.25f);
     f25 = *(float *)(d + 0x80) * (float)n;
     f27 = *(float *)&D_L06_00161CF0 * 0.25f;
@@ -843,7 +843,7 @@ void FUN_L06_002f4130(char *m) {
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
-extern f32 D_L06_00161CEC_d __asm__("D_L06_00161CEC") __attribute__((sda));
+extern f32 spark_speed_gp __asm__("D_L06_00161CEC") __attribute__((sda));
 
 void FUN_L06_002f4390(char *m) {
     struct {
@@ -879,7 +879,7 @@ void FUN_L06_002f4390(char *m) {
     q.b19 = 1;
     q.s1A = *(unsigned short *)(m + 0xA6);
     sp = (*(float *)(d + 0x70) * 60.0f - (float)*(int *)(d + 0x88)) *
-         (*(float *)&D_L06_00161CEC_d * frame_time);
+         (*(float *)&spark_speed_gp * frame_time);
     if (*(float *)&D_L06_00161CF0 < sp)
         sp = *(float *)&D_L06_00161CF0;
     normalize_vector_xyz(v, m + 0xD0, 0.125f);
@@ -1737,7 +1737,7 @@ extern char D_0013F350[];
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern float FUN_001f96b0(float);
-extern int D_L06_0015F5CC; /* no foreign declaration */
+extern int GB_FRAME __asm__("D_L06_0015F5CC"); /* no foreign declaration */
 extern float D_L06_00161ED0 __attribute__((sda));
 extern int D_001413D0[];
 extern float D_L06_00161EE4 __attribute__((sda));
@@ -1854,7 +1854,7 @@ void FUN_L06_002f91e8(Moby *moby)
     case 9:
     case 12:
     case 13:
-        if (D_L06_0015F5CC % 4 == (((int)moby >> 8) & 3)) {
+        if (GB_FRAME % 4 == (((int)moby >> 8) & 3)) {
             func_L00_0025A8E8_2FA618(moby, 0.7f, &moby->pos.x, 0x10000, 0.9f, 1.0f, 0, 1, 0);
         }
         break;
@@ -2664,7 +2664,7 @@ extern char *D_L06_001600EC_c __asm__("D_L06_001600EC") __attribute__((section("
 extern char *D_L06_0015FFD8_c __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
 extern char D_0013F350[];
 extern float D_0015ED6C __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
+extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern int D_0013D388; /* no foreign declaration */
 extern int D_0013D3A8; /* no foreign declaration */
 extern int D_0013D4C6; /* no foreign declaration */
@@ -2865,7 +2865,7 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
         if (moby->state == 6) {
             target += ((Node_2FDA70 *)D_L06_001600EC_c)[d->f78].v20.z;
         }
-        t = D_L06_00161F68 * D_0015ED70;
+        t = D_L06_00161F68 * frame_time_sq_macro;
         advance_accelerated_scalar(&moby->pos.z, &d->f8C, target, t, t, D_L06_00161F64 * D_0015ED6C);
         if (absolute_float(moby->pos.z - target) < 0.01f) {
             if (moby->state == 6) {

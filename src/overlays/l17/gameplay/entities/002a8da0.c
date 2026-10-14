@@ -628,7 +628,7 @@ extern int random_integer_below(int);
 extern int truncate_float_to_s32();
 extern short D_L17_00161B78 __attribute__((sda));
 extern short D_L17_00161B7C __attribute__((sda));
-extern f32 D_L17_00161B80 __attribute__((sda));
+extern f32 D_L17_00161B80_gp __asm__("D_L17_00161B80") __attribute__((sda));
 extern short D_L17_00161B84 __attribute__((sda));
 extern short D_L17_00161B88 __attribute__((sda));
 extern short D_L17_00161B8C __attribute__((sda));
@@ -708,9 +708,9 @@ void FUN_L17_002d77f0(char *m) {
             do {
                 j = 0;
                 do {
-                    f21 = wrap_angle(*(float *)&D_L17_00161B80 * DEG_TO_RAD *
+                    f21 = wrap_angle(*(float *)&D_L17_00161B80_gp * DEG_TO_RAD *
                                      convert_integer_to_float(j) * 0.5f) -
-                          *(float *)&D_L17_00161B80 * DEG_TO_RAD;
+                          *(float *)&D_L17_00161B80_gp * DEG_TO_RAD;
                     g = *(float *)&D_L17_00161B7C * DEG_TO_RAD;
                     build_spherical_offset(
                         spC0, *(float *)&D_L17_00161B84, 1.5707964f,
@@ -792,7 +792,7 @@ typedef struct {
     long alpha;
 } RingPrim;
 
-extern float D_L17_00161B80_c __asm__("D_L17_00161B80") __attribute__((sda));
+extern float D_L17_00161B80_gp __asm__("D_L17_00161B80") __attribute__((sda));
 extern RingUV D_L17_001D3F70[4];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L17_00161BBC __attribute__((sda));
@@ -838,8 +838,8 @@ void FUN_L17_002d7cf0(struct Moby *moby) {
         for (i = 0; i < 3; i++) {
             for (j = 0; j < 4; j++) {
                 RingStep step = D_L17_00161BC8;
-                float spread[4] = {0.0f, -D_L17_00161B80_c * DEG_TO_RAD,
-                                   D_L17_00161B80_c * DEG_TO_RAD, 0.0f};
+                float spread[4] = {0.0f, -D_L17_00161B80_gp * DEG_TO_RAD,
+                                   D_L17_00161B80_gp * DEG_TO_RAD, 0.0f};
                 float *vj;
                 float radius;
 

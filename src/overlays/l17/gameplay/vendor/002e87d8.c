@@ -975,7 +975,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
 extern int FUN_001f9740(void *);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L11_00308848(void *, void *, void *, float, float);
-extern f32 D_L17_001620A0_d __asm__("D_L17_001620A0") __attribute__((sda));
+extern f32 D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
 extern unsigned char D_0013A4E0_u[] __asm__("D_0013A4E0");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -990,7 +990,7 @@ void FUN_L17_002ec000(char *moby, char *obj, float p2, float p3) {
     char b[16];
     char c[16];
     char d[16];
-    build_spherical_offset(a, *(float *)&D_L17_0016206C * *(float *)&D_L17_001620A0_d, p2, p3);
+    build_spherical_offset(a, *(float *)&D_L17_0016206C * *(float *)&D_L17_001620A0_gp, p2, p3);
     FUN_001f9a10(a, a, obj);
     if (FUN_001f9740(obj + 0x80) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x84)) {
         allocate_voice_for_target_entry(3, 0, (int)moby);
@@ -1026,7 +1026,7 @@ void FUN_L17_002ec150(char *moby, char *obj) {
             moby_point_position(moby, t + 7, a);
             FUN_001f9bf8(b, obj, 0.3f);
             FUN_001f9a10(a, a, b);
-            s = *(float *)&D_L17_00162074 * *(float *)&D_L17_001620A0_d;
+            s = *(float *)&D_L17_00162074 * *(float *)&D_L17_001620A0_gp;
             n = FUN_001f96f8(300);
             if (FUN_L13_002e6a58(moby, a, *(int *)(obj + 0xEC), pos, s, n)) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
@@ -1132,7 +1132,7 @@ extern float D_L17_00162060 __attribute__((sda));
 extern float D_L17_0016208C __attribute__((sda));
 extern float D_L17_00162090 __attribute__((sda));
 extern float D_L17_0016209C __attribute__((sda));
-extern float D_L17_001620A0_f __asm__("D_L17_001620A0") __attribute__((sda));
+extern float D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
 extern float D_L17_001620AC __attribute__((sda));
 extern float D_L17_001620B0 __attribute__((sda));
 extern float D_L17_001620B4 __attribute__((sda));
@@ -1237,7 +1237,7 @@ void FUN_L17_002ec360(Moby *m, Obj *o) {
 
     dir.q = 0;
     up.q = 0;
-    dir.v[2] = frame_time * 8.0f * D_L17_001620A0_f;
+    dir.v[2] = frame_time * 8.0f * D_L17_001620A0_gp;
     up.v[2] = 1.0f;
     m->flags &= 0xFEFF;
     *(Q_c4 *)vel = dir.q;
@@ -1266,15 +1266,15 @@ void FUN_L17_002ec360(Moby *m, Obj *o) {
             }
             pad = (char *)((char *)&D_0013C940);
             if (*(int *)(pad + 0x1B0) & 0x40) {
-                float f = o->speed + D_L17_0016200C * D_L17_001620A0_f;
-                float max = D_L17_00162008 * D_L17_001620A0_f;
+                float f = o->speed + D_L17_0016200C * D_L17_001620A0_gp;
+                float max = D_L17_00162008 * D_L17_001620A0_gp;
                 o->speed = f;
                 if (max < f) {
                     o->speed = max;
                 }
             } else {
-                float hi = D_L17_00162004 * D_L17_001620A0_f;
-                float step = D_L17_00161FFC * D_L17_001620A0_f;
+                float hi = D_L17_00162004 * D_L17_001620A0_gp;
+                float step = D_L17_00161FFC * D_L17_001620A0_gp;
                 float cur = o->speed;
                 if (cur < hi - step) {
                     o->speed = cur + step;
@@ -1285,7 +1285,7 @@ void FUN_L17_002ec360(Moby *m, Obj *o) {
                 }
             }
         } else {
-            o->speed += D_L17_00161FF8 * D_L17_001620A0_f;
+            o->speed += D_L17_00161FF8 * D_L17_001620A0_gp;
             o->count += 1;
         }
     } else {

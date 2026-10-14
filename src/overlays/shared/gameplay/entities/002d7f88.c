@@ -141,7 +141,7 @@ typedef struct {
 } G_2d81b8;
 extern G_2d81b8 D_L00_00173E40_2d81b8 __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern float D_L00_00173E68_2d81b8 __asm__("D_L00_00173E68") __attribute__((section(".data")));
-extern float D_0015ED70_2d81b8 __asm__("D_0015ED70");
+extern float frame_time_sq __asm__("D_0015ED70");
 int FUN_001efa68_2d81b8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 int FUN_L00_0025e3b8_2d81b8(void *) __asm__("FUN_L00_0025e3b8");
 void FUN_L00_002d81b8(unsigned char *m) {
@@ -196,7 +196,7 @@ void FUN_L00_002d81b8(unsigned char *m) {
     } else {
         float c, acc;
         m[0xBC] = 1;
-        acc = D_0015ED70_2d81b8 * 9.8f;
+        acc = frame_time_sq * 9.8f;
         *(float *)(m + 0x18) = f - d->f50;
         d->f50 += acc;
         if (0.3f < d->f50)
@@ -2270,7 +2270,7 @@ void FUN_L00_002dc938_c(char *p, char *q, int flag) __asm__("FUN_L00_002dc938");
 void no_op_main_callback(void *) __asm__("FUN_001e93e8");
 extern float D_0015EE60_2DDEA0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern float frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
-extern float D_0015EE70_2DDEA0 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern unsigned char D_0013E629_2DDEA0[] __asm__("D_0013E529");
 extern unsigned char D_001404FC_2DDEA0[] __asm__("D_001403FC");
 extern char D_0013F450_2DDEA0[] __asm__("D_0013F350");
@@ -2478,11 +2478,11 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                     if (0.0f < time) {
                         func_001F9C30_2DDEA0(&work.v[4], &work.v[2], time);
                         func_001F9BD8_2DDEA0(&work.v[4], &work.v[4], &work.v[1]);
-                        func_L00_001FF4B0_2DDEA0(&work.v[4], &work.v[4], D_0015EE70_2DDEA0 * 90.0f);
+                        func_L00_001FF4B0_2DDEA0(&work.v[4], &work.v[4], frame_time_sq_macro * 90.0f);
                         func_001F9BD8_2DDEA0(&record->vel, &record->vel, &work.v[4]);
                         func_L00_001FF4B0_2DDEA0(&record->vel, &record->vel, speed);
                     } else {
-                        func_L00_001FF4B0_2DDEA0(&work.v[1], &work.v[1], D_0015EE70_2DDEA0 * 90.0f);
+                        func_L00_001FF4B0_2DDEA0(&work.v[1], &work.v[1], frame_time_sq_macro * 90.0f);
                         func_001F9BD8_2DDEA0(&record->vel, &record->vel, &work.v[1]);
                         func_L00_001FF4B0_2DDEA0(&record->vel, &record->vel, speed);
                     }
@@ -2696,13 +2696,13 @@ void FUN_L00_002dd8e8(void) {
     FUN_002a0ba8_002dd8e8(0x47, 0x5360b);
 }
 #endif
-extern int D_L00_00161B44_002ddca0 __asm__("D_L00_00161B44") __attribute__((sda));
-extern int D_L00_00161B40_002ddca0 __asm__("D_L00_00161B40") __attribute__((sda));
+extern int D_L00_00161B44_gp __asm__("D_L00_00161B44") __attribute__((sda));
+extern int D_L00_00161B40_gp __asm__("D_L00_00161B40") __attribute__((sda));
 extern short D_L00_001E6008_002ddca0 __asm__("D_L00_001E6008") __attribute__((section(".data")));
-/* Sets D_L00_00161B40 and D_L00_00161B44 to 1 and clears D_L00_001E6008. */
+/* Sets D_L00_00161B40_gp and D_L00_00161B44_gp to 1 and clears D_L00_001E6008. */
 void FUN_L00_002ddca0(void) {
-    D_L00_00161B40_002ddca0 = 1;
-    D_L00_00161B44_002ddca0 = 1;
+    D_L00_00161B40_gp = 1;
+    D_L00_00161B44_gp = 1;
     D_L00_001E6008_002ddca0 = 0;
 }
 #ifndef NON_MATCHING
@@ -2710,7 +2710,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ddcb8.s", FUN_L00_002ddcb8);
 #else
 extern float D_L00_00161B80_gp __asm__("D_L00_00161B80") __attribute__((sda));
 extern float D_L00_00161B84_gp __asm__("D_L00_00161B84") __attribute__((sda));
-extern float D_L00_00161B50_002ddcb8 __asm__("D_L00_00161B50") __attribute__((sda));
+extern float D_L00_00161B50_gp __asm__("D_L00_00161B50") __attribute__((sda));
 extern int D_L00_00161B54_002ddcb8 __asm__("D_L00_00161B54") __attribute__((sda));
 extern int D_L00_00161B58_002ddcb8 __asm__("D_L00_00161B58") __attribute__((sda));
 extern char D_L00_00166FD0_002ddcb8[] __asm__("D_L00_00166FD0");
@@ -2786,7 +2786,7 @@ void FUN_L00_002ddcb8(char *frame_context, void *initial_vector) {
     sampled = FUN_00257cb0_002ddcb8();
     FUN_0025fc08_002ddcb8(D_L00_00161B70_002ddcb8, sampled, &temp1, &temp2);
     D_L00_00161B80_gp = sampled;
-    D_L00_00161B50_002ddcb8 = 0.006f;
+    D_L00_00161B50_gp = 0.006f;
     D_L00_00161B54_002ddcb8 = 0;
     D_L00_00161B58_002ddcb8 = 0;
     if (*(int *)((char *)&D_L00_00161B84_gp - 0x40)) {
@@ -2806,7 +2806,7 @@ extern float D_L00_00161B84_lui __asm__("D_L00_00161B84") __attribute__((section
 extern float D_L00_00161B80_lui __asm__("D_L00_00161B80") __attribute__((section(".data")));
 extern float D_L00_00161B80_gp __asm__("D_L00_00161B80") __attribute__((sda));
 extern float D_L00_00161B84_gp __asm__("D_L00_00161B84") __attribute__((sda));
-extern float D_L00_00161B50_002ddcb8 __asm__("D_L00_00161B50") __attribute__((sda));
+extern float D_L00_00161B50_gp __asm__("D_L00_00161B50") __attribute__((sda));
 extern int D_L00_00161B54_002ddcb8 __asm__("D_L00_00161B54") __attribute__((sda));
 extern int D_L00_00161B58_002ddcb8 __asm__("D_L00_00161B58") __attribute__((sda));
 extern char D_L00_00166FD0_002ddcb8[] __asm__("D_L00_00166FD0");
@@ -3162,9 +3162,9 @@ extern E04 D_L00_001E4C80[];
 extern char D_L00_001E5F30[];
 extern char D_L00_001E5F40[];
 extern float vector_length_xyz(void *);
-extern s32 D_L00_00161B40 __attribute__((sda));
-extern s32 D_L00_00161B44 __attribute__((sda));
-extern f32 D_L00_00161B50 __attribute__((sda));
+extern s32 D_L00_00161B40_gp __asm__("D_L00_00161B40") __attribute__((sda));
+extern s32 D_L00_00161B44_gp __asm__("D_L00_00161B44") __attribute__((sda));
+extern f32 D_L00_00161B50_gp __asm__("D_L00_00161B50") __attribute__((sda));
 extern void FUN_L00_002defe0(int);
 extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
@@ -3177,9 +3177,9 @@ void FUN_L00_002df048(int arg0) {
     float len;
     char *p;
 
-    *(int *)&D_L00_00161B40 = 1;
-    *(float *)&D_L00_00161B50 = *(float *)&D_L00_00161B50 * 0.5f;
-    *(int *)&D_L00_00161B44 = 1;
+    *(int *)&D_L00_00161B40_gp = 1;
+    *(float *)&D_L00_00161B50_gp = *(float *)&D_L00_00161B50_gp * 0.5f;
+    *(int *)&D_L00_00161B44_gp = 1;
     for (i = 0; i < 200; i++) {
         p = D_L00_001E4C80[i].p;
         if (p != 0) {

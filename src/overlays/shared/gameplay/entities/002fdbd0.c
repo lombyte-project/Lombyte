@@ -899,14 +899,14 @@ void FUN_L06_002ff978(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00301FE8), where it is exact; names translated to the US level program. */
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern f32 D_L06_00162080_d __asm__("D_L06_00162080") __attribute__((sda));
+extern f32 D_L06_00162080_gp __asm__("D_L06_00162080") __attribute__((sda));
 extern void FUN_001f9a10(float *, float *, float *);
 
 void FUN_L06_00300b90(struct Moby *moby) {
     char *data;
     float t = frame_time_sq * 15.0f;
     moby->scale =
-        moby->pclass->scale * *(float *)&D_L06_00162080_d;
+        moby->pclass->scale * *(float *)&D_L06_00162080_gp;
     data = (char *)moby->pvars;
     *(float *)(data + 8) -= t;
     FUN_001f9a10(&moby->pos.x, &moby->pos.x, (float *)data);
@@ -922,7 +922,7 @@ void FUN_L06_00300b90(struct Moby *moby) {
 #include "eetypes.h"
 extern unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void upd_a(unsigned char *) __asm__("FUN_L00_00250df8");
-extern float D_L06_00162080_300c60 __asm__("D_L06_00162080") __attribute__((sda));
+extern float D_L06_00162080_gp __asm__("D_L06_00162080") __attribute__((sda));
 extern int ftoi_300c60(float) __asm__("FUN_001fa6d0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
@@ -941,7 +941,7 @@ unsigned char *FUN_L06_00300c60(char *m, float *pos, float *vel) {
 
     if (n != 0) {
         d = *(char **)(n + 0x78);
-        *(float *)(n + 0x2C) = *(float *)(*(char **)(n + 0x24) + 0x24) * D_L06_00162080_300c60;
+        *(float *)(n + 0x2C) = *(float *)(*(char **)(n + 0x24) + 0x24) * D_L06_00162080_gp;
         n[0x30] = 0xFF;
         *(short *)(n + 0x32) = 0x7E;
         n[0x31] = 1;
@@ -958,7 +958,7 @@ unsigned char *FUN_L06_00300c60(char *m, float *pos, float *vel) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00303630), where it is exact; names translated to the US level program. */
 
-extern int D_L06_0015F5CC;
+extern int GB_FRAME __asm__("D_L06_0015F5CC");
 extern short D_L06_001620C8 __attribute__((sda));
 extern short D_L06_001620CC __attribute__((sda));
 extern short D_L06_001620D0 __attribute__((sda));
@@ -989,7 +989,7 @@ void FUN_L06_003021d8(char *moby) {
     draw_ui_frame(W(D_L06_001620D8) + W(D_L06_001620CC), W(D_L06_001620DC) + W(D_L06_001620CC),
                 W(D_L06_001620E0) + W(D_L06_001620C8), W(D_L06_001620E4) + W(D_L06_001620C8),
                 W(D_L06_001620E8));
-    v = fast_sin(func_001FA888(D_L06_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
+    v = fast_sin(func_001FA888(GB_FRAME % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (v > 1.0f) {
         v = 1.0f;
     } else if (v < 0.0f) {

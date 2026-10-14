@@ -2472,8 +2472,8 @@ extern float D_L02_00161C50 __attribute__((sda));
 extern float D_L02_00161C54 __attribute__((sda));
 extern float D_L02_00161C58 __attribute__((sda));
 extern float D_L02_00161C60 __attribute__((sda));
-extern float D_L02_00161C30_f __asm__("D_L02_00161C30") __attribute__((sda));
-extern float D_L02_00161C34_f __asm__("D_L02_00161C34") __attribute__((sda));
+extern float D_L02_00161C30_gp __asm__("D_L02_00161C30") __attribute__((sda));
+extern float D_L02_00161C34_gp __asm__("D_L02_00161C34") __attribute__((sda));
 extern int *D_L02_001B0AB0_dc88[] __asm__("D_L02_001B0AB0");
 extern unsigned char D_0014C050_dc88[] __asm__("D_0014C050");
 extern unsigned int D_00141BAC __attribute__((section(".data")));
@@ -2603,8 +2603,8 @@ void FUN_L02_002ddc88(unsigned char *moby) {
         break;
     case 3:
         FUN_00213f38((float *)(moby + 0x18), &d->speed, D_L02_001600EC_n[d->node_a].pos[2],
-                     D_L02_00161C34_f * frame_time_sq, D_L02_00161C34_f * frame_time_sq,
-                     D_L02_00161C30_f * D_0015ED6C);
+                     D_L02_00161C34_gp * frame_time_sq, D_L02_00161C34_gp * frame_time_sq,
+                     D_L02_00161C30_gp * D_0015ED6C);
         FUN_L02_002df0b0((struct Moby *)moby);
         if (D_L02_001600EC_n[d->node_a].pos[2] - 0.0001f <= ((struct Moby *)moby)->pos.z) {
             moby[0x20] = 4;
@@ -2699,8 +2699,8 @@ void FUN_L02_002ddc88(unsigned char *moby) {
     case 8:
         FUN_00213f38((float *)(moby + 0x18), &d->speed,
                      D_L02_001600EC_n[d->node_a].pos[2] - 6.0f,
-                     D_L02_00161C34_f * frame_time_sq, D_L02_00161C34_f * frame_time_sq,
-                     D_L02_00161C30_f * D_0015ED6C);
+                     D_L02_00161C34_gp * frame_time_sq, D_L02_00161C34_gp * frame_time_sq,
+                     D_L02_00161C30_gp * D_0015ED6C);
         FUN_L02_002df0b0((struct Moby *)moby);
         if (((struct Moby *)moby)->pos.z < D_L02_001600EC_n[d->node_a].pos[2] - 5.999f) {
             if (moby[0xBC] == 0) {
@@ -2738,8 +2738,8 @@ void FUN_L02_002ddc88(unsigned char *moby) {
         break;
     case 10:
         FUN_00213f38((float *)(moby + 0x18), &d->speed, D_L02_001600EC_n[d->node_a].pos[2],
-                     D_L02_00161C34_f * frame_time_sq, D_L02_00161C34_f * frame_time_sq,
-                     D_L02_00161C30_f * D_0015ED6C);
+                     D_L02_00161C34_gp * frame_time_sq, D_L02_00161C34_gp * frame_time_sq,
+                     D_L02_00161C30_gp * D_0015ED6C);
         FUN_L02_002df0b0((struct Moby *)moby);
         if (D_L02_001600EC_n[d->node_a].pos[2] <= ((struct Moby *)moby)->pos.z) {
             moby[0x20] = 0xB;
@@ -2837,8 +2837,8 @@ void FUN_L02_002ddc88(unsigned char *moby) {
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float D_0015ED6C;
-extern f32 D_L02_00161C30_d __asm__("D_L02_00161C30") __attribute__((sda));
-extern f32 D_L02_00161C34_d __asm__("D_L02_00161C34") __attribute__((sda));
+extern f32 D_L02_00161C30_gp __asm__("D_L02_00161C30") __attribute__((sda));
+extern f32 D_L02_00161C34_gp __asm__("D_L02_00161C34") __attribute__((sda));
 
 extern short D_L02_00161C38 __attribute__((sda));
 extern short D_L02_00161C3C __attribute__((sda));
@@ -2846,12 +2846,12 @@ void FUN_L02_002def80(struct Moby *moby) {
     char *d = (char *)moby->pvars;
     advance_accelerated_scalar(
         (float *)(*(char **)(d + 0x84) + 0x18), (float *)(d + 0x8C),
-        moby->pos.z + *(float *)(d + 0x94), *(float *)&D_L02_00161C34_d * frame_time_sq,
-        *(float *)&D_L02_00161C38 * frame_time_sq, *(float *)&D_L02_00161C30_d * D_0015ED6C);
+        moby->pos.z + *(float *)(d + 0x94), *(float *)&D_L02_00161C34_gp * frame_time_sq,
+        *(float *)&D_L02_00161C38 * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
     advance_accelerated_scalar(
         (float *)(*(char **)(d + 0x88) + 0x18), (float *)(d + 0x90),
-        moby->pos.z + *(float *)(d + 0x98), *(float *)&D_L02_00161C34_d * frame_time_sq,
-        *(float *)&D_L02_00161C38 * frame_time_sq, *(float *)&D_L02_00161C30_d * D_0015ED6C);
+        moby->pos.z + *(float *)(d + 0x98), *(float *)&D_L02_00161C34_gp * frame_time_sq,
+        *(float *)&D_L02_00161C38 * frame_time_sq, *(float *)&D_L02_00161C30_gp * D_0015ED6C);
     {
         float r0 =
             fast_add_rotations(moby->rot.z,

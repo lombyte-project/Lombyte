@@ -153,8 +153,8 @@ typedef struct O23cdb8 {
     u8 pad78[4];
     s32 timer;
 } O23cdb8;
-extern s32 D_L00_0015F91C __attribute__((sda));
-extern s32 D_L00_0015F920 __attribute__((sda));
+extern s32 D_L00_0015F91C_gp __asm__("D_L00_0015F91C") __attribute__((sda));
+extern s32 D_L00_0015F920_gp __asm__("D_L00_0015F920") __attribute__((sda));
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L00_0023cdb8(O23cdb8 *p) {
     u8 *c = p->c;
@@ -166,9 +166,9 @@ void FUN_L00_0023cdb8(O23cdb8 *p) {
         p->val = 0;
     if (p->timer >= scale_game_frames(5)) {
         p->timer = scale_game_frames(5);
-        if (c[0] < D_L00_0015F91C)
+        if (c[0] < D_L00_0015F91C_gp)
             c[0]++;
-        else if (c[1] < D_L00_0015F920)
+        else if (c[1] < D_L00_0015F920_gp)
             c[1]++;
     } else {
         p->f6C = 1;

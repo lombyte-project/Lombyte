@@ -402,7 +402,7 @@ extern void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L00_00258ad0");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
-extern f32 frame_time_sq __asm__("D_0015ED70") __attribute__((sda));
+extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
 extern f32 frame_scale __asm__("D_0015ED60") __attribute__((sda));
 s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     Vec4 save;
@@ -448,7 +448,7 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
         d.f[2] = 0.0f;
     } else {
         d.f[2] = c->f18;
-        c->f18 = c->f18 - frame_time_sq * 9.0f;
+        c->f18 = c->f18 - frame_time_sq_gp * 9.0f;
     }
     lim = m->pos.f[2] + 0.04f;
     FUN_001f9a10(&p, &m->pos, &d);

@@ -140,7 +140,7 @@ extern float D_L00_0015F4FC_2E0E50 __asm__("D_L00_0015F3FC") __attribute__((sect
 extern float D_L00_00161C84_2E0E50 __asm__("D_L00_00161BB4") __attribute__((section(".sdata")));
 extern float D_0015EE6C_2E0E50 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
-extern float D_0015EE70_2E0E50 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern char D_L00_00166EC0_2E0E50[] __asm__("D_L00_00166DC0");
 extern void func_L00_002E1660_2E0E50(Moby *) __asm__("FUN_L00_002e01b0");
 extern int func_0022ED80_2E0E50(int, int, Moby *) __asm__("FUN_0022da68");
@@ -312,7 +312,7 @@ void FUN_L00_002df9a0(Moby *moby) {
                 return;
             }
             if (data->f10 < 1.0f) {
-                func_00214D88_2E0E50(&data->f10, &data->f14, 1.0f, D_0015EE70_2E0E50 * 0.666f, D_0015EE70_2E0E50 * 0.666f, D_0015EE6C_2E0E50 * 0.5f);
+                func_00214D88_2E0E50(&data->f10, &data->f14, 1.0f, frame_time_sq_macro * 0.666f, frame_time_sq_macro * 0.666f, D_0015EE6C_2E0E50 * 0.5f);
                 func_001F9C08_2E0E50(&camera_pos, D_L00_001601AC_2E0E50 + (data->i8 << 7) + 0x30, D_L00_001601AC_2E0E50 + (data->iC << 7) + 0x30, data->f10);
                 func_001F9BC0_2E0E50(&camera_rot);
                 camera_rot.y = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->iC].v70.y, ((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->i8].v70.y) * data->f10;
@@ -1581,7 +1581,7 @@ extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern float D_L00_00166EEC __attribute__((section(".data")));
 extern int FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 D_L00_00161D24 __attribute__((sda));
+extern s32 D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
 extern short D_L00_00161D38 __attribute__((sda));
 extern short D_L00_00161D3C_gp __asm__("D_L00_00161D3C") __attribute__((sda));
 extern short D_L00_00161D40_gp __asm__("D_L00_00161D40") __attribute__((sda));
@@ -1801,7 +1801,7 @@ void FUN_L00_002e4930(char *m) {
             e->state = 1;
             e->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
             r = 1.0f / convert_integer_to_float_c(e->timer);
-            t = *(int *)&D_L00_00161D24;
+            t = *(int *)&D_L00_00161D24_gp;
             e->invTimer = r;
             q = *(char **)(m + 0x70);
             *(short *)(q + 0x20) = scale_game_frames(t);
@@ -1839,7 +1839,7 @@ extern int FUN_001f96f8_c2(int) __asm__("FUN_001f96f8");
 extern int FUN_001f9770_c(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern float FUN_L00_002e4580_u(void *, float) __asm__("FUN_L00_002e4580");
-extern s32 D_L00_00161D24_d __asm__("D_L00_00161D24") __attribute__((sda));
+extern s32 D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
 extern short D_L00_00161D3C_gp __asm__("D_L00_00161D3C") __attribute__((sda));
 extern short D_L00_00161D40_gp __asm__("D_L00_00161D40") __attribute__((sda));
 extern short D_L00_00161D54_gp __asm__("D_L00_00161D54") __attribute__((sda));
@@ -1882,7 +1882,7 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
             *(unsigned char *)(e + 0xC4) = 0xB;
             qcopy(m + 0x40, m);
             q = *(char **)(m + 0x70);
-            *(short *)(q + 0x20) = FUN_001f96f8_c2(*(int *)&D_L00_00161D24_d);
+            *(short *)(q + 0x20) = FUN_001f96f8_c2(*(int *)&D_L00_00161D24_gp);
         }
         return;
     }

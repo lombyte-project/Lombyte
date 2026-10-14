@@ -841,7 +841,7 @@ typedef struct {
 } HudCounter;
 
 extern int FUN_L00_0023aaa8(char *);
-extern s32 D_L00_0015F7F0_d __asm__("D_L00_0015F7F0") __attribute__((sda));
+extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 
 void FUN_L00_00239630(HudElem *e) {
     unsigned char *c = e->cnt;
@@ -888,9 +888,9 @@ void FUN_L00_00239630(HudElem *e) {
         e->unk74 = e->unk78;
     }
     if (e->unk7C >= FUN_001f96f8(5)) {
-        if (*(int *)&D_L00_0015F7F0_d > c[0]) {
+        if (*(int *)&D_L00_0015F7F0_gp > c[0]) {
             c[0]++;
-        } else if (c[1] < *(int *)&D_L00_0015F7F0_d) {
+        } else if (c[1] < *(int *)&D_L00_0015F7F0_gp) {
             c[1]++;
         }
     } else {
@@ -931,7 +931,7 @@ extern void FUN_L00_0023b120_c(Hud *, s32, s32, s32, s32, s32) __asm__("FUN_L00_
 extern s32 D_0015ED80_c __asm__("D_0015ED80");
 extern s32 hero_max_health __asm__("D_0015EDA0");
 extern s32 D_L00_0015F808 __attribute__((sda));
-extern s32 D_L00_0015F7F0 __attribute__((sda));
+extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 extern s32 D_L00_0015F820 __attribute__((sda));
 extern s32 D_L00_0015F810 __attribute__((sda));
 extern s32 D_L00_0015F80C __attribute__((sda));
@@ -976,12 +976,12 @@ s32 FUN_L00_00239810(Hud *m) {
     q = m->ab;
     if (q[0] == 0)
         goto out;
-    f21 = FUN_001fa6c0(q[0]) / FUN_001fa6c0(D_L00_0015F7F0);
+    f21 = FUN_001fa6c0(q[0]) / FUN_001fa6c0(D_L00_0015F7F0_gp);
     if (1.0f < f21)
         f21 = 1.0f;
     else if (f21 < 0.0f)
         f21 = 0.0f;
-    f22 = FUN_001fa6c0(q[1]) / FUN_001fa6c0(D_L00_0015F7F0);
+    f22 = FUN_001fa6c0(q[1]) / FUN_001fa6c0(D_L00_0015F7F0_gp);
     if (1.0f < f22)
         f22 = 1.0f;
     else if (f22 < 0.0f)
@@ -1207,13 +1207,13 @@ int FUN_L00_00239df8(HudElem *m)
 }
 #include "sda.h"
 extern s32 D_00141398 NOT_SDA;
-extern s32 D_L00_0015F7F0 __attribute__((sda));
+extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 s32 FUN_001f96f8(s32);
 void FUN_L00_0023a218(u8 *m) {
     u8 *q = m + 0x70;
     if (D_00141398) {
         s32 r = FUN_001f96f8(10);
-        s32 lim = D_L00_0015F7F0;
+        s32 lim = D_L00_0015F7F0_gp;
         *(s32 *)(m + 0x7C) = r;
         if (m[0x70] < lim) {
             m[0x70]++;
@@ -1271,12 +1271,12 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     if (q[0] == 0)
         return m->ret;
 
-    open = convert_integer_to_float(q[0]) / convert_integer_to_float(D_L00_0015F7F0);
+    open = convert_integer_to_float(q[0]) / convert_integer_to_float(D_L00_0015F7F0_gp);
     if (1.0f < open)
         open = 1.0f;
     else if (open < 0.0f)
         open = 0.0f;
-    text = convert_integer_to_float(q[1]) / convert_integer_to_float(D_L00_0015F7F0);
+    text = convert_integer_to_float(q[1]) / convert_integer_to_float(D_L00_0015F7F0_gp);
     if (1.0f < text)
         text = 1.0f;
     else if (text < 0.0f)

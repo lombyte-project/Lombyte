@@ -867,7 +867,7 @@ int FUN_L11_002d2340(struct Moby *moby, char *other) {
 extern int D_L11_0015FFD8;
 extern int FUN_L11_00316128(char *);
 extern short *D_L11_001AC240[];
-extern int D_L11_0015FFF4_i __asm__("D_L11_0015FFF4");
+extern int D_L11_0015FFF4 ;
 extern float FUN_001f9b48(void *, void *);
 
 struct TargetSets {
@@ -890,7 +890,7 @@ int FUN_L11_002d2460(struct Moby *moby) {
 
     for (i = 0; i < 4; i++) {
         group = d->sets[d->set][i].group;
-        if (group < 0 || group > D_L11_0015FFF4_i)
+        if (group < 0 || group > D_L11_0015FFF4)
             break;
         p = D_L11_001AC240[group];
         if (p == 0)
@@ -1184,7 +1184,7 @@ void FUN_L11_002f0e40(struct Moby *moby) {
 }
 #include "qcopy.h"
 
-extern float D_0013F3D8_2518 __asm__("D_0013F3D8") __attribute__((section(".data")));          /* hero z */
+extern float D_0013F3D8_lui __asm__("D_0013F3D8") __attribute__((section(".data")));          /* hero z */
 extern int D_0015ED84_2518 __asm__("D_0015ED84");
 extern unsigned char D_0014C050_2518[] __asm__("D_0014C050");
 extern int D_0013CAE4_2518 __asm__("D_0013CAE4") __attribute__((section(".data")));
@@ -1336,7 +1336,7 @@ void FUN_L11_002f2518(struct Moby *moby) {
         }
         break;
     case 4:
-        if (D_0013F3D8_2518 < 138.0f)
+        if (D_0013F3D8_lui < 138.0f)
             D_0013D3DD = 1;
         if (*(float *)(data + 0x3C) < 1.95f) {
             enqueue_callback_2518(FUN_L11_002f2d58_2518, moby);
@@ -1820,7 +1820,7 @@ void FUN_L11_00309ac0(struct Moby *moby) {
     case 5:
         qcopy(target, (char *)pv->path_c4 + 0x10 + pv->seg_d4 * 16);
         if (pv->flag_b0 != 0) {
-            if (D_0013F3D8_2518 < moby->pos.z) {
+            if (D_0013F3D8_lui < moby->pos.z) {
                 advance_309ac0(&moby->pos.z, &pv->approach_d0, target[2] + 1.0f, frame_time_sq, frame_time_sq, frame_time);
             } else {
                 advance_309ac0(&moby->pos.z, &pv->approach_d0, target[2] + 8.0f, frame_time_sq, frame_time_sq, frame_time);

@@ -3839,7 +3839,7 @@ extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 extern Vec4 hero_velocity __asm__("D_0013F430");
 extern char hero_pos[] __asm__("D_0013F3D0");
 extern f32 D_0015ED6C;
-extern f32 D_0015ED70;
+extern f32 frame_time_sq __asm__("D_0015ED70");
 extern u8 D_0013D4C2 __attribute__((section(".data")));
 extern s32 D_0013CAE0 __attribute__((section(".data")));
 
@@ -3903,7 +3903,7 @@ void hero_integrate_velocity(void) {
         if (hero.state_timer < scale_game_frames(8)) {
             speed = gravity_z(&hero.motion.velocity);
             if (speed < max_speed) {
-                approach_value(&speed, max_speed, D_0015ED70 * 150.0f);
+                approach_value(&speed, max_speed, frame_time_sq * 150.0f);
             }
             gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, speed);
         }
@@ -3937,11 +3937,11 @@ void hero_integrate_velocity(void) {
                     c->key++;
                     c->frames = 0;
                     if (c->keys[c->key].value != -999999.0f) {
-                        c->value = c->keys[c->key].value * D_0015ED70;
+                        c->value = c->keys[c->key].value * frame_time_sq;
                     }
                 }
                 if (c->frames > 0) {
-                    c->value += c->keys[c->key].delta * D_0015ED70;
+                    c->value += c->keys[c->key].delta * frame_time_sq;
                 }
                 FUN_L00_00233810(&hero_velocity, &hero_velocity, c->value);
             }
@@ -3955,7 +3955,7 @@ tail:
     }
     if (hero.state_timer < hero.unk420) {
         gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-        FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, D_0015ED70 * 48.0f);
+        FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 48.0f);
     } else {
         FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, hero.unk4A0);
         z = gravity_z(&hero.motion.velocity);

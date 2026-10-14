@@ -345,7 +345,7 @@ void FUN_L11_00311210(void *pt, int *outx, int *outy, int yoff) {
 
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern f32 D_L11_00161FF4_d __asm__("D_L11_00161FF4") __attribute__((sda));
+extern f32 D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0025f8e0(float *v, float s);
 extern void FUN_L01_0028a7a8(void *, float *, float *, void *, int);
@@ -366,7 +366,7 @@ void FUN_L11_003112b8(void *m, char *t) {
         float scale;
 
         *(OvlQuad *)vel = 0;
-        scale = *(float *)(t + 0x64) / *(float *)&D_L11_00161FF4_d;
+        scale = *(float *)(t + 0x64) / *(float *)&D_L11_00161FF4_gp;
         if (scale > 1.0f) {
             scale = 1.0f;
         } else if (scale < 0.35f) {

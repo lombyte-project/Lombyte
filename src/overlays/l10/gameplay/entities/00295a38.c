@@ -994,7 +994,7 @@ extern char *func_0020D348_d8058(int) __asm__("FUN_0020c4f8");
 extern float func_002140F8_d8058(float, float) __asm__("FUN_002132a8");
 extern int func_001F9850_d8058(int) __asm__("FUN_001f96f8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
-extern f32 D_L10_00161C6C_d8058 __asm__("D_L10_00161BEC") __attribute__((sda));
+extern f32 D_L10_00161BEC_gp __asm__("D_L10_00161BEC") __attribute__((sda));
 extern float D_0015EE6C_d8058 __asm__("D_0015ED6C");
 int FUN_L10_002d8058(int owner, char *pos, char *vec) {
     char *moby = func_0020D348_d8058(0x3AA);
@@ -1007,7 +1007,7 @@ int FUN_L10_002d8058(int owner, char *pos, char *vec) {
         *(int *)(data + 0x10) = owner;
         *(short *)(data + 0x16) = 0;
         qcopy(moby + 0x10, pos);
-        *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + *(float *)&D_L10_00161C6C_d8058;
+        *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + *(float *)&D_L10_00161BEC_gp;
         qcopy(data, vec);
         ((struct Swirl_d8058 *)data)->a =
             func_002140F8_d8058(D_0015EE6C_d8058 * 1.0471976f, D_0015EE6C_d8058 * 3.1415927f);
@@ -1168,7 +1168,7 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float FUN_L00_0025ab48(float, float);
 extern float scale_game_frames_alt(float) __asm__("FUN_001f96f8");
-extern float D_L10_00161BEC __attribute__((sda));
+extern float D_L10_00161BEC_gp __asm__("D_L10_00161BEC") __attribute__((sda));
 extern int FUN_L00_001f2868();
 extern int FUN_L00_002502f0();
 extern int FUN_L00_00250320();
@@ -1216,7 +1216,7 @@ void FUN_L10_002d85c8(char *m) {
         func_0020D678_2D9988(m);
         return;
     }
-    *(float *)(m + 0x18) = *(float *)(m + 0x18) - D_L10_00161BEC;
+    *(float *)(m + 0x18) = *(float *)(m + 0x18) - D_L10_00161BEC_gp;
     qcopy(v0, m + 0x10);
     state = *(unsigned char *)(m + 0x20);
     switch (state) {
@@ -1312,7 +1312,7 @@ void FUN_L10_002d85c8(char *m) {
         func_0020D678_2D9988(m);
         return;
     }
-    *(float *)(m + 0x18) = *(float *)(m + 0x18) + D_L10_00161BEC;
+    *(float *)(m + 0x18) = *(float *)(m + 0x18) + D_L10_00161BEC_gp;
     if (*(float *)(m + 0x10) < 1.0f || 511.0f < *(float *)(m + 0x10) || *(float *)(m + 0x14) < 1.0f ||
         511.0f < *(float *)(m + 0x14) || *(float *)(m + 0x18) < 1.0f || 511.0f < *(float *)(m + 0x18)) {
         func_0020D678_2D9988(m);
@@ -1361,7 +1361,7 @@ void FUN_L10_002d85c8(char *m) {
         delete_moby(m);
         return;
     }
-    *(float *)(m + 0x18) -= *(float *)&D_L10_00161C6C_d8058;
+    *(float *)(m + 0x18) -= *(float *)&D_L10_00161BEC_gp;
     qcopy(prev, m + 0x10);
     state = *(unsigned char *)(m + 0x20);
     if (state == 1) goto state1;
@@ -1481,7 +1481,7 @@ state3:
         return;
 
 finish:
-    *(float *)(m + 0x18) += *(float *)&D_L10_00161C6C_d8058;
+    *(float *)(m + 0x18) += *(float *)&D_L10_00161BEC_gp;
     if (*(float *)(m + 0x10) < 1.0f || *(float *)(m + 0x10) > 511.0f ||
         *(float *)(m + 0x14) < 1.0f || *(float *)(m + 0x14) > 511.0f ||
         *(float *)(m + 0x18) < 1.0f || *(float *)(m + 0x18) > 511.0f)

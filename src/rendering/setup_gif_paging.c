@@ -5,7 +5,7 @@
 #include "types.h"
 extern int *gif_page_marker_a __asm__("D_0015F450") MACRO_ADDR;
 extern int effect_tex_cnt __asm__("D_0015F45C") MACRO_ADDR;
-extern s32 D_0015F458;
+extern s32 pending_texture_upload_count __asm__("D_0015F458");
 typedef struct {
     long unk0;
     long unk8;
@@ -16,7 +16,7 @@ static inline char *PagingArena(void) {
 }
 /* SetupGifPaging(int): marks the render_packet_cursor.words packet in D_0015F450 and
    reserves 0x10 bytes, copies D_0015EE78 to D_0015EE74, clears
-   D_0015F458 and the first dword of the D_0015F45C paging slots, then,
+   pending_texture_upload_count and the first dword of the D_0015F45C paging slots, then,
    when arg0 is 0, clears the +4 half of the arena's 8-byte list entries:
    the list at D_0019A3E8 + 0x24 (count at +0x44 of the record at +0x18)
    where it is at least D_0015EE8C >> 8, and all of the list at + 0x28
@@ -40,7 +40,7 @@ void setup_gif_paging(int arg0) {
     p += 4;
     render_packet_cursor.words = p;
     gs_texture_allocation_cursor = gs_texture_allocation_start;
-    *(int *)&D_0015F458 = 0;
+    *(int *)&pending_texture_upload_count = 0;
     {
         int k;
 

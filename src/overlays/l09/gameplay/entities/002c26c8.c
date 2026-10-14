@@ -91,7 +91,7 @@ extern float D_L09_001613BC __attribute__((sda));
 extern int D_L09_001613C0 __attribute__((sda));
 extern int D_L09_001613C4 __attribute__((sda));
 extern f32 frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern f32 frame_time_sq __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern int D_L09_001613C8 __attribute__((sda));
 /* Update for the airship parts (classes 0x49E-0x4A5): attach to the hull, ride it, then break off, tumble away and fall with smoke and sparks. */
 void FUN_L09_002c26c8(struct Moby *moby) {
@@ -206,10 +206,10 @@ void FUN_L09_002c26c8(struct Moby *moby) {
         d->f20 = FUN_002132a8_2c26c8(-(D_L09_001613B0 * 0.017453292f * frame_time), D_L09_001613B0 * 0.017453292f * frame_time);
         d->f24 = FUN_002132a8_2c26c8(-(D_L09_001613B4 * 0.017453292f * frame_time), D_L09_001613B4 * 0.017453292f * frame_time);
         d->h2A = FUN_002132a8_2c26c8(FUN_001f96f8_2c26c8(0x5A), FUN_001f96f8_2c26c8(0x96));
-        d->f64 = FUN_002132a8_2c26c8(D_L09_00161398 * frame_time_sq, D_L09_0016139C * frame_time_sq);
+        d->f64 = FUN_002132a8_2c26c8(D_L09_00161398 * frame_time_sq_macro, D_L09_0016139C * frame_time_sq_macro);
         if (moby->oclass >= 0x4A1 && moby->oclass <= 0x4A2) {
             d->f20 = d->f20 / d->f20 * (1.5707964f / d->h2A);
-            d->f64 = FUN_002132a8_2c26c8(D_L09_001613A0 * frame_time_sq, D_L09_001613A4 * frame_time_sq);
+            d->f64 = FUN_002132a8_2c26c8(D_L09_001613A0 * frame_time_sq_macro, D_L09_001613A4 * frame_time_sq_macro);
         }
         moby->collision = 0;
         moby->state = 4;
@@ -258,7 +258,7 @@ void FUN_L09_002c26c8(struct Moby *moby) {
         }
         break;
     case 5:
-        d->vel[2] -= frame_time_sq * 10.8f / 3.0f;
+        d->vel[2] -= frame_time_sq_macro * 10.8f / 3.0f;
         FUN_001f9a10_2c26c8(((f32 *)&moby->pos), ((f32 *)&moby->pos), d->vel);
         moby->rot.x = FUN_001fa580_2c26c8(moby->rot.x, d->f20);
         moby->rot.y = FUN_001fa580_2c26c8(moby->rot.y, d->f24);

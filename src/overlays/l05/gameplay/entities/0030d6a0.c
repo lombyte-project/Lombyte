@@ -1484,14 +1484,14 @@ typedef struct {
 
 extern G D_L05_0016CC60;
 extern int D_L05_0015F5C4;
-extern s32 D_L05_00161ED0_d __asm__("D_L05_00161ED0") __attribute__((sda));
+extern s32 breast_growth_count_gp __asm__("D_L05_00161ED0") __attribute__((sda));
 extern unsigned char D_0015EDB0[] MACRO_ADDR;
 extern unsigned char D_L05_0017C8A0[];
 extern void FUN_L05_00316810(char *, int);
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void FUN_L05_00316990(char *arg) {
-    if (D_L05_0015F5C4 == 2 && (D_0015EDB0[0] != 0 || *(int *)&D_L05_00161ED0_d != 0)) {
+    if (D_L05_0015F5C4 == 2 && (D_0015EDB0[0] != 0 || *(int *)&breast_growth_count_gp != 0)) {
         int i;
         for (i = 0; i < D_L05_0016CC60.n; i++) {
             char *moby = D_L05_0016CC60.m[i];
@@ -1505,7 +1505,7 @@ void FUN_L05_00316990(char *arg) {
                         *(float *)(q + 0x28) = 2.75f;
                     }
                 }
-                if (*(int *)&D_L05_00161ED0_d != 0) {
+                if (*(int *)&breast_growth_count_gp != 0) {
                     FUN_L05_00316810(moby, *(int *)(arg + 0x78));
                 }
             }

@@ -2110,7 +2110,7 @@ void FUN_L11_00311d50(struct Moby *moby) {
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L11_00308848(void *, void *, void *, float, float);
-extern f32 D_L11_00162090_d __asm__("D_L11_00162090") __attribute__((sda));
+extern f32 D_L11_00162090_gp __asm__("D_L11_00162090") __attribute__((sda));
 extern unsigned char D_0013A4E0[];
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_001f9a10(void *, void *, void *);
@@ -2126,7 +2126,7 @@ void FUN_L11_003125a8(struct Moby *moby, char *obj, float p2, float p3) {
     char c[16];
     char d[16];
 
-    build_spherical_offset((f32 *)a, *(float *)&D_L11_0016205C * *(float *)&D_L11_00162090_d, p2,
+    build_spherical_offset((f32 *)a, *(float *)&D_L11_0016205C * *(float *)&D_L11_00162090_gp, p2,
                            p3);
     FUN_001f9a10(a, a, obj);
     if (FUN_001f9740_c(obj + 0x80) && (*(int *)(D_0013A4E0 + 0x2610) & 0x84)) {
@@ -2147,7 +2147,7 @@ void FUN_L11_003125a8(struct Moby *moby, char *obj, float p2, float p3) {
 
 extern int FUN_001f96f8(int);
 extern int FUN_L11_00309378(void *, void *, int, void *, float, int);
-extern f32 D_L11_00162090_d __asm__("D_L11_00162090") __attribute__((sda));
+extern f32 D_L11_00162090_gp __asm__("D_L11_00162090") __attribute__((sda));
 extern unsigned char D_0013A4E0[];
 extern void FUN_001f9740(int *arg0);
 extern void FUN_001f9a10(void *, void *, void *);
@@ -2173,7 +2173,7 @@ void FUN_L11_003126f8(struct Moby *moby, char *d) {
             if (*(int *)(d + 0x88) != 0 && !(500 < *(int *)(d + 0x8C)))
                 t = *(int *)(d + 0x88);
             if (FUN_L11_00309378(moby, a, t, &moby->rot,
-                                 *(float *)&D_L11_00162064 * *(float *)&D_L11_00162090_d,
+                                 *(float *)&D_L11_00162064 * *(float *)&D_L11_00162090_gp,
                                  FUN_001f96f8(300))) {
                 func_0022ED80_i(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
@@ -2250,7 +2250,7 @@ extern int D_L11_00162004 __attribute__((sda));
 extern int D_L11_0016214C __attribute__((sda));
 extern float D_L11_00161FE8 __attribute__((sda));
 extern float D_L11_00161FEC __attribute__((sda));
-extern float D_L11_00161FF4 __attribute__((sda));
+extern float D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
 extern float D_L11_00161FF8 __attribute__((sda));
 extern float D_L11_00161FFC __attribute__((sda));
 extern float D_L11_00162000 __attribute__((sda));
@@ -2272,7 +2272,7 @@ extern float D_L11_00162050 __attribute__((sda));
 extern float D_L11_0016207C __attribute__((sda));
 extern float D_L11_00162080 __attribute__((sda));
 extern float D_L11_0016208C __attribute__((sda));
-extern float D_L11_00162090_f __asm__("D_L11_00162090") __attribute__((sda));
+extern float D_L11_00162090_gp __asm__("D_L11_00162090") __attribute__((sda));
 extern float D_L11_0016209C __attribute__((sda));
 extern float D_L11_001620A0 __attribute__((sda));
 extern float D_L11_001620A4 __attribute__((sda));
@@ -2356,7 +2356,7 @@ void FUN_L11_00312838(struct Moby *m, ShipVars_2838 *o) {
 
     up.q = 0;
     m->flags &= 0xFEFF;
-    up.v[2] = frame_time * 8.0f * D_L11_00162090_f;
+    up.v[2] = frame_time * 8.0f * D_L11_00162090_gp;
     *(Q_2838 *)vel = up.q;
     up.q = 0;
     up.v[2] = 1.0f;
@@ -2378,15 +2378,15 @@ void FUN_L11_00312838(struct Moby *m, ShipVars_2838 *o) {
             }
             D_00141848.stat[28].level_mask =
                 D_00141848.stat[28].level_mask | (1 << current_level_index) | 0x80000000;
-            f = o->speed + D_L11_00161FFC * D_L11_00162090_f;
-            max = D_L11_00161FF8 * D_L11_00162090_f;
+            f = o->speed + D_L11_00161FFC * D_L11_00162090_gp;
+            max = D_L11_00161FF8 * D_L11_00162090_gp;
             o->speed = f;
             if (max < f) {
                 o->speed = max;
             }
         } else {
-            float hi = D_L11_00161FF4 * D_L11_00162090_f;
-            float step = D_L11_00161FEC * D_L11_00162090_f;
+            float hi = D_L11_00161FF4_gp * D_L11_00162090_gp;
+            float step = D_L11_00161FEC * D_L11_00162090_gp;
             float cur = o->speed;
             if (cur < hi - step) {
                 o->speed = cur + step;
@@ -2397,7 +2397,7 @@ void FUN_L11_00312838(struct Moby *m, ShipVars_2838 *o) {
             }
         }
     } else {
-        o->speed += D_L11_00161FE8 * D_L11_00162090_f;
+        o->speed += D_L11_00161FE8 * D_L11_00162090_gp;
         o->count += 1;
     }
 
@@ -2434,7 +2434,7 @@ void FUN_L11_00312838(struct Moby *m, ShipVars_2838 *o) {
     qcopy(old, &m->pos);
     FUN_001f9a10(&m->pos, &m->pos, dir);
     {
-        float lo = D_L11_00161FF4;
+        float lo = D_L11_00161FF4_gp;
         float range = D_L11_00161FF8 - lo;
         float sp = o->speed - lo;
         if (sp < 0.0f) {

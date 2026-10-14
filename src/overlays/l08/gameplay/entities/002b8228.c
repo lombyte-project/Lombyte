@@ -1621,7 +1621,7 @@ extern f32 fast_cos_c2(f32) __asm__("func_001F9DC8");
 extern f32 random_angle_radians_c2(void) __asm__("func_00213308");
 extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_0015ED70_c2 __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_L08_00161A00 __attribute__((sda));
 extern float D_L08_00161A04 __attribute__((sda));
 extern float D_L08_00161A08 __attribute__((sda));
@@ -1687,7 +1687,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         subtract_vector_xyz(delta,target,moby->position);
         FUN_L00_0025f730(delta,target_data->speed*D_0015ED6C_c);
         subtract_vector_xyz(accel,delta,data->velocity);
-        FUN_L00_0025f730(accel,D_L08_00161A04*D_0015ED70_c2);
+        FUN_L00_0025f730(accel,D_L08_00161A04*frame_time_sq_macro);
         add_vector_xyz(data->velocity,data->velocity,accel);
         add_vector_xyz(moby->position,moby->position,data->velocity);
         moby->rotation[1]=-FUN_001f9e90(vector_length_xy(data->velocity),data->velocity[2]);
@@ -1715,7 +1715,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         subtract_vector_xyz(delta,target,moby->position);
         FUN_L00_0025f730(delta,target_data->speed*D_0015ED6C_c);
         subtract_vector_xyz(accel,delta,data->velocity);
-        FUN_L00_0025f730(accel,D_L08_00161A04*4.0f*D_0015ED70_c2);
+        FUN_L00_0025f730(accel,D_L08_00161A04*4.0f*frame_time_sq_macro);
         add_vector_xyz(data->velocity,data->velocity,accel);
         add_vector_xyz(moby->position,moby->position,data->velocity);
         moby->rotation[1]=-FUN_001f9e90(vector_length_xy(data->velocity),data->velocity[2]);
