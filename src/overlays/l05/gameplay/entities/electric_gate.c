@@ -172,7 +172,7 @@ void FUN_L05_0030de90(char *moby) {
     short *list;
     int offset;
     char *entry;
-    struct GeometryQuad *a, *b;
+    struct GeometryQuad *a, *b, *end;
     float *u, *v;
     u32 *colors;
     angle = (convert_integer_to_float(D_L05_0015F5CC_e[2] & 63) / 63.0f) * 6.28318f;
@@ -189,7 +189,7 @@ void FUN_L05_0030de90(char *moby) {
         do {
             u64 texture = get_effect_texture(D_L05_00161D98);
             /* Each 0x90-byte record spans 18 flag words or 36 float words. */
-            u64 *flags = (u64 *)quads;
+            volatile u64 *flags = (volatile u64 *)quads;
             flags[i * 18 + j * 90 + 17] = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) |
                 ((s64)D_L05_00161D78 << 4) | ((s64)D_L05_00161D7C << 6) | 0x8000000000ULL;
             flags[i * 18 + j * 90 + 15] = texture;
@@ -245,14 +245,15 @@ void FUN_L05_0030de90(char *moby) {
             entry = *(char **)&D_L05_0015FFD8_d + offset;
             qcopy(matrix[3], entry + 0x10);
             matrix[3][3] = 1.0f;
-            a = quads[0];
             b = quads[1];
+            end = b;
+            a = quads[0];
             do {
                 fast_draw_quad_real(a, matrix, 0);
                 fast_draw_quad_real(b, matrix, 0);
                 a++;
                 b++;
-            } while ((int)a < (int)quads[1]);
+            } while ((int)a < (int)end);
         }
     } while (*list++ >= 0);
 }
