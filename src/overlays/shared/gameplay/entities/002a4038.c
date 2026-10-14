@@ -921,7 +921,7 @@ void FUN_L02_002d93e8(char *moby) {
             color = D_L02_00161BC4;
             if (markers[11 - i] != 2) {
                 color = D_L02_00161BC0;
-                if ((*(int *)0x0013cae4 & 0x20) == 0) color = D_L02_00161BBC;
+                if ((D_0013CAE4 & 0x20) == 0) color = D_L02_00161BBC;
             }
             draw_arc_2d93e8(texture, color, angle, phase, (float)D_L02_00161B58, (float)D_L02_00161B54);
         }
