@@ -497,7 +497,7 @@ int FUN_L11_003192c8(char *moby) {
     list = D_L11_001AC240[(unsigned char)moby[0x21]];
     do {
         unsigned short entry = *(unsigned short *)list;
-        char *linked = (char *)(D_L11_0015FFD8 + ((entry & 0x7fff) << 8));
+        char *linked = (char *)(((entry & 0x7fff) << 8) + D_L11_0015FFD8);
         int skip = *(short *)(linked + 0xa6) != *(short *)(moby + 0xa6);
         if (*(unsigned char *)(linked + 0x31) == 0) skip = 1;
         next_list = list + 1;
