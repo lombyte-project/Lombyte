@@ -318,14 +318,11 @@ void FUN_L00_00276908(void) {
             FUN_L00_00235310(4);
         }
         {
-            s32 *saved;
             s32 remaining;
-            saved = (s32 *)((u32)&D_L00_001B9CF0 + 0x1a0);
             remaining = 13;
             do {
+                D_L00_001B9E90[13 - remaining] = delete_moby(D_L00_001B9E90[13 - remaining]);
                 remaining--;
-                *saved = (s32)delete_moby((struct Ent *)*saved);
-                saved++;
             } while (remaining >= 0);
         }
         handle = show_health_hud();
@@ -339,11 +336,15 @@ void FUN_L00_00276908(void) {
             s32 value = *(s32 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
             if (value < ((u8 *)D_L00_00197300[0])[0xc]) {
                 do {
-                    i = value++;
-                    *(s32 *)((u8 *)D_L00_00197300[0] + 0x48 + i * 4) = 0;
+                    s32 *saved = (s32 *)(value * 4 + 0x48 + (u32)D_L00_00197300[0]);
+                    value++;
+                    *saved = 0;
                 } while (value < ((u8 *)D_L00_00197300[0])[0xc]);
             }
-            ((u8 *)D_L00_00197300[0])[0xc] = *(u8 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
+            {
+                struct GameState *state = &D_L00_001B9CF0;
+                ((u8 *)D_L00_00197300[0])[0xc] = *(u8 *)((u8 *)state + 0xcc);
+            }
         }
         D_L00_0015F5D8 = 1;
         {
