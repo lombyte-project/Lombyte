@@ -202,8 +202,8 @@ void FUN_L00_002c89e8(struct Moby *m)
     case 0:
         m->state = 1;
         *(s32 *)v->pad_34 = scale_game_frames_2c8440(4);
-        *(s32 *)((u8 *)v + 0x3c) = 0;
         v->timer = 0;
+        *(s32 *)((u8 *)v + 0x3c) = 0;
         break;
     case 1: {
         v->timer = 0;
