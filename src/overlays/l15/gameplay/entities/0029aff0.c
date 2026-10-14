@@ -2382,9 +2382,6 @@ void FUN_L15_002cf3a8(UMoby *m) {
         FUN_L00_002598b0((int)m, 2.5f, &m->pos, 0x10000, 40.0f, 1.0f, 0, 1, 0);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002d0fa8.s", FUN_L15_002d0fa8);
-#else
 extern float D_L15_00161B00 __attribute__((sda));
 extern float D_L15_00161B04 __attribute__((sda));
 extern float D_L15_00161B08 __attribute__((sda));
@@ -2397,7 +2394,7 @@ extern int FUN_00249d60(void *, void *, void *, int, int *, float *, int, int) _
 extern int FUN_001f99c8_f(float) __asm__("FUN_001fa6d0");
 extern void FUN_0023ee30(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_0024dcf8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_0027bb68(int, int, void *, int) __asm__("FUN_L00_0028dc90");
+extern int FUN_0027bb68(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern void FUN_00246ad8(void *, int, long long) __asm__("FUN_L00_00257470");
 extern float FUN_001f9028(float, float) __asm__("FUN_001f9e90");
 extern void FUN_0024a430(void *, void *, void *, void *) __asm__("FUN_L00_0025ab48");
@@ -2456,13 +2453,16 @@ void FUN_L15_002d0fa8(void *arg) {
             if (d->f20 <= 0.0f)
                 code = 1;
             hit = FUN_001f99c8_f(2560.0f);
-            angle = D_L15_00161B00 * D_0015ED70;
-            *(int *)((char *)d + 0x90) = hit;
-            *(float *)((char *)d + 0x98) = 2.5f;
-            *(float *)((char *)d + 0x80) = angle;
-            *(float *)((char *)d + 0x84) = 0.0005f;
-            *(int *)((char *)d + 0x94) = 9;
-            *(unsigned char *)((char *)d + 0xAD) = 0;
+            {
+                float angle;
+                angle = D_L15_00161B00 * D_0015ED70;
+                *(int *)((char *)d + 0x90) = hit;
+                *(float *)((char *)d + 0x98) = 2.5f;
+                *(float *)((char *)d + 0x80) = angle;
+                *(float *)((char *)d + 0x84) = 0.0005f;
+                *(int *)((char *)d + 0x94) = 9;
+                *(unsigned char *)((char *)d + 0xAD) = 0;
+            }
             switch (code) {
             case 0:
             case 11:
@@ -2501,8 +2501,9 @@ void FUN_L15_002d0fa8(void *arg) {
                 origin.q = 0;
                 m->flags &= 0xEFFF;
                 FUN_0023ee30(m, 7, &effect);
+                hit = -1;
                 FUN_0024dcf8(m, &origin, &effect, 0.0f, 0.0f, 0x14, 6, 0x20,
-                              16.0f, 8.0f, 9.0f, -1, 4.0f, 32.0f, 1, 16, -1, 0);
+                              16.0f, 8.0f, 9.0f, -1, 4.0f, 32.0f, 1, 16, hit, 0);
                 FUN_0027bb68(0, 0, m, 0x79);
                 m->state = 10;
                 *(unsigned char *)((char *)d + 0x67) = 0xF0;
@@ -2540,4 +2541,3 @@ check_path:
     if (d->target == 0)
         d->target = (UMoby *)D_001413D0;
 }
-#endif
