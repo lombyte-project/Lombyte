@@ -2292,6 +2292,7 @@ int FUN_L15_002a3138(unsigned char *moby) {
     float (*firstUv)[2];
     float *firstUv1, *firstUv3, *secondUv0, *secondUv1;
     int nextPass;
+    int passOffset;
     float *secondUv2, *secondUv3;
     float (*secondVertices)[4];
 
@@ -2348,12 +2349,12 @@ int FUN_L15_002a3138(unsigned char *moby) {
             first.col[1] = second.col[2];
             first.col[0] = second.col[2];
         }
+        passOffset = pass * 8;
         nextPass = pass + 1;
-        pass *= 8;
         for (corner = 0; corner < 4; corner++) {
             float *uv = (float *)(corner * 8 + (unsigned int)firstUv);
-            float *frequency = (float *)((char *)D_L15_001CE250 + pass);
-            int waveform = pass;
+            float *frequency = (float *)((char *)D_L15_001CE250 + passOffset);
+            int waveform = passOffset;
             int base = corner * 8;
             axis = 1;
             do {
