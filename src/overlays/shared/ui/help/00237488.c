@@ -1720,9 +1720,6 @@ int FUN_L05_002551d0(void) {
 
 #define MACRO_ADDR
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00255208.s", FUN_L05_00255208);
-#else
 extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern float frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -1856,7 +1853,6 @@ continue_fall:
     }
     return 0;
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_0025BDA8), where it is exact; names translated to the US level program. */
 
 extern char D_L05_0017C068[];
