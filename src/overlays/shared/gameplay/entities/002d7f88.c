@@ -3007,7 +3007,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
             FUN_001ff278_002ddcb8(current, D_L00_001E5F40_002ddcb8 + index, &ring[0]);
             current += 16;
             prior += 16;
-        } while (j < 20);
+        } while (j != 20);
         FUN_001ff500_002ddcb8(&scaled_first, &offset, D_L00_00161B84_lui);
         row = next_row;
     } while (row < 10);
