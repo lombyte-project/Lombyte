@@ -1340,8 +1340,8 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     f32 maximum;
     s64 negative_one = -1;
     u8 *record;
-    f32 * volatile score_ptr;
     void * volatile output;
+    f32 * volatile score_ptr;
 
     {
         /* Retail: hero + 0x12F0 ring; counters at +0x21B8..+0x21C0. */
@@ -1395,7 +1395,12 @@ void FUN_L00_0020f160(void *moby, void *matrix)
         for (j = 0; j < n; j++) {
             if (i != j) {
                 s32 b = (*(volatile s32 *)(hero.pad_21B8)) - (j - 15);
-                b %= 16;
+                {
+                    s32 ring = b + 15;
+                    if (negative_one < b)
+                        ring = b;
+                    b -= (ring >> 4) * 16;
+                }
                 score_ptr[i] += FUN_L00_0020f0b8((f32 *)((hero.pad_12EF + 1) + a * 0x30),
                                                   (f32 *)((hero.pad_12EF + 1) + b * 0x30));
             }
