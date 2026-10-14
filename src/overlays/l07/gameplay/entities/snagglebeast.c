@@ -80,8 +80,9 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
     v = split_float_fraction(spin * -0.02f, &scratch);
     quad.texture_coordinates[0][1] = v;
     quad.texture_coordinates[1][1] = v;
-    quad.texture_coordinates[2][1] = v + 1.0f;
-    quad.texture_coordinates[3][1] = v + 1.0f;
+    v += 1.0f;
+    quad.texture_coordinates[2][1] = v;
+    quad.texture_coordinates[3][1] = v;
     end_alpha -= row_alpha;
     alpha_step = end_alpha * 0.0625f;
     step = scratch.f[1] * 0.0625f;
