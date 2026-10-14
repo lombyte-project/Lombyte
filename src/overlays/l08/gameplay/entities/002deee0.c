@@ -2023,8 +2023,8 @@ default:
             if (timer < limit) D_L08_00161CD4 = timer;
         }
         moby->flags &= 0xfeff;
-        qcopy(data, &moby->pos);
         position = (unsigned char *)&moby->pos;
+        qcopy(data, position);
         /* Retail leaves normal untouched when this flag is nonzero. */
         if (DATA_S(0x6e) == 0) {
             normalize_vector_xyz(&point, &moby->rot_row2, 0.1f);
@@ -2052,8 +2052,12 @@ default:
         moby->state = 1;
         DATA_S(0x6c) = 0;
         timer = scale_game_frames_alt(600);
-        DATA_I(0x70) = truncate_float_to_s32(random_float_between(0.0f, (float)timer));
-        DATA_I(0x78) = D_L08_00161CCC;
+        timer = truncate_float_to_s32(random_float_between(0.0f, (float)timer));
+        {
+            int limit = D_L08_00161CCC;
+            DATA_I(0x70) = timer;
+            DATA_I(0x78) = limit;
+        }
         break;
     }
     case 1: {
@@ -2084,15 +2088,19 @@ default:
             if (!(24.0f < FUN_001f9b80(position, &hero.motion.pos))) return;
             goto remove;
         }
-        if (moby->oclass == 0x3dc) {
+        switch (moby->oclass) {
+        case 0x3dc:
             angle = fast_add_rotations(DATA_F(0x60), D_L08_00161CA4 * 0.017453292f * frame_time);
             turn = D_L08_00161CA8;
-        } else if (moby->oclass == 0x3dd) {
+            break;
+        case 0x3dd:
             angle = fast_add_rotations(DATA_F(0x60), D_L08_00161CAC * 0.017453292f * frame_time);
             turn = D_L08_00161CB0;
-        } else {
+            break;
+        default:
             angle = fast_add_rotations(DATA_F(0x60), D_L08_00161C9C * 0.017453292f * frame_time);
             turn = D_L08_00161CA0;
+            break;
         }
         DATA_F(0x60) = angle;
         DATA_F(0x64) = fast_add_rotations(DATA_F(0x64), turn * 0.017453292f * frame_time);
@@ -2169,11 +2177,11 @@ default:
         unsigned char *source;
         char *data;
         unsigned char *position;
-        position = (unsigned char *)&moby->pos;
         data = (char *)moby->pvars;
         if (!DATA_P(0x78)) return;
         normalize_vector_xyz(&point, &DATA_P(0x78)->rot_row2, DATA_F(0x7c));
         add_vector_xyz(&point, &point, &DATA_P(0x78)->pos);
+        position = (unsigned char *)&moby->pos;
         subtract_vector_xyz(&normal, &point, position);
         if (DATA_F(0x64) != 0.0f) {
             sine = fast_sin(DATA_F(0x64));
@@ -2364,12 +2372,12 @@ chase:
         }
         if (!(!moby->command)) {
             moby->state = 1;
-            if (!DATA_P(0x7c)) {
-                qcopy(position, data + 0x20);
-                qcopy(&moby->rot.x, data + 0x30);
-            } else {
+            if (DATA_P(0x7c)) {
                 data = (char *)moby->pvars;
                 FUN_L00_00260668(moby, DATA_P(0x7c), data, data + 0x10, data + 0x20, data + 0x30);
+            } else {
+                qcopy(position, data + 0x20);
+                qcopy(&moby->rot.x, data + 0x30);
             }
         } else {
             timer = truncate_float_to_s32((float)scale_game_frames_alt(20));
