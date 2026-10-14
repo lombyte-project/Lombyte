@@ -1228,7 +1228,84 @@ void FUN_L12_00306350(struct Moby *moby, int slot) {
         *speed = frame_time_sq * 13.0f;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003064e8.s", FUN_L12_003064e8);
+#else
+extern float D_L12_00161F40;
+extern float D_L12_00161F50[4];
+extern float D_L12_00161F60[4], D_L12_00161F70[4];
+extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
+extern void FUN_L00_00250df8(unsigned char *);
+
+void FUN_L12_003064e8(void *moby) {
+    char *data;
+    int *saved = D_L12_001FB688;
+    int i = 0;
+    int offset = 0;
+    char *slot_data;
+    float *speed;
+    data = (char *)((struct Moby *)moby)->pvars;
+    speed = (float *)(data + 0x454);
+    slot_data = data;
+    do {
+        int index = *saved;
+        if (index != 0) {
+            struct Moby *other;
+            float height;
+            if (i == 17) {
+                other = (struct Moby *)moby;
+            } else {
+                if (index == -1) goto next_slot;
+                other = (struct Moby *)(D_L12_0015FFD8_p + index * 0x100);
+            }
+            if (i == 17) {
+                if (D_L12_00161F40 == -1.0f) {
+                    qcopy(&D_L12_00161F40, &other->pos);
+                    qcopy(D_L12_00161F50, &other->rot);
+                }
+                qcopy(D_L12_00161F60, &other->pos);
+                qcopy(D_L12_00161F70, &other->rot);
+                qcopy(&other->pos, &D_L12_00161F40);
+                qcopy(&other->rot, D_L12_00161F50);
+            }
+            if (other->pos.z < 20.0f) {
+                if (i == 17) return;
+                mark_moby_for_removal(other);
+                *saved = -1;
+            }
+            height = *(float *)(slot_data + 0x338) - *(float *)(data + offset + 0x570);
+            *(float *)(slot_data + 0x338) = height;
+            other->pos.z += height;
+            if (other->oclass == 0x500) {
+                other->rot.x = fast_add_rotations(other->rot.x, D_0015ED6C * 0.34906584f);
+                FUN_L00_0025bc98(&other->rot.y, speed, 0, 1.5707964f, 0.002f, 0.3f, 0.0f);
+            } else if (other->oclass == 0x4fd) {
+                other->rot.x = fast_add_rotations(other->rot.x, *(float *)(slot_data + 0x450));
+                FUN_L00_0025bc98(&other->rot.y, data + i * 0x10 + 0x454, 0, -1.5707964f, *(float *)(slot_data + 0x45c), 0.3f, 0.0f);
+            } else if (other->oclass == 0x4fa) {
+                other->rot.x = fast_add_rotations(other->rot.x, frame_time * -0.87266463f);
+                other->rot.y = fast_add_rotations(other->rot.y, *(float *)(slot_data + 0x454));
+                other->pos.y += D_0015ED6C * -4.0f;
+            } else {
+                other->pos.y += frame_time * -4.0f;
+                other->rot.x = fast_add_rotations(other->rot.x, *(float *)(slot_data + 0x450));
+                other->rot.y = fast_add_rotations(other->rot.y, *(float *)(slot_data + 0x454));
+            }
+            if (i == 17) {
+                qcopy(&D_L12_00161F40, &other->pos);
+                qcopy(D_L12_00161F50, &other->rot);
+            }
+            FUN_L00_00250df8((unsigned char *)other);
+        }
+next_slot:
+        i++;
+        speed += 4;
+        slot_data += 0x10;
+        offset += 4;
+        saved++;
+    } while (i < 18);
+}
+#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306828.s", FUN_L12_00306828);
 #else
