@@ -3182,9 +3182,16 @@ typedef struct {
 } P;
 
 extern T *D_L00_001600EC;
-extern V D_L00_001CB7E0[];
-extern u8 D_L00_001D2860[];
-extern s16 D_L00_001D5740[];
+/* Particle pool of 1200 entries, one array per field (more fields below FUN_L00_002d73e8). */
+V D_L00_001CB7E0[1200] = {0};
+V D_L01_001CBC60[1200] = {0};
+V D_L14_001CBEE0[1200] = {0};
+u8 D_L00_001D2860[1200] = {0};
+u8 D_L01_001D2CE0[1200] = {0};
+u8 D_L14_001D2F60[1200] = {0};
+s16 D_L00_001D5740[1200] = {0};
+s16 D_L01_001D5BC0[1200] = {0};
+s16 D_L14_001D5E40[1200] = {0};
 extern float D_L00_001619B4 __attribute__((sda));
 extern float D_L00_001619B8 __attribute__((sda));
 extern int D_L00_001619BC __attribute__((sda));
@@ -3303,12 +3310,12 @@ typedef struct {
     u64 texture[4];
 } __attribute__((aligned(16))) Quad_2d73e8;
 extern float D_L00_001D02E0[];
-extern float D_L00_001D15A0[];
-extern float D_L00_001D31C0[];
-extern float D_L00_001D4480[];
-extern u8 D_L00_001D2D10[];
-extern s16 D_L00_001D60A0[];
-extern s16 D_L00_001D6A00[];
+extern float D_L00_001D15A0[]; /*nm*/
+extern float D_L00_001D31C0[]; /*nm*/
+extern float D_L00_001D4480[]; /*nm*/
+extern u8 D_L00_001D2D10[]; /*nm*/
+extern s16 D_L00_001D60A0[]; /*nm*/
+extern s16 D_L00_001D6A00[]; /*nm*/
 extern u8 D_L00_001E11A0_2d73e8[] __asm__("D_L00_001E11A0");
 extern float D_L00_001E11E0_2d73e8[] __asm__("D_L00_001E11E0");
 extern V D_L00_001E1200_2d73e8[] __asm__("D_L00_001E1200");
@@ -3487,16 +3494,30 @@ void FUN_L00_002d73e8(P *p) {
 }
 #endif
 
-extern s16 D_L00_001D60A0[];
-extern s16 D_L00_001D6A00[];
+s16 D_L00_001D60A0[1200] = {0};
+s16 D_L01_001D6520[1200] = {0};
+s16 D_L14_001D67A0[1200] = {0};
+s16 D_L00_001D6A00[1200] = {0};
+s16 D_L01_001D6E80[1200] = {0};
+s16 D_L14_001D7100[1200] = {0};
 extern u16 D_L00_00161380_2d7bf0 __asm__("D_L00_00161380");
 extern int D_L00_0016137C_2d7bf0 __asm__("D_L00_0016137C");
 
-extern float D_L00_001D02E0[];
-extern float D_L00_001D15A0[];
-extern float D_L00_001D31C0[];
-extern float D_L00_001D4480[];
-extern u8 D_L00_001D2D10[];
+float D_L00_001D02E0[1200] = {0};
+float D_L01_001D0760[1200] = {0};
+float D_L14_001D09E0[1200] = {0};
+float D_L00_001D15A0[1200] = {0};
+float D_L01_001D1A20[1200] = {0};
+float D_L14_001D1CA0[1200] = {0};
+float D_L00_001D31C0[1200] = {0};
+float D_L01_001D3640[1200] = {0};
+float D_L14_001D38C0[1200] = {0};
+float D_L00_001D4480[1200] = {0};
+float D_L01_001D4900[1200] = {0};
+float D_L14_001D4B80[1200] = {0};
+u8 D_L00_001D2D10[1200] = {0};
+u8 D_L01_001D3190[1200] = {0};
+u8 D_L14_001D3410[1200] = {0};
 /* Resets particle i of the emitter: random direction, random speeds from
  * the emitter's ranges, and a start delay staggered by index. */
 void FUN_L00_002d7bf0(P *m, int i) {
