@@ -281,9 +281,10 @@ void FUN_L14_002b17d8(unsigned char *moby) {
     LineInfo_2b17d8 info;
     OvlVec4 scale;
     char *owner = 0;
-    int mode, idx;
+    int mode;
+    long idx;
     unsigned int state;
-    unsigned char anim;
+    unsigned int anim;
 
     FUN_L00_00263ac8(moby, 2, data + 0x120, 2.5f);
     if (*(int *)(data + 0x288)) {
@@ -450,12 +451,12 @@ void FUN_L14_002b17d8(unsigned char *moby) {
 
         if (data[0x24A]) FUN_L14_002d9870(*(int *)(data + 0x264));
         if (!FUN_L14_002b3418(moby)) goto finish;
-        if (!data[0x24A]) {
-            *(short *)(data + 0x248) = FUN_001f96f8(D_L14_001614F0);
-            moby[0x20] = 13;
-        } else {
+        if (data[0x24A]) {
             blend_moby_animation(moby, 2, 0, FUN_001f96f8(10));
             moby[0x20] = 9;
+        } else {
+            *(short *)(data + 0x248) = FUN_001f96f8(D_L14_001614F0);
+            moby[0x20] = 13;
         }
         break;
     }
@@ -479,11 +480,9 @@ void FUN_L14_002b17d8(unsigned char *moby) {
                 *(int *)(data + 0x24C) = idx;
                 p = (char *)D_L14_001B0BB0[*(int *)(data + 0x240)];
                 f = *(float *)(p + idx * 16 + 0x1C);
-                *(float *)(data + 0x254) = 0.0f;
+                *(float *)(data + 0x254) = *(float *)(data + 0x25C) = *(float *)(data + 0x258) = 0.0f;
                 *(float *)(data + 0x250) = f;
                 *(float *)(data + 0x27C) = -1.0f;
-                *(float *)(data + 0x25C) = 0.0f;
-                *(float *)(data + 0x258) = 0.0f;
                 FUN_L00_002e2040(moby);
                 goto finish;
             }
@@ -569,13 +568,13 @@ void FUN_L14_002b17d8(unsigned char *moby) {
     case 10: {
 
         anim = (unsigned char)moby[0x52];
-        if (!((unsigned char)moby[0x70] & 2) || anim != (unsigned char)moby[0x53]) {
-            if (anim == 7) goto finish;
+        if (!((unsigned char)moby[0x70] & 2) || (unsigned char)anim != (unsigned char)moby[0x53]) {
+            if ((unsigned char)anim == 7) goto finish;
             anim = (unsigned char)moby[0x53];
-            if (anim == 7) break;
-        } else if (anim != 7) {
+            if ((unsigned char)anim == 7) break;
+        } else if ((unsigned char)anim != 7) {
             anim = (unsigned char)moby[0x53];
-            if (anim == 7) break;
+            if ((unsigned char)anim == 7) break;
         }
         idx = 10;
 resume_move:
