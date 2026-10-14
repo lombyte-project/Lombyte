@@ -2411,7 +2411,7 @@ void FUN_L12_002e9f68(struct Moby *moby) {
         if (*(int *)(data + 0xb0) == -1)
             *(int *)(data + 0xb0) = allocate_voice_for_target_entry_e9f68(3, 4, (int)moby);
     } else {
-        index = *(int *)(data + 0xb0);
+        int index = *(int *)(data + 0xb0);
         if (index != -1 && (void *)((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.owner == (void *)moby && ((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.state)
             release_voice(index);
         *(int *)(data + 0xb0) = -1;
@@ -2425,7 +2425,8 @@ void FUN_L12_002e9f68(struct Moby *moby) {
                     mark_moby_for_removal(*(struct Moby **)(data + 0xac));
                     *(struct Moby **)(data + 0xac) = 0;
                 }
-                goto remove;
+                mark_moby_for_removal(moby);
+                return;
             }
             index = *(int *)(data + 0xc0);
             goto check_mode;
@@ -2434,7 +2435,7 @@ void FUN_L12_002e9f68(struct Moby *moby) {
 check_mode:
         if (index == 0) goto update_state;
     }
-    if (D_0014C050[current_level_index * 16 + moby->mission] == 255) {
+    if (D_0014C050[moby->mission + current_level_index * 16] == 255) {
         if (*(struct Moby **)(data + 0xac)) {
             mark_moby_for_removal(*(struct Moby **)(data + 0xac));
             *(struct Moby **)(data + 0xac) = 0;
@@ -2451,7 +2452,8 @@ check_mode:
     }
 update_state:
     switch (moby->state) {
-    case 0:
+    case 0: {
+        int a, b, limit;
         data[0x28] = 2;
         *(float *)(data + 0x20) = 6.0f;
         *(short *)(data + 0x24) = 6;
@@ -2484,7 +2486,10 @@ update_state:
         *(int *)(data + 0xb4) = 0;
         moby->state = 1;
         break;
-    case 1:
+    }
+    case 1: {
+        int triggered, a;
+        struct Moby *child;
         triggered = 0;
         if (*(int *)(data + 0xc0) && D_L12_00161F00)
             triggered = tick_countdown_32_alt_c2((int *)(data + 0xc4)) != 0;
@@ -2500,6 +2505,7 @@ update_state:
             moby->collision = a;
         }
         break;
+    }
     case 2:
         if (*(int *)(data + 0xc0) == 0 && D_L12_00167100.moby == 0) {
             D_L12_00167100.count = 0;
@@ -2563,7 +2569,7 @@ update_state:
                     velocity.f[2] = FUN_L00_00257c48(0.0f, frame_time * spread);
                     color = FUN_L00_00257b90(170, 240);
                     b = FUN_L00_00257b90(110, 180);
-                    color = (b << 8) | color | 0x7f000000;
+                    color = (b << 8) | (color | 0x7f000000);
                     a = FUN_L00_00257b90(30, 70);
                     life = scale_game_frames_alt(a);
                     size = FUN_L00_00257b90(120, 170);
@@ -2645,14 +2651,16 @@ remove:
     angle = fast_add_rotations_c3(*(float *)(data + 0x90), 6.2831855f / (float)a);
     *(float *)(data + 0x90) = angle;
     moby->pos.z += fast_cos_c(angle) * 0.17f;
-    child = *(struct Moby **)(data + 0xac);
-    if (child) {
-        *(OvlQuad *)&child->pos = *(OvlQuad *)&moby->pos;
-        child = *(struct Moby **)(data + 0xac);
-        *(OvlQuad *)&child->rot = *(OvlQuad *)&moby->rot;
-        advance_moby_animation(*(struct Moby **)(data + 0xac));
-        FUN_L00_00250df8_x(*(struct Moby **)(data + 0xac));
-        (*(struct Moby **)(data + 0xac))->flags |= 6;
+    {
+        struct Moby *child = *(struct Moby **)(data + 0xac);
+        if (child) {
+            *(OvlQuad *)&child->pos = *(OvlQuad *)&moby->pos;
+            child = *(struct Moby **)(data + 0xac);
+            *(OvlQuad *)&child->rot = *(OvlQuad *)&moby->rot;
+            advance_moby_animation(*(struct Moby **)(data + 0xac));
+            FUN_L00_00250df8_x(*(struct Moby **)(data + 0xac));
+            (*(struct Moby **)(data + 0xac))->flags |= 6;
+        }
     }
     if (*(int *)(data + 0xc0) == 0 && moby->state > 1 && moby->visible && distance_xyz(&moby->pos, D_L12_00167240) < 30.0f) {
         FUN_L00_0025a120((char *)moby);
