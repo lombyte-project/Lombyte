@@ -76,38 +76,39 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
         ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].hA;
     else
         ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].h8;
-    if (current_bolt_count < ammo_cost) {
+    if (current_bolt_count >= ammo_cost) {
+        FUN_0024ff08(vendor_menu.f20 + 0x500, 1);
+        cost = 1;
+        ((volatile VendorTextBox *)&box)->style = cost;
+        text_x = 6;
+        ((volatile VendorTextBox *)&box)->half_y = text_x;
+        FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5237), -1);
+        sprintf(text, D_L00_00161160, D_L00_00161E34);
+        if (D_L00_00161E34 >= 100)
+            text_x = 0x17;
+        else {
+            if (D_L00_00161E34 < 10)
+                goto quantity_small;
+            text_x = 0x1e;
+        }
+        FUN_001fb3f0(text_x, 0x32, 0x80f0f0f0ULL, text, -1);
+        goto quantity_done;
+    quantity_small:
+        FUN_001fb3f0(0x25, 0x32, 0x80f0f0f0ULL, text, -1);
+    quantity_done:
+        FUN_001fb3f0(0xc, 0x32, 0x80f0f0f0ULL, D_L00_00161168, -1);
+        FUN_001fb3f0(0x40, 0x32, 0x80f0f0f0ULL, D_L00_00161170, -1);
+        if (vendor_menu.f40)
+            ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].hA;
+        else
+            ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].h8;
+        sprintf(text, D_L00_00161160, D_L00_00161E34 * (s32)ammo_cost);
+        FUN_001fb888(0x40, 0x4c, 0x80f0f0f0ULL, text, -1);
+        return;
+    } else {
         message_id = 0x5238;
         goto message;
     }
-    FUN_0024ff08(vendor_menu.f20 + 0x500, 1);
-    cost = 1;
-    ((volatile VendorTextBox *)&box)->style = cost;
-    cost = 6;
-    ((volatile VendorTextBox *)&box)->half_y = cost;
-    FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5237), -1);
-    sprintf(text, D_L00_00161160, D_L00_00161E34);
-    if (D_L00_00161E34 >= 100)
-        text_x = 0x17;
-    else {
-        if (D_L00_00161E34 < 10)
-            goto quantity_small;
-        text_x = 0x1e;
-    }
-    FUN_001fb3f0(text_x, 0x32, 0x80f0f0f0ULL, text, -1);
-    goto quantity_done;
-quantity_small:
-    FUN_001fb3f0(0x25, 0x32, 0x80f0f0f0ULL, text, -1);
-quantity_done:
-    FUN_001fb3f0(0xc, 0x32, 0x80f0f0f0ULL, D_L00_00161168, -1);
-    FUN_001fb3f0(0x40, 0x32, 0x80f0f0f0ULL, D_L00_00161170, -1);
-    if (vendor_menu.f40)
-        ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].hA;
-    else
-        ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].h8;
-    sprintf(text, D_L00_00161160, D_L00_00161E34 * (s32)ammo_cost);
-    FUN_001fb888(0x40, 0x4c, 0x80f0f0f0ULL, text, -1);
-    return;
 message:
     FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(message_id), -1);
     return;
