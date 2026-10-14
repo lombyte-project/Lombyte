@@ -488,9 +488,6 @@ void FUN_L15_002a3ba8(struct Moby *moby) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a7880.s", FUN_L15_002a7880);
-#else
 typedef union { u128 q; float f[4]; } Vec_2a7880;
 extern char D_L15_00178700[];
 extern char D_L15_00161568[];
@@ -536,6 +533,7 @@ void FUN_L15_002a7880(struct Moby *moby)
     float radius, angle, size;
     int color, color2, duration;
     void *effect;
+    Vec_2a7880 *base_position;
 
     if (D_001413F4[0] != 2 && moby->state == 1)
         return;
@@ -563,6 +561,7 @@ void FUN_L15_002a7880(struct Moby *moby)
         base.f[2] += 6.0f;
     }
 
+    base_position = &base;
     {
     float radius, angle;
     int i = 0x18;
@@ -577,7 +576,7 @@ void FUN_L15_002a7880(struct Moby *moby)
         offset.f[2] = 0.0f;
         offset.f[2] = random_float_between_7880(1.0f, 7.0f);
         add_full_vector_7880(colors, &offset, &moby->pos);
-        subtract_vector_xyz_7880(colors, &base, &offset);
+        subtract_vector_xyz_7880(colors, base_position, &offset);
         velocity.q = *(u128 *)colors;
         normalize_vector_xyz_7880(frame_time * 5.0f, &velocity, &velocity);
         add_full_vector_7880(colors, &velocity, &second);
@@ -598,7 +597,7 @@ void FUN_L15_002a7880(struct Moby *moby)
         offset.q = *(u128 *)&moby->pos;
         offset.f[2] += 10.0f;
         radius = 1.0f;
-        subtract_vector_xyz_7880(colors, &base, &offset);
+        subtract_vector_xyz_7880(colors, base_position, &offset);
         velocity.q = *(u128 *)colors;
         normalize_vector_xyz_7880(frame_time * 5.0f, &velocity, &velocity);
         add_full_vector_7880(colors, &velocity, &second);
@@ -612,7 +611,7 @@ void FUN_L15_002a7880(struct Moby *moby)
             scale_vector_xyz_7880(0.35f, (char *)effect + 0x40, (char *)effect + 0x40);
     }
     clear_u64_value_7880(&velocity);
-    FUN_L00_0025e450_7880(moby, &velocity, &base, 0.0f, 0.0f, 20,
+    FUN_L00_0025e450_7880(moby, &velocity, base_position, 0.0f, 0.0f, 20,
                             3, 4, 10.0f, 5.0f, 100000.0f,
                             0, 3.0f, 15.0f, 1, 1, -1, 0);
 
@@ -630,7 +629,7 @@ void FUN_L15_002a7880(struct Moby *moby)
         offset.f[2] = 0.0f;
         add_vector_xyz_7880(&offset, &offset, &moby->pos);
         offset.f[2] += random_float_between_7880(1.0f, 5.5f);
-        subtract_vector_xyz_7880(&position, &base, &offset);
+        subtract_vector_xyz_7880(&position, base_position, &offset);
         velocity.q = position.q;
         normalize_vector_xyz_7880(frame_time * 5.0f, &velocity, &velocity);
         add_full_vector_7880(&position, &velocity, &first);
@@ -662,15 +661,15 @@ no_hit:
     moby->draw_dist = 0x80;
     moby->scale = moby->scale + moby->scale;
     {
+    u8 saved_flag = D_0013DD50;
     u16 save_id = moby->save_id;
     u32 saved_bit = *(u32 *)(D_0014C190 + (((s16)save_id >> 5) * 4) +
                     current_level_index * 0x100) &
                     (1U << (save_id & 31));
-    if (D_0013DD50 != 0 && saved_bit != 0)
+    if (saved_flag != 0 && saved_bit != 0)
         mark_moby_for_removal_7880(moby);
     }
 }
-#endif
 extern char D_L15_00178700[];
 extern u8 D_001413F4[];
 extern u8 D_0013DD50;
