@@ -2619,7 +2619,166 @@ void FUN_L15_002bddb0(struct Moby *moby) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002cb4c8.s", FUN_L15_002cb4c8);
+#else
+extern short D_L15_0015F5C4_macro __asm__("D_L15_0015F5C4") __attribute__((section(".data")));
+extern int interpolate_color_2a3138(float, int, int) __asm__("FUN_001fa6e0");
+extern int D_L15_00161AB4 __attribute__((sda));
+extern int D_L15_00161AB8 __attribute__((sda));
+extern int D_L15_00161ABC __attribute__((sda));
+extern int D_L15_0015F5C4_small __asm__("D_L15_0015F5C4") __attribute__((sda));
+extern void FUN_L15_002cbc30(void *);
+
+/* Advances the animation state, pulses the color, and updates the shared effect. */
+void FUN_L15_002cb4c8(unsigned char *moby) {
+    float position[4];
+    float step;
+    int color;
+    int flag;
+    int *data = *(int **)(moby + 0x78);
+    switch (moby[0x20]) {
+    case 0:
+        flag = data[0];
+        D_L15_00161AB4 = 0;
+        D_L15_00161AB8 = 0;
+        D_L15_00161ABC = 0;
+        if (flag == 2) {
+            moby[0x20] = 6;
+            if (moby[0x53] != 4)
+                blend_moby_animation(moby, 4, 0, 0);
+        } else {
+            moby[0x20] = 3;
+            if (moby[0x53] != 2)
+                blend_moby_animation(moby, 2, 0, 0);
+        }
+        break;
+    case 1:
+        color = interpolate_color_2a3138((fast_sin_door(*(float *)(data + 5)) + 1.0f) * 0.5f, 0x801414bc, 0x801414dc);
+        step = frame_time;
+        *(int *)(moby + 0x90) = color;
+        *(float *)(data + 5) = fast_add_rotations(*(float *)(data + 5), step * 6.2831855f);
+        if (data[2] == 0) goto update;
+        if (*(int *)&D_L15_0015F5C4_macro != 2) {
+            if (data[0] == 1) {
+                moby[0x20] = 6;
+                if (moby[0x53] != 4)
+                    blend_moby_animation(moby, 4, 0, FUN_001f96f8(30));
+            } else {
+                moby[0x20] = 5;
+            }
+        }
+        break;
+    case 2:
+        if (moby[0x70] & 2) {
+            moby[0x20] = 3;
+            if (moby[0x53] != 2)
+                blend_moby_animation(moby, 2, 0, FUN_001f96f8(10));
+        }
+        break;
+    case 3:
+        if (data[2] == 0) goto update;
+        if (D_L15_0015F5C4_small != 2) {
+            moby[0x20] = 4;
+            if (moby[0x53] != 3)
+                blend_moby_animation(moby, 3, 0, FUN_001f96f8(10));
+        }
+        break;
+    case 4:
+        if (moby[0x70] & 2) {
+            if (data[2] == 0 || D_L15_0015F5C4_small == 2) goto stop_animation;
+            if (data[0] == 1) {
+                moby[0x20] = 7;
+                if (moby[0x53] != 5)
+                    blend_moby_animation(moby, 5, 0, FUN_001f96f8(10));
+            } else {
+                if (moby[0x53] != 8)
+                    blend_moby_animation(moby, 8, 0, FUN_001f96f8(10));
+                moby[0x20] = 5;
+            }
+        }
+        break;
+stop_animation:
+        if (moby[0x53] != 8)
+            blend_moby_animation(moby, 8, 0, FUN_001f96f8(10));
+        moby[0x20] = 10;
+        break;
+    case 5:
+        if ((moby[0x70] & 2) && moby[0x53] != 0)
+            blend_moby_animation(moby, 0, 0, FUN_001f96f8(10));
+        color = interpolate_color_2a3138((fast_sin_door(*(float *)(data + 5)) + 1.0f) * 0.5f, 0x801414dc, 0x8004048c);
+        step = frame_time;
+        *(int *)(moby + 0x90) = color;
+        *(float *)(data + 5) = fast_add_rotations(*(float *)(data + 5), step * 12.566371f);
+        if (tick_countdown_32_alt(data + 6) || *(int *)&D_L15_0015F5C4_macro == 2) {
+            FUN_L15_002cbac0((char *)moby, 0);
+            data[2] = 0;
+            if (moby[0x53] != 8)
+                blend_moby_animation(moby, 8, 0, FUN_001f96f8(10));
+            moby[0x20] = 10;
+        }
+        break;
+    case 6:
+        if (data[2] == 0) goto update;
+        moby[0x20] = 7;
+        if (moby[0x53] != 5)
+            blend_moby_animation(moby, 5, 0, FUN_001f96f8(10));
+        break;
+    case 7:
+        if (moby[0x70] & 2) {
+            moby[0x20] = 8;
+            if (moby[0x53] != 6)
+                blend_moby_animation(moby, 6, 0, FUN_001f96f8(10));
+        }
+        break;
+    case 8: {
+        float *pos = (float *)(moby + 0x10);
+        float *g = hero.motion.pos.f;
+        if (FUN_001f9b80(pos, g) < 16.0f && D_L15_0015F5C4_small != 2 && tick_countdown_32_alt(data + 3)) {
+            qcopy(position, pos);
+            position[2] += 1.0f;
+            if (FUN_001efa68(position, g + 20, 2, 0, 0) == 0 && FUN_L15_002a2868(data[1], pos))
+                data[3] = data[4];
+        }
+        if (tick_countdown_32_alt(data + 6) || *(int *)&D_L15_0015F5C4_macro == 2) {
+            FUN_L15_002cbac0((char *)moby, 0);
+            data[2] = 0;
+            moby[0x20] = 9;
+            if (moby[0x53] != 7)
+                blend_moby_animation(moby, 7, 0, FUN_001f96f8(10));
+        }
+        break;
+    }
+    case 9:
+        if (moby[0x70] & 2) {
+            if (data[0] == 2) {
+                moby[0x20] = 6;
+                if (moby[0x53] != 4)
+                    blend_moby_animation(moby, 4, 0, FUN_001f96f8(10));
+            } else {
+                moby[0x20] = 10;
+                if (moby[0x53] != 8)
+                    blend_moby_animation(moby, 8, 0, FUN_001f96f8(10));
+            }
+        }
+        break;
+    case 10:
+        if (moby[0x70] & 2) {
+            moby[0x20] = 2;
+            if (moby[0x53] != 1)
+                blend_moby_animation(moby, 1, 0, FUN_001f96f8(10));
+        }
+        break;
+    }
+    if (data[2] != 0) D_L15_00161AB8 = 1;
+update:
+    if (D_L15_00161AB4 != D_L15_0015F5CC) {
+        D_L15_00161AB4 = D_L15_0015F5CC;
+        FUN_L15_002cbc30(moby);
+        D_L15_00161AB8 = 0;
+    }
+}
+#endif
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */
 
 extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
