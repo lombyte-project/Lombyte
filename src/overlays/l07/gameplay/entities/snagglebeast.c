@@ -81,8 +81,8 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
     quad.texture_coordinates[0][1] = v;
     quad.texture_coordinates[1][1] = v;
     v += 1.0f;
-    quad.texture_coordinates[2][1] = v;
     quad.texture_coordinates[3][1] = v;
+    quad.texture_coordinates[2][1] = v;
     end_alpha -= row_alpha;
     alpha_step = end_alpha * 0.0625f;
     step = scratch.f[1] * 0.0625f;
@@ -97,6 +97,7 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
         latitude = step + -1.5707964f;
         quad.colors[3] = quad.colors[2];
         if (latitude <= (limit = scratch.f[1] - 1.5707964f)) {
+            float z_adjustment = 0.375f;
             u32 inner_color = color | 0x404040;
             do {
                 qcopy(&quad.positions[0], &quad.positions[2]);
@@ -114,8 +115,8 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
                     quad.positions[2].f[2] += 0.6f;
                     quad.positions[3].f[2] += 0.6f;
                 } else {
-                    quad.positions[2].f[2] -= 0.375f;
-                    quad.positions[3].f[2] -= 0.375f;
+                    quad.positions[2].f[2] -= z_adjustment;
+                    quad.positions[3].f[2] -= z_adjustment;
                 }
                 latitude += step;
                 add_vector_xyz(&quad.positions[2], &quad.positions[2], &position);
