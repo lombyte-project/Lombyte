@@ -169,6 +169,7 @@ void FUN_L05_0030de90(char *moby) {
     float angle, blend;
     int color0, color1;
     int i, j, k;
+    int height;
     short *list;
     int offset;
     char *entry;
@@ -181,6 +182,7 @@ void FUN_L05_0030de90(char *moby) {
     colors = quads[0][0].colors;
     i = 0;
     do {
+        height = i + 1;
         blend = (angle_sin(angle) + 1.0f) * 0.5f;
         color0 = fast_tween_color(D_L05_00161D3C, D_L05_00161D40, blend);
         color1 = fast_tween_color(D_L05_00161D44, D_L05_00161D48, blend);
@@ -191,7 +193,7 @@ void FUN_L05_0030de90(char *moby) {
             /* Each 0x90-byte record spans 18 flag words or 36 float words. */
             volatile u64 *flags = (volatile u64 *)quads;
             flags[i * 18 + j * 90 + 17] = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) |
-                ((s64)D_L05_00161D78 << 4) | ((s64)D_L05_00161D7C << 6) | 0x8000000000ULL;
+                (((s64)D_L05_00161D78 << 4) | ((s64)D_L05_00161D7C << 6)) | 0x8000000000ULL;
             flags[i * 18 + j * 90 + 15] = texture;
             flags[i * 18 + j * 90 + 16] = 0xff9000000260ULL;
             flags[i * 18 + j * 90 + 14] = 0;
@@ -214,11 +216,11 @@ void FUN_L05_0030de90(char *moby) {
                     if (j != 0) {
                         *color = color0;
                         qcopy(positions, source);
-                        positions->f[2] += (float)(i + 1);
+                        positions->f[2] += (float)height;
                     } else {
                         *colors0 = color1;
                         qcopy(positions0, source0);
-                        positions0->f[2] += (float)(i + 1);
+                        positions0->f[2] += (float)height;
                     }
                     positions0++;
                     source0++;
