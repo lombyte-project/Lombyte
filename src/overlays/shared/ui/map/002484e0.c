@@ -52,7 +52,7 @@ void FUN_L00_002484e0(f32 *position) {
     s32 level;
     s32 state;
     s32 mode15;
-    s32 mode16;
+    s64 mode16;
     s32 i;
     s32 *filter = filters;
 
@@ -150,7 +150,7 @@ reject:
                         s32 bit = 1 << ((s32)column & 7);
                         if (*pixel & bit) {
                             s32 bitmap_column = test_column < 0 ? byte_column : test_column;
-                            u8 check = D_L00_001841F0.exclusion[filterrow + (bitmap_column >> 3)];
+                            u8 check = D_L00_001841F0.exclusion[(bitmap_column >> 3) + filterrow];
                             if (((check >> (test_column - ((bitmap_column >> 3) << 3))) & 1) == 0) {
                                 u8 packed;
                                 s32 selected;
