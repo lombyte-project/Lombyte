@@ -2337,7 +2337,7 @@ extern float D_L06_00161EFC __attribute__((sda));
 extern float D_L06_00161F00 __attribute__((sda));
 extern float D_L06_00161F04 __attribute__((sda));
 extern float D_L06_00161F08 __attribute__((sda));
-extern unsigned char D_0013D3AB;
+extern unsigned char D_0013D3AB __attribute__((section(".data")));
 extern unsigned char D_0013D505 __attribute__((section(".data")));
 #include "rnc/gameplay/state/item_state.h"
 extern char D_L06_001678D0[];
@@ -2488,9 +2488,10 @@ void FUN_L06_002f9a28(unsigned char *moby) {
         if (1.0f < FUN_0020c9e0(moby) && FUN_0020c9e0(moby) < 8.0f) {
             v[0] = FUN_001f9dc8(*(float *)(moby + 0x48)) * 0.45f;
             v[1] = FUN_001f9de0(*(float *)(moby + 0x48)) * 0.45f;
-            hit.scale = 1.0f; hit.enabled = 1;
-            v[2] = 0.0f; hit.owner = moby; hit.flags = 1;
-            hit.direction[0] = FUN_001f9dc8(*(float *)(moby + 0x48));
+            { float angle = *(float *)(moby + 0x48);
+              hit.enabled = 1; hit.scale = 1.0f;
+              hit.owner = moby; v[2] = 0.0f; hit.flags = 1;
+              hit.direction[0] = FUN_001f9dc8(angle); }
             hit.direction[1] = FUN_001f9de0(*(float *)(moby + 0x48)); hit.direction[2] = 0.0f;
             FUN_L00_0024f7c8(moby, 0, pos); FUN_L00_001f2868(0.5f, pos, 0, moby, &hit);
             FUN_L00_0024f7c8(moby, 1, pos); FUN_L00_001f2868(0.5f, pos, 0, moby, &hit);
