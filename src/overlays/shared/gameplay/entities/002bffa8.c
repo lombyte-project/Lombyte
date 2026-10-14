@@ -765,7 +765,7 @@ void FUN_L00_002bffa8(struct Moby *moby) {
             {
             float scale_01;
             float scale_02;
-            float scale_045;
+            float scale_045 = frame_scale * 0.045f;
             float scale_066;
             float scale_2;
             float size_25 = size * 0.25f;
@@ -788,7 +788,6 @@ void FUN_L00_002bffa8(struct Moby *moby) {
             HB_2bffa8(0x1f3c) = 2;
             HB_2bffa8(0x1f3d) = 3;
             HB_2bffa8(0x1f3e) = 4;
-            scale_045 = frame_scale * 0.045f;
             HF_2bffa8(0x1f4c) = scale_045;
             HF_2bffa8(0x1ee8) = 3.1415927f;
             HF_2bffa8(0x1f2c) = time_297;
