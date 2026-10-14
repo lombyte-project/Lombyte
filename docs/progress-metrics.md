@@ -68,7 +68,8 @@ texture (every logical group is a tile sized by its bytes; the colour is the
 group's state). Below it the **tree** lists the shared level code first and then
 the 19 levels in game order, each with its planet, a one-line description, its
 C_EXACT percentage and a bar of blocks, one per `src/overlays/` file, sized by
-bytes. The headline percentage in the header is the whole game. Everywhere the
+bytes. The headline percentage in the header is the whole game; the smaller
+one beside it is data in C (see Data below). Everywhere the
 same scale applies: **orange** is all recoverable C matching exactly, **chrome**
 is intentional low-level assembly only, and **dark steel** to **copper** is
 pending C by its exact coverage.
@@ -156,4 +157,5 @@ The report (`report.json`) keeps the executable and the overlays apart in its
 categories: `boot` (= `game` + `sdk`), `overlays` (= `shared` + `levels`), and
 one `level_NN` per level. `decomp_map.json` (schema
 `rnc-public-progress-v3`) has the same split as `boot`, `overlays` and
-`total`; its top-level fields describe the total.
+`total`; its top-level fields describe the total. Each part has a `data`
+object with the same data bytes the report counts.
