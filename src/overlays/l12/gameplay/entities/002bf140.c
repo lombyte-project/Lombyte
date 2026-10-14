@@ -857,6 +857,7 @@ extern void spawn_particle(void *, void *, void *, int, int, int, int, int, int)
 
 void FUN_L12_002e3098(struct Moby *moby) {
     float pos[4] __attribute__((aligned(16)));
+    void *vars;
     float velocity[4] __attribute__((aligned(16)));
     float accel[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
@@ -865,7 +866,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
     float *position;
     float *direction_ptr;
 
-    void *vars = *(void *volatile *)&moby->pvars;
+    vars = *(void *volatile *)&moby->pvars;
 
     count = D_L12_0016183C;
     if (moby->state == 15)
