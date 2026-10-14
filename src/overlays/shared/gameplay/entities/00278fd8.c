@@ -2813,15 +2813,15 @@ void FUN_L15_002cb4c8(unsigned char *moby) {
     float position[4];
     float step;
     int color;
-    int flag;
+    int mode;
     int *data = *(int **)(moby + 0x78);
     switch (moby[0x20]) {
     case 0:
-        flag = data[0];
+        mode = data[0];
         D_L15_00161AB4 = 0;
         D_L15_00161AB8 = 0;
         *(int *)&D_L15_00161ABC_gp = 0;
-        if (flag == 2) {
+        if (mode == 2) {
             moby[0x20] = 6;
             if (moby[0x53] != 4)
                 blend_moby_animation(moby, 4, 0, 0);
