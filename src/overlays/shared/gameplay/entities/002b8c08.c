@@ -2697,9 +2697,10 @@ reset_timer:
         Q2(data, 0xd0) = Q2(data, 0xc0);
         FUN_L01_0028bb90(path_state, B2(data, 0x120) & 0x20, moby, F2(data, 0xf4), F2(data, 0xf8));
         if ((B2(data, 0x120) & 0x1e) && !(B2(data, 0x120) & 1)) {
-            link = (int *)(data + 0x140);
+            i = 0;
             node = (char *)point;
-            for (i = 0; i < 4; ++i, node += 0x10, ++link) {
+            link = (int *)(data + 0x140);
+            for (; i < 4; ++i, node += 0x10, ++link) {
                 if ((B2(data, 0x120) & (2 << i)) && *link != -1) {
                     child = D_L01_0015FFD8 + (*link << 8);
                     if (child && (child_data = *(char **)(child + 0x78)) != 0) {
@@ -2783,8 +2784,8 @@ reset_timer:
     if (!found) FUN_L01_002f5040(moby, (float *)(moby + 0x10));
     if (B2(data, 0x120) & 0x1f) {
         count = 0;
-        link_offset = -4;
         i = 0;
+        link_offset = -4;
         do {
             if (B2(data, 0x120) & (1 << i)) {
                 FUN_002645a8_2f5168(moby, count++, point);
@@ -2816,20 +2817,22 @@ reset_timer:
         B2(data, 0x121)--;
     }
     if (D_L01_0015ED84 != 3 && D_L01_0015ED84 != 9) return;
-    current = FUN_0026f320_2f5168(moby, 0x210000, 0);
-    if (current && H2(current, 0x28) != 0x102) {
-        FUN_00221170_2f5168(point);
-        if (H2(moby, 0xa6) == 0x33) {
-            point[0] = FUN_002216f8_2f5168(F2(moby, 0x48)) * -2.747f;
-            point[1] = FUN_00221710_2f5168(F2(moby, 0x48)) * -2.747f;
-            point[2] = 0.0f;
+    {
+        char *current = FUN_0026f320_2f5168(moby, 0x210000, 0);
+        if (current && UH2(current, 0x28) != 0x102) {
+            FUN_00221170_2f5168(point);
+            if (H2(moby, 0xa6) == 0x33) {
+                point[0] = FUN_002216f8_2f5168(F2(moby, 0x48)) * -2.747f;
+                point[1] = FUN_00221710_2f5168(F2(moby, 0x48)) * -2.747f;
+                point[2] = 0.0f;
+            }
+            FUN_002211b8_2f5168(offset, moby + 0x10, position);
+            *(OvlQuad *)work = *(OvlQuad *)offset;
+            FUN_00221210_2f5168(work, work, 0.5f);
+            FUN_00221188_2f5168(point, point, moby + 0x10);
+            H2(data, 0x13a) = FUN_00220e30_2f5168(600);
+            FUN_00273310_2f5168(moby, work, point, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, (H2(moby, 0xa6) == 0x532 || H2(moby, 0xa6) == 0x53b || H2(moby, 0xa6) == 0x53c) ? 1 : -1, 15.0f, 1, 1, -1, 0);
         }
-        FUN_002211b8_2f5168(offset, moby + 0x10, position);
-        *(OvlQuad *)work = *(OvlQuad *)offset;
-        FUN_00221210_2f5168(work, work, 0.5f);
-        FUN_00221188_2f5168(point, point, moby + 0x10);
-        H2(data, 0x13a) = FUN_00220e30_2f5168(600);
-        FUN_00273310_2f5168(moby, work, point, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, (H2(moby, 0xa6) == 0x532 || H2(moby, 0xa6) == 0x53b || H2(moby, 0xa6) == 0x53c) ? 1 : -1, 15.0f, 1, 1, -1, 0);
     }
     D_L01_00160770 = FUN_L01_002f5168;
     B2(moby, 0xa4) = 0xff;
