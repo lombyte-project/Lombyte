@@ -65,13 +65,13 @@ comparison against the original through `./verify-baseline.sh` (see
 ## The progress map
 
 The map (`decomp_map.svg`, published on the `progress` branch by CI) has two parts. The **drawer** at the top is the boot
-executable: its own C_EXACT percentage over its group treemap, dimmed to a
+executable on the left 3/4: its own C_EXACT percentage over its group treemap, dimmed to a
 texture (every logical group is a tile sized by its bytes; the colour is the
 group's state). Below it the **tree** lists the shared level code first and then
 the 19 levels in game order, each with its planet, a one-line description, its
 C_EXACT percentage and a bar of blocks, one per `src/overlays/` file, sized by
-bytes. The header's main figure is the C_EXACT of the whole game
-(exe + overlays in C), with data in C (see Data below) above it. Everywhere the
+bytes. Right of the drawer's slanted cut sits the main figure, the C_EXACT of
+the whole game (exe + overlays in C), with data in C (see Data below) above it. Everywhere the
 same scale applies: **orange** is all recoverable C matching exactly, **chrome**
 is intentional low-level assembly only, and **dark steel** to **copper** is
 pending C by its exact coverage.

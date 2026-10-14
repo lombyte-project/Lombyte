@@ -1000,40 +1000,43 @@ def render_svg(
             f'font-family="{esc(FONT)}" font-size="{legend_font}" fill="{MUTED}">{text}</text>'
         )
 
-    # Stats, right-aligned beside the legend and on its rows: data in C as a
-    # small line on the first row, the whole game's code (executable +
-    # overlays) as the main figure over the last row.
-    status_x = row_x - 10
+    # The drawer: the executable on the left 3/4, cut with a "\"; the whole
+    # game's figures (data, exe + overlays) on one centre axis right of the cut.
+    dx0, dy0 = margin_px, header_px
+    full_dx, ddy = width - 2 * margin_px, drawer_height
+    slant, cut_gap = 56, 8
+    xt = dx0 + 0.75 * full_dx - slant / 2
+    xb = xt + slant
+    right = dx0 + full_dx
+    boot_poly = f"{dx0},{dy0} {xt:.1f},{dy0} {xb:.1f},{dy0 + ddy} {dx0},{dy0 + ddy}"
+    lines.append(
+        f'<polygon points="{xt + cut_gap:.1f},{dy0} {right},{dy0} {right},{dy0 + ddy} '
+        f'{xb + cut_gap:.1f},{dy0 + ddy}" fill="{PLATE}" fill-opacity="0.35"/>'
+    )
+    pcx = (xt + cut_gap + slant / 2 + right) / 2
     if data and data[0]:
         lines.append(
-            f'<text x="{status_x}" y="18" text-anchor="end" font-family="{esc(FONT)}" '
-            f'font-size="{legend_font}" fill="{MUTED}">'
-            f'<tspan font-size="12" font-weight="800" fill="{CHROME}">'
+            f'<text x="{pcx:.1f}" y="{dy0 + 22}" text-anchor="middle" font-family="{esc(FONT)}" '
+            f'font-size="10" fill="{TEXT}"><tspan font-size="12" font-weight="800" fill="{CHROME}">'
             f'{100.0 * data[1] / data[0]:.1f}%</tspan> data in C'
             f'<title>Data in C: {data[1]:,} of {data[0]:,} B, of which {data[2]:,} B '
             f'are zeros (zero-initialised level data).</title></text>'
         )
     lines.append(
-        f'<text x="{status_x}" y="42" text-anchor="end" font-family="{esc(FONT)}" '
-        f'font-size="24" font-weight="800" fill="{ORANGE}">{total_percent:.1f}%</text>'
+        f'<text x="{pcx:.1f}" y="{dy0 + 58}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'font-size="34" font-weight="800" fill="{ORANGE}">{total_percent:.1f}%</text>'
     )
     lines.append(
-        f'<text x="{status_x}" y="52" text-anchor="end" font-family="{esc(FONT)}" '
-        f'font-size="{legend_font}" fill="{TEXT}">exe + overlays in C</text>'
+        f'<text x="{pcx:.1f}" y="{dy0 + 75}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'font-size="10" fill="{TEXT}">exe + overlays in C</text>'
     )
-
-    # The drawer: the executable, its own percentage over its dimmed treemap.
-    dx0, dy0 = margin_px, header_px
-    ddx, ddy = width - 2 * margin_px, drawer_height
-    inset = 0  # the treemap fills the drawer edge to edge: no frame around it
     lines.append(
-        f'<rect x="{dx0}" y="{dy0}" width="{ddx}" height="{ddy}" '
+        f'<polygon points="{boot_poly}" '
         f'fill="url(#drawer-face)">'
-        f"<title>{esc(f'Boot ELF SCUS_971.99: {boot_exact_bytes:,} of {boot_recoverable:,} recoverable bytes are matching C ({boot_percent:.1f}%); {len(exact)} matching, {len(pending)} pending, {len(asm)} intentional asm units')}</title></rect>"
+        f"<title>{esc(f'Boot ELF SCUS_971.99: {boot_exact_bytes:,} of {boot_recoverable:,} recoverable bytes are matching C ({boot_percent:.1f}%); {len(exact)} matching, {len(pending)} pending, {len(asm)} intentional asm units')}</title></polygon>"
     )
-    lines.append(f'<clipPath id="drawer-clip"><rect x="{dx0 + inset}" y="{dy0 + inset}" '
-                 f'width="{ddx - 2 * inset}" height="{ddy - 2 * inset}"/></clipPath>')
-    placements = layout_boot(units, dx0 + inset, dy0 + inset, ddx - 2 * inset, ddy - 2 * inset, min_bytes)
+    lines.append(f'<clipPath id="drawer-clip"><polygon points="{boot_poly}"/></clipPath>')
+    placements = layout_boot(units, dx0, dy0, xb - dx0, ddy, min_bytes)
     lines.append('<g clip-path="url(#drawer-clip)" opacity="0.75">')
     for tile, rect in placements:
         x, y = rect["x"], rect["y"]
@@ -1046,15 +1049,12 @@ def render_svg(
             f'shape-rendering="geometricPrecision"><title>{esc(tile_tooltip(tile))}</title></rect>'
         )
     lines.append("</g>")
-    lines.append(
-        f'<rect x="{dx0 + inset}" y="{dy0 + inset}" width="{ddx - 2 * inset}" '
-        f'height="{ddy - 2 * inset}" fill="url(#sheen)" pointer-events="none"/>'
-    )
-    cx, cy = dx0 + ddx / 2, dy0 + ddy / 2
+    lines.append(f'<polygon points="{boot_poly}" fill="url(#sheen)" pointer-events="none"/>')
+    cx, cy = (dx0 + xt) / 2, dy0 + ddy / 2
     # A soft local shadow keeps the percentage legible over the brighter
     # treemap without darkening the whole drawer.
     lines.append(
-        f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="200" ry="{ddy * 0.62:.1f}" '
+        f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{(xt - dx0) * 0.3:.1f}" ry="{ddy * 0.62:.1f}" '
         f'fill="url(#drawer-halo)" pointer-events="none"/>'
     )
     lines.append(
