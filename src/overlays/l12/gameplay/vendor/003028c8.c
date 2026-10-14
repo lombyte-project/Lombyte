@@ -1066,9 +1066,9 @@ extern float angle_atan2_304e00(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations_304e00(float, float) __asm__("FUN_001fa580");
 extern void add_vector_xyz_304e00(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_304e00(struct Moby *, int, int, int) __asm__("FUN_00212f90");
-extern float probe_ground_height_304e00(void *, int, float) __asm__("FUN_00213508");
-extern int collect_mobies_in_sphere_304e00(void *, int, struct Moby *, void *, float) __asm__("FUN_L00_001f2868");
-extern int coll_sphere_304e00(void *, int, struct Moby *, float) __asm__("FUN_L00_001f0d60");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
+extern int collect_mobies_in_sphere(void *, int, struct Moby *, void *, float) __asm__("FUN_L00_001f2868");
+extern int coll_sphere(void *, int, struct Moby *, float) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_0025b8c0_304e00(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern void spawn_explosion_304e00(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00257470(struct Moby *, int, int);
@@ -1159,7 +1159,7 @@ void FUN_L12_00304e00(struct Moby *moby) {
             moby->pos.z += data->bob;
         }
         if (scale_ticks(30) < data->timer) {
-            height = probe_ground_height_304e00(&moby->pos, 0, 0.5f);
+            height = probe_ground_height(&moby->pos, 0, 0.5f);
             if (height < hero.ground_z.f)
                 height = hero.ground_z.f;
             difference = height - moby->pos.z;
@@ -1175,11 +1175,11 @@ void FUN_L12_00304e00(struct Moby *moby) {
             func_L00_0025A8C0_304310(hit_info, moby, 0x10001, 1.0f, &direction);
             qcopy(&probe, &moby->pos);
             probe.f[2] += 0.4f;
-            if (!collect_mobies_in_sphere_304e00(&probe, 0x10, moby, hit_info, 0.4f) || hit_moby_304e00 == NULL ||
+            if (!collect_mobies_in_sphere(&probe, 0x10, moby, hit_info, 0.4f) || hit_moby_304e00 == NULL ||
                 hit_moby_304e00->oclass == 0x4F5 || hit_moby_304e00 == moby->parent) {
                 qcopy(&probe, &moby->pos);
                 probe.f[2] += 0.35f;
-                if (coll_sphere_304e00(&probe, 0, moby, 0.35f))
+                if (coll_sphere(&probe, 0, moby, 0.35f))
                     moby->state = 2;
             } else {
                 moby->state = 2;

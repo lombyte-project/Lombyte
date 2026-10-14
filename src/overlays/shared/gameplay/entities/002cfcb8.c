@@ -2650,7 +2650,7 @@ typedef struct {
 } Cutscene;         /* 0x80 */
 
 extern Path *D_L00_001B04B0[];
-extern u8 D_0013DD40[];
+extern u8 level_available[] __asm__("D_0013DD40");
 extern Player D_0013F3D0;
 extern Camera D_0013F350;
 extern f32 D_0015ED6C;
@@ -2770,7 +2770,7 @@ void FUN_L00_002d5de8(struct Moby *moby)
         moby->rot.y = spring_turn_2d5de8(moby->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &infobot->spin[1]);
         moby->rot.x = spring_turn_2d5de8(moby->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
         FUN_L00_002d6cd0_2d5de8(moby);
-        if (D_0013DD40[infobot->planet] != 0) {
+        if (level_available[infobot->planet] != 0) {
             FUN_0020c828(moby);
             return;
         }
@@ -2780,7 +2780,7 @@ void FUN_L00_002d5de8(struct Moby *moby)
         break;
     case 3:
         FUN_L00_002d6cd0_2d5de8(moby);
-        if (D_0013DD40[infobot->planet] != 0) {
+        if (level_available[infobot->planet] != 0) {
             FUN_0020c828(moby);
             return;
         }
@@ -2806,7 +2806,7 @@ void FUN_L00_002d5de8(struct Moby *moby)
         break;
     case 5:
         FUN_L00_002d6cd0_2d5de8(moby);
-        if (D_0013DD40[infobot->planet] != 0) {
+        if (level_available[infobot->planet] != 0) {
             FUN_0020c828(moby);
             return;
         }
