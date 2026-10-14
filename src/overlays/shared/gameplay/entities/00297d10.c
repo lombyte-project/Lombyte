@@ -2202,9 +2202,11 @@ void FUN_L06_002f2250(void) {
         GbMoby *moby, *target;
         GbVars *vars;
         GbClass *cls;
+        float *score_list;
         for (i = 0; i < moby_count; i++) {
             moby = mobys[i];
             vars = moby->vars;
+            score_list = (float *)((char *)vars + 0x1c0);
             *(short *)((char *)vars + 0x192) = 0;
             j = 0;
             target = D_L06_001AC180_2f2250[0];
@@ -2236,7 +2238,7 @@ void FUN_L06_002f2250(void) {
                                             last = 6;
                                             if ((short)count - 1 < 7) last = (short)count - 1;
                                             target_list = (GbMoby **)((char *)vars + 0x1a4) + last;
-                                            scores = (float *)((char *)vars + 0x1c0) + last;
+                                            scores = score_list + last;
                                             for (; last >= k; last--) {
                                                 *target_list = target_list[-1];
                                                 target_list--;
