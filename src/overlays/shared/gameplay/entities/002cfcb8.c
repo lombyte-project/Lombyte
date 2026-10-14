@@ -2277,8 +2277,8 @@ void FUN_L00_002d5160(unsigned char *m) {
         health = *(f32 *)(v + 0x20) - damage;
         v[0xAD] = 0;
         duration = D_0015ED6C_2d5160 + D_0015ED6C_2d5160;
-        *(s32 *)(v + 0x94) = 0x29;
-        *(s32 *)(v + 0x90) = 0x200;
+        *(volatile s32 *)(v + 0x94) = 0x29;
+        *(volatile s32 *)(v + 0x90) = 0x200;
         *(f32 *)(v + 0x98) = 0.75f;
         *(f32 *)(v + 0x20) = health;
         *(f32 *)(v + 0x84) = forceY;
