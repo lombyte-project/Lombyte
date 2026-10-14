@@ -514,22 +514,26 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
         int i = 9;
         do {
             int lo, hi, duration;
+            OvlVec4 *random_direction, *offset, *axis;
             work.random_vector.q = 0;
             work.random_vector.f[0] = FUN_002132a8(-1.0f, 1.0f);
             i--;
             work.random_vector.f[1] = FUN_002132a8(-1.0f, 1.0f);
-            work.random_direction.q = work.random_vector.q;
-            amount = dot_vector_xyz(&work.random_direction, &work.axis);
-            fast_vec_normalize(&work.offset, &work.axis, amount);
-            subtract_vector_xyz(&work.random_direction, &work.random_direction, &work.offset);
-            fast_vec_normalize(&work.offset, &work.axis, FUN_002132a8(0.0f, 1.0f));
-            add_vector_xyz(&work.random_direction, &work.random_direction, &work.offset);
-            fast_vec_normalize(&work.random_direction, &work.random_direction,
+            random_direction = &work.random_direction;
+            offset = &work.offset;
+            axis = &work.axis;
+            random_direction->q = work.random_vector.q;
+            amount = dot_vector_xyz(random_direction, axis);
+            fast_vec_normalize(offset, axis, amount);
+            subtract_vector_xyz(random_direction, random_direction, offset);
+            fast_vec_normalize(offset, axis, FUN_002132a8(0.0f, 1.0f));
+            add_vector_xyz(random_direction, random_direction, offset);
+            fast_vec_normalize(random_direction, random_direction,
                 scale * FUN_002132a8(3.5f, 6.5f) * D_0015ED6C);
-            add_vector_xyz(&work.random_direction, &work.random_direction, &work.velocity);
+            add_vector_xyz(random_direction, random_direction, &work.velocity);
             lo = FUN_001f96f8(60); hi = FUN_001f96f8(120);
             duration = random_int_between(lo, hi);
-            FUN_L13_0030c138(&work.pos, &work.random_direction, duration, 0);
+            FUN_L13_0030c138(&work.pos, random_direction, duration, 0);
         } while (i >= 0);
     }
     twice_distance = distance + distance;
@@ -537,21 +541,25 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
         int i = 3;
         do {
             int lo, hi, duration;
+            OvlVec4 *random_direction, *axis, *offset;
             work.random_vector.q = 0;
             work.random_vector.f[0] = FUN_002132a8(-1.0f, 1.0f);
             i--;
             work.random_vector.f[1] = FUN_002132a8(-1.0f, 1.0f);
-            work.random_direction.q = work.random_vector.q;
-            fast_vec_normalize(&work.offset, &work.axis, dot_vector_xyz(&work.random_direction, &work.axis));
-            subtract_vector_xyz(&work.random_direction, &work.random_direction, &work.offset);
-            fast_vec_normalize(&work.offset, &work.axis, FUN_002132a8(0.0f, 1.0f));
-            add_vector_xyz(&work.random_direction, &work.random_direction, &work.offset);
-            fast_vec_normalize(&work.random_direction, &work.random_direction,
+            random_direction = &work.random_direction;
+            axis = &work.axis;
+            offset = &work.offset;
+            random_direction->q = work.random_vector.q;
+            fast_vec_normalize(offset, axis, dot_vector_xyz(random_direction, axis));
+            subtract_vector_xyz(random_direction, random_direction, offset);
+            fast_vec_normalize(offset, axis, FUN_002132a8(0.0f, 1.0f));
+            add_vector_xyz(random_direction, random_direction, offset);
+            fast_vec_normalize(random_direction, random_direction,
                 scale * FUN_002132a8(6.5f, 10.0f) * D_0015ED6C);
-            add_vector_xyz(&work.random_direction, &work.random_direction, &work.velocity);
+            add_vector_xyz(random_direction, random_direction, &work.velocity);
             lo = FUN_001f96f8(60); hi = FUN_001f96f8(90);
             duration = random_int_between(lo, hi);
-            FUN_L13_0030c138(&work.pos, &work.random_direction, duration, 1);
+            FUN_L13_0030c138(&work.pos, random_direction, duration, 1);
         } while (i >= 0);
     }
     work.random_vector.q = 0;
