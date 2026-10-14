@@ -743,8 +743,8 @@ void FUN_L00_002772c0(s32 param_1) {
             object->image[21] = height;
             object->image[22] = left;
             object->image[23] = top;
-            FUN_L00_0023caa8_772c0(width + 1, height + 1, left + width - 1,
-                                     top + height - 1, *(s32 *)0x00160270, 0);
+            FUN_L00_0023caa8_772c0(width + 1, height + 1, width + left - 1,
+                                     height + top - 1, *(s32 *)0x00160270, 0);
         }
     }
     for (pass = 0; pass < 2; pass++) {
@@ -754,22 +754,24 @@ void FUN_L00_002772c0(s32 param_1) {
                 continue;
             }
             entry = (VoiceRenderEntry *)handles[i];
-            flags = entry->flags;
-            if ((flags & 4) != 0 || D_L00_001B23C0[i] == 0 || entry->draw == 0 ||
-                (i == 6 && D_L00_001B9DC8 == 0) ||
-                (pass == 0 && (flags & 2) == 0) ||
-                (pass == 1 && (flags & 2) != 0)) {
-                continue;
-            }
-            if ((flags & 1) != 0) {
-                entry->draw(entry);
-                continue;
+            {
+                u32 flags = entry->flags;
+                if ((flags & 4) != 0 || D_L00_001B23C0[i] == 0 || entry->draw == 0 ||
+                    (i == 6 && D_L00_001B9DC8 == 0) ||
+                    (pass == 0 && (flags & 2) == 0) ||
+                    (pass == 1 && (flags & 2) != 0)) {
+                    continue;
+                }
+                if ((flags & 1) != 0) {
+                    entry->draw(entry);
+                    continue;
+                }
             }
             object = (VoiceRenderObject *)D_L00_001B9E90_init[i];
-            texture_width = object->image[22];
-            texture_height = object->image[23];
             right = object->image[20];
             bottom = object->image[21];
+            texture_width = object->image[22];
+            texture_height = object->image[23];
             width_shift = 7;
             if (texture_width > 0x80) {
                 for (width_shift = 8; (1 << width_shift) < texture_width; width_shift++) {}
