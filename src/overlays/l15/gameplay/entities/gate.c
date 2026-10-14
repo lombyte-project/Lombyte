@@ -1513,7 +1513,9 @@ apply_delta:
         moby->rot.y = spring_turn((float *)(vars + 0x178), moby->rot.y, yaw_target, frame_time_sq * 0.5235988f, frame_time_sq * max_turn, frame_time * 0.7853982f);
         moby->rot.x = spring_turn((float *)(vars + 0x174), moby->rot.x, pitch_target, frame_time_sq * max_turn, frame_time_sq * 2.0943952f, frame_time * 1.5707964f);
         break;
-    case 7:
+    case 7: {
+        int i;
+        float angle;
         delta.q = 0;
         angle = random_angle_radians_7880();
         manip0 = vars + 0xd0;
@@ -1539,6 +1541,7 @@ apply_delta:
         detach_manipulator(moby, manip1);
         moby->state = 0x40;
         return;
+    }
     case 0x40:
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xefff;
@@ -1550,9 +1553,10 @@ apply_delta:
         *(unsigned int *)(D_0014C190 + ((short)moby->save_id >> 5) * 4 + current_level_index * 0x100) &= ~(1U << (moby->save_id & 31));
         D_L15_001BAAD0[(short)moby->save_id >> 5] &= ~(1U << (moby->save_id & 31));
         if (D_001413F4[0] == 2) return;
+        position = *(float *)(vars + 0x1a8);
         moby->state = 0;
         moby->scale = moby->scale + moby->scale;
-        moby->pos.z = *(float *)(vars + 0x1a8) - 7.5f;
+        moby->pos.z = position - 7.5f;
         return;
     }
     if (moby->visible && FUN_001f9b48(&moby->pos, D_L15_001673C0) < 40.0f)
