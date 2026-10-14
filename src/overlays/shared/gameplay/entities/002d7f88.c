@@ -2631,7 +2631,7 @@ void FUN_L00_002dd8e8(void) {
     float previous_phase;
     int row, segment, next_segment, value, previous_value;
     int current, segment_offset;
-    char *prior;
+    char *prior; u32 *colors;
 
     quad.texture[1] = FUN_001f9298_002dd8e8(0x15);
     quad.texture[2] = 0xff9000000260ULL;
@@ -2675,8 +2675,11 @@ void FUN_L00_002dd8e8(void) {
             if (value > 0x40) value = 0x40;
             if (previous_value < 0) previous_value = 0;
             if (previous_value > 0x40) previous_value = 0x40;
-            quad.colors[0] = quad.colors[1] = (value << 24) | 0x404040;
-            quad.colors[2] = quad.colors[3] = (previous_value << 24) | 0x404040;
+            colors = quad.colors;
+            *colors++ = (value << 24) | 0x404040;
+            *colors++ = (value << 24) | 0x404040;
+            *colors++ = (previous_value << 24) | 0x404040;
+            *colors = (previous_value << 24) | 0x404040;
             if (row == 1)
                 quad.colors[2] = quad.colors[3] = 0x20404040;
             else if (row == 9)
