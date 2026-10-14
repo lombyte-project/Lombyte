@@ -97,6 +97,7 @@ PARTIAL_ORANGE = "#d87620"
 # with sharp corners, edged in the bolt orange.
 DRAWER_FACE_TOP = "#231a12"
 DRAWER_FACE_BOTTOM = "#17110c"
+PANEL_FACE_TOP = "#3b2a1a"  # the dimmed boot treemap's brown, for the whole-game panel
 UNCLASSIFIED_LAYOUT_CAP_BYTES = 16 * 1024
 
 ROW_RE = re.compile(
@@ -974,7 +975,7 @@ def render_svg(
              f"{xb + cut_gap:.1f},{dy0 + ddy}")
     lines.append(
         f'<defs><linearGradient id="panel-face" x1="0" y1="0" x2="1" y2="1">'
-        f'<stop offset="0" stop-color="{PLATE}"/><stop offset="1" stop-color="{BACKGROUND}"/></linearGradient>'
+        f'<stop offset="0" stop-color="{PANEL_FACE_TOP}"/><stop offset="1" stop-color="{DRAWER_FACE_BOTTOM}"/></linearGradient>'
         f'<radialGradient id="panel-glow"><stop offset="0" stop-color="{ORANGE}" stop-opacity="0.28"/>'
         f'<stop offset="1" stop-color="{ORANGE}" stop-opacity="0"/></radialGradient>'
         f'<pattern id="panel-hatch" width="10" height="{ddy}" patternUnits="userSpaceOnUse" '
