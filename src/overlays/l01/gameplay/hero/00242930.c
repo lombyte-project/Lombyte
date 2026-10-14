@@ -128,7 +128,7 @@ void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
-extern int D_L01_0015F678 __attribute__((sda));
+int D_L01_0015F678 = {0};
 void FUN_L01_00242930(void) {
     unsigned char *moby;
     int prevSub;

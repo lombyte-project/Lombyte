@@ -176,7 +176,7 @@ typedef struct {
     int i20;
     int pad[3];
 } Ray_67e8;
-extern int D_L14_00161A3C_67e8 __asm__("D_L14_00161A3C") __attribute__((sda));
+int D_L14_00161A3C_67e8 __asm__("D_L14_00161A3C") = 0x8c;
 extern float D_L14_00161A40 __attribute__((sda));
 extern float D_L14_00161A44 __attribute__((sda));
 extern float D_L14_00161A48 __attribute__((sda));
@@ -445,7 +445,12 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk_2d71f0;
 
-extern float D_L14_001DE540[4][4];
+float D_L14_001DE540[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
 extern void scale_g(void *, void *, float) __asm__("FUN_001f9a68");
 extern void sub_g(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void normalize_g(void *, void *, float) __asm__("FUN_001f9bf8");

@@ -140,7 +140,7 @@ void FUN_L02_002d3a50(void *moby, void *a, void *b, int n, float sa, float sb) {
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D5098), where it is exact; names translated to the US level program. */
 
 extern float D_L02_001D3230[][4] __attribute__((section(".data")));
-extern short D_L02_001619C0 __attribute__((sda));
+short D_L02_001619C0 = {0};
 extern short D_L02_001619D0 __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
@@ -170,10 +170,10 @@ void FUN_L02_002d3c98(struct Moby *moby, int a, int b, int d) {
 
 extern void FUN_L02_002d3c98(struct Moby *moby, int a, int b, int d);
 
-extern short D_L02_001619EC __attribute__((sda));
-extern short D_L02_001619F0 __attribute__((sda));
-extern short D_L02_001619F4 __attribute__((sda));
-extern short D_L02_001619F8 __attribute__((sda));
+short D_L02_001619EC = 0xa;
+short D_L02_001619F0 = 0xa;
+short D_L02_001619F4 = 8;
+short D_L02_001619F8 = 8;
 void FUN_L02_002d3dd0(void *moby) {
     FUN_L02_002d3c98(moby, 0, 1, *(int *)&D_L02_001619F0);
     FUN_L02_002d3c98(moby, 2, 3, *(int *)&D_L02_001619EC);
@@ -299,12 +299,12 @@ extern void FUN_L02_002d5a68_e50(void *) __asm__("FUN_L02_002d5a68");
 extern void FUN_L02_002d5c88_e50(void *) __asm__("FUN_L02_002d5c88");
 extern void FUN_L02_002d63c0_e50(void *) __asm__("FUN_L02_002d63c0");
 
-extern int D_L02_001619A8 __attribute__((sda));
+int D_L02_001619A8 = {0};
 extern unsigned char D_L02_00161900 __attribute__((sda));
 extern float D_L02_0016191C __attribute__((sda));
-extern int D_L02_001619B0 __attribute__((sda));
-extern int D_L02_001619E4 __attribute__((sda));
-extern int D_L02_001619E8 __attribute__((sda));
+int D_L02_001619B0 = 0xa000000;
+int D_L02_001619E4 = 0x40306058;
+int D_L02_001619E8 = 0x306058;
 /* Aridia burrowing enemy: profiled with EE timer 0 around its state machine. */
 void FUN_L02_002d3e50(struct Moby *moby) {
     Varsd3e50 *vars;
@@ -944,9 +944,9 @@ extern int D_L02_00161948 __attribute__((sda));
 extern int D_L02_0016194C __attribute__((sda));
 extern int D_L02_00161950 __attribute__((sda));
 extern int D_L02_00161954 __attribute__((sda));
-extern int D_L02_00161958 __attribute__((sda));
-extern int D_L02_0016195C __attribute__((sda));
-extern int D_L02_00161960 __attribute__((sda));
+int D_L02_00161958 = 0x60306058;
+int D_L02_0016195C = 0x20306058;
+int D_L02_00161960 = -1;
 
 /* Same routine as FUN_L12_002e19a8: spawns n particles around pos, fewer when D_L02_00160178 is high. */
 void FUN_L02_002d57f8(void *pos, int n) {
@@ -1001,9 +1001,9 @@ extern s32 D_L02_0016198C __attribute__((sda));
 extern s32 D_L02_00161990 __attribute__((sda));
 extern s32 D_L02_00161994 __attribute__((sda));
 extern s32 D_L02_00161998 __attribute__((sda));
-extern s32 D_L02_0016199C __attribute__((sda));
-extern s32 D_L02_001619A0 __attribute__((sda));
-extern s32 D_L02_001619A4 __attribute__((sda));
+s32 D_L02_0016199C = 0x40306058;
+s32 D_L02_001619A0 = 0x10306058;
+s32 D_L02_001619A4 = -1;
 
 void FUN_L02_002d5a68(Vec4 *from) {
     Vec4 pos;
@@ -1347,9 +1347,9 @@ extern float D_L02_0015F580[] __attribute__((section(".sdata")));
 extern int D_L02_0015F5CC_i __asm__("D_L02_0015F5CC");
 extern float D_L02_00161A80 __attribute__((sda));
 extern float D_L02_00161A84 __attribute__((sda));
-extern int D_L02_00161A88 __attribute__((sda));
-extern int D_L02_00161A90 __attribute__((sda));
-extern int D_L02_00161A94 __attribute__((sda));
+int D_L02_00161A88 = 0x40808080;
+int D_L02_00161A90 = 0x3c;
+int D_L02_00161A94 = 0x78;
 extern float D_L02_00161A98 __attribute__((sda));
 extern float FUN_001f9b80(void *, void *);
 extern float approach_value_alt(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
@@ -1991,12 +1991,12 @@ extern float D_L02_00161BEC __attribute__((sda));
 extern float D_L02_00161BE8 __attribute__((sda));
 extern float D_L02_00161BF0 __attribute__((sda));
 extern float D_L02_00161C10 __attribute__((sda));
-extern int D_L02_00161BF4 __attribute__((sda));
-extern int D_L02_00161BF8 __attribute__((sda));
-extern int D_L02_00161BFC __attribute__((sda));
-extern int D_L02_00161C00 __attribute__((sda));
-extern int D_L02_00161C04 __attribute__((sda));
-extern int D_L02_00161C08 __attribute__((sda));
+int D_L02_00161BF4 = {0};
+int D_L02_00161BF8 = 2;
+int D_L02_00161BFC = {0};
+int D_L02_00161C00 = 1;
+int D_L02_00161C04 = 0x206068;
+int D_L02_00161C08 = 0x40107020;
 extern int FUN_001fa6e0(int, int, float);
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void FUN_001fa298(void *, void *);
@@ -2989,8 +2989,8 @@ extern float D_0015ED6C __attribute__((section(".sdata")));
 extern f32 D_L02_00161C6C __attribute__((sda));
 extern f32 D_L02_00161C70 __attribute__((sda));
 extern f32 D_L02_00161C74 __attribute__((sda));
-extern s32 D_L02_00161C78 __attribute__((sda));
-extern s32 D_L02_00161C7C __attribute__((sda));
+s32 D_L02_00161C78 = 0x800000ff;
+s32 D_L02_00161C7C = 0x80329600;
 extern f32 D_L02_00161C84 __attribute__((sda));
 extern void FUN_L02_002df730(struct Moby *moby);
 extern char *FUN_L02_002ec228(char *src, void *pos, float *dir);
@@ -3292,8 +3292,8 @@ extern void clear_vector(void *) __asm__("func_001F99F8");
 void blend_moby_animation_c(void *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-extern short D_L02_00161C9C __attribute__((sda));
-extern short D_L02_00161CA0 __attribute__((sda));
+short D_L02_00161C9C = 0x7070;
+short D_L02_00161CA0 = 0x7070;
 void FUN_L02_002e0280(struct Moby *moby) {
     float u[4];
     float v[4];
@@ -3341,8 +3341,8 @@ typedef struct {
 } Colors0720;
 
 extern unsigned char menu_item_enabled_9 __asm__("D_0013D39D") __attribute__((section(".data")));
-extern int D_L02_00161CC4 __attribute__((sda));
-extern int D_L02_00161CC8 __attribute__((sda));
+int D_L02_00161CC4 = 0x5f243632;
+int D_L02_00161CC8 = 0x61311;
 extern Colors0720 D_L02_00161CD0;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_001f9a10(void *, void *, void *);

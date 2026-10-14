@@ -46,9 +46,9 @@ extern int FUN_L00_0025d808(int *tab, float *out, int *a, float *b, int c, float
 extern int FUN_L12_00227f10(int a);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern short D_L14_0015F6E8 __attribute__((sda));
+short D_L14_0015F6E8 = {0};
 extern short D_L14_0015F688 __attribute__((sda));
-extern short D_L14_0015F6D8 __attribute__((sda));
+short D_L14_0015F6D8 = 8;
 extern unsigned char D_L14_0017C4D8[];
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");

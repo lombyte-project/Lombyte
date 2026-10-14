@@ -53,8 +53,8 @@ extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FU
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern s32 D_L05_0015F688 __attribute__((sda));
-extern char D_L05_0015F6E8[4] __attribute__((sda));
-extern char D_L05_0015F6F8[4] __attribute__((sda));
+char D_L05_0015F6E8[4] = {8, 0, 0, 0};
+char D_L05_0015F6F8[4] = {0, 0, 0x40, 0x42};
 extern unsigned char D_0013D388[];
 extern unsigned char D_L05_0017C238[];
 extern void *D_L05_001612D0;

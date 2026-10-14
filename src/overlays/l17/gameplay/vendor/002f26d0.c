@@ -307,7 +307,7 @@ extern float fast_cos_c(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_c(float) __asm__("FUN_001f9de0");
 extern int FUN_001fa6e0(int, int, float);
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
-extern short D_L17_00162440 __asm__("D_L17_001623C0") __attribute__((sda));
+short D_L17_00162440 __asm__("D_L17_001623C0") = {0};
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
@@ -325,7 +325,7 @@ extern float D_L17_001E6FA0[];
 extern int D_L17_001DE010[];
 extern int D_L17_001DE028[];
 extern int D_L17_001DE088[];
-extern short D_L17_001623B8 __attribute__((sda));
+short D_L17_001623B8 = 0x4931;
 void FUN_L17_002f32f0(struct Moby *moby) {
     Pkt pkt;
     OvlQuad vv[4];
@@ -941,11 +941,11 @@ extern void FUN_L00_001fde98(int, int, int, void *, int);
 void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-extern short D_L17_001623F0 __attribute__((sda));
-extern short D_L17_001623F8 __attribute__((sda));
-extern short D_L17_00162400 __attribute__((sda));
-extern short D_L17_00162408 __attribute__((sda));
-extern short D_L17_00162410 __attribute__((sda));
+short D_L17_001623F0 = 0x1a;
+short D_L17_001623F8 = -7856;
+short D_L17_00162400 = -7232;
+short D_L17_00162408 = -6816;
+short D_L17_00162410 = -6192;
 void FUN_L17_002f5690(void) {
     int i;
     float *p;
@@ -965,14 +965,14 @@ void FUN_L17_002f5690(void) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F74E8), where it is exact; names translated to the US level program. */
 
 extern char D_L17_001DF6A0[];
-extern short D_L17_00162440_d __asm__("D_L17_00162440") __attribute__((sda));
-extern short D_L17_00162450_d __asm__("D_L17_00162450") __attribute__((sda));
-extern short D_L17_00162458_d __asm__("D_L17_00162458") __attribute__((sda));
+short D_L17_00162440_d __asm__("D_L17_00162440") = -4784;
+short D_L17_00162450_d __asm__("D_L17_00162450") = -3456;
+short D_L17_00162458_d __asm__("D_L17_00162458") = -2664;
 void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-extern short D_L17_00162420 __attribute__((sda));
-extern short D_L17_00162448 __attribute__((sda));
+short D_L17_00162420 = 0x42;
+short D_L17_00162448 = -3984;
 void FUN_L17_002f59a8(void) {
     int i;
     float *p;

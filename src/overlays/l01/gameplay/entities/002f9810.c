@@ -343,7 +343,7 @@ typedef struct {
 
 extern BurstPalette D_L01_0020B4F0;   /* inner colours */
 extern BurstPalette D_L01_0020B508;   /* outer colours */
-extern BurstLight D_L01_001E3440;
+BurstLight D_L01_001E3440 = {{0, 0, 0, 0, 0, 0, 0, 0, 0x66, 0x66, 0xa6, 0x3f, 0, 0, 0, 0, 0, 0, 0xff, 0, 0x13, 0xf, 0, 0xff, 0, 0x13, 0x11, 0, 0x64, 0, 0x13, 0x13}, 13.0f, 13.0f, 13.0f};
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026a9f0(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32);
@@ -1029,7 +1029,7 @@ extern u128 pool_drips[] __asm__("D_L01_001FA650");
 extern u8 pool_wave[] __asm__("D_L01_001FA6A0");
 extern u8 camera_pos[] __asm__("D_L01_00167240");
 extern s32 level_frame_count __asm__("D_L01_0015F5CC") MACRO_ADDR;
-extern s32 pool_drip_timer __asm__("D_L01_00161C84") __attribute__((sda));
+s32 pool_drip_timer __asm__("D_L01_00161C84") = {0};
 extern PoolTile *pool_draw_tiles __asm__("D_L01_001612D0") MACRO_ADDR;
 extern u8 *pool_draw_tex __asm__("D_L01_001612D4") MACRO_ADDR;
 extern s32 pool_draw_count __asm__("D_L01_001612D8") MACRO_ADDR;
@@ -1304,7 +1304,7 @@ typedef struct {
 } WaterLayer;
 
 extern WaterLayer D_L01_001FBC80[];
-extern s32 D_L01_00161CE0 __attribute__((sda));
+s32 D_L01_00161CE0 = {0};
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 extern f32 FUN_001fa6c0(s32);
 extern f32 FUN_001f9de0(f32);
@@ -1795,7 +1795,7 @@ extern ClonedMoby *FUN_L01_00302328(ClonedMoby *);
 extern f32 FUN_001f9e90(f32, f32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void FUN_L00_0025c558(void *, void *, s32, s32, s32, f32);
-extern s32 D_L01_00161E90 __attribute__((sda));
+s32 D_L01_00161E90 = 5;
 
 void FUN_L01_003021b8(SpawnerMoby *m) {
     SpawnerVars *v = m->pvars;
@@ -1876,3 +1876,7 @@ void FUN_L01_00307c48(void *self) {
         mark_moby_for_removal(self);
     }
 }
+
+BurstPalette D_L01_0020B4F0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+
+BurstPalette D_L01_0020B508 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};

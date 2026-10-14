@@ -743,13 +743,13 @@ void FUN_L08_00308c90(struct Moby *moby) {
 
 extern Pair D_L08_00162408[] __attribute__((section(".sdata")));
 extern char D_L08_001F8560[];
-extern short D_L08_001623C8_gp __asm__("D_L08_001623C8") __attribute__((sda));
-extern short D_L08_001623E8_gp __asm__("D_L08_001623E8") __attribute__((sda));
+short D_L08_001623C8_gp __asm__("D_L08_001623C8") = 0x23;
+short D_L08_001623E8_gp __asm__("D_L08_001623E8") = 0xa8;
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
-extern short D_L08_001623D0 __attribute__((sda));
-extern short D_L08_001623D8 __attribute__((sda));
+short D_L08_001623D0 = -2096;
+short D_L08_001623D8 = -1248;
 void FUN_L08_00308f68(int x) {
     int i;
     int *a = (int *)&D_L08_001623C8_gp;
@@ -781,7 +781,7 @@ extern int D_L08_001623F0;
 extern int FUN_001fa728(char *, float);
 extern int truncate_float_to_s32();
 extern short D_L08_00162380 __attribute__((sda));
-extern short D_L08_001623C4 __attribute__((sda));
+short D_L08_001623C4 = {0};
 extern short D_L08_001623E8_gp __asm__("D_L08_001623E8") __attribute__((sda));
 extern short D_L08_001623C8_gp __asm__("D_L08_001623C8") __attribute__((sda));
 extern void FUN_L08_002f0dc8(void);

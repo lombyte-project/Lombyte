@@ -342,9 +342,9 @@ extern short D_L12_001618B4 __attribute__((sda));
 extern short D_L12_001618B8 __attribute__((sda));
 extern short D_L12_001618BC __attribute__((sda));
 extern short D_L12_001618C0 __attribute__((sda));
-extern short D_L12_001618C4 __attribute__((sda));
-extern short D_L12_001618C8 __attribute__((sda));
-extern short D_L12_001618CC __attribute__((sda));
+short D_L12_001618C4 = -5920;
+short D_L12_001618C8 = -5920;
+short D_L12_001618CC = 0x17;
 void FUN_L12_002e19a8(void *pos) {
     float v[4];
     float w[4];
@@ -433,7 +433,7 @@ typedef struct {
 extern unsigned char D_0013F3D0_r[] __asm__("D_0013F3D0");
 extern char *D_L12_001B0930[];
 extern char D_L12_00167240[];
-extern int D_L12_001618E8 __attribute__((sda));
+int D_L12_001618E8 = 0xa030303;
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
@@ -1077,7 +1077,7 @@ int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
 extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
-extern short D_L12_00161920 __attribute__((sda));
+short D_L12_00161920 = {0};
 void FUN_L12_002e3948(struct Moby *moby) {
     float a[4];
     float b[4];

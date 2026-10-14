@@ -166,9 +166,9 @@ void FUN_L16_002e4f30(struct Moby *a) {
 extern char D_L16_001DF2D0[] __attribute__((section(".data")));
 extern int FUN_001fa728(char *, float);
 extern int get_effect_texture_l16(int) __asm__("FUN_001f44b8");
-extern short D_L16_00161FA0 __attribute__((sda));
-extern short D_L16_00161FA8 __attribute__((sda));
-extern short D_L16_00161FB0 __attribute__((sda));
+short D_L16_00161FA0 = -6368;
+short D_L16_00161FA8 = -5384;
+short D_L16_00161FB0 = -3904;
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");

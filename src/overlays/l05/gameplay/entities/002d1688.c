@@ -562,10 +562,10 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int frame_number __asm__("D_L05_0015F5CC");
 extern float D_L05_001613D4 __attribute__((sda));
-extern int D_L05_001613D8 __attribute__((sda));
-extern int D_L05_001613DC __attribute__((sda));
-extern float D_L05_001613E0 __attribute__((sda));
-extern int D_L05_001613E4 __attribute__((sda));
+int D_L05_001613D8 = 0x80000080;
+int D_L05_001613DC = 0x80202020;
+float D_L05_001613E0 = 5.0f;
+int D_L05_001613E4 = 1;
 extern float D_L05_001613E8 __attribute__((sda));
 extern float D_L05_001613EC __attribute__((sda));
 extern int FUN_001fa6e0(int, int, float);
@@ -755,19 +755,24 @@ typedef struct {
     u64 flags;
 } L05GlowPacket;
 
-extern int D_L05_001613F0 __attribute__((sda));
-extern int D_L05_001613F4 __attribute__((sda));
-extern int D_L05_001613F8 __attribute__((sda));
-extern int D_L05_001613FC __attribute__((sda));
-extern int D_L05_00161400 __attribute__((sda));
-extern int D_L05_00161404 __attribute__((sda));
-extern int D_L05_00161408 __attribute__((sda));
-extern int D_L05_0016140C __attribute__((sda));
+int D_L05_001613F0 = {0};
+int D_L05_001613F4 = {0};
+int D_L05_001613F8 = {0};
+int D_L05_001613FC = 2;
+int D_L05_00161400 = {0};
+int D_L05_00161404 = 1;
+int D_L05_00161408 = 0x40806060;
+int D_L05_0016140C = 0x802020;
 extern unsigned char D_L05_0015EDB2;
 extern int frame_number __asm__("D_L05_0015F5CC");
 extern struct Moby *D_L05_0015FFD8_7920 __asm__("D_L05_0015FFD8");
 extern short *D_L05_001ABCC0_7920[] __asm__("D_L05_001ABCC0");
-extern float D_L05_001CDD70[4][2];
+float D_L05_001CDD70[4][2] = {
+    {0.0f, 0.5f},
+    {1.0f, 0.5f},
+    {0.0f, 0.5f},
+    {1.0f, 0.5f},
+};
 extern u64 get_effect_texture_7920(int) __asm__("FUN_001f44b8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int interpolate_color_7920(float, int, int) __asm__("FUN_001fa6e0");
@@ -1502,8 +1507,8 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float frame_scale_sq __asm__("D_0015ED64");
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern int D_L05_00161A74 __attribute__((sda));
-extern int D_L05_00161A78 __attribute__((sda));
+int D_L05_00161A74 = 0x80004000;
+int D_L05_00161A78 = 0x80008000;
 extern float D_L05_00161A88 __attribute__((sda));
 extern float D_L05_00161A8C __attribute__((sda));
 extern float D_L05_00161A90 __attribute__((sda));
@@ -1941,7 +1946,7 @@ extern float vector_length_305178(void *) __asm__("FUN_001f9af0");
 extern void finish_motion_305178(void *, void *) __asm__("FUN_L00_0025d538");
 extern float D_0013F3D0[];
 
-extern int D_L05_00161B74 __attribute__((sda));
+int D_L05_00161B74 = 5;
 extern float D_L05_00161AF0 __attribute__((sda));
 extern const float frame_time_const __asm__("D_0015ED6C");
 extern float D_L05_00161AF4 __attribute__((sda));
@@ -2775,13 +2780,13 @@ extern int D_L05_00161208 __attribute__((section(".sdata")));
 extern float D_L05_0016120C __attribute__((section(".sdata")));
 extern float D_L05_00161210 __attribute__((section(".sdata")));
 extern float D_L05_00161214 __attribute__((section(".sdata")));
-extern int D_L05_00161D10 __attribute__((sda));
+int D_L05_00161D10 = -1;
 extern unsigned short D_L05_00161D14 __attribute__((sda));
-extern int hero_hits __asm__("D_L05_00161D1C") __attribute__((sda));
-extern int rise_step __asm__("D_L05_00161D20") __attribute__((sda));
+int hero_hits __asm__("D_L05_00161D1C") = {0};
+int rise_step __asm__("D_L05_00161D20") = {0};
 extern float rise_checkpoint __asm__("D_L05_00161D24") __attribute__((sda));
-extern float water __asm__("D_L05_00161D28") __attribute__((sda));
-extern int rise_checkpoint_hit __asm__("D_L05_00161D2C") __attribute__((sda));
+float water __asm__("D_L05_00161D28") = {0};
+int rise_checkpoint_hit __asm__("D_L05_00161D2C") = {0};
 extern float move_speed __asm__("D_L05_00161D30") __attribute__((sda));
 extern float move_accel __asm__("D_L05_00161D34") __attribute__((sda));
 extern s32 D_L05_001612D8 __attribute__((section(".sdata")));

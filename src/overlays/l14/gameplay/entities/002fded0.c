@@ -46,7 +46,7 @@ extern float D_L14_00161F94 __attribute__((sda));
 extern float D_L14_00161F98 __attribute__((sda));
 extern float D_L14_00161F9C __attribute__((sda));
 extern float D_L14_00161FA0 __attribute__((sda));
-extern int D_L14_00161FA4 __attribute__((sda));
+int D_L14_00161FA4 = 0x7f204080;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");

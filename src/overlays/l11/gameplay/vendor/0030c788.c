@@ -25,20 +25,20 @@ extern struct Moby *D_L11_00161F10[] __attribute__((section(".sdata")));
 extern struct Moby *D_L11_00161F20[] __attribute__((section(".sdata")));
 extern struct Moby *D_L11_00161F30[] __attribute__((section(".sdata")));
 extern float D_L11_0015F580[] MACRO_ADDR;
-extern float D_L11_00161EC4 __attribute__((sda));
-extern float D_L11_00161EC8 __attribute__((sda));
-extern float D_L11_00161ECC __attribute__((sda));
-extern float D_L11_00161ED0 __attribute__((sda));
-extern float D_L11_00161ED4 __attribute__((sda));
-extern float D_L11_00161ED8 __attribute__((sda));
-extern float D_L11_00161EDC __attribute__((sda));
-extern float D_L11_00161EE0 __attribute__((sda));
-extern float D_L11_00161EE4 __attribute__((sda));
-extern float D_L11_00161EE8 __attribute__((sda));
-extern float D_L11_00161EEC __attribute__((sda));
-extern float D_L11_00161EF0 __attribute__((sda));
-extern float D_L11_00161EF4 __attribute__((sda));
-extern float D_L11_00161EF8 __attribute__((sda));
+float D_L11_00161EC4 = {0};
+float D_L11_00161EC8 = {0};
+float D_L11_00161ECC = {0};
+float D_L11_00161ED0 = {0};
+float D_L11_00161ED4 = {0};
+float D_L11_00161ED8 = {0};
+float D_L11_00161EDC = {0};
+float D_L11_00161EE0 = {0};
+float D_L11_00161EE4 = {0};
+float D_L11_00161EE8 = {0};
+float D_L11_00161EEC = {0};
+float D_L11_00161EF0 = {0};
+float D_L11_00161EF4 = {0};
+float D_L11_00161EF8 = {0};
 extern float D_L11_0015F3FC;
 extern int D_L11_0015FFD8_c788 __asm__("D_L11_0015FFD8");
 extern int D_L11_001600EC_c788 __asm__("D_L11_001600EC");
@@ -362,7 +362,7 @@ typedef struct {
 
 extern int D_L11_0015FFD8_d800 __asm__("D_L11_0015FFD8");
 extern int D_L11_001600EC_d800 __asm__("D_L11_001600EC");
-extern int D_L11_00161F54 __attribute__((sda));
+int D_L11_00161F54 = {0};
 extern float D_L11_00161F58 __attribute__((sda));
 extern float D_L11_00161F5C __attribute__((sda));
 extern float D_L11_00161F60 __attribute__((sda));
@@ -595,7 +595,7 @@ typedef struct {
 } Light_e088;
 
 extern Light_e088 D_L11_001CB280;
-extern int D_L11_00161F64 __attribute__((sda));
+int D_L11_00161F64 = {0};
 extern char D_L11_0021B4C0[];
 extern char D_L11_001DA740[];
 extern float D_L11_001808C0[];
@@ -1854,8 +1854,8 @@ void FUN_L11_00311be8(void *moby, void *a1, void *a2) {
 }
 /* Keeps the moby's current target, picking a new one when it is lost and restarting the timer. */
 
-extern int D_L11_00162160 __attribute__((sda));
-extern int D_L11_00162164 __attribute__((sda));
+int D_L11_00162160 = 0x1f4;
+int D_L11_00162164 = 0x64;
 extern float D_L11_001677D0[];
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 
@@ -1925,7 +1925,7 @@ typedef struct {
     s32 *clut;
     s32 saved;
 } HpBarPalette;
-extern HpBarPalette hp_bar_palette __asm__("D_L11_0016216C") __attribute__((sda));
+HpBarPalette hp_bar_palette __asm__("D_L11_0016216C") = {0};
 extern s32 D_L11_001F1088[]; /* the health bar palette as loaded */
 
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
@@ -2119,7 +2119,7 @@ extern void FUN_L11_00311210(void *, void *, void *, int);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 extern short D_L11_0016205C __attribute__((sda));
-extern short D_L11_00162060 __attribute__((sda));
+short D_L11_00162060 = 4;
 void FUN_L11_003125a8(struct Moby *moby, char *obj, float p2, float p3) {
     char a[16];
     char b[16];
@@ -2158,7 +2158,7 @@ extern int func_0022ED80_i(int, int, int) __asm__("FUN_0022da68");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 extern short D_L11_00162064 __attribute__((sda));
-extern short D_L11_00162068 __attribute__((sda));
+short D_L11_00162068 = 0x1e;
 void FUN_L11_003126f8(struct Moby *moby, char *d) {
     if (func_001F9908_i(d + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
         if (hero.ship_ammo != 0) {
@@ -2245,9 +2245,9 @@ extern unsigned short D_00141C10 __attribute__((section(".data")));
 extern float D_L11_0016D4F0 __attribute__((section(".data")));
 extern char D_L11_00174840[];
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int D_L11_00161FF0 __attribute__((sda));
-extern int D_L11_00162004 __attribute__((sda));
-extern int D_L11_0016214C __attribute__((sda));
+int D_L11_00161FF0 = 0x78;
+int D_L11_00162004 = 5;
+int D_L11_0016214C = 0xa;
 extern float D_L11_00161FE8 __attribute__((sda));
 extern float D_L11_00161FEC __attribute__((sda));
 extern float D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
@@ -2588,7 +2588,7 @@ extern unsigned char D_L11_00162054 __attribute__((sda));
 extern unsigned char D_L11_00162058 __attribute__((sda));
 extern float D_L11_00162074 __attribute__((sda));
 extern float D_L11_00162078 __attribute__((sda));
-extern int D_L11_00162168 __attribute__((sda));
+int D_L11_00162168 = 0xb4;
 extern float D_L11_0016D4F0_a[] __asm__("D_L11_0016D4F0");
 extern ShipHit_3290 *hit_info_3290(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int timer_3290(void *) __asm__("FUN_001f9740");
@@ -2608,7 +2608,7 @@ extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L11_0031a758(int);
 extern int FUN_L11_0031a7d8(int);
 
-extern s32 hp_bar_saved __asm__("D_L11_00162170") __attribute__((sda));
+s32 hp_bar_saved __asm__("D_L11_00162170") = {0};
 void FUN_L11_00313290(struct Moby *moby) {
     ShipVars_2838 *v;
     ShipHit_3290 *hit;
@@ -3049,7 +3049,7 @@ extern char *D_L11_001B0EB0_4318[] __asm__("D_L11_001B0EB0");
 extern char *D_L11_0015FFD8_4318 __asm__("D_L11_0015FFD8");
 extern char D_L11_001677C0_4318[] __asm__("D_L11_001677C0");
 extern char D_0013F3D0_4318[] __asm__("D_0013F3D0");
-extern float D_L11_001622C0 __attribute__((sda));
+float D_L11_001622C0 = {0};
 extern float D_L11_001622CC __attribute__((sda));
 extern float D_L11_001622E4 __attribute__((sda));
 extern float D_L11_001622E8 __attribute__((sda));

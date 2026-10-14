@@ -517,7 +517,21 @@ int FUN_L04_00295778(struct Moby *m, LegRig *rig, float amount, float target, fl
     return flags;
 }
 #endif
-extern u8 D_L04_001CA938[13][4];
+u8 D_L04_001CA938[13][4] = {
+    {1, 0, 0, 0},
+    {2, 0, 0, 0},
+    {3, 0, 0, 0},
+    {4, 0, 0, 0},
+    {7, 0, 0, 0},
+    {8, 0, 0, 0},
+    {9, 0, 0, 0},
+    {0xc, 0, 0, 0},
+    {0xd, 0, 0, 0},
+    {0xe, 0, 0, 0},
+    {0x13, 0, 0, 0},
+    {0xf, 0, 0, 0},
+    {0x14, 0, 0, 0},
+};
 extern void transform_scaled_vertex_batch(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
 extern void get_joint_matrix(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
 extern void attach_manipulator(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");

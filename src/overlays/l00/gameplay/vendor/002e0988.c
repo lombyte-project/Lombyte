@@ -174,7 +174,7 @@ typedef struct {
 } VendHit;
 
 extern f32 D_L00_00161BE4 __attribute__((sda));
-extern s32 D_L00_00161BE8 __attribute__((sda));
+s32 D_L00_00161BE8 = 3;
 extern f32 D_L00_00161BEC __attribute__((sda));
 extern VendVec D_L00_00166DC0;
 extern s32 D_001413D0 NOT_SDA;

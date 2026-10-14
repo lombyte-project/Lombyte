@@ -47,9 +47,9 @@ extern int FUN_L00_0025d808(int *tab, float *out, int *a, float *b, int c, float
 extern int FUN_L01_00226f10(int a);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern short D_L08_0015F6D8 __attribute__((sda));
+short D_L08_0015F6D8 = 8;
 extern short D_L08_0015F688 __attribute__((sda));
-extern short D_L08_0015F6E8 __attribute__((sda));
+short D_L08_0015F6E8 = {0};
 extern unsigned char D_L08_0017C5D8[];
 extern void *D_L08_001612D0;
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");

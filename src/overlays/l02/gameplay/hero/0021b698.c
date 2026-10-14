@@ -728,7 +728,7 @@ extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32_cf(int, int, int) __asm__("FUN_0022da68");
 extern int vector_length_xy_cf(float) __asm__("FUN_001fa6d0");
 extern short D_L02_0015F688 __attribute__((sda));
-extern short D_L02_0015F68C __attribute__((sda));
+short D_L02_0015F68C = {0};
 extern unsigned char *FUN_L00_00250df8_cf(int) __asm__("FUN_0020c4f8");
 extern unsigned char D_0013D4C0[];
 extern void FUN_001efa68_cf(float *dst, float *src, float dz) __asm__("FUN_L00_00233810");

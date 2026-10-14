@@ -455,8 +455,29 @@ class Placer:
                 return self.rodata_address(sym["st_value"] + addend)
             if secname and secname.startswith(".rodata.jtbl_"):
                 return resolve_symbol(secname[len(".rodata."):], self.level, near) + sym["st_value"] + addend
+            owned = self.own_data(sym, addend)
+            if owned is not None:
+                return resolve_symbol(owned[0], self.level, near) + owned[1]
             raise Unresolved(f"section {secname or sym['st_shndx']}")
         return resolve_symbol(sym.name, self.level, near) + addend
+
+    def gp0(self) -> int:
+        """The gp value the assembler assumed (.reginfo's ri_gp_value)."""
+        reginfo = self.elf.get_section_by_name(".reginfo")
+        return int.from_bytes(reginfo.data()[20:24], "little", signed=True) if reginfo else 0
+
+    def own_data(self, sym, addend: int):
+        """(label, offset) when SYM + ADDEND falls in level data this file defines
+        (the assembler points at the section, not at the object's name)."""
+        if not isinstance(sym["st_shndx"], int):
+            return None
+        where = sym["st_value"] + addend
+        for other in _symbols(self.elf):
+            if (other["st_shndx"] == sym["st_shndx"] and other["st_info"]["type"] == "STT_OBJECT"
+                    and other.name and (ov.OVERLAY_DATA.match(other.name) or ov.SHARED_DATA.match(other.name))
+                    and other["st_value"] <= where < other["st_value"] + max(other["st_size"], 1)):
+                return other.name, where - other["st_value"]
+        return None
 
     LITERAL_SECTIONS = (".sdata", ".lit4", ".lit8")
 
@@ -499,6 +520,8 @@ class Placer:
             hi_off = hi_rel["r_offset"]
             ahl = (hi_imm << 16) + sign16(lo_imm)
             literal = self.literal_section(self.sym_of(hi_rel))
+            if literal is not None and self.own_data(self.sym_of(hi_rel), ahl) is not None:
+                literal = None  # level data this file defines, not a literal
             try:
                 if literal is not None:
                     value = self.place_literal(literal, self.sym_of(hi_rel)["st_value"] + ahl,
@@ -557,7 +580,10 @@ class Placer:
                 ours[o:o + 4] = ((word & 0xFC000000) | ((target >> 2) & 0x03FFFFFF)).to_bytes(4, "little")
             elif rtype == R_MIPS_GPREL16:
                 try:
-                    s = self.resolve_address(self.sym_of(rel), near, sign16(word & 0xFFFF))
+                    addend = sign16(word & 0xFFFF)
+                    if self.sym_of(rel)["st_info"]["type"] == "STT_SECTION":
+                        addend += self.gp0()  # the assembler stored offset - gp0
+                    s = self.resolve_address(self.sym_of(rel), near, addend)
                 except Unresolved as e:
                     self.note_unresolved(str(e.what))
                     continue

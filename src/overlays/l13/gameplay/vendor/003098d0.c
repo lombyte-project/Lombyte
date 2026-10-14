@@ -14,18 +14,23 @@ typedef struct {
     u64 tag[4];
 } QuadPacket;
 
-extern s32 D_L13_00161E88 __attribute__((sda));
-extern s32 D_L13_00161E8C __attribute__((sda));
-extern s32 D_L13_00161E90 __attribute__((sda));
-extern s32 D_L13_00161E94 __attribute__((sda));
-extern s32 D_L13_00161E98 __attribute__((sda));
-extern s32 D_L13_00161E9C __attribute__((sda));
-extern s32 D_L13_00161EA0 __attribute__((sda));
-extern s32 D_L13_00161EA4 __attribute__((sda));
-extern s32 D_L13_00161EA8 __attribute__((sda));
-extern s32 D_L13_00161EAC __attribute__((sda));
+s32 D_L13_00161E88 = {0};
+s32 D_L13_00161E8C = 2;
+s32 D_L13_00161E90 = {0};
+s32 D_L13_00161E94 = 1;
+s32 D_L13_00161E98 = 0x80;
+s32 D_L13_00161E9C = 0xb;
+s32 D_L13_00161EA0 = 0x40ff;
+s32 D_L13_00161EA4 = 0x600040ff;
+s32 D_L13_00161EA8 = 0xcccc;
+s32 D_L13_00161EAC = 0x6000cccc;
 /* Scrolling texture coordinates of the four corners. */
-extern f32 D_L13_001D9B70[4][2];
+f32 D_L13_001D9B70[4][2] = {
+    {0.0f, 1.0f},
+    {0.0f, 0.0f},
+    {1.0f, 1.0f},
+    {1.0f, 0.0f},
+};
 
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
@@ -114,8 +119,8 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern short D_L13_00161EB0 __attribute__((sda));
-extern short D_L13_00161EB4 __attribute__((sda));
+short D_L13_00161EB0 = 0x40ff;
+short D_L13_00161EB4 = -13184;
 extern short D_L13_00161EB8 __attribute__((sda));
 extern short D_L13_00161EBC __attribute__((sda));
 extern short D_L13_00161EC0 __attribute__((sda));
@@ -129,7 +134,7 @@ extern short D_L13_00161EDC __attribute__((sda));
 extern short D_L13_00161EE0 __attribute__((sda));
 extern short D_L13_00161EE4 __attribute__((sda));
 extern short D_L13_00161EE8 __attribute__((sda));
-extern short D_L13_00161EEC __attribute__((sda));
+short D_L13_00161EEC = 0x18;
 extern void FUN_001f9a40(void *, void *, void *, float);
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");

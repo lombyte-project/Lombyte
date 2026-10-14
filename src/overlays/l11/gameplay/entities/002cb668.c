@@ -324,8 +324,8 @@ extern void FUN_00212f90(void *, int, int, int);
 extern void FUN_001f99f8(void *);
 extern float D_0015ED70;
 extern float D_0015ED6C;
-extern float D_L11_001613E0 __attribute__((sda));
-extern int D_L11_001613F0 __attribute__((sda));
+float D_L11_001613E0 = 3.2f;
+int D_L11_001613F0 = {0};
 extern int D_L11_0016D260[];
 extern int D_L11_0015FFD8;
 
@@ -739,7 +739,7 @@ extern void FUN_001f9cf8(void *, void *, void *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern float D_L11_001613D0 __attribute__((sda));
 extern float D_L11_001613D4 __attribute__((sda));
-extern float D_L11_00161400 __attribute__((sda));
+float D_L11_00161400 = -3.0f;
 extern int D_L11_0015FFD8;
 
 void FUN_L11_002d2088(struct Moby *moby, unsigned char state) {
@@ -1398,11 +1398,11 @@ extern void draw_quad_2f2d58(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern float D_L11_001D3530[];
 
-extern int D_L11_00161920 __attribute__((sda));
-extern int D_L11_00161924 __attribute__((sda));
-extern int D_L11_00161928 __attribute__((sda));
-extern int D_L11_0016192C __attribute__((sda));
-extern int D_L11_00161930 __attribute__((sda));
+int D_L11_00161920 = {0};
+int D_L11_00161924 = 2;
+int D_L11_00161928 = {0};
+int D_L11_0016192C = 1;
+int D_L11_00161930 = 0x13;
 extern unsigned int D_L11_00161934 __attribute__((sda));
 extern float D_L11_00161938 __attribute__((sda));
 /* Draws a ring of 32 textured quads around the moby; the band widens as the radius at pvars+0x3C shrinks below 1.15. */

@@ -1299,7 +1299,7 @@ extern short D_L15_00161B28 __attribute__((sda));
 extern short D_L15_00161B34 __attribute__((sda));
 extern short D_L15_00161B38 __attribute__((sda));
 extern short D_L15_00161B3C __attribute__((sda));
-extern short D_L15_00161B1C __attribute__((sda));
+short D_L15_00161B1C = 0xb4;
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void FUN_001f9c48(void *, void *, float);
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");

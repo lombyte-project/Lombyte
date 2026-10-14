@@ -25,8 +25,8 @@ extern int FUN_L10_002d8058_u() __asm__("FUN_L10_002d8058");
 extern void FUN_001f9a10(void *, void *, void *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-extern short D_L10_00161BF0 __attribute__((sda));
-extern short D_L10_00161BF4 __attribute__((sda));
+short D_L10_00161BF0 = 0xf0;
+short D_L10_00161BF4 = 0x258;
 extern short D_L10_00161BF8 __attribute__((sda));
 extern short D_L10_00161BFC __attribute__((sda));
 extern short D_L10_00161C00 __attribute__((sda));
@@ -309,7 +309,7 @@ typedef struct {
     u8 collected[1];
 } LevelState_98b68;
 
-extern int D_L10_00161388 __attribute__((sda));
+int D_L10_00161388 = 1;
 extern char *D_L10_0015FFD8_98b68 __asm__("D_L10_0015FFD8");
 extern u8 D_0014C050_98b68[] __asm__("D_0014C050");
 extern LevelState_98b68 D_L10_001BB6B0_98b68 __asm__("D_L10_001BB6B0");

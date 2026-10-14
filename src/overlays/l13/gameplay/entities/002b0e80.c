@@ -584,7 +584,7 @@ extern int frame_count __asm__("D_L13_0015F5CC");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 extern short D_L13_00161388 __attribute__((sda));
-extern short D_L13_0016138C __attribute__((sda));
+short D_L13_0016138C = 2;
 void FUN_L13_002b47a0(struct Moby *moby) {
     float v[4];
     float v2[4];
@@ -1097,7 +1097,7 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 rand(void);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern short D_L13_001613A0 __attribute__((sda));
+short D_L13_001613A0 = 0x505;
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
@@ -1927,11 +1927,11 @@ void FUN_L13_002b50d8(RsMoby *m) {
 extern void FUN_L00_0025f8e0(float *v, float s);
 extern void FUN_L01_0028a7a8(void *, float *, float *, void *, int);
 
-extern short D_L13_001613D8 __attribute__((sda));
-extern short D_L13_001613E8 __attribute__((sda));
-extern short D_L13_001613F8 __attribute__((sda));
-extern short D_L13_00161408 __attribute__((sda));
-extern short D_L13_00161418 __attribute__((sda));
+short D_L13_001613D8 = 0xff;
+short D_L13_001613E8 = -1;
+short D_L13_001613F8 = 0x7f4f;
+short D_L13_00161408 = -32513;
+short D_L13_00161418 = 0x7f00;
 void FUN_L13_002b8590(void *moby, char *obj) {
     float vel[4];
     float pos[4];
@@ -2089,7 +2089,7 @@ extern float FUN_L00_0025e310(float);
 extern float seg_sqrt(float) __asm__("func_001F9988");
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L13_001613C8 __attribute__((sda));
+short D_L13_001613C8 = 2;
 extern unsigned char D_0013E500[];
 extern unsigned char D_0013F3D0[];
 extern void FUN_001fa2d8(void *, void *);
@@ -2368,7 +2368,7 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 font_print_center_large(s32, s32, u64, s32, s32) __asm__("func_001F6C20");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s32 get_effect_texture_c(s32) __asm__("func_001F44B8");
-extern int *D_L13_001613C0[1] __attribute__((sda));
+int *D_L13_001613C0[1] = {0};
 extern unsigned char D_0013E500[];
 extern unsigned char D_0013F350[];
 extern void FUN_L11_00310ad0(float, float, float, void *, int, int, long);
@@ -2592,9 +2592,9 @@ extern int D_L13_0015ED84;
 extern float D_L13_0016CDF0 __attribute__((section(".data")));
 extern JetTexture D_L13_0016D480[];
 extern unsigned int D_L13_0015F420;
-extern int D_L13_001613C4 __attribute__((sda));
+int D_L13_001613C4 = {0};
 extern char D_L13_001CBDE8[];
-extern short D_L13_00161440 __attribute__((sda));
+short D_L13_00161440 = 0x7f;
 extern float D_L13_0015F3FC;
 extern int D_L13_0015F608;
 extern JetPath *D_L13_001600EC;

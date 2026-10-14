@@ -1620,9 +1620,9 @@ void FUN_L07_00314150(unsigned char *moby) {
 extern u64 get_effect_texture_l07(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister_l07(int, u64) __asm__("FUN_00233980");
 extern void draw_geometry_quad_l07(void *, int, int) __asm__("FUN_001f7d30");
-extern float D_L07_00161B74 __attribute__((sda));
-extern float D_L07_00161B78 __attribute__((sda));
-extern float D_L07_00161B7C_gp __asm__("D_L07_00161B7C") __attribute__((sda));
+float D_L07_00161B74 = {0};
+float D_L07_00161B78 = {0};
+float D_L07_00161B7C_gp __asm__("D_L07_00161B7C") = 0.006f;
 extern short D_L07_0020DBC8[];
 
 typedef struct {

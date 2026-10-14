@@ -245,8 +245,8 @@ typedef struct {
     u8 mtx[0x40];
 } SplashMoby_u;
 
-extern SplashColors D_L01_0020AF50;
-extern SplashColors D_L01_0020AF68;
+SplashColors D_L01_0020AF50 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+SplashColors D_L01_0020AF68 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
@@ -1464,7 +1464,7 @@ extern f32 D_L01_00161A60 __attribute__((sda));
 extern f32 D_L01_00161A64 __attribute__((sda));
 extern f32 D_L01_00161A68 __attribute__((sda));
 extern f32 D_L01_00161A6C __attribute__((sda));
-extern s32 D_L01_00161A70 __attribute__((sda));
+s32 D_L01_00161A70 = 0x9020202;
 extern s32 D_L01_001B0930[];
 extern MobyNode *D_L01_0015FFE4;
 extern u8 D_L01_00161A80[] __attribute__((section(".sdata")));
@@ -2695,7 +2695,7 @@ typedef struct {
     u8 pad10[0x50];
 } BoundGroup;
 
-extern s32 D_L01_00161BA0 __attribute__((sda));
+s32 D_L01_00161BA0 = {0};
 extern BoundGroup D_L01_001E3380[];
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
@@ -2907,7 +2907,7 @@ typedef struct {
 extern f32 gunship_min_scale __asm__("D_L01_00161BD0") __attribute__((sda));
 extern f32 gunship_far_dist __asm__("D_L01_00161BD4") __attribute__((sda));
 extern f32 gunship_near_dist __asm__("D_L01_00161BD8") __attribute__((sda));
-extern GunshipTargets gunship_no_targets __asm__("D_L01_00161BE0");
+GunshipTargets gunship_no_targets __asm__("D_L01_00161BE0") = {{-1, -1, -1, -1}};
 extern char camera_pos[] __asm__("D_L01_00167240");
 extern u8 gunship_banner_shown __asm__("D_0013D408") NOT_SDA;
 extern char gunship_no_path_fmt[] __asm__("D_L01_0020B4A0");
@@ -3312,7 +3312,7 @@ typedef struct {
     f32 floor_z;
 } SteamParticle;
 
-extern SteamColors D_L01_00161C08;
+SteamColors D_L01_00161C08 = {{0x2b8, 0x2b9, 0x2ba}};
 extern SteamColors D_L01_00161C18;
 extern int FUN_001f9770(void *);
 extern s32 FUN_001f9740(void *);
@@ -3477,7 +3477,7 @@ typedef struct {
 
 extern CapLevelState D_L01_001BB6B0;
 extern CapCamera D_L01_00167100;
-extern CapColors D_L01_00161C40;
+CapColors D_L01_00161C40 = {{0x2b8, 0x2b9, 0x2ba}};
 extern s32 D_0014C190[][64];
 extern s32 moby_killed[] __asm__("D_L01_001BA950");
 extern s32 cutscene_active __asm__("D_L01_0015F404");

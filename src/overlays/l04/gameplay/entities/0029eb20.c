@@ -184,7 +184,7 @@ extern void update_spawned_moby_29ecf8(struct Moby *) __asm__("FUN_L00_00250df8"
 extern void FUN_L04_001f30e0(void *, s32, struct Moby *, void *, void *);
 extern void apply_child_motion_29ecf8(f32, struct Moby *, void *, void *) __asm__("FUN_L04_001f3a80");
 extern PathPoints_eb20 *D_L04_001b0630[];
-extern f32 D_L04_00166130[8];
+f32 D_L04_00166130[8] __attribute__((section(".bss")));
 extern s32 D_L04_001513C0 __attribute__((sda));
 
 /* Variables of a swarm child (class 0x55). */
@@ -1465,8 +1465,8 @@ typedef struct {
 
 extern E_35F0 *D_L04_001600EC;
 extern G_35F0 D_L04_00173FC0;
-extern I4_35F0 D_L04_001618A0;
-extern I4_35F0 D_L04_00161890;
+I4_35F0 D_L04_001618A0 = {{1, 4, 2, 3}};
+I4_35F0 D_L04_00161890 = {{1, 2, 3, 4}};
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float D_L04_00166F40[4];
@@ -1496,7 +1496,7 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_002147
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern short D_L04_00161878 __attribute__((sda));
+short D_L04_00161878 = 0x101;
 extern struct Path5BD0 *D_L04_001B0630[];
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);

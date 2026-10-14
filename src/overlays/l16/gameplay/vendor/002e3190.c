@@ -68,7 +68,7 @@ typedef struct {
 } L16WatchFlags;
 
 extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[];
-extern float D_L16_001D96C0[8];
+float D_L16_001D96C0[8] = {300.73f, 206.04f, 123.22f, 0.0f, 0.0f, 0.11f, 0.0f, 0.0f};
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
@@ -838,9 +838,9 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 extern int tick_countdown_32_u(void *) __asm__("func_001F9740");
 extern int func_0022ED80_6478(int, int, void *) __asm__("FUN_0022da68");
 
-extern short D_L16_00161DD8 __attribute__((sda));
-extern short D_L16_00161DDC __attribute__((sda));
-extern short D_L16_00161DE0 __attribute__((sda));
+short D_L16_00161DD8 = 0x258;
+short D_L16_00161DDC = -32640;
+short D_L16_00161DE0 = 0x2020;
 void FUN_L16_002e5010(struct Moby *m) {
     char *d = (char *)m->pvars;
     char *g;
@@ -897,9 +897,9 @@ extern int tick_countdown_32_q(void *) __asm__("FUN_001f9740");
 extern int func_0022ED80_66C0_q(int, int, void *) __asm__("FUN_0022da68");
 
 extern float D_L16_001D9768[] __attribute__((section(".data")));
-extern short D_L16_00161DE4;
-extern short D_L16_00161DE8 __attribute__((sda));
-extern short D_L16_00161DEC __attribute__((sda));
+short D_L16_00161DE4 = 0x258;
+short D_L16_00161DE8 = 0x2020;
+short D_L16_00161DEC = -32640;
 extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L16_002e5258(struct Moby *m) {
     char *d = (char *)m->pvars;
@@ -963,7 +963,7 @@ extern float FUN_001fa580(float, float);
 extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
 extern int FUN_001f9740(int *);
 extern int FUN_001fa6e0_u(float, int, int) __asm__("FUN_001fa6e0");
-extern short D_L16_00161DF0 __attribute__((sda));
+short D_L16_00161DF0 = {0};
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
@@ -1074,7 +1074,7 @@ void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm_
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
-extern short D_L16_00161E48 __attribute__((sda));
+short D_L16_00161E48 = {0};
 void FUN_L16_002e5e08(struct Moby *m) {
     char *d = (char *)m->pvars;
     FUN_L16_002e6208(m);
@@ -1873,8 +1873,8 @@ void build_spherical_offset_u(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00
 extern void func_L00_0026DD70_emit(void *, void *, int, int, float,
                                    int) __asm__("FUN_L00_0026ced0");
 
-extern short D_L16_00161E98 __attribute__((sda));
-extern short D_L16_00161E9C __attribute__((sda));
+short D_L16_00161E98 = -12160;
+short D_L16_00161E9C = 0x1000;
 extern short D_L16_00161EA0 __attribute__((sda));
 extern short D_L16_00161EA4 __attribute__((sda));
 extern short D_L16_00161EA8 __attribute__((sda));
@@ -2236,12 +2236,12 @@ extern float D_L16_00161EB8_gp __asm__("D_L16_00161EB8") __attribute__((sda));
 extern float D_L16_00161EC4 __attribute__((sda));
 extern float D_L16_00161EC8 __attribute__((sda));
 extern float D_L16_00161EE8 __attribute__((sda));
-extern int D_L16_00161ECC __attribute__((sda));
-extern int D_L16_00161ED0 __attribute__((sda));
-extern int D_L16_00161ED4 __attribute__((sda));
-extern int D_L16_00161ED8 __attribute__((sda));
-extern int D_L16_00161EDC __attribute__((sda));
-extern int D_L16_00161EE0 __attribute__((sda));
+int D_L16_00161ECC = {0};
+int D_L16_00161ED0 = 2;
+int D_L16_00161ED4 = {0};
+int D_L16_00161ED8 = 1;
+int D_L16_00161EDC = 0x408000;
+int D_L16_00161EE0 = 0x40c08030;
 extern int FUN_001fa6e0(int, int, float);
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void FUN_001fa298(void *, void *);
@@ -2490,11 +2490,11 @@ extern char D_L16_001DC600[][16] __attribute__((section(".data")));
 extern char D_L16_001DC630[] __attribute__((section(".data")));
 extern int FUN_001fa728(char *, float);
 extern int get_effect_texture_l16(int) __asm__("FUN_001f44b8");
-extern short D_L16_00161EF0_gp __asm__("D_L16_00161EF0") __attribute__((sda));
-extern short D_L16_00161F00_gp __asm__("D_L16_00161F00") __attribute__((sda));
-extern short D_L16_00161F10 __attribute__((sda));
-extern short D_L16_00161F20 __attribute__((sda));
-extern short D_L16_00161F30 __attribute__((sda));
+short D_L16_00161EF0_gp __asm__("D_L16_00161EF0") = 0x94;
+short D_L16_00161F00_gp __asm__("D_L16_00161F00") = -26416;
+short D_L16_00161F10 = -22560;
+short D_L16_00161F20 = -19992;
+short D_L16_00161F30 = -16136;
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
@@ -2602,11 +2602,11 @@ extern void FUN_L16_002e8b98_t(int, int, int, int, char *) __asm__("FUN_L16_002e
 extern void vu1_add_g_sregister_2e9270(int, long) __asm__("FUN_00233980");
 
 extern char D_L16_001DDC80[] __attribute__((section(".data")));
-extern short D_L16_00161F40 __attribute__((sda));
-extern short D_L16_00161F60 __attribute__((sda));
-extern short D_L16_00161F68 __attribute__((sda));
-extern short D_L16_00161F70 __attribute__((sda));
-extern short D_L16_00161F78 __attribute__((sda));
+short D_L16_00161F40 = 0x7d;
+short D_L16_00161F60 = -13600;
+short D_L16_00161F68 = -12096;
+short D_L16_00161F70 = -11096;
+short D_L16_00161F78 = -9592;
 void FUN_L16_002e9270(void) {
     int *a = (int *)&D_L16_00161F40;
     int *b = (int *)&D_L16_00161F60;
@@ -2783,11 +2783,11 @@ extern void FUN_L00_001fde98(int, int, int, char *, int);
 void FUN_L16_002e8b98(int n, Vec3f *p1, Vec3f *p2, int unused, float *out);
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-extern short D_L16_00161FB8[1] __attribute__((sda));
-extern short D_L16_00161FC8[1] __attribute__((sda));
-extern short D_L16_00161FD8[1] __attribute__((sda));
-extern short D_L16_00161FE8[1] __attribute__((sda));
-extern short D_L16_00161FF8[1] __attribute__((sda));
+short D_L16_00161FB8[1] = {0x94};
+short D_L16_00161FC8[1] = {-2128};
+short D_L16_00161FD8[1] = {0x810};
+short D_L16_00161FE8[1] = {0x12f8};
+short D_L16_00161FF8[1] = {0x2358};
 void FUN_L16_002e9ce0(void) {
     int i;
     vu1_add_g_sregister(6, get_effect_texture_alt(0x29));
@@ -2810,8 +2810,8 @@ typedef struct {
 
 void enqueue_callback_list_1_2ea128(int arg0, int arg1) __asm__("FUN_001f4600");
 
-extern short D_L16_00162008 __attribute__((sda));
-extern short D_L16_00162018 __attribute__((sda));
+short D_L16_00162008 = 0x94;
+short D_L16_00162018 = 0x2db0;
 extern L16SingleSphere_2ea128 D_L16_001E5390[] __attribute__((section(".data")));
 void FUN_L16_002ea128(unsigned char *m) {
     int i, j;

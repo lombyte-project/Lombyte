@@ -1561,7 +1561,7 @@ typedef struct {
 
 extern char *D_L03_0015FFD8_c5bb8 __asm__("D_L03_0015FFD8");
 extern char *D_L03_001B05B0_c5bb8[] __asm__("D_L03_001B05B0");
-extern char D_L03_001618D0 __attribute__((sda));
+char D_L03_001618D0 = 3;
 extern char D_L03_00166EC0[];
 extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
 extern float absolute_float_c5bb8(float) __asm__("FUN_001f99c0");
@@ -2186,7 +2186,7 @@ extern int convert_integer_to_float_cf(void *, void *, int, void *, void *) __as
 extern int D_L03_0015F5C4;
 extern int D_L03_0015F5CC;
 extern Moby2C8398 *D_L03_0015FFD8_m __asm__("D_L03_0015FFD8");
-extern int D_L03_001618F4_i __asm__("D_L03_001618F4") __attribute__((sda));
+int D_L03_001618F4_i __asm__("D_L03_001618F4") = {0};
 extern int FUN_001f9770_cf(float, unsigned char *, char *) __asm__("FUN_L03_002c6e18");
 extern int FUN_001fa688_cf(void *) __asm__("FUN_001f9770");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");

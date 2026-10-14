@@ -474,7 +474,7 @@ extern u8 D_0013D4DC[];
 extern struct UsageStats D_00141848;
 #define S D_00141848
 extern s32 D_L12_0015F688 __attribute__((sda));
-extern s32 D_L12_0015F68C __attribute__((sda));
+s32 D_L12_0015F68C = {0};
 extern u8 D_L12_00167258[];
 
 extern void FUN_L00_00209540(s32, s32);

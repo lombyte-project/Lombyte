@@ -47,12 +47,12 @@ extern s32 frame_size[] __asm__("D_0013E504");
 extern char D_L02_0015F850[];
 extern s32 D_L02_0015F91C __attribute__((sda));
 extern s32 D_L02_0015F920 __attribute__((sda));
-extern s32 D_L02_0015F944 __attribute__((sda));
-extern s32 D_L02_0015F948 __attribute__((sda));
-extern s32 D_L02_0015F950 __attribute__((sda));
-extern s32 D_L02_0015F954 __attribute__((sda));
-extern s32 D_L02_0015F958 __attribute__((sda));
-extern s32 D_L02_0015F95C __attribute__((sda));
+s32 D_L02_0015F944 = 0x18;
+s32 D_L02_0015F948 = 0x1e0;
+s32 D_L02_0015F950 = 0xe08080;
+s32 D_L02_0015F954 = 0x80e08080;
+s32 D_L02_0015F958 = 0x30;
+s32 D_L02_0015F95C = 0x46;
 
 /* Draws the counter: a stretched bar behind the icon and the count, on whichever side of the screen it sits. */
 s32 FUN_L02_0023cda8(HudElem *m) {

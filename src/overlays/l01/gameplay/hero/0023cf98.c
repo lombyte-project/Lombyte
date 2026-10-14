@@ -42,8 +42,8 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L01_00226f10(int a);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern short D_L01_0015F6D8 __attribute__((sda));
-extern short D_L01_0015F6E8 __attribute__((sda));
+short D_L01_0015F6D8 = 8;
+short D_L01_0015F6E8 = {0};
 extern unsigned char D_L01_0017C258[];
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
@@ -1602,7 +1602,7 @@ struct HeldGadgetVars {
 };
 
 extern int D_00141660 __attribute__((section(".data")));
-extern int D_L01_0015F674 __attribute__((sda));
+int D_L01_0015F674 = {0};
 extern int FUN_001f9740(int *) __asm__("FUN_001f9740");
 extern int FUN_0022da68(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);

@@ -44,6 +44,7 @@ import shutil
 import struct
 import subprocess
 import sys
+import functools
 import tempfile
 
 from dataclasses import dataclass
@@ -633,6 +634,7 @@ def find_declaration(label: str, files: list[Path]) -> tuple[Path, str, str] | N
     return found
 
 
+@functools.lru_cache(maxsize=None)
 def level_symbols(level: int) -> dict[int, str]:
     """address -> name a level pointer can be written as: the level's
     functions and declared level data, and the executable's declarations."""
@@ -739,7 +741,8 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path, level: int | Non
     out = into
     dims = "".join(f"[{n}]" for n in counts)
     text = out.read_text()
-    if re.search(rf"\b{name}\b[^;]*=", text):
+    # a definition sits at file scope (column 0); an indented `name = x;` is code
+    if re.search(rf"^(?!extern\b)[A-Za-z_][^;(\n]*\b{name}\b[^;(\n]*=", text, re.M):
         raise SystemExit(f"{shown(out)} already defines {name}")
     lines = text.rstrip("\n").splitlines()
     if include and f'#include "{include}"' not in lines:
@@ -762,9 +765,13 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path, level: int | Non
         if name == label:
             decl_re = re.compile(rf'^extern[^;=\n]*\b{label}\b[^;\n]*;[ \t]*$', re.M)
         else:
-            decl_re = re.compile(rf'^[ \t]*extern[^;=\n]*__asm__\("{label}"\)[^;\n]*;[ \t]*$', re.M)
+            decl_re = re.compile(rf'^extern[^;=\n]*\b{name}\b[^;=\n]*__asm__\("{label}"\)[^;\n]*;[ \t]*$', re.M)
             definition = definition.replace(f"{name}{dims}", f'{name}{dims} __asm__("{label}")', 1)
-        out.write_text(decl_re.sub(lambda _m: definition, "\n".join(lines) + "\n", count=1))
+        text = "\n".join(lines) + "\n"
+        if decl_re.search(text):
+            out.write_text(decl_re.sub(lambda _m: definition, text, count=1))
+        else:  # declared only inside functions: define it after them, keep the externs
+            out.write_text(text + f"\n{definition}\n")
     else:
         out.write_text("\n".join(lines) + f"\n\n{definition}\n")
     if level is not None:

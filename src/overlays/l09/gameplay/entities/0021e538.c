@@ -681,8 +681,8 @@ typedef struct { char pad0[0x2084]; int f2084; } Hero_2EC188;
 typedef struct { char pad0[0x140]; float pos[4]; char pad150[0x10]; float f160; int f164; int f168; } Cam_2EC188;
 
 char *FUN_L09_002ea528_c(struct Moby *owner, float *vec) __asm__("FUN_L09_002ea528");
-extern V6_2EC188 D_L09_00208B00;
-extern V6_2EC188 D_L09_00208B18;
+V6_2EC188 D_L09_00208B00 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+V6_2EC188 D_L09_00208B18 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
 extern char *FUN_L09_002efe48_c(void *, void *, void *, float, float) __asm__("FUN_L09_002efe48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("FUN_001fa580");
 extern f32 random_float_between_c2(f32, f32) __asm__("FUN_002132a8");

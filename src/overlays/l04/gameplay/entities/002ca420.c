@@ -677,8 +677,8 @@ typedef struct WBQuery {
     /* 0x24 */ int pad24[3];
 } WBQuery;
 
-extern WBAngles D_L04_001DC468;
-extern WBJoints D_L04_001DC450;
+WBAngles D_L04_001DC468 = {{0.5235988f, 0.7853982f, 0.2617994f, 1.0471976f, 0.0f}};
+WBJoints D_L04_001DC450 = {{0, 2, 1, 3, 4, 5}};
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_L04_00166F40[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");

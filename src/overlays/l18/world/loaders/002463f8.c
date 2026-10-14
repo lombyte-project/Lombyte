@@ -415,15 +415,15 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
 #define W(x) (*(int *)&(x))
 
 extern int game_frame __asm__("D_L18_0015F5CC");
-extern short D_L18_00161A1C __attribute__((sda));
-extern short D_L18_00161A20 __attribute__((sda));
-extern short D_L18_00161A24 __attribute__((sda));
-extern short D_L18_00161A28 __attribute__((sda));
-extern short D_L18_00161A2C __attribute__((sda));
-extern short D_L18_00161A30 __attribute__((sda));
-extern short D_L18_00161A34 __attribute__((sda));
-extern short D_L18_00161A38 __attribute__((sda));
-extern short D_L18_00161A3C __attribute__((sda));
+short D_L18_00161A1C = 0x104;
+short D_L18_00161A20 = 0x50;
+short D_L18_00161A24 = -16192;
+short D_L18_00161A28 = 0x40ff;
+short D_L18_00161A2C = -5;
+short D_L18_00161A30 = 0x14;
+short D_L18_00161A34 = -50;
+short D_L18_00161A38 = 0x34;
+short D_L18_00161A3C = 0x60;
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
