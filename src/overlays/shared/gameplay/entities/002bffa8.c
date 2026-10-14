@@ -1264,7 +1264,11 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
                 if (controller_state.held & 5) speed = 6.0f;
             }
             distance = FUN_001f9988(frame_time_sq * 9.8f * speed * 0.5f);
-            radius = ((distance + distance) * distance * (1.0f - horizontal)) / (frame_time_sq * 9.8f);
+            gravity = frame_time_sq * 9.8f;
+            radius = distance + distance;
+            radius *= distance;
+            radius *= 1.0f - horizontal;
+            radius /= gravity;
             vertical = horizontal * radius;
             if (radius > 0.0f) {
                 temporary.arc.f[0] = FUN_001f9dc8(angle) * radius;
