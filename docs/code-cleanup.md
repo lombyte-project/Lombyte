@@ -88,8 +88,10 @@ make it clearer, add a comment that explains why it looks odd.
 
 - Each variable has one definition and one `extern` in a header.
 - Data that only one file reads is defined in that file and listed in
-  `DATA_OVERLAYS` in `configure.py`. This command writes it for you:
-  `python3 scripts/data-refs.py --emit ADDR --into FILE`
+  `DATA_OVERLAYS` in `configure.py` with its address and size. This command
+  writes both for you: `python3 scripts/data-refs.py --emit ADDR --into FILE`
+- Level data is defined with its `D_LNN_XXXXXXXX` label and listed in
+  `config/overlays/us/data.tsv`; `make overlays` proves its bytes.
 - Shared data and raw bytes stay in assembly, with their type in a header.
 - A variable defined in C is removed from `config/us/symbol_addrs.txt`.
 

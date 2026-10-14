@@ -156,6 +156,7 @@ def verify_all() -> int:
 
     import overlay_proof as proof
     total, copies, bad = 0, 0, []
+    data_rows, data_defined = ov.read_data_catalogue(), {}
     for obj in sorted((BUILD / "c").glob("**/*.c.o")):
         # An object left behind by a moved or deleted source is not counted.
         if not (SOURCES / obj.relative_to(BUILD / "c").with_suffix("")).is_file():
@@ -165,6 +166,16 @@ def verify_all() -> int:
             names = [s.name for s in symtab.iter_symbols()
                      if is_overlay_name(s.name) and s["st_size"]
                      and s["st_info"]["type"] == "STT_FUNC"] if symtab else []
+        # level data defined in C: its bytes, pointers resolved, equal the level's
+        for sym, _section in proof.data_symbols(proof.open_elf(obj)):
+            where = obj.relative_to(BUILD)
+            if not ov.OVERLAY_DATA.match(sym.name):
+                bad.append(f"{sym.name:24s} needs its D_LNN_XXXXXXXX label  ({where})")
+                continue
+            data_defined[sym.name] = sym["st_size"]
+            verdict = proof.check_data(obj, sym.name)
+            if not verdict["exact"]:
+                bad.append(f"{sym.name:24s} {verdict['verdict']}  ({where})")
         for name in names:
             total += 1
             verdict = proof.check(obj, name)
@@ -183,12 +194,17 @@ def verify_all() -> int:
                 if not verdict["exact"]:
                     bad.append(f"{name:24s} L{place[0]:02d}:{place[1]:08x} {verdict['verdict']}"
                                f"  ({obj.relative_to(BUILD)})")
+    for name in sorted(data_defined.keys() | data_rows.keys()):
+        if data_rows.get(name) != data_defined.get(name):
+            bad.append(f"{name:24s} config/overlays/us/data.tsv says {data_rows.get(name)} bytes, "
+                       f"src/overlays defines {data_defined.get(name)}")
     for line in bad:
         print(line)
     if bad:
-        print(f"FAIL: {len(bad)} of {total} overlay functions in C do not match retail")
+        print(f"FAIL: {len(bad)} overlay functions or data in C do not match retail")
         return 1
-    print(f"PASS: all {total} overlay functions in C match retail, with their {copies} copies in other places")
+    print(f"PASS: all {total} overlay functions in C match retail, with their {copies} copies "
+          f"in other places, and all {len(data_defined)} level data objects in C")
     return 0
 
 

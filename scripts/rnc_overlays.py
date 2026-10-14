@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RECORDS_DIR = ROOT / "config/us/overlays"
 ASM_DIR = RECORDS_DIR / "asm"
 CATALOGUE = ROOT / "config/overlays/us/functions.tsv"
+DATA_CATALOGUE = ROOT / "config/overlays/us/data.tsv"
 
 RECORD_NAMES = ("lit", "bss", "data", "vtbl", "camvtbl", "sndvtbl", "text")
 GP = 0x166C00              # _gp of the executable; every level inherits it
@@ -113,6 +114,17 @@ def read_catalogue(path: Path = CATALOGUE) -> dict[str, Row]:
         rows[name] = Row(name, kind, size,
                          [(int(p[:2]), int(p[3:], 16)) for p in places.split(",")],
                          parts[6] if len(parts) > 6 else "")
+    return rows
+
+
+def read_data_catalogue(path: Path = DATA_CATALOGUE) -> dict[str, int]:
+    """Level data defined in C (D_LNN_XXXXXXXX): name -> size in bytes."""
+    rows = {}
+    if path.is_file():
+        for line in path.read_text().splitlines():
+            if line and not line.startswith("#"):
+                name, size = line.split("\t")[:2]
+                rows[name] = int(size)
     return rows
 
 

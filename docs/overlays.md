@@ -57,6 +57,11 @@ top of `configure.py`) build with SN ee-gcc 2.95.2 instead; list a file only
 when every C function in it stays exact. `check-unit.py FUN_LNN_xxxxxxxx` runs this for one function; `make overlays` builds every file and runs it for every
 function in C, ending with `PASS`.
 
+Level data defined in C carries its `D_LNN_XXXXXXXX` label and a row in
+`config/overlays/us/data.tsv` (name, size). `make overlays` compares its bytes,
+with every pointer resolved to that level's address, to what the level loads
+there (`check_data` in `scripts/overlay_proof.py`).
+
 ## Progress
 
 Every distinct function counts once: an `exe` copy counts with the

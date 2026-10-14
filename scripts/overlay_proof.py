@@ -727,3 +727,84 @@ def copy_check(obj_path, name: str, place: tuple[int, int]) -> dict:
             # build this place, it is another function the catalogue merged
             return {**full, "not_a_copy": i not in relocated}
     return {**full, "verdict": "EXACT", "exact": True, "differing_words": 0, "method": METHOD + "+copy"}
+
+
+DATA_METHOD = "overlay-data-bytes-v1"
+DATA_SECTIONS = (".data", ".sdata", ".rodata", ".bss", ".sbss")
+
+
+def data_symbols(elf: ELFFile) -> list:
+    """Every object the file defines in a data section: (symbol, section)."""
+    out = []
+    for sym in _symbols(elf):
+        if sym["st_info"]["type"] != "STT_OBJECT" or not isinstance(sym["st_shndx"], int):
+            continue
+        secname = section_name(elf, sym["st_shndx"])
+        if secname in DATA_SECTIONS:
+            out.append((sym, secname))
+    return out
+
+
+def check_data(obj_path, name: str) -> dict:
+    """The verdict for level data NAME (D_LNN_XXXXXXXX) defined in OBJ_PATH.
+
+    Its bytes, with every pointer resolved to level NN's address of its
+    symbol, must equal what level NN loads at XXXXXXXX (a bss object: the
+    place must be bss). verdict is EXACT, BYTES n/size or LINK <what>."""
+    result = {"method": DATA_METHOD, "exact": False, "symbol": name}
+    m = ov.OVERLAY_DATA.match(name)
+    if not m:
+        result["verdict"] = f"LINK not a level data name: {name}"
+        return result
+    level, address = int(m.group(1)), int(m.group(2), 16)
+    elf = open_elf(obj_path)
+    found = [(sym, sec) for sym, sec in data_symbols(elf) if sym.name == name]
+    if not found:
+        result["verdict"] = f"LINK {name} is not defined in this file"
+        return result
+    sym, secname = found[0]
+    size, start = sym["st_size"], sym["st_value"]
+    result.update(level=level, address=address, size=size)
+    if secname in (".bss", ".sbss"):
+        bss = next((r for r in ov.manifest(level)["records"] if r["type"] == 8), None)
+        inside = bss and bss["address"] <= address and address + size <= bss["address"] + bss["bytes"]
+        result.update(verdict="EXACT" if inside else "LINK not in the level's bss", exact=bool(inside))
+        return result
+    retail = ov.level_data_bytes(level, address, size)
+    if retail is None:
+        result["verdict"] = f"LINK {address:#x}+{size} is not in level {level:02d} data"
+        return result
+    section = elf.get_section(sym["st_shndx"])
+    ours = bytearray(section.data()[start:start + size])
+    unresolved = []
+    for rel_sec in elf.iter_sections():
+        if not isinstance(rel_sec, RelocationSection) or rel_sec["sh_info"] != sym["st_shndx"]:
+            continue
+        for rel in rel_sec.iter_relocations():
+            off = rel["r_offset"] - start
+            if not 0 <= off < size:
+                continue
+            target = _symbols(elf)[rel["r_info_sym"]]
+            if rel["r_info_type"] != R_MIPS_32:
+                unresolved.append(f"relocation type {rel['r_info_type']} at +0x{off:x}")
+                continue
+            if not _is_named(target):
+                unresolved.append(f"+0x{off:x} points into {section_name(elf, target['st_shndx'])}: "
+                                  "name the target D_/FUN_ so it has a level address")
+                continue
+            try:
+                value = resolve_symbol(target.name, level, address)
+            except Unresolved as e:
+                unresolved.append(e.what)
+                continue
+            addend = int.from_bytes(ours[off:off + 4], "little")
+            ours[off:off + 4] = ((value + addend) & 0xFFFFFFFF).to_bytes(4, "little")
+    if unresolved:
+        result["verdict"] = "LINK " + ", ".join(unresolved[:4])
+        return result
+    differing = [i for i in range(size) if ours[i] != retail[i]]
+    if differing:
+        result.update(verdict=f"BYTES {len(differing)}/{size}", first_difference=differing[0])
+        return result
+    result.update(verdict="EXACT", exact=True)
+    return result
