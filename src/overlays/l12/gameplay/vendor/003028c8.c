@@ -1517,6 +1517,7 @@ void FUN_L12_003064e8(void *moby) {
         if (index != 0) {
             struct Moby *other;
             float height;
+            int slot_offset;
             if (i == 17) {
                 other = (struct Moby *)moby;
             } else {
@@ -1524,20 +1525,22 @@ void FUN_L12_003064e8(void *moby) {
                 other = (struct Moby *)(D_L12_0015FFD8_p + index * 0x100);
             }
             if (i == 17) {
+                /* Retail stores the saved rotation 16 bytes after the saved position. */
                 if (D_L12_00161F40 == -1.0f) {
                     qcopy(&D_L12_00161F40, &other->pos);
-                    qcopy(D_L12_00161F50, &other->rot);
+                    qcopy((char *)&D_L12_00161F40 + 16, &other->rot);
                 }
                 qcopy(D_L12_00161F60, &other->pos);
                 qcopy(D_L12_00161F70, &other->rot);
                 qcopy(&other->pos, &D_L12_00161F40);
-                qcopy(&other->rot, D_L12_00161F50);
+                qcopy(&other->rot, (char *)&D_L12_00161F40 + 16);
             }
             if (other->pos.z < 20.0f) {
                 if (i == 17) return;
                 mark_moby_for_removal(other);
                 *saved = -1;
             }
+            slot_offset = i << 4;
             height = *(float *)(slot_data + 0x338) - *(float *)(data + offset + 0x570);
             *(float *)(slot_data + 0x338) = height;
             other->pos.z += height;
@@ -1546,7 +1549,7 @@ void FUN_L12_003064e8(void *moby) {
                 FUN_L00_0025bc98(&other->rot.y, speed, 0, 1.5707964f, 0.002f, 0.3f, 0.0f);
             } else if (other->oclass == 0x4fd) {
                 other->rot.x = fast_add_rotations(other->rot.x, *(float *)(slot_data + 0x450));
-                FUN_L00_0025bc98(&other->rot.y, data + i * 0x10 + 0x454, 0, -1.5707964f, *(float *)(slot_data + 0x45c), 0.3f, 0.0f);
+                FUN_L00_0025bc98(&other->rot.y, (char *)((int)data + slot_offset) + 0x454, 0, -1.5707964f, *(float *)(slot_data + 0x45c), 0.3f, 0.0f);
             } else if (other->oclass == 0x4fa) {
                 other->rot.x = fast_add_rotations(other->rot.x, frame_time * -0.87266463f);
                 other->rot.y = fast_add_rotations(other->rot.y, *(float *)(slot_data + 0x454));
@@ -1558,7 +1561,7 @@ void FUN_L12_003064e8(void *moby) {
             }
             if (i == 17) {
                 qcopy(&D_L12_00161F40, &other->pos);
-                qcopy(D_L12_00161F50, &other->rot);
+                qcopy((char *)&D_L12_00161F40 + 16, &other->rot);
             }
             FUN_L00_00250df8((unsigned char *)other);
         }
