@@ -618,104 +618,98 @@ void FUN_L05_0030c220(struct Moby *m) {
     }
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_0030c5b0.s", FUN_L05_0030c5b0);
-#else
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern void allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
+#include "rnc/overlay/level_globals.h"
+typedef struct {
+    u8 pad0[0x454];
+    u8 collected[1];
+} SaveFlags_30c5b0;
+extern SaveFlags_30c5b0 D_L05_001BB6B0;
+extern SaveFlags_30c5b0 D_L05_001BAA50_s __asm__("D_L05_001BAA50");
+extern unsigned char D_L05_0015FC88[] __attribute__((section(".sdata")));
+extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 extern char *D_L05_001B0930[];
-extern unsigned char D_L05_0015FC88[];
-extern unsigned char D_0014C050[][16];
-extern int D_0014C190[][64];
+extern u8 D_0014C050[];
+extern f32 random_angle_radians_c(void) __asm__("FUN_00213308");
+extern f32 fast_add_rotations_c2(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_sin_c(f32) __asm__("FUN_001f9de0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
-typedef struct {
-    int table;
-    float key;
-    int active;
-    float angle;
-} KeyVars_30c5b0;
-typedef struct {
-    unsigned char pad[0x454];
-    unsigned char killed[1];
-} KillFlags_30c5b0;
-typedef struct {
-    int count;
-    unsigned char pad04[8];
-    float key;
-} KeyRow_30c5b0;
-extern KillFlags_30c5b0 D_L05_001BB6B0;
-extern KillFlags_30c5b0 D_L05_001BAA50;
+void FUN_L05_0030c5b0(struct Moby *moby) {
+    s32 *d = (s32 *)moby->pvars;
+    s16 id;
+    s32 i;
+    s32 list;
+    char *p;
+    f32 angle;
+    s32 color;
+    u32 shade;
+    u32 high;
 
-void FUN_L05_0030c5b0(struct Moby *m) {
-    KeyVars_30c5b0 *v = (KeyVars_30c5b0 *)m->pvars;
-    KeyRow_30c5b0 *row;
-    int intensity;
-
-    switch (m->state) {
+    switch (moby->state) {
     case 0:
-        v->angle = random_angle_radians();
-        m->pos.z -= 0.35f;
-        if (D_L05_001BB6B0.killed[(short)m->save_id] == 0 &&
-            ((D_0014C190[current_level_index][(short)m->save_id >> 5] >> (m->save_id & 31)) & 1) == 0) {
-            if (v->active == 0) {
-                goto active_30c5b0;
-            }
-            if (D_0014C050[current_level_index][m->mission] != 0xFF) {
-                goto active_30c5b0;
-            }
-        }
-        {
-            m->command = 2;
-            m->state = 2;
-            m->glow_color = 0x80208020;
-            if (v->table != -1) {
-                int i = 0;
-                while (i < *(int *)D_L05_001B0930[v->table]) {
-                    row = (KeyRow_30c5b0 *)(D_L05_001B0930[v->table] + i * 16);
-                    if (row[1].key == v->key) {
-                        *(int *)&row[1].key = 0;
-                    }
-                    i++;
+        *(f32 *)(d + 3) = random_angle_radians_c();
+        moby->pos.z -= 0.35f;
+        id = (s16)moby->save_id;
+        if (D_L05_001BB6B0.collected[id] != 0 ||
+            (D_0014C190_257218[current_level_index][id >> 5] >> (moby->save_id & 31) & 1) != 0 ||
+            (d[2] != 0 && D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
+            moby->command = 2;
+            moby->glow_color = 0x80208020;
+            moby->state = 2;
+            list = d[0];
+            if (list != -1) {
+                i = 0;
+                if (*(s32 *)D_L05_001B0930[list] > 0) {
+                    do {
+                        p = D_L05_001B0930[list] + i * 16;
+                        if (*(f32 *)(p + 0x1C) == ((f32 *)d)[1])
+                            *(s32 *)(p + 0x1C) = 0;
+                        list = d[0];
+                        i++;
+                    } while (i < *(s32 *)D_L05_001B0930[list]);
                 }
             }
+        } else {
+            moby->state = 1;
         }
         break;
-    active_30c5b0:
-        m->state = 1;
-        break;
     case 1:
-        v->angle = fast_add_rotations(v->angle, frame_time * 6.2831855f);
-        intensity = truncate_float_to_s32((fast_sin(v->angle) * 4.0f - 3.0f) * 128.0f);
-        if (intensity > 0x80) intensity = 0x80;
-        else if (intensity < 0x20) intensity = 0x20;
-        m->glow_color = 0x80000000 | intensity << 16 | intensity << 8 | intensity;
-        if (hero.ground_moby == m && hero.air_frames.s == 0) {
-            int next_state;
-            D_L05_001BAA50.killed[(short)m->save_id] = m->mission + 2;
-            if (m->mission == 0xFF ||
-                (D_L05_0015FC88[m->mission] != 0xFF && D_0014C050[current_level_index][m->mission] == 0xFF)) {
-                D_L05_001BB6B0.killed[(short)m->save_id] = m->mission + 2;
+        angle = fast_add_rotations_c2(*(f32 *)(d + 3), frame_time * 6.2831855f);
+        *(f32 *)(d + 3) = angle;
+        color = truncate_float_to_s32((fast_sin_c(angle) * 4.0f - 3.0f) * 128.0f);
+        if (color > 0x80) color = 0x80;
+        else if (color < 0x20) color = 0x20;
+        shade = 0x80000000 | (color << 8);
+        high = color << 16;
+        moby->glow_color = high | shade | color;
+        if (hero.ground_moby == moby && hero.air_frames.s == 0) {
+            D_L05_001BAA50_s.collected[(s16)moby->save_id] = moby->mission + 2;
+            if (moby->mission == 0xFF ||
+                (D_L05_0015FC88[moby->mission] != 0xFF && D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
+                D_L05_001BB6B0.collected[(s16)moby->save_id] = moby->mission + 2;
             }
-            next_state = 2;
-            m->command = 1;
-            m->state = next_state;
-            m->glow_color = 0x80208020;
-            allocate_voice_for_target_entry(0, 0, m);
-            if (v->table != -1) {
-                int i = 0;
-                while (i < *(int *)D_L05_001B0930[v->table]) {
-                    row = (KeyRow_30c5b0 *)(D_L05_001B0930[v->table] + i * 16);
-                    if (row[1].key == v->key) {
-                        *(int *)&row[1].key = 0;
-                    }
-                    i++;
+            moby->state = 2;
+            moby->command = 1;
+            moby->glow_color = 0x80208020;
+            allocate_voice_for_target_entry(0, 0, moby);
+            list = d[0];
+            if (list != -1) {
+                i = 0;
+                if (*(s32 *)D_L05_001B0930[list] > 0) {
+                    do {
+                        p = D_L05_001B0930[list] + i * 16;
+                        if (*(f32 *)(p + 0x1C) == ((f32 *)d)[1])
+                            *(s32 *)(p + 0x1C) = 0;
+                        list = d[0];
+                        i++;
+                    } while (i < *(s32 *)D_L05_001B0930[list]);
                 }
             }
         }
         break;
     }
 }
-#endif
 typedef struct {
     char pad0[0x44];
     short count;

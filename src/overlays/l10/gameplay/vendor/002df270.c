@@ -1283,7 +1283,7 @@ extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L01_0026d930(char *p);
 extern void FUN_L03_00250a78(float *p, float a, float b);
 extern void FUN_L10_002e0138(struct Moby *m);
-extern void FUN_L10_002e3a90(void *);
+extern void FUN_L10_002e3a90_u(void *) __asm__("FUN_L10_002e3a90");
 extern void FUN_L10_002e3de8(char *moby);
 extern void FUN_L10_002e3ef0_u(void *) __asm__("FUN_L10_002e3ef0");
 extern void add_vector_xyz(void *, void *, void *);
@@ -1829,9 +1829,9 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                     float *dp = D_L10_0015F580;
                     float zz = 0.0f;
                     char *pb;
-                    FUN_L10_002e3a90(m);
+                    FUN_L10_002e3a90_u(m);
                     pb = (char *)m + 0x40;
-                    FUN_L10_002e3a90(m);
+                    FUN_L10_002e3a90_u(m);
                     FUN_L00_0025f3e8(m, m->pos, -1, 1.25f, 20.0f);
                     FUN_L00_00263fd8((char *)m, 0x775, m->pos, pb, 0, 2, zz, dp, dp, dp);
                     FUN_L00_00263fd8((char *)m, 0x77A, m->pos, pb, 0, 2, zz, dp, dp, dp);
@@ -1877,7 +1877,103 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
         }
     }
 }
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e3a90.s", FUN_L10_002e3a90);
+extern int D_L10_00161E74 __attribute__((sda));
+extern int D_L10_00161E78 __attribute__((sda));
+extern float D_L10_00161E7C __attribute__((sda));
+extern float D_L10_00161E80 __attribute__((sda));
+extern float D_L10_00161E84 __attribute__((sda));
+extern float D_L10_00161E88 __attribute__((sda));
+extern float D_L10_00161E8C __attribute__((sda));
+extern float D_L10_00161E90 __attribute__((sda));
+extern float D_L10_00161E94 __attribute__((sda));
+extern float D_L10_00161E98 __attribute__((sda));
+extern float D_L10_00161E9C __attribute__((sda));
+extern float D_L10_00161EA0 __attribute__((sda));
+extern int D_L10_00161EA4 __attribute__((sda));
+extern int D_L10_00161EA8 __attribute__((sda));
+extern int D_L10_00161EAC __attribute__((sda));
+extern int D_L10_00161EB0 __attribute__((sda));
+extern int D_L10_00161EB4 __attribute__((sda));
+extern int D_L10_00161EB8 __attribute__((sda));
+extern int D_L10_00161EBC __attribute__((sda));
+extern void FUN_L00_0025f8e0_3a90(void *, float) __asm__("FUN_L00_0025f8e0");
+extern float random_float_between_3a90(float, float) __asm__("FUN_002132a8");
+extern float random_angle_radians_3a90(void) __asm__("FUN_00213308");
+extern float fast_cos_3a90(float) __asm__("FUN_001f9dc8");
+extern float fast_sin_3a90(float) __asm__("FUN_001f9de0");
+extern void scale_vector_xyz_3a90(void *, void *, float) __asm__("FUN_001f9a68");
+extern void add_vector_xyz_3a90(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int scale_game_frames_3a90(int) __asm__("FUN_001f96f8");
+extern float scale_time_3a90(float) __asm__("FUN_001f96b0");
+extern int truncate_float_3a90(float) __asm__("FUN_001fa6d0");
+extern int fast_tween_color_3a90(int, int, float) __asm__("FUN_001fa6e0");
+extern char *spawn_particle_3a90(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+
+void FUN_L10_002e3a90(struct Moby *moby) {
+    float pos[4];
+    float vel[4];
+    float accel[4];
+    float push[4];
+    char *vars;
+    int count;
+    float *p;
+    void *src;
+    int i;
+    int j;
+    float angle;
+    float speed;
+    float rise;
+    float size;
+    float n;
+    int c0;
+    int c1;
+    int life;
+    int fade;
+
+    count = D_L10_00161E74;
+    vars = (char *)moby->pvars;
+    for (i = 0; i < count; i++) {
+        p = pos;
+        src = &moby->pos;
+        /* Fakematch: the block copy of p adds the loop luids that let loop.c hoist src. */
+        {
+            void *d = p;
+            qcopy_nc(d, src);
+        }
+        FUN_L00_0025f8e0_3a90(p, D_L10_00161E7C);
+        pos[2] += 0.55f;
+        angle = random_angle_radians_3a90();
+        speed = random_float_between_3a90(D_L10_00161E88, D_L10_00161E8C);
+        rise = random_float_between_3a90(D_L10_00161E90, D_L10_00161E94);
+        if (*((u8 *)moby + 0x20) == 11) {
+            speed *= 0.55f;
+            rise *= 0.55f;
+            pos[2] -= 0.2f;
+        }
+        vel[0] = fast_cos_3a90(angle) * (speed * D_0015ED6C);
+        vel[1] = fast_sin_3a90(angle) * (speed * D_0015ED6C);
+        vel[2] = 0.0f + rise * D_0015ED6C;
+        scale_vector_xyz_3a90(push, vars + 0x70, 0.5f);
+        push[2] = 0.0f;
+        add_vector_xyz_3a90(vel, vel, push);
+        qcopy(accel, vel);
+        accel[2] -= D_L10_00161E98 * D_0015ED70 * (float)scale_game_frames_3a90(D_L10_00161EB8);
+        for (j = 0; j < D_L10_00161E78; j++) {
+            size = random_float_between_3a90(0.5f, 1.5f);
+            vel[3] = size * D_L10_00161E9C;
+            accel[3] = size * D_L10_00161EA0;
+            FUN_L00_0025f8e0_3a90(pos, D_L10_00161E80);
+            FUN_L00_0025f8e0_3a90(accel, D_L10_00161E84 * D_0015ED6C);
+            c0 = fast_tween_color_3a90(D_L10_00161EA4, D_L10_00161EAC, random_float_between_3a90(0.0f, 1.0f));
+            c1 = fast_tween_color_3a90(D_L10_00161EA8, D_L10_00161EB0, random_float_between_3a90(0.0f, 1.0f));
+            life = scale_game_frames_3a90(D_L10_00161EB4);
+            fade = scale_game_frames_3a90(D_L10_00161EB8);
+            n = (float)D_L10_00161EBC;
+            spawn_particle_3a90(pos, vel, accel, c0, c1, life, fade,
+                truncate_float_3a90(scale_time_3a90(random_float_between_3a90(n * 0.5f, n * 2.5f))), -1);
+        }
+    }
+}
 /* Level 10 toxic crab: per-frame sight, target and state update. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E52B0), where it is exact; names translated to the US level program. */
 

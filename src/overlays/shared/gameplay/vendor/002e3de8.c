@@ -431,198 +431,197 @@ void FUN_L10_002f5b58(char *moby) {
         hero_set_state(0x72, 1);
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5f18.s", FUN_L10_002f5f18);
-#else
+#include "rnc/overlay/level_globals.h"
+#include "rnc/globals.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
-extern float D_L10_0015F3FC_lui __asm__("D_L10_0015F3FC") __attribute__((section(".data")));
-extern float D_L10_0015F3FC_gp __asm__("D_L10_0015F3FC") __attribute__((sda));
-extern int D_L10_0015F404;
-extern float D_0015ED6C;
-extern char *D_L10_0015FFD8 __attribute__((sda));
-extern char *D_L10_0015FFD8_far __asm__("D_L10_0015FFD8") __attribute__((section(".data")));
-extern float D_L10_00167358;
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void scale_vector_xyz(float, void *, void *) __asm__("FUN_001f9bf8");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void FUN_001f9a68(float, void *, void *);
-extern float FUN_001f9b48(void *, void *);
-extern int FUN_001f9770(short *);
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
-extern void update_view_context(void) __asm__("FUN_001f2d98");
-extern void hero_set_state_5f18(int, int) __asm__("FUN_L00_002223f8");
-extern int FUN_L00_0025d808(void *, void *, int *, float *, float, int);
-extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
-extern void FUN_001e93e8(float, void *);
-extern void FUN_001e93e8_part(void *, void *) __asm__("FUN_001e93e8");
-extern float D_L10_00167450[];
-extern float D_0013F5E0[];
+#include "rnc/gameplay/camera/update_cam.h"
 
-extern char D_L10_0016CEC0[];
-extern float D_L10_0016CF70_far __asm__("D_L10_0016CF70") __attribute__((section(".data")));
+typedef struct {
+    s16 seg[8];   /* 0x00: path segment of each stop (-1 ends the list) */
+    f32 fov[8];   /* 0x10: field of view at each stop, degrees */
+    f32 fov_end;  /* 0x30: field of view handed back at the end */
+} VendorCamStops_5f18;
 
-void FUN_L10_002f5f18(char *moby) {
-    char *work = *(char **)(moby + 0x70);
-    char *acc = work + 0x40;
-    short *indices = (short *)(acc + 0x18);
-    int slot = *(short *)(moby + 0x84);
-    unsigned char *data = *(unsigned char **)(D_L10_0015EF50 + slot * 0x20 + 0x1c);
+typedef struct {
+    s32 seg;      /* 0x40 */
+    f32 t;        /* 0x44 */
+    f32 len_a;    /* 0x48: length of the camera path */
+    f32 len_b;    /* 0x4C: length of the look path */
+    f32 dist;     /* 0x50: distance travelled */
+    s16 started;  /* 0x54 */
+    s16 timer;    /* 0x56 */
+} VendorCamRun_5f18;
+
+typedef struct {
+    char pad0[0xB0];
+    float fB0; /* tan of half the field of view */
+} VendorView_5f18;
+
+extern char *D_L10_0015EF50_5f18 __asm__("D_L10_0015EF50");
+extern char *D_L10_001B0930_5f18[] __asm__("D_L10_001B0930");
+extern char *D_L10_0015FFD8_5f18 __asm__("D_L10_0015FFD8");
+extern f32 D_L10_0015F3FC;
+extern s32 D_L10_0015F404;
+extern char D_L10_00167450[];
+extern float D_L10_00167358 __attribute__((section(".data")));
+extern float D_0013F5E0_5f18[] __asm__("D_0013F5E0");
+extern VendorView_5f18 D_L10_0016CEC0;
+extern int path_step_5f18(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
+extern void transform_vector_by_basis_5f18(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern float cosine_interpolate_5f18(float, float, float) __asm__("FUN_002133d0");
+extern void update_view_context_5f18(void) __asm__("FUN_001f2d98");
+extern float fast_sin_5f18(float) __asm__("FUN_001f9de0");
+extern float fast_cos_5f18(float) __asm__("FUN_001f9dc8");
+extern float FUN_001f9b48_5f18(void *, void *) __asm__("FUN_001f9b48");
+extern void sub_5f18(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_5f18(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_5f18(void *, void *, float) __asm__("FUN_001f9a68");
+extern void normalize_5f18(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_5f18(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern s32 tick_countdown_16_5f18(s16 *) __asm__("FUN_001f9770");
+extern s32 truncate_float_to_s32_5f18(f32) __asm__("FUN_001fa6d0");
+extern s32 scale_game_frames_5f18(s32) __asm__("FUN_001f96f8");
+extern void FUN_L00_002223f8(s32, s32);
+extern void debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
+extern void debug_line_5f18(void *, void *) __asm__("FUN_001e93e8");
+
+void FUN_L10_002f5f18(struct UpdateCam *cam) {
+    float dir[4];
+    float t[4];
+    float u[4];
+    float v[4];
+    s32 seg2;
+    f32 tt2;
+    char *p;
+    VendorCamRun_5f18 *q;
+    char *rec;
+    VendorCamStops_5f18 *s;
     char *path;
-    float old_pos[4] __attribute__((aligned(16)));
-    union { float target[4]; float direction[4]; } vectors __attribute__((aligned(16)));
-    float transformed[4] __attribute__((aligned(16)));
-    float point[4] __attribute__((aligned(16)));
-    float * volatile scale;
-    int i, count, next, index;
-    long long segment;
-    long long reached;
-    float angle, first, total, distance, fade;
-    float *distance_cursor;
+    int done;
+    int i;
 
-    if (*(short *)(acc + 0x14) == 0) {
-        char *other;
-        D_L10_0015F3FC_gp = D_L10_0015F3FC_lui + 0.05f;
-        if (!(1.0f <= D_L10_0015F3FC_gp)) return;
-        path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
-        other = D_L10_001B0930_5a78[*(int *)(data + 0x24)];
-        scale = (float *)(moby + 0x30);
-        D_L10_0015F3FC_lui = 1.0f;
-        D_L10_0015F404 = 1;
-        *(short *)(acc + 0x14) = 1;
-        path += 0x10;
-        qcopy(scale, path);
-        if (*(int *)(data + 0x28) >= 0) {
-            path = D_L10_0015FFD8 + *(int *)(data + 0x28) * 0x100;
-            vectors.target[0] = *(float *)(data + 0x2c);
-            vectors.target[1] = *(float *)(data + 0x30);
-            vectors.target[2] = *(float *)(data + 0x34);
-            vectors.target[3] = 0.0f;
-            transform_vector_by_basis(vectors.target, vectors.target, D_L10_00167450);
-            add_vector_xyz(transformed, path + 0x10, vectors.target);
-            subtract_vector_xyz(old_pos, transformed, scale);
-        } else {
-            subtract_vector_xyz(old_pos, other + 0x10, scale);
+    p = (char *)cam->saved_state;
+    rec = *(char **)(D_L10_0015EF50_5f18 + cam->descriptor_index * 32 + 0x1C);
+    q = (VendorCamRun_5f18 *)(p + 0x40);
+    s = (VendorCamStops_5f18 *)(p + 0x58);
+
+    if (q->started == 0) {
+        D_L10_0015F3FC += 0.05f;
+        if (D_L10_0015F3FC >= 1.0f) {
+            char *pa = D_L10_001B0930_5f18[*(int *)(rec + 0x20)];
+            char *pb = D_L10_001B0930_5f18[*(int *)(rec + 0x24)];
+            D_L10_0015F3FC = 1.0f;
+            D_L10_0015F404 = 1;
+            q->started = 1;
+            qcopy(&cam->pos, pa + 0x10);
+            if (*(int *)(rec + 0x28) >= 0) {
+                struct Moby *o = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
+                float *ofs = (float *)(rec + 0x2C);
+                t[0] = ofs[0];
+                t[1] = ofs[1];
+                t[2] = ofs[2];
+                t[3] = 0.0f;
+                transform_vector_by_basis_5f18(t, t, D_L10_00167450);
+                add_5f18(u, &o->pos, t);
+                sub_5f18(dir, u, &cam->pos);
+            } else {
+                sub_5f18(dir, pb + 0x10, &cam->pos);
+            }
+            scale_5f18(t, D_0013F5E0_5f18, -1.0f);
+            normalize_5f18(&cam->m0, dir, 1.0f);
+            cross_5f18(&cam->m1, &cam->m0, t);
+            normalize_5f18(&cam->m1, &cam->m1, 1.0f);
+            cross_5f18(&cam->m2, &cam->m1, &cam->m0);
         }
-        FUN_001f9a68(-1.0f, vectors.target, D_0013F5E0);
-        scale_vector_xyz(1.0f, moby, old_pos);
-        cross_vectors_xyz(moby + 0x10, moby, vectors.target);
-        scale_vector_xyz(1.0f, moby + 0x10, moby + 0x10);
-        cross_vectors_xyz(moby + 0x20, moby + 0x10, moby);
         return;
     }
-    if (*(short *)(acc + 0x14) == 2) {
-        D_L10_0015F3FC_gp = D_L10_0015F3FC_lui + 0.05f;
-        if (D_L10_0015F3FC_gp >= 1.0f) {
-            *(short *)(acc + 0x14) = 3;
-            D_L10_0015F3FC_lui = 1.0f;
-            angle = *(float *)((char *)indices + 0x30) * 0.5f;
-            distance = FUN_001f9de0(angle);
-            fade = FUN_001f9dc8(angle);
-            D_L10_0016CF70_far = distance / fade;
-            update_view_context();
-            data[0x39] = 1;
+    if (q->started == 2) {
+        D_L10_0015F3FC += 0.05f;
+        if (D_L10_0015F3FC >= 1.0f) {
+            float ang;
+            q->started = 3;
+            D_L10_0015F3FC = 1.0f;
+            ang = s->fov_end * 0.5f;
+            D_L10_0016CEC0.fB0 = fast_sin_5f18(ang) / fast_cos_5f18(ang);
+            update_view_context_5f18();
+            *(u8 *)(rec + 0x39) = 1;
             D_L10_00167358 = 0.05f;
-            *(short *)(moby + 0x7e) = 4;
+            cam->transition_state = 4;
             D_L10_0015F404 = 0;
-            if (*(int *)(data + 0x4c) == 0) hero_set_state_5f18(0, 1);
+            if (*(int *)(rec + 0x4C) == 0)
+                FUN_L00_002223f8(0, 1);
         }
-        if (*(int *)(data + 0x40) == 0) return;
+        if (*(int *)(rec + 0x40) == 0)
+            return;
+    } else if (q->started == 3) {
+        return;
     } else {
-        if (*(short *)(acc + 0x14) == 3) return;
-        D_L10_0015F3FC_gp -= 0.05f;
-        if (D_L10_0015F3FC_gp < 0.0f) D_L10_0015F3FC_lui = 0.0f;
+        D_L10_0015F3FC -= 0.05f;
+        if (D_L10_0015F3FC < 0.0f)
+            D_L10_0015F3FC = 0.0f;
     }
-    path = D_L10_001B0930_5a78[*(int *)(data + 0x20)];
-    scale = (float *)(moby + 0x30);
-    qcopy(old_pos, scale);
-    reached = FUN_L00_0025d808(path, scale, (int *)(acc + 0x00),
-                                (float *)(acc + 0x04), *(float *)(data + 0x3c) * D_0015ED6C, 0);
-    if (*(short *)(acc + 0x16) != 0) {
-        if (FUN_001f9770((short *)(acc + 0x16))) {
-            reached = 1;
-        } else if (*(int *)(data + 0x40) != 0) {
-            if (*(short *)(acc + 0x16) < scale_game_frames(truncate_float_to_s32(20.0f)))
-                reached = 1;
+    path = D_L10_001B0930_5f18[*(int *)(rec + 0x20)];
+    qcopy(dir, &cam->pos);
+    done = path_step_5f18(path, &cam->pos.x, &q->seg, &q->t, 0, *(float *)(rec + 0x3C) * frame_time);
+    if (q->timer != 0) {
+        if (tick_countdown_16_5f18(&q->timer) != 0)
+            done = 1;
+        else if (*(int *)(rec + 0x40) != 0 && q->timer < scale_game_frames_5f18(truncate_float_to_s32_5f18(20.0f)))
+            done = 1;
+    }
+    if (*(u8 *)(rec + 0x39) != 0)
+        done = 1;
+    if (done) {
+        q->started = 2;
+        if (*(int *)(rec + 0x40) == 0)
+            return;
+    }
+    for (i = 0; i < 7 && s->seg[i] >= 0 && s->seg[i + 1] >= 0; i++) {
+        int lo = s->seg[i];
+        if (q->seg >= lo && q->seg < s->seg[i + 1]) {
+            float sum = 0.0f;
+            float total;
+            float ang;
+            int m;
+            int n;
+            for (m = lo; m < q->seg; m++)
+                sum += *(float *)(path + (m * 16 + 0x1C));
+            total = sum;
+            sum += q->t;
+            for (n = q->seg; n < s->seg[i + 1]; n++)
+                total += *(float *)(path + (n * 16 + 0x1C));
+            ang = cosine_interpolate_5f18(s->fov[i], s->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
+            D_L10_0016CEC0.fB0 = fast_sin_5f18(ang) / fast_cos_5f18(ang);
+            update_view_context_5f18();
         }
     }
-    if ((unsigned char)data[0x39] != 0) reached = 1;
-    if (reached) {
-        *(short *)(acc + 0x14) = 2;
-        if (*(int *)(data + 0x40) == 0) return;
-    }
-    if (indices[0] >= 0 && indices[1] >= 0) {
-        i = 0;
-        do {
-            next = i + 1;
-            segment = *(int *)(acc + 0x00);
-            index = indices[i];
-            if (index <= segment && segment < indices[next]) {
-                first = 0.0f;
-                if (index < segment) {
-                    count = segment - index;
-                    distance_cursor = (float *)(path + (index * 0x10 + 0x1c));
-                    do {
-                        first += *distance_cursor;
-                        distance_cursor += 4;
-                        count--;
-                    } while (count != 0);
-                }
-                total = first;
-                first = first + *(float *)(acc + 0x04);
-                if (segment < indices[next]) {
-                    count = indices[next] - segment;
-                    index = segment;
-                    distance_cursor = (float *)(path + (index * 0x10 + 0x1c));
-                    do {
-                        total += *distance_cursor;
-                        distance_cursor += 4;
-                        count--;
-                    } while (count != 0);
-                }
-                angle = cosine_interpolate(((float *)((char *)indices + 0x10))[i],
-                                            ((float *)((char *)indices + 0x10))[next], first / total);
-                angle = angle * 0.017453292f * 0.5f;
-                distance = FUN_001f9de0(angle);
-                fade = FUN_001f9dc8(angle);
-                *(float *)(D_L10_0016CEC0 + 0xb0) = distance / fade;
-                update_view_context();
-            }
-            if (next >= 7) break;
-            i = next;
-        } while (indices[i] >= 0 && indices[i + 1] >= 0);
-    }
-    distance = FUN_001f9b48(old_pos, scale);
-    *(float *)(acc + 0x10) += distance;
-    if (*(int *)(data + 0x28) >= 0) {
-        path = D_L10_0015FFD8_far + *(int *)(data + 0x28) * 0x100;
-        transformed[0] = *(float *)(data + 0x2c);
-        transformed[1] = *(float *)(data + 0x30);
-        transformed[2] = *(float *)(data + 0x34);
-        transformed[3] = 0.0f;
-        transform_vector_by_basis(transformed, transformed, D_L10_00167450);
-        add_vector_xyz(point, path + 0x10, transformed);
-        subtract_vector_xyz(vectors.direction, point, scale);
+    q->dist += FUN_001f9b48_5f18(dir, &cam->pos);
+    if (*(int *)(rec + 0x28) >= 0) {
+        struct Moby *o = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
+        float *ofs = (float *)(rec + 0x2C);
+        u[0] = ofs[0];
+        u[1] = ofs[1];
+        u[2] = ofs[2];
+        u[3] = 0.0f;
+        transform_vector_by_basis_5f18(u, u, D_L10_00167450);
+        add_5f18(v, &o->pos, u);
+        sub_5f18(t, v, &cam->pos);
     } else {
-        float zero_a = 0.0f, zero_b = 0.0f;
-        char *other = D_L10_001B0930_5a78[*(int *)(data + 0x24)];
-        FUN_L00_0025d808(other, transformed, (int *)&zero_a, &zero_b,
-            (*(float *)(acc + 0x10) / *(float *)(acc + 0x08)) * *(float *)(acc + 0x0c), 0);
-        FUN_001e93e8(0.2f, transformed);
-        FUN_001e93e8_part(other + 0x10, other + *(int *)other * 0x10);
-        subtract_vector_xyz(vectors.direction, transformed, scale);
+        char *look = D_L10_001B0930_5f18[*(int *)(rec + 0x24)];
+        seg2 = 0;
+        tt2 = 0.0f;
+        path_step_5f18(look, u, &seg2, &tt2, 0, q->dist / q->len_a * q->len_b);
+        debug_point_5f18(u, 0.2f);
+        debug_line_5f18(look + 0x10, look + *(int *)look * 16);
+        sub_5f18(t, u, &cam->pos);
     }
-    FUN_001f9a68(-1.0f, transformed, D_0013F5E0);
-    scale_vector_xyz(1.0f, moby, vectors.direction);
-    cross_vectors_xyz(moby + 0x10, moby, transformed);
-    scale_vector_xyz(1.0f, moby + 0x10, moby + 0x10);
-    cross_vectors_xyz(moby + 0x20, moby + 0x10, moby);
+    scale_5f18(u, D_0013F5E0_5f18, -1.0f);
+    normalize_5f18(&cam->m0, t, 1.0f);
+    cross_5f18(&cam->m1, &cam->m0, u);
+    normalize_5f18(&cam->m1, &cam->m1, 1.0f);
+    cross_5f18(&cam->m2, &cam->m1, &cam->m0);
 }
-#endif
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
