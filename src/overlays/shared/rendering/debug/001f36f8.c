@@ -12,7 +12,25 @@ typedef struct {
 extern s32 D_L00_0015EFC4 __attribute__((sda));
 extern void *D_L00_0015EFC0 __attribute__((sda));
 extern E001f36f8 D_L00_0016A840[];
-extern u8 D_L00_0016A040[];
+u8 D_L00_0016A040[0x800] = {0};
+u8 D_L01_0016A4C0[0x800] = {0};
+u8 D_L02_0016A640[0x800] = {0};
+u8 D_L03_0016A140[0x800] = {0};
+u8 D_L04_0016A1C0[0x800] = {0};
+u8 D_L05_0016A440[0x800] = {0};
+u8 D_L06_0016A7C0[0x800] = {0};
+u8 D_L07_0016A0C0[0x800] = {0};
+u8 D_L08_0016A840[0x800] = {0};
+u8 D_L09_0016A1C0[0x800] = {0};
+u8 D_L10_0016A4C0[0x800] = {0};
+u8 D_L11_0016AA40[0x800] = {0};
+u8 D_L12_0016A4C0[0x800] = {0};
+u8 D_L13_0016A340[0x800] = {0};
+u8 D_L14_0016A740[0x800] = {0};
+u8 D_L15_0016A640[0x800] = {0};
+u8 D_L16_0016A440[0x800] = {0};
+u8 D_L17_0016A940[0x800] = {0};
+u8 D_L18_0016AA40[0x800] = {0};
 void FUN_L00_001f3770(s32, s32, s32, s32);
 /* Calls FUN_L00_001f3770 for each queued D_L00_0016A840 entry and resets the queue. */
 void FUN_L00_001f36f8(void) {
