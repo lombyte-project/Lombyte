@@ -495,7 +495,8 @@ void FUN_L06_002e8678(struct Moby *moby) {
         moby->state = 8;
         if (moby->prev_seq == 4) return;
         frames = 5;
-        break;
+        blend_moby_animation(moby, 4, 0, FUN_001f96f8(frames));
+        return;
     case 3:
         subtract_vector_xyz(direction, &target->pos, &moby->pos);
         FUN_L06_002e9aa8((char *)moby);
@@ -504,11 +505,10 @@ void FUN_L06_002e8678(struct Moby *moby) {
         moby->state = 4;
         if (moby->prev_seq == 4) return;
         frames = 5;
-        break;
+        blend_moby_animation(moby, 4, 0, FUN_001f96f8(frames));
+        return;
     case 4:
-        path = D_L06_001B0C30[E8678_INT(0x1f8)];
-        path_pos = (float *)(path + 4);
-        qcopy(pos, path_pos + E8678_SHORT(0x208) * 4);
+        qcopy(pos, (float *)(D_L06_001B0C30[E8678_INT(0x1f8)] + E8678_SHORT(0x208) * 4) + 4);
         subtract_vector_xyz(direction, pos, &moby->pos);
         FUN_L06_002e9aa8((char *)moby);
         FUN_L06_002e9998((char *)moby, D_L06_00174600, direction);
@@ -525,12 +525,13 @@ void FUN_L06_002e8678(struct Moby *moby) {
         qcopy((vars + 0x230), (vars + 0x210));
         f = FUN_001f9b80(&moby->pos, vars + 0x210);
         f /= (float)FUN_001f96f8(30);
+        path_pos = (float *)(vars + 0x120);
         E8678_FLOAT(0x138) = f;
         E8678_FLOAT(0x13c) = FUN_L00_0025abf0(&moby->pos, vars + 0x210, 0, f, -E8678_FLOAT(0x130));
         vars[0x15d] = 3;
         E8678_INT(0x144) = 5;
         angle = FUN_001f9e90(E8678_FLOAT(0x210) - moby->pos.x, E8678_FLOAT(0x214) - moby->pos.y);
-        FUN_L00_0025c558(moby, vars + 0x120, 2, 1, 0, angle);
+        FUN_L00_0025c558(moby, path_pos, 2, 1, 0, angle);
         moby->state = 5;
         return;
     case 5:
@@ -559,8 +560,10 @@ remove:
         moby->state = 8;
         if (moby->prev_seq == 4) return;
         frames = 5;
-        break;
-    case 8:
+        blend_moby_animation(moby, 4, 0, FUN_001f96f8(frames));
+        return;
+    case 8: {
+        float angle, speed;
         if (moby->visible != 0) {
             if (FUN_001f9b48(&moby->pos, vars + 0x230) < 0.05f || tick_countdown_32((int *)(vars + 0x1fc))) {
                 angle = random_angle_radians();
@@ -577,17 +580,19 @@ remove:
             FUN_001f9bf8(pos, &moby->rot_row0, E8678_FLOAT(0x1e4) * D_0015ED6C);
             FUN_L06_002e9b60(0.3f, 0.3f, (char *)moby, pos, 1);
         }
-        if (E8678_INT(0x1c4) == 2 || random_integer_below(9) != 0) {
+        if (E8678_INT(0x1c4) != 2 && random_integer_below(9) == 0) {
+            E8678_FLOAT(0x1d4) = random_float_between(-E8678_FLOAT(0x1d8), E8678_FLOAT(0x1d8)) * 0.017453292f;
+            moby->state = 9;
+        } else {
             if (E8678_SHORT(0x1e8) == 0) return;
             E8678_FLOAT(0x1d4) = random_float_between(-E8678_FLOAT(0x1d8), E8678_FLOAT(0x1d8)) * 0.017453292f;
             moby->state = 10;
-        } else {
-            E8678_FLOAT(0x1d4) = random_float_between(-E8678_FLOAT(0x1d8), E8678_FLOAT(0x1d8)) * 0.017453292f;
-            moby->state = 9;
         }
         if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, 0);
         return;
-    case 9:
+    }
+    case 9: {
+        float angle;
         angle = FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
         angle = fast_add_rotations_e94f0(angle, E8678_FLOAT(0x1d4));
         pos[0] = fast_cos(angle);
@@ -604,7 +609,9 @@ remove:
         }
         if (E8678_INT(0x1c4) == 2) moby->state = 13;
         return;
-    case 10:
+    }
+    case 10: {
+        float angle;
         angle = FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
         angle = fast_add_rotations_e94f0(angle, E8678_FLOAT(0x1d4));
         qcopy(displacement, &moby->pos);
@@ -625,23 +632,23 @@ remove:
         if (blocked) {
             moby->state = 11;
             if (moby->prev_seq == 6) return;
-            animation = 6;
-            frames = FUN_001f96f8(10);
+            blend_moby_animation(moby, 6, 0, FUN_001f96f8(10));
+            return;
         } else {
             if (!(FUN_001f9b80(&moby->pos, &target->pos) < 2.0f)) return;
             moby->state = 12;
             if (moby->prev_seq == 5) return;
-            animation = 5;
-            frames = FUN_001f96f8(10);
+            blend_moby_animation(moby, 5, 0, FUN_001f96f8(10));
+            return;
         }
-        blend_moby_animation(moby, animation, 0, frames);
-        return;
+    }
     case 11:
         if (!(moby->anim_flags & 2)) return;
         moby->state = 10;
         if (moby->prev_seq == 4) return;
         frames = 20;
-        break;
+        blend_moby_animation(moby, 4, 0, FUN_001f96f8(frames));
+        return;
     case 12: {
         float f;
         pos[0] = fast_cos(FUN_001f9e90(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y));
@@ -660,7 +667,8 @@ remove:
         moby->state = 9;
         if (moby->prev_seq == 4) return;
         frames = 10;
-        break;
+        blend_moby_animation(moby, 4, 0, FUN_001f96f8(frames));
+        return;
     }
     case 13:
         subtract_vector_xyz(pos, vars + 0x210, &moby->pos);
@@ -668,15 +676,15 @@ remove:
         FUN_L06_002e9998((char *)moby, D_L06_00174600, pos);
         FUN_001f9bf8(direction, &moby->rot_row0, E8678_FLOAT(0x1e4) * D_0015ED6C);
         FUN_L06_002e9b60(0.3f, 0.3f, (char *)moby, direction, 1);
-        if (!(FUN_001f9b80(&moby->pos, vars + 0x210) < 2.0f)) {
-            if (E8678_INT(0x1c4) != 2) moby->state = 9;
-            else if (E8678_SHORT(0x1e8) != 0) moby->state = 10;
+        if (FUN_001f9b80(&moby->pos, vars + 0x210) < 2.0f) {
+            moby->state = 8;
+            if (moby->prev_seq == 4) return;
+            blend_moby_animation(moby, 4, 0, FUN_001f96f8(10));
             return;
         }
-        moby->state = 8;
-        if (moby->prev_seq == 4) return;
-        frames = 10;
-        break;
+        if (E8678_INT(0x1c4) != 2) moby->state = 9;
+        else if (E8678_SHORT(0x1e8) != 0) moby->state = 10;
+        return;
     case 16:
         if (FUN_L00_002dc9f0(moby, vars + 0x120) != 0) {
             moby->state = 8;
@@ -687,7 +695,6 @@ remove:
     default:
         return;
     }
-    blend_moby_animation(moby, 4, 0, FUN_001f96f8(frames));
 }
 #undef E8678_SHORT
 #undef E8678_INT
