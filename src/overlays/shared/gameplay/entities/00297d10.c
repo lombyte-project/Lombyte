@@ -564,6 +564,8 @@ remove:
         return;
     case 8: {
         float angle, speed;
+        int state;
+        float f;
         if (moby->visible != 0) {
             if (FUN_001f9b48(&moby->pos, vars + 0x230) < 0.05f || tick_countdown_32((int *)(vars + 0x1fc))) {
                 angle = random_angle_radians();
@@ -581,14 +583,17 @@ remove:
             FUN_L06_002e9b60(0.3f, 0.3f, (char *)moby, pos, 1);
         }
         if (E8678_INT(0x1c4) != 2 && random_integer_below(9) == 0) {
-            E8678_FLOAT(0x1d4) = random_float_between(-E8678_FLOAT(0x1d8), E8678_FLOAT(0x1d8)) * 0.017453292f;
-            moby->state = 9;
+            f = random_float_between(-E8678_FLOAT(0x1d8), E8678_FLOAT(0x1d8)) * 0.017453292f;
+            state = 9;
         } else {
             if (E8678_SHORT(0x1e8) == 0) return;
-            E8678_FLOAT(0x1d4) = random_float_between(-E8678_FLOAT(0x1d8), E8678_FLOAT(0x1d8)) * 0.017453292f;
-            moby->state = 10;
+            f = random_float_between(-E8678_FLOAT(0x1d8), E8678_FLOAT(0x1d8)) * 0.017453292f;
+            state = 10;
         }
-        if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, 0);
+        E8678_FLOAT(0x1d4) = f;
+        flags = moby->prev_seq;
+        moby->state = state;
+        if (flags != 4) blend_moby_animation(moby, 4, 0, 0);
         return;
     }
     case 9: {
