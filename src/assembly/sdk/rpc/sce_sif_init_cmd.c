@@ -88,14 +88,10 @@ block_3:
         var_3_42 += 1;
     } while (ipval >= 0);
     ipval = 0x1F;
-    var_2_61 = LookupTable + 0x1F;
-loop_6:
-    *var_2_61 = 0;
-    ipval -= 1;
-    var_2_61 -= 1;
-    if (ipval >= 0) {
-        goto loop_6;
-    }
+    do {
+        LookupTable[ipval] = 0;
+        ipval -= 1;
+    } while (ipval >= 0);
     D_00154E80[0].unk0 = FUN_0011a448;
     D_00154E80[1].unk0 = FUN_0011a428;
     D_00154E80[0].unk4 = &D_00154E58;
