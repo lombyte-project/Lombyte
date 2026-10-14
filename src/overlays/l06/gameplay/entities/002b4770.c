@@ -2477,7 +2477,7 @@ void FUN_L06_002f9a28(unsigned char *moby) {
             v[0] = FUN_001f9dc8(*(float *)(moby + 0x48)) * 0.45f;
             v[1] = FUN_001f9de0(*(float *)(moby + 0x48)) * 0.45f;
             v[2] = 0.0f;
-            hit.owner = moby; hit.flags = 1; hit.scale = 1.0f; hit.enabled = 1;
+            hit.scale = 1.0f; hit.enabled = 1; hit.owner = moby; hit.flags = 1;
             hit.direction[0] = FUN_001f9dc8(*(float *)(moby + 0x48));
             hit.direction[1] = FUN_001f9de0(*(float *)(moby + 0x48)); hit.direction[2] = 0.0f;
             FUN_L00_0024f7c8(moby, 0, pos); FUN_L00_001f2868(0.5f, pos, 0, moby, &hit);
@@ -2490,6 +2490,8 @@ void FUN_L06_002f9a28(unsigned char *moby) {
 
             return;
         }
+        if (!((unsigned char)moby[0x70] & 2)) return;
+        moby[0x20] = moby[0xbc]; if ((unsigned char)moby[0x53] != 1) FUN_00212f90(moby, 1, 0, scale_game_frames_alt(20)); return;
     case 11:
         if (!((unsigned char)moby[0x70] & 2)) return;
         moby[0x20] = moby[0xbc]; if ((unsigned char)moby[0x53] != 1) FUN_00212f90(moby, 1, 0, scale_game_frames_alt(20)); return;
@@ -2515,7 +2517,7 @@ void FUN_L06_002f9a28(unsigned char *moby) {
             moby[0x31] = 0; *(int *)(moby + 0x94) = 0; if ((unsigned char)moby[0x53] != 1) FUN_00212f90(moby, 1, 0, scale_game_frames_alt(20)); return;
         }
         if (!((unsigned char)moby[0x70] & 2)) return;
-        *(CirclerQuad *)v = *(CirclerQuad *)(moby + 0x10); v[2] += 1.0f;
+        *(volatile CirclerQuad *)v = *(volatile CirclerQuad *)(moby + 0x10); v[2] += 1.0f;
         FUN_L00_0025f3e8(moby, v, -1, 2.0f, 20.0f);
         FUN_L00_00263e30(moby, 0x6a2, 1, 0x6a3, 3, 6, 2);
         FUN_L06_002f5360(D_L06_0015FFD8 + (*(int *)(data + 0x100) << 8));
@@ -2528,7 +2530,7 @@ void FUN_L06_002f9a28(unsigned char *moby) {
         target = D_L06_001678D0; path = D_L06_0016A010;
         for (i = 0; i < 48; i++) {
             if (*path != 0 && *(short *)(target + 0x86) == 18) { FUN_L06_00316330(target); break; }
-            target += 0xa0; path++;
+            path++; target += 0xa0;
         }
         if (D_L06_0015F5C4 == 2) {
             FUN_L06_002f5360(D_L06_0015FFD8 + (*(int *)(data + 0xfc) << 8)); mark_moby_for_removal((struct Moby *)moby);
