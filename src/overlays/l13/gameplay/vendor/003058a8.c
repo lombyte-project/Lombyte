@@ -400,12 +400,9 @@ attach_hit:
                     break;
 update_hit:
                     previous->value += 1.0f;
-                    previous = &D_L13_00178400[target->hit_slot];
-                    previous->active = 1;
-                    previous = &D_L13_00178400[target->hit_slot];
-                    previous->valid = 1;
-                    previous = &D_L13_00178400[target->hit_slot];
-                    previous->oclass = moby->oclass;
+                    D_L13_00178400[target->hit_slot].active = 1;
+                    D_L13_00178400[target->hit_slot].valid = 1;
+                    D_L13_00178400[target->hit_slot].oclass = moby->oclass;
                     previous = &D_L13_00178400[target->hit_slot];
                     previous->flags = (unsigned short)flags | 0x10000;
                 }
