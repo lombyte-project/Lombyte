@@ -2389,12 +2389,16 @@ void FUN_L12_002e9f68(struct Moby *moby) {
     FUN_L12_002eb220(moby);
     if (D_001413F4 == 2) {
         moby->scale = moby->pclass->scale * 0.5f;
-        child = *(struct Moby **)(data + 0xac);
-        if (child != 0) child->scale = child->pclass->scale * 0.5f;
+        {
+            struct Moby *child = *(struct Moby **)(data + 0xac);
+            if (child != 0) child->scale = child->pclass->scale * 0.5f;
+        }
     } else {
         moby->scale = moby->pclass->scale;
-        child = *(struct Moby **)(data + 0xac);
-        if (child != 0) child->scale = child->pclass->scale;
+        {
+            struct Moby *child = *(struct Moby **)(data + 0xac);
+            if (child != 0) child->scale = child->pclass->scale;
+        }
     }
     if ((unsigned int)(moby->state - 2) < 4) {
         if (*(int *)(data + 0xb0) == -1)
@@ -2460,7 +2464,7 @@ update_state:
             child->update_dist = 0;
             (*(struct Moby **)(data + 0xac))->flags |= 0x41;
         }
-        *(OvlQuad *)&moby->pos = *(OvlQuad *)(D_L12_001B0930[*(int *)(data + 0xa0)] + 0x10);
+        qcopy(&moby->pos, D_L12_001B0930[*(int *)(data + 0xa0)] + 0x10);
         if (*(int *)(data + 0xc0) != 0 && *(int *)(data + 0xc4) == 0) {
             a = scale_game_frames_alt(240);
             b = scale_game_frames_alt(400);
@@ -2484,8 +2488,9 @@ update_state:
             child = *(struct Moby **)(data + 0xac);
             if (child) child->flags &= 0xffbe;
             moby->flags |= 0x1000;
+            a = moby->pclass->collision;
             moby->state = 2;
-            moby->collision = moby->pclass->collision;
+            moby->collision = a;
         }
         break;
     case 2:
@@ -2526,9 +2531,9 @@ update_state:
                 ++*(short *)(data + 0xbc);
                 moby_point_position(moby, *(int *)(data + 0xb8), &position);
                 *(int *)(data + 0xb8) = *(int *)(data + 0xb8) == 0;
-                aim.q = *(OvlQuad *)(target + 8);
+                qcopy(&aim, target + 8);
                 if (*(int *)(data + 0xc0)) {
-                    aim.q = *(OvlQuad *)D_L12_00167240;
+                    qcopy(&aim, D_L12_00167240);
                     aim.f[2] += random_float_between(-0.5f, 0.1f);
                     aim.f[0] += FUN_L00_00257c48(0.0f, 0.4f);
                 }
