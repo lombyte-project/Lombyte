@@ -480,7 +480,7 @@ extern u8 FUN_001fef20_2d09b8(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_001ff3d8_2d09b8(void *) __asm__("FUN_001f9af0");
 extern s32 FUN_00257b90_2d09b8(s32, s32) __asm__("FUN_L00_00257b90");
 extern void FUN_0026a9f0_2d09b8(void *, void *, s32, s32, s32, s32, s32, s32, f32, f32) __asm__("FUN_L00_0026a9f0");
-extern void FUN_002ac910_2d09b8(void *, void *, void *, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
+extern void FUN_002ac910_2d09b8(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
 
 void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
     u8 *vars = (u8 *)m->vars;
@@ -514,73 +514,76 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
         *(u8 **)(*(u8 **)(*(u8 **)(vars + 0xA4) + 0x78) + 0xA0) = *(u8 **)(vars + 0xA0);
         *(u32 *)(*(u8 **)(*(u8 **)(vars + 0xA4) + 0x78) + 0xAC) |= 4;
     }
-    qcopy(&position, &m->pos);
-    position.f[2] += 0.3f;
-    FUN_0026b790_2d09b8(0.3f, 1.01f, 1.075f, 0.05f, 50000.0f, &position, 1, 0x40808080);
-    for (i = 4; i >= 0; i--)
-        FUN_0026b790_2d09b8(0.3f, 1.01f, 1.07f, 0.05f, 50000.0f, &position, 1, 0x40808080);
-    if (source)
-        qcopy(&b, (u8 *)source + 0x10);
-    else
-        FUN_001ff2a8_2d09b8(&b, &m->pos, D_001413D0_2d09b8 + 0x10);
-    switch ((s16)((u16)m->oclass - 500)) {
-    case 1: kind = 0x15C; break;
-    case 3: kind = 0x15F; break;
-    case 2: kind = 0x162; break;
-    case 0: case 11: kind = 0x165; break;
-    case 4: kind = 0x168; break;
-    case 5: kind = 0x16B; break;
-    case 6: kind = 0x16E; break;
-    case 7: case 8: case 9: case 10: kind = 0x171; break;
-    default: kind = 0x95; break;
-    }
-    if (D_L00_0015FFBC_2d09b8 >= 201) { count = 4; trail_count = 4; }
-    else if (D_L00_0015FFBC_2d09b8 >= 151) { count = 2; trail_count = 2; }
-    else if (D_L00_0015FFBC_2d09b8 >= 101) { count = 2; trail_count = 1; }
-    else if (D_L00_0015FFBC_2d09b8 >= 51) { count = 1; trail_count = 0; }
-    else { count = 1; trail_count = 0; }
-    angle = D_L00_00166C80_2d19b0[80] - m->pos.x;
-    speed = D_L00_00166C80_2d19b0[81] - m->pos.y;
-    angle = FUN_001ff8b0_2d09b8(angle, speed);
-    angle = FUN_00200130_2d09b8(angle, m->v40.z);
-    angle += 3.1415925f;
-    choice = FUN_00200250_2d09b8(angle / 1.57f);
-    angle = FUN_00200178_2d09b8((f32)choice * 1.57f);
-    FUN_001ff260_2d09b8(&rotation);
-    rotation.f[2] = angle;
-    FUN_001ffa50_2d09b8(&c, &rotation);
-    for (i = 0; i < count; ++i) {
-        FUN_001ff6d0_2d09b8(&d, &D_L00_001DE6F0_2d09b8[i], &c);
-        FUN_001ff278_2d09b8(&d, &d, &m->pos);
-        qcopy(&e, &D_L00_001DE750_2d09b8[i]);
-        e.f[2] = FUN_002000e8_2d09b8(e.f[2], rotation.f[2]);
-        FUN_001ff2a8_2d09b8(&a, &d, &m->pos);
-        a.f[2] = 0.0f;
-        speed = FUN_00257be8_2d09b8(1.0f, 5.0f);
-        FUN_001ff500_2d09b8(speed * D_0015ED6C_2d09b8, &a, &a);
-        a.f[2] = FUN_00257be8_2d09b8(4.0f, 9.0f) * D_0015ED6C_2d09b8;
-        particle = FUN_00257b50_2d09b8(2);
-        spawned = FUN_002af8b0_2d09b8(m, &a, &d, &e, kind, particle, 1.0f, 1.0f);
-        if (spawned) {
-            qcopy((u8 *)spawned + 0x40, &D_L00_001DE750_2d09b8[i]);
-            *(f32 *)((u8 *)spawned + 0x48) = FUN_002000e8_2d09b8(*(f32 *)((u8 *)spawned + 0x48), rotation.f[2]);
-            FUN_00250df8_2d09b8(spawned);
+    {
+        s32 i;
+        qcopy(&position, &m->pos);
+        position.f[2] += 0.3f;
+        FUN_0026b790_2d09b8(0.3f, 1.01f, 1.075f, 0.05f, 50000.0f, &position, 1, 0x40808080);
+        for (i = 4; i >= 0; i--)
+            FUN_0026b790_2d09b8(0.3f, 1.01f, 1.07f, 0.05f, 50000.0f, &position, 1, 0x40808080);
+        if (source)
+            qcopy(&b, (u8 *)source + 0x10);
+        else
+            FUN_001ff2a8_2d09b8(&b, &m->pos, D_001413D0_2d09b8 + 0x10);
+        switch ((s16)((u16)m->oclass - 500)) {
+        case 1: kind = 0x15C; break;
+        case 3: kind = 0x15F; break;
+        case 2: kind = 0x162; break;
+        case 0: case 11: kind = 0x165; break;
+        case 4: kind = 0x168; break;
+        case 5: kind = 0x16B; break;
+        case 6: kind = 0x16E; break;
+        case 7: case 8: case 9: case 10: kind = 0x171; break;
+        default: kind = 0x95; break;
         }
-    }
-    for (i = 0; i < trail_count; i++) {
-        d.f[0] = FUN_00257be8_2d09b8(-0.5f, 0.5f);
-        d.f[1] = FUN_00257be8_2d09b8(-0.5f, 0.5f);
-        d.f[2] = FUN_00257be8_2d09b8(0.0f, 1.0f);
-        FUN_001ff278_2d09b8(&d, &d, &m->pos);
-        speed = FUN_00257be8_2d09b8(6.0f, 12.0f) * D_0015ED6C_2d09b8;
-        FUN_00257d78_2d09b8(speed, speed, &a);
-        if (a.f[2] < 0.0f) a.f[2] = -a.f[2];
-        e.f[0] = FUN_00257cb0_2d09b8();
-        e.f[2] = FUN_00257cb0_2d09b8();
-        particle = 1;
-        if (FUN_00257b50_2d09b8(6) == 0)
-            particle = FUN_00200250_2d09b8(FUN_00257be8_2d09b8(3.0f, 6.0f));
-        FUN_002af8b0_2d09b8(m, &a, &d, &e, kind + 1, particle, 0.25f, 0.5f);
+        if (D_L00_0015FFBC_2d09b8 >= 201) { count = 4; trail_count = 4; }
+        else if (D_L00_0015FFBC_2d09b8 >= 151) { count = 2; trail_count = 2; }
+        else if (D_L00_0015FFBC_2d09b8 >= 101) { count = 2; trail_count = 1; }
+        else if (D_L00_0015FFBC_2d09b8 >= 51) { count = 1; trail_count = 0; }
+        else { count = 1; trail_count = 0; }
+        angle = D_L00_00166C80_2d19b0[80] - m->pos.x;
+        speed = D_L00_00166C80_2d19b0[81] - m->pos.y;
+        angle = FUN_001ff8b0_2d09b8(angle, speed);
+        angle = FUN_00200130_2d09b8(angle, m->v40.z);
+        angle += 3.1415925f;
+        choice = FUN_00200250_2d09b8(angle / 1.57f);
+        angle = FUN_00200178_2d09b8((f32)choice * 1.57f);
+        FUN_001ff260_2d09b8(&rotation);
+        rotation.f[2] = angle;
+        FUN_001ffa50_2d09b8(&c, &rotation);
+        for (i = 0; i < count; ++i) {
+            FUN_001ff6d0_2d09b8(&d, &D_L00_001DE6F0_2d09b8[i], &c);
+            FUN_001ff278_2d09b8(&d, &d, &m->pos);
+            qcopy(&e, &D_L00_001DE750_2d09b8[i]);
+            e.f[2] = FUN_002000e8_2d09b8(e.f[2], rotation.f[2]);
+            FUN_001ff2a8_2d09b8(&a, &d, &m->pos);
+            a.f[2] = 0.0f;
+            speed = FUN_00257be8_2d09b8(1.0f, 5.0f);
+            FUN_001ff500_2d09b8(speed * D_0015ED6C_2d09b8, &a, &a);
+            a.f[2] = FUN_00257be8_2d09b8(4.0f, 9.0f) * D_0015ED6C_2d09b8;
+            particle = FUN_00257b50_2d09b8(2);
+            spawned = FUN_002af8b0_2d09b8(m, &a, &d, &e, kind, particle, 1.0f, 1.0f);
+            if (spawned) {
+                qcopy((u8 *)spawned + 0x40, &D_L00_001DE750_2d09b8[i]);
+                *(f32 *)((u8 *)spawned + 0x48) = FUN_002000e8_2d09b8(*(f32 *)((u8 *)spawned + 0x48), rotation.f[2]);
+                FUN_00250df8_2d09b8(spawned);
+            }
+        }
+        for (i = 0; i < trail_count; i++) {
+            d.f[0] = FUN_00257be8_2d09b8(-0.5f, 0.5f);
+            d.f[1] = FUN_00257be8_2d09b8(-0.5f, 0.5f);
+            d.f[2] = FUN_00257be8_2d09b8(0.0f, 1.0f);
+            FUN_001ff278_2d09b8(&d, &d, &m->pos);
+            speed = FUN_00257be8_2d09b8(6.0f, 12.0f) * D_0015ED6C_2d09b8;
+            FUN_00257d78_2d09b8(speed, speed, &a);
+            if (a.f[2] < 0.0f) a.f[2] = -a.f[2];
+            e.f[0] = FUN_00257cb0_2d09b8();
+            e.f[2] = FUN_00257cb0_2d09b8();
+            particle = 1;
+            if (FUN_00257b50_2d09b8(6) == 0)
+                particle = FUN_00200250_2d09b8(FUN_00257be8_2d09b8(3.0f, 6.0f));
+            FUN_002af8b0_2d09b8(m, &a, &d, &e, kind + 1, particle, 0.25f, 0.5f);
+        }
     }
     *(u32 *)((u8 *)m + 0x94) = 0;
     m->state = 3;
@@ -617,12 +620,12 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
             FUN_0026a9f0_2d09b8(&a, &e, *effect, *velocity, first_color, second_color, 0, 0, 400000.0f, rise);
         }
         if (D_L00_0015F5D0_2d09b8 < 0.95f && distance > 9.0f && !close) {
-            FUN_002ac910_2d09b8(m, &a, &e, FUN_001fef20_2d09b8(15), 4.0f, 127, 127, 127, 32);
-            FUN_002ac910_2d09b8(m, &a, &e, FUN_001fef20_2d09b8(24), 4.0f, 127, 32, 0, 32);
-            FUN_002ac910_2d09b8(m, &a, &e, FUN_001fef20_2d09b8(20), 4.0f, 127, 64, 0, 48);
+            FUN_002ac910_2d09b8(m, &a, &e, 4.0f, FUN_001fef20_2d09b8(15), 127, 127, 127, 32);
+            FUN_002ac910_2d09b8(m, &a, &e, 4.0f, FUN_001fef20_2d09b8(24), 127, 32, 0, 32);
+            FUN_002ac910_2d09b8(m, &a, &e, 4.0f, FUN_001fef20_2d09b8(20), 127, 64, 0, 48);
         }
-        FUN_002ac910_2d09b8(m, &a, &e, FUN_001fef20_2d09b8(27), 3.5f, 96, 16, 0, 64);
-        FUN_002ac910_2d09b8(m, &a, &e, FUN_001fef20_2d09b8(29), 3.0f, 32, 0, 0, 32);
+        FUN_002ac910_2d09b8(m, &a, &e, 3.5f, FUN_001fef20_2d09b8(27), 96, 16, 0, 64);
+        FUN_002ac910_2d09b8(m, &a, &e, 3.0f, FUN_001fef20_2d09b8(29), 32, 0, 0, 32);
     }
 }
 #endif
