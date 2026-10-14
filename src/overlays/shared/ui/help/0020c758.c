@@ -1492,7 +1492,8 @@ void FUN_L00_0020f580(void)
     struct { u8 position[0x30]; u8 rotation[0x10]; } transform __attribute__((aligned(16)));
     s32 i, j, index, offset, first, second, third, random_range;
     s32 color_red, color_green, color_blue;
-    u8 *moby, *effect, *source;
+    u8 *moby, *effect;
+    u8 *volatile source;
     u8 *volatile slot;
     f32 angle;
 
@@ -1502,11 +1503,12 @@ void FUN_L00_0020f580(void)
             offset = i * 0x50;
             slot = (u8 *)&hero + offset;
             j = 0;
+            source = transform.position;
             do {
                 moby = *(u8 **)(slot + 0x1090);
                 if (j == 1) moby = *(u8 **)(slot + 0x1094);
                 if (moby != 0) {
-                    *(u64 *)(moby + 0x38) = *(u64 *)(*(u8 **)((u8 *)&hero + 0x2080) + 0x38);
+                    *(u64 *)(moby + 0x38) = *(u64 *)((u8 *)hero.moby + 0x38);
                     index = *(s32 *)(D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c + 0xc);
                     if (i == 1 && j == 1) index = 3;
                     if (*(u8 *)(slot + 0x10aa) != 0) {
@@ -1604,23 +1606,21 @@ after_moby:
                     if (D_001404DC_f580 != 0) {
                         effect = (u8 *)D_001404DC_f580;
                         if (((*(u16 *)(effect + 0x34) ^ 1) & 1) != 0) {
-                            FUN_0024f728_f580(moby, 6, transform.position);
-                            *(u128 *)D_001410D0_f580 = *(u128 *)transform.rotation;
+                            FUN_0024f728_f580(moby, 6, source);
+                            *(u128 *)D_001410D0_f580 = *(u128 *)(source + 0x30);
                             FUN_00207d00_f580();
-                            *(u128 *)(effect + 0x10) = *(u128 *)transform.rotation;
-                            FUN_001ffcd8_f580(effect + 0xc0, transform.position);
+                            *(u128 *)(effect + 0x10) = *(u128 *)(source + 0x30);
+                            FUN_001ffcd8_f580(effect + 0xc0, source);
                             FUN_00250df8_f580(effect);
-                            *(u64 *)(effect + 0x38) = *(u64 *)(*(u8 **)((u8 *)&hero + 0x2080) + 0x38);
+                            *(u64 *)(effect + 0x38) = *(u64 *)((u8 *)hero.moby + 0x38);
                             random_range = FUN_001fef20_f580(0x78);
                             angle = FUN_001ff800_f580(((f32)(D_L00_0015F5CC_f580 % random_range) / FUN_00200240_f580(random_range) * 2.0f) * 3.1415927f + -3.1415927f);
                             color_red = FUN_00200250_f580(angle * 90.0f);
                             color_green = FUN_00200250_f580(angle * 50.0f);
                             color_blue = FUN_00200250_f580(angle * 10.0f);
-                            color_blue += 0x14;
-                            color_green += 0x32;
                             color_red += 0xd7;
                             if (color_red > 0xff) color_red = 0xff;
-                            *(u32 *)(effect + 0x90) = (color_blue << 16) | 0x80000000 | (color_green << 8) | color_red;
+                            *(u32 *)(effect + 0x90) = ((color_blue + 0x14) << 16) | 0x80000000 | ((color_green + 0x32) << 8) | color_red;
                             *(u16 *)(effect + 0x34) |= 0x10;
                         }
                     }
