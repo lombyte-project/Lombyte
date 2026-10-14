@@ -2028,6 +2028,7 @@ void FUN_L00_002dbf28(char *moby) {
     float magnitude, range, deficit, speed;
     int multiplier, count, i, a, b, red, green, blue;
     char *center;
+    G_002dbf28 *owner;
 
     __builtin_memcpy(matrix, D_L00_001EA0B0_002dbf28, 80);
     axis.ul128 = 0;
@@ -2054,8 +2055,7 @@ void FUN_L00_002dbf28(char *moby) {
         FUN_001f9a28_002dbf28(&scaled, &scaled, &temporary);
         FUN_001f9bf8_002dbf28(FUN_002132a8_002dbf28(0.0f, 1.0f), &temporary, &axis);
         FUN_001f9a10_002dbf28(&scaled, &scaled, &temporary);
-        speed = FUN_002132a8_002dbf28(3.5f, 6.5f);
-        speed = magnitude * speed;
+        speed = magnitude * FUN_002132a8_002dbf28(3.5f, 6.5f);
         FUN_001f9bf8_002dbf28(speed * frame_time, &scaled, &scaled);
         FUN_001f9a10_002dbf28(&scaled, &scaled, &position);
         a = FUN_001f96f8_002dbf28(60);
@@ -2073,14 +2073,14 @@ void FUN_L00_002dbf28(char *moby) {
         FUN_001f9a28_002dbf28(&scaled, &scaled, &temporary);
         FUN_001f9bf8_002dbf28(FUN_002132a8_002dbf28(0.0f, 1.0f), &temporary, &axis);
         FUN_001f9a10_002dbf28(&scaled, &scaled, &temporary);
-        speed = FUN_002132a8_002dbf28(6.5f, 10.0f);
-        speed = magnitude * speed;
-        FUN_001f9bf8_002dbf28(speed * frame_time, &scaled, &scaled);
+        deficit = magnitude * FUN_002132a8_002dbf28(6.5f, 10.0f);
+        FUN_001f9bf8_002dbf28(deficit * frame_time, &scaled, &scaled);
         FUN_001f9a10_002dbf28(&scaled, &scaled, &position);
         a = FUN_001f96f8_002dbf28(60);
         b = FUN_001f96f8_002dbf28(90);
         FUN_L00_002af450_002dbf28(center, &scaled, FUN_L00_00257b90_002dbf28(a, b), 1, item_text_variant.b9);
     }
+    deficit = range + range;
     displacement.ul128 = 0;
     displacement.fl32[0] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
     displacement.fl32[1] = FUN_002132a8_002dbf28(-1.0f, 1.0f);
@@ -2088,7 +2088,7 @@ void FUN_L00_002dbf28(char *moby) {
     origin.fl32[2] += range * 0.5f;
     scaled.ul128 = displacement.ul128;
     FUN_001f9bf8_002dbf28((range / 5.0f) * frame_time, &scaled, &scaled);
-    FUN_001f9bf8_002dbf28((range + range) * frame_time, &origin, &origin);
+    FUN_001f9bf8_002dbf28(deficit * frame_time, &origin, &origin);
     FUN_001f9a10_002dbf28(&scaled, &scaled, &origin);
     FUN_001f9c90_002dbf28(&scaled, &scaled, frame_time * 10.0f);
     a = FUN_001f96f8_002dbf28(60);
@@ -2146,8 +2146,9 @@ void FUN_L00_002dbf28(char *moby) {
     speed = magnitude * 3.0f;
     a = FUN_001f96f8_002dbf28(29);
     FUN_L00_002df808_002dbf28(speed, moby, center, &position, a, (u8)red, (u8)green, (u8)blue, 32);
-    if (range < 20.0f) D_L00_00166C80_002dbf28.f160 = 0.4f - range * 0.0175f;
-    else D_L00_00166C80_002dbf28.f160 = 0.050000012f;
+    owner = &D_L00_00166C80_002dbf28;
+    if (range < 20.0f) owner->f160 = 0.4f - range * 0.0175f;
+    else owner->f160 = 0.050000012f;
     D_L00_00166C80_002dbf28.i168 = FUN_001f96f8_002dbf28(25);
     FUN_L00_002d3838_002dbf28(matrix, center, 0, 0);
     if (item_text_variant.b9) {
