@@ -2475,6 +2475,7 @@ found:
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030f5f0.s", FUN_L07_0030f5f0);
 #else
+#include "qzero.h"
 extern void func_L00_002A5158_30D8E8(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern void FUN_L00_0025e450_l07(f32, f32, f32, f32, f32, f32, f32, struct Moby *, void *, s32, s32, s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263ac8(void *, int, void *, float);
@@ -2487,8 +2488,8 @@ extern void FUN_L00_00258278(void *, void *, float, float, float, float);
 extern float FUN_L00_00258110(void *, float, float, float, float, float);
 extern void FUN_001e93e8(void *, void *);
 extern int FUN_L00_0025c698(void *, void *);
-extern unsigned char D_L07_00161B40[] __attribute__((sda));
-extern unsigned char D_L07_00161B50[] __attribute__((sda));
+extern unsigned char D_L07_00161B40[] __attribute__((sda, section(".sdata")));
+extern unsigned char D_L07_00161B50[] __attribute__((sda, section(".sdata")));
 extern char D_L07_002117F8[];
 extern char D_L07_00211838[];
 extern char D_0013F3D0[];
@@ -2540,10 +2541,10 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             *(int *)(target + 17) = 0;
         } else {
             *(int *)(target + 16) = 0;
-            *(u128 *)target = 0;
-            *(u128 *)(target + 4) = 0;
-            *(u128 *)(target + 12) = 0;
-            *(u128 *)(target + 8) = 0;
+            qzero(target);
+            qzero(target + 4);
+            qzero(target + 12);
+            qzero(target + 8);
             *(int *)(target + 17) = 2;
         }
     } else inside = point_in_path_xy(target, path + 0x10, *(int *)path) != 0;
@@ -2587,7 +2588,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
     if (1.0f <= F(data, 0x14c)) *(u128 *)D_0013F3D0 = *(u128 *)(position);
     switch (moby[0x20]) {
     case 0:
-        stub_printf(D_L07_00211838, 0);
+        ((void (*)(char *))stub_printf)(D_L07_00211838);
         goto bounds;
     case 1:
         if ((moby[0x70] & 2) && moby[0x53] != 0) blend_moby_animation(moby, 0, 0, 10);
@@ -2684,8 +2685,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         qcopy(previous, position);
         subtract_vector_xyz(goal, target, offset);
         subtract_vector_xyz(delta, goal, data + 0x100);
-        scale = 1.0f;
-        if (F(data, 0x14c) < scale) scale = F(data, 0x14c);
+        scale = F(data, 0x14c) < 1.0f ? F(data, 0x14c) : 1.0f;
         FUN_001f9a68(delta, delta, scale);
         add_vector_xyz(position, delta, data + 0x100);
         FUN_001e93e8(previous, position);
@@ -2801,6 +2801,9 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             goto remove;
         }
         goto bounds;
+    remove:
+        mark_moby_for_removal(moby);
+        return;
     case 15:
         FUN_001f9a68(data + 0xd0, data + 0xd0, frame_scale * -0.050000012f + 1.0f);
         F(data, 0xd8) -= frame_time * 9.8f;
@@ -2824,7 +2827,6 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
     }
 bounds:
     if (F(moby, 0x10) < 2.0f || 1021.0f < F(moby, 0x10) || F(moby, 0x14) < 2.0f || 1021.0f < F(moby, 0x14) || F(moby, 0x18) < 2.0f || 1021.0f < F(moby, 0x18)) {
-    remove:
         mark_moby_for_removal(moby);
     }
 }
