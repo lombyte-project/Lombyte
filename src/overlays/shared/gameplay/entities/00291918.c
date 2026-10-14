@@ -725,7 +725,8 @@ void FUN_L03_002c4718(struct Moby *m)
     Vec4 old_pos;
     Vec4 next_pos;
     Vec4 delta;
-    struct { int old_m98, old_owner98, old_m94, old_owner94; } saved;
+    /* Keep each collision snapshot ordered before collision fields are disabled. */
+    volatile struct { int old_m98, old_owner98, old_m94, old_owner94; } saved;
     float angle;
     float distance;
     float time_step;
@@ -743,12 +744,12 @@ void FUN_L03_002c4718(struct Moby *m)
         FUN_001f9a10(pos, pos, d);
         FUN_001f9bf8(&next_pos, d, 0.2f);
         FUN_001f9a10(&next_pos, &next_pos, pos);
-        saved.old_m98 = m->collision_disable;
-        saved.old_m94 = m->collision;
+        saved.old_m98 = *(volatile int *)&m->collision_disable;
+        saved.old_m94 = *(volatile int *)&m->collision;
         owner = *(struct Moby **)(d + 4);
-        saved.old_owner94 = owner->collision;
-        saved.old_owner98 = owner->collision_disable;
-        m->collision_disable = -1;
+        saved.old_owner94 = *(volatile int *)&owner->collision;
+        saved.old_owner98 = *(volatile int *)&owner->collision_disable;
+        *(volatile int *)&m->collision_disable = -1;
         (*(struct Moby **)(d + 4))->collision_disable = -1;
         m->collision = 0;
         (*(struct Moby **)(d + 4))->collision = 0;
