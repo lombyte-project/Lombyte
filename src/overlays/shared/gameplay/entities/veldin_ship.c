@@ -1801,12 +1801,13 @@ typedef union { u32 word[4]; f32 f[4]; int q __attribute__((mode(TI))); } __attr
 void FUN_L00_002d3a10(u8 *moby) {
     u8 *vars, *row, *moby_position;
     V2d3a10 position, target, offset;
-    s32 flags, active, changed = 0;
+    s32 flags, active, changed;
     f32 value, limit, step;
     s32 i;
     if (!moby) return;
     vars = *(u8 **)(moby + 0x78);
     if (!vars) return;
+    changed = 0;
     if (!moby[0x20]) {
         moby[0x30] = 0xff;
         moby[0xbc] = vars[0x1c];
@@ -1899,7 +1900,7 @@ void FUN_L00_002d3a10(u8 *moby) {
                 }
             }
         } else if (vars[0x6b] && FUN_001fefc8_2d3a10(vars + 0x7f)) *(s32 *)(vars + 0x4c) ^= 2;
-    } else if (!*(u16 *)(vars + 0x72) || changed)
+    } else if (!*(u16 *)(vars + 0x72) || changed == 1)
         *(f32 *)(vars + 0x60) = FUN_00257be8_2d3a10(*(f32 *)(vars + 0x3c), *(f32 *)(vars + 0x38));
 after_position:
     if (*(u16 *)(vars + 0x6c) && FUN_001fef98_2d3a10(vars + 0x74)) {
