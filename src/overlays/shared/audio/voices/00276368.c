@@ -336,19 +336,14 @@ void FUN_L00_00276908(void) {
         D_L00_001B9CF0.state = 0x14;
         D_L00_001B9CF0.unk14 = 2;
         {
-            u8 *table;
-            value = *(s32 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
-            table = (u8 *)D_L00_00197300[0];
-            if (value < table[0xc]) {
+            s32 value = *(s32 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
+            if (value < ((u8 *)D_L00_00197300[0])[0xc]) {
                 do {
-                    table = (u8 *)D_L00_00197300[0];
                     i = value++;
-                    *(s32 *)(table + 0x48 + i * 4) = 0;
-                    table = (u8 *)D_L00_00197300[0];
-                } while (value < table[0xc]);
+                    *(s32 *)((u8 *)D_L00_00197300[0] + 0x48 + i * 4) = 0;
+                } while (value < ((u8 *)D_L00_00197300[0])[0xc]);
             }
-            table = (u8 *)D_L00_00197300[0];
-            table[0xc] = *(u8 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
+            ((u8 *)D_L00_00197300[0])[0xc] = *(u8 *)((u8 *)&D_L00_001B9CF0 + 0xcc);
         }
         D_L00_0015F5D8 = 1;
         {
