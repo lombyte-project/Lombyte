@@ -681,8 +681,10 @@ void FUN_L08_002f5e58(struct Moby *m) {
     Vec4 *grid;
     f32 *u, *v;
     f32 *weight;
-    f32 inv_x, inv_y, time, phase, amp_a, amp_b, phase_a, phase_b;
-    f32 phase_step, amp_step_a, amp_step_b, step_a, step_b, height_a, height_b;
+    s32 next_i;
+    f32 inv_x, inv_y;
+    f32 phase, phase_step, amp_a, amp_step_a, amp_b, amp_step_b;
+    f32 step_a, step_b, time, height_a, height_b, phase_a, phase_b;
     f32 x, y, noise_x, noise_y, angle, base, sine, shape, bend, a, c, t;
     s32 i, j, k, stride, alpha, timer, count, lifetime;
     u32 color_a, color_b;
@@ -774,10 +776,11 @@ void FUN_L08_002f5e58(struct Moby *m) {
     bend = d->levels_a[0];
     phase = f[5]; amp_a = f[7]; amp_b = f[8];
     phase_a = f[0x18]; phase_b = f[0x19];
-    for (i = 0; i <= b[9]; i++) {
+    for (i = 0; i <= b[9]; i = next_i) {
         f32 next_phase, next_amp_a, next_amp_b, next_a, next_b;
         y = convert_integer_to_float(i) / convert_integer_to_float(b[9]);
         qcopy(&point, &edge[0]);
+        next_i = i + 1;
         next_phase = phase + phase_step;
         next_amp_b = amp_b + amp_step_b;
         next_a = phase_a + step_a;
@@ -786,10 +789,10 @@ void FUN_L08_002f5e58(struct Moby *m) {
         subtract_vector_xyz(&across, &edge[1], &edge[0]);
         FUN_001f9a68(&across, &across, inv_x);
         noise_y = FUN_L08_002f5d98(y, (char *)d);
+        k = i * stride;
+        weight = (f32 *)((char *)grid + k + 12);
         for (j = 0; j <= b[8]; j++) {
             f32 a, c, t, base, angle, shape;
-            k = i * stride;
-            weight = (f32 *)((char *)grid + k + j * 16 + 12);
             x = convert_integer_to_float(j) / convert_integer_to_float(b[8]);
             a = FUN_L00_0025e310(f[0x17] * time);
             angle = x * 3.1415927f;
@@ -821,6 +824,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
             *weight = 1.0f /
                 (((1.0f-f[0x56]) + f[0x56]*sine*sine*sine) * ((1.0f-f[0x57])+f[0x57]*y));
             add_vector_xyz(&point, &point, &across);
+            weight += 4;
         }
         add_vector_xyz(&edge[0], &edge[0], &down[0]);
         phase = next_phase; amp_a = next_amp_a;
