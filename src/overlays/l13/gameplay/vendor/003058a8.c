@@ -472,7 +472,150 @@ bounds:
         mark_moby_for_removal(moby);
 }
 #endif
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L13_003073c8.s", FUN_L13_003073c8);
+#else
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern float dot_vector_xyz(void *, void *) __asm__("FUN_001f9ab0");
+extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern void FUN_001f9c90(void *, void *, float);
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern char D_L13_001670C0[];
+typedef struct { int v[6]; } L13EffectColors;
+extern L13EffectColors D_L13_001F5560, D_L13_001F5578;
+extern char *FUN_L13_0030c138(void *, void *, int, int);
+extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
+extern char *FUN_L00_002df808(void *, void *, void *, int, int, int, int, int, float);
+
+void FUN_L13_003073c8(struct Moby *moby, void *vars) {
+    struct {
+        OvlVec4 direction, velocity, axis, offset, pos, random_direction, random_vector;
+    } work;
+    int count;
+    int duration;
+    int *color, *second_color;
+    float distance, twice_distance, extra, speed, amount;
+    float scale;
+    work.axis.q = 0;
+    work.axis.f[2] = D_0015ED6C + D_0015ED6C;
+    work.velocity.q = work.axis.q;
+    work.axis.q = 0;
+    scale = 1.5f;
+    work.axis.f[2] = 1.0f;
+    /* Retail offsets the copied position before emitting the effects. */
+    qcopy(&work.pos, &moby->pos);
+    work.pos.f[2] += 1.0f;
+    scale_vector_xyz(&work.velocity, &work.velocity, scale);
+    subtract_vector_xyz(&work.direction, D_L13_001670C0, &work.pos);
+    distance = vector_length_xyz(&work.direction);
+    {
+        int i = 9;
+        do {
+            int lo, hi, duration;
+            work.random_vector.q = 0;
+            work.random_vector.f[0] = FUN_002132a8(-1.0f, 1.0f);
+            i--;
+            work.random_vector.f[1] = FUN_002132a8(-1.0f, 1.0f);
+            work.random_direction.q = work.random_vector.q;
+            FUN_001f9bf8(&work.offset, &work.axis, dot_vector_xyz(&work.random_direction, &work.axis));
+            subtract_vector_xyz(&work.random_direction, &work.random_direction, &work.offset);
+            FUN_001f9bf8(&work.offset, &work.axis, FUN_002132a8(0.0f, 1.0f));
+            add_vector_xyz(&work.random_direction, &work.random_direction, &work.offset);
+            FUN_001f9bf8(&work.random_direction, &work.random_direction,
+                scale * FUN_002132a8(3.5f, 6.5f) * D_0015ED6C);
+            add_vector_xyz(&work.random_direction, &work.random_direction, &work.velocity);
+            lo = FUN_001f96f8(60); hi = FUN_001f96f8(120);
+            duration = random_int_between(lo, hi);
+            FUN_L13_0030c138(&work.pos, &work.random_direction, duration, 0);
+        } while (i >= 0);
+    }
+    twice_distance = distance + distance;
+    {
+        int i = 3;
+        do {
+            int lo, hi, duration;
+            work.random_vector.q = 0;
+            work.random_vector.f[0] = FUN_002132a8(-1.0f, 1.0f);
+            i--;
+            work.random_vector.f[1] = FUN_002132a8(-1.0f, 1.0f);
+            work.random_direction.q = work.random_vector.q;
+            FUN_001f9bf8(&work.offset, &work.axis, dot_vector_xyz(&work.random_direction, &work.axis));
+            subtract_vector_xyz(&work.random_direction, &work.random_direction, &work.offset);
+            FUN_001f9bf8(&work.offset, &work.axis, FUN_002132a8(0.0f, 1.0f));
+            add_vector_xyz(&work.random_direction, &work.random_direction, &work.offset);
+            FUN_001f9bf8(&work.random_direction, &work.random_direction,
+                scale * FUN_002132a8(6.5f, 10.0f) * D_0015ED6C);
+            add_vector_xyz(&work.random_direction, &work.random_direction, &work.velocity);
+            lo = FUN_001f96f8(60); hi = FUN_001f96f8(90);
+            duration = random_int_between(lo, hi);
+            FUN_L13_0030c138(&work.pos, &work.random_direction, duration, 1);
+        } while (i >= 0);
+    }
+    work.random_vector.q = 0;
+    work.random_vector.f[0] = FUN_002132a8(-1.0f, 1.0f);
+    work.random_vector.f[1] = FUN_002132a8(-1.0f, 1.0f);
+    work.random_vector.f[2] = FUN_002132a8(-1.0f, 1.0f);
+    work.direction.f[2] += distance * 0.5f;
+    work.random_direction.q = work.random_vector.q;
+    FUN_001f9bf8(&work.random_direction, &work.random_direction, (distance / 5.0f) * D_0015ED6C);
+    FUN_001f9bf8(&work.direction, &work.direction, twice_distance * D_0015ED6C);
+    add_vector_xyz(&work.random_direction, &work.random_direction, &work.direction);
+    FUN_001f9c90(&work.random_direction, &work.random_direction, D_0015ED6C * 10.0f);
+    {
+        int lo = FUN_001f96f8(60);
+        int hi = FUN_001f96f8(90);
+        duration = random_int_between(lo, hi);
+    }
+    FUN_L13_0030c138(&work.pos, &work.random_direction, duration, 1);
+    count = distance < 6.0f ? FUN_001fa6d0(distance) + 1 : 4;
+    extra = 0.0f;
+    if (distance < 7.0f) extra = 7.0f - distance;
+    if (count > 0) {
+        int i = count;
+        L13EffectColors colors __attribute__((aligned(16)));
+        L13EffectColors second_colors __attribute__((aligned(16)));
+        float magnitude = 400000.0f;
+        float amount;
+        do {
+            int lo, hi, duration, duration2;
+            i--;
+            speed = FUN_002132a8(8.0f, 10.0f);
+            amount = extra * D_0015ED6C;
+            colors = D_L13_001F5560;
+            speed = scale * speed * D_0015ED6C;
+            second_colors = D_L13_001F5578;
+            speed -= amount;
+            amount = scale * magnitude;
+            color = &colors.v[random_integer_below(6)];
+            second_color = &second_colors.v[random_integer_below(6)];
+            lo = FUN_001f96f8(15); hi = FUN_001f96f8(20);
+            duration = random_int_between(lo, hi);
+            lo = FUN_001f96f8(25); hi = FUN_001f96f8(30);
+            duration2 = random_int_between(lo, hi);
+            FUN_L00_0026a9f0(&work.pos, &work.velocity, *color, *second_color,
+                duration, duration2, 0, 0, amount, speed);
+        } while (i != 0);
+    }
+    if (distance > 9.0f) {
+        amount = scale * 4.0f;
+        duration = FUN_001f96f8(15);
+        FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 127,127,127,32, amount);
+        duration = FUN_001f96f8(24);
+        FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 32,127,0,32, amount);
+    }
+    amount = scale * 4.0f;
+    duration = FUN_001f96f8(20);
+    FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 63,127,0,48, amount);
+    amount = scale * 3.5f;
+    duration = FUN_001f96f8(27);
+    FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 16,96,0,64, amount);
+    amount = scale * 3.0f;
+    duration = FUN_001f96f8(29);
+    FUN_L00_002df808(moby, &work.pos, &work.velocity, duration, 0,32,0,32, amount);
+}
+#endif
 struct BlastHit {
     u8 pad0[0x2C];
     f32 damage;
