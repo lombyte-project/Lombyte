@@ -1364,7 +1364,8 @@ void FUN_L12_003069d0(struct Moby *moby) {
         moby->state = 1;
         break;
     }
-    case 1:
+    case 1: {
+        float *pos = (float *)&D_0013F3D0;
         triggered = FUN_00214720(D_L12_00167240, *(int *)(data + 0x624));
         if (triggered) {
             moby->flags |= 0x41;
@@ -1389,11 +1390,11 @@ void FUN_L12_003069d0(struct Moby *moby) {
                 i--; slot += 12;
             } while (i >= 0);
         }
-        triggered = FUN_00214720(&D_0013F3D0, *(int *)(data + 0x628));
-        if (!(52.0f < ((float *)&D_0013F3D0)[2]) || triggered) {
+        triggered = FUN_00214720(pos, *(int *)(data + 0x628));
+        if (!(52.0f < pos[2]) || triggered) {
             height = 3.0f;
             if (triggered) height = 10.0f;
-            if (FUN_00214720(&D_0013F3D0, *(int *)(data + 0x61c)))
+            if (FUN_00214720(pos, *(int *)(data + 0x61c)))
                 *(int *)(data + 0x620) = scale_ticks(90);
             if (!tick_countdown_32_alt((int *)(data + 0x620))) height = 19.0f;
             FUN_L00_0025b8c0(&moby->pos.z, data + 0x62c, *(float *)(data + 0x618) + height,
@@ -1407,7 +1408,7 @@ void FUN_L12_003069d0(struct Moby *moby) {
         FUN_L00_00262b80(moby, data + 0x5e4, data + 0x5e8, D_L12_00161F30,
             D_L12_00161F28 * 0.017453292f * frame_time, D_L12_00161F2C * 0.017453292f * frame_time);
         FUN_L12_0027b370(moby, data, 17);
-        if (FUN_00214720(&D_0013F3D0, *(int *)(data + 0x5ec)) || D_L12_00161F00) {
+        if (FUN_00214720(pos, *(int *)(data + 0x5ec)) || D_L12_00161F00) {
             D_L12_001619B4 = 1;
             slot = (int *)(data + 0x5d0); i = 4;
             do {
@@ -1419,6 +1420,7 @@ void FUN_L12_003069d0(struct Moby *moby) {
             moby->state = 2;
         }
         break;
+    }
     case 2: {
         char *row;
         FUN_L00_00262b00(moby, data + 0x5cc, data + 0x5c8, 0.7f, frame_time * 1.2217305f);
@@ -1432,17 +1434,17 @@ void FUN_L12_003069d0(struct Moby *moby) {
             if (*(float *)(data + 0x5f0) == 0.0f) { moby->state = 3; break; }
         }
         next = (*(short *)(data + 0x5f8) + 1) % *(int *)row;
-        FUN_001f9a28(direction, row + next * 16 + 16, row + *(short *)(data + 0x5f8) * 16 + 16);
+        FUN_001f9a28(direction, row + (next + 1) * 16, row + (*(short *)(data + 0x5f8) + 1) * 16);
         FUN_001f9bf8(direction, direction, *(float *)(data + 0x5f0));
         FUN_001f9a10(&moby->pos, &moby->pos, direction);
-        angle = FUN_001f9e90(*(float *)(row + next * 16 + 16) - *(float *)(row + *(short *)(data + 0x5f8) * 16 + 16),
-                             *(float *)(row + next * 16 + 20) - *(float *)(row + *(short *)(data + 0x5f8) * 16 + 20));
+        angle = FUN_001f9e90(*(float *)(row + (next + 1) * 16) - *(float *)(row + (*(short *)(data + 0x5f8) + 1) * 16),
+                             *(float *)(row + (next + 1) * 16 + 4) - *(float *)(row + (*(short *)(data + 0x5f8) + 1) * 16 + 4));
         if (*(int *)row - 20 < *(short *)(data + 0x5f8)) angle = 3.054326f;
         FUN_L00_00258278(moby, data + 0x5f4, angle, frame_scale_sq * 0.0015f, frame_scale_sq * 0.3f, frame_time * 0.17453292f);
-        distance = FUN_001f9b80(&moby->pos, row + *(short *)(data + 0x5f8) * 16 + 16);
+        distance = FUN_001f9b80(&moby->pos, row + (*(short *)(data + 0x5f8) + 1) * 16);
         if (!(distance < 5.0f)) {
-            angle = FUN_001f9e90(*(float *)(row + *(short *)(data + 0x5f8) * 16 + 16) - moby->pos.x,
-                                 *(float *)(row + *(short *)(data + 0x5f8) * 16 + 20) - moby->pos.y);
+            angle = FUN_001f9e90(*(float *)(row + (*(short *)(data + 0x5f8) + 1) * 16) - moby->pos.x,
+                                 *(float *)(row + (*(short *)(data + 0x5f8) + 1) * 16 + 4) - moby->pos.y);
             if (!(1.5707964f < fast_difference_between_rotations(moby->rot.z, angle))) goto update_linked;
         }
         *(short *)(data + 0x5f8) = (*(short *)(data + 0x5f8) + 1) % *(int *)row;
@@ -1461,7 +1463,8 @@ update_linked:
         break;
     case 4:
         if (*(int *)(data + 0x608) != -1 && *(int *)(data + 0x60c) != -1) {
-            if (moby->command == 1) {
+            switch (moby->command) {
+            case 1:
                 if (*(float *)(data + 0x610) < 1.0f) {
                     advance_accelerated_scalar_l12(data + 0x610, data + 0x614, 1.0f,
                         frame_time_sq * 0.666f, frame_time_sq * 0.666f, frame_time * 0.4f);
@@ -1490,15 +1493,16 @@ update_linked:
                     D_L12_0015F404 = 0;
                     FUN_L00_002eac18(3);
                 }
-            } else if (moby->command < 2) {
-                if (moby->command == 0) {
+                break;
+            case 0: {
                     moby->command = 1;
                     FUN_L00_002ea9d8(D_L12_001600EC + *(int *)(data + 0x608) * 128 + 0x30);
                     FUN_L00_002eaa30(D_L12_001600EC + *(int *)(data + 0x608) * 128 + 0x70);
                     D_L12_001619A0 = 1;
                     D_L12_0015F404 = 1;
-                }
-            } else if (moby->command == 2) {
+                break;
+            }
+            case 2: {
                 char *slot_data = data;
                 int index;
                 saved = D_L12_001FB688;
@@ -1520,6 +1524,7 @@ update_linked:
 remove_moby:
                 mark_moby_for_removal(moby);
                 return;
+            }
             }
         }
         if (*(short *)(data + 0x5fa) == 0) {
