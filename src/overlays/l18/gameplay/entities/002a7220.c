@@ -2331,7 +2331,7 @@ extern void add_vector_9768(float *, float *, float *) __asm__("FUN_001f9a10");
 extern void vector_from_angles_9768(float *, float, float) __asm__("FUN_L00_00257d78");
 extern int hit_test_9768(float, float *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void remove_moby_9768(void *) __asm__("FUN_0020c828");
-extern void spawn_particle_9768(float, float, void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_0026a9f0");
+extern void spawn_particle_9768(void *, void *, int, int, int, int, float, float, int, int) __asm__("FUN_L00_0026a9f0");
 extern void spawn_particle_alt_9768(float, void *, void *, int, int, int) __asm__("FUN_L00_0026a4c8");
 extern float D_0015ED70_9768 __asm__("D_0015ED70");
 extern int D_L18_0015F580;
@@ -2387,16 +2387,13 @@ void FUN_L18_002e9768(struct Moby *moby) {
                         int lifetime, spread;
                         lifetime = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
                         spread = random_int_between(scale_game_frames_9768(30), scale_game_frames_9768(45));
-                        spawn_particle_9768(1500000.0f, magnitude, position, &D_L18_0015F580,
-                        *first, *second,
-                        lifetime, spread, 0, 0);
+                        spawn_particle_9768(position, &D_L18_0015F580, *first, *second, lifetime, spread, 1500000.0f, magnitude, 0, 0);
                     }
                     {
                         int lifetime, spread;
                         lifetime = random_int_between(scale_game_frames_9768(5), scale_game_frames_9768(10));
                         spread = random_int_between(scale_game_frames_9768(15), scale_game_frames_9768(20));
-                        spawn_particle_9768(1500000.0f, magnitude * 0.5f, position, &D_L18_0015F580,
-                        0x7fffffff, 0xffffff, lifetime, spread, 0, 0);
+                        spawn_particle_9768(position, &D_L18_0015F580, 0x7fffffff, 0xffffff, lifetime, spread, 1500000.0f, magnitude * 0.5f, 0, 0);
                     }
                 } while ((float)i < 10.0f);
             }
