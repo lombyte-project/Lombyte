@@ -2379,7 +2379,7 @@ extern unsigned char D_0014C050[];
 extern unsigned char D_0013E550[];
 extern unsigned char D_0013D4CB __attribute__((section(".data")));
 extern unsigned short D_00141C50 __attribute__((section(".data")));
-extern char D_L12_0015F580[];
+extern char D_L12_0015F580[] __attribute__((section(".sdata")));
 
 void FUN_L12_002e9f68(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -2572,9 +2572,9 @@ update_state:
                     velocity.f[0] = FUN_L00_00257c48(0.0f, frame_time * spread);
                     velocity.f[1] = FUN_L00_00257c48(0.0f, frame_time * spread);
                     velocity.f[2] = FUN_L00_00257c48(0.0f, frame_time * spread);
-                    color = FUN_L00_00257b90(170, 240);
+                    a = FUN_L00_00257b90(170, 240);
                     b = FUN_L00_00257b90(110, 180);
-                    color = (b << 8) | (color | 0x7f000000);
+                    color = (b << 8) | (a + 0x7f000000);
                     a = FUN_L00_00257b90(30, 70);
                     life = scale_game_frames_alt(a);
                     size = FUN_L00_00257b90(120, 170);
