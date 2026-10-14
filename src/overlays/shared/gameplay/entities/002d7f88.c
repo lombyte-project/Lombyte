@@ -2671,8 +2671,8 @@ void FUN_L00_002dd8e8(void) {
             }
             previous_phase = phase - 0.3f;
             dot = offset + step;
-            value = ((short *)(D_L00_001E6020_lui - 0x18))[row];
             previous_value = ((short *)(D_L00_001E6020_lui - 0x18))[row - 1];
+            value = ((short *)(D_L00_001E6020_lui - 0x18))[row];
             if (value > 0x40) value = 0x40;
             if (value < 0) value = 0;
             if (previous_value > 0x40) previous_value = 0x40;
