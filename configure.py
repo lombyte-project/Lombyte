@@ -480,6 +480,15 @@ DATA_OVERLAYS = {
     "textbin/video/player/init_all": (0x1E8AF0, 0xE9A70, 18),
 }
 
+# Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the
+# small-data blobs as zeros: (retail VMA, retail file offset, size), placed
+# like SDATA_OVERLAYS.  `.bss` sits in the preserved bss (core.bss / .bss),
+# which has no file bytes: (retail VMA, size).
+SBSS_OVERLAYS: dict[str, tuple[int, int, int]] = {
+}
+BSS_OVERLAYS: dict[str, tuple[int, int]] = {
+}
+
 # The preserved data blobs of the main segment: (output section, blob,
 # retail VMA, retail file offset).  Bytes a C unit owns (the tables above) are
 # cut out of its blob, so the gate hashes what the C compiled to.
@@ -493,16 +502,28 @@ PRESERVED_DATA = [
     ("lvl.camvtbl", "lvl_camvtbl", 0x1E8C00, 0xE9B80),
     ("lvl.sndvtbl", "lvl_sndvtbl", 0x1E8C80, 0xE9C00),
 ]
+# The preserved bss (no file bytes): (output section, asm name, retail VMA).
+PRESERVED_BSS = [
+    ("core.bss", "core_bss.bss", 0x154100),
+    (".bss", "bss.bss", 0x161280),
+]
 
 C_DATA_TABLES = (
     (".rodata", "rdata", RODATA_OVERLAYS),
     (".sdata", "sdata", SDATA_OVERLAYS),
     (".data", "data", DATA_OVERLAYS),
+    (".sbss", "sbss", SBSS_OVERLAYS),
+    (".bss", "bss", {key: (vram, None, size) for key, (vram, size) in BSS_OVERLAYS.items()}),
 )
+
+# Uninitialised globals without `static` are common symbols: they link with
+# their unit's bss.
+C_DATA_INPUTS = {".bss": ".bss COMMON", ".sbss": ".sbss .scommon"}
 
 def c_data_sections(c_units: list[str]) -> list[tuple[str, str, str, int, int, int]]:
     """(output section, unit, input section, VMA, file offset, size) of every
-    *_OVERLAYS entry, by VMA.  An entry must name exactly one configured unit."""
+    *_OVERLAYS entry, by VMA (bss: no file offset).  An entry must name
+    exactly one configured unit."""
     owned = []
     for section, kind, table in C_DATA_TABLES:
         for suffix, (vram, at, size) in table.items():
@@ -521,17 +542,9 @@ def preserved_data_sections(config_dir: Path, out_name: str, blob: str, vram: in
     """Write BLOB's asm as the pieces between the C-owned holes; return their
     linker sections."""
     size = (config_dir / "assets" / f"{blob}.databin.bin").stat().st_size
-    holes = [(v - vram, n) for _, _, _, v, _, n in owned if vram <= v < vram + size and n]
-    pieces, cursor = [], 0
-    for offset, length in holes:
-        if offset < cursor or offset + length > size:
-            raise SystemExit(f"{blob}: C data at 0x{vram + offset:X} overlaps other "
-                             "C data or the end of the blob")
-        if offset > cursor:
-            pieces.append((cursor, offset - cursor))
-        cursor = offset + length
-    if cursor < size:
-        pieces.append((cursor, size - cursor))
+    holes = [(v - vram, n) for _, _, sec, v, _, n in owned
+             if sec != ".bss" and vram <= v < vram + size and n]
+    pieces = cut(size, holes, blob)
     asm = config_dir / "asm" / "data" / f"{blob}.s"
     labels = [line for line in asm.read_text().splitlines() if line.startswith("glabel ")]
     if labels and pieces[0][0] != 0:
@@ -552,6 +565,65 @@ def preserved_data_sections(config_dir: Path, out_name: str, blob: str, vram: in
             "    } :data"
         ))
     asm.write_text("\n".join(lines))
+    return sections
+
+def cut(size: int, holes: list[tuple[int, int]], what: str) -> list[tuple[int, int]]:
+    """The (offset, length) pieces of SIZE bytes left around HOLES."""
+    pieces, cursor = [], 0
+    for offset, length in sorted(holes):
+        if offset < cursor or offset + length > size:
+            raise SystemExit(f"{what}: C data at +0x{offset:X} overlaps other C data "
+                             "or the end of the blob")
+        if offset > cursor:
+            pieces.append((cursor, offset - cursor))
+        cursor = offset + length
+    if cursor < size:
+        pieces.append((cursor, size - cursor))
+    return pieces
+
+def preserved_bss_sections(config_dir: Path, out_name: str, asm_name: str, vram: int,
+                           owned: list) -> list[tuple[int, str]]:
+    """Write a preserved bss's asm (splat's labels and `.space`) as the pieces
+    around the C-owned `.bss`; a label inside a hole is the C unit's to define."""
+    asm = config_dir / "asm" / "data" / f"{asm_name}.s"
+    # splat's file, or the pieces an earlier run wrote (each opens with its
+    # offset, the last line gives the size)
+    labels, offset, size = [], 0, None
+    for line in asm.read_text().splitlines():
+        if mark := re.match(r"/\* (at|end) (0x[0-9A-F]+) \*/", line.strip()):
+            offset = int(mark.group(2), 16)
+            size = offset if mark.group(1) == "end" else size
+            continue
+        line = re.sub(r"/\*.*?\*/", "", line).strip()
+        if line.startswith("glabel "):
+            labels.append((offset, line))
+        elif line.startswith(".space "):
+            offset += int(line.split()[1], 0)
+    size = offset if size is None else size
+    holes = [(v - vram, n) for _, _, sec, v, _, n in owned
+             if sec == ".bss" and vram <= v < vram + size and n]
+    pieces = cut(size, holes, asm_name)
+    lines, sections = ['.include "macro.inc"', ""], []
+    for index, (start, length) in enumerate(pieces):
+        single = len(pieces) == 1
+        section = ".bss" if single else f".bss.{index}"
+        name = out_name if single else f"{out_name}.{index}"
+        lines += [f'.section {section}, "wa", @nobits', f"/* at 0x{start:X} */"]
+        at = start
+        for label_offset, label in labels:
+            if start <= label_offset < start + length:
+                if label_offset > at:
+                    lines.append(f"    .space 0x{label_offset - at:X}")
+                    at = label_offset
+                lines.append(label)
+        lines += [f"    .space 0x{start + length - at:X}", ""]
+        sections.append((vram + start,
+            f"    {name} 0x{vram + start:X} (NOLOAD) : SUBALIGN(1)\n"
+            "    {\n"
+            f"        build/asm/data/{asm_name}.s.o({section});\n"
+            "    } :data"
+        ))
+    asm.write_text("\n".join(lines + [f"/* end 0x{size:X} */", ""]))
     return sections
 
 # —— Code ——
@@ -1856,18 +1928,14 @@ def apply_retail_link_layout(config: dict[str, Any], linkerscript_path: Path):
     config_dir = linkerscript_path.parent
     # In VMA order: dot never moves back, and with the C-owned bytes cut out
     # of the blobs no two sections share an address.
-    data_sections: list[tuple[int, str]] = [
-        (0x154100, "    core.bss 0x154100 (NOLOAD) : SUBALIGN(4)\n"
-                   "    {\n        build/asm/data/core_bss.bss.s.o(.bss);\n    } :data"),
-        (0x161280, "    .bss 0x161280 (NOLOAD) : SUBALIGN(4)\n"
-                   "    {\n        build/asm/data/bss.bss.s.o(.bss);\n    } :data"),
-    ]
+    data_sections: list[tuple[int, str]] = []
     asserts = []
     for name, unit, section, vram, at, size in owned:
+        place = "(NOLOAD) :" if at is None else f": AT(0x{at:X})"
         data_sections.append((vram,
-            f"    {name} 0x{vram:X} : AT(0x{at:X}) SUBALIGN(4)\n"
+            f"    {name} 0x{vram:X} {place} SUBALIGN(4)\n"
             "    {\n"
-            f"        build/src/{unit}.c.o({section});\n"
+            f"        build/src/{unit}.c.o({C_DATA_INPUTS.get(section, section)});\n"
             "    } :data"
         ))
         asserts.append(f'ASSERT(SIZEOF({name}) == {size}, "{unit}: its {section} is not '
@@ -1876,6 +1944,8 @@ def apply_retail_link_layout(config: dict[str, Any], linkerscript_path: Path):
                    '*_OVERLAYS entry places (see .c_data_unplaced in the link map)");')
     for out_name, blob, vram, at in PRESERVED_DATA:
         data_sections += preserved_data_sections(config_dir, out_name, blob, vram, at, owned)
+    for out_name, asm_name, vram in PRESERVED_BSS:
+        data_sections += preserved_bss_sections(config_dir, out_name, asm_name, vram, owned)
     linked_data = "\n\n".join(text for _, text in sorted(data_sections))
     script = f"""ENTRY(entry)
 PHDRS

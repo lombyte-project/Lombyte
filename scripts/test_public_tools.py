@@ -402,6 +402,29 @@ class ConfigureDataLayoutTests(unittest.TestCase):
         self.assertIn("AT(0x66420)", sections[1][1])
 
 
+    def test_bss_is_cut_around_the_c_bss_twice_the_same(self):
+        """A label inside a C-owned bss range is dropped; a second configure
+        run reads the pieces it wrote and gives the same layout."""
+        with tempfile.TemporaryDirectory() as tmp:
+            config_dir = Path(tmp)
+            (config_dir / "asm" / "data").mkdir(parents=True)
+            asm = config_dir / "asm" / "data" / "bss.bss.s"
+            asm.write_text('.include "macro.inc"\n\n.section .bss, "wa"\n\n'
+                           "glabel D_00161280\n    /* 00161280 */ .space 0x10\n\n"
+                           "glabel D_00161290\n    /* 00161290 */ .space 0x8\n\n"
+                           "glabel D_00161298\n    /* 00161298 */ .space 0x8\n")
+            owned = [("u.bss", "u", ".bss", 0x161290, None, 0x8)]
+            first = self.configure.preserved_bss_sections(config_dir, ".bss", "bss.bss", 0x161280, owned)
+            once = asm.read_text()
+            second = self.configure.preserved_bss_sections(config_dir, ".bss", "bss.bss", 0x161280, owned)
+            twice = asm.read_text()
+        self.assertEqual(first, second)
+        self.assertEqual(once, twice)
+        self.assertEqual([vram for vram, _ in first], [0x161280, 0x161298])
+        self.assertNotIn("D_00161290", once)
+        self.assertIn("glabel D_00161298", once)
+
+
 class OverlaySourceStateTests(unittest.TestCase):
     """overlay_units.source_state must count a C-named function bound to its label."""
 

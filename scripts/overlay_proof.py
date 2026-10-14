@@ -766,9 +766,13 @@ def check_data(obj_path, name: str) -> dict:
     size, start = sym["st_size"], sym["st_value"]
     result.update(level=level, address=address, size=size)
     if secname in (".bss", ".sbss"):
+        # bss, or zeros the level loads (small bss sits in .lit)
         bss = next((r for r in ov.manifest(level)["records"] if r["type"] == 8), None)
-        inside = bss and bss["address"] <= address and address + size <= bss["address"] + bss["bytes"]
-        result.update(verdict="EXACT" if inside else "LINK not in the level's bss", exact=bool(inside))
+        zeros = ov.level_data_bytes(level, address, size)
+        inside = (bss and bss["address"] <= address and address + size <= bss["address"] + bss["bytes"]
+                  or zeros is not None and not any(zeros))
+        result.update(verdict="EXACT" if inside else "LINK not bss or zeros in the level",
+                      exact=bool(inside))
         return result
     retail = ov.level_data_bytes(level, address, size)
     if retail is None:

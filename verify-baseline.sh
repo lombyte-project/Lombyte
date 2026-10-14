@@ -103,7 +103,16 @@ if [[ "$BUILD_STATUS" -ne 0 ]]; then
 fi
 tools/objdiff/objdiff-cli report generate -p config/us/ -o config/us/report.json -f json
 python3 <<'PY'
-import hashlib, json, pathlib
+import hashlib, json, pathlib, re, subprocess
+# A label names its address: data a unit defines (its bss above all, which no
+# hash covers) must sit where the label says.
+nm = subprocess.run(["mips-ps2-decompals-nm", "config/us/build/SCUS_971.99.elf"],
+                    capture_output=True, text=True, check=True).stdout
+moved = [line for line in nm.splitlines()
+         if (m := re.fullmatch(r"([0-9a-f]+) \S (?:D|FUN|func|jtbl)_([0-9A-Fa-f]{8})", line))
+         and int(m.group(1), 16) & 0xFFFFFFFF != int(m.group(2), 16)]
+if moved:
+    raise SystemExit("labels linked away from their address:\n  " + "\n  ".join(moved[:20]))
 elf = pathlib.Path("config/us/build/SCUS_971.99")
 retail = pathlib.Path("config/us/SCUS_971.99")
 built_sha = hashlib.sha256(elf.read_bytes()).hexdigest()

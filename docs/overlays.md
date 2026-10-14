@@ -58,7 +58,8 @@ when every C function in it stays exact. `check-unit.py FUN_LNN_xxxxxxxx` runs t
 function in C, ending with `PASS`.
 
 Level data defined in C carries its `D_LNN_XXXXXXXX` label and a row in
-`config/overlays/us/data.tsv` (name, size). `make overlays` compares its bytes,
+`config/overlays/us/data.tsv` (name, size); `scripts/data-refs.py --level N
+--emit ADDR --into FILE` writes the definition and the row. `make overlays` compares its bytes,
 with every pointer resolved to that level's address, to what the level loads
 there (`check_data` in `scripts/overlay_proof.py`).
 
