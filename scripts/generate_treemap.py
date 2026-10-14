@@ -1010,11 +1010,11 @@ def render_svg(
     lines.append(
         f'<text x="{status_x}" y="52" text-anchor="end" '
         f'font-family="{esc(FONT)}" font-size="9" fill="{MUTED}">'
-        f"C_EXACT &#183; executable + overlays</text>"
+        f"C_EXACT &#183; exe + overlays</text>"
     )
     if data and data[0]:
         # Data next to the code stat: bytes of preserved data defined in C.
-        data_x = status_x - 160
+        data_x = status_x - 124
         lines.append(
             f'<text x="{data_x}" y="38" text-anchor="end" '
             f'font-family="{esc(FONT)}" font-size="20" font-weight="800" '
