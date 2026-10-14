@@ -1047,7 +1047,7 @@ void FUN_L00_0020e728(void) {
                 if (hero_state->state.control_mode == 12)
                     anim = (s32)definition->f2C;
                 if (anim != -1 && (*slot)[0x23] != anim) {
-                    hero_state->unk2294 = anim;
+                    *(volatile s32 *)&hero_state->unk2294 = anim;
                     FUN_L00_0024f3e0((u8 *)hero_state->moby, *slot, hero_state->unk2294, 0,
                                       FUN_001f96f8_e728(8), 1);
                 }
@@ -1079,14 +1079,14 @@ void FUN_L00_0020e728(void) {
         slot++;
     } while (i < 2);
     if (hero.state.control_mode == 15) {
-        hero.unk688 = hero.unk5D8 != 0 ?
+        hero.unk684 = hero.unk5D8 != 0 ?
             (*(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q,
              (angle = FUN_001ff8b0_e728(*(f32 *)((u8 *)hero.unk5D8 + 0x10) - hero.motion.pos.f[0],
                                 *(f32 *)((u8 *)hero.unk5D8 + 0x14) - hero.motion.pos.f[1]),
-              hero.unk684 = -hero.unk580, angle)) :
+              hero.unk688 = angle, -hero.unk580)) :
             (*(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q,
              (angle = FUN_002000e8_e728(hero.unk57C, hero.unk5D0),
-              hero.unk684 = -hero.unk580, angle));
+              hero.unk688 = angle, -hero.unk580));
         vu_euler_rotation_basis(hero.basis, (u8 *)&hero + 0x680);
         FUN_001ff260_e728((u8 *)&hero + 0x670);
         hero.unk670 = 1.0f;
