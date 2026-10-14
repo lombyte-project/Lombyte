@@ -2289,10 +2289,11 @@ int FUN_L15_002a3138(unsigned char *moby) {
     float position[4];
     int *data = *(int **)(moby + 0x78);
     int pass, corner, axis, component;
-    int nextPass;
-    float (*secondVertices)[4];
     float (*firstUv)[2];
-    float *firstUv1, *firstUv3, *secondUv0, *secondUv1, *secondUv2, *secondUv3;
+    float *firstUv1, *firstUv3, *secondUv0, *secondUv1;
+    int nextPass;
+    float *secondUv2, *secondUv3;
+    float (*secondVertices)[4];
 
     copy_rotation_2a3138(transform, moby + 0xc0);
     qcopy(position, moby + 0x10);
@@ -2301,14 +2302,14 @@ int FUN_L15_002a3138(unsigned char *moby) {
     first.r80 = 0xff9000000260ULL;
     first.r70 = 0;
     second.texture = get_effect_texture(0x2c);
-    firstUv1 = first.uv[1];
-    firstUv3 = first.uv[3];
-    secondUv0 = second.uv[0];
-    secondUv1 = second.uv[1];
-    secondUv2 = second.uv[2];
-    secondUv3 = second.uv[3];
     secondVertices = second.v;
     firstUv = first.uv;
+    secondUv0 = second.uv[0];
+    firstUv1 = first.uv[1];
+    secondUv1 = second.uv[1];
+    secondUv2 = second.uv[2];
+    firstUv3 = first.uv[3];
+    secondUv3 = second.uv[3];
     second.r70 = 0;
     second.r80 = 0xff9000000260ULL;
     second.col[3] = 0;
@@ -2332,32 +2333,32 @@ int FUN_L15_002a3138(unsigned char *moby) {
             ((unsigned long long)D_L15_001614F0[parity] << 6) |
             0x8000000000ULL;
         if (data[5] != 0) {
-            first.col[1] = interpolate_color_2a3138((float)data[5] / 60.0f,
+            second.col[2] = interpolate_color_2a3138((float)data[5] / 60.0f,
                                                    D_L15_001CE230[pass], 0);
-            second.col[2] = first.col[1];
-            second.col[0] = first.col[1];
-            first.col[3] = first.col[1];
-            first.col[2] = first.col[1];
-            first.col[0] = first.col[1];
+            second.col[0] = second.col[2];
+            first.col[3] = second.col[2];
+            first.col[2] = second.col[2];
+            first.col[1] = second.col[2];
+            first.col[0] = second.col[2];
         } else {
-            first.col[1] = D_L15_001CE230[pass];
-            second.col[2] = first.col[1];
-            second.col[0] = first.col[1];
-            first.col[3] = first.col[1];
-            first.col[2] = first.col[1];
-            first.col[0] = first.col[1];
+            second.col[2] = D_L15_001CE230[pass];
+            second.col[0] = second.col[2];
+            first.col[3] = second.col[2];
+            first.col[2] = second.col[2];
+            first.col[1] = second.col[2];
+            first.col[0] = second.col[2];
         }
         nextPass = pass + 1;
         for (corner = 0; corner < 4; corner++) {
-            float *frequency = D_L15_001CE250[pass];
             float *uv = firstUv[corner];
+            float *frequency = D_L15_001CE250[pass];
             int waveform = pass * 8;
             int base = corner * 8;
             axis = 1;
             do {
                 int limit, value;
                 float angle, delta;
-                float step = 0.125f;
+                float step;
                 axis--;
                 limit = truncate_float_2a3138(*frequency * 360.0f);
                 angle = integer_to_float_2a3138(*(int *)0x0015f3f8 % limit)
@@ -2365,6 +2366,7 @@ int FUN_L15_002a3138(unsigned char *moby) {
                 frequency++;
                 value = *(int *)((char *)D_L15_001CE290 + waveform);
                 waveform += 4;
+                step = 0.125f;
                 if (value != 0) {
                     delta = fast_cos_2a3138(angle * 0.017453292f) * step;
                 } else {
