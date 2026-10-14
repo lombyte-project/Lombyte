@@ -8,7 +8,7 @@ struct G {
     f32 f[0x50];
 };
 extern struct G D_00186F40;
-extern u8 camera_rows[] __asm__("D_00187290");
+extern char camera_rows[] __asm__("D_00187290");
 #include "rnc/gameplay/camera/update_cam.h"
 extern u8 D_0018CD00[];
 extern u8 sky_view_mtx[] __asm__("D_0018CF80");

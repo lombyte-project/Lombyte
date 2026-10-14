@@ -1,7 +1,7 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/gameplay/entities/moby.h"
-extern u32 world_update_time __asm__("D_0015F60C");
+extern s32 world_update_time __asm__("D_0015F60C");
 extern s32 num_spawnable_mobys __asm__("D_0015FEFC") MACRO_ADDR;
 extern struct Moby *moby_instance_end __asm__("D_0015FF1C");
 extern struct Moby *moby_instance_perm_end __asm__("D_0015FF20");
@@ -16,7 +16,7 @@ struct Moby *create_moby(s32 oclass) {
     struct Moby *m;
 
     for (m = moby_instance_end; m < moby_instance_perm_end; m++) {
-        if (m->state >= 0xFE && m->spawn_frame <= world_update_time) {
+        if (m->state >= 0xFE && m->spawn_frame <= (u32)world_update_time) {
             if (m->state == 0xFF) {
                 m[1].state = 0xFF;
             }

@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 extern u8 D_00120960[];
-extern u32 D_001312FC[];
+extern s32 D_001312FC[];
 extern s32 DIntr();
 extern s32 EnableInterrupts();
 extern s32 sceSifAddCmdHandler();

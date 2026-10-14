@@ -175,7 +175,7 @@ extern u8 *D_001940D8 NOT_SDA;
 extern Buf194100 coll_output __asm__("D_00194100");
 extern u8 D_00194180[];
 extern u8 D_001941C0[];
-extern u8 dir_lights[] __asm__("D_0019BDC0");
+extern char dir_lights[] __asm__("D_0019BDC0");
 extern u8 point_lights[] __asm__("D_0019C1C0");
 extern u8 point_light_data[] __asm__("D_0019C3C0");
 extern u8 D_001AAA40[];

@@ -438,7 +438,7 @@ extern f32 D_L00_0015F454 MACRO_ADDR;
 extern s32 D_L00_0015F5C4 NOT_SDA;
 extern s32 D_L00_0015F600 MACRO_ADDR;
 extern s32 D_L00_0015F614 MACRO_ADDR;
-extern s8 mission_state[] __asm__("D_L00_0015FC88") NOT_SDA;
+extern u8 mission_state[] __asm__("D_L00_0015FC88") NOT_SDA;
 extern s32 D_L00_0015FFF0 MACRO_ADDR;
 extern s32 D_L00_0016017C NOT_SDA;
 extern s32 D_L00_001604A4 MACRO_ADDR;

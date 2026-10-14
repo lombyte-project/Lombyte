@@ -1,7 +1,7 @@
 #include "types.h"
 extern s32 D_0013E5BC[];
 extern u8 D_00187080[];
-extern u8 D_00194120[];
+extern char D_00194120[];
 extern s32 func_001EFA68();
 extern void func_001F9A10();
 extern void func_001F9A28();

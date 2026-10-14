@@ -431,7 +431,7 @@ typedef struct {
 extern Sys *D_L00_0016051C_c3 __asm__("D_L00_0016051C");
 extern u32 D_L00_00160500_c[1] __asm__("D_L00_00160500") __attribute__((sda));
 extern u32 D_L00_001604F0[1] __attribute__((sda));
-extern u8 D_L00_001BD7E0_c2[] __asm__("D_L00_001BD7E0") __attribute__((section(".data")));
+extern char D_L00_001BD7E0_c2[] __asm__("D_L00_001BD7E0") __attribute__((section(".data")));
 extern u8 D_L00_001BD7B0[] __attribute__((section(".data")));
 
 extern void FUN_001f9fc8(void *);
@@ -605,7 +605,7 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V0028a2f0;
-extern u8 D_L00_001BD7E0_c[] __asm__("D_L00_001BD7E0");
+extern char D_L00_001BD7E0_c[] __asm__("D_L00_001BD7E0");
 extern u8 *D_L00_0016051C_c2 __asm__("D_L00_0016051C");
 extern s32 D_L00_0015F5CC_c __asm__("D_L00_0015F5CC");
 void FUN_001f9fc8(void *);
@@ -761,7 +761,7 @@ void FUN_L00_0028a998(void) {
     FUN_001fa070(D_L00_001BD7E0, v);
     FUN_0022b690(2);
 }
-extern u8 D_L00_001BD7E0_0028aa98[] __asm__("D_L00_001BD7E0");
+extern char D_L00_001BD7E0_0028aa98[] __asm__("D_L00_001BD7E0");
 extern u8 *D_L00_0016051C_0028aa98 __asm__("D_L00_0016051C");
 void FUN_001f9fc8_0028aa98(void *) __asm__("FUN_001f9fc8");
 void FUN_0022b690_0028aa98(s32) __asm__("FUN_0022b690");

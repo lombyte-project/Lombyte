@@ -28,7 +28,7 @@ extern u8 *snd_batch_return_buffers[2] __asm__("D_0015ECB8") __attribute__((sda)
 extern s32 snd_cd_callback_pending __asm__("D_0015ECC8") __attribute__((sda));
 extern s32 snd_cd_callback_fn __asm__("D_0015ECD0") __attribute__((sda));
 extern s64 snd_cd_callback_data __asm__("D_0015ECD8") MACRO_ADDR;
-extern s32 snd_cd_callback_arg __asm__("D_0015ED00") MACRO_ADDR;
+extern u32 snd_cd_callback_arg __asm__("D_0015ED00") MACRO_ADDR;
 
 extern void sceSifInitRpc(u32);
 extern s32 sceSifBindRpc(struct SifClientDataStartSound *, u32, s32);

@@ -207,7 +207,7 @@ void FUN_L07_0030bf90(unsigned char *moby)
         break;
     }
 }
-extern u8 *D_L07_0015FFD8_310df0 __asm__("D_L07_0015FFD8");
+extern char *D_L07_0015FFD8_310df0 __asm__("D_L07_0015FFD8");
 extern void add_vector_xyz_310df0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 vector_length_xyz_310df0(void *) __asm__("FUN_001f9af0");
 extern void scale_vector_xyz_310df0(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -343,7 +343,7 @@ extern void scale_vector_xyz_alt_31aee0(f32, void *, void *) __asm__("FUN_001f9b
 extern void subtract_vector_xyz_31aee0(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void play_sound_31aee0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void update_moby_motion_31aee0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern u8 *D_L07_0015FFD8_31aee0 __asm__("D_L07_0015FFD8");
+extern char *D_L07_0015FFD8_31aee0 __asm__("D_L07_0015FFD8");
 
 void FUN_L07_0031aee0(u8 *moby)
 {

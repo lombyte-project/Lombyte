@@ -292,7 +292,7 @@ extern s32 D_L00_00161E38;
 extern s32 D_L00_001BA4C0;
 extern s16 D_001516D8[];
 extern u32 frame_size[] __asm__("D_0013E504");
-extern u32 D_0015EE84;
+extern s32 D_0015EE84;
 extern u128 D_L00_00166DD0[];
 extern u128 D_L00_00165F80[];
 extern u128 D_L00_00166FE0[];

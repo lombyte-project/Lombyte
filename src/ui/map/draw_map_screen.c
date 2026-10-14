@@ -28,7 +28,7 @@ extern u8 D_001CF678[];
 extern u8 D_001CF418[];
 extern u8 D_0013D4E1[];
 #include "rnc/gameplay/state/level_state.h"
-extern u8 D_00141EC0[];
+extern char D_00141EC0[];
 extern struct MapEntry D_001383A0[];
 extern struct MapEntry D_00138438[];
 

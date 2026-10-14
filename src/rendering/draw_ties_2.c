@@ -8,15 +8,15 @@ extern void FUN_001f98d0(void *, void *, int);
 extern void FlushCache(int);
 extern char *D_001E1700[];
 extern char D_001E3000[];
-extern char D_001E4200[];
-extern char D_001E2A00[];
-extern char D_001E3E00[];
-extern char tie_light_data[] __asm__("D_001E3200");
-extern char tie_light_data2[] __asm__("D_001E4400");
+extern u8 D_001E4200[];
+extern u8 D_001E2A00[];
+extern u8 D_001E3E00[];
+extern u8 tie_light_data[] __asm__("D_001E3200");
+extern u8 tie_light_data2[] __asm__("D_001E4400");
 extern int D_00160F68 MACRO_ADDR;
-extern char D_00160F30[];
-extern char D_00160F40[];
-extern char D_001DF030[];
+extern u8 D_00160F30[];
+extern u8 D_00160F40[];
+extern u8 D_001DF030[];
 extern void func_001F21B8(void *, int); /* empty profiling marker */
 extern void func_001F21B0(void *, int); /* empty profiling marker */
 extern void FUN_00235be8(void);

@@ -88,7 +88,7 @@ typedef struct {
 
 extern OvlVec4 D_0013F3D0_307d68 __asm__("D_0013F3D0");
 extern OvlVec4 D_L09_00166F40_307d68 __asm__("D_L09_00166F40");
-extern u8 D_L09_00174000_307d68[] __asm__("D_L09_00174000");
+extern char D_L09_00174000_307d68[] __asm__("D_L09_00174000");
 extern f32 distance_307d68(void *, void *) __asm__("FUN_001f9b48");
 extern f32 FUN_001f9b80_307d68(void *, void *) __asm__("FUN_001f9b80");
 extern void add_vector_xyz_307d68(void *, void *, void *) __asm__("FUN_001f9a10");

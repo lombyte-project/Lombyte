@@ -167,7 +167,7 @@ extern unsigned short D_00141910 __attribute__((section(".data")));
 extern unsigned short D_00141940 __attribute__((section(".data")));
 extern char D_00141848[];
 extern char D_00141968[];
-extern char items_acquired[] __asm__("D_0013D4E8");
+extern u8 items_acquired[] __asm__("D_0013D4E8");
 extern Moby *D_L04_00160064_2E57F8 __asm__("D_L04_0015FFE4");
 extern Moby *D_L04_00160058_2E57F8 __asm__("D_L04_0015FFD8");
 

@@ -1,5 +1,5 @@
 #include "types.h"
-extern u32 D_001312E8[];
+extern s32 D_001312E8[];
 extern u8 D_00131340[];
 extern u8 D_00132490[];
 extern s32 SignalSema();

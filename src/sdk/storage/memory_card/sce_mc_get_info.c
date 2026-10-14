@@ -13,7 +13,7 @@ struct McGetInfoRequest {
 
 extern u8 D_00123D10[];
 extern u32 D_00132DA8[];
-extern u32 D_00132DAC[];
+extern s32 D_00132DAC[];
 extern struct sceSifClientData D_00159A00;
 extern u32 D_00159A28[];
 extern u32 D_00159A2C[];

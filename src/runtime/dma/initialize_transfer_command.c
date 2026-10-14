@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
-extern u32 D_0015F604;
+extern s32 D_0015F604;
 /* Linkage correction: D_0015F604 is a u32 array element (sibling
  * FUN_00218d78 declares `extern u32 D_0015F604[]`), i.e. non-small-data.
  * The size metadata (12 = non-small under -G8; exact extent unknown) lets

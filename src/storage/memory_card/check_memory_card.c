@@ -9,7 +9,7 @@ struct McDirBlk {
 };
 
 #include "rnc/storage/memory_card/memory_card_state.h"
-extern u8 D_0013D1D0[];
+extern char D_0013D1D0[];
 extern u8 D_0013D348[];
 extern s32 sceMcGetInfo(s32, s32, s32, s32, s32);
 extern s32 sceMcSync(s32, s32 *, s32 *);

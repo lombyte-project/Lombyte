@@ -89,7 +89,7 @@ extern float D_L02_001612FC;
 extern float D_L02_00161300;
 extern float D_L02_00161304;
 extern char D_L02_001673C0[];
-extern char font_vu_program[] __asm__("D_0010E810");
+extern u8 font_vu_program[] __asm__("D_0010E810");
 extern char D_L02_001CB8F0[];
 extern QuadFrame D_L02_0016D780[];
 extern char *D_L02_0015F420;

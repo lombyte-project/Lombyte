@@ -6,8 +6,8 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/level_state.h"
-extern u32 D_001CF874[];
-extern u32 D_001CF758[];
+extern s32 D_001CF874[];
+extern s32 D_001CF758[];
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 extern void update_mission_list(void) __asm__("func_0020B950");
 extern s32 collect_mission_ids(void *, s32, void *, s32) __asm__("func_0020BC00");

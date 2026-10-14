@@ -1,5 +1,5 @@
 #include "types.h"
-extern u32 D_001312EC[];
+extern s32 D_001312EC[];
 extern volatile u32 D_00131314[];
 extern u8 D_001324C0[];
 extern u8 D_00132D08[];

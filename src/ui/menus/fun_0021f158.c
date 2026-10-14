@@ -3,10 +3,10 @@
 #include "rnc/ui/menus/menu_screen.h"
 
 #include "rnc/gameplay/state/item_state.h"
-extern u8 D_001602A0[];
+extern char D_001602A0[];
 extern u8 D_001602B8[];
 extern u8 D_001602C0[];
-extern u8 D_001602D0[];
+extern char D_001602D0[];
 struct ImageEntry {
     u8 pad0[8];
     u16 unk8;

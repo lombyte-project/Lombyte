@@ -15,8 +15,8 @@ extern char D_00141EC0[];
 extern int D_0015EE24 MACRO_ADDR;
 extern int D_0015EE20 MACRO_ADDR;
 extern int mode_freeze_flags __asm__("D_0015EEB4") MACRO_ADDR;
-extern char D_0014EED0[];
-extern char D_001506D0[];
+extern u8 D_0014EED0[];
+extern u8 D_001506D0[];
 /* memcard_save_data(slot, flags): starts the save (sceCdReadClock/sceScfGetLocalTimefromRTC
    on D_0015EE98, FUN_00208770, func_00207B08 on the D_00141EC0 page for
    D_0015ED84). With no valid card slot (D_0013D290+0xC8, its record's

@@ -21,7 +21,7 @@ typedef struct TexRecord_23fa00 {
 typedef struct TexEntry_23fa00 {
     s32 w[4];
 } TexEntry_23fa00;
-extern char *resident_bank_23fa00 __asm__("D_0015EE54") __attribute__((section(".sdata")));
+extern u8 *resident_bank_23fa00 __asm__("D_0015EE54") __attribute__((section(".sdata")));
 extern s32 vram_base_23fa00[2] __asm__("D_0015EE88") __attribute__((section(".sdata")));
 extern TexEntry_23fa00 texture_table_23fa00[] __asm__("D_L00_001AEBC0");
 /* $gp scalar aliases: retail takes the records' addresses through $gp. */

@@ -1639,9 +1639,9 @@ void FUN_L00_00234b38(void *a) {
     }
     FUN_L00_00234a50_00234b38(a);
 }
-extern char D_L00_0017A608[];
-extern char D_L00_0017C680[];
-extern char D_L00_0015F6A8[];
+extern u8 D_L00_0017A608[];
+extern u8 D_L00_0017C680[];
+extern u8 D_L00_0015F6A8[];
 void FUN_0020cca8(void *, int, void *);
 void FUN_001fa2b8(void *, void *);
 void FUN_0020e098(void *);

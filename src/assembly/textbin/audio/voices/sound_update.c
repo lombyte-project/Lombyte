@@ -81,7 +81,7 @@ extern s32 boot_level_active __asm__("D_0015F5E8");
 extern s32 D_0015F604;
 extern s32 world_update_time __asm__("D_0015F60C");
 extern VoiceVector D_00187080;
-extern u8 camera_rows[] __asm__("D_00187290");
+extern char camera_rows[] __asm__("D_00187290");
 extern s32 use_alt_fog __asm__("D_001872D4");
 
 extern s32 ComputeByteStringHash(u8 *, s32);

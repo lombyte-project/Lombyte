@@ -4,7 +4,7 @@
 #include "rnc/rendering/geometry_quad.h"
 
 extern u64 D_00160580;
-extern u8 D_001D97B0[];
+extern char D_001D97B0[];
 extern f32 D_001D9A90[];
 extern f32 D_001D9A50[][4];
 extern s32 D_001604F0 __attribute__((sda));

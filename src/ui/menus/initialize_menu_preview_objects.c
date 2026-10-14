@@ -2,7 +2,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/gameplay/gadgets/hand_gadget.h"
 
-extern char D_00186310[];
+extern u8 D_00186310[];
 extern char D_00186F40[];
 extern int D_0015FF4C;
 extern void FUN_00224b60();

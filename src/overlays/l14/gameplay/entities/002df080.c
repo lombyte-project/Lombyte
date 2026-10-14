@@ -1271,7 +1271,7 @@ extern f32 D_L14_00161CF0;
 extern s32 D_L14_00161CF4;
 extern s32 D_L14_00161CF8_d530[] __asm__("D_L14_00161CF8") __attribute__((section(".sdata")));
 extern f32 D_L14_001DFD80_d530[40][4] __asm__("D_L14_001DFD80");
-extern u16 D_L14_001E0000_d530[40] __asm__("D_L14_001E0000");
+extern s16 D_L14_001E0000_d530[40] __asm__("D_L14_001E0000");
 extern f32 D_L14_001E0050_d530[3][16][4] __asm__("D_L14_001E0050");
 extern u16 D_L14_001E0350_d530[3][16] __asm__("D_L14_001E0350");
 extern void arc_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1460,7 +1460,7 @@ extern int D_L14_00161CF8[] __attribute__((section(".sdata")));
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern short D_L14_001E0000[];
+extern s16 D_L14_001E0000[];
 extern short D_L14_001E0350[];
 extern unsigned char D_L14_00161CE0[] __attribute__((section(".sdata")));
 extern void copy_blocks_16_forward(void *dst, void *src, s32 size) __asm__("func_001F98D0");
@@ -3442,7 +3442,7 @@ void FUN_L14_002fd310(struct Moby *m) {
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002FEDA0), where it is exact; names translated to the US level program. */
 
-extern char *D_L14_00167500 __attribute__((section(".data")));
+extern u8 *D_L14_00167500 __attribute__((section(".data")));
 extern char D_0013E550[];
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float D_0015ED6C_f2 __asm__("D_0015ED6C");

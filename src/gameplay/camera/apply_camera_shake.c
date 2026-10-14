@@ -11,7 +11,7 @@ struct CameraShake {
 
 extern struct UpdateCam *cur_cam[] __asm__("D_001870C0");
 extern u8 D_00187080[];
-extern u8 camera_rows[] __asm__("D_00187290");
+extern char camera_rows[] __asm__("D_00187290");
 extern u8 D_001872B0[];
 
 extern s32 func_001F9740(s32 *);

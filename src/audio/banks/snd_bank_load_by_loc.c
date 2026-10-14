@@ -1,7 +1,7 @@
 #include "types.h"
 
 extern s32 snd_cd_bank_load_request[] __asm__("D_00137B40");
-extern u8 snd_non_idle_error_string[] __asm__("D_00153D20");
+extern char snd_non_idle_error_string[] __asm__("D_00153D20");
 extern u8 snd_bank_load_by_loc_rpc_error_string[] __asm__("D_00153DF8");
 extern u8 D_0015EBE8[];
 extern s32 snd_cd_load_error __asm__("D_0015EC88") __attribute__((sda));

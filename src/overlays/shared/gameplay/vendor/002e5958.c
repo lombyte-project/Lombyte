@@ -44,7 +44,7 @@ extern u8 D_0013F3D0[];
 extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_L15_001BB830[];
 extern u32 D_0014C190[];
-extern u32 D_L15_001BAAD0[];
+extern s32 D_L15_001BAAD0[];
 
 void FUN_L15_002e5958(struct Moby *moby) {
     VendorVars_2e5958 *vars = (VendorVars_2e5958 *)moby->pvars;

@@ -7,7 +7,7 @@ struct MemoryCardUnformatRequest {
 };
 
 extern u32 D_00132DA8[];
-extern u32 D_00132DAC[];
+extern s32 D_00132DAC[];
 extern struct sceSifClientData D_00159A00;
 extern struct MemoryCardUnformatRequest D_00159A80;
 extern u8 D_0015AFC0[];
