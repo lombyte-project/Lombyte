@@ -100,6 +100,8 @@ edit fails at once.
 - **One name, one type.** Each variable has one definition and one `extern`
   in a header. A file that needs another placement keeps one alias,
   `<name>_gp` (sda), `<name>_lui` (`NOT_SDA`) or `<name>_macro` (`MACRO_ADDR`).
+  In an SN unit, functions above the first `sda` declaration keep `lui` when
+  they read a `<name>_lui` alias declared before it.
   File suffixes (`_28efc8`, `_t`) and level prefixes on main-ELF data go.
   `scripts/data-decls.py` lists the labels that still disagree; fix the type
   when you move that data to C, and lower the count in `test_public_tools.py`.
