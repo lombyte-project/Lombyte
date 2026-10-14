@@ -2348,11 +2348,9 @@ void FUN_L18_002e9768(struct Moby *moby) {
 
     switch (state) {
     case 0: {
-        int unkB0 = moby->mission;
-        if (unkB0 != 0xff) {
-            unkB0 += current_level_index * 16;
-            unkB0 = ((unsigned char *)D_0014C050_9768)[unkB0];
-            if (unkB0 == 0xff) goto remove;
+        if (moby->mission != 0xff) {
+            int unkB0 = moby->mission + current_level_index * 16;
+            if (((unsigned char *)D_0014C050_9768)[unkB0] == 0xff) goto remove;
         }
         moby->state = 1;
         if (*(int *)data != 0) *(int *)(*(int *)data) = 3;
@@ -2375,8 +2373,8 @@ void FUN_L18_002e9768(struct Moby *moby) {
                 float colors2[6];
                 float position[4];
                 i = 0;
-                pos = &moby->pos.x;
                 do {
+                    pos = &moby->pos.x;
                     magnitude = random_float_between_9768(8.0f, 10.0f) * frame_time;
                     __builtin_memcpy(colors, D_L18_001F29A0_9768, 24);
                     __builtin_memcpy(colors2, D_L18_001F29B8_9768, 24);
