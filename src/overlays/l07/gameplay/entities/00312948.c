@@ -1044,8 +1044,9 @@ void FUN_L07_00314150(unsigned char *moby) {
         qcopy(&position, data + 0x140);
         *(int *)(data + 0x298) += 1;
         if (*(float *)(data + 0x98) < fast_difference_between_rotations(*(float *)(moby + 0x48), FUN_001f9e90(position.f[0] - *(float *)(moby + 0x10), position.f[1] - *(float *)(moby + 0x14)))) {
+            i = moby[0x20];
             *(float *)(moby + 0x58) = 1.0f;
-            data[0x1F4] = moby[0x20];
+            data[0x1F4] = i;
             data[0x1F6] = 0xA;
             data[0x1F5] = 1;
             qcopy(data + 0xC0, &position);
@@ -1352,8 +1353,9 @@ void FUN_L07_00314150(unsigned char *moby) {
         qcopy(data + 0x140, ((char *)&hero) + 0x80);
         *(float *)(data + 0x148) += 0.6f;
         if (*(float *)(data + 0x16C) < hero_distance) {
+            float step_time = frame_time * 15.0f;
             *(int *)(data + 0x160) = 0;
-            *(float *)(data + 0x16C) += frame_time * 15.0f;
+            *(float *)(data + 0x16C) += step_time;
         } else {
             if (data[0x1C4] != 0 || (tick_countdown_32_alt((int *)(data + 0x160)) && fr < 0.6f)) {
                 int slot;
