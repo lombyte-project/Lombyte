@@ -1927,7 +1927,8 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
     Vec4 offset;
     Vec4 previous;
     Vec4 previous_cross;
-    float zero, one;
+    float zero;
+    volatile float one;
     float minimum;
     float fraction;
     float swing_fraction;
@@ -2035,8 +2036,8 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         build_look_at_matrix(&extension, &delta, &velocity, turn);
         normalize_vector_xyz(&direction, &extension, 2.8f);
         lerp_vector(&extension, &extension, &direction, 1.0f);
-        length = vector_length_xyz(&extension);
-        if (3.9f < length) scale_vector_xyz(&extension, &extension, 3.9f / length);
+        distance = vector_length_xyz(&extension);
+        if (3.9f < distance) scale_vector_xyz(&extension, &extension, 3.9f / distance);
         index = (float)i;
         if (i > 5) lerp_vector(&extension, &extension, &delta, index / convert_integer_to_float(10) + zero);
         add_vector_xyz(point, prior, &extension);
@@ -2164,11 +2165,11 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
                     column = *(short *)((char *)D_L07_0020C840_c + 2 + i * 24);
                     ring = (char *)&D_L07_0020DB00_c[14] + segment * 0x140;
                     subtract_vector_xyz(&basis, ring + column * 16, D_L07_0020DB00_c[segment]);
-                    subtract_vector_xyz(&velocity, ring + column * 16 - 0x140, D_L07_0020DAF0_c[segment]);
+                    subtract_vector_xyz(&velocity, (char *)&D_L07_0020DB00_c[0] + segment * 0x140 + column * 16 - 0x60, D_L07_0020DAF0_c[segment]);
                     interpolate_vector(&extension, &basis, &velocity, fraction);
                     next_column = (column + 19) % 20;
                     subtract_vector_xyz(&direction, ring + next_column * 16, D_L07_0020DB00_c[segment]);
-                    subtract_vector_xyz(&tangent, ring + next_column * 16 - 0x140, D_L07_0020DAF0_c[segment]);
+                    subtract_vector_xyz(&tangent, (char *)&D_L07_0020DB00_c[0] + segment * 0x140 + next_column * 16 - 0x60, D_L07_0020DAF0_c[segment]);
                     interpolate_vector(&point_basis.side, &direction, &tangent, fraction);
                     interpolate_vector(&extension, &extension, &point_basis.side, *(float *)((char *)D_L07_0020C840_c + 8 + i * 24));
                     blend = *(float *)((char *)D_L07_0020C840_c + 8 + i * 24) + *(float *)((char *)D_L07_0020C840_c + 12 + i * 24);
