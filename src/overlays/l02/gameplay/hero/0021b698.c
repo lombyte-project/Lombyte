@@ -794,7 +794,7 @@ void clear_vector(void *);
 void normalize_vector_xyz(void *, void *, f32);
 void scale_vector_xyz(void *, void *, f32);
 void subtract_vector_xyz(void *, void *, void *);
-extern char D_0013CB14[];
+extern s32 D_0013CB14[];
 
 void FUN_L02_00225c20(void) {
     FVec4 vec[14];

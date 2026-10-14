@@ -6,7 +6,7 @@ struct MobyRecord {
     u8 unk52;
 };
 
-extern u8 moby_render_slots[] __asm__("D_001B2BC0");
+extern s32 moby_render_slots[] __asm__("D_001B2BC0");
 void prune_moby_references(void) __asm__("FUN_0020cc60");
 
 void prune_moby_references(void) {

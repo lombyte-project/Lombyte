@@ -7,7 +7,7 @@
 extern void FUN_001f98d0(void *, void *, int);
 extern void FlushCache(int);
 extern char *D_001E1700[];
-extern char D_001E3000[];
+extern s32 D_001E3000[];
 extern u8 D_001E4200[];
 extern u8 D_001E2A00[];
 extern u8 D_001E3E00[];

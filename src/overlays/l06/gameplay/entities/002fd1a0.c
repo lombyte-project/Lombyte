@@ -872,7 +872,7 @@ extern void update_joint_animation_301070(float, float, void *, void *, int) __a
 extern char D_L06_00167540_301070[] __asm__("D_L06_00167540");
 extern int D_L06_0015F5C4_301070 __asm__("D_L06_0015F5C4") __attribute__((section(".sdata")));
 extern float D_L06_0015F3FC_301070 __asm__("D_L06_0015F3FC") __attribute__((section(".sdata")));
-extern char D_L06_00179B90_301070[] __asm__("D_L06_00179B90");
+extern s32 D_L06_00179B90_301070[] __asm__("D_L06_00179B90");
 extern unsigned char big_head_cheat_enabled_301070[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern unsigned char cheats_301070[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern int D_0013D8AC_301070 __asm__("D_0013D8AC") __attribute__((section(".data")));

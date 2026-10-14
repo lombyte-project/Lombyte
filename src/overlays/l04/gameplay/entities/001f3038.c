@@ -68,7 +68,7 @@ typedef struct {
     Vec_1F3010 normal;
 } Coll_1F3010;
 
-extern char D_L04_00173FF0[];
+extern s32 D_L04_00173FF0[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -91,7 +91,7 @@ int FUN_L04_001f3038_c(char *a, char *b, int n) __asm__("FUN_L04_001f3038");
 int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n);
 extern PathEl_1F3010 *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
 extern Coll_1F3010 D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
-extern char D_L04_00174070_1F3010[] __asm__("D_L04_00173FF0");
+extern s32 D_L04_00174070_1F3010[] __asm__("D_L04_00173FF0");
 extern char D_0013F450_1F3010[] __asm__("D_0013F350");
 extern void func_001F9BC0_1F3010(void *) __asm__("FUN_001f99f8");
 extern float func_001F9D10_1F3010(void *, void *) __asm__("FUN_001f9b48");
@@ -333,7 +333,7 @@ void FUN_L04_001f30e0(Moby **others, int other_count, Moby *moby, Steer_1F3010 *
 /* steps a moby's position out of collision and aims it */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F39B0), where it is exact; names translated to the US level program. */
 
-extern char D_L04_00173FF0[];
+extern s32 D_L04_00173FF0[];
 extern float FUN_001f9e90(float, float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_001f0d60(float, void *, int, void *);

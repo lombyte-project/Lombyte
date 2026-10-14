@@ -281,7 +281,7 @@ extern void FUN_0022da68(void *, void *);
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float D_L08_00161868[4];
-extern char D_L08_00161868_bytes[] __asm__("D_L08_00161868");
+extern f32 D_L08_00161868_bytes[] __asm__("D_L08_00161868");
 extern int D_L08_00174658;
 extern int D_L08_00174658_data __asm__("D_L08_00174658") __attribute__((section(".data")));
 extern float D_L08_00174660[4];

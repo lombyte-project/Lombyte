@@ -74,7 +74,7 @@ void FUN_L00_00269b70_2c3440(float *, unsigned char, unsigned char, unsigned cha
                              int) __asm__("FUN_L00_00269b70");
 void FUN_L00_0025f800_2c3440(void *, void *) __asm__("FUN_L00_0025f800");
 void FUN_0020c828_2c3440(void *) __asm__("FUN_0020c828");
-extern char D_L00_001B0830_2c3440[] __asm__("D_L00_001B0830") __attribute__((section(".data")));
+extern s16 D_L00_001B0830_2c3440[] __asm__("D_L00_001B0830") __attribute__((section(".data")));
 void FUN_L00_002c3440(unsigned char *m) {
     float v[4] __attribute__((aligned(16)));
     int i;
@@ -1113,7 +1113,7 @@ extern u32 D_0013CAE4 __attribute__((section(".data")));
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern OvlVec4 D_L00_00166DC0_2c1ad0 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern char D_L00_001B07B0[] __attribute__((section(".data")));
+extern s16 D_L00_001B07B0[] __attribute__((section(".data")));
 extern void FUN_L00_002aa008(void *, void *, void *);
 extern struct Moby *FUN_L00_002a9ed0(void *, void *, void *);
 extern void FUN_L00_0025f780(void *, void *, int);
@@ -1457,7 +1457,7 @@ extern u32 D_0013CAE4 __attribute__((section(".data")));
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern OvlVec4 D_L00_00166DC0_2c1ad0 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern char D_L00_001B07B0[] __attribute__((section(".data")));
+extern s16 D_L00_001B07B0[] __attribute__((section(".data")));
 extern void FUN_L00_002aa008(void *, void *, void *);
 extern struct Moby *FUN_L00_002a9ed0(void *, void *, void *);
 extern void FUN_L00_0025f780(void *, void *, int);

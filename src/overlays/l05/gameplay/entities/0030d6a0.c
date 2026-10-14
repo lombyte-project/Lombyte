@@ -1277,7 +1277,7 @@ void FUN_L05_00315f70(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317538), where it is exact; names translated to the US level program. */
 
 extern char D_L05_001671C0[];
-extern char D_L05_00211B20[];
+extern f32 D_L05_00211B20[];
 extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
 extern void FUN_L03_00291918(char *);
 

@@ -155,7 +155,7 @@ extern char *FUN_L00_0026bed0(char *, char *, int, int, float, int, int);
 extern char *FUN_L00_002d3838(char *a, char *b, int c, char *d);
 extern char *FUN_L00_002d7e90(void *, float);
 extern char D_L00_00173E70[];
-extern char D_L00_001B07B0[];
+extern s16 D_L00_001B07B0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 FUN_001f9b80(void *, void *);

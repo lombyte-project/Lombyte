@@ -146,7 +146,7 @@ extern unsigned short D_00141888 __attribute__((section(".data")));
 extern unsigned short D_001418E8 __attribute__((section(".data")));
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 extern char D_00141968[];
-extern char D_0014EE90[];
+extern s32 D_0014EE90[];
 
 void FUN_L02_002ee890(struct Moby *moby) {
     int *data = (int *)moby->pvars;

@@ -80,7 +80,7 @@ extern s32 D_0015F440;
 extern s32 D_0015EE8C;
 extern u8 D_00194180[];
 #include "rnc/rendering/resident_class.h"
-extern u8 D_001B6180[];
+extern s32 D_001B6180[];
 extern MemInfo D_001940C0;
 #include "rnc/rendering/material_templates.h"
 extern s32 D_0015FF08;

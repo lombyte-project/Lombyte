@@ -1431,7 +1431,7 @@ short FUN_L11_0031a758(int idx) {
 }
 extern char *D_L11_0015FFD8;
 extern char D_L11_001677C0[];
-extern char D_L11_001677D0[];
+extern f32 D_L11_001677D0[];
 extern float FUN_001fa580(float, float);
 extern short *D_L11_001AC240[];
 extern s32 random_integer_below_c(s32 arg0) __asm__("FUN_00213260");
@@ -1964,13 +1964,13 @@ extern FlB D_L11_0016262C[] __attribute__((section(".sdata")));
 extern PairB D_L11_00162618[] __attribute__((section(".sdata")));
 extern PairB D_L11_00162628[] __attribute__((section(".sdata")));
 extern PairB D_L11_00217758[];
-extern char D_L11_00200728[];
-extern char D_L11_002078D8[];
-extern char D_L11_00207900[];
-extern char D_L11_00215220[];
+extern s32 D_L11_00200728[];
+extern s32 D_L11_002078D8[];
+extern s32 D_L11_00207900[];
+extern s32 D_L11_00215220[];
 extern char D_L11_00217760[];
-extern char D_L11_00217740[];
-extern char D_L11_00215268[];
+extern s32 D_L11_00217740[];
+extern s32 D_L11_00215268[];
 extern float D_L11_001625B8 __attribute__((sda));
 extern float D_L11_001625BC;
 extern float D_L11_001625C0;

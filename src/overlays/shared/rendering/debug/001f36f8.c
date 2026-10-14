@@ -457,7 +457,7 @@ extern u8 item_defs[] __asm__("D_L00_00179AC0") NOT_SDA;
 #define D_L00_00179AFE ((s16 *)(item_defs + 0x3E))
 #include "rnc/ui/vendor/vendor_item_info.h"
 #define D_L00_001C40BE ((u16 *)((u8 *)D_L00_001C40B0 + 0xE))
-extern char D_0013D428[];
+extern s32 D_0013D428[];
 extern int D_0013E520[];
 extern u8 D_0014C050[];
 extern const char D_L00_0015EFE0[] __attribute__((sda));
@@ -1011,7 +1011,7 @@ extern char *D_L00_00160CE0[];
 extern char *D_L00_00160CF0[];
 extern char *D_L00_00160D08[];
 extern char *D_L00_001C3E28[];
-extern char D_0013D428[];
+extern s32 D_0013D428[];
 extern s32 D_0015ED84;
 extern char D_L00_0015F008[];
 extern char D_L00_0015F010[];

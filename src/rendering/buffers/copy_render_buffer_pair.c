@@ -1,6 +1,6 @@
 #include "types.h"
 extern u8 D_001E2A00[];
-extern u8 D_001E3000[];
+extern s32 D_001E3000[];
 extern u8 D_001E3E00[];
 extern u8 D_001E4200[];
 extern s32 FUN_001f98d0();

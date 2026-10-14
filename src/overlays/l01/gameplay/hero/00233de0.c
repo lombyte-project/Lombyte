@@ -510,7 +510,7 @@ extern void release_voice_slot_cf(int, int, int) __asm__("FUN_L00_00216e48");
 extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);
-extern char D_0013CB14[];
+extern s32 D_0013CB14[];
 
 void FUN_L01_002370b8(void) {
     FVec4 vec[6];
