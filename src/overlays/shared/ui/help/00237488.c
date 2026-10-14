@@ -1258,8 +1258,7 @@ void FUN_L05_00254058(void) {
             stats->stat[30].unk2 = scale_game_frames(D_0015EEA4_gp) / 600;
             level = *(s32 *)0x0015ED84;
         }
-        stats->stat[30].level_mask |= 1U << level;
-        stats->stat[30].level_mask |= 0x80000000;
+        stats->stat[30].level_mask = 0x80000000U | (1U << level) | stats->stat[30].level_mask;
     }
     {
         counter = (s32 *)((char *)&hero + 0x6D0);
@@ -1279,7 +1278,8 @@ void FUN_L05_00254058(void) {
         struct Hero *g = &hero;
         *(s32 *)((char *)g + 0x70C) = 0;
         {
-            s32 *counter = (s32 *)((char *)g + 0x700);
+            s32 *counter = (s32 *)g;
+            counter += 0x700 / 4;
             i = 2;
             do {
                 if (*(s32 *)((char *)g + 0x70C) < *counter)
@@ -1305,7 +1305,7 @@ void FUN_L05_00254058(void) {
     }
     {
         struct Hero *g = &hero;
-        int i;
+        s32 *counter;
         *(s32 *)((char *)g + 0x6F0) = 0;
         counter = (s32 *)((char *)g + 0x6E0);
         i = 3;
