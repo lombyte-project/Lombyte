@@ -957,9 +957,8 @@ def render_svg(
         f'<stop offset="0" stop-color="{DRAWER_FACE_TOP}"/>'
         f'<stop offset="1" stop-color="{DRAWER_FACE_BOTTOM}"/>'
         '</linearGradient><radialGradient id="drawer-halo">'
-        f'<stop offset="0" stop-color="{BACKGROUND}" stop-opacity="0.8"/>'
-        f'<stop offset="0.6" stop-color="{BACKGROUND}" stop-opacity="0.55"/>'
-        f'<stop offset="1" stop-color="{BACKGROUND}" stop-opacity="0"/>'
+        f'<stop offset="0" stop-color="{ORANGE}" stop-opacity="0.55"/>'
+        f'<stop offset="1" stop-color="{ORANGE}" stop-opacity="0"/>'
         "</radialGradient></defs>",
     ]
 
@@ -1009,10 +1008,26 @@ def render_svg(
     xb = xt + slant
     right = dx0 + full_dx
     boot_poly = f"{dx0},{dy0} {xt:.1f},{dy0} {xb:.1f},{dy0 + ddy} {dx0},{dy0 + ddy}"
+    panel = (f"{xt + cut_gap:.1f},{dy0} {right},{dy0} {right},{dy0 + ddy} "
+             f"{xb + cut_gap:.1f},{dy0 + ddy}")
     lines.append(
-        f'<polygon points="{xt + cut_gap:.1f},{dy0} {right},{dy0} {right},{dy0 + ddy} '
-        f'{xb + cut_gap:.1f},{dy0 + ddy}" fill="{PLATE}" fill-opacity="0.35"/>'
+        f'<defs><linearGradient id="panel-face" x1="0" y1="0" x2="1" y2="1">'
+        f'<stop offset="0" stop-color="{PLATE}"/><stop offset="1" stop-color="{BACKGROUND}"/></linearGradient>'
+        f'<radialGradient id="panel-glow"><stop offset="0" stop-color="{ORANGE}" stop-opacity="0.28"/>'
+        f'<stop offset="1" stop-color="{ORANGE}" stop-opacity="0"/></radialGradient>'
+        f'<pattern id="panel-hatch" width="10" height="{ddy}" patternUnits="userSpaceOnUse" '
+        f'patternTransform="skewX({math.degrees(math.atan(slant / ddy)):.2f})">'
+        f'<rect width="3" height="{ddy}" fill="{ORANGE}" fill-opacity="0.05"/></pattern>'
+        f'<clipPath id="panel-clip"><polygon points="{panel}"/></clipPath></defs>'
     )
+    lines.append(f'<polygon points="{panel}" fill="url(#panel-face)"/>')
+    lines.append(f'<polygon points="{panel}" fill="url(#panel-hatch)"/>')
+    lines.append('<g clip-path="url(#panel-clip)">')
+    lines.append(
+        f'<ellipse cx="{(xt + cut_gap + slant / 2 + right) / 2:.1f}" cy="{dy0 + ddy / 2 + 4:.1f}" '
+        f'rx="{(right - xb) * 0.55:.1f}" ry="{ddy * 0.7:.1f}" fill="url(#panel-glow)"/>'
+    )
+    lines.append("</g>")
     pcx = (xt + cut_gap + slant / 2 + right) / 2
     if data and data[0]:
         lines.append(
@@ -1037,7 +1052,7 @@ def render_svg(
     )
     lines.append(f'<clipPath id="drawer-clip"><polygon points="{boot_poly}"/></clipPath>')
     placements = layout_boot(units, dx0, dy0, xb - dx0, ddy, min_bytes)
-    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.75">')
+    lines.append('<g clip-path="url(#drawer-clip)" opacity="0.75"><g id="boot-tiles">')
     for tile, rect in placements:
         x, y = rect["x"], rect["y"]
         tdx, tdy = max(rect["dx"], 0.0), max(rect["dy"], 0.0)
@@ -1048,14 +1063,25 @@ def render_svg(
             f'fill="{tile_fill(tile)}" stroke="{STROKE}" stroke-width="0.6" '
             f'shape-rendering="geometricPrecision"><title>{esc(tile_tooltip(tile))}</title></rect>'
         )
-    lines.append("</g>")
+    lines.append("</g></g>")
     lines.append(f'<polygon points="{boot_poly}" fill="url(#sheen)" pointer-events="none"/>')
     cx, cy = (dx0 + xt) / 2, dy0 + ddy / 2
-    # A soft local shadow keeps the percentage legible over the brighter
-    # treemap without darkening the whole drawer.
+    # Frosted glass behind the percentage: the treemap blurred under the same
+    # warm plate and orange glow as the whole-game panel.
+    grx, gry = (xt - dx0) * 0.3, ddy * 0.62
     lines.append(
-        f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{(xt - dx0) * 0.3:.1f}" ry="{ddy * 0.62:.1f}" '
-        f'fill="url(#drawer-halo)" pointer-events="none"/>'
+        f'<defs><filter id="glass" x="-10%" y="-10%" width="120%" height="120%">'
+        f'<feGaussianBlur stdDeviation="5"/></filter>'
+        f'<radialGradient id="glass-fade"><stop offset="0.55" stop-color="#fff"/>'
+        f'<stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
+        f'<mask id="glass-mask"><ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{grx:.1f}" ry="{gry:.1f}" '
+        f'fill="url(#glass-fade)"/></mask></defs>'
+    )
+    lines.append(
+        f'<g clip-path="url(#drawer-clip)" mask="url(#glass-mask)" pointer-events="none">'
+        f'<use href="#boot-tiles" filter="url(#glass)" opacity="0.75"/>'
+        f'<rect x="{cx - grx:.1f}" y="{dy0}" width="{2 * grx:.1f}" height="{ddy}" fill="{PLATE}" fill-opacity="0.7"/>'
+        f'<ellipse cx="{cx:.1f}" cy="{cy + 4:.1f}" rx="{grx * 0.8:.1f}" ry="{gry:.1f}" fill="url(#panel-glow)"/></g>'
     )
     lines.append(
         f'<text x="{dx0 + 12}" y="{dy0 + 17}" font-family="{esc(FONT)}" font-size="10" '
@@ -1064,17 +1090,15 @@ def render_svg(
     )
     lines.append(
         f'<text x="{cx:.1f}" y="{cy + 4:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
-        f'font-size="24" font-weight="800" fill="{ORANGE}" '
-        f'style="paint-order:stroke" stroke="{BACKGROUND}" stroke-width="2.1" stroke-opacity="0.6">'
+        f'font-size="24" font-weight="800" fill="{ORANGE}">'
         f"{boot_percent:.1f}%</text>"
     )
-    caption = "C_EXACT of the executable"
+    caption = "executable in C"
     if fuzzy_percent is not None:
         caption += f" &#183; C_FUZZY {fuzzy_percent:.1f}%"
     lines.append(
         f'<text x="{cx:.1f}" y="{cy + 18:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
-        f'font-size="10" fill="{TEXT}" fill-opacity="0.95" style="paint-order:stroke" '
-        f'stroke="{BACKGROUND}" stroke-width="2.1" stroke-opacity="0.7">{caption}</text>'
+        f'font-size="10" fill="{TEXT}">{caption}</text>'
     )
 
     # The tree: a trunk on the left, one branch per line.
