@@ -1270,7 +1270,7 @@ extern char *D_L14_001600EC;
 extern char *D_L14_00167504;
 extern struct { char pad0[0x184]; char *copy_source; } D_L14_00167380;
 extern float D_L14_0016D1F0;
-extern struct { char pad0[0xB0]; float fB0; } D_L14_0016D140;
+extern struct { char pad0[0xB0]; float fB0; } D_L14_0016D140_14f00 __asm__("D_L14_0016D140");
 extern int scale_game_frames_14f00(int) __asm__("FUN_001f96f8");
 extern void clear_u64_value_14f00(void *) __asm__("FUN_001f99f8");
 extern float FUN_001f9b48_14f00(void *, void *) __asm__("FUN_001f9b48");
@@ -1311,7 +1311,7 @@ void FUN_L14_00314f00(char *moby) {
     vector30 = moby + 0x30;
     vector10 = moby + 0x10;
     vector20 = moby + 0x20;
-    *(float *)((char *)indices + 0x30) = FUN_001f9e90_14f00(1.0f, D_L14_0016D140.fB0) * 2.0f;
+    *(float *)((char *)indices + 0x30) = FUN_001f9e90_14f00(1.0f, D_L14_0016D140_14f00.fB0) * 2.0f;
 
     if (*(int *)(rec + 0x20) >= 0) {
         int count;
