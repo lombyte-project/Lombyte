@@ -1860,17 +1860,17 @@ void FUN_L01_002eec68(char *moby) {
             *(int *)(other_data + 0x84) = 8;
             *(int *)(other_data + 0x80) = FUN_001fa6d0(*(float *)(data + 0x250) * 0.8f * 1024.0f);
             {
+                float scale = *(volatile float *)&D_L01_0015ED6C;
+                float speed = *(volatile float *)(data + 0x250);
                 float first_scale = D_L01_001619A0;
                 float second_scale = D_L01_001619A4;
-                float speed = *(float *)(data + 0x250);
-                float scale = D_L01_0015ED6C;
                 speed *= 0.8f;
                 first_scale *= scale;
                 second_scale *= scale;
                 effect = *(u32 *)(other_data + 0x84) | 4;
                 *(volatile float *)(other_data + 0x88) = speed;
                 *(volatile float *)(other_data + 0x78) = first_scale;
-                *(float *)(other_data + 0xb0) = 7.0f;
+                *(volatile float *)(other_data + 0xb0) = 7.0f;
                 *(float *)(other_data + 0xb4) = 13.0f;
                 *(volatile float *)(other_data + 0x7c) = second_scale;
             }
@@ -1890,17 +1890,17 @@ void FUN_L01_002eec68(char *moby) {
             *(int *)(other_data + 0x84) = 8;
             *(int *)(other_data + 0x80) = FUN_001fa6d0(*(float *)(data + 0x250) * 0.8f * 1024.0f);
             {
+                float scale = *(volatile float *)&D_L01_0015ED6C;
+                float speed = *(volatile float *)(data + 0x250);
                 float first_scale = D_L01_001619A0;
                 float second_scale = D_L01_001619A4;
-                float speed = *(float *)(data + 0x250);
-                float scale = D_L01_0015ED6C;
                 speed *= 0.8f;
                 first_scale *= scale;
                 second_scale *= scale;
                 effect = *(u32 *)(other_data + 0x84) | 4;
                 *(volatile float *)(other_data + 0x88) = speed;
                 *(volatile float *)(other_data + 0x78) = first_scale;
-                *(float *)(other_data + 0xb0) = 7.0f;
+                *(volatile float *)(other_data + 0xb0) = 7.0f;
                 *(float *)(other_data + 0xb4) = 13.0f;
                 *(volatile float *)(other_data + 0x7c) = second_scale;
             }
