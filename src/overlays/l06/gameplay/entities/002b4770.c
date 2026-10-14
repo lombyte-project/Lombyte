@@ -2452,6 +2452,7 @@ void FUN_L06_002f9a28(unsigned char *moby) {
         if (*(int *)(data + 0xb4) == 2) return;
         moby[0x20] = 8; if ((unsigned char)moby[0x53] != 3) FUN_00212f90(moby, 3, 0, scale_game_frames_alt(20)); return;
     case 8: {
+        float distance, angle;
         char *target;
         target = moby + 0x10;
         distance = FUN_001f9b80(target, focus + 0x10);
@@ -2502,7 +2503,9 @@ void FUN_L06_002f9a28(unsigned char *moby) {
     case 11:
         if (!((unsigned char)moby[0x70] & 2)) return;
         moby[0x20] = moby[0xbc]; if ((unsigned char)moby[0x53] != 1) FUN_00212f90(moby, 1, 0, scale_game_frames_alt(20)); return;
-    case 13:
+    case 13: {
+        float distance, angle;
+        char *target;
         target = moby + 0x10;
         distance = FUN_001f9b80(target, data + 0xc0);
         angle = fast_difference_between_rotations(*(float *)(moby + 0x48), FUN_001f9e90(*(float *)(data + 0xc0) - *(float *)(moby + 0x10), *(float *)(data + 0xc4) - *(float *)(moby + 0x14)));
@@ -2515,6 +2518,7 @@ void FUN_L06_002f9a28(unsigned char *moby) {
         if (*(int *)(data + 0xb4) != 2) { moby[0x20] = 7; return; }
         if (!(distance < 1.0f)) return;
         moby[0x20] = 7; if ((unsigned char)moby[0x53] != 1) FUN_00212f90(moby, 1, 0, scale_game_frames_alt(20)); return;
+    }
     case 14:
         D_0013D3AB = 1; *(int *)(data + 0x110) = 0; moby[0x30] = 0xff;
         if ((unsigned char)data[0x2e] == 2) {
