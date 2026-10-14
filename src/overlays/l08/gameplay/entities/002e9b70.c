@@ -683,7 +683,6 @@ void FUN_L08_002f5e58(struct Moby *m) {
     f32 *weight;
     f32 inv_x, inv_y, time, phase, amp_a, amp_b, phase_a, phase_b;
     f32 phase_step, amp_step_a, amp_step_b, step_a, step_b, height_a, height_b;
-    f32 next_phase, next_amp_a, next_amp_b, next_a, next_b;
     f32 x, y, noise_x, noise_y, angle, base, sine, shape, bend, a, c, t;
     s32 i, j, k, stride, alpha, timer, count, lifetime;
     u32 color_a, color_b;
@@ -775,6 +774,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
     phase = f[5]; amp_a = f[7]; amp_b = f[8];
     phase_a = f[0x18]; phase_b = f[0x19];
     for (i = 0; i <= b[9]; i++) {
+        f32 next_phase, next_amp_a, next_amp_b, next_a, next_b;
         y = convert_integer_to_float(i) / convert_integer_to_float(b[9]);
         qcopy(&point, &edge[0]);
         next_phase = phase + phase_step;
