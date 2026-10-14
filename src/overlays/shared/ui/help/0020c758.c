@@ -686,9 +686,9 @@ void FUN_L00_0020dd20(void) {
     u8 *obj, *moby;
     f32 angle, value;
     u8 **slot;
-    f32 zero = 0.0f;
     f32 tenth = 0.1f;
     f32 one = 1.0f;
+    f32 zero = 0.0f;
 
     i = 0;
     do {
