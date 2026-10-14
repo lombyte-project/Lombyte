@@ -1996,7 +1996,8 @@ extern s32 FUN_001fef20_2cd1f0(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_001fef68_2cd1f0(void *) __asm__("FUN_001f9740");
 extern s32 FUN_001160d8_2cd1f0(void) __asm__("FUN_001160d8");
 extern void FUN_001ff660_2cd1f0(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void FUN_0025e450_2cd1f0(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
+/* EE float and integer argument banks retain their separate retail order. */
+extern void FUN_0025e450_2cd1f0(f32, void *, void *, void *, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern void FUN_0024eb68_2cd1f0(void *) __asm__("FUN_L00_0024eb68");
 
 void FUN_L00_002cd1f0(struct Moby *m)
@@ -2136,7 +2137,7 @@ moved:
                 qcopy(&m->pos, &coll_hit_2c8440.point);
                 FUN_001ff660_2cd1f0(&vector_scratch.bounce, &query, &coll_hit_2c8440.normal_x);
                 FUN_001ff500_2cd1f0(&vector_scratch.bounce, &vector_scratch.bounce, frame_time + frame_time);
-                FUN_0025e450_2cd1f0(m, &vector_scratch.bounce, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
+                FUN_0025e450_2cd1f0(0.0f, m, &vector_scratch.bounce, 0, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
             } else {
                 if (coll_hit_2c8440.unk1C <= 0)
                     goto bounce_only;
@@ -2144,7 +2145,7 @@ moved:
                 qcopy(&m->pos, &coll_hit_2c8440.point);
                 FUN_001ff660_2cd1f0(&vector_scratch.bounce, &query, &coll_hit_2c8440.normal_x);
                 FUN_001ff500_2cd1f0(&vector_scratch.bounce, &vector_scratch.bounce, frame_time + frame_time);
-                FUN_0025e450_2cd1f0(m, &vector_scratch.bounce, 0, 0.0f, 1.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
+                FUN_0025e450_2cd1f0(0.0f, m, &vector_scratch.bounce, 0, 1.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
             }
         } else if (!FUN_001fef68_2cd1f0(&v->timer) && !(200.0f < FUN_001ff488_2cd1f0(&m->pos, D_001413D0_2ccee0 + 0x10))) {
             goto bounce_only;
