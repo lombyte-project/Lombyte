@@ -347,40 +347,45 @@ set_timer:
 state_three:
     {
         float speed;
-        if (hero.water_surface_z < *(float *)(moby + 0x18) || *(float *)(data + 0x78) < 0.0f) {
-            if (hero.state.current != 0x72) {
-                qcopy_nc(v, &hero.motion.pos);
-                v[2] = hero.water_surface_z;
-                FUN_L05_002d1fd8((int)moby, (char *)v);
-                set_camera_2d1688(&hero.motion.pos, &hero.motion.rot, 0x72, 0);
-            } else {
-                qcopy(&hero.motion.pos, moby + 0x10);
+        {
+            struct Hero *h = &hero;
+            if (h->water_surface_z < *(float *)(moby + 0x18) || *(float *)(data + 0x78) < 0.0f) {
+                if (h->state.current != 0x72) {
+                    qcopy_nc(v, &h->motion.pos);
+                    v[2] = h->water_surface_z;
+                    FUN_L05_002d1fd8((int)moby, (char *)v);
+                    set_camera_2d1688(&h->motion.pos, &h->motion.rot, 0x72, 0);
+                } else {
+                    qcopy(&h->motion.pos, moby + 0x10);
+                }
+                h->unk20A5 = one;
+                h->motion.pos.f[2] += 20.0f;
             }
-            hero.unk20A5 = one;
-            hero.motion.pos.f[2] += 20.0f;
         }
         speed = *(float *)(data + 0x78);
         height = *(float *)(moby + 0x18);
-        *(float *)(moby + 0x18) = height + speed;
         {
             float acceleration = frame_time_sq * 10.0f;
             float threshold = frame_time + frame_time;
-            speed = *(float *)(data + 0x78) - acceleration;
-            *(float *)(data + 0x78) = speed;
-            if (speed < threshold) {
-                fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
-                steer_2d1688(1.5533431f, frame_time_sq * 12.566371f,
-                              frame_time_sq * 12.566371f, frame_time * 25.132742f,
-                              moby + 0x44, data + 0x70);
-                copy_direction_2d1688(moby + 0xc0, moby + 0x40);
-                fast_vec_normalize((*(float *)&D_L05_00161388), w, moby + 0xe0);
-                fast_vec_sub(z, w, v);
-                fast_vec_sub(moby + 0x10, moby + 0x10, z);
+            *(float *)(moby + 0x18) = height + speed;
+            {
+                float speed = *(float *)(data + 0x78) - acceleration;
+                *(float *)(data + 0x78) = speed;
+                if (speed < threshold) {
+                    fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
+                    steer_2d1688(1.5533431f, frame_time_sq * 12.566371f,
+                                  frame_time_sq * 12.566371f, frame_time * 25.132742f,
+                                  moby + 0x44, data + 0x70);
+                    copy_direction_2d1688(moby + 0xc0, moby + 0x40);
+                    fast_vec_normalize((*(float *)&D_L05_00161388), w, moby + 0xe0);
+                    fast_vec_sub(z, w, v);
+                    fast_vec_sub(moby + 0x10, moby + 0x10, z);
+                }
             }
         }
         if (*(float *)(data + 0x78) < 0.0f) {
             if (*(float *)(moby + 0x18) < hero.water_surface_z && *(unsigned char *)(moby + 0xbc) == 0) {
-                *(unsigned char *)(moby + 0xbc) = one;
+                *(unsigned char *)(moby + 0xbc) = 1;
                 effect_2d1688(0, 0, moby);
                 fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
                 fast_vec_add(v, v, moby + 0x10);
