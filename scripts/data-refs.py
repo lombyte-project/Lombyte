@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import argparse
 import bisect
+import functools
 import json
 import os
 import re
@@ -44,7 +45,6 @@ import shutil
 import struct
 import subprocess
 import sys
-import functools
 import tempfile
 
 from dataclasses import dataclass
@@ -701,11 +701,10 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path, level: int | Non
         size *= n
     if level is not None:
         import rnc_overlays as ov
-        raw = ov.level_data_bytes(level, addr, size)
+        raw = ov.level_data_bytes(level, addr, size)  # None: no loaded bytes there
         bss = next((r for r in ov.manifest(level)["records"] if r["type"] == 8), None)
-        if raw is None and bss and bss["address"] <= addr and addr + size <= bss["address"] + bss["bytes"]:
-            raw = None  # bss: defined without a value
-        elif raw is None:
+        in_bss = bss and bss["address"] <= addr and addr + size <= bss["address"] + bss["bytes"]
+        if raw is None and not in_bss:
             raise SystemExit(f"{label}+{size} is not in level {level:02d}'s data or bss")
         table = "bss" if raw is None else "data"
     else:
@@ -753,7 +752,8 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path, level: int | Non
         # bss: in .bss in source order (a common symbol is placed by ld's own order)
         definition = f'{decl} __attribute__((section(".bss")));'
     else:
-        body = "{0}" if not any(raw) else nest(raw, counts)
+        zero = "0" if not counts and members is None else "{0}"  # one value: plain 0
+        body = zero if not any(raw) else nest(raw, counts)
         const = "const " if table == "RODATA_OVERLAYS" and not elem.startswith("const") else ""
         in_lit = level is not None and ov.level_data_bytes(level, addr, size) is not None and any(
             r["name"] == "lit" and r["address"] <= addr < r["address"] + r["bytes"]
@@ -776,9 +776,11 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path, level: int | Non
         out.write_text("\n".join(lines) + f"\n\n{definition}\n")
     if level is not None:
         catalogue = ROOT / "config" / "overlays" / "us" / "data.tsv"
-        rows = catalogue.read_text().splitlines()
+        entries = catalogue.read_text().splitlines()
+        notes = [entry for entry in entries if entry.startswith("#")]
+        rows = [entry for entry in entries if entry and not entry.startswith("#")]
         if not any(row.startswith(label + "\t") for row in rows):
-            catalogue.write_text("\n".join(rows + [f"{label}\t{size}"]) + "\n")
+            catalogue.write_text("\n".join(notes + sorted(rows + [f"{label}\t{size}"])) + "\n")
         print(f"listed {label} ({size} bytes) in {shown(catalogue)}")
         return out
     unit = os.path.relpath(out.resolve().with_suffix(""), ROOT / "src")

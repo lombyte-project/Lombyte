@@ -9,8 +9,8 @@ import hashlib
 import importlib.util
 import io
 import json
-import re
 import os
+import re
 import shutil
 import struct
 import subprocess
@@ -335,7 +335,6 @@ class ProgressReportTests(unittest.TestCase):
             self.assertIn("`P`", text)
             self.assertIn("No report for main yet", comment.render({}, new, "main"))
 
-
     def test_data_counts_blobs_c_entries_and_levels(self):
         """Data totals come from the preserved blobs and the level records;
         matched data from the *_OVERLAYS sizes and config/overlays/us/data.tsv."""
@@ -364,6 +363,28 @@ class ProgressReportTests(unittest.TestCase):
         self.assertEqual(categories["levels"]["total_data"], "256")
         self.assertEqual(categories["overlays"]["matched_data"], "12")
         self.assertNotIn("total_data", categories["game"])
+
+    def test_zero_data_counts_both_zero_forms(self):
+        """`= 0` and `= {0}` are zeros, placement attributes or not; a
+        D_XXXXXXXX row counts once per level."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            overlays = repo / "config" / "overlays" / "us"
+            overlays.mkdir(parents=True)
+            for level in (1, 2):
+                (overlays / f"level-{level:02d}.json").write_text("{}")
+            (overlays / "data.tsv").write_text(
+                "# name\tsize\nD_00160000\t4\nD_L01_00161000\t4\nD_L01_00161004\t16\n"
+                "D_L01_00161014\t4\nD_L01_00161018\t4\n")
+            src = repo / "src" / "overlays" / "l01"
+            src.mkdir(parents=True)
+            (src / "a.c").write_text(
+                "int D_00160000 = 0;\n"
+                "int D_L01_00161000 = {0};\n"
+                'float row_phase[4] __asm__("D_L01_00161004") __attribute__((section(".sdata"))) = {0};\n'
+                "int D_L01_00161014 = 8;\n"
+                "extern int D_L01_00161018;\n")
+            self.assertEqual(self.report.zero_level_data(repo), 4 * 2 + 4 + 16)
 
 
 class ConfigureDataLayoutTests(unittest.TestCase):
@@ -400,7 +421,6 @@ class ConfigureDataLayoutTests(unittest.TestCase):
         self.assertIn('.incbin "assets/data.databin.bin", 0x0, 0x10', text)
         self.assertIn('.incbin "assets/data.databin.bin", 0x20, 0x20', text)
         self.assertIn("AT(0x66420)", sections[1][1])
-
 
     def test_bss_is_cut_around_the_c_bss_twice_the_same(self):
         """A label inside a C-owned bss range is dropped; a second configure

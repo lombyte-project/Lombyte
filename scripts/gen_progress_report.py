@@ -197,12 +197,13 @@ def read_level_data(repo: Path) -> dict[int, int]:
 
 
 def zero_level_data(repo: Path) -> int:
-    """Bytes of the level data in C that are zero (defined `= {0}`), counted per
-    level like the matched bytes: a D_XXXXXXXX row counts once for every level."""
+    """Bytes of the level data in C that are zero (defined `= 0` or `= {0}`),
+    counted per level like the matched bytes: a D_XXXXXXXX row counts once for
+    every level."""
     zero = set()
     for path in (repo / "src" / "overlays").rglob("*.c"):
-        for label, bare in re.findall(r'(?:__asm__\("(D_\w+)"\)|\b(D_(?:L\d\d_)?[0-9A-Fa-f]{8})(?:\[\w*\])*)'
-                                      r'\s*=\s*\{\s*0\s*\}\s*;', path.read_text(errors="replace")):
+        for label, bare in re.findall(r'^(?!extern\b)[^;=\n]*?(?:__asm__\("(D_\w+)"\)|\b(D_(?:L\d\d_)?[0-9A-Fa-f]{8})\b)'
+                                      r'[^;=\n]*=\s*(?:\{\s*0\s*\}|0)\s*;', path.read_text(errors="replace"), re.M):
             zero.add(label or bare)
     levels = len(list((repo / "config" / "overlays" / "us").glob("level-??.json")))
     rows = (repo / "config" / "overlays" / "us" / "data.tsv")

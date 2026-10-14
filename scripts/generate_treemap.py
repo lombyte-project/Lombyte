@@ -914,7 +914,6 @@ def render_svg(
     tree_top = header_px + drawer_height + 26
     height = tree_top + branch_height * len(branches) + footer_px + margin_px
 
-    total_units = len(units)
     exact = [unit for unit in units if unit["category"] == "exact"]
     asm = [unit for unit in units if unit["category"] == "asm"]
     pending = [unit for unit in units if unit["category"] == "pending"]
@@ -925,7 +924,6 @@ def render_svg(
     boot_percent = (100.0 * boot_exact_bytes / boot_recoverable) if boot_recoverable else 0.0
     ov_bytes = sum(f["size"] for f in overlays)
     ov_exact_bytes = sum(f["size"] for f in overlays if f["exact"])
-    ov_exact = sum(1 for f in overlays if f["exact"])
     ov_percent = (100.0 * ov_exact_bytes / ov_bytes) if ov_bytes else 0.0
     total_bytes = boot_bytes + ov_bytes
     exact_bytes = boot_exact_bytes + ov_exact_bytes
