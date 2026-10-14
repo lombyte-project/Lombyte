@@ -749,6 +749,7 @@ void FUN_L00_002772c0(s32 param_1) {
     }
     for (pass = 0; pass < 2; pass++) {
         for (i = 0; i < 14; i++) {
+            s32 width, height;
             if (D_L00_001B9E90_init[i] == 0 || handles == 0 || handles[i] == 0) {
                 continue;
             }
@@ -771,18 +772,18 @@ void FUN_L00_002772c0(s32 param_1) {
             bottom = object->image[21];
             width_shift = 7;
             if (texture_width > 0x80) {
-                for (width_shift = 8; (1 << (width_shift & 31)) < texture_width; width_shift++) {}
+                for (width_shift = 8; (1 << width_shift) < texture_width; width_shift++) {}
             }
             height_shift = 7;
             if (texture_height > 0x80) {
-                for (height_shift = 8; (1 << (height_shift & 31)) < texture_height; height_shift++) {}
+                for (height_shift = 8; (1 << height_shift) < texture_height; height_shift++) {}
             }
             while (width_shift + height_shift > 17) {
                 height_shift--;
             }
             FUN_L00_001fc928(1.0f, width_shift, height_shift, pass != 0);
-            width = 1 << (width_shift & 31);
-            height = 1 << (height_shift & 31);
+            width = 1 << width_shift;
+            height = 1 << height_shift;
             FUN_L00_0023cc30(0, 0, width, height, *(s32 *)0x00160270, 0, 0);
             entry = (VoiceRenderEntry *)handles[i];
             flags = entry->draw(entry);
