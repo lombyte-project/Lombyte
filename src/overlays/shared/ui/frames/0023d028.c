@@ -58,9 +58,6 @@ void FUN_L00_0023d028(void) {
 }
 extern int D_L00_001C3E98[];
 extern unsigned char D_0015EDD0[] __attribute__((sda));
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0023d198.s", FUN_L00_0023d198);
-#else
 extern int D_00141660_23d028[] __asm__("D_00141660");
 void FUN_L00_00260860_23d028(int, int) __asm__("FUN_L00_00260860");
 void FUN_L00_0023d3d8(int i) __asm__("FUN_L00_0023d3d8");
@@ -75,27 +72,37 @@ void FUN_L00_0023d198(void) {
             items_acquired[i] = 1;
         }
         {
-            int table12 = 12, table13 = 13, table11 = 11;
-            int table17 = 17, table10 = 10, table16 = 16;
+            int entry0 = 0x4A;
+            int entry1 = 0x50;
+            int entry2 = 0x4F;
+            int entry3 = 0x54;
+            int entry4 = 0x51;
+            int entry5 = 0x4E;
+            int entry6 = 0x4B;
+            int entry7 = 0x52;
+            int entry8 = 0x4D;
+            int entry9 = 0x59;
+            int entry10 = 0x58;
+            int entry11 = 0x53;
             pause_iop_sprite_lists[0] = 15;
-            D_0015EDD0[0] = 0x4A;
-            D_0015EDD0[1] = 0x50;
-            D_0015EDD0[2] = 0x4F;
-            D_0015EDD0[3] = 0x54;
-            D_0015EDD0[4] = 0x51;
-            D_0015EDD0[5] = 0x4E;
-            D_0015EDD0[6] = 0x4B;
-            D_0015EDD0[7] = 0x52;
-            D_0015EDD0[8] = 0x4D;
-            D_0015EDD0[9] = 0x59;
-            D_0015EDD0[10] = 0x58;
-            D_0015EDD0[11] = 0x53;
-            pause_iop_sprite_lists[1] = table12;
-            pause_iop_sprite_lists[2] = table13;
-            pause_iop_sprite_lists[3] = table11;
-            pause_iop_sprite_lists[4] = table17;
-            pause_iop_sprite_lists[5] = table10;
-            pause_iop_sprite_lists[6] = table16;
+            D_0015EDD0[0] = entry0;
+            D_0015EDD0[1] = entry1;
+            D_0015EDD0[2] = entry2;
+            D_0015EDD0[3] = entry3;
+            D_0015EDD0[4] = entry4;
+            D_0015EDD0[5] = entry5;
+            D_0015EDD0[6] = entry6;
+            D_0015EDD0[7] = entry7;
+            D_0015EDD0[8] = entry8;
+            D_0015EDD0[9] = entry9;
+            D_0015EDD0[10] = entry10;
+            D_0015EDD0[11] = entry11;
+            pause_iop_sprite_lists[1] = 12;
+            pause_iop_sprite_lists[2] = 13;
+            pause_iop_sprite_lists[3] = 11;
+            pause_iop_sprite_lists[4] = 17;
+            pause_iop_sprite_lists[5] = 10;
+            pause_iop_sprite_lists[6] = 16;
             pause_iop_sprite_lists[7] = 19;
         }
     } else {
@@ -120,7 +127,6 @@ void FUN_L00_0023d198(void) {
         FUN_L00_0023d3d8(current_level_index);
     }
 }
-#endif
 /* Appends D_L00_001C3E98[i] to the 0xFF-terminated D_0015EDD0 list unless already present. */
 void FUN_L00_0023d3d8(int i) {
     int v = D_L00_001C3E98[i];
