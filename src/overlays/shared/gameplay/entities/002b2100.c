@@ -1035,8 +1035,9 @@ void FUN_L00_002b49a8(u8 *m) {
 
     state = hero.state.current;
     if (state == 30 && (*(u16 *)(((u8 *)hero.moby) + 0x34) & 1)) {
-        u8 *origin = (u8 *)D_L00_00166C80_b3058.v140;
+        u8 *origin;
         FUN_001fa2b8_2b49a8(&scratch.work.target, &D_L00_00166C80_b3058);
+        origin = (u8 *)D_L00_00166C80_b3058.v140;
         FUN_001fa2d8_2b49a8(scratch.matrix, &scratch.work.target);
         scratch.velocity.f[2] = D_0015ED6C_2b49a8 * 40.0f;
         FUN_001f9d20_2b49a8(&scratch.velocity, &scratch.velocity, scratch.matrix);
@@ -1165,14 +1166,16 @@ pitch_ready:
         if (hero.state.current != 0x72 && D_L00_0015F5C4_2b49a8 != 2) goto finish;
     }
     if (m[0x53] == 0 && !(m[0x70] & 2)) {
-        if (hero.state.current == 0x72 || D_L00_0015F5C4_2b49a8 == 2) goto clear;
+        goto clear_test;
     } else {
         if (hero.state.current == 0x72) goto clear;
-        if (D_L00_0015F5C4_2b49a8 == 2) goto clear;
+        if (D_L00_0015F5C4_2b49a8 == 2) goto clear_test;
         if (m[0x53] != 1) FUN_L00_00257880_2b49a8(m, 1, 0, FUN_001f96f8_2b49a8(7));
         goto skip;
     }
     goto skip;
+clear_test:
+    if (hero.state.current != 0x72 && D_L00_0015F5C4_2b49a8 != 2) goto skip;
 clear:
     FUN_L00_002577c8_2b49a8(m, 1, 0);
     FUN_L00_00250480_2b49a8(m);
