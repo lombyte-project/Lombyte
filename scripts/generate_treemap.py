@@ -1280,6 +1280,8 @@ def main(argv=None) -> int:
     overlay_asm = [f for f in overlays if f["asm"]]
     overlays = [f for f in overlays if not f["asm"]]
     levels = load_levels(repo)
+    # Data bytes in C (the progress report's count); absent in a bare tree.
+    data = data_totals(repo) if (repo / "config" / "us" / "rnc1.us.yaml").is_file() else None
     svg, height = render_svg(
         units,
         overlays,
@@ -1291,7 +1293,7 @@ def main(argv=None) -> int:
         min_bytes=args.min_bytes,
         title=args.title,
         fuzzy_percent=fuzzy_percent,
-        data=data_totals(repo)["all"],
+        data=data["all"] if data else None,
         drawer_height=args.drawer_height,
     )
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -1403,14 +1405,11 @@ def main(argv=None) -> int:
         "c_exact_percent_of_recoverable": round(100.0 * all_exact / all_recoverable, 4) if all_recoverable else 0.0,
         "c_fuzzy_percent_of_recoverable": round(total_fuzzy, 4) if total_fuzzy is not None else None,
     }
-    def data_stats(key):
-        total, matched = data_totals(repo)[key]
-        return {"bytes_total": total, "bytes_matching_c": matched,
-                "c_exact_percent": round(100.0 * matched / total, 4) if total else 0.0}
-
-    boot["data"] = data_stats("boot")
-    overlays_stats["data"] = data_stats("overlays")
-    total_stats["data"] = data_stats("all")
+    if data:
+        for section, key in ((boot, "boot"), (overlays_stats, "overlays"), (total_stats, "all")):
+            total, matched = data[key]
+            section["data"] = {"bytes_total": total, "bytes_matching_c": matched,
+                               "c_exact_percent": round(100.0 * matched / total, 4) if total else 0.0}
     # The header fields describe the whole game (executable + overlays); the
     # executable alone is under "boot", as the drawer shows it.
     stats = {
