@@ -1097,7 +1097,7 @@ append:
                 position += 16;
             j = 0;
             if (length > 0) {
-                if (history[position] == sequence[0]) {
+                if (*(u8 *)(position + (s32)history) == sequence[0]) {
                     do {
                         position++;
                         j++;
@@ -1105,7 +1105,7 @@ append:
                             position -= 16;
                         if ((s32)j >= length)
                             goto scan_result;
-                    } while (history[position] == sequence[j]);
+                    } while (sequence[j] == *(u8 *)(position + (s32)history));
                 }
                 j = -1;
             }
