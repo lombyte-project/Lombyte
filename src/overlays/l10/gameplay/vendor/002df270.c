@@ -1427,7 +1427,93 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
         }
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e3a90.s", FUN_L10_002e3a90);
+#else
+extern s32 D_L10_00161E74 __attribute__((sda));
+extern s32 D_L10_00161E78 __attribute__((sda));
+extern f32 D_L10_00161E7C __attribute__((sda));
+extern f32 D_L10_00161E80 __attribute__((sda));
+extern f32 D_L10_00161E84 __attribute__((sda));
+extern f32 D_L10_00161E88 __attribute__((sda));
+extern f32 D_L10_00161E8C __attribute__((sda));
+extern f32 D_L10_00161E90 __attribute__((sda));
+extern f32 D_L10_00161E94 __attribute__((sda));
+extern f32 D_L10_00161E98 __attribute__((sda));
+extern f32 D_L10_00161E9C __attribute__((sda));
+extern f32 D_L10_00161EA0 __attribute__((sda));
+extern s32 D_L10_00161EA4 __attribute__((sda));
+extern s32 D_L10_00161EA8 __attribute__((sda));
+extern s32 D_L10_00161EAC __attribute__((sda));
+extern s32 D_L10_00161EB0 __attribute__((sda));
+extern s32 D_L10_00161EB4 __attribute__((sda));
+extern s32 D_L10_00161EB8 __attribute__((sda));
+extern s32 D_L10_00161EBC __attribute__((sda));
+extern void add_random_vector_offset(f32 *, f32) __asm__("FUN_L00_0025f8e0");
+extern void scale_vector_xyz(f32 *, f32 *, f32) __asm__("FUN_001f9a68");
+extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
+extern void FUN_00218888(void *, void *, void *, s32, s32, s32, s32, s32, s32);
+
+/* The burst count is captured once; the inner count is reread after each emission. */
+extern f32 multiply_global_factor_ed64_2e3a90(f32) __asm__("func_001F96B0");
+
+void FUN_L10_002e3a90(void *arg)
+{
+    f32 position[4] __attribute__((aligned(16)));
+    f32 velocity[4] __attribute__((aligned(16)));
+    f32 acceleration[4] __attribute__((aligned(16)));
+    f32 offset[4] __attribute__((aligned(16)));
+    Moby *moby = (Moby *)arg;
+    u8 * volatile pvars = moby->pvars;
+    s32 count = D_L10_00161E74;
+    s32 i = 0;
+    s32 j;
+    f32 angle, speed, vertical_speed, size;
+    s32 color, color2, a, b;
+
+    if (count > 0) {
+        Vec4 *moby_position = (Vec4 *)&moby->pos;
+        do {
+            qcopy(position, moby_position);
+            add_random_vector_offset(position, D_L10_00161E7C);
+            position[2] += 0.55f;
+            angle = random_angle_radians();
+            speed = random_float_between(D_L10_00161E88, D_L10_00161E8C);
+            vertical_speed = random_float_between(D_L10_00161E90, D_L10_00161E94);
+            if (moby->state == 11) {
+                speed *= 0.55f;
+                vertical_speed *= 0.55f;
+                position[2] -= 0.2f;
+            }
+            velocity[0] = fast_cos(angle) * (speed * D_0015ED6C);
+            velocity[1] = fast_sin(angle) * (speed * D_0015ED6C);
+            velocity[2] = vertical_speed * D_0015ED6C + 0.0f;
+            scale_vector_xyz(offset, (f32 *)(pvars + 0x70), 0.5f);
+            offset[2] = 0.0f;
+            fast_vec_add(velocity, velocity, offset);
+            qcopy(acceleration, velocity);
+            j = 0;
+            acceleration[2] -= D_L10_00161E98 * D_0015ED70 * (f32)scale_game_frames(D_L10_00161EB8);
+            if (D_L10_00161E78 > 0) {
+                do {
+                    ++j;
+                    size = random_float_between(0.5f, 1.5f);
+                    velocity[3] = size * D_L10_00161E9C;
+                    acceleration[3] = size * D_L10_00161EA0;
+                    add_random_vector_offset(position, D_L10_00161E80);
+                    add_random_vector_offset(acceleration, D_L10_00161E84 * D_0015ED6C);
+                    color = fast_tween_color(random_float_between(0.0f, 1.0f), D_L10_00161EA4, D_L10_00161EAC);
+                    color2 = fast_tween_color(random_float_between(0.0f, 1.0f), D_L10_00161EA8, D_L10_00161EB0);
+                    a = scale_game_frames(D_L10_00161EB4);
+                    b = scale_game_frames(D_L10_00161EB8);
+                    FUN_00218888(position, velocity, acceleration, color, color2, a, b, truncate_float_to_s32(multiply_global_factor_ed64_2e3a90(random_float_between((f32)D_L10_00161EBC * 0.5f, (f32)D_L10_00161EBC * 2.5f))), -1);
+                } while (j < D_L10_00161E78);
+            }
+            ++i;
+        } while (i < count);
+    }
+}
+#endif
 /* Level 10 toxic crab: per-frame sight, target and state update. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E52B0), where it is exact; names translated to the US level program. */
 
