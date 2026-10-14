@@ -3262,6 +3262,7 @@ void FUN_L00_002d73e8(P *p) {
     V *points, *source;
     float *texcoords, *texcoords_second;
     u32 *colors;
+    s32 *indices;
 
     qcopy(&position, &p->pos);
     position.w = 1.0f;
@@ -3300,9 +3301,10 @@ void FUN_L00_002d73e8(P *p) {
         if (D_L00_001D2D10[i] != 0) {
             quad.texture[3] = 0x8000000044ULL;
             for (row = 2; row < 4; row++) {
+                indices = D_L00_001E1380_2d73e8[row];
                 source_texcoords = D_L00_001E11E0_2d73e8;
                 for (point = 0, points = quad.points, texcoords = quad.texcoords, texcoords_second = quad.texcoords + 1, colors = quad.colors; point < 4; point++, points++, texcoords += 2, texcoords_second += 2, colors++) {
-                    index = D_L00_001E1380_2d73e8[row][point];
+                    index = *indices++;
                     source = &D_L00_001E12C0_2d73e8[index];
                     points->x = source->x;
                     f = source->y * x;
@@ -3368,9 +3370,10 @@ void FUN_L00_002d73e8(P *p) {
     positive_transform[3].z -= q->f50;
     if (q->flag42 == 0) {
         for (row = 0; row < 6; row++) {
+            indices = D_L00_001E1380_2d73e8[row];
             source_texcoords = D_L00_001E11E0_2d73e8;
             for (point = 0, points = quad.points, texcoords = quad.texcoords, texcoords_second = quad.texcoords + 1, colors = quad.colors; point < 4; point++, points++, texcoords += 2, texcoords_second += 2, colors++) {
-                index = D_L00_001E1380_2d73e8[row][point];
+                index = *indices++;
                 source = &D_L00_001E1200_2d73e8[index];
                 points->x = source->x;
                 points->y = source->y * q->f48;
