@@ -926,8 +926,8 @@ void FUN_L00_002d9810(u8 *m) {
     for (i = 0; i < 32; i++) {
         indices = (short *)(D_L00_001E3A80_002d9810 + i * 8);
         j = 0;
-        pointB = (char *)quad.points;
         pointA = (char *)quad.points;
+        pointB = (char *)quad.points;
         for (; j < 4; j++) {
             short index = *indices;
             if (j >= 2)
@@ -936,8 +936,8 @@ void FUN_L00_002d9810(u8 *m) {
             else
                 FUN_001f9a68_002d9810(D_L00_00161ADC_002d9810, pointA,
                                         D_L00_001E3480_002d9810 + index * 16);
-            pointB += 16;
             pointA += 16;
+            pointB += 16;
             indices++;
         }
         quad.texcoords[0] = 0.5f;
