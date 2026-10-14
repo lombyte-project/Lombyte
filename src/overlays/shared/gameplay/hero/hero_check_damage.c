@@ -1389,12 +1389,15 @@ void FUN_L00_0020f160(void *moby, void *matrix)
         D_0013F694 = 5;
     else
         D_0013F694 = 11;
-    limit = D_0013F694;
-    if ((*(s32 *)(hero.pad_21B8 + 8)) < limit)
-        (*(s32 *)(hero.pad_21B8 + 8))++;
-    else if ((*(s32 *)(hero.pad_21B8 + 8)) > limit)
-        (*(s32 *)(hero.pad_21B8 + 8))--;
-    n = (*(s32 *)(hero.pad_21B8 + 8));
+    {
+        struct Hero *hero_ptr = &hero;
+        s32 limit = D_0013F694;
+        if ((*(s32 *)(hero_ptr->pad_21B8 + 8)) < limit)
+            (*(s32 *)(hero_ptr->pad_21B8 + 8))++;
+        else if ((*(s32 *)(hero_ptr->pad_21B8 + 8)) > limit)
+            (*(s32 *)(hero_ptr->pad_21B8 + 8))--;
+        n = (*(s32 *)(hero_ptr->pad_21B8 + 8));
+    }
     if (n < 2)
         n = 2;
     if ((*(s32 *)(hero.pad_21B8 + 4)) < n)
