@@ -2348,9 +2348,7 @@ void FUN_L12_002e8808(struct Moby *moby, float *target, float max_angle, float a
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e9f68.s", FUN_L12_002e9f68);
-#else
+extern f32 approach_value_e9f68(void *, f32, f32) __asm__("FUN_00213ed8");
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
 extern float FUN_L00_00257c48(float, float);
 extern void FUN_L01_00274b78(void *, void *, float);
@@ -2600,14 +2598,14 @@ update_state:
         }
         distance = vector_length_xyz_c3(&position);
         if (!(distance > 5.5f)) {
-            approach_value(data + 0x94, 0.0f, frame_time_sq * 9.0f);
+            approach_value_e9f68(data + 0x94, 0.0f, frame_time_sq * 9.0f);
             if (*(float *)(data + 0x94) == 0.0f) {
                 *(short *)(data + 0x8c) = scale_game_frames_alt(50);
                 *(short *)(data + 0xbe) = *(short *)(data + 0xbe) == 0;
                 moby->state = 3;
                 break;
             }
-        } else approach_value(data + 0x94, frame_time * 10.0f, frame_time_sq * 7.0f);
+        } else approach_value_e9f68(data + 0x94, frame_time * 10.0f, frame_time_sq * 7.0f);
         fast_vec_normalize(data + 0x70, &position, *(float *)(data + 0x94));
         fast_vec_add(&moby->pos, &moby->pos, data + 0x70);
         FUN_L12_002eae00(moby);
@@ -2674,7 +2672,6 @@ remove:
         moby->shadow_range = 24;
     }
 }
-#endif
 /* Springs the moby's two rotation angles toward a heading taken from its data's direction vector. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC180), where it is exact; names translated to the US level program. */
 
