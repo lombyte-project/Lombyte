@@ -407,9 +407,8 @@ RODATA_OVERLAYS = {
     "update_resident_gameplay_state": (0x1E8930, 0xE98B0, 36),  # gameplay-state switch table
     "fun_00222768": (0x1E8860, 0xE97E0, 80),  # switch table
     "camera_activation_check_priority": (0x1E7730, 0xE86B0, 32),  # camera-mode switch table
-    "ui/help/draw_help": (0x1E7A70, 0xE89F0, 28),  # switch table (PAL import)
-    "ui/help/dismiss_help": (0x1E7A20, 0xE89A0, 32),  # switch table (PAL import)
-    # Still assembly: 0 bytes until its C (and switch table) is promoted.
+    "ui/help/draw_help": (0x1E7A70, 0xE89F0, 28),  # switch table (migrated)
+    "ui/help/dismiss_help": (0x1E7A20, 0xE89A0, 32),  # switch table (migrated)
     "_sceFs_Rcv_Intr": (0x1528E0, 0x53860, 100),  # retail switch table (jtbl_001528E0)
     "fun_00216c48": (0x1E86A0, 0xE9620, 24),  # retail switch table (jtbl_001E86A0)
     "draw_sky_shells": (0x1E8910, 0xE9890, 24),  # switch table

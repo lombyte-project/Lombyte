@@ -144,8 +144,8 @@ justify a change in behavior.
   (`.set nomacro`) or after its definition in the same translation unit. So a
   unit that retail reaches gp-relative outside delay slots defines the
   variable itself, ahead of its functions, and is listed in `SDATA_OVERLAYS`
-  so its `.sdata` is linked at the retail address in place of the blob bytes; functions that share such a
-  variable live in one file (`rendering/vu1_chain.c`,
+  so its `.sdata` is linked at the retail address in place of the blob bytes;
+  functions that share such a variable live in one file (`rendering/vu1_chain.c`,
   `audio/rpc/snd_returns.c`). No `__asm__(".extern ...")` is needed.
 - The build targets the boot executable and its embedded DVP overlay blobs;
   other disc files are out of scope.

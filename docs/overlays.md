@@ -59,12 +59,12 @@ function in C, ending with `PASS`.
 
 Level data defined in C carries its `D_LNN_XXXXXXXX` label and a row in
 `config/overlays/us/data.tsv` (name, size); `scripts/data-refs.py --level N
---emit ADDR --into FILE` writes the definition and the row. `make overlays` compares its bytes,
-with every pointer resolved to that level's address, to what the level loads
-there (`check_data` in `scripts/overlay_proof.py`).
-A row named `D_XXXXXXXX` (no level) is data every level holds at that
-address, such as the zero globals in `src/overlays/shared/data/level_globals.c`:
-it is checked in every level and counted in each.
+--emit ADDR --into FILE` writes the definition and the row. `make overlays`
+compares its bytes, with every pointer resolved to that level's address, to
+what the level loads there (`check_data` in `scripts/overlay_proof.py`). A row
+named `D_XXXXXXXX` (no level) is data every level holds at that address, such
+as the zero globals in `src/overlays/shared/data/level_globals.c`: it is
+checked in every level and counted in each.
 
 ## Progress
 
