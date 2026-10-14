@@ -2665,22 +2665,22 @@ reset_timer:
         if (path_state->state == 0) {
             if (path_state->index <= 0) {
                 path_state->index = FUN_L01_0028b510(moby + 0x10, path_state->path, 0.0f);
-                if (path_state->direction >= 0) {
-                    if (path_state->index == *(int *)path_state->path - 1) path_state->index = 0;
-                } else if (path_state->index == 0) path_state->index = 0;
+                if (path_state->direction < 0) {
+                    if (path_state->index == 0) path_state->index = 0;
+                } else if (path_state->index == *(int *)path_state->path - 1) path_state->index = 0;
             }
             path_state->distance = FUN_00221360_2f5168(moby + 0x10, path_state->path + (path_state->index << 4) + 0x10);
-            node = path_state->path + (path_state->index << 4);
+            node = (char *)((path_state->index << 4) + (int)path_state->path);
             path_state->angle = FUN_002217c0_2f5168(F2(node, 0x10) - F2(moby, 0x10), F2(node, 0x14) - F2(moby, 0x14));
             path_state->state = 2;
             path_state->progress = 0;
             path_state->unused = 0;
         }
-        node = path_state->path + (path_state->index << 4);
+        node = (char *)((path_state->index << 4) + (int)path_state->path);
         Q2(data, 0xe0) = Q2(node, 0x10);
         F2(data, 0xf0) = 1.0f;
         FUN_L01_0028b8c8(data + 0xa0, path_state, 0, F2(data, 0xf4), F2(data, 0xf8));
-        node = path_state->path + (path_state->index << 4);
+        node = (char *)((path_state->index << 4) + (int)path_state->path);
         Q2(temp, 0) = Q2(node, 0x10);
         Q2(data, 0xb0) = Q2(temp, 0);
         Q2(data, 0xc0) = Q2(temp, 0);
