@@ -588,10 +588,16 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
             amount = scale * magnitude;
             color = &colors.v[random_integer_below(6)];
             second_color = &second_colors.v[random_integer_below(6)];
-            lo = FUN_001f96f8(15); hi = FUN_001f96f8(20);
-            duration = random_int_between(lo, hi);
-            lo = FUN_001f96f8(25); hi = FUN_001f96f8(30);
-            duration2 = random_int_between(lo, hi);
+            {
+                int lo = FUN_001f96f8(15);
+                int hi = FUN_001f96f8(20);
+                duration = random_int_between(lo, hi);
+            }
+            {
+                int lo = FUN_001f96f8(25);
+                int hi = FUN_001f96f8(30);
+                duration2 = random_int_between(lo, hi);
+            }
             FUN_L00_0026a9f0(&work.pos, &work.velocity, *color, *second_color,
                 duration, duration2, 0, 0, amount, speed);
         } while (i != 0);
