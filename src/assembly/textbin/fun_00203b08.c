@@ -124,8 +124,8 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
             material_base = packet->material_base;
             /* The original material control survives the width scratch below. */
             packet_material_base = material_base;
-            draw_high = packet->draw_high;
             draw_shift = packet->draw_shift;
+            draw_high = packet->draw_high;
             material_shift = packet->material_shift;
             if (textures != 0) {
                 texture = &textures[material_index];
