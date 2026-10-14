@@ -691,11 +691,13 @@ void FUN_L08_002f5e58(struct Moby *m) {
     u8 red, green, blue;
     s8 light;
     Vec4 *at;
+    void *mat_rot;
     if (m == NULL) return;
     d = (FlickerLightVars *)m->pvars;
     if (d == NULL) return;
     b = (u8 *)d;
     f = (f32 *)d;
+    mat_rot = &m->rot;
     stride = (b[8] + 1) * 16;
     grid = __builtin_alloca((((u32)(b[8] + 1) << 7) * (b[9] + 1)) >> 3);
     inv_x = 1.0f / convert_integer_to_float(b[8]);
@@ -723,9 +725,12 @@ void FUN_L08_002f5e58(struct Moby *m) {
             current++;
         } while (i >= 0);
     }
-    a = convert_integer_to_float(b[0x13]);
-    c = convert_integer_to_float(m->alpha);
-    alpha = truncate_float_to_s32_u(d->intensity * a * c * 0.0078125f) & 0xff;
+    {
+        f32 a, c;
+        a = convert_integer_to_float(b[0x13]);
+        c = convert_integer_to_float(m->alpha);
+        alpha = truncate_float_to_s32_u(d->intensity * a * c * 0.0078125f) & 0xff;
+    }
     if (b[0xd] != 0) b[0xf] = b[0xc] + (D_L08_0015F3F8_gp / (b[0xe]+1)) % b[0xd];
     else b[0xf] = b[0xc];
     temp = b[0xf];
@@ -738,12 +743,14 @@ void FUN_L08_002f5e58(struct Moby *m) {
     packet.color[3] = (u32)b[0x13] << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
     packet.color[0] = packet.color[1] = packet.color[2] = packet.color[3];
     corners[0].q = corners[1].q = corners[2].q = corners[3].q = 0;
-    t = d->size_x * 0.5f;
-    corners[1].f[0] = corners[3].f[0] = t;
-    corners[0].f[0] = corners[2].f[0] = -t;
+    {
+        f32 t = d->size_x * 0.5f;
+        corners[1].f[0] = corners[3].f[0] = t;
+        corners[0].f[0] = corners[2].f[0] = -t;
+    }
     corners[0].f[2] = f[0x20] + 0.01f;
     corners[1].f[2] = f[0x21] + 0.01f;
-    FUN_001fa050(mat, &m->rot);
+    FUN_001fa050(mat, mat_rot);
     FUN_001f9d20(&corners[0], &corners[0], mat);
     FUN_001f9d20(&corners[1], &corners[1], mat);
     FUN_001f9d20(&corners[2], &corners[2], mat);
@@ -778,9 +785,10 @@ void FUN_L08_002f5e58(struct Moby *m) {
         subtract_vector_xyz(&across, &edge[1], &edge[0]);
         FUN_001f9a68(&across, &across, inv_x);
         noise_y = FUN_L08_002f5d98(y, (char *)d);
-        k = i * stride;
-        weight = (f32 *)((char *)grid + k + 12);
         for (j = 0; j <= b[8]; j++) {
+            f32 a, c, t, base, angle, shape;
+            k = i * stride;
+            weight = (f32 *)((char *)grid + k + j * 16 + 12);
             x = convert_integer_to_float(j) / convert_integer_to_float(b[8]);
             a = FUN_L00_0025e310(f[0x17] * time);
             angle = x * 3.1415927f;
@@ -812,7 +820,6 @@ void FUN_L08_002f5e58(struct Moby *m) {
             *weight = 1.0f /
                 (((1.0f-f[0x56]) + f[0x56]*sine*sine*sine) * ((1.0f-f[0x57])+f[0x57]*y));
             add_vector_xyz(&point, &point, &across);
-            weight += 4;
         }
         add_vector_xyz(&edge[0], &edge[0], &down[0]);
         phase = next_phase; amp_a = next_amp_a;
@@ -860,13 +867,13 @@ void FUN_L08_002f5e58(struct Moby *m) {
                     add_vector_xyz(&packet.points[1], &current[j+1], &m->pos);
                     add_vector_xyz(&packet.points[2], &target[j], &m->pos);
                     add_vector_xyz(&packet.points[3], &target[j+1], &m->pos);
-                    timer = truncate_float_to_s32_u((&current[j])->f[3]);
+                    timer = truncate_float_to_s32_u(((f32 *)((char *)grid + k + j*16))[3]);
                     packet.color[0] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-                    timer = truncate_float_to_s32_u((&current[j+1])->f[3]);
+                    timer = truncate_float_to_s32_u(((f32 *)((char *)grid + k + (j+1)*16))[3]);
                     packet.color[1] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-                    timer = truncate_float_to_s32_u((&target[j])->f[3]);
+                    timer = truncate_float_to_s32_u(((f32 *)((char *)grid + count + j*16))[3]);
                     packet.color[2] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
-                    timer = truncate_float_to_s32_u((&target[j+1])->f[3]);
+                    timer = truncate_float_to_s32_u(((f32 *)((char *)grid + count + (j+1)*16))[3]);
                     packet.color[3] = (u32)(alpha/timer) << 24 | (u32)b[0x11] << 16 | (u32)b[0x12] << 8 | b[0x10];
                     FUN_001f7d30(&packet, NULL, 0);
                 }
