@@ -566,10 +566,10 @@ void FUN_L08_002d42d8(struct Moby *moby) {
         clear_u64_value(data + 0x40);
         data[0x29] = 0;
         data[0x28] = 3;
-        *(float *)(data + 0x30) = 3.0f;
+        *(volatile float *)(data + 0x30) = 3.0f;
         data[0x2a] = 12;
         data[0x2e] = 1;
-        *(float *)(data + 0x20) = 9.0f;
+        *(volatile float *)(data + 0x20) = 9.0f;
         *(unsigned short *)(data + 0x3e) |= 2;
         clear_u64_value(data + 0x40);
         *(float *)(data + 0x178) = 0;
@@ -618,8 +618,9 @@ void FUN_L08_002d42d8(struct Moby *moby) {
     state14:
         if (*(int *)(data + 0xf4) == 2) goto finish;
         FUN_L08_002d5d08(moby);
-        if (((unsigned char *)D_0013D388)[0x2e] != 0) allocate_voice_for_target_entry(6, 0, moby);
-        ((unsigned char *)D_0013D388)[0x2e] = 1;
+        target = (struct Moby *)D_0013D388;
+        if (((unsigned char *)target)[0x2e] != 0) allocate_voice_for_target_entry(6, 0, moby);
+        ((unsigned char *)target)[0x2e] = 1;
  restore_parts:
         qcopy(&(*(struct Moby **)(data + 0x160))->pos, &moby->pos);
         qcopy(&(*(struct Moby **)(data + 0x164))->pos, &moby->pos);
