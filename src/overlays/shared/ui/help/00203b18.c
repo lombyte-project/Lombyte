@@ -449,7 +449,7 @@ void FUN_L00_002059d8(void) {
             Quad_59d8 *src_c = (Quad_59d8 *)D_L00_0017C260_2059d8;
             Quad_59d8 *src_a = (Quad_59d8 *)D_L00_0017C1E0_2059d8;
             Quad_59d8 *src_b = (Quad_59d8 *)D_L00_0017C220_2059d8;
-            s32 *kind = (s32 *)0x140AF8;
+            s32 *kind = (s32 *)(g + 0x17A8);
             for (i = 0; i < 4; i++, dst_c += 0x40, src_c++,
                  src_a++, src_b++, dst_a += 0x40, kind++,
                  slot += 0x40, active += 0x40, dst_b += 0x40) {
