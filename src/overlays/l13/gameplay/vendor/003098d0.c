@@ -119,8 +119,8 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-short D_L13_00161EB0 = 0x40ff;
-short D_L13_00161EB4 = -13184;
+int D_L13_00161EB0 = 0x800040ff;
+int D_L13_00161EB4 = 0x4000cc80;
 extern short D_L13_00161EB8 __attribute__((sda));
 extern short D_L13_00161EBC __attribute__((sda));
 extern short D_L13_00161EC0 __attribute__((sda));
@@ -134,7 +134,7 @@ extern short D_L13_00161EDC __attribute__((sda));
 extern short D_L13_00161EE0 __attribute__((sda));
 extern short D_L13_00161EE4 __attribute__((sda));
 extern short D_L13_00161EE8 __attribute__((sda));
-short D_L13_00161EEC = 0x18;
+int D_L13_00161EEC = 24;
 extern void FUN_001f9a40(void *, void *, void *, float);
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -183,8 +183,8 @@ void FUN_L13_00309bc8(struct Moby *moby) {
         w[3] = *(float *)&D_L13_00161EBC;
         p = data + (off + 0x210);
         FUN_001f9a40(s10, p, p, random_float_between_alt(0.0f, 1.0f));
-        FUN_00218888(s10, v, w, *(int *)&D_L13_00161EB0, *(int *)&D_L13_00161EB4, s18, s19, s17,
-                     *(int *)&D_L13_00161EEC);
+        FUN_00218888(s10, v, w, D_L13_00161EB0, D_L13_00161EB4, s18, s19, s17,
+                     D_L13_00161EEC);
     }
 }
 

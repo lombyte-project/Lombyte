@@ -1854,8 +1854,8 @@ void FUN_L11_00311be8(void *moby, void *a1, void *a2) {
 }
 /* Keeps the moby's current target, picking a new one when it is lost and restarting the timer. */
 
-int lock_hold_frames __asm__("D_L11_00162160") = 0x1f4;
-int lock_fade_frames __asm__("D_L11_00162164") = 0x64;
+int lock_hold_frames __asm__("D_L11_00162160") = 500;
+int lock_fade_frames __asm__("D_L11_00162164") = 100;
 extern float D_L11_001677D0[];
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 
@@ -2119,7 +2119,7 @@ extern void FUN_L11_00311210(void *, void *, void *, int);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 extern short D_L11_0016205C __attribute__((sda));
-short D_L11_00162060 = 4;
+int D_L11_00162060 = 4;
 void FUN_L11_003125a8(struct Moby *moby, char *obj, float p2, float p3) {
     char a[16];
     char b[16];
@@ -2134,7 +2134,7 @@ void FUN_L11_003125a8(struct Moby *moby, char *obj, float p2, float p3) {
         moby_point_position(moby, 3 + (obj[0x61] & 1), b);
         FUN_001f9a10(b, b, c);
         FUN_L11_00308848(moby, a, b, 200.0f, -1.0f);
-        *(int *)(obj + 0x80) = *(int *)&D_L11_00162060;
+        *(int *)(obj + 0x80) = D_L11_00162060;
         obj[0x61] ^= 1;
         FUN_0022da68_c(3, 0, (int)moby);
     }
@@ -2158,7 +2158,7 @@ extern int func_0022ED80_i(int, int, int) __asm__("FUN_0022da68");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 extern short D_L11_00162064 __attribute__((sda));
-short D_L11_00162068 = 0x1e;
+int D_L11_00162068 = 30;
 void FUN_L11_003126f8(struct Moby *moby, char *d) {
     if (func_001F9908_i(d + 0x84) && (*(int *)(D_0013A4E0 + 0x2610) & 0x28)) {
         if (hero.ship_ammo != 0) {
@@ -2177,7 +2177,7 @@ void FUN_L11_003126f8(struct Moby *moby, char *d) {
                                  FUN_001f96f8(300))) {
                 func_0022ED80_i(2, 0, (int)moby);
                 hero.ship_ammo -= 1;
-                *(int *)(d + 0x84) = *(int *)&D_L11_00162068;
+                *(int *)(d + 0x84) = D_L11_00162068;
             }
         }
     }
@@ -2245,9 +2245,9 @@ extern unsigned short D_00141C10 __attribute__((section(".data")));
 extern float D_L11_0016D4F0 __attribute__((section(".data")));
 extern char D_L11_00174840[];
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-int D_L11_00161FF0 = 0x78;
+int D_L11_00161FF0 = 120;
 int D_L11_00162004 = 5;
-int D_L11_0016214C = 0xa;
+int D_L11_0016214C = 10;
 extern float D_L11_00161FE8 __attribute__((sda));
 extern float D_L11_00161FEC __attribute__((sda));
 extern float D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
@@ -2588,7 +2588,7 @@ extern unsigned char D_L11_00162054 __attribute__((sda));
 extern unsigned char D_L11_00162058 __attribute__((sda));
 extern float D_L11_00162074 __attribute__((sda));
 extern float D_L11_00162078 __attribute__((sda));
-int D_L11_00162168 = 0xb4;
+int D_L11_00162168 = 180;
 extern float D_L11_0016D4F0_a[] __asm__("D_L11_0016D4F0");
 extern ShipHit_3290 *hit_info_3290(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int timer_3290(void *) __asm__("FUN_001f9740");

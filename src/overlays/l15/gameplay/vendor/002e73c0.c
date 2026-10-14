@@ -434,9 +434,9 @@ extern float FUN_L00_00200260(float, float);
 extern float fast_add_rotations(float, float);
 extern float wrap_angle(float);
 extern int D_L15_0015F5CC;
-int D_L15_001620EC = 0x80;
-int D_L15_001620F0 = 0x2d;
-int D_L15_001620F4 = 0x40;
+int D_L15_001620EC = 128;
+int D_L15_001620F0 = 45;
+int D_L15_001620F4 = 64;
 extern float D_L15_001620F8 __attribute__((sda));
 extern float D_L15_001620FC __attribute__((sda));
 extern float D_L15_00162100 __attribute__((sda));
@@ -537,9 +537,9 @@ int D_L15_00162120[2] = {0x44, 0};
 int D_L15_00162140[2] = {0x1de200, 0};
 int D_L15_00162148[2] = {0x1de530, 0};
 int D_L15_00162150[1] = {0x1de750};
-int D_L15_00162154 = 0x80;
-int D_L15_00162158 = 0x2d;
-int D_L15_0016215C = 0x40;
+int D_L15_00162154 = 128;
+int D_L15_00162158 = 45;
+int D_L15_0016215C = 64;
 extern float D_L15_00162160 __attribute__((sda));
 extern float D_L15_00162164 __attribute__((sda));
 extern float D_L15_00162168 __attribute__((sda));
@@ -697,10 +697,10 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 void font_print_large(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_001f6530");
 extern void font_print_large_001fb470(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) __asm__("FUN_L00_001fb470");
 
-short D_L15_00162180 = 0x96;
-short D_L15_00162184 = 0x96;
-short D_L15_00162188 = -1;
-short D_L15_0016218C = {0};
+int D_L15_00162180 = 150;
+int D_L15_00162184 = 150;
+int D_L15_00162188 = 0x3800ffff;
+int D_L15_0016218C = 0x38800000;
 void FUN_L15_002eb6b8(void) {
     char buf[0x50];
     int flag = 0;
@@ -751,11 +751,11 @@ void FUN_L15_002eb6b8(void) {
         if ((n - val) & 4)
             n = n - 1;
     }
-    font_print_large_001fb470((void *)(*(int *)&D_L15_00162180 + 1),
-                     (void *)(*(int *)&D_L15_00162184 + 1), (void *)*(int *)&D_L15_0016218C,
+    font_print_large_001fb470((void *)(D_L15_00162180 + 1),
+                     (void *)(D_L15_00162184 + 1), (void *)D_L15_0016218C,
                      buf, (void *)n);
-    font_print_large_001fb470((void *)*(int *)&D_L15_00162180, (void *)*(int *)&D_L15_00162184,
-                     (void *)*(int *)&D_L15_00162188, buf, (void *)n);
+    font_print_large_001fb470((void *)D_L15_00162180, (void *)D_L15_00162184,
+                     (void *)D_L15_00162188, buf, (void *)n);
 }
 /* Per-frame update: when the counter check is zero, builds a vector and calls the movement helper. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
@@ -765,11 +765,11 @@ extern void FUN_L00_0026f080(float, float, char *, float *);
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 extern short D_L15_00162198 __attribute__((sda));
-short D_L15_0016219C = 3;
+int D_L15_0016219C = 3;
 void FUN_L15_002eb928(struct Moby *moby) {
     float vec[4];
     float *data = (float *)moby->pvars;
-    if (random_integer_below(*(int *)&D_L15_0016219C - 1) == 0) {
+    if (random_integer_below(D_L15_0016219C - 1) == 0) {
         char *pos = &moby->pos;
         clear_u64_value(vec);
         vec[2] = random_float_between(0.75f, 1.5f) * *(float *)&D_L15_00162198 * frame_time;
@@ -1482,9 +1482,9 @@ int D_L15_001621B0[1] = {0x2e};
 int D_L15_001621D0[1] = {0x1decb0};
 int D_L15_001621D8[1] = {0x1deed8};
 int D_L15_001621E0[1] = {0x1df048};
-int D_L15_001621E4 = 0x80;
-int D_L15_001621E8 = 0x2d;
-int D_L15_001621EC = 0x40;
+int D_L15_001621E4 = 128;
+int D_L15_001621E8 = 45;
+int D_L15_001621EC = 64;
 extern float D_L15_001621F0 __attribute__((sda));
 extern float D_L15_001621F4 __attribute__((sda));
 extern float D_L15_001621F8 __attribute__((sda));
@@ -1566,9 +1566,9 @@ int D_L15_00162220[1] = {0x58};
 int D_L15_00162240[1] = {0x1df940};
 int D_L15_00162248[1] = {0x1dfd60};
 int D_L15_00162250[1] = {0x1e0020};
-int D_L15_00162254 = 0x80;
-int D_L15_00162258 = 0x2d;
-int D_L15_0016225C = 0x40;
+int D_L15_00162254 = 128;
+int D_L15_00162258 = 45;
+int D_L15_0016225C = 64;
 extern float D_L15_00162260 __attribute__((sda));
 extern float D_L15_00162264 __attribute__((sda));
 extern float D_L15_00162268 __attribute__((sda));

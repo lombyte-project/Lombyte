@@ -25,8 +25,8 @@ extern int FUN_L10_002d8058_u() __asm__("FUN_L10_002d8058");
 extern void FUN_001f9a10(void *, void *, void *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
-short D_L10_00161BF0 = 0xf0;
-short D_L10_00161BF4 = 0x258;
+int D_L10_00161BF0 = 240;
+int D_L10_00161BF4 = 600;
 extern short D_L10_00161BF8 __attribute__((sda));
 extern short D_L10_00161BFC __attribute__((sda));
 extern short D_L10_00161C00 __attribute__((sda));
@@ -38,7 +38,7 @@ void FUN_L10_002d8c00(struct Moby *moby) {
     float b[4];
     if (moby->state == 0) {
         *(int *)data =
-            FUN_001f96f8(random_int_between(*(int *)&D_L10_00161BF0, *(int *)&D_L10_00161BF4));
+            FUN_001f96f8(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
         moby->state = 1;
     }
     if (FUN_001f9740((int *)data)) {
@@ -57,7 +57,7 @@ void FUN_L10_002d8c00(struct Moby *moby) {
         FUN_L10_002d8058_u(moby, b, a);
         allocate_voice_for_target_entry(0, 0, (int)moby);
         *(int *)data =
-            FUN_001f96f8(random_int_between(*(int *)&D_L10_00161BF0, *(int *)&D_L10_00161BF4));
+            FUN_001f96f8(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
     }
 }
 #include "qcopy.h"

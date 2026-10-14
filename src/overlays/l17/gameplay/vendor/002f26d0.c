@@ -325,7 +325,7 @@ extern float D_L17_001E6FA0[];
 extern int D_L17_001DE010[];
 extern int D_L17_001DE028[];
 extern int D_L17_001DE088[];
-short D_L17_001623B8 = 0x4931;
+int D_L17_001623B8 = 0x807e4931;
 void FUN_L17_002f32f0(struct Moby *moby) {
     Pkt pkt;
     OvlQuad vv[4];
@@ -355,10 +355,10 @@ void FUN_L17_002f32f0(struct Moby *moby) {
         *(long *)&pkt.q[4] = 0x0000FF9000000260LL;
         *(long *)&pkt.q[6] = 0x0000008000000048LL;
         *(long *)&pkt.q[0] = 0;
-        pkt.col[3] = *(int *)&D_L17_001623B8;
-        pkt.col[2] = *(int *)&D_L17_001623B8;
-        pkt.col[1] = *(int *)&D_L17_001623B8;
-        pkt.col[0] = *(int *)&D_L17_001623B8;
+        pkt.col[3] = D_L17_001623B8;
+        pkt.col[2] = D_L17_001623B8;
+        pkt.col[1] = D_L17_001623B8;
+        pkt.col[0] = D_L17_001623B8;
         {
             float *qu = &pkt.uv[0];
             float *qv = &pkt.uv[1];

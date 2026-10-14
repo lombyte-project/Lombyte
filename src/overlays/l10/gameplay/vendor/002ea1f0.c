@@ -228,17 +228,17 @@ extern short D_L10_00162014 __attribute__((sda));
 extern short D_L10_00162018 __attribute__((sda));
 extern short D_L10_0016201C __attribute__((sda));
 extern short D_L10_00162020 __attribute__((sda));
-short D_L10_00162024 = 0x2040;
-short D_L10_00162028 = 0x4040;
-short D_L10_0016202C = 0x2040;
-short D_L10_00162030 = 0x4020;
+int D_L10_00162024 = 0x80002040;
+int D_L10_00162028 = 0x80104040;
+int D_L10_0016202C = 0x30002040;
+int D_L10_00162030 = 0x30004020;
 extern short D_L10_00162038 __attribute__((sda));
 extern short D_L10_00162034 __attribute__((sda));
 extern short D_L10_00162040 __attribute__((sda));
 extern short D_L10_0016203C __attribute__((sda));
 extern short D_L10_00162048 __attribute__((sda));
 extern short D_L10_00162044 __attribute__((sda));
-short D_L10_0016204C = 0x18;
+int D_L10_0016204C = 24;
 extern short D_L10_00162050 __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -272,8 +272,8 @@ void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
     acc[2] -= *(float *)&D_L10_00162000 * frame_time_sq * (float)c;
     vel[3] = random_float_between(*(float *)&D_L10_00162008, *(float *)&D_L10_0016200C);
     acc[3] = random_float_between(*(float *)&D_L10_00162010, *(float *)&D_L10_00162014);
-    c1 = FUN_001fa6e0(*(int *)&D_L10_00162024, *(int *)&D_L10_00162028, random_float_between(0.0f, 1.0f));
-    FUN_00218888(pos, vel, acc, c1, FUN_001fa6e0(*(int *)&D_L10_0016202C, *(int *)&D_L10_00162030, random_float_between(0.0f, 1.0f)), a, c, b, *(int *)&D_L10_0016204C);
+    c1 = FUN_001fa6e0(D_L10_00162024, D_L10_00162028, random_float_between(0.0f, 1.0f));
+    FUN_00218888(pos, vel, acc, c1, FUN_001fa6e0(D_L10_0016202C, D_L10_00162030, random_float_between(0.0f, 1.0f)), a, c, b, D_L10_0016204C);
     *timer = func_001FA898_r(random_float_between((float)*(int *)&D_L10_00162034, (float)*(int *)&D_L10_00162038));
 }
 #define NOT_SDA

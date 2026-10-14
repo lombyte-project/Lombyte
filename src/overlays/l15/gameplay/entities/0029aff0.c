@@ -1299,7 +1299,7 @@ extern short D_L15_00161B28 __attribute__((sda));
 extern short D_L15_00161B34 __attribute__((sda));
 extern short D_L15_00161B38 __attribute__((sda));
 extern short D_L15_00161B3C __attribute__((sda));
-short D_L15_00161B1C = 0xb4;
+int D_L15_00161B1C = 180;
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void FUN_001f9c48(void *, void *, float);
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
@@ -1545,7 +1545,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
                 if (v20.f[2] < 0.0f)
                     v20.f[2] = 0.0f;
                 func_L10_002CD578_v(&v20, 3.0f, &v10, (int)m, (int)tgt,
-                                    scale_game_frames(*(int *)&D_L15_00161B1C));
+                                    scale_game_frames(D_L15_00161B1C));
                 normalize_vector_xyz(&v20, &v20, 3.0f);
                 FUN_L00_001ff290(&v30, &v10, &v20);
                 FUN_L03_00250ae8(m, &v10, 0);

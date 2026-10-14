@@ -342,9 +342,9 @@ extern short D_L12_001618B4 __attribute__((sda));
 extern short D_L12_001618B8 __attribute__((sda));
 extern short D_L12_001618BC __attribute__((sda));
 extern short D_L12_001618C0 __attribute__((sda));
-short D_L12_001618C4 = -5920;
-short D_L12_001618C8 = -5920;
-short D_L12_001618CC = 0x17;
+int D_L12_001618C4 = 0xa0f0e8e0;
+int D_L12_001618C8 = 0x20f0e8e0;
+int D_L12_001618CC = 0x10017;
 void FUN_L12_002e19a8(void *pos) {
     float v[4];
     float w[4];
@@ -381,8 +381,8 @@ void FUN_L12_002e19a8(void *pos) {
                                                      (float)*(int *)&D_L12_001618B8));
         c = func_001FA898_r(random_float_between_alt((float)*(int *)&D_L12_001618BC,
                                                      (float)*(int *)&D_L12_001618C0));
-        FUN_00218888(w, v3, v4, *(int *)&D_L12_001618C4, *(int *)&D_L12_001618C8, a, b, c,
-                     *(int *)&D_L12_001618CC);
+        FUN_00218888(w, v3, v4, D_L12_001618C4, D_L12_001618C8, a, b, c,
+                     D_L12_001618CC);
     } while (--i >= 0);
 }
 #include "rnc/math/vector.h"

@@ -838,9 +838,9 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 extern int tick_countdown_32_u(void *) __asm__("func_001F9740");
 extern int func_0022ED80_6478(int, int, void *) __asm__("FUN_0022da68");
 
-short D_L16_00161DD8 = 0x258;
-short D_L16_00161DDC = -32640;
-short D_L16_00161DE0 = 0x2020;
+int D_L16_00161DD8 = 600;
+int D_L16_00161DDC = 0x80808080;
+int D_L16_00161DE0 = 0x80202020;
 void FUN_L16_002e5010(struct Moby *m) {
     char *d = (char *)m->pvars;
     char *g;
@@ -850,7 +850,7 @@ void FUN_L16_002e5010(struct Moby *m) {
     int period = scale_game_frames(30);
     f = convert_integer_to_float(D_L16_0015F5CC % period) / convert_integer_to_float(period);
     m->glow_color = FUN_001fa6e0_u(fast_sin(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
-                                        *(int *)&D_L16_00161DDC, *(int *)&D_L16_00161DE0);
+                                        D_L16_00161DDC, D_L16_00161DE0);
     switch (m->state) {
     case 0:
         m->state = 1;
@@ -867,7 +867,7 @@ void FUN_L16_002e5010(struct Moby *m) {
                 D_L16_001D9750[4] < mat[2] && mat[2] < D_L16_001D9750[5]) {
                 m->command = 1;
                 m->state = 2;
-                *(int *)d = scale_game_frames(*(int *)&D_L16_00161DD8);
+                *(int *)d = scale_game_frames(D_L16_00161DD8);
                 func_0022ED80_6478(1, 0, m);
             }
         }
@@ -897,9 +897,9 @@ extern int tick_countdown_32_q(void *) __asm__("FUN_001f9740");
 extern int func_0022ED80_66C0_q(int, int, void *) __asm__("FUN_0022da68");
 
 extern float D_L16_001D9768[] __attribute__((section(".data")));
-short D_L16_00161DE4 = 0x258;
-short D_L16_00161DE8 = 0x2020;
-short D_L16_00161DEC = -32640;
+int D_L16_00161DE4 = 600;
+int D_L16_00161DE8 = 0x80202020;
+int D_L16_00161DEC = 0x80808080;
 extern char D_0013F3D0[] __attribute__((section(".data")));
 void FUN_L16_002e5258(struct Moby *m) {
     char *d = (char *)m->pvars;
@@ -910,7 +910,7 @@ void FUN_L16_002e5258(struct Moby *m) {
     int period = scale_game_frames_q(30);
     f = convert_integer_to_float_q(D_L16_0015F5CC % period) / convert_integer_to_float_q(period);
     m->glow_color = FUN_001fa6e0_q(fast_sin_q(f * 6.28318f - 3.14159f) * 0.5f + 0.5f,
-                                        *(int *)&D_L16_00161DE8, *(int *)&D_L16_00161DEC);
+                                        D_L16_00161DE8, D_L16_00161DEC);
     switch (m->state) {
     case 0:
         m->state = 1;
@@ -929,7 +929,7 @@ void FUN_L16_002e5258(struct Moby *m) {
                 func_0022ED80_66C0_q(1, 0, m);
                 m->command = 1;
                 m->state = 2;
-                *(int *)d = scale_game_frames_q(*(int *)&D_L16_00161DE4);
+                *(int *)d = scale_game_frames_q(D_L16_00161DE4);
             }
         }
         break;
@@ -1873,8 +1873,8 @@ void build_spherical_offset_u(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00
 extern void func_L00_0026DD70_emit(void *, void *, int, int, float,
                                    int) __asm__("FUN_L00_0026ced0");
 
-short D_L16_00161E98 = -12160;
-short D_L16_00161E9C = 0x1000;
+int D_L16_00161E98 = 0x60d0d080;
+int D_L16_00161E9C = 0x801000;
 extern short D_L16_00161EA0 __attribute__((sda));
 extern short D_L16_00161EA4 __attribute__((sda));
 extern short D_L16_00161EA8 __attribute__((sda));
@@ -1903,7 +1903,7 @@ void FUN_L16_002e7a30(unsigned char *m, void *v) {
     add_vector_xyz(velocity, velocity, out);
     final_size = *(float *)&D_L16_00161EA8;
     final_size *= 210000.0f;
-    func_L00_0026DD70_emit(offset, velocity, *(int *)&D_L16_00161E98, *(int *)&D_L16_00161E9C,
+    func_L00_0026DD70_emit(offset, velocity, D_L16_00161E98, D_L16_00161E9C,
                            final_size, scale_game_frames(0x23));
 }
 

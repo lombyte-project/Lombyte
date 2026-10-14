@@ -1108,7 +1108,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L13_00161E80 __attribute__((sda));
-short D_L13_00161E84 = 0x96;
+int D_L13_00161E84 = 150;
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
@@ -1133,7 +1133,7 @@ void FUN_L13_00309370(struct Moby *m) {
             *(float *)(d + 0x21C + i * 16) = 1.0f;
         }
     }
-    *(float *)(d + 0x1FC) = scale_game_frames(*(int *)&D_L13_00161E84);
+    *(float *)(d + 0x1FC) = scale_game_frames(D_L13_00161E84);
 }
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int FUN_001f9740(int *);

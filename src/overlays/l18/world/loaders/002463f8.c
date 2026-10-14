@@ -412,18 +412,17 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
     return 0;
 }
 #include "sda.h"
-#define W(x) (*(int *)&(x))
 
 extern int game_frame __asm__("D_L18_0015F5CC");
-short D_L18_00161A1C = 0x104;
-short D_L18_00161A20 = 0x50;
-short D_L18_00161A24 = -16192;
-short D_L18_00161A28 = 0x40ff;
-short D_L18_00161A2C = -5;
-short D_L18_00161A30 = 0x14;
-short D_L18_00161A34 = -50;
-short D_L18_00161A38 = 0x34;
-short D_L18_00161A3C = 0x60;
+int timer_text_x __asm__("D_L18_00161A1C") = 260;
+int timer_text_y __asm__("D_L18_00161A20") = 80;
+int timer_color_dim __asm__("D_L18_00161A24") = 0x80c0c0c0;
+int timer_color_bright __asm__("D_L18_00161A28") = 0x804040ff;
+int timer_frame_top __asm__("D_L18_00161A2C") = -5;
+int timer_frame_bottom __asm__("D_L18_00161A30") = 20;
+int timer_frame_left __asm__("D_L18_00161A34") = -50;
+int timer_frame_right __asm__("D_L18_00161A38") = 52;
+int D_L18_00161A3C = 96;
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -434,7 +433,6 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
 extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 
-#define W(x) (*(int *)&(x))
 
 /* Draws the level timer as "H:MM:SS.t" text with a pulsing colour. */
 void FUN_L18_002d8098(struct Moby *moby) {
@@ -443,16 +441,16 @@ void FUN_L18_002d8098(struct Moby *moby) {
     float v;
     int col;
 
-    draw_ui_frame(W(D_L18_00161A2C) + W(D_L18_00161A20), W(D_L18_00161A30) + W(D_L18_00161A20),
-                W(D_L18_00161A34) + W(D_L18_00161A1C), W(D_L18_00161A38) + W(D_L18_00161A1C),
-                W(D_L18_00161A3C));
+    draw_ui_frame(timer_frame_top + timer_text_y, timer_frame_bottom + timer_text_y,
+                timer_frame_left + timer_text_x, timer_frame_right + timer_text_x,
+                D_L18_00161A3C);
     v = fast_sin(func_001FA888(game_frame % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (v > 1.0f) {
         v = 1.0f;
     } else if (v < 0.0f) {
         v = 0.0f;
     }
-    col = fast_tween_color(W(D_L18_00161A24), W(D_L18_00161A28), v);
+    col = fast_tween_color(timer_color_dim, timer_color_bright, v);
     buf[0] = 0x30;
     buf[1] = *(int *)(data + 0x6c) / scale_ticks(0xE10) + 0x30;
     buf[2] = 0x3A;
@@ -461,7 +459,7 @@ void FUN_L18_002d8098(struct Moby *moby) {
     buf[5] = 0x3A;
     buf[6] = *(int *)(data + 0x6c) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
     buf[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
-    font_print_center_large_001f6c20(W(D_L18_00161A1C), W(D_L18_00161A20), col, (int)buf, 8);
+    font_print_center_large_001f6c20(timer_text_x, timer_text_y, col, (int)buf, 8);
 }
 
 extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L01_0026e0e0");

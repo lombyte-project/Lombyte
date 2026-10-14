@@ -24,7 +24,7 @@ extern void enqueue_callback_list_1_72(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L12_002ecac0(struct Moby *);
 extern float D_L12_0015F3FC;
 extern float D_L12_001619CC __attribute__((sda));
-int D_L12_001619D0 = 0x69;
+int D_L12_001619D0 = 105;
 extern float D_L12_001619D4 __attribute__((sda));
 extern float D_L12_001619D8 __attribute__((sda));
 extern int D_L12_001619DC __attribute__((sda));
@@ -132,12 +132,12 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern int FUN_001fa6e0(int, int, float);
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-short D_L12_00161A10 = 1;
-short D_L12_00161A14 = {0};
-short D_L12_00161A0C = {0};
-short D_L12_00161A18 = 1;
-short D_L12_00161A1C = 0x2020;
-short D_L12_00161A20 = 0x1818;
+int D_L12_00161A10 = 1;
+int D_L12_00161A14 = 0;
+int D_L12_00161A0C = 0;
+int D_L12_00161A18 = 1;
+int D_L12_00161A1C = 0x40602020;
+int D_L12_00161A20 = 0x40681818;
 extern short D_L12_00161A24 __attribute__((sda));
 extern void FUN_001fa298(void *, void *);
 extern void draw_geometry_quad(void *, void *, int);
@@ -156,10 +156,10 @@ void FUN_L12_002ecac0(struct Moby *moby) {
     q.g[1] = get_effect_texture(0x10);
     q.g[0] = 0;
     q.g[2] = 0xFF9000000260UL;
-    q.g[3] = (long)*(int *)&D_L12_00161A0C | ((long)*(int *)&D_L12_00161A10 << 2) |
-             ((long)*(int *)&D_L12_00161A14 << 4) | ((long)*(int *)&D_L12_00161A18 << 6) |
+    q.g[3] = (long)D_L12_00161A0C | ((long)D_L12_00161A10 << 2) |
+             ((long)D_L12_00161A14 << 4) | ((long)D_L12_00161A18 << 6) |
              (0x8000L << 24);
-    col = FUN_001fa6e0(*(int *)&D_L12_00161A1C, *(int *)&D_L12_00161A20,
+    col = FUN_001fa6e0(D_L12_00161A1C, D_L12_00161A20,
                        (fast_sin(*(float *)data) + 1.0f) * 0.5f);
     for (i = 0; i < 4; i++) {
         q.uv[i * 2] = 0.5f;
