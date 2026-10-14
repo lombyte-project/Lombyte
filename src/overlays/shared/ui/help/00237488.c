@@ -1305,6 +1305,7 @@ void FUN_L05_00254058(void) {
     }
     {
         struct Hero *g = &hero;
+        int i;
         *(s32 *)((char *)g + 0x6F0) = 0;
         counter = (s32 *)((char *)g + 0x6E0);
         i = 3;
