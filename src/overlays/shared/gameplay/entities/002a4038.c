@@ -920,11 +920,9 @@ void FUN_L02_002d93e8(char *moby) {
         angle = add_rotation_2d93e8(-0.08726646f, (float)degrees * 0.017453292f);
         phase = add_rotation_2d93e8(angle, 0.17453292f);
         if (markers[11 - i] != 0) {
-            color = D_L02_00161BC4;
-            if (markers[11 - i] != 2) {
-                color = D_L02_00161BC0;
-                if ((D_0013CAE4 & 0x20) == 0) color = D_L02_00161BBC;
-            }
+            if (markers[11 - i] == 2) color = D_L02_00161BC4;
+            else if (D_0013CAE4 & 0x20) color = D_L02_00161BC0;
+            else color = D_L02_00161BBC;
             draw_arc_2d93e8(texture, color, angle, phase, (float)D_L02_00161B58, (float)D_L02_00161B54);
         }
     }
