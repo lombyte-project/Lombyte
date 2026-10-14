@@ -1,10 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/debug/printf_impl/_printf.s", _printf);
-#else
-#include "types.h"
 
 extern s32 DIntr(void);
 extern s32 EnableInterrupts(void);
@@ -213,4 +207,3 @@ void _printf(const char *fmt, char *ap) {
         EnableInterrupts();
     }
 }
-#endif /* NON_MATCHING */

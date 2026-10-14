@@ -44,7 +44,7 @@ extern struct PreviewItemDefinition preview_item_definitions[] __asm__("D_001863
 extern struct PreviewCamera preview_camera __asm__("D_00186F40");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 #include "rnc/gameplay/hero.h"
-extern s32 resource_request_state __asm__("D_0015FF50");
+extern s32 active_decode_buffer __asm__("D_0015FF50");
 extern void update_item_preview_transform() __asm__("FUN_0021e698");
 
 extern void func_001E9470(s32, s32);
@@ -125,7 +125,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
             }
             if (oclass != menu_system.unk11C) {
                 select_world_object_resource_tables(oclass, menu_system.resource_table_toggle == 0);
-                menu_system.last_resource_table_toggle = resource_request_state;
+                menu_system.last_resource_table_toggle = active_decode_buffer;
                 menu_system.unk140 = oclass;
                 menu_system.unk120 = oclass;
                 ((struct PreviewClassResource *)moby_class_resources[resident_class_slot_by_id[oclass]])->state_0d = 0;

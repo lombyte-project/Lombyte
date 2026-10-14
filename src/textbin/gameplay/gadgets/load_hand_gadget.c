@@ -107,12 +107,12 @@ s32 load_hand_gadget(HandGadgetState *hand) {
             (selected_gadget != hero.items[0].item_id)) {
             func_001E9470(0, 0);
         }
-        resource_request_state = menu_system.resource_table_toggle == 0;
+        active_decode_buffer = menu_system.resource_table_toggle == 0;
         select_world_object_resource_tables(selected_class, -1);
         menu_system.unk11C = selected_class;
-        menu_system.resource_table_toggle = resource_request_state;
+        menu_system.resource_table_toggle = active_decode_buffer;
         menu_system.unk140 = selected_class;
-        menu_system.last_resource_table_toggle = resource_request_state;
+        menu_system.last_resource_table_toggle = active_decode_buffer;
         ((u8 *)moby_class_resources[resident_class_slot_by_id[selected_class]])[0xD] = 0;
         moby = create_menu_preview_moby(selected_class);
         if (moby != 0) {

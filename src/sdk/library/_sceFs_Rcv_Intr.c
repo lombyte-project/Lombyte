@@ -1,12 +1,4 @@
 #include "types.h"
-#include "asm.h"
-
-#ifndef NON_MATCHING
-/* Exact SDK/library unit _sceFs_Rcv_Intr; symbolic expected assembly retained pending source recovery. */
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/library/_sceFs_Rcv_Intr/_sceFs_Rcv_Intr.s",
-            _sceFs_Rcv_Intr);
-#else
-#include "types.h"
 
 typedef struct {
     s32 v;
@@ -45,7 +37,8 @@ typedef struct {
     u8 b[0x40];
 } __attribute__((packed)) FsStat;
 
-extern volatile s32 D_0012FC10[];
+/* Semaphore slot table: read plainly, released through a volatile store (below). */
+extern s32 D_0012FC10[];
 extern u32 D_0012FC90[];
 extern s32 D_0012FC98[];
 extern u8 D_00157500[];
@@ -129,8 +122,9 @@ void _sceFs_Rcv_Intr(s32 *arg) {
         ret = (s32)semaphore;
         h.ret.v = (s32)semaphore;
         for (i = 0; i < 32; i++) {
-            if (ret == D_0012FC10[i]) {
-                D_0012FC10[i] = -1;
+            if (D_0012FC10[i] == ret) {
+                /* volatile keeps the store ahead of the branch, out of its delay slot */
+                ((volatile s32 *)D_0012FC10)[i] = -1;
                 break;
             }
         }
@@ -138,4 +132,3 @@ void _sceFs_Rcv_Intr(s32 *arg) {
     }
     iSignalSema(h.ret.v);
 }
-#endif /* NON_MATCHING */
