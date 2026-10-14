@@ -1101,8 +1101,10 @@ void FUN_L07_0030b000(struct Moby *moby) {
         break;
     }
     case 1: {
-        s32 cursor = 0;
-        FUN_L00_002591d0(&cursor, *(s32 *)(data + 0x74), 1, 0);
+        s32 cursor;
+        s32 identifier = *(s32 *)(data + 0x74);
+        cursor = 0;
+        FUN_L00_002591d0(&cursor, identifier, 1, 0);
         i = 0;
         if (0 < *(s32 *)(data + 0x78)) do {
             child = *(s32 *)(cursor + 0x78);
