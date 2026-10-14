@@ -565,8 +565,13 @@ def c_value(kind: str, raw: bytes, symbols: dict[int, str]) -> str:
     if fmt is None:
         raise ValueError(f"no scalar format for {kind!r}")
     value = struct.unpack(fmt, raw[:struct.calcsize(fmt)])[0]
-    if fmt in ("<f", "<d"):
-        return repr(value) + ("f" if fmt == "<f" else "")
+    if fmt == "<f":
+        # the shortest decimal that reads back as the same float
+        text = next(t for t in (f"{value:.{n}g}" for n in range(1, 10))
+                    if struct.pack("<f", float(t)) == raw[:4])
+        return (text if any(c in text for c in ".en") else text + ".0") + "f"
+    if fmt == "<d":
+        return repr(value)
     if value < -0xFFFF and fmt in ("<i", "<q"):
         return hex(value & (1 << 8 * struct.calcsize(fmt)) - 1)  # bit pattern, e.g. a packed color
     return str(value) if value < 0 or value < 10 else hex(value)
@@ -721,8 +726,8 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path, level: int | Non
             return one(chunk)
         width = len(chunk) // dims[0]
         rows = [nest(chunk[i * width:(i + 1) * width], dims[1:]) for i in range(dims[0])]
-        if members is not None and len(dims) == 1:  # one record per line
-            return "{\n    " + ",\n    ".join(rows) + ",\n}"
+        if len(dims) == len(counts) and (members is not None or len(dims) > 1):
+            return "{\n    " + ",\n    ".join(rows) + ",\n}"  # one record or row per line
         return "{" + ", ".join(rows) + "}"
 
     out = into
@@ -746,7 +751,13 @@ def emit_data(addr: int, elf: Path, sections: list, into: Path, level: int | Non
             for r in ov.manifest(level)["records"])
         small = " NOT_SDA" if len(raw) <= 8 and table in ("DATA_OVERLAYS", "data") and not in_lit else ""
         definition = f"{const}{decl}{small} = {body};"
-    out.write_text("\n".join(lines) + f"\n\n{definition}\n")
+    if header == out:
+        # the file declared it itself: the definition replaces that extern
+        decl_re = re.compile(rf'^[ \t]*extern[^;=\n]*__asm__\("{label}"\)[^;\n]*;[ \t]*$', re.M)
+        definition = definition.replace(f"{name}{dims}", f'{name}{dims} __asm__("{label}")', 1)
+        out.write_text(decl_re.sub(lambda _m: definition, "\n".join(lines) + "\n", count=1))
+    else:
+        out.write_text("\n".join(lines) + f"\n\n{definition}\n")
     if level is not None:
         catalogue = ROOT / "config" / "overlays" / "us" / "data.tsv"
         rows = catalogue.read_text().splitlines()

@@ -647,8 +647,13 @@ extern int D_L18_00161978_d5 __asm__("D_L18_00161978") __attribute__((sda));
 extern int D_L18_0016197C_d5 __asm__("D_L18_0016197C") __attribute__((sda));
 extern int D_L18_00161980_d5 __asm__("D_L18_00161980") __attribute__((sda));
 extern int D_L18_00161984_d5 __asm__("D_L18_00161984") __attribute__((sda));
-extern float D_L18_001D3630_d5[4][4] __asm__("D_L18_001D3630");
-extern float D_L18_001D3670_d5[8] __asm__("D_L18_001D3670");
+float sparkle_quad_corners[4][4] __asm__("D_L18_001D3630") = {
+    {1.0f, 1.0f, 0.1f, 0.0f},
+    {1.0f, -1.0f, 0.1f, 0.0f},
+    {-1.0f, 1.0f, 0.1f, 0.0f},
+    {-1.0f, -1.0f, 0.1f, 0.0f},
+};
+float sparkle_quad_uvs[8] __asm__("D_L18_001D3670") = {1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
@@ -670,11 +675,11 @@ void FUN_L18_002d5768(struct Moby *m) {
     pk.a = 0;
     for (i = 0; i < 4; i++) {
         float *p = pk.m[i];
-        add_vector_xyz(p, D_L18_001D3630_d5[i], d + 0x10);
+        add_vector_xyz(p, sparkle_quad_corners[i], d + 0x10);
         p[3] = 1.0f;
         pk.col[i] = col;
-        pk.uv[i][0] = D_L18_001D3670_d5[i * 2];
-        pk.uv[i][1] = D_L18_001D3670_d5[i * 2 + 1];
+        pk.uv[i][0] = sparkle_quad_uvs[i * 2];
+        pk.uv[i][1] = sparkle_quad_uvs[i * 2 + 1];
     }
     draw_geometry_quad(&pk, 0, 0);
 }
