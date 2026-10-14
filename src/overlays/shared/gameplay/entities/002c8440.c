@@ -991,7 +991,7 @@ extern s32 FUN_00200250_2caf70(f32) __asm__("FUN_L00_00200250");
 extern f32 FUN_001ff8b0_2caf70(f32, f32) __asm__("FUN_L00_001ff8b0");
 extern f32 FUN_001ff408_2caf70(void *) __asm__("FUN_L00_001ff408");
 extern f32 cubic_hermite_scalar_2caf70(f32, f32, f32, f32, f32) __asm__("FUN_L00_00257e20");
-extern void FUN_L00_002cbcc0(void *, s32);
+extern void FUN_L00_002cbcc0(u8 *, s32);
 extern void FUN_0024eb68_2caf70(void *) __asm__("FUN_L00_0024eb68");
 extern f32 D_L00_00161890_2caf70 __asm__("D_L00_00161890") __attribute__((sda));
 extern f32 D_L00_00161894_2caf70 __asm__("D_L00_00161894") __attribute__((section(".data")));
@@ -1080,7 +1080,7 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
                 goto update_motion;
             lifetime = 1;
         }
-        FUN_L00_002cbcc0(m, lifetime);
+        FUN_L00_002cbcc0((u8 *)m, lifetime);
         FUN_0024eb68_2caf70(m);
         return 0;
 update_motion:
