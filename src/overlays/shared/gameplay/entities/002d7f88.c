@@ -883,9 +883,9 @@ void FUN_L00_002d9810(u8 *m) {
     FUN_001f9ad8_002d9810(&cross, shiftedVector, shape + 0xe0);
     FUN_001f9bf8_002d9810(1.0f, &cross, &cross);
     FUN_001f9ad8_002d9810(&normal, &cross, shiftedVector);
-    quad.colors[1] = D_L00_00161AD8_002d9810;
-    quad.colors[2] = D_L00_00161AD8_002d9810;
     quad.colors[3] = D_L00_00161AD8_002d9810;
+    quad.colors[2] = D_L00_00161AD8_002d9810;
+    quad.colors[1] = D_L00_00161AD8_002d9810;
     quad.colors[0] = D_L00_00161AD8_002d9810;
     FUN_00233980_002d9810(6, FUN_001f44b8_002d9810(D_L00_00161AD4_002d9810));
     FUN_00233980_002d9810(0x42, 0x8000000044ULL);
@@ -952,9 +952,9 @@ void FUN_L00_002d9810(u8 *m) {
     }
     if (FUN_L00_002d8128(m)) {
         quad.texture[1] = FUN_001f44b8_002d9810(D_L00_00161AE4_002d9810);
-        quad.colors[1] = 0x107f7f7f;
-        quad.colors[2] = 0x107f7f7f;
         quad.colors[3] = 0x107f7f7f;
+        quad.colors[2] = 0x107f7f7f;
+        quad.colors[1] = 0x107f7f7f;
         quad.colors[0] = 0x107f7f7f;
         quad.texture[3] = 0x8000000044ULL;
         shape = *(char **)((char *)data + 0xc);
