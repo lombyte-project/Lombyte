@@ -1034,11 +1034,9 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
         qcopy(vars, &other->pos);
         other = FUN_0025c338_2caf70(other);
         if (other != 0)
-            blend = *(f32 *)((u8 *)other + 0x10);
+            *(f32 *)(vars + 8) = *(f32 *)(vars + 8) + *(f32 *)((u8 *)other + 0x10);
         else
-            blend = 0.5f;
-        initial_value = *(f32 *)(vars + 8);
-        *(f32 *)(vars + 8) = initial_value + blend;
+            *(f32 *)(vars + 8) = *(f32 *)(vars + 8) + 0.5f;
     } else {
         FUN_001ff260_2caf70(vars);
     }
@@ -1047,7 +1045,7 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
     *(s32 *)(vars + 0x10) = 0;
     *(s32 *)(vars + 0x14) = 0;
     {
-    s16 lifetime = FUN_001fef20_2caf70(0x23) + D_0013E520[15] * 10;
+    s32 lifetime = FUN_001fef20_2caf70(0x23) + D_0013E520[15] * 10;
     *(s32 *)(vars + 0x28) = 0;
     *(volatile s16 *)(vars + 0x26) = lifetime;
     *(volatile s16 *)(vars + 0x24) = lifetime;
