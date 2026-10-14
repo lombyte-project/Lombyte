@@ -907,9 +907,6 @@ int FUN_L14_002d9870(int i) {
     data[2] = FUN_001f96f8(0x3C);
     return r;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002de670.s", FUN_L14_002de670);
-#else
 extern f32 D_L14_00161B18_de670 __asm__("D_L14_00161B18") __attribute__((sda));
 extern f32 D_L14_00161B1C_de670 __asm__("D_L14_00161B1C") __attribute__((sda));
 extern f32 D_L14_00161B20_de670 __asm__("D_L14_00161B20") __attribute__((sda));
@@ -918,7 +915,7 @@ extern f32 D_0015ED64_de670 __asm__("D_0015ED64");
 #define DE670_THRESHOLD D_L14_00161B20_de670
 #define DE670_DAMPING D_L14_00161B1C_de670
 #define DE670_GRAVITY D_L14_00161B18_de670
-extern s32 D_001413D0;
+extern void *D_001413D0_de670 __asm__("D_001413D0") __attribute__((section(".data")));
 extern void FUN_L14_002dec40(struct Moby *);
 extern void FUN_001f4600(void (*)(struct Moby *), struct Moby *);
 extern void FUN_001f9a10(void *, void *, void *);
@@ -938,7 +935,6 @@ extern void FUN_0020c828(struct Moby *);
 
 void FUN_L14_002de670(struct Moby *moby) {
     f32 *velocity = (f32 *)moby->pvars;
-    f32 *position;
     s32 i;
     s32 n;
     s32 alpha;
@@ -951,8 +947,7 @@ void FUN_L14_002de670(struct Moby *moby) {
     if (random_integer_below_de670(2) != 0) {
         FUN_001f4600(FUN_L14_002dec40, moby);
     }
-    position = (f32 *)&moby->pos;
-    FUN_001f9a10(position, position, velocity);
+    FUN_001f9a10(&moby->pos, &moby->pos, velocity);
     absolute_velocity = FUN_001f99c0(velocity[0]);
     if (DE670_THRESHOLD * D_0015ED60_de670 < absolute_velocity) {
         velocity[0] *= (DE670_DAMPING - 1.0f) * D_0015ED60_de670 + 1.0f;
@@ -969,33 +964,28 @@ void FUN_L14_002de670(struct Moby *moby) {
     moby->rot.y = fast_add_rotations(moby->rot.y, velocity[5]);
     moby->rot.z = fast_add_rotations(moby->rot.z, velocity[6]);
 
-    if (!(moby->pos.x < 2.0f || 1021.0f < moby->pos.x ||
-          moby->pos.y < 2.0f || 1021.0f < moby->pos.y ||
-          moby->pos.z < 2.0f || 1021.0f < moby->pos.z)) {
-        if (FUN_001f9740(velocity + 8) != 0) {
-            goto effect;
-        }
-        if (coll_sphere(0.5f, position, 0, *(void **)(velocity + 9)) == 0) {
-            goto particles;
-        }
-effect:
-        i = -1;
-        FUN_L00_0025e450(moby, velocity, position, 0.0f, 0.0f, 5, 2, 4,
-                            1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, i, 0);
-        coll_sphere(1.0f, position, 0, (void *)D_001413D0);
+    if (moby->pos.x < 2.0f || 1021.0f < moby->pos.x ||
+        moby->pos.y < 2.0f || 1021.0f < moby->pos.y ||
+        moby->pos.z < 2.0f || 1021.0f < moby->pos.z) {
+        FUN_0020c828(moby);
+        return;
     }
-    FUN_0020c828(moby);
-    return;
-particles:
-    alpha = 0x60000000;
-    FUN_L00_0026cbb0_de670(position, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
+    if (FUN_001f9740(velocity + 8) != 0 || coll_sphere(0.5f, &moby->pos, 0, *(void **)(velocity + 9)) != 0) {
+        FUN_L00_0025e450(moby, velocity, &moby->pos, 0.0f, 0.0f, 5, 2, 4,
+                            1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, -1, 0);
+        coll_sphere(1.0f, &moby->pos, 0, D_001413D0_de670);
+        FUN_0020c828(moby);
+        return;
+    }
+    FUN_L00_0026cbb0_de670(&moby->pos, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
                          FUN_L00_00257b90(FUN_001f96f8(10), FUN_001f96f8(20)), 1, 60000.0f);
-    for (i = 1; i >= 0; --i) {
+    for (i = 0; i < 2; i++) {
         n = random_integer_below_de670(6);
         if (random_integer_below_de670(2) != 0) n = -n;
         size = random_float_between_de670(40000.0f, 100000.0f);
         color = FUN_L00_00257b90(0x30, 0xFF);
-        particle = FUN_L00_0026d000_de670(position, 0.025f, 1.0f, 1.0f, n,
+        alpha = 0x60000000;
+        particle = FUN_L00_0026d000_de670(&moby->pos, 0.025f, 1.0f, 1.0f, n,
                                        D_L14_0015F580, size,
                                        color | ((color << 16) | ((color << 8) | alpha)));
         if (particle != 0) {
@@ -1007,9 +997,7 @@ particles:
             fade[0xB] = particle[0xA];
         }
     }
-    return;
 }
-#endif
 #include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002DFE98), where it is exact; names translated to the US level program. */
