@@ -2669,8 +2669,13 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             F(data, 0x14c) = 0.0f;
             qcopy(data + 0x100, position);
         }
-        F(data, 0x138) = target[2] - 0.25f;
-        FUN_L07_0030f0f8(moby, data, frame_time_sq * 38.0f, frame_time_sq * 0.0f, frame_time * 38.0f);
+        {
+            float distance = frame_time_sq * 38.0f;
+            float height = frame_time_sq * 0.0f;
+            float scale = frame_time * 38.0f;
+            F(data, 0x138) = target[2] - 0.25f;
+            FUN_L07_0030f0f8(moby, data, distance, height, scale);
+        }
         if (!inside || D_0013F65C == 0) {
             if (moby[0x53] != 1) blend_moby_animation(moby, 1, 0, 10);
             moby[0x20] = 2;
