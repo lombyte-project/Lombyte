@@ -743,9 +743,6 @@ void FUN_L05_002d7140(char *moby) {
     }
     if (D_L05_001613E4) func_L05_002D8268_2D8388(moby);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_002d7920.s", FUN_L05_002d7920);
-#else
 /* Retail quad packet: vertices +0x00, colors +0x40, UVs +0x50, commands +0x70. */
 typedef struct {
     char vertices[0x40];
@@ -768,7 +765,7 @@ extern int D_L05_00161408 __attribute__((sda));
 extern int D_L05_0016140C __attribute__((sda));
 extern unsigned char D_L05_0015EDB2;
 extern int D_L05_0015F5CC_7920 __asm__("D_L05_0015F5CC");
-extern char *D_L05_0015FFD8_7920 __asm__("D_L05_0015FFD8");
+extern struct Moby *D_L05_0015FFD8_7920 __asm__("D_L05_0015FFD8");
 extern short *D_L05_001ABCC0_7920[] __asm__("D_L05_001ABCC0");
 extern float D_L05_001CDD70[4][2];
 extern u64 get_effect_texture_7920(int) __asm__("FUN_001f44b8");
@@ -779,17 +776,20 @@ extern void transform_glow_vertex_7920(void *, void *, void *) __asm__("FUN_001f
 extern void draw_geometry_quad_7920(void *, int, int) __asm__("FUN_001f7d30");
 extern void clear_glow_matrix_7920(void *, int, int) __asm__("FUN_001153fc");
 
+/* Builds 16 fading glow quads, then draws three ribbons of quads for each linked moby of class 0x4F in view. */
 void FUN_L05_002d7920(char *moby) {
     L05GlowPacket packet[16];
     float matrix[8];
     float center[4];
-    int i, j, frame;
+    int i;
+    int j;
     short *list;
-    char *member;
+    struct Moby *member;
     char *data;
     float phase;
     float ratio;
     u64 texture;
+    L05GlowPacket *p;
 
     if (D_L05_001613F0 != 0)
         return;
@@ -798,23 +798,23 @@ void FUN_L05_002d7920(char *moby) {
     else
         D_L05_001613E0 = 5.0f;
     for (i = 0; i < 16; i++) {
-        L05GlowPacket *p;
         texture = get_effect_texture_7920(0x13);
         p = &packet[i];
         p->effect_texture = texture;
         p->texture = 0xff9000000260ULL;
+        p->zero = 0;
         p->flags = (u64)D_L05_001613F8 | ((u64)D_L05_001613FC << 2) |
                           ((u64)D_L05_00161400 << 4) | ((u64)D_L05_00161404 << 6) |
                           0x8000000000ULL;
-        p->zero = 0;
-        phase = convert_integer_to_float((D_L05_0015F5CC_7920 + 3) & 3) /
-                (D_L05_001613E0 * 4.0f);
+        phase = convert_integer_to_float((D_L05_0015F5CC_7920 + 3) & 3) / (D_L05_001613E0 * 4.0f);
         for (j = 0; j < 4; j++) {
             packet[i].uv[j][0] = D_L05_001CDD70[j][0];
             packet[i].uv[j][1] = D_L05_001CDD70[j][1];
             ratio = convert_integer_to_float(i + 1 - (j >> 1)) / (D_L05_001613E0 + phase);
-            if (ratio > 1.0f) ratio = 1.0f;
-            else if (ratio < 0.0f) ratio = 0.0f;
+            if (ratio > 1.0f)
+                ratio = 1.0f;
+            else if (ratio < 0.0f)
+                ratio = 0.0f;
             packet[i].color[j] = interpolate_color_7920(ratio, D_L05_00161408, D_L05_0016140C);
         }
     }
@@ -823,29 +823,30 @@ void FUN_L05_002d7920(char *moby) {
     matrix[6] = -0.15f;
     list = D_L05_001ABCC0_7920[(unsigned char)moby[0x21]];
     do {
-        member = D_L05_0015FFD8_7920 + ((*list & 0x7fff) << 8);
-        if (*(short *)(member + 0xa6) == 0x4f && (unsigned char)member[0x20] == 1) {
-            data = *(char **)(member + 0x78);
-            qcopy_nc(center, member + 0x10);
+        member = (struct Moby *)(((*list & 0x7fff) << 8) + (int)D_L05_0015FFD8_7920);
+        if (member->oclass == 0x4f && member->state == 1) {
+            data = (char *)member->pvars;
+            qcopy_nc(center, &member->pos);
             center[3] = 20.0f;
             if (sphere_in_view_7920(center, 512.0f) != -1) {
+                int first;
+                int ribbon;
+                int k;
+                char *points;
+                int index;
+                int frame;
                 for (frame = 0; frame < *(short *)(data + 0x320); frame++) {
-                    int i;
-                    int vertex_index;
-                    int packet_offset = frame * 0x90;
-                    vertex_index = (*(short *)(data + 0x322) - frame + 15) & 15;
-                    for (i = 0; i < 3; i++) {
+                    first = (*(short *)(data + 0x322) - frame + 15) & 15;
+                    for (ribbon = 0; ribbon < 3; ribbon++) {
                         if (D_L05_001613F4 == 0) {
-                            int k;
-                            char *vertices;
-                            char *vertex_source = data + (i * 0x100 + 0x20);
+                            points = data + (ribbon * 0x100 + 0x20);
                             for (k = 0; k < 4; k++) {
-                                transform_glow_vertex_7920((char *)packet + packet_offset + k * 0x10,
-                                                           vertex_source + (((vertex_index + (k >> 1)) & 15) << 4),
+                                index = (first + (k >> 1)) & 15;
+                                transform_glow_vertex_7920(packet[frame].vertices + k * 0x10,
+                                                           points + (index << 4),
                                                            (char *)matrix + (k & 1) * 0x10);
                             }
-                            vertices = (char *)packet + frame * 0x90;
-                            draw_geometry_quad_7920(vertices, 0, 0);
+                            draw_geometry_quad_7920(&packet[frame], 0, 0);
                         }
                     }
                 }
@@ -853,7 +854,6 @@ void FUN_L05_002d7920(char *moby) {
         }
     } while (*list++ >= 0);
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DBF10), where it is exact; names translated to the US level program. */
 
 extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
