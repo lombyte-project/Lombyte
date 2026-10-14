@@ -1261,10 +1261,11 @@ void FUN_L06_002f5d78(char *moby) {
             if (1.5707964f < threshold) threshold = 1.5707964f;
             else if (threshold < 0.0f) threshold = 0.0f;
             if (upper != 0.0f && threshold == 0.0f) allocate_voice_for_target_entry(1, 0, (int)*right);
-            *(float *)(*left + 0x40) = -angle;
+            other = -angle;
             angle = D_L06_00161D80_gp * DEG_TO_RAD - (float)(i + i) * 0.7853982f;
-            *(float *)(*right + 0x40) = upper;
             threshold = angle - (*(float *)&D_L06_00161DA4) * DEG_TO_RAD;
+            *(float *)(*left + 0x40) = other;
+            *(float *)(*right + 0x40) = upper;
             if (1.5707964f < angle) angle = 1.5707964f;
             else if (angle < 0.0f) angle = 0.0f;
             if (1.5707964f < threshold) threshold = 1.5707964f;
