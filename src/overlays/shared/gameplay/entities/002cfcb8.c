@@ -144,20 +144,23 @@ advance_first:
 
     FUN_L00_002591d0_2cfcb8(&second, group, 0, 0);
     while (second) {
-        vars = *(u8 **)(second + 0x78);
+        vars = *(u8 * volatile *)(second + 0x78);
         if (FUN_L00_0025e3b8_2cfcb8(second) && !*(u8 **)(vars + 0xA4)) {
             qcopy_nc(&second_probe, second + 0x10);
             qcopy(&second_start, second + 0x10);
-            second_start.z = 0.1f;
             second_probe.z += *(f32 *)(vars + 0xB0) * 0.5f;
+            second_start.z = 0.1f;
             if (FUN_L00_001efc70_2cfcb8(&second_probe, &second_start, 2, first, 0) &&
                 D_L00_00173E58_2cfcb8 && FUN_L00_002603d0_2cfcb8(D_L00_00173E58_2cfcb8)) {
                 if (first) *(u16 *)(first + 0x36) = 0x7F80;
                 FUN_L00_00260668_2cfcb8(second, D_L00_00173E58_2cfcb8,
                     second + 0x10, second + 0x40, vars + 0xD0, vars + 0xE0);
                 *(s32 *)(vars + 0xF4) = 0;
-                *(u32 *)(vars + 0xAC) |= 8;
-                *(u8 **)(vars + 0xF0) = D_L00_00173E58_2cfcb8;
+                {
+                    u8 *other = D_L00_00173E58_2cfcb8;
+                    *(u32 *)(vars + 0xAC) |= 8;
+                    *(u8 **)(vars + 0xF0) = other;
+                }
             }
             first = second;
             while (first) {
