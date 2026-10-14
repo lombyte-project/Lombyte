@@ -815,10 +815,11 @@ void FUN_L00_002bffa8(struct Moby *moby) {
         vars->age = (s32)((u32)vars->age + 1);
         if (scale_game_frames(3600) < vars->age) moby->state = 11;
         tick_countdown(&vars->timer);
-        qcopy(&vars->previous_pos,&moby->pos);
+        pos = &moby->pos;
+        qcopy(&vars->previous_pos,pos);
         if (FUN_L00_002beab0(moby,5,0)) {
+            if (!collision_hit_2bffa8.moby) goto land;
             target = (struct Moby *)collision_hit_2bffa8.moby;
-            if (!target) goto land;
             if (collision_hit_2bffa8.unk1C < 0 && (target->flags & 0x1000) && target->pclass && target->pclass->type == 5) { moby->state = 11; goto collision_done; }
             if (!collision_hit_2bffa8.moby || collision_hit_2bffa8.unk1C < 0) {
 land:
@@ -837,8 +838,9 @@ land:
 collision_done:
         if (moby->pos.z < 0.1f) goto destroy;
         if (vars->timer > 4000) moby->state = 11;
+    } else {
+        pos = &moby->pos;
     }
-    pos = &moby->pos;
     if (FUN_00213508_2bffa8(pos,0,0.5f) != 0.0f && collision_hit_2bffa8.moby)
         FUN_L00_00260400(moby,collision_hit_2bffa8.moby,pos,&moby->rot,pos,&moby->rot);
     switch (moby->state) {
