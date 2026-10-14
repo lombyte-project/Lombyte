@@ -1227,7 +1227,7 @@ void FUN_L12_003054b0(void *moby) {
         slot_data = data + slot * 0x30;
         other = (struct Moby *)(D_L12_0015FFD8_gp + *(int *)(slot_data + 0x20) * 0x100);
         other_data = (char *)other->pvars;
-        qcopy(position, D_L12_00167240);
+        *(u128 *)position = *(u128 *)D_L12_00167240;
         position[2] -= 0.7f;
         qcopy(velocity_ptr, &other->pos);
         velocity[2] += 1.5f;
@@ -1238,7 +1238,7 @@ void FUN_L12_003054b0(void *moby) {
         radius = speed * 0.008f;
         *(float *)(other_data + 0x60) = pitch;
         FUN_L00_002628d8(other, other_data, 0, radius, amount);
-        yaw = FUN_001f9e90(((float *)&D_0013F3D0)[0] - other->pos.x, ((float *)&D_0013F3D0)[1] - other->pos.y);
+        yaw = FUN_001f9e90(hero.motion.pos.f[0] - other->pos.x, hero.motion.pos.f[1] - other->pos.y);
         yaw = fast_add_rotations(yaw, -1.5707964f);
         yaw = fast_subtract_rotations(yaw, ((struct Moby *)moby)->rot.z);
         if (*(short *)(other_data + 0x90) == 0) {
@@ -1256,8 +1256,8 @@ void FUN_L12_003054b0(void *moby) {
             if (absolute_float(angle) < 0.017453292f) *(float *)(other_data + 0x8c) = -*(float *)(other_data + 0x8c);
         }
         active = 0;
-        distance = FUN_001f9b80(&((struct Moby *)moby)->pos, &D_0013F3D0);
-        height = absolute_float(((float *)&D_0013F3D0)[2] - ((struct Moby *)moby)->pos.z);
+        distance = FUN_001f9b80(&((struct Moby *)moby)->pos, &hero.motion.pos);
+        height = absolute_float(hero.motion.pos.f[2] - ((struct Moby *)moby)->pos.z);
         if (scale_game_frames_alt(1200) < D_L12_00161F34 && distance < 80.0f && height < 4.0f) active = 1;
         if (distance > 90.0f || height > 7.0f) {
             D_L12_00161F34 = 0;
@@ -1348,12 +1348,12 @@ void FUN_L12_003054b0(void *moby) {
                     FUN_0022da68(1, 0, other);
                     if (*(short *)(data + 0x5fc) > 0) {
                         int linked_slot = D_L12_001FB670[index];
-                        if (linked_slot == 17) D_L12_001FB688[17] = 1;
-                        else {
+                        if (linked_slot != 17) {
                             char *linked_data = data + linked_slot * 0x30;
                             D_L12_001FB688[linked_slot] = *(int *)(linked_data + 0x20);
                             *(int *)(linked_data + 0x20) = -1;
                         }
+                        else D_L12_001FB688[17] = 1;
                         FUN_L12_00306350(moby, linked_slot);
                         if (index == 4) {
                             char *linked_data = data;
@@ -1395,32 +1395,37 @@ void FUN_L12_003054b0(void *moby) {
 hit_done:
         other->hit_slot = 255;
         if (*(float *)(other_data + 0x80) > 0.0f && *(float *)(other_data + 0x80) < 10.0f) {
+            int count, life, red, green, color;
+            int i;
             count = (9 - truncate_float_to_s32(*(float *)(other_data + 0x80))) / 2;
-            i = count + 3;
-            if (i > 0) do {
-                qcopy(position, &other->pos);
-                i--;
-                position[2] += 0.7f;
-                angle = random_angle();
-                radius = random_float_between(0.1f, 0.4f);
-                position[0] += fast_cos(angle) * radius;
-                position[1] += fast_sin(angle) * radius;
-                red = scale_game_frames_alt(25);
-                green = scale_game_frames_alt(55);
-                life = random_int_between(red, green);
-                radius = random_float_between(frame_time * 0.5f, frame_time * 3.0f);
-                velocity[0] = fast_cos(angle) * radius;
-                velocity[1] = fast_sin(angle) * radius;
-                velocity[2] = 0.0f;
-                radius = random_float_between(frame_time * 7.0f, frame_time * 17.0f);
-                height = convert_integer_to_float(count);
-                amount = convert_integer_to_float(5);
-                radius = radius * height;
-                radius = radius * 1.5f;
-                velocity[2] = radius / amount;
-                color = random_int_between(70, 205);
-                FUN_L00_0026ced0(position, velocity, (color << 8) | 0x460a00aa, 0xa0a46, 420000.0f, life);
-            } while (i != 0);
+            if (count + 3 > 0) {
+                i = count + 3;
+                do {
+                    qcopy(position, &other->pos);
+                    i--;
+                    position[2] += 0.7f;
+                    angle = random_angle();
+                    radius = random_float_between(0.1f, 0.4f);
+                    position[0] += fast_cos(angle) * radius;
+                    position[1] += fast_sin(angle) * radius;
+                    red = scale_game_frames_alt(25);
+                    green = scale_game_frames_alt(55);
+                    life = random_int_between(red, green);
+                    radius = random_float_between(frame_time * 0.5f, frame_time * 3.0f);
+                    velocity[0] = fast_cos(angle) * radius;
+                    velocity[1] = fast_sin(angle) * radius;
+                    velocity[2] = 0.0f;
+                    radius = random_float_between(frame_time * 7.0f, frame_time * 17.0f);
+                    height = convert_integer_to_float(count);
+                    amount = convert_integer_to_float(5);
+                    radius = radius * height;
+                    radius = radius * 1.5f;
+                    radius = radius / amount;
+                    velocity[2] = radius;
+                    color = random_int_between(70, 205);
+                    FUN_L00_0026ced0(position, velocity, (color << 8) | 0x460a00aa, 0xa0a46, 420000.0f, life);
+                } while (i != 0);
+            }
             i = 2;
             do {
                 qcopy(position, &other->pos);
