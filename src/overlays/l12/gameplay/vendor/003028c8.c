@@ -380,71 +380,69 @@ void FUN_L12_003032e8(struct Moby *moby) {
     m[6] = fast_add_rotations(1.5707964f, moby->rot.z);
     FUN_L00_002eaa30(m + 4);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00303370.s", FUN_L12_00303370);
-#else
-#include "qcopy.h"
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
-extern int D_L12_00167100;
-typedef struct { char pad[0x140]; float position[4]; float pad150; float pitch; float yaw; } Reference_303370;
-#define L12_VENDOR_REFERENCE ((Reference_303370 *)&D_L12_00167100)
 
+/* The view the targets are checked against: position, pitch and yaw. */
+typedef struct {
+    u8 pad0[0x140];
+    Vec4 position;
+    f32 unk150;
+    f32 pitch;
+    f32 yaw;
+} View_303370;
+extern View_303370 view_303370 __asm__("D_L12_00167100");
+
+typedef struct {
+    u8 pad0[0x40];
+    s32 targets[10];
+    u8 pad68[0x20];
+    s32 timer;
+} Data_303370;
+
+/* Raises the timer while one of the ten targets is in the view cone, otherwise counts it down. */
 void FUN_L12_00303370(void *moby) {
-    char *data = (char *)((struct Moby *)moby)->pvars;
+    Data_303370 *data = (Data_303370 *)((struct Moby *)moby)->pvars;
     int found = 0;
     int i;
-    int offset;
-    float position[4] __attribute__((aligned(16)));
+    Vec4 position;
 
-    i = 0;
-    do {
-        offset = i * 4;
-        offset = *(int *)(data + offset + 0x40);
-        if (offset != -1) {
-            struct Moby *other = (struct Moby *)(D_L12_0015FFD8_p + offset * 0x100);
+    for (i = 0; i < 10; i++) {
+        if (data->targets[i] != -1) {
+            Moby *target = &D_L12_0015FFD8[data->targets[i]];
             float yaw_limit;
             float pitch_limit;
             float yaw;
-            float distance;
             float pitch;
 
-            *(volatile u128 *)position = *(u128 *)&other->pos;
+            qcopy(&position, &target->pos);
             yaw_limit = 0.12217305f;
             pitch_limit = yaw_limit;
-            if (other->oclass == 0x146) {
-                position[2] += 1.5f;
-            }
-            if (other->oclass == 0x4fe) {
+            if (target->oclass == 0x146)
+                position.f[2] += 1.5f;
+            if (target->oclass == 0x4FE) {
                 yaw_limit = 0.034906585f;
                 pitch_limit = 0.05235988f;
-                position[2] += 1.5f;
+                position.f[2] += 1.5f;
             }
-            yaw = FUN_001f9e90(position[0] - L12_VENDOR_REFERENCE->position[0],
-                                   position[1] - L12_VENDOR_REFERENCE->position[1]);
-            distance = FUN_001f9b80(L12_VENDOR_REFERENCE->position, position);
-            pitch = FUN_001f9e90(distance, position[2] - L12_VENDOR_REFERENCE->position[2]);
-            if (fast_difference_between_rotations(yaw, L12_VENDOR_REFERENCE->yaw) < yaw_limit &&
-                fast_difference_between_rotations(pitch, -L12_VENDOR_REFERENCE->pitch) < pitch_limit) {
+            yaw = FUN_001f9e90(position.f[0] - view_303370.position.f[0], position.f[1] - view_303370.position.f[1]);
+            pitch = FUN_001f9e90(FUN_001f9b80(&view_303370.position, &position), position.f[2] - view_303370.position.f[2]);
+            if (fast_difference_between_rotations(yaw, view_303370.yaw) < yaw_limit &&
+                fast_difference_between_rotations(pitch, -view_303370.pitch) < pitch_limit)
                 found = 1;
-            }
-        }
-        i++;
-        offset = i * 4;
-    } while (i < 10);
-    if (!found) {
-        tick_countdown_32_alt((int *)(data + 0x88));
-    } else {
-        *(int *)(data + 0x88) += 2;
-        if (scale_ticks(0x1e) < *(int *)(data + 0x88)) {
-            *(int *)(data + 0x88) = scale_ticks(0x1e);
         }
     }
+    if (!found) {
+        tick_countdown_32_alt(&data->timer);
+    } else {
+        data->timer += 2;
+        if (scale_ticks(30) < data->timer)
+            data->timer = scale_ticks(30);
+    }
 }
-#endif
 #include "sda.h"
 
 /* Update of moby class 1267 (Hoven turret): waits for the hero, is manned and aimed with the stick, fires, and burns out when destroyed. */
