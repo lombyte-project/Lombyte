@@ -1033,11 +1033,11 @@ struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Mob
     if (other != 0) {
         qcopy(vars, &other->pos);
         other = FUN_0025c338_2caf70(other);
-        initial_value = *(f32 *)(vars + 8);
         if (other != 0)
             blend = *(f32 *)((u8 *)other + 0x10);
         else
             blend = 0.5f;
+        initial_value = *(f32 *)(vars + 8);
         *(f32 *)(vars + 8) = initial_value + blend;
     } else {
         FUN_001ff260_2caf70(vars);
