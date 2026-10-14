@@ -1632,7 +1632,7 @@ extern f32 D_L00_001617CC __attribute__((sda));
 extern s32 D_L00_00161718_i __asm__("D_L00_00161718") __attribute__((sda));
 extern s32 D_L00_00161720_i __asm__("D_L00_00161720") __attribute__((sda));
 extern s32 D_L00_00161724_i __asm__("D_L00_00161724") __attribute__((sda));
-extern s32 D_L00_001617D0;
+extern float D_L00_001617D0 __attribute__((section(".sdata")));
 extern s32 D_L00_00161824;
 extern s32 D_L00_00161818;
 extern s32 D_L00_001DBF50 __attribute__((section(".data")));
@@ -1663,7 +1663,7 @@ void FUN_L00_002bcf98(u8 *m) {
         D_L00_00161720_i = 0;
         D_L00_00161724_i = 0;
         scaled_vector = &vec;
-        D_L00_001617D0 = 0;
+        D_L00_001617D0 = 0.0f;
         D_L00_00161824 = 0;
         copies = (u128 *)&D_L00_001DD0D0;
         clears = &D_L00_00161818;
