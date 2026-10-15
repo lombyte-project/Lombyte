@@ -2833,7 +2833,7 @@ void FUN_L01_002f5168(char *moby) {
     int found = 0;
     short type;
     float temp[4];
-    float zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+    float zero[4];
     float rotation[4], position[4];
     union { float point[16]; struct { float first[4], work[4], offset[4], last[4]; } parts; } vectors;
     float work_init[4];
@@ -2843,6 +2843,7 @@ void FUN_L01_002f5168(char *moby) {
 #define offset vectors.parts.offset
     float speed, fraction, distance, angle, scale;
 
+    Q2(zero, 0) = 0;
     data = *(char **)(moby + 0x78);
     if (H2(moby, 0xa6) != 0x336) {
         found = FUN_L01_00275690(FUN_00222150_2f5168(H2(moby, 0x32)), moby) == -1;
@@ -2854,7 +2855,7 @@ void FUN_L01_002f5168(char *moby) {
         FUN_L00_0026e150_2f5168(iterator, B2(moby, 0x21), 0, 0);
         if (*(char **)iterator == moby) {
             while ((current = *(char **)iterator) != 0) {
-                if (FUN_L01_00275690(FUN_00222150_2f5168(H2(current, 0x32)), current) != -1) {
+                if ((unsigned int)FUN_L01_00275690(FUN_00222150_2f5168(H2(current, 0x32)), current) + 1 != 0) {
                     valid = 1;
                     break;
                 }
