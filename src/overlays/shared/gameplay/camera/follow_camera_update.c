@@ -1439,6 +1439,7 @@ void FUN_L00_002ebe70(char *o) {
     float *aim_values;
     float target, rate, fraction, score, best;
     char *candidate, *chosen;
+    OvlQuad *collision_position;
     unsigned short *list;
     int i;
 
@@ -1506,18 +1507,19 @@ void FUN_L00_002ebe70(char *o) {
     *(float *)(p + 0x30) = FUN_001ff7e8_2ebe70(*angle);
     *(float *)(p + 0x34) = FUN_001ff800_2ebe70(*angle);
     *(int *)(p + 0x38) = 0;
-    *(int *)(p + 0x3c) = *(int *)(p + 0x38);
+    *(float *)(p + 0x3c) = *(float *)(p + 0x38);
     FUN_001ff500_2ebe70(-*distance, &next, p + 0x30);
     ((float *)&next)[2] += distance[4];
     FUN_001ff278_2ebe70(&next, &next, &hero.motion.pos);
     if (FUN_001efc70_2ebe70(o + 0x30, &next, 0x12, 0, 0) != 0) {
         FUN_001ff2a8_2ebe70(&diff, &D_L00_00173E60_2ebe70, o + 0x30);
+        collision_position = &D_L00_00173E60_2ebe70;
         score = FUN_001ff3d8_2ebe70(&diff);
         if (score > 0.5f) {
             FUN_001ff300_2ebe70((score - 0.5f) / score, &diff, &diff);
             FUN_001ff278_2ebe70(&next, o + 0x30, &diff);
             for (i = 0; i < 5 && FUN_001f0d60_2ebe70(0.75f, &next, 0, 0); i++)
-                next = *(OvlQuad *)D_L00_00173E70_2ebe70;
+                next = collision_position[1];
         }
         qcopy(o + 0x30, &next);
         FUN_001ff2a8_2ebe70(&diff, &hero.motion.pos, o + 0x30);
