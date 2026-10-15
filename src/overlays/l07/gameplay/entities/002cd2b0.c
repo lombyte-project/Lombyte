@@ -1637,12 +1637,10 @@ void FUN_L07_0030cd48(int arg) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030cf90.s", FUN_L07_0030cf90);
-#else
+/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E370), where it is exact; names translated to the US level program. */
 extern u8 D_0014C050[];
 extern s32 D_L07_00184528[] __attribute__((section(".data")));
-extern void FUN_001f9cf8(void *, void *, void *);
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 typedef struct {
     f32 origin_x;
@@ -1658,24 +1656,24 @@ typedef struct {
     f32 radius;
 } FUN_L07_0030cf90_Vars;
 
+/* Slides out from its origin once its linked moby reaches one state and back when it reaches
+   another; a level flag is set while it is out. */
 void FUN_L07_0030cf90(struct Moby *moby) {
     extern char *level_mobys_gp __asm__("D_L07_0015FFD8") __attribute__((sda));
     FUN_L07_0030cf90_Vars *vars = (FUN_L07_0030cf90_Vars *)moby->pvars;
-    Vec4 origin;
+    f32 origin[4];
     Vec4 rotated;
     Vec4 step;
     struct Moby *target;
     s16 voice;
     f32 distance;
     f32 step_size;
-    Vec4f *position;
-    Vec4f *distance_position;
 
-    origin.f[0] = vars->origin_x;
-    origin.f[1] = vars->origin_y;
-    origin.f[2] = vars->origin_z;
-    origin.f[3] = 0.0f;
-    if (moby->mission != 0xff && D_0014C050[moby->mission + current_level_index * 16] == 0xff)
+    origin[0] = vars->origin_x;
+    origin[1] = vars->origin_y;
+    origin[2] = vars->origin_z;
+    origin[3] = 0.0f;
+    if (moby->mission != 0xff && D_0014C050[moby->mission + (current_level_index << 4)] == 0xff)
         vars->target_index = -1;
 
     switch (moby->state) {
@@ -1705,18 +1703,13 @@ void FUN_L07_0030cf90(struct Moby *moby) {
     case 2:
         if (vars->target_index != -1 &&
             (target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100)) != 0 &&
-            target->state != 0xfe && target->state != 0xfd) {
-            distance_position = &moby->pos;
-            if (target->state == vars->target_state_word) {
-                play_moby_sound(vars->trigger_sound, 0, moby);
-                moby->state = 4;
-                break;
-            }
-        } else {
-            distance_position = &moby->pos;
+            target->state != 0xfe && target->state != 0xfd &&
+            target->state == vars->target_state_word) {
+            play_moby_sound(vars->trigger_sound, 0, moby);
+            moby->state = 4;
+            break;
         }
-        distance = vector_distance(distance_position, &origin);
-        position = &moby->pos;
+        distance = vector_distance(&moby->pos, origin);
         if (vars->radius < distance) {
             if (vars->arrival_sound != -1)
                 play_moby_sound(vars->arrival_sound, 0, moby);
@@ -1729,8 +1722,8 @@ void FUN_L07_0030cf90(struct Moby *moby) {
             rotated.q = step.q;
             if (moby->oclass == 0x3f5 || moby->oclass == 0x429)
                 rotated.f[1] = -rotated.f[1];
-            FUN_001f9cf8(&step, &rotated, &moby->rot_row0);
-            add_vector_xyz(position, position, &step);
+            transform_vector_by_basis(&step, &rotated, &moby->rot_row0);
+            add_vector_xyz(&moby->pos, &moby->pos, &step);
             return;
         }
         break;
@@ -1747,18 +1740,18 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         }
         break;
     case 4:
-        target = (struct Moby *)((u32)level_mobys_gp + (u32)vars->target_index * 0x100);
-        if (vars->target_index == -1 || target == 0 ||
-            (voice = target->state) == vars->target_state ||
-            voice == 0xfe || voice == 0xfd) {
+        if (vars->target_index == -1 ||
+            (target = (struct Moby *)(level_mobys_gp + vars->target_index * 0x100)) == 0 ||
+            target->state == 0xfe || target->state == 0xfd ||
+            target->state == vars->target_state) {
             play_moby_sound(vars->trigger_sound, 0, moby);
             moby->state = 2;
             return;
         }
-        position = &moby->pos;
-        distance = vector_distance(position, &origin);
+        distance = vector_distance(&moby->pos, origin);
         step_size = frame_scale * 0.01f;
         if (distance <= step_size) {
+            Vec4f *position = &moby->pos;
             position->x = vars->origin_x;
             position->y = vars->origin_y;
             position->z = vars->origin_z;
@@ -1782,14 +1775,13 @@ void FUN_L07_0030cf90(struct Moby *moby) {
         rotated.q = step.q;
         if (moby->oclass == 0x3f5 || moby->oclass == 0x429)
             rotated.f[1] = -rotated.f[1];
-        FUN_001f9cf8(&step, &rotated, &moby->rot_row0);
-        add_vector_xyz(position, position, &step);
+        transform_vector_by_basis(&step, &rotated, &moby->rot_row0);
+        add_vector_xyz(&moby->pos, &moby->pos, &step);
         break;
     case 5:
         break;
     }
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L07_0030d4d8.s", FUN_L07_0030d4d8);
 #else
