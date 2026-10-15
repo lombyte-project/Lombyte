@@ -315,8 +315,8 @@ void FUN_L14_002b17d8(unsigned char *moby) {
         FUN_L14_002b2f60(moby);
         FUN_L14_002b3268(moby);
         FUN_L14_002b2ed8((struct Moby *)moby);
-        owner = *(char **)(data + 0x110);
-        mode = D_L14_0015F5C4;
+        owner = *(char * volatile *)(data + 0x110);
+        mode = *(volatile int *)&D_L14_0015F5C4;
     }
     if (mode == 2) {
         moby[0x31] = 0;
