@@ -116,10 +116,10 @@ void FUN_L01_00228000(void)
         phase = fast_sin((((float)(D_L01_0015F5CC % (int)period) / value) * 2.0f) * 3.1415927f + -3.1415927f);
         r = truncate_float_to_s32(phase * 20.0f) + 50;
         g = truncate_float_to_s32(phase * 70.0f) + 180;
-        b = truncate_float_to_s32(phase * 10.0f) + 20;
-        if (g > 255) g = 255;
         if (r > 255) r = 255;
+        b = truncate_float_to_s32(phase * 10.0f) + 20;
         hero.moby->flags |= 0x10;
+        if (g > 255) g = 255;
         if (hero.unk22E0 == 2) {
             int channels;
             channels = alpha << 24;
