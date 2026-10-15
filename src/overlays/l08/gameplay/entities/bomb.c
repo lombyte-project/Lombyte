@@ -1117,12 +1117,13 @@ void FUN_L08_002d5d08(struct Moby *moby)
     short *list = D_L08_001AC040[((struct Moby *)D_L08_0015FFD8)[*(int *)(data + 0x144)].group];
     short *next;
     struct Moby *other, *spawned;
-    int i = 0;
+    int i;
     float position[4], offset[4], velocity[4];
     struct { char pad[0x140]; float x, y; } *center;
     extern char camera_state_bytes[] __asm__("D_L08_00167480");
     float angle, launch_yaw, center_yaw, min_frames, max_frames;
     if (list == 0) return;
+    i = 0;
     next = list + 1;
     other = (struct Moby *)D_L08_0015FFD8 + (*list & 0x7fff);
     if (D_L08_0015FFBC > 49) {
