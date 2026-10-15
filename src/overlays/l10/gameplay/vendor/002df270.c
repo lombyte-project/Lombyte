@@ -2743,14 +2743,11 @@ void FUN_L10_002e5be0(struct Moby *moby) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002e8358.s", FUN_L10_002e8358);
-#else
 extern void tick_countdown_32_vendor(void *) __asm__("FUN_001f9740");
 extern void FUN_L00_00266858_vendor(struct Moby *, int) __asm__("FUN_L00_00266858");
 extern int try_set_help_message_vendor(int, int) __asm__("FUN_00215130");
 extern void FUN_L00_00298840_vendor(int) __asm__("FUN_L00_00298840");
-extern void memcard_save_data_vendor(int, int) __asm__("FUN_0020b178");
+extern int memcard_save_data_vendor(int, int) __asm__("FUN_0020b178");
 extern void FUN_L00_00263d40_vendor(int, int) __asm__("FUN_L00_00263d40");
 extern int D_0013ED98 __attribute__((section(".sdata")));
 extern int D_0013EDA0 __attribute__((sda));
@@ -2827,7 +2824,6 @@ state_one:
         moby->state = 0;
     }
 }
-#endif
 /* Level 10 moby update (class 1344): tracks nearby targets and fires the level's event messages. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E9978), where it is exact; names translated to the US level program. */
 
