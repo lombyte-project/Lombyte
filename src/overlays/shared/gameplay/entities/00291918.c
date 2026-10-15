@@ -692,9 +692,6 @@ char *FUN_L03_002c45d8(char *owner, float *pos, float *dir, short ang, int arg) 
     }
     return m;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002c4718.s", FUN_L03_002c4718);
-#else
 extern int FUN_001f9740(int *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9bf8(void *, void *, float);
@@ -714,63 +711,59 @@ extern float FUN_00213508(void *, int, float);
 extern float FUN_002132a8(float, float);
 extern void FUN_L00_00259fe8(void *, float);
 extern void FUN_0020c828(void *);
-extern CollisionHit coll_hit_lui __asm__("D_L03_00173F60") __attribute__((section(".data")));
+extern CollisionHit D_L03_00173F40 __attribute__((section(".data")));
 
+/* Drifts and bounces off walls (state 0), lands and spawns its child moby (1), then shrinks while the child grows (2). */
 void FUN_L03_002c4718(struct Moby *m)
 {
     float *d;
     Vec4 *pos;
-    struct Moby *owner;
     struct Moby *other;
     Vec4 old_pos;
     Vec4 next_pos;
     Vec4 delta;
-    /* Keep each collision snapshot ordered before collision fields are disabled. */
-    volatile struct { int old_m98, old_owner98, old_m94, old_owner94; } saved;
+    int old_m98, old_owner98, old_m94, old_owner94;
     float angle;
     float distance;
-    float time_step;
-    float scale_step;
 
     if (m == NULL) return;
     d = (float *)m->pvars;
     if (d == NULL) return;
     pos = (Vec4 *)&m->pos;
     FUN_001f9740(d + 8);
-    old_pos = *pos;
+    qcopy(&old_pos, pos);
     switch (m->state) {
     case 0: {
         m->scale += (m->pclass->scale - m->scale) * (frame_scale * 0.05f);
         FUN_001f9a10(pos, pos, d);
         FUN_001f9bf8(&next_pos, d, 0.2f);
         FUN_001f9a10(&next_pos, &next_pos, pos);
-        saved.old_m98 = *(volatile int *)&m->collision_disable;
-        saved.old_m94 = *(volatile int *)&m->collision;
-        owner = *(struct Moby **)(d + 4);
-        saved.old_owner94 = *(volatile int *)&owner->collision;
-        saved.old_owner98 = *(volatile int *)&owner->collision_disable;
-        *(volatile int *)&m->collision_disable = -1;
+        old_m98 = m->collision_disable;
+        old_m94 = m->collision;
+        old_owner98 = (*(struct Moby **)(d + 4))->collision_disable;
+        old_owner94 = (*(struct Moby **)(d + 4))->collision;
+        m->collision_disable = -1;
         (*(struct Moby **)(d + 4))->collision_disable = -1;
         m->collision = 0;
         (*(struct Moby **)(d + 4))->collision = 0;
         if (FUN_001efa68(&old_pos, &next_pos, 4, m, 0)) {
-            FUN_001f9a28(&next_pos, &coll_hit_lui.point, &next_pos);
+            FUN_001f9a28(&next_pos, &D_L03_00173F40.point, &next_pos);
             FUN_001f9bf8(&next_pos, &next_pos, 0.215f);
             FUN_001f9a10(pos, pos, &next_pos);
-            if (coll_hit_lui.moby == 0) {
-                FUN_L00_001ff660(d, d, &coll_hit_lui.normal_x);
-                angle = FUN_001f9b20(&coll_hit_lui.normal_x);
-                if (FUN_001f9e90(coll_hit_lui.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
+            if (D_L03_00173F40.moby == 0) {
+                FUN_L00_001ff660(d, d, &D_L03_00173F40.normal_x);
+                angle = FUN_001f9b20(&D_L03_00173F40.normal_x);
+                if (FUN_001f9e90(D_L03_00173F40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
                     FUN_001f9a68(d, d, 0.5f);
                     if (FUN_001f9af0(d) < 0.025f) {
                         m->state = 1;
                         goto first_collision_timer;
                     }
                 }
-            } else if (((struct Moby *)coll_hit_lui.moby)->oclass != 0x221) {
-                FUN_L00_001ff660(d, d, &coll_hit_lui.normal_x);
-                angle = FUN_001f9b20(&coll_hit_lui.normal_x);
-                if (FUN_001f9e90(coll_hit_lui.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
+            } else if (((struct Moby *)D_L03_00173F40.moby)->oclass != 0x221) {
+                FUN_L00_001ff660(d, d, &D_L03_00173F40.normal_x);
+                angle = FUN_001f9b20(&D_L03_00173F40.normal_x);
+                if (FUN_001f9e90(D_L03_00173F40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
                     FUN_001f9a68(d, d, 1.2f);
             } else {
                 d[2] *= FUN_002132a8(0.9f, 1.1f);
@@ -782,20 +775,20 @@ first_collision_timer:
             }
         }
         if (coll_sphere(0.2f, (Vec4 *)&m->pos, 4, m)) {
-            FUN_001f9a28(&next_pos, &coll_hit_lui.point, &coll_hit_lui.pad30);
+            FUN_001f9a28(&next_pos, &D_L03_00173F40.point, &D_L03_00173F40.pad30);
             FUN_001f9bf8(&next_pos, &next_pos, 0.015f);
-            FUN_001f9a10((Vec4 *)&m->pos, &coll_hit_lui.pad30, &next_pos);
-            if (coll_hit_lui.moby == 0) {
-                FUN_L00_001ff660(d, d, &coll_hit_lui.normal_x);
-                angle = FUN_001f9b20(&coll_hit_lui.normal_x);
-                if (FUN_001f9e90(coll_hit_lui.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
+            FUN_001f9a10((Vec4 *)&m->pos, &D_L03_00173F40.pad30, &next_pos);
+            if (D_L03_00173F40.moby == 0) {
+                FUN_L00_001ff660(d, d, &D_L03_00173F40.normal_x);
+                angle = FUN_001f9b20(&D_L03_00173F40.normal_x);
+                if (FUN_001f9e90(D_L03_00173F40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1) {
                     FUN_001f9a68(d, d, 0.5f);
                     if (FUN_001f9af0(d) < 0.025f) m->state = 1;
                 }
-            } else if (((struct Moby *)coll_hit_lui.moby)->oclass != 0x221) {
-                FUN_L00_001ff660(d, d, &coll_hit_lui.normal_x);
-                angle = FUN_001f9b20(&coll_hit_lui.normal_x);
-                if (FUN_001f9e90(coll_hit_lui.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
+            } else if (((struct Moby *)D_L03_00173F40.moby)->oclass != 0x221) {
+                FUN_L00_001ff660(d, d, &D_L03_00173F40.normal_x);
+                angle = FUN_001f9b20(&D_L03_00173F40.normal_x);
+                if (FUN_001f9e90(D_L03_00173F40.normal_z, angle) < 0.6981317f && FUN_001f0b58() == -1)
                     FUN_001f9a68(d, d, 1.2f);
             } else {
                 d[2] *= FUN_002132a8(0.9f, 1.1f);
@@ -818,15 +811,13 @@ first_collision_timer:
         if (FUN_001f9770(d + 5)) m->state = 2;
         m->rot.x = FUN_L00_0025e310(d[0]);
         m->rot.y = FUN_L00_0025e310(d[1]);
-        time_step = frame_time_sq;
-        scale_step = frame_scale;
-        m->collision_disable = saved.old_m98;
-        (*(struct Moby **)(d + 4))->collision_disable = saved.old_owner98;
-        m->collision = saved.old_m94;
-        (*(struct Moby **)(d + 4))->collision = saved.old_owner94;
-        d[2] -= time_step * 9.8f;
-        m->rot.x += scale_step * 0.01f;
-        m->rot.y += scale_step * 0.02f;
+        m->collision_disable = old_m98;
+        (*(struct Moby **)(d + 4))->collision_disable = old_owner98;
+        m->collision = old_m94;
+        (*(struct Moby **)(d + 4))->collision = old_owner94;
+        d[2] -= frame_time_sq * 9.8f;
+        m->rot.x += frame_scale * 0.01f;
+        m->rot.y += frame_scale * 0.02f;
     break;
     }
     case 1: {
@@ -861,14 +852,14 @@ remove_moby:
         return;
     }
     if (m->pos.x < 5.0f) m->pos.x = 5.0f;
-    if (m->pos.x > 1018.0f) m->pos.x = 1018.0f;
+    /* Fakematch: the do-while only weights m's uses for the register allocator, so m stays in $18 like retail. */
+    if (m->pos.x > 1018.0f) do { m->pos.x = 1018.0f; } while (0);
     if (m->pos.y < 5.0f) m->pos.y = 5.0f;
     if (m->pos.y > 1018.0f) m->pos.y = 1018.0f;
     if (m->pos.z < 5.0f) m->pos.z = 5.0f;
     if (m->pos.z > 1018.0f) m->pos.z = 1018.0f;
     return;
 }
-#endif
 /* Recognize the active vendor object state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00310738), where it is exact; names translated to the US level program. */
 

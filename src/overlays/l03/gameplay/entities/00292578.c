@@ -2161,7 +2161,7 @@ typedef struct Moby2C8398 {
 
 extern char *D_L03_001B05B0[];
 extern char D_L03_00166EC0[];
-extern char D_L03_00173F40[];
+extern CollisionHit D_L03_00173F40;
 extern CollisionHit coll_hit __asm__("D_L03_00173F60");
 extern char D_L03_00173F70[];
 extern char D_L03_00173F80[];
@@ -3015,7 +3015,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         g = FUN_L00_002603d0_cf(m->pos, 0, 0.5f);
         m->pos[2] = m->pos[2] - 2.0f;
         if (m->pos[2] < g) {
-            char *h = D_L03_00173F40;
+            char *h = (char *)&D_L03_00173F40;
             if (*(int *)(h + 0x18) != 0 && FUN_L03_0024fba8_cf(*(int *)(h + 0x18)) != 0) {
                 d->i280 = *(Moby2C8398 **)(h + 0x18) - D_L03_0015FFD8_m;
             } else if (d->i280 != -1) {

@@ -1059,7 +1059,7 @@ extern void FUN_L00_00259a88(void *, void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float D_L03_00161B28 __attribute__((sda));
-extern char D_L03_00173F40[];
+extern CollisionHit D_L03_00173F40;
 
 /* Homing rocket update: flies on, trails smoke, steers up or down toward a target, explodes on impact or timeout. */
 extern Vec4 D_0013F490_v __asm__("D_0013F490");
@@ -1111,7 +1111,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
         }
         if (FUN_001efa68(pos, &old, 0, v->ignore, 0) != 0 ||
             coll_sphere(0.2f, pos, 0, v->ignore) != 0) {
-            level = (void **)D_L03_00173F40;
+            level = (void **)&D_L03_00173F40;
             if (level[6] != NULL) {
                 make_hit_descriptor(&hit, m, 0x10001, 1.0f, v);
                 hit.dir.f[0] = FUN_001f9dc8(v->heading);
