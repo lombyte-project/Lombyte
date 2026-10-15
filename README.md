@@ -32,12 +32,6 @@
 <h3>Decompilation progress</h3>
 
 <p align="center">
-  <a href="https://lombyte-project.github.io/namingdesk">
-    <img src="https://raw.githubusercontent.com/lombyte-project/lombyte/progress/naming-desk-card.svg" alt="Open the Naming Desk" width="100%">
-  </a>
-</p>
-
-<p align="center">
   <a href="https://bytematch.dev/lombyte-project/Lombyte">
     <img src="https://raw.githubusercontent.com/lombyte-project/lombyte/progress/decomp_map.svg" alt="Lombyte decompilation progress" width="100%">
   </a>
@@ -59,7 +53,12 @@ Only this release is targeted; other releases and the PlayStation 3 remaster are
 
 <h3>Contributing</h3>
 
-Contributions to matching C, recovered names, types, and documentation are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and verification requirements.
+You can help improve matching C, recovered names, types, and documentation. See [CONTRIBUTING.md](CONTRIBUTING.md) for more...
+<p align="center">
+  <a href="https://lombyte-project.github.io/namingdesk">
+    <img src="https://raw.githubusercontent.com/lombyte-project/lombyte/progress/naming-desk-card.svg" alt="Open the Naming Desk" width="100%">
+  </a>
+</p>
 
 <h4>Quick setup</h4>
 
