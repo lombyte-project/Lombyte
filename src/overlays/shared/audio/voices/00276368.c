@@ -263,6 +263,8 @@ extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 
 #include "rnc/gameplay/hero.h"
+/* Closes the scene once its progress reaches 10: releases its objects, restores the hero's
+   items and HUD bank, deletes the 14 scene mobies, shows the health and bolt HUD, enters state 0x14. */
 void FUN_L00_00276908(void) {
     s32 i;
     s32 value;
