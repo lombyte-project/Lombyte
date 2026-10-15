@@ -1352,11 +1352,11 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     f32 scores[16];
     s32 i, j, n, chosen, ring, limit;
     s32 count;
-    f32 maximum;
-    s64 negative_one = -1;
-    u8 *record;
     void *output;
     f32 * volatile score_ptr;
+    s64 negative_one = -1;
+    f32 maximum;
+    u8 *record;
     f32 *score;
 
     {
@@ -1396,12 +1396,15 @@ void FUN_L00_0020f160(void *moby, void *matrix)
             (*(s32 *)(hero_ptr->pad_21B8 + 8))++;
         else if ((*(s32 *)(hero_ptr->pad_21B8 + 8)) > limit)
             (*(s32 *)(hero_ptr->pad_21B8 + 8))--;
-        n = (*(s32 *)(hero_ptr->pad_21B8 + 8));
     }
-    if (n < 2)
-        n = 2;
-    if ((*(s32 *)(hero.pad_21B8 + 4)) < n)
-        return;
+    {
+        struct Hero *hero_ptr = &hero;
+        n = (*(s32 *)(hero_ptr->pad_21B8 + 8));
+        if (n < 2)
+            n = 2;
+        if ((*(s32 *)(hero_ptr->pad_21B8 + 4)) < n)
+            return;
+    }
 
     /* The completed triplet countdown leaves the signed remainder sentinel. */
     negative_one = i;
