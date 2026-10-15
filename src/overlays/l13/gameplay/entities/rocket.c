@@ -377,12 +377,14 @@ void FUN_L13_00306300(struct Moby *moby) {
         int i;
         scale_vector_xyz_6300(data, data, 0.5f);
         subtract_vector_xyz(&moby->pos, &moby->pos, data);
-        /* Keep the vector clear stores in address order before writing the sentinel. */
-        *(volatile unsigned long long *)data = 0;
-        *(volatile unsigned long long *)(data + 8) = 0;
+        /* Clear all four vector words in address order before writing the sentinel. */
+        ((volatile int *)data)[0] = 0;
+        ((volatile int *)data)[1] = 0;
+        ((volatile int *)data)[2] = 0;
+        ((volatile int *)data)[3] = 0;
         *(int *)(data + 0x2c) = 5;
-        /* Preserve the sentinel bits without keeping the comparison constant live. */
-        *(unsigned int *)(data + 0xc) = 0x46f4d334;
+        /* This float has the exact retail sentinel bits, 0x46f4d334. */
+        *(float *)(data + 0xc) = 31337.602f;
         for (i = 0; i < 6; i++) {
             struct Moby *target = (struct Moby *)hero.unk2020[i];
             if (target != 0) {
