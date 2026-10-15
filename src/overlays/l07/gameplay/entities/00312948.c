@@ -1159,9 +1159,8 @@ void FUN_L07_00314150(unsigned char *moby) {
         qcopy(&position, data + 0x140);
         *(int *)(data + 0x298) += 1;
         if (*(float *)(data + 0x98) < fast_difference_between_rotations(*(float *)(moby + 0x48), FUN_001f9e90(position.f[0] - *(float *)(moby + 0x10), position.f[1] - *(float *)(moby + 0x14)))) {
-            i = moby[0x20];
             *(float *)(moby + 0x58) = 1.0f;
-            data[0x1F4] = i;
+            data[0x1F4] = moby[0x20];
             data[0x1F6] = 0xA;
             data[0x1F5] = 1;
             qcopy(data + 0xC0, &position);
@@ -1180,7 +1179,11 @@ void FUN_L07_00314150(unsigned char *moby) {
             near = 0;
             if (!path_point_ready && target_distance < 20.0f) near = 1;
             moving = frame_time * 0.01f < spd;
-            if (hit != 4) hit = 2;
+            if (hit != 4) {
+                hit = 2;
+            } else if (moving) {
+                hit = 4;
+            }
             if ((hit == 4) || !moving) {
                 data[0x1F7] = scale_ticks(0x5A);
                 if (moby[0x53] != (FUN_001160d8() & 1)) {
@@ -1343,8 +1346,8 @@ void FUN_L07_00314150(unsigned char *moby) {
         if (moby[0xBC] == 8) {
             float z = *(float *)(data + 0x108);
             scale_vector_xyz(data + 0x100, data + 0x100, 0.7f);
-            *(float *)(data + 0x108) = z;
-            *(float *)(data + 0x108) -= frame_time * 9.8f;
+            ((float *)(data + 0x100))[2] = z;
+            ((float *)(data + 0x100))[2] -= frame_time * 9.8f;
             add_vector_xyz(moby + 0x10, moby + 0x10, data + 0x100);
             if (*(float *)(moby + 0x18) < *(float *)(data + 0x1B8)) done = 1;
         } else {
@@ -1455,13 +1458,11 @@ void FUN_L07_00314150(unsigned char *moby) {
     }
     case 8: {
         float fr;
-        float rotation_time = frame_time_sq;
         if (*(int *)(data + 0x294) <= 0) {
             if (FUN_L07_00313de8(moby, data, (float *)(((char *)&hero) + 0x80), 6, 0)) break;
-            rotation_time = frame_time_sq;
         }
-        *(int *)(data + 0x294) = 1;
-        FUN_L00_00258278((struct Moby *)moby, hero_angle, (float *)(data + 0x168), rotation_time * 2.0943952f, rotation_time * 0.6981317f, frame_time * 2.0943952f);
+        ((int *)data)[0xA5] = 1;
+        FUN_L00_00258278((struct Moby *)moby, hero_angle, (float *)(data + 0x168), frame_time_sq * 2.0943952f, frame_time_sq * 0.6981317f, frame_time * 2.0943952f);
         FUN_L00_0024f7c8(moby, 4, &position);
         fr = FUN_L07_00317e60(moby, &position);
         if (moby[0x52] != 6) break;
