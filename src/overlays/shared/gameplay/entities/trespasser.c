@@ -2014,7 +2014,7 @@ void FUN_L00_002c4380(char *moby) {
     char *target;
     float v[4] __attribute__((aligned(16)));
     struct { float w[4]; float x[4]; } scratch __attribute__((aligned(16)));
-    float c[4] __attribute__((aligned(16)));
+    float rotated_normal[4] __attribute__((aligned(16)));
     float len, angle, cos_angle, sin_angle, rate;
     int i, hit, state;
     short *ids;
@@ -2138,14 +2138,14 @@ void FUN_L00_002c4380(char *moby) {
                             qcopy(scratch.x, &coll_hit.normal_x);
                             cos_angle = FUN_001ff7e8_2c4380(*(float *)(moby + 0x48));
                             sin_angle = FUN_001ff800_2c4380(*(float *)(moby + 0x48));
-                            c[0] = scratch.x[0] * cos_angle + scratch.x[1] * sin_angle;
+                            rotated_normal[0] = scratch.x[0] * cos_angle + scratch.x[1] * sin_angle;
                             cos_angle = FUN_001ff7e8_2c4380(*(float *)(moby + 0x48));
                             sin_angle = FUN_001ff800_2c4380(*(float *)(moby + 0x48));
-                            c[1] = scratch.x[1] * cos_angle - scratch.x[0] * sin_angle;
-                            c[2] = scratch.x[2];
+                            rotated_normal[1] = scratch.x[1] * cos_angle - scratch.x[0] * sin_angle;
+                            rotated_normal[2] = scratch.x[2];
                             *(float *)(vars + 0x4c) = -FUN_001ff8b0_2c4380(
-                                FUN_001ff1e0_2c4380(c[0] * c[0] + c[2] * c[2]), c[1]);
-                            *(float *)(vars + 0x50) = FUN_001ff8b0_2c4380(c[2], c[0]);
+                                FUN_001ff1e0_2c4380(rotated_normal[0] * rotated_normal[0] + rotated_normal[2] * rotated_normal[2]), rotated_normal[1]);
+                            *(float *)(vars + 0x50) = FUN_001ff8b0_2c4380(rotated_normal[2], rotated_normal[0]);
                             rate = 0.1f;
                             *(float *)(moby + 0x40) = FUN_002000e8_2c4380(*(float *)(moby + 0x40),
                                 FUN_00200130_2c4380(*(float *)(vars + 0x4c), *(float *)(moby + 0x40)) *
