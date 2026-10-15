@@ -204,8 +204,8 @@ next_path:      i -= 8; p += 8;
                         char *other;
                         other = (char *)D_L15_001808C0 + DATA_INT(0x120) * 0x20;
                         qcopy(other + 0x10, (char *)data + 0xf0);
-                        *(float *)(other + 0x1c) = 8.0f; *(float *)(other + 4) = 1.0f;
-                        *(float *)(other + 8) = 0.5f; *(int *)(other + 12) = 0; *(float *)other = 1.0f;
+                        *(float *)(other + 0x1c) = 8.0f; *(float *)other = 1.0f;
+                        *(float *)(other + 4) = 1.0f; *(float *)(other + 8) = 0.5f; *(int *)(other + 12) = 0;
                     }
                     FUN_L15_002d79e8((char *)moby); FUN_L15_002d7bb0((struct Moby *)moby); enqueue_callback_list_1(FUN_L15_002d8710, moby);
                 }
@@ -222,7 +222,7 @@ next_path:      i -= 8; p += 8;
                 ((unsigned char *)data)[0x88] = D_L15_0015F444; ((unsigned char *)data)[0x89] = D_L15_0015F445; ((unsigned char *)data)[0x8a] = D_L15_0015F446;
             }
             DATA_INT(0x1c)++;
-            D_L15_0015F446 = 0x7f; D_L15_0015F444 = 0x7f; D_L15_0015F445 = 0x7f;
+            D_L15_0015F446 = D_L15_0015F445 = D_L15_0015F444 = 0x7f;
             D_L15_0015F44C = 131072.0f; *(int *)&D_L15_0015F448_gp = 0;
             D_L15_0015F450 = random_float_between(128.0f, 255.0f); *(int *)&D_L15_0015F454_gp = 0;
             radius = random_float_between(5.0f, 8.0f); angle = random_angle_radians(); rotation = random_angle_radians();
