@@ -427,8 +427,8 @@ void FUN_L14_00301fa8(char *m) {
     for (point = 0; point < 31; point = next) {
         qcopy(end, start);
         if (point < 30) {
-            subtract_vector_xyz(side, d + 0x20 + (point << 4), d + 0x40 + (point << 4));
-            subtract_vector_xyz(work, d + 0x30 + (point << 4), direction);
+            subtract_vector_xyz(side, (char *)((point << 4) + 0x20 + (int)d), (char *)((point << 4) + 0x40 + (int)d));
+            subtract_vector_xyz(work, (char *)((point << 4) + 0x30 + (int)d), direction);
             cross_vectors_xyz(start, work, side);
             normalize_vector_xyz(start, start, 0.1f);
         } else {
