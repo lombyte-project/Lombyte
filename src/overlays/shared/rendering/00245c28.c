@@ -530,11 +530,13 @@ void FUN_L00_002464a8(void) {
         } else {
             FUN_L00_00248278(D_L00_001841F0_load.mask_data, D_L00_001841F0_load.first_data, D_L00_001841F0_load.second_data);
         }
+        x_slope = 256.0f;
+        y_slope = 15.5f;
         mask = D_L00_00184394;
         for (y = 0; y < 32; y++) {
             for (x = 0; x < 32; x++) {
-                if ((15.5f - (f32)x) * (15.5f - (f32)x) +
-                    (15.5f - (f32)y) * (15.5f - (f32)y) > 256.0f) {
+                if ((y_slope - (f32)x) * (y_slope - (f32)x) +
+                    (y_slope - (f32)y) * (y_slope - (f32)y) > x_slope) {
                     mask[x / 8 + y * 4] |= 1 << (x - (x / 8) * 8);
                 }
             }
