@@ -784,12 +784,12 @@ void FUN_L01_0030df40(struct Moby *m) {
     p = (char *)m->pvars;
     if (p == 0) return;
     if (HOVER_I(0x48) != -1) {
-        if (m->state < 5) {
-            e = (struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100);
-            angle = fast_arc_tan(hero.motion.pos.f[0] - e->pos.x, hero.motion.pos.f[1] - e->pos.y);
-        } else {
+        if (m->state >= 5) {
             e = (struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100);
             angle = fast_arc_tan(m->pos.x - e->pos.x, m->pos.y - e->pos.y);
+        } else {
+            e = (struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100);
+            angle = fast_arc_tan(hero.motion.pos.f[0] - e->pos.x, hero.motion.pos.f[1] - e->pos.y);
         }
         *(f32 *)((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->pvars = angle;
         if (HOVER_I(0x48) != -1)
@@ -798,9 +798,7 @@ void FUN_L01_0030df40(struct Moby *m) {
     if (m->state >= 3) {
         if (D_0015EDB0 != 0) {
             if (*(u8 *)(p + 0x91) == 0) attach_manipulator(m, 5, p + 0x90);
-            HOVER_F(0xb8) = 2.1f;
-            HOVER_F(0xb0) = 2.1f;
-            HOVER_F(0xb4) = 2.1f;
+            HOVER_F(0xb8) = HOVER_F(0xb0) = HOVER_F(0xb4) = 2.1f;
         } else if (*(u8 *)(p + 0x91) != 0) detach_manipulator(m, p + 0x90);
         FUN_L01_0030ded0((char *)m);
     }
@@ -874,7 +872,7 @@ void FUN_L01_0030df40(struct Moby *m) {
         }
         if (*(s32 *)(g + 0x1130) == 0 || *(s32 *)(g + 0x1158) != 5) break;
         angle = fast_arc_tan(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
-        FUN_L00_00258278(m, &D_L01_001DEB4C, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+        FUN_L00_00258278(m, &D_L01_001DEB38.yaw_speed, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
         qcopy(&v, D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100 + 0x10);
         v.f[2] += 0.5f;
         qcopy(&q, &hero.motion.pos);
@@ -924,7 +922,7 @@ void FUN_L01_0030df40(struct Moby *m) {
         } else {
             FUN_L01_002e30b8(m, p);
             angle = fast_arc_tan(HOVER_F(0) - m->pos.x, HOVER_F(4) - m->pos.y);
-            FUN_L00_00258278(m, &D_L01_001DEB4C, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+            FUN_L00_00258278(m, &D_L01_001DEB38.yaw_speed, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
             HOVER_F(0x18) = 0.0f;
             hit = FUN_L00_00259028(m, &D_L01_001DEB38, p, p + 0x10);
         }
@@ -1014,7 +1012,7 @@ void FUN_L01_0030df40(struct Moby *m) {
         qcopy(p, D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100 + 0x10);
         *(s32 *)((char *)&D_L01_001DEB38 + 0x50) = 0;
         angle = fast_arc_tan(HOVER_F(0) - m->pos.x, HOVER_F(4) - m->pos.y);
-        FUN_L00_00258278(m, &D_L01_001DEB4C, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+        FUN_L00_00258278(m, &D_L01_001DEB38.yaw_speed, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
         if (m->prev_seq != 0) blend_moby_animation(m, 0, 0, FUN_001f96f8(6));
         ((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->command = 1;
         m->state = 1;
