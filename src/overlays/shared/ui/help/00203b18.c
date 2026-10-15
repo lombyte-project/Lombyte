@@ -618,7 +618,7 @@ extern f32 D_0015EE18_macro __asm__("D_0015EE18") __attribute__((section(".sdata
 extern volatile f32 D_0015ED6C_002062b0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 D_0015ED60_002062b0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern f32 D_0015ED60_gp_002062b0 __asm__("D_0015ED60_gp") __attribute__((sda));
-extern f32 D_0015EE18_gp_gp __asm__("D_0015EE18_gp") __attribute__((sda));
+extern f32 D_0015EE18_gp __attribute__((sda));
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F5CC_002062b0 __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
 extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((section(".data")));
@@ -814,7 +814,7 @@ void FUN_L00_002062b0(void) {
     FUN_L00_002484e0(&hero.motion.pos);
     if (hero.vehicle_mode == 2) {
         char *g = (char *)&hero;
-        if (D_0015EDB3_macro) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x210) = 1.4f * D_0015EE18_gp_gp;
+        if (D_0015EDB3_macro) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x210) = 1.4f * D_0015EE18_gp;
         FUN_L00_002059d8();
         FUN_L00_002061f0();
         g = (char *)&hero;

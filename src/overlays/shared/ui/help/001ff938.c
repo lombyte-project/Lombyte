@@ -35,7 +35,7 @@ extern float D_L15_0017ACC0_d __asm__("D_L15_0017ACC0") __attribute__((section("
 extern unsigned char D_0013E533[];
 extern u8 D_0015EDB3;
 extern u8 D_0015EDB1 __attribute__((section(".data")));
-extern float D_0015EE18_gp_gp __asm__("D_0015EE18_gp") __attribute__((sda));
+extern float D_0015EE18_gp __attribute__((sda));
 extern int D_L15_0015F5CC;
 extern u8 D_0013D4DC[];
 
@@ -64,7 +64,7 @@ void FUN_L15_001ff938(void) {
 
     if (hero.vehicle_mode == 2) {
         if (D_0015EDB3 != 0)
-            *(float *)((u8 *)&D_L15_0017ACC0_d + 0x13AC) = D_0015EE18_gp_gp * 1.4f;
+            *(float *)((u8 *)&D_L15_0017ACC0_d + 0x13AC) = D_0015EE18_gp * 1.4f;
         FUN_L00_002059d8();
         FUN_L00_002061f0();
         if (((*(u16 *)((u8 *)hero.moby + 0x34) ^ 1) & 1) != 0) {

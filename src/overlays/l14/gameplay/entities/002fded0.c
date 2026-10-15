@@ -229,8 +229,8 @@ extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, f
 extern int stub_printf() __asm__("FUN_001e93b0");
 extern int FUN_L00_0025c698(void *,void *);
 extern int FUN_L14_002fea80(struct Moby *moby);
-extern f32 D_L14_00161FBC __asm__("D_L14_00161FBC");
-extern f32 D_L14_00161FC0_gp __asm__("D_L14_00161FC0") __attribute__((sda));
+extern float D_L14_00161FBC __attribute__((sda));
+extern float D_L14_00161FC0 __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
 extern void FUN_L00_0025d538(void *, void *);
@@ -353,9 +353,9 @@ void FUN_L14_002fe2a0(L16CrateMoby *moby) {
             FUN_L14_002fec28(moby);
         qcopy(target, path + *(int *)path * 16);
         zero = 0.0f;
-        FUN_L00_0025b8c0(moby->position, &a->vx, target[0], *(float *)&D_L14_00161FBC, *(float *)&D_L14_00161FC0_gp, zero);
-        FUN_L00_0025b8c0(moby->position + 1, &a->vy, target[1], *(float *)&D_L14_00161FBC, *(float *)&D_L14_00161FC0_gp, zero);
-        FUN_L00_0025b8c0(moby->position + 2, &a->vz, target[2], *(float *)&D_L14_00161FBC, *(float *)&D_L14_00161FC0_gp, zero);
+        FUN_L00_0025b8c0(moby->position, &a->vx, target[0], D_L14_00161FBC, D_L14_00161FC0, zero);
+        FUN_L00_0025b8c0(moby->position + 1, &a->vy, target[1], D_L14_00161FBC, D_L14_00161FC0, zero);
+        FUN_L00_0025b8c0(moby->position + 2, &a->vz, target[2], D_L14_00161FBC, D_L14_00161FC0, zero);
         if ((moby->status & 2) && moby->frame == moby->animation) {
             if (a->mode == 1) {
                 moby->state = 1;
@@ -417,8 +417,6 @@ extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern int FUN_L00_0025d808(char *, float *, float *, float *, int, float);
 extern float D_L14_00161FB8 __attribute__((sda));
-extern float D_L14_00161FBC __attribute__((sda));
-extern float D_L14_00161FC0 __attribute__((sda));
 extern char *D_L14_001B0BB0[];
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void FUN_L00_00258278(char *, float, float *, float, float, float);
