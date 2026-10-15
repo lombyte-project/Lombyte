@@ -1997,7 +1997,7 @@ void FUN_L10_002da690(void *moby) {
     int group_age;
     char *age_base;
     char *ages;
-    int group_vertices;
+    unsigned short group_vertices;
     float *matrix1;
     int next_group, next_row;
     float *matrix2, *uv1, *uv2;
