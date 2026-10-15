@@ -1668,7 +1668,8 @@ void FUN_L12_003069d0(struct Moby *moby) {
     float direction[4] __attribute__((aligned(16)));
     float rotation[4] __attribute__((aligned(16)));
     char *data = (char *)moby->pvars;
-    int i, next;
+    int i;
+    long next;
     int *slot;
     int *saved;
     struct Moby *other;
