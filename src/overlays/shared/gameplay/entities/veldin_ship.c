@@ -1808,8 +1808,8 @@ void FUN_L00_002d3a10(u8 *moby) {
     s32 i;
     if (!moby) return;
     vars = *(u8 **)(moby + 0x78);
-    if (!vars) return;
     changed = 0;
+    if (!vars) return;
     if (!moby[0x20]) {
         moby[0x30] = 0xff;
         moby[0xbc] = vars[0x1c];
