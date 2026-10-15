@@ -758,7 +758,7 @@ void FUN_L01_002e0c68(char *moby) {
             g = other - 0x98;
             FUN_L00_0025bc00((float *)other,0,F(g,0x180),*(volatile float *)&frame_time*6.2831855f);
             /* Keep retail's two separate height subtractions around the ground probe. */
-            F(data,0x24) += frame_time_sq*9.8f;
+            F(data,0x24) = frame_time_sq*9.8f + F(data,0x24);
             F(g,0x88) -= F(data,0x24)-2.0f;
             ground = probe_ground_height(other-0x18,0,0.5f);
             F(g,0x88) -= 2.0f;
