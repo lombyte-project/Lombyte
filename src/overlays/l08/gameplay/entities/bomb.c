@@ -1570,14 +1570,17 @@ void FUN_L08_002dabf0(struct Moby *moby) {
             if (collision.damage < 1.0f) d[0x67] = 100;
             else {
                 float distance, time, angle;
+                time = frame_time;
+                distance = D_0015ED70 * 30.0f;
                 *(int *)(d + 0x94) = 9;
-                *(float *)(d + 0x88) = frame_time * 5.0f;
-                *(float *)(d + 0x8c) = frame_time * 7.0f;
-                *(float *)(d + 0x80) = D_0015ED70 * 30.0f;
+                *(float *)(d + 0x88) = time * 5.0f;
+                *(float *)(d + 0x8c) = time * 7.0f;
+                *(float *)(d + 0x80) = distance;
                 *(float *)(d + 0x84) = 0.0005f;
                 d[0xad] = 0;
+                old = d + 0x70;
                 angle = fast_arc_tan(moby->pos.x - hero.motion.pos.f[0], moby->pos.y - hero.motion.pos.f[1]);
-                FUN_L08_00266a48(angle, moby, d + 0x70, 6, 1, 0);
+                FUN_L08_00266a48(angle, moby, old, 6, 1, 0);
                 *(float *)(d + 0xc0) = 6.0f;
                 *(float *)(d + 0xc4) = 10.0f;
                 d[0x67] = 120;
@@ -1585,17 +1588,18 @@ void FUN_L08_002dabf0(struct Moby *moby) {
             }
         } else {
             float distance, time, angle;
+            angle = D_0015ED70 * 30.0f;
             distance = D_L08_0016198C * D_0015ED6C;
             time = D_L08_00161990 * D_0015ED6C;
-            angle = D_0015ED70 * 30.0f;
             *(int *)(d + 0x94) = 9;
             *(float *)(d + 0x84) = 0.0005f;
             *(float *)(d + 0x88) = distance;
             *(float *)(d + 0x80) = angle;
             *(float *)(d + 0x8c) = time;
             d[0xad] = 0;
+            old = d + 0x70;
             angle = fast_arc_tan(moby->pos.x - hero.motion.pos.f[0], moby->pos.y - hero.motion.pos.f[1]);
-            FUN_L08_00266a48(angle, moby, d + 0x70, 9, 1, 0);
+            FUN_L08_00266a48(angle, moby, old, 9, 1, 0);
             *(float *)(d + 0xc0) = 6.0f;
             *(float *)(d + 0xc4) = 10.0f;
             FUN_L08_00261970(moby, 0, -1);
@@ -1668,7 +1672,14 @@ set_idle:
         FUN_L08_002635a0(moby, d + 0xd0, *(char **)(d + 0x120) + 0x10, d + 0x40);
         if (!(moby->anim_flags & 2)) break;
         blend_moby_animation(*(void **)(d + 0x120), 1, 0, scale_game_frames(6));
-        moby->pos = (*(struct Moby **)(d + 0x120))->pos;
+        {
+            int *point = (int *)&moby->pos;
+            int *aim = (int *)(*(char **)(d + 0x120) + 0x10);
+            point[0] = aim[0];
+            point[1] = aim[1];
+            point[2] = aim[2];
+            point[3] = aim[3];
+        }
         moby->pos.z -= 0.1f;
         if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, 10);
         moby->state = 3;
