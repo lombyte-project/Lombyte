@@ -517,7 +517,7 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
     for (; remaining >= 7; remaining -= 5) small++;
     single = remaining;
     if (large + medium + small + single > 3 && (flags & 8)) {
-        int a_large = 3, a_medium = 0, a_small = 0, a_single = 0;
+        int a_single = 0, a_small = 0, a_medium = 0, a_large = 3;
         int b_large = 0, b_medium = 0, b_small = 0, b_single = 3;
         near_value = 150;
         far_value = 3;
