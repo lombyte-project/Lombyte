@@ -144,7 +144,7 @@ void FUN_L15_002d6810(unsigned char *moby) {
             moby[0x30] = 0xff; p = (int *)data; i = 3;
             do {
                 if (*p != -1) {
-                    other = moby_array + *p * 0x100;
+                    other = (char *)(*p * 0x100 + (int)moby_array);
                     if (*(short *)(other + 0xa6) == 0x33e) {
                         D_L15_001BB024[*(short *)(other + 0xb2)] = 0;
                         D_L15_001BBC84[*(short *)(moby_array + *p * 0x100 + 0xb2)] = 0;
@@ -279,7 +279,7 @@ next_target: p++;
     p = (int *)data; i = 3;
     do {
         if (*p != -1) {
-            other = moby_array + *p * 0x100;
+            other = (char *)(*p * 0x100 + (int)moby_array);
             if (!(*(short *)(other + 0xa6) == 0x33e && (unsigned char)other[0x20] == 2)) {
                 if (*p == -1 || !FUN_L11_0030f270(moby_array + *p * 0x100)) goto next_moby;
             }
@@ -315,12 +315,12 @@ state_three:
             DATA_INT(0x8c) = ready;
             if (!FUN_001f9770((char *)data + 0x12) && !(is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x70)) && hero.air_frames.s == 0) && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x128))) goto finish;
             p = (int *)data; i = 3;
-            do { if (*p != -1) { other = moby_array + *p * 0x100; if (*(short *)(other + 0xa6) == 0x33e) other[0x20] = 1; else FUN_L15_002d95a0(other); } p++; } while (--i >= 0);
+            do { if (*p != -1) { other = (char *)(*p * 0x100 + (int)moby_array); if (*(short *)(other + 0xa6) == 0x33e) other[0x20] = 1; else FUN_L15_002d95a0(other); } p++; } while (--i >= 0);
             RESET_TIMERS(); goto finish;
 
 finish:
     data = triggers; i = 3; other = (char *)&hero;
-    do { if (is_point_inside_clip_volume(&hero.motion.pos, *data) && FUN_L00_0020d568()) ((struct Hero *)other)->water_surface_z = *(float *)(D_L15_001600EC_gp + *data * 0x80 + 0x38); data++; } while (--i >= 0);
+    do { if (is_point_inside_clip_volume(((char *)other + 0x80), *data) && FUN_L00_0020d568()) ((struct Hero *)other)->water_surface_z = *(float *)(D_L15_001600EC_gp + *data * 0x80 + 0x38); data++; } while (--i >= 0);
 }
 #undef DATA_INT
 #undef DATA_SHORT
