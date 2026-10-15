@@ -980,7 +980,7 @@ extern void FUN_001e93b0(char *, ...);
 extern s32 FUN_L01_0028b510(f32, void *, void *);
 extern void FUN_L00_0025d458(void *, short *);
 extern void FUN_L00_0025d538(struct Moby *, void *);
-extern void FUN_L00_0025d808(f32, void *, void *, void *, void *, s32);
+extern int FUN_L00_0025d808(f32, void *, void *, void *, void *, s32);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_L00_00259fe8(struct Moby *, f32);
 extern char D_L07_00211550[] __asm__("D_L07_00211550");

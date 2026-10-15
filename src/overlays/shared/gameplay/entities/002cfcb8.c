@@ -1152,7 +1152,7 @@ extern s32 FUN_001fef68_2d2670(s32 *) __asm__("FUN_001f9740");
 extern s32 FUN_001fef20_2d2670(s32) __asm__("FUN_001f96f8");
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 extern void FUN_L00_00216de8(s32, s32);
-extern void use_ammo(s32, s32) __asm__("FUN_L00_00233db8");
+extern int use_ammo(s32, s32) __asm__("FUN_L00_00233db8");
 extern void FUN_L00_002d2158_u(void *, void *, void *) __asm__("FUN_L00_002d2158");
 extern void FUN_0022da68_2d2670(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_002c3888(void *, void *, void *);
