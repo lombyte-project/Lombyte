@@ -2183,8 +2183,8 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sz, float s
     t.c[0] = col0;
     u.q0 = tex_2baae0(D_L00_001617A8);
     col1 = color1 | (b << 24);
-    u.q2 = t.q2;
     u.q1 = t.q1;
+    u.q2 = t.q2;
     u.z4 = t.z4;
     u.c[0] = u.c[1] = u.c[2] = u.c[3] = col1;
     u.f[0] = 0;
