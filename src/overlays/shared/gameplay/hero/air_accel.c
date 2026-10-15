@@ -127,7 +127,7 @@ void FUN_L01_00228000(void)
             channels |= (r / 2) << 8;
             color = channels | g;
         } else {
-            color = (alpha << 24) | (b << 16) | (g << 8) | r;
+            color = ((alpha << 24) | (b << 16)) | ((g << 8) | r);
         }
         q = &hero;
 
