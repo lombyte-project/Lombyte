@@ -3080,7 +3080,7 @@ extern float D_L03_001618E4 __attribute__((sda));
 extern float D_L03_001618E8 __attribute__((sda));
 extern float FUN_001f9988(float);
 extern int FUN_001f9770(void *);
-extern int hit_85b8(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float add_rotations_c95(float, float) __asm__("FUN_001fa580");
 extern void set_moby_animation_alt(void *, int, int) __asm__("FUN_00212ed8");
@@ -3115,7 +3115,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
         d->f270 = d->f26C + 5.0f;
     }
     hit = find_moby_hit(m, 0x330000, 0);
-    result = hit_85b8(m, hit, &d->f20, 0, &kind, &damage, 0, 4);
+    result = fun_00213928(m, hit, &d->f20, 0, &kind, &damage, 0, 4);
     if (hit != 0 && kind != 1 && m->state != 0xD) {
         other = *(char **)(hit + 0x20);
         if (other != 0) {

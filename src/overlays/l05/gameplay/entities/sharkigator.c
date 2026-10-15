@@ -1532,7 +1532,7 @@ extern float D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
 extern float D_L05_00161AD0 __attribute__((sda));
 extern float D_L05_00161AD4 __attribute__((sda));
 extern int coll_line_fix() __asm__("FUN_001efa68");
-extern int hit_85b8() __asm__("FUN_00213928");
+extern int fun_00213928() __asm__("FUN_00213928");
 extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_002628d8(char *, char *, int, float, float);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");

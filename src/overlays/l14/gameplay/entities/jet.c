@@ -922,7 +922,7 @@ extern float FUN_L00_00257c48(float, float);
 extern int FUN_L00_0025d808_mine(void *, float *, int *, float *, int, float) __asm__("FUN_L00_0025d808");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern L14MineHit *mine_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern s32 hit_85b8(struct Moby *, void *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
+extern s32 fun_00213928(struct Moby *, void *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 extern int mine_sound(int, int, void *) __asm__("FUN_0022da68");
 extern void mine_explode(void *, void *, void *, float, float, int, int, int, float, float, float, float,
                          int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -979,7 +979,7 @@ void FUN_L14_002ec810(struct Moby *m) {
         FUN_L00_0025b8c0(&m->pos.y, &d->vel[1], v[1], 0.02f, 0.2f, 0.0f);
         FUN_L00_0025b8c0(&m->pos.z, &d->vel[2], v[2], 0.02f, 0.2f, 0.0f);
         hit = mine_hit(m, 0x230000, 0);
-        hit_85b8(m, hit, d->health, 0, &count, 0, 0, 4);
+        fun_00213928(m, hit, d->health, 0, &count, 0, 0, 4);
         if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) || hero.coll_hit_moby == (u8 *)m) {
             mine_clear(&vel);
             mine_sound(0, 0, m);

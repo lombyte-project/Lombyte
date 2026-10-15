@@ -1081,7 +1081,7 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_L13_0015F5C4;
 extern int D_L13_001613B0[] __attribute__((section(".sdata")));
 extern int FUN_001f9770(void *);
-extern int hit_85b8(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00258830(void *, void *, float, float, float, int);
@@ -1176,7 +1176,7 @@ void FUN_L13_002b50d8(RsMoby *m) {
     }
     dmg = 0.0f;
     hit = FUN_L00_0025a420(m, 0x330000, 0);
-    hit_85b8(m, hit, &v->f20, 0, &hits, &dmg, 0, 4);
+    fun_00213928(m, hit, &v->f20, 0, &hits, &dmg, 0, 4);
     FUN_001f9770(&v->h26);
     if (v->h26 < scale_game_frames_alt(0x2D) && hit != 0 && m->state != 0x63) {
         if (hit->src->hA6 >= 0xB0 && hit->src->hA6 <= 0xB1 && v->h26 != 0) {

@@ -146,7 +146,7 @@ extern char *D_L00_0016051C;
 extern char D_L00_001BD7E0[] NOT_SDA;
 extern int D_L00_0015F5CC;
 extern void FUN_001f9fc8_c(void *) __asm__("FUN_001f9fc8");
-void rot_216130(void *, void *) __asm__("FUN_001fa070");
+void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void sky_draw_shell(s32 shell_index) __asm__("FUN_0022b690");
 
 void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
@@ -159,15 +159,15 @@ void update_sky_shells_animated(void) {
         switch (i) {
         case 2:
             v[2] = (D_L00_0015F5CC & 0x3ffff) * 0.000023968450f - 3.14159265f;
-            rot_216130(D_L00_001BD7E0, v);
+            fun_001fa070(D_L00_001BD7E0, v);
             break;
         case 3:
             v[2] = (D_L00_0015F5CC & 0x1ffff) * 0.000047936900f - 3.14159265f;
-            rot_216130(D_L00_001BD7E0, v);
+            fun_001fa070(D_L00_001BD7E0, v);
             break;
         case 4:
             v[2] = (unsigned short)D_L00_0015F5CC * 0.000095873800f - 3.14159265f;
-            rot_216130(D_L00_001BD7E0, v);
+            fun_001fa070(D_L00_001BD7E0, v);
             break;
         default:
             FUN_001f9fc8_c(D_L00_001BD7E0);
@@ -374,7 +374,7 @@ void FUN_L00_00288ec0(int, int);
 void FUN_L00_00289108(void);
 void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 void FUN_00233980(int, long);
-void rot_216130(void *, void *) __asm__("FUN_001fa070");
+void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void FUN_L00_00289bd8(void) {
     float v[4] __attribute__((aligned(16)));
     set_identity_matrix(D_L00_001BD7E0);
@@ -386,7 +386,7 @@ void FUN_L00_00289bd8(void) {
     FUN_00233980(0x42, (0x8000L << 24) | 0x44);
     qzero(v);
     v[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
-    rot_216130(D_L00_001BD7E0, v);
+    fun_001fa070(D_L00_001BD7E0, v);
     FUN_0022b690(1);
 }
 #include "qcopy.h"
@@ -585,7 +585,7 @@ void FUN_L00_00288ec0(int, int);
 void FUN_L00_00289108(void);
 void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 void FUN_00233980(int, long);
-void rot_216130(void *, void *) __asm__("FUN_001fa070");
+void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void FUN_L00_0028a208(void) {
     float v[4] __attribute__((aligned(16)));
     set_identity_matrix(D_L00_001BD7E0);
@@ -598,7 +598,7 @@ void FUN_L00_0028a208(void) {
     FUN_0022b690(1);
     qzero(v);
     v[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
-    rot_216130(D_L00_001BD7E0, v);
+    fun_001fa070(D_L00_001BD7E0, v);
     FUN_0022b690(2);
 }
 typedef union {
@@ -626,7 +626,7 @@ void FUN_L00_0028a2f0(void) {
 extern int D_L00_0015F5CC;
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void FUN_0022b690(int);
-void rot_216130(void *, void *) __asm__("FUN_001fa070");
+void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void FUN_L00_0028a3a8(void) {
     float v[3];
     *(short *)(D_L00_0016051C + 4) = 0;
@@ -637,7 +637,7 @@ void FUN_L00_0028a3a8(void) {
     v[0] = 0.0f;
     v[1] = 0.3f;
     v[2] = (D_L00_0015F5CC % 25000) * 0.000251327408f - 3.14159265f;
-    rot_216130(D_L00_001BD7E0, v);
+    fun_001fa070(D_L00_001BD7E0, v);
     FUN_0022b690(3);
     set_identity_matrix(D_L00_001BD7E0);
     FUN_0022b690(4);
@@ -689,7 +689,7 @@ void FUN_L00_0028a480(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028B8F8), where it is exact; names translated to the US level program. */
 
-void rot_216130(void *, void *) __asm__("FUN_001fa070");
+void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void sky_draw_shell(s32 shell_index) __asm__("FUN_0022b690");
 extern short D_L00_0015F6B0_s __asm__("D_L00_0015F5CC");
 
@@ -702,15 +702,15 @@ void FUN_L00_0028a620(void) {
         switch (i) {
         case 1:
             v[2] = (D_L00_0015F5CC & 0x3FFFF) * (3.14159265f / 131072.0f) - 3.14159265f;
-            rot_216130(D_L00_001BD7E0, v);
+            fun_001fa070(D_L00_001BD7E0, v);
             break;
         case 2:
             v[2] = (D_L00_0015F5CC & 0x1FFFF) * (3.14159265f / 65536.0f) - 3.14159265f;
-            rot_216130(D_L00_001BD7E0, v);
+            fun_001fa070(D_L00_001BD7E0, v);
             break;
         case 3:
             v[2] = *(unsigned short *)&D_L00_0015F6B0_s * (3.14159265f / 32768.0f) - 3.14159265f;
-            rot_216130(D_L00_001BD7E0, v);
+            fun_001fa070(D_L00_001BD7E0, v);
             break;
         default:
             set_identity_matrix(D_L00_001BD7E0);
@@ -748,17 +748,17 @@ void FUN_L00_0028a920(void) {
 #include "qzero.h"
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void FUN_0022b690(int);
-void rot_216130(void *, void *) __asm__("FUN_001fa070");
+void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void FUN_L00_0028a998(void) {
     float v[4] __attribute__((aligned(16)));
     set_identity_matrix(D_L00_001BD7E0);
     FUN_0022b690(0);
     qzero(v);
     v[2] = (D_L00_0015F5CC % 50000) * 0.000125663704f - 3.14159265f;
-    rot_216130(D_L00_001BD7E0, v);
+    fun_001fa070(D_L00_001BD7E0, v);
     FUN_0022b690(1);
     v[2] = (D_L00_0015F5CC % 100000) * 0.0000628318521f - 3.14159265f;
-    rot_216130(D_L00_001BD7E0, v);
+    fun_001fa070(D_L00_001BD7E0, v);
     FUN_0022b690(2);
 }
 extern char D_L00_001BD7E0[] __asm__("D_L00_001BD7E0");
@@ -909,7 +909,7 @@ void FUN_L00_0028ac88(void) {
 #include "qzero.h"
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void FUN_0022b690(int);
-void rot_216130(void *, void *) __asm__("FUN_001fa070");
+void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void FUN_L00_0028b080(void) {
     float v[4] __attribute__((aligned(16)));
     *(short *)(D_L00_0016051C + 4) = 0;
@@ -919,10 +919,10 @@ void FUN_L00_0028b080(void) {
     FUN_0022b690(3);
     qzero(v);
     v[2] = (D_L00_0015F5CC % 40000) * 0.000157079637f - 3.14159265f;
-    rot_216130(D_L00_001BD7E0, v);
+    fun_001fa070(D_L00_001BD7E0, v);
     FUN_0022b690(4);
     v[2] = (D_L00_0015F5CC % 60000) * 0.000104719758f - 3.14159265f;
-    rot_216130(D_L00_001BD7E0, v);
+    fun_001fa070(D_L00_001BD7E0, v);
     FUN_0022b690(5);
     set_identity_matrix(D_L00_001BD7E0);
     FUN_0022b690(6);

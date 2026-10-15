@@ -443,7 +443,7 @@ float dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
 float seg_sqrt(float) __asm__("FUN_001f9988");
 float atan2_216130(float, float) __asm__("FUN_001f9e90");
 void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
-void rot_216130(void *, void *) __asm__("FUN_001fa070");
+void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void mmul_216130(void *, void *, void *) __asm__("FUN_001fa378");
 void xform_216130(void *, void *, void *) __asm__("FUN_001f9d20");
 float smooth_216130(float *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
@@ -471,14 +471,14 @@ void FUN_L00_00216130(V_216130 *v, M_216130 *m, void *p, float a, float b, float
         r.f[0] = 0.0f;
         r.f[1] = 0.0f;
         r.f[2] = -roll;
-        rot_216130(&m1, &r);
+        fun_001fa070(&m1, &r);
         mmul_216130(m, &m1, m);
         xform_216130(&x, &x, &m1);
         yaw = atan2_216130(x.f[2], x.f[0]);
         r.f[0] = 0.0f;
         r.f[2] = 0.0f;
         r.f[1] = -yaw;
-        rot_216130(&m0, &r);
+        fun_001fa070(&m0, &r);
         mmul_216130(m, &m0, m);
         xform_216130(&x, &x, &m0);
     } else {
@@ -494,15 +494,15 @@ void FUN_L00_00216130(V_216130 *v, M_216130 *m, void *p, float a, float b, float
         r.f[2] = t;
     }
     r.f[1] = 0.0f;
-    rot_216130(&m1, &r);
+    fun_001fa070(&m1, &r);
     mmul_216130(m, &m1, m);
     r.f[1] = yaw;
     r.f[2] = 0.0f;
-    rot_216130(&m0, &r);
+    fun_001fa070(&m0, &r);
     mmul_216130(m, &m0, m);
     r.f[2] = roll;
     r.f[1] = 0.0f;
-    rot_216130(&m1, &r);
+    fun_001fa070(&m1, &r);
     mmul_216130(m, &m1, m);
     if (p)
         set_216130(m, p);

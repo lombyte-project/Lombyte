@@ -1265,7 +1265,7 @@ extern float FUN_001f99c0(float);
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int update_float_countdown(void *) __asm__("FUN_L08_00211b08");
 extern int convert_float_to_int_a570(float) __asm__("FUN_001fa6d0");
-extern int hit_85b8(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_0025ab48(void *, float *, void *, void *);
 extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
 extern void FUN_L00_0025d458(void *, void *);
@@ -1293,7 +1293,7 @@ void FUN_L15_0029a570(void *object, int flag) {
     *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L15_001613EC;
     impact = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
-    code = hit_85b8(moby, hit, data + 0x20, 0, &kind, &impact, 0, 4);
+    code = fun_00213928(moby, hit, data + 0x20, 0, &kind, &impact, 0, 4);
     if (kind != 1 && moby[0x20] != 0x17) {
         if ((unsigned char)D_001413F4[0] == 0)
             FUN_L15_0029a0d0(moby);

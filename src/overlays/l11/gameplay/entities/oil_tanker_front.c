@@ -74,7 +74,7 @@ struct L11HitInfo {
 };
 
 extern struct L11HitInfo *FUN_L00_0025a420_h(void *, s32, s32) __asm__("FUN_L00_0025a420");
-extern s32 hit_85b8(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
+extern s32 fun_00213928(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void FUN_L00_0025f3e8(void *, void *, s32, f32, f32);
 extern s32 FUN_L11_0030a830(void *);
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -125,7 +125,7 @@ void FUN_L11_00315968(struct Moby *moby) {
     dmg = 0.0f;
     hit = FUN_L00_0025a420_h(moby, 0x330000, 0);
     {
-        s32 kind = hit_85b8(moby, hit, &d->hp, 0, &out, &dmg, 0, 4);
+        s32 kind = fun_00213928(moby, hit, &d->hp, 0, &out, &dmg, 0, 4);
         if (out != 1 && moby->state != 0xB) {
             d->hp -= dmg;
             if (hit->moby->oclass == 0x47) {

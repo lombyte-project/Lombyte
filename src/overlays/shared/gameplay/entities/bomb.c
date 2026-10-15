@@ -2816,7 +2816,7 @@ extern s32 D_001413DC __attribute__((section(".data")));
 extern s32 FUN_L00_0025e3b8(void *);
 extern void FUN_L00_002d1428(struct Moby *);
 extern Contact *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int hit_85b8(void *, void *, void *, int, int *, int *, int *, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, int *, int *, int) __asm__("FUN_00213928");
 extern void FUN_L00_002cfcb8(struct Moby *);
 extern void FUN_L00_002d8138(struct Moby *);
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -2873,7 +2873,7 @@ void crate_update(struct Moby *moby) {
         touched = 1;
     }
     if (moby->oclass >= 0x1FB && moby->oclass <= 0x1FD) {
-        hit_85b8(moby, other, coll, 0, &hitKind, &hitB, &hitAngle, 4);
+        fun_00213928(moby, other, coll, 0, &hitKind, &hitB, &hitAngle, 4);
     }
 
     switch (moby->state) {

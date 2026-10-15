@@ -977,7 +977,7 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_2E2B80(float) __asm__("FUN_001fa6d0");
 extern int func_001F9908_2E2B80(int *) __asm__("FUN_001f9740");
 extern Hit_2E2B80 *trooper_find_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int hit_85b8(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int func_0022ED80_2E2B80(int, int, void *) __asm__("FUN_0022da68");
@@ -1011,7 +1011,7 @@ void FUN_L10_002e17c0(struct Moby *moby)
     func_001F9908_2E2B80(&data->f184);
     if (moby->state != 13) {
         r = trooper_find_hit(moby, 0x330000, 0);
-        hit_85b8(moby, r, &data->f20, 5, &st, 0, 0, 4);
+        fun_00213928(moby, r, &data->f20, 5, &st, 0, 0, 4);
         if (r != 0 && r->moby->oclass != moby->oclass) {
             if (data->f20 <= r->f2C) {
                 data->f20 = 0.0f;
@@ -2608,7 +2608,7 @@ void FUN_L10_002e5968(struct Moby *m) {
     float dmg;
     int r;
     dmg = 0.0f;
-    r = hit_85b8(m, info, d + 0x20, 5, &out, &dmg, 0, 4);
+    r = fun_00213928(m, info, d + 0x20, 5, &out, &dmg, 0, 4);
     if (info != 0 && out != 1 && m->state != 8) {
         if ((*(float *)(d + 0x20) -= dmg) <= 0.0f) {
             r = 1;

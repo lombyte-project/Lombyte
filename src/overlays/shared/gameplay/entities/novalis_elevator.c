@@ -1763,7 +1763,7 @@ void FUN_L01_002edca0(unsigned char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002eec68.s", FUN_L01_002eec68);
 #else
 extern char *FUN_L00_0025a420(char *, int, int);
-extern void hit_85b8(char *, char *, char *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern void fun_00213928(char *, char *, char *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_0025ab48(void *, void *, void *, void *);
 extern void FUN_L00_0025c558(float, char *, char *, int, int, int);
 extern int FUN_L00_0025ff38(float, char *, char *, int, int, void *, int);
@@ -1838,7 +1838,7 @@ void FUN_L01_002eec68(char *moby) {
             hit = 0;
         }
     }
-    hit_85b8(moby, hit, data + 0x20, 0, &hit_type, &smoke_angle, 0, 4);
+    fun_00213928(moby, hit, data + 0x20, 0, &hit_type, &smoke_angle, 0, 4);
     if (hit_type != 1 && smoke_angle != 0.0f &&
         (u8)moby[0x20] != 11 && (u8)moby[0x20] != 10 && (u8)moby[0x20] != 8) {
         FUN_0022da68(0, 0, moby);

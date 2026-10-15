@@ -221,7 +221,7 @@ extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 extern void FUN_L00_00288ec0(int, int);
 extern void FUN_L00_00289108(void);
-extern void rot_216130(void *, void *) __asm__("FUN_001fa070");
+extern void fun_001fa070(void *, void *) __asm__("FUN_001fa070");
 void sky_draw_shell(s32 arg0) __asm__("FUN_0022b690");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
@@ -239,7 +239,7 @@ void FUN_L00_00289330(void) {
     sky_draw_shell(2);
     qzero(&rot);
     rot.f[2] = (f32)(*(volatile int *)&D_L00_0015F5CC & 0x7FFF) * 1.9174760e-4f - 3.1415927f;
-    rot_216130(D_L00_001BD7E0, &rot);
+    fun_001fa070(D_L00_001BD7E0, &rot);
     sky_draw_shell(3);
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(4);

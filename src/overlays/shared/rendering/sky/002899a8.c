@@ -10,7 +10,7 @@
 
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void sky_draw_shell(s32) __asm__("func_0022B690");
-void rot_216130(void *,void *) __asm__("FUN_001fa070");
+void fun_001fa070(void *,void *) __asm__("FUN_001fa070");
 
 void FUN_L00_002899a8(void) {
  float v[4] __attribute__((aligned(16)));
@@ -19,9 +19,9 @@ void FUN_L00_002899a8(void) {
  sky_draw_shell(0);
  qzero(v);
  v[2]=(unsigned short)D_L00_0015F5CC*0.000095873800f-3.14159265f;
- rot_216130(D_L00_001BD7E0,v);
+ fun_001fa070(D_L00_001BD7E0,v);
  sky_draw_shell(1);
  v[2]=(D_L00_0015F5CC&0x1ffff)*0.000047936900f-3.14159265f;
- rot_216130(D_L00_001BD7E0,v);
+ fun_001fa070(D_L00_001BD7E0,v);
  sky_draw_shell(2);
 }

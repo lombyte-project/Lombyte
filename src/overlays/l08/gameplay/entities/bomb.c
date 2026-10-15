@@ -699,7 +699,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
 extern int D_L08_001B0CB0[];
 extern int multiply_quaternions() __asm__("FUN_001fa3c0");
-extern int hit_85b8() __asm__("FUN_00213928");
+extern int fun_00213928() __asm__("FUN_00213928");
 extern int FUN_L00_001fff28();
 extern int allocate_voice_for_target_entry_alt(int,int,void*) __asm__("FUN_0022da68");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");

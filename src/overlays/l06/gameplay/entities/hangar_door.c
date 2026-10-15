@@ -2907,7 +2907,7 @@ void FUN_L06_002f9a28(unsigned char *moby)
 }
 extern int FUN_001fa6d0(float);
 extern char *FUN_L00_0025a420(void *, int, int);
-extern int hit_85b8(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void FUN_L00_00257470(void *, int, int);
@@ -2955,7 +2955,7 @@ void FUN_L06_002fa9c0(char *moby) {
     *(int *)(data + 0x110) = FUN_001fa6d0(*(float *)(data + 0x20) * 16.0f);
     dmg = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
-    kind = hit_85b8(moby, hit, data + 0x20, 0, &out, &dmg, 0, 4);
+    kind = fun_00213928(moby, hit, data + 0x20, 0, &out, &dmg, 0, 4);
     if (out != 1 && (unsigned char)moby[0x20] != 14 &&
         (unsigned char)moby[0x20] != 3 && (unsigned char)moby[0x20] != 5) {
         if (*(char **)(hit + 0x20) != 0) {

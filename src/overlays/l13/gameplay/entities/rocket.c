@@ -2479,7 +2479,7 @@ collision:
 #include "rnc/gameplay/state/item_state.h"
 extern unsigned char D_0013D408[];
 extern float D_L13_0015F580[] __attribute__((section(".sdata")));
-extern void hit_85b8(void *, void *, void *, int, void *, int, int, int) __asm__("FUN_00213928");
+extern void fun_00213928(void *, void *, void *, int, void *, int, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
 extern int FUN_L01_0026e008(int, int);
@@ -2507,7 +2507,7 @@ void FUN_L13_0030cdb8(struct Moby *moby) {
     }
     data = (char *)moby->pvars;
     hit = find_moby_hit(moby, 0x10000, 0);
-    hit_85b8(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
+    fun_00213928(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
     switch (moby->state) {
     case 0:
         moby->state = 1;

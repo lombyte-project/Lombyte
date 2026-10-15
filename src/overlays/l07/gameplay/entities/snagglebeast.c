@@ -2271,7 +2271,7 @@ extern void FUN_L01_0026e0e0(s32, s32);
 
 typedef struct {
     u8 pad0[0x20];
-    f32 health;            /* 0x20: lowered by hit_85b8 */
+    f32 health;            /* 0x20: lowered by fun_00213928 */
     u8 pad24[0x14];
     struct Moby *target;   /* 0x38 */
     u8 pad3C[0x24];
@@ -2427,7 +2427,7 @@ typedef struct {
 /* pvars of a swooper. */
 typedef struct {
     u8 pad0[0x20];
-    u8 collision[9];       /* 0x20: contact state for hit_85b8 */
+    u8 collision[9];       /* 0x20: contact state for fun_00213928 */
     u8 unk29;              /* 0x29 */
     u8 pad2A[0xE];
     struct Moby *perch;    /* 0x38 */
@@ -2480,7 +2480,7 @@ extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f99c0(f32);
 extern void FUN_L00_0025a120(struct Moby *);
 extern MobyHit *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
-extern s32 hit_85b8(struct Moby *, MobyHit *, void *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
+extern s32 fun_00213928(struct Moby *, MobyHit *, void *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
@@ -2519,7 +2519,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
         moby->shadow_range = 0x15;
     }
     hit = find_moby_hit(moby, 0x230000, 0);
-    hit_85b8(moby, hit, collision, 0, &touching, 0, 0, 4);
+    fun_00213928(moby, hit, collision, 0, &touching, 0, 0, 4);
     if (touching >= 2 && hit != NULL && hit->moby->oclass != 0x363 && hit->moby->oclass != 0x458 &&
         hit->moby->oclass != 0x367) {
         FUN_L00_0025e450(moby, &vars->velocity, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
@@ -2709,7 +2709,7 @@ void FUN_L07_0031a250(unsigned char *moby) {
     collision = data + 0x20;
     animation = data + 0x60;
     hit = FUN_L00_0025a420((void *)moby, 0x230000, 0);
-    hit_85b8((void *)moby, (MobyHit *)hit, collision, 0, contact, 0, 0, 4);
+    fun_00213928((void *)moby, (MobyHit *)hit, collision, 0, contact, 0, 0, 4);
     if ((u8)moby[0x20] < 2 && contact[0] > 1) {
         FUN_0022da68(1, 0, moby);
         FUN_L00_00257470(moby, 0, -1);

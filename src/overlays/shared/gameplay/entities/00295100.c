@@ -472,7 +472,7 @@ float f213508_298b18(void *, int, float) __asm__("FUN_00213508");
 float absolute_float(float) __asm__("FUN_001f99c0");
 void f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
 void f216f90_298b18(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-void f216c48_298b18(F_298b18 *, void *, int) __asm__("FUN_00216c48");
+void fun_00216c48(F_298b18 *, void *, int) __asm__("FUN_00216c48");
 int f1f96f8_298b18(int) __asm__("FUN_001f96f8");
 void f265880_298b18(int) __asm__("FUN_L00_00265880");
 void FUN_L00_00298b18(void) {
@@ -523,7 +523,7 @@ void FUN_L00_00298b18(void) {
         void *b = active_scene_trigger.trigger;
         active_scene_trigger.moby = 0;
         active_scene_trigger.trigger = 0;
-        f216c48_298b18(a, b, 1);
+        fun_00216c48(a, b, 1);
     }
     f265880_298b18(f1f96f8_298b18(0x1E));
 }

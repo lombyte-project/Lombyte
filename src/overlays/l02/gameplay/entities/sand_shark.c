@@ -1104,7 +1104,7 @@ extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int FUN_L02_002d5658(void *argp);
 extern void FUN_L02_002d5728(char *arg);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern int hit_85b8(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
 extern void FUN_L00_0025d458(void *m, short *p);
@@ -1153,7 +1153,7 @@ void FUN_L02_002d5c88(unsigned char *moby) {
     }
     dmg = 0.0f;
     h = find_moby_hit(moby, 0x330000, 0);
-    hit_85b8(moby, h, &d->hp, 0, &hit, &dmg, 0, 4);
+    fun_00213928(moby, h, &d->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && moby[0x20] != 0x18) {
         FUN_L02_002d5728((char *)moby);
         d->i29C = 0;
@@ -1677,7 +1677,7 @@ extern float D_L02_00161A70 __attribute__((sda));
 extern float D_L02_00161A74 __attribute__((sda));
 extern float D_L02_00161A78 __attribute__((sda));
 extern float D_L02_00161A9C __attribute__((sda));
-extern int hit_85b8(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int trunc_d57f8(float) __asm__("FUN_001fa6d0");
 extern int FUN_L02_00261c80(char *a, char *o, float best);
@@ -1730,7 +1730,7 @@ void FUN_L02_002d85b8(void *arg) {
     if (h != 0 && *(short *)(*(char **)(h + 0x20) + 0xA6) == 0x264) {
         h = 0;
     }
-    hit_85b8(moby, h, &d->hp, 0, &hit, &dmg, 0, 4);
+    fun_00213928(moby, h, &d->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x11) {
         d->hp -= dmg;
         d->i90 = trunc_d57f8(614.4f);

@@ -326,7 +326,7 @@ extern float D_L09_00161408 __attribute__((sda));
 extern float D_L09_0016140C __attribute__((sda));
 extern int multiply_global_factor_ed64() __asm__("FUN_001f96b0");
 extern int FUN_001f9b80_c() __asm__("FUN_001f9b80");
-extern int hit_85b8(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry_alt(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
