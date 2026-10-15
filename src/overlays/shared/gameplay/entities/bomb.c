@@ -705,9 +705,12 @@ void FUN_L00_002c97e0(struct Moby *m)
                 build_spherical_offset_2c97e0(&offset, f, g, FUN_L00_00257cb0_2c97e0());
                 offset.f[2] += D_L00_00161864_2c97e0 * scale;
                 add_vector_xyz_2c8440(&offset, &offset, &old_pos);
-                f = random_float_between(D_L00_0016185C_2c97e0 * D_0015ED6C_2c8440, D_L00_00161860_2c97e0 * D_0015ED6C_2c8440);
-                g = FUN_L00_00257cb0_2c97e0();
-                build_spherical_offset_2c97e0(&velocity, f, g, D_L00_00161858_2c97e0 * rotation);
+                {
+                    f32 f;
+                    f = random_float_between(D_L00_0016185C_2c97e0 * D_0015ED6C_2c8440, D_L00_00161860_2c97e0 * D_0015ED6C_2c8440);
+                    g = FUN_L00_00257cb0_2c97e0();
+                    build_spherical_offset_2c97e0(&velocity, f, g, D_L00_00161858_2c97e0 * rotation);
+                }
                 velocity.f[2] = random_float_between(3.5f, 5.5f) * D_0015ED6C_2c8440;
                 FUN_L00_002cbf68_2c97e0(m, &offset, &velocity);
             }
@@ -857,9 +860,12 @@ animate:
                 build_spherical_offset_2c97e0(&offset, f, g, FUN_L00_00257cb0_2c97e0());
                 offset.f[2] += D_L00_00161864_2c97e0 * scale;
                 add_vector_xyz_2c8440(&offset, &offset, &old_pos);
-                f = random_float_between(D_L00_0016185C_2c97e0 * D_0015ED6C_2c8440, D_L00_00161860_2c97e0 * D_0015ED6C_2c8440);
-                g = FUN_L00_00257cb0_2c97e0();
-                build_spherical_offset_2c97e0(&velocity, f, g, D_L00_00161858_2c97e0 * 0.017453292f);
+                {
+                    f32 f;
+                    f = random_float_between(D_L00_0016185C_2c97e0 * D_0015ED6C_2c8440, D_L00_00161860_2c97e0 * D_0015ED6C_2c8440);
+                    g = FUN_L00_00257cb0_2c97e0();
+                    build_spherical_offset_2c97e0(&velocity, f, g, D_L00_00161858_2c97e0 * 0.017453292f);
+                }
                 velocity.f[2] = random_float_between(3.5f, 5.5f) * D_0015ED6C_2c8440;
                 FUN_L00_002cbf68_2c97e0(m, &offset, &velocity);
         return;
