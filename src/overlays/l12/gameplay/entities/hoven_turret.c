@@ -2224,10 +2224,9 @@ void FUN_L12_00308350(struct Moby *m) {
         second_vertex = second.vertices;
         for (j = 0; j < 4; j++) {
             ((float *)&first.vertices[j])[2] += 1.0f;
-            ((float *)second_vertex)[2] += 1.0f;
-            first.uv[j][1] = D_L12_001FB6D0[j][1];
+            ((float *)&second_vertex[j])[2] += 1.0f;
             first.uv[j][0] = D_L12_001FB6D0[j][0] + x_offset;
-            second_vertex++;
+            first.uv[j][1] = D_L12_001FB6D0[j][1];
         }
         jitter = 0.0f;
         for (row = -3; row < 3; row++) {
