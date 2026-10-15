@@ -25,7 +25,7 @@ extern void fast_draw_quad_real(void *, int, int) __asm__("func_001F7D30");
 /* Builds a 4-row matrix per light in D_0018E340 (count D_0015F474):
    each row starts as the light's position and is pushed along the
    corner D_0018CAA0[k], projected off the normalised light direction,
-   scaled by the position's w; func_001F7D30 draws it. The packet header,
+   scaled by the position's w; fast_draw_quad_real draws it. The packet header,
    colours and UVs are filled on the stack but never sent. Both copies
    are qcopy (retail's lq/sq stay inside the loop), and the inner loop
    needs its own counter, not the one the setup loop used. */

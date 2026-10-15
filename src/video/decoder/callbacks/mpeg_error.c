@@ -1,4 +1,4 @@
-/* FUN_0023d080 (mpeg_error) exact recovery: one DebugPrint of the record field and return 1; the patched profile (lq/sq saves) reproduces all 10 instructions. Caller-facing func_0023D080 alias required for the oracle link. */
+/* mpeg_error exact recovery: one DebugPrint of the record field and return 1; the patched profile (lq/sq saves) reproduces all 10 instructions. Caller-facing func_0023D080 alias required for the oracle link. */
 
 #include "types.h"
 struct MpegErrorData {

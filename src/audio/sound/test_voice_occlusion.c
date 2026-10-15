@@ -7,7 +7,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 /* Aim the vector from the frame at D_00187080 toward arg0+0x20, scaled to
    3/4 and 64, and return the line test from arg1 to its end. The int
-   return keeps retail's argument order for FUN_001f9a10. */
+   return keeps retail's argument order for add_vector_xyz. */
 int test_voice_occlusion(void *voice, void *listener_position) __asm__("FUN_0022c658");
 
 int test_voice_occlusion(void *voice, void *listener_position) {

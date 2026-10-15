@@ -2540,7 +2540,7 @@ void FUN_L00_0026ee48(unsigned char *p) {
 extern int FUN_001f9770(void *);
 extern void FUN_L00_00267a08(void *);
 
-/* Calls FUN_L00_00267a08 on a once FUN_001f9770(a + 10) returns non-zero. */
+/* Calls FUN_L00_00267a08 on a once fast_dec_timer_s16(a + 10) returns non-zero. */
 void FUN_L00_0026f048(char *a) {
     if (FUN_001f9770(a + 10) != 0) {
         FUN_L00_00267a08(a);
@@ -3209,7 +3209,7 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
 extern int FUN_001f9770(void *);
 extern void FUN_L00_00267a08(void *);
 
-/* Calls FUN_L00_00267a08 on a once FUN_001f9770(a + 0xA) returns non-zero; skips id -1. */
+/* Calls FUN_L00_00267a08 on a once fast_dec_timer_s16(a + 0xA) returns non-zero; skips id -1. */
 void FUN_L00_00270710(char *a) {
     if (*(short *)(a + 0xA) != -1) {
         if (FUN_001f9770(a + 0xA) != 0) {

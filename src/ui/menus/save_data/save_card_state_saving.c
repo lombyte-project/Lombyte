@@ -1,4 +1,4 @@
-/* FUN_00208f28 exact recovery: retail keeps the `mode_freeze_flags |= 0x40` result
+/* save_card_state_saving exact recovery: retail keeps the `mode_freeze_flags |= 0x40` result
    in v0 and the 0x15 constant in v1; without the pin the allocator swaps them
    (98.67% under the patched profile).  The register-asm pin reproduces
    retail's block, one instruction stream for all 30 instructions. */

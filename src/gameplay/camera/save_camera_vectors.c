@@ -4,7 +4,7 @@
 #include "rnc/gameplay/camera/camera_globals.h"
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 /* When the flag at +2 is clear, copies the 16-byte vector at +0x50 to
-   +0xC0 with retail's qcopy, optionally runs FUN_001f9a10 on +0x60,
+   +0xC0 with retail's qcopy, optionally runs add_vector_xyz on +0x60,
    then copies +0x60 to +0xD0. Sibling of func_001ECC10 just above it. */
 void save_camera_vectors(void) __asm__("FUN_001ec7f0");
 

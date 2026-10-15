@@ -62,7 +62,7 @@ struct MobyTrail {
    D_L00_0017A680 table FUN_L00_002054e8 walks has the same layout. */
 /* A manipulator record eased by FUN_L00_00205168: it moves rot and pos toward
    their targets, then rebuilds quat, scale3 and translation (the part
-   attach_manipulator, FUN_0020cb10, hands to the moby) from them. */
+   attach_manipulator, hands to the moby) from them. */
 /* The first 0x40 bytes of a HeroEase: the part attach_manipulator reads. */
 struct HeroManipulator {
     u8 unk0;                       /* 0x00 */
@@ -78,7 +78,7 @@ struct HeroManipulator {
 
 struct HeroEase {
     u8 unk0;                       /* 0x00 */
-    u8 attached;                   /* 0x01: attached to its moby (FUN_0020cb10 / FUN_0020cb88) */
+    u8 attached;                   /* 0x01: attached to its moby (attach_manipulator / detach_manipulator) */
     u8 pad_2[0xE];
     Vec4 quat;                     /* 0x10: rotation built from rot (FUN_L00_00259f50) */
     Vec4 scale3;                   /* 0x20: x/y/z = scale */

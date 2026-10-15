@@ -1168,7 +1168,7 @@ typedef struct {
     s32 path;   /* -1, or an index into D_L01_001B0930 */
     f32 zmin;
     f32 zmax;
-    s32 volume; /* clip volume FUN_00214720 tests */
+    s32 volume; /* clip volume is_point_inside_clip_volume tests */
 } Zone_302648;
 typedef struct {
     Zone_302648 zones[20];

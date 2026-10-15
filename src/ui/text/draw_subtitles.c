@@ -24,7 +24,7 @@ extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
    D_0015ED88 picks the string (2..5 map to 1..4, anything else to 0). The
    text is measured in a FontSetWindow buffer (font_set_window/7560), its
    box is kept 0x14 above the bottom of the screen (screen_extent.height), the
-   frame is drawn (func_001F5F18) and the text printed with the measure
+   frame is drawn (draw_ui_frame) and the text printed with the measure
    flag (4) cleared. The list is tested and then read again for the
    loop, which gives retail's copy of it; the clamp test is written
    bottom-first, which gives retail's registers. */

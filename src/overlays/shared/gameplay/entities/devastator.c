@@ -3764,7 +3764,7 @@ void FUN_L00_002b9310(char *moby) {
    names are declared. */
 /* the per-object block reached through o+0x78: 0x20..0x2C are s32 counters and
    0x30..0x3C are f32 rates (the case-1/3 bodies divide five constants by
-   FUN_001f96f8(2) / FUN_001f96f8(8) and store the results there). */
+   scale_game_frames(2) / scale_game_frames(8) and store the results there). */
 typedef struct {
     s32 i0;
     char pad4[4];

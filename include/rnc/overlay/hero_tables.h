@@ -23,7 +23,7 @@ typedef struct HeroTableEntry70 {
     u8 pad_54[0x4];
     f32 interval;        /* seconds; 0 = never picked */
     f32 duration;        /* seconds */
-    s32 duration_frames; /* FUN_001f96b0(duration) * 60 */
+    s32 duration_frames; /* multiply_global_factor_ed64(duration) * 60 */
     u8 pad_64[0xC];
 } HeroTableEntry70;
 

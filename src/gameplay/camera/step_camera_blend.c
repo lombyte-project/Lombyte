@@ -13,9 +13,9 @@ extern void quaternion_to_matrix(void *, void *) __asm__("FUN_001fa4f8");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 /* Camera blend step toward to: while the position (cam[3]) or rotation
    (cam[0]) blend hasn't reached 1, move cam+0x40 from cam+0x30 toward
-   to's position by the eased factor (FUN_002133d0), copy it to
+   to's position by the eased factor (cosine_interpolate), copy it to
    D_00187080 unless the D_0018C318 flag is set, slerp the rotation
-   (FUN_001fa400) into cam+0x50 and load it as the view matrix, then
+   (quaternion_nlerp) into cam+0x50 and load it as the view matrix, then
    advance both blends by their rates times D_0015ED60, capped at 1.
    Returns 1 once both are complete. */
 int step_camera_blend(void *to_blend, void *cam_blend) __asm__("FUN_001ecaf8");

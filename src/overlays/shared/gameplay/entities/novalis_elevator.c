@@ -2393,7 +2393,7 @@ typedef struct {
     union {
         struct {
             s32 path;   /* -1, or an index into D_L01_001B0930 */
-            s32 volume; /* -1, or a clip volume FUN_00214720 tests */
+            s32 volume; /* -1, or a clip volume is_point_inside_clip_volume tests */
         } s;
         s64 both;       /* -1 when neither is set */
     } area;

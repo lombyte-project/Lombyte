@@ -991,7 +991,7 @@ void FUN_L00_002d9810(u8 *m) {
 }
 #endif
 int FUN_001efa68(Vec4 *, Vec4 *, int, int, int);
-/* True when FUN_001efa68 returns 0 for the moby and D_001413D0 positions, both raised by 0.5. */
+/* True when coll_line_fix returns 0 for the moby and D_001413D0 positions, both raised by 0.5. */
 int FUN_L00_002d8980(char *a) {
     Vec4 p, t;
     qcopy(&p, a + 0x10);

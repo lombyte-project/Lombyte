@@ -5,7 +5,7 @@
 #include "rnc/math/vector.h"
 
 /* View and projection state at D_0018CD00. init_view_context and
-   configure_graphics_projection (FUN_001f33b8) set the clip distances,
+   configure_graphics_projection set the clip distances,
    field of view, screen size and fog endpoints; update_view_context
    derives the projection matrices, scales and fog packet words. */
 struct View {

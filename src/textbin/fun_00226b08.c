@@ -6,7 +6,7 @@
 #include "rnc/gameplay/state/options.h"
 #include "rnc/gameplay/state/game_globals.h"
 
-/* Preserves selected state across func_00209370 using scratchpad copies.
+/* Preserves selected state across load_and_initialize_level_chunk using scratchpad copies.
    Only listed bytes of item_available are restored; each D_00141EA0 entry is
    cleared when its referenced byte is zero. The two saved flags are then
    restored, the counter is advanced, the clock is refreshed, and a

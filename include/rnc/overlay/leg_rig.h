@@ -6,7 +6,7 @@
 /* Two-legged walker rig kept in a moby's pvars (Eudora: at pvars + 0x160).
  * Set up by FUN_L04_002d1418, refreshed by FUN_L04_00295de8. */
 
-/* Attachment record handed to attach_manipulator (FUN_0020cb10). */
+/* Attachment record handed to attach_manipulator. */
 typedef struct {
     /* 0x00 */ u8 unk0;
     /* 0x01 */ u8 attached;
@@ -45,7 +45,7 @@ typedef struct {
 typedef struct {
     /* 0x00 */ s32 id;                /* animation sequence id */
     /* 0x04 */ f32 unk4;
-    /* 0x08 */ f32 rate;              /* unk4 / FUN_001f96b0(len * 2) */
+    /* 0x08 */ f32 rate;              /* unk4 / multiply_global_factor_ed64(len * 2) */
     /* 0x0C */ f32 start;             /* FUN_L04_002418b0(class slot, id) */
     /* 0x10 */ f32 len;               /* FUN_L04_00241910(class slot, id) - start */
     /* 0x14 */ u8 pad14[0xC];
@@ -53,7 +53,7 @@ typedef struct {
 } LegRigAnim;
 
 typedef struct {
-    /* 0x000 */ f32 pts[6][4];        /* joint positions from FUN_0020cd48 */
+    /* 0x000 */ f32 pts[6][4];        /* joint positions from transform_scaled_vertex_batch */
     /* 0x060 */ u8 pad60[0xC];
     /* 0x06C */ f32 heading;          /* turn target while unkEE & 4 is set */
     /* 0x070 */ LegRigAnim *anims[13];

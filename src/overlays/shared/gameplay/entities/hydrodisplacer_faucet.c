@@ -110,7 +110,7 @@ void FUN_L05_002f5190(int a, int b, int i, int c) {
 typedef struct {
     s32 path;          /* -1, or an index into D_L05_001B0930 */
     f32 radius;        /* > 0: trigger when the target is this close */
-    s32 volumes[6];    /* -1, or a clip volume FUN_00214720 tests */
+    s32 volumes[6];    /* -1, or a clip volume is_point_inside_clip_volume tests */
     s32 on_lists[12];  /* -1, or a list run by FUN_L05_002f5190 */
     s32 on_mobys[11];  /* -1, or a moby passed to FUN_L05_002f4f60 */
     u8 pad7C[2];

@@ -14,8 +14,8 @@ extern void rot_216130(float *, float *) __asm__("FUN_001fa070");
 extern void multiply_matrix(Mtx44 *, float *, Mtx44 *) __asm__("FUN_001fa378");
 
 /* Matrix to Euler angles: on a copy of src with the translation cleared,
-   read the Z angle from row 0, undo it (FUN_001fa050 builds the Z
-   rotation, FUN_001fa378 multiplies), read and undo Y the same way,
+   read the Z angle from row 0, undo it (euler_rotation_matrix builds the Z
+   rotation, multiply_matrix multiplies), read and undo Y the same way,
    then read X from row 1; out = (x, y, z). The last undo vector is
    filled but never used. The four TImode row copies give retail's
    interleaved lq/sq (a whole-struct copy becomes ld/sd here). */

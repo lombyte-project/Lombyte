@@ -34,7 +34,7 @@ extern void project_to_screen(f32 *, void *) __asm__("func_001F2070");
 extern void spawn_particle_burst(void *, f32, f32) __asm__("func_001EE008");
 
 /* Draws every queued sprite with a resource outside states 0xFE and 0xFD:
-   at its projected screen position (func_001F2070, then relative to the
+   at its projected screen position (project_to_screen, then relative to the
    D_0013E500 offset in 1/16 units) or, for unprojected ones, at the
    screen centre; then empties the queue. Camera mode 0x72 discards it. */
 void render_queued_rotated_sprites(void) __asm__("FUN_001ee338");

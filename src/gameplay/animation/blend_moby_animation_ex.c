@@ -29,13 +29,13 @@ extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 extern float convert_integer_to_float(int arg0) __asm__("func_001FA6C0");
 extern void FUN_0020ede8(void *, int);
 /* Re-registers this MobyAnim in the shared slot table (D_001B2F40, via
-   func_0020CC18) when it hasn't settled yet (unk54 > 0.025, or unk60/unk64
+   find_or_allocate_id_slot) when it hasn't settled yet (unk54 > 0.025, or unk60/unk64
    nonzero) or the caller forces it (arg4 & 4): builds a flags byte from
    arg4 bits 0/1 (0x100/0x200), hands it to FUN_0020ede8, snapshots this
    moby's unkF0 vector into the matching D_001B2C00 slot, remembers the
    old seq in unkA5 (unless it was already 0xFF), then marks seq 0xFF and
    frame = slot. Either way it then sets nextFrame/prevSeq from arg2/arg1,
-   refreshes frame pointers (func_0020C880), arms the timer (unk58 = 1),
+   refreshes frame pointers (update_moby_animation_state), arms the timer (unk58 = 1),
    resets unk54, clears unk70 bit 1, stores 1/func_001FA6C0(arg3) into
    unk5C, and copies a not-yet-named byte (offset 0x11) out of
    pClass->seqs[arg1] into unk7C. */

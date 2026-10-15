@@ -163,7 +163,7 @@ struct Moby_A4D88 {
     void *unkB8; /* 0xB8: bolt source record; its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
     u8 unkBC;
     u8 padBD[3];
-    Vec4f_A4D88 unkC0; /* 0xC0: first row of a matrix built from rot (FUN_001fa030) */
+    Vec4f_A4D88 unkC0; /* 0xC0: first row of a matrix built from rot (euler_rotation_basis) */
     Vec4f_A4D88 unkD0;
     Vec4f_A4D88 unkE0;
     u8 padF0[0x10];

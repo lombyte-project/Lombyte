@@ -6,7 +6,7 @@
 /*
  * Controller state D_0013C940, polled each frame by poll_pad_device_state
  * (state machine on profile_state) and filled by process_pad_input
- * (FUN_00217328); socket set up by init_pads.
+ * (process_pad_input); socket set up by init_pads.
  *
  * Button masks: process_pad_input ORs left-stick directions into `held`
  * (0x8000/0x2000 x, 0x1000/0x4000 y) and swaps 0x8000/0x2000 when the

@@ -352,7 +352,7 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
-/* Multiplies the 001fa050 matrices of (x, y, z) and of a+0x40, stored back by FUN_00214598. */
+/* Multiplies the 001fa050 matrices of (x, y, z) and of a+0x40, stored back by matrix_to_euler. */
 void FUN_L00_00262480(char *a, float x, float y, float z) {
     float in[3];
     float t[16], u[16];

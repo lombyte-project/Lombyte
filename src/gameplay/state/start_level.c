@@ -22,8 +22,8 @@ extern void sceGsSyncVCallback(void (*)(void));
 extern void hud_send_texture(int, int, int, int, int, int) __asm__("func_00200B10");
 /* Start level `level`: pick its two load parameters from the level
    table in disc_table (the alternate set while D_0015ED80 is set), stop
-   sound and wait for the loader (func_002093D8) to go idle, then load it
-   (func_0023A3B8) and reset the display state. */
+   sound and wait for the loader (memcard_update_state) to go idle, then load it
+   (play_mpeg_movie) and reset the display state. */
 void start_level(int level) __asm__("FUN_001e9488");
 
 extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;

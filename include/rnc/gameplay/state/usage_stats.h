@@ -10,7 +10,7 @@
  * OR (1 << current_level_index) | 0x80000000 into level_mask.
  * Known writers: record 9 (overlay entities), 11 (button 0x40 held over
  * 90 frames), 12 and 29 (hero), 18 (hero), 21 (quick-select slot assigned,
- * FUN_0021c7a0), 31 (hero). Records 0-8 and the size past 0x100 are unseen.
+ * update_menu_item_slots), 31 (hero). Records 0-8 and the size past 0x100 are unseen.
  */
 struct UsageStat {
     u16 count;      /* saturating counter */

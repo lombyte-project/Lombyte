@@ -23,8 +23,8 @@ extern float D_001D97D0[][4][4];
 /* Draws a light flare quad at arg0's position (+0x00; the matrix is at
    +0xC0) when FUN_001fa820 finds it on screen, with the alpha it
    returns. In D_0015F604 mode 6 with flare set 3, the flare fades as
-   level_render_state's level passes FUN_001f96f8(150), and its depth comes from
-   func_00213508. The corners are D_001D97D0[set]. */
+   level_render_state's level passes scale_game_frames(150), and its depth comes from
+   probe_ground_height. The corners are D_001D97D0[set]. */
 void draw_light_flare(char *object) __asm__("FUN_0022df40");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;

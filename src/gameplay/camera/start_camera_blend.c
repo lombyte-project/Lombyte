@@ -15,8 +15,8 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 /* Camera mode update from arg (its +0x30 vector is copied). In mode 1
    the sub-mode at +3 picks what is captured from it: 0 the +0x50/+0x60
-   pair, 2 the +0xC0/+0xD0 pair and func_001EC710's angles, otherwise
-   D_0013F350's axes and func_001EC530's yaw/pitch/dist into +0x70. Other
+   pair, 2 the +0xC0/+0xD0 pair and capture_camera_orientation's angles, otherwise
+   D_0013F350's axes and compute_camera_angles's yaw/pitch/dist into +0x70. Other
    modes restore through func_001EC7F0/func_001EC868. Then the mode
    becomes 3, +2 takes the sub-mode, and either the +0x10 blend resets or
    the +0x70 timer advances. */

@@ -85,7 +85,7 @@ struct Moby {
     void *parent;                     /* 0xB8: spawner (bolt source record); its byte 0xB1 is a per-level id (FUN_L00_002a6b70) */
     u8 command;                       /* external command byte */
     u8 padBD[3];
-    Vec4f rot_row0;                   /* 0xC0: rows of the matrix built from rot (FUN_001fa030) */
+    Vec4f rot_row0;                   /* 0xC0: rows of the matrix built from rot (euler_rotation_basis) */
     Vec4f rot_row1;
     Vec4f rot_row2;
     u8 padF0[0x10];

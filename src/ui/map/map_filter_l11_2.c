@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp (src/game/menu.c, func_00208030). */
+/* Ported from rac1-decomp (src/game/menu.c, downsample_map_coverage). */
 #include "sda.h"
 extern unsigned char D_0013D3E0 NOT_SDA;
 int map_filter_l11_2(int arg0, float unused1, float unused2, float arg1) __asm__("FUN_00207800");

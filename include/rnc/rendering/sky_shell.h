@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* Quadword scaled by FUN_0022eaa8 and copied into each sky shell transform. */
+/* Quadword scaled by update_level_gameplay_frame and copied into each sky shell transform. */
 /* Keep the existing byte address label: qcopy accesses 16 bytes from it. */
 extern u8 D_00160460;
 

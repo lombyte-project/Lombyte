@@ -639,7 +639,7 @@ typedef struct {
     s16 pad42;
     s16 h44;
     s16 pad46;
-    s16 h48;            /* 0x48: frame at which FUN_00215b10 runs */
+    s16 h48;            /* 0x48: frame at which continue_audio_stream_if_ready runs */
     char pad4A[0xA];
     CutsceneCameraKey *f54;
     char pad58[0x120];

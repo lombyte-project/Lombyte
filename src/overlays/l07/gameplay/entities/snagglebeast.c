@@ -2271,7 +2271,7 @@ extern void FUN_L01_0026e0e0(s32, s32);
 
 typedef struct {
     u8 pad0[0x20];
-    f32 health;            /* 0x20: lowered by FUN_00213928 */
+    f32 health;            /* 0x20: lowered by hit_85b8 */
     u8 pad24[0x14];
     struct Moby *target;   /* 0x38 */
     u8 pad3C[0x24];
@@ -2427,7 +2427,7 @@ typedef struct {
 /* pvars of a swooper. */
 typedef struct {
     u8 pad0[0x20];
-    u8 collision[9];       /* 0x20: contact state for FUN_00213928 */
+    u8 collision[9];       /* 0x20: contact state for hit_85b8 */
     u8 unk29;              /* 0x29 */
     u8 pad2A[0xE];
     struct Moby *perch;    /* 0x38 */

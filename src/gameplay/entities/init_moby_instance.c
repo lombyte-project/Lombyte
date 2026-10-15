@@ -81,7 +81,7 @@ extern void update_moby_animation_state(void *) __asm__("func_0020C880");
    array base D_0015FF18), flags a class with no D_001B3580 entry, then
    copies the class record D_001B3200[class] (or marks the moby dead when
    there is none) and applies the animation-sequence rules after
-   func_0020C880. The moby is a real struct so its non-byte stores are "in
+   update_moby_animation_state. The moby is a real struct so its non-byte stores are "in
    struct" and D_0015FF18's load can move above them; the class load comes
    first, and the default stores are ordered so that sched1's
    register-pressure tie-break (stores that free a register go first)

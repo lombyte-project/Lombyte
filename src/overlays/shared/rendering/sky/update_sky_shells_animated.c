@@ -127,7 +127,7 @@ extern char D_L00_001BD7E0[];
 extern char *D_L00_0016051C;
 void set_identity_matrix() __asm__("FUN_001f9fc8");
 void FUN_0022b690();
-/* Runs FUN_001f9fc8 on D_L00_001BD7E0 and draws each sky shell. */
+/* Runs set_identity_matrix on D_L00_001BD7E0 and draws each sky shell. */
 void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
 void update_sky_shells_static(void) {
     int i;

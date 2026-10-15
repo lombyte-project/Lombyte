@@ -9,11 +9,11 @@ struct MenuScreen;
  * One page of the front-end menu: up to 14 screens, each paired with one of
  * the 14 menu mobys (D_001D5D90). Size 0x88 (only the fields used so far).
  *
- * FUN_002192a8 switches pages: it plays moby_anims[i] on D_001D5D90[i], copies
+ * update_menu_system switches pages: it plays moby_anims[i] on D_001D5D90[i], copies
  * state into menu_system.state, runs the enter/leave/update handlers of
  * screens[], and moves pending_focus into focus on the next update.
- * confirmed is the answer of the confirm page: FUN_00221af0 sets 1 for pad
- * bit 0x20 and 0 for 0x10, FUN_00221a48 clears it on enter; the save screens
+ * confirmed is the answer of the confirm page: update_menu_confirm_page sets 1 for pad
+ * bit 0x20 and 0 for 0x10, enter_menu_prompt clears it on enter; the save screens
  * start saving once menu_system.previous->confirmed != 0.
  */
 struct MenuPage {
@@ -32,33 +32,33 @@ struct MenuPage {
  *
  * One struct, not adjacent globals: retail code materialises the base
  * 0x1D5BF0 (lui/addiu %lo(D_001D5BF0)) and then reaches 0x4..0x144 through
- * that one register in the same function: FUN_002192a8 (0x4..0x110),
- * FUN_00218f98 init (0x4..0x124), fun_0021e230 (0x4, 0x118..0x120,
+ * that one register in the same function: update_menu_system (0x4..0x110),
+ * FUN_00218f98 init (0x4..0x124), update_item_preview_binding (0x4, 0x118..0x120,
  * 0x140, 0x144), load_hand_gadget/FUN_00224368 (0x1C..0x3C, 0xCC,
- * 0x118..0x144), fun_002240c8 (0x1C, 0xA0..0xCA, 0x11C..0x120),
- * fun_00225e70 (0x30..0x38, 0xBC..0xCC), FUN_00218d78 (0xC..0x13C).
+ * 0x118..0x144), initialize_menu_preview_objects (0x1C, 0xA0..0xCA, 0x11C..0x120),
+ * update_preview_animation_and_attachments (0x30..0x38, 0xBC..0xCC), pause_all_sounds (0xC..0x13C).
  * gcc never folds two separate globals onto one base register, so these are
  * members of one object. D_001D5D90 (menu mobys) and D_001D5DD0
  * (manipulators) are never reached from this base and stay separate.
  *
  * Evidence for the less obvious fields:
- * - close_request: nonzero makes FUN_002192a8 call FUN_002191b8 (release the
+ * - close_request: nonzero makes update_menu_system call close_menu_system (release the
  *   page, state 20); 1 from a screen update, 3 with unkE4..unkF4 set
- *   (fun_00221968, draw_map_screen), 3/4/5 from fun_0021abf8.
+ *   (fun_00221968, draw_map_screen), 3/4/5 from update_menu_entry_actions.
  * - equipped: D_001863D8[id] +0 names the slot; draw_menu_item_grid draws the
  *   held item with frame +1; load_hand_gadget builds the preview mobys from
- *   slots 0..3; fun_0021b858 never clears slots 0 and 3.
+ *   slots 0..3; update_menu_grid_selection never clears slots 0 and 3.
  * - preview stream (0xA0-0xCF): buffers from select_next_stream_buffer(1) at
- *   preview init; fun_00225e70 reads animations at or above
+ *   preview init; update_preview_animation_and_attachments reads animations at or above
  *   streamed_animation_base from the stream archive (id - base);
  *   pending_buffer is cleared by complete_stream_buffer_transfer and
  *   clear_preview_animation_queue.
  * - unkD4: 0 from saving_data_menu, 1/2 from saving_data_menu2 (flags
  *   0x2000); draw_prompt_box shows text 0x4FB3 for 0..2, 0x4FB5 for 3.
- * - unkD8: fun_002196b8 draws panel slot 6 only while set; pause_all_sounds
+ * - unkD8: render_level_effects_and_screen_sprites draws panel slot 6 only while set; pause_all_sounds
  *   sets it and picks page tables D_001CE798 by it.
  * - resource_table_toggle: select_world_object_resource_tables(class,
- *   toggle == 0), then stored negated (load_hand_gadget, fun_0021e230);
+ *   toggle == 0), then stored negated (load_hand_gadget, update_item_preview_binding);
  *   load_hand_gadget builds the preview moby once unk120 equals the
  *   selected class.
  * - unk134 / unk138: while set, pages with flags 8 / 4 are skipped
@@ -67,7 +67,7 @@ struct MenuPage {
  *   D_001940C0[1] / [2] by FUN_00218f98.
  */
 struct MenuSystem {
-    /* Page switching (FUN_002192a8) */
+    /* Page switching (update_menu_system) */
     s32 state;                /* 0x000: menu state, from page->state; 0x2D at init */
     struct MenuPage *current; /* 0x004: active page */
     struct MenuPage *next;    /* 0x008: requested page */
@@ -82,9 +82,9 @@ struct MenuSystem {
 
     /* Preview animation stream */
     s32 stream_buffer[2];     /* 0x0A0: double buffer */
-    s32 unkA8;                /* 0x0A8: fun_00226848 first-resource argument */
-    s32 unkAC;                /* 0x0AC: fun_00226848 count argument */
-    s32 unkB0[3];             /* 0x0B0: buffer addresses read by fun_00226848 */
+    s32 unkA8;                /* 0x0A8: load_preview_resource_bindings first-resource argument */
+    s32 unkAC;                /* 0x0AC: load_preview_resource_bindings count argument */
+    s32 unkB0[3];             /* 0x0B0: buffer addresses read by load_preview_resource_bindings */
     s32 read_offset;          /* 0x0BC: offset of the data in the read buffer */
     s32 unkC0;                /* 0x0C0: -1 at preview init */
     u8 pad_C4[0x4];
@@ -95,12 +95,12 @@ struct MenuSystem {
 
     struct MenuPage *previous; /* 0x0D0: page left by the last switch */
     s32 unkD4;                /* 0x0D4: 0 saving_data_menu, 1/2 saving_data_menu2; picks draw_prompt_box text */
-    s32 unkD8;                /* 0x0D8: fun_002196b8 draws slot 6 only while set */
+    s32 unkD8;                /* 0x0D8: render_level_effects_and_screen_sprites draws slot 6 only while set */
     s32 unkDC;                /* 0x0DC: pause_all_sounds: (mode == 0x23) */
     s32 unkE0;                /* 0x0E0: memcard_make_whole_save / memcard_restore_game argument */
     s32 unkE4;                /* 0x0E4: written with unkF0/unkF4 before close_request 3 */
     u8 pad_E8[0x4];
-    s32 unkEC;                /* 0x0EC: menu_action_messages[] entry (fun_0021abf8) */
+    s32 unkEC;                /* 0x0EC: menu_action_messages[] entry (update_menu_entry_actions) */
     struct MenuPage *unkF0;   /* 0x0F0: menu_system.current, or D_001CF418 (draw_map_screen) */
     s32 unkF4;                /* 0x0F4: 0, 2, 0xB or 0xF */
     s32 unkF8;                /* 0x0F8: read by pause_all_sounds */
@@ -112,7 +112,7 @@ struct MenuSystem {
     s32 help_text_buffer;     /* 0x108: help text read target, D_001940C0[1] + 0xDC000 */
     s32 unk10C;               /* 0x10C: D_001940C0[2] + 0x180000 */
 
-    s32 update_count;         /* 0x110: FUN_002192a8 updates */
+    s32 update_count;         /* 0x110: update_menu_system updates */
     u8 pad_114[0x4];
 
     /* Preview moby resources */
@@ -126,7 +126,7 @@ struct MenuSystem {
     u8 pad_130[0x4];
     s32 unk134;               /* 0x134: hides pages / items with flags 8 */
     s32 unk138;               /* 0x138: hides pages / items with flags 4 */
-    s32 unk13C;               /* 0x13C: written by FUN_00218d78 */
+    s32 unk13C;               /* 0x13C: written by pause_all_sounds */
     s32 unk140;                        /* 0x140: oclass at the last resource table select */
     s32 last_resource_table_toggle;    /* 0x144: resource_table_toggle at the last select */
 }; /* size 0x148 */

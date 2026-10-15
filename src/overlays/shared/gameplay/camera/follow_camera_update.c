@@ -564,7 +564,7 @@ void FUN_L00_002e9f38(u8 *o) {
  *        if (l != 0.0f) { ... }
  *    Nesting the second test inside the first leaves the first `bc1t`
  *    delay slot empty; flat lets the `daddu $4,$s0,$zero` that sets up the
- *    later FUN_001f9ab0 call fall into it, as retail has it.
+ *    later fast_vec_dot call fall into it, as retail has it.
  */
 
 typedef struct {

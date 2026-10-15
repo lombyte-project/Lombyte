@@ -9,7 +9,7 @@ extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, vo
 /* Builds three unit vectors from D_0013F350's +0x2080 pointer table
    (+0xC0/+0xD0/+0xE0 offsets, re-read at each call as retail does),
    stashes two of them into D_001871B0's record (+0x90, +0xA0), calls
-   func_001EC530 to compute the camera's yaw/pitch/dist into +0x70,
+   compute_camera_angles to compute the camera's yaw/pitch/dist into +0x70,
    then copies +0xD0 back over +0xB0 (retail's qcopy, see common.h). */
 void capture_camera_orientation(void) __asm__("FUN_001ec710");
 

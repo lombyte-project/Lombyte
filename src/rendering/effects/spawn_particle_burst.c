@@ -8,9 +8,9 @@ extern void append_rotated_sprite_quad(float, float, float, float, float, int, i
 /*
  * Spawns a burst of particle effects around (x, y) using the source
  * object's unk10 (a size, scaled by 40.0f) and unk18 (looked up through
- * func_001F44B8 to get a handle passed on to FUN_001f5ab0). unk2C picks
+ * get_effect_texture to get a handle passed on to append_rotated_sprite_quad). unk2C picks
  * the pattern: 0 -- a fan of unk26 particles, stepping the angle (unk1C)
- * by unk28 each time (func_001FA580 adds and wraps the angle); 1 -- four
+ * by unk28 each time (fast_add_rotations adds and wraps the angle); 1 -- four
  * particles offset from the point along and across the current angle;
  * 2 -- a single particle. Matching the case order (1, then 0 vs
  * negative, then 2 vs default) needed a real switch so gcc's own

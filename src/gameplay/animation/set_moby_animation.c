@@ -26,7 +26,7 @@ extern void update_moby_animation_state(void *) __asm__("func_0020C880");
 /* Sets moby m's animation to sequence seq at frame (clamped to the
    sequence's last frame), the next frame to frame + 1 (clamped the same
    way, 0 if still out of range), refreshes the frame pointers
-   (func_0020C880) and copies the first float of the new frame to +0x5C.
+   (update_moby_animation_state) and copies the first float of the new frame to +0x5C.
    The frame count is re-read through the class at each test, as retail
    reloads it after the byte stores. */
 void set_moby_animation(MobyAnim *m, int seq, int frame) __asm__("FUN_00212ed8");

@@ -378,7 +378,7 @@ extern u8 D_L00_00179118[];
 int FUN_001f96f8_00263d40(int) __asm__("FUN_001f96f8");
 int FUN_001fdd10_00263d40(int) __asm__("FUN_001fdd10");
 void FUN_001165b8_00263d40(char *, int) __asm__("FUN_001165b8");
-/* Calls FUN_001165b8 with D_L00_00179118 and FUN_001fdd10(a); stores b (default 0xB4 frames). */
+/* Calls strcpy with D_L00_00179118 and get_help_message_text(a); stores b (default 0xB4 frames). */
 void queue_dialogue_message(int a, int b) __asm__("FUN_L00_00263d40");
 void queue_dialogue_message(int a, int b) {
     if (b == -1)
@@ -391,7 +391,7 @@ extern s32 D_L00_0015F640;
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 get_help_message_text() __asm__("FUN_001fdd10");
 void sprintf() __asm__("FUN_00116248");
-/* Calls FUN_00116248 on D_L00_00179118 with help message a and b; c frames (default 0xB4). */
+/* Calls sprintf on D_L00_00179118 with help message a and b; c frames (default 0xB4). */
 void FUN_L00_00263db0(s32 a, s32 b, s32 c) {
     if (c == -1)
         c = scale_game_frames(0xB4);

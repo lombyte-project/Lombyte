@@ -507,7 +507,7 @@ add_branch:
     }
 }
 #endif
-/* Damage request passed to the collision line test (FUN_001efa68). */
+/* Damage request passed to the collision line test (coll_line_fix). */
 typedef struct {
     f32 v[4];          /* 0x0: push direction xy; w 5627.925 */
     struct Moby *moby; /* 0x10: source */

@@ -352,7 +352,7 @@ extern f32 random_float(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 truncate_time(f32) __asm__("FUN_001fa6d0");
 extern s32 lerp_color(s32, s32, f32) __asm__("FUN_001fa6e0");
-/* FUN_001f9bf8 (out = in scaled to length s), with the float declared first (same registers): the scale is then
+/* fast_vec_normalize (out = in scaled to length s), with the float declared first (same registers): the scale is then
  * evaluated before the vector addresses, as in retail. */
 extern void scale_vector_by(f32 s, void *out, void *in) __asm__("FUN_001f9bf8");
 extern void add_vector(void *, void *, void *) __asm__("FUN_001f9a10");

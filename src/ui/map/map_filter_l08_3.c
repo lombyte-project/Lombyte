@@ -1,4 +1,4 @@
-/* FUN_00207508's twin with other thresholds. The function is 116 bytes:
+/* map_filter_l08_2's twin with other thresholds. The function is 116 bytes:
    its last three words (`move v0,0; jr ra; nop`) were split off as a
    separate FUN_002075e8, which no caller uses. */
 int map_filter_l08_3(int frame, float unused0, float unused1, float value) __asm__("FUN_00207580");

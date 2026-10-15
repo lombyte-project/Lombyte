@@ -6,10 +6,10 @@ extern int snd_get_movie_nax(void) __asm__("FUN_0012f178");
 extern void send_to_spu(struct AudioDec *, unsigned char *, int, int) __asm__("func_0023AF18");
 /* sendADPCM(_AudioDec *): once enough is buffered (state 1: 4 KiB,
    filling the IOP buffer from iopLastPos; state 2: the free space behind
-   the SPU position FUN_0012f178 reports), sends 1 KiB per channel at a
+   the SPU position snd_get_movie_nax reports), sends 1 KiB per channel at a
    time: each channel's interleaved blocks are gathered from the ring
    buffer into D_001612BC, the ADPCM loop/start flags are patched at the
-   buffer's start (spuPos 0) and end (spuPos 0xC00), and func_0023AF18
+   buffer's start (spuPos 0) and end (spuPos 0xC00), and send_to_spu
    sends it to i * 0x1000 + spuPos. The space counter is decremented at
    the end of the body, so it is its own register at the loop test as
    in retail; the header bytes go through a local copy of the buffer

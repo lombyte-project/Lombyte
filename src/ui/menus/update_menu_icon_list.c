@@ -2,7 +2,7 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_system.h"
 
-/* Pause list handler (func_0022DA68's family): one `char *` pad local per
+/* Pause list handler (allocate_voice_for_target_entry's family): one `char *` pad local per
    block. The cursor at menu+0x3C moves on 0x1000/0x4000 within
    menu+0x40, with a notify on change; then the scroll (menu+0x60) is
    clamped around the cursor and the bar position at menu+0x5C derived

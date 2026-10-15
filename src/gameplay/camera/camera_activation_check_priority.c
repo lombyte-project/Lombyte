@@ -21,7 +21,7 @@ extern CamPrioHook D_001E8C00[];
    take over from `other`. An inactive camera (+0x7C) never does; the camera
    type's +4 hook (D_001E8C00) may decide first (-1 no, 1 yes); otherwise
    the mode at +0x74 decides: 0 (and 1/2 once +0x7D is set) by priority
-   byte, 4 through func_00214720 on the target record, 7 by the level's
+   byte, 4 through is_point_inside_clip_volume on the target record, 7 by the level's
    mode and target. Each case ends in `if (x) return 1;` falling out to the
    one shared `return 0;`, which is what lets cross-jumping and reorg give
    retail's branches; case 7's final test shares its `return 1` with the

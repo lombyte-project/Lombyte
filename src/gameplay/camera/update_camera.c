@@ -22,9 +22,9 @@ extern void update_camera_environment_from_regions(void *) __asm__("FUN_001ee4b0
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 /* Camera update, once per frame: count the frame, run the camera
    steps, then (unless the D_0018C318 freeze flag is set) take the view
-   from the target object (mode 3 blends it through FUN_001ed2b0) and
-   refresh its Euler angles; run func_001ED360 on the two vectors at
-   D_001870A0, func_001ED7F0 and FUN_001ee4b0, and, with
+   from the target object (mode 3 blends it through update_camera_blend) and
+   refresh its Euler angles; run apply_camera_shake on the two vectors at
+   D_001870A0, update_camera_underwater_flag and update_camera_environment_from_regions, and, with
    D_0015EDB4 set, the matrix's third row as a cross product. */
 void update_camera(void) __asm__("FUN_001edaa8");
 

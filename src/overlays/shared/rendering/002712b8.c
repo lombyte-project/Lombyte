@@ -1105,7 +1105,7 @@ struct EmberParticle {
     s32 color;         /* 0x4: 0xAABBGGRR */
     u8 spin;           /* 0x8 */
     u8 unk9;
-    s16 life;          /* 0xA: frames left (FUN_001f9770) */
+    s16 life;          /* 0xA: frames left (fast_dec_timer_s16) */
     f32 size;          /* 0xC */
     Vec4 pos;          /* 0x10 */
     struct EmberMotion m;  /* 0x20 */
@@ -1880,7 +1880,7 @@ extern int D_L00_00160240 __attribute__((sda));
 void FUN_L00_00259430();
 int FUN_001f9770(void *);
 void FUN_L00_00267a08();
-/* Lowers the top byte at p+4 by D_L00_00160240; calls 00267a08 once FUN_001f9770(p+0xA) is set. */
+/* Lowers the top byte at p+4 by D_L00_00160240; calls 00267a08 once fast_dec_timer_s16(p+0xA) is set. */
 void FUN_L00_00275810(char *p) {
     FUN_L00_00259430(p + 4, D_L00_00160240);
     if (FUN_001f9770(p + 0xA))

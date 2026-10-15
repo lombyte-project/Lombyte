@@ -2277,7 +2277,7 @@ void FUN_L00_00210b30(void) {
 
 extern void FUN_001f9c48(float *, float *, float);
 
-/* Scales x/y by s and sets or scales z, per component or through FUN_001f9c48. */
+/* Scales x/y by s and sets or scales z, per component or through set_vector_length_xy. */
 void hero_knockback(float *v, int each, float s, float z) __asm__("FUN_L00_00210c80");
 void hero_knockback(float *v, int each, float s, float z) {
     if (each) {
@@ -2656,7 +2656,7 @@ void hero_update(void)
 
 extern float FUN_001f9b20(void *);
 
-/* Length from FUN_001f9b20 on hero.stick_x, capped at 1. */
+/* Length from vector_length_xy on hero.stick_x, capped at 1. */
 float FUN_L00_00211830(void) {
     float len = FUN_001f9b20(&hero.stick_x);
 

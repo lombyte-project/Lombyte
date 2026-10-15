@@ -3,7 +3,7 @@
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
 /* Conjugate-style sandwich: out = quat * (vec with w = 0) * quat_conj, where
-   quat_conj is quat negated with its w kept (FUN_001fa3c0 is the quaternion
+   quat_conj is quat negated with its w kept (multiply_quaternions is the quaternion
    multiply). The 16-byte copy of vec is qcopy's lq/sq. */
 void rotate_vector_by_quaternion(void *out, void *vec, void *quat) __asm__("FUN_00214800");
 

@@ -1,4 +1,4 @@
-/* Ported from rac1-decomp (src/game/menu.c, FUN_002073b8). */
+/* Ported from rac1-decomp (src/game/menu.c, map_filter_l07_7). */
 #include "sda.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"

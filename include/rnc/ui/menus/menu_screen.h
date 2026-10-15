@@ -14,15 +14,15 @@
 struct MenuScreenWords {
     u8 pad_30[0x4];
     s32 unk34;        /* 0x34: flags 0x40 / 0x80 (draw_map_screen) */
-    s32 unk38;        /* 0x38: cleared by FUN_0021d1f8 */
-    s32 unk3C;        /* 0x3C: stream buffer (FUN_00225660) */
+    s32 unk38;        /* 0x38: cleared by enter_menu_help_text */
+    s32 unk3C;        /* 0x3C: stream buffer (leave_streamed_moby_screen) */
     u8 pad_40[0x10];
-    s32 unk50;        /* 0x50: 0, 1 or 3 (FUN_0021d1f8) */
-    s32 unk54;        /* 0x54: cleared by FUN_0021d1f8 */
+    s32 unk50;        /* 0x50: 0, 1 or 3 (enter_menu_help_text) */
+    s32 unk54;        /* 0x54: cleared by enter_menu_help_text */
     u8 pad_58[0x8];
 };
 
-/* Option list screen (FUN_00220e28). */
+/* Option list screen (update_menu_option_list). */
 struct MenuOption {
     void *unk0;               /* 0x0: 0 ends the list */
     u8 *flag;                 /* 0x4: toggled by confirm (pad 0x40) */
@@ -37,7 +37,7 @@ struct MenuOptionListData {
     s32 fade_timer;           /* 0x3C: counts down after fade_to_black, drives D_0015F43C */
 };
 
-/* Choice list screen (FUN_002212b8). */
+/* Choice list screen (update_menu_choice_list). */
 struct MenuChoice {
     s32 unk0;                 /* 0x0: 0 ends the list */
     u8 *value;                /* 0x4: chosen option; confirm advances it */
@@ -50,7 +50,7 @@ struct MenuChoiceListData {
     s32 selection;            /* 0x38: pad 0x1000 up, 0x4000 down */
 };
 
-/* Mission list screen (FUN_0021c4c0). */
+/* Mission list screen (update_menu_mission_list). */
 struct MenuMissionListData {
     s32 choice[19];           /* 0x30: selected mission per level; -1 while unfocused */
     s32 count;                /* 0x7C: collect_mission_ids result */
@@ -59,13 +59,13 @@ struct MenuMissionListData {
 /* Item grid screen (draw_menu_item_grid). Cell frames: +1 equipped,
    +2 locked, +4 D_0013E520. Locked: flags 4 / 8 with menu_system.unk138 /
    unk134 set. The up/down/left/right screens take the focus when the cursor
-   leaves the grid on that side (fun_0021b858). */
+   leaves the grid on that side (update_menu_grid_selection). */
 struct MenuGridCell {
     u16 icon;                 /* 0x0: get_icon_frame icon */
     s16 frame;                /* 0x2: first frame */
     s16 kind;                 /* 0x4: 0 = item (owned D_0013D4C0[id]), else D_0013D388[id] */
     s16 id;                   /* 0x6: item id */
-    s16 stream_entry;         /* 0x8: stream entry shown for this cell (fun_0021fdc8) */
+    s16 stream_entry;         /* 0x8: stream entry shown for this cell (update_menu_resource_stream) */
 }; /* size 0xA */
 
 struct MenuItemGridData {
@@ -82,7 +82,7 @@ struct MenuItemGridData {
     struct MenuScreen *right; /* 0x58 */
 };
 
-/* Icon list screen (FUN_00219fa0). */
+/* Icon list screen (draw_menu_icon_list). */
 struct MenuIcon {
     u16 icon;                 /* 0x0: get_icon_frame icon */
     s16 frame;                /* 0x2: get_icon_frame frame */
@@ -99,27 +99,27 @@ struct MenuIconListData {
 };
 
 /* Save slot screen (saving_data_menu, saving_data_menu2, loading_data_menu,
-   draw_save_slot_list). Enter fun_00222f18 takes a stream buffer into
-   save_data and sets step 0; leave fun_00222f58 gives the buffer back.
+   draw_save_slot_list). Enter enter_save_slot_screen takes a stream buffer into
+   save_data and sets step 0; leave leave_save_slot_screen gives the buffer back.
    flags 0x2000 is the second variant (FUN_00226b08, page D_001D4F98). */
 struct MenuSaveSlotData {
     s32 flags;                /* 0x30: bit 0 pad repeat mask, 0x2000 second variant */
     u8 pad_34[0xC];
     s32 slot;                 /* 0x40: memory card slot 0..4, mirrored in D_0015EE34 */
     u8 pad_44[0x4];
-    s32 save_data;            /* 0x48: buffer for prepare_save_game / FUN_00226a70 */
+    s32 save_data;            /* 0x48: buffer for prepare_save_game / start_memory_card_save */
     s32 step;                 /* 0x4C: 0 idle, 1 start saving, 2 started */
 };
 
-/* Confirm prompt screen (draw_prompt_box). Enter fun_00221a48 clears
-   menu_system.current->confirmed and takes the buffer; leave fun_00221a88
+/* Confirm prompt screen (draw_prompt_box). Enter enter_menu_prompt clears
+   menu_system.current->confirmed and takes the buffer; leave leave_menu_prompt
    gives it back (complete_stream_buffer_transfer). */
 struct MenuPromptData {
     u8 pad_30[0x24];
     s32 buffer;               /* 0x54: stream buffer */
 };
 
-/* Item slot screen (FUN_0021c7a0). Confirm stores the grid's selected item
+/* Item slot screen (update_menu_item_slots). Confirm stores the grid's selected item
    at cursor, clears its old slot and advances the cursor. */
 struct MenuItemSlotsData {
     s32 items[8];             /* 0x30: item id per slot */
@@ -134,7 +134,7 @@ struct MenuCycleData {
 
 /*
  * Text list screen (draw_menu_text_list, render_localized_ui_entry_list,
- * fun_0021abf8). Entry actions on confirm (fun_0021abf8): 0 none (dimmed,
+ * update_menu_entry_actions). Entry actions on confirm (update_menu_entry_actions): 0 none (dimmed,
  * skipped), 1/3 open page param, 4/5 mode_freeze_init(3, param), 6 message
  * close, 7/8/10 close with param, 9 requested level, 11 close; 2 draws text
  * 0x4F54. FUN_00221d68 steps `selected` modulo 30 with pad 0x40/0x20;
@@ -164,8 +164,8 @@ struct MenuTextListData {
 };
 
 /*
- * Resource stream screen (fun_0021fdc8, fun_0021f990, enter fun_0021fce0,
- * leave fun_0021fd78, draw_checking_memory_card_data_menu): streams the
+ * Resource stream screen (update_menu_resource_stream, update_menu_stream_image, enter enter_menu_stream_image,
+ * leave leave_menu_stream_image, draw_checking_memory_card_data_menu): streams the
  * entry picked by `flags` into one of two buffers.
  * flags: entry source 1 fixed_entry, 2 D_001A0314[0], 4 focus grid cell,
  * 0x100 focus save slot; 0x20 read to the buffer end and decompress_wad;
@@ -192,7 +192,7 @@ struct MenuStreamData {
     s32 read_offset;          /* 0x60: data offset of a flags 0x20 read */
 };
 
-/* Item preview screen (FUN_0021e110, draw_available_item_preview_mobys,
+/* Item preview screen (draw_item_preview_screen, draw_available_item_preview_mobys,
    update_item_preview_moby). */
 struct MenuItemPreviewData {
     u8 pad_30[0x14];
@@ -200,7 +200,7 @@ struct MenuItemPreviewData {
     char *second_moby;        /* 0x48: optional, drawn after moby */
 };
 
-/* Label screen (fun_0021a328). flags: 8/0x10 font; value source 0x20
+/* Label screen (render_configured_text_label). flags: 8/0x10 font; value source 0x20
    current level, 0x40 D_001A0314, 0x80 focus list selection, 0x100 focus
    grid cell, 0x1000 help entry of the focus list item. */
 struct MenuLabelData {
@@ -215,17 +215,17 @@ struct MenuLabelData {
 };
 
 /*
- * One screen of a menu page (MenuPage.screens). FUN_002192a8 calls update
+ * One screen of a menu page (MenuPage.screens). update_menu_system calls update
  * every frame (nonzero sets menu_system.close_request), enter when the page
  * becomes current (arg 0) or the screen gains focus (arg 1), and leave the
- * other way round (also FUN_002191b8).
+ * other way round (also close_menu_system).
  */
 struct MenuScreen {
     s32 (*update)(struct MenuScreen *);      /* 0x00 */
     u8 pad_4[0x4];
     void (*enter)(struct MenuScreen *, s32); /* 0x08 */
     void (*leave)(struct MenuScreen *, s32); /* 0x0C */
-    s32 unk10;                /* 0x10: bit 2 set by FUN_0021d1f8 */
+    s32 unk10;                /* 0x10: bit 2 set by enter_menu_help_text */
     s32 moby;                 /* 0x14: its menu moby D_001D5D90[i]; menu sounds play on it */
     s32 x;                    /* 0x18: left edge */
     s32 y;                    /* 0x1C: top edge */
@@ -234,19 +234,19 @@ struct MenuScreen {
     u8 pad_28[0x8];
     union {
         struct MenuScreenWords raw;          /* not understood yet */
-        struct MenuOptionListData options;   /* FUN_00220e28 */
-        struct MenuChoiceListData choices;   /* FUN_002212b8 */
-        struct MenuMissionListData missions; /* FUN_0021c4c0 */
+        struct MenuOptionListData options;   /* update_menu_option_list */
+        struct MenuChoiceListData choices;   /* update_menu_choice_list */
+        struct MenuMissionListData missions; /* update_menu_mission_list */
         struct MenuItemGridData grid;        /* draw_menu_item_grid */
-        struct MenuIconListData icons;       /* FUN_00219fa0 */
+        struct MenuIconListData icons;       /* draw_menu_icon_list */
         struct MenuSaveSlotData save;        /* saving_data_menu, saving_data_menu2 */
-        struct MenuItemSlotsData slots;      /* FUN_0021c7a0 */
+        struct MenuItemSlotsData slots;      /* update_menu_item_slots */
         struct MenuCycleData cycle;          /* update_menu_cycle_selection */
-        struct MenuTextListData list;        /* draw_menu_text_list, fun_0021abf8 */
-        struct MenuStreamData stream;        /* fun_0021fdc8, fun_0021f990 */
-        struct MenuItemPreviewData preview;  /* FUN_0021e110, update_item_preview_moby */
-        struct MenuLabelData label;          /* fun_0021a328 */
-        struct MenuPromptData prompt;        /* draw_prompt_box, fun_00221a48 */
+        struct MenuTextListData list;        /* draw_menu_text_list, update_menu_entry_actions */
+        struct MenuStreamData stream;        /* update_menu_resource_stream, update_menu_stream_image */
+        struct MenuItemPreviewData preview;  /* draw_item_preview_screen, update_item_preview_moby */
+        struct MenuLabelData label;          /* render_configured_text_label */
+        struct MenuPromptData prompt;        /* draw_prompt_box, enter_menu_prompt */
     } data;                   /* 0x30 */
 };
 

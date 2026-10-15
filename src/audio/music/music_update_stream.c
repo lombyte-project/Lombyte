@@ -22,11 +22,11 @@ extern void music_channel_ready_callback(int, long) __asm__("FUN_00216990");
 /* music_UpdateStream(music_Playing &): with a live handle and state other
    than 9, state 5 stops the stream (state 6) and state 6 without a
    handle resets; a fading record (+0xC bit 15) pauses the handle once
-   (+0xA bit 15) and polls FUN_001f9770 until it reports 2 (+0xC = 4),
+   (+0xA bit 15) and polls fast_dec_timer_s16 until it reports 2 (+0xC = 4),
    otherwise a paused one is resumed. Unpaused, states 1/8/9 are left
-   alone, 2 hands the handle to FUN_0012ed00 unless it is 0xFFFFFFFF,
-   and anything but 2/3 releases the handle through FUN_0012ecd0 and
-   FUN_0012e448. With no live handle (or state 9) the state is cleared
+   alone, 2 hands the handle to snd_is_vag_stream_buffered_cb unless it is 0xFFFFFFFF,
+   and anything but 2/3 releases the handle through snd_get_vag_stream_time_remaining_cb and
+   snd_sound_is_still_playing_cb. With no live handle (or state 9) the state is cleared
    when it is 7 or the handle is 0. The handle is unsigned (retail builds
    0xFFFFFFFF with lui/ori), the special case is the else arm (retail
    places it last), and the dispatch reads p->state directly so the 2/3

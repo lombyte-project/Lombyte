@@ -12,21 +12,21 @@ struct MapHdr;
  * (GameState, GameProgress, Level, UiGlobals, Hud, TextTable,
  * MapMarkerState) are merged here.
  *
- * - level: fun_0021c4c0 steps it to the next/previous level with missions;
+ * - level: update_menu_mission_list steps it to the next/previous level with missions;
  *   update_mission_list reads D_001A2B70[level]; draw_map_screen shows that
  *   map and passes it as menu_system.unkE4.
  * - zoom/pan_x/pan_y are indexed by `loaded`; slot[] caches five decoded
  *   maps (find_map_entry_slot).
  * - mask: compose_bitmap_from_mask input when the shown level is the
- *   current one; fun_00207b08 / FUN_00208030 pack it into the level's
+ *   current one; save_map_coverage / downsample_map_coverage pack it into the level's
  *   0x800-byte save page (cleared instead when unk28 is zero).
  * - unk22C / unk234: stash_receive_data arguments when the next map is the
  *   current level's (draw_map_screen); unk234 is stored as slot_size.
  * - The *_vram words are GS memory byte addresses (>> 8 = block) passed to
- *   FUN_00204e30 as CBP (arg 5) and TBP0 (arg 6). tex0..tex2 are the TEX0
+ *   register_8bit_texture as CBP (arg 5) and TBP0 (arg 6). tex0..tex2 are the TEX0
  *   values of the 128x128 images at hdr +0x10/+0x14/+0x18 (CLUT +0x20,
  *   pixels +0x420), all drawn with tex0's CLUT; tex0 is also drawn by
- *   fun_00220850 and draw_transition_overlay.
+ *   draw_map_screen_layers and draw_transition_overlay.
  */
 struct MapState {
     u8 pad0[0x8];

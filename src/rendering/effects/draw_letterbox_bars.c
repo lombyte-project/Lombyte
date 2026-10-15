@@ -14,7 +14,7 @@
    a GIF packet (the D_00160820/D_00160830 register descriptors, PRIM
    0x104) drawing two full-width strips, the height in 16ths reaching in
    from the top and bottom of the D_0013E500 viewport, the same packet
-   steps as FUN_001f52a0. */
+   steps as draw_rect_overlay. */
 void draw_letterbox_bars(void) __asm__("FUN_001f4d98");
 
 extern s32 occl_chain_active_macro __asm__("D_0015F444") MACRO_ADDR;
