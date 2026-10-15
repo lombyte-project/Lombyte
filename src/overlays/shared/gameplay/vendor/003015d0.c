@@ -391,6 +391,7 @@ void FUN_L14_00301fa8(char *m) {
     u8 *indices;
     void *src;
     float t;
+    float offset;
     float *uv, *uv_base;
     int next;
     int branch_next;
@@ -455,8 +456,8 @@ add_main:
             }
             t = convert_integer_to_float(point - rounded) * 0.25f;
             j = i++;
-            packet[0].uv[j][0] = ((float *)0x001e5fd0)[j * 2] +
-                t;
+            offset = ((float *)0x001e5fd0)[j * 2];
+            packet[0].uv[j][0] = offset + t;
         }
         draw_geometry_quad(&packet[0], base, 0);
     }
@@ -499,7 +500,8 @@ add_branch:
                     }
                     t = convert_integer_to_float(point - rounded) * 0.25f;
                     j = k++;
-                    t = *uv_base + t;
+                    offset = *uv_base;
+                    t = offset + t;
                     uv_base += 2;
                     *uv = t;
                     uv += 2;
