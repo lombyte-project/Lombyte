@@ -366,8 +366,8 @@ state_three:
                 h->motion.pos.f[2] += 20.0f;
             }
         }
-        speed = *(float *)(data + 0x78);
-        height = *(float *)(moby + 0x18);
+        height = *(float *)(data + 0x78);
+        speed = *(float *)(moby + 0x18);
         {
             float acceleration = frame_time_sq * 10.0f;
             float threshold = frame_time + frame_time;
