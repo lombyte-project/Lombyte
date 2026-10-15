@@ -574,7 +574,7 @@ extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
 extern char *D_L01_00167280_lui __asm__("D_L01_00167280") __attribute__((section(".data")));
 extern char *D_L01_001600EC;
 extern char D_L01_001BAAA0[];
-extern unsigned char mission_status[] __asm__("D_0014C050");
+#include "rnc/gameplay/state/game_globals.h"
 extern float D_L01_001618A0 __attribute__((sda));
 extern unsigned char D_0015EDB5;
 
@@ -617,7 +617,7 @@ void FUN_L01_002e0c68(char *moby) {
         g = (struct Hero *)&hero.motion.pos;
         if (FUN_001f9b80(moby + 0x10, g) < 1.75f &&
             (g = (struct Hero *)((char *)g - 0x80), g->vehicle_mode) == 0 &&
-            fast_difference_between_rotations(g->motion.rot.f[2], FUN_001f9e90(F(moby,0x10) - g->motion.pos.f[0], F(moby,0x14) - g->motion.pos.f[1])) < 1.5707964f &&
+            fast_difference_between_rotations(g->motion.rot.f[2], fast_arc_tan(F(moby,0x10) - g->motion.pos.f[0], F(moby,0x14) - g->motion.pos.f[1])) < 1.5707964f &&
             absolute_float(g->motion.pos.f[2] - 0.3f - F(moby,0x18)) < 0.2f &&
             g->items[0].item_id == 8 && g->items[0].moby != 0 &&
             pad_pressed_within(0x80, FUN_001f96f8(7), 0) &&
@@ -653,7 +653,7 @@ void FUN_L01_002e0c68(char *moby) {
             if (F(data,0x3c) <= F(moby,0x18)) F(moby,0x18) = F(data,0x3c);
         } else {
             if (*(int *)(data+0x38) == 0) break;
-            if (*(int *)(data+0x34) != -1 && mission_status[(unsigned char)moby[0xb0] + (current_level_index << 4)] != 255) {
+            if (*(int *)(data+0x34) != -1 && visited52[(unsigned char)moby[0xb0] + (current_level_index << 4)] != 255) {
                 FUN_L01_0029b0a0(data,4,moby,2,D_L01_001BAAA0);
                 FUN_L00_002502a0((unsigned char)moby[0xb0]);
                 if (*(int *)(data+0x34) != -1) {
@@ -670,7 +670,7 @@ void FUN_L01_002e0c68(char *moby) {
         *(u128 *)target = 0;
         target[2] = F(D_L01_00167240,0x18);
         *(u128 *)rotation = *(u128 *)target;
-        old_angle = FUN_001f9e90(hero.motion.pos.f[0]-F(moby,0x10),hero.motion.pos.f[1]-F(moby,0x14));
+        old_angle = fast_arc_tan(hero.motion.pos.f[0]-F(moby,0x10),hero.motion.pos.f[1]-F(moby,0x14));
         if ((pad_pressed_within(0x80,FUN_001f96f8(7),0) && FUN_001f96f8(60) < hero.state_timer) || F(data,0) == 1.0f) {
             FUN_L01_0023cf98(0,1);
             if (*(int *)(data+0x38)) {
@@ -684,7 +684,7 @@ void FUN_L01_002e0c68(char *moby) {
                 id = *(unsigned short *)(moby+0xb2);
                 moby_killed[(short)id >> 5] |= 1 << (id & 31);
                 allocate_voice_for_target_entry(0,0,moby);
-                if (*(int *)(data+0x34) != -1 && mission_status[(unsigned char)moby[0xb0] + (current_level_index << 4)] != 255) {
+                if (*(int *)(data+0x34) != -1 && visited52[(unsigned char)moby[0xb0] + (current_level_index << 4)] != 255) {
                     FUN_L01_0029b0a0(data,4,moby,2,D_L01_001BAAA0);
                     FUN_L00_002502a0((unsigned char)moby[0xb0]);
                     if (*(int *)(data+0x34) != -1) {
@@ -698,10 +698,10 @@ void FUN_L01_002e0c68(char *moby) {
         }
         direction[1] = -hero.stick_x;
         direction[0] = -hero.stick_y;
-        { float length = FUN_001f9b20(direction);
+        { float length = vector_length_xy(direction);
           if (1.0f < length) FUN_L00_001ff378(direction,direction,length); }
         FUN_001fa050(matrix,rotation);
-        FUN_001f9d20(direction,direction,matrix);
+        transform_vector(direction,direction,matrix);
         facing[0] = FUN_001f9dc8(hero.moby->rot.z);
         facing[1] = FUN_001f9de0(hero.moby->rot.z);
         facing[2] = 0;
@@ -723,7 +723,7 @@ void FUN_L01_002e0c68(char *moby) {
             if (F(data,0x1c) < 0.0f) F(data,0x1c) = 0.0f;
             if (absolute_float(F(data,0x1c)) < (frame_time_sq * 5.5f) * 0.25f) F(data,0x1c) = 0.0f;
         }
-        FUN_001f9bf8(movement,facing,F(data,0x1c));
+        fast_vec_normalize(movement,facing,F(data,0x1c));
         if ((hero.unkA98 & 2) && hero.moby->prev_seq == 0x44) set_hero_animation(0x3f,0,(float)FUN_001f96f8(7));
         if (hero.moby->prev_seq != 0x44 && hero.unkA9C == 0) {
             if (hero.moby->seq == 0x40 && absolute_float(F(data,0x1c)) == 0.0f) {
@@ -738,16 +738,16 @@ void FUN_L01_002e0c68(char *moby) {
         }
         height = hero.motion.pos.f[2];
         add_vector_xyz(&hero.motion.pos,&hero.motion.pos,movement);
-        angle = FUN_001f9e90(hero.motion.pos.f[0]-F(moby,0x10),hero.motion.pos.f[1]-F(moby,0x14));
+        angle = fast_arc_tan(hero.motion.pos.f[0]-F(moby,0x10),hero.motion.pos.f[1]-F(moby,0x14));
         movement[0] = FUN_001f9dc8(angle) * 1.05f;
         movement[1] = FUN_001f9de0(angle) * 1.05f;
         movement[2] = 0;
         add_vector_xyz(target,moby+0x10,movement);
         subtract_vector_xyz(offset,target,&hero.motion.pos);
         offset[2] = 0;
-        distance = -FUN_001f9b20(offset);
+        distance = -vector_length_xy(offset);
         FUN_L00_0025b8c0(&distance,&D_L01_001618A0,0.0f,frame_scale_sq*0.015f,frame_scale_sq*0.3f,frame_time*7.0f);
-        FUN_001f9bf8(offset,offset,D_L01_001618A0);
+        fast_vec_normalize(offset,offset,D_L01_001618A0);
         add_vector_xyz(&hero.motion.pos,&hero.motion.pos,offset);
         hero.motion.pos.f[2] = height;
         {

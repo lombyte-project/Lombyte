@@ -1590,7 +1590,7 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
-extern struct Moby *D_L12_0015FFD8_abs __asm__("D_L12_0015FFD8") __attribute__((section(".data")));
+extern struct Moby *D_L12_0015FFD8_lui __asm__("D_L12_0015FFD8") __attribute__((section(".data")));
 
 void FUN_L12_00306828(struct Moby *moby) {
     int i;
@@ -1609,7 +1609,7 @@ void FUN_L12_00306828(struct Moby *moby) {
         float divisor;
         other = moby;
         if (i != 17) {
-            other = (struct Moby *)(((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8) + (unsigned int)D_L12_0015FFD8_abs);
+            other = (struct Moby *)(((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8) + (unsigned int)D_L12_0015FFD8_lui);
         }
         if (other->oclass != 0x4FE) {
             period = scale_ticks(0xAA);
@@ -1663,7 +1663,7 @@ extern int FUN_0022da68(int, int, void *);
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 extern int D_L12_00161F00_lui __asm__("D_L12_00161F00") __attribute__((section(".data")));
-extern struct Moby *D_L12_0015FFD8_abs __asm__("D_L12_0015FFD8") __attribute__((section(".data")));
+extern struct Moby *D_L12_0015FFD8_lui __asm__("D_L12_0015FFD8") __attribute__((section(".data")));
 extern int D_L12_001619A0_lui __asm__("D_L12_001619A0") __attribute__((section(".data")));
 extern int D_L12_001619B4_gp __asm__("D_L12_001619B4") __attribute__((sda));
 extern int D_L12_001619B4_lui __asm__("D_L12_001619B4") __attribute__((section(".data")));
@@ -1712,7 +1712,7 @@ void FUN_L12_003069d0(struct Moby *moby) {
             char *moby_base = D_L12_0015FFD8_p;
             if ((D_0013F4D0_304310)[2] < 52.0f) {
                 moby->pos.z += 3.0f;
-                moby_base = (char *)D_L12_0015FFD8_abs;
+                moby_base = (char *)D_L12_0015FFD8_lui;
             }
             {
                 int *slot = (int *)(data + 0x5d0);
@@ -1745,7 +1745,7 @@ void FUN_L12_003069d0(struct Moby *moby) {
         triggered = FUN_00214720(D_L12_00167240, *(int *)(data + 0x624));
         if (triggered) {
             moby->flags |= 0x41;
-            moby_base = (char *)D_L12_0015FFD8_abs;
+            moby_base = (char *)D_L12_0015FFD8_lui;
             slot = (int *)(data + 0x20);
             i = 16;
             do {
@@ -1757,7 +1757,7 @@ void FUN_L12_003069d0(struct Moby *moby) {
             } while (i >= 0);
         } else {
             moby->flags &= 0xffbe;
-            moby_base = (char *)D_L12_0015FFD8_abs;
+            moby_base = (char *)D_L12_0015FFD8_lui;
             slot = (int *)(data + 0x20);
             i = 16;
             do {
@@ -1794,7 +1794,7 @@ void FUN_L12_003069d0(struct Moby *moby) {
                 int i = 4;
                 do {
                     int index = *slot++;
-                    other = (struct Moby *)((char *)D_L12_0015FFD8_abs + *(int *)(data + index * 0x30 + 0x20) * 0x100);
+                    other = (struct Moby *)((char *)D_L12_0015FFD8_lui + *(int *)(data + index * 0x30 + 0x20) * 0x100);
                     other->hit_slot = 0xff;
                     i--;
                 } while (i >= 0);

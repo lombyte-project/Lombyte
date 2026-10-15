@@ -621,7 +621,7 @@ extern char D_0013F350_002062b0[] __asm__("D_0013F350");
 extern f32 D_0015EE18_macro __asm__("D_0015EE18") __attribute__((section(".sdata")));
 extern volatile f32 D_0015ED6C_002062b0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 D_0015ED60_002062b0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
-extern f32 D_0015ED60_gp_002062b0 __asm__("D_0015ED60_gp") __attribute__((sda));
+extern f32 D_0015ED60_gp __asm__("D_0015ED60_gp") __attribute__((sda));
 extern f32 D_0015EE18_gp __attribute__((sda));
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F5CC_002062b0 __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
@@ -769,7 +769,7 @@ void FUN_L00_002062b0(void) {
                 red = color;
                 {
                     s32 color = FUN_L00_00200298_002062b0(wave * 0.5f + 0.5f, red, color2);
-                    if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = FUN_L00_00200298_002062b0(D_0015ED60_gp_002062b0 * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), color);
+                    if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = FUN_L00_00200298_002062b0(D_0015ED60_gp * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), color);
                     *(u32 *)(g + 0x2300) = FUN_L00_00200298_002062b0(D_0015ED60_002062b0 * 0.1f, *(u32 *)(g + 0x2300), color);
                 }
                 if (*(char **)(g + 0x1620) == 0) {
