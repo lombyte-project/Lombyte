@@ -1724,9 +1724,6 @@ extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
 void FUN_L12_002e7290(void *a, void *b) {
     FUN_L00_0025f3e8(a, b, -1, 1.0f, 10.0f);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_002e72c0.s", FUN_L12_002e72c0);
-#else
 extern void FUN_L12_002e81e0(struct Moby *);
 extern void FUN_L12_002e8608(struct Moby *, float *);
 extern void FUN_L12_002e86d0(struct Moby *);
@@ -1755,7 +1752,7 @@ extern float FUN_L00_00257c48(float, float);
 extern void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
 extern int FUN_L01_0028b510(void *, void *, float);
 extern int FUN_L12_0027b8e0(void *, void *, float, float, float);
-extern float vector_project_72(void *, float) __asm__("FUN_001f9b20");
+extern float vector_project_72(void *) __asm__("FUN_001f9b20");
 extern void FUN_L04_002aee30(void *, void *, void *, int);
 
 #define OGRE_I(offset) (*(int *)(data + (offset)))
@@ -1949,7 +1946,7 @@ hide:
             angle = fast_arc_tan(delta.f[0], delta.f[1]);
             other = fast_add_rotations_e81e0(moby->rot.z, OGRE_F(0x208));
             angle = 0.2268928f < angle_difference_8808(angle, other) ? other : angle;
-            value = vector_project_72(&delta, angle);
+            value = vector_project_72(&delta);
             value = fast_arc_tan(value, delta.f[2]);
             build_spherical_offset(&delta, D_0015ED6C * 15.0f, angle, value);
             allocate_voice_for_target_entry(0, 0, (int)moby);
@@ -2037,7 +2034,6 @@ finish:
 #undef OGRE_B
 #undef OGRE_H
 #undef OGRE_CHILD
-#endif
 /* Variables of the l12 ogre moby (moby->pvars): FUN_L00_002e1678's TrollVars
    layout, with the alert and call-for-help state at 0x230.. */
 typedef struct {
