@@ -2329,9 +2329,9 @@ extern void draw_2be650(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L00_002be650(void *o) {
     Q_2be650 quad;
-    OvlVec4 scaled;
-    OvlVec4 axis;
     OvlVec4 negativeUp;
+    OvlVec4 axis;
+    OvlVec4 scaled;
     OvlVec4 vertex[2];
     struct {
         volatile int color;
