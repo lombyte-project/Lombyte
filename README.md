@@ -33,7 +33,7 @@
 
 <p align="center">
   <a href="https://lombyte-project.github.io/namingdesk">
-    <img src="assets/naming-desk-card.svg" alt="Open the Naming Desk" width="100%">
+    <img src="https://raw.githubusercontent.com/lombyte-project/lombyte/progress/naming-desk-card.svg" alt="Open the Naming Desk" width="100%">
   </a>
 </p>
 
