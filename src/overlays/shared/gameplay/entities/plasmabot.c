@@ -327,10 +327,11 @@ void FUN_L14_002b17d8(unsigned char *moby) {
     }
     switch ((unsigned char)moby[0x20]) {
     case 0: {
+        int idx;
         char *p;
-        int flag;
+        unsigned long flag;
         flag = (unsigned char)data[0x24A];
-        if (flag) {
+        if (data[0x24A]) {
             idx = *(int *)(data + 0x240);
             if (idx == -1) { debug_print(D_L14_001FBB60, *(short *)(moby + 0xB2)); goto remove; }
             if (!*D_L14_001B0BB0[idx]) { debug_print(D_L14_001FBBA0, *(short *)(moby + 0xB2)); goto remove; }
@@ -338,7 +339,7 @@ void FUN_L14_002b17d8(unsigned char *moby) {
         idx = *(int *)(data + 0x244);
         if (idx == -1) { debug_print(D_L14_001FBBF8, *(short *)(moby + 0xB2)); goto remove; }
         if (!*D_L14_001B0BB0[idx]) { debug_print(D_L14_001FBC38, *(short *)(moby + 0xB2)); goto remove; }
-        if (flag && *(int *)(data + 0x264) < 0) { debug_print(D_L14_001FBC90, *(short *)(moby + 0xB2)); goto remove; }
+        if ((unsigned char)flag && *(int *)(data + 0x264) < 0) { debug_print(D_L14_001FBC90, *(short *)(moby + 0xB2)); goto remove; }
         if (FUN_00213260(2)) *(unsigned short *)(moby + 0x34) |= 0x8000;
         FUN_L14_002b3358(moby);
         if (*(int *)(data + 0x240) != -1) {
@@ -444,8 +445,9 @@ void FUN_L14_002b17d8(unsigned char *moby) {
     case 3: {
 
         if (!FUN_L14_002b3418(moby)) goto finish;
-        idx = FUN_001f96f8(10);
-        goto resume_move;
+        blend_moby_animation(moby, 0, 0, FUN_001f96f8(10));
+        moby[0x20] = 4;
+        break;
     }
     case 8: {
 
@@ -461,6 +463,7 @@ void FUN_L14_002b17d8(unsigned char *moby) {
         break;
     }
     case 4: {
+        int idx;
         char *p;
         float angle;
         float difference;
@@ -478,8 +481,9 @@ void FUN_L14_002b17d8(unsigned char *moby) {
                 if ((unsigned char)moby[0x53] != 3) blend_moby_animation(moby, 3, 0, FUN_001f96f8(20));
                 idx = *(int *)(data + 0x24C) - 1;
                 *(int *)(data + 0x24C) = idx;
+                idx *= 16;
                 p = (char *)D_L14_001B0BB0[*(int *)(data + 0x240)];
-                f = *(float *)(p + idx * 16 + 0x1C);
+                f = *(float *)(p + idx + 0x1C);
                 *(float *)(data + 0x254) = *(float *)(data + 0x25C) = *(float *)(data + 0x258) = 0.0f;
                 *(float *)(data + 0x250) = f;
                 *(float *)(data + 0x27C) = -1.0f;
@@ -563,25 +567,22 @@ void FUN_L14_002b17d8(unsigned char *moby) {
 
         if (!((unsigned char)moby[0x70] & 2)) goto finish;
         if (moby[0x52] != moby[0x53]) goto finish;
-        idx = FUN_001f96f8(10);
-        goto resume_move;
+        blend_moby_animation(moby, 0, 0, FUN_001f96f8(10));
+        moby[0x20] = 4;
+        break;
     }
     case 10: {
-
         anim = (unsigned char)moby[0x52];
         if (((unsigned char)moby[0x70] & 2) && (unsigned char)anim == (unsigned char)moby[0x53]) {
-            if ((unsigned char)anim != 7) {
-                anim = (unsigned char)moby[0x53];
-                if ((unsigned char)anim == 7) goto finish;
-            }
+            if ((unsigned char)anim == 7) goto resume_move;
+            anim = (unsigned char)moby[0x53];
         } else {
             if ((unsigned char)anim == 7) goto finish;
             anim = (unsigned char)moby[0x53];
-            if ((unsigned char)anim == 7) goto finish;
         }
-        idx = 10;
+        if ((int)anim == 7) goto finish;
 resume_move:
-        blend_moby_animation(moby, 0, 0, idx);
+        blend_moby_animation(moby, 0, 0, 10);
         moby[0x20] = 4;
         break;
     }
