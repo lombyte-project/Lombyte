@@ -9489,8 +9489,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l01_0",
-        "source_path": "src/ui/map/map_filter_l01_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206978",
         "current_name": "FUN_00206978",
         "proposed_name": "hit_test_fixed_screen_rectangle",
@@ -9506,12 +9506,12 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "ui/map/map_filter_l07_0",
-        "source_path": "src/ui/map/map_filter_l07_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206bd8",
         "current_name": "FUN_00206bd8",
         "proposed_name": "passes_projected_region_callback_0",
-        "logical_group": "unclassified",
+        "logical_group": "ui/menus",
         "status": "proposed",
         "confidence": "medium",
         "evidence": [
@@ -9523,8 +9523,8 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/map/map_filter_l07_1",
-        "source_path": "src/ui/map/map_filter_l07_1.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206e18",
         "current_name": "FUN_00206e18",
         "proposed_name": null,
@@ -9540,8 +9540,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l07_2",
-        "source_path": "src/ui/map/map_filter_l07_2.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206f50",
         "current_name": "FUN_00206f50",
         "proposed_name": null,
@@ -9557,8 +9557,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l07_3",
-        "source_path": "src/ui/map/map_filter_l07_3.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207100",
         "current_name": "FUN_00207100",
         "proposed_name": null,
@@ -9574,8 +9574,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l07_4",
-        "source_path": "src/ui/map/map_filter_l07_4.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x002071c0",
         "current_name": "FUN_002071c0",
         "proposed_name": null,
@@ -9596,8 +9596,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l07_6",
-        "source_path": "src/ui/map/map_filter_l07_6.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207300",
         "current_name": "FUN_00207300",
         "proposed_name": null,
@@ -9613,8 +9613,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l07_7",
-        "source_path": "src/ui/map/map_filter_l07_7.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x002073b8",
         "current_name": "FUN_002073b8",
         "proposed_name": null,
@@ -9635,8 +9635,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l15_0",
-        "source_path": "src/ui/map/map_filter_l15_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207a18",
         "current_name": "FUN_00207a18",
         "proposed_name": null,
@@ -18326,8 +18326,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l01_1",
-        "source_path": "src/ui/map/map_filter_l01_1.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x002069a0",
         "current_name": "FUN_002069a0",
         "proposed_name": null,
@@ -18343,8 +18343,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l01_2",
-        "source_path": "src/ui/map/map_filter_l01_2.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x002069b0",
         "current_name": "FUN_002069b0",
         "proposed_name": null,
@@ -18360,8 +18360,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l02_0",
-        "source_path": "src/ui/map/map_filter_l02_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x002069c0",
         "current_name": "FUN_002069c0",
         "proposed_name": null,
@@ -18377,8 +18377,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l01_3",
-        "source_path": "src/ui/map/map_filter_l01_3.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x002069d0",
         "current_name": "FUN_002069d0",
         "proposed_name": null,
@@ -18394,8 +18394,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l01_4",
-        "source_path": "src/ui/map/map_filter_l01_4.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206a90",
         "current_name": "FUN_00206a90",
         "proposed_name": null,
@@ -18411,8 +18411,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l01_5",
-        "source_path": "src/ui/map/map_filter_l01_5.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206b10",
         "current_name": "FUN_00206b10",
         "proposed_name": null,
@@ -18428,8 +18428,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l03_0",
-        "source_path": "src/ui/map/map_filter_l03_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206b78",
         "current_name": "FUN_00206b78",
         "proposed_name": null,
@@ -18445,8 +18445,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l04_0",
-        "source_path": "src/ui/map/map_filter_l04_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206b88",
         "current_name": "FUN_00206b88",
         "proposed_name": null,
@@ -18462,8 +18462,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l04_1",
-        "source_path": "src/ui/map/map_filter_l04_1.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206b98",
         "current_name": "FUN_00206b98",
         "proposed_name": null,
@@ -18479,8 +18479,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l04_2",
-        "source_path": "src/ui/map/map_filter_l04_2.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206ba8",
         "current_name": "FUN_00206ba8",
         "proposed_name": null,
@@ -18496,8 +18496,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l04_3",
-        "source_path": "src/ui/map/map_filter_l04_3.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206bb8",
         "current_name": "FUN_00206bb8",
         "proposed_name": null,
@@ -18513,8 +18513,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l06_0",
-        "source_path": "src/ui/map/map_filter_l06_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00206bc8",
         "current_name": "FUN_00206bc8",
         "proposed_name": null,
@@ -18530,8 +18530,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l07_5",
-        "source_path": "src/ui/map/map_filter_l07_5.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207250",
         "current_name": "FUN_00207250",
         "proposed_name": null,
@@ -18547,8 +18547,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l08_0",
-        "source_path": "src/ui/map/map_filter_l08_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207480",
         "current_name": "FUN_00207480",
         "proposed_name": null,
@@ -18564,8 +18564,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l08_1",
-        "source_path": "src/ui/map/map_filter_l08_1.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x002074b0",
         "current_name": "FUN_002074b0",
         "proposed_name": null,
@@ -18581,8 +18581,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l08_2",
-        "source_path": "src/ui/map/map_filter_l08_2.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207508",
         "current_name": "FUN_00207508",
         "proposed_name": null,
@@ -18598,8 +18598,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l08_4",
-        "source_path": "src/ui/map/map_filter_l08_4.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x002075f8",
         "current_name": "FUN_002075f8",
         "proposed_name": null,
@@ -18615,8 +18615,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l09_0",
-        "source_path": "src/ui/map/map_filter_l09_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207660",
         "current_name": "FUN_00207660",
         "proposed_name": null,
@@ -18632,8 +18632,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l09_1",
-        "source_path": "src/ui/map/map_filter_l09_1.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207670",
         "current_name": "FUN_00207670",
         "proposed_name": null,
@@ -18649,8 +18649,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l09_2",
-        "source_path": "src/ui/map/map_filter_l09_2.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207680",
         "current_name": "FUN_00207680",
         "proposed_name": null,
@@ -18666,8 +18666,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l10_0",
-        "source_path": "src/ui/map/map_filter_l10_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207690",
         "current_name": "FUN_00207690",
         "proposed_name": null,
@@ -18683,8 +18683,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l11_0",
-        "source_path": "src/ui/map/map_filter_l11_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207720",
         "current_name": "FUN_00207720",
         "proposed_name": null,
@@ -18700,8 +18700,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l11_1",
-        "source_path": "src/ui/map/map_filter_l11_1.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x002077a0",
         "current_name": "FUN_002077a0",
         "proposed_name": null,
@@ -18717,8 +18717,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l11_2",
-        "source_path": "src/ui/map/map_filter_l11_2.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207800",
         "current_name": "FUN_00207800",
         "proposed_name": null,
@@ -18734,8 +18734,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l11_3",
-        "source_path": "src/ui/map/map_filter_l11_3.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207880",
         "current_name": "FUN_00207880",
         "proposed_name": null,
@@ -18751,8 +18751,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l11_4",
-        "source_path": "src/ui/map/map_filter_l11_4.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207930",
         "current_name": "FUN_00207930",
         "proposed_name": null,
@@ -18768,8 +18768,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l11_5",
-        "source_path": "src/ui/map/map_filter_l11_5.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x002079c8",
         "current_name": "FUN_002079c8",
         "proposed_name": null,
@@ -18785,8 +18785,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l12_0",
-        "source_path": "src/ui/map/map_filter_l12_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x002079d8",
         "current_name": "FUN_002079d8",
         "proposed_name": null,
@@ -18802,8 +18802,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l12_1",
-        "source_path": "src/ui/map/map_filter_l12_1.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207a08",
         "current_name": "FUN_00207a08",
         "proposed_name": null,
@@ -18819,8 +18819,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l12_2",
-        "source_path": "src/ui/map/map_filter_l12_2.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207a10",
         "current_name": "FUN_00207a10",
         "proposed_name": null,
@@ -18836,8 +18836,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l16_0",
-        "source_path": "src/ui/map/map_filter_l16_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207ab8",
         "current_name": "FUN_00207ab8",
         "proposed_name": null,
@@ -18853,8 +18853,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l16_1",
-        "source_path": "src/ui/map/map_filter_l16_1.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207ac8",
         "current_name": "FUN_00207ac8",
         "proposed_name": null,
@@ -18870,8 +18870,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l16_2",
-        "source_path": "src/ui/map/map_filter_l16_2.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207ad8",
         "current_name": "FUN_00207ad8",
         "proposed_name": null,
@@ -18887,8 +18887,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l16_3",
-        "source_path": "src/ui/map/map_filter_l16_3.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207ae8",
         "current_name": "FUN_00207ae8",
         "proposed_name": null,
@@ -18904,8 +18904,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/map/map_filter_l18_0",
-        "source_path": "src/ui/map/map_filter_l18_0.c",
+        "unit": "ui/map/map_filters",
+        "source_path": "src/ui/map/map_filters.c",
         "address": "0x00207af8",
         "current_name": "FUN_00207af8",
         "proposed_name": null,
