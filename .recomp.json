@@ -11,7 +11,10 @@
   "project": "Lombyte",
   "status": "in-progress",
   "toolchain": [
-    "Splat"
+    "Splat",
+    "Objdiff",
+    "EE-GCC 2.9-ee-991111b",
+    "SN EE-GCC 2.95.2"
   ],
   "approach": "Matching decompilation: C that rebuilds the retail executable and level overlays byte for byte, compiled with a reconstructed copy of the original EE GCC toolchain.",
   "maintainers": [
