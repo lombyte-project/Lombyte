@@ -1434,7 +1434,9 @@ void FUN_L00_002ebe70(char *o) {
     char *p = m + 0x40;
     float *angle = (float *)(m + 0xb8);
     float *distance = (float *)(m + 0xa0);
-    OvlQuad next, diff, scaled, aim;
+    OvlQuad next, diff, scaled;
+    float aim[4];
+    float *aim_values;
     float target, rate, fraction, score, best;
     char *candidate, *chosen;
     unsigned short *list;
@@ -1465,15 +1467,16 @@ void FUN_L00_002ebe70(char *o) {
             best = 1000.0f;
             list = D_L00_001AB840_2ebe70[*(unsigned char *)((char *)hero.unk994 + 0x21)];
             if (list != 0) {
+                aim_values = aim;
                 do {
                     candidate = D_0015FFD8_2ebe70 + (*list & 0x7fff) * 0x100;
                     if (candidate != (char *)hero.unk994 &&
                         (*(short *)(candidate + 0xa6) == 0x323 || *(short *)(candidate + 0xa6) == 0x2f6)) {
                         FUN_001ff2a8_2ebe70(&diff, candidate + 0x10, (char *)hero.unk994 + 0x10);
                         FUN_001ff500_2ebe70(1.0f, &scaled, &diff);
-                        ((float *)&aim)[0] = FUN_001ff7e8_2ebe70(((float *)&hero.motion.rot)[2]);
-                        ((float *)&aim)[1] = FUN_001ff800_2ebe70(((float *)&hero.motion.rot)[2]);
-                        ((float *)&aim)[2] = 0.0f;
+                        aim_values[0] = FUN_001ff7e8_2ebe70(((float *)&hero.motion.rot)[2]);
+                        aim_values[1] = FUN_001ff800_2ebe70(((float *)&hero.motion.rot)[2]);
+                        aim_values[2] = 0.0f;
                         score = FUN_001ff398_2ebe70(&scaled, &aim);
                         if (score > 0.0f) {
                             target = FUN_001ff3d8_2ebe70(&diff) - score * 10.0f;
