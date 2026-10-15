@@ -860,6 +860,7 @@ collision_done:
         break;
     case 2: case 3: case 4: case 5: {
         u8 state;
+        float angle;
         struct Moby *target;
         target = vars->target;
         if (target && target->state != 254 && target->state != 253) {
@@ -887,7 +888,8 @@ collision_done:
         vars->move_speed = rate * 0.1f * speed; moby->state = 4;
         if (!vars->target) {
             angle = random_float_between(-3.1415927f,3.1415927f);
-            if (!FUN_00213260_2bffa8(4)) vars->angle = FUN_L00_002bf050(moby,pos,0,&result,angle,1.847995638847351f,4.0f,size*0.35f,4.0f,convert_integer_to_float(HI_2bffa8(0x1ec0))*0.0009765625f);
+            limit = size * 0.35f;
+            if (!FUN_00213260_2bffa8(4)) vars->angle = FUN_L00_002bf050(moby,pos,0,&result,angle,1.847995638847351f,4.0f,limit,4.0f,convert_integer_to_float(HI_2bffa8(0x1ec0))*0.0009765625f);
             else result.f[0] = 5.0f;
         }
         target = vars->target;
