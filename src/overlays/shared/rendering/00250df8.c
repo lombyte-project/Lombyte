@@ -15,7 +15,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257024.s", FUN_L00_00257024);
 
 typedef struct {
     u8 pad0[0xE];
-    u16 hE;
+    u16 max_ammo;
     u8 pad10[8];
 } Item257218;
 typedef struct {
@@ -31,10 +31,10 @@ extern Item257218 D_L00_001C40B0[] __attribute__((section(".data")));
 int FUN_00213260(int);
 int FUN_L00_00257218_u3(Moby257218 *, int *) __asm__("FUN_L00_00257218");
 
+/* Picks the weapon whose ammo a pickup gives (*out), preferring owned weapons that are not full, and returns how many pickups to drop (1 or 2). */
 int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
     int i, idx, x;
-    int nA = 0, nB = 0, nC = 0;
-    int r;
+    int not_full = 0, owned = 0, with_max = 0;
     int one;
 
     /* Fakematch: the constant 1 of the final return lives in a local set first, so its register comes before the 2's. */
@@ -43,26 +43,26 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
         for (i = 0; i < 12 && D_0015EDD0_257218[i] != 0xFF; i++) {
             x = D_0015EDD0_257218[i] & 0x3F;
             if (D_0013D4C0[x]) {
-                if (((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE) nC++;
-                nB++;
-                nA += weapon_ammo_counts[x] < ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE;
+                if (((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo) with_max++;
+                owned++;
+                not_full += weapon_ammo_counts[x] < ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo;
             }
         }
         idx = -1;
-        if (nA) {
-            i = FUN_00213260(nA);
+        if (not_full) {
+            i = FUN_00213260(not_full);
             while (i >= 0) {
                 idx++;
                 x = D_0015EDD0_257218[idx] & 0x3F;
-                if (D_0013D4C0[x]) i -= ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE > weapon_ammo_counts[x];
+                if (D_0013D4C0[x]) i -= ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo > weapon_ammo_counts[x];
             }
             *out = D_0015EDD0_257218[idx] & 0x3F;
-        } else if (nB) {
-            i = FUN_00213260(nC);
+        } else if (owned) {
+            i = FUN_00213260(with_max);
             while (i >= 0) {
                 idx++;
                 x = D_0015EDD0_257218[idx] & 0x3F;
-                if (D_0013D4C0[x] && ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE) i--;
+                if (D_0013D4C0[x] && ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo) i--;
             }
             *out = D_0015EDD0_257218[idx] & 0x3F;
         } else {
