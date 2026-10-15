@@ -116,16 +116,16 @@ void FUN_L00_002b94d0(u8 *o) {
                 fast_vec_sub(&target0, candidate + 0x10, v);
                 distance = vector_length_xy(&target0);
                 if (D_L00_00161594 < distance) continue;
-                angle = fast_difference_between_rotations(*(float *)(camera_base + 0x158),
+                length = fast_difference_between_rotations(*(float *)(camera_base + 0x158),
                     fast_arc_tan(*(float *)(candidate + 0x10) - *(float *)(camera_base + 0x140),
                                   *(float *)(candidate + 0x14) - *(float *)(camera_base + 0x144)));
-                if (D_L00_0016159C < angle) continue;
+                if (D_L00_0016159C < length) continue;
                 score = fast_difference_between_rotations(
                     fast_arc_tan(*(float *)(candidate + 0x10) - *(float *)(hero_base + 0x80),
                                   *(float *)(candidate + 0x14) - *(float *)(hero_base + 0x84)),
                     *(float *)(hero_base + 0x98));
                 if (D_L00_00161598 < score) continue;
-                score = ((D_L00_0016159C - angle) / D_L00_0016159C) * D_L00_0016162C +
+                score = ((D_L00_0016159C - length) / D_L00_0016159C) * D_L00_0016162C +
                         (D_L00_00161594 - distance) / D_L00_00161594;
                 if (best_score < score) {
                     second_score = best_score; second = best;
@@ -137,11 +137,12 @@ next_candidate:;
     }
     enabled_float = (float)(int)enabled;
     if (best) {
-        if (!*(char **)(v + 0x20)) {
+        if (*(char **)(v + 0x20)) second = best;
+        else {
             *(char **)(v + 0x20) = best;
             *(short *)(v + 0x40) = 0;
             FUN_0022da68(1, 0, o);
-        } else second = best;
+        }
     }
     if (second && enabled) {
         distance = fast_vec_dist(v, best + 0x10);
@@ -190,10 +191,10 @@ next_candidate:;
     side = (char *)D_L00_001DB5C0 + 0x150;
     for (i = 1; i < 20; i++, difference += 16, point += 16, side += 16, previous += 16) {
         n = (float)i;
-        amplitude = D_L00_001615A4 + (D_L00_001615A8 - D_L00_001615A4) *
+        factor = D_L00_001615A4 + (D_L00_001615A8 - D_L00_001615A4) *
                     (FUN_001fa6c0(i) * 0.05f);
         phase = FUN_L00_0025e310((*(float *)&D_L00_001615AC_gp) + n * D_L00_001615A0);
-        wave = amplitude * FUN_001f9de0(phase);
+        wave = factor * FUN_001f9de0(phase);
         wave += FUN_L00_00257c48(D_L00_001615E4, D_L00_001615E8);
 
         score = *(float *)(point + 8) - ((float *)D_L00_001DB840)[i];
@@ -201,10 +202,10 @@ next_candidate:;
         ((float *)D_L00_001DB840)[i] = wave;
         fast_vec_sub(&delta, point, (char *)D_L00_001DB5C0 - 16 + difference);
         blend_vector_2b94d0(0.85f, &blend, &delta, &step);
-        primary_distance = fast_vec_length(&blend);
-        if (primary_distance == 0.0f) qcopy(point, previous);
+        score = fast_vec_length(&blend);
+        if (score == 0.0f) qcopy(point, previous);
         else {
-            fast_vec_scale(spacing / primary_distance, &blend, &blend);
+            fast_vec_scale(spacing / score, &blend, &blend);
             fast_vec_add(point, (char *)D_L00_001DB5C0 - 16 + difference, &blend); qcopy(&step, &blend);
         }
         *(float *)(point + 8) += wave;
@@ -227,7 +228,7 @@ next_candidate:;
                 if (length != 0.0f) {
                     if (i == 9 || i == 19) { factor = 0.7f; spacing = length; }
                     else if ((unsigned)(i - 5) < 5 || i > 14) {
-                        factor = 0.7f; spacing = length / FUN_001fa6c0(i < 10 ? 9 - i : 19 - i);
+                        factor = 0.7f; spacing = length / FUN_001fa6c0((unsigned)(i - 5) < 5 ? 9 - i : 19 - i);
                     } else factor = 0.2f;
                     fast_vec_scale(spacing / length, &target_delta, &target_delta);
                     blend_vector_2b94d0(factor, &step, &step, &target_delta);
@@ -306,8 +307,9 @@ next_candidate:;
         make_hit_descriptor(&effects.first.hit0, o, 0x210000, &target_delta, enabled_float + 2.0f);
         effects.first.hit0.id = *(short *)(o + 0xa6); effects.first.hit0.mode = 3; effects.first.hit0.kind = 5;
         FUN_L00_00259a88(*(char **)(v + 0x20), &effects.first.hit0);
+        timer = 5;
         data = (char *)FUN_002141f8(*(char **)(v + 0x20));
-        timer = 5; if (data && *(short *)(data + 4) == 1) timer = 1;
+        if (data && *(short *)(data + 4) == 1) timer = 1;
         *(short *)(v + 0x44) = scale_game_frames(timer);
     }
     if (*(char **)(v + 0x38) && !(*(unsigned long *)(v + 0x40) & 0xffff0000ffff0000UL)) {
@@ -318,8 +320,9 @@ next_candidate:;
         make_hit_descriptor(&effects.hit1, o, 0x210000, &target_delta, enabled_float + 2.0f);
         effects.hit1.id = *(short *)(o + 0xa6); effects.hit1.kind = 5; effects.hit1.mode = 3;
         FUN_L00_00259a88(*(char **)(v + 0x38), &effects.hit1);
+        timer = 5;
         data = (char *)FUN_002141f8(*(char **)(v + 0x38));
-        timer = 5; if (data && *(short *)(data + 4) == 1) timer = 1;
+        if (data && *(short *)(data + 4) == 1) timer = 1;
         *(short *)(v + 0x46) = scale_game_frames(timer);
     }
     for (i = 0; i < 4; i++) {
