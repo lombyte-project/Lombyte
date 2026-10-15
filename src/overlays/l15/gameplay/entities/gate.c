@@ -1296,6 +1296,7 @@ get_goal:
     switch (moby->state) {
     case 0: {
         SteeringPath_5630 *path;
+        SteeringVec_4f88 *p, *next;
         manip0 = vars + 0xd0;
         moby->pos.z = moby->pos.z + 7.5f;
         manip1 = vars + 0x110;
