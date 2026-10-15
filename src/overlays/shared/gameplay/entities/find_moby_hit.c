@@ -597,15 +597,15 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
             if (type < 2) {
                 qcopy(&first, (void *)((entry + 0x10)));
                 FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
-                radius = first.f[3];
+                extent = first.f[3] * *(float *)(entity + 0x2c);
             } else {
                 qcopy(&first, (void *)((0x70000000 + (*(int *)(entry + 4) << 4))));
                 qcopy(&second, (void *)((entry + 0x10)));
                 FUN_001f9a10_25aca0(&first, &first, &second);
                 FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
-                radius = *(float *)(entry + 0xc);
+                extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c);
             }
-            extent = radius * *(float *)(entity + 0x2c) * 0.0009765625f;
+            extent *= 0.0009765625f;
             FUN_L00_001ff378_25aca0(1024.0f, &first, &first);
             do {
                 second.f[0] = FUN_002132a8_25aca0(-extent, extent);
