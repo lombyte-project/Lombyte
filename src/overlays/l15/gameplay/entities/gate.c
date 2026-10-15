@@ -1393,6 +1393,7 @@ show_link:
             (*(struct Moby **)(vars + 0x160))->flags &= 0xffbe;
         break;
     case 2: {
+        float distance, speed, step;
         int i;
         float position, fraction;
         SteeringPath_5630 *path;
@@ -1441,8 +1442,8 @@ show_link:
         goto apply_delta;
     }
     case 3:
-        delta.q = *(u128 *)&target->pos;
         path = D_L15_001B0AB0_5630[*(int *)(vars + 0x194)];
+        delta.q = *(u128 *)&target->pos;
         i = 0;
         if (i < path->n) {
             p = path->pt;
@@ -1588,30 +1589,34 @@ apply_delta:
         FUN_L00_00250df8(*(struct Moby **)(vars + 0x160));
         (*(struct Moby **)(vars + 0x160))->flags |= 6;
     }
-    target = *(struct Moby **)(vars + 0x164);
-    if (target == 0 || target->oclass != 0x350 || target->state == 0xfe || target->state == 0xfd) {
-        moby_point_position(moby, 0, &attachment);
-        subtract_vector_xyz(&difference, &goal.pos, &attachment);
-        local.q = difference.q;
-        transpose_rotation_matrix(&delta, &moby->rot_row0);
-        transform_vector_by_basis(&local, &local, &delta);
-        *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), FUN_001f9e90(local.f[0], local.f[1]), frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-        *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(vector_length_xy(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
-        FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
-        FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
-        *(int *)(vars + 0x164) = 0;
-    } else {
-        moby_point_position(moby, 0, &attachment);
-        subtract_vector_xyz(&difference, &(*(struct Moby **)(vars + 0x164))->pos, &attachment);
-        local.q = difference.q;
-        transpose_rotation_matrix(&delta, &moby->rot_row0);
-        transform_vector_by_basis(&local, &local, &delta);
-        *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), FUN_001f9e90(local.f[0], local.f[1]), frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-        *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(vector_length_xy(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
-        FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
-        FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
+    {
+        struct Moby *target;
+        target = *(struct Moby **)(vars + 0x164);
+        if (target == 0 || target->oclass != 0x350 || target->state == 0xfe || target->state == 0xfd) {
+            moby_point_position(moby, 0, &attachment);
+            subtract_vector_xyz(&difference, &goal.pos, &attachment);
+            local.q = difference.q;
+            transpose_rotation_matrix(&delta, &moby->rot_row0);
+            transform_vector_by_basis(&local, &local, &delta);
+            *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), FUN_001f9e90(local.f[0], local.f[1]), frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
+            *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(vector_length_xy(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
+            FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
+            FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
+            *(int *)(vars + 0x164) = 0;
+        } else {
+            moby_point_position(moby, 0, &attachment);
+            subtract_vector_xyz(&difference, &(*(struct Moby **)(vars + 0x164))->pos, &attachment);
+            local.q = difference.q;
+            transpose_rotation_matrix(&delta, &moby->rot_row0);
+            transform_vector_by_basis(&local, &local, &delta);
+            *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), FUN_001f9e90(local.f[0], local.f[1]), frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
+            *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(vector_length_xy(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
+            FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
+            FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
+        }
     }
 }
+
 #endif
 /* Steps a moby's countdown from a helper's output, then aims it at its target. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002C7C20), where it is exact; names translated to the US level program. */
