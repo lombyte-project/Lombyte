@@ -575,8 +575,9 @@ void FUN_L08_002d42d8(struct Moby *moby) {
         *(unsigned short *)(data + 0x3e) |= 2;
         clear_u64_value(data + 0x40);
         *(float *)(data + 0x178) = 0;
+        speed = D_L08_001618CC;
         *(float *)(data + 0x170) = moby->rot.z;
-        data[0x58] = truncate_float_to_s32(D_L08_001618CC);
+        data[0x58] = truncate_float_to_s32(speed);
         data[0x5a] = truncate_float_to_s32(D_L08_001618D0 * 8.0f);
         goto finish;
     state6:
@@ -597,15 +598,16 @@ void FUN_L08_002d42d8(struct Moby *moby) {
             frame = moby_animation_frame(moby);
             if (frame == 4.0f) FUN_L00_0024f7c8(moby, 1, joint_pos);
             else FUN_L00_0024f7c8(moby, 2, joint_pos);
-            speed = D_L08_001618A8 * D_0015ED6C;
+            frame = D_L08_001618A8;
+            frame *= D_0015ED6C;
             angle = fast_cos(fast_add_rotations(*(float *)(data + 0x170), moby->rot.z));
-            angle *= (fast_cos(*(float *)(data + 0x178)) * speed);
+            angle *= (fast_cos(*(float *)(data + 0x178)) * frame);
             velocity[0] = angle;
             angle = fast_sin(fast_add_rotations(*(float *)(data + 0x170), moby->rot.z));
-            angle *= (fast_cos(*(float *)(data + 0x178)) * speed);
+            angle *= (fast_cos(*(float *)(data + 0x178)) * frame);
             velocity[2] = 0.0f;
             velocity[1] = angle;
-            velocity[2] = -fast_sin(*(float *)(data + 0x178)) * speed;
+            velocity[2] = -fast_sin(*(float *)(data + 0x178)) * frame;
             {
                 struct Moby *other = (struct Moby *)FUN_L08_002dc8a0((char *)moby, (char *)joint_pos, (char *)velocity);
                 if (other) other->state = 1;
