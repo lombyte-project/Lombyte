@@ -686,7 +686,8 @@ void FUN_L08_002f5e58(struct Moby *m) {
     f32 phase, phase_step, amp_a, amp_step_a, amp_b, amp_step_b;
     f32 step_a, step_b, time, height_a, height_b, phase_a, phase_b;
     f32 x, y, noise_x, angle, base, sine, shape, bend, a, c, t;
-    s32 stride, alpha, i, j, k, timer, count, lifetime;
+    s32 stride, alpha, i, j, k, timer, count;
+    s16 lifetime;
     u32 color_a, color_b;
     s32 temp;
     u8 red, green, blue;
@@ -916,6 +917,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
         *(s16 *)(b+0x122) = scale_game_frames(b[0x121]);
         i=0;
         if (b[0x120]) do {
+            s32 lifetime;
             i++;
             color_a = (u32)b[0x117]<<24 | (u32)b[0x116]<<16 | (u32)b[0x115]<<8 | b[0x114];
             color_b = (u32)b[0x11b]<<24 | (u32)b[0x11a]<<16 | (u32)b[0x119]<<8 | b[0x118];
