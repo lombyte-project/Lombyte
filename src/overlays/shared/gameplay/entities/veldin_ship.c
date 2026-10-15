@@ -3398,7 +3398,7 @@ void FUN_L00_002d73e8(P *p) {
     for (i = q->start; i < end; i++) {
         speed = D_L00_001D4480[i];
         f = D_L00_001D31C0[i];
-        f -= speed * D_0015ED60_2d73e8;
+        f -= D_0015ED60_2d73e8 * speed;
         transform = D_L00_001D2860[i] ? negative_transform : positive_transform;
         D_L00_001D31C0[i] = f;
         if (f <= -8.0f)
