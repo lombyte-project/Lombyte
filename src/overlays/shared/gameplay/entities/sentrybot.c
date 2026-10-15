@@ -2610,13 +2610,16 @@ void FUN_L15_002a6e68(unsigned char *moby) {
             life_byte = life & 0xff;
             i++;
             scale_vector_xyz(&offset, &offset, random_float_between(0.0f, 0.9f));
-            /* Retail discards this sum and emits at the chosen endpoint. */
+            /* The checked helper adds offset into its second argument, endpoint_ptr. */
             FUN_L00_001ff290(collision.work.motion.temporary, endpoint_ptr, &offset);
             speed = D_0015ED6C * 10.0f;
             speed = random_float_between(speed, length / convert_integer_to_float(life << 2));
             normalize_vector_xyz(&offset, &offset, speed);
             alpha = random_integer_below(255);
-            FUN_L00_002730e0((float *)endpoint_ptr, (char *)&offset, 0x604040ff, life_byte, alpha, 0, D_L15_0016155C);
+            /* Retail returns the allocated effect pointer; this call ignores it. */
+            ((unsigned char *(*)(float *, char *, int, unsigned char, unsigned char, int, float))
+                FUN_L00_002730e0)((float *)endpoint_ptr, (char *)&offset, 0x604040ff,
+                                 life_byte, alpha, 0, D_L15_0016155C);
         } while (i < D_L15_00161558);
     }
     enqueue_callback_list_1_2a6e68((void (*)(void))FUN_L15_002a7628, moby);
