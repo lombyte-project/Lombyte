@@ -1545,7 +1545,8 @@ void FUN_L08_002dabf0(struct Moby *moby) {
     struct Moby *target;
     char *old;
     char *next;
-    int hit_duration;
+    long hit_duration;
+    int one;
     float distance, time, angle;
     collision.damage = 0.0f;
     FUN_L08_0026dae0(moby, D_L08_001619AC, d + 0x160, 3.0f);
@@ -1616,13 +1617,14 @@ void FUN_L08_002dabf0(struct Moby *moby) {
     target = search.target;
     switch (moby->state) {
     case 0:
+        one = 1;
         moby->flags |= 0x1000;
-        d[0x29] = 1;
+        d[0x29] = one;
         *(float *)(d + 0x20) = 2.0f;
         FUN_L08_00263050(d + 0xd0);
         { float distance = D_L08_00161978 * D_0015ED6C;
-        *(volatile float *)(d + 0xd8) = 2.0f;
-        *(volatile float *)(d + 0xdc) = 2.0f;
+        *(float *)(d + 0xdc) = 2.0f;
+        *(float *)(d + 0xd8) = 2.0f;
         *(float *)(d + 0x10c) = 0.03f;
         *(float *)(d + 0x110) = 0.3f;
         *(float *)(d + 0x114) = 0.25f;
@@ -1632,11 +1634,15 @@ void FUN_L08_002dabf0(struct Moby *moby) {
         clear_u64_value(d + 0x40);
         next = FUN_L08_002daa10(moby);
         *(char **)(d + 0x120) = next;
-        next[0xbc] = 1;
+        next[0xbc] = one;
         *(int *)(d + 0x128) = scale_game_frames(180);
-        if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, 0);
+        if (moby->prev_seq != 4) {
+            hit_duration = 0;
+change_animation:
+            blend_moby_animation(moby, 4, 0, hit_duration);
+        }
 set_idle:
-        moby->state = 1;
+        moby->state = one;
         goto reset_timer;
     case 1:
         FUN_L08_002635a0(moby, d + 0xd0, *(char **)(d + 0x120) + 0x10, d + 0x40);
@@ -1673,12 +1679,10 @@ set_idle:
         if (!(moby->anim_flags & 2)) break;
         blend_moby_animation(*(void **)(d + 0x120), 1, 0, scale_game_frames(6));
         {
-            int *point = (int *)&moby->pos;
-            int *aim = (int *)(*(char **)(d + 0x120) + 0x10);
+            u64 *point = (u64 *)&moby->pos;
+            u64 *aim = (u64 *)(*(char **)(d + 0x120) + 0x10);
             point[0] = aim[0];
             point[1] = aim[1];
-            point[2] = aim[2];
-            point[3] = aim[3];
         }
         moby->pos.z -= 0.1f;
         if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, 10);
@@ -1723,10 +1727,10 @@ select_target:
         *(char **)(d + 0x120) = next;
         if (!next) *(char **)(d + 0x120) = old;
         old[0xbc] = 0;
-        (*(struct Moby **)(d + 0x120))->command = 1;
+        one = 1;
+        (*(struct Moby **)(d + 0x120))->command = one;
         if (moby->prev_seq != 4) { hit_duration = scale_game_frames(7); goto change_animation; }
-        moby->state = 1;
-        goto reset_timer;
+        goto set_idle;
 fire_animation:
         if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(6));
         moby->state = 5;
@@ -1800,10 +1804,6 @@ reset_timer:
         }
     }
     goto finish;
-change_animation:
-    blend_moby_animation(moby, 4, 0, hit_duration);
-    moby->state = 1;
-    goto reset_timer;
 finish:
     FUN_L08_00267a28(moby, d + 0x60);
     *(int *)(d + 0x38) = 0;
