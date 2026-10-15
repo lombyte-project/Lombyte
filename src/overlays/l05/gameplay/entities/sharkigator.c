@@ -253,6 +253,7 @@ void FUN_L05_002d1688(char *moby) {
     }
 state_zero:
     {
+        float height;
         if (*(int *)(data + 0x64) != 0) {
             *(unsigned char *)(moby + 0x20) = 2;
             *(unsigned short *)(moby + 0x34) |= 1;
@@ -377,8 +378,9 @@ state_three:
                 *(float *)(data + 0x78) = speed;
                 if (speed < threshold) {
                     fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
-                    steer_2d1688(1.5533431f, frame_time_sq * 12.566371f,
-                                  frame_time_sq * 12.566371f, frame_time * 25.132742f,
+                    height = frame_time_sq;
+                    steer_2d1688(1.5533431f, height * 12.566371f,
+                                  height * 12.566371f, frame_time * 25.132742f,
                                   moby + 0x44, data + 0x70);
                     copy_direction_2d1688(moby + 0xc0, moby + 0x40);
                     fast_vec_normalize((*(float *)&D_L05_00161388), w, moby + 0xe0);
