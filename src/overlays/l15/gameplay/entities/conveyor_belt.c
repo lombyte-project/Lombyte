@@ -1090,8 +1090,8 @@ void FUN_L15_002ec760(struct Moby *moby) {
         }
         break;
     case 1:
-        if (is_point_inside_clip_volume((void *)0x13f3d0, *(int *)(data + 0x27c)) &&
-            (D_001413DC < 2 || D_001413DC == 9) && FUN_00255a30(moby, data)) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x27c)) &&
+            ((unsigned int)hero.state.control_mode < 2 || (unsigned int)hero.state.control_mode == 9) && FUN_00255a30(moby, data)) {
             FUN_L00_002502a0_v(*(int *)(data + 0x280));
             moby->anim_speed = 0.0f;
             moby->state = 2;
@@ -1177,7 +1177,7 @@ void FUN_L15_002ec760(struct Moby *moby) {
     char *pos = (char *)&moby->pos;
     fast = 0.02f;
     slow = 0.3f;
-    near_distance = FUN_001f8c00(pos, (void *)0x13f3d0);
+    near_distance = FUN_001f8c00(pos, &hero.motion.pos);
     if (near_distance < 8.0f) {
         yaw = FUN_001f9028(D_0013F420 - *(float *)(pos), D_0013F424 - *(float *)((char *)moby + 0x14));
         if (FUN_001f9968(moby->rot.z, yaw) < 1.5707964f) {
@@ -1210,8 +1210,8 @@ ready:
     FUN_001f8a20(&vecs.diff, &vecs.target, &vecs.pos);
     yaw = FUN_001f98a8(FUN_001f9028(((float *)&vecs.diff)[0], ((float *)&vecs.diff)[1]), moby->rot.z);
     pitch = -FUN_001f9028(FUN_001f8b80(&vecs.diff), ((float *)&vecs.diff)[2]);
-    if (yaw > 1.5707964f) yaw = 1.5707964f;
-    else if (yaw < -1.5707964f) yaw = -1.5707964f;
+    if (yaw < -1.5707964f) yaw = -1.5707964f;
+    else if (yaw > 1.5707964f) yaw = 1.5707964f;
     if (pitch > 0.5235988f) pitch = 0.5235988f;
     else if (pitch < -0.5235988f) pitch = -0.5235988f;
     {
