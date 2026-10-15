@@ -2183,8 +2183,8 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sz, float s
     t.c[0] = col0;
     u.q0 = tex_2baae0(D_L00_001617A8);
     col1 = color1 | (b << 24);
-    u.q1 = t.q1;
     u.q2 = t.q2;
+    u.q1 = t.q1;
     u.z4 = t.z4;
     u.c[0] = u.c[1] = u.c[2] = u.c[3] = col1;
     u.f[0] = 0;
@@ -2207,9 +2207,9 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sz, float s
     fast_vec_sub(w140, m, g_debug_camera);
     fast_vec_sub(w150, m + 0x10, m);
     fast_vec_cross(w120, w150, w140);
-    len0 = fast_vec_length(w120);
-    len0 = len0 != 0.0f ? 1.0f / len0 : len0;
-    fast_vec_scale(D_L00_00161774 * len0, w120, w120);
+    l2 = fast_vec_length(w120);
+    l2 = l2 != 0.0f ? 1.0f / l2 : l2;
+    fast_vec_scale(D_L00_00161774 * l2, w120, w120);
     fast_vec_add(q[0], m, w120);
     fast_vec_sub(q[1], m, w120);
     i = 1;
