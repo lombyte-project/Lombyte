@@ -751,19 +751,22 @@ void FUN_L01_002e0c68(char *moby) {
         add_vector_xyz(&hero.motion.pos,&hero.motion.pos,offset);
         hero.motion.pos.f[2] = height;
         {
-            struct Hero *g = &hero;
-            g->motion.move_yaw = fast_add_rotations(D_0015EDB5 ? -1.5707964f : 1.5707964f,angle);
-            FUN_L00_0025bc00(&g->motion.rot.f[2],0,g->motion.move_yaw,frame_time*6.2831855f);
+            char *g;
+            *(volatile float *)&hero.motion.move_yaw = fast_add_rotations(D_0015EDB5 ? -1.5707964f : 1.5707964f,angle);
+            /* Existing data-label anchor reconstructs hero yaw at 0x0013f3e8. */
+            other = D_0013E533 + 0xeb5;
+            g = other - 0x98;
+            FUN_L00_0025bc00((float *)other,0,F(g,0x180),*(volatile float *)&frame_time*6.2831855f);
             /* Keep retail's two separate height subtractions around the ground probe. */
             F(data,0x24) += frame_time_sq*9.8f;
-            g->motion.pos.f[2] -= F(data,0x24)-2.0f;
-            ground = probe_ground_height(&g->motion.pos,0,0.5f);
-            g->motion.pos.f[2] -= 2.0f;
-            if (g->motion.pos.f[2] < ground) {
-                g->motion.pos.f[2] = ground;
+            F(g,0x88) -= F(data,0x24)-2.0f;
+            ground = probe_ground_height(other-0x18,0,0.5f);
+            F(g,0x88) -= 2.0f;
+            if (F(g,0x88) < ground) {
+                F(g,0x88) = ground;
                 *(int *)(data+0x24) = 0;
             }
-            if (g->moby->prev_seq != 0x44) {
+            if (((struct Hero *)g)->moby->prev_seq != 0x44) {
                 float turn;
                 turn = fast_add_rotations(0.2617994f,angle);
                 FUN_L00_0025bc00((float *)(moby+0x48),0,turn,frame_time*3.1415927f);
@@ -777,7 +780,7 @@ void FUN_L01_002e0c68(char *moby) {
             F(data,0) = F(data,0x18) / (F(data,0x30)*6.2831855f);
             if (1.0f < F(data,0)) F(data,0) = 1.0f;
             if (F(data,0) < 0.0f) F(data,0) = 0.0f;
-            fast_mem_zero16((char *)g + 0xe0,0x90);
+            fast_mem_zero16(&hero.motion.velocity,0x90);
         }
         break;
     }
