@@ -530,14 +530,15 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                 float radius, extent;
                 flags = *(unsigned int *)(list - 4);
                 last = flags >> 31;
+                type = flags & 0xff;
                 chosen = mask >> (index & 31);
-                if (!((chosen ^ 1) & 1) && (flags & 0x20000)) {
+                if ((chosen & 1) && (flags & 0x20000)) {
                     entries[count] = entry;
-                    switch ((int)(flags & 0xff)) {
+                    switch (type) {
                     case 0:
                     case 1:
                     case 2: {
-                        if ((int)(flags & 0xff) < 2) {
+                        if (type < 2) {
                             qcopy(&first, (void *)((entry + 0x10)));
                             FUN_001f9a80_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
                             radius = first.f[3];
@@ -546,13 +547,14 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                             qcopy(&second, (void *)((entry + 0x10)));
                             FUN_001f9a10_25aca0(&first, &first, &second);
                             FUN_001f9a68_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
-                            extent = *(float *)(entity + 0x2c);
-                            radius = *(float *)(list + 8) * extent * 0.0009765625f;
+                            radius = *(float *)(entity + 0x2c);
+                            radius = *(float *)(list + 8) * radius * 0.0009765625f;
                         }
                         weights[count] = radius * 4.1887903f * radius * radius;
                         break;
                     }
                     case 3: {
+                        float radius, extent;
                         qcopy(&first, (void *)((entry + 0x10)));
                         FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
                         radius = first.f[3] * *(float *)(entity + 0x2c);
