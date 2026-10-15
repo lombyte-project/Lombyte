@@ -479,12 +479,12 @@ void FUN_L00_002464a8(void) {
         y2 = points[5];
         x3 = points[6];
         y3 = points[7];
-        x_slope = (x2 - x3) / (x0 - x1);
-        y_slope = (y2 - y3) / (y0 - y1);
-        coefficients[1] = x_slope;
-        coefficients[3] = y_slope;
-        coefficients[0] = x2 - x_slope * x0;
-        coefficients[2] = y2 - y_slope * y0;
+        x3 = (x2 - x3) / (x0 - x1);
+        y3 = (y2 - y3) / (y0 - y1);
+        coefficients[1] = x3;
+        coefficients[3] = y3;
+        coefficients[0] = x2 - x3 * x0;
+        coefficients[2] = y2 - y3 * y0;
         points += 8;
         coefficients += 4;
     }
