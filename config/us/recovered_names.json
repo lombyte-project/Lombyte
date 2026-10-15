@@ -11098,7 +11098,7 @@
       },
       {
         "unit": "math/interpolation/advance_accelerated_scalar",
-        "source_path": "src/assembly/textbin/fun_00213f38.c",
+        "source_path": "src/math/interpolation/advance_accelerated_scalar.c",
         "address": "0x00213f38",
         "current_name": "FUN_00213f38",
         "proposed_name": "advance_accelerated_scalar",
@@ -12716,7 +12716,7 @@
       },
       {
         "unit": "ui/menus/item_preview/update_item_preview_binding",
-        "source_path": "src/assembly/textbin/fun_0021e230.c",
+        "source_path": "src/ui/menus/item_preview/update_item_preview_binding.c",
         "address": "0x0021e230",
         "current_name": "FUN_0021e230",
         "proposed_name": "update_item_preview_binding",
@@ -13229,7 +13229,7 @@
       },
       {
         "unit": "ui/menus/update_menu_resource_stream",
-        "source_path": "src/assembly/textbin/fun_0021fdc8.c",
+        "source_path": "src/ui/menus/update_menu_resource_stream.c",
         "address": "0x0021fdc8",
         "current_name": "FUN_0021fdc8",
         "proposed_name": "update_menu_resource_stream",
@@ -14039,7 +14039,7 @@
       },
       {
         "unit": "ui/menus/item_preview/update_menu_preview_pose_and_attachments",
-        "source_path": "src/assembly/textbin/fun_00224e18.c",
+        "source_path": "src/ui/menus/item_preview/update_menu_preview_pose_and_attachments.c",
         "address": "0x00224e18",
         "current_name": "FUN_00224e18",
         "proposed_name": "update_menu_preview_pose_and_attachments",
@@ -14688,7 +14688,7 @@
       },
       {
         "unit": "rendering/append_fullscreen_clear_strips",
-        "source_path": "src/assembly/textbin/fun_00227378.c",
+        "source_path": "src/rendering/append_fullscreen_clear_strips.c",
         "address": "0x00227378",
         "current_name": "FUN_00227378",
         "proposed_name": "append_fullscreen_clear_strips",
@@ -15625,7 +15625,7 @@
       },
       {
         "unit": "ui/loading/prepare_loading_slide_textures",
-        "source_path": "src/assembly/textbin/fun_00231878.c",
+        "source_path": "src/ui/loading/prepare_loading_slide_textures.c",
         "address": "0x00231878",
         "current_name": "FUN_00231878",
         "proposed_name": "prepare_loading_slide_textures",
@@ -16784,7 +16784,7 @@
       },
       {
         "unit": "gameplay/camera/sample_surface_height_map",
-        "source_path": "src/assembly/textbin/fun_00239f58.c",
+        "source_path": "src/gameplay/camera/sample_surface_height_map.c",
         "address": "0x00239f58",
         "current_name": "FUN_00239f58",
         "proposed_name": "sample_surface_height_map",
