@@ -453,7 +453,8 @@ void FUN_L10_002be858(unsigned char *moby) {
     int *data = *(int **)(moby + 0x78);
     float position[4];
     float velocity[4];
-    float offset[4];
+    float offset_buffer[4];
+    float *offset;
     float angle;
     int i;
     if ((unsigned char)moby[0x20] == 0) {
@@ -463,6 +464,7 @@ void FUN_L10_002be858(unsigned char *moby) {
         moby[0x20] = 1;
     }
     if (hero.vehicle_mode == 1 && *data != -1 && vector_distance(moby + 0x10, &hero.motion.pos) < 0.5f) {
+        offset = offset_buffer;
         i = 9;
         do {
             float size, size_scaled;
