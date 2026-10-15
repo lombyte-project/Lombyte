@@ -127,10 +127,7 @@ void FUN_L01_00228000(void)
             channels |= (r / 2) << 8;
             color = channels | g;
         } else {
-            color = alpha << 24;
-            color |= b << 16;
-            color |= g << 8;
-            color |= r;
+            color = (alpha << 24) | (b << 16) | (g << 8) | r;
         }
         q = &hero;
 
@@ -163,8 +160,8 @@ void FUN_L01_00228000(void)
         if (q->pending_item[0] == 31) goto pending_zero;
         if (q->unk22DE == 0) {
             FUN_L00_00216de8(25, 0);
-            q->unk22DC = 1;
             q->unk22DE = 18;
+            q->unk22DC = 1;
         }
         goto finish;
 pending_zero:
@@ -175,8 +172,8 @@ pending_zero:
         if (D_0013D4DC[0] == 0) goto finish;
         if (p->unk22DE != 0) goto finish;
         FUN_L00_00216de8(25, 0);
-        p->unk22DC = 1;
         p->unk22DE = 18;
+        p->unk22DC = 1;
     }
 finish:
     FUN_L00_00208b60();
