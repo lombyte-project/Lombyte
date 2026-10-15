@@ -1768,7 +1768,7 @@ extern Vec_2BE3A8 D_L00_001DC250_2BE3A8[12] __asm__("D_L00_001DBF50");
 extern Vec_2BE3A8 D_L00_001DC260_2BE3A8[12] __asm__("D_L00_001DBF60");
 extern Vec_2BE3A8 D_L00_001DC320_2BE3A8[12] __asm__("D_L00_001DC020");
 extern Vec_2BE3A8 D_L00_001DC3E0_2BE3A8[12] __asm__("D_L00_001DC0E0");
-Vec_2BE3A8 D_L00_001DC4A0_2BE3A8[12][20] __asm__("D_L00_001DC1A0") = {0};
+Vec_2BE3A8 D_L00_001DC1A0_2BE3A8[12][20] __asm__("D_L00_001DC1A0") = {0};
 Vec_2BE3A8 D_L01_001DC620[12][20] = {0};
 Vec_2BE3A8 D_L02_001D0C20[12][20] = {0};
 Vec_2BE3A8 D_L03_001D0720[12][20] = {0};
@@ -1905,7 +1905,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
 
                 for (ring_index = 0; ring_index < 20; ring_index++) {
                     func_002156E0_2BE3A8(&ring, &side, &dir, (float)ring_index * D_L00_001617D4_2BE3A8);
-                    func_001F9BD8_2BE3A8(&D_L00_001DC4A0_2BE3A8[i][ring_index], &ring, &D_L00_001DC260_2BE3A8[i]);
+                    func_001F9BD8_2BE3A8(&D_L00_001DC1A0_2BE3A8[i][ring_index], &ring, &D_L00_001DC260_2BE3A8[i]);
                 }
                 qcopy(&node, &D_L00_001DC260_2BE3A8[i]);
                 func_L00_001FF4B0_2BE3A8(&fwd, &dir, 1.0f);

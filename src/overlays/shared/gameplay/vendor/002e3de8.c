@@ -473,12 +473,12 @@ extern float cosine_interpolate_5f18(float, float, float) __asm__("FUN_002133d0"
 extern void update_view_context_5f18(void) __asm__("FUN_001f2d98");
 extern float fast_sin_5f18(float) __asm__("FUN_001f9de0");
 extern float fast_cos_5f18(float) __asm__("FUN_001f9dc8");
-extern float FUN_001f9b48_5f18(void *, void *) __asm__("FUN_001f9b48");
-extern void sub_5f18(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void add_5f18(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_5f18(void *, void *, float) __asm__("FUN_001f9a68");
-extern void normalize_5f18(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void cross_5f18(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
+extern void subtract_vector_xyz_5f18(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s32 tick_countdown_16_5f18(s16 *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32_5f18(f32) __asm__("FUN_001fa6d0");
 extern s32 scale_game_frames_5f18(s32) __asm__("FUN_001f96f8");
@@ -523,16 +523,16 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
                 offset[2] = ofs[2];
                 offset[3] = 0.0f;
                 transform_vector_by_basis_5f18(offset, offset, D_L10_00167450);
-                add_5f18(point, &anchor->pos, offset);
-                sub_5f18(dir, point, &cam->pos);
+                add_vector_xyz(point, &anchor->pos, offset);
+                subtract_vector_xyz_5f18(dir, point, &cam->pos);
             } else {
-                sub_5f18(dir, look_path + 0x10, &cam->pos);
+                subtract_vector_xyz_5f18(dir, look_path + 0x10, &cam->pos);
             }
-            scale_5f18(offset, D_0013F5E0_5f18, -1.0f);
-            normalize_5f18(&cam->m0, dir, 1.0f);
-            cross_5f18(&cam->m1, &cam->m0, offset);
-            normalize_5f18(&cam->m1, &cam->m1, 1.0f);
-            cross_5f18(&cam->m2, &cam->m1, &cam->m0);
+            scale_vector_xyz(offset, D_0013F5E0_5f18, -1.0f);
+            normalize_vector_xyz(&cam->m0, dir, 1.0f);
+            cross_vectors_xyz(&cam->m1, &cam->m0, offset);
+            normalize_vector_xyz(&cam->m1, &cam->m1, 1.0f);
+            cross_vectors_xyz(&cam->m2, &cam->m1, &cam->m0);
         }
         return;
     }
@@ -596,7 +596,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
             update_view_context_5f18();
         }
     }
-    run->dist += FUN_001f9b48_5f18(dir, &cam->pos);
+    run->dist += distance_xyz(dir, &cam->pos);
     if (*(int *)(rec + 0x28) >= 0) {
         struct Moby *anchor = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
         float *ofs = (float *)(rec + 0x2C);
@@ -605,8 +605,8 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         point[2] = ofs[2];
         point[3] = 0.0f;
         transform_vector_by_basis_5f18(point, point, D_L10_00167450);
-        add_5f18(look_point, &anchor->pos, point);
-        sub_5f18(offset, look_point, &cam->pos);
+        add_vector_xyz(look_point, &anchor->pos, point);
+        subtract_vector_xyz_5f18(offset, look_point, &cam->pos);
     } else {
         char *look = D_L10_001B0930_5f18[*(int *)(rec + 0x24)];
         look_seg = 0;
@@ -614,13 +614,13 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         path_step_5f18(look, point, &look_seg, &look_t, 0, run->dist / run->len_a * run->len_b);
         debug_point_5f18(point, 0.2f);
         debug_line_5f18(look + 0x10, look + *(int *)look * 16);
-        sub_5f18(offset, point, &cam->pos);
+        subtract_vector_xyz_5f18(offset, point, &cam->pos);
     }
-    scale_5f18(point, D_0013F5E0_5f18, -1.0f);
-    normalize_5f18(&cam->m0, offset, 1.0f);
-    cross_5f18(&cam->m1, &cam->m0, point);
-    normalize_5f18(&cam->m1, &cam->m1, 1.0f);
-    cross_5f18(&cam->m2, &cam->m1, &cam->m0);
+    scale_vector_xyz(point, D_0013F5E0_5f18, -1.0f);
+    normalize_vector_xyz(&cam->m0, offset, 1.0f);
+    cross_vectors_xyz(&cam->m1, &cam->m0, point);
+    normalize_vector_xyz(&cam->m1, &cam->m1, 1.0f);
+    cross_vectors_xyz(&cam->m2, &cam->m1, &cam->m0);
 }
 #include "sda.h"
 

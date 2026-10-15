@@ -11,51 +11,51 @@
 typedef unsigned int Q_2cfcb8 __attribute__((mode(TI)));
 typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) V_2cfcb8;
 
-struct D_2cfcb8;
+struct Vars_2cfcb8;
 typedef struct M_2cfcb8 {
     u8 p0[0x10];
     V_2cfcb8 pos;
-    u8 p20;
-    u8 grp;
+    u8 state;
+    u8 group;
     u8 p22[0x30 - 0x22];
-    u8 b30;
+    u8 update_dist;
     u8 p31[0x36 - 0x31];
-    s16 h36;
+    s16 occlusion;
     u8 p38[0x40 - 0x38];
-    f32 f40;
-    f32 f44;
-    f32 f48;
+    f32 rot_x;
+    f32 rot_y;
+    f32 rot_z;
     u8 p4c[0x78 - 0x4C];
-    struct D_2cfcb8 *data;
+    struct Vars_2cfcb8 *vars;
     u8 p7c[0xA6 - 0x7C];
-    s16 type;
+    s16 oclass;
     u16 hA8;
     u8 pAA[0xB0 - 0xAA];
-    u8 bB0;
+    u8 mission;
 } M_2cfcb8;
 
-typedef struct D_2cfcb8 {
+typedef struct Vars_2cfcb8 {
     u8 p0[0xA0];
-    M_2cfcb8 *pA0;
+    M_2cfcb8 *next_member;
     M_2cfcb8 *pA4;
     u8 pA8[4];
     s32 flags;
-    f32 fB0;
+    f32 height;
     u8 pB4[0xC0 - 0xB4];
-    s32 iC0;
+    s32 route_index;
     u16 hC4;
     s16 hC6;
     u8 pC8[4];
     s32 iCC;
-    V_2cfcb8 vD0;
-    V_2cfcb8 vE0;
-    M_2cfcb8 *pF0;
-    f32 fF4;
+    V_2cfcb8 link_pos;
+    V_2cfcb8 link_rot;
+    M_2cfcb8 *standing_on;
+    f32 stack_level;
     s32 iF8;
-} D_2cfcb8;
+} Vars_2cfcb8;
 
-typedef struct { s32 n; s32 p4[3]; struct { s32 a, b, c, st; } e[1]; } R_2cfcb8;
-typedef struct { u8 p0[0x18]; M_2cfcb8 *hit; u8 p1c[0x28 - 0x1C]; f32 f28; } H_2cfcb8;
+typedef struct { s32 count; s32 pad_4[3]; struct { s32 pad_0[3]; s32 state; } entries[1]; } R_2cfcb8;
+typedef struct { u8 p0[0x18]; M_2cfcb8 *moby; u8 p1c[0x28 - 0x1C]; f32 point_z; } H_2cfcb8;
 
 extern s32 D_0014EE90_lui[] __asm__("D_0014EE90") __attribute__((section(".data")));
 extern H_2cfcb8 coll_hit_2cfcb8 __asm__("D_L00_00173E40") __attribute__((section(".data")));
@@ -81,27 +81,27 @@ void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
     V_2cfcb8 probe_down;
     M_2cfcb8 *member;
     M_2cfcb8 *other;
-    D_2cfcb8 *vars;
-    D_2cfcb8 *below_vars;
+    Vars_2cfcb8 *vars;
+    Vars_2cfcb8 *below_vars;
     V_2cfcb8 *src1, *src2, *src3, *src4;
     R_2cfcb8 *route;
     s32 group, flags_before, i, member_flags;
     M_2cfcb8 *below;
 
-    vars = moby->data;
-    group = moby->grp;
+    vars = moby->vars;
+    group = moby->group;
     vars->flags |= 4;
     if (group == 0xFF) {
-        if (moby->type == 0x1F4 && FUN_00213260_2cfcb8(2) != 0 && moby->f40 == 0.0f && moby->f44 == 0.0f) {
-            moby->f48 = FUN_001fa580_2cfcb8(moby->f48, 1.5707964f);
+        if (moby->oclass == 0x1F4 && FUN_00213260_2cfcb8(2) != 0 && moby->rot_x == 0.0f && moby->rot_y == 0.0f) {
+            moby->rot_z = FUN_001fa580_2cfcb8(moby->rot_z, 1.5707964f);
         }
-        if (moby->type == 0x1F5 && moby->bB0 != 0xFF && D_0014EE90_lui[moby->bB0] < vars->iF8) {
+        if (moby->oclass == 0x1F5 && moby->mission != 0xFF && D_0014EE90_lui[moby->mission] < vars->iF8) {
             FUN_0020c828_2cfcb8(moby);
             return;
         }
         flags_before = vars->flags;
         vars->hC4 = moby->hA8;
-        vars->fB0 = 1.0f;
+        vars->height = 1.0f;
         vars->flags = flags_before | 1;
         src1 = &moby->pos;
         qcopy(&probe_top, src1);
@@ -112,36 +112,36 @@ void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
             vars->pA4 = 0;
             return;
         }
-        if (coll_hit_2cfcb8.hit == 0) {
-            moby->pos.z = coll_hit_2cfcb8.f28;
+        if (coll_hit_2cfcb8.moby == 0) {
+            moby->pos.z = coll_hit_2cfcb8.point_z;
             vars->pA4 = 0;
             return;
         }
-        if (FUN_L00_0025e3b8_2cfcb8(coll_hit_2cfcb8.hit) != 0) return;
+        if (FUN_L00_0025e3b8_2cfcb8(coll_hit_2cfcb8.moby) != 0) return;
         vars->pA4 = 0;
         vars->flags |= 8;
-        if (FUN_L00_002603d0_2cfcb8(coll_hit_2cfcb8.hit) != 0) {
-            if (moby != 0) moby->h36 = 0x7F80;
-            FUN_L00_00260668_2cfcb8(member, coll_hit_2cfcb8.hit, &moby->pos, &moby->f40, &vars->vD0, &vars->vE0);
-            vars->fF4 = 0;
-            vars->pF0 = coll_hit_2cfcb8.hit;
+        if (FUN_L00_002603d0_2cfcb8(coll_hit_2cfcb8.moby) != 0) {
+            if (moby != 0) moby->occlusion = 0x7F80;
+            FUN_L00_00260668_2cfcb8(member, coll_hit_2cfcb8.moby, &moby->pos, &moby->rot_x, &vars->link_pos, &vars->link_rot);
+            vars->stack_level = 0;
+            vars->standing_on = coll_hit_2cfcb8.moby;
         }
         return;
     }
 
     FUN_L00_002591d0_2cfcb8(&moby, group, 0, 0);
     while (moby != 0) {
-        vars = moby->data;
+        vars = moby->vars;
         if (FUN_L00_0025e3b8_2cfcb8(moby) != 0) {
-            if (moby->type == 0x1F4 && FUN_00213260_2cfcb8(2) != 0 && moby->f40 == 0.0f && moby->f44 == 0.0f) {
-                moby->f48 = FUN_001fa580_2cfcb8(moby->f48, 1.5707964f);
+            if (moby->oclass == 0x1F4 && FUN_00213260_2cfcb8(2) != 0 && moby->rot_x == 0.0f && moby->rot_y == 0.0f) {
+                moby->rot_z = FUN_001fa580_2cfcb8(moby->rot_z, 1.5707964f);
             }
-            if (moby->type == 0x1F5 && moby->bB0 != 0xFF && D_0014EE90_lui[moby->bB0] < vars->iF8) {
+            if (moby->oclass == 0x1F5 && moby->mission != 0xFF && D_0014EE90_lui[moby->mission] < vars->iF8) {
                 FUN_0020c828_2cfcb8(moby);
             } else {
                 member_flags = vars->flags;
                 vars->hC4 = moby->hA8;
-                vars->fB0 = 1.0f;
+                vars->height = 1.0f;
                 vars->flags = member_flags | 1;
                 src2 = &moby->pos;
                 qcopy(&probe_top, src2);
@@ -151,34 +151,34 @@ void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
                 if (FUN_001efa68_2cfcb8(&probe_top, &probe_bottom, 2, 0, 0) == 0) {
                     vars->pA4 = 0;
                 } else {
-                    if (coll_hit_2cfcb8.hit == 0) {
-                        moby->pos.z = coll_hit_2cfcb8.f28;
+                    if (coll_hit_2cfcb8.moby == 0) {
+                        moby->pos.z = coll_hit_2cfcb8.point_z;
                         vars->pA4 = 0;
-                    } else if (FUN_L00_0025e3b8_2cfcb8(coll_hit_2cfcb8.hit) == 0 && (u16)(coll_hit_2cfcb8.hit->type - 0x128) >= 2) {
+                    } else if (FUN_L00_0025e3b8_2cfcb8(coll_hit_2cfcb8.moby) == 0 && (u16)(coll_hit_2cfcb8.moby->oclass - 0x128) >= 2) {
                         vars->pA4 = 0;
-                        moby->b30 = 0xFF;
+                        moby->update_dist = 0xFF;
                         vars->flags |= 8;
-                    } else if (coll_hit_2cfcb8.hit->data == 0) {
+                    } else if (coll_hit_2cfcb8.moby->vars == 0) {
                         vars->pA4 = 0;
-                    } else if (coll_hit_2cfcb8.hit->grp != moby->grp) {
+                    } else if (coll_hit_2cfcb8.moby->group != moby->group) {
                         vars->pA4 = 0;
-                    } else if (FUN_L00_0025e3b8_2cfcb8(coll_hit_2cfcb8.hit) != 0) {
-                        vars->pA4 = coll_hit_2cfcb8.hit;
+                    } else if (FUN_L00_0025e3b8_2cfcb8(coll_hit_2cfcb8.moby) != 0) {
+                        vars->pA4 = coll_hit_2cfcb8.moby;
                         src3 = &moby->pos;
-                        below = coll_hit_2cfcb8.hit;
+                        below = coll_hit_2cfcb8.moby;
                         qcopy(src3, &below->pos);
                         FUN_001f9a10_2cfcb8(src3, src3, (u8 *)below + 0xE0);
-                        vars = coll_hit_2cfcb8.hit->data;
+                        vars = coll_hit_2cfcb8.moby->vars;
                         if (FUN_L00_0025e3b8_2cfcb8(moby) != 0) {
-                            vars->pA0 = moby;
+                            vars->next_member = moby;
                         } else {
                             FUN_001f97b0_2cfcb8();
-                            vars->pA0 = 0;
+                            vars->next_member = 0;
                         }
                     } else {
                         vars->pA4 = 0;
                         vars->iCC = 0;
-                        moby->pos.z = coll_hit_2cfcb8.f28;
+                        moby->pos.z = coll_hit_2cfcb8.point_z;
                     }
                 }
             }
@@ -188,57 +188,57 @@ void FUN_L00_002cfcb8(M_2cfcb8 *moby) {
 
     FUN_L00_002591d0_2cfcb8(&member, group, 0, 0);
     while (member != 0) {
-        vars = member->data;
+        vars = member->vars;
         if (FUN_L00_0025e3b8_2cfcb8(member) != 0 && vars->pA4 == 0) {
             src4 = &member->pos;
             qcopy(&probe_up, src4);
             qcopy(&probe_down, src4);
-            probe_up.z += vars->fB0 * 0.5f;
+            probe_up.z += vars->height * 0.5f;
             probe_down.z = 0.1f;
             if (FUN_001efa68_2cfcb8(&probe_up, &probe_down, 2, moby, 0) != 0) {
-                        if (coll_hit_2cfcb8.hit != 0 && FUN_L00_002603d0_2cfcb8(coll_hit_2cfcb8.hit) != 0) {
-                    if (moby != 0) moby->h36 = 0x7F80;
-                    FUN_L00_00260668_2cfcb8(member, coll_hit_2cfcb8.hit, &member->pos, &member->f40, &vars->vD0, &vars->vE0);
-                    vars->fF4 = 0;
-                    vars->pF0 = coll_hit_2cfcb8.hit;
+                        if (coll_hit_2cfcb8.moby != 0 && FUN_L00_002603d0_2cfcb8(coll_hit_2cfcb8.moby) != 0) {
+                    if (moby != 0) moby->occlusion = 0x7F80;
+                    FUN_L00_00260668_2cfcb8(member, coll_hit_2cfcb8.moby, &member->pos, &member->rot_x, &vars->link_pos, &vars->link_rot);
+                    vars->stack_level = 0;
+                    vars->standing_on = coll_hit_2cfcb8.moby;
                     vars->flags |= 8;
                 }
             }
-            for (moby = member; moby != 0; moby = vars->pA0) {
-                vars = moby->data;
+            for (moby = member; moby != 0; moby = vars->next_member) {
+                vars = moby->vars;
                 below_vars = 0;
-                if (vars->pA4 != 0) below_vars = vars->pA4->data;
+                if (vars->pA4 != 0) below_vars = vars->pA4->vars;
                 if (below_vars != 0) {
                     vars->iCC = below_vars->iCC;
-                    if (below_vars->pF0 != 0) {
-                        moby->b30 = 0xFF;
+                    if (below_vars->standing_on != 0) {
+                        moby->update_dist = 0xFF;
                         vars->flags |= 8;
-                        qcopy(&vars->vD0, &below_vars->vD0);
-                        qcopy(&vars->vE0, &below_vars->vE0);
-                        vars->pF0 = below_vars->pF0;
-                        vars->fF4 = below_vars->fF4 + 1.0f;
+                        qcopy(&vars->link_pos, &below_vars->link_pos);
+                        qcopy(&vars->link_rot, &below_vars->link_rot);
+                        vars->standing_on = below_vars->standing_on;
+                        vars->stack_level = below_vars->stack_level + 1.0f;
                     }
                 }
-                if ((vars->hC6 != 0 || moby->type == 0x1F5) && vars->pA0 != 0 && vars->iC0 != -1) {
-                    route = D_L00_001B04B0_2cfcb8[vars->iC0];
-                    if (route->n == 0) {
-                        vars->iC0 = -1;
+                if ((vars->hC6 != 0 || moby->oclass == 0x1F5) && vars->next_member != 0 && vars->route_index != -1) {
+                    route = D_L00_001B04B0_2cfcb8[vars->route_index];
+                    if (route->count == 0) {
+                        vars->route_index = -1;
                     } else {
-                        s32 step = route->e[0].st;
-                        if (step == 1 || step == 3) {
-                            vars->iC0 = -1;
-                        } else if (step == 0x111) {
-                            vars->iC0 = -1;
-                        } else if ((u32)(step - 0x11) < 0x100) {
-                            if (step - 0x10 >= route->n) {
-                                vars->iC0 = -1;
+                        s32 entry_state = route->entries[0].state;
+                        if (entry_state == 1 || entry_state == 3) {
+                            vars->route_index = -1;
+                        } else if (entry_state == 0x111) {
+                            vars->route_index = -1;
+                        } else if ((u32)(entry_state - 0x11) < 0x100) {
+                            if (entry_state - 0x10 >= route->count) {
+                                vars->route_index = -1;
                             } else {
-                                route->e[0].st = step + 1;
+                                route->entries[0].state = entry_state + 1;
                             }
                         } else {
-                            route->e[0].st = 0x11;
-                            for (i = 0; i < D_L00_001B04B0_2cfcb8[vars->iC0]->n; i++) {
-                                D_L00_001B04B0_2cfcb8[vars->iC0]->e[i].st = 0;
+                            route->entries[0].state = 0x11;
+                            for (i = 0; i < D_L00_001B04B0_2cfcb8[vars->route_index]->count; i++) {
+                                D_L00_001B04B0_2cfcb8[vars->route_index]->entries[i].state = 0;
                             }
                         }
                     }
@@ -1021,12 +1021,12 @@ extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 void FUN_L00_002c7320(void *pos, void *tgt, f32 *out, f32 speed, f32 unused, f32 range);
-extern char D_L00_00166D80_2D3608[] __asm__("D_L00_00166C80");
-extern char D_L00_00166EC0_2D3608[] __asm__("D_L00_00166DC0");
-extern char D_L00_00173F40_2D3608[] __asm__("D_L00_00173E40");
-extern char D_0013E633_2D3608[] __asm__("D_0013F990");
-extern char D_0013A5E0_2D3608[] __asm__("D_0013C940");
-extern float D_0015EE70_2D3608 __asm__("D_0015ED70");
+extern char player_camera_2D3608[] __asm__("D_L00_00166C80");
+extern char camera_pos_2D3608[] __asm__("D_L00_00166DC0");
+extern char coll_hit_2D3608[] __asm__("D_L00_00173E40");
+extern char D_0013F990_2D3608[] __asm__("D_0013F990");
+extern char controller_state_2D3608[] __asm__("D_0013C940");
+extern float frame_time_sq_2D3608 __asm__("D_0015ED70");
 extern void func_001FA480_2D3608(void *, void *) __asm__("FUN_001fa2b8");
 extern void func_001FA4A0_2D3608(void *, void *) __asm__("FUN_001fa2d8");
 extern void func_001F9EC0_2D3608(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -1058,37 +1058,37 @@ void FUN_L00_002d2158(int collision_arg, Moby_2D3608 *carrier, float *position)
     float *anchor_ptr = anchor;
 
     *(u128_2D3608 *)anchor_ptr = *(u128_2D3608 *)position;
-    func_001FA480_2D3608(rotation, D_L00_00166D80_2D3608);
+    func_001FA480_2D3608(rotation, player_camera_2D3608);
     func_001FA4A0_2D3608(inverse, rotation);
     target = carrier->target;
     if (target == 0) return;
     output = target->data;
     *(u128_2D3608 *)direction = 0;
     direction[0] = 1.0f;
-    func_001F9EC0_2D3608(direction, direction, D_0013E633_2D3608);
+    func_001F9EC0_2D3608(direction, direction, D_0013F990_2D3608);
     {
-        Hero *hero_state = (Hero *)(D_0013E633_2D3608 - 0x640);
-        anchor_ptr[0] = func_001F9F90_2D3608(func_001FA748_2D3608(-0.361968011f, func_L00_001FF860_2D3608(hero_state->unk670, hero_state->unk674))) * 0.859039009f;
-        anchor_ptr[1] = func_001F9FA8_2D3608(func_001FA748_2D3608(-0.361968011f, func_L00_001FF860_2D3608(hero_state->unk670, hero_state->unk674))) * 0.859039009f;
+        Hero *hero = (Hero *)(D_0013F990_2D3608 - 0x640);
+        anchor_ptr[0] = func_001F9F90_2D3608(func_001FA748_2D3608(-0.361968011f, func_L00_001FF860_2D3608(hero->unk670, hero->unk674))) * 0.859039009f;
+        anchor_ptr[1] = func_001F9FA8_2D3608(func_001FA748_2D3608(-0.361968011f, func_L00_001FF860_2D3608(hero->unk670, hero->unk674))) * 0.859039009f;
         anchor_ptr[2] = 0.0f;
-        func_001F9BD8_2D3608(anchor_ptr, anchor_ptr, D_0013E633_2D3608 - 0x5C0);
+        func_001F9BD8_2D3608(anchor_ptr, anchor_ptr, D_0013F990_2D3608 - 0x5C0);
         anchor_ptr[2] = anchor_ptr[2] + 0.390819997f;
         func_L00_001FF860_2D3608(direction[0], direction[1]);
-        range = (((PadState *)D_0013A5E0_2D3608)->held & 5) ? 3.5f : 2.5f;
+        range = (((PadState *)controller_state_2D3608)->held & 5) ? 3.5f : 2.5f;
         func_001F9C30_2D3608(aim, direction, range);
         func_001F9BD8_2D3608(aim, aim, anchor_ptr);
-        if ((((PadState *)D_0013A5E0_2D3608)->held & 5) && hero_state->unk20AC == 0) {
+        if ((((PadState *)controller_state_2D3608)->held & 5) && hero->unk20AC == 0) {
             *(u128_2D3608 *)launch = 0;
             launch[2] = 1.0f;
             func_001F9EE8_2D3608(launch, launch, inverse);
             hit = 0;
-            func_001FA790_2D3608(((Moby_2D3608 *)hero_state->moby)->yaw, func_L00_001FF860_2D3608(launch[0], launch[1]));
+            func_001FA790_2D3608(((Moby_2D3608 *)hero->moby)->yaw, func_L00_001FF860_2D3608(launch[0], launch[1]));
             heading = func_L00_001FF860_2D3608(launch[0], launch[1]);
             pitch = func_L00_001FF860_2D3608(func_001F9CE8_2D3608(launch), launch[2]);
             if (0.593411922f < pitch) pitch = 0.593411922f;
             if (pitch < -1.39626336f) pitch = -1.39626336f;
-            func_00215C00_2D3608(launch, (((PadState *)D_0013A5E0_2D3608)->held & 5) ? 3.5f : 2.5f, heading, pitch);
-            qcopy(origin_copy, D_L00_00166D80_2D3608 + 0x140);
+            func_00215C00_2D3608(launch, (((PadState *)controller_state_2D3608)->held & 5) ? 3.5f : 2.5f, heading, pitch);
+            qcopy(origin_copy, player_camera_2D3608 + 0x140);
             length = func_001F9CE8_2D3608(launch);
             {
                 float rise = launch[2];
@@ -1098,17 +1098,17 @@ void FUN_L00_002d2158(int collision_arg, Moby_2D3608 *carrier, float *position)
                     value = rise / 0.00999999978f;
                 }
             }
-            fall_time = func_001F9B50_2D3608(D_0015EE70_2D3608 * 9.0f * ((((PadState *)D_0013A5E0_2D3608)->held & 5) ? 3.5f : 2.5f) * 0.5f);
-            distance = (fall_time + fall_time) * fall_time * (1.0f - value) / (D_0015EE70_2D3608 * 9.0f);
+            fall_time = func_001F9B50_2D3608(frame_time_sq_2D3608 * 9.0f * ((((PadState *)controller_state_2D3608)->held & 5) ? 3.5f : 2.5f) * 0.5f);
+            distance = (fall_time + fall_time) * fall_time * (1.0f - value) / (frame_time_sq_2D3608 * 9.0f);
             vertical = value * distance;
             if (0.0f < distance) {
                 launch[0] = func_001F9F90_2D3608(heading) * distance;
                 launch[1] = func_001F9FA8_2D3608(heading) * distance;
                 launch[2] = vertical;
-                func_001F9BD8_2D3608(endpoint, D_L00_00166EC0_2D3608, launch);
-                if (func_L00_001EFFF0_2D3608(D_L00_00166EC0_2D3608, endpoint, 2, collision_arg, 0)
-                    && ((Hit_2D3608 *)D_L00_00173F40_2D3608)->moby != *(void **)(D_001413D0_r)) {
-                    qcopy(aim, ((Hit_2D3608 *)D_L00_00173F40_2D3608)->point);
+                func_001F9BD8_2D3608(endpoint, camera_pos_2D3608, launch);
+                if (func_L00_001EFFF0_2D3608(camera_pos_2D3608, endpoint, 2, collision_arg, 0)
+                    && ((Hit_2D3608 *)coll_hit_2D3608)->moby != *(void **)(D_001413D0_r)) {
+                    qcopy(aim, ((Hit_2D3608 *)coll_hit_2D3608)->point);
                     hit = 1;
                     heading = func_L00_001FF860_2D3608(aim[0] - anchor_ptr[0], aim[1] - anchor_ptr[1]);
                 }
@@ -1117,15 +1117,15 @@ void FUN_L00_002d2158(int collision_arg, Moby_2D3608 *carrier, float *position)
                     aim[0] = func_001F9F90_2D3608(heading) * distance * value;
                     aim[1] = func_001F9FA8_2D3608(heading) * distance * value;
                     aim[2] = vertical * value;
-                    func_001F9BD8_2D3608(aim, aim, D_L00_00166EC0_2D3608);
+                    func_001F9BD8_2D3608(aim, aim, camera_pos_2D3608);
                 }
             }
         } else {
-            *(int *)(D_0013E633_2D3608 + 0x410) = 0;
+            *(int *)(D_0013F990_2D3608 + 0x410) = 0;
         }
     }
-    func_L00_002C8680_2D3608(anchor_ptr, aim, output + 4, D_0015EE70_2D3608 * 9.0f, 0.00000999999975f,
-                             (((PadState *)D_0013A5E0_2D3608)->held & 5) ? 3.5f : 2.5f);
+    func_L00_002C8680_2D3608(anchor_ptr, aim, output + 4, frame_time_sq_2D3608 * 9.0f, 0.00000999999975f,
+                             (((PadState *)controller_state_2D3608)->held & 5) ? 3.5f : 2.5f);
 }
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d2670.s", FUN_L00_002d2670);

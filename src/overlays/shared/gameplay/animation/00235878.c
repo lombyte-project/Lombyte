@@ -328,26 +328,26 @@ void FUN_L00_00236268(void) {
     int i;
     FUN_L00_00235d80_236268();
     for (i = 0; i < 100; i++) {
-        float w, a, lo, hi;
-        int n;
-        float *z;
-        if (i < 10) w = star_init_limit0_gp;
-        else if (i < 20) w = star_init_limit1_gp;
-        else w = star_init_limit2_gp;
-        n = D_L00_0015F75C_236268;
-        a = 232.0f;
+        float margin, band, lo, hi;
+        int bands;
+        float *depth;
+        if (i < 10) margin = star_init_limit0_gp;
+        else if (i < 20) margin = star_init_limit1_gp;
+        else margin = star_init_limit2_gp;
+        bands = D_L00_0015F75C_236268;
+        band = 232.0f;
         lo = 116.0f;
-        a = (a - (w + w)) / (float)n;
-        lo = (w - lo) + (float)(i % n) * a;
-        hi = lo + a;
-        z = &D_L00_0017E660_236268[i].z;
-        D_L00_0017E660_236268[i].x = FUN_002132a8_236268(w - 17.0f, 17.0f - w);
+        band = (band - (margin + margin)) / (float)bands;
+        lo = (margin - lo) + (float)(i % bands) * band;
+        hi = lo + band;
+        depth = &D_L00_0017E660_236268[i].z;
+        D_L00_0017E660_236268[i].x = FUN_002132a8_236268(margin - 17.0f, 17.0f - margin);
         D_L00_0017E660_236268[i].y = FUN_002132a8_236268(lo, hi);
-        *z = FUN_002132a8_236268(-0.4f, 0.4f);
+        *depth = FUN_002132a8_236268(-0.4f, 0.4f);
         D_L00_0017E660_236268[i].w = FUN_002132a8_236268(-0.6f, 0.6f);
-        *z += FUN_002132a8_236268(-0.4f, 0.4f);
+        *depth += FUN_002132a8_236268(-0.4f, 0.4f);
         D_L00_0017E660_236268[i].w += FUN_002132a8_236268(-0.6f, 0.6f);
-        *z += FUN_002132a8_236268(-0.4f, 0.4f);
+        *depth += FUN_002132a8_236268(-0.4f, 0.4f);
         D_L00_0017E660_236268[i].w += FUN_002132a8_236268(-0.6f, 0.6f);
     }
 }

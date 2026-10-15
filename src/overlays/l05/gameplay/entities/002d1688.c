@@ -224,7 +224,7 @@ extern float angle_from_2d1688(float, float) __asm__("FUN_001fa580");
 extern void copy_direction_2d1688(void *, void *) __asm__("FUN_001fa030");
 extern int check_path_2d1688(void *, void *, int) __asm__("FUN_L00_00259740");
 extern void set_camera_2d1688(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern int effect_2d1688(int, int, char *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry_2d1688(int, int, char *) __asm__("FUN_0022da68");
 extern void sound_2d1688(void) __asm__("FUN_L00_00211250");
 extern void reset_2d1688(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L05_002d1e30(char *);
@@ -390,7 +390,7 @@ state_three:
         if (*(float *)(data + 0x78) < 0.0f) {
             if (*(float *)(moby + 0x18) < hero.water_surface_z && *(unsigned char *)(moby + 0xbc) == 0) {
                 *(unsigned char *)(moby + 0xbc) = 1;
-                effect_2d1688(0, 0, moby);
+                allocate_voice_for_target_entry_2d1688(0, 0, moby);
                 fast_vec_normalize((*(float *)&D_L05_00161388), v, moby + 0xe0);
                 fast_vec_add(v, v, moby + 0x10);
                 v[2] = hero.water_surface_z;
@@ -1856,9 +1856,8 @@ char *FUN_L05_00303f80(char *self, int idx) {
     }
     return res;
 }
-/* Pushes a point clear of a path and returns the nearest wall distance.
- * Adapted from the matched func_L00_00262DF0, based on Lombyte (MIT):
- * src/overlays/shared/gameplay/state/00261968.c, FUN_L00_00261d78. */
+/* Pushes a point clear of a path and returns the nearest wall distance, like
+ * FUN_L00_00261d78. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003054B0), where it is exact; names translated to the US level program. */
 
 typedef int Quad_3054B0 __attribute__((mode(TI)));
@@ -1881,11 +1880,9 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
-extern SegmentPath_3054B0 *D_L05_001B0CB0_3054B0[] __asm__("D_L05_001B0930");
-extern f32 abs_3054B0(f32) __asm__("FUN_001f99c0");
+extern SegmentPath_3054B0 *segment_paths_3054B0[] __asm__("D_L05_001B0930");
 extern void func_001F9BD8_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, PathVec_3054B0 *) __asm__("FUN_001f9a10");
 extern void func_001F9BF0_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, PathVec_3054B0 *) __asm__("FUN_001f9a28");
-extern f32 dot_3054B0(PathVec_3054B0 *, PathVec_3054B0 *) __asm__("FUN_001f9ab0");
 extern void func_001F9CA0_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, PathVec_3054B0 *) __asm__("FUN_001f9ad8");
 extern f32 func_001F9CB8_3054B0(PathVec_3054B0 *) __asm__("FUN_001f9af0");
 extern void func_L00_001FF4B0_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, f32) __asm__("FUN_001f9bf8");
@@ -1907,8 +1904,8 @@ f32 FUN_L05_00304058(s32 path_index, void *input, void *output, f32 distance) {
 
     found = 0;
     qcopy_nc(&working, point);
-    for (i = 0; i < D_L05_001B0CB0_3054B0[path_index]->count - 1; i++) {
-        entry = &D_L05_001B0CB0_3054B0[path_index];
+    for (i = 0; i < segment_paths_3054B0[path_index]->count - 1; i++) {
+        entry = &segment_paths_3054B0[path_index];
         if ((*entry)->points[i].f[3] == 0.0f && (*entry)->points[i + 1].f[3] == 0.0f)
             continue;
         func_001F9BF0_3054B0(&difference, &working, &(*entry)->points[i]);
@@ -1918,7 +1915,7 @@ f32 FUN_L05_00304058(s32 path_index, void *input, void *output, f32 distance) {
         func_L00_001FF4B0_3054B0(&scaled_segment, &segment, 1.0f);
         func_001F9CA0_3054B0(&cross, &difference, &scaled_segment);
         {
-            f32 wall_distance = abs_3054B0(cross.f[2]);
+            f32 wall_distance = absolute_float(cross.f[2]);
             if (wall_distance < best)
                 best = wall_distance;
             if (distance < wall_distance)
@@ -1926,7 +1923,7 @@ f32 FUN_L05_00304058(s32 path_index, void *input, void *output, f32 distance) {
         }
         {
             f32 segment_length = func_001F9CB8_3054B0(&segment);
-            f32 projection = dot_3054B0(&difference, &scaled_segment);
+            f32 projection = dot_vectors_xyz(&difference, &scaled_segment);
             if (segment_length < projection || projection < 0.0f) {
                 if (!(func_001F9CB8_3054B0(&difference) < distance))
                     continue;

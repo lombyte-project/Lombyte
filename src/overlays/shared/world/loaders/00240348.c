@@ -31,8 +31,8 @@ void FUN_L00_00241728(s32 *h) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00241788.s", FUN_L00_00241788);
 #else
 typedef struct {
-    f32 a;
-    f32 b;
+    f32 id;
+    f32 length;
 } P_241788;
 
 extern f32 FUN_001fa6c0(s32);
@@ -42,48 +42,48 @@ extern void FUN_001e93b0(void *, s32, s32);
 extern u8 D_L00_001E8640[];
 
 void FUN_L00_00241788(u8 *src, s32 n) {
-    P_241788 fp[512];
+    P_241788 entries[512];
     s32 i;
     s32 done;
     s32 k;
     s32 j;
 
     for (i = 0; i < n; i++) {
-        fp[i].a = (f32)*(s32 *)(src + 4);
+        entries[i].id = (f32)*(s32 *)(src + 4);
         if (*(s32 *)(src + 0) == 0) {
-            fp[i].b = 0.0f;
+            entries[i].length = 0.0f;
         } else {
-            s32 v = *(s32 *)(src + 0x20);
+            s32 next_start = *(s32 *)(src + 0x20);
 
-            if (v == 0) {
-                v = *(s32 *)(src + 0x40);
+            if (next_start == 0) {
+                next_start = *(s32 *)(src + 0x40);
             }
-            fp[i].b = FUN_001fa6c0(v - *(s32 *)(src + 0)) * 0.0009765625f;
-            fp[i + 1].a = -1.0f;
-            fp[i + 1].b = 0.0f;
+            entries[i].length = FUN_001fa6c0(next_start - *(s32 *)(src + 0)) * 0.0009765625f;
+            entries[i + 1].id = -1.0f;
+            entries[i + 1].length = 0.0f;
         }
         src += 0x20;
     }
     do {
         done = 1;
         for (j = 0; j < n - 1; j++) {
-            if (fp[j].b < fp[j + 1].b) {
-                f32 ta = fp[j].a;
-                f32 tb = fp[j].b;
+            if (entries[j].length < entries[j + 1].length) {
+                f32 id = entries[j].id;
+                f32 length = entries[j].length;
 
-                fp[j].a = fp[j + 1].a;
-                fp[j].b = fp[j + 1].b;
-                fp[j + 1].a = ta;
-                fp[j + 1].b = tb;
+                entries[j].id = entries[j + 1].id;
+                entries[j].length = entries[j + 1].length;
+                entries[j + 1].id = id;
+                entries[j + 1].length = length;
                 done = 0;
             }
         }
     } while (done == 0);
     for (k = 0; k < n; k++) {
-        s32 v = FUN_001fa6d0(fp[k].a);
-        s32 w = FUN_00120478(fp[k].b);
+        s32 entry_id = FUN_001fa6d0(entries[k].id);
+        s32 entry_length = FUN_00120478(entries[k].length);
 
-        FUN_001e93b0(D_L00_001E8640, v, w);
+        FUN_001e93b0(D_L00_001E8640, entry_id, entry_length);
     }
 
 }

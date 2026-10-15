@@ -1532,13 +1532,11 @@ typedef struct Data_2B5C98 {
 
 typedef struct Input_2B5C98 { char pad0[0x1A0]; int held; } Input_2B5C98;
 
-typedef struct Order_2B5C98 { unsigned char pad[0xF]; unsigned char level; } Order_2B5C98;
-
 typedef struct Stats_2B5C98 { char pad0[0x78]; unsigned short uses; unsigned short longest; int levels; } Stats_2B5C98;
 
 typedef struct Aim_2B5C98 { char pad0[0x10]; float height; } Aim_2B5C98;
 
-typedef struct Light_2B5C98 { float x, y, z, b; V_2B5C98 pos; } Light_2B5C98;
+typedef struct Light_2B5C98 { float red, green, blue, pad_C; V_2B5C98 pos; } Light_2B5C98;
 
 typedef struct Spawn_2B5C98 {
     V_2B5C98 pos;
@@ -1614,18 +1612,18 @@ void FUN_L00_0020e698(void);
 void FUN_L00_00233660(float *out, float x, float y, float z);
 void FUN_L00_0023e838(int);
 extern Hero hero_2B33E8 __asm__("D_0013F350");
-extern unsigned char D_0014171B_2B33E8[] __asm__("D_00141680");
-extern char D_L00_00166D80_2B33E8[] __asm__("D_L00_00166C80");
-extern char D_L00_00166EC0_2B33E8[] __asm__("D_L00_00166DC0");
-extern float D_L00_0017ADF4_2B33E8 __asm__("D_L00_0017ACF4");
-extern int D_L00_0015F6A8_2B33E8 __asm__("D_L00_0015F5C4") MACRO_ADDR;
-extern float D_0015EE6C_2B33E8 __asm__("D_0015ED6C") MACRO_ADDR;
-extern int D_0015EFA4_2B33E8 __asm__("D_0015EEA4") MACRO_ADDR;
-extern int D_0015EE84_2B33E8 __asm__("D_0015ED84") MACRO_ADDR;
-extern char D_0013CA40_2B5C98[] __asm__("D_0013C940");
-extern Order_2B5C98 order_2B5C98 __asm__("D_0013E520");
-extern struct Moby *D_L00_00173F58_2B5C98 __asm__("D_L00_00173E58") NOT_SDA;
-extern Light_2B5C98 D_L00_001803C0_2B5C98[] __asm__("D_L00_001802C0");
+extern unsigned char item_usage_2B33E8[] __asm__("D_00141680");
+extern char player_camera_2B33E8[] __asm__("D_L00_00166C80");
+extern char camera_pos_2B33E8[] __asm__("D_L00_00166DC0");
+extern float D_L00_0017ACF4_2B33E8 __asm__("D_L00_0017ACF4");
+extern int level_game_mode_2B33E8 __asm__("D_L00_0015F5C4") MACRO_ADDR;
+extern float frame_time_2B33E8 __asm__("D_0015ED6C") MACRO_ADDR;
+extern int play_frames_2B33E8 __asm__("D_0015EEA4") MACRO_ADDR;
+extern int current_level_index_2B33E8 __asm__("D_0015ED84") MACRO_ADDR;
+extern char controller_state_2B5C98[] __asm__("D_0013C940");
+extern u8 item_text_variant[] __asm__("D_0013E520");
+extern struct Moby *coll_hit_moby_2B5C98 __asm__("D_L00_00173E58") NOT_SDA;
+extern Light_2B5C98 point_lights_2B5C98[] __asm__("D_L00_001802C0");
 extern int func_001F9938_2B5C98(short *) __asm__("FUN_001f9770");
 extern int func_001F9908_2B5C98(int *) __asm__("FUN_001f9740");
 extern void func_L00_00222B80_2B5C98(int, int) __asm__("FUN_L00_002223f8");
@@ -1669,19 +1667,19 @@ extern float func_001FA888_2B5C98(int) __asm__("FUN_001fa6c0");
 extern int func_L00_0023F0D0_2B5C98(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void func_L00_0023F1D0_2B5C98(int) __asm__("FUN_L00_0023e838");
 
-void FUN_L00_002b49a8(struct Moby *m) {
+void FUN_L00_002b49a8(struct Moby *moby) {
     V_2B5C98 velocity;
-    V_2B5C98 tpoint;
+    V_2B5C98 aim_point;
     V_2B5C98 launch;
-    Work_2B5C98 w;
+    Work_2B5C98 work;
     M4_2B5C98 inverse;
     V_2B5C98 reach;
     V_2B5C98 end;
     struct Moby *target;
     float yaw;
     float pitch;
-    float yaw0, pitch0;
-    float a, b, c;
+    float base_yaw, base_pitch;
+    float red, green, blue;
     Data_2B5C98 *data;
     Stats_2B5C98 *stats;
     int i;
@@ -1689,162 +1687,162 @@ void FUN_L00_002b49a8(struct Moby *m) {
     velocity.q = 0;
     target = 0;
     pitch = 0.0f;
-    data = (Data_2B5C98 *)m->pvars;
-    if (m->state == 0) {
-        m->state = 1;
+    data = (Data_2B5C98 *)moby->pvars;
+    if (moby->state == 0) {
+        moby->state = 1;
         data->light = -1;
         data->glow = 0;
     }
     func_001F9938_2B5C98(&data->lock);
     func_001F9908_2B5C98(&data->cooldown);
     if (hero_2B33E8.state.current == 1) func_L00_00222B80_2B5C98(30, 1);
-    if (m->prev_seq == 0 && m->prev_frame < 3) data->cooldown = func_001F9850_2B5C98(7);
+    if (moby->prev_seq == 0 && moby->prev_frame < 3) data->cooldown = func_001F9850_2B5C98(7);
     if (hero_2B33E8.state.current == 30 && (hero_2B33E8.moby->flags & 1)) {
-        func_001FA480_2B5C98(&w.rotation, D_L00_00166D80_2B33E8);
-        func_001FA4A0_2B5C98(&inverse, &w.rotation);
-        velocity.f.z = D_0015EE6C_2B33E8 * 40.0f;
+        func_001FA480_2B5C98(&work.rotation, player_camera_2B33E8);
+        func_001FA4A0_2B5C98(&inverse, &work.rotation);
+        velocity.f.z = frame_time_2B33E8 * 40.0f;
         func_001F9EE8_2B5C98(&velocity, &velocity, &inverse);
         func_001F9BC0_2B5C98(&launch);
         launch.f.x += 0.15f;
         launch.f.z += 0.75f;
         launch.f.y += 0.15f;
         func_001F9EE8_2B5C98(&launch, &launch, &inverse);
-        func_001F9BD8_2B5C98(&launch, &launch, D_L00_00166D80_2B33E8 + 0x140);
+        func_001F9BD8_2B5C98(&launch, &launch, player_camera_2B33E8 + 0x140);
         if (hero_2B33E8.state.current == 30 && (hero_2B33E8.moby->flags & 1) && !hero_2B33E8.unk20AC) {
-            func_L00_001EE2E0_2B5C98((int)m, 0xFF0F0FFF, 1.0f, 0, 0.0f, 0x26, -1, 90.0f, 4);
+            func_L00_001EE2E0_2B5C98((int)moby, 0xFF0F0FFF, 1.0f, 0, 0.0f, 0x26, -1, 90.0f, 4);
             func_L00_001FF4B0_2B5C98(&reach, &velocity, 20.0f);
             func_001F9BD8_2B5C98(&end, &reach, &launch);
             reach = end;
-            if (func_L00_001EFFF0_2B5C98(D_L00_00166D80_2B33E8 + 0x140, &reach, 0, (int)m, 0)) {
-                if (D_L00_00173F58_2B5C98 && (D_L00_00173F58_2B5C98->flags & 0x1000)) target = D_L00_00173F58_2B5C98;
+            if (func_L00_001EFFF0_2B5C98(player_camera_2B33E8 + 0x140, &reach, 0, (int)moby, 0)) {
+                if (coll_hit_moby_2B5C98 && (coll_hit_moby_2B5C98->flags & 0x1000)) target = coll_hit_moby_2B5C98;
             }
         }
     } else {
-        velocity.f.x = D_0015EE6C_2B33E8 * 40.0f;
+        velocity.f.x = frame_time_2B33E8 * 40.0f;
         func_001F9EC0_2B5C98(&velocity, &velocity, &hero_2B33E8.basis);
-        func_L00_00250800_2B5C98(m, 0, &launch);
+        func_L00_00250800_2B5C98(moby, 0, &launch);
     }
     if (hero_2B33E8.items[6].unk40) yaw = hero_2B33E8.items[6].unk4C;
     else yaw = func_L00_001FF860_2B5C98(velocity.f.x, velocity.f.y);
     pitch = -func_L00_001FF860_2B5C98(func_001F9CE8_2B5C98(&velocity), velocity.f.z);
-    yaw0 = yaw;
-    pitch0 = pitch;
+    base_yaw = yaw;
+    base_pitch = pitch;
     if (hero_2B33E8.state.current != 30) {
         if (hero_2B33E8.unk22C8 == 1) {
-            yaw = m->rot.z;
-            yaw0 = yaw;
-            pitch = D_L00_0017ADF4_2B33E8;
-            pitch0 = pitch;
+            yaw = moby->rot.z;
+            base_yaw = yaw;
+            pitch = D_L00_0017ACF4_2B33E8;
+            base_pitch = pitch;
         }
-        target = func_L00_002B5998_2B5C98(m, &launch, &yaw, &pitch);
+        target = func_L00_002B5998_2B5C98(moby, &launch, &yaw, &pitch);
     }
     if (target && data->lock == 0) {
         if (func_L00_00234718_2B5C98(-1)) {
-            Aim_2B5C98 *r = func_L00_0025D390_2B5C98(target);
-            float d = func_001F9D10_2B5C98(D_L00_00166EC0_2B33E8, &target->pos) / 50.0f;
-            float h;
-            qcopy(&w.point, &target->pos);
-            h = 0.5f;
-            if (r) h = r->height;
-            w.point.f.z += h;
-            func_L00_001EE2E0_2B5C98((int)m, 0xFF0FFF0F, func_001F9B88_2B5C98(0.9f - d * 0.65f), &w.point, 0.0f, 0x26, -1, 90.0f, 4);
+            Aim_2B5C98 *aim = func_L00_0025D390_2B5C98(target);
+            float distance = func_001F9D10_2B5C98(camera_pos_2B33E8, &target->pos) / 50.0f;
+            float height;
+            qcopy(&work.point, &target->pos);
+            height = 0.5f;
+            if (aim) height = aim->height;
+            work.point.f.z += height;
+            func_L00_001EE2E0_2B5C98((int)moby, 0xFF0FFF0F, func_001F9B88_2B5C98(0.9f - distance * 0.65f), &work.point, 0.0f, 0x26, -1, 90.0f, 4);
         }
     }
-    if (hero_2B33E8.unk20A8 && hero_2B33E8.state.current != 0x72 && D_L00_0015F6A8_2B33E8 != 2) {
-        if (func_001F9850_2B5C98(5 - order_2B5C98.level) < hero_2B33E8.unk1BC && data->cooldown == 0) {
+    if (hero_2B33E8.unk20A8 && hero_2B33E8.state.current != 0x72 && level_game_mode_2B33E8 != 2) {
+        if (func_001F9850_2B5C98(5 - item_text_variant[15]) < hero_2B33E8.unk1BC && data->cooldown == 0) {
             if (func_L00_00234638_2B5C98(-1, 1) && !hero_2B33E8.unk20AC) {
                 data->cooldown = func_001F9850_2B5C98(6);
                 if (target) {
-                    float speed = D_0015EE6C_2B33E8 * 40.0f;
-                    Aim_2B5C98 *r;
-                    qcopy(&tpoint, &target->pos);
-                    r = func_L00_0025D390_2B5C98(target);
-                    if (r) tpoint.f.z += r->height;
-                    else tpoint.f.z += 0.5f;
-                    pitch = -func_L00_001FF860_2B5C98(func_001F9D48_2B5C98(&launch, &tpoint), tpoint.f.z - launch.f.z);
-                    pitch0 -= hero_2B33E8.ground_pitch.f * 0.5f;
-                    if (func_001FA850_2B5C98(pitch0, pitch) < 0.17453292f) {
-                        pitch0 = pitch;
-                    } else if (func_001FA748_2B5C98(pitch0, 0.17453292f) < pitch) {
-                        pitch0 = func_001FA748_2B5C98(pitch0, 0.17453292f);
-                    } else if (pitch < func_001FA748_2B5C98(pitch0, -0.17453292f)) {
-                        pitch0 = func_001FA748_2B5C98(pitch0, -0.17453292f);
+                    float speed = frame_time_2B33E8 * 40.0f;
+                    Aim_2B5C98 *aim;
+                    qcopy(&aim_point, &target->pos);
+                    aim = func_L00_0025D390_2B5C98(target);
+                    if (aim) aim_point.f.z += aim->height;
+                    else aim_point.f.z += 0.5f;
+                    pitch = -func_L00_001FF860_2B5C98(func_001F9D48_2B5C98(&launch, &aim_point), aim_point.f.z - launch.f.z);
+                    base_pitch -= hero_2B33E8.ground_pitch.f * 0.5f;
+                    if (func_001FA850_2B5C98(base_pitch, pitch) < 0.17453292f) {
+                        base_pitch = pitch;
+                    } else if (func_001FA748_2B5C98(base_pitch, 0.17453292f) < pitch) {
+                        base_pitch = func_001FA748_2B5C98(base_pitch, 0.17453292f);
+                    } else if (pitch < func_001FA748_2B5C98(base_pitch, -0.17453292f)) {
+                        base_pitch = func_001FA748_2B5C98(base_pitch, -0.17453292f);
                     }
-                    func_00215C00_2B5C98(&w.point, speed, yaw0, -pitch0);
-                    func_001F9BD8_2B5C98(&w.point, &w.point, &launch);
-                    yaw = func_L00_001FF860_2B5C98(tpoint.f.x - w.point.f.x, tpoint.f.y - w.point.f.y);
-                    pitch = -func_L00_001FF860_2B5C98(func_001F9D48_2B5C98(&w.point, &tpoint), tpoint.f.z - w.point.f.z);
+                    func_00215C00_2B5C98(&work.point, speed, base_yaw, -base_pitch);
+                    func_001F9BD8_2B5C98(&work.point, &work.point, &launch);
+                    yaw = func_L00_001FF860_2B5C98(aim_point.f.x - work.point.f.x, aim_point.f.y - work.point.f.y);
+                    pitch = -func_L00_001FF860_2B5C98(func_001F9D48_2B5C98(&work.point, &aim_point), aim_point.f.z - work.point.f.z);
                 } else if (hero_2B33E8.state.current != 30) {
                     pitch -= hero_2B33E8.ground_pitch.f * 0.5f;
-                    pitch0 -= hero_2B33E8.ground_pitch.f * 0.5f;
+                    base_pitch -= hero_2B33E8.ground_pitch.f * 0.5f;
                 }
-                w.spawn.flags = 0x10000;
-                w.spawn.owner = m;
-                w.spawn.f1C = 0.25f;
-                w.spawn.i20 = 1;
-                w.spawn.pos.f.x = func_001F9F90_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674));
-                w.spawn.pos.f.y = func_001F9FA8_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674));
-                w.spawn.pos.f.z = 1.0f;
-                w.spawn.pos.f.w = 5627.9248f;
-                w.spawn.b18 = 1;
-                w.spawn.b19 = 1;
-                w.spawn.cls = (*(unsigned short *)&m->oclass);
+                work.spawn.flags = 0x10000;
+                work.spawn.owner = moby;
+                work.spawn.f1C = 0.25f;
+                work.spawn.i20 = 1;
+                work.spawn.pos.f.x = func_001F9F90_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674));
+                work.spawn.pos.f.y = func_001F9FA8_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674));
+                work.spawn.pos.f.z = 1.0f;
+                work.spawn.pos.f.w = 5627.9248f;
+                work.spawn.b18 = 1;
+                work.spawn.b19 = 1;
+                work.spawn.cls = (*(unsigned short *)&moby->oclass);
                 func_L00_00233EE0_2B5C98(&inverse, 0.7f, -0.15f, 0.5f);
-                func_L00_001F2BE8_2B5C98(&inverse, 0.42f, 5, hero_2B33E8.moby, &w.spawn);
-                func_L00_002CC3C0_2B5C98(hero_2B33E8.moby, yaw, pitch, yaw0, pitch0, &launch, target);
+                func_L00_001F2BE8_2B5C98(&inverse, 0.42f, 5, hero_2B33E8.moby, &work.spawn);
+                func_L00_002CC3C0_2B5C98(hero_2B33E8.moby, yaw, pitch, base_yaw, base_pitch, &launch, target);
                 data->glow = func_001F9850_2B5C98(15);
                 for (i = 0; i < 5; i++) {
-                    w.spray.rnd.q = 0;
-                    w.spray.rnd.f.x = func_002140F8_2B5C98(-1.0f, 1.0f);
-                    w.spray.rnd.f.y = func_002140F8_2B5C98(-1.0f, 1.0f);
-                    w.spray.rnd.f.z = func_002140F8_2B5C98(-1.0f, 1.0f);
-                    w.spray.v = w.spray.rnd;
-                    func_L00_001FF4B0_2B5C98(&w.spray.v, &w.spray.v, func_001F9CB8_2B5C98(&velocity) * 0.65f);
-                    func_001F9BD8_2B5C98(&w.spray.v, &velocity, &w.spray.v);
-                    func_L00_001FF4B0_2B5C98(&w.spray.v, &w.spray.v, func_002140F8_2B5C98(D_0015EE6C_2B33E8 * 3.0f, D_0015EE6C_2B33E8 * 6.0f));
-                    func_L00_0026EBC0_2B5C98(&launch, &w.spray.v, 0x5F2F4F6F,
+                    work.spray.rnd.q = 0;
+                    work.spray.rnd.f.x = func_002140F8_2B5C98(-1.0f, 1.0f);
+                    work.spray.rnd.f.y = func_002140F8_2B5C98(-1.0f, 1.0f);
+                    work.spray.rnd.f.z = func_002140F8_2B5C98(-1.0f, 1.0f);
+                    work.spray.v = work.spray.rnd;
+                    func_L00_001FF4B0_2B5C98(&work.spray.v, &work.spray.v, func_001F9CB8_2B5C98(&velocity) * 0.65f);
+                    func_001F9BD8_2B5C98(&work.spray.v, &velocity, &work.spray.v);
+                    func_L00_001FF4B0_2B5C98(&work.spray.v, &work.spray.v, func_002140F8_2B5C98(frame_time_2B33E8 * 3.0f, frame_time_2B33E8 * 6.0f));
+                    func_L00_0026EBC0_2B5C98(&launch, &work.spray.v, 0x5F2F4F6F,
                         func_L00_00258BC8_2B5C98(func_001F9850_2B5C98(5), func_001F9850_2B5C98(10)), 10000.0f);
                 }
-                func_L00_001FF4B0_2B5C98(&velocity, &velocity, D_0015EE6C_2B33E8 * 0.5f);
+                func_L00_001FF4B0_2B5C98(&velocity, &velocity, frame_time_2B33E8 * 0.5f);
                 func_L00_0026EBC0_2B5C98(&launch, &velocity, 0x2F4F7F7F,
                     func_L00_00258BC8_2B5C98(func_001F9850_2B5C98(4), func_001F9850_2B5C98(7)), 200000.0f);
             }
-            if (m->prev_seq != 4) func_00213DE0_2B5C98(m, 4, 0, func_001F9850_2B5C98(7));
-            stats = (Stats_2B5C98 *)(D_0014171B_2B33E8 + 0x65);
+            if (moby->prev_seq != 4) func_00213DE0_2B5C98(moby, 4, 0, func_001F9850_2B5C98(7));
+            stats = (Stats_2B5C98 *)(item_usage_2B33E8 + 0x65);
             if (stats->uses < 65535) stats->uses++;
-            if (func_001F9850_2B5C98(D_0015EFA4_2B33E8) / 600 > stats->longest)
-                stats->longest = func_001F9850_2B5C98(D_0015EFA4_2B33E8) / 600;
-            stats->levels = (stats->levels | (1 << D_0015EE84_2B33E8)) | 0x80000000;
+            if (func_001F9850_2B5C98(play_frames_2B33E8) / 600 > stats->longest)
+                stats->longest = func_001F9850_2B5C98(play_frames_2B33E8) / 600;
+            stats->levels = (stats->levels | (1 << current_level_index_2B33E8)) | 0x80000000;
         }
     }
-    if (!(((((Input_2B5C98 *)D_0013CA40_2B5C98)->held & hero_2B33E8.items[0].button_mask) && func_L00_00234718_2B5C98(-1)) ||
+    if (!(((((Input_2B5C98 *)controller_state_2B5C98)->held & hero_2B33E8.items[0].button_mask) && func_L00_00234718_2B5C98(-1)) ||
           (!(func_001F9850_2B5C98(9) < hero_2B33E8.unk1BC) && hero_2B33E8.unk20A8)) ||
-        hero_2B33E8.state.current == 0x72 || D_L00_0015F6A8_2B33E8 == 2) {
-        if ((m->prev_seq != 0 || (m->anim_flags & 2)) && hero_2B33E8.state.current != 0x72 && D_L00_0015F6A8_2B33E8 != 2) {
-            if (m->prev_seq != 1) func_00213DE0_2B5C98(m, 1, 0, func_001F9850_2B5C98(7));
-        } else if (hero_2B33E8.state.current == 0x72 || D_L00_0015F6A8_2B33E8 == 2) {
-            func_00213D28_2B5C98(m, 1, 0);
-            func_L00_002514B8_2B5C98(m);
+        hero_2B33E8.state.current == 0x72 || level_game_mode_2B33E8 == 2) {
+        if ((moby->prev_seq != 0 || (moby->anim_flags & 2)) && hero_2B33E8.state.current != 0x72 && level_game_mode_2B33E8 != 2) {
+            if (moby->prev_seq != 1) func_00213DE0_2B5C98(moby, 1, 0, func_001F9850_2B5C98(7));
+        } else if (hero_2B33E8.state.current == 0x72 || level_game_mode_2B33E8 == 2) {
+            func_00213D28_2B5C98(moby, 1, 0);
+            func_L00_002514B8_2B5C98(moby);
         }
         func_L00_0020ED30_2B5C98();
         data->cooldown = 0;
     }
-    if (m->seq != 2 && data->glow > 0) {
-        a = func_001FA888_2B5C98(data->glow < func_001F9850_2B5C98(9) ? data->glow : func_001F9850_2B5C98(9)) * 0.7f / (float)func_001F9850_2B5C98(9);
-        b = func_001FA888_2B5C98(data->glow < func_001F9850_2B5C98(9) ? data->glow : func_001F9850_2B5C98(9)) * 0.7f / (float)func_001F9850_2B5C98(9);
-        c = func_001FA888_2B5C98(data->glow < func_001F9850_2B5C98(9) ? data->glow : func_001F9850_2B5C98(9)) * 0.7f / (float)func_001F9850_2B5C98(9);
-        w.point.f.x = hero_2B33E8.motion.pos.f[0] + func_001F9F90_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674)) * 2.0f;
-        w.point.f.y = hero_2B33E8.motion.pos.f[1] + func_001F9FA8_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674)) * 2.0f;
-        w.point.f.z = hero_2B33E8.motion.pos.f[2] + 1.0f;
+    if (moby->seq != 2 && data->glow > 0) {
+        red = func_001FA888_2B5C98(data->glow < func_001F9850_2B5C98(9) ? data->glow : func_001F9850_2B5C98(9)) * 0.7f / (float)func_001F9850_2B5C98(9);
+        green = func_001FA888_2B5C98(data->glow < func_001F9850_2B5C98(9) ? data->glow : func_001F9850_2B5C98(9)) * 0.7f / (float)func_001F9850_2B5C98(9);
+        blue = func_001FA888_2B5C98(data->glow < func_001F9850_2B5C98(9) ? data->glow : func_001F9850_2B5C98(9)) * 0.7f / (float)func_001F9850_2B5C98(9);
+        work.point.f.x = hero_2B33E8.motion.pos.f[0] + func_001F9F90_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674)) * 2.0f;
+        work.point.f.y = hero_2B33E8.motion.pos.f[1] + func_001F9FA8_2B5C98(func_L00_001FF860_2B5C98(hero_2B33E8.unk670, hero_2B33E8.unk674)) * 2.0f;
+        work.point.f.z = hero_2B33E8.motion.pos.f[2] + 1.0f;
         if (data->light == -1) {
-            data->light = func_L00_0023F0D0_2B5C98(&w.point, 6.0f, 0.0f, a, b, c);
+            data->light = func_L00_0023F0D0_2B5C98(&work.point, 6.0f, 0.0f, red, green, blue);
         } else {
-            Light_2B5C98 *e = &D_L00_001803C0_2B5C98[data->light];
-            qcopy(&e->pos, &w.point);
-            e->pos.f.w = 6.0f;
-            e->x = a;
-            e->y = b;
-            e->z = c;
+            Light_2B5C98 *light = &point_lights_2B5C98[data->light];
+            qcopy(&light->pos, &work.point);
+            light->pos.f.w = 6.0f;
+            light->red = red;
+            light->green = green;
+            light->blue = blue;
         }
         func_001F9908_2B5C98(&data->glow);
     } else if (data->light != -1) {

@@ -937,28 +937,28 @@ void FUN_00215b68_2997c8(s32, s32, s32) __asm__("FUN_00215b68");
 void FUN_00216c48_2997c8(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
 void FUN_L00_002997c8(void) {
     char buf[0x70] __attribute__((aligned(16)));
-    s32 n, m, src, t, i;
-    struct ActiveSceneTrigger *p;
+    s32 large_count, small_count, src, vram, i;
+    struct ActiveSceneTrigger *active;
     D_L00_0015F5D8 = 1;
     FUN_00122298_2997c8(0);
     FUN_00120558_2997c8(0, 0);
     FUN_00122e68_2997c8(FUN_0012f1c8_2997c8);
-    n = D_0015ED80_2997c8 ? 14 : 13;
-    m = D_0015ED80_2997c8 ? 14 : 17;
+    large_count = D_0015ED80_2997c8 ? 14 : 13;
+    small_count = D_0015ED80_2997c8 ? 14 : 17;
     src = D_L00_00161058;
-    t = D_0015EE88_2997c8;
-    for (i = 0; i < n; i++) {
-        FUN_00122518_2997c8(buf, t >> 8, 2, 1, 0, 0, 0x80, 0x80);
-        t += 0x10000;
+    vram = D_0015EE88_2997c8;
+    for (i = 0; i < large_count; i++) {
+        FUN_00122518_2997c8(buf, vram >> 8, 2, 1, 0, 0, 0x80, 0x80);
+        vram += 0x10000;
         FUN_00118a80_2997c8(0);
         FUN_001227d8_2997c8(buf, src);
         src += 0xC000;
         FUN_00120558_2997c8(0, 0);
     }
-    t = D_0015EE78_2997c8;
-    for (i = 0; i < m; i++) {
-        FUN_00122518_2997c8(buf, t >> 8, 1, 0, 0, 0, 0x40, 0x40);
-        t += 0x4000;
+    vram = D_0015EE78_2997c8;
+    for (i = 0; i < small_count; i++) {
+        FUN_00122518_2997c8(buf, vram >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        vram += 0x4000;
         FUN_00118a80_2997c8(0);
         FUN_001227d8_2997c8(buf, src);
         src += 0x4000;
@@ -970,12 +970,12 @@ void FUN_L00_002997c8(void) {
     FUN_001f4a58_2997c8(4);
     FUN_00215b68_2997c8(D_001516D0_2997c8.h38, 1, 0x400);
     D_L00_0015F5C4_2997c8 = 0;
-    p = &active_scene_trigger_lui;
-    if (p->moby != 0) {
-        struct SceneTrigger *trigger = p->trigger;
-        struct Moby *moby = p->moby;
-        p->moby = 0;
-        p->trigger = 0;
+    active = &active_scene_trigger_lui;
+    if (active->moby != 0) {
+        struct SceneTrigger *trigger = active->trigger;
+        struct Moby *moby = active->moby;
+        active->moby = 0;
+        active->trigger = 0;
         FUN_00216c48_2997c8(moby, trigger, 1);
     }
     D_0013E550_2997c8.f |= 0x10;

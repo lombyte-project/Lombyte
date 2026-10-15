@@ -363,7 +363,7 @@ extern s32 FUN_L04_00292828_c(struct Moby *, LegRig *) __asm__("FUN_L04_00292828
 extern void rig_step(struct Moby *, LegRig *, f32, f32, f32, s32) __asm__("FUN_L00_002a1670");
 extern void rig_probe_setup(struct Moby *, s32, s32 *, void *, f32 *, f32 *) __asm__("FUN_L01_00263a28");
 extern s32 rig_probe(void *, s32, f32, struct Moby *, f32) __asm__("FUN_L00_001f19a0");
-extern f32 rig_angle_difference(f32, f32) __asm__("FUN_001fa688");
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001f99c0(f32);
 extern f32 D_0015ED60;
 extern f32 D_0015ED68;
@@ -418,20 +418,20 @@ s32 FUN_L04_00295778(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32
         s32 active = mode | (rig->mode & 0x30);
         s32 bit = 1;
         f32 count = 0.0f;
-        RigVec *t = transformed;
-        RigVec *p = (RigVec *)rig->pts;
+        RigVec *moved = transformed;
+        RigVec *point = (RigVec *)rig->pts;
 
         zero_vector(&shift);
         pos = &moby->pos;
         for (i = 5; i >= 0; i--) {
             if (active & bit) {
                 count += 1.0f;
-                add_vector_xyz(&shift, &shift, p);
-                subtract_vector_xyz(&shift, &shift, t);
+                add_vector_xyz(&shift, &shift, point);
+                subtract_vector_xyz(&shift, &shift, moved);
             }
             bit <<= 1;
-            t++;
-            p++;
+            moved++;
+            point++;
         }
         divide_vector_xyz(&shift, &shift, count);
     } else {
@@ -441,13 +441,13 @@ s32 FUN_L04_00295778(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32
         *(s32 *)&shift.z = 0;
     }
     {
-        RigVec *t = transformed;
-        RigVec *p = (RigVec *)rig->pts;
+        RigVec *moved = transformed;
+        RigVec *point = (RigVec *)rig->pts;
 
         for (i = 5; i >= 0; i--) {
-            add_vector_xyz(p, t, &shift);
-            t++;
-            p++;
+            add_vector_xyz(point, moved, &shift);
+            moved++;
+            point++;
         }
     }
     add_vector_xyz(pos, pos, &shift);
@@ -509,7 +509,7 @@ s32 FUN_L04_00295778(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32
                 LegRigAnim *anim;
                 f32 rate;
 
-                if (!(rig->speed < D_0015ED6C * 0.19f) || !(min_turn < rig_angle_difference(moby->rot.z, heading)) ||
+                if (!(rig->speed < D_0015ED6C * 0.19f) || !(min_turn < fast_difference_between_rotations(moby->rot.z, heading)) ||
                     !(speed < (rate = D_0015ED6C * 0.19f))) {
                     anim = *entry;
                     rate = rig->speed;

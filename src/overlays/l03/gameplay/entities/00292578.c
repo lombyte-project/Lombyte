@@ -2162,7 +2162,6 @@ typedef struct Moby2C8398 {
 extern char *D_L03_001B05B0[];
 extern char D_L03_00166EC0[];
 extern CollisionHit D_L03_00173F40;
-extern CollisionHit coll_hit __asm__("D_L03_00173F60");
 extern char D_L03_00173F70[];
 extern char D_L03_00173F80[];
 extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
@@ -2806,7 +2805,7 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
             b[2] += q->f28;
             if (FUN_001efa68_cf(q) > (float)q->i20) {
                 convert_integer_to_float_cf(a, b, 0x24, m, 0);
-                qcopy(b, &coll_hit);
+                qcopy(b, &D_L03_00173F40.point);
             }
             if (coll_sphere(FUN_L00_0025a120_cf(q->i20) * 0.0009765625f, b, 0x24, m)) {
                 qcopy(m->pos, D_L03_00173F70);
@@ -3015,9 +3014,9 @@ void FUN_L03_002c6fd0(Moby2C8398 *m) {
         g = FUN_L00_002603d0_cf(m->pos, 0, 0.5f);
         m->pos[2] = m->pos[2] - 2.0f;
         if (m->pos[2] < g) {
-            char *h = (char *)&D_L03_00173F40;
-            if (*(int *)(h + 0x18) != 0 && FUN_L03_0024fba8_cf(*(int *)(h + 0x18)) != 0) {
-                d->i280 = *(Moby2C8398 **)(h + 0x18) - D_L03_0015FFD8_m;
+            CollisionHit *hit = &D_L03_00173F40;
+            if (hit->moby != 0 && FUN_L03_0024fba8_cf(hit->moby) != 0) {
+                d->i280 = (Moby2C8398 *)hit->moby - D_L03_0015FFD8_m;
             } else if (d->i280 != -1) {
                 short cls = D_L03_0015FFD8_m[d->i280].cls;
                 if (cls != 0x335 && cls != 0x4BA) {

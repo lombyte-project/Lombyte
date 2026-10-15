@@ -128,79 +128,79 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a3ec8.s", FUN_L00_002a3ec8);
 #else
 typedef struct {
     f32 x, z;
-    u8 p8[4];
-    u8 nb[8];
-    u8 p14[0x3C];
-    f32 h[2][23][16];
-    u8 pbd0[0x1190 - 0xBD0];
-} G;
-typedef struct { u8 p0[8]; f32 ox, oz, cw, ch; } T;
-extern T D_L00_001CA880;
+    u8 pad_8[4];
+    u8 neighbours[8];
+    u8 pad_14[0x3C];
+    f32 heights[2][23][16];
+    u8 pad_BD0[0x1190 - 0xBD0];
+} HeightTile;
+typedef struct { u8 pad_0[8]; f32 origin_x, origin_z, cell_width, cell_height; } HeightGridLayout;
+extern HeightGridLayout D_L00_001CA880;
 extern s32 D_L00_00161218 __attribute__((sda));
 extern s32 D_L00_00161220 __attribute__((sda));
 extern f32 FUN_001f9988(f32);
 extern f32 FUN_001f99c0(f32);
-#define NB(k) (grids + g->nb[k])
-void FUN_L00_002a3ec8(G *grids, s32 count, s32 mode, f32 x, f32 z, f32 r, f32 amount)
+#define NEIGHBOUR(k) (grids + tile->neighbours[k])
+void FUN_L00_002a3ec8(HeightTile *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount)
 {
-    G *g = grids;
-    s32 k, i, j, i0, i1, j0, j1;
-    f32 oz, fx, fz, zz, xx, dz2, d2, v, a;
+    HeightTile *tile = grids;
+    s32 k, i, j, row_first, row_last, col_first, col_last;
+    f32 tile_z, cell_x, cell_z, row_z, col_x, dz_sq, dist_sq, height, magnitude;
 
-    for (k = 0; k < count; k++, g++) {
-        oz = g->z + D_L00_001CA880.oz;
-        fz = (z - oz) / D_L00_001CA880.ch;
-        fx = (x - (g->x + D_L00_001CA880.ox)) / D_L00_001CA880.cw;
-        i0 = fz - r;
-        if (i0 < 0) i0 = 0;
-        i1 = fz + r;
-        j1 = fx + r;
-        j0 = fx - r;
-        if (i1 >= 16) i1 = 15;
-        if (j1 >= 16) j1 = 15;
-        if (j0 < 0) j0 = 0;
-        zz = oz + D_L00_001CA880.ch * (f32)i0;
-        for (i = i0; i <= i1; i++) {
-            xx = g->x + D_L00_001CA880.ox + D_L00_001CA880.cw * (f32)j0;
-            dz2 = (z - zz) * (z - zz);
-            for (j = j0; j <= j1; j++) {
-                d2 = (x - xx) * (x - xx) + dz2;
-                v = amount;
-                if (!(d2 < 1.0f)) v = amount / FUN_001f9988(d2);
+    for (k = 0; k < count; k++, tile++) {
+        tile_z = tile->z + D_L00_001CA880.origin_z;
+        cell_z = (z - tile_z) / D_L00_001CA880.cell_height;
+        cell_x = (x - (tile->x + D_L00_001CA880.origin_x)) / D_L00_001CA880.cell_width;
+        row_first = cell_z - radius;
+        if (row_first < 0) row_first = 0;
+        row_last = cell_z + radius;
+        col_last = cell_x + radius;
+        col_first = cell_x - radius;
+        if (row_last >= 16) row_last = 15;
+        if (col_last >= 16) col_last = 15;
+        if (col_first < 0) col_first = 0;
+        row_z = tile_z + D_L00_001CA880.cell_height * (f32)row_first;
+        for (i = row_first; i <= row_last; i++) {
+            col_x = tile->x + D_L00_001CA880.origin_x + D_L00_001CA880.cell_width * (f32)col_first;
+            dz_sq = (z - row_z) * (z - row_z);
+            for (j = col_first; j <= col_last; j++) {
+                dist_sq = (x - col_x) * (x - col_x) + dz_sq;
+                height = amount;
+                if (!(dist_sq < 1.0f)) height = amount / FUN_001f9988(dist_sq);
                 if (mode == 0) {
-                    a = FUN_001f99c0(v);
-                    if (a < FUN_001f99c0(g->h[D_L00_00161218][i][j]))
-                        v = g->h[D_L00_00161218][i][j];
+                    magnitude = FUN_001f99c0(height);
+                    if (magnitude < FUN_001f99c0(tile->heights[D_L00_00161218][i][j]))
+                        height = tile->heights[D_L00_00161218][i][j];
                 } else {
-                    v += g->h[D_L00_00161220][i][j];
+                    height += tile->heights[D_L00_00161220][i][j];
                 }
-                g->h[D_L00_00161218][i][j] = v;
-                if (i < 2 && g->nb[0] != 0xFF) {
-                    if (i == 0) NB(0)->h[D_L00_00161218][18][j] = g->h[D_L00_00161218][0][j];
-                    else NB(0)->h[D_L00_00161218][20][j] = v;
+                tile->heights[D_L00_00161218][i][j] = height;
+                if (i < 2 && tile->neighbours[0] != 0xFF) {
+                    if (i == 0) NEIGHBOUR(0)->heights[D_L00_00161218][18][j] = tile->heights[D_L00_00161218][0][j];
+                    else NEIGHBOUR(0)->heights[D_L00_00161218][20][j] = height;
                 }
-                if (j < 2 && g->nb[1] != 0xFF) {
-                    if (j == 0) NB(1)->h[D_L00_00161218][19][i] = g->h[D_L00_00161218][i][0];
-                    else NB(1)->h[D_L00_00161218][21][i] = g->h[D_L00_00161218][i][j];
+                if (j < 2 && tile->neighbours[1] != 0xFF) {
+                    if (j == 0) NEIGHBOUR(1)->heights[D_L00_00161218][19][i] = tile->heights[D_L00_00161218][i][0];
+                    else NEIGHBOUR(1)->heights[D_L00_00161218][21][i] = tile->heights[D_L00_00161218][i][j];
                 }
-                if (i == 15 && g->nb[2] != 0xFF)
-                    NB(2)->h[D_L00_00161218][16][j] = g->h[D_L00_00161218][15][j];
-                if (j == 15 && g->nb[3] != 0xFF)
-                    NB(3)->h[D_L00_00161218][17][i] = g->h[D_L00_00161218][i][15];
-                if (g->nb[4] != 0xFF) {
-                    if (j == 0 && i == 0) NB(4)->h[D_L00_00161218][22][3] = g->h[D_L00_00161218][0][0];
-                    if (j == 1 && i == 0) NB(4)->h[D_L00_00161218][22][4] = g->h[D_L00_00161218][0][1];
-                    if (j == 0 && i == 1) NB(4)->h[D_L00_00161218][22][5] = g->h[D_L00_00161218][1][0];
+                if (i == 15 && tile->neighbours[2] != 0xFF)
+                    NEIGHBOUR(2)->heights[D_L00_00161218][16][j] = tile->heights[D_L00_00161218][15][j];
+                if (j == 15 && tile->neighbours[3] != 0xFF)
+                    NEIGHBOUR(3)->heights[D_L00_00161218][17][i] = tile->heights[D_L00_00161218][i][15];
+                if (tile->neighbours[4] != 0xFF) {
+                    if (j == 0 && i == 0) NEIGHBOUR(4)->heights[D_L00_00161218][22][3] = tile->heights[D_L00_00161218][0][0];
+                    if (j == 1 && i == 0) NEIGHBOUR(4)->heights[D_L00_00161218][22][4] = tile->heights[D_L00_00161218][0][1];
+                    if (j == 0 && i == 1) NEIGHBOUR(4)->heights[D_L00_00161218][22][5] = tile->heights[D_L00_00161218][1][0];
                 }
-                if (g->nb[5] != 0xFF && j == 15 && i == 0)
-                    NB(5)->h[D_L00_00161218][22][2] = g->h[D_L00_00161218][0][15];
-                if (g->nb[6] != 0xFF && j == 0 && i == 15)
-                    NB(6)->h[D_L00_00161218][22][1] = g->h[D_L00_00161218][15][0];
-                if (g->nb[7] != 0xFF && j == 15 && i == 15)
-                    NB(7)->h[D_L00_00161218][22][0] = g->h[D_L00_00161218][15][15];
-                xx += D_L00_001CA880.cw;
+                if (tile->neighbours[5] != 0xFF && j == 15 && i == 0)
+                    NEIGHBOUR(5)->heights[D_L00_00161218][22][2] = tile->heights[D_L00_00161218][0][15];
+                if (tile->neighbours[6] != 0xFF && j == 0 && i == 15)
+                    NEIGHBOUR(6)->heights[D_L00_00161218][22][1] = tile->heights[D_L00_00161218][15][0];
+                if (tile->neighbours[7] != 0xFF && j == 15 && i == 15)
+                    NEIGHBOUR(7)->heights[D_L00_00161218][22][0] = tile->heights[D_L00_00161218][15][15];
+                col_x += D_L00_001CA880.cell_width;
             }
-            zz += D_L00_001CA880.ch;
+            row_z += D_L00_001CA880.cell_height;
         }
     }
 }

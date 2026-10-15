@@ -356,7 +356,7 @@ extern s32 fast_tween_color_alpha_first(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void draw_hud_icon(void *, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b120");
-extern int font_print_right_2382a0(s32, s32, s32, const char *, s32) __asm__("FUN_001f6af0");
+extern int font_print_center_2382a0(s32, s32, s32, const char *, s32) __asm__("FUN_001f6af0");
 extern const char *get_text(s32) __asm__("FUN_001fdd10");
 extern s32 strlen_alt(const char *) __asm__("FUN_001166cc");
 extern s32 sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
@@ -454,8 +454,8 @@ s32 FUN_L00_002382a0(char *rec) {
                 shadow = fast_tween_color_alpha_first(opacity, D_L00_0015F7A8, D_L00_0015F7AC);
             else
                 shadow = fast_tween_color_alpha_first(opacity, D_L00_0015F7A0, D_L00_0015F7A4);
-            font_print_right_2382a0(x + D_L00_0015F720 + 1, y + D_L00_0015F724 + 13, color, formatted, -1);
-            font_print_right_2382a0(x + D_L00_0015F720, y + D_L00_0015F724 + 12, shadow, formatted, -1);
+            font_print_center_2382a0(x + D_L00_0015F720 + 1, y + D_L00_0015F724 + 13, color, formatted, -1);
+            font_print_center_2382a0(x + D_L00_0015F720, y + D_L00_0015F724 + 12, shadow, formatted, -1);
         }
         prefix_length = 0;
         shadow = fast_tween_color_alpha_first(opacity, D_L00_0015F790, D_L00_0015F794);
@@ -509,14 +509,14 @@ s32 FUN_L00_002382a0(char *rec) {
         else
             text_y += D_L00_0015F7BC;
         if (prefix_length != 0) {
-            font_print_right_2382a0(x + D_L00_0015F720 + 1, text_y + 1, color, text, prefix_length);
-            font_print_right_2382a0(x + D_L00_0015F720, text_y, shadow, text, prefix_length);
+            font_print_center_2382a0(x + D_L00_0015F720 + 1, text_y + 1, color, text, prefix_length);
+            font_print_center_2382a0(x + D_L00_0015F720, text_y, shadow, text, prefix_length);
             text_y += 16;
-            font_print_right_2382a0(x + D_L00_0015F720 + 1, text_y + 1, color, suffix, -1);
-            font_print_right_2382a0(x + D_L00_0015F720, text_y, shadow, suffix, -1);
+            font_print_center_2382a0(x + D_L00_0015F720 + 1, text_y + 1, color, suffix, -1);
+            font_print_center_2382a0(x + D_L00_0015F720, text_y, shadow, suffix, -1);
         } else {
-            font_print_right_2382a0(x + D_L00_0015F720 + 1, text_y + 1, color, text, -1);
-            font_print_right_2382a0(x + D_L00_0015F720, text_y, shadow, text, -1);
+            font_print_center_2382a0(x + D_L00_0015F720 + 1, text_y + 1, color, text, -1);
+            font_print_center_2382a0(x + D_L00_0015F720, text_y, shadow, text, -1);
         }
     }
 out:

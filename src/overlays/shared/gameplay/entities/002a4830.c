@@ -2136,66 +2136,66 @@ s32 FUN_L00_001efc70_2a96f8(void *, void *, s32, void *, s32) __asm__("FUN_001ef
 void FUN_L00_00250df8_2a96f8(void *) __asm__("FUN_L00_00250df8");
 void FUN_L00_0025f780_2a96f8(void *, void *, s32) __asm__("FUN_L00_0025f780");
 M_2a96f8 *FUN_L00_002a96f8(T_2a96f8 *src, V_2a96f8 *pos, T_2a96f8 *tgt, f32 x, f32 y, f32 z, f32 w, f32 v) {
-    M_2a96f8 *m;
-    O_2a96f8 *o;
-    R_2a96f8 *r;
-    V_2a96f8 a, b;
-    f32 f;
-    s32 k;
-    m = FUN_0020c4f8_2a96f8(0x100);
-    if (m) {
-        m->b30 = 0xFF;
-        m->b31 = 1;
-        m->b20 = 0;
-        m->h32 = 0xFF;
-        m->f2C *= D_L00_001613C4_2a96f8;
-        o = m->p78;
-        m->f48 = w;
-        m->f44 = v;
+    M_2a96f8 *moby;
+    O_2a96f8 *vars;
+    R_2a96f8 *target_info;
+    V_2a96f8 dir, start;
+    f32 player_speed;
+    s32 delay;
+    moby = FUN_0020c4f8_2a96f8(0x100);
+    if (moby) {
+        moby->b30 = 0xFF;
+        moby->b31 = 1;
+        moby->b20 = 0;
+        moby->h32 = 0xFF;
+        moby->f2C *= D_L00_001613C4_2a96f8;
+        vars = moby->p78;
+        moby->f48 = w;
+        moby->f44 = v;
         if (!tgt) {
-            FUN_00214db0_2a96f8(&a, 20.0f * D_0015ED6C_2a96f8, w, v);
-            b.q = pos->q;
-            tgt = FUN_L00_002630c8_2a96f8(src, &b, &a, 0.34906585f, &x, &y, &z);
+            FUN_00214db0_2a96f8(&dir, 20.0f * D_0015ED6C_2a96f8, w, v);
+            start.q = pos->q;
+            tgt = FUN_L00_002630c8_2a96f8(src, &start, &dir, 0.34906585f, &x, &y, &z);
         }
-        o->p10 = src;
-        qcopy(&m->v10, pos);
-        o->i38 = 1;
-        o->f34 = D_0015ED6C_2a96f8 * 100.0f;
-        o->i24 = 0;
-        o->i28 = 0;
-        o->i20 = 0;
-        o->p18 = tgt;
+        vars->p10 = src;
+        qcopy(&moby->v10, pos);
+        vars->i38 = 1;
+        vars->f34 = D_0015ED6C_2a96f8 * 100.0f;
+        vars->i24 = 0;
+        vars->i28 = 0;
+        vars->i20 = 0;
+        vars->p18 = tgt;
         if (tgt) {
-            r = FUN_L00_0025c338_2a96f8(tgt);
-            if (r) {
-                r->h1E |= 0x80;
-                if (r->bB) o->i38 = 0;
-                if (r->bC) o->f34 = r->bC * D_0015ED6C_2a96f8;
+            target_info = FUN_L00_0025c338_2a96f8(tgt);
+            if (target_info) {
+                target_info->h1E |= 0x80;
+                if (target_info->bB) vars->i38 = 0;
+                if (target_info->bC) vars->f34 = target_info->bC * D_0015ED6C_2a96f8;
             }
         }
-        o->f2C = x;
-        o->f30 = y;
-        o->i14 = FUN_001f96f8_2a96f8(0x96);
+        vars->f2C = x;
+        vars->f30 = y;
+        vars->i14 = FUN_001f96f8_2a96f8(0x96);
         if (tgt) {
-            qcopy(&o->v0, &tgt->v10);
-            o->v0.f[2] += z;
-            o->f1C = z;
+            qcopy(&vars->v0, &tgt->v10);
+            vars->v0.f[2] += z;
+            vars->f1C = z;
         }
-        f = FUN_001f9af0_2a96f8(D_0013F490_2a96f8);
-        k = FUN_001f96f8_2a96f8(D_0015ED6C_2a96f8 * 0.1f < f ? 0x3C : 1);
-        o->h3E = k;
-        o->h3C = k;
-        a.f[2] = pos->f[2];
-        a.q = src->v10.q;
-        if (FUN_L00_001efc70_2a96f8(&a, pos, 0, D_001413D0_2a96f8, 0)) {
-            m->bBC = 1;
-            qcopy(&m->v10, &D_L00_00173E60_2a96f8[0]);
+        player_speed = FUN_001f9af0_2a96f8(D_0013F490_2a96f8);
+        delay = FUN_001f96f8_2a96f8(D_0015ED6C_2a96f8 * 0.1f < player_speed ? 0x3C : 1);
+        vars->h3E = delay;
+        vars->h3C = delay;
+        dir.f[2] = pos->f[2];
+        dir.q = src->v10.q;
+        if (FUN_L00_001efc70_2a96f8(&dir, pos, 0, D_001413D0_2a96f8, 0)) {
+            moby->bBC = 1;
+            qcopy(&moby->v10, &D_L00_00173E60_2a96f8[0]);
         }
-        FUN_L00_00250df8_2a96f8(m);
-        FUN_L00_0025f780_2a96f8(m, D_L00_001B0770_lui, 0x1F);
-        m->f2C += m->f2C;
+        FUN_L00_00250df8_2a96f8(moby);
+        FUN_L00_0025f780_2a96f8(moby, D_L00_001B0770_lui, 0x1F);
+        moby->f2C += moby->f2C;
     }
-    return m;
+    return moby;
 }
 #endif
 /* Creates a moby at a position with a scale, colour and a few data fields. */

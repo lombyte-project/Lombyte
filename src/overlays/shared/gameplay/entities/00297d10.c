@@ -440,11 +440,11 @@ void FUN_L06_002e8678(unsigned char *moby) {
     case 0: {
         float wait;
         int spawn_count = *(int *)&D_L06_00161C14;
-        int n = *(short *)(data + 0x240);
+        int divisor = *(short *)(data + 0x240);
         *(short *)(data + 0x20A) = spawn_count % 8;
         *(int *)&D_L06_00161C14 = spawn_count + 1;
-        if (n != 0) {
-            *(short *)(moby + 0xB4) = *(short *)(moby + 0xB4) / n;
+        if (divisor != 0) {
+            *(short *)(moby + 0xB4) = *(short *)(moby + 0xB4) / divisor;
         }
         *(unsigned short *)(moby + 0x34) |= 0x100;
         data[0x58] = truncate_float_to_s32(8.0f);
@@ -514,7 +514,7 @@ void FUN_L06_002e8678(unsigned char *moby) {
         break;
     case 4: {
         int *path;
-        int n;
+        int point_count;
         qcopy(B, (char *)D_L06_001B0C30[*(int *)(data + 0x1F8)] + *(short *)(data + 0x208) * 16 + 0x10);
         subtract_vector_xyz(A, B, moby + 0x10);
         FUN_L06_002e9aa8_c((char *)moby);
@@ -523,20 +523,20 @@ void FUN_L06_002e8678(unsigned char *moby) {
         FUN_L06_002e9b60_c(moby, C, 0, 0.3f, 0.3f);
         transform_vector_by_basis(A, A, moby + 0xC0);
         if (vector_length_xy_c(A) < 0.5f) {
-            float k;
+            float return_speed;
             float dist;
             path = D_L06_001B0C30[*(int *)(data + 0x1F8)];
-            n = *path;
-            if (*(short *)(data + 0x208) < n - 2) {
+            point_count = *path;
+            if (*(short *)(data + 0x208) < point_count - 2) {
                 *(short *)(data + 0x208) = *(short *)(data + 0x208) + 1;
                 return;
             }
-            qcopy(data + 0x210, (char *)path + n * 16);
+            qcopy(data + 0x210, (char *)path + point_count * 16);
             qcopy(data + 0x230, data + 0x210);
             dist = FUN_001f9b80(moby + 0x10, data + 0x210);
-            k = dist / (float)scale_game_frames_alt(30);
-            *(float *)(data + 0x138) = k;
-            *(float *)(data + 0x13C) = FUN_L00_0025abf0(moby + 0x10, data + 0x210, 0, k, -*(float *)(data + 0x130));
+            return_speed = dist / (float)scale_game_frames_alt(30);
+            *(float *)(data + 0x138) = return_speed;
+            *(float *)(data + 0x13C) = FUN_L00_0025abf0(moby + 0x10, data + 0x210, 0, return_speed, -*(float *)(data + 0x130));
             data[0x15D] = 3;
             *(int *)(data + 0x144) = 5;
             func_L00_0025D5B0_x(moby, data + 0x120, 2, 1, 0,
