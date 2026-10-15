@@ -11,6 +11,9 @@ of scope. How the overlays are counted is in [Level overlays](#level-overlays).
 | **C_EXACT** | the unit's functions compile from C to the same bytes as retail           |
 | **C_FUZZY** | a pending unit's C body is measurably similar to retail, without matching |
 
+A unit that holds several functions counts each one, split at the retail labels
+its source binds them to (`__asm__("FUN_…")`).
+
 This document deliberately carries **no percentages**: they are regenerated from
 the build and would be stale the moment they were written down. Read the current
 figures from the [progress map](https://github.com/lombyte-project/lombyte/blob/progress/decomp_map.svg),

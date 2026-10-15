@@ -216,6 +216,33 @@ class ProgressReportTests(unittest.TestCase):
         with mock.patch.object(self.report, "REPO", repo):
             return self.report.build_report(scores)
 
+    def test_unit_with_several_functions_counts_each(self):
+        """A unit binding several functions to retail labels counts each one."""
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            (repo / "config" / "us").mkdir(parents=True)
+            (repo / "config" / "us" / "rnc1.us.yaml").write_text(textwrap.dedent("""
+                segments:
+                  - name: main
+                    type: code
+                    start: 0x1000
+                    vram: 0x100080
+                    subsegments:
+                      - [0x13300, c, ui/pair]
+                      - [0x13380, textbin, text_gap_end]
+                """))
+            (repo / "src" / "ui").mkdir(parents=True)
+            (repo / "src" / "ui" / "pair.c").write_text(
+                'extern void callee(void) __asm__("FUN_00200000");\n'
+                'void first(void) __asm__("func_00112380");\nvoid first(void) {\n}\n'
+                'int second(int x) __asm__("FUN_001123b0");\nint second(int x) {\n    return x;\n}\n'
+            )
+            report = self._build(repo, {})
+        functions = [f for unit in report["units"] for f in unit["functions"]]
+        self.assertEqual([(f["name"], f["size"]) for f in functions],
+                         [("first", "48"), ("second", "80")])
+        self.assertEqual(report["measures"]["matched_functions"], 2)
+
     def test_only_exact_units_are_matched(self):
         with tempfile.TemporaryDirectory() as tmp:
             report = self._build(self._repo(Path(tmp)), {"textbin/pending": 100.0})

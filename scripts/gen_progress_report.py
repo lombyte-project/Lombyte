@@ -246,8 +246,69 @@ def measures(functions: list[dict], groups: list[dict]) -> dict:
     }
 
 
+# A function the unit's source defines, bound to its retail label.
+LABEL_DEF_RE = re.compile(
+    r'^(?!extern\b)[^\n;{}]*?\b(\w+)\s*\([^;{}]*\)\s*__asm__\("(?:FUN|func)_([0-9A-Fa-f]{8})"\)\s*;',
+    re.M)
+INCLUDE_ASM_LABEL_RE = re.compile(r'INCLUDE_ASM\([^\n]*\b(?:FUN|func)_([0-9A-Fa-f]{8})\)')
+
+
+def main_vram_offset() -> int | None:
+    """VMA minus file offset of the executable's main segment."""
+    path = REPO / "config" / "us" / "rnc1.us.yaml"
+    text = path.read_text() if path.is_file() else ""
+    match = re.search(r"name: main\n\s+type: code\n\s+start: (0x[0-9a-fA-F]+)\n\s+vram: (0x[0-9a-fA-F]+)", text)
+    return int(match.group(2), 16) - int(match.group(1), 16) if match else None
+
+
+def unit_functions(unit: dict, vram_offset: int | None) -> list[tuple[int, int, str | None]]:
+    """(offset, size, C name) of each function a unit holds.
+
+    A unit holding several functions lists them by the retail labels its
+    source binds them to; any other unit is one function."""
+    whole = [(int(unit["address"]), int(unit["size"]), None)]
+    source = unit["source"]
+    if vram_offset is None or not source.is_file():
+        return whole
+    start, end = int(unit["address"]), int(unit["address"]) + int(unit["size"])
+    text = source.read_text(encoding="utf-8", errors="replace")
+    found: dict[int, str | None] = {}
+    for match in LABEL_DEF_RE.finditer(text):
+        found.setdefault(int(match.group(2), 16) - vram_offset, match.group(1))
+    for match in INCLUDE_ASM_LABEL_RE.finditer(text):
+        found.setdefault(int(match.group(1), 16) - vram_offset, None)
+    offsets = sorted(offset for offset in found if start <= offset < end)
+    if len(offsets) < 2 or offsets[0] != start:
+        return whole
+    bounds = offsets + [end]
+    return [(offset, bounds[i + 1] - offset, found[offset]) for i, offset in enumerate(offsets)]
+
+
+def recovered_by_address() -> dict[int, str]:
+    """Proposed recovered name of each function address."""
+    path = REPO / "config" / "us" / "recovered_names.json"
+    payload = json.loads(path.read_text()) if path.is_file() else {}
+    names: dict[int, str] = {}
+
+    def walk(node: object) -> None:
+        if isinstance(node, dict):
+            address, name = node.get("address"), node.get("proposed_name")
+            if isinstance(address, str) and isinstance(name, str) and "source_path" in node:
+                names.setdefault(int(address, 16), name)
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    walk(payload)
+    return names
+
+
 def build_report(scores: dict[object, float]) -> dict:
     assignments = load_group_assignments(REPO)
+    vram_offset = main_vram_offset()
+    recovered = recovered_by_address()
     functions = []
     for unit in classify_units(REPO):
         if unit["category"] == "asm":
@@ -262,16 +323,23 @@ def build_report(scores: dict[object, float]) -> dict:
         fuzzy = 100.0 if exact else round(min(100.0, max(0.0, score)), 4)
         if not exact and fuzzy >= 100.0:
             fuzzy = 99.99  # only promoted C counts as matched
-        functions.append({
-            "owner": canonical_name,
-            "size": unit["size"],
-            "address": address,
-            "exact": exact,
-            "fuzzy": fuzzy,
-            "category": unit_category(owner),
-            "logical_group": group_for_owner(owner, assignments),
-            "symbol": proposed_name or unit_symbol(unit),
-        })
+        parts = unit_functions(unit, vram_offset)
+        for offset, size, c_name in parts:
+            if len(parts) == 1:
+                symbol = proposed_name or unit_symbol(unit)
+            else:
+                vma = offset + (vram_offset or 0)
+                symbol = recovered.get(vma) or c_name or f"FUN_{vma:08x}"
+            functions.append({
+                "owner": canonical_name,
+                "size": size,
+                "address": offset,
+                "exact": exact,
+                "fuzzy": fuzzy,
+                "category": unit_category(owner),
+                "logical_group": group_for_owner(owner, assignments),
+                "symbol": symbol,
+            })
     functions.sort(key=lambda function: function["address"])
 
     levels = load_levels(REPO)
