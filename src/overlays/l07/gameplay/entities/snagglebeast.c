@@ -2012,11 +2012,11 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
     ring = (char *)&D_L07_0020DB00_c[14];
     do {
         scale_vector_xyz(&delta, point, 0.02f);
-        i--;
         transform_vector_by_basis(&delta, &delta, &ring_basis.matrix);
         add_vector_xyz(ring, D_L07_0020DB00_c, &delta);
         point = (char *)point + 16;
         ring += 16;
+        i--;
     } while (i >= 0);
     zero = 0.0f;
     i = 1;
@@ -2168,12 +2168,12 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
                     segment = *(short *)((char *)D_L07_0020C840_c + 0 + i * 24);
                     add_vector_xyz(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 16, D_L07_0020DB00_c[segment], &delta);
                     column = *(short *)((char *)D_L07_0020C840_c + 2 + i * 24);
-                    ring = (char *)&D_L07_0020DB00_c[14] + segment * 0x140;
-                    subtract_vector_xyz(&basis, ring + column * 16, D_L07_0020DB00_c[segment]);
+                    ring = (char *)&D_L07_0020DB00_c[14];
+                    subtract_vector_xyz(&basis, ring + column * 16 + segment * 0x140, D_L07_0020DB00_c[segment]);
                     subtract_vector_xyz(&velocity, (char *)&D_L07_0020DB00_c[0] + segment * 0x140 + column * 16 - 0x60, D_L07_0020DAF0_c[segment]);
                     interpolate_vector(&extension, &basis, &velocity, fraction);
                     next_column = (column + 19) % 20;
-                    subtract_vector_xyz(&direction, ring + next_column * 16, D_L07_0020DB00_c[segment]);
+                    subtract_vector_xyz(&direction, ring + next_column * 16 + segment * 0x140, D_L07_0020DB00_c[segment]);
                     subtract_vector_xyz(&tangent, (char *)&D_L07_0020DB00_c[0] + segment * 0x140 + next_column * 16 - 0x60, D_L07_0020DAF0_c[segment]);
                     interpolate_vector(&point_basis.side, &direction, &tangent, fraction);
                     interpolate_vector(&extension, &extension, &point_basis.side, *(float *)((char *)D_L07_0020C840_c + 8 + i * 24));
