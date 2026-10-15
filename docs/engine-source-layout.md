@@ -116,10 +116,11 @@ typedef struct StashGetInfo {
 } StashGetInfo;
 ```
 
-These definitions resolve the placeholder types previously used in:
-- `src/storage/stash/init_stash.c` (initialisation of `D_001DD1A0` / `StashInfo` and the 64-entry `D_001DD1D8` / `StashBlock` table, calling `IOP_STASH_INFO`).
-- `src/world/data/stash_send_data.c` (`stash_send_data`, implementing `IOP_STASH_SEND`).
-- `src/storage/stash/stash_receive_data.c` (`stash_receive_data`, implementing `IOP_STASH_FETCH`).
+They match the stash code in the executable:
+- `src/storage/stash/init_stash.c`: fills `D_001DD1A0` (`StashInfo`) and the
+  64-entry `D_001DD1D8` table (`StashBlock`) through `IOP_STASH_INFO`.
+- `src/world/data/stash_send_data.c`: `IOP_STASH_SEND`.
+- `src/storage/stash/stash_receive_data.c`: `IOP_STASH_FETCH`.
 
 ## Sound driver subsystem (`989snd.c`)
 
@@ -163,9 +164,6 @@ screen overlays.
 
 ## Scope
 
-The matching decompilation targets the retail boot executable only. Per-level
-`update/*` and `hero*` code lives in the level code overlays, which are out of
-scope until the executable is done (see
-[progress-metrics.md](progress-metrics.md#level-overlays)); the module list above
-is provided as engine context for naming and for the future runtime, not as a
-work queue.
+Per-level `update/*` and `hero*` code lives in the level code overlays
+([overlays.md](overlays.md)). The module list above is context for naming,
+not a work queue.

@@ -49,7 +49,7 @@ Expected SHA-256 of the boot executable:
 e050581032e4bb3f20341307da5b69b76f1574910519155380ea771e55c3c0c9
 ```
 
-Only this release is currently targeted. PAL, NTSC-J, and the PlayStation 3 remaster are not supported.
+Only this release is targeted; other releases and the PlayStation 3 remaster are not supported.
 
 <h3>Contributing</h3>
 

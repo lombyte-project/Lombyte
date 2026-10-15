@@ -114,7 +114,7 @@ for how those units are handled when the profile is absent.
 ## 2. Python environment
 
 ```sh
-cd ~/Lombyte
+cd lombyte
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 

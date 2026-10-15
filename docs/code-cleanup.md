@@ -51,7 +51,12 @@ make it clearer, add a comment that explains why it looks odd.
 - **Functions:** `lower_snake_case`, verb first (`draw_hud`), with a
   subsystem prefix when it helps (`hud_`, `save_card_`). Recovered CamelCase
   names become clear snake_case. Sony SDK names stay as they are. Keep
-  `FUN_<addr>` only in the asm label.
+  `FUN_<addr>` only in the asm label, and use the same name the function's
+  own file uses in every file that calls it.
+- **Files:** a boot file is named after the function it holds; a level code
+  file after the moby class or function it holds
+  ([overlays.md](overlays.md#sources-and-the-proof)). Keep `fun_<addr>.c`
+  until the name is proven.
 - **Renaming:** use the tool, one function at a time, so callers in level
   code are updated too:
   `python3 scripts/rename-function-proposals.py --address 0x... --apply`

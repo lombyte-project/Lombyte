@@ -74,21 +74,19 @@ Procedure and acceptance bar for Ratchet & Clank (PS2, `SCUS_971.99`).
   owners stay under `assembly/<subsystem>/`. Keep the canonical linker symbol and
   required external aliases, resolve relocations and data ownership, and
   re-verify all four measures from a fresh compile.
-- Remove the oracle only after the transaction succeeds, and update the record.
-  Refresh the audit from fresh evidence; counters are derived, never edited.
+- Remove the oracle only after the transaction succeeds. Progress numbers
+  come from the tree; never edit them by hand.
 - Use the semantic C identifier from `docs/recovered-names.md` when its evidence
   supports the function's role. Bind it to the existing `FUN_<address>` linker
   symbol with a GNU assembler label; this keeps the emitted symbol stable while
   making C references descriptive. Keep other aliases only when code or
   configuration requires them.
 
-## 8. Evidence discipline
+## 8. Parking a unit
 
-- Every attempt keeps a unique set of artifacts: source hash, compiler
-  invocation, object, raw comparison report, measures, decision, next action.
-- Evidence paths stay with the maintainers' artifacts, not in this repository.
-- Raw reports are preserved; summaries do not replace them. Parked work records
-  the tested hypotheses, the blocker class, and a concrete revisit trigger.
+- When a unit stalls, write down what you tried, the first mismatch and its
+  class, and what would make it worth another look (in the pull request or
+  an issue). The maintainers keep the raw comparison reports.
 
 ## 9. Recovery ladder
 

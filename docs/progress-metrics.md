@@ -50,13 +50,10 @@ linker at the generated retail layout addresses and compares each allocated
 section byte-for-byte against `config/us/SCUS_971.99`
 (`retail_verification`, method `ps2-ld-retail-bytes-v1`).
 
-The maintainer's promotion tool (`promote-unit.py`, in the private tooling
-checkout, not in `scripts/`) requires both, and the promotion receipt records the
-object hash, the retail hash and the layout hash the comparison was bound to. A
-100 % candidate with `exact=False` is a real state, not a rounding artifact: it
-usually means the store order or a linked address is wrong in a way objdiff
-cannot see. Sorting a near miss by the diff rows and the instruction count is
-more reliable than trusting the percentage, which moves with row alignment.
+A 100 % candidate that is not exact usually has a store order or a linked
+address wrong in a way objdiff cannot see. The diff rows and the instruction
+count say more about a near miss than the percentage, which moves with row
+alignment.
 
 Matching is verified at two levels: objdiff per compiled object, and a whole-ELF
 comparison against the original through `./verify-baseline.sh` (see
@@ -97,8 +94,7 @@ whose C would not be a faithful reconstruction. They are left out of the
 percentages, `check-unit.py` refuses them by design, and they carry **no `#else`
 C body at all** — a body there can never be measured, staged or promoted, which
 makes it the ideal hiding place for a wrong one. Evidence behind the
-classification is in `analysis/audits/intentional-asm-evidence.json` in the
-sibling tooling checkout.
+classification is kept by the maintainers.
 
 Group assignments and proposed semantic names come from
 `config/us/recovered_names.json`; the naming rules are in
@@ -113,19 +109,14 @@ build time from your own `config/us/SCUS_971.99` into the gitignored
 `config/us/expected/asm/` tree — the repository stores none, which is why a build
 cannot start before the game file is in place.
 
-## Why a public score can differ from a banked one
+## Compiler flags
 
-A candidate's score in the tooling repository is measured on the route its bank
-records, which need not be the route the public build uses. The public number in
-the published report is measured through the public harness, on whichever build
-rule `config/us/rnc1.us.yaml` and the generated `config/us/build.ninja` select for
-that unit. When those differ the two numbers differ, and the public one is the one
-the report shows.
-
-One consequence worth knowing: the default `cc` build rule — which every unit in
-no route set gets, and there are many — accepts **no per-unit compiler flags at
-all**. A unit whose best C needs `-G0` or `-fno-schedule-insns` is therefore not
-reproducible publicly unless it is routed to a profile that has the flag hook.
+The report measures each unit with the build rule `configure.py` picks for
+it. The default rule takes no per-unit compiler flags; a flag such as
+`-fno-schedule-insns` is only honoured for a unit listed in the per-unit
+flag tables at the top of `configure.py` (`GAME_COMPILER_FLAG_UNITS`,
+`SN_FLAG_UNITS`), and decompilation-tips.md asks to add one only as a last
+resort.
 
 ## Working on a unit
 

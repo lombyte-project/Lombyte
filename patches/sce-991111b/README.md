@@ -98,7 +98,7 @@ differs. `make` does not track header dependencies: after changing
     stay byte-identical; `-ffixed-hi1` cannot express this, because the
     R5900 register setup un-fixes the pair after the command line is read
   - fixtures: `textbin/fun_001fe980`, `textbin/fun_00214260`,
-    `textbin/storage/memory_card/data/memcard_restore_info` (PAL imports)
+    `textbin/storage/memory_card/data/memcard_restore_info` (migrated)
 
 - `0054-r5900-assembler-pads-loops.patch` SHA-256: `2cec82e691f4c2fbd20fe530960df5fe2476b891561bd6ad65342b31f8fa03eb`
   - role: default. The R5900 short-loop padding and the `div` padding are

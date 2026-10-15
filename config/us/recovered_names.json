@@ -3597,7 +3597,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL core/00119D88.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp core/00119D88.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -3646,7 +3646,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL core/0011CCE0.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp core/0011CCE0.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -3773,11 +3773,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL names it decode_motion_vector (libmpeg, core/00125630.c)"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp names it decode_motion_vector (libmpeg, core/00125630.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "PAL names it decode_motion_vector (libmpeg, core/00125630.c)"
+            "note": "rac1-decomp names it decode_motion_vector (libmpeg, core/00125630.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -4951,11 +4951,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: start level `level` (PAL bmain.c)"
+            "note": "rac1-decomp places it in its original source file: doc: start level `level` (rac1-decomp bmain.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: start level `level` (PAL bmain.c)"
+            "note": "doc: start level `level` (rac1-decomp bmain.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5376,11 +5376,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: yaw, pitch and distance between two points against the camera axes (body, PAL camera.c)"
+            "note": "rac1-decomp places it in its original source file: yaw, pitch and distance between two points against the camera axes (body, rac1-decomp camera.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "yaw, pitch and distance between two points against the camera axes (body, PAL camera.c)"
+            "note": "yaw, pitch and distance between two points against the camera axes (body, rac1-decomp camera.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5397,11 +5397,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: unit axes into the camera record, angles through compute_camera_angles (PAL camera.c)"
+            "note": "rac1-decomp places it in its original source file: doc: unit axes into the camera record, angles through compute_camera_angles (rac1-decomp camera.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: unit axes into the camera record, angles through compute_camera_angles (PAL camera.c)"
+            "note": "doc: unit axes into the camera record, angles through compute_camera_angles (rac1-decomp camera.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5418,11 +5418,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: copies +0x50/+0x60 to +0xC0/+0xD0 when the flag is clear (PAL camera.c)"
+            "note": "rac1-decomp places it in its original source file: doc: copies +0x50/+0x60 to +0xC0/+0xD0 when the flag is clear (rac1-decomp camera.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: copies +0x50/+0x60 to +0xC0/+0xD0 when the flag is clear (PAL camera.c)"
+            "note": "doc: copies +0x50/+0x60 to +0xC0/+0xD0 when the flag is clear (rac1-decomp camera.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5439,11 +5439,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: copies +0xC0/+0xD0 back to +0x50/+0x60 (PAL camera.c)"
+            "note": "rac1-decomp places it in its original source file: doc: copies +0xC0/+0xD0 back to +0x50/+0x60 (rac1-decomp camera.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: copies +0xC0/+0xD0 back to +0x50/+0x60 (PAL camera.c)"
+            "note": "doc: copies +0xC0/+0xD0 back to +0x50/+0x60 (rac1-decomp camera.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5460,11 +5460,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: captures the start state and sets mode 3 with the blend rates (PAL camera.c)"
+            "note": "rac1-decomp places it in its original source file: doc: captures the start state and sets mode 3 with the blend rates (rac1-decomp camera.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: captures the start state and sets mode 3 with the blend rates (PAL camera.c)"
+            "note": "doc: captures the start state and sets mode 3 with the blend rates (rac1-decomp camera.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5481,11 +5481,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: camera blend step (PAL camera.c)"
+            "note": "rac1-decomp places it in its original source file: doc: camera blend step (rac1-decomp camera.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: camera blend step (PAL camera.c)"
+            "note": "doc: camera blend step (rac1-decomp camera.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5519,11 +5519,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: runs the blend step and commits the view when it completes (PAL camera.c)"
+            "note": "rac1-decomp places it in its original source file: doc: runs the blend step and commits the view when it completes (rac1-decomp camera.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: runs the blend step and commits the view when it completes (PAL camera.c)"
+            "note": "doc: runs the blend step and commits the view when it completes (rac1-decomp camera.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5540,11 +5540,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: decaying cosine offset added to the camera position (body, PAL camera.c)"
+            "note": "rac1-decomp places it in its original source file: decaying cosine offset added to the camera position (body, rac1-decomp camera.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "decaying cosine offset added to the camera position (body, PAL camera.c)"
+            "note": "decaying cosine offset added to the camera position (body, rac1-decomp camera.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5580,11 +5580,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: camera-inside-water test (PAL camera.c)"
+            "note": "rac1-decomp places it in its original source file: doc: camera-inside-water test (rac1-decomp camera.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: camera-inside-water test (PAL camera.c)"
+            "note": "doc: camera-inside-water test (rac1-decomp camera.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5606,7 +5606,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL camera.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp camera.c"
           },
           {
             "kind": "source_analysis",
@@ -5632,7 +5632,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL camera.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp camera.c"
           },
           {
             "kind": "source_analysis",
@@ -5658,11 +5658,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: camera update, once per frame (PAL camera.c)"
+            "note": "rac1-decomp places it in its original source file: doc: camera update, once per frame (rac1-decomp camera.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: camera update, once per frame (PAL camera.c)"
+            "note": "doc: camera update, once per frame (rac1-decomp camera.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5698,11 +5698,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: spawns a burst of particle effects (PAL effects.c)"
+            "note": "rac1-decomp places it in its original source file: doc: spawns a burst of particle effects (rac1-decomp effects.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: spawns a burst of particle effects (PAL effects.c)"
+            "note": "doc: spawns a burst of particle effects (rac1-decomp effects.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5753,11 +5753,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: queues a formatted string at x, y in the debug-text list (body, PAL draw.c)"
+            "note": "rac1-decomp places it in its original source file: queues a formatted string at x, y in the debug-text list (body, rac1-decomp draw.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "queues a formatted string at x, y in the debug-text list (body, PAL draw.c)"
+            "note": "queues a formatted string at x, y in the debug-text list (body, rac1-decomp draw.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5774,11 +5774,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: measures the string and prints it centred on x (body, PAL draw.c)"
+            "note": "rac1-decomp places it in its original source file: measures the string and prints it centred on x (body, rac1-decomp draw.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "measures the string and prints it centred on x (body, PAL draw.c)"
+            "note": "measures the string and prints it centred on x (body, rac1-decomp draw.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5795,11 +5795,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: world point to 12.4 screen coordinates and depth (body, PAL draw.c)"
+            "note": "rac1-decomp places it in its original source file: world point to 12.4 screen coordinates and depth (body, rac1-decomp draw.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "world point to 12.4 screen coordinates and depth (body, PAL draw.c)"
+            "note": "world point to 12.4 screen coordinates and depth (body, rac1-decomp draw.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -5821,11 +5821,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: sceDmaReset, sceGsResetGraph and the packet buffers (body, PAL draw.c)"
+            "note": "rac1-decomp places it in its original source file: sceDmaReset, sceGsResetGraph and the packet buffers (body, rac1-decomp draw.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "sceDmaReset, sceGsResetGraph and the packet buffers (body, PAL draw.c)"
+            "note": "sceDmaReset, sceGsResetGraph and the packet buffers (body, rac1-decomp draw.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -6365,11 +6365,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: a quad per light facing its direction (PAL draw.c)"
+            "note": "rac1-decomp places it in its original source file: doc: a quad per light facing its direction (rac1-decomp draw.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: a quad per light facing its direction (PAL draw.c)"
+            "note": "doc: a quad per light facing its direction (rac1-decomp draw.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -6404,11 +6404,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: draws the subtitle showing at the current time (PAL draw.c)"
+            "note": "rac1-decomp places it in its original source file: doc: draws the subtitle showing at the current time (rac1-decomp draw.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: draws the subtitle showing at the current time (PAL draw.c)"
+            "note": "doc: draws the subtitle showing at the current time (rac1-decomp draw.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -6425,11 +6425,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: letterbox bars (PAL draw.c)"
+            "note": "rac1-decomp places it in its original source file: doc: letterbox bars (rac1-decomp draw.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: letterbox bars (PAL draw.c)"
+            "note": "doc: letterbox bars (rac1-decomp draw.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -6446,7 +6446,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL draw.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp draw.c"
           },
           {
             "kind": "source_analysis",
@@ -6611,11 +6611,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: a filled rectangle and eight outline strips (body, PAL draw.c)"
+            "note": "rac1-decomp places it in its original source file: a filled rectangle and eight outline strips (body, rac1-decomp draw.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "a filled rectangle and eight outline strips (body, PAL draw.c)"
+            "note": "a filled rectangle and eight outline strips (body, rac1-decomp draw.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -7084,7 +7084,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL draw.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp draw.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -7101,11 +7101,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: appends the draw environment and sets up the view context (body, PAL draw.c)"
+            "note": "rac1-decomp places it in its original source file: appends the draw environment and sets up the view context (body, rac1-decomp draw.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "appends the draw environment and sets up the view context (body, PAL draw.c)"
+            "note": "appends the draw environment and sets up the view context (body, rac1-decomp draw.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -7127,7 +7127,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL draw.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp draw.c"
           },
           {
             "kind": "source_analysis",
@@ -7601,11 +7601,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: sprite packet over a framebuffer rectangle with an offset (body, PAL framebuf.c)"
+            "note": "rac1-decomp places it in its original source file: sprite packet over a framebuffer rectangle with an offset (body, rac1-decomp framebuf.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "sprite packet over a framebuffer rectangle with an offset (body, PAL framebuf.c)"
+            "note": "sprite packet over a framebuffer rectangle with an offset (body, rac1-decomp framebuf.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -7856,11 +7856,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: Help_Draw in our and PAL comments (PAL help.c)"
+            "note": "rac1-decomp places it in its original source file: Help_Draw in our and rac1-decomp comments (rac1-decomp help.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "Help_Draw in our and PAL comments (PAL help.c)"
+            "note": "Help_Draw in our and rac1-decomp comments (rac1-decomp help.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -7877,11 +7877,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: index of the help entry with the given id (body, PAL help.c)"
+            "note": "rac1-decomp places it in its original source file: index of the help entry with the given id (body, rac1-decomp help.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "index of the help entry with the given id (body, PAL help.c)"
+            "note": "index of the help entry with the given id (body, rac1-decomp help.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -7898,11 +7898,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: moves the entry to the end of the shown-help list (body, PAL help.c)"
+            "note": "rac1-decomp places it in its original source file: moves the entry to the end of the shown-help list (body, rac1-decomp help.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "moves the entry to the end of the shown-help list (body, PAL help.c)"
+            "note": "moves the entry to the end of the shown-help list (body, rac1-decomp help.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -7950,11 +7950,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: resets the 13 HUD slots and allocates the HUD buffers (body, PAL hud.c)"
+            "note": "rac1-decomp places it in its original source file: resets the 13 HUD slots and allocates the HUD buffers (body, rac1-decomp hud.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "resets the 13 HUD slots and allocates the HUD buffers (body, PAL hud.c)"
+            "note": "resets the 13 HUD slots and allocates the HUD buffers (body, rac1-decomp hud.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -8094,11 +8094,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: finds the HUD slot holding the id and clears it (body, PAL hud.c)"
+            "note": "rac1-decomp places it in its original source file: finds the HUD slot holding the id and clears it (body, rac1-decomp hud.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "finds the HUD slot holding the id and clears it (body, PAL hud.c)"
+            "note": "finds the HUD slot holding the id and clears it (body, rac1-decomp hud.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -8201,11 +8201,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: runs each HUD slot callback and fades the HUD message (body, PAL hud.c)"
+            "note": "rac1-decomp places it in its original source file: runs each HUD slot callback and fades the HUD message (body, rac1-decomp hud.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "runs each HUD slot callback and fades the HUD message (body, PAL hud.c)"
+            "note": "runs each HUD slot callback and fades the HUD message (body, rac1-decomp hud.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -8271,11 +8271,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: textured sprite packet from the HUD texture table (body, PAL hud.c)"
+            "note": "rac1-decomp places it in its original source file: textured sprite packet from the HUD texture table (body, rac1-decomp hud.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "textured sprite packet from the HUD texture table (body, PAL hud.c)"
+            "note": "textured sprite packet from the HUD texture table (body, rac1-decomp hud.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -8292,11 +8292,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: the same sprite as a vertically flipped strip (body, PAL hud.c)"
+            "note": "rac1-decomp places it in its original source file: the same sprite as a vertically flipped strip (body, rac1-decomp hud.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "the same sprite as a vertically flipped strip (body, PAL hud.c)"
+            "note": "the same sprite as a vertically flipped strip (body, rac1-decomp hud.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -8313,11 +8313,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: HUD sprite with 12.4 coordinates (body, PAL hud.c)"
+            "note": "rac1-decomp places it in its original source file: HUD sprite with 12.4 coordinates (body, rac1-decomp hud.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "HUD sprite with 12.4 coordinates (body, PAL hud.c)"
+            "note": "HUD sprite with 12.4 coordinates (body, rac1-decomp hud.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -8334,11 +8334,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: HUD sprite with a texture offset (body, PAL hud.c)"
+            "note": "rac1-decomp places it in its original source file: HUD sprite with a texture offset (body, rac1-decomp hud.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "HUD sprite with a texture offset (body, PAL hud.c)"
+            "note": "HUD sprite with a texture offset (body, rac1-decomp hud.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -8367,11 +8367,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: sprite rotated by an angle about its centre (body, PAL hud.c)"
+            "note": "rac1-decomp places it in its original source file: sprite rotated by an angle about its centre (body, rac1-decomp hud.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "sprite rotated by an angle about its centre (body, PAL hud.c)"
+            "note": "sprite rotated by an angle about its centre (body, rac1-decomp hud.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -8388,11 +8388,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: HUD sprite with explicit texture rectangle (body, PAL hud.c)"
+            "note": "rac1-decomp places it in its original source file: HUD sprite with explicit texture rectangle (body, rac1-decomp hud.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "HUD sprite with explicit texture rectangle (body, PAL hud.c)"
+            "note": "HUD sprite with explicit texture rectangle (body, rac1-decomp hud.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -8442,11 +8442,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: untextured rectangle packet (body, PAL hud.c)"
+            "note": "rac1-decomp places it in its original source file: untextured rectangle packet (body, rac1-decomp hud.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "untextured rectangle packet (body, PAL hud.c)"
+            "note": "untextured rectangle packet (body, rac1-decomp hud.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -8478,7 +8478,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL hud.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp hud.c"
           },
           {
             "kind": "source_analysis",
@@ -8514,11 +8514,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: untextured rectangle at a given depth (body, PAL hud.c)"
+            "note": "rac1-decomp places it in its original source file: untextured rectangle at a given depth (body, rac1-decomp hud.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "untextured rectangle at a given depth (body, PAL hud.c)"
+            "note": "untextured rectangle at a given depth (body, rac1-decomp hud.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -8842,11 +8842,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL loaders.c: unpacks count x, y, u, v point records (12.4 fixed point) into D_0018D540"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp loaders.c: unpacks count x, y, u, v point records (12.4 fixed point) into D_0018D540"
           },
           {
             "kind": "source_analysis",
-            "note": "PAL loaders.c: unpacks count x, y, u, v point records (12.4 fixed point) into D_0018D540"
+            "note": "rac1-decomp loaders.c: unpacks count x, y, u, v point records (12.4 fixed point) into D_0018D540"
           }
         ],
         "logical_group_confidence": "high"
@@ -8863,11 +8863,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL loaders.c: relocates the sky definition just loaded and makes it current"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp loaders.c: relocates the sky definition just loaded and makes it current"
           },
           {
             "kind": "source_analysis",
-            "note": "PAL loaders.c: relocates the sky definition just loaded and makes it current"
+            "note": "rac1-decomp loaders.c: relocates the sky definition just loaded and makes it current"
           }
         ],
         "logical_group_confidence": "high"
@@ -8965,11 +8965,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL loaders.c: uploads the listed images into GS memory"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp loaders.c: uploads the listed images into GS memory"
           },
           {
             "kind": "source_analysis",
-            "note": "PAL loaders.c: uploads the listed images into GS memory"
+            "note": "rac1-decomp loaders.c: uploads the listed images into GS memory"
           }
         ],
         "logical_group_confidence": "high"
@@ -9025,11 +9025,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL loaders.c: registers a moby class in the next slot"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp loaders.c: registers a moby class in the next slot"
           },
           {
             "kind": "source_analysis",
-            "note": "PAL loaders.c: registers a moby class in the next slot"
+            "note": "rac1-decomp loaders.c: registers a moby class in the next slot"
           }
         ],
         "logical_group_confidence": "high"
@@ -9257,11 +9257,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: first loaded map slot without an owner (body, PAL map.c)"
+            "note": "rac1-decomp places it in its original source file: first loaded map slot without an owner (body, rac1-decomp map.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "first loaded map slot without an owner (body, PAL map.c)"
+            "note": "first loaded map slot without an owner (body, rac1-decomp map.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -9339,11 +9339,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: picks the map to load next (PAL map.c)"
+            "note": "rac1-decomp places it in its original source file: doc: picks the map to load next (rac1-decomp map.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: picks the map to load next (PAL map.c)"
+            "note": "doc: picks the map to load next (rac1-decomp map.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -9377,11 +9377,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: the map slot farthest from the current map (body, PAL map.c)"
+            "note": "rac1-decomp places it in its original source file: the map slot farthest from the current map (body, rac1-decomp map.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "the map slot farthest from the current map (body, PAL map.c)"
+            "note": "the map slot farthest from the current map (body, rac1-decomp map.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -9415,11 +9415,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: pad input scales the zoom and pans the map, both clamped (body, PAL map.c)"
+            "note": "rac1-decomp places it in its original source file: pad input scales the zoom and pans the map, both clamped (body, rac1-decomp map.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "pad input scales the zoom and pans the map, both clamped (body, PAL map.c)"
+            "note": "pad input scales the zoom and pans the map, both clamped (body, rac1-decomp map.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -9458,11 +9458,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: decodes each row and packs its 4-bit pixels into bit masks (body, PAL map.c)"
+            "note": "rac1-decomp places it in its original source file: decodes each row and packs its 4-bit pixels into bit masks (body, rac1-decomp map.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "decodes each row and packs its 4-bit pixels into bit masks (body, PAL map.c)"
+            "note": "decodes each row and packs its 4-bit pixels into bit masks (body, rac1-decomp map.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -9479,11 +9479,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: run-length decoder for one map row (body, PAL map.c)"
+            "note": "rac1-decomp places it in its original source file: run-length decoder for one map row (body, rac1-decomp map.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "run-length decoder for one map row (body, PAL map.c)"
+            "note": "run-length decoder for one map row (body, rac1-decomp map.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -9534,7 +9534,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -9551,7 +9551,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -9568,7 +9568,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -9590,7 +9590,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -9607,7 +9607,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -9629,7 +9629,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -9663,7 +9663,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -9680,7 +9680,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -9714,7 +9714,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -9731,7 +9731,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -9748,11 +9748,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: copies the item text, replacing its %b with the item name (body, PAL menu.c)"
+            "note": "rac1-decomp places it in its original source file: copies the item text, replacing its %b with the item name (body, rac1-decomp menu.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "copies the item text, replacing its %b with the item name (body, PAL menu.c)"
+            "note": "copies the item text, replacing its %b with the item name (body, rac1-decomp menu.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -9769,11 +9769,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: scales a world position into the per-level map frame (body, PAL menu.c)"
+            "note": "rac1-decomp places it in its original source file: scales a world position into the per-level map frame (body, rac1-decomp menu.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "scales a world position into the per-level map frame (body, PAL menu.c)"
+            "note": "scales a world position into the per-level map frame (body, rac1-decomp menu.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -9807,7 +9807,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -9846,7 +9846,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -9895,11 +9895,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: sceMcGetInfo and sceMcGetDir on the save slot; returns the card status (body, PAL memcard.c)"
+            "note": "rac1-decomp places it in its original source file: sceMcGetInfo and sceMcGetDir on the save slot; returns the card status (body, rac1-decomp memcard.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "sceMcGetInfo and sceMcGetDir on the save slot; returns the card status (body, PAL memcard.c)"
+            "note": "sceMcGetInfo and sceMcGetDir on the save slot; returns the card status (body, rac1-decomp memcard.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -10194,11 +10194,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: evaluates each mission entry state and counts those available (body, PAL missionfunc.c)"
+            "note": "rac1-decomp places it in its original source file: evaluates each mission entry state and counts those available (body, rac1-decomp missionfunc.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "evaluates each mission entry state and counts those available (body, PAL missionfunc.c)"
+            "note": "evaluates each mission entry state and counts those available (body, rac1-decomp missionfunc.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -10215,11 +10215,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: evaluates one (kind, value) mission condition (body, PAL missionfunc.c)"
+            "note": "rac1-decomp places it in its original source file: evaluates one (kind, value) mission condition (body, rac1-decomp missionfunc.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "evaluates one (kind, value) mission condition (body, PAL missionfunc.c)"
+            "note": "evaluates one (kind, value) mission condition (body, rac1-decomp missionfunc.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -10236,11 +10236,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: lists the shown missions with their completion mask (body, PAL missionfunc.c)"
+            "note": "rac1-decomp places it in its original source file: lists the shown missions with their completion mask (body, rac1-decomp missionfunc.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "lists the shown missions with their completion mask (body, PAL missionfunc.c)"
+            "note": "lists the shown missions with their completion mask (body, rac1-decomp missionfunc.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -10379,11 +10379,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: keeps the moby sound voice slot valid or claims one (body, PAL mobyfunc.c)"
+            "note": "rac1-decomp places it in its original source file: keeps the moby sound voice slot valid or claims one (body, rac1-decomp mobyfunc.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "keeps the moby sound voice slot valid or claims one (body, PAL mobyfunc.c)"
+            "note": "keeps the moby sound voice slot valid or claims one (body, rac1-decomp mobyfunc.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -10505,11 +10505,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: clears list entries pointing at dead or detached mobys (body, PAL mobyfunc.c)"
+            "note": "rac1-decomp places it in its original source file: clears list entries pointing at dead or detached mobys (body, rac1-decomp mobyfunc.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "clears list entries pointing at dead or detached mobys (body, PAL mobyfunc.c)"
+            "note": "clears list entries pointing at dead or detached mobys (body, rac1-decomp mobyfunc.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -10526,7 +10526,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL mobyfunc.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyfunc.c"
           },
           {
             "kind": "cross_project_name",
@@ -10622,7 +10622,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL mobyfunc.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyfunc.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -10654,7 +10654,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL mobyfunc.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyfunc.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -10820,11 +10820,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: looks the class id up in the class table for the current slot (body, PAL mobyutil.c)"
+            "note": "rac1-decomp places it in its original source file: looks the class id up in the class table for the current slot (body, rac1-decomp mobyutil.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "looks the class id up in the class table for the current slot (body, PAL mobyutil.c)"
+            "note": "looks the class id up in the class table for the current slot (body, rac1-decomp mobyutil.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -10858,11 +10858,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: sets the sequence and a clamped frame without blending (body, PAL mobyutil.c)"
+            "note": "rac1-decomp places it in its original source file: sets the sequence and a clamped frame without blending (body, rac1-decomp mobyutil.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "sets the sequence and a clamped frame without blending (body, PAL mobyutil.c)"
+            "note": "sets the sequence and a clamped frame without blending (body, rac1-decomp mobyutil.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -10879,11 +10879,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: sequence change blended from the current pose (PAL mobyutil.c)"
+            "note": "rac1-decomp places it in its original source file: doc: sequence change blended from the current pose (rac1-decomp mobyutil.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: sequence change blended from the current pose (PAL mobyutil.c)"
+            "note": "doc: sequence change blended from the current pose (rac1-decomp mobyutil.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -10900,11 +10900,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: the same with caller flags (PAL mobyutil.c)"
+            "note": "rac1-decomp places it in its original source file: doc: the same with caller flags (rac1-decomp mobyutil.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: the same with caller flags (PAL mobyutil.c)"
+            "note": "doc: the same with caller flags (rac1-decomp mobyutil.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -10982,7 +10982,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL mobyutil.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyutil.c"
           },
           {
             "kind": "source_analysis",
@@ -11003,11 +11003,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: from + (to - from) * (1 - cos(pi t)) / 2 (body, PAL mobyutil.c)"
+            "note": "rac1-decomp places it in its original source file: from + (to - from) * (1 - cos(pi t)) / 2 (body, rac1-decomp mobyutil.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "from + (to - from) * (1 - cos(pi t)) / 2 (body, PAL mobyutil.c)"
+            "note": "from + (to - from) * (1 - cos(pi t)) / 2 (body, rac1-decomp mobyutil.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -11024,11 +11024,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: ray cast down, height of the hit (PAL mobyutil.c)"
+            "note": "rac1-decomp places it in its original source file: doc: ray cast down, height of the hit (rac1-decomp mobyutil.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: ray cast down, height of the hit (PAL mobyutil.c)"
+            "note": "doc: ray cast down, height of the hit (rac1-decomp mobyutil.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -11045,7 +11045,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL mobyutil.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyutil.c"
           },
           {
             "kind": "source_analysis",
@@ -11066,11 +11066,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: shadow range probe (PAL mobyutil.c)"
+            "note": "rac1-decomp places it in its original source file: doc: shadow range probe (rac1-decomp mobyutil.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: shadow range probe (PAL mobyutil.c)"
+            "note": "doc: shadow range probe (rac1-decomp mobyutil.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -11087,11 +11087,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: moves value toward target by at most step, returns the distance left (body, PAL mobyutil.c)"
+            "note": "rac1-decomp places it in its original source file: moves value toward target by at most step, returns the distance left (body, rac1-decomp mobyutil.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "moves value toward target by at most step, returns the distance left (body, PAL mobyutil.c)"
+            "note": "moves value toward target by at most step, returns the distance left (body, rac1-decomp mobyutil.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -11169,7 +11169,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL mobyutil.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyutil.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -11232,11 +11232,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: q * v * conj(q) (PAL mobyutil.c)"
+            "note": "rac1-decomp places it in its original source file: doc: q * v * conj(q) (rac1-decomp mobyutil.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: q * v * conj(q) (PAL mobyutil.c)"
+            "note": "doc: q * v * conj(q) (rac1-decomp mobyutil.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -11275,11 +11275,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: 60 Hz (0) or 50 Hz (1) frame-time constants (body, PAL mobyutil.c)"
+            "note": "rac1-decomp places it in its original source file: 60 Hz (0) or 50 Hz (1) frame-time constants (body, rac1-decomp mobyutil.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "60 Hz (0) or 50 Hz (1) frame-time constants (body, PAL mobyutil.c)"
+            "note": "60 Hz (0) or 50 Hz (1) frame-time constants (body, rac1-decomp mobyutil.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -11296,7 +11296,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL mobyutil.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyutil.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -11519,11 +11519,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: clears the music state and waits for the IOP (body, PAL music.c)"
+            "note": "rac1-decomp places it in its original source file: clears the music state and waits for the IOP (body, rac1-decomp music.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "clears the music state and waits for the IOP (body, PAL music.c)"
+            "note": "clears the music state and waits for the IOP (body, rac1-decomp music.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -11934,7 +11934,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp stream.c; a stream-request callback"
           }
         ],
         "logical_group_confidence": "high"
@@ -11960,7 +11960,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp stream.c; a stream-request callback"
           }
         ],
         "logical_group_confidence": "high"
@@ -12180,7 +12180,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -12329,7 +12329,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -12378,7 +12378,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -12418,7 +12418,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -12435,7 +12435,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -12452,7 +12452,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -12469,7 +12469,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -12522,7 +12522,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -12544,7 +12544,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -12565,7 +12565,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -12620,7 +12620,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -12641,7 +12641,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -12662,11 +12662,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: keeps the item preview moby in step with the highlighted entry (PAL pause.c)"
+            "note": "rac1-decomp places it in its original source file: doc: keeps the item preview moby in step with the highlighted entry (rac1-decomp pause.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: keeps the item preview moby in step with the highlighted entry (PAL pause.c)"
+            "note": "doc: keeps the item preview moby in step with the highlighted entry (rac1-decomp pause.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -12683,7 +12683,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -12705,7 +12705,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -12743,7 +12743,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -12829,7 +12829,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -12865,7 +12865,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -12950,7 +12950,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -12986,7 +12986,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13185,7 +13185,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13222,7 +13222,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13348,7 +13348,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13380,11 +13380,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: draws the ring of 8 icons and the quick-select overlay (PAL pause.c)"
+            "note": "rac1-decomp places it in its original source file: doc: draws the ring of 8 icons and the quick-select overlay (rac1-decomp pause.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: draws the ring of 8 icons and the quick-select overlay (PAL pause.c)"
+            "note": "doc: draws the ring of 8 icons and the quick-select overlay (rac1-decomp pause.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -13416,7 +13416,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13456,7 +13456,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13473,7 +13473,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13490,7 +13490,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13507,7 +13507,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13529,7 +13529,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13551,7 +13551,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13568,7 +13568,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13585,11 +13585,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: draws the two-line prompt box (PAL pause.c)"
+            "note": "rac1-decomp places it in its original source file: doc: draws the two-line prompt box (rac1-decomp pause.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: draws the two-line prompt box (PAL pause.c)"
+            "note": "doc: draws the two-line prompt box (rac1-decomp pause.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -13611,7 +13611,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13628,7 +13628,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -13649,7 +13649,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13681,7 +13681,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13732,7 +13732,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13789,7 +13789,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13806,7 +13806,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13823,7 +13823,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -13916,7 +13916,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -13937,7 +13937,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -13963,7 +13963,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -14007,7 +14007,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -14028,7 +14028,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -14066,7 +14066,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -14087,7 +14087,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -14130,7 +14130,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -14156,11 +14156,11 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c names it DeleteMoby (PAL pause.c)"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c names it DeleteMoby (rac1-decomp pause.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "PAL pause.c names it DeleteMoby (PAL pause.c)"
+            "note": "rac1-decomp pause.c names it DeleteMoby (rac1-decomp pause.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -14182,7 +14182,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -14351,7 +14351,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -14422,7 +14422,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -14439,7 +14439,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -14460,7 +14460,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -14486,7 +14486,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           },
           {
             "kind": "source_analysis",
@@ -14529,11 +14529,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: stamps the RTC time, builds the save image (func_0020ABB0, memcard_MakeWholeSave in PAL) and records the slot (body, PAL pause.c)"
+            "note": "rac1-decomp places it in its original source file: stamps the RTC time, builds the save image (func_0020ABB0, memcard_MakeWholeSave in rac1-decomp) and records the slot (body, rac1-decomp pause.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "stamps the RTC time, builds the save image (func_0020ABB0, memcard_MakeWholeSave in PAL) and records the slot (body, PAL pause.c)"
+            "note": "stamps the RTC time, builds the save image (func_0020ABB0, memcard_MakeWholeSave in rac1-decomp) and records the slot (body, rac1-decomp pause.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -14555,7 +14555,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -14584,7 +14584,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -14664,7 +14664,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -14765,7 +14765,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL shrubfunc.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp shrubfunc.c"
           },
           {
             "kind": "cross_project_name",
@@ -14955,7 +14955,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp sound.c"
           },
           {
             "kind": "source_analysis",
@@ -14976,7 +14976,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp sound.c"
           },
           {
             "kind": "source_analysis",
@@ -15002,7 +15002,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp sound.c"
           },
           {
             "kind": "source_analysis",
@@ -15028,7 +15028,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp sound.c"
           },
           {
             "kind": "source_analysis",
@@ -15049,7 +15049,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp sound.c"
           },
           {
             "kind": "source_analysis",
@@ -15206,7 +15206,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp sound.c"
           },
           {
             "kind": "source_analysis",
@@ -15358,11 +15358,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: draws a light flare quad when the light is on screen (PAL space.c)"
+            "note": "rac1-decomp places it in its original source file: doc: draws a light flare quad when the light is on screen (rac1-decomp space.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: draws a light flare quad when the light is on screen (PAL space.c)"
+            "note": "doc: draws a light flare quad when the light is on screen (rac1-decomp space.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -15396,7 +15396,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL space.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp space.c"
           },
           {
             "kind": "source_analysis",
@@ -15417,7 +15417,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL space.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp space.c"
           },
           {
             "kind": "source_analysis",
@@ -15586,7 +15586,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL space.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp space.c"
           },
           {
             "kind": "source_analysis",
@@ -15786,11 +15786,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL stash.c labels it Stash_ReceiveData"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp stash.c labels it Stash_ReceiveData"
           },
           {
             "kind": "source_analysis",
-            "note": "PAL stash.c labels it Stash_ReceiveData"
+            "note": "rac1-decomp stash.c labels it Stash_ReceiveData"
           }
         ],
         "logical_group_confidence": "high"
@@ -16060,7 +16060,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL vuchain.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp vuchain.c"
           },
           {
             "kind": "source_analysis",
@@ -16188,7 +16188,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL vuchain.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp vuchain.c"
           },
           {
             "kind": "source_analysis",
@@ -16229,7 +16229,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL vuchain.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp vuchain.c"
           },
           {
             "kind": "source_analysis",
@@ -16580,7 +16580,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL vendor.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp vendor.c"
           },
           {
             "kind": "cross_project_name",
@@ -16625,7 +16625,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL vendor.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp vendor.c"
           },
           {
             "kind": "cross_project_name",
@@ -16718,7 +16718,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL vendor.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp vendor.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -16735,7 +16735,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL vendor.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp vendor.c"
           },
           {
             "kind": "source_analysis",
@@ -16773,11 +16773,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: index of the zone box and cell holding the point (PAL vendor.c)"
+            "note": "rac1-decomp places it in its original source file: doc: index of the zone box and cell holding the point (rac1-decomp vendor.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: index of the zone box and cell holding the point (PAL vendor.c)"
+            "note": "doc: index of the zone box and cell holding the point (rac1-decomp vendor.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -16821,7 +16821,7 @@
           },
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL vendor.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp vendor.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -17367,7 +17367,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL movie/strfile.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp movie/strfile.c"
           },
           {
             "kind": "source_analysis",
@@ -18208,7 +18208,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL core/00119D88.c (SIO); role not settled"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp core/00119D88.c (SIO); role not settled"
           }
         ],
         "logical_group_confidence": "high"
@@ -18225,7 +18225,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL core/00119D88.c (SIO)"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp core/00119D88.c (SIO)"
           }
         ],
         "logical_group_confidence": "high"
@@ -18259,7 +18259,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL core/00125630.c (libmpeg)"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp core/00125630.c (libmpeg)"
           }
         ],
         "logical_group_confidence": "high"
@@ -18276,11 +18276,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: the vsync callback start_level installs: counts frames, stamps timer 0 (body, PAL permcb.c)"
+            "note": "rac1-decomp places it in its original source file: the vsync callback start_level installs: counts frames, stamps timer 0 (body, rac1-decomp permcb.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "the vsync callback start_level installs: counts frames, stamps timer 0 (body, PAL permcb.c)"
+            "note": "the vsync callback start_level installs: counts frames, stamps timer 0 (body, rac1-decomp permcb.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -18316,11 +18316,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: moves the help window into its closing states (body, PAL help.c)"
+            "note": "rac1-decomp places it in its original source file: moves the help window into its closing states (body, rac1-decomp help.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "moves the help window into its closing states (body, PAL help.c)"
+            "note": "moves the help window into its closing states (body, rac1-decomp help.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -18337,7 +18337,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18354,7 +18354,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18371,7 +18371,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18388,7 +18388,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18405,7 +18405,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18422,7 +18422,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18439,7 +18439,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18456,7 +18456,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18473,7 +18473,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18490,7 +18490,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18507,7 +18507,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18524,7 +18524,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18541,7 +18541,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18558,7 +18558,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18575,7 +18575,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18592,7 +18592,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18609,7 +18609,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18626,7 +18626,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18643,7 +18643,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18660,7 +18660,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18677,7 +18677,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18694,7 +18694,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18711,7 +18711,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18728,7 +18728,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18745,7 +18745,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18762,7 +18762,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18779,7 +18779,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18796,7 +18796,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18813,7 +18813,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18830,7 +18830,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18847,7 +18847,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18864,7 +18864,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18881,7 +18881,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18898,7 +18898,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18915,7 +18915,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -18950,7 +18950,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -18971,7 +18971,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -18992,7 +18992,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19013,7 +19013,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19034,7 +19034,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19055,7 +19055,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19076,7 +19076,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19093,7 +19093,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19110,7 +19110,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19127,7 +19127,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19144,7 +19144,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19161,7 +19161,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19178,7 +19178,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19195,7 +19195,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19212,7 +19212,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19229,7 +19229,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19246,7 +19246,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19263,7 +19263,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19280,7 +19280,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19297,7 +19297,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL missionfunc.c; a mission-condition predicate"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp missionfunc.c; a mission-condition predicate"
           }
         ],
         "logical_group_confidence": "high"
@@ -19314,7 +19314,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL mobyutil.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyutil.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -19331,7 +19331,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp stream.c; a stream-request callback"
           },
           {
             "kind": "source_analysis",
@@ -19352,7 +19352,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp stream.c; a stream-request callback"
           },
           {
             "kind": "source_analysis",
@@ -19373,7 +19373,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp stream.c; a stream-request callback"
           },
           {
             "kind": "source_analysis",
@@ -19394,7 +19394,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp stream.c; a stream-request callback"
           },
           {
             "kind": "source_analysis",
@@ -19415,7 +19415,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL stream.c; a stream-request callback"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp stream.c; a stream-request callback"
           },
           {
             "kind": "source_analysis",
@@ -19436,11 +19436,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: pause page link walk (PAL pause.c)"
+            "note": "rac1-decomp places it in its original source file: doc: pause page link walk (rac1-decomp pause.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: pause page link walk (PAL pause.c)"
+            "note": "doc: pause page link walk (rac1-decomp pause.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -19457,11 +19457,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: reloads the 8-entry list and moves to the first empty entry (PAL pause.c)"
+            "note": "rac1-decomp places it in its original source file: doc: reloads the 8-entry list and moves to the first empty entry (rac1-decomp pause.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: reloads the 8-entry list and moves to the first empty entry (PAL pause.c)"
+            "note": "doc: reloads the 8-entry list and moves to the first empty entry (rac1-decomp pause.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -19478,7 +19478,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -19495,7 +19495,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -19512,7 +19512,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -19529,7 +19529,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -19546,7 +19546,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -19563,7 +19563,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -19580,11 +19580,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: doc: builds the pause-menu item list (PAL pause.c)"
+            "note": "rac1-decomp places it in its original source file: doc: builds the pause-menu item list (rac1-decomp pause.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "doc: builds the pause-menu item list (PAL pause.c)"
+            "note": "doc: builds the pause-menu item list (rac1-decomp pause.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -19601,7 +19601,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -19618,7 +19618,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL pause.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -19635,7 +19635,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp sound.c"
           },
           {
             "kind": "source_analysis",
@@ -19656,7 +19656,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp sound.c"
           },
           {
             "kind": "source_analysis",
@@ -19677,7 +19677,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL sound.c"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp sound.c"
           },
           {
             "kind": "source_analysis",
@@ -19698,11 +19698,11 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: the mpegStopDMA callback of Sony's videodec sample (PAL movie/videodec.c)"
+            "note": "rac1-decomp places it in its original source file: the mpegStopDMA callback of Sony's videodec sample (rac1-decomp movie/videodec.c)"
           },
           {
             "kind": "source_analysis",
-            "note": "the mpegStopDMA callback of Sony's videodec sample (PAL movie/videodec.c)"
+            "note": "the mpegStopDMA callback of Sony's videodec sample (rac1-decomp movie/videodec.c)"
           }
         ],
         "logical_group_confidence": "high"
@@ -19714,7 +19714,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19735,7 +19735,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19756,7 +19756,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19777,7 +19777,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19798,7 +19798,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19819,7 +19819,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19840,7 +19840,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19861,7 +19861,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19882,7 +19882,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
@@ -19903,7 +19903,7 @@
         "evidence": [
           {
             "kind": "cross_region_module",
-            "note": "rac1-decomp (PAL) places it in its original source file: PAL menu.c; one state of the D_0015EEB0 state machine"
+            "note": "rac1-decomp places it in its original source file: rac1-decomp menu.c; one state of the D_0015EEB0 state machine"
           },
           {
             "kind": "source_analysis",
