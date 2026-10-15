@@ -2044,8 +2044,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         lerp_vector(&extension, &extension, &direction, 1.0f);
         distance = vector_length_xyz(&extension);
         if (3.9f < distance) scale_vector_xyz(&extension, &extension, 3.9f / distance);
-        index = (float)i;
-        if (i > 5) lerp_vector(&extension, &extension, &delta, index / convert_integer_to_float(10) + zero);
+        if (i > 5) lerp_vector(&extension, &extension, &delta, (float)i / convert_integer_to_float(10) + zero);
         add_vector_xyz(point, prior, &extension);
         distance = FUN_L07_0029e6d8(&tangent, &center, &center, prior, point, zero);
         if (distance < minimum) minimum = distance;
@@ -2066,12 +2065,14 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         qcopy(&up, &point_basis.normal);
         ring = (char *)&D_L07_0020DB00_c[14] + i * 0x140;
         point = D_L07_0020C700;
-        phase = index * 0.7f;
+        phase = (float)i * 0.7f;
+        index = (float)i;
         wave_scale = 0.25f;
         next_column = i + 1;
         j = 0;
         do {
-            radius = index * 0.2f + 0.02f;
+            radius = index * 0.2f;
+            radius += 0.02f;
             j++;
             wave = fast_add_rotations((*(float *)&D_L07_00161B84_gp) + phase, 0.0f);
             wave = fast_sin(wave);
