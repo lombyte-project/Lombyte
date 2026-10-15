@@ -568,10 +568,10 @@ void FUN_L08_002d42d8(struct Moby *moby) {
  initialize:
         clear_u64_value(data + 0x40);
         *(unsigned short *)(data + 0x28) = 3;
-        *(volatile float *)(data + 0x30) = 3.0f;
+        *(float *)(data + 0x30) = 3.0f;
         data[0x2a] = 12;
         data[0x2e] = 1;
-        *(volatile float *)(data + 0x20) = 9.0f;
+        *(float *)(data + 0x20) = 9.0f;
         *(unsigned short *)(data + 0x3e) |= 2;
         clear_u64_value(data + 0x40);
         *(float *)(data + 0x178) = 0;
