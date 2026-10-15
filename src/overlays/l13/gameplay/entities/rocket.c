@@ -377,8 +377,9 @@ void FUN_L13_00306300(struct Moby *moby) {
         int i;
         scale_vector_xyz_6300(data, data, 0.5f);
         subtract_vector_xyz(&moby->pos, &moby->pos, data);
-        *(unsigned long long *)data = 0;
-        *(unsigned long long *)(data + 8) = 0;
+        /* Keep the vector clear stores in address order before writing the sentinel. */
+        *(volatile unsigned long long *)data = 0;
+        *(volatile unsigned long long *)(data + 8) = 0;
         *(int *)(data + 0x2c) = 5;
         /* Preserve the sentinel bits without keeping the comparison constant live. */
         *(unsigned int *)(data + 0xc) = 0x46f4d334;
