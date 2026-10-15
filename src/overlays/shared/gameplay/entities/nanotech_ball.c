@@ -2871,7 +2871,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     char *record, *effect, *current, *prior;
     short *halfword;
     int i, j, row, segment, count, small_count, index, next_segment;
-    float fraction, sampled, angle, delta, length, row_float, spread, phase, value;
+    float fraction, sampled, length, value;
     int next_row;
 
     FUN_L00_002ddcb8(frame_context, initial_vector);
@@ -2965,6 +2965,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     } while (i >= 0);
     row = 1;
     do {
+        float sampled, angle, delta, length, row_float, spread, phase;
         index = row << 4;
         FUN_001ff2a8_002ddf60(&temp1, D_L00_001E5F40_002ddcb8 + index, D_L00_001E5F30 + index);
         qcopy(&temp2, &scaled_first);
@@ -3002,7 +3003,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
         next_row = row + 1;
         j = 0;
         do {
-            value = spread + 0.1f;
+            float value = spread + 0.1f;
             ++j;
             sampled = fast_add_rotations(*(float *)&D_L00_00161B58_002ddcb8 + phase, 0.0f);
             sampled = FUN_001ff800_002ddf60(sampled);
