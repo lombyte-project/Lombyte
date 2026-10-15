@@ -891,9 +891,11 @@ animate:
     gravity:
         *(f32 *)((u8 *)s2 + 0x6c) += f * 9.8f;
         m->pos.z -= *(f32 *)((u8 *)s2 + 0x6c);
-        f = probe_ground_height(&m->pos, 0, 0.5f);
-        if (m->pos.z < f && f < m->pos.z + scale * 0.25f) {
-            *(f32 *)((u8 *)s2 + 0x6c) = 0.0f; m->pos.z = f;
+        {
+            f32 f = probe_ground_height(&m->pos, 0, 0.5f);
+            if (m->pos.z < f && f < m->pos.z + scale * 0.25f) {
+                *(f32 *)((u8 *)s2 + 0x6c) = 0.0f; m->pos.z = f;
+            }
         }
         if (!FUN_001f0b58_2c8440()) s2->unk78 = 0.0f;
         if (m->state != 5) {
@@ -906,10 +908,10 @@ animate:
             f = fast_cos(m->rot.z); g = fast_sin(m->rot.z);
             offset.f[1] = velocity.f[1] * f - velocity.f[0] * g;
             offset.f[2] = velocity.f[2];
-            f = -atan2_f_2c8440(square_root(offset.f[0] * offset.f[0] + offset.f[2] * offset.f[2]), offset.f[1]);
+            g = -atan2_f_2c8440(square_root(offset.f[0] * offset.f[0] + offset.f[2] * offset.f[2]), offset.f[1]);
             angle = atan2_f_2c8440(offset.f[2], offset.f[0]);
-            f = rotation_delta_2c97e0(f, m->rot.x);
-            m->rot.x = fast_add_rotations_2c8440(m->rot.x, f * (D_0015ED6C_2c8440 * scale));
+            g = rotation_delta_2c97e0(g, m->rot.x);
+            m->rot.x = fast_add_rotations_2c8440(m->rot.x, g * (D_0015ED6C_2c8440 * scale));
             f = rotation_delta_2c97e0(angle, m->rot.y);
             m->rot.y = fast_add_rotations_2c8440(m->rot.y, f * (D_0015ED6C_2c8440 * scale));
         }
