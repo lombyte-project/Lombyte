@@ -315,8 +315,8 @@ void FUN_L08_002d23f0(char *moby) {
         } effect;
     } record;
     float direction[4];
-    float particle[4];
     float impulse[4];
+    float particle[4];
     int state;
     int time;
     int index;
