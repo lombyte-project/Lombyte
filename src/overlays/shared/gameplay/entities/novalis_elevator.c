@@ -705,17 +705,23 @@ void FUN_L01_002e0c68(char *moby) {
         facing[0] = FUN_001f9dc8(hero.moby->rot.z);
         facing[1] = FUN_001f9de0(hero.moby->rot.z);
         facing[2] = 0;
-        { float turn, limit, speed;
-        turn = FUN_001f9ab0(facing,direction) - F(data,0x1c);
-        limit = frame_time_sq * 5.5f;
-        if (limit < turn) turn = limit;
-        if (turn < -limit) turn = -limit;
-        speed = F(data,0x1c) + turn;
-        limit = frame_time * 3.7f;
-        F(data,0x1c) = speed;
-        if (limit < speed) F(data,0x1c) = limit;
-        if (F(data,0x1c) < 0.0f) F(data,0x1c) = 0.0f;
-        if (absolute_float(F(data,0x1c)) < (frame_time_sq * 5.5f) * 0.25f) F(data,0x1c) = 0.0f;
+        {
+            float turn, speed;
+            {
+                float limit;
+                turn = FUN_001f9ab0(facing,direction) - F(data,0x1c);
+                limit = frame_time_sq * 5.5f;
+                if (limit < turn) turn = limit;
+                if (turn < -limit) turn = -limit;
+            }
+            speed = F(data,0x1c) + turn;
+            {
+                float limit = frame_time * 3.7f;
+                F(data,0x1c) = speed;
+                if (limit < speed) F(data,0x1c) = limit;
+            }
+            if (F(data,0x1c) < 0.0f) F(data,0x1c) = 0.0f;
+            if (absolute_float(F(data,0x1c)) < (frame_time_sq * 5.5f) * 0.25f) F(data,0x1c) = 0.0f;
         }
         FUN_001f9bf8(movement,facing,F(data,0x1c));
         if ((hero.unkA98 & 2) && hero.moby->prev_seq == 0x44) set_hero_animation(0x3f,0,(float)FUN_001f96f8(7));
@@ -744,32 +750,35 @@ void FUN_L01_002e0c68(char *moby) {
         FUN_001f9bf8(offset,offset,D_L01_001618A0);
         add_vector_xyz(&hero.motion.pos,&hero.motion.pos,offset);
         hero.motion.pos.f[2] = height;
-        hero.motion.move_yaw = fast_add_rotations(D_0015EDB5 ? -1.5707964f : 1.5707964f,angle);
-        FUN_L00_0025bc00(&hero.motion.rot.f[2],0,hero.motion.move_yaw,frame_time*6.2831855f);
-        /* Keep retail's two separate height subtractions around the ground probe. */
-        F(data,0x24) += frame_time_sq*9.8f;
-        hero.motion.pos.f[2] -= F(data,0x24)-2.0f;
-        ground = probe_ground_height(&hero.motion.pos,0,0.5f);
-        hero.motion.pos.f[2] -= 2.0f;
-        if (hero.motion.pos.f[2] < ground) {
-            hero.motion.pos.f[2] = ground;
-            *(int *)(data+0x24) = 0;
-        }
-        if (hero.moby->prev_seq != 0x44) {
-            float turn;
-            turn = fast_add_rotations(0.2617994f,angle);
-            FUN_L00_0025bc00((float *)(moby+0x48),0,turn,frame_time*3.1415927f);
-            if (1.0471976f < FUN_001fa5c8(F(moby,0x48),turn)) {
-                F(moby,0x48) = FUN_001fa5c8(F(moby,0x48),1.0471976f);
-            } else if (FUN_001fa5c8(F(moby,0x48),turn) < -1.0471976f) {
-                F(moby,0x48) = fast_add_rotations(F(moby,0x48),1.0471976f);
+        {
+            struct Hero *g = &hero;
+            g->motion.move_yaw = fast_add_rotations(D_0015EDB5 ? -1.5707964f : 1.5707964f,angle);
+            FUN_L00_0025bc00(&g->motion.rot.f[2],0,g->motion.move_yaw,frame_time*6.2831855f);
+            /* Keep retail's two separate height subtractions around the ground probe. */
+            F(data,0x24) += frame_time_sq*9.8f;
+            g->motion.pos.f[2] -= F(data,0x24)-2.0f;
+            ground = probe_ground_height(&g->motion.pos,0,0.5f);
+            g->motion.pos.f[2] -= 2.0f;
+            if (g->motion.pos.f[2] < ground) {
+                g->motion.pos.f[2] = ground;
+                *(int *)(data+0x24) = 0;
             }
+            if (g->moby->prev_seq != 0x44) {
+                float turn;
+                turn = fast_add_rotations(0.2617994f,angle);
+                FUN_L00_0025bc00((float *)(moby+0x48),0,turn,frame_time*3.1415927f);
+                if (1.0471976f < FUN_001fa5c8(F(moby,0x48),turn)) {
+                    F(moby,0x48) = FUN_001fa5c8(F(moby,0x48),1.0471976f);
+                } else if (FUN_001fa5c8(F(moby,0x48),turn) < -1.0471976f) {
+                    F(moby,0x48) = fast_add_rotations(F(moby,0x48),1.0471976f);
+                }
+            }
+            F(data,0x18) += fast_difference_between_rotations(angle,old_angle);
+            F(data,0) = F(data,0x18) / (F(data,0x30)*6.2831855f);
+            if (1.0f < F(data,0)) F(data,0) = 1.0f;
+            if (F(data,0) < 0.0f) F(data,0) = 0.0f;
+            fast_mem_zero16((char *)g + 0xe0,0x90);
         }
-        F(data,0x18) += fast_difference_between_rotations(angle,old_angle);
-        F(data,0) = F(data,0x18) / (F(data,0x30)*6.2831855f);
-        if (1.0f < F(data,0)) F(data,0) = 1.0f;
-        if (F(data,0) < 0.0f) F(data,0) = 0.0f;
-        fast_mem_zero16((char *)&hero + 0xe0,0x90);
         break;
     }
     case 4:
