@@ -54,9 +54,6 @@ int FUN_L06_0021d0a0(int a) {
         return D_L06_0017A240[i].v;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0021e1a0.s", FUN_L06_0021e1a0);
-#else
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern char D_0013F350_lui[] __asm__("D_0013F350") __attribute__((section(".data")));
@@ -94,7 +91,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void allocate_voice_for_target_entry(void *, s32, void *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(void *, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00216de8(s32, s32);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -201,10 +198,12 @@ void FUN_L06_0021e1a0(void) {
             }
             {
                 char *g = (char *)&hero;
+                s32 tint;
                 wave = fast_sin(*(f32 *)(g + 0x1628));
                 color = fast_tween_color(wave * 0.5f + 0.5f, color, color2);
-                if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = fast_tween_color(D_0015ED60_gp * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), color);
-                *(u32 *)(g + 0x2300) = fast_tween_color(frame_scale_macro * 0.1f, *(u32 *)(g + 0x2300), color);
+                tint = color;
+                if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = fast_tween_color(D_0015ED60_gp * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), tint);
+                *(u32 *)(g + 0x2300) = fast_tween_color(frame_scale_macro * 0.1f, *(u32 *)(g + 0x2300), tint);
                 if (*(char **)(g + 0x1620) == 0) {
                     *(char **)(g + 0x1620) = create_moby(0x47a);
                     if (*(char **)(g + 0x1620)) {
@@ -327,7 +326,6 @@ void FUN_L06_0021e1a0(void) {
     FUN_L00_00208b60();
     FUN_L00_00257024((s32)hero.moby);
 }
-#endif
 #include "qcopy.h"
 
 #define NOT_SDA

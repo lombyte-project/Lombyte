@@ -613,9 +613,6 @@ void FUN_L00_002061f0(void) {
         *(unsigned short *)(o + 0x34) |= 0x41;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002062b0.s", FUN_L00_002062b0);
-#else
 #include "rnc/overlay/quad.h"
 extern char D_0013F350_002062b0[] __asm__("D_0013F350");
 extern f32 D_0015EE18_macro __asm__("D_0015EE18") __attribute__((section(".sdata")));
@@ -765,13 +762,12 @@ void FUN_L00_002062b0(void) {
             }
             {
                 char *g = (char *)&hero;
+                s32 tint;
                 wave = FUN_L00_001ff800_002062b0(*(f32 *)(g + 0x1628));
-                red = color;
-                {
-                    s32 color = FUN_L00_00200298_002062b0(wave * 0.5f + 0.5f, red, color2);
-                    if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = FUN_L00_00200298_002062b0(D_0015ED60_gp * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), color);
-                    *(u32 *)(g + 0x2300) = FUN_L00_00200298_002062b0(D_0015ED60_002062b0 * 0.1f, *(u32 *)(g + 0x2300), color);
-                }
+                color = FUN_L00_00200298_002062b0(wave * 0.5f + 0.5f, color, color2);
+                tint = color;
+                if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = FUN_L00_00200298_002062b0(D_0015ED60_gp * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), tint);
+                *(u32 *)(g + 0x2300) = FUN_L00_00200298_002062b0(D_0015ED60_002062b0 * 0.1f, *(u32 *)(g + 0x2300), tint);
                 if (*(char **)(g + 0x1620) == 0) {
                     *(char **)(g + 0x1620) = FUN_0020c4f8_002062b0(0x47a);
                     if (*(char **)(g + 0x1620)) {
@@ -905,7 +901,6 @@ void FUN_L00_002062b0(void) {
     FUN_L00_00208b60();
     FUN_L00_00257024((s32)hero.moby);
 }
-#endif
 #include "rnc/audio/voice_pool.h"
 
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
