@@ -1611,8 +1611,8 @@ void FUN_L08_002dabf0(struct Moby *moby) {
         *(float *)(d + 0x20) = 2.0f;
         FUN_L08_00263050(d + 0xd0);
         { float distance = D_L08_00161978 * D_0015ED6C;
-        *(float *)(d + 0xd8) = 2.0f;
-        *(float *)(d + 0xdc) = 2.0f;
+        *(volatile float *)(d + 0xd8) = 2.0f;
+        *(volatile float *)(d + 0xdc) = 2.0f;
         *(float *)(d + 0x10c) = 0.03f;
         *(float *)(d + 0x110) = 0.3f;
         *(float *)(d + 0x114) = 0.25f;
@@ -1624,7 +1624,7 @@ void FUN_L08_002dabf0(struct Moby *moby) {
         *(char **)(d + 0x120) = next;
         next[0xbc] = 1;
         *(int *)(d + 0x128) = scale_game_frames(180);
-        if (moby->prev_seq != 4) { hit_duration = 0; goto change_animation; }
+        if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, 0);
 set_idle:
         moby->state = 1;
         goto reset_timer;
@@ -1785,7 +1785,8 @@ reset_timer:
     goto finish;
 change_animation:
     blend_moby_animation(moby, 4, 0, hit_duration);
-    goto set_idle;
+    moby->state = 1;
+    goto reset_timer;
 finish:
     FUN_L08_00267a28(moby, d + 0x60);
     *(int *)(d + 0x38) = 0;
