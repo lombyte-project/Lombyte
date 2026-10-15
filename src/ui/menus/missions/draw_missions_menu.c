@@ -12,8 +12,8 @@ extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32 get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32 measure_text_width_small(s32, s32) __asm__("func_001F6270");
-extern void func_001F61F8(void);
-extern void func_001F61E8(void);
+extern void disable_global_flag(void) __asm__("func_001F61F8");
+extern void enable_global_flag(void) __asm__("func_001F61E8");
 extern void font_print_small(s32, s32, u64, s32, s32) __asm__("func_001F65B0");
 
 s32 draw_missions_menu(struct Menu *m) __asm__("FUN_0021f368");
@@ -56,7 +56,7 @@ s32 draw_missions_menu(struct Menu *m) {
         x = 2;
     }
     step = m->h / (current_level_index != 0 ? 7 : 6);
-    func_001F61F8();
+    disable_global_flag();
     y = step - 6;
     font_print_small(x, y, 0x80FFA888, get_help_message_text(0x4EEE), -1);
     if (current_level_index != 0) {
@@ -71,7 +71,7 @@ s32 draw_missions_menu(struct Menu *m) {
     font_print_small(x, y, 0x80FFA888, get_help_message_text(0x4EFC), -1);
     y += step;
     font_print_small(x, y, 0x80FFA888, get_help_message_text(0x4EE0), -1);
-    func_001F61E8();
+    enable_global_flag();
     do_gif_paging();
     return 2;
 }

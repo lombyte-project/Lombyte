@@ -16,13 +16,13 @@ extern u8 D_00160E70[];
 extern u8 D_00160E80[];
 extern void FlushCache(s32);
 extern void WriteDmaChannel(u32, u32, u32);
-extern void func_001F21B0(void *, s32);
-extern void func_001F21B8(void *, s32);
-extern void FUN_001f9a68(void *, void *, f32);
-extern void FUN_001f9fc8(void *);
-extern void FUN_001fa378(void *, void *, void *);
+extern void noop_core_callback(void *, s32) __asm__("func_001F21B0");
+extern void noop_core_callback_secondary(void *, s32) __asm__("func_001F21B8");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void dma_tfrag_textures(void) __asm__("func_002331C0");
-extern void func_00233FB0(void);
+extern void tfrag_proc(void) __asm__("func_00233FB0");
 void write_vif_unpack_packet(s32 addr, void *src, s32 qwc) __asm__("FUN_00233888");
 /* Draws the level terrain (tfrags). Each tfrag has a 0x40-byte header:
  *   0x10  where its data starts
@@ -44,24 +44,24 @@ void draw_tfrag(void) {
     gs_texture_allocation_cursor = gs_texture_allocation_start;
     packet += 0x10;
     render_packet_cursor.addr = packet;
-    func_001F21B8(D_00160E70, 1);
-    FUN_001f9fc8(&L);
+    noop_core_callback_secondary(D_00160E70, 1);
+    set_identity_matrix(&L);
     p = camera_position;
-    FUN_001f9a68(&L.v30, p, -1024.0f);
+    fast_vec_scale(&L.v30, p, -1024.0f);
     L.v3C = 1.0f;
-    FUN_001fa378(&L, p - 0x100, &L);
+    multiply_matrix(&L, p - 0x100, &L);
     write_vif_unpack_packet(5, &L, 4);
     write_vif_unpack_packet(0x14D, &L, 4);
     if (draw_config.tfrag.enabled != 0) {
         FlushCache(0);
-        func_00233FB0();
+        tfrag_proc();
     }
-    func_001F21B8(D_00160E80, 2);
+    noop_core_callback_secondary(D_00160E80, 2);
     dma_tfrag_textures();
     if (draw_config.tfrag.enabled != 0) {
         WriteDmaChannel(D_001E1300, 0x3000, 0x40);
     }
-    func_001F21B0(D_00160E80, 2);
+    noop_core_callback(D_00160E80, 2);
 }
 
 extern __typeof__(draw_tfrag) func_002333A8 __attribute__((alias("FUN_002333a8")));

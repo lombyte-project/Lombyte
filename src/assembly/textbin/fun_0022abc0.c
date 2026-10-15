@@ -26,10 +26,10 @@ struct SkyShellSet {
 extern f32 D_00160404 __attribute__((sda));
 extern struct SkyShellSet *D_0016045C;
 extern u8 sky_matrix[] __asm__("D_001D96E0");
-extern void FUN_001f9fc8(void *);
+extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void FUN_001fa070(void *, f32 *);
-extern void FUN_001f9a80(void *, void *, f32);
+extern void rot_216130(void *, f32 *) __asm__("FUN_001fa070");
+extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 extern void sky_draw_shell(s32) __asm__("FUN_0022b690");
 
 void FUN_0022abc0(void) {
@@ -42,7 +42,7 @@ void FUN_0022abc0(void) {
 
     shell_index = 0;
     D_0016045C->relocation_state = 0;
-    FUN_001f9fc8(sky_matrix);
+    set_identity_matrix(sky_matrix);
     clear_u64_value(rotation_angles);
 
     shell_set = D_0016045C;
@@ -76,7 +76,7 @@ void FUN_0022abc0(void) {
                 shell_scale = 1.25f;
                 break;
             default:
-                FUN_001f9fc8(sky_matrix);
+                set_identity_matrix(sky_matrix);
                 break;
             }
 
@@ -84,11 +84,11 @@ void FUN_0022abc0(void) {
                 rotation_angles[2] =
                     (f32)((s32)(*shell_angle + (f32)shell_index * 2000.0f) % 10000) *
                         0.0006283185f - 3.1415927f;
-                FUN_001fa070(sky_matrix, rotation_angles);
+                rot_216130(sky_matrix, rotation_angles);
                 transform_row = sky_matrix;
-                FUN_001f9a80(transform_row, transform_row, shell_scale);
-                FUN_001f9a80(transform_row + 0x10, transform_row + 0x10, shell_scale);
-                FUN_001f9a80(transform_row + 0x20, transform_row + 0x20, shell_scale);
+                scale_vector(transform_row, transform_row, shell_scale);
+                scale_vector(transform_row + 0x10, transform_row + 0x10, shell_scale);
+                scale_vector(transform_row + 0x20, transform_row + 0x20, shell_scale);
                 transform_row += 0x30;
                 qcopy(transform_row, &D_00160460);
             }

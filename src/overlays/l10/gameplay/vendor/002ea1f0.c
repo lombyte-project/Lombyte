@@ -63,12 +63,12 @@ void FUN_L10_002ea1f0(char *m) {
  }
 }
 #include "qcopy.h"
-extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
-extern float FUN_001f9b48(void *, void *);
+extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_001f9770(void *);
-extern int FUN_001fa6e0(int, int, float);
-extern int FUN_001fa728(char *, float);
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern float D_L10_00161F68 __attribute__((sda));
 extern float D_L10_00161F6C __attribute__((sda));
@@ -111,11 +111,11 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
             -func_001FA898_r(random_float_between((float)D_L10_00161FB4, (float)D_L10_00161FB8));
         return;
     }
-    if (32.0f < FUN_001f9b48(D_L10_00167240, pos))
+    if (32.0f < fast_vec_dist(D_L10_00167240, pos))
         return;
     qcopy(p, pos);
     p[3] = 2.0f;
-    if (FUN_001fa728((char *)p, 32.0f) == -1 && random_integer_below(3) != 0)
+    if (fast_bsphere_check((char *)p, 32.0f) == -1 && random_integer_below(3) != 0)
         return;
     if (!FUN_001f9770(timer))
         return;
@@ -129,9 +129,9 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
     a = func_001FA898_r((float)D_L10_00161F84 * s);
     b = func_001FA898_r((float)D_L10_00161F88 * s);
     c = func_001FA898_r((float)D_L10_00161F8C * s);
-    c1 = FUN_001fa6e0(D_L10_00161F94, D_L10_00161F98, random_float_between(0.0f, 1.0f));
-    FUN_00218888(pos, vel, acc, c1,
-                 FUN_001fa6e0(D_L10_00161F9C, D_L10_00161FA0, random_float_between(0.0f, 1.0f)), a,
+    c1 = fast_tween_color(D_L10_00161F94, D_L10_00161F98, random_float_between(0.0f, 1.0f));
+    spawn_spark(pos, vel, acc, c1,
+                 fast_tween_color(D_L10_00161F9C, D_L10_00161FA0, random_float_between(0.0f, 1.0f)), a,
                  b, c, -1);
     *timer = func_001FA898_r(random_float_between((float)D_L10_00161FA4, (float)D_L10_00161FA8));
 }
@@ -145,12 +145,12 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
 /* Emits a smoke particle from pos on its timer, when the camera is near and the spot is visible. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EBB70), where it is exact; names translated to the US level program. */
 
-extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
-extern float FUN_001f9b48(void *, void *);
+extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int FUN_001f9770(void *);
-extern int FUN_001fa6e0(int, int, float);
-extern int FUN_001fa728(char *, float);
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern float D_L10_00161FBC __attribute__((sda));
@@ -180,12 +180,12 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
     float acc[4];
     float s;
     int a, b, c, c1;
-    if (32.0f < FUN_001f9b48(D_L10_00167240, pos))
+    if (32.0f < fast_vec_dist(D_L10_00167240, pos))
         return;
     qcopy(p, pos);
     p[2] += 6.0f;
     p[3] = 5.0f;
-    if (FUN_001fa728((char *)p, 32.0f) == -1 && random_integer_below(3) != 0)
+    if (fast_bsphere_check((char *)p, 32.0f) == -1 && random_integer_below(3) != 0)
         return;
     if (!FUN_001f9770(timer))
         return;
@@ -199,9 +199,9 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
     a = func_001FA898_r((float)D_L10_00161FD8 * s);
     b = func_001FA898_r((float)D_L10_00161FDC * s);
     c = func_001FA898_r((float)D_L10_00161FE0 * s);
-    c1 = FUN_001fa6e0(D_L10_00161FE8, D_L10_00161FEC, random_float_between(0.0f, 1.0f));
-    FUN_00218888(pos, vel, acc, c1,
-                 FUN_001fa6e0(D_L10_00161FF0, D_L10_00161FF4, random_float_between(0.0f, 1.0f)), a,
+    c1 = fast_tween_color(D_L10_00161FE8, D_L10_00161FEC, random_float_between(0.0f, 1.0f));
+    spawn_spark(pos, vel, acc, c1,
+                 fast_tween_color(D_L10_00161FF0, D_L10_00161FF4, random_float_between(0.0f, 1.0f)), a,
                  b, c, -1);
     *timer = func_001FA898_r(random_float_between((float)D_L10_00161FF8, (float)D_L10_00161FFC));
 }
@@ -212,12 +212,12 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EBDC8), where it is exact; names translated to the US level program. */
 
-extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float FUN_001f9988(float);
+extern float square_root(float) __asm__("FUN_001f9988");
 extern int FUN_001f9770(void *);
-extern int FUN_001fa6e0(int, int, float);
-extern int FUN_001fa728(char *, float);
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short D_L10_00162000 __attribute__((sda));
 extern short D_L10_00162004 __attribute__((sda));
@@ -261,19 +261,19 @@ void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
     qcopy(p, pos);
     p[3] = 3.0f;
     p[2] -= 4.0f;
-    if (FUN_001fa728((char *)p, 32.0f) == -1) return;
+    if (fast_bsphere_check((char *)p, 32.0f) == -1) return;
     if (!FUN_001f9770(timer)) return;
     s = random_float_between(1.0f - *(float *)&D_L10_00162020, *(float *)&D_L10_00162020 + 1.0f);
     a = func_001FA898_r((float)*(int *)&D_L10_00162018 * s);
     b = func_001FA898_r((float)*(int *)&D_L10_0016201C * s);
-    c = func_001FA898_r(FUN_001f9988((height + height) / (*(float *)&D_L10_00162000 * frame_time_sq)) * *(float *)&D_L10_00162050 * s);
+    c = func_001FA898_r(square_root((height + height) / (*(float *)&D_L10_00162000 * frame_time_sq)) * *(float *)&D_L10_00162050 * s);
     clear_u64_value(vel);
     random_vector(acc, 0.0f, *(float *)&D_L10_00162004 * frame_time);
     acc[2] -= *(float *)&D_L10_00162000 * frame_time_sq * (float)c;
     vel[3] = random_float_between(*(float *)&D_L10_00162008, *(float *)&D_L10_0016200C);
     acc[3] = random_float_between(*(float *)&D_L10_00162010, *(float *)&D_L10_00162014);
-    c1 = FUN_001fa6e0(D_L10_00162024, D_L10_00162028, random_float_between(0.0f, 1.0f));
-    FUN_00218888(pos, vel, acc, c1, FUN_001fa6e0(D_L10_0016202C, D_L10_00162030, random_float_between(0.0f, 1.0f)), a, c, b, D_L10_0016204C);
+    c1 = fast_tween_color(D_L10_00162024, D_L10_00162028, random_float_between(0.0f, 1.0f));
+    spawn_spark(pos, vel, acc, c1, fast_tween_color(D_L10_0016202C, D_L10_00162030, random_float_between(0.0f, 1.0f)), a, c, b, D_L10_0016204C);
     *timer = func_001FA898_r(random_float_between((float)*(int *)&D_L10_00162034, (float)*(int *)&D_L10_00162038));
 }
 #define NOT_SDA

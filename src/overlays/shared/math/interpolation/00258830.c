@@ -13,7 +13,7 @@ typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
 extern Vec4 D_L00_00173E70;
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_L00_00173E40[];
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_L00_001f0d60();
@@ -68,7 +68,7 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
         if (D_L00_00173E40[7] > 0) {
             float surface;
             result |= 2;
-            surface = FUN_001f9e90(*(float *)((char *)D_L00_00173E40 + 0x48), vector_length_xy((char *)D_L00_00173E40 + 0x40));
+            surface = fast_arc_tan(*(float *)((char *)D_L00_00173E40 + 0x48), vector_length_xy((char *)D_L00_00173E40 + 0x40));
             if (surface > 0.5f) {
                 result |= 4;
             }

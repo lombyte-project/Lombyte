@@ -8,9 +8,9 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_00250800), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_001f9cf8(void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_00210850(void *, int, int *, void *);
 
 /* Writes into arg2 the 0x30 point of joint arg1, scaled by 0x2C/1024 and moved to world space. */
@@ -23,7 +23,7 @@ void moby_point_position(char *arg0, int arg1, void *arg2) {
     s = *(float *)(arg0 + 0x2C) * 0.0009765625f;
     n = arg1;
     FUN_00210850(arg0, 1, &n, buf);
-    FUN_001f9a68(arg2, buf + 0x30, s);
-    FUN_001f9cf8(arg2, arg2, arg0 + 0xC0);
-    FUN_001f9a10(arg2, arg2, arg0 + 0x10);
+    fast_vec_scale(arg2, buf + 0x30, s);
+    transform_vector_by_basis(arg2, arg2, arg0 + 0xC0);
+    add_vector_xyz(arg2, arg2, arg0 + 0x10);
 }

@@ -12,7 +12,7 @@ struct CameraProbePosition {
 extern s32 D_001611A0;
 extern f32 D_001611AC;
 extern f32 absolute_float(f32) __asm__("func_001F99C0");
-extern void FUN_001f9a00(s32);
+extern void set_vector_unit_z(s32) __asm__("FUN_001f9a00");
 extern f32 FUN_001f9b80(struct CameraProbePosition *, s32 *);
 extern s32 sample_surface_height_map(f32 *, f32, f32, f32) __asm__("func_00239F58");
 
@@ -32,14 +32,14 @@ f32 resolve_camera_surface_height(struct CameraProbePosition *position, s32 opti
         if (absolute_float(position->z - *(f32 *)0x1611A8) < 0.5f) {
             if (FUN_001f9b80(position, &D_001611A0) < D_001611AC) {
                 if (optional_output != 0) {
-                    FUN_001f9a00(optional_output);
+                    set_vector_unit_z(optional_output);
                 }
                 return *(f32 *)0x1611A8;
             }
         }
     }
     if (optional_output != 0) {
-        FUN_001f9a00(optional_output);
+        set_vector_unit_z(optional_output);
     }
     return position->z;
 }

@@ -1217,13 +1217,13 @@ extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern float FUN_001fa6c0(int);
 extern float vector_length_xyz_7880(void *) __asm__("FUN_001f9af0");
-extern float FUN_001f9b20(void *);
-extern void FUN_001fa2d8(void *, void *);
-extern void FUN_001f9c48(void *, void *, float);
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern int FUN_001f9770(void *);
-extern void FUN_0020cb10(void *, int, void *);
-extern void FUN_0020cb88(void *, void *);
-extern void FUN_0020d580(void *);
+extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
+extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
+extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void FUN_L00_00250df8(void *);
 extern int FUN_L03_002d5208(float, void *, void *, void *, int);
 extern void FUN_L00_0025e450_5630(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -1333,8 +1333,8 @@ get_goal:
         *(float *)(vars + 0x178) = 0.0f;
         *(float *)(vars + 0x17c) = 0.0f;
         *(float *)(vars + 0x19c) = 60.0f;
-        FUN_0020cb10(moby, 0, manip0);
-        FUN_0020cb10(moby, 1, manip1);
+        attach_manipulator(moby, 0, manip0);
+        attach_manipulator(moby, 1, manip1);
         moby->scale *= 0.5f;
         if (*(struct Moby **)(vars + 0x160) != 0) {
             (*(struct Moby **)(vars + 0x160))->update_dist = 0;
@@ -1481,7 +1481,7 @@ wait:
                 *(short *)(vars + 0x168) = scale_game_frames(60);
                 second.q = goal.pos.q;
                 subtract_vector_xyz(&first, &second, &point);
-                FUN_001f9c48(&first, &first, frame_time * 6.0f);
+                set_vector_length_xy(&first, &first, frame_time * 6.0f);
                 first.f[2] = 0.0f;
                 i = scale_game_frames(240);
                 *(int *)(vars + 0x164) = FUN_L03_002d5208(goal.pos.f[2], &first, &point, moby, i);
@@ -1535,8 +1535,8 @@ apply_delta:
         }
         FUN_L00_0025e450_5630(moby, &delta, &moby->pos, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, 2, 3.0f, 15.0f, 1, 1, -1, 0);
         FUN_L00_00257470_7880(moby, 0x200, -1);
-        FUN_0020cb88(moby, manip0);
-        FUN_0020cb88(moby, manip1);
+        detach_manipulator(moby, manip0);
+        detach_manipulator(moby, manip1);
         moby->state = 0x40;
         return;
     case 0x40:
@@ -1574,7 +1574,7 @@ apply_delta:
     if (*(struct Moby **)(vars + 0x160) != 0) {
         *(u128 *)&(*(struct Moby **)(vars + 0x160))->pos = *(u128 *)&moby->pos;
         *(u128 *)&(*(struct Moby **)(vars + 0x160))->rot = *(u128 *)&moby->rot;
-        FUN_0020d580(*(struct Moby **)(vars + 0x160));
+        advance_moby_animation(*(struct Moby **)(vars + 0x160));
         FUN_L00_00250df8(*(struct Moby **)(vars + 0x160));
         (*(struct Moby **)(vars + 0x160))->flags |= 6;
     }
@@ -1583,10 +1583,10 @@ apply_delta:
         moby_point_position(moby, 0, &attachment);
         subtract_vector_xyz(&difference, &goal.pos, &attachment);
         local.q = difference.q;
-        FUN_001fa2d8(&delta, &moby->rot_row0);
+        transpose_rotation_matrix(&delta, &moby->rot_row0);
         transform_vector_by_basis(&local, &local, &delta);
         *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), FUN_001f9e90(local.f[0], local.f[1]), frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-        *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(FUN_001f9b20(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
+        *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(vector_length_xy(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
         FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
         FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
         *(int *)(vars + 0x164) = 0;
@@ -1594,10 +1594,10 @@ apply_delta:
         moby_point_position(moby, 0, &attachment);
         subtract_vector_xyz(&difference, &(*(struct Moby **)(vars + 0x164))->pos, &attachment);
         local.q = difference.q;
-        FUN_001fa2d8(&delta, &moby->rot_row0);
+        transpose_rotation_matrix(&delta, &moby->rot_row0);
         transform_vector_by_basis(&local, &local, &delta);
         *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), FUN_001f9e90(local.f[0], local.f[1]), frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-        *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(FUN_001f9b20(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
+        *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(vector_length_xy(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
         FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
         FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
     }
@@ -1857,7 +1857,7 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xyz(void *);
 extern int D_L15_001BAAD0[];
-extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
@@ -1883,7 +1883,7 @@ extern short D_L15_00161B38 __attribute__((sda));
 extern short D_L15_00161B3C __attribute__((sda));
 int D_L15_00161B1C = 180;
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-extern void FUN_001f9c48(void *, void *, float);
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -2001,7 +2001,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
                     }
                     m->pos.q = path->pt[0].q;
                     subtract_vector_xyz(&d->vel, (UVec *)path + path->n, &m->pos);
-                    FUN_001f9c48(&d->vel, &d->vel, *(float *)&D_L15_00161B14 * frame_time);
+                    set_vector_length_xy(&d->vel, &d->vel, *(float *)&D_L15_00161B14 * frame_time);
                     d->vel.f[2] = FUN_L00_0025abf0(&m->pos, (UVec *)path + path->n, 0,
                                                    *(float *)&D_L15_00161B14 * frame_time,
                                                    -(*(float *)&D_L15_00161B18 * frame_time_sq));
@@ -2159,7 +2159,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
                     (UVec *)D_L15_001B0AB0[((UPaths *)((char *)d + 0x180))->idx[d->side]] +
                         (d->point + 1),
                     &m->pos);
-                FUN_001f9c48(&d->vel, &d->vel, *(float *)&D_L15_00161B14 * frame_time);
+                set_vector_length_xy(&d->vel, &d->vel, *(float *)&D_L15_00161B14 * frame_time);
                 d->vel.f[2] = FUN_L00_0025abf0(
                     &m->pos,
                     (UVec *)D_L15_001B0AB0[((UPaths *)((char *)d + 0x180))->idx[d->side]] +
@@ -2191,7 +2191,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
                     (UVec *)D_L15_001B0AB0[((UPaths *)((char *)d + 0x180))->idx[d->side]] +
                         (d->point + 1),
                     &m->pos);
-                FUN_001f9c48(&d->vel, &d->vel, *(float *)&D_L15_00161B14 * frame_time);
+                set_vector_length_xy(&d->vel, &d->vel, *(float *)&D_L15_00161B14 * frame_time);
                 d->vel.f[2] = FUN_L00_0025abf0(
                     &m->pos,
                     (UVec *)D_L15_001B0AB0[((UPaths *)((char *)d + 0x180))->idx[d->side]] +
@@ -2259,7 +2259,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
                     (UVec *)D_L15_001B0AB0[((UPaths *)((char *)d + 0x180))->idx[d->side]] +
                         (d->point + 1),
                     &m->pos);
-                FUN_001f9c48(&d->vel, &d->vel, *(float *)&D_L15_00161B14 * frame_time);
+                set_vector_length_xy(&d->vel, &d->vel, *(float *)&D_L15_00161B14 * frame_time);
                 d->vel.f[2] = FUN_L00_0025abf0(
                     &m->pos,
                     (UVec *)D_L15_001B0AB0[((UPaths *)((char *)d + 0x180))->idx[d->side]] +
@@ -2282,7 +2282,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
                 v40.f[2] = 1.0f;
                 make_hit_descriptor(&v10, m, 0x10007, &v40, 4.0f);
                 collect_mobies_in_sphere(&v60, 9, m, &v10, 2.5f);
-                FUN_001efa68(&v50, &v60, 0, m, &v10);
+                coll_line_fix(&v50, &v60, 0, m, &v10);
                 sweep_hit_segment(&v50, &v60, &v50, &d->v1A0, m, &v10, 5);
                 no_op_main_callback(&v50, &v60);
                 qcopy(&d->v1A0, &v60);
@@ -2307,7 +2307,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
                 if (m->anim != 3)
                     blend_moby_animation(m, 3, 0, scale_game_frames(0x14));
                 subtract_vector_xyz(&d->vel, &v10, &m->pos);
-                FUN_001f9c48(&d->vel, &d->vel, *(float *)&D_L15_00161B14 * frame_time);
+                set_vector_length_xy(&d->vel, &d->vel, *(float *)&D_L15_00161B14 * frame_time);
                 d->vel.f[2] =
                     FUN_L00_0025abf0(&m->pos, &v10, 0, *(float *)&D_L15_00161B14 * frame_time,
                                      -(*(float *)&D_L15_00161B18 * frame_time_sq));

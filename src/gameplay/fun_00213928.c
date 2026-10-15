@@ -33,14 +33,14 @@ extern Q_25a478 *func_002141F8(void *);
 extern Q_25a478 *ReadStateField(void *);
 extern s32 func_001F9770(s16 *);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern f32 func_001F9E90(f32, f32);
-extern f32 func_001F9DC8(f32);
-extern f32 func_001F9DE0(f32);
-extern f32 FUN_001f9af0(void *);
-extern void FUN_001f9a68(void *, void *, f32);
-extern void FUN_001f9bf8(void *, void *, f32);
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9c48(void *, void *, f32);
+extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 s32 FUN_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) {
     V_25a478 v;
@@ -83,18 +83,18 @@ s32 FUN_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f
     }
     if (p->u.s.f1C == 5627.9248f) {
         V_25a478 *pv = &p->u.pos;
-        FUN_001f9a68(pv, pv, D_001CC0C8[idx][p->state]);
+        fast_vec_scale(pv, pv, D_001CC0C8[idx][p->state]);
         kind = p->kind;
         p->u.s.f1C = 5627.9248f;
         if (kind == 0x47) {
-            v.f[0] = func_001F9DC8(func_001F9E90(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
-            v.f[1] = func_001F9DE0(func_001F9E90(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
+            v.f[0] = fast_cos(fast_arc_tan(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
+            v.f[1] = fast_sin(fast_arc_tan(obj->x - hero.motion.pos.f[0], obj->y - hero.motion.pos.f[1]));
             v.f[2] = 1.0f;
-            FUN_001f9bf8(&v, &v, FUN_001f9af0(pv) * 0.7f);
-            FUN_001f9a68(pv, pv, 0.3f);
-            FUN_001f9a10(&t, pv, &v);
+            fast_vec_normalize(&v, &v, fast_vec_length(pv) * 0.7f);
+            fast_vec_scale(pv, pv, 0.3f);
+            add_vector_xyz(&t, pv, &v);
             pv->q = t.q;
-            FUN_001f9c48(pv, pv, 1.0f);
+            set_vector_length_xy(pv, pv, 1.0f);
         }
     } else {
         if (!p->tgt) { p->state = 8; kind = 0x47; }

@@ -14,9 +14,9 @@ typedef struct {
 } L00Entry;
 
 extern L00Entry actuator_wave[8] __asm__("D_00165480");
-extern f32 func_001FA6C0(s32);
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern f32 func_001F9DC8(f32);
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 
 s32 actuator_calc_power(s32 *p1) __asm__("FUN_001e8d08");
 
@@ -92,12 +92,12 @@ s32 actuator_calc_power(s32 *p1)
             f32 f;
             f32 g;
             if (rem < e->f0c) {
-                f = func_001FA6C0(rem) * 3.1415927f / func_001FA6C0(e->f0c);
+                f = convert_integer_to_float(rem) * 3.1415927f / convert_integer_to_float(e->f0c);
             } else {
-                f = 3.1415927f - func_001FA6C0(rem - e->f0c) * 3.1415927f / func_001FA6C0(e->f0a);
+                f = 3.1415927f - convert_integer_to_float(rem - e->f0c) * 3.1415927f / convert_integer_to_float(e->f0a);
             }
-            f = func_001F9DC8(f);
-            g = func_001FA6C0(e->f0e);
+            f = fast_cos(f);
+            g = convert_integer_to_float(e->f0e);
             res = truncate_float_to_s32((f * g + g) * 0.5f) + e->f0f;
             if (res >= 256) {
                 res = 255;

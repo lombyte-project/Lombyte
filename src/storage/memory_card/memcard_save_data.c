@@ -7,8 +7,8 @@ extern int mc_leveldata[] __asm__("D_001A07C0");
 extern int memcard_prepare_data(void *dst, int i, int *table) __asm__("func_0020AD78");
 extern void sceCdReadClock(void *);
 extern void sceScfGetLocalTimefromRTC(void *);
-extern void FUN_00208770(void);
-extern void func_00207B08(void *);
+extern void copy_level_object_positions(void) __asm__("FUN_00208770");
+extern void save_map_coverage(void *) __asm__("func_00207B08");
 extern char D_0015EE98[] MACRO_ADDR;
 extern char D_00141EC0[];
 #include "rnc/gameplay/state/level_state.h"
@@ -39,8 +39,8 @@ int memcard_save_data(int slot, int flags) {
 
     sceCdReadClock(D_0015EE98);
     sceScfGetLocalTimefromRTC(D_0015EE98);
-    FUN_00208770();
-    func_00207B08(D_00141EC0 + (current_level_index << 11));
+    copy_level_object_positions();
+    save_map_coverage(D_00141EC0 + (current_level_index << 11));
     {
         char *p = D_0013D290;
         int active = *(int *)(p + 0xC0);

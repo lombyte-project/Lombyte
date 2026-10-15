@@ -5,7 +5,7 @@
 extern struct TagPtr D_00160F68;
 extern s32 D_00160F74;
 extern char D_001E8A50[];
-extern s32 FUN_002370c0(s32);
+extern s32 build_tie_texture_dma(s32) __asm__("FUN_002370c0");
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
 extern void DebugPrint(char *, ...);
 void dma_tie_textures(void) __asm__("FUN_00235640");
@@ -21,7 +21,7 @@ void dma_tie_textures(void) {
     D_00160F68.p->vif0 = 0;
     D_00160F68.p->vif1 = 0;
     if (draw_config.tie.enabled != 0 && draw_config.tie.count != 0) {
-        size = FUN_002370c0(gs_texture_allocation_cursor);
+        size = build_tie_texture_dma(gs_texture_allocation_cursor);
         vu1_tex_flush();
         if (size > 0x400000) {
             DebugPrint(D_001E8A50);

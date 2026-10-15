@@ -99,10 +99,10 @@ typedef struct {
 extern void FUN_L01_002783a8(void *, float);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
-extern int FUN_001f9740(void *);
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int FUN_001f96f8(int);
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa688_cf(float, float) __asm__("FUN_001f9e90");
@@ -238,7 +238,7 @@ void FUN_L08_00305270(WM *m) {
         if (tick_countdown_32(&d->target_timer)) {
             float heading;
             d->target_timer =
-                random_float_between_cf(FUN_001f96b0(truncate_float_to_s32_cf(180.0f, 300.0f)));
+                random_float_between_cf(multiply_global_factor_ed64(truncate_float_to_s32_cf(180.0f, 300.0f)));
             heading =
                 fast_add_rotations(m->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(d->target, 6.0f, heading,
@@ -388,7 +388,7 @@ typedef struct {
     float aim[4];
 } L14Player;
 extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
-extern float FUN_001f9af0(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9b20(void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -466,7 +466,7 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
              fast_difference_between_rotations(
                  m->yaw, FUN_001f9e90(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) <
                 1.5707964f) {
-            if (FUN_001f9af0(g + 0x80) > 0.01f)
+            if (fast_vec_length(g + 0x80) > 0.01f)
                 d->moving_timer = FUN_001f96f8(120);
             else
                 FUN_001f9740_c(&d->moving_timer);
@@ -476,7 +476,7 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
         }
         if (FUN_001f9740_c(&d->target_timer)) {
             float heading;
-            d->target_timer = FUN_001fa6d0(FUN_001f96b0(random_float_between(180.0f, 300.0f)));
+            d->target_timer = FUN_001fa6d0(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading =
                 fast_add_rotations(m->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(d->target, 6.0f, heading,
@@ -708,8 +708,8 @@ void FUN_L08_003084d8(struct Moby *moby) {
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9cf8(void *, void *, void *);
-extern void FUN_001fa030(void *, void *);
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_L08_0027fe00(float *, float *, int, float);
 
 void FUN_L08_00308c90(struct Moby *moby) {
@@ -723,8 +723,8 @@ void FUN_L08_00308c90(struct Moby *moby) {
         a[1] = random_float_between_alt(-*(float *)(data + 4), *(float *)(data + 4));
         a[2] = 0;
         a[3] = 1.0f;
-        FUN_001fa030(b, &moby->rot);
-        FUN_001f9cf8(a, a, b);
+        euler_rotation_basis(b, &moby->rot);
+        transform_vector_by_basis(a, a, b);
         FUN_001f9a10(a, a, &moby->pos);
         c[0] = 0;
         c[1] = random_float_between_alt(*(float *)(data + 0x18) * frame_time,

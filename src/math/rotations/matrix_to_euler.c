@@ -8,10 +8,10 @@ typedef union {
 } Mtx44;
 
 extern void clear_u64_value(float *) __asm__("func_001F99F8");
-extern float FUN_001f9e90(float, float);
-extern void FUN_001fa050(float *, float *);
-extern void FUN_001fa070(float *, float *);
-extern void FUN_001fa378(Mtx44 *, float *, Mtx44 *);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
+extern void rot_216130(float *, float *) __asm__("FUN_001fa070");
+extern void multiply_matrix(Mtx44 *, float *, Mtx44 *) __asm__("FUN_001fa378");
 
 /* Matrix to Euler angles: on a copy of src with the translation cleared,
    read the Z angle from row 0, undo it (FUN_001fa050 builds the Z
@@ -35,19 +35,19 @@ void matrix_to_euler(Mtx44 *src, float *out) {
     m.q[3] = src->q[3];
     clear_u64_value(m.m[3]);
     m.m[3][3] = 1.0f;
-    z = FUN_001f9e90(m.m[0][0], m.m[0][1]);
+    z = fast_arc_tan(m.m[0][0], m.m[0][1]);
     v[0] = 0.0f;
     v[1] = 0.0f;
     v[2] = -z;
-    FUN_001fa050(rot, v);
-    FUN_001fa378(&m, rot, &m);
-    y = FUN_001f9e90(m.m[0][0], -m.m[0][2]);
+    euler_rotation_matrix(rot, v);
+    multiply_matrix(&m, rot, &m);
+    y = fast_arc_tan(m.m[0][0], -m.m[0][2]);
     v[0] = 0.0f;
     v[2] = 0.0f;
     v[1] = -y;
-    FUN_001fa070(rot, v);
-    FUN_001fa378(&m, rot, &m);
-    x = FUN_001f9e90(m.m[1][1], m.m[1][2]);
+    rot_216130(rot, v);
+    multiply_matrix(&m, rot, &m);
+    x = fast_arc_tan(m.m[1][1], m.m[1][2]);
     v[1] = 0.0f;
     v[0] = -x;
     v[2] = 0.0f;

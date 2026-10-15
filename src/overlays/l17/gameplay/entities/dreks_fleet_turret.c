@@ -84,7 +84,7 @@ extern int FUN_001fa728(char *, float);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern short D_L17_00161498 __attribute__((sda));
 extern unsigned char *FUN_L17_0026fb60(char *parent, void *pos, float *vec);
-extern void FUN_001f9a40(void *, void *, void *, float);
+extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L17_002a95b8(struct Moby *moby);
 extern void add_vector_xyz(void *, void *, void *);
@@ -166,10 +166,10 @@ void FUN_L17_002a8da0(struct Moby *m) {
             *(float *)(d + 0x54) = -*(float *)(d + 0x54);
         }
         if (*(int *)(d + 0x68) != -1) {
-            FUN_001f9a40(&m->pos, d, ((char *(*)[64])D_L17_0015FFD8)[*(int *)(d + 0x68)][0x1E],
+            lerp_vector(&m->pos, d, ((char *(*)[64])D_L17_0015FFD8)[*(int *)(d + 0x68)][0x1E],
                          *(float *)(d + 0x50));
         } else {
-            FUN_001f9a40(&m->pos, d, D_L17_001600EC + (*(int *)(d + 0x44) << 7) + 0x30,
+            lerp_vector(&m->pos, d, D_L17_001600EC + (*(int *)(d + 0x44) << 7) + 0x30,
                          *(float *)(d + 0x50));
         }
         if (*(int *)(d + 0x40) == -1 ||
@@ -215,7 +215,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
         subtract_vector_xyz(e50, &m->pos, d + 0x10);
         *(OvlQuad *)(d + 0x10) = *(OvlQuad *)e50;
         len = vector_length_xyz(d + 0x30);
-        FUN_001f9a40(b, d + 0x10, d + 0x20, 0.5f);
+        lerp_vector(b, d + 0x10, d + 0x20, 0.5f);
         b[3] = len * 0.5f;
         if (FUN_001fa728((char *)b, 32.0f) != -1) {
             subtract_vector_xyz(v30, &hero.motion.pos, &m->pos);
@@ -614,7 +614,7 @@ struct Blk {
 };
 
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float dot_vectors_xyz(void *, void *);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -637,8 +637,8 @@ extern short D_L17_00161B90 __attribute__((sda));
 extern short D_L17_00161B94 __attribute__((sda));
 extern unsigned char *FUN_L00_002730e0(float *pos, char *vel, int color, unsigned char life,
                                        unsigned char b, int mode, float scale);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001fa298(void *, void *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 void FUN_L17_002d7cf0(struct Moby *moby);
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
@@ -704,7 +704,7 @@ void FUN_L17_002d77f0(char *m) {
             blk.h1A = *(unsigned short *)(m + 0xA6);
             vu_euler_rotation_basis(mat1, m + 0x40);
             normalize_vector_triplet(mat1);
-            FUN_001fa298(mat2, mat1);
+            copy_matrix_rotation(mat2, mat1);
             i = 0;
             do {
                 j = 0;
@@ -719,7 +719,7 @@ void FUN_L17_002d77f0(char *m) {
                             fast_add_rotations(g,
                                                wrap_angle(convert_integer_to_float(i) * 2.0943952f)),
                             f21));
-                    FUN_001f9d20(spC0, spC0, mat2);
+                    transform_vector(spC0, spC0, mat2);
                     FUN_L00_001ff290(spD0, spC0, (m + 0x10));
                     if (FUN_001f9b48((m + 0x10), &hero.motion.pos) < 30.0f) {
                         FUN_001efa68((m + 0x10), spC0, 9, m, &blk);
@@ -735,7 +735,7 @@ void FUN_L17_002d77f0(char *m) {
                                 f20 = -1.0f;
                                 if (rand() & 1)
                                     f20 = 1.0f;
-                                c = func_001FA898_r(FUN_001f96b0(random_float_between(
+                                c = func_001FA898_r(multiply_global_factor_ed64(random_float_between(
                                     *(float *)&D_L17_00161B90 * 0.5f, *(float *)&D_L17_00161B90)));
                                 if (c <= 0)
                                     c = 1;
@@ -807,7 +807,7 @@ extern int D_L17_00161BB8 __attribute__((sda));
 extern RingStep D_L17_00161BC0 __attribute__((section(".data")));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern RingStep D_L17_00161BC8 __attribute__((section(".data")));
-extern void FUN_001fa050(float *, float *);
+extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void draw_geometry_quad(void *, void *, int);
 extern void wrap_angle_alt(void *, float, float, float) __asm__("FUN_00214db0");
 
@@ -822,7 +822,7 @@ void FUN_L17_002d7cf0(struct Moby *moby) {
 
     scroll = convert_integer_to_float(D_L17_0015F5CC) * (D_L17_00161BBC * frame_time);
     scroll = FUN_L00_00200260(scroll, 1.0f);
-    FUN_001fa050(mat, &moby->rot.x);
+    euler_rotation_matrix(mat, &moby->rot.x);
     *(OvlQuad *)&mat[12] = *(OvlQuad *)&moby->pos;
     mat[15] = 1.0f;
     q.tex = get_effect_texture(0x28);

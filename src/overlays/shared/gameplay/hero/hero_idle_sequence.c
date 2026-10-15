@@ -582,12 +582,12 @@ void FUN_L00_00206080(void) {
 }
 #include "qcopy.h"
 typedef float M4_2061f0[16] __attribute__((aligned(16)));
-void FUN_0020cca8(void *, int, void *);
-void FUN_001fa2b8(void *, void *);
-void FUN_00214598(void *, void *);
+void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
+void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
+void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 int FUN_001f96f8(int);
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-void FUN_0020d580(void *);
+void advance_moby_animation(void *) __asm__("FUN_0020d580");
 void FUN_L00_00250df8(void *);
 void FUN_L00_002061f0(void) {
     M4_2061f0 m;
@@ -597,13 +597,13 @@ void FUN_L00_002061f0(void) {
     o[0x7F] = 0;
     s = ((char *)g->moby);
     if ((*(unsigned short *)(s + 0x34) ^ 1) & 1) {
-        FUN_0020cca8(s, 5, m);
+        build_moby_bone_transform(s, 5, m);
         qcopy(o + 0x10, &m[12]);
-        FUN_001fa2b8(o + 0xC0, m);
-        FUN_00214598(m, o + 0x40);
+        copy_matrix3x4(o + 0xC0, m);
+        matrix_to_euler(m, o + 0x40);
         *(unsigned short *)(o + 0x34) &= 0xFFBE;
         blend_moby_animation(o, 0x81, 0, FUN_001f96f8(10));
-        FUN_0020d580(o);
+        advance_moby_animation(o);
         FUN_L00_00250df8(o);
     } else {
         *(unsigned short *)(o + 0x34) |= 0x41;
@@ -1159,7 +1159,7 @@ void FUN_L00_00206cf8(void);
 void FUN_L00_00205ea8(void);
 void FUN_L00_00206080(void);
 void FUN_L00_00206e00(void);
-void FUN_001e93e8(int);
+void noop_main_callback(int) __asm__("FUN_001e93e8");
 void FUN_L00_002484e0(void *);
 void FUN_L00_00257024(int);
 void FUN_L00_002076a8(void);
@@ -1210,7 +1210,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_00205ea8();
     FUN_L00_00206080();
     FUN_L00_00206e00();
-    FUN_001e93e8((int)g->moby);
+    noop_main_callback((int)g->moby);
     if (g->state.control_mode != 0x16 && g->state.current != 0x32)
         FUN_L00_002484e0(&g->motion.pos);
     {
@@ -2592,7 +2592,7 @@ extern G0020a240 D_0013F350_c __asm__("D_0013F350");
 extern u8 D_L00_00173E60[];
 extern void FUN_L00_002335c8(V0020a240 *, f32, f32, f32);
 extern s32 FUN_001efa68(V0020a240 *, V0020a240 *, s32, s32, s32);
-extern f32 FUN_001f9b80(void *, void *);
+extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 s32 FUN_L00_0020a240(f32 *out, f32 a, f32 b) {
     G0020a240 *g = &D_0013F350_c;
     V0020a240 p;
@@ -2602,7 +2602,7 @@ s32 FUN_L00_0020a240(f32 *out, f32 a, f32 b) {
     FUN_L00_002335c8(&q, b, 0.0f, a);
     if (FUN_001efa68(&p, &q, 2, 0, 0)) {
         if (out != 0)
-            *out = FUN_001f9b80(g->v80, D_L00_00173E60);
+            *out = vector_distance_xy(g->v80, D_L00_00173E60);
         return 1;
     }
     return 0;
@@ -2611,7 +2611,7 @@ s32 FUN_L00_0020a240(f32 *out, f32 a, f32 b) {
 
 extern V collision_hit_point __asm__("D_L00_00173E60") __attribute__((section(".data")));
 extern char D_L00_0017A680_d[] __asm__("D_L00_0017A680") __attribute__((section(".data")));
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L00_0020a240_u(int, float, float) __asm__("FUN_L00_0020a240");
 extern int FUN_L00_0025e3b8(void *);
 extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") __attribute__((section(".data")));
@@ -2654,7 +2654,7 @@ void FUN_L00_0020a318(void) {
     *(float *)(p2 + 0x6D4) = s2 * 0.05f;
     *(float *)(p2 + 0x6D8) = s2 * 0.3f;
     h = (char *)D_0013E533 + 0xE9D;
-    f = FUN_001f9b48(h, collision_hit_point);
+    f = fast_vec_dist(h, collision_hit_point);
     g2 = (char *)D_0013E533 + 0xE1D;
     f = f - *(float *)(g2 + 0x234);
     f = (1.29999995f - f) / 1.29999995f;
@@ -3046,7 +3046,7 @@ extern A_20b1d8 D_L00_0017A680_20b1d8 __asm__("D_L00_0017A680");
 #define A D_L00_0017A680_20b1d8
 extern s32 FUN_L00_0020d568(void);
 extern f32 FUN_001f99c0(f32);
-extern f32 FUN_001f9e90(f32, f32);
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void FUN_L00_00233288(s32, s32, s32, s32, f32, f32);
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0026de90(void *, void *, f32);
@@ -3063,8 +3063,8 @@ void FUN_L00_0020b1d8(void) {
         if (P.h308 != 1) {
             A.f324 = -P.f2C8;
             A.f3D4 = -P.f2CC;
-            a = FUN_001f9e90(0.2f, P.f2C0) * 1.2f;
-            b = -FUN_001f9e90(0.2f, P.f2C4) * 1.2f;
+            a = fast_arc_tan(0.2f, P.f2C0) * 1.2f;
+            b = -fast_arc_tan(0.2f, P.f2C4) * 1.2f;
             if (0.7853982f < a)
                 a = 0.7853982f;
             if (a < -0.17453292f)

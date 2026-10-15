@@ -3,7 +3,7 @@
 #include "eetypes.h"
 #define DPUT(a, v)  (*(volatile u32 *)(a) = (v))
 #define DMA_ADDR(p) ((u32)(p) & 0x0FFFFFFF)
-extern void func_0023BC20(u128 *, u32, s32, s32);
+extern void sc_tag2(u128 *, u32, s32, s32) __asm__("func_0023BC20");
 extern void set_d4_chcr(s32) __asm__("FUN_0023bbb0");
 s32 vi_buf_reset(struct ViBuf *f) __asm__("FUN_0023bcc0");
 
@@ -23,9 +23,9 @@ s32 vi_buf_reset(struct ViBuf *f) {
         f->ts[i].len = 0;
     }
     for (i = 0; i < f->n; i++) {
-        func_0023BC20(f->tag + i, DMA_ADDR((i << 11) + (u32)f->data), 3, 0x80);
+        sc_tag2(f->tag + i, DMA_ADDR((i << 11) + (u32)f->data), 3, 0x80);
     }
-    func_0023BC20(f->tag + i, DMA_ADDR(f->tag), 2, 0);
+    sc_tag2(f->tag + i, DMA_ADDR(f->tag), 2, 0);
     DPUT(0x1000B420, 0);
     DPUT(0x1000B410, DMA_ADDR(f->data));
     DPUT(0x1000B430, DMA_ADDR(f->tag));

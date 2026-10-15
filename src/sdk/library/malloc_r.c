@@ -7,8 +7,8 @@
 #include "rnc/data_labels.h"
 
 struct _reent;
-extern void func_001154C0(struct _reent *);
-extern void func_001154C8(struct _reent *);
+extern void noop_core_utility(struct _reent *) __asm__("func_001154C0");
+extern void noop_core_utility_secondary(struct _reent *) __asm__("func_001154C8");
 extern void malloc_extend_top(struct _reent *ptr, u32 nb);
 struct malloc_chunk;
 extern struct malloc_chunk D_0012F790;
@@ -33,7 +33,7 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
     u32 nb = (((long)(bytes + (4 + (16 - 1)))) < ((long)(16 + (16 - 1))))
                  ? ((16 + (16 - 1)) & (~(16 - 1)))
                  : ((bytes + (4 + (16 - 1))) & (~(16 - 1)));
-    func_001154C0(ptr);
+    noop_core_utility(ptr);
     if (nb < (512 - 8)) {
         idx = ((unsigned long)nb) >> 3;
         q = (mbinptr)(((u8 *)(&D_0012F788[(2 * idx) + 2])) - (2 * 4));
@@ -48,7 +48,7 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
             };
             ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
             (void)0;
-            func_001154C8(ptr);
+            noop_core_utility_secondary(ptr);
             return (void *)(((char *)victim) + (2 * 4));
         }
         idx += 2;
@@ -83,7 +83,7 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
                 };
                 ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
                 (void)0;
-                func_001154C8(ptr);
+                noop_core_utility_secondary(ptr);
                 return (void *)(((char *)victim) + (2 * 4));
             }
         }
@@ -103,14 +103,14 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
             remainder->size = remainder_size | 1;
             ((mchunkptr)(((char *)remainder) + remainder_size))->prev_size = remainder_size;
             (void)0;
-            func_001154C8(ptr);
+            noop_core_utility_secondary(ptr);
             return (void *)(((char *)victim) + (2 * 4));
         }
         (&D_0012F790)->fd = ((&D_0012F790)->bk = &D_0012F790);
         if (remainder_size >= 0) {
             ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
             (void)0;
-            func_001154C8(ptr);
+            noop_core_utility_secondary(ptr);
             return (void *)(((char *)victim) + (2 * 4));
         }
         {
@@ -193,7 +193,7 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
                         ((mchunkptr)(((char *)remainder) + remainder_size))->prev_size =
                             remainder_size;
                         (void)0;
-                        func_001154C8(ptr);
+                        noop_core_utility_secondary(ptr);
                         return (void *)(((char *)victim) + (2 * 4));
                     } else if (remainder_size >= 0) {
                         ((mchunkptr)(((char *)victim) + victim_size))->size |= 1;
@@ -204,7 +204,7 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
                             bck->fd = fwd;
                         };
                         (void)0;
-                        func_001154C8(ptr);
+                        noop_core_utility_secondary(ptr);
                         return (void *)(((char *)victim) + (2 * 4));
                     }
                 }
@@ -260,7 +260,7 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
         if (((((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->fd->size & (~(1 | 0x2))) <
              nb) ||
             (remainder_size < ((long)16))) {
-            func_001154C8(ptr);
+            noop_core_utility_secondary(ptr);
             return 0;
         }
     }
@@ -271,6 +271,6 @@ void *_malloc_r(struct _reent *ptr, u32 bytes) {
         (mchunkptr)(((char *)victim) + nb);
     ((mbinptr)(((u8 *)(&D_0012F788[(2 * 0) + 2])) - (2 * 4)))->fd->size = remainder_size | 1;
     (void)0;
-    func_001154C8(ptr);
+    noop_core_utility_secondary(ptr);
     return (void *)(((char *)victim) + (2 * 4));
 }

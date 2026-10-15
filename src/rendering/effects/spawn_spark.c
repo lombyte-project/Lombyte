@@ -32,7 +32,7 @@ struct Obj {
 
 extern u8 *D_001CDF80[];
 extern u8 *D_001CDFDC[];
-extern struct Obj *FUN_00217a30(s32);
+extern struct Obj *create_part(s32) __asm__("FUN_00217a30");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern void func_00214A98(void *, void *);
@@ -48,7 +48,7 @@ struct Obj *spawn_spark(u128 *arg0, f32 *arg1, f32 *arg2, s32 arg3, s32 arg4, s3
     f32 t0[4];
     f32 t1[4];
 
-    o = FUN_00217a30(2);
+    o = create_part(2);
     if (o != 0) {
         qcopy(&o->q10, arg0);
         o->w4 = arg3;

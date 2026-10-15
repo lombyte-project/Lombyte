@@ -205,11 +205,11 @@ void follow_camera_pull_back(char *o, float *x, float *y) {
 extern char D_L00_00166E10[];
 extern float FUN_001f9ab0(void *, void *);
 extern float FUN_001f9af0(void *);
-extern float FUN_001f9df8(float);
+extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_L00_001eb328(void *, float, float, float, float, float);
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a28(float *, float *, float *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(float *, float *, float *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_L00_002e9518_c(char *, float *, float *) __asm__("FUN_L00_002e9518");
@@ -246,26 +246,26 @@ void follow_camera_orbit(int arg) {
     char *p130 = d + 0x130;
     char *p140 = d + 0x140;
     char *p1d0 = d + 0x1D0;
-    FUN_001f9a10(d, d + 0x90, p130);
+    add_vector_xyz(d, d + 0x90, p130);
     x = *(float *)(p130 + 0x2C);
     x -= *(float *)(p1d0 + 0x30);
     bc = FUN_001f9af0(p140);
     FUN_L00_002e9518_c(m, &tb[0], &tb[1]);
     bc = cam_interp_values(d + 0x158, bc, x, tb[0], tb[1], 0.0f);
     e1 = FUN_001f9ab0(p130, up);
-    y = FUN_001f9df8(e1 / x);
+    y = fast_arc_sin(e1 / x);
     h = FUN_001f9ab0(p140, up);
-    r = FUN_001f9df8(h / bc);
+    r = fast_arc_sin(h / bc);
     i = FUN_L00_001eb328(d + 0x154, r, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
                          0.0f);
     FUN_001f9a68(t0, up, e1);
-    FUN_001f9a28(t1, p130, t0);
+    subtract_vector_xyz(t1, p130, t0);
     FUN_001f9a68(t2, up, h);
-    FUN_001f9a28(t3, p140, t2);
+    subtract_vector_xyz(t3, p140, t2);
     e = FUN_001f9ab0(t1, t3);
     x = FUN_001f9af0(t1);
     x = x * FUN_001f9af0(t3);
-    r = 1.5707964f - FUN_001f9df8(e / x);
+    r = 1.5707964f - fast_arc_sin(e / x);
     x = FUN_L00_001eb328(d + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4,
                          *(float *)&D_L00_00161CF8, 0.0f);
     fast_vec_cross(t4, t3, up);
@@ -277,11 +277,11 @@ void follow_camera_orbit(int arg) {
     build_look_at_matrix(t5, t5, t4, i);
     FUN_001f9bf8(p140, t5, bc);
     FUN_001f9a68(t6, up, *(float *)(p130 + 0x30));
-    FUN_001f9a10(t7, t6, d + 0xA0);
+    add_vector_xyz(t7, t6, d + 0xA0);
     e = FUN_001f9ab0(p140, fw);
     len = FUN_001f9af0(p140);
     if (len != 0.0f) {
-        x = 1.5707964f - FUN_001f9df8(e / len);
+        x = 1.5707964f - fast_arc_sin(e / len);
         if (absolute_float(x) < 0.2617994f) {
             fast_vec_cross(t8, p140, fw);
             build_look_at_matrix(p140, p140, t8,
@@ -291,7 +291,7 @@ void follow_camera_orbit(int arg) {
             *(float *)(p130 + 0x24) = 0.0f;
         }
     }
-    FUN_001f9a10(m + 0x30, t7, p130 + 0x10);
+    add_vector_xyz(m + 0x30, t7, p130 + 0x10);
 }
 extern int *D_L00_0015EF80_9aa0 __asm__("D_L00_0015EF80");
 extern char *D_L00_001600F4_9aa0 __asm__("D_L00_001600F4");
@@ -351,7 +351,7 @@ extern s32 opt_cam_yaw_rate __asm__("D_0015EDE4");
 extern f32 D_L00_00161DB0[2] __attribute__((sda));
 void FUN_L00_002e46b8();
 void follow_camera_apply_overrides() __asm__("FUN_L00_002e6000");
-void FUN_001e93e8();
+void noop_main_callback() __asm__("FUN_001e93e8");
 void follow_camera_springs() __asm__("FUN_L00_002e5830");
 void FUN_L00_002e9bb0();
 void follow_camera_approach() __asm__("FUN_L00_002e5e38");
@@ -362,11 +362,11 @@ void follow_camera_update(u8 *m) {
     D_L00_0015EF44_gp = D_L00_00161DB0[opt_cam_yaw_rate];
     FUN_L00_002e46b8();
     follow_camera_apply_overrides(m);
-    FUN_001e93e8(m);
+    noop_main_callback(m);
     follow_camera_springs(m);
-    FUN_001e93e8(m, p);
+    noop_main_callback(m, p);
     FUN_L00_002e9bb0(m);
-    FUN_001e93e8(m);
+    noop_main_callback(m);
     follow_camera_approach(m);
 }
 extern unsigned char D_0015EDB3_002e9cc0 __asm__("D_0015EDB3");
@@ -902,8 +902,8 @@ void FUN_L00_002eac18(int mode) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC210), where it is exact; names translated to the US level program. */
 
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void FUN_001fa050(void *, void *);
-extern void FUN_001fa2b8(void *, void *);
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 
 void FUN_L00_002ead60(char *m) {
     float v[16];
@@ -922,8 +922,8 @@ void FUN_L00_002ead60(char *m) {
     *(float *)(p + 0x18) = 1.0f;
     *(short *)(p + 0x1C) = 1;
     clear_u64_value(p);
-    FUN_001fa050(v, m + 0x40);
-    FUN_001fa2b8(m, v);
+    euler_rotation_matrix(v, m + 0x40);
+    copy_matrix3x4(m, v);
     *(short *)(m + 0x7E) = 0;
 }
 #define F(p, o) (*(float *)((char *)(p) + (o)))
@@ -1010,8 +1010,8 @@ void FUN_L00_002eae20(void *arg) {
                                           F(a, 0x28));
         }
     }
-    FUN_001fa050(mtx, m + 0x40);
-    FUN_001fa2b8(m, mtx);
+    euler_rotation_matrix(mtx, m + 0x40);
+    copy_matrix3x4(m, mtx);
 }
 #define NOT_SDA
 
@@ -1038,8 +1038,8 @@ void FUN_L00_002eb218(char *a) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC728), where it is exact; names translated to the US level program. */
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void FUN_001fa050(void *, void *);
-extern void FUN_001fa2b8(void *, void *);
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void FUN_L00_001ed580(void *, void *, void *);
 
 void FUN_L00_002eb278(void *arg) {
@@ -1053,8 +1053,8 @@ void FUN_L00_002eb278(void *arg) {
     *(float *)(a + 0x48) = fast_add_rotations(3.14159274101257324f, *(float *)(a + 0x50));
     *(float *)(a + 0x48) = fast_add_rotations(*(float *)(a + 0x48), *(float *)(a + 0x60));
     *(int *)(a + 0x4C) = 0;
-    FUN_001fa050(m, a + 0x40);
-    FUN_001fa2b8(a, m);
+    euler_rotation_matrix(m, a + 0x40);
+    copy_matrix3x4(a, m);
 }
 #include "eetypes.h"
 #include "qcopy.h"
@@ -1280,14 +1280,14 @@ char *FUN_L00_002eb930(void *arg) {
     return o;
 }
 extern char D_00166C80_c[] __asm__("D_L00_00166C80");
-float FUN_001f9e90(float, float);
+float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 float FUN_001f9b48(void *, void *);
 void FUN_L00_002eba18(char *o) {
     struct Hero *g = &hero;
     char *h = D_00166C80_c;
     char *s = ((char *)g->moby);
-    float a = FUN_001f9e90(*(float *)(s + 0x10) - *(float *)(h + 0x140),
+    float a = fast_arc_tan(*(float *)(s + 0x10) - *(float *)(h + 0x140),
                            *(float *)(s + 0x14) - *(float *)(h + 0x144));
     if (fast_difference_between_rotations(*(float *)(h + 0x158), a) < 0.5585053563117981f &&
         FUN_001f9b48(&g->motion.pos, h + 0x140) < 8.0f) {

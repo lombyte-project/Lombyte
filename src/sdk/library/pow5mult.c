@@ -91,7 +91,7 @@ typedef struct _reent {
     _Bigint *_p5s;
 } _reent;
 extern s32 D_001523B8[];
-extern _Bigint *func_00115808(struct _reent *, s32);
+extern _Bigint *initialize_object_resource(struct _reent *, s32) __asm__("func_00115808");
 extern _Bigint *_multiply(struct _reent *, _Bigint *, _Bigint *);
 extern _Bigint *_multadd(struct _reent *, _Bigint *, s32, s32);
 extern void InsertLinkObject(struct _reent *, _Bigint *);
@@ -105,7 +105,7 @@ _Bigint *_pow5mult(struct _reent *ptr, _Bigint *b, s32 k) {
     if (!(k >>= 2))
         return b;
     if (!(p5 = ptr->_p5s)) {
-        p5 = ptr->_p5s = func_00115808(ptr, 625);
+        p5 = ptr->_p5s = initialize_object_resource(ptr, 625);
         p5->_next = 0;
     }
     for (;;) {

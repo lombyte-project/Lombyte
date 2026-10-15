@@ -61,10 +61,10 @@ extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern int FUN_001fa6e0();
+extern int fast_tween_color() __asm__("FUN_001fa6e0");
 extern int FUN_L00_0024f7c8();
 extern int FUN_L00_002dc9f0();
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
@@ -1018,14 +1018,14 @@ void FUN_L08_002f1378(int i) {
     if (*p > 1.0f) *p -= 1.0f;
     if (*p < -1.0f) *p += 1.0f;
 }
-extern int FUN_001f9740(int *);
-extern void FUN_001fa050(void *, void *);
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_001f9bf8(void *, void *, float);
 extern void FUN_001f9a10(void *, void *, void *);
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern void FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
 extern s32 D_L08_00161F74 __attribute__((sda));
 extern s32 D_L08_00161F78 __attribute__((sda));
@@ -1048,11 +1048,11 @@ void FUN_L08_002f5830(char *m) {
     s32 s0, s16, s2;
 
     v = *(char **)(m + 0x78);
-    if (FUN_001f9740((int *)(v + 0x3C)) == 0)
+    if (fast_dec_timer((int *)(v + 0x3C)) == 0)
         return;
     if (*(s32 *)(v + 0x38) != 0) {
         *(s32 *)(v + 0x3C) = D_L08_00161F98;
-        FUN_001fa050(e, m + 0x40);
+        euler_rotation_matrix(e, m + 0x40);
         qcopy(c, m + 0x10);
         c[0] += random_float_between(-0.05f, 0.05f);
         c[1] += random_float_between(-0.05f, 0.05f);
@@ -1072,15 +1072,15 @@ void FUN_L08_002f5830(char *m) {
         v0[3] = D_L08_00161F9C;
         v1[3] = D_L08_00161FA0;
         s0 = truncate_float_to_s32(
-            FUN_001f96b0(random_float_between((f32)D_L08_00161F8C, (f32)D_L08_00161F8C * 1.2f)));
+            multiply_global_factor_ed64(random_float_between((f32)D_L08_00161F8C, (f32)D_L08_00161F8C * 1.2f)));
         s16 = truncate_float_to_s32(
-            FUN_001f96b0(random_float_between((f32)D_L08_00161F90, (f32)D_L08_00161F90 * 1.2f)));
+            multiply_global_factor_ed64(random_float_between((f32)D_L08_00161F90, (f32)D_L08_00161F90 * 1.2f)));
         s2 = truncate_float_to_s32(
-            FUN_001f96b0(random_float_between((f32)D_L08_00161F94, (f32)D_L08_00161F94 * 1.2f)));
-        FUN_00218888(c, v0, v1, D_L08_00161F74, D_L08_00161F78, s0, s16, s2, -1);
+            multiply_global_factor_ed64(random_float_between((f32)D_L08_00161F94, (f32)D_L08_00161F94 * 1.2f)));
+        spawn_spark(c, v0, v1, D_L08_00161F74, D_L08_00161F78, s0, s16, s2, -1);
     } else {
         *(s32 *)(v + 0x3C) = *(s32 *)(v + 0x14);
-        FUN_001fa050(e, m + 0x40);
+        euler_rotation_matrix(e, m + 0x40);
         qcopy(c, m + 0x10);
         c[0] += random_float_between(-0.05f, 0.05f);
         c[1] += random_float_between(-0.05f, 0.05f);
@@ -1103,13 +1103,13 @@ void FUN_L08_002f5830(char *m) {
         v1[2] += random_float_between(*(f32 *)(v + 0x24), *(f32 *)(v + 0x24) * 1.5f) * frame_time;
         v0[3] = *(f32 *)(v + 0x28);
         v1[3] = *(f32 *)(v + 0x2C);
-        s0 = truncate_float_to_s32(FUN_001f96b0(
+        s0 = truncate_float_to_s32(multiply_global_factor_ed64(
             random_float_between((f32) * (s32 *)(v + 0x08), (f32) * (s32 *)(v + 0x08) * 1.2f)));
-        s16 = truncate_float_to_s32(FUN_001f96b0(
+        s16 = truncate_float_to_s32(multiply_global_factor_ed64(
             random_float_between((f32) * (s32 *)(v + 0x0C), (f32) * (s32 *)(v + 0x0C) * 1.2f)));
-        s2 = truncate_float_to_s32(FUN_001f96b0(
+        s2 = truncate_float_to_s32(multiply_global_factor_ed64(
             random_float_between((f32) * (s32 *)(v + 0x10), (f32) * (s32 *)(v + 0x10) * 1.2f)));
-        FUN_00218888(c, v0, v1, *(s32 *)(v + 0x00), *(s32 *)(v + 0x04), s0, s16, s2, -1);
+        spawn_spark(c, v0, v1, *(s32 *)(v + 0x00), *(s32 *)(v + 0x04), s0, s16, s2, -1);
     }
 }
 /* Paratrooper: initializes its path and steering, patrols, attacks its target,
@@ -1177,8 +1177,8 @@ extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern float D_L08_0015F580[4] __attribute__((section(".sdata")));
 extern float D_L08_0015F5D0;
 extern float D_L08_0015F5D4;
-extern int FUN_001efa68(void *, void *, int, int, int);
-extern int FUN_001f9a40();
+extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int lerp_vector() __asm__("FUN_001f9a40");
 extern int FUN_L00_001f2868();
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00259888();
@@ -1690,7 +1690,7 @@ void FUN_L08_003024d8(char *m) {
     finish_animation_3024d8(m, d + 0x60);
     if (*(int *)(d + 0x38) != 0) {
         angle = random_float_between(180.0f, 240.0f);
-        *(short *)(d + 0x1d8) = truncate_3024d8(FUN_001f96b0(angle));
+        *(short *)(d + 0x1d8) = truncate_3024d8(multiply_global_factor_ed64(angle));
         *(int *)(d + 0x38) = 0;
     }
     tick_countdown_16_3024d8((short *)(d + 0x1d8));

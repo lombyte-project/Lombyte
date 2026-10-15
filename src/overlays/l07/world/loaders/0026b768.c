@@ -122,33 +122,33 @@ extern char *D_L18_0016016C_26b768 __asm__("D_L07_0016016C");
 typedef struct { u8 pad[0x10]; u32 v __attribute__((packed, aligned(1))); } Una26b768;
 extern u8 D_L07_00179180[];
 
-extern void FUN_00202a98(void);
-extern void FUN_001f98d0(void *, void *, s32);
+extern void load_hud_banks(void) __asm__("FUN_00202a98");
+extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
 extern void FUN_001f9838_26b768(void *, void *, s32) __asm__("FUN_001f9838");
-extern void FUN_00203120(void *, s32, void *);
-extern void FUN_00118a80(s32);
+extern void upload_texture_images(void *, s32, void *) __asm__("FUN_00203120");
+extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32 FUN_L00_0024d8d0_26b768(void *, char *) __asm__("FUN_L00_0024d8d0");
-extern s32 FUN_001f97a0(s32);
-extern void FUN_002040e0(char *, void *);
-extern void FUN_002028e0(char *);
+extern s32 log2dim(s32) __asm__("FUN_001f97a0");
+extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0");
+extern void relocate_sky_definition(char *) __asm__("FUN_002028e0");
 extern void FUN_L00_00241728_26b768(char *) __asm__("FUN_L00_00241728");
-extern void FUN_00203640(char *, void *, void *, s32);
+extern void register_moby_class(char *, void *, void *, s32) __asm__("FUN_00203640");
 extern void FUN_L00_00241788_26b768(void *, s32) __asm__("FUN_L00_00241788");
-extern void FUN_002032e0(Class26b768 *, s32);
-extern void FUN_00203730(char *, void *, void *, s32);
-extern void FUN_001e93e8(void *, s32);
-extern void FUN_00203b08(char *, void *, void *, void *, s32);
-extern void FUN_00202800(void *, s32);
+extern void relocate_asset_entry_pointers(Class26b768 *, s32) __asm__("FUN_002032e0");
+extern void register_object_render_class(char *, void *, void *, s32) __asm__("FUN_00203730");
+extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
+extern void register_shrub_render_class(char *, void *, void *, void *, s32) __asm__("FUN_00203b08");
+extern void unpack_point_records(void *, s32) __asm__("FUN_00202800");
 extern void FUN_L00_0023f120(char *);
 extern void FUN_L00_0023f0d8(char *);
-extern void FUN_002026c8(void *, char *, void *, s32);
+extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
 extern void printf_1e93b0(const char *, ...) __asm__("FUN_001e93b0");
-extern void FUN_001f97e8(void *, s32, s32);
+extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *FUN_L00_0023fa00(char *, s32 *);
 extern char *FUN_L00_00241940_26b768(s32) __asm__("FUN_L00_00241940");
 extern f32 int_to_float(s32) __asm__("FUN_001fa6c0");
 extern void FUN_L00_00285008(void);
-extern void FUN_00226f50(void);
+extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
 extern void FUN_L00_00264740(void);
 
 #define GS_TEX0(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld) \
@@ -202,15 +202,15 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
     u64 *t;
 
     if (full)
-        FUN_00202a98();
+        load_hud_banks();
     base = ld->f14;
     if (full) {
-        FUN_001f98d0(h, (char *)(src[4] + (s32)src), src[5]);
+        fast_mem_copy(h, (char *)(src[4] + (s32)src), src[5]);
         D_L07_0015F40C = 0;
         FUN_001f9838_26b768(D_L07_0015FC88_macro, visited52 + current_level_index * 16, 0x10);
-        FUN_00203120((char *)(src[6] + (s32)src), h[0], (char *)h + h[1]);
+        upload_texture_images((char *)(src[6] + (s32)src), h[0], (char *)h + h[1]);
         D_L07_00160004 = sound_bank_handle;
-        FUN_00118a80(0);
+        flush_cache(0);
         used = FUN_L00_0024d8d0_26b768((char *)(src[0x14] + (s32)src), base);
         D_L07_0015F40C = (s32)(base + h[0x18]);
 
@@ -230,38 +230,38 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
         t1 = (TexRef26b768 *)((char *)h + h[0xD]);
         D_L07_00160F54 = h[0xC];
         for (c1 = 0; c1 < D_L07_00160F54; c1++)
-            D_L07_001C4A80[c1] = D_L07_0015F40C + t1[c1].offset + (FUN_001f97a0(t1[c1].kind) << 28);
+            D_L07_001C4A80[c1] = D_L07_0015F40C + t1[c1].offset + (log2dim(t1[c1].kind) << 28);
         tex = (TexRef26b768 *)((char *)h + h[0xF]);
         D_L07_0015FFC8 = h[0xE];
         for (c2 = 0; c2 < D_L07_0015FFC8; c2++)
-            D_L07_00199B00[c2] = D_L07_0015F40C + tex[c2].offset + (FUN_001f97a0(tex[c2].kind) << 28);
-        FUN_001f98d0(D_L07_001AEC40, tex, D_L07_0015FFC8 * 16);
+            D_L07_00199B00[c2] = D_L07_0015F40C + tex[c2].offset + (log2dim(tex[c2].kind) << 28);
+        fast_mem_copy(D_L07_001AEC40, tex, D_L07_0015FFC8 * 16);
         t3 = (TexRef26b768 *)((char *)h + h[0x11]);
         D_L07_00160FD4 = h[0x10];
         for (c3 = 0; c3 < D_L07_00160FD4; c3++)
-            D_L07_001C6780[c3] = D_L07_0015F40C + t3[c3].offset + (FUN_001f97a0(t3[c3].kind) << 28);
+            D_L07_001C6780[c3] = D_L07_0015F40C + t3[c3].offset + (log2dim(t3[c3].kind) << 28);
         t4 = (TexRef26b768 *)((char *)h + h[0x13]);
         D_L07_001604AC = h[0x12];
         for (c4 = 0; c4 < D_L07_001604AC; c4++)
-            D_L07_001BC630[c4] = D_L07_0015F40C + t4[c4].offset + (FUN_001f97a0(t4[c4].kind) << 28);
+            D_L07_001BC630[c4] = D_L07_0015F40C + t4[c4].offset + (log2dim(t4[c4].kind) << 28);
 
-        FUN_002040e0(base + h[2], (char *)h + h[0xD]);
+        initialize_tfrag_render_data(base + h[2], (char *)h + h[0xD]);
         if (h[3])
             D_L18_0015F600_26b768 = base + h[3];
         else
             D_L18_0015F600_26b768 = 0;
         if (h[4])
-            FUN_002028e0(base + h[4]);
+            relocate_sky_definition(base + h[4]);
         else
             D_L07_0016051C = 0;
         FUN_L00_00241728_26b768(base + h[5]);
         for (i = 0, q2 = (char *)h + h[7]; i < h[6]; i++, q2 += 0x20)
-            FUN_00203640(*(s32 *)q2 ? base + *(s32 *)q2 : 0, (char *)h + h[0xF], q2 + 0x10, *(s32 *)(q2 + 4));
+            register_moby_class(*(s32 *)q2 ? base + *(s32 *)q2 : 0, (char *)h + h[0xF], q2 + 0x10, *(s32 *)(q2 + 4));
         FUN_L00_00241788_26b768((char *)h + h[7], h[7]);
         for (sq = 0, p = (char *)h + h[0x1E]; sq < D_L07_00197380[0]->seq_count; sq++, p += 4) {
             if (*(s32 *)p) {
                 D_L07_00197380[0]->seqs[sq] = base + *(s32 *)p;
-                FUN_002032e0(D_L07_00197380[0], sq);
+                relocate_asset_entry_pointers(D_L07_00197380[0], sq);
             }
         }
         D_L07_0016000C = -1;
@@ -276,12 +276,12 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
             qcopy(&D_L07_001AFD60[m], (char *)h + h[7] + o); }
         }
         for (i = 0, q2 = (char *)h + h[9]; i < h[8]; i++, q2 += 0x20)
-            FUN_00203730(base + *(s32 *)q2, (char *)h + h[0x11], q2 + 0x10, *(s32 *)(q2 + 4));
-        FUN_001e93e8((char *)h + h[9], h[8]);
+            register_object_render_class(base + *(s32 *)q2, (char *)h + h[0x11], q2 + 0x10, *(s32 *)(q2 + 4));
+        noop_main_callback((char *)h + h[9], h[8]);
         for (i = 0, q2 = (char *)h + h[0xB]; i < h[0xA]; i++, q2 += 0x30)
-            FUN_00203b08(base + *(s32 *)q2, (char *)h + h[0x13], q2 + 0x10, q2 + 0x20, *(s32 *)(q2 + 4));
+            register_shrub_render_class(base + *(s32 *)q2, (char *)h + h[0x13], q2 + 0x10, q2 + 0x20, *(s32 *)(q2 + 4));
         D_L07_0015F420 = base + h[0x1A];
-        FUN_00202800((char *)h + h[0x17], h[0x16]);
+        unpack_point_records((char *)h + h[0x17], h[0x16]);
         if (h[0x28]) {
             FUN_L00_0023f120(base + h[0x28]);
         } else {
@@ -305,7 +305,7 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
         {
             char *x1 = base + h[0x19];
             char *x2 = (char *)h + h[0x15];
-            FUN_002026c8((char *)h + h[0x1B], x1, x2, h[0x14]);
+            parse_particle_textures((char *)h + h[0x1B], x1, x2, h[0x14]);
         }
 
         tbl = (char *)h + h[0x1C];
@@ -336,7 +336,7 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
                     if (D_L07_001AFC40[j] == D_L07_00197A80[ci])
                         break;
                 if (j < D_L07_00160008) {
-                    FUN_001f97e8(D_L07_001AFEE0[j], -1, 0x20);
+                    fill_transfer_words(D_L07_001AFEE0[j], -1, 0x20);
                     e = tbl + span->off;
                     for (k = 0; k < span->count && k < 15; k++, e += 4)
                         D_L07_001AFEE0[j][k] = *(u16 *)e;
@@ -408,7 +408,7 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
     if (keep) {
         FUN_L00_00285008();
     } else {
-        FUN_00226f50();
+        clear_scene_state_buffers();
         for (z = 15; z >= 0; z--)
             D_0014EE90[z] = 0;
     }

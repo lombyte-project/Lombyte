@@ -52,8 +52,8 @@ typedef struct HandGadgetDefinition {
 extern u8 gadget_available[] __asm__("D_0013D4C0");
 extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern HandGadgetDefinition gadget_definitions[] __asm__("D_001863D0");
-extern void func_001E9470(s32, s32);
-extern void func_001E9478(Moby *, s32);
+extern void noop_callback_q(s32, s32) __asm__("func_001E9470");
+extern void noop_callback_r(Moby *, s32) __asm__("func_001E9478");
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
 extern void attach_manipulator(s32, s32, HandGadgetManipulator *) __asm__("FUN_0020cb10");
 extern void detach_manipulator(s32, HandGadgetManipulator *) __asm__("func_0020CB88");
@@ -105,7 +105,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         }
         if ((hero.items[0].item_id != 0) &&
             (selected_gadget != hero.items[0].item_id)) {
-            func_001E9470(0, 0);
+            noop_callback_q(0, 0);
         }
         active_decode_buffer = menu_system.resource_table_toggle == 0;
         select_world_object_resource_tables(selected_class, -1);
@@ -118,7 +118,7 @@ s32 load_hand_gadget(HandGadgetState *hand) {
         if (moby != 0) {
             loaded_gadget = selected_gadget;
             if (gold_weapon_purchased[loaded_gadget]) {
-                func_001E9478(moby, hand->source_moby_address);
+                noop_callback_r(moby, hand->source_moby_address);
             }
             *moby->vars = hand;
             moby->update = update_menu_preview_class_pose;

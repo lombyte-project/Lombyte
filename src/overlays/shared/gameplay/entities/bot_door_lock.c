@@ -10,8 +10,8 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L06_00307578.s", FUN_L06_00307578);
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/overlay/quad.h"
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void FUN_001fa030(void *, void *);
-extern void FUN_001f9cf8(void *, void *, void *);
+extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L06_00167400[];
 extern OvlVec4 D_L06_001fe8d0[];
@@ -35,7 +35,7 @@ void FUN_L06_00307578(char *moby) {
     float (*uvs)[2];
     u32 *colors;
     rotation[0] = 0.0f; rotation[1] = 0.0f; rotation[2] = D_L06_00167400[86];
-    FUN_001fa030(matrix, rotation);
+    euler_rotation_basis(matrix, rotation);
     data[7] += 0.01f;
     if (1.0f < data[7]) data[7] -= 1.0f;
     quad.texture_state = 1;
@@ -58,12 +58,12 @@ void FUN_L06_00307578(char *moby) {
     do {
         volatile int offset = i * 4;
         i++;
-        FUN_001f9cf8(result0, &vertices[indices[0]], matrix);
+        transform_vector_by_basis(result0, &vertices[indices[0]], matrix);
         index1 = D_L06_001fe9d0 + 1 + offset;
-        FUN_001f9cf8(result1, &vertices[*index1], matrix);
+        transform_vector_by_basis(result1, &vertices[*index1], matrix);
         index2 = D_L06_001fe9d0 + 2 + offset;
-        FUN_001f9cf8(result2, &vertices[*index2], matrix);
-        FUN_001f9cf8(result3, &vertices[indices[3]], matrix);
+        transform_vector_by_basis(result2, &vertices[*index2], matrix);
+        transform_vector_by_basis(result3, &vertices[indices[3]], matrix);
         quad.positions[0].f[0] = *(float *)(moby + 16) + result[0].f[0] * data[9];
         quad.positions[0].f[1] = *(float *)(moby + 20) + result[0].f[1] * data[9];
         quad.positions[0].f[2] = *(float *)(moby + 24) + result[0].f[2];
@@ -115,11 +115,11 @@ void FUN_L06_00307578(char *moby) {
     pos[1].q = corners[1].q;
     pos[2].q = corners[2].q;
     pos[3].q = corners[3].q;
-    FUN_001fa030(matrix, rotation);
-    FUN_001f9cf8(result0, pos0, matrix);
-    FUN_001f9cf8(result1, pos1, matrix);
-    FUN_001f9cf8(result2, pos2, matrix);
-    FUN_001f9cf8(result3, pos3, matrix);
+    euler_rotation_basis(matrix, rotation);
+    transform_vector_by_basis(result0, pos0, matrix);
+    transform_vector_by_basis(result1, pos1, matrix);
+    transform_vector_by_basis(result2, pos2, matrix);
+    transform_vector_by_basis(result3, pos3, matrix);
     quad.positions[0].f[0] = *(float *)(moby + 16) + result[0].f[0];
     quad.positions[0].f[1] = *(float *)(moby + 20) + result[0].f[1];
     quad.positions[0].f[2] = *(float *)(moby + 24) + result[0].f[2];
@@ -395,7 +395,7 @@ void FUN_L06_0030be60(char *m) {
     }
 }
 extern char *mk_b(int) __asm__("FUN_0020c4f8");
-extern float FUN_001fa6c0(int);
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
 
 void FUN_L06_0030bef8(char *src, int a1, int a2, int a3) {
@@ -408,7 +408,7 @@ void FUN_L06_0030bef8(char *src, int a1, int a2, int a3) {
         char *e = *(char **)(m + 0x78);
         float f;
         qcopy(m + 0x10, vp);
-        f = FUN_001fa6c0(a1);
+        f = convert_integer_to_float(a1);
         *(int *)(e + 0xC) = a3;
         *(int *)(e + 0x8) = a2;
         *(float *)(e + 0x4) = 2.0f / f;

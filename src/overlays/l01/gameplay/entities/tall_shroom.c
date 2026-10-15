@@ -15,7 +15,7 @@ extern Ent D_L01_00202D80[];
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 void FUN_L00_002371e0(void);
 void FUN_L01_002b96e0(s32, void *);
-extern float FUN_001fa6c0(s32);
+extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float FUN_001f9de0(float);
 
 void FUN_L01_00309bf8(void) {
@@ -24,7 +24,7 @@ void FUN_L01_00309bf8(void) {
 
     FUN_L00_002371e0();
     FUN_L01_002b96e0(3, D_L01_00202D80);
-    v = FUN_001f9de0((FUN_001fa6c0(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
+    v = FUN_001f9de0((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
     v = v * 0.5f + 0.5f;
     for (i = 2; i >= 0; i--) {
         D_L01_00202D80[i].f5c = v;
@@ -350,7 +350,7 @@ typedef struct {
 
 extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8(DebrisMoby *);
-extern void FUN_001f9bf8(void *, void *, f32);
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -370,7 +370,7 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
         m->h32 = 0xFF;
         m->b31 = 1;
         m->scale = m->scale * scale;
-        FUN_001f9bf8(v, dir, random_float_between(0.8f, 1.2f));
+        fast_vec_normalize(v, dir, random_float_between(0.8f, 1.2f));
         v->spin_x = randf_sym(0.0f, 0.008726646f);
         v->spin_y = randf_sym(0.05235988f, 0.13962634f);
         v->spin_z = randf_sym(0.0f, DEG_TO_RAD);
@@ -626,9 +626,9 @@ typedef struct {
 extern EnvVec D_L01_00167240;
 extern f32 D_L01_00162110[2];
 extern void FUN_001f9a28(void *, void *, void *);
-extern f32 FUN_001f9ab0(void *, void *);
-extern void FUN_001f9a68(void *, void *, f32);
-extern f32 FUN_001f9af0(void *);
+extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 
 void FUN_L01_0030ef18(s32 n, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32 (*uv)[2]) {
     EnvVec eye;
@@ -644,17 +644,17 @@ void FUN_L01_0030ef18(s32 n, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32
         pos.y = verts[i][1];
         pos.z = verts[i][2];
         FUN_001f9a28(&eye, &pos, &D_L01_00167240);
-        FUN_001f9bf8(&eye, &eye, 1.0f);
+        fast_vec_normalize(&eye, &eye, 1.0f);
         nrm.w = 1.0f;
         nrm.x = -normals[i][0];
         nrm.y = -normals[i][1];
         nrm.z = -normals[i][2];
-        FUN_001f9bf8(&nrm, &nrm, 1.0f);
-        FUN_001f9a68(&refl, &nrm, FUN_001f9ab0(&nrm, &eye) * 2.0f);
+        fast_vec_normalize(&nrm, &nrm, 1.0f);
+        fast_vec_scale(&refl, &nrm, fast_vec_dot(&nrm, &eye) * 2.0f);
         FUN_001f9a28(&refl, &eye, &refl);
-        FUN_001f9bf8(&refl, &refl, 1.0f);
+        fast_vec_normalize(&refl, &refl, 1.0f);
         refl.z += 1.0f;
-        len = FUN_001f9af0(&refl) * 2.0f;
+        len = fast_vec_length(&refl) * 2.0f;
         uv[i][0] = (refl.x / len + 0.5f) * 2.0f + D_L01_00162110[0];
         uv[i][1] = (refl.y / len + 0.5f) * 2.0f + D_L01_00162110[1];
     }

@@ -49,7 +49,7 @@ extern s32 sceGsSyncV(s32);
 extern void put_disp_buffer(void) __asm__("func_001FB2A8");
 extern void PackDmaTag(s32, u64, u64);
 extern void FlushCache(s32);
-extern void func_0020B618(s32, s32);
+extern void fast_decompress(s32, s32) __asm__("func_0020B618");
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern void draw_boot_image(s32) __asm__("func_002012B8");
@@ -67,7 +67,7 @@ extern void DebugPrint(char *, ...);
 extern s32 load_audio_bank_by_location(s32) __asm__("func_0022D708");
 extern void snd_resolve_bank_xrefs(void) __asm__("func_0012E1A8");
 extern s32 transition_do_transition(void) __asm__("FUN_001eb798");
-extern s32 func_001204B8(void);
+extern s32 reset_vif1_gif(void) __asm__("func_001204B8");
 extern void sceGsResetGraph(s16, s16, s16, s16);
 extern void set_pal_mode(void) __asm__("func_001F34E8");
 extern void do_space_transition(void) __asm__("FUN_00231ff0");
@@ -123,7 +123,7 @@ void startlevel(void) {
                 tbl = hdr->loading;
             }
             FlushCache(0);
-            func_0020B618(tbl[game_language].off + (s32)hdr, hdr->code + (s32)hdr);
+            fast_decompress(tbl[game_language].off + (s32)hdr, hdr->code + (s32)hdr);
             FlushCache(0);
             vu1_init_chain();
             PackDmaTag(0, 0, 0);
@@ -158,9 +158,9 @@ void startlevel(void) {
     fade_to_black(scale_game_frames(0x12));
     FlushCache(0);
     if (pal_mode_macro != 0) {
-        func_0020B618(hdr->gfx_alt + (s32)hdr, hdr->code + (s32)hdr);
+        fast_decompress(hdr->gfx_alt + (s32)hdr, hdr->code + (s32)hdr);
     } else {
-        func_0020B618(hdr->gfx + (s32)hdr, hdr->code + (s32)hdr);
+        fast_decompress(hdr->gfx + (s32)hdr, hdr->code + (s32)hdr);
     }
     FlushCache(0);
     vu1_init_chain();
@@ -197,7 +197,7 @@ void startlevel(void) {
     transition_do_transition();
     if (pal_mode_macro != requested_video_mode) {
         pal_mode_macro = requested_video_mode;
-        func_001204B8();
+        reset_vif1_gif();
         sceGsResetGraph(0, 1, pal_mode_macro != 0 ? 3 : 2, 0);
         set_pal_mode();
         put_disp_buffer();

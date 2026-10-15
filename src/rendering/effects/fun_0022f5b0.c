@@ -10,11 +10,11 @@
 extern u128 D_001D9B60[][6];
 
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern void FUN_001f9cf8(void *, void *, void *);
-extern void FUN_001f9a10(void *, void *, void *);
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 func_00218888(void *, void *, void *, s32, s32, s32, s32, s32, s32);
+extern s32 spawn_spark(void *, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("func_00218888");
 
 void FUN_0022f5b0(u8 *m, f32 z) __asm__("FUN_0022f5b0");
 
@@ -36,12 +36,12 @@ void FUN_0022f5b0(u8 *m, f32 z) {
         qcopy(&vel2, &vel);
         vel2.f[3] = 0.6f;
         qcopy(&pos, &D_001D9B60[level_render_state.content_variant][i]);
-        FUN_001f9cf8(&pos, &pos, m + 0xC0);
-        FUN_001f9a10(&pos, &pos, m + 0x10);
+        transform_vector_by_basis(&pos, &pos, m + 0xC0);
+        add_vector_xyz(&pos, &pos, m + 0x10);
         a = scale_game_frames(4);
         b = scale_game_frames(4);
         c = scale_game_frames(4);
-        func_00218888(&pos, &vel, &vel2, 0x24C0C0C0, 0x14C0C0C0, a, b,
+        spawn_spark(&pos, &vel, &vel2, 0x24C0C0C0, 0x14C0C0C0, a, b,
                       c + random_integer_below(scale_game_frames(4)), -1);
     }
 }

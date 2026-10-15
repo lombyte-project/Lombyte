@@ -4,16 +4,16 @@
 
 float random_float_between(float *, float, float) __asm__("FUN_002132a8");
 float random_angle_radians(void) __asm__("FUN_00213308");
-float FUN_001f9dc8(float);
-float FUN_001f9de0(float);
+float fast_cos(float) __asm__("FUN_001f9dc8");
+float fast_sin(float) __asm__("FUN_001f9de0");
 void random_vector(float *out, float lo, float hi) __asm__("FUN_L00_00257d78");
 void random_vector(float *out, float lo, float hi) {
     float r = random_float_between(out, lo, hi);
     float a = random_angle_radians();
     float b = random_angle_radians();
-    out[0] = FUN_001f9dc8(a) * FUN_001f9de0(b) * r;
-    out[1] = FUN_001f9de0(a) * FUN_001f9de0(b) * r;
-    out[2] = FUN_001f9dc8(b) * r;
+    out[0] = fast_cos(a) * fast_sin(b) * r;
+    out[1] = fast_sin(a) * fast_sin(b) * r;
+    out[2] = fast_cos(b) * r;
 }
 #define NOT_SDA
 

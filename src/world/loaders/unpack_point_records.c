@@ -9,7 +9,7 @@ struct Point {
     s16 v;
 };
 extern struct Point D_0018D440[];
-extern s16 FUN_001f97a0(s32);
+extern s16 log2dim(s32) __asm__("FUN_001f97a0");
 void unpack_point_records(s32 *src, s32 count) __asm__("FUN_00202800");
 
 void unpack_point_records(s32 *src, s32 count) {
@@ -25,8 +25,8 @@ void unpack_point_records(s32 *src, s32 count) {
         v = *src++;
         D_0018D440[effect_tex_cnt].x = x >> 4;
         D_0018D440[effect_tex_cnt].y = y >> 4;
-        D_0018D440[effect_tex_cnt].u = FUN_001f97a0(u);
-        D_0018D440[effect_tex_cnt].v = FUN_001f97a0(v);
+        D_0018D440[effect_tex_cnt].u = log2dim(u);
+        D_0018D440[effect_tex_cnt].v = log2dim(v);
         D_0018D440[effect_tex_cnt].flags = 0;
     }
 }

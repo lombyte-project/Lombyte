@@ -489,7 +489,7 @@ void FUN_L05_0024bdc0(void) {
 
 extern float D_L05_00174268 __attribute__((section(".data")));
 extern int frame_number __asm__("D_L05_0015F5CC");
-extern int FUN_001f0b58(void);
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00216de8_c(int a, int b) __asm__("FUN_L00_00216de8");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void FUN_L00_002126b8(void *, void *, int, float, float);
@@ -564,7 +564,7 @@ int FUN_L05_002515d0(void) {
         }
         FUN_L00_002126b8(v1, v2, 0, scale, 1.3f);
         if (func_L00_001EFFF0(v1, v2, 2, *(int *)&u->moby, 0) != 0) {
-            int s = FUN_001f0b58();
+            int s = collision_hit_material();
             u->ground_type = s;
             if ((short)s == 0) {
                 v1[2] = D_L05_00174268 - 0.01f;
@@ -614,8 +614,8 @@ typedef struct {
     int fDC;
 } Stats_2523C8;
 
-extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9e90(float, float);
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0015ED84; /* no foreign declaration */
 extern int FUN_L00_001fefc8(void *);
@@ -972,11 +972,11 @@ int FUN_L05_00251be8(void) {
                         continue;
                     }
                     candidate = (Moby *)((char *)D_L05_00160098_2523C8 + (id << 8));
-                    yaw_error = fast_difference_between_rotations(D_0013F450_h2523C8.motion.rot.f[2], FUN_001f9e90(candidate->pos.x - D_0013F450_h2523C8.motion.pos.f[0], candidate->pos.y - D_0013F450_h2523C8.motion.pos.f[1]));
+                    yaw_error = fast_difference_between_rotations(D_0013F450_h2523C8.motion.rot.f[2], fast_arc_tan(candidate->pos.x - D_0013F450_h2523C8.motion.pos.f[0], candidate->pos.y - D_0013F450_h2523C8.motion.pos.f[1]));
                     if (!(yaw_error > 0.7853982f)) {
-                        pitch_error = fast_difference_between_rotations(FUN_001f9e90(FUN_001f9b80(D_0013F450_h2523C8.motion.pos.f, &candidate->pos), candidate->pos.z - D_0013F450_h2523C8.motion.pos.f[2]), 0.0f);
+                        pitch_error = fast_difference_between_rotations(fast_arc_tan(vector_distance_xy(D_0013F450_h2523C8.motion.pos.f, &candidate->pos), candidate->pos.z - D_0013F450_h2523C8.motion.pos.f[2]), 0.0f);
                         if (!(pitch_error > 0.7853982f)) {
-                            distance = FUN_001f9b80(&candidate->pos, D_0013F450_h2523C8.motion.pos.f);
+                            distance = vector_distance_xy(&candidate->pos, D_0013F450_h2523C8.motion.pos.f);
                             score = distance;
                             score += distance * yaw_error * 2.0f;
                             score += distance * pitch_error * 2.0f;
@@ -1112,13 +1112,13 @@ void FUN_L05_00253850(void) {
 }
 extern s32 FUN_001f96f8(s32);
 extern s32 FUN_L00_001fefc8_c(u8 *) __asm__("FUN_L00_001fefc8");
-extern void FUN_001f9a28(void *, void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001f99c0(f32);
-extern void FUN_001f9fc8(void *);
-extern void FUN_001fa2d8(void *, void *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern f32 FUN_001fa6c0(s32);
-extern f32 FUN_001f9de0(f32);
+extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_001fa6d0(f32);
 extern f32 FUN_001f9b48(void *, void *);
 extern s32 FUN_L00_002591d0(void **, s32, s32, s32);
@@ -1148,10 +1148,10 @@ void FUN_L05_00253b48(void) {
             do {
 
                 if (*(s16 *)(first + 0xA6) == 0x473 && FUN_L00_001fefc8_c(first + 0xBC) != 0) {
-                    FUN_001f9a28(delta, first + 0x10, &hero.motion.unkD0);
-                    FUN_001f9fc8(matrix);
-                    FUN_001fa2d8(matrix, first + 0xC0);
-                    FUN_001f9d20(delta, delta, matrix);
+                    subtract_vector_xyz(delta, first + 0x10, &hero.motion.unkD0);
+                    set_identity_matrix(matrix);
+                    transpose_rotation_matrix(matrix, first + 0xC0);
+                    transform_vector(delta, delta, matrix);
                     if (FUN_001f99c0(delta[0]) < 0.5f && FUN_001f99c0(delta[1]) < 2.9f && FUN_001f99c0(delta[2]) < 2.9f) {
                         hero.unk8C4 += **(s32 **)(first + 0x78);
                         first[0xBC] = FUN_001f96f8(0x3C);
@@ -1164,10 +1164,10 @@ void FUN_L05_00253b48(void) {
         }
     }
     count = FUN_001f96f8(0x32);
-    period = FUN_001fa6c0(count);
+    period = convert_integer_to_float(count);
     ratio = (f32)(D_L00_0015F5CC % count) / period;
     ratio += ratio;
-    wave = FUN_001f9de0(ratio * 3.1415927f + -3.1415927f);
+    wave = fast_sin(ratio * 3.1415927f + -3.1415927f);
     red = FUN_001fa6d0(wave * 48.0f) + 0x68;
     green = FUN_001fa6d0(wave * 64.0f) + 0xD0;
     blue = FUN_001fa6d0(wave * 24.0f) + 0x3C;
@@ -1183,10 +1183,10 @@ void FUN_L05_00253b48(void) {
                         *(u16 *)(second + 0x34) |= 0x10;
                         *(u32 *)(second + 0x90) = color;
                         if (FUN_L00_001fefc8_c(second + 0xBC) != 0) {
-                            FUN_001f9a28(delta, second + 0x10, &hero.motion.pos);
-                            FUN_001f9fc8(matrix);
-                            FUN_001fa2d8(matrix, second + 0xC0);
-                            FUN_001f9d20(delta, delta, matrix);
+                            subtract_vector_xyz(delta, second + 0x10, &hero.motion.pos);
+                            set_identity_matrix(matrix);
+                            transpose_rotation_matrix(matrix, second + 0xC0);
+                            transform_vector(delta, delta, matrix);
                             if (FUN_001f99c0(delta[0]) < 2.8f && FUN_001f99c0(delta[1]) < 1.25f && FUN_001f99c0(delta[2]) < 1.5f) {
                                 hero.unk8C4 += **(s32 **)(second + 0x78);
                                 second[0xBC] = FUN_001f96f8(0x3C);
@@ -1330,9 +1330,9 @@ void FUN_L05_00254058(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254358.s", FUN_L05_00254358);
 #else
 extern char *D_L05_001B0930[];
-extern f32 FUN_001f9e90(f32, f32);
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
-extern f32 FUN_001f9b80(void *, void *);
+extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern f32 find_ground_height(f32, void *, s32) __asm__("FUN_00213508");
 extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
@@ -1379,11 +1379,11 @@ void FUN_L05_00254358(f32 *position, f32 *direction) {
             s32 count;
             f32 b;
             g = &hero;
-            a = FUN_001f9e90(cursor->points[0].x - g->motion.pos.f[0], cursor->points[0].y - g->motion.pos.f[1]);
+            a = fast_arc_tan(cursor->points[0].x - g->motion.pos.f[0], cursor->points[0].y - g->motion.pos.f[1]);
             count = path->count;
             next = (s32)((u32)count + 2U);
             next = (s32)((u32)index + (u32)next) % count;
-            b = FUN_001f9e90(path->points[next].x - cursor->points[0].x, path->points[next].y - cursor->points[0].y);
+            b = fast_arc_tan(path->points[next].x - cursor->points[0].x, path->points[next].y - cursor->points[0].y);
             if (!(fast_difference_between_rotations(a, b) > 1.5707964f)) goto next_point;
             {
                 if (current_level_index == 0x10 && g->unk8B4 != 0) {
@@ -1397,7 +1397,7 @@ void FUN_L05_00254358(f32 *position, f32 *direction) {
                     }
                 }
                 {
-                    f32 distance = FUN_001f9b80((char *)&hero + 0x80, p);
+                    f32 distance = vector_distance_xy((char *)&hero + 0x80, p);
                     if (distance < best) {
                         best = distance;
                         selected = index;
@@ -1415,7 +1415,7 @@ next_point:
     point.z += 2.0f;
     position[2] = find_ground_height(0.5f, &point, 0);
     clear_u64_value(direction);
-    direction[2] = FUN_001f9e90(path->points[selected + 1].x - path->points[selected].x, path->points[selected + 1].y - path->points[selected].y);
+    direction[2] = fast_arc_tan(path->points[selected + 1].x - path->points[selected].x, path->points[selected + 1].y - path->points[selected].y);
 }
 #endif
 extern int D_0015ED84_lui __asm__("D_0015ED84") __attribute__((section(".sdata")));
@@ -1796,7 +1796,7 @@ int FUN_L05_00255208(void) {
                 float minimum;
                 if (height < other) minimum = height;
                 else minimum = other;
-                distance = FUN_001f9b80(&(&hero)->motion.pos, &path->p[index]);
+                distance = vector_distance_xy(&(&hero)->motion.pos, &path->p[index]);
                 if (0.5f < minimum - (&hero)->motion.pos.f[2] && 4.0f < distance) {
                     state = 0x6D;
                     goto change_state;

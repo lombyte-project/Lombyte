@@ -5,7 +5,7 @@ struct CamColl {
     void *moby;
 };
 extern struct CamColl cam_coll_state __asm__("D_001870D0");
-extern void *func_001E9448(void *);
+extern void *noop_callback_l(void *) __asm__("func_001E9448");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void handle_camera_collision_with_hero(struct UpdateCam *cam) __asm__("FUN_001ebe68");
 
@@ -14,7 +14,7 @@ void handle_camera_collision_with_hero(struct UpdateCam *cam) {
 
     if (cam->unk86 == 0) {
         if (c->moby == 0) {
-            c->moby = func_001E9448((u8 *)c - 0x50);
+            c->moby = noop_callback_l((u8 *)c - 0x50);
         }
     } else if (c->moby != 0) {
         mark_moby_for_removal(c->moby);

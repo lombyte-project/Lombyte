@@ -19,7 +19,7 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void *memset(void *, s32, u32) __asm__("func_001153FC");
 extern void font_print_window_small(FontWindow *, u64, char *, s32) __asm__("func_001F75F0");
-extern u64 func_00204CF0(s32);
+extern u64 load_texture_file(s32) __asm__("func_00204CF0");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64,
                                u64) __asm__("FUN_001f5450");
 
@@ -85,9 +85,9 @@ s32 draw_checking_memory_card_data_menu(struct MenuScreen *menu) {
     }
     setup_gif_paging(0);
     if (menu->data.stream.state < 4) {
-        texture = func_00204CF0(menu->data.stream.buffer[0]);
+        texture = load_texture_file(menu->data.stream.buffer[0]);
     } else {
-        texture = func_00204CF0(menu->data.stream.buffer[1]);
+        texture = load_texture_file(menu->data.stream.buffer[1]);
     }
     draw_textured_quad(0, 0, screen_dimensions.width, screen_dimensions.height, 0, 0,
                        menu->data.stream.texture_width, menu->data.stream.texture_height,

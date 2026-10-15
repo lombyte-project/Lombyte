@@ -16,7 +16,7 @@ extern void memcard_update_state(void) __asm__("func_002093D8");
 extern void play_mpeg_movie(int, int, int, int, int) __asm__("func_0023A3B8");
 extern void sceCdSync(int);
 extern void sceGsSyncV(int);
-extern void FUN_00120558(int, int);
+extern void wait_for_graphics_pipeline_idle(int, int) __asm__("FUN_00120558");
 extern int count_vsync(void) __asm__("FUN_0012f1c8");
 extern void sceGsSyncVCallback(void (*)(void));
 extern void hud_send_texture(int, int, int, int, int, int) __asm__("func_00200B10");
@@ -69,7 +69,7 @@ void start_level(int level) {
     play_mpeg_movie(b, a, t + 0x100000, t + 0x400000, 0);
     sceCdSync(0);
     sceGsSyncV(0);
-    FUN_00120558(0, 0);
+    wait_for_graphics_pipeline_idle(0, 0);
     sceGsSyncVCallback(count_vsync);
     hud_send_texture(0x1000000, depth_buffer_address, 0x1B, 6, 6, 1);
     decode_mode_macro = 0;

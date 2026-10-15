@@ -187,8 +187,8 @@ extern int D_L00_0015FA98 __attribute__((section(".sdata")));
 extern int D_L00_0015FA94;
 extern int D_L00_0015F3F8;
 extern int FUN_001f96f8(int);
-extern float FUN_001f9988(float);
-extern float FUN_001f9e90(float, float);
+extern float square_root(float) __asm__("FUN_001f9988");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int remove_hud_item(int) __asm__("FUN_001ff480");
 typedef struct {
     u8 p0[0x10B8];
@@ -214,12 +214,12 @@ extern int D_L00_0017DC1C __attribute__((section(".data")));
 extern int D_L00_0017DC20 __attribute__((section(".data")));
 extern int D_L00_0017DC24 __attribute__((section(".data")));
 extern int D_0015EEA4;
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float FUN_001fa6c0(int);
 extern float FUN_001fa5c8(float, float);
 extern float FUN_001fa688(float, float);
 extern int FUN_001fa6d0(float);
-extern float FUN_001fa610(float);
+extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 /* Picks slot w74 from the stick angle (or steps it with the 0x1000-0x8000 pad bits), counts hold frames in b71/b70, records the slot's entry when released, and closes when b70 runs out. */
@@ -230,15 +230,15 @@ void FUN_L00_00237ba0(Obj *p) {
 
     p->w7C = FUN_001f96f8(0xB4);
     p->w6C = 0x18;
-    if (FUN_001f9770(D_00141622)) D_0013C940.w1CC = 2;
+    if (fast_dec_timer_s16(D_00141622)) D_0013C940.w1CC = 2;
     x = D_0013C940.f148;
     y = D_0013C940.f14C;
-    mag = FUN_001f9988(x * x + y * y);
+    mag = square_root(x * x + y * y);
     if (mag != 0.0f) {
         x /= mag;
         y /= mag;
     }
-    ang = FUN_001f9e90(x, y);
+    ang = fast_arc_tan(x, y);
     if ((p->w78 >> 24) == 0) {
         if ((D_0013C940.w1C4 & 0xF000) || mag < 0.5f || --p->w78 == -1) {
             p->w74 = -1;
@@ -262,7 +262,7 @@ void FUN_L00_00237ba0(Obj *p) {
                 }
                 p->w74 = s;
                 n = -1;
-                D_L00_0015F784 = FUN_001fa610(a - ((float)s * 0.7853982f + 0.39269909f));
+                D_L00_0015F784 = fast_normalize_angle(a - ((float)s * 0.7853982f + 0.39269909f));
                 if (D_L00_0015F784 > 0.0f) n = 1;
             }
         } else if (D_0013C940.w1D8 == 0 && (D_0013C940.w1C4 & 0xF000)) {
@@ -555,12 +555,12 @@ void FUN_L00_00238b80(Obj *o) {
     D_0013C940.w1CC = 2;
     x = D_0013C940.f148;
     y = D_0013C940.f14C;
-    len = FUN_001f9988(x * x + y * y);
+    len = square_root(x * x + y * y);
     if (len != 0.0f) {
         x /= len;
         y /= len;
     }
-    ang = FUN_001f9e90(x, y);
+    ang = fast_arc_tan(x, y);
     if ((o->w78 >> 24) == 0 && D_L00_0017E504 != 0) {
         if ((D_0013C940.w1C4 & 0xF000) || len < 0.5f || --o->w78 == -1) {
             o->w74 = -1;

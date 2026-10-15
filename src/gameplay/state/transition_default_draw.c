@@ -34,7 +34,7 @@ extern s32 draw_dialog_text() __asm__("func_001FBC50");
 extern s32 prune_moby_references() __asm__("FUN_0020cc60");
 extern s32 patch_moby_gifs() __asm__("func_0020CEF8");
 extern s32 draw_mobys() __asm__("func_0020D460");
-extern void func_00217C18();
+extern void part_proc() __asm__("func_00217C18");
 extern s32 render_level_effects_and_screen_sprites() __asm__("func_002196B8");
 extern s32 patch_shrub_gifs() __asm__("func_00228A30");
 extern s32 draw_shrubs() __asm__("func_00228B38");
@@ -45,10 +45,10 @@ extern s32 vu0_load_micro_program() __asm__("func_002334D8");
 extern s32 vu1_sync_chain() __asm__("func_002337B0");
 extern s32 vu1_add_g_sregister() __asm__("func_00233980");
 extern void vu1_gs_regs_alt() __asm__("func_00233C28");
-extern s32 func_00234F98();
+extern s32 light_tfrags() __asm__("func_00234F98");
 extern s32 patch_tie_texture_fields() __asm__("func_00235780");
 extern s32 draw_ties_1() __asm__("func_002358C8");
-extern s32 func_00237370();
+extern s32 light_ties() __asm__("func_00237370");
 void transition_default_draw(s32 *arg0) __asm__("FUN_001eb410");
 
 void transition_default_draw(s32 *arg0) {
@@ -88,7 +88,7 @@ void transition_default_draw(s32 *arg0) {
         vu1_add_g_sregister(8, 5);
         vu1_gs_regs_alt();
         FlushCache(0);
-        func_00217C18();
+        part_proc();
         font_state = 8;
     }
     aa_blur_pass();
@@ -118,10 +118,10 @@ void transition_default_draw(s32 *arg0) {
         draw_dialog_text();
     }
     vu1_sync_chain(2);
-    func_00234F98(D_001E1300);
+    light_tfrags(D_001E1300);
     patch_tfrag_gifs();
     vu1_sync_chain(4);
-    func_00237370(tie_light_data);
+    light_ties(tie_light_data);
     patch_tie_texture_fields();
     vu1_sync_chain(8);
     func_0022A5E0(D_001D8EB0);

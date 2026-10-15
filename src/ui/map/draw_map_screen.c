@@ -47,7 +47,7 @@ extern s32 complete_stream_buffer_transfer() __asm__("FUN_00225cd8");
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");
 extern s32 stash_receive_data() __asm__("FUN_00232f20");
 extern s32 func_0020B618_l() __asm__("FUN_0020b618");
-extern s64 func_00204E30();
+extern s64 register_8bit_texture() __asm__("func_00204E30");
 extern void load_map_chunk() __asm__("FUN_00207bb0");
 extern void FUN_0020b4a8();
 extern void update_map_icons() __asm__("func_0020BF90");
@@ -164,13 +164,13 @@ s32 draw_map_screen(struct MenuScreen *screen) {
             b = tbase + hdr->unk14 + 0x420;
             c = tbase + hdr->unk18 + 0x420;
             level_map_selection.tex0 =
-                func_00204E30(7, 7, tex + 0x20, tex + 0x420, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
+                register_8bit_texture(7, 7, tex + 0x20, tex + 0x420, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
             level_map_selection.tex1 =
-                func_00204E30(7, 7, tex + 0x20, b, level_map_selection.tex_clut_vram, level_map_selection.tex1_vram);
+                register_8bit_texture(7, 7, tex + 0x20, b, level_map_selection.tex_clut_vram, level_map_selection.tex1_vram);
             level_map_selection.tex2 =
-                func_00204E30(7, 7, tex + 0x20, c, level_map_selection.tex_clut_vram, level_map_selection.tex2_vram);
+                register_8bit_texture(7, 7, tex + 0x20, c, level_map_selection.tex_clut_vram, level_map_selection.tex2_vram);
             if (buf != 0) {
-                func_00204E30(9, 9, pal, pal, 0x3FF000, level_map_selection.map_image_vram);
+                register_8bit_texture(9, 9, pal, pal, 0x3FF000, level_map_selection.map_image_vram);
             }
             FUN_0020b4a8();
         }

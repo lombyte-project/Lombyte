@@ -1,8 +1,8 @@
 #include "types.h"
 
-extern f32 func_001F99C0(f32);
+extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 FUN_001f9d68(void *);
+extern s32 fast_vector_to_packed_chars(void *) __asm__("FUN_001f9d68");
 
 void FUN_00214a98(f32 *v, s32 *out) {
     f32 buf[4];
@@ -13,9 +13,9 @@ void FUN_00214a98(f32 *v, s32 *out) {
     s32 n;
     f32 s;
 
-    a = func_001F99C0(v[0]);
-    b = func_001F99C0(v[1]);
-    c = func_001F99C0(v[2]);
+    a = absolute_float(v[0]);
+    b = absolute_float(v[1]);
+    c = absolute_float(v[2]);
     if (b < a) {
         b = a;
     }
@@ -30,7 +30,7 @@ void FUN_00214a98(f32 *v, s32 *out) {
     buf[0] = v[0] * s + 127.0f;
     buf[1] = v[1] * s + 127.0f;
     buf[2] = v[2] * s + 127.0f;
-    *out = FUN_001f9d68(buf);
+    *out = fast_vector_to_packed_chars(buf);
 }
 
 extern __typeof__(FUN_00214a98) func_00214A98 __attribute__((alias("FUN_00214a98")));

@@ -10,11 +10,11 @@ extern u8 D_001DF030[];
 extern u8 tie_light_data[] __asm__("D_001E3200");
 extern s32 FlushCache();
 extern s32 WriteDmaChannel();
-extern s32 func_001F21B0();
-extern void func_001F21B8();
-extern s32 func_001F98D0();
+extern s32 noop_core_callback() __asm__("func_001F21B0");
+extern void noop_core_callback_secondary() __asm__("func_001F21B8");
+extern s32 fast_mem_copy() __asm__("func_001F98D0");
 extern s32 dma_tie_textures() __asm__("func_00235640");
-extern s32 func_00235BE8();
+extern s32 tie_proc() __asm__("func_00235BE8");
 void draw_ties_1(void) __asm__("FUN_002358c8");
 
 void draw_ties_1(void) {
@@ -28,16 +28,16 @@ void draw_ties_1(void) {
     gs_texture_allocation_cursor = gs_texture_allocation_start;
     render_packet_cursor.addr = current;
     callbackArg = 1;
-    func_001F21B8(callbackData, callbackArg);
+    noop_core_callback_secondary(callbackData, callbackArg);
     if (D_0018A2C8[0] != 0) {
         FlushCache(0);
-        func_00235BE8();
+        tie_proc();
         WriteDmaChannel(tie_light_data, 0x3600, 0x40);
     }
-    func_001F21B8(D_00160F40, 5);
+    noop_core_callback_secondary(D_00160F40, 5);
     dma_tie_textures();
-    func_001F98D0(render_packet_cursor.addr, D_001DF030, 0x20);
-    func_001F21B0(D_00160F40, 5);
+    fast_mem_copy(render_packet_cursor.addr, D_001DF030, 0x20);
+    noop_core_callback(D_00160F40, 5);
 }
 
 extern __typeof__(draw_ties_1) func_002358C8 __attribute__((alias("FUN_002358c8")));

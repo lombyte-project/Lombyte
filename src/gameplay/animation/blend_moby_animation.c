@@ -27,7 +27,7 @@ typedef struct {
     unsigned char unk70; /* 0x70 */
 } MobyAnim;
 extern void update_moby_animation_state(void *) __asm__("func_0020C880");
-extern float func_001FA6C0(int arg0);
+extern float convert_integer_to_float(int arg0) __asm__("func_001FA6C0");
 extern void FUN_0020ede8(void *, int);
 /* As func_00213F28 below, for a plain sequence change: clamp the frame
    to the sequence's last one; if the moby hasn't settled, park the
@@ -62,7 +62,7 @@ void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blen
     moby->prevSeq = new_seq;
     update_moby_animation_state(moby);
     *(float *)((char *)moby + 0x58) = 1.0f;
-    scale = 1.0f / func_001FA6C0(blend_frames);
+    scale = 1.0f / convert_integer_to_float(blend_frames);
     *(float *)((char *)moby + 0x54) = 0.0f;
     moby->unk70 = (unsigned char)(moby->unk70 & 0xFD);
     moby->unk5C = scale;

@@ -31,10 +31,10 @@ struct Locals_001f2070 {
 
 extern struct CameraView D_00186F40;
 extern f32 D_0018CF10[];
-extern void FUN_001f9a68(void *a, s64 b, f32 c);
-extern void FUN_001f9d20(void *a, void *b, void *c);
-extern void FUN_001f9fc8(void *a);
-extern void FUN_001fa378(void *a, void *b, void *c);
+extern void fast_vec_scale(void *a, s64 b, f32 c) __asm__("FUN_001f9a68");
+extern void transform_vector(void *a, void *b, void *c) __asm__("FUN_001f9d20");
+extern void set_identity_matrix(void *a) __asm__("FUN_001f9fc8");
+extern void multiply_matrix(void *a, void *b, void *c) __asm__("FUN_001fa378");
 void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) __asm__("FUN_001f2070");
 
 void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) {
@@ -43,14 +43,14 @@ void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) {
     f32 y;
     f32 x;
 
-    FUN_001f9fc8(&L);
+    set_identity_matrix(&L);
     L.v30 = -D_00186F40.unk140 * 1024.0f;
     L.v34 = -D_00186F40.unk144 * 1024.0f;
     L.v38 = -D_00186F40.unk148 * 1024.0f;
-    FUN_001fa378(&L.v40, (u8 *)&D_00186F40 + 0x40, &L);
-    FUN_001f9a68(&L.blk80, world_pos, 1024.0f);
+    multiply_matrix(&L.v40, (u8 *)&D_00186F40 + 0x40, &L);
+    fast_vec_scale(&L.blk80, world_pos, 1024.0f);
     L.v8C = 1.0f;
-    FUN_001f9d20(&L.v90, &L.blk80, &L.v40);
+    transform_vector(&L.v90, &L.blk80, &L.v40);
     scale = D_0018CF10[0] / L.v9C;
     screen_out->unk8 = L.v98 * 0.0009765625f;
     x = L.v90 * scale + 2048.0f;

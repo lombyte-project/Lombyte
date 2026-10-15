@@ -12,7 +12,7 @@ struct SaveHeader {
     s32 checksum;
 };
 
-extern void FUN_001f9838(void *, void *, s32);
+extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 extern s32 calculate_crc16(void *, s32) __asm__("func_0020ACC0");
 
 s32 memcard_prepare_data(struct SaveHeader *out, s32 slot,
@@ -35,7 +35,7 @@ s32 memcard_prepare_data(struct SaveHeader *out, s32 slot, struct SaveBlock *blk
             ((s32 *)p)[0] = block->id;
             ((s32 *)p)[1] = block->size;
             p += 8;
-            FUN_001f9838(p, src, block->size);
+            copy_memory_aligned(p, src, block->size);
             p += block->size;
             total += block->size;
             p = (u8 *)(((s32)p + 3) & mask);

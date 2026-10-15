@@ -45,7 +45,7 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
@@ -53,7 +53,7 @@ extern void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void clear_u64_value() __asm__("FUN_001f99f8");
 extern void blend_vector_2b94d0(float, void *, void *, void *) __asm__("FUN_001f9a40");
-extern float FUN_001f9dc8(float), FUN_001f9de0(float), FUN_001f9e90(float, float);
+extern float FUN_001f9dc8(float), FUN_001f9de0(float), fast_arc_tan(float, float);
 extern float FUN_001fa6c0(int);
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -115,11 +115,11 @@ void FUN_L00_002b94d0(u8 *o) {
                 distance = vector_length_xy(&target0);
                 if (D_L00_00161594 < distance) continue;
                 angle = fast_difference_between_rotations(*(float *)(camera_base + 0x158),
-                    FUN_001f9e90(*(float *)(candidate + 0x10) - *(float *)(camera_base + 0x140),
+                    fast_arc_tan(*(float *)(candidate + 0x10) - *(float *)(camera_base + 0x140),
                                   *(float *)(candidate + 0x14) - *(float *)(camera_base + 0x144)));
                 if (D_L00_0016159C < angle) continue;
                 score = fast_difference_between_rotations(
-                    FUN_001f9e90(*(float *)(candidate + 0x10) - *(float *)(hero_base + 0x80),
+                    fast_arc_tan(*(float *)(candidate + 0x10) - *(float *)(hero_base + 0x80),
                                   *(float *)(candidate + 0x14) - *(float *)(hero_base + 0x84)),
                     *(float *)(hero_base + 0x98));
                 if (D_L00_00161598 < score) continue;
@@ -141,9 +141,9 @@ void FUN_L00_002b94d0(u8 *o) {
         } else second = best;
     }
     if (second && enabled) {
-        distance = FUN_001f9b48(v, best + 0x10);
+        distance = fast_vec_dist(v, best + 0x10);
         if (distance < D_L00_00161594) {
-            angle = FUN_001f9b48(best + 0x10, second + 0x10);
+            angle = fast_vec_dist(best + 0x10, second + 0x10);
             if (distance + angle < D_L00_00161594) {
                 *(char **)(v + 0x38) = second;
                 *(short *)(v + 0x42) = 0;
@@ -155,14 +155,14 @@ void FUN_L00_002b94d0(u8 *o) {
         data = (char *)FUN_002141f8(*(char **)(v + 0x20));
         qcopy(&target0, *(char **)(v + 0x20) + 0x10);
         target0.f[2] += *(float *)(data + 0x10);
-        primary_distance = FUN_001f9b48(v, &target0);
+        primary_distance = fast_vec_dist(v, &target0);
         spacing = primary_distance * 0.05f;
     }
     if (*(char **)(v + 0x38)) {
         data = (char *)FUN_002141f8(*(char **)(v + 0x38));
         qcopy(&target1, *(char **)(v + 0x38) + 0x10);
         target1.f[2] += *(float *)(data + 0x10);
-        spacing = (FUN_001f9b48(&target0, &target1) + primary_distance) * 0.05f;
+        spacing = (fast_vec_dist(&target0, &target1) + primary_distance) * 0.05f;
     }
     D_L00_001615F8 = enabled ? 0x207f20 : 0x7f2020;
     clear_u64_value(&camera_direction);
@@ -240,7 +240,7 @@ void FUN_L00_002b94d0(u8 *o) {
             side_wave = amplitude * wave + side_wave;
             ((float *)D_L00_001DB9D0)[i] = side_wave;
             *(float *)(point + 0x148) += side_wave;
-            angle = fast_add_rotations(FUN_001f9e90(delta.f[0], delta.f[1]), 1.5707964f);
+            angle = fast_add_rotations(fast_arc_tan(delta.f[0], delta.f[1]), 1.5707964f);
             amplitude = D_L00_001615C4 * FUN_001f9dc8(phase);
             offset.f[0] = FUN_001f9dc8(angle) * amplitude;
             offset.f[1] = FUN_001f9de0(angle) * amplitude;
@@ -645,12 +645,12 @@ void FUN_L00_002bb0b0(void *mv) {
     }
     draw_2bb0b0(&quad, 0, 0);
 }
-u8 *FUN_0020c4f8(s32);
+u8 *create_moby(s32) __asm__("FUN_0020c4f8");
 void clear_u64_value() __asm__("FUN_001f99f8");
-void FUN_0020e098();
+void refresh_moby_spatial_bounds_from_basis() __asm__("FUN_0020e098");
 void FUN_L00_00250df8();
 u8 *FUN_L00_002bb360(u8 *src) {
-    u8 *m = FUN_0020c4f8(0xB3);
+    u8 *m = create_moby(0xB3);
     if (m) {
         u8 *v = *(u8 **)(m + 0x78);
         m[0x30] = 0xFF;
@@ -664,7 +664,7 @@ u8 *FUN_L00_002bb360(u8 *src) {
         *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)(src + 0xC0);
         *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)(src + 0xD0);
         *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)(src + 0xE0);
-        FUN_0020e098(m);
+        refresh_moby_spatial_bounds_from_basis(m);
         FUN_L00_00250df8(m);
     }
     return m;
@@ -1205,12 +1205,12 @@ extern struct {
     char *moby;
 } D_L00_00173E40_2bc3b0 __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern float D_L00_00161660_f[];
-extern float FUN_001f9e90(float, float);
-extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9b48(void *, void *);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float FUN_001fa688(float, float);
 extern float FUN_001f99c0(float);
-extern float FUN_001f9df8(float);
+extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern float FUN_001fa6c0(int);
 extern void FUN_001f9a10(void *, void *, void *);
 extern int FUN_002141f8();
@@ -1253,15 +1253,15 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
         if (!candidate || !*(char **)(candidate + 0x24) ||
             *(s16 *)(*(char **)(candidate + 0x24) + 0x46) != 5)
             continue;
-        angle = FUN_001f9e90(target[0] - position[0], target[1] - position[1]);
-        distance = FUN_001f9b80(position, target);
-        elevation = FUN_001f9e90(distance, target[2] - position[2]);
+        angle = fast_arc_tan(target[0] - position[0], target[1] - position[1]);
+        distance = vector_distance_xy(position, target);
+        elevation = fast_arc_tan(distance, target[2] - position[2]);
         headingError = FUN_001fa688(*heading, angle);
-        distance = FUN_001f9b48(position, target);
+        distance = fast_vec_dist(position, target);
         if (distance < 2.5f) {
             float toward;
             moby = (char *)hero.moby;
-            toward = FUN_001f9e90(*(float *)(candidate + 0x10) - hero.motion.pos.f[0],
+            toward = fast_arc_tan(*(float *)(candidate + 0x10) - hero.motion.pos.f[0],
                                    *(float *)(candidate + 0x14) - hero.motion.pos.f[1]);
             if (FUN_001fa688(*(float *)(moby + 0x48), toward) < 1.0471976f &&
                 FUN_001f99c0(position[2] - target[2]) < 2.0f &&
@@ -1276,13 +1276,13 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
             continue;
         build_spherical_offset(offset, distance, *heading, *pitch + hero.ground_pitch.f * 0.5f);
         FUN_001f9a10(offset, offset, position);
-        apparentAngle = FUN_001f9df8(FUN_001f9b48(offset, target) / (distance + distance));
+        apparentAngle = fast_arc_sin(fast_vec_dist(offset, target) / (distance + distance));
         apparentAngle += apparentAngle;
         if (D_L00_001616D8 * 0.017453292f < apparentAngle) {
             data = (char *)FUN_002141f8(candidate);
             if (data) {
                 radius = FUN_001fa6c0(*(u8 *)(data + 10)) * 0.125f;
-                reduction = FUN_001f9df8(radius / distance);
+                reduction = fast_arc_sin(radius / distance);
                 if (radius < distance) {
                     apparentAngle -= reduction;
                     if (apparentAngle < 0.0f)
@@ -1368,7 +1368,7 @@ extern unsigned char D_00141680_r[] __asm__("D_00141680");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_00141680;
 extern int D_0015EEA4;
 extern float D_L00_001616E0 __attribute__((sda));
@@ -1378,7 +1378,7 @@ extern int D_L00_001617C0;
 extern int D_L00_001617C4;
 extern int D_L00_001617C8;
 extern int FUN_001f9770();
-extern int FUN_001fa2d8();
+extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
 extern int FUN_002141f8();
 extern int FUN_L00_002223f8();
 extern int FUN_L00_00236e50();
@@ -1708,7 +1708,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_L00_0025e310(float);
 extern float D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
 extern signed char D_L00_00161763;
@@ -1722,7 +1722,7 @@ extern int D_L00_001DBF70;
 extern int D_L00_001DD0A0;
 extern int D_L00_001DD0D0;
 extern int FUN_001efa68_c_c(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
-extern int FUN_001f9a40();
+extern int lerp_vector() __asm__("FUN_001f9a40");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern void add_vector_xyz_c3(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2074,7 +2074,7 @@ long FUN_001f44b8(int);
 void FUN_001f9a28(void *, void *, void *);
 void FUN_001f9ad8(void *, void *, void *);
 float FUN_001f9ab0(void *, void *);
-void FUN_001f7d30(void *, void *, int);
+void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 /* scrolls the two texture-offset accumulators and draws the 10x20 band of
    textured quads between the D_L00_001DC060/001DC1A0 rings, skipping
    back-facing ones */
@@ -2136,7 +2136,7 @@ void FUN_L00_002bdc50(void *o) {
                 quad.uv[7] = a + D_L00_00161714;
                 quad.uv[6] = y - D_L00_00161710;
                 a = a + D_L00_00161714;
-                FUN_001f7d30(&quad, 0, 0);
+                fast_draw_quad_real(&quad, 0, 0);
                 quad.uv[0] = y;
                 quad.uv[1] = b;
                 quad.uv[2] = y;
@@ -2146,7 +2146,7 @@ void FUN_L00_002bdc50(void *o) {
                 quad.uv[6] = y - D_L00_00161710;
                 quad.uv[7] = b + D_L00_00161714;
                 b = b + D_L00_00161714;
-                FUN_001f7d30(&quad, 0, 0);
+                fast_draw_quad_real(&quad, 0, 0);
             }
         }
         y += D_L00_00161710;
@@ -2595,9 +2595,9 @@ float FUN_L00_002bec80(Vec4_2bec80 *p, void *q) {
 }
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char D_0013F3D0[] __attribute__((section(".data")));
-extern float FUN_001f9b48(void *, void *);
-extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9e90(float, float);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa688(float, float);
 extern float FUN_001f99c0(float);
 extern int FUN_001efa68_2bed90(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -2617,16 +2617,16 @@ char *FUN_L00_002bed90(char *self, float *position, float *angles, int unused, i
         short classId = classData ? *(short *)(classData + 0x46) : 0;
         if (classId != 5)
             continue;
-        distance = FUN_001f9b48(position, candidate + 0x10);
+        distance = fast_vec_dist(position, candidate + 0x10);
         if (distance > 40.0f)
             continue;
         if (distance > 30.0f)
             checkCollision = 0;
         qcopy(target, candidate + 0x10);
         target[2] += 0.4f;
-        angleError = FUN_001fa688(angles[2], FUN_001f9e90(target[0] - position[0], target[1] - position[1]));
+        angleError = FUN_001fa688(angles[2], fast_arc_tan(target[0] - position[0], target[1] - position[1]));
         angleError *= angleError;
-        heightError = FUN_001fa688(angles[1], FUN_001f9e90(distance, target[2] - position[2]));
+        heightError = FUN_001fa688(angles[1], fast_arc_tan(distance, target[2] - position[2]));
         heightError *= heightError;
         if (checkCollision) {
             if (8.0f < FUN_001f99c0(*(float *)(candidate + 0x18) - *(float *)(self + 0x18)))
@@ -2638,7 +2638,7 @@ char *FUN_L00_002bed90(char *self, float *position, float *angles, int unused, i
         }
         if (mode != 0 || !valid) {
             bonus = 0.0f;
-            score = FUN_001f9b48(position, target);
+            score = fast_vec_dist(position, target);
             if (*(float *)(candidate + 0x18) - *(float *)(self + 0x18) > 3.25f)
                 score += 15.0f;
             if (valid)
@@ -2654,7 +2654,7 @@ char *FUN_L00_002bed90(char *self, float *position, float *angles, int unused, i
     }
     if (best == 0) {
         char *playerPosition = D_0013F3D0;
-        if (FUN_001f9b80(self + 0x10, playerPosition) > 3.2f)
+        if (vector_distance_xy(self + 0x10, playerPosition) > 3.2f)
             best = *(char **)(playerPosition + 0x2000);
     }
     return best;
@@ -2704,7 +2704,7 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
-extern f32 FUN_001f9b48(void *, void *);
+extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 FUN_001efa68_c(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern f32 FUN_L00_002bec80_c(void *, void *) __asm__("FUN_L00_002bec80");
 
@@ -2763,7 +2763,7 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
             return cur;
         }
         best = cur;
-        bestDist = FUN_001f9b48(&v0, &D_L00_00173E60);
+        bestDist = fast_vec_dist(&v0, &D_L00_00173E60);
         bestDiff = 0.0f;
         if (*out < bestDist) {
             *out = bestDist;
@@ -2798,7 +2798,7 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
                 *out = 100.0f;
                 return arc;
             }
-            d = FUN_001f9b48(&v0, &D_L00_00173E60);
+            d = fast_vec_dist(&v0, &D_L00_00173E60);
             if (bestDist < d) {
                 best = arc;
                 bestDist = d;
@@ -2834,7 +2834,7 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
         if (D_L00_00173E58_bf != x->p38 &&
             !(D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 &&
               D_L00_00173E58_bf->p24->h46 == 5)) {
-            d = FUN_001f9b48(&v0, &D_L00_00173E60);
+            d = fast_vec_dist(&v0, &D_L00_00173E60);
             best = fast_add_rotations(best, (r2 - d) * 3.1415927f / (r2 * 3.0f));
         }
     }
@@ -2851,7 +2851,7 @@ f32 FUN_L00_002bf050(Mob *m, VU *pos, f32 *tgt, f32 *out, f32 ang, f32 arc, f32 
         if (D_L00_00173E58_bf != x->p38 &&
             !(D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 &&
               D_L00_00173E58_bf->p24->h46 == 5)) {
-            d = FUN_001f9b48(&v0, &D_L00_00173E60);
+            d = fast_vec_dist(&v0, &D_L00_00173E60);
             best = fast_subtract_rotations(best, (r2 - d) * 3.1415927f / (r2 * 3.0f));
         }
     }
@@ -2879,9 +2879,9 @@ void FUN_L00_002bf810(char *a, char *b, int n) {
         FUN_001f9a10(t, t, d);
     }
 }
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f99c0(float);
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025abf0(void *, void *, int, float, float);
 
 void FUN_L00_002bf8b0(unsigned char *m, unsigned char *o, u128 *src) {
@@ -2889,14 +2889,14 @@ void FUN_L00_002bf8b0(unsigned char *m, unsigned char *o, u128 *src) {
 #define F2BF(p, x) (*(float *)((p) + (x)))
     *(int *)(o + 0x30) = 0;
     qcopy(o, src);
-    s = FUN_001f9b80(m + 0x10, o);
+    s = vector_distance_xy(m + 0x10, o);
     s = s * s;
     t = F2BF(o, 0x1C) * 35.0f * F2BF(o, 0x20) / (FUN_001f99c0(F2BF(o, 8) - F2BF(m, 0x18)) + 1.0f) *
         (s + 0.25f);
     F2BF(o, 0x14) = t;
     if (F2BF(o, 0x20) < t)
         F2BF(o, 0x14) = F2BF(o, 0x20);
-    F2BF(o, 0x18) = FUN_001f9e90(F2BF(o, 0) - F2BF(m, 0x10), F2BF(o, 4) - F2BF(m, 0x14));
+    F2BF(o, 0x18) = fast_arc_tan(F2BF(o, 0) - F2BF(m, 0x10), F2BF(o, 4) - F2BF(m, 0x14));
     r = FUN_L00_0025abf0(m + 0x10, o, 0, F2BF(o, 0x14), -F2BF(o, 0x1C));
     lim = frame_time * 7.0f;
     F2BF(o, 0x10) = r;
@@ -3070,11 +3070,11 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
 }
 #include "eetypes.h"
 #include "qcopy.h"
-unsigned char *FUN_0020c4f8(int);
+unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
 void FUN_L00_0025d1b8(unsigned char *);
 unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) {
-    unsigned char *m = FUN_0020c4f8(0xba);
+    unsigned char *m = create_moby(0xba);
     if (m) {
         char *q;
         m[0x30] = 0xff;

@@ -26,8 +26,8 @@ typedef struct {
 
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern void FUN_001fa2d8(void *, void *);
-extern void FUN_001f9d20(void *, void *, void *);
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern f32 FUN_001f9b48(void *, void *);
 extern s16 FUN_001f9770(s16 *);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -58,8 +58,8 @@ void FUN_L15_002e5958(struct Moby *moby) {
     if ((u8)(moby->state - 1) < 2) {
         subtract_vector_xyz(delta, &moby->pos, D_0013F3D0);
         if (vector_length_xyz(delta) < vars->distance) {
-            FUN_001fa2d8(matrix, &moby->rot_row0);
-            FUN_001f9d20(delta, delta, matrix);
+            transpose_rotation_matrix(matrix, &moby->rot_row0);
+            transform_vector(delta, delta, matrix);
             if (*(f32 *)(delta + 4) < 0.2f) near_parent = 1;
         }
     }

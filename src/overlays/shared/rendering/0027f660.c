@@ -158,7 +158,7 @@ unsigned char *FUN_L01_00287158(void *a, int b, int c, int d, float f, float g) 
 extern int D_L01_001B2628; /* no foreign declaration */
 extern s32 rand(void);
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern void FUN_001fa2d8(void *, void *);
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2628");
@@ -188,7 +188,7 @@ unsigned char *FUN_L01_0028a7a8(char *m, char *pos, float *vel, char *cfg, int f
         qzero(mat + 4);
         qzero(mat + 8);
         qzero(mat + 12);
-        FUN_001fa2d8(mat, m + 0xc0);
+        transpose_rotation_matrix(mat, m + 0xc0);
         transform_vector(v, v, mat);
         *(float *)(q + 0x10) = v[0];
         *(float *)(q + 0x14) = v[1];
@@ -202,7 +202,7 @@ unsigned char *FUN_L01_0028a7a8(char *m, char *pos, float *vel, char *cfg, int f
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C1D8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 void FUN_L01_0028b410(char *p) {
     int i;
@@ -215,7 +215,7 @@ void FUN_L01_0028b410(char *p) {
         q = *(char **)(p + 0x10);
         off = i << 4;
         *(float *)(*(char **)(p + 0x10) + off + 0x1C) =
-            FUN_001f9b48(q + (off + 0x10), q + ((((i + 1) % *(int *)q) << 4) + 0x10));
+            fast_vec_dist(q + (off + 0x10), q + ((((i + 1) % *(int *)q) << 4) + 0x10));
         *(float *)(*(char **)(p + 0x10) + off + 0x18) += 0.5f;
         *(float *)(*(char **)(p + 0x10) + off + 0x18) -= 0.5f;
     }
@@ -229,7 +229,7 @@ typedef struct {
     float e[1][4];
 } List;
 
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
@@ -237,7 +237,7 @@ int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
     int i;
     float bestDiff = 1e11f;
     for (i = 0; i < arg1->count; i++) {
-        float d = FUN_001f9b48(arg1->e[i], arg0);
+        float d = fast_vec_dist(arg1->e[i], arg0);
         if (absolute_float(d - target) < bestDiff) {
             bestDiff = d;
             best = i;
@@ -250,12 +250,12 @@ int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out) {
     int idx1 = -1;
     float best0 = 10000.0f;
     float best1 = 10000.0f;
-    float d_init = FUN_001f9b48(a0 + 0x10, pt);
+    float d_init = fast_vec_dist(a0 + 0x10, pt);
     int i;
 
     for (i = 0; i < list->count; i++) {
-        float d_pt = FUN_001f9b48(list->e[i], pt);
-        float d_a0 = FUN_001f9b48(list->e[i], a0 + 0x10);
+        float d_pt = fast_vec_dist(list->e[i], pt);
+        float d_a0 = fast_vec_dist(list->e[i], a0 + 0x10);
         if (d_a0 < best0) {
             best0 = d_a0;
             idx0 = i;
@@ -363,8 +363,8 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
         wb = (1.0f - a) * (b + 1.0f) * 0.5f;
         wa = (1.0f - a) * (1.0f - b) * 0.5f;
     }
-    d1 = FUN_001f9b48(p[0], p[1]);
-    d2 = FUN_001f9b48(p[1], p[2]);
+    d1 = fast_vec_dist(p[0], p[1]);
+    d2 = fast_vec_dist(p[1], p[2]);
     if (d1 < d2)
         m = d1;
     else
@@ -385,7 +385,7 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, float);
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4) {
     char tmp[16];
@@ -394,12 +394,12 @@ void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4
     float b = t2 * 3.0f;
     float a = t3 + t3;
     float c = t2 + t2;
-    FUN_001f9a68(out, p1, a - b + 1.0f);
-    FUN_001f9a68(tmp, p3, t3 - c + t);
+    fast_vec_scale(out, p1, a - b + 1.0f);
+    fast_vec_scale(tmp, p3, t3 - c + t);
     FUN_001f9a10(out, out, tmp);
-    FUN_001f9a68(tmp, p4, t3 - t2);
+    fast_vec_scale(tmp, p4, t3 - t2);
     FUN_001f9a10(out, out, tmp);
-    FUN_001f9a68(tmp, p2, b - a);
+    fast_vec_scale(tmp, p2, b - a);
     FUN_001f9a10(out, out, tmp);
 }
 float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *moby) {
@@ -448,7 +448,7 @@ float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *mo
             }
             FUN_L01_0028ba80(t, &point, &currentNode, &nextNode, &previousTangent, &nextTangent);
             t += step;
-            segmentLength += FUN_001f9b48(&previousPoint, &point);
+            segmentLength += fast_vec_dist(&previousPoint, &point);
             previousPoint.q = point.q;
         } while (t <= 1.0f);
         total += segmentLength;

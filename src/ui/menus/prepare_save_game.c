@@ -10,8 +10,8 @@ extern void prepare_save_game(int, int) __asm__("FUN_002269c0");
 extern char D_0015EE98[] MACRO_ADDR;
 extern void sceCdReadClock(void *);
 extern void sceScfGetLocalTimefromRTC(void *);
-extern void FUN_00208770(void);
-extern void func_00207B08(void *);
+extern void copy_level_object_positions(void) __asm__("FUN_00208770");
+extern void save_map_coverage(void *) __asm__("func_00207B08");
 
 void prepare_save_game(int save_data, int slot) __asm__("FUN_002269c0");
 
@@ -21,8 +21,8 @@ void prepare_save_game(int save_data, int slot) {
     int saving = 1;
     sceCdReadClock(D_0015EE98);
     sceScfGetLocalTimefromRTC(D_0015EE98);
-    FUN_00208770();
-    func_00207B08(D_00141EC0 + (current_level_index << 11));
+    copy_level_object_positions();
+    save_map_coverage(D_00141EC0 + (current_level_index << 11));
     memcard_make_whole_save((char *)save_data);
     b->unkF4 = saving;
     b->buf = (void *)save_data;

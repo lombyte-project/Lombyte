@@ -14,8 +14,8 @@ typedef struct {
 } Vp __attribute__((aligned(16)));
 
 extern float FUN_001f9b20(void *);
-extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001f9cf8(void *, void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 int FUN_L00_0025fa38(void *p, int i) {
     Vp a;
@@ -25,9 +25,9 @@ int FUN_L00_0025fa38(void *p, int i) {
         return 0;
     }
     e = D_L00_001600FC + i * 128;
-    FUN_001f9a28(&a, p, e + 0x30);
+    subtract_vector_xyz(&a, p, e + 0x30);
     a.w = 0;
-    FUN_001f9cf8(&b, &a, e + 0x40);
+    transform_vector_by_basis(&b, &a, e + 0x40);
     if (FUN_001f9b20(&b) < 1.0f) {
         if (-1.0f <= b.z && b.z <= 1.0f) {
             return 1;
@@ -41,9 +41,9 @@ int FUN_L00_0025fa38(void *p, int i) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260B68), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9af0(void *);
-extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001f9cf8(void *, void *, void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 /* True when p lies inside the unit box of D_L00_001600F4 entry idx. */
 int FUN_L00_0025faf0(float *p, int idx) {
@@ -52,10 +52,10 @@ int FUN_L00_0025faf0(float *p, int idx) {
     char *e;
     if (idx >= 0) {
         e = (char *)D_L00_001600F4 + idx * 128;
-        FUN_001f9a28(a, p, e + 0x30);
+        subtract_vector_xyz(a, p, e + 0x30);
         a[3] = 0;
-        FUN_001f9cf8(b, a, e + 0x40);
-        if (FUN_001f9af0(b) < 1.0f)
+        transform_vector_by_basis(b, a, e + 0x40);
+        if (fast_vec_length(b) < 1.0f)
             return 1;
     }
     return 0;

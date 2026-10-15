@@ -44,9 +44,9 @@ extern char D_00160088[];
 extern char D_00160090[];
 extern Weapon D_001DFFB0[];
 #include "rnc/gameplay/state/item_state.h"
-extern void func_001E9458(s32);
+extern void noop_callback_n(s32) __asm__("func_001E9458");
 extern s32 remove_hud_item(s32) __asm__("FUN_001ff480");
-extern void func_001E9460(s32);
+extern void noop_callback_o(s32) __asm__("func_001E9460");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char *strcpy(char *, const char *);
 extern char *FindSubstring(char *, char *);
@@ -54,7 +54,7 @@ extern s32 sprintf(char *, const char *, ...);
 extern void copy_text_to_shared_buffer(char *) __asm__("func_001FF658");
 extern s32 compute_clamped_count_difference(void) __asm__("FUN_00215248");
 
-void func_00216C48(void *arg0, Menu *menu, s32 arg2);
+void func_00216C48(void *arg0, Menu *menu, s32 arg2) __asm__("func_00216C48");
 
 #define SCRATCH ((char *)0x70000000)
 
@@ -88,11 +88,11 @@ void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
                 D_001993C0[2] = (s32)arg0;
                 D_001993C0[3] = (s32)menu;
                 if (e->unk4 & 0x4000) {
-                    func_001E9458((s16)(e->unk4 ^ 0x4000));
+                    noop_callback_n((s16)(e->unk4 ^ 0x4000));
                 } else {
                     remove_hud_item(D_00160070);
                     D_00160070 = -1;
-                    func_001E9460((s16)e->unk4);
+                    noop_callback_o((s16)e->unk4);
                 }
             }
         }

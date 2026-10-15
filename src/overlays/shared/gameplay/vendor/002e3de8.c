@@ -9,8 +9,8 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -32,8 +32,8 @@ void FUN_L10_002e3de8(char *moby) {
     float c = random_float_between_alt(0.0f, *(float *)&D_L10_00161E60);
     float d = random_float_between_alt(*(float *)&D_L10_00161E60, *(float *)&D_L10_00161E64);
     int e = random_int_between(*(int *)&D_L10_00161E68, *(int *)&D_L10_00161E6C);
-    v[0] = FUN_001f9dc8(a) * b;
-    v[1] = FUN_001f9de0(a) * b;
+    v[0] = fast_cos(a) * b;
+    v[1] = fast_sin(a) * b;
     v[2] = 0.0f;
     FUN_001f9a10(v, v, (float *)(moby + 0x10));
     v[2] = v[2] + 0.025f;
@@ -54,8 +54,8 @@ void FUN_L10_002e3de8(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002EA3E8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48(void *, void *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001fa2d8(void *, void *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void FUN_L10_002e91b8(unsigned char *m);
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void subtract_vector_xyz(void *, void *, void *);
@@ -75,8 +75,8 @@ void FUN_L10_002e9028(unsigned char *m) {
         player = (&hero.motion.pos);
         if (FUN_001f9b48(m + 0x10, player) < 8.0f) {
             subtract_vector_xyz(v, player + 0x50, m + 0x10);
-            FUN_001fa2d8(mtx, m + 0xC0);
-            FUN_001f9d20(v, v, mtx);
+            transpose_rotation_matrix(mtx, m + 0xC0);
+            transform_vector(v, v, mtx);
             if (-5.0f < v[0] && v[0] < 5.0f && 0.0f < v[2] && v[2] < 8.0f) {
                 if (v[1] < 0.5f) {
                     player[0x224B] = 1;
@@ -206,9 +206,9 @@ void FUN_L10_002e91b8(unsigned char *m) {
                     float angle = integer_to_float(*(int *)0x0015f3f8 % limit) / *first_source - 180.0f;
                     float wave;
                     if (*(int *)((unsigned char *)D_L10_001DA2B0 + index) != 0)
-                        wave = FUN_001f9dc8(angle * 0.017453292f);
+                        wave = fast_cos(angle * 0.017453292f);
                     else
-                        wave = FUN_001f9de0(angle * 0.017453292f);
+                        wave = fast_sin(angle * 0.017453292f);
                     first_source++;
                     index += 4;
                     *first_vectors++ = *(float *)((unsigned char *)D_L10_001DA2F0 + offset) + wave * 0.125f;
@@ -296,7 +296,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L10_002f5b58.s", FUN_L10_002f5b58);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001f9b48(void *, void *);
-extern void FUN_001f99f8(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float s32_to_float(int) __asm__("FUN_001fa6c0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char D_L10_00167100[];
@@ -416,11 +416,11 @@ void FUN_L10_002f5b58(char *moby) {
     work = *(char **)(moby + 0x70);
     *(float *)(work + 0x00) = 0.03f;
     *(float *)(work + 0x04) = 0.2f;
-    FUN_001f99f8(work + 0x10);
+    clear_u64_value(work + 0x10);
     work = *(char **)(moby + 0x70);
     *(float *)(work + 0x20) = 0.03f;
     *(float *)(work + 0x24) = 0.2f;
-    FUN_001f99f8(work + 0x30);
+    clear_u64_value(work + 0x30);
     {
         char *source = *(char **)(D_L10_00167100 + 0x184);
         source += 0x30;

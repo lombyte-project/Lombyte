@@ -36,13 +36,13 @@ extern char D_L00_00161160[];
 extern char D_L00_00161168[];
 extern char D_L00_00161170[];
 extern void FUN_00201560(s32, s32, s32, s32, s32, s32, s32) __asm__("FUN_001fb8f0");
-extern void *FUN_001153fc(void *, s32, s32);
+extern void *memset(void *, s32, s32) __asm__("FUN_001153fc");
 extern char *FUN_00203ad8(s32) __asm__("FUN_001fdd10");
 extern void FUN_001fc4a8(void *, u64, char *, s32) __asm__("FUN_001f75f0");
 extern void FUN_001fb3f0(s32, s32, u64, char *, s32) __asm__("FUN_001f65b0");
 extern void FUN_001fb888(s32, s32, u64, char *, s32) __asm__("FUN_001f69d0");
 extern void FUN_0024ff08(s32, s32) __asm__("FUN_0020d330");
-extern s32 FUN_00116248(char *, const char *, ...);
+extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 
 void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     VendorTextBox box;
@@ -55,7 +55,7 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     u16 ammo_cost;
 
     FUN_00201560(0, 0, 0x200, 0x80, 0x200, 0x80, 0);
-    FUN_001153fc((void *)&box, 0, 0x18);
+    memset((void *)&box, 0, 0x18);
     box.half_x = x / 2;
     box.half_y = y / 2;
     box.left = x - 8;
@@ -86,7 +86,7 @@ void FUN_L00_0029ead8(void *m, s32 x, s32 y) {
     cost = 6;
     ((volatile VendorTextBox *)&box)->half_y = cost;
     FUN_001fc4a8((void *)&box, 0x80f0f0f0ULL, FUN_00203ad8(0x5237), -1);
-    FUN_00116248(text, D_L00_00161160, D_L00_00161E34);
+    sprintf(text, D_L00_00161160, D_L00_00161E34);
     if (D_L00_00161E34 >= 100)
         text_x = 0x17;
     else {
@@ -105,7 +105,7 @@ quantity_done:
         ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].hA;
     else
         ammo_cost = D_L00_001C40B0[vendor_menu.rows[vendor_menu.f58].fD0].h8;
-    FUN_00116248(text, D_L00_00161160, D_L00_00161E34 * (s32)ammo_cost);
+    sprintf(text, D_L00_00161160, D_L00_00161E34 * (s32)ammo_cost);
     FUN_001fb888(0x40, 0x4c, 0x80f0f0f0ULL, text, -1);
     return;
 message:
@@ -138,8 +138,8 @@ typedef struct { u8 pad_0[8]; f32 origin_x, origin_z, cell_width, cell_height; }
 extern HeightGridLayout D_L00_001CA880;
 extern s32 D_L00_00161218 __attribute__((sda));
 extern s32 D_L00_00161220 __attribute__((sda));
-extern f32 FUN_001f9988(f32);
-extern f32 FUN_001f99c0(f32);
+extern f32 square_root(f32) __asm__("FUN_001f9988");
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 #define NEIGHBOUR(k) (grids + tile->neighbours[k])
 void FUN_L00_002a3ec8(HeightTile *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount)
 {
@@ -166,10 +166,10 @@ void FUN_L00_002a3ec8(HeightTile *grids, s32 count, s32 mode, f32 x, f32 z, f32 
             for (j = col_first; j <= col_last; j++) {
                 dist_sq = (x - col_x) * (x - col_x) + dz_sq;
                 height = amount;
-                if (!(dist_sq < 1.0f)) height = amount / FUN_001f9988(dist_sq);
+                if (!(dist_sq < 1.0f)) height = amount / square_root(dist_sq);
                 if (mode == 0) {
-                    magnitude = FUN_001f99c0(height);
-                    if (magnitude < FUN_001f99c0(tile->heights[D_L00_00161218][i][j]))
+                    magnitude = absolute_float(height);
+                    if (magnitude < absolute_float(tile->heights[D_L00_00161218][i][j]))
                         height = tile->heights[D_L00_00161218][i][j];
                 } else {
                     height += tile->heights[D_L00_00161220][i][j];

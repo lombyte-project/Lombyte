@@ -11,21 +11,21 @@
 /* tests whether a point lies within height, distance and heading limits of a moby */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C8D8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 int FUN_L12_0027b8e0(char *a, float *b, float x, float y, float z) {
     float d = absolute_float(b[2] - *(float *)(a + 0x18));
     if (d > y)
         return 0;
-    if (FUN_001f9b48(b, a + 0x10) > x)
+    if (fast_vec_dist(b, a + 0x10) > x)
         return 0;
     if (!(0.0f < z))
         return 1;
     {
-        float r = FUN_001f9e90(b[0] - *(float *)(a + 0x10), b[1] - *(float *)(a + 0x14));
+        float r = fast_arc_tan(b[0] - *(float *)(a + 0x10), b[1] - *(float *)(a + 0x14));
         r = fast_difference_between_rotations(*(float *)(a + 0x48), r);
         if (r > z)
             return 0;
@@ -73,6 +73,6 @@ void FUN_L12_0027ba70(int idx) {
     for (i = 0; i < *(int *)p - 1; i++) {
         int o = i * 16;
         *(float *)(p + o + 0x1C) =
-            FUN_001f9b48(p + (o + 0x10), p + (((i + 1) % *(int *)p) * 16 + 0x10));
+            fast_vec_dist(p + (o + 0x10), p + (((i + 1) % *(int *)p) * 16 + 0x10));
     }
 }

@@ -10,12 +10,12 @@ extern void FUN_L00_0020a1e0(f32, f32);
 extern void FUN_L00_0020a1f8(f32, f32);
 extern void FUN_L00_0020a210(f32, f32);
 extern void FUN_L00_0020a228(f32, f32);
-extern f32 FUN_001f99c0(f32);
-extern f32 FUN_001f9e90(f32, f32);
-extern f32 FUN_001fa5c8(f32, f32);
-extern f32 FUN_001f9de0(f32);
-extern f32 FUN_001f9dc8(f32);
-extern f32 FUN_001fa580(f32, f32);
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 
 #define TF(o) (D_L00_0017A680.f[(o) / 4])
 
@@ -43,22 +43,22 @@ void FUN_L00_00215340(void) {
             TF(0x118) = v * 0.16f;
             TF(0x1C0) = v * -0.12f;
             TF(0x278) = v * 0.65f;
-            TF(0x274) = FUN_001f99c0(v) * -0.15f;
-            TF(0x270) = FUN_001f99c0(v) * 0.16f;
+            TF(0x274) = absolute_float(v) * -0.15f;
+            TF(0x270) = absolute_float(v) * 0.16f;
             TF(0x958) = nv * 0.35f;
             TF(0xA08) = nv * 0.3f;
             TF(0xAB8) = nv * 0.3f;
             TF(0xB68) = nv * 0.3f;
-            TF(0x954) = FUN_001f99c0(v) * 0.35f;
-            TF(0xA04) = FUN_001f99c0(v) * 0.2f;
+            TF(0x954) = absolute_float(v) * 0.35f;
+            TF(0xA04) = absolute_float(v) * 0.2f;
         } else {
             w = hero.motion.unk188 * 0.5f;
             if (0.8f < w) w = 0.8f;
             else if (w < -0.8f) w = -0.8f;
-            w = w * FUN_001f99c0(w) * 1.25f;
+            w = w * absolute_float(w) * 1.25f;
             TF(0x118) = w;
             TF(0x278) = w;
-            a = FUN_001f99c0(w);
+            a = absolute_float(w);
             nw = -w;
             TF(0x274) = a * 0.25f;
             TF(0x958) = nw * 0.35f;
@@ -89,23 +89,23 @@ void FUN_L00_00215340(void) {
         TF(0x1C0) = b * -0.28f;
         if (0.6f < c2) TF(0x278) = 0.6f;
         else if (c2 < -0.6f) TF(0x278) = -0.6f;
-        c3 = FUN_001f99c0(b) * 0.2f;
+        c3 = absolute_float(b) * 0.2f;
         TF(0x274) = c3;
         if (0.2f < c3) TF(0x274) = 0.2f;
         else if (c3 < -0.2f) TF(0x274) = -0.2f;
-        TF(0x270) = FUN_001f99c0(b) * 0.16f;
+        TF(0x270) = absolute_float(b) * 0.16f;
         if (hero.state.current == 0x81) {
             if (frame_time * 0.5f < hero.motion.unk164) {
-                ang = FUN_001fa5c8(FUN_001f9e90(hero.motion.displacement.f[0], hero.motion.displacement.f[1]), hero.motion.rot.f[2]);
+                ang = fast_subtract_rotations(fast_arc_tan(hero.motion.displacement.f[0], hero.motion.displacement.f[1]), hero.motion.rot.f[2]);
                 s = hero.motion.unk164 * 3.0f;
-                TF(0x60) = -FUN_001f9de0(ang) * s;
-                TF(0x64) = FUN_001f9dc8(ang) * s;
+                TF(0x60) = -fast_sin(ang) * s;
+                TF(0x64) = fast_cos(ang) * s;
                 if (0.43633232f < TF(0x60)) TF(0x60) = 0.43633232f;
                 else if (TF(0x60) < -0.43633232f) TF(0x60) = -0.43633232f;
                 if (0.43633232f < TF(0x64)) TF(0x64) = 0.43633232f;
                 else if (TF(0x64) < -0.43633232f) TF(0x64) = -0.43633232f;
             }
-            TF(0x64) = FUN_001fa580(TF(0x64), -0.12217305f);
+            TF(0x64) = fast_add_rotations(TF(0x64), -0.12217305f);
         }
         TF(0x958) = -b * 0.35f;
         TF(0xA08) = -b * 0.3f;

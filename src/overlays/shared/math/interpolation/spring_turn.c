@@ -272,7 +272,7 @@ typedef union {
 } V_94C8;
 
 extern V_94C8 D_L00_00173E70;
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern int D_L00_00173E40[];
@@ -331,7 +331,7 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
         if (D_L00_00173E40[7] > 0) {
             float g;
             r |= 2;
-            g = FUN_001f9e90(*(float *)((char *)D_L00_00173E40 + 0x48),
+            g = fast_arc_tan(*(float *)((char *)D_L00_00173E40 + 0x48),
                              vector_length_xy((char *)D_L00_00173E40 + 0x40));
             if (g > 0.5f) {
                 r |= 4;
@@ -393,11 +393,11 @@ extern Glob D_L00_00173E40_c __asm__("D_L00_00173E40");
 extern void FUN_001f9a28(void *, void *, void *);
 extern f32 FUN_001f9b20(void *);
 extern f32 FUN_001f9dc8_c(f32) __asm__("FUN_001f9dc8");
-extern f32 FUN_001f9de0(f32);
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void FUN_001f9a10(void *, void *, void *);
 extern s32 FUN_L00_002583f0_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002583f0");
-extern f32 FUN_001f9e90(f32, f32);
-extern void FUN_001f9bf8(void *, void *, f32);
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L00_00258ad0");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
@@ -439,10 +439,10 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
         c->f10 = -lim;
     if (c->i38 & 4) {
         d.f[0] = FUN_001f9dc8_c(c->f4C) * c->f10;
-        d.f[1] = FUN_001f9de0(c->f4C) * c->f10;
+        d.f[1] = fast_sin(c->f4C) * c->f10;
     } else {
         d.f[0] = FUN_001f9dc8_c(m->f48) * c->f10;
-        d.f[1] = FUN_001f9de0(m->f48) * c->f10;
+        d.f[1] = fast_sin(m->f48) * c->f10;
     }
     if (c->i38 & 1) {
         d.f[2] = 0.0f;
@@ -455,16 +455,16 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     p.f[2] = m->pos.f[2] - c->f30;
     if (FUN_L00_002583f0_c(&p, m, c->i38 & 0x20, c->f08, c->f0C)) {
         g = &D_L00_00173E40_c;
-        a = FUN_001f9e90(g->v40.f[2], FUN_001f9b20(&g->v40));
+        a = fast_arc_tan(g->v40.f[2], FUN_001f9b20(&g->v40));
         h1 = g->f28;
         if (0.5f < a && 0.1f < FUN_001f9b20(&d)) {
             {
-                FUN_001f9bf8(&q, &d, 0.57f);
+                fast_vec_normalize(&q, &d, 0.57f);
                 FUN_001f9a10(&q, &q, &m->pos);
                 q.f[2] = m->pos.f[2] - c->f30;
                 if (FUN_L00_002583f0_c(&q, m, c->i38 & 0x20, c->f08, c->f0C)) {
                     h2 = g->f28;
-                    if (!(0.5f <= FUN_001f9e90(g->v40.f[2], FUN_001f9b20(&g->v40))))
+                    if (!(0.5f <= fast_arc_tan(g->v40.f[2], FUN_001f9b20(&g->v40))))
                         goto done;
                     mask = 0x22;
                     if (!(c->i38 & 8))
@@ -668,16 +668,16 @@ float FUN_L00_00259468(float *a, float *b, int *out, float f) {
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, float);
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L00_00259508(void *a, void *b, void *c, int d, float f) {
     float t[4];
-    FUN_001f9a68(t, c, convert_integer_to_float(d));
+    fast_vec_scale(t, c, convert_integer_to_float(d));
     t[2] -= convert_integer_to_float((d * d + d) >> 1) * f;
     FUN_001f9a10(a, b, t);
 }
 float FUN_001f99c0(float);
-float FUN_001f9988(float);
+float square_root(float) __asm__("FUN_001f9988");
 int FUN_L00_002595a0(float *r0, float *r1, float a, float b, float c) {
     float d = b * b - a * 4.0f * c;
     float s, t;
@@ -685,7 +685,7 @@ int FUN_L00_002595a0(float *r0, float *r1, float a, float b, float c) {
         *r0 = -b / (a + a);
         return 1;
     }
-    s = FUN_001f9988(FUN_001f99c0(d));
+    s = square_root(FUN_001f99c0(d));
     *r0 = (-b + s) / (a + a);
     *r1 = (-b - s) / (a + a);
     if (*r0 < *r1) {

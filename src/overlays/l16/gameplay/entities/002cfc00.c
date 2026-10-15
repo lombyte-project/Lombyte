@@ -14,9 +14,9 @@ extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(int *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001f9fc8(void *);
-extern void FUN_001fa2d8(void *, void *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void subtract_vector_xyz(void *, void *, void *);
 
 /* Same routine as FUN_L05_00307010, with this level's data offsets. */
@@ -51,9 +51,9 @@ void FUN_L16_002cfc00(struct Moby *moby) {
                 a[2] += 0.8f;
                 subtract_vector_xyz(v, pos + 0x10, a);
                 if (!(8.0f < vector_length_xyz(v))) {
-                    FUN_001f9fc8(m);
-                    FUN_001fa2d8(m, l1 + 0xC0);
-                    FUN_001f9d20(v, v, m);
+                    set_identity_matrix(m);
+                    transpose_rotation_matrix(m, l1 + 0xC0);
+                    transform_vector(v, v, m);
                     if (absolute_float(v[0]) < 0.5f && absolute_float(v[1]) < 2.5f &&
                         absolute_float(v[2]) < 2.5f) {
                         *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
@@ -71,9 +71,9 @@ void FUN_L16_002cfc00(struct Moby *moby) {
                 float m[16];
                 subtract_vector_xyz(v, l2 + 0x10, data + 0x260);
                 if (!(8.0f < vector_length_xyz(v))) {
-                    FUN_001f9fc8(m);
-                    FUN_001fa2d8(m, l2 + 0xC0);
-                    FUN_001f9d20(v, v, m);
+                    set_identity_matrix(m);
+                    transpose_rotation_matrix(m, l2 + 0xC0);
+                    transform_vector(v, v, m);
                     if (absolute_float(v[0]) < 2.8f && absolute_float(v[1]) < 1.4f &&
                         absolute_float(v[2]) < 0.5f) {
                         *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);

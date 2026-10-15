@@ -140,36 +140,36 @@ extern void SceVu0RotMatrixX(void *, void *, f32);
 extern void SceVu0RotMatrixY(void *, void *, f32);
 extern void sceVu0RotMatrixZ(void *, void *, f32);
 extern s32 sceGsSyncV(s32);
-extern void func_001E93F0(void *, void *, s32, s32, s32);
-extern void func_001E93F8(void *);
-extern void func_001E9400(void *);
-extern void func_001E9408(void);
-extern void func_001E9410(ResidentRenderObject *);
-extern void func_001E9418(ResidentRenderObject *);
-extern void func_001E9420(void);
-extern void func_001E9428(void);
-extern void func_001E9430(void);
-extern void func_001E9438(void);
-extern void func_001E9440(void *, void *, s32, s32);
-extern void func_001E9450(ResidentRenderObject *, ResidentRenderObject *);
+extern void noop_callback_a(void *, void *, s32, s32, s32) __asm__("func_001E93F0");
+extern void noop_callback_b(void *) __asm__("func_001E93F8");
+extern void noop_callback_c(void *) __asm__("func_001E9400");
+extern void noop_callback_d(void) __asm__("func_001E9408");
+extern void noop_callback_e(ResidentRenderObject *) __asm__("func_001E9410");
+extern void noop_callback_f(ResidentRenderObject *) __asm__("func_001E9418");
+extern void noop_callback_g(void) __asm__("func_001E9420");
+extern void noop_callback_h(void) __asm__("func_001E9428");
+extern void noop_callback_i(void) __asm__("func_001E9430");
+extern void noop_callback_j(void) __asm__("func_001E9438");
+extern void noop_callback_k(void *, void *, s32, s32) __asm__("func_001E9440");
+extern void noop_callback_m(ResidentRenderObject *, ResidentRenderObject *) __asm__("func_001E9450");
 extern void update_camera(void) __asm__("func_001EDAA8");
 extern void update_view_context(void) __asm__("func_001F2D98");
 extern void enqueue_callback_list_1(void *, ResidentRenderObject *) __asm__("FUN_001f4600");
 extern void enqueue_callback_list_4(void *, ResidentRenderObject *) __asm__("FUN_001f47b8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
-extern f32 func_001F96E8(f32);
+extern f32 multiply_global_scale(f32) __asm__("func_001F96E8");
 extern s32 scale_ticks(s32) __asm__("func_001F96F8");
 extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void add_vectors(void *, void *, void *) __asm__("func_001F9A10");
-extern void func_001F9A40(void *, void *, void *, f32);
+extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
 extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
-extern f32 func_001F9B80(void *, void *, void *);
-extern void func_001F9CF8(void *, void *, void *);
+extern f32 vector_distance_xy(void *, void *, void *) __asm__("func_001F9B80");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 func_001F9E90(f32, f32);
+extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -187,7 +187,7 @@ extern void sample_camera_path(ScriptedPath *, s32, void *, void *, s32,
                                f32) __asm__("func_00214E58");
 extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
-extern void func_00217B88(void);
+extern void update_parts(void) __asm__("func_00217B88");
 extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
 extern void sound_update(void) __asm__("func_0022CA50");
 extern void enqueue_voice_request(void) __asm__("func_0022DC50");
@@ -229,11 +229,11 @@ void update_resident_gameplay_state(void) {
     switch (level_render_state.state) {
     case 0:
     case 8:
-        func_001E9430();
+        noop_callback_i();
         update_visible_resident_objects();
         enqueue_voice_request();
-        func_001E9420();
-        func_00217B88();
+        noop_callback_g();
+        update_parts();
         sequence -= 0.125f;
         render_sequence.frame++;
         render_sequence.time++;
@@ -309,12 +309,12 @@ void update_resident_gameplay_state(void) {
             music_unpause();
             space_load_in_progress[0] = 1;
             D_001413F5[0] = 0;
-            func_001E9438();
+            noop_callback_j();
             if (level_render_state.unk2C != 0) {
-                func_001E9408();
+                noop_callback_d();
                 return;
             }
-            func_001E9440(&level_render_state.unk60, &level_render_state.unk70, 0, 1);
+            noop_callback_k(&level_render_state.unk60, &level_render_state.unk70, 0, 1);
             return;
         }
         bank_tick_limit = pal_mode ? 0x50 : 0x60;
@@ -327,7 +327,7 @@ void update_resident_gameplay_state(void) {
         view_tan_half_fov[0] = keyframe_angles[3];
         update_view_context();
         qcopy(&D_00186F40.position, &keyframe->position);
-        func_001F9CF8(&D_00186F40.position, &D_00186F40.position,
+        transform_vector_by_basis(&D_00186F40.position, &D_00186F40.position,
                       level_render_state.player->transform);
         add_vectors(&D_00186F40.position, &D_00186F40.position,
                     &level_render_state.player->position);
@@ -365,7 +365,7 @@ void update_resident_gameplay_state(void) {
             scale_vector(&scratch_vectors[1], animation_positions + object->next_frame * 16,
                          object->blend);
             add_vectors(&object->position, &scratch_vectors[0], &scratch_vectors[1]);
-            func_001F9CF8(&object->position, &object->position,
+            transform_vector_by_basis(&object->position, &object->position,
                           level_render_state.player->transform);
             add_vectors(&object->position, &object->position, &level_render_state.player->position);
             object->rotation.components[2] = level_render_state.player->rotation.components[2];
@@ -406,10 +406,10 @@ void update_resident_gameplay_state(void) {
                 update_moby_shadow_range(object);
             }
             if (object->class_id == 10) {
-                func_001E9418(object);
+                noop_callback_f(object);
             }
             if (object->class_id == 0) {
-                func_001E9410(object);
+                noop_callback_e(object);
                 if ((current_level_index == 10 && item_available[6] != 0) ||
                     current_level_index == 13) {
                     if (level_render_state.attachment == 0) {
@@ -421,7 +421,7 @@ void update_resident_gameplay_state(void) {
                             level_render_state.attachment->unk73 = 0x18;
                         }
                     }
-                    func_001E9450(object, level_render_state.attachment);
+                    noop_callback_m(object, level_render_state.attachment);
                 }
             }
             if ((u16)object->class_id - 0x213U < 3) {
@@ -444,7 +444,7 @@ void update_resident_gameplay_state(void) {
                         }
                     } else if (render_sequence.time < scale_ticks(0x1F8)) {
                         s32 color_intensity =
-                            (s32)(((f32)render_sequence.time - func_001F96E8(360.0f)) *
+                            (s32)(((f32)render_sequence.time - multiply_global_scale(360.0f)) *
                                   (frame_scale * 1.25f));
                         if (color_intensity >= 256) {
                             color_intensity = 255;
@@ -457,7 +457,7 @@ void update_resident_gameplay_state(void) {
                         }
                         if (scale_ticks(0x1A4) < render_sequence.time) {
                             level_render_state.player->unkBC =
-                                (s32)(((f32)render_sequence.time - func_001F96E8(420.0f)) *
+                                (s32)(((f32)render_sequence.time - multiply_global_scale(420.0f)) *
                                       (frame_scale * 1.2f));
                             level_render_state.player->unkB2 = 0;
                             enqueue_callback_list_1(FUN_0022e1b0, level_render_state.player);
@@ -500,12 +500,12 @@ void update_resident_gameplay_state(void) {
                     s32 color_intensity;
                     if (render_sequence.time < scale_ticks(300)) {
                         level_render_state.player->unkBC =
-                            (s32)((func_001F96E8(300.0f) - (f32)render_sequence.time) *
+                            (s32)((multiply_global_scale(300.0f) - (f32)render_sequence.time) *
                                   (frame_scale * 1.5f));
                         level_render_state.player->unkB2 = 0;
                         enqueue_callback_list_1(FUN_0022e1b0, level_render_state.player);
                     }
-                    color_intensity = (s32)((func_001F96E8(360.0f) - (f32)render_sequence.time) *
+                    color_intensity = (s32)((multiply_global_scale(360.0f) - (f32)render_sequence.time) *
                                             (frame_scale * 1.25f));
                     if (object->class_id == 0x215) {
                         object->color = (color_intensity << 8) | (color_intensity << 16);
@@ -532,15 +532,15 @@ void update_resident_gameplay_state(void) {
         sound_update();
         update_all_point_lights();
         func_0020CFD0();
-        func_001E9428();
+        noop_callback_h();
         break;
 
     case 3:
-        func_001E9430();
+        noop_callback_i();
         update_visible_resident_objects();
         enqueue_voice_request();
-        func_001E9420();
-        func_00217B88();
+        noop_callback_g();
+        update_parts();
         if (level_render_state.timer == 0) {
             music_pause(0);
             update_audio_stream_until_idle(0);
@@ -573,7 +573,7 @@ void update_resident_gameplay_state(void) {
                 level_render_state.companion_b->lifetime_stamp =
                     ((ResidentRenderObject *)hero.moby)->lifetime_stamp;
             }
-            func_001E93F0(&D_00186F40.position, &D_00186F40.unk150, 1, 0, 0);
+            noop_callback_a(&D_00186F40.position, &D_00186F40.unk150, 1, 0, 0);
             level_render_state.blend = 0.0f;
             level_render_state.interpolation_velocity = 0.0f;
             if (level_render_state.path >= 0) {
@@ -582,12 +582,12 @@ void update_resident_gameplay_state(void) {
                 path->p[0].components[3] = maximum_turn;
                 for (path_point_index = 1; path_point_index < path->point_count - 1;
                      path_point_index++) {
-                    segment_angle = func_001F9E90(path->p[path_point_index].components[0] -
+                    segment_angle = fast_arc_tan(path->p[path_point_index].components[0] -
                                                       path->p[path_point_index - 1].components[0],
                                                   path->p[path_point_index].components[1] -
                                                       path->p[path_point_index - 1].components[1]);
                     path->p[path_point_index].components[3] = fast_subtract_rotations(
-                        func_001F9E90(path->p[path_point_index + 1].components[0] -
+                        fast_arc_tan(path->p[path_point_index + 1].components[0] -
                                           path->p[path_point_index].components[0],
                                       path->p[path_point_index + 1].components[1] -
                                           path->p[path_point_index].components[1]),
@@ -596,12 +596,12 @@ void update_resident_gameplay_state(void) {
                         maximum_turn = absolute_float(path->p[path_point_index].components[3]);
                     }
                 }
-                segment_angle = func_001F9E90(path->p[path->point_count - 1].components[0] -
+                segment_angle = fast_arc_tan(path->p[path->point_count - 1].components[0] -
                                                   path->p[path->point_count - 2].components[0],
                                               path->p[path->point_count - 1].components[1] -
                                                   path->p[path->point_count - 2].components[1]);
                 path->p[path->point_count - 1].components[3] = fast_subtract_rotations(
-                    func_001F9E90(
+                    fast_arc_tan(
                         path->p[0].components[0] - path->p[path->point_count - 1].components[0],
                         path->p[0].components[1] - path->p[path->point_count - 1].components[1]),
                     segment_angle);
@@ -618,11 +618,11 @@ void update_resident_gameplay_state(void) {
                 qcopy(&level_render_state.startPos, &player->position);
                 qcopy(&level_render_state.pathPos, &path->p[0]);
                 qcopy(&level_render_state.startRot, &player->rotation);
-                level_render_state.rotY = func_001F9E90(
-                    func_001F9B80(&path->p[1], &path->p[0], &level_render_state.startPos),
+                level_render_state.rotY = fast_arc_tan(
+                    vector_distance_xy(&path->p[1], &path->p[0], &level_render_state.startPos),
                     path->p[0].components[2] - path->p[1].components[2]);
                 level_render_state.rotZ =
-                    func_001F9E90(path->p[1].components[0] - path->p[0].components[0],
+                    fast_arc_tan(path->p[1].components[0] - path->p[0].components[0],
                                   path->p[1].components[1] - path->p[0].components[1]);
             }
         }
@@ -632,7 +632,7 @@ void update_resident_gameplay_state(void) {
             advance_accelerated_scalar(&level_render_state.blend,
                                        &level_render_state.interpolation_velocity, 1.0f,
                                        camera_blend_step, camera_blend_step, frame_time * 0.5f);
-            func_001F9A40(&scratch_vectors[0],
+            lerp_vector(&scratch_vectors[0],
                           &D_00160034[level_render_state.source_camera_index].position,
                           &D_00160034[level_render_state.destination_camera_index].position,
                           level_render_state.blend);
@@ -653,8 +653,8 @@ void update_resident_gameplay_state(void) {
             scratch_vectors[1].components[2] =
                 fast_add_rotations(D_00160034[level_render_state.source_camera_index].rotZ,
                                    scratch_vectors[1].components[2]);
-            func_001E93F8(&scratch_vectors[0]);
-            func_001E9400(&scratch_vectors[1]);
+            noop_callback_b(&scratch_vectors[0]);
+            noop_callback_c(&scratch_vectors[1]);
         }
         if (level_render_state.path >= 0) {
             if (level_render_state.timer < scale_ticks(150)) {
@@ -666,7 +666,7 @@ void update_resident_gameplay_state(void) {
                     blend = 1.0f;
                 }
                 level_render_state.player->blend = blend;
-                func_001F9A40(&level_render_state.player->position, &level_render_state.startPos,
+                lerp_vector(&level_render_state.player->position, &level_render_state.startPos,
                               &level_render_state.pathPos, blend);
                 level_render_state.player->rotation.components[0] = 0.0f;
                 level_render_state.player->rotation.components[1] = fast_add_rotations(
@@ -723,14 +723,14 @@ void update_resident_gameplay_state(void) {
                     if (level_render_state.history_count < 0x20) {
                         level_render_state.history_count++;
                     }
-                    func_001F9CF8(&level_render_state.primary_history[level_render_state.history_index],
+                    transform_vector_by_basis(&level_render_state.primary_history[level_render_state.history_index],
                                   &D_001D99B0[level_render_state.content_variant].a,
                                   level_render_state.player->transform);
                     add_vectors(&level_render_state.primary_history[level_render_state.history_index],
                                 &level_render_state.primary_history[level_render_state.history_index],
                                 &level_render_state.player->position);
                     level_render_state.primary_history[level_render_state.history_index].f[3] = 1.0f;
-                    func_001F9CF8(&level_render_state.secondary_history[level_render_state.history_index],
+                    transform_vector_by_basis(&level_render_state.secondary_history[level_render_state.history_index],
                                   &D_001D99B0[level_render_state.content_variant].b,
                                   level_render_state.player->transform);
                     add_vectors(&level_render_state.secondary_history[level_render_state.history_index],
@@ -751,7 +751,7 @@ void update_resident_gameplay_state(void) {
                 ResidentRenderObject *p = level_render_state.player;
                 ResidentRenderObject *scratch_vectors = level_render_state.companion_a;
                 qcopy(&scratch_vectors->rotation, &p->rotation);
-                func_001F9CF8(&scratch_vectors->position,
+                transform_vector_by_basis(&scratch_vectors->position,
                               &D_001D9C80[level_render_state.content_variant], p->transform);
             }
             add_vectors(&level_render_state.companion_a->position,
@@ -762,7 +762,7 @@ void update_resident_gameplay_state(void) {
                 ResidentRenderObject *scratch_vectors = level_render_state.companion_b;
                 ResidentRenderObject *p = level_render_state.player;
                 qcopy(&scratch_vectors->rotation, &p->rotation);
-                func_001F9CF8(&scratch_vectors->position,
+                transform_vector_by_basis(&scratch_vectors->position,
                               &D_001D9CB0[level_render_state.content_variant], p->transform);
             }
             add_vectors(&level_render_state.companion_b->position,
@@ -774,7 +774,7 @@ void update_resident_gameplay_state(void) {
         sound_update();
         update_all_point_lights();
         func_0020CFD0();
-        func_001E9428();
+        noop_callback_h();
         break;
 
     case 4:

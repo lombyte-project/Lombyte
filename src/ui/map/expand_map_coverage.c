@@ -1,6 +1,6 @@
 #include "types.h"
 
-extern void FUN_001f98d0(u8 *, void *, s32);
+extern void fast_mem_copy(u8 *, void *, s32) __asm__("FUN_001f98d0");
 
 void expand_map_coverage(u8 *dest, u8 *src) __asm__("FUN_00207e58");
 
@@ -46,13 +46,13 @@ void expand_map_coverage(u8 *dest, u8 *src) {
             q++;
             src++;
         }
-        FUN_001f98d0(dest, buf, 0x40);
+        fast_mem_copy(dest, buf, 0x40);
         dest += 0x40;
-        FUN_001f98d0(dest, buf, 0x40);
+        fast_mem_copy(dest, buf, 0x40);
         dest += 0x40;
-        FUN_001f98d0(dest, buf, 0x40);
+        fast_mem_copy(dest, buf, 0x40);
         dest += 0x40;
-        FUN_001f98d0(dest, buf, 0x40);
+        fast_mem_copy(dest, buf, 0x40);
         dest += 0x40;
     }
 }

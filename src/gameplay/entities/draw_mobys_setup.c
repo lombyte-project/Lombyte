@@ -8,7 +8,7 @@
 extern u8 D_00100080[];
 extern u8 D_0015FED0[];
 extern s32 vu1_chain_limit __asm__("D_00160F08");
-extern void func_001F21B8();
+extern void noop_core_callback_secondary() __asm__("func_001F21B8");
 extern void vu0_load_micro_program() __asm__("func_002334D8");
 extern void vu1_add_data_ref() __asm__("func_00233830");
 extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
@@ -28,7 +28,7 @@ void draw_mobys_setup(void) {
     current += 0x10;
     gs_texture_allocation_cursor = gs_texture_allocation_start;
     render_packet_cursor.addr = current;
-    func_001F21B8(D_0015FED0, callbackArg);
+    noop_core_callback_secondary(D_0015FED0, callbackArg);
     D_0015FF40 = 0;
     vu1_chain_limit = D_0015F63C + 0xFFFF0000;
     moby_anim_head = D_0015F638;

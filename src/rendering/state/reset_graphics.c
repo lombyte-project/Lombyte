@@ -7,7 +7,7 @@ extern s32 D_0015EE78[] MACRO_ADDR;
 extern s32 D_0015EE78_gp;
 extern s32 space_load_in_progress[] __asm__("D_0015F618") MACRO_ADDR;
 extern volatile s32 vif_chain_flags __asm__("D_00160EE0") MACRO_ADDR;
-extern s32 func_001204B8();
+extern s32 reset_vif1_gif() __asm__("func_001204B8");
 extern s32 set_pal_mode() __asm__("func_001F34E8");
 extern s32 init_dma() __asm__("func_0020B418");
 extern s32 vu1_init_chain() __asm__("func_002335D0");
@@ -29,7 +29,7 @@ void reset_graphics(void) {
     sceDmaReset(1);
     init_dma();
     sceGsResetGraph(0, 1, (D_0015ED80[0] != 0) ? 3 : 2, 0);
-    func_001204B8();
+    reset_vif1_gif();
     do {
         vu1_init_chain();
         temp_16_31 = D_0015EE78[0];

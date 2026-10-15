@@ -9,7 +9,7 @@
 
 /* Wobbles a moby's position and rotation from its sine-driven state. */
 
-extern float FUN_001f9de0(float);
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void FUN_L08_002dc4a0(struct Moby *moby) {
@@ -19,18 +19,18 @@ void FUN_L08_002dc4a0(struct Moby *moby) {
     qcopy(&moby->rot, d + 0x70);
     s = fast_add_rotations(*(float *)(d + 0xec), frame_time * 2.0943951f);
     *(float *)(d + 0xec) = s;
-    t = FUN_001f9de0(s);
+    t = fast_sin(s);
     w = frame_time * 1.6929693f;
     moby->pos.z += t * 0.25f;
     s = fast_add_rotations(*(float *)(d + 0xf0), w);
     *(float *)(d + 0xf0) = s;
-    t = fast_add_rotations(moby->rot.y, FUN_001f9de0(s) * 0.08726646f);
+    t = fast_add_rotations(moby->rot.y, fast_sin(s) * 0.08726646f);
     w = frame_time * 0.9250245f;
     moby->rot.y = t;
     s = fast_add_rotations(*(float *)(d + 0xf4), w);
     *(float *)(d + 0xf4) = s;
     moby->rot.x =
-        fast_add_rotations(moby->rot.x, FUN_001f9de0(s) * 0.08726646f);
+        fast_add_rotations(moby->rot.x, fast_sin(s) * 0.08726646f);
     if (moby->rot.x > 0.17453292f)
         moby->rot.x = 0.17453292f;
     else if (moby->rot.x < -0.17453292f)

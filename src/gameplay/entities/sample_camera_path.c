@@ -11,9 +11,9 @@ struct CameraPath {
 };
 
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_001f9a40(void *, void *, void *, f32);
+extern void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 FUN_001f9e90(f32, f32);
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
@@ -64,11 +64,11 @@ void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *
     next_bank = 0.0f;
     qcopy(&current_point.q, &path->points[point_index]);
     qcopy(&next_point.q, &path->points[next_index]);
-    FUN_001f9a40(position, &current_point, &next_point, fraction);
+    lerp_vector(position, &current_point, &next_point, fraction);
     if (!(flags & 1)) {
         subtract_vector_xyz(&segment, &next_point, &current_point);
-        heading = FUN_001f9e90(segment.f[0], segment.f[1]);
-        pitch = FUN_001f9e90(vector_length_xy(&segment), segment.f[2]);
+        heading = fast_arc_tan(segment.f[0], segment.f[1]);
+        pitch = fast_arc_tan(vector_length_xy(&segment), segment.f[2]);
         bank = current_point.f[3];
         next_pitch = pitch;
         if (clamped) {
@@ -77,8 +77,8 @@ void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *
         } else {
             qcopy(&following_point.q, &path->points[following_index]);
             subtract_vector_xyz(&segment, &following_point, &next_point);
-            next_heading = FUN_001f9e90(segment.f[0], segment.f[1]);
-            next_pitch = FUN_001f9e90(vector_length_xy(&segment), segment.f[2]);
+            next_heading = fast_arc_tan(segment.f[0], segment.f[1]);
+            next_pitch = fast_arc_tan(vector_length_xy(&segment), segment.f[2]);
             next_bank = next_point.f[3];
         }
         *(s32 *)rotation = 0;

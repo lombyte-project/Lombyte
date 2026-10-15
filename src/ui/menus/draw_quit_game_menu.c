@@ -21,7 +21,7 @@ extern void font_print_center(s32, s32, u64, s32, s32) __asm__("func_001F6AF0");
 extern void font_print_window_regular(s32, u64, s32, s32) __asm__("func_001F7580");
 extern s32 get_help_message_text() __asm__("func_001FDD10");
 extern void vu1_add_g_sregister() __asm__("func_00233980");
-extern void func_001153FC();
+extern void memset() __asm__("func_001153FC");
 s32 draw_quit_game_menu(struct QuitMenu *arg0) __asm__("FUN_0021e890");
 
 s32 draw_quit_game_menu(struct QuitMenu *arg0) {
@@ -35,7 +35,7 @@ s32 draw_quit_game_menu(struct QuitMenu *arg0) {
     s32 temp_16_16;
     temp_16_16 = arg0->unk20;
     temp_17_18 = arg0->unk24;
-    func_001153FC(packet, 0, 0x18);
+    memset(packet, 0, 0x18);
     temp_18_25 = (s32)(temp_16_16 + (((u32)temp_16_16) >> 0x1F));
     temp_18_25 = temp_18_25 >> 1;
     packet[1] = temp_17_18;

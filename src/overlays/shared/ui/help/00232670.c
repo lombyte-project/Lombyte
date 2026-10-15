@@ -34,9 +34,9 @@ extern void FUN_L00_00232320(void);
 extern void FUN_L00_00232128(void);
 extern void FUN_L00_002322c8(void);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 FUN_0022da68(s32, s32, struct Moby *);
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern f32 FUN_0020c9e0(struct Moby *);
+extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
 
 /* Hero animation frame advance: steps the hero moby's frame position
    (unk54) by the rate in hero.anim_speed/unkA94 or a scripted table, moves to
@@ -117,7 +117,7 @@ void FUN_L00_00232670(void) {
         for (i = 0; i < seq->trigger_count; i++, trig++) {
             s32 at = *trig >> 16;
             if (lo < at && !(hi < at)) {
-                FUN_0022da68(*trig & 0xFFFF, 0, m);
+                allocate_voice_for_target_entry(*trig & 0xFFFF, 0, m);
                 break;
             }
         }
@@ -131,12 +131,12 @@ void FUN_L00_00232670(void) {
             m->sound_slot = 0xFF;
         }
     } else if (m->unk7C != 0xFF && D_L00_0015F5C4 != 2 && D_L00_0015F5C4 != 6) {
-        m->sound_slot = FUN_0022da68(m->unk7C, 4, m);
+        m->sound_slot = allocate_voice_for_target_entry(m->unk7C, 4, m);
     }
     FUN_L00_00232128();
     FUN_L00_002322c8();
     prev = hero.anim_frame;
-    hero.anim_frame = FUN_0020c9e0(m);
+    hero.anim_frame = compute_interpolated_record_value(m);
     if (prev <= hero.anim_frame)
         hero.unkAAC = hero.anim_frame - prev;
     else

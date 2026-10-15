@@ -38,7 +38,7 @@ typedef struct {
     D_002d7f88 *p78;
 } S_002d7f88;
 extern f32 D_L00_001616DC;
-s32 FUN_001f9740(void *);
+s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_001f9cf8(void *, void *, void *);
@@ -50,7 +50,7 @@ void FUN_L00_002d7f88(S_002d7f88 *self) {
     void *m;
     f32 t;
     d->f4 += (D_L00_001616DC + D_L00_001616DC) * frame_time;
-    if (FUN_001f9740(d->v8) != 0 || D_L00_001616DC * 1.1f <= d->f4)
+    if (fast_dec_timer(d->v8) != 0 || D_L00_001616DC * 1.1f <= d->f4)
         goto kill;
     o = d->o;
     if (o == 0 || o->hA6 != 0xB9 || o->b20 == 0xFE || o->b20 == 0xFD) {
@@ -430,7 +430,7 @@ extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern int hero_max_health __asm__("D_0015EDA0");
 extern unsigned char D_L00_001619F4 __attribute__((sda));
 extern float D_L00_001619F8 __attribute__((sda));
@@ -447,7 +447,7 @@ extern float D_L00_00161A50 __attribute__((sda));
 extern float D_L00_00161A54 __attribute__((sda));
 extern int D_L00_00161A58_gp __asm__("D_L00_00161A58") __attribute__((sda));
 extern float D_L00_00161A5C __attribute__((sda));
-extern int FUN_001fa728();
+extern int fast_bsphere_check() __asm__("FUN_001fa728");
 extern int FUN_L00_00267a08();
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern unsigned char D_0013F5E0[];
@@ -467,7 +467,7 @@ float FUN_L00_00257e20(float a, float b, float c, float d, float t);
 int FUN_L00_00257b90(int lo, int hi);
 int FUN_L00_0028dc90(int i, int a1, int v, int k);
 int FUN_L00_002d8980_c(char *a) __asm__("FUN_L00_002d8980");
-s32 FUN_001f9770(void *);
+s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32 FUN_L00_002d8510_c(M_2d8510 *m) __asm__("FUN_L00_002d8510");
 s32 scale_game_frames_alt_c(s32) __asm__("FUN_001f96f8");
 unsigned char *FUN_L00_00273708(void *a, int b, int c);
@@ -1028,18 +1028,18 @@ typedef struct {
     int a[16];
 } V __attribute__((aligned(16)));
 
-extern void FUN_001fa050(void *, void *);
-extern void FUN_001fa298(void *, void *);
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void FUN_001fa2b8(void *, void *);
-extern void FUN_001fa378(void *, void *, void *);
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_0020e098(void *);
 
 /* Composes the 0xC0 matrix of a with the one built from c into b+0xC0 and flags b for update. */
 void FUN_L00_002d9fd0(char *a, char *b, void *c) {
     V t0, t1, t2;
-    FUN_001fa050(&t0, c);
-    FUN_001fa298(&t1, a + 0xC0);
-    FUN_001fa378(&t2, &t1, &t0);
+    euler_rotation_matrix(&t0, c);
+    copy_matrix_rotation(&t1, a + 0xC0);
+    multiply_matrix(&t2, &t1, &t0);
     FUN_001fa2b8(b + 0xC0, &t2);
     *(unsigned short *)(b + 0x34) |= 4;
     FUN_0020e098(b);
@@ -1057,7 +1057,7 @@ typedef struct {
     s32 i207C;
 } G_2db508;
 
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char D_0013E529 __attribute__((section(".data")));
 extern char *D_001413A0[];
 extern G_2db508 D_0013F350;
@@ -1088,7 +1088,7 @@ int FUN_L00_002da058(u8 *p, void *q, void *m_, void *r_, void *buf) {
                 *(short *)(r + 0x68) = 3;
                 *(int *)(r + 0x6C) = 0;
                 *(float *)(m + 0x58) = 1.0f;
-                *(float *)(r + 0x64) = FUN_001f9b80(m + 0x10, buf);
+                *(float *)(r + 0x64) = vector_distance_xy(m + 0x10, buf);
                 for (i = 0; i < (D_0013E529 == 0 ? 5 : 10); i++) {
                     G_2db508 *gg = &D_0013F350;
                     if (D_001413A0[i] == 0) {
@@ -1191,7 +1191,7 @@ extern void FUN_L00_002db848(void);
 extern void FUN_L00_002da250_c(void *, f32 *, f32 *, void *) __asm__("FUN_L00_002da250");
 extern void FUN_L00_002ddf60(void *, void *);
 extern R *FUN_L00_002db890_c(M_da360 *) __asm__("FUN_L00_002db890");
-extern f32 FUN_001f9b80(void *, void *);
+extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern s32 FUN_L00_002d9f78_c(void) __asm__("FUN_L00_002d9f78");
 extern f32 FUN_001f9e90(f32, f32);
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
@@ -1215,7 +1215,7 @@ void FUN_L00_002da360(u8 *p, void *q) {
             *(void **)*(u8 **)(m->p24 + 0x2c) != (void *)FUN_L00_002db848) {
             r = FUN_L00_002db890_c(m);
             if (r != 0 && r->h68 < 6) {
-                d = FUN_001f9b80(p + 0x10, &m->pos);
+                d = vector_distance_xy(p + 0x10, &m->pos);
                 if (d < 15.0f && !FUN_L00_002d9f78_c() &&
                     ((n = G2->i2078), G1->b9 == 0 ? n < 5 : n < 10)) {
                     if (r->h68 < 3) {
@@ -1407,7 +1407,7 @@ extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 square_root_scalar(f32) __asm__("func_001F9988");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_L00_00173E40[];
 extern int collision_segment_hits(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -1415,7 +1415,7 @@ extern int allocate_voice_for_target_entry_alt(int,int,int) __asm__("FUN_0022da6
 extern int queue_animation_update_alt(int,int,int,int,int,int,int) __asm__("FUN_001ff308");
 extern s32 D_0015EEA4;
 extern s32 FUN_L00_002d9f78(void);
-extern void FUN_001fa2d8(void *,void *);
+extern void transpose_rotation_matrix(void *,void *) __asm__("FUN_001fa2d8");
 extern void FUN_L00_0020e4c8(void);
 extern void FUN_L00_0020e698(void);
 extern void FUN_L00_002223f8(int,int);
@@ -1584,7 +1584,7 @@ void FUN_L00_002da790(SuckMoby *self) {
             work.aim.velocity.f.z=50.0f;
             copy_matrix3x4(&work.aim.rotation,camera);
             eye=(SuckVec *)(camera+0x140);
-            FUN_001fa2d8(&work.aim.inverse,&work.aim.rotation);
+            transpose_rotation_matrix(&work.aim.inverse,&work.aim.rotation);
             transform_vector(&work.aim.velocity,&work.aim.velocity,&work.aim.inverse);
             add_vector_xyz(&work.aim.end,eye,&work.aim.velocity);
             if(collision_segment_hits(eye,&work.aim.end,0,(int)self,0)) {
@@ -1641,7 +1641,7 @@ void FUN_L00_002da790(SuckMoby *self) {
             float yaw,pitch,limit;
             work.fire.velocity.q=0;
             copy_matrix3x4(&work.fire.rotation,D_L00_00166C80);
-            FUN_001fa2d8(&work.fire.inverse,&work.fire.rotation);
+            transpose_rotation_matrix(&work.fire.inverse,&work.fire.rotation);
             if(suck_hero.state==30 && (suck_hero.moby->flags&1)) {
                 work.fire.offset.q=0;
                 work.fire.offset.f.z=frame_scale*0.4462f;
@@ -1680,7 +1680,7 @@ void FUN_L00_002da790(SuckMoby *self) {
                         else work.fire.point.f.z+=0.5f;
                         if((m->flags&0x1000) && m && m->cls && m->cls->category==5) {
                             tyaw=FUN_001f9e90(work.fire.point.f.x-work.fire.launch.f.x,work.fire.point.f.y-work.fire.launch.f.y);
-                            tpitch=FUN_001f9e90(FUN_001f9b80(&work.fire.launch,&work.fire.point),work.fire.point.f.z-work.fire.launch.f.z);
+                            tpitch=FUN_001f9e90(vector_distance_xy(&work.fire.launch,&work.fire.point),work.fire.point.f.z-work.fire.launch.f.z);
                             dyaw=fast_difference_between_rotations(yaw,tyaw);
                             distance=distance_xyz(&work.fire.launch,&work.fire.point);
                             if(distance<2.5f && fast_difference_between_rotations(suck_hero.yaw,
@@ -2237,11 +2237,11 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
 extern int D_0013E529_c __asm__("D_0013E529");
 extern int D_001403FC; /* no foreign declaration */
-extern int FUN_001f9c48();
-extern int FUN_001fa3c0();
-extern int FUN_001fa400();
-extern int FUN_001fa4f8();
-extern int FUN_00214260();
+extern int set_vector_length_xy() __asm__("FUN_001f9c48");
+extern int multiply_quaternions() __asm__("FUN_001fa3c0");
+extern int quaternion_nlerp() __asm__("FUN_001fa400");
+extern int quaternion_to_matrix() __asm__("FUN_001fa4f8");
+extern int matrix_to_quaternion() __asm__("FUN_00214260");
 extern int FUN_L00_001f0d60();
 extern int FUN_L00_001f2868();
 extern int FUN_L00_001ff430();
@@ -2250,7 +2250,7 @@ extern int FUN_L00_00259888();
 extern int allocate_voice_for_target_entry_alt(int,int,int) __asm__("FUN_0022da68");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void DebugPrint(char *, ...);
-extern void FUN_001fa2d8(void *,void *);
+extern void transpose_rotation_matrix(void *,void *) __asm__("FUN_001fa2d8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void add_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -3331,7 +3331,7 @@ void FUN_L00_002df4a8(M09 *m) {
 
 extern float FUN_001f9de0(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int FUN_001fa6e0(int, int, float);
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern void FUN_L00_002df4a8_u(void *) __asm__("FUN_L00_002df4a8");
 
@@ -3353,7 +3353,7 @@ void FUN_L00_002df4f8(char *m) {
                                *(float *)&D_L00_00161B98 * DEG_TO_RAD * frame_time);
         *(float *)p = a;
         a = FUN_001f9de0(a);
-        c = FUN_001fa6e0(*(int *)&D_L00_00161B90, *(int *)&D_L00_00161B94, a * 0.5f + 0.5f);
+        c = fast_tween_color(*(int *)&D_L00_00161B90, *(int *)&D_L00_00161B94, a * 0.5f + 0.5f);
         b = (c >> 16) & 0xFF;
         g = (c >> 8) & 0xFF;
         r = c & 0xFF;

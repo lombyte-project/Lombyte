@@ -20,7 +20,7 @@ struct Mmio {
 extern struct TtyState D_00154A50;
 extern u8 D_00154BC0[];
 extern s32 FlushCache();
-extern s32 func_00119568();
+extern s32 init_block() __asm__("func_00119568");
 extern s32 sceDeci2Open();
 extern void sceTtyHandler();
 s32 sceTtyInit(void) {
@@ -43,6 +43,6 @@ s32 sceTtyInit(void) {
     hdr->unk6 = 'E';
     hdr->unk7 = 'H';
     hdr->unk8 = 0;
-    state->unk18 = func_00119568(0x100);
+    state->unk18 = init_block(0x100);
     return 1;
 }

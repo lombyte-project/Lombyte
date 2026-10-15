@@ -121,14 +121,14 @@ extern f32 D_L00_00161D9C __attribute__((sda));
 extern f32 D_L00_00161DA0 __attribute__((sda));
 extern f32 D_L00_00161DA4 __attribute__((sda));
 extern f32 D_L00_00161DA8 __attribute__((sda));
-extern f32 FUN_001fa580(f32, f32);
-extern f32 FUN_001f9dc8(f32);
-extern f32 FUN_001f9de0(f32);
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 FUN_001f99c0(f32);
-extern f32 FUN_001fa688(f32, f32);
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001fa6c0(s32);
 extern s32 FUN_001f96f8(s32);
-extern s32 FUN_001f9770(s16 *);
+extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern u8 *FUN_002141f8(s32);
 extern s32 collect_mobies_in_sphere(void *, s32, s32, s32, f32) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_002e8918(f32 *, f32, f32);
@@ -160,9 +160,9 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
 
     s = (S220_2e6000 *)((u8 *)o->m + 0x220);
     if (hero.unk2284 == 0xD && s->i10 != 0x14D) {
-        f = FUN_001fa580(hero.unk4E4, 3.14159265f);
-        v[0] = FUN_001f9dc8(f);
-        v[1] = FUN_001f9de0(f);
+        f = fast_add_rotations(hero.unk4E4, 3.14159265f);
+        v[0] = fast_cos(f);
+        v[1] = fast_sin(f);
         v[2] = 0.0f;
         FUN_L00_002e8918(v, 0.20943952f, v[2]);
         follow_camera_start_slide();
@@ -260,7 +260,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
         f32 *q = v;
         do {
             next = j + 1;
-            *q = FUN_001fa688(D_L00_00166E10[j + 43], D_L00_00166E10[j + 44]);
+            *q = fast_difference_between_rotations(D_L00_00166E10[j + 43], D_L00_00166E10[j + 44]);
             sum += *q;
             q++;
             j = next;
@@ -273,7 +273,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
     c = 1.0f - c;
     if (c < D_L00_00161D84) m->h12 = FUN_001f96f8(0x20); }
     if (m->h12 != 0) {
-        if (FUN_001f9770(&m->h12)) m->h14 = FUN_001f96f8(0x2D);
+        if (fast_dec_timer_s16(&m->h12)) m->h14 = FUN_001f96f8(0x2D);
         follow_camera_start_slide();
         k = ++m->h16;
         if (FUN_001f96f8(0x1E) < k) m->h16 = FUN_001f96f8(0x1E);
@@ -281,7 +281,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
         FUN_L00_002e8590((D_L00_00161D88 - 0.015f) * f + 0.015f, 0.2f);
         D_L00_0015EF40 = 0.0f;
     } else if (m->h14 != 0) {
-        FUN_001f9770(&m->h14);
+        fast_dec_timer_s16(&m->h14);
         f = FUN_001fa6c0(m->h14) / FUN_001fa6c0(FUN_001f96f8(0x2D));
         f *= -0.75f;
         f += 0.75f;
@@ -300,7 +300,7 @@ typedef float V[4] __attribute__((aligned(16)));
 extern V D_L00_00173E60;
 extern char D_L00_00166C80[];
 extern char D_L00_00173E70_c[] __asm__("D_L00_00173E70");
-extern f32 FUN_001f9b80(void *, void *);
+extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_L00_00166E40[];
@@ -344,7 +344,7 @@ void FUN_L00_002e66b8(int snap) {
         scale_vector_xyz(rise, *(char **)(target + 0xC0) + 0xE0, *(float *)(target + 0xB0));
         add_vector_xyz(eye, target, rise);
         if (FUN_001efa68(eye, cam + 0x30, mask, (int)player->moby, 0)) {
-            if (FUN_001f9b80(D_L00_00173F60_a, eye) < 0.001f) mask = 0x96;
+            if (vector_distance_xy(D_L00_00173F60_a, eye) < 0.001f) mask = 0x96;
         }
         hero2 = &hero;
         if (FUN_001efa68(eye, cam + 0x30, mask, (int)hero2->moby, 0)) {
@@ -1165,24 +1165,24 @@ extern C940_2e7d20_t D_0013C940_2e7d20  __asm__("D_0013C940")__attribute__((sect
 typedef struct { u8 pad[0x18]; s32 p18; s32 p1C; u8 v20[0x10]; } E40_2e7d20_t;
 extern E40_2e7d20_t D_L00_00173E40 __attribute__((section(".data")));
 
-void FUN_001f9a40(void *, void *, void *, f32);
+void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 extern s32 probe_world_sphere(void *, s32, void *, s32, f32) __asm__("FUN_L00_001f2868");
 s32 FUN_L00_00259830(void *);
 extern void FUN_001f9a28_2e7d20(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001f9ab0_2e7d20(void *, void *) __asm__("FUN_001f9ab0");
 extern void FUN_001f9a68_2e7d20(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9bf8_2e7d20(void *, void *, f32) __asm__("FUN_001f9bf8");
-f32 FUN_001f9df8(f32);
+f32 fast_arc_sin(f32) __asm__("FUN_001f9df8");
 extern f32 FUN_001f99c0_2e7d20(f32) __asm__("FUN_001f99c0");
-void FUN_001f9ad8(void *, void *, void *);
-void FUN_00214890(void *, void *, void *, f32);
+void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+void build_look_at_matrix(void *, void *, void *, f32) __asm__("FUN_00214890");
 extern s32 FUN_L00_002e7a30_2e7d20(void *) __asm__("FUN_L00_002e7a30");
 extern s32 FUN_L00_002e7520_2e7d20(void *) __asm__("FUN_L00_002e7520");
 extern s32 FUN_L00_002e7318_2e7d20(void *) __asm__("FUN_L00_002e7318");
 extern s32 FUN_001f96f8_2e7d20(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer(void *) __asm__("FUN_001f9770");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-f32 FUN_002133d0(f32, f32, f32);
+f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
 extern void FUN_001f9a10_2e7d20(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern s32 FUN_L00_002e4290_2e7d20(void *) __asm__("FUN_L00_002e4290");
@@ -1230,7 +1230,7 @@ void follow_camera_avoid_mobies(u8 *m) {
     if (current_level_index_macro == 0xF) {
         any = D_0013F350_2e7d20.b20A4 == 2;
     }
-    FUN_001f9a40(&v0, x + 0x90, base - 0x50, 0.5f);
+    lerp_vector(&v0, x + 0x90, base - 0x50, 0.5f);
     n = probe_world_sphere(&v0, 1, D_0013F350_2e7d20.p2080, 0, h * 0.5f);
     if (n > 0) {
         i = n;
@@ -1255,14 +1255,14 @@ void follow_camera_avoid_mobies(u8 *m) {
             FUN_001f9a28_2e7d20(&v30, &v10, &v20);
             FUN_001f9bf8_2e7d20(&v30, &v30, 1.0f);
             f = FUN_001f9ab0_2e7d20(&v30, a);
-            f = FUN_001f9df8(f / (AF_2e7d20(0x2C) - BF_2e7d20(0x30)));
+            f = fast_arc_sin(f / (AF_2e7d20(0x2C) - BF_2e7d20(0x30)));
             if (FUN_001f99c0_2e7d20(1.5707964f - f) < 0.43633232f) {
-                FUN_001f9ad8(&v40, a, base + 0x30);
+                fast_vec_cross(&v40, a, base + 0x30);
                 FUN_001f9bf8_2e7d20(&v40, &v40, 1.0f);
                 if (0.0f < FUN_001f9ab0_2e7d20(&v40, &v10)) {
-                    FUN_00214890(a, a, base + 0x20, -0.017453292f);
+                    build_look_at_matrix(a, a, base + 0x20, -0.017453292f);
                 } else {
-                    FUN_00214890(a, a, base + 0x20, 0.017453292f);
+                    build_look_at_matrix(a, a, base + 0x20, 0.017453292f);
                 }
             }
         next:
@@ -1306,7 +1306,7 @@ dec:
         }
     }
     f = convert_integer_to_float(BH_2e7d20(0x34));
-    BF_2e7d20(0x30) = FUN_002133d0(0.0f, BF_2e7d20(0x30), f / convert_integer_to_float(FUN_001f96f8_2e7d20(2000)));
+    BF_2e7d20(0x30) = cosine_interpolate(0.0f, BF_2e7d20(0x30), f / convert_integer_to_float(FUN_001f96f8_2e7d20(2000)));
     goto move;
 slow:
     s = BH_2e7d20(0x34);

@@ -218,7 +218,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float D_0015ED6C;
 extern float D_L15_00161FBC __attribute__((sda));
-extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60();
 extern int FUN_L00_001ff660();
 extern int FUN_L00_0025e450();
@@ -385,7 +385,7 @@ void FUN_L15_002ea748(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002EBFC8), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L15_002e7ed8_c(void *, void *) __asm__("FUN_L15_002e7ed8");
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int FUN_001f9740(int *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L15_0016207C;
@@ -395,13 +395,13 @@ void FUN_L15_002eabd8(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     switch (moby->state) {
     case 0:
-        data[0] = func_001FA898_r(FUN_001f96b0(*(float *)(data + 1) * 60.0f));
+        data[0] = func_001FA898_r(multiply_global_factor_ed64(*(float *)(data + 1) * 60.0f));
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
     case 1:
         if (FUN_001f9740(data)) {
-            data[0] = func_001FA898_r(FUN_001f96b0(*(float *)&D_L15_0016207C * 60.0f));
+            data[0] = func_001FA898_r(multiply_global_factor_ed64(*(float *)&D_L15_0016207C * 60.0f));
             FUN_L15_002e7ed8_c(moby, &moby->pos);
         }
         break;
@@ -428,8 +428,8 @@ typedef struct {
 T4 D_L15_00162108 = {{{{1.0f, -0.62831855f}}, {{1.0f, 0.62831855f}}}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float FUN_001f96b0(float);
-extern float FUN_001f9988(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_L00_00200260(float, float);
 extern float fast_add_rotations(float, float);
 extern float wrap_angle(float);
@@ -478,7 +478,7 @@ void FUN_L15_002eac90(struct Moby *moby) {
     vu1_add_gs_register(0x14, ((long)0xFF90 << 32) | 0x260);
     d->f0 = d->f4;
     d->f4 = fast_add_rotations(d->f4,
-                               360.0f / FUN_001f96b0(D_L15_001620FC) * DEG_TO_RAD * frame_time);
+                               360.0f / multiply_global_factor_ed64(D_L15_001620FC) * DEG_TO_RAD * frame_time);
     FUN_L00_00250320(moby, &r, &g, &b);
     color = (D_L15_001620F4 << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 3; i++) {
@@ -487,7 +487,7 @@ void FUN_L15_002eac90(struct Moby *moby) {
             float *p = (float *)(*e + j * 12);
             float t = D_L15_00162100 *
                       fast_sin(fast_add_rotations(
-                          wrap_angle(FUN_L00_00200260(FUN_001f9988(p[0] * p[0] + p[1] * p[1]),
+                          wrap_angle(FUN_L00_00200260(square_root(p[0] * p[0] + p[1] * p[1]),
                                                       D_L15_001620F8) *
                                      6.2831855f / D_L15_001620F8),
                           d->f4));
@@ -537,8 +537,8 @@ extern float D_L15_001DDBA0[];
 extern float D_L15_001DDED0[][2];
 extern float D_L15_001DE200[];
 extern float D_L15_001DE530[][2];
-extern float FUN_001f96b0(float);
-extern float FUN_001f9988(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_L00_00200260(float, float);
 extern float fast_add_rotations(float, float);
 extern float wrap_angle(float);
@@ -579,7 +579,7 @@ void FUN_L15_002eb108(struct Moby *moby) {
     vu1_add_gs_register(8, 0);
     vu1_add_gs_register(0x14, 0xFF9000000260L);
     data->prev = data->angle;
-    data->angle = fast_add_rotations(data->angle, 360.0f / FUN_001f96b0(D_L15_00162164) *
+    data->angle = fast_add_rotations(data->angle, 360.0f / multiply_global_factor_ed64(D_L15_00162164) *
                                                       DEG_TO_RAD * frame_time);
     FUN_L00_00250320(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
@@ -590,7 +590,7 @@ void FUN_L15_002eb108(struct Moby *moby) {
         float *s = &D_L15_001DDBA0[i * 3];
         float x = s[0];
         float y = s[1];
-        float rad = FUN_001f9988(x * x + y * y);
+        float rad = square_root(x * x + y * y);
         float a = FUN_L00_00200260(rad, D_L15_00162160);
         float w = wrap_angle(a * 6.2831855f / D_L15_00162160);
         float z = fast_sin(fast_add_rotations(w, data->angle));
@@ -1689,13 +1689,13 @@ int FUN_L15_002f85a8(char *moby) {
 extern char *D_L15_001600EC;
 extern char D_L15_00167410[];
 extern char D_L15_00167280[];
-extern float FUN_001f9ab0(void *a, void *b);
-extern float FUN_001f9af0(void *a);
+extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
+extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern float FUN_001f9df8(float);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_001f9a28(void *dst, void *a, void *b);
-extern void FUN_001f9a68(void *, void *, float);
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float FUN_001f99c0(float);
 
 int FUN_L15_002f8698(char *moby, float a, float b) {
@@ -1722,17 +1722,17 @@ int FUN_L15_002f8698(char *moby, float a, float b) {
     }
     g = D_L15_00167280;
     FUN_001f9a28(d, src + 0x30, *(char **)(g + 0x180) + 0x30);
-    dot1 = FUN_001f9ab0(d, (vec + 0x30));
-    FUN_001f9a68(p, (vec + 0x30), dot1);
+    dot1 = fast_vec_dot(d, (vec + 0x30));
+    fast_vec_scale(p, (vec + 0x30), dot1);
     FUN_001f9a28(q, d, p);
-    lenq = FUN_001f9af0(q);
-    dot2 = FUN_001f9ab0(*(char **)(g + 0x180), (vec + 0x30));
-    FUN_001f9a68(p, (vec + 0x30), dot2);
+    lenq = fast_vec_length(q);
+    dot2 = fast_vec_dot(*(char **)(g + 0x180), (vec + 0x30));
+    fast_vec_scale(p, (vec + 0x30), dot2);
     FUN_001f9a28(r, *(char **)(g + 0x180), p);
-    lenr = FUN_001f9af0(r);
+    lenr = fast_vec_length(r);
     if (b != 0.0f) {
-        float t1 = FUN_001f9e90(lenq, dot1);
-        float t2 = FUN_001f9e90(lenr, dot2);
+        float t1 = fast_arc_tan(lenq, dot1);
+        float t2 = fast_arc_tan(lenr, dot2);
         float t3 = fast_difference_between_rotations(t1, t2);
         if (b * DEG_TO_RAD < t3) {
             return 0;
@@ -1741,7 +1741,7 @@ int FUN_L15_002f8698(char *moby, float a, float b) {
     if (a == 0.0f) {
         return 1;
     }
-    dot3 = FUN_001f9ab0(q, r);
+    dot3 = fast_vec_dot(q, r);
     den = lenr * lenq;
     if (den == 0.0f) {
         return 0;

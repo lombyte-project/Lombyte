@@ -7,7 +7,7 @@ struct VoiceVolumeDefinition {
     u8 pad_10[0x9];
     u8 attenuation_flags;
 };
-extern f32 func_001FA6C0();
+extern f32 convert_integer_to_float() __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 s32 calculate_voice_distance_volume(struct VoiceVolumeDefinition *definition, f32 distance,
                                     f32 near_distance, f32 far_distance) __asm__("FUN_0022c6f8");
@@ -24,7 +24,7 @@ s32 calculate_voice_distance_volume(struct VoiceVolumeDefinition *definition, f3
     if (far_distance <= distance) {
         return definition->far_volume;
     }
-    volume_range = func_001FA6C0(definition->near_volume - definition->far_volume);
+    volume_range = convert_integer_to_float(definition->near_volume - definition->far_volume);
     return definition->far_volume +
            truncate_float_to_s32(
                ((far_distance - distance) * (far_distance - distance) * volume_range) /
@@ -36,7 +36,7 @@ linear_falloff:
     /* Negated test: retail branches into the falloff and falls into the
        far-volume return. */
     if (!(far_distance <= distance)) {
-        volume_range = func_001FA6C0(definition->near_volume - definition->far_volume);
+        volume_range = convert_integer_to_float(definition->near_volume - definition->far_volume);
         return definition->far_volume +
                truncate_float_to_s32(((far_distance - distance) * volume_range) /
                                      (far_distance - near_distance));

@@ -137,10 +137,10 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void set_vector_xyz(void *, float, float) __asm__("FUN_L00_00257d78");
-extern void FUN_001f9d20(void *, void *, void *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern float FUN_001f9b80(void *, void *);
 extern void FUN_001fa050(void *, void *) __asm__("FUN_001fa050");
-extern void FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
+extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float D_0015ED6C;
 extern int D_L14_001620BC __attribute__((sda));
 extern int D_L14_001620C0 __attribute__((sda));
@@ -247,25 +247,25 @@ void FUN_L14_003017f8(char *m) {
         {
             int i;
             for (i = 0; i < 32; i += 8) {
-                FUN_001f9d20(work, d + 0x20 + (i << 4), matrix);
+                transform_vector(work, d + 0x20 + (i << 4), matrix);
                 qcopy(delta_a, d + 0x220 + (i << 4));
                 delta_a[3] = D_L14_00162114;
                 index = random_integer_below(2);
                 color = index ? D_L14_0016211C : D_L14_00162120;
                 index = random_integer_below(10);
-                FUN_00218888(work, delta_a, delta_a, D_L14_00162108,
+                spawn_spark(work, delta_a, delta_a, D_L14_00162108,
                     D_L14_0016210C, i >> 1, 15, scale_game_frames(index + 20), color);
             }
         }
         {
             int i;
             for (i = 0; i < 2; i++) {
-                FUN_001f9d20(work, d + 0x4e0 + (i << 4), matrix);
+                transform_vector(work, d + 0x4e0 + (i << 4), matrix);
                 qcopy(delta_a, d + 0x5e0 + (i << 4));
                 delta_a[3] = D_L14_00162114;
                 random_integer_below(2);
                 index = random_integer_below(10);
-                FUN_00218888(work, delta_a, delta_a, D_L14_00162108,
+                spawn_spark(work, delta_a, delta_a, D_L14_00162108,
                     D_L14_0016210C, (unsigned char)d[0x18 + i] >> 1, 15,
                     scale_game_frames(index + 20), D_L14_00162120);
             }

@@ -3,7 +3,7 @@
 #include "rnc/rendering/texture_upload.h"
 #include "types.h"
 
-extern int FUN_001f97a0(int);
+extern int log2dim(int) __asm__("FUN_001f97a0");
 typedef struct {
     char *clut; /* 0x00 */
     char *pix;  /* 0x04 */
@@ -36,8 +36,8 @@ long load_texture_file(char *p) {
 
     t.clut = p + 0x20;
     t.clutSize = 0x400;
-    t.tw = FUN_001f97a0(*(int *)(p + 8));
-    t.th = FUN_001f97a0(*(int *)(p + 0xC));
+    t.tw = log2dim(*(int *)(p + 8));
+    t.th = log2dim(*(int *)(p + 0xC));
     t.pix = p + 0x20 + t.clutSize;
     addr = gs_texture_allocation_cursor;
     cbp = addr >> 8;

@@ -9,11 +9,11 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0027C260.c: func_L12_0027C368), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001fa050(float *, float *);
-extern void FUN_001fa378(void *, void *, void *);
-extern void FUN_00214598(void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void FUN_L00_00250df8(void *);
 
 void FUN_L12_0027b370(char *parent, char *list, int n) {
@@ -22,16 +22,16 @@ void FUN_L12_0027b370(char *parent, char *list, int n) {
     float m2[4];
     char *p;
     int i;
-    FUN_001fa050(m0, (float *)(parent + 0x40));
+    euler_rotation_matrix(m0, (float *)(parent + 0x40));
     for (i = 0; i < n; i++) {
         int idx = *(int *)(list + i * 0x30 + 0x20);
         if (idx != -1) {
             p = D_L12_0015FFD8_p + idx * 256;
-            FUN_001fa050(m1, (float *)(list + i * 0x30 + 0x10));
-            FUN_001fa378(m1, m0, m1);
-            FUN_00214598(m1, p + 0x40);
-            FUN_001f9d20(m2, list + i * 0x30, m0);
-            FUN_001f9a10(p + 0x10, parent + 0x10, m2);
+            euler_rotation_matrix(m1, (float *)(list + i * 0x30 + 0x10));
+            multiply_matrix(m1, m0, m1);
+            matrix_to_euler(m1, p + 0x40);
+            transform_vector(m2, list + i * 0x30, m0);
+            add_vector_xyz(p + 0x10, parent + 0x10, m2);
             FUN_L00_00250df8(p);
         }
     }
@@ -43,11 +43,11 @@ void FUN_L12_0027b370(char *parent, char *list, int n) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0027C260.c: func_L12_0027C260), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001fa050(float *, float *);
-extern void FUN_001fa2d8(void *, void *);
-extern void FUN_001fa378(void *, void *, void *);
-extern void FUN_00214598(void *, void *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void vu_euler_rotation_basis(void *, void *);
 
@@ -57,17 +57,17 @@ void FUN_L12_0027b268(char *moby, char *arr, int n) {
     float m2[16];
     int i;
     vu_euler_rotation_basis(m0, moby + 0x40);
-    FUN_001fa2d8(m1, m0);
+    transpose_rotation_matrix(m1, m0);
     for (i = 0; i < n; i++) {
         char *p = arr + i * 0x30;
         int idx = *(int *)(p + 0x20);
         if (idx != -1) {
             char *o = D_L12_0015FFD8_p + (idx << 8);
             subtract_vector_xyz(p, o + 0x10, moby + 0x10);
-            FUN_001f9d20(p, p, m1);
-            FUN_001fa050(m2, o + 0x40);
-            FUN_001fa378(m2, m1, m2);
-            FUN_00214598(m2, p + 0x10);
+            transform_vector(p, p, m1);
+            euler_rotation_matrix(m2, o + 0x40);
+            multiply_matrix(m2, m1, m2);
+            matrix_to_euler(m2, p + 0x10);
         }
     }
 }

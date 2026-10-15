@@ -3,7 +3,7 @@
 #include "rnc/rendering/fs_aa_buffer.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/rendering/view.h"
-extern f32 func_001FA6C0(s32);
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 
 void init_view_context(void) __asm__("FUN_001f2c60");
 
@@ -26,8 +26,8 @@ void init_view_context(void) {
     v->near_clip = 32.0f;
     v->far_clip = 745472.0f;
     v->fov.f[0] = 0.63f;
-    v->half_width = func_001FA6C0(d->display_width) * 0.5f;
-    v->half_height = func_001FA6C0(d->display_height) * 0.5f;
+    v->half_width = convert_integer_to_float(d->display_width) * 0.5f;
+    v->half_height = convert_integer_to_float(d->display_height) * 0.5f;
     v->scr_x = v->half_width * 4.0f;
     v->scr_y = v->half_height * 4.0f;
     v->fog_far_dist = 524288.0f;

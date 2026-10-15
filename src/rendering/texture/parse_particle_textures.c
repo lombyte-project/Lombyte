@@ -16,8 +16,8 @@ struct ParticleTex {
 extern s32 D_001600C0;
 extern u8 D_001CE180[];
 extern struct ParticleTex D_001CD980[];
-extern void FUN_001f9838(void *, void *, s32);
-extern s32 FUN_001f97a0(s32);
+extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
+extern s32 log2dim(s32) __asm__("FUN_001f97a0");
 
 void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src,
                              s32 count) __asm__("FUN_002026c8");
@@ -46,7 +46,7 @@ void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src, s32 co
             D_001CDF80[i] = v - (offset - (s32)D_001CE180);
         }
     }
-    FUN_001f9838(D_001CE180, (u8 *)hdr + offset, size);
+    copy_memory_aligned(D_001CE180, (u8 *)hdr + offset, size);
     D_001600C0 = 0;
     while (D_001600C0 < count) {
         a = base + *src++;
@@ -54,7 +54,7 @@ void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src, s32 co
         c = base + *src++;
         d = *src++;
         D_001CD980[D_001600C0].tex0 = (a << 4) + b;
-        D_001CD980[D_001600C0].tex1 = (c << 4) + FUN_001f97a0(d);
+        D_001CD980[D_001600C0].tex1 = (c << 4) + log2dim(d);
         D_001600C0 = D_001600C0 + 1;
     }
 }

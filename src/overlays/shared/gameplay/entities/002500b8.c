@@ -14,9 +14,9 @@
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002510F0), where it is exact; names translated to the US level program. */
 
 extern char D_L00_001E8ED8[];
-extern float FUN_001f9af0(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void debug_print_alt() __asm__("FUN_001e93b0");
-extern void FUN_001f9a28(void *, void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void pack_render_command_fields(struct RenderEntry *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
 
 void FUN_L00_002500b8(char *o) {
@@ -33,8 +33,8 @@ void FUN_L00_002500b8(char *o) {
     unsigned char *h;
 
     for (i = 0; i < D_L00_00160014; i++) {
-        FUN_001f9a28(vec, o + 0x10, D_L00_00160040 + i * 0x30);
-        d = FUN_001f9af0(vec);
+        subtract_vector_xyz(vec, o + 0x10, D_L00_00160040 + i * 0x30);
+        d = fast_vec_length(vec);
         if (d <= 8.0f && d < best) {
             best = d;
             idx = i;

@@ -201,7 +201,7 @@ s32 hud_keep_visible(s32 key, s32 val) {
 }
 extern float FUN_001fa6c0(int);
 extern int FUN_001fa6d0(float);
-extern float FUN_001f9988(float);
+extern float square_root(float) __asm__("FUN_001f9988");
 extern void FUN_L00_0023aaa8(void *);
 
 void FUN_L00_00235ea0(e) HudElem *e;
@@ -229,7 +229,7 @@ void FUN_L00_00235ea0(e) HudElem *e;
             int t = e->unk74 - e->unk78;
             d = t < 0 ? -t : t;
             if (d != 0) {
-                s = FUN_001fa6d0(FUN_001f9988(FUN_001fa6c0(d) / 25.0f) * 5.0f);
+                s = FUN_001fa6d0(square_root(FUN_001fa6c0(d) / 25.0f) * 5.0f);
                 s = s < d * scale_game_frames(2) / scale_game_frames(10)
                         ? d * scale_game_frames(2) / scale_game_frames(10)
                         : s;
@@ -620,7 +620,7 @@ extern float FUN_001ff450(float *, float *) __asm__("FUN_001f9b48");
 extern const char freeze_stats_score_format[] __asm__("D_L00_0015F778");
 extern const char freeze_stats_time_format[] __asm__("D_L00_001E84C0");
 extern char *FUN_00203ad8(int) __asm__("FUN_001fdd10");
-extern int FUN_00116248(char *, const char *, ...);
+extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern void FUN_0023cf80(int, int, int, char *) __asm__("FUN_00201200");
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) HudPoint_237200;
@@ -714,10 +714,10 @@ int FUN_L00_00237200(HudElem *e) {
                     remainder = (remainder - other_left * other_width) * 100 / other_width;
                     line = freeze_stats_time_format;
                     message = FUN_00203ad8(0x531b);
-                    FUN_00116248(text, line, message, seconds, other_left, remainder);
+                    sprintf(text, line, message, seconds, other_left, remainder);
                     FUN_0023cf80(0x100, y + 0x28, color, text);
                     if (extra != 0) {
-                        FUN_00116248(text, freeze_stats_score_format, FUN_00203ad8(0x531c), extra);
+                        sprintf(text, freeze_stats_score_format, FUN_00203ad8(0x531c), extra);
                         FUN_0023cf80(0x100, y + 0x48, color, text);
                     }
                 }

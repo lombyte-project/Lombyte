@@ -10,13 +10,13 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/gameplay/state/game_globals.h"
 
-extern s32 FUN_001f97a0(s32);
-extern s64 FUN_00204e30(s32, s32, u8 *, u8 *, s32, s32);
+extern s32 log2dim(s32) __asm__("FUN_001f97a0");
+extern s64 register_8bit_texture(s32, s32, u8 *, u8 *, s32, s32) __asm__("FUN_00204e30");
 extern void FUN_0020b4a8(void);
-extern void FUN_0020b618(u8 *, s32);
+extern void fast_decompress(u8 *, s32) __asm__("FUN_0020b618");
 extern s32 start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
 extern s32 get_stream_buffer_size(s32) __asm__("FUN_00225d88");
-extern s32 FUN_00225dd8(s32);
+extern s32 mark_stream_buffer_read_active(s32) __asm__("FUN_00225dd8");
 extern s32 clear_record_flag_by_key(s32) __asm__("FUN_00225e20");
 
 s32 update_menu_stream_image(struct MenuScreen *stream) __asm__("FUN_0021f990");
@@ -95,7 +95,7 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
                                         stream->data.stream.entries[idx].sector_count);
         }
         if (r != 0) {
-            FUN_00225dd8(stream->data.stream.buffer[0]);
+            mark_stream_buffer_read_active(stream->data.stream.buffer[0]);
             stream->data.stream.loaded_entry[0] = idx;
             stream->data.stream.state++;
         } else {
@@ -109,16 +109,16 @@ s32 update_menu_stream_image(struct MenuScreen *stream) {
         }
         clear_record_flag_by_key(stream->data.stream.buffer[0]);
         if (stream->data.stream.flags & 0x20) {
-            FUN_0020b618((u8 *)stream->data.stream.buffer[0] + stream->data.stream.read_offset,
+            fast_decompress((u8 *)stream->data.stream.buffer[0] + stream->data.stream.read_offset,
                          stream->data.stream.buffer[0]);
             stream->data.stream.read_offset = 0;
         }
         b = (struct ClutImage *)stream->data.stream.buffer[0];
         p20 = b->clut;
         p420 = b->pixels;
-        x = FUN_001f97a0(b->width);
-        y = FUN_001f97a0(b->height);
-        level_map_selection.tex0 = FUN_00204e30(x, y, p20, p420, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
+        x = log2dim(b->width);
+        y = log2dim(b->height);
+        level_map_selection.tex0 = register_8bit_texture(x, y, p20, p420, level_map_selection.tex_clut_vram, level_map_selection.tex0_vram);
         FUN_0020b4a8();
         stream->data.stream.state = 2;
         break;

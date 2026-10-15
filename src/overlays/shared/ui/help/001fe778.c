@@ -72,11 +72,11 @@ s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
 u8 *FUN_002141f8(s32);
-f32 FUN_001f9b48(void *, void *);
+f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
 f32 FUN_L00_00233d30(void *);
 f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
-void FUN_001f9a28(void *, void *, void *);
+void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -173,12 +173,12 @@ void FUN_L15_0020a7a0(void) {
     if (HH.unk1C > 0) {
         qcopy(&hero.ground_point, &HH.point);
         hero.ground_z.f = HH.point.f[2];
-        hero.ground_distance = FUN_001f9b48(&hero.motion.pos, &hero.ground_point);
+        hero.ground_distance = fast_vec_dist(&hero.motion.pos, &hero.ground_point);
         hero.ground_moby = (struct Moby *)HH.moby;
         FUN_00125180_c(&hero.unk270, (u8 *)&HH.normal_x);
         hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        FUN_001f9a28(&v20, &hero.ground_point, &hero.motion.pos);
+        subtract_vector_xyz(&v20, &hero.ground_point, &hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&v20, &hero.unk270)) {
             hero.ground_distance = -hero.ground_distance;
         }
@@ -211,7 +211,7 @@ d1:
         FUN_001f9a68_c(&hero.gravity_dir, &hero.gravity_dir, -1.0f);
         break;
     case 2:
-        FUN_001f9a28(&hero.gravity_dir, &hero.motion.unkB0, &hero.motion.pos);
+        subtract_vector_xyz(&hero.gravity_dir, &hero.motion.unkB0, &hero.motion.pos);
         FUN_001f9bf8_c(&hero.gravity_dir, &hero.gravity_dir, 1.0f);
         break;
     }

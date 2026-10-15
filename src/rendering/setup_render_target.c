@@ -23,7 +23,7 @@ typedef struct {
     unsigned long FBMSK : 32;
 } GsFrame; /* sceGsFrame */
 
-extern void FUN_001f9810(void *, int);
+extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
 extern int sceGsSetDefDrawEnv(void *, short, short, short, short, short);
 
 extern long capture_texture_tex0 __asm__("D_0015EED0") MACRO_ADDR;
@@ -44,7 +44,7 @@ void setup_render_target(int a, int b, int c) {
     fs_aa_buffer.target_height = 1 << b;
     capture_texture_tex0 = (long)(c >> 8) | ((long)(1 << x) << 14) | ((long)a << 26) |
                  ((unsigned long)b << 30) | ((unsigned long)1 << 34);
-    FUN_001f9810(render_packet_cursor.words, 0xF0);
+    fast_mem_zero16(render_packet_cursor.words, 0xF0);
     render_packet_cursor.words[0] = 0x1000000E;
     render_packet_cursor.words[1] = 0;
     render_packet_cursor.words[2] = 0;

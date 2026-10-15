@@ -7,9 +7,9 @@
 #include "rnc/gameplay/camera/camera_globals.h"
 
 
-extern void FUN_001f9ff8(f32 (*)[4], f32);
-extern void FUN_001f9a68(f32 *, u8 *, f32);
-extern void FUN_001fa378(void *, u8 *, f32 (*)[4]);
+extern void set_scale_matrix(f32 (*)[4], f32) __asm__("FUN_001f9ff8");
+extern void fast_vec_scale(f32 *, u8 *, f32) __asm__("FUN_001f9a68");
+extern void multiply_matrix(void *, u8 *, f32 (*)[4]) __asm__("FUN_001fa378");
 extern void vu1_add_data_ref(u8 *, s32) __asm__("func_00233830");
 extern void vu1_gs_regs_font(void) __asm__("func_00233C90");
 
@@ -20,8 +20,8 @@ void font_queue_vu_state(void) {
     struct DmaTag *base;
     u8 *p;
 
-    FUN_001f9ff8(m, 1024.0f);
-    FUN_001f9a68(m[3], camera_position, -1024.0f);
+    set_scale_matrix(m, 1024.0f);
+    fast_vec_scale(m[3], camera_position, -1024.0f);
     m[3][3] = 1.0f;
     if (font_state != 7) {
         vu1_add_data_ref(font_vu_program, font_vu_program_tag[0]);
@@ -37,10 +37,10 @@ void font_queue_vu_state(void) {
     base[1].vif0 = 0;
     base[1].vif1 = 0x6C0C43A4;
     p = (u8 *)(base + 2);
-    FUN_001fa378(p, camera_position - 0x100, m);
+    multiply_matrix(p, camera_position - 0x100, m);
     *(f32 *)(p + 0x38) += font_depth_bias;
     p = (u8 *)(base + 6);
-    FUN_001fa378(p, camera_position - 0x80, m);
+    multiply_matrix(p, camera_position - 0x80, m);
     *(f32 *)(p + 0x38) += font_depth_bias;
     base[10].tag = 0x8000;
     base[10].addr = 0x303EC000;

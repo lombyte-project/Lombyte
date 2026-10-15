@@ -63,19 +63,19 @@ extern struct TextRegion D_L00_001E7A68;
 extern void memset(void *, s32, s32) __asm__("FUN_001153fc");
 extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern void strncpy(void *, char *, s32) __asm__("FUN_00116808");
-extern void FUN_001f4280(s32);
-extern void FUN_001f4398(void);
+extern void setup_gif_paging(s32) __asm__("FUN_001f4280");
+extern void do_gif_paging(void) __asm__("FUN_001f4398");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_ui_frame(s32, s32, s32, s32, s32) __asm__("FUN_001f5f18");
-extern void FUN_001f6060(s32, s32, s32, s32, s32);
+extern void draw_outlined_rect(s32, s32, s32, s32, s32) __asm__("FUN_001f6060");
 extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("FUN_001f6af0");
 extern void font_print_window(struct TextRegion *, s64, void *, s32, s32, u8 *) __asm__("FUN_001f7090");
 extern void font_print_window_regular(struct TextRegion *, s32, char *, s32) __asm__("FUN_001f7580");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern f32 FUN_001f9de0(f32);
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 FUN_001fa6e0(s32, s32, f32);
+extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern s32 find_valid_animation_frame_index_alt(s32, s32) __asm__("FUN_001ff960");
 extern s64 get_frame_texture(s32) __asm__("FUN_001ffa10");
@@ -90,7 +90,7 @@ void FUN_L00_002018c8(void) {
     char buf[0x200];
     struct TextRegion box;
 
-    FUN_001f4280(0);
+    setup_gif_paging(0);
     switch (D_L00_00173040.state) {
     case 5: {
         u8 *p;
@@ -107,7 +107,7 @@ void FUN_L00_002018c8(void) {
         alpha = 1.0f - (f32)D_L00_00173040.timer / (f32)scale_game_frames(30);
         draw_ui_frame(0x50, 0x154, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box = D_L00_001E7A50;
-        color = FUN_001fa6e0(D_L00_0015F4B0, D_L00_0015F4B4, alpha);
+        color = fast_tween_color(D_L00_0015F4B0, D_L00_0015F4B4, alpha);
         strncpy(SCRATCHPAD, get_help_message_text(0x4E2B), 0x400);
         p = SCRATCHPAD;
         while (*p >= 2) {
@@ -127,7 +127,7 @@ void FUN_L00_002018c8(void) {
         box.flags ^= 4;
         box.anchor_y = 0x136 - box.rendered_height;
         font_print_window(&box, color, p, -1, get_effect_texture(1), D_L00_001C3150);
-        tint = FUN_001fa6e0(0x20FFFF, 0x8020FFFF,
+        tint = fast_tween_color(0x20FFFF, 0x8020FFFF,
                             1.0f - (f32)D_L00_00173040.unk24 / (f32)scale_game_frames(30));
         font_print_center(0x100, 0x140, tint, get_help_message_text(0x524A), -1);
         mid = (y + box.anchor_y) >> 1;
@@ -258,8 +258,8 @@ void FUN_L00_002018c8(void) {
         alpha = 1.0f - (f32)D_L00_00173040.timer / (f32)scale_game_frames(30);
         draw_ui_frame(box.top, box.bottom, 0x60, 0x1A0, (s32)(alpha * 80.0f));
         box.flags ^= 4;
-        font_print_window_regular(&box, FUN_001fa6e0(D_L00_0015F4B0, D_L00_0015F4B4, alpha), text, -1);
-        tint = FUN_001fa6e0(0x20FFFF, 0x8020FFFF,
+        font_print_window_regular(&box, fast_tween_color(D_L00_0015F4B0, D_L00_0015F4B4, alpha), text, -1);
+        tint = fast_tween_color(0x20FFFF, 0x8020FFFF,
                             1.0f - (f32)D_L00_00173040.unk24 / (f32)scale_game_frames(30));
         if (left != 0) {
             font_print_center(0xCA, box.bottom - 0x14, tint, get_help_message_text(left), -1);
@@ -281,8 +281,8 @@ void FUN_L00_002018c8(void) {
         box = D_L00_001E7A68;
         alpha = 1.0f - (f32)D_L00_00173040.timer / (f32)scale_game_frames(30);
         draw_ui_frame(0x64, 0x12C, 0x60, 0x1A0, (s32)(alpha * 80.0f));
-        text_color = FUN_001fa6e0(D_L00_0015F4B0, D_L00_0015F4B4, alpha);
-        button_color = FUN_001fa6e0(0x20FFFF, 0x8020FFFF, alpha);
+        text_color = fast_tween_color(D_L00_0015F4B0, D_L00_0015F4B4, alpha);
+        button_color = fast_tween_color(0x20FFFF, 0x8020FFFF, alpha);
         switch (D_L00_00173040.choice) {
         case 0:
         case 1:
@@ -325,8 +325,8 @@ void FUN_L00_002018c8(void) {
         f32 scale;
         f32 f;
 
-        pulse = FUN_001fa6e0(D_L00_0015F4E4, D_L00_0015F4E8,
-                             FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f - 3.14159f) *
+        pulse = fast_tween_color(D_L00_0015F4E4, D_L00_0015F4E8,
+                             fast_sin((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f - 3.14159f) *
                                      0.5f +
                                  0.5f);
         scale = (f32)D_L00_00173040.unk20 * 0.125f;
@@ -345,12 +345,12 @@ void FUN_L00_002018c8(void) {
             } else if (f < 0.0f) {
                 f = 0.0f;
             }
-            c1 = FUN_001fa6e0(D_L00_0015F4EC, D_L00_0015F4F0, f);
-            c2 = FUN_001fa6e0(D_L00_0015F4F4, D_L00_0015F4F8, f);
-            c3 = FUN_001fa6e0(D_L00_0015F4FC, D_L00_0015F500, f);
+            c1 = fast_tween_color(D_L00_0015F4EC, D_L00_0015F4F0, f);
+            c2 = fast_tween_color(D_L00_0015F4F4, D_L00_0015F4F8, f);
+            c3 = fast_tween_color(D_L00_0015F4FC, D_L00_0015F500, f);
         }
         if (hero.unk89A < 3) {
-            FUN_001f6060(D_L00_0015F4BC - truncate_float_to_s32((f32)D_L00_0015F4C4 * scale),
+            draw_outlined_rect(D_L00_0015F4BC - truncate_float_to_s32((f32)D_L00_0015F4C4 * scale),
                          D_L00_0015F4BC + truncate_float_to_s32((f32)D_L00_0015F4C4 * scale),
                          D_L00_0015F4B8 - truncate_float_to_s32((f32)D_L00_0015F4C0 * scale),
                          D_L00_0015F4B8 + truncate_float_to_s32((f32)D_L00_0015F4C0 * scale), pulse);
@@ -358,7 +358,7 @@ void FUN_L00_002018c8(void) {
             font_print_center(0x100, D_L00_0015F4C8 + 0x18, c1, get_help_message_text(0x5249), -1);
             font_print_center(0x100, D_L00_0015F4C8 + 0x30, c1, get_help_message_text(0x5248), -1);
         } else {
-            FUN_001f6060(D_L00_0015F4D0 - truncate_float_to_s32((f32)D_L00_0015F4D8 * scale),
+            draw_outlined_rect(D_L00_0015F4D0 - truncate_float_to_s32((f32)D_L00_0015F4D8 * scale),
                          D_L00_0015F4D0 + truncate_float_to_s32((f32)D_L00_0015F4D8 * scale),
                          D_L00_0015F4CC - truncate_float_to_s32((f32)D_L00_0015F4D4 * scale),
                          D_L00_0015F4CC + truncate_float_to_s32((f32)D_L00_0015F4D4 * scale), pulse);
@@ -410,9 +410,9 @@ void FUN_L00_002018c8(void) {
         break;
     }
     case 2:
-        FUN_001f6060(0x64, 0xA0, 0xB0, 0x150,
-                     FUN_001fa6e0(D_L00_0015F4E4, D_L00_0015F4E8,
-                                  FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f -
+        draw_outlined_rect(0x64, 0xA0, 0xB0, 0x150,
+                     fast_tween_color(D_L00_0015F4E4, D_L00_0015F4E8,
+                                  fast_sin((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f));
@@ -422,12 +422,12 @@ void FUN_L00_002018c8(void) {
         MessageBox *mb = &D_L00_00173040;
         s32 pulse;
 
-        pulse = FUN_001fa6e0(D_L00_0015F4E4, D_L00_0015F4E8,
-                                  FUN_001f9de0((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f -
+        pulse = fast_tween_color(D_L00_0015F4E4, D_L00_0015F4E8,
+                                  fast_sin((f32)(D_L00_0015F3F8 % D_L00_0015F4E0) / convert_integer_to_float(D_L00_0015F4E0) * 6.28318f -
                                                3.14159f) *
                                           0.5f +
                                       0.5f);
-        FUN_001f6060(0x50, D_L00_0015F4AC + 0x1A, 0xB0, 0x150, pulse);
+        draw_outlined_rect(0x50, D_L00_0015F4AC + 0x1A, 0xB0, 0x150, pulse);
         if (mb->title != NULL) {
             font_print_center(0x100, 0x5A, 0x8000C0C0, mb->title, -1);
         }
@@ -440,5 +440,5 @@ void FUN_L00_002018c8(void) {
         break;
     }
     }
-    FUN_001f4398();
+    do_gif_paging();
 }

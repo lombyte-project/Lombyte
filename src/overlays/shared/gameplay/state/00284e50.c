@@ -17,7 +17,7 @@ extern char D_L00_001BB230[] __attribute__((section(".data")));
 extern unsigned char D_0014C050[][16];
 extern char D_001516D0[];
 extern char D_0013E550[];
-extern void FUN_001f9838(int, void *, unsigned short);
+extern void copy_memory_aligned(int, void *, unsigned short) __asm__("FUN_001f9838");
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void FUN_L00_00284e50(OvlQuad *a, OvlQuad *b) {
@@ -31,7 +31,7 @@ void FUN_L00_00284e50(OvlQuad *a, OvlQuad *b) {
     signed char c;
     int v;
 
-    FUN_001f9838((int)&D_L00_001BB280, &D_L00_001BA620, 0x404);
+    copy_memory_aligned((int)&D_L00_001BB280, &D_L00_001BA620, 0x404);
     lvl = current_level_index;
     for (src = D_L00_001BA620.f, i = 0; i < 0x7FF; i++, src++) {
         v = *src;
@@ -77,11 +77,11 @@ extern char D_L00_001BA5D0[] __attribute__((section(".data")));
 extern u8 *D_L00_0015FFD8;
 extern u8 *D_L00_0015FFDC;
 extern unsigned short D_00151708 __attribute__((section(".data")));
-extern void FUN_001f97e8(void *, int, int);
-extern void FUN_001f97b0(void);
+extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
+extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern void FUN_L00_00210a08(s32, s32, void *);
 extern void FUN_L00_00250df8(void *);
-extern void FUN_001fa030(void *, void *);
+extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void init_camera_system(void) __asm__("FUN_L00_001ed280");
 extern void FUN_L00_002852c0(void);
 
@@ -93,10 +93,10 @@ void FUN_L00_00285008(void) {
     struct Hero *p;
 
     if (*(int *)s == 0) {
-        FUN_001f97e8(D_L00_001BA5D0, 0, 0xC60);
+        fill_transfer_words(D_L00_001BA5D0, 0, 0xC60);
         return;
     }
-    FUN_001f9838((int)D_L00_001BA5D0, s, 0xC60);
+    copy_memory_aligned((int)D_L00_001BA5D0, s, 0xC60);
     qcopy(&hero.motion.pos, s + 0x10);
     qcopy(&hero.motion.rot, s + 0x20);
     *(int *)((char *)hero.moby + 0x38) = *(int *)(s + 0x30);
@@ -123,7 +123,7 @@ mode_one:
         id = 0x57;
         goto scan;
 invalid_mode:
-        FUN_001f97b0();
+        raise_kernel_trap();
 scan:
         for (i = 0; ; i++) {
             m = D_L00_0015FFD8 + i * 0x100;
@@ -138,7 +138,7 @@ scan:
     }
     p = &hero;
     FUN_L00_00250df8(p->moby);
-    FUN_001fa030((char *)hero.moby + 0xC0, &hero.motion.rot);
+    euler_rotation_basis((char *)hero.moby + 0xC0, &hero.motion.rot);
     init_camera_system();
     FUN_L00_002852c0();
 }
@@ -170,7 +170,7 @@ typedef struct {
 } Ent;
 
 extern int FUN_L00_002851c0_u(int, int) __asm__("FUN_L00_002851c0");
-extern void FUN_001f9838(int, void *, unsigned short);
+extern void copy_memory_aligned(int, void *, unsigned short) __asm__("FUN_001f9838");
 
 void FUN_L00_00285208(int *h) {
     int i;
@@ -184,7 +184,7 @@ void FUN_L00_00285208(int *h) {
             } else {
                 dst = ((Ent *)(h + 1))[i].off + *(int *)(m + 0x78);
             }
-            FUN_001f9838(dst, &((Ent *)(h + 1))[i].pad, ((Ent *)(h + 1))[i].len);
+            copy_memory_aligned(dst, &((Ent *)(h + 1))[i].pad, ((Ent *)(h + 1))[i].len);
         }
     }
 }

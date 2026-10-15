@@ -26,7 +26,7 @@ struct StdioFile {
 extern void __sread();
 extern void __sseek();
 extern void __swrite();
-extern void func_00116408();
+extern void resolve_resource_index() __asm__("func_00116408");
 void std(struct StdioFile *fp, s16 flags, s16 fd, s32 reent) {
     int new_var2;
     struct StdioFile *new_var;
@@ -37,7 +37,7 @@ void std(struct StdioFile *fp, s16 flags, s16 fd, s32 reent) {
     fp->unk20 = &__sread;
     new_var->unk24 = &__swrite;
     new_var->unk28 = &__sseek;
-    new_var->unk2C = &func_00116408;
+    new_var->unk2C = &resolve_resource_index;
     do {
         new_var2 = 0;
         fp->unk0 = new_var2;

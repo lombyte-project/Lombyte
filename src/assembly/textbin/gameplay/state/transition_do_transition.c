@@ -59,7 +59,7 @@ extern void read_global_table_entry(void) __asm__("ReadGlobalTableEntry");
 extern s32 rand(void);
 extern void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff);
 extern s32 sceGsSyncV(s32 mode);
-extern s32 func_001204B8();
+extern s32 reset_vif1_gif() __asm__("func_001204B8");
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 extern s32 snd_reset_state_and_flush_commands() __asm__("func_0012EB00");
 extern void start_level(int level) __asm__("FUN_001e9488");
@@ -84,7 +84,7 @@ extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 allocate_voice_for_group_entry(s32 arg0, s32 arg1, s32 arg2) __asm__("FUN_0022dba0");
 extern void initialize_sif_rpc(void) __asm__("FUN_00232ce0");
-extern void FUN_00232d00(void);
+extern void init_stash(void) __asm__("FUN_00232d00");
 extern void vu1_init_chain(void) __asm__("func_002335D0");
 extern void swap_render_buffer_chain(void) __asm__("func_00233630");
 extern void vu1_send_chain(void) __asm__("func_002336A0");
@@ -136,7 +136,7 @@ void transition_do_transition(void) {
     hdr->chunk[0].off = p - (u8 *)hdr;
     initialize_resource_entry();
     initialize_sif_rpc();
-    FUN_00232d00();
+    init_stash();
     init_hud();
     load_hud_banks();
     for (n = *(volatile u32 *)0x10000000 / 0x109; n < scale_game_frames(0xB4); n++) {
@@ -203,7 +203,7 @@ void transition_do_transition(void) {
         if (requested_video_mode != D_0015ED80) {
             D_0015ED80 = D_0015ED80 == 0;
             fade_to_black(4);
-            func_001204B8();
+            reset_vif1_gif();
             sceGsResetGraph(0, 1, D_0015ED80 != 0 ? 3 : 2, 0);
             old = gs_texture_allocation_start;
             sequence_macro = 1.0f;

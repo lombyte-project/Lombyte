@@ -16,9 +16,9 @@ struct SkyTransform {
 extern f32 D_00160404 __attribute__((sda));
 extern struct SkyTransform sky_matrix __asm__("D_001D96E0");
 extern void clear_u64_value(f32 *) __asm__("func_001F99F8");
-extern void FUN_001f9a80(void *, void *, f32);
-extern void FUN_001f9fc8(void *);
-extern void FUN_001fa070(void *, f32 *);
+extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
+extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
+extern void rot_216130(void *, f32 *) __asm__("FUN_001fa070");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern void setup_sky_gif_paging(void) __asm__("func_0022B4C8");
 extern void do_sky_gif_paging(void) __asm__("func_0022B558");
@@ -41,7 +41,7 @@ void draw_sky_shells(void) {
     shell_index = 0;
     setup_sky_gif_paging();
     level_sky_effect_data->relocation_state = 0;
-    FUN_001f9fc8(&sky_matrix);
+    set_identity_matrix(&sky_matrix);
     clear_u64_value(rotation_angles);
     if (level_sky_effect_data->shell_count > 0) {
         do {
@@ -76,11 +76,11 @@ void draw_sky_shells(void) {
                 shell_scale = 2.0f;
                 break;
             }
-            FUN_001fa070(&sky_matrix, rotation_angles);
+            rot_216130(&sky_matrix, rotation_angles);
             transform_row = (u8 *)&sky_matrix;
-            FUN_001f9a80(transform_row, transform_row, shell_scale);
-            FUN_001f9a80(transform_row + 0x10, transform_row + 0x10, shell_scale);
-            FUN_001f9a80(transform_row + 0x20, transform_row + 0x20, shell_scale);
+            scale_vector(transform_row, transform_row, shell_scale);
+            scale_vector(transform_row + 0x10, transform_row + 0x10, shell_scale);
+            scale_vector(transform_row + 0x20, transform_row + 0x20, shell_scale);
             transform_row += 0x30;
             qcopy(transform_row, &D_00160460);
             sky_draw_shell(shell_index);

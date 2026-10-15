@@ -193,19 +193,19 @@ extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void blend_moby_animation(VendMoby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(VendMoby *) __asm__("FUN_0020c828");
 extern s32 vend_rand(s32) __asm__("FUN_001f96f8");
-extern f32 FUN_001f9e90(f32, f32);
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void FUN_L00_0025be00(void *, f32, void *, f32, f32, f32);
-extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001f9a10(void *, void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 FUN_001f9af0(void *);
 extern f32 advance_accelerated_scalar(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_00213f38");
-extern void FUN_001f9bf8(void *, void *, f32);
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 FUN_L00_002e1f28(VendMoby *, s32, s32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern void FUN_0020cca8(VendMoby *, s32, void *);
-extern f32 FUN_001f9dc8(f32);
-extern f32 FUN_001f9de0(f32);
+extern void build_moby_bone_transform(VendMoby *, s32, void *) __asm__("FUN_0020cca8");
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 compute_interpolated_record_value(VendMoby *) __asm__("FUN_0020c9e0");
 extern s32 FUN_001efa68(void *, void *, s32, VendMoby *, VendQuery *);
 extern s32 vend_2040(VendMoby *) __asm__("FUN_L00_002e2040");
@@ -292,9 +292,9 @@ void FUN_L00_002e0b88(VendMoby *moby) {
         path = vend_paths[vars->pathIdx];
         qcopy(&delta, &path->pts[vars->pathPt]);
         VEND_TURN(moby, vars,
-                  FUN_001f9e90(delta.f[0] - moby->pos.f[0], delta.f[1] - moby->pos.f[1]),
+                  fast_arc_tan(delta.f[0] - moby->pos.f[0], delta.f[1] - moby->pos.f[1]),
                   12.566371f);
-        FUN_001f9a28(&dir, &delta, &moby->pos);
+        subtract_vector_xyz(&dir, &delta, &moby->pos);
         advance_accelerated_scalar(FUN_001f9b48(&moby->pos, &path->pts[path->count - 1]),
                                    frame_time_sq * 8.0f, frame_time_sq * 16.0f, frame_time * 12.0f, &vel,
                                    &vars->speed);
@@ -305,13 +305,13 @@ void FUN_L00_002e0b88(VendMoby *moby) {
                 VEND_ANIM(moby, 1, vend_rand(10));
             }
         }
-        FUN_001f9bf8(&dir, &dir, vars->speed);
-        FUN_001f9a10(&moby->pos, &moby->pos, &dir);
+        fast_vec_normalize(&dir, &dir, vars->speed);
+        add_vector_xyz(&moby->pos, &moby->pos, &dir);
         break;
     case 3:
         VEND_TURN(
             moby, vars,
-            FUN_001f9e90(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
+            fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
             12.566371f);
         if (FUN_001f9b80(&moby->pos, &hero.motion.pos) < 20.0f) {
             VEND_ANIM(moby, 4, vend_rand(20));
@@ -326,7 +326,7 @@ void FUN_L00_002e0b88(VendMoby *moby) {
     case 4:
         VEND_TURN(
             moby, vars,
-            FUN_001f9e90(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
+            fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
             12.566371f);
         if (moby->unk70 & 2) {
             vars->timer = 0;
@@ -337,25 +337,25 @@ void FUN_L00_002e0b88(VendMoby *moby) {
     case 5: {
         f32 ang;
 
-        ang = FUN_001f9e90(vars->homeX - moby->pos.f[0], vars->homeY - moby->pos.f[1]);
+        ang = fast_arc_tan(vars->homeX - moby->pos.f[0], vars->homeY - moby->pos.f[1]);
         if (moby->flags34 & 0x8000) {
             ang = fast_add_rotations(ang, D_L00_00161BEC);
         } else {
             ang = fast_subtract_rotations(ang, D_L00_00161BEC);
         }
         VEND_TURN(moby, vars, ang, 1.5707964f);
-        FUN_0020cca8(moby, 0, mtx);
+        build_moby_bone_transform(moby, 0, mtx);
         qcopy(&delta, &moby->unkC0);
         delta.f[2] = 0.0f;
-        FUN_001f9bf8(&delta, &delta, D_L00_00161BE4);
-        FUN_001f9a10(&dir, &mtx[3], &delta);
+        fast_vec_normalize(&delta, &delta, D_L00_00161BE4);
+        add_vector_xyz(&dir, &mtx[3], &delta);
         hit = 0;
         query.flags = 0x10000;
         query.moby = moby;
         query.unk90 = 1;
         query.unk8C = 1.0f;
-        query.dir[0] = FUN_001f9dc8(moby->unk40.f[2]);
-        query.dir[1] = FUN_001f9de0(moby->unk40.f[2]);
+        query.dir[0] = fast_cos(moby->unk40.f[2]);
+        query.dir[1] = fast_sin(moby->unk40.f[2]);
         query.dir[3] = 5627.925f;
         query.unk89 = 1;
         query.unk8A = moby->unkA6;
@@ -394,7 +394,7 @@ void FUN_L00_002e0b88(VendMoby *moby) {
     case 6:
         VEND_TURN(
             moby, vars,
-            FUN_001f9e90(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
+            fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
             12.566371f);
         if (moby->unk70 & 2) {
             moby->state = 3;
@@ -496,9 +496,9 @@ typedef struct {
 } TrollColl;
 
 extern s16 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern f32 FUN_001f9b80(void *, void *);
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L00_00257470(TrollMoby *, s32, s32);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern TrollColl *find_moby_hit(TrollMoby *, s32, s32) __asm__("FUN_L00_0025a420");
@@ -539,7 +539,7 @@ void FUN_L00_002e1678(TrollMoby *m) {
         vars->unk38 = 0;
         vars->unk1DA = scale_game_frames(random_int_between(0xB4, 0x12C));
     }
-    FUN_001f9770(&vars->unk1DA);
+    fast_dec_timer_s16(&vars->unk1DA);
     anim = vars->unk60;
     dmg = 0.0f;
     coll = find_moby_hit(m, 0x330000, 0);
@@ -573,7 +573,7 @@ void FUN_L00_002e1678(TrollMoby *m) {
             vars->unk8C = D_L00_00161BE0 * frame_time * 0.5f;
             v.q = coll->pos.q;
             FUN_L00_0025ab48(&v, &unused, &vars->unk88, &vars->unk8C);
-            FUN_L00_0025c558(m, vars->unk70, 8, 1, 0, FUN_001f9e90(coll->pos.f[0], coll->pos.f[1]));
+            FUN_L00_0025c558(m, vars->unk70, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
             vars->unkC4 = vars->unkC0 = -1.0f;
             m->state = 7;
             vars->unk67 = 0xFA;
@@ -720,9 +720,9 @@ typedef struct {
 
 extern GlowVec glow_origin __asm__("D_L00_00166DC0");
 extern GlowVec D_L00_001E6CA0[4];
-extern void FUN_001f9a68(f32, void *, void *);
-extern void FUN_001f9bf8(void *, void *, float);
-extern void FUN_001f7d30(void *, void *, s32);
+extern void fast_vec_scale(f32, void *, void *) __asm__("FUN_001f9a68");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_draw_quad_real(void *, void *, s32) __asm__("FUN_001f7d30");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
@@ -737,10 +737,10 @@ void FUN_L00_002e1c78(GlowMoby *m) {
     qcopy(&mat[3], &m->vars->pos);
     one = 1.0f;
     mat[3].f[3] = one;
-    FUN_001f9a28(&mat[0], &glow_origin, &mat[3]);
-    FUN_001f9bf8(&mat[0], &mat[0], one);
+    subtract_vector_xyz(&mat[0], &glow_origin, &mat[3]);
+    fast_vec_normalize(&mat[0], &mat[0], one);
     fast_vec_cross(&mat[1], &mat[0], (GlowVec *)&hero.gravity_dir);
-    FUN_001f9bf8(&mat[1], &mat[1], -1.0f);
+    fast_vec_normalize(&mat[1], &mat[1], -1.0f);
     fast_vec_cross(&mat[2], &mat[1], &mat[0]);
     quad.tex = get_effect_texture(0xB);
     quad.unk88 = 0x8000000048L;
@@ -761,9 +761,9 @@ void FUN_L00_002e1c78(GlowMoby *m) {
     src = D_L00_001E6CA0;
     dst = quad.corner;
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68(0.2f, dst++, src++);
+        fast_vec_scale(0.2f, dst++, src++);
     }
-    FUN_001f7d30(&quad, mat, 0);
+    fast_draw_quad_real(&quad, mat, 0);
 }
 typedef struct {
     u8 pad0[0x20];

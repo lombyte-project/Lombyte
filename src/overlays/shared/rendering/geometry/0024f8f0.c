@@ -9,20 +9,20 @@ typedef struct {
     float r[12];
     float t[4];
 } __attribute__((aligned(16))) M4;
-void FUN_001fa298(Mtx *, void *);
+void copy_matrix_rotation(Mtx *, void *) __asm__("FUN_001fa298");
 void FUN_00210850(char *, int, int, M4 *);
-void FUN_001fa378(void *, Mtx *, void *);
-void FUN_001f9a68(void *, void *, float);
-void FUN_001f9a10(void *, void *, void *);
+void multiply_matrix(void *, Mtx *, void *) __asm__("FUN_001fa378");
+void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_0024f8f0(char *p, int n, int c, M4 *out) {
     Mtx m;
     float s = *(float *)(p + 0x2C) * (1.0f / 1024.0f);
     int i;
-    FUN_001fa298(&m, p + 0xC0);
+    copy_matrix_rotation(&m, p + 0xC0);
     FUN_00210850(p, n, c, out);
     for (i = 0; i < n; i++) {
-        FUN_001fa378(&out[i], &m, &out[i]);
-        FUN_001f9a68(out[i].t, out[i].t, s);
-        FUN_001f9a10(out[i].t, out[i].t, p + 0x10);
+        multiply_matrix(&out[i], &m, &out[i]);
+        fast_vec_scale(out[i].t, out[i].t, s);
+        add_vector_xyz(out[i].t, out[i].t, p + 0x10);
     }
 }

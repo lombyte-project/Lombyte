@@ -2,7 +2,7 @@
 #include "eetypes.h"
 #include "rnc/math/vector.h"
 #include "rnc/data_labels.h"
-extern f32 FUN_001f9b80(Vec4 *, Vec4 *);
+extern f32 vector_distance_xy(Vec4 *, Vec4 *) __asm__("FUN_001f9b80");
 s32 map_filter_l15_0(s32 x, s32 y) __asm__("FUN_00207a18");
 
 s32 map_filter_l15_0(s32 x, s32 y) {
@@ -17,7 +17,7 @@ s32 map_filter_l15_0(s32 x, s32 y) {
         a.f[1] = y;
         b.f[0] = 161.5f;
         b.f[1] = 249.0f;
-        near = FUN_001f9b80(&a, &b) <= 35.0f;
+        near = vector_distance_xy(&a, &b) <= 35.0f;
     } else {
         near = 1;
     }

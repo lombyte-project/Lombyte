@@ -5,8 +5,8 @@
 extern struct TagPtr D_00160EBC;
 extern s32 D_00160EC4;
 extern char D_001E89B0[];
-extern void FUN_00234bd8(void);
-extern s32 func_00234D48(s32);
+extern void compute_tfrag_texture_usage(void) __asm__("FUN_00234bd8");
+extern s32 build_tfrag_texture_dma(s32) __asm__("func_00234D48");
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
 extern void DebugPrint(char *, ...);
 void dma_tfrag_textures(void) __asm__("FUN_002331c0");
@@ -22,8 +22,8 @@ void dma_tfrag_textures(void) {
     D_00160EBC.p->vif0 = 0;
     D_00160EBC.p->vif1 = 0;
     if (draw_config.tfrag.enabled != 0 && draw_config.tfrag.count != 0) {
-        FUN_00234bd8();
-        size = func_00234D48(gs_texture_allocation_cursor);
+        compute_tfrag_texture_usage();
+        size = build_tfrag_texture_dma(gs_texture_allocation_cursor);
         vu1_tex_flush();
         if (size > 0x400000) {
             DebugPrint(D_001E89B0);

@@ -516,10 +516,10 @@ typedef struct {
     float aim[4];
 } L14Player;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9af0(void *);
-extern float FUN_001f9b20(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -640,7 +640,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
              fast_difference_between_rotations(
                  m->yaw, FUN_001f9e90(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) <
                 1.5707964f) {
-            if (FUN_001f9af0(g + 0x80) > 0.01f)
+            if (fast_vec_length(g + 0x80) > 0.01f)
                 d->moving_timer = scale_game_frames(120);
             else
                 FUN_001f9740(&d->moving_timer);
@@ -651,7 +651,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
         if (FUN_001f9740(&d->target_timer)) {
             float heading;
             d->target_timer =
-                truncate_float_to_s32(FUN_001f96b0(random_float_between(180.0f, 300.0f)));
+                truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading =
                 fast_add_rotations(m->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(d->target, 6.0f, heading,
@@ -673,7 +673,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
         scratch.eye[2] += 1.0f;
         FUN_001f9a28(scratch.delta, scratch.target, scratch.eye);
         yaw = fast_subtract_rotations(FUN_001f9e90(scratch.delta[0], scratch.delta[1]), m->yaw);
-        pitch = -FUN_001f9e90(FUN_001f9b20(scratch.delta), scratch.delta[2]);
+        pitch = -FUN_001f9e90(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

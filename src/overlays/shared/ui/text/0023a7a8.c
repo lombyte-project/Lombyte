@@ -10,7 +10,7 @@
 
 extern char D_L00_0015F7C8[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern int FUN_001fa6e0(int, int, float);
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int find_valid_animation_frame_index_alt(int, int) __asm__("FUN_001ff960");
 extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -73,10 +73,10 @@ int FUN_L00_0023a7a8(char *m) {
         v74 = *(int *)(m + 0x74);
         sprintf_alt(buf, D_L00_0015F7C8, v74, *(int *)(m + 8));
         if (v74 != 0)
-            s16 = FUN_001fa6e0(*(int *)&D_L00_0015F92C, *(int *)&D_L00_0015F930, f20);
+            s16 = fast_tween_color(*(int *)&D_L00_0015F92C, *(int *)&D_L00_0015F930, f20);
         else
-            s16 = FUN_001fa6e0(*(int *)&D_L00_0015F934, *(int *)&D_L00_0015F938, f20);
-        c1 = FUN_001fa6e0(0, 0x80000000, f20);
+            s16 = fast_tween_color(*(int *)&D_L00_0015F934, *(int *)&D_L00_0015F938, f20);
+        c1 = fast_tween_color(0, 0x80000000, f20);
         {
             int tx = x + *(int *)&D_L00_0015F93C + w;
             font_print_right(tx + 1, y + *(int *)&D_L00_0015F940 + 1, c1, buf, -1);

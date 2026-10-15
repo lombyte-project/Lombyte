@@ -3,11 +3,11 @@
 #include "asm.h"
 
 void build_spherical_offset(void *) __asm__("FUN_00214db0");
-void FUN_001f9a10(void *, void *, void *);
+void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00262cf0(void *a, void *b) {
     char buf[16];
     build_spherical_offset(buf);
-    FUN_001f9a10(a, buf, b);
+    add_vector_xyz(a, buf, b);
 }
 typedef struct {
     s32 v[19];

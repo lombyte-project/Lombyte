@@ -55,9 +55,9 @@ extern char D_L05_0015FA58[];
 extern char D_L05_0015FA68[];
 extern char D_L05_0015FA70[];
 
-extern void FUN_00201128(int, int, int, int, int);
-extern char *FUN_001fdd10(int);
-extern int FUN_00116248(char *, const char *, ...);
+extern void draw_stretchable_ui_frame(int, int, int, int, int) __asm__("FUN_00201128");
+extern char *get_help_message_text(int) __asm__("FUN_001fdd10");
+extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern int FUN_001f6250(char *, int);
 extern void FUN_L00_001fb470(int x, int y, u64 color, char *text, int len);
 #ifdef NON_MATCHING
@@ -70,8 +70,8 @@ extern char D_L05_0015F9F8[];
 extern char D_L05_0015FA00[];
 extern char D_L05_0015FA08[];
 extern int measure_text_width_regular(char *, int) __asm__("FUN_L05_00229d48");
-extern int FUN_001ff960(int, int);
-extern void FUN_001ffc30(int, int, int, int, int, int);
+extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
+extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 
 int FUN_L05_00266320(HudElem *e) {
     /* The retail GP is 0x166C00; this renderer uses the preceding
@@ -100,42 +100,42 @@ int FUN_L05_00266320(HudElem *e) {
         int x;
         x = -(D_0015ED80 ? D_L05_0015F988 + 10 : D_L05_0015F988 + 18) + D_0013E500[1];
         y = -(D_0015ED80 ? D_L05_0015F9A4 + 10 : D_L05_0015F9A4 + 18) + D_0013E500[1];
-        FUN_00201128(D_L05_0015F984, x, D_L05_0015F98C, D_L05_0015F990, D_L05_0015F994);
+        draw_stretchable_ui_frame(D_L05_0015F984, x, D_L05_0015F98C, D_L05_0015F990, D_L05_0015F994);
     }
     x = D_L05_0015F9A0;
-    FUN_00116248(buf, D_L05_0015F9D8, FUN_001fdd10(0x523F));
+    sprintf(buf, D_L05_0015F9D8, get_help_message_text(0x523F));
     FUN_L00_001fb470(x - 1, y + 1, 0x80000000, buf, -1);
     FUN_L00_001fb470(x, y, D_L05_0015F998, buf, -1);
     x += measure_text_width_regular(buf, -1);
     count = hero.unk89A + 1;
     if (count > 3) count = 3;
-    FUN_00116248(buf, D_L05_0015F9E0, count);
+    sprintf(buf, D_L05_0015F9E0, count);
     FUN_L00_001fb470(x - 1, y + 2, 0x80000000, buf, -1);
     FUN_L00_001fb470(x, y, D_L05_0015F99C, buf, -1);
     {
         int count = hero.unk8C0;
         x = D_L05_0015F9B0;
         if (count == 1) {
-            FUN_00116248(buf, D_L05_0015F9E8, 1);
+            sprintf(buf, D_L05_0015F9E8, 1);
         } else if (count == 2) {
-            FUN_00116248(buf, D_L05_0015F9F0, 2);
+            sprintf(buf, D_L05_0015F9F0, 2);
         } else if (count == 3) {
-            FUN_00116248(buf, D_L05_0015F9F8, 3);
+            sprintf(buf, D_L05_0015F9F8, 3);
         } else {
-            FUN_00116248(buf, D_L05_0015FA00, count);
+            sprintf(buf, D_L05_0015FA00, count);
         }
     }
     x -= measure_text_width_regular(buf, -1);
     FUN_L00_001fb470(x + 1, y + 1, 0x80000000, buf, -1);
     FUN_L00_001fb470(x, y, D_L05_0015F99C, buf, -1);
-    FUN_00116248(buf, D_L05_0015FA08, FUN_001fdd10(0x5240));
+    sprintf(buf, D_L05_0015FA08, get_help_message_text(0x5240));
     x -= measure_text_width_regular(buf, -1);
     FUN_L00_001fb470(x + 1, y + 1, 0x80000000, buf, -1);
     FUN_L00_001fb470(x, y, D_L05_0015F998, buf, -1);
     if (D_0015ED84 == 0x10) {
         int y2, x2;
         int count;
-        FUN_00116248(small_buf, D_L05_0015F860, hero.unk8CE);
+        sprintf(small_buf, D_L05_0015F860, hero.unk8CE);
         count = D_0015ED80;
         y2 = D_0013D388[0];
         x2 = e->unk50;
@@ -145,8 +145,8 @@ int FUN_L05_00266320(HudElem *e) {
             x2 = D_L05_0015F9C0;
             y2 = D_L05_0015F9C4;
         }
-        FUN_00201128(x2 - 0x18, y2, D_L05_0015F9C8, 0x20, 0x60);
-        FUN_001ffc30(FUN_001ff960(0x7558, 2), x2, y2, 0x20, 0x20, 0x80);
+        draw_stretchable_ui_frame(x2 - 0x18, y2, D_L05_0015F9C8, 0x20, 0x60);
+        draw_hud_sprite(get_icon_frame(0x7558, 2), x2, y2, 0x20, 0x20, 0x80);
         FUN_L00_001fb470(x2 + 0x29, y2 + 8, 0x80000000, small_buf, -1);
         if (hero.unk8CE != 0) {
             FUN_L00_001fb470(x2 + 0x28, y2 + 7, 0x80e08060, small_buf, -1);
@@ -182,26 +182,26 @@ int FUN_L05_00266710(HudElem *e) {
     hund = frames * 100 / per_sec;
 
     if (D_0013D388[0]) {
-        FUN_00201128(D_L05_0015FA14, y0, D_L05_0015FA1C, D_L05_0015FA20, D_L05_0015FA24);
+        draw_stretchable_ui_frame(D_L05_0015FA14, y0, D_L05_0015FA1C, D_L05_0015FA20, D_L05_0015FA24);
         x = D_L05_0015FA30;
-        FUN_00116248(buf, D_L05_0015F788, FUN_001fdd10(0x50A6), hero.unk8A8);
+        sprintf(buf, D_L05_0015F788, get_help_message_text(0x50A6), hero.unk8A8);
         x -= FUN_001f6250(buf, -1) >> 1;
-        FUN_00116248(buf, D_L05_0015F9D8, FUN_001fdd10(0x50A6));
+        sprintf(buf, D_L05_0015F9D8, get_help_message_text(0x50A6));
         FUN_L00_001fb470(x + 1, y1 + 1, 0x80000000, buf, -1);
         FUN_L00_001fb470(x, y1, D_L05_0015FA28, buf, -1);
         x += FUN_001f6250(buf, -1);
-        FUN_00116248(buf, D_L05_0015FA50, hero.unk8A8);
+        sprintf(buf, D_L05_0015FA50, hero.unk8A8);
         FUN_L00_001fb470(x + 1, y1 + 1, 0x80000000, buf, -1);
         FUN_L00_001fb470(x, y1, D_L05_0015FA2C, buf, -1);
     }
     x = D_L05_0015FA30;
-    FUN_00116248(buf, D_L05_0015FA58, FUN_001fdd10(0x5241));
+    sprintf(buf, D_L05_0015FA58, get_help_message_text(0x5241));
     x -= FUN_001f6250(buf, -1) >> 1;
-    FUN_00116248(buf, D_L05_0015FA68, FUN_001fdd10(0x5241));
+    sprintf(buf, D_L05_0015FA68, get_help_message_text(0x5241));
     FUN_L00_001fb470(x + 1, y2 + 1, 0x80000000, buf, -1);
     FUN_L00_001fb470(x, y2, D_L05_0015FA28, buf, -1);
     x += FUN_001f6250(buf, -1);
-    FUN_00116248(buf, D_L05_0015FA70, min, sec, hund);
+    sprintf(buf, D_L05_0015FA70, min, sec, hund);
     FUN_L00_001fb470(x + 1, y2 + 1, 0x80000000, buf, -1);
     FUN_L00_001fb470(x, y2, D_L05_0015FA2C, buf, -1);
     return e->w;

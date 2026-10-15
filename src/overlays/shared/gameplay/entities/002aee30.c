@@ -17,8 +17,8 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
 
 extern char D_L04_001D2C90[];
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9cf8(void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_L04_002c41e0(void *, void *, void *, int, float, float);
 
 extern short D_L04_001618B0 __attribute__((sda));
@@ -28,13 +28,13 @@ void FUN_L04_002c45b8(char *a, int i, int j, int k) {
     pi = D_L04_001D2C90 + i * 16;
     qcopy(v0, pi);
     v0[3] = 1.0f;
-    FUN_001f9cf8(v0, v0, a + 0xC0);
-    FUN_001f9a10(v0, v0, a + 0x10);
+    transform_vector_by_basis(v0, v0, a + 0xC0);
+    add_vector_xyz(v0, v0, a + 0x10);
     pj = D_L04_001D2C90 + j * 16;
     qcopy(v10, pj);
     v10[3] = 1.0f;
-    FUN_001f9cf8(v10, v10, a + 0xC0);
-    FUN_001f9a10(v10, v10, a + 0x10);
+    transform_vector_by_basis(v10, v10, a + 0xC0);
+    add_vector_xyz(v10, v10, a + 0x10);
     FUN_L04_002c41e0(a, v0, v10, k, *(float *)(pi + 0xC) * *(float *)&D_L04_001618B0,
                      *(float *)(pj + 0xC) * *(float *)&D_L04_001618B0);
 }
@@ -86,7 +86,7 @@ typedef struct {
 extern struct Moby *create_moby(int oclass) __asm__("FUN_0020c4f8");
 extern float atan2_f(float, float) __asm__("FUN_001f9e90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float FUN_001f9b48(void *, void *);  /* distance between two points */
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");  /* distance between two points */
 extern void FUN_L00_0026daa0(struct Moby *, int color, int life, int, float size);
 extern void FUN_L00_00250df8(void *);
 
@@ -125,7 +125,7 @@ struct Moby *FUN_L04_002aee30(struct Moby *owner, void *pos, void *dir, int life
         vars->unk14 = 0;
         vars->time = life;
         vars->time_max = life;
-        vars->hero_dist = FUN_001f9b48(&m->pos, &hero.motion.pos);
+        vars->hero_dist = fast_vec_dist(&m->pos, &hero.motion.pos);
         vars->unk24 = 0;
         vars->unk28 = 0;
         if (owner->oclass == 0xFF) {
@@ -160,7 +160,7 @@ extern u128 D_L04_00173FE0;                              /* hit position of the 
 extern u8 D_L04_00174000[];
 extern f32 FUN_001f9b80(void *, void *);
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
-extern void FUN_001f9c48(void *, void *, f32);
+extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern s32 FUN_001f9770(s16 *);                          /* counts a s16 down, nonzero at 0 */
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 collision_line(void *, void *, s32, struct Moby *, CollisionProbe *) __asm__("FUN_001efa68");
@@ -194,9 +194,9 @@ void FUN_L04_002af058(struct Moby *m)
         range = 128.0f;
     if (current_level_index == 12)
         range = 100.0f;
-    d = FUN_001f9b48(&m->pos, &hero.motion.pos);
+    d = fast_vec_dist(&m->pos, &hero.motion.pos);
     qcopy(&old, &m->pos);
-    FUN_001f9a10(&m->pos, &m->pos, &v->dir);
+    add_vector_xyz(&m->pos, &m->pos, &v->dir);
     if (v->unk28 == 0 && v->unk24 != 0 && v->hero_dist < d && d < 3.0f) {
         allocate_voice_for_target_entry(0, 0, m);
         v->unk28 = 1;
@@ -222,7 +222,7 @@ void FUN_L04_002af058(struct Moby *m)
         }
         pr.unk20 = 1;
         qcopy(&pr.dir, &v->dir);
-        FUN_001f9c48(&pr.dir, &pr.dir, 1.0f);
+        set_vector_length_xy(&pr.dir, &pr.dir, 1.0f);
         probe = &pr;
         pr.dir.v.z = 1.0f;
         pr.dir.v.w = 5627.9248f;
@@ -249,7 +249,7 @@ void FUN_L04_002af058(struct Moby *m)
             push.q = r.q;
             FUN_L00_001ff660(&r, v, D_L04_00174000);
             normalize_vector_xyz(&push, &push, vector_length_xyz(&r) * 0.5f);
-            FUN_001f9a10(&push, &r, &push);
+            add_vector_xyz(&push, &r, &push);
             normalize_vector_xyz(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
             FUN_L00_0026dd20(&m->pos, &push, 0x7F2F4F6F,
                              random_int_between(scale_game_frames(10), scale_game_frames(15)), 30000.0f);

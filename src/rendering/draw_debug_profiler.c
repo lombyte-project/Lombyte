@@ -52,10 +52,10 @@ extern u8 D_001E78B8[];
 extern void AppendDmaTag(u32);
 extern void FlushCache(s32);
 extern void transition_draw_sky(void) __asm__("func_001E9AB8");
-extern void func_001EDC50(void);
+extern void draw_lens_flare(void) __asm__("func_001EDC50");
 extern void render_queued_rotated_sprites(void) __asm__("FUN_001ee338");
-extern void func_001F21B0(void *, s32);
-extern void func_001F21B8(void *, s32);
+extern void noop_core_callback(void *, s32) __asm__("func_001F21B0");
+extern void noop_core_callback_secondary(void *, s32) __asm__("func_001F21B8");
 extern void func_001F2260(void);
 extern void update_fog(void) __asm__("func_001F2588");
 extern void update_occlusion(void) __asm__("FUN_001f2c10");
@@ -74,7 +74,7 @@ extern void draw_fogged_fullscreen_sprite(void *) __asm__("func_001F5138");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
 extern void draw_debug_font(void) __asm__("func_001F79A8");
 extern void append_billboard_batch(void) __asm__("FUN_001f92b0");
-extern f32 func_001FA6C0(s32);
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern void aa_blur_pass(void) __asm__("func_001FB680");
@@ -83,7 +83,7 @@ extern void update_hud(void) __asm__("func_001FF780");
 extern void prune_moby_references(void) __asm__("FUN_0020cc60");
 extern void patch_moby_gifs(void) __asm__("func_0020CEF8");
 extern void draw_mobys(void) __asm__("func_0020D460");
-extern void func_00217C18(void);
+extern void part_proc(void) __asm__("func_00217C18");
 extern void patch_shrub_gifs(void) __asm__("func_00228A30");
 extern void draw_shrubs(void) __asm__("func_00228B38");
 extern void FUN_0022a5e0(void *);
@@ -95,14 +95,14 @@ extern void vu1_add_data_ref(void *, s32) __asm__("func_00233830");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void vu1_gs_regs_normal(void) __asm__("func_00233BC8");
 extern void vu1_gs_regs_alt(void) __asm__("func_00233C28");
-extern void FUN_00234f98(void *);
+extern void light_tfrags(void *) __asm__("FUN_00234f98");
 extern void patch_tie_texture_fields(void) __asm__("FUN_00235780");
 extern void copy_render_buffer_pair(void) __asm__("FUN_00235840");
 extern void register_entity_render_resources(void) __asm__("FUN_00235898");
 extern void draw_ties_1(void) __asm__("func_002358C8");
 extern void draw_ties_2(void) __asm__("func_00235990");
-extern void FUN_00237370(void *);
-extern void func_00237A70(void);
+extern void light_ties(void *) __asm__("FUN_00237370");
+extern void noop_graphics_callback(void) __asm__("func_00237A70");
 
 void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 
@@ -122,14 +122,14 @@ void draw_debug_profiler(void) {
     update_occlusion();
     reset_gs_registers();
     font_state = -1;
-    func_001F21B0(D_0015F380, 0xF);
-    func_001F21B8(D_0015F380, 0xF);
+    noop_core_callback(D_0015F380, 0xF);
+    noop_core_callback_secondary(D_0015F380, 0xF);
     if (D_0016045C != NULL && (draw_enable_mask & 1)) {
         if (draw_config.unk8 != 0) {
             transition_draw_sky();
         }
-        func_001F21B8(D_0015F390, 0xE);
-        func_001F21B0(D_0015F390, 0xE);
+        noop_core_callback_secondary(D_0015F390, 0xE);
+        noop_core_callback(D_0015F390, 0xE);
     }
     if (draw_enable_mask & 2) {
         draw_tfrag();
@@ -150,8 +150,8 @@ void draw_debug_profiler(void) {
         do_gif_paging();
         vu1_gs_regs_normal();
     }
-    func_001F21B0(D_0015F3A0, 6);
-    func_001F21B8(D_0015F3A0, 6);
+    noop_core_callback(D_0015F3A0, 6);
+    noop_core_callback_secondary(D_0015F3A0, 6);
     if (draw_enable_mask & 8) {
         draw_shrubs();
     }
@@ -180,8 +180,8 @@ void draw_debug_profiler(void) {
         vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);
         font_state = 6;
     }
-    func_001F21B8(D_0015F3B0, 4);
-    func_001F21B0(D_0015F3B0, 4);
+    noop_core_callback_secondary(D_0015F3B0, 4);
+    noop_core_callback(D_0015F3B0, 4);
     if (draw_enable_mask & 0x20) {
         vu1_gs_regs_alt();
         if (draw_config.unk34 != 0) {
@@ -189,21 +189,21 @@ void draw_debug_profiler(void) {
                 dispatch_callback_list_1();
             }
             vu1_add_g_sregister(0x42, 0x8000000048);
-            func_001EDC50();
+            draw_lens_flare();
             vu1_gs_regs_alt();
             draw_light_quads();
         }
-        func_001F21B0(D_0015F3C0, 6);
-        func_001F21B8(D_0015F3C0, 6);
+        noop_core_callback(D_0015F3C0, 6);
+        noop_core_callback_secondary(D_0015F3C0, 6);
         if (draw_config.unk38 != 0) {
             vu1_add_g_sregister(8, 5);
             vu1_gs_regs_alt();
             FlushCache(0);
-            func_00217C18();
+            part_proc();
             font_state = 8;
         }
-        func_001F21B0(D_0015F3D0, 8);
-        func_001F21B8(D_0015F3D0, 8);
+        noop_core_callback(D_0015F3D0, 8);
+        noop_core_callback_secondary(D_0015F3D0, 8);
         if (draw_config.unk3C != 0) {
             if (draw_callback2_count != 0) {
                 vu1_gs_regs_alt();
@@ -215,16 +215,16 @@ void draw_debug_profiler(void) {
             vu1_add_g_sregister(0x42, 0x8000000044);
             render_queued_rotated_sprites();
         }
-        func_001F21B0(D_0015F3E0, 6);
-        func_001F21B8(D_0015F3E0, 6);
+        noop_core_callback(D_0015F3E0, 6);
+        noop_core_callback_secondary(D_0015F3E0, 6);
     }
     if (draw_config.unk48 != 0) {
         aa_blur_pass();
     }
-    func_001F21B8(D_0015F3F0, 0xF);
+    noop_core_callback_secondary(D_0015F3F0, 0xF);
     vu1_gs_regs_alt();
     if (draw_enable_mask & 0x10000) {
-        func_00237A70();
+        noop_graphics_callback();
     }
     if ((draw_enable_mask & 0x80) && draw_config.unk40 != 0) {
         update_hud();
@@ -234,8 +234,8 @@ void draw_debug_profiler(void) {
     if (game_mode_macro == 2 && subtitles_enabled != 0) {
         draw_subtitles();
     }
-    func_001F21B8(D_0015F3F8, 0xE);
-    func_001F21B0(D_0015F3F8, 0xE);
+    noop_core_callback_secondary(D_0015F3F8, 0xE);
+    noop_core_callback(D_0015F3F8, 0xE);
     do_gif_paging();
     if (draw_enable_mask & 0x40) {
         if (draw_config.unk44 != 0) {
@@ -259,51 +259,51 @@ void draw_debug_profiler(void) {
                 draw_screen_effect();
             }
         }
-        func_001F21B8(D_0015F400, 0xA);
+        noop_core_callback_secondary(D_0015F400, 0xA);
     }
     vu0_load_micro_program(D_00100AE0);
     FlushCache(0);
-    t = func_001FA6C0(*(volatile s32 *)0x10000800);
+    t = convert_integer_to_float(*(volatile s32 *)0x10000800);
     D_0015F614 = t / (pal_mode != 0 ? 11520.0f : 9600.0f);
     vu1_sync_chain(2);
-    func_001F21B0(D_0015F410, 0x11);
+    noop_core_callback(D_0015F410, 0x11);
     if (draw_enable_mask & 2) {
         if (draw_config.tfrag.enabled != 0) {
-            FUN_00234f98(D_001E1300);
+            light_tfrags(D_001E1300);
             patch_tfrag_gifs();
         }
-        func_001F21B0(D_001E78A0, 2);
+        noop_core_callback(D_001E78A0, 2);
     }
     vu1_sync_chain(4);
-    func_001F21B0(D_0015F410, 0x11);
+    noop_core_callback(D_0015F410, 0x11);
     if (draw_enable_mask & 4) {
         if (draw_config.tie.enabled != 0) {
             if (pal_mode != 0) {
                 register_entity_render_resources();
                 copy_render_buffer_pair();
             } else {
-                FUN_00237370(tie_light_data);
+                light_ties(tie_light_data);
                 patch_tie_texture_fields();
             }
         }
-        func_001F21B0(D_0015F418, 5);
+        noop_core_callback(D_0015F418, 5);
     }
     vu1_sync_chain(8);
-    func_001F21B0(D_0015F410, 0x11);
+    noop_core_callback(D_0015F410, 0x11);
     if (draw_enable_mask & 8) {
         if (draw_config.shrub.enabled != 0) {
             FUN_0022a5e0(D_001D8EB0);
             patch_shrub_gifs();
         }
-        func_001F21B0(D_001E78B8, 7);
+        noop_core_callback(D_001E78B8, 7);
     }
     vu1_sync_chain(0x10);
-    func_001F21B0(D_0015F410, 0x11);
+    noop_core_callback(D_0015F410, 0x11);
     if (draw_enable_mask & 0x10) {
         if (draw_config.moby.enabled != 0) {
             patch_moby_gifs();
         }
-        func_001F21B0(D_0015F428, 3);
+        noop_core_callback(D_0015F428, 3);
     }
     update_fog();
     D_0015F648 = 0;

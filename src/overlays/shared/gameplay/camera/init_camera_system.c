@@ -270,16 +270,16 @@ void setup_level_cameras(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED900), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
-extern void FUN_001f9a10(void *, void *, void *);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void FUN_L00_001ed580(float *o, float *v, void *m) {
-    o[0] = v[2] * FUN_001f9dc8(v[1]) * FUN_001f9dc8(v[0]);
-    o[1] = v[2] * FUN_001f9dc8(v[1]) * FUN_001f9de0(v[0]);
-    o[2] = v[2] * FUN_001f9de0(v[1]);
+    o[0] = v[2] * fast_cos(v[1]) * fast_cos(v[0]);
+    o[1] = v[2] * fast_cos(v[1]) * fast_sin(v[0]);
+    o[2] = v[2] * fast_sin(v[1]);
     *(int *)(o + 3) = 0;
-    FUN_001f9a10(o, o, m);
+    add_vector_xyz(o, o, m);
 }
 #define NOT_SDA
 
@@ -289,22 +289,22 @@ void FUN_L00_001ed580(float *o, float *v, void *m) {
 
 typedef float W[4] __attribute__((aligned(16)));
 
-extern float FUN_001f9af0(float *);
-extern float FUN_001f9b20(float *);
-extern float FUN_001f9e90(float, float);
-extern void FUN_001f9a28(float *);
+extern float fast_vec_length(float *) __asm__("FUN_001f9af0");
+extern float vector_length_xy(float *) __asm__("FUN_001f9b20");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+extern void subtract_vector_xyz(float *) __asm__("FUN_001f9a28");
 extern void fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Fills a from a subtract_vector_xyz result: two FUN_001f9e90 angles and its length. */
 int FUN_L00_001ed630(float *a) {
     W v;
     float t;
-    FUN_001f9a28(v);
-    a[1] = FUN_001f9e90(FUN_001f9b20(v), v[2]);
-    t = FUN_001f9e90(v[0], v[1]);
+    subtract_vector_xyz(v);
+    a[1] = fast_arc_tan(vector_length_xy(v), v[2]);
+    t = fast_arc_tan(v[0], v[1]);
     fast_subtract_rotations(t, a[0]);
     a[0] = t;
-    a[2] = FUN_001f9af0(v);
+    a[2] = fast_vec_length(v);
     return 0;
 }
 #include "qcopy.h"

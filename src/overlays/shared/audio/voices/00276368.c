@@ -423,7 +423,7 @@ extern u8 D_L00_001E91B0[];
 
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
-extern void FUN_001e93b0(void *, s32);
+extern void debug_print(void *, s32) __asm__("FUN_001e93b0");
 extern void update_fog(void) __asm__("FUN_001f2588");
 extern s32 fade_to_black(s32) __asm__("FUN_001f4a58");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -431,10 +431,10 @@ extern void mode_freeze_init(s32, void *) __asm__("FUN_001fbab8");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void set_moby_animation(Ent *, s32, s32) __asm__("FUN_00212ed8");
-extern void FUN_00216088(void);
+extern void music_unpause(void) __asm__("FUN_00216088");
 extern int sound_update(void) __asm__("FUN_0022ca50");
 extern void allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
-extern void FUN_002335a0(void);
+extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern void FUN_L00_00235668(s32);
 extern void FUN_L00_00276368(void);
 extern void FUN_L00_00276908(void);
@@ -479,7 +479,7 @@ void FUN_L00_00276bd0(void) {
             return;
         }
         D_L00_0015F578 = 0x1E000;
-        FUN_002335a0();
+        calculate_dma_transfer_address();
         qcopy(&D_L00_00166DC0[0], &D_L00_001B9CF0.v40);
         qcopy(&D_L00_00166DC0[1], &D_L00_001B9CF0.v50);
         D_L00_0016CAF0_lui = D_L00_001B9CF0.unkE8;
@@ -495,7 +495,7 @@ void FUN_L00_00276bd0(void) {
         D_L00_001B9CF0.unk104 = 0;
         D_L00_001B9CF0.unk10 = 0;
         if (D_L00_001B9CF0.unkC == 2) {
-            FUN_001e93b0(D_L00_001E91B0, D_L00_001841F0.w224);
+            debug_print(D_L00_001E91B0, D_L00_001841F0.w224);
             FUN_L00_0028ed58(D_L00_001841F0.w224);
         } else if (D_L00_001B9CF0.unkC == 3) {
             tmp = decode_mode;
@@ -536,7 +536,7 @@ void FUN_L00_00276bd0(void) {
         }
         snd_continue_all_sounds_in_group(0x1D);
         if (D_L00_001B9CF0.unkC != 2) {
-            FUN_00216088();
+            music_unpause();
         }
         snd_flush_sound_commands();
         sound_update();

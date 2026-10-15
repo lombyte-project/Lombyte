@@ -107,7 +107,7 @@ void FUN_L16_002e4cd8(struct Moby *moby) {
 }
 /* Wobbles a moby's position and rotation from its sine-driven state. */
 
-extern float FUN_001f9de0(float);
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void FUN_L16_002e4d88(struct Moby *moby) {
@@ -117,18 +117,18 @@ void FUN_L16_002e4d88(struct Moby *moby) {
     qcopy(&moby->rot, d + 0x70);
     s = fast_add_rotations(*(float *)(d + 0xb8), frame_time * 2.0943951f);
     *(float *)(d + 0xb8) = s;
-    t = FUN_001f9de0(s);
+    t = fast_sin(s);
     w = frame_time * 1.6929693f;
     moby->pos.z += t * 0.25f;
     s = fast_add_rotations(*(float *)(d + 0xbc), w);
     *(float *)(d + 0xbc) = s;
-    t = fast_add_rotations(moby->rot.y, FUN_001f9de0(s) * 0.08726646f);
+    t = fast_add_rotations(moby->rot.y, fast_sin(s) * 0.08726646f);
     w = frame_time * 0.9250245f;
     moby->rot.y = t;
     s = fast_add_rotations(*(float *)(d + 0xc0), w);
     *(float *)(d + 0xc0) = s;
     moby->rot.x =
-        fast_add_rotations(moby->rot.x, FUN_001f9de0(s) * 0.08726646f);
+        fast_add_rotations(moby->rot.x, fast_sin(s) * 0.08726646f);
     if (moby->rot.x > 0.17453292f)
         moby->rot.x = 0.17453292f;
     else if (moby->rot.x < -0.17453292f)
@@ -141,8 +141,8 @@ void FUN_L16_002e4d88(struct Moby *moby) {
 /* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
 
 extern char D_L16_001D96E0[];
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9cf8(void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void FUN_L16_002e4f30(struct Moby *a) {
     char *data = (char *)a->pvars;
@@ -153,8 +153,8 @@ void FUN_L16_002e4f30(struct Moby *a) {
             int i;
             struct Hero *g;
             for (i = 0; i < 7; i++) {
-                FUN_001f9cf8(p + 0x10 + i * 16, D_L16_001D96E0 + i * 16, &a->rot_row0);
-                FUN_001f9a10(p + 0x10 + i * 16, p + 0x10 + i * 16, &a->pos);
+                transform_vector_by_basis(p + 0x10 + i * 16, D_L16_001D96E0 + i * 16, &a->rot_row0);
+                add_vector_xyz(p + 0x10 + i * 16, p + 0x10 + i * 16, &a->pos);
             }
             g = &hero;
             *(unsigned short *)&g->unk22DA = *(unsigned short *)(data + 0xa0);

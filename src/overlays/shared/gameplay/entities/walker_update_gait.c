@@ -59,7 +59,7 @@ void FUN_L00_002a1538(u8 *a0) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vuchain_002A21A8.c: func_L00_002A2858), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9988(float);
+extern float square_root(float) __asm__("FUN_001f9988");
 
 float FUN_L00_002a15c8(char *a, char *b) {
     float s = *(float *)(b + 0xDC);
@@ -68,7 +68,7 @@ float FUN_L00_002a15c8(char *a, char *b) {
     float d = c * c + (s + s) * gap;
     float res;
     if (d > 0.0f) {
-        d = FUN_001f9988(d);
+        d = square_root(d);
         if (d <= c) {
             res = c - d;
         } else {
@@ -152,9 +152,9 @@ typedef struct WalkData {
 
 extern char D_L00_001611E0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float FUN_001f9b48(void *, void *);
-extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9e90(float, float);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 extern float fast_cos(float) __asm__("func_001F9DC8");
@@ -810,11 +810,11 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
         break;
     case 15:
         if (flags & 0x30) {
-            float dist = FUN_001f9b80(m->pos, d->v60);
+            float dist = vector_distance_xy(m->pos, d->v60);
             debug_print_alt(D_L00_001611E0, dist);
             d->fD8 = FUN_L00_0025abf0(m->pos, d->v60, 0, d->fC0, -d->fDC);
             d->uEE |= 4;
-            d->f6C = FUN_001f9e90(d->v60[0] - m->pos[0], d->v60[1] - m->pos[1]);
+            d->f6C = fast_arc_tan(d->v60[0] - m->pos[0], d->v60[1] - m->pos[1]);
         }
         if (compute_interpolated_record_value(m) >= d->anim[11]->f0C + d->anim[11]->f10 - m->f58) {
             blend_moby_animation(m, d->bB3, 0, 10);
@@ -840,11 +840,11 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
         break;
     case 14:
         if (flags & 0x30) {
-            float dist = FUN_001f9b48(m->pos, d->v60);
+            float dist = fast_vec_dist(m->pos, d->v60);
             debug_print_alt(D_L00_001611E0, dist);
             d->fD8 = FUN_L00_0025abf0(m->pos, d->v60, 0, d->fC0, -d->fDC);
             d->uEE |= 4;
-            d->f6C = FUN_001f9e90(d->v60[0] - m->pos[0], d->v60[1] - m->pos[1]);
+            d->f6C = fast_arc_tan(d->v60[0] - m->pos[0], d->v60[1] - m->pos[1]);
         }
         if (compute_interpolated_record_value(m) >= d->anim[9]->f0C + d->anim[9]->f10 - m->f58) {
             blend_moby_animation(m, d->bB3, 0, 10);

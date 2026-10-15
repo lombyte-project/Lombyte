@@ -47,8 +47,8 @@ extern u8 gold_weapon_purchased[] __asm__("D_0013E520");
 extern s32 active_decode_buffer __asm__("D_0015FF50");
 extern void update_item_preview_transform() __asm__("FUN_0021e698");
 
-extern void func_001E9470(s32, s32);
-extern void func_001E9478(struct Moby *, s32);
+extern void noop_callback_q(s32, s32) __asm__("func_001E9470");
+extern void noop_callback_r(struct Moby *, s32) __asm__("func_001E9478");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern void select_world_object_resource_tables(s32, s32) __asm__("func_00204A40");
 extern void set_moby_animation(struct Moby *, s32, s32) __asm__("func_00212ED8");
@@ -121,7 +121,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
         if (load_class) {
             if (hero.items[0].item_id != 0 &&
                 oclass != hero.items[0].item_id) {
-                func_001E9470(0, 0);
+                noop_callback_q(0, 0);
             }
             if (oclass != menu_system.unk11C) {
                 select_world_object_resource_tables(oclass, menu_system.resource_table_toggle == 0);
@@ -140,7 +140,7 @@ s32 update_item_preview_binding(struct ItemPreviewBinding *preview) {
         }
         if (moby != 0) {
             if (load_class && gold_weapon_purchased[item_index] != 0) {
-                func_001E9478(moby, preview->variant);
+                noop_callback_r(moby, preview->variant);
             }
             preview->primary_moby = moby;
             moby->flags = 0;

@@ -40,7 +40,7 @@ extern void FUN_0023a2c0();
 extern struct S D_00186F40;
 extern u8 D_001601C0 __attribute__((sda));
 extern u8 D_001601D0 __attribute__((sda));
-extern s32 FUN_001f9a68(s32, s32, f32);
+extern s32 fast_vec_scale(s32, s32, f32) __asm__("FUN_001f9a68");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern s32 sceGsSyncV(s32);
 extern s32 initialize_graphics_buffer_descriptors() __asm__("FUN_00225ac0");
@@ -56,7 +56,7 @@ void FUN_00218f98(void) {
     menu_system.current = &D_001D45C8;
     menu_system.next = &D_001D45C8;
     menu_system.close_locked = 0;
-    FUN_001f9a68((s32)D_0019C150, (s32)&D_001601C0, 1.0f);
+    fast_vec_scale((s32)D_0019C150, (s32)&D_001601C0, 1.0f);
     qcopy(D_0019C150 - 0x10, &D_001601D0);
     qzero(D_0019C150 + 0x20);
     qzero(D_0019C160);

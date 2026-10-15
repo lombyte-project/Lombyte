@@ -48,7 +48,7 @@ extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L05_0015F638;
 extern float D_L05_001671D8 __attribute__((section(".data")));
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b80(void *, void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_00208f20(float a, float b, float c, float d);
@@ -67,7 +67,7 @@ extern int D_00141660 __attribute__((section(".data")));
 int r1_repeat_timer __asm__("D_L05_0015F678") = 0;
 extern int D_L05_0015F594 __attribute__((sda));
 extern int D_L05_0016CB80 __attribute__((section(".data")));
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_002050b8(int);
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int FUN_L00_00211360(void *);
@@ -186,8 +186,8 @@ void FUN_L05_00255960(void) {
                     hud_keep_visible(id, scale_game_frames(0xB4));
                 }
             }
-            FUN_001f9770(&hero.unk22D4);
-            FUN_001f9770(&hero.unk22D6);
+            fast_dec_timer_s16(&hero.unk22D4);
+            fast_dec_timer_s16(&hero.unk22D6);
             if (controller_state.pressed & 0x10) {
                 hero.unk22D4 = scale_game_frames(0x14);
             }
@@ -273,7 +273,7 @@ void FUN_L05_00255960(void) {
                                 hero.unk2270 = record_index;
                                 rec = &D_L05_00179CF0[record_index];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
-                                rec->duration_frames = FUN_001f96b0(rec->duration) * 60.0f;
+                                rec->duration_frames = multiply_global_factor_ed64(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
                                     hero_set_state(HERO_STATE_FIDGET, 1);
                                 } else {
@@ -1839,7 +1839,7 @@ void FUN_L05_00255960(void) {
                     }
                     break;
                 case 107:
-                    FUN_001f9770(&hero.unk89E);
+                    fast_dec_timer_s16(&hero.unk89E);
                     if (FUN_L05_00255208()) {
                         break;
                     }
@@ -1895,7 +1895,7 @@ void FUN_L05_00255960(void) {
                         if (hero.unk12E8 != 0) {
                             hero.unk8AC = scale_game_frames(7);
                         }
-                        FUN_001f9770(&hero.unk8AC);
+                        fast_dec_timer_s16(&hero.unk8AC);
                         if (hero.unk89C == 0) {
                             if ((hero.air_frames.s < scale_game_frames(4) || hero.unk8BC == 0) &&
                                 hero.unk89E == 0) {

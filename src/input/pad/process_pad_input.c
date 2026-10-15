@@ -36,10 +36,10 @@ typedef struct Pad {
 
 extern volatile u8 D_0015EDB4;
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern float FUN_001f9b20(float *);
-extern float FUN_001f9e90(float, float);
+extern float vector_length_xy(float *) __asm__("FUN_001f9b20");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern float func_001FA6C0(s32);
+extern float convert_integer_to_float(s32) __asm__("func_001FA6C0");
 
 #define SWAPLR(x)                                                                                  \
     if ((x) & 0x8000) {                                                                            \
@@ -66,7 +66,7 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
             if (d < 0)
                 d = -d;
             if (d >= 0x30) {
-                float f = func_001FA6C0(d - 0x30) / func_001FA6C0(0x4C);
+                float f = convert_integer_to_float(d - 0x30) / convert_integer_to_float(0x4C);
                 p->axes[i] = f;
                 if (f > 1.0f) {
                     p->axes[i] = 1.0f;
@@ -79,7 +79,7 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
     }
     if (len >= 0x12) {
         for (i = 4; i < 16; i++) {
-            p->axes[i] = func_001FA6C0(buf[i + 2]) * 0.003921569f;
+            p->axes[i] = convert_integer_to_float(buf[i + 2]) * 0.003921569f;
         }
     }
     if (D_0015EDB4) {
@@ -144,8 +144,8 @@ void process_pad_input(Pad *p, u8 *buf, s32 len) {
     }
     v[0] = p->axes[2];
     v[1] = p->axes[3];
-    mag = FUN_001f9b20(v);
-    ang = FUN_001f9e90(v[0], v[1]);
+    mag = vector_length_xy(v);
+    ang = fast_arc_tan(v[0], v[1]);
     p->hist_mag[p->idx] = mag;
     p->hist_ang[p->idx] = ang;
     if (mag > 0.9f) {

@@ -25,8 +25,8 @@ void FUN_L15_002d95a0(char *moby) {
 
 extern char *FUN_L00_0026daa0(char *src, int col, int w, int v, float x);
 extern char *func_0020D348_m(int);
-extern float FUN_001f9b20(void *);
-extern float FUN_001f9e90(float, float);
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_001f9a68(void *, void *, float);
 extern void FUN_L00_00250df8(void *);
@@ -48,8 +48,8 @@ char *FUN_L15_002e4580(char *src, float *v, char *pos) {
         *(char **)(p + 0x3C) = src;
         m[0x23] = 0x30;
         *(unsigned short *)(m + 0x34) |= 0x200;
-        *(float *)(m + 0x48) = FUN_001f9e90(v[0], v[1]);
-        *(float *)(m + 0x44) = -FUN_001f9e90(FUN_001f9b20(v), v[2]);
+        *(float *)(m + 0x48) = fast_arc_tan(v[0], v[1]);
+        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(v), v[2]);
         FUN_L00_00250df8(m);
         FUN_L00_0026daa0(m, 0x600040FF, 0x80, -1, 170000.0f);
     }
@@ -71,9 +71,9 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float FUN_001f9b48(void *, void *);
-extern float FUN_001f9b80(void *, void *);
-extern void FUN_001f9c48(float, void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern void set_vector_length_xy(float, void *, void *) __asm__("FUN_001f9c48");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int FUN_L00_0028d8c0(int, int);
 extern int FUN_L00_0028dc90(int, int, int, int);
@@ -85,7 +85,7 @@ extern int FUN_L00_0020d568(void);
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L00_00259a88(int, void *);
-extern void FUN_001f4600(void *, void *);
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void enqueue_timer_display(void *, void *) __asm__("FUN_L15_001f2ac8");
 extern void FUN_L15_002d79e8(char *);
 struct Moby;
@@ -182,8 +182,8 @@ void FUN_L15_002d6810(unsigned char *moby) {
             do {
                 if (*p != -1) {
                     if (best) {
-                        distance = FUN_001f9b48(D_L15_001600EC + *best * 0x80 + 0x30, &hero.motion.pos);
-                        next_distance = FUN_001f9b48(D_L15_001600EC + *p * 0x80 + 0x30, &hero.motion.pos);
+                        distance = fast_vec_dist(D_L15_001600EC + *best * 0x80 + 0x30, &hero.motion.pos);
+                        next_distance = fast_vec_dist(D_L15_001600EC + *p * 0x80 + 0x30, &hero.motion.pos);
                         if (!(next_distance < distance)) goto next_path;
                     }
                     best = p;
@@ -206,7 +206,7 @@ next_path:      i -= 8; p += 8;
                         *(float *)(other + 0x1c) = 8.0f; *(float *)(other + 4) = 1.0f;
                         *(float *)(other + 8) = 0.5f; *(int *)(other + 12) = 0; *(float *)other = 1.0f;
                     }
-                    FUN_L15_002d79e8((char *)moby); FUN_L15_002d7bb0((struct Moby *)moby); FUN_001f4600(FUN_L15_002d8710, moby);
+                    FUN_L15_002d79e8((char *)moby); FUN_L15_002d7bb0((struct Moby *)moby); enqueue_callback_list_1(FUN_L15_002d8710, moby);
                 }
             }
         }
@@ -229,11 +229,11 @@ next_path:      i -= 8; p += 8;
             FUN_L00_001ff290(vector, (char *)data + 0x110, &hero.motion.unkD0);
             *(u128 *)((char *)data + 0x100) = *(u128 *)((char *)data + 0x110);
             *(u128 *)((char *)data + 0xf0) = *(u128 *)&hero.motion.unkD0;
-            FUN_L15_002d79e8((char *)moby); FUN_L15_002d7bb0((struct Moby *)moby); FUN_001f4600(FUN_L15_002d8710, moby);
+            FUN_L15_002d79e8((char *)moby); FUN_L15_002d7bb0((struct Moby *)moby); enqueue_callback_list_1(FUN_L15_002d8710, moby);
             shot.owner = (int)moby; shot.flags = 0x10001; shot.scale = 1.0f;
             shot.pos[0] = fast_cos(*(float *)(moby + 0x48)) * 0.2f;
             shot.pos[1] = fast_sin(*(float *)(moby + 0x48)) * 0.2f; shot.pos[2] = 0.0f;
-            FUN_001f9c48(1.0f, shot.pos, shot.pos);
+            set_vector_length_xy(1.0f, shot.pos, shot.pos);
             shot.type = 1; shot.oclass = *(unsigned short *)(moby + 0xa6);
             shot.pos[2] = 1.0f; shot.pos[3] = 5627.9248046875f; shot.state = 0;
             FUN_L00_00259a88((int)hero.moby, &shot);
@@ -258,8 +258,8 @@ target_selection:
     do {
         if (*p != -1) {
             if (target) {
-                distance = FUN_001f9b80(target + 0x10, D_L15_001673C0_6810);
-                next_distance = FUN_001f9b80(D_L15_0015FFD8 + *p * 0x100 + 0x10, D_L15_001673C0_6810);
+                distance = vector_distance_xy(target + 0x10, D_L15_001673C0_6810);
+                next_distance = vector_distance_xy(D_L15_0015FFD8 + *p * 0x100 + 0x10, D_L15_001673C0_6810);
                 if (!(next_distance < distance)) goto next_target;
             }
             target = moby_array + *p * 0x100;
@@ -268,8 +268,8 @@ next_target: p++;
     } while (--i >= 0);
     if (!DATA_INT(0x84)) DATA_INT(0x84) = (int)target;
     else {
-        distance = FUN_001f9b80((void *)(DATA_INT(0x84) + 0x10), D_L15_001673C0_6810);
-        next_distance = FUN_001f9b80(target + 0x10, D_L15_001673C0_6810);
+        distance = vector_distance_xy((void *)(DATA_INT(0x84) + 0x10), D_L15_001673C0_6810);
+        next_distance = vector_distance_xy(target + 0x10, D_L15_001673C0_6810);
         if (next_distance < distance) { if (DATA_INT(0x84)) { STOP_VOICE(0x14); STOP_VOICE(0x80); } DATA_INT(0x84) = (int)target; }
     }
     if (!FUN_L00_0028d8c0(DATA_INT(0x84), DATA_INT(0x14))) DATA_INT(0x14) = FUN_L00_0028dc90(0, 5, DATA_INT(0x84), 0x28f);
@@ -505,7 +505,7 @@ extern short D_L15_00161CC0[] __attribute__((section(".sdata")));
 extern short D_L15_00161CC8[] __attribute__((section(".sdata")));
 extern short D_L15_00161CD0[] __attribute__((section(".sdata")));
 extern short D_L15_00161CD8[] __attribute__((section(".sdata")));
-extern void FUN_001f9a40(void *, void *, void *, float);
+extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
@@ -563,7 +563,7 @@ void FUN_L15_002d7bb0(Moby *moby) {
         pitch = random_angle_radians();
         build_spherical_offset(&vectors[1], scale, yaw, pitch);
         vectors[1].f[2] = vectors[1].f[2] * 0.5f;
-        FUN_001f9a40(&vectors[2], &vectors[3], &vectors[1], *(float *)&D_L15_00161C98);
+        lerp_vector(&vectors[2], &vectors[3], &vectors[1], *(float *)&D_L15_00161C98);
         step_length = vector_length_xyz(&vectors[2]);
         if (step_length == 0.0f) {
             qcopy(&D_L15_001D3750[0][i], &D_L15_001D3750[0][i - 1]);
@@ -588,7 +588,7 @@ void FUN_L15_002d7bb0(Moby *moby) {
                 blend = 0.1f;
             }
             scale_vector_xyz(&vectors[5], &vectors[5], scale / remaining);
-            FUN_001f9a40(&vectors[3], &vectors[3], &vectors[5], blend);
+            lerp_vector(&vectors[3], &vectors[3], &vectors[5], blend);
         }
         if (i < 10) {
             float phase;
@@ -602,7 +602,7 @@ void FUN_L15_002d7bb0(Moby *moby) {
             height = height * fast_sin_c(phase) + FUN_L00_00257c48(0.0f, 0.1f);
             D_L15_001D3750[1][i].f[2] = D_L15_001D3750[1][i].f[2] + height;
             D_L15_001D3B60[i] = height;
-            side_angle = fast_add_rotations(FUN_001f9e90(vectors[1].f[0], vectors[1].f[1]), 1.5707964f);
+            side_angle = fast_add_rotations(fast_arc_tan(vectors[1].f[0], vectors[1].f[1]), 1.5707964f);
             swing = *(float *)&D_L15_00161C2C * fast_cos(phase);
             vectors[4].f[0] = fast_cos(side_angle) * swing;
             vectors[4].f[1] = fast_sin_c(side_angle) * swing;

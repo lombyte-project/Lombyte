@@ -31,10 +31,10 @@ void FUN_L11_002cb790(char *a0) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309A40), where it is exact; names translated to the US level program. */
 
 extern char *D_L11_0015FFE4;
-extern float FUN_001f9988(float);
-extern float FUN_001f9b48(void *, void *);
-extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9e90(float, float);
+extern float square_root(float) __asm__("FUN_001f9988");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
 char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd) {
@@ -47,21 +47,21 @@ char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd) {
             *(short *)(*(char **)(p + 0x24) + 0x46) == 5) {
             float d;
             q = p + 0x10;
-            d = FUN_001f9b80(pos, q);
+            d = vector_distance_xy(pos, q);
             if (d < maxd) {
                 float tmp[4];
                 float ra, rb, y, score;
                 qcopy(tmp, q);
                 tmp[2] = tmp[2] + 0.4f;
                 ra = fast_difference_between_rotations(
-                    aim[2], FUN_001f9e90(tmp[0] - pos[0], tmp[1] - pos[1]));
+                    aim[2], fast_arc_tan(tmp[0] - pos[0], tmp[1] - pos[1]));
                 ra = ra * ra;
                 if (ra < r1 * r1) {
-                    y = fast_difference_between_rotations(aim[1], FUN_001f9e90(d, tmp[2] - pos[2]));
+                    y = fast_difference_between_rotations(aim[1], fast_arc_tan(d, tmp[2] - pos[2]));
                     rb = y * y;
                     if (rb < r2 * r2) {
                         score = ra * rb * 30.0f;
-                        score = score + FUN_001f9988(FUN_001f9b48(pos, tmp));
+                        score = score + square_root(fast_vec_dist(pos, tmp));
                         if (score < bestd) {
                             bestd = score;
                             best = p;
@@ -84,11 +84,11 @@ char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309C18), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float FUN_001f9af0(void *);
-extern float FUN_001f9b20(void *);
-extern float FUN_001f9e90(float, float);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_001f9bf8(void *, void *, float);
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern void FUN_L00_00250df8(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -103,15 +103,15 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, fl
         *(short *)(m + 0x32) = func_001FA898_r(a);
         *(int *)(m + 0x40) = 0;
         m[0x31] = 1;
-        f = FUN_001f9b20(dir);
-        *(float *)(m + 0x44) = -FUN_001f9e90(f, dir[2]);
-        *(float *)(m + 0x48) = FUN_001f9e90(dir[0], dir[1]);
+        f = vector_length_xy(dir);
+        *(float *)(m + 0x44) = -fast_arc_tan(f, dir[2]);
+        *(float *)(m + 0x48) = fast_arc_tan(dir[0], dir[1]);
         *(float *)(d + 0x10) = 1.0f;
         if (b > 0.0f) {
-            FUN_001f9bf8(d, dir, b);
+            fast_vec_normalize(d, dir, b);
         } else {
             qcopy(d, dir);
-            b = FUN_001f9af0(dir);
+            b = fast_vec_length(dir);
         }
         qcopy(m + 0x10, pos);
         *(int *)(d + 0x18) = *(int *)(d + 0x14) = func_001FA898_r(a / b);
@@ -275,14 +275,14 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
         *(short *)(m + 0x32) = truncate_float_to_s32(size);
         *(int *)(m + 0x40) = 0;
         m[0x31] = 1;
-        *(float *)(m + 0x44) = -FUN_001f9e90(FUN_001f9b20(dir), dir[2]);
-        *(float *)(m + 0x48) = FUN_001f9e90(dir[0], dir[1]);
+        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(dir), dir[2]);
+        *(float *)(m + 0x48) = fast_arc_tan(dir[0], dir[1]);
         *(float *)(p + 0x10) = 1.0f;
         if (len > 0.0f) {
-            FUN_001f9bf8(p, dir, len);
+            fast_vec_normalize(p, dir, len);
         } else {
             qcopy(p, dir);
-            len = FUN_001f9af0(dir);
+            len = fast_vec_length(dir);
         }
         qcopy(m + 0x10, pos);
         r = truncate_float_to_s32(size / len);
@@ -307,7 +307,7 @@ extern int D_L11_00161DC8 __attribute__((sda));
 extern int D_L11_00161DCC __attribute__((sda));
 extern float D_L11_00161DD0 __attribute__((sda));
 extern int FUN_001efa68(void *, void *, int, void *, void *);
-extern int FUN_001fa6e0(int, int, float);
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -336,7 +336,7 @@ void FUN_L11_00309098(char *moby) {
     if (data == 0) return;
     pos = moby + 0x10;
     qcopy(old, pos);
-    c = FUN_001fa6e0(D_L11_00161DC0, D_L11_00161DC4, random_float_between(0.0f, 1.0f));
+    c = fast_tween_color(D_L11_00161DC0, D_L11_00161DC4, random_float_between(0.0f, 1.0f));
     random_vector(p, 0.0f, 0.1f);
     add_vector_xyz(p, p, pos);
     scale_vector_xyz(v, data, D_L11_00161DD0);

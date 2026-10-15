@@ -95,7 +95,7 @@ void FUN_L06_003083b0(struct Moby *moby) {
 #include "qcopy.h"
 extern int FUN_001fa728(char *, float);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) SparkVector;
 typedef struct SparkData { int f0; int f4; char pad8[0x18]; int f20; int f24; int f28; } SparkData;
@@ -190,7 +190,7 @@ void FUN_L06_00308c68(struct Moby *m) {
         int k;
         if (timer_step(&d->f24)) {
             n = 5;
-            d->f24 = truncate_float_to_s32(FUN_001f96b0(random_float_between_alt(60.0f, 120.0f)));
+            d->f24 = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between_alt(60.0f, 120.0f)));
         }
         if (random_integer_below(4) != 0 && n < 2) {
             return;
@@ -208,9 +208,9 @@ void FUN_L06_00308c68(struct Moby *m) {
                 v3.w = random_float_between_alt(D_L06_00162318, D_L06_0016231C);
                 c19 = fast_tween_color(D_L06_00162320, D_L06_00162324, random_float_between_alt(0.0f, 1.0f));
                 c18 = fast_tween_color(D_L06_00162328, D_L06_0016232C, random_float_between_alt(0.0f, 1.0f));
-                c17 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_00162300 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
-                c16 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_00162304 * (random_float_between_alt(-D_L06_0016230C, D_L06_0016230C) + 1.0f)));
-                c2 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_00162308 * (random_float_between_alt(-D_L06_0016230C, D_L06_0016230C) + 1.0f)));
+                c17 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162300 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+                c16 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162304 * (random_float_between_alt(-D_L06_0016230C, D_L06_0016230C) + 1.0f)));
+                c2 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162308 * (random_float_between_alt(-D_L06_0016230C, D_L06_0016230C) + 1.0f)));
                 emit_spark(&*(SparkVector *)&m->pos, &v2, &v3, c19, c18, c17, c16, c2, -1);
         }
         break;
@@ -219,7 +219,7 @@ void FUN_L06_00308c68(struct Moby *m) {
         if (timer_step(&d->f20)) {
             int cnt;
             int k;
-            d->f20 = truncate_float_to_s32(FUN_001f96b0(random_float_between_alt((float)D_L06_00162374, (float)D_L06_00162378)));
+            d->f20 = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between_alt((float)D_L06_00162374, (float)D_L06_00162378)));
             cnt = random_integer_below(7) ? 1 : random_integer_below(5) + 5;
             for (k = 0; k < cnt; k++) {
                     int c19, c18, c17, c16, c2;
@@ -232,9 +232,9 @@ void FUN_L06_00308c68(struct Moby *m) {
                     v3.w = random_float_between_alt(D_L06_0016235C, D_L06_00162360);
                     c19 = fast_tween_color(D_L06_00162364, D_L06_00162368, random_float_between_alt(0.0f, 1.0f));
                     c18 = fast_tween_color(D_L06_0016236C, D_L06_00162370, random_float_between_alt(0.0f, 1.0f));
-                    c17 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_00162344 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
-                    c16 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_00162348 * (random_float_between_alt(-D_L06_00162350, D_L06_00162350) + 1.0f)));
-                    c2 = truncate_float_to_s32(FUN_001f96b0((float)D_L06_0016234C * (random_float_between_alt(-D_L06_00162350, D_L06_00162350) + 1.0f)));
+                    c17 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162344 * random_float_between_alt(0.0f, 1.0f) + 1.0f));
+                    c16 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_00162348 * (random_float_between_alt(-D_L06_00162350, D_L06_00162350) + 1.0f)));
+                    c2 = truncate_float_to_s32(multiply_global_factor_ed64((float)D_L06_0016234C * (random_float_between_alt(-D_L06_00162350, D_L06_00162350) + 1.0f)));
                     emit_spark(&*(SparkVector *)&m->pos, &v2, &v3, c19, c18, c17, c16, c2, D_L06_0016237C);
             }
         }
@@ -252,7 +252,7 @@ void FUN_L06_00308c68(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A680), where it is exact; names translated to the US level program. */
 
 extern char *D_L06_0015FFD8;
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001fa728(char *, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -275,7 +275,7 @@ void FUN_L06_00309240(int idx) {
                     data = *(char **)(m + 0x78);
                     m[0x20] = 2;
                     *(int *)(data + 0x28) =
-                        func_001FA898_r(FUN_001f96b0(random_float_between_alt(30.0f, 60.0f)));
+                        func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(30.0f, 60.0f)));
                 }
             }
         } while (*p++ >= 0);

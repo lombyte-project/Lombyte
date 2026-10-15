@@ -34,11 +34,11 @@ extern struct CamColl cam_coll_state __asm__("D_001870D0");
 extern f32 cam_interp_values(f32 *vel, f32 from, f32 to, f32 stiffness, f32 damping,
                              f32 max) __asm__("FUN_001ebd78");
 extern float absolute_float(float input) __asm__("func_001F99C0");
-extern void FUN_001f9a28(void *out, void *a, void *b);
-extern void FUN_001f9a68(void *out, void *a, f32 s);
+extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern f32 FUN_001f9ab0(void *a, void *b);
-extern f32 FUN_001f9af0(void *a);
-extern void FUN_001f9bf8(void *out, void *a, f32 len);
+extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
+extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 void FUN_001ed470(void) {
     Vec4 dir;
@@ -49,7 +49,7 @@ void FUN_001ed470(void) {
     struct Moby *m;
 
     cam = &cam_coll_state;
-    FUN_001f9bf8(&dir, &hero.gravity_dir, -1.0f);
+    fast_vec_normalize(&dir, &hero.gravity_dir, -1.0f);
     qcopy(&cam->unk40, &cam->unk30);
     qcopy(&cam->unk30, &dir);
     if (FUN_001f9ab0(&cam->dir, &dir) < -0.98f) {
@@ -63,17 +63,17 @@ void FUN_001ed470(void) {
         cam_interp_values(&cam->dir_vel[1], cam->dir.f[1], dir.f[1], 0.015f, 0.2f, 0.0f);
     cam->dir.f[2] =
         cam_interp_values(&cam->dir_vel[2], cam->dir.f[2], dir.f[2], 0.015f, 0.2f, 0.0f);
-    FUN_001f9bf8(&cam->dir, &cam->dir, 1.0f);
+    fast_vec_normalize(&cam->dir, &cam->dir, 1.0f);
 
-    FUN_001f9a28(&cam->unk70, &hero.motion.pos, &cam->unk60);
-    cam->unkA0 = FUN_001f9af0(&cam->unk70);
+    subtract_vector_xyz(&cam->unk70, &hero.motion.pos, &cam->unk60);
+    cam->unkA0 = fast_vec_length(&cam->unk70);
     d = FUN_001f9ab0(&cam->unk70, &dir);
     cam->unkA8 = d;
-    FUN_001f9bf8(&proj, &dir, d);
+    fast_vec_normalize(&proj, &dir, d);
     qcopy(&cam->unk90, &proj);
-    FUN_001f9a28(&cam->unk80, &cam->unk70, &proj);
-    cam->unkA4 = FUN_001f9af0(&cam->unk80);
-    FUN_001f9a68(&cam->unk80, &cam->unk80, 1.0f / cam->unkA4);
+    subtract_vector_xyz(&cam->unk80, &cam->unk70, &proj);
+    cam->unkA4 = fast_vec_length(&cam->unk80);
+    fast_vec_scale(&cam->unk80, &cam->unk80, 1.0f / cam->unkA4);
     qcopy(&cam->unk60, &hero.motion.pos);
 
     if (hero.unk2284 != 0x50 || hero.state.current == 0x11) {

@@ -15,7 +15,7 @@ extern char *D_L17_0015FFDC;
 extern char D_0013E52B[];
 extern char D_L17_00167580[];
 extern char D_L17_001E6F60[];
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int D_00141DC4 __attribute__((section(".data")));
 extern int D_L17_00179D10[];
@@ -227,7 +227,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         FUN_L00_002e8970((int)(D_L17_001600EC + (*(int *)(d + 0x44) << 7) + 0x30), 0.02617994f,
                          0.0f);
         cam = D_L17_00167580;
-        f = FUN_001f9e90(*(float *)(D_L17_001600EC + ((*(int *)(d + 0x44) << 7) + 0x30)) -
+        f = fast_arc_tan(*(float *)(D_L17_001600EC + ((*(int *)(d + 0x44) << 7) + 0x30)) -
                              *(float *)(cam + 0x140),
                          *(float *)(D_L17_001600EC + ((*(int *)(d + 0x44) << 7) + 0x34)) -
                              *(float *)(cam + 0x144));
@@ -244,7 +244,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             FUN_L00_002e8970((int)(D_L17_001600EC + (*(int *)(d + 0x40) << 7) + 0x30), 0.02617994f,
                              0.0f);
             cam = D_L17_00167580;
-            f = FUN_001f9e90(*(float *)(D_L17_001600EC + ((*(int *)(d + 0x40) << 7) + 0x30)) -
+            f = fast_arc_tan(*(float *)(D_L17_001600EC + ((*(int *)(d + 0x40) << 7) + 0x30)) -
                                  *(float *)(cam + 0x140),
                              *(float *)(D_L17_001600EC + ((*(int *)(d + 0x40) << 7) + 0x34)) -
                                  *(float *)(cam + 0x144));
@@ -305,7 +305,7 @@ extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float frame_delta_time __asm__("D_0015ED7C");
 extern float fast_cos_c(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_c(float) __asm__("FUN_001f9de0");
-extern int FUN_001fa6e0(int, int, float);
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 float D_L17_001623C0[4] __attribute__((section(".sdata"))) = {-0.5f, -1.0f, 1.0f, 1.0f};
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -415,7 +415,7 @@ void FUN_L17_002f32f0(struct Moby *moby) {
         pkt.uv[6] = fast_sin_c(fast_add_rotations(ang, 1.5707964f)) * 0.5f + 0.5f;
         pkt.uv[7] = fast_cos_c(fast_add_rotations(ang, 1.5707964f)) * 0.5f + 0.5f;
         {
-            int c = FUN_001fa6e0(D_L17_001DE010[k], D_L17_001DE028[k], D_L17_001DE040[k]);
+            int c = fast_tween_color(D_L17_001DE010[k], D_L17_001DE028[k], D_L17_001DE040[k]);
             pkt.col[3] = c;
             pkt.col[2] = c;
             pkt.col[1] = c;
@@ -521,7 +521,7 @@ extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float FUN_L00_0025be00(float *p, float *v, float a, float b, float c, float d);
 extern float fast_cos(float) __asm__("func_001F9DC8");
@@ -689,10 +689,10 @@ void FUN_L17_002f40d8(struct Moby *moby) {
             float *pitch = &moby->rot.y;
             float ang;
             subtract_vector_xyz(s70, tgt, &moby->pos.x);
-            ang = FUN_001f9e90(s70[0], s70[1]);
+            ang = fast_arc_tan(s70[0], s70[1]);
             FUN_L00_0025be00(yaw, (float *)(d + 0x8C), ang, frame_time_sq * 12.566371f,
                              frame_time_sq * 12.566371f, frame_time * 12.566371f);
-            ang = -FUN_001f9e90(vector_length_xy(s70), s70[2]);
+            ang = -fast_arc_tan(vector_length_xy(s70), s70[2]);
             FUN_L00_0025be00(pitch, (float *)(d + 0x90), ang, frame_time_sq * 12.566371f,
                              frame_time_sq * 12.566371f, frame_time * 12.566371f);
             if (D_L17_0015F5CC % 10 == 0) {
@@ -712,8 +712,8 @@ void FUN_L17_002f40d8(struct Moby *moby) {
                 p = FUN_L11_00308f48((int)moby, s90, sA0, 128.0f, -1.0f, 10.0f);
                 if (p) {
                     subtract_vector_xyz(s90, s90, s20);
-                    *(float *)(p + 0x44) = -FUN_001f9e90(vector_length_xy(s90), s90[2]);
-                    *(float *)(p + 0x48) = FUN_001f9e90(s90[0], s90[1]);
+                    *(float *)(p + 0x44) = -fast_arc_tan(vector_length_xy(s90), s90[2]);
+                    *(float *)(p + 0x48) = fast_arc_tan(s90[0], s90[1]);
                 }
             }
             if (moby->visible == 0) {
@@ -756,8 +756,8 @@ extern float FUN_001f9de0(float);
 extern float FUN_001fa580(float, float);
 extern int FUN_001f96f8(int);
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001fa030(void *, void *);
-extern void FUN_001f9bf8(void *, void *, float);
+extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -783,15 +783,15 @@ char *FUN_L17_002f4fb8(int list) {
             C[1] = 0.17453292f;
         else if (C[1] < -0.17453292f)
             C[1] = -0.17453292f;
-        FUN_001fa030(D, C);
+        euler_rotation_basis(D, C);
         {
             float f = FUN_001fa580(0.7853982f, (float)*(int *)(d + 0x88) * 1.5707964f);
-            FUN_001f9bf8(A, E, FUN_001f9de0(f) * 12.0f);
+            fast_vec_normalize(A, E, FUN_001f9de0(f) * 12.0f);
             FUN_001f9a10(B, D_L17_001676C0, A);
-            FUN_001f9bf8(A, F, FUN_001f9dc8(f) * 12.0f);
+            fast_vec_normalize(A, F, FUN_001f9dc8(f) * 12.0f);
         }
         FUN_001f9a10(B, B, A);
-        FUN_001f9bf8(A, D, 6.0f);
+        fast_vec_normalize(A, D, 6.0f);
         FUN_001f9a10(B, B, A);
         qcopy(d + 0xB0, D_0013E533 + 0xE9D);
         qcopy(m + 0x10, B);
@@ -895,11 +895,11 @@ typedef struct {
 } V4;
 
 extern char D_L17_001676C0[];
-extern float FUN_001f9ab0(void *, void *);
-extern float FUN_001f9af0(void *);
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_001f9bf8(void *, void *, float);
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
     V4 v0;
@@ -915,18 +915,18 @@ void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
         p.v.y = a[i].y;
         p.v.z = a[i].z;
         FUN_001f9a28(&v0, &p, D_L17_001676C0);
-        FUN_001f9bf8(&v0, &v0, 1.0f);
+        fast_vec_normalize(&v0, &v0, 1.0f);
         q.w = 1.0f;
         q.v.x = b[i].x;
         q.v.y = b[i].y;
         q.v.z = b[i].z;
-        FUN_001f9bf8(&q, &q, 1.0f);
-        d = FUN_001f9ab0(&q, &v0);
-        FUN_001f9a68(&r, &q, d + d);
+        fast_vec_normalize(&q, &q, 1.0f);
+        d = fast_vec_dot(&q, &v0);
+        fast_vec_scale(&r, &q, d + d);
         FUN_001f9a28(&r, &v0, &r);
-        FUN_001f9bf8(&r, &r, 1.0f);
+        fast_vec_normalize(&r, &r, 1.0f);
         r.v.z = r.v.z + 1.0f;
-        len = FUN_001f9af0(&r);
+        len = fast_vec_length(&r);
         len = len + len;
         out[i * 2] = (r.v.x / len + 0.5f) * 4.0f;
         out[i * 2 + 1] = (r.v.y / len + 0.5f) * 4.0f;
@@ -1019,18 +1019,18 @@ void FUN_L17_002f6138(int n, char *nrm, char *pos, int unused, float *out) {
         t[1] = p[1];
         t[2] = p[2];
         FUN_001f9a28(a, D_L17_001676C0, t);
-        FUN_001f9bf8(a, a, 1.0f);
+        fast_vec_normalize(a, a, 1.0f);
         c[3] = 1.0f;
         q = (float *)(i * 12 + (int)nrm);
         c[0] = q[0];
         c[1] = q[1];
         c[2] = q[2];
-        FUN_001f9bf8(c, c, 1.0f);
-        FUN_001f9a68(r, c, FUN_001f9ab0(c, a) * 2.0f);
+        fast_vec_normalize(c, c, 1.0f);
+        fast_vec_scale(r, c, fast_vec_dot(c, a) * 2.0f);
         FUN_001f9a28(r, a, r);
-        FUN_001f9bf8(r, r, 1.0f);
+        fast_vec_normalize(r, r, 1.0f);
         r[2] += 1.0f;
-        len = FUN_001f9af0(r) * 2.0f;
+        len = fast_vec_length(r) * 2.0f;
         out[i * 2] = (r[0] / len + 0.5f) * 4.0f;
         out[i * 2 + 1] = (r[1] / len + 0.5f) * 4.0f;
     }

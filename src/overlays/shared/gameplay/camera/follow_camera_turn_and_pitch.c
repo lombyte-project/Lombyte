@@ -181,10 +181,10 @@ void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EA3F0), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9af0(void *);
-extern void FUN_001f9a28(float *, float *, float *);
-extern void FUN_001f9a40(float, void *, void *, void *);
-extern void FUN_001f9bf8(void *, void *, float);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern void subtract_vector_xyz(float *, float *, float *) __asm__("FUN_001f9a28");
+extern void lerp_vector(float, void *, void *, void *) __asm__("FUN_001f9a40");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void follow_camera_auto_turn(int m) __asm__("FUN_L00_002e8f40");
 void follow_camera_auto_turn(int m) {
@@ -195,19 +195,19 @@ void follow_camera_auto_turn(int m) {
         float v[4];
         float f;
         float lim;
-        FUN_001f9a28(v, (float *)p, (float *)(p + 0x90));
-        FUN_001f9a40(D_L00_0015EF40, q, q, v);
-        f = FUN_001f9af0(q);
+        subtract_vector_xyz(v, (float *)p, (float *)(p + 0x90));
+        lerp_vector(D_L00_0015EF40, q, q, v);
+        f = fast_vec_length(q);
         lim = *(float *)(q + 0x2C);
         if (lim < f) {
             f = lim;
-            FUN_001f9bf8(q, q, f);
+            fast_vec_normalize(q, q, f);
             *(float *)(r + 0x30) = *(float *)(q + 0x2C) - f;
         } else {
             float t = lim - *(float *)(r + 0x30);
             if (f < t) {
                 f = t;
-                FUN_001f9bf8(q, q, f);
+                fast_vec_normalize(q, q, f);
             }
             *(float *)(r + 0x30) = *(float *)(q + 0x2C) - f;
         }

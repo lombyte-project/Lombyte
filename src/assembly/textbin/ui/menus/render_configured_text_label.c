@@ -37,10 +37,10 @@ extern void disable_global_state_flag(void) __asm__("func_001F61F8");
 extern void font_print_window(struct TextRegion *, long, char *, int, long,
                               u8 *) __asm__("func_001F7090");
 extern int scale_game_frames(int) __asm__("func_001F96F8");
-extern long func_001FA6E0(int, int, float);
+extern long fast_tween_color(int, int, float) __asm__("func_001FA6E0");
 extern char *get_help_message_text(int) __asm__("func_001FDD10");
 extern int find_help_entry(short, int, u16 *) __asm__("func_001FECC8");
-extern long func_0021B6D8(int, long, int);
+extern long fade_menu_color(int, long, int) __asm__("func_0021B6D8");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern void *memset(void *, int, unsigned int);
 extern int sprintf(char *, const char *, ...) __asm__("func_00116248");
@@ -232,8 +232,8 @@ int render_configured_text_label(struct MenuScreen *label) {
         if (label->data.label.flags & 0x10000) {
             c.bottom = label->height - 1;
         }
-        color = func_0021B6D8(label->data.label.fade_timer,
-                              func_001FA6E0(panel_clear_color_gp, 0x80FFA888, 0.5f), 0x80FFA888);
+        color = fade_menu_color(label->data.label.fade_timer,
+                              fast_tween_color(panel_clear_color_gp, 0x80FFA888, 0.5f), 0x80FFA888);
         c.flags |= 4;
         font_print_window(&c, color, text, -1, texture_tex0, font);
         window->flags = c.flags ^ 4;

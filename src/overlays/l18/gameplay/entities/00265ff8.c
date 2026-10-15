@@ -21,7 +21,7 @@ typedef struct {
 } Level18Effect;
 
 extern Level18Effect *FUN_002141f8_00265ff8(Level18Moby *) __asm__("FUN_002141f8");
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void FUN_L18_00265ff8(Level18Moby *moby, float scale) {
@@ -36,7 +36,7 @@ void FUN_L18_00265ff8(Level18Moby *moby, float scale) {
         return;
     }
     alpha =
-        truncate_float_to_s32(FUN_001f9b48(D_0013E533 + 0xE9D, moby->position) * 8.0f * scale) - 1;
+        truncate_float_to_s32(fast_vec_dist(D_0013E533 + 0xE9D, moby->position) * 8.0f * scale) - 1;
     if (alpha >= 256) {
         alpha = 255;
     } else if (alpha < 0) {

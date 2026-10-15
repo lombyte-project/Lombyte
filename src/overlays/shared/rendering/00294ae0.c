@@ -10,11 +10,11 @@ typedef struct {
     Vec4 point[1];
 } PathPoints;
 
-extern void FUN_001f9a28(Vec4 *out, void *a, void *b);
-extern f32 FUN_001f9af0(Vec4 *v);
-extern void FUN_001f9bf8(Vec4 *out, Vec4 *v, f32 len);
-extern f32 FUN_001f9ab0(Vec4 *a, Vec4 *b);
-extern void FUN_001f9a10(Vec4 *out, Vec4 *a, Vec4 *b);
+extern void subtract_vector_xyz(Vec4 *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern f32 fast_vec_length(Vec4 *v) __asm__("FUN_001f9af0");
+extern void fast_vec_normalize(Vec4 *out, Vec4 *v, f32 len) __asm__("FUN_001f9bf8");
+extern f32 fast_vec_dot(Vec4 *a, Vec4 *b) __asm__("FUN_001f9ab0");
+extern void add_vector_xyz(Vec4 *out, Vec4 *a, Vec4 *b) __asm__("FUN_001f9a10");
 
 static inline s32 path_next(PathPoints *path, s32 i, s32 dir) {
     if (i == path->count - 1) {
@@ -34,19 +34,19 @@ s32 FUN_L09_00294ae0(struct Moby *m, PathPoints *path, Vec4 *out, s32 i, s32 dir
     f32 along;
 
     next = path_next(path, i, dir);
-    FUN_001f9a28(&seg, &path->point[next], &path->point[i]);
-    len = FUN_001f9af0(&seg);
-    FUN_001f9bf8(&seg, &seg, 1.0f);
-    FUN_001f9a28(&rel, &m->pos, &path->point[i]);
-    along = FUN_001f9ab0(&rel, &seg) + dist;
+    subtract_vector_xyz(&seg, &path->point[next], &path->point[i]);
+    len = fast_vec_length(&seg);
+    fast_vec_normalize(&seg, &seg, 1.0f);
+    subtract_vector_xyz(&rel, &m->pos, &path->point[i]);
+    along = fast_vec_dot(&rel, &seg) + dist;
     if (len < along) {
         i = next;
         next = path_next(path, i, dir);
-        FUN_001f9a28(&seg, &path->point[next], &path->point[i]);
+        subtract_vector_xyz(&seg, &path->point[next], &path->point[i]);
         along = along - len;
-        FUN_001f9bf8(&seg, &seg, 1.0f);
+        fast_vec_normalize(&seg, &seg, 1.0f);
     }
-    FUN_001f9bf8(&seg, &seg, along);
-    FUN_001f9a10(out, &seg, &path->point[i]);
+    fast_vec_normalize(&seg, &seg, along);
+    add_vector_xyz(out, &seg, &path->point[i]);
     return i;
 }

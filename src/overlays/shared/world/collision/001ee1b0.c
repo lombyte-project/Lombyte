@@ -11,10 +11,10 @@ typedef union {
     s32 i[4];
 } V;
 
-extern void FUN_001f9a28(void *, void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001f9b20(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_001e93b0(char *);
+extern void debug_print(char *) __asm__("FUN_001e93b0");
 extern char D_L00_001E78B0[];
 extern s32 FUN_L00_001ee318_c(V *, s32 *, f32) __asm__("FUN_L00_001ee318");
 
@@ -32,7 +32,7 @@ s32 *FUN_L00_001ee1b0(OvlQuad *v, f32 rad) {
     i = truncate_float_to_s32(t.f[0] * 0.0625f);
     j = truncate_float_to_s32(t.f[1] * 0.0625f);
     if (i < 0 || j < 0 || i > 0x40 || j > 0x40) {
-        FUN_001e93b0(D_L00_001E78B0);
+        debug_print(D_L00_001E78B0);
         return 0;
     }
     p = (char *)D_L00_0015EF80[j * 64 + i];
@@ -42,7 +42,7 @@ s32 *FUN_L00_001ee1b0(OvlQuad *v, f32 rad) {
     p += (s32)D_L00_0015EF80;
     for (k = 0; k < *(s32 *)p; k++) {
         e = p + 0x10 + k * 0x30;
-        FUN_001f9a28(&d, e, tp);
+        subtract_vector_xyz(&d, e, tp);
         f = *(f32 *)(e + 0xC);
         d.f[3] = 1.0f;
         if (FUN_001f9b20(&d) < f + rad) {

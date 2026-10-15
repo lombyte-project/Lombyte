@@ -1,16 +1,16 @@
 #include "types.h"
 #include "rnc/video/decoder/vi_buf.h"
 
-extern s32 FUN_00118990();
-extern s32 FUN_001189b0();
+extern s32 signal_semaphore() __asm__("FUN_00118990");
+extern s32 wait_semaphore() __asm__("FUN_001189b0");
 s32 vi_buf_count(struct ViBuf *buf) __asm__("FUN_0023c610");
 
 s32 vi_buf_count(struct ViBuf *buf) {
     s32 count;
 
-    FUN_001189b0(buf->sema);
+    wait_semaphore(buf->sema);
     count = (buf->dma_n << 0xB) + buf->read_bytes;
-    FUN_00118990(buf->sema);
+    signal_semaphore(buf->sema);
     return count;
 }
 

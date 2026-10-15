@@ -89,7 +89,7 @@ extern f32 FUN_001f9e90(f32, f32);
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
-extern f32 FUN_0020c9e0(struct Moby *);
+extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
@@ -275,7 +275,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
         moby_point_position(moby, 0, &a);
         qcopy(&b, &moby->pos);
         b.f[2] += 0.3f;
-        cur_frame = FUN_0020c9e0(moby);
+        cur_frame = compute_interpolated_record_value(moby);
         if (hero.vehicle_mode == 1 && cur_frame < 9.0f) {
             moby->anim_speed = D_L06_00161FCC;
         }
@@ -338,7 +338,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
         moby_point_position(moby, 0, &a);
         qcopy(&b, &moby->pos);
         b.f[2] += 1.5f;
-        frame = FUN_0020c9e0(moby);
+        frame = compute_interpolated_record_value(moby);
         if (frame >= 9.0f && frame <= 15.0f) {
             c.f[0] = FUN_001f9dc8(moby->rot.z);
             c.f[1] = FUN_001f9de0(moby->rot.z);
@@ -739,7 +739,7 @@ extern f32 D_L06_001F2E90[4][2];
 
 extern void vu1_add_gs_register(s32, s64) __asm__("FUN_00233980");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void FUN_001f9fc8(void *);
+extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
@@ -775,7 +775,7 @@ void FUN_L06_002ff680(char *moby) {
     pk[0].tag[0] = 0;
     pk[1].tag[3] = regs;
     pk[0].tag[3] = regs;
-    FUN_001f9fc8(mat);
+    set_identity_matrix(mat);
     do {
         D_L06_001F2E90[1][1] = D_L06_001F2E90[3][1];
         D_L06_001F2E90[3][1] = random_float_between(0.0f, 0.2f);
@@ -818,8 +818,8 @@ void FUN_L06_002ff680(char *moby) {
 /* Spawns a burst of effects for each pair of ready entries in the moby's table. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300DA8), where it is exact; names translated to the US level program. */
 
-extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
-extern float FUN_001f96b0(float);
+extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -840,7 +840,7 @@ extern short D_L06_00162034 __attribute__((sda));
 extern short D_L06_00162038 __attribute__((sda));
 extern short D_L06_0016203C __attribute__((sda));
 extern short D_L06_00162040 __attribute__((sda));
-extern void FUN_001f9a40(void *, void *, void *, float);
+extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -876,19 +876,19 @@ void FUN_L06_002ff978(char *moby) {
         w[2] = 0;
         v[2] = random_float_between(*(float *)&D_L06_00162034, *(float *)&D_L06_00162038);
         w[2] = random_float_between(*(float *)&D_L06_00162034, *(float *)&D_L06_00162038);
-        s18 = func_001FA898_r(FUN_001f96b0(
+        s18 = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between(*(float *)&D_L06_00162014, *(float *)&D_L06_00162018)));
-        s19 = func_001FA898_r(FUN_001f96b0(
+        s19 = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between(*(float *)&D_L06_0016201C, *(float *)&D_L06_00162020)));
-        s17 = func_001FA898_r(FUN_001f96b0(
+        s17 = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between(*(float *)&D_L06_00162024, *(float *)&D_L06_00162028)));
         scale_vector_xyz(v, v, 1.0f / (float)s18);
         v[3] = *(float *)&D_L06_0016200C;
         scale_vector_xyz(w, w, 1.0f / (float)s17);
         w[3] = *(float *)&D_L06_00162010;
         p = data + (off + 0x230);
-        FUN_001f9a40(s10, p, p, random_float_between(0.0f, 1.0f));
-        FUN_00218888(s10, v, w, *(int *)&D_L06_00162004, *(int *)&D_L06_00162008, s18, s19, s17,
+        lerp_vector(s10, p, p, random_float_between(0.0f, 1.0f));
+        spawn_spark(s10, v, w, *(int *)&D_L06_00162004, *(int *)&D_L06_00162008, s18, s19, s17,
                      *(int *)&D_L06_00162040);
     }
 }

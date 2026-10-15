@@ -7,7 +7,7 @@ extern s32 DebugPrint();
 extern s32 init_moby_class_dists() __asm__("FUN_0020d1f0");
 extern void draw_mobys_setup() __asm__("func_0020D278");
 extern s32 draw_mobys_clean_up() __asm__("FUN_0020d3b0");
-extern s32 func_00211808();
+extern s32 moby_proc() __asm__("func_00211808");
 void draw_mobys(void) __asm__("FUN_0020d460");
 
 void draw_mobys(void) {
@@ -19,7 +19,7 @@ void draw_mobys(void) {
     if (flag != 0) {
         init_moby_class_dists();
         new_var = (s32 *)0x160F00;
-        moby_anim_head = func_00211808(*(s32 *)0x15FF18, *(s32 *)0x15FF14, -1, 1);
+        moby_anim_head = moby_proc(*(s32 *)0x15FF18, *(s32 *)0x15FF14, -1, 1);
         if (*new_var > *(s32 *)0x160F08) {
             DebugPrint(vu_chain_overflow_message);
         }

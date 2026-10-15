@@ -10,7 +10,7 @@ extern u8 D_001996D0[];
 extern s32 help_msgs __asm__("D_0015F6A0");
 
 extern s32 start_audio_stream_read(s32 menu, s32 arg1, s32 arg2) __asm__("FUN_00216788");
-extern void FUN_001f9838(void *, void *, s32);
+extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 
 static inline int pauseSlotCount(void) {
     char *b = D_001996D0;
@@ -42,7 +42,7 @@ int update_menu_help_text_load(char *menu) {
             int *text_entries;
             int i;
 
-            FUN_001f9838(archive, language_entries, ((entry_bytes + 3) & ~3) - 8);
+            copy_memory_aligned(archive, language_entries, ((entry_bytes + 3) & ~3) - 8);
             b = D_001996D0;
             *(int *)(menu + 0x54) = help_msgs;
             *(int *)(menu + 0x38) = *(int *)(b + 0x2C);

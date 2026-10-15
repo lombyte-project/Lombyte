@@ -34,7 +34,7 @@ f32 D_L13_001D9B70[4][2] = {
 
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void FUN_001f9fc8(void *);
+extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void vector_subtract(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -71,7 +71,7 @@ void FUN_L13_003098d0(struct Moby *moby) {
     pk[0].tag[0] = 0;
     pk[1].tag[3] = regs;
     pk[0].tag[3] = regs;
-    FUN_001f9fc8(mat);
+    set_identity_matrix(mat);
     do {
         D_L13_001D9B70[1][1] = D_L13_001D9B70[3][1];
         D_L13_001D9B70[3][1] = random_float_between_alt(0.0f, 0.2f);
@@ -113,8 +113,8 @@ void FUN_L13_003098d0(struct Moby *moby) {
 
 /* Spawns a burst of effects for each pair of ready entries in the moby's table. */
 
-extern char *FUN_00218888(void *, void *, void *, int, int, int, int, int, int);
-extern float FUN_001f96b0(float);
+extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -135,7 +135,7 @@ extern short D_L13_00161EE0 __attribute__((sda));
 extern short D_L13_00161EE4 __attribute__((sda));
 extern short D_L13_00161EE8 __attribute__((sda));
 int D_L13_00161EEC = 24;
-extern void FUN_001f9a40(void *, void *, void *, float);
+extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -171,19 +171,19 @@ void FUN_L13_00309bc8(struct Moby *moby) {
         w[2] = 0;
         v[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
         w[2] = random_float_between_alt(*(float *)&D_L13_00161EE0, *(float *)&D_L13_00161EE4);
-        s18 = func_001FA898_r(FUN_001f96b0(
+        s18 = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between_alt(*(float *)&D_L13_00161EC0, *(float *)&D_L13_00161EC4)));
-        s19 = func_001FA898_r(FUN_001f96b0(
+        s19 = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between_alt(*(float *)&D_L13_00161EC8, *(float *)&D_L13_00161ECC)));
-        s17 = func_001FA898_r(FUN_001f96b0(
+        s17 = func_001FA898_r(multiply_global_factor_ed64(
             random_float_between_alt(*(float *)&D_L13_00161ED0, *(float *)&D_L13_00161ED4)));
         scale_vector_xyz(v, v, 1.0f / (float)s18);
         v[3] = *(float *)&D_L13_00161EB8;
         scale_vector_xyz(w, w, 1.0f / (float)s17);
         w[3] = *(float *)&D_L13_00161EBC;
         p = data + (off + 0x210);
-        FUN_001f9a40(s10, p, p, random_float_between_alt(0.0f, 1.0f));
-        FUN_00218888(s10, v, w, D_L13_00161EB0, D_L13_00161EB4, s18, s19, s17,
+        lerp_vector(s10, p, p, random_float_between_alt(0.0f, 1.0f));
+        spawn_spark(s10, v, w, D_L13_00161EB0, D_L13_00161EB4, s18, s19, s17,
                      D_L13_00161EEC);
     }
 }

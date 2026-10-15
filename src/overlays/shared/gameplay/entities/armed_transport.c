@@ -28,7 +28,7 @@ extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__(
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L16_0015F580[] __attribute__((section(".sdata")));
 extern float D_L16_001D9680[4];
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float distance_xyz(void *) __asm__("FUN_001f9b48");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
@@ -198,7 +198,7 @@ void FUN_L16_002e22d8(char *m) {
 
         advance_accelerated_scalar((float *)(d + 0x17C), (float *)(d + 0x180), 0.0f, frame_time_sq * 12.566371f,
                       frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-        bearing = FUN_001f9e90(*(float *)(d + 0x70) - *(float *)(m + 0x10),
+        bearing = fast_arc_tan(*(float *)(d + 0x70) - *(float *)(m + 0x10),
                                     *(float *)(d + 0x74) - *(float *)(m + 0x14));
         advance_accelerated_scalar(yaw, (float *)(d + 0x178), bearing, frame_time_sq * 3.1415927f, frame_time_sq * 3.1415927f,
                       frame_time * 6.2831855f);
@@ -400,7 +400,7 @@ void FUN_L16_002e2fa0(void *arg) {
     int n;
     for (i = 0; i < path->count - 1; i++) {
         PathPoint2fa0 *p = path->pts;
-        path->pts[i].heading = FUN_001f9e90(path->pts[i + 1].x - path->pts[i].x, p[i + 1].y - path->pts[i].y);
+        path->pts[i].heading = fast_arc_tan(path->pts[i + 1].x - path->pts[i].x, p[i + 1].y - path->pts[i].y);
     }
     n = path->count;
     if (n >= 2)
@@ -512,7 +512,7 @@ extern int D_L16_00161E34 __attribute__((sda));
 extern int D_L16_00161E38 __attribute__((sda));
 extern int D_L16_00161E3C __attribute__((sda));
 extern int D_L16_00161E40 __attribute__((sda));
-extern int FUN_001fa6e0(int,int,float);
+extern int fast_tween_color(int,int,float) __asm__("FUN_001fa6e0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
@@ -565,7 +565,7 @@ void FUN_L16_002e58d8(char *m) {
         if (phase > 0.5f) blend = (-phase + 1.0f) + (-phase + 1.0f);
         else blend = phase + phase;
         ++i;
-        color = FUN_001fa6e0(*(int *)&D_L16_00161E18, *(int *)&D_L16_00161E1C, blend);
+        color = fast_tween_color(*(int *)&D_L16_00161E18, *(int *)&D_L16_00161E1C, blend);
         for (j = 1; j >= 0; --j) color_base[j] = color;
         phase += phase_step;
         if (phase > 1.0f) phase -= 1.0f;
@@ -618,7 +618,7 @@ int FUN_L16_002e5cd0(int idx) {
    here retail loads it absolute: reach it from a neighbour, past whose size the
    assembler no longer uses $gp. */
 #define D_L16_0015FFD8 (((char **)&D_L16_00161D78)[-(0x161D78 - 0x15FFD8) / 4])
-extern float FUN_001f9b48(void *);
+extern float fast_vec_dist(void *) __asm__("FUN_001f9b48");
 extern short *D_L16_001ABCC0[];
 extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
 

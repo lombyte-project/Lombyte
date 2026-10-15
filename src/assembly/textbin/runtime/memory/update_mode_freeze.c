@@ -69,15 +69,15 @@ extern s32 pause_current_action_list[] __asm__("D_001D5BF8");
 extern char sound_update() __asm__("func_0022CA50");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
-extern void func_001E93E8();
-extern void func_001E9440(u8 *, u8 *, s32, s32);
+extern void noop_main_callback() __asm__("func_001E93E8");
+extern void noop_callback_k(u8 *, u8 *, s32, s32) __asm__("func_001E9440");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void set_animation_parameter(s32, s32) __asm__("func_001FF570");
-extern void func_001FF768();
+extern void update_resource_counter() __asm__("func_001FF768");
 extern void load_and_initialize_level_chunk() __asm__("func_00209370");
-extern void func_0022E188(s32);
+extern void initialize_global_state_entry(s32) __asm__("func_0022E188");
 extern void snd_continue_all_sounds_in_group(s32) __asm__("func_0012E418");
-extern void func_00216088();
+extern void music_unpause() __asm__("func_00216088");
 extern void snd_flush_sound_commands() __asm__("func_0012DC80");
 void update_mode_freeze(void) __asm__("FUN_001fce28");
 
@@ -113,8 +113,8 @@ void update_mode_freeze(void) {
             p->unk31 = 0;
             p->unk94 = 0;
             p->unk34 = (u16)(p->unk34 | 1);
-            func_001E93E8();
-            func_001E9440(((u8 *)(&D_0013F350)) + 0x1D00, ((u8 *)(&D_0013F350)) + 0x1D10, 0, 1);
+            noop_main_callback();
+            noop_callback_k(((u8 *)(&D_0013F350)) + 0x1D00, ((u8 *)(&D_0013F350)) + 0x1D10, 0, 1);
             game_mode = 0;
         } else if (controller_state.pressed & PAD_CROSS) {
             game_mode = 0;
@@ -229,7 +229,7 @@ void update_mode_freeze(void) {
                         set_animation_parameter(D_0013F350.unk880, 0);
                         D_0013F350.unk880 = -1;
                     }
-                    func_001FF768();
+                    update_resource_counter();
                     if (scale_game_frames(0x1068) < D_0013F350.unk19C) {
                         if (current_level_index == 5) {
                             D_0015EE38++;
@@ -238,7 +238,7 @@ void update_mode_freeze(void) {
                         }
                     }
                     game_mode = 0;
-                    func_001E9440(D_00141050, D_00141050 + 0x10, 0, 1);
+                    noop_callback_k(D_00141050, D_00141050 + 0x10, 0, 1);
                 } else {
                     game_mode = 0;
                     if (D_0013F350.unk89A >= 3) {
@@ -336,7 +336,7 @@ void update_mode_freeze(void) {
                     mode_freeze_flags = mode_freeze_flags & (~2);
                     mode_freeze_flags = mode_freeze_flags & (~4);
                     mode_freeze_flags = mode_freeze_flags | 0x20;
-                    func_0022E188(0);
+                    initialize_global_state_entry(0);
                     D_0013E05A[0] = 1;
                 } else if (controller_state.pressed & PAD_TRIANGLE) {
                     mode_freeze_flags = mode_freeze_flags & (~2);
@@ -358,7 +358,7 @@ void update_mode_freeze(void) {
                 mode_freeze_flags = mode_freeze_flags & (~2);
                 mode_freeze_flags = mode_freeze_flags & (~4);
                 mode_freeze_flags = mode_freeze_flags | 0x20;
-                func_0022E188(0);
+                initialize_global_state_entry(0);
                 D_0013E05A[0] = 1;
             } else if (controller_state.pressed & PAD_TRIANGLE) {
                 mode_freeze_flags |= 0x20;
@@ -374,7 +374,7 @@ void update_mode_freeze(void) {
                         load_and_initialize_level_chunk();
                         mode_freeze_flags = mode_freeze_flags & (~2);
                         mode_freeze_flags = mode_freeze_flags & (~4);
-                        func_0022E188(0);
+                        initialize_global_state_entry(0);
                         D_0013E05A[0] = 1;
                     }
                     if (p->unk1A4 & 0x10) {
@@ -415,7 +415,7 @@ void update_mode_freeze(void) {
 
     if (((u32)(game_mode - 3)) >= 2U) {
         snd_continue_all_sounds_in_group(0x1D);
-        func_00216088();
+        music_unpause();
         snd_flush_sound_commands();
     }
 }

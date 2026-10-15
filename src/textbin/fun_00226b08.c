@@ -35,7 +35,7 @@ extern Checkpoints D_0013D290;
 extern u8 D_0015EE98[] MACRO_ADDR;
 extern s32 D_001D5BA0[];
 
-extern void func_001F9838(void *dst, void *src, s32 size);
+extern void copy_memory_aligned(void *dst, void *src, s32 size) __asm__("func_001F9838");
 extern void load_and_initialize_level_chunk(void) __asm__("func_00209370");
 extern void memcard_make_whole_save(s32) __asm__("func_0020ABB0");
 extern s32 sceCdReadClock(u8 *clock);
@@ -52,31 +52,31 @@ void FUN_00226b08(s32 slot) {
     s32 i;
     s32 j;
 
-    func_001F9838((void *)0x70000000, item_text_variant, 0x28);
-    func_001F9838((void *)0x70000030, item_available, 0x25);
-    func_001F9838((void *)0x70000060, weapon_ammo_counts, 0x94);
-    func_001F9838((void *)0x70000100, D_0014BEC0, 0x50);
-    func_001F9838((void *)0x70000150, pause_iop_sprite_lists, 0x20);
-    func_001F9838((void *)0x70000170, D_0015EDD0_257218_macro, 0xC);
-    func_001F9838((void *)0x70000180, item_unlocked, 0x20);
+    copy_memory_aligned((void *)0x70000000, item_text_variant, 0x28);
+    copy_memory_aligned((void *)0x70000030, item_available, 0x25);
+    copy_memory_aligned((void *)0x70000060, weapon_ammo_counts, 0x94);
+    copy_memory_aligned((void *)0x70000100, D_0014BEC0, 0x50);
+    copy_memory_aligned((void *)0x70000150, pause_iop_sprite_lists, 0x20);
+    copy_memory_aligned((void *)0x70000170, D_0015EDD0_257218_macro, 0xC);
+    copy_memory_aligned((void *)0x70000180, item_unlocked, 0x20);
     saved = current_bolt_count;
     count = alternate_animation_sequence;
     flag4 = alternate_item_available[4] != 0;
     flag5 = alternate_item_available[5] != 0;
     bytes = (u8 *)0x70000030;
     load_and_initialize_level_chunk();
-    func_001F9838(item_text_variant, (void *)0x70000000, 0x28);
+    copy_memory_aligned(item_text_variant, (void *)0x70000000, 0x28);
     for (j = 0; D_001D5BA0[j] != -1; j++) {
         item_available[D_001D5BA0[j]] = bytes[D_001D5BA0[j]];
     }
-    func_001F9838(weapon_ammo_counts, (void *)0x70000060, 0x94);
-    func_001F9838(D_0014BEC0, (void *)0x70000100, 0x50);
+    copy_memory_aligned(weapon_ammo_counts, (void *)0x70000060, 0x94);
+    copy_memory_aligned(D_0014BEC0, (void *)0x70000100, 0x50);
     for (i = 0; i < 8; i++) {
         s32 item = items[i];
         pause_iop_sprite_lists[i] = item_available[item] ? item : 0;
     }
-    func_001F9838(D_0015EDD0_257218_macro, (void *)0x70000170, 0xC);
-    func_001F9838(item_unlocked, (void *)0x70000180, 0x20);
+    copy_memory_aligned(D_0015EDD0_257218_macro, (void *)0x70000170, 0xC);
+    copy_memory_aligned(item_unlocked, (void *)0x70000180, 0x20);
     current_bolt_count = saved;
     if (flag4) {
         alternate_item_available[4] = 1;

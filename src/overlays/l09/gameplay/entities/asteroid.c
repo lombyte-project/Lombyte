@@ -13,9 +13,9 @@ extern s32 texture_cursor_ref[] __asm__("D_0015EE74") __attribute__((section(".s
 extern char *texture_vertices __asm__("D_L09_0015F420") __attribute__((section(".sdata")));
 extern char D_L09_0016D300[];
 extern long D_L09_00161FC0[];
-extern long FUN_001f44b8(int);
+extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int);
-extern void FUN_00233980(int, long);
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 typedef struct {
     char unused[8];
@@ -39,7 +39,7 @@ void FUN_L09_0021e560(int tex0, int tex1) {
         words = (long *)(packet + 4);
         words[0] = 0x1000000000008001L;
         words[1] = 0xEEEEEEE;
-        words[2] = FUN_001f44b8(tex1);
+        words[2] = get_effect_texture(tex1);
         words[3] = 6;
         PACKET_CURSOR = packet + 12;
     } else {
@@ -91,7 +91,7 @@ void FUN_L09_0021e560(int tex0, int tex1) {
         words[2] = 0;
         words[3] = 0x3F;
         PACKET_CURSOR = packet + 8;
-        FUN_00233980(7, (long)(TEXTURE_CURSOR >> 8) | 0x18100000 | (0xB000L << 19));
+        vu1_add_g_sregister(7, (long)(TEXTURE_CURSOR >> 8) | 0x18100000 | (0xB000L << 19));
         TEXTURE_CURSOR += 0x4000;
     }
 }
@@ -113,7 +113,7 @@ typedef struct {
 extern char D_L09_0016EAA0[];
 extern int *D_L09_001611C0;
 extern int D_L09_0015F5CC;
-extern int FUN_001fa728(char *, float);
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void FUN_L01_0021fa98(int, int, int, int, int, int);
 extern void FUN_L09_0021e560_u(int, int) __asm__("FUN_L09_0021e560");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -142,7 +142,7 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
     }
     for (i = 0; i < count; i++) {
         char *e = list + i * 64;
-        idx = FUN_001fa728(e, 256.0f);
+        idx = fast_bsphere_check(e, 256.0f);
         if (idx == -1)
             continue;
         for (j = 0; j < *(int *)(e + 0x1C); j++) {
@@ -166,11 +166,11 @@ void FUN_L09_0021e8c0(char *list, int count, float unused, long tex0, long tex1)
 }
 extern void setup_first_context(void) __asm__("FUN_001f2d98");
 extern void setup_second_context(void) __asm__("FUN_001f2260");
-extern void FUN_001f9ff8(float, void *);
+extern void set_scale_matrix(float, void *) __asm__("FUN_001f9ff8");
 extern void setup_offset_vector(float, void *, void *) __asm__("FUN_001f9a68");
-extern void FUN_00233830(void *, int);
+extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void transform_packet_data(void *, void *, void *) __asm__("FUN_001fa378");
-extern int FUN_001fa728(char *, float);
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L02_002a46e0(void *);
 extern int D_L09_0015F458;
@@ -227,10 +227,10 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
     }
     setup_first_context();
     setup_second_context();
-    FUN_001f9ff8(1024.0f, matrix);
+    set_scale_matrix(1024.0f, matrix);
     setup_offset_vector(-1024.0f, offset, D_L09_00166F40);
     offset[3] = 1.0f;
-    FUN_00233830(D_L09_0010E810, D_L09_0010E800[0]);
+    vu1_add_data_ref(D_L09_0010E810, D_L09_0010E800[0]);
     {
         int *packet;
         int *packet_end;
@@ -326,7 +326,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
         int visible;
         entry_offset = i * 32;
         entry = (char *)((int)list + entry_offset);
-        visible = FUN_001fa728(entry, 256.0f);
+        visible = fast_bsphere_check(entry, 256.0f);
         if (visible != -1) {
             int n = *(int *)(entry + 0x1c);
             float *source = *(float **)(entry + 0x14);
@@ -357,7 +357,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
 
 
 extern char *func_0020D348_m(int);
-extern void FUN_001f9cf8(void *, void *, void *);
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -381,7 +381,7 @@ char *FUN_L09_002c2500(struct Moby *src, char *pos, int cls) {
         FUN_L00_00250df8(m);
         moby_point_position(m, 0, &v0);
         subtract_vector_xyz(&v1, pos, &v0);
-        FUN_001f9cf8(&v1, &v1, &src->rot_row0);
+        transform_vector_by_basis(&v1, &v1, &src->rot_row0);
         add_vector_xyz(p, pos, &v1);
         qcopy(m + 0x40, &src->rot);
         *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)&src->rot_row0;
@@ -393,7 +393,7 @@ char *FUN_L09_002c2500(struct Moby *src, char *pos, int cls) {
 }
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C37A0), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b48(void *, void *);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 char *FUN_L09_002c2610(void *pos, int type, float *dist) {
     char *best = 0;
@@ -401,7 +401,7 @@ char *FUN_L09_002c2610(void *pos, int type, float *dist) {
     char *m;
     for (m = D_L09_0015FFE4; m != 0; m = *(char **)(m + 0x28)) {
         if (*(short *)(m + 0xA6) == type) {
-            float d = FUN_001f9b48(pos, m + 0x10);
+            float d = fast_vec_dist(pos, m + 0x10);
             if (d < bestd) {
                 bestd = d;
                 best = m;
@@ -620,12 +620,12 @@ struct Moby *FUN_L09_002eaa50(struct Moby *owner) {
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EC010), where it is exact; names translated to the US level program. */
 
 extern float D_L09_00166F40[];
-extern float FUN_001f9af0(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_001f9bf8(void *, void *, float);
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void delete_moby(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L09_002ead30(unsigned char *m) {
@@ -640,9 +640,9 @@ void FUN_L09_002ead30(unsigned char *m) {
         *(float *)(d + 8) -= frame_time_sq * 20.0f;
         FUN_001f9a10(d + 0x20, d + 0x20, d);
         FUN_001f9a28(m + 0x10, d + 0x20, D_L09_00166F40);
-        len = FUN_001f9af0(m + 0x10);
+        len = fast_vec_length(m + 0x10);
         if (len > 100.0f) {
-            FUN_001f9bf8(m + 0x10, m + 0x10, 100.0f);
+            fast_vec_normalize(m + 0x10, m + 0x10, 100.0f);
             FUN_001f9a10(m + 0x10, m + 0x10, D_L09_00166F40);
             *(float *)(m + 0x2C) = *(float *)(d + 0x50) * (100.0f / len);
         } else {

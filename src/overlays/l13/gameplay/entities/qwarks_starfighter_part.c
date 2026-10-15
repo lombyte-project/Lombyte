@@ -440,7 +440,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_L13_00160660[] __attribute__((section(".sdata")));
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern float FUN_L00_0025e310(float);
@@ -454,7 +454,7 @@ extern int D_L13_001D3448[];
 extern int D_L13_001D34D8[];
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int FUN_001efa68(void *, void *, int, void *, void *);
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_001fa728(void *, float);
 extern int FUN_L00_0023e738(float *, float, float, float, float, float);
 extern int FUN_L01_0028b510(void *, void *, float);
@@ -731,7 +731,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
             char *hero = ((char *)&D_0013F350);
             float yaw, pitch, distance;
             yaw = FUN_001f9e90(*(float *)(hero + 0x80) - moby->pos[0], *(float *)(hero + 0x84) - moby->pos[1]);
-            pitch = -FUN_001f9e90(FUN_001f9b80(moby->pos, hero + 0x80), *(float *)(hero + 0x88) - moby->pos[2]);
+            pitch = -FUN_001f9e90(vector_distance_xy(moby->pos, hero + 0x80), *(float *)(hero + 0x88) - moby->pos[2]);
             FUN_L13_002e9018(moby, data, yaw, pitch);
             if (*(Moby388 **)(hero + 0x15F0) != 0 && (*(Moby388 **)(hero + 0x15F0))->cls_id == 0x45) {
                 (*(Moby388 **)(hero + 0x15F0))->bBC = 1;
@@ -758,7 +758,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
                     ship = (char *)ship_moby->d;
                     yaw_error = fast_subtract_rotations(FUN_001f9e90(moby->pos[0] - ship_moby->pos[0], moby->pos[1] - ship_moby->pos[1]), *(float *)(ship + 0x38));
                     abs_yaw_error = absolute_float(yaw_error);
-                    pitch_error = fast_subtract_rotations(-FUN_001f9e90(FUN_001f9b80((*(Moby388 **)(hero + 0x15F0))->pos, moby->pos),
+                    pitch_error = fast_subtract_rotations(-FUN_001f9e90(vector_distance_xy((*(Moby388 **)(hero + 0x15F0))->pos, moby->pos),
                                                          moby->pos[2] - (*(Moby388 **)(hero + 0x15F0))->pos[2]),
                                       *(float *)(ship + 0x34));
                     abs_pitch_error = absolute_float(pitch_error);
@@ -829,7 +829,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
             char *path = walker_paths[data->paths[data->b13B]];
             int i = data->s9C;
             int n = *(int *)path;
-            float flat_distance = FUN_001f9b80(path + (i * 16 + 0x10), path + (((i + 3 >= n - 1) ? n - 1 : i + 3) * 16 + 0x10));
+            float flat_distance = vector_distance_xy(path + (i * 16 + 0x10), path + (((i + 3 >= n - 1) ? n - 1 : i + 3) * 16 + 0x10));
             Path388 *path2 = (Path388 *)walker_paths[data->paths[data->b13B]];
             int i2 = data->s9C;
             int n2 = path2->n;
@@ -1079,8 +1079,8 @@ void FUN_L13_002eb098(Moby388 *moby) {
             }
         }
     }
-    FUN_001f9770(&data->h144);
-    FUN_001f9770(&data->h146);
+    fast_dec_timer_s16(&data->h144);
+    fast_dec_timer_s16(&data->h146);
     if (moby->state >= 2 && moby->state <= 5 && (((unsigned char *)D_0013E533)[0x242C] & 1)) {
         moby->state = 9;
     }
@@ -1203,11 +1203,11 @@ void FUN_L13_002ece00(struct Moby *moby) {
     }
 }
 #include "types.h"
-extern void FUN_001fa2d8(void *, void *);
-extern void FUN_001f9d20(void *, void *, void *);
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001fa030(void *, void *);
+extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_001f9cf8(void *, void *, void *);
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L10_0024c7f0(float, void *, void *, int, void *);
@@ -1229,7 +1229,7 @@ void FUN_L13_002ed158(void *moby, void *data) {
     float radius;
     float limit, tolerance, height_limit, height_tolerance;
 
-    FUN_001fa030(matrix, moby + 0x40);
+    euler_rotation_basis(matrix, moby + 0x40);
     max_size = *(short *)(data + 10) < *(short *)(data + 8) ?
         *(short *)(data + 8) : *(short *)(data + 10);
     radius = (float)max_size * 0.5f;
@@ -1246,8 +1246,8 @@ void FUN_L13_002ed158(void *moby, void *data) {
         if (candidate == 0 || (unsigned char)candidate[0x20] == 0xfe ||
             (unsigned char)candidate[0x20] == 0xfd) continue;
         FUN_001f9a28(candidate_pos, candidate + 0x10, moby + 0x10);
-        FUN_001fa2d8(rotation_matrix, matrix);
-        FUN_001f9d20(local_pos, candidate_pos, rotation_matrix);
+        transpose_rotation_matrix(rotation_matrix, matrix);
+        transform_vector(local_pos, candidate_pos, rotation_matrix);
         qcopy(probe, local_pos);
         half_width = *(short *)(data + 8);
         limit = (float)half_width * 0.5f;

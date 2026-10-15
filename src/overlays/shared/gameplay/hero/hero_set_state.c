@@ -268,9 +268,9 @@ skip:
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_002222F0), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9af0(void *);
-extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -298,7 +298,7 @@ void FUN_L00_00221b68(void) {
     }
     p = (char *)D_0013E533 + 0xE1D;
     if (*(short *)(p + 0x1EA) != 0) {
-        d = FUN_001f9b80(p + 0x80, p + 0x210);
+        d = vector_distance_xy(p + 0x80, p + 0x210);
         lim = *(float *)(p + 0x234) * 0.9f;
         if (d < lim) {
             ang = FUN_001f9e90(*(float *)(p + 0x80) - *(float *)(p + 0x210),
@@ -309,8 +309,8 @@ void FUN_L00_00221b68(void) {
             t0 = d - lim;
             FUN_L00_0025b8c0(&t0, (float *)(p + 0x244), 0.0f, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
                              frame_time * 2.8f);
-            *(float *)(p + 0xF0) = FUN_001f9dc8(ang) * *(float *)(p + 0x244);
-            *(float *)(p + 0xF4) = FUN_001f9de0(ang) * *(float *)(p + 0x244);
+            *(float *)(p + 0xF0) = fast_cos(ang) * *(float *)(p + 0x244);
+            *(float *)(p + 0xF4) = fast_sin(ang) * *(float *)(p + 0x244);
             *(float *)(p + 0xF8) = 0.0f;
         }
     } else {
@@ -526,7 +526,7 @@ int FUN_L00_00222158(void) {
         if (out != 0)
             continue;
         gb += 0x80;
-        if (FUN_001f9b80(gb, m + 0x10) < 4.0f)
+        if (vector_distance_xy(gb, m + 0x10) < 4.0f)
             continue;
         if (*(unsigned char *)(m + 0x31) == 0)
             d += 10.0f;
@@ -3040,7 +3040,7 @@ int FUN_L00_002276c0(void) {
 
 extern float D_L00_00173E68 __attribute__((section(".data")));
 extern int D_L00_0015F5CC;
-extern int FUN_001f0b58(void);
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00216de8(int a, int b);
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void FUN_L00_002126b8(void *, void *, int, float, float);
@@ -3111,7 +3111,7 @@ int FUN_L00_002279b0(void) {
         }
         FUN_L00_002126b8(v1, v2, 0, scale, 1.3f);
         if (func_L00_001EFFF0(v1, v2, 2, *(int *)&u->moby, 0) != 0) {
-            int s = FUN_001f0b58();
+            int s = collision_hit_material();
             u->ground_type = s;
             if ((short)s == 0) {
                 v1[2] = D_L00_00173E68 - 0.01f;

@@ -30,16 +30,16 @@ extern int D_L02_001600D8 __attribute__((sda));
 extern float D_L02_001600DC __attribute__((sda));
 extern float D_L02_001600E0 __attribute__((sda));
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern float FUN_001f9b48(void *, void *);
-extern void FUN_001f9bf8(void *, void *, float);
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_00213f38(float *, float *, float, float, float, float);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern float FUN_002132a8(float, float);
-extern float FUN_001f96b0(float);
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float scale_timer_random(float) __asm__("FUN_L02_0020ff48");
-extern int FUN_001fa6d0(float);
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int FUN_001f9770(void *);
 extern char *FUN_L00_0026b230(void *, void *, unsigned long long, float);
 extern void FUN_L00_0026d598(void *, void *, int);
@@ -64,27 +64,27 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     speed = 0.0f;
     save_shot = (D_L02_0015F5CC % 4) == 0;
     qcopy(origin, position);
-    FUN_001f9bf8(adjusted, direction, distance + 0.75f);
-    FUN_001f9a10(end, adjusted, origin);
+    fast_vec_normalize(adjusted, direction, distance + 0.75f);
+    add_vector_xyz(end, adjusted, origin);
     if (FUN_001efa68(origin, end, 2, 0, 0)) {
-        travel = FUN_001f9b48(origin, D_L02_00174460) - 0.75f;
+        travel = fast_vec_dist(origin, D_L02_00174460) - 0.75f;
         if (travel < 0.0f) travel = 0.0f;
     } else {
         travel = distance;
     }
     acceleration = D_L02_001600D0 * D_0015ED6C;
-    FUN_00213f38(&speed, &travel_step, travel, 1.0f, frame_time_sq * 48.0f,
+    advance_accelerated_scalar(&speed, &travel_step, travel, 1.0f, frame_time_sq * 48.0f,
                   acceleration);
-    FUN_001f9bf8(adjusted, adjusted, travel_step);
+    fast_vec_normalize(adjusted, adjusted, travel_step);
     first_count = D_L02_001600D4;
     count = D_L02_001600D8;
     if (travel < 4.0f) first_count = 1;
     for (i = 0; i < count + first_count; i++) {
         random_vector(offset, 0.0f,
             ((D_L02_001600DC - D_L02_001600E0) * (travel / distance) + D_L02_001600E0) * D_0015ED6C);
-        FUN_001f9a10(offset, offset, adjusted);
-        FUN_001f9a68(velocity, adjusted, FUN_002132a8(0.0f, 1.0f));
-        FUN_001f9a10(velocity, velocity, origin);
+        add_vector_xyz(offset, offset, adjusted);
+        fast_vec_scale(velocity, adjusted, random_float_between(0.0f, 1.0f));
+        add_vector_xyz(velocity, velocity, origin);
         shot = FUN_L00_0026b230(velocity, offset, i < first_count ? 1ULL : (unsigned long long)(i < first_count), travel);
         if (i == 2 && save_shot) {
             int j;
@@ -98,12 +98,12 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
         }
     }
     if (FUN_001f9770(slots + 0x1c)) {
-        int timer = FUN_001fa6d0(scale_timer_random(FUN_002132a8(10.0f, 30.0f)));
+        int timer = truncate_float_to_s32(scale_timer_random(random_float_between(10.0f, 30.0f)));
         acceleration = D_0015ED6C + D_0015ED6C;
         *(short *)(slots + 0x1c) = timer;
         random_vector(offset, 0.0f, acceleration);
-        FUN_001f9a68(velocity, adjusted, FUN_002132a8(0.5f, 0.1f));
-        FUN_001f9a10(velocity, velocity, offset);
+        fast_vec_scale(velocity, adjusted, random_float_between(0.5f, 0.1f));
+        add_vector_xyz(velocity, velocity, offset);
         velocity[3] = 0.0f;
         FUN_L00_0026d598(position, velocity, 0);
     }

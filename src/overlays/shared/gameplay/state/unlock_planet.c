@@ -201,25 +201,25 @@ int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, i
 }
 typedef float M4_260400[16] __attribute__((aligned(16)));
 extern char *c338_p(char *) __asm__("FUN_L00_002603d0");
-void FUN_001fa050(void *, void *);
-void FUN_001f9a10(void *, void *, void *);
-void FUN_001f9a28(void *, void *, void *);
-void FUN_001f9cf8(void *, void *, void *);
-void FUN_001fa378(void *, void *, void *);
-void FUN_00214598(void *, void *);
+void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out) {
     M4_260400 m, n;
     char *o = c338_p(a);
     if (o == 0)
         return 0;
-    FUN_001fa050(m, o);
-    FUN_001f9a10(v, b, o + 0x10);
-    FUN_001f9a28(v, v, a + 0x10);
-    FUN_001f9cf8(v, v, m);
-    FUN_001f9a10(v, v, a + 0x10);
-    FUN_001fa050(n, c);
-    FUN_001fa378(n, m, n);
-    FUN_00214598(n, out);
+    euler_rotation_matrix(m, o);
+    add_vector_xyz(v, b, o + 0x10);
+    subtract_vector_xyz(v, v, a + 0x10);
+    transform_vector_by_basis(v, v, m);
+    add_vector_xyz(v, v, a + 0x10);
+    euler_rotation_matrix(n, c);
+    multiply_matrix(n, m, n);
+    matrix_to_euler(n, out);
     return 1;
 }
 #include "qcopy.h"
@@ -267,12 +267,12 @@ int FUN_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002616E0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002603d0(char *);
-extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001fa050(void *, void *);
-extern void FUN_001fa2d8(void *, void *);
-extern void FUN_001fa378(void *, void *, void *);
-extern void FUN_00214598(void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
 int FUN_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d) {
     float m[16];
@@ -281,27 +281,27 @@ int FUN_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d) {
     float pad[12];
     if (FUN_L00_002603d0(o) == 0)
         return 0;
-    FUN_001f9a28(v, a, o + 0x10);
-    FUN_001fa2d8(m, o + 0xC0);
-    FUN_001f9d20(b, v, m);
-    FUN_001fa050(w, c);
-    FUN_001fa378(w, m, w);
-    FUN_00214598(w, d);
+    subtract_vector_xyz(v, a, o + 0x10);
+    transpose_rotation_matrix(m, o + 0xC0);
+    transform_vector(b, v, m);
+    euler_rotation_matrix(w, c);
+    multiply_matrix(w, m, w);
+    matrix_to_euler(w, d);
     return 1;
 }
 typedef float M4[16] __attribute__((aligned(16)));
-void FUN_001fa050(void *, void *);
-void FUN_001fa2d8(void *, void *);
-void FUN_001fa378(void *, void *, void *);
-void FUN_00214598(void *, void *);
+void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
+void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 #include "qcopy.h"
 void FUN_L00_00260738(char *out, OvlQuad *pos, void *m1, void *m2) {
     M4 a, b, c;
-    FUN_001fa050(a, m1);
-    FUN_001fa2d8(a, a);
-    FUN_001fa050(b, m2);
-    FUN_001fa378(c, a, b);
-    FUN_00214598(c, out);
+    euler_rotation_matrix(a, m1);
+    transpose_rotation_matrix(a, a);
+    euler_rotation_matrix(b, m2);
+    multiply_matrix(c, a, b);
+    matrix_to_euler(c, out);
     qcopy(out + 0x10, pos);
 }
 extern u8 level_available[] __asm__("D_0013DD40");

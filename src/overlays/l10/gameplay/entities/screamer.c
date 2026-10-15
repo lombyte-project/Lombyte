@@ -1252,7 +1252,7 @@ extern int D_L10_0015F5CC;
 extern int D_L10_0015FFD8;
 extern char *D_L10_0015FFD0_w[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
 extern int FUN_001efa68(void *, void *, int, void *, void *);
-extern int FUN_001f0b58(void);
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int FUN_L00_0025c698(void *, void *);
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -1792,7 +1792,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
             if (m->pos[2] < probe_ground_height(m->pos, 0, 0.5f)) {
                 int q;
                 float x;
-                r = FUN_001f0b58();
+                r = collision_hit_material();
                 if (r == 0 || r == 1 || r == 3) {
                     FUN_L00_00257470(m, 0x200, -1);
                     mark_moby_for_removal(m);
@@ -2044,7 +2044,7 @@ extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern float dot_vectors_xyz(float) __asm__("FUN_001f9ab0");
 extern float D_L10_00161E2C __attribute__((sda));
 extern float D_L10_00161E40_gp __asm__("D_L10_00161E40") __attribute__((sda));
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_00213928_c(void *,void *,void *,int,int *,float *,int,int) __asm__("FUN_00213928");
 extern int FUN_L00_0025ff38_c(float,char *,void *,int,int,void *,int) __asm__("FUN_L00_0025ff38");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");

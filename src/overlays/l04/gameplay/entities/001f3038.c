@@ -9,14 +9,14 @@
 /* index of the nearest of n vectors to a + 0x10 */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F2F68), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 
 int FUN_L04_001f3038(char *moby, char *points, int count) {
     int best = -1;
     int i;
     float best_distance = 32767.0f;
     for (i = 0; i < count; i++) {
-        float distance = FUN_001f9b80(moby + 0x10, points + i * 0x10);
+        float distance = vector_distance_xy(moby + 0x10, points + i * 0x10);
         if (distance < best_distance) {
             best_distance = distance;
             best = i;
@@ -73,10 +73,10 @@ extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float FUN_001f9e90(float, float);
-extern int FUN_001efa68();
-extern int FUN_001f9770();
-extern int FUN_001f9c48();
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+extern int coll_line_fix() __asm__("FUN_001efa68");
+extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
+extern int set_vector_length_xy() __asm__("FUN_001f9c48");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -331,7 +331,7 @@ void FUN_L04_001f30e0(Moby **others, int other_count, Moby *moby, Steer_1F3010 *
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F39B0), where it is exact; names translated to the US level program. */
 
 extern s32 D_L04_00173FF0[];
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern void add_vector_xyz(void *, void *, void *);
@@ -356,5 +356,5 @@ void FUN_L04_001f3a80(char *a, char *b, char *c, float f) {
         }
     }
     *(float *)(a + 0x48) =
-        fast_add_rotations(FUN_001f9e90(*(float *)(b + 0x10), *(float *)(b + 0x14)), 3.14159265f);
+        fast_add_rotations(fast_arc_tan(*(float *)(b + 0x10), *(float *)(b + 0x14)), 3.14159265f);
 }

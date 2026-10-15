@@ -1,21 +1,16 @@
 # Source layout
 
-`src/` is organized by semantic subsystem: `audio`, `gameplay`, `input`,
-`math`, `rendering`, `runtime`, `sdk`, `storage`, `ui`, `video`, and `world`,
-plus `overlays` for the level code layer.
+`src/` is grouped by subsystem: `audio`, `gameplay`, `input`, `math`,
+`rendering`, `runtime`, `sdk`, `storage`, `ui`, `video` and `world`.
 
-- `src/assembly/` marks units whose current implementation still uses an
-  assembly oracle. Its subdirectories follow the same subsystem boundaries;
-  `src/assembly/textbin/` retains the owner paths for those oracle-backed
-  functions.
-- Semantically grouped C units live directly under their logical subsystem,
-  even when they were first recovered from a textbin region. Compiler routing
-  for those moved units is recorded explicitly in `configure.py`.
-- `src/overlays/` holds the level code overlays (`shared/` and `lNN/`), see
-  [`docs/overlays.md`](../docs/overlays.md); they are compiled by
-  `make overlays`, not linked into the boot executable.
+- A file is named after the function it holds (`ui/map/save_map_coverage.c`);
+  `fun_<address>.c` means the function is not understood yet.
+- `assembly/` holds units that still build from the retail assembly (the
+  oracle), with their C draft under `#else`. Promotion moves the file out of
+  it ([CONTRIBUTING.md](../CONTRIBUTING.md#6-promote-an-exact-unit)).
+- `overlays/` holds the level code (`shared/` and `lNN/`), built by
+  `make overlays` and not linked into the boot executable
+  ([docs/overlays.md](../docs/overlays.md)).
 
-The active configuration lists every build owner explicitly. Keep each owner
-path aligned with its source file. Do not infer that a C file is safe to replace
-merely because it compiles: consult the source-quality audit and preserve the
-exact oracle until all objdiff measures are exact.
+Each file's owner path in `config/us/rnc1.us.yaml` must match its location.
+Moving or renaming a file follows [docs/code-cleanup.md](../docs/code-cleanup.md).

@@ -7,13 +7,13 @@
 /* Builds a matrix that rolls by roll around the direction dir and writes it to out. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/mobyutil_0026B0E8.c: func_L08_0026B0E8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9e90(float, float);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001f9fc8(void *);
-extern void FUN_001fa050(void *, void *);
-extern void FUN_001fa070(void *, void *);
-extern void FUN_001fa2d8(void *, void *);
-extern void FUN_001fa378(void *, void *, void *);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void rot_216130(void *, void *) __asm__("FUN_001fa070");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void copy_matrix3x4(void *, void *);
 
 void FUN_L08_0026a0f8(void *out, void *dir, float roll) {
@@ -25,31 +25,31 @@ void FUN_L08_0026a0f8(void *out, void *dir, float roll) {
     float d[4];
     float a;
     qcopy(d, dir);
-    FUN_001f9fc8(M);
-    a = -FUN_001f9e90(d[0], d[1]);
+    set_identity_matrix(M);
+    a = -fast_arc_tan(d[0], d[1]);
     ang[0] = 0.0f;
     ang[1] = 0.0f;
     ang[2] = a;
-    FUN_001fa050(Rz, ang);
-    FUN_001f9d20(d, d, Rz);
-    a = -FUN_001f9e90(d[2], d[0]);
+    euler_rotation_matrix(Rz, ang);
+    transform_vector(d, d, Rz);
+    a = -fast_arc_tan(d[2], d[0]);
     ang[0] = 0.0f;
     ang[2] = 0.0f;
     ang[1] = a;
-    FUN_001fa070(Ry, ang);
-    FUN_001f9d20(d, d, Ry);
+    rot_216130(Ry, ang);
+    transform_vector(d, d, Ry);
     ang[2] = roll;
     ang[0] = 0.0f;
     ang[1] = 0.0f;
-    FUN_001fa070(Rx, ang);
-    FUN_001fa378(M, Rz, M);
-    FUN_001fa378(M, Ry, M);
-    FUN_001fa378(M, Rx, M);
-    FUN_001fa2d8(Ry, Ry);
-    FUN_001fa378(M, Ry, M);
-    FUN_001fa2d8(Rz, Rz);
-    FUN_001fa378(M, Rz, M);
+    rot_216130(Rx, ang);
+    multiply_matrix(M, Rz, M);
+    multiply_matrix(M, Ry, M);
+    multiply_matrix(M, Rx, M);
+    transpose_rotation_matrix(Ry, Ry);
+    multiply_matrix(M, Ry, M);
+    transpose_rotation_matrix(Rz, Rz);
+    multiply_matrix(M, Rz, M);
     qcopy(d, dir);
-    FUN_001f9d20(d, d, M);
+    transform_vector(d, d, M);
     copy_matrix3x4(out, M);
 }

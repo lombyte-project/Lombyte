@@ -20,7 +20,7 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern s32 measure_text_width_regular(u8 *, s32) __asm__("func_001F6250");
 extern void font_print_large(s32, s32, u64, u8 *, s32) __asm__("func_001F6530");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern f32 func_001F9B20(f32 *);
+extern f32 vector_length_xy(f32 *) __asm__("func_001F9B20");
 extern u8 *get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
@@ -97,7 +97,7 @@ void draw_level_selection_map(s32 left, s32 right, s32 top, s32 bottom) {
             label_y = marker_y + level_map_markers[level_index].label_offset_y;
             label_direction[1] = level_map_markers[level_index].label_offset_y;
             label_direction[0] = level_map_markers[level_index].label_offset_x;
-            direction_length = func_001F9B20(label_direction) * 1000.0f;
+            direction_length = vector_length_xy(label_direction) * 1000.0f;
             line_fraction = direction_length - 8000;
             line_start_x = label_x + (marker_x - label_x) * line_fraction / direction_length;
             line_start_y = label_y + (marker_y - label_y) * line_fraction / direction_length;

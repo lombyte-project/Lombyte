@@ -9,10 +9,10 @@ typedef union {
     u128 q;
     f32 f[4];
 } V0025d238;
-void FUN_001f9a28(void *, void *, void *);
-f32 FUN_001f99c0(f32);
-void FUN_001f9a68(void *, void *, f32);
-void FUN_001f9a10(void *, void *, void *);
+void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+f32 absolute_float(f32) __asm__("FUN_001f99c0");
+void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_0025d238(V0025d238 *src, V0025d238 *v) {
     V0025d238 t0, t1;
     f32 *pv, *p0, *p1;
@@ -24,9 +24,9 @@ void FUN_L00_0025d238(V0025d238 *src, V0025d238 *v) {
     p1 = t1.f;
     for (i = 2; i >= 0; i--) {
         if (*pv < 0.0f) {
-            FUN_001f9a28(b, v, a);
-            FUN_001f9a68(b, b, FUN_001f99c0((*p0 - 0.1f) / *p1));
-            FUN_001f9a10(v, a, b);
+            subtract_vector_xyz(b, v, a);
+            fast_vec_scale(b, b, absolute_float((*p0 - 0.1f) / *p1));
+            add_vector_xyz(v, a, b);
         }
         pv++;
         p1++;
@@ -729,7 +729,7 @@ extern void FUN_L00_002d3838(void *, void *, int, int);
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
 extern int FUN_001fa728(void *, float);
-extern void FUN_0022da68(int, int, void *);
+extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 typedef struct {
     u8 pad0[0x160];
@@ -772,7 +772,7 @@ void FUN_L00_0025f090(u8 *owner, u128 *pos, int sound, float scale, float flash)
         }
     }
     if (owner != 0 && owner[0x20] != 0xFE && owner[0x20] != 0xFD && sound != -1) {
-        FUN_0022da68(sound, 0, owner);
+        allocate_voice_for_target_entry(sound, 0, owner);
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {
@@ -839,12 +839,12 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607A8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9af0(void *);
-extern void FUN_001f9bf8(void *, void *, float);
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 /* Clamps vector a to length x: normalizes it to x when vector_length_xyz is longer. */
 void FUN_L00_0025f730(void *a, float x) {
     if (x < FUN_001f9af0(a)) {
-        FUN_001f9bf8(a, a, x);
+        fast_vec_normalize(a, a, x);
     }
 }
 #define NOT_SDA

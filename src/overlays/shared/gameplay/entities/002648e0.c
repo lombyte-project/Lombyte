@@ -27,7 +27,7 @@ extern struct Moby *FUN_L00_00250768(void);
 extern void FUN_L00_00250480(struct Moby *);
 extern void FUN_L00_00250df8(struct Moby *);
 extern f32 FUN_L00_00200240(s32);
-extern s32 FUN_00120478(f32);
+extern s32 fptodp(f32) __asm__("FUN_00120478");
 
 void FUN_L00_002648e0(void) {
     struct Moby *moby;
@@ -107,7 +107,7 @@ void FUN_L00_002648e0(void) {
                     share = FUN_L00_00200240(current_ticks) / total_ticks;
                     share = share * 100.0f;
                     FUN_L00_001eb078(D_L00_001E90C8, profile_label, profile->count,
-                                   scaled_ticks, FUN_00120478(share));
+                                   scaled_ticks, fptodp(share));
                     profile->count = 0;
                 } else if (next_ticks < profile->ticks) {
                     next_ticks = profile->ticks;

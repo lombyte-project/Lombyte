@@ -43,7 +43,7 @@ extern Obj20 *D_001603D4;
 extern Obj20 *D_001603D8;
 
 extern s32 FUN_001f9bb0(void *, void *);
-extern void FUN_001f9a80(void *, void *, f32);
+extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 
 void create_point_light(s32 i) __asm__("FUN_00201ba8");
 
@@ -92,7 +92,7 @@ void create_point_light(s32 i) {
         slot->c0 = p - slot->buf;
         if (p < end) {
             slot->n1 = slot->c0;
-            FUN_001f9a80(&sphere, &sphere, 1024.0f);
+            scale_vector(&sphere, &sphere, 1024.0f);
             m = D_00160E8C;
             for (n2 = 0; n2 < D_00160E90; n2++, m++) {
                 if (FUN_001f9bb0(&sphere, m)) {

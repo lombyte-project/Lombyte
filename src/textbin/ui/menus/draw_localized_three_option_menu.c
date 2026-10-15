@@ -16,8 +16,8 @@ extern s32 count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
 extern s32 count_nonzero_entries_up_to_30(void) __asm__("func_00215348");
 extern s32 sprintf(char *, const char *, ...);
 extern s32 measure_text_width_regular(char *, s32) __asm__("func_001F6250");
-extern void func_001F61F8(void);
-extern void func_001F61E8(void);
+extern void disable_global_flag(void) __asm__("func_001F61F8");
+extern void enable_global_flag(void) __asm__("func_001F61E8");
 extern void font_print_center(s32, s32, u64, char *, s32) __asm__("func_001F6AF0");
 extern void draw_menu_selection_marker(s32, s32, s32) __asm__("func_0021F8E8");
 extern u64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -59,7 +59,7 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
         font_texture_index = 2;
         glyphs = small_font_metrics;
     }
-    func_001F61F8();
+    disable_global_flag();
     font_print_center(menu->menu_width >> 1, draw_y, 0x80FFA888, get_help_message_text(0x522E), -1);
     draw_y += line_spacing;
     draw_menu_selection_marker(0xB, draw_y + 9, count_nonzero_entries_up_to_40() == 0x28);
@@ -76,7 +76,7 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
     sprintf(text_buffer, get_help_message_text(0x5231), count_nonzero_entries_up_to_30(), 0x1E);
     font_print(0x14, draw_y, 0x80FFA888, text_buffer, -1, get_effect_texture(font_texture_index),
                glyphs);
-    func_001F61E8();
+    enable_global_flag();
     do_gif_paging();
     return 2;
 }

@@ -146,11 +146,11 @@ extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void snd_play_sound_vol_pan_pmpb(s32, s32, s32, s32, s32, s32, s32,
                                         void *) __asm__("func_0012E308");
 extern void snd_reset_state_and_flush_commands(void) __asm__("func_0012EB00");
-extern void func_001E9428(void);
-extern void func_001E9430(void);
+extern void noop_callback_h(void) __asm__("func_001E9428");
+extern void noop_callback_i(void) __asm__("func_001E9430");
 extern void update_view_context(void) __asm__("func_001F2D98");
 extern s32 scale_ticks(s32) __asm__("func_001F96F8");
-extern u32 func_001F98D0(void *, void *, s32);
+extern u32 fast_mem_copy(void *, void *, s32) __asm__("func_001F98D0");
 extern void add_vectors(void *, void *, void *) __asm__("func_001F9A10");
 extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -158,7 +158,7 @@ extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern void mark_moby_for_removal(LevelRenderObject *) __asm__("func_0020C828");
 extern void update_moby_animation_state(LevelRenderObject *) __asm__("func_0020C880");
 extern void calculate_object_transform(LevelRenderObject *, s32, void *) __asm__("func_0020CCA8");
-extern void func_0020DEF8(LevelRenderObject *);
+extern void refresh_moby_spatial_bounds(LevelRenderObject *) __asm__("func_0020DEF8");
 extern void build_object_rotation_matrix(void) __asm__("func_0022DE10");
 extern s32 rand(void);
 
@@ -205,7 +205,7 @@ void update_level_gameplay_frame(void) {
     f32 blend;
     f32 scale;
 
-    func_001E9430();
+    noop_callback_i();
     sequence_macro -= 0.25f;
     render_sequence.frame++;
     render_sequence.time++;
@@ -312,12 +312,12 @@ void update_level_gameplay_frame(void) {
             object->state_a = 0;
             object->state_b = 0;
             update_moby_animation_state(object);
-            func_001F98D0(object->frame_data_a + 0x10, (void *)current_frame_payload, 0x20);
-            func_001F98D0(object->frame_data_b + 0x10, (void *)next_frame_payload, 0x20);
+            fast_mem_copy(object->frame_data_a + 0x10, (void *)current_frame_payload, 0x20);
+            fast_mem_copy(object->frame_data_b + 0x10, (void *)next_frame_payload, 0x20);
             *(volatile u8 *)&object->opacity = 0xFF;
             *(volatile u8 *)&object->cached_selector = 0xFF;
             object->selected_index = 0x1FF;
-            func_0020DEF8(object);
+            refresh_moby_spatial_bounds(object);
             object->selected_a = object->model->count - 1;
             object->selected_b = object->model->count - 1;
             calculate_object_transform(object, 1, &first_transform);
@@ -354,7 +354,7 @@ void update_level_gameplay_frame(void) {
             }
         }
     }
-    func_001E9428();
+    noop_callback_h();
 }
 
 extern __typeof__(update_level_gameplay_frame) func_0022EAA8 __attribute__((alias("FUN_0022eaa8")));

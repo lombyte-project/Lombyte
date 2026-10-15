@@ -6,7 +6,7 @@ extern f32 D_00160370[] MACRO_ADDR;
 extern f32 D_00160380[] MACRO_ADDR;
 extern f32 D_00160390[] MACRO_ADDR;
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void FUN_001f9bf8(f32 *, f32 *, f32);
+extern void fast_vec_normalize(f32 *, f32 *, f32) __asm__("FUN_001f9bf8");
 
 typedef union {
     u128 q;
@@ -18,7 +18,7 @@ void FUN_00226fb8(PauseVec *dir, f32 scale) {
     f32 *v = d.v;
 
     d.q = dir->q;
-    FUN_001f9bf8(D_00160370, v, 1.0f);
+    fast_vec_normalize(D_00160370, v, 1.0f);
     D_00160390[0] = D_00160370[0] * scale;
     D_00160390[1] = D_00160370[1] * scale;
     D_00160390[2] = D_00160370[2] * scale;
@@ -42,7 +42,7 @@ void FUN_00226fb8(PauseVec *dir, f32 scale) {
         D_00160380[2] = v[2];
     }
     fast_vec_cross(D_00160380, D_00160380, D_00160370);
-    FUN_001f9bf8(D_00160380, D_00160380, 1.0f);
+    fast_vec_normalize(D_00160380, D_00160380, 1.0f);
 }
 
 extern __typeof__(FUN_00226fb8) func_00226FB8 __attribute__((alias("FUN_00226fb8")));

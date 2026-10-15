@@ -122,7 +122,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 extern s32 sceCdSync(s32);
 extern void FlushCache(s32);
-extern s32 func_0020B618(void *, void *);
+extern s32 fast_decompress(void *, void *) __asm__("func_0020B618");
 extern void upload_texture_images(s32 arg0, s32 count, s32 p) __asm__("FUN_00203120");
 extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
 extern void copy_blocks_16_forward(void *, void *, s32) __asm__("func_001F98D0");
@@ -188,7 +188,7 @@ void initialize_level_runtime(void) {
     fade_to_black(scale_game_frames(0xC));
     sceCdSync(0);
     FlushCache(0);
-    archive_size = func_0020B618(D_001940C0.buffer + 0x400000, D_001940C0.buffer);
+    archive_size = fast_decompress(D_001940C0.buffer + 0x400000, D_001940C0.buffer);
     FlushCache(0);
     header = (LevelHeader *)D_001940C0.buffer;
     upload_texture_images((s32)header + header->tex, header->texCount,

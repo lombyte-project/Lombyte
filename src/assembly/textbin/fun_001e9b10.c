@@ -193,22 +193,22 @@ extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern void PackDmaTag(s32 arg0, u64 arg1, u64 arg2);
 extern void update_fog(void) __asm__("func_001F2588");
 extern void reset_draw_globals(void) __asm__("func_001F37E8");
-extern void func_001F61E8(void);
-extern void func_001F9810(void *, s32);
-extern void func_001F9838(void *, void *, s32);
-extern f32 func_001F99C8(f32, f32);
-extern void func_001F9A10(void *, void *, void *);
-extern void func_001F9A80(void *, void *, f32);
-extern f32 func_001F9AF0(void *);
-extern void func_001F9CF8(void *, void *, void *);
-extern f32 func_001FA6C0(s32);
+extern void enable_global_flag(void) __asm__("func_001F61E8");
+extern void fast_mem_zero16(void *, s32) __asm__("func_001F9810");
+extern void copy_memory_aligned(void *, void *, s32) __asm__("func_001F9838");
+extern f32 max_float(f32, f32) __asm__("func_001F99C8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("func_001F9A10");
+extern void scale_vector(void *, void *, f32) __asm__("func_001F9A80");
+extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void set_video_timing(s32) __asm__("func_00214970");
-extern void func_00217020(void);
+extern void reset_global_state(void) __asm__("func_00217020");
 extern void func_0022A5E0(void *);
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
-extern void func_00234F98(void *);
-extern void func_00237370(void *);
+extern void light_tfrags(void *) __asm__("func_00234F98");
+extern void light_ties(void *) __asm__("func_00237370");
 
 u8 *FUN_001e9b10(LevelHeader *hdr) {
     u8 *p;
@@ -270,8 +270,8 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     coll_output.xC = 0;
     coll_output.x10 = 0;
     coll_output.x14 = 0;
-    func_001F9810(moby_grids, 0x10000);
-    func_001F9810(D_001C76E0, 0x60);
+    fast_mem_zero16(moby_grids, 0x10000);
+    fast_mem_zero16(D_001C76E0, 0x60);
 
     c = (u8 *)hdr + hdr->x0;
     D_0018CD00.x23C = *(s32 *)c;
@@ -298,9 +298,9 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     part_clip_dist = 0x1F4000;
     PackDmaTag(D_0018CD00.x23C, D_0018CD00.x240, D_0018CD00.x244);
     vu0_load_micro_program(D_00100AE0);
-    func_001F9810(point_lights, 0x100);
-    func_001F9810(point_light_data, 0x180);
-    func_001F9810(dir_lights, 0x400);
+    fast_mem_zero16(point_lights, 0x100);
+    fast_mem_zero16(point_light_data, 0x180);
+    fast_mem_zero16(dir_lights, 0x400);
 
     lc = (u8 *)hdr + hdr->x4;
     n = *(s32 *)lc;
@@ -310,7 +310,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         n = 12;
     }
     if (n != 0) {
-        func_001F9838(dir_lights, lc, n << 6);
+        copy_memory_aligned(dir_lights, lc, n << 6);
     }
 
     for (i0 = 0; i0 < D_00160E90; i0++) {
@@ -323,7 +323,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
             *sp++ = i1;
         }
         *sp = 0xFFFF;
-        func_00234F98((void *)0x70003000);
+        light_tfrags((void *)0x70003000);
     }
 
     sc = (u8 *)hdr + hdr->x34;
@@ -367,17 +367,17 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         sh->x18 = k;
         sc += 0x50;
         sd->m[3].w = D_001E1700[sh->cls]->x40;
-        func_001F9CF8(sh, D_001E1700[sh->cls]->x30, sd);
-        s = func_001F9AF0(&sd->m[0]);
-        s = func_001F99C8(s, func_001F9AF0(&sd->m[1]));
-        s = func_001F99C8(s, func_001F9AF0(&sd->m[2]));
+        transform_vector_by_basis(sh, D_001E1700[sh->cls]->x30, sd);
+        s = fast_vec_length(&sd->m[0]);
+        s = max_float(s, fast_vec_length(&sd->m[1]));
+        s = max_float(s, fast_vec_length(&sd->m[2]));
         sh->scale = D_001E1700[sh->cls]->scale * s;
-        func_001F9A80(sh, sh, sd->m[3].w);
-        func_001F9A10(sh, sh, &sd->m[3]);
-        D_00160F58[i2].m[0].w = 1.0f / func_001F9AF0(&D_00160F58[i2].m[0]);
-        D_00160F58[i2].m[1].w = 1.0f / func_001F9AF0(&D_00160F58[i2].m[1]);
-        D_00160F58[i2].m[2].w = 1.0f / func_001F9AF0(&D_00160F58[i2].m[2]);
-        func_001F9838(sd->x140, sc, 0x80);
+        scale_vector(sh, sh, sd->m[3].w);
+        add_vector_xyz(sh, sh, &sd->m[3]);
+        D_00160F58[i2].m[0].w = 1.0f / fast_vec_length(&D_00160F58[i2].m[0]);
+        D_00160F58[i2].m[1].w = 1.0f / fast_vec_length(&D_00160F58[i2].m[1]);
+        D_00160F58[i2].m[2].w = 1.0f / fast_vec_length(&D_00160F58[i2].m[2]);
+        copy_memory_aligned(sd->x140, sc, 0x80);
         sc += 0x80;
         sh->x1C = *(u16 *)sc;
         sc += 0x10;
@@ -387,7 +387,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         *spa++ = i3;
     }
     *spa = 0xFFFF;
-    func_00237370((void *)0x70000000);
+    light_ties((void *)0x70000000);
 
     tc = (u8 *)hdr + hdr->x3C;
     D_001603D0 = *(s32 *)tc;
@@ -440,7 +440,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
             f32 rad;
 
             tie->x17 = truncate_float_to_s32(*D_001D7F30[cls]->x1C);
-            rad = func_001FA6C0(tie->x17) + 24.0f;
+            rad = convert_integer_to_float(tie->x17) + 24.0f;
             if (tie->radius < rad) {
                 tie->radius = rad;
             }
@@ -451,8 +451,8 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         qcopy(&td->m3, tc + 0x40);
         tc += 0x50;
         td->m3.w = D_001D7F30[cls]->x20;
-        a = (func_001F9AF0(&td->m[0]) + func_001F9AF0(&td->m[1])) * 0.5f;
-        b = func_001F9AF0(&td->m[2]);
+        a = (fast_vec_length(&td->m[0]) + fast_vec_length(&td->m[1])) * 0.5f;
+        b = fast_vec_length(&td->m[2]);
         x = truncate_float_to_s32(a * 4096.0f);
         y = truncate_float_to_s32(b * 4096.0f);
         if (x > 0x10000) {
@@ -472,13 +472,13 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         td->m[0].w = (bl << 16) | g | r;
         tie->x1C = *(u16 *)tc;
         tc += 0x10;
-        func_001F9CF8(tie, D_001D7F30[cls], td);
-        s = func_001F9AF0(&td->m[0]);
-        s = func_001F99C8(s, func_001F9AF0(&td->m[1]));
-        s = func_001F99C8(s, func_001F9AF0(&td->m[2]));
+        transform_vector_by_basis(tie, D_001D7F30[cls], td);
+        s = fast_vec_length(&td->m[0]);
+        s = max_float(s, fast_vec_length(&td->m[1]));
+        s = max_float(s, fast_vec_length(&td->m[2]));
         tie->scale = D_001D7F30[cls]->scale * s;
-        func_001F9A80(tie, tie, td->m3.w);
-        func_001F9A10(tie, tie, &td->m3);
+        scale_vector(tie, tie, td->m3.w);
+        add_vector_xyz(tie, tie, &td->m3);
     }
     spb = (u16 *)0x70000000;
     for (i5 = 0; i5 < D_001603D0; i5++) {
@@ -523,7 +523,7 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     D_001600B4 = -1;
     D_001600B0 = 0;
     D_001600B8 = 0;
-    func_001F9810(D_001CD780, 0x200);
+    fast_mem_zero16(D_001CD780, 0x200);
     for (e = D_0015FF18; e != moby_instance_perm_end; e++) {
         e->x36 = 0x7F80;
     }
@@ -535,8 +535,8 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     }
     occl_cam_state.x1C = 0;
     reset_draw_globals();
-    func_00217020();
-    func_001F61E8();
+    reset_global_state();
+    enable_global_flag();
     world_update_time = 0;
     sequence = 1.0f;
     return p;

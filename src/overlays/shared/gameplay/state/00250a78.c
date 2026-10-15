@@ -8,10 +8,10 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00249488.c: func_L03_00251A58), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9988(float);
+extern float square_root(float) __asm__("FUN_001f9988");
 
 void FUN_L03_00250a78(float *p, float a, float b) {
-    float root = FUN_001f9988((b + b) * p[4]);
+    float root = square_root((b + b) * p[4]);
     float x = (root + root) / p[4];
     p[7] = root;
     p[6] = (a + a) / x;

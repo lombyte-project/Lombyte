@@ -269,13 +269,13 @@ void FUN_L00_00268f10(Vec4 *v, int c) {
     }
 }
 int scale_game_frames(int) __asm__("FUN_001f96f8");
-int FUN_001f9770(void *);
+int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08(unsigned char *);
 void FUN_L00_00268fe8(unsigned char *p) {
     int r = scale_game_frames(0x1b);
     int k = *(short *)(p + 0xa) * *(int *)(p + 0x20) / r;
     *(int *)(p + 4) = (*(int *)(p + 4) & 0xffffff) | (k << 24);
-    if (FUN_001f9770(p + 0xa))
+    if (fast_dec_timer_s16(p + 0xa))
         FUN_L00_00267a08(p);
     else {
         int a = scale_game_frames(0x1b);

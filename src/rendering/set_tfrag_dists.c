@@ -5,7 +5,7 @@ extern s32 tfrag_lod_dists_raw[3] __asm__("D_00160EB0");
 extern f32 fog_params[] __asm__("D_0018CF20");
 extern f32 D_001DE7F0[4][4];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_001f9810(void *, s32);
+extern void fast_mem_zero16(void *, s32) __asm__("FUN_001f9810");
 
 void set_tfrag_dists(void) __asm__("FUN_00233068");
 
@@ -20,7 +20,7 @@ void set_tfrag_dists(void) {
     c = D_00160EA0[2] * fog_params[0];
     ab = 1.0f / (a - b);
     bc = 1.0f / (b - c);
-    FUN_001f9810(D_001DE7F0, 0x40);
+    fast_mem_zero16(D_001DE7F0, 0x40);
     D_001DE7F0[0][0] = ab * 0.5f;
     D_001DE7F0[0][1] = -ab;
     D_001DE7F0[1][0] = bc * 0.5f;

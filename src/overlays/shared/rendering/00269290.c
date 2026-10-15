@@ -78,12 +78,12 @@ void FUN_L00_00269290(char *o) {
 extern char D_L00_00166DC0[];
 extern f32 convert_integer_to_float_c(s32) __asm__("FUN_001fa6c0");
 extern float D_L00_001CB7C0[];
-extern float FUN_001f9b48(void *, void *);
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_L00_0015F5CC;
 extern int FUN_001f9770(void *);
 extern int FUN_L00_001f0d60(float, void *, int, void *);
@@ -124,25 +124,25 @@ void FUN_L00_002694f8(char *m) {
     }
     if (*(int *)(p + 0x1C) >= 0) {
         g = D_L00_001CB7C0;
-        *(float *)p = FUN_001f9dc8(g[1]) * g[5] / 2.5f;
-        *(float *)(p + 4) = FUN_001f9de0(g[1]) * g[5] / 2.5f;
+        *(float *)p = fast_cos(g[1]) * g[5] / 2.5f;
+        *(float *)(p + 4) = fast_sin(g[1]) * g[5] / 2.5f;
         *(int *)(p + 8) = 0;
         FUN_001f9a10(pos, pos, p);
     }
 after:
     q = D_L00_00166DC0;
     B = q - 0x140;
-    d = FUN_001f9b48(pos, q);
-    a = fast_subtract_rotations(FUN_001f9e90(*(float *)(m + 0x10) - *(float *)(B + 0x140),
+    d = fast_vec_dist(pos, q);
+    a = fast_subtract_rotations(fast_arc_tan(*(float *)(m + 0x10) - *(float *)(B + 0x140),
                                              *(float *)(m + 0x14) - *(float *)(B + 0x144)),
                                 *(float *)(B + 0x158));
     if (absolute_float(a) > 1.0471976f) {
         if ((*(int *)(p + 0x18))++ >= 6)
             goto kill;
-        v[0] = FUN_001f9dc8(
+        v[0] = fast_cos(
                    fast_add_rotations(*(float *)(B + 0x158), a > 0.0f ? -1.0471976f : 1.0471976f)) *
                d;
-        v[1] = FUN_001f9de0(
+        v[1] = fast_sin(
                    fast_add_rotations(*(float *)(B + 0x158), a > 0.0f ? -1.0471976f : 1.0471976f)) *
                d;
         v[2] = *(float *)(m + 0x18) - *(float *)(B + 0x148);
@@ -644,17 +644,17 @@ void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int 
 extern char D_L00_00166DC0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L00_0015F5D0;
-extern float FUN_001f9988(float);
-extern float FUN_001f9b48(void *, void *);
+extern float square_root(float) __asm__("FUN_001f9988");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f9770(void *);
-extern int FUN_001fa6e0(int, int, float);
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int FUN_L00_001fefc8(void *);
 extern int FUN_L00_00257b90(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_001f9bf8(void *, void *, float);
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_0026a9f0_u(void *, void *, int, int, int, int, int, float, int,
                                float) __asm__("FUN_L00_0026a9f0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -692,7 +692,7 @@ void FUN_L00_0026ac78(char *m) {
             float B = (A * 8.0f - A * 3.0f * x) / (x * 8.0f * x + x * 8.0f);
             float C = (A * 3.0f + B * 8.0f * x) / (x * -8.0f);
             float F = convert_integer_to_float(*(short *)(m + 0xA));
-            float s = FUN_001f9988(B * B - C * 4.0f * (A - F));
+            float s = square_root(B * B - C * 4.0f * (A - F));
             float r2 = (-B + s) / (C + C);
             float r1 = (-B - s) / (C + C);
             float d;
@@ -700,18 +700,18 @@ void FUN_L00_0026ac78(char *m) {
                 *(float *)(m + 0xC) = r2;
             else
                 *(float *)(m + 0xC) = r1;
-            d = FUN_001f9b48(m + 0x10, D_L00_00166DC0);
+            d = fast_vec_dist(m + 0x10, D_L00_00166DC0);
             if (d < 10.0f) {
                 *(float *)(m + 0xC) *= d * 0.075f + 0.25f;
             }
         }
         if (p[0x19] & 2) {
             *(int *)(m + 4) =
-                FUN_001fa6e0(*(int *)(p + 0x10), 0xFFFFFFF,
+                fast_tween_color(*(int *)(p + 0x10), 0xFFFFFFF,
                              (float)*(short *)(m + 0xA) / (float)(unsigned char)p[0x1B]);
         } else {
             *(int *)(m + 4) =
-                FUN_001fa6e0(*(int *)(p + 0x14), *(int *)(p + 0x10),
+                fast_tween_color(*(int *)(p + 0x14), *(int *)(p + 0x10),
                              (float)*(short *)(m + 0xA) / (float)(unsigned char)p[0x1B]);
         }
         FUN_L00_001fefc8(m + 0x38);
@@ -721,7 +721,7 @@ void FUN_L00_0026ac78(char *m) {
                 *(short *)(m + 0xA) = t;
                 p[0x1B] = t;
                 p[0x19] = (p[0x19] & 0xFD) | 4;
-                FUN_001f9bf8(p, p, *(float *)(p + 0xC) * random_float_between_alt(1.6f, 2.0f));
+                fast_vec_normalize(p, p, *(float *)(p + 0xC) * random_float_between_alt(1.6f, 2.0f));
             } else {
                 int r;
                 *(int *)(p + 0x10) = *(int *)(p + 0x14);
@@ -743,7 +743,7 @@ void FUN_L00_0026ac78(char *m) {
         FUN_001f9a68(p, p, 0.98f);
         life = *(short *)(m + 0xA);
         if (n1 < life) {
-            *(int *)(m + 4) = FUN_001fa6e0(*(int *)(p + 0x14), *(int *)(p + 0x10),
+            *(int *)(m + 4) = fast_tween_color(*(int *)(p + 0x14), *(int *)(p + 0x10),
                                            (float)(life - n1) / (float)n2);
         } else if ((unsigned char)m[3] == 0x48) {
             *(short *)(m + 0xA) = 0;
@@ -1348,7 +1348,7 @@ extern u8 *D_L00_001B20CC NOT_SDA;
 E0026c6e8 *FUN_L00_002678b8_u(s32) __asm__("FUN_L00_002678b8");
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-void FUN_001f9a28(void *, void *, void *);
+void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_L00_0026c6e8(void *pos, void *vel) {
     E0026c6e8 *e = FUN_L00_002678b8_u(0x13);
     u32 v;
@@ -1363,8 +1363,8 @@ void FUN_L00_0026c6e8(void *pos, void *vel) {
     e->x2 = *D_L00_001B20CC;
     qcopy(e->a, pos);
     qcopy(e->c, vel);
-    FUN_001f9a28(e->b, pos, e->c);
-    FUN_001f9a28(e->b, e->b, e->c);
+    subtract_vector_xyz(e->b, pos, e->c);
+    subtract_vector_xyz(e->b, e->b, e->c);
     e->a[3] = 0.09f;
     e->b[3] = 0.5f;
 }
@@ -2602,11 +2602,11 @@ unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y) {
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED60_c __asm__("D_0015ED60");
 extern float D_L00_00166DD8_d __asm__("D_L00_00166DD8") __attribute__((section(".data")));
-extern float FUN_001f9b20(void *);
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void FUN_001f9c48(void *, void *, float);
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void FUN_L00_0026f280(char *m) {
@@ -2644,8 +2644,8 @@ void FUN_L00_0026f280(char *m) {
     v[1] = *(float *)(p + 4);
     v[2] = *(float *)(p + 8);
     {
-        float len = FUN_001f9b20(v);
-        FUN_001f9c48(v, v, D_0015ED60_c * -0.029999971f * len + len);
+        float len = vector_length_xy(v);
+        set_vector_length_xy(v, v, D_0015ED60_c * -0.029999971f * len + len);
     }
     FUN_001f9a10(m + 0x10, m + 0x10, v);
     approach_value(v + 2, frame_time * 1.3f, frame_time_sq * 5.0f);
@@ -2654,9 +2654,9 @@ void FUN_L00_0026f280(char *m) {
     *(float *)(p + 8) = v[2];
     *(float *)(p + 0x14) = fast_add_rotations(*(float *)(p + 0x14), *(float *)(p + 0x18));
     a = fast_add_rotations(D_L00_00166DD8_d, 1.5707964f);
-    k = FUN_001f9de0(*(float *)(p + 0x14)) * *(float *)(p + 0x1C);
-    v[0] = FUN_001f9dc8(a) * k;
-    v[1] = FUN_001f9de0(a) * k;
+    k = fast_sin(*(float *)(p + 0x14)) * *(float *)(p + 0x1C);
+    v[0] = fast_cos(a) * k;
+    v[1] = fast_sin(a) * k;
     v[2] = 0;
     FUN_001f9a10(m + 0x10, m + 0x10, v);
 }
@@ -2808,9 +2808,9 @@ typedef float V4[4] __attribute__((aligned(16)));
 extern char D_L00_00166DC0[];
 int FUN_001f9770(void *);
 void FUN_L00_00267a08(void *);
-void FUN_001f9a28(void *, void *, void *);
-float FUN_001f9af0(void *);
-void FUN_001f9bf8(void *, void *, float);
+void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+float fast_vec_length(void *) __asm__("FUN_001f9af0");
+void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a68(void *, void *, float);
 void FUN_001f9a10(void *, void *, void *);
 int FUN_L00_002371e0(int, int, float);
@@ -2822,9 +2822,9 @@ void FUN_L00_0026fa00(char *p) {
         FUN_L00_00267a08(p);
         return;
     }
-    FUN_001f9a28(d, D_L00_00166DC0, q);
-    if (5.0f < FUN_001f9af0(d))
-        FUN_001f9bf8(d, d, 1.25f);
+    subtract_vector_xyz(d, D_L00_00166DC0, q);
+    if (5.0f < fast_vec_length(d))
+        fast_vec_normalize(d, d, 1.25f);
     else
         FUN_001f9a68(d, d, 0.25f);
     FUN_001f9a10(p + 0x10, q, d);
@@ -3305,7 +3305,7 @@ extern void FUN_001f9a28_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern M_270948 *FUN_L00_00270758_c(void *, void *, s32, s32) __asm__("FUN_L00_00270758");
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_00213260_c(s32) __asm__("FUN_00213260");
-extern s32 FUN_001efa68(void *, void *, s32, s32, void *);
+extern s32 coll_line_fix(void *, void *, s32, s32, void *) __asm__("FUN_001efa68");
 extern f32 FUN_001fa6c0_c(s32) __asm__("FUN_001fa6c0");
 extern s32 FUN_001fa6d0_c(f32) __asm__("FUN_001fa6d0");
 
@@ -3358,7 +3358,7 @@ void FUN_L00_00270948(M_270948 *m) {
             goto kill;
         e->b18 = fl | 8;
         if (!FUN_00213260_c(3))
-            hit = FUN_001efa68(&p, &v, 0, e->x1C, 0) != 0;
+            hit = coll_line_fix(&p, &v, 0, e->x1C, 0) != 0;
     } else {
         c.x10 = e->x1C;
         c.x1C = 1.0f;
@@ -3366,7 +3366,7 @@ void FUN_L00_00270948(M_270948 *m) {
         c.x14 = 1;
         c.x20 = 1;
         if (!FUN_00213260_c(3))
-            hit = FUN_001efa68(&p, &v, 0, e->x1C, &c) != 0;
+            hit = coll_line_fix(&p, &v, 0, e->x1C, &c) != 0;
     }
     if (hit)
         e->b18 |= 8;

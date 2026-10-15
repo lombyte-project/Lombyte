@@ -245,13 +245,13 @@ unsigned char *FUN_L00_00271b18(u128 *a, u128 *b, float x) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272A88), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, float);
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_L00_00267a08(void *);
 
 void FUN_L00_00271be8(char *m) {
     char *v = m + 0x20;
     int t;
-    FUN_001f9a68(v, v, 0.975f);
+    fast_vec_scale(v, v, 0.975f);
     FUN_001f9a10(m + 0x10, m + 0x10, v);
     *(float *)(m + 0xC) += 14700.0f;
     m[8] += v[0x10];
@@ -302,7 +302,7 @@ extern V00271d20 D_L00_00173E60;
 void FUN_001f9a10(void *, void *, void *);
 s32 FUN_001f9770(void *);
 void FUN_L00_00267a08(void *);
-s32 FUN_001efa68(void *, void *, s32, s32, s32);
+s32 coll_line_fix(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void FUN_L00_00271d20(O00271d20 *o) {
     V00271d20 t;
     V00271d20 *acc = &o->acc;
@@ -316,7 +316,7 @@ void FUN_L00_00271d20(O00271d20 *o) {
     FUN_001f9a10(vel, vel, &t);
     if (FUN_001f9770(&o->xa)) {
         FUN_L00_00267a08(o);
-    } else if (FUN_001efa68(vel, pos, 0x10, acc->i[3], 0)) {
+    } else if (coll_line_fix(vel, pos, 0x10, acc->i[3], 0)) {
         o->pos.q = D_L00_00173E60.q;
         o->xa = 0;
     }
@@ -591,7 +591,7 @@ f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 void FUN_001f9a28(void *, void *, void *);
 f32 FUN_001f9af0(void *);
-void FUN_001f9bf8(void *, void *, f32);
+void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10(void *, void *, void *);
 void FUN_L00_002726d8(P_2726d8 *p) {
     Q_2726d8 *q = &p->q;
@@ -613,17 +613,17 @@ void FUN_L00_002726d8(P_2726d8 *p) {
     } else {
         f = FUN_001f9af0(&t) + r2;
     }
-    FUN_001f9bf8(&t, &t, f);
+    fast_vec_normalize(&t, &t, f);
     FUN_001f9a10((u8 *)p + 0x20, &p->pos, &t);
     *(f32 *)((u8 *)p + 0x1C) = sc;
     p->f2C = save;
 }
-void FUN_001f9a68(void *, void *, f32);
+void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9a10(void *, void *, void *);
 void FUN_L00_00267a08(void *);
 void FUN_L00_00272838(u8 *m) {
     s32 n;
-    FUN_001f9a68(m + 0x20, m + 0x20, 0.975f);
+    fast_vec_scale(m + 0x20, m + 0x20, 0.975f);
     FUN_001f9a10(m + 0x10, m + 0x10, m + 0x20);
     *(f32 *)(m + 0xC) += 6300.0f;
     n = m[4] - 4;
@@ -1168,7 +1168,7 @@ void FUN_L00_00273a68(struct EmberParticle *p) {
             m->vel.f[0] = random_float_between(-1.0f, 1.0f);
             m->vel.f[1] = random_float_between(-1.0f, 1.0f);
             m->vel.f[2] = 0.0f;
-            FUN_001f9bf8(&m->vel, &m->vel, random_float_between(1.5f, 3.0f) * frame_time);
+            fast_vec_normalize(&m->vel, &m->vel, random_float_between(1.5f, 3.0f) * frame_time);
             m->vel.f[2] = frame_time * 3.0f;
             t.q = p->pos.q;
             t.f[2] -= 1.5f;

@@ -10,13 +10,13 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00249488.c: func_L03_0024F6D8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9ab0(void *, void *);
-extern float FUN_001f9af0(void *);
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
-extern float FUN_001f9df8(float);
-extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_001f9bf8(void *, void *, float);
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void rotate_vector_by_quaternion(void *arg0, void *arg1, void *arg2) __asm__("FUN_00214800");
 
@@ -24,19 +24,19 @@ void FUN_L03_0024e6f8(float t, float *dst, float *a, float *b, int flag) {
     float q[4];
     float d, l, ang;
     fast_vec_cross(q, b, a);
-    FUN_001f9bf8(q, q, 1.0f);
-    d = FUN_001f9ab0(a, b);
+    fast_vec_normalize(q, q, 1.0f);
+    d = fast_vec_dot(a, b);
     if (flag == 0) {
-        l = FUN_001f9af0(a);
-        l = l * FUN_001f9af0(b);
+        l = fast_vec_length(a);
+        l = l * fast_vec_length(b);
         if (l == 0.0f) {
             qcopy(dst, a);
             return;
         }
         d = d / l;
     }
-    ang = (1.5707964f - FUN_001f9df8(d)) * 0.5f * t;
-    FUN_001f9a68(q, q, FUN_001f9de0(ang));
-    q[3] = FUN_001f9dc8(ang);
+    ang = (1.5707964f - fast_arc_sin(d)) * 0.5f * t;
+    fast_vec_scale(q, q, fast_sin(ang));
+    q[3] = fast_cos(ang);
     rotate_vector_by_quaternion(dst, a, q);
 }

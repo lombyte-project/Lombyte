@@ -9,17 +9,17 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D288), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001fa2d8(void *, void *);
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 /* Returns component d of c - a transformed by the matrix FUN_001fa2d8 builds from b. */
 float FUN_L00_0025c230(void *a, void *b, void *c, int d) {
     float v0[4], v1[4], v2[16];
     float *w = v1;
-    FUN_001f9a28(v0, c, a);
-    FUN_001fa2d8(v2, b);
-    FUN_001f9d20(w, v0, v2);
+    subtract_vector_xyz(v0, c, a);
+    transpose_rotation_matrix(v2, b);
+    transform_vector(w, v0, v2);
     return w[d];
 }
 #define NOT_SDA
@@ -32,17 +32,17 @@ typedef struct {
     int a[4];
 } Vq __attribute__((aligned(16)));
 
-extern float FUN_001f9ab0(void *, void *);
-extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_001f9bf8(void *, void *, float);
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 /* Sets a to b plus c (normalised) scaled by s times the dot of c and b. */
 void FUN_L00_0025c2b0(void *a, void *b, void *c, float s) {
     Vq t0, t1;
-    FUN_001f9bf8(&t1, c, 1.0f);
-    FUN_001f9a68(&t0, &t1, FUN_001f9ab0(&t1, b) * s);
-    FUN_001f9a28(a, b, &t0);
+    fast_vec_normalize(&t1, c, 1.0f);
+    fast_vec_scale(&t0, &t1, fast_vec_dot(&t1, b) * s);
+    subtract_vector_xyz(a, b, &t0);
 }
 
 #define NOT_SDA

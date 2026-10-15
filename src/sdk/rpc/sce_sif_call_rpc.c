@@ -39,7 +39,7 @@ extern s32 CreateSema();
 extern s32 DeleteSema();
 extern s32 WaitSema();
 extern s32 get_available_rpc_packet() __asm__("func_0011ACE8");
-extern s32 func_0011AD90();
+extern s32 clear_state_bits() __asm__("func_0011AD90");
 extern s32 sceSifSendCmd();
 extern s32 sceSifWriteBackDCache();
 s32 sceSifCallRpc(struct SifRpcClient *client, s32 rpc_number, s32 mode, s32 send_buf, s32 send_size, s32 recv_buf,
@@ -90,7 +90,7 @@ s32 sceSifCallRpc(struct SifRpcClient *client, s32 rpc_number, s32 mode, s32 sen
         if (sceSifSendCmd(0x8000000A, packet, 0x40, send_buf, client->server_buffer, send_size) != 0) {
             return 0;
         } else {
-            func_0011AD90(packet);
+            clear_state_bits(packet);
             return -2;
         }
     } else {
@@ -99,13 +99,13 @@ s32 sceSifCallRpc(struct SifRpcClient *client, s32 rpc_number, s32 mode, s32 sen
         semaphore_id = CreateSema(semaphore_parameters);
         client->semaphore_id = semaphore_id;
         if (semaphore_id < 0) {
-            func_0011AD90(packet);
+            clear_state_bits(packet);
             return -3;
         }
         packet->completion_mode = 1;
         if (sceSifSendCmd(0x8000000A, packet, 0x40, send_buf, client->server_buffer, send_size) == 0) {
             DeleteSema(client->semaphore_id);
-            func_0011AD90(packet);
+            clear_state_bits(packet);
             return -2;
         }
         WaitSema(client->semaphore_id);

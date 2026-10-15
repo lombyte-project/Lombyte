@@ -131,7 +131,7 @@ typedef struct {
 extern char D_L12_001F5B20[];
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern int FUN_001fa6e0(int, int, float);
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 int D_L12_00161A10 = 1;
 int D_L12_00161A14 = 0;
@@ -140,7 +140,7 @@ int D_L12_00161A18 = 1;
 int D_L12_00161A1C = 0x40602020;
 int D_L12_00161A20 = 0x40681818;
 extern short D_L12_00161A24 __attribute__((sda));
-extern void FUN_001fa298(void *, void *);
+extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void draw_geometry_quad(void *, void *, int);
 
 void FUN_L12_002ecac0(struct Moby *moby) {
@@ -150,7 +150,7 @@ void FUN_L12_002ecac0(struct Moby *moby) {
     float pos[4];
     float a, b;
     int i, col;
-    FUN_001fa298(m, &moby->rot_row0);
+    copy_matrix_rotation(m, &moby->rot_row0);
     qcopy(pos, &moby->pos);
     pos[2] = pos[2] + *(float *)(data + 8);
     pos[3] = 1.0f;
@@ -160,7 +160,7 @@ void FUN_L12_002ecac0(struct Moby *moby) {
     q.g[3] = (long)D_L12_00161A0C | ((long)D_L12_00161A10 << 2) |
              ((long)D_L12_00161A14 << 4) | ((long)D_L12_00161A18 << 6) |
              (0x8000L << 24);
-    col = FUN_001fa6e0(D_L12_00161A1C, D_L12_00161A20,
+    col = fast_tween_color(D_L12_00161A1C, D_L12_00161A20,
                        (fast_sin(*(float *)data) + 1.0f) * 0.5f);
     for (i = 0; i < 4; i++) {
         q.uv[i * 2] = 0.5f;
@@ -193,8 +193,8 @@ void FUN_L12_002ecac0(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EE068), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float FUN_001f9b20(void *);
-extern float FUN_001f9e90(float, float);
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
@@ -210,8 +210,8 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
         moby->state = 1;
         qcopy(&moby->pos, pos);
         qcopy(data, src);
-        moby->rot.z = FUN_001f9e90(*(float *)data, *(float *)(data + 4));
-        moby->rot.y = -FUN_001f9e90(FUN_001f9b20(data), *(float *)(data + 8));
+        moby->rot.z = fast_arc_tan(*(float *)data, *(float *)(data + 4));
+        moby->rot.y = -fast_arc_tan(vector_length_xy(data), *(float *)(data + 8));
         r = scale_game_frames(seed);
         *(int *)(data + 0x10) = owner;
         *(float *)(data + 0x18) = f2;

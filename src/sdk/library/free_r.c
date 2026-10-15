@@ -14,8 +14,8 @@
 
 struct _reent;
 
-extern void func_001154C0(struct _reent *);
-extern void func_001154C8(struct _reent *);
+extern void noop_core_utility(struct _reent *) __asm__("func_001154C0");
+extern void noop_core_utility_secondary(struct _reent *) __asm__("func_001154C8");
 extern s32 _malloc_trim_r(struct _reent *ptr, u32 pad);
 
 extern u64 D_0012FB90[]; /* trim_threshold */
@@ -111,7 +111,7 @@ void _free_r(struct _reent *ptr, void *mem) {
     if (mem == 0)
         return;
 
-    func_001154C0(ptr);
+    noop_core_utility(ptr);
 
     p = mem2chunk(mem);
     hd = p->size;
@@ -134,7 +134,7 @@ void _free_r(struct _reent *ptr, void *mem) {
         top = p;
         if ((unsigned long)(sz) >= (unsigned long)trim_threshold)
             _malloc_trim_r(ptr, top_pad);
-        func_001154C8(ptr);
+        noop_core_utility_secondary(ptr);
         return;
     }
 
@@ -168,5 +168,5 @@ void _free_r(struct _reent *ptr, void *mem) {
     if (!islr)
         frontlink(p, sz, idx, bck, fwd);
 
-    func_001154C8(ptr);
+    noop_core_utility_secondary(ptr);
 }

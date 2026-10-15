@@ -17,7 +17,7 @@ struct Pkt611c0 {
     int *p;
 };
 extern struct Pkt611c0 D_L12_001611C0;
-extern int FUN_001fa728(char *, float);
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L01_0021fa98(int, int, int, int, int, int);
 extern void FUN_L12_002667fc(int, int, int, int);
@@ -42,7 +42,7 @@ void FUN_L12_002bc210(void *list_, int count, int tex0, int tex1) {
     }
     if (count > 0) {
         for (i = count; i != 0; i--) {
-            idx = FUN_001fa728(list, 256.0f);
+            idx = fast_bsphere_check(list, 256.0f);
             if (idx != -1) {
                 FUN_L12_002667fc(*(int *)(list + 0x1C), *(int *)(list + 0x10),
                                  *(int *)(list + 0x18), 0x70001000);

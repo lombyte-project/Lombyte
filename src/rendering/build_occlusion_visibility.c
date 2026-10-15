@@ -18,10 +18,10 @@ extern u8 *occl_previous_grid __asm__("D_0015F650");
 
 extern u8 *parse_occlusion_grid(s32, s32, s32) __asm__("FUN_001f2690");
 extern u8 *get_occlusion_grid_from_pair(s32, s32, s32, s32, s32, s32, f32) __asm__("FUN_001f2768");
-extern void FUN_001f9810(u8 *, s32);
-extern void FUN_001f98d0(u8 *, u8 *, s32);
-extern void FUN_001f98f8(u8 *, u8 *, u8 *, s32);
-extern f32 func_001FA6C0(s32);
+extern void fast_mem_zero16(u8 *, s32) __asm__("FUN_001f9810");
+extern void fast_mem_copy(u8 *, u8 *, s32) __asm__("FUN_001f98d0");
+extern void fast_mem_or16(u8 *, u8 *, u8 *, s32) __asm__("FUN_001f98f8");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void fill_transfer_words(u8 *, s32, s32) __asm__("func_001F97E8");
 
@@ -41,38 +41,38 @@ void build_occlusion_visibility(void) {
     vis = parse_occlusion_grid(x, y, z);
     if (vis != 0) {
         occl_invalid_grid = 0;
-        FUN_001f98d0(occl_visibility, vis, 0x80);
+        fast_mem_copy(occl_visibility, vis, 0x80);
         occl_previous_grid = vis;
     } else {
         occl_invalid_grid = 1;
         if (D_0015F648 == 0) {
             gx = get_occlusion_grid_from_pair(x - 1, y, z, x + 1, y, z,
-                                              D_00186F40.x * scale - func_001FA6C0(x));
+                                              D_00186F40.x * scale - convert_integer_to_float(x));
             gy = get_occlusion_grid_from_pair(x, y - 1, z, x, y + 1, z,
-                                              D_00186F40.y * scale - func_001FA6C0(y));
+                                              D_00186F40.y * scale - convert_integer_to_float(y));
             gz = get_occlusion_grid_from_pair(x, y, z - 1, x, y, z + 1,
-                                              D_00186F40.z * scale - func_001FA6C0(z));
+                                              D_00186F40.z * scale - convert_integer_to_float(z));
             if (gx != 0 || gy != 0 || gz != 0) {
-                FUN_001f9810(occl_visibility_merged, 0x80);
+                fast_mem_zero16(occl_visibility_merged, 0x80);
                 if (gx != 0) {
-                    FUN_001f98f8(occl_visibility_merged, occl_visibility_merged, gx, 0x80);
+                    fast_mem_or16(occl_visibility_merged, occl_visibility_merged, gx, 0x80);
                 }
                 if (gy != 0) {
-                    FUN_001f98f8(occl_visibility_merged, occl_visibility_merged, gy, 0x80);
+                    fast_mem_or16(occl_visibility_merged, occl_visibility_merged, gy, 0x80);
                 }
                 if (gz != 0) {
-                    FUN_001f98f8(occl_visibility_merged, occl_visibility_merged, gz, 0x80);
+                    fast_mem_or16(occl_visibility_merged, occl_visibility_merged, gz, 0x80);
                 }
                 vis = occl_visibility_merged;
                 occl_previous_grid = vis;
-                FUN_001f98d0(occl_visibility, vis, 0x80);
+                fast_mem_copy(occl_visibility, vis, 0x80);
             }
         }
         if (vis == 0) {
             switch (D_0015F648) {
             case 0:
                 if (camera_position_publication_suppressed[0] == 0 && occl_previous_grid != 0) {
-                    FUN_001f98d0(occl_visibility, occl_previous_grid, 0x80);
+                    fast_mem_copy(occl_visibility, occl_previous_grid, 0x80);
                 } else {
                     fill_transfer_words(occl_visibility, -1, 0x80);
                 }
@@ -86,10 +86,10 @@ void build_occlusion_visibility(void) {
                     bx = 0.0f < D_00186F40.x - p[0];
                     by = 0.0f < D_00186F40.y - p[1];
                     bz = 0.0f < D_00186F40.z - p[2];
-                    FUN_001f98d0(occl_visibility, (u8 *)p + ((bz + by * 2 + bx * 4) * 0x80 + 0x10),
+                    fast_mem_copy(occl_visibility, (u8 *)p + ((bz + by * 2 + bx * 4) * 0x80 + 0x10),
                                  0x80);
                 } else if (camera_position_publication_suppressed[0] == 0 && occl_previous_grid != 0) {
-                    FUN_001f98d0(occl_visibility, occl_previous_grid, 0x80);
+                    fast_mem_copy(occl_visibility, occl_previous_grid, 0x80);
                 } else {
                     fill_transfer_words(occl_visibility, -1, 0x80);
                 }

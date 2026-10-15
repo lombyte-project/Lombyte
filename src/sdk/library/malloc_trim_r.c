@@ -13,8 +13,8 @@
 
 struct _reent;
 
-extern void func_001154C0(struct _reent *);
-extern void func_001154C8(struct _reent *);
+extern void noop_core_utility(struct _reent *) __asm__("func_001154C0");
+extern void noop_core_utility_secondary(struct _reent *) __asm__("func_001154C8");
 extern void *_sbrk_r(struct _reent *ptr, s32 delta);
 
 extern u32 D_0012F788[]; /* __malloc_av_ bins (pointer array) */
@@ -45,18 +45,18 @@ s32 _malloc_trim_r(struct _reent *ptr, u32 pad) {
     u8 *new_brk;
     u64 pagesz = malloc_getpagesize;
 
-    func_001154C0(ptr);
+    noop_core_utility(ptr);
 
     top_size = chunksize(top);
     extra = ((top_size - pad - MINSIZE + (pagesz - 1)) / pagesz - 1) * pagesz;
 
     if (extra < (s64)pagesz) {
-        func_001154C8(ptr);
+        noop_core_utility_secondary(ptr);
         return 0;
     } else {
         current_brk = (u8 *)MORECORE(0);
         if (current_brk != (u8 *)(top) + top_size) {
-            func_001154C8(ptr);
+            noop_core_utility_secondary(ptr);
             return 0;
         } else {
             new_brk = (u8 *)MORECORE(-extra);
@@ -68,13 +68,13 @@ s32 _malloc_trim_r(struct _reent *ptr, u32 pad) {
                     set_head(top, top_size | 1);
                 }
                 check_chunk(top);
-                func_001154C8(ptr);
+                noop_core_utility_secondary(ptr);
                 return 0;
             } else {
                 set_head(top, (top_size - extra) | 1);
                 sbrked_mem -= (u32)extra;
                 check_chunk(top);
-                func_001154C8(ptr);
+                noop_core_utility_secondary(ptr);
                 return 1;
             }
         }

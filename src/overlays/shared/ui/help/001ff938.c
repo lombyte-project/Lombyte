@@ -22,12 +22,12 @@ extern void FUN_L00_002059d8(void);
 extern void FUN_L00_002061f0(void);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00207d00(void);
-extern int FUN_001f96f8(int);
-extern float FUN_001fa6c0(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float FUN_001fa6c0_inherited(void) __asm__("FUN_001fa6c0");
-extern float FUN_001f9de0(float);
-extern int FUN_001fa6d0(float);
-extern u32 FUN_001fa6e0(f32, u32, u32);
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern u32 fast_tween_color(f32, u32, u32) __asm__("FUN_001fa6e0");
 extern void FUN_L00_00216de8(int, int);
 extern void FUN_L00_00208b60(void);
 extern void FUN_L00_00257024(void *);
@@ -81,16 +81,16 @@ void FUN_L15_001ff938(void) {
             if (D_0015EDB1 != 0)
                 *(float *)((u8 *)&D_L15_0017ACC0_d + 0x150C) = 1.9f;
             alpha = 0x80;
-            period = FUN_001f96f8(0xAA);
+            period = scale_game_frames(0xAA);
             if (base->unk22E0 == 2)
-                period = FUN_001f96f8(0x32);
+                period = scale_game_frames(0x32);
             else if (base->unk22E0 == 1)
-                period = FUN_001f96f8(0x5A);
+                period = scale_game_frames(0x5A);
         }
-        pulse = FUN_001f9de0((((float)(D_L15_0015F5CC % period) / FUN_001fa6c0(period)) * 2.0f) * 3.1415927f + -3.1415927f);
-        red = FUN_001fa6d0(pulse * 20.0f) + 0x32;
-        green = FUN_001fa6d0(pulse * 70.0f) + 0xB4;
-        blue = FUN_001fa6d0(pulse * 10.0f) + 0x14;
+        pulse = fast_sin((((float)(D_L15_0015F5CC % period) / convert_integer_to_float(period)) * 2.0f) * 3.1415927f + -3.1415927f);
+        red = truncate_float_to_s32(pulse * 20.0f) + 0x32;
+        green = truncate_float_to_s32(pulse * 70.0f) + 0xB4;
+        blue = truncate_float_to_s32(pulse * 10.0f) + 0x14;
         if (green > 0xFF) green = 0xFF;
         if (red > 0xFF) red = 0xFF;
         *(u16 *)((u8 *)hero.moby + 0x34) |= 0x10;
@@ -103,7 +103,7 @@ void FUN_L15_001ff938(void) {
             channels = (alpha << 24) | (blue << 16) | (green << 8);
             color = channels | red;
         }
-        *(u32 *)((u8 *)hero.moby + 0x90) = FUN_001fa6e0(0.1f, *(u32 *)((u8 *)hero.moby + 0x90), color);
+        *(u32 *)((u8 *)hero.moby + 0x90) = fast_tween_color(0.1f, *(u32 *)((u8 *)hero.moby + 0x90), color);
         for (i = 0; i < 3; i++)
             moby_point_position(hero.moby, i, (u8 *)&hero + 0x1D50 + i * 16);
         {
@@ -115,7 +115,7 @@ void FUN_L15_001ff938(void) {
             green = moby[0x91];
             red = moby[0x90];
             if (base->unk22DE != 0)
-                alpha = FUN_001fa6d0((FUN_001fa6c0(base->unk22DE) / FUN_001fa6c0(0x12)) * (float)alpha);
+                alpha = truncate_float_to_s32((convert_integer_to_float(base->unk22DE) / convert_integer_to_float(0x12)) * (float)alpha);
             color = (alpha << 24) | (blue << 16) | (green << 8);
             color |= red;
             *(u32 *)((u8 *)base + 0x22E4) = color;
@@ -172,9 +172,9 @@ void FUN_L15_00200788(void) {
 
 
 extern float D_L15_0017ACC0_d __asm__("D_L15_0017ACC0") __attribute__((section(".data")));
-extern void FUN_001f9cf8(void *, void *, void *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001fa050(float *, float *);
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
@@ -193,9 +193,9 @@ void FUN_L15_002007d8(void) {
             qcopy(m + 0x10, cam + 0x10);
             *(u128 *)v = 0;
             v[2] = 0.21f;
-            FUN_001f9cf8(v, v, cam + 0xC0);
-            FUN_001fa050(w, &D_L15_0017ACC0_d);
-            FUN_001f9d20(v, v, w);
+            transform_vector_by_basis(v, v, cam + 0xC0);
+            euler_rotation_matrix(w, &D_L15_0017ACC0_d);
+            transform_vector(v, v, w);
             add_vector_xyz(((char *)base->unk86C) + 0x10, ((char *)base->unk86C) + 0x10, v);
         }
     }

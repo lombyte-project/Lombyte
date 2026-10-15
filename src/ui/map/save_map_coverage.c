@@ -5,22 +5,22 @@
 extern s32 D_0013D560[];
 extern void fill_transfer_words() __asm__("func_001F97E8");
 extern s32 func_001FA860();
-extern void func_00208030();
-extern void func_00208810();
+extern void downsample_map_coverage() __asm__("func_00208030");
+extern void noop_memory_callback() __asm__("func_00208810");
 
 void save_map_coverage(s32 buffer) __asm__("FUN_00207b08");
 
 void save_map_coverage(s32 buffer) {
     s32 n;
 
-    func_00208810();
+    noop_memory_callback();
     if (level_map_selection.unk28 == 0) {
         fill_transfer_words(buffer, 0, 0x800);
         return;
     }
     n = func_001FA860(buffer, 0x800, level_map_selection.unk14, level_map_selection.mask);
     if (n == -1) {
-        func_00208030(buffer);
+        downsample_map_coverage(buffer);
     }
     if (D_0013D560[current_level_index] < n) {
         D_0013D560[current_level_index] = n;

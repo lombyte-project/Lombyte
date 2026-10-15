@@ -11,8 +11,8 @@ struct Vec4 {
     f32 w;
 };
 
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a28(void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 
@@ -36,14 +36,14 @@ void draw_rotated_sprite(s32 w, s32 h, s64 buf, f32 x, f32 y, f32 cx, f32 cy, f3
     sz.y = cy * fast_cos(ang);
     off.x = -cx * fast_cos(ang);
     off.y = cx * fast_sin(ang);
-    FUN_001f9a10(&p0, &pos, &sz);
-    FUN_001f9a28(&p0, &p0, &off);
-    FUN_001f9a10(&p1, &pos, &sz);
-    FUN_001f9a10(&p1, &p1, &off);
-    FUN_001f9a28(&p2, &pos, &sz);
-    FUN_001f9a28(&p2, &p2, &off);
-    FUN_001f9a28(&p3, &pos, &sz);
-    FUN_001f9a10(&p3, &p3, &off);
+    add_vector_xyz(&p0, &pos, &sz);
+    subtract_vector_xyz(&p0, &p0, &off);
+    add_vector_xyz(&p1, &pos, &sz);
+    add_vector_xyz(&p1, &p1, &off);
+    subtract_vector_xyz(&p2, &pos, &sz);
+    subtract_vector_xyz(&p2, &p2, &off);
+    subtract_vector_xyz(&p3, &pos, &sz);
+    add_vector_xyz(&p3, &p3, &off);
     render_packet_cursor.tag->tag = 0x10000007;
     render_packet_cursor.tag->addr = 0;
     render_packet_cursor.tag->vif0 = 0;

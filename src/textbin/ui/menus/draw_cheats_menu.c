@@ -24,7 +24,7 @@ struct CheatsMenu {
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
-extern void func_001153FC(void *, s32, u32);
+extern void memset(void *, s32, u32) __asm__("func_001153FC");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void font_print_window_regular(FontWindow *, u64, char *, s32) __asm__("func_001F7580");
 extern void font_print_large(s32, s32, u64, char *, s32) __asm__("func_001F6530");
@@ -47,7 +47,7 @@ s32 draw_cheats_menu(struct CheatsMenu *menu) {
     vu1_add_g_sregister(0x47, 0x2004B);
     setup_gif_paging(0);
     if ((menu->flags & 1) && menu->entries->text_id == 0) {
-        func_001153FC(window_fields, 0, sizeof(window_fields));
+        memset(window_fields, 0, sizeof(window_fields));
         window_fields[1] = menu->height + 1;
         window_fields[3] = menu->width + 1;
         window_fields[4] = menu->width >> 1;

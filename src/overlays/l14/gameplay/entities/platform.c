@@ -64,7 +64,7 @@ extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int *D_L14_001B0BB0[];
 extern int D_L14_0015F70C;
 extern int tick_countdown_32(void *);
-extern void FUN_001f9a40(void *, void *, void *, float);
+extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern char *D_L14_001B0F30_a[] __asm__("D_L14_001B0BB0");
 
 int FUN_L14_002d64d0(struct Moby *m) {
@@ -74,7 +74,7 @@ int FUN_L14_002d64d0(struct Moby *m) {
     float t;
     ok = tick_countdown_32(d + 0x6C) != 0;
     t = convert_integer_to_float(*(int *)(d + 0x6C));
-    FUN_001f9a40(&m->pos, ent + 0x10, D_L14_001B0F30_a[*(int *)(d + 0x84)] + 0x10,
+    lerp_vector(&m->pos, ent + 0x10, D_L14_001B0F30_a[*(int *)(d + 0x84)] + 0x10,
                  t * *(float *)(d + 0x70));
     return ok;
 }

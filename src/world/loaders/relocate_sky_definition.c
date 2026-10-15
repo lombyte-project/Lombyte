@@ -29,7 +29,7 @@ struct SpriteFile {
 };
 
 extern struct SpriteFile *D_0016045C;
-extern s16 FUN_001f97a0(s32);
+extern s16 log2dim(s32) __asm__("FUN_001f97a0");
 
 /* Prepares the sky data of a level. The sky block starts with a header:
  *   0x00  background colour (RGBA), set only on some levels
@@ -70,8 +70,8 @@ void relocate_sky_definition(struct SpriteFile *f) {
         d = *src++;
         ((struct Sprite *)D_0016045C->sprites)[i].y = a >> 4;
         ((struct Sprite *)D_0016045C->sprites)[i].x = b >> 4;
-        ((struct Sprite *)D_0016045C->sprites)[i].w = FUN_001f97a0(c);
-        ((struct Sprite *)D_0016045C->sprites)[i].h = FUN_001f97a0(d);
+        ((struct Sprite *)D_0016045C->sprites)[i].w = log2dim(c);
+        ((struct Sprite *)D_0016045C->sprites)[i].h = log2dim(d);
         ((struct Sprite *)D_0016045C->sprites)[i].unk0 = 0;
     }
     for (k = 0; k < D_0016045C->ngroups; k++) {

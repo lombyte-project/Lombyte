@@ -16,7 +16,7 @@ struct MenuPacket {
     u8 pad_12[6];
 };
 
-extern void func_001153FC();
+extern void memset() __asm__("func_001153FC");
 extern void setup_gif_paging() __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
 extern void font_print_window_regular(void *, u64, void *, s32) __asm__("func_001F7580");
@@ -35,7 +35,7 @@ s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     s32 first_y = 4;
     s16 pos_x = 0x18;
 
-    func_001153FC(&tmp, 0, 0x18);
+    memset(&tmp, 0, 0x18);
     tmp.height = menu->height;
     tmp.width = menu->width;
     tmp.unk10 = 0x10;

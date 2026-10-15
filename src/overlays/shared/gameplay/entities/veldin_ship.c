@@ -481,7 +481,7 @@ void FUN_001f9a10(void *, void *, void *);
 f32 FUN_001f99c0(f32);
 f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-s32 FUN_001efa68(void *, void *, s32, s32, s32);
+s32 coll_line_fix(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void break_crate(M2d1428 *, s32, s32) __asm__("FUN_L00_002d09b8");
 void FUN_L00_002d0538_c(M2d1428 *) __asm__("FUN_L00_002d0538");
 void FUN_L00_002604f0(M2d1428 *, void *, void *, void *, void *, void *);
@@ -762,7 +762,7 @@ void FUN_L00_002d1428(M2d1428 *m) {
             qcopy(&g, &m->pos);
             e.z += o->fB0 * 0.75f;
             g.z += o->vel.z;
-            hit = FUN_001efa68(&e, &g, 2, 0, 0);
+            hit = coll_line_fix(&e, &g, 2, 0, 0);
             qcopy(&c2, &D_L00_00173E60);
         } else {
             qcopy(&c2, &o->parent->pos);
@@ -943,7 +943,7 @@ typedef struct M2d1e80 {
 } M2d1e80;
 extern s32 D_L00_0015F5C4;
 extern s32 D_L00_0016C890[];
-void FUN_0020cca8(void *, s32, void *);
+void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
 void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 void FUN_L00_002d19b0(void);
 void FUN_L00_002d1e80(M2d1e80 *m) {
@@ -960,7 +960,7 @@ void FUN_L00_002d1e80(M2d1e80 *m) {
         m->vis = 1;
         m->flags &= 0xFFFE;
     }
-    FUN_0020cca8(m, 0, v);
+    build_moby_bone_transform(m, 0, v);
     if (m->vis)
         enqueue_callback_list_1(FUN_L00_002d19b0, m);
 }
@@ -1451,18 +1451,18 @@ extern f32 D_L00_00161940 __attribute__((sda));
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern f32 FUN_001f9b80(void *, void *);
-extern f32 FUN_001f9e90(f32, f32);
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
-extern void FUN_001e93e8(void *, void *);
-extern void FUN_001f9bf8(void *, void *, f32);
-extern void FUN_001f9ad8(void *, void *, void *);
-extern void FUN_001fa2d8(void *, void *);
-extern void FUN_001fa378(void *, void *, void *);
-extern void FUN_00214260(void *, void *);
+extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
 extern void FUN_L00_00259f50(void *, void *);
-extern void FUN_001fa400(void *, void *, void *, f32);
+extern void quaternion_nlerp(void *, void *, void *, f32) __asm__("FUN_001fa400");
 extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_0028df38(s32, s32);
@@ -1529,8 +1529,8 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
         if (hero.unk2040 != 0 && hero.unk2040->oclass == 0x25D && hero.unk2040->state != 0xFE &&
             hero.unk2040->state != 0xFD) {
             pitch = FUN_001f9b80(&vars->pos, &hero.unk2040->pos);
-            pitch = FUN_001f9e90(pitch, hero.unk2040->pos.z - vars->pos.f[2]);
-            yaw = FUN_001f9e90(hero.unk2040->pos.x - vars->pos.f[0], hero.unk2040->pos.y - vars->pos.f[1]);
+            pitch = fast_arc_tan(pitch, hero.unk2040->pos.z - vars->pos.f[2]);
+            yaw = fast_arc_tan(hero.unk2040->pos.x - vars->pos.f[0], hero.unk2040->pos.y - vars->pos.f[1]);
             yaw = fast_subtract_rotations(yaw, hero.motion.rot.f[2]);
             pitch = fast_subtract_rotations(pitch, -1.5707964f);
             abs_yaw = FUN_001f99c0(yaw);
@@ -1550,33 +1550,33 @@ void FUN_L00_002d2ee8(struct Moby *moby) {
             pitch = fast_add_rotations(pitch, -1.5707964f);
             build_spherical_offset(v, -3.0f, yaw, pitch);
             FUN_001f9a10(w, &vars->pos, v);
-            FUN_001e93e8(&vars->pos, w);
-            FUN_001f9bf8(m[D_L00_00161920], v, (f32)D_L00_0016192C);
-            FUN_001f9ad8(m[D_L00_00161924], m[D_L00_00161920], &D_L00_00161940);
-            FUN_001f9bf8(m[D_L00_00161924], m[D_L00_00161924], (f32)D_L00_00161930);
-            FUN_001f9ad8(m[D_L00_0016191C], m[D_L00_00161924], m[D_L00_00161920]);
+            noop_main_callback(&vars->pos, w);
+            fast_vec_normalize(m[D_L00_00161920], v, (f32)D_L00_0016192C);
+            fast_vec_cross(m[D_L00_00161924], m[D_L00_00161920], &D_L00_00161940);
+            fast_vec_normalize(m[D_L00_00161924], m[D_L00_00161924], (f32)D_L00_00161930);
+            fast_vec_cross(m[D_L00_0016191C], m[D_L00_00161924], m[D_L00_00161920]);
             m[3][2] = zero;
             m[3][1] = zero;
             m[3][0] = zero;
             m[3][3] = one;
-            FUN_0020cca8(moby, 2, m2);
-            FUN_001f9bf8(m2[0], m2[0], one);
-            FUN_001f9bf8(m2[1], m2[1], one);
-            FUN_001f9bf8(m2[2], m2[2], one);
-            FUN_001fa2d8(m3, m2);
+            build_moby_bone_transform(moby, 2, m2);
+            fast_vec_normalize(m2[0], m2[0], one);
+            fast_vec_normalize(m2[1], m2[1], one);
+            fast_vec_normalize(m2[2], m2[2], one);
+            transpose_rotation_matrix(m3, m2);
             m3[3][2] = zero;
             m3[3][1] = zero;
             m3[3][0] = zero;
             m3[3][3] = one;
-            FUN_001fa378(m4, m3, m);
-            FUN_00214260(u, m4);
+            multiply_matrix(m4, m3, m);
+            matrix_to_quaternion(u, m4);
         } else {
             *(u128 *)w = 0;
             FUN_L00_00259f50(u, w);
         }
         qcopy(&vars->unk30, v);
-        FUN_001fa400(D_L00_001E1170, D_L00_001E1170, u, 0.1f);
-        FUN_0020cca8(moby, 3, w);
+        quaternion_nlerp(D_L00_001E1170, D_L00_001E1170, u, 0.1f);
+        build_moby_bone_transform(moby, 3, w);
         qcopy(&vars->unk30, w);
         if (controller_state_lui.pressed & 0x20) {
             vars->unk24 = 0;
@@ -2748,10 +2748,10 @@ extern void FUN_L00_002d5988_2d5de8(struct Moby *, Path *, s32) __asm__("FUN_L00
 extern f32 FUN_001f9b48(void *, void *);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, f32);
-extern void FUN_001f9bf8(void *, void *, f32);
-extern f32 FUN_001f9af0(void *);
-extern f32 FUN_001f9e90(f32, f32);
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
 extern f32 FUN_001fa580(f32, f32);
@@ -2768,7 +2768,7 @@ extern void FUN_L00_00298840(s32);
 extern void FUN_L00_00299460(s32);
 extern void FUN_L00_00262d38(s32);
 extern void FUN_L00_00266858(struct Moby *, s32);
-extern void FUN_0020b178(s32, s32);
+extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern void FUN_0020c828(struct Moby *);
 
 /* Store each segment's length in its start point's w. */
@@ -2871,7 +2871,7 @@ void FUN_L00_002d5de8(struct Moby *moby)
             moby->state = 2;
             break;
         }
-        heading = FUN_001f9e90(D_0013F350.target.v.x - moby->pos.x, D_0013F350.target.v.y - moby->pos.y);
+        heading = fast_arc_tan(D_0013F350.target.v.x - moby->pos.x, D_0013F350.target.v.y - moby->pos.y);
         moby->rot.z = spring_turn_2d5de8(moby->rot.z, heading, 0.01f, 0.3f, 0.1f, &infobot->spin[2]);
         moby->rot.y = spring_turn_2d5de8(moby->rot.y, 0.0f, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &infobot->spin[1]);
         moby->rot.x = spring_turn_2d5de8(moby->rot.x, 0.0f, D_0015ED70 * 1.0471976f, D_0015ED70 * 2.0943952f, D_0015ED6C * 1.5707964f, &infobot->spin[0]);
@@ -2913,7 +2913,7 @@ void FUN_L00_002d5de8(struct Moby *moby)
         moby->state = 6;
         infobot->attach = -1;
         MPOS(moby)->q = D_L00_001B04B0[infobot->path]->pts[0].q;
-        moby->rot.z = FUN_001f9e90(D_L00_001B04B0[infobot->path]->pts[1].v.x - D_L00_001B04B0[infobot->path]->pts[0].v.x,
+        moby->rot.z = fast_arc_tan(D_L00_001B04B0[infobot->path]->pts[1].v.x - D_L00_001B04B0[infobot->path]->pts[0].v.x,
                                 D_L00_001B04B0[infobot->path]->pts[1].v.y - D_L00_001B04B0[infobot->path]->pts[0].v.y);
         measure_path(D_L00_001B04B0[infobot->path]);
         break;
@@ -2950,20 +2950,20 @@ void FUN_L00_002d5de8(struct Moby *moby)
             fraction = 1.0f;
         }
         FUN_001f9a28(&point, &path->pts[segment + 1], &path->pts[segment]);
-        FUN_001f9a68(&point, &point, fraction);
+        fast_vec_scale(&point, &point, fraction);
         FUN_001f9a10(&point, &point, &path->pts[segment]);
-        heading = FUN_001f9e90(path->pts[segment + 1].v.x - path->pts[segment].v.x,
+        heading = fast_arc_tan(path->pts[segment + 1].v.x - path->pts[segment].v.x,
                          path->pts[segment + 1].v.y - path->pts[segment].v.y);
         moby->rot.z = spring_turn_2d5de8(moby->rot.z, heading, 0.01f, 0.3f, 0.1f, &infobot->spin[2]);
         pos = &step;
         FUN_001f9a28(pos, &point, MPOS(moby));
-        distance = FUN_001f9af0(pos);
+        distance = fast_vec_length(pos);
         if (infobot->speed < distance) {
             distance = infobot->speed;
         }
-        FUN_001f9bf8(pos, pos, distance);
+        fast_vec_normalize(pos, pos, distance);
         FUN_001f9a10(MPOS(moby), MPOS(moby), pos);
-        heading = FUN_001fa5c8(FUN_001f9e90(step.v.x, step.v.y), moby->rot.z);
+        heading = FUN_001fa5c8(fast_arc_tan(step.v.x, step.v.y), moby->rot.z);
         tilt_y = infobot->speed * 0.34906584f * FUN_001f9dc8(heading) / (D_0015ED6C * 16.0f);
         tilt_x = infobot->speed * -0.34906584f * FUN_001f9de0(heading) / (D_0015ED6C * 16.0f);
         moby->rot.y = spring_turn_2d5de8(moby->rot.y, tilt_y, D_0015ED70 * 0.5235988f, D_0015ED70 * 1.0471976f, D_0015ED6C * 0.7853982f, &infobot->spin[1]);
@@ -3025,7 +3025,7 @@ void FUN_L00_002d5de8(struct Moby *moby)
         if (D_L00_0015F5C4 == 2) {
             return;
         }
-        FUN_0020b178(0, -1);
+        memcard_save_data(0, -1);
         FUN_L00_00262d38(infobot->planet);
         FUN_0020c828(moby);
         return;
@@ -3200,12 +3200,12 @@ extern int D_L00_001619C8 __attribute__((sda));
 extern float D_L00_001619E0 __attribute__((sda));
 extern V D_L00_00166DC0;
 void FUN_0020c828_c(P *) __asm__("FUN_0020c828");
-float FUN_001f9af0(void *);
+float fast_vec_length(void *) __asm__("FUN_001f9af0");
 int FUN_L00_002a4dc8(int);
 int FUN_00213260_c(int) __asm__("FUN_00213260");
 void FUN_L00_002d7bf0(P *, int);
 void FUN_L00_002d7d58_c(P *, int) __asm__("FUN_L00_002d7d58");
-int FUN_001fa728(V *, float);
+int fast_bsphere_check(V *, float) __asm__("FUN_001fa728");
 float FUN_001f9b80(void *, void *);
 float FUN_L00_00257c48(float, float);
 void FUN_001f9d20(V *, V *, void *);
@@ -3233,15 +3233,15 @@ void FUN_L00_002d6f28(P *p) {
             FUN_0020c828_c(p);
             return;
         }
-        q->f48 = FUN_001f9af0(&D_L00_001600EC[q->idx].v1);
-        g = FUN_001f9af0(&D_L00_001600EC[q->idx].v0);
+        q->f48 = fast_vec_length(&D_L00_001600EC[q->idx].v1);
+        g = fast_vec_length(&D_L00_001600EC[q->idx].v0);
         if (q->f48 < g)
             q->f48 = g;
         if (q->extra)
             q->f44 = q->f48;
         else
             q->f44 = 3.0f;
-        q->f50 = FUN_001f9af0(&D_L00_001600EC[q->idx].v2) * 0.5f;
+        q->f50 = fast_vec_length(&D_L00_001600EC[q->idx].v2) * 0.5f;
         s = q->start = FUN_L00_002a4dc8(q->count + q->extra);
         e = s + q->count;
         for (i = s; i < e; i++) {
@@ -3267,7 +3267,7 @@ void FUN_L00_002d6f28(P *p) {
         qcopy(&v, tbl + 0x30);
         v.z += 9.0f;
         v.w = 10.0f;
-        if (FUN_001fa728(&v, D_L00_001619E0) < 0)
+        if (fast_bsphere_check(&v, D_L00_001619E0) < 0)
             return;
         if (q->flag42 && FUN_001f9b80(&D_L00_00166DC0, &p->pos) < 128.0f) {
             for (e = 0; e < D_L00_001619BC; e++) {

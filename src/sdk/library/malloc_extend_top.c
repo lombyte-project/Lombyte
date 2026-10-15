@@ -14,8 +14,8 @@
 
 struct _reent;
 
-extern void func_001154C0(struct _reent *);
-extern void func_001154C8(struct _reent *);
+extern void noop_core_utility(struct _reent *) __asm__("func_001154C0");
+extern void noop_core_utility_secondary(struct _reent *) __asm__("func_001154C8");
 extern void *_sbrk_r(struct _reent *ptr, s32 delta);
 extern void _free_r(struct _reent *ptr, void *mem);
 

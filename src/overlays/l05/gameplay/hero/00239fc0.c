@@ -122,12 +122,12 @@ void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void FUN_L00_002126b8_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 FUN_001efa68(void *, void *, s32, s32, s32);
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
-s32 FUN_001f0b58(void);
+s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
 u8 *FUN_002141f8(s32);
-f32 FUN_001f9b48(void *, void *);
-void FUN_00125180(void *, void *);
+f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 f32 FUN_L00_00233d30(void *);
 f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 void FUN_001f9a28(void *, void *, void *);
@@ -184,7 +184,7 @@ void FUN_L05_002402a8(void) {
         r = 3;
     }
     hero.unk12ED = r;
-    hero.ground_type = FUN_001f0b58();
+    hero.ground_type = collision_hit_material();
     if (hero.ground_type == 0) {
         hero.water_surface_z = resolve_camera_surface_height(D_L05_00174260, (u8 *)&hero.unk280);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.unk2F8 <= 0) {
@@ -235,9 +235,9 @@ void FUN_L05_002402a8(void) {
     if (HH.unk1C > 0) {
         qcopy((u8 *)&hero.ground_point, &HH.point);
         hero.ground_z.f = HH.point.f[2];
-        hero.ground_distance = FUN_001f9b48((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
+        hero.ground_distance = fast_vec_dist((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
         hero.ground_moby = (struct Moby *)HH.moby;
-        FUN_00125180((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
+        sceVu0Normalize((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
         hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
         FUN_001f9a28(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
@@ -312,7 +312,7 @@ d1:
             if (0.4f < FUN_001f99c0(f)) {
                 hero.unk2C0.f[i] = 0.0f;
             }
-            FUN_00125180(&v60, (u8 *)&HH.normal_x);
+            sceVu0Normalize(&v60, (u8 *)&HH.normal_x);
             FUN_L00_00216078(&v60, &v50);
             if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
                 hero.unk2C8.f[i] = v50.f[1];
@@ -492,7 +492,7 @@ extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float FUN_L00_00213350(void *);
 extern float FUN_L00_002339d0(float *v);
 extern float FUN_L00_00233a78(float *);
-extern void FUN_001f9c48(void *, void *, float);
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00212ff0(void);
 extern void FUN_L00_002137a8(void);
 extern void FUN_L00_002338d0(float *, float *);
@@ -565,7 +565,7 @@ void FUN_L05_002413e0(void) {
                     position = (float *)((char *)player + 0xE0);
                     length = vector_length_xy(position);
                     limit = player->speed_limit - 0.02f;
-                    if (limit < length) FUN_001f9c48(position, position, limit);
+                    if (limit < length) set_vector_length_xy(position, position, limit);
                 }
             }
         }

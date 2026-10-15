@@ -24,9 +24,9 @@ extern s32 surface_height_layer __asm__("D_001610E0") __attribute__((sda));
 
 extern s32 find_surface_height_map(f32, f32, f32) __asm__("func_00239D60");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern f32 func_001FA6C0(s32);
-extern void func_001F9AD8(f32 *, f32 *, f32 *);
-extern void func_001F9BF8(f32 *, f32 *, f32);
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern void fast_vec_cross(f32 *, f32 *, f32 *) __asm__("func_001F9AD8");
+extern void fast_vec_normalize(f32 *, f32 *, f32) __asm__("func_001F9BF8");
 
 /* Each tile is 0x1190 bytes, with three 0x5C0-byte sample banks. The rounded
    cell indices use signed fractions, so interpolation can extrapolate on
@@ -65,9 +65,9 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     fraction_y = y - fraction_y;
     column = truncate_float_to_s32(fraction_x / surface_height_grid.cell_width);
     row = truncate_float_to_s32(*&fraction_y / surface_height_grid.cell_height);
-    fraction_x -= func_001FA6C0(column) * surface_height_grid.cell_width;
+    fraction_x -= convert_integer_to_float(column) * surface_height_grid.cell_width;
     weight_x = fraction_x / surface_height_grid.cell_width;
-    fraction_y -= func_001FA6C0(row) * surface_height_grid.cell_height;
+    fraction_y -= convert_integer_to_float(row) * surface_height_grid.cell_height;
     /* Divide the signed remainder after rounding the row, before choosing the sample bank. */
     weight_y = fraction_y / surface_height_grid.cell_height;
     h00 = tile->layers[surface_height_layer].samples[row][column];
@@ -106,8 +106,8 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
         y_tangent[1] = surface_height_grid.cell_height;
         y_tangent[2] = h01 - h00;
         y_tangent[3] = 1.0f;
-        func_001F9AD8(normal, x_tangent, y_tangent);
-        func_001F9BF8(normal, normal, 1.0f);
+        fast_vec_cross(normal, x_tangent, y_tangent);
+        fast_vec_normalize(normal, normal, 1.0f);
     }
     return 1;
 }

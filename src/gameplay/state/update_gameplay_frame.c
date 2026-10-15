@@ -48,20 +48,20 @@ extern s32 intro_overlay_alpha __asm__("D_0015EF50");
 extern s32 language_intro_overlay_alpha __asm__("D_0015EF54");
 extern s32 intro_overlay_timer __asm__("D_0015EF58");
 extern void InitializeTransferCommand(void);
-extern void func_001E9410(RenderSequenceActor *);
-extern void func_001E9428(void);
-extern void func_001E9430(void);
+extern void noop_callback_e(RenderSequenceActor *) __asm__("func_001E9410");
+extern void noop_callback_h(void) __asm__("func_001E9428");
+extern void noop_callback_i(void) __asm__("func_001E9430");
 extern void transition_update_movie_camera(void) __asm__("func_001EAF88");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void func_001F9A10(Vec4 *, Vec4 *, Vec4 *);
-extern void func_001F9A68(Vec4 *, Vec4 *, f32);
+extern void add_vector_xyz(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9A10");
+extern void fast_vec_scale(Vec4 *, Vec4 *, f32) __asm__("func_001F9A68");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 func_001FA6C0(s32);
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void update_mode_freeze(void) __asm__("func_001FCE28");
 extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern void update_moby_animation_state(RenderSequenceActor *) __asm__("func_0020C880");
-extern void func_0020DEF8(RenderSequenceActor *);
-extern void func_002192A8(void);
+extern void refresh_moby_spatial_bounds(RenderSequenceActor *) __asm__("func_0020DEF8");
+extern void update_menu_system(void) __asm__("func_002192A8");
 extern void sound_update(void) __asm__("func_0022CA50");
 
 void update_gameplay_frame(void) __asm__("FUN_001eb0a8");
@@ -75,7 +75,7 @@ void update_gameplay_frame(void) {
     f32 fade;
     f32 half;
 
-    func_001E9430();
+    noop_callback_i();
     fade = sequence - 0.0625f;
     render_sequence.frame++;
     render_sequence.time++;
@@ -99,25 +99,25 @@ void update_gameplay_frame(void) {
         actor->current_frame = render_sequence.frame >> 1;
         actor->next_frame = frame_index + 1;
         update_moby_animation_state(actor);
-        actor->frame_fraction = func_001FA6C0(render_sequence.frame & 1) * half;
+        actor->frame_fraction = convert_integer_to_float(render_sequence.frame & 1) * half;
         animation_positions = ((RenderSequenceSidecar *)actor)->animation_positions;
         {
             f32 remaining_fraction = 1.0f;
             remaining_fraction -= actor->frame_fraction;
-            func_001F9A68(&first_position, &animation_positions[actor->current_frame],
+            fast_vec_scale(&first_position, &animation_positions[actor->current_frame],
                           remaining_fraction);
         }
-        func_001F9A68(&next_position, &animation_positions[actor->next_frame],
+        fast_vec_scale(&next_position, &animation_positions[actor->next_frame],
                       actor->frame_fraction);
-        func_001F9A10(&actor->position, &first_position, &next_position);
+        add_vector_xyz(&actor->position, &first_position, &next_position);
         actor->cached_frame = 0xFF;
-        func_0020DEF8(actor);
+        refresh_moby_spatial_bounds(actor);
         actor->update_enabled = 0;
         if (actor->class_id == 0) {
-            func_001E9410(actor);
+            noop_callback_e(actor);
         }
     }
-    func_001E9428();
+    noop_callback_h();
     if (game_mode == 0) {
         intro_overlay_timer++;
         if (scale_game_frames(0x3C) < intro_overlay_timer) {
@@ -144,7 +144,7 @@ void update_gameplay_frame(void) {
         if ((language_intro_overlay_alpha -= 0x10) < 0) {
             language_intro_overlay_alpha = 0;
         }
-        func_002192A8();
+        update_menu_system();
         sound_update();
     } else if (game_mode == 4) {
         update_mode_freeze();

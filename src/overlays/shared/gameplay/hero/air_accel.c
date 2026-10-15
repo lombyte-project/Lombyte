@@ -895,13 +895,13 @@ extern char D_L01_001742C0_d[] __asm__("D_L01_001742C0") __attribute__((section(
 extern float FUN_001f9b20(void *);
 extern float FUN_001f9dc8(float);
 extern float FUN_001f9de0(float);
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_002339d0(float *v);
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_001f0b58(void);
-extern void FUN_00125180(void *, void *);
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, float);
+extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 extern int D_L01_001742DC __attribute__((section(".data")));
 void FUN_L01_00232978(int flag) {
@@ -943,13 +943,13 @@ void FUN_L01_00232978(int flag) {
     } else {
         qcopy(p, &g->motion.velocity);
         p[2] = 0.0f;
-        FUN_001f9a68(p, p, f21 / FUN_001f9b20(p));
+        fast_vec_scale(p, p, f21 / FUN_001f9b20(p));
         qcopy(q, p);
-        FUN_001f9a68(q, q, 1.4f);
+        fast_vec_scale(q, q, 1.4f);
     }
-    FUN_001f9a10(p, p, s);
+    add_vector_xyz(p, p, s);
     k = -1;
-    FUN_001f9a10(q, q, t);
+    add_vector_xyz(q, q, t);
     h1 = &hero;
     if (FUN_001efa68(t, q, 4, (int)h1->moby, 0) != 0) {
         if (D_L01_001742DC > 0) {
@@ -961,7 +961,7 @@ void FUN_L01_00232978(int flag) {
     if (FUN_001efa68(s, p, 4, (int)h2->moby, 0) != 0) {
         w = D_L01_001742C0_d;
         if (*(int *)(w + 0x1C) > 0) {
-            f20 = FUN_001f9e90(*(float *)(w + 0x48), FUN_001f9b20(w + 0x40));
+            f20 = fast_arc_tan(*(float *)(w + 0x48), FUN_001f9b20(w + 0x40));
         }
     }
     if (f20 >= 0.87266463f || k == 8 || k == 12) {
@@ -970,13 +970,13 @@ void FUN_L01_00232978(int flag) {
         u = (float *)(w3 + 0x40);
         *(int *)(w3 + 0x48) = 0;
         h3->unk240 = *(int *)(w3 + 0x18);
-        FUN_00125180(u, u);
+        sceVu0Normalize(u, u);
         {
             float c = -h3->motion.velocity.f[0] * *(float *)(w3 + 0x40) -
                       h3->motion.velocity.f[1] * *(float *)(w3 + 0x44);
             if (c > 0.0f) {
-                FUN_001f9a68(u, u, c);
-                FUN_001f9a10(&h3->motion.velocity, &h3->motion.velocity, u);
+                fast_vec_scale(u, u, c);
+                add_vector_xyz(&h3->motion.velocity, &h3->motion.velocity, u);
             }
         }
     }
@@ -996,11 +996,11 @@ s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
 u8 *FUN_002141f8(s32);
-f32 FUN_001f9b48(void *, void *);
+f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
 f32 FUN_L00_00233d30(void *);
 f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
-void FUN_001f9a28(void *, void *, void *);
+void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -1091,12 +1091,12 @@ void FUN_L01_00232dc0(void) {
     if (HH.unk1C > 0) {
         qcopy((u8 *)&hero.ground_point, &HH.point);
         hero.ground_z.f = HH.point.f[2];
-        hero.ground_distance = FUN_001f9b48((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
+        hero.ground_distance = fast_vec_dist((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
         hero.ground_moby = (struct Moby *)HH.moby;
         FUN_00125180_c((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
         hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        FUN_001f9a28(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
+        subtract_vector_xyz(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero.unk270)) {
             hero.ground_distance = -hero.ground_distance;
         }
@@ -1129,7 +1129,7 @@ d1:
         FUN_001f9a68_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, -1.0f);
         break;
     case 2:
-        FUN_001f9a28((u8 *)&hero.gravity_dir, (u8 *)&hero.motion.unkB0, (u8 *)&hero.motion.pos);
+        subtract_vector_xyz((u8 *)&hero.gravity_dir, (u8 *)&hero.motion.unkB0, (u8 *)&hero.motion.pos);
         FUN_001f9bf8_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, 1.0f);
         break;
     }

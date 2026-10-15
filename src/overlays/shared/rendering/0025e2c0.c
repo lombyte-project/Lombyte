@@ -10,10 +10,10 @@
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, float);
-extern int FUN_001f96f8(int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int D_L15_001601FC __attribute__((sda));
 
 /* Spawns particle type 0x1F of colour `color` at `pos`, starting a quarter of the way from `owner` towards it. */
@@ -31,11 +31,11 @@ void FUN_L15_0025e2c0(int color, u128 *pos, char *owner) {
     if (p != 0) {
         a = &at;
         from = owner + 0x10;
-        FUN_001f9a28(a, &target, from);
+        subtract_vector_xyz(a, &target, from);
         b = &step.q;
         *b = *a;
-        FUN_001f9a68(b, b, 0.25f);
-        FUN_001f9a10(a, from, b);
+        fast_vec_scale(b, b, 0.25f);
+        add_vector_xyz(a, from, b);
         *(u128 *)(p + 0x10) = *a;
         *(u128 *)(p + 0x20) = target.q;
         *(int *)(p + 4) = color;
@@ -43,7 +43,7 @@ void FUN_L15_0025e2c0(int color, u128 *pos, char *owner) {
         p[9] = truncate_float_to_s32(4.0f) + 0x70;
         p[3] = 0x44;
         p[1] = 2;
-        *(short *)(p + 0xA) = FUN_001f96f8(D_L15_001601FC);
+        *(short *)(p + 0xA) = scale_game_frames(D_L15_001601FC);
         *(char **)(p + 0x30) = owner;
     }
 }

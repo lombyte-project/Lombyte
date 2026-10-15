@@ -16,7 +16,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int sample_path(int *, float *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
 extern void spawn_on_path(float *, int, int, int) __asm__("FUN_L00_002c52a8");
-extern int FUN_00120478(float);
+extern int fptodp(float) __asm__("FUN_00120478");
 extern char *D_L07_001B0530[];
 extern char D_L07_00211AF0[];
 extern char D_L07_00211B30[];
@@ -126,10 +126,10 @@ state_one:
                         } while (!accepted);
                         total = remaining;
                         {
-                            int x = FUN_00120478(position[0]);
-                            int y = FUN_00120478(position[1]);
-                            int z = FUN_00120478(position[2]);
-                            int path_step = FUN_00120478(step);
+                            int x = fptodp(position[0]);
+                            int y = fptodp(position[1]);
+                            int z = fptodp(position[2]);
+                            int path_step = fptodp(step);
                             debug_print(D_L07_00211B78, id, batch, x, y, z, path_step);
                         }
                         spawn_on_path(position, id, batch, 0);

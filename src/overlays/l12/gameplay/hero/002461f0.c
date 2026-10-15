@@ -41,7 +41,7 @@ extern S17C2B8 D_L12_0017C238;
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L12_0015F638;
 extern float D_L12_00167258 __attribute__((section(".data")));
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b80(void *, void *);
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_00208f20(float a, float b, float c, float d);
@@ -60,7 +60,7 @@ extern int D_00141660 __attribute__((section(".data")));
 extern int D_L12_0015F6DC_d __asm__("D_L12_0015F6DC");
 extern int D_L12_0015F594 __attribute__((sda));
 extern int D_L12_0016CC00 __attribute__((section(".data")));
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_002050b8(int);
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int FUN_L00_00211360(void *);
@@ -169,8 +169,8 @@ void FUN_L12_002461f0(void) {
                     hud_keep_visible(id, scale_game_frames(0xB4));
                 }
             }
-            FUN_001f9770(&hero.unk22D4);
-            FUN_001f9770(&hero.unk22D6);
+            fast_dec_timer_s16(&hero.unk22D4);
+            fast_dec_timer_s16(&hero.unk22D6);
             if (controller_state.pressed & 0x10) {
                 hero.unk22D4 = scale_game_frames(0x14);
             }
@@ -259,7 +259,7 @@ void FUN_L12_002461f0(void) {
                                 hero.unk2270 = record_index;
                                 rec = &D_L12_00179D10[record_index];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
-                                rec->duration_frames = FUN_001f96b0(rec->duration) * 60.0f;
+                                rec->duration_frames = multiply_global_factor_ed64(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
                                     hero_set_state(HERO_STATE_FIDGET, 1);
                                 } else {

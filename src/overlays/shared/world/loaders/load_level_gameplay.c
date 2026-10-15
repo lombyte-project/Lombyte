@@ -37,8 +37,8 @@ typedef struct {
 
 extern f32 FUN_001fa6c0(s32);
 extern s32 FUN_001fa6d0(f32);
-extern s32 FUN_00120478(f32);
-extern void FUN_001e93b0(void *, s32, s32);
+extern s32 fptodp(f32) __asm__("FUN_00120478");
+extern void debug_print(void *, s32, s32) __asm__("FUN_001e93b0");
 extern u8 D_L00_001E8640[];
 
 void FUN_L00_00241788(u8 *src, s32 n) {
@@ -81,9 +81,9 @@ void FUN_L00_00241788(u8 *src, s32 n) {
     } while (done == 0);
     for (k = 0; k < n; k++) {
         s32 entry_id = FUN_001fa6d0(entries[k].id);
-        s32 entry_length = FUN_00120478(entries[k].length);
+        s32 entry_length = fptodp(entries[k].length);
 
-        FUN_001e93b0(D_L00_001E8640, entry_id, entry_length);
+        debug_print(D_L00_001E8640, entry_id, entry_length);
     }
 
 }
@@ -437,7 +437,7 @@ extern float D_L00_0015F638  MACRO_ADDR;
 extern float D_L00_001604A4 MACRO_ADDR;
 extern float D_L00_00160F80 MACRO_ADDR;
 extern float D_L00_00160FE0 MACRO_ADDR;
-extern float FUN_001f99c8(float, float);
+extern float max_float(float, float) __asm__("FUN_001f99c8");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_0015ED84 MACRO_ADDR;
 extern int D_L00_0015EF54 MACRO_ADDR;
@@ -481,11 +481,11 @@ extern unsigned char D_L00_001804C0[];
 extern unsigned char D_L00_001BC1B0[];
 extern unsigned char D_L00_001C5B00[];
 extern void enable_global_state_flag(void) __asm__("func_001F61E8");
-extern void FUN_001f9838(void *, void *, int);
-extern void FUN_001f9a80(void *, void *, float);
+extern void copy_memory_aligned(void *, void *, int) __asm__("FUN_001f9838");
+extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 extern void FUN_0022a5e0(void *);
-extern void FUN_00234f98(void *);
-extern void FUN_00237370(void *);
+extern void light_tfrags(void *) __asm__("FUN_00234f98");
+extern void light_ties(void *) __asm__("FUN_00237370");
 extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern void FUN_L00_00204c60(void);
 extern void FUN_L00_00204f80(void);
@@ -603,7 +603,7 @@ char *load_level_gameplay(int arg0) {
             n = 12;
         }
         if (n != 0) {
-            FUN_001f9838(D_L00_0017FEC0, p, n << 6);
+            copy_memory_aligned(D_L00_0017FEC0, p, n << 6);
         }
     }
     if (hdr->f80 != 0) {
@@ -615,8 +615,8 @@ char *load_level_gameplay(int arg0) {
             Light *l;
             int i;
 
-            FUN_001f9838(D_L00_0017ECC0, p, D_L00_0015FBC4 << 4);
-            FUN_001f9838(D_L00_0017EEC0, p + (D_L00_0015FBC4 << 4), D_L00_0015FBC4 << 7);
+            copy_memory_aligned(D_L00_0017ECC0, p, D_L00_0015FBC4 << 4);
+            copy_memory_aligned(D_L00_0017EEC0, p + (D_L00_0015FBC4 << 4), D_L00_0015FBC4 << 7);
             for (i = 0; i < D_L00_0015FBC4; i++) {
                 l = &D_L00_0017EEC0[i];
                 if (l->f48 < 0) {
@@ -650,7 +650,7 @@ char *load_level_gameplay(int arg0) {
                 i++;
             }
             *q = 0xFFFF;
-            FUN_00234f98((void *)0x70003000);
+            light_tfrags((void *)0x70003000);
         }
     }
     if (hdr->f10[0] != 0) {
@@ -667,7 +667,7 @@ char *load_level_gameplay(int arg0) {
         size += 3;
         size &= ~3;
         size -= 8;
-        FUN_001f9838(mem, p, size);
+        copy_memory_aligned(mem, p, size);
         for (i = 0; i < D_L00_00179410.f2C; i++) {
             int delta = (int)D_L00_0015F660 - 8;
 
@@ -724,14 +724,14 @@ char *load_level_gameplay(int arg0) {
             mtx->f3C = D_L00_001C5800[inst->f1A]->f40;
             transform_vector_by_basis(inst, D_L00_001C5800[inst->f1A]->f30, mtx);
             scale = vector_length_xyz(mtx);
-            scale = FUN_001f99c8(scale, vector_length_xyz(mtx->m1));
-            inst->fC = D_L00_001C5800[inst->f1A]->f3C * FUN_001f99c8(scale, vector_length_xyz(mtx->m2));
-            FUN_001f9a80(inst, inst, mtx->f3C);
+            scale = max_float(scale, vector_length_xyz(mtx->m1));
+            inst->fC = D_L00_001C5800[inst->f1A]->f3C * max_float(scale, vector_length_xyz(mtx->m2));
+            scale_vector(inst, inst, mtx->f3C);
             add_vector_xyz(inst, inst, mtx->m3);
             D_L00_00160FC8[i].fC = 1.0f / vector_length_xyz(&D_L00_00160FC8[i]);
             D_L00_00160FC8[i].f1C = 1.0f / vector_length_xyz(D_L00_00160FC8[i].m1);
             D_L00_00160FC8[i].f2C = 1.0f / vector_length_xyz(D_L00_00160FC8[i].m2);
-            FUN_001f9838(mtx->f140, p, 0x80);
+            copy_memory_aligned(mtx->f140, p, 0x80);
             p += 0x80;
             inst->f1C = *(unsigned short *)p;
             p += 0x10;
@@ -745,7 +745,7 @@ char *load_level_gameplay(int arg0) {
             *q++ = i;
         }
         *q = 0xFFFF;
-        FUN_00237370((void *)0x70000000);
+        light_ties((void *)0x70000000);
     }
     {
         char *p = (char *)hdr + hdr->f3C;
@@ -842,9 +842,9 @@ char *load_level_gameplay(int arg0) {
             p += 0x10;
             transform_vector_by_basis(inst, D_L00_001BC030[cls], mtx);
             scale = vector_length_xyz(mtx);
-            scale = FUN_001f99c8(scale, vector_length_xyz(mtx->m1));
-            inst->fC = D_L00_001BC030[cls]->fC * FUN_001f99c8(scale, vector_length_xyz(mtx->m2));
-            FUN_001f9a80(inst, inst, mtx->f3C);
+            scale = max_float(scale, vector_length_xyz(mtx->m1));
+            inst->fC = D_L00_001BC030[cls]->fC * max_float(scale, vector_length_xyz(mtx->m2));
+            scale_vector(inst, inst, mtx->f3C);
             add_vector_xyz(inst, inst, mtx->m3);
         }
     }
@@ -926,7 +926,7 @@ char *load_level_gameplay(int arg0) {
             for (i = 0; i < D_0013E550.fD90; i++) {
                 SoundInst *e = D_0013E550.fD94 + i;
 
-                FUN_001f9838(e, p, 0x90);
+                copy_memory_aligned(e, p, 0x90);
                 p += 0x90;
                 FUN_L00_0028df58((short *)e);
             }
@@ -1355,7 +1355,7 @@ char *load_level_gameplay(int arg0) {
             FillTransferWords(D_L00_001600E4, 0, n * 0x90);
         }
         for (i = 0; i < D_L00_001600E8; i++) {
-            FUN_001f9838(D_L00_001600E4 + i * 0x90, q, 0x90);
+            copy_memory_aligned(D_L00_001600E4 + i * 0x90, q, 0x90);
             q += 0x80;
         }
     }
@@ -1373,7 +1373,7 @@ char *load_level_gameplay(int arg0) {
             FillTransferWords(D_L00_001600EC, 0, n << 7);
         }
         for (i = 0; i < D_L00_001600F0; i++) {
-            FUN_001f9838(D_L00_001600EC + (i << 7), q, 0x80);
+            copy_memory_aligned(D_L00_001600EC + (i << 7), q, 0x80);
             q += 0x80;
         }
     }
@@ -1391,7 +1391,7 @@ char *load_level_gameplay(int arg0) {
             FillTransferWords(D_L00_001600F4, 0, n << 7);
         }
         for (i = 0; i < D_L00_001600F8; i++) {
-            FUN_001f9838(D_L00_001600F4 + (i << 7), q, 0x80);
+            copy_memory_aligned(D_L00_001600F4 + (i << 7), q, 0x80);
             q += 0x80;
         }
     }
@@ -1409,7 +1409,7 @@ char *load_level_gameplay(int arg0) {
             FillTransferWords(D_L00_001600FC, 0, n << 7);
         }
         for (i = 0; i < D_L00_00160100; i++) {
-            FUN_001f9838(D_L00_001600FC + (i << 7), q, 0x80);
+            copy_memory_aligned(D_L00_001600FC + (i << 7), q, 0x80);
             q += 0x80;
         }
     }
@@ -1421,7 +1421,7 @@ char *load_level_gameplay(int arg0) {
         q += 0x10;
         size += 0x4000;
         mem += size;
-        FUN_001f9838(D_L00_0015EF80, q, size);
+        copy_memory_aligned(D_L00_0015EF80, q, size);
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
     }
     if (hdr->f78 != 0) {
@@ -1432,7 +1432,7 @@ char *load_level_gameplay(int arg0) {
         q += 0x10;
         size += 0x4000;
         mem += size;
-        FUN_001f9838(D_L00_0015FBC0, q, size);
+        copy_memory_aligned(D_L00_0015FBC0, q, size);
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
     }
     if (hdr->f7C != 0) {
@@ -1445,7 +1445,7 @@ char *load_level_gameplay(int arg0) {
         mem += n << 5;
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
         if (n != 0) {
-            FUN_001f9838(D_L00_0015FB80, q, n << 5);
+            copy_memory_aligned(D_L00_0015FB80, q, n << 5);
         }
     }
     if (hdr->f88 != 0) {
@@ -1458,7 +1458,7 @@ char *load_level_gameplay(int arg0) {
         mem += n * 0x30;
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
         if (n != 0) {
-            FUN_001f9838(D_L00_00160040, q, n * 0x30);
+            copy_memory_aligned(D_L00_00160040, q, n * 0x30);
         }
     }
     D_L00_0016016C_macro = mem;
@@ -1794,33 +1794,33 @@ typedef struct { u8 pad[0x10]; u32 v __attribute__((packed, aligned(1))); } Una2
 extern u8 D_L00_00179100[];
 extern s32 game_frame __asm__("D_L00_0015F5CC");
 
-extern void FUN_00202a98(void);
-extern void FUN_001f98d0(void *, void *, s32);
+extern void load_hud_banks(void) __asm__("FUN_00202a98");
+extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
 extern void FUN_001f9838_244110(void *, void *, s32) __asm__("FUN_001f9838");
-extern void FUN_00203120(void *, s32, void *);
-extern void FUN_00118a80(s32);
+extern void upload_texture_images(void *, s32, void *) __asm__("FUN_00203120");
+extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32 FUN_L00_0024d8d0_244110(void *, char *) __asm__("FUN_L00_0024d8d0");
-extern s32 FUN_001f97a0(s32);
-extern void FUN_002040e0(char *, void *);
-extern void FUN_002028e0(char *);
+extern s32 log2dim(s32) __asm__("FUN_001f97a0");
+extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0");
+extern void relocate_sky_definition(char *) __asm__("FUN_002028e0");
 extern void FUN_L00_00241728_244110(char *) __asm__("FUN_L00_00241728");
-extern void FUN_00203640(char *, void *, void *, s32);
+extern void register_moby_class(char *, void *, void *, s32) __asm__("FUN_00203640");
 extern void FUN_L00_00241788_244110(void *, s32) __asm__("FUN_L00_00241788");
-extern void FUN_002032e0(Class244110 *, s32);
-extern void FUN_00203730(char *, void *, void *, s32);
-extern void FUN_001e93e8(void *, s32);
-extern void FUN_00203b08(char *, void *, void *, void *, s32);
-extern void FUN_00202800(void *, s32);
+extern void relocate_asset_entry_pointers(Class244110 *, s32) __asm__("FUN_002032e0");
+extern void register_object_render_class(char *, void *, void *, s32) __asm__("FUN_00203730");
+extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
+extern void register_shrub_render_class(char *, void *, void *, void *, s32) __asm__("FUN_00203b08");
+extern void unpack_point_records(void *, s32) __asm__("FUN_00202800");
 extern void FUN_L00_0023f120(char *);
 extern void FUN_L00_0023f0d8(char *);
-extern void FUN_002026c8(void *, char *, void *, s32);
+extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_002026c8");
 extern void printf_1e93b0(const char *, ...) __asm__("FUN_001e93b0");
-extern void FUN_001f97e8(void *, s32, s32);
+extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *FUN_L00_0023fa00(char *, s32 *);
 extern char *FUN_L00_00241940_244110(s32) __asm__("FUN_L00_00241940");
 extern f32 int_to_float(s32) __asm__("FUN_001fa6c0");
 extern void FUN_L00_00285008(void);
-extern void FUN_00226f50(void);
+extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
 extern void FUN_L00_00264740(void);
 
 #define GS_TEX0(tbp0, tbw, psm, tw, th, tcc, tfx, cbp, cpsm, csm, csa, cld) \
@@ -1873,15 +1873,15 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
     u64 *t;
 
     if (full)
-        FUN_00202a98();
+        load_hud_banks();
     base = ld->f14;
     if (full) {
-        FUN_001f98d0(h, (char *)(src[4] + (s32)src), src[5]);
+        fast_mem_copy(h, (char *)(src[4] + (s32)src), src[5]);
         D_L00_0015F40C = 0;
         FUN_001f9838_244110(mission_state_macro, D_0014C050 + current_level_index * 16, 0x10);
-        FUN_00203120((char *)(src[6] + (s32)src), h[0], (char *)h + h[1]);
+        upload_texture_images((char *)(src[6] + (s32)src), h[0], (char *)h + h[1]);
         D_L00_00160004 = sound_bank_handle;
-        FUN_00118a80(0);
+        flush_cache(0);
         used = FUN_L00_0024d8d0_244110((char *)(src[0x14] + (s32)src), base);
         D_L00_0015F40C = (s32)(base + h[0x18]);
 
@@ -1901,38 +1901,38 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         t1 = (TexRef244110 *)((char *)h + h[0xD]);
         D_L00_00160F54 = h[0xC];
         for (c1 = 0; c1 < D_L00_00160F54; c1++)
-            D_L00_001C4A00[c1] = D_L00_0015F40C + t1[c1].offset + (FUN_001f97a0(t1[c1].kind) << 28);
+            D_L00_001C4A00[c1] = D_L00_0015F40C + t1[c1].offset + (log2dim(t1[c1].kind) << 28);
         tex = (TexRef244110 *)((char *)h + h[0xF]);
         texture_count = h[0xE];
         for (c2 = 0; c2 < texture_count; c2++)
-            D_L00_00199A80[c2] = D_L00_0015F40C + tex[c2].offset + (FUN_001f97a0(tex[c2].kind) << 28);
-        FUN_001f98d0(D_L00_001AEBC0, tex, texture_count * 16);
+            D_L00_00199A80[c2] = D_L00_0015F40C + tex[c2].offset + (log2dim(tex[c2].kind) << 28);
+        fast_mem_copy(D_L00_001AEBC0, tex, texture_count * 16);
         t3 = (TexRef244110 *)((char *)h + h[0x11]);
         D_L00_00160FD4 = h[0x10];
         for (c3 = 0; c3 < D_L00_00160FD4; c3++)
-            D_L00_001C6700[c3] = D_L00_0015F40C + t3[c3].offset + (FUN_001f97a0(t3[c3].kind) << 28);
+            D_L00_001C6700[c3] = D_L00_0015F40C + t3[c3].offset + (log2dim(t3[c3].kind) << 28);
         t4 = (TexRef244110 *)((char *)h + h[0x13]);
         D_L00_001604AC = h[0x12];
         for (c4 = 0; c4 < D_L00_001604AC; c4++)
-            D_L00_001BC5B0[c4] = D_L00_0015F40C + t4[c4].offset + (FUN_001f97a0(t4[c4].kind) << 28);
+            D_L00_001BC5B0[c4] = D_L00_0015F40C + t4[c4].offset + (log2dim(t4[c4].kind) << 28);
 
-        FUN_002040e0(base + h[2], (char *)h + h[0xD]);
+        initialize_tfrag_render_data(base + h[2], (char *)h + h[0xD]);
         if (h[3])
             D_L00_0015F600_244110 = base + h[3];
         else
             D_L00_0015F600_244110 = 0;
         if (h[4])
-            FUN_002028e0(base + h[4]);
+            relocate_sky_definition(base + h[4]);
         else
             D_L00_0016051C = 0;
         FUN_L00_00241728_244110(base + h[5]);
         for (i = 0, q2 = (char *)h + h[7]; i < h[6]; i++, q2 += 0x20)
-            FUN_00203640(*(s32 *)q2 ? base + *(s32 *)q2 : 0, (char *)h + h[0xF], q2 + 0x10, *(s32 *)(q2 + 4));
+            register_moby_class(*(s32 *)q2 ? base + *(s32 *)q2 : 0, (char *)h + h[0xF], q2 + 0x10, *(s32 *)(q2 + 4));
         FUN_L00_00241788_244110((char *)h + h[7], h[7]);
         for (sq = 0, p = (char *)h + h[0x1E]; sq < D_L00_00197300[0]->seq_count; sq++, p += 4) {
             if (*(s32 *)p) {
                 D_L00_00197300[0]->seqs[sq] = base + *(s32 *)p;
-                FUN_002032e0(D_L00_00197300[0], sq);
+                relocate_asset_entry_pointers(D_L00_00197300[0], sq);
             }
         }
         D_L00_0016000C = -1;
@@ -1947,12 +1947,12 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
             qcopy(&D_L00_001AFCE0[m], (char *)h + h[7] + o); }
         }
         for (i = 0, q2 = (char *)h + h[9]; i < h[8]; i++, q2 += 0x20)
-            FUN_00203730(base + *(s32 *)q2, (char *)h + h[0x11], q2 + 0x10, *(s32 *)(q2 + 4));
-        FUN_001e93e8((char *)h + h[9], h[8]);
+            register_object_render_class(base + *(s32 *)q2, (char *)h + h[0x11], q2 + 0x10, *(s32 *)(q2 + 4));
+        noop_main_callback((char *)h + h[9], h[8]);
         for (i = 0, q2 = (char *)h + h[0xB]; i < h[0xA]; i++, q2 += 0x30)
-            FUN_00203b08(base + *(s32 *)q2, (char *)h + h[0x13], q2 + 0x10, q2 + 0x20, *(s32 *)(q2 + 4));
+            register_shrub_render_class(base + *(s32 *)q2, (char *)h + h[0x13], q2 + 0x10, q2 + 0x20, *(s32 *)(q2 + 4));
         D_L00_0015F420 = base + h[0x1A];
-        FUN_00202800((char *)h + h[0x17], h[0x16]);
+        unpack_point_records((char *)h + h[0x17], h[0x16]);
         if (h[0x28]) {
             FUN_L00_0023f120(base + h[0x28]);
         } else {
@@ -1976,7 +1976,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         {
             char *x1 = base + h[0x19];
             char *x2 = (char *)h + h[0x15];
-            FUN_002026c8((char *)h + h[0x1B], x1, x2, h[0x14]);
+            parse_particle_textures((char *)h + h[0x1B], x1, x2, h[0x14]);
         }
 
         tbl = (char *)h + h[0x1C];
@@ -2007,7 +2007,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
                     if (D_L00_001AFBC0[j] == D_L00_00197A00[ci])
                         break;
                 if (j < D_L00_00160008) {
-                    FUN_001f97e8(D_L00_001AFE60[j], -1, 0x20);
+                    fill_transfer_words(D_L00_001AFE60[j], -1, 0x20);
                     e = tbl + span->off;
                     for (k = 0; k < span->count && k < 15; k++, e += 4)
                         D_L00_001AFE60[j][k] = *(u16 *)e;
@@ -2079,7 +2079,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
     if (keep) {
         FUN_L00_00285008();
     } else {
-        FUN_00226f50();
+        clear_scene_state_buffers();
         for (z = 15; z >= 0; z--)
             D_0014EE90[z] = 0;
     }

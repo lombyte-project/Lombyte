@@ -17,8 +17,8 @@ extern s32 EnableCache();
 extern s32 EnableInterrupts();
 extern s32 fill_transfer_words() __asm__("func_001F97E8");
 extern void FlushCache();
-extern s32 FUN_001204b8();
-extern s32 FUN_00120558();
+extern s32 reset_vif1_gif() __asm__("FUN_001204b8");
+extern s32 wait_for_graphics_pipeline_idle() __asm__("FUN_00120558");
 extern s32 sceCdDiskReady() __asm__("FUN_00121190");
 extern s32 wad_get_sectors() __asm__("FUN_0012f208");
 extern s32 load_disc_sectors_into_global_buffer() __asm__("func_0012F2B8");
@@ -32,7 +32,7 @@ extern s32 init_mem_slots() __asm__("func_002015D8");
 extern s32 memcard_get_name() __asm__("func_00209030");
 extern s32 memcard_initialize() __asm__("func_0020AC58");
 extern s32 init_dma() __asm__("func_0020B418");
-extern s32 FUN_0020b618();
+extern s32 fast_decompress() __asm__("FUN_0020b618");
 extern s32 init_pads() __asm__("func_00217048");
 extern s32 initialize_gameplay_sound_system() __asm__("FUN_0022c8d0");
 extern s32 initialize_sif_rpc() __asm__("FUN_00232ce0");
@@ -61,7 +61,7 @@ void init_once(void) {
     s32 *dst;
     s32 flag;
 
-    FUN_001204b8();
+    reset_vif1_gif();
     sceDmaReset(1);
     sceCdInit(0);
     sceCdDiskReady(0);
@@ -97,7 +97,7 @@ void init_once(void) {
     dst = (s32 *)(D_1FF8000 - (disc_table.unk12C0.size << 0xB));
     wad_get_sectors(disc_table.unk12C0.sector, disc_table.unk12C0.size, dst);
     FlushCache(0);
-    FUN_0020b618(dst, base);
+    fast_decompress(dst, base);
     FlushCache(0);
     load_irx_module(*(u32 *)(base + 0x70) + base, *(u32 *)(base + 0x74));
     load_irx_module(*(u32 *)(base + 0x78) + base, *(u32 *)(base + 0x7C));
@@ -126,7 +126,7 @@ void init_once(void) {
     sceGsSetDefLoadImage(buf, 0x3FFB, 1, 0, 0, 0, 8, 8);
     FlushCache(0);
     sceGsExecLoadImage(buf, image_clear_buffer);
-    FUN_00120558(0, 0);
+    wait_for_graphics_pipeline_idle(0, 0);
     load_debug_font();
     *(volatile s32 *)0x10000810 = 0x82;
     *(volatile s32 *)0x10000800 = 0;

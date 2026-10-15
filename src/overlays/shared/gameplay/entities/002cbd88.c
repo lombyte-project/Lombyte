@@ -35,7 +35,7 @@ void FUN_L15_002cbd88(void) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */
 
 
-extern int FUN_001f0b58(void);
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_0020d568(void);
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 
@@ -50,7 +50,7 @@ int FUN_L15_002d6770(void) {
         *(OvlQuad *)vec = *(OvlQuad *)&p->motion.pos;
         vec[2] = vec[2] + 2.0f;
         h = probe_ground_height(vec, 0, 0.5f);
-        if (FUN_001f0b58() != 0)
+        if (collision_hit_material() != 0)
             return 0;
         if (p->motion.pos.f[2] <= h)
             return 1;

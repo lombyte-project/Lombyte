@@ -38,7 +38,7 @@ void FUN_L03_00291918(char *moby) {
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_001f9770(void *);
-extern int FUN_001fa6e0(int, int, float);
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern void FUN_L00_00262cf0(void *, void *, float, float, float);
@@ -67,7 +67,7 @@ void FUN_L03_002bae48(char *moby) {
         fast_add_rotations(*(float *)(moby + 0x40), frame_time * 5.235987663269043f);
     ratio = convert_integer_to_float(*(short *)(p + 0xE));
     ratio = ratio / convert_integer_to_float(*(short *)(p + 0xC));
-    c = FUN_001fa6e0(*(int *)(p + 8), *(int *)(p + 4), ratio);
+    c = fast_tween_color(*(int *)(p + 8), *(int *)(p + 4), ratio);
     b = (c >> 16) & 0xFF;
     g = (c >> 8) & 0xFF;
     FUN_L00_002502f0(moby, c & 0xFF, g, b);
@@ -79,7 +79,7 @@ void FUN_L03_002bae48(char *moby) {
 extern char *D_L03_001600EC;
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9cf8(void *, void *, void *);
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 int FUN_L03_002beba0(int idx, float *out) {
     char *mat;
@@ -88,7 +88,7 @@ int FUN_L03_002beba0(int idx, float *out) {
         out[0] = random_float_between_alt(-1.0f, 1.0f);
         out[1] = random_float_between_alt(-1.0f, 1.0f);
         out[2] = random_float_between_alt(-1.0f, 1.0f);
-        FUN_001f9cf8(out, out, mat);
+        transform_vector_by_basis(out, out, mat);
         FUN_001f9a10(out, out, mat + 0x30);
         return 0;
     }
@@ -138,11 +138,11 @@ extern struct Moby *D_L03_0015FFE4;
 extern s32 D_L03_0015F5CC;
 extern char D_L03_001E2FA0[];
 
-extern void FUN_00212ed8(struct Moby *, s32, s32);
+extern void set_moby_animation(struct Moby *, s32, s32) __asm__("FUN_00212ed8");
 extern SpawnTarget *FUN_L00_002db890(struct Moby *);
 extern void FUN_L00_0025d1b8(struct Moby *);
 extern SpawnSound *FUN_002141f8(struct Moby *);
-extern void FUN_001e93b0();
+extern void debug_print() __asm__("FUN_001e93b0");
 
 /* Spawner: revives the first free pooled child (of class oclass, -1 = any) at a copy of at, counts the live children, returns the revived one or NULL. */
 struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
@@ -210,7 +210,7 @@ struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
         if (pv->options & 2) {
             c->scale = ((SpawnClass *)c->pclass)->scale * 0.1f;
         }
-        FUN_00212ed8(c, 0, 0);
+        set_moby_animation(c, 0, 0);
         target = FUN_L00_002db890(c);
         if (target != NULL) {
             target->unk94 = 0;
@@ -244,7 +244,7 @@ struct Moby *FUN_L03_002bec60(struct Moby *m, Vec4 *at, s32 oclass)
         }
     }
     if (spawned == NULL) {
-        FUN_001e93b0(D_L03_001E2FA0, D_L03_0015F5CC, (s16)m->save_id, m->oclass);
+        debug_print(D_L03_001E2FA0, D_L03_0015F5CC, (s16)m->save_id, m->oclass);
     }
     return spawned;
 }
@@ -707,7 +707,7 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_0022da68(int, int, void *);
 extern int FUN_001f9770(void *);
 extern float FUN_L00_0025e310(float);
-extern float FUN_00213508(void *, int, float);
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float FUN_002132a8(float, float);
 extern void FUN_L00_00259fe8(void *, float);
 extern void FUN_0020c828(void *);
@@ -821,7 +821,7 @@ first_collision_timer:
     break;
     }
     case 1: {
-        float height = FUN_00213508(pos, 0, 0.5f);
+        float height = probe_ground_height(pos, 0, 0.5f);
         moby->pos.w = 0.0f;
         moby->pos.z = height + 0.2f;
         next_pos.q = *(u128 *)pos;
@@ -939,7 +939,7 @@ extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") __attribute__((section(".sdata")));
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9e90(float, float);
 extern int D_0014C050; /* no foreign declaration */
@@ -947,14 +947,14 @@ extern int D_0015ED68_e[] __asm__("D_0015ED68") __attribute__((section(".sdata")
 extern float D_L03_00161994 __attribute__((sda)); /* no foreign declaration */
 extern float D_L03_00161998 __attribute__((sda)); /* no foreign declaration */
 extern float D_L03_0016199C __attribute__((sda));
-extern int FUN_001fa2d8();
+extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
 extern int FUN_L00_001fff28();
 extern int FUN_L00_00258110();
 extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_00214720");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern void FUN_001f9c48(void *, void *, float);
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
@@ -1521,10 +1521,10 @@ void FUN_L03_002d47c0(Moby *moby) {
     state = moby->state;
     switch (state) {
     case 1:
-        FUN_001f9c48(&direction, data, 1.0f);
+        set_vector_length_xy(&direction, data, 1.0f);
         data->vel.z = 1.0f;
         FUN_L00_00259888(&hit, moby, 0x10003, 2.0f, &direction);
-        FUN_001f9c48(&hit, &hit, 1.0f);
+        set_vector_length_xy(&hit, &hit, 1.0f);
         hit.dir.z = 1.0f;
         hit.dir.w = 5627.9248f;
         hit.b18 = state;
@@ -1586,7 +1586,7 @@ void FUN_L03_002d47c0(Moby *moby) {
                 }
                 normalize_vector_xyz(&aim, &aim, D_0015ED6C_c * 0.5f);
                 FUN_L00_0026dd20(&muzzle, &aim, 0x2F4F7F7F, random_int_between(scale_game_frames_alt(4), scale_game_frames_alt(7)), 400000.0f);
-                scale_vector_xyz(&spark_dir, data, FUN_001f96b0(6.0f));
+                scale_vector_xyz(&spark_dir, data, multiply_global_factor_ed64(6.0f));
                 add_vector_xyz(&spark_dir, &spark_dir, &moby->pos);
                 subtract_vector_xyz(&spark_dir, &spark_dir, &side_offset);
                 subtract_vector_xyz(&tracer_vel, &spark_dir, &muzzle);
@@ -1781,7 +1781,7 @@ extern unsigned char *D_L03_0015FFD8 __attribute__((sda));
 extern char D_L03_00166EC0[];
 extern char D_L03_001E3628[], D_L03_001E3660[], D_L03_001E3690[];
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b80(void *, void *);
 extern float FUN_001f9af0(void *);
 extern float FUN_001f9b20(void *);
@@ -1795,7 +1795,7 @@ extern int FUN_001f9740(int *);
 extern int FUN_001fa6d0(float);
 extern float FUN_001f9b48(void *, void *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void FUN_001e93b0(void *);
+extern void debug_print(void *) __asm__("FUN_001e93b0");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9a28(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
@@ -1823,11 +1823,11 @@ void FUN_L03_002dc478(L03WatchMoby *m) {
     case 0:
         m->opacity = 0xFF;
         if (d->region_a == -1)
-            FUN_001e93b0(D_L03_001E3628);
+            debug_print(D_L03_001E3628);
         if (d->region_c == -1)
-            FUN_001e93b0(D_L03_001E3660);
+            debug_print(D_L03_001E3660);
         if (d->region_b == -1) {
-            FUN_001e93b0(D_L03_001E3690);
+            debug_print(D_L03_001E3690);
         } else {
             unsigned char *p = D_L03_0015FFD8;
             if (p[d->region_b * 256 + 0x20] != 0) {
@@ -1871,7 +1871,7 @@ void FUN_L03_002dc478(L03WatchMoby *m) {
         }
         if (FUN_001f9740(&d->target_timer)) {
             float heading;
-            d->target_timer = FUN_001fa6d0(FUN_001f96b0(random_float_between(180.0f, 300.0f)));
+            d->target_timer = FUN_001fa6d0(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading =
                 fast_add_rotations(m->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(d->target, 6.0f, heading,

@@ -39,9 +39,9 @@ extern struct {
     s32 y;
 } tfrag_vu_const_block __asm__("D_001DE740");
 
-extern f32 func_001F9E90(f32, f32);
+extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern void FUN_001f9838(void *, void *, s32);
+extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 extern void set_tfrag_dists(void) __asm__("func_00233068");
 
 void update_view_context(void) __asm__("FUN_001f2d98");
@@ -83,10 +83,10 @@ void update_view_context(void) {
     view = &view_context;
     view->aspect_x = view->scr_x / view->half_width;
     view->aspect_y = view->scr_y / view->half_height;
-    view->fov.f[2] = 1.0f / fast_cos(func_001F9E90(1.0f, view->fov.f[0]));
-    view->fov.f[3] = 1.0f / fast_cos(func_001F9E90(1.0f, view->fov.f[1]));
-    horizontal_clip_scale = 1.0f / fast_cos(func_001F9E90(1.0f, view->fov.f[0] * view->aspect_x));
-    vertical_clip_scale = 1.0f / fast_cos(func_001F9E90(1.0f, view->fov.f[1] * view->aspect_y));
+    view->fov.f[2] = 1.0f / fast_cos(fast_arc_tan(1.0f, view->fov.f[0]));
+    view->fov.f[3] = 1.0f / fast_cos(fast_arc_tan(1.0f, view->fov.f[1]));
+    horizontal_clip_scale = 1.0f / fast_cos(fast_arc_tan(1.0f, view->fov.f[0] * view->aspect_x));
+    vertical_clip_scale = 1.0f / fast_cos(fast_arc_tan(1.0f, view->fov.f[1] * view->aspect_y));
     horizontal_clip_scale /= view->fov.f[2];
     vertical_clip_scale /= view->fov.f[3];
     view->aspect_scale.f[2] = 1.0f / view->aspect_x;
@@ -163,9 +163,9 @@ void update_view_context(void) {
     view->proj[14] = -2.0f * projection_near_clip * far_clip /
                      (projection_near_clip * (far_clip - projection_near_clip)) * depth_scale;
     view->proj[15] = 0;
-    FUN_001f9838(view->proj2, view->proj, 0x40);
+    copy_memory_aligned(view->proj2, view->proj, 0x40);
     view->proj2[11] = 1.0f / view->near_clip;
-    FUN_001f9838(view->proj3, view->proj2, 0x40);
+    copy_memory_aligned(view->proj3, view->proj2, 0x40);
     view->proj3[0] /= view->scr_x;
     view->proj3[5] /= view->scr_y;
     view->proj3[10] /= depth_scale;

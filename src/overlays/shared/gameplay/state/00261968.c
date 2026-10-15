@@ -348,9 +348,9 @@ void FUN_L00_00262360(PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002634F8), where it is exact; names translated to the US level program. */
 
-extern void FUN_001fa050(void *, void *);
-extern void FUN_001fa378(void *, void *, void *);
-extern void FUN_00214598(void *, void *);
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
 /* Multiplies the 001fa050 matrices of (x, y, z) and of a+0x40, stored back by FUN_00214598. */
 void FUN_L00_00262480(char *a, float x, float y, float z) {
@@ -359,10 +359,10 @@ void FUN_L00_00262480(char *a, float x, float y, float z) {
     in[0] = x;
     in[1] = y;
     in[2] = z;
-    FUN_001fa050(t, in);
-    FUN_001fa050(u, a + 0x40);
-    FUN_001fa378(u, u, t);
-    FUN_00214598(u, a + 0x40);
+    euler_rotation_matrix(t, in);
+    euler_rotation_matrix(u, a + 0x40);
+    multiply_matrix(u, u, t);
+    matrix_to_euler(u, a + 0x40);
 }
 #define NOT_SDA
 
@@ -569,7 +569,7 @@ void FUN_L00_002628d8(void *m, unsigned char *p, int c, float fa, float fb) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263B78), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9de0(float);
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 /* Advances angle *p by y and swaps the old x*sin offset in a+0x18 for the new one. */
@@ -577,18 +577,18 @@ void FUN_L00_00262b00(float x, float y, char *a, float *p, float *q) {
     float t;
     *p = fast_add_rotations(*p, y);
     *(float *)(a + 0x18) -= *q;
-    t = FUN_001f9de0(*p) * x;
+    t = fast_sin(*p) * x;
     *q = t;
     *(float *)(a + 0x18) += t;
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263BF8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9dc8(float);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
 /* Sets o[16] and o[17] from r and the sines/cosines of the two angles, then advances the angles by l1 and l2. */
 void FUN_L00_00262b80(float *o, float *a, float *b, float r, float l1, float l2) {
-    o[0x10] = r * FUN_001f9de0(*a) * FUN_001f9de0(*b);
-    o[0x11] = r * FUN_001f9de0(*a) * FUN_001f9dc8(*b);
+    o[0x10] = r * fast_sin(*a) * fast_sin(*b);
+    o[0x11] = r * fast_sin(*a) * fast_cos(*b);
     *a = fast_add_rotations(*a, l1);
     *b = fast_add_rotations(*b, l2);
 }

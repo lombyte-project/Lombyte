@@ -19,8 +19,8 @@ typedef struct {
 
 extern FRow D_0018CAA0[4];
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void FUN_001f9bf8(void *dst, void *src, float len);
-extern void func_001F7D30(void *, int, int);
+extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8");
+extern void fast_draw_quad_real(void *, int, int) __asm__("func_001F7D30");
 
 /* Builds a 4-row matrix per light in D_0018E340 (count D_0015F474):
    each row starts as the light's position and is pushed along the
@@ -55,7 +55,7 @@ void draw_light_quads(void) {
         int k;
 
         qcopy(&dir, &D_0018E340[i].dir);
-        FUN_001f9bf8(&dir, &dir, 1.0f);
+        fast_vec_normalize(&dir, &dir, 1.0f);
         s = D_0018E340[i].pos.v[3];
         for (k = 0; k < 4; k++) {
             float cx = D_0018CAA0[k].v[0];
@@ -68,7 +68,7 @@ void draw_light_quads(void) {
             m[k].v[1] += (cy - dir.v[1] * d) * s;
             m[k].v[2] -= dir.v[2] * d * s;
         }
-        func_001F7D30(m, 0, 0);
+        fast_draw_quad_real(m, 0, 0);
     }
 }
 

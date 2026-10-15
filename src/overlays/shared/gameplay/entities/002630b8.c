@@ -19,15 +19,15 @@ typedef struct MobyBound {
 extern struct Moby *D_L00_0015FFE4;
 extern u8 D_L00_00166DC0[];
 float FUN_001f9e90(float, float);
-float FUN_001f9b20(void *);
-float FUN_001f9b80(void *, void *);
-float FUN_001f9b48(void *, void *);
+float vector_length_xy(void *) __asm__("FUN_001f9b20");
+float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float FUN_001fa688(float, float);
 float FUN_001f99c0(float);
-float FUN_001f9df8(float);
-float FUN_001fa6c0(s32);
-void FUN_001f9a10(void *, void *, void *);
-void FUN_00214db0(Vec4 *, float, float, float);
+float fast_arc_sin(float) __asm__("FUN_001f9df8");
+float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
+void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+void build_spherical_offset(Vec4 *, float, float, float) __asm__("FUN_00214db0");
 MobyBound *FUN_002141f8(struct Moby *);
 int FUN_001efa68(void *, Vec4 *, int, void *, int);
 
@@ -44,7 +44,7 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
     pos.q = pos_in->q;
     dir.q = dir_in->q;
     *yaw = FUN_001f9e90(dp->f[0], dp->f[1]);
-    *pitch = -FUN_001f9e90(FUN_001f9b20(dp), dp->f[2]);
+    *pitch = -FUN_001f9e90(vector_length_xy(dp), dp->f[2]);
 
     for (m = D_L00_0015FFE4; m != 0; m = m->next) {
         MobyBound *b;
@@ -60,8 +60,8 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
         if (!(m->flags & 0x1000) || !m || !m->pclass || m->pclass->type != 5)
             continue;
         t_yaw = FUN_001f9e90(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
-        t_pitch = FUN_001f9e90(FUN_001f9b80(pp, &target), target.f[2] - pp->f[2]);
-        dist = FUN_001f9b48(pp, &target);
+        t_pitch = FUN_001f9e90(vector_distance_xy(pp, &target), target.f[2] - pp->f[2]);
+        dist = fast_vec_dist(pp, &target);
         if (dist < 7.5f &&
             FUN_001fa688(hero.moby->rot.z,
                          FUN_001f9e90(m->pos.x - hero.motion.pos.f[0],
@@ -73,13 +73,13 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
         }
         if (best_dist < dist)
             continue;
-        FUN_00214db0(&probe, dist, *yaw, *pitch + hero.ground_pitch.f * 0.5f);
-        FUN_001f9a10(&probe, &probe, pp);
-        ang = FUN_001f9df8(FUN_001f9b48(&probe, &target) / (dist + dist));
+        build_spherical_offset(&probe, dist, *yaw, *pitch + hero.ground_pitch.f * 0.5f);
+        add_vector_xyz(&probe, &probe, pp);
+        ang = fast_arc_sin(fast_vec_dist(&probe, &target) / (dist + dist));
         ang = ang + ang;
         if (max_angle < ang && b) {
-            f32 radius = FUN_001fa6c0(b->size << 3) * 0.125f;
-            f32 shrink = FUN_001f9df8(radius / dist);
+            f32 radius = convert_integer_to_float(b->size << 3) * 0.125f;
+            f32 shrink = fast_arc_sin(radius / dist);
             if (radius < dist)
                 ang -= shrink;
         }
@@ -390,12 +390,12 @@ extern u8 D_L00_00179118[];
 extern s32 D_L00_0015F640;
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 get_help_message_text() __asm__("FUN_001fdd10");
-void FUN_00116248();
+void sprintf() __asm__("FUN_00116248");
 /* Calls FUN_00116248 on D_L00_00179118 with help message a and b; c frames (default 0xB4). */
 void FUN_L00_00263db0(s32 a, s32 b, s32 c) {
     if (c == -1)
         c = scale_game_frames(0xB4);
-    FUN_00116248(D_L00_00179118, get_help_message_text(a), b);
+    sprintf(D_L00_00179118, get_help_message_text(a), b);
     D_L00_0015F640 = c;
 }
 typedef unsigned int u128_263e30 __attribute__((mode(TI), aligned(16)));
@@ -485,14 +485,14 @@ typedef struct {
 
 extern float D_0015ED6C_s[] __asm__("D_0015ED6C") __attribute__((sda));
 extern float FUN_001f9af0(void *a);
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
-extern float FUN_001f96b0(float);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_001fa030(void *, void *);
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_L00_00250df8(void *);
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
@@ -514,13 +514,13 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
         *(long *)(m + 0x38) = *(long *)(src + 0x38);
         m[0x20] = 1;
         qcopy(m + 0x10, pos);
-        FUN_001fa030(m + 0xC0, mat);
+        euler_rotation_basis(m + 0xC0, mat);
         *(unsigned char *)(m + 0x30) = 0xFF;
         *(short *)(m + 0x32) = 0x80;
         *(int *)(m + 0x94) = 0;
         if (a8 == 0)
             *(int *)(d + 0x30) =
-                func_001FA898_r(FUN_001f96b0(random_float_between_alt(60.0f, 120.0f)));
+                func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(60.0f, 120.0f)));
         else
             *(int *)(d + 0x30) = a8;
         *(int *)(d + 0x34) = a9;
@@ -531,8 +531,8 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
         if (FUN_001f9af0(v10) == 0.0f) {
             f21 = random_angle_radians();
             k = random_float_between_alt(2.0f, 4.0f) * frame_time;
-            t[0] = FUN_001f9dc8(f21) * k;
-            t[1] = FUN_001f9de0(f21) * k;
+            t[0] = fast_cos(f21) * k;
+            t[1] = fast_sin(f21) * k;
             t[2] = 0.0f;
             t[2] = random_float_between_alt(5.0f, 8.0f) * frame_time;
             qcopy(d, t);
@@ -550,7 +550,7 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
             qcopy(t, *(char **)(m + 0x24) + 0x30);
             k2 = *(float *)(m + 0x2C);
             k2 = k2 * 0.0009765625f;
-            FUN_001f9a68(t, t, k2);
+            fast_vec_scale(t, t, k2);
             t[3] = t[3] * k2;
             qcopy(d + 0x20, t);
         } else {

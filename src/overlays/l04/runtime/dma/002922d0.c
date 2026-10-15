@@ -13,7 +13,7 @@
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
 
-extern int FUN_001efa68(void *, void *, int, int, int);
+extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
 extern float D_L04_00173FE8 __attribute__((section(".data")));
 float FUN_L04_002922d0(float *pos) {
@@ -25,7 +25,7 @@ float FUN_L04_002922d0(float *pos) {
         a[2] = 0.1f;
     qcopy(b, pos);
     b[2] = b[2] + 0.75f;
-    if (FUN_001efa68(b, a, 2, 0, 0) != 0)
+    if (coll_line_fix(b, a, 2, 0, 0) != 0)
         return D_L04_00173FE8;
     return 0.0f;
 }
@@ -44,13 +44,13 @@ void FUN_L04_00292370(void *unused, char *arg) {
 extern char invalid_animation_message[] __asm__("D_L04_001DB360");
 extern char rig_size_message[] __asm__("D_L04_001DB3F0");
 extern void stub_printf() __asm__("FUN_001e93b0");
-extern void FUN_001f97b0(void);
+extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
 extern float animation_end(int, int) __asm__("FUN_L04_00241910");
 extern float FUN_001f96b0(float) __asm__("FUN_L04_001f1978");
 extern void transform_scaled_vertex_batch(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
 extern void get_joint_matrix(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void attach_manipulator(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");
 
 void FUN_L04_002923b8(struct Moby *moby, LegRig *rig) {
@@ -63,7 +63,7 @@ void FUN_L04_002923b8(struct Moby *moby, LegRig *rig) {
     for (i = 0; i < 13; i++) {
         if (rig->anims[i]->id < 0) {
             stub_printf(invalid_animation_message, i, moby->oclass);
-            FUN_001f97b0();
+            raise_kernel_trap();
         }
         rig->anims[i]->start = animation_start(moby->class_slot, rig->anims[i]->id);
         rig->anims[i]->len = animation_end(moby->class_slot, rig->anims[i]->id) - rig->anims[i]->start;
@@ -90,7 +90,7 @@ void FUN_L04_002923b8(struct Moby *moby, LegRig *rig) {
         get_joint_matrix(moby, rig->legs[k].joint, matrix[0]);
         rig->legs[k].upper_turn = 0;
         rig->legs[k].lower_turn = 0;
-        rig->legs[k].yaw = FUN_001f9e90(matrix[1][0], matrix[1][1]);
+        rig->legs[k].yaw = fast_arc_tan(matrix[1][0], matrix[1][1]);
         if (rig->legs[k].manip_b.attached == 0)
             attach_manipulator(moby, rig->legs[k].slot_b, &rig->legs[k].manip_b);
         if (rig->legs[k].manip_a.attached == 0)
@@ -163,7 +163,7 @@ typedef struct {
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
@@ -349,8 +349,8 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
 }
 typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) RigVec;
 
-extern f32 FUN_0020c9e0(struct Moby *);
-extern f32 FUN_001fa6c0(s32);
+extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 rig_pick_mode(struct Moby *, LegRig *, f32) __asm__("FUN_L04_002927d0");
 extern f32 spring_turn(f32 cur, f32 target, f32 k, f32 d, f32 max, f32 *vel) __asm__("FUN_L00_00258110");
 extern void rig_animate(struct Moby *, LegRig *, s32, f32) __asm__("FUN_L04_00292d48");
@@ -391,9 +391,9 @@ s32 FUN_L04_00295778(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32
     Vec4f *pos;
 
     if (moby->seq != 0xFF) {
-        time = FUN_0020c9e0(moby);
+        time = compute_interpolated_record_value(moby);
     } else {
-        time = FUN_001fa6c0(moby->prev_frame) + animation_start(moby->class_slot, moby->prev_seq);
+        time = convert_integer_to_float(moby->prev_frame) + animation_start(moby->class_slot, moby->prev_seq);
     }
     mode = rig_pick_mode(moby, rig, time);
     if (rig->unkEE & 4) {
@@ -543,9 +543,9 @@ u8 D_L04_001CA938[13][4] = {
 extern void transform_scaled_vertex_batch(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
 extern void get_joint_matrix(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
 extern void attach_manipulator(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");
-extern float FUN_001f9e90(float, float);
-extern float FUN_0020c9e0(struct Moby *);
-extern float FUN_001fa6c0(int);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+extern float compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
 extern float FUN_001f99c0(float);
 extern int rig_pick_mode(struct Moby *m, LegRig *rig, float t) __asm__("FUN_L04_002927d0");
@@ -569,16 +569,16 @@ void FUN_L04_00295de8(struct Moby *m, LegRig *rig) {
         get_joint_matrix(m, rig->legs[i].joint, mtx[0]);
         rig->legs[i].upper_turn = 0;
         rig->legs[i].lower_turn = 0;
-        rig->legs[i].yaw = FUN_001f9e90(mtx[1][0], mtx[1][1]);
+        rig->legs[i].yaw = fast_arc_tan(mtx[1][0], mtx[1][1]);
         if (rig->legs[i].manip_b.attached == 0)
             attach_manipulator(m, rig->legs[i].slot_b, &rig->legs[i].manip_b);
         if (rig->legs[i].manip_a.attached == 0)
             attach_manipulator(m, rig->legs[i].slot_a, &rig->legs[i].manip_a);
     }
     if (m->seq != 0xFF) {
-        t = FUN_0020c9e0(m);
+        t = compute_interpolated_record_value(m);
     } else {
-        t = FUN_001fa6c0(m->prev_frame);
+        t = convert_integer_to_float(m->prev_frame);
         t += animation_start(m->class_slot, m->prev_seq);
     }
     rig->mode = 5;

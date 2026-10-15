@@ -14,12 +14,12 @@ extern u8 D_00187080[];
 extern char camera_rows[] __asm__("D_00187290");
 extern u8 D_001872B0[];
 
-extern s32 func_001F9740(s32 *);
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9bf8(f32 *, f32 *, f32);
+extern s32 fast_dec_timer(s32 *) __asm__("func_001F9740");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_normalize(f32 *, f32 *, f32) __asm__("FUN_001f9bf8");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
-extern f32 func_001FA6C0(s32);
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 
 void apply_camera_shake(struct CameraShake *shake, s32 arg1) __asm__("FUN_001ed360");
 
@@ -41,19 +41,19 @@ void apply_camera_shake(struct CameraShake *shake, s32 arg1) {
             if (shake->unkC < v5) {
                 shake->unkC = v5;
             }
-            func_001F9740(&shake->unk8);
-            v1 = func_001FA6C0(shake->unk8);
-            v2 = func_001FA6C0(shake->unkC);
+            fast_dec_timer(&shake->unk8);
+            v1 = convert_integer_to_float(shake->unk8);
+            v2 = convert_integer_to_float(shake->unkC);
             v3 = v1 / v2;
-            v4 = fast_cos(fast_normalize_angle(2.0f * func_001FA6C0(shake->unk8)));
+            v4 = fast_cos(fast_normalize_angle(2.0f * convert_integer_to_float(shake->unk8)));
             val = shake->unk0 * v4 * v3 * v3;
             shake->unk4 = val;
             if (arg1 == 0) {
-                FUN_001f9bf8(sp_slot, D_001872B0, val);
+                fast_vec_normalize(sp_slot, D_001872B0, val);
             } else {
-                FUN_001f9bf8(sp_slot, camera_rows, val);
+                fast_vec_normalize(sp_slot, camera_rows, val);
             }
-            FUN_001f9a10(D_00187080, D_00187080, sp_slot);
+            add_vector_xyz(D_00187080, D_00187080, sp_slot);
         } else {
             shake->unkC = 0;
         }

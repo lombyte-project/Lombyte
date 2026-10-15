@@ -1,4 +1,4 @@
-extern float FUN_001f9988(float);
+extern float square_root(float) __asm__("FUN_001f9988");
 typedef struct {
     int next[3];
 } QuatNext;
@@ -19,7 +19,7 @@ void matrix_to_quaternion(void *arg0, void *arg1) {
 
     trace = m[0][0] + m[1][1] + m[2][2];
     if (trace > 0.0f) {
-        s = FUN_001f9988(trace + 1.0f);
+        s = square_root(trace + 1.0f);
         q[3] = s * 0.5f;
         s = 0.5f / s;
         q[0] = (m[2][1] - m[1][2]) * s;
@@ -44,7 +44,7 @@ void matrix_to_quaternion(void *arg0, void *arg1) {
         }
         j = n.next[i];
         k = n.next[j];
-        s = FUN_001f9988(mat[i][i] - (mat[j][j] + mat[k][k]) + 1.0f);
+        s = square_root(mat[i][i] - (mat[j][j] + mat[k][k]) + 1.0f);
         q[i] = s * 0.5f;
         if (s != 0.0f) {
             s = 0.5f / s;

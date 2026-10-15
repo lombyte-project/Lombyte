@@ -431,7 +431,7 @@ extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
 extern float integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int tween_color(float, int, int) __asm__("FUN_001fa6e0");
-extern void FUN_001153fc(void *, int, int);
+extern void memset(void *, int, int) __asm__("FUN_001153fc");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_packet(void *, int, int) __asm__("FUN_001f7d30");
 extern int level_frame __asm__("D_L11_0015F5CC");
@@ -491,7 +491,7 @@ int FUN_L11_003192c8(char *moby) {
             colors[j] = tween_color(t, 0x8c28aa28, 0x144646);
         }
     }
-    FUN_001153fc(offset, 0, 0x20);
+    memset(offset, 0, 0x20);
     offset[2] = 0.25f;
     offset[6] = -0.25f;
     list = D_L11_001AC240[(unsigned char)moby[0x21]];
@@ -541,7 +541,7 @@ int FUN_L11_003192c8(char *moby) {
 extern int level_frame __asm__("D_L11_0015F5CC");
 extern int FUN_L11_003192c8();
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
-extern void FUN_001f9cf8(void *, void *, void *);
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern void f49(void *, void *) __asm__("FUN_001f4600");
@@ -565,14 +565,14 @@ void FUN_L11_00319670(char *moby) {
     v[1] = 0.7f;
     v[0] = -1.2f;
     v[2] = 0.3f;
-    FUN_001f9cf8(v, v, moby + 0xC0);
+    transform_vector_by_basis(v, v, moby + 0xC0);
     add_vector_xyz(d + ((*(int *)(d + 0x2C4) << 4) + 0xC0), v, moby + 0x10);
     *(float *)(d + (*(int *)(d + 0x2C4) << 4) + 0xCC) = 1.0f;
     *(OvlQuad *)w = 0;
     w[0] = -1.2f;
     w[1] = -0.7f;
     w[2] = 0.3f;
-    FUN_001f9cf8(w, w, moby + 0xC0);
+    transform_vector_by_basis(w, w, moby + 0xC0);
     add_vector_xyz(d + ((*(int *)(d + 0x2C4) << 4) + 0x1C0), w, moby + 0x10);
     t = level_frame;
     *(float *)(d + (*(int *)(d + 0x2C4) << 4) + 0x1CC) = 1.0f;

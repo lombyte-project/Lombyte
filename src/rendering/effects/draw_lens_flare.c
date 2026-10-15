@@ -28,7 +28,7 @@ typedef struct {
 #include "rnc/rendering/screen.h"
 extern LensFlare effect_ribbon __asm__("D_00187300");
 
-extern f32 FUN_001f9b48(void *, void *);
+extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern float absolute_float(float input) __asm__("func_001F99C0");
@@ -65,7 +65,7 @@ void draw_lens_flare(void) {
     if (effect_ribbon.intensity <= 0.0f) {
         return;
     }
-    dist = FUN_001f9b48(camera_position, effect_ribbon.moby->pos);
+    dist = fast_vec_dist(camera_position, effect_ribbon.moby->pos);
     ctr[0] = convert_integer_to_float(screen_extent.half_width);
     ctr[1] = convert_integer_to_float(screen_extent.half_height);
     project_to_screen(scr, effect_ribbon.moby->pos);

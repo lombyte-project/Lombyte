@@ -117,7 +117,7 @@ extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
 extern void FUN_L00_002eac18(int);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_0020cca8(void *, int, void *);
+extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_L00_00250df8(void *);
@@ -268,7 +268,7 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
         Vec4 offset;
         if (*(struct Moby **)(data + 0x178) != 0) {
             moby_point_position(moby, 2, &(*(struct Moby **)(data + 0x178))->pos);
-            FUN_0020cca8(moby, 2, mtx);
+            build_moby_bone_transform(moby, 2, mtx);
             copy_matrix(&(*(struct Moby **)(data + 0x178))->rot_row0, mtx);
             transform_vector_by_basis(&offset, D_L02_00161CE0, &(*(struct Moby **)(data + 0x178))->rot_row0);
             vec_add(&(*(struct Moby **)(data + 0x178))->pos, &(*(struct Moby **)(data + 0x178))->pos, &offset);
@@ -557,8 +557,8 @@ extern void add_vectors(void *out, void *a, void *b) __asm__("FUN_001f9a10");
 extern float distance_xyz(void *a, void *b) __asm__("FUN_001f9b80");
 extern float atan2_e2228(float, float) __asm__("FUN_001f9e90");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_0020cca8(void *, int, void *);
-extern void FUN_00212ed8(void *, int, int);
+extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
+extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int allocate_voice_for_target(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
@@ -582,7 +582,7 @@ void FUN_L02_002e2228(struct Moby *moby) {
     qcopy(&moby->pos, &pos);
     switch (moby->state) {
     case 0:
-        FUN_0020cca8(driver, 0, joint_mtx);
+        build_moby_bone_transform(driver, 0, joint_mtx);
         moby->rot.z = atan2_e2228(joint_mtx[0], joint_mtx[1]);
         moby->state = 1;
         blend_moby_animation(driver, 3, 0, 0);
@@ -607,11 +607,11 @@ void FUN_L02_002e2228(struct Moby *moby) {
         if (ride) {
             if (moby->state == 5 || moby->state == 1) {
                 moby->state = 2;
-                FUN_00212ed8(driver, 0, 0);
+                set_moby_animation(driver, 0, 0);
                 *(int *)(data + 0xA4) = allocate_voice_for_target(2, 4, driver);
             } else {
                 moby->state = 4;
-                FUN_00212ed8(driver, 2, 0);
+                set_moby_animation(driver, 2, 0);
                 *(int *)(data + 0xA4) = allocate_voice_for_target(0, 4, driver);
             }
         } else if (hero.ground_moby != moby) {
@@ -620,7 +620,7 @@ void FUN_L02_002e2228(struct Moby *moby) {
         break;
     case 2:
     case 4:
-        FUN_0020cca8(driver, 0, joint_mtx);
+        build_moby_bone_transform(driver, 0, joint_mtx);
         moby->rot.z = atan2_e2228(joint_mtx[0], joint_mtx[1]);
         if (distance_xyz(&moby->pos, &hero.motion.pos) < 1.5f && hero.motion.pos.f[2] < moby->pos.z - 1.5f) {
             driver->anim_speed = 0.0f;

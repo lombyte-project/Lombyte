@@ -16,10 +16,10 @@ extern void start_camera_blend(void *) __asm__("func_001EC8A0");
 extern int update_all_cameras(void) __asm__("func_001EC420");
 extern void apply_camera_shake(void *, int) __asm__("func_001ED360");
 extern void update_camera_underwater_flag(void) __asm__("func_001ED7F0");
-extern void FUN_001fa298(void *, void *);
-extern void FUN_00214598(void *, void *);
+extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
+extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void update_camera_environment_from_regions(void *) __asm__("FUN_001ee4b0");
-extern void func_001F9AD8(void *, void *, void *);
+extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 /* Camera update, once per frame: count the frame, run the camera
    steps, then (unless the D_0018C318 freeze flag is set) take the view
    from the target object (mode 3 blends it through FUN_001ed2b0) and
@@ -67,8 +67,8 @@ void update_camera(void) {
     {
         char *st = occl_cam_state;
         if (*(int *)(st + 0x14) == 0) {
-            FUN_001fa298(m, camera_rows);
-            FUN_00214598(m, camera_rows - 0x200);
+            copy_matrix_rotation(m, camera_rows);
+            matrix_to_euler(m, camera_rows - 0x200);
         }
     }
 frozen:
@@ -78,7 +78,7 @@ frozen:
     update_camera_underwater_flag();
     update_camera_environment_from_regions(v - 0x20);
     if (D_0015EDB4[0] != 0) {
-        func_001F9AD8(v + 0x200, v + 0x210, v + 0x1F0);
+        fast_vec_cross(v + 0x200, v + 0x210, v + 0x1F0);
     }
 }
 

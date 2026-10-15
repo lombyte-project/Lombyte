@@ -234,7 +234,7 @@ typedef struct {
 extern float D_L05_00215C70[4][4];
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
-extern void FUN_001f9d20(void *, void *, void *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void add_vector_xyz(void *, void *, void *);
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, void *, int);
@@ -288,7 +288,7 @@ void FUN_L05_0031cf58(char *m) {
     pk.col[0] = col;
     for (j = 0; j < 4; j++) {
         scale_vector_xyz(pk.m[j], D_L05_00215C70[j], *(float *)(d + 0x70));
-        FUN_001f9d20(pk.m[j], pk.m[j], M);
+        transform_vector(pk.m[j], pk.m[j], M);
     }
     draw_geometry_quad(&pk, 0, 0);
 }
@@ -315,7 +315,7 @@ char *FUN_L05_0031d160(unsigned char *a0) {
 
 
 extern float FUN_001f9b80(float *, float *);
-extern void FUN_001f9d20(void *, void *, void *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
@@ -325,7 +325,7 @@ void FUN_L05_00329358(char *moby) {
     float *p = (float *)(d + 0x80);
     *(OvlQuad *)v = 0;
     v[2] = 0.7f;
-    FUN_001f9d20(v, v, &hero);
+    transform_vector(v, v, &hero);
     add_vector_xyz(p, &hero.motion.pos, v);
     qcopy(d + 0x1D0, p);
     if (current_level_index == 5) {
@@ -589,7 +589,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 FUN_001f9ab0(void *, void *);
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float FUN_001f9df8(float);
+extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern void rotate_about_axis(void *out, void *v, void *axis, f32 ang) __asm__("FUN_00214890");
 extern float FUN_L00_001eb328(void *, float, float, float, float, float);
 extern float FUN_001ebd78(void *, float, float, float, float, float);
@@ -629,7 +629,7 @@ void FUN_L05_003298d8(Camera *cam) {
         if (len == 0.0f) {
             len = 0.0001f;
         }
-        ang = 1.5707964f - FUN_001f9df8(dot / len);
+        ang = 1.5707964f - fast_arc_sin(dot / len);
         normalize_vector_xyz(&unit, &flat, 1.0f);
         if (FUN_001f9ab0(&side, &unit) < 0.0f) {
             ang = -ang;
@@ -641,7 +641,7 @@ void FUN_L05_003298d8(Camera *cam) {
         if (len == 0.0f) {
             len = 0.0001f;
         }
-        tilt = 1.5707964f - FUN_001f9df8(dot / len);
+        tilt = 1.5707964f - fast_arc_sin(dot / len);
         normalize_vector_xyz(&unit, &rel, 1.0f);
         pitch = -tilt;
         if (FUN_001f9ab0(&up, &unit) < 0.0f) {
@@ -911,7 +911,7 @@ void FUN_L05_00329ce8(Camera_32B1F8 *camera) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032BBF0), where it is exact; names translated to the US level program. */
 
-extern void FUN_002144d8(void *, void *);
+extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("FUN_002144d8");
 extern void FUN_L05_003296e0(Camera *);
 
 extern char *D_L05_00167204 __attribute__((section(".data")));
@@ -921,6 +921,6 @@ void FUN_L05_0032a6e0(char *out) {
     qcopy(out, src);
     qcopy(out + 0x10, src + 0x10);
     qcopy(out + 0x20, src + 0x20);
-    FUN_002144d8(out + 0x40, out);
+    extract_matrix_rotation_quaternion(out + 0x40, out);
     FUN_L05_003296e0((Camera *)out);
 }

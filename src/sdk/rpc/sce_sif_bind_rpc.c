@@ -13,7 +13,7 @@ extern s32 CreateSema();
 extern s32 DeleteSema();
 extern s32 WaitSema();
 extern s32 get_available_rpc_packet() __asm__("func_0011ACE8");
-extern s32 func_0011AD90();
+extern s32 clear_state_bits() __asm__("func_0011AD90");
 extern s32 sceSifSendCmd();
 s32 sceSifBindRpc(struct sceSifClientData *client, s32 rpc_number, s32 mode) {
     s32 sema_param[6];
@@ -41,13 +41,13 @@ s32 sceSifBindRpc(struct sceSifClientData *client, s32 rpc_number, s32 mode) {
     if (sema_id >= 0) {
         goto block_4;
     }
-    func_0011AD90(packet);
+    clear_state_bits(packet);
     return -3;
 block_4:
     if (sceSifSendCmd(0x80000009, packet, 0x40, 0, 0, 0) != 0) {
         goto block_6;
     }
-    func_0011AD90(packet);
+    clear_state_bits(packet);
     DeleteSema(client->rpcd.tid);
     return -2;
 block_6:
@@ -59,6 +59,6 @@ block_7:
     if (sceSifSendCmd(0x80000009, packet, 0x40, 0, 0, 0) != 0) {
         return 0;
     }
-    func_0011AD90(packet);
+    clear_state_bits(packet);
     return -2;
 }

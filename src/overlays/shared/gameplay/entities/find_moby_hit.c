@@ -233,7 +233,7 @@ typedef struct {
     int a[4];
 } Vk __attribute__((aligned(16)));
 
-extern void FUN_001fa3c0(void *, void *, void *);
+extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
 extern void FUN_L00_001fff28(void *, int, float);
 
 void FUN_L00_00259f50(void *a, float *v) {
@@ -241,8 +241,8 @@ void FUN_L00_00259f50(void *a, float *v) {
     FUN_L00_001fff28(&t2, 0, v[0]);
     FUN_L00_001fff28(&t1, 1, v[1]);
     FUN_L00_001fff28(&t0, 2, v[2]);
-    FUN_001fa3c0(a, &t2, &t1);
-    FUN_001fa3c0(a, a, &t0);
+    multiply_quaternions(a, &t2, &t1);
+    multiply_quaternions(a, a, &t0);
 }
 #include "eetypes.h"
 #include "rnc/overlay/quad.h"
@@ -376,16 +376,16 @@ extern f32 D_L00_00160080[2] __attribute__((sda));
 extern f32 D_L00_001B01C8[][8];
 extern u8 D_L00_001B0180[][4];
 extern Q_25a478 *FUN_002141f8(void *);
-extern s32 FUN_001f9770(s16 *);
+extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 extern f32 FUN_001f9dc8(f32);
 extern f32 FUN_001f9de0(f32);
 extern f32 FUN_001f9af0_c(void *) __asm__("FUN_001f9af0");
 extern void FUN_001f9a68(void *, void *, f32);
-extern void FUN_001f9bf8(void *, void *, f32);
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9c48(void *, void *, f32);
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 /* hit_reaction is the executable function of the same bytes (src/gameplay). */
 
@@ -438,17 +438,17 @@ typedef union {
     OvlQuad q;
     float f[4];
 } U25ab48;
-float FUN_001f9e90(float, float);
-float FUN_001f9b20(void *);
+float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+float vector_length_xy(void *) __asm__("FUN_001f9b20");
 void FUN_L00_0025ab48(OvlQuad *v, float *ang, float *s1, float *s2) {
     U25ab48 t;
     t.q = *v;
     if (t.f[3] != 5627.9248046875f) {
-        *ang = FUN_001f9e90(t.f[0], t.f[1]);
+        *ang = fast_arc_tan(t.f[0], t.f[1]);
         return;
     }
-    *ang = FUN_001f9e90(t.f[0], t.f[1]);
-    *s1 *= FUN_001f9b20(&t);
+    *ang = fast_arc_tan(t.f[0], t.f[1]);
+    *s1 *= vector_length_xy(&t);
     t.f[3] = 0;
     *s2 *= t.f[2];
 }
@@ -462,14 +462,14 @@ typedef struct {
     float x, y, z, w;
 } Vc0 __attribute__((aligned(16)));
 
-extern float FUN_001f9b20(void *);
-extern void FUN_001f9a28(void *, void *, void *);
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g) {
     Vc0 d;
     float t;
-    FUN_001f9a28(&d, b, a);
-    t = FUN_001f9b20(&d) / speed;
+    subtract_vector_xyz(&d, b, a);
+    t = vector_length_xy(&d) / speed;
     if (out) {
         *out = t;
     }

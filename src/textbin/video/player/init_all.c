@@ -27,11 +27,11 @@ extern s32 decoder_thread_id __asm__("D_00161210");
 extern u8 D_00166C00;
 extern void video_callback() __asm__("func_0023B5F0");
 extern void pcm_callback() __asm__("func_0023B728");
-extern void func_0023B3D8();
+extern void vblank_handler() __asm__("func_0023B3D8");
 
 extern void handler_end_image() __asm__("FUN_0023b540");
 extern void video_dec_main() __asm__("func_0023CE28");
-extern s32 func_0023B940(struct AudioDecoderState *);
+extern s32 read_buf_create(struct AudioDecoderState *) __asm__("func_0023B940");
 extern void sceMpegInit(void);
 extern s32 video_dec_create(void *, u32, u32, void *, u32, u32, void *,
                             u32) __asm__("FUN_0023cac8");
@@ -59,7 +59,7 @@ s32 init_all(s32 stream_source, s32 source_mode, s32 callback_context) {
     void *thread_gp;
     *((volatile s32 *)0x1000E000) |= 3;
     *((volatile s32 *)0x1000E010) = 4;
-    func_0023B940(decoder_state);
+    read_buf_create(decoder_state);
     sceMpegInit();
     video_dec_create(((u8 *)decoder_state) + 0xD9048, decoder_buffer_address + 0x1C85C0, 0xEB768,
                      ((u8 *)decoder_state) + 0x52040, decoder_buffer_address + 0x1C7180, 0x100,
@@ -89,7 +89,7 @@ s32 init_all(s32 stream_source, s32 source_mode, s32 callback_context) {
     } else {
         opened = 1;
     }
-    decoder_state->intc_handler_id = AddIntcHandler(2, func_0023B3D8, 0);
+    decoder_state->intc_handler_id = AddIntcHandler(2, vblank_handler, 0);
     enable_intc(2);
     decoder_state->dmac_handler_id = AddDmacHandler(2, handler_end_image, 0);
     enable_dmac(2);

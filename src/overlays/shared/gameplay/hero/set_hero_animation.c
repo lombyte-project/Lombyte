@@ -875,20 +875,20 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
    by the matrix at hero and adds the vector at hero +0x80. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233E48), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9d20(void *, void *, void *);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 
 void FUN_L00_002335c8(float *out, float r, float angle, float z) {
     struct Hero *base;
 
-    out[0] = FUN_001f9dc8(angle) * r;
-    out[1] = FUN_001f9de0(angle) * r;
+    out[0] = fast_cos(angle) * r;
+    out[1] = fast_sin(angle) * r;
     base = &hero;
     out[2] = z;
-    FUN_001f9d20(out, out, base->unk0);
-    FUN_001f9a10(out, out, &base->motion.pos);
+    transform_vector(out, out, base->unk0);
+    add_vector_xyz(out, out, &base->motion.pos);
 }
 /* Sets OUT to the point (X, Y, Z, 0) (cleared first by func_001F9BC0),
    then transforms it by the matrix at hero and adds the vector at
@@ -905,8 +905,8 @@ void FUN_L00_00233660(float *out, float x, float y, float z) {
     out[0] = x;
     out[1] = y;
     out[2] = z;
-    FUN_001f9d20(out, out, base->unk0);
-    FUN_001f9a10(out, out, &base->motion.pos);
+    transform_vector(out, out, base->unk0);
+    add_vector_xyz(out, out, &base->motion.pos);
 }
 void FUN_L00_002334d0_002336e8(float) __asm__("FUN_L00_002334d0");
 /* Calls FUN_L00_002334d0 with -x. */
@@ -990,7 +990,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234150), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9bf8(void *, void *, float);
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void FUN_L00_002338d0(float *dst, float *src) {
     struct Hero *base = &hero;
@@ -1002,7 +1002,7 @@ void FUN_L00_002338d0(float *dst, float *src) {
         dst[2] = 0.0f;
         break;
     case 1:
-        FUN_001f9bf8(n, &base->unk270, 1.0f);
+        fast_vec_normalize(n, &base->unk270, 1.0f);
         scale_vector_xyz(n, n, dot_vectors_xyz(n, src));
         subtract_vector_xyz(dst, src, n);
         break;
@@ -1019,9 +1019,9 @@ void FUN_L00_002338d0(float *dst, float *src) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234250), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b20(void *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001fa050(void *, void *);
-extern void FUN_001fa2d8(void *, void *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 float FUN_L00_002339d0(float *v) {
     struct Hero *base = &hero;
@@ -1034,9 +1034,9 @@ float FUN_L00_002339d0(float *v) {
         return FUN_001f9b20(v);
     case 1:
     case 2:
-        FUN_001fa050(m, ((char *)base->moby) + 0x40);
-        FUN_001fa2d8(inv, m);
-        FUN_001f9d20(out, v, inv);
+        euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
+        transpose_rotation_matrix(inv, m);
+        transform_vector(out, v, inv);
         return FUN_001f9b20(out);
     }
     return 0.0f;
@@ -1048,8 +1048,8 @@ float FUN_L00_002339d0(float *v) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002342F8), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9ab0(void *, void *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001fa050(void *, void *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
 float FUN_L00_00233a78(float *v) {
     struct Hero *base = &hero;
@@ -1063,8 +1063,8 @@ float FUN_L00_00233a78(float *v) {
     case 2:
         clear_u64_value(axis);
         axis[2] = 1.0f;
-        FUN_001fa050(m, ((char *)base->moby) + 0x40);
-        FUN_001f9d20(axis, axis, m);
+        euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
+        transform_vector(axis, axis, m);
         return FUN_001f9ab0(axis, v);
     }
     return 0.0f;
@@ -1096,21 +1096,21 @@ void FUN_L00_00233b20(f32 *out, f32 *in, f32 z) {
    matrices at +0x40 and +0x0. The switch gives retail's case tree. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234420), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001f9c48(float *, float *, float);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 
 void FUN_L00_00233ba0(float *dst, float *src, float z) {
     struct Hero *base = &hero;
 
     switch (base->unk20B3) {
     case 0:
-        FUN_001f9c48(dst, src, z);
+        set_vector_length_xy(dst, src, z);
         break;
     case 1:
     case 2:
-        FUN_001f9d20(dst, src, base->unk40);
-        FUN_001f9c48(dst, dst, z);
-        FUN_001f9d20(dst, dst, base->unk0);
+        transform_vector(dst, src, base->unk40);
+        set_vector_length_xy(dst, dst, z);
+        transform_vector(dst, dst, base->unk0);
         break;
     }
 }
@@ -1642,16 +1642,16 @@ void FUN_L00_00234b38(void *a) {
 extern u8 D_L00_0017A608[];
 extern u8 D_L00_0017C680[];
 extern u8 D_L00_0015F6A8[];
-void FUN_0020cca8(void *, int, void *);
-void FUN_001fa2b8(void *, void *);
-void FUN_0020e098(void *);
+void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
+void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
+void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 void FUN_L00_002092c8(void *, void *, void *, int, void *);
 void FUN_L00_00234c78(void *a, char *p) {
     u128 mt[4];
-    FUN_0020cca8(a, 4, mt);
+    build_moby_bone_transform(a, 4, mt);
     qcopy(p + 0x10, &mt[3]);
-    FUN_001fa2b8(p + 0xc0, mt);
-    FUN_0020e098(p);
+    copy_matrix3x4(p + 0xc0, mt);
+    refresh_moby_spatial_bounds_from_basis(p);
     if (*(short *)(p + 0xa6) == 0x1b1)
         FUN_L00_002092c8(D_L00_0017A608, D_L00_0017C680, *(void **)(p + 0x24), 6, a);
     else

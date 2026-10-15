@@ -3,7 +3,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/camera/camera_globals.h"
-extern void FUN_001f9bf8(void *dst, void *src, float len); /* dst = normalize(src) * len */
+extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8"); /* dst = normalize(src) * len */
 extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1,
                                   void *axis) __asm__("func_001EC530");
 /* Builds three unit vectors from D_0013F350's +0x2080 pointer table
@@ -20,9 +20,9 @@ void capture_camera_orientation(void) {
     char local1[16];
     char local2[16];
 
-    FUN_001f9bf8(local0, (char *)g->moby + 0xC0, 1.0f);
-    FUN_001f9bf8(local1, (char *)g->moby + 0xD0, 1.0f);
-    FUN_001f9bf8(local2, (char *)g->moby + 0xE0, 1.0f);
+    fast_vec_normalize(local0, (char *)g->moby + 0xC0, 1.0f);
+    fast_vec_normalize(local1, (char *)g->moby + 0xD0, 1.0f);
+    fast_vec_normalize(local2, (char *)g->moby + 0xE0, 1.0f);
 
     qcopy(r + 0x90, local0);
     qcopy(r + 0xA0, local2);
@@ -31,6 +31,6 @@ void capture_camera_orientation(void) {
 
     qcopy(r + 0xB0, r + 0xD0);
 }
-extern void FUN_001f9bf8(void *dst, void *src, float len);
+extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8");
 
 extern __typeof__(capture_camera_orientation) func_001EC710 __attribute__((alias("FUN_001ec710")));

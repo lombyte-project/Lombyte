@@ -2,13 +2,13 @@
 #include "rnc/data_labels.h"
 #include "rnc/video/decoder/decoder_globals.h"
 
-extern s32 func_0023AEE0();
+extern s32 is_state_field_large() __asm__("func_0023AEE0");
 
 s32 is_audio_ok(void) __asm__("FUN_0023a790");
 
 s32 is_audio_ok(void) {
     s32 result;
-    result = func_0023AEE0(decoder_state + 0xD9100);
+    result = is_state_field_large(decoder_state + 0xD9100);
     return result;
 }
 

@@ -16,7 +16,7 @@
 
 extern int FUN_001f0b58(void);
 extern int FUN_L00_001f0d60(float, void *, int, void *);
-extern void FUN_001f9810(void *, int);
+extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
 extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L16_0021e398");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -26,7 +26,7 @@ void FUN_L16_002097a0(void) {
     int keep = g->unk12ED;
     int st = g->ground_type;
     int v;
-    FUN_001f9810(&g->ground_type, 0x10);
+    fast_mem_zero16(&g->ground_type, 0x10);
     g->unk12ED = keep;
     g->ground_type = -1;
     g->unk20A9 = 0;
@@ -143,7 +143,7 @@ void FUN_L16_002097a0(void) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_0020FEC8), where it is exact; names translated to the US level program. */
 
 extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9bf8(void *, void *, float);
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_0025f730(void *a, float x);
 
 void FUN_L16_0020f8b0(void) {
@@ -152,7 +152,7 @@ void FUN_L16_0020f8b0(void) {
     char *q;
     qcopy(p, p - 0x670);
     q = p - 0x770;
-    FUN_001f9bf8(tmp, q, *(float *)(q + 0x194));
+    fast_vec_normalize(tmp, q, *(float *)(q + 0x194));
     FUN_001f9a10(p, p, tmp);
     qcopy(p - 0x690, p);
     FUN_L00_0025f730(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
@@ -172,8 +172,8 @@ s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
 u8 *FUN_002141f8(s32);
-f32 FUN_001f9b48(void *, void *);
-void FUN_00125180(void *, void *);
+f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 f32 FUN_L00_00233d30(void *);
 f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 void FUN_001f9a28(void *, void *, void *);
@@ -271,9 +271,9 @@ void FUN_L16_0020ffb0(void) {
     if (HH.unk1C > 0) {
         qcopy((u8 *)&hero.ground_point, &HH.point);
         hero.ground_z.f = HH.point.f[2];
-        hero.ground_distance = FUN_001f9b48((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
+        hero.ground_distance = fast_vec_dist((u8 *)&hero.motion.pos, (u8 *)&hero.ground_point);
         hero.ground_moby = (struct Moby *)HH.moby;
-        FUN_00125180((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
+        sceVu0Normalize((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
         hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
         FUN_001f9a28(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
@@ -348,7 +348,7 @@ d1:
             if (0.4f < FUN_001f99c0(f)) {
                 hero.unk2C0.f[i] = 0.0f;
             }
-            FUN_00125180(&v60, (u8 *)&HH.normal_x);
+            sceVu0Normalize(&v60, (u8 *)&HH.normal_x);
             FUN_L00_00216078(&v60, &v50);
             if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
                 hero.unk2C8.f[i] = v50.f[1];
@@ -531,7 +531,7 @@ extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float FUN_L00_00213350(void *);
 extern float FUN_L00_002339d0(float *v);
 extern float FUN_L00_00233a78(float *);
-extern void FUN_001f9c48(void *, void *, float);
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00212ff0(void);
 extern void FUN_L00_002137a8(void);
 extern void FUN_L00_002338d0(float *, float *);
@@ -599,7 +599,7 @@ void FUN_L16_00211098(void) {
             position = (float *)(((char *)&D_0013F430));
             length = vector_length_xy(position);
             limit = player->speed_limit - 0.02f;
-            if (limit < length) FUN_001f9c48(position, position, limit);
+            if (limit < length) set_vector_length_xy(position, position, limit);
         }
     } else if (player->mode == 21) {
         float limit = 0.6f;
@@ -625,7 +625,7 @@ void FUN_L16_00211098(void) {
                     position = (float *)(((char *)&D_0013F430));
                     length = vector_length_xy(position);
                     limit = player->speed_limit - 0.02f;
-                    if (limit < length) FUN_001f9c48(position, position, limit);
+                    if (limit < length) set_vector_length_xy(position, position, limit);
                 }
             }
         }

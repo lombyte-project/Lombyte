@@ -16,9 +16,9 @@ typedef struct {
 } L00Entry;
 
 extern L00Entry D_L00_00166000[8];
-extern f32 FUN_001fa6c0(s32);
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern f32 FUN_001f9dc8(f32);
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 
 /* FUN_L00_001eaa08 is the executable function of the same bytes (src/gameplay). */
 

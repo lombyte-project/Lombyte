@@ -77,10 +77,10 @@ typedef struct QuadFrame { char pad0[8]; unsigned short a; unsigned short b; cha
 
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void FUN_001f2260(void);
-extern void FUN_001f9ff8(float *, float);
+extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");
 extern void setup_offset_vector(void *, void *, float) __asm__("FUN_001f9a68");
-extern void FUN_00233830(void *, int);
-extern void FUN_001fa378(void *, void *, void *);
+extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int, float);
 extern char D_L02_0016D040[];
 extern int D_L02_0015F458;
@@ -125,10 +125,10 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     }
     update_view_context();
     FUN_001f2260();
-    FUN_001f9ff8(view_matrix, 1024.0f);
+    set_scale_matrix(view_matrix, 1024.0f);
     setup_offset_vector(&view_matrix[12], D_L02_001673C0, -1024.0f);
     view_matrix[15] = 1.0f;
-    FUN_00233830(font_vu_program, D_0010E800_ref[0]);
+    vu1_add_data_ref(font_vu_program, D_0010E800_ref[0]);
     PACKET_CURSOR[0] = 0x10000000;
     PACKET_CURSOR[1] = 0;
     PACKET_CURSOR[2] = 0x11000000;
@@ -139,9 +139,9 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     base[6] = 0;
     base[7] = 0x6C0C43A4;
     cursor = base + 8;
-    FUN_001fa378(cursor, D_L02_001673C0 - 0x100, view_matrix);
+    multiply_matrix(cursor, D_L02_001673C0 - 0x100, view_matrix);
     cursor = base + 0x18;
-    FUN_001fa378(cursor, D_L02_001673C0 - 0x80, view_matrix);
+    multiply_matrix(cursor, D_L02_001673C0 - 0x80, view_matrix);
     base[0x28] = 0x8000;
     base[0x29] = 0x303EC000;
     base[0x2A] = 0x412;
@@ -423,8 +423,8 @@ extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_0015ED70 __attribute__((section(".sdata")));
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0015ED84; /* no foreign declaration */
-extern int FUN_001f9770();
-extern int FUN_001f9a40();
+extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
+extern int lerp_vector() __asm__("FUN_001f9a40");
 extern int FUN_L00_002323b8();
 extern int FUN_L02_0022b728();
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -1005,8 +1005,8 @@ extern int D_L02_00161AE4 __attribute__((sda));
 extern int D_L02_00161AE8 __attribute__((sda));
 extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 extern int D_L02_00161B9C __attribute__((sda));
-extern void FUN_001fa050(void *, void *);
-extern void FUN_001fa378(void *, void *, void *);
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern void clear_vector(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -1056,8 +1056,8 @@ void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
     xy[0] = v;
     clear_vector(ang);
     ang[2] = -a;
-    FUN_001fa050(M, ang);
-    FUN_001fa378(M, M, D_L02_001D33B0);
+    euler_rotation_matrix(M, ang);
+    multiply_matrix(M, M, D_L02_001D33B0);
     xy[0] += func_001FA898_r(M[0][0] * 16.0f) << 16;
     xy[0] += func_001FA898_r(M[0][1] * 16.0f);
     xy[1] += func_001FA898_r(M[1][0] * 16.0f) << 16;
@@ -1336,8 +1336,8 @@ move:
  * when its slot is used. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002E1888), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f96b0(float);
-extern float FUN_001f9e90(float, float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern unsigned char D_0014C050_a[] __asm__("D_0014C050");
 extern int D_L02_0015F5CC; /* no foreign declaration */
 extern int D_L02_0015FFD8; /* no foreign declaration */
@@ -1384,7 +1384,7 @@ void FUN_L02_002e0450(char *m) {
         if (*(short *)(m + 0xA6) == 0x323) {
             struct Hero *g = &hero;
             float *rz = (float *)(m + 0x48);
-            float yaw = FUN_001f9e90(g->motion.pos.f[0] - *(float *)(m + 0x10),
+            float yaw = fast_arc_tan(g->motion.pos.f[0] - *(float *)(m + 0x10),
                                      g->motion.pos.f[1] - *(float *)(m + 0x14));
             func_L00_0025CE58_f(rz, yaw, (float *)(d + 0x38), frame_time_sq * 6.2831855f,
                                 frame_time_sq * 6.2831855f, frame_time * 12.566371f);
@@ -1395,9 +1395,9 @@ void FUN_L02_002e0450(char *m) {
                     if (D_L02_0015F5CC & 4)
                         s = -1.0f;
                     normalize_vector_xyz(v, m + 0xD0, s * *(float *)&D_L02_00161CBC);
-                    normalize_vector_xyz(w, v, -2.0f / FUN_001f96b0(*(float *)&D_L02_00161CB0));
+                    normalize_vector_xyz(w, v, -2.0f / multiply_global_factor_ed64(*(float *)&D_L02_00161CB0));
                     add_vector_xyz(v, v, m + 0x10);
-                    a = truncate_float_to_s32(FUN_001f96b0(*(float *)&D_L02_00161CB0)) & 0xFF;
+                    a = truncate_float_to_s32(multiply_global_factor_ed64(*(float *)&D_L02_00161CB0)) & 0xFF;
                     FUN_L00_002730e0(v, w, *(int *)&D_L02_00161CB4, a,
                                      random_integer_below(0xFF) & 0xFF, 0,
                                      *(float *)&D_L02_00161CB8);

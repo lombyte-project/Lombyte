@@ -10,8 +10,8 @@
 
 extern CollisionHit coll_hit __asm__("D_L15_00174440") __attribute__((section(".data")));
 extern int coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a28(void *, void *, void *);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001f9b20(void *);
 extern f32 FUN_001f9e90(f32, f32);
 
@@ -23,7 +23,7 @@ int FUN_L15_00247e90(struct Moby *obj, u128 *delta, int flags, float step, float
     int mask;
 
     qcopy(&start, &obj->pos);
-    FUN_001f9a10(&obj->pos, &obj->pos, delta);
+    add_vector_xyz(&obj->pos, &obj->pos, delta);
     i = 0;
     do {
         mask = (flags << 1) & 0x20;
@@ -39,6 +39,6 @@ int FUN_L15_00247e90(struct Moby *obj, u128 *delta, int flags, float step, float
         }
         i++;
     } while (i < 6);
-    FUN_001f9a28(delta, &obj->pos, &start);
+    subtract_vector_xyz(delta, &obj->pos, &start);
     return pushed;
 }

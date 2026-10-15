@@ -140,18 +140,18 @@ typedef struct {
 } DebugCameraBlock;
 extern DebugCameraBlock D_L00_00166C80;
 extern void update_all_cameras(void) __asm__("FUN_001ec420");
-extern f32 FUN_001f9dc8(f32);
-extern f32 FUN_001f9de0(f32);
-extern f32 FUN_001f99c0(f32);
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern void FUN_001f9bf8(void *, void *, f32);
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001f9fc8(void *);
-extern void FUN_001fa298(void *, void *);
-extern void FUN_001fa378(void *, void *, void *);
-extern void FUN_001fa2b8(void *, void *);
-extern void FUN_001fa050(void *, void *);
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
+extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void FUN_L00_002e6bf8(void *);
 
 static inline void copy_vector3(f32 *dst, f32 *src) {
@@ -186,64 +186,64 @@ void update_debug_camera(void) {
         if ((pad->buttons.held_pressed & 3) != 3) {
             if (D_0013C940.buttons.w.held & 0x1000) {
                 if (free_look) {
-                    FUN_001f9bf8(&step, D_L00_00166C80.camera.basis,
+                    fast_vec_normalize(&step, D_L00_00166C80.camera.basis,
                                  g_debug_menu.movement_speed);
-                    FUN_001f9a10(D_L00_00166C80.camera.position,
+                    add_vector_xyz(D_L00_00166C80.camera.position,
                                  D_L00_00166C80.camera.position, &step);
                 } else {
                     D_L00_00166C80.camera.position[0] +=
-                        FUN_001f9dc8(D_L00_00166C80.camera.angles[2]) *
+                        fast_cos(D_L00_00166C80.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                     D_L00_00166C80.camera.position[1] +=
-                        FUN_001f9de0(D_L00_00166C80.camera.angles[2]) *
+                        fast_sin(D_L00_00166C80.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 0x4000) {
                 if (free_look) {
-                    FUN_001f9bf8(&step, D_L00_00166C80.camera.basis,
+                    fast_vec_normalize(&step, D_L00_00166C80.camera.basis,
                                  g_debug_menu.movement_speed);
-                    FUN_001f9a28(D_L00_00166C80.camera.position,
+                    subtract_vector_xyz(D_L00_00166C80.camera.position,
                                  D_L00_00166C80.camera.position, &step);
                 } else {
                     D_L00_00166C80.camera.position[0] -=
-                        FUN_001f9dc8(D_L00_00166C80.camera.angles[2]) *
+                        fast_cos(D_L00_00166C80.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                     D_L00_00166C80.camera.position[1] -=
-                        FUN_001f9de0(D_L00_00166C80.camera.angles[2]) *
+                        fast_sin(D_L00_00166C80.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 1) {
                 if (free_look) {
-                    FUN_001f9bf8(&step, D_L00_00166C80.camera.basis + 4,
+                    fast_vec_normalize(&step, D_L00_00166C80.camera.basis + 4,
                                  g_debug_menu.movement_speed);
-                    FUN_001f9a10(D_L00_00166C80.camera.position,
+                    add_vector_xyz(D_L00_00166C80.camera.position,
                                  D_L00_00166C80.camera.position, &step);
                 } else {
                     D_L00_00166C80.camera.position[0] -=
-                        FUN_001f9de0(D_L00_00166C80.camera.angles[2]) *
+                        fast_sin(D_L00_00166C80.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                     D_L00_00166C80.camera.position[1] +=
-                        FUN_001f9dc8(D_L00_00166C80.camera.angles[2]) *
+                        fast_cos(D_L00_00166C80.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 2) {
                 if (free_look) {
-                    FUN_001f9bf8(&step, D_L00_00166C80.camera.basis + 4,
+                    fast_vec_normalize(&step, D_L00_00166C80.camera.basis + 4,
                                  g_debug_menu.movement_speed);
-                    FUN_001f9a28(D_L00_00166C80.camera.position,
+                    subtract_vector_xyz(D_L00_00166C80.camera.position,
                                  D_L00_00166C80.camera.position, &step);
                 } else {
                     D_L00_00166C80.camera.position[0] +=
-                        FUN_001f9de0(D_L00_00166C80.camera.angles[2]) *
+                        fast_sin(D_L00_00166C80.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                     D_L00_00166C80.camera.position[1] -=
-                        FUN_001f9dc8(D_L00_00166C80.camera.angles[2]) *
+                        fast_cos(D_L00_00166C80.camera.angles[2]) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
@@ -272,23 +272,23 @@ void update_debug_camera(void) {
             if (free_look) {
                 Vec4 r[4];
                 Vec4 m[4];
-                float sine = FUN_001f9de0(g_debug_menu.yaw_speed);
-                float cosine = FUN_001f9dc8(g_debug_menu.yaw_speed);
-                FUN_001f9fc8(r);
+                float sine = fast_sin(g_debug_menu.yaw_speed);
+                float cosine = fast_cos(g_debug_menu.yaw_speed);
+                set_identity_matrix(r);
                 r[0].f[1] = -sine;
                 r[1].f[0] = sine;
                 r[0].f[0] = cosine;
                 r[1].f[1] = cosine;
-                FUN_001fa298(m, D_L00_00166C80.camera.basis);
-                FUN_001fa378(m, m, r);
-                FUN_001fa2b8(D_L00_00166C80.camera.basis, m);
+                copy_matrix_rotation(m, D_L00_00166C80.camera.basis);
+                multiply_matrix(m, m, r);
+                copy_matrix3x4(D_L00_00166C80.camera.basis, m);
             } else {
                 D_L00_00166C80.camera.angles[2] = fast_subtract_rotations(
                     D_L00_00166C80.camera.angles[2], g_debug_menu.yaw_speed);
             }
         } else {
             g_debug_menu.yaw_speed = g_debug_menu.yaw_speed / 1.5f;
-            if (FUN_001f99c0(g_debug_menu.yaw_speed) < 0.002f)
+            if (absolute_float(g_debug_menu.yaw_speed) < 0.002f)
                 g_debug_menu.yaw_speed = 0;
         }
     }
@@ -305,23 +305,23 @@ void update_debug_camera(void) {
         if (free_look) {
             Vec4 r[4];
             Vec4 m[4];
-            float sine = FUN_001f9de0(g_debug_menu.pitch_speed);
-            float cosine = FUN_001f9dc8(g_debug_menu.pitch_speed);
-            FUN_001f9fc8(r);
+            float sine = fast_sin(g_debug_menu.pitch_speed);
+            float cosine = fast_cos(g_debug_menu.pitch_speed);
+            set_identity_matrix(r);
             r[0].f[0] = cosine;
             r[0].f[2] = sine;
             r[2].f[0] = -sine;
             r[2].f[2] = cosine;
-            FUN_001fa298(m, D_L00_00166C80.camera.basis);
-            FUN_001fa378(m, m, r);
-            FUN_001fa2b8(D_L00_00166C80.camera.basis, m);
+            copy_matrix_rotation(m, D_L00_00166C80.camera.basis);
+            multiply_matrix(m, m, r);
+            copy_matrix3x4(D_L00_00166C80.camera.basis, m);
         } else {
             D_L00_00166C80.camera.angles[1] = fast_subtract_rotations(
                 D_L00_00166C80.camera.angles[1], g_debug_menu.pitch_speed);
         }
     } else {
         g_debug_menu.pitch_speed = g_debug_menu.pitch_speed / 1.5f;
-        if (FUN_001f99c0(g_debug_menu.pitch_speed) < 0.002f)
+        if (absolute_float(g_debug_menu.pitch_speed) < 0.002f)
             g_debug_menu.pitch_speed = 0;
     }
 
@@ -339,20 +339,20 @@ void update_debug_camera(void) {
             Vec4 r[4];
             Vec4 m[4];
             Vec4 n[4];
-            float sine = FUN_001f9de0(g_debug_menu.roll_speed);
-            float cosine = FUN_001f9dc8(g_debug_menu.roll_speed);
-            FUN_001f9fc8(r);
+            float sine = fast_sin(g_debug_menu.roll_speed);
+            float cosine = fast_cos(g_debug_menu.roll_speed);
+            set_identity_matrix(r);
             r[1].f[1] = cosine;
             r[1].f[2] = -sine;
             r[2].f[1] = sine;
             r[2].f[2] = cosine;
-            FUN_001fa298(m, D_L00_00166C80.camera.basis);
-            FUN_001fa378(n, m, r);
-            FUN_001fa2b8(D_L00_00166C80.camera.basis, n);
+            copy_matrix_rotation(m, D_L00_00166C80.camera.basis);
+            multiply_matrix(n, m, r);
+            copy_matrix3x4(D_L00_00166C80.camera.basis, n);
         }
     } else {
         g_debug_menu.roll_speed = g_debug_menu.roll_speed / 1.5f;
-        if (FUN_001f99c0(g_debug_menu.roll_speed) < 0.002f)
+        if (absolute_float(g_debug_menu.roll_speed) < 0.002f)
             g_debug_menu.roll_speed = 0;
     }
 
@@ -374,18 +374,18 @@ void update_debug_camera(void) {
     {
         Vec4 r[3];
         if (free_look) {
-            FUN_001f9bf8(&r[0], D_L00_00166C80.camera.basis + 8, g_debug_menu.vertical_speed);
-            FUN_001f9a10(D_L00_00166C80.camera.position, D_L00_00166C80.camera.position,
+            fast_vec_normalize(&r[0], D_L00_00166C80.camera.basis + 8, g_debug_menu.vertical_speed);
+            add_vector_xyz(D_L00_00166C80.camera.position, D_L00_00166C80.camera.position,
                          &r[0]);
         } else {
             D_L00_00166C80.camera.position[2] += g_debug_menu.vertical_speed;
         }
         if (!free_look) {
-            FUN_001fa050(r, D_L00_00166C80.camera.angles);
-            FUN_001f9bf8(&r[0], &r[0], 1.0f);
-            FUN_001f9bf8(&r[1], &r[1], 1.0f);
-            FUN_001f9bf8(&r[2], &r[2], 1.0f);
-            FUN_001fa2b8(D_L00_00166C80.camera.basis, r);
+            euler_rotation_matrix(r, D_L00_00166C80.camera.angles);
+            fast_vec_normalize(&r[0], &r[0], 1.0f);
+            fast_vec_normalize(&r[1], &r[1], 1.0f);
+            fast_vec_normalize(&r[2], &r[2], 1.0f);
+            copy_matrix3x4(D_L00_00166C80.camera.basis, r);
         }
     }
     if (g_debug_menu.control_mode == 2 && D_L00_00166C80.camera.target != 0) {
@@ -406,10 +406,10 @@ typedef struct {
 } B001f4490;
 extern B001f4490 D_L00_0016C058;
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-f32 FUN_001f9dc8(f32);
-f32 FUN_001f9de0(f32);
-void FUN_001fa050(void *, void *);
-void FUN_001f9838(void *, void *, s32);
+f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+f32 fast_sin(f32) __asm__("FUN_001f9de0");
+void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 void FUN_L00_00250df8(void *);
 void FUN_L00_001f4490(void) {
     DebugCameraBlock *a = &D_L00_00166C80;
@@ -417,17 +417,17 @@ void FUN_L00_001f4490(void) {
     struct Hero *c;
     u8 *d;
     f32 ang = fast_add_rotations(a->camera.angles[2], b->x88);
-    f32 s = FUN_001f9dc8(ang);
+    f32 s = fast_cos(ang);
     c = &hero;
     c->motion.pos.f[0] = a->camera.position[0] + s * b->x8c;
-    c->motion.pos.f[1] = a->camera.position[1] + FUN_001f9de0(ang) * b->x8c;
+    c->motion.pos.f[1] = a->camera.position[1] + fast_sin(ang) * b->x8c;
     c->motion.pos.f[2] = a->camera.position[2] + b->x90;
     c->motion.rot.f[2] = fast_add_rotations(a->camera.angles[2], b->x84);
-    FUN_001fa050(c, c->motion.rot.f);
+    euler_rotation_matrix(c, c->motion.rot.f);
     d = *(u8 **)&c->moby;
     qcopy(d + 0x10, &c->motion.pos);
     qcopy(d + 0x40, c->motion.rot.f);
-    FUN_001f9838(d + 0xC0, c, 0x30);
+    copy_memory_aligned(d + 0xC0, c, 0x30);
     FUN_L00_00250df8(*(u8 **)&c->moby);
 }
 /* Pending C: keep the oracle until the placed overlay bytes match. */
@@ -485,22 +485,22 @@ extern const char D_L00_001E7970[];
 extern const char D_L00_001E7990[];
 extern u8 D_L00_0015EFD0[] __attribute__((sda));
 extern void sound_update(void) __asm__("FUN_0022ca50");
-extern void FUN_001fb280(s32, s32, s32);
-extern void FUN_001f9a28(void *, void *, void *);
-extern f32 FUN_001f9b20(void *);
-extern f32 FUN_001f9e90(f32, f32);
+extern void set_background_color(s32, s32, s32) __asm__("FUN_001fb280");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern f32 FUN_001fa6c0(s32);
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void update_fog(void) __asm__("FUN_001f2588");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern s32 FUN_00116248(char *, const char *, ...);
 extern f64 FUN_00120478(f32);
-extern s32 FUN_0011bc80(const char *, s32);
-extern s32 FUN_0011c088(s32, s32, s32);
-extern s32 FUN_0011c520(s32, const void *, s32);
-extern s32 FUN_0011c2c0(s32, void *, s32);
-extern s32 FUN_0011bf08(s32);
-extern s32 FUN_001166cc(const char *);
+extern s32 sceopen(const char *, s32) __asm__("FUN_0011bc80");
+extern s32 sce_lseek(s32, s32, s32) __asm__("FUN_0011c088");
+extern s32 scewrite(s32, const void *, s32) __asm__("FUN_0011c520");
+extern s32 sceRead(s32, void *, s32) __asm__("FUN_0011c2c0");
+extern s32 sceClose(s32) __asm__("FUN_0011bf08");
+extern s32 strlen(const char *) __asm__("FUN_001166cc");
 void FUN_L00_001f4598(void);
 
 void FUN_L00_001f4598(void) {
@@ -525,7 +525,7 @@ void FUN_L00_001f4598(void) {
     sound_update();
     if ((D_0013C940.buttons.w.pressed & 0x500) != 0) {
         D_L00_0015F5C4 = g_debug_menu.unknown_a4;
-        FUN_001fb280(D_L00_0016CC7C, D_L00_0016CC80, D_L00_0016CC84);
+        set_background_color(D_L00_0016CC7C, D_L00_0016CC80, D_L00_0016CC84);
         g_debug_menu.unknown_94 = (int)D_L00_00166C80.camera.position[0] >> 2;
         g_debug_menu.unknown_98 = (int)D_L00_00166C80.camera.position[1] >> 2;
         g_debug_menu.unknown_9c = (int)D_L00_00166C80.camera.position[2] >> 2;
@@ -608,9 +608,9 @@ void FUN_L00_001f4598(void) {
                 }
                 case 2: {
                     g_debug_menu.update_flags = 0;
-                    FUN_001f9a28(capture.difference, hero.motion.pos.f, D_L00_00166C80.camera.position);
-                    g_debug_menu.target_distance = FUN_001f9b20(capture.difference);
-                    angle = FUN_001f9e90(capture.difference[0], capture.difference[1]);
+                    subtract_vector_xyz(capture.difference, hero.motion.pos.f, D_L00_00166C80.camera.position);
+                    g_debug_menu.target_distance = vector_length_xy(capture.difference);
+                    angle = fast_arc_tan(capture.difference[0], capture.difference[1]);
                     g_debug_menu.target_angle =
                         fast_subtract_rotations(angle, D_L00_00166C80.camera.angles[2]);
                     g_debug_menu.target_height = hero.motion.pos.f[2] - D_L00_00166C80.camera.position[2];
@@ -708,9 +708,9 @@ void FUN_L00_001f4598(void) {
                 } else {
                     scale = 0.125f;
                 }
-                dimension = (float)FUN_001fa6c0((s16)occl_cam_param0);
+                dimension = (float)convert_integer_to_float((s16)occl_cam_param0);
                 D_L00_0016CC40 = dimension * scale;
-                dimension = (float)FUN_001fa6c0((s16)occl_cam_param1);
+                dimension = (float)convert_integer_to_float((s16)occl_cam_param1);
                 D_L00_0016CC44 = dimension * scale;
                 D_L00_0016CC48 = D_L00_0016CC40 * 4.0f;
                 D_L00_0016CC4C = D_L00_0016CC44 * 4.0f;
@@ -945,33 +945,33 @@ void FUN_L00_001f4598(void) {
             formatted_y = FUN_00120478(D_L00_00166C80.camera.position[1]);
             formatted_z = FUN_00120478(D_L00_00166C80.camera.position[2]);
             FUN_00116248(position_buffer, D_L00_001E7970, formatted_x, formatted_y, formatted_z);
-            file = FUN_0011bc80(path_buffer, 0x303);
+            file = sceopen(path_buffer, 0x303);
             if (-1 < file) {
-                FUN_0011c088(file, 0, 2);
-                text_length = FUN_001166cc(position_buffer);
-                FUN_0011c520(file, position_buffer, text_length);
-                FUN_0011bf08(file);
+                sce_lseek(file, 0, 2);
+                text_length = strlen(position_buffer);
+                scewrite(file, position_buffer, text_length);
+                sceClose(file);
                 g_debug_menu.sample_capture_status = 0x79;
             }
             capture_positions = D_L00_00173E20;
             FUN_00116248(path_buffer, D_L00_0015EFE0, D_L00_001E7938, D_0015ED84, D_L00_0015EFF8,
                          D_L00_0015EFF0);
-            file = FUN_0011bc80(path_buffer, 0x303);
+            file = sceopen(path_buffer, 0x303);
             if (-1 < file) {
-                FUN_0011c088(file, 0, 2);
-                FUN_0011c520(file, D_L00_00166C80.camera.position, 4);
-                FUN_0011c520(file, D_L00_00166C80.camera.position + 1, 4);
-                FUN_0011c520(file, D_L00_00166C80.camera.position + 2, 4);
-                FUN_0011c088(file, 0, 0);
-                file_size = FUN_0011c088(file, 0, 2);
+                sce_lseek(file, 0, 2);
+                scewrite(file, D_L00_00166C80.camera.position, 4);
+                scewrite(file, D_L00_00166C80.camera.position + 1, 4);
+                scewrite(file, D_L00_00166C80.camera.position + 2, 4);
+                sce_lseek(file, 0, 0);
+                file_size = sce_lseek(file, 0, 2);
                 if (file_size < 0x100001) {
-                    FUN_0011c088(file, 0, 0);
-                    FUN_0011c2c0(file, capture_positions, file_size);
+                    sce_lseek(file, 0, 0);
+                    sceRead(file, capture_positions, file_size);
                     D_L00_0015F614 = (int)file_size / 0xc;
                 } else {
                     D_L00_0015F614 = 0;
                 }
-                FUN_0011bf08(file);
+                sceClose(file);
             }
         }
         if ((g_debug_menu.selected_row == 3) && ((D_0013C940.buttons.w.pressed & 0xf0) != 0)) {
@@ -982,12 +982,12 @@ void FUN_L00_001f4598(void) {
             formatted_y = FUN_00120478(D_L00_00166C80.camera.position[1]);
             formatted_z = FUN_00120478(D_L00_00166C80.camera.position[2]);
             FUN_00116248(angle_buffer, D_L00_001E7990, formatted_x, formatted_y, formatted_z);
-            file = FUN_0011bc80(capture.capture_path, 0x303);
+            file = sceopen(capture.capture_path, 0x303);
             if (-1 < file) {
-                FUN_0011c088(file, 0, 2);
-                text_length = FUN_001166cc(angle_buffer);
-                FUN_0011c520(file, angle_buffer, text_length);
-                FUN_0011bf08(file);
+                sce_lseek(file, 0, 2);
+                text_length = strlen(angle_buffer);
+                scewrite(file, angle_buffer, text_length);
+                sceClose(file);
                 g_debug_menu.start_capture_status = 0x79;
             }
         }

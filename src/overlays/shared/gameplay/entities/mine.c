@@ -162,8 +162,8 @@ extern f32 FUN_001f9b80(void *, void *);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L00_00173E68[];
-extern float FUN_001f96b0(float);
-extern float FUN_001f9988(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_001f9e90(float, float);
 extern float FUN_L00_00200510(float, float, float);
 extern float FUN_L00_00259710(void *);
@@ -205,9 +205,9 @@ extern int D_L00_0015F5CC;
 extern unsigned char *FUN_002141f8(unsigned char *);
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void *FUN_L00_0026bb70(void *, void *, int, int, float, int, int, int, int);
-extern void FUN_001f9c48(void *, void *, float);
-extern void FUN_001fa050(void *, void *);
-extern void FUN_001fa378(void *, void *, void *);
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00259fe8(unsigned char *, float);
@@ -285,9 +285,9 @@ void mine_update(M910 *m) {
             {
                 rot.q = 0;
                 rot.f[0] = 3.1415927f;
-                FUN_001fa050(m1, &rot);
+                euler_rotation_matrix(m1, &rot);
                 build_moby_bone_transform((char *)v->owner, 0, (char *)m2);
-                FUN_001fa378(m1, m2, m1);
+                multiply_matrix(m1, m2, m1);
                 copy_matrix3x4(m->mtx, m1);
                 m->i94 = 0;
                 m->flags |= 0x100;
@@ -326,7 +326,7 @@ void mine_update(M910 *m) {
             q.moby = m;
             q.i10 = 1;
             qcopy(&q, v);
-            FUN_001f9c48(&q, &q, 1.0f);
+            set_vector_length_xy(&q, &q, 1.0f);
             q.b8 = 2;
             q.dir[3] = 5627.925f;
             q.b9 = 1;
@@ -334,7 +334,7 @@ void mine_update(M910 *m) {
             m->pos.f[2] -= 0.4f;
             q.dir[2] = 1.0f;
             k = convert_integer_to_float(D_L00_0015F5CC - v->i74);
-            k = k / FUN_001f96b0(*(float *)&D_L00_001613D4);
+            k = k / multiply_global_factor_ed64(*(float *)&D_L00_001613D4);
             if (1.0f < k) {
                 k = 1.0f;
             } else if (k < 0.0f) {
@@ -464,7 +464,7 @@ void mine_update(M910 *m) {
                                 r[2] = n[2];
                                 m->rx = FUN_L00_00200510(
                                     m->rx,
-                                    -FUN_001f9e90(FUN_001f9988(r[0] * r[0] + r[2] * r[2]), r[1]),
+                                    -FUN_001f9e90(square_root(r[0] * r[0] + r[2] * r[2]), r[1]),
                                     0.05235988f);
                                 m->ry =
                                     FUN_L00_00200510(m->ry, FUN_001f9e90(r[2], r[0]), 0.05235988f);
@@ -736,7 +736,7 @@ void mine_update(M910 *m) {
                 }
             }
             k = convert_integer_to_float(D_L00_0015F5CC - v->i74);
-            k = k / FUN_001f96b0(*(float *)&D_L00_001613D4);
+            k = k / multiply_global_factor_ed64(*(float *)&D_L00_001613D4);
             if (1.0f < k) {
                 k = 1.0f;
             } else if (k < 0.0f) {
@@ -2377,7 +2377,7 @@ extern f32 FUN_001f9b80(void *, void *);
 extern f32 FUN_001f9e90(f32, f32);
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001f99c0(f32);
-extern f32 FUN_001f9df8(f32);
+extern f32 fast_arc_sin(f32) __asm__("FUN_001f9df8");
 extern f32 FUN_001fa6c0(s32);
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_00214db0(void *, f32, f32, f32);
@@ -2455,11 +2455,11 @@ void FUN_L00_002affa8(char *self, O *out, char *skip) {
         ang = FUN_001fa6c0(D_0013E520_u.bB) * 0.6981317f;
         FUN_00214db0(&lv, dist, yaw, pitch + g->ground_pitch.f * 0.5f);
         FUN_001f9a10(&lv, &lv, spos);
-        z = FUN_001f9df8(FUN_001f9b48(&lv, &v) / (dist + dist));
+        z = fast_arc_sin(FUN_001f9b48(&lv, &v) / (dist + dist));
         ang = ang + 1.5707964f;
         if (ang < z + z && p != 0) {
             ang = FUN_001fa6c0(*(u8 *)(p + 0xA) << 3) * 0.125f;
-            FUN_001f9df8(ang / dist);
+            fast_arc_sin(ang / dist);
         }
         flag = 1;
         if (FUN_001efa68_u(D_L00_00166DC0, &v, 6, self, 0) != 0) {
@@ -2562,7 +2562,7 @@ extern int *D_L00_00177F00[];
 extern int D_L00_0015F5CC;
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_001f9770(void *);
-extern int FUN_001f9fc8();
+extern int set_identity_matrix() __asm__("FUN_001f9fc8");
 extern int FUN_L00_001f2868(void *, int, void *, void *, float);
 extern int FUN_L00_001ff290();
 extern int FUN_L00_001ff2c0();
@@ -2583,9 +2583,9 @@ extern short D_L00_001B0770[];
 extern unsigned FUN_L00_0025c0e8(unsigned c, int mask);
 extern unsigned char *D_L00_001B20DC __attribute__((section(".data")));
 extern void *FUN_L00_0026bb70(void *, void *, int, int, float, int, int, int, int);
-extern void FUN_001f9c48(void *, void *, float);
-extern void FUN_001f9c90(void *, void *, float);
-extern void FUN_001fa378(void *, void *, void *);
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
+extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
 extern void FUN_L00_0025f800(void *, void *);
@@ -2758,7 +2758,7 @@ void FUN_L00_002b03a0(M910 *m) {
     phase.collision.fC=3.0f;
     phase.collision.i10=1;
     qcopy(phase.collision.dir,&motion);
-    FUN_001f9c48(phase.collision.dir,phase.collision.dir,1.0f);
+    set_vector_length_xy(phase.collision.dir,phase.collision.dir,1.0f);
     phase.collision.dir[2]=1.0f;
     phase.collision.dir[3]=5627.925f;
     phase.collision.b8=3;
@@ -2828,7 +2828,7 @@ void FUN_L00_002b03a0(M910 *m) {
         basis[1][3]=0.0f;
         basis[2][3]=0.0f;
         basis[3][3]=0.0f;
-        FUN_001fa378(basis_squared,basis,basis);
+        multiply_matrix(basis_squared,basis,basis);
         if(reduced) { particle_reduction=1; particles/=3; }
         { int remaining;
         for(remaining=0;remaining<particles;remaining++) {
@@ -2873,7 +2873,7 @@ void FUN_L00_002b03a0(M910 *m) {
         normalize_vector_xyz(&predicted,&predicted,distance/5.0f*D_0015ED6C*size);
         normalize_vector_xyz(&camera_delta,&camera_delta,(distance+distance)*D_0015ED6C);
         add_vector_xyz(&predicted,&predicted,&camera_delta);
-        FUN_001f9c90(&predicted,&predicted,D_0015ED6C*10.0f);
+        clamp_vector_length(&predicted,&predicted,D_0015ED6C*10.0f);
         FUN_L00_002af450((char *)(&m->pos),(char *)&predicted,FUN_L00_00257b90(scale_game_frames_alt(60),scale_game_frames_alt(90)),0,0);
         if(distance<6.0f) j=truncate_float_to_s32(distance)/2;
         else j=3;

@@ -19,19 +19,19 @@ typedef struct {
     char h[0x10];
     Ent32 e[1];
 } Tbl;
-void FUN_001fa2d8(Mtx *, void *);
-void FUN_001f9a28(Vec4 *, void *, void *);
-void FUN_001f9d20(Vec4 *, Vec4 *, Mtx *);
-void FUN_001f9a68(Vec4 *, Vec4 *, float);
+void transpose_rotation_matrix(Mtx *, void *) __asm__("FUN_001fa2d8");
+void subtract_vector_xyz(Vec4 *, void *, void *) __asm__("FUN_001f9a28");
+void transform_vector(Vec4 *, Vec4 *, Mtx *) __asm__("FUN_001f9d20");
+void fast_vec_scale(Vec4 *, Vec4 *, float) __asm__("FUN_001f9a68");
 void FUN_L00_0024eed8(char *p, int idx, void *v, float a, float b) {
     Mtx m;
     Vec4 t;
     Ent32 *e = &(*(Tbl **)(p + 0x94))->e[idx];
     float k = 1024.0f / *(float *)(p + 0x2C);
-    FUN_001fa2d8(&m, p + 0xC0);
-    FUN_001f9a28(&t, v, p + 0x10);
-    FUN_001f9d20(&t, &t, &m);
-    FUN_001f9a68(&t, &t, k);
+    transpose_rotation_matrix(&m, p + 0xC0);
+    subtract_vector_xyz(&t, v, p + 0x10);
+    transform_vector(&t, &t, &m);
+    fast_vec_scale(&t, &t, k);
     qcopy(&e->v, &t);
     e->b = b * k;
     e->v.w = a * k;

@@ -303,17 +303,17 @@ extern A02b0_tab D_L00_001C8FF0[];
 extern void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
 extern void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 extern void FUN_L00_002a09d8(s32);
-extern s32 FUN_00122298(s32);
+extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");
 extern void FUN_L00_002a08c8(void);
 extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 extern void FUN_L00_001f99c0(s32);
 extern void FUN_001f2260(void);
-extern void FUN_001f9ad8(void *, void *, void *);
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void FUN_L00_00250df8(void *);
-extern void FUN_0020d4f0(void *, s32, s32, s32, s32);
+extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
 extern void FUN_L00_0029b680(void);
-extern void FUN_001f9810(void *, s32);
+extern void fast_mem_zero16(void *, s32) __asm__("FUN_001f9810");
 extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void FUN_L00_002a0fc8(s32, u32, u32);
 extern void setup_gif_paging(s32) __asm__("FUN_001f4280");
@@ -357,7 +357,7 @@ void FUN_L00_002a02b0(void) {
         p->f8 = 1;
         p->fC = 0;
         FUN_L00_002a09d8(1);
-        FUN_00122298(0);
+        sce_gs_sync_v(0);
         D_L00_0015F3F8_s = D_L00_0015F3F8_v[0] + 1;
         FUN_L00_002a08c8();
         swap_render_buffer_chain();
@@ -385,20 +385,20 @@ void FUN_L00_002a02b0(void) {
             D_L00_00165F80[0] = D_L00_00166FD0[0];
             D_L00_00165F80[1] = D_L00_00166FD0[1];
             D_L00_00165F80[2] = D_L00_00166FD0[2];
-            FUN_001f9ad8(&D_L00_00166FD0[1], &D_L00_00166FD0[0], &D_L00_00166FD0[2]);
+            fast_vec_cross(&D_L00_00166FD0[1], &D_L00_00166FD0[0], &D_L00_00166FD0[2]);
         }
         p->f20 = p->f14 + 0x100;
         init_moby_instance(p->f20, 0xD);
         *(u16 *)(p->f20 + 0x32) = 0x40;
         FUN_L00_00250df8(p->f20);
-        FUN_0020d4f0(p->f20, 0x202020, 0xE, 0xE, 0);
+        pack_render_command_fields(p->f20, 0x202020, 0xE, 0xE, 0);
         init_moby_instance(p->f20 + 0x500, 0xD);
         *(u16 *)(p->f20 + 0x532) = 0x40;
         FUN_L00_00250df8(p->f20 + 0x500);
-        FUN_0020d4f0(p->f20 + 0x500, 0x202020, 0xE, 0xE, 0);
+        pack_render_command_fields(p->f20 + 0x500, 0x202020, 0xE, 0xE, 0);
         FUN_L00_0029b680();
         p->f2C = p->f14 + 0x1400;
-        FUN_001f9810(p->f2C, 0x400);
+        fast_mem_zero16(p->f2C, 0x400);
         p->f18 = p->f2C + 0x400;
         if (cd_read_active[0] == 0) {
             if (start_audio_stream_read(p->f18 + 0x80000, disc_table.animation_streams[48].sector,

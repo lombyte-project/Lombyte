@@ -28,7 +28,7 @@ struct sceSifClientData {
     s32 server;
 };
 extern s32 iSignalSema();
-extern s32 func_0011AD90();
+extern s32 clear_state_bits() __asm__("func_0011AD90");
 void _request_end(struct EndPkt *request, void *data) {
     struct sceSifClientData *cd;
     (void)data;
@@ -56,6 +56,6 @@ tail:
     if (cd->sema_id >= 0) {
         iSignalSema(cd->sema_id);
     }
-    func_0011AD90((u32 *)cd->pkt_addr);
+    clear_state_bits((u32 *)cd->pkt_addr);
     cd->pkt_addr = 0;
 }

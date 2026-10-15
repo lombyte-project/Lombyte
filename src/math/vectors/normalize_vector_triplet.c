@@ -5,7 +5,7 @@ struct Vec3Padded {
     s32 pad;
 };
 
-extern void func_001F9BF8(f32 *, f32 *, f32);
+extern void fast_vec_normalize(f32 *, f32 *, f32) __asm__("func_001F9BF8");
 
 void normalize_vector_triplet(f32 *arg0) __asm__("FUN_00214128");
 
@@ -36,7 +36,7 @@ void normalize_vector_triplet(f32 *arg0) {
             *dst = value;
             dst++;
         } while (count >= 0);
-        func_001F9BF8(scratch.values, scratch.values, 1.0f);
+        fast_vec_normalize(scratch.values, scratch.values, 1.0f);
         dst = (f32 *)((u8 *)base + offset);
         src = scratch.values;
         count = 2;

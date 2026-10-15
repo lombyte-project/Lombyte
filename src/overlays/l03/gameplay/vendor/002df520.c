@@ -315,7 +315,7 @@ void FUN_L03_002eb7e0(char *m) {
 }
 #include "sda.h"
 extern void clear_u64_value_eb978(void *) __asm__("FUN_001f99f8");
-extern void FUN_001fa030(void *, void *);
+extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern s32 D_L03_00167074 NOT_SDA;
 /* vendor camera init: aims the camera data at the hero, resets its blend state and places it (FUN_L03_002eb7e0) */
 void FUN_L03_002eb978(void *arg) {
@@ -367,7 +367,7 @@ void FUN_L03_002eb978(void *arg) {
     v[1] = p[1];
     v[2] = p[2];
     v[3] = 0.0f;
-    FUN_001fa030(mtx, v);
+    euler_rotation_basis(mtx, v);
     qcopy(ang, mtx);
     FUN_L03_002eb7e0(m);
     *(s16 *)(m + 0x7E) = 0;

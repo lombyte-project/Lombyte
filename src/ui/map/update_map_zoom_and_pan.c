@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/input/pad_state.h"
 
-extern void func_00208810(void);
+extern void noop_memory_callback(void) __asm__("func_00208810");
 #include "rnc/ui/map/map_state.h"
 
 int update_map_zoom_and_pan(void) __asm__("FUN_00205440");
@@ -11,7 +11,7 @@ int update_map_zoom_and_pan(void) {
     int *xs;
     int *ys;
 
-    func_00208810();
+    noop_memory_callback();
     if (controller_state.pressed & (PAD_SELECT | PAD_R3)) {
         return 1;
     }

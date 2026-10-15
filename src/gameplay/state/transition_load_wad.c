@@ -129,11 +129,11 @@ extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAd
 extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern void FlushCache(s32);
 extern void QueueDmaTransfer(s32);
-extern void FUN_00120558(s32, s32);
+extern void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
 extern s32 FUN_001e9b10(u8 *);
 extern void init_view_context(void) __asm__("FUN_001f2c60");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
-extern volatile char func_001F97A0(s32);
+extern volatile char log2dim(s32) __asm__("func_001F97A0");
 extern void init_mem_slots(void) __asm__("FUN_002015d8");
 extern void parse_particle_textures(u8 *, u8 *, u8 *, s32) __asm__("FUN_002026c8");
 extern void unpack_point_records(u8 *, s32) __asm__("FUN_00202800");
@@ -144,7 +144,7 @@ extern void register_object_render_class(u8 *, u8 *, u8 *, s32) __asm__("func_00
 extern void register_shrub_render_class(u8 *, u8 *, u8 *, u8 *, s32) __asm__("func_00203B08");
 extern void initialize_tfrag_render_data(u8 *, u8 *) __asm__("func_002040E0");
 extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
-extern s32 FUN_0020b618(u8 *, u8 *);
+extern s32 fast_decompress(u8 *, u8 *) __asm__("FUN_0020b618");
 extern void start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
 extern volatile unsigned int load(s32, s32, s32) __asm__("func_00216828");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
@@ -200,7 +200,7 @@ void transition_load_wad(void)
   start_audio_stream_read(D_001940C0.hdr + 0x1000000, disc_table.unk14E8.sector, disc_table.unk14E8.size);
   update_audio_stream_until_idle(1);
   FlushCache(0);
-  size = FUN_0020b618(D_001940C0.hdr + 0x1000000, D_001940C0.hdr);
+  size = fast_decompress(D_001940C0.hdr + 0x1000000, D_001940C0.hdr);
   FlushCache(0);
   hdr = (WadHeader *) D_001940C0.hdr;
   upload_texture_images(((u8 *) hdr) + hdr->x0, hdr->x8, ((u8 *) hdr) + hdr->xC);
@@ -216,7 +216,7 @@ void transition_load_wad(void)
   {
     do
     {
-      tfrag_texture_size_table[i] = (((s32) base) + tex[i].offset) + (func_001F97A0(tex[i].x4) << 28);
+      tfrag_texture_size_table[i] = (((s32) base) + tex[i].offset) + (log2dim(tex[i].x4) << 28);
       i++;
     }
     while (i < D_00160E94);
@@ -227,7 +227,7 @@ void transition_load_wad(void)
   {
     do
     {
-      D_001B5980[k] = (((s32) base) + tex[k].offset) + (func_001F97A0(tex[k].x4) << 28);
+      D_001B5980[k] = (((s32) base) + tex[k].offset) + (log2dim(tex[k].x4) << 28);
       k++;
     }
     while (k < D_0015FF08);
@@ -238,7 +238,7 @@ void transition_load_wad(void)
   {
     do
     {
-      D_001E2600[k] = (((s32) base) + tex[k].offset) + (func_001F97A0(tex[k].x4) << 28);
+      D_001E2600[k] = (((s32) base) + tex[k].offset) + (log2dim(tex[k].x4) << 28);
       k++;
     }
     while (k < D_00160F64);
@@ -249,7 +249,7 @@ void transition_load_wad(void)
   {
     do
     {
-      D_001D84B0[k] = (((s32) base) + tex[k].offset) + (func_001F97A0(tex[k].x4) << 28);
+      D_001D84B0[k] = (((s32) base) + tex[k].offset) + (log2dim(tex[k].x4) << 28);
       k++;
     }
     while (k < D_001603EC);
@@ -288,7 +288,7 @@ void transition_load_wad(void)
   sceGsSetDefLoadImage(li, (gs_texture_allocation_cursor << 8) >> 16, 4, 0, 0, 0, 0x100, 0x80);
   FlushCache(0);
   sceGsExecLoadImage(li, data + hdr->x84);
-  FUN_00120558(0, 0);
+  wait_for_graphics_pipeline_idle(0, 0);
   D_001940C0.x18 = ((s32) D_001940C0.hdr) + size;
   v = gs_texture_allocation_cursor;
   D_0015EF48 = ((v >> 8) | 0x20010000) | (((s64) 0xB800) << 19);

@@ -17,9 +17,9 @@ extern void sceVu0UnitMatrix(void *);
 extern void SceVu0RotMatrixX(void *, void *, f32);
 extern void SceVu0RotMatrixY(void *, void *, f32);
 extern void sceVu0RotMatrixZ(void *, void *, f32);
-extern void FUN_001fa378(void *, void *, void *);
-extern void FUN_001f9a80(void *, void *, f32);
-extern void FUN_001f9a68(void *, void *, f32);
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 
 void FUN_001f2260(void) {
     Vec4 m[4];
@@ -59,8 +59,8 @@ void FUN_001f2260(void) {
     *(s32 *)&g->f[0xC / 4] = 0;
     *(s32 *)&g->f[0x1C / 4] = 0;
     *(s32 *)&g->f[0x2C / 4] = 0;
-    FUN_001fa378(&g->f[0x40 / 4], x, g);
-    FUN_001fa378(&g->f[0x80 / 4], x + 0x40, g);
+    multiply_matrix(&g->f[0x40 / 4], x, g);
+    multiply_matrix(&g->f[0x80 / 4], x + 0x40, g);
     a = xf[0x1A0 / 4];
     b = xf[0x1A4 / 4];
     c = xf[0x1A8 / 4];
@@ -76,16 +76,16 @@ void FUN_001f2260(void) {
     g->f[0xB0 / 4] += g->f[0xBC / 4] * a;
     g->f[0xB4 / 4] += g->f[0xBC / 4] * b;
     g->f[0xB8 / 4] += g->f[0xBC / 4] * c;
-    FUN_001fa378(&g->f[0xC0 / 4], x + 0x80, g);
-    FUN_001f9a80(&g->f[0x100 / 4], x + 0x80, xf[0x1C0 / 4]);
-    FUN_001f9a80(&g->f[0x110 / 4], x + 0x90, xf[0x1C0 / 4]);
+    multiply_matrix(&g->f[0xC0 / 4], x + 0x80, g);
+    scale_vector(&g->f[0x100 / 4], x + 0x80, xf[0x1C0 / 4]);
+    scale_vector(&g->f[0x110 / 4], x + 0x90, xf[0x1C0 / 4]);
     qcopy(&g->f[0x120 / 4], x + 0xA0);
     qcopy(&g->f[0x130 / 4], x + 0xB0);
-    FUN_001fa378(&g->f[0x100 / 4], &g->f[0x100 / 4], g);
+    multiply_matrix(&g->f[0x100 / 4], &g->f[0x100 / 4], g);
     qcopy(sky_view_mtx, g);
     qcopy(sky_view_mtx + 0x10, &g->f[0x10 / 4]);
     qcopy(sky_view_mtx + 0x20, &g->f[0x20 / 4]);
-    FUN_001f9a68(sky_view_mtx + 0x30, &g->f[0x140 / 4], 1024.0f);
+    fast_vec_scale(sky_view_mtx + 0x30, &g->f[0x140 / 4], 1024.0f);
     *(f32 *)(sky_view_mtx + 0x3C) = 1024.0f;
 }
 

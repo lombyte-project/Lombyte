@@ -10,7 +10,7 @@
 extern int D_0015ED84_d __asm__("D_0015ED84");
 extern int FUN_001f0b58(void);
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void FUN_001f9810(void *, int);
+extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
 extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -20,7 +20,7 @@ void FUN_L18_00213b40(void) {
     int keep = g->unk12ED;
     int st = g->ground_type;
     int v;
-    FUN_001f9810(&g->ground_type, 0x10);
+    fast_mem_zero16(&g->ground_type, 0x10);
     g->unk12ED = keep;
     g->ground_type = -1;
     g->unk20A9 = 0;

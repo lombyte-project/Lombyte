@@ -27,7 +27,7 @@ typedef struct {
 extern Menu D_L00_001841F0;
 extern char D_L00_0015FE38[];
 extern char D_L00_0015FE40[];
-extern u8 *FUN_001fdd10(s32);
+extern u8 *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
 
 /* Copies menu item idx's label into out, expanding one %b (the bolt cost)
@@ -37,7 +37,7 @@ void FUN_L00_0024a618(s32 idx, u8 *out) {
     u8 *s;
     u8 *t;
 
-    s = FUN_001fdd10(D_L00_001841F0.items[idx].label);
+    s = get_help_message_text(D_L00_001841F0.items[idx].label);
     t = buf;
     if (s == 0) {
         return;

@@ -6,7 +6,7 @@ extern u8 D_001C8680[];
 extern u8 D_0015FEC0[];
 extern void FUN_00227740(void);
 extern void submit_graphics_setup_command_stream(void *) __asm__("FUN_00227548");
-extern void func_001F21B0(void *, s32);
+extern void noop_core_callback(void *, s32) __asm__("func_001F21B0");
 void FUN_0020d060(void) {
     struct DmaTag *tag;
 
@@ -33,7 +33,7 @@ void FUN_0020d060(void) {
     tag->addr = (u32)render_packet_cursor.tag;
     tag->vif0 = 0;
     tag->vif1 = 0;
-    func_001F21B0(D_0015FEC0, 8);
+    noop_core_callback(D_0015FEC0, 8);
 }
 
 extern __typeof__(FUN_0020d060) func_0020D060 __attribute__((alias("FUN_0020d060")));

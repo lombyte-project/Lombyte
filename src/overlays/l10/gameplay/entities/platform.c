@@ -613,8 +613,8 @@ extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern void *FUN_L00_0026fd28(char *a, char *b, unsigned char c, int d);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001fa050(float *, float *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -637,10 +637,10 @@ void FUN_L10_002c7a20(struct Moby *moby) {
         break;
     case 1:
         qcopy(v, &moby->pos);
-        FUN_001fa050(d, &moby->rot.x);
+        euler_rotation_matrix(d, &moby->rot.x);
         clear_u64_value(r);
         r[2] = *(float *)data * 3.0f * D_0015ED6C_c;
-        FUN_001f9d20(r, r, d);
+        transform_vector(r, r, d);
         scale_vector_xyz(s, r, 0.33f);
         FUN_L00_0026fd28((char *)v, (char *)r, 0x40, (int)moby);
         add_vector_xyz(v, v, s);
@@ -679,9 +679,9 @@ typedef struct {
 } HitBox;
 
 extern struct Moby *D_L10_00178380_u[] __asm__("D_L10_00178380");
-extern void FUN_001fa030(void *, void *);
+extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_001f9cf8(void *, void *, void *);
-extern void FUN_001fa2d8(void *, void *);
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *memcpy(void *, const void *, u32);
 extern void FUN_L10_0024c7f0(unsigned char *m, int x, int y, void *p, float f);
@@ -702,7 +702,7 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
     if (box->flags & 0x100) {
         return;
     }
-    FUN_001fa030(mat, &moby->rot);
+    euler_rotation_basis(mat, &moby->rot);
     if (box->width > box->depth) {
         radius = box->width * 0.5f;
     } else {
@@ -724,8 +724,8 @@ void FUN_L10_002c9958(struct Moby *moby, HitBox *box) {
                 continue;
             }
             subtract_vector_xyz(&delta, &other->pos, &moby->pos);
-            FUN_001fa2d8(inv, mat);
-            FUN_001f9d20(&local, &delta, inv);
+            transpose_rotation_matrix(inv, mat);
+            transform_vector(&local, &delta, inv);
             qcopy(&point, &local);
             if (point.f[0] < -(box->width * 0.5f + box->margin_x)) {
                 point.f[0] = -box->width * 0.5f;
@@ -883,14 +883,14 @@ void FUN_L10_002d7b18(struct Moby *a, float t) {
     }
 }
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern void FUN_001f9c48(void *, void *, float);
-extern void FUN_001f9bf8(void *, void *, float);
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int FUN_001f9770(void *);
 extern int FUN_L01_00274b78(float, void *, void *);
-extern float FUN_001f9b80(void *, void *);
-extern float FUN_001f9af0(void *);
+extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_001f96f8(int);
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
@@ -939,7 +939,7 @@ void FUN_L10_002d7b80(struct Moby *moby) {
     }
     qcopy(check, data);
     check[2] = 0.0f;
-    FUN_001f9c48(check, check, 1.0f);
+    set_vector_length_xy(check, check, 1.0f);
     check[2] = 1.0f;
     make_hit_descriptor(hit, moby, 0x10001, *(float *)(data + 0x18), check);
     if (FUN_001f9770(data + 0x10)) {
@@ -967,9 +967,9 @@ void FUN_L10_002d7b80(struct Moby *moby) {
                 rand_dir[2] = random_float_between_alt(-1.0f, 1.0f);
                 *(OvlQuad *)raised = *(OvlQuad *)rand_dir;
                 FUN_L00_001ff660(rand_dir, data, D_L10_00174300);
-                FUN_001f9bf8(raised, raised, FUN_001f9af0(rand_dir) * 0.5f);
+                fast_vec_normalize(raised, raised, fast_vec_length(rand_dir) * 0.5f);
                 FUN_001f9a10(raised, rand_dir, raised);
-                FUN_001f9bf8(raised, raised,
+                fast_vec_normalize(raised, raised,
                     random_float_between_alt(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
                 FUN_L00_0026dd20(&moby->pos, raised, 0x7f2f4f6f,
                     random_int_between(FUN_001f96f8(10), FUN_001f96f8(15)), 30000.0f);
@@ -980,7 +980,7 @@ void FUN_L10_002d7b80(struct Moby *moby) {
     }
     if (moby->pos.x < 2.0f || moby->pos.y < 2.0f || moby->pos.z < 2.0f ||
         moby->pos.x > 510.0f || moby->pos.y > 510.0f || moby->pos.z > 510.0f ||
-        FUN_001f9b80(&moby->pos, &D_L10_00167240) > 80.0f)
+        vector_distance_xy(&moby->pos, &D_L10_00167240) > 80.0f)
         mark_moby_for_removal_d7b80(moby);
 }
 #ifndef NOT_SDA
@@ -1162,7 +1162,7 @@ typedef struct {
     int i40;
 } Shot_2D9988;
 
-extern char *FUN_001f9e90(void *, int, int);
+extern char *fast_arc_tan(void *, int, int) __asm__("FUN_001f9e90");
 extern char D_L10_00178380[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -1583,8 +1583,8 @@ void FUN_L10_002d8d30(char *m) {
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA3C0), where it is exact; names translated to the US level program. */
 
 
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001fa2d8(void *, void *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 extern short D_L10_00161C0C __attribute__((sda));
 extern short D_L10_00161C10 __attribute__((sda));
@@ -1594,10 +1594,10 @@ int FUN_L10_002d9000(struct Moby *m, float *p) {
     float t50[4] __attribute__((aligned(16)));
     float t60[4] __attribute__((aligned(16)));
     *(OvlQuad *)a = *(OvlQuad *)p;
-    FUN_001fa2d8(t10, &m->rot_row0);
+    transpose_rotation_matrix(t10, &m->rot_row0);
     subtract_vector_xyz(t60, a, &m->pos);
     *(OvlQuad *)t50 = *(OvlQuad *)t60;
-    FUN_001f9d20(t50, t50, t10);
+    transform_vector(t50, t50, t10);
     if (absolute_float(t50[0]) < *(float *)&D_L10_00161C10) {
         return absolute_float(t50[1]) < *(float *)&D_L10_00161C0C;
     }
@@ -1609,7 +1609,7 @@ int FUN_L10_002d9000(struct Moby *m, float *p) {
 
 extern char D_0013D388[];
 extern char D_L10_001DD160[];
-extern float FUN_001f96b0(float);
+extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern int FUN_L10_002d9000_c() __asm__("FUN_L10_002d9000");
@@ -1635,7 +1635,7 @@ void FUN_L10_002d90a8(unsigned char *m) {
     case 1:
         flag = 0;
         {
-            float f = *(float *)(m + 0x18) - 4.0f / FUN_001f96b0(20.0f);
+            float f = *(float *)(m + 0x18) - 4.0f / multiply_global_factor_ed64(20.0f);
             *(float *)(m + 0x18) = f;
             if (f <= *(float *)(d + 2)) {
                 *(float *)(m + 0x18) = *(float *)(d + 2);
@@ -1670,7 +1670,7 @@ void FUN_L10_002d90a8(unsigned char *m) {
     case 2:
         break;
     case 3: {
-        float f = 4.0f / FUN_001f96b0(20.0f);
+        float f = 4.0f / multiply_global_factor_ed64(20.0f);
         float g = *(float *)(m + 0x18) + f;
         float h;
         *(float *)(m + 0x18) = g;
@@ -1856,9 +1856,9 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_001f96f8(int);
 extern int FUN_001fa6d0(float);
-extern float FUN_001f9988(float);
-extern float FUN_001f9b48(void *, void *);
-extern int FUN_001fa728(void *, float);
+extern float square_root(float) __asm__("FUN_001f9988");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -1919,8 +1919,8 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         *(OvlQuad *)position1 = *(OvlQuad *)&moby->pos;
         radius_squared = half_height * half_height;
         position1[2] += half_height;
-        position1[3] = FUN_001f9988(radius_squared + half_width * half_width);
-        if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(position1, 80.0f))
+        position1[3] = square_root(radius_squared + half_width * half_width);
+        if (fast_vec_dist(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)fast_bsphere_check(position1, 80.0f))
             enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
         if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x30)) == 0)
             *(int *)(data + 0x30) = allocate_voice_for_target_entry(0, 4, (int)moby);
@@ -1942,8 +1942,8 @@ void FUN_L10_002da2c8(struct Moby *moby) {
         *(OvlQuad *)scratch.position2 = *(OvlQuad *)&moby->pos;
         radius_squared = half_height * half_height;
         scratch.position2[2] += half_height;
-        scratch.position2[3] = FUN_001f9988(radius_squared + half_width * half_width);
-        if (FUN_001f9b48(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)FUN_001fa728(scratch.position2, 80.0f))
+        scratch.position2[3] = square_root(radius_squared + half_width * half_width);
+        if (fast_vec_dist(&moby->pos, &D_L10_00167240) < 80.0f && 0.0f <= (float)fast_bsphere_check(scratch.position2, 80.0f))
             enqueue_callback_list_1((void *)FUN_L10_002da690, moby);
         break;
     }
@@ -2330,8 +2330,8 @@ void FUN_L10_002dd650(struct Moby *m) {
                 char *o = *(char **)(e + 0x20);
                 if (*(short *)(o + 0xA6) == 0xAC || *(short *)(o + 0xA6) == 0x99) {
                     subtract_vector_xyz(v, &m->pos, o + 0x10);
-                    FUN_001fa2d8(w, &m->rot_row0);
-                    FUN_001f9d20(v, v, w);
+                    transpose_rotation_matrix(w, &m->rot_row0);
+                    transform_vector(v, v, w);
                     if (v[0] > 0.25f) {
                         *(int *)(D_0014C190 + (((short)m->save_id >> 5) * 4 +
                                                (D_0015ED84_m << 8))) |=

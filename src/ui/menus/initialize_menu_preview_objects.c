@@ -6,7 +6,7 @@ extern u8 D_00186310[];
 extern char D_00186F40[];
 extern int active_class_resource_index __asm__("D_0015FF4C");
 extern void FUN_00224b60();
-extern int func_001E9410();
+extern int noop_callback_e() __asm__("func_001E9410");
 extern int update_menu_preview_animation_pose() __asm__("FUN_00224fc0");
 extern int fill_transfer_words() __asm__("func_001F97E8");
 extern int create_menu_preview_moby() __asm__("func_00225490");
@@ -74,7 +74,7 @@ int initialize_menu_preview_objects(char *preview) {
         g = &menu_system;
         g->unkC0 = -1;
         fill_transfer_words(D_00186310, 0, 0x40);
-        func_001E9410(object);
+        noop_callback_e(object);
     }
     object = create_menu_preview_moby(0x259);
     if (object != 0) {

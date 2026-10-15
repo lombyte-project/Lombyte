@@ -24,7 +24,7 @@ extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern void fill_transfer_words(u8 *, s32, s32) __asm__("func_001F97E8");
 extern void FlushCache(s32);
 /* Retail returns zero after the graphics pipeline becomes idle. */
-extern s32 func_00120558(s32, s32);
+extern s32 wait_for_graphics_pipeline_idle(s32, s32) __asm__("func_00120558");
 extern void setup_fs_aa_buffer(s32, s32, s32, s32, s32, s32) __asm__("func_001FA978");
 extern void put_disp_buffer(void) __asm__("func_001FB2A8");
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
@@ -67,7 +67,7 @@ void set_pal_mode(void) {
     screen_extent.right = (screen_extent.half_width + 0x800) << 4;
     screen_extent.bottom = (screen_extent.half_height + 0x800) << 4;
     FlushCache(0);
-    func_00120558(0, 0);
+    wait_for_graphics_pipeline_idle(0, 0);
     zbuf = (depth_buffer_address >> 13) | 0x1000000;
     frame = (draw_buffer_address >> 13) | ((u64)(screen_extent.width >> 6) << 16);
     scissor = ((u64)(screen_extent.width - 1) << 16) | ((u64)(screen_extent.height - 1) << 48);
@@ -86,7 +86,7 @@ void set_pal_mode(void) {
     put_draw_buffer_large();
     append_gif_transfer_packet();
     FlushCache(0);
-    func_00120558(0, 0);
+    wait_for_graphics_pipeline_idle(0, 0);
     put_disp_buffer();
     fill_transfer_words(image_clear_buffer, 0, 0x1000);
     tile_count = (fs_aa_buffer.storage_width * fs_aa_buffer.storage_height) >> 10;
@@ -94,7 +94,7 @@ void set_pal_mode(void) {
         sceGsSetDefLoadImage(&image_transfer, tile_index << 4, 1, 0, 0, 0, 32, 32);
         FlushCache(0);
         sceGsExecLoadImage(&image_transfer, image_clear_buffer);
-        func_00120558(0, 0);
+        wait_for_graphics_pipeline_idle(0, 0);
     }
 }
 

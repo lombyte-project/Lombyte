@@ -27,7 +27,7 @@ extern char D_0015FBF0[];
 extern struct Vram D_001940C0;
 extern u32 D_0019A420[];
 extern struct HudBank *hud_heap_alloc(u32, s32, char *, s32) __asm__("func_001FF288");
-extern void FUN_001f98d0(void *, void *, u32);
+extern void fast_mem_copy(void *, void *, u32) __asm__("FUN_001f98d0");
 extern void load_compressed_hud_bank(s32, s32) __asm__("FUN_00202d10");
 extern s32 stash_send_data(void *, u32, u32, char *) __asm__("func_00232E40");
 extern void hud_send_resident_bank(s32, s32, s32) __asm__("func_001FF128");
@@ -59,7 +59,7 @@ void load_hud_banks(void) {
     v = &D_001940C0;
     b = hud_heap_alloc(size, 0, D_0015FBB0, 0x23A);
     hb = &hud_state;
-    FUN_001f98d0(b, (void *)(f->chunk[0].offset + (s32)f), size);
+    fast_mem_copy(b, (void *)(f->chunk[0].offset + (s32)f), size);
     hb->header.bank = b;
     hb->anim_defs = (struct HudAnimDef *)((u8 *)b + b->off4);
     vram = v->base + 0x60000;

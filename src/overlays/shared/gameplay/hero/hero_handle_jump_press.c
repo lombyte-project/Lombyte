@@ -13,7 +13,7 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern s32 FUN_L00_001efc70(void *, void *, s32, void *, s32);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern f32 FUN_001f96b0(f32);
+extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
 
 /* Idle fidget picker: lists the eligible entries of idle_fidgets, then
    picks one weighted by 1 / (interval * 60). Returns 1 and the index in
@@ -72,7 +72,7 @@ s32 pick_idle_fidget(s32 *index) {
     total = 0.0f;
     for (i = 0; i < count; i++) {
         HeroTableEntry70 *choice = &idle_fidgets[choices[i]];
-        total += 1.0f / (f32)(s32)(FUN_001f96b0(choice->interval) * 60.0f);
+        total += 1.0f / (f32)(s32)(multiply_global_factor_ed64(choice->interval) * 60.0f);
     }
     pick = random_float_between(0.0f, 1.0f);
     if (pick < total) {
@@ -81,7 +81,7 @@ s32 pick_idle_fidget(s32 *index) {
             HeroTableEntry70 *choice;
             *index = picked;
             choice = &idle_fidgets[picked];
-            total -= 1.0f / (f32)(s32)(FUN_001f96b0(choice->interval) * 60.0f);
+            total -= 1.0f / (f32)(s32)(multiply_global_factor_ed64(choice->interval) * 60.0f);
             if (total < pick) break;
         }
         return 1;

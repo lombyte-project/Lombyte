@@ -5,9 +5,9 @@ struct VertexBatch {
     s32 unk2C;
 };
 
-extern void func_001F9A10(void *arg0, void *arg1, void *arg2);
-extern void func_001F9A68(void *arg0, void *arg1, f32 arg2);
-extern void func_001F9CF8(void *arg0, void *arg1, void *arg2);
+extern void add_vector_xyz(void *arg0, void *arg1, void *arg2) __asm__("func_001F9A10");
+extern void fast_vec_scale(void *arg0, void *arg1, f32 arg2) __asm__("func_001F9A68");
+extern void transform_vector_by_basis(void *arg0, void *arg1, void *arg2) __asm__("func_001F9CF8");
 extern void func_002106F8(void);
 
 void transform_scaled_vertex_batch(struct VertexBatch *object, s32 count, s32 arg2,
@@ -20,10 +20,10 @@ void transform_scaled_vertex_batch(struct VertexBatch *object, s32 count, s32 ar
     func_002106F8();
     if (count > 0) {
         do {
-            func_001F9A68(cursor, cursor, scale);
+            fast_vec_scale(cursor, cursor, scale);
             count -= 1;
-            func_001F9CF8(cursor, cursor, (u8 *)object + 0xC0);
-            func_001F9A10(cursor, cursor, (u8 *)object + 0x10);
+            transform_vector_by_basis(cursor, cursor, (u8 *)object + 0xC0);
+            add_vector_xyz(cursor, cursor, (u8 *)object + 0x10);
             cursor += 0x10;
         } while (count != 0);
     }

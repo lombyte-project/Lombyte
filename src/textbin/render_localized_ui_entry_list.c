@@ -12,12 +12,12 @@ extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void func_001F61E8(void);
-extern void func_001F61F8(void);
+extern void enable_global_flag(void) __asm__("func_001F61E8");
+extern void disable_global_flag(void) __asm__("func_001F61F8");
 extern s32 measure_text_width(char *, s32, u8 *) __asm__("func_001F6200");
 extern void font_print(s32, s32, long, char *, s32, s32, u8 *) __asm__("func_001F62B0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern s32 FUN_0021b6d8(s32, s32, s32);
+extern s32 fade_menu_color(s32, s32, s32) __asm__("FUN_0021b6d8");
 s32 render_localized_ui_entry_list(struct MenuScreen *menu) __asm__("FUN_0021b1c8");
 
 s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
@@ -125,7 +125,7 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
                 color = 0x80006060;
             } else if (enabled) {
             fade_timer:
-                color = FUN_0021b6d8(selected_item->fade_timer, -1, -1);
+                color = fade_menu_color(selected_item->fade_timer, -1, -1);
 
             } else {
                 color = 0x80303030;
@@ -140,24 +140,24 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
             } else if (menu->data.list.flags & 0x4000) {
                 x = half_width - (maximum_text_width >> 1);
             }
-            func_001F61F8();
+            disable_global_flag();
             font_print(x + text_shadow_x, y + text_shadow_y, 0x80000000L, text_id, -1,
                        get_effect_texture(font_texture_index), glyphs);
-            func_001F61E8();
+            enable_global_flag();
             if (menu->data.list.flags & 0x80) {
-                func_001F61F8();
+                disable_global_flag();
             }
             font_print(x, y, color, text_id, -1, get_effect_texture(font_texture_index), glyphs);
             y += row_height;
             if (menu->data.list.items[entry_index].subtext != 0) {
-                func_001F61F8();
+                disable_global_flag();
                 shadow_x = x + text_shadow_x;
                 shadow_y = y + text_shadow_y;
                 secondary_text = get_help_message_text(menu->data.list.items[entry_index].subtext);
                 font_print(shadow_x, shadow_y, 0x80000000L, secondary_text, -1,
                            get_effect_texture(font_texture_index), glyphs);
                 if (!(menu->data.list.flags & 0x80)) {
-                    func_001F61E8();
+                    enable_global_flag();
                 }
                 font_print(x, y, color,
                            get_help_message_text(menu->data.list.items[entry_index].subtext), -1,
@@ -165,7 +165,7 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
                 y += row_height;
             }
             if (menu->data.list.flags & 0x80) {
-                func_001F61E8();
+                enable_global_flag();
             }
             entry_index++;
             selection_index++;

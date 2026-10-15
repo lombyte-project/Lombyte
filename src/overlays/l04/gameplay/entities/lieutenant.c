@@ -49,10 +49,10 @@ extern int FUN_00214720(char *, s32);
 extern int FUN_L00_00266448(struct Moby *, struct VendorVars *);
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void FUN_L00_002502a0(int);
-extern void FUN_001f9bf8(Vec4 *, Vec4 *, float);
-extern void FUN_001f9a10(Vec4 *, Vec4 *, void *);
-extern float FUN_001fa580(float, float);
-extern void FUN_0020b178(int, int);
+extern void fast_vec_normalize(Vec4 *, Vec4 *, float) __asm__("FUN_001f9bf8");
+extern void add_vector_xyz(Vec4 *, Vec4 *, void *) __asm__("FUN_001f9a10");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 void FUN_L04_002e3078(struct Moby *moby) {
     Vec4 pos;
@@ -88,15 +88,15 @@ void FUN_L04_002e3078(struct Moby *moby) {
         if (vars->phase == 2) {
             unlock_planet(6);
             FUN_L00_002502a0(((struct VendorMobyView *)moby)->slot);
-            FUN_001f9bf8(&pos, &((struct VendorMobyView *)moby)->facing, 2.0f);
-            FUN_001f9a10(&pos, &pos, &moby->pos);
+            fast_vec_normalize(&pos, &((struct VendorMobyView *)moby)->facing, 2.0f);
+            add_vector_xyz(&pos, &pos, &moby->pos);
             r = &rot;
             qcopy(r, &moby->rot);
-            rot.f[2] = FUN_001fa580(rot.f[2], 3.14159f);
+            rot.f[2] = fast_add_rotations(rot.f[2], 3.14159f);
             qcopy(&D_L04_0016C9F0.pos, &pos);
             qcopy(&D_L04_0016C9F0.rot, r);
             D_L04_0016C9F0.active = 1;
-            FUN_0020b178(0, -1);
+            memcard_save_data(0, -1);
             moby->state = 3;
             moby->flags |= 0x41;
             moby->collision = 0;

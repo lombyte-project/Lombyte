@@ -369,9 +369,9 @@ extern float vector_length_xyz(void *);
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int FUN_L00_002592b8(int *, int, int, int);
 extern int tick_countdown_32(int *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001f9fc8(void *);
-extern void FUN_001fa2d8(void *, void *);
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void subtract_vector_xyz(void *, void *, void *);
 
 void FUN_L05_00307010(char *moby) {
@@ -405,9 +405,9 @@ void FUN_L05_00307010(char *moby) {
                 a[2] += 0.8f;
                 subtract_vector_xyz(v, pos + 0x10, a);
                 if (!(8.0f < vector_length_xyz(v))) {
-                    FUN_001f9fc8(m);
-                    FUN_001fa2d8(m, l1 + 0xC0);
-                    FUN_001f9d20(v, v, m);
+                    set_identity_matrix(m);
+                    transpose_rotation_matrix(m, l1 + 0xC0);
+                    transform_vector(v, v, m);
                     if (absolute_float(v[0]) < 0.5f && absolute_float(v[1]) < 2.5f &&
                         absolute_float(v[2]) < 2.5f) {
                         *(unsigned short *)(data + 0x25A) += scale_game_frames(0x78);
@@ -425,9 +425,9 @@ void FUN_L05_00307010(char *moby) {
                 float m[16];
                 subtract_vector_xyz(v, l2 + 0x10, data + 0x200);
                 if (!(8.0f < vector_length_xyz(v))) {
-                    FUN_001f9fc8(m);
-                    FUN_001fa2d8(m, l2 + 0xC0);
-                    FUN_001f9d20(v, v, m);
+                    set_identity_matrix(m);
+                    transpose_rotation_matrix(m, l2 + 0xC0);
+                    transform_vector(v, v, m);
                     if (absolute_float(v[0]) < 2.8f && absolute_float(v[1]) < 1.4f &&
                         absolute_float(v[2]) < 0.5f) {
                         *(unsigned short *)(data + 0x25A) += scale_game_frames(0x78);
@@ -772,7 +772,7 @@ extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern void FUN_001fa050(void *, void *);
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -803,7 +803,7 @@ void FUN_L05_003186f8(char *moby)
             *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40), *(float *)(data + 0x20));
             *(float *)(moby + 0x44) = fast_add_rotations_c(*(float *)(moby + 0x44), *(float *)(data + 0x24));
             *(float *)(moby + 0x48) = fast_add_rotations_c(*(float *)(moby + 0x48), *(float *)(data + 0x28));
-            FUN_001fa050(buf, moby + 0x40);
+            euler_rotation_matrix(buf, moby + 0x40);
             copy_matrix3x4(moby + 0xC0, buf);
             moby_point_position(moby, *(int *)(data + 4), buf + 0x50);
             subtract_vector_xyz(buf + 0x60, buf + 0x40, buf + 0x50);
@@ -812,7 +812,7 @@ void FUN_L05_003186f8(char *moby)
             *(float *)(moby + 0x40) = fast_add_rotations_c(*(float *)(moby + 0x40), *(float *)(data + 0x20));
             *(float *)(moby + 0x44) = fast_add_rotations_c(*(float *)(moby + 0x44), *(float *)(data + 0x24));
             *(float *)(moby + 0x48) = fast_add_rotations_c(*(float *)(moby + 0x48), *(float *)(data + 0x28));
-            FUN_001fa050(buf, moby + 0x40);
+            euler_rotation_matrix(buf, moby + 0x40);
             if (*(unsigned short *)(moby + 0x34) & 0x8000)
                 scale_vector_xyz(buf + 0x10, buf + 0x10, -1.0f);
             copy_matrix3x4(moby + 0xC0, buf);
