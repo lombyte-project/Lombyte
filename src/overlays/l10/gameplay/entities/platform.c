@@ -538,10 +538,11 @@ void FUN_L10_002be858(unsigned char *moby) {
             position[2] += convert_integer_to_float(i) * 0.1f * 0.0625f + 1.8f;
             effect = (char *)FUN_L00_002715e8(position, 0, 0x1eff7f40, 0.0f, D_0015ED6C * 315000.0f);
             if (effect != 0) {
+                float size = frame_time;
                 float *velocity = (float *)(effect + 0x20);
                 velocity[0] = 0.0f;
                 velocity[1] = 0.0f;
-                velocity[2] = frame_time * -1.5f;
+                velocity[2] = size * -1.5f;
             }
         }
     }
