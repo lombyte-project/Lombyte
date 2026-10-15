@@ -1697,7 +1697,7 @@ set_idle:
         angle = fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y);
         FUN_L08_00262778(angle, 0.02f, 0.3f, 0.2f, moby, d + 0x12c);
         if (distance < 20.0f && 8.0f < distance && FUN_001f9740((int *)(d + 0x128))) {
-            old = camera_state_bytes;
+            char *old = camera_state_bytes;
             angle = fast_arc_tan(moby->pos.x - *(float *)(old + 0x140), moby->pos.y - *(float *)(old + 0x144));
             if (fast_difference_between_rotations(*(float *)(old + 0x158), angle) < 0.55850536f) goto begin_attack;
         }
@@ -1718,9 +1718,11 @@ begin_attack:
             FUN_L08_002635a0(moby, d + 0xd0, point, d + 0x40);
         if (!(moby->anim_flags & 2)) break;
         if (FUN_001f9b80(&moby->pos, &target->pos) < 6.0f) goto select_target;
-        old = camera_state_bytes;
-        angle = fast_arc_tan(moby->pos.x - *(float *)(old + 0x140), moby->pos.y - *(float *)(old + 0x144));
-        if (!(0.55850536f < fast_difference_between_rotations(*(float *)(old + 0x158), angle))) goto fire_animation;
+        {
+            char *old = camera_state_bytes;
+            angle = fast_arc_tan(moby->pos.x - *(float *)(old + 0x140), moby->pos.y - *(float *)(old + 0x144));
+            if (!(0.55850536f < fast_difference_between_rotations(*(float *)(old + 0x158), angle))) goto fire_animation;
+        }
 select_target:
         old = *(char **)(d + 0x120);
         next = FUN_L08_002daa10(moby);
@@ -1757,7 +1759,7 @@ fire_animation:
             if (next) {
                 old = *(char **)(next + 0x78);
                 *(int *)(old + 0x20) = scale_game_frames(180);
-                *(short *)(old + 0xc) = scale_game_frames(10);
+                *(volatile short *)(old + 0xc) = scale_game_frames(10);
                 *(short *)(old + 0xe) = scale_game_frames(10);
                 (*(struct Moby **)(d + 0x124))->state = 1;
                 (*(struct Moby **)(d + 0x124))->command |= 3;
