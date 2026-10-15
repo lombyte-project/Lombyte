@@ -1294,7 +1294,8 @@ get_goal:
         return;
     }
     switch (moby->state) {
-    case 0:
+    case 0: {
+        SteeringPath_5630 *path;
         manip0 = vars + 0xd0;
         moby->pos.z = moby->pos.z + 7.5f;
         manip1 = vars + 0x110;
@@ -1347,6 +1348,7 @@ get_goal:
         if (*(struct Moby **)(vars + 0x160) != 0)
             (*(struct Moby **)(vars + 0x160))->flags |= 0x41;
         break;
+    }
     case 1:
         if (*(int *)(vars + 0x1a4) != 0 && D_001413F4[0] != 2) {
             moby->collision = 0;
@@ -1363,7 +1365,8 @@ get_goal:
             if (*(int *)(vars + 0x190) == trigger) goto activate;
         }
         if (FUN_L01_0026e008(*(int *)(vars + 0x190), 0x40)) break;
-activate:
+activate: {
+        int trigger;
         trigger = moby->pclass->collision;
         moby->flags = (moby->flags & 0xffbe) | 0x1000;
         moby->collision = trigger;
@@ -1371,14 +1374,18 @@ activate:
         if (*(int *)(vars + 0x1ac) == -1) goto free_move;
         moby->state = 2;
         goto show_link;
+        }
 check_volume:
         if (*(int *)(vars + 0x1b0) != -1) break;
         if (goal.kind == 2) break;
+        {
+        int trigger;
         trigger = moby->pclass->collision;
         moby->flags = (moby->flags & 0xffbe) | 0x1000;
         moby->collision = trigger;
         vars[0x58] = 0x19;
         if (*(int *)(vars + 0x1ac) != -1) { moby->state = 2; goto show_link; }
+        }
 free_move:
         moby->state = 3;
 show_link:
@@ -1567,9 +1574,8 @@ apply_delta:
         if (step < distance) {
             float position;
             position = origin.f[2];
-            if (position < moby->pos.z) position = position + step;
-            else position = position - step;
-            moby->pos.z = position;
+            if (position < moby->pos.z) moby->pos.z = position + step;
+            else moby->pos.z = position - step;
         }
     }
     moby->pos.z -= D_L15_00161A0C * fast_cos(*(float *)(vars + 0x16c));
