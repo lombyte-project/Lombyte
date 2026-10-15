@@ -2015,6 +2015,7 @@ void FUN_L05_00304320(char *moby) {
     char *path;
     char *child;
     char *position;
+    char *path_position;
     int state;
     int *path_entry;
     int count;
@@ -2028,8 +2029,8 @@ void FUN_L05_00304320(char *moby) {
     float angle;
     float turn;
     float point[4] __attribute__((aligned(16)));
-    float v[4] __attribute__((aligned(16)));
     float w[4] __attribute__((aligned(16)));
+    float v[4] __attribute__((aligned(16)));
     float pos[4] __attribute__((aligned(16)));
     void *matrix0;
     void *matrix1;
@@ -2126,11 +2127,15 @@ state_one:
     count=**(int **)((char *)path_entry+0x10);
     last=0;
     if (*(signed char *)((char *)path_entry+4)>=0) last=count-1;
-    index=(*path_entry+count+*(signed char *)((char *)path_entry+4))%count;
-    position=moby+0x10;
-    offset=index*16+16;
+    index=*path_entry+count;
+    index+=*(signed char *)((char *)path_entry+4);
+    index%=count;
+    path_position=moby+0x10;
+    position=path_position;
+    offset=index*16;
+    offset+=16;
     FUN_L00_00259028(moby,data+0x70,*(char **)((char *)path_entry+0x10)+offset,data+0x40);
-    if (distance_to_2d1688(position,*(char **)((char *)path_entry+0x10)+offset)<1.0f) {
+    if (distance_to_2d1688(path_position,*(char **)((char *)path_entry+0x10)+offset)<1.0f) {
         if (index==last) {
             path=*(char **)((char *)path_entry+0x10);
             if (distance_2d1688(path+*(int *)path*16,path+16)>5.0f)
@@ -2166,11 +2171,15 @@ state_two:
     count=**(int **)((char *)path_entry+0x10);
     last=0;
     if (*(signed char *)((char *)path_entry+4)>=0) last=count-1;
-    index=(*path_entry+count+*(signed char *)((char *)path_entry+4))%count;
-    position=moby+0x10;
-    offset=index*16+16;
+    index=*path_entry+count;
+    index+=*(signed char *)((char *)path_entry+4);
+    index%=count;
+    path_position=moby+0x10;
+    position=path_position;
+    offset=index*16;
+    offset+=16;
     FUN_L00_00259028(moby,data+0x70,*(char **)((char *)path_entry+0x10)+offset,data+0x40);
-    if (distance_to_2d1688(position,*(char **)((char *)path_entry+0x10)+offset)<1.0f) {
+    if (distance_to_2d1688(path_position,*(char **)((char *)path_entry+0x10)+offset)<1.0f) {
         if (index==last) {
             path=*(char **)((char *)path_entry+0x10);
             if (distance_2d1688(path+*(int *)path*16,path+16)>5.0f)
