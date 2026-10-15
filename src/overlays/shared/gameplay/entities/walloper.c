@@ -110,7 +110,8 @@ void FUN_L00_002b94d0(u8 *o) {
                 if (candidate == *(char **)(v + 0x20) || candidate == *(char **)(v + 0x38) ||
                     !candidate || !*(char **)(candidate + 0x24) ||
                     *(short *)(*(char **)(candidate + 0x24) + 0x46) != 5) continue;
-                if ((u8)candidate[0x20] == 0xfe || (u8)candidate[0x20] == 0xfd) continue;
+                if ((u8)candidate[0x20] == 0xfe) goto next_candidate;
+                if ((u8)candidate[0x20] == 0xfd) goto next_candidate;
                 if (!FUN_002141f8(candidate)) continue;
                 fast_vec_sub(&target0, candidate + 0x10, v);
                 distance = vector_length_xy(&target0);
@@ -130,6 +131,7 @@ void FUN_L00_002b94d0(u8 *o) {
                     second_score = best_score; second = best;
                     best_score = score; best = candidate;
                 } else if (second_score < score) { second_score = score; second = candidate; }
+next_candidate:;
             }
         }
     }
@@ -165,10 +167,11 @@ void FUN_L00_002b94d0(u8 *o) {
         target1.f[2] += *(float *)(data + 0x10);
         spacing = (fast_vec_dist(&target0, &target1) + primary_distance) * 0.05f;
     }
-    D_L00_001615F8 = enabled ? 0x207f20 : 0x7f2020;
+    if (enabled) D_L00_001615F8 = 0x207f20;
+    else D_L00_001615F8 = 0x7f2020;
     clear_u64_value(&camera_direction);
     make_hit_descriptor(&hit, o, 0x210000, &camera_direction, enabled_float + 2.0f);
-    hit.id = *(short *)(o + 0xa6); hit.mode = 1; hit.kind = 5;
+    hit.mode = 1; hit.kind = 5; hit.id = *(short *)(o + 0xa6);
     *(short *)(v + 0x3e) = 20;
     FUN_L00_001f2868(0.3f, v, 0x10, *(void **)D_001413D0, &hit);
     fast_vec_sub(&direction, v + 0x10, v);
@@ -185,9 +188,7 @@ void FUN_L00_002b94d0(u8 *o) {
     point = (char *)D_L00_001DB5C0 + 16;
     previous = (char *)D_L00_001DB5C0;
     side = (char *)D_L00_001DB5C0 + 0x150;
-    for (i = 1; i < 20; i++, difference += 16, point += 16, side += 16) {
-        previous = (char *)D_L00_001DB5C0 - 16 + difference;
-        collision_previous = (char *)D_L00_001DB5C0 - 32 + difference;
+    for (i = 1; i < 20; i++, difference += 16, point += 16, side += 16, previous += 16) {
         n = (float)i;
         amplitude = D_L00_001615A4 + (D_L00_001615A8 - D_L00_001615A4) *
                     (FUN_001fa6c0(i) * 0.05f);
@@ -196,26 +197,26 @@ void FUN_L00_002b94d0(u8 *o) {
         wave += FUN_L00_00257c48(D_L00_001615E4, D_L00_001615E8);
 
         score = *(float *)(point + 8) - ((float *)D_L00_001DB840)[i];
-        ((float *)D_L00_001DB840)[i] = wave;
         *(float *)(point + 8) = score;
-        fast_vec_sub(&delta, point, previous);
+        ((float *)D_L00_001DB840)[i] = wave;
+        fast_vec_sub(&delta, point, (char *)D_L00_001DB5C0 - 16 + difference);
         blend_vector_2b94d0(0.85f, &blend, &delta, &step);
-        length = fast_vec_length(&blend);
-        if (length == 0.0f) qcopy(point, previous);
+        primary_distance = fast_vec_length(&blend);
+        if (primary_distance == 0.0f) qcopy(point, previous);
         else {
-            fast_vec_scale(spacing / length, &blend, &blend);
-            fast_vec_add(point, previous, &blend); qcopy(&step, &blend);
+            fast_vec_scale(spacing / primary_distance, &blend, &blend);
+            fast_vec_add(point, (char *)D_L00_001DB5C0 - 16 + difference, &blend); qcopy(&step, &blend);
         }
         *(float *)(point + 8) += wave;
-        fast_vec_sub(&delta, point, previous);
+        fast_vec_sub(&delta, point, (char *)D_L00_001DB5C0 - 16 + difference);
         if (*(char **)(v + 0x20)) {
             if (!enabled || !*(char **)(v + 0x38)) {
                 fast_vec_sub(&target_delta, &target0, point);
                 length = fast_vec_length(&target_delta);
                 if (length != 0.0f) {
                     if (i == 19) { factor = 0.5f; spacing = length; }
-                    else if (i < 16) factor = 0.1f;
-                    else { factor = 0.5f; spacing = length / FUN_001fa6c0(19 - i); }
+                    else if (i >= 16) { factor = 0.5f; spacing = length / FUN_001fa6c0(19 - i); }
+                    else factor = 0.1f;
                     fast_vec_scale(spacing / length, &target_delta, &target_delta);
                     blend_vector_2b94d0(factor, &step, &step, &target_delta);
                 }
@@ -234,8 +235,8 @@ void FUN_L00_002b94d0(u8 *o) {
             }
         }
         if (i < 10) {
-            phase = FUN_L00_0025e310((*(float *)&D_L00_001615B4_gp) + n * D_L00_001615BC);
-            angle = FUN_L00_0025e310((*(float *)&D_L00_001615C8_gp) + n * D_L00_001615D0);
+            phase = FUN_L00_0025e310((*(float *)&D_L00_001615B4_gp) + (float)i * D_L00_001615BC);
+            angle = FUN_L00_0025e310((*(float *)&D_L00_001615C8_gp) + (float)i * D_L00_001615D0);
             amplitude = D_L00_001615C0 * FUN_001f9de0(angle);
             qcopy(side, point);
             wave = FUN_001f9de0(phase);
@@ -261,7 +262,7 @@ void FUN_L00_002b94d0(u8 *o) {
             fast_vec_add(&target_delta, D_0013F3D0, &effects.first.origin);
             hit_result = FUN_001efa68(&target_delta, (Vec4 *)v, 0x10, *(void **)D_001413D0, 0);
         } else if (i == 19 || !(i & 1)) {
-            hit_result = FUN_001efa68((Vec4 *)collision_previous, (Vec4 *)point, 0x10, o, 0);
+            hit_result = FUN_001efa68((Vec4 *)((char *)D_L00_001DB5C0 - 32 + difference), (Vec4 *)point, 0x10, o, 0);
         } else continue;
         fast_vec_sub(&camera_direction, point, g_debug_camera);
         camera_direction.f[2] = 0.0f;
