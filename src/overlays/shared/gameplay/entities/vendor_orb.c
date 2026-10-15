@@ -1099,7 +1099,7 @@ void FUN_L00_002e2c88(int a, int b, void *points, int alpha, int glow_alpha, int
     cross_vectors_xyz(&transform[2], &transform[1], &transform[0]);
     qcopy(&q.positions[0], &width);
     fast_vec_scale(&q.positions[1], &q.positions[0], -1.0f);
-    glow.positions[0].q = glow_width.q;
+    *(volatile u128 *)&glow.positions[0] = glow_width.q;
     fast_vec_scale(&glow.positions[1], &glow.positions[0], -1.0f);
     transform_vector_c(&from, points, transform);
     transform_vector_c(&to, (char *)points + 0x10, transform);
