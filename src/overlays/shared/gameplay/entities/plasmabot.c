@@ -527,9 +527,9 @@ void FUN_L14_002b17d8(unsigned char *moby) {
         f = FUN_001fa6c0(*(short *)(data + 0x262));
         duration = FUN_001fa6c0(FUN_001f96f8(D_L14_001614EC));
         f = f / duration;
-        f = fast_subtract_rotations(*(float *)(data + 0x278), -D_L14_001614E8 + (D_L14_001614E8 + D_L14_001614E8) * f);
+        duration = fast_subtract_rotations(*(float *)(data + 0x278), -D_L14_001614E8 + (D_L14_001614E8 + D_L14_001614E8) * f);
         if (data[0x24B] && (*(float *)(owner + 0x18) + 0.1f) - *(float *)(moby + 0x18) < 0.0f) flag = 1;
-        FUN_L14_002b35d8(moby, flag, f);
+        FUN_L14_002b35d8(moby, flag, duration);
         FUN_L14_002b37b0(moby, angle);
         build_moby_bone_transform((struct Moby *)moby, 0, mat);
         direction_ptr = &direction;
@@ -540,10 +540,10 @@ void FUN_L14_002b17d8(unsigned char *moby) {
         FUN_001f9a10(&end, start, direction_ptr);
         fast_vec_normalize(direction_ptr, direction_ptr, D_L14_001614F4);
         FUN_001f9a10(start, start, &direction);
+        info.moby = moby;
         info.flags = 0x10001;
         info.count = 1;
         info.strength = 1.0f;
-        info.moby = moby;
         info.x = FUN_001f9dc8(*(float *)(moby + 0x48));
         info.y = FUN_001f9de0(*(float *)(moby + 0x48));
         info.oclass = *(unsigned short *)(moby + 0xA6);
@@ -569,14 +569,8 @@ void FUN_L14_002b17d8(unsigned char *moby) {
     case 10: {
 
         anim = (unsigned char)moby[0x52];
-        if (!((unsigned char)moby[0x70] & 2) || (unsigned char)anim != (unsigned char)moby[0x53]) {
-            if ((unsigned char)anim == 7) goto finish;
-            anim = (unsigned char)moby[0x53];
-            if ((unsigned char)anim == 7) break;
-        } else if ((unsigned char)anim != 7) {
-            anim = (unsigned char)moby[0x53];
-            if ((unsigned char)anim == 7) break;
-        }
+        if (!(((unsigned char)moby[0x70] & 2) && (unsigned char)anim == (unsigned char)moby[0x53]) &&
+            ((unsigned char)anim == 7 || (unsigned char)moby[0x53] == 7)) goto finish;
         idx = 10;
 resume_move:
         blend_moby_animation(moby, 0, 0, idx);
