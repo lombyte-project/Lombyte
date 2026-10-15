@@ -1663,7 +1663,7 @@ extern int D_L12_00161F00_lui __asm__("D_L12_00161F00") __attribute__((section("
 extern struct Moby *D_L12_0015FFD8_abs __asm__("D_L12_0015FFD8") __attribute__((section(".data")));
 extern int D_L12_001619A0_lui __asm__("D_L12_001619A0") __attribute__((section(".data")));
 extern int D_L12_001619B4_gp __asm__("D_L12_001619B4") __attribute__((sda));
-extern int D_L12_001619B4_lui __asm__("D_L12_001619B4") __attribute__((section(".data")));
+extern int D_L12_001619B4_lui __asm__("D_L12_001619B4") __attribute__((section(".sdata")));
 void FUN_L12_003069d0(struct Moby *moby) {
     float direction[4] __attribute__((aligned(16)));
     float rotation[4] __attribute__((aligned(16)));
@@ -1677,8 +1677,12 @@ void FUN_L12_003069d0(struct Moby *moby) {
     int triggered;
 
     if (moby->state && D_L12_001FB6CC) {
-        qcopy(&moby->pos, D_L12_00161F60);
-        qcopy(&moby->rot, D_L12_00161F70);
+        float *slot = (float *)&moby->pos;
+        float *saved = D_L12_00161F60;
+        qcopy(slot, saved);
+        slot = (float *)&moby->rot;
+        saved = D_L12_00161F70;
+        qcopy(slot, saved);
     }
     switch (moby->state) {
     case 0: {
@@ -1720,8 +1724,9 @@ void FUN_L12_003069d0(struct Moby *moby) {
         }
         D_L12_00161F40 = -1.0f;
         {
-            int *saved = D_L12_001FB688 + 17;
+            int *saved = D_L12_001FB688;
             int i = 17;
+            saved += 17;
             do { *saved-- = 0; i--; } while (i >= 0);
         }
         *(int *)(data + 0x604) = -1;
@@ -1732,26 +1737,29 @@ void FUN_L12_003069d0(struct Moby *moby) {
     case 1: {
         int i;
         int *slot;
+        char *moby_base;
         struct Moby *other;
         triggered = FUN_00214720(D_L12_00167240, *(int *)(data + 0x624));
         if (triggered) {
             moby->flags |= 0x41;
+            moby_base = (char *)D_L12_0015FFD8_abs;
             slot = (int *)(data + 0x20);
             i = 16;
             do {
                 if (*slot != -1) {
-                    other = (struct Moby *)((char *)D_L12_0015FFD8_abs + *slot * 0x100);
+                    other = (struct Moby *)(moby_base + *slot * 0x100);
                     other->flags |= 0x41;
                 }
                 i--; slot += 12;
             } while (i >= 0);
         } else {
             moby->flags &= 0xffbe;
+            moby_base = (char *)D_L12_0015FFD8_abs;
             slot = (int *)(data + 0x20);
             i = 16;
             do {
                 if (*slot != -1) {
-                    other = (struct Moby *)((char *)D_L12_0015FFD8_abs + *slot * 0x100);
+                    other = (struct Moby *)(moby_base + *slot * 0x100);
                     other->flags &= 0xffbe;
                 }
                 i--; slot += 12;
