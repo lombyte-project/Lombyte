@@ -2,7 +2,7 @@
 
 [`config/us/recovered_names.json`](../config/us/recovered_names.json) is the catalog for recovered symbol evidence and address-bound semantic names. Addresses identify functions across source moves; the catalog's function names and logical groups provide the readable names used in source organization and progress reporting.
 
-The catalog is reference metadata, not an input to C compilation. The progress report groups functions by report category and `logical_group`; selecting a group on decomp.dev shows its member functions. Entries marked `proposed` supply the displayed function name, while group assignments can organize functions regardless of name status. Each member retains its retail address and source path.
+The catalog is reference metadata, not an input to C compilation. The progress report groups functions by report category and `logical_group`; selecting a group in an objdiff report viewer shows its member functions. Entries marked `proposed` supply the displayed function name, while group assignments can organize functions regardless of name status. Each member retains its retail address and source path.
 
 ## Catalog structure
 

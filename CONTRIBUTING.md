@@ -126,7 +126,7 @@ Once the unit matches, make the C the only compiled code:
 
 4. Run `make elf` again; it must end with `PASS`.
 
-There is no progress file to regenerate: CI rebuilds the decomp.dev report and
+There is no progress file to regenerate: CI rebuilds the objdiff report and
 the progress map from the tree, and the pull request gets a comment with the
 change in C_EXACT, in data in C and the newly matched functions.
 
@@ -205,7 +205,7 @@ game data for C_EXACT and data in C, which follow from the tree, so on every
 run it generates the objdiff report (`scripts/gen_progress_report.py`) and the
 progress map (`scripts/generate_treemap.py`), validates the report with objdiff
 and uploads it as the `SCUS_971.99_report` artifact that
-[decomp.dev](https://decomp.dev/lombyte-project/lombyte) reads. On `main` it also
+[recomp.fyi](https://recomp.fyi/game/ratchet-and-clank-ps2) reads. On `main` it also
 publishes `report.json`, `decomp_map.svg` and `decomp_map.json` on the
 [`progress`](https://github.com/lombyte-project/lombyte/tree/progress) branch,
 which the README shows. On a pull request it compares the report with that

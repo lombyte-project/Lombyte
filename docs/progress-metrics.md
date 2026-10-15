@@ -15,7 +15,7 @@ This document deliberately carries **no percentages**: they are regenerated from
 the build and would be stale the moment they were written down. Read the current
 figures from the [progress map](https://github.com/lombyte-project/lombyte/blob/progress/decomp_map.svg),
 the [report](https://github.com/lombyte-project/lombyte/blob/progress/report.json), or from
-[decomp.dev](https://decomp.dev/lombyte-project/lombyte) — never from prose.
+[recomp.fyi](https://recomp.fyi/game/ratchet-and-clank-ps2) — never from prose.
 
 ## Data
 
@@ -81,7 +81,7 @@ python3 scripts/generate_treemap.py   # preview in build/progress/decomp_map.svg
 ```
 
 Neither the map nor the objdiff-format report behind
-[decomp.dev](https://decomp.dev/lombyte-project/lombyte) is committed. The
+[recomp.fyi](https://recomp.fyi/game/ratchet-and-clank-ps2) is committed. The
 `progress` workflow regenerates both from the tree on every push to `main`
 (publishing them on the `progress` branch) and on every pull request (posting
 the change as a comment); it never builds the game. C_FUZZY needs a build, so

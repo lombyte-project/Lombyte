@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Progress report for decomp.dev, in objdiff's report format (version 2).
+"""Progress report for recomp.fyi, in objdiff's report format (version 2).
 
-decomp.dev reads ``report.json`` from the CI artifact ``SCUS_971.99_report``
+recomp.fyi reads ``report.json`` from the CI artifact ``SCUS_971.99_report``
 on the default branch. The report is not committed: every number but one is
 derived from the tree (linker config, ``src/``, overlay tables), so the
 ``progress`` workflow regenerates it on every push and pull request, publishes
@@ -80,7 +80,7 @@ from progress_groups import (  # noqa: E402
 REPO = Path(__file__).resolve().parents[1]
 REPORT = REPO / "build" / "progress" / "report.json"
 SCORES = REPO / "build" / "progress" / "fuzzy_scores.json"
-# A unit carries every category it belongs to (decomp.dev sums a category
+# A unit carries every category it belongs to (objdiff sums a category
 # over the units that list it): executable units ``boot`` and ``game``/``sdk``,
 # overlay functions ``overlays`` and ``shared`` or ``levels`` + ``level_NN``.
 CATEGORIES = (("boot", "Boot executable"), ("game", "Game"), ("sdk", "SDK"),
