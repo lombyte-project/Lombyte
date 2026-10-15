@@ -139,7 +139,8 @@ void FUN_L15_002d6810(unsigned char *moby) {
         return;
     }
     switch (moby[0x20]) {
-    case 0:
+    case 0: {
+        int i;
         triggers = (int *)((char *)data + 0x60);
             moby[0x30] = 0xff; p = (int *)data; i = 3;
             do {
@@ -159,7 +160,9 @@ void FUN_L15_002d6810(unsigned char *moby) {
             } while (--i >= 0);
             RESET_TIMERS(); DATA_INT(0x120) = -1; DATA_INT(0x80) = -1; DATA_INT(0x14) = -1;
             goto finish;
-    case 1:
+    }
+    case 1: {
+        int *p; int i;
         found = 0;
         active = FUN_L15_002d6770();
         if (FUN_001f9770((char *)data + 0x10)) {
@@ -245,6 +248,7 @@ next_path:      i -= 8; p += 8;
             }
         }
         goto target_selection;
+    }
     case 2:
         triggers = (int *)((char *)data + 0x60);
         goto target_selection;
@@ -254,7 +258,8 @@ next_path:      i -= 8; p += 8;
         triggers = (int *)((char *)data + 0x60);
         goto finish;
     }
-target_selection:
+target_selection: {
+    int i;
     target = 0; p = (int *)((char *)data + 0x74); i = 2;
     do {
         if (*p != -1) {
@@ -289,7 +294,9 @@ next_target: p++;
 next_moby: p++;
     } while (--i >= 0);
     goto finish;
-state_three:
+}
+state_three: {
+    int *p; int i;
         triggers = (int *)((char *)data + 0x60);
             p = (int *)((char *)data + 0x74); i = 2;
             do { if (*p != -1) FUN_L00_002502f0(moby_array + *p * 0x100, 0x40, 0x40, 0x40); p++; } while (--i >= 0);
@@ -317,6 +324,7 @@ state_three:
             p = (int *)data; i = 3;
             do { if (*p != -1) { other = (char *)(*p * 0x100 + (int)moby_array); if (*(short *)(other + 0xa6) == 0x33e) other[0x20] = 1; else FUN_L15_002d95a0(other); } p++; } while (--i >= 0);
             RESET_TIMERS(); goto finish;
+}
 
 finish:
     data = triggers; i = 3; other = (char *)&hero;
