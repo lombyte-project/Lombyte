@@ -1609,8 +1609,8 @@ set_idle:
                     if (moby->prev_seq != 5) blend_moby_animation(moby, 5, 0, 10);
                     moby->state = 6;
                 } else {
-                    *(int *)(d + 0x134) = scale_game_frames(240);
                     old = *(char **)(d + 0x120);
+                    *(int *)(d + 0x134) = scale_game_frames(240);
                     next = FUN_L08_002daa10(moby);
                     *(char **)(d + 0x120) = next;
                     if (!next) *(char **)(d + 0x120) = old;
