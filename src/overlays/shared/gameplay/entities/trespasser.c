@@ -1957,9 +1957,6 @@ ret0:
     /* a second return 0 block, as in retail */
     return 0;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c4380.s", FUN_L00_002c4380);
-#else
 extern char *D_0015FFD8_2c4380 __asm__("D_L00_0015FFD8");
 extern float D_0015ED60_2c4380 __asm__("D_0015ED60");
 extern float D_0015ED70_2c4380 __asm__("D_0015ED70");
@@ -2178,8 +2175,10 @@ void FUN_L00_002c4380(char *moby) {
             if (*(int *)(target + 0x20) != *(int *)(vars + 0x58) ||
                 *(int *)(vars + 0x5c) <= 0) {
                 *(int *)(vars + 0x58) = *(int *)(target + 0x20);
-                *(volatile int *)(vars + 0x5c) = FUN_001fef20_2c4380(30);
-                if (*(volatile short *)(vars + 0x6c) == 0) {
+                *(int *)(vars + 0x5c) = FUN_001fef20_2c4380(30);
+                /* Fakematch: the empty loop keeps the timer read below the cooldown store. */
+                do {} while (0);
+                if (*(short *)(vars + 0x6c) == 0) {
                     if (*(u16 *)(target + 0x28) == 0x101 &&
                         ((*(u64 *)(vars + 0x68) & 0xffffff00000000ULL) == 0)) {
                         *(short *)(vars + 0x6c) = FUN_001fef20_2c4380(100);
@@ -2293,7 +2292,6 @@ void FUN_L00_002c4380(char *moby) {
         moby[0x20] = 0;
     }
 }
-#endif
 extern int D_L00_0015F5CC_2c53c0 __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
 extern float D_0015ED60_2c53c0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern float D_0015ED6C_2c53c0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
