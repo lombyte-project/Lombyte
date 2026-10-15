@@ -1507,8 +1507,9 @@ retreat:
         *(float *)(vars + 0x170) = speed;
         if (speed < 0.0f) *(float *)(vars + 0x170) = 0.0f;
         delta.f[0] = fast_cos(moby->rot.z) * -*(float *)(vars + 0x170);
-        delta.f[1] = fast_sin(moby->rot.z) * -*(float *)(vars + 0x170);
+        c = fast_sin(moby->rot.z);
         delta.f[2] = 0.0f;
+        delta.f[1] = c * -*(float *)(vars + 0x170);
         max_turn = 1.0471976f;
 apply_delta:
         add_vector_xyz(&moby->pos, &moby->pos, &delta);
