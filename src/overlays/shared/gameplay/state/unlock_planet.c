@@ -450,7 +450,8 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
     float time;
     float scale;
     int large = 0, medium = 0, small = 0, single;
-    int count, remaining, multiplier, near_count, far_count;
+    int count, multiplier, near_count, far_count;
+    long remaining;
     int near_large, near_medium, near_small, near_single;
     int far_large, far_medium, far_small, far_single;
     int near_value, far_value, gated = 0;
@@ -485,9 +486,8 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
                 count *= 5;
             } else {
                 lower = 190 - multiplier;
-                lower /= 20;
-                FUN_001eb078_260a88((int)D_L00_001600B0_260a88, lower);
-                count *= lower;
+                FUN_001eb078_260a88((int)D_L00_001600B0_260a88, lower / 20);
+                count *= lower / 20;
             }
             if (D_0015EEA0) {
                 if (count > 1000) count = 1000;
