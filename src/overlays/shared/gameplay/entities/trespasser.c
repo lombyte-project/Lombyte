@@ -1312,7 +1312,8 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         vars->held = 0;
-        moby->state = (moby->anim_flags & 2) ? 2 : 1;
+        if (moby->anim_flags & 2) moby->state = 2;
+        else moby->state = 1;
     case 1:
         if (moby->anim_flags & 2)
             moby->state = 2;
