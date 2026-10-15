@@ -2515,13 +2515,13 @@ void FUN_L00_002ce358(struct Moby *m)
             count = 0;
             distance = 1000000.0f;
             *(u8 *)((u8 *)&hero + 0x1ff4) = 1;
-            *(u8 *)((u8 *)&hero + 0x1ff7) = 0;
+            hero.ammo_capacity = 0;
             *(f32 *)((u8 *)&hero + 0x1ff8) = FUN_002000e8_2ce358(*(f32 *)((u8 *)&hero + 0x1ff8), frame_scale * 0.05f);
             {
                 struct Moby **slots, **exclusions;
                 s32 i;
-                exclusions = (struct Moby **)((u8 *)&hero + 0x1ffc);
                 slots = (struct Moby **)hero.unk2020;
+                exclusions = (struct Moby **)((u8 *)&hero + 0x1ffc);
                 for (i = 0; i < 6; i++, slots++) {
                     other = *slots;
                     if (other != 0) {
@@ -2534,7 +2534,7 @@ void FUN_L00_002ce358(struct Moby *m)
                                 count++;
                                 *exclusions++ = *(struct Moby **)(other->pvars + 0x30);
                                 if (other->state < 4)
-                                    (*(u8 *)((u8 *)&hero + 0x1ff7))++;
+                                    (hero.ammo_capacity)++;
                                 if (count > 8)
                                     break;
                             }
