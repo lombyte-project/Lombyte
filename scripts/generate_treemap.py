@@ -1029,6 +1029,7 @@ def render_svg(
         "functions": len(units), "matching_c": len(exact),
         "bytes_total": boot_bytes, "bytes_matching_c": boot_exact_bytes,
         "c_exact_percent": boot_percent, "blocks": group_tiles,
+        "fuzzy_percent": fuzzy_percent,
     })
 
     # The tree: a trunk on the left, one branch per line.
@@ -1057,11 +1058,12 @@ def render_svg(
             f'<circle cx="{trunk_x}" cy="{y}" r="3.5" fill="{dot}" stroke="{BACKGROUND}" stroke-width="1"/>'
         )
         number = "" if branch["index"] is None else f"{branch['index']:02d} &#183; "
+        fuzzy = "" if branch.get("fuzzy_percent") is None else f' &#183; C_FUZZY {branch["fuzzy_percent"]:.1f}%'
         lines.append(
             f'<text x="{label_x}" y="{y + 4}" font-family="{esc(FONT)}" font-size="11">'
             f'<tspan fill="{MUTED}">{number}</tspan>'
             f'<tspan fill="{TEXT}" font-weight="700">{esc(branch["planet"])}</tspan>'
-            f'<tspan fill="{MUTED}"> &#183; {esc(branch["description"])}</tspan></text>'
+            f'<tspan fill="{MUTED}"> &#183; {esc(branch["description"])}{fuzzy}</tspan></text>'
         )
         pct = branch["c_exact_percent"]
         pct_fill = ORANGE if pct >= 100.0 else (PARTIAL_ORANGE if pct > 0 else MUTED)
