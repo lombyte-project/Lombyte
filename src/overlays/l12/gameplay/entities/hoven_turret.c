@@ -2207,7 +2207,7 @@ void FUN_L12_00308350(struct Moby *m) {
         x = D_L12_001FB6D0[vertex][0];
         y = D_L12_001FB6D0[vertex][1];
         first.uv[vertex][0] = x;
-        first.uv[vertex][1] = y;
+        ((float *)first.uv)[vertex * 2 + 1] = y;
         second.uv[vertex][0] = x;
         second.uv[vertex][1] = y;
         vertex++;
