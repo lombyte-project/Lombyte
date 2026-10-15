@@ -1518,8 +1518,9 @@ void FUN_L00_002ebe70(char *o) {
         if (score > 0.5f) {
             FUN_001ff300_2ebe70((score - 0.5f) / score, &diff, &diff);
             FUN_001ff278_2ebe70(&next, o + 0x30, &diff);
-            for (i = 0; i < 5 && FUN_001f0d60_2ebe70(0.75f, &next, 0, 0); i++)
-                next = collision_position[1];
+            for (i = 0; i < 5 && FUN_001f0d60_2ebe70(0.75f, &next, 0, 0); i++) {
+                qcopy(&next, collision_position + 1);
+            }
         }
         qcopy(o + 0x30, &next);
         FUN_001ff2a8_2ebe70(&diff, &hero.motion.pos, o + 0x30);
