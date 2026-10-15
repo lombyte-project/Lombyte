@@ -493,7 +493,7 @@ void FUN_L08_002d42d8(struct Moby *moby) {
     void *position = &moby->pos;
     struct Moby *target;
     struct Moby *other;
-    int state;
+    long state;
     float angle, speed, frame;
     qcopy(old_position, position);
     qcopy(old_rotation, &moby->rot);
