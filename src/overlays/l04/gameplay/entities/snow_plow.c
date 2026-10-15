@@ -135,8 +135,9 @@ void FUN_L04_002ca420(struct Moby *moby) {
                 if (*(short *)(data + 0x14a) == 0 && *p != -1 &&
                     is_point_inside_clip_volume(&moby->pos, *p)) {
                     qcopy(data + 0x160, &moby->pos);
+                    i = *(unsigned char *)target;
                     *(unsigned char *)(data + 0x149) = 1;
-                    *(unsigned char *)(data + 0x148) = *(unsigned char *)target;
+                    *(unsigned char *)(data + 0x148) = i;
                     *(int *)(data + 0x7c) = 0;
                     *(float *)(data + 0x14c) = moby->rot.z;
                     moby->state = 3;
