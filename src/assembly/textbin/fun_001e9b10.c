@@ -155,11 +155,11 @@ extern s32 part_clip_dist __asm__("D_001600BC");
 extern u8 requested_video_mode __asm__("D_0016034C");
 extern s32 D_001603D0;
 extern Tie *D_001603D4;
-extern Tie *D_001603D8;
+extern Tie *volatile D_001603D8;
 extern TieData *D_001603DC;
 extern u8 *D_001603E0;
 extern f32 occl_fog_density_set __asm__("D_001603E4");
-extern S160AB0 D_00160AB0;
+extern volatile S160AB0 D_00160AB0 NOT_SDA;
 extern Ent40 *D_00160E8C __attribute__((sda));
 extern s32 D_00160E90;
 extern f32 D_00160EC0;
@@ -412,12 +412,12 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     if (D_001603D0 != 0) {
         fill_transfer_words(D_001603E0, 0, size4);
     }
-    p2 = p + 0x4000;
     lastTie = -1;
     /* Retail 0x001ea2a4-0x001ea2c4 publishes the tie data pointer,
        the end of the tie array, and the next pool base in this order. */
     D_00160AB0.x4 = D_001603E0;
     D_001603D8 = &D_001603D4[D_001603D0];
+    p2 = p + 0x4000;
     for (i = 0; i < D_001603D0; i++) {
         tie = &D_001603D4[i];
         cls = shrub_render_class_slot_by_id[*(s32 *)tc];
