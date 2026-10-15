@@ -1176,10 +1176,8 @@ void FUN_L08_002d5d08(struct Moby *moby)
                     qcopy(offset, velocity);
                     break;
                 case 1:
-                    ((u32 *)velocity)[0] = 0;
-                    ((u32 *)velocity)[1] = 0;
-                    ((u32 *)velocity)[2] = 0;
-                    ((u32 *)velocity)[3] = 0;
+                    velocity[3] = 0.0f;
+                    *(u128 *)velocity = 0;
                     velocity[0] = 1.299f;
                     velocity[1] = -5.558f;
                     velocity[2] = 11.48f;
@@ -1193,10 +1191,8 @@ void FUN_L08_002d5d08(struct Moby *moby)
                     qcopy(offset, velocity);
                     break;
                 case 3:
-                    ((u32 *)velocity)[0] = 0;
-                    ((u32 *)velocity)[1] = 0;
-                    ((u32 *)velocity)[2] = 0;
-                    ((u32 *)velocity)[3] = 0;
+                    velocity[3] = 0.0f;
+                    *(u128 *)velocity = 0;
                     velocity[0] = 0.019f;
                     velocity[1] = -6.19f;
                     velocity[2] = 3.409f;
@@ -1210,10 +1206,8 @@ void FUN_L08_002d5d08(struct Moby *moby)
                     qcopy(offset, velocity);
                     break;
                 case 5:
-                    ((u32 *)velocity)[0] = 0;
-                    ((u32 *)velocity)[1] = 0;
-                    ((u32 *)velocity)[2] = 0;
-                    ((u32 *)velocity)[3] = 0;
+                    velocity[3] = 0.0f;
+                    *(u128 *)velocity = 0;
                     velocity[0] = 2.11f;
                     velocity[1] = -3.013f;
                     velocity[2] = 2.625f;
@@ -1227,10 +1221,8 @@ void FUN_L08_002d5d08(struct Moby *moby)
                     qcopy(offset, velocity);
                     break;
                 case 7:
-                    ((u32 *)velocity)[0] = 0;
-                    ((u32 *)velocity)[1] = 0;
-                    ((u32 *)velocity)[2] = 0;
-                    ((u32 *)velocity)[3] = 0;
+                    velocity[3] = 0.0f;
+                    *(u128 *)velocity = 0;
                     velocity[0] = 3.286f;
                     velocity[1] = -6.925f;
                     velocity[2] = 2.96f;
@@ -1244,10 +1236,8 @@ void FUN_L08_002d5d08(struct Moby *moby)
                     qcopy(offset, velocity);
                     break;
                 case 9:
-                    ((u32 *)velocity)[0] = 0;
-                    ((u32 *)velocity)[1] = 0;
-                    ((u32 *)velocity)[2] = 0;
-                    ((u32 *)velocity)[3] = 0;
+                    velocity[3] = 0.0f;
+                    *(u128 *)velocity = 0;
                     velocity[0] = 1.596f;
                     velocity[1] = -2.512f;
                     velocity[2] = 8.359f;
