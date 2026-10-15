@@ -2660,11 +2660,15 @@ state2:
         }
         qcopy(&collision_data[0], &m->pos);
         if (FUN_001f0d60_2ce358(0.2f, &collision_data[0], 0, m)) {
+            category = 0;
             other = (struct Moby *)coll_hit.moby;
             if (other && other->oclass == 0 && other->state != 0xfe && other->state != 0xfd)
                 goto update_rotations;
             other = (struct Moby *)((volatile CollisionHit *)&coll_hit)->moby;
-            category = other && other->pclass ? *(u8 *)((u8 *)other->pclass + 0x46) : 0;
+            if (other) {
+                category = 0;
+                if (other->pclass) category = *(u8 *)((u8 *)other->pclass + 0x46);
+            }
             other = (struct Moby *)((volatile CollisionHit *)&coll_hit)->moby;
             if (other && other->state != 0xfe && other->state != 0xfd &&
                 (category == 5 || category == 7 || category == 8)) {
