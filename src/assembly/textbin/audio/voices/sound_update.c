@@ -326,9 +326,9 @@ s32 sound_update(void) {
             }
             occluded_samples = 0;
             if (world_update_time != D_0013E550.occlusion_frame) {
-                for (history_offset = 0; history_offset < 6; history_offset++) {
+                for (sample_index = 5; sample_index >= 0; sample_index--) {
                     clamp_voice_position_to_collision(
-                        &D_0013E550.occlusion_samples[history_offset]);
+                        &D_0013E550.occlusion_samples[5 - sample_index]);
                 }
                 D_0013E550.occlusion_frame = world_update_time;
             }
