@@ -244,8 +244,7 @@ void FUN_L05_0030de90(char *moby) {
         entry = (char *)(offset + *(int *)&D_L05_0015FFD8_d);
         if (*(short *)(entry + 0xa6) == 0x346 && (unsigned char)entry[0x20] == 1) {
             copy_matrix_rotation(matrix, entry + 0xc0);
-            entry = (char *)(offset + *(int *)&D_L05_0015FFD8_d);
-            qcopy(matrix[3], entry + 0x10);
+            qcopy(matrix[3], (char *)(offset + *(int *)&D_L05_0015FFD8_d) + 0x10);
             matrix[3][3] = 1.0f;
             b = quads[1];
             end = b;
