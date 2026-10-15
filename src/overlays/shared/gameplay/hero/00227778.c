@@ -1,4 +1,4 @@
-/* FUN_L00_00227778 split out of 00221310.c so it builds with the SN
+/* FUN_L00_00227778 split out of hero_set_state.c so it builds with the SN
    compiler on its own. */
 #include "types.h"
 #include "qcopy.h"

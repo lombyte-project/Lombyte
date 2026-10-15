@@ -214,7 +214,7 @@ s32 FUN_L17_0020dbe8(s32 arg) {
 #define NOT_SDA
 #define MACRO_ADDR
 
-/* Adapted from the exact FUN_L00_00211380 (src/overlays/shared/ui/help/0020c758.c); L17 has no mode-2 case in the b20A4 switch. */
+/* Adapted from the exact FUN_L00_00211380 (src/overlays/shared/gameplay/hero/hero_check_damage.c); L17 has no mode-2 case in the b20A4 switch. */
 
 f32 FUN_001f9b80_211380(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_211380(f32, f32, f32 *) __asm__("FUN_00213ed8");

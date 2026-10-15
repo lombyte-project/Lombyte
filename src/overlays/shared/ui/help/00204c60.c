@@ -1,4 +1,4 @@
-/* Hero creation FUN_L00_00204c60, split out of 00203b18.c because only SN
+/* Hero creation FUN_L00_00204c60, split out of hero_idle_sequence.c because only SN
    cc1 2.95.2 reproduces it (OVERLAY_SN_UNITS): the 0x17A680 loop keeps one
    pointer per cleared field, which the game compiler folds into one. */
 #include "types.h"

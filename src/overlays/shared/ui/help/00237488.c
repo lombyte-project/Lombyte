@@ -485,7 +485,7 @@ void FUN_L05_0024bdc0(void) {
         FUN_L00_0022e9c0(hero.unk86C + 0xc0, combined);
     }
 }
-/* Adapted from the exact FUN_L00_002279b0 (src/overlays/shared/ui/help/00221310.c): L05 has a wider head guard and its own level data. */
+/* Adapted from the exact FUN_L00_002279b0 (src/overlays/shared/gameplay/hero/hero_set_state.c): L05 has a wider head guard and its own level data. */
 
 extern float D_L05_00174268 __attribute__((section(".data")));
 extern int frame_number __asm__("D_L05_0015F5CC");

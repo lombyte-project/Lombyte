@@ -9,7 +9,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 
-/* Help message playback state (same layout as S00203908 in shared/ui/help/00203880.c). */
+/* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
 struct L03HelpState {
     s32 state;
     u8 pad4[0x20];

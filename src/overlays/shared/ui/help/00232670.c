@@ -1,4 +1,4 @@
-/* FUN_L00_00232670 split out of 00231d08.c: it reads D_L00_0015F5C4
+/* FUN_L00_00232670 split out of set_hero_animation.c: it reads D_L00_0015F5C4
    through $gp, while the functions there reach it with lui. */
 #include "types.h"
 #include "rnc/gameplay/hero.h"
