@@ -73,8 +73,9 @@ from progress_groups import (  # noqa: E402
 
 # Ratchet & Clank (2002) logo palette: Ratchet's bolt orange, Clank's chrome,
 # and the dark riveted plate behind them. The plate is the warm gunmetal of
-# assets/lombyte-logo.png; text stays neutral white. The canvas stays GitHub
-# dark.
+# assets/lombyte-logo.png; text stays neutral white. The canvas is a card like
+# assets/naming-desk-card.svg: GitHub dark with a warm top-left corner and an
+# orange edge.
 ORANGE = "#de812f"
 CHROME = "#c3cbd8"
 PLATE = "#3a3632"
@@ -82,7 +83,8 @@ BACKGROUND = "#0d1117"
 STROKE = "#0d1117"
 TEXT = "#e8edf5"
 MUTED = "#a6adc8"
-FONT = "ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+CARD_WARM = "#2a1c10"
+FONT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif"
 
 # Tile label inks: dark ink on the bright orange and chrome plates, light ink
 # on the dark pending plate.
@@ -943,7 +945,11 @@ def render_svg(
         f'viewBox="0 0 {width} {height}" role="img" '
         f'aria-label="Decompilation progress of the boot ELF (SCUS_971.99) and the 19 level overlays">',
         f"<title>{esc(title)}</title>",
-        f'<rect width="{width}" height="{height}" fill="{BACKGROUND}"/>',
+        '<defs><linearGradient id="card-face" x1="0" y1="0" x2="1" y2="1">'
+        f'<stop offset="0" stop-color="{CARD_WARM}"/><stop offset="0.55" stop-color="{BACKGROUND}"/>'
+        '</linearGradient></defs>',
+        f'<rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="10" fill="url(#card-face)" '
+        f'stroke="{ORANGE}" stroke-opacity="0.45"/>',
         '<defs><linearGradient id="progress-range" x1="0" y1="0" x2="1" y2="0">'
         f'<stop offset="0" stop-color="{PLATE}"/>'
         f'<stop offset="1" stop-color="{PARTIAL_ORANGE}"/>'
