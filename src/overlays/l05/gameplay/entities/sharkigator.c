@@ -2258,7 +2258,7 @@ slots_done:
     if ((*(float *)((char *)(data)+(0x174)))<distance_to_2d1688(position,hero.motion.pos.f)) goto stop_attack;
     if (4.0f<=absolute_2d1688((*(float *)((char *)(moby)+(0x18)))-hero.motion.pos.f[2])) goto stop_attack;
     if ((*(int *)((char *)(data)+(0x190)))!=-1 && !point_in_path_xy(hero.motion.pos.f,D_L05_001B0930[(*(int *)((char *)(data)+(0x190)))]+16,*(int *)D_L05_001B0930[(*(int *)((char *)(data)+(0x190)))])) goto stop_attack;
-    if (!collision_line_304320(pos,(char *)&hero+0xd0,2,moby,0)) goto turn_attack;
+    if (!collision_line_304320(pos,D_0013E633_3047E8,2,moby,0)) goto turn_attack;
 stop_attack:
     if ((*(unsigned char *)((char *)(moby)+(0x53)))) blend_moby_animation(moby,0,0,3);
     (*(unsigned char *)((char *)(moby)+(0x20)))=1;
