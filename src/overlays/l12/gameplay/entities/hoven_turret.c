@@ -1703,9 +1703,9 @@ void FUN_L12_003069d0(struct Moby *moby) {
                                   *(float *)(row + 0x24) - *(float *)(row + 0x14));
         {
             char *moby_base = D_L12_0015FFD8_p;
-            if (((float *)&D_0013F3D0)[2] < 52.0f) {
+            if ((D_0013F4D0_304310)[2] < 52.0f) {
                 moby->pos.z += 3.0f;
-                moby_base = (char *)D_L12_0015FFD8;
+                moby_base = (char *)D_L12_0015FFD8_abs;
             }
             {
                 int *slot = (int *)(data + 0x5d0);
@@ -1719,18 +1719,20 @@ void FUN_L12_003069d0(struct Moby *moby) {
             }
         }
         D_L12_00161F40 = -1.0f;
-        saved = D_L12_001FB688;
-        saved += 17;
-        i = 17;
-        do { *saved-- = 0; i--; } while (i >= 0);
+        {
+            int *saved = D_L12_001FB688 + 17;
+            int i = 17;
+            do { *saved-- = 0; i--; } while (i >= 0);
+        }
         *(int *)(data + 0x604) = -1;
         *(short *)(data + 0x5fc) = 100;
         moby->state = 1;
         break;
     }
     case 1: {
+        int i;
+        int *slot;
         struct Moby *other;
-        float *pos = (float *)&D_0013F3D0;
         triggered = FUN_00214720(D_L12_00167240, *(int *)(data + 0x624));
         if (triggered) {
             moby->flags |= 0x41;
@@ -1755,14 +1757,14 @@ void FUN_L12_003069d0(struct Moby *moby) {
                 i--; slot += 12;
             } while (i >= 0);
         }
-        triggered = FUN_00214720(pos, *(int *)(data + 0x628));
-        if (52.0f < pos[2] && !triggered) {
+        triggered = FUN_00214720(D_0013F4D0_304310, *(int *)(data + 0x628));
+        if (52.0f < D_0013F4D0_304310[2] && !triggered) {
             approach_value(&moby->pos.z, *(float *)(data + 0x618), frame_time + frame_time);
             angle = frame_time;
         } else {
             height = 3.0f;
             if (triggered) height = 10.0f;
-            if (FUN_00214720(pos, *(int *)(data + 0x61c)))
+            if (FUN_00214720(D_0013F4D0_304310, *(int *)(data + 0x61c)))
                 *(int *)(data + 0x620) = scale_ticks(90);
             if (!tick_countdown_32_alt((int *)(data + 0x620))) height = 19.0f;
             FUN_L00_0025b8c0(&moby->pos.z, data + 0x62c, *(float *)(data + 0x618) + height,
@@ -1773,7 +1775,7 @@ void FUN_L12_003069d0(struct Moby *moby) {
         FUN_L00_00262b80(moby, data + 0x5e4, data + 0x5e8, D_L12_00161F30,
             D_L12_00161F28 * 0.017453292f * frame_time, D_L12_00161F2C * 0.017453292f * frame_time);
         FUN_L12_0027b370(moby, data, 17);
-        if (FUN_00214720(pos, *(int *)(data + 0x5ec)) || D_L12_00161F00_lui) {
+        if (FUN_00214720(D_0013F4D0_304310, *(int *)(data + 0x5ec)) || D_L12_00161F00_lui) {
             D_L12_001619B4_lui = 1;
             {
                 int *slot = (int *)(data + 0x5d0);
