@@ -2518,7 +2518,6 @@ extern f32 D_0013F3D0_b6bc8[] __asm__("D_0013F3D0");
 s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     u128 velocity __attribute__((aligned(16)));
     union { u128 q; f32 f[4]; } pos __attribute__((aligned(16)));
-    Moby **p;
     Moby *other;
     u8 *state;
     Vars *vars;
@@ -2535,7 +2534,7 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     vars->pad14 = 0;
     other = D_001ABA00_b6bc8[0];
     if (other != 0) {
-        p = D_001ABA00_b6bc8;
+        i = 0;
         do {
             state = FUN_L00_0025c338_b6bc8(other);
             if (state != 0) {
@@ -2574,8 +2573,8 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
                     }
                 }
             }
-            p++;
-            other = *p;
+            i++;
+            other = D_001ABA00_b6bc8[i];
         } while (other != 0);
     }
     i = 1;
