@@ -9,6 +9,7 @@
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
  * its phase reaches 2, and closes when the slot is already used. */
@@ -164,7 +165,6 @@ extern unsigned short D_001418D0 __attribute__((section(".data")));
 extern unsigned short D_00141908 __attribute__((section(".data")));
 extern unsigned short D_00141910 __attribute__((section(".data")));
 extern unsigned short D_00141940 __attribute__((section(".data")));
-extern char D_00141848[];
 extern char D_00141968[];
 extern u8 items_acquired[] __asm__("D_0013D4E8");
 extern Moby *D_L04_00160064_2E57F8 __asm__("D_L04_0015FFE4");
@@ -187,15 +187,15 @@ void FUN_L04_002e4418(Moby *moby) {
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1
             && D_0014C050_c[moby->mission + (current_level_index_macro << 4)] != 0xFF) {
             if (data->f14 == -1) {
-                Help_2E57F8 *usage = (Help_2E57F8 *)(((char *)&D_00141848));
+                struct UsageStat *usage = usage_stats.stat;
                 data->f14 = D_0015EEAC_macro;
                 if (usage[0x18].count < 0xFFFF) {
                     usage[0x18].count++;
                 }
-                if (scale_game_frames_alt(D_0015EEA4_macro) / 600 > usage[0x18].time) {
-                    usage[0x18].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                if (scale_game_frames_alt(D_0015EEA4_macro) / 600 > usage[0x18].unk2) {
+                    usage[0x18].unk2 = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                 }
-                usage[0x18].mask = usage[0x18].mask | (1 << current_level_index_macro) | 0x80000000;
+                usage[0x18].level_mask = usage[0x18].level_mask | (1 << current_level_index_macro) | 0x80000000;
             } else if (D_00141908 >= 3) {
                 if (D_0013D4D4 == 0) {
                     Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
@@ -292,15 +292,15 @@ void FUN_L04_002e4418(Moby *moby) {
                 }
             } else {
                 if (data->f48 != -1 && D_L04_00160058_2E57F8[data->f48].oclass == 0x267 && D_L04_00160058_2E57F8[data->f48].state == 4) {
-                    Help_2E57F8 *usage = (Help_2E57F8 *)(((char *)&D_00141848));
+                    struct UsageStat *usage = usage_stats.stat;
                     unsigned int count = usage[0x11].count;
                     if (count <= 0xFFFE) {
                         usage[0x11].count = count + 1;
                     }
-                    if (scale_game_frames_alt(D_0015EEA4_macro) / 600 > usage[0x11].time) {
-                        usage[0x11].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                    if (scale_game_frames_alt(D_0015EEA4_macro) / 600 > usage[0x11].unk2) {
+                        usage[0x11].unk2 = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                     }
-                    usage[0x11].mask = usage[0x11].mask | (1 << current_level_index_macro) | 0x80000000;
+                    usage[0x11].level_mask = usage[0x11].level_mask | (1 << current_level_index_macro) | 0x80000000;
                 } else if (data->fC == 0) {
                     if (D_001418D0 == 0) {
                         Help_2E57F8 *help;
@@ -368,16 +368,16 @@ void FUN_L04_002e4418(Moby *moby) {
         }
 
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f30) != 0) {
-            Help_2E57F8 *usage = (Help_2E57F8 *)(((char *)&D_00141848));
+            struct UsageStat *usage = usage_stats.stat;
             if (usage[0x19].count == 0
                 && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)) {
                 int now;
                 usage[0x19].count++;
                 now = scale_game_frames_alt(D_0015EEA4_macro) / 600;
-                if (usage[0x19].time < now) {
-                    usage[0x19].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                if (usage[0x19].unk2 < now) {
+                    usage[0x19].unk2 = scale_game_frames_alt(D_0015EEA4_macro) / 600;
                 }
-                usage[0x19].mask = usage[0x19].mask | (1 << current_level_index_macro) | 0x80000000;
+                usage[0x19].level_mask = usage[0x19].level_mask | (1 << current_level_index_macro) | 0x80000000;
             }
         }
 

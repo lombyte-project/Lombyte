@@ -385,8 +385,6 @@ struct LevelTable_QS {
 };
 
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
-extern struct UsageStats D_00141848;
-#define S D_00141848
 s32 D_L14_0015F68C = 0;
 
 extern void FUN_L00_00209540(s32, s32);
@@ -594,15 +592,15 @@ void FUN_L14_00228cd0(void) {
                 turn_to(0, frame_scale_sq, frame_scale_sq * 0.0f, frame_time * 174.53293f);
                 if (D_L14_0015F688 > 0 && FUN_001f9740(&D_L14_0015F688) != 0) {
                     s32 t;
-                    if (S.stat[18].count < 0xFFFF) {
-                        S.stat[18].count++;
+                    if (usage_stats.stat[18].count < 0xFFFF) {
+                        usage_stats.stat[18].count++;
                     }
                     t = scale_game_frames(D_0015EEA4) / 600;
-                    if (S.stat[18].unk2 < t) {
-                        S.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    if (usage_stats.stat[18].unk2 < t) {
+                        usage_stats.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
                     D_L14_0015F688 = -1;
-                    S.stat[18].level_mask = S.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
+                    usage_stats.stat[18].level_mask = usage_stats.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
                     D_L14_0015F68C++;
                 }
             }

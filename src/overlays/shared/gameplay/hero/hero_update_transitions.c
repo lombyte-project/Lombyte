@@ -50,7 +50,6 @@ typedef struct {
 extern HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
 extern HeroAnimRow item_defs[] __asm__("D_L00_00179AC0");
 extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890");
-extern struct UsageStats D_00141848;
 extern S166D80 D_L00_00166C80;
 extern S17A780 D_L00_0017A680;
 extern S17BEB8 D_L00_0017BDB8;
@@ -245,13 +244,13 @@ void hero_update_transitions(void) {
                         next = D_00141660;
                     }
                     if (next != 0 && cur != base) {
-                        if (D_00141848.stat[31].count < 0xFFFF) {
-                            D_00141848.stat[31].count++;
+                        if (usage_stats.stat[31].count < 0xFFFF) {
+                            usage_stats.stat[31].count++;
                         }
-                        if (scale_game_frames(D_0015EEA4) / 600 > D_00141848.stat[31].unk2) {
-                            D_00141848.stat[31].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                        if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[31].unk2) {
+                            usage_stats.stat[31].unk2 = scale_game_frames(D_0015EEA4) / 600;
                         }
-                        D_00141848.stat[31].level_mask = D_00141848.stat[31].level_mask | (1 << current_level_index) | 0x80000000;
+                        usage_stats.stat[31].level_mask = usage_stats.stat[31].level_mask | (1 << current_level_index) | 0x80000000;
                         hero.pending_item[0] = next;
                         hero.unk22D4 = 0;
                         hero.unk22D6 = 0;

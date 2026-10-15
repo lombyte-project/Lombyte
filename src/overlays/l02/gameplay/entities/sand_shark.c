@@ -2477,7 +2477,6 @@ extern float D_L02_00161C34_gp __asm__("D_L02_00161C34") __attribute__((sda));
 extern int *D_L02_001B0AB0_dc88[] __asm__("D_L02_001B0AB0");
 extern unsigned char D_0014C050_dc88[] __asm__("D_0014C050");
 extern unsigned int D_00141BAC __attribute__((section(".data")));
-extern struct UsageStats D_00141848;
 extern float D_0015ED6C;
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10(void *, void *, void *);
@@ -2753,7 +2752,7 @@ void FUN_L02_002ddc88(unsigned char *moby) {
         if (absolute_float_dc88(*(float *)(d->rail_a + 0x18) - ((struct Moby *)moby)->pos.z - 2.0f) < 0.01f &&
             absolute_float_dc88(*(float *)(d->rail_b + 0x18) - ((struct Moby *)moby)->pos.z + 4.0f) < 0.01f) {
             {
-                t = scale_ticks(D_0015EEA4_gp) - D_00141848.stat[9].unk2 * 600;
+                t = scale_ticks(D_0015EEA4_gp) - usage_stats.stat[9].unk2 * 600;
             }
             lim = scale_ticks(3600) * 60.0f;
             if (lim < t) {

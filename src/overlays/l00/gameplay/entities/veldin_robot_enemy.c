@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -21,7 +22,6 @@ typedef struct {
 
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
-extern u16 D_00141848[];
 extern u16 D_00141850[];
 extern u16 D_00141968[];
 extern u8 *D_L00_0015FFD8 __attribute__((sda));
@@ -51,7 +51,7 @@ void FUN_L00_002e0988(HelpMoby *m) {
             help_request(5, 9);
         }
     }
-    if (D_00141968[0x40 / 2] == 0 && D_00141848[0] == 0) {
+    if (D_00141968[0x40 / 2] == 0 && usage_stats.stat[0].count == 0) {
         if (is_point_inside_clip_volume((s32)(&hero.motion.pos), vars[1]) != 0) {
             help_request(4, 8);
         }

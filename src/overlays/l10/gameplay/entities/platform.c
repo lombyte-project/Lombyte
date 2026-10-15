@@ -317,7 +317,6 @@ extern u8 D_0014C050_98b68[] __asm__("D_0014C050");
 extern LevelState_98b68 D_L10_001BB6B0_98b68 __asm__("D_L10_001BB6B0");
 extern int D_0014C190_98b68[][64] __asm__("D_0014C190");
 extern int D_L10_001BA950[];
-extern struct UsageStats D_00141848;
 extern u8 D_001413F4_98b68[] __asm__("D_001413F4");
 extern char *D_L10_001600EC_98b68 __asm__("D_L10_001600EC");
 extern int scale_game_frames_98b68(int) __asm__("FUN_001f96f8");
@@ -363,14 +362,14 @@ void FUN_L10_00298b68(struct Moby *moby) {
             ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 2;
             ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->collision = 0;
         } else {
-            if (D_L10_0015F5C4_vendor == 0 && D_00141848.stat[32].count < scale_game_frames_98b68(300)) {
-                if (D_00141848.stat[32].count <= 0xFFFE) {
-                    D_00141848.stat[32].count++;
+            if (D_L10_0015F5C4_vendor == 0 && usage_stats.stat[32].count < scale_game_frames_98b68(300)) {
+                if (usage_stats.stat[32].count <= 0xFFFE) {
+                    usage_stats.stat[32].count++;
                 }
-                if (scale_game_frames_98b68(D_0015EEA4) / 600 > D_00141848.stat[32].unk2) {
-                    D_00141848.stat[32].unk2 = scale_game_frames_98b68(D_0015EEA4) / 600;
+                if (scale_game_frames_98b68(D_0015EEA4) / 600 > usage_stats.stat[32].unk2) {
+                    usage_stats.stat[32].unk2 = scale_game_frames_98b68(D_0015EEA4) / 600;
                 }
-                D_00141848.stat[32].level_mask = D_00141848.stat[32].level_mask | (1 << current_level_index) | 0x80000000;
+                usage_stats.stat[32].level_mask = usage_stats.stat[32].level_mask | (1 << current_level_index) | 0x80000000;
                 try_set_help_message_98b68(1, 0x53F1);
                 if (D_001413F4_98b68[0] == 1) {
                     return;

@@ -12,6 +12,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B33E8), where it is exact; names translated to the US level program. */
 #include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
+#include "rnc/gameplay/state/usage_stats.h"
 typedef unsigned int Quad_2b2100 __attribute__((mode(TI)));
 
 typedef union { struct { float x, y, z, w; } f; Quad_2b2100 q; } Vec_2b2100 __attribute__((aligned(16)));
@@ -3164,7 +3165,6 @@ tail:
 }
 #endif
 extern unsigned char D_0013E550_2b8230[] __asm__("D_0013E550");
-extern unsigned char D_00141848_2b8230[] __asm__("D_00141848");
 extern int D_0015EEA4;
 extern int D_0015ED84_2b8230 __asm__("D_0015ED84");
 void FUN_0020c828_2b8230(void *) __asm__("FUN_0020c828");
@@ -3176,7 +3176,7 @@ void FUN_L00_00203908_2b8230(int, int) __asm__("FUN_L00_00203908");
 extern unsigned short D_00141BD8 __attribute__((section(".data")));
 void FUN_L00_002b8230(unsigned char *m) {
     unsigned char *v = *(unsigned char **)(m + 0x78);
-    unsigned char *P;
+    struct UsageStats *P;
     unsigned char *voice;
     int h, c;
     if (m[0x53] == 2) {
@@ -3198,8 +3198,8 @@ void FUN_L00_002b8230(unsigned char *m) {
     }
     if (D_00141BD8)
         return;
-    P = D_00141848_2b8230;
-    if (*(unsigned short *)(P + 0x50))
+    P = &usage_stats;
+    if (P->stat[10].count)
         return;
     if (m[0x20] == 3) {
         (*(unsigned short *)(v + 0x50))++;
@@ -3209,12 +3209,12 @@ void FUN_L00_002b8230(unsigned char *m) {
     if (c == 0)
         return;
     if (FUN_001f96f8_2b8230(0x78) < c) {
-        if (*(unsigned short *)(P + 0x50) <= 0xFFFE)
-            (*(unsigned short *)(P + 0x50))++;
+        if (P->stat[10].count <= 0xFFFE)
+            (P->stat[10].count)++;
         h = FUN_001f96f8_2b8230(D_0015EEA4) / 600;
-        if (*(unsigned short *)(P + 0x52) < h)
-            *(unsigned short *)(P + 0x52) = FUN_001f96f8_2b8230(D_0015EEA4) / 600;
-        *(int *)(P + 0x54) = *(int *)(P + 0x54) | (1 << D_0015ED84_2b8230) | 0x80000000;
+        if (P->stat[10].unk2 < h)
+            P->stat[10].unk2 = FUN_001f96f8_2b8230(D_0015EEA4) / 600;
+        P->stat[10].level_mask = P->stat[10].level_mask | (1 << D_0015ED84_2b8230) | 0x80000000;
     } else if (*(short *)(v + 0x50) < FUN_001f96f8_2b8230(0x1E)) {
         hero.unk20B4++;
     }

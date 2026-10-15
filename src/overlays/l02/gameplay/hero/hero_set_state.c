@@ -28,7 +28,6 @@ typedef struct {
 
 extern T2C_22BE40 D_L02_0017C228[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
-extern char D_00141848[];
 /* D_0015ED60 reached through the word below it: retail loads it with lui here, not $gp. */
 extern float D_0015ED5C_lui[2] __asm__("D_0015ED5C");
 extern float D_L02_0017C3F0[][25];
@@ -1060,15 +1059,15 @@ int hero_set_state(int a, int b) {
         p->unkA64 = 0;
         switch (p->state.current) {
         case 0x14: {
-            char *h = ((char *)&D_00141848);
+            struct UsageStat *h = usage_stats.stat;
             struct Hero *q;
-            if (*(unsigned short *)(h + 0) <= 0xFFFE) {
-                *(unsigned short *)(h + 0) = *(unsigned short *)(h + 0) + 1;
+            if (h[0].count <= 0xFFFE) {
+                h[0].count = h[0].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 2)) {
-                *(unsigned short *)(h + 2) = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[0].unk2) {
+                h[0].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 4) = *(unsigned int *)(h + 4) | (1 << current_level_index) | 0x80000000;
+            h[0].level_mask = h[0].level_mask | (1 << current_level_index) | 0x80000000;
             q = &hero;
             q->unk2284 = 0x50;
             q->attack_record = 4;
@@ -1089,17 +1088,17 @@ int hero_set_state(int a, int b) {
             break;
         }
         case 0x15: {
-            char *h = ((char *)&D_00141848);
+            struct UsageStat *h = usage_stats.stat;
             char *h2;
             struct Hero *q;
-            if (*(unsigned short *)(h + 8) <= 0xFFFE) {
-                *(unsigned short *)(h + 8) = *(unsigned short *)(h + 8) + 1;
+            if (h[1].count <= 0xFFFE) {
+                h[1].count = h[1].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0xA)) {
-                *(unsigned short *)(h + 0xA) = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[1].unk2) {
+                h[1].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 0xC) =
-                *(unsigned int *)(h + 0xC) | (1 << current_level_index) | 0x80000000;
+            h[1].level_mask =
+                h[1].level_mask | (1 << current_level_index) | 0x80000000;
             h2 = item_usage;
             if (*(unsigned short *)(h2 + 0x128) <= 0xFFFE) {
                 *(unsigned short *)(h2 + 0x128) = *(unsigned short *)(h2 + 0x128) + 1;
@@ -1792,7 +1791,6 @@ typedef struct {
 
 extern HeroAnimRow D_L02_0017A0C0[];
 extern HeroTableEntry70 D_L02_00179E90[];
-extern struct UsageStats D_00141848_u __asm__("D_00141848");
 extern S17AD00 D_L02_0017AC80;
 extern S17C438 D_L02_0017C3B8;
 extern float absolute_float(float) __asm__("func_001F99C0");
@@ -1940,13 +1938,13 @@ void FUN_L02_00230988(void) {
                         next = D_00141660;
                     }
                     if (next != 0 && cur != base) {
-                        if (D_00141848_u.stat[31].count < 0xFFFF) {
-                            D_00141848_u.stat[31].count++;
+                        if (usage_stats.stat[31].count < 0xFFFF) {
+                            usage_stats.stat[31].count++;
                         }
-                        if (scale_game_frames(D_0015EEA4) / 600 > D_00141848_u.stat[31].unk2) {
-                            D_00141848_u.stat[31].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                        if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[31].unk2) {
+                            usage_stats.stat[31].unk2 = scale_game_frames(D_0015EEA4) / 600;
                         }
-                        D_00141848_u.stat[31].level_mask = D_00141848_u.stat[31].level_mask | (1 << current_level_index) | 0x80000000;
+                        usage_stats.stat[31].level_mask = usage_stats.stat[31].level_mask | (1 << current_level_index) | 0x80000000;
                         hero.pending_item[0] = next;
                         hero.unk22D4 = 0;
                         hero.unk22D6 = 0;

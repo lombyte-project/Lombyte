@@ -232,8 +232,6 @@ struct LevelTable_QS {
 };
 
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
-extern struct UsageStats D_00141848;
-#define S D_00141848
 extern s32 D_L11_0015F688 __attribute__((sda));
 s32 D_L11_0015F68C = 0;
 extern u8 D_L11_001677D8[];
@@ -448,15 +446,15 @@ void FUN_L11_00246b70(void) {
                 turn_to(0, frame_scale_sq, frame_scale_sq * 0.0f, frame_time * 174.53293f);
                 if (D_L11_0015F688 > 0 && FUN_001f9740(&D_L11_0015F688) != 0) {
                     s32 t;
-                    if (S.stat[18].count < 0xFFFF) {
-                        S.stat[18].count++;
+                    if (usage_stats.stat[18].count < 0xFFFF) {
+                        usage_stats.stat[18].count++;
                     }
                     t = scale_game_frames(D_0015EEA4) / 600;
-                    if (S.stat[18].unk2 < t) {
-                        S.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    if (usage_stats.stat[18].unk2 < t) {
+                        usage_stats.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
                     D_L11_0015F688 = -1;
-                    S.stat[18].level_mask = S.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
+                    usage_stats.stat[18].level_mask = usage_stats.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
                     D_L11_0015F68C++;
                 }
             }
@@ -695,14 +693,14 @@ void FUN_L11_00246b70(void) {
                 hero.unk90E++;
                 if (PD.f128 > 0.75f) {
                     s32 t2;
-                    if (++hero.unk90C > scale_game_frames(90) && S.stat[11].count < 0xFFFF) {
-                        S.stat[11].count++;
+                    if (++hero.unk90C > scale_game_frames(90) && usage_stats.stat[11].count < 0xFFFF) {
+                        usage_stats.stat[11].count++;
                     }
                     t2 = scale_game_frames(D_0015EEA4) / 600;
-                    if (S.stat[11].unk2 < t2) {
-                        S.stat[11].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                    if (usage_stats.stat[11].unk2 < t2) {
+                        usage_stats.stat[11].unk2 = scale_game_frames(D_0015EEA4) / 600;
                     }
-                    S.stat[11].level_mask = S.stat[11].level_mask | (1 << current_level_index) | 0x80000000;
+                    usage_stats.stat[11].level_mask = usage_stats.stat[11].level_mask | (1 << current_level_index) | 0x80000000;
                 } else {
                     hero.unk90C = 0;
                 }

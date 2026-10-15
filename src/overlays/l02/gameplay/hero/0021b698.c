@@ -696,7 +696,6 @@ typedef struct {
 extern Cam D_L02_00167280;
 extern Moby *D_L02_00178500[];
 extern HeroTableRow2C D_L02_0017C228[];
-extern struct UsageStats D_00141848;
 extern S17BEB8 D_L02_0017C3B8;
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
@@ -838,13 +837,13 @@ void FUN_L02_00225c20(void) {
                 turn_to(0, frame_scale_sq, frame_scale_sq * 0.0f, frame_time * 174.53293f);
                 if (*(int *)&D_L02_0015F688 > 0) {
                     if (tick_countdown_32((int *)&D_L02_0015F688)) {
-                        if (D_00141848.stat[18].count < 0xFFFF) {
-                            D_00141848.stat[18].count++;
+                        if (usage_stats.stat[18].count < 0xFFFF) {
+                            usage_stats.stat[18].count++;
                         }
-                        if (scale_game_frames(D_0015EEA4) / 600 > D_00141848.stat[18].unk2) {
-                            D_00141848.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                        if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[18].unk2) {
+                            usage_stats.stat[18].unk2 = scale_game_frames(D_0015EEA4) / 600;
                         }
-                        D_00141848.stat[18].level_mask = D_00141848.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
+                        usage_stats.stat[18].level_mask = usage_stats.stat[18].level_mask | (1 << current_level_index) | 0x80000000;
                         *(int *)&D_L02_0015F688 = -1;
                         D_L02_0015F68C++;
                     }

@@ -5,6 +5,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/hud.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
 extern unsigned char D_0013E529[];
 void FUN_L00_00235ea0(char *);
@@ -198,13 +199,6 @@ typedef struct {
     u8 p1FF6[0x20B8 - 0x1FF6];
     int w20B8;
 } Progress;
-typedef struct {
-    u8 p0[0xA0];
-    u16 hA0;
-    u16 hA2;
-    int wA4;
-} Stats;
-extern Stats D_00141848 __attribute__((section(".data")));
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern u8 D_00141622[] __attribute__((section(".data")));
 extern float D_L00_0015F788 __attribute__((sda));
@@ -291,11 +285,11 @@ void FUN_L00_00237ba0(Obj *p) {
             VendorItemInfo *rr;
             int ri = id;
             if (hero_lui.items[0].item_id != id) {
-                if (D_00141848.hA0 < 0xFFFF) D_00141848.hA0++;
+                if (usage_stats.stat[20].count < 0xFFFF) usage_stats.stat[20].count++;
             }
-            if (FUN_001f96f8(D_0015EEA4) / 600 > D_00141848.hA2)
-                D_00141848.hA2 = FUN_001f96f8(D_0015EEA4) / 600;
-            D_00141848.wA4 = D_00141848.wA4 | (1 << current_level_index) | 0x80000000;
+            if (FUN_001f96f8(D_0015EEA4) / 600 > usage_stats.stat[20].unk2)
+                usage_stats.stat[20].unk2 = FUN_001f96f8(D_0015EEA4) / 600;
+            usage_stats.stat[20].level_mask = usage_stats.stat[20].level_mask | (1 << current_level_index) | 0x80000000;
             if (id == 0x18) hero_lui.unk1FF5 = 1;
             else hero_lui.pending_item[0] = id;
             rr = &D_L00_001C40B0[ri];

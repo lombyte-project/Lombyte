@@ -4,6 +4,7 @@
 #include "rnc/overlay/collision.h"
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
 #define NOT_SDA
 
@@ -607,13 +608,6 @@ typedef struct {
     char p14[0x18];
 } Rec2C_2523C8;
 
-typedef struct {
-    char p0[0xD8];
-    unsigned short hD8;
-    unsigned short hDA;
-    int fDC;
-} Stats_2523C8;
-
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
@@ -640,7 +634,6 @@ extern void FUN_L00_0029a6b0(void *);
 extern void FUN_L05_0024cee8(int, int);
 extern void FUN_L05_002d4168(void *, void *, void *, float, float);
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
-extern char D_00141848[];
 extern Hero D_0013F450_h2523C8 __asm__("D_0013F350");
 extern PadState D_0013CA40_p2523C8 __asm__("D_0013C940");
 extern int D_00141760_2523C8 __asm__("D_00141660") __attribute__((section(".data")));
@@ -929,7 +922,7 @@ int FUN_L05_00251be8(void) {
         {
             Moby *item;
             Moby *best;
-            Stats_2523C8 *stats;
+            struct UsageStats *stats;
             int play_time, unit;
 
             if (D_0013F450_h2523C8.unk8CE != 0) {
@@ -989,18 +982,18 @@ int FUN_L05_00251be8(void) {
                     i++;
                 }
             }
-            stats = (Stats_2523C8 *)(((char *)&D_00141848));
+            stats = &usage_stats;
             item->command = scale_game_frames_alt(7);
             D_0013F450_h2523C8.unk8CF = scale_game_frames_alt(0x32);
-            if (stats->hD8 < 0xFFFF) {
-                stats->hD8++;
+            if (stats->stat[27].count < 0xFFFF) {
+                stats->stat[27].count++;
             }
             play_time = scale_game_frames_alt(D_0015EEA4_macro);
             unit = 600;
-            if (play_time / unit > stats->hDA) {
-                stats->hDA = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+            if (play_time / unit > stats->stat[27].unk2) {
+                stats->stat[27].unk2 = scale_game_frames_alt(D_0015EEA4_macro) / 600;
             }
-            stats->fDC = stats->fDC | (1 << D_0015EE84_2523C8) | 0x80000000;
+            stats->stat[27].level_mask = stats->stat[27].level_mask | (1 << D_0015EE84_2523C8) | 0x80000000;
             allocate_voice_for_target_entry_alt(0, 0, (int)item);
             FUN_L00_0024f7c8(item, 0, joint_pos);
             FUN_L05_002d4168(item, joint_pos, best, D_0013F450_h2523C8.motion.rot.f[2], D_0013F450_h2523C8.motion.rot.f[1]);
@@ -1226,7 +1219,6 @@ void FUN_L05_00253b48(void) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
 #else
-#include "rnc/gameplay/state/usage_stats.h"
 extern u8 D_0013D388;
 
 extern s32 D_0015ED84 __attribute__((sda));
@@ -1244,7 +1236,7 @@ void FUN_L05_00254058(void) {
 
     if (D_0013D388 == 0) return;
     if (hero.unk8A8 != 0) {
-        struct UsageStats *stats = (struct UsageStats *)D_00141848;
+        struct UsageStats *stats = &usage_stats;
         s32 duration = D_0015EEA4_gp;
         s32 frame_count;
         s32 level;

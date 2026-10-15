@@ -6,6 +6,7 @@
 #include "rnc/gameplay/state/options.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
 typedef struct {
     unsigned char pad0[0x10];
@@ -16,20 +17,13 @@ typedef struct {
     unsigned char pad20[4];
     float f24;
 } S_2e89b0;
-typedef struct {
-    unsigned char pad0[0x40];
-    unsigned short u40;
-    unsigned short u42;
-    int i44;
-} G_2e89b0;
 extern float D_0013CA40_2e89b0[] __asm__("D_0013CA40") __attribute__((section(".data")));
-extern G_2e89b0 D_00141848_2e89b0 __asm__("D_00141848");
 extern int FUN_001f96f8_2e89b0(int) __asm__("FUN_001f96f8");
 
 void follow_camera_read_stick(char *o, float *a, float *b) __asm__("FUN_L00_002e89b0");
 void follow_camera_read_stick(char *o, float *a, float *b) {
     S_2e89b0 *s = (S_2e89b0 *)(*(char **)(o + 0x70) + 0x1A8);
-    G_2e89b0 *g;
+    struct UsageStats *g;
 
     if (s->flags & 1) {
         *a = 0.0f;
@@ -47,18 +41,18 @@ void follow_camera_read_stick(char *o, float *a, float *b) {
         }
     } else {
         s->f14 = D_L00_0015EF44;
-        g = &D_00141848_2e89b0;
-        if (g->u40 < 3) {
+        g = &usage_stats;
+        if (g->stat[8].count < 3) {
             D_L00_00161D8C++;
             if (D_L00_00161D90 == 0 && FUN_001f96f8_2e89b0(0x3C) < D_L00_00161D8C) {
-                if (g->u40 <= 0xFFFE) {
-                    g->u40++;
+                if (g->stat[8].count <= 0xFFFE) {
+                    g->stat[8].count++;
                 }
-                if (FUN_001f96f8_2e89b0(D_0015EEA4) / 600 > g->u42) {
-                    g->u42 = FUN_001f96f8_2e89b0(D_0015EEA4) / 600;
+                if (FUN_001f96f8_2e89b0(D_0015EEA4) / 600 > g->stat[8].unk2) {
+                    g->stat[8].unk2 = FUN_001f96f8_2e89b0(D_0015EEA4) / 600;
                 }
                 D_L00_00161D90 = 1;
-                g->i44 = g->i44 | (1 << current_level_index) | 0x80000000;
+                g->stat[8].level_mask = g->stat[8].level_mask | (1 << current_level_index) | 0x80000000;
             }
         }
     }

@@ -12,6 +12,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00235E08.c: func_L06_00235E08), where it is exact; names translated to the US level program. */
 
@@ -28,7 +29,6 @@ typedef struct {
 
 extern T2C_235E08 D_L06_0017C3A8[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
-extern char D_00141848[];
 extern float D_L06_0017C570[][25];
 extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9e90(float, float);
@@ -1209,15 +1209,15 @@ int hero_set_state(int a, int b) {
         p->unkA64 = 0;
         switch (p->state.current) {
         case 0x14: {
-            char *h = ((char *)&D_00141848);
+            struct UsageStat *h = usage_stats.stat;
             struct Hero *q;
-            if (*(unsigned short *)(h + 0) <= 0xFFFE) {
-                *(unsigned short *)(h + 0) = *(unsigned short *)(h + 0) + 1;
+            if (h[0].count <= 0xFFFE) {
+                h[0].count = h[0].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 2)) {
-                *(unsigned short *)(h + 2) = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[0].unk2) {
+                h[0].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 4) = *(unsigned int *)(h + 4) | (1 << current_level_index) | 0x80000000;
+            h[0].level_mask = h[0].level_mask | (1 << current_level_index) | 0x80000000;
             q = &hero;
             q->unk2284 = 0x50;
             q->attack_record = 4;
@@ -1238,17 +1238,17 @@ int hero_set_state(int a, int b) {
             break;
         }
         case 0x15: {
-            char *h = ((char *)&D_00141848);
+            struct UsageStat *h = usage_stats.stat;
             char *h2;
             struct Hero *q;
-            if (*(unsigned short *)(h + 8) <= 0xFFFE) {
-                *(unsigned short *)(h + 8) = *(unsigned short *)(h + 8) + 1;
+            if (h[1].count <= 0xFFFE) {
+                h[1].count = h[1].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0xA)) {
-                *(unsigned short *)(h + 0xA) = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[1].unk2) {
+                h[1].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 0xC) =
-                *(unsigned int *)(h + 0xC) | (1 << current_level_index) | 0x80000000;
+            h[1].level_mask =
+                h[1].level_mask | (1 << current_level_index) | 0x80000000;
             h2 = item_usage;
             if (*(unsigned short *)(h2 + 0x128) <= 0xFFFE) {
                 *(unsigned short *)(h2 + 0x128) = *(unsigned short *)(h2 + 0x128) + 1;

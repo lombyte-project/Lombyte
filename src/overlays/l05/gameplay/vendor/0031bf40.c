@@ -6,6 +6,7 @@
 #include "sda.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/gameplay/state/usage_stats.h"
 extern char D_0013F3D0[];
 extern int D_001413D4 NOT_SDA, D_001413DC NOT_SDA, D_0013D464 NOT_SDA;
 extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;
@@ -42,24 +43,6 @@ extern VendorEventRecord D_00141968[];
 #define D_00141C5C (D_00141968[94].flags)
 #define D_00141B88 (D_00141968[68].count)
 #define D_00141BB8 (D_00141968[74].count)
-typedef struct {
-    unsigned char pad_0[74];
-    unsigned short D_00141892;
-    unsigned char pad_4c[12];
-    unsigned short D_001418A0;
-    unsigned char pad_5a[6];
-    unsigned short D_001418A8;
-    unsigned char pad_62[46];
-    unsigned short D_001418D8;
-    unsigned char pad_92[86];
-    unsigned short D_00141930;
-} L05Fields_00141848;
-extern L05Fields_00141848 l05_00141848 __asm__("D_00141848");
-#define D_00141892 (l05_00141848.D_00141892)
-#define D_001418A8 (l05_00141848.D_001418A8)
-#define D_001418A0 (l05_00141848.D_001418A0)
-#define D_00141930 (l05_00141848.D_00141930)
-#define D_001418D8 (l05_00141848.D_001418D8)
 typedef struct {
     unsigned char pad_0[82];
     unsigned short D_00141772;
@@ -114,16 +97,16 @@ void FUN_L05_0031bf40(unsigned char *moby) {
         }
     }
     if (is_point_inside_clip_volume(D_0013F3D0, data[16])) {
-        elapsed = scale_game_frames(D_L05_0015EEA4) - D_00141892 * 600;
+        elapsed = scale_game_frames(D_L05_0015EEA4) - usage_stats.stat[9].unk2 * 600;
         limit = (int)((float)scale_game_frames(0xe10) * 60.0f);
         if (limit < elapsed && (unsigned int)(D_00141BAC & (1 << D_L05_0015ED84)) < 1)
             FUN_L00_00203908(0x7dd, 0x48);
     }
-    if (frame_number < scale_game_frames(60) && D_001418A8 && !D_001418A0 && D_00141BF4 >= 0)
+    if (frame_number < scale_game_frames(60) && usage_stats.stat[12].count && !usage_stats.stat[11].count && D_00141BF4 >= 0)
         FUN_L00_00203908(0x4e27, 0x51);
-    if (frame_number < scale_game_frames(60) && D_00141930) {
+    if (frame_number < scale_game_frames(60) && usage_stats.stat[29].count) {
         if (D_00141CFC >= 0) FUN_L00_00203908(0x4e28, 0x72);
-        D_00141930 = 0;
+        usage_stats.stat[29].count = 0;
     }
     if (!D_0013D4D6) {
         if (is_point_inside_clip_volume(D_0013F3D0, data[9]) && !D_0013F64C) {
@@ -207,7 +190,7 @@ void FUN_L05_0031bf40(unsigned char *moby) {
                    (is_point_inside_clip_volume(&hero.motion.pos, data[13]) || is_point_inside_clip_volume(&hero.motion.pos, data[14])))
             FUN_L00_00203908(0x138e, 0x5e);
     }
-    if (!D_001418D8 && !D_00141BB8 && D_0013D4CF &&
+    if (!usage_stats.stat[18].count && !D_00141BB8 && D_0013D4CF &&
         is_point_inside_clip_volume(D_0013F3D0, data[18]) && D_0013D464 >= 20)
         FUN_L00_00203908(20000, 0x4a);
     value = data[21];

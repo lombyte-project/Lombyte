@@ -37,7 +37,6 @@ typedef struct {
 extern HeroTableRow2C D_L06_0017C3A8[];
 extern HeroAnimRow D_L06_0017A240[];
 extern HeroTableEntry70 D_L06_0017A010[];
-extern struct UsageStats D_00141848;
 extern S17AF00 D_L06_0017AE00;
 extern S17C638 D_L06_0017C538;
 extern float absolute_float(float) __asm__("func_001F99C0");
@@ -216,13 +215,13 @@ void FUN_L06_0023b440(void) {
                         next = D_00141660;
                     }
                     if (next != 0 && cur != base) {
-                        if (D_00141848.stat[31].count < 0xFFFF) {
-                            D_00141848.stat[31].count++;
+                        if (usage_stats.stat[31].count < 0xFFFF) {
+                            usage_stats.stat[31].count++;
                         }
-                        if (scale_game_frames(D_0015EEA4) / 600 > D_00141848.stat[31].unk2) {
-                            D_00141848.stat[31].unk2 = scale_game_frames(D_0015EEA4) / 600;
+                        if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[31].unk2) {
+                            usage_stats.stat[31].unk2 = scale_game_frames(D_0015EEA4) / 600;
                         }
-                        D_00141848.stat[31].level_mask = D_00141848.stat[31].level_mask | (1 << current_level_index) | 0x80000000;
+                        usage_stats.stat[31].level_mask = usage_stats.stat[31].level_mask | (1 << current_level_index) | 0x80000000;
                         hero.pending_item[0] = next;
                         hero.unk22D4 = 0;
                         hero.unk22D6 = 0;

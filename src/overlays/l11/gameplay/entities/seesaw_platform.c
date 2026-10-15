@@ -2240,7 +2240,6 @@ typedef struct {
     float fade;
 } ShipVars_2838;
 
-extern struct UsageStats D_00141848;
 extern unsigned short D_00141C10 __attribute__((section(".data")));
 extern float D_L11_0016D4F0 __attribute__((section(".data")));
 extern char D_L11_00174840[];
@@ -2370,14 +2369,14 @@ void FUN_L11_00312838(struct Moby *m, ShipVars_2838 *o) {
         if (pad->raw_held & 0x40) {
             float f;
             float max;
-            if (D_00141848.stat[28].count < 0xFFFF) {
-                D_00141848.stat[28].count++;
+            if (usage_stats.stat[28].count < 0xFFFF) {
+                usage_stats.stat[28].count++;
             }
-            if (FUN_001f96f8(D_0015EEA4) / 600 > D_00141848.stat[28].unk2) {
-                D_00141848.stat[28].unk2 = FUN_001f96f8(D_0015EEA4) / 600;
+            if (FUN_001f96f8(D_0015EEA4) / 600 > usage_stats.stat[28].unk2) {
+                usage_stats.stat[28].unk2 = FUN_001f96f8(D_0015EEA4) / 600;
             }
-            D_00141848.stat[28].level_mask =
-                D_00141848.stat[28].level_mask | (1 << current_level_index) | 0x80000000;
+            usage_stats.stat[28].level_mask =
+                usage_stats.stat[28].level_mask | (1 << current_level_index) | 0x80000000;
             f = o->speed + D_L11_00161FFC * D_L11_00162090_gp;
             max = D_L11_00161FF8 * D_L11_00162090_gp;
             o->speed = f;

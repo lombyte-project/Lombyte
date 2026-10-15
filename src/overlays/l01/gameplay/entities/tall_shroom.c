@@ -68,7 +68,6 @@ struct L01HelpRecord {
 
 extern struct L01HelpState help_state __asm__("D_L01_00179890");
 extern struct L01HelpRecord help_records[] __asm__("D_00141968");
-extern struct UsageStats usage_stats __asm__("D_00141848");
 extern s32 cutscene_mode_macro __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern s32 D_L01_0015F688 MACRO_ADDR;
 extern s32 D_L01_0015F68C MACRO_ADDR;

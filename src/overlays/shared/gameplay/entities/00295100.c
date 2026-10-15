@@ -42,6 +42,7 @@ void FUN_L00_00297e30(void) {
     D_L00_0015F2F4 = 0;
 }
 #include "rnc/input/pad_state.h"
+#include "rnc/gameplay/state/usage_stats.h"
 extern struct PadStateWords D_0013C940;
 extern int D_L00_00160FF0 __attribute__((sda));
 extern int D_L00_0015F5CC;
@@ -110,12 +111,6 @@ typedef struct {
     u8 pad0[0x10];
     u8 b10;
 } R_297f78;
-typedef struct {
-    u8 pad0[0x48];
-    u16 h48;
-    u16 h4A;
-    u32 w4C;
-} H_297f78;
 extern S_297f78 D_L00_0016C058;
 extern C_297f78 D_0013C940_c __asm__("D_0013C940");
 extern s32 D_L00_0015F5C0_m[] __asm__("D_L00_0015F5C0") __attribute__((section(".sdata")));
@@ -127,7 +122,6 @@ extern s32 D_0013D384 __attribute__((section(".data")));
 extern R_297f78 D_0013D388;
 extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_L00_00184214 __attribute__((section(".data")));
-extern H_297f78 D_00141848;
 extern s32 D_0015EEA4;
 extern s32 D_L00_0015F630;
 extern u8 D_L00_00160FF8[], D_L00_00161008[], D_L00_00161018[], D_L00_00161028[], D_L00_00161038[];
@@ -247,12 +241,12 @@ void handle_pause_input(void) {
         hud_keep_visible(x, FUN_001f96f8_c(0xB4));
     }
     if (D_L00_00184214) {
-        H_297f78 *h = &D_00141848;
-        if (h->h48 < 0xFFFF)
-            h->h48++;
-        if (FUN_001f96f8_c(D_0015EEA4) / 600 > h->h4A)
-            h->h4A = FUN_001f96f8_c(D_0015EEA4) / 600;
-        h->w4C = h->w4C | (1 << current_level_index) | 0x80000000;
+        struct UsageStats *h = &usage_stats;
+        if (h->stat[9].count < 0xFFFF)
+            h->stat[9].count++;
+        if (FUN_001f96f8_c(D_0015EEA4) / 600 > h->stat[9].unk2)
+            h->stat[9].unk2 = FUN_001f96f8_c(D_0015EEA4) / 600;
+        h->stat[9].level_mask = h->stat[9].level_mask | (1 << current_level_index) | 0x80000000;
     }
     if (D_L00_0015F630) {
         D_L00_0015F630 = 0;

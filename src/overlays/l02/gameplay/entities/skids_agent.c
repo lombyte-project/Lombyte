@@ -102,7 +102,7 @@ extern char D_L02_00161CF0[];
 extern char *D_L02_001600EC;
 extern f32 D_L02_0015F3FC;
 extern f32 D_L02_00161CE0[2] __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
-extern struct UsageStat D_00141968[] __attribute__((section(".data"))); /* usage records 36 on (D_00141848 + 0x120) */
+extern struct UsageStat D_00141968[] __attribute__((section(".data"))); /* usage records 36 on (usage_stats + 0x120) */
 extern u8 items_owned[] __asm__("D_0013D4C0") __attribute__((section(".data"))); /* by item id */
 extern s32 level_game_mode __asm__("D_L02_0015F5C4");
 extern u8 big_head_cheat_enabled __asm__("D_0015EDB0");

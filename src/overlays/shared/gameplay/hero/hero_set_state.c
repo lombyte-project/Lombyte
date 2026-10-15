@@ -5,6 +5,7 @@
 #include "asm.h"
 
 #include "rnc/overlay/collision.h"
+#include "rnc/gameplay/state/usage_stats.h"
 
 extern s32 D_L00_0015F5CC;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
@@ -652,7 +653,6 @@ extern void clear_vector(void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern char D_0013F350[];
-extern char D_00141848[];
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -984,34 +984,34 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         p->health.hp = 0;
         if (p->unk90E > scale_game_frames(0x32)) {
-            char *h = ((char *)&D_00141848);
-            if (*(unsigned short *)(h + 0x60) <= 0xFFFE) {
-                *(unsigned short *)(h + 0x60) = *(unsigned short *)(h + 0x60) + 1;
+            struct UsageStat *h = usage_stats.stat;
+            if (h[12].count <= 0xFFFE) {
+                h[12].count = h[12].count + 1;
             }
         }
         {
-            char *h = ((char *)&D_00141848);
-            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0x62)) {
-                *(unsigned short *)(h + 0x62) = scale_game_frames(D_0015EEA4) / 600;
+            struct UsageStat *h = usage_stats.stat;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[12].unk2) {
+                h[12].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
             {
                 struct Hero *q = &hero;
-                *(unsigned int *)(h + 0x64) =
-                    *(unsigned int *)(h + 0x64) | (1 << current_level_index) | 0x80000000;
+                h[12].level_mask =
+                    h[12].level_mask | (1 << current_level_index) | 0x80000000;
                 if (q->unk910 >= 3) {
-                    if (*(unsigned short *)(h + 0xE8) <= 0xFFFE) {
-                        *(unsigned short *)(h + 0xE8) = *(unsigned short *)(h + 0xE8) + 1;
+                    if (h[29].count <= 0xFFFE) {
+                        h[29].count = h[29].count + 1;
                     }
                 }
             }
         }
         {
-            char *h = ((char *)&D_00141848);
-            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0xEA)) {
-                *(unsigned short *)(h + 0xEA) = scale_game_frames(D_0015EEA4) / 600;
+            struct UsageStat *h = usage_stats.stat;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[29].unk2) {
+                h[29].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 0xEC) =
-                *(unsigned int *)(h + 0xEC) | (1 << current_level_index) | 0x80000000;
+            h[29].level_mask =
+                h[29].level_mask | (1 << current_level_index) | 0x80000000;
         }
         {
             char *v = (char *)(&hero.motion.unk150);
@@ -2174,15 +2174,15 @@ int hero_set_state(int a, int b) {
         p->unkA64 = 0;
         switch (p->state.current) {
         case 0x14: {
-            char *h = ((char *)&D_00141848);
+            struct UsageStat *h = usage_stats.stat;
             struct Hero *q;
-            if (*(unsigned short *)(h + 0) <= 0xFFFE) {
-                *(unsigned short *)(h + 0) = *(unsigned short *)(h + 0) + 1;
+            if (h[0].count <= 0xFFFE) {
+                h[0].count = h[0].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 2)) {
-                *(unsigned short *)(h + 2) = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[0].unk2) {
+                h[0].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 4) = *(unsigned int *)(h + 4) | (1 << current_level_index) | 0x80000000;
+            h[0].level_mask = h[0].level_mask | (1 << current_level_index) | 0x80000000;
             q = &hero;
             q->unk2284 = 0x50;
             q->attack_record = 4;
@@ -2203,17 +2203,17 @@ int hero_set_state(int a, int b) {
             break;
         }
         case 0x15: {
-            char *h = ((char *)&D_00141848);
+            struct UsageStat *h = usage_stats.stat;
             char *h2;
             struct Hero *q;
-            if (*(unsigned short *)(h + 8) <= 0xFFFE) {
-                *(unsigned short *)(h + 8) = *(unsigned short *)(h + 8) + 1;
+            if (h[1].count <= 0xFFFE) {
+                h[1].count = h[1].count + 1;
             }
-            if (scale_game_frames(D_0015EEA4) / 600 > *(unsigned short *)(h + 0xA)) {
-                *(unsigned short *)(h + 0xA) = scale_game_frames(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > h[1].unk2) {
+                h[1].unk2 = scale_game_frames(D_0015EEA4) / 600;
             }
-            *(unsigned int *)(h + 0xC) =
-                *(unsigned int *)(h + 0xC) | (1 << current_level_index) | 0x80000000;
+            h[1].level_mask =
+                h[1].level_mask | (1 << current_level_index) | 0x80000000;
             h2 = D_00141680;
             if (*(unsigned short *)(h2 + 0x128) <= 0xFFFE) {
                 *(unsigned short *)(h2 + 0x128) = *(unsigned short *)(h2 + 0x128) + 1;
