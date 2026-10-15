@@ -1021,6 +1021,40 @@ def render_svg(
         f'<text x="{cx:.1f}" y="{dy0 + 73}" text-anchor="middle" font-family="{esc(FONT)}" '
         f'font-size="10" fill="{TEXT}">exe + overlays in C</text>'
     )
+    # Legend: the colour key in the drawer's top-right corner, on a dark
+    # plate so it reads over the dimmed treemap.
+    legend_font = 10
+    swatch = 10
+    gap = 15
+    legend_rows = (
+        (ORANGE, f"matching C &#183; {exact_bytes:,} B"),
+        (CHROME, f"intentional asm &#183; {asm_bytes:,} B"),
+        ("url(#progress-range)", f"pending C &#183; {recoverable - exact_bytes:,} B"),
+    )
+    widest = max(
+        len(html.unescape(text)) * legend_font * 0.56 for _, text in legend_rows
+    )
+    row_x = right - 12 - round(widest) - gap
+    lines.append(
+        f'<rect x="{row_x - 8}" y="{dy0 + 8}" width="{right - row_x}" height="{ddy - 16}" '
+        f'rx="6" fill="{BACKGROUND}" fill-opacity="0.72" pointer-events="none"/>'
+    )
+    for offset, (color, text) in enumerate(legend_rows):
+        y = dy0 + 17 + offset * 19
+        row_title = (
+            '<title>Pending C: dark plate to copper shows C_EXACT coverage; '
+            'bolt orange marks 100% exact.</title>'
+            if color == "url(#progress-range)"
+            else ""
+        )
+        lines.append(
+            f'<rect x="{row_x}" y="{y}" width="{swatch}" height="{swatch}" rx="2" '
+            f'fill="{color}">{row_title}</rect>'
+        )
+        lines.append(
+            f'<text x="{row_x + gap}" y="{y + 9}" '
+            f'font-family="{esc(FONT)}" font-size="{legend_font}" fill="{MUTED}">{text}</text>'
+        )
 
     # The executable leads the tree, above the shared code.
     group_tiles = sorted(build_group_tiles(units), key=lambda tile: tile["address"])
