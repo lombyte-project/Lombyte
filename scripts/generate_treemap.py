@@ -1031,16 +1031,22 @@ def render_svg(
         (CHROME, f"intentional asm &#183; {asm_bytes:,} B"),
         ("url(#progress-range)", f"pending C &#183; {recoverable - exact_bytes:,} B"),
     )
+    # 0.47 em per character fits the system sans (SF, Inter, Segoe UI).
     widest = max(
-        len(html.unescape(text)) * legend_font * 0.56 for _, text in legend_rows
+        len(html.unescape(text)) * legend_font * 0.47 for _, text in legend_rows
     )
-    row_x = right - 12 - round(widest) - gap
+    inset, pad, row_step = 8, 10, 19
+    plate_width = round(pad + gap + widest + pad)
+    plate_x = right - inset - plate_width
+    row_x = plate_x + pad
+    plate_height = ddy - 2 * inset
+    rows_height = row_step * (len(legend_rows) - 1) + swatch
     lines.append(
-        f'<rect x="{row_x - 8}" y="{dy0 + 8}" width="{right - row_x}" height="{ddy - 16}" '
+        f'<rect x="{plate_x}" y="{dy0 + inset}" width="{plate_width}" height="{plate_height}" '
         f'rx="6" fill="{BACKGROUND}" fill-opacity="0.72" pointer-events="none"/>'
     )
     for offset, (color, text) in enumerate(legend_rows):
-        y = dy0 + 17 + offset * 19
+        y = dy0 + inset + (plate_height - rows_height) / 2 + offset * row_step
         row_title = (
             '<title>Pending C: dark plate to copper shows C_EXACT coverage; '
             'bolt orange marks 100% exact.</title>'
