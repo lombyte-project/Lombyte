@@ -1081,10 +1081,9 @@ void FUN_L00_002e2c88(int a, int b, void *points, int alpha, int glow_alpha, int
     width.q = 0; glow_width.q = 0;
     glow_width.f[2] = scale + scale;
     width.f[2] = scale; glow_width.f[3] = one; width.f[3] = one;
-    position = (OvlVec4 *)(D_L00_001E6D20[idx].b + 0x10);
-    qcopy(&basis[0], D_L00_001E6D20[idx].b + 0x10);
-    one = width.f[3];
-    position += 2;
+    qcopy_nc(&basis[0], D_L00_001E6D20[idx].b + 0x10);
+    one = *(volatile f32 *)&width.f[3];
+    position = (OvlVec4 *)(D_L00_001E6D20[idx].b + 0x30);
     subtract_vector_xyz(&basis[1], g_debug_camera, position);
     fast_vec_scale(&basis[1], &basis[1], one);
     cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
