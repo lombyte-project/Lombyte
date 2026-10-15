@@ -269,7 +269,7 @@ next_candidate:;
         length = fast_vec_length(&camera_direction);
         if (length == 0.0f) camera_direction.f[2] = 1.0f;
         else fast_vec_scale(1.0f / length, &camera_direction, &camera_direction);
-        camera_direction.i[3] = 0x45afdf66;
+        camera_direction.f[3] = 5627.9248046875f;
         qcopy(&hit.direction, &camera_direction);
         if (hit_result) {
             candidate = D_L00_00173E58;
@@ -302,7 +302,7 @@ next_candidate:;
         fast_vec_sub(&target_delta, *(char **)(v + 0x20) + 0x10, g_debug_camera);
         target_delta.f[2] = 0.0f;
         fast_vec_normalize(&target_delta, &target_delta, 1.0f);
-        target_delta.i[3] = 0x45afdf66;
+        target_delta.f[3] = 5627.9248046875f;
         make_hit_descriptor(&effects.first.hit0, o, 0x210000, &target_delta, enabled_float + 2.0f);
         effects.first.hit0.id = *(short *)(o + 0xa6); effects.first.hit0.mode = 3; effects.first.hit0.kind = 5;
         FUN_L00_00259a88(*(char **)(v + 0x20), &effects.first.hit0);
@@ -314,7 +314,7 @@ next_candidate:;
         fast_vec_sub(&target_delta, *(char **)(v + 0x38) + 0x10, g_debug_camera);
         target_delta.f[2] = 0.0f;
         fast_vec_normalize(&target_delta, &target_delta, 1.0f);
-        target_delta.i[3] = 0x45afdf66;
+        target_delta.f[3] = 5627.9248046875f;
         make_hit_descriptor(&effects.hit1, o, 0x210000, &target_delta, enabled_float + 2.0f);
         effects.hit1.id = *(short *)(o + 0xa6); effects.hit1.kind = 5; effects.hit1.mode = 3;
         FUN_L00_00259a88(*(char **)(v + 0x38), &effects.hit1);
@@ -326,23 +326,7 @@ next_candidate:;
         if (i < 2) { qcopy(&effects.first.origin, v); factor = 0.4f; }
         else { qcopy(&effects.first.origin, v + 0x10); factor = 0.5f; }
         point = (char *)D_L00_001DBA20 + i * 0x50;
-        if (!FUN_001f9770(&D_L00_00161658[i])) {
-            for (j = 0; j < 4; j++) {
-                fast_vec_sub(&differences[j + 1], point + (j + 1) * 16, point + j * 16);
-                differences[j + 1].f[0] += FUN_L00_00257c48(0.0f, 0.1f);
-                differences[j + 1].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
-                differences[j + 1].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
-            }
-            qcopy(point, &effects.first.origin);
-            for (j = 0; j < 4; j++)
-                fast_vec_add(point + (j + 1) * 16, point + j * 16, &differences[j + 1]);
-            if (D_L00_00161670[i] < D_L00_00161658[i])
-                difference = D_L00_00161658[i] - D_L00_00161670[i];
-            else difference = D_L00_00161670[i] - D_L00_00161658[i];
-            distance = FUN_001fa6c0(difference);
-            angle = FUN_001fa6c0(scale_game_frames(15));
-            (&D_L00_00161660)[i] = truncate_float_to_s32((1.0f - distance / angle) * 32.0f);
-        } else {
+        if (FUN_001f9770(&D_L00_00161658[i])) {
             D_L00_00161658[i] = scale_game_frames(D_L00_00161668[i]);
             (&D_L00_00161660)[i] = 0;
             angle = FUN_L00_00257c48(0.5235988f, 1.0471976f);
@@ -360,6 +344,22 @@ next_candidate:;
                 build_look_at_matrix(&target_delta, &target_delta, &effects.first.hit0, phase);
                 fast_vec_add(point + (j + 2) * 16, point + (j + 1) * 16, &target_delta);
             }
+        } else {
+            for (j = 0; j < 4; j++) {
+                fast_vec_sub(&differences[j + 1], point + (j + 1) * 16, point + j * 16);
+                differences[j + 1].f[0] += FUN_L00_00257c48(0.0f, 0.1f);
+                differences[j + 1].f[1] += FUN_L00_00257c48(0.0f, 0.1f);
+                differences[j + 1].f[2] += FUN_L00_00257c48(0.0f, 0.1f);
+            }
+            qcopy(point, &effects.first.origin);
+            for (j = 0; j < 4; j++)
+                fast_vec_add(point + (j + 1) * 16, point + j * 16, &differences[j + 1]);
+            if (D_L00_00161670[i] < D_L00_00161658[i])
+                difference = D_L00_00161658[i] - D_L00_00161670[i];
+            else difference = D_L00_00161670[i] - D_L00_00161658[i];
+            distance = FUN_001fa6c0(difference);
+            angle = FUN_001fa6c0(scale_game_frames(15));
+            (&D_L00_00161660)[i] = truncate_float_to_s32((1.0f - distance / angle) * 32.0f);
         }
     }
     angle = FUN_L00_00257c48(0.5235988f, 1.0471976f);
