@@ -530,7 +530,8 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                 float radius, extent;
                 flags = *(unsigned int *)(list - 4);
                 last = flags >> 31;
-                if (!((mask >> (index & 31) ^ 1) & 1) && (flags & 0x20000)) {
+                chosen = mask >> (index & 31);
+                if (!((chosen ^ 1) & 1) && (flags & 0x20000)) {
                     entries[count] = entry;
                     switch ((int)(flags & 0xff)) {
                     case 0:
@@ -554,7 +555,8 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                     case 3: {
                         qcopy(&first, (void *)((entry + 0x10)));
                         FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
-                        radius = first.f[3] * *(float *)(entity + 0x2c) * 0.0009765625f;
+                        radius = first.f[3] * *(float *)(entity + 0x2c);
+                        radius *= 0.0009765625f;
                         extent = *(float *)list * (*(float *)(entity + 0x2c) * 0.0009765625f);
                           weights[count] = radius * 4.187743f * radius * radius + radius * 1.5707964f * radius * extent;
                         break;
