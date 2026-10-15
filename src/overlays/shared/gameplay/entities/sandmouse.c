@@ -798,7 +798,7 @@ void FUN_L01_0030df40(struct Moby *m) {
     if (m->state >= 3) {
         if (D_0015EDB0 != 0) {
             if (*(u8 *)(p + 0x91) == 0) attach_manipulator(m, 5, p + 0x90);
-            HOVER_F(0xb8) = HOVER_F(0xb0) = HOVER_F(0xb4) = 2.1f;
+            HOVER_F(0xb8) = HOVER_F(0xb4) = HOVER_F(0xb0) = 2.1f;
         } else if (*(u8 *)(p + 0x91) != 0) detach_manipulator(m, p + 0x90);
         FUN_L01_0030ded0((char *)m);
     }
@@ -843,7 +843,7 @@ void FUN_L01_0030df40(struct Moby *m) {
             *(f32 *)((char *)t + 0xc) = 0.15f;
             t->yaw_speed = speed;
             *(f32 *)((char *)t + 0x24) = limit;
-            *(f32 *)((char *)t + 0x1c) = rate;
+            *(f32 *)((char *)t + 0x10) = rate;
             *(f32 *)((char *)t + 4) = 0.3f;
             t->unk30 = 0.005f;
             *(s32 *)((char *)t + 0x38) = flags;
@@ -851,7 +851,7 @@ void FUN_L01_0030df40(struct Moby *m) {
             *(f32 *)((char *)t + 0x40) = turn;
             *(f32 *)((char *)t + 0x44) = turn_limit;
             *(f32 *)((char *)t + 8) = 0.15f;
-            *(f32 *)((char *)t + 0x10) = rate;
+            *(f32 *)((char *)t + 0x1c) = rate;
         }
         *(s32 *)((char *)t + 0x48) = FUN_001f96f8(4);
         *(f32 *)((char *)t + 0x28) = 3.1415927f;
