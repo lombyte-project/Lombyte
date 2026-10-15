@@ -734,7 +734,7 @@ extern char D_0013E550[];
 extern char D_L01_001BB6B0[];
 extern s32 D_0014C190[][64];
 extern s32 D_L01_001742D8;
-extern char *D_L01_00167280_lui;
+extern char *D_L01_00167280_lui __asm__("D_L01_00167280") __attribute__((section(".data")));
 extern char D_L01_0020BA10[], D_L01_0020BA30[];
 extern s32 D_L01_00162098 __attribute__((sda));
 extern s32 D_L01_0016209C __attribute__((sda));
@@ -831,12 +831,12 @@ void FUN_L01_0030df40(struct Moby *m) {
         t = &D_L01_001DEB38;
         FUN_L01_0026d930(t);
         {
-            f32 scale = frame_scale;
             f32 time = frame_time;
+            f32 scale = frame_scale;
             f32 time_sq = frame_time_sq;
             f32 turn = time_sq * 3.1415927f;
-            f32 speed = scale * 0.4f;
             f32 limit = time * 2.7f;
+            f32 speed = scale * 0.4f;
             f32 rate = scale * 0.01f;
             f32 turn_speed = time_sq * 6.2831855f;
             f32 turn_limit = time * 11.519173f;
@@ -994,8 +994,8 @@ void FUN_L01_0030df40(struct Moby *m) {
             qcopy(&v, &m->pos);
             FUN_L00_0025f8e0(&v, D_L01_001620B0);
             color = (rand() + 0x30u) & 0x3f;
-            color |= ((rand() + 0x20u) & 0x3f) << 8;
-            color |= (rand() & 0x2fu) << 16;
+            duration = (rand() + 0x20u) & 0x3f;
+            color |= (duration << 8) | ((rand() & 0x2fu) << 16);
             color |= D_L01_001620BC << 24;
             r = rand() % 2;
             if (*(u16 *)(p + 0x52) & 1) r = -r;

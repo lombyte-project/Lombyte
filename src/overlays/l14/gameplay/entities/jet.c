@@ -80,11 +80,11 @@ void FUN_L14_002df138(u8 *moby) {
             index = 0.0f;
             height = 0.0f;
         } else {
-            index = (f32)i;
-            angle = normalize_rotation_l14(d[0x78] + index * step);
+            angle = normalize_rotation_l14(d[0x78] + (f32)i * step);
             height = fast_sin(angle);
             height *= 0.1f;
             height += spread_l14(0.0f, 0.2f);
+            index = (f32)i;
         }
         p[2] = height;
         i++;
@@ -94,7 +94,7 @@ void FUN_L14_002df138(u8 *moby) {
         p += 4;
     } while (i < 5);
 
-    mirror = (f32 *)((s32)((i - 1) * 4 + 2) * 4 + (s32)d);
+    mirror = (f32 *)((s32)((i - 1) * 16) + (s32)(d + 2));
     j = 5;
     tail = d + 0x14;
     do {

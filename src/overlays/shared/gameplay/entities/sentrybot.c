@@ -2262,15 +2262,13 @@ void FUN_L15_002a2bf0(unsigned char *moby) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a3138.s", FUN_L15_002a3138);
-#else
 extern void copy_rotation_2a3138(void *, void *) __asm__("FUN_001fa298");
 extern int interpolate_color_2a3138(float, int, int) __asm__("FUN_001fa6e0");
 extern int truncate_float_2a3138(float) __asm__("FUN_001fa6d0");
 extern float integer_to_float_2a3138(int) __asm__("FUN_001fa6c0");
 extern float fast_cos_2a3138(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2a3138(float) __asm__("FUN_001f9de0");
+extern int D_L15_0015F3F8;
 extern int D_L15_001CE230[];
 extern float D_L15_001CE250[][2];
 extern int D_L15_001CE290[][2];
@@ -2289,12 +2287,13 @@ int FUN_L15_002a3138(unsigned char *moby) {
     float position[4];
     int *data = *(int **)(moby + 0x78);
     int pass, corner, axis, component;
-    float (*firstUv)[2];
+    float *transformPointer;
     float *firstUv1, *firstUv3, *secondUv0, *secondUv1;
     int nextPass;
     int passOffset;
     float *secondUv2, *secondUv3;
     float (*secondVertices)[4];
+    float (*firstUv)[2];
 
     copy_rotation_2a3138(transform, moby + 0xc0);
     qcopy(position, moby + 0x10);
@@ -2349,9 +2348,10 @@ int FUN_L15_002a3138(unsigned char *moby) {
             first.col[1] = second.col[2];
             first.col[0] = second.col[2];
         }
+        corner = 0;
         passOffset = pass * 8;
         nextPass = pass + 1;
-        for (corner = 0; corner < 4; corner++) {
+        for (; corner < 4; corner++) {
             float *uv = (float *)(corner * 8 + (unsigned int)firstUv);
             float *frequency = (float *)((char *)D_L15_001CE250 + passOffset);
             int waveform = passOffset;
@@ -2364,7 +2364,7 @@ int FUN_L15_002a3138(unsigned char *moby) {
                 float radians;
                 axis--;
                 limit = truncate_float_2a3138(*frequency * 360.0f);
-                angle = integer_to_float_2a3138(*(int *)0x0015f3f8 % limit)
+                angle = integer_to_float_2a3138(D_L15_0015F3F8 % limit)
                     / *frequency - 180.0f;
                 frequency++;
                 value = *(int *)((char *)D_L15_001CE290 + waveform);
@@ -2372,10 +2372,11 @@ int FUN_L15_002a3138(unsigned char *moby) {
                 radians = 0.017453292f;
                 step = 0.125f;
                 if (value != 0) {
-                    delta = fast_cos_2a3138(angle * radians) * step;
+                    angle = fast_cos_2a3138(angle * radians);
                 } else {
-                    delta = fast_sin_2a3138(angle * radians) * step;
+                    angle = fast_sin_2a3138(angle * radians);
                 }
+                delta = angle * step;
                 *uv++ = *(float *)((char *)D_L15_001CE2D0 + base) + delta;
                 base += 4;
             } while (axis >= 0);
@@ -2387,15 +2388,15 @@ int FUN_L15_002a3138(unsigned char *moby) {
             secondUv2[component] = firstUv3[component];
             secondUv3[component] = firstUv3[component] + step;
         }
-        draw_geometry_quad(&first, transform, 0);
-        draw_geometry_quad(secondVertices, transform, 0);
+        transformPointer = transform;
+        draw_geometry_quad(&first, transformPointer, 0);
+        draw_geometry_quad(secondVertices, transformPointer, 0);
         for (corner = 0; corner < 4; corner++) {
             first.v[corner][0] += 0.1f;
             secondVertices[corner][0] += 0.1f;
         }
     }
 }
-#endif
 #include "rnc/gameplay/entities/moby.h"
 
 typedef struct {
@@ -2489,6 +2490,7 @@ void FUN_L15_002a6e68(unsigned char *moby) {
     unsigned int life;
     unsigned char alpha, life_byte;
     int i;
+    Vec4 *endpoint_ptr;
 
     position.q = *(u128 *)(moby + 0x10);
     data = *(unsigned char **)(moby + 0x78);
@@ -2592,6 +2594,7 @@ void FUN_L15_002a6e68(unsigned char *moby) {
         *(u128 *)(data + 0x10) = *(u128 *)D_L15_00174460;
     else
         *(u128 *)(data + 0x10) = endpoint.q;
+    endpoint_ptr = &endpoint;
     i = 0;
     if (D_L15_00161558 > 0) {
         do {
@@ -2607,13 +2610,16 @@ void FUN_L15_002a6e68(unsigned char *moby) {
             life_byte = life & 0xff;
             i++;
             scale_vector_xyz(&offset, &offset, random_float_between(0.0f, 0.9f));
-            /* Retail discards this sum and emits at the chosen endpoint. */
-            FUN_L00_001ff290(collision.work.motion.temporary, &endpoint, &offset);
+            /* The checked helper adds offset into its second argument, endpoint_ptr. */
+            FUN_L00_001ff290(collision.work.motion.temporary, endpoint_ptr, &offset);
             speed = D_0015ED6C * 10.0f;
             speed = random_float_between(speed, length / convert_integer_to_float(life << 2));
             normalize_vector_xyz(&offset, &offset, speed);
             alpha = random_integer_below(255);
-            FUN_L00_002730e0((float *)&endpoint, (char *)&offset, 0x604040ff, life_byte, alpha, 0, D_L15_0016155C);
+            /* Retail returns the allocated effect pointer; this call ignores it. */
+            ((unsigned char *(*)(float *, char *, int, unsigned char, unsigned char, int, float))
+                FUN_L00_002730e0)((float *)endpoint_ptr, (char *)&offset, 0x604040ff,
+                                 life_byte, alpha, 0, D_L15_0016155C);
         } while (i < D_L15_00161558);
     }
     enqueue_callback_list_1_2a6e68((void (*)(void))FUN_L15_002a7628, moby);

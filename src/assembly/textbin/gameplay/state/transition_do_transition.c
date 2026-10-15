@@ -101,14 +101,14 @@ void transition_do_transition(void) {
     s32 i;
     s32 old;
     s32 first_size;
-    u32 alignment_mask = ~0xFu;
+    u64 alignment_mask = ~0xFULL;
     struct DiscTable *tbl;
 
     current_level_index = 0;
     *(volatile u32 *)0x10000010 = 0x83;
     *(volatile u32 *)0x10000000 = 0;
-    load_and_initialize_level_chunk();
     tbl = &disc_table;
+    load_and_initialize_level_chunk();
     transition_load_wad();
     p = (u8 *)D_001940C8[0];
     hdr = (WadHeader *)p;

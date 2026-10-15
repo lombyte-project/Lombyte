@@ -299,7 +299,8 @@ extern float FUN_001f9b48(void *, void *);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float s32_to_float(int) __asm__("FUN_001fa6c0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern char D_L10_00167100[];
+/* Retail retains this global base and loads the four-block source at +0x184. */
+extern struct { char pad0[0x184]; char *source; } D_L10_00167100;
 
 extern VendorView_5f18 D_L10_0016CEC0;
 #include "qcopy.h"
@@ -310,9 +311,9 @@ void FUN_L10_002f5b58(char *moby) {
     short * volatile indices;
     float *angles;
     char *acc;
+    char *moby_rot;
     char *moby_scale;
     char *moby_pos;
-    char *moby_rot;
 
     data[0x38] = 1;
     work = *(char **)(moby + 0x70);
@@ -422,14 +423,13 @@ void FUN_L10_002f5b58(char *moby) {
     *(float *)(work + 0x24) = 0.2f;
     clear_u64_value(work + 0x30);
     {
-        char *source = *(char **)(D_L10_00167100 + 0x184);
-        source += 0x30;
-        qcopy(moby_scale, source);
-        source -= 0x30;
+        char *source = D_L10_00167100.source;
+        char *source_block = source + 0x30;
+        qcopy(moby_scale, source_block);
         qcopy(moby, source);
-        source += 0x10;
-        qcopy(moby_pos, source);
-        source += 0x10;
+        source_block = source + 0x10;
+        qcopy(moby_pos, source_block);
+        source += 0x20;
         qcopy(moby_rot, source);
     }
     if (*(int *)(data + 0x4c) == 0)

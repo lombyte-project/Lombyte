@@ -90,12 +90,13 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                                  ((u64)(mip_texture->texture_block_offset + gs_block_base) << 37) |
                                  0x1300000ULL | ((u64)width_log2 << 26) | ((u64)height_log2 << 30) |
                                  (1ULL << 34) | (1ULL << 63);
-            mip_packet->miptbp1 = (((u64)(mip_texture->mip_block_offset_2 + gs_block_base)) << 40) |
+            mip_word = (((u64)(mip_texture->mip_block_offset_2 + gs_block_base)) << 40) |
                                   (((u64)mip_width_units[1]) << 14) |
                                   (((u64)(mip_texture->mip_block_offset_1 + gs_block_base)) << 20) |
                                   ((u64)(mip_texture->mip_block_offset_0 + gs_block_base)) |
                                   (((u64)mip_width_units[3]) << 54) |
                                   (((u64)mip_width_units[2]) << 34);
+            mip_packet->miptbp1 = mip_word;
         } else {
             for (template_index = 0; resident_material_templates[(template_index + 1) * 3] != 0;
                  template_index++) {
@@ -145,10 +146,10 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                             (((u64)draw_shift) << 6) | 0x20;
                 material_word = (packet_material_base | (((u64)material_shift) << 2)) |
                                 (((u64)material_index) << 24);
-                mip_word = (((u64)(texture->mip_block_offset_1 + gs_block_base) << 40) |
-                            (((u64)1) << 34)) |
-                           (((u64)width_units_128 << 14) |
-                            (((u64)(texture->mip_block_offset_0 + gs_block_base)) << 20));
+                mip_word = (((u64)width_units_128 << 14) |
+                            (((u64)(texture->mip_block_offset_0 + gs_block_base)) << 20)) |
+                           (((u64)(texture->mip_block_offset_1 + gs_block_base) << 40) |
+                            (((u64)1) << 34));
                 mip_word |= ((u64)1) << 54;
                 texture_word =
                     ((((u64)width_units_64 << 14) | (((u64)width_log2 << 26) | 0x1300000)) |

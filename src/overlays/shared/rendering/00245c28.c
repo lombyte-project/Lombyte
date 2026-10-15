@@ -430,6 +430,7 @@ void FUN_L00_00249f48(s32, void *, s32) __asm__("FUN_L00_00249f48");
 extern f32 D_L00_00182810[];
 extern f32 D_L00_00182A70[];
 extern u8 D_L00_00184394[];
+extern char D_00141EC0[];
 extern s32 D_L00_00183EF0[];
 extern char render_archive_source_file[] __asm__("D_L00_0015FE00");
 
@@ -450,11 +451,10 @@ void FUN_L00_002464a8(void) {
     struct DiscFile *file;
     u8 *level_data;
     u8 *mask;
-    RenderArchiveLoad *state = &D_L00_001841F0_load;
 
     D_L00_001841F0_load.initialized = 1;
+    destination = (s32 *)((u8 *)&D_L00_001841F0_load + 0x154);
     source = D_L00_00183EF0;
-    destination = (s32 *)((u8 *)state + 0x154);
     for (i = 0x13; i >= 0; i--) {
         word0 = source[0];
         word1 = source[1];
@@ -503,43 +503,41 @@ void FUN_L00_002464a8(void) {
         archive = (s32 *)((s32)archive_base + 0x9a800);
         scratch = file->size << 7;
         FUN_00266040(archive, file->sector, file->size);
-        state->file_handle = FUN_00293c58(archive, scratch, 0x4800, 0x1e8b00);
-        state->transfer_bytes = scratch;
+        D_L00_001841F0_load.file_handle = FUN_00293c58(archive, scratch, 0x4800, 0x1e8b00);
+        D_L00_001841F0_load.transfer_bytes = scratch;
         FUN_L00_0024d8d0(archive, archive_base);
         archive = archive_base;
         first_size = archive[1] - archive[0];
         D_L00_001841F0_load.first_data = FUN_002355f0(first_size, 0, heap_tag, 0x2db);
         hud_send_resident_bank(D_L00_001841F0_load.first_data, (s32)archive + archive[0], first_size);
         D_L00_001841F0_load.first_data += 8;
-        state->second_data = D_L00_001841F0_load.first_data;
+        D_L00_001841F0_load.second_data = D_L00_001841F0_load.first_data;
         second_size = archive[2] - archive[1];
-        state->second_raw = FUN_002355f0(second_size, 0, heap_tag, 0x2ec);
-        hud_send_resident_bank(state->second_raw, (s32)archive + archive[1], second_size);
-        state->scratch_data = FUN_002355f0(0x1000, 0, heap_tag, 0x2f3);
+        D_L00_001841F0_load.second_raw = FUN_002355f0(second_size, 0, heap_tag, 0x2ec);
+        hud_send_resident_bank(D_L00_001841F0_load.second_raw, (s32)archive + archive[1], second_size);
+        D_L00_001841F0_load.scratch_data = FUN_002355f0(0x1000, 0, heap_tag, 0x2f3);
         destination = (s32 *)0x184228;
         for (i = 0; i < 8; i++) {
             *(s32 *)((u8 *)destination - 8) = -1;
             *(s32 *)((u8 *)destination - 4) = -1;
-            destination[0] = state->scratch_data + i * 0x200;
+            destination[0] = D_L00_001841F0_load.scratch_data + i * 0x200;
             destination += 4;
         }
-        state->mask_data = FUN_002355f0(0x8000, 0, (s32)render_archive_source_file, 0x2fc);
-        level_data = (u8 *)(0x141ec0 + state->archive_index * 0x800);
-        if (level_data[0] == 0) {
-            FUN_L00_00248278(state->mask_data, D_L00_001841F0_load.first_data, state->second_data);
+        D_L00_001841F0_load.mask_data = FUN_002355f0(0x8000, 0, (s32)render_archive_source_file, 0x2fc);
+        level_data = (u8 *)D_00141EC0 + D_L00_001841F0_load.archive_index * 0x800;
+        if (level_data[0] != 0) {
+            FUN_L00_00249f48(D_L00_001841F0_load.mask_data, level_data, D_L00_001841F0_load.second_raw);
         } else {
-            FUN_L00_00249f48(state->mask_data, level_data, state->second_raw);
+            FUN_L00_00248278(D_L00_001841F0_load.mask_data, D_L00_001841F0_load.first_data, D_L00_001841F0_load.second_data);
         }
         mask = D_L00_00184394;
         for (y = 0; y < 32; y++) {
             for (x = 0; x < 32; x++) {
                 if ((15.5f - (f32)x) * (15.5f - (f32)x) +
                     (15.5f - (f32)y) * (15.5f - (f32)y) > 256.0f) {
-                    i = x / 8;
-                    mask[i] |= 1 << (x - i * 8);
+                    mask[x / 8 + y * 4] |= 1 << (x - (x / 8) * 8);
                 }
             }
-            mask += 4;
         }
     } else {
         D_L00_001841F0_load.first_data = 0;

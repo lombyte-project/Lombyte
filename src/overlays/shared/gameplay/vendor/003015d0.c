@@ -166,7 +166,8 @@ void FUN_L14_003017f8(char *m) {
     int i, j, index, next, color;
     float length, t;
     float y;
-    long offset;
+    int offset;
+    u8 *indices;
     VendorBeamFrame *frame;
 
     D_L14_001600EC[*(int *)d].origin.f[3] = 1.0f;
@@ -202,19 +203,20 @@ void FUN_L14_003017f8(char *m) {
             }
         }
     }
+    indices = (u8 *)(d + 0x18);
     {
         int i;
         for (i = 0; i < 32; i++) {
-            if (i != 0 && i != 31) {
+            if (i == 0 || i == 31) {
+                qcopy(d + 0x20 + (i << 4), path_a[i]);
+                qcopy(d + 0x220 + (i << 4), path_b[i]);
+            } else {
                 add_vector_xyz(work, path_a[i - 1], path_a[i]);
                 add_vector_xyz(work, work, path_a[i + 1]);
                 scale_vector_xyz(d + 0x20 + (i << 4), work, 0.333f);
                 add_vector_xyz(work, path_b[i - 1], path_b[i]);
                 add_vector_xyz(work, work, path_b[i + 1]);
                 scale_vector_xyz(d + 0x220 + (i << 4), work, 0.333f);
-            } else {
-                qcopy(d + 0x20 + (i << 4), path_a[i]);
-                qcopy(d + 0x220 + (i << 4), path_b[i]);
             }
         }
     }
@@ -226,16 +228,16 @@ void FUN_L14_003017f8(char *m) {
             index = truncate_float_to_s32(random_float_between((float)i * 6.0f,
                 (float)next * 6.0f));
             index += 4;
-            d[0x18 + i] = index;
-            offset = (unsigned int)((i << 4) + (int)d);
-            qcopy((char *)offset + 0x420, d + 0x20 + (index << 4));
-            qcopy((char *)offset + 0x520, d + 0x220 + (index << 4));
+            indices[i] = index;
+            offset = (i << 4);
+            qcopy(d + 0x420 + (i << 4), d + 0x20 + (index << 4));
+            qcopy((char *)(offset + (int)d) + 0x520, d + 0x220 + (index << 4));
             for (j = 2; j >= 0; j--) {
                 set_vector_xyz(delta_a, 0.1f, 0.1f);
                 set_vector_xyz(d + 0x560 + (i << 4) + ((2 - j) << 6), 0.0f,
                     D_L14_00162100 * D_0015ED6C);
                 add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
-                    (char *)offset + 0x420 + ((2 - j) << 6), work);
+                    d + offset + 0x420 + ((2 - j) << 6), work);
                 add_vector_xyz(d + 0x460 + (i << 4) + ((2 - j) << 6),
                     d + 0x460 + (i << 4) + ((2 - j) << 6), delta_a);
             }
@@ -259,14 +261,15 @@ void FUN_L14_003017f8(char *m) {
         }
         {
             int i;
+            float *point = delta_a;
             for (i = 0; i < 2; i++) {
                 transform_vector(work, d + 0x4e0 + (i << 4), matrix);
                 qcopy(delta_a, d + 0x5e0 + (i << 4));
                 delta_a[3] = D_L14_00162114;
                 random_integer_below(2);
                 index = random_integer_below(10);
-                spawn_spark(work, delta_a, delta_a, D_L14_00162108,
-                    D_L14_0016210C, (unsigned char)d[0x18 + i] >> 1, 15,
+                spawn_spark(work, point, point, D_L14_00162108,
+                    D_L14_0016210C, indices[i] >> 1, 15,
                     scale_game_frames(index + 20), D_L14_00162120);
             }
         }
@@ -304,10 +307,10 @@ void FUN_L14_00301de8(char *m) {
         i = 0;
         do {
             next_i = i + 1;
-            dst = (char *)((i << 4) + (int)d);
-            offset = (int)dst;
-            dst += 0x460;
-            src = (char *)offset + 0x560;
+            src = (char *)((i << 4) + (int)d);
+            offset = (int)src;
+            src += 0x560;
+            dst = (char *)offset + 0x460;
             for (k = 2; k >= 0; k--) {
                 add_vector_xyz(dst, dst, src);
                 dst += 0x40;
@@ -388,6 +391,7 @@ void FUN_L14_00301fa8(char *m) {
     u8 *indices;
     void *src;
     float t;
+    float offset;
     float *uv, *uv_base;
     int next;
     int branch_next;
@@ -424,8 +428,8 @@ void FUN_L14_00301fa8(char *m) {
     for (point = 0; point < 31; point = next) {
         qcopy(end, start);
         if (point < 30) {
-            subtract_vector_xyz(side, d + 0x20 + (point << 4), d + 0x40 + (point << 4));
-            subtract_vector_xyz(work, d + 0x30 + (point << 4), direction);
+            subtract_vector_xyz(side, (char *)((point << 4) + 0x20 + (int)d), (char *)((point << 4) + 0x40 + (int)d));
+            subtract_vector_xyz(work, (char *)((point << 4) + 0x30 + (int)d), direction);
             cross_vectors_xyz(start, work, side);
             normalize_vector_xyz(start, start, 0.1f);
         } else {
@@ -452,8 +456,9 @@ add_main:
             }
             t = convert_integer_to_float(point - rounded) * 0.25f;
             j = i++;
-            packet[0].uv[j][0] = ((float *)0x001e5fd0)[j * 2] +
-                t;
+            offset = ((float *)0x001e5fd0)[j * 2];
+            offset += t;
+            packet[0].uv[j][0] = offset;
         }
         draw_geometry_quad(&packet[0], base, 0);
     }
@@ -496,9 +501,10 @@ add_branch:
                     }
                     t = convert_integer_to_float(point - rounded) * 0.25f;
                     j = k++;
-                    t = *uv_base + t;
+                    offset = *uv_base;
+                    offset += t;
                     uv_base += 2;
-                    *uv = t;
+                    *uv = offset;
                     uv += 2;
                 }
                 draw_geometry_quad(&packet[0], base, 0);

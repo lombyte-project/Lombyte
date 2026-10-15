@@ -22,7 +22,7 @@ extern void *D_L00_00197300[];
 extern s32 D_L00_0015F3F8_gp __asm__("D_L00_0015F3F8") __attribute__((sda));
 extern s32 frame_size __asm__("D_0013E504");
 extern s32 D_L00_001611CC;
-extern s32 D_L00_00184414;
+#define D_L00_00184414 (*(s32 *)(D_L00_001841F0_init + 0x224))
 extern s32 D_L00_001B9E90_init[] __asm__("D_L00_001B9E90");
 extern s32 D_L00_00180260[];
 extern s32 D_L00_001B9D30[];
@@ -149,9 +149,9 @@ void FUN_L00_00276368(void) {
     if (special) {
         D_L00_001B9DF4 = D_L00_00173E04 + 0x30000;
         D_L00_001B9D00 = D_L00_00173E08 + 0x30000;
-        D_L00_001B9DF8 = D_L00_00173E04 + 0x6c000;
-        D_L00_001B9DF0 = D_L00_00173E08 + 0x110000;
-        D_L00_001B9DEC = D_L00_00173E04 + 0x7d800;
+        D_L00_001B9DF8 = D_L00_001B9DF4 + 0x3c000;
+        D_L00_001B9DF0 = D_L00_001B9D00 + 0xe0000;
+        D_L00_001B9DEC = D_L00_001B9DF8 + 0x11800;
         D_L00_001611CC = 0x30000;
         D_L00_001B9DFC = D_L00_001B9DF0;
         FUN_L00_00283908(0);
@@ -743,46 +743,49 @@ void FUN_L00_002772c0(s32 param_1) {
             object->image[21] = height;
             object->image[22] = left;
             object->image[23] = top;
-            FUN_L00_0023caa8_772c0(width + 1, height + 1, left + width - 1,
-                                     top + height - 1, *(s32 *)0x00160270, 0);
+            FUN_L00_0023caa8_772c0(width + 1, height + 1, width + left - 1,
+                                     height + top - 1, *(s32 *)0x00160270, 0);
         }
     }
     for (pass = 0; pass < 2; pass++) {
         for (i = 0; i < 14; i++) {
+            s32 width, height;
             if (D_L00_001B9E90_init[i] == 0 || handles == 0 || handles[i] == 0) {
                 continue;
             }
             entry = (VoiceRenderEntry *)handles[i];
-            flags = entry->flags;
-            if ((flags & 4) != 0 || D_L00_001B23C0[i] == 0 || entry->draw == 0 ||
-                (i == 6 && D_L00_001B9DC8 == 0) ||
-                (pass == 0 && (flags & 2) == 0) ||
-                (pass == 1 && (flags & 2) != 0)) {
-                continue;
-            }
-            if ((flags & 1) != 0) {
-                entry->draw(entry);
-                continue;
+            {
+                u32 flags = entry->flags;
+                if ((flags & 4) != 0 || D_L00_001B23C0[i] == 0 || entry->draw == 0 ||
+                    (i == 6 && D_L00_001B9DC8 == 0) ||
+                    (pass == 0 && (flags & 2) == 0) ||
+                    (pass == 1 && (flags & 2) != 0)) {
+                    continue;
+                }
+                if ((flags & 1) != 0) {
+                    entry->draw(entry);
+                    continue;
+                }
             }
             object = (VoiceRenderObject *)D_L00_001B9E90_init[i];
-            texture_width = object->image[22];
-            texture_height = object->image[23];
             right = object->image[20];
             bottom = object->image[21];
+            texture_width = object->image[22];
+            texture_height = object->image[23];
             width_shift = 7;
             if (texture_width > 0x80) {
-                for (width_shift = 8; (1 << (width_shift & 31)) < texture_width; width_shift++) {}
+                for (width_shift = 8; (1 << width_shift) < texture_width; width_shift++) {}
             }
             height_shift = 7;
             if (texture_height > 0x80) {
-                for (height_shift = 8; (1 << (height_shift & 31)) < texture_height; height_shift++) {}
+                for (height_shift = 8; (1 << height_shift) < texture_height; height_shift++) {}
             }
             while (width_shift + height_shift > 17) {
                 height_shift--;
             }
             FUN_L00_001fc928(1.0f, width_shift, height_shift, pass != 0);
-            width = 1 << (width_shift & 31);
-            height = 1 << (height_shift & 31);
+            width = 1 << width_shift;
+            height = 1 << height_shift;
             FUN_L00_0023cc30(0, 0, width, height, *(s32 *)0x00160270, 0, 0);
             entry = (VoiceRenderEntry *)handles[i];
             flags = entry->draw(entry);

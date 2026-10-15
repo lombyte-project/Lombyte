@@ -54,16 +54,16 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
 
     color_byte = *(u8 *)(*(char **)(moby + 0x78) + 0x1c6);
     color = ((u32)color_byte << 24) | ((u32)color_byte << 16) | ((u32)color_byte << 8) | color_byte;
+    scratch.f[1] = ang;
+    scratch.f[2] = alpha;
     vu1_add_g_sregister_l07(0x4e, (s64)((depth_buffer_address >> 13) | 0x1000000) | ((u64)0x8000 << 17));
-    row_alpha = alpha;
+    row_alpha = scratch.f[2];
     texture = get_effect_texture(0x3c);
-    quad.colors[0] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | (base_color = color | 0x404040);
+    quad.colors[0] = quad.colors[1] = quad.colors[2] = quad.colors[3] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | (base_color = color | 0x404040);
     quad.texture = texture;
     quad.texture_state = texture_state;
     quad.primitive = primitive;
-    quad.colors[1] = quad.colors[0];
-    quad.colors[2] = quad.colors[0];
-    quad.colors[3] = quad.colors[0];
+
     quad.reserved.value = 0;
     spin = convert_integer_to_float(frame_count_l07 + phase) * speed;
     FUN_L00_0024f7c8(moby, 9, &position);
@@ -74,34 +74,39 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
     scratch.i[3] = base_color;
     u = split_float_fraction(spin * -0.01f, &scratch);
     quad.texture_coordinates[0][0] = u;
-    quad.texture_coordinates[1][0] = u + 1.0f;
     quad.texture_coordinates[2][0] = u;
     quad.texture_coordinates[3][0] = u + 1.0f;
+    quad.texture_coordinates[1][0] = u + 1.0f;
     v = split_float_fraction(spin * -0.02f, &scratch);
     quad.texture_coordinates[0][1] = v;
-    quad.texture_coordinates[2][1] = v + 1.0f;
-    alpha_step = (end_alpha - row_alpha) * 0.0625f;
-    step = ang * 0.0625f;
     quad.texture_coordinates[1][1] = v;
-    quad.texture_coordinates[3][1] = v + 1.0f;
+    v += 1.0f;
+    quad.texture_coordinates[3][1] = v;
+    quad.texture_coordinates[2][1] = v;
+    end_alpha -= row_alpha;
+    alpha_step = end_alpha * 0.0625f;
+    step = scratch.f[1] * 0.0625f;
     do {
         qcopy(&quad.positions[2], &center);
-        qcopy(&quad.positions[3], &center);
+        qcopy(&quad.positions[3], &quad.positions[2]);
+
         next_angle = angle + 0.3926991f;
-        row_alpha = alpha;
-        quad.colors[2] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * alpha) << 24) | scratch.i[3];
-        limit = ang - 1.5707964f;
+        row_alpha = scratch.f[2];
+        quad.colors[2] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | scratch.i[3];
+
         latitude = step + -1.5707964f;
         quad.colors[3] = quad.colors[2];
-        if (latitude <= limit) {
+        if (latitude <= (limit = scratch.f[1] - 1.5707964f)) {
+            float z_adjustment = 0.375f;
+            u32 inner_color = color | 0x404040;
             do {
                 qcopy(&quad.positions[0], &quad.positions[2]);
                 qcopy(&quad.positions[1], &quad.positions[3]);
                 row_alpha += alpha_step;
                 quad.colors[0] = quad.colors[2];
                 quad.colors[1] = quad.colors[3];
-                quad.colors[2] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | (color | 0x404040);
-                quad.colors[3] = quad.colors[2];
+                quad.colors[3] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | inner_color;
+                quad.colors[2] = quad.colors[3];
                 wrapped = FUN_L00_0025e310(angle + spin * 0.02f);
                 build_spherical_offset(&quad.positions[2], radius, wrapped, latitude);
                 wrapped = fast_add_rotations(wrapped, 0.3926991f);
@@ -110,8 +115,8 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
                     quad.positions[2].f[2] += 0.6f;
                     quad.positions[3].f[2] += 0.6f;
                 } else {
-                    quad.positions[2].f[2] -= 0.375f;
-                    quad.positions[3].f[2] -= 0.375f;
+                    quad.positions[2].f[2] -= z_adjustment;
+                    quad.positions[3].f[2] -= z_adjustment;
                 }
                 latitude += step;
                 add_vector_xyz(&quad.positions[2], &quad.positions[2], &position);
@@ -1179,10 +1184,10 @@ void FUN_L07_00314150(unsigned char *moby) {
             near = 0;
             if (!path_point_ready && target_distance < 20.0f) near = 1;
             moving = frame_time * 0.01f < spd;
-            if (hit != 4) {
+            if (hit == 4) {
+                if (moving) hit = 4;
+            } else {
                 hit = 2;
-            } else if (moving) {
-                hit = 4;
             }
             if ((hit == 4) || !moving) {
                 data[0x1F7] = scale_ticks(0x5A);
@@ -1927,10 +1932,12 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
     Vec4 offset;
     Vec4 previous;
     Vec4 previous_cross;
-    float zero, one;
+    float zero;
+    volatile float one;
     float minimum;
     float fraction;
     float swing_fraction;
+    float wave_scale;
     float length;
     float angle;
     float turn;
@@ -1978,8 +1985,8 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
     swing_fraction = (float)D_L07_00161B80 / convert_integer_to_float(scale_game_frames(60));
     D_L07_00161B80++;
     step.f[0] = start.f[0] + (end.f[0] - start.f[0]) * swing_fraction;
-    step.f[2] = start.f[2] + (end.f[2] - start.f[2]) * swing_fraction;
     step.f[1] = start.f[1] + (end.f[1] - start.f[1]) * swing_fraction;
+    step.f[2] = start.f[2] + (end.f[2] - start.f[2]) * swing_fraction;
     if (scale_game_frames(60) <= D_L07_00161B80) {
         qcopy(D_L07_00161B90, D_L07_00161BA0);
         normalize_vector_xyz(&up, (char *)moby + 0xc0, 2.8f);
@@ -1996,7 +2003,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         D_L07_00161B80 = 0;
     }
     (*(float *)&D_L07_00161B84_gp) = fast_add_rotations((*(float *)&D_L07_00161B84_gp), 0.1f);
-    normalize_vector_xyz(&up, D_0013F5E0, -1.0f);
+    normalize_vector_xyz(&up, D_0013F3D0 + 0x210, -1.0f);
     qcopy(&ring_basis.reference, &up);
     fast_vec_cross(&ring_basis.cross, &step, &ring_basis.reference);
     normalize_vector_xyz(&ring_basis.cross, &ring_basis.cross, 1.0f);
@@ -2006,11 +2013,11 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
     ring = (char *)&D_L07_0020DB00_c[14];
     do {
         scale_vector_xyz(&delta, point, 0.02f);
-        i--;
         transform_vector_by_basis(&delta, &delta, &ring_basis.matrix);
         add_vector_xyz(ring, D_L07_0020DB00_c, &delta);
         point = (char *)point + 16;
         ring += 16;
+        i--;
     } while (i >= 0);
     zero = 0.0f;
     i = 1;
@@ -2035,10 +2042,9 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         build_look_at_matrix(&extension, &delta, &velocity, turn);
         normalize_vector_xyz(&direction, &extension, 2.8f);
         lerp_vector(&extension, &extension, &direction, 1.0f);
-        length = vector_length_xyz(&extension);
-        if (3.9f < length) scale_vector_xyz(&extension, &extension, 3.9f / length);
-        index = (float)i;
-        if (i > 5) lerp_vector(&extension, &extension, &delta, index / convert_integer_to_float(10) + zero);
+        distance = vector_length_xyz(&extension);
+        if (3.9f < distance) scale_vector_xyz(&extension, &extension, 3.9f / distance);
+        if (i > 5) lerp_vector(&extension, &extension, &delta, (float)i / convert_integer_to_float(10) + zero);
         add_vector_xyz(point, prior, &extension);
         distance = FUN_L07_0029e6d8(&tangent, &center, &center, prior, point, zero);
         if (distance < minimum) minimum = distance;
@@ -2059,21 +2065,25 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         qcopy(&up, &point_basis.normal);
         ring = (char *)&D_L07_0020DB00_c[14] + i * 0x140;
         point = D_L07_0020C700;
-        phase = index * 0.7f;
-        i++;
+        phase = (float)i * 0.7f;
+        index = (float)i;
+        wave_scale = 0.25f;
+        next_column = i + 1;
         j = 0;
         do {
-            radius = index * 0.2f + 0.02f;
+            radius = index * 0.2f;
+            radius += 0.02f;
             j++;
             wave = fast_add_rotations((*(float *)&D_L07_00161B84_gp) + phase, 0.0f);
             wave = fast_sin(wave);
-            scale_vector_xyz(&offset, point, radius + radius * 0.25f * wave);
+            scale_vector_xyz(&offset, point, radius + radius * wave_scale * wave);
             transform_vector_by_basis(&offset, &offset, &point_basis.side);
             add_vector_xyz(ring, (char *)D_L07_0020DB00_c + point_offset, &offset);
             ring += 16;
             point = (char *)point + 16;
-        } while (j < 20);
+        } while (point != (void *)(D_L07_0020C700 + 20));
         normalize_vector_xyz(&step, &extension, 2.8f);
+        i = next_column;
     } while (i < 10);
     one = 1.0f;
     add_draw_callback(FUN_L07_00317910, moby);
@@ -2084,11 +2094,13 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         slot = (char *)(D_L07_0020C840_c + i);
         if (*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) == 0 && created < 5) {
             segment = 9;
-            alpha = D_L07_0020DBC8 + 9;
-            while (*alpha < 64) {
-                segment--;
-                if (segment < 0) break;
-                alpha--;
+            if (D_L07_0020DBC8[9] < 64) {
+                alpha = D_L07_0020DBC8 + 9;
+                do {
+                    segment--;
+                    if (segment < 0) break;
+                    alpha--;
+                } while (*alpha < 64);
             }
             if (segment > 0) {
                 if (segment > 1 && extras < 2) {
@@ -2149,26 +2161,26 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
                 fraction = *(float *)((char *)D_L07_0020C840_c + 4 + i * 24) / length;
                 if (*(short *)((char *)D_L07_0020C840_c + 0 + i * 24) == 2) *(short *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 10) = 100;
                 else if (*(short *)((char *)D_L07_0020C840_c + 0 + i * 24) < 2) {
-                    *(short *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 10) = truncate_float_to_s32((1.0f - fraction) * 100.0f);
+                    *(short *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 10) = truncate_float_to_s32((one - fraction) * 100.0f);
                     if (*(short *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 10) < 61) *(short *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 10) = 60;
                 }
                 if (*(short *)((char *)D_L07_0020C840_c + 0 + i * 24) == 1) {
                     subtract_vector_xyz(&basis, anchor, *(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 16);
                     normalize_vector_xyz(&basis, &basis, *(float *)((char *)D_L07_0020C840_c + 16 + i * 24));
                     add_vector_xyz(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 16, *(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 16, &basis);
-                    *(float *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 12) *= frame_scale * -0.050000012f + 1.0f;
+                    *(float *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 12) *= frame_scale * -0.050000012f + one;
                 } else {
                     scale_vector_xyz(&delta, &delta, fraction);
                     segment = *(short *)((char *)D_L07_0020C840_c + 0 + i * 24);
                     add_vector_xyz(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 16, D_L07_0020DB00_c[segment], &delta);
                     column = *(short *)((char *)D_L07_0020C840_c + 2 + i * 24);
-                    ring = (char *)&D_L07_0020DB00_c[14] + segment * 0x140;
-                    subtract_vector_xyz(&basis, ring + column * 16, D_L07_0020DB00_c[segment]);
-                    subtract_vector_xyz(&velocity, ring + column * 16 - 0x140, D_L07_0020DAF0_c[segment]);
+                    ring = (char *)&D_L07_0020DB00_c[14];
+                    subtract_vector_xyz(&basis, ring + column * 16 + segment * 0x140, D_L07_0020DB00_c[segment]);
+                    subtract_vector_xyz(&velocity, (char *)&D_L07_0020DB00_c[0] + segment * 0x140 + column * 16 - 0x60, D_L07_0020DAF0_c[segment]);
                     interpolate_vector(&extension, &basis, &velocity, fraction);
                     next_column = (column + 19) % 20;
-                    subtract_vector_xyz(&direction, ring + next_column * 16, D_L07_0020DB00_c[segment]);
-                    subtract_vector_xyz(&tangent, ring + next_column * 16 - 0x140, D_L07_0020DAF0_c[segment]);
+                    subtract_vector_xyz(&direction, ring + next_column * 16 + segment * 0x140, D_L07_0020DB00_c[segment]);
+                    subtract_vector_xyz(&tangent, (char *)&D_L07_0020DB00_c[0] + segment * 0x140 + next_column * 16 - 0x60, D_L07_0020DAF0_c[segment]);
                     interpolate_vector(&point_basis.side, &direction, &tangent, fraction);
                     interpolate_vector(&extension, &extension, &point_basis.side, *(float *)((char *)D_L07_0020C840_c + 8 + i * 24));
                     blend = *(float *)((char *)D_L07_0020C840_c + 8 + i * 24) + *(float *)((char *)D_L07_0020C840_c + 12 + i * 24);

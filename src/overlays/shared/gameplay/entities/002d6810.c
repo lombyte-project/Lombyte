@@ -139,12 +139,13 @@ void FUN_L15_002d6810(unsigned char *moby) {
         return;
     }
     switch (moby[0x20]) {
-    case 0:
+    case 0: {
+        int i;
         triggers = (int *)((char *)data + 0x60);
             moby[0x30] = 0xff; p = (int *)data; i = 3;
             do {
                 if (*p != -1) {
-                    other = moby_array + *p * 0x100;
+                    other = (char *)(*p * 0x100 + (int)moby_array);
                     if (*(short *)(other + 0xa6) == 0x33e) {
                         D_L15_001BB024[*(short *)(other + 0xb2)] = 0;
                         D_L15_001BBC84[*(short *)(moby_array + *p * 0x100 + 0xb2)] = 0;
@@ -159,7 +160,9 @@ void FUN_L15_002d6810(unsigned char *moby) {
             } while (--i >= 0);
             RESET_TIMERS(); DATA_INT(0x120) = -1; DATA_INT(0x80) = -1; DATA_INT(0x14) = -1;
             goto finish;
-    case 1:
+    }
+    case 1: {
+        int *p; int i;
         found = 0;
         active = FUN_L15_002d6770();
         if (FUN_001f9770((char *)data + 0x10)) {
@@ -197,14 +200,15 @@ next_path:      i -= 8; p += 8;
                 if (count > 1) {
                     index = random_int_between(0, count - 2);
                     *(u128 *)((char *)data + 0xf0) = *(u128 *)(D_L15_001600EC + best[index] * 0x80 + 0x30);
-                    *(u128 *)((char *)data + 0x110) = *(u128 *)(D_L15_001600EC + best[index+1] * 0x80 + 0x30);
-                    *(u128 *)((char *)data + 0x100) = *(u128 *)((char *)data + 0x110);
+                    *(u128 *)((char *)data + 0x100) = *(u128 *)(D_L15_001600EC + best[index+1] * 0x80 + 0x30);
+                    *(u128 *)((char *)data + 0x110) = *(u128 *)((char *)data + 0x100);
                     if (DATA_INT(0x120) == -1) DATA_INT(0x120) = FUN_L00_0023e738(8.0f, 0.0f, 1.0f, 1.0f, 0.5f, (char *)data + 0xf0);
                     else {
+                        char *other;
                         other = (char *)D_L15_001808C0 + DATA_INT(0x120) * 0x20;
                         qcopy(other + 0x10, (char *)data + 0xf0);
-                        *(float *)(other + 0x1c) = 8.0f; *(float *)(other + 4) = 1.0f;
-                        *(float *)(other + 8) = 0.5f; *(int *)(other + 12) = 0; *(float *)other = 1.0f;
+                        *(float *)(other + 0x1c) = 8.0f; *(float *)other = 1.0f;
+                        *(float *)(other + 4) = 1.0f; *(float *)(other + 8) = 0.5f; *(int *)(other + 12) = 0;
                     }
                     FUN_L15_002d79e8((char *)moby); FUN_L15_002d7bb0((struct Moby *)moby); enqueue_callback_list_1(FUN_L15_002d8710, moby);
                 }
@@ -221,7 +225,7 @@ next_path:      i -= 8; p += 8;
                 ((unsigned char *)data)[0x88] = D_L15_0015F444; ((unsigned char *)data)[0x89] = D_L15_0015F445; ((unsigned char *)data)[0x8a] = D_L15_0015F446;
             }
             DATA_INT(0x1c)++;
-            D_L15_0015F446 = 0x7f; D_L15_0015F444 = 0x7f; D_L15_0015F445 = 0x7f;
+            D_L15_0015F446 = D_L15_0015F445 = D_L15_0015F444 = 0x7f;
             D_L15_0015F44C = 131072.0f; *(int *)&D_L15_0015F448_gp = 0;
             D_L15_0015F450 = random_float_between(128.0f, 255.0f); *(int *)&D_L15_0015F454_gp = 0;
             radius = random_float_between(5.0f, 8.0f); angle = random_angle_radians(); rotation = random_angle_radians();
@@ -244,6 +248,7 @@ next_path:      i -= 8; p += 8;
             }
         }
         goto target_selection;
+    }
     case 2:
         triggers = (int *)((char *)data + 0x60);
         goto target_selection;
@@ -253,7 +258,8 @@ next_path:      i -= 8; p += 8;
         triggers = (int *)((char *)data + 0x60);
         goto finish;
     }
-target_selection:
+target_selection: {
+    int i;
     target = 0; p = (int *)((char *)data + 0x74); i = 2;
     do {
         if (*p != -1) {
@@ -278,7 +284,7 @@ next_target: p++;
     p = (int *)data; i = 3;
     do {
         if (*p != -1) {
-            other = moby_array + *p * 0x100;
+            other = (char *)(*p * 0x100 + (int)moby_array);
             if (!(*(short *)(other + 0xa6) == 0x33e && (unsigned char)other[0x20] == 2)) {
                 if (*p == -1 || !FUN_L11_0030f270(moby_array + *p * 0x100)) goto next_moby;
             }
@@ -288,7 +294,9 @@ next_target: p++;
 next_moby: p++;
     } while (--i >= 0);
     goto finish;
-state_three:
+}
+state_three: {
+    int *p; int i;
         triggers = (int *)((char *)data + 0x60);
             p = (int *)((char *)data + 0x74); i = 2;
             do { if (*p != -1) FUN_L00_002502f0(moby_array + *p * 0x100, 0x40, 0x40, 0x40); p++; } while (--i >= 0);
@@ -297,7 +305,7 @@ state_three:
             if (DATA_INT(0x84)) { STOP_VOICE(0x14); STOP_VOICE(0x80); DATA_INT(0x84) = 0; }
             p = (int *)data; i = 3;
             do {
-                if (*p != -1 && D_0013F64C == (int)(D_L15_0015FFD8 + *p * 0x100) && *(short *)(D_0013F64C + 0xa6) == 0x33e && D_0013F65E == 0) {
+                if (*p != -1 && (int)hero.ground_moby == (int)(D_L15_0015FFD8 + *p * 0x100) && *(short *)((int)hero.ground_moby + 0xa6) == 0x33e && hero.air_frames.s == 0) {
                     ready = 0;
                     if (DATA_INT(0x8c)) {
                         int timer = DATA_SHORT(0x12);
@@ -312,14 +320,15 @@ state_three:
                 p++;
             } while (--i >= 0);
             DATA_INT(0x8c) = ready;
-            if (!FUN_001f9770((char *)data + 0x12) && !(is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x70)) && D_0013F65E == 0) && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x128))) goto finish;
+            if (!FUN_001f9770((char *)data + 0x12) && !(is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x70)) && hero.air_frames.s == 0) && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x128))) goto finish;
             p = (int *)data; i = 3;
-            do { if (*p != -1) { other = moby_array + *p * 0x100; if (*(short *)(other + 0xa6) == 0x33e) other[0x20] = 1; else FUN_L15_002d95a0(other); } p++; } while (--i >= 0);
+            do { if (*p != -1) { other = (char *)(*p * 0x100 + (int)moby_array); if (*(short *)(other + 0xa6) == 0x33e) other[0x20] = 1; else FUN_L15_002d95a0(other); } p++; } while (--i >= 0);
             RESET_TIMERS(); goto finish;
+}
 
 finish:
     data = triggers; i = 3; other = (char *)&hero;
-    do { if (is_point_inside_clip_volume(&hero.motion.pos, *data) && FUN_L00_0020d568()) ((struct Hero *)other)->water_surface_z = *(float *)(D_L15_001600EC_gp + *data * 0x80 + 0x38); data++; } while (--i >= 0);
+    do { if (is_point_inside_clip_volume(((char *)other + 0x80), *data) && FUN_L00_0020d568()) ((struct Hero *)other)->water_surface_z = *(float *)(D_L15_001600EC_gp + *data * 0x80 + 0x38); data++; } while (--i >= 0);
 }
 #undef DATA_INT
 #undef DATA_SHORT

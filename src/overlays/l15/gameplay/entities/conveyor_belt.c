@@ -1073,7 +1073,7 @@ void FUN_L15_002ec760(struct Moby *moby) {
         moby->state = 1;
         *(float *)(data + 0xc) = 20.0f;
         FUN_00255e88(moby, data);
-        if (*(unsigned char *)(*(int *)(data + 0x280) + D_L15_0015ED84 * 0x10 + 0x14c050) == 0xff) {
+        if (D_0014C050_v[*(int *)(data + 0x280) + D_L15_0015ED84 * 0x10] == 0xff) {
             if (D_0013DD50 == 0) {
                 moby->state = 3;
                 if (D_L15_0015FFE4 != 0) {
@@ -1194,7 +1194,7 @@ void FUN_L15_002ec760(struct Moby *moby) {
 ready:
     if (FUN_001f86a0(data + 0x278)) {
         float angle = 0.017453292f;
-        *(int *)(data + 0x278) = FUN_001f99c8(random_float_between(180.0f, 300.0f) * D_0015ED68);
+        *(int *)(data + 0x278) = FUN_001f99c8(scale_time(random_float_between(180.0f, 300.0f)));
         turn = FUN_001f9860(moby->rot.z, random_float_between(-90.0f, 90.0f) * angle);
         FUN_00252348(6.0f, turn, random_float_between(0.0f, 30.0f) * angle, data + 0x260);
         FUN_001f89f0(data + 0x260, data + 0x260, pos);

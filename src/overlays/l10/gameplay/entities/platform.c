@@ -421,10 +421,11 @@ extern struct Moby *D_L10_0015FFD8;
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern unsigned char D_001413F4[];
-extern float D_0013F3D0[];
+extern char D_0013F3D0[];
 extern int D_L10_001618A8 __attribute__((sda));
 #define D_001618A8 (*(int *)0x001618a8)
-#define D_00167280 (*(char **)0x00167280)
+extern struct { char pad[0x180]; char *effect; } D_L10_00167100;
+#define D_00167280 D_L10_00167100.effect
 extern int D_001618A0 __asm__("D_L10_001618A0") __attribute__((sda));
 extern int D_001618A4 __asm__("D_L10_001618A4") __attribute__((sda));
 extern int FUN_001f96f8(int);
@@ -452,7 +453,8 @@ void FUN_L10_002be858(unsigned char *moby) {
     int *data = *(int **)(moby + 0x78);
     float position[4];
     float velocity[4];
-    float offset[4];
+    float offset_buffer[4];
+    float *offset;
     float angle;
     int i;
     if ((unsigned char)moby[0x20] == 0) {
@@ -462,6 +464,7 @@ void FUN_L10_002be858(unsigned char *moby) {
         moby[0x20] = 1;
     }
     if (hero.vehicle_mode == 1 && *data != -1 && vector_distance(moby + 0x10, &hero.motion.pos) < 0.5f) {
+        offset = offset_buffer;
         i = 9;
         do {
             float size, size_scaled;
@@ -535,10 +538,11 @@ void FUN_L10_002be858(unsigned char *moby) {
             position[2] += convert_integer_to_float(i) * 0.1f * 0.0625f + 1.8f;
             effect = (char *)FUN_L00_002715e8(position, 0, 0x1eff7f40, 0.0f, D_0015ED6C * 315000.0f);
             if (effect != 0) {
+                float size = frame_time;
                 float *velocity = (float *)(effect + 0x20);
                 velocity[0] = 0.0f;
                 velocity[1] = 0.0f;
-                velocity[2] = frame_time * -1.5f;
+                velocity[2] = size * -1.5f;
             }
         }
     }
@@ -1994,7 +1998,7 @@ void FUN_L10_002da690(void *moby) {
     int group_age;
     char *age_base;
     char *ages;
-    int group_vertices;
+    unsigned short group_vertices;
     float *matrix1;
     int next_group, next_row;
     float *matrix2, *uv1, *uv2;

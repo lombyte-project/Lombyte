@@ -169,13 +169,20 @@ void FUN_L05_0030de90(char *moby) {
     float angle, blend;
     int color0, color1;
     int i, j, k;
+    int height;
     short *list;
     int offset;
     char *entry;
-    struct GeometryQuad *a, *b;
+    struct GeometryQuad *a, *b, *end;
+    float *u, *v;
+    u32 *colors;
     angle = (convert_integer_to_float(D_L05_0015F5CC_e[2] & 63) / 63.0f) * 6.28318f;
+    u = &quads[0][0].texture_coordinates[0][0];
+    v = &quads[0][0].texture_coordinates[0][1];
+    colors = quads[0][0].colors;
     i = 0;
     do {
+        height = i + 1;
         blend = (angle_sin(angle) + 1.0f) * 0.5f;
         color0 = fast_tween_color(D_L05_00161D3C, D_L05_00161D40, blend);
         color1 = fast_tween_color(D_L05_00161D44, D_L05_00161D48, blend);
@@ -183,27 +190,50 @@ void FUN_L05_0030de90(char *moby) {
         j = 0;
         do {
             u64 texture = get_effect_texture(D_L05_00161D98);
-            struct GeometryQuad *quad = &quads[j][i];
-            quad->primitive = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) |
-                ((s64)D_L05_00161D78 << 4) | ((s64)D_L05_00161D7C << 6) | 0x8000000000ULL;
-            quad->texture = texture;
-            quad->texture_state = 0xff9000000260ULL;
-            quad->reserved.value = 0;
-            k = 0;
-            do {
-                quad->texture_coordinates[k][0] = D_L05_0020B740[k][0];
-                quad->texture_coordinates[k][1] = D_L05_0020B740[k][1];
-                if (j == 0) {
-                    quads[0][i].colors[k] = color1;
-                    quads[0][i].positions[k].q = D_L05_0020B7A0[k].q;
-                    quads[0][i].positions[k].f[2] += (float)(i + 1);
-                } else {
-                    quad->colors[k] = color0;
-                    quad->positions[k].q = D_L05_0020B760[k].q;
-                    quad->positions[k].f[2] += (float)(i + 1);
-                }
-                k++;
-            } while (k < 4);
+            /* Each 0x90-byte record spans 18 flag words or 36 float words. */
+            u64 *flags = (u64 *)quads;
+            *(volatile u64 *)&flags[i * 18 + j * 90 + 17] = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) |
+                (((s64)D_L05_00161D78 << 4) | ((s64)D_L05_00161D7C << 6)) | 0x8000000000ULL;
+            *(volatile u64 *)&flags[i * 18 + j * 90 + 15] = texture;
+            flags[i * 18 + j * 90 + 16] = 0xff9000000260ULL;
+            *(volatile u64 *)&flags[i * 18 + j * 90 + 14] = 0;
+            {
+                Vec4 *positions0 = (Vec4 *)((float *)quads + i * 0x24);
+                Vec4 *positions = (Vec4 *)((float *)quads + i * 36 + j * 180);
+                Vec4 *source0 = D_L05_0020B7A0;
+                Vec4 *source = D_L05_0020B760;
+                u32 *colors0 = colors + i * 0x24;
+                u32 *color = colors + i * 36 + j * 180;
+                float *uv = D_L05_0020B740[0];
+                float *uv0 = (float *)((char *)u + j * 0x2d0 + i * 0x90);
+                float *uv1 = (float *)((char *)v + j * 0x2d0 + i * 0x90);
+                k = 3;
+                do {
+                    float x = uv[0];
+                    float y = uv[1];
+                    *uv0 = x;
+                    *uv1 = y;
+                    if (j != 0) {
+                        *color = color0;
+                        qcopy(positions, source);
+                        positions->f[2] += (float)height;
+                    } else {
+                        *colors0 = color1;
+                        qcopy(positions0, source0);
+                        positions0->f[2] += (float)height;
+                    }
+                    positions0++;
+                    source0++;
+                    colors0++;
+                    positions++;
+                    source++;
+                    color++;
+                    uv1 += 2;
+                    uv0 += 2;
+                    k--;
+                    uv += 2;
+                } while (k >= 0);
+            }
             j++;
         } while (j < 2);
         i++;
@@ -211,20 +241,20 @@ void FUN_L05_0030de90(char *moby) {
     list = D_L05_001ABCC0[(unsigned char)moby[0x21]];
     do {
         offset = (*list & 0x7fff) << 8;
-        entry = *(char **)&D_L05_0015FFD8_d + offset;
+        entry = (char *)(offset + *(int *)&D_L05_0015FFD8_d);
         if (*(short *)(entry + 0xa6) == 0x346 && (unsigned char)entry[0x20] == 1) {
             copy_matrix_rotation(matrix, entry + 0xc0);
-            entry = *(char **)&D_L05_0015FFD8_d + offset;
-            qcopy(matrix[3], entry + 0x10);
+            qcopy(matrix[3], (char *)(offset + *(int *)&D_L05_0015FFD8_d) + 0x10);
             matrix[3][3] = 1.0f;
-            a = quads[0];
             b = quads[1];
+            end = b;
+            a = quads[0];
             do {
                 fast_draw_quad_real(a, matrix, 0);
                 fast_draw_quad_real(b, matrix, 0);
                 a++;
                 b++;
-            } while ((int)a < (int)quads[1]);
+            } while ((int)a < (int)end);
         }
     } while (*list++ >= 0);
 }

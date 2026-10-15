@@ -54,7 +54,280 @@ int FUN_L06_0021d0a0(int a) {
         return D_L06_0017A240[i].v;
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_0021e1a0.s", FUN_L06_0021e1a0);
+#else
+#include "qcopy.h"
+#include "rnc/overlay/quad.h"
+extern char D_0013F350_lui[] __asm__("D_0013F350") __attribute__((section(".data")));
+/* Separate linker alias keeps GP and macro accesses independent in SN. */
+extern f32 D_0015ED60_gp __asm__("D_0015ED60_gp") __attribute__((sda));
+extern f32 D_0015EE18_macro __asm__("D_0015EE18") __attribute__((section(".sdata")));
+extern volatile f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
+extern s32 D_L06_0015F5CC_macro __asm__("D_L06_0015F5CC") __attribute__((section(".sdata")));
+extern f32 D_L06_0017BFDC_lui __asm__("D_L06_0017BFDC") __attribute__((section(".data")));
+extern void FUN_L00_00232670(void);
+extern void FUN_L00_00211670(void);
+extern void FUN_L06_00222fb8(void);
+extern void FUN_L00_0020bed0_u(void) __asm__("FUN_L00_0020bed0");
+extern void FUN_L00_00215b68(void);
+extern void FUN_L06_0023b440(void);
+extern void FUN_L00_00216f10(void);
+extern void FUN_L00_002054e8(void);
+extern void FUN_L00_00208a10(void);
+extern void FUN_L00_00207c48(void);
+extern void FUN_L00_00207a58(void);
+extern void FUN_L00_002059d8(void);
+extern void FUN_L00_00207d00(void);
+extern void FUN_L00_00208b60(void);
+extern void FUN_L00_002484e0(void *);
+extern void FUN_L00_00257024(int);
+extern void FUN_L00_00250df8(void *);
+extern void FUN_L00_0024f7c8(void *, s32, void *);
+extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
+extern void *create_moby(s32) __asm__("FUN_0020c4f8");
+extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void allocate_voice_for_target_entry(void *, s32, void *) __asm__("FUN_0022da68");
+extern void FUN_L00_00216de8(s32, s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
+extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
+extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
+extern void approach_value(f32, f32, void *) __asm__("FUN_00213ed8");
+
+void FUN_L06_0021e1a0(void) {
+    char *g;
+    char *moby;
+    /* The two transform paths reuse the retail 0xA0-byte scratch region. */
+    union {
+        OvlQuad rotation[10];
+        struct {
+            OvlQuad reserved;
+            OvlQuad transform[4];
+            OvlQuad offset;
+            OvlQuad inverse[4];
+        } help;
+    } scratch;
+    f32 phase, scale, wave;
+    s32 i, span, red, green, blue, alpha;
+    s32 color, color2;
+
+    FUN_L00_00232670();
+    FUN_L00_00211670();
+    FUN_L06_00222fb8();
+    g = (char *)&hero;
+    if (*(u8 *)(g + 0x20a4) == 1) {
+        FUN_L00_0020bed0_u();
+        FUN_L00_00215b68();
+    }
+    FUN_L06_0023b440();
+    if (*(u8 *)(g + 0x20a4) == 0) return;
+    FUN_L00_00216f10();
+    FUN_L00_002054e8();
+    if (*(u8 *)(g + 0x20a4) == 0) return;
+    FUN_L00_00208a10();
+    FUN_L00_00207c48();
+    FUN_L00_00207a58();
+    if (*(u8 *)(g + 0x20a4) == 1) {
+        D_L06_0017BFDC_lui = D_0015EE18_macro;
+        FUN_L00_002059d8();
+        if (*(char **)(g + 0x1624) == 0) {
+            *(char **)(g + 0x1624) = create_moby(0x4b4);
+            if (*(char **)(g + 0x1624)) {
+                char *moby = *(char **)(g + 0x1624);
+                *(u32 *)(moby + 0x90) = 0x801432d7;
+                *(u32 *)(g + 0x2300) = 0x301432d7;
+                moby = *(char **)(g + 0x1624);
+                qcopy(moby + 0x10, g + 0x80);
+                qcopy(moby + 0x40, g + 0x90);
+                *(u16 *)(moby + 0x32) = 0x40;
+                (*(char **)(g + 0x1624))[0x31] = 1;
+                (*(char **)(g + 0x1624))[0x30] = 0;
+                *(u16 *)(*(char **)(g + 0x1624) + 0x34) = 0;
+                *(f32 *)(*(char **)(g + 0x1624) + 0x2c) *= 1.7f;
+                *(u16 *)(*(char **)(g + 0x1624) + 0x34) |= 0x10;
+                FUN_L00_00250df8(*(char **)(g + 0x1624));
+            }
+        }
+        {
+            char *g = (char *)&hero;
+            if ((*(u16 *)(*(char **)(g + 0x2080) + 0x34) ^ 1) & 1) {
+                FUN_L00_0024f7c8(*(char **)(g + 0x2080), 7, scratch.rotation);
+                qcopy(g + 0x1d80, &scratch.rotation[0]);
+                FUN_L00_00207d00();
+                if (*(char **)(g + 0x1624) != 0) {
+                    build_moby_bone_transform(*(char **)(g + 0x2080), 7, scratch.help.transform);
+                    qcopy_nc(*(char **)(g + 0x1624) + 0x10, &scratch.help.transform[3]);
+                    copy_matrix3x4(*(char **)(g + 0x1624) + 0xc0, scratch.help.transform);
+                    scratch.help.offset = 0;
+                    ((f32 *)&scratch.help.offset)[2] = 0.0257f;
+                    transform_vector_by_basis(&scratch.help.offset, &scratch.help.offset, *(char **)(g + 0x1624) + 0xc0);
+                    *(f32 *)(*(char **)(g + 0x1624) + 0x18) -= ((f32 *)&scratch.help.offset)[2];
+                    FUN_L00_00250df8(*(char **)(g + 0x1624));
+                    scale = 1.7f;
+                    if (D_0015EDB3_macro) scale = 3.1f;
+                    if (*(s16 *)(g + 0x22fc)) scale *= 1.4f;
+                    approach_value(*(f32 *)(*(char **)(*(char **)(g + 0x1624) + 0x24) + 0x24) * scale, 0.02f, *(char **)(g + 0x1624) + 0x2c);
+                }
+            }
+        }
+        {
+            char *g = (char *)&hero;
+            color = 0x281414c8;
+            color2 = 0x1e00004b;
+            {
+                char *g = (char *)&hero;
+                *(f32 *)(g + 0x1628) = fast_add_rotations(*(f32 *)(g + 0x1628), frame_time_macro * 2.9670596f);
+            }
+            if (fast_dec_timer_s16(g + 0x22fc) == 0) {
+                char *g = (char *)&hero;
+                *(f32 *)(g + 0x1628) = fast_add_rotations(*(f32 *)(g + 0x1628), frame_time_macro * 12.217304f);
+                switch (*(s16 *)(g + 0x22fe)) {
+                case 1: color = 0x2814c814; color2 = 0x1e004b00; break;
+                case 2: color = 0x2814c8c8; color2 = 0x1e004b4b; break;
+                case 3: color = 0x323232fa; color2 = 0x1e000078; break;
+                case 4: color = 0x28f01414; color2 = 0x1e4b0000; break;
+                }
+            }
+            {
+                char *g = (char *)&hero;
+                wave = fast_sin(*(f32 *)(g + 0x1628));
+                color = fast_tween_color(wave * 0.5f + 0.5f, color, color2);
+                if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = fast_tween_color(D_0015ED60_gp * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), color);
+                *(u32 *)(g + 0x2300) = fast_tween_color(frame_scale_macro * 0.1f, *(u32 *)(g + 0x2300), color);
+                if (*(char **)(g + 0x1620) == 0) {
+                    *(char **)(g + 0x1620) = create_moby(0x47a);
+                    if (*(char **)(g + 0x1620)) {
+                        char *moby = *(char **)(g + 0x1620);
+                        qcopy(moby + 0x10, g + 0x80);
+                        qcopy(moby + 0x40, g + 0x90);
+                        *(u16 *)(moby + 0x32) = 0x40;
+                        (*(char **)(g + 0x1620))[0x31] = 1;
+                        (*(char **)(g + 0x1620))[0x30] = 0;
+                        *(u16 *)(*(char **)(g + 0x1620) + 0x34) = 0;
+                        FUN_L00_00250df8(*(char **)(g + 0x1620));
+                    }
+                }
+                if (*(char **)(g + 0x1620)) {
+                    build_moby_bone_transform(*(char **)(g + 0x2080), 5, scratch.rotation);
+                    {
+                        OvlQuad *position = &scratch.rotation[3];
+                        char *moby = *(char **)(g + 0x1620);
+                        qcopy_nc(moby + 0x10, position);
+                        FUN_L00_00250df8(moby);
+                    }
+                    clear_u64_value((scratch.rotation + 4));
+                    ((f32 *)(scratch.rotation + 4))[2] = -*(f32 *)(g + 0x98);
+                    euler_rotation_matrix(scratch.help.inverse, (scratch.rotation + 4));
+                    multiply_matrix(scratch.rotation, scratch.rotation, scratch.help.inverse);
+                    copy_matrix3x4(*(char **)(g + 0x1620) + 0xc0, scratch.rotation);
+                    *(u64 *)(*(char **)(g + 0x1620) + 0x38) = *(u64 *)(*(char **)(g + 0x2080) + 0x38);
+                    if (*(s32 *)(g + 0x2084) == 0x4f) {
+                        if (*(u8 *)(*(char **)(g + 0x1620) + 0x53) != 1)
+                            blend_moby_animation(*(char **)(g + 0x1620), 1, 0, scale_game_frames(10));
+                    } else if (*(u8 *)(*(char **)(g + 0x1620) + 0x53) != 0) {
+                        blend_moby_animation(*(char **)(g + 0x1620), 0, 0, scale_game_frames(0x11));
+                    }
+                }
+            }
+        }
+        {
+            char *g = (char *)&hero;
+            if (*(char **)(g + 0x22c0)) {
+                allocate_voice_for_target_entry(*(char **)(g + 0x22c0) + 0x10, 0, *(char **)(g + 0x2080));
+                /* Retail copies the low halfword of this pending pointer. */
+                *(s16 *)(g + 0x22fe) = *(u16 *)(g + 0x22c0);
+                *(s16 *)(g + 0x22fc) = scale_game_frames(0x39);
+            }
+            *(u32 *)(g + 0x22c0) = 0;
+        }
+    }
+    FUN_L00_002484e0(&hero.motion.pos);
+    if (hero.vehicle_mode == 3) {
+        s32 color;
+        /* D_0015EDB1 is the byte two bytes before the checked D_0015EDB3 base. */
+        if (*((u8 *)&D_0015EDB3_macro - 2)) *(f32 *)((char *)&D_L06_0017BFDC_lui + 0x370) = 1.9f;
+        {
+            char *g = (char *)&hero;
+            alpha = 0x80;
+            span = scale_game_frames(0xaa);
+            if (*(s16 *)(g + 0x22e0) == 2) span = scale_game_frames(0x32);
+            else if (*(s16 *)(g + 0x22e0) == 1) span = scale_game_frames(0x5a);
+            phase = convert_integer_to_float(span);
+            phase = (f32)(D_L06_0015F5CC_macro % span) / phase;
+            wave = fast_sin((phase + phase) * 3.1415927f + -3.1415927f);
+        }
+        red = truncate_float_to_s32(wave * 20.0f) + 0x32;
+        green = truncate_float_to_s32(wave * 70.0f) + 0xb4;
+        blue = truncate_float_to_s32(wave * 10.0f) + 0x14;
+        {
+            char *g = (char *)&hero;
+            {
+                s32 span = red < 0x100;
+                s32 i = green < 0x100;
+                green = i ? green : 0xff;
+                *(u16 *)(*(char **)(g + 0x2080) + 0x34) |= 0x10;
+                red = span ? red : 0xff;
+            }
+            if (*(s16 *)(g + 0x22e0) == 2)
+                color = ((u32)alpha << 24) | ((u32)blue << 16) | ((u32)(red / 2) << 8) | (u32)green;
+            else
+                color = ((u32)alpha << 24) | ((u32)blue << 16) | ((u32)green << 8) | (u32)red;
+        }
+        {
+            char *g;
+            {
+                char *g = (char *)&hero;
+                *(u32 *)(*(char **)(g + 0x2080) + 0x90) = fast_tween_color(0.1f, *(u32 *)(*(char **)(g + 0x2080) + 0x90), color);
+            }
+            g = (char *)&hero;
+            for (i = 0; i < 3; i++)
+                FUN_L00_0024f7c8(hero.moby, i, g + 0x1d50 + i * 0x10);
+            g = (char *)&hero;
+            moby = *(char **)(g + 0x2080);
+            /* Retail snapshots these channels before the alpha helper calls. */
+            blue = *(u8 *)(moby + 0x92);
+            green = *(u8 *)(moby + 0x91);
+            red = *(u8 *)(moby + 0x90);
+            alpha = 0x30;
+            if (*(s16 *)(g + 0x22de))
+                alpha = truncate_float_to_s32(convert_integer_to_float(*(s16 *)(g + 0x22de)) / convert_integer_to_float(0x12) * (f32)alpha);
+            *(u32 *)(g + 0x22e4) = (alpha << 24) | ((u32)blue << 16) | ((u32)green << 8) | (u32)red;
+            FUN_L00_00207d00();
+            *(s16 *)(g + 0x22e0) = 0;
+            if (*(u8 *)(g + 0x20a4) == 3) {
+                if (*(s32 *)(g + 0x20b8) != 0 && *(s32 *)(g + 0x20b8) != 0x1f) {
+                    if (*(s16 *)(g + 0x22de) == 0) {
+                        FUN_L00_00216de8(0x19, 0);
+                        *(s16 *)(g + 0x22de) = 0x12;
+                        *(s16 *)(g + 0x22dc) = 1;
+                    }
+                } else {
+                    char *g = (char *)&hero;
+                    *(s32 *)(g + 0x20b8) = 0;
+                    if (*(u8 *)(g + 0x12e7) && *(s32 *)(g + 0x300) && *(u8 *)(D_0013F350_lui - 0x1e74) && *(s16 *)(g + 0x22de) == 0) {
+                        FUN_L00_00216de8(0x19, 0);
+                        *(s16 *)(g + 0x22de) = 0x12;
+                        *(s16 *)(g + 0x22dc) = 1;
+                    }
+                }
+            }
+        }
+    }
+    FUN_L00_00208b60();
+    FUN_L00_00257024((s32)hero.moby);
+}
+#endif
 #include "qcopy.h"
 
 #define NOT_SDA
@@ -515,7 +788,6 @@ skip:
 /* Ported from rac1-decomp (src/overlays/shared/help_0021D6B8.c: func_L06_00239CD0), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013E533[];
-extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 
 void FUN_L06_00239528(void) {
     switch (D_0013E533[0x2EC1]) {

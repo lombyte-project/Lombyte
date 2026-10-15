@@ -1061,19 +1061,22 @@ void FUN_L00_002e2c88(int a, int b, void *points, int alpha, int glow_alpha, int
     scale = 0.6f;
     glow.texture_coordinates[0][1] = 0.0f;
     zero = glow.texture_coordinates[0][1];
-    q.texture_coordinates[0][0] = D_L00_00161C78_f[idx] + zero;
-    q.texture_coordinates[2][0] = D_L00_00161C78_f[idx] + one;
-    glow_color = ((u32)glow_alpha << 24) | 0x7f4040;
-    texture3 = q.primitive; texture2 = q.texture_state; texture0 = q.reserved.value;
-    glow.texture_state = texture2; glow.primitive = texture3; glow.reserved.value = texture0;
-    glow.colors[0] = glow.colors[1] = glow.colors[2] = glow.colors[3] = glow_color;
-    glow.texture_coordinates[0][0] = one; glow.texture_coordinates[0][1] = zero;
-    glow.texture_coordinates[1][0] = one; glow.texture_coordinates[1][1] = one;
-    *(u32 *)&glow.texture_coordinates[2][0] = 0; *(u32 *)&glow.texture_coordinates[2][1] = 0;
-    *(u32 *)&glow.texture_coordinates[3][0] = 0; glow.texture_coordinates[3][1] = one;
-    q.texture_coordinates[1][0] = q.texture_coordinates[0][0]; q.texture_coordinates[0][1] = zero;
-    q.texture_coordinates[1][1] = one; q.texture_coordinates[3][0] = q.texture_coordinates[2][0];
-    q.texture_coordinates[2][1] = zero; q.texture_coordinates[3][1] = one;
+    {
+        f32 uv_start, uv_end;
+        uv_start = D_L00_00161C78_f[idx] + zero;
+        uv_end = D_L00_00161C78_f[idx] + one;
+        glow_color = ((u32)glow_alpha << 24) | 0x7f4040;
+        texture3 = q.primitive; texture2 = q.texture_state; texture0 = q.reserved.value;
+        glow.colors[0] = glow.colors[1] = glow.colors[2] = glow.colors[3] = glow_color;
+        glow.primitive = texture3; glow.texture_state = texture2; glow.reserved.ordered = texture0;
+        glow.texture_coordinates[0][0] = one; glow.texture_coordinates[0][1] = zero;
+        glow.texture_coordinates[1][0] = one; glow.texture_coordinates[1][1] = one;
+        *(u32 *)&glow.texture_coordinates[2][0] = 0; *(u32 *)&glow.texture_coordinates[2][1] = 0;
+        *(u32 *)&glow.texture_coordinates[3][0] = 0; glow.texture_coordinates[3][1] = one;
+        q.texture_coordinates[0][0] = uv_start; q.texture_coordinates[1][0] = uv_start; q.texture_coordinates[0][1] = zero;
+        q.texture_coordinates[1][1] = one; q.texture_coordinates[2][0] = uv_end; q.texture_coordinates[3][0] = uv_end;
+        q.texture_coordinates[2][1] = zero; q.texture_coordinates[3][1] = one;
+    }
     if (*(short *)(D_L00_00161C88_c2[idx] + 0xa6) == 0x1c) scale = 0.3f;
     width.q = 0; glow_width.q = 0;
     glow_width.f[2] = scale + scale;

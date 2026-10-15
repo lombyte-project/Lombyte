@@ -62,7 +62,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     active_fs_aa_buffer->giftag0.REGS0 = 0xE;
     sceGsSetDefDrawEnv(&active_fs_aa_buffer->draw1, fs_aa_buffer.storage_psm,
                        fs_aa_buffer.storage_width, fs_aa_buffer.storage_height, 0, 0);
-    *(volatile u64 *)&active_fs_aa_buffer->draw1.zbuf1 = (u64)1 << 32;
+    *(u64 *)&active_fs_aa_buffer->draw1.zbuf1 = (u64)1 << 32;
     active_fs_aa_buffer->draw1.frame1.FBP = fs_aa_buffer.fbp1;
     *(volatile u128 *)&active_fs_aa_buffer->giftag1 = 0;
     active_fs_aa_buffer->giftag1.NLOOP = 8;

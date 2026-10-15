@@ -1057,7 +1057,7 @@ void FUN_L07_0030b000(struct Moby *moby) {
             s32 k;
             while (j < path_count) {
                 k = j + 1;
-                *(f32 *)(path + 0x1c + j * 16) =
+                *(f32 *)(path + (j << 4) + 0x1c) =
                     fast_vec_dist(path + 0x10 + j * 16,
                                   path + 0x10 + (k % path_count) * 16);
                 j = k;
@@ -2779,7 +2779,9 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             if (moby[0x53] != 4) blend_moby_animation(moby, 4, 0, 10);
             moby[0x20] = 8;
         }
-        FUN_L07_0030f308(moby, data, 10, 5, 4, 4, 11, *(int *)(target + 16), 17.0f, 20.0f, 1.0f, 1.0f, 1.0f);
+        /* Preserve retail argument-bank order and call setup on the EE. */
+        ((void (*)(char *, char *, int, int, float, float, float, float, float, int, int, int, int))FUN_L07_0030f308)
+            ((char *)moby, data, 10, 5, 17.0f, 20.0f, 1.0f, 1.0f, 1.0f, 4, 4, 11, *(int *)(target + 16));
         if (moby[0x70] & 2) {
             if (moby[0x53] != 4) blend_moby_animation(moby, 4, 0, 10);
             *(int *)(data + 0x134) = rand_e50() % 200 + 300;
@@ -2802,7 +2804,9 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         goto bounds;
     case 14:
         if (FUN_L00_0025c698(moby, data + 0x70) & (moby[0x70] & 2)) {
-            FUN_L00_0025e450_l07(0.0f, 0.0f, 2.0f, 1.0f, 4.0f, 1.0f, 7.0f, (struct Moby *)moby, data + 0xd0, 0, 3, 3, 5, -1, 0, 1, -1, 0);
+            /* Preserve retail argument-bank order and call setup on the EE. */
+            ((void (*)(void *, float, void *, int, float, float, int, float, int, float, int, float, int, float, int, int, int, int))FUN_L00_0025e450_l07)
+                (moby, 0.0f, data + 0xd0, 0, 0.0f, 2.0f, 3, 1.0f, 3, 4.0f, 5, 1.0f, -1, 7.0f, 0, 1, -1, 0);
             goto remove;
         }
         goto bounds;

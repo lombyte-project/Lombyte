@@ -267,6 +267,7 @@ void draw_map_overlay(void) {
             s32 ax, ay, bx, by;
             struct MapIcon *icon;
             s32 inner_offset;
+            s32 inner_icon_offset;
             s32 inner_stride;
 
             /* The flag-4 entry terminates the list. Separate overlapping icon
@@ -281,10 +282,11 @@ void draw_map_overlay(void) {
                         goto next_outer_icon;
                     }
                     j = i + 1;
-                    inner_offset = j * inner_stride;
+                    inner_icon_offset = j * inner_stride;
+                    inner_offset = inner_icon_offset;
                     for (;
                          !(((struct MapIcon *)((u8 *)level_map_selection.icons + inner_offset))->flags & 4);
-                         j++, inner_offset += inner_stride) {
+                         j++, inner_offset += inner_stride, inner_icon_offset += sizeof(struct MapIcon)) {
                         pan_x = icon_bounds[j].x1 - icon_bounds[i].x0;
                         if (pan_x <= 0)
                             continue;
@@ -297,9 +299,10 @@ void draw_map_overlay(void) {
                         oy1 = icon_bounds[i].y1 - icon_bounds[j].y0;
                         if (oy1 <= 0)
                             continue;
-                        if (level_map_selection.icons[j].active == 0 ||
-                            level_map_selection.icons[j].texture_id == 0 ||
-                            (level_map_selection.icons[j].flags & 3)) {
+                        icon = (struct MapIcon *)((u8 *)level_map_selection.icons + inner_icon_offset);
+                        if (icon->active == 0 ||
+                            icon->texture_id == 0 ||
+                            (icon->flags & 3)) {
                             continue;
                         }
                         ax = 0;

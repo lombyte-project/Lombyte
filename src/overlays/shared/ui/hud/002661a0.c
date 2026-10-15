@@ -134,12 +134,13 @@ int FUN_L05_00266320(HudElem *e) {
     FUN_L00_001fb470(x, y, D_L05_0015F998, buf, -1);
     if (D_0015ED84 == 0x10) {
         int y2, x2;
+        int *y2_ptr = &y2;
         int count;
         sprintf(small_buf, D_L05_0015F860, hero.unk8CE);
         count = D_0015ED80;
-        y2 = D_0013D388[0];
+        *y2_ptr = D_0013D388[0];
         x2 = e->unk50;
-        if (y2 == 0) {
+        if ((u8)*y2_ptr == 0) {
             y2 = count ? 10 : 18;
         } else {
             x2 = D_L05_0015F9C0;

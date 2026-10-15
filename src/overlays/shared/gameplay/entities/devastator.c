@@ -1616,14 +1616,14 @@ extern Hero hero_2B33E8 __asm__("D_0013F350");
 extern unsigned char item_usage_2B33E8[] __asm__("D_00141680");
 extern char player_camera_2B33E8[] __asm__("D_L00_00166C80");
 extern char camera_pos_2B33E8[] __asm__("D_L00_00166DC0");
-extern float D_L00_0017ACF4_2B33E8 __asm__("D_L00_0017ACF4");
+extern float D_L00_0017ACF4_2B33E8 __asm__("D_L00_0017ACF4") __attribute__((section(".data")));
 extern int level_game_mode_2B33E8 __asm__("D_L00_0015F5C4") MACRO_ADDR;
 extern float frame_time_2B33E8 __asm__("D_0015ED6C") MACRO_ADDR;
 extern int play_frames_2B33E8 __asm__("D_0015EEA4") MACRO_ADDR;
 extern int current_level_index_2B33E8 __asm__("D_0015ED84") MACRO_ADDR;
 extern char controller_state_2B5C98[] __asm__("D_0013C940");
 extern u8 item_text_variant[] __asm__("D_0013E520");
-extern struct Moby *coll_hit_moby_2B5C98 __asm__("D_L00_00173E58") NOT_SDA;
+extern struct Moby *coll_hit_moby_2B5C98 __asm__("D_L00_00173E58") __attribute__((section(".data")));
 extern Light_2B5C98 point_lights_2B5C98[] __asm__("D_L00_001802C0");
 extern int func_001F9938_2B5C98(short *) __asm__("FUN_001f9770");
 extern int func_001F9908_2B5C98(int *) __asm__("FUN_001f9740");
@@ -1713,9 +1713,10 @@ void FUN_L00_002b49a8(struct Moby *moby) {
             func_L00_001EE2E0_2B5C98((int)moby, 0xFF0F0FFF, 1.0f, 0, 0.0f, 0x26, -1, 90.0f, 4);
             func_L00_001FF4B0_2B5C98(&reach, &velocity, 20.0f);
             func_001F9BD8_2B5C98(&end, &reach, &launch);
-            reach = end;
+            reach.q = end.q;
             if (func_L00_001EFFF0_2B5C98(player_camera_2B33E8 + 0x140, &reach, 0, (int)moby, 0)) {
-                if (coll_hit_moby_2B5C98 && (coll_hit_moby_2B5C98->flags & 0x1000)) target = coll_hit_moby_2B5C98;
+                target = coll_hit_moby_2B5C98;
+                if (target && !(target->flags & 0x1000)) target = 0;
             }
         }
     } else {
@@ -1797,7 +1798,7 @@ void FUN_L00_002b49a8(struct Moby *moby) {
                     work.spray.rnd.f.x = func_002140F8_2B5C98(-1.0f, 1.0f);
                     work.spray.rnd.f.y = func_002140F8_2B5C98(-1.0f, 1.0f);
                     work.spray.rnd.f.z = func_002140F8_2B5C98(-1.0f, 1.0f);
-                    work.spray.v = work.spray.rnd;
+                    work.spray.v.q = work.spray.rnd.q;
                     func_L00_001FF4B0_2B5C98(&work.spray.v, &work.spray.v, func_001F9CB8_2B5C98(&velocity) * 0.65f);
                     func_001F9BD8_2B5C98(&work.spray.v, &velocity, &work.spray.v);
                     func_L00_001FF4B0_2B5C98(&work.spray.v, &work.spray.v, func_002140F8_2B5C98(frame_time_2B33E8 * 3.0f, frame_time_2B33E8 * 6.0f));
@@ -1809,7 +1810,7 @@ void FUN_L00_002b49a8(struct Moby *moby) {
                     func_L00_00258BC8_2B5C98(func_001F9850_2B5C98(4), func_001F9850_2B5C98(7)), 200000.0f);
             }
             if (moby->prev_seq != 4) func_00213DE0_2B5C98(moby, 4, 0, func_001F9850_2B5C98(7));
-            stats = (Stats_2B5C98 *)(item_usage_2B33E8 + 0x65);
+            stats = (Stats_2B5C98 *)item_usage_2B33E8;
             if (stats->uses < 65535) stats->uses++;
             if (func_001F9850_2B5C98(play_frames_2B33E8) / 600 > stats->longest)
                 stats->longest = func_001F9850_2B5C98(play_frames_2B33E8) / 600;

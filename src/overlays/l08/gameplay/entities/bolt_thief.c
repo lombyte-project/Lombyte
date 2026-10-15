@@ -2053,9 +2053,9 @@ extern float func_001FA850_2E16A0(float, float) __asm__("FUN_001fa688");
 extern float func_001F9CE8_2E16A0(void *) __asm__("FUN_001f9b20");
 extern float func_00214D28_2E16A0(float *,float,float) __asm__("FUN_00213ed8");
 extern void func_001F49B0_2E16A0(void *,void *) __asm__("FUN_001f4600");
-extern void func_L00_0023A658_4BE8(void) __asm__("FUN_L00_00239cc8");
-extern void func_L00_0023A690_4BE8(void) __asm__("FUN_L00_00239d00");
-extern void func_L00_0023A788_4BE8(void) __asm__("FUN_L00_00239df8");
+extern void func_L00_0023A658_4BE8(void) __asm__("FUN_L08_002444a8");
+extern void func_L00_0023A690_4BE8(void) __asm__("FUN_L08_002444e0");
+extern void func_L00_0023A788_4BE8(void) __asm__("FUN_L08_002445d8");
 extern unsigned char D_0014C050_4BE8[][16] __asm__("D_0014C050");
 extern int D_L08_00174658_lui __asm__("D_L08_00174658") __attribute__((section(".data")));
 

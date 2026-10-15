@@ -1995,7 +1995,8 @@ void FUN_L00_00275aa0(unsigned char *m) {
         h -= originalAlpha;
         alpha = (float)h;
         alpha *= f;
-        alpha = (float)originalAlpha + alpha;
+        f = (float)originalAlpha + alpha;
+        alpha = f;
     } else {
         f = (float)*(short *)(m + 0xa) / FUN_001fa6c0_275aa0(h - 6);
         *(float *)(m + 0xc) = *(float *)q +
@@ -2004,7 +2005,11 @@ void FUN_L00_00275aa0(unsigned char *m) {
         alpha *= f;
         alpha += 0.0f;
     }
-    *(int *)(m + 4) = (FUN_001fa6d0_275aa0(alpha) << 24) | (*(int *)(m + 4) & 0xffffff);
+    h = FUN_001fa6d0_275aa0(alpha);
+    originalAlpha = *(int *)(m + 4);
+    originalAlpha &= 0xffffff;
+    h = (h << 24) | originalAlpha;
+    *(int *)(m + 4) = h;
     velocity = (float *)(q + 0xc);
     *(volatile float *)&v[0] = *(volatile float *)(q + 0xc);
     *(volatile float *)&v[1] = *(volatile float *)(q + 0x10);

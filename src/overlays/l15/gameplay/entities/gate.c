@@ -1294,7 +1294,9 @@ get_goal:
         return;
     }
     switch (moby->state) {
-    case 0:
+    case 0: {
+        SteeringPath_5630 *path;
+        SteeringVec_4f88 *p, *next;
         manip0 = vars + 0xd0;
         moby->pos.z = moby->pos.z + 7.5f;
         manip1 = vars + 0x110;
@@ -1306,8 +1308,8 @@ get_goal:
         vars[0x58] = 0x19;
         *(float *)(vars + 0x30) = 1.0f;
         vars[0x2e] = 1;
-        vars[0x5a] = 6;
         vars[0x59] = 1;
+        vars[0x5a] = 6;
         moby->update_dist = 0xff;
         moby->draw_dist = 0x80;
         if (*(int *)(vars + 0x1ac) != -1) {
@@ -1347,6 +1349,7 @@ get_goal:
         if (*(struct Moby **)(vars + 0x160) != 0)
             (*(struct Moby **)(vars + 0x160))->flags |= 0x41;
         break;
+    }
     case 1:
         if (*(int *)(vars + 0x1a4) != 0 && D_001413F4[0] != 2) {
             moby->collision = 0;
@@ -1363,7 +1366,8 @@ get_goal:
             if (*(int *)(vars + 0x190) == trigger) goto activate;
         }
         if (FUN_L01_0026e008(*(int *)(vars + 0x190), 0x40)) break;
-activate:
+activate: {
+        int trigger;
         trigger = moby->pclass->collision;
         moby->flags = (moby->flags & 0xffbe) | 0x1000;
         moby->collision = trigger;
@@ -1371,14 +1375,18 @@ activate:
         if (*(int *)(vars + 0x1ac) == -1) goto free_move;
         moby->state = 2;
         goto show_link;
+        }
 check_volume:
         if (*(int *)(vars + 0x1b0) != -1) break;
         if (goal.kind == 2) break;
+        {
+        int trigger;
         trigger = moby->pclass->collision;
         moby->flags = (moby->flags & 0xffbe) | 0x1000;
         moby->collision = trigger;
         vars[0x58] = 0x19;
         if (*(int *)(vars + 0x1ac) != -1) { moby->state = 2; goto show_link; }
+        }
 free_move:
         moby->state = 3;
 show_link:
@@ -1386,6 +1394,7 @@ show_link:
             (*(struct Moby **)(vars + 0x160))->flags &= 0xffbe;
         break;
     case 2: {
+        float distance, speed, step;
         int i;
         float position, fraction;
         SteeringPath_5630 *path;
@@ -1400,10 +1409,8 @@ show_link:
             *(float *)(vars + 0x170) = speed - step;
             if (speed - step < 0.0f) *(float *)(vars + 0x170) = 0.0f;
         } else {
-            speed = speed + step;
-            distance = frame_time * 10.0f;
-            *(float *)(vars + 0x170) = speed;
-            if (distance < speed) *(float *)(vars + 0x170) = distance;
+            *(float *)(vars + 0x170) = speed + step;
+            if (frame_time * 10.0f < speed + step) *(float *)(vars + 0x170) = frame_time * 10.0f;
         }
         index = truncate_float_to_s32(position / path->pt[0].f[3]);
         fraction = (position - FUN_001fa6c0(index) * path->pt[0].f[3]) / path->pt[0].f[3];
@@ -1434,8 +1441,8 @@ show_link:
         goto apply_delta;
     }
     case 3:
-        delta.q = *(u128 *)&target->pos;
         path = D_L15_001B0AB0_5630[*(int *)(vars + 0x194)];
+        delta.q = *(u128 *)&target->pos;
         i = 0;
         if (i < path->n) {
             p = path->pt;
@@ -1513,7 +1520,9 @@ apply_delta:
         moby->rot.y = spring_turn((float *)(vars + 0x178), moby->rot.y, yaw_target, frame_time_sq * 0.5235988f, frame_time_sq * max_turn, frame_time * 0.7853982f);
         moby->rot.x = spring_turn((float *)(vars + 0x174), moby->rot.x, pitch_target, frame_time_sq * max_turn, frame_time_sq * 2.0943952f, frame_time * 1.5707964f);
         break;
-    case 7:
+    case 7: {
+        int i;
+        float angle;
         delta.q = 0;
         angle = random_angle_radians_7880();
         manip0 = vars + 0xd0;
@@ -1539,6 +1548,7 @@ apply_delta:
         detach_manipulator(moby, manip1);
         moby->state = 0x40;
         return;
+    }
     case 0x40:
         moby->collision = 0;
         moby->flags = (moby->flags | 0x41) & 0xefff;
@@ -1550,9 +1560,10 @@ apply_delta:
         *(unsigned int *)(D_0014C190 + ((short)moby->save_id >> 5) * 4 + current_level_index * 0x100) &= ~(1U << (moby->save_id & 31));
         D_L15_001BAAD0[(short)moby->save_id >> 5] &= ~(1U << (moby->save_id & 31));
         if (D_001413F4[0] == 2) return;
+        position = *(float *)(vars + 0x1a8);
         moby->state = 0;
         moby->scale = moby->scale + moby->scale;
-        moby->pos.z = *(float *)(vars + 0x1a8) - 7.5f;
+        moby->pos.z = position - 7.5f;
         return;
     }
     if (moby->visible && FUN_001f9b48(&moby->pos, D_L15_001673C0) < 40.0f)
@@ -1563,9 +1574,8 @@ apply_delta:
         if (step < distance) {
             float position;
             position = origin.f[2];
-            if (position < moby->pos.z) position = position + step;
-            else position = position - step;
-            moby->pos.z = position;
+            if (position < moby->pos.z) moby->pos.z = position + step;
+            else moby->pos.z = position - step;
         }
     }
     moby->pos.z -= D_L15_00161A0C * fast_cos(*(float *)(vars + 0x16c));
@@ -1578,30 +1588,38 @@ apply_delta:
         FUN_L00_00250df8(*(struct Moby **)(vars + 0x160));
         (*(struct Moby **)(vars + 0x160))->flags |= 6;
     }
-    target = *(struct Moby **)(vars + 0x164);
-    if (target == 0 || target->oclass != 0x350 || target->state == 0xfe || target->state == 0xfd) {
-        moby_point_position(moby, 0, &attachment);
-        subtract_vector_xyz(&difference, &goal.pos, &attachment);
-        local.q = difference.q;
-        transpose_rotation_matrix(&delta, &moby->rot_row0);
-        transform_vector_by_basis(&local, &local, &delta);
-        *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), FUN_001f9e90(local.f[0], local.f[1]), frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-        *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(vector_length_xy(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
-        FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
-        FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
-        *(int *)(vars + 0x164) = 0;
-    } else {
-        moby_point_position(moby, 0, &attachment);
-        subtract_vector_xyz(&difference, &(*(struct Moby **)(vars + 0x164))->pos, &attachment);
-        local.q = difference.q;
-        transpose_rotation_matrix(&delta, &moby->rot_row0);
-        transform_vector_by_basis(&local, &local, &delta);
-        *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), FUN_001f9e90(local.f[0], local.f[1]), frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-        *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(vector_length_xy(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
-        FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
-        FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
+    {
+        struct Moby *target;
+        target = *(struct Moby **)(vars + 0x164);
+        if (target == 0 || target->oclass != 0x350 || target->state == 0xfe || target->state == 0xfd) {
+            moby_point_position(moby, 0, &attachment);
+            subtract_vector_xyz(&difference, &goal.pos, &attachment);
+            local.q = difference.q;
+            transpose_rotation_matrix(&delta, &moby->rot_row0);
+            transform_vector_by_basis(&local, &local, &delta);
+            facing = FUN_001f9e90(local.f[0], local.f[1]);
+            *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), facing, frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
+            facing = -FUN_001f9e90(vector_length_xy(&local), local.f[2]);
+            *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), facing, frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
+            FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
+            FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
+            *(int *)(vars + 0x164) = 0;
+        } else {
+            moby_point_position(moby, 0, &attachment);
+            subtract_vector_xyz(&difference, &(*(struct Moby **)(vars + 0x164))->pos, &attachment);
+            local.q = difference.q;
+            transpose_rotation_matrix(&delta, &moby->rot_row0);
+            transform_vector_by_basis(&local, &local, &delta);
+            facing = FUN_001f9e90(local.f[0], local.f[1]);
+            *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), facing, frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
+            facing = -FUN_001f9e90(vector_length_xy(&local), local.f[2]);
+            *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), facing, frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
+            FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
+            FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
+        }
     }
 }
+
 #endif
 /* Steps a moby's countdown from a helper's output, then aims it at its target. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002C7C20), where it is exact; names translated to the US level program. */

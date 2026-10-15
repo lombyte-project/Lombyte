@@ -2460,9 +2460,9 @@ void FUN_L06_003049f8(char *m) {
                     /* The completed countdown is -1: these cursors start at
                      * the second and third scratch vectors. */
                     float *second, *third;
-                    j = index + 2;
-                    second = scratch + j * 4;
-                    third = scratch + (j + 1) * 4;
+                    index += 2;
+                    second = scratch + index * 4;
+                    third = scratch + (index + 1) * 4;
                     q = scratch;
                     paths = (float *)(data + i * 0x1e0 + 0x790);
                     for (j = 27; j >= 0; j--) {

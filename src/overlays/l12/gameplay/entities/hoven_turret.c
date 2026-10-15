@@ -1255,14 +1255,17 @@ void FUN_L12_003054b0(void *moby) {
                 frame_time * 0.2617994f + (float)index * (frame_time * 0.05235988f));
             if (absolute_float(angle) < 0.017453292f) *(float *)(other_data + 0x8c) = -*(float *)(other_data + 0x8c);
         }
-        active = 0;
-        distance = FUN_001f9b80(&((struct Moby *)moby)->pos, &hero.motion.pos);
-        height = absolute_float(hero.motion.pos.f[2] - ((struct Moby *)moby)->pos.z);
-        if (scale_game_frames_alt(1200) < D_L12_00161F34 && distance < 80.0f && height < 4.0f) active = 1;
-        if (distance > 90.0f || height > 7.0f) {
-            D_L12_00161F34 = 0;
-            state = D_L12_00161F00_lui;
-        } else state = D_L12_00161F00;
+        {
+            float *position = D_0013F4D0_304310;
+            active = 0;
+            distance = FUN_001f9b80(&((struct Moby *)moby)->pos, position);
+            height = absolute_float(position[2] - ((struct Moby *)moby)->pos.z);
+            if (scale_game_frames_alt(1200) < D_L12_00161F34 && distance < 80.0f && height < 4.0f) active = 1;
+            if (distance > 90.0f || height > 7.0f) {
+                D_L12_00161F34 = 0;
+                state = D_L12_00161F00_lui;
+            } else state = D_L12_00161F00;
+        }
         if ((state || active) && *(float *)(other_data + 0x80) > 0.0f) {
             FUN_001f9770(other_data + 0x98);
             FUN_001f9770(other_data + 0x9c);
@@ -1587,28 +1590,28 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
+extern struct Moby *D_L12_0015FFD8_lui __asm__("D_L12_0015FFD8") __attribute__((section(".data")));
+
 void FUN_L12_00306828(struct Moby *moby) {
     int i;
     int alpha = 0x80000000;
     char *data = (char *)moby->pvars;
-    for (i = 0; i != 18; i++) {
+    for (i = 0; i < 18; i++) {
         struct Moby *other;
         int period;
         float sine;
         float color;
-        int red;
+        unsigned int red;
         int green;
         int blue;
         int packed_color;
         float phase;
         float divisor;
-        if (i == 17) {
-            other = moby;
-        } else {
-            other = (struct Moby *)(((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8) + (unsigned int)D_L12_0015FFD8_p);
+        other = moby;
+        if (i != 17) {
+            other = (struct Moby *)(((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8) + (unsigned int)D_L12_0015FFD8_lui);
         }
-        if (other->oclass == 0x4FE) continue;
-        {
+        if (other->oclass != 0x4FE) {
             period = scale_ticks(0xAA);
             divisor = convert_integer_to_float(period);
             phase = (float)(D_L12_0015F5CC % period) / divisor;
@@ -1617,9 +1620,9 @@ void FUN_L12_00306828(struct Moby *moby) {
             red = truncate_float_to_s32(color);
             green = truncate_float_to_s32(color);
             blue = truncate_float_to_s32(sine * 10.0f);
-            packed_color = ((blue + 0x46) << 16) | alpha |
-                ((green + 0xB4 > 0xFF ? 0xFF : green + 0xB4) << 8) |
-                (red + 0xB4 > 0xFF ? 0xFF : red + 0xB4);
+            packed_color = ((blue + 0x46) << 16) |
+                (alpha | ((green + 0xB4 > 0xFF ? 0xFF : green + 0xB4) << 8)) |
+                ((int)(red + 0xB4) > 0xFF ? 0xFF : red + 0xB4);
             other->flags |= 0x10;
             other->glow_color = packed_color;
         }
@@ -1660,7 +1663,7 @@ extern int FUN_0022da68(int, int, void *);
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 extern int D_L12_00161F00_lui __asm__("D_L12_00161F00") __attribute__((section(".data")));
-extern struct Moby *D_L12_0015FFD8_abs __asm__("D_L12_0015FFD8") __attribute__((section(".data")));
+extern struct Moby *D_L12_0015FFD8_lui __asm__("D_L12_0015FFD8") __attribute__((section(".data")));
 extern int D_L12_001619A0_lui __asm__("D_L12_001619A0") __attribute__((section(".data")));
 extern int D_L12_001619B4_gp __asm__("D_L12_001619B4") __attribute__((sda));
 extern int D_L12_001619B4_lui __asm__("D_L12_001619B4") __attribute__((section(".data")));
@@ -1668,16 +1671,21 @@ void FUN_L12_003069d0(struct Moby *moby) {
     float direction[4] __attribute__((aligned(16)));
     float rotation[4] __attribute__((aligned(16)));
     char *data = (char *)moby->pvars;
-    int i, next;
+    int i;
+    int next;
     int *slot;
     int *saved;
     struct Moby *other;
     float height, angle, distance;
     int triggered;
 
-    if (moby->state && D_L12_001FB6CC) {
-        qcopy(&moby->pos, D_L12_00161F60);
-        qcopy(&moby->rot, D_L12_00161F70);
+    if (moby->state != 0 && D_L12_001FB688[17] != 0) {
+        float *slot = (float *)&moby->pos;
+        float *saved = D_L12_00161F60;
+        qcopy(slot, saved);
+        slot = (float *)&moby->rot;
+        saved = D_L12_00161F70;
+        qcopy(slot, saved);
     }
     switch (moby->state) {
     case 0: {
@@ -1702,9 +1710,9 @@ void FUN_L12_003069d0(struct Moby *moby) {
                                   *(float *)(row + 0x24) - *(float *)(row + 0x14));
         {
             char *moby_base = D_L12_0015FFD8_p;
-            if (((float *)&D_0013F3D0)[2] < 52.0f) {
+            if ((D_0013F4D0_304310)[2] < 52.0f) {
                 moby->pos.z += 3.0f;
-                moby_base = (char *)D_L12_0015FFD8;
+                moby_base = (char *)D_L12_0015FFD8_lui;
             }
             {
                 int *slot = (int *)(data + 0x5d0);
@@ -1718,68 +1726,75 @@ void FUN_L12_003069d0(struct Moby *moby) {
             }
         }
         D_L12_00161F40 = -1.0f;
-        saved = D_L12_001FB688;
-        saved += 17;
-        i = 17;
-        do { *saved-- = 0; i--; } while (i >= 0);
+        {
+            int *saved = D_L12_001FB688;
+            int i = 17;
+            saved += 17;
+            do { *saved-- = 0; i--; } while (i >= 0);
+        }
         *(int *)(data + 0x604) = -1;
         *(short *)(data + 0x5fc) = 100;
         moby->state = 1;
         break;
     }
     case 1: {
+        int i;
+        int *slot;
+        char *moby_base;
         struct Moby *other;
-        float *pos = (float *)&D_0013F3D0;
         triggered = FUN_00214720(D_L12_00167240, *(int *)(data + 0x624));
         if (triggered) {
             moby->flags |= 0x41;
+            moby_base = (char *)D_L12_0015FFD8_lui;
             slot = (int *)(data + 0x20);
             i = 16;
             do {
                 if (*slot != -1) {
-                    other = (struct Moby *)((char *)D_L12_0015FFD8_abs + *slot * 0x100);
+                    other = (struct Moby *)(moby_base + *slot * 0x100);
                     other->flags |= 0x41;
                 }
                 i--; slot += 12;
             } while (i >= 0);
         } else {
             moby->flags &= 0xffbe;
+            moby_base = (char *)D_L12_0015FFD8_lui;
             slot = (int *)(data + 0x20);
             i = 16;
             do {
                 if (*slot != -1) {
-                    other = (struct Moby *)((char *)D_L12_0015FFD8_abs + *slot * 0x100);
+                    other = (struct Moby *)(moby_base + *slot * 0x100);
                     other->flags &= 0xffbe;
                 }
                 i--; slot += 12;
             } while (i >= 0);
         }
-        triggered = FUN_00214720(pos, *(int *)(data + 0x628));
-        if (52.0f < pos[2] && !triggered) {
+        triggered = FUN_00214720(D_0013F4D0_304310, *(int *)(data + 0x628));
+        if (52.0f < D_0013F4D0_304310[2] && !triggered) {
             approach_value(&moby->pos.z, *(float *)(data + 0x618), frame_time + frame_time);
             angle = frame_time;
         } else {
             height = 3.0f;
             if (triggered) height = 10.0f;
-            if (FUN_00214720(pos, *(int *)(data + 0x61c)))
+            if (FUN_00214720(D_0013F4D0_304310, *(int *)(data + 0x61c)))
                 *(int *)(data + 0x620) = scale_ticks(90);
             if (!tick_countdown_32_alt((int *)(data + 0x620))) height = 19.0f;
+            distance = frame_scale_sq;
             FUN_L00_0025b8c0(&moby->pos.z, data + 0x62c, *(float *)(data + 0x618) + height,
-                frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, frame_time * 2.7f);
+                distance * 0.03f, distance * 0.3f, frame_time * 2.7f);
             angle = frame_time;
         }
         FUN_L00_00262b00(moby, data + 0x5cc, data + 0x5c8, 0.7f, angle * 1.2217305f);
         FUN_L00_00262b80(moby, data + 0x5e4, data + 0x5e8, D_L12_00161F30,
             D_L12_00161F28 * 0.017453292f * frame_time, D_L12_00161F2C * 0.017453292f * frame_time);
         FUN_L12_0027b370(moby, data, 17);
-        if (FUN_00214720(pos, *(int *)(data + 0x5ec)) || D_L12_00161F00_lui) {
+        if (FUN_00214720(D_0013F4D0_304310, *(int *)(data + 0x5ec)) || D_L12_00161F00_lui) {
             D_L12_001619B4_lui = 1;
             {
                 int *slot = (int *)(data + 0x5d0);
                 int i = 4;
                 do {
                     int index = *slot++;
-                    other = (struct Moby *)((char *)D_L12_0015FFD8_abs + *(int *)(data + index * 0x30 + 0x20) * 0x100);
+                    other = (struct Moby *)((char *)D_L12_0015FFD8_lui + *(int *)(data + index * 0x30 + 0x20) * 0x100);
                     other->hit_slot = 0xff;
                     i--;
                 } while (i >= 0);
@@ -2207,7 +2222,7 @@ void FUN_L12_00308350(struct Moby *m) {
         x = D_L12_001FB6D0[vertex][0];
         y = D_L12_001FB6D0[vertex][1];
         first.uv[vertex][0] = x;
-        first.uv[vertex][1] = y;
+        ((float *)first.uv)[vertex * 2 + 1] = y;
         second.uv[vertex][0] = x;
         second.uv[vertex][1] = y;
         vertex++;
@@ -2224,10 +2239,9 @@ void FUN_L12_00308350(struct Moby *m) {
         second_vertex = second.vertices;
         for (j = 0; j < 4; j++) {
             ((float *)&first.vertices[j])[2] += 1.0f;
-            ((float *)second_vertex)[2] += 1.0f;
-            first.uv[j][1] = D_L12_001FB6D0[j][1];
+            ((float *)&second_vertex[j])[2] += 1.0f;
             first.uv[j][0] = D_L12_001FB6D0[j][0] + x_offset;
-            second_vertex++;
+            first.uv[j][1] = D_L12_001FB6D0[j][1];
         }
         jitter = 0.0f;
         for (row = -3; row < 3; row++) {

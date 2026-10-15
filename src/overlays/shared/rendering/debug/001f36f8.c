@@ -510,7 +510,7 @@ void FUN_L00_001f4598(void) {
     u32 *counter;
     u8 *level;
     f32 *capture_positions;
-    char *player_setting;
+    u8 *player_setting;
     u8 byte_value;
     f32 dimension, scale, angle;
     s32 file, file_size;
@@ -742,13 +742,12 @@ void FUN_L00_001f4598(void) {
                 if ((D_0013C940.buttons.w.pressed & 0x20) != 0) {
                     index = g_debug_menu.segment_index;
                     player_setting =
-                        (char *)(g_debug_menu.segment_index + D_0015ED84 * 0x10 + D_0014C050);
-                    byte_value = '\0';
-                    if (*player_setting == '\0') {
-                        byte_value = 255;
-                    }
-                    *player_setting = byte_value;
-                    mission_state_lui[index] = byte_value;
+                        (u8 *)(g_debug_menu.segment_index + D_0015ED84 * 0x10 + D_0014C050);
+                    new_count = 0;
+                    if (*player_setting == 0)
+                        new_count = 255;
+                    *player_setting = new_count;
+                    mission_state_lui[index] = new_count;
                 }
             } else if ((D_0013C940.buttons.w.pressed & 0x40) == 0) {
                 g_debug_menu.segment_index = g_debug_menu.segment_index + -1;
@@ -770,10 +769,10 @@ void FUN_L00_001f4598(void) {
         }
         break;
     case 3:
-        maximum_count = 999999;
+        row_count = 999999;
         if ((int)g_debug_menu.selected_row < 0xd) {
             counter = &((u32 *)weapon_ammo_counts)[D_L00_0015EFD0[g_debug_menu.selected_row]];
-            maximum_count = (u32) * (u16 *)((u8 *)D_L00_001C40BE +
+            row_count = (u32) * (u16 *)((u8 *)D_L00_001C40BE +
                                             (u32)D_L00_0015EFD0[g_debug_menu.selected_row] * 0x18);
         } else {
             counter = (u32 *)&current_bolt_count;
@@ -805,8 +804,8 @@ void FUN_L00_001f4598(void) {
             }
         }
         current_count = *counter;
-        if ((int)maximum_count < (int)current_count) {
-            *counter = maximum_count;
+        if (row_count < (int)current_count) {
+            *counter = row_count;
         }
         if ((D_0013C940.buttons.w.pressed & 0x10) != 0) {
             *(char *)(D_L00_0015EFD0[g_debug_menu.selected_row] + (u8 *)D_0013E520) =

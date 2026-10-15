@@ -365,8 +365,7 @@ extern void transform_help_quad_2059d8(f32, void *, void *) __asm__("FUN_L00_001
 void FUN_L00_002059d8(void) {
     u8 *g;
     u8 *moby;
-    s32 i, k, r, a, b, low, high;
-    f32 f, c, t;
+    s32 i;
 
     if (D_0015EDB3 != 0)
         set_help_color_2059d8(1.8f, 0.05f, &D_0015EE18);
@@ -384,45 +383,50 @@ void FUN_L00_002059d8(void) {
         return;
     g = (u8 *)&hero;
     *(u16 *)(moby + 0x34) |= 0x10;
-    a = 0x38;
-    if (*(s32 *)(g + 0x22A8) == 1)
-        a = 0x88;
-    k = scale_game_frames_2059d8(0x6E);
-    f = convert_integer_to_float_2059d8(k);
-    c = fast_sin_2059d8(((f32)(D_0015F5CC_2059d8 % k) / f * 2.0f) * 3.1415927f + -3.1415927f);
-    t = c * 24.0f;
-    r = truncate_float_to_s32_2059d8(t);
-    b = truncate_float_to_s32_2059d8(c * 48.0f);
-    low = a + r + 0xC;
-    high = b + 0xA0;
-    b += 0x18;
-    a = truncate_float_to_s32_2059d8(t);
-    i = a + 0x4C;
-    if (*(s16 *)(g + 0x1EE) != 0) {
-        s32 five, twenty, forty_five;
-        f = 1.0f;
-        five = scale_game_frames_2059d8(5);
-        twenty = scale_game_frames_2059d8(20);
-        forty_five = scale_game_frames_2059d8(45);
-        if (forty_five - five < *(s16 *)(g + 0x1EE)) {
+    {
+        s32 i, k, r, a, b, low, high;
+        f32 f, c, t;
+        a = 0x38;
+        if (*(s32 *)(g + 0x22A8) == 1)
+            a = 0x88;
+        k = scale_game_frames_2059d8(0x6E);
+        f = convert_integer_to_float_2059d8(k);
+        c = fast_sin_2059d8(((f32)(D_0015F5CC_2059d8 % k) / f * 2.0f) * 3.1415927f + -3.1415927f);
+        t = c * 24.0f;
+        r = truncate_float_to_s32_2059d8(t);
+        b = truncate_float_to_s32_2059d8(c * 48.0f);
+        low = a + r + 0xC;
+        high = b + 0xA0;
+        b += 0x18;
+        a = truncate_float_to_s32_2059d8(t);
+        i = a + 0x4C;
+        if (*(s16 *)(g + 0x1EE) != 0) {
+            s32 five, twenty, forty_five;
+            f = 1.0f;
+            five = scale_game_frames_2059d8(5);
+            twenty = scale_game_frames_2059d8(20);
             forty_five = scale_game_frames_2059d8(45);
-            f = convert_integer_to_float_2059d8(forty_five - *(s16 *)(g + 0x1EE)) /
-                convert_integer_to_float_2059d8(five);
+            if (forty_five - five < *(s16 *)(g + 0x1EE)) {
+                forty_five = scale_game_frames_2059d8(45);
+                f = convert_integer_to_float_2059d8(forty_five - *(s16 *)(g + 0x1EE)) /
+                    convert_integer_to_float_2059d8(five);
+            }
+            if (*(s16 *)(g + 0x1EE) < twenty) {
+                f = convert_integer_to_float_2059d8(*(s16 *)(g + 0x1EE)) /
+                    convert_integer_to_float_2059d8(twenty);
+            }
+            low -= truncate_float_to_s32_2059d8((f32)(r + 0xC) * f);
+            high -= truncate_float_to_s32_2059d8((f32)b * f);
+            i -= truncate_float_to_s32_2059d8((f32)(a + 0xC) * f);
+            low += truncate_float_to_s32_2059d8(f * 112.0f);
+            high -= truncate_float_to_s32_2059d8(f * 72.0f);
         }
-        if (*(s16 *)(g + 0x1EE) < twenty) {
-            f = convert_integer_to_float_2059d8(*(s16 *)(g + 0x1EE)) /
-                convert_integer_to_float_2059d8(twenty);
-        }
-        low -= truncate_float_to_s32_2059d8((f32)(r + 0xC) * f);
-        high -= truncate_float_to_s32_2059d8((f32)b * f);
-        i -= truncate_float_to_s32_2059d8((f32)(a + 0xC) * f);
-        low += truncate_float_to_s32_2059d8(f * 112.0f);
-        high -= truncate_float_to_s32_2059d8(f * 72.0f);
+        *(u32 *)(moby + 0x90) = ((0x80U << 24) | (i << 16)) | ((high << 8) | low);
     }
-    *(u32 *)(moby + 0x90) = ((0x80U << 24) | (i << 16)) | ((high << 8) | low);
     if (g[0x20A4] != 0)
         return;
     if (help_active_2059d8(g + 0xFFC) && moby[0x53] == 1) {
+        s32 low, high, a;
         low = scale_game_frames_2059d8(50);
         high = scale_game_frames_2059d8(200);
         a = random_int_between_2059d8(low, high);
@@ -617,7 +621,7 @@ extern char D_0013F350_002062b0[] __asm__("D_0013F350");
 extern f32 D_0015EE18_macro __asm__("D_0015EE18") __attribute__((section(".sdata")));
 extern volatile f32 D_0015ED6C_002062b0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 D_0015ED60_002062b0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
-extern f32 D_0015ED60_gp_002062b0 __asm__("D_0015ED60_gp") __attribute__((sda));
+extern f32 D_0015ED60_gp __asm__("D_0015ED60_gp") __attribute__((sda));
 extern f32 D_0015EE18_gp __attribute__((sda));
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F5CC_002062b0 __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
@@ -762,9 +766,12 @@ void FUN_L00_002062b0(void) {
             {
                 char *g = (char *)&hero;
                 wave = FUN_L00_001ff800_002062b0(*(f32 *)(g + 0x1628));
-                color = FUN_L00_00200298_002062b0(wave * 0.5f + 0.5f, color, color2);
-                if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = FUN_L00_00200298_002062b0(D_0015ED60_gp_002062b0 * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), color);
-                *(u32 *)(g + 0x2300) = FUN_L00_00200298_002062b0(D_0015ED60_002062b0 * 0.1f, *(u32 *)(g + 0x2300), color);
+                red = color;
+                {
+                    s32 color = FUN_L00_00200298_002062b0(wave * 0.5f + 0.5f, red, color2);
+                    if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = FUN_L00_00200298_002062b0(D_0015ED60_gp * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), color);
+                    *(u32 *)(g + 0x2300) = FUN_L00_00200298_002062b0(D_0015ED60_002062b0 * 0.1f, *(u32 *)(g + 0x2300), color);
+                }
                 if (*(char **)(g + 0x1620) == 0) {
                     *(char **)(g + 0x1620) = FUN_0020c4f8_002062b0(0x47a);
                     if (*(char **)(g + 0x1620)) {

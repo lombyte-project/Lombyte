@@ -1047,7 +1047,7 @@ void FUN_L00_0020e728(void) {
                 if (hero_state->state.control_mode == 12)
                     anim = (s32)definition->f2C;
                 if (anim != -1 && (*slot)[0x23] != anim) {
-                    hero_state->unk2294 = anim;
+                    *(volatile s32 *)&hero_state->unk2294 = anim;
                     FUN_L00_0024f3e0((u8 *)hero_state->moby, *slot, hero_state->unk2294, 0,
                                       FUN_001f96f8_e728(8), 1);
                 }
@@ -1079,14 +1079,14 @@ void FUN_L00_0020e728(void) {
         slot++;
     } while (i < 2);
     if (hero.state.control_mode == 15) {
-        hero.unk688 = hero.unk5D8 != 0 ?
+        hero.unk684 = hero.unk5D8 != 0 ?
             (*(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q,
              (angle = FUN_001ff8b0_e728(*(f32 *)((u8 *)hero.unk5D8 + 0x10) - hero.motion.pos.f[0],
                                 *(f32 *)((u8 *)hero.unk5D8 + 0x14) - hero.motion.pos.f[1]),
-              hero.unk684 = -hero.unk580, angle)) :
+              hero.unk688 = angle, -hero.unk580)) :
             (*(u128 *)((u8 *)&hero + 0x680) = hero.motion.rot.q,
              (angle = FUN_002000e8_e728(hero.unk57C, hero.unk5D0),
-              hero.unk684 = -hero.unk580, angle));
+              hero.unk688 = angle, -hero.unk580));
         vu_euler_rotation_basis(hero.basis, (u8 *)&hero + 0x680);
         FUN_001ff260_e728((u8 *)&hero + 0x670);
         hero.unk670 = 1.0f;
@@ -1352,11 +1352,11 @@ void FUN_L00_0020f160(void *moby, void *matrix)
     f32 scores[16];
     s32 i, j, n, chosen, ring, limit;
     s32 count;
-    f32 maximum;
-    s64 negative_one = -1;
-    u8 *record;
-    void * volatile output;
+    void *output;
     f32 * volatile score_ptr;
+    s64 negative_one = -1;
+    f32 maximum;
+    u8 *record;
     f32 *score;
 
     {
@@ -1389,16 +1389,22 @@ void FUN_L00_0020f160(void *moby, void *matrix)
         D_0013F694 = 5;
     else
         D_0013F694 = 11;
-    limit = D_0013F694;
-    if ((*(s32 *)(hero.pad_21B8 + 8)) < limit)
-        (*(s32 *)(hero.pad_21B8 + 8))++;
-    else if ((*(s32 *)(hero.pad_21B8 + 8)) > limit)
-        (*(s32 *)(hero.pad_21B8 + 8))--;
-    n = (*(s32 *)(hero.pad_21B8 + 8));
-    if (n < 2)
-        n = 2;
-    if ((*(s32 *)(hero.pad_21B8 + 4)) < n)
-        return;
+    {
+        struct Hero *hero_ptr = &hero;
+        s32 limit = D_0013F694;
+        if ((*(s32 *)(hero_ptr->pad_21B8 + 8)) < limit)
+            (*(s32 *)(hero_ptr->pad_21B8 + 8))++;
+        else if ((*(s32 *)(hero_ptr->pad_21B8 + 8)) > limit)
+            (*(s32 *)(hero_ptr->pad_21B8 + 8))--;
+    }
+    {
+        struct Hero *hero_ptr = &hero;
+        n = (*(s32 *)(hero_ptr->pad_21B8 + 8));
+        if (n < 2)
+            n = 2;
+        if ((*(s32 *)(hero_ptr->pad_21B8 + 4)) < n)
+            return;
+    }
 
     /* The completed triplet countdown leaves the signed remainder sentinel. */
     negative_one = i;
@@ -1508,6 +1514,7 @@ void FUN_L00_0020f580(void)
     union { f32 direction[4]; u8 saved[0x20]; } scratch __attribute__((aligned(16)));
     struct { u8 position[0x30]; u8 rotation[0x10]; } transform __attribute__((aligned(16)));
     s32 i, j, index, offset, first, second, third, random_range;
+    u8 *definition;
     s32 color_red, color_green, color_blue;
     u8 *moby, *effect;
     u8 *volatile source;
@@ -1526,7 +1533,8 @@ void FUN_L00_0020f580(void)
                 if (j == 1) moby = *(u8 **)(slot + 0x1094);
                 if (moby != 0) {
                     *(u64 *)(moby + 0x38) = *(u64 *)((u8 *)hero.moby + 0x38);
-                    index = *(s32 *)(D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c + 0xc);
+                    definition = D_00179AC0_f580 + *(s32 *)(slot + 0x10b8) * 0x4c;
+                    index = *(s32 *)(definition + 0xc);
                     if (i == 1 && j == 1) index = 3;
                     if (*(u8 *)(slot + 0x10aa) != 0) {
                         *(u128 *)((u8 *)&hero + offset + 0x1070) = *(u128 *)(D_0013FE40_f580 + index * 0x40);
@@ -1564,8 +1572,8 @@ void FUN_L00_0020f580(void)
                                 else
                                     FUN_L00_002092c8_f580(D_L00_0015F6A8, D_L00_0017C680, *(s32 *)(moby + 0x24), 0, 0);
                                 *(s32 *)(moby + 0x54) = 0;
-                                *(void **)(moby + 0x6c) = D_L00_0017C680;
                                 *(void **)(moby + 0x68) = D_L00_0017C680;
+                                *(void **)(moby + 0x6c) = D_L00_0017C680;
                                 *(s32 *)(moby + 0x50) = 0;
                             } else if (third != 0) {
                                 *(u128 *)scratch.saved = *(u128 *)D_0017A960_f580;

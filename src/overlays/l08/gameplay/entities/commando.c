@@ -678,17 +678,19 @@ void FUN_L08_002f5e58(struct Moby *m) {
     Vec4 corners[4], across, down[2], edge[2], point, width, normal, mat[4];
     FlickerDrawPacket packet;
     Vec4 velocity, offset, position, wave, sag;
+    s32 stride;
     Vec4 *grid;
     f32 *weight;
-    s32 next_i;
     f32 inv_x, inv_y;
     f32 *u, *v;
     f32 phase, phase_step, amp_a, amp_step_a, amp_b, amp_step_b;
     f32 step_a, step_b, time, height_a, height_b, phase_a, phase_b;
     f32 x, y, noise_x, angle, base, sine, shape, bend, a, c, t;
-    s32 stride, alpha, i, j, k, timer, count, lifetime;
+    s32 alpha, i, j, k, timer, count;
+    s16 lifetime;
     u32 color_a, color_b;
     s32 temp;
+    s32 next_i;
     u8 red, green, blue;
     s8 light;
     Vec4 *at;
@@ -840,17 +842,25 @@ void FUN_L08_002f5e58(struct Moby *m) {
         f32 *weight;
         a = fast_sin(FUN_L00_0025e310(time * f[0x12]));
         a = FUN_L00_00200228(time*f[0x10] + f[0x11]*a, &temp);
-        weight = u;
-        for (count = 0; count <= b[8]; count++) {
-            *weight++ = a;
-            a = a + inv_x / d->period_a;
+        count = 0;
+        if (count <= b[8]) {
+            weight = u;
+            do {
+                *weight++ = a;
+                a = a + inv_x / d->period_a;
+                count++;
+            } while (count <= b[8]);
         }
         a = fast_sin(FUN_L00_0025e310(time * f[0x15]));
         a = FUN_L00_00200228(time*f[0x13] + f[0x14]*a, &temp);
-        weight = v;
-        for (count = 0; count <= b[9]; count++) {
-            *weight++ = a;
-            a = a + inv_y / d->period_b;
+        count = 0;
+        if (count <= b[9]) {
+            weight = v;
+            do {
+                *weight++ = a;
+                a = a + inv_y / d->period_b;
+                count++;
+            } while (count <= b[9]);
         }
     }
     for (i=0; i<b[9]; i++) {
@@ -916,6 +926,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
         *(s16 *)(b+0x122) = scale_game_frames(b[0x121]);
         i=0;
         if (b[0x120]) do {
+            s32 lifetime;
             i++;
             color_a = (u32)b[0x117]<<24 | (u32)b[0x116]<<16 | (u32)b[0x115]<<8 | b[0x114];
             color_b = (u32)b[0x11b]<<24 | (u32)b[0x11a]<<16 | (u32)b[0x119]<<8 | b[0x118];

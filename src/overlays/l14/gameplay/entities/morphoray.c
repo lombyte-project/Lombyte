@@ -5,6 +5,12 @@
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
+
+typedef struct {
+    char pad0[0xB0];
+    float fB0; /* tan of half the field of view */
+} VendorView_5290;
+extern VendorView_5290 D_L14_0016D140;
 #include "qcopy.h"
 
 /* Oltanis (level 14) vendor code.  Both bodies below were written from the
@@ -1270,7 +1276,6 @@ extern char *D_L14_001600EC;
 extern char *D_L14_00167504;
 extern struct { char pad0[0x184]; char *copy_source; } D_L14_00167380;
 extern float D_L14_0016D1F0;
-extern struct { char pad0[0xB0]; float fB0; } D_L14_0016D140;
 extern int scale_game_frames_14f00(int) __asm__("FUN_001f96f8");
 extern void clear_u64_value_14f00(void *) __asm__("FUN_001f99f8");
 extern float FUN_001f9b48_14f00(void *, void *) __asm__("FUN_001f9b48");
@@ -1412,10 +1417,6 @@ extern s32 D_L14_0015F404;
 extern char D_L14_001676D0[];
 extern float D_L14_001675D8 __attribute__((section(".data")));
 extern float D_0013F5E0_5290[] __asm__("D_0013F5E0");
-typedef struct {
-    char pad0[0xB0];
-    float fB0; /* tan of half the field of view */
-} VendorView_5290;
 extern int path_step_5290(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
@@ -1431,7 +1432,6 @@ extern void normalize_5290(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void cross_5290(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s32 tick_countdown_16_5290(s16 *) __asm__("FUN_001f9770");
 
-extern VendorView_5290 D_L14_0016D140;
 void FUN_L14_00315290(struct UpdateCam *cam) {
     float dir[4];
     float t[4];

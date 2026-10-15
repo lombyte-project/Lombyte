@@ -418,7 +418,7 @@ extern f32 D_L06_00161FB4 __attribute__((sda));
 extern f32 D_L06_00161FB8 __attribute__((sda));
 extern f32 D_L06_00161FBC __attribute__((sda));
 extern f32 D_0015ED6C __asm__("D_0015ED6C");
-extern s32 D_001413D0 __asm__("D_001413D0");
+extern s32 D_001413D0[] __asm__("D_001413D0");
 #include "rnc/gameplay/state/item_state.h"
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time_for_update(f32) __asm__("FUN_001f96b0");
@@ -573,7 +573,7 @@ void FUN_L06_002feb40(struct Moby *moby) {
         }
     }
     if (vars->target == 0) {
-        vars->target = (struct Moby *)D_001413D0;
+        vars->target = (struct Moby *)D_001413D0[0];
     }
 }
 #endif
@@ -659,9 +659,9 @@ void FUN_L06_002ff2c8(char *moby) {
     }
     offset = 0;
     {
-        s32 i = 0;
         f32 *entry = (f32 *)(data + 0x230);
         f32 *relative_ptr = relative;
+        i = 0;
         do {
             if (hero.vehicle_mode == 1) {
                 step = D_L06_00161FD0 * frame_time;
@@ -698,12 +698,16 @@ void FUN_L06_002ff2c8(char *moby) {
         next = i + 1;
         if (*(f32 *)(data + i * 16 + 0x23C) >= 0.6f &&
             (next_entry = (f32 *)(data + 0x230 + next * 16), next_entry[3] >= 0.6f)) {
+            s32 hit_type;
             point[0] = fast_cos(*(f32 *)(moby + 0x48));
             point[1] = fast_sin_c(*(f32 *)(moby + 0x48));
             point[2] = 1.0f;
             point[3] = 5627.925f;
-            make_hit_descriptor(&shot, (struct Moby *)moby,
-                             *(f32 *)(data + i * 16 + 0x23C) >= 1.0f && next_entry[3] >= 1.0f ? 0x10001 : 0x10000, point, 1.0f);
+            hit_type = 0x10000;
+            if (*(f32 *)(data + i * 16 + 0x23C) >= 1.0f && next_entry[3] >= 1.0f) {
+                hit_type |= 1;
+            }
+            make_hit_descriptor(&shot, (struct Moby *)moby, hit_type, point, 1.0f);
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = *(s16 *)(moby + 0xA6);

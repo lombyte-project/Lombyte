@@ -1321,7 +1321,7 @@ extern float D_L06_001DAFD0[];
 extern float D_L06_001DB060[];
 extern void FUN_L06_002f7000(struct Moby *);
 extern void FUN_L06_002f6dd0(char *);
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void decrement_timer(short *) __asm__("FUN_001f9770");
 extern int check_voice_target_2f6470(char *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_2f6470(int, int, int) __asm__("FUN_0022da68");

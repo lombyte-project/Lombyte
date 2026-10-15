@@ -738,7 +738,6 @@ void FUN_L00_002bffa8(struct Moby *moby) {
     OvlVec4 probe, start, end, delta, result;
     void *pos;
     float size, speed, distance, height, limit, angle, rate, old_z;
-    u8 state;
     u8 *data;
     int hit;
     u32 flags;
@@ -859,7 +858,10 @@ collision_done:
     case 1: case 9: case 10:
         if (moby->anim_flags & 2) moby->state = 2;
         break;
-    case 2: case 3: case 4: case 5:
+    case 2: case 3: case 4: case 5: {
+        u8 state;
+        float angle;
+        struct Moby *target;
         target = vars->target;
         if (target && target->state != 254 && target->state != 253) {
             height = target->pos.z;
@@ -886,7 +888,8 @@ collision_done:
         vars->move_speed = rate * 0.1f * speed; moby->state = 4;
         if (!vars->target) {
             angle = random_float_between(-3.1415927f,3.1415927f);
-            if (!FUN_00213260_2bffa8(4)) vars->angle = FUN_L00_002bf050(moby,pos,0,&result,angle,1.847995638847351f,4.0f,size*0.35f,4.0f,convert_integer_to_float(HI_2bffa8(0x1ec0))*0.0009765625f);
+            limit = size * 0.35f;
+            if (!FUN_00213260_2bffa8(4)) vars->angle = FUN_L00_002bf050(moby,pos,0,&result,angle,1.847995638847351f,4.0f,limit,4.0f,convert_integer_to_float(HI_2bffa8(0x1ec0))*0.0009765625f);
             else result.f[0] = 5.0f;
         }
         target = vars->target;
@@ -974,13 +977,16 @@ collision_done:
             moby->state = 6;
         }
         break;
-    case 6:
+    }
+    case 6: {
+        u8 state;
         angle = atan2_f(vars->target_pos.f[0]-moby->pos.x,vars->target_pos.f[1]-moby->pos.y);
         FUN_L00_002beb90(vars);
         FUN_L00_00258278_2bffa8(moby,(u8 *)&hero+0x1ec0+0x14,angle,HF_2bffa8(0x1efc)+HF_2bffa8(0x1efc),HF_2bffa8(0x1f00)*0.5f,HF_2bffa8(0x1f04)+HF_2bffa8(0x1f04));
         FUN_L00_002bebc8(vars);
         if (fast_difference_between_rotations(moby->rot.z,angle) < 0.08726646f) { state = HB_2bffa8(0x1f3c); ANIM_2bffa8(state,3); moby->state = 7; }
         break;
+    }
     case 7:
         old_z = moby->pos.z; FUN_L00_002bec00(vars);
         if (FUN_L00_0025b440(moby,(u8 *)&hero+0x1f10) == 4) {
@@ -1243,8 +1249,11 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
             hit = 0;
             temporary.arc.q = probe.q;
             rotate_vector_2c1ad0(&temporary.arc, &temporary.arc, matrix);
-            angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
-            fast_subtract_rotations_2c1ad0(*(f32 *)((u8 *)hero.moby + 0x48), angle);
+            {
+                struct Moby *heroMoby = hero.moby;
+                angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
+                fast_subtract_rotations_2c1ad0(*(f32 *)((u8 *)heroMoby + 0x48), angle);
+            }
             angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
             slope = atan2_f(vector_length_xy_2c1ad0(&temporary.arc), temporary.arc.f[2]);
             if (slope > 0.5934119f)
@@ -1310,7 +1319,8 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         vars->held = 0;
-        moby->state = (moby->anim_flags & 2) ? 2 : 1;
+        if (moby->anim_flags & 2) moby->state = 2;
+        else moby->state = 1;
     case 1:
         if (moby->anim_flags & 2)
             moby->state = 2;
