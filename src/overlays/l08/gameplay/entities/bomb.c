@@ -503,7 +503,8 @@ void FUN_L08_002d42d8(struct Moby *moby) {
         } else if (state == 6) goto state6;
     } else {
         if (state == 14) goto state14;
-        if (state > 14 && state == 99) goto state99;
+        if (state < 15) goto finish;
+        if (state == 99) goto state99;
     }
     goto finish;
     state0:
@@ -566,8 +567,7 @@ void FUN_L08_002d42d8(struct Moby *moby) {
         }
  initialize:
         clear_u64_value(data + 0x40);
-        data[0x29] = 0;
-        data[0x28] = 3;
+        *(unsigned short *)(data + 0x28) = 3;
         *(volatile float *)(data + 0x30) = 3.0f;
         data[0x2a] = 12;
         data[0x2e] = 1;
@@ -606,8 +606,10 @@ void FUN_L08_002d42d8(struct Moby *moby) {
             velocity[2] = 0.0f;
             velocity[1] = angle;
             velocity[2] = -fast_sin(*(float *)(data + 0x178)) * speed;
-            other = (struct Moby *)FUN_L08_002dc8a0((char *)moby, (char *)joint_pos, (char *)velocity);
-            if (other) other->state = 1;
+            {
+                struct Moby *other = (struct Moby *)FUN_L08_002dc8a0((char *)moby, (char *)joint_pos, (char *)velocity);
+                if (other) other->state = 1;
+            }
         }
         goto finish;
     state11:
