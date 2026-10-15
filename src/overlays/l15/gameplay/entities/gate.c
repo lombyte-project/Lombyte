@@ -1598,8 +1598,10 @@ apply_delta:
             local.q = difference.q;
             transpose_rotation_matrix(&delta, &moby->rot_row0);
             transform_vector_by_basis(&local, &local, &delta);
-            *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), FUN_001f9e90(local.f[0], local.f[1]), frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-            *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(vector_length_xy(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
+            facing = FUN_001f9e90(local.f[0], local.f[1]);
+            *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), facing, frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
+            facing = -FUN_001f9e90(vector_length_xy(&local), local.f[2]);
+            *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), facing, frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
             FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
             FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
             *(int *)(vars + 0x164) = 0;
@@ -1609,8 +1611,10 @@ apply_delta:
             local.q = difference.q;
             transpose_rotation_matrix(&delta, &moby->rot_row0);
             transform_vector_by_basis(&local, &local, &delta);
-            *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), FUN_001f9e90(local.f[0], local.f[1]), frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-            *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), -FUN_001f9e90(vector_length_xy(&local), local.f[2]), frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
+            facing = FUN_001f9e90(local.f[0], local.f[1]);
+            *(float *)(vars + 0x180) = spring_turn((float *)(vars + 0x184), *(float *)(vars + 0x180), facing, frame_time_sq * 6.2831855f, frame_time_sq * 12.566371f, frame_time * 6.2831855f);
+            facing = -FUN_001f9e90(vector_length_xy(&local), local.f[2]);
+            *(float *)(vars + 0x188) = spring_turn((float *)(vars + 0x18c), *(float *)(vars + 0x188), facing, frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 1.5707964f);
             FUN_L00_001fff28(*(float *)(vars + 0x180), vars + 0xe0, 2);
             FUN_L00_001fff28(*(float *)(vars + 0x188), vars + 0x120, 2);
         }
