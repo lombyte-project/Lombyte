@@ -1212,8 +1212,8 @@ ready:
     pitch = -FUN_001f9028(FUN_001f8b80(&vecs.diff), ((float *)&vecs.diff)[2]);
     if (yaw < -1.5707964f) yaw = -1.5707964f;
     else if (yaw > 1.5707964f) yaw = 1.5707964f;
-    if (pitch > 0.5235988f) pitch = 0.5235988f;
-    else if (pitch < -0.5235988f) pitch = -0.5235988f;
+    if (pitch < -0.5235988f) pitch = -0.5235988f;
+    else if (pitch > 0.5235988f) pitch = 0.5235988f;
     {
     float half_yaw = yaw * 0.5f;
     *(volatile float *)(data + 0x248) = half_yaw;
