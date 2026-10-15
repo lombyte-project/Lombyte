@@ -88,9 +88,9 @@ state_one:
             float step = random_float_between(0.0f, *(float *)(data + 8));
             float min_ratio = *(float *)(data + 2) / 100.0f;
             if (min_ratio <= ratio && ratio < *(float *)(data + 3) / 100.0f) {
+                float amount;
                 float lower = scale * (*(float *)(data + 4) / 100.0f) - value;
                 float upper = scale * (*(float *)(data + 5) / 100.0f);
-                float amount;
                 int total;
                 int batch;
                 int remaining;
