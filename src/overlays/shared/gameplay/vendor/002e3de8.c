@@ -311,9 +311,9 @@ void FUN_L10_002f5b58(char *moby) {
     short * volatile indices;
     float *angles;
     char *acc;
+    char *moby_rot;
     char *moby_scale;
     char *moby_pos;
-    char *moby_rot;
 
     data[0x38] = 1;
     work = *(char **)(moby + 0x70);
