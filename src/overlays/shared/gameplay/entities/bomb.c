@@ -2592,10 +2592,10 @@ state2:
         v->elevation = FUN_002000e8_2ce358(v->elevation, distance * (frame_scale * 0.01f));
         scratch.vectors.direction.f[0] = FUN_001ff7e8_2ce358(v->yaw) * v->strength;
         scratch.vectors.direction.f[1] = FUN_001ff800_2ce358(v->yaw) * v->strength;
+        scratch.vectors.rotated.f[1] = v->elevation;
         scratch.vectors.direction.f[2] = 0.0f;
         scratch.vectors.rotated.f[0] = 0.0f;
         scratch.vectors.rotated.f[2] = 0.0f;
-        scratch.vectors.rotated.f[1] = v->elevation;
         scratch.vectors.rotated.f[3] = 0.0f;
         FUN_001ffa70_2ce358(matrix, &scratch.vectors.rotated);
         FUN_001ff6f8_2ce358(&scratch.vectors.direction, &scratch.vectors.direction, matrix);
@@ -2684,7 +2684,7 @@ state3:
                 if (!other || other->state == 0xfe || other->state == 0xfd || other != v->target || other->oclass == 0) {
                     qcopy(&m->pos, &D_L00_00173E70_2ce358);
                 } else {
-                    category = other->pclass ? *(u8 *)((u8 *)other->pclass + 0x46) : 0;
+                    s32 category = other->pclass ? *(u8 *)((u8 *)other->pclass + 0x46) : 0;
                     FUN_00259858_2ce358(1.0f, scratch.effect, m, 0x10000);
                     FUN_001ff550_2ce358(scratch.effect, &v->position, 1.0f);
                     *(f32 *)(scratch.effect + 8) = 1.0f;
