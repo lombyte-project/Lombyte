@@ -1117,6 +1117,8 @@ void FUN_L08_002d5d08(struct Moby *moby)
     struct Moby *other, *spawned;
     int i = 0;
     float position[4], offset[4], velocity[4];
+    struct { char pad[0x140]; float x, y; } *center;
+    extern char camera_state_bytes[] __asm__("D_L08_00167480");
     float angle, launch_yaw, center_yaw, min_frames, max_frames;
     if (list == 0) return;
     next = list + 1;
@@ -1255,7 +1257,8 @@ void FUN_L08_002d5d08(struct Moby *moby)
                     break;
                 }
                 launch_yaw = fast_arc_tan(position[0], position[1]);
-                center_yaw = fast_arc_tan(D_L08_001675C0[0] - moby->pos.x, D_L08_001675C0[1] - moby->pos.y);
+                center = (void *)camera_state_bytes;
+                center_yaw = fast_arc_tan(center->x - moby->pos.x, center->y - moby->pos.y);
                 if (fast_difference_between_rotations(launch_yaw, center_yaw) < 0.2617994f) {
                     min_frames = 10.0f; max_frames = 20.0f;
                 } else {
