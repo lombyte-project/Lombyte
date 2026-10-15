@@ -457,7 +457,8 @@ add_main:
             t = convert_integer_to_float(point - rounded) * 0.25f;
             j = i++;
             offset = ((float *)0x001e5fd0)[j * 2];
-            packet[0].uv[j][0] = offset + t;
+            offset += t;
+            packet[0].uv[j][0] = offset;
         }
         draw_geometry_quad(&packet[0], base, 0);
     }
@@ -501,9 +502,9 @@ add_branch:
                     t = convert_integer_to_float(point - rounded) * 0.25f;
                     j = k++;
                     offset = *uv_base;
-                    t = offset + t;
+                    offset += t;
                     uv_base += 2;
-                    *uv = t;
+                    *uv = offset;
                     uv += 2;
                 }
                 draw_geometry_quad(&packet[0], base, 0);
