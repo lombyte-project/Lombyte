@@ -1057,7 +1057,7 @@ void FUN_L07_0030b000(struct Moby *moby) {
             s32 k;
             while (j < path_count) {
                 k = j + 1;
-                *(f32 *)(path + 0x1c + j * 16) =
+                *(f32 *)(path + (j << 4) + 0x1c) =
                     fast_vec_dist(path + 0x10 + j * 16,
                                   path + 0x10 + (k % path_count) * 16);
                 j = k;
