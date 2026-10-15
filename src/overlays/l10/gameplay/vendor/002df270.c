@@ -2743,6 +2743,9 @@ void FUN_L10_002e5be0(struct Moby *moby) {
         }
     }
 }
+
+/* Health upgrade vendor: sells two upgrades (4000 bolts: 5 hp, 30000 bolts: 8 hp) once each,
+   then saves the game and shows the purchase message. */
 extern void tick_countdown_32_vendor(void *) __asm__("FUN_001f9740");
 extern void FUN_L00_00266858_vendor(struct Moby *, int) __asm__("FUN_L00_00266858");
 extern int try_set_help_message_vendor(int, int) __asm__("FUN_00215130");
