@@ -736,7 +736,29 @@ typedef struct {
 } SparkleRowC860;
 
 extern char D_0013E533[];
-extern char D_L00_001DBBA0[];
+/* One arc: its start point and four bent points toward the D_L00_001DBB90 row. */
+typedef struct {
+    float point[5][4];
+} SparkleArc;
+SparkleArc D_L00_001DBBA0[10] = {0};
+SparkleArc D_L01_001DC020[10] = {0};
+SparkleArc D_L02_001D0620[10] = {0};
+SparkleArc D_L03_001D0120[10] = {0};
+SparkleArc D_L04_001D01A0[10] = {0};
+SparkleArc D_L05_001D04C0[10] = {0};
+SparkleArc D_L06_001D07A0[10] = {0};
+SparkleArc D_L07_001D00A0[10] = {0};
+SparkleArc D_L08_001D0820[10] = {0};
+SparkleArc D_L09_001D01A0[10] = {0};
+SparkleArc D_L10_001D04A0[10] = {0};
+SparkleArc D_L11_001D0A20[10] = {0};
+SparkleArc D_L12_001E30C0[10] = {0};
+SparkleArc D_L13_001D0930[10] = {0};
+SparkleArc D_L14_001DCFE0[10] = {0};
+SparkleArc D_L15_001D0AA0[10] = {0};
+SparkleArc D_L16_001D04A0[10] = {0};
+SparkleArc D_L17_001D0D20[10] = {0};
+SparkleArc D_L18_001D0A20[10] = {0};
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float D_L00_001616D4;
 extern float D_L00_00166DC0[];
@@ -880,7 +902,7 @@ void FUN_L00_002bb558(char *m) {
                 D_L00_001DBEC0[i] = 2;
                 D_L00_001DBED8[i] = 0x40;
                 random_spherical_offset(vec1, D_L00_001616A4, D_L00_001616A4);
-                qcopy(D_L00_001DBBA0 + i * 0x50, vec0);
+                qcopy(D_L00_001DBBA0[i].point[0], vec0);
                 n = i + 1;
                 sign = 1.0f;
                 for (k = 1; k < 5; k++) {
@@ -889,7 +911,7 @@ void FUN_L00_002bb558(char *m) {
                     ang = random_float_between(0.17453292f, 0.7853982f) * sign;
                     sign = -sign;
                     build_look_at_matrix(vec1, vec1, t, ang);
-                    add_vector_xyz(((float(*)[4])(D_L00_001DBBA0 + i * 0x50))[k],
+                    add_vector_xyz(D_L00_001DBBA0[i].point[k],
                                    D_L00_001DBB90[i].point[k - 1], vec1);
                 }
             } else {
@@ -900,16 +922,16 @@ void FUN_L00_002bb558(char *m) {
             float(*workspace)[4] = w;
             for (k = 1; k < 5; k++) {
                 float *v = workspace[k];
-                subtract_vector_xyz(v, ((float(*)[4])(D_L00_001DBBA0 + i * 0x50))[k],
+                subtract_vector_xyz(v, D_L00_001DBBA0[i].point[k],
                                     D_L00_001DBB90[i].point[k - 1]);
                 v[0] += FUN_L00_00257c48(0.0f, 0.1f);
                 v[1] += FUN_L00_00257c48(0.0f, 0.1f);
                 v[2] += FUN_L00_00257c48(0.0f, 0.1f);
             }
             n = i + 1;
-            qcopy(D_L00_001DBBA0 + i * 0x50, vec0);
+            qcopy(D_L00_001DBBA0[i].point[0], vec0);
             for (k = 1; k < 5; k++) {
-                add_vector_xyz(((float(*)[4])(D_L00_001DBBA0 + i * 0x50))[k],
+                add_vector_xyz(D_L00_001DBBA0[i].point[k],
                                D_L00_001DBB90[i].point[k - 1], workspace[k]);
             }
             if (D_L00_001DBEC0[i] > 0)
@@ -920,28 +942,6 @@ void FUN_L00_002bb558(char *m) {
     }
     enqueue_callback_list_1(FUN_L00_002bbb00_c, m);
 }
-typedef struct {
-    u8 b[0x50];
-} E002bbb00;
-E002bbb00 D_L00_001DBBA0_u[10] __asm__("D_L00_001DBBA0") = {0};
-E002bbb00 D_L01_001DC020[10] = {0};
-E002bbb00 D_L02_001D0620[10] = {0};
-E002bbb00 D_L03_001D0120[10] = {0};
-E002bbb00 D_L04_001D01A0[10] = {0};
-E002bbb00 D_L05_001D04C0[10] = {0};
-E002bbb00 D_L06_001D07A0[10] = {0};
-E002bbb00 D_L07_001D00A0[10] = {0};
-E002bbb00 D_L08_001D0820[10] = {0};
-E002bbb00 D_L09_001D01A0[10] = {0};
-E002bbb00 D_L10_001D04A0[10] = {0};
-E002bbb00 D_L11_001D0A20[10] = {0};
-E002bbb00 D_L12_001E30C0[10] = {0};
-E002bbb00 D_L13_001D0930[10] = {0};
-E002bbb00 D_L14_001DCFE0[10] = {0};
-E002bbb00 D_L15_001D0AA0[10] = {0};
-E002bbb00 D_L16_001D04A0[10] = {0};
-E002bbb00 D_L17_001D0D20[10] = {0};
-E002bbb00 D_L18_001D0A20[10] = {0};
 extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
 extern f32 D_L00_00161690 __attribute__((sda));
 extern f32 D_L00_00161694 __attribute__((sda));
@@ -955,7 +955,7 @@ void FUN_L00_002bbb00(void *o) {
     for (i = 0; i < 10; i++) {
         if (D_L00_001DBEC0[i] != 0) {
             r = truncate_float_to_s32(FUN_001fa6c0(D_L00_001DBED8[i]) * D_L00_00161660_f[29]);
-            FUN_L00_002bbbc8(&D_L00_001DBBA0_u[i], r, r, 5, D_L00_00161690, D_L00_00161694, 0.2f);
+            FUN_L00_002bbbc8(&D_L00_001DBBA0[i], r, r, 5, D_L00_00161690, D_L00_00161694, 0.2f);
         }
     }
     FUN_L00_002bc1a0(o);
