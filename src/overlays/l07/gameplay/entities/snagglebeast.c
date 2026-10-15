@@ -105,8 +105,8 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
                 row_alpha += alpha_step;
                 quad.colors[0] = quad.colors[2];
                 quad.colors[1] = quad.colors[3];
-                quad.colors[2] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | inner_color;
-                quad.colors[3] = quad.colors[2];
+                quad.colors[3] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | inner_color;
+                quad.colors[2] = quad.colors[3];
                 wrapped = FUN_L00_0025e310(angle + spin * 0.02f);
                 build_spherical_offset(&quad.positions[2], radius, wrapped, latitude);
                 wrapped = fast_add_rotations(wrapped, 0.3926991f);
