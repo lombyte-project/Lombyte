@@ -1663,20 +1663,20 @@ extern int D_L12_00161F00_lui __asm__("D_L12_00161F00") __attribute__((section("
 extern struct Moby *D_L12_0015FFD8_abs __asm__("D_L12_0015FFD8") __attribute__((section(".data")));
 extern int D_L12_001619A0_lui __asm__("D_L12_001619A0") __attribute__((section(".data")));
 extern int D_L12_001619B4_gp __asm__("D_L12_001619B4") __attribute__((sda));
-extern int D_L12_001619B4_lui __asm__("D_L12_001619B4") __attribute__((section(".sdata")));
+extern int D_L12_001619B4_lui __asm__("D_L12_001619B4") __attribute__((section(".data")));
 void FUN_L12_003069d0(struct Moby *moby) {
     float direction[4] __attribute__((aligned(16)));
     float rotation[4] __attribute__((aligned(16)));
     char *data = (char *)moby->pvars;
     int i;
-    long next;
+    int next;
     int *slot;
     int *saved;
     struct Moby *other;
     float height, angle, distance;
     int triggered;
 
-    if (moby->state && D_L12_001FB6CC) {
+    if (moby->state != 0 && D_L12_001FB688[17] != 0) {
         float *slot = (float *)&moby->pos;
         float *saved = D_L12_00161F60;
         qcopy(slot, saved);
@@ -1775,8 +1775,9 @@ void FUN_L12_003069d0(struct Moby *moby) {
             if (FUN_00214720(D_0013F4D0_304310, *(int *)(data + 0x61c)))
                 *(int *)(data + 0x620) = scale_ticks(90);
             if (!tick_countdown_32_alt((int *)(data + 0x620))) height = 19.0f;
+            distance = frame_scale_sq;
             FUN_L00_0025b8c0(&moby->pos.z, data + 0x62c, *(float *)(data + 0x618) + height,
-                frame_scale_sq * 0.03f, frame_scale_sq * 0.3f, frame_time * 2.7f);
+                distance * 0.03f, distance * 0.3f, frame_time * 2.7f);
             angle = frame_time;
         }
         FUN_L00_00262b00(moby, data + 0x5cc, data + 0x5c8, 0.7f, angle * 1.2217305f);
