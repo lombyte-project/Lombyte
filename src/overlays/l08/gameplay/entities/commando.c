@@ -901,6 +901,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
         *(s32 *)(b+0xf8) = scale_game_frames(b[0xf3]);
         i=0;
         if (b[0xf2]) do {
+            f32 t;
             t = d->size_x * 0.5f;
             i++;
             a = random_float_between(-1.0f, 1.0f);
@@ -927,6 +928,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
         i=0;
         if (b[0x120]) do {
             s32 lifetime;
+            f32 a;
             i++;
             color_a = (u32)b[0x117]<<24 | (u32)b[0x116]<<16 | (u32)b[0x115]<<8 | b[0x114];
             color_b = (u32)b[0x11b]<<24 | (u32)b[0x11a]<<16 | (u32)b[0x119]<<8 | b[0x118];
