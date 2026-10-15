@@ -1937,6 +1937,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
     float minimum;
     float fraction;
     float swing_fraction;
+    float wave_scale;
     float length;
     float angle;
     float turn;
@@ -2066,6 +2067,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         ring = (char *)&D_L07_0020DB00_c[14] + i * 0x140;
         point = D_L07_0020C700;
         phase = index * 0.7f;
+        wave_scale = 0.25f;
         i++;
         j = 0;
         do {
@@ -2073,7 +2075,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
             j++;
             wave = fast_add_rotations((*(float *)&D_L07_00161B84_gp) + phase, 0.0f);
             wave = fast_sin(wave);
-            scale_vector_xyz(&offset, point, radius + radius * 0.25f * wave);
+            scale_vector_xyz(&offset, point, radius + radius * wave_scale * wave);
             transform_vector_by_basis(&offset, &offset, &point_basis.side);
             add_vector_xyz(ring, (char *)D_L07_0020DB00_c + point_offset, &offset);
             ring += 16;
