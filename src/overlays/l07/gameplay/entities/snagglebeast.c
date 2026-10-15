@@ -1184,10 +1184,10 @@ void FUN_L07_00314150(unsigned char *moby) {
             near = 0;
             if (!path_point_ready && target_distance < 20.0f) near = 1;
             moving = frame_time * 0.01f < spd;
-            if (hit != 4) {
+            if (hit == 4) {
+                if (moving) hit = 4;
+            } else {
                 hit = 2;
-            } else if (moving) {
-                hit = 4;
             }
             if ((hit == 4) || !moving) {
                 data[0x1F7] = scale_ticks(0x5A);
