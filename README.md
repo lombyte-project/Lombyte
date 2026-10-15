@@ -37,6 +37,12 @@
   </a>
 </p>
 
+<p align="center">
+  <a href="https://lombyte-project.github.io/namingdesk">
+    <img src="assets/naming-desk-card.svg" alt="Open the Naming Desk" width="100%">
+  </a>
+</p>
+
 <h3>Supported version</h3>
 
 | Game                   | Platform      | Region       | Boot executable |
