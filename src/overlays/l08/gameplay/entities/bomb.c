@@ -1759,7 +1759,7 @@ fire_animation:
             if (next) {
                 old = *(char **)(next + 0x78);
                 *(int *)(old + 0x20) = scale_game_frames(180);
-                *(volatile short *)(old + 0xc) = scale_game_frames(10);
+                *(short *)(old + 0xc) = scale_game_frames(10);
                 *(short *)(old + 0xe) = scale_game_frames(10);
                 (*(struct Moby **)(d + 0x124))->state = 1;
                 (*(struct Moby **)(d + 0x124))->command |= 3;
@@ -1798,8 +1798,9 @@ reset_timer:
             moby->anim_speed = 0;
             moby->state = 100;
             moby->collision = 0;
+            hit_duration = D_L08_001619D0;
             *(short *)(d + 0x132) = 40;
-            *(short *)(d + 0x130) = D_L08_001619D0;
+            *(short *)(d + 0x130) = hit_duration;
             FUN_L08_002da8d8(moby);
             mark_moby_for_removal(moby);
             return;
