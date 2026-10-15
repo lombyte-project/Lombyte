@@ -120,10 +120,12 @@ void FUN_L04_002ca420(struct Moby *moby) {
     if (moby->oclass != 0x1e4) {
         fast_dec_timer_s16(data + 0x14a);
         switch (*(unsigned char *)(data + 0x149)) {
-        case 0:
+        case 0: {
+            float length;
+            length = *(float *)(data + 0xfc);
             amount = *(float *)(data + 0x138);
-            if (*(float *)(data + 0xfc) < amount) {
-                *(float *)(data + 0xfc) += frame_time_sq * 20.0f;
+            if (length < amount) {
+                *(float *)(data + 0xfc) = length + frame_time_sq * 20.0f;
                 if (amount < *(float *)(data + 0xfc)) *(float *)(data + 0xfc) = amount;
             }
             target = (int *)(data + 0x150);
@@ -144,6 +146,7 @@ void FUN_L04_002ca420(struct Moby *moby) {
                 ++i; ++p; ++target;
             } while (i < 4);
             break;
+        }
         case 1:
             FUN_L00_00258278(moby, *(float *)(D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x78),
                 data + 0x7c, frame_time_sq * 1.0471976f, frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
