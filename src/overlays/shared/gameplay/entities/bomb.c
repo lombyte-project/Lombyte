@@ -2608,8 +2608,9 @@ state2:
         FUN_001ff598_2ce358(&target_pos, &target_pos, D_0015ED6C_2c8440 * 10.0f);
         if (FUN_00258830_2ce358(0.0f, 0.18f, 0.0f, m, &target_pos, 0) & 1) {
             if (!m->visible) {
-                add_vector_xyz_2c8440(&m->pos, &D_L00_00166DC0_2ce358, &D_L00_00166FF0_2ce358);
-                subtract_vector_xyz_2c8440(&m->pos, &m->pos, &D_L00_00166FD0_2ce358);
+                V4 *hit = &D_L00_00166DC0_2ce358;
+                add_vector_xyz_2c8440(&m->pos, hit, hit + 0x23);
+                subtract_vector_xyz_2c8440(&m->pos, &m->pos, hit + 0x21);
             }
         }
         qcopy(&collision_data[0], &m->pos);
@@ -2617,7 +2618,9 @@ state2:
             other = (struct Moby *)coll_hit_2c8440.moby;
             if (other && other->oclass == 0 && other->state != 0xfe && other->state != 0xfd)
                 goto update_rotations;
+            other = (struct Moby *)((volatile CollisionHit *)&coll_hit_2c8440)->moby;
             category = other && other->pclass ? *(u8 *)((u8 *)other->pclass + 0x46) : 0;
+            other = (struct Moby *)((volatile CollisionHit *)&coll_hit_2c8440)->moby;
             if (other && other->state != 0xfe && other->state != 0xfd &&
                 (category == 5 || category == 7 || category == 8)) {
                 FUN_00259858_2ce358(1.0f, scratch.effect, m, 0x10000);
@@ -2632,10 +2635,10 @@ state2:
                     if (coll_hit_2c8440.moby && ((struct Moby *)coll_hit_2c8440.moby)->oclass == 0x4d6 && (health = v->health) > 0) {
                         random = FUN_00200250_2ce358(*(f32 *)(scratch.effect + 0x1c));
                         if (random > 0)
-                            random = FUN_00200250_2ce358(*(f32 *)(scratch.effect + 0x1c));
+                            random = health - FUN_00200250_2ce358(*(f32 *)(scratch.effect + 0x1c));
                         else
-                            random = 1;
-                        v->health = health - random;
+                            random = health - 1;
+                        v->health = random;
                     } else {
                         FUN_0025e450_2ce358(0, 0, 0.4f, 0.2f, 4.0f, 1.0f, 8.0f, m, v, 0, 0, 1, 1, 1, 1, 1, -1, 0);
                         m->state = 4;
@@ -2694,10 +2697,10 @@ state3:
                         if (coll_hit_2c8440.moby && ((struct Moby *)coll_hit_2c8440.moby)->oclass == 0x4d6 && (health = v->health) > 0) {
                             random = FUN_00200250_2ce358(*(f32 *)(scratch.effect + 0x1c));
                             if (random > 0)
-                                random = FUN_00200250_2ce358(*(f32 *)(scratch.effect + 0x1c));
+                                random = health - FUN_00200250_2ce358(*(f32 *)(scratch.effect + 0x1c));
                             else
-                                random = 1;
-                            v->health = health - random;
+                                random = health - 1;
+                            v->health = random;
                         } else {
                             FUN_0025e450_2ce358(0, 0, 0.4f, 0.2f, 4.0f, 1.0f, 8.0f, m, v, 0, 0, 1, 1, 1, 1, 1, -1, 0);
                             m->state = 4;
