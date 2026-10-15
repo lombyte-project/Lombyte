@@ -1245,8 +1245,11 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
             hit = 0;
             temporary.arc.q = probe.q;
             rotate_vector_2c1ad0(&temporary.arc, &temporary.arc, matrix);
-            angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
-            fast_subtract_rotations_2c1ad0(*(f32 *)((u8 *)hero.moby + 0x48), angle);
+            {
+                struct Moby *heroMoby = hero.moby;
+                angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
+                fast_subtract_rotations_2c1ad0(*(f32 *)((u8 *)heroMoby + 0x48), angle);
+            }
             angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
             slope = atan2_f(vector_length_xy_2c1ad0(&temporary.arc), temporary.arc.f[2]);
             if (slope > 0.5934119f)
