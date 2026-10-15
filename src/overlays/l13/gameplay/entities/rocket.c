@@ -371,9 +371,9 @@ void FUN_L13_00306300(struct Moby *moby) {
     normalize_vector_xyz_6300(&work.direction, &work.direction, 1.0f);
     work.direction.z = 1.0f;
     flags = 0x10001;
-    /* Existing symbols for hero.ammo_used and hero.motion.pos at their retail addresses. */
-    if (D_00141346 != 0 && *(float *)(data + 0xc) != 31337.602f &&
-        fast_vec_dist(&moby->pos, D_0013F3D0) < 2.0f) {
+    /* Retail checks ammo_used and proximity to hero.motion.pos. */
+    if (hero.ammo_used != 0 && *(float *)(data + 0xc) != 31337.602f &&
+        fast_vec_dist(&moby->pos, &hero.motion.pos) < 2.0f) {
         int i;
         scale_vector_xyz_6300(data, data, 0.5f);
         subtract_vector_xyz(&moby->pos, &moby->pos, data);
@@ -383,10 +383,11 @@ void FUN_L13_00306300(struct Moby *moby) {
         ((volatile int *)data)[2] = 0;
         ((volatile int *)data)[3] = 0;
         *(int *)(data + 0x2c) = 5;
-        /* This float has the exact retail sentinel bits, 0x46f4d334. */
-        *(float *)(data + 0xc) = 31337.602f;
+        /* Store the exact retail float sentinel bits, 0x46f4d334. */
+        *(unsigned int *)(data + 0xc) = 0x46f4d334;
+        /* hero.unk2020 starts 0x1fa0 bytes after the existing position symbol. */
         for (i = 0; i < 6; i++) {
-            struct Moby *target = (struct Moby *)hero.unk2020[i];
+            struct Moby *target = (struct Moby *)((struct Moby **)(D_0013F3D0 + 0x1fa0))[i];
             if (target != 0) {
                 FUN_L00_00259888(&work.hit, moby, flags | 1, &work.direction, 1.0f);
                 work.hit.oclass = moby->oclass;
