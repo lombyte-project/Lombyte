@@ -2022,15 +2022,12 @@ leave:
     }
 finish:
     if (moby->visible || (OGRE_CHILD && OGRE_CHILD->visible)) {
-        float value;
         FUN_L12_002e8720(moby);
-        value = frame_scale_sq;
         if (moby->flags & 0x8000) {
             OGRE_F(0x188) = -OGRE_F(0x188);
             OGRE_F(0x208) = -OGRE_F(0x208);
-            value = D_0015ED64;
         }
-        FUN_L00_002628d8(value * 0.018f, value * 0.3f, moby, data + 0x120, 5);
+        FUN_L00_002628d8(D_0015ED64 * 0.018f, D_0015ED64 * 0.3f, moby, data + 0x120, 5);
         FUN_L00_002628d8(D_0015ED64 * 0.024f, D_0015ED64 * 0.3f, moby, data + 0x1a0, 6);
     }
     return;
