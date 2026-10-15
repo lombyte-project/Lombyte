@@ -1255,14 +1255,17 @@ void FUN_L12_003054b0(void *moby) {
                 frame_time * 0.2617994f + (float)index * (frame_time * 0.05235988f));
             if (absolute_float(angle) < 0.017453292f) *(float *)(other_data + 0x8c) = -*(float *)(other_data + 0x8c);
         }
-        active = 0;
-        distance = FUN_001f9b80(&((struct Moby *)moby)->pos, &D_0013F3D0);
-        height = absolute_float(((float *)&D_0013F3D0)[2] - ((struct Moby *)moby)->pos.z);
-        if (scale_game_frames_alt(1200) < D_L12_00161F34 && distance < 80.0f && height < 4.0f) active = 1;
-        if (distance > 90.0f || height > 7.0f) {
-            D_L12_00161F34 = 0;
-            state = D_L12_00161F00_lui;
-        } else state = D_L12_00161F00;
+        {
+            float *position = D_0013F4D0_304310;
+            active = 0;
+            distance = FUN_001f9b80(&((struct Moby *)moby)->pos, position);
+            height = absolute_float(position[2] - ((struct Moby *)moby)->pos.z);
+            if (scale_game_frames_alt(1200) < D_L12_00161F34 && distance < 80.0f && height < 4.0f) active = 1;
+            if (distance > 90.0f || height > 7.0f) {
+                D_L12_00161F34 = 0;
+                state = D_L12_00161F00_lui;
+            } else state = D_L12_00161F00;
+        }
         if ((state || active) && *(float *)(other_data + 0x80) > 0.0f) {
             FUN_001f9770(other_data + 0x98);
             FUN_001f9770(other_data + 0x9c);
