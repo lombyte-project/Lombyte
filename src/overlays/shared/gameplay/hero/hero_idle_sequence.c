@@ -616,12 +616,12 @@ void FUN_L00_002061f0(void) {
 #include "rnc/overlay/quad.h"
 extern char D_0013F350_002062b0[] __asm__("D_0013F350");
 extern f32 D_0015EE18_macro __asm__("D_0015EE18") __attribute__((section(".sdata")));
-extern volatile f32 D_0015ED6C_002062b0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern f32 D_0015ED60_002062b0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern volatile f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern f32 D_0015ED60_gp __asm__("D_0015ED60_gp") __attribute__((sda));
 extern f32 D_0015EE18_gp __attribute__((sda));
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
-extern s32 D_L00_0015F5CC_002062b0 __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
+extern s32 D_L00_0015F5CC __attribute__((section(".sdata")));
 extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((section(".data")));
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_00211670(void);
@@ -641,30 +641,24 @@ extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00257024(int);
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0024f7c8(void *, s32, void *);
-extern void FUN_0020cca8_002062b0(void *, s32, void *) __asm__("FUN_0020cca8");
-extern void *FUN_0020c4f8_002062b0(s32) __asm__("FUN_0020c4f8");
-extern void FUN_001fa2b8_002062b0(void *, void *) __asm__("FUN_001fa2b8");
-extern void FUN_001f99f8_002062b0(void *) __asm__("FUN_001f99f8");
-extern void FUN_001f9cf8_002062b0(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_001fa378_002062b0(void *, void *, void *) __asm__("FUN_001fa378");
-extern void FUN_001fa050_002062b0(void *, void *) __asm__("FUN_001fa050");
-extern void FUN_L00_00257880_002062b0(void *, s32, s32, s32) __asm__("FUN_L00_00257880");
-extern int FUN_L00_0028dbe8_002062b0(void *, s32, void *) __asm__("FUN_L00_0028dbe8");
+extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
+extern void *create_moby(s32) __asm__("FUN_0020c4f8");
+extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void blend_moby_animation_2062b0(void *, s32, s32, s32) __asm__("FUN_L00_00257880");
+extern int allocate_voice_for_target_entry_2062b0(void *, s32, void *) __asm__("FUN_L00_0028dbe8");
 extern void FUN_L00_00216de8(s32, s32);
-extern s32 FUN_001f96f8_002062b0(s32) __asm__("FUN_001f96f8");
-extern s32 FUN_001f9770_002062b0(void *) __asm__("FUN_001f9770");
-extern f32 FUN_001fa580_002062b0(f32, f32) __asm__("FUN_001fa580");
-extern f32 FUN_001fa6c0_002062b0(s32) __asm__("FUN_001fa6c0");
-extern s32 FUN_001fa6d0_002062b0(f32) __asm__("FUN_001fa6d0");
-extern f32 FUN_001fa6e0_002062b0(f32) __asm__("FUN_001fa6e0");
-extern s32 FUN_L00_00200298_002062b0(f32, s32, s32) __asm__("FUN_L00_00200298");
-extern f32 FUN_L00_001ff800_002062b0(f32) __asm__("FUN_L00_001ff800");
-extern f32 FUN_L00_002000e8_002062b0(f32, f32) __asm__("FUN_L00_002000e8");
-extern s32 FUN_L00_00200250_002062b0(f32) __asm__("FUN_L00_00200250");
-extern f32 FUN_L00_00200240_002062b0(s32) __asm__("FUN_L00_00200240");
-extern s32 FUN_L00_001fef20_002062b0(s32) __asm__("FUN_L00_001fef20");
-extern s32 FUN_L00_001fef98_002062b0(void *) __asm__("FUN_L00_001fef98");
-extern void FUN_L00_0025b868_002062b0(f32, f32, void *) __asm__("FUN_L00_0025b868");
+extern s32 fast_tween_color_2062b0(f32, s32, s32) __asm__("FUN_L00_00200298");
+extern f32 fast_sin_2059d8(f32) __asm__("FUN_L00_001ff800");
+extern f32 fast_add_rotations_2062b0(f32, f32) __asm__("FUN_L00_002000e8");
+extern s32 truncate_float_to_s32_2059d8(f32) __asm__("FUN_L00_00200250");
+extern f32 convert_integer_to_float_2059d8(s32) __asm__("FUN_L00_00200240");
+extern s32 scale_game_frames_2059d8(s32) __asm__("FUN_L00_001fef20");
+extern s32 help_active_2059d8(void *) __asm__("FUN_L00_001fef98");
+extern void set_help_color_2059d8(f32, f32, void *) __asm__("FUN_L00_0025b868");
 
 void FUN_L00_002062b0(void) {
     char *g;
@@ -703,7 +697,7 @@ void FUN_L00_002062b0(void) {
         D_L00_0017B85C_002062b0 = D_0015EE18_macro;
         FUN_L00_002059d8();
         if (*(char **)(g + 0x1624) == 0) {
-            *(char **)(g + 0x1624) = FUN_0020c4f8_002062b0(0x4b4);
+            *(char **)(g + 0x1624) = create_moby(0x4b4);
             if (*(char **)(g + 0x1624)) {
                 char *moby = *(char **)(g + 0x1624);
                 *(u32 *)(moby + 0x90) = 0x801432d7;
@@ -727,18 +721,18 @@ void FUN_L00_002062b0(void) {
                 qcopy(g + 0x1d80, &scratch.rotation[0]);
                 FUN_L00_00207d00();
                 if (*(char **)(g + 0x1624) != 0) {
-                    FUN_0020cca8_002062b0(*(char **)(g + 0x2080), 7, scratch.help.transform);
+                    build_moby_bone_transform(*(char **)(g + 0x2080), 7, scratch.help.transform);
                     qcopy_nc(*(char **)(g + 0x1624) + 0x10, &scratch.help.transform[3]);
-                    FUN_001fa2b8_002062b0(*(char **)(g + 0x1624) + 0xc0, scratch.help.transform);
+                    copy_matrix3x4(*(char **)(g + 0x1624) + 0xc0, scratch.help.transform);
                     scratch.help.offset = 0;
                     ((f32 *)&scratch.help.offset)[2] = 0.0257f;
-                    FUN_001f9cf8_002062b0(&scratch.help.offset, &scratch.help.offset, *(char **)(g + 0x1624) + 0xc0);
+                    transform_vector_by_basis(&scratch.help.offset, &scratch.help.offset, *(char **)(g + 0x1624) + 0xc0);
                     *(f32 *)(*(char **)(g + 0x1624) + 0x18) -= ((f32 *)&scratch.help.offset)[2];
                     FUN_L00_00250df8(*(char **)(g + 0x1624));
                     scale = 1.7f;
                     if (D_0015EDB3_macro) scale = 3.1f;
                     if (*(s16 *)(g + 0x22fc)) scale *= 1.4f;
-                    FUN_L00_0025b868_002062b0(*(f32 *)(*(char **)(*(char **)(g + 0x1624) + 0x24) + 0x24) * scale, 0.02f, *(char **)(g + 0x1624) + 0x2c);
+                    set_help_color_2059d8(*(f32 *)(*(char **)(*(char **)(g + 0x1624) + 0x24) + 0x24) * scale, 0.02f, *(char **)(g + 0x1624) + 0x2c);
                 }
             }
         }
@@ -748,11 +742,11 @@ void FUN_L00_002062b0(void) {
             color2 = 0x1e00004b;
             {
                 char *g = (char *)&hero;
-                *(f32 *)(g + 0x1628) = FUN_L00_002000e8_002062b0(*(f32 *)(g + 0x1628), D_0015ED6C_002062b0 * 2.9670596f);
+                *(f32 *)(g + 0x1628) = fast_add_rotations_2062b0(*(f32 *)(g + 0x1628), frame_time_macro * 2.9670596f);
             }
-            if (FUN_L00_001fef98_002062b0(g + 0x22fc) == 0) {
+            if (help_active_2059d8(g + 0x22fc) == 0) {
                 char *g = (char *)&hero;
-                *(f32 *)(g + 0x1628) = FUN_L00_002000e8_002062b0(*(f32 *)(g + 0x1628), D_0015ED6C_002062b0 * 12.217304f);
+                *(f32 *)(g + 0x1628) = fast_add_rotations_2062b0(*(f32 *)(g + 0x1628), frame_time_macro * 12.217304f);
                 switch (*(s16 *)(g + 0x22fe)) {
                 case 1: color = 0x2814c814; color2 = 0x1e004b00; break;
                 case 2: color = 0x2814c8c8; color2 = 0x1e004b4b; break;
@@ -763,13 +757,13 @@ void FUN_L00_002062b0(void) {
             {
                 char *g = (char *)&hero;
                 s32 tint;
-                wave = FUN_L00_001ff800_002062b0(*(f32 *)(g + 0x1628));
-                color = FUN_L00_00200298_002062b0(wave * 0.5f + 0.5f, color, color2);
+                wave = fast_sin_2059d8(*(f32 *)(g + 0x1628));
+                color = fast_tween_color_2062b0(wave * 0.5f + 0.5f, color, color2);
                 tint = color;
-                if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = FUN_L00_00200298_002062b0(D_0015ED60_gp * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), tint);
-                *(u32 *)(g + 0x2300) = FUN_L00_00200298_002062b0(D_0015ED60_002062b0 * 0.1f, *(u32 *)(g + 0x2300), tint);
+                if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = fast_tween_color_2062b0(D_0015ED60_gp * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), tint);
+                *(u32 *)(g + 0x2300) = fast_tween_color_2062b0(frame_scale_macro * 0.1f, *(u32 *)(g + 0x2300), tint);
                 if (*(char **)(g + 0x1620) == 0) {
-                    *(char **)(g + 0x1620) = FUN_0020c4f8_002062b0(0x47a);
+                    *(char **)(g + 0x1620) = create_moby(0x47a);
                     if (*(char **)(g + 0x1620)) {
                         char *moby = *(char **)(g + 0x1620);
                         qcopy(moby + 0x10, g + 0x80);
@@ -782,24 +776,24 @@ void FUN_L00_002062b0(void) {
                     }
                 }
                 if (*(char **)(g + 0x1620)) {
-                    FUN_0020cca8_002062b0(*(char **)(g + 0x2080), 5, scratch.rotation);
+                    build_moby_bone_transform(*(char **)(g + 0x2080), 5, scratch.rotation);
                     {
                         OvlQuad *position = &scratch.rotation[3];
                         char *moby = *(char **)(g + 0x1620);
                         qcopy_nc(moby + 0x10, position);
                         FUN_L00_00250df8(moby);
                     }
-                    FUN_001f99f8_002062b0((scratch.rotation + 4));
+                    clear_u64_value((scratch.rotation + 4));
                     ((f32 *)(scratch.rotation + 4))[2] = -*(f32 *)(g + 0x98);
-                    FUN_001fa050_002062b0(scratch.help.inverse, (scratch.rotation + 4));
-                    FUN_001fa378_002062b0(scratch.rotation, scratch.rotation, scratch.help.inverse);
-                    FUN_001fa2b8_002062b0(*(char **)(g + 0x1620) + 0xc0, scratch.rotation);
+                    euler_rotation_matrix(scratch.help.inverse, (scratch.rotation + 4));
+                    multiply_matrix(scratch.rotation, scratch.rotation, scratch.help.inverse);
+                    copy_matrix3x4(*(char **)(g + 0x1620) + 0xc0, scratch.rotation);
                     *(u64 *)(*(char **)(g + 0x1620) + 0x38) = *(u64 *)(*(char **)(g + 0x2080) + 0x38);
                     if (*(s32 *)(g + 0x2084) == 0x4f) {
                         if (*(u8 *)(*(char **)(g + 0x1620) + 0x53) != 1)
-                            FUN_L00_00257880_002062b0(*(char **)(g + 0x1620), 1, 0, FUN_L00_001fef20_002062b0(10));
+                            blend_moby_animation_2062b0(*(char **)(g + 0x1620), 1, 0, scale_game_frames_2059d8(10));
                     } else if (*(u8 *)(*(char **)(g + 0x1620) + 0x53) != 0) {
-                        FUN_L00_00257880_002062b0(*(char **)(g + 0x1620), 0, 0, FUN_L00_001fef20_002062b0(0x11));
+                        blend_moby_animation_2062b0(*(char **)(g + 0x1620), 0, 0, scale_game_frames_2059d8(0x11));
                     }
                 }
             }
@@ -807,9 +801,9 @@ void FUN_L00_002062b0(void) {
         {
             char *g = (char *)&hero;
             if (*(char **)(g + 0x22c0)) {
-                FUN_L00_0028dbe8_002062b0(*(char **)(g + 0x22c0) + 0x10, 0, *(char **)(g + 0x2080));
+                allocate_voice_for_target_entry_2062b0(*(char **)(g + 0x22c0) + 0x10, 0, *(char **)(g + 0x2080));
                 *(s16 *)(g + 0x22fe) = *(u16 *)(g + 0x22c0);
-                *(s16 *)(g + 0x22fc) = FUN_L00_001fef20_002062b0(0x39);
+                *(s16 *)(g + 0x22fc) = scale_game_frames_2059d8(0x39);
             }
             *(u32 *)(g + 0x22c0) = 0;
         }
@@ -835,15 +829,15 @@ void FUN_L00_002062b0(void) {
         {
             char *g = (char *)&hero;
             alpha = 0x80;
-            span = FUN_L00_001fef20_002062b0(0xaa);
-            if (*(s16 *)(g + 0x22e0) == 2) span = FUN_L00_001fef20_002062b0(0x32);
-            else if (*(s16 *)(g + 0x22e0) == 1) span = FUN_L00_001fef20_002062b0(0x5a);
-            phase = FUN_L00_00200240_002062b0(span);
-            wave = FUN_L00_001ff800_002062b0((((f32)(D_L00_0015F5CC_002062b0 % span) / phase) * 2.0f) * 3.1415927f + -3.1415927f);
+            span = scale_game_frames_2059d8(0xaa);
+            if (*(s16 *)(g + 0x22e0) == 2) span = scale_game_frames_2059d8(0x32);
+            else if (*(s16 *)(g + 0x22e0) == 1) span = scale_game_frames_2059d8(0x5a);
+            phase = convert_integer_to_float_2059d8(span);
+            wave = fast_sin_2059d8((((f32)(D_L00_0015F5CC % span) / phase) * 2.0f) * 3.1415927f + -3.1415927f);
         }
-        red = FUN_L00_00200250_002062b0(wave * 20.0f) + 0x32;
-        green = FUN_L00_00200250_002062b0(wave * 70.0f) + 0xb4;
-        blue = FUN_L00_00200250_002062b0(wave * 10.0f) + 0x14;
+        red = truncate_float_to_s32_2059d8(wave * 20.0f) + 0x32;
+        green = truncate_float_to_s32_2059d8(wave * 70.0f) + 0xb4;
+        blue = truncate_float_to_s32_2059d8(wave * 10.0f) + 0x14;
         {
             char *g = (char *)&hero;
             {
@@ -862,7 +856,7 @@ void FUN_L00_002062b0(void) {
             char *g;
             {
                 char *g = (char *)&hero;
-                *(u32 *)(*(char **)(g + 0x2080) + 0x90) = FUN_L00_00200298_002062b0(0.1f, *(u32 *)(*(char **)(g + 0x2080) + 0x90), color);
+                *(u32 *)(*(char **)(g + 0x2080) + 0x90) = fast_tween_color_2062b0(0.1f, *(u32 *)(*(char **)(g + 0x2080) + 0x90), color);
             }
             g = (char *)&hero;
             for (i = 0; i < 3; i++)
@@ -875,7 +869,7 @@ void FUN_L00_002062b0(void) {
             red = *(u8 *)(moby + 0x90);
             alpha = 0x30;
             if (*(s16 *)(g + 0x22de))
-                alpha = FUN_L00_00200250_002062b0(FUN_L00_00200240_002062b0(*(s16 *)(g + 0x22de)) / FUN_L00_00200240_002062b0(0x12) * (f32)alpha);
+                alpha = truncate_float_to_s32_2059d8(convert_integer_to_float_2059d8(*(s16 *)(g + 0x22de)) / convert_integer_to_float_2059d8(0x12) * (f32)alpha);
             *(u32 *)(g + 0x22e4) = (alpha << 24) | ((u32)blue << 16) | ((u32)green << 8) | (u32)red;
             FUN_L00_00207d00();
             *(s16 *)(g + 0x22e0) = 0;
