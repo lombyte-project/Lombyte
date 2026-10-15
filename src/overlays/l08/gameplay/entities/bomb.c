@@ -323,10 +323,11 @@ void FUN_L08_002d23f0(char *moby) {
     if (*(unsigned char *)(moby + 0x20) != 0x37 && coll_sphere(0.5f, position = moby + 0x10, 0x11, moby)) {
         if (D_L08_00174658_data != 0 &&
             (D_L08_00174658_data != *(int *)(data + 0x30) || *(int *)(data + 0x24) != 0)) {
-            if (*(unsigned char *)(moby + 0xbc) & 2) moby[0x20] = 0x63;
-            else moby[0x20] = 0x62;
-            qcopy(position, D_L08_00174660);
-            rotate_vector_2d23f0(data + 0x10, data + 0x10, D_L08_00174680_vec);
+            char *collision_result = (char *)D_L08_00174660;
+            if (!(*(unsigned char *)(moby + 0xbc) & 2)) moby[0x20] = 0x62;
+            else moby[0x20] = 0x63;
+            qcopy(position, collision_result);
+            rotate_vector_2d23f0(data + 0x10, data + 0x10, collision_result + 0x20);
             normalize_vector_xyz(data + 0x10, data + 0x10, D_0015ED6C + D_0015ED6C);
         }
     }
