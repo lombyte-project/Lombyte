@@ -291,6 +291,7 @@ void FUN_L08_002d23f0(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *position;
     char *velocity;
+    char *collision_result;
     union {
         struct {
             float from[4];
@@ -323,7 +324,7 @@ void FUN_L08_002d23f0(char *moby) {
     if (*(unsigned char *)(moby + 0x20) != 0x37 && coll_sphere(0.5f, position = moby + 0x10, 0x11, moby)) {
         if (D_L08_00174658_data != 0 &&
             (D_L08_00174658_data != *(int *)(data + 0x30) || *(int *)(data + 0x24) != 0)) {
-            char *collision_result = (char *)D_L08_00174660;
+            collision_result = (char *)D_L08_00174660;
             if (!(*(unsigned char *)(moby + 0xbc) & 2)) moby[0x20] = 0x62;
             else moby[0x20] = 0x63;
             qcopy(position, collision_result);
@@ -362,7 +363,7 @@ void FUN_L08_002d23f0(char *moby) {
         record.motion.collision.owner = moby;
         qcopy(record.motion.collision.velocity, velocity);
         if (FUN_001efa68(record.motion.from, &record.motion.collision, 0, moby, 0)) {
-            char *collision_result = (char *)&D_L08_00174658 - 0x18;
+            collision_result = (char *)&D_L08_00174658 - 0x18;
             if (*(int *)(collision_result + 0x18) != 0) {
                 if (*(int *)(collision_result + 0x18) == *(int *)(data + 0x30) && *(int *)(data + 0x24) == 0) goto finish;
                 if (*(unsigned char *)(moby + 0xbc) & 2) moby[0x20] = 0x63;
