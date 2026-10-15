@@ -840,7 +840,7 @@ void FUN_L01_0030df40(struct Moby *m) {
             f32 turn_limit = time * 11.519173f;
             s32 flags = *(s32 *)((char *)t + 0x38) | 8;
             t->unk0 = 500;
-            *(f32 *)((char *)t + 0xc) = 0.15f;
+            *(f32 *)((char *)t + 8) = 0.15f;
             t->yaw_speed = speed;
             *(f32 *)((char *)t + 0x24) = limit;
             *(f32 *)((char *)t + 0x10) = rate;
@@ -850,7 +850,7 @@ void FUN_L01_0030df40(struct Moby *m) {
             *(f32 *)((char *)t + 0x3c) = turn_speed;
             *(f32 *)((char *)t + 0x40) = turn;
             *(f32 *)((char *)t + 0x44) = turn_limit;
-            *(f32 *)((char *)t + 8) = 0.15f;
+            *(f32 *)((char *)t + 0xc) = 0.15f;
             *(f32 *)((char *)t + 0x1c) = rate;
         }
         *(s32 *)((char *)t + 0x48) = FUN_001f96f8(4);
