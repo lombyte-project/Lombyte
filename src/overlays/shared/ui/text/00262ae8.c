@@ -171,8 +171,8 @@ void FUN_L05_00262b58(HudCounter *e) {
             i = 3;
             dst = &D_L05_0015FAEC;
             do { *dst-- = 0; } while (--i >= 0);
-            counter[2] = 0;
             counter[0] = 0;
+            counter[2] = 0;
         } else {
             if (counter[2] == 3) {
                 if (timer == scale_game_frames(0x6e)) {
