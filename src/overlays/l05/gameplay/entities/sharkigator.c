@@ -2019,6 +2019,7 @@ void FUN_L05_00304320(char *moby) {
     int state;
     int *path_entry;
     int count;
+    int direction;
     int index;
     int last;
     int offset;
@@ -2125,10 +2126,11 @@ state_zero:
 state_one:
     path_entry=(int *)(data+0xc0);
     count=**(int **)((char *)path_entry+0x10);
+    direction=*(signed char *)((char *)path_entry+4);
     last=0;
-    if (*(signed char *)((char *)path_entry+4)>=0) last=count-1;
+    if (direction>=0) last=count-1;
     index=*path_entry+count;
-    index+=*(signed char *)((char *)path_entry+4);
+    index+=direction;
     index%=count;
     path_position=moby+0x10;
     position=path_position;
@@ -2169,10 +2171,11 @@ state_one:
 state_two:
     path_entry=(int *)(data+0xc0);
     count=**(int **)((char *)path_entry+0x10);
+    direction=*(signed char *)((char *)path_entry+4);
     last=0;
-    if (*(signed char *)((char *)path_entry+4)>=0) last=count-1;
+    if (direction>=0) last=count-1;
     index=*path_entry+count;
-    index+=*(signed char *)((char *)path_entry+4);
+    index+=direction;
     index%=count;
     path_position=moby+0x10;
     position=path_position;
@@ -2190,10 +2193,6 @@ state_two:
     v[3]=D_L05_00161B30;
     w[3]=D_L05_00161B34;
     moby_point_position(moby,2,point);
-    rotation0=data+0x194;
-    rotation1=data+0x198;
-    matrix1=data+0x140;
-    matrix0=data+0x100;
     i=0;
     do {
     qcopy(pos,point);
@@ -2213,30 +2212,32 @@ state_two:
     n2=func_001FA898_r(scale_particle_time(random_float_between(D_L05_00161B18,D_L05_00161B18*1.2f)));
     n3=func_001FA898_r(scale_particle_time(random_float_between(D_L05_00161B1C,D_L05_00161B1C*1.2f)));
     particle=spawn_spark(pos,v,w,D_L05_00161B0C,D_L05_00161B10,n1,n2,n3,-1);
+    count=i+1;
     if (!(frame_number&7) && particle && i==0) {
+        count=1;
+        j=0;
         if (*(char **)(data+0x1a0)==0) *(char **)(data+0x1a0)=particle;
         else {
-            j=0;
             do {
                 j++;
                 if (j>=8) goto slots_done;
-                child=data+0x1a0+j*4;
+                path_position=data+0x1a0+j*4;
             } while (*(char **)(data+0x1a0+j*4));
-            *(char **)child=particle;
+            *(char **)path_position=particle;
         }
     }
 slots_done:
-    i++;
+    i=count;
     } while (i<2);
     v[3]=D_L05_00161B60;
     w[3]=D_L05_00161B64;
-    i=1;
+    last=1;
     do {
     qcopy(pos,point);
     pos[0]+=random_float_between(-0.2f,0.2f);
     pos[1]+=random_float_between(-0.2f,0.2f);
     pos[2]+=random_float_between(-0.2f,0.2f);
-    i--;
+    last--;
     turn=random_float_between(-D_L05_00161B6C,D_L05_00161B6C)*0.017453292f;
     v[0]=FUN_001f9dc8(FUN_001fa580((*(float *)((char *)(data)+(0x194))),turn))*(D_L05_00161B50*frame_time);
     v[1]=FUN_001f9de0(FUN_001fa580((*(float *)((char *)(data)+(0x194))),turn))*(D_L05_00161B50*frame_time);
@@ -2251,7 +2252,7 @@ slots_done:
     n2=func_001FA898_r(scale_particle_time(random_float_between(D_L05_00161B48,D_L05_00161B48*1.2f)));
     n3=func_001FA898_r(scale_particle_time(random_float_between(D_L05_00161B4C,D_L05_00161B4C*1.2f)));
     particle=spawn_spark(pos,v,w,D_L05_00161B3C,D_L05_00161B40,n1,n2,n3,-1);
-    } while (i>=0);
+    } while (last>=0);
     qcopy(pos,position);
     pos[2]+=3.0f;
     if ((*(float *)((char *)(data)+(0x174)))<distance_to_2d1688(position,hero.motion.pos.f)) goto stop_attack;
@@ -2262,6 +2263,10 @@ stop_attack:
     if ((*(unsigned char *)((char *)(moby)+(0x53)))) blend_moby_animation(moby,0,0,3);
     (*(unsigned char *)((char *)(moby)+(0x20)))=1;
 turn_attack:
+    rotation0=data+0x194;
+    rotation1=data+0x198;
+    matrix1=data+0x140;
+    matrix0=data+0x100;
     angle=FUN_001f9e90(hero.motion.pos.f[0]-(*(float *)((char *)(moby)+(0x10))),hero.motion.pos.f[1]-(*(float *)((char *)(moby)+(0x14))));
     smooth_angle_304320(angle,frame_time*1.5707964f,rotation0,0);
     smooth_angle_304320(0.08726646f,frame_time*1.5707964f,rotation1,0);
