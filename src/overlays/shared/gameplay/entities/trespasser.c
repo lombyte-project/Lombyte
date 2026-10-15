@@ -738,7 +738,6 @@ void FUN_L00_002bffa8(struct Moby *moby) {
     OvlVec4 probe, start, end, delta, result;
     void *pos;
     float size, speed, distance, height, limit, angle, rate, old_z;
-    u8 state;
     u8 *data;
     int hit;
     u32 flags;
@@ -860,6 +859,7 @@ collision_done:
         if (moby->anim_flags & 2) moby->state = 2;
         break;
     case 2: case 3: case 4: case 5: {
+        u8 state;
         struct Moby *target;
         target = vars->target;
         if (target && target->state != 254 && target->state != 253) {
@@ -976,13 +976,15 @@ collision_done:
         }
         break;
     }
-    case 6:
+    case 6: {
+        u8 state;
         angle = atan2_f(vars->target_pos.f[0]-moby->pos.x,vars->target_pos.f[1]-moby->pos.y);
         FUN_L00_002beb90(vars);
         FUN_L00_00258278_2bffa8(moby,(u8 *)&hero+0x1ec0+0x14,angle,HF_2bffa8(0x1efc)+HF_2bffa8(0x1efc),HF_2bffa8(0x1f00)*0.5f,HF_2bffa8(0x1f04)+HF_2bffa8(0x1f04));
         FUN_L00_002bebc8(vars);
         if (fast_difference_between_rotations(moby->rot.z,angle) < 0.08726646f) { state = HB_2bffa8(0x1f3c); ANIM_2bffa8(state,3); moby->state = 7; }
         break;
+    }
     case 7:
         old_z = moby->pos.z; FUN_L00_002bec00(vars);
         if (FUN_L00_0025b440(moby,(u8 *)&hero+0x1f10) == 4) {
