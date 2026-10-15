@@ -29,13 +29,13 @@
 > Lombyte does not include game data, executables, disc images, or proprietary toolchains.<br>
 > A legitimately obtained copy of the **USA / NTSC-U** release (`SCUS_971.99`) is required.
 
+<h3>Decompilation progress</h3>
+
 <p align="center">
   <a href="https://lombyte-project.github.io/namingdesk">
     <img src="assets/naming-desk-card.svg" alt="Open the Naming Desk" width="100%">
   </a>
 </p>
-
-<h3>Decompilation progress</h3>
 
 <p align="center">
   <a href="https://bytematch.dev/lombyte-project/Lombyte">
