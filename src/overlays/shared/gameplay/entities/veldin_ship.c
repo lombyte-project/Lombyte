@@ -3359,7 +3359,7 @@ void FUN_L00_002d73e8(P *p) {
     u32 base_color = (u32)sprite_data[0x5f] << 16 | (u32)sprite_data[0x5e] << 8 | sprite_data[0x5d];
     int end = q->start + q->count + q->extra;
     V *transform;
-    float x, y, f;
+    float x, y, f, speed;
     float * volatile phase;
     float *source_texcoords;
     s16 *timer;
@@ -3391,7 +3391,9 @@ void FUN_L00_002d73e8(P *p) {
     FUN_002a0ba8_2d73e8(0x47, 0x51001);
 
     for (i = q->start; i < end; i++) {
-        f = D_L00_001D31C0[i] - D_L00_001D4480[i] * D_0015ED60_2d73e8;
+        speed = D_L00_001D4480[i];
+        f = D_L00_001D31C0[i];
+        f -= speed * D_0015ED60_2d73e8;
         transform = negative_transform;
         if (D_L00_001D2860[i] == 0)
             transform = positive_transform;
@@ -3413,9 +3415,9 @@ void FUN_L00_002d73e8(P *p) {
                     points->x = source->x;
                     f = source->y * x;
                     points->y = f;
-                    f = source->z * y;
+                    speed = source->z * y;
                     points->w = 1.0f;
-                    points->z = f;
+                    points->z = speed;
                     FUN_001ff6f8_2d73e8(points, points, transform);
                     *texcoords = D_L00_001E1440_2d73e8[index][1] + *phase;
                     *texcoords_second = D_L00_001E1440_2d73e8[index][0];
