@@ -197,10 +197,11 @@ next_path:      i -= 8; p += 8;
                 if (count > 1) {
                     index = random_int_between(0, count - 2);
                     *(u128 *)((char *)data + 0xf0) = *(u128 *)(D_L15_001600EC + best[index] * 0x80 + 0x30);
-                    *(u128 *)((char *)data + 0x110) = *(u128 *)(D_L15_001600EC + best[index+1] * 0x80 + 0x30);
-                    *(u128 *)((char *)data + 0x100) = *(u128 *)((char *)data + 0x110);
+                    *(u128 *)((char *)data + 0x100) = *(u128 *)(D_L15_001600EC + best[index+1] * 0x80 + 0x30);
+                    *(u128 *)((char *)data + 0x110) = *(u128 *)((char *)data + 0x100);
                     if (DATA_INT(0x120) == -1) DATA_INT(0x120) = FUN_L00_0023e738(8.0f, 0.0f, 1.0f, 1.0f, 0.5f, (char *)data + 0xf0);
                     else {
+                        char *other;
                         other = (char *)D_L15_001808C0 + DATA_INT(0x120) * 0x20;
                         qcopy(other + 0x10, (char *)data + 0xf0);
                         *(float *)(other + 0x1c) = 8.0f; *(float *)(other + 4) = 1.0f;
