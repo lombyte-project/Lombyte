@@ -2962,6 +2962,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     do {
         float sampled, angle, delta, length, row_float, spread, phase;
         index = row << 4;
+        row_float = (float)row;
         FUN_001ff2a8_002ddf60(&temp1, D_L00_001E5F40_002ddcb8 + index, D_L00_001E5F30 + index);
         qcopy(&temp2, &scaled_first);
         FUN_001ff3c0_002ddf60(&edge, &temp2, &temp1);
@@ -2981,7 +2982,6 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
             if (length > 2.0f)
                 FUN_001ff300_002ddcb8(&offset, &offset, 2.0f / length);
         }
-        row_float = (float)row;
         if (row > 5) FUN_001ff2d8_002ddf60(&offset, &offset, &temp1, row_float / FUN_00200240_002ddf60(10) + 0.0f);
         FUN_001ff278_002ddcb8(D_L00_001E5F40_002ddcb8 + index, D_L00_001E5F30 + index, &offset);
         qcopy(&tangent, &scaled_first);
