@@ -2195,13 +2195,14 @@ void FUN_L00_002be078(void *mv, int a, int b, int n, float sx, float sz, float s
     u.f[5] = 0;
     u.f[6] = 1.0f;
     u.f[7] = 1.0f;
+    len0 = D_L00_0016178C + 1.0f;
     t.f[0] = D_L00_0016178C + 0;
     t.f[1] = 0;
     t.f[2] = D_L00_0016178C + 0;
     t.f[3] = 1.0f;
-    t.f[4] = D_L00_0016178C + 1.0f;
+    t.f[4] = len0;
     t.f[5] = 0;
-    t.f[6] = D_L00_0016178C + 1.0f;
+    t.f[6] = len0;
     t.f[7] = 1.0f;
     fast_vec_sub(w140, m, g_debug_camera);
     fast_vec_sub(w150, m + 0x10, m);
