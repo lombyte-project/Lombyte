@@ -191,12 +191,12 @@ void FUN_L05_0030de90(char *moby) {
         do {
             u64 texture = get_effect_texture(D_L05_00161D98);
             /* Each 0x90-byte record spans 18 flag words or 36 float words. */
-            u64 *flags = (u64 *)quads;
-            *(volatile u64 *)&flags[i * 18 + j * 90 + 17] = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) |
+            int flags = (int)quads;
+            *(volatile u64 *)(flags + i * 144 + j * 720 + 136) = (s64)D_L05_00161D70 | ((s64)D_L05_00161D74 << 2) |
                 (((s64)D_L05_00161D78 << 4) | ((s64)D_L05_00161D7C << 6)) | 0x8000000000ULL;
-            *(volatile u64 *)&flags[i * 18 + j * 90 + 15] = texture;
-            flags[i * 18 + j * 90 + 16] = 0xff9000000260ULL;
-            *(volatile u64 *)&flags[i * 18 + j * 90 + 14] = 0;
+            *(volatile u64 *)(flags + i * 144 + j * 720 + 120) = texture;
+            *(u64 *)(flags + i * 144 + j * 720 + 128) = 0xff9000000260ULL;
+            *(volatile u64 *)(flags + i * 144 + j * 720 + 112) = 0;
             {
                 Vec4 *positions0 = (Vec4 *)((float *)quads + i * 0x24);
                 Vec4 *positions = (Vec4 *)((float *)quads + i * 36 + j * 180);
@@ -216,11 +216,11 @@ void FUN_L05_0030de90(char *moby) {
                     if (j != 0) {
                         *color = color0;
                         qcopy(positions, source);
-                        positions->f[2] += (float)height;
+                        positions->f[2] += (float)(short)height;
                     } else {
                         *colors0 = color1;
                         qcopy(positions0, source0);
-                        positions0->f[2] += (float)height;
+                        positions0->f[2] += (float)(short)height;
                     }
                     positions0++;
                     source0++;
