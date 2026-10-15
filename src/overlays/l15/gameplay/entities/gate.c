@@ -1307,8 +1307,8 @@ get_goal:
         vars[0x58] = 0x19;
         *(float *)(vars + 0x30) = 1.0f;
         vars[0x2e] = 1;
-        vars[0x5a] = 6;
         vars[0x59] = 1;
+        vars[0x5a] = 6;
         moby->update_dist = 0xff;
         moby->draw_dist = 0x80;
         if (*(int *)(vars + 0x1ac) != -1) {
