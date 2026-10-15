@@ -2833,7 +2833,7 @@ void FUN_L01_002f5168(char *moby) {
     int i, j, count, index, state;
     int link_offset;
     int hit;
-    int found = 0;
+    int found;
     short type;
     float temp[4];
     float zero[4];
@@ -2847,6 +2847,7 @@ void FUN_L01_002f5168(char *moby) {
     float speed, fraction, distance, angle, scale;
 
     Q2(zero, 0) = 0;
+    found = 0;
     data = *(char **)(moby + 0x78);
     if (H2(moby, 0xa6) != 0x336) {
         found = FUN_L01_00275690(FUN_00222150_2f5168(H2(moby, 0x32)), moby) == -1;
