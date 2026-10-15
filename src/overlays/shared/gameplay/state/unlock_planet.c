@@ -555,7 +555,8 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
             single = b_single; small = b_small; medium = b_medium; large = b_large;
         }
     }
-    while (large || medium || small || single) {
+    goto check_units;
+    do {
         qcopy(&position, moby + 0x10);
         position.f[2] += 0.5f;
         time = FUN_00257cb0_260a88();
@@ -571,6 +572,7 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
         FUN_001ff500_260a88(0.5f, &offset, &offset);
         FUN_001ff278_260a88(&position, &position, &offset);
         if (path_index >= 0) {
+            float time;
             float half = frame_time_sq * 10.8f * -0.5f;
             time = 120.0f;
             if ((float)FUN_002595a0_260a88(half, velocity.f[2] - half,
@@ -603,6 +605,7 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
             near_count = 1;
         }
         FUN_002a7438_260a88(moby, &position, &velocity, flags, near_count, gated);
-    }
+check_units:;
+    } while (single || small || medium || large);
 }
 #endif
