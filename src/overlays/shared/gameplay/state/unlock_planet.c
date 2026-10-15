@@ -505,9 +505,8 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
             if (count < 1) count = 1;
         }
     }
-    single = count;
-    remaining = single;
-    if (remaining >= 300) {
+    remaining = count;
+    if (count >= 300) {
         do {
             remaining -= 50;
             large++;
@@ -551,9 +550,9 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
             }
         }
         if (near_value - count < count - far_value) {
-            large = a_large; medium = a_medium; small = a_small; single = a_single;
+            single = a_single; small = a_small; medium = a_medium; large = a_large;
         } else {
-            large = b_large; medium = b_medium; small = b_small; single = b_single;
+            single = b_single; small = b_small; medium = b_medium; large = b_large;
         }
     }
     while (large || medium || small || single) {
@@ -592,18 +591,18 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
         FUN_001ff278_260a88(&velocity, &velocity, &base);
         if (large) {
             large--;
-            remaining = 50;
+            near_count = 50;
         } else if (medium) {
             medium--;
-            remaining = 20;
+            near_count = 20;
         } else if (small) {
             small--;
-            remaining = 5;
+            near_count = 5;
         } else {
             single--;
-            remaining = 1;
+            near_count = 1;
         }
-        FUN_002a7438_260a88(moby, &position, &velocity, flags, remaining, gated);
+        FUN_002a7438_260a88(moby, &position, &velocity, flags, near_count, gated);
     }
 }
 #endif
