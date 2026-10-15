@@ -36,8 +36,10 @@ A `D_XXXXXXXX` row counts in every level. `decomp_map.json` also gives
 
 A promoted unit counts toward C_EXACT only when its source is C. Inline asm is
 allowed solely as a label that binds a declaration to its linked name
-(`void f(void) __asm__("FUN_00202d10");`), plus the one approved idiom in
-`include/qcopy.h` and `include/qzero.h`. A unit whose file holds any other asm - instructions, an
+(`void f(void) __asm__("FUN_00202d10");`), plus the approved macros in headers:
+the quadword idiom in `include/qcopy.h` and `include/qzero.h`, and the
+privileged instructions C cannot express (`CpuEnableInt`, `CpuSync`,
+`CpuReadStatus`, `CpuSyscall`, ...) in `include/kernel.h`. A unit whose file holds any other asm - instructions, an
 empty memory barrier, `__asm__("" : "+r"(x))`, a `.extern` directive, or a
 register pin (`register int x asm("v1")`) - builds byte-exact but stays
 **pending** (C_FUZZY 99.99) until the asm is gone. `non_label_asm()` in
@@ -93,7 +95,10 @@ after `make elf` measures it the same way.
 
 `config/us/unit_categories.json` classifies units, and the ones marked
 `intentional_asm` are excluded from the C goal: SIMD, VU0/MMI and COP2 helpers
-whose C would not be a faithful reconstruction. They are left out of the
+whose C would not be a faithful reconstruction, and code written by hand in
+assembly (kernel syscall stubs, code using `$at` or trapping `add`). Compiled
+code that only needs `ei`, `di`, `sync`, `mfc0` or `syscall` is not on this
+list: it is C with the `include/kernel.h` macros. They are left out of the
 percentages, `check-unit.py` refuses them by design, and they carry **no `#else`
 C body at all** — a body there can never be measured, staged or promoted, which
 makes it the ideal hiding place for a wrong one. Evidence behind the

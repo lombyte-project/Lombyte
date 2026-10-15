@@ -1,4 +1,5 @@
 #include "types.h"
+#include "kernel.h"
 
 extern s32 D_001611E8;
 extern u8 *D_0016120C;
@@ -11,6 +12,7 @@ s32 handler_end_image(void) {
         vo_buf_dec_count(D_0016120C + 0xD9168);
         *(s32 *)0x1611E8 = 0;
     }
-    __asm__ __volatile__("sync\nei");
+    CpuSync();
+    CpuEnableInt();
     return 0;
 }

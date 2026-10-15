@@ -1,4 +1,5 @@
 #include "types.h"
+#include "kernel.h"
 
 extern s32 _DisableIntc();
 extern s32 DIntr();
@@ -10,13 +11,13 @@ s32 disable_intc(s32 arg0) {
     u32 status;
     s32 result;
 
-    __asm__ __volatile__("mfc0 %0, $12" : "=r"(status));
+    status = CpuReadStatus();
     status &= 0x10000;
     if (status != 0) {
         DIntr();
     }
     result = _DisableIntc(arg0);
-    __asm__ __volatile__("sync");
+    CpuSync();
     if (status != 0) {
         EnableInterrupts();
     }

@@ -62,7 +62,6 @@ extern u8 D_0014BEC0[];
 extern u8 D_0014BF10[];
 extern s32 D_0014EE90[16];
 extern short D_001516F0 __attribute__((section(".data")));
-extern s32 D_00154500[];
 extern u8 D_00154A80[];
 extern u32 D_00154E64[];
 extern u32 D_00154E6C[];

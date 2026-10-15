@@ -2,6 +2,7 @@
 
 #include "types.h"
 #include "kernel.h"
+#include "rnc/sdk/top_thread.h"
 
 
 struct ThreadParam {
@@ -20,11 +21,8 @@ extern s32 DeleteSema(s32 sema);
 extern s32 _StartThread(s32 id, void *arg);
 extern s32 GetThreadId();
 extern s32 ChangeThreadPriority(s32 id, s32 priority);
-extern void topThread();
+extern void topThread(TopThreadQueue *queue);
 
-extern s32 D_0012FBF8[];
-extern s32 D_00154500[];
-extern u32 D_00154508[];
 extern s32 D_00154100[];
 extern s32 D_00166C00[];
 
@@ -32,13 +30,13 @@ s32 InitThread(void) {
     struct ThreadParam th;
     struct SemaParam se;
 
-    if (D_0012FBF8[0] > 0)
+    if (top_thread_id > 0)
         return -1;
 
     se.initCount = 0;
     se.maxCount = 0xFF;
-    D_00154500[0] = CreateSema(&se);
-    if (D_00154500[0] < 0)
+    top_thread_semaphore = CreateSema(&se);
+    if (top_thread_semaphore < 0)
         return -1;
 
     th.entry = topThread;
@@ -46,16 +44,16 @@ s32 InitThread(void) {
     th.stackSize = 0x400;
     th.gp = D_00166C00;
     th.priority = 0;
-    D_0012FBF8[0] = CreateThread(&th);
-    if (D_0012FBF8[0] < 0) {
-        DeleteSema(D_00154500[0]);
+    top_thread_id = CreateThread(&th);
+    if (top_thread_id < 0) {
+        DeleteSema(top_thread_semaphore);
         return -1;
     }
 
-    D_00154508[0] = 0;
-    D_00154508[1] = 0;
-    _StartThread(D_0012FBF8[0], D_00154508);
+    top_thread_queue.read_index = 0;
+    top_thread_queue.write_index = 0;
+    _StartThread(top_thread_id, &top_thread_queue);
     ChangeThreadPriority(GetThreadId(), 1);
 
-    return D_0012FBF8[0];
+    return top_thread_id;
 }

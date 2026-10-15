@@ -40,7 +40,8 @@ make it clearer, add a comment that explains why it looks odd.
 
 **Never:**
 
-- add inline assembly (other than the name label);
+- add inline assembly (other than the name label); for `ei`, `di`, `sync`,
+  `mfc0` or `syscall` use the macros in `include/kernel.h`;
 - use `#ifdef` tricks;
 - change which compiler a unit uses;
 - edit files in `asm/`;

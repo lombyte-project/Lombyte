@@ -1,4 +1,5 @@
 #include "types.h"
+#include "kernel.h"
 
 extern s32 DIntr();
 extern s32 EnableInterrupts();
@@ -8,7 +9,7 @@ void VSync(void) {
 
     old = DIntr();
     *(volatile u32 *)0x1000F000 = 4;
-    __asm__ __volatile__("sync");
+    CpuSync();
     if (old != 0) {
         EnableInterrupts();
     }
@@ -16,7 +17,7 @@ void VSync(void) {
     }
     old = DIntr();
     *(volatile u32 *)0x1000F000 = 4;
-    __asm__ __volatile__("sync");
+    CpuSync();
     if (old != 0) {
         EnableInterrupts();
     }

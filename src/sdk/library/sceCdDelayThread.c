@@ -2,7 +2,8 @@ extern int CreateSema(int *parameters) __asm__("CreateSema");
 extern void SetAlarm(int delay, void *callback, int semaphore) __asm__("SetAlarm");
 extern void WaitSema(int semaphore) __asm__("WaitSema");
 extern void DeleteSema(int semaphore) __asm__("DeleteSema");
-extern unsigned char AlarmCallback[1] __asm__("D_001205E8") __attribute__((section(".data")));
+extern void signal_native_cd_delay_alarm(int alarm_id, unsigned int scheduled_time, int semaphore_id)
+    __asm__("FUN_001205e8");
 
 void SceCdDelayThread(int delay) __asm__("sceCdDelayThread");
 
@@ -15,7 +16,7 @@ void SceCdDelayThread(int delay) {
     parameters[2] = 0;
     parameters[5] = 0;
     semaphore = CreateSema(parameters);
-    SetAlarm(delay_reg, AlarmCallback, semaphore);
+    SetAlarm(delay_reg, signal_native_cd_delay_alarm, semaphore);
     WaitSema(semaphore);
     DeleteSema(semaphore);
 }

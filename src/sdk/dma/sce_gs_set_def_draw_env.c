@@ -1,4 +1,5 @@
 #include "types.h"
+#include "kernel.h"
 
 struct sceGsDrawEnv1 {
     unsigned long frame1;
@@ -19,7 +20,6 @@ struct sceGsDrawEnv1 {
     unsigned long test1addr;
 };
 
-#define M2C_SYNC() __asm__ __volatile__("sync")
 
 extern s16 sceGszbufaddr(s16 psm, s16 w, s16 h);
 
@@ -63,6 +63,6 @@ s32 sceGsSetDefDrawEnv(struct sceGsDrawEnv1 *draw, s16 psm, s16 w, s16 h, s16 zt
     } else {
         draw->test1 = 0x30000;
     }
-    M2C_SYNC();
+    CpuSync();
     return 8;
 }

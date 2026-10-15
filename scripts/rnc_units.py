@@ -222,8 +222,9 @@ def workspace_problem(workspace: Path, repo: Path | None = None) -> str | None:
 # solely as a label binding a declaration to its linked name
 # (`__asm__("FUN_00202d10")`). Any other asm in the file (instructions, empty
 # memory barriers, `.extern` directives, register pins) keeps the unit pending
-# however exact its bytes are. include/qcopy.h and include/qzero.h are the approved exceptions and
-# lives in a header, not in the unit.
+# however exact its bytes are. The approved exceptions live in headers, not in
+# units: include/qcopy.h and include/qzero.h (the quadword idiom) and
+# include/kernel.h (privileged instructions: ei, di, sync, mfc0, syscall).
 _ASM_START_RE = re.compile(r"\b(?:__asm__|__asm|asm)\b(?:\s*(?:__volatile__|volatile))?\s*\(")
 _ASM_LABEL_RE = re.compile(r'\s*"[A-Za-z_.$][\w.$]*"\s*')
 _COMMENT_RE = re.compile(r"/\*.*?\*/|//[^\n]*", re.S)
