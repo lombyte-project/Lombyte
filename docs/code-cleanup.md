@@ -16,6 +16,9 @@ to make that code easier to read. To decompile new code, see
    must still say the unit matches.
 5. Run `make elf` and `make overlays`. Both must end with `PASS`. If one
    fails, find the change that broke it and undo it.
+   `python3 scripts/check-cleanup.py` lists the rules below that your change
+   breaks. CI runs it on every pull request; older code on `main` does not
+   count.
 6. Commit each area on its own and say what became easier to read.
 
 ## What you can change

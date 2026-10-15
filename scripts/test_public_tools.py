@@ -2016,5 +2016,111 @@ class DataRefsTests(unittest.TestCase):
         self.assertEqual(self.refs.scalar("u8 *[2]"), '"u8 *[2]"')
 
 
+class CleanupCheckTests(unittest.TestCase):
+    """check-cleanup.py reports only the problems a change adds."""
+
+    BASE_C = textwrap.dedent("""\
+        #include "types.h"
+        s32 old_helper(s32 arg0) __asm__("FUN_00100000");
+        s32 old_helper(s32 arg0) {
+            s32 v0 = arg0;
+            return v0;
+        }
+    """)
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+        for name in ("check-cleanup.py", "data-decls.py", "commit-msg.py"):
+            (self.root / "scripts").mkdir(exist_ok=True)
+            shutil.copy(ROOT / "scripts" / name, self.root / "scripts" / name)
+        self.write("config/us/rnc1.us.yaml", "  - [0x1000, c, old_helper]\n  - [0x1100, c, new_helper]\n")
+        self.write("configure.py", 'ROUTE_EXCEPTIONS = {"old_helper": "cc_sn"}\n')
+        self.write("src/old_helper.c", self.BASE_C)
+        self.write("src/new_helper.c", "void new_helper(void) __asm__(\"FUN_00100100\");\nvoid new_helper(void) {\n}\n")
+        self.git("init", "-q", "-b", "main")
+        self.git("add", "-A")
+        self.git("commit", "-q", "-m", "chore: start")
+        self.git("checkout", "-q", "-b", "work")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def write(self, rel, text):
+        path = self.root / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text)
+
+    def git(self, *args):
+        env = {**os.environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@example.com",
+               "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@example.com"}
+        subprocess.run(["git", *args], cwd=self.root, check=True, env=env)
+
+    def check(self, *extra):
+        result = subprocess.run([sys.executable, "scripts/check-cleanup.py", "--base", "main", *extra],
+                                cwd=self.root, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        return result.returncode, result.stdout
+
+    def test_old_problems_on_main_do_not_fail(self):
+        self.write("src/old_helper.c", self.BASE_C.replace("return v0;", "return v0 + 1;"))
+        self.assertEqual(self.check(), (0, "cleanup check: no new problems\n"))
+
+    def test_moved_code_stays_old(self):
+        self.git("mv", "src/old_helper.c", "src/helper.c")
+        self.write("config/us/rnc1.us.yaml", "  - [0x1000, c, helper]\n  - [0x1100, c, new_helper]\n")
+        self.write("configure.py", 'ROUTE_EXCEPTIONS = {"helper": "cc_sn"}\n')
+        code, out = self.check()
+        self.assertEqual(code, 1)
+        self.assertNotIn("register-name", out)
+        self.assertIn("file holds old_helper but is named helper.c", out)
+
+    def test_new_problems_fail(self):
+        self.write("src/new_helper.c", textwrap.dedent("""\
+            void new_helper(s32 a0) __asm__("FUN_00100100");
+            s32 helper_00100000(s32) __asm__("FUN_00100000");
+            void new_helper(s32 a0) {
+                s32 temp_v0;
+                __asm__ volatile("sync");
+            #ifdef DEBUG
+                temp_v0 = helper_00100000(a0);
+            #endif
+            }
+        """))
+        self.write("configure.py", 'ROUTE_EXCEPTIONS = {"old_helper": "cc_sn", "new_helper": "cc_sn"}\n')
+        self.write("docs/note.md", "See https://claude.ai/code/session_123 and /home/someone/x.\n")  # cleanup-check: allow
+        code, out = self.check()
+        self.assertEqual(code, 1)
+        for check in ("[register-name] parameter 'a0'", "[register-name] local 'temp_v0'", "[inline-asm]",
+                      "[ifdef]", "[address-in-name] function helper_00100000", "[label-names]",
+                      "[compiler] ROUTE_EXCEPTIONS: new_helper", "link to a private AI session",
+                      "[forbidden] local path"):
+            self.assertIn(check, out)
+
+    def test_recovered_names_format_and_config(self):
+        entry = {"unit": "missing", "source_path": "src/missing.c", "address": "0x00100000",
+                 "current_name": "FUN_00100000", "proposed_name": "OldHelper", "logical_group": "EE/x",
+                 "status": "done", "confidence": "high", "evidence": []}
+        data = {"schema": "rnc-recovered-names-v2", "symbols": [],
+                "rename_proposals": {"schema": "rnc-function-name-proposals-v1", "entries": [entry]}}
+        self.write("config/us/recovered_names.json", json.dumps(data, indent=2) + "\n")
+        code, out = self.check()
+        self.assertEqual(code, 1)
+        for msg in ("unit missing is not in", "status 'done'", "proposed_name OldHelper is not lower_snake_case",
+                    "starts with EE or VU"):
+            self.assertIn(msg, out)
+
+    def test_commit_subjects_and_pull_request_text(self):
+        self.write("src/new_helper.c", "void new_helper(void) __asm__(\"FUN_00100100\");\nvoid new_helper(void) {}\n")
+        self.git("commit", "-q", "-am", "Updated stuff.")
+        body = Path(self.tmp.name + "-body.md")
+        self.addCleanup(body.unlink)
+        body.write_text("Co-Authored-By: someone\n")
+        code, out = self.check("--title", "decomp: name the helper", "--body-file", str(body))
+        self.assertEqual(code, 1)
+        self.assertIn("[commit-message]", out)
+        self.assertIn("pull request description: [forbidden] agent trailer", out)
+        self.assertNotIn("pull request title", out)
+
+
 if __name__ == "__main__":
     unittest.main()

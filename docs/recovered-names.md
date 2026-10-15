@@ -13,7 +13,9 @@ not read it.
   `status` (`proposed`, `needs_review`, `unresolved`), `confidence`,
   `evidence`, `unit` and `source_path`.
 
-Count entries from the file instead of copying numbers here.
+Count entries from the file instead of copying numbers here. CI checks its
+format and that each entry's unit and `source_path` match the config
+(`scripts/check-cleanup.py`).
 
 ## Naming
 

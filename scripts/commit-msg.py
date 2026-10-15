@@ -35,7 +35,6 @@ NON_IMPERATIVE_RE = re.compile(
 
 # Prefer the shared validator from a tooling checkout; fall back to the local rule.
 NAMING = Path(os.environ.get("RNC_COMMIT_NAMING", ""))
-problems: list[str] = []
 
 # Trailer form only (line starts with the token + ":"): prose that merely
 # mentions the term, e.g. in a commit about this hook, must survive.
@@ -118,23 +117,29 @@ if NAMING.is_file():
     spec.loader.exec_module(module)
     validate = module.validate_subject
 
-MSG = Path(sys.argv[1]) if len(sys.argv) > 1 else None
-if MSG is not None and strip_trailers(MSG):
-    print("commit-msg: dropped co-authored-by line(s) from the message", file=sys.stderr)
-text = MSG.read_text(errors="replace") if MSG else ""
-subject = ""
-for line in text.splitlines():
-    if line.strip() and not line.lstrip().startswith("#"):
-        subject = line
-        break
-problems = validate(subject)
-if SESSION_LINK_RE.search(text):
-    problems.append("message links to a private AI session; remove the link")
-if MSG is not None:
-    problems += agent_identities()
-if problems:
-    for problem in problems:
-        print(f"commit-msg: {problem}", file=sys.stderr)
-    print(f"commit-msg: got '{subject.strip()}'", file=sys.stderr)
-    print("commit-msg: see docs/commit-messages.md", file=sys.stderr)
-    sys.exit(1)
+
+def main() -> None:
+    MSG = Path(sys.argv[1]) if len(sys.argv) > 1 else None
+    if MSG is not None and strip_trailers(MSG):
+        print("commit-msg: dropped co-authored-by line(s) from the message", file=sys.stderr)
+    text = MSG.read_text(errors="replace") if MSG else ""
+    subject = ""
+    for line in text.splitlines():
+        if line.strip() and not line.lstrip().startswith("#"):
+            subject = line
+            break
+    problems = validate(subject)
+    if SESSION_LINK_RE.search(text):
+        problems.append("message links to a private AI session; remove the link")
+    if MSG is not None:
+        problems += agent_identities()
+    if problems:
+        for problem in problems:
+            print(f"commit-msg: {problem}", file=sys.stderr)
+        print(f"commit-msg: got '{subject.strip()}'", file=sys.stderr)
+        print("commit-msg: see docs/commit-messages.md", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
