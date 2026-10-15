@@ -371,7 +371,7 @@ extern int FUN_001f9740(int *counter);
 extern int FUN_0022da68(int, int, int);
 extern int FUN_L07_0030e370_c() __asm__("FUN_L07_0030e370");
 extern void FUN_L00_001ff600(float, void *, void *);
-extern void FUN_L07_00311eb8(float, void *, void *, int, void *, short, unsigned int, int);
+extern void FUN_L07_00311eb8(float, void *, void *, short, void *, short, unsigned int, int);
 
 int FUN_L07_003122b0(void *mp, char *obj, float *vec) {
     unsigned char *moby = mp;
@@ -3138,7 +3138,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L07_00311eb8.s", FUN_L07_00311eb8);
 extern short FUN_L00_0023e5e0_l07(void *, float, float, int) __asm__("FUN_L00_0023e5e0");
 extern float FUN_001fa6c0_l07(int) __asm__("FUN_001fa6c0");
 
-void FUN_L07_00311eb8(float size, void *moby, void *state, int sequence, void *position,
+void FUN_L07_00311eb8(float size, void *moby, void *state, short sequence, void *position,
                        short duration, unsigned int color, int next_color) {
     char *s = state;
     char *effect;
@@ -3147,8 +3147,6 @@ void FUN_L07_00311eb8(float size, void *moby, void *state, int sequence, void *p
     short handle;
     short old_duration;
     int faded_duration;
-
-    sequence = (short)sequence;
 
     if (position == 0)
         qcopy(&spawn_position, (char *)moby + 0x10);
