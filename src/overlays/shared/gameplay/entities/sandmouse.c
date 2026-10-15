@@ -994,8 +994,8 @@ void FUN_L01_0030df40(struct Moby *m) {
             qcopy(&v, &m->pos);
             FUN_L00_0025f8e0(&v, D_L01_001620B0);
             color = (rand() + 0x30u) & 0x3f;
-            color |= ((rand() + 0x20u) & 0x3f) << 8;
-            color |= (rand() & 0x2fu) << 16;
+            duration = (rand() + 0x20u) & 0x3f;
+            color |= (duration << 8) | ((rand() & 0x2fu) << 16);
             color |= D_L01_001620BC << 24;
             r = rand() % 2;
             if (*(u16 *)(p + 0x52) & 1) r = -r;
