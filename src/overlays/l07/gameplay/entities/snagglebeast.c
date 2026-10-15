@@ -2078,7 +2078,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
             add_vector_xyz(ring, (char *)D_L07_0020DB00_c + point_offset, &offset);
             ring += 16;
             point = (char *)point + 16;
-        } while (j < 20);
+        } while (point != (void *)(D_L07_0020C700 + 20));
         normalize_vector_xyz(&step, &extension, 2.8f);
     } while (i < 10);
     one = 1.0f;
@@ -2090,11 +2090,13 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         slot = (char *)(D_L07_0020C840_c + i);
         if (*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) == 0 && created < 5) {
             segment = 9;
-            alpha = D_L07_0020DBC8 + 9;
-            while (*alpha < 64) {
-                segment--;
-                if (segment < 0) break;
-                alpha--;
+            if (D_L07_0020DBC8[9] < 64) {
+                alpha = D_L07_0020DBC8 + 9;
+                do {
+                    segment--;
+                    if (segment < 0) break;
+                    alpha--;
+                } while (*alpha < 64);
             }
             if (segment > 0) {
                 if (segment > 1 && extras < 2) {
@@ -2155,14 +2157,14 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
                 fraction = *(float *)((char *)D_L07_0020C840_c + 4 + i * 24) / length;
                 if (*(short *)((char *)D_L07_0020C840_c + 0 + i * 24) == 2) *(short *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 10) = 100;
                 else if (*(short *)((char *)D_L07_0020C840_c + 0 + i * 24) < 2) {
-                    *(short *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 10) = truncate_float_to_s32((1.0f - fraction) * 100.0f);
+                    *(short *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 10) = truncate_float_to_s32((one - fraction) * 100.0f);
                     if (*(short *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 10) < 61) *(short *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 10) = 60;
                 }
                 if (*(short *)((char *)D_L07_0020C840_c + 0 + i * 24) == 1) {
                     subtract_vector_xyz(&basis, anchor, *(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 16);
                     normalize_vector_xyz(&basis, &basis, *(float *)((char *)D_L07_0020C840_c + 16 + i * 24));
                     add_vector_xyz(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 16, *(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 16, &basis);
-                    *(float *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 12) *= frame_scale * -0.050000012f + 1.0f;
+                    *(float *)(*(char * *)((char *)D_L07_0020C840_c + 20 + i * 24) + 12) *= frame_scale * -0.050000012f + one;
                 } else {
                     scale_vector_xyz(&delta, &delta, fraction);
                     segment = *(short *)((char *)D_L07_0020C840_c + 0 + i * 24);
