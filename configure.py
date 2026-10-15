@@ -114,7 +114,7 @@ ROUTE_EXCEPTIONS = {
     "audio/rpc/snd_send_current_batch": "cc_sn",
     # fun_00208030: expand a 4bpp coverage map through the 16-entry weight table
     # into a 1bpp threshold mask (4 source rows per output row)
-    "ui/menus/fun_00208030": "cc_sn",
+    "ui/map/downsample_map_coverage": "cc_sn",
     "ui/menus/update_menu_cycle_selection": "cc_sn",
     # Game code still built by SN cc1 plus the SN assembler Ps2EeAs (the padless route).
     "rendering/packets/emit_rgba_draw_packet": "cc_sn_padless",
@@ -148,7 +148,7 @@ ROUTE_EXCEPTIONS = {
     # emit in retail's order a2<-s0, a3<-v0, a1<-s2. NOTE:
     # src/assembly/textbin/fun_001fd748.c still declares that callee as s32 in
     # another translation unit.
-    "ui/menus/fun_00221460": "cc_sn_padless",
+    "ui/menus/draw_menu_choice_list": "cc_sn_padless",
     # fun_00232d00: bind the stash RPC server, read its IOP buffer and reset the
     # stash slots
     "storage/cd/fun_00232d00": "cc_sn_padless",
@@ -397,7 +397,7 @@ RODATA_OVERLAYS = {
     "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28, 77),  # its two error messages
     "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90, 96),  # its buffer-full message
     "rendering/image/jump_to_image_setup": (0x153AD8, 0x54A58, 16),  # its error message
-    "fun_0021fdc8": (0x1E87F0, 0xE9770, 28),  # stream-state switch table
+    "update_menu_resource_stream": (0x1E87F0, 0xE9770, 28),  # stream-state switch table
     # vfprintf_r: blanks/zeroes, the xdigs strings, the short literals (kept in
     # .rodata via section attributes, in source order) and its switch table.
     "runtime/newlib/vfprintf_r": (0x1524E0, 0x53460, 516),
@@ -419,9 +419,9 @@ RODATA_OVERLAYS = {
     "init_once": (0x1E7B30, 0xE8AB0, 20),  # switch table
     "actuator_calc_power": (0x1E7640, 0xE85C0, 24),  # switch table
     "fun_00213928": (0x1E84E0, 0xE9460, 128),  # switch table
-    "fun_00204428": (0x1E7CE0, 0xE8C60, 32),  # switch table
+    "service_level_archive_load": (0x1E7CE0, 0xE8C60, 32),  # switch table
     "mode_freeze_init": (0x1E78D0, 0xE8850, 28),  # switch table
-    "fun_0021abf8": (0x1E8770, 0xE96F0, 48),  # menu action switch table
+    "update_menu_entry_actions": (0x1E8770, 0xE96F0, 48),  # menu action switch table
     "draw_dialog_text": (0x1E7920, 0xE88A0, 124),  # switch table
 }
 
@@ -439,7 +439,7 @@ SDATA_OVERLAYS = {
     "runtime/callbacks/count_vsync": (0x15ED40, 0x5FCC0, 24),
     "runtime/time/set_video_timing": (0x15ED60, 0x5FCE0, 32),
     "ui/fonts/load_debug_font": (0x15EEC8, 0x5FE48, 8),
-    "gameplay/state/fun_00204428": (0x15EE50, 0x5FDD0, 8),
+    "gameplay/state/service_level_archive_load": (0x15EE50, 0x5FDD0, 8),
     "rendering/draw_debug_profiler": (0x15EE40, 0x5FDC0, 1),
     "gameplay/camera/camera_activation_check_priority": (0x15EF40, 0x5FEC0, 4),
     "gameplay/camera/execute_camera_post_update_callbacks": (0x15EF8C, 0x5FF0C, 4),
@@ -461,22 +461,22 @@ DATA_OVERLAYS = {
     "textbin/render_queued_rotated_sprites": (0x189300, 0x8A280, 196),
     "gameplay/camera/backup_current_cam": (0x1893D0, 0x8A350, 1920),
     "textbin/append_billboard_batch": (0x18ED00, 0x8FC80, 512),
-    "textbin/passes_projected_region_callback_0": (0x1A03B0, 0xA1330, 4),
+    "ui/map/map_filter_l07_0": (0x1A03B0, 0xA1330, 4),
     "textbin/initialize_level_runtime": (0x1CAAC0, 0xCBA40, 4096),
     "textbin/world/data/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60, 1152),
     "ui/menus/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
     "textbin/gameplay/gadgets/load_hand_gadget": (0x1D52E8, 0xD6268, 1776),
-    "assembly/textbin/fun_00225e70": (0x1D6080, 0xD7000, 56),
-    "assembly/textbin/fun_00203b08": (0x1D8030, 0xD8FB0, 128),
+    "assembly/textbin/ui/menus/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
+    "assembly/textbin/rendering/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
     "gameplay/fun_0022e1b0": (0x1D9890, 0xDA810, 384),
-    "assembly/textbin/fun_0022e420": (0x1D9A10, 0xDA990, 32),
-    "assembly/textbin/fun_001fd748": (0x1DDE28, 0xDEDA8, 320),
-    "assembly/textbin/fun_00203730": (0x1E1900, 0xE2880, 256),
-    "assembly/textbin/fun_00238310": (0x1E6018, 0xE6F98, 512),
-    "assembly/textbin/fun_00239780": (0x1E6218, 0xE7198, 96),
+    "assembly/textbin/rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 32),
+    "assembly/textbin/ui/map/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),
+    "assembly/textbin/rendering/register_object_render_class": (0x1E1900, 0xE2880, 256),
+    "assembly/textbin/gameplay/vendor/render_capture_scrolling_text": (0x1E6018, 0xE6F98, 512),
+    "assembly/textbin/gameplay/vendor/render_vendor_capture_pass_sequence": (0x1E6218, 0xE7198, 96),
     "textbin/render_vendor_capture_texture_overlays_pass": (0x1E6620, 0xE75A0, 64),
     "textbin/rebuild_configured_text_label_list": (0x1E8728, 0xE96A8, 60),
-    "textbin/fun_0021fdc8": (0x1E87D0, 0xE9750, 24),
+    "ui/menus/update_menu_resource_stream": (0x1E87D0, 0xE9750, 24),
     "textbin/video/player/init_all": (0x1E8AF0, 0xE9A70, 18),
 }
 

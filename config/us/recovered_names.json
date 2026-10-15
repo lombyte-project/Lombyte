@@ -5072,7 +5072,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "textbin/fun_001eb0a8",
+        "unit": "gameplay/state/update_gameplay_frame",
         "source_path": "src/textbin/fun_001eb0a8.c",
         "address": "0x001eb0a8",
         "current_name": "FUN_001eb0a8",
@@ -5275,7 +5275,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_001ebf10",
+        "unit": "gameplay/camera/switch_active_camera_record",
         "source_path": "src/textbin/fun_001ebf10.c",
         "address": "0x001ebf10",
         "current_name": "FUN_001ebf10",
@@ -6001,7 +6001,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_001f33b8",
+        "unit": "textbin/rendering/view/configure_graphics_projection",
         "source_path": "src/assembly/textbin/fun_001f33b8.c",
         "address": "0x001f33b8",
         "current_name": "FUN_001f33b8",
@@ -7176,7 +7176,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "textbin/fun_001f96f8",
+        "unit": "textbin/runtime/time/scale_game_frames",
         "source_path": "src/assembly/textbin/fun_001f96f8.c",
         "address": "0x001f96f8",
         "current_name": "FUN_001f96f8",
@@ -7193,7 +7193,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_001f99c8",
+        "unit": "assembly/textbin/math/max_float",
         "source_path": "src/assembly/textbin/fun_001f99c8.c",
         "address": "0x001f99c8",
         "current_name": "FUN_001f99c8",
@@ -7205,7 +7205,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_001f99d0",
+        "unit": "assembly/textbin/math/min_float",
         "source_path": "src/assembly/textbin/fun_001f99d0.c",
         "address": "0x001f99d0",
         "current_name": "FUN_001f99d0",
@@ -7217,7 +7217,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "assembly/textbin/fun_001f99e8",
+        "unit": "assembly/textbin/math/clamp_float",
         "source_path": "src/assembly/textbin/fun_001f99e8.c",
         "address": "0x001f99e8",
         "current_name": "FUN_001f99e8",
@@ -7246,7 +7246,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_001fa2b8",
+        "unit": "assembly/textbin/math/matrices/copy_matrix3x4",
         "source_path": "src/assembly/textbin/fun_001fa2b8.c",
         "address": "0x001fa2b8",
         "current_name": "FUN_001fa2b8",
@@ -7578,7 +7578,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/fun_001fb740",
+        "unit": "gameplay/vendor/draw_centered_capture_background",
         "source_path": "src/rendering/fun_001fb740.c",
         "address": "0x001fb740",
         "current_name": "FUN_001fb740",
@@ -7697,7 +7697,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_001fd748",
+        "unit": "textbin/ui/map/draw_level_selection_map",
         "source_path": "src/assembly/textbin/fun_001fd748.c",
         "address": "0x001fd748",
         "current_name": "FUN_001fd748",
@@ -8344,7 +8344,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00200468",
+        "unit": "assembly/textbin/rendering/append_power_of_two_textured_screen_sprite",
         "source_path": "src/assembly/textbin/fun_00200468.c",
         "address": "0x00200468",
         "current_name": "FUN_00200468",
@@ -8796,7 +8796,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "textbin/fun_00202270",
+        "unit": "textbin/rendering/texture/upload_mip_texture",
         "source_path": "src/assembly/textbin/fun_00202270.c",
         "address": "0x00202270",
         "current_name": "FUN_00202270",
@@ -9035,7 +9035,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_00203730",
+        "unit": "textbin/rendering/register_object_render_class",
         "source_path": "src/assembly/textbin/fun_00203730.c",
         "address": "0x00203730",
         "current_name": "FUN_00203730",
@@ -9052,7 +9052,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "textbin/fun_00203b08",
+        "unit": "textbin/rendering/register_shrub_render_class",
         "source_path": "src/assembly/textbin/fun_00203b08.c",
         "address": "0x00203b08",
         "current_name": "FUN_00203b08",
@@ -9069,7 +9069,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "textbin/fun_002040e0",
+        "unit": "textbin/rendering/initialize_tfrag_render_data",
         "source_path": "src/assembly/textbin/fun_002040e0.c",
         "address": "0x002040e0",
         "current_name": "FUN_002040e0",
@@ -9108,7 +9108,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/state/fun_00204428",
+        "unit": "gameplay/state/service_level_archive_load",
         "source_path": "src/gameplay/state/fun_00204428.c",
         "address": "0x00204428",
         "current_name": "FUN_00204428",
@@ -9489,7 +9489,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/hit_test_fixed_screen_rectangle",
+        "unit": "ui/map/map_filter_l01_0",
         "source_path": "src/ui/menus/hit_test_fixed_screen_rectangle.c",
         "address": "0x00206978",
         "current_name": "FUN_00206978",
@@ -9506,7 +9506,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "textbin/passes_projected_region_callback_0",
+        "unit": "ui/map/map_filter_l07_0",
         "source_path": "src/textbin/passes_projected_region_callback_0.c",
         "address": "0x00206bd8",
         "current_name": "FUN_00206bd8",
@@ -9523,7 +9523,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_00206e18",
+        "unit": "ui/map/map_filter_l07_1",
         "source_path": "src/ui/menus/fun_00206e18.c",
         "address": "0x00206e18",
         "current_name": "FUN_00206e18",
@@ -9540,7 +9540,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00206f50",
+        "unit": "ui/map/map_filter_l07_2",
         "source_path": "src/ui/menus/fun_00206f50.c",
         "address": "0x00206f50",
         "current_name": "FUN_00206f50",
@@ -9557,7 +9557,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207100",
+        "unit": "ui/map/map_filter_l07_3",
         "source_path": "src/ui/menus/fun_00207100.c",
         "address": "0x00207100",
         "current_name": "FUN_00207100",
@@ -9574,7 +9574,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002071c0",
+        "unit": "ui/map/map_filter_l07_4",
         "source_path": "src/ui/menus/fun_002071c0.c",
         "address": "0x002071c0",
         "current_name": "FUN_002071c0",
@@ -9596,7 +9596,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207300",
+        "unit": "ui/map/map_filter_l07_6",
         "source_path": "src/ui/menus/fun_00207300.c",
         "address": "0x00207300",
         "current_name": "FUN_00207300",
@@ -9613,7 +9613,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002073b8",
+        "unit": "ui/map/map_filter_l07_7",
         "source_path": "src/ui/menus/fun_002073b8.c",
         "address": "0x002073b8",
         "current_name": "FUN_002073b8",
@@ -9635,7 +9635,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207a18",
+        "unit": "ui/map/map_filter_l15_0",
         "source_path": "src/ui/menus/fun_00207a18.c",
         "address": "0x00207a18",
         "current_name": "FUN_00207a18",
@@ -9647,7 +9647,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_00207b08",
+        "unit": "ui/map/save_map_coverage",
         "source_path": "src/ui/menus/fun_00207b08.c",
         "address": "0x00207b08",
         "current_name": "FUN_00207b08",
@@ -9669,7 +9669,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207bb0",
+        "unit": "ui/map/load_map_chunk",
         "source_path": "src/ui/menus/fun_00207bb0.c",
         "address": "0x00207bb0",
         "current_name": "FUN_00207bb0",
@@ -9686,7 +9686,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_00207c28",
+        "unit": "textbin/ui/map/decode_compressed_occlusion_map",
         "source_path": "src/assembly/textbin/fun_00207c28.c",
         "address": "0x00207c28",
         "current_name": "FUN_00207c28",
@@ -9703,7 +9703,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_00207e58",
+        "unit": "ui/map/expand_map_coverage",
         "source_path": "src/ui/menus/fun_00207e58.c",
         "address": "0x00207e58",
         "current_name": "FUN_00207e58",
@@ -9720,7 +9720,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00208030",
+        "unit": "ui/map/downsample_map_coverage",
         "source_path": "src/ui/menus/fun_00208030.c",
         "address": "0x00208030",
         "current_name": "FUN_00208030",
@@ -9779,7 +9779,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_00208508",
+        "unit": "textbin/ui/map/draw_map_markers",
         "source_path": "src/assembly/textbin/fun_00208508.c",
         "address": "0x00208508",
         "current_name": "FUN_00208508",
@@ -9796,7 +9796,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_00208770",
+        "unit": "ui/map/copy_level_object_positions",
         "source_path": "src/ui/menus/fun_00208770.c",
         "address": "0x00208770",
         "current_name": "FUN_00208770",
@@ -10515,7 +10515,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/entities/fun_0020cca8",
+        "unit": "gameplay/entities/build_moby_bone_transform",
         "source_path": "src/gameplay/entities/fun_0020cca8.c",
         "address": "0x0020cca8",
         "current_name": "FUN_0020cca8",
@@ -11097,7 +11097,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_00213f38",
+        "unit": "math/interpolation/advance_accelerated_scalar",
         "source_path": "src/assembly/textbin/fun_00213f38.c",
         "address": "0x00213f38",
         "current_name": "FUN_00213f38",
@@ -11158,7 +11158,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "gameplay/entities/fun_002144d8",
+        "unit": "math/rotations/extract_matrix_rotation_quaternion",
         "source_path": "src/gameplay/entities/fun_002144d8.c",
         "address": "0x002144d8",
         "current_name": "FUN_002144d8",
@@ -12097,7 +12097,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/fun_00218888",
+        "unit": "rendering/effects/spawn_spark",
         "source_path": "src/rendering/fun_00218888.c",
         "address": "0x00218888",
         "current_name": "FUN_00218888",
@@ -12169,7 +12169,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_002191b8",
+        "unit": "ui/menus/close_menu_system",
         "source_path": "src/ui/menus/fun_002191b8.c",
         "address": "0x002191b8",
         "current_name": "FUN_002191b8",
@@ -12186,7 +12186,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002192a8",
+        "unit": "ui/menus/update_menu_system",
         "source_path": "src/ui/menus/fun_002192a8.c",
         "address": "0x002192a8",
         "current_name": "FUN_002192a8",
@@ -12215,7 +12215,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_00219e10",
+        "unit": "ui/menus/update_menu_icon_list",
         "source_path": "src/ui/menus/fun_00219e10.c",
         "address": "0x00219e10",
         "current_name": "FUN_00219e10",
@@ -12227,7 +12227,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_00219fa0",
+        "unit": "ui/menus/draw_menu_icon_list",
         "source_path": "src/ui/menus/fun_00219fa0.c",
         "address": "0x00219fa0",
         "current_name": "FUN_00219fa0",
@@ -12262,7 +12262,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "textbin/fun_0021a328",
+        "unit": "textbin/ui/menus/render_configured_text_label",
         "source_path": "src/assembly/textbin/fun_0021a328.c",
         "address": "0x0021a328",
         "current_name": "FUN_0021a328",
@@ -12318,7 +12318,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_0021b6d8",
+        "unit": "ui/menus/fade_menu_color",
         "source_path": "src/ui/menus/fun_0021b6d8.c",
         "address": "0x0021b6d8",
         "current_name": "FUN_0021b6d8",
@@ -12335,7 +12335,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_0021b858",
+        "unit": "textbin/ui/menus/update_menu_grid_selection",
         "source_path": "src/assembly/textbin/fun_0021b858.c",
         "address": "0x0021b858",
         "current_name": "FUN_0021b858",
@@ -12352,7 +12352,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_0021bda0",
+        "unit": "ui/map/leave_map_screen",
         "source_path": "src/ui/menus/fun_0021bda0.c",
         "address": "0x0021bda0",
         "current_name": "FUN_0021bda0",
@@ -12407,7 +12407,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021c420",
+        "unit": "ui/menus/missions/enter_menu_mission_list",
         "source_path": "src/ui/menus/fun_0021c420.c",
         "address": "0x0021c420",
         "current_name": "FUN_0021c420",
@@ -12424,7 +12424,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021c4c0",
+        "unit": "ui/menus/missions/update_menu_mission_list",
         "source_path": "src/ui/menus/fun_0021c4c0.c",
         "address": "0x0021c4c0",
         "current_name": "FUN_0021c4c0",
@@ -12441,7 +12441,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021c7a0",
+        "unit": "ui/menus/update_menu_item_slots",
         "source_path": "src/ui/menus/fun_0021c7a0.c",
         "address": "0x0021c7a0",
         "current_name": "FUN_0021c7a0",
@@ -12458,7 +12458,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021cae0",
+        "unit": "ui/menus/reset_menu_graphics_buffers",
         "source_path": "src/ui/menus/fun_0021cae0.c",
         "address": "0x0021cae0",
         "current_name": "FUN_0021cae0",
@@ -12511,7 +12511,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "ui/menus/fun_0021d1f8",
+        "unit": "ui/menus/enter_menu_help_text",
         "source_path": "src/ui/menus/fun_0021d1f8.c",
         "address": "0x0021d1f8",
         "current_name": "FUN_0021d1f8",
@@ -12672,7 +12672,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021e110",
+        "unit": "ui/menus/item_preview/draw_item_preview_screen",
         "source_path": "src/ui/menus/fun_0021e110.c",
         "address": "0x0021e110",
         "current_name": "FUN_0021e110",
@@ -12715,7 +12715,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_0021e230",
+        "unit": "ui/menus/item_preview/update_item_preview_binding",
         "source_path": "src/assembly/textbin/fun_0021e230.c",
         "address": "0x0021e230",
         "current_name": "FUN_0021e230",
@@ -12960,7 +12960,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021f158",
+        "unit": "ui/menus/draw_selected_item_ammo",
         "source_path": "src/ui/menus/fun_0021f158.c",
         "address": "0x0021f158",
         "current_name": "FUN_0021f158",
@@ -13109,7 +13109,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021f990",
+        "unit": "ui/menus/update_menu_stream_image",
         "source_path": "src/ui/menus/fun_0021f990.c",
         "address": "0x0021f990",
         "current_name": "FUN_0021f990",
@@ -13159,7 +13159,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "ui/menus/fun_0021fce0",
+        "unit": "ui/menus/enter_menu_stream_image",
         "source_path": "src/ui/menus/fun_0021fce0.c",
         "address": "0x0021fce0",
         "current_name": "FUN_0021fce0",
@@ -13191,7 +13191,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021fd78",
+        "unit": "ui/menus/leave_menu_stream_image",
         "source_path": "src/ui/menus/fun_0021fd78.c",
         "address": "0x0021fd78",
         "current_name": "FUN_0021fd78",
@@ -13228,7 +13228,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_0021fdc8",
+        "unit": "ui/menus/update_menu_resource_stream",
         "source_path": "src/assembly/textbin/fun_0021fdc8.c",
         "address": "0x0021fdc8",
         "current_name": "FUN_0021fdc8",
@@ -13322,7 +13322,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00220850",
+        "unit": "ui/map/draw_map_screen_layers",
         "source_path": "src/ui/menus/fun_00220850.c",
         "address": "0x00220850",
         "current_name": "FUN_00220850",
@@ -13390,7 +13390,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00220e28",
+        "unit": "ui/menus/update_menu_option_list",
         "source_path": "src/ui/menus/fun_00220e28.c",
         "address": "0x00220e28",
         "current_name": "FUN_00220e28",
@@ -13440,7 +13440,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "ui/menus/fun_002212b8",
+        "unit": "ui/menus/update_menu_choice_list",
         "source_path": "src/ui/menus/fun_002212b8.c",
         "address": "0x002212b8",
         "current_name": "FUN_002212b8",
@@ -13462,7 +13462,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00221460",
+        "unit": "ui/menus/draw_menu_choice_list",
         "source_path": "src/ui/menus/fun_00221460.c",
         "address": "0x00221460",
         "current_name": "FUN_00221460",
@@ -13496,7 +13496,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00221930",
+        "unit": "ui/map/draw_level_selection_map_screen",
         "source_path": "src/ui/menus/fun_00221930.c",
         "address": "0x00221930",
         "current_name": "FUN_00221930",
@@ -13535,7 +13535,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00221a48",
+        "unit": "ui/menus/enter_menu_prompt",
         "source_path": "src/ui/menus/fun_00221a48.c",
         "address": "0x00221a48",
         "current_name": "FUN_00221a48",
@@ -13557,7 +13557,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00221a88",
+        "unit": "ui/menus/leave_menu_prompt",
         "source_path": "src/ui/menus/fun_00221a88.c",
         "address": "0x00221a88",
         "current_name": "FUN_00221a88",
@@ -13795,7 +13795,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00222f18",
+        "unit": "ui/menus/save_data/enter_save_slot_screen",
         "source_path": "src/ui/menus/fun_00222f18.c",
         "address": "0x00222f18",
         "current_name": "FUN_00222f18",
@@ -13812,7 +13812,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00222f58",
+        "unit": "ui/menus/save_data/leave_save_slot_screen",
         "source_path": "src/ui/menus/fun_00222f58.c",
         "address": "0x00222f58",
         "current_name": "FUN_00222f58",
@@ -14038,7 +14038,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_00224e18",
+        "unit": "ui/menus/item_preview/update_menu_preview_pose_and_attachments",
         "source_path": "src/assembly/textbin/fun_00224e18.c",
         "address": "0x00224e18",
         "current_name": "FUN_00224e18",
@@ -14166,7 +14166,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00225660",
+        "unit": "ui/menus/leave_streamed_moby_screen",
         "source_path": "src/ui/menus/fun_00225660.c",
         "address": "0x00225660",
         "current_name": "FUN_00225660",
@@ -14188,7 +14188,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_002256e8",
+        "unit": "textbin/ui/menus/update_streamed_moby_animation",
         "source_path": "src/assembly/textbin/fun_002256e8.c",
         "address": "0x002256e8",
         "current_name": "FUN_002256e8",
@@ -14232,7 +14232,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "textbin/fun_00225ac0",
+        "unit": "textbin/rendering/buffers/initialize_graphics_buffer_descriptors",
         "source_path": "src/assembly/textbin/fun_00225ac0.c",
         "address": "0x00225ac0",
         "current_name": "FUN_00225ac0",
@@ -14325,7 +14325,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00225dd8",
+        "unit": "ui/menus/mark_stream_buffer_read_active",
         "source_path": "src/ui/menus/fun_00225dd8.c",
         "address": "0x00225dd8",
         "current_name": "FUN_00225dd8",
@@ -14384,7 +14384,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_00225e70",
+        "unit": "textbin/ui/menus/update_preview_animation_and_attachments",
         "source_path": "src/assembly/textbin/fun_00225e70.c",
         "address": "0x00225e70",
         "current_name": "FUN_00225e70",
@@ -14496,7 +14496,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00226848",
+        "unit": "ui/menus/item_preview/load_preview_resource_bindings",
         "source_path": "src/ui/menus/fun_00226848.c",
         "address": "0x00226848",
         "current_name": "FUN_00226848",
@@ -14539,7 +14539,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00226a70",
+        "unit": "ui/menus/save_data/start_memory_card_save",
         "source_path": "src/ui/menus/fun_00226a70.c",
         "address": "0x00226a70",
         "current_name": "FUN_00226a70",
@@ -14670,7 +14670,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_002271d0",
+        "unit": "textbin/rendering/append_fullscreen_setup_strips",
         "source_path": "src/assembly/textbin/fun_002271d0.c",
         "address": "0x002271d0",
         "current_name": "FUN_002271d0",
@@ -14687,7 +14687,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "textbin/fun_00227378",
+        "unit": "rendering/append_fullscreen_clear_strips",
         "source_path": "src/assembly/textbin/fun_00227378.c",
         "address": "0x00227378",
         "current_name": "FUN_00227378",
@@ -14704,7 +14704,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "textbin/fun_00227548",
+        "unit": "rendering/submit_graphics_setup_command_stream",
         "source_path": "src/textbin/fun_00227548.c",
         "address": "0x00227548",
         "current_name": "FUN_00227548",
@@ -15163,7 +15163,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_0022d7f0",
+        "unit": "audio/voices/allocate_voice_slot",
         "source_path": "src/textbin/fun_0022d7f0.c",
         "address": "0x0022d7f0",
         "current_name": "FUN_0022d7f0",
@@ -15368,7 +15368,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_0022e420",
+        "unit": "textbin/rendering/effects/build_resident_indexed_texture_warp_meshes",
         "source_path": "src/assembly/textbin/fun_0022e420.c",
         "address": "0x0022e420",
         "current_name": "FUN_0022e420",
@@ -15427,7 +15427,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_0022eaa8",
+        "unit": "textbin/gameplay/state/update_level_gameplay_frame",
         "source_path": "src/assembly/textbin/fun_0022eaa8.c",
         "address": "0x0022eaa8",
         "current_name": "FUN_0022eaa8",
@@ -15596,7 +15596,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/hud/fun_002316e8",
+        "unit": "ui/loading/append_scrolling_textured_quad",
         "source_path": "src/ui/hud/fun_002316e8.c",
         "address": "0x002316e8",
         "current_name": "FUN_002316e8",
@@ -15624,7 +15624,7 @@
         "logical_group_confidence": "low"
       },
       {
-        "unit": "textbin/fun_00231878",
+        "unit": "ui/loading/prepare_loading_slide_textures",
         "source_path": "src/assembly/textbin/fun_00231878.c",
         "address": "0x00231878",
         "current_name": "FUN_00231878",
@@ -16457,7 +16457,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "textbin/fun_00237a78",
+        "unit": "textbin/rendering/project_graphics_bounds",
         "source_path": "src/assembly/textbin/fun_00237a78.c",
         "address": "0x00237a78",
         "current_name": "FUN_00237a78",
@@ -16474,7 +16474,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "textbin/fun_00237c80",
+        "unit": "textbin/rendering/project_graphics_bounds_float",
         "source_path": "src/assembly/textbin/fun_00237c80.c",
         "address": "0x00237c80",
         "current_name": "FUN_00237c80",
@@ -16525,7 +16525,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "textbin/fun_00238310",
+        "unit": "textbin/gameplay/vendor/render_capture_scrolling_text",
         "source_path": "src/assembly/textbin/fun_00238310.c",
         "address": "0x00238310",
         "current_name": "FUN_00238310",
@@ -16564,7 +16564,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/vendor/fun_00238630",
+        "unit": "gameplay/vendor/render_capture_effect_pass",
         "source_path": "src/gameplay/vendor/fun_00238630.c",
         "address": "0x00238630",
         "current_name": "FUN_00238630",
@@ -16609,7 +16609,7 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "gameplay/vendor/fun_002386e8",
+        "unit": "gameplay/vendor/render_vendor_item_icon_strip_pass",
         "source_path": "src/gameplay/vendor/fun_002386e8.c",
         "address": "0x002386e8",
         "current_name": "FUN_002386e8",
@@ -16654,7 +16654,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "textbin/fun_00238f08",
+        "unit": "textbin/gameplay/vendor/render_vendor_buy_label_pass",
         "source_path": "src/assembly/textbin/fun_00238f08.c",
         "address": "0x00238f08",
         "current_name": "FUN_00238f08",
@@ -16671,7 +16671,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "gameplay/vendor/fun_00239160",
+        "unit": "gameplay/vendor/render_vendor_purchase_prompt_pass",
         "source_path": "src/gameplay/vendor/fun_00239160.c",
         "address": "0x00239160",
         "current_name": "FUN_00239160",
@@ -16707,7 +16707,7 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "gameplay/vendor/fun_00239690",
+        "unit": "gameplay/vendor/configure_capture_target",
         "source_path": "src/gameplay/vendor/fun_00239690.c",
         "address": "0x00239690",
         "current_name": "FUN_00239690",
@@ -16745,7 +16745,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_00239780",
+        "unit": "textbin/gameplay/vendor/render_vendor_capture_pass_sequence",
         "source_path": "src/assembly/textbin/fun_00239780.c",
         "address": "0x00239780",
         "current_name": "FUN_00239780",
@@ -16783,7 +16783,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "textbin/fun_00239f58",
+        "unit": "gameplay/camera/sample_surface_height_map",
         "source_path": "src/assembly/textbin/fun_00239f58.c",
         "address": "0x00239f58",
         "current_name": "FUN_00239f58",
@@ -18326,7 +18326,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002069a0",
+        "unit": "ui/map/map_filter_l01_1",
         "source_path": "src/ui/menus/fun_002069a0.c",
         "address": "0x002069a0",
         "current_name": "FUN_002069a0",
@@ -18343,7 +18343,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002069b0",
+        "unit": "ui/map/map_filter_l01_2",
         "source_path": "src/ui/menus/fun_002069b0.c",
         "address": "0x002069b0",
         "current_name": "FUN_002069b0",
@@ -18360,7 +18360,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002069c0",
+        "unit": "ui/map/map_filter_l02_0",
         "source_path": "src/ui/menus/fun_002069c0.c",
         "address": "0x002069c0",
         "current_name": "FUN_002069c0",
@@ -18377,7 +18377,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002069d0",
+        "unit": "ui/map/map_filter_l01_3",
         "source_path": "src/ui/menus/fun_002069d0.c",
         "address": "0x002069d0",
         "current_name": "FUN_002069d0",
@@ -18394,7 +18394,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00206a90",
+        "unit": "ui/map/map_filter_l01_4",
         "source_path": "src/ui/menus/fun_00206a90.c",
         "address": "0x00206a90",
         "current_name": "FUN_00206a90",
@@ -18411,7 +18411,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00206b10",
+        "unit": "ui/map/map_filter_l01_5",
         "source_path": "src/ui/menus/fun_00206b10.c",
         "address": "0x00206b10",
         "current_name": "FUN_00206b10",
@@ -18428,7 +18428,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00206b78",
+        "unit": "ui/map/map_filter_l03_0",
         "source_path": "src/ui/menus/fun_00206b78.c",
         "address": "0x00206b78",
         "current_name": "FUN_00206b78",
@@ -18445,7 +18445,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00206b88",
+        "unit": "ui/map/map_filter_l04_0",
         "source_path": "src/ui/menus/fun_00206b88.c",
         "address": "0x00206b88",
         "current_name": "FUN_00206b88",
@@ -18462,7 +18462,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00206b98",
+        "unit": "ui/map/map_filter_l04_1",
         "source_path": "src/ui/menus/fun_00206b98.c",
         "address": "0x00206b98",
         "current_name": "FUN_00206b98",
@@ -18479,7 +18479,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00206ba8",
+        "unit": "ui/map/map_filter_l04_2",
         "source_path": "src/ui/menus/fun_00206ba8.c",
         "address": "0x00206ba8",
         "current_name": "FUN_00206ba8",
@@ -18496,7 +18496,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00206bb8",
+        "unit": "ui/map/map_filter_l04_3",
         "source_path": "src/ui/menus/fun_00206bb8.c",
         "address": "0x00206bb8",
         "current_name": "FUN_00206bb8",
@@ -18513,7 +18513,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00206bc8",
+        "unit": "ui/map/map_filter_l06_0",
         "source_path": "src/ui/menus/fun_00206bc8.c",
         "address": "0x00206bc8",
         "current_name": "FUN_00206bc8",
@@ -18530,7 +18530,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207250",
+        "unit": "ui/map/map_filter_l07_5",
         "source_path": "src/ui/menus/fun_00207250.c",
         "address": "0x00207250",
         "current_name": "FUN_00207250",
@@ -18547,7 +18547,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207480",
+        "unit": "ui/map/map_filter_l08_0",
         "source_path": "src/ui/menus/fun_00207480.c",
         "address": "0x00207480",
         "current_name": "FUN_00207480",
@@ -18564,7 +18564,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002074b0",
+        "unit": "ui/map/map_filter_l08_1",
         "source_path": "src/ui/menus/fun_002074b0.c",
         "address": "0x002074b0",
         "current_name": "FUN_002074b0",
@@ -18581,7 +18581,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207508",
+        "unit": "ui/map/map_filter_l08_2",
         "source_path": "src/ui/menus/fun_00207508.c",
         "address": "0x00207508",
         "current_name": "FUN_00207508",
@@ -18598,7 +18598,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002075f8",
+        "unit": "ui/map/map_filter_l08_4",
         "source_path": "src/ui/menus/fun_002075f8.c",
         "address": "0x002075f8",
         "current_name": "FUN_002075f8",
@@ -18615,7 +18615,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207660",
+        "unit": "ui/map/map_filter_l09_0",
         "source_path": "src/ui/menus/fun_00207660.c",
         "address": "0x00207660",
         "current_name": "FUN_00207660",
@@ -18632,7 +18632,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207670",
+        "unit": "ui/map/map_filter_l09_1",
         "source_path": "src/ui/menus/fun_00207670.c",
         "address": "0x00207670",
         "current_name": "FUN_00207670",
@@ -18649,7 +18649,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207680",
+        "unit": "ui/map/map_filter_l09_2",
         "source_path": "src/ui/menus/fun_00207680.c",
         "address": "0x00207680",
         "current_name": "FUN_00207680",
@@ -18666,7 +18666,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207690",
+        "unit": "ui/map/map_filter_l10_0",
         "source_path": "src/ui/menus/fun_00207690.c",
         "address": "0x00207690",
         "current_name": "FUN_00207690",
@@ -18683,7 +18683,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207720",
+        "unit": "ui/map/map_filter_l11_0",
         "source_path": "src/ui/menus/fun_00207720.c",
         "address": "0x00207720",
         "current_name": "FUN_00207720",
@@ -18700,7 +18700,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002077a0",
+        "unit": "ui/map/map_filter_l11_1",
         "source_path": "src/ui/menus/fun_002077a0.c",
         "address": "0x002077a0",
         "current_name": "FUN_002077a0",
@@ -18717,7 +18717,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207800",
+        "unit": "ui/map/map_filter_l11_2",
         "source_path": "src/ui/menus/fun_00207800.c",
         "address": "0x00207800",
         "current_name": "FUN_00207800",
@@ -18734,7 +18734,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207880",
+        "unit": "ui/map/map_filter_l11_3",
         "source_path": "src/ui/menus/fun_00207880.c",
         "address": "0x00207880",
         "current_name": "FUN_00207880",
@@ -18751,7 +18751,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207930",
+        "unit": "ui/map/map_filter_l11_4",
         "source_path": "src/ui/menus/fun_00207930.c",
         "address": "0x00207930",
         "current_name": "FUN_00207930",
@@ -18768,7 +18768,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002079c8",
+        "unit": "ui/map/map_filter_l11_5",
         "source_path": "src/ui/menus/fun_002079c8.c",
         "address": "0x002079c8",
         "current_name": "FUN_002079c8",
@@ -18785,7 +18785,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002079d8",
+        "unit": "ui/map/map_filter_l12_0",
         "source_path": "src/ui/menus/fun_002079d8.c",
         "address": "0x002079d8",
         "current_name": "FUN_002079d8",
@@ -18802,7 +18802,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207a08",
+        "unit": "ui/map/map_filter_l12_1",
         "source_path": "src/ui/menus/fun_00207a08.c",
         "address": "0x00207a08",
         "current_name": "FUN_00207a08",
@@ -18819,7 +18819,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207a10",
+        "unit": "ui/map/map_filter_l12_2",
         "source_path": "src/ui/menus/fun_00207a10.c",
         "address": "0x00207a10",
         "current_name": "FUN_00207a10",
@@ -18836,7 +18836,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207ab8",
+        "unit": "ui/map/map_filter_l16_0",
         "source_path": "src/ui/menus/fun_00207ab8.c",
         "address": "0x00207ab8",
         "current_name": "FUN_00207ab8",
@@ -18853,7 +18853,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207ac8",
+        "unit": "ui/map/map_filter_l16_1",
         "source_path": "src/ui/menus/fun_00207ac8.c",
         "address": "0x00207ac8",
         "current_name": "FUN_00207ac8",
@@ -18870,7 +18870,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207ad8",
+        "unit": "ui/map/map_filter_l16_2",
         "source_path": "src/ui/menus/fun_00207ad8.c",
         "address": "0x00207ad8",
         "current_name": "FUN_00207ad8",
@@ -18887,7 +18887,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207ae8",
+        "unit": "ui/map/map_filter_l16_3",
         "source_path": "src/ui/menus/fun_00207ae8.c",
         "address": "0x00207ae8",
         "current_name": "FUN_00207ae8",
@@ -18904,7 +18904,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00207af8",
+        "unit": "ui/map/map_filter_l18_0",
         "source_path": "src/ui/menus/fun_00207af8.c",
         "address": "0x00207af8",
         "current_name": "FUN_00207af8",
@@ -19484,7 +19484,7 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_0021cac8",
+        "unit": "ui/menus/reset_pause_memory_card_state",
         "source_path": "src/ui/menus/fun_0021cac8.c",
         "address": "0x0021cac8",
         "current_name": "FUN_0021cac8",
