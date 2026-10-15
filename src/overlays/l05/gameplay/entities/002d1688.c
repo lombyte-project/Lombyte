@@ -224,7 +224,7 @@ extern float angle_from_2d1688(float, float) __asm__("FUN_001fa580");
 extern void copy_direction_2d1688(void *, void *) __asm__("FUN_001fa030");
 extern int check_path_2d1688(void *, void *, int) __asm__("FUN_L00_00259740");
 extern void set_camera_2d1688(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void effect_2d1688(int, int, char *) __asm__("FUN_0022da68");
+extern int effect_2d1688(int, int, char *) __asm__("FUN_0022da68");
 extern void sound_2d1688(void) __asm__("FUN_L00_00211250");
 extern void reset_2d1688(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L05_002d1e30(char *);

@@ -357,7 +357,7 @@ extern s32 fast_tween_color_alpha_first(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void draw_hud_icon(void *, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b120");
-extern void font_print_right_2382a0(s32, s32, s32, const char *, s32) __asm__("FUN_001f6af0");
+extern int font_print_right_2382a0(s32, s32, s32, const char *, s32) __asm__("FUN_001f6af0");
 extern const char *get_text(s32) __asm__("FUN_001fdd10");
 extern s32 strlen_alt(const char *) __asm__("FUN_001166cc");
 extern s32 sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");

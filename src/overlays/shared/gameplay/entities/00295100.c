@@ -1018,7 +1018,7 @@ void FUN_L00_002999a8(void) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299a68.s", FUN_L00_00299a68);
 #else
-extern void FUN_L00_002660c0(s32);
+extern int FUN_L00_002660c0(s32);
 extern void FUN_L00_001ff040(void *, s32, s32);
 extern void FUN_L00_00265fa0(s32, s32, s32);
 
