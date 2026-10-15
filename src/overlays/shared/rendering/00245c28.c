@@ -542,11 +542,12 @@ void FUN_L00_002464a8(void) {
             }
         }
     } else {
+        destination = (s32 *)&D_L00_001841F0_load;
         D_L00_001841F0_load.first_data = 0;
-        *(s32 *)0x184218 = 0;
-        D_L00_001841F0_load.scratch_data = 0;
-        D_L00_001841F0_load.mask_data = 0;
-        D_L00_001841F0_load.second_data = 0;
+        destination[10] = 0;
+        destination[2] = 0;
+        destination[3] = 0;
+        destination[1] = 0;
     }
 }
 #endif
