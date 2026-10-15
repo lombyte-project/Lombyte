@@ -12,11 +12,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00252990.s", FUN_L00_00252990);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00254b58.s", FUN_L00_00254b58);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00256f14.s", FUN_L00_00256f14);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257024.s", FUN_L00_00257024);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00257218.s", FUN_L00_00257218);
-#else
-/* NEAR: 4 rows left, final return: ours li 2/li 1/movz, retail li 1/li 2/movn (tried ~20 return spellings, all identical bytes). */
-/* Hand-written from the US listing. */
 
 typedef struct {
     u8 pad0[0xE];
@@ -27,7 +22,7 @@ typedef struct {
     u8 pad0[0xB2];
     u16 uid;
 } Moby257218;
-extern int D_0015ED84 __attribute__((sda));
+extern int D_0015ED84;
 extern int D_0014C190[][64];
 extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
 extern u8 D_0013D4C0[];
@@ -40,7 +35,10 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
     int i, idx, x;
     int nA = 0, nB = 0, nC = 0;
     int r;
+    int one;
 
+    /* Fakematch: the constant 1 of the final return lives in a local set first, so its register comes before the 2's. */
+    one = 1;
     if (*out <= 0 || (m != 0 && (D_0014C190[D_0015ED84][(s16)m->uid >> 5] >> (m->uid & 0x1F)) & 1)) {
         for (i = 0; i < 12 && D_0015EDD0_257218[i] != 0xFF; i++) {
             x = D_0015EDD0_257218[i] & 0x3F;
@@ -71,10 +69,9 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
             *out = 10;
         }
     }
-    if (FUN_00213260(5)) { return 1; }
+    if (FUN_00213260(5)) { return one; }
     return 2;
 }
-#endif
 extern int D_0015ED84_257470 __asm__("D_0015ED84");
 extern int D_0015ED84_257470b __asm__("D_0015ED84");
 extern unsigned char D_0014C050_257470[][16] __asm__("D_0014C050")
