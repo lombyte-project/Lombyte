@@ -1408,10 +1408,8 @@ show_link:
             *(float *)(vars + 0x170) = speed - step;
             if (speed - step < 0.0f) *(float *)(vars + 0x170) = 0.0f;
         } else {
-            speed = speed + step;
-            distance = frame_time * 10.0f;
-            *(float *)(vars + 0x170) = speed;
-            if (distance < speed) *(float *)(vars + 0x170) = distance;
+            *(float *)(vars + 0x170) = speed + step;
+            if (frame_time * 10.0f < speed + step) *(float *)(vars + 0x170) = frame_time * 10.0f;
         }
         index = truncate_float_to_s32(position / path->pt[0].f[3]);
         fraction = (position - FUN_001fa6c0(index) * path->pt[0].f[3]) / path->pt[0].f[3];
