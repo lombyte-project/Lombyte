@@ -39,7 +39,7 @@ void FUN_L06_00307578(char *moby) {
     data[7] += 0.01f;
     if (1.0f < data[7]) data[7] -= 1.0f;
     quad.texture_state = 1;
-    quad.primitive = 0x4000000044ULL;
+    *(volatile u64 *)&quad.primitive = 0x4000000044ULL;
     quad.reserved.value = 0;
     indices = D_L06_001fe9d0;
     i = 0;
