@@ -2029,8 +2029,8 @@ void FUN_L05_00304320(char *moby) {
     float angle;
     float turn;
     float point[4] __attribute__((aligned(16)));
-    float w[4] __attribute__((aligned(16)));
     float v[4] __attribute__((aligned(16)));
+    float w[4] __attribute__((aligned(16)));
     float pos[4] __attribute__((aligned(16)));
     void *matrix0;
     void *matrix1;
@@ -2221,7 +2221,7 @@ state_two:
                 j++;
                 if (j>=8) goto slots_done;
                 child=data+0x1a0+j*4;
-            } while (*(char **)child);
+            } while (*(char **)(data+0x1a0+j*4));
             *(char **)child=particle;
         }
     }
