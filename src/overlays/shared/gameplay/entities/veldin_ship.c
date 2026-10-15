@@ -1177,7 +1177,8 @@ void FUN_L00_002d2670(u8 *moby) {
     FUN_001ff278_2d2670(vars + 0x40, &position, &difference);
     target = *(u8 **)(vars + 0x50);
     if (target != 0) {
-        *(s32 *)(target + 0x98) = 1;
+        value = 1;
+        *(s32 *)(target + 0x98) = value;
         if (D_0013E539 && *(s16 *)(*(u8 **)(vars + 0x50) + 0xa6) != 0x76c) {
             *(u64 *)&velocity = 0;
             *((u64 *)&velocity + 1) = 0;
@@ -1199,7 +1200,8 @@ target_valid:
             (hero.state.current == 0x23 && hero.state_timer == FUN_001fef20_2d2670(0x10))) {
             FUN_L00_00216de8(0x1a, 0);
             use_ammo(-1, 1);
-            moby[0x20] = 3;
+            value = 3;
+            moby[0x20] = value;
         }
     }
     velocity.q = ((V2d2670 *)(vars + 0x40))->q;
