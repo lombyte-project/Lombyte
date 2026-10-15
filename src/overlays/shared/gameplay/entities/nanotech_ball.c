@@ -958,10 +958,12 @@ void FUN_L00_002d9810(u8 *m) {
         quad.colors[1] = 0x107f7f7f;
         quad.colors[0] = 0x107f7f7f;
         quad.texture[3] = 0x8000000044ULL;
-        shape = *(char **)((char *)data + 0xc);
-        qcopy(shiftedVector, shape + 0xc0);
-        qcopy(&cross, shape + 0xd0);
-        qcopy(&normal, shape + 0xe0);
+        {
+            char *shape = *(char **)((char *)data + 0xc);
+            qcopy(shiftedVector, shape + 0xc0);
+            qcopy(&cross, shape + 0xd0);
+            qcopy(&normal, shape + 0xe0);
+        }
         uBase = &quad.texcoords[1];
         vBase = &quad.texcoords[0];
         ((float *)&position)[2] = *(float *)(m + 0x18);
