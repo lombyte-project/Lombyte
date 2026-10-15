@@ -657,14 +657,16 @@ int FUN_L00_00237200(HudElem *e) {
         D_L00_0017E530[i] = 0;
         width = FUN_001fb090((const char *)D_L00_0017E530, -1);
         left = 0xe0 - (width >> 1);
-        other_width = FUN_001fb090((const char *)&D_L00_0017E530[1] + i, -1);
-        other_left = 0xe0 - (other_width >> 1);
-        if (left >= other_left) {
-            width = other_width;
-        } else {
-            other_left = left;
+        {
+            int other_width = FUN_001fb090((const char *)&D_L00_0017E530[1] + i, -1);
+            other_left = 0xe0 - (other_width >> 1);
+            if (left >= other_left) {
+                width = other_width;
+            } else {
+                other_left = left;
+            }
+            left = other_left;
         }
-        left = other_left;
         other_left = left + 0x20;
         FUN_0023b4d8(FUN_0023b208(0x7580, 0), other_left, y, width, 0x36, alpha);
         other_left = color;
@@ -708,10 +710,11 @@ int FUN_L00_00237200(HudElem *e) {
                     const char *message;
                     interval = pal_mode != 0 ? 3000 : 3600;
                     seconds = elapsed / interval;
-                    other_width = interval / 60;
-                    remainder = elapsed - seconds * interval;
-                    other_left = remainder / other_width;
-                    remainder = (remainder - other_left * other_width) * 100 / other_width;
+                    other_width = interval;
+                    interval /= 60;
+                    remainder = elapsed - seconds * other_width;
+                    other_left = remainder / interval;
+                    remainder = (remainder - other_left * interval) * 100 / interval;
                     line = freeze_stats_time_format;
                     message = FUN_00203ad8(0x531b);
                     sprintf(text, line, message, seconds, other_left, remainder);
