@@ -387,14 +387,12 @@ void FUN_L14_002b17d8(unsigned char *moby) {
         *(int *)(data + 0x268) = 0;
         f = *(float *)(data + 0x268);
         *(float *)(data + 0x27C) = 1.0f;
-        *(float *)(data + 0x254) = f;
         *(int *)(data + 0x26C) = 0;
         *(int *)(data + 0x270) = 0;
         *(int *)(data + 0x274) = 0;
         *(int *)(data + 0x24C) = 0;
         *(int *)(data + 0x250) = 0;
-        *(float *)(data + 0x25C) = f;
-        *(float *)(data + 0x258) = f;
+        *(float *)(data + 0x254) = *(float *)(data + 0x258) = *(float *)(data + 0x25C) = f;
         return;
     }
     case 2: {
@@ -436,9 +434,9 @@ void FUN_L14_002b17d8(unsigned char *moby) {
             *(float *)(data + 0x27C) = 1.0f;
             f = *(float *)(data + 0x250);
             *(int *)(data + 0x24C) = 0;
-            *(float *)(data + 0x254) = f;
             *(float *)(data + 0x25C) = f;
             *(float *)(data + 0x258) = f;
+            *(float *)(data + 0x254) = f;
         }
         break;
     }
@@ -484,9 +482,9 @@ void FUN_L14_002b17d8(unsigned char *moby) {
                 idx *= 16;
                 p = (char *)D_L14_001B0BB0[*(int *)(data + 0x240)];
                 f = *(float *)(p + idx + 0x1C);
-                *(float *)(data + 0x254) = *(float *)(data + 0x25C) = *(float *)(data + 0x258) = 0.0f;
-                *(float *)(data + 0x250) = f;
+                *(float *)(data + 0x254) = *(float *)(data + 0x258) = *(float *)(data + 0x25C) = 0.0f;
                 *(float *)(data + 0x27C) = -1.0f;
+                *(float *)(data + 0x250) = f;
                 FUN_L00_002e2040(moby);
                 goto finish;
             }
