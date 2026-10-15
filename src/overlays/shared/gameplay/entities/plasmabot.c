@@ -759,7 +759,7 @@ void FUN_L14_002b2928(struct Moby *m)
     Vec4 *template;
     Vec4 *beam_start;
     Vec4 *beam_end;
-    union { f32 f; s32 i; } color;
+    s32 color;
     s32 i;
 
     {
@@ -855,12 +855,13 @@ void FUN_L14_002b2928(struct Moby *m)
     cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
     fast_vec_scale(&offset, &basis[0], D_L14_001614BC);
     FUN_001f9a10(&pos, &pos, &offset);
-    /* IEEE float bits for 2.0f supply the shared 0x40000000 alpha word. */
-    color.f = 2.0f;
-    quad.colors[3] = color.i | 0xFF2020;
-    quad.colors[2] = color.i | 0xFF2020;
-    quad.colors[1] = color.i | 0xFF2020;
-    quad.colors[0] = color.i | 0xFF2020;
+    /* The preceding four-corner loop leaves i == -1, so this shifts by 24. */
+    color = 0x40;
+    color <<= i + 25;
+    quad.colors[3] = color | 0xFF2020;
+    quad.colors[2] = color | 0xFF2020;
+    quad.colors[1] = color | 0xFF2020;
+    quad.colors[0] = color | 0xFF2020;
     i = 3;
     corner = &quad.positions[0];
     do {
@@ -880,10 +881,10 @@ void FUN_L14_002b2928(struct Moby *m)
     cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
     fast_vec_scale(&offset, &basis[0], D_L14_001614BC);
     FUN_001f9a10(&pos, &pos, &offset);
-    quad.colors[3] = color.i | 0xFF2020;
-    quad.colors[2] = color.i | 0xFF2020;
-    quad.colors[1] = color.i | 0xFF2020;
-    quad.colors[0] = color.i | 0xFF2020;
+    quad.colors[3] = color | 0xFF2020;
+    quad.colors[2] = color | 0xFF2020;
+    quad.colors[1] = color | 0xFF2020;
+    quad.colors[0] = color | 0xFF2020;
     i = 3;
     corner = &quad.positions[0];
     do {
