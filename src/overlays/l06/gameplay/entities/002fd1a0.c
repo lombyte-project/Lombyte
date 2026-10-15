@@ -1910,33 +1910,33 @@ extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int
 
 void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count) {
     float position[4], direction[4], velocity[4], acceleration[4];
-    Colors_303748 a, b;
+    Colors_303748 first_colors, second_colors;
     int i;
     float strength;
     prepare_piece_effect_303748(moby, pos, -1, 2.0f, 13.0f);
-    a = D_L06_00201948;
-    b = D_L06_00201960;
+    first_colors = D_L06_00201948;
+    second_colors = D_L06_00201960;
     {
         int piece;
         for (piece = 0; piece < count; piece++) {
-            int *pa = a.v + random_integer_below(6);
-            int *pb;
-            int r1, r2;
+            int *first_color = first_colors.v + random_integer_below(6);
+            int *second_color;
+            int first_time, second_time;
             strength = scale * 400000.0f;
-            pb = b.v + random_integer_below(6);
+            second_color = second_colors.v + random_integer_below(6);
             {
                 int low, high;
                 low = scale_game_frames(15);
                 high = scale_game_frames(20);
-                r1 = random_int_between(low, high);
+                first_time = random_int_between(low, high);
             }
             {
                 int low, high;
                 low = scale_game_frames(25);
                 high = scale_game_frames(30);
-                r2 = random_int_between(low, high);
+                second_time = random_int_between(low, high);
             }
-            FUN_L00_0026a9f0(pos, push, *pa, *pb, strength, r1, r2, 0, 0,
+            FUN_L00_0026a9f0(pos, push, *first_color, *second_color, strength, first_time, second_time, 0, 0,
                              frame_time_03b68 * 10.0f * scale);
         }
     }

@@ -370,7 +370,7 @@ extern f32 D_0015ED68;
 extern f32 D_0015ED6C;
 extern s32 D_L04_00173FF0[] __attribute__((section(".data")));
 
-s32 FUN_L04_00295778(struct Moby *m, LegRig *rig, f32 speed, f32 heading, f32 step) {
+s32 FUN_L04_00295778(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) {
     union {
         s32 joints[6];
         struct {
@@ -390,22 +390,22 @@ s32 FUN_L04_00295778(struct Moby *m, LegRig *rig, f32 speed, f32 heading, f32 st
     s32 tries;
     Vec4f *pos;
 
-    if (m->seq != 0xFF) {
-        time = FUN_0020c9e0(m);
+    if (moby->seq != 0xFF) {
+        time = FUN_0020c9e0(moby);
     } else {
-        time = FUN_001fa6c0(m->prev_frame) + animation_start(m->class_slot, m->prev_seq);
+        time = FUN_001fa6c0(moby->prev_frame) + animation_start(moby->class_slot, moby->prev_seq);
     }
-    mode = rig_pick_mode(m, rig, time);
+    mode = rig_pick_mode(moby, rig, time);
     if (rig->unkEE & 4) {
-        m->rot.z = spring_turn(m->rot.z, rig->heading, rig->unkCC, rig->unkD0, rig->unkD4,
+        moby->rot.z = spring_turn(moby->rot.z, rig->heading, rig->unkCC, rig->unkD0, rig->unkD4,
                                (f32 *)&rig->unkC8);
     } else if (mode & 0xF) {
-        m->rot.z = spring_turn(m->rot.z, heading, rig->unkCC, rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
+        moby->rot.z = spring_turn(moby->rot.z, heading, rig->unkCC, rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
     } else {
-        m->rot.z = spring_turn(m->rot.z, heading, 0.0f, rig->unkD0 + rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
+        moby->rot.z = spring_turn(moby->rot.z, heading, 0.0f, rig->unkD0 + rig->unkD0, rig->unkD4, (f32 *)&rig->unkC8);
     }
-    rig_animate(m, rig, mode, heading);
-    m->rot.y = spring_turn(m->rot.y, *(f32 *)&rig->unkB8, 0.005f, 0.01f, D_0015ED60 * 0.017453292f,
+    rig_animate(moby, rig, mode, heading);
+    moby->rot.y = spring_turn(moby->rot.y, *(f32 *)&rig->unkB8, 0.005f, 0.01f, D_0015ED60 * 0.017453292f,
                            (f32 *)&rig->unkBC);
     local.joints[0] = rig->legs[0].joint;
     local.joints[1] = rig->legs[0].joint2;
@@ -413,7 +413,7 @@ s32 FUN_L04_00295778(struct Moby *m, LegRig *rig, f32 speed, f32 heading, f32 st
     local.joints[3] = rig->legs[1].joint2;
     local.joints[4] = rig->jointB4;
     local.joints[5] = rig->jointB5;
-    transform_scaled_vertex_batch(m, 6, local.joints, transformed);
+    transform_scaled_vertex_batch(moby, 6, local.joints, transformed);
     if (!(rig->unkEE & 4)) {
         s32 active = mode | (rig->mode & 0x30);
         s32 bit = 1;
@@ -422,7 +422,7 @@ s32 FUN_L04_00295778(struct Moby *m, LegRig *rig, f32 speed, f32 heading, f32 st
         RigVec *p = (RigVec *)rig->pts;
 
         zero_vector(&shift);
-        pos = &m->pos;
+        pos = &moby->pos;
         for (i = 5; i >= 0; i--) {
             if (active & bit) {
                 count += 1.0f;
@@ -435,7 +435,7 @@ s32 FUN_L04_00295778(struct Moby *m, LegRig *rig, f32 speed, f32 heading, f32 st
         }
         divide_vector_xyz(&shift, &shift, count);
     } else {
-        pos = &m->pos;
+        pos = &moby->pos;
         shift.x = fast_cos_c(rig->heading) * rig->speed;
         shift.y = fast_sin_c(rig->heading) * rig->speed;
         *(s32 *)&shift.z = 0;
@@ -466,22 +466,22 @@ s32 FUN_L04_00295778(struct Moby *m, LegRig *rig, f32 speed, f32 heading, f32 st
         rig->speed -= step;
         if (rig->speed < speed) rig->speed = speed;
     }
-    flags = FUN_L04_00292828_c(m, rig);
-    rig_step(m, rig, speed, heading, step, changed);
+    flags = FUN_L04_00292828_c(moby, rig);
+    rig_step(moby, rig, speed, heading, step, changed);
     if (!(rig->unkEE & 4)) {
-        rig_probe_setup(m, 0, &probe_kind, &local.v.ground, &probe_start, &probe_end);
-        if (m->prev_seq == rig->anims[3]->id || m->prev_seq == rig->anims[1]->id ||
-            m->prev_seq == rig->anims[2]->id) {
+        rig_probe_setup(moby, 0, &probe_kind, &local.v.ground, &probe_start, &probe_end);
+        if (moby->prev_seq == rig->anims[3]->id || moby->prev_seq == rig->anims[1]->id ||
+            moby->prev_seq == rig->anims[2]->id) {
             *(f32 *)&rig->unkE8 = rig->unkE0 + rig->unkE0;
-        } else if (m->prev_seq == rig->anims[7]->id && (rig->mode & 0xF)) {
+        } else if (moby->prev_seq == rig->anims[7]->id && (rig->mode & 0xF)) {
             *(f32 *)&rig->unkE8 = rig->unkE0 + rig->unkE0;
-        } else if (m->prev_seq == m->seq) {
+        } else if (moby->prev_seq == moby->seq) {
             *(f32 *)&rig->unkE8 = *(f32 *)&rig->unkE8 * 0.9f;
         }
         local.v.ground.z += *(f32 *)&rig->unkE8;
         probe_end -= *(f32 *)&rig->unkE8;
         subtract_vector_xyz(&local.v.offset, pos, &local.v.ground);
-        for (tries = 0; tries < 8 && rig_probe(&local.v.ground, 4, probe_start, m, probe_end); tries++) {
+        for (tries = 0; tries < 8 && rig_probe(&local.v.ground, 4, probe_start, moby, probe_end); tries++) {
             qcopy(&local.v.ground, D_L04_00173FF0);
             flags |= 1;
         }
@@ -495,13 +495,13 @@ s32 FUN_L04_00295778(struct Moby *m, LegRig *rig, f32 speed, f32 heading, f32 st
     local.joints[3] = rig->legs[1].joint2;
     local.joints[4] = rig->jointB4;
     local.joints[5] = rig->jointB5;
-    transform_scaled_vertex_batch(m, 6, local.joints, rig);
-    if (rig->unkB7 == 0x12 && m->seq == rig->anims[12]->id) return flags;
-    m->anim_speed = 1.0f;
+    transform_scaled_vertex_batch(moby, 6, local.joints, rig);
+    if (rig->unkB7 == 0x12 && moby->seq == rig->anims[12]->id) return flags;
+    moby->anim_speed = 1.0f;
     if (rig->unkB7 != 0) {
         LegRigAnim **fallback = rig->anims;
         LegRigAnim **entry;
-        s32 seq = m->seq;
+        s32 seq = moby->seq;
         f32 min_turn = 0.09239978f;
 
         for (i = 0, entry = fallback; i < 13; i++) {
@@ -509,14 +509,14 @@ s32 FUN_L04_00295778(struct Moby *m, LegRig *rig, f32 speed, f32 heading, f32 st
                 LegRigAnim *anim;
                 f32 rate;
 
-                if (!(rig->speed < D_0015ED6C * 0.19f) || !(min_turn < rig_angle_difference(m->rot.z, heading)) ||
+                if (!(rig->speed < D_0015ED6C * 0.19f) || !(min_turn < rig_angle_difference(moby->rot.z, heading)) ||
                     !(speed < (rate = D_0015ED6C * 0.19f))) {
                     anim = *entry;
                     rate = rig->speed;
                 } else {
                     anim = *fallback;
                 }
-                m->anim_speed = D_0015ED68 * FUN_001f99c0(rate / anim->rate);
+                moby->anim_speed = D_0015ED68 * FUN_001f99c0(rate / anim->rate);
                 break;
             }
             entry++;

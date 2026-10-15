@@ -2911,11 +2911,11 @@ stop_animation:
         break;
     case 8: {
         float *pos = (float *)(moby + 0x10);
-        float *g = hero.motion.pos.f;
-        if (FUN_001f9b80(pos, g) < 16.0f && D_L15_0015F5C4 != 2 && tick_countdown_32_alt(data + 3)) {
+        float *hero_pos = hero.motion.pos.f;
+        if (FUN_001f9b80(pos, hero_pos) < 16.0f && D_L15_0015F5C4 != 2 && tick_countdown_32_alt(data + 3)) {
             qcopy(position, pos);
             position[2] += 1.0f;
-            if (FUN_001efa68(position, g + 20, 2, 0, 0) == 0 && FUN_L15_002a2868(data[1], pos))
+            if (FUN_001efa68(position, hero_pos + 20, 2, 0, 0) == 0 && FUN_L15_002a2868(data[1], pos))
                 data[3] = data[4];
         }
         if (tick_countdown_32_alt(data + 6) || D_L15_0015F5C4 == 2) {

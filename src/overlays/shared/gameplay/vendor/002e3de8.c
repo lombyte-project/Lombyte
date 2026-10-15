@@ -488,61 +488,61 @@ extern void debug_line_5f18(void *, void *) __asm__("FUN_001e93e8");
 
 void FUN_L10_002f5f18(struct UpdateCam *cam) {
     float dir[4];
-    float t[4];
-    float u[4];
-    float v[4];
-    s32 seg2;
-    f32 tt2;
-    char *p;
-    VendorCamRun_5f18 *q;
+    float offset[4];
+    float point[4];
+    float look_point[4];
+    s32 look_seg;
+    f32 look_t;
+    char *saved;
+    VendorCamRun_5f18 *run;
     char *rec;
-    VendorCamStops_5f18 *s;
+    VendorCamStops_5f18 *stops;
     char *path;
     int done;
     int i;
 
-    p = (char *)cam->saved_state;
+    saved = (char *)cam->saved_state;
     rec = *(char **)(D_L10_0015EF50 + cam->descriptor_index * 32 + 0x1C);
-    q = (VendorCamRun_5f18 *)(p + 0x40);
-    s = (VendorCamStops_5f18 *)(p + 0x58);
+    run = (VendorCamRun_5f18 *)(saved + 0x40);
+    stops = (VendorCamStops_5f18 *)(saved + 0x58);
 
-    if (q->started == 0) {
+    if (run->started == 0) {
         D_L10_0015F3FC += 0.05f;
         if (D_L10_0015F3FC >= 1.0f) {
-            char *pa = D_L10_001B0930_5f18[*(int *)(rec + 0x20)];
-            char *pb = D_L10_001B0930_5f18[*(int *)(rec + 0x24)];
+            char *start_path = D_L10_001B0930_5f18[*(int *)(rec + 0x20)];
+            char *look_path = D_L10_001B0930_5f18[*(int *)(rec + 0x24)];
             D_L10_0015F3FC = 1.0f;
             D_L10_0015F404 = 1;
-            q->started = 1;
-            qcopy(&cam->pos, pa + 0x10);
+            run->started = 1;
+            qcopy(&cam->pos, start_path + 0x10);
             if (*(int *)(rec + 0x28) >= 0) {
-                struct Moby *o = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
+                struct Moby *anchor = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
                 float *ofs = (float *)(rec + 0x2C);
-                t[0] = ofs[0];
-                t[1] = ofs[1];
-                t[2] = ofs[2];
-                t[3] = 0.0f;
-                transform_vector_by_basis_5f18(t, t, D_L10_00167450);
-                add_5f18(u, &o->pos, t);
-                sub_5f18(dir, u, &cam->pos);
+                offset[0] = ofs[0];
+                offset[1] = ofs[1];
+                offset[2] = ofs[2];
+                offset[3] = 0.0f;
+                transform_vector_by_basis_5f18(offset, offset, D_L10_00167450);
+                add_5f18(point, &anchor->pos, offset);
+                sub_5f18(dir, point, &cam->pos);
             } else {
-                sub_5f18(dir, pb + 0x10, &cam->pos);
+                sub_5f18(dir, look_path + 0x10, &cam->pos);
             }
-            scale_5f18(t, D_0013F5E0_5f18, -1.0f);
+            scale_5f18(offset, D_0013F5E0_5f18, -1.0f);
             normalize_5f18(&cam->m0, dir, 1.0f);
-            cross_5f18(&cam->m1, &cam->m0, t);
+            cross_5f18(&cam->m1, &cam->m0, offset);
             normalize_5f18(&cam->m1, &cam->m1, 1.0f);
             cross_5f18(&cam->m2, &cam->m1, &cam->m0);
         }
         return;
     }
-    if (q->started == 2) {
+    if (run->started == 2) {
         D_L10_0015F3FC += 0.05f;
         if (D_L10_0015F3FC >= 1.0f) {
             float ang;
-            q->started = 3;
+            run->started = 3;
             D_L10_0015F3FC = 1.0f;
-            ang = s->fov_end * 0.5f;
+            ang = stops->fov_end * 0.5f;
             D_L10_0016CEC0.fB0 = fast_sin_5f18(ang) / fast_cos_5f18(ang);
             update_view_context_5f18();
             *(u8 *)(rec + 0x39) = 1;
@@ -554,7 +554,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         }
         if (*(int *)(rec + 0x40) == 0)
             return;
-    } else if (q->started == 3) {
+    } else if (run->started == 3) {
         return;
     } else {
         D_L10_0015F3FC -= 0.05f;
@@ -563,62 +563,62 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
     }
     path = D_L10_001B0930_5f18[*(int *)(rec + 0x20)];
     qcopy(dir, &cam->pos);
-    done = path_step_5f18(path, &cam->pos.x, &q->seg, &q->t, 0, *(float *)(rec + 0x3C) * frame_time);
-    if (q->timer != 0) {
-        if (tick_countdown_16_5f18(&q->timer) != 0)
+    done = path_step_5f18(path, &cam->pos.x, &run->seg, &run->t, 0, *(float *)(rec + 0x3C) * frame_time);
+    if (run->timer != 0) {
+        if (tick_countdown_16_5f18(&run->timer) != 0)
             done = 1;
-        else if (*(int *)(rec + 0x40) != 0 && q->timer < scale_game_frames_5f18(truncate_float_to_s32_5f18(20.0f)))
+        else if (*(int *)(rec + 0x40) != 0 && run->timer < scale_game_frames_5f18(truncate_float_to_s32_5f18(20.0f)))
             done = 1;
     }
     if (*(u8 *)(rec + 0x39) != 0)
         done = 1;
     if (done) {
-        q->started = 2;
+        run->started = 2;
         if (*(int *)(rec + 0x40) == 0)
             return;
     }
-    for (i = 0; i < 7 && s->seg[i] >= 0 && s->seg[i + 1] >= 0; i++) {
-        int lo = s->seg[i];
-        if (q->seg >= lo && q->seg < s->seg[i + 1]) {
+    for (i = 0; i < 7 && stops->seg[i] >= 0 && stops->seg[i + 1] >= 0; i++) {
+        int first_seg = stops->seg[i];
+        if (run->seg >= first_seg && run->seg < stops->seg[i + 1]) {
             float sum = 0.0f;
             float total;
             float ang;
-            int m;
-            int n;
-            for (m = lo; m < q->seg; m++)
-                sum += *(float *)(path + (m * 16 + 0x1C));
+            int before;
+            int after;
+            for (before = first_seg; before < run->seg; before++)
+                sum += *(float *)(path + (before * 16 + 0x1C));
             total = sum;
-            sum += q->t;
-            for (n = q->seg; n < s->seg[i + 1]; n++)
-                total += *(float *)(path + (n * 16 + 0x1C));
-            ang = cosine_interpolate_5f18(s->fov[i], s->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
+            sum += run->t;
+            for (after = run->seg; after < stops->seg[i + 1]; after++)
+                total += *(float *)(path + (after * 16 + 0x1C));
+            ang = cosine_interpolate_5f18(stops->fov[i], stops->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
             D_L10_0016CEC0.fB0 = fast_sin_5f18(ang) / fast_cos_5f18(ang);
             update_view_context_5f18();
         }
     }
-    q->dist += FUN_001f9b48_5f18(dir, &cam->pos);
+    run->dist += FUN_001f9b48_5f18(dir, &cam->pos);
     if (*(int *)(rec + 0x28) >= 0) {
-        struct Moby *o = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
+        struct Moby *anchor = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
         float *ofs = (float *)(rec + 0x2C);
-        u[0] = ofs[0];
-        u[1] = ofs[1];
-        u[2] = ofs[2];
-        u[3] = 0.0f;
-        transform_vector_by_basis_5f18(u, u, D_L10_00167450);
-        add_5f18(v, &o->pos, u);
-        sub_5f18(t, v, &cam->pos);
+        point[0] = ofs[0];
+        point[1] = ofs[1];
+        point[2] = ofs[2];
+        point[3] = 0.0f;
+        transform_vector_by_basis_5f18(point, point, D_L10_00167450);
+        add_5f18(look_point, &anchor->pos, point);
+        sub_5f18(offset, look_point, &cam->pos);
     } else {
         char *look = D_L10_001B0930_5f18[*(int *)(rec + 0x24)];
-        seg2 = 0;
-        tt2 = 0.0f;
-        path_step_5f18(look, u, &seg2, &tt2, 0, q->dist / q->len_a * q->len_b);
-        debug_point_5f18(u, 0.2f);
+        look_seg = 0;
+        look_t = 0.0f;
+        path_step_5f18(look, point, &look_seg, &look_t, 0, run->dist / run->len_a * run->len_b);
+        debug_point_5f18(point, 0.2f);
         debug_line_5f18(look + 0x10, look + *(int *)look * 16);
-        sub_5f18(t, u, &cam->pos);
+        sub_5f18(offset, point, &cam->pos);
     }
-    scale_5f18(u, D_0013F5E0_5f18, -1.0f);
-    normalize_5f18(&cam->m0, t, 1.0f);
-    cross_5f18(&cam->m1, &cam->m0, u);
+    scale_5f18(point, D_0013F5E0_5f18, -1.0f);
+    normalize_5f18(&cam->m0, offset, 1.0f);
+    cross_5f18(&cam->m1, &cam->m0, point);
     normalize_5f18(&cam->m1, &cam->m1, 1.0f);
     cross_5f18(&cam->m2, &cam->m1, &cam->m0);
 }

@@ -1728,29 +1728,29 @@ extern int FUN_L00_0025d7a0(void *, int, int, int);
 extern int D_L05_0015F698 __attribute__((sda));
 
 int FUN_L05_00255208(void) {
-    struct Hero *g = &hero;
+    struct Hero *player = &hero;
     float start[4] __attribute__((aligned(16)));
     float end[4] __attribute__((aligned(16)));
     float velocity[4] __attribute__((aligned(16)));
     int level;
     int state;
     int can_fall;
-    if (frame_time * 12.0f < g->motion.unk164) {
+    if (frame_time * 12.0f < player->motion.unk164) {
         FUN_L00_0025c9d8(start, 0.0f, 0.0f, 0.75f);
         qcopy(end, start);
-        qcopy(velocity, &g->motion.velocity);
+        qcopy(velocity, &player->motion.velocity);
         fast_vec_normalize(velocity, velocity, 0.55f);
-        fast_vec_add(velocity, velocity, &g->motion.velocity);
+        fast_vec_add(velocity, velocity, &player->motion.velocity);
         velocity[2] = 0.0f;
         fast_vec_add(end, start, velocity);
         if (FUN_L00_0021e8d8(start, end, 2, 0, 0) &&
             D_L05_00174240.moby == 0 && D_L05_00174240.unk1C != 0) {
             CollisionHit *wall = &D_L05_00174240;
             if (1.2217305f < FUN_L00_0022e598(wall->normal_z, FUN_L00_0022e0f0(&wall->normal_x))) {
-                g->unk8A4 = fast_add_rotations(FUN_L00_0022e598(wall->normal_x, wall->normal_y), 3.1415927f);
-                if (fast_difference_between_rotations(FUN_L00_0022e598(g->motion.velocity.f[0], g->motion.velocity.f[1]), g->unk8A4) < 0.7853982f) {
+                player->unk8A4 = fast_add_rotations(FUN_L00_0022e598(wall->normal_x, wall->normal_y), 3.1415927f);
+                if (fast_difference_between_rotations(FUN_L00_0022e598(player->motion.velocity.f[0], player->motion.velocity.f[1]), player->unk8A4) < 0.7853982f) {
                     state = 0x6F;
-                    if (!(g->ground_distance < 1.0f)) state = 0x6D;
+                    if (!(player->ground_distance < 1.0f)) state = 0x6D;
                     goto change_state;
                 }
             }
@@ -1833,8 +1833,8 @@ continue_fall:
             queue_dialogue_message_254608(0x53D6, -1);
         }
         {
-            struct Hero *g = &hero;
-            *(int *)((char *)g + 0x714) = 0;
+            struct Hero *player = &hero;
+            *(int *)((char *)player + 0x714) = 0;
         }
     }
     if ((&hero)->state.current == 0x6C) {

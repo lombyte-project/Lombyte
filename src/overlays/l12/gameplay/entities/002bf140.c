@@ -864,7 +864,7 @@ void FUN_L12_002e3098(struct Moby *moby) {
     float push[4];
     char *vars;
     int count;
-    float *p;
+    float *pos_ptr;
     void *src;
     int i;
     int j;
@@ -872,9 +872,9 @@ void FUN_L12_002e3098(struct Moby *moby) {
     float speed;
     float rise;
     float size;
-    float n;
-    int c0;
-    int c1;
+    float time_base;
+    int start_color;
+    int end_color;
     int life;
     int fade;
 
@@ -883,14 +883,14 @@ void FUN_L12_002e3098(struct Moby *moby) {
     if (moby->state == 15)
         count = truncate_float((float)count * 1.5f);
     for (i = 0; i < count; i++) {
-        p = pos;
+        pos_ptr = pos;
         src = &moby->pos;
-        /* Fakematch: the block copy of p adds the loop luids that let loop.c hoist src. */
+        /* Fakematch: the block copy of pos_ptr adds the loop luids that let loop.c hoist src. */
         {
-            void *d = p;
-            qcopy_nc(d, src);
+            void *dst = pos_ptr;
+            qcopy_nc(dst, src);
         }
-        FUN_L00_0025f8e0(p, D_L12_00161844);
+        FUN_L00_0025f8e0(pos_ptr, D_L12_00161844);
         pos[2] += 0.55f;
         angle = random_angle_radians();
         speed = random_float_between_e3098(D_L12_00161850, D_L12_00161854);
@@ -914,13 +914,13 @@ void FUN_L12_002e3098(struct Moby *moby) {
             accel[3] = size * D_L12_00161868;
             FUN_L00_0025f8e0(pos, D_L12_00161848);
             FUN_L00_0025f8e0(accel, D_L12_0016184C * D_0015ED6C);
-            c0 = fast_tween_color(D_L12_0016186C, D_L12_00161874, random_float_between_e3098(0.0f, 1.0f));
-            c1 = fast_tween_color(D_L12_00161870, D_L12_00161878, random_float_between_e3098(0.0f, 1.0f));
+            start_color = fast_tween_color(D_L12_0016186C, D_L12_00161874, random_float_between_e3098(0.0f, 1.0f));
+            end_color = fast_tween_color(D_L12_00161870, D_L12_00161878, random_float_between_e3098(0.0f, 1.0f));
             life = scale_game_frames_e3098(D_L12_0016187C);
             fade = scale_game_frames_e3098(D_L12_00161880);
-            n = (float)D_L12_00161884;
-            spawn_particle(pos, vel, accel, c0, c1, life, fade,
-                truncate_float(scale_time(random_float_between_e3098(n * 0.5f, n * 2.5f))), -1);
+            time_base = (float)D_L12_00161884;
+            spawn_particle(pos, vel, accel, start_color, end_color, life, fade,
+                truncate_float(scale_time(random_float_between_e3098(time_base * 0.5f, time_base * 2.5f))), -1);
         }
     }
 }

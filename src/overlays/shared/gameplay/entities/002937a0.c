@@ -391,8 +391,8 @@ extern u32 D_00151878_002d3878 __asm__("D_00151878") __attribute__((sda));
 extern u32 D_0015187C_002d3878 __asm__("D_0015187C") __attribute__((sda));
 extern u32 D_00151880_002d3878 __asm__("D_00151880") __attribute__((sda));
 extern u32 D_00151884_002d3878 __asm__("D_00151884") __attribute__((sda));
-void FUN_L08_002d3878(char *m) {
-    char *data = *(char **)(m + 0x78);
+void FUN_L08_002d3878(char *moby) {
+    char *data = *(char **)(moby + 0x78);
     Packet_002d3878 pk;
     Vec_002d3878 matrix[3], direction, pos, delta, angles;
     float length;
@@ -400,7 +400,7 @@ void FUN_L08_002d3878(char *m) {
     Vec_002d3878 *points;
     char *source0;
     char *source1;
-    float *v;
+    float *vertex;
     int i;
     tag = FUN_001f44b8_002d3878(14);
     pk.color[0] = D_00151878_002d3878;
@@ -415,7 +415,7 @@ void FUN_L08_002d3878(char *m) {
     pk.uv[2] = 1.0f; pk.uv[3] = 0.0f;
     pk.uv[4] = 0.0f; pk.uv[5] = 1.0f;
     pk.uv[6] = 1.0f; pk.uv[7] = 1.0f;
-    get_moby_position_002d3878(m, 2, &pos);
+    get_moby_position_002d3878(moby, 2, &pos);
     fast_vec_sub(&delta, *(char **)(data + 0x218) + 0x10, &pos);
     scale_vector_002d3878(3.0f, &delta);
     delta.v[2] = (*(float *)(*(char **)(data + 0x218) + 0x18) + 0.25f) - pos.v[2];
@@ -463,10 +463,10 @@ void FUN_L08_002d3878(char *m) {
     pk.vertices[3].v[2] += 0.25f; pk.vertices[3].v[3] = 1.0f;
     FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
     {
-        float *v;
-        for (i = 0, v = pk.vertices[0].v; i < 4; i++, v += 4) {
-            if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
-            else { v[1] += 0.25f; v[2] += -0.25f; }
+        float *vertex;
+        for (i = 0, vertex = pk.vertices[0].v; i < 4; i++, vertex += 4) {
+            if (i < 2) { vertex[1] += -0.25f; vertex[2] += 0.25f; }
+            else { vertex[1] += 0.25f; vertex[2] += -0.25f; }
         }
     }
     FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
@@ -485,10 +485,10 @@ void FUN_L08_002d3878(char *m) {
     pk.vertices[3].v[2] = 0.0f; pk.vertices[3].v[3] = 1.0f;
     FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
     {
-        float *v;
-        for (i = 0, v = pk.vertices[0].v; i < 4; i += 2, v += 8) {
-            if (i < 2) { v[1] += -0.25f; v[2] += 0.25f; }
-            else { v[1] += 0.25f; v[2] += -0.25f; }
+        float *vertex;
+        for (i = 0, vertex = pk.vertices[0].v; i < 4; i += 2, vertex += 8) {
+            if (i < 2) { vertex[1] += -0.25f; vertex[2] += 0.25f; }
+            else { vertex[1] += 0.25f; vertex[2] += -0.25f; }
         }
     }
     FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
