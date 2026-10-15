@@ -74,8 +74,7 @@ from progress_groups import (  # noqa: E402
 # Ratchet & Clank (2002) logo palette: Ratchet's bolt orange, Clank's chrome,
 # and the dark riveted plate behind them. The plate is the warm gunmetal of
 # assets/lombyte-logo.png; text stays neutral white. The canvas is a card like
-# assets/naming-desk-card.svg: GitHub dark with a warm top-left corner and an
-# orange edge.
+# assets/naming-desk-card.svg: GitHub dark with a warm top-left corner.
 ORANGE = "#de812f"
 CHROME = "#c3cbd8"
 PLATE = "#3a3632"
@@ -96,10 +95,9 @@ LABEL_FILLS = {
 # instead of repeating a gradient inside every tile.
 PARTIAL_ORANGE = "#d87620"
 # The executable's drawer: a warm, dim face (the page is already blue-black)
-# with sharp corners, edged in the bolt orange.
+# with sharp corners.
 DRAWER_FACE_TOP = "#231a12"
 DRAWER_FACE_BOTTOM = "#17110c"
-PANEL_FACE_TOP = "#3b2a1a"  # the dimmed boot treemap's brown, for the whole-game panel
 UNCLASSIFIED_LAYOUT_CAP_BYTES = 16 * 1024
 
 ROW_RE = re.compile(
@@ -905,8 +903,9 @@ def render_svg(
     drawer_height=86,
     branch_height=44,
 ) -> tuple[str, int]:
-    """The map: the executable as a drawer (its own C_EXACT over its dimmed
-    group treemap) above the tree of the shared code and the 19 levels.
+    """The map: a drawer with the whole game's C_EXACT over the executable's
+    dimmed group treemap, above the tree of the executable, the shared code
+    and the 19 levels.
     Returns (svg, height)."""
     scale = 1.0
     text_scale = 1.0
@@ -914,7 +913,8 @@ def render_svg(
     margin_px, header_px, footer_px = margin, margin, footer
     branches = overlay_branches(overlays, levels)
     tree_top = header_px + drawer_height + 26
-    height = tree_top + branch_height * len(branches) + footer_px + margin_px
+    # One more line than the overlay branches: the executable leads the tree.
+    height = tree_top + branch_height * (len(branches) + 1) + footer_px + margin_px
 
     exact = [unit for unit in units if unit["category"] == "exact"]
     asm = [unit for unit in units if unit["category"] == "asm"]
@@ -948,8 +948,7 @@ def render_svg(
         '<defs><linearGradient id="card-face" x1="0" y1="0" x2="1" y2="1">'
         f'<stop offset="0" stop-color="{CARD_WARM}"/><stop offset="0.55" stop-color="{BACKGROUND}"/>'
         '</linearGradient></defs>',
-        f'<rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="10" fill="url(#card-face)" '
-        f'stroke="{ORANGE}" stroke-opacity="0.45"/>',
+        f'<rect width="{width}" height="{height}" rx="10" fill="url(#card-face)"/>',
         '<defs><linearGradient id="progress-range" x1="0" y1="0" x2="1" y2="0">'
         f'<stop offset="0" stop-color="{PLATE}"/>'
         f'<stop offset="1" stop-color="{PARTIAL_ORANGE}"/>'
@@ -966,59 +965,23 @@ def render_svg(
         "</radialGradient></defs>",
     ]
 
-    # The drawer: the executable on the left 3/4, cut with a "\"; the whole
-    # game's figures (data, exe + overlays) on one centre axis right of the cut.
+    # The drawer: the executable's dimmed group treemap across the whole width,
+    # with the whole game's figures (data, exe + overlays) on its centre axis.
     dx0, dy0 = margin_px, header_px
     full_dx, ddy = width - 2 * margin_px, drawer_height
-    slant, cut_gap = 56, 8
-    xt = dx0 + 0.75 * full_dx - slant / 2
-    xb = xt + slant
     right = dx0 + full_dx
-    boot_poly = f"{dx0},{dy0} {xt:.1f},{dy0} {xb:.1f},{dy0 + ddy} {dx0},{dy0 + ddy}"
-    panel = (f"{xt + cut_gap:.1f},{dy0} {right},{dy0} {right},{dy0 + ddy} "
-             f"{xb + cut_gap:.1f},{dy0 + ddy}")
+    boot_poly = f"{dx0},{dy0} {right},{dy0} {right},{dy0 + ddy} {dx0},{dy0 + ddy}"
     lines.append(
-        f'<defs><linearGradient id="panel-face" x1="0" y1="0" x2="1" y2="1">'
-        f'<stop offset="0" stop-color="{PANEL_FACE_TOP}"/><stop offset="1" stop-color="{DRAWER_FACE_BOTTOM}"/></linearGradient>'
-        f'<radialGradient id="panel-glow"><stop offset="0" stop-color="{ORANGE}" stop-opacity="0.28"/>'
-        f'<stop offset="1" stop-color="{ORANGE}" stop-opacity="0"/></radialGradient>'
-        f'<pattern id="panel-hatch" width="10" height="{ddy}" patternUnits="userSpaceOnUse" '
-        f'patternTransform="skewX({math.degrees(math.atan(slant / ddy)):.2f})">'
-        f'<rect width="3" height="{ddy}" fill="{ORANGE}" fill-opacity="0.05"/></pattern>'
-        f'<clipPath id="panel-clip"><polygon points="{panel}"/></clipPath></defs>'
-    )
-    lines.append(f'<polygon points="{panel}" fill="url(#panel-face)"/>')
-    lines.append(f'<polygon points="{panel}" fill="url(#panel-hatch)"/>')
-    lines.append('<g clip-path="url(#panel-clip)">')
-    lines.append(
-        f'<ellipse cx="{(xt + cut_gap + slant / 2 + right) / 2:.1f}" cy="{dy0 + ddy / 2 + 4:.1f}" '
-        f'rx="{(right - xb) * 0.55:.1f}" ry="{ddy * 0.7:.1f}" fill="url(#panel-glow)"/>'
-    )
-    lines.append("</g>")
-    pcx = (xt + cut_gap + slant / 2 + right) / 2
-    if data and data[0]:
-        lines.append(
-            f'<text x="{pcx:.1f}" y="{dy0 + 25}" text-anchor="middle" font-family="{esc(FONT)}" '
-            f'font-size="10" fill="{TEXT}"><tspan font-size="12" font-weight="800" fill="{CHROME}">'
-            f'{100.0 * data[1] / data[0]:.1f}%</tspan> data in C'
-            f'<title>Data in C: {data[1]:,} of {data[0]:,} B, of which {data[2]:,} B '
-            f'are zeros (zero-initialised level data).</title></text>'
-        )
-    lines.append(
-        f'<text x="{pcx:.1f}" y="{dy0 + 57}" text-anchor="middle" font-family="{esc(FONT)}" '
-        f'font-size="30" font-weight="800" fill="{ORANGE}">{total_percent:.1f}%</text>'
-    )
-    lines.append(
-        f'<text x="{pcx:.1f}" y="{dy0 + 73}" text-anchor="middle" font-family="{esc(FONT)}" '
-        f'font-size="10" fill="{TEXT}">exe + overlays in C</text>'
+        f'<defs><radialGradient id="panel-glow"><stop offset="0" stop-color="{ORANGE}" stop-opacity="0.28"/>'
+        f'<stop offset="1" stop-color="{ORANGE}" stop-opacity="0"/></radialGradient></defs>'
     )
     lines.append(
         f'<polygon points="{boot_poly}" '
         f'fill="url(#drawer-face)">'
-        f"<title>{esc(f'Boot ELF SCUS_971.99: {boot_exact_bytes:,} of {boot_recoverable:,} recoverable bytes are matching C ({boot_percent:.1f}%); {len(exact)} matching, {len(pending)} pending, {len(asm)} intentional asm units')}</title></polygon>"
+        f"<title>{esc(f'Executable and level overlays: {exact_bytes:,} of {recoverable:,} recoverable bytes are matching C ({total_percent:.1f}%)')}</title></polygon>"
     )
     lines.append(f'<clipPath id="drawer-clip"><polygon points="{boot_poly}"/></clipPath>')
-    placements = layout_boot(units, dx0, dy0, xb - dx0, ddy, min_bytes)
+    placements = layout_boot(units, dx0, dy0, full_dx, ddy, min_bytes)
     lines.append('<g clip-path="url(#drawer-clip)" opacity="0.24">')
     for tile, rect in placements:
         x, y = rect["x"], rect["y"]
@@ -1032,32 +995,41 @@ def render_svg(
         )
     lines.append("</g>")
     lines.append(f'<polygon points="{boot_poly}" fill="url(#sheen)" pointer-events="none"/>')
-    cx, cy = (dx0 + xt) / 2, dy0 + ddy / 2
-    # A soft dark centre, then the whole-game panel's orange glow, behind the
-    # percentage.
+    cx, cy = (dx0 + right) / 2, dy0 + ddy / 2
+    # A soft dark centre, then an orange glow, behind the percentage.
     lines.append(
         f'<g clip-path="url(#drawer-clip)" pointer-events="none">'
-        f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{(xt - dx0) * 0.28:.1f}" ry="{ddy * 0.6:.1f}" '
+        f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{full_dx * 0.2:.1f}" ry="{ddy * 0.6:.1f}" '
         f'fill="url(#drawer-halo)"/>'
-        f'<ellipse cx="{cx:.1f}" cy="{dy0 + ddy / 2 + 4:.1f}" rx="{(right - xb) * 0.55:.1f}" '
+        f'<ellipse cx="{cx:.1f}" cy="{cy + 4:.1f}" rx="{full_dx * 0.14:.1f}" '
         f'ry="{ddy * 0.7:.1f}" fill="url(#panel-glow)"/></g>'
     )
+    if data and data[0]:
+        lines.append(
+            f'<text x="{cx:.1f}" y="{dy0 + 25}" text-anchor="middle" font-family="{esc(FONT)}" '
+            f'font-size="10" fill="{TEXT}"><tspan font-size="12" font-weight="800" fill="{CHROME}">'
+            f'{100.0 * data[1] / data[0]:.1f}%</tspan> data in C'
+            f'<title>Data in C: {data[1]:,} of {data[0]:,} B, of which {data[2]:,} B '
+            f'are zeros (zero-initialised level data).</title></text>'
+        )
     lines.append(
-        f'<text x="{dx0 + 12}" y="{dy0 + 17}" font-family="{esc(FONT)}" font-size="10" '
-        f'font-weight="700" fill="{CHROME}">BOOT ELF &#183; SCUS_971.99</text>'
+        f'<text x="{cx:.1f}" y="{dy0 + 57}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'font-size="30" font-weight="800" fill="{ORANGE}">{total_percent:.1f}%</text>'
     )
     lines.append(
-        f'<text x="{cx:.1f}" y="{cy + 7:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
-        f'font-size="30" font-weight="800" fill="{ORANGE}">'
-        f"{boot_percent:.1f}%</text>"
+        f'<text x="{cx:.1f}" y="{dy0 + 73}" text-anchor="middle" font-family="{esc(FONT)}" '
+        f'font-size="10" fill="{TEXT}">exe + overlays in C</text>'
     )
-    caption = "executable in C"
-    if fuzzy_percent is not None:
-        caption += f" &#183; C_FUZZY {fuzzy_percent:.1f}%"
-    lines.append(
-        f'<text x="{cx:.1f}" y="{cy + 23:.1f}" text-anchor="middle" font-family="{esc(FONT)}" '
-        f'font-size="10" fill="{TEXT}">{caption}</text>'
-    )
+
+    # The executable leads the tree, above the shared code.
+    group_tiles = sorted(build_group_tiles(units), key=lambda tile: tile["address"])
+    branches.insert(0, {
+        "category": "boot", "index": None, "planet": "BOOT ELF",
+        "description": "the executable, SCUS_971.99", "unit": "units",
+        "functions": len(units), "matching_c": len(exact),
+        "bytes_total": boot_bytes, "bytes_matching_c": boot_exact_bytes,
+        "c_exact_percent": boot_percent, "blocks": group_tiles,
+    })
 
     # The tree: a trunk on the left, one branch per line.
     trunk_x = margin_px + 14
@@ -1066,8 +1038,7 @@ def render_svg(
     bar_right = pct_x - 118
     lines.append(
         f'<text x="{margin_px}" y="{tree_top - 8}" font-family="{esc(FONT)}" font-size="10" '
-        f'font-weight="700" fill="{CHROME}" fill-opacity="0.9">LEVEL OVERLAYS &#183; '
-        f'{ov_exact_bytes:,} of {ov_bytes:,} B matching C ({ov_percent:.1f}%)</text>'
+        f'font-weight="700" fill="{CHROME}" fill-opacity="0.9">EXECUTABLE AND LEVEL OVERLAYS</text>'
     )
     first_y = tree_top + 14
     last_y = tree_top + branch_height * (len(branches) - 1) + 14
@@ -1100,7 +1071,7 @@ def render_svg(
         )
         lines.append(
             f'<text x="{pct_x}" y="{y + 20}" text-anchor="end" font-family="{esc(FONT)}" '
-            f'font-size="8.5" fill="{MUTED}">{branch["matching_c"]}/{branch["functions"]} fn '
+            f'font-size="8.5" fill="{MUTED}">{branch["matching_c"]}/{branch["functions"]} {branch.get("unit", "fn")} '
             f'&#183; {branch["bytes_total"]:,} B</text>'
         )
         # blocks: one per src/overlays file, width by bytes
@@ -1113,7 +1084,8 @@ def render_svg(
         x = bar_x
         for block in branch["blocks"]:
             w = usable * block["size"] / total
-            tip = (f"{block['file']}: {block['matching_c']}/{block['count']} functions matching C, "
+            tip = (f"{block.get('file') or block['display']}: {block['matching_c']}/{block['count']} "
+                   f"{'units' if branch['category'] == 'boot' else 'functions'} matching C, "
                    f"{block['bytes_matching_c']:,}/{block['size']:,} B")
             lines.append(
                 f'<rect x="{x:.2f}" y="{bar_y}" width="{max(w, 0.4):.2f}" height="{bar_h}" rx="1" '
