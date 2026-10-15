@@ -855,7 +855,7 @@ def overlay_branches(functions: list[dict], levels: dict[int, dict]) -> list[dic
     for category in order:
         members = by_category.get(category, [])
         if category == "shared":
-            index, planet, description = None, "Shared code", "functions present in two or more levels"
+            index, planet, description = None, "Shared code", "Functions present in two or more levels"
         else:
             index = int(category[-2:])
             meta = levels.get(index, {})
@@ -913,8 +913,9 @@ def render_svg(
     margin_px, header_px, footer_px = margin, margin, footer
     branches = overlay_branches(overlays, levels)
     tree_top = header_px + drawer_height + 26
-    # One more line than the overlay branches: the executable leads the tree.
-    height = tree_top + branch_height * (len(branches) + 1) + footer_px + margin_px
+    # One more line than the overlay branches, set apart: the executable.
+    section_gap = 26
+    height = tree_top + branch_height * (len(branches) + 1) + section_gap + footer_px + margin_px
 
     exact = [unit for unit in units if unit["category"] == "exact"]
     asm = [unit for unit in units if unit["category"] == "asm"]
@@ -1025,7 +1026,7 @@ def render_svg(
     group_tiles = sorted(build_group_tiles(units), key=lambda tile: tile["address"])
     branches.insert(0, {
         "category": "boot", "index": None, "planet": "BOOT ELF",
-        "description": "the executable, SCUS_971.99", "unit": "units",
+        "description": "The executable, SCUS_971.99", "unit": "units",
         "functions": len(units), "matching_c": len(exact),
         "bytes_total": boot_bytes, "bytes_matching_c": boot_exact_bytes,
         "c_exact_percent": boot_percent, "blocks": group_tiles,
@@ -1037,18 +1038,27 @@ def render_svg(
     label_x = trunk_x + 20
     pct_x = width - margin_px
     bar_right = pct_x - 118
+    # The executable sits on its own above the overlays' tree.
+    ov_top = tree_top + branch_height + section_gap
+    for header, top in (
+        ("EXECUTABLE", tree_top),
+        (f"LEVEL OVERLAYS &#183; {ov_exact_bytes:,} of {ov_bytes:,} B matching C ({ov_percent:.1f}%)", ov_top),
+    ):
+        lines.append(
+            f'<text x="{margin_px}" y="{top - 8}" font-family="{esc(FONT)}" font-size="10" '
+            f'font-weight="700" fill="{CHROME}" fill-opacity="0.9">{header}</text>'
+        )
+    last_y = ov_top + branch_height * (len(branches) - 2) + 14
     lines.append(
-        f'<text x="{margin_px}" y="{tree_top - 8}" font-family="{esc(FONT)}" font-size="10" '
-        f'font-weight="700" fill="{CHROME}" fill-opacity="0.9">EXECUTABLE AND LEVEL OVERLAYS</text>'
+        f'<line x1="{trunk_x}" y1="{tree_top - 2}" x2="{trunk_x}" y2="{tree_top + 14}" '
+        f'stroke="{PLATE}" stroke-width="2"/>'
     )
-    first_y = tree_top + 14
-    last_y = tree_top + branch_height * (len(branches) - 1) + 14
     lines.append(
-        f'<line x1="{trunk_x}" y1="{tree_top - 2}" x2="{trunk_x}" y2="{last_y}" '
+        f'<line x1="{trunk_x}" y1="{ov_top - 2}" x2="{trunk_x}" y2="{last_y}" '
         f'stroke="{PLATE}" stroke-width="2"/>'
     )
     for i, branch in enumerate(branches):
-        y = tree_top + i * branch_height + 14
+        y = tree_top + 14 if i == 0 else ov_top + (i - 1) * branch_height + 14
         lines.append(
             f'<path d="M {trunk_x} {y} h 12" stroke="{PLATE}" stroke-width="2" fill="none"/>'
         )
@@ -1063,7 +1073,7 @@ def render_svg(
             f'<text x="{label_x}" y="{y + 4}" font-family="{esc(FONT)}" font-size="11">'
             f'<tspan fill="{MUTED}">{number}</tspan>'
             f'<tspan fill="{TEXT}" font-weight="700">{esc(branch["planet"])}</tspan>'
-            f'<tspan fill="{MUTED}"> &#183; {esc(branch["description"])}{fuzzy}</tspan></text>'
+            f'<tspan fill="{MUTED}"> &#183; {esc(branch["description"][:1].upper() + branch["description"][1:])}{fuzzy}</tspan></text>'
         )
         pct = branch["c_exact_percent"]
         pct_fill = ORANGE if pct >= 100.0 else (PARTIAL_ORANGE if pct > 0 else MUTED)
