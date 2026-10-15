@@ -1049,12 +1049,14 @@ void FUN_L13_00307e98(struct Moby *moby) {
     case 15: {
         anim = data + 0x60;
         flags = FUN_L00_0025c698(moby, anim);
-        if (flags & 0x40) {
+        value = flags & 0x40;
+        flags &= 0x120;
+        if (value) {
             *(OvlQuad *)anim = 0;
             moby->state = 1; if (moby->prev_seq != 0) FUN_00212f90(moby, 0, 0, scale_game_frames(10));
         return;
         }
-        if (flags & 0x120) mark_moby_for_removal(moby);
+        if (flags) mark_moby_for_removal(moby);
         return;
     }
     case 16: {
