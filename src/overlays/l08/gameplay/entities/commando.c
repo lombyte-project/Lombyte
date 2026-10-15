@@ -686,7 +686,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
     f32 phase, phase_step, amp_a, amp_step_a, amp_b, amp_step_b;
     f32 step_a, step_b, time, height_a, height_b, phase_a, phase_b;
     f32 x, y, noise_x, angle, base, sine, shape, bend, a, c, t;
-    s32 alpha, i, j, k, timer, count;
+    s32 alpha, i, j, timer, count, k;
     s16 lifetime;
     u32 color_a, color_b;
     s32 temp;
