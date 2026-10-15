@@ -1026,7 +1026,7 @@ def render_svg(
     group_tiles = sorted(build_group_tiles(units), key=lambda tile: tile["address"])
     branches.insert(0, {
         "category": "boot", "index": None, "planet": "BOOT ELF",
-        "description": "The executable, SCUS_971.99", "unit": "units",
+        "description": "Game executable, SCUS_971.99", "unit": "units",
         "functions": len(units), "matching_c": len(exact),
         "bytes_total": boot_bytes, "bytes_matching_c": boot_exact_bytes,
         "c_exact_percent": boot_percent, "blocks": group_tiles,
