@@ -88,7 +88,7 @@ typedef struct {
 
 extern OvlVec4 D_0013F3D0_307d68 __asm__("D_0013F3D0");
 extern OvlVec4 D_L09_00166F40_307d68 __asm__("D_L09_00166F40");
-extern char D_L09_00174000_307d68[] __asm__("D_L09_00174000");
+extern char D_L09_00174000[] __asm__("D_L09_00174000");
 extern f32 distance_307d68(void *, void *) __asm__("FUN_001f9b48");
 extern f32 FUN_001f9b80_307d68(void *, void *) __asm__("FUN_001f9b80");
 extern void add_vector_xyz_307d68(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -179,7 +179,7 @@ void FUN_L09_00307d68(struct Moby *m)
             r.f[1] = random_float_between_307d68(-1.0f, 1.0f);
             r.f[2] = random_float_between_307d68(-1.0f, 1.0f);
             push.q = r.q;
-            FUN_L00_001ff660_307d68(&r, v, D_L09_00174000_307d68);
+            FUN_L00_001ff660_307d68(&r, v, D_L09_00174000);
             normalize_vector_xyz_307d68(&push, &push, vector_length_xyz_307d68(&r) * 0.5f);
             add_vector_xyz_307d68(&push, &r, &push);
             normalize_vector_xyz_307d68(&push, &push, random_float_between_307d68(frame_time * 3.0f, frame_time * 6.0f));

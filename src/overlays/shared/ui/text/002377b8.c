@@ -205,7 +205,7 @@ typedef struct {
     int wA4;
 } Stats;
 extern Stats D_00141848 __attribute__((section(".data")));
-extern int D_0013D428[] __attribute__((section(".data")));
+extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern u8 D_00141622[] __attribute__((section(".data")));
 extern float D_L00_0015F788 __attribute__((sda));
 extern float D_L00_0015F784 __attribute__((sda));
@@ -299,7 +299,7 @@ void FUN_L00_00237ba0(Obj *p) {
             if (id == 0x18) hero_lui.unk1FF5 = 1;
             else hero_lui.pending_item[0] = id;
             rr = &D_L00_001C40B0[ri];
-            if (rr->h8 && rr->hE < D_0013D428[id]) D_0013D428[id] = rr->hE;
+            if (rr->h8 && rr->hE < weapon_ammo_counts[id]) weapon_ammo_counts[id] = rr->hE;
         }
         if (c[0]) c[0]--;
     } else if (c[0] < D_L00_0015F780_gp) c[0]++;
@@ -345,7 +345,6 @@ extern Ent **D_L00_0015FAC0_c __asm__("D_L00_0015FAC0");
 extern s32 D_L00_0017E504;
 extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
 extern E00237ae8 D_L00_00179AC0[];
-extern s32 D_0013D428[];
 extern u8 D_0013E520[];
 extern char D_L00_0015F7C8[];
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
@@ -449,7 +448,7 @@ s32 FUN_L00_002382a0(char *rec) {
         id = pause_iop_sprite_lists[selected];
         if (D_L00_001C40B0[id].h8 != 0) {
             s32 shadow, item;
-            item = D_0013D428[id];
+            item = weapon_ammo_counts[id];
             sprintf_alt(formatted, D_L00_0015F7C8, item, D_L00_001C40B0[id].hE);
             if (item != 0)
                 shadow = fast_tween_color_alpha_first(opacity, D_L00_0015F7A8, D_L00_0015F7AC);

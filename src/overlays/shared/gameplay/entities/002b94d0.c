@@ -1701,7 +1701,7 @@ extern float D_L00_00161828_2BE3A8 __asm__("D_L00_00161758") __attribute__((sda)
 extern float D_L00_0016182C_2BE3A8 __asm__("D_L00_0016175C") __attribute__((sda));
 extern float D_L00_00161838_2BE3A8 __asm__("D_L00_00161768") __attribute__((sda));
 extern signed char D_L00_00161833_2BE3A8[] __asm__("D_L00_00161763") __attribute__((section(".sdata")));
-extern float D_L00_0016189C_2BE3A8 __asm__("D_L00_001617CC") __attribute__((section(".sdata")));
+extern float D_L00_001617CC_macro __asm__("D_L00_001617CC") __attribute__((section(".sdata")));
 extern int D_L00_00161824_macro __asm__("D_L00_00161824") __attribute__((section(".sdata")));
 extern float D_0015EE60_2BE3A8 __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern float D_0015EE6C_2BE3A8 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
@@ -1797,7 +1797,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
     wave_offset.x = 0.0f;
     func_L00_002BE2A0_2BE3A8();
     D_L00_001617D0 = func_L00_0025F368_2BE3A8(D_L00_001617D0 + D_L00_001617C8_2BE3A8);
-    func_00215C00_2BE3A8(&aim, D_L00_0016189C_2BE3A8, data->f48, data->f4C);
+    func_00215C00_2BE3A8(&aim, D_L00_001617CC_macro, data->f48, data->f4C);
     if (data->target != 0 && (info = func_L00_0025D390_2BE3A8(data->target)) != 0) {
         qcopy(&beam_end, &data->target->pos);
         beam_end.z = beam_end.z + info->height;
@@ -1816,7 +1816,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
     {
         int i;
 
-        D_L00_0016189C_2BE3A8 = beam_length * D_L00_001617C0_2BE3A8;
+        D_L00_001617CC_macro = beam_length * D_L00_001617C0_2BE3A8;
         qcopy(&D_L00_001DC260_2BE3A8[0], data);
         qcopy(&D_L00_001DC320_2BE3A8[0], data);
         qcopy(&D_L00_001DC3E0_2BE3A8[0], data);
@@ -1828,7 +1828,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
             factor = progress * -0.49999997f + 0.9f;
             if (D_L00_001617C4_2BE3A8 < i && data->target != 0) {
                 func_001F9BF0_2BE3A8(&point, &data->target->pos, &D_L00_001DC260_2BE3A8[i]);
-                func_L00_001FF4B0_2BE3A8(&point, &point, D_L00_0016189C_2BE3A8);
+                func_L00_001FF4B0_2BE3A8(&point, &point, D_L00_001617CC_macro);
                 func_001F9C08_2BE3A8(&aim, &aim, &point, 0.2f);
             }
             func_001F9C08_2BE3A8(&point, &segment, &aim, factor);
@@ -1836,7 +1836,7 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
             if (seg_length == 0.0f) {
                 qcopy(&D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1]);
             } else {
-                func_001F9C30_2BE3A8(&point, &point, D_L00_0016189C_2BE3A8 / seg_length);
+                func_001F9C30_2BE3A8(&point, &point, D_L00_001617CC_macro / seg_length);
                 func_001F9BD8_2BE3A8(&D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1], &point);
             }
             func_001F9BF0_2BE3A8(&dir, &D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1]);
@@ -1960,8 +1960,8 @@ void FUN_L00_002bd0a0(struct Moby *moby) {
             func_001F9BD8_2BE3A8(&D_L00_001DD3A0_2BE3A8[pulse], &D_L00_001DD3A0_2BE3A8[pulse], &side);
             continue;
         }
-        node_index = func_001FA898_2BE3A8(travelled / D_L00_0016189C_2BE3A8);
-        remainder = D_L00_001618C8_2BE3A8[pulse] - func_001FA888_2BE3A8(node_index) * D_L00_0016189C_2BE3A8;
+        node_index = func_001FA898_2BE3A8(travelled / D_L00_001617CC_macro);
+        remainder = D_L00_001618C8_2BE3A8[pulse] - func_001FA888_2BE3A8(node_index) * D_L00_001617CC_macro;
         qcopy(&D_L00_001DD3A0_2BE3A8[pulse], &D_L00_001DC260_2BE3A8[node_index]);
         if (node_index == 11) {
             func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[node_index], &D_L00_001DC250_2BE3A8[node_index]);

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://recomp.fyi/schema/v1.json",
+  "game": "Ratchet & Clank",
+  "wikidata": "Q170003",
+  "system": "PS2",
+  "type": "decomp",
+  "original": {
+    "region": "USA",
+    "serial": "SCUS-97199"
+  },
+  "project": "Lombyte",
+  "status": "in-progress",
+  "toolchain": [
+    "Splat",
+    "Objdiff",
+    "EE-GCC 2.9-ee-991111b",
+    "SN EE-GCC 2.95.2"
+  ],
+  "approach": "Matching decompilation: C that rebuilds the retail executable and level overlays byte for byte, compiled with a reconstructed copy of the original EE GCC toolchain.",
+  "maintainers": [
+    {
+      "name": "mateuszklysz",
+      "link": "https://github.com/mateuszklysz"
+    }
+  ],
+  "links": [
+    {
+      "label": "Website",
+      "url": "https://lombyte-project.github.io"
+    },
+    {
+      "label": "Discord",
+      "url": "https://discord.gg/XVdFrwKuw"
+    }
+  ],
+  "help": [
+    "Matching hard functions",
+    "Naming structs and fields",
+    "Level overlays"
+  ],
+  "tags": [
+    "matching",
+    "platformer",
+    "MIPS-R5900",
+    "EE-GCC",
+    "level-overlays",
+    "objdiff",
+    "readable-C"
+  ],
+  "notes": "Readable C with evidence-based names. Progress comes from the objdiff report published by CI on every push to main."
+}

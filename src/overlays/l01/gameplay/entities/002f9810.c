@@ -687,7 +687,7 @@ extern Rec_2FC140 *D_L01_0016016C_2FC140 __asm__("D_L01_001600EC") MACRO_ADDR;
 extern int cutscene_mode __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern char D_L01_001BAD60_2FC140[] __asm__("D_L01_001BAA50");
 extern Lv_2FC140 D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB6B0");
-extern char D_L01_001BADB0_2FC140[] __asm__("D_L01_001BAAA0");
+extern char D_L01_001BAAA0[] __asm__("D_L01_001BAAA0");
 extern unsigned char D_0014C050_u[] __asm__("D_0014C050");
 extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern void func_L01_002FC058_2FC140(void) __asm__("FUN_L01_002fac80");
@@ -887,8 +887,8 @@ void FUN_L01_002fad68(Moby_2FC140 *moby) {
             if (data->f34 != -1 && data->f38 != -1) {
                 D_L01_00160058_2FC140[data->f34].fBC = 2;
                 D_L01_00160058_2FC140[data->f38].fBC = 2;
-                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f34].fBC, 1, &D_L01_00160058_2FC140[data->f34], 1, D_L01_001BADB0_2FC140);
-                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f38].fBC, 1, &D_L01_00160058_2FC140[data->f38], 1, D_L01_001BADB0_2FC140);
+                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f34].fBC, 1, &D_L01_00160058_2FC140[data->f34], 1, D_L01_001BAAA0);
+                func_L01_0029C2A0_2FC140(&D_L01_00160058_2FC140[data->f38].fBC, 1, &D_L01_00160058_2FC140[data->f38], 1, D_L01_001BAAA0);
             }
         }
         func_L00_002512D8_2FC140(moby->fB0);

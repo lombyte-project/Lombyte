@@ -2833,7 +2833,7 @@ float FUN_00257cb0_002ddcb8(void) __asm__("FUN_L00_00257cb0");
 void FUN_0025fc08_002ddcb8(void *, float, void *, void *) __asm__("FUN_L00_0025fc08");
 extern char D_L00_001E4B40[];
 extern char D_L00_001E4C80_002ddf60[] __asm__("D_L00_001E4C80");
-extern char D_L00_001E6020_002ddf60[] __asm__("D_L00_001E6020");
+extern char D_L00_001E6020[] __asm__("D_L00_001E6020");
 extern char D_L00_001E5FE0[];
 extern short D_L00_001E6008_002ddca0 __asm__("D_L00_001E6008") __attribute__((section(".data")));
 extern char D_L00_00173E60_002ddf60[] __asm__("D_L00_00173E60");
@@ -2952,7 +2952,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     FUN_001ff500_002ddcb8(&cross, &cross, 1.0f);
     FUN_001ff3c0_002ddf60(&normal, &basis, &cross);
     current = D_L00_001E4B40;
-    prior = D_L00_001E6020_002ddf60;
+    prior = D_L00_001E6020;
     i = 19;
     do {
         FUN_001ff300_002ddcb8(&temp1, current, 0.1f);
@@ -2996,7 +2996,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
         qcopy(&axis, &forward);
         spread = row_float * 0.3f;
         phase = row_float * 0.7f;
-        current = D_L00_001E6020_002ddf60 + row * 320;
+        current = D_L00_001E6020 + row * 320;
         prior = D_L00_001E4B40;
         next_row = row + 1;
         j = 0;
@@ -3032,7 +3032,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                 if (row > 1 && small_count < 2) {
                     segment = random_integer_below(20);
                     sampled = FUN_00257be8_002ddf60(0.2f, 1.0f);
-                    current = D_L00_001E6020_002ddf60 + segment * 16;
+                    current = D_L00_001E6020 + segment * 16;
                     FUN_001ff2d8_002ddf60(&temp1, current, current + row * 320, sampled);
                     FUN_001ff2d8_002ddf60(&edge, D_L00_001E5F40_002ddcb8, D_L00_001E5F40_002ddcb8 + row * 16, sampled);
                     sampled = FUN_00257be8_002ddf60(60000.0f, 180000.0f);
@@ -3107,15 +3107,15 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                     FUN_001ff278_002ddcb8(*(char **)(record + 20) + 16, D_L00_001E5F40_002ddcb8 + row * 16, &temp1);
                     row = *(short *)record;
                     segment = *(short *)(record + 2);
-                    FUN_001ff2a8_002ddf60(&temp2, D_L00_001E6020_002ddf60 + row * 320 + segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&temp2, D_L00_001E6020 + row * 320 + segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
                     row = *(short *)record;
-                    FUN_001ff2a8_002ddf60(&edge, D_L00_001E6020_002ddf60 + row * 320 + segment * 16 - 0x140, D_L00_001E5F30 + row * 16);
+                    FUN_001ff2a8_002ddf60(&edge, D_L00_001E6020 + row * 320 + segment * 16 - 0x140, D_L00_001E5F30 + row * 16);
                     interpolate_vector4_linear_002ddf60(&offset, &temp2, &edge, fraction);
                     next_segment = (segment + 19) % 20;
                     row = *(short *)record;
-                    FUN_001ff2a8_002ddf60(&direction, D_L00_001E6020_002ddf60 + row * 320 + next_segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
+                    FUN_001ff2a8_002ddf60(&direction, D_L00_001E6020 + row * 320 + next_segment * 16, D_L00_001E5F40_002ddcb8 + row * 16);
                     row = *(short *)record;
-                    FUN_001ff2a8_002ddf60(&tangent, D_L00_001E6020_002ddf60 + row * 320 + next_segment * 16 - 0x140, D_L00_001E5F30 + row * 16);
+                    FUN_001ff2a8_002ddf60(&tangent, D_L00_001E6020 + row * 320 + next_segment * 16 - 0x140, D_L00_001E5F30 + row * 16);
                     interpolate_vector4_linear_002ddf60(&following, &direction, &tangent, fraction);
                     interpolate_vector4_linear_002ddf60(&offset, &offset, &following, *(volatile float *)(record + 8));
                     value = *(volatile float *)(record + 8) + *(volatile float *)(record + 12);

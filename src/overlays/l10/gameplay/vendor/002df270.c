@@ -2997,7 +2997,7 @@ typedef struct {
 extern struct Moby *D_L10_0015FFD8_8ab0 __asm__("D_L10_0015FFD8") __attribute__((sda));
 typedef struct { unsigned char pad[0x454]; unsigned char collected[1]; } SaveFlags_2E8AB0;
 extern SaveFlags_2E8AB0 D_L10_001BB6B0_8ab0 __asm__("D_L10_001BB6B0");
-extern int D_L10_001BA950_8ab0[] __asm__("D_L10_001BA950");
+extern int D_L10_001BA950[] __asm__("D_L10_001BA950");
 extern int D_0014C190_8ab0[] __asm__("D_0014C190");
 extern float FUN_L00_00258110(float *, float, float, float, float, float);
 extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
@@ -3162,7 +3162,7 @@ remove_candidate:
         bits = (int *)((char *)D_0014C190_8ab0 + (((int)((unsigned int)save_id << 16) >> 21) * 4 + (current_level_index << 8)));
         *bits |= 1 << (save_id & 31);
         save_id = moby->save_id;
-        D_L10_001BA950_8ab0[(int)((unsigned int)save_id << 16) >> 21] |= 1 << (save_id & 31);
+        D_L10_001BA950[(int)((unsigned int)save_id << 16) >> 21] |= 1 << (save_id & 31);
         return;
     }
 }
@@ -3180,7 +3180,7 @@ typedef struct {
 } LevelState_e9648;
 
 extern LevelState_e9648 D_L10_001BB6B0_e9648 __asm__("D_L10_001BB6B0");
-extern int D_L10_001BA950_e9648[] __asm__("D_L10_001BA950");
+extern int D_L10_001BA950[] __asm__("D_L10_001BA950");
 extern int D_0014C190_e9648[][64] __asm__("D_0014C190");
 extern unsigned char D_001413F4_e9648[] __asm__("D_001413F4");
 extern unsigned char D_0013DD4C_e9648[] __asm__("D_0013DD4C");
@@ -3227,7 +3227,7 @@ void FUN_L10_002e9648(struct Moby *moby) {
         save_id = moby->save_id;
         D_0014C190_e9648[current_level_index][(short)save_id >> 5] |= 1 << (save_id & 31);
         save_id = moby->save_id;
-        D_L10_001BA950_e9648[(short)save_id >> 5] |= 1 << (save_id & 31);
+        D_L10_001BA950[(short)save_id >> 5] |= 1 << (save_id & 31);
         if (inside_clip_volume_e9648(&hero.motion.pos, vars->clip_volume))
             FUN_L10_002f5a50(vars->sound);
         vars->timer = truncate_float_e9648(scale_time(90.0f));
@@ -3295,7 +3295,7 @@ extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L10_002f5a50(int i);
 extern unsigned char D_001413F4[];
 extern unsigned char D_0013DE4B_2EAD50[] __asm__("D_0013DD4C");
-extern int D_L10_001BAC60_2EAD50[] __asm__("D_L10_001BA950");
+extern int D_L10_001BA950[] __asm__("D_L10_001BA950");
 extern L10State_2EAD50 D_L10_001BB9C0_2EAD50 __asm__("D_L10_001BB6B0");
 extern void func_L10_002F6E10_2EAD50(int) __asm__("FUN_L10_002f5a50");
 extern float func_001F9F90_2EAD50(float) __asm__("FUN_001f9dc8");
@@ -3347,7 +3347,7 @@ void FUN_L10_002e9990(GateMoby_2EAD50 *m)
                 D_L10_0015FFD8_c[d->door].flags &= 0xFFFD;
             }
             *(int *)(bits + ((((short)m->uid >> 5) * 4) + (current_level_index << 8))) |= st << (m->uid & 0x1F);
-            D_L10_001BAC60_2EAD50[(short)m->uid >> 5] |= st << (m->uid & 0x1F);
+            D_L10_001BA950[(short)m->uid >> 5] |= st << (m->uid & 0x1F);
             if (d->sound > 0) {
                 func_L10_002F6E10_2EAD50(d->sound);
             }

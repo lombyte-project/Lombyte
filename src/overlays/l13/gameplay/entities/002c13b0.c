@@ -2482,7 +2482,7 @@ int FUN_L13_002e86f8(void *unused, unsigned char *p, int base, int n) {
     return 0;
 }
 /* Throws sparks from each of the moby's six vent bones that are open. */
-extern int D_L13_001D3478_v[] __asm__("D_L13_001D3478");
+extern int D_L13_001D3478[] __asm__("D_L13_001D3478");
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern int rnd_v(int, int) __asm__("FUN_L00_00257b90");
 extern int below_v(int) __asm__("FUN_00213260");
@@ -2513,7 +2513,7 @@ void FUN_L13_002e8920(struct Moby *m, char *d) {
             if (frame_count & 1) {
                 r = frames_v(rnd_v(0xF, 0x14));
                 spark_v(a, &zv, 0xCF0000FF, 0xCF, r, ftoi_v(s * 350.0f), -100, 1);
-            } else if (m->command == 0 || D_L13_001D3478_v[m->command - 1] != D_L13_001D3508[i] ||
+            } else if (m->command == 0 || D_L13_001D3478[m->command - 1] != D_L13_001D3508[i] ||
                        below_v(9) == 0) {
                 r = frames_v(rnd_v(0xF, 0x16));
                 spark_v(a, &zv, 0x6000FFFF, 0x80, r, ftoi_v(s * 600.0f), -100, 1);
@@ -3000,7 +3000,7 @@ int FUN_L13_002e86f8_c(void *unused, unsigned char *p, int base, int n) __asm__(
 void FUN_L13_002e9680_c(void *unused, char *p, int idx) __asm__("FUN_L13_002e9680");
 extern char D_0013F450_2EAE80[] __asm__("D_0013F350");
 extern char D_00140940[];
-extern int D_L13_001D3748_2EAE80[] __asm__("D_L13_001D3478");
+extern int D_L13_001D3478[] __asm__("D_L13_001D3478");
 extern float func_001FA888_2EAE80(int) __asm__("FUN_001fa6c0");
 extern Hit_2EAE80 *func_L00_0025B478_2EAE80(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int func_L00_0025B4D0_2EAE80(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
@@ -3075,7 +3075,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                         v->f118 = 0;
                     }
                 } else if (dd->f0 < hi) {
-                    int tv = D_L13_001D3748_2EAE80[m->bBC - 1];
+                    int tv = D_L13_001D3478[m->bBC - 1];
 
                     if (tv != -1) {
                         func_0022ED80_2EAE80(7, 0, m);
@@ -3106,7 +3106,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                     mode = 2;
                     if (m->bBC == 7) {
                         for (j = m->bBC - 1; j < 10; j++) {
-                            func_L13_002EAAB8_2EAE80(m, d, D_L13_001D3748_2EAE80[j]);
+                            func_L13_002EAAB8_2EAE80(m, d, D_L13_001D3478[j]);
                         }
                         func_0022ED80_2EAE80(7, 0, m);
                     }
@@ -3166,7 +3166,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                     v->f118 = 0;
                 }
             } else if (dd->f0 < hi) {
-                int tv = D_L13_001D3748_2EAE80[m->bBC - 1];
+                int tv = D_L13_001D3478[m->bBC - 1];
 
                 if (tv != -1) {
                     func_L13_002EAAB8_2EAE80(m, d, tv);
@@ -3197,7 +3197,7 @@ void FUN_L13_002e9a48(Moby_2EAE80 *m, Data_2EAE80 *d) {
                 mode = 2;
                 if (m->bBC == 7) {
                     for (k = m->bBC - 1; k < 10; k++) {
-                        func_L13_002EAAB8_2EAE80(m, d, D_L13_001D3748_2EAE80[k]);
+                        func_L13_002EAAB8_2EAE80(m, d, D_L13_001D3478[k]);
                     }
                     func_0022ED80_2EAE80(7, 0, m);
                 }

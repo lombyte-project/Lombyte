@@ -90,7 +90,7 @@ s32 pick_idle_fidget(s32 *index) {
 }
 extern u8 D_0013F350_002293a8[] __asm__("D_0013F350");
 extern s32 D_0013CAE0_002293a8 __asm__("D_0013CAE0") __attribute__((section(".data")));
-extern s32 D_L00_0015F6DC_002293a8 __asm__("D_L00_0015F6DC");
+extern s32 D_L00_0015F6DC __asm__("D_L00_0015F6DC");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 FUN_001f96f8_002293a8(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002323b8_002293a8(s32, s32, f32) __asm__("FUN_L00_002323b8");
@@ -125,7 +125,7 @@ void FUN_L00_002293a8(void) {
             n = FUN_001f96f8_002293a8(8);
             if (FUN_001f96f8_002293a8(5) < *(s32 *)(c + 0x418))
                 n = FUN_001f96f8_002293a8(14);
-            FUN_L00_002323b8_002293a8(4, D_L00_0015F6DC_002293a8, (f32)n);
+            FUN_L00_002323b8_002293a8(4, D_L00_0015F6DC, (f32)n);
             *(s16 *)(c + 0x3BC) = 1;
         }
         return;

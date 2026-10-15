@@ -64,7 +64,7 @@ extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *a);
 extern int D_00141660 __attribute__((section(".data")));
-extern int D_L01_0015F6DC_d __asm__("D_L01_0015F6DC");
+extern int D_L01_0015F6DC __asm__("D_L01_0015F6DC");
 extern int D_L01_0015F594 __attribute__((sda));
 extern int D_L01_0016CC00 __attribute__((section(".data")));
 extern int FUN_001f9770(void *);
@@ -1351,7 +1351,7 @@ void FUN_L01_00242930(void) {
                         hero_set_state(HERO_STATE_RUN, 0);
                         if (hero.state.current == HERO_STATE_RUN) {
                             hero.state.step = 1;
-                            set_hero_animation(4, D_L01_0015F6DC_d, scale_game_frames(0xC));
+                            set_hero_animation(4, D_L01_0015F6DC, scale_game_frames(0xC));
                         }
                         FUN_L00_00233288(0.016f, 0.002f, 5, 2, 1, 0);
                         break;

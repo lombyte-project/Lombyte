@@ -461,7 +461,7 @@ typedef struct {
 } M_2e03a0_2e03a0;
 extern f32 D_0015ED6C_2e03a0 __asm__("D_0015ED6C");
 extern s32 D_L00_0015F5C4_2e03a0 __asm__("D_L00_0015F5C4");
-extern s32 D_L00_0015F640_2e03a0 __asm__("D_L00_0015F640");
+extern s32 D_L00_0015F640 __asm__("D_L00_0015F640");
 extern E_2e03a0_2e03a0 *D_L00_0015FFD8_2e03a0 __asm__("D_L00_0015FFD8");
 typedef struct {
     u8 pad[0x454];
@@ -534,7 +534,7 @@ void FUN_L00_002e03a0(M_2e03a0_2e03a0 *m) {
             return;
         stub_printf(D_L00_00161BC0);
         queue_dialogue_message(0x232A, -1);
-        D_L00_0015F640_2e03a0 = 0xB4;
+        D_L00_0015F640 = 0xB4;
         FUN_L00_00260860_2e03a0(7, 1);
         if (D_00141B08[0] == 0)
             give_reward(0x2328, 0x34);

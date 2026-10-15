@@ -660,7 +660,7 @@ extern int truncate_float_to_s32_002e7eb0(float) __asm__("FUN_001fa6d0");
 extern float scale_game_frames_002e7eb0(float) __asm__("FUN_L08_00211a20");
 extern int scale_game_frames_int_002e7eb0(int) __asm__("FUN_001f96f8");
 extern void FUN_00218888_002e7eb0(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern int D_L08_0015F5CC_002e7eb0 __asm__("D_L08_0015F5CC");
+extern int D_L08_0015F5CC __asm__("D_L08_0015F5CC");
 typedef union { float float_value; int int_value; } Data_002e7eb0;
 /* Retail inherits GP 0x166c00: these scalar labels preserve its GP-relative loads.
    Keep the existing timer name while binding it to the checked level-08 address. */
@@ -709,7 +709,7 @@ char *FUN_L08_002e7eb0(int owner, float *position, float *rotation, int value) {
         *(float *)(moby + 0x48) = angle_atan2_002e7eb0(rotation[0], rotation[1]);
         qcopy(moby + 0x10, position_copy);
         qcopy(data, rotation_copy);
-        if (D_L08_0015F5CC_002e7eb0 & 1)
+        if (D_L08_0015F5CC & 1)
             *(volatile int *)(data + 0x1c) = 1;
         else
             *(volatile int *)(data + 0x1c) = -1;

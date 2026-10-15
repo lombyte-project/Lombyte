@@ -234,7 +234,7 @@ void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, 
 extern char D_L15_001744C0_2E9358[] __asm__("D_L15_00174440");
 extern int D_L15_001744D8_2E9358 __asm__("D_L15_00174458") __attribute__((section(".data")));
 extern int D_001414D0_2E9358 __asm__("D_001413D0") __attribute__((section(".data")));
-extern s32 D_L15_00178580_2E9358[] __asm__("D_L15_00178500");
+extern s32 D_L15_00178500[] __asm__("D_L15_00178500");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern Res_2E9358 *trooper_find_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *c338_p(int) __asm__("FUN_L00_002603d0");
@@ -320,7 +320,7 @@ void FUN_L15_002e7f68(Moby_2E9358 *moby) {
         trooper_play_sound(0, 0, moby, 0x79);
         ret = probe_world_sphere(&moby->pos, 0x10, moby, 0, 2.0f);
         s40.q = moby->pos;
-        mine_blast_mobys(moby, &s40, D_L15_00178580_2E9358, ret, 0, 0x830001, 2, 1, 1.0f, 1.0f, 1.0f);
+        mine_blast_mobys(moby, &s40, D_L15_00178500, ret, 0, 0x830001, 2, 1, 1.0f, 1.0f, 1.0f);
         mark_moby_for_removal(moby);
     }
 }
@@ -622,7 +622,7 @@ void FUN_L15_002eb108(struct Moby *moby) {
 #include "rnc/overlay/quad.h"
 /* Cutscene trigger moby: waits for the hero in its clip volume, then steps through the scene stages and saves at the end. */
 extern int D_L15_0015F5C4;
-extern int D_L15_00161AC0_v __asm__("D_L15_00161AC0");
+extern int D_L15_00161AC0 __asm__("D_L15_00161AC0");
 extern unsigned char *D_L15_0015FFD8_v __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern unsigned char D_0014C050_v[] __asm__("D_0014C050");
@@ -646,7 +646,7 @@ void FUN_L15_002eb4c0(struct Moby *m) {
     case 0:
         if (D_0014C050_v[m->mission + current_level_index * 16] == 0xFF)
             break;
-        if (D_L15_00161AC0_v != 0)
+        if (D_L15_00161AC0 != 0)
             break;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)d) == 0)
             break;

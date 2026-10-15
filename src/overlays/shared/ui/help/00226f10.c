@@ -678,8 +678,8 @@ void FUN_L01_00231450(void) {
     hero_set_state(HERO_STATE_IDLE, 1);
 }
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
-extern s32 D_0013DF88_8[] __asm__("D_0013DF88");
-extern s32 D_0015EEA8_8 __asm__("D_0015EEA8");
+extern s32 D_0013DF88[] __asm__("D_0013DF88");
+extern s32 D_0015EEA8 __asm__("D_0015EEA8");
 
 void FUN_L00_00206c08_8(void) __asm__("FUN_L00_00206c08");
 void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -730,9 +730,9 @@ s32 FUN_L01_00231580(s32 arg) {
     if ((tbl->unk24 ^ 1) & 1) {
         return 0;
     }
-    D_0013DF88_8[current_level_index]++;
+    D_0013DF88[current_level_index]++;
     G.unk2280 = (struct Moby *)tbl->target;
-    D_0015EEA8_8++;
+    D_0015EEA8++;
     if (arg == 0) {
         return 1;
     }
@@ -821,7 +821,7 @@ s32 FUN_L01_00231580(s32 arg) {
 /* Adapted from the exact FUN_L17_0020e1c0 (src/overlays/l17/ui_help_002020a8.c) /
    FUN_L00_00211380; L01 has only the mode-0 and mode-3 cases and no b12E2 branch. */
 
-extern f32 D_0013F570_231ae0[] __asm__("D_0013F570");
+extern f32 D_0013F570[] __asm__("D_0013F570");
 f32 FUN_001f9b80_231ae0(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_231ae0(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_231ae0(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
@@ -853,7 +853,7 @@ void FUN_L01_00231ae0(void) {
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
         FUN_001f9b80_231ae0(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
-        f32 *q = D_0013F570_231ae0;
+        f32 *q = D_0013F570;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
         approach_value_231ae0(b->unk228, frame_scale * 0.02f, q);
         approach_value_231ae0(b->unk22C, frame_scale * 0.02f, q + 1);

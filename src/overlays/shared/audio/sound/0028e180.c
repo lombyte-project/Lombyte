@@ -14,7 +14,7 @@ extern float FUN_001f9b80(void *, void *);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int D_L00_0015F5C4;
 extern char D_L00_001BD880[];
-extern int D_L00_0015F630_i __asm__("D_L00_0015F630");
+extern int D_L00_0015F630 __asm__("D_L00_0015F630");
 extern int FUN_L00_002644e0(int);
 extern unsigned char D_0013CAE4[];
 extern unsigned char D_0013D388[];
@@ -82,7 +82,7 @@ void FUN_L00_0028e180(unsigned char *m) {
                     FUN_L00_00298840(9);
                 } else {
                     FUN_L00_002644e0(2);
-                    D_L00_0015F630_i = 1;
+                    D_L00_0015F630 = 1;
                     ship_index[1] = 0;
                 }
             }
@@ -107,7 +107,7 @@ void FUN_L00_0028e180(unsigned char *m) {
                 *(unsigned short *)(m + 0x34) &= 0xFFBE;
                 one = 1;
                 ship_index[1] = one;
-                D_L00_0015F630_i = one;
+                D_L00_0015F630 = one;
             }
         }
     }

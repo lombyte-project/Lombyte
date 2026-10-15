@@ -367,7 +367,7 @@ void FUN_L06_002ffc38(int idx) {
 extern char D_0013F3D0_ffcb0[] __asm__("D_0013F3D0");
 extern unsigned char *D_L06_0015FFD8_ffcb0 __asm__("D_L06_0015FFD8");
 extern char *D_L06_001600EC_ffcb0 __asm__("D_L06_001600EC");
-extern float D_L06_0015F3FC_ffcb0 __asm__("D_L06_0015F3FC");
+extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
 extern float vector_distance_ffcb0(void *, void *) __asm__("FUN_001f9b80");
 extern int scale_frames_ffcb0(int) __asm__("FUN_001f96f8");
 extern int count_down_ffcb0(int *) __asm__("FUN_001f9740");
@@ -467,12 +467,12 @@ void FUN_L06_002ffcb0(char *moby) {
             }
         }
         if (data[9] < D_L06_00162044)
-            D_L06_0015F3FC_ffcb0 = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044;
+            D_L06_0015F3FC = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044;
         break;
     case 3:
         if (data[9] < D_L06_00162044) {
             data[9]++;
-            D_L06_0015F3FC_ffcb0 = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044;
+            D_L06_0015F3FC = 1.0f - normalize_timer_ffcb0(data[9]) / (float)D_L06_00162044;
         }
         /* This field holds float bits; retail completes only on an ordered >= comparison. */
         if (*(float *)(data + 6) >= 0.99999f) {
@@ -872,7 +872,7 @@ extern void update_joint_animation_301070(float, float, void *, void *, int) __a
 extern char D_L06_00167540_301070[] __asm__("D_L06_00167540");
 extern int D_L06_0015F5C4_macro __asm__("D_L06_0015F5C4") __attribute__((section(".sdata")));
 extern float D_L06_0015F3FC_macro __asm__("D_L06_0015F3FC") __attribute__((section(".sdata")));
-extern s32 D_L06_00179B90_301070[] __asm__("D_L06_00179B90");
+extern s32 D_L06_00179B90[] __asm__("D_L06_00179B90");
 extern unsigned char big_head_cheat_enabled_301070[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern unsigned char cheats_301070[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern int D_0013D8AC_lui __asm__("D_0013D8AC") __attribute__((section(".data")));
@@ -1016,7 +1016,7 @@ void FUN_L06_00301070(struct Moby *m) {
         FUN_L00_002ea9d8_301070(pos);
         FUN_L00_002eaa30_301070(rot);
         if (d->f178 >= 1.0f
-            || (((Busy_301070 *)D_L06_00179B90_301070)->f0 == 0 && ((Busy_301070 *)D_L06_00179B90_301070)->f24 == -1 && d->f178 > 0.2f)) {
+            || (((Busy_301070 *)D_L06_00179B90)->f0 == 0 && ((Busy_301070 *)D_L06_00179B90)->f24 == -1 && d->f178 > 0.2f)) {
             approach_value_301070(&D_L06_0015F3FC_macro, 1.0f, frame_time_macro * 4.0f);
         } else {
             approach_value_301070(&D_L06_0015F3FC_macro, 0.0f, frame_time_macro * 4.0f);
@@ -1400,10 +1400,10 @@ extern unsigned char D_0014C050[];
 extern int D_0015EE1D;
 extern int D_0015EE1C;
 extern int D_L06_0015F5C4;
-extern int D_L06_0015F594_302578 __asm__("D_L06_0015F594");
+extern int D_L06_0015F594 __asm__("D_L06_0015F594");
 extern char *D_L06_001600EC_302578 __asm__("D_L06_001600EC");
 extern char *D_L06_0015FFD8_302578 __asm__("D_L06_0015FFD8");
-extern int D_L06_00179B90_302578[] __asm__("D_L06_00179B90");
+extern int D_L06_00179B90[] __asm__("D_L06_00179B90");
 extern char *D_L06_001B0C30_302578[] __asm__("D_L06_001B0C30");
 extern char D_0013D3AC_302578[] __asm__("D_0013D3A7") __attribute__((section(".data")));
 extern char D_0013D388_302578[] __asm__("D_0013D388") __attribute__((section(".data")));
@@ -1495,7 +1495,7 @@ void FUN_L06_00302578(struct Moby *moby) {
     case 1:
         busy = 0;
         if (*(unsigned char *)&D_0015EE1D != 0 || *(unsigned char *)&D_0015EE1C != 0) {
-            if (((Busy_302578 *)D_L06_00179B90_302578)->f0 != 0 || ((Busy_302578 *)D_L06_00179B90_302578)->f24 != -1) {
+            if (((Busy_302578 *)D_L06_00179B90)->f0 != 0 || ((Busy_302578 *)D_L06_00179B90)->f24 != -1) {
                 busy = 1;
             }
         }
@@ -1503,7 +1503,7 @@ void FUN_L06_00302578(struct Moby *moby) {
             || D_L06_00162100 != 0) {
             FUN_L06_00302fd8((char *)moby);
             now = D_L06_00162100;
-            if (now != 0 || ((*(int *)(D_0013A4E0_302578 + 0x2604) & 0x10) && D_L06_0015F594_302578 == 10 && d->f9C >= 0)) {
+            if (now != 0 || ((*(int *)(D_0013A4E0_302578 + 0x2604) & 0x10) && D_L06_0015F594 == 10 && d->f9C >= 0)) {
                 d->go = 1;
                 D_L06_0015FDF8 = 0;
                 if (now != 0) {
@@ -2114,7 +2114,7 @@ typedef struct {
 extern Cut_304098 *D_L06_001600EC_304098 __asm__("D_L06_001600EC");
 extern struct Moby *D_L06_0015FFD8_304098 __asm__("D_L06_0015FFD8");
 extern char D_0013F3D0_304098[] __asm__("D_0013F3D0") __attribute__((section(".data")));
-extern float D_L06_0015F3FC_304098 __asm__("D_L06_0015F3FC");
+extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
 typedef struct { char pad0[0x160]; float f160; int pad164; int f168; } Fx_304098;
 extern Fx_304098 D_L06_00167400_304098 __asm__("D_L06_00167400") __attribute__((section(".data")));
 
@@ -2217,7 +2217,7 @@ void FUN_L06_00304098(struct Moby *moby) {
         if (data->timer < scale_game_frames_304098(10)) {
             previous_value = float_from_int_304098(data->timer);
             previous_value = previous_value / (float)scale_game_frames_304098(10);
-            D_L06_0015F3FC_304098 = 1.0f - previous_value;
+            D_L06_0015F3FC = 1.0f - previous_value;
         }
         break;
     case 5:
@@ -2227,7 +2227,7 @@ void FUN_L06_00304098(struct Moby *moby) {
             data->timer = timer + 1;
             previous_value = float_from_int_304098(timer + 1);
             previous_value = previous_value / (float)scale_game_frames_304098(10);
-            D_L06_0015F3FC_304098 = 1.0f - previous_value;
+            D_L06_0015F3FC = 1.0f - previous_value;
         }
         previous_value = data->t;
         approach_two_stage_304098(&data->t, &data->vel, 2.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f);

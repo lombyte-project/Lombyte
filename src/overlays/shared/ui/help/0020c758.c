@@ -1470,15 +1470,15 @@ extern u8 D_00179AC0_f580[] __asm__("D_L00_00179AC0");
 extern u8 D_0013FE10_f580[] __asm__("D_0013FE10");
 extern u8 D_0013FE40_f580[] __asm__("D_0013FE40");
 extern u8 D_0017A5C0_f580[] __asm__("D_L00_0017A5C0");
-extern u8 D_0017A608_f580[] __asm__("D_L00_0017A608");
+extern u8 D_L00_0017A608[] __asm__("D_L00_0017A608");
 extern u8 D_0017A650_f580[] __asm__("D_L00_0017A650");
 extern u8 D_0017A668_f580[] __asm__("D_L00_0017A668");
 extern u8 D_0017C480_f580[] __asm__("D_L00_0017C480");
-extern u8 D_0017C680_f580[] __asm__("D_L00_0017C680");
+extern u8 D_L00_0017C680[] __asm__("D_L00_0017C680");
 extern u8 D_0017C880_f580[] __asm__("D_L00_0017C880");
 extern u8 D_0017C980_f580[] __asm__("D_L00_0017C980");
 extern u8 D_0017A960_f580[] __asm__("D_L00_0017A960");
-extern u8 D_0015F6A8_f580[] __asm__("D_L00_0015F6A8");
+extern u8 D_L00_0015F6A8[] __asm__("D_L00_0015F6A8");
 extern s32 D_001404DC_f580 __asm__("D_001404DC");
 extern u8 D_001410D0_f580[] __asm__("D_001410D0");
 extern u8 opt_mirror_anim __asm__("D_0015EDB5");
@@ -1560,12 +1560,12 @@ void FUN_L00_0020f580(void)
                                 *(void **)(moby + 0x6c) = D_0017C480_f580;
                             } else if (second != 0) {
                                 if (*(s16 *)(moby + 0xa6) == 0x1b1)
-                                    FUN_L00_002092c8_f580(D_0017A608_f580, D_0017C680_f580, *(s32 *)(moby + 0x24), 6, 0);
+                                    FUN_L00_002092c8_f580(D_L00_0017A608, D_L00_0017C680, *(s32 *)(moby + 0x24), 6, 0);
                                 else
-                                    FUN_L00_002092c8_f580(D_0015F6A8_f580, D_0017C680_f580, *(s32 *)(moby + 0x24), 0, 0);
+                                    FUN_L00_002092c8_f580(D_L00_0015F6A8, D_L00_0017C680, *(s32 *)(moby + 0x24), 0, 0);
                                 *(s32 *)(moby + 0x54) = 0;
-                                *(void **)(moby + 0x6c) = D_0017C680_f580;
-                                *(void **)(moby + 0x68) = D_0017C680_f580;
+                                *(void **)(moby + 0x6c) = D_L00_0017C680;
+                                *(void **)(moby + 0x68) = D_L00_0017C680;
                                 *(s32 *)(moby + 0x50) = 0;
                             } else if (third != 0) {
                                 *(u128 *)scratch.saved = *(u128 *)D_0017A960_f580;
@@ -2309,8 +2309,8 @@ typedef union {
     s32 i[4];
 } V_210ce8;
 
-extern s32 D_0013DF88_210ce8[] __asm__("D_0013DF88");
-extern s32 D_0015EEA8_210ce8 __asm__("D_0015EEA8");
+extern s32 D_0013DF88[] __asm__("D_0013DF88");
+extern s32 D_0015EEA8 __asm__("D_0015EEA8");
 extern f32 D_0015ED6C_210ce8 __asm__("D_0015ED6C");
 
 s32 FUN_001fa6d0_210ce8(f32) __asm__("FUN_001fa6d0");
@@ -2368,9 +2368,9 @@ s32 hero_check_damage(s32 arg) {
     } else if ((tbl->i24 ^ 1) & 1) {
         return 0;
     }
-    D_0013DF88_210ce8[current_level_index]++;
+    D_0013DF88[current_level_index]++;
     hero.unk2280 = (struct Moby *)tbl->p20;
-    D_0015EEA8_210ce8++;
+    D_0015EEA8++;
     if (hero.state.control_mode == 0xF) {
         hero.unk5BE = 1;
         return 0;
@@ -2482,8 +2482,8 @@ s32 hero_check_damage(s32 arg) {
     FUN_001f9a10_210ce8(&hero.motion.displacement, &hero.motion.displacement, &v);
     return 1;
 }
-extern s32 D_0015EEAC_211250 __asm__("D_0015EEAC");
-extern s32 D_0014EE90_211250[] __asm__("D_0014EE90");
+extern s32 D_0015EEAC __asm__("D_0015EEAC");
+extern s32 D_0014EE90[] __asm__("D_0014EE90");
 extern void FUN_L00_00203a28_211250(void) __asm__("FUN_L00_00203a28");
 extern int FUN_001f96f8_211250(int) __asm__("FUN_001f96f8");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
@@ -2497,7 +2497,7 @@ void hero_respawn(void) {
     char *m;
     u32 t;
     D_0013DFD8[lvl]++;
-    D_0015EEAC_211250++;
+    D_0015EEAC++;
     if (((char *)hero.unk2280) != 0 && *(s16 *)(((char *)hero.unk2280) + 0xA6) == 0x4D &&
         lvl == 15) {
         D_L00_0015F5A4 = 1;
@@ -2506,7 +2506,7 @@ void hero_respawn(void) {
     m = ((char *)hero.unk2280);
     if (m != 0 && *(u8 *)(m + 0xB0) != 0xFF) {
         D_0014E990[current_level_index][*(u8 *)(m + 0xB0)]++;
-        D_0014EE90_211250[*(u8 *)(m + 0xB0)]++;
+        D_0014EE90[*(u8 *)(m + 0xB0)]++;
     }
     fade_to_black(FUN_001f96f8_211250(0x10));
     hero.unk20B1 = 1;

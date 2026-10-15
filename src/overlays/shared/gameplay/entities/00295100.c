@@ -337,7 +337,7 @@ typedef struct {
     int x22a8;
 } P_298840;
 extern C_298840 D_L00_0016C860_298840 __asm__("D_L00_0016C860") __attribute__((section(".data")));
-extern int D_L00_0015F5D8_298840 __asm__("D_L00_0015F5D8");
+extern int D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
 extern char D_L00_0017C340_298840[] __asm__("D_L00_0017C340") __attribute__((section(".data")));
 extern char D_L00_0017C380_lui[] __asm__("D_L00_0017C380") __attribute__((section(".data")));
 extern char D_L00_0017C400_298840[] __asm__("D_L00_0017C400") __attribute__((section(".data")));
@@ -347,7 +347,7 @@ extern struct {
 } D_L00_00173E00_298840 __asm__("D_L00_00173E00") __attribute__((section(".data")));
 extern int D_L00_0015F5A0_298840 __asm__("D_L00_0015F5A0");
 extern float D_L00_0015F3FC_298840 __asm__("D_L00_0015F3FC");
-extern int D_L00_0015F400_298840 __asm__("D_L00_0015F400");
+extern int D_L00_0015F400 __asm__("D_L00_0015F400");
 extern O_298840 *D_L00_0015FFDC_298840 __asm__("D_L00_0015FFDC");
 void f211250_298840(void) __asm__("FUN_L00_00211250");
 void f216050_298840(int) __asm__("FUN_00216050");
@@ -376,7 +376,7 @@ void FUN_L00_00298840(int a) {
     }
     f216050_298840(0);
     update_audio_stream_until_idle(0);
-    D_L00_0015F5D8_298840 = 1;
+    D_L00_0015F5D8 = 1;
     memset_298840(&D_L00_0016C860_298840, 0, 0x1C0);
     memset_298840(D_L00_0017C440, 0, 0x40);
     memset_298840(D_L00_0017C340_298840, 0, 0x40);
@@ -395,7 +395,7 @@ void FUN_L00_00298840(int a) {
     f2039a0_298840();
     D_L00_0015F3FC_298840 = 1.0f;
     D_L00_0015F5C0_m[1] = 2;
-    D_L00_0015F400_298840 = 0;
+    D_L00_0015F400 = 0;
     hero_set_state(100, 2);
     hero.unk20A5 = 1;
     f232fe8_298840();
@@ -458,7 +458,7 @@ extern struct {
     char pad[0x5A];
     unsigned short x5a;
 } D_001516D0_298b18 __asm__("D_001516D0");
-extern int D_L00_0015F5D8_298b18 __asm__("D_L00_0015F5D8");
+extern int D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
 extern float D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
 extern int D_L00_0015F3FC_298b18 __asm__("D_L00_0015F3FC");
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
@@ -481,7 +481,7 @@ void FUN_L00_00298b18(void) {
     int i;
     if ((unsigned short)(D_001516D0_298b18.x5a - 6) >= 2)
         D_001516D0_298b18.x5a = 5;
-    D_L00_0015F5D8_298b18 = 1;
+    D_L00_0015F5D8 = 1;
     f2335a0_298b18();
     f1f4a58_298b18(0xC);
     D_L00_0015F5C0_m[1] = 0;
@@ -917,7 +917,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002997c8.s", FUN_L00_002997c8);
 #else
 typedef struct { u8 pad[0x38]; s16 h38; } S_2997c8;
 typedef struct { u8 pad[0x6B]; u8 f; } M_2997c8;
-extern s32 D_L00_0015F5D8_2997c8 __asm__("D_L00_0015F5D8");
 extern s32 D_0015ED80_2997c8 __asm__("D_0015ED80");
 extern s32 D_0015EE88_2997c8 __asm__("D_0015EE88");
 extern s32 D_0015EE78_2997c8 __asm__("D_0015EE78");
@@ -940,7 +939,7 @@ void FUN_L00_002997c8(void) {
     char buf[0x70] __attribute__((aligned(16)));
     s32 n, m, src, t, i;
     struct ActiveSceneTrigger *p;
-    D_L00_0015F5D8_2997c8 = 1;
+    D_L00_0015F5D8 = 1;
     FUN_00122298_2997c8(0);
     FUN_00120558_2997c8(0, 0);
     FUN_00122e68_2997c8(FUN_0012f1c8_2997c8);
@@ -1359,9 +1358,9 @@ extern s32 D_L00_00161E34;
 extern s32 D_0015ED98_29a6b0 __asm__("D_0015ED98");
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern s32 D_L00_00173E00_29a6b0[] __asm__("D_L00_00173E00");
-extern s32 D_L00_0015F5D8_29a6b0 __asm__("D_L00_0015F5D8");
+extern s32 D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
 extern f32 D_L00_0015F3FC_29a6b0 __asm__("D_L00_0015F3FC");
-extern s32 D_L00_0015F400_29a6b0 __asm__("D_L00_0015F400");
+extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
 extern u8 D_0013F350_29a6b0[] __asm__("D_0013F350");
 extern Vec4 D_L00_00180260_29a6b0 __asm__("D_L00_00180260");
 extern s32 D_L00_00161188;
@@ -1459,7 +1458,7 @@ void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m) {
                                                   FUN_L00_00235ea0_29a6b0, FUN_L00_0023a7a8_29a6b0,
                                                   &weapon_ammo_counts[item], (vendor_items_29a6b0 + item)->text);
     }
-    D_L00_0015F5D8_29a6b0 = 1;
+    D_L00_0015F5D8 = 1;
     vendor_29a6b0.f0 = 0;
     vendor_29a6b0.f10 = D_L00_00173E00_29a6b0[2] + 0x60000;
     vendor_29a6b0.f14 = D_L00_00173E00_29a6b0[1] + 0x60000;
@@ -1472,7 +1471,7 @@ void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m) {
     FUN_L00_002039a0_29a6b0();
     D_L00_0015F3FC_29a6b0 = 1.0f;
     D_L00_0015F5C4 = 5;
-    D_L00_0015F400_29a6b0 = 0;
+    D_L00_0015F400 = 0;
     FUN_L00_002223f8_29a6b0(100, 1);
     D_0013F350_29a6b0[0x20AC] = 1;
     D_0013F350_29a6b0[0x20A5] = 1;
@@ -1521,7 +1520,7 @@ void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m) {
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vec4_29ab70;
-extern int D_L00_0015F5D8_29ab70 __asm__("D_L00_0015F5D8");
+extern int D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
 extern char D_L00_001CA4C0_29ab70[] __asm__("D_L00_001CA4C0");
 struct S16_29ab70 {
     char pad[0x5A];
@@ -1553,7 +1552,7 @@ void FUN_L00_0029ab70(int a) {
     *(int *)(g + 0x54) = -1;
     *(int *)(g + 0x50) = -1;
     f1ff768_29ab70();
-    D_L00_0015F5D8_29ab70 = 1;
+    D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
     hero.unk20A5 = 0;
@@ -1587,7 +1586,7 @@ extern s32 D_L00_0015F3FC;
 extern s32 D_L00_001CA020[];
 extern s32 D_L00_001CA580[];
 extern Vendor_29a6b0 D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
-extern s32 D_L00_0015F400_29ad08 __asm__("D_L00_0015F400");
+extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
 extern s32 D_L00_00161100 __attribute__((sda));
 extern s32 D_L00_001610F0 __attribute__((sda));
 struct S16_29ad08 { char pad[0x5A]; s16 mode; };
@@ -1651,7 +1650,7 @@ void FUN_L00_0029ad08(void) {
     D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + offset;
     item = D_L00_001CA020[index];
     D_L00_0015F3FC = 0;
-    D_L00_0015F400_29ad08 = 0;
+    D_L00_0015F400 = 0;
     if (hero.items[0].item_id != 0 && index != hero.items[0].item_id)
         FUN_L00_0020fca8(0, 0);
     hero.pending_item[0] = D_L00_001CA4C0_29ad08.f48;

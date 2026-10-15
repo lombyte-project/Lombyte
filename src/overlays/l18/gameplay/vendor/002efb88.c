@@ -1420,7 +1420,7 @@ extern short D_L18_00162360 __attribute__((sda));
 extern short D_L18_00162390 __attribute__((sda));
 extern short D_L18_00162394 __attribute__((sda));
 extern short D_L18_00162398 __attribute__((sda));
-extern s32 D_L18_001623A0_c __asm__("D_L18_001623A0");
+extern s32 D_L18_001623A0 __asm__("D_L18_001623A0");
 extern short D_L18_0016239C __attribute__((sda));
 extern unsigned char *D_L18_0015FFD8;
 extern unsigned char *FUN_L18_002f6e10(struct Moby *self);
@@ -1557,10 +1557,10 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                 ((BossShared *)&D_L18_0016D260_c)->f34 < scale_game_frames(0x3C0)) {
                 FUN_L18_002d6d50(d->f200);
             }
-            if (*(int *)&D_L18_001623A0_c == 0) {
+            if (*(int *)&D_L18_001623A0 == 0) {
                 char *b = D_L18_001600EC + d->f294 * 0x80;
                 FUN_L00_00284e50(b + 0x30, b + 0x70);
-                *(int *)&D_L18_001623A0_c = 1;
+                *(int *)&D_L18_001623A0 = 1;
             }
         }
         break;
@@ -1618,7 +1618,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                 d->f344 = d->f250[1];
             } else if (FUN_001f9b48(hero.motion.pos.f, D_L18_001600EC + (d->f250[2] << 7) + 0x30) <
                        50.0f) {
-                if (*(int *)&D_L18_001623A0_c != 0) {
+                if (*(int *)&D_L18_001623A0 != 0) {
                     FUN_L18_002d6d50(d->f200);
                     if (FUN_L00_0028d8c0(moby, d->f3B0) != 0) {
                         int i = d->f3B0;
@@ -2471,7 +2471,7 @@ void FUN_L18_002f2bf0(BossMoby *moby) {
                 d->f34C = 0xB;
             } else if (k == 0xB && D_L18_0015F5C4 == 0) {
                 *(int *)&D_L18_00162360 = 0;
-                *(int *)&D_L18_001623A0_c = 0;
+                *(int *)&D_L18_001623A0 = 0;
                 pause_all_sounds(0x21);
                 mark_moby_for_removal(d->f3A0);
                 if (d->f3A4 != 0) {
@@ -3576,7 +3576,7 @@ extern void FUN_L03_00250ae8(void *, void *, int);
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
-extern short D_L18_0016250C_b __asm__("D_L18_0016247C");
+extern short D_L18_0016247C __asm__("D_L18_0016247C");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern void func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 
@@ -3661,7 +3661,7 @@ void FUN_L18_002f7c40(M1454 *m) {
                 s = *(float *)&D_L18_0016247C_gp;
             } else {
                 moby_point_position(m, 2, w);
-                s = *(float *)&D_L18_0016250C_b;
+                s = *(float *)&D_L18_0016247C;
             }
             s *= frame_time;
             v[0] = fast_cos(d->f110) * (fast_cos(d->f118) * s);

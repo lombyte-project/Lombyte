@@ -305,7 +305,7 @@ void FUN_L00_00260738(char *out, OvlQuad *pos, void *m1, void *m2) {
     qcopy(out + 0x10, pos);
 }
 extern u8 level_available[] __asm__("D_0013DD40");
-extern s32 D_0013D510_2607d0[] __asm__("D_0013D510");
+extern s32 D_0013D510[] __asm__("D_0013D510");
 void FUN_L00_00262d38(s32);
 void unlock_planet(s32 id) __asm__("FUN_L00_002607d0");
 void unlock_planet(s32 id) {
@@ -317,7 +317,7 @@ void unlock_planet(s32 id) {
                 n++;
         }
         level_available[id] = 1;
-        D_0013D510_2607d0[n] = id;
+        D_0013D510[n] = id;
         if (id != *(volatile s32 *)&current_level_index)
             FUN_L00_00262d38(id);
     }
@@ -413,12 +413,12 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00260a88.s", FUN_L00_00260a88);
 
 typedef OvlVec4 Vec_260a88;
 
-extern int D_L00_0015F598_260a88 __asm__("D_L00_0015F598");
+extern int D_L00_0015F598 __asm__("D_L00_0015F598");
 extern unsigned char D_L00_0015FC88_260a88[] __asm__("D_L00_0015FC88");
-extern int D_L00_0015EEA0_260a88 __asm__("D_0015EEA0");
+extern int D_0015EEA0 __asm__("D_0015EEA0");
 extern int alternate_animation_sequence __asm__("D_0015EE20");
-extern int D_L00_0015EE28_260a88 __asm__("D_0015EE28");
-extern int D_L00_0015EE2C_260a88 __asm__("D_0015EE2C");
+extern int D_0015EE28 __asm__("D_0015EE28");
+extern int D_0015EE2C __asm__("D_0015EE2C");
 extern float D_L00_0015ED6C_260a88 __asm__("D_0015ED6C");
 extern float frame_time_sq __asm__("D_0015ED70");
 extern char *D_L00_001B04B0_260a88[] __asm__("D_L00_001B04B0");
@@ -459,9 +459,9 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
     FUN_001ff260_260a88(&base);
     if (!(flags & 0x20) && (unsigned char)moby[0xb0] != 0xff &&
         (unsigned int)((unsigned short)*(unsigned short *)(moby + 0xa6) - 500) > 40) {
-        D_L00_0015F598_260a88 = D_L00_0015FC88_260a88[(unsigned char)moby[0xb0]] == 0xff;
+        D_L00_0015F598 = D_L00_0015FC88_260a88[(unsigned char)moby[0xb0]] == 0xff;
     }
-    if (D_L00_0015F598_260a88)
+    if (D_L00_0015F598)
         gated = !(flags & 0x20);
     if (!flags || (!lower && !upper))
         return;
@@ -473,11 +473,11 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
     if (lower < 1)
         lower = 1;
     count = FUN_00257b50_260a88(upper - lower + 1) + lower;
-    if (D_L00_0015EEA0_260a88 || alternate_animation_sequence)
+    if (D_0015EEA0 || alternate_animation_sequence)
         count *= 2;
-    if (count < 500 && gated && D_L00_0015EE28_260a88) {
-        multiplier = (int)((float)FUN_001fef20_260a88(60) * 60.0f) * D_L00_0015EE2C_260a88 / D_L00_0015EE28_260a88;
-        if (D_L00_0015EEA0_260a88 || alternate_animation_sequence)
+    if (count < 500 && gated && D_0015EE28) {
+        multiplier = (int)((float)FUN_001fef20_260a88(60) * 60.0f) * D_0015EE2C / D_0015EE28;
+        if (D_0015EEA0 || alternate_animation_sequence)
             multiplier /= 2;
         if (multiplier < 150) {
             if (multiplier < 91) {
@@ -489,7 +489,7 @@ void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int 
                 FUN_001eb078_260a88((int)D_L00_001600B0_260a88, lower);
                 count *= lower;
             }
-            if (D_L00_0015EEA0_260a88) {
+            if (D_0015EEA0) {
                 if (count > 1000) count = 1000;
             } else if (count > 500) count = 500;
         } else if (multiplier >= 301) {

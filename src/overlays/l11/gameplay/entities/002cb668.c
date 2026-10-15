@@ -1189,7 +1189,7 @@ extern float D_0013F3D8_lui __asm__("D_0013F3D8") __attribute__((section(".data"
 extern int D_0015ED84_2518 __asm__("D_0015ED84");
 extern unsigned char D_0014C050_2518[] __asm__("D_0014C050");
 extern int D_0013CAE4_2518 __asm__("D_0013CAE4") __attribute__((section(".data")));
-extern int D_L11_0015F594_2518 __asm__("D_L11_0015F594");
+extern int D_L11_0015F594 __asm__("D_L11_0015F594");
 extern char *D_L11_0015FFD8_2518 __asm__("D_L11_0015FFD8");
 extern unsigned char D_001413F5_2518 __asm__("D_001413F5") __attribute__((section(".data")));
 extern float D_0015ED6C_2518 __asm__("D_0015ED6C");
@@ -1267,7 +1267,7 @@ void FUN_L11_002f2518(struct Moby *moby) {
         FUN_L11_002f2cd0_2518(moby);
         if (!(D_0013CAE4_2518 & 0x10))
             break;
-        if (D_L11_0015F594_2518 != 0xB)
+        if (D_L11_0015F594 != 0xB)
             break;
         allocate_voice_2518(0, 0, (void *)moby);
         moby->state = 2;
@@ -1289,7 +1289,7 @@ void FUN_L11_002f2518(struct Moby *moby) {
                                             D_L11_00161910 * D_0015ED70_2518,
                                             D_L11_00161914 * D_0015ED70_2518,
                                             D_L11_00161918 * D_0015ED6C_2518);
-        } else if (D_L11_0015F594_2518 != 0xB || !(*(float *)(data + 0x20) > 0.25f)) {
+        } else if (D_L11_0015F594 != 0xB || !(*(float *)(data + 0x20) > 0.25f)) {
             if (r == 2) {
                 *(float *)(data + 0x3C) = 1.95f;
                 moby->state = 3;

@@ -445,7 +445,7 @@ extern struct Moby *D_L00_001DD100[];
 extern Node D_L00_001DD150[];
 extern u8 D_L00_001DDF10[];
 extern s32 D_L00_00161854 __attribute__((sda));
-extern s32 D_L00_00161854_b __asm__("D_L00_00161854") __attribute__((sda));
+extern s32 D_L00_00161854_gp __asm__("D_L00_00161854") __attribute__((sda));
 extern u32 D_L00_00161840[1] __attribute__((sda));
 
 extern void *create_moby(int) __asm__("FUN_0020c4f8");
@@ -556,7 +556,7 @@ struct Moby *FUN_L00_002c9348(State *a) {
         }
         FUN_L00_002c92d8_c(s2->unk14);
         D_L00_001DD100[D_L00_00161854] = n;
-        D_L00_00161854_b = D_L00_00161854 + 1;
+        D_L00_00161854_gp = D_L00_00161854 + 1;
         D_L00_00161854 = (D_L00_00161854 + 1) % 20;
         if (s2->unk74) {
             n->flags &= ~0x20;
@@ -568,9 +568,9 @@ struct Moby *FUN_L00_002c9348(State *a) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c97e0.s", FUN_L00_002c97e0);
 #else
-extern f32 D_L00_0015F5D4_sda_2c97e0 __asm__("D_L00_0015F5D4") __attribute__((sda));
+extern f32 D_L00_0015F5D4_gp __asm__("D_L00_0015F5D4") __attribute__((sda));
 extern f32 D_L00_0015F5D0_macro __asm__("D_L00_0015F5D0") __attribute__((section(".sdata")));
-extern f32 D_L00_0015F5D4_2c97e0 __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
+extern f32 D_L00_0015F5D4_macro __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
 
 extern s32 D_L00_00161850_2c97e0 __asm__("D_L00_00161850") __attribute__((sda));
 extern f32 D_L00_00161858_2c97e0 __asm__("D_L00_00161858") __attribute__((sda));
@@ -636,11 +636,11 @@ void FUN_L00_002c97e0(struct Moby *m)
         if (tick_countdown_2c8440(&s2->unk70) && !m->visible) goto remove;
         if (s2->unk70 >= 0) {
             f32 f;
-            f = D_L00_0015F5D4_sda_2c97e0;
+            f = D_L00_0015F5D4_gp;
             if ((f > 0.9f || D_L00_0015F5D0_macro > 0.9f) && !m->visible && s2->unk70 != -1) {
                 if (!FUN_L00_00257b50_2c97e0(199)) goto remove;
                 s2->unk70 = FUN_L00_00257b90(20, 30);
-                f = D_L00_0015F5D4_2c97e0;
+                f = D_L00_0015F5D4_macro;
             }
             if (f > 1.0f || D_L00_0015F5D0_macro > 1.0f) {
                 if (!m->visible) {
@@ -691,8 +691,8 @@ void FUN_L00_002c97e0(struct Moby *m)
             FUN_L00_0025a9f8_2c97e0(m, &offset, 0x177f00, a, 0, 0x830000, 2, 1, 1.0f, 1.0f, 1.0f);
         }
         count = FUN_L00_00257b90(5, 8);
-        if (D_L00_0015F5D0_macro > 0.85f || D_L00_0015F5D4_2c97e0 > 0.85f) {
-            if (D_L00_0015F5D0_macro > 1.0f || D_L00_0015F5D4_2c97e0 > 1.0f) count = 1;
+        if (D_L00_0015F5D0_macro > 0.85f || D_L00_0015F5D4_macro > 0.85f) {
+            if (D_L00_0015F5D0_macro > 1.0f || D_L00_0015F5D4_macro > 1.0f) count = 1;
             else count /= 2;
         }
         if (count > 0) {
@@ -2802,10 +2802,10 @@ typedef struct {
     s32 unk20;
 } Burst;
 
-/* D_L00_001C40B0 rows (0x18 bytes); unkE is compared with D_0013D428. */
+/* D_L00_001C40B0 rows (0x18 bytes); unkE is compared with weapon_ammo_counts. */
 
 extern u8 D_0013D4C0[];
-extern s32 D_0013D428[];
+extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern u8 D_L00_00197BC0[];
 extern struct MobyClass *D_L00_00197300[];
 extern s32 D_0015ED84 __attribute__((section(".sdata")));
@@ -3045,7 +3045,7 @@ void crate_update(struct Moby *moby) {
                         VendorItemInfo *g = &D_L00_001C40B0[i];
 
                         total++;
-                        if (g->hE != 0 && (f32)D_0013D428[i] < (f32)g->hE * 0.8f) {
+                        if (g->hE != 0 && (f32)weapon_ammo_counts[i] < (f32)g->hE * 0.8f) {
                             low++;
                         }
                     }

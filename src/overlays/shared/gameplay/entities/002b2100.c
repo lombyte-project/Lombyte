@@ -2511,7 +2511,7 @@ extern void FUN_001ff500_b6bc8(f32, void *, void *) __asm__("FUN_001f9bf8");
 extern void FUN_L00_00259bc8_b6bc8(Moby *, Moby *, s32, void *, void *, f32) __asm__("FUN_L00_00259bc8");
 extern s32 FUN_001fef20_b6bc8(s32) __asm__("FUN_001f96f8");
 extern Moby *D_001ABA00_b6bc8[] __asm__("D_L00_001ABA00");
-extern s16 D_001B07B0_b6bc8[] __asm__("D_L00_001B07B0");
+extern s16 D_L00_001B07B0[] __asm__("D_L00_001B07B0");
 extern u8 *D_0015FFD8_b6bc8 __asm__("D_L00_0015FFD8");
 extern f32 D_0013F3D0_b6bc8[] __asm__("D_0013F3D0");
 
@@ -2579,9 +2579,9 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
         } while (other != 0);
     }
     i = 1;
-    if (D_001B07B0_b6bc8[0] > 0) {
+    if (D_L00_001B07B0[0] > 0) {
         struct Hero *g = &hero;
-        s16 *entryCount = D_001B07B0_b6bc8;
+        s16 *entryCount = D_L00_001B07B0;
         entry = entryCount + 1;
         do {
             other = (Moby *)(D_0015FFD8_b6bc8 + *entry * 0x100);
@@ -2902,7 +2902,7 @@ extern Vec_2b77f0 D_00166FF0_2b77f0 __asm__("D_L00_00166FF0");
 extern Vec_2b77f0 D_00166DC0_2b77f0 __asm__("D_L00_00166DC0");
 extern Vec_2b77f0 D_00166FD0_2b77f0 __asm__("D_L00_00166FD0");
 extern Vec_2b77f0 D_00173E60_2b77f0 __asm__("D_L00_00173E60");
-extern f32 D_001601E8_2b77f0 __asm__("D_L00_001601E8");
+extern f32 D_L00_001601E8 __asm__("D_L00_001601E8");
 extern f32 frame_time_sq __asm__("D_0015ED70");
 extern Vec_2b77f0 D_L00_0015F580_2b77f0 __asm__("D_L00_0015F580");
 extern s32 D_L00_001614F8_2b77f0 __asm__("D_L00_001614F8") __attribute__((sda));
@@ -3069,18 +3069,18 @@ void FUN_L00_002b77f0(unsigned char *m) {
         }
         if (FUN_001efa68_2b77f0(&D_0013F420_2b77f0, &scratch, 2, 0, 0)) {
             length = 0.0f;
-            response_scale = D_001601E8_2b77f0;
+            response_scale = D_L00_001601E8;
         } else if (FUN_001efa68_2b77f0(&scratch, &endpoint, 2, 0, 0)) {
             length = FUN_001f9b48_2b77f0(&scratch, &D_00173E60_2b77f0) - 0.75f;
             if (length < 0.0f) {
                 length = 0.0f;
-                response_scale = D_001601E8_2b77f0;
+                response_scale = D_L00_001601E8;
             } else {
-                response_scale = D_001601E8_2b77f0;
+                response_scale = D_L00_001601E8;
             }
         } else {
             length = D_L00_00161520_2b77f0 + speed;
-            response_scale = D_001601E8_2b77f0;
+            response_scale = D_L00_001601E8;
         }
         FUN_L00_00259bc8_2b77f0(length, 1.0f, response_scale * frame_time_sq,
                                   D_L00_00161514_2b77f0 * D_0015ED6C_c, &counts.response[0], &counts.response[1]);
@@ -3427,7 +3427,7 @@ extern Voice_2B9AD8 D_0013E550_2b2100[] __asm__("D_0013E550");
 extern unsigned char D_0013E533_2b2100[] __asm__("D_0013E533");
 extern unsigned short D_00141D70_2b2100[] __asm__("D_00141D70");
 extern unsigned short D_00141918_2b2100[] __asm__("D_00141918");
-extern int D_L00_00161590_2b2100 __asm__("D_L00_00161590");
+extern int D_L00_00161590 __asm__("D_L00_00161590");
 extern Light_2B9AD8 D_L00_001802C0_2b2100[] __asm__("D_L00_001802C0");
 extern int FUN_L00_00233e98_2b2100a(int) __asm__("FUN_L00_00233e98");
 extern void FUN_L00_00203908_2b2100(int, int) __asm__("FUN_L00_00203908");
@@ -3589,7 +3589,7 @@ void FUN_L00_002b87e0(struct Moby *m) {
         s->lock2 = 0;
     }
     if (!active) {
-        D_L00_00161590_2b2100 = 1;
+        D_L00_00161590 = 1;
         if (s->glow > 0) s->glow--;
         if (s->sound != -1) {
             Voice_2B9AD8 *v = &D_0013E550_2b2100[s->sound];
@@ -3605,7 +3605,7 @@ void FUN_L00_002b87e0(struct Moby *m) {
     case 0:
         s->timer = FUN_001f96f8_2b2100(16);
         s->light = FUN_L00_0023e5e0_2b2100(&s->pos, 0.0f, 0.0f, 0);
-        D_L00_00161590_2b2100 = 1;
+        D_L00_00161590 = 1;
         m->state = 1;
         s->f3E = 20;
         s->sound = -1;

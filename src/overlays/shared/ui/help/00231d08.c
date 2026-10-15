@@ -1589,7 +1589,7 @@ void FUN_L00_00234a50(int a0) {
     }
 }
 extern s32 D_L00_0015F5C4_00234b38[1] __asm__("D_L00_0015F5C4");
-extern f32 D_0015EE14_00234b38 __asm__("D_0015EE14");
+extern f32 D_0015EE14 __asm__("D_0015EE14");
 typedef struct {
     u8 b0;
     u8 b1;
@@ -1611,7 +1611,7 @@ extern B_00234b38 D_L00_0016C860_00234b38 __asm__("D_L00_0016C860")
 void FUN_0020cb10_00234b38(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_00234a50_00234b38(void *) __asm__("FUN_L00_00234a50");
 void FUN_L00_00234b38(void *a) {
-    f32 s = D_0015EE14_00234b38;
+    f32 s = D_0015EE14;
     A_00234b38 *q;
     s32 m;
     if (D_L00_0015F5C4_00234b38[0] == 6 && 1.33f < s)

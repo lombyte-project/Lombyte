@@ -954,7 +954,7 @@ void FUN_L00_002e7530(O002e7530 *o, V002e7530 *a, V002e7530 *b, V002e7530 *c, V0
     subtract_vector_xyz(a, &t3, out);
 }
 extern char *current_follow_cam __asm__("D_L00_00166E00") __attribute__((section(".data")));
-extern int D_L00_0015EF5C_2e7618 __asm__("D_L00_0015EF5C");
+extern int D_L00_0015EF5C __asm__("D_L00_0015EF5C");
 extern struct { u8 pad[0x2080]; int value; } D_0013F350_2e7618 __asm__("D_0013F350") __attribute__((section(".data")));
 extern void clear_u64_value_2e7618(void *) __asm__("FUN_001f99f8");
 extern void add_vector_xyz_2e7618(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -993,7 +993,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
         found = 1;
         FUN_L00_002e7530(o, &delta, &temp, &hit, &start, radius - measure, dist);
         qcopy(out, &near);
-        if (coll_sphere_2e7618(out, D_L00_0015EF5C_2e7618, D_0013F350_2e7618.value, spd)) {
+        if (coll_sphere_2e7618(out, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
             subtract_vector_xyz_2e7618(&diff, &start, out);
             add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &diff);
             measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
@@ -1004,7 +1004,7 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
                 FUN_L00_002e7530(o, &next, &temp, &hit, &start, radius - measure, dist);
                 add_vector_xyz_2e7618(&delta, &delta, &next);
                 qcopy(out, &D_L00_00173E70);
-                if (coll_sphere_2e7618(out, D_L00_0015EF5C_2e7618, D_0013F350_2e7618.value, spd)) {
+                if (coll_sphere_2e7618(out, D_L00_0015EF5C, D_0013F350_2e7618.value, spd)) {
                     subtract_vector_xyz_2e7618(&diff, &start, out);
                     add_vector_xyz_2e7618(&hit, &D_L00_00173E60, &diff);
                     measure = resolve_level_path_segment_point_2e7618(&temp, &hit, path, &pos, 0.0f);
@@ -1052,7 +1052,7 @@ typedef float V_2e7a30[4] __attribute__((aligned(16)));
 extern float follow_cam_min_distance_gp __asm__("D_L00_00161CD8") __attribute__((sda));
 extern float D_L00_00161CC8_gp __asm__("D_L00_00161CC8") __attribute__((sda));
 extern float D_0013CA40_2e7a30 __asm__("D_0013CA40") __attribute__((section(".data")));
-extern int D_L00_0015EF5C_2e7a30 __asm__("D_L00_0015EF5C");
+extern int D_L00_0015EF5C __asm__("D_L00_0015EF5C");
 extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
 extern V_2e7a30 D_L00_00173E60_2e7a30 __asm__("D_L00_00173E60") __attribute__((section(".data")));
 extern V_2e7a30 D_L00_00166E40_2e7a30 __asm__("D_L00_00166E40") __attribute__((section(".data")));
@@ -1095,7 +1095,7 @@ int FUN_L00_002e7a30(unsigned char *a) {
     for (i = 0; i < truncate_float_to_s32(*(float *)(e + 0x40) - 1.0f); i++) {
         if (i > 0 && FUN_L00_002e4290_2e7a30(pos) == 0) {
             g = &hero_data;
-            if (FUN_L00_001f0d60_2e7a30(pos, D_L00_0015EF5C_2e7a30, ((int)g->moby), spd) &&
+            if (FUN_L00_001f0d60_2e7a30(pos, D_L00_0015EF5C, ((int)g->moby), spd) &&
                 FUN_L00_002e79c8_2e7a30(a, i, pos, spd) == 0) {
                 qcopy(step, D_L00_00173E60_2e7a30);
                 qcopy(save, pos);

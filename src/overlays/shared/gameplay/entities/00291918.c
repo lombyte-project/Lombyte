@@ -988,7 +988,7 @@ s32 FUN_L00_0025df68(s32 *path, void *point, void *nearest, f32 *fraction, s32 *
 void FUN_L00_00259a88(unsigned char *m, void *src);
 void FUN_L00_00263b38(char *p, float x);
 void FUN_L03_002ce238_c(char *m) __asm__("FUN_L03_002ce238");
-extern int D_L03_001BA8E0_2CDDC8[] __asm__("D_L03_001BA5D0");
+extern int D_L03_001BA5D0[] __asm__("D_L03_001BA5D0");
 extern HPath49_2CDDC8 *D_L03_001B08B0_2CDDC8[] __asm__("D_L03_001B05B0");
 extern unsigned char D_0014171B_2CDDC8[] __asm__("D_0014C050");
 extern int helicopter_target49_2CDDC8(void*,void*,float) __asm__("FUN_L03_0024e830");
@@ -1052,7 +1052,7 @@ void FUN_L03_002cca00(HMob49_2CDDC8 *moby) {
     if (data->timer) target_range=80.0f;
     helicopter_target49_2CDDC8(moby,&work.target,target_range);
     index=(short)moby->pool_index;
-    if ((D_L03_001BA8E0_2CDDC8[index>>5]>>(moby->pool_index&31))&1) {
+    if ((D_L03_001BA5D0[index>>5]>>(moby->pool_index&31))&1) {
         if (data->child_index!=-1) func_0020D678_2CDDC8((HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8)));
         func_0020D678_2CDDC8(moby); return;
     }

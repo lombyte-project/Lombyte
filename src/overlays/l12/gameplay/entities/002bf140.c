@@ -1548,7 +1548,7 @@ extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern void FUN_L01_002783a8_c(void *, float) __asm__("FUN_L01_002783a8");
 extern unsigned char alternate_item_available[] __asm__("D_0013D388");
-extern int D_L12_0015F5C4_c __asm__("D_L12_0015F5C4");
+extern int D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
 extern void FUN_0020c828_c(void *) __asm__("FUN_0020c828");
 extern void FUN_L02_0025c758(void *);
 extern char *func_0020D348_m_x(int) __asm__("FUN_0020c4f8");
@@ -1600,7 +1600,7 @@ void FUN_L12_002e6c48(L16WatchMoby *m) {
         }
         break;
     case 2:
-        if (D_L12_0015F5C4_c != 2) {
+        if (D_L12_0015F5C4 != 2) {
             *(float *)((char *)m + 0x58) = 1.0f;
             alternate_item_available[1] = 1;
             FUN_L00_00263d40_c(0x2EE7, scale_game_frames(300));
@@ -1775,7 +1775,7 @@ void FUN_L12_002e72c0(struct Moby *moby) {
     struct Moby *target;
 
     func_L00_00264BB0_2E2EF0(data + 0x120, 3.0f);
-    if (D_L12_0015F5C4_c == 2) goto hide;
+    if (D_L12_0015F5C4 == 2) goto hide;
     if (moby->state >= 3) {
         moby->flags &= 0xffbe;
         if (OGRE_CHILD) OGRE_CHILD->flags &= 0xffbe;
@@ -2383,7 +2383,7 @@ void FUN_L12_002e9f68(struct Moby *moby) {
     OvlVec4 position, delta, aim, velocity;
     int index, count, limit, a, b, color, life, size, triggered;
     float distance, angle, value, spread;
-    if (D_L12_0015F5C4_c == 2) return;
+    if (D_L12_0015F5C4 == 2) return;
     FUN_L01_00274b78(moby, target, 70.0f);
     child = *(struct Moby **)(data + 0xac);
     if (child != 0 && (signed char)child->state >= 0)
@@ -2837,7 +2837,7 @@ typedef struct {
 } L12WatchGlobals;
 
 extern L12WatchGlobals D_0013D5B0_b570 __asm__("D_0013D5B0") __attribute__((section(".data")));
-extern int D_L12_0015F5C4_b570 __asm__("D_L12_0015F5C4");
+extern int D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
 extern float D_0015ED64_b570 __asm__("D_0015ED64");
 extern void FUN_L03_002db480_b570(void *) __asm__("FUN_L03_002db480");
 extern void blend_moby_animation_b570(void *, int, int, int) __asm__("FUN_00212f90");
@@ -2873,7 +2873,7 @@ void FUN_L12_002eb570(L16WatchMoby *m) {
         }
         break;
     case 2:
-        if (D_L12_0015F5C4_b570 != 2) {
+        if (D_L12_0015F5C4 != 2) {
             *(float *)((char *)m + 0x58) = 1.0f;
             FUN_L00_002502a0(m->widget);
             if (d->region != -1) {
@@ -2947,7 +2947,7 @@ void FUN_L12_002eb570(L16WatchMoby *m) {
                 *(unsigned short *)(d->turret + 0x34) = 0;
                 blend_moby_animation_b570(d->turret, 1, 0, 2);
             }
-        } else if (D_L12_0015F5C4_b570 == 2) {
+        } else if (D_L12_0015F5C4 == 2) {
             *(unsigned short *)(d->turret + 0x34) |= 1;
             d->turret[0x31] = 0;
         } else {
@@ -2967,7 +2967,7 @@ void FUN_L12_002eb570(L16WatchMoby *m) {
                     FUN_L00_00250df8_x(p);
                 }
             }
-        } else if (D_L12_0015F5C4_b570 == 2) {
+        } else if (D_L12_0015F5C4 == 2) {
             *(unsigned short *)(d->turret + 0x34) |= 1;
             d->turret[0x31] = 0;
             *(unsigned short *)(d->base + 0x34) |= 1;

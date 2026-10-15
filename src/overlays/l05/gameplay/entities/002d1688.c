@@ -414,7 +414,7 @@ extern void vadd_2d1e30(void *, void *, void *) __asm__("FUN_001f9a10");
 extern char *spawn_2d1e30(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
 extern int frames_2d1e30(int) __asm__("FUN_001f96f8");
 extern int ftoi_2d1e30(float) __asm__("FUN_001fa6d0");
-extern float D_L05_001612E8_2d1e30 __asm__("D_L05_001612E8");
+extern float D_L05_001612E8 __asm__("D_L05_001612E8");
 extern char D_L05_0015F580_macro[] __asm__("D_L05_0015F580") __attribute__((section(".sdata")));
 
 /* When the timer runs out, spawns two effects beside the moby, one to each side, and restarts the timer. */
@@ -435,8 +435,8 @@ void FUN_L05_002d1e30(char *moby) {
         addrot_2d1e30(a, rand_2d1e30(-0.785398006f, 0.785398006f));
         fast_vec_scale(v, moby + 0xD0, rand_2d1e30(-0.5f, 0.5f));
         vadd_2d1e30(v, v, moby + 0x10);
-        v[2] = D_L05_001612E8_2d1e30 + 0.05f;
-        h = &D_L05_001612E8_2d1e30;
+        v[2] = D_L05_001612E8 + 0.05f;
+        h = &D_L05_001612E8;
         p = spawn_2d1e30(v, D_L05_0015F580_macro, h, rand_2d1e30(0.7f, 1.0f), i == 0 ? 2.0f : -2.0f);
         if (p != 0) {
             *(short *)(p + 0xA) = frames_2d1e30(15);

@@ -31,7 +31,7 @@ extern int D_0015ED84 __attribute__((sda));
 extern int D_0014C190[][64];
 extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
 extern u8 D_0013D4C0[];
-extern int D_0013D428[];
+extern int weapon_ammo_counts[] __asm__("D_0013D428");
 extern Item257218 D_L00_001C40B0[] __attribute__((section(".data")));
 int FUN_00213260(int);
 int FUN_L00_00257218_u3(Moby257218 *, int *) __asm__("FUN_L00_00257218");
@@ -47,7 +47,7 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
             if (D_0013D4C0[x]) {
                 if (((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE) nC++;
                 nB++;
-                nA += D_0013D428[x] < ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE;
+                nA += weapon_ammo_counts[x] < ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE;
             }
         }
         idx = -1;
@@ -56,7 +56,7 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
             while (i >= 0) {
                 idx++;
                 x = D_0015EDD0_257218[idx] & 0x3F;
-                if (D_0013D4C0[x]) i -= ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE > D_0013D428[x];
+                if (D_0013D4C0[x]) i -= ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->hE > weapon_ammo_counts[x];
             }
             *out = D_0015EDD0_257218[idx] & 0x3F;
         } else if (nB) {

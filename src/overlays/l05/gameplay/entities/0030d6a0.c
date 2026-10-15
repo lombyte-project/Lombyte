@@ -2025,7 +2025,7 @@ void FUN_L05_003180a0(WM *m) {
 
 extern int D_L05_001612D8_318a68[] __asm__("D_L05_001612D8") MACRO_ADDR;
 extern char D_L05_001612E0_318a68[16] __asm__("D_L05_001612E0") MACRO_ADDR __attribute__((sda));
-extern float D_L05_001612E8_318a68 __asm__("D_L05_001612E8");
+extern float D_L05_001612E8 __asm__("D_L05_001612E8");
 extern int D_L05_0015F5C4_318a68[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
 extern int find_318a68(void *, int) __asm__("FUN_00214720");
 extern float sin_318a68(float) __asm__("FUN_001f9de0");
@@ -2053,7 +2053,7 @@ void FUN_L05_00318a68(char *m) {
             qcopy(D_L05_001612E0_318a68, t);
             *(short *)(t + 0x15E) = 5;
             D_L05_001612EC = 48.0f;
-            *(volatile float *)&D_L05_001612E8_318a68 = sin_318a68((float)(D_L05_0015F5C4_318a68[2] % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
+            *(volatile float *)&D_L05_001612E8 = sin_318a68((float)(D_L05_0015F5C4_318a68[2] % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
         } else {
             D_L05_001612DC = 0;
         }

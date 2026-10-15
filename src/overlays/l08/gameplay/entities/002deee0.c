@@ -257,27 +257,27 @@ extern f32 fast_subtract_rotations_c(f32, f32) __asm__("func_001FA5C8");
 extern float FUN_001f9e90(float, float);
 extern int D_0015EDB4_d __asm__("D_0015EDB4") __attribute__((section(".data"))); /* no foreign declaration */
 extern int D_L08_0015F5CC_lui __asm__("D_L08_0015F5CC") __attribute__((section(".data"))); /* no foreign declaration */
-extern f32 D_L08_00161AC0_d __asm__("D_L08_00161AC0") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161AC0_gp __asm__("D_L08_00161AC0") __attribute__((sda)); /* no foreign declaration */
 extern int D_L08_00161AC8_gp __asm__("D_L08_00161AC8") __attribute__((sda)); /* no foreign declaration */
 extern int D_L08_00161AD4_gp __asm__("D_L08_00161AD4") __attribute__((sda)); /* no foreign declaration */
 extern int D_L08_00161AD8_gp __asm__("D_L08_00161AD8") __attribute__((sda)); /* no foreign declaration */
 extern int D_L08_00161ADC_gp __asm__("D_L08_00161ADC") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B60_d __asm__("D_L08_00161B60") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B64_d __asm__("D_L08_00161B64") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B68_d __asm__("D_L08_00161B68") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B6C_d __asm__("D_L08_00161B6C") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B70_d __asm__("D_L08_00161B70") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B74_d __asm__("D_L08_00161B74") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B78_d __asm__("D_L08_00161B78") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B7C_d __asm__("D_L08_00161B7C") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B80_d __asm__("D_L08_00161B80") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B84_d __asm__("D_L08_00161B84") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B88_d __asm__("D_L08_00161B88") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B8C_d __asm__("D_L08_00161B8C") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B90_d __asm__("D_L08_00161B90") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B94_d __asm__("D_L08_00161B94") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B98_d __asm__("D_L08_00161B98") __attribute__((sda)); /* no foreign declaration */
-extern f32 D_L08_00161B9C_d __asm__("D_L08_00161B9C") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B60_gp __asm__("D_L08_00161B60") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B64_gp __asm__("D_L08_00161B64") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B68_gp __asm__("D_L08_00161B68") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B6C_gp __asm__("D_L08_00161B6C") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B70_gp __asm__("D_L08_00161B70") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B74_gp __asm__("D_L08_00161B74") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B78_gp __asm__("D_L08_00161B78") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B7C_gp __asm__("D_L08_00161B7C") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B80_gp __asm__("D_L08_00161B80") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B84_gp __asm__("D_L08_00161B84") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B88_gp __asm__("D_L08_00161B88") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B8C_gp __asm__("D_L08_00161B8C") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B90_gp __asm__("D_L08_00161B90") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B94_gp __asm__("D_L08_00161B94") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B98_gp __asm__("D_L08_00161B98") __attribute__((sda)); /* no foreign declaration */
+extern f32 D_L08_00161B9C_gp __asm__("D_L08_00161B9C") __attribute__((sda)); /* no foreign declaration */
 extern int D_L08_00161BA0_gp __asm__("D_L08_00161BA0") __attribute__((sda)); /* no foreign declaration */
 extern int D_L08_00161BA4_gp __asm__("D_L08_00161BA4") __attribute__((sda)); /* no foreign declaration */
 extern int D_L08_00161BA8_gp __asm__("D_L08_00161BA8") __attribute__((sda)); /* no foreign declaration */
@@ -319,49 +319,49 @@ extern float func_L00_001FF860_2E0258(float, float) __asm__("FUN_001f9e90");
 extern int func_001FA8A8_2E0258(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001F9850_2E0258(int) __asm__("FUN_001f96f8");
 extern char *D_L08_0015FFD8;
-extern int D_L08_0015F6B0_2E0258 __asm__("D_L08_0015F5CC");
+extern int D_L08_0015F5CC __asm__("D_L08_0015F5CC");
 extern unsigned char draw_map51[4] __asm__("D_0015EDB4");
-extern float D_L08_00161B50_2E0258 __asm__("D_L08_00161AC0");
-extern float D_L08_00161BF0_2E0258 __asm__("D_L08_00161B60");
-extern float D_L08_00161BF4_2E0258 __asm__("D_L08_00161B64");
-extern float D_L08_00161BF8_2E0258 __asm__("D_L08_00161B68");
-extern float D_L08_00161BFC_2E0258 __asm__("D_L08_00161B6C");
-extern float D_L08_00161C00_2E0258 __asm__("D_L08_00161B70");
-extern float D_L08_00161C04_2E0258 __asm__("D_L08_00161B74");
-extern float D_L08_00161C08_2E0258 __asm__("D_L08_00161B78");
-extern float D_L08_00161C0C_2E0258 __asm__("D_L08_00161B7C");
-extern float D_L08_00161C10_2E0258 __asm__("D_L08_00161B80");
-extern float D_L08_00161C14_2E0258 __asm__("D_L08_00161B84");
-extern float D_L08_00161C18_2E0258 __asm__("D_L08_00161B88");
-extern float D_L08_00161C1C_2E0258 __asm__("D_L08_00161B8C");
-extern float D_L08_00161C20_2E0258 __asm__("D_L08_00161B90");
-extern float D_L08_00161C24_2E0258 __asm__("D_L08_00161B94");
-extern float D_L08_00161C28_2E0258 __asm__("D_L08_00161B98");
-extern float D_L08_00161C2C_2E0258 __asm__("D_L08_00161B9C");
-extern int D_L08_00161B58_2E0258 __asm__("D_L08_00161AC8");
-extern int D_L08_00161B64_2E0258 __asm__("D_L08_00161AD4");
-extern int D_L08_00161B68_2E0258 __asm__("D_L08_00161AD8");
-extern int D_L08_00161B6C_2E0258 __asm__("D_L08_00161ADC");
-extern int D_L08_00161C30_2E0258 __asm__("D_L08_00161BA0");
-extern int D_L08_00161C34_2E0258 __asm__("D_L08_00161BA4");
-extern int D_L08_00161C38_2E0258 __asm__("D_L08_00161BA8");
-extern int D_L08_00161C3C_2E0258 __asm__("D_L08_00161BAC");
-extern int D_L08_00161C40_2E0258 __asm__("D_L08_00161BB0");
-extern int D_L08_00161C44_2E0258 __asm__("D_L08_00161BB4");
-extern int D_L08_00161C48_2E0258 __asm__("D_L08_00161BB8");
-extern int D_L08_00161C4C_2E0258 __asm__("D_L08_00161BBC");
-extern int D_L08_00161C50_2E0258 __asm__("D_L08_00161BC0");
-extern int D_L08_00161C54_2E0258 __asm__("D_L08_00161BC4");
-extern int D_L08_00161C58_2E0258 __asm__("D_L08_00161BC8");
-extern int D_L08_00161C5C_2E0258 __asm__("D_L08_00161BCC");
-extern int D_L08_00161C60_2E0258 __asm__("D_L08_00161BD0");
-extern int D_L08_00161C64_2E0258 __asm__("D_L08_00161BD4");
-extern int D_L08_00161C68_2E0258 __asm__("D_L08_00161BD8");
-extern int D_L08_00161C6C_2E0258 __asm__("D_L08_00161BDC");
-extern int D_L08_00161C70_2E0258 __asm__("D_L08_00161BE0");
-extern int D_L08_00161C74_2E0258 __asm__("D_L08_00161BE4");
-extern int D_L08_00161C78_2E0258 __asm__("D_L08_00161BE8");
-extern int D_L08_00161C7C_2E0258 __asm__("D_L08_00161BEC");
+extern float D_L08_00161AC0 __asm__("D_L08_00161AC0");
+extern float D_L08_00161B60 __asm__("D_L08_00161B60");
+extern float D_L08_00161B64 __asm__("D_L08_00161B64");
+extern float D_L08_00161B68 __asm__("D_L08_00161B68");
+extern float D_L08_00161B6C __asm__("D_L08_00161B6C");
+extern float D_L08_00161B70 __asm__("D_L08_00161B70");
+extern float D_L08_00161B74 __asm__("D_L08_00161B74");
+extern float D_L08_00161B78 __asm__("D_L08_00161B78");
+extern float D_L08_00161B7C __asm__("D_L08_00161B7C");
+extern float D_L08_00161B80 __asm__("D_L08_00161B80");
+extern float D_L08_00161B84 __asm__("D_L08_00161B84");
+extern float D_L08_00161B88 __asm__("D_L08_00161B88");
+extern float D_L08_00161B8C __asm__("D_L08_00161B8C");
+extern float D_L08_00161B90 __asm__("D_L08_00161B90");
+extern float D_L08_00161B94 __asm__("D_L08_00161B94");
+extern float D_L08_00161B98 __asm__("D_L08_00161B98");
+extern float D_L08_00161B9C __asm__("D_L08_00161B9C");
+extern int D_L08_00161AC8 __asm__("D_L08_00161AC8");
+extern int D_L08_00161AD4 __asm__("D_L08_00161AD4");
+extern int D_L08_00161AD8 __asm__("D_L08_00161AD8");
+extern int D_L08_00161ADC __asm__("D_L08_00161ADC");
+extern int D_L08_00161BA0 __asm__("D_L08_00161BA0");
+extern int D_L08_00161BA4 __asm__("D_L08_00161BA4");
+extern int D_L08_00161BA8 __asm__("D_L08_00161BA8");
+extern int D_L08_00161BAC __asm__("D_L08_00161BAC");
+extern int D_L08_00161BB0 __asm__("D_L08_00161BB0");
+extern int D_L08_00161BB4 __asm__("D_L08_00161BB4");
+extern int D_L08_00161BB8 __asm__("D_L08_00161BB8");
+extern int D_L08_00161BBC __asm__("D_L08_00161BBC");
+extern int D_L08_00161BC0 __asm__("D_L08_00161BC0");
+extern int D_L08_00161BC4 __asm__("D_L08_00161BC4");
+extern int D_L08_00161BC8 __asm__("D_L08_00161BC8");
+extern int D_L08_00161BCC __asm__("D_L08_00161BCC");
+extern int D_L08_00161BD0 __asm__("D_L08_00161BD0");
+extern int D_L08_00161BD4 __asm__("D_L08_00161BD4");
+extern int D_L08_00161BD8 __asm__("D_L08_00161BD8");
+extern int D_L08_00161BDC __asm__("D_L08_00161BDC");
+extern int D_L08_00161BE0 __asm__("D_L08_00161BE0");
+extern int D_L08_00161BE4 __asm__("D_L08_00161BE4");
+extern int D_L08_00161BE8 __asm__("D_L08_00161BE8");
+extern int D_L08_00161BEC __asm__("D_L08_00161BEC");
 
 void FUN_L08_002deee0(Moby *moby) {
     long xy[4];
@@ -377,12 +377,12 @@ void FUN_L08_002deee0(Moby *moby) {
     int color_a, color_b;
     long base;
     func_00234C98_2E0258(0x42, 0x8000000044L);
-    texture = texture51(D_L08_00161C30_2E0258 + 0x28);
-    uv_words[0] = D_L08_00161C40_2E0258;
-    uv_words[1] = D_L08_00161C44_2E0258;
-    uv_words[2] = D_L08_00161C48_2E0258;
-    uv_words[3] = D_L08_00161C4C_2E0258;
-    color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161B58_2E0258;
+    texture = texture51(D_L08_00161BA0 + 0x28);
+    uv_words[0] = D_L08_00161BB0;
+    uv_words[1] = D_L08_00161BB4;
+    uv_words[2] = D_L08_00161BB8;
+    uv_words[3] = D_L08_00161BBC;
+    color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161AC8;
     for (i = 0; i < 4; i++) {
         sign_x = (i & 1) ? -1.0f : 1.0f;
         sign_y = (i >= 2) ? -1.0f : 1.0f;
@@ -390,36 +390,36 @@ void FUN_L08_002deee0(Moby *moby) {
         xy[2] = 0xFFFFF000000000L;
         xy[1] = 0xFFFFF000000000L;
         xy[0] = 0xFFFFF000000000L;
-        xy[0] += (unsigned int)((func_001FA898_2E0258((D_L08_00161C14_2E0258 + D_L08_00161C1C_2E0258 * sign_y) * 16.0f) << 16) - (int)0x80000000);
-        xy[0] += (func_001FA898_2E0258(D_L08_00161C10_2E0258 + D_L08_00161C18_2E0258 * sign_x) << 4) + 0x8000;
-        xy[1] += (unsigned int)((func_001FA898_2E0258(D_L08_00161C14_2E0258 * 16.0f) << 16) - (int)0x80000000);
-        xy[1] += (func_001FA898_2E0258(D_L08_00161C10_2E0258 + D_L08_00161C18_2E0258 * sign_x) << 4) + 0x8000;
-        xy[2] += (unsigned int)((func_001FA898_2E0258((D_L08_00161C14_2E0258 + D_L08_00161C1C_2E0258 * sign_y) * 16.0f) << 16) - (int)0x80000000);
-        xy[2] += (func_001FA898_2E0258(D_L08_00161C10_2E0258) << 4) + 0x8000;
-        xy[3] += (unsigned int)((func_001FA898_2E0258(D_L08_00161C14_2E0258 * 16.0f) << 16) - (int)0x80000000);
-        xy[3] += (func_001FA898_2E0258(D_L08_00161C10_2E0258) << 4) + 0x8000;
+        xy[0] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B84 + D_L08_00161B8C * sign_y) * 16.0f) << 16) - (int)0x80000000);
+        xy[0] += (func_001FA898_2E0258(D_L08_00161B80 + D_L08_00161B88 * sign_x) << 4) + 0x8000;
+        xy[1] += (unsigned int)((func_001FA898_2E0258(D_L08_00161B84 * 16.0f) << 16) - (int)0x80000000);
+        xy[1] += (func_001FA898_2E0258(D_L08_00161B80 + D_L08_00161B88 * sign_x) << 4) + 0x8000;
+        xy[2] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B84 + D_L08_00161B8C * sign_y) * 16.0f) << 16) - (int)0x80000000);
+        xy[2] += (func_001FA898_2E0258(D_L08_00161B80) << 4) + 0x8000;
+        xy[3] += (unsigned int)((func_001FA898_2E0258(D_L08_00161B84 * 16.0f) << 16) - (int)0x80000000);
+        xy[3] += (func_001FA898_2E0258(D_L08_00161B80) << 4) + 0x8000;
         draw_quad51(xy, uv_words, color_words, texture, 1);
     }
-    texture = texture51(D_L08_00161C34_2E0258);
-    uv_words[0] = D_L08_00161C50_2E0258;
-    uv_words[1] = D_L08_00161C54_2E0258;
-    uv_words[2] = D_L08_00161C58_2E0258;
-    uv_words[3] = D_L08_00161C5C_2E0258;
+    texture = texture51(D_L08_00161BA4);
+    uv_words[0] = D_L08_00161BC0;
+    uv_words[1] = D_L08_00161BC4;
+    uv_words[2] = D_L08_00161BC8;
+    uv_words[3] = D_L08_00161BCC;
     for (k = 0; k < 8; k++) {
         float angle, radius;
         if (data->linked[k]) {
             if ((signed char)data->linked[k]->state >= 0) {
                 if (data->linked[k]->state == 2) {
-                    if (D_L08_0015F6B0_2E0258 & 0x10) {
-                        color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161B64_2E0258;
+                    if (D_L08_0015F5CC & 0x10) {
+                        color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161AD4;
                     } else {
                         color_words[0] = color_words[1] = color_words[2] = color_words[3] = 0x60000000;
                     }
                 } else {
-                    color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161B6C_2E0258;
+                    color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161ADC;
                 }
                 angle = func_001FA790_2E0258(func_L00_001FF860_2E0258((*(float (*)[4])&data->linked[k]->pos)[0] - (*(float (*)[4])&moby->pos)[0], (*(float (*)[4])&data->linked[k]->pos)[1] - (*(float (*)[4])&moby->pos)[1]), (*(float (*)[4])&moby->rot)[2]);
-                radius = func_001F9D10_2E0258((*(float (*)[4])&data->linked[k]->pos), (*(float (*)[4])&moby->pos)) * D_L08_00161B50_2E0258;
+                radius = func_001F9D10_2E0258((*(float (*)[4])&data->linked[k]->pos), (*(float (*)[4])&moby->pos)) * D_L08_00161AC0;
                 sign = draw_map51[0] ? -1 : 1;
                 relative[0] = (float)-sign * func_001F9FA8_2E0258(angle) * radius;
                 relative[1] = -func_001F9F90_2E0258(angle) * radius;
@@ -427,14 +427,14 @@ void FUN_L08_002deee0(Moby *moby) {
                 xy[2] = 0xFFFFF000000000L;
                 xy[1] = 0xFFFFF000000000L;
                 xy[0] = 0xFFFFF000000000L;
-                xy[0] += (unsigned int)((func_001FA898_2E0258((D_L08_00161C14_2E0258 + D_L08_00161C24_2E0258) * 16.0f + relative[1]) << 16) - (int)0x80000000);
-                xy[0] += func_001FA898_2E0258((D_L08_00161C10_2E0258 + D_L08_00161C20_2E0258) * 16.0f + relative[0]) + 0x8000;
-                xy[1] += (unsigned int)((func_001FA898_2E0258((D_L08_00161C14_2E0258 - D_L08_00161C24_2E0258) * 16.0f + relative[1]) << 16) - (int)0x80000000);
-                xy[1] += func_001FA898_2E0258((D_L08_00161C10_2E0258 + D_L08_00161C20_2E0258) * 16.0f + relative[0]) + 0x8000;
-                xy[2] += (unsigned int)((func_001FA898_2E0258((D_L08_00161C14_2E0258 + D_L08_00161C24_2E0258) * 16.0f + relative[1]) << 16) - (int)0x80000000);
-                xy[2] += func_001FA898_2E0258((D_L08_00161C10_2E0258 - D_L08_00161C20_2E0258) * 16.0f + relative[0]) + 0x8000;
-                xy[3] += (unsigned int)((func_001FA898_2E0258((D_L08_00161C14_2E0258 - D_L08_00161C24_2E0258) * 16.0f + relative[1]) << 16) - (int)0x80000000);
-                xy[3] += func_001FA898_2E0258((D_L08_00161C10_2E0258 - D_L08_00161C20_2E0258) * 16.0f + relative[0]) + 0x8000;
+                xy[0] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B84 + D_L08_00161B94) * 16.0f + relative[1]) << 16) - (int)0x80000000);
+                xy[0] += func_001FA898_2E0258((D_L08_00161B80 + D_L08_00161B90) * 16.0f + relative[0]) + 0x8000;
+                xy[1] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B84 - D_L08_00161B94) * 16.0f + relative[1]) << 16) - (int)0x80000000);
+                xy[1] += func_001FA898_2E0258((D_L08_00161B80 + D_L08_00161B90) * 16.0f + relative[0]) + 0x8000;
+                xy[2] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B84 + D_L08_00161B94) * 16.0f + relative[1]) << 16) - (int)0x80000000);
+                xy[2] += func_001FA898_2E0258((D_L08_00161B80 - D_L08_00161B90) * 16.0f + relative[0]) + 0x8000;
+                xy[3] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B84 - D_L08_00161B94) * 16.0f + relative[1]) << 16) - (int)0x80000000);
+                xy[3] += func_001FA898_2E0258((D_L08_00161B80 - D_L08_00161B90) * 16.0f + relative[0]) + 0x8000;
                 draw_quad51(xy, uv_words, color_words, texture, 1);
             } else data->linked[k] = 0;
         }
@@ -443,33 +443,33 @@ void FUN_L08_002deee0(Moby *moby) {
     for (n = 0; n < 4; n++) {
         float angle, radius;
         if (((Moby *)D_L08_0015FFD8)[*indices].state < 0x7F) {
-    color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161B68_2E0258;
+    color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161AD8;
             angle = func_001FA790_2E0258(func_L00_001FF860_2E0258((*(float (*)[4])&((Moby *)D_L08_0015FFD8)[*indices].pos)[0] - (*(float (*)[4])&moby->pos)[0], (*(float (*)[4])&((Moby *)D_L08_0015FFD8)[*indices].pos)[1] - (*(float (*)[4])&moby->pos)[1]), (*(float (*)[4])&moby->rot)[2]);
-            radius = func_001F9D10_2E0258((*(float (*)[4])&((Moby *)D_L08_0015FFD8)[*indices].pos), (*(float (*)[4])&moby->pos)) * D_L08_00161B50_2E0258;
+            radius = func_001F9D10_2E0258((*(float (*)[4])&((Moby *)D_L08_0015FFD8)[*indices].pos), (*(float (*)[4])&moby->pos)) * D_L08_00161AC0;
             relative[0] = -func_001F9FA8_2E0258(angle) * radius;
             relative[1] = -func_001F9F90_2E0258(angle) * radius;
             xy[3] = 0xFFFFF000000000L;
             xy[2] = 0xFFFFF000000000L;
             xy[1] = 0xFFFFF000000000L;
             xy[0] = 0xFFFFF000000000L;
-            xy[0] += (unsigned int)((func_001FA898_2E0258((D_L08_00161C14_2E0258 + D_L08_00161C2C_2E0258) * 16.0f + relative[1]) << 16) - (int)0x80000000);
-            xy[0] += func_001FA898_2E0258((D_L08_00161C10_2E0258 + D_L08_00161C28_2E0258) * 16.0f + relative[0]) + 0x8000;
-            xy[1] += (unsigned int)((func_001FA898_2E0258((D_L08_00161C14_2E0258 - D_L08_00161C2C_2E0258) * 16.0f + relative[1]) << 16) - (int)0x80000000);
-            xy[1] += func_001FA898_2E0258((D_L08_00161C10_2E0258 + D_L08_00161C28_2E0258) * 16.0f + relative[0]) + 0x8000;
-            xy[2] += (unsigned int)((func_001FA898_2E0258((D_L08_00161C14_2E0258 + D_L08_00161C2C_2E0258) * 16.0f + relative[1]) << 16) - (int)0x80000000);
-            xy[2] += func_001FA898_2E0258((D_L08_00161C10_2E0258 - D_L08_00161C28_2E0258) * 16.0f + relative[0]) + 0x8000;
-            xy[3] += (unsigned int)((func_001FA898_2E0258((D_L08_00161C14_2E0258 - D_L08_00161C2C_2E0258) * 16.0f + relative[1]) << 16) - (int)0x80000000);
-            xy[3] += func_001FA898_2E0258((D_L08_00161C10_2E0258 - D_L08_00161C28_2E0258) * 16.0f + relative[0]) + 0x8000;
+            xy[0] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B84 + D_L08_00161B9C) * 16.0f + relative[1]) << 16) - (int)0x80000000);
+            xy[0] += func_001FA898_2E0258((D_L08_00161B80 + D_L08_00161B98) * 16.0f + relative[0]) + 0x8000;
+            xy[1] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B84 - D_L08_00161B9C) * 16.0f + relative[1]) << 16) - (int)0x80000000);
+            xy[1] += func_001FA898_2E0258((D_L08_00161B80 + D_L08_00161B98) * 16.0f + relative[0]) + 0x8000;
+            xy[2] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B84 + D_L08_00161B9C) * 16.0f + relative[1]) << 16) - (int)0x80000000);
+            xy[2] += func_001FA898_2E0258((D_L08_00161B80 - D_L08_00161B98) * 16.0f + relative[0]) + 0x8000;
+            xy[3] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B84 - D_L08_00161B9C) * 16.0f + relative[1]) << 16) - (int)0x80000000);
+            xy[3] += func_001FA898_2E0258((D_L08_00161B80 - D_L08_00161B98) * 16.0f + relative[0]) + 0x8000;
             draw_quad51(xy, uv_words, color_words, texture, 1);
         }
         indices++;
     }
-    uv_words[0] = D_L08_00161C40_2E0258;
-    uv_words[1] = D_L08_00161C44_2E0258;
-    uv_words[2] = D_L08_00161C48_2E0258;
-    uv_words[3] = D_L08_00161C4C_2E0258;
-    color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161B58_2E0258;
-    texture = texture51(D_L08_00161C30_2E0258 + 0x28);
+    uv_words[0] = D_L08_00161BB0;
+    uv_words[1] = D_L08_00161BB4;
+    uv_words[2] = D_L08_00161BB8;
+    uv_words[3] = D_L08_00161BBC;
+    color_words[0] = color_words[1] = color_words[2] = color_words[3] = D_L08_00161AC8;
+    texture = texture51(D_L08_00161BA0 + 0x28);
     for (i = 0; i < 4; i++) {
         sign_x = (i & 1) ? -1.0f : 1.0f;
         sign_y = (i >= 2) ? -1.0f : 1.0f;
@@ -477,21 +477,21 @@ void FUN_L08_002deee0(Moby *moby) {
         xy[2] = 0xFFFFF000000000L;
         xy[1] = 0xFFFFF000000000L;
         xy[0] = 0xFFFFF000000000L;
-        xy[0] += (unsigned int)((func_001FA898_2E0258((D_L08_00161BF4_2E0258 + D_L08_00161BFC_2E0258 * sign_y) * 16.0f) << 16) - (int)0x80000000);
-        xy[0] += (func_001FA898_2E0258(D_L08_00161BF0_2E0258 + D_L08_00161BF8_2E0258 * sign_x) << 4) + 0x8000;
-        xy[1] += (unsigned int)((func_001FA898_2E0258(D_L08_00161BF4_2E0258 * 16.0f) << 16) - (int)0x80000000);
-        xy[1] += (func_001FA898_2E0258(D_L08_00161BF0_2E0258 + D_L08_00161BF8_2E0258 * sign_x) << 4) + 0x8000;
-        xy[2] += (unsigned int)((func_001FA898_2E0258((D_L08_00161BF4_2E0258 + D_L08_00161BFC_2E0258 * sign_y) * 16.0f) << 16) - (int)0x80000000);
-        xy[2] += (func_001FA898_2E0258(D_L08_00161BF0_2E0258) << 4) + 0x8000;
-        xy[3] += (unsigned int)((func_001FA898_2E0258(D_L08_00161BF4_2E0258 * 16.0f) << 16) - (int)0x80000000);
-        xy[3] += (func_001FA898_2E0258(D_L08_00161BF0_2E0258) << 4) + 0x8000;
+        xy[0] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B64 + D_L08_00161B6C * sign_y) * 16.0f) << 16) - (int)0x80000000);
+        xy[0] += (func_001FA898_2E0258(D_L08_00161B60 + D_L08_00161B68 * sign_x) << 4) + 0x8000;
+        xy[1] += (unsigned int)((func_001FA898_2E0258(D_L08_00161B64 * 16.0f) << 16) - (int)0x80000000);
+        xy[1] += (func_001FA898_2E0258(D_L08_00161B60 + D_L08_00161B68 * sign_x) << 4) + 0x8000;
+        xy[2] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B64 + D_L08_00161B6C * sign_y) * 16.0f) << 16) - (int)0x80000000);
+        xy[2] += (func_001FA898_2E0258(D_L08_00161B60) << 4) + 0x8000;
+        xy[3] += (unsigned int)((func_001FA898_2E0258(D_L08_00161B64 * 16.0f) << 16) - (int)0x80000000);
+        xy[3] += (func_001FA898_2E0258(D_L08_00161B60) << 4) + 0x8000;
         draw_quad51(xy, uv_words, color_words, texture, 1);
     }
-    texture = texture51(D_L08_00161C34_2E0258);
-    uv_words[0] = D_L08_00161C60_2E0258;
-    uv_words[1] = D_L08_00161C64_2E0258;
-    uv_words[2] = D_L08_00161C68_2E0258;
-    uv_words[3] = D_L08_00161C6C_2E0258;
+    texture = texture51(D_L08_00161BA4);
+    uv_words[0] = D_L08_00161BD0;
+    uv_words[1] = D_L08_00161BD4;
+    uv_words[2] = D_L08_00161BD8;
+    uv_words[3] = D_L08_00161BDC;
     if ((float)data->health > 100.0f) color = func_001FA8A8_2E0258(0x6000FFFF, 0x6000FF00, ((float)data->health - 100.0f) / 100.0f);
     else color = func_001FA8A8_2E0258(0x600000FF, 0x6000FFFF, (float)data->health / 100.0f);
     segments = func_001FA898_2E0258((1.0f - (float)data->health / 200.0f) * 32.0f);
@@ -504,22 +504,22 @@ void FUN_L08_002deee0(Moby *moby) {
         }
         angle = func_001FA7D8_2E0258((float)j * 0.19634955f);
         next_angle = func_001FA748_2E0258(angle, 0.19634955f);
-        outer_x = func_001FA898_2E0258(D_L08_00161C00_2E0258 * func_001F9FA8_2E0258(angle));
-        outer_y = func_001FA898_2E0258(D_L08_00161C04_2E0258 * -func_001F9F90_2E0258(angle));
-        inner_x = func_001FA898_2E0258(D_L08_00161C00_2E0258 * func_001F9FA8_2E0258(next_angle));
-        inner_y = func_001FA898_2E0258(D_L08_00161C04_2E0258 * -func_001F9F90_2E0258(next_angle));
+        outer_x = func_001FA898_2E0258(D_L08_00161B70 * func_001F9FA8_2E0258(angle));
+        outer_y = func_001FA898_2E0258(D_L08_00161B74 * -func_001F9F90_2E0258(angle));
+        inner_x = func_001FA898_2E0258(D_L08_00161B70 * func_001F9FA8_2E0258(next_angle));
+        inner_y = func_001FA898_2E0258(D_L08_00161B74 * -func_001F9F90_2E0258(next_angle));
         xy[3] = 0xFFFFF000000000L;
         xy[2] = 0xFFFFF000000000L;
         xy[1] = 0xFFFFF000000000L;
         xy[0] = 0xFFFFF000000000L;
-        xy[0] += (unsigned int)((func_001FA898_2E0258((D_L08_00161BF4_2E0258 + (float)inner_y) * 16.0f) << 16) - (int)0x80000000);
-        xy[0] += (func_001FA898_2E0258(D_L08_00161BF0_2E0258 + (float)inner_x) << 4) + 0x8000;
-        xy[1] += (unsigned int)((func_001FA898_2E0258(D_L08_00161BF4_2E0258 * 16.0f) << 16) - (int)0x80000000);
-        xy[1] += (func_001FA898_2E0258(D_L08_00161BF0_2E0258) << 4) + 0x8000;
-        xy[2] += (unsigned int)((func_001FA898_2E0258((D_L08_00161BF4_2E0258 + (float)outer_y) * 16.0f) << 16) - (int)0x80000000);
-        xy[2] += (func_001FA898_2E0258(D_L08_00161BF0_2E0258 + (float)outer_x) << 4) + 0x8000;
-        xy[3] += (unsigned int)((func_001FA898_2E0258(D_L08_00161BF4_2E0258 * 16.0f) << 16) - (int)0x80000000);
-        xy[3] += (func_001FA898_2E0258(D_L08_00161BF0_2E0258) << 4) + 0x8000;
+        xy[0] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B64 + (float)inner_y) * 16.0f) << 16) - (int)0x80000000);
+        xy[0] += (func_001FA898_2E0258(D_L08_00161B60 + (float)inner_x) << 4) + 0x8000;
+        xy[1] += (unsigned int)((func_001FA898_2E0258(D_L08_00161B64 * 16.0f) << 16) - (int)0x80000000);
+        xy[1] += (func_001FA898_2E0258(D_L08_00161B60) << 4) + 0x8000;
+        xy[2] += (unsigned int)((func_001FA898_2E0258((D_L08_00161B64 + (float)outer_y) * 16.0f) << 16) - (int)0x80000000);
+        xy[2] += (func_001FA898_2E0258(D_L08_00161B60 + (float)outer_x) << 4) + 0x8000;
+        xy[3] += (unsigned int)((func_001FA898_2E0258(D_L08_00161B64 * 16.0f) << 16) - (int)0x80000000);
+        xy[3] += (func_001FA898_2E0258(D_L08_00161B60) << 4) + 0x8000;
         draw_quad51(xy, uv_words, color_words, texture, 1);
     }
     if (func_001F9850_2E0258(15) < data->timer) {
@@ -527,45 +527,45 @@ void FUN_L08_002deee0(Moby *moby) {
     } else {
         color = func_001FA8A8_2E0258(0x5000FF00, 0x5000FFFF, func_001FA888_2E0258(data->timer) / (float)func_001F9850_2E0258(15));
     }
-    uv_words[0] = D_L08_00161C70_2E0258;
-    uv_words[1] = D_L08_00161C74_2E0258;
-    uv_words[2] = D_L08_00161C78_2E0258;
-    uv_words[3] = D_L08_00161C7C_2E0258;
+    uv_words[0] = D_L08_00161BE0;
+    uv_words[1] = D_L08_00161BE4;
+    uv_words[2] = D_L08_00161BE8;
+    uv_words[3] = D_L08_00161BEC;
     color_words[0] = color_words[1] = color_words[2] = color_words[3] = color;
     xy[3] = 0xFFFFF000000000L;
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
     angle = func_001FA7D8_2E0258(func_001FA748_2E0258((*(float (*)[4])&moby->rot)[2] * 4.0f, 0.0f));
-    xy[0] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161C0C_2E0258 * 16.0f) << 16) - (int)0x80000000);
-    xy[0] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161C08_2E0258 * 16.0f) + 0x8000;
+    xy[0] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161B7C * 16.0f) << 16) - (int)0x80000000);
+    xy[0] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
     angle = func_001FA7D8_2E0258(func_001FA748_2E0258((*(float (*)[4])&moby->rot)[2] * 4.0f, 1.5707964f));
-    xy[1] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161C0C_2E0258 * 16.0f) << 16) - (int)0x80000000);
-    xy[1] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161C08_2E0258 * 16.0f) + 0x8000;
+    xy[1] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161B7C * 16.0f) << 16) - (int)0x80000000);
+    xy[1] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
     angle = func_001FA7D8_2E0258(func_001FA748_2E0258((*(float (*)[4])&moby->rot)[2] * 4.0f, -1.5707964f));
-    xy[2] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161C0C_2E0258 * 16.0f) << 16) - (int)0x80000000);
-    xy[2] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161C08_2E0258 * 16.0f) + 0x8000;
+    xy[2] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161B7C * 16.0f) << 16) - (int)0x80000000);
+    xy[2] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
     angle = func_001FA7D8_2E0258(func_001FA748_2E0258((*(float (*)[4])&moby->rot)[2] * 4.0f, 3.1415927f));
-    xy[3] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161C0C_2E0258 * 16.0f) << 16) - (int)0x80000000);
-    xy[3] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161C08_2E0258 * 16.0f) + 0x8000;
-    draw_quad51(xy, uv_words, color_words, texture51(D_L08_00161C38_2E0258), 1);
+    xy[3] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161B7C * 16.0f) << 16) - (int)0x80000000);
+    xy[3] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
+    draw_quad51(xy, uv_words, color_words, texture51(D_L08_00161BA8), 1);
     xy[3] = 0xFFFFF000000000L;
     xy[2] = 0xFFFFF000000000L;
     xy[1] = 0xFFFFF000000000L;
     xy[0] = 0xFFFFF000000000L;
     angle = func_001FA7D8_2E0258(func_001FA748_2E0258((*(float (*)[4])&moby->rot)[1] * 8.0f, 0.0f));
-    xy[0] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161C0C_2E0258 * 16.0f) << 16) - (int)0x80000000);
-    xy[0] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161C08_2E0258 * 16.0f) + 0x8000;
+    xy[0] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161B7C * 16.0f) << 16) - (int)0x80000000);
+    xy[0] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
     angle = func_001FA7D8_2E0258(func_001FA748_2E0258((*(float (*)[4])&moby->rot)[1] * 8.0f, 1.5707964f));
-    xy[1] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161C0C_2E0258 * 16.0f) << 16) - (int)0x80000000);
-    xy[1] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161C08_2E0258 * 16.0f) + 0x8000;
+    xy[1] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161B7C * 16.0f) << 16) - (int)0x80000000);
+    xy[1] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
     angle = func_001FA7D8_2E0258(func_001FA748_2E0258((*(float (*)[4])&moby->rot)[1] * 8.0f, -1.5707964f));
-    xy[2] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161C0C_2E0258 * 16.0f) << 16) - (int)0x80000000);
-    xy[2] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161C08_2E0258 * 16.0f) + 0x8000;
+    xy[2] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161B7C * 16.0f) << 16) - (int)0x80000000);
+    xy[2] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
     angle = func_001FA7D8_2E0258(func_001FA748_2E0258((*(float (*)[4])&moby->rot)[1] * 8.0f, 3.1415927f));
-    xy[3] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161C0C_2E0258 * 16.0f) << 16) - (int)0x80000000);
-    xy[3] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161C08_2E0258 * 16.0f) + 0x8000;
-    draw_quad51(xy, uv_words, color_words, texture51(D_L08_00161C3C_2E0258), 1);
+    xy[3] += (unsigned int)((func_001FA898_2E0258(func_001F9FA8_2E0258(angle) * D_L08_00161B7C * 16.0f) << 16) - (int)0x80000000);
+    xy[3] += func_001FA898_2E0258(func_001F9F90_2E0258(angle) * D_L08_00161B78 * 16.0f) + 0x8000;
+    draw_quad51(xy, uv_words, color_words, texture51(D_L08_00161BAC), 1);
 }
 /* Updates the mounted Batalia cannon: entry/exit, aiming, alternating barrels, waves, and attached visuals. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E16A0), where it is exact; names translated to the US level program. */
@@ -1994,9 +1994,9 @@ extern float D_L08_00161CA4 __attribute__((sda));
 extern float D_L08_00161CA8 __attribute__((sda));
 extern float D_L08_00161CAC __attribute__((sda));
 extern float D_L08_00161CB0 __attribute__((sda));
-extern float D_L08_00161CB4_3870 __asm__("D_L08_00161CB4") __attribute__((sda));
-extern float D_L08_00161CB8_3870 __asm__("D_L08_00161CB8") __attribute__((sda));
-extern float D_L08_00161CBC_3870 __asm__("D_L08_00161CBC") __attribute__((sda));
+extern short D_L08_00161CB4 __attribute__((sda));
+extern short D_L08_00161CB8 __attribute__((sda));
+extern short D_L08_00161CBC __attribute__((sda));
 extern float D_L08_00161CD0 __attribute__((sda));
 extern float FUN_001f96b0(float);
 extern float FUN_001f9b80(void *, void *);
@@ -2051,7 +2051,6 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013F350_3870[] __asm__("D_0013F350");
 extern char D_0013F3D0[];
 extern char D_0013F490[];
-extern int D_L08_0015F6B0_2E0258 __asm__("D_L08_0015F5CC");
 extern float func_001FA850_2E16A0(float, float) __asm__("FUN_001fa688");
 extern float func_001F9CE8_2E16A0(void *) __asm__("FUN_001f9b20");
 extern float func_00214D28_2E16A0(float *,float,float) __asm__("FUN_00213ed8");
@@ -2075,18 +2074,18 @@ void FUN_L08_002e3870(Moby *m) {
 
         switch (m->oclass) {
         case 0x279:
-            m->scale = m->pclass->scale * *(float *)&D_L08_00161CB4_3870;
+            m->scale = m->pclass->scale * *(float *)&D_L08_00161CB4;
             break;
         case 0x3DC:
-            m->scale = m->pclass->scale * *(float *)&D_L08_00161CB8_3870;
+            m->scale = m->pclass->scale * *(float *)&D_L08_00161CB8;
             break;
         case 0x3DD:
-            m->scale = m->pclass->scale * *(float *)&D_L08_00161CBC_3870;
+            m->scale = m->pclass->scale * *(float *)&D_L08_00161CBC;
             break;
         }
         linked = 0;
-        if (D_L08_00161CD4 > D_L08_0015F6B0_2E0258) {
-            D_L08_00161CD4 = D_L08_0015F6B0_2E0258;
+        if (D_L08_00161CD4 > D_L08_0015F5CC) {
+            D_L08_00161CD4 = D_L08_0015F5CC;
         }
         m->flags &= ~0x100;
         qcopy(d->v0, &m->pos);
@@ -2199,8 +2198,8 @@ void FUN_L08_002e3870(Moby *m) {
             e->u70.f = D_0015ED6C * 8.0f;
             e->u78.p = *(char **)((char *)&D_0013F3D0 + 0x2000);
             e->u7C.f = 0.5f;
-            if (D_L08_00161CD4 + scale_game_frames_alt(3) < D_L08_0015F6B0_2E0258) {
-                D_L08_00161CD4 = D_L08_0015F6B0_2E0258;
+            if (D_L08_00161CD4 + scale_game_frames_alt(3) < D_L08_0015F5CC) {
+                D_L08_00161CD4 = D_L08_0015F5CC;
                 allocate_voice_for_target_entry_alt(0, 0x20, m);
                 e->f64 = 0.0f;
             } else {
@@ -2271,7 +2270,7 @@ void FUN_L08_002e3870(Moby *m) {
                     m->alpha = (distance_xyz(b, &m->pos) + lim) * 128.0f / (lim + lim);
                 }
                 if (D_L08_00161CC4 != 0) {
-                    m->scale = m->pclass->scale * *(float *)&D_L08_00161CB4_3870 * (distance_xyz(b, &m->pos) + lim) / (lim + lim);
+                    m->scale = m->pclass->scale * *(float *)&D_L08_00161CB4 * (distance_xyz(b, &m->pos) + lim) / (lim + lim);
                 }
             } else {
                 int value;

@@ -237,7 +237,6 @@ typedef struct {
     short h36;
     char pad2[0x14];
 } E_2c5be8;
-extern int D_0013D428_2c5be8[] __asm__("D_0013D428");
 extern E_2c5be8 D_179AC0_2c5be8[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
 extern float D_0015ED60_2c5be8 __asm__("D_0015ED60");
 extern float D_0015ED6C_2c5be8 __asm__("D_0015ED6C");
@@ -261,17 +260,17 @@ int FUN_L00_002c5be8(char *o) {
     fail:
         return 0;
     }
-    before = D_0013D428_2c5be8[p[2]];
+    before = weapon_ammo_counts[p[2]];
     f = f33e40_2c5be8(p[2], p[0]);
-    if (before >= D_0013D428_2c5be8[p[2]]) {
+    if (before >= weapon_ammo_counts[p[2]]) {
         goto fail;
     }
-    d = D_0013D428_2c5be8[p[2]] - before;
+    d = weapon_ammo_counts[p[2]] - before;
     f63db0_2c5be8(d == 1 ? ((E_2c5be8 *)(p[2] * 0x4C + (char *)D_179AC0_2c5be8))->h36
                          : ((E_2c5be8 *)(p[2] * 0x4C + (char *)D_179AC0_2c5be8))->h34,
                   d, -1);
     if (f < (float)p[0]) {
-        D_0013DE08[p[2]] += D_0013D428_2c5be8[p[2]] - before;
+        D_0013DE08[p[2]] += weapon_ammo_counts[p[2]] - before;
         *(unsigned char *)(o + 0x20) = 2;
         *(float *)(o + 0x2C) *= D_0015ED60_2c5be8 * 0.200000048f + 1.0f;
         f99f8_2c5be8(p + 4);

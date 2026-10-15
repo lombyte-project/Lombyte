@@ -1108,7 +1108,7 @@ void FUN_L18_002fbb98(unsigned char *m) {
 #include "rnc/math_consts.h"
 extern int game_frame __asm__("D_L18_0015F5CC");
 extern int D_L18_0015F5C4;
-extern int *D_L18_001B0EB0_c100[] __asm__("D_L18_001B0EB0");
+extern int *D_L18_001B0EB0[] __asm__("D_L18_001B0EB0");
 extern void FUN_L18_002fca98(struct Moby *moby);
 extern float fast_add_rotations_c100(float, float) __asm__("FUN_001fa580");
 extern float fast_sin_c100(float) __asm__("FUN_001f9de0");
@@ -1242,7 +1242,7 @@ void FUN_L18_002fc100(struct Moby *m) {
     }
     m->hit_slot = 0xFF;
     anim_update_c100(m, d->anim);
-    b = (int)&D_L18_001B0EB0_c100[d->path];
+    b = (int)&D_L18_001B0EB0[d->path];
     a = *(int *)b;
     FUN_L00_0025ff38_c100(512.0f, m, &d->target, 0, 0, (int *)(a + 0x10), *(int *)a);
     if (d->target_mode == 2) {

@@ -35,7 +35,7 @@ extern float D_L15_0017ACC0_d __asm__("D_L15_0017ACC0") __attribute__((section("
 extern unsigned char D_0013E533[];
 extern u8 D_0015EDB3;
 extern u8 D_0015EDB1 __attribute__((section(".data")));
-extern float D_0015EE18_001ff938 __asm__("D_0015EE18_gp") __attribute__((sda));
+extern float D_0015EE18_gp __attribute__((sda));
 extern int D_L15_0015F5CC;
 extern u8 D_0013D4DC[];
 
@@ -64,7 +64,7 @@ void FUN_L15_001ff938(void) {
 
     if (hero.vehicle_mode == 2) {
         if (D_0015EDB3 != 0)
-            *(float *)((u8 *)&D_L15_0017ACC0_d + 0x13AC) = D_0015EE18_001ff938 * 1.4f;
+            *(float *)((u8 *)&D_L15_0017ACC0_d + 0x13AC) = D_0015EE18_gp * 1.4f;
         FUN_L00_002059d8();
         FUN_L00_002061f0();
         if (((*(u16 *)((u8 *)hero.moby + 0x34) ^ 1) & 1) != 0) {
@@ -250,7 +250,7 @@ void FUN_L15_00208ca8(void) {
         hero_set_state(HERO_STATE_IDLE, 1);
     }
 }
-extern f32 D_0013F570_209450[] __asm__("D_0013F570");
+extern f32 D_0013F570[] __asm__("D_0013F570");
 f32 FUN_001f9b80_209450(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_209450(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_209450(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
@@ -287,7 +287,7 @@ void FUN_L15_00209450(void) {
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
         FUN_001f9b80_209450(hero.unk210.f, hero.motion.pos.f) > hero.unk234 * 0.5f) {
-        f32 *q = D_0013F570_209450;
+        f32 *q = D_0013F570;
         struct Hero *b = (struct Hero *)((u8 *)q - 0x220);
         approach_value_209450(b->unk228, frame_scale * 0.02f, q);
         approach_value_209450(b->unk22C, frame_scale * 0.02f, q + 1);

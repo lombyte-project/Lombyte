@@ -253,7 +253,7 @@ typedef struct {
     } u_00259fe8;
     u128 b;
 } E_259fe8_00259fe8;
-extern int D_L00_0015F434_00259fe8 __asm__("D_L00_0015F434");
+extern int D_L00_0015F434 __asm__("D_L00_0015F434");
 extern u128 D_L00_00173E80_00259fe8 __asm__("D_L00_00173E80") __attribute__((section(".data")));
 extern float FUN_00213508_00259fe8(void *, int, float) __asm__("FUN_00213508");
 extern int FUN_001f0b58_00259fe8(void) __asm__("FUN_001f0b58");
@@ -264,19 +264,19 @@ void FUN_L00_00259fe8(unsigned char *m, float r) {
     float h, y;
     if (m[0x31] == 0)
         return;
-    if (D_L00_0015F434_00259fe8 >= 32)
+    if (D_L00_0015F434 >= 32)
         return;
-    qcopy(&D_L00_0016E080[D_L00_0015F434_00259fe8].u_00259fe8.a_00259fe8, m + 0x10);
+    qcopy(&D_L00_0016E080[D_L00_0015F434].u_00259fe8.a_00259fe8, m + 0x10);
     h = FUN_00213508_00259fe8(m + 0x10, 0, 0.5f);
     if (FUN_001f0b58_00259fe8() == 0)
         return;
-    D_L00_0016E080[D_L00_0015F434_00259fe8].u_00259fe8.f[2] = h + 0.025f;
-    qcopy(&D_L00_0016E080[D_L00_0015F434_00259fe8].b, &D_L00_00173E80_00259fe8);
+    D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[2] = h + 0.025f;
+    qcopy(&D_L00_0016E080[D_L00_0015F434].b, &D_L00_00173E80_00259fe8);
     y = (8.0f - FUN_001f99c0_00259fe8(*(float *)(m + 0x18) - h)) * 0.125f;
     if (y < 0.25f)
         y = 0.25f;
-    D_L00_0016E080[D_L00_0015F434_00259fe8].u_00259fe8.f[3] = r * y;
-    D_L00_0015F434_00259fe8++;
+    D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[3] = r * y;
+    D_L00_0015F434++;
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025B178), where it is exact; names translated to the US level program. */
 

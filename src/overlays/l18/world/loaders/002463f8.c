@@ -107,7 +107,7 @@ extern char D_L18_001F0EB0[], D_L18_001F0ED0[], D_L18_001F0F00[], D_L18_001F0F18
 extern char D_L18_0015FC80[];
 extern char D_L18_0030A0C0[];
 extern s32 D_L18_001B2480[];
-extern char *D_L18_001C6200_2463f8[] __asm__("D_L18_001C6200");
+extern char *D_L18_001C6200[] __asm__("D_L18_001C6200");
 extern char *D_L18_001BCA30_2463f8[] __asm__("D_L18_001BCA30");
 extern char *D_L18_00160FC0_2463f8 __asm__("D_L18_00160FC0");
 extern char *D_L18_00160494_2463f8 __asm__("D_L18_00160494");
@@ -379,11 +379,11 @@ s32 FUN_L18_002463f8(s32 full, s32 keep) {
         printf_1e93b0(D_L18_001F1028, KB((D_L18_001B2480[1] >> 4) - D_L18_0015F40C));
         printf_1e93b0(D_L18_001F1040, KB((s32)D_L18_0015F420 - (D_L18_001B2480[1] >> 4)));
         printf_1e93b0(D_L18_001F1058, KB((char *)D_L18_00197D00[0] - D_L18_0015F420));
-        printf_1e93b0(D_L18_001F1070, KB(D_L18_001C6200_2463f8[0] - (char *)D_L18_00197D00[0]));
+        printf_1e93b0(D_L18_001F1070, KB(D_L18_001C6200[0] - (char *)D_L18_00197D00[0]));
         if (h[0xA])
-            printf_1e93b0(D_L18_001F1088, KB(D_L18_001BCA30_2463f8[0] - D_L18_001C6200_2463f8[0]));
+            printf_1e93b0(D_L18_001F1088, KB(D_L18_001BCA30_2463f8[0] - D_L18_001C6200[0]));
         else
-            printf_1e93b0(D_L18_001F1088, KB(D_L18_00160FC0_2463f8 - D_L18_001C6200_2463f8[0]));
+            printf_1e93b0(D_L18_001F1088, KB(D_L18_00160FC0_2463f8 - D_L18_001C6200[0]));
         if (h[0xA])
             printf_1e93b0(D_L18_001F10A0, KB(D_L18_00197D00[0]->seqs[0] - D_L18_001BCA30_2463f8[0]));
         printf_1e93b0(D_L18_001F10B8, KB(D_L18_00160FC0_2463f8 - D_L18_00197D00[0]->seqs[0]));

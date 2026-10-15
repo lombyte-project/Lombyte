@@ -343,8 +343,8 @@ void FUN_L00_002056a8(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002059d8.s", FUN_L00_002059d8);
 #else
 typedef u32 Quad_59d8 __attribute__((mode(TI), aligned(16)));
-extern u8 D_0015EDB3_2059d8 __asm__("D_0015EDB3");
-extern f32 D_0015EE18_2059d8 __asm__("D_0015EE18");
+extern u8 D_0015EDB3 __asm__("D_0015EDB3");
+extern f32 D_0015EE18 __asm__("D_0015EE18");
 extern u8 D_0013F350_2059d8[] __asm__("D_0013F350");
 extern s32 D_0015F5CC_2059d8 __asm__("D_L00_0015F5CC");
 extern u8 D_L00_0017C1E0_2059d8[] __asm__("D_L00_0017C1E0");
@@ -368,10 +368,10 @@ void FUN_L00_002059d8(void) {
     s32 i, k, r, a, b, low, high;
     f32 f, c, t;
 
-    if (D_0015EDB3_2059d8 != 0)
-        set_help_color_2059d8(1.8f, 0.05f, &D_0015EE18_2059d8);
+    if (D_0015EDB3 != 0)
+        set_help_color_2059d8(1.8f, 0.05f, &D_0015EE18);
     else
-        set_help_color_2059d8(1.0f, 0.05f, &D_0015EE18_2059d8);
+        set_help_color_2059d8(1.0f, 0.05f, &D_0015EE18);
 
     if ((u8)(D_0013F350_2059d8[0x20A4] - 1) < 2)
         moby = *(u8 **)(D_0013F350_2059d8 + 0x2080);
@@ -618,7 +618,7 @@ extern f32 D_0015EE18_macro __asm__("D_0015EE18") __attribute__((section(".sdata
 extern volatile f32 D_0015ED6C_002062b0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 D_0015ED60_002062b0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern f32 D_0015ED60_gp_002062b0 __asm__("D_0015ED60_gp") __attribute__((sda));
-extern f32 D_0015EE18_gp_002062b0 __asm__("D_0015EE18_gp") __attribute__((sda));
+extern f32 D_0015EE18_gp __attribute__((sda));
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F5CC_002062b0 __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
 extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((section(".data")));
@@ -814,7 +814,7 @@ void FUN_L00_002062b0(void) {
     FUN_L00_002484e0(&hero.motion.pos);
     if (hero.vehicle_mode == 2) {
         char *g = (char *)&hero;
-        if (D_0015EDB3_macro) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x210) = 1.4f * D_0015EE18_gp_002062b0;
+        if (D_0015EDB3_macro) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x210) = 1.4f * D_0015EE18_gp;
         FUN_L00_002059d8();
         FUN_L00_002061f0();
         g = (char *)&hero;
@@ -1273,7 +1273,7 @@ void FUN_L00_00207330(void *a, char *m) {
 }
 extern int D_15F5CC_207430 __asm__("D_L00_0015F5CC");
 extern unsigned char D_0015EDB3_207430 __asm__("D_0015EDB3") __attribute__((section(".data")));
-extern float D_0015EE18_207430m __asm__("D_0015EE18");
+extern float D_0015EE18 __asm__("D_0015EE18");
 extern unsigned char D_17C380_207430[] __asm__("D_L00_0017C380") __attribute__((section(".data")));
 extern unsigned char D_17C3C0_207430[] __asm__("D_L00_0017C3C0") __attribute__((section(".data")));
 extern unsigned char D_17C400_207430[] __asm__("D_L00_0017C400") __attribute__((section(".data")));
@@ -1332,7 +1332,7 @@ void FUN_L00_00207430(char *o) {
             x = D_0015EE18_gp;
         } else {
             fcb10_207430(o, 2, t);
-            x = D_0015EE18_207430m;
+            x = D_0015EE18;
         }
         *(float *)(t + 0x20) = x;
         *(float *)(t + 0x24) = x;
@@ -2720,8 +2720,8 @@ typedef struct {
 
 extern G_a540 D_0013F350_a540 __asm__("D_0013F350");
 extern P_a540 D_L00_0017A680_a540 __asm__("D_L00_0017A680");
-extern f32 D_0015EE14_a540 __asm__("D_0015EE14");
-extern f32 D_0015EE18_a540 __asm__("D_0015EE18");
+extern f32 D_0015EE14 __asm__("D_0015EE14");
+extern f32 D_0015EE18 __asm__("D_0015EE18");
 
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
@@ -2733,7 +2733,7 @@ extern s32 FUN_L00_00257b90_a540(s32, s32) __asm__("FUN_L00_00257b90");
 extern f32 FUN_L00_00257c48_a540(f32, f32) __asm__("FUN_L00_00257c48");
 extern f32 FUN_L00_0025b6a8_a540(f32, f32, f32) __asm__("FUN_L00_0025b6a8");
 
-extern u8 D_0015EDB3_x __asm__("D_0015EDB3");
+extern u8 D_0015EDB3 __asm__("D_0015EDB3");
 #define G D_0013F350_a540
 #define P D_L00_0017A680_a540
 
@@ -2745,14 +2745,14 @@ void FUN_L00_0020a540(void) {
     s32 v;
     s32 a;
 
-    if (D_0015EDB3_x != 0 && G.i1184 != 0) {
-        P.fd0c = D_0015EE18_a540;
+    if (D_0015EDB3 != 0 && G.i1184 != 0) {
+        P.fd0c = D_0015EE18;
     }
-    P.fc5c = D_0015EE14_a540;
+    P.fc5c = D_0015EE14;
     if (*(u8 *)0x15EDB1 != 0) {
-        FUN_00213ed8_a540(&D_0015EE14_a540, 1.57f, 0.05f);
+        FUN_00213ed8_a540(&D_0015EE14, 1.57f, 0.05f);
     } else {
-        FUN_00213ed8_a540(&D_0015EE14_a540, 0.92f, 0.05f);
+        FUN_00213ed8_a540(&D_0015EE14, 0.92f, 0.05f);
     }
     if (G.i260 != 0 && 1.4f < G.f258 && 1.0f < G.f248) {
 
