@@ -571,13 +571,19 @@ void FUN_L14_002b17d8(unsigned char *moby) {
     }
     case 10: {
         anim = (unsigned char)moby[0x52];
-        if (((unsigned char)moby[0x70] & 2) && (unsigned char)anim == (unsigned char)moby[0x53]) {
-            if ((unsigned char)anim == 7) goto resume_move;
-            anim = (unsigned char)moby[0x53];
-        } else {
-            if ((unsigned char)anim == 7) goto finish;
-            anim = (unsigned char)moby[0x53];
+        if (!((unsigned char)moby[0x70] & 2)) goto anim_incomplete;
+        if ((unsigned char)anim != moby[0x53]) goto anim_incomplete;
+        if ((unsigned char)anim != 7) {
+            anim = moby[0x53];
+            goto check_anim;
         }
+        blend_moby_animation(moby, 0, 0, 10);
+        moby[0x20] = 4;
+        break;
+anim_incomplete:
+        if ((unsigned char)anim == 7) goto finish;
+        anim = moby[0x53];
+check_anim:
         if ((int)anim == 7) goto finish;
 resume_move:
         blend_moby_animation(moby, 0, 0, 10);
@@ -593,10 +599,9 @@ resume_move:
         FUN_L00_0025e450(moby, data + 0x40, moby + 0x10, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
         if (D_001413F4[0] == 2) {
             FUN_L00_00257470(moby, 0x200, -1);
-            mark_moby_for_removal((struct Moby *)moby);
-            return;
+        } else {
+            FUN_L00_00257470(moby, 0, -1);
         }
-        FUN_L00_00257470(moby, 0, -1);
         mark_moby_for_removal((struct Moby *)moby);
         return;
     }
