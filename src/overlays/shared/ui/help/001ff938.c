@@ -34,7 +34,7 @@ extern void FUN_L00_00257024(void *);
 extern float D_L15_0017ACC0_d __asm__("D_L15_0017ACC0") __attribute__((section(".data")));
 extern unsigned char D_0013E533[];
 extern u8 D_0015EDB3;
-extern u8 D_0015EDB1 __attribute__((section(".data")));
+extern u8 D_0015EDB1;
 extern float D_0015EE18_gp __attribute__((sda));
 extern int D_L15_0015F5CC;
 extern u8 D_0013D4DC[];
