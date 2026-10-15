@@ -1985,8 +1985,8 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
     swing_fraction = (float)D_L07_00161B80 / convert_integer_to_float(scale_game_frames(60));
     D_L07_00161B80++;
     step.f[0] = start.f[0] + (end.f[0] - start.f[0]) * swing_fraction;
-    step.f[2] = start.f[2] + (end.f[2] - start.f[2]) * swing_fraction;
     step.f[1] = start.f[1] + (end.f[1] - start.f[1]) * swing_fraction;
+    step.f[2] = start.f[2] + (end.f[2] - start.f[2]) * swing_fraction;
     if (scale_game_frames(60) <= D_L07_00161B80) {
         qcopy(D_L07_00161B90, D_L07_00161BA0);
         normalize_vector_xyz(&up, (char *)moby + 0xc0, 2.8f);
@@ -2003,7 +2003,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         D_L07_00161B80 = 0;
     }
     (*(float *)&D_L07_00161B84_gp) = fast_add_rotations((*(float *)&D_L07_00161B84_gp), 0.1f);
-    normalize_vector_xyz(&up, D_0013F5E0, -1.0f);
+    normalize_vector_xyz(&up, D_0013F3D0 + 0x210, -1.0f);
     qcopy(&ring_basis.reference, &up);
     fast_vec_cross(&ring_basis.cross, &step, &ring_basis.reference);
     normalize_vector_xyz(&ring_basis.cross, &ring_basis.cross, 1.0f);
@@ -2068,7 +2068,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
         point = D_L07_0020C700;
         phase = index * 0.7f;
         wave_scale = 0.25f;
-        i++;
+        next_column = i + 1;
         j = 0;
         do {
             radius = index * 0.2f + 0.02f;
@@ -2082,6 +2082,7 @@ float FUN_L07_00317e60(void *moby, void *anchor) {
             point = (char *)point + 16;
         } while (point != (void *)(D_L07_0020C700 + 20));
         normalize_vector_xyz(&step, &extension, 2.8f);
+        i = next_column;
     } while (i < 10);
     one = 1.0f;
     add_draw_callback(FUN_L07_00317910, moby);
