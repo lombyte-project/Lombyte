@@ -677,10 +677,13 @@ void FUN_L00_002c97e0(struct Moby *m)
                 f = random_float_between(D_0015ED6C_2c8440 * 0.1f, D_0015ED6C_2c8440) * scale;
                 g = FUN_L00_00257cb0_2c97e0(); h = FUN_L00_00257cb0_2c97e0();
                 build_spherical_offset_2c97e0(&velocity, f, g, h);
-                g = scale * 150000.0f;
-                a = scale_game_frames(30); b = scale_game_frames(57);
-                a = FUN_L00_00257b90(a, b);
-                FUN_L00_0026ced0_2c97e0(&offset, &velocity, 0x3f7f7f7f, 0x2f2f2f, a, g);
+                {
+                    f32 g;
+                    g = scale * 150000.0f;
+                    a = scale_game_frames(30); b = scale_game_frames(57);
+                    a = FUN_L00_00257b90(a, b);
+                    FUN_L00_0026ced0_2c97e0(&offset, &velocity, 0x3f7f7f7f, 0x2f2f2f, a, g);
+                }
             }
         } else {
             offset.q = 0;
