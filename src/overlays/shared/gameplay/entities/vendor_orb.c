@@ -1067,9 +1067,8 @@ void FUN_L00_002e2c88(int a, int b, void *points, int alpha, int glow_alpha, int
         uv_end = D_L00_00161C78_f[idx] + one;
         glow_color = ((u32)glow_alpha << 24) | 0x7f4040;
         texture3 = q.primitive; texture2 = q.texture_state; texture0 = q.reserved.value;
-        glow.colors[0] = glow_color;
-        glow.reserved.ordered = texture0; glow.texture_state = texture2; glow.primitive = texture3;
         glow.colors[0] = glow.colors[1] = glow.colors[2] = glow.colors[3] = glow_color;
+        glow.primitive = texture3; glow.texture_state = texture2; glow.reserved.ordered = texture0;
         glow.texture_coordinates[0][0] = one; glow.texture_coordinates[0][1] = zero;
         glow.texture_coordinates[1][0] = one; glow.texture_coordinates[1][1] = one;
         *(u32 *)&glow.texture_coordinates[2][0] = 0; *(u32 *)&glow.texture_coordinates[2][1] = 0;
