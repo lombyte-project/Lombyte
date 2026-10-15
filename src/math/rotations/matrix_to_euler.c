@@ -19,7 +19,9 @@ extern void FUN_001fa378(Mtx44 *, float *, Mtx44 *);
    then read X from row 1; out = (x, y, z). The last undo vector is
    filled but never used. The four TImode row copies give retail's
    interleaved lq/sq (a whole-struct copy becomes ld/sd here). */
-void FUN_00214598(Mtx44 *src, float *out) {
+void matrix_to_euler(Mtx44 *src, float *out) __asm__("FUN_00214598");
+
+void matrix_to_euler(Mtx44 *src, float *out) {
     float rot[16];
     Mtx44 m;
     float v[4];
@@ -54,4 +56,4 @@ void FUN_00214598(Mtx44 *src, float *out) {
     out[0] = x;
 }
 
-extern __typeof__(FUN_00214598) func_00214598 __attribute__((alias("FUN_00214598")));
+extern __typeof__(matrix_to_euler) func_00214598 __attribute__((alias("FUN_00214598")));

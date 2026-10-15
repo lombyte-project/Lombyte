@@ -27,7 +27,9 @@ extern void FUN_001f9810(void *, int);
 extern int sceGsSetDefDrawEnv(void *, short, short, short, short, short);
 
 extern long capture_texture_tex0 __asm__("D_0015EED0") MACRO_ADDR;
-void FUN_001fb440(int a, int b, int c) {
+void setup_render_target(int a, int b, int c) __asm__("FUN_001fb440");
+
+void setup_render_target(int a, int b, int c) {
     int x;
     long *q;
     unsigned long *d;
@@ -71,4 +73,4 @@ void FUN_001fb440(int a, int b, int c) {
     render_packet_cursor.words += 0x14;
 }
 
-extern __typeof__(FUN_001fb440) func_001FB440 __attribute__((alias("FUN_001fb440")));
+extern __typeof__(setup_render_target) func_001FB440 __attribute__((alias("FUN_001fb440")));

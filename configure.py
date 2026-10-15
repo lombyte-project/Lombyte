@@ -146,12 +146,12 @@ ROUTE_EXCEPTIONS = {
     # perturbs the local hard-register order into retail's, and declaring
     # func_001F6530 void removes the unused-return pseudo so its argument copies
     # emit in retail's order a2<-s0, a3<-v0, a1<-s2. NOTE:
-    # src/assembly/textbin/fun_001fd748.c still declares that callee as s32 in
+    # src/assembly/textbin/ui/map/draw_level_selection_map.c still declares that callee as s32 in
     # another translation unit.
     "ui/menus/draw_menu_choice_list": "cc_sn_padless",
     # fun_00232d00: bind the stash RPC server, read its IOP buffer and reset the
     # stash slots
-    "storage/cd/fun_00232d00": "cc_sn_padless",
+    "storage/stash/init_stash": "cc_sn_padless",
     # SDK code still built by the patched 991111 compiler (plus the SN assembler).
     # Retail uses classic mult/mflo; the frozen trees emit the R5900 rd-form.
     # 100/100/100 + patha linked-byte equal (0x12D3A0), 2026-09-12.
@@ -405,7 +405,7 @@ RODATA_OVERLAYS = {
     "gameplay/missions/check_mission_condition": (0x1E8390, 0xE9310, 40),  # unlock-condition switch table
     "draw_menu_preview_objects": (0x1E87A0, 0xE9720, 48),  # item-handle release switch table
     "update_resident_gameplay_state": (0x1E8930, 0xE98B0, 36),  # gameplay-state switch table
-    "fun_00222768": (0x1E8860, 0xE97E0, 80),  # switch table
+    "draw_menu_text_box": (0x1E8860, 0xE97E0, 80),  # switch table
     "camera_activation_check_priority": (0x1E7730, 0xE86B0, 32),  # camera-mode switch table
     "ui/help/draw_help": (0x1E7A70, 0xE89F0, 28),  # switch table (migrated)
     "ui/help/dismiss_help": (0x1E7A20, 0xE89A0, 32),  # switch table (migrated)

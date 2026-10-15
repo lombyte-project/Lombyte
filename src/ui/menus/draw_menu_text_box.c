@@ -14,7 +14,9 @@ extern void vu1_add_g_sregister(int, long) __asm__("func_00233980");
    bottom; states 4, 11, 15 and 19 draw the single text id at +0x34. The
    line count's low nibble goes through `& 0xF` (retail's lbu + dsrl) and
    the start subtracts its own variable, which keeps retail's order. */
-int FUN_00222768(char *arg0) {
+int draw_menu_text_box(char *arg0) __asm__("FUN_00222768");
+
+int draw_menu_text_box(char *arg0) {
     short box[12];
     int ypos;
     int n;
@@ -77,4 +79,4 @@ int FUN_00222768(char *arg0) {
     return 2;
 }
 
-extern __typeof__(FUN_00222768) func_00222768 __attribute__((alias("FUN_00222768")));
+extern __typeof__(draw_menu_text_box) func_00222768 __attribute__((alias("FUN_00222768")));

@@ -13,7 +13,9 @@ extern struct StashEntry D_001DD1D8[64];
 extern s32 sceSifBindRpc(struct sceSifClientData *, u32, s32);
 extern s32 SceSifCheckStatRpc(struct sceSifClientData *);
 extern s32 sceSifCallRpc(void *, u32, u32, void *, s32, void *, s32, void (*)(void *), void *);
-void FUN_00232d00(void) {
+void init_stash(void) __asm__("FUN_00232d00");
+
+void init_stash(void) {
     s32 buf[4];
     s32 i;
 
@@ -41,4 +43,4 @@ void FUN_00232d00(void) {
     }
 }
 
-extern __typeof__(FUN_00232d00) func_00232D00 __attribute__((alias("FUN_00232d00")));
+extern __typeof__(init_stash) func_00232D00 __attribute__((alias("FUN_00232d00")));

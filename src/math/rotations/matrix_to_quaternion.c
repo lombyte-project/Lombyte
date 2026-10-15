@@ -6,7 +6,9 @@ extern QuatNext D_0015FFD8;
 /* Rotation matrix (rows of four floats) to quaternion (x, y, z, w), by
    Shoemake's method: from the trace when it is positive, else from the
    largest diagonal element, working on a packed 3x3 copy. */
-void FUN_00214260(void *arg0, void *arg1) {
+void matrix_to_quaternion(void *arg0, void *arg1) __asm__("FUN_00214260");
+
+void matrix_to_quaternion(void *arg0, void *arg1) {
     float *q = arg0;
     float(*m)[4] = arg1;
     QuatNext n = D_0015FFD8;
@@ -53,4 +55,4 @@ void FUN_00214260(void *arg0, void *arg1) {
     }
 }
 
-extern __typeof__(FUN_00214260) func_00214260 __attribute__((alias("FUN_00214260")));
+extern __typeof__(matrix_to_quaternion) func_00214260 __attribute__((alias("FUN_00214260")));

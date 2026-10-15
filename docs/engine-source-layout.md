@@ -117,7 +117,7 @@ typedef struct StashGetInfo {
 ```
 
 These definitions resolve the placeholder types previously used in:
-- `src/storage/cd/fun_00232d00.c` (initialisation of `D_001DD1A0` / `StashInfo` and the 64-entry `D_001DD1D8` / `StashBlock` table, calling `IOP_STASH_INFO`).
+- `src/storage/stash/init_stash.c` (initialisation of `D_001DD1A0` / `StashInfo` and the 64-entry `D_001DD1D8` / `StashBlock` table, calling `IOP_STASH_INFO`).
 - `src/world/data/stash_send_data.c` (`stash_send_data`, implementing `IOP_STASH_SEND`).
 - `src/storage/stash/stash_receive_data.c` (`stash_receive_data`, implementing `IOP_STASH_FETCH`).
 

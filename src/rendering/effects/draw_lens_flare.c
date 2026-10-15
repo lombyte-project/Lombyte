@@ -37,7 +37,9 @@ extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("FUN_001f5450");
 
-void FUN_001edc50(void) {
+void draw_lens_flare(void) __asm__("FUN_001edc50");
+
+void draw_lens_flare(void) {
     f32 scr[4];
     f32 ctr[4];
     f32 d[4];
@@ -108,4 +110,4 @@ void FUN_001edc50(void) {
     effect_ribbon.intensity = 0.0f;
 }
 
-extern __typeof__(FUN_001edc50) func_001EDC50 __attribute__((alias("FUN_001edc50")));
+extern __typeof__(draw_lens_flare) func_001EDC50 __attribute__((alias("FUN_001edc50")));

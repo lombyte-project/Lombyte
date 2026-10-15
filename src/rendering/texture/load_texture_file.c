@@ -20,11 +20,11 @@ typedef struct {
    space at D_0015EE74 (cbp, then tbp 0x400 later, then the allocator
    moves on by 1 << (tw + th)), and the texture is registered and its GS
    TEX0 value returned. */
-long FUN_00204cf0(char *p) __asm__("FUN_00204cf0");
+long load_texture_file(char *p) __asm__("FUN_00204cf0");
 
 extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
 extern s32 pending_texture_upload_count_macro __asm__("D_0015F458") MACRO_ADDR;
-long FUN_00204cf0(char *p) {
+long load_texture_file(char *p) {
     TexDesc t;
     int w;
     int cbp;
@@ -66,4 +66,4 @@ long FUN_00204cf0(char *p) {
     return reg;
 }
 
-extern __typeof__(FUN_00204cf0) func_00204CF0 __attribute__((alias("FUN_00204cf0")));
+extern __typeof__(load_texture_file) func_00204CF0 __attribute__((alias("FUN_00204cf0")));

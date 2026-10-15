@@ -5073,7 +5073,7 @@
       },
       {
         "unit": "gameplay/state/update_gameplay_frame",
-        "source_path": "src/textbin/fun_001eb0a8.c",
+        "source_path": "src/gameplay/state/update_gameplay_frame.c",
         "address": "0x001eb0a8",
         "current_name": "FUN_001eb0a8",
         "proposed_name": "update_gameplay_frame",
@@ -5276,7 +5276,7 @@
       },
       {
         "unit": "gameplay/camera/switch_active_camera_record",
-        "source_path": "src/textbin/fun_001ebf10.c",
+        "source_path": "src/gameplay/camera/switch_active_camera_record.c",
         "address": "0x001ebf10",
         "current_name": "FUN_001ebf10",
         "proposed_name": "switch_active_camera_record",
@@ -5668,8 +5668,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/effects/fun_001edc50",
-        "source_path": "src/rendering/effects/fun_001edc50.c",
+        "unit": "rendering/effects/draw_lens_flare",
+        "source_path": "src/rendering/effects/draw_lens_flare.c",
         "address": "0x001edc50",
         "current_name": "FUN_001edc50",
         "proposed_name": "lens_flare_draw",
@@ -6002,7 +6002,7 @@
       },
       {
         "unit": "textbin/rendering/view/configure_graphics_projection",
-        "source_path": "src/assembly/textbin/fun_001f33b8.c",
+        "source_path": "src/assembly/textbin/rendering/view/configure_graphics_projection.c",
         "address": "0x001f33b8",
         "current_name": "FUN_001f33b8",
         "proposed_name": "configure_graphics_projection",
@@ -7177,7 +7177,7 @@
       },
       {
         "unit": "textbin/runtime/time/scale_game_frames",
-        "source_path": "src/assembly/textbin/fun_001f96f8.c",
+        "source_path": "src/assembly/textbin/runtime/time/scale_game_frames.c",
         "address": "0x001f96f8",
         "current_name": "FUN_001f96f8",
         "proposed_name": "scale_game_frames",
@@ -7194,7 +7194,7 @@
       },
       {
         "unit": "assembly/textbin/math/max_float",
-        "source_path": "src/assembly/textbin/fun_001f99c8.c",
+        "source_path": "src/assembly/textbin/math/max_float.c",
         "address": "0x001f99c8",
         "current_name": "FUN_001f99c8",
         "proposed_name": null,
@@ -7206,7 +7206,7 @@
       },
       {
         "unit": "assembly/textbin/math/min_float",
-        "source_path": "src/assembly/textbin/fun_001f99d0.c",
+        "source_path": "src/assembly/textbin/math/min_float.c",
         "address": "0x001f99d0",
         "current_name": "FUN_001f99d0",
         "proposed_name": null,
@@ -7218,7 +7218,7 @@
       },
       {
         "unit": "assembly/textbin/math/clamp_float",
-        "source_path": "src/assembly/textbin/fun_001f99e8.c",
+        "source_path": "src/assembly/textbin/math/clamp_float.c",
         "address": "0x001f99e8",
         "current_name": "FUN_001f99e8",
         "proposed_name": null,
@@ -7247,7 +7247,7 @@
       },
       {
         "unit": "assembly/textbin/math/matrices/copy_matrix3x4",
-        "source_path": "src/assembly/textbin/fun_001fa2b8.c",
+        "source_path": "src/assembly/textbin/math/matrices/copy_matrix3x4.c",
         "address": "0x001fa2b8",
         "current_name": "FUN_001fa2b8",
         "proposed_name": null,
@@ -7497,8 +7497,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/fun_001fb440",
-        "source_path": "src/rendering/fun_001fb440.c",
+        "unit": "rendering/setup_render_target",
+        "source_path": "src/rendering/setup_render_target.c",
         "address": "0x001fb440",
         "current_name": "FUN_001fb440",
         "proposed_name": null,
@@ -7579,7 +7579,7 @@
       },
       {
         "unit": "gameplay/vendor/draw_centered_capture_background",
-        "source_path": "src/rendering/fun_001fb740.c",
+        "source_path": "src/gameplay/vendor/draw_centered_capture_background.c",
         "address": "0x001fb740",
         "current_name": "FUN_001fb740",
         "proposed_name": null,
@@ -7698,7 +7698,7 @@
       },
       {
         "unit": "textbin/ui/map/draw_level_selection_map",
-        "source_path": "src/assembly/textbin/fun_001fd748.c",
+        "source_path": "src/assembly/textbin/ui/map/draw_level_selection_map.c",
         "address": "0x001fd748",
         "current_name": "FUN_001fd748",
         "proposed_name": "draw_level_selection_map",
@@ -8345,7 +8345,7 @@
       },
       {
         "unit": "assembly/textbin/rendering/append_power_of_two_textured_screen_sprite",
-        "source_path": "src/assembly/textbin/fun_00200468.c",
+        "source_path": "src/assembly/textbin/rendering/append_power_of_two_textured_screen_sprite.c",
         "address": "0x00200468",
         "current_name": "FUN_00200468",
         "proposed_name": null,
@@ -8797,7 +8797,7 @@
       },
       {
         "unit": "textbin/rendering/texture/upload_mip_texture",
-        "source_path": "src/assembly/textbin/fun_00202270.c",
+        "source_path": "src/assembly/textbin/rendering/texture/upload_mip_texture.c",
         "address": "0x00202270",
         "current_name": "FUN_00202270",
         "proposed_name": "upload_mip_texture",
@@ -9036,7 +9036,7 @@
       },
       {
         "unit": "textbin/rendering/register_object_render_class",
-        "source_path": "src/assembly/textbin/fun_00203730.c",
+        "source_path": "src/assembly/textbin/rendering/register_object_render_class.c",
         "address": "0x00203730",
         "current_name": "FUN_00203730",
         "proposed_name": "register_object_render_class",
@@ -9053,7 +9053,7 @@
       },
       {
         "unit": "textbin/rendering/register_shrub_render_class",
-        "source_path": "src/assembly/textbin/fun_00203b08.c",
+        "source_path": "src/assembly/textbin/rendering/register_shrub_render_class.c",
         "address": "0x00203b08",
         "current_name": "FUN_00203b08",
         "proposed_name": "register_shrub_render_class",
@@ -9070,7 +9070,7 @@
       },
       {
         "unit": "textbin/rendering/initialize_tfrag_render_data",
-        "source_path": "src/assembly/textbin/fun_002040e0.c",
+        "source_path": "src/assembly/textbin/rendering/initialize_tfrag_render_data.c",
         "address": "0x002040e0",
         "current_name": "FUN_002040e0",
         "proposed_name": "initialize_tfrag_render_data",
@@ -9109,7 +9109,7 @@
       },
       {
         "unit": "gameplay/state/service_level_archive_load",
-        "source_path": "src/gameplay/state/fun_00204428.c",
+        "source_path": "src/gameplay/state/service_level_archive_load.c",
         "address": "0x00204428",
         "current_name": "FUN_00204428",
         "proposed_name": "service_level_archive_load",
@@ -9222,8 +9222,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/fun_00204cf0",
-        "source_path": "src/rendering/fun_00204cf0.c",
+        "unit": "rendering/texture/load_texture_file",
+        "source_path": "src/rendering/texture/load_texture_file.c",
         "address": "0x00204cf0",
         "current_name": "FUN_00204cf0",
         "proposed_name": null,
@@ -9234,8 +9234,8 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "rendering/fun_00204e30",
-        "source_path": "src/rendering/fun_00204e30.c",
+        "unit": "rendering/texture/register_8bit_texture",
+        "source_path": "src/rendering/texture/register_8bit_texture.c",
         "address": "0x00204e30",
         "current_name": "FUN_00204e30",
         "proposed_name": null,
@@ -9490,7 +9490,7 @@
       },
       {
         "unit": "ui/map/map_filter_l01_0",
-        "source_path": "src/ui/menus/hit_test_fixed_screen_rectangle.c",
+        "source_path": "src/ui/map/map_filter_l01_0.c",
         "address": "0x00206978",
         "current_name": "FUN_00206978",
         "proposed_name": "hit_test_fixed_screen_rectangle",
@@ -9507,7 +9507,7 @@
       },
       {
         "unit": "ui/map/map_filter_l07_0",
-        "source_path": "src/textbin/passes_projected_region_callback_0.c",
+        "source_path": "src/ui/map/map_filter_l07_0.c",
         "address": "0x00206bd8",
         "current_name": "FUN_00206bd8",
         "proposed_name": "passes_projected_region_callback_0",
@@ -9524,7 +9524,7 @@
       },
       {
         "unit": "ui/map/map_filter_l07_1",
-        "source_path": "src/ui/menus/fun_00206e18.c",
+        "source_path": "src/ui/map/map_filter_l07_1.c",
         "address": "0x00206e18",
         "current_name": "FUN_00206e18",
         "proposed_name": null,
@@ -9541,7 +9541,7 @@
       },
       {
         "unit": "ui/map/map_filter_l07_2",
-        "source_path": "src/ui/menus/fun_00206f50.c",
+        "source_path": "src/ui/map/map_filter_l07_2.c",
         "address": "0x00206f50",
         "current_name": "FUN_00206f50",
         "proposed_name": null,
@@ -9558,7 +9558,7 @@
       },
       {
         "unit": "ui/map/map_filter_l07_3",
-        "source_path": "src/ui/menus/fun_00207100.c",
+        "source_path": "src/ui/map/map_filter_l07_3.c",
         "address": "0x00207100",
         "current_name": "FUN_00207100",
         "proposed_name": null,
@@ -9575,7 +9575,7 @@
       },
       {
         "unit": "ui/map/map_filter_l07_4",
-        "source_path": "src/ui/menus/fun_002071c0.c",
+        "source_path": "src/ui/map/map_filter_l07_4.c",
         "address": "0x002071c0",
         "current_name": "FUN_002071c0",
         "proposed_name": null,
@@ -9597,7 +9597,7 @@
       },
       {
         "unit": "ui/map/map_filter_l07_6",
-        "source_path": "src/ui/menus/fun_00207300.c",
+        "source_path": "src/ui/map/map_filter_l07_6.c",
         "address": "0x00207300",
         "current_name": "FUN_00207300",
         "proposed_name": null,
@@ -9614,7 +9614,7 @@
       },
       {
         "unit": "ui/map/map_filter_l07_7",
-        "source_path": "src/ui/menus/fun_002073b8.c",
+        "source_path": "src/ui/map/map_filter_l07_7.c",
         "address": "0x002073b8",
         "current_name": "FUN_002073b8",
         "proposed_name": null,
@@ -9636,7 +9636,7 @@
       },
       {
         "unit": "ui/map/map_filter_l15_0",
-        "source_path": "src/ui/menus/fun_00207a18.c",
+        "source_path": "src/ui/map/map_filter_l15_0.c",
         "address": "0x00207a18",
         "current_name": "FUN_00207a18",
         "proposed_name": null,
@@ -9648,7 +9648,7 @@
       },
       {
         "unit": "ui/map/save_map_coverage",
-        "source_path": "src/ui/menus/fun_00207b08.c",
+        "source_path": "src/ui/map/save_map_coverage.c",
         "address": "0x00207b08",
         "current_name": "FUN_00207b08",
         "proposed_name": null,
@@ -9670,7 +9670,7 @@
       },
       {
         "unit": "ui/map/load_map_chunk",
-        "source_path": "src/ui/menus/fun_00207bb0.c",
+        "source_path": "src/ui/map/load_map_chunk.c",
         "address": "0x00207bb0",
         "current_name": "FUN_00207bb0",
         "proposed_name": null,
@@ -9687,7 +9687,7 @@
       },
       {
         "unit": "textbin/ui/map/decode_compressed_occlusion_map",
-        "source_path": "src/assembly/textbin/fun_00207c28.c",
+        "source_path": "src/assembly/textbin/ui/map/decode_compressed_occlusion_map.c",
         "address": "0x00207c28",
         "current_name": "FUN_00207c28",
         "proposed_name": "decode_compressed_occlusion_map",
@@ -9704,7 +9704,7 @@
       },
       {
         "unit": "ui/map/expand_map_coverage",
-        "source_path": "src/ui/menus/fun_00207e58.c",
+        "source_path": "src/ui/map/expand_map_coverage.c",
         "address": "0x00207e58",
         "current_name": "FUN_00207e58",
         "proposed_name": null,
@@ -9721,7 +9721,7 @@
       },
       {
         "unit": "ui/map/downsample_map_coverage",
-        "source_path": "src/ui/menus/fun_00208030.c",
+        "source_path": "src/ui/map/downsample_map_coverage.c",
         "address": "0x00208030",
         "current_name": "FUN_00208030",
         "proposed_name": null,
@@ -9780,7 +9780,7 @@
       },
       {
         "unit": "textbin/ui/map/draw_map_markers",
-        "source_path": "src/assembly/textbin/fun_00208508.c",
+        "source_path": "src/assembly/textbin/ui/map/draw_map_markers.c",
         "address": "0x00208508",
         "current_name": "FUN_00208508",
         "proposed_name": "draw_map_markers",
@@ -9797,7 +9797,7 @@
       },
       {
         "unit": "ui/map/copy_level_object_positions",
-        "source_path": "src/ui/menus/fun_00208770.c",
+        "source_path": "src/ui/map/copy_level_object_positions.c",
         "address": "0x00208770",
         "current_name": "FUN_00208770",
         "proposed_name": null,
@@ -10516,7 +10516,7 @@
       },
       {
         "unit": "gameplay/entities/build_moby_bone_transform",
-        "source_path": "src/gameplay/entities/fun_0020cca8.c",
+        "source_path": "src/gameplay/entities/build_moby_bone_transform.c",
         "address": "0x0020cca8",
         "current_name": "FUN_0020cca8",
         "proposed_name": "moby_attach_to_joint",
@@ -11146,8 +11146,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "math/geometry/fun_00214260",
-        "source_path": "src/math/geometry/fun_00214260.c",
+        "unit": "math/rotations/matrix_to_quaternion",
+        "source_path": "src/math/rotations/matrix_to_quaternion.c",
         "address": "0x00214260",
         "current_name": "FUN_00214260",
         "proposed_name": null,
@@ -11159,7 +11159,7 @@
       },
       {
         "unit": "math/rotations/extract_matrix_rotation_quaternion",
-        "source_path": "src/gameplay/entities/fun_002144d8.c",
+        "source_path": "src/math/rotations/extract_matrix_rotation_quaternion.c",
         "address": "0x002144d8",
         "current_name": "FUN_002144d8",
         "proposed_name": null,
@@ -11192,8 +11192,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "math/rotations/fun_00214598",
-        "source_path": "src/math/rotations/fun_00214598.c",
+        "unit": "math/rotations/matrix_to_euler",
+        "source_path": "src/math/rotations/matrix_to_euler.c",
         "address": "0x00214598",
         "current_name": "FUN_00214598",
         "proposed_name": null,
@@ -12098,7 +12098,7 @@
       },
       {
         "unit": "rendering/effects/spawn_spark",
-        "source_path": "src/rendering/fun_00218888.c",
+        "source_path": "src/rendering/effects/spawn_spark.c",
         "address": "0x00218888",
         "current_name": "FUN_00218888",
         "proposed_name": "part_type02_spawn",
@@ -12170,7 +12170,7 @@
       },
       {
         "unit": "ui/menus/close_menu_system",
-        "source_path": "src/ui/menus/fun_002191b8.c",
+        "source_path": "src/ui/menus/close_menu_system.c",
         "address": "0x002191b8",
         "current_name": "FUN_002191b8",
         "proposed_name": null,
@@ -12187,7 +12187,7 @@
       },
       {
         "unit": "ui/menus/update_menu_system",
-        "source_path": "src/ui/menus/fun_002192a8.c",
+        "source_path": "src/ui/menus/update_menu_system.c",
         "address": "0x002192a8",
         "current_name": "FUN_002192a8",
         "proposed_name": null,
@@ -12216,7 +12216,7 @@
       },
       {
         "unit": "ui/menus/update_menu_icon_list",
-        "source_path": "src/ui/menus/fun_00219e10.c",
+        "source_path": "src/ui/menus/update_menu_icon_list.c",
         "address": "0x00219e10",
         "current_name": "FUN_00219e10",
         "proposed_name": null,
@@ -12228,7 +12228,7 @@
       },
       {
         "unit": "ui/menus/draw_menu_icon_list",
-        "source_path": "src/ui/menus/fun_00219fa0.c",
+        "source_path": "src/ui/menus/draw_menu_icon_list.c",
         "address": "0x00219fa0",
         "current_name": "FUN_00219fa0",
         "proposed_name": null,
@@ -12263,7 +12263,7 @@
       },
       {
         "unit": "textbin/ui/menus/render_configured_text_label",
-        "source_path": "src/assembly/textbin/fun_0021a328.c",
+        "source_path": "src/assembly/textbin/ui/menus/render_configured_text_label.c",
         "address": "0x0021a328",
         "current_name": "FUN_0021a328",
         "proposed_name": "render_configured_text_label",
@@ -12319,7 +12319,7 @@
       },
       {
         "unit": "ui/menus/fade_menu_color",
-        "source_path": "src/ui/menus/fun_0021b6d8.c",
+        "source_path": "src/ui/menus/fade_menu_color.c",
         "address": "0x0021b6d8",
         "current_name": "FUN_0021b6d8",
         "proposed_name": null,
@@ -12336,7 +12336,7 @@
       },
       {
         "unit": "textbin/ui/menus/update_menu_grid_selection",
-        "source_path": "src/assembly/textbin/fun_0021b858.c",
+        "source_path": "src/assembly/textbin/ui/menus/update_menu_grid_selection.c",
         "address": "0x0021b858",
         "current_name": "FUN_0021b858",
         "proposed_name": "update_menu_grid_selection",
@@ -12353,7 +12353,7 @@
       },
       {
         "unit": "ui/map/leave_map_screen",
-        "source_path": "src/ui/menus/fun_0021bda0.c",
+        "source_path": "src/ui/map/leave_map_screen.c",
         "address": "0x0021bda0",
         "current_name": "FUN_0021bda0",
         "proposed_name": null,
@@ -12408,7 +12408,7 @@
       },
       {
         "unit": "ui/menus/missions/enter_menu_mission_list",
-        "source_path": "src/ui/menus/fun_0021c420.c",
+        "source_path": "src/ui/menus/missions/enter_menu_mission_list.c",
         "address": "0x0021c420",
         "current_name": "FUN_0021c420",
         "proposed_name": null,
@@ -12425,7 +12425,7 @@
       },
       {
         "unit": "ui/menus/missions/update_menu_mission_list",
-        "source_path": "src/ui/menus/fun_0021c4c0.c",
+        "source_path": "src/ui/menus/missions/update_menu_mission_list.c",
         "address": "0x0021c4c0",
         "current_name": "FUN_0021c4c0",
         "proposed_name": null,
@@ -12442,7 +12442,7 @@
       },
       {
         "unit": "ui/menus/update_menu_item_slots",
-        "source_path": "src/ui/menus/fun_0021c7a0.c",
+        "source_path": "src/ui/menus/update_menu_item_slots.c",
         "address": "0x0021c7a0",
         "current_name": "FUN_0021c7a0",
         "proposed_name": null,
@@ -12459,7 +12459,7 @@
       },
       {
         "unit": "ui/menus/reset_menu_graphics_buffers",
-        "source_path": "src/ui/menus/fun_0021cae0.c",
+        "source_path": "src/ui/menus/reset_menu_graphics_buffers.c",
         "address": "0x0021cae0",
         "current_name": "FUN_0021cae0",
         "proposed_name": null,
@@ -12512,7 +12512,7 @@
       },
       {
         "unit": "ui/menus/enter_menu_help_text",
-        "source_path": "src/ui/menus/fun_0021d1f8.c",
+        "source_path": "src/ui/menus/enter_menu_help_text.c",
         "address": "0x0021d1f8",
         "current_name": "FUN_0021d1f8",
         "proposed_name": null,
@@ -12673,7 +12673,7 @@
       },
       {
         "unit": "ui/menus/item_preview/draw_item_preview_screen",
-        "source_path": "src/ui/menus/fun_0021e110.c",
+        "source_path": "src/ui/menus/item_preview/draw_item_preview_screen.c",
         "address": "0x0021e110",
         "current_name": "FUN_0021e110",
         "proposed_name": null,
@@ -12961,7 +12961,7 @@
       },
       {
         "unit": "ui/menus/draw_selected_item_ammo",
-        "source_path": "src/ui/menus/fun_0021f158.c",
+        "source_path": "src/ui/menus/draw_selected_item_ammo.c",
         "address": "0x0021f158",
         "current_name": "FUN_0021f158",
         "proposed_name": null,
@@ -13110,7 +13110,7 @@
       },
       {
         "unit": "ui/menus/update_menu_stream_image",
-        "source_path": "src/ui/menus/fun_0021f990.c",
+        "source_path": "src/ui/menus/update_menu_stream_image.c",
         "address": "0x0021f990",
         "current_name": "FUN_0021f990",
         "proposed_name": null,
@@ -13160,7 +13160,7 @@
       },
       {
         "unit": "ui/menus/enter_menu_stream_image",
-        "source_path": "src/ui/menus/fun_0021fce0.c",
+        "source_path": "src/ui/menus/enter_menu_stream_image.c",
         "address": "0x0021fce0",
         "current_name": "FUN_0021fce0",
         "proposed_name": null,
@@ -13192,7 +13192,7 @@
       },
       {
         "unit": "ui/menus/leave_menu_stream_image",
-        "source_path": "src/ui/menus/fun_0021fd78.c",
+        "source_path": "src/ui/menus/leave_menu_stream_image.c",
         "address": "0x0021fd78",
         "current_name": "FUN_0021fd78",
         "proposed_name": null,
@@ -13323,7 +13323,7 @@
       },
       {
         "unit": "ui/map/draw_map_screen_layers",
-        "source_path": "src/ui/menus/fun_00220850.c",
+        "source_path": "src/ui/map/draw_map_screen_layers.c",
         "address": "0x00220850",
         "current_name": "FUN_00220850",
         "proposed_name": null,
@@ -13391,7 +13391,7 @@
       },
       {
         "unit": "ui/menus/update_menu_option_list",
-        "source_path": "src/ui/menus/fun_00220e28.c",
+        "source_path": "src/ui/menus/update_menu_option_list.c",
         "address": "0x00220e28",
         "current_name": "FUN_00220e28",
         "proposed_name": null,
@@ -13441,7 +13441,7 @@
       },
       {
         "unit": "ui/menus/update_menu_choice_list",
-        "source_path": "src/ui/menus/fun_002212b8.c",
+        "source_path": "src/ui/menus/update_menu_choice_list.c",
         "address": "0x002212b8",
         "current_name": "FUN_002212b8",
         "proposed_name": null,
@@ -13463,7 +13463,7 @@
       },
       {
         "unit": "ui/menus/draw_menu_choice_list",
-        "source_path": "src/ui/menus/fun_00221460.c",
+        "source_path": "src/ui/menus/draw_menu_choice_list.c",
         "address": "0x00221460",
         "current_name": "FUN_00221460",
         "proposed_name": null,
@@ -13497,7 +13497,7 @@
       },
       {
         "unit": "ui/map/draw_level_selection_map_screen",
-        "source_path": "src/ui/menus/fun_00221930.c",
+        "source_path": "src/ui/map/draw_level_selection_map_screen.c",
         "address": "0x00221930",
         "current_name": "FUN_00221930",
         "proposed_name": null,
@@ -13536,7 +13536,7 @@
       },
       {
         "unit": "ui/menus/enter_menu_prompt",
-        "source_path": "src/ui/menus/fun_00221a48.c",
+        "source_path": "src/ui/menus/enter_menu_prompt.c",
         "address": "0x00221a48",
         "current_name": "FUN_00221a48",
         "proposed_name": null,
@@ -13558,7 +13558,7 @@
       },
       {
         "unit": "ui/menus/leave_menu_prompt",
-        "source_path": "src/ui/menus/fun_00221a88.c",
+        "source_path": "src/ui/menus/leave_menu_prompt.c",
         "address": "0x00221a88",
         "current_name": "FUN_00221a88",
         "proposed_name": null,
@@ -13721,8 +13721,8 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "ui/menus/fun_00222768",
-        "source_path": "src/ui/menus/fun_00222768.c",
+        "unit": "ui/menus/draw_menu_text_box",
+        "source_path": "src/ui/menus/draw_menu_text_box.c",
         "address": "0x00222768",
         "current_name": "FUN_00222768",
         "proposed_name": null,
@@ -13796,7 +13796,7 @@
       },
       {
         "unit": "ui/menus/save_data/enter_save_slot_screen",
-        "source_path": "src/ui/menus/fun_00222f18.c",
+        "source_path": "src/ui/menus/save_data/enter_save_slot_screen.c",
         "address": "0x00222f18",
         "current_name": "FUN_00222f18",
         "proposed_name": null,
@@ -13813,7 +13813,7 @@
       },
       {
         "unit": "ui/menus/save_data/leave_save_slot_screen",
-        "source_path": "src/ui/menus/fun_00222f58.c",
+        "source_path": "src/ui/menus/save_data/leave_save_slot_screen.c",
         "address": "0x00222f58",
         "current_name": "FUN_00222f58",
         "proposed_name": null,
@@ -14167,7 +14167,7 @@
       },
       {
         "unit": "ui/menus/leave_streamed_moby_screen",
-        "source_path": "src/ui/menus/fun_00225660.c",
+        "source_path": "src/ui/menus/leave_streamed_moby_screen.c",
         "address": "0x00225660",
         "current_name": "FUN_00225660",
         "proposed_name": null,
@@ -14189,7 +14189,7 @@
       },
       {
         "unit": "textbin/ui/menus/update_streamed_moby_animation",
-        "source_path": "src/assembly/textbin/fun_002256e8.c",
+        "source_path": "src/assembly/textbin/ui/menus/update_streamed_moby_animation.c",
         "address": "0x002256e8",
         "current_name": "FUN_002256e8",
         "proposed_name": "update_streamed_moby_animation",
@@ -14233,7 +14233,7 @@
       },
       {
         "unit": "textbin/rendering/buffers/initialize_graphics_buffer_descriptors",
-        "source_path": "src/assembly/textbin/fun_00225ac0.c",
+        "source_path": "src/assembly/textbin/rendering/buffers/initialize_graphics_buffer_descriptors.c",
         "address": "0x00225ac0",
         "current_name": "FUN_00225ac0",
         "proposed_name": "initialize_graphics_buffer_descriptors",
@@ -14326,7 +14326,7 @@
       },
       {
         "unit": "ui/menus/mark_stream_buffer_read_active",
-        "source_path": "src/ui/menus/fun_00225dd8.c",
+        "source_path": "src/ui/menus/mark_stream_buffer_read_active.c",
         "address": "0x00225dd8",
         "current_name": "FUN_00225dd8",
         "proposed_name": null,
@@ -14385,7 +14385,7 @@
       },
       {
         "unit": "textbin/ui/menus/update_preview_animation_and_attachments",
-        "source_path": "src/assembly/textbin/fun_00225e70.c",
+        "source_path": "src/assembly/textbin/ui/menus/update_preview_animation_and_attachments.c",
         "address": "0x00225e70",
         "current_name": "FUN_00225e70",
         "proposed_name": "update_preview_animation_and_attachments",
@@ -14497,7 +14497,7 @@
       },
       {
         "unit": "ui/menus/item_preview/load_preview_resource_bindings",
-        "source_path": "src/ui/menus/fun_00226848.c",
+        "source_path": "src/ui/menus/item_preview/load_preview_resource_bindings.c",
         "address": "0x00226848",
         "current_name": "FUN_00226848",
         "proposed_name": "load_preview_resource_bindings",
@@ -14540,7 +14540,7 @@
       },
       {
         "unit": "ui/menus/save_data/start_memory_card_save",
-        "source_path": "src/ui/menus/fun_00226a70.c",
+        "source_path": "src/ui/menus/save_data/start_memory_card_save.c",
         "address": "0x00226a70",
         "current_name": "FUN_00226a70",
         "proposed_name": null,
@@ -14671,7 +14671,7 @@
       },
       {
         "unit": "textbin/rendering/append_fullscreen_setup_strips",
-        "source_path": "src/assembly/textbin/fun_002271d0.c",
+        "source_path": "src/assembly/textbin/rendering/append_fullscreen_setup_strips.c",
         "address": "0x002271d0",
         "current_name": "FUN_002271d0",
         "proposed_name": "append_fullscreen_setup_strips",
@@ -14705,7 +14705,7 @@
       },
       {
         "unit": "rendering/submit_graphics_setup_command_stream",
-        "source_path": "src/textbin/fun_00227548.c",
+        "source_path": "src/rendering/submit_graphics_setup_command_stream.c",
         "address": "0x00227548",
         "current_name": "FUN_00227548",
         "proposed_name": "submit_graphics_setup_command_stream",
@@ -15164,7 +15164,7 @@
       },
       {
         "unit": "audio/voices/allocate_voice_slot",
-        "source_path": "src/textbin/fun_0022d7f0.c",
+        "source_path": "src/audio/voices/allocate_voice_slot.c",
         "address": "0x0022d7f0",
         "current_name": "FUN_0022d7f0",
         "proposed_name": "allocate_voice_slot",
@@ -15369,7 +15369,7 @@
       },
       {
         "unit": "textbin/rendering/effects/build_resident_indexed_texture_warp_meshes",
-        "source_path": "src/assembly/textbin/fun_0022e420.c",
+        "source_path": "src/assembly/textbin/rendering/effects/build_resident_indexed_texture_warp_meshes.c",
         "address": "0x0022e420",
         "current_name": "FUN_0022e420",
         "proposed_name": "build_resident_indexed_texture_warp_meshes",
@@ -15428,7 +15428,7 @@
       },
       {
         "unit": "textbin/gameplay/state/update_level_gameplay_frame",
-        "source_path": "src/assembly/textbin/fun_0022eaa8.c",
+        "source_path": "src/assembly/textbin/gameplay/state/update_level_gameplay_frame.c",
         "address": "0x0022eaa8",
         "current_name": "FUN_0022eaa8",
         "proposed_name": "update_level_gameplay_frame",
@@ -15597,7 +15597,7 @@
       },
       {
         "unit": "ui/loading/append_scrolling_textured_quad",
-        "source_path": "src/ui/hud/fun_002316e8.c",
+        "source_path": "src/ui/loading/append_scrolling_textured_quad.c",
         "address": "0x002316e8",
         "current_name": "FUN_002316e8",
         "proposed_name": null,
@@ -15745,8 +15745,8 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "storage/cd/fun_00232d00",
-        "source_path": "src/storage/cd/fun_00232d00.c",
+        "unit": "storage/stash/init_stash",
+        "source_path": "src/storage/stash/init_stash.c",
         "address": "0x00232d00",
         "current_name": "FUN_00232d00",
         "proposed_name": null,
@@ -16458,7 +16458,7 @@
       },
       {
         "unit": "textbin/rendering/project_graphics_bounds",
-        "source_path": "src/assembly/textbin/fun_00237a78.c",
+        "source_path": "src/assembly/textbin/rendering/project_graphics_bounds.c",
         "address": "0x00237a78",
         "current_name": "FUN_00237a78",
         "proposed_name": "project_graphics_bounds",
@@ -16475,7 +16475,7 @@
       },
       {
         "unit": "textbin/rendering/project_graphics_bounds_float",
-        "source_path": "src/assembly/textbin/fun_00237c80.c",
+        "source_path": "src/assembly/textbin/rendering/project_graphics_bounds_float.c",
         "address": "0x00237c80",
         "current_name": "FUN_00237c80",
         "proposed_name": "project_graphics_bounds_float",
@@ -16526,7 +16526,7 @@
       },
       {
         "unit": "textbin/gameplay/vendor/render_capture_scrolling_text",
-        "source_path": "src/assembly/textbin/fun_00238310.c",
+        "source_path": "src/assembly/textbin/gameplay/vendor/render_capture_scrolling_text.c",
         "address": "0x00238310",
         "current_name": "FUN_00238310",
         "proposed_name": "render_capture_scrolling_text",
@@ -16565,7 +16565,7 @@
       },
       {
         "unit": "gameplay/vendor/render_capture_effect_pass",
-        "source_path": "src/gameplay/vendor/fun_00238630.c",
+        "source_path": "src/gameplay/vendor/render_capture_effect_pass.c",
         "address": "0x00238630",
         "current_name": "FUN_00238630",
         "proposed_name": "vendor_draw_salesman_video",
@@ -16610,7 +16610,7 @@
       },
       {
         "unit": "gameplay/vendor/render_vendor_item_icon_strip_pass",
-        "source_path": "src/gameplay/vendor/fun_002386e8.c",
+        "source_path": "src/gameplay/vendor/render_vendor_item_icon_strip_pass.c",
         "address": "0x002386e8",
         "current_name": "FUN_002386e8",
         "proposed_name": "vendor_draw_icon_strip",
@@ -16655,7 +16655,7 @@
       },
       {
         "unit": "textbin/gameplay/vendor/render_vendor_buy_label_pass",
-        "source_path": "src/assembly/textbin/fun_00238f08.c",
+        "source_path": "src/assembly/textbin/gameplay/vendor/render_vendor_buy_label_pass.c",
         "address": "0x00238f08",
         "current_name": "FUN_00238f08",
         "proposed_name": "render_vendor_buy_label_pass",
@@ -16672,7 +16672,7 @@
       },
       {
         "unit": "gameplay/vendor/render_vendor_purchase_prompt_pass",
-        "source_path": "src/gameplay/vendor/fun_00239160.c",
+        "source_path": "src/gameplay/vendor/render_vendor_purchase_prompt_pass.c",
         "address": "0x00239160",
         "current_name": "FUN_00239160",
         "proposed_name": "vendor_draw_prompt",
@@ -16708,7 +16708,7 @@
       },
       {
         "unit": "gameplay/vendor/configure_capture_target",
-        "source_path": "src/gameplay/vendor/fun_00239690.c",
+        "source_path": "src/gameplay/vendor/configure_capture_target.c",
         "address": "0x00239690",
         "current_name": "FUN_00239690",
         "proposed_name": null,
@@ -16746,7 +16746,7 @@
       },
       {
         "unit": "textbin/gameplay/vendor/render_vendor_capture_pass_sequence",
-        "source_path": "src/assembly/textbin/fun_00239780.c",
+        "source_path": "src/assembly/textbin/gameplay/vendor/render_vendor_capture_pass_sequence.c",
         "address": "0x00239780",
         "current_name": "FUN_00239780",
         "proposed_name": "render_vendor_capture_pass_sequence",
@@ -18327,7 +18327,7 @@
       },
       {
         "unit": "ui/map/map_filter_l01_1",
-        "source_path": "src/ui/menus/fun_002069a0.c",
+        "source_path": "src/ui/map/map_filter_l01_1.c",
         "address": "0x002069a0",
         "current_name": "FUN_002069a0",
         "proposed_name": null,
@@ -18344,7 +18344,7 @@
       },
       {
         "unit": "ui/map/map_filter_l01_2",
-        "source_path": "src/ui/menus/fun_002069b0.c",
+        "source_path": "src/ui/map/map_filter_l01_2.c",
         "address": "0x002069b0",
         "current_name": "FUN_002069b0",
         "proposed_name": null,
@@ -18361,7 +18361,7 @@
       },
       {
         "unit": "ui/map/map_filter_l02_0",
-        "source_path": "src/ui/menus/fun_002069c0.c",
+        "source_path": "src/ui/map/map_filter_l02_0.c",
         "address": "0x002069c0",
         "current_name": "FUN_002069c0",
         "proposed_name": null,
@@ -18378,7 +18378,7 @@
       },
       {
         "unit": "ui/map/map_filter_l01_3",
-        "source_path": "src/ui/menus/fun_002069d0.c",
+        "source_path": "src/ui/map/map_filter_l01_3.c",
         "address": "0x002069d0",
         "current_name": "FUN_002069d0",
         "proposed_name": null,
@@ -18395,7 +18395,7 @@
       },
       {
         "unit": "ui/map/map_filter_l01_4",
-        "source_path": "src/ui/menus/fun_00206a90.c",
+        "source_path": "src/ui/map/map_filter_l01_4.c",
         "address": "0x00206a90",
         "current_name": "FUN_00206a90",
         "proposed_name": null,
@@ -18412,7 +18412,7 @@
       },
       {
         "unit": "ui/map/map_filter_l01_5",
-        "source_path": "src/ui/menus/fun_00206b10.c",
+        "source_path": "src/ui/map/map_filter_l01_5.c",
         "address": "0x00206b10",
         "current_name": "FUN_00206b10",
         "proposed_name": null,
@@ -18429,7 +18429,7 @@
       },
       {
         "unit": "ui/map/map_filter_l03_0",
-        "source_path": "src/ui/menus/fun_00206b78.c",
+        "source_path": "src/ui/map/map_filter_l03_0.c",
         "address": "0x00206b78",
         "current_name": "FUN_00206b78",
         "proposed_name": null,
@@ -18446,7 +18446,7 @@
       },
       {
         "unit": "ui/map/map_filter_l04_0",
-        "source_path": "src/ui/menus/fun_00206b88.c",
+        "source_path": "src/ui/map/map_filter_l04_0.c",
         "address": "0x00206b88",
         "current_name": "FUN_00206b88",
         "proposed_name": null,
@@ -18463,7 +18463,7 @@
       },
       {
         "unit": "ui/map/map_filter_l04_1",
-        "source_path": "src/ui/menus/fun_00206b98.c",
+        "source_path": "src/ui/map/map_filter_l04_1.c",
         "address": "0x00206b98",
         "current_name": "FUN_00206b98",
         "proposed_name": null,
@@ -18480,7 +18480,7 @@
       },
       {
         "unit": "ui/map/map_filter_l04_2",
-        "source_path": "src/ui/menus/fun_00206ba8.c",
+        "source_path": "src/ui/map/map_filter_l04_2.c",
         "address": "0x00206ba8",
         "current_name": "FUN_00206ba8",
         "proposed_name": null,
@@ -18497,7 +18497,7 @@
       },
       {
         "unit": "ui/map/map_filter_l04_3",
-        "source_path": "src/ui/menus/fun_00206bb8.c",
+        "source_path": "src/ui/map/map_filter_l04_3.c",
         "address": "0x00206bb8",
         "current_name": "FUN_00206bb8",
         "proposed_name": null,
@@ -18514,7 +18514,7 @@
       },
       {
         "unit": "ui/map/map_filter_l06_0",
-        "source_path": "src/ui/menus/fun_00206bc8.c",
+        "source_path": "src/ui/map/map_filter_l06_0.c",
         "address": "0x00206bc8",
         "current_name": "FUN_00206bc8",
         "proposed_name": null,
@@ -18531,7 +18531,7 @@
       },
       {
         "unit": "ui/map/map_filter_l07_5",
-        "source_path": "src/ui/menus/fun_00207250.c",
+        "source_path": "src/ui/map/map_filter_l07_5.c",
         "address": "0x00207250",
         "current_name": "FUN_00207250",
         "proposed_name": null,
@@ -18548,7 +18548,7 @@
       },
       {
         "unit": "ui/map/map_filter_l08_0",
-        "source_path": "src/ui/menus/fun_00207480.c",
+        "source_path": "src/ui/map/map_filter_l08_0.c",
         "address": "0x00207480",
         "current_name": "FUN_00207480",
         "proposed_name": null,
@@ -18565,7 +18565,7 @@
       },
       {
         "unit": "ui/map/map_filter_l08_1",
-        "source_path": "src/ui/menus/fun_002074b0.c",
+        "source_path": "src/ui/map/map_filter_l08_1.c",
         "address": "0x002074b0",
         "current_name": "FUN_002074b0",
         "proposed_name": null,
@@ -18582,7 +18582,7 @@
       },
       {
         "unit": "ui/map/map_filter_l08_2",
-        "source_path": "src/ui/menus/fun_00207508.c",
+        "source_path": "src/ui/map/map_filter_l08_2.c",
         "address": "0x00207508",
         "current_name": "FUN_00207508",
         "proposed_name": null,
@@ -18599,7 +18599,7 @@
       },
       {
         "unit": "ui/map/map_filter_l08_4",
-        "source_path": "src/ui/menus/fun_002075f8.c",
+        "source_path": "src/ui/map/map_filter_l08_4.c",
         "address": "0x002075f8",
         "current_name": "FUN_002075f8",
         "proposed_name": null,
@@ -18616,7 +18616,7 @@
       },
       {
         "unit": "ui/map/map_filter_l09_0",
-        "source_path": "src/ui/menus/fun_00207660.c",
+        "source_path": "src/ui/map/map_filter_l09_0.c",
         "address": "0x00207660",
         "current_name": "FUN_00207660",
         "proposed_name": null,
@@ -18633,7 +18633,7 @@
       },
       {
         "unit": "ui/map/map_filter_l09_1",
-        "source_path": "src/ui/menus/fun_00207670.c",
+        "source_path": "src/ui/map/map_filter_l09_1.c",
         "address": "0x00207670",
         "current_name": "FUN_00207670",
         "proposed_name": null,
@@ -18650,7 +18650,7 @@
       },
       {
         "unit": "ui/map/map_filter_l09_2",
-        "source_path": "src/ui/menus/fun_00207680.c",
+        "source_path": "src/ui/map/map_filter_l09_2.c",
         "address": "0x00207680",
         "current_name": "FUN_00207680",
         "proposed_name": null,
@@ -18667,7 +18667,7 @@
       },
       {
         "unit": "ui/map/map_filter_l10_0",
-        "source_path": "src/ui/menus/fun_00207690.c",
+        "source_path": "src/ui/map/map_filter_l10_0.c",
         "address": "0x00207690",
         "current_name": "FUN_00207690",
         "proposed_name": null,
@@ -18684,7 +18684,7 @@
       },
       {
         "unit": "ui/map/map_filter_l11_0",
-        "source_path": "src/ui/menus/fun_00207720.c",
+        "source_path": "src/ui/map/map_filter_l11_0.c",
         "address": "0x00207720",
         "current_name": "FUN_00207720",
         "proposed_name": null,
@@ -18701,7 +18701,7 @@
       },
       {
         "unit": "ui/map/map_filter_l11_1",
-        "source_path": "src/ui/menus/fun_002077a0.c",
+        "source_path": "src/ui/map/map_filter_l11_1.c",
         "address": "0x002077a0",
         "current_name": "FUN_002077a0",
         "proposed_name": null,
@@ -18718,7 +18718,7 @@
       },
       {
         "unit": "ui/map/map_filter_l11_2",
-        "source_path": "src/ui/menus/fun_00207800.c",
+        "source_path": "src/ui/map/map_filter_l11_2.c",
         "address": "0x00207800",
         "current_name": "FUN_00207800",
         "proposed_name": null,
@@ -18735,7 +18735,7 @@
       },
       {
         "unit": "ui/map/map_filter_l11_3",
-        "source_path": "src/ui/menus/fun_00207880.c",
+        "source_path": "src/ui/map/map_filter_l11_3.c",
         "address": "0x00207880",
         "current_name": "FUN_00207880",
         "proposed_name": null,
@@ -18752,7 +18752,7 @@
       },
       {
         "unit": "ui/map/map_filter_l11_4",
-        "source_path": "src/ui/menus/fun_00207930.c",
+        "source_path": "src/ui/map/map_filter_l11_4.c",
         "address": "0x00207930",
         "current_name": "FUN_00207930",
         "proposed_name": null,
@@ -18769,7 +18769,7 @@
       },
       {
         "unit": "ui/map/map_filter_l11_5",
-        "source_path": "src/ui/menus/fun_002079c8.c",
+        "source_path": "src/ui/map/map_filter_l11_5.c",
         "address": "0x002079c8",
         "current_name": "FUN_002079c8",
         "proposed_name": null,
@@ -18786,7 +18786,7 @@
       },
       {
         "unit": "ui/map/map_filter_l12_0",
-        "source_path": "src/ui/menus/fun_002079d8.c",
+        "source_path": "src/ui/map/map_filter_l12_0.c",
         "address": "0x002079d8",
         "current_name": "FUN_002079d8",
         "proposed_name": null,
@@ -18803,7 +18803,7 @@
       },
       {
         "unit": "ui/map/map_filter_l12_1",
-        "source_path": "src/ui/menus/fun_00207a08.c",
+        "source_path": "src/ui/map/map_filter_l12_1.c",
         "address": "0x00207a08",
         "current_name": "FUN_00207a08",
         "proposed_name": null,
@@ -18820,7 +18820,7 @@
       },
       {
         "unit": "ui/map/map_filter_l12_2",
-        "source_path": "src/ui/menus/fun_00207a10.c",
+        "source_path": "src/ui/map/map_filter_l12_2.c",
         "address": "0x00207a10",
         "current_name": "FUN_00207a10",
         "proposed_name": null,
@@ -18837,7 +18837,7 @@
       },
       {
         "unit": "ui/map/map_filter_l16_0",
-        "source_path": "src/ui/menus/fun_00207ab8.c",
+        "source_path": "src/ui/map/map_filter_l16_0.c",
         "address": "0x00207ab8",
         "current_name": "FUN_00207ab8",
         "proposed_name": null,
@@ -18854,7 +18854,7 @@
       },
       {
         "unit": "ui/map/map_filter_l16_1",
-        "source_path": "src/ui/menus/fun_00207ac8.c",
+        "source_path": "src/ui/map/map_filter_l16_1.c",
         "address": "0x00207ac8",
         "current_name": "FUN_00207ac8",
         "proposed_name": null,
@@ -18871,7 +18871,7 @@
       },
       {
         "unit": "ui/map/map_filter_l16_2",
-        "source_path": "src/ui/menus/fun_00207ad8.c",
+        "source_path": "src/ui/map/map_filter_l16_2.c",
         "address": "0x00207ad8",
         "current_name": "FUN_00207ad8",
         "proposed_name": null,
@@ -18888,7 +18888,7 @@
       },
       {
         "unit": "ui/map/map_filter_l16_3",
-        "source_path": "src/ui/menus/fun_00207ae8.c",
+        "source_path": "src/ui/map/map_filter_l16_3.c",
         "address": "0x00207ae8",
         "current_name": "FUN_00207ae8",
         "proposed_name": null,
@@ -18905,7 +18905,7 @@
       },
       {
         "unit": "ui/map/map_filter_l18_0",
-        "source_path": "src/ui/menus/fun_00207af8.c",
+        "source_path": "src/ui/map/map_filter_l18_0.c",
         "address": "0x00207af8",
         "current_name": "FUN_00207af8",
         "proposed_name": null,
@@ -19485,7 +19485,7 @@
       },
       {
         "unit": "ui/menus/reset_pause_memory_card_state",
-        "source_path": "src/ui/menus/fun_0021cac8.c",
+        "source_path": "src/ui/menus/reset_pause_memory_card_state.c",
         "address": "0x0021cac8",
         "current_name": "FUN_0021cac8",
         "proposed_name": null,

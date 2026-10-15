@@ -10,7 +10,9 @@ extern s32 pending_texture_upload_count_macro __asm__("D_0015F458") MACRO_ADDR;
    cld 4) and, while there is room (64 entries), records it in the next
    D_0018D040 slot. The tcc term is the one unsigned field: it keeps fold
    from re-pairing the constants, which gives retail's OR tree. */
-long FUN_00204e30(s32 tw, s32 th, s32 clut_data, s32 image_data, s32 cbp, s32 tbp) {
+long register_8bit_texture(s32 tw, s32 th, s32 clut_data, s32 image_data, s32 cbp, s32 tbp) __asm__("FUN_00204e30");
+
+long register_8bit_texture(s32 tw, s32 th, s32 clut_data, s32 image_data, s32 cbp, s32 tbp) {
     s32 w;
     long reg;
 
@@ -36,4 +38,4 @@ long FUN_00204e30(s32 tw, s32 th, s32 clut_data, s32 image_data, s32 cbp, s32 tb
     return reg;
 }
 
-extern __typeof__(FUN_00204e30) func_00204E30 __attribute__((alias("FUN_00204e30")));
+extern __typeof__(register_8bit_texture) func_00204E30 __attribute__((alias("FUN_00204e30")));
