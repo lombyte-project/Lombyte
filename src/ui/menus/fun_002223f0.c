@@ -12,11 +12,12 @@ struct Menu {
     s32 unk54;
 };
 #include "rnc/ui/menus/menu_system.h"
+#include "sda.h"
 extern s32 D_001D2AF4[];
 extern u8 D_001D5098[];
 extern u8 D_001D5148[];
 extern u8 D_001D5208[];
-extern u8 D_001D5298[];
+u8 D_001D5298[] NOT_SDA = "9Q";
 extern u8 D_001D52B0[];
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 FUN_002223f0(struct Menu *menu) {

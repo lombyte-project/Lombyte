@@ -496,6 +496,7 @@ DATA_OVERLAYS = {
     "textbin/video/player/init_all": (0x1E8AF0, 0xE9A70, 18),
     "rendering/view/update_view_context": (0x18CFC0, 0x8DF40, 64),
     "input/pad/init_pads": (0x1CD760, 0xCE6E0, 16),
+    "ui/menus/fun_002223f0": (0x1D5298, 0xD6218, 3),
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the
