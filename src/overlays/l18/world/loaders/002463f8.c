@@ -96,7 +96,7 @@ extern s32 D_L18_0015F5F0;
 extern s32 D_L18_0015FFC0;
 extern s16 D_L18_00198400[];
 extern u16 D_L18_001B0860[][16];
-extern char D_L18_001F0EB0[], D_L18_001F0ED0[], D_L18_001F0F00[], D_L18_001F0F18[],
+extern char D_L18_001F0EB0[], D_L18_001F0F00[], D_L18_001F0F18[],
     D_L18_001F0F30[], D_L18_001F0F48[], D_L18_001F0F60[], D_L18_001F0F78[],
     D_L18_001F0F90[], D_L18_001F0FA8[], D_L18_001F0FC0[], D_L18_001F0FE0[],
     D_L18_001F0FF8[], D_L18_001F1010[], D_L18_001F1028[], D_L18_001F1040[],
@@ -106,6 +106,7 @@ extern char D_L18_001F0EB0[], D_L18_001F0ED0[], D_L18_001F0F00[], D_L18_001F0F18
     D_L18_001F1178[];
 extern char D_L18_0015FC80[];
 extern char D_L18_0030A0C0[];
+char D_L18_001F0ED0[] = "internal moby sound mismatch on moby %d\n";
 extern s32 D_L18_001B2480[];
 extern char *D_L18_001C6200[] __asm__("D_L18_001C6200");
 extern char *D_L18_001BCA30_2463f8[] __asm__("D_L18_001BCA30");
