@@ -436,7 +436,7 @@ extern int D_L10_001618A0 __attribute__((sda));
 extern int D_L10_001618A4 __attribute__((sda));
 extern int D_L10_001618A8;
 extern int FUN_L00_00257b90(int, int);
-extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -465,7 +465,7 @@ extern char *D_L10_00160058_00299818 __asm__("D_L10_0015FFD8");
 #define func_L00_001FF4B0_2BFBB8 ((void (*)(void *, void *, float))fast_vec_normalize_c)
 #define func_L00_00272F00_2BFBB8 FUN_L00_00272060
 #define func_L00_00272488_2BFBB8 FUN_L00_002715e8
-#define func_0022ED80_2BFBB8 ((int (*)(int, int, int))allocate_voice_for_target_entry_alt)
+#define func_0022ED80_2BFBB8 ((int (*)(int, int, int))allocate_voice_for_target_entry)
 #define func_L00_00217718_2BFBB8 FUN_L00_00216f90
 #define func_001FA888_2BFBB8 ((float (*)(int))convert_integer_to_float)
 #define func_001FA898_2BFBB8 ((int (*)(float))truncate_float_to_s32)

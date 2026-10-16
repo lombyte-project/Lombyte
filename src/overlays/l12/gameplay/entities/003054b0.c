@@ -484,7 +484,7 @@ void FUN_L12_003064e8(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00307C08), where it is exact; names translated to the US level program. */
 
 extern int D_L12_0015F5CC_p __asm__("D_L12_0015F5CC");
-extern unsigned char * D_L12_0015FFD8_p_c __asm__("D_L12_0015FFD8");
+extern unsigned char * D_L12_0015FFD8;
 extern struct Moby *D_L12_00160058_303CA8 __asm__("D_L12_0015FFD8");
 
 void FUN_L12_00306828(char *moby) {

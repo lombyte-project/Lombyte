@@ -1003,7 +1003,7 @@ extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
 extern float D_L00_0015F580[] __attribute__((section(".sdata")));
-extern float D_L00_00161890_c __asm__("D_L00_00161890") __attribute__((sda));
+extern float D_L00_00161890_gp __asm__("D_L00_00161890") __attribute__((sda));
 extern float FUN_L00_00257e20(float, float, float, float, float);
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int FUN_001efa68(void *, void *, int, int, int);
@@ -1028,7 +1028,7 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern char D_0013E520_c[] __asm__("D_0013E520");
 
-char *FUN_L00_002caf70(char *a, char *vec, char *b, float f12, float f13, float f14, float f15) {
+char *FUN_L00_002caf70(char *a, char *vec, char *b, float unk18, float unk1C, float yaw, float pitch) {
     float tv[4];
     float lf[4];
     float out[4];
@@ -1048,7 +1048,7 @@ char *FUN_L00_002caf70(char *a, char *vec, char *b, float f12, float f13, float 
     float len;
     float ret;
     float fi;
-    float f16;
+    float fraction;
     float *t;
 
     t = tv;
@@ -1061,9 +1061,9 @@ char *FUN_L00_002caf70(char *a, char *vec, char *b, float f12, float f13, float 
         *(short *)(m + 0x32) = 0x7F;
         m[0x31] = 1;
         *(long *)(m + 0x38) = *(long *)(a + 0x38);
-        *(float *)(m + 0x40) = D_L00_00161890_c;
-        *(float *)(m + 0x44) = fast_add_rotations(f15, (&D_L00_00161890_c)[1]);
-        *(float *)(m + 0x48) = f14;
+        *(float *)(m + 0x40) = D_L00_00161890_gp;
+        *(float *)(m + 0x44) = fast_add_rotations(pitch, (&D_L00_00161890_gp)[1]);
+        *(float *)(m + 0x48) = yaw;
         qcopy(m + 0x10, t);
         if (b != 0) {
             int rr;
@@ -1077,8 +1077,8 @@ char *FUN_L00_002caf70(char *a, char *vec, char *b, float f12, float f13, float 
         } else {
             clear_u64_value_c(d);
         }
-        *(float *)(d + 0x18) = f12;
-        *(float *)(d + 0x1C) = f13;
+        *(float *)(d + 0x18) = unk18;
+        *(float *)(d + 0x1C) = unk1C;
         *(int *)(d + 0x10) = 0;
         *(int *)(d + 0x14) = 0;
         r2 = scale_game_frames_c2(0x23);
@@ -1136,8 +1136,8 @@ char *FUN_L00_002caf70(char *a, char *vec, char *b, float f12, float f13, float 
                 if (q != 0) {
                     *(float *)(q + 0xC) = random_float_between_c2(*(float *)&D_L00_00161870, *(float *)&D_L00_00161874);
                     fi = convert_integer_to_float_c(i);
-                    f16 = fi / convert_integer_to_float_c(16);
-                    ret = FUN_L00_00257e20(-1.5f, 0.0f, 1.0f, 0.0f, f16);
+                    fraction = fi / convert_integer_to_float_c(16);
+                    ret = FUN_L00_00257e20(-1.5f, 0.0f, 1.0f, 0.0f, fraction);
                     *(float *)(q + 0xC) = *(float *)(q + 0xC) + (*(float *)&D_L00_00161878 - *(float *)(q + 0xC)) * ret;
                     r = truncate_float_to_s32_c(ret * -64.0f + 128.0f);
                     *(int *)(q + 4) = (r << 24) | 0xFFFFFF;

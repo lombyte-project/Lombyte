@@ -10,18 +10,17 @@
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_L15_0017C0EC, D_L15_0017C14C_p __asm__("D_L15_0017C14C");
-extern int D_L15_0015F5B0_p __asm__("D_L15_0015F5B0");
-extern int D_L15_0015F5CC_p __asm__("D_L15_0015F5CC");
+extern float D_L15_0017C0EC, D_L15_0017C14C;
+extern int D_L15_0015F5B0;
+extern int D_L15_0015F5CC;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_0015EE18_p __asm__("D_0015EE18");
-extern unsigned char D_0013D4DC_p[] __asm__("D_0013D4DC");
-extern unsigned char D_0013E533_p[] __asm__("D_0013E533");
-extern unsigned char D_0013F350_p[] __asm__("D_0013F350");
+extern short D_0015EE18;
+extern unsigned char D_0013D4DC[];
+extern unsigned char D_0013F350[];
 extern struct { unsigned char b[8]; } D_0015EDB0_s __asm__("D_0015EDB0");
-extern float D_L15_0017C06C_f[] __asm__("D_L15_0017C06C");
-extern float D_L15_0017C1CC_f[] __asm__("D_L15_0017C1CC");
+extern float D_L15_0017C06C[];
+extern float D_L15_0017C1CC[];
 extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
 extern void FUN_L00_002054e8(void);
 extern void FUN_L00_002059d8(void);
@@ -53,7 +52,7 @@ void FUN_L15_001ff938(void) {
     FUN_L00_00211670();
     FUN_L15_002044c8();
     FUN_L15_0021d040();
-    b0 = ((char *)&D_0013F350_p);
+    b0 = ((char *)&D_0013F350);
     if (b0[0x20A4] == 0)
         return;
     FUN_L00_00216f10();
@@ -67,7 +66,7 @@ void FUN_L15_001ff938(void) {
 
     if (b0[0x20A4] == 2) {
         if (D_0015EDB0_s.b[3] != 0)
-            D_L15_0017C06C_f[0] = (*(float *)&D_0015EE18_p) * 1.4f;
+            D_L15_0017C06C[0] = (*(float *)&D_0015EE18) * 1.4f;
         FUN_L00_002059d8();
         FUN_L00_002061f0();
         {
@@ -80,21 +79,21 @@ void FUN_L15_001ff938(void) {
         }
     }
 
-    b1 = ((char *)&D_0013F350_p);
+    b1 = ((char *)&D_0013F350);
     if (b1[0x20A4] == 3) {
         if (D_0015EDB0_s.b[1] != 0)
-            D_L15_0017C1CC_f[0] = 1.9f;
+            D_L15_0017C1CC[0] = 1.9f;
         alpha = 0x80;
         period = scale_game_frames(0xAA);
         if (*(short *)(b1 + 0x22E0) == 2)
             period = scale_game_frames(0x32);
         else if (*(short *)(b1 + 0x22E0) == 1)
             period = scale_game_frames(0x5A);
-        pulse = fast_sin((((float)(D_L15_0015F5CC_p % period) / convert_integer_to_float(period)) * 2.0f) * 3.1415927f + -3.1415927f);
+        pulse = fast_sin((((float)(D_L15_0015F5CC % period) / convert_integer_to_float(period)) * 2.0f) * 3.1415927f + -3.1415927f);
         red = truncate_float_to_s32(pulse * 20.0f) + 0x32;
         green = truncate_float_to_s32(pulse * 70.0f) + 0xB4;
         blue = truncate_float_to_s32(pulse * 10.0f);
-        b2 = ((char *)&D_0013F350_p);
+        b2 = ((char *)&D_0013F350);
         moby = *(unsigned char **)(b2 + 0x2080);
         if (red > 0xFF) red = 0xFF;
         if (green > 0xFF) green = 0xFF;
@@ -104,16 +103,16 @@ void FUN_L15_001ff938(void) {
             color = (alpha << 24) | (blue << 16) | ((red / 2) << 8) | green;
         else
             color = (alpha << 24) | (blue << 16) | (green << 8) | red;
-        b3 = ((char *)&D_0013F350_p);
+        b3 = ((char *)&D_0013F350);
         *(unsigned int *)(*(unsigned char **)(b3 + 0x2080) + 0x90) =
             fast_tween_color(0.1f, *(unsigned int *)(*(unsigned char **)(b3 + 0x2080) + 0x90), color);
         for (i = 0; i < 3; i++)
         {
-            b4 = ((char *)&D_0013F350_p);
+            b4 = ((char *)&D_0013F350);
             FUN_L00_0024f7c8(*(void **)(b4 + 0x2080), i, b4 + 0x1D50 + i * 16);
         }
         alpha = 0x30;
-        b4 = ((char *)&D_0013F350_p);
+        b4 = ((char *)&D_0013F350);
         {
             unsigned char *mb = *(unsigned char **)(b4 + 0x2080);
             blue = mb[0x92];
@@ -134,9 +133,9 @@ void FUN_L15_001ff938(void) {
                     *(short *)(b4 + 0x22DC) = 1;
                 }
             } else {
-                b5 = ((char *)&D_0013F350_p);
+                b5 = ((char *)&D_0013F350);
                 *(int *)(b5 + 0x20B8) = 0;
-                if (b5[0x12E7] != 0 && *(int *)(b5 + 0x300) != 0 && D_0013D4DC_p[0] != 0 &&
+                if (b5[0x12E7] != 0 && *(int *)(b5 + 0x300) != 0 && D_0013D4DC[0] != 0 &&
                     *(short *)(b5 + 0x22DE) == 0) {
                     FUN_L00_00216de8(0x19, 0);
                     *(short *)(b5 + 0x22DE) = 0x12;
@@ -146,7 +145,7 @@ void FUN_L15_001ff938(void) {
         }
     }
     FUN_L00_00208b60();
-    b6 = ((char *)&D_0013F350_p);
+    b6 = ((char *)&D_0013F350);
     FUN_L00_00257024(*(void **)(b6 + 0x2080));
 }
 #define NOT_SDA

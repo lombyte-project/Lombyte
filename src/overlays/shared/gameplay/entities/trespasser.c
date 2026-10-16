@@ -1169,8 +1169,8 @@ extern struct { u8 pad0[0x11]; u8 unk11; } D_0013E520_2c1ad0 __asm__("D_0013E520
 extern struct { u8 pad0[0x88]; u16 deliveries; u16 unk8A; u32 levels; } D_00141680_s __asm__("D_00141680");
 extern struct { u8 pad0[0x18]; s32 moby; u8 pad1C[4]; Vec4 point; } coll_hit_2c1ad0 __asm__("D_L00_00173E40");
 extern Vec4 D_L00_00166DC0_v __asm__("D_L00_00166DC0");
-extern char D_L00_00166C80_c[] __asm__("D_L00_00166C80");
-extern short D_L00_001B07B0_2c1ad0[] __asm__("D_L00_001B07B0");
+extern char D_L00_00166C80[];
+extern short D_L00_001B07B0[];
 extern f32 frame_scale_inv_macro __asm__("D_0015ED68") __attribute__((section(".sdata")));
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
@@ -1207,7 +1207,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     offset.q = 0;
     offset.f[1] = -0.09f;
     offset.f[2] = -0.02f;
-    setup_matrix_2c1ad0(basis, D_L00_00166C80_c);
+    setup_matrix_2c1ad0(basis, D_L00_00166C80);
     matrix_from_basis_rows_2c1ad0(matrix, basis);
     if (vars == 0)
         return;
@@ -1309,7 +1309,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
                     D_00141680_s.unk8A = scale_game_frames(D_0015EEA4_macro) / 600;
             }
             D_00141680_s.levels = (D_00141680_s.levels | (1u << current_level_index_macro)) | 0x80000000;
-            FUN_L00_0025f780(vars->held, D_L00_001B07B0_2c1ad0, 0x3F);
+            FUN_L00_0025f780(vars->held, D_L00_001B07B0, 0x3F);
             vars->held = 0;
             vars->timer54 = scale_game_frames(10);
         }

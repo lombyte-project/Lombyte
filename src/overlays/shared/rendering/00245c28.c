@@ -312,21 +312,20 @@ extern float D_L00_00182A70[];
 extern int *D_L00_00173E08[];
 extern int D_L00_00183EF0[];
 extern int D_L00_001841F0_c[] __asm__("D_L00_001841F0");
-extern int func_0020C468() __asm__("FUN_L00_0024d8d0");
+extern int FUN_L00_0024d8d0();
 extern s32 D_0015ED84;
 extern s32 hud_heap_alloc() __asm__("func_001FF288");
 extern unsigned char D_0013D4C0[];
 extern unsigned char D_0014161B[];
 extern unsigned char D_L00_00184394[];
-extern void decode_map_mask_alt(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
+extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
 extern void fast_mem_copy_alt(void *, void *, int) __asm__("FUN_001f98d0");
-extern void load_map_chunk(void *arg0, unsigned char *arg1, int arg2) __asm__("FUN_00207bb0");
+extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
 s32 load(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
 s32 stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");
 extern char D_00138438_c[] __asm__("D_00138438");
 extern char D_001383A0[];
 extern char D_00141EC0[];
-extern int D_0015EE84_2465F8 __asm__("D_0015ED84");
 
 void FUN_L00_002464a8(void) {
     int i, j;
@@ -352,7 +351,7 @@ void FUN_L00_002464a8(void) {
         ((float *)D_L00_001841F0_c)[0x2D + i] = 0.65f;
         D_L00_001841F0_c[0x55 + i] = D_L00_00183EF0[i * 2 + 1];
     } }
-    v = D_0015EE84_2465F8;
+    v = current_level_index;
     D_L00_001841F0_c[0x8B] = -1;
     D_L00_001841F0_c[0x89] = v > 18 ? 0 : v;
     { int i;
@@ -384,7 +383,7 @@ void FUN_L00_002464a8(void) {
         load(archive, e[0], e[1]);
         gl[0x8B] = stash_send_data((int)archive, scratch, 0x4800, (int)D_L00_001E8B00);
         gl[0x8D] = scratch;
-        func_0020C468((int)archive, (int)archive_base);
+        FUN_L00_0024d8d0((int)archive, (int)archive_base);
         archive = archive_base;
         first_size = archive[1] - archive[0];
         gl[0] = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);
@@ -406,7 +405,7 @@ void FUN_L00_002464a8(void) {
         if (level_data[0] != 0) {
             load_map_chunk((void *)D_L00_001841F0_c[3], level_data, D_L00_001841F0_c[5]);
         } else {
-            decode_map_mask_alt((int *)D_L00_001841F0_c[3], (unsigned char *)D_L00_001841F0_c[0], (short *)D_L00_001841F0_c[1]);
+            decode_map_mask((int *)D_L00_001841F0_c[3], (unsigned char *)D_L00_001841F0_c[0], (short *)D_L00_001841F0_c[1]);
         }
         lim = 256.0f;
         for (y = 0; y < 32; y++) {

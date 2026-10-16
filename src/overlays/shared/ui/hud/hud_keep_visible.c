@@ -343,10 +343,10 @@ typedef struct {
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern float D_L00_0017E660_c[][4] __asm__("D_L00_0017E660");
-extern short D_L00_0015F750_p __asm__("D_L00_0015F750") __attribute__((sda));
-extern short D_L00_0015F754_p __asm__("D_L00_0015F754") __attribute__((sda));
-extern short D_L00_0015F758_p __asm__("D_L00_0015F758") __attribute__((sda));
-extern short D_L00_0015F75C_p __asm__("D_L00_0015F75C") __attribute__((sda));
+extern short D_L00_0015F750_gp __asm__("D_L00_0015F750") __attribute__((sda));
+extern short D_L00_0015F754_gp __asm__("D_L00_0015F754") __attribute__((sda));
+extern short D_L00_0015F758_gp __asm__("D_L00_0015F758") __attribute__((sda));
+extern short D_L00_0015F75C_gp __asm__("D_L00_0015F75C") __attribute__((sda));
 void FUN_L00_00235d80_c(HudElem_p *e) __asm__("FUN_L00_00235d80");
 
 void FUN_L00_00236268(HudElem_p *e) {
@@ -356,12 +356,12 @@ void FUN_L00_00236268(HudElem_p *e) {
 
     FUN_L00_00235d80_c(e);
     for (i = 0; i < 100; i++) {
-        v = *(float *)&D_L00_0015F750_p;
+        v = *(float *)&D_L00_0015F750_gp;
         if (i >= 10) {
-            v = *(float *)&D_L00_0015F754_p;
-            if (i >= 20) v = *(float *)&D_L00_0015F758_p;
+            v = *(float *)&D_L00_0015F754_gp;
+            if (i >= 20) v = *(float *)&D_L00_0015F758_gp;
         }
-        n = *(int *)&D_L00_0015F75C_p;
+        n = *(int *)&D_L00_0015F75C_gp;
         span = (232.0f - (v + v)) / (float)n;
         lo = (v - 116.0f) + (float)(i % n) * span;
         hi = lo + span;

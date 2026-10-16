@@ -838,7 +838,7 @@ extern s32 movie_buffer __asm__("D_L00_00161054") __attribute__((section(".sdata
 extern s32 movie_image_data __asm__("D_L00_00161058") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F40C_macro __asm__("D_L00_0015F40C") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") __attribute__((section(".sdata")));
-extern s32 D_L00_00173E04_data __asm__("D_L00_00173E04") __attribute__((section(".data")));
+extern s32 D_L00_00173E04_lui __asm__("D_L00_00173E04") __attribute__((section(".data")));
 /* [0] is gs_texture_allocation_start, [4] depth_buffer_address. */
 extern s32 gs_layout_macro[6] __asm__("D_0015EE78") __attribute__((section(".sdata")));
 extern void flush_cache(s32) __asm__("FUN_00118a80");
@@ -849,7 +849,7 @@ extern void FUN_L00_002039a0(void);
 extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(void *, u8 *);
 extern void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
-extern void debug_print_002995d0(char *, s32) __asm__("FUN_001e93b0");
+extern void FUN_001e93b0(char *, s32);
 extern void FUN_001f97b0(void);
 extern char D_L00_001E9480[];
 
@@ -869,7 +869,7 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     fade_to_black(4);
     FUN_L00_002039a0();
     D_L00_0015F5C4_macro = 1;
-    movie_buffer = D_L00_00173E04_data;
+    movie_buffer = D_L00_00173E04_lui;
     movie_image_data = D_L00_0015F40C_macro;
     large_count = D_0015ED80 != 0 ? 0xE : 0xD;
     small_count = D_0015ED80 != 0 ? 0xE : 0x11;
@@ -897,7 +897,7 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
         wait_for_graphics_pipeline_idle(0, 0);
     }
     if (gs_address > 0x400000) {
-        debug_print_002995d0(D_L00_001E9480, gs_address - 0x400000);
+        FUN_001e93b0(D_L00_001E9480, gs_address - 0x400000);
         FUN_001f97b0();
     }
 }
