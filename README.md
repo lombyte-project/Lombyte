@@ -17,7 +17,7 @@
 </p>
 <p align="center">
     A work-in-progress, byte-matching decompilation of Ratchet &amp; Clank (2002) for PlayStation 2.<br>
-    Reconstructing the original game code in readable C, with a native Rust port as the long-term goal.
+    Reconstructing the original game code in readable C.
 </p>
 
 > [!NOTE]
