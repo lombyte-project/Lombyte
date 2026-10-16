@@ -12090,18 +12090,6 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "rendering/fun_00218f98",
-        "source_path": "src/rendering/fun_00218f98.c",
-        "address": "0x00218f98",
-        "current_name": "FUN_00218f98",
-        "proposed_name": null,
-        "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
-        "logical_group_confidence": "unresolved"
-      },
-      {
         "unit": "ui/menus/close_menu_system",
         "source_path": "src/ui/menus/close_menu_system.c",
         "address": "0x002191b8",
@@ -20049,6 +20037,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x0011cb14, 0x0011cb2c and 0x0011cb40, the function compares four bytes using 0x001151b4 (memcmp in the supplied comparison) between records at 0x00158428, 0x0012fbec and the reference pointer stored at 0x0012fcb4 (g_pSifLoadModuleVersionReference). Branches at 0x0011cb1c and 0x0011cb34 return false for either equality, and 0x0011cb48 returns true only if the final pair also differs. Checked caller load_sif_module_buffer_with_result at 0x0011cb70 calls it at 0x0011cbb0 after initialize_sif_load_module; a true result takes 0x0011cbc0..0x0011cbc8 to return -0x10004 rather than issuing load-module RPC 6 at 0x0011cd2c. This corroborates and preserves the supplied Ghidra name sif_load_module_server_changed."
+          }
+        ]
+      },
+      {
+        "address": "0x00218f98",
+        "current_name": "FUN_00218f98",
+        "proposed_name": "initialize_menu_preview_scene",
+        "logical_group": "rendering",
+        "unit": "rendering/initialize_menu_preview_scene",
+        "source_path": "src/rendering/initialize_menu_preview_scene.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "The supplied original Ghidra decompilation identifies preview_stream_state, MenuPreviewContext, create_menu_preview_moby, camera position and lighting presets. Retail instructions at 0x00218fb0 set state 2, and 0x00218fe4/0x00218ff0 install default context 0x001d45c8 in both context slots. 0x00218fec..0x00219014 initialize lighting preset 14; 0x00219018/0x00219020 synchronize DMA/vblank, and 0x0021908c..0x002190b4 establish graphics workspace pointers and initialize descriptors/bounds. 0x002190f0 creates class 0x472 objects, stores them in the array at 0x001d5d90, attaches callback 0x0023a2c0 at 0x00219118, copies camera position and zeroes rotation at 0x00219120..0x00219154, and selects each context animation's final frame at 0x00219180; the loop bound at 0x0021918c is fourteen. Checked caller FUN_002192a8 invokes this initializer at 0x0021936c only for state 0 or 0x2d (tests 0x0021935c..0x00219364), then manages fourteen context entries and the same preview object array, including animation transitions at 0x00219548/0x00219568. Caller is itself called by update_gameplay_frame at 0x001eb3b4. Bounded bytes at 0x001d45c8 confirm the fourteen initial animation indices (0,1,16,17,18,5..13); no identifying strings were present. This proves initialization of the menu preview scene without assigning an unsupported specific menu identity."
           }
         ]
       }

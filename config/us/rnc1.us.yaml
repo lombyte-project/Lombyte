@@ -1648,7 +1648,7 @@ segments:
           - [0x119ecc, textbin, text_gap_00218f4c_after_fun_00218d78]
           - [0x119ee8, c, runtime/dma/initialize_transfer_command]
           - [0x119f14, textbin, text_gap_00218f94_before_fun_00218f98]
-          - [0x119f18, c, rendering/fun_00218f98]
+          - [0x119f18, c, rendering/initialize_menu_preview_scene]
           - [0x11a138, c, ui/menus/close_menu_system]
           - [0x11a228, c, ui/menus/update_menu_system]
           - [0x11a634, textbin, text_gap_002196b4_after_fun_002192a8]

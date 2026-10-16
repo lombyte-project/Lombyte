@@ -49,7 +49,9 @@ extern struct O2 *create_menu_preview_moby() __asm__("func_00225490");
 extern s32 set_moby_animation() __asm__("func_00212ED8");
 
 void func_00225AC0__void() __asm__("FUN_00225ac0");
-void FUN_00218f98(void) {
+void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
+
+void initialize_menu_preview_scene(void) {
     s32 i;
     s32 a, b, c, d;
     menu_system.state = 2;
@@ -98,4 +100,4 @@ void FUN_00218f98(void) {
     }
 }
 
-extern __typeof__(FUN_00218f98) func_00218F98 __attribute__((alias("FUN_00218f98")));
+extern __typeof__(initialize_menu_preview_scene) func_00218F98 __attribute__((alias("FUN_00218f98")));
