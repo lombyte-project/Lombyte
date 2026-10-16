@@ -1033,7 +1033,7 @@ segments:
           - [0xf63d0, c, rendering/texture/draw_textured_quad]
           - [0xf6554, textbin, text_gap_001f55d4_after_fun_001f5450]
           - [0xf6558, c, textbin/append_subpixel_textured_screen_quad]
-          - [0xf6788, c, rendering/fun_001f5808]
+          - [0xf6788, c, rendering/emit_textured_rectangle]
           - [0xf6a30, c, rendering/append_rotated_sprite_quad]
           - [0xf6e8c, textbin, text_gap_001f5f0c_before_fun_001f5f18]
           - [0xf6e98, c, ui/frames/draw_ui_frame]

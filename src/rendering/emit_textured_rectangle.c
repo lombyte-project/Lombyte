@@ -6,7 +6,9 @@
 extern char D_00160860[];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
-void FUN_001f5808(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 tex) {
+void emit_textured_rectangle(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 tex) __asm__("FUN_001f5808");
+
+void emit_textured_rectangle(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 tex) {
     s32 x0 = truncate_float_to_s32(x * 16.0f) + screen_extent.left - 8;
     s32 x1 = truncate_float_to_s32((x + w) * 16.0f) + screen_extent.left - 8;
     s32 y0 = truncate_float_to_s32(y * 16.0f) + screen_extent.top - 8;
@@ -51,4 +53,4 @@ void FUN_001f5808(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x70);
 }
 
-extern __typeof__(FUN_001f5808) func_001F5808 __attribute__((alias("FUN_001f5808")));
+extern __typeof__(emit_textured_rectangle) func_001F5808 __attribute__((alias("FUN_001f5808")));

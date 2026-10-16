@@ -6507,18 +6507,6 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "rendering/fun_001f5808",
-        "source_path": "src/rendering/fun_001f5808.c",
-        "address": "0x001f5808",
-        "current_name": "FUN_001f5808",
-        "proposed_name": null,
-        "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
-        "logical_group_confidence": "unresolved"
-      },
-      {
         "unit": "textbin/fun_001f5ab0",
         "source_path": "src/assembly/textbin/fun_001f5ab0.c",
         "address": "0x001f5ab0",
@@ -20025,6 +20013,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x00226fd4 the input vector is copied to stack; 0x00226fe0 calls recovered normalize_vector_xyz (0x001f9bf8) with length 1.0 and destination 0x00160370. Instructions 0x00227000..0x0022702c multiply its XYZ by the incoming scalar preserved in f20 and store to 0x00160390/394/398. The comparisons and stores at 0x0022701c..0x002270a4 select a component permutation into 0x00160380/384/388. At 0x002270b8 recovered cross_vectors_xyz (0x001f9ad8) crosses that vector with the normalized direction, in place; 0x002270d0 normalizes the cross-product at 0x00160380 with length 1.0. The supplied caller is submit_graphics_setup_command_stream, callsite 0x00227614; its body was unavailable, so the name describes only the proven vector preparation rather than a speculative graphics application."
+          }
+        ]
+      },
+      {
+        "address": "0x001f5808",
+        "current_name": "FUN_001f5808",
+        "proposed_name": "emit_textured_rectangle",
+        "logical_group": "rendering",
+        "unit": "rendering/emit_textured_rectangle",
+        "source_path": "src/rendering/emit_textured_rectangle.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x001f5878\u20130x001f58cc the function converts x, x+width, y and y+height to 16ths of a pixel using convert_float_to_word and adds g_nViewportFixedLeft/Top minus 8; 0x001f58d0\u20130x001f5904 rejects rectangles outside the coordinate bounds. At 0x001f591c\u20130x001f5978 it begins a packet through g_pDmaPacketCursor (0x00160f00) and copies the template at 0x00160860. The primitive value 0x154 at 0x001f59e8/0x001f5a00 selects a textured triangle strip with fixed UV coordinates; 0x001f5a30\u20130x001f5a4c emits four UV/XYZ pairs combining the two texture endpoints and two screen endpoints. The cursor advances by a total 0x90 bytes. Checked caller FUN_001f6638 indexes four-byte records by character code and advances the screen x position by a scaled record width (0x001f68ac\u20130x001f68c0); its calls at 0x001f67b4 and 0x001f68a0 supply 16x16 atlas regions and scaled screen dimensions, while 0x001f6858 supplies a 24x16 region. This confirms textured rectangle emission rather than text parsing within the target."
           }
         ]
       }
