@@ -8,7 +8,6 @@ extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void draw_moby_list(int, int) __asm__("func_0020D330");
 extern void *func_001FE540_id(int) __asm__("func_001FDD10");
 extern const float D_001602A4_f __asm__("D_001602A4") __attribute__((sda));
-extern short D_001602A4_s __asm__("D_001602A4");
 extern char D_001602A8[];
 extern int D_001E0888[];
 #include "rnc/rendering/screen.h"
@@ -43,9 +42,6 @@ int setup_menu_display_text(char *menu) {
     func_001F6CF8_c(*(int *)(menu + 0x20) - 0x10, (screen_extent.height >> 1) - 8, 0x80000000L, buf, -1);
     func_001F6CF8_c(*(int *)(menu + 0x20) - 0x11, (screen_extent.height >> 1) - 9, 0x80FFA888L, buf, -1);
     do_gif_paging();
-    if (0) {
-        (void)D_001602A4_s;
-    }
     return 8;
 }
 

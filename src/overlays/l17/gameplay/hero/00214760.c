@@ -1731,6 +1731,7 @@ void FUN_L17_00214760(void) {
         if (hero.motion.velocity.f[2] > frame_time_sq * -40.0f) {
             hero.motion.velocity.f[2] = frame_time_sq * -40.0f;
         }
+        /* Fakematch: cc1 drops the self-store, but it puts frame_time in $f2 as in retail. */
         hero.target_speed = hero.target_speed;
         if (d > frame_time * 1.3962634f) {
             d = frame_time * 1.3962634f;
