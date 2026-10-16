@@ -16291,18 +16291,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/vendor/fun_00237ed0",
-        "source_path": "src/gameplay/vendor/fun_00237ed0.c",
-        "address": "0x00237ed0",
-        "current_name": "FUN_00237ed0",
-        "proposed_name": null,
-        "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
-        "logical_group_confidence": "unresolved"
-      },
-      {
         "unit": "gameplay/vendor/render_capture_scrolling_text",
         "source_path": "src/gameplay/vendor/render_capture_scrolling_text.c",
         "address": "0x00238310",
@@ -20010,6 +19998,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x0020cfd8 the function loads g_pCameraReferenceData (0x001413d0), then calls 0x0020d510 at 0x0020cfec. Checked helper instructions 0x0020d510..0x0020d57c read its +0x38 packed preset selector and copy or interpolate vector slot +0x10 from 0x0019bdc0, recovered as g_abObjectRenderLightingPresets[].aAvVectors[1]. The assigned retail instructions 0x0020d000..0x0020d014 feed the vector's first two floats to angle helper 0x001f9e90 and fast_cos; 0x0020d028 calls fast_sin. Stores at 0x0020d02c, 0x0020d044 and 0x0020d048 set g_flResidentPackedDirection at 0x001caa80 to (0.14*cos(angle), 0.14*sin(angle), -0.99). The supplied caller is update_resident_gameplay_state via 0x00230e8c. This proves updating the named resident direction vector; no relevant string evidence is supplied or needed for this bounded role."
+          }
+        ]
+      },
+      {
+        "address": "0x00237ed0",
+        "current_name": "FUN_00237ed0",
+        "proposed_name": "update_resident_dialogue_animation_state",
+        "logical_group": "gameplay/vendor",
+        "unit": "gameplay/vendor/update_resident_dialogue_animation_state",
+        "source_path": "src/gameplay/vendor/update_resident_dialogue_animation_state.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00237f50-0x00237f70 the function dispatches on ResidentObjectState lifecycle byte +0x20. At 0x00237f78-0x0023807c it compares the shared timer 0x001e63f4 to scale_game_frames(600), selects one of two variants through game_random_remainder(2) at 0x00237f98, writes a dialogue request at 0x001516ec (0x00237fe0), and calls start_resident_animation_transition (0x00212f90) at 0x00238004/0x0023805c. At 0x00238164-0x002382d4 it gates lifecycle/animation selection on g_dialogueChannelTwoState.playback.nPhase at 0x0015172a being 3 and selects variant-dependent animation bindings. At 0x002380fc it calls resident_animation_threshold_crossed_this_step (0x00214cc8); when the threshold and pending flag permit, 0x00238114 calls stop_dialogue_channel_two_if_started (0x00215b10). The transition-complete bit at resident +0x70 returns the lifecycle to state 2 at 0x0023811c-0x00238160. These recovered symbols and matching retail instructions prove a resident dialogue animation state updater without requiring an unproven actor-specific name."
           }
         ]
       }

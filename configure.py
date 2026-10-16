@@ -417,7 +417,7 @@ RODATA_OVERLAYS = {
     "fun_00216c48": (0x1E86A0, 0xE9620, 24),  # retail switch table (jtbl_001E86A0)
     "draw_sky_shells": (0x1E8910, 0xE9890, 24),  # switch table
     "fun_002223f0": (0x1E8810, 0xE9790, 80),  # switch table
-    "fun_00237ed0": (0x1E8A90, 0xE9A10, 52),  # switch table
+    "gameplay/vendor/update_resident_dialogue_animation_state": (0x1E8A90, 0xE9A10, 52),  # switch table
     "update_help_state": (0x1E7A40, 0xE89C0, 36),  # switch table
     "memcard_update_state": (0x1E8200, 0xE9180, 348),  # switch table
     "init_once": (0x1E7B30, 0xE8AB0, 20),  # switch table
@@ -500,7 +500,7 @@ DATA_OVERLAYS = {
     "rendering/view/update_view_context": (0x18CFC0, 0x8DF40, 64),
     "input/pad/init_pads": (0x1CD760, 0xCE6E0, 16),
     "ui/menus/fun_002223f0": (0x1D5298, 0xD6218, 3),
-    "gameplay/vendor/fun_00237ed0": (0x1E63FC, 0xE737C, 4),
+    "gameplay/vendor/update_resident_dialogue_animation_state": (0x1E63FC, 0xE737C, 4),
     "rendering/draw_dialog_text": (0x1E78F0, 0xE8870, 48),
 }
 

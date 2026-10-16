@@ -1968,7 +1968,7 @@ extern void FUN_L00_00250df8(void *);
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
 extern void FUN_L00_0029b4d8(s32);
 extern void FUN_0020d580(void *);
-extern void FUN_00237ed0(void *);
+extern void update_resident_dialogue_animation_state(void *) __asm__("FUN_00237ed0");
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
 extern f32 FUN_001fa580(f32, f32);
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
@@ -2367,7 +2367,7 @@ void FUN_L00_0029c648(void) {
             add_vector_xyz(&vendor_menu.f24->pos, &vendor_menu.f24->pos, &vendor_menu.f1c->pos);
             FUN_0020d580(vendor_menu.f24);
             FUN_L00_00250df8(vendor_menu.f24);
-            FUN_00237ed0(vendor_menu.f24);
+            update_resident_dialogue_animation_state(vendor_menu.f24);
         }
         k1 = -0.05f;
         k2 = -0.36f;

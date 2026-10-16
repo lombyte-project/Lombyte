@@ -2050,7 +2050,7 @@ segments:
           - [0x138de4, textbin, text_gap_00237e64_before_fun_00237e90]
           - [0x138e10, c, ui/text/set_scrolling_status_message]
           - [0x138e4c, textbin, text_gap_00237ecc_after_fun_00237e90]
-          - [0x138e50, c, gameplay/vendor/fun_00237ed0]
+          - [0x138e50, c, gameplay/vendor/update_resident_dialogue_animation_state]
           - [0x139274, textbin, text_gap_002382f4_before_fun_00238310]
           - [0x139290, c, gameplay/vendor/render_capture_scrolling_text]
           - [0x1394a0, c, ui/text/update_scrolling_status_message]
