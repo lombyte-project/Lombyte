@@ -2838,7 +2838,7 @@ extern int D_0015EE08;
 extern struct { char pad[0x18]; unsigned char flag; } D_0013D408;
 extern s32 D_L14_00161F5C __attribute__((sda));
 extern char D_0013E550[];
-extern char D_L14_001FCE10[];
+char D_L14_001FCE10[] = "Enemy Fighter (moby908) with no flyPath. UID: %d - RAR\n";
 extern char D_L14_001FCE48[];
 extern char *D_L14_001B0BB0_cart[] __asm__("D_L14_001B0BB0");
 
