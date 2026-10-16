@@ -170,128 +170,126 @@ void FUN_L11_0030ee00(Lock_3102C8 *moby)
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L11_00310cf8.s", FUN_L11_00310cf8);
-#else
-#define FUN_L11_00310cf8 FUN_L11_00310cf8_c
-void FUN_L11_00310cf8_c(float, float, float, float, float, int, int, long long, int,
-                          unsigned char, unsigned char, unsigned char, unsigned char)
-    __asm__("FUN_L11_00310cf8");
-typedef unsigned int u128_quad __attribute__((mode(TI)));
-extern int D_L11_001611C0_g __asm__("D_L11_001611C0");
-extern int screen_extent[] __asm__("D_0013E500");
-extern int ftoi_g(float) __asm__("FUN_001fa6d0");
+#include "qcopy.h"
+
+/* Builds one GIF packet for a rotated textured sprite and advances the packet pointer. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003121C0), where it is exact; names translated to the US level program. */
+
+extern int gif_packet_end __asm__("D_L11_001611C0") __attribute__((section(".sdata")));
+extern unsigned char screen_extent_c[] __asm__("D_0013E500");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern int ftoi(float) __asm__("FUN_001fa6d0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
 void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, int texture_width,
-                       int texture_height, long long texture, int z_and_fog, unsigned char red,
-                       unsigned char green, unsigned char blue, unsigned char alpha) {
+                       int texture_height, long texture, int z_and_fog, int red, int green, int blue,
+                       int alpha) {
     float vertical[4];
     float horizontal[4];
     float center[4];
     float top_left[4];
     float bottom_left[4];
     float top_right[4];
-    struct { float bottom_right[4]; volatile int saved_depth[2]; } saved __attribute__((aligned(16)));
-    int *tag;
-    unsigned long long *q;
-    unsigned long long packed_depth;
+    float bottom_right[4];
+    unsigned long rgba;
+    unsigned long green_bits;
+    unsigned long blue_bits;
+    unsigned long alpha_bits;
+    unsigned long tex0;
+    int depth;
+    unsigned long packed_depth;
+    unsigned long gif_tag;
+    unsigned long gif_regs;
+    unsigned long prim;
+    unsigned long tex_size;
+    int gif_dma_tag;
+    int u_end;
+    int v_end;
+    char *tag;
+    unsigned long *packet;
+    int *extent;
     float scale;
 
-    union { volatile int bits; volatile float scale; } saved_scale;
-    saved.saved_depth[0] = z_and_fog;
+    rgba = red & 0xFF;
+    green_bits = green & 0xFF;
+    blue_bits = blue & 0xFF;
+    alpha_bits = alpha & 0xFF;
+    tex0 = texture;
+    depth = z_and_fog;
+
     center[0] = x;
     center[1] = y;
     vertical[0] = height * fast_sin(angle);
     vertical[1] = height * fast_cos(angle);
     horizontal[0] = width * fast_cos(angle);
-    width = -width;
-    horizontal[1] = width * fast_sin(angle);
+    horizontal[1] = -width * fast_sin(angle);
     add_vector_xyz(top_left, center, vertical);
     subtract_vector_xyz(top_left, top_left, horizontal);
     add_vector_xyz(bottom_left, center, vertical);
     subtract_vector_xyz(top_right, center, horizontal);
-    *(u128_quad *)saved.bottom_right = *(u128_quad *)center;
+    qcopy(bottom_right, center);
 
-    tag = (int *)D_L11_001611C0_g;
-    ((int *)(*(volatile int *)&D_L11_001611C0_g))[0] = 0x10000007;
-    ((int *)(*(volatile int *)&D_L11_001611C0_g))[1] = 0;
-    ((int *)(*(volatile int *)&D_L11_001611C0_g))[2] = 0;
-    packed_depth = (unsigned long long)saved.saved_depth[0] << 32;
-    saved_scale.bits = 0x41800000;
-    scale = saved_scale.scale;
-    ((int *)(*(volatile int *)&D_L11_001611C0_g))[3] = 0x50000007;
-    tag = (int *)(*(volatile int *)&D_L11_001611C0_g);
-    q = (unsigned long long *)(tag + 4);
-    D_L11_001611C0_g = (int)q;
-    q[0] = 0xB400000000008001ULL;
-    q[1] = 0x53535353106ULL;
-    q[2] = (unsigned long long)texture;
-    q[3] = 0x154;
-    q[4] = (unsigned long long)(red & 0xff) | ((unsigned long long)(green & 0xff) << 8) |
-           ((unsigned long long)(blue & 0xff) << 16) | ((unsigned long long)(alpha & 0xff) << 24);
-    q[5] = 0x100010;
-    texture_width <<= 4;
-    texture_height <<= 20;
+    *(int *)(gif_packet_end + 0) = 0x10000007;
+    green_bits = green_bits << 8;
+    rgba = rgba | green_bits;
+    gif_dma_tag = 0x50000007;
+    gif_regs = 0x53535353106;
+    *(int *)(gif_packet_end + 4) = 0;
+    blue_bits = blue_bits << 16;
+    rgba = rgba | blue_bits;
+    alpha_bits = alpha_bits << 24;
+    prim = 0x154;
+    tex_size = 0x100010;
+    gif_tag = 0xB400000000008001;
+    rgba = rgba | alpha_bits;
+    *(int *)(gif_packet_end + 8) = 0;
+    scale = 16.0f;
+    u_end = texture_width << 4;
+    v_end = texture_height << 20;
+    packed_depth = (unsigned long)depth << 32;
+    *(int *)(gif_packet_end + 12) = gif_dma_tag;
+    tag = (char *)gif_packet_end;
+    packet = (unsigned long *)(tag + 0x10);
+    gif_packet_end = (int)packet;
+    *(unsigned long *)(tag + 0x10) = gif_tag;
+    packet[1] = gif_regs;
+    packet[2] = tex0;
+    packet[3] = prim;
+    packet[4] = rgba;
+    packet[5] = tex_size;
+
     {
-        int sx, sy;
-        unsigned long long packed_position;
-        sx = ftoi_g(top_left[0] * scale);
-        sy = ftoi_g(top_left[1] * scale);
-        sy = sy + screen_extent[5] - 8;
-        sx = sx + screen_extent[4] - 8;
-        q[7] = texture_width;
-        packed_position = (unsigned long long)sx;
-        packed_position |= (unsigned long long)sy << 16;
-        packed_position |= packed_depth;
-        q[6] = packed_position;
+        int a = ftoi(top_left[0] * scale);
+        int b = ftoi(top_left[1] * scale);
+        extent = (int *)(screen_extent_c);
+        packet[6] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
+        packet[7] = u_end;
     }
     {
-        int sx, sy;
-        unsigned long long packed_position;
-        sx = ftoi_g(bottom_left[0] * scale);
-        sy = ftoi_g(bottom_left[1] * scale);
-        sy = sy + screen_extent[5] - 8;
-        sx = sx + screen_extent[4] - 8;
-        q[9] = texture_height;
-        packed_position = (unsigned long long)sx;
-        packed_position |= (unsigned long long)sy << 16;
-        packed_position |= packed_depth;
-        q[8] = packed_position;
+        int a = ftoi(bottom_left[0] * scale);
+        int b = ftoi(bottom_left[1] * scale);
+        packet[8] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
+        packet[9] = v_end;
     }
     {
-        int sx, sy;
-        unsigned long long packed_position;
-        sx = ftoi_g(top_right[0] * scale);
-        sy = ftoi_g(top_right[1] * scale);
-        sy = sy + screen_extent[5] - 8;
-        sx = sx + screen_extent[4] - 8;
-        q[11] = (texture_height) + (texture_width);
-        packed_position = (unsigned long long)sx;
-        packed_position |= (unsigned long long)sy << 16;
-        packed_position |= packed_depth;
-        q[10] = packed_position;
+        int a = ftoi(top_right[0] * scale);
+        int b = ftoi(top_right[1] * scale);
+        v_end = v_end + u_end;
+        packet[10] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
+        packet[11] = v_end;
     }
     {
-        int sx, sy;
-        unsigned long long packed_position;
-        sx = ftoi_g(saved.bottom_right[0] * scale);
-        sy = ftoi_g(saved.bottom_right[1] * scale);
-        sy = sy + screen_extent[5] - 8;
-        sx = sx + screen_extent[4] - 8;
-        q[13] = 0;
-        packed_position = (unsigned long long)sx;
-        packed_position |= (unsigned long long)sy << 16;
-        packed_position |= packed_depth;
-        q[12] = packed_position;
+        int a = ftoi(bottom_right[0] * scale);
+        int b = ftoi(bottom_right[1] * scale);
+        packet[12] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
+        packet[13] = 0;
     }
-    D_L11_001611C0_g = (*(volatile int *)&D_L11_001611C0_g) + 0x70;
+
+    /* Fakematch: the store through the address keeps the reload after the last packet store. */
+    *(char **)&gif_packet_end += 0x70;
 }
-#undef FUN_L11_00310cf8
-#endif
 #define NOT_SDA
 
 #define MACRO_ADDR
@@ -301,8 +299,6 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
-extern void FUN_L11_00310cf8(float, float, float, float, float, int, int, int, int, int, int, int,
-                             int);
 
 void FUN_L11_00311048(unsigned char a, unsigned char b, unsigned char c, unsigned char d, float x,
                       float y, float s, float ang) {

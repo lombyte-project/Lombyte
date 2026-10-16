@@ -141,187 +141,231 @@ void FUN_L00_0025c558(u8 *a, B_25c558 *b, int c, int d, int e, float f) {
     else
         FUN_00212f90_0025c558(a, c, e, d);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0025c698.s", FUN_L00_0025c698);
-#else
-extern float FUN_001f9b20_0025c698(void *) __asm__("FUN_001f9b20");
-extern void FUN_L00_0025b868_0025c698(float, float, float *) __asm__("FUN_00213ed8");
-extern void FUN_001f9af0_0025c698(float, void *, void *) __asm__("FUN_001f9c48");
-extern void FUN_001f9a68_0025c698(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float FUN_L00_00259698_0025c698(void *, int, float) __asm__("FUN_00213508");
-extern int FUN_001f35d8_0025c698(void) __asm__("FUN_001f0b58");
-extern float FUN_L00_00259710_0025c698(void *) __asm__("FUN_L00_00259710");
-extern void FUN_L00_002d7e90_0025c698(float, void *) __asm__("FUN_L00_002d7e90");
-extern void FUN_001ff300_0025c698(float, void *, void *) __asm__("FUN_001f9a68");
-extern float FUN_0024edc8_0025c698(void *) __asm__("FUN_0020c9e0");
-extern float FUN_001ff218_0025c698(float) __asm__("FUN_001f99c0");
-extern int FUN_L00_002595a0_0025c698(float, float, float, float *, float *) __asm__("FUN_L00_002595a0");
-extern void FUN_L00_00258278_0025c698(float, float, float, float, void *, void *) __asm__("FUN_L00_00258278");
-extern float FUN_00200240_0025c698(int) __asm__("FUN_001fa6c0");
-extern int FUN_L00_001f2868_0025c698(float, void *, int, void *, int) __asm__("FUN_L00_001f2868");
-extern int FUN_L00_0025e3b8_0025c698(int) __asm__("FUN_L00_0025e3b8");
-extern void FUN_L00_00259bc8_0025c698(float, int, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
-extern float FUN_001ff3d8_0025c698(void *) __asm__("FUN_001f9af0");
-extern void FUN_001efc70_0025c698(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern int FUN_L00_001f0d60_0025c698(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void FUN_001f9bf8_0025c698(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float FUN_001f9ab0_0025c698(void *, void *) __asm__("FUN_001f9ab0");
-extern void FUN_001f9a28_0025c698(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float D_0015ED60_0025c698 __asm__("D_0015ED60");
-extern float D_00158160_0025c698 __asm__("D_00158160");
-extern int D_00177F00_0025c698[] __asm__("D_L00_00177F00");
-extern V4 D_00173E60_0025c698 __asm__("D_L00_00173E60");
-extern V4 D_00173E70_0025c698 __asm__("D_L00_00173E70");
-extern V4 D_00173E80_0025c698 __asm__("D_L00_00173E80");
-extern int D_00173E58_0025c698 __asm__("D_L00_00173E58");
+#include "rnc/math/vector.h"
 
-#define F_25C698(p, o) (*(float *)((u8 *)(p) + (o)))
-#define I_25C698(p, o) (*(int *)((u8 *)(p) + (o)))
-#define H_25C698(p, o) (*(s16 *)((u8 *)(p) + (o)))
-#define B_25C698(p, o) (*(u8 *)((u8 *)(p) + (o)))
+#include "qcopy.h"
 
-int FUN_L00_0025c698(void *moby, void *motion) {
-    V4 moved, prior, probe, surface, normal, impulse;
-    float speed, height, smoothing, target, duration, limit, time, value;
-    float output, scratch;
-    float dot;
-    int result = 0, count, *hit, state;
+/* Steps moby MOBY's motion from state ST and returns the flag bits it set. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D6F0), where it is exact; names translated to the US level program. */
 
-    F_25C698(motion, 8) -= F_25C698(motion, 0x10);
-    if (B_25C698(motion, 0x2e) == 1 && B_25C698(motion, 0x2f) != 0)
-        FUN_L00_0025c398(moby, motion, (void *)(int)B_25C698(motion, 0x2f));
-    speed = FUN_001f9b20_0025c698(motion);
-    target = H_25C698(motion, 0x3e) == 2 ? 0.0f : F_25C698(motion, 0x4c);
-    FUN_L00_0025b868_0025c698(target, F_25C698(motion, 0x14), &speed);
-    FUN_001f9af0_0025c698(speed, motion, motion);
-    if (F_25C698(motion, 0x1c) < F_25C698(motion, 8))
-        F_25C698(motion, 8) = F_25C698(motion, 0x1c);
+extern Vec4 D_L00_00173E70;
+extern char *FUN_L00_002d7e90(void *, float);
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern f32 fast_vec_dot_c(void *a, void *b) __asm__("func_001F9AB0");
+extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float approach_value(float *p, float target, float maxstep);
+extern int *D_L00_00177F00[];
+extern int D_0015ED60 __attribute__((section(".sdata")));
+extern int D_L00_00173E60; /* no foreign declaration */
+extern int FUN_001efa68(void *, void *, int, int, int);
+extern int FUN_001f0b58(void);
+extern int FUN_L00_001f0d60();
+extern int FUN_L00_001f2868(void *, float, int, void *, void *);
+extern int FUN_L00_0025e3b8(void *);
+extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
+extern void probe_ground_height_alt(void *, int, float) __asm__("FUN_00213508");
+extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
+f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
+float absolute_float(float input) __asm__("func_001F99C0");
+int FUN_L00_002595a0(float *r0, float *r1, float a, float b, float c);
+void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
+void FUN_L00_00259710(void *a);
+void FUN_L00_00259bc8(char *, float, int, int, void *, void *);
+void FUN_L00_0025c398_c(void *a0, void *a1, void *a2) __asm__("FUN_L00_0025c398");
+extern Vec4 D_94C8_60 __asm__("D_L00_00173E60");
+extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
+extern int func_L00_001EFFF0_p(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
+extern float func_00214358f(void *, int, float) __asm__("FUN_00213508");
+extern float D_0015EE60_m __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern int func_L00_001F2BE8_d6f0(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
-    prior = *(V4 *)((u8 *)moby + 0x10);
-    prior.v[2] = F_25C698(motion, 0x28) + prior.v[2];
-    height = FUN_L00_00259698_0025c698(&prior, 0, 0.5f);
-    if (FUN_001f35d8_0025c698() == 0) {
-        if (F_25C698(motion, 0x5c) == 0.0f && height <= prior.v[2] &&
-            prior.v[2] + F_25C698(motion, 8) < height) {
-            F_25C698(motion, 0x5c) = 1.0f;
-            prior.v[2] = height;
-            FUN_L00_002d7e90_0025c698(3.0f, &prior);
-        }
-        height = FUN_L00_00259710_0025c698((u8 *)moby + 0x10);
-    } else if ((I_25C698(motion, 0x24) & 0x10) || H_25C698(motion, 0x3e) == 2) {
-        FUN_001f9a68_0025c698(&probe, (u8 *)moby + 0x10, motion);
-        if (FUN_L00_00259710_0025c698(&probe) < height - 0.25f)
-            FUN_001f9af0_0025c698(0.0f, motion, motion);
-    }
-    if (F_25C698(motion, 0x5c) != 0.0f) {
-        if (F_25C698(motion, 0x5c) < 4.0f)
-            FUN_001ff300_0025c698(0.7f, motion, motion);
-        if (F_25C698(motion, 0x5c) < 7.0f) {
-            F_25C698(motion, 0x5c) += 1.0f;
-            F_25C698(motion, 0x10) *= 0.75f;
+int FUN_L00_0025c698(char *moby, char *st) {
+    float v0[4];
+    float v10[4];
+    float v20[4];
+    float v30[4];
+    float v40[4];
+    float v50[4];
+    float f60, f64, f68, f6c;
+    
+    Vec4 *g;
+    char *q;
+    int flags = 0;
+
+    float sc, f21, f20, f12, t, r, rr, one;
+    int n, i;
+
+    *(float *)(st + 0x8) = *(float *)(st + 0x8) - *(float *)(st + 0x10);
+    if (*(unsigned char *)(st + 0x2E) == 1) {
+        if (*(unsigned char *)(st + 0x2F) != 0) {
+            FUN_L00_0025c398_c(moby, st, (void *)(int)*(unsigned char *)(st + 0x2F));
         }
     }
-    if (F_25C698(moby, 0x10) < 2.0f || F_25C698(moby, 0x10) > 1021.0f ||
-        F_25C698(moby, 0x14) < 2.0f || F_25C698(moby, 0x14) > 1021.0f ||
-        F_25C698(moby, 0x18) < 2.0f || F_25C698(moby, 0x18) > 1021.0f)
-        result = 0x100;
 
-    if (F_25C698(motion, 0x54) != -1.0f && F_25C698(motion, 0x50) != -1.0f) {
-        switch (H_25C698(motion, 0x3e)) {
+    f60 = vector_length_xy(st);
+    t = (*(short *)(st + 0x3E) == 2) ? 0.0f : *(float *)(st + 0x4C);
+    approach_value(&f60, t, *(float *)(st + 0x14));
+    set_vector_length_xy((float *)st, (float *)st, f60);
+    if (*(float *)(st + 0x1C) < *(float *)(st + 0x8)) {
+        *(float *)(st + 0x8) = *(float *)(st + 0x1C);
+    }
+
+    qcopy(v10, moby + 0x10);
+    v10[2] = v10[2] + *(float *)(st + 0x28);
+    f21 = func_00214358f(v10, 0, 0.5f);
+    if (FUN_001f0b58() == 0) {
+        if (*(float *)(st + 0x5C) == 0.0f && f21 <= v10[2] && v10[2] + *(float *)(st + 0x8) < f21) {
+            *(float *)(st + 0x5C) = 1.0f;
+            v10[2] = f21;
+            FUN_L00_002d7e90(v10, 3.0f);
+        }
+        f21 = func_L00_0025A748_f((moby + 0x10));
+    } else {
+        if ((*(int *)(st + 0x24) & 0x10) || *(short *)(st + 0x3E) == 2) {
+            add_vector_xyz_c(v20, (moby + 0x10), st);
+            if (func_L00_0025A748_f(v20) < f21 - 0.25f) {
+                set_vector_length_xy((float *)st, (float *)st, 0.0f);
+            }
+        }
+    }
+
+    if (*(float *)(st + 0x5C) != 0.0f) {
+        if (*(float *)(st + 0x5C) < 4.0f) {
+            fast_vec_scale_c(st, st, 0.7f);
+        }
+        if (*(float *)(st + 0x5C) < 7.0f) {
+            *(float *)(st + 0x5C) = *(float *)(st + 0x5C) + 1.0f;
+            *(float *)(st + 0x10) = *(float *)(st + 0x10) * 0.75f;
+        }
+    }
+    if (*(float *)(moby + 0x10) < 2.0f || 1021.0f < *(float *)(moby + 0x10)
+        || *(float *)(moby + 0x14) < 2.0f || 1021.0f < *(float *)(moby + 0x14)
+        || *(float *)(moby + 0x18) < 2.0f || 1021.0f < *(float *)(moby + 0x18)) {
+        flags = 0x100;
+    }
+
+    if (*(float *)(st + 0x54) != -1.0f && *(float *)(st + 0x50) != -1.0f) {
+        switch (*(short *)(st + 0x3E)) {
         case 0: {
-            duration = FUN_001ff218_0025c698(F_25C698(motion, 8) / F_25C698(motion, 0x10));
-            if (duration > 2.0f) {
-                time = (F_25C698(motion, 0x50) - FUN_0024edc8_0025c698(moby)) / duration;
-                if (time > 0.0f)
-                    FUN_L00_0025b868_0025c698(time, D_00158160_0025c698 * 0.1f, (float *)((u8 *)moby + 0x58));
+            float s0;
+            s0 = absolute_float(*(float *)(st + 0x8) / *(float *)(st + 0x10));
+            if (2.0f < s0) {
+                t = compute_interpolated_record_value(moby);
+                rr = (*(float *)(st + 0x50) - t) / s0;
+                if (0.0f < rr) {
+                    approach_value((float *)(moby + 0x58), rr, D_0015EE60_m * 0.1f);
+                }
             }
-        break;
-        }
-        case 1: {
-            if (F_25C698(motion, 0x54) <= FUN_0024edc8_0025c698(moby)) {
-                I_25C698(moby, 0x58) = 0;
-            } else {
-                value = F_25C698(motion, 0x10) * -0.5f;
-                output = 60.0f;
-                if (FUN_L00_002595a0_0025c698(value, F_25C698(motion, 8) - value,
-                    F_25C698(moby, 0x18) - height, &scratch, &limit) > 0 &&
-                    scratch > 0.0f && scratch < 60.0f)
-                    output = scratch;
-                if (output < 0.0001f) output = 0.0001f;
-                time = (F_25C698(motion, 0x54) - FUN_0024edc8_0025c698(moby)) / output;
-                if (time > 2.0f) time = 2.0f;
-                else if (time < 0.0f) time = 0.0f;
-                FUN_L00_0025b868_0025c698(time, D_0015ED60_0025c698 * 0.1f, (float *)((u8 *)moby + 0x58));
-            }
-        break;
-        }
-        case 2: {
-            F_25C698(moby, 0x58) = 1.0f;
             break;
         }
+        case 1:
+            t = compute_interpolated_record_value(moby);
+            if (*(float *)(st + 0x54) <= t) {
+                *(int *)(moby + 0x58) = 0;
+            } else {
+                float h = *(float *)(st + 0x10) * -0.5f;
+                f20 = 60.0f;
+                n = FUN_L00_002595a0(&f64, &f68, h, *(float *)(st + 0x8) - h, *(float *)(moby + 0x18) - f21);
+                if (n > 0 && 0.0f < f64 && f64 < f20) {
+                    f20 = f64;
+                }
+                if (f20 < 0.0001f) {
+                    f20 = 0.0001f;
+                }
+                t = compute_interpolated_record_value(moby);
+                rr = (*(float *)(st + 0x54) - t) / f20;
+                if (2.0f < rr) {
+                    rr = 2.0f;
+                } else if (rr < 0.0f) {
+                    rr = 0.0f;
+                }
+                approach_value((float *)(moby + 0x58), rr, D_0015EE60_m * 0.1f);
+            }
+            break;
+        case 2:
+            *(float *)(moby + 0x58) = 1.0f;
+            break;
         }
     }
-    if (B_25C698(moby, 0x70) & 2) result |= 0x40;
-    if (!(I_25C698(motion, 0x24) & 4))
-        FUN_L00_00258278_0025c698(F_25C698(motion, 0x40), 0.02f, 0.3f,
-            F_25C698(motion, 0x48), moby, (u8 *)motion + 0x44);
 
-    moved = *(V4 *)((u8 *)moby + 0x10);
-    moved.v[2] += F_25C698(motion, 0x28);
-    FUN_001f9a68_0025c698((u8 *)moby + 0x10, (u8 *)moby + 0x10, motion);
-    probe = *(V4 *)((u8 *)moby + 0x10);
-    probe.v[2] += F_25C698(motion, 0x28);
-    FUN_001f9a68_0025c698(&surface, &probe, motion);
-    count = FUN_L00_001f2868_0025c698(FUN_00200240_0025c698(I_25C698(motion, 0x20)) * 0.0010742188f,
-        &surface, 0x10, moby, 0);
-    state = count;
-    hit = D_00177F00_0025c698;
-    /* The query returns zero or a logical-right-shifted hit count. */
-    while (state-- > 0) {
-        if (FUN_L00_0025e3b8_0025c698(*hit) == 0) {
-            if ((I_25C698(motion, 0x24) & 0x20) && H_25C698(motion, 0x3e) == 2)
-                result |= 0x100;
-        } else {
-            FUN_L00_00259bc8_0025c698(1.0f, *hit, moby, 0x10000, (u8 *)moby + 0x10, motion);
-        }
-        hit++;
+    if (*(unsigned char *)(moby + 0x70) & 2) {
+        flags |= 0x40;
     }
-    smoothing = FUN_001ff3d8_0025c698(motion);
-    if ((float)I_25C698(motion, 0x20) * 0.0009765625f < smoothing) {
-        FUN_001efc70_0025c698(&moved, &probe, 0x24, moby, 0);
-        probe = D_00173E60_0025c698;
+    if (!(*(int *)(st + 0x24) & 4)) {
+        FUN_L00_00258278(moby, (float *)(st + 0x44), *(float *)(st + 0x40), 0.02f, 0.3f, *(float *)(st + 0x48));
     }
-    if (FUN_L00_001f0d60_0025c698(FUN_00200240_0025c698(I_25C698(motion, 0x20)) * 0.0009765625f,
-        &probe, 0x24, moby)) {
-        result |= 2;
-        *(V4 *)((u8 *)moby + 0x10) = D_00173E70_0025c698;
-        F_25C698(moby, 0x18) -= F_25C698(motion, 0x28);
-        FUN_001f9bf8_0025c698(&normal, &D_00173E80_0025c698, 1.0f);
-        if (normal.v[2] >= 0.707f) {
-            dot = FUN_001f9ab0_0025c698(motion, &normal);
-            if (dot < 0.0f) {
-                if (D_00173E58_0025c698 == 0 || *(&D_00173E58_0025c698 + 1) > 0) {
-                    result |= 1;
-                    H_25C698(motion, 0x3e) = 2;
+
+    i = 0;
+    qcopy(v0, (moby + 0x10));
+    v0[2] = v0[2] + *(float *)(st + 0x28);
+    add_vector_xyz_c((moby + 0x10), (moby + 0x10), st);
+    qcopy(v20, (moby + 0x10));
+    v20[2] = v20[2] + *(float *)(st + 0x28);
+    add_vector_xyz_c(v30, v20, st);
+    n = func_L00_001F2BE8_d6f0(convert_integer_to_float(*(int *)(st + 0x20)) * 0.0010742187732830644f, v30, 16, moby, 0);
+    if (i < n) {
+        int **pp = D_L00_00177F00;
+        int k = n;
+        do {
+            if (FUN_L00_0025e3b8(*pp) == 0) {
+                if (*(int *)(st + 0x24) & 0x20) {
+                    if (*(short *)(st + 0x3E) == 2) {
+                        flags |= 0x100;
+                    }
                 }
-                FUN_001f9bf8_0025c698(&impulse, &normal, dot);
-                FUN_001f9a28_0025c698(motion, motion, &impulse);
-                if (H_25C698(motion, 0x3e) == 2) {
-                    float vertical = FUN_001ff3d8_0025c698(motion);
-                    FUN_L00_0025b868_0025c698(0.0f, F_25C698(motion, 0x10), &vertical);
-                    FUN_001f9bf8_0025c698(motion, motion, vertical);
+            } else {
+                FUN_L00_00259bc8((char *)*pp, 1.0f, (int)moby, 0x10000, (moby + 0x10), st);
+            }
+            pp++;
+        } while (--k != 0);
+    }
+
+    sc = 0.0009765625f;
+    t = fast_vec_length(st);
+    if ((float)*(int *)(st + 0x20) * sc < t) {
+        func_L00_001EFFF0_p(v0, v20, 36, moby, 0);
+        qcopy(v20, &D_94C8_60);
+    }
+    if (func_L00_001F10E0_l(v20, convert_integer_to_float(*(int *)(st + 0x20)) * sc, 36, moby) != 0) {
+        flags |= 2;
+        g = &D_L00_00173E70;
+        qcopy((moby + 0x10), g);
+        one = 1.0f;
+        *(float *)(moby + 0x18) = *(float *)(moby + 0x18) - *(float *)(st + 0x28);
+        fast_vec_normalize_c(v40, (char *)g + 0x10, one);
+        if (0.7070000171661377f <= v40[2]) {
+            float e = fast_vec_dot_c(st, v40);
+            if (e < 0.0f) {
+                q = (char *)g - 0x30;
+                if (*(int *)(q + 0x18) == 0 || *(int *)(q + 0x1C) > 0) {
+                    flags |= 1;
+                    *(short *)(st + 0x3E) = 2;
+                }
+                fast_vec_normalize_c(v50, v40, e);
+                subtract_vector_xyz(st, st, v50);
+                if (*(short *)(st + 0x3E) == 2) {
+                    f6c = fast_vec_length(st);
+                    approach_value(&f6c, 0.0f, *(float *)(st + 0x10));
+                    fast_vec_normalize_c(st, st, f6c);
                 }
             }
         } else {
-            dot = FUN_001f9ab0_0025c698(motion, &normal);
-            if (dot < 0.0f) {
-                FUN_001f9bf8_0025c698(&impulse, &normal, dot * -(F_25C698(motion, 0x30) + 1.0f));
-                FUN_001f9a68_0025c698(motion, motion, &impulse);
+            float d = fast_vec_dot_c(st, v40);
+            if (d < 0.0f) {
+                d = d * -(*(float *)(st + 0x30) + one);
+                fast_vec_normalize_c(v50, v40, d);
+                add_vector_xyz_c(st, st, v50);
             }
         }
     }
-    if (H_25C698(motion, 0x3e) == 0 && F_25C698(motion, 8) < 0.0f)
-        H_25C698(motion, 0x3e) = 1;
-    return result;
+    if (*(short *)(st + 0x3E) == 0) {
+        if (*(float *)(st + 0x8) < 0.0f) {
+            *(short *)(st + 0x3E) = 1;
+        }
+    }
+    return flags;
 }
-#endif

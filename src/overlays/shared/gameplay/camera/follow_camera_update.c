@@ -1323,109 +1323,91 @@ void FUN_L00_002ebb00(O002ebb00 *o) {
     FUN_L00_001eb0c8(o->x50, m2 + 0x14, 0.0f);
     FUN_L00_002eb3b0_u(o);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebbd8.s", FUN_L00_002ebbd8);
-#else
-extern int FUN_001fef20_2ebbd8(int) __asm__("FUN_001f96f8");
-extern void FUN_001ff260_2ebbd8(void *) __asm__("FUN_001f99f8");
-extern float FUN_001ff7e8_2ebbd8(float) __asm__("FUN_001f9dc8");
-extern float FUN_001ff800_2ebbd8(float) __asm__("FUN_001f9de0");
-extern void FUN_001ff2a8_2ebbd8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_001ff500_2ebbd8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float FUN_001ff8b0_2ebbd8(float, float) __asm__("FUN_001f9e90");
+/* Sets up the camera activation moby: tuning floats, then the pose copied from the current camera. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002ED088), where it is exact; names translated to the US level program. */
+
+extern char D_0013F350[] __attribute__((section(".data")));
+extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
+extern f32 fast_cos(f32) __asm__("func_001F9DC8");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern int D_0015ED84 __attribute__((section(".sdata")));
+extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
+extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void FUN_L00_002ebbd8(void *arg) {
-    O002ebb00 *o = (O002ebb00 *)arg;
-    char *m;
-    char *p;
-    struct Hero *g;
-    char *cam;
-    char *tail;
-    char *source;
-    char *q;
-    int state = current_level_index;
-    float scale = 1.5f;
-    int frames;
-    int next;
-
-    {
-        char *m = (char *)o->m;
-        p = m + 0x40;
-    }
+    char *m = arg;
+    char *g;
+    int lvl0 = D_0015ED84;
+    int lvl;
+    char *p = *(char **)(m + 0x70) + 0x40;
+    float f;
+    char *t, *q, *r, *w, *s19, *src;
+    char *gg, *gg0, *h;
     *(int *)(p + 0x40) = 0;
-    if (state == 14) {
-        if ((unsigned)(hero.state.current - 0x2c) >= 2) {
-            *(float *)(p + 0x4c) = scale;
-            goto scale_done;
-        }
-        scale = 2.0f;
-    }
-    *(float *)(p + 0x4c) = scale;
-scale_done:
-    g = &hero;
-    *(float *)(p + 0x48) = 0.20943952f;
-    *(float *)(p + 0x58) = 0.0017453292f;
-    *(float *)(p + 0x5c) = -0.004363323f;
-    *(int *)(p + 0x44) = ((int)g->moby);
+    f = 1.5f;
+    if (lvl0 == 0xE && (h = D_0013F350, (unsigned)(*(int *)(h + 0x2084) - 0x2C) < 2))
+        *(float *)(p + 0x4C) = 2.0f;
+    else
+        *(float *)(p + 0x4C) = 1.5f;
+    g = D_0013F350;
+    *(float *)(p + 0x48) = 0.20943951606750488f;
+    *(float *)(p + 0x58) = 0.001745329238474369f;
+    *(float *)(p + 0x5C) = -0.004363323096185923f;
+    *(int *)(p + 0x44) = *(int *)(g + 0x2080);
     {
-        char *m = (char *)((volatile O002ebb00 *)o)->m + 0xa0;
-        *(float *)(m + 0) = 4.64f;
-        *(float *)(m + 4) = 0.5f;
-        *(float *)(m + 0x10) = 2.0f;
-        *(float *)(m + 0x14) = 0.05f;
+        char *q0 = *(char **)(m + 0x70);
+        *(float *)(q0 + 0xA0) = 4.639999866485596f;
+        q0 += 0xA0;
+        *(float *)(q0 + 4) = 0.5f;
+        *(float *)(q0 + 0x10) = 2.0f;
+        *(float *)(q0 + 0x14) = 0.05f;
     }
-    {
-        char *m = (char *)((volatile O002ebb00 *)o)->m;
-        *(int *)(m + 0x18) = 0;
-        *(float *)(m + 0x10) = 0.01f;
-        *(float *)(m + 0x14) = 0.3f;
-        frames = FUN_001fef20_2ebbd8(0x78);
-        *(short *)(m + 0x1c) = 0;
-        *(short *)(m + 0x1e) = frames;
-        FUN_001ff260_2ebbd8(m);
-    }
-    {
-        char *m = (char *)((volatile O002ebb00 *)o)->m + 0x30;
-        *(float *)(m + 4) = 0.02f;
-        *(float *)(m + 8) = 0.2f;
-        *(int *)(m + 0xc) = 0;
-        *(int *)m = 0;
-    }
-    m = (char *)((volatile O002ebb00 *)o)->m;
-    tail = m + 0xb8;
-    *(int *)(tail + 4) = 0;
-    {
-        char *cam = D_00166C80_c;
-        source = *(char **)(cam + 0x184);
-    }
-    q = (char *)o + 0x30;
-    qcopy(q, source + 0x30);
-    qcopy(o, source);
-    qcopy((char *)o + 0x10, source + 0x10);
-    qcopy((char *)o + 0x20, source + 0x20);
-    qcopy((char *)o + 0x40, o);
-    *(short *)((char *)o + 0x7e) = 0;
-    if ((unsigned)(g->state.current - 0x2c) < 2) {
-        *(float *)(p + 0x30) = FUN_001ff7e8_2ebbd8(g->unk9AC);
-        *(float *)(p + 0x34) = FUN_001ff800_2ebbd8(g->unk9AC);
+    r = *(char **)(m + 0x70);
+    *(int *)(r + 0x18) = 0;
+    *(float *)(r + 0x10) = 0.01f;
+    *(float *)(r + 0x14) = 0.3f;
+    *(short *)(r + 0x1E) = scale_game_frames_c(0x78);
+    *(short *)(r + 0x1C) = 0;
+    clear_u64_value_c(r);
+    q = *(char **)(m + 0x70);
+    t = q + 0x30;
+    *(float *)(t + 4) = 0.02f;
+    *(float *)(t + 8) = 0.2f;
+    *(int *)(t + 0xC) = 0;
+    *(int *)(q + 0x30) = 0;
+    s19 = *(char **)(m + 0x70);
+    w = s19 + 0xB8;
+    *(int *)(w + 4) = 0;
+    gg0 = (char *)&D_L00_00166C80;
+    src = *(char **)(gg0 + 0x184);
+    qcopy(m + 0x30, src + 0x30);
+    qcopy(m, src);
+    qcopy(m + 0x10, src + 0x10);
+    qcopy(m + 0x20, src + 0x20);
+    qcopy(m + 0x40, m);
+    *(short *)(m + 0x7E) = 0;
+    lvl = *(int *)(g + 0x2084);
+    if ((unsigned)(lvl - 0x2C) < 2) {
+        *(float *)(p + 0x30) = fast_cos(*(float *)(g + 0x9AC));
+        *(float *)(p + 0x34) = fast_sin(*(float *)(g + 0x9AC));
         *(int *)(p + 0x38) = 0;
-        *(float *)(m + 0xb8) = g->unk9AC;
-        *(int *)(tail + 8) = (int)g->unk994;
+        *(float *)(s19 + 0xB8) = *(float *)(g + 0x9AC);
+        *(int *)(w + 8) = *(int *)(g + 0x994);
     } else {
-        FUN_001ff2a8_2ebbd8(p + 0x30, ((char *)g->unk964) + 0x10, q);
+        subtract_vector_xyz_c(p + 0x30, *(char **)(g + 0x964) + 0x10, m + 0x30);
         *(int *)(p + 0x38) = 0;
-        *(int *)(p + 0x3c) = 0;
-        FUN_001ff500_2ebbd8(p + 0x30, p + 0x30, 1.0f);
-        *(float *)(m + 0xb8) =
-            FUN_001ff8b0_2ebbd8(*(float *)(p + 0x30), *(float *)(p + 0x34));
-        *(int *)(tail + 8) = (int)g->unk964;
+        *(int *)(p + 0x3C) = 0;
+        fast_vec_normalize(p + 0x30, p + 0x30, 1.0f);
+        *(float *)(s19 + 0xB8) = fast_arc_tan_c(*(float *)(p + 0x30), *(float *)(p + 0x34));
+        *(int *)(w + 8) = *(int *)(g + 0x964);
     }
-    cam = D_00166C80_c;
-    *(char *)(cam + 0x273) = 2;
-    *(short *)(cam + 0x270) = 1;
-    *(int *)(cam + 0x2f4) = FUN_001fef20_2ebbd8(0x3c);
+    gg = (char *)&D_L00_00166C80;
+    *(char *)(gg + 0x273) = 2;
+    *(short *)(gg + 0x270) = 1;
+    *(int *)(gg + 0x2F4) = scale_game_frames_c(0x3C);
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebe70.s", FUN_L00_002ebe70);
 #else
@@ -1589,7 +1571,7 @@ void FUN_L00_002ec4a8(unsigned char *m) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDB70), where it is exact; names translated to the US level program. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_002ebbd8(void *);
+extern void FUN_L00_002ebbd8_u(void *) __asm__("FUN_L00_002ebbd8");
 void refresh_point_light(s32 arg0) __asm__("FUN_00201f58");
 extern char D_L00_00166D80_c[] __asm__("D_L00_00166C80");
 
@@ -1617,7 +1599,7 @@ void FUN_L00_002ec6c0(char *m) {
         qcopy(r, m);
         qcopy(r + 0x10, m + 0x10);
         qcopy(r + 0x20, m + 0x20);
-        FUN_L00_002ebbd8(m);
+        FUN_L00_002ebbd8_u(m);
         *(int *)(g + 0x2F4) = scale_game_frames(0x2D);
     }
 done:

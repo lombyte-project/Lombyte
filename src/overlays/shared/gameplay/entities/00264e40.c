@@ -16,33 +16,35 @@ void FUN_L02_00264e40(char *moby) {
     }
     *(short *)(moby + 0x1C) = 0;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_00264e70.s", FUN_L02_00264e70);
-#else
 #include "qcopy.h"
-extern int D_L02_0015F5CC;
-extern float D_0015ED6C;
-extern float frame_time_sq __asm__("D_0015ED70");
-extern float D_L02_00174460[] __attribute__((section(".data")));
-extern float D_L02_001600D0 __attribute__((sda));
-extern int D_L02_001600D4 __attribute__((sda));
-extern int D_L02_001600D8 __attribute__((sda));
-extern float D_L02_001600DC __attribute__((sda));
-extern float D_L02_001600E0 __attribute__((sda));
+
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/00264e40.c, FUN_L02_00264e70. */
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E88), where it is exact; names translated to the US level program. */
+
+typedef struct { char *p[7]; short timer; } Slots_265E88;
+
+extern char *FUN_L00_0026b230(void *, void *, unsigned long, float);
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float D_0015ED70 __attribute__((section(".sdata")));
+extern float D_L02_00174460[];
+extern float FUN_001f96b0(float);
+extern float fast_vec_dist(void *, void *);
+extern int D_L02_0015F5CC __attribute__((section(".sdata")));
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
-extern float scale_timer_random(float) __asm__("FUN_L02_0020ff48");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int FUN_001f9770(void *);
-extern char *FUN_L00_0026b230(void *, void *, unsigned long long, float);
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern short D_L02_001600D0 __attribute__((sda));
+extern short D_L02_001600D4 __attribute__((sda));
+extern short D_L02_001600D8 __attribute__((sda));
+extern short D_L02_001600DC __attribute__((sda));
+extern short D_L02_001600E0 __attribute__((sda));
+extern void FUN_L00_00257d78(float *, float, float);
 extern void FUN_L00_0026d598(void *, void *, int);
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void advance_accelerated_scalar_alt(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 
 void FUN_L02_00264e70(char *slots, float *position, float *direction, float distance) {
     float origin[4] __attribute__((aligned(16)));
@@ -50,19 +52,21 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     float adjusted[4] __attribute__((aligned(16)));
     float velocity[4] __attribute__((aligned(16)));
     float offset[4] __attribute__((aligned(16)));
-    float speed;
-    float travel_step;
+    float travel_step = 0.0f;
+    float speed = 0.0f;
     float travel;
     float acceleration;
-    int count;
+    int n;
     int first_count;
     int i;
     int save_shot;
     char *shot;
+    unsigned long fl;
 
-    travel_step = 0.0f;
-    speed = 0.0f;
-    save_shot = (D_L02_0015F5CC % 4) == 0;
+    {
+        int phase = D_L02_0015F5CC & 3;
+        save_shot = phase == 0;
+    }
     qcopy(origin, position);
     fast_vec_normalize(adjusted, direction, distance + 0.75f);
     add_vector_xyz(end, adjusted, origin);
@@ -72,43 +76,42 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     } else {
         travel = distance;
     }
-    acceleration = D_L02_001600D0 * D_0015ED6C;
-    advance_accelerated_scalar(&speed, &travel_step, travel, 1.0f, frame_time_sq * 48.0f,
-                  acceleration);
-    fast_vec_normalize(adjusted, adjusted, travel_step);
-    first_count = D_L02_001600D4;
-    count = D_L02_001600D8;
+    acceleration = D_0015ED70;
+    advance_accelerated_scalar_alt(&speed, &travel_step, travel, 1.0f, acceleration * 48.0f,
+                  (*(float *)&D_L02_001600D0) * D_0015ED6C);
+    ((float (*)(void *, void *, float))fast_vec_normalize)(adjusted, adjusted, travel_step);
+    n = (*(int *)&D_L02_001600D8);
+    first_count = (*(int *)&D_L02_001600D4);
     if (travel < 4.0f) first_count = 1;
-    for (i = 0; i < count + first_count; i++) {
-        random_vector(offset, 0.0f,
-            ((D_L02_001600DC - D_L02_001600E0) * (travel / distance) + D_L02_001600E0) * D_0015ED6C);
+    for (i = 0; i < n + first_count; i++) {
+        FUN_L00_00257d78(offset, 0.0f,
+            (((*(float *)&D_L02_001600DC) - (*(float *)&D_L02_001600E0)) * (travel / distance) + (*(float *)&D_L02_001600E0)) * D_0015ED6C);
         add_vector_xyz(offset, offset, adjusted);
         fast_vec_scale(velocity, adjusted, random_float_between(0.0f, 1.0f));
         add_vector_xyz(velocity, velocity, origin);
-        shot = FUN_L00_0026b230(velocity, offset, i < first_count ? 1ULL : (unsigned long long)(i < first_count), travel);
+        if (i < first_count) fl = 1; else fl = 0;
+        shot = FUN_L00_0026b230(velocity, offset, fl, travel);
         if (i == 2 && save_shot) {
             int j;
-            char **slot = (char **)slots;
             for (j = 0; j < 7; j++) {
-                if (*(char **)((char *)slot + (j << 2)) == 0) {
-                    *(char **)((char *)slot + (j << 2)) = shot;
+                if (((Slots_265E88 *)slots)->p[j] == 0) {
+                    ((Slots_265E88 *)slots)->p[j] = shot;
                     break;
                 }
             }
         }
     }
     if (FUN_001f9770(slots + 0x1c)) {
-        int timer = truncate_float_to_s32(scale_timer_random(random_float_between(10.0f, 30.0f)));
-        acceleration = D_0015ED6C + D_0015ED6C;
-        *(short *)(slots + 0x1c) = timer;
-        random_vector(offset, 0.0f, acceleration);
+        float sp2 = random_float_between(10.0f, 30.0f);
+        sp2 = FUN_001f96b0(sp2);
+        ((Slots_265E88 *)slots)->timer = truncate_float_to_s32(sp2);
+        FUN_L00_00257d78(offset, 0.0f, D_0015ED6C + D_0015ED6C);
         fast_vec_scale(velocity, adjusted, random_float_between(0.5f, 0.1f));
         add_vector_xyz(velocity, velocity, offset);
         velocity[3] = 0.0f;
         FUN_L00_0026d598(position, velocity, 0);
     }
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_002661E8), where it is exact; names translated to the US level program. */
 
 extern int collect_mobies_in_sphere(float, void *, int, int, int) __asm__("FUN_L00_001f2868");
