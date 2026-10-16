@@ -816,7 +816,12 @@ extern int D_L18_001622C8 __attribute__((sda));
 extern int D_L18_001622CC __attribute__((sda));
 extern f32 D_L18_001622D0 __attribute__((sda));
 extern f32 D_L18_001622D4 __attribute__((sda));
-extern f32 D_L18_001DA350[4][2];
+f32 D_L18_001DA350[4][2] = {
+    {0.0f, 0.0f},
+    {0.0f, 1.0f},
+    {7.0f, 0.0f},
+    {7.0f, 1.0f},
+};
 extern u128 D_L18_001DA370[4];
 
 void FUN_L18_002f1fd8(struct Moby *moby) {
