@@ -363,7 +363,7 @@ segments:
           - [0x1d930, c, runtime/state/invoke_state_initializer]
           - [0x1d94c, textbin, text_gap_0011c9cc]
           - [0x1d960, c, sdk/rpc/lf_bind]
-          - [0x1da60, c, runtime/sio/fun_0011cae0]
+          - [0x1da60, c, runtime/sio/sif_load_module_server_changed]
           - [0x1daec, textbin, text_gap_0011cb6c_after_fun_0011cae0]
           - [0x1daf0, c, sdk/rpc/sce_sif_load_module_buffer]
           - [0x1dcf8, c, runtime/iop/invoke_iop_status]

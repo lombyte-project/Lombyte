@@ -6,7 +6,7 @@ struct SifLoadModuleArgs {
 };
 extern u8 D_00158400[];
 extern s32 _lf_bind();
-extern s32 func_0011CAE0();
+extern s32 sif_load_module_server_changed() __asm__("func_0011CAE0");
 extern s32 memcpy();
 extern s32 sceSifCallRpc();
 #define SIFCMD ((struct SifLoadModuleArgs *)D_00158200)
@@ -18,7 +18,7 @@ s32 _sceSifLoadModuleBuffer(s32 arg0, s32 size, s32 src, s32 *result_out) {
     if (_lf_bind() < 0) {
         return var_2_18;
     }
-    if (func_0011CAE0() != 0) {
+    if (sif_load_module_server_changed() != 0) {
         return 0xFFFEFFFC;
     }
     SIFCMD->unk0 = arg0;
