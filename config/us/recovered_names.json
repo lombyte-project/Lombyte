@@ -11127,23 +11127,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/entities/fun_00214a98",
-        "source_path": "src/gameplay/entities/fun_00214a98.c",
-        "address": "0x00214a98",
-        "current_name": "FUN_00214a98",
-        "proposed_name": null,
-        "logical_group": "gameplay/entities",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyutil.c"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "ui/text/load_display_text_resource_entry",
         "source_path": "src/ui/text/load_display_text_resource_entry.c",
         "address": "0x00214bc0",
@@ -20001,6 +19984,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x00226b58..0x00226be8 seven state ranges are copied to scratchpad before the call at 0x00226c18 to 0x00209370. That helper reads a disc chunk through read_cd_sectors_blocking at 0x002093a8, initializes its offset-0x10 payload at 0x002093b8, and explicitly stores zero to g_nCurrentLevelIndex (0x0015ed84) at 0x002093cc. The assigned wrapper restores selected state at 0x00226c20..0x00226d14, including the saved bolt count from 0x0015ed98, selected bytes indexed by 0x001d5ba0, and eight entries from 0x00141ea0 filtered against 0x0013d4c0. It preserves flags at 0x0013d38c/0x0013d38d and increments 0x0015ee20, then refreshes g_cdClock at 0x00226d6c/0x00226d7c. Caller 0x00222290 passes -1 at 0x002222e0 and immediately requests level zero at 0x002222e8. Caller 0x002235b8 passes its save cursor slot (+0x40) at 0x00223670; subsequent code writes bolt count, level, counter and clock into 0x1c-byte save-slot records at 0x00223704..0x00223794. At 0x00226d84..0x00226dd0 a nonnegative argument selects that slot and schedules pending memory-card state 0x13 when idle. These instruction-backed effects establish the proposed verb-first name; no string interpretation is required."
+          }
+        ]
+      },
+      {
+        "address": "0x00214a98",
+        "current_name": "FUN_00214a98",
+        "proposed_name": "pack_vector_xyz_with_shared_scale",
+        "logical_group": "gameplay/entities",
+        "unit": "gameplay/entities/pack_vector_xyz_with_shared_scale",
+        "source_path": "src/gameplay/entities/pack_vector_xyz_with_shared_scale.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00214ab8/0x00214ac4/0x00214ad0 the assigned function uses absolute_value_scalar on XYZ; 0x00214ad8..0x00214af8 selects their maximum magnitude. 0x00214afc..0x00214b3c computes convert_float_to_word(max_abs * 10000 / 63) and clamps the scale to 1..255. At 0x00214b50..0x00214b94 it writes float(scale) as the fourth lane and transforms each XYZ lane to component/(scale*0.0001)+127. The call at 0x00214b98 reaches 0x001f9d68, whose vftoi0.xyzw at 0x001f9d70 and ppach/ppacb at 0x001f9d84/0x001f9d8c pack the four converted lanes into bytes; 0x00214ba0 stores the low 32-bit word. Caller 0x00218888 invokes this function at 0x002189dc and 0x002189e8 to write object offsets +0x20 and +0x24, then passes those same words to 0x00214bc0 at 0x002189f4 and 0x00218a00. That inverse routine subtracts (127,127,127) through recovered subtract_vector_xyz at 0x00214c18 and multiplies XYZ by the fourth lane*0.0001 through recovered scale_vector_xyz at 0x00214c28. This proves shared-scale XYZ packing without requiring an unproven gameplay subsystem label."
           }
         ]
       }

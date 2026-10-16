@@ -1554,7 +1554,7 @@ segments:
           - [0x1158b8, textbin, text_gap_00214938_after_fun_00214890]
           - [0x1158f0, c, runtime/time/set_video_timing]
           - [0x115a10, textbin, text_gap_00214a90_before_fun_00214a98]
-          - [0x115a18, c, gameplay/entities/fun_00214a98]
+          - [0x115a18, c, gameplay/entities/pack_vector_xyz_with_shared_scale]
           - [0x115b40, c, ui/text/load_display_text_resource_entry]
           - [0x115bc4, textbin, text_gap_00214c44_before_fun_00214c48]
           - [0x115bc8, c, math/conversion/round_float_to_decimal_places]

@@ -4,7 +4,9 @@ extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 fast_vector_to_packed_chars(void *) __asm__("FUN_001f9d68");
 
-void FUN_00214a98(f32 *v, s32 *out) {
+void pack_vector_xyz_with_shared_scale(f32 *v, s32 *out) __asm__("FUN_00214a98");
+
+void pack_vector_xyz_with_shared_scale(f32 *v, s32 *out) {
     f32 buf[4];
     f32 a;
     f32 b;
@@ -33,4 +35,4 @@ void FUN_00214a98(f32 *v, s32 *out) {
     *out = fast_vector_to_packed_chars(buf);
 }
 
-extern __typeof__(FUN_00214a98) func_00214A98 __attribute__((alias("FUN_00214a98")));
+extern __typeof__(pack_vector_xyz_with_shared_scale) func_00214A98 __attribute__((alias("FUN_00214a98")));

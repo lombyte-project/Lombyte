@@ -35,7 +35,7 @@ extern u8 *D_001CDFDC[];
 extern struct Obj *create_part(s32) __asm__("FUN_00217a30");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern void func_00214A98(void *, void *);
+extern void pack_vector_xyz_with_shared_scale(void *, void *) __asm__("func_00214A98");
 extern void load_display_text_resource_entry(void *, void *) __asm__("func_00214BC0");
 
 struct Obj *spawn_spark(u128 *arg0, f32 *arg1, f32 *arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6,
@@ -69,8 +69,8 @@ struct Obj *spawn_spark(u128 *arg0, f32 *arg1, f32 *arg2, s32 arg3, s32 arg4, s3
         s = &o->sub;
         s->h16 = truncate_float_to_s32(arg1[3] * 210000.0f / 1000.0f);
         s->h18 = truncate_float_to_s32(arg2[3] * 210000.0f / 1000.0f);
-        func_00214A98(arg1, &s->a);
-        func_00214A98(arg2, &s->b);
+        pack_vector_xyz_with_shared_scale(arg1, &s->a);
+        pack_vector_xyz_with_shared_scale(arg2, &s->b);
         load_display_text_resource_entry(t0, &s->a);
         load_display_text_resource_entry(t1, &s->b);
         s->c = arg3;
