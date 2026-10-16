@@ -1104,9 +1104,6 @@ void FUN_L00_002c1778(void *mv) {
         break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002c1ad0.s", FUN_L00_002c1ad0);
-#else
 typedef struct {
     u8 pad0[0x40];
     OvlVec4 grip;
@@ -1157,32 +1154,64 @@ extern int FUN_L00_00216de8_2c1ad0(int, int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_00233db8_2c1ad0(int, int) __asm__("FUN_L00_00233db8");
 extern int FUN_L00_00233e98_2c1ad0(int) __asm__("FUN_L00_00233e98");
 #include "rnc/input/pad_state.h"
-/* Level 00 carrier: updates its grip, tosses a held moby, then looks for another. */
-void FUN_L00_002c1ad0(struct Moby *moby) {
-    CarrierVars_2c1ad0 *vars;
-    OvlVec4 saved, offset, rotatedOffset, local[4], pos, target, basis[3], matrix[4];
-    OvlVec4 direction;
-    union { OvlVec4 launch; OvlVec4 arc; } temporary;
-    OvlVec4 probe;
-    f32 angle, slope, distance, horizontal, vertical, radius, speed;
-    OvlVec4 *targetPosition;
+#include "rnc/math/vector.h"
+#include "qcopy.h"
+#include "qzero.h"
+typedef struct {
+    u8 pad0[0x40];
+    Vec4 grip;
+    struct Moby *held;
+    s32 timer54;
+    s32 timer58;
+    s32 delay;
+} GloveVars_2c1ad0;
+extern struct { u8 pad0[0x11]; u8 unk11; } D_0013E520_2c1ad0 __asm__("D_0013E520");
+extern struct { u8 pad0[0x88]; u16 deliveries; u16 unk8A; u32 levels; } D_00141680_s __asm__("D_00141680");
+extern struct { u8 pad0[0x18]; s32 moby; u8 pad1C[4]; Vec4 point; } coll_hit_2c1ad0 __asm__("D_L00_00173E40");
+extern Vec4 D_L00_00166DC0_v __asm__("D_L00_00166DC0");
+extern char D_L00_00166C80_c[] __asm__("D_L00_00166C80");
+extern short D_L00_001B07B0_2c1ad0[] __asm__("D_L00_001B07B0");
+extern f32 frame_scale_inv_macro __asm__("D_0015ED68") __attribute__((section(".sdata")));
+extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern s32 D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata")));
+extern u32 D_0013CAE4 __attribute__((section(".data")));
+extern void FUN_L00_0024f7c8(void *, int, void *);
+/* Float arguments first: the order they are evaluated in gives retail's registers. */
+extern void FUN_L00_002c1928_f(f32, f32, f32, f32 *, f32 *, f32 *) __asm__("FUN_L00_002c1928");
+extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 
+/* Mine glove update: aims the glove and throws a mine at the target. */
+void FUN_L00_002c1ad0(struct Moby *moby) {
+    GloveVars_2c1ad0 *vars;
+    Vec4 saved, offset, rotatedOffset;
+    Vec4 local[4];
+    Vec4 pos, target;
+    Vec4 basis[3];
+    Vec4 matrix[4];
+    Vec4 launch, arc, probe;
+    float *out;
+    float angle, slope, horizontal, vertical, radius, root;
+    s32 hit;
 
     if (moby == 0)
         return;
-    vars = (CarrierVars_2c1ad0 *)moby->pvars;
-    if (*(s32 *)((u8 *)vars + 0x5c) < 3) {
-        ++*(s32 *)((u8 *)vars + 0x5c);
+    vars = (GloveVars_2c1ad0 *)moby->pvars;
+    if (vars->delay < 3) {
+        ++vars->delay;
         return;
     }
     offset.q = 0;
     offset.f[1] = -0.09f;
     offset.f[2] = -0.02f;
-    setup_matrix_2c1ad0(basis, D_L00_00166C80_2c1ad0);
+    setup_matrix_2c1ad0(basis, D_L00_00166C80_c);
     matrix_from_basis_rows_2c1ad0(matrix, basis);
     if (vars == 0)
         return;
-    FUN_L00_0024f7c8((u8 *)moby, 0, &saved);
+    FUN_L00_0024f7c8(moby, 0, &saved);
     build_moby_bone_transform(moby, 0, local);
     rotate_vector_2c1ad0(&rotatedOffset, &offset, local);
     add_vector_xyz(&vars->grip, &saved, &rotatedOffset);
@@ -1192,7 +1221,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
         vars->held = 0;
     if (hero.state.current == 1)
         hero_set_state_2c1ad0(0x1E, 1);
-    if (tick_countdown((s32 *)((u8 *)vars + 0x58)) && !hero.unk20AC) {
+    if (tick_countdown(&vars->timer58) && !hero.unk20AC) {
         if ((hero.unk20A8 && hero.unk1BC == scale_game_frames(0x11)) ||
             ((D_0013CAE4 & hero.items[0].button_mask) &&
              hero.state.current == 0x1E && FUN_L00_00233e98_2c1ad0(-1)) ||
@@ -1203,124 +1232,67 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
         }
     }
     if (vars->held != 0 && !hero.unk20AC) {
-        f32 *out = (f32 *)vars->held->pvars;
-        {
-            f32 speed;
-            temporary.launch.q = 0;
-            if (item_text_variant[0x11]) {
-                if (controller_state.held & 5) {
-                    speed = 12.0f;
-                    distance = D_0015ED6C;
-                } else {
-                    speed = 4.0f;
-                    distance = frame_time;
-                }
-            } else {
-                if (controller_state.held & 5) {
-                    speed = 6.0f;
-                    distance = D_0015ED6C;
-                } else {
-                    speed = 4.0f;
-                    distance = frame_time;
-                }
-            }
-            temporary.launch.f[0] = distance * speed;
-            qcopy(&direction, &temporary.launch);
-        }
-        adjust_direction_2c1ad0(&direction, &direction, (u8 *)&hero + 0x640);
-        angle = fast_add_rotations(-0.361968f,
-                                   atan2_f(hero.unk670, hero.unk674));
-        pos.f[0] = FUN_001f9dc8(angle) * 0.859039f;
-        angle = fast_add_rotations(-0.361968f,
-                                   atan2_f(hero.unk670, hero.unk674));
-        pos.f[1] = FUN_001f9de0(angle) * 0.859039f;
+        out = (float *)vars->held->pvars;
+        arc.q = 0;
+        arc.f[0] = frame_time_macro * (D_0013E520_2c1ad0.unk11 ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f));
+        launch.q = arc.q;
+        adjust_direction_2c1ad0(&launch, &launch, hero.basis);
+        pos.f[0] = fast_cos(fast_add_rotations(-0.361968011f, atan2_f(hero.unk670, hero.unk674))) * 0.859039009f;
+        pos.f[1] = fast_sin(fast_add_rotations(-0.361968011f, atan2_f(hero.unk670, hero.unk674))) * 0.859039009f;
         pos.f[2] = 0.0f;
         add_vector_xyz(&pos, &pos, &hero.motion.pos);
-        pos.f[2] += 0.49082f;
-        atan2_f(direction.f[0], direction.f[1]);
-        targetPosition = &target;
-        scale_vector_xyz(targetPosition, &direction, D_0015ED68 * 60.0f);
-        add_vector_xyz(targetPosition, targetPosition, &pos);
+        pos.f[2] += 0.490819991f;
+        angle = atan2_f(launch.f[0], launch.f[1]);
+        scale_vector_xyz(&target, &launch, frame_scale_inv_macro * 60.0f);
+        add_vector_xyz(&target, &target, &pos);
         if (controller_state.held & 5) {
-            s32 hit;
-            f32 gravity;
             probe.q = 0;
-            probe.f[2] = item_text_variant[0x11] ? 12.0f : 6.0f;
+            probe.f[2] = D_0013E520_2c1ad0.unk11 ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f);
+            arc.q = probe.q;
             hit = 0;
-            temporary.arc.q = probe.q;
-            rotate_vector_2c1ad0(&temporary.arc, &temporary.arc, matrix);
+            rotate_vector_2c1ad0(&arc, &arc, matrix);
+            fast_subtract_rotations_2c1ad0(hero.moby->rot.z, atan2_f(arc.f[0], arc.f[1]));
+            angle = atan2_f(arc.f[0], arc.f[1]);
+            slope = atan2_f(vector_length_xy_2c1ad0(&arc), arc.f[2]);
+            if (0.593411922f < slope) slope = 0.593411922f;
+            if (slope < -1.39626336f) slope = -1.39626336f;
+            build_spherical_offset_2c1ad0(&arc, D_0013E520_2c1ad0.unk11 ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f), angle, slope);
             {
-                struct Moby *heroMoby = hero.moby;
-                angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
-                fast_subtract_rotations_2c1ad0(*(f32 *)((u8 *)heroMoby + 0x48), angle);
+                float distance = vector_length_xy_2c1ad0(&arc);
+                float z = arc.f[2];
+                if (distance != 0.0f) horizontal = z / distance;
+                else horizontal = z / 0.01f;
             }
-            angle = atan2_f(temporary.arc.f[0], temporary.arc.f[1]);
-            slope = atan2_f(vector_length_xy_2c1ad0(&temporary.arc), temporary.arc.f[2]);
-            if (slope > 0.5934119f)
-                slope = 0.5934119f;
-            if (slope < -1.3962634f)
-                slope = -1.3962634f;
-            speed = 4.0f;
-            if (item_text_variant[0x11]) {
-                if (controller_state.held & 5) speed = 12.0f;
-            } else {
-                if (controller_state.held & 5) speed = 6.0f;
-            }
-            build_spherical_offset_2c1ad0(&temporary.arc, speed, angle, slope);
-            distance = vector_length_xy_2c1ad0(&temporary.arc);
-            if (distance == 0.0f)
-                horizontal = temporary.arc.f[2] / 0.01f;
-            else
-                horizontal = temporary.arc.f[2] / distance;
-            speed = 4.0f;
-            if (item_text_variant[0x11]) {
-                if (controller_state.held & 5) speed = 12.0f;
-            } else {
-                if (controller_state.held & 5) speed = 6.0f;
-            }
-            distance = square_root(frame_time_sq * 9.8f * speed * 0.5f);
-            gravity = frame_time_sq * 9.8f;
-            radius = distance + distance;
-            radius *= distance;
-            radius *= 1.0f - horizontal;
-            radius /= gravity;
+            root = square_root(frame_time_sq_macro * 9.8f * (D_0013E520_2c1ad0.unk11 ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f)) * 0.5f);
+            radius = (root + root) * root * (1.0f - horizontal) / (frame_time_sq_macro * 9.8f);
             vertical = horizontal * radius;
-            if (radius > 0.0f) {
-                temporary.arc.f[0] = FUN_001f9dc8(angle) * radius;
-                temporary.arc.f[1] = FUN_001f9de0(angle) * radius;
-                temporary.arc.f[2] = vertical;
-                add_vector_xyz(&probe, &D_L00_00166DC0_2c1ad0, &temporary.arc);
-                if (collision_line(&D_L00_00166DC0_2c1ad0, &probe, 2, moby, 0) &&
-                    coll_hit.moby != (s32)hero.moby) {
-                    targetPosition->q = coll_hit.point.q;
+            if (0.0f < radius) {
+                arc.f[0] = fast_cos(angle) * radius;
+                arc.f[1] = fast_sin(angle) * radius;
+                arc.f[2] = vertical;
+                add_vector_xyz(&probe, &D_L00_00166DC0_v, &arc);
+                if (collision_line(&D_L00_00166DC0_v, &probe, 2, moby, 0) && coll_hit_2c1ad0.moby != (s32)hero.moby) {
+                    qcopy(&target, &coll_hit_2c1ad0.point);
                     hit = 1;
-                    angle = atan2_f(targetPosition->f[0] - pos.f[0], targetPosition->f[1] - pos.f[1]);
+                    angle = atan2_f(target.f[0] - pos.f[0], target.f[1] - pos.f[1]);
                 }
                 if (!hit) {
-                    targetPosition->f[0] = FUN_001f9dc8(angle) * radius * 5.0f;
-                    targetPosition->f[1] = FUN_001f9de0(angle) * radius * 5.0f;
-                    targetPosition->f[2] = vertical * 5.0f;
-                    add_vector_xyz(targetPosition, targetPosition, &D_L00_00166DC0_2c1ad0);
+                    target.f[0] = fast_cos(angle) * radius * 5.0f;
+                    target.f[1] = fast_sin(angle) * radius * 5.0f;
+                    target.f[2] = vertical * 5.0f;
+                    add_vector_xyz(&target, &target, &D_L00_00166DC0_v);
                 }
             }
         }
-        {
-            f32 gravity = frame_time_sq_macro * 9.8f;
-            speed = 4.0f;
-            if (item_text_variant[0x11]) {
-                if (controller_state.held & 5) speed = 12.0f;
-        } else {
-            if (controller_state.held & 5) speed = 6.0f;
-        }
-        FUN_L00_002c1928((f32 *)&pos, (OvlQuad *)targetPosition, out,
-                          gravity, 1.0f, speed);
-        }
+        FUN_L00_002c1928_f(frame_time_sq_macro * 9.8f, 1.0f, D_0013E520_2c1ad0.unk11 ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f), pos.f, target.f, out);
     }
     switch (moby->state) {
     case 0:
         vars->held = 0;
-        if (moby->anim_flags & 2) moby->state = 2;
-        else moby->state = 1;
+        if (!(moby->anim_flags & 2))
+            moby->state = 1;
+        else
+            moby->state = 2;
     case 1:
         if (moby->anim_flags & 2)
             moby->state = 2;
@@ -1328,20 +1300,21 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     case 3:
         if (vars->held != 0) {
             FUN_L00_002aa008(&pos, vars->held, vars->held->pvars);
-            if (D_00141680_2c1ad0.deliveries < 0xffff)
-                ++D_00141680_2c1ad0.deliveries;
+            if (D_00141680_s.deliveries <= 0xfffe)
+                ++D_00141680_s.deliveries;
             {
-                s32 frames = scale_game_frames(D_0015EEA4);
-                if (frames / 600 > D_00141680_2c1ad0.unkA2)
-                    D_00141680_2c1ad0.unkA2 = scale_game_frames(D_0015EEA4) / 600;
+                s32 frames = scale_game_frames(D_0015EEA4_macro);
+                frames /= 600;
+                if (D_00141680_s.unk8A < frames)
+                    D_00141680_s.unk8A = scale_game_frames(D_0015EEA4_macro) / 600;
             }
-            D_00141680_2c1ad0.levels = (D_00141680_2c1ad0.levels | (1u << current_level_index)) | 0x80000000u;
-            FUN_L00_0025f780(vars->held, D_L00_001B07B0_lui, 0x3f);
+            D_00141680_s.levels = (D_00141680_s.levels | (1u << current_level_index_macro)) | 0x80000000;
+            FUN_L00_0025f780(vars->held, D_L00_001B07B0_2c1ad0, 0x3F);
             vars->held = 0;
-            vars->timer = scale_game_frames(10);
+            vars->timer54 = scale_game_frames(10);
         }
         moby->state = 4;
-        *(s32 *)((u8 *)vars + 0x58) = scale_game_frames(0x14);
+        vars->timer58 = scale_game_frames(0x14);
         break;
     case 4:
         if (hero.state.current != 0x23 && !hero.unk20A8)
@@ -1357,15 +1330,14 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
         }
         break;
     }
-    tick_countdown(&vars->timer);
-    if (vars->held != 0)
+    tick_countdown(&vars->timer54);
+    if (vars->held != 0) {
         qcopy(&vars->held->pos, &vars->grip);
-    else if (vars->timer == 0 && FUN_L00_00233e98_2c1ad0(-1)) {
-        direction.q = 0;
-        vars->held = FUN_L00_002a9ed0(moby, &vars->grip, &direction);
+    } else if (vars->timer54 == 0 && FUN_L00_00233e98_2c1ad0(-1)) {
+        qzero(&launch);
+        vars->held = FUN_L00_002a9ed0(moby, &vars->grip, &launch);
     }
 }
-#endif
 /*
  * TODO(route): this body is DONE - it is byte-identical to retail under the
  * bundled GNU as (572/572 bytes; the only 23 differing words are relocation
