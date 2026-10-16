@@ -21,7 +21,7 @@ extern void InitializeGlobalStateEntry(s32 value);
 extern void mode_freeze_init() __asm__("func_001FBAB8");
 extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
 extern void start_memory_card_save(s32 arg0, s32 arg1) __asm__("FUN_00226a70");
-extern s32 FUN_00226b08();
+extern s32 load_level_zero_preserving_progress() __asm__("FUN_00226b08");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 saving_data_menu2(struct MenuScreen *w) __asm__("FUN_002235b8");
@@ -46,7 +46,7 @@ s32 saving_data_menu2(struct MenuScreen *w) {
     }
     if (w->data.save.step == 1) {
         if (w->data.save.flags & 0x2000) {
-            FUN_00226b08(w->data.save.slot);
+            load_level_zero_preserving_progress(w->data.save.slot);
         } else {
             start_memory_card_save(w->data.save.save_data, w->data.save.slot);
         }

@@ -42,7 +42,9 @@ extern s32 sceCdReadClock(u8 *clock);
 extern void sceScfGetLocalTimefromRTC(u8 *clock);
 
 extern u8 D_0015EDD0_257218_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
-void FUN_00226b08(s32 slot) {
+void load_level_zero_preserving_progress(s32 slot) __asm__("FUN_00226b08");
+
+void load_level_zero_preserving_progress(s32 slot) {
     s32 saved;
     u32 count;
     u8 flag4;
@@ -104,4 +106,4 @@ void FUN_00226b08(s32 slot) {
     }
 }
 
-extern __typeof__(FUN_00226b08) func_00226B08 __attribute__((alias("FUN_00226b08")));
+extern __typeof__(load_level_zero_preserving_progress) func_00226B08 __attribute__((alias("FUN_00226b08")));
