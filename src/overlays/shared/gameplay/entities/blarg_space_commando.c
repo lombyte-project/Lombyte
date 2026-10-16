@@ -428,7 +428,7 @@ extern int *D_L06_001B0C30[];
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern int current_level_index __asm__("D_0015ED84") __attribute__((sda));
+extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 extern float D_L06_00161FA8 __attribute__((sda));
 extern short D_L06_00161FAC __attribute__((sda));
 extern short D_L06_00161FB0 __attribute__((sda));
@@ -473,7 +473,7 @@ void FUN_L06_002feb40(char *m) {
     t = FUN_L00_0025a420(m, 0x330000, 0);
     r = fun_00213928(m, t, d + 0x20, 0, &hit, &dt, 0, 4);
     if (hit != 1 && (unsigned char)m[0x20] != 0x10) {
-        if (current_level_index == 0xA && t != 0 && *(char **)(t + 0x20) != 0 &&
+        if (current_level_index_gp == 0xA && t != 0 && *(char **)(t + 0x20) != 0 &&
             *(short *)(*(char **)(t + 0x20) + 0xA6) == 0x31A && D_0013D408[0x11] == 0) {
             D_0013D408[0x11] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);

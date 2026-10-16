@@ -1,4 +1,5 @@
 #include "rnc/gameplay/hero.h"
+#include "rnc/audio/voice_pool.h"
 #include "types.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/globals.h"
@@ -567,7 +568,7 @@ extern int D_L12_0015F404 __attribute__((section(".sdata")));
 extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_00214720");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern int current_level_index __asm__("D_0015ED84");
+
 extern short D_L12_00161F28 __attribute__((sda));
 extern short D_L12_00161F2C __attribute__((sda));
 extern short D_L12_00161F30 __attribute__((sda));
@@ -984,7 +985,7 @@ void FUN_L12_00307ab8(struct Moby *m) {
 #include "rnc/gameplay/entities/moby.h"
 
 extern unsigned char D_0014C050[];
-extern char D_0013E550[];
+
 extern int FUN_L01_00275690(void *, float);
 extern int FUN_0022da68(int, int, void *);
 extern unsigned char *moby_bytes __asm__("D_L12_0015FFD8");
@@ -1021,7 +1022,7 @@ void FUN_L12_003081b0(struct Moby *m) {
         if (d[0] >= 0) {
             int i = d[1];
             if (i != -1) {
-                char *e = D_0013E550 + i * 0x70;
+                char *e = ((char *)&voice_pool) + i * 0x70;
                 if (*(struct Moby **)(e + 0x88) == m && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(i);
                 }
