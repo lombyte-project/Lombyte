@@ -226,7 +226,7 @@ typedef struct {
 
 extern struct Moby *moby_list __asm__("D_L09_0015FFD8");
 char D_L09_00208F90[] = "Moby class %d Damage Received: %f\n";
-extern char D_L09_00208FF0[];
+char D_L09_00208FF0[] = "Moby class %d Damage Received: %f\n";
 extern VendorHitSource *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 fptodp(f32) __asm__("FUN_00120478");
 extern void debug_print(char *, s32, s32) __asm__("FUN_001e93b0");
