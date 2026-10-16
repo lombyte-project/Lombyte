@@ -47,6 +47,15 @@ make it clearer, add a comment that explains why it looks odd.
 - edit files in `asm/`;
 - fix bugs from the original game.
 
+## Fakematches
+
+A fakematch is code that only steers the compiler: `x++; x--;`, `x = x;`, a
+`do { } while (0)` outside a macro, an `if (0)` branch, a dead store. It is
+allowed until someone finds the real form, but it needs a comment that starts
+with `Fakematch:` and says what it changes, ending at most three lines above
+it. `check-cleanup.py` finds the shapes above without that comment. If
+removing the trick does not change the code, it is not a fakematch: delete it.
+
 ## Names
 
 - **Only name what you can prove.** Good evidence: recovered symbols

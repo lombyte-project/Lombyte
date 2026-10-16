@@ -2107,6 +2107,32 @@ class CleanupCheckTests(unittest.TestCase):
         self.assertNotIn("message", out)
         self.assertNotIn("small_table", out)
 
+    def test_fakematch_needs_a_comment(self):
+        self.write("src/new_helper.c", textwrap.dedent("""\
+            #define ONCE(x) do { x; } while (0)
+            void new_helper(s32 count) __asm__("FUN_00100100");
+            void new_helper(s32 count) {
+                count++;
+                count--;
+                ONCE(count = 1);
+                do {
+                    count = 2;
+                } while (0);
+                /* Fakematch: the pair keeps count in its own register. */
+                count--;
+                count++;
+            #ifndef NON_MATCHING
+            #else
+                count = count;
+            #endif
+            }
+        """))
+        code, out = self.check()
+        self.assertEqual(code, 1)
+        self.assertIn("src/new_helper.c:4: [fakematch] x++; x--", out)
+        self.assertIn("src/new_helper.c:7: [fakematch] do { } while (0)", out)
+        self.assertEqual(out.count("[fakematch]"), 2)
+
     def test_recovered_names_format_and_config(self):
         entry = {"unit": "missing", "source_path": "src/missing.c", "address": "0x00100000",
                  "current_name": "FUN_00100000", "proposed_name": "OldHelper", "logical_group": "EE/x",

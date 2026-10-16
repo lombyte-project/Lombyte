@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import bisect
 import collections
 import importlib.util
 import json
@@ -75,6 +76,18 @@ DECL_LINE = re.compile(r"^\s*(?:(?:register|volatile|const|static|extern)\s+)*(?
 RAW_BYTES = re.compile(r"^(?:const\s+)?(?:u8|s8|(?:un)?signed\s+char|char)\s+(\w+)\s*\[[^\]\n]*\]"
                        r"(?:\s*__asm__\s*\(\s*\"([^\"]*)\"\s*\))?[^=;\n]*=\s*\{([^;]*?)\}\s*;", re.M)
 RAW_BYTES_MAX = 16
+# Code that only steers the compiler (docs/code-cleanup.md, Fakematches). Each use
+# needs a `Fakematch:` comment that ends at most FAKEMATCH_REACH lines above it.
+OPERAND = r"\*?[A-Za-z_][\w.\[\]]*(?:->[\w.\[\]]+)*"
+STEP = r"(?:(" + OPERAND + r")\s*(\+\+|--)|(\+\+|--)\s*(" + OPERAND + r"))"
+FAKEMATCHES = [
+    ("x++; x--", re.compile(r"(?<![\w.\]>])" + STEP + r"\s*;\s*" + STEP + r"\s*;")),
+    ("x = x", re.compile(r"(?:^|[;{}:)])[ \t]*((?:\*\s*)?\(?" + OPERAND + r"\)?)\s*=\s*"
+                         r"((?:\*\s*)?\(?" + OPERAND + r"\)?)\s*;", re.M)),
+    ("do { } while (0)", re.compile(r"\bdo\s*\{")),
+    ("if (0)", re.compile(r"\b(?:if|while)\s*\(\s*0\s*\)")),
+]
+FAKEMATCH_REACH = 3
 SNAKE = re.compile(r"^_*[a-z][a-z0-9_]*$")
 PLACEHOLDER = re.compile(r"^(?:fun|func|FUN|sub|D|D_L\d\d|FUN_L\d\d|jtbl|text_gap|lbl)_[0-9A-Fa-f]{8}\w*?$")
 HEXPART = re.compile(r"^(?=[0-9A-Fa-f]*\d)[0-9A-Fa-f]{6,8}$")
@@ -187,6 +200,65 @@ def param_names(params: str):
 
 # —— Per-file checks (run on changed files) ——
 
+def matching_code(text: str) -> str:
+    """Blank out preprocessor lines and NON_MATCHING drafts, keeping line numbers."""
+    out, stack, cont = [], [], False
+    for line in text.split("\n"):
+        s = line.strip()
+        if cont or s.startswith("#"):
+            cont = line.rstrip().endswith("\\")
+            m = re.match(r"#\s*(ifdef|ifndef|if|elif|else|endif)\b(.*)", s)
+            if m and m.group(1) in ("ifdef", "ifndef", "if"):
+                draft = "NON_MATCHING" in m.group(2)
+                stack.append([draft, draft and m.group(1) == "ifdef"])
+            elif m and m.group(1) in ("else", "elif") and stack and stack[-1][0]:
+                stack[-1][1] = not stack[-1][1]
+            elif m and m.group(1) == "endif" and stack:
+                stack.pop()
+            out.append(" " * len(line))
+        else:
+            out.append(" " * len(line) if any(on for _, on in stack) else line)
+    return "\n".join(out)
+
+
+def check_fakematches(rel: str, raw: str, text: str) -> list[Problem]:
+    code = matching_code(text)
+    starts = [0] + [m.end() for m in re.finditer("\n", raw)]
+    line = lambda pos: bisect.bisect_right(starts, pos)
+    marks = [(line(m.start()), line(m.end())) for m in re.finditer(r"/\*.*?\*/|//[^\n]*", raw, re.S)
+             if "Fakematch:" in m.group(0)]
+    out = []
+    for kind, pattern in FAKEMATCHES:
+        for m in pattern.finditer(code):
+            if kind == "x++; x--":
+                first, second = m.group(1) or m.group(4), m.group(5) or m.group(8)
+                if re.sub(r"\s", "", first) != re.sub(r"\s", "", second) or \
+                        (m.group(2) or m.group(3)) == (m.group(6) or m.group(7)):
+                    continue
+            elif kind == "x = x":
+                if re.sub(r"\s", "", m.group(1)) != re.sub(r"\s", "", m.group(2)):
+                    continue
+            elif kind == "do { } while (0)":
+                depth, i = 0, m.end() - 1
+                for i in range(m.end() - 1, len(code)):
+                    depth += {"{": 1, "}": -1}.get(code[i], 0)
+                    if depth == 0:
+                        break
+                if not re.match(r"\}\s*while\s*\(\s*0\s*\)\s*;", code[i:i + 40]):
+                    continue
+            elif m.group(0).startswith("while") and re.search(r"\}\s*$", code[max(0, m.start() - 20):m.start()]):
+                continue  # the end of a do { } while (0)
+            pos = m.start() + len(m.group(0)) - len(m.group(0).lstrip(";{}:) \t\n"))
+            at = line(pos)
+            if any(start <= at and at - end <= FAKEMATCH_REACH for start, end in marks):
+                continue
+            snippet = re.sub(r"\s+", " ", code[pos:m.end()]).strip()[:60]
+            out.append(Problem("fakematch", rel, f"{kind}: `{snippet}` only steers the compiler; "
+                               "say why in a `Fakematch:` comment just above it", at,
+                               f"{kind} {re.sub(chr(32), '', snippet)}"))
+    return out
+
+
 def check_c_file(rel: str, raw: str) -> list[Problem]:
     out: list[Problem] = []
     text = strip_comments(raw)
@@ -247,6 +319,8 @@ def check_c_file(rel: str, raw: str) -> list[Problem]:
             if REGISTER_NAME.match(name):
                 out.append(Problem("register-name", rel, f"local '{name}' is named after a register or a "
                                    "decompiler temp; name it by what it holds", line_of(text, m.start())))
+    if rel.endswith(".c") and not is_sdk(rel):
+        out += check_fakematches(rel, raw, text)
     return out
 
 
