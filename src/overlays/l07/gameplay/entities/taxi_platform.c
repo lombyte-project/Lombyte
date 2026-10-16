@@ -1792,7 +1792,7 @@ extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_angle_radians_c(void) __asm__("func_00213308");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float D_0015ED70 __attribute__((section(".sdata")));
 extern float D_L07_0015F580[] __attribute__((section(".sdata")));
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
@@ -1972,7 +1972,7 @@ eb20:
                         float g;
                         FUN_L00_0024f7c8(m, i, v100);
                         f = fast_arc_tan_c(v100[0] - *(float *)(m + 0x10), v100[1] - *(float *)(m + 0x14));
-                        g = fast_subtract_rotations(*(float *)(d + 0xBC), D_0015ED6C_c * 17.80235863f);
+                        g = fast_subtract_rotations(*(float *)(d + 0xBC), D_0015ED6C_gp * 17.80235863f);
                         f = fast_difference_between_rotations_c(f, g);
                         if (f < best) {
                             qcopy(vF0, v100);
@@ -1985,9 +1985,9 @@ eb20:
                 v80[2] = *(float *)(d + 0xBC);
                 euler_rotation_matrix(vB0, v80);
                 transform_vector(v20, v20, vB0);
-                fast_vec_normalize_c(v90, v20, D_0015ED6C_c * 7.0f);
+                fast_vec_normalize_c(v90, v20, D_0015ED6C_gp * 7.0f);
                 add_vector_xyz(v20, v20, m + 0x10);
-                v90[2] = FUN_L00_0025abf0(vA0, v20, 0, D_0015ED6C_c * 7.0f, -(D_0015ED70 * 9.8f));
+                v90[2] = FUN_L00_0025abf0(vA0, v20, 0, D_0015ED6C_gp * 7.0f, -(D_0015ED70 * 9.8f));
                 add_vector_xyz(vA0, vA0, v90);
                 FUN_L07_0030ba90_c(vA0, v90, (int)m, *(short *)(d + 0xBA));
                 *(short *)(d + 0xBA) = *(short *)(d + 0xBA) + 1;
@@ -2003,7 +2003,7 @@ eb20:
     }
 
     if (((unsigned char *)m)[0x20] != 0) {
-        float f = D_0015ED6C_c * 17.80235863f;
+        float f = D_0015ED6C_gp * 17.80235863f;
         float g = fast_add_rotations_c(*(float *)(d + 0xC0), f);
         *(float *)(d + 0xC0) = g;
         FUN_L00_001fff28(d + 0x80, 2, g);
@@ -3314,7 +3314,7 @@ typedef struct Packet_313800 {
     long x138;
 } Packet_313800;
 
-extern int D_L07_0015F5CC_c __asm__("D_L07_0015F5CC");
+extern int D_L07_0015F5CC_lui __asm__("D_L07_0015F5CC");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
@@ -3342,7 +3342,7 @@ void FUN_L07_00312420(struct Moby *arg)
     int k;
     Packet_313800 pkt;
 
-    f20 = FUN_001fa6c0_2cd2b0(D_L07_0015F5CC_c);
+    f20 = FUN_001fa6c0_2cd2b0(D_L07_0015F5CC_lui);
     qcopy(v50, p->f140);
     t = FUN_001f9dc8_2cd2b0(FUN_L00_0025e310_2cd2b0(f20 / 11.0f));
     f20 = f20 / 10.0f;

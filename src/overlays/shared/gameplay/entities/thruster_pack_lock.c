@@ -175,7 +175,7 @@ void FUN_L11_0030ee00(Lock_3102C8 *moby)
 /* Builds one GIF packet for a rotated textured sprite and advances the packet pointer. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003121C0), where it is exact; names translated to the US level program. */
 
-extern int D_L11_001611C0_g __asm__("D_L11_001611C0") __attribute__((section(".sdata")));
+extern int D_L11_001611C0 __attribute__((section(".sdata")));
 extern unsigned char screen_extent_c[] __asm__("D_0013E500");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -231,12 +231,12 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     subtract_vector_xyz(top_right, center, horizontal);
     qcopy(bottom_right, center);
 
-    *(int *)(D_L11_001611C0_g + 0) = 0x10000007;
+    *(int *)(D_L11_001611C0 + 0) = 0x10000007;
     green_bits = green_bits << 8;
     rgba = rgba | green_bits;
     gif_dma_tag = 0x50000007;
     gif_regs = 0x53535353106;
-    *(int *)(D_L11_001611C0_g + 4) = 0;
+    *(int *)(D_L11_001611C0 + 4) = 0;
     blue_bits = blue_bits << 16;
     rgba = rgba | blue_bits;
     alpha_bits = alpha_bits << 24;
@@ -244,15 +244,15 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     tex_size = 0x100010;
     gif_tag = 0xB400000000008001;
     rgba = rgba | alpha_bits;
-    *(int *)(D_L11_001611C0_g + 8) = 0;
+    *(int *)(D_L11_001611C0 + 8) = 0;
     scale = 16.0f;
     u_end = texture_width << 4;
     v_end = texture_height << 20;
     packed_depth = (unsigned long)depth << 32;
-    *(int *)(D_L11_001611C0_g + 12) = gif_dma_tag;
-    tag = (char *)D_L11_001611C0_g;
+    *(int *)(D_L11_001611C0 + 12) = gif_dma_tag;
+    tag = (char *)D_L11_001611C0;
     packet = (unsigned long *)(tag + 0x10);
-    D_L11_001611C0_g = (int)packet;
+    D_L11_001611C0 = (int)packet;
     *(unsigned long *)(tag + 0x10) = gif_tag;
     packet[1] = gif_regs;
     packet[2] = tex0;
@@ -288,7 +288,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     }
 
     /* Fakematch: the store through the address keeps the reload after the last packet store. */
-    *(char **)&D_L11_001611C0_g += 0x70;
+    *(char **)&D_L11_001611C0 += 0x70;
 }
 #define NOT_SDA
 
@@ -653,7 +653,7 @@ void FUN_L11_0031a1c0(char *m) {
 
 /* Queues a GIF packet that draws a line strip through the given points, scaled and offset to the screen. */
 typedef unsigned int u128_ad0 __attribute__((mode(TI)));
-extern int D_L11_001611C0_g __asm__("D_L11_001611C0");
+extern int D_L11_001611C0_lui __asm__("D_L11_001611C0");
 extern int screen_extent[] __asm__("D_0013E500");
 extern float itof_g(int) __asm__("FUN_001fa6c0");
 extern int ftoi_g(float) __asm__("FUN_001fa6d0");
@@ -665,36 +665,36 @@ void FUN_L11_00310ad0(short *pts, int n, float x0, float y0, unsigned int col, u
     unsigned long long *o;
     int x, y;
     int i;
-    *(int *)(D_L11_001611C0_g + 0) = q | 0x10000000;
-    *(int *)(D_L11_001611C0_g + 4) = 0;
-    *(int *)(D_L11_001611C0_g + 8) = 0;
-    *(int *)(D_L11_001611C0_g + 12) = q | 0x50000000;
+    *(int *)(D_L11_001611C0 + 0) = q | 0x10000000;
+    *(int *)(D_L11_001611C0 + 4) = 0;
+    *(int *)(D_L11_001611C0 + 8) = 0;
+    *(int *)(D_L11_001611C0 + 12) = q | 0x50000000;
     {
-        char *t1 = (char *)D_L11_001611C0_g;
-        D_L11_001611C0_g = (int)(t1 + 0x10);
-        qcopy((void *)D_L11_001611C0_g, &D_L11_001608E0);
+        char *t1 = (char *)D_L11_001611C0;
+        D_L11_001611C0 = (int)(t1 + 0x10);
+        qcopy((void *)D_L11_001611C0, &D_L11_001608E0);
         *(short *)(t1 + 0x10) = -0x7FFF;
     }
     {
-        unsigned long long *t2 = (unsigned long long *)((char *)D_L11_001611C0_g + 0x10);
-        D_L11_001611C0_g = (int)t2;
+        unsigned long long *t2 = (unsigned long long *)((char *)D_L11_001611C0 + 0x10);
+        D_L11_001611C0 = (int)t2;
         t2[0] = 0x144;
         t2[1] = prim;
     }
     {
-        char *t3 = (char *)D_L11_001611C0_g;
-        D_L11_001611C0_g = (int)(t3 + 0x10);
-        qcopy((void *)D_L11_001611C0_g, &D_L11_001608F0);
+        char *t3 = (char *)D_L11_001611C0;
+        D_L11_001611C0 = (int)(t3 + 0x10);
+        qcopy((void *)D_L11_001611C0, &D_L11_001608F0);
         *(short *)(t3 + 0x10) = n - 0x8000;
     }
-    D_L11_001611C0_g += 0x10;
-    o = (unsigned long long *)D_L11_001611C0_g;
+    D_L11_001611C0 += 0x10;
+    o = (unsigned long long *)D_L11_001611C0;
     for (i = 0; i < n; i++) {
         x = ftoi_g((itof_g(pts[i * 2]) * scale + x0) * 16.0f);
         y = ftoi_g((itof_g(pts[i * 2 + 1]) * scale + y0) * 16.0f);
         o[i] = (unsigned long long)(x + screen_extent[4] - 8) | ((unsigned long long)(y + screen_extent[5] - 8) << 16) | ((unsigned long long)col << 32);
     }
-    D_L11_001611C0_g += ((n + 1) / 2) * 16;
+    D_L11_001611C0 += ((n + 1) / 2) * 16;
 }
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");

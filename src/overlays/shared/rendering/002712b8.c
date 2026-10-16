@@ -710,7 +710,7 @@ typedef struct {
     char p1[0x2080 - 0x8C];
     int i2080;
 } P_272bc0;
-extern V_272bc0 D_0013F3D0_272bc0 __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern char D_0013F3D0[] __attribute__((section(".data")));
 extern unsigned char *D_L00_0016016C_272bc0 __asm__("D_L00_0016016C");
 extern float FUN_001fa6c0_272bc0(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
@@ -766,7 +766,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
         if (fast_dec_timer(p + 0xA)) {
             free_effect_particle(p);
         }
-        c = (unsigned char *)D_0013F3D0_272bc0;
+        c = (unsigned char *)(*(V_272bc0 *)D_0013F3D0);
         if (vector_distance(p + 0x10, c) < 0.3f) {
             g = (P_272bc0 *)(c - 0x80);
             if (g->f88 < *(float *)(p + 0x18) + 1.2f) {
@@ -801,7 +801,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
         break;
     }
 }
-extern char D_0013F3D0_00272f68[] __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern char D_0013F3D0[] __attribute__((section(".data")));
 int FUN_001fa6d0_00272f68(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B2080_lui[] __asm__("D_L00_001B2080") __attribute__((section(".data")));
 unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode,
@@ -811,7 +811,7 @@ unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int fl
         int *e = (int *)(m + 0x20);
         e[4] = mode;
         if (mode == 1)
-            subtract_vector_xyz(e, a, D_0013F3D0_00272f68);
+            subtract_vector_xyz(e, a, D_0013F3D0);
         qcopy(m + 0x10, a);
         *(int *)(m + 4) = c;
         m[9] = FUN_001fa6d0_00272f68(1.0f) + 0x20;
@@ -939,7 +939,7 @@ typedef struct {
     E_273448 e;
 } P_273448;
 extern u8 *tab_273448 __asm__("D_L00_001B2174") __attribute__((section(".data")));
-extern f32 org_273448[4] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern float g_debug_camera[4] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern s32 tick_273448(void *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void pos_273448(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
@@ -999,7 +999,7 @@ void FUN_L00_00273448(P_273448 *p) {
     p->w4 = (p->w4 & 0xFFFFFF) + (truncate_float_to_s32(e->f4 * 256.0f) << 24);
     e->f14 += (1.0f - e->f14) * (frame_scale * 0.175f);
     pos_273448(e->m, e->hE, a);
-    subtract_vector_xyz(v, org_273448, a);
+    subtract_vector_xyz(v, g_debug_camera, a);
     vscl_273448(v, v, e->f14);
     vadd_273448(p->pos, a, v);
 }
@@ -1180,7 +1180,7 @@ void FUN_L00_00273a68(struct EmberParticle *p) {
     }
     FUN_L00_00267a08(p);
 }
-extern u128 D_L00_00173E60_273ee0[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern V00271d20 D_L00_00173E60 __attribute__((section(".data")));
 void FUN_001f9a10_273ee0(void *, void *, void *) __asm__("FUN_001f9a10");
 int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -1198,7 +1198,7 @@ void FUN_L00_00273ee0(unsigned char *o) {
     FUN_001f9a10_273ee0(out, b, c);
     if (*(float *)(o + 0x20) != 0.0f || c[1] != 0.0f || c[2] != 0.0f) {
         if (collision_line(o + 0x10, out, 2, o, 0)) {
-            *(u128 *)(o + 0x10) = D_L00_00173E60_273ee0[0];
+            *(u128 *)(o + 0x10) = ((u128 *)&D_L00_00173E60)[0];
             clear_u64_value(c);
             *(float *)(o + 0xC) += *(float *)(o + 0xC);
         } else {
@@ -1606,7 +1606,7 @@ typedef struct {
     V_274e48 v10;
     R_274e48 r;
 } M_274e48;
-extern V_274e48 D_0013F420_274e48 __asm__("D_0013F420");
+extern float D_0013F420[];
 f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 void FUN_001f9bf8_274e48(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -1623,7 +1623,7 @@ void FUN_L00_00274e48(M_274e48 *m) {
     s32 c;
     if (D_L00_0015F5CC & 1)
         m->b8++;
-    d = distance_xyz(&m->v10, &D_0013F420_274e48);
+    d = distance_xyz(&m->v10, &(*(V_274e48 *)D_0013F420));
     if (d < 5.0f && 0.0f < r->p18[2]) {
         subtract_vector_xyz(&a, r->p18, &m->v10);
         if (0.5f < vector_length_xyz(&a)) {
