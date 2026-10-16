@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
 extern u8 D_001538E8[];
-extern u8 D_00153910[];
+const u8 D_00153910[] = "load_chroma_non_intra_quantizer_matrix == 1";
 extern s32 _Error();
 extern s32 _nextBit();
 extern s32 _sendIpuCommand();

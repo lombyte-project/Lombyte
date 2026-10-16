@@ -432,6 +432,7 @@ RODATA_OVERLAYS = {
     "sdk/library/sceDbcInit": (0x153518, 0x54498, 57),
     "sdk/library/mb_address_increment": (0x1537A8, 0x54728, 50),
     "sdk/library/slicea0": (0x153800, 0x54780, 38),
+    "sdk/library/_quantMatrixExtension": (0x153910, 0x54890, 44),
 }
 
 # Recovered C units that define the small-data variables their original
