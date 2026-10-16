@@ -101,7 +101,7 @@ extern s32 D_L07_0015FFC0;
 extern s16 D_L07_00197A80[];
 extern u16 D_L07_001AFEE0[][16];
 extern char D_L07_0020FA20[], D_L07_0020FA70[],
-    D_L07_0020FAA0[], D_L07_0020FAB8[], D_L07_0020FAD0[], D_L07_0020FAE8[],
+    D_L07_0020FAB8[], D_L07_0020FAD0[], D_L07_0020FAE8[],
     D_L07_0020FB00[], D_L07_0020FB18[], D_L07_0020FB30[], D_L07_0020FB50[],
     D_L07_0020FB68[], D_L07_0020FB80[], D_L07_0020FB98[], D_L07_0020FBB0[],
     D_L07_0020FBC8[], D_L07_0020FBE0[], D_L07_0020FBF8[], D_L07_0020FC10[],
@@ -112,6 +112,7 @@ extern char D_L07_0015FC80[];
 extern char D_L07_0032C980[];
 char D_L07_0020FA40[] = "internal moby sound mismatch on moby %d\n";
 char D_L07_0020FA88[] = "os:             %.1fK\n";
+char D_L07_0020FAA0[] = "code mem:       %.1fK\n";
 extern s32 D_L07_001B1B00[];
 extern char *D_L18_001C6200_26b768[] __asm__("D_L07_001C5880");
 extern char *D_L18_001BCA30_26b768[] __asm__("D_L07_001BC0B0");
