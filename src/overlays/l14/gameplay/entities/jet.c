@@ -832,7 +832,12 @@ extern void xform_m(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_m(void *, int, int) __asm__("FUN_001f7d30");
 
 extern int D_L14_00161C0C __attribute__((sda));
-extern float D_L14_001DFD40[4][4];
+float D_L14_001DFD40[4][4] = {
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+};
 void FUN_L14_002eb810(struct Moby *m) {
     Spk_k *d = (Spk_k *)m->pvars;
     Pk_m pk;
