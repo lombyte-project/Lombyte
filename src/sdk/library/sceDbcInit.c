@@ -10,7 +10,7 @@ extern SifClientData D_0015B030;
 extern char D_001534D8[];
 extern char D_001534F0[];
 const char D_00153518[] = "[libdbc.a = %d.%d, dbcman.irx = %d.%d]\n";
-extern char D_00153540[];
+const char D_00153540[] = "SifDmaAddr %08x\n";
 extern void sceSifInitRpc(u32);
 extern s32 sceSifBindRpc(SifClientData *, u32, u32);
 extern void debug_print_stub(const char *fmt, ...) __asm__("func_00124A20");
