@@ -2101,7 +2101,7 @@ typedef struct Data_2B5938 {
 char *FUN_L14_003014e0(int a0, float *pos, float *a2, int a3, float f);
 extern char D_0013E550_c[] __asm__("D_0013E550");
 char D_L14_001FBDF0[] = "Hovertank with no introPath. UID: %d\n";
-extern char D_L14_001FBE18[];
+char D_L14_001FBE18[] = "Hovertank with a intro path that has no points. UID: %d\n";
 extern char D_L14_001FBE58[];
 extern char D_L14_001FBE80[];
 extern char D_L14_001FBEC0[];
