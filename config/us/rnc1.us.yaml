@@ -549,7 +549,7 @@ segments:
           - [0x25624, textbin, text_gap_00124510_post_sdk_worker]
           - [0x25628, c, sdk/library/sceDbcSetWorkAddr]
           - [0x25694, textbin, text_gap_001246a8_post_sdk_worker]
-          - [0x25698, c, assembly/sdk/library/sceDbcCreateSocket]
+          - [0x25698, c, sdk/library/sceDbcCreateSocket]
           - [0x25760, c, sdk/library/sceDbcGetDepNumber]
           - [0x258a8, textbin, text_gap_001247e0_post_sdk_worker]
           - [0x258b0, c, sdk/library/scedbcreceivedata]
