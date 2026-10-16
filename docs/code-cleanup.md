@@ -53,7 +53,8 @@ A fakematch is code that only steers the compiler: `x++; x--;`, `x = x;`, a
 `do { } while (0)` outside a macro, an `if (0)` branch, a dead store. It is
 allowed until someone finds the real form, but it needs a comment that starts
 with `Fakematch:` and says what it changes, ending at most three lines above
-it. `check-cleanup.py` finds the shapes above without that comment. If
+it. `check-cleanup.py` finds the first four shapes without that comment (not
+dead stores or `x += 1; x -= 1;`, so mark those yourself). If
 removing the trick does not change the code, it is not a fakematch: delete it.
 
 ## Names
