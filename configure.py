@@ -498,6 +498,7 @@ DATA_OVERLAYS = {
     "input/pad/init_pads": (0x1CD760, 0xCE6E0, 16),
     "ui/menus/fun_002223f0": (0x1D5298, 0xD6218, 3),
     "gameplay/vendor/fun_00237ed0": (0x1E63FC, 0xE737C, 4),
+    "rendering/draw_dialog_text": (0x1E78F0, 0xE8870, 24),
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the
