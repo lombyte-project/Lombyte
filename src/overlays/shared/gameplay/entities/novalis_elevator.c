@@ -2046,9 +2046,9 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern float D_0013F420[];
 extern int D_001413D0[];
 extern char *D_L01_0015FFD8;
-extern const float D_L01_00161A30_c __asm__("D_L01_001619A0") __attribute__((sda));
-extern const float D_L01_00161A34_c __asm__("D_L01_001619A4") __attribute__((sda));
-extern const float D_0015EE6C_c __asm__("D_0015ED6C");
+extern const float D_L01_001619A0_gp __asm__("D_L01_001619A0") __attribute__((sda));
+extern const float D_L01_001619A4_gp __asm__("D_L01_001619A4") __attribute__((sda));
+extern const float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 
 void FUN_L01_002eec68(char *m) {
     V_2F0040 v;
@@ -2135,11 +2135,11 @@ void FUN_L01_002eec68(char *m) {
                 *(float *)(q + 0x70) = rate;
                 *(int *)(q + 0x84) = 8;
                 *(int *)(q + 0x80) = truncate_float_to_s32_c(*(float *)(d + 0x250) * f20 * fixed_scale);
-                k = D_0015EE6C_c;
+                k = frame_time_macro;
                 seven = 7.0f;
                 *(float *)(q + 0x88) = *(float *)(d + 0x250) * f20;
-                *(float *)(q + 0x78) = D_L01_00161A30_c * k;
-                *(float *)(q + 0x7C) = D_L01_00161A34_c * k;
+                *(float *)(q + 0x78) = D_L01_001619A0_gp * k;
+                *(float *)(q + 0x7C) = D_L01_001619A4_gp * k;
                 *(int *)(q + 0x84) = *(int *)(q + 0x84) | 4;
                 *(float *)(q + 0xB0) = seven;
                 *(float *)(q + 0xB4) = 13.0f;
@@ -2157,11 +2157,11 @@ void FUN_L01_002eec68(char *m) {
                 q[0x9D] = 3;
                 *(int *)(q + 0x84) = 8;
                 *(int *)(q + 0x80) = truncate_float_to_s32_c(*(float *)(d + 0x250) * f20 * fixed_scale);
-                k = D_0015EE6C_c;
+                k = frame_time_macro;
                 seven = 7.0f;
                 *(float *)(q + 0x88) = *(float *)(d + 0x250) * f20;
-                *(float *)(q + 0x78) = D_L01_00161A30_c * k;
-                *(float *)(q + 0x7C) = D_L01_00161A34_c * k;
+                *(float *)(q + 0x78) = D_L01_001619A0_gp * k;
+                *(float *)(q + 0x7C) = D_L01_001619A4_gp * k;
                 *(int *)(q + 0x84) = *(int *)(q + 0x84) | 4;
                 *(float *)(q + 0xB0) = seven;
                 *(float *)(q + 0xB4) = 13.0f;

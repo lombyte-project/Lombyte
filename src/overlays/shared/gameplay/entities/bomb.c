@@ -1978,7 +1978,6 @@ typedef struct { float f[4]; } __attribute__((aligned(16))) V4_cd;
 
 typedef struct { float x, y, z, w; char *p; int c; unsigned char b18; unsigned char b19; unsigned short s; float e; int i; } RocketHit;
 
-extern char D_001413D0_c[] __asm__("D_001413D0");
 extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
@@ -2181,7 +2180,7 @@ done:
         gg = (char *)((int *)&D_L00_00173E40);
         p = *(char **)(gg + 0x18);
         if (p != 0) {
-            if (p == *(char **)(D_001413D0_c) || p == *(char **)(d + 0x20)
+            if (p == (char *)D_001413D0_2ccee0 || p == *(char **)(d + 0x20)
                 || *(short *)(p + 0xA6) == 0x1C9 || *(short *)(p + 0xA6) == 0) goto keep;
             m[0xBC] = 2;
             qcopy(m + 0x10, gg + 0x20);
@@ -2202,7 +2201,7 @@ done:
         }
     } else {
         if (tick_countdown_32_alt((int *)(d + 0x24)) == 0
-            && !(200.0f < vector_distance_xy_alt(m + 0x10, *(char **)(D_001413D0_c) + 0x10))) goto keep;
+            && !(200.0f < vector_distance_xy_alt(m + 0x10, (char *)D_001413D0_2ccee0 + 0x10))) goto keep;
     }
 del:
     mark_moby_for_removal_c(m);
