@@ -82,12 +82,12 @@ void FUN_L00_001f3770(s32 x, s32 y, s32 color, s32 text_address) {
     D_L00_001611C0 = packet + 2;
     packet[2] = 0x10AB400000000001ULL;
     tags = packet + 2;
+    tags[6] = color & 0xFFFFFFFFULL;
     tags[1] = 0xE;
-    tags[3] = 0x14;
     tags[2] = 1;
+    tags[3] = 0x14;
     tags[4] = 0x2400000000000001ULL;
     tags[5] = 0x61;
-    ((u64 *)tags)[6] = color & 0xFFFFFFFFULL;
     texture_state = debug_font_pif_header;
     tags[9] = 0x5353;
     tags[7] = texture_state;
