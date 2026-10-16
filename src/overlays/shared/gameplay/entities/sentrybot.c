@@ -2879,195 +2879,189 @@ void FUN_L15_002a35d8(int addr) {
     m->command = 0xFF;
     m->state = 2;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L15_002a6e68.s", FUN_L15_002a6e68);
-#else
-#endif
-#ifdef NON_MATCHING
-extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
-extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
-extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern float wrap_rotation(float) __asm__("FUN_001fa610");
-extern unsigned int rand(void) __asm__("FUN_001160d8");
-extern float multiply_global_factor_ed68(float) __asm__("FUN_L15_001f8648");
-extern void enqueue_callback_list_1_2a6e68(void (*)(void), void *) __asm__("FUN_L15_001f2ac8");
-extern unsigned char D_L15_00174460[];
-extern int D_L15_00161558 __attribute__((sda));
-extern float D_L15_0016155C __attribute__((sda));
-extern float D_L15_00161560 __attribute__((sda));
-extern void FUN_L00_001ff290(void *, void *, void *);
-void FUN_L15_002a7628(char *moby);
+/* Spiderbot update: steps the walk/turn state, then probes ahead and sprays sparks along the path. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A8090), where it is exact; names translated to the US level program. */
+
+typedef int u128_2A8090 __attribute__((mode(TI)));
 
 typedef struct {
-    void *moby;
+    float v[2];
+    float f8;
+    float fC;
+    unsigned char *moby;
     int flags;
-    unsigned char enabled, mode;
-    unsigned short id;
-    float scale;
-    int active;
-} MotionQuery;
+    unsigned char b18;
+    unsigned char b19;
+    short h1A;
+    float f1C;
+    int i20;
+    int pad24[3];
+} Ray_2A8090;
+
+extern f32 convert_integer_to_float_c3(s32) __asm__("func_001FA6C0");
+extern f32 fast_cos_c4(f32) __asm__("func_001F9DC8");
+extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
+extern f32 fast_sin_c4(f32) __asm__("func_001F9DE0");
+extern float D_0015ED6C_c3 __asm__("D_0015ED6C");
+extern float FUN_001f96b0(float);
+extern float fast_add_rotations_c2(float, float) __asm__("func_001FA580");
+extern s32 rand(void);
+extern s32 random_integer_below_c4(s32) __asm__("func_00213260");
+extern s32 truncate_float_to_s32_c5(f32) __asm__("func_001FA6D0");
+extern short D_L15_00161558_d __asm__("D_L15_00161558") __attribute__((sda));
+extern short D_L15_0016155C_d __asm__("D_L15_0016155C") __attribute__((sda));
+extern short D_L15_00161560_d __asm__("D_L15_00161560") __attribute__((sda));
+extern u8 D_L15_00174460[];
+extern void FUN_L15_002a7628_c() __asm__("FUN_L15_002a7628");
+extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
+extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
+extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
+extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
+extern void subtract_vector_xyz_c3(void *, void *, void *) __asm__("FUN_001f9a28");
+void normalize_vector_triplet(f32 *arg0) __asm__("FUN_00214128");
+extern unsigned char *func_L00_00273F80_r(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 
 void FUN_L15_002a6e68(unsigned char *moby) {
-    Vec4 position;
-    Vec4 endpoint;
-    Vec4 offset;
-    Vec4 axis;
-    /* The four-row matrix shares storage with the later query and scratch. */
-    struct {
-        Vec4 angles;
-        union {
-            Vec4 rotation[4];
-            struct {
-                MotionQuery query;
-                unsigned char pad[12];
-                Vec4 temporary[2];
-            } motion;
-        } work;
-    } collision;
-    Vec4 next;
-    void * volatile position_ptr;
-    unsigned char *data;
-    float old_offset, angle, sign, length, speed;
-    unsigned int life;
-    unsigned char alpha, life_byte;
-    int i;
-    Vec4 *endpoint_ptr;
-
-    position.q = *(u128 *)(moby + 0x10);
-    data = *(unsigned char **)(moby + 0x78);
+    float old[4];
+    float A[4];
+    float B[4];
+    float C[4];
+    unsigned char *d = *(unsigned char **)(moby + 0x78);
+    *(u128_2A8090 *)old = *(u128_2A8090 *)(moby + 0x10);
+    {
+    float D[4];
+    float M[16];
+    float T[4];
     switch (moby[0x20]) {
     case 0:
-        *(u128 *)data = position.q;
-        *(float *)(moby + 0x58) = *(float *)(data + 0x30) / 1.5f;
-        *(float *)(data + 0x28) *= DEG_TO_RAD;
-        if (*(int *)(data + 0x20) == 0) {
+        *(u128_2A8090 *)d = *(u128_2A8090 *)old;
+        *(float *)(moby + 0x58) = *(float *)(d + 0x30) / 1.5f;
+        *(float *)(d + 0x28) = *(float *)(d + 0x28) * 0.017453292f;
+        if (*(int *)(d + 0x20) == 0) {
             moby[0x20] = 1;
-            *(float *)(data + 0x2c) = *(float *)(moby + 0x48);
-        } else if (*(int *)(data + 0x20) >= 3) {
+            *(float *)(d + 0x2C) = *(float *)(moby + 0x48);
+        } else if (*(int *)(d + 0x20) >= 3) {
             moby[0x20] = 2;
-            *(float *)(data + 0x2c) = *(float *)(moby + 0x48);
+            *(float *)(d + 0x2C) = *(float *)(moby + 0x48);
         } else {
             moby[0x20] = 3;
         }
         break;
-    case 1:
-        axis.q = 0;
-        axis.f[2] = *(float *)(data + 0x24);
-        collision.angles.q = 0;
-        offset.q = axis.q;
-        *(float *)(data + 0x28) = fast_add_rotations(*(float *)(data + 0x28),
-            (360.0f / ((*(float *)(data + 0x24) * 6.2831855f) / *(float *)(data + 0x30))) * DEG_TO_RAD * D_0015ED6C);
-        *(float *)(moby + 0x58) = *(float *)(data + 0x30) / 1.5f;
-        axis.f[0] = fast_cos(*(float *)(data + 0x2c));
-        axis.f[1] = fast_sin(*(float *)(data + 0x2c));
-        axis.f[2] = 0.0f;
-        build_look_at_matrix(&endpoint, &offset, &axis, *(float *)(data + 0x28));
-        add_vector_xyz(&next, data, &endpoint);
-        *(u128 *)(moby + 0x10) = next.q;
-        collision.angles.f[2] = fast_add_rotations(*(float *)(data + 0x2c), 1.5707964f);
-        collision.angles.f[1] = fast_add_rotations(-*(float *)(data + 0x28), 3.1415927f);
-        rotation_matrix_from_euler(&collision.work, &collision.angles);
-        copy_matrix(moby + 0xc0, &collision.work);
-        normalize_vector_triplet(moby + 0xc0);
+    case 1: {
+        *(u128_2A8090 *)C = 0;
+        C[2] = *(float *)(d + 0x24);
+        *(u128_2A8090 *)D = 0;
+        *(u128_2A8090 *)B = *(u128_2A8090 *)C;
+        *(float *)(d + 0x28) = fast_add_rotations_c2(*(float *)(d + 0x28),
+            360.0f / (*(float *)(d + 0x24) * 6.2831855f / *(float *)(d + 0x30)) * 0.017453292f * D_0015ED6C_c3);
+        *(float *)(moby + 0x58) = *(float *)(d + 0x30) / 1.5f;
+        C[0] = fast_cos_c4(*(float *)(d + 0x2C));
+        C[1] = fast_sin_c4(*(float *)(d + 0x2C));
+        C[2] = 0.0f;
+        build_look_at_matrix(A, B, C, *(float *)(d + 0x28));
+        add_vector_xyz(T, d, A);
+        *(u128_2A8090 *)(moby + 0x10) = *(u128_2A8090 *)T;
+        D[2] = fast_add_rotations_c2(*(float *)(d + 0x2C), 1.5707964f);
+        D[1] = fast_add_rotations_c2(-*(float *)(d + 0x28), 3.1415927f);
+        euler_rotation_matrix(M, D);
+        copy_matrix3x4(moby + 0xC0, M);
+        normalize_vector_triplet(moby + 0xC0);
         *(unsigned short *)(moby + 0x34) |= 0x100;
         break;
+    }
     case 2: {
-        float angle, old_offset;
-        float half_pi = 1.5707964f;
-        axis.q = 0;
-        axis.f[2] = -*(float *)(data + 0x24);
-        collision.angles.q = 0;
-        offset.q = axis.q;
-        angle = fast_add_rotations(wrap_rotation(fast_cos(*(float *)(data + 0x28)) * half_pi),
-                                  *(int *)(data + 0x20) == 4 ? half_pi : 0.0f);
-        *(float *)(data + 0x28) = fast_add_rotations(*(float *)(data + 0x28),
-            (360.0f / ((*(float *)(data + 0x24) * 6.2831855f) / *(float *)(data + 0x30))) * DEG_TO_RAD * D_0015ED6C);
-        old_offset = fast_add_rotations(wrap_rotation(fast_cos(*(float *)(data + 0x28)) * half_pi),
-                                  *(int *)(data + 0x20) == 4 ? half_pi : 0.0f);
-        speed = fast_subtract_rotations(old_offset, angle);
-        *(float *)(moby + 0x58) = (*(float *)(data + 0x24) * speed) / (D_0015ED6C * 1.5f);
-        axis.f[0] = fast_cos(*(float *)(data + 0x2c));
-        axis.f[1] = fast_sin(*(float *)(data + 0x2c));
-        axis.f[2] = 0.0f;
-        build_look_at_matrix(&endpoint, &offset, &axis, old_offset);
-        add_vector_xyz(&next, data, &endpoint);
-        *(u128 *)(moby + 0x10) = next.q;
-        collision.angles.f[2] = fast_add_rotations(*(float *)(data + 0x2c), half_pi);
-        collision.angles.f[1] = fast_add_rotations(-old_offset, 0.0f);
-        rotation_matrix_from_euler(&collision.work, &collision.angles);
-        copy_matrix(moby + 0xc0, &collision.work);
-        normalize_vector_triplet(moby + 0xc0);
+        float b1;
+        float b2;
+        *(u128_2A8090 *)C = 0;
+        C[2] = -*(float *)(d + 0x24);
+        *(u128_2A8090 *)D = 0;
+        *(u128_2A8090 *)B = *(u128_2A8090 *)C;
+        b1 = fast_add_rotations_c2(fast_normalize_angle(fast_cos_c4(*(float *)(d + 0x28)) * 1.5707964f),
+                           *(int *)(d + 0x20) == 4 ? 1.5707964f : 0.0f);
+        *(float *)(d + 0x28) = fast_add_rotations_c2(*(float *)(d + 0x28),
+            360.0f / (*(float *)(d + 0x24) * 6.2831855f / *(float *)(d + 0x30)) * 0.017453292f * D_0015ED6C_c3);
+        b2 = fast_add_rotations_c2(fast_normalize_angle(fast_cos_c4(*(float *)(d + 0x28)) * 1.5707964f),
+                           *(int *)(d + 0x20) == 4 ? 1.5707964f : 0.0f);
+        *(float *)(moby + 0x58) = *(float *)(d + 0x24) * fast_subtract_rotations(b2, b1) / (D_0015ED6C_c3 * 1.5f);
+        C[0] = fast_cos_c4(*(float *)(d + 0x2C));
+        C[1] = fast_sin_c4(*(float *)(d + 0x2C));
+        C[2] = 0.0f;
+        build_look_at_matrix(A, B, C, b2);
+        add_vector_xyz(T, d, A);
+        *(u128_2A8090 *)(moby + 0x10) = *(u128_2A8090 *)T;
+        D[2] = fast_add_rotations_c2(*(float *)(d + 0x2C), 1.5707964f);
+        D[1] = fast_add_rotations_c2(-b2, 0.0f);
+        euler_rotation_matrix(M, D);
+        copy_matrix3x4(moby + 0xC0, M);
+        normalize_vector_triplet(moby + 0xC0);
         *(unsigned short *)(moby + 0x34) |= 0x100;
         break;
     }
-    case 3:
-        old_offset = fast_cos(*(float *)(data + 0x28)) * *(float *)(data + 0x24);
-        *(float *)(data + 0x28) = fast_add_rotations(*(float *)(data + 0x28),
-            (360.0f / ((*(float *)(data + 0x24) * 6.2831855f) / *(float *)(data + 0x30))) * DEG_TO_RAD * D_0015ED6C);
-        angle = fast_cos(*(float *)(data + 0x28)) * *(float *)(data + 0x24);
-        *(float *)(moby + 0x58) = (angle - old_offset) / (D_0015ED6C * 1.5f);
-        build_spherical_offset(&endpoint, angle, *(int *)(data + 0x20) == 2 ? 0.0f : *(float *)(moby + 0x48),
-                               *(int *)(data + 0x20) == 2 ? 1.5707964f : 0.0f);
-        add_vector_xyz(&offset, data, &endpoint);
-        *(u128 *)(moby + 0x10) = offset.q;
+    case 3: {
+        float w;
+        float x;
+        w = fast_cos_c4(*(float *)(d + 0x28)) * *(float *)(d + 0x24);
+        *(float *)(d + 0x28) = fast_add_rotations_c2(*(float *)(d + 0x28),
+            360.0f / (*(float *)(d + 0x24) * 6.2831855f / *(float *)(d + 0x30)) * 0.017453292f * D_0015ED6C_c3);
+        x = fast_cos_c4(*(float *)(d + 0x28)) * *(float *)(d + 0x24);
+        *(float *)(moby + 0x58) = (x - w) / (D_0015ED6C_c3 * 1.5f);
+        build_spherical_offset(A, x, *(int *)(d + 0x20) != 2 ? *(float *)(moby + 0x48) : 0.0f,
+                      *(int *)(d + 0x20) == 2 ? 1.5707964f : 0.0f);
+        add_vector_xyz(B, d, A);
+        *(u128_2A8090 *)(moby + 0x10) = *(u128_2A8090 *)B;
         break;
     }
-    offset.q = 0;
-    offset.f[2] = 12.0f;
-    transform_vector(&offset, &offset, moby + 0xc0);
-    position_ptr = moby + 0x10;
-    add_vector_xyz(&collision.angles, moby + 0x10, &offset);
-    collision.work.motion.query.flags = 0x10001;
-    endpoint.q = collision.angles.q;
-    collision.work.motion.query.moby = moby;
-    collision.work.motion.query.scale = 1.0f;
-    collision.work.motion.query.active = 1;
-    normalize_vector_xyz(&collision.angles, &offset, 1.0f);
-    collision.work.motion.query.id = *(unsigned short *)(moby + 0xa6);
-    collision.angles.f[2] = 1.0f;
-    collision.angles.f[3] = 5627.925f;
-    collision.work.motion.query.enabled = 1;
-    collision.work.motion.query.mode = 1;
-    subtract_vector_xyz(collision.work.motion.temporary, moby + 0x10, &position);
-    axis.q = collision.work.motion.temporary[0].q;
-    FUN_001efa68(moby + 0x10, &endpoint, 9, moby, &collision.angles);
-    if (FUN_001efa68(moby + 0x10, &endpoint, 2, 0, 0) != 0)
-        *(u128 *)(data + 0x10) = *(u128 *)D_L15_00174460;
-    else
-        *(u128 *)(data + 0x10) = endpoint.q;
-    endpoint_ptr = &endpoint;
-    i = 0;
-    if (D_L15_00161558 > 0) {
-        do {
-            sign = -1.0f;
-            if (rand() & 1) sign = 1.0f;
-            life = truncate_float_to_s32_u(multiply_global_factor_ed68(random_float_between(D_L15_00161560 * 0.5f, D_L15_00161560)));
-            subtract_vector_xyz(collision.work.motion.temporary, data + 0x10, position_ptr);
-            offset.q = collision.work.motion.temporary[0].q;
-            scale_vector_xyz(&offset, &offset, sign);
-            length = vector_length_xyz(&offset);
-            if (sign < 0.0f) endpoint.q = *(u128 *)(data + 0x10);
-            else endpoint.q = *(u128 *)(moby + 0x10);
-            life_byte = life & 0xff;
-            i++;
-            scale_vector_xyz(&offset, &offset, random_float_between(0.0f, 0.9f));
-            /* The checked helper adds offset into its second argument, endpoint_ptr. */
-            FUN_L00_001ff290(collision.work.motion.temporary, endpoint_ptr, &offset);
-            speed = D_0015ED6C * 10.0f;
-            speed = random_float_between(speed, length / convert_integer_to_float(life << 2));
-            normalize_vector_xyz(&offset, &offset, speed);
-            alpha = random_integer_below(255);
-            /* Retail returns the allocated effect pointer; this call ignores it. */
-            ((unsigned char *(*)(float *, char *, int, unsigned char, unsigned char, int, float))
-                FUN_L00_002730e0)((float *)endpoint_ptr, (char *)&offset, 0x604040ff,
-                                 life_byte, alpha, 0, D_L15_0016155C);
-        } while (i < D_L15_00161558);
     }
-    enqueue_callback_list_1_2a6e68((void (*)(void))FUN_L15_002a7628, moby);
+    }
+    {
+        Ray_2A8090 R;
+        float T2[4];
+        int i;
+        *(u128_2A8090 *)B = 0;
+        B[2] = 12.0f;
+        func_001F9EC0_2A3DD0(B, B, moby + 0xC0);
+        add_vector_xyz(R.v, moby + 0x10, B);
+        *(u128_2A8090 *)A = *(u128_2A8090 *)R.v;
+        R.flags = 0x10001;
+        R.moby = moby;
+        R.f1C = 1.0f;
+        R.i20 = 1;
+        fast_vec_normalize(R.v, B, 1.0f);
+        R.h1A = *(unsigned short *)(moby + 0xA6);
+        R.f8 = 1.0f;
+        R.fC = 5627.9248f;
+        R.b18 = 1;
+        R.b19 = 1;
+        subtract_vector_xyz_c3(T2, moby + 0x10, old);
+        *(u128_2A8090 *)C = *(u128_2A8090 *)T2;
+        FUN_001efa68(moby + 0x10, A, 9, moby, &R);
+        if (FUN_001efa68(moby + 0x10, A, 2, 0, 0)) {
+            *(u128_2A8090 *)(d + 0x10) = *(u128_2A8090 *)D_L15_00174460;
+        } else {
+            *(u128_2A8090 *)(d + 0x10) = *(u128_2A8090 *)A;
+        }
+        for (i = 0; i < *(int *)&D_L15_00161558_d; i++) {
+            float s;
+            float len;
+            int k;
+            unsigned char life;
+            s = -1.0f;
+            if (rand() & 1) s = 1.0f;
+            k = truncate_float_to_s32_c5(FUN_001f96b0(random_float_between(*(float *)&D_L15_00161560_d * 0.5f, *(float *)&D_L15_00161560_d)));
+            subtract_vector_xyz_c3(T2, d + 0x10, moby + 0x10);
+            *(u128_2A8090 *)B = *(u128_2A8090 *)T2;
+            fast_vec_scale(B, B, s);
+            len = fast_vec_length(B);
+            *(u128_2A8090 *)A = s < 0.0f ? *(u128_2A8090 *)(d + 0x10) : *(u128_2A8090 *)(moby + 0x10);
+            life = k;
+            fast_vec_scale(B, B, random_float_between(0.0f, 0.9f));
+            FUN_L00_001ff290(T2, A, B);
+            fast_vec_normalize(B, B, random_float_between(D_0015ED6C_c3 * 10.0f, len / convert_integer_to_float_c3(k * 4)));
+            func_L00_00273F80_r(A, (char *)B, 0x604040FF, life, random_integer_below_c4(0xFF), 0, *(float *)&D_L15_0016155C_d);
+        }
+    }
+    enqueue_callback_list_1_alt(FUN_L15_002a7628_c, moby);
 }
-#endif
 /* Builds a screen-space quad from the moby's offset and draws it. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A8850), where it is exact; names translated to the US level program. */
 

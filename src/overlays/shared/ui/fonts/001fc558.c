@@ -2,56 +2,56 @@
 #include "types.h"
 #include "asm.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fc558.s", FUN_L00_001fc558);
-#else
-extern s32 frame_size[] __asm__("D_0013E504");
-extern s32 draw_buffer_address __asm__("D_0015EE84");
-extern u8 *D_L00_001611C0;
-void FUN_L00_002a0d90(void);
+/* Ported from rac1-decomp (src/game/draw.c: func_001F7680), where it is exact; names translated to the US level program. */
 
-void FUN_L00_001fc558(u32 source) {
-    s32 remaining = frame_size[0];
-    s32 destination = draw_buffer_address >> 8;
-    u64 count;
-    u64 transfer;
-    u8 *packet;
-    u64 *words;
+extern int *D_L00_001611C0;
+extern int D_0013E504[];
+extern int D_0015EE84;
+extern void vu1_tex_flush(void) __asm__("func_00233B68");
+
+#define PK ((unsigned char *)D_L00_001611C0)
+
+void FUN_L00_001fc558(unsigned int source) {
+    int remaining = D_0013E504[0];
+    int destination = D_0015EE84 >> 8;
+    unsigned long count;
+    unsigned long transfer;
+    unsigned char *packet;
+    unsigned long *words;
 
     do {
-        count = (s64)remaining;
+        count = (long)remaining;
         if (count > 0x80)
             count = 0x80;
-        *(u32 *)(D_L00_001611C0 + 0) = 0x10000006;
+        *(unsigned int *)(PK + 0) = 0x10000006;
         remaining -= 0x80;
-        *(u32 *)(D_L00_001611C0 + 4) = 0;
-        *(u32 *)(D_L00_001611C0 + 8) = 0;
-        *(u32 *)(D_L00_001611C0 + 12) = 0x50000006;
-        packet = D_L00_001611C0;
-        D_L00_001611C0 = packet + 0x10;
-        transfer = (u64)count << 7;
-        words = (u64 *)(packet + 0x10);
-        words[0] = 0x4000000000000001ULL;
+        *(unsigned int *)(PK + 4) = 0;
+        *(unsigned int *)(PK + 8) = 0;
+        *(unsigned int *)(PK + 12) = 0x50000006;
+        packet = PK;
+        D_L00_001611C0 = (int *)(packet + 0x10);
+        transfer = (unsigned long)count << 7;
+        words = (unsigned long *)(packet + 0x10);
+        words[0] = 0x4000000000000001UL;
         words[1] = 0x0eeeeeee;
-        words[2] = ((u64)(u32)destination << 32) | 0x8000000000000ULL;
+        words[2] = ((unsigned long)(unsigned int)destination << 32) | 0x8000000000000UL;
         words[3] = 0x50;
         words[4] = 0;
         words[5] = 0x51;
-        words[6] = ((u64)count << 32) | 0x200;
+        words[6] = ((unsigned long)count << 32) | 0x200;
         words[7] = 0x52;
         words[8] = 0;
         words[9] = 0x53;
-        words[10] = transfer | 0x0800000000008000ULL;
+        words[10] = transfer | 0x0800000000008000UL;
         words[11] = 0;
-        destination += (s32)((count << 35) >> 32);
-        D_L00_001611C0 = packet + 0x70;
-        *(u32 *)(packet + 0x70) = (u32)(s64)(s32)(transfer | 0x30000000);
-        *(u32 *)(D_L00_001611C0 + 4) = source;
-        source += (s32)(count * 0x800);
-        *(u32 *)(D_L00_001611C0 + 8) = 0;
-        *(u32 *)(D_L00_001611C0 + 12) = (u32)transfer | 0x50000000;
-        D_L00_001611C0 += 0x10;
+        D_L00_001611C0 = (int *)(packet + 0x70);
+        *(unsigned int *)(packet + 0x70) = (unsigned int)(long)(int)(transfer | 0x30000000);
+        *(unsigned int *)(PK + 4) = source;
+        source += (int)(count * 0x800);
+        destination += (int)(count * 8);
+        *(unsigned int *)(PK + 8) = 0;
+        *(unsigned int *)(PK + 12) = (unsigned int)transfer | 0x50000000;
+        D_L00_001611C0 = (int *)(PK + 0x10);
     } while (remaining > 0);
-    FUN_L00_002a0d90();
+    vu1_tex_flush();
 }
-#endif /* NON_MATCHING */

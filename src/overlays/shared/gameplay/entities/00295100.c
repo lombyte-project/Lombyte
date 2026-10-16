@@ -1008,63 +1008,51 @@ void FUN_L00_002999a8(void) {
     sceCdSync_alt(0);
     FUN_L00_002997c8();
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299a68.s", FUN_L00_00299a68);
-#else
-extern int FUN_L00_002660c0(s32);
-extern void FUN_L00_001ff040(void *, s32, s32);
-extern void FUN_L00_00265fa0(s32, s32, s32);
+/* starts the slideshow: resets state, rebases the level data pointers, and starts the first two streams */
+/* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_0029ADD8), where it is exact; names translated to the US level program. */
 
-/* The retail record bases are 0x16A8 and 0x1748 within disc_table.
- * This view preserves those offsets separately from the signed index.
- * The spacing does not establish the number of valid records. */
-typedef struct {
-    char pad[0x16A8];
-    struct DiscFile records[20];
-    struct DiscFile records_alt[20];
-} DiscTableRecords;
+typedef struct { int a; int b; } LL9;
+
+typedef struct { char pad[0x16A8]; LL9 normal[20]; LL9 alt[20]; } G9;
+
+extern G9 D_00137B80_c __asm__("D_00137B80");
+extern int D_L00_0015F3FC_c __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
+extern int D_L00_0015F5C4 __attribute__((section(".sdata")));
+extern int D_L00_0015F5D8_c __asm__("D_L00_0015F5D8") __attribute__((section(".sdata")));
+extern int D_L00_0015F620[4] __attribute__((section(".sdata")));
+extern int D_L00_00173E00[];
+extern int D_L00_001611CC __attribute__((section(".sdata")));
+extern int update_audio_stream_until_idle_alt(int) __asm__("FUN_002168a8");
+extern s32 D_0015ED80_c __asm__("D_0015ED80") __attribute__((section(".sdata")));
+extern s32 start_audio_stream_read(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216788");
+extern void FillTransferWords(void *, s32, s32);
+extern void fade_to_black_c(s32 n) __asm__("FUN_001f4a58");
 
 void FUN_L00_00299a68(void) {
-
-    s32 offset;
-    s32 first_destination, second_destination;
-    s32 index;
-
-    FUN_L00_002660c0(0);
-    FUN_L00_001f9838(8);
-    D_L00_0015F5D8 = 1;
-    D_L00_0015F3FC_298840 = 1.0f;
-    FUN_L00_001ff040((D_L00_0015F5C4 = 7, (char *)&D_L00_0015F622 - 2), 0, 0x10);
-    offset = D_L00_001611CC - 0xE0000;
-    first_destination = D_L00_00173E00_298840.x4 + offset;
-    second_destination = D_L00_00173E00_298840.x8 + offset;
-    D_L00_0015F62C = second_destination;
-    D_L00_001611CC = offset;
-    *(volatile s32 *)&D_L00_0015F628 = first_destination;
-    if (pal_mode != 0) {
-        index = (s16)D_L00_0015F622;
-        FUN_L00_00265fa0(first_destination, ((DiscTableRecords *)&disc_table)->records_alt[index].sector,
-                           ((DiscTableRecords *)&disc_table)->records_alt[index].size);
+    int t;
+    update_audio_stream_until_idle_alt(0);
+    fade_to_black_c(8);
+    D_L00_0015F5D8_c = 1;
+    *(float *)&D_L00_0015F3FC_c = 1.0f;
+    D_L00_0015F5C4 = 7;
+    FillTransferWords(D_L00_0015F620, 0, 16);
+    t = D_L00_001611CC - 0xE0000;
+    D_L00_0015F620[2] = D_L00_00173E00[1] + t;
+    D_L00_0015F620[3] = D_L00_00173E00[2] + t;
+    D_L00_001611CC = t;
+    if (D_0015ED80_c != 0) {
+        start_audio_stream_read(D_L00_0015F620[2], D_00137B80_c.alt[((short *)D_L00_0015F620)[1]].a, D_00137B80_c.alt[((short *)D_L00_0015F620)[1]].b);
     } else {
-        index = (s16)D_L00_0015F622;
-        FUN_L00_00265fa0(first_destination, ((DiscTableRecords *)&disc_table)->records[index].sector,
-                           ((DiscTableRecords *)&disc_table)->records[index].size);
+        start_audio_stream_read(D_L00_0015F620[2], D_00137B80_c.normal[((short *)D_L00_0015F620)[1]].a, D_00137B80_c.normal[((short *)D_L00_0015F620)[1]].b);
     }
-    FUN_L00_002660c0(1);
-    index = D_L00_0015F622 + 1;
-    D_L00_0015F622 = index;
-    index = (s32)((u32)index << 16);
-    if (pal_mode != 0) {
-        second_destination = D_L00_0015F62C;
-        FUN_L00_00265fa0(second_destination, ((DiscTableRecords *)&disc_table)->records_alt[index >> 16].sector,
-                           ((DiscTableRecords *)&disc_table)->records_alt[index >> 16].size);
+    update_audio_stream_until_idle_alt(1);
+    ((short *)D_L00_0015F620)[1]++;
+    if (D_0015ED80_c != 0) {
+        start_audio_stream_read(D_L00_0015F620[3], D_00137B80_c.alt[((short *)D_L00_0015F620)[1]].a, D_00137B80_c.alt[((short *)D_L00_0015F620)[1]].b);
     } else {
-        second_destination = D_L00_0015F62C;
-        FUN_L00_00265fa0(second_destination, ((DiscTableRecords *)&disc_table)->records[index >> 16].sector,
-                           ((DiscTableRecords *)&disc_table)->records[index >> 16].size);
+        start_audio_stream_read(D_L00_0015F620[3], D_00137B80_c.normal[((short *)D_L00_0015F620)[1]].a, D_00137B80_c.normal[((short *)D_L00_0015F620)[1]].b);
     }
 }
-#endif
 extern s32 D_L00_0015F3FC;
 void FUN_L00_002a09d8(s32);
 void fade_to_black(s32) __asm__("FUN_001f4a58");
