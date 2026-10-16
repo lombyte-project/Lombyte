@@ -1765,7 +1765,7 @@ segments:
           - [0x1223e0, c, ui/menus/draw_menu_choice_list]
           - [0x122574, textbin, text_gap_002215f4_before_fun_002216c0]
           - [0x122578, c, ui/menus/pause/build_pause_item_list]
-          - [0x122640, c, ui/menus/fun_002216c0]
+          - [0x122640, c, ui/menus/build_filtered_menu_item_list]
           - [0x122774, textbin, text_gap_002217f4_before_fun_00221930]
           - [0x122778, c, ui/menus/fun_002217f8]
           - [0x122780, textbin, text_gap_00221800_after_fun_002217f8]

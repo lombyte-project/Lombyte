@@ -13400,23 +13400,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002216c0",
-        "source_path": "src/ui/menus/fun_002216c0.c",
-        "address": "0x002216c0",
-        "current_name": "FUN_002216c0",
-        "proposed_name": null,
-        "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "ui/map/draw_level_selection_map_screen",
         "source_path": "src/ui/map/draw_level_selection_map_screen.c",
         "address": "0x00221930",
@@ -20053,6 +20036,22 @@
           {
             "kind": "source_analysis",
             "note": "The supplied original Ghidra decompilation identifies preview_stream_state, MenuPreviewContext, create_menu_preview_moby, camera position and lighting presets. Retail instructions at 0x00218fb0 set state 2, and 0x00218fe4/0x00218ff0 install default context 0x001d45c8 in both context slots. 0x00218fec..0x00219014 initialize lighting preset 14; 0x00219018/0x00219020 synchronize DMA/vblank, and 0x0021908c..0x002190b4 establish graphics workspace pointers and initialize descriptors/bounds. 0x002190f0 creates class 0x472 objects, stores them in the array at 0x001d5d90, attaches callback 0x0023a2c0 at 0x00219118, copies camera position and zeroes rotation at 0x00219120..0x00219154, and selects each context animation's final frame at 0x00219180; the loop bound at 0x0021918c is fourteen. Checked caller FUN_002192a8 invokes this initializer at 0x0021936c only for state 0 or 0x2d (tests 0x0021935c..0x00219364), then manages fourteen context entries and the same preview object array, including animation transitions at 0x00219548/0x00219568. Caller is itself called by update_gameplay_frame at 0x001eb3b4. Bounded bytes at 0x001d45c8 confirm the fourteen initial animation indices (0,1,16,17,18,5..13); no identifying strings were present. This proves initialization of the menu preview scene without assigning an unsupported specific menu identity."
+          }
+        ]
+      },
+      {
+        "address": "0x002216c0",
+        "current_name": "FUN_002216c0",
+        "proposed_name": "build_filtered_menu_item_list",
+        "logical_group": "ui/menus",
+        "unit": "ui/menus/build_filtered_menu_item_list",
+        "source_path": "src/ui/menus/build_filtered_menu_item_list.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00221738..0x00221764 the assigned ui/menus function selects signed item IDs from 10-byte-stride source entries in four ranges split at indices 6, 9 and 12; 0x002217c8 bounds traversal to 14 candidates. Instructions 0x00221768..0x00221774 test the per-item byte at 0x0013d4c0 and skip zero entries. For each retained item, 0x0022177c..0x002217b4 index the recovered g_pVendorItemDefinitions table at 0x001863d0 with stride 0x4c, copy wIcon_texture_group_id (+0x38) into compact 10-byte records at 0x001d61b8, zero two halfwords, save item ID at +6 and original candidate index at +8, and copy definition +0x40/+0x44 to parallel arrays 0x001d6248/0x001d6280. At 0x002217e8 the retained-entry count is stored to 0x001d10c8. The prepared decompilation corroborates these operations. No checked caller or string establishes a narrower menu or filter meaning, so the name describes only this proven construction."
           }
         ]
       }
