@@ -18180,23 +18180,6 @@
         ]
       },
       {
-        "unit": "runtime/sio/fun_0011a428",
-        "source_path": "src/runtime/sio/fun_0011a428.c",
-        "address": "0x0011a428",
-        "current_name": "FUN_0011a428",
-        "proposed_name": null,
-        "logical_group": "runtime/sio",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp core/00119D88.c (SIO); role not settled"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "runtime/sio/fun_0011a448",
         "source_path": "src/runtime/sio/fun_0011a448.c",
         "address": "0x0011a448",
@@ -20068,6 +20051,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x001f78b4..0x001f78e8 the assigned function selects either DAT_001518ee shifted by 13 or an 8192-byte-aligned address below g_dwGsTextureAllocationBase, subtracting 4 << min(width_exponent + height_exponent,16). At 0x001f78f0 it calls established build_graphics_render_target (0x001fb440) with the two exponents and selected byte address. Bounded helper evidence confirms that builder records 1<<exponent dimensions at 0x001518e0/0x001518e2 and constructs the drawing environment and framebuffer/texture state. At 0x001f78f8..0x001f7920 the wrapper computes those same power-of-two dimensions and calls configure_graphics_projection (0x001f33b8), retaining its f12 input. At 0x001f7924..0x001f7954 it emits register 0x47 with zero or 0x30000 according to the flag and register 0x42 with 0x8000000044 through emit_gs_register_write (0x00233980). The supplied caller reference is render_level_effects_and_screen_sprites via 0x00219ae8; no effect-specific claim is required."
+          }
+        ]
+      },
+      {
+        "address": "0x0011a428",
+        "current_name": "FUN_0011a428",
+        "proposed_name": "handle_sif_set_system_register",
+        "logical_group": "runtime/sio",
+        "unit": "runtime/sio/handle_sif_set_system_register",
+        "source_path": "src/runtime/sio/handle_sif_set_system_register.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x0011a428/0x0011a430 the retail body loads packet register index +0x10 and value +0x14; 0x0011a42c loads the state system-register table pointer +0x1c; 0x0011a434 scales the index by four, 0x0011a438 computes the entry, and the return delay-slot store at 0x0011a440 writes the value. Prepared Ghidra decompilation identifies SifSetSystemRegisterPacket and SifCommandState and documents system command 0x80000001 installed in callback slot one, with supplied sceSifInitCmd reference 0x0011a5a4. Retain its established verb-first descriptive name. Managed baseline reports strict/text match 100%, 28 retail bytes, no differences, legal/promotable candidate."
           }
         ]
       }

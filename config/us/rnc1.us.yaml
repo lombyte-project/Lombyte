@@ -286,7 +286,7 @@ segments:
           - [0x1b30c, textbin, text_gap_00119da0_post_sdk_worker]
           - [0x1b310, c, sdk/debug/kprintf]
           - [0x1b348, c, sdk/debug/sce_printf]
-          - [0x1b3a8, c, runtime/sio/fun_0011a428]
+          - [0x1b3a8, c, runtime/sio/handle_sif_set_system_register]
           - [0x1b3c4, textbin, text_gap_0011a444_after_fun_0011a428]
           - [0x1b3c8, c, runtime/sio/fun_0011a448]
           - [0x1b3d4, textbin, text_gap_0011a454_after_fun_0011a448]

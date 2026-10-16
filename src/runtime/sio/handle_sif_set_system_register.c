@@ -2,9 +2,9 @@
 
 /* SIO transmit callback: stores the channel index field at a0+0x14 into the
    array a1+0x1C at slot a0+0x10.  Returns nothing (SIO calls it void). */
-void FUN_0011a428(s32 *a0, s32 *a1) __asm__("FUN_0011a428");
+void handle_sif_set_system_register(s32 *a0, s32 *a1) __asm__("FUN_0011a428");
 
-void FUN_0011a428(s32 *a0, s32 *a1) {
+void handle_sif_set_system_register(s32 *a0, s32 *a1) {
     s32 *dst;
     s32 index;
     s32 value;
@@ -15,4 +15,4 @@ void FUN_0011a428(s32 *a0, s32 *a1) {
     dst[index] = value;
 }
 
-extern __typeof__(FUN_0011a428) func_0011A428 __attribute__((alias("FUN_0011a428")));
+extern __typeof__(handle_sif_set_system_register) func_0011A428 __attribute__((alias("FUN_0011a428")));
