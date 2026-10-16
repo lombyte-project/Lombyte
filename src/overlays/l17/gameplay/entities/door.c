@@ -1556,7 +1556,7 @@ typedef struct {
 } ShipLevelEntry;
 extern char D_L17_001D9B68_ed[] __asm__("D_L17_001D9B68");
 extern char D_L17_001E6E00[];
-extern char D_L17_001E6E38[];
+char D_L17_001E6E38[] = "no final place for hero during victory, so just fall\n";
 extern float D_L17_00161FE0 __attribute__((sda));
 extern float D_L17_00161FE4 __attribute__((sda));
 extern float D_L17_00162054 __attribute__((sda));
