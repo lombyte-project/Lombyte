@@ -983,147 +983,103 @@ void FUN_L00_00206cf8(void) {
     if (n >= 9)
         give_reward(0x4E26, 0x50);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00206e00.s", FUN_L00_00206e00);
-#else
-extern s32 D_0015EEA0 MACRO_ADDR;
-extern s32 alternate_animation_sequence __asm__("D_0015EE20") MACRO_ADDR;
-extern u8 D_0015EDB4 MACRO_ADDR;
-extern u8 big_head_cheat_enabled[] __asm__("D_0015EDB0") MACRO_ADDR;
-extern u8 selector_available[] __asm__("D_0015EDC0") MACRO_ADDR;
-extern s32 FUN_001f96f8(s32);
-extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
+/* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00207418), where it is exact; names translated to the US level program. */
+
+extern int D_0015EE20 __attribute__((section(".sdata")));
+extern int D_0015EEA0 __attribute__((section(".sdata")));
+extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
+extern unsigned char D_0013F350_c3[] __asm__("D_0013F350") __attribute__((section(".data")));
+extern unsigned char D_0015EDB0[] __attribute__((section(".sdata")));
+extern unsigned char D_0015EDB4[4] __attribute__((section(".sdata")));
+extern unsigned char D_0015EDC0[] __attribute__((section(".sdata")));
+extern unsigned char D_L00_00179700_c[][16] __asm__("D_L00_00179700");
+extern void FUN_L00_00263d40(int arg0, int arg1);
 
 void FUN_L00_00206e00(void) {
-    struct Hero *g;
-    /* Retail appends at hero +0x21C4 and reloads the count at +0x21D4. */
-    struct {
-        u8 pad[0x21C4];
-        u8 history[16];
-        volatile s32 history_count;
-    } *history_view;
-    s32 input;
-    u32 state;
-    s32 level;
-    s32 i, length, position, offset;
-    u32 j;
-    u8 *end;
-    u8 *sequence;
-    u8 *history;
-    volatile s32 *history_count;
-    if (D_0015EEA0 == 0 && alternate_animation_sequence == 0)
-        return;
-    g = &hero;
-    level = FUN_001f96f8(15);
-    input = 0;
-    if (g->state_timer == level) {
-        if (g->state.control_mode == 4) {
-            if (g->state.current == HERO_STATE_HIGH_JUMP) {
-                if (g->unk450 == 0) {
-                    input = 1;
-                    if (D_0015EDB4)
-                        input = 2;
-                    goto append;
+    char *g;
+    int s;
+    int i;
+    if (D_0015EEA0 == 0 && D_0015EE20 == 0) return;
+    g = (char *)D_0013F350_c3;
+    s = 0;
+    if (*(int *)(g + 0x198) == scale_game_frames_c2(0xF)) {
+        if (*(int *)(g + 0x208C) == 4) {
+            int b = *(int *)(g + 0x2084);
+            if (b == 0xB) {
+                int c = *(int *)(g + 0x450);
+                if (c == 0) {
+                    s = 1;
+                    if (D_0015EDB4[0]) s = 2;
+                } else if (c == 1) {
+                    s = 2;
+                    if (D_0015EDB4[0]) s = 1;
+                } else if (c == 3) {
+                    s = 3;
                 }
-                if (g->unk450 == 1) {
-                    input = 2;
-                    if (D_0015EDB4)
-                        input = 1;
-                    goto append;
-                }
-                state = g->unk450 ^ 3;
-                input = 3;
-                goto reject;
-            } else if (g->state.current == 0x11) {
-                input = 9;
-                goto append;
-            } else if (g->state.current == HERO_STATE_PACK_JUMP) {
-                input = 10;
-                goto append;
-            } else {
-                state = g->state.current ^ 0xE;
-                input = 5;
-                goto reject;
+            } else if (b == 0x11) {
+                s = 9;
+            } else if (b == 0xA) {
+                s = 0xA;
+            } else if (b == 0xE) {
+                s = 5;
             }
-        } else if (g->state.control_mode == 6) {
-            if (g->state.current == HERO_STATE_WRENCH_SLAM) {
-                input = 6;
-                goto append;
+        } else if (*(int *)(g + 0x208C) == 6) {
+            int b = *(int *)(g + 0x2084);
+            if (b == 0x14) {
+                s = 6;
+            } else if (b == 0x13) {
+                s = *(int *)(g + 0xA60) + 0xC;
+            } else if (b == 0x15) {
+                s = 4;
             }
-            if (g->state.current == HERO_STATE_WRENCH_COMBO) {
-                input = g->attack_record + 12;
-                goto append;
-            }
-            state = g->state.current ^ HERO_STATE_CROUCH_SWING;
-            input = 4;
-            goto reject;
-        } else {
-            state = g->state.current ^ 0x22;
-            input = 11;
-            goto reject;
+        } else if (*(int *)(g + 0x2084) == 0x22) {
+            s = 0xB;
         }
-    } else {
-        level = FUN_001f96f8(0x3C);
-        if (g->state_timer == level) {
-            if (g->state.current == HERO_STATE_CROUCH) {
-                input = 7;
-                goto append;
-            }
-            state = g->state.current ^ HERO_STATE_LAND;
-            input = 8;
-            goto reject;
+    } else if (*(int *)(g + 0x198) == scale_game_frames_c2(0x3C)) {
+        if (*(int *)(g + 0x2084) == 4) {
+            s = 7;
+        } else if (*(int *)(g + 0x2084) == 8) {
+            s = 8;
         }
     }
-    goto append;
-reject:
-    if (state != 0) input = 0;
-append:
-    if (input == 0)
-        return;
-    history_view = (void *)&hero;
-    history_count = &history_view->history_count;
-    history = history_view->history;
-    history[*history_count] = input;
-    (*history_count)++;
-    sequence = D_L00_00179700;
-    for (i = 0, offset = 0; i < 12; i++, sequence += 16, offset += 16) {
-        length = 0;
-        if (*sequence != 0) {
-            end = D_L00_00179700 + offset;
-            do { end++; length++; } while (*end != 0);
-        }
-        if (length != 0) {
-            position = *history_count - length;
-            if (position < 0)
-                position += 16;
-            j = 0;
-            if (length > 0) {
-                if (*(u8 *)(position + (s32)history) == sequence[0]) {
-                    do {
-                        position++;
-                        j++;
-                        if (position > 15)
-                            position -= 16;
-                        if ((s32)j >= length)
-                            goto scan_result;
-                    } while (sequence[j] == *(u8 *)(position + (s32)history));
-                }
+    if (s == 0) return;
+    {
+    char *q = (char *)D_0013F350_c3;
+    unsigned char *b0 = (unsigned char *)q + 0x21C4;
+    b0[*(int *)(q + 0x21D4)] = s;
+    *(int *)(q + 0x21D4) += 1;
+    for (i = 0; i < 12; i++) {
+        char *g2 = (char *)D_0013F350_c3;
+        unsigned char *b = (unsigned char *)g2 + 0x21C4;
+        int n = 0;
+        int j;
+        int k;
+        while (D_L00_00179700_c[i][n] != 0) n++;
+        if (n == 0) continue;
+        k = *(int *)(g2 + 0x21D4) - n;
+        if (k < 0) k += 16;
+        for (j = 0; j < n; j++) {
+            if (*(unsigned char *)(k + (int)b) != D_L00_00179700_c[i][j]) {
                 j = -1;
-            }
-scan_result:
-            if ((s32)j == length) {
-                selector_available[i] = 1;
-                big_head_cheat_enabled[i] = !big_head_cheat_enabled[i];
-                queue_dialogue_message(big_head_cheat_enabled[i] ? 0x4FBE : 0x4FBF, -1);
                 break;
             }
+            k++;
+            if (k >= 16) k -= 16;
+        }
+        if (j == n) {
+            int t = D_0015EDB0[i] == 0;
+            D_0015EDC0[i] = 1;
+            D_0015EDB0[i] = t;
+            FUN_L00_00263d40(t ? 0x4FBE : 0x4FBF, -1);
+            break;
         }
     }
-    history_view = (void *)&hero;
-    if (history_view->history_count > 15)
-        history_view->history_count = 0;
+    }
+    {
+        char *r = (char *)D_0013F350_c3;
+        if (*(int *)(r + 0x21D4) >= 16) *(int *)(r + 0x21D4) = 0;
+    }
 }
-#endif
 int FUN_001f96f8(int);
 void fade_to_black(int) __asm__("FUN_001f4a58");
 void FUN_L00_002062b0(void);
@@ -1153,7 +1109,7 @@ void FUN_L00_00207a58(void);
 void FUN_L00_00206cf8(void);
 void FUN_L00_00205ea8(void);
 void FUN_L00_00206080(void);
-void FUN_L00_00206e00(void);
+void FUN_L00_00206e00_u(void) __asm__("FUN_L00_00206e00");
 void noop_main_callback(int) __asm__("FUN_001e93e8");
 void FUN_L00_002484e0(void *);
 void FUN_L00_00257024(int);
@@ -1204,7 +1160,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_00206cf8();
     FUN_L00_00205ea8();
     FUN_L00_00206080();
-    FUN_L00_00206e00();
+    FUN_L00_00206e00_u();
     noop_main_callback((int)g->moby);
     if (g->state.control_mode != 0x16 && g->state.current != 0x32)
         FUN_L00_002484e0(&g->motion.pos);
