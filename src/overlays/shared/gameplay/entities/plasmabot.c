@@ -374,7 +374,7 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_moby_bone_transform_c(char *, int, void *) __asm__("build_moby_bone_transform");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
-extern void set_moby_animation_alt(void *, int, int) __asm__("FUN_00212ed8");
+extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float FUN_L14_002b35d8_c(char *moby, int flag, float x_p) __asm__("FUN_L14_002b35d8");
 int FUN_L14_002b3418_c(char *moby) __asm__("FUN_L14_002b3418");
@@ -521,7 +521,7 @@ void FUN_L14_002b17d8(char *m) {
         *(short *)(data + 0x248) = scale_game_frames(*(int *)&D_L14_001614F0);
         FUN_L14_002b3330_c(m);
         ((unsigned char *)m)[0x20] = 2;
-        set_moby_animation_alt(m, 1, 0);
+        set_moby_animation(m, 1, 0);
         p = (float *)D_L14_001B0BB0[*(int *)(data + 0x240)];
         *(float *)(m + 0x48) = fast_arc_tan_c(p[8] - p[4], p[9] - p[5]);
         *(int *)(data + 0x268) = 0;
@@ -1338,7 +1338,6 @@ void FUN_L14_002b3a20(char *m) {
 extern u8 *D_L14_00167500 NOT_SDA;
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_001f9740(void *);
-extern void set_moby_animation_c(void *, s32, s32) __asm__("FUN_00212ed8");
 
 void FUN_L14_002d96e0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -1357,18 +1356,18 @@ void FUN_L14_002d96e0(struct Moby *moby) {
     case 1:
         if (FUN_001f9740(data + 8) != 0) {
             moby->state = 2;
-            set_moby_animation_c(moby, 1, 0);
+            set_moby_animation(moby, 1, 0);
         }
         break;
     case 2:
         if ((moby->anim_flags & 2) != 0) {
             moby->state = 3;
-            set_moby_animation_c(moby, 2, 0);
+            set_moby_animation(moby, 2, 0);
         }
         break;
     case 3:
         if (*(s16 *)(D_L14_00167500 + 0x86) != 0x14) {
-            set_moby_animation_c(moby, 0, 0);
+            set_moby_animation(moby, 0, 0);
             moby->state = 4;
         }
         break;
@@ -1377,19 +1376,19 @@ void FUN_L14_002d96e0(struct Moby *moby) {
     case 5:
         if ((moby->anim_flags & 2) != 0) {
             moby->state = 6;
-            set_moby_animation_c(moby, 2, 0);
+            set_moby_animation(moby, 2, 0);
         }
         break;
     case 6:
         if (FUN_001f9740(data + 8) != 0) {
-            set_moby_animation_c(moby, 3, 0);
+            set_moby_animation(moby, 3, 0);
             moby->state = 7;
         }
         break;
     case 7:
         if ((moby->anim_flags & 2) != 0) {
             moby->state = 0;
-            set_moby_animation_c(moby, 0, 0);
+            set_moby_animation(moby, 0, 0);
         }
         break;
     }
@@ -1414,7 +1413,7 @@ typedef struct {
     int f90;
 } Obj;
 
-void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8");
+extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 
 int FUN_L14_002d9870(int i) {
     unsigned char *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);

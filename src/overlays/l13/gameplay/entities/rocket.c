@@ -268,7 +268,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int FUN_001f96f8(int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_00250df8(void *);
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
+extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern char *func_0020D348_m_c(int) __asm__("FUN_0020c4f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -828,7 +828,6 @@ extern void FUN_L00_00263ac8(float, struct Moby *, int, void *);
 extern void FUN_L01_0026d930(void *);
 extern void FUN_L13_00308d10_c(struct Moby *) __asm__("FUN_L13_00308d10");
 extern void FUN_L13_00309370_c(char *m) __asm__("FUN_L13_00309370");
-extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 extern void func_L00_0025A8C0_30A9B0(void *, void *, int, void *, float) __asm__("FUN_L13_00265990");
@@ -883,24 +882,24 @@ void FUN_L13_00307e98(struct Moby *moby) {
                                                                  target->pos.y - moby->pos.y)) < 0.2617994f) {
                     moby->state = 2;
                     if (moby->prev_seq != 3) {
-                        blend_moby_animation_c(moby, 3, 0, scale_game_frames(10));
+                        blend_moby_animation(moby, 3, 0, scale_game_frames(10));
                     }
                 } else {
                     moby->state = 7;
                     if (moby->prev_seq != 1) {
-                        blend_moby_animation_c(moby, 1, 0, scale_game_frames(20));
+                        blend_moby_animation(moby, 1, 0, scale_game_frames(20));
                     }
                 }
             } else {
                 moby->state = 5;
                 if (moby->prev_seq != 6) {
-                    blend_moby_animation_c(moby, 6, 0, scale_game_frames(10));
+                    blend_moby_animation(moby, 6, 0, scale_game_frames(10));
                 }
             }
         } else if (vars->unk184 != 0) {
             moby->state = 11;
             if (moby->prev_seq != 1) {
-                blend_moby_animation_c(moby, 1, 0, scale_game_frames(20));
+                blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
         }
         break;
@@ -909,7 +908,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
             moby->state = 3;
             FUN_L13_00309370_c((char *)moby);
             if (moby->prev_seq != 5) {
-                blend_moby_animation_c(moby, 5, 0, scale_game_frames(10));
+                blend_moby_animation(moby, 5, 0, scale_game_frames(10));
             }
         }
         break;
@@ -919,13 +918,13 @@ void FUN_L13_00307e98(struct Moby *moby) {
             if (vars->unk164 != 2 && dist < 15.0f) {
                 moby->state = 4;
                 if (moby->prev_seq != 4) {
-                    blend_moby_animation_c(moby, 4, 0, scale_game_frames(20));
+                    blend_moby_animation(moby, 4, 0, scale_game_frames(20));
                 }
                 vars->timer = scale_game_frames(D_L13_00161E70);
             } else {
                 moby->state = 1;
                 if (moby->prev_seq != 0) {
-                    blend_moby_animation_c(moby, 0, 0, scale_game_frames(20));
+                    blend_moby_animation(moby, 0, 0, scale_game_frames(20));
                 }
             }
         }
@@ -937,18 +936,18 @@ void FUN_L13_00307e98(struct Moby *moby) {
             moby->state = 3;
             FUN_L13_00309370_c((char *)moby);
             if (moby->prev_seq != 5) {
-                blend_moby_animation_c(moby, 5, 0, scale_game_frames(5));
+                blend_moby_animation(moby, 5, 0, scale_game_frames(5));
             }
         } else if (vector_distance_xy_alt(&moby->pos, &target->pos) < D_L13_00161F04_309330) {
             FUN_L00_0024f7c8(moby, 0, &vars->unk1E0);
             moby->state = 5;
             if (moby->prev_seq != 6) {
-                blend_moby_animation_c(moby, 6, 0, scale_game_frames(10));
+                blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
         } else if (vars->unk184 != 0) {
             moby->state = 11;
             if (moby->prev_seq != 1) {
-                blend_moby_animation_c(moby, 1, 0, scale_game_frames(20));
+                blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
         }
         break;
@@ -977,7 +976,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
             moby->state = 6;
             moby->command = 1;
             if (moby->prev_seq != 2) {
-                blend_moby_animation_c(moby, 2, 0, scale_game_frames(10));
+                blend_moby_animation(moby, 2, 0, scale_game_frames(10));
             }
         }
         break;
@@ -985,7 +984,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
         if (moby->anim_flags & 2) {
             moby->state = moby->command;
             if (moby->prev_seq != 0) {
-                blend_moby_animation_c(moby, 0, 0, scale_game_frames(20));
+                blend_moby_animation(moby, 0, 0, scale_game_frames(20));
             }
         }
         break;
@@ -1014,17 +1013,17 @@ void FUN_L13_00307e98(struct Moby *moby) {
         if (dist < 15.0f) {
             moby->state = 2;
             if (moby->prev_seq != 3) {
-                blend_moby_animation_c(moby, 3, 0, scale_game_frames(10));
+                blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             }
         } else if (close != 0) {
             moby->state = 2;
             if (moby->prev_seq != 3) {
-                blend_moby_animation_c(moby, 3, 0, scale_game_frames(10));
+                blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             }
         } else if (dist < D_L13_00161F04_309330) {
             moby->state = 5;
             if (moby->prev_seq != 6) {
-                blend_moby_animation_c(moby, 6, 0, scale_game_frames(10));
+                blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
         }
         }
@@ -1048,13 +1047,13 @@ void FUN_L13_00307e98(struct Moby *moby) {
         } else if (near != 0) {
             moby->state = 12;
             if (moby->prev_seq != 6) {
-                blend_moby_animation_c(moby, 6, 0, scale_game_frames(10));
+                blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
         } else if (vector_distance_xy_alt(&moby->pos, &target->pos) < D_L13_00161F04_309330) {
             FUN_L00_0024f7c8(moby, 0, &vars->unk1E0);
             moby->state = 12;
             if (moby->prev_seq != 6) {
-                blend_moby_animation_c(moby, 6, 0, scale_game_frames(10));
+                blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             }
         }
         break;
@@ -1080,7 +1079,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
         if (moby->anim_flags & 2) {
             moby->state = 11;
             if (moby->prev_seq != 1) {
-                blend_moby_animation_c(moby, 1, 0, scale_game_frames(20));
+                blend_moby_animation(moby, 1, 0, scale_game_frames(20));
             }
         }
         break;
@@ -1099,7 +1098,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
         if (fast_vec_dist(&vars->home, &moby->pos) < 1.0f) {
             moby->state = 1;
             if (moby->prev_seq != 0) {
-                blend_moby_animation_c(moby, 0, 0, scale_game_frames(20));
+                blend_moby_animation(moby, 0, 0, scale_game_frames(20));
             }
         }
         break;
@@ -1109,7 +1108,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
             qzero(&vars->vel);
             moby->state = 1;
             if (moby->prev_seq != 0) {
-                blend_moby_animation_c(moby, 0, 0, scale_game_frames(10));
+                blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
         } else if (hit & 0x120) {
             mark_moby_for_removal_c2(moby);
