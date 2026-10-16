@@ -21,7 +21,7 @@ struct CaptureBoundsAdjustment {
 };
 
 extern struct VendorItemPricing vendor_item_prices[43] __asm__("D_001DFFB0");
-extern volatile s32 capture_glyph_coordinates[64] __asm__("D_001E6018");
+extern s32 capture_glyph_coordinates[64] __asm__("D_001E6018");
 extern s32 capture_glyph_advances[64] __asm__("D_001E6118");
 extern struct CaptureBoundsAdjustment capture_bounds_adjustments[6] __asm__("D_001E6218");
 

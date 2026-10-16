@@ -16525,8 +16525,8 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "textbin/gameplay/vendor/render_capture_scrolling_text",
-        "source_path": "src/assembly/textbin/gameplay/vendor/render_capture_scrolling_text.c",
+        "unit": "gameplay/vendor/render_capture_scrolling_text",
+        "source_path": "src/gameplay/vendor/render_capture_scrolling_text.c",
         "address": "0x00238310",
         "current_name": "FUN_00238310",
         "proposed_name": "render_capture_scrolling_text",
@@ -17564,8 +17564,8 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "textbin/video/decoder/vi_buf_restart_dma",
-        "source_path": "src/assembly/textbin/video/decoder/vi_buf_restart_dma.c",
+        "unit": "video/decoder/vi_buf_restart_dma",
+        "source_path": "src/video/decoder/vi_buf_restart_dma.c",
         "address": "0x0023c280",
         "current_name": "FUN_0023c280",
         "proposed_name": "vi_buf_restart_dma",

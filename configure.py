@@ -488,7 +488,7 @@ DATA_OVERLAYS = {
     "assembly/textbin/rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 32),
     "assembly/textbin/ui/map/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),
     "assembly/textbin/rendering/register_object_render_class": (0x1E1900, 0xE2880, 256),
-    "assembly/textbin/gameplay/vendor/render_capture_scrolling_text": (0x1E6018, 0xE6F98, 512),
+    "gameplay/vendor/render_capture_scrolling_text": (0x1E6018, 0xE6F98, 512),
     "assembly/textbin/gameplay/vendor/render_vendor_capture_pass_sequence": (0x1E6218, 0xE7198, 96),
     "textbin/render_vendor_capture_texture_overlays_pass": (0x1E6620, 0xE75A0, 64),
     "textbin/rebuild_configured_text_label_list": (0x1E8728, 0xE96A8, 60),

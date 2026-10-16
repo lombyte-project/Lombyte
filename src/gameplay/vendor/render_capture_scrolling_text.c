@@ -1,14 +1,8 @@
 #include "types.h"
-#include "asm.h"
+#include "sda.h"
 #include "rnc/ui/vendor/vendor_capture.h"
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/vendor/render_capture_scrolling_text/FUN_00238310.s", FUN_00238310);
-#else
-#include "types.h"
-#include "rnc/ui/vendor/vendor_capture.h"
-
-extern s32 game_frame_counter __asm__("D_0015F438");
+extern s32 game_frame_counter __asm__("D_0015F438") MACRO_ADDR;
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -37,6 +31,7 @@ void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 sca
     s32 texture_u;
     s32 glyph_width;
     s32 glyph_height;
+    s32 *glyph_entry;
     u8 character;
 
     blink_next_glyph = 0;
@@ -47,11 +42,10 @@ void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 sca
 
     for (;;) {
         skip_draw = 0;
-        character = (u8)*cursor_text;
-        if (character == 0) {
+        if (*(u8 *)cursor_text == 0) {
             return;
         }
-        cursor_text++;
+        character = (u8)*cursor_text++;
         glyph_index = (s32)character - 0x20;
 
         if (glyph_index == 0x42) {
@@ -64,55 +58,46 @@ void render_capture_scrolling_text(char *text, s32 start_x, s32 start_y, f32 sca
         }
 
         if (glyph_index < 0x3B) {
-            {
-                volatile s32 *glyph_entry;
-                glyph_entry = capture_glyph_coordinates + glyph_index;
-                if (*glyph_entry != -1 || glyph_index == 0) {
-                    if (blink_next_glyph != 0) {
-                        skip_draw = 0;
-                        blink_next_glyph = 0;
-                        long_blink_period = scale_game_frames(0x1E);
-                        short_blink_period = scale_game_frames(0xA);
-                        blink_period = long_blink_period + short_blink_period;
-                        blink_remainder = game_frame_counter % blink_period;
-                        long_blink_period = scale_game_frames(0xA);
-                        if (blink_remainder < long_blink_period) {
-                            skip_draw = 1;
-                        }
+            glyph_entry = capture_glyph_coordinates + glyph_index;
+            if (*glyph_entry != -1 || glyph_index == 0) {
+                if (blink_next_glyph != 0) {
+                    skip_draw = 0;
+                    blink_next_glyph = 0;
+                    long_blink_period = scale_game_frames(0x1E);
+                    short_blink_period = scale_game_frames(0xA);
+                    blink_period = long_blink_period + short_blink_period;
+                    blink_remainder = game_frame_counter % blink_period;
+                    long_blink_period = scale_game_frames(0xA);
+                    if (blink_remainder < long_blink_period) {
+                        skip_draw = 1;
                     }
-
-                    if (glyph_index != 0 && skip_draw == 0) {
-                        packed_coordinates = *glyph_entry;
-                        texture_v = (u32)packed_coordinates >> 0x14;
-                        texture_u = (packed_coordinates & 0xFFFF) >> 4;
-
-                        if (cursor_x + 9 > 0) {
-                            if (cursor_x < 0x100) {
-                                glyph_width =
-                                    convert_float_to_integer(convert_integer_to_float(9) * scale);
-                                glyph_height =
-                                    convert_float_to_integer(convert_integer_to_float(9) * scale);
-                                draw_textured_quad(cursor_x, cursor_y, glyph_width, glyph_height,
-                                                   texture_u, texture_v, 9, 9, (s64)0x80404040,
-                                                   texture);
-                            }
-                        }
-                    }
-
-                    cursor_x += convert_float_to_integer(
-                        convert_integer_to_float(capture_glyph_advances[glyph_index]) * scale);
                 }
+
+                if (glyph_index != 0 && skip_draw == 0) {
+                    packed_coordinates = *glyph_entry;
+                    texture_v = (u32)packed_coordinates >> 0x14;
+                    texture_u = (packed_coordinates & 0xFFFF) >> 4;
+
+                    if (cursor_x + 9 > 0) {
+                        if (cursor_x < 0x100) {
+                            glyph_width = convert_float_to_integer(convert_integer_to_float(9) * scale);
+                            glyph_height = convert_float_to_integer(convert_integer_to_float(9) * scale);
+                            draw_textured_quad(cursor_x, cursor_y, glyph_width, glyph_height,
+                                               texture_u, texture_v, 9, 9, (s64)0x80404040, texture);
+                        }
+                    }
+                }
+
+                cursor_x += convert_float_to_integer(
+                    convert_integer_to_float(capture_glyph_advances[glyph_index]) * scale);
             }
         }
     }
 }
 
-extern __typeof__(render_capture_scrolling_text) func_00238310
-    __attribute__((alias("FUN_00238310")));
+extern __typeof__(render_capture_scrolling_text) func_00238310 __attribute__((alias("FUN_00238310")));
 
-#endif /* NON_MATCHING */
-
-volatile s32 capture_glyph_coordinates[64] = {
+s32 capture_glyph_coordinates[64] = {
     -1, 0x2400120, -1, -1, -1, -1, -1, 0x2d00000,
     -1, -1, -1, -1, 0x24001b0, 0x24002d0, 0x2400240, -1,
     -1, -1, -1, -1, -1, -1, -1, -1,
@@ -122,7 +107,6 @@ volatile s32 capture_glyph_coordinates[64] = {
     0x12001b0, 0x1200240, 0x12002d0, 0x1b00000, 0x1b00090, 0x1b00120, 0x1b001b0, 0x1b00240,
     0x1b002d0, 0x2400000, 0x2400090, -1, -1, -1, -1, -1,
 };
-
 s32 capture_glyph_advances[64] = {
     9, 5, 0xa, 0xa, 0xa, 0xa, 0xa, 5,
     0xa, 0xa, 0xa, 0xa, 5, 9, 5, 0xa,
