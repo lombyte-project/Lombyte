@@ -178,9 +178,9 @@ s32 sound_update(void) {
         history_index %= 4;
         *history_position = history_index;
     }
-    listener_sample_count = 0;
     qcopy(&D_0013E550.listener_history[history_index], &D_00187080);
     previous_history_index = (history_index + 3) % 4;
+    listener_sample_count = 0;
     if (previous_history_index != history_index) {
         do {
             subtract_vector_xyz(&relative_velocity, &D_0013E550.listener_history[history_index],
@@ -335,7 +335,7 @@ s32 sound_update(void) {
                 D_0013E550.occlusion_frame = world_update_time;
             }
             sample_index = 0;
-            for (history_offset = 0; sample_index < 6;
+            for (history_offset = 0; history_offset < 36;
                  history_offset += 6, sample_index++) {
                 D_0013E550.voices[slot_index].occlusion_history[history_offset] =
                     test_voice_occlusion(&D_0013E550.voices[slot_index],
