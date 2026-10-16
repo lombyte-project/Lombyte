@@ -1466,7 +1466,7 @@ segments:
           - [0x10dd70, c, rendering/texture/dma_moby_textures]
           - [0x10de78, c, gameplay/entities/patch_moby_gifs]
           - [0x10df50, c, gameplay/entities/fun_0020cfd0]
-          - [0x10dfe0, c, gameplay/entities/fun_0020d060]
+          - [0x10dfe0, c, gameplay/entities/configure_graphics_setup_dma_chain]
           - [0x10e124, textbin, text_gap_0020d1a4_before_fun_0020d1a8]
           - [0x10e128, c, gameplay/entities/process_moby_anim_data]
           - [0x10e16c, textbin, text_gap_0020d1ec_before_fun_0020d1f0]

@@ -10584,38 +10584,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/entities/fun_0020d060",
-        "source_path": "src/gameplay/entities/fun_0020d060.c",
-        "address": "0x0020d060",
-        "current_name": "FUN_0020d060",
-        "proposed_name": null,
-        "logical_group": "gameplay/entities",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "neighboring_group_context",
-            "functions": [
-              {
-                "address": "0x0020cef8",
-                "name": "FUN_0020cef8",
-                "logical_group": "gameplay/entities"
-              },
-              {
-                "address": "0x0020d1a8",
-                "name": "FUN_0020d1a8",
-                "logical_group": "gameplay/entities"
-              }
-            ]
-          },
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyfunc.c"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "gameplay/entities/process_moby_anim_data",
         "source_path": "src/gameplay/entities/process_moby_anim_data.c",
         "address": "0x0020d1a8",
@@ -20041,6 +20009,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x0023a334 the target loads its output/cache pointer from instance+0x78. Instructions 0x0023a338-0x0023a358 copy four indices from 0x00160ed0; bounded data request 3df7f474d36a481787f50134e008cdb9 confirms little-endian words 0,1,2,3. At 0x0023a35c it calls the established transform_instance_attachment_points (0x0020cd48) with count 4 and that output pointer. Calls to subtract_vector_xyz (0x001f9a28) at 0x0023a36c and 0x0023a380 compute point1-point0 and point2-point0. Calls to vector_length_xyz (0x001f9af0) at 0x0023a388 and 0x0023a394 produce lengths stored at cache+0x40 and +0x44 by 0x0023a398/0x0023a39c. Supplied caller reference is 0x0023a300 in FUN_0023a2c0; no gameplay-specific role is inferred from it. Naming baseline reports 100% function/text match, no differences, non_text_ok and promotable true; strict_match_percent is 99.30769 as reported. No source edits, Git commands, or builds were performed."
+          }
+        ]
+      },
+      {
+        "address": "0x0020d060",
+        "current_name": "FUN_0020d060",
+        "proposed_name": "configure_graphics_setup_dma_chain",
+        "logical_group": "gameplay/entities",
+        "unit": "gameplay/entities/configure_graphics_setup_dma_chain",
+        "source_path": "src/gameplay/entities/configure_graphics_setup_dma_chain.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x0020d074 the assigned function branches on count 0x0015ff3c. The zero path (0x0020d07c\u20130x0020d0b0) writes a zero-length 0x10000000 tag and clears its remaining words through pointer 0x0015ff40. The nonzero path reserves 16 bytes from g_pDmaPacketCursor (0x00160f00), writes 0x20000000 link tags, and points the reserved tag at the generated segment (0x0020d0b4\u20130x0020d108). It invokes 0x00227740 at 0x0020d104, then recovered submit_graphics_setup_command_stream at 0x00227548 from 0x0020d110 with buffer 0x001c8680. Checked helper 0x00227740 consumes the same count and object records at 0x001c8500, transforms their data, and writes the zero-terminated output at 0x001c8680. Instructions 0x0020d12c\u20130x0020d18c link the generated segment back to reserved_tag+16 and patch the saved cursor tag to resume after the inserted segment. Sole checked caller 0x0020d3b0 invokes this at 0x0020d444 under the recovered g_nMobyPatchReady gate; sibling 0x0020cdf0 uses the same cursor/reserved-tag linking pattern. This establishes graphics setup chain configuration without assigning an unproven visual-effect name."
           }
         ]
       }

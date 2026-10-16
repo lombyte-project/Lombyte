@@ -8,7 +8,7 @@ extern s32 D_0015FF38;
 extern void noop_core_callback() __asm__("func_001F21B0");
 extern s32 noop_core_callback_secondary() __asm__("func_001F21B8");
 extern s32 dma_moby_textures() __asm__("FUN_0020cdf0");
-extern s32 FUN_0020d060();
+extern s32 configure_graphics_setup_dma_chain() __asm__("FUN_0020d060");
 extern void process_moby_anim_data() __asm__("FUN_0020d1a8");
 extern void FUN_002116b8();
 
@@ -27,7 +27,7 @@ void draw_mobys_clean_up(void) {
     noop_core_callback(D_0015FEF0, 3);
     if (draw_config.moby.enabled != 0) {
         if (D_0015FF40 != 0) {
-            FUN_0020d060();
+            configure_graphics_setup_dma_chain();
         }
     }
 }
