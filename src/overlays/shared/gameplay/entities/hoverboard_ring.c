@@ -111,7 +111,7 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
     Vec4 dir;
     Vec4 start;
     f32 distance;
-    f32 camera_distance;
+    f32 fade;
     f32 size;
     f32 speed;
     f32 yaw;
@@ -130,17 +130,13 @@ void FUN_L05_0031c8e0(struct Moby *moby) {
         moby->glow_color = (0x7F000000 | vars->glow_b << 16 | vars->glow_g << 8) | vars->glow_r;
         vars->color = vars->spark_b << 16 | vars->spark_g << 8 | vars->spark_r;
     }
-    /* Fakematch: the distance passes through a second variable; assigned directly,
-       the compiler keeps it in $f0 and picks other registers for the fade below. */
-    camera_distance = vector_distance_c8e0(D_L05_001671C0, &moby->pos);
-    distance = camera_distance;
+    distance = vector_distance_c8e0(D_L05_001671C0, &moby->pos);
     if (48.0f <= distance) {
         return;
     }
     if (32.0f <= distance) {
-        distance -= 32.0f;
-        distance *= 0.0625f;
-        vars->alpha = float_to_int_c8e0(int_to_float_c8e0(vars->max_alpha) * (1.0f - distance));
+        fade = (distance - 32.0f) * 0.0625f;
+        vars->alpha = float_to_int_c8e0(int_to_float_c8e0(vars->max_alpha) * (1.0f - fade));
     } else {
         vars->alpha = vars->max_alpha;
     }

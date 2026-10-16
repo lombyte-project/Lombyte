@@ -89,20 +89,30 @@ extern float D_L02_001612FC;
 extern float D_L02_00161300;
 extern float D_L02_00161304;
 extern char D_L02_001673C0[];
+extern unsigned short font_vu_program_tag[] __asm__("D_0010E800");
 extern u8 font_vu_program[] __asm__("D_0010E810");
 extern char D_L02_001CB8F0[];
 extern QuadFrame D_L02_0016D780[];
 extern char *D_L02_0015F420;
-/* Fakematch: these globals are read as one-element arrays, so every packet store reloads them like retail. */
-extern unsigned short D_0010E800_ref[] __asm__("D_0010E800");
-extern int *packet_cursor_ref[] __asm__("D_L02_001611C0") __attribute__((section(".sdata")));
+#include "rnc/rendering/dma_tag.h"
+
+extern union PacketCursor l02_packet __asm__("D_L02_001611C0") __attribute__((section(".sdata")));
+extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") __attribute__((section(".sdata")));
+#define PACKET_CURSOR (l02_packet.words)
+#define TEXTURE_CURSOR (gs_texture_allocation.cursor)
+/* Fakematch: the frame counter is read as a one-element array, so its load stays below the packet stores like retail. */
 extern int frame_counter_ref[] __asm__("D_L02_0015F5CC") __attribute__((section(".sdata")));
-extern int texture_cursor_ref[] __asm__("D_0015EE74") __attribute__((section(".sdata")));
-extern long texture_register_ref[] __asm__("D_L02_001612F0") __attribute__((section(".sdata")));
-#define PACKET_CURSOR (packet_cursor_ref[0])
 #define FRAME_COUNTER (frame_counter_ref[0])
-#define TEXTURE_CURSOR (texture_cursor_ref[0])
-#define TEXTURE_REGISTER (texture_register_ref[0])
+/* The quad's GS texture register and the camera values it saves (D_L02_001612F8..00161304). */
+struct QuadTextureState {
+    long tex0;
+    float camera_218;
+    float camera_21C;
+    float camera_228;
+    float camera_22C;
+};
+extern struct QuadTextureState quad_texture_state __asm__("D_L02_001612F0") __attribute__((section(".sdata")));
+#define TEXTURE_REGISTER (quad_texture_state.tex0)
 
 void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     float view_matrix[16];
@@ -128,7 +138,7 @@ void FUN_L02_002a40f0(QuadDrawArgs *arg) {
     set_scale_matrix(view_matrix, 1024.0f);
     setup_offset_vector(&view_matrix[12], D_L02_001673C0, -1024.0f);
     view_matrix[15] = 1.0f;
-    vu1_add_data_ref(font_vu_program, D_0010E800_ref[0]);
+    vu1_add_data_ref(font_vu_program, font_vu_program_tag[0]);
     PACKET_CURSOR[0] = 0x10000000;
     PACKET_CURSOR[1] = 0;
     PACKET_CURSOR[2] = 0x11000000;

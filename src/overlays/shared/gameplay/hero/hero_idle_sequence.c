@@ -758,9 +758,7 @@ void FUN_L00_002062b0(void) {
                 char *g = (char *)&hero;
                 s32 tint;
                 wave = fast_sin_2059d8(*(f32 *)(g + 0x1628));
-                color = fast_tween_color_2062b0(wave * 0.5f + 0.5f, color, color2);
-                /* Fakematch: the copy keeps the colour move above the moby check, as in retail. */
-                tint = color;
+                tint = fast_tween_color_2062b0(wave * 0.5f + 0.5f, color, color2);
                 if (*(char **)(g + 0x1624)) *(u32 *)(*(char **)(g + 0x1624) + 0x90) = fast_tween_color_2062b0(D_0015ED60_gp * 0.1f, *(u32 *)(*(char **)(g + 0x1624) + 0x90), tint);
                 *(u32 *)(g + 0x2300) = fast_tween_color_2062b0(frame_scale_macro * 0.1f, *(u32 *)(g + 0x2300), tint);
                 if (*(char **)(g + 0x1620) == 0) {

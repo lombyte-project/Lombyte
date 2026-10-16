@@ -1934,11 +1934,7 @@ void FUN_L10_002e3a90(struct Moby *moby) {
     for (i = 0; i < count; i++) {
         pos_ptr = pos;
         src = &moby->pos;
-        /* Fakematch: the block copy of pos_ptr adds the loop luids that let loop.c hoist src. */
-        {
-            void *dst = pos_ptr;
-            qcopy_nc(dst, src);
-        }
+        qcopy_nc(pos, src);
         FUN_L00_0025f8e0_3a90(pos_ptr, D_L10_00161E7C);
         pos[2] += 0.55f;
         angle = random_angle_radians_3a90();

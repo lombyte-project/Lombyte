@@ -296,7 +296,6 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
     float heading;
     LegRigLeg *leg;
     int mask;
-    LegRig *row;
     int i;
 
     mask = 3;
@@ -323,22 +322,20 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
             leg->lower_turn = fast_subtract_rotations_2d48(twist, leg->upper_turn);
             leg->lower_turn_speed = 0.0f;
         }
-        /* Fakematch: the later fields are read through the rig shifted by one leg stride. */
-        row = (LegRig *)((char *)rig + i * sizeof(LegRigLeg));
-        if (leg->upper_turn < leg->angle_min)
-            leg->upper_turn = leg->angle_min;
-        if (row->legs[0].upper_turn > row->legs[0].angle_max)
-            row->legs[0].upper_turn = row->legs[0].angle_max;
-        if (row->legs[0].lower_turn < row->legs[0].angle_min)
-            row->legs[0].lower_turn = row->legs[0].angle_min;
-        if (row->legs[0].lower_turn > row->legs[0].angle_max)
-            row->legs[0].lower_turn = row->legs[0].angle_max;
-        row->legs[0].yaw = fast_add_rotations_2d48(row->legs[0].upper_turn, base_yaw);
-        row->legs[0].yaw = fast_add_rotations_2d48(row->legs[0].lower_turn, row->legs[0].yaw);
-        if (row->legs[0].manip_b.attached)
-            axis_rotation_2d48(rig->legs[i].manip_b.rot, 2, row->legs[0].upper_turn);
-        if (row->legs[0].manip_a.attached) {
-            axis_rotation_2d48(rig->legs[i].manip_a.rot, 2, row->legs[0].lower_turn);
+        if (rig->legs[i].upper_turn < rig->legs[i].angle_min)
+            rig->legs[i].upper_turn = rig->legs[i].angle_min;
+        if (rig->legs[i].upper_turn > rig->legs[i].angle_max)
+            rig->legs[i].upper_turn = rig->legs[i].angle_max;
+        if (rig->legs[i].lower_turn < rig->legs[i].angle_min)
+            rig->legs[i].lower_turn = rig->legs[i].angle_min;
+        if (rig->legs[i].lower_turn > rig->legs[i].angle_max)
+            rig->legs[i].lower_turn = rig->legs[i].angle_max;
+        rig->legs[i].yaw = fast_add_rotations_2d48(rig->legs[i].upper_turn, base_yaw);
+        rig->legs[i].yaw = fast_add_rotations_2d48(rig->legs[i].lower_turn, rig->legs[i].yaw);
+        if (rig->legs[i].manip_b.attached)
+            axis_rotation_2d48(rig->legs[i].manip_b.rot, 2, rig->legs[i].upper_turn);
+        if (rig->legs[i].manip_a.attached) {
+            axis_rotation_2d48(rig->legs[i].manip_a.rot, 2, rig->legs[i].lower_turn);
             if (flags & mask) {
                 axis_rotation_2d48(tilt, 0, -moby->rot.x);
                 quat_multiply_2d48(rig->legs[i].manip_a.rot, rig->legs[i].manip_a.rot, tilt);

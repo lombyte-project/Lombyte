@@ -49,6 +49,11 @@ extern s32 depth_buffer_address __asm__("D_0015EE88");
 /* GS texture memory: next free address, and where level textures start. */
 extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
 extern s32 gs_texture_allocation_start __asm__("D_0015EE78");
+/* The same two words as one block (code that reloads the cursor after packet stores). */
+struct GsTextureAllocation {
+    s32 cursor;
+    s32 start;
+};
 
 extern f32 warp_texture_coordinates[4][2] __asm__("D_001D9A10");
 

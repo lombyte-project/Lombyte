@@ -5,11 +5,12 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 
-/* Fakematch: both cursors are read as one-element arrays, so every packet store reloads them like retail. */
-extern int *packet_cursor_ref[] __asm__("D_L09_001611C0") __attribute__((section(".sdata")));
-extern s32 texture_cursor_ref[] __asm__("D_0015EE74") __attribute__((section(".sdata")));
-#define PACKET_CURSOR (packet_cursor_ref[0])
-#define TEXTURE_CURSOR (texture_cursor_ref[0])
+#include "rnc/rendering/dma_tag.h"
+
+extern union PacketCursor l09_packet __asm__("D_L09_001611C0") __attribute__((section(".sdata")));
+extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") __attribute__((section(".sdata")));
+#define PACKET_CURSOR (l09_packet.words)
+#define TEXTURE_CURSOR (gs_texture_allocation.cursor)
 extern char *texture_vertices __asm__("D_L09_0015F420") __attribute__((section(".sdata")));
 extern char D_L09_0016D300[];
 extern long D_L09_00161FC0[];

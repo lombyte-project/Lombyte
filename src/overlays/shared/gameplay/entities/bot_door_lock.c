@@ -194,12 +194,6 @@ extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void draw_number(void *, void *, int, unsigned int, int, int, int, float) __asm__("FUN_L01_00285768");
 
-/* Fakematch: the blue channel goes through this inline; written in place, the
-   or is scheduled before the green one. */
-static inline unsigned int or_blue_channel(int blue, unsigned int color) {
-    return blue * 0x10000 | color;
-}
-
 extern int D_L06_0015FFD8_gp __asm__("D_L06_0015FFD8") __attribute__((sda));
 void FUN_L06_00307d30(char *moby) {
     float *data = *(float **)(moby + 0x78);
@@ -240,8 +234,7 @@ void FUN_L06_00307d30(char *moby) {
             pos[2] += D_L06_001622DC * fast_cos(data[6]);
             value = truncate_float_to_s32(D_L06_001622E8 * fast_cos(data[10]));
             color_channels = (value / 2 + 120) * 0x100 | 0x20000000U;
-            color_channels = or_blue_channel(value / 3 + 13, color_channels);
-            color = color_channels | (value + 150U);
+            color = (value / 3 + 13) * 0x10000 | color_channels | (value + 150U);
             if (D_001413F4 == 1) {
                 if (idata[5] < 10) {
                     draw_number(pos, moby, idata[5] + 2, color, 0x7f, 4, 0xff, 0.5f);

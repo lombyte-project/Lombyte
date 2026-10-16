@@ -35,10 +35,8 @@ int FUN_L00_00257218_u3(Moby257218 *, int *) __asm__("FUN_L00_00257218");
 int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
     int i, idx, x;
     int not_full = 0, owned = 0, with_max = 0;
-    int one;
+    int drops = 1;
 
-    /* Fakematch: the constant 1 of the final return lives in a local set first, so its register comes before the 2's. */
-    one = 1;
     if (*out <= 0 || (m != 0 && (D_0014C190[D_0015ED84][(s16)m->uid >> 5] >> (m->uid & 0x1F)) & 1)) {
         for (i = 0; i < 12 && D_0015EDD0_257218[i] != 0xFF; i++) {
             x = D_0015EDD0_257218[i] & 0x3F;
@@ -69,8 +67,8 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
             *out = 10;
         }
     }
-    if (FUN_00213260(5)) { return one; }
-    return 2;
+    if (FUN_00213260(5) == 0) drops = 2;
+    return drops;
 }
 extern int D_0015ED84_257470 __asm__("D_0015ED84");
 extern int D_0015ED84_257470b __asm__("D_0015ED84");

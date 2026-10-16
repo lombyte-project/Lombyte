@@ -2230,9 +2230,7 @@ void FUN_L13_002e4448(char *moby) {
             data->unk7B = 0;
             data->unk80 = moby;
             FUN_L00_002591d0(iter, (unsigned char)moby[0x21], 0, 0);
-            /* Fakematch: the volatile read keeps the reload of iter[0] at the top of the
-               body; with a plain read it moves into the branch delay slot. */
-            while ((linked = *(char *volatile *)iter) != 0) {
+            while ((linked = *iter) != 0) {
                 linked = iter[0];
                 if (linked != moby && *(short *)(linked + 0xA6) == 0xE7) {
                     SwitchVars *other_data = *(SwitchVars **)(linked + 0x78);
