@@ -2313,7 +2313,7 @@ s32 FUN_L06_003047f8(const u8 *moby) {
 
 typedef struct { int v[6]; } V6;
 
-extern V6 D_L06_002019A0;
+V6 D_L06_002019A0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
 extern V6 D_L06_002019B8;
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
