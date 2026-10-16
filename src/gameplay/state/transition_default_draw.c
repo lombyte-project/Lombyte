@@ -18,7 +18,7 @@ extern s32 fill_transfer_words() __asm__("func_001F97E8");
 extern s32 FlushCache();
 extern s32 transition_draw_sky() __asm__("func_001E9AB8");
 extern s32 transition_update_movie_camera() __asm__("func_001EAF88");
-extern s32 func_001F2260();
+extern s32 update_camera_view_matrices() __asm__("func_001F2260");
 extern s32 update_fog() __asm__("func_001F2588");
 extern void reset_gs_registers() __asm__("func_001F3868");
 extern s32 setup_gif_paging() __asm__("func_001F4280");
@@ -59,7 +59,7 @@ void transition_default_draw(s32 *arg0) {
     }
     fill_transfer_words(occl_visibility, -1, 0x80);
     transition_update_movie_camera();
-    func_001F2260();
+    update_camera_view_matrices();
     prune_moby_references();
     reset_gs_registers();
     font_state = -1;

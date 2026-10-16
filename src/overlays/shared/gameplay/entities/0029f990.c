@@ -286,7 +286,7 @@ extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");
 extern void FUN_L00_002a08c8(void);
 extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 extern void FUN_L00_001f99c0(s32);
-extern void FUN_001f2260(void);
+extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void FUN_L00_00250df8(void *);
@@ -359,7 +359,7 @@ void FUN_L00_002a02b0(void) {
             D_L00_00166C80[0x364 / 4] = 1.0f;
             D_L00_00166C80[0x378 / 4] = 1.0f;
             D_L00_00166C80[0x37C / 4] = 1.0f;
-            FUN_001f2260();
+            update_camera_view_matrices();
         } else {
             D_L00_00165F80[0] = D_L00_00166FD0[0];
             D_L00_00165F80[1] = D_L00_00166FD0[1];
@@ -397,7 +397,7 @@ void FUN_L00_002a02b0(void) {
     }
     FUN_L00_002a0fc8(p->f10, draw_buffer_address, frame_size[0] << 11);
     setup_gif_paging(0);
-    FUN_001f2260();
+    update_camera_view_matrices();
     reset_gs_registers();
     draw_mobys_setup();
     init_moby_class_dists();

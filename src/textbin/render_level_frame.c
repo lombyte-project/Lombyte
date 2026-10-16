@@ -19,7 +19,7 @@ extern s32 D_0018CB54[];
 extern s32 D_0018CC98[];
 extern struct LevelProjectionState view_context __asm__("D_0018CD00");
 extern void AppendDmaTag(u32);
-extern void func_001F2260();
+extern void update_camera_view_matrices() __asm__("func_001F2260");
 extern void update_view_context() __asm__("func_001F2D98");
 extern void reset_gs_registers() __asm__("func_001F3868");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
@@ -53,7 +53,7 @@ void render_level_frame(void) {
     struct Screen *display_state;
     s64 texture;
     append_gif_transfer_packet();
-    func_001F2260();
+    update_camera_view_matrices();
     prune_moby_references();
     reset_gs_registers();
     saved_projection_scale = view_context.projection_scale;
@@ -62,11 +62,11 @@ void render_level_frame(void) {
         view_context.projection_scale = 0.63f;
     }
     update_view_context();
-    func_001F2260();
+    update_camera_view_matrices();
     draw_sky_shells();
     view_context.projection_scale = saved_projection_scale;
     update_view_context();
-    func_001F2260();
+    update_camera_view_matrices();
     if (level_render_state.scene_mode == 4) {
         setup_gif_paging(1);
         draw_resident_textured_quad();

@@ -21,7 +21,9 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 
-void FUN_001f2260(void) {
+void update_camera_view_matrices(void) __asm__("FUN_001f2260");
+
+void update_camera_view_matrices(void) {
     Vec4 m[4];
     struct G *g;
     u8 *x;
@@ -89,4 +91,4 @@ void FUN_001f2260(void) {
     *(f32 *)(sky_view_mtx + 0x3C) = 1024.0f;
 }
 
-extern __typeof__(FUN_001f2260) func_001F2260 __attribute__((alias("FUN_001f2260")));
+extern __typeof__(update_camera_view_matrices) func_001F2260 __attribute__((alias("FUN_001f2260")));

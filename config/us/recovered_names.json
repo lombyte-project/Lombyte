@@ -5804,25 +5804,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "rendering/view/fun_001f2260",
-        "source_path": "src/rendering/view/fun_001f2260.c",
-        "address": "0x001f2260",
-        "current_name": "FUN_001f2260",
-        "proposed_name": "build_rotation_view_proj",
-        "logical_group": "unclassified",
-        "status": "needs_review",
-        "confidence": "low",
-        "evidence": [
-          {
-            "kind": "cross_project_name",
-            "project": "ReRAC",
-            "name": "build_rotation_view_proj",
-            "note": "suggested"
-          }
-        ],
-        "logical_group_confidence": "unresolved"
-      },
-      {
         "unit": "rendering/update_fog",
         "source_path": "src/rendering/update_fog.c",
         "address": "0x001f2588",
@@ -20025,6 +20006,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x0020d074 the assigned function branches on count 0x0015ff3c. The zero path (0x0020d07c\u20130x0020d0b0) writes a zero-length 0x10000000 tag and clears its remaining words through pointer 0x0015ff40. The nonzero path reserves 16 bytes from g_pDmaPacketCursor (0x00160f00), writes 0x20000000 link tags, and points the reserved tag at the generated segment (0x0020d0b4\u20130x0020d108). It invokes 0x00227740 at 0x0020d104, then recovered submit_graphics_setup_command_stream at 0x00227548 from 0x0020d110 with buffer 0x001c8680. Checked helper 0x00227740 consumes the same count and object records at 0x001c8500, transforms their data, and writes the zero-terminated output at 0x001c8680. Instructions 0x0020d12c\u20130x0020d18c link the generated segment back to reserved_tag+16 and patch the saved cursor tag to resume after the inserted segment. Sole checked caller 0x0020d3b0 invokes this at 0x0020d444 under the recovered g_nMobyPatchReady gate; sibling 0x0020cdf0 uses the same cursor/reserved-tag linking pattern. This establishes graphics setup chain configuration without assigning an unproven visual-effect name."
+          }
+        ]
+      },
+      {
+        "address": "0x001f2260",
+        "current_name": "FUN_001f2260",
+        "proposed_name": "update_camera_view_matrices",
+        "logical_group": "rendering/view",
+        "unit": "rendering/view/update_camera_view_matrices",
+        "source_path": "src/rendering/view/update_camera_view_matrices.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x001f2268-0x001f230c the routine tests g_dwCameraPositionPublicationSuppressed (0x0018c32c), copies g_flCameraBasisColumn0..2 from 0x00187290 or constructs a basis using identity and X/Y/Z rotations from g_flCameraEulerAngles at 0x00187090. At 0x001f2314-0x001f23bc it rearranges/sign-flips that basis into the homogeneous matrix at 0x00186f40. Calls at 0x001f23b8, 0x001f23c8, 0x001f24b4 and 0x001f2504 compose matrices into 0x00186f80, 0x00186fc0, 0x00187000 and g_flActiveViewProjection at 0x00187040. Bounded checked helper evidence for 0x001fa378 (request 0ef04cbb94c1426bb2f49d5c122381d8) confirms four-vector VU matrix multiplication via vmulax/vmadday/vmaddaz/vmaddw. At 0x001f2514-0x001f2554 the basis is copied to 0x0018cf80 and g_flActiveCameraPosition at 0x00187080 is scaled by 1024 into 0x0018cfb0, with homogeneous W=1024. Supplied callers include render_gameplay_frame via 0x001eb454, render_level_effects_and_screen_sprites via 0x00219738, and render_level_frame via 0x001f3a30/0x0022f2a4/0x0022f2f4/0x0022f30c, supporting a rendering camera-matrix refresh. Naming baseline reports 808 bytes, 100% function/text matching, non_text_ok=true, no differences, and promotable=true. Source was not edited."
           }
         ]
       }

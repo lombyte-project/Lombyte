@@ -48,7 +48,7 @@ extern void init_moby_class_dists(void) __asm__("FUN_0020d1f0");
 extern void stash_moby_class_dists(void) __asm__("FUN_0020d218");
 extern void draw_moby_list(void *, s32) __asm__("FUN_0020d330");
 extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
-extern void func_001F2260(void) __asm__("FUN_001f2260");
+extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern void project_graphics_bounds(Vec4 *, Vec4 *, s32 *, s32 *, s32 *, s32 *)
     __asm__("FUN_00237a78");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
@@ -115,7 +115,7 @@ void render_level_effects_and_screen_sprites(void) {
     stash_moby_class_dists();
     draw_moby_list(resident_object_pool, 4);
     reset_active_camera_position_and_basis();
-    func_001F2260();
+    update_camera_view_matrices();
     for (effect_slot_index = 0; effect_slot_index < slot_count; effect_slot_index++) {
         if (panel_slot_enabled[effect_slot_index] != 0 && panel_slots[effect_slot_index] != 0 &&
             (effect_slot_index != 6 || menu_system.unkD8 != 0)) {
