@@ -662,7 +662,7 @@ struct BlastVars {
     int timer;
 };
 
-extern char D_L13_001F5590[];
+char D_L13_001F5590[] = "Moby class %d UID:%d  Damage Received: %f\n";
 extern char D_L13_00178200[];
 extern int D_L13_00161E2C __attribute__((sda));
 extern f32 D_L13_00161E30 __attribute__((sda));
