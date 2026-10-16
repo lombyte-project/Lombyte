@@ -2543,7 +2543,8 @@ typedef struct {
 } Pkt;
 
 extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
-extern float D_L18_00167680_d[] __asm__("D_L18_00167680") __attribute__((section(".data")));
+typedef struct { char pad[0x140]; float position[4]; } L18FlareView;
+extern L18FlareView D_L18_00167680 __attribute__((section(".data")));
 extern float D_L18_001D9B50[][2];
 extern float D_L18_001D9B70[][4][4];
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
@@ -2567,8 +2568,8 @@ void FUN_L18_002ea1f8(char *moby) {
     char *data = *(char **)(moby + 0x78);
 
     clear_u64_value_c(rot);
-    rot[2] = fast_arc_tan_c(D_L18_00167680_d[0x50] - *(float *)(moby + 0x10), D_L18_00167680_d[0x51] - *(float *)(moby + 0x14));
-    rot[1] = -fast_arc_tan_c(vector_distance_xy_alt(moby + 0x10, &D_L18_00167680_d[0x50]), D_L18_00167680_d[0x52] - *(float *)(moby + 0x18));
+    rot[2] = fast_arc_tan_c(D_L18_00167680.position[0] - *(float *)(moby + 0x10), D_L18_00167680.position[1] - *(float *)(moby + 0x14));
+    rot[1] = -fast_arc_tan_c(vector_distance_xy_alt(moby + 0x10, &D_L18_00167680.position[0]), D_L18_00167680.position[2] - *(float *)(moby + 0x18));
     euler_rotation_matrix(m[0][0], rot);
     euler_rotation_matrix(m[1][0], rot);
     fast_vec_scale_c(m[1][1], m[1][1], *(float *)(data + 0x24));

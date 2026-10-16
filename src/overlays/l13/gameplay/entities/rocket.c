@@ -310,7 +310,6 @@ typedef int OvlQuad_p __attribute__((mode(TI)));
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) L13Vec_p;
 
-typedef struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vec_p pos; L13Vec_p pad2; L13Vec_p matrix; } L13Hit_p;
 
 struct L13Ent00178480 {
     char pad0[0x24];
@@ -325,7 +324,6 @@ struct L13Ent00178480 {
 };
 
 extern char D_0013E533[];
-extern char D_L13_00174140_c[] __asm__("D_L13_00174140");
 extern f32 fast_vec_length_c(void *) __asm__("func_001F9AF0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float fast_vec_dist(void *, void *);
@@ -345,6 +343,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern char D_0013F350[];
 
 void FUN_L13_00306300(struct Moby *moby) {
+    extern struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vec_p pos; L13Vec_p pad2; L13Vec_p matrix; } D_L13_00174140;
     char *data = (char *)moby->pvars;
     struct {
         L13Vec_p old_pos;
@@ -423,7 +422,7 @@ void FUN_L13_00306300(struct Moby *moby) {
     }
     if (FUN_001efa68(&work.old_pos, &moby->pos, stationary, *(void **)(data + 0x20), work.hit) == 0)
         goto bounds;
-    qcopy(&moby->pos, &(*(L13Hit_p *)D_L13_00174140_c).pos);
+    qcopy(&moby->pos, &D_L13_00174140.pos);
     if (moby->visible != 0) {
         int i;
         for (i = 0; i < 5; i++) {
@@ -432,7 +431,7 @@ void FUN_L13_00306300(struct Moby *moby) {
             work.random_direction.y = random_float_between(-1.0f, 1.0f);
             work.random_direction.z = random_float_between(-1.0f, 1.0f);
             *(OvlQuad_p *)&work.direction = *(OvlQuad_p *)&work.random_direction;
-            FUN_L00_001ff660(&work.random_direction, data, &(*(L13Hit_p *)D_L13_00174140_c).matrix);
+            FUN_L00_001ff660(&work.random_direction, data, &D_L13_00174140.matrix);
             fast_vec_normalize_c(&work.direction, &work.direction, fast_vec_length_c(&work.random_direction) * 0.5f);
             add_vector_xyz(&work.direction, &work.random_direction, &work.direction);
             fast_vec_normalize_c(&work.direction, &work.direction,
@@ -442,7 +441,7 @@ void FUN_L13_00306300(struct Moby *moby) {
         }
     }
     {
-        struct Moby *target = (*(L13Hit_p *)D_L13_00174140_c).moby;
+        struct Moby *target = D_L13_00174140.moby;
         if (target != 0 && *(short *)((char *)target + 0xA6) == 0)
             allocate_voice_for_target_entry(0, 0, (int)moby);
     }

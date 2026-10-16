@@ -278,14 +278,14 @@ typedef struct {
     f32 normal_z; /* 0x48: ledge probes compare atan2(normal_z, xy length) with 20 degrees */
 } CollisionHit_2d23f0;
 
-extern char D_L08_001746C0_36F8[] __asm__("D_L08_00174640");
+#include "rnc/overlay/collision.h"
+extern CollisionHit D_L08_00174640;
 extern blk16 D_L08_00161868;
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_0015ED70_gp __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern f32 fast_vec_length_c(void *) __asm__("func_001F9AF0");
 extern f32 random_float_between_c5(f32, f32) __asm__("func_002132A8");
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
-extern int D_L08_0015F580_c __asm__("D_L08_0015F580");
 extern float D_L08_00174660[];
 extern int FUN_001efa68(void *, void *, int, void *, int);
 extern int FUN_L00_001f0d60(float, void *, int, void *);
@@ -368,7 +368,7 @@ void FUN_L08_002d23f0(char *moby) {
         c.r.x.f = 1.0f;
         qcopy(c.r.x.v, d + 0x10);
         if (FUN_001efa68(c.r.start, c.r.end, 0, moby, 0)) {
-            char *tbl = D_L08_001746C0_36F8;
+            char *tbl = (char *)&D_L08_00174640;
             int v = *(int *)(tbl + 0x18);
             if (v != 0) {
                 if (v != *(int *)(d + 0x30) || *(int *)(d + 0x24) != 0) {
@@ -1132,7 +1132,6 @@ extern short *D_L08_001AC040[];
 extern void FUN_L00_0025e450_c2(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L05_00318648(void*,int,void*,void*,int);
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
-extern float D_L08_00167500_7010[] __asm__("D_L08_00167480");
 
 void FUN_L08_002d5d08(char *moby) {
     float a[4];
@@ -1220,8 +1219,8 @@ void FUN_L08_002d5d08(char *moby) {
                     qcopy(b, c); break;
                 }
                 if (fast_difference_between_rotations_c2(fast_arc_tan_c(a[0], a[1]),
-                                  fast_arc_tan_c(D_L08_00167500_7010[0x50] - *(float *)(moby + 0x10),
-                                                    D_L08_00167500_7010[0x51] - *(float *)(moby + 0x14))) < 0.2617994f) {
+                                  fast_arc_tan_c(D_L08_00167480.x - *(float *)(moby + 0x10),
+                                                    D_L08_00167480.y - *(float *)(moby + 0x14))) < 0.2617994f) {
                     FUN_L05_00318648(other, (int)moby, a, b, func_001FA898_2D6C58(random_float_between_c4(10.0f, 20.0f)));
                 } else {
                     FUN_L05_00318648(other, (int)moby, a, b, func_001FA898_2D6C58(random_float_between_c4(30.0f, 45.0f)));
