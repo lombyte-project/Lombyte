@@ -2106,7 +2106,7 @@ char D_L14_001FBE58[] = "Hovertank with no boundPath. UID: %d\n";
 char D_L14_001FBE80[] = "Hovertank with a bound path that has no points. UID: %d\n";
 char D_L14_001FBEC0[] = "Hovertank with no bombPath. UID: %d\n";
 char D_L14_001FBEE8[] = "Hovertank with a bomb path that has no points. UID: %d\n";
-extern char D_L14_001FBF20[];
+char D_L14_001FBF20[] = "Hovertank with no exit Path. UID: %d\n";
 extern char D_L14_001FBF48[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
