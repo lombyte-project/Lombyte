@@ -429,6 +429,7 @@ RODATA_OVERLAYS = {
     "sdk/storage/cd_check_scmd": (0x152F10, 0x53E90, 39),
     "sdk/library/checkModelVersion": (0x153030, 0x53FB0, 12),
     "sdk/dma/wait_dma": (0x1533E0, 0x54360, 22),
+    "sdk/library/sceDbcInit": (0x153518, 0x54498, 40),
 }
 
 # Recovered C units that define the small-data variables their original

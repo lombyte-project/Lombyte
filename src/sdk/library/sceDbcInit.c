@@ -9,7 +9,7 @@ extern SifClientData D_0015B008;
 extern SifClientData D_0015B030;
 extern char D_001534D8[];
 extern char D_001534F0[];
-extern char D_00153518[];
+const char D_00153518[] = "[libdbc.a = %d.%d, dbcman.irx = %d.%d]\n";
 extern char D_00153540[];
 extern void sceSifInitRpc(u32);
 extern s32 sceSifBindRpc(SifClientData *, u32, u32);
