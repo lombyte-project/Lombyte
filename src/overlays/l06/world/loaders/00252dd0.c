@@ -102,7 +102,7 @@ extern s32 D_L06_0015FFC0;
 extern s16 D_L06_00198180[];
 extern u16 D_L06_001B05E0[][16];
 extern char D_L06_001FFB80[], D_L06_001FFBD0[],
-    D_L06_001FFC18[], D_L06_001FFC30[], D_L06_001FFC48[],
+    D_L06_001FFC30[], D_L06_001FFC48[],
     D_L06_001FFC60[], D_L06_001FFC78[], D_L06_001FFC90[], D_L06_001FFCB0[],
     D_L06_001FFCC8[], D_L06_001FFCE0[], D_L06_001FFCF8[], D_L06_001FFD10[],
     D_L06_001FFD28[], D_L06_001FFD40[], D_L06_001FFD58[], D_L06_001FFD70[],
@@ -114,6 +114,7 @@ extern char D_L06_00319998[];
 char D_L06_001FFBA0[] = "internal moby sound mismatch on moby %d\n";
 char D_L06_001FFBE8[] = "os:             %.1fK\n";
 char D_L06_001FFC00[] = "code mem:       %.1fK\n";
+char D_L06_001FFC18[] = "dead space:     %.1fK\n";
 extern s32 D_L06_001B2200[];
 extern char *D_L18_001C6200_252dd0[] __asm__("D_L06_001C5F80");
 extern char *D_L18_001BCA30_252dd0[] __asm__("D_L06_001BC7B0");
