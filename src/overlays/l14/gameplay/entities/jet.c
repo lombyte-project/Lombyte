@@ -561,7 +561,7 @@ extern s32 D_L14_00162238;
 extern f32 D_L14_00162240;
 char D_L14_001FC980[] = "*Error: Moby 610 (wind-control) with no cuboid index (wind pushing hero area). UID: %d - RAR\n";
 char D_L14_001FC9E0[] = "*Error: Moby 610 (wind-control) with no fxArea cuboid (fx drawing area). UID: %d - RAR\n";
-extern char D_L14_001FCA38[];
+char D_L14_001FCA38[] = "*Error: Moby 610 (wind-control) with no fxAct cuboid (fx activation area). UID: %d - RAR\n";
 extern void wind_print(const char *, short) __asm__("FUN_001e93b0");
 extern void wind_remove(struct Moby *) __asm__("FUN_0020c828");
 extern float wind_length(void *) __asm__("FUN_001f9af0");
