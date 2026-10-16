@@ -12099,29 +12099,6 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "rendering/fun_00218d10",
-        "source_path": "src/rendering/fun_00218d10.c",
-        "address": "0x00218d10",
-        "current_name": "FUN_00218d10",
-        "proposed_name": null,
-        "logical_group": "audio/voices",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "neighboring_group_context",
-            "functions": [
-              {
-                "address": "0x00218d78",
-                "name": "FUN_00218d78",
-                "logical_group": "audio/voices"
-              }
-            ]
-          }
-        ],
-        "logical_group_confidence": "low"
-      },
-      {
         "unit": "audio/voices/pause_all_sounds",
         "source_path": "src/audio/voices/pause_all_sounds.c",
         "address": "0x00218d78",
@@ -20067,6 +20044,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x0011a428/0x0011a430 the retail body loads packet register index +0x10 and value +0x14; 0x0011a42c loads the state system-register table pointer +0x1c; 0x0011a434 scales the index by four, 0x0011a438 computes the entry, and the return delay-slot store at 0x0011a440 writes the value. Prepared Ghidra decompilation identifies SifSetSystemRegisterPacket and SifCommandState and documents system command 0x80000001 installed in callback slot one, with supplied sceSifInitCmd reference 0x0011a5a4. Retain its established verb-first descriptive name. Managed baseline reports strict/text match 100%, 28 retail bytes, no differences, legal/promotable candidate."
+          }
+        ]
+      },
+      {
+        "address": "0x00218d10",
+        "current_name": "FUN_00218d10",
+        "proposed_name": "reset_active_camera_position_and_basis",
+        "logical_group": "rendering",
+        "unit": "rendering/reset_active_camera_position_and_basis",
+        "source_path": "src/rendering/reset_active_camera_position_and_basis.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00218d28, 0x00218d30 and 0x00218d34, stores to 0x00187084/0x00187088/0x00187080 set recovered g_flActiveCameraPosition to (256,256,64). The sq zero instructions at 0x00218d38, 0x00218d44 and 0x00218d50 clear the three recovered g_flCameraBasisColumn arrays at 0x00187290, 0x001872a0 and 0x001872b0. Stores at 0x00218d64..0x00218d74 set offsets 0x37c,0x350,0x364,0x378 from 0x00186f40 to 1.0, producing columns (1,0,0,0),(0,1,0,0),(0,0,1,1). Checked direct caller FUN_002192a8 calls this unconditionally at 0x002192e4 before its state/update dispatch, later calling publish_camera_environment at 0x00219330 and update_visible_resident_objects at 0x00219668. Supplied second caller render_level_effects_and_screen_sprites calls at 0x00219730. These camera symbols, exact writes and caller placement support the reset role without guessing a particular mode."
           }
         ]
       }
