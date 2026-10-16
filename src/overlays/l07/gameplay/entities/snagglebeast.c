@@ -1185,7 +1185,7 @@ void FUN_L07_00314150(unsigned char *moby) {
             if (!path_point_ready && target_distance < 20.0f) near = 1;
             moving = frame_time * 0.01f < spd;
             if (hit == 4) {
-                if (moving) hit = 4;
+                if (frame_time * 0.01f < spd) hit = 4;
             } else {
                 hit = 2;
             }

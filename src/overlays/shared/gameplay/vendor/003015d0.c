@@ -276,9 +276,6 @@ void FUN_L14_003017f8(char *m) {
     }
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00301de8.s", FUN_L14_00301de8);
-#else
 extern int D_L14_001620C4 __attribute__((sda));
 extern int D_L14_001620F0 __attribute__((sda));
 extern int D_L14_001620F4 __attribute__((sda));
@@ -291,7 +288,6 @@ void FUN_L14_00301de8(char *m) {
     char *dst, *src;
     u8 *indices;
     int i, j, k, copy_i, next_i;
-    int offset;
     float t;
 
     if (*(s16 *)(d + 0x12) != 0) {
@@ -307,14 +303,9 @@ void FUN_L14_00301de8(char *m) {
         i = 0;
         do {
             next_i = i + 1;
-            src = (char *)((i << 4) + (int)d);
-            offset = (int)src;
-            src += 0x560;
-            dst = (char *)offset + 0x460;
             for (k = 2; k >= 0; k--) {
-                add_vector_xyz(dst, dst, src);
-                dst += 0x40;
-                src += 0x40;
+                char *row = d + (i << 4) + (2 - k) * 0x40;
+                add_vector_xyz(row + 0x460, row + 0x460, row + 0x560);
             }
             i = next_i;
         } while ((float)i < 4.0f);
@@ -340,7 +331,6 @@ void FUN_L14_00301de8(char *m) {
         *(int *)(d + 0x14) = 0;
     }
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L14_00301fa8.s", FUN_L14_00301fa8);
 #else
