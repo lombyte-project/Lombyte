@@ -288,7 +288,7 @@ segments:
           - [0x1b348, c, sdk/debug/sce_printf]
           - [0x1b3a8, c, runtime/sio/handle_sif_set_system_register]
           - [0x1b3c4, textbin, text_gap_0011a444_after_fun_0011a428]
-          - [0x1b3c8, c, runtime/sio/fun_0011a448]
+          - [0x1b3c8, c, runtime/sio/handle_sif_initialize_command]
           - [0x1b3d4, textbin, text_gap_0011a454_after_fun_0011a448]
           - [0x1b3d8, c, runtime/data/lookup_index]
           - [0x1b3f0, textbin, text_gap_0011a470]

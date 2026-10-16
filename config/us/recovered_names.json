@@ -18023,23 +18023,6 @@
         ]
       },
       {
-        "unit": "runtime/sio/fun_0011a448",
-        "source_path": "src/runtime/sio/fun_0011a448.c",
-        "address": "0x0011a448",
-        "current_name": "FUN_0011a448",
-        "proposed_name": null,
-        "logical_group": "runtime/sio",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp core/00119D88.c (SIO)"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "runtime/memory/unpack_spr_descriptor",
         "source_path": "src/runtime/memory/unpack_spr_descriptor.c",
         "address": "0x001238a0",
@@ -20022,6 +20005,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x001f2268-0x001f230c the routine tests g_dwCameraPositionPublicationSuppressed (0x0018c32c), copies g_flCameraBasisColumn0..2 from 0x00187290 or constructs a basis using identity and X/Y/Z rotations from g_flCameraEulerAngles at 0x00187090. At 0x001f2314-0x001f23bc it rearranges/sign-flips that basis into the homogeneous matrix at 0x00186f40. Calls at 0x001f23b8, 0x001f23c8, 0x001f24b4 and 0x001f2504 compose matrices into 0x00186f80, 0x00186fc0, 0x00187000 and g_flActiveViewProjection at 0x00187040. Bounded checked helper evidence for 0x001fa378 (request 0ef04cbb94c1426bb2f49d5c122381d8) confirms four-vector VU matrix multiplication via vmulax/vmadday/vmaddaz/vmaddw. At 0x001f2514-0x001f2554 the basis is copied to 0x0018cf80 and g_flActiveCameraPosition at 0x00187080 is scaled by 1024 into 0x0018cfb0, with homogeneous W=1024. Supplied callers include render_gameplay_frame via 0x001eb454, render_level_effects_and_screen_sprites via 0x00219738, and render_level_frame via 0x001f3a30/0x0022f2a4/0x0022f2f4/0x0022f30c, supporting a rendering camera-matrix refresh. Naming baseline reports 808 bytes, 100% function/text matching, non_text_ok=true, no differences, and promotable=true. Source was not edited."
+          }
+        ]
+      },
+      {
+        "address": "0x0011a448",
+        "current_name": "FUN_0011a448",
+        "proposed_name": "handle_sif_initialize_command",
+        "logical_group": "runtime/sio",
+        "unit": "runtime/sio/handle_sif_initialize_command",
+        "source_path": "src/runtime/sio/handle_sif_initialize_command.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x0011a448, lw v0,0x10(a0) loads SifInitializePacket.dwReceiveBufferAddress; at 0x0011a450, the return delay-slot sw v0,0x8(a1) stores SifCommandState.dwRemoteReceiveAddress. The supplied original typed Ghidra decompilation names this handle_sif_initialize_command and documents initializer-installed callback slot zero; the supplied reference at 0x0011a59c belongs to sceSifInitCmd. Preserve this established descriptive name. The baseline validation reports strict/text matching of 100% for the complete 12-byte function."
           }
         ]
       }
