@@ -434,6 +434,7 @@ RODATA_OVERLAYS = {
     "sdk/library/slicea0": (0x153800, 0x54780, 38),
     "sdk/library/_quantMatrixExtension": (0x153910, 0x54890, 44),
     "sdk/library/is_out_size_ok": (0x153980, 0x54900, 41),
+    "sdk/callbacks/report_mpeg_sequence_scalable_unsupported": (0x153B48, 0x54AC8, 48),
 }
 
 # Recovered C units that define the small-data variables their original

@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-extern u8 D_00153B48[];
+const u8 D_00153B48[] = "_sequenceScalableExtension() is not implemented";
 extern void _Error(void *pState, u8 *message);
 
 void report_mpeg_sequence_scalable_unsupported(void *pState) __asm__("FUN_0012caf0");
