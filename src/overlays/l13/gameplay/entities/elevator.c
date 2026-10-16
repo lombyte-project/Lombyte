@@ -1103,7 +1103,7 @@ extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, floa
 extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_0025ab48(void *, float *, void *, void *);
-extern void FUN_L00_0025c558(void *, void *, int, int, int, float);
+extern void FUN_L00_0025c558(void *, void *, float, int, int, int);
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
@@ -1202,8 +1202,7 @@ void FUN_L13_002b50d8(RsMoby *m) {
                 v->f13C = frame_time * 5.5f;
                 *(u128 *)&va = *(u128 *)&hit->pos;
                 FUN_L00_0025ab48(&va, &ang, &v->f138, &v->f13C);
-                /* Fakematch: ang is read into a copy before the call so it is loaded ahead of rand(), like retail. */
-                { float yaw = ang; FUN_L00_0025c558(m, v->x120, (rand() & 1) + 9, 1, 0, yaw); }
+                FUN_L00_0025c558(m, v->x120, ang, (rand() & 1) + 9, 1, 0);
                 v->f170 = 11.0f;
                 v->f174 = 18.0f;
                 m->state = 0x63;
@@ -1214,7 +1213,7 @@ void FUN_L13_002b50d8(RsMoby *m) {
             } else {
                 *(u128 *)&va = *(u128 *)&hit->pos;
                 FUN_L00_0025ab48(&va, &ang, &v->f138, &v->f13C);
-                { float yaw = ang; FUN_L00_0025c558(m, v->x120, (rand() & 1) + 9, 1, 0, yaw); }
+                FUN_L00_0025c558(m, v->x120, ang, (rand() & 1) + 9, 1, 0);
                 v->f170 = 5.0f;
                 v->f174 = 10.0f;
                 m->state = 6;
@@ -1548,7 +1547,7 @@ void FUN_L13_002b50d8(RsMoby *m) {
             v->f13C = FUN_L00_0025abf0(&m->pos, &v->v1D0, &out, D_L13_00161398 * frame_time, -D_L13_0016139C);
             v->w144 = 0xD;
             v->b15D = 0;
-            FUN_L00_0025c558(m, v->x120, (rand() & 1) + 9, 1, 0, m->rot.f[2]);
+            FUN_L00_0025c558(m, v->x120, m->rot.f[2], (rand() & 1) + 9, 1, 0);
             v->f170 = 5.0f;
             v->f174 = 10.0f;
             FUN_L13_002b4f28((unsigned char *)m, (char *)v);

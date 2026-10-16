@@ -1631,7 +1631,7 @@ struct PokPv_309ac0 {
 extern unsigned char D_0013E550_309ac0[] __asm__("D_0013E550");
 extern void *D_0013F64C_309ac0 __asm__("D_0013F64C") __attribute__((section(".data")));
 extern int check_slot_309ac0(void *, int) __asm__("FUN_L00_0028d8c0");
-extern void release_slot_309ac0(int, int) __asm__("FUN_0022d798");
+extern void release_slot_309ac0(int) __asm__("FUN_0022d798");
 extern void FUN_001fa2d8_309ac0(void *, void *) __asm__("FUN_001fa2d8");
 extern void FUN_001f9cf8_309ac0(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_001f9d20_309ac0(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -1678,9 +1678,7 @@ void FUN_L11_00309ac0(struct Moby *moby) {
         int w;
 
         moby->draw_dist = 0xFF;
-        /* Fakematch: `- 1 != 0` instead of `!= 1` is one insn shorter before gcse,
-           which sizes the PRE hash table so the spill slots come out in retail order. */
-        if (moby->prev_seq - 1 != 0) {
+        if (moby->prev_seq != 1) {
             blend_moby_animation_309378((MobyAnim_309378 *)moby, 1, 0, 1);
         }
         tab_a8 = D_L11_001B0EB0[pv->idx_a8];
@@ -1731,7 +1729,7 @@ void FUN_L11_00309ac0(struct Moby *moby) {
                 if (pv->slot_c8 != -1) {
                     unsigned char *ent = D_0013E550_309ac0 + pv->slot_c8 * 0x70;
                     if (*(void **)(ent + 0x88) == moby && ent[0x74] != 0) {
-                        release_slot_309ac0(pv->slot_c8, pv->slot_c8);
+                        release_slot_309ac0(pv->slot_c8);
                     }
                 }
                 pv->slot_c8 = -1;
@@ -1745,7 +1743,7 @@ void FUN_L11_00309ac0(struct Moby *moby) {
                 if (pv->slot_cc != -1) {
                     unsigned char *ent = D_0013E550_309ac0 + pv->slot_cc * 0x70;
                     if (*(void **)(ent + 0x88) == moby && ent[0x74] != 0) {
-                        release_slot_309ac0(pv->slot_cc, pv->slot_cc);
+                        release_slot_309ac0(pv->slot_cc);
                     }
                 }
                 pv->slot_cc = -1;
@@ -1769,7 +1767,7 @@ void FUN_L11_00309ac0(struct Moby *moby) {
                 if (pv->slot_cc != -1) {
                     unsigned char *ent = D_0013E550_309ac0 + pv->slot_cc * 0x70;
                     if (*(void **)(ent + 0x88) == moby && ent[0x74] != 0) {
-                        release_slot_309ac0(pv->slot_cc, pv->slot_cc);
+                        release_slot_309ac0(pv->slot_cc);
                     }
                 }
                 pv->slot_cc = -1;
@@ -1778,7 +1776,7 @@ void FUN_L11_00309ac0(struct Moby *moby) {
                 if (pv->slot_c8 != -1) {
                     unsigned char *ent = D_0013E550_309ac0 + pv->slot_c8 * 0x70;
                     if (*(void **)(ent + 0x88) == moby && ent[0x74] != 0) {
-                        release_slot_309ac0(pv->slot_c8, pv->slot_c8);
+                        release_slot_309ac0(pv->slot_c8);
                     }
                 }
                 pv->slot_c8 = -1;
