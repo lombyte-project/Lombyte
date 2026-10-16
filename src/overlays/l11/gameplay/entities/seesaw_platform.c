@@ -1245,7 +1245,7 @@ extern void sound_fe50(void *, void *) __asm__("FUN_L00_0025d458");
 extern void blend_fe50(void *, int, int, int) __asm__("FUN_00212f90");
 extern int frames_fe50(int) __asm__("FUN_001f96f8");
 extern void update_fe50(void *, void *) __asm__("FUN_L00_0025d538");
-extern char D_L11_0021B530[];
+char D_L11_0021B530[] = "Moby class %d Damage Received: %f\n";
 
 void FUN_L11_0030fe50(struct Moby *m, unsigned char *d, float *t) {
     int out;
