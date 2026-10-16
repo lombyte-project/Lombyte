@@ -2440,7 +2440,6 @@ extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
-extern unsigned char D_0014171B_t[] __asm__("D_0014161B");
 extern int D_0015ED84;
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
