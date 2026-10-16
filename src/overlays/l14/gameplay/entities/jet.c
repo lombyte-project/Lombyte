@@ -107,6 +107,8 @@ void FUN_L14_002df138(u8 *moby) {
     wp = &d[20];
     sixteen = 1.6f;
     one = 1.0f;
+    /* Fakematch: the extra loop level rematerialises the 4 and ranks the read
+       pointer above the counter in register allocation, as in retail. */
     do {
         for (; k < 10; k++) {
             wp[2] = *rp;

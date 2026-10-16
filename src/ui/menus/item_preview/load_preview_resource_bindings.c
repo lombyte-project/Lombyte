@@ -44,9 +44,9 @@ void load_preview_resource_bindings(s32 first_resource, s32 resource_count) {
             buffer_skip = 0;
             class_slot = resident_class_slot_by_id[binding->class_id];
             animation_index = binding->animation_index;
-            /* Two bindings use resource buffers 0 and 2. The do-while
-               weights the index use one loop deeper, so the index is
-               allocated before the binding pointer. */
+            /* Fakematch: two bindings use resource buffers 0 and 2. The
+               do-while weights the index use one loop deeper, so the index
+               is allocated before the binding pointer. */
             if (count == 2) {
                 do {
                     if (resource_index == 1) {

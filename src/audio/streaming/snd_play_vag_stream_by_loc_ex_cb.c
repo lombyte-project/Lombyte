@@ -20,6 +20,7 @@ void snd_play_vag_stream_by_loc_ex_cb(s32 loc, s32 size, s32 vol_l, s32 vol_r, s
     int new_var;
     s32 buf[7];
     new_var = (pitch << 16) | (vol_l & 0xFFFF);
+    /* Fakematch: the dead id update moves the packet stores into retail's order. */
     id++;
     id--;
     buf[0] = loc;

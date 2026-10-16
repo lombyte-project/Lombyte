@@ -15,9 +15,8 @@ void audio_dec_start(struct AudioDec *dec) {
     snd_start_movie_sound(dec->iopBuff, ((copy = temp_2_10) / 0x400) * four, dec->iopZero,
                           dec->hdr.rate, u18);
     dec->state = 2;
-    /* Allocator-shape pair: GCC removes both stores (code-dead), but the
-       read-modify-write sequence drives hdr.ch's register choice to retail's
-       schedule.  Verified 100/100/100 bytes. */
+    /* Fakematch: GCC removes both stores, but the read-modify-write
+       sequence gives hdr.ch retail's register. */
     dec->hdr.ch++;
     dec->hdr.ch--;
 }

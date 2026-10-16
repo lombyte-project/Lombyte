@@ -30,6 +30,7 @@ void reset_graphics(void) {
     init_dma();
     sceGsResetGraph(0, 1, (D_0015ED80[0] != 0) ? 3 : 2, 0);
     reset_vif1_gif();
+    /* Fakematch: see the note at the top of the function. */
     do {
         vu1_init_chain();
         temp_16_31 = D_0015EE78[0];

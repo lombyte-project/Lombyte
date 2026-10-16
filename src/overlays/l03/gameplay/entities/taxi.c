@@ -1336,15 +1336,17 @@ void FUN_L03_002da870(struct Moby *m) {
                     D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                         ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                     o = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
-                    /* Same record as the || test in the level's other reward code; the
-                       do/while (0) blocks keep the loop notes that make gcc predict the
-                       0xFF branch taken and keep the group load ahead of the table load. */
+                    /* Fakematch: same record as the || test in the level's other reward
+                       code; the do/while (0) blocks keep the loop notes that make gcc
+                       predict the 0xFF branch taken and keep the group load ahead of the
+                       table load. */
                     if (o->mission == 0xFF)
                         goto record;
                     do {
                         group = o->mission;
                     } while (0);
                     if (D_L03_0015FC88[group] != 0xFF && D_0014C050[group + current_level_index * 16] == 0xFF) {
+                        /* Fakematch: see above. */
                         do {
                         record:
                             D_L03_001BB330.collected[(s16)o->save_id] = o->mission + 2;
@@ -1732,8 +1734,8 @@ void FUN_L03_002db558(struct Moby *m) {
                 D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                     ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                 o = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
-                /* Same record test as above; the goto and the do/while (0) loop note keep
-                   the group byte's zero-extend ahead of the table address. */
+                /* Fakematch: same record test as above; the goto and the do/while (0)
+                   loop note keep the group byte's zero-extend ahead of the table address. */
                 if (o->mission == 0xFF)
                     goto rec2;
                 do {

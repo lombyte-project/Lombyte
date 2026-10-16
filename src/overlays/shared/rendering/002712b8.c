@@ -550,6 +550,7 @@ s32 FUN_001fa6d0(f32);
 void add_vector_xyz_cf(u8 *, u8 *, void *) __asm__("FUN_L00_0024f7c8");
 P_2725d8 *FUN_L00_002725d8(u8 *a0, u8 *a1, s32 a2, s32 a3, f32 a4, f32 a5) {
     P_2725d8 *p = FUN_L00_002678b8_c2(0x37);
+    /* Fakematch: the dead update gives a0 and a3 retail's saved registers. */
     a3++;
     a3--;
     if (p) {

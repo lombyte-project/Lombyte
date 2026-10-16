@@ -11,6 +11,7 @@ int point_is_clockwise(int a0, int a1, int a2, int a3, int t0, int t1) {
 
     dx = a0 - a2;
     dy = a1 - a3;
+    /* Fakematch: the block keeps the two differences below dx and dy. */
     do {
         int term1 = (t0 - a2) * dy;
         int term2 = (t1 - a3) * dx;

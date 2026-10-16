@@ -10,11 +10,11 @@ void extract_matrix_rotation_quaternion(s32 arg0, s32 arg1) {
 
     buf = sp_slot;
     copy_matrix_rotation(buf);
-    /* The single-iteration do/while wrappers are allocator-shape levers:
-       both compile to plain calls (code-identical) but select retail's
-       callee-saved register roles. */
+    /* Fakematch: the single-iteration do/while wrappers compile to plain
+       calls but select retail's callee-saved register roles. */
     do {
         matrix_to_quaternion(arg0, sp_slot);
+        /* Fakematch: see above. */
         do {
             copy_matrix3x4(arg1, sp_slot);
         } while (0);

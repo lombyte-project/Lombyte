@@ -45,6 +45,7 @@ s32 rebuild_configured_text_label_list(void) {
     text_ids = label_text_table;
     do {
         entry_count = 0;
+        /* Fakematch: the block swaps the selector and entry pointers into retail's registers. */
         do {
             /* Retail scans twelve selectors despite copying eight selector words and
        seven text words. Preserve that original overrun while this stays pending. */

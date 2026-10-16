@@ -933,7 +933,7 @@ void FUN_L00_00206c08(void) {
     clear:
         *slot = -1;
         slot++;
-        /* empty block between the two steps: retail steps slot before off */
+        /* Fakematch: the empty block makes retail step slot before off. */
         do {
         } while (0);
         off += 4;
