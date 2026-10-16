@@ -371,7 +371,12 @@ extern volatile float D_L18_00162558;
 extern float D_L18_0016255C;
 extern int D_L18_001624F8 __attribute__((sda));
 extern int D_L18_001624FC __attribute__((sda));
-extern float D_L18_001DFB90[4][4];
+float D_L18_001DFB90[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
 void FUN_L18_002f9780(void) {
     Pk_9780 pk;
     float mat[4][4];
