@@ -2109,13 +2109,14 @@ def build_overlays() -> Path:
     ninja_path = OVERLAYS_BUILD / "build.ninja"
     ninja = ninja_syntax.Writer(open(str(ninja_path), "w"), width=9999)
     # obj/ only checks that the file compiles as written; its code is never
-    # compared.  -G0 keeps GNU as from relaxing bare symbol accesses, which
-    # it asserts on (tc-mips.c:11454) when one sits in a noreorder delay slot
-    # and an unsized symbol is loaded later in the same frag.
+    # compared.  GNU as can assert (tc-mips.c:11454) on a bare symbol access
+    # in a noreorder delay slot, with -G0 on some files and without it on
+    # others, so a file passes when it assembles either way.
+    overlay_cc = f"{game_root}/ee-gcc -c {includes} {LANG_DEFINE} {COMPILER_FLAGS} $in -o $out"
     ninja.rule(
         "overlay-cc",
         description="overlay-cc $in",
-        command=f"{game_root}/ee-gcc -c {includes} -Wa,-G0 {LANG_DEFINE} {COMPILER_FLAGS} $in -o $out",
+        command=f"{overlay_cc.replace(' -c ', ' -c -Wa,-G0 ', 1)} 2>/dev/null || {overlay_cc}",
     )
     ninja.rule(
         "c-only",
