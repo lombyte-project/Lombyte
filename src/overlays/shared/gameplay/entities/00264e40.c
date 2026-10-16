@@ -18,7 +18,6 @@ void FUN_L02_00264e40(char *moby) {
 }
 #include "qcopy.h"
 
-/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/entities/00264e40.c, FUN_L02_00264e70. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E88), where it is exact; names translated to the US level program. */
 
 typedef struct { char *p[7]; short timer; } Slots_265E88;

@@ -1129,7 +1129,7 @@ void FUN_L00_002d2158(int collision_arg, Moby_2D3608 *carrier, float *position)
 }
 #include "qzero.h"
 
-/* Decoy glove update: state machine on moby[0x20], per-object data block at moby[0x78]. Adapted from Lombyte (MIT) for PAL: none. */
+/* Decoy glove update: state machine on moby[0x20], per-object data block at moby[0x78]. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D3B20), where it is exact; names translated to the US level program. */
 
 typedef struct {
