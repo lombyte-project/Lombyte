@@ -100,9 +100,7 @@ extern s32 D_L07_0015F5F0;
 extern s32 D_L07_0015FFC0;
 extern s16 D_L07_00197A80[];
 extern u16 D_L07_001AFEE0[][16];
-extern char D_L07_0020FA20[], D_L07_0020FA70[],
-    D_L07_0020FB30[],
-    D_L07_0020FCB8[], D_L07_0020FCD0[],
+extern char D_L07_0020FA20[], D_L07_0020FA70[], D_L07_0020FB30[], D_L07_0020FCB8[],
     D_L07_0020FCE8[];
 extern char D_L07_0015FC80[];
 extern char D_L07_0032C980[];
@@ -129,6 +127,7 @@ char D_L07_0020FC58[] = "shrub insts:    %.1fK\n";
 char D_L07_0020FC70[] = "moby insts:     %.1fK\n";
 char D_L07_0020FC88[] = "moby pvars:     %.1fK\n";
 char D_L07_0020FCA0[] = "paths:          %.1fK\n";
+char D_L07_0020FCD0[] = "end of mem:     %.1fM\n";
 extern s32 D_L07_001B1B00[];
 extern char *D_L18_001C6200_26b768[] __asm__("D_L07_001C5880");
 extern char *D_L18_001BCA30_26b768[] __asm__("D_L07_001BC0B0");
