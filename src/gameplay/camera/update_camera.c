@@ -10,7 +10,7 @@ extern char D_001870A0[];
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
 extern void advance_timed_camera_control(void) __asm__("FUN_001eda60");
 extern void refresh_camera_control_flags(void) __asm__("func_001ED940");
-extern void FUN_001ed470(void);
+extern void update_camera_tracking_state(void) __asm__("FUN_001ed470");
 extern void update_camera_blend(char *) __asm__("FUN_001ed2b0");
 extern void start_camera_blend(void *) __asm__("func_001EC8A0");
 extern int update_all_cameras(void) __asm__("func_001EC420");
@@ -46,7 +46,7 @@ void update_camera(void) {
     (*(int *)(c + 0x398))++;
     advance_timed_camera_control();
     refresh_camera_control_flags();
-    FUN_001ed470();
+    update_camera_tracking_state();
     update_all_cameras();
     target = *(char **)(c + 0x180);
     if ((unsigned short)(*(unsigned short *)(c + 0x270) - 1) < 2) {

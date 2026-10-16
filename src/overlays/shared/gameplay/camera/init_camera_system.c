@@ -99,7 +99,7 @@ typedef struct {
 extern S_u D_L00_00166C80_c __asm__("D_L00_00166C80");
 extern char *FUN_L00_001eb1f8_u(int) __asm__("FUN_L00_001eb1f8");
 extern char D_L00_00169110[];
-extern void FUN_001ed470(void);
+extern void update_camera_tracking_state(void) __asm__("FUN_001ed470");
 void backup_current_cam(void) __asm__("FUN_001ebc90");
 void camera_run_setup_to_new_cam(struct Moby *cam) __asm__("FUN_001ebec8");
 
@@ -117,7 +117,7 @@ void init_camera_system(void) {
     *(short *)(*(char **)(g + 0x180) + 0x8E) = 1;
     *(char **)(*(char **)(g + 0x180) + 0x70) = D_L00_00169110;
     *(short *)(g + 0x270) = 0;
-    FUN_001ed470();
+    update_camera_tracking_state();
     camera_run_setup_to_new_cam(*(char **)(g + 0x180));
     backup_current_cam();
     a = *(char **)(g + 0x180);

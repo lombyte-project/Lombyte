@@ -5523,25 +5523,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/camera/fun_001ed470",
-        "source_path": "src/gameplay/camera/fun_001ed470.c",
-        "address": "0x001ed470",
-        "current_name": "FUN_001ed470",
-        "proposed_name": "camera_pre_update",
-        "logical_group": "unclassified",
-        "status": "needs_review",
-        "confidence": "low",
-        "evidence": [
-          {
-            "kind": "cross_project_name",
-            "project": "ReRAC",
-            "name": "CameraPreUpdate",
-            "note": "suggested, from its level-01 copy"
-          }
-        ],
-        "logical_group_confidence": "unresolved"
-      },
-      {
         "unit": "gameplay/camera/update_camera_underwater_flag",
         "source_path": "src/gameplay/camera/update_camera_underwater_flag.c",
         "address": "0x001ed7f0",
@@ -20029,6 +20010,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x001f5878\u20130x001f58cc the function converts x, x+width, y and y+height to 16ths of a pixel using convert_float_to_word and adds g_nViewportFixedLeft/Top minus 8; 0x001f58d0\u20130x001f5904 rejects rectangles outside the coordinate bounds. At 0x001f591c\u20130x001f5978 it begins a packet through g_pDmaPacketCursor (0x00160f00) and copies the template at 0x00160860. The primitive value 0x154 at 0x001f59e8/0x001f5a00 selects a textured triangle strip with fixed UV coordinates; 0x001f5a30\u20130x001f5a4c emits four UV/XYZ pairs combining the two texture endpoints and two screen endpoints. The cursor advances by a total 0x90 bytes. Checked caller FUN_001f6638 indexes four-byte records by character code and advances the screen x position by a scaled record width (0x001f68ac\u20130x001f68c0); its calls at 0x001f67b4 and 0x001f68a0 supply 16x16 atlas regions and scaled screen dimensions, while 0x001f6858 supplies a 24x16 region. This confirms textured rectangle emission rather than text parsing within the target."
+          }
+        ]
+      },
+      {
+        "address": "0x001ed470",
+        "current_name": "FUN_001ed470",
+        "proposed_name": "update_camera_tracking_state",
+        "logical_group": "gameplay/camera",
+        "unit": "gameplay/camera/update_camera_tracking_state",
+        "source_path": "src/gameplay/camera/update_camera_tracking_state.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "Preserves the supplied recovered Ghidra name. Supplied caller record shows update_camera_frame calling at 0x001edb08. Retail 0x001ed4c4-0x001ed4e0 normalizes g_afCameraTargetDirection (0x0013f5e0) and shifts/publishes direction in g_cameraTrackingState (0x001870d0); 0x001ed580, 0x001ed5a4 and 0x001ed5c4 damp its three direction components using helper 0x001ebd78. At 0x001ed5e8-0x001ed660 it subtracts the previous target position from target position 0x0013f3d0, measures and decomposes displacement, and retains the new position. At 0x001ed668-0x001ed6dc it conditionally damps height; 0x001ed6e0-0x001ed724 shifts history; 0x001ed728-0x001ed7ac retains selected-object address/value and suppresses deltas below 0.001. These state updates prove the broad camera tracking role without assigning unknown mode or object-class meanings."
           }
         ]
       }
