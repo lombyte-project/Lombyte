@@ -38,9 +38,9 @@ int FUN_L00_0027f448(P_27f448 *p) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027f700.s", FUN_L00_0027f700);
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_00286068), where it is exact; names translated to the US level program. */
 
-typedef struct { short uid; short bolts; } BoltSource_286068;
+typedef struct { short uid; short bolts; } BoltSourceStats;
 
-extern BoltSource_286068 D_0014D590[][64];
+extern BoltSourceStats D_0014D590[][64];
 
 int FUN_L00_00284d90(int lvl, int uid) {
     int k = -1;

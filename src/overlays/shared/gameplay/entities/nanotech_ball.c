@@ -1127,8 +1127,7 @@ typedef struct {
     char p1[0x350 - 0x15C];
     char m350[0x40];
 } C_002da250;
-extern char D_L00_00166C80[]
-    __attribute__((section(".data")));
+extern char D_L00_00166C80[] __attribute__((section(".data")));
 typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) V_002da250;
@@ -2830,7 +2829,6 @@ void FUN_001ff260_002ddcb8(void *) __asm__("FUN_L00_001ff260");
 float FUN_00257cb0_002ddcb8(void) __asm__("FUN_L00_00257cb0");
 void FUN_0025fc08_002ddcb8(void *, float, void *, void *) __asm__("FUN_L00_0025fc08");
 extern char D_L00_001E4B40[];
-extern char D_L00_001E4C80_002ddf60[] __asm__("D_L00_001E4C80");
 extern char D_L00_001E6020[] __asm__("D_L00_001E6020");
 extern char D_L00_001E5FE0[];
 extern short D_L00_001E6008[] __attribute__((section(".data")));
@@ -3019,7 +3017,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     i = 0;
     do {
         j = i + 1;
-        record = D_L00_001E4C80_002ddf60 + (i * 3 << 3);
+        record = (char *)D_L00_001E4C80 + (i * 3 << 3);
         if (!*(char **)(record + 20) && count < 5) {
             row = 9;
             if (((short *)(D_L00_001E5F40_002ddcb8 + 0xc8))[9] < 64) {
@@ -3085,7 +3083,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                 }
             }
             if (*(char **)(record + 20)) {
-                record = D_L00_001E4C80_002ddf60 + (i * 3 << 3);
+                record = (char *)D_L00_001E4C80 + (i * 3 << 3);
                 fraction = *(float *)(record + 4) / length;
                 if (*(short *)record == 2) *(short *)(*(char **)(record + 20) + 10) = 100;
                 else if (*(short *)record < 2) {
@@ -3093,7 +3091,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
                     if (*(short *)(*(char **)(record + 20) + 10) < 61) *(short *)(*(char **)(record + 20) + 10) = 60;
                 }
                 i = (i * 3 << 3);
-                record = D_L00_001E4C80_002ddf60 + i;
+                record = (char *)D_L00_001E4C80 + i;
                 if (*(short *)record == 1) {
                     effect = *(char **)(record + 20);
                     FUN_001ff2a8_002ddf60(&temp2, initial_vector, effect + 16);

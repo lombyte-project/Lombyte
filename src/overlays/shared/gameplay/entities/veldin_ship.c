@@ -1162,7 +1162,7 @@ extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 extern void transform_vector_alt() __asm__("FUN_001f9d20");
 void FUN_L00_002d2158_c(int collision_arg, Moby_2D3608 *carrier, float *position) __asm__("FUN_L00_002d2158");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
-extern char D_0013E539[];
+extern u8 D_0013E539_lui __asm__("D_0013E539") __attribute__((section(".data")));
 extern char D_0013CAE4[];
 extern char D_00141680[];
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
@@ -1197,7 +1197,7 @@ void FUN_L00_002d2670(unsigned char *moby) {
     p = *(char **)(d + 0x50);
     if (p) {
         *(int *)(p + 0x98) = 1;
-        if (*(unsigned char *)(((char *)&D_0013E539)) && *(short *)(*(char **)(d + 0x50) + 0xA6) != 0x76C) {
+        if (D_0013E539_lui && *(short *)(*(char **)(d + 0x50) + 0xA6) != 0x76C) {
             qzero(&loc);
             FUN_L00_0025f800(*(char **)(d + 0x50), D_L00_001B0830);
             ((void (*)(void *))mark_moby_for_removal)(*(char **)(d + 0x50));
