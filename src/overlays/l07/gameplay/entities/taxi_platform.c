@@ -2286,7 +2286,7 @@ void FUN_L07_0030eb38(char *data) {
 extern char *D_L07_0015FFD8_30ed30 __asm__("D_L07_0015FFD8");
 extern char *D_L07_001600EC_30ed30 __asm__("D_L07_001600EC");
 char D_L07_00211720[] = "Illegal Bounding path for moby 1059 instance #%d.\n";
-extern char D_L07_00211758[];
+char D_L07_00211758[] = "Illegal Hero Detect path for moby 1059 instance #%d.\n";
 extern char D_L07_00211790[];
 extern char D_L07_002117C0[];
 extern void stub_printf(char *, int) __asm__("FUN_001e93b0");
