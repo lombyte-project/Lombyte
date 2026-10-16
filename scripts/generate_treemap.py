@@ -1022,8 +1022,8 @@ def render_svg(
         f'<text x="{cx:.1f}" y="{dy0 + 73}" text-anchor="middle" font-family="{esc(FONT)}" '
         f'font-size="10" fill="{TEXT}">exe + overlays in C</text>'
     )
-    # Legend: the colour key in the drawer's top-right corner, on a dark
-    # plate so it reads over the dimmed treemap.
+    # Legend: the colour key in the drawer's top-right corner, over a shade
+    # so it reads over the dimmed treemap.
     legend_font = 10
     swatch = 10
     gap = 15
@@ -1042,9 +1042,18 @@ def render_svg(
     row_x = plate_x + pad
     plate_height = ddy - 2 * inset
     rows_height = row_step * (len(legend_rows) - 1) + swatch
+    # The shade fades in from the left and runs to the drawer's edge, so no
+    # edge can cut the text when the font is wider than estimated.
+    shade_x = plate_x - 60
     lines.append(
-        f'<rect x="{plate_x}" y="{dy0 + inset}" width="{plate_width}" height="{plate_height}" '
-        f'rx="6" fill="{BACKGROUND}" fill-opacity="0.72" pointer-events="none"/>'
+        f'<linearGradient id="legend-shade" x1="0" x2="1" y1="0" y2="0">'
+        f'<stop offset="0" stop-color="{BACKGROUND}" stop-opacity="0"/>'
+        f'<stop offset="0.4" stop-color="{BACKGROUND}" stop-opacity="0.5"/>'
+        f'<stop offset="1" stop-color="{BACKGROUND}" stop-opacity="0.5"/></linearGradient>'
+    )
+    lines.append(
+        f'<rect x="{shade_x}" y="{dy0}" width="{right - shade_x}" height="{ddy}" '
+        f'fill="url(#legend-shade)" clip-path="url(#drawer-clip)" pointer-events="none"/>'
     )
     for offset, (color, text) in enumerate(legend_rows):
         y = dy0 + inset + (plate_height - rows_height) / 2 + offset * row_step
@@ -1060,7 +1069,7 @@ def render_svg(
         )
         lines.append(
             f'<text x="{row_x + gap}" y="{y + 9}" '
-            f'font-family="{esc(FONT)}" font-size="{legend_font}" fill="{MUTED}">{text}</text>'
+            f'font-family="{esc(FONT)}" font-size="{legend_font}" fill="{TEXT}">{text}</text>'
         )
 
     # The executable leads the tree, above the shared code.
