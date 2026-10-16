@@ -98,7 +98,7 @@ extern s16 D_L18_00198400[];
 extern u16 D_L18_001B0860[][16];
 extern char D_L18_001F0EB0[], D_L18_001F0F00[],
     D_L18_001F0FC0[],
-    D_L18_001F1058[], D_L18_001F1070[], D_L18_001F1088[], D_L18_001F10A0[],
+    D_L18_001F1070[], D_L18_001F1088[], D_L18_001F10A0[],
     D_L18_001F10B8[], D_L18_001F10D0[], D_L18_001F10E8[], D_L18_001F1100[],
     D_L18_001F1118[], D_L18_001F1130[], D_L18_001F1148[], D_L18_001F1160[],
     D_L18_001F1178[];
@@ -117,6 +117,7 @@ char D_L18_001F0FF8[] = "sky:            %.1fK\n";
 char D_L18_001F1010[] = "collision:      %.1fK\n";
 char D_L18_001F1028[] = "shared vram:    %.1fK\n";
 char D_L18_001F1040[] = "particle vram:  %.1fK\n";
+char D_L18_001F1058[] = "effects vram:   %.1fK\n";
 extern s32 D_L18_001B2480[];
 extern char *D_L18_001C6200[] __asm__("D_L18_001C6200");
 extern char *D_L18_001BCA30_2463f8[] __asm__("D_L18_001BCA30");
