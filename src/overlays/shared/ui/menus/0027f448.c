@@ -36,36 +36,24 @@ int FUN_L00_0027f448(P_27f448 *p) {
 }
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0027f700.s", FUN_L00_0027f700);
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00284d90.s", FUN_L00_00284d90);
-#else
-extern short bolt_source_stats[][64][2] __asm__("D_0014D590");
-int FUN_L00_00284d90(int groupIndex, int itemIndex) {
-    int slotIndex = -1;
-    int value, current;
-    short *slot, *writeSlot;
-    if (itemIndex >= 0) {
-        value = itemIndex + 1;
-        slot = &bolt_source_stats[groupIndex][0][0];
-        slotIndex = 63;
-        current = *(writeSlot = slot + 126);
-        slot = writeSlot;
-        if (current == value) goto store;
-        if (current == 0) goto store;
-        do {
-            slotIndex--;
-            slot -= 2;
-            if (slotIndex < 0) break;
-            writeSlot = slot;
-            current = *writeSlot;
-            if (current == value) goto store;
-        } while (current != 0);
-        if (slotIndex >= 0) goto store;
+/* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_00286068), where it is exact; names translated to the US level program. */
+
+typedef struct { short uid; short bolts; } BoltSource_286068;
+
+extern BoltSource_286068 D_0014D590[][64];
+
+int FUN_L00_00284d90(int lvl, int uid) {
+    int k = -1;
+
+    if (uid >= 0) {
+        uid++;
+        k = 63;
+        while (k >= 0 && D_0014D590[lvl][k].uid != uid && D_0014D590[lvl][k].uid != 0) {
+            k--;
+        }
+        if (k >= 0) {
+            D_0014D590[lvl][k].uid = uid;
+        }
     }
-    goto done;
-store:
-    *writeSlot = value;
-done:
-    return slotIndex;
+    return k;
 }
-#endif /* NON_MATCHING */

@@ -12,79 +12,79 @@ int FUN_L00_0027a6e0(char *menu) {
     return 0;
 }
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002831c0.s", FUN_L00_002831c0);
-#else
-#include "rnc/input/pad_state.h"
+/* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_00284410), where it is exact; names translated to the US level program. */
 
-extern struct PadState D_0013C940;
-#define D_0015EF78 (*(s32 *)0x0015ef78)
-extern s16 D_L00_001BA4A8[];
-extern u8 D_L00_001B9BA0[];
-extern u8 items_acquired[] __asm__("D_0013D4E8");
-extern u8 D_0013D4C0[];
-extern u8 D_0013D388[];
-extern u8 D_0013D408[];
-extern void unlock_planet(s32) __asm__("FUN_L00_002607d0");
-extern void FUN_L00_0028dd40(s32, s32, s32) __asm__("FUN_0022db10");
-extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
+extern char D_0013D408[];
+extern char D_0013D4C0[];
+extern char D_0013D4E8[];
+extern char D_0013D388[];
+extern short D_L00_001603F8 __attribute__((sda));
+extern short D_L00_001BA4A8[];
+extern unsigned char D_0013A4E0[];
+extern unsigned char D_0013C940[];
+extern unsigned char D_L00_001B9BA0[];
+extern void FUN_L00_002607d0(int);
+extern void FUN_L00_00263d40(int, int);
+s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 
 void FUN_L00_002831c0(void) {
-    s32 pressed;
-    s32 direction;
-    s32 count;
-    s32 code;
-    s32 index;
-    s32 matched;
+    char *pad = (char *)((char *)&D_0013C940);
+    int lim0, lim;
+    int va, vb, vc;
+    int pressed, direction, count, j, code, index, matched;
+    if ((*(long *)(pad + 0x1C0) & 0xF) == 6) {
+        pressed = *(int *)(pad + 0x1C4);
+        if (!(pressed & 0xF0A0)) return;
 
-    if (((*(u64 *)&D_0013C940.held_unmasked) & 15) == 6) {
-        pressed = D_0013C940.pressed_unmasked;
-        if ((pressed & 0xF0A0) && (D_0015EF78 < 20)) {
-            count = D_0015EF78;
-            if (pressed & 0x1000) direction = 0;
-            else if (pressed & 0x4000) direction = 1;
-            else if (pressed & 0x8000) direction = 2;
-            else if (pressed & 0x2000) direction = 3;
-            else direction = (pressed & 0x80) ? 4 : 5;
-            D_0015EF78 = count + 1;
-            D_L00_001BA4A8[count] = direction;
-            if (count + 1 != 20) return;
-
-            code = -1;
-            for (index = 2; index < 0x93; index++) {
-                if (D_L00_001BA4A8[0] == D_L00_001B9BA0[index & 0xff]) {
-                    matched = 1;
-                    count = 1;
-                    do {
-                        if (D_L00_001BA4A8[count] != D_L00_001B9BA0[(index * count + index) & 0xff]) {
-                            matched = 0;
-                            break;
-                        }
-                        count++;
-                    } while (count < 20);
-                    if (matched) {
-                        code = index - 2;
-                        break;
-                    }
+        if (*(int *)&D_L00_001603F8 >= 20) return;
+        if (pressed & 0x1000) direction = 0;
+        else if (pressed & 0x4000) direction = 1;
+        else if (pressed & 0x8000) direction = 2;
+        else if (pressed & 0x2000) direction = 3;
+        else direction = (pressed & 0x80) ? 4 : 5;
+        count = *(int *)&D_L00_001603F8;
+        D_L00_001BA4A8[count++] = direction;
+        *(int *)&D_L00_001603F8 = count;
+        if (count != 20) return;
+        code = -1;
+        index = 2;
+        /* Fakematch: the bound read back through memory stays a register compare */
+        lim0 = 0x93;
+        lim = *(int *)&lim0;
+        for (; index < lim; index++) {
+            matched = 1;
+            for (j = 0; j < 20; j++) {
+                if (D_L00_001BA4A8[j] != D_L00_001B9BA0[(j * index + index) & 0xff]) {
+                    matched = 0;
+                    break;
                 }
             }
-            if (code < 0) return;
-            if (code < 0x25) {
-                D_0013D4C0[code] = 1;
-                items_acquired[code] = 1;
-            } else if (code < 0x37) {
-                unlock_planet(code - 0x24);
-            } else if (code < 0x3d) {
-                D_0013D388[code - 0x37] = 1;
-            } else if (code < 0x5b) {
-                u8 *flag = &D_0013D408[code - 0x3d];
-                if (!*flag) {
-                    *flag = 1;
-                    FUN_L00_0028dd40(1, 0, 0);
-                    queue_dialogue_message(0x53d6, -1);
-                }
+            if (matched) {
+                code = index - 2;
+                break;
             }
         }
-    } else D_0015EF78 = 0;
+        if (code == -1) return;
+        va = code - 0x24;
+        vb = code - 0x37;
+        vc = code - 0x3d;
+        if (code < 0x25) {
+            D_0013D4C0[code] = 1;
+            D_0013D4E8[code] = 1;
+        } else if ((unsigned)(code - 0x25) < 0x12) {
+            FUN_L00_002607d0(va);
+        } else if ((unsigned)vb < 6) {
+            char *p3 = D_0013D388;
+            p3[vb] = 1;
+        } else if ((unsigned)vc < 0x1e) {
+            unsigned char *q = (unsigned char *)D_0013D408 + vc;
+            if (!*q) {
+                *q = 1;
+                allocate_voice_for_bank_entry(1, 0, 0);
+                FUN_L00_00263d40(0x53D6, -1);
+            }
+        }
+    } else {
+        *(int *)&D_L00_001603F8 = 0;
+    }
 }
-#endif

@@ -1318,98 +1318,79 @@ void FUN_L05_00254058(void) {
     }
 }
 #endif
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254358.s", FUN_L05_00254358);
-#else
-extern char *D_L05_001B0930[];
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
-extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern f32 find_ground_height(f32, void *, s32) __asm__("FUN_00213508");
-extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
+/* Finds the nearest path node ahead of the hero (behind the facing test) and returns its position and heading. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00254B38), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    f32 x, y, z, w;
-} __attribute__((aligned(16))) HelpPathPoint;
+extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
+extern int D_L05_001B0930; /* no foreign declaration */
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+float absolute_float_c(float input) __asm__("func_001F99C0");
+extern char D_0013F350[];
+extern char D_0013F3D0[];
+extern int D_0015EE84_2523C8 __asm__("D_0015ED84");
+extern char *D_L05_001B0CB0_254B38[] __asm__("D_L05_001B0930");
 
-typedef struct {
-    s32 count;
-    u8 pad[12];
-    HelpPathPoint points[1];
-} HelpPath;
+void FUN_L05_00254358(float *out, float *rot) {
+    char *g = (char *)((char *)&D_0013F350);
+    char *m = *(char **)(g + 0x86C);
+    char *path;
+    float distance;
+    int i, best;
+    float tmp[4] __attribute__((aligned(16)));
 
-void FUN_L05_00254358(f32 *position, f32 *direction) {
-    struct Hero *g;
-    HelpPath *path;
-    f32 height_limit;
-    f32 best;
-    s32 index;
-    s32 selected;
-    HelpPathPoint point;
-    HelpPathPoint *p;
-    HelpPath *cursor;
-
-
-    if (hero.unk86C == 0) {
-        qcopy(position, (char *)&hero + 0x80);
-        qcopy(direction, (char *)&hero + 0x90);
+    if (m == 0) {
+        qcopy(out, g + 0x80);
+        qcopy(rot, g + 0x90);
         return;
     }
-    path = (HelpPath *)D_L05_001B0930[*(s32 *)(*(char **)(hero.unk86C + 0x78) + 0x24)];
-    best = 9999999.0f;
-    index = 0;
-    selected = 0;
-
-    if (path->count > 0) {
-        height_limit = 4.0f;
-        p = path->points;
-        cursor = path;
-        do {
-            f32 a;
-            s32 next;
-            s32 count;
-            f32 b;
-            g = &hero;
-            a = fast_arc_tan(cursor->points[0].x - g->motion.pos.f[0], cursor->points[0].y - g->motion.pos.f[1]);
-            count = path->count;
-            next = (s32)((u32)count + 2U);
-            next = (s32)((u32)index + (u32)next) % count;
-            b = fast_arc_tan(path->points[next].x - cursor->points[0].x, path->points[next].y - cursor->points[0].y);
-            if (!(fast_difference_between_rotations(a, b) > 1.5707964f)) goto next_point;
-            {
-                if (current_level_index == 0x10 && g->unk8B4 != 0) {
-                    f32 a = ((HelpPath *)g->unk8B4)->points[*(s16 *)((char *)g + 0x8C8)].z;
-                    f32 b = ((HelpPath *)g->unk8B4)->points[g->unk898].z;
-                    f32 high = cursor->points[0].z;
-                    if (a < b) high = b - high;
-                    else high = a - high;
-                    if (absolute_float(high) > height_limit) {
-                        goto next_point;
+    path = D_L05_001B0CB0_254B38[*(int *)(*(char **)(m + 0x78) + 0x24)];
+    distance = 9999999.0f;
+    best = 0;
+    for (i = 0; i < *(int *)path; i += 2) {
+            char *h = (char *)((char *)&D_0013F350);
+            char *p = path + i * 16;
+            float limit = 4.0f;
+            float angle = fast_arc_tan_c(*(float *)(p + 0x10) - *(float *)(h + 0x80), *(float *)(p + 0x14) - *(float *)(h + 0x84));
+            int n2 = *(int *)path + 2;
+            int next = (i + n2) % *(int *)path;
+            char *q = path + next * 16;
+            if (fast_difference_between_rotations(angle, fast_arc_tan_c(*(float *)(q + 0x10) - *(float *)(p + 0x10), *(float *)(q + 0x14) - *(float *)(p + 0x14))) > 1.5707964f) {
+                float d;
+                if (D_0015EE84_2523C8 == 0x10 && *(char **)(h + 0x8B4) != 0) {
+                    char *verts = *(char **)(h + 0x8B4);
+                    char *v1 = verts + *(short *)(h + 0x8C8) * 16;
+                    char *v2 = verts + *(short *)(h + 0x898) * 16;
+                    float z1 = *(float *)(v1 + 0x18);
+                    float z2 = *(float *)(v2 + 0x18);
+                    if (z1 < z2) {
+                        if (absolute_float_c(z2 - *(float *)(p + 0x18)) > limit)
+                            goto next_point;
+                    } else {
+                        if (absolute_float_c(z1 - *(float *)(p + 0x18)) > limit)
+                            goto next_point;
                     }
                 }
-                {
-                    f32 distance = vector_distance_xy((char *)&hero + 0x80, p);
-                    if (distance < best) {
-                        best = distance;
-                        selected = index;
-                    }
+                d = vector_distance_xy_alt(((char *)&D_0013F3D0), path + i * 16 + 0x10);
+                if (d < distance) {
+                    distance = d;
+                    best = i;
                 }
             }
-next_point:
-            index += 2;
-            p += 2;
-            cursor = (HelpPath *)((char *)cursor + 0x20);
-        } while (index < path->count);
+        next_point:;
     }
-    qcopy(position, &path->points[selected]);
-    qcopy(&point, position);
-    point.z += 2.0f;
-    position[2] = find_ground_height(0.5f, &point, 0);
-    clear_u64_value(direction);
-    direction[2] = fast_arc_tan(path->points[selected + 1].x - path->points[selected].x, path->points[selected + 1].y - path->points[selected].y);
+    qcopy(out, path + best * 16 + 0x10);
+    qcopy(tmp, out);
+    tmp[2] += 2.0f;
+    out[2] = probe_ground_height(tmp, 0, 0.5f);
+    clear_u64_value(rot);
+    {
+        float *a = (float *)(path + best * 16);
+        float *b = (float *)(path + (best + 1) * 16);
+        rot[2] = fast_arc_tan_c(b[4] - a[4], b[5] - a[5]);
+    }
 }
-#endif
 extern int D_0015ED84_lui __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern int FUN_001f96f8_254608(int) __asm__("FUN_001f96f8");
 typedef int u128_254608 __attribute__((mode(TI)));

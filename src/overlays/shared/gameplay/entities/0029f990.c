@@ -158,91 +158,70 @@ void FUN_L00_0029fcd0(void *m) {
     FUN_0020d330_29fcd0(m, 1);
     FUN_001f5450_29fcd0(w, h, x, y, 0, 0, x, y, 0x80808080L, D_0015EED0_29fcd0);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0029ff58.s", FUN_L00_0029ff58);
-#else
-typedef struct {
-    float position[4][4];
-    int color[4];
-    float uv[4][2];
-    long extra[4];
-} L00Quad29ff58;
+/* Draws the four quads of the hologram cone, scrolling the texture coordinates. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_002A11E8), where it is exact; names translated to the US level program. */
 
-extern float D_L00_00161184 __attribute__((sda));
-extern int D_L00_001CA480[4][4];
-extern float D_L00_001CA380[16][4];
-extern float D_L00_001CA410[8][2];
-extern int D_L00_001CA458[];
-typedef struct {
-    char pad[0x1c];
-    char *f1C;
-} L00ObjectState29ff58;
-extern L00ObjectState29ff58 D_L00_001CA4C0_29ff58 __asm__("D_L00_001CA4C0");
-extern long FUN_001f44b8_29ff58(int) __asm__("FUN_001f44b8");
-extern void FUN_001f9cf8_29ff58(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_001f7d30_29ff58(void *, int, int) __asm__("FUN_001f7d30");
+struct Quad { int a, b, c, d; };
+
+struct HoloPacket {
+    float pos[4][4];
+    int col[4];
+    float uv[4][2];
+    long hdr[4];
+};
+
+extern float D_L00_001CA380[][4];
+extern float D_L00_001CA410[][2];
+extern int D_L00_001CA458_d[] __asm__("D_L00_001CA458") __attribute__((section(".data")));
+extern int D_L00_001CA4C0_d[] __asm__("D_L00_001CA4C0") __attribute__((section(".data")));
+extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
+extern short D_L00_00161184_d __asm__("D_L00_00161184") __attribute__((sda));
+extern struct Quad D_L00_001CA480_d[] __asm__("D_L00_001CA480") __attribute__((section(".data")));
+extern void fast_draw_quad_real(void *, void *, int);
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
 void FUN_L00_0029ff58(void) {
-    L00Quad29ff58 q;
-    float transformed[4][4];
-    float *position;
-
-    int offset;
+    struct HoloPacket s;
+    float v[4][4];
     int i;
-    int index0, index1, index2, index3;
-    int *indices, *second, *third;
-    D_L00_00161184 = D_L00_00161184 + 0.01f;
-    if (1.0f < D_L00_00161184) {
-        D_L00_00161184 = D_L00_00161184 - 1.0f;
-    }
-    q.extra[0] = 0;
-    q.extra[3] = 0x4000000044L;
-    indices = D_L00_001CA480[0];
-    q.extra[2] = 1;
-    q.extra[1] = FUN_001f44b8_29ff58(0x18);
-    i = 0;
-    while (1) {
-        offset = i * 16;
-        i++;
-        FUN_001f9cf8_29ff58(transformed[0], D_L00_001CA380[indices[0]], D_L00_001CA4C0_29ff58.f1C + 0xc0);
-        /* Each row is 16 bytes, so the low offset bits select its fields. */
-        second = (int *)((int)D_L00_001CA480 + (offset | 4));
-        FUN_001f9cf8_29ff58(transformed[1], D_L00_001CA380[*second], D_L00_001CA4C0_29ff58.f1C + 0xc0);
-        third = (int *)((int)D_L00_001CA480 + (offset | 8));
-        FUN_001f9cf8_29ff58(transformed[2], D_L00_001CA380[*third], D_L00_001CA4C0_29ff58.f1C + 0xc0);
-        FUN_001f9cf8_29ff58(transformed[3], D_L00_001CA380[indices[3]], D_L00_001CA4C0_29ff58.f1C + 0xc0);
-        position = (float *)(D_L00_001CA4C0_29ff58.f1C);
-#define SET_POSITION(n) \
-        q.position[n][0] = position[4] + transformed[n][0]; \
-        q.position[n][1] = position[5] + transformed[n][1]; \
-        q.position[n][2] = position[6] + transformed[n][2]
-        SET_POSITION(0);
-        SET_POSITION(1);
-        SET_POSITION(2);
-        SET_POSITION(3);
-#undef SET_POSITION
-        index0 = indices[0];
-        index1 = *second;
-        index2 = *third;
-        index3 = indices[3];
-        q.color[0] = D_L00_001CA458[index0];
-        q.color[1] = D_L00_001CA458[index1];
-        q.color[2] = D_L00_001CA458[index2];
-        q.color[3] = D_L00_001CA458[index3];
-        q.uv[0][0] = D_L00_001CA410[index0][0];
-        q.uv[0][1] = D_L00_001CA410[index0][1] + D_L00_00161184;
-        q.uv[1][0] = D_L00_001CA410[index1][0];
-        q.uv[1][1] = D_L00_001CA410[index1][1] + D_L00_00161184;
-        q.uv[2][0] = D_L00_001CA410[index2][0];
-        q.uv[2][1] = D_L00_001CA410[index2][1] + D_L00_00161184;
-        q.uv[3][0] = D_L00_001CA410[index3][0];
-        q.uv[3][1] = D_L00_001CA410[index3][1] + D_L00_00161184;
-        indices += 4;
-        FUN_001f7d30_29ff58(&q, 0, 1);
-        if (i >= 4) break;
+    *(float *)&D_L00_00161184_d = *(float *)&D_L00_00161184_d + 0.01f;
+    if (*(float *)&D_L00_00161184_d > 1.0f) *(float *)&D_L00_00161184_d = *(float *)&D_L00_00161184_d - 1.0f;
+    s.hdr[2] = 1;
+    s.hdr[3] = 0x4000000044L;
+    s.hdr[0] = 0;
+    s.hdr[1] = get_effect_texture_c(0x18);
+    for (i = 0; i < 4; i++) {
+        transform_vector_by_basis(v[0], D_L00_001CA380[D_L00_001CA480_d[i].a], (char *)D_L00_001CA4C0_d[7] + 0xC0);
+        transform_vector_by_basis(v[1], D_L00_001CA380[*(int *)((char *)D_L00_001CA480_d + i * 16 + 4)], (char *)D_L00_001CA4C0_d[7] + 0xC0);
+        transform_vector_by_basis(v[2], D_L00_001CA380[*(int *)((char *)D_L00_001CA480_d + i * 16 + 8)], (char *)D_L00_001CA4C0_d[7] + 0xC0);
+        transform_vector_by_basis(v[3], D_L00_001CA380[D_L00_001CA480_d[i].d], (char *)D_L00_001CA4C0_d[7] + 0xC0);
+        s.pos[0][0] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x10) + v[0][0];
+        s.pos[0][1] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x14) + v[0][1];
+        s.pos[0][2] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x18) + v[0][2];
+        s.pos[1][0] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x10) + v[1][0];
+        s.pos[1][1] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x14) + v[1][1];
+        s.pos[1][2] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x18) + v[1][2];
+        s.pos[2][0] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x10) + v[2][0];
+        s.pos[2][1] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x14) + v[2][1];
+        s.pos[2][2] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x18) + v[2][2];
+        s.pos[3][0] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x10) + v[3][0];
+        s.pos[3][1] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x14) + v[3][1];
+        s.pos[3][2] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x18) + v[3][2];
+        s.col[0] = D_L00_001CA458_d[D_L00_001CA480_d[i].a];
+        s.col[1] = D_L00_001CA458_d[*(int *)((char *)D_L00_001CA480_d + i * 16 + 4)];
+        s.col[2] = D_L00_001CA458_d[*(int *)((char *)D_L00_001CA480_d + i * 16 + 8)];
+        s.col[3] = D_L00_001CA458_d[D_L00_001CA480_d[i].d];
+        s.uv[0][0] = D_L00_001CA410[D_L00_001CA480_d[i].a][0];
+        s.uv[0][1] = D_L00_001CA410[D_L00_001CA480_d[i].a][1] + *(float *)&D_L00_00161184_d;
+        s.uv[1][0] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480_d + i * 16 + 4)][0];
+        s.uv[1][1] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480_d + i * 16 + 4)][1] + *(float *)&D_L00_00161184_d;
+        s.uv[2][0] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480_d + i * 16 + 8)][0];
+        s.uv[2][1] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480_d + i * 16 + 8)][1] + *(float *)&D_L00_00161184_d;
+        s.uv[3][0] = D_L00_001CA410[D_L00_001CA480_d[i].d][0];
+        s.uv[3][1] = D_L00_001CA410[D_L00_001CA480_d[i].d][1] + *(float *)&D_L00_00161184_d;
+        fast_draw_quad_real(&s, 0, 1);
     }
 }
-#endif
 #include "eetypes.h"
 #include "qzero.h"
 typedef struct {
@@ -322,7 +301,7 @@ extern void draw_mobys_setup(void) __asm__("FUN_0020d278");
 extern void init_moby_class_dists(void) __asm__("FUN_0020d1f0");
 extern void stash_moby_class_dists(void) __asm__("FUN_0020d218");
 extern void draw_moby_list(void *, s32) __asm__("FUN_0020d330");
-extern void FUN_L00_0029ff58(void);
+extern void FUN_L00_0029ff58_u(void) __asm__("FUN_L00_0029ff58");
 extern void render_vendor_capture_pass_sequence(s32) __asm__("FUN_00239780");
 extern void FUN_L00_0029fcd0_c(void *) __asm__("FUN_L00_0029fcd0");
 extern void FUN_00233980(s32, s64);
@@ -435,7 +414,7 @@ void FUN_L00_002a02b0(void) {
     }
     draw_moby_list(p->f1C, 1);
     if (p->f40 == 0) {
-        FUN_L00_0029ff58();
+        FUN_L00_0029ff58_u();
     }
     render_vendor_capture_pass_sequence(p->f1C);
     if (p->f5C != 0) {
