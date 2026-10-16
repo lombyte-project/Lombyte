@@ -52,7 +52,7 @@ extern void func_001F2260(void) __asm__("FUN_001f2260");
 extern void project_graphics_bounds(Vec4 *, Vec4 *, s32 *, s32 *, s32 *, s32 *)
     __asm__("FUN_00237a78");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
-extern void func_001F7888(s32, s32, s32, f32) __asm__("FUN_001f7888");
+extern void configure_graphics_render_target_and_projection(s32, s32, s32, f32) __asm__("FUN_001f7888");
 extern void draw_hud_rect_depth(s32, s32, s32, s32, u64, u32, s32) __asm__("FUN_00200f90");
 extern void begin_draw_frame(void) __asm__("FUN_001f7978");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64)
@@ -203,7 +203,7 @@ void render_level_effects_and_screen_sprites(void) {
             while (texture_width_log2 + texture_height_log2 >= 18) {
                 texture_height_log2--;
             }
-            func_001F7888(texture_width_log2, texture_height_log2, pass != 0, 1.0f);
+            configure_graphics_render_target_and_projection(texture_width_log2, texture_height_log2, pass != 0, 1.0f);
             texture_width = 1 << texture_width_log2;
             texture_height = 1 << texture_height_log2;
             draw_hud_rect_depth(0, 0, texture_width, texture_height, panel_clear_color_gp, 0, 0);

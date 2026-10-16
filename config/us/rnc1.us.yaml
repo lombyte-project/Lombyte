@@ -1076,7 +1076,7 @@ segments:
           - [0xf85dc, textbin, text_gap_001f765c_after_fun_001f75f0]
           - [0xf85e8, c, ui/fonts/font_set_window]
           - [0xf8620, c, rendering/font_queue_vu_state]
-          - [0xf8808, c, rendering/fun_001f7888]
+          - [0xf8808, c, rendering/configure_graphics_render_target_and_projection]
           - [0xf88f4, textbin, text_gap_001f7974_before_fun_001f7978]
           - [0xf88f8, c, rendering/state/begin_draw_frame]
           - [0xf8924, textbin, text_gap_001f79a4_after_fun_001f7978]
