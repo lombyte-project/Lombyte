@@ -1335,16 +1335,16 @@ float FUN_L00_0020f0b8(float *a, float *b) {
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_F7F8;
 
-extern char D_0013E533_d[] __asm__("D_0013E533") __attribute__((section(".data")));
+extern char D_0013E533[] __attribute__((section(".data")));
 extern float FUN_L00_0020f0b8_c(float *a, float *b) __asm__("FUN_L00_0020f0b8");
-extern short D_L00_0015F694_d __asm__("D_L00_0015F694") __attribute__((sda));
+extern short D_L00_0015F694 __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void copy_matrix3x4_alt() __asm__("FUN_001fa2b8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void normalize_vector_triplet(f32 *arg0) __asm__("FUN_00214128");
-extern char D_0013F350_d[] __asm__("D_0013F350") __attribute__((section(".data")));
+extern char D_0013F350[] __attribute__((section(".data")));
 
 void FUN_L00_0020f160(char *arg) {
     V4_F7F8 vv[4];
@@ -1357,9 +1357,9 @@ void FUN_L00_0020f160(char *arg) {
     float mx;
 
     {
-    char *b = ((char *)&D_0013F350_d);
-    copy_matrix3x4_alt(((char *)&D_0013F350_d) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
-    normalize_vector_triplet(((char *)&D_0013F350_d) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
+    char *b = ((char *)&D_0013F350);
+    copy_matrix3x4_alt(((char *)&D_0013F350) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
+    normalize_vector_triplet(((char *)&D_0013F350) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
 
     *(int *)(b + 0x21B8) = (*(int *)(b + 0x21B8) + 1) % 16;
     *(int *)(b + 0x21BC) = *(int *)(b + 0x21BC) + 1;
@@ -1373,27 +1373,27 @@ void FUN_L00_0020f160(char *arg) {
     }
 
     {
-    char *b = ((char *)&D_0013F350_d);
+    char *b = ((char *)&D_0013F350);
     if (*(int *)(b + 0x208C) == 0x16) {
-        *(int *)&D_L00_0015F694_d = 14;
+        *(int *)&D_L00_0015F694 = 14;
     } else if (*(int *)(b + 0x2084) == 2) {
-        *(int *)&D_L00_0015F694_d = 5;
+        *(int *)&D_L00_0015F694 = 5;
     } else {
-        *(int *)&D_L00_0015F694_d = 11;
+        *(int *)&D_L00_0015F694 = 11;
     }
     }
 
     {
-    char *b = ((char *)&D_0013F350_d);
-    if (*(int *)(b + 0x21C0) < *(int *)&D_L00_0015F694_d) {
+    char *b = ((char *)&D_0013F350);
+    if (*(int *)(b + 0x21C0) < *(int *)&D_L00_0015F694) {
         *(int *)(b + 0x21C0) = *(int *)(b + 0x21C0) + 1;
-    } else if (*(int *)&D_L00_0015F694_d < *(int *)(b + 0x21C0)) {
+    } else if (*(int *)&D_L00_0015F694 < *(int *)(b + 0x21C0)) {
         *(int *)(b + 0x21C0) = *(int *)(b + 0x21C0) - 1;
     }
     }
 
     {
-    char *b = ((char *)&D_0013F350_d);
+    char *b = ((char *)&D_0013F350);
     n = *(int *)(b + 0x21C0);
     if (n < 2) {
         n = 2;
@@ -1407,19 +1407,19 @@ void FUN_L00_0020f160(char *arg) {
     cnt = 0;
 
     for (i = 0; i < n; i++) {
-        char *b = ((char *)&D_0013F350_d);
+        char *b = ((char *)&D_0013F350);
         int t;
         fp = fa;
         t = i - 15;
         ri = (*(int *)(b + 0x21B8) - t) % 16;
         for (k = 0; k < n; k++) {
             if (i != k) {
-                char *b = ((char *)&D_0013F350_d);
+                char *b = ((char *)&D_0013F350);
                 int u = k - 15;
                 int rj = (*(int *)(b + 0x21B8) - u) % 16;
                 *(float *)((char *)fp - (-(i * 4))) += FUN_L00_0020f0b8_c(
-                    (float *)(((char *)&D_0013F350_d) + 0x12F0 + ri * 0x30),
-                    (float *)(((char *)&D_0013F350_d) + 0x12F0 + rj * 0x30));
+                    (float *)(((char *)&D_0013F350) + 0x12F0 + ri * 0x30),
+                    (float *)(((char *)&D_0013F350) + 0x12F0 + rj * 0x30));
             }
         }
     }
@@ -1444,11 +1444,11 @@ void FUN_L00_0020f160(char *arg) {
         }
         acc++;
         {
-        char *b = ((char *)&D_0013F350_d);
+        char *b = ((char *)&D_0013F350);
         int t = i - 15;
         ri = (*(int *)(b + 0x21B8) - t) % 16;
         for (k = 0; k < 3; k++) {
-            add_vector_xyz(&vv[k], &vv[k], ((char *)&D_0013F350_d) + 0x12F0 + ri * 0x30 + k * 16);
+            add_vector_xyz(&vv[k], &vv[k], ((char *)&D_0013F350) + 0x12F0 + ri * 0x30 + k * 16);
         }
         }
     }

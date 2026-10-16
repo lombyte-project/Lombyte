@@ -742,11 +742,11 @@ typedef union {
 } Vec4_2b2928;
 
 extern Vec4_2b2928 D_L14_001D8850_d[] __asm__("D_L14_001D8850") __attribute__((section(".data")));
-extern char D_0013F5E0_d[] __asm__("D_0013F5E0") __attribute__((section(".data")));
+extern char D_0013F5E0[] __attribute__((section(".data")));
 extern char D_L14_001674C0_d[] __asm__("D_L14_001674C0") __attribute__((section(".data")));
-extern int D_L14_001614AC_d __asm__("D_L14_001614AC") __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_001614BC_d __asm__("D_L14_001614BC") __attribute__((sda)); /* no foreign declaration */
-extern int D_L14_001614C0_d __asm__("D_L14_001614C0") __attribute__((sda)); /* no foreign declaration */
+extern float D_L14_001614AC __attribute__((sda)); /* no foreign declaration */
+extern float D_L14_001614BC __attribute__((sda)); /* no foreign declaration */
+extern float D_L14_001614C0 __attribute__((sda)); /* no foreign declaration */
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void add_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -754,9 +754,9 @@ extern void fast_draw_quad_real(void *, void *, s32);
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 extern void subtract_vector_xyz_c3(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
-extern f32 D_L14_00161574_3B78 __asm__("D_L14_001614AC");
-extern f32 D_L14_00161584_3B78 __asm__("D_L14_001614BC");
-extern f32 D_L14_00161588_3B78 __asm__("D_L14_001614C0");
+extern float D_L14_001614AC_lui __asm__("D_L14_001614AC");
+extern float D_L14_001614BC_lui __asm__("D_L14_001614BC");
+extern float D_L14_001614C0_lui __asm__("D_L14_001614C0");
 
 void FUN_L14_002b2928(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -779,7 +779,7 @@ void FUN_L14_002b2928(char *moby) {
     m[3].f[3] = 1.0f;
     subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
     fast_vec_normalize(&m[0], &m[0], 1.0f);
-    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0_d);
+    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
     fast_vec_normalize(&m[1], &m[1], -1.0f);
     cross_vectors_xyz(&m[2], &m[1], &m[0]);
     pk.t[1] = get_effect_texture(11);
@@ -810,7 +810,7 @@ void FUN_L14_002b2928(char *moby) {
     r = data + 0x210;
     q = data + 0x1F0;
     fast_vec_normalize(&m[0], &m[0], 1.0f);
-    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0_d);
+    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
     fast_vec_normalize(&m[1], &m[1], -1.0f);
     cross_vectors_xyz(&m[2], &m[1], &m[0]);
     pk.c[3] = 0x202020FF;
@@ -826,10 +826,10 @@ void FUN_L14_002b2928(char *moby) {
     qcopy(&m[3], q);
     subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
     fast_vec_normalize(&m[0], &m[0], 1.0f);
-    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0_d);
+    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
     fast_vec_normalize(&m[1], &m[1], -1.0f);
     cross_vectors_xyz(&m[2], &m[1], &m[0]);
-    fast_vec_scale_c(&w, &m[0], D_L14_00161574_3B78);
+    fast_vec_scale_c(&w, &m[0], D_L14_001614AC_lui);
     add_vector_xyz_c2(&m[3], &m[3], &w);
     pk.c[3] = 0x4020FF20;
     pk.c[2] = 0x4020FF20;
@@ -845,17 +845,17 @@ void FUN_L14_002b2928(char *moby) {
     qcopy(&m[3], r);
     subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
     fast_vec_normalize(&m[0], &m[0], 1.0f);
-    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0_d);
+    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
     fast_vec_normalize(&m[1], &m[1], -1.0f);
     cross_vectors_xyz(&m[2], &m[1], &m[0]);
-    fast_vec_scale_c(&w, &m[0], D_L14_00161584_3B78);
+    fast_vec_scale_c(&w, &m[0], D_L14_001614BC_lui);
     add_vector_xyz_c2(&m[3], &m[3], &w);
     pk.c[3] = (a << 24) | 0xFF2020;
     pk.c[2] = (a << 24) | 0xFF2020;
     pk.c[1] = (a << 24) | 0xFF2020;
     pk.c[0] = (a << 24) | 0xFF2020;
     for (j = 0; j < 4; j++) {
-        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], D_L14_00161588_3B78);
+        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], D_L14_001614C0_lui);
         transform_vector(&pk.o[j], &pk.o[j], &m[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);
@@ -863,17 +863,17 @@ void FUN_L14_002b2928(char *moby) {
     qcopy(&m[3], pp);
     subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
     fast_vec_normalize(&m[0], &m[0], 1.0f);
-    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0_d);
+    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
     fast_vec_normalize(&m[1], &m[1], -1.0f);
     cross_vectors_xyz(&m[2], &m[1], &m[0]);
-    fast_vec_scale_c(&w, &m[0], D_L14_00161584_3B78);
+    fast_vec_scale_c(&w, &m[0], D_L14_001614BC_lui);
     add_vector_xyz_c2(&m[3], &m[3], &w);
     pk.c[3] = (a << 24) | 0xFF2020;
     pk.c[2] = (a << 24) | 0xFF2020;
     pk.c[1] = (a << 24) | 0xFF2020;
     pk.c[0] = (a << 24) | 0xFF2020;
     for (j = 0; j < 4; j++) {
-        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], D_L14_00161588_3B78);
+        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], D_L14_001614C0_lui);
         transform_vector(&pk.o[j], &pk.o[j], &m[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);

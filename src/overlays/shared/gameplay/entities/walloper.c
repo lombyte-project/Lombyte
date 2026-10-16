@@ -1207,8 +1207,8 @@ void FUN_L00_002bc1a0(void *mv) {
 
 typedef u32 VecQuad __attribute__((mode(TI), aligned(16)));
 
-extern Vec4 D_L00_00173E60_c __asm__("D_L00_00173E60");
-extern char *D_L00_001ABA00[];
+extern Vec4 collision_position_2b94d0 __asm__("D_L00_00173E60");
+extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char D_0013F350[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
@@ -1219,7 +1219,7 @@ extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L00_00173E40[];
 extern int collision_line(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
 extern int fun_002141f8(char *) __asm__("FUN_002141f8");
-extern short D_L00_001616DC __attribute__((sda));
+extern float D_L00_001616DC __attribute__((sda));
 extern short D_L00_001616D8 __attribute__((sda));
 extern void add_vector_xyz_c4(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
@@ -1241,7 +1241,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
     char *g;
     char *m0;
 
-    limit = *(float *)&D_L00_001616DC;
+    limit = D_L00_001616DC;
     a0s[0] = (int)self;
     *(VecQuad *)start = *(VecQuad *)position;
     g = D_0013F350;
@@ -1252,11 +1252,11 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
     collision = collision_line((Vec4f *)end, (Vec4f *)position, 6, m0, 0);
     res[0] = 0;
     if (collision) {
-        qcopy(position, &D_L00_00173E60_c);
+        qcopy(position, &collision_position_2b94d0);
         return 0;
     }
     i = 0;
-    if ((candidate = D_L00_001ABA00[i]) != 0) do {
+    if ((candidate = active_mobies[i]) != 0) do {
         if (*(signed char *)(candidate + 0x20) < 0 || *(short *)(candidate + 0xA6) == 0x58E ||
             *(short *)(candidate + 0xA6) == 0x452)
             continue;
@@ -1323,7 +1323,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
                 res[0] = (int)candidate;
             }
         }
-    } while ((candidate = D_L00_001ABA00[++i]) != 0);
+    } while ((candidate = active_mobies[++i]) != 0);
 done:
     return (char *)res[0];
 }

@@ -4,16 +4,16 @@
 
 /* Ported from rac1-decomp (src/game/draw.c: func_001F7680), where it is exact; names translated to the US level program. */
 
-extern int *D_L00_001611C0;
-extern int D_0013E504[];
-extern int D_0015EE84;
+extern unsigned char *D_L00_001611C0;
+extern int frame_size[] __asm__("D_0013E504");
+extern int draw_buffer_address __asm__("D_0015EE84");
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
 
-#define PK ((unsigned char *)D_L00_001611C0)
+#define PK ((unsigned char *)(*(int * *)&D_L00_001611C0))
 
 void FUN_L00_001fc558(unsigned int source) {
-    int remaining = D_0013E504[0];
-    int destination = D_0015EE84 >> 8;
+    int remaining = frame_size[0];
+    int destination = draw_buffer_address >> 8;
     unsigned long count;
     unsigned long transfer;
     unsigned char *packet;
@@ -29,7 +29,7 @@ void FUN_L00_001fc558(unsigned int source) {
         *(unsigned int *)(PK + 8) = 0;
         *(unsigned int *)(PK + 12) = 0x50000006;
         packet = PK;
-        D_L00_001611C0 = (int *)(packet + 0x10);
+        (*(int * *)&D_L00_001611C0) = (int *)(packet + 0x10);
         transfer = (unsigned long)count << 7;
         words = (unsigned long *)(packet + 0x10);
         words[0] = 0x4000000000000001UL;
@@ -44,14 +44,14 @@ void FUN_L00_001fc558(unsigned int source) {
         words[9] = 0x53;
         words[10] = transfer | 0x0800000000008000UL;
         words[11] = 0;
-        D_L00_001611C0 = (int *)(packet + 0x70);
+        (*(int * *)&D_L00_001611C0) = (int *)(packet + 0x70);
         *(unsigned int *)(packet + 0x70) = (unsigned int)(long)(int)(transfer | 0x30000000);
         *(unsigned int *)(PK + 4) = source;
         source += (int)(count * 0x800);
         destination += (int)(count * 8);
         *(unsigned int *)(PK + 8) = 0;
         *(unsigned int *)(PK + 12) = (unsigned int)transfer | 0x50000000;
-        D_L00_001611C0 = (int *)(PK + 0x10);
+        (*(int * *)&D_L00_001611C0) = (int *)(PK + 0x10);
     } while (remaining > 0);
     vu1_tex_flush();
 }

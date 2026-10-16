@@ -985,7 +985,7 @@ void FUN_L00_00206cf8(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00207418), where it is exact; names translated to the US level program. */
 
-extern int D_0015EE20 __attribute__((section(".sdata")));
+extern int alternate_animation_sequence __asm__("D_0015EE20") __attribute__((section(".sdata")));
 extern int D_0015EEA0 __attribute__((section(".sdata")));
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013F350_c3[] __asm__("D_0013F350") __attribute__((section(".data")));
@@ -999,7 +999,7 @@ void FUN_L00_00206e00(void) {
     char *g;
     int s;
     int i;
-    if (D_0015EEA0 == 0 && D_0015EE20 == 0) return;
+    if (D_0015EEA0 == 0 && alternate_animation_sequence == 0) return;
     g = (char *)D_0013F350_c3;
     s = 0;
     if (*(int *)(g + 0x198) == scale_game_frames_c2(0xF)) {
@@ -2759,7 +2759,7 @@ void FUN_L00_0020a540(void) {
 /* Re-rolls four random motion parameters and copies each pair into its 0xB0-byte record. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020B060), where it is exact; names translated to the US level program. */
 
-extern char D_L00_0017A680_c2[] __asm__("D_L00_0017A680");
+extern Ent D_L00_0017A680_c[] __asm__("D_L00_0017A680");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float FUN_L00_00257c48(float lo, float hi);
 extern int tick_countdown_32_alt_c(int *) __asm__("FUN_001f9740");
@@ -2778,7 +2778,7 @@ void FUN_L00_0020a9e8(void) {
     if (*(unsigned char *)(*(int *)(base + 0x2080) + 0x53) != 0) return;
     q = (int *)(base + 0x1060);
     g = base;
-    tbl = D_L00_0017A680_c2;
+    tbl = ((char *)D_L00_0017A680_c);
     for (i = 0; i < 4; i++) {
         char *f;
         if (tick_countdown_32_alt_c(&q[i])) {

@@ -1015,11 +1015,11 @@ typedef struct { int a; int b; } LL9;
 
 typedef struct { char pad[0x16A8]; LL9 normal[20]; LL9 alt[20]; } G9;
 
-extern G9 D_00137B80_c __asm__("D_00137B80");
-extern int D_L00_0015F3FC_c __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
+extern Tab D_00137B80;
+extern float D_L00_0015F3FC_298840_gp __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
 extern int D_L00_0015F5C4 __attribute__((section(".sdata")));
-extern int D_L00_0015F5D8_c __asm__("D_L00_0015F5D8") __attribute__((section(".sdata")));
-extern int D_L00_0015F620[4] __attribute__((section(".sdata")));
+extern int D_L00_0015F5D8_gp __asm__("D_L00_0015F5D8") __attribute__((section(".sdata")));
+extern short D_L00_0015F620 __attribute__((section(".sdata")));
 extern int D_L00_00173E00[];
 extern int D_L00_001611CC __attribute__((section(".sdata")));
 extern int update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
@@ -1032,25 +1032,25 @@ void FUN_L00_00299a68(void) {
     int t;
     update_audio_stream_until_idle(0);
     fade_to_black(8);
-    D_L00_0015F5D8_c = 1;
-    *(float *)&D_L00_0015F3FC_c = 1.0f;
+    D_L00_0015F5D8_gp = 1;
+    D_L00_0015F3FC_298840_gp = 1.0f;
     D_L00_0015F5C4 = 7;
-    FillTransferWords(D_L00_0015F620, 0, 16);
+    FillTransferWords(((int *)&D_L00_0015F620), 0, 16);
     t = D_L00_001611CC - 0xE0000;
-    D_L00_0015F620[2] = D_L00_00173E00[1] + t;
-    D_L00_0015F620[3] = D_L00_00173E00[2] + t;
+    ((int *)&D_L00_0015F620)[2] = D_L00_00173E00[1] + t;
+    ((int *)&D_L00_0015F620)[3] = D_L00_00173E00[2] + t;
     D_L00_001611CC = t;
     if (D_0015ED80_c != 0) {
-        start_audio_stream_read(D_L00_0015F620[2], D_00137B80_c.alt[((short *)D_L00_0015F620)[1]].a, D_00137B80_c.alt[((short *)D_L00_0015F620)[1]].b);
+        start_audio_stream_read(((int *)&D_L00_0015F620)[2], (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].b);
     } else {
-        start_audio_stream_read(D_L00_0015F620[2], D_00137B80_c.normal[((short *)D_L00_0015F620)[1]].a, D_00137B80_c.normal[((short *)D_L00_0015F620)[1]].b);
+        start_audio_stream_read(((int *)&D_L00_0015F620)[2], (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].b);
     }
     update_audio_stream_until_idle(1);
-    ((short *)D_L00_0015F620)[1]++;
+    ((short *)((int *)&D_L00_0015F620))[1]++;
     if (D_0015ED80_c != 0) {
-        start_audio_stream_read(D_L00_0015F620[3], D_00137B80_c.alt[((short *)D_L00_0015F620)[1]].a, D_00137B80_c.alt[((short *)D_L00_0015F620)[1]].b);
+        start_audio_stream_read(((int *)&D_L00_0015F620)[3], (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].b);
     } else {
-        start_audio_stream_read(D_L00_0015F620[3], D_00137B80_c.normal[((short *)D_L00_0015F620)[1]].a, D_00137B80_c.normal[((short *)D_L00_0015F620)[1]].b);
+        start_audio_stream_read(((int *)&D_L00_0015F620)[3], (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].b);
     }
 }
 extern s32 D_L00_0015F3FC;
@@ -1093,7 +1093,7 @@ void FUN_L00_00299c48(void) {
     if (fade_level < 0.0f) {
         fade_level = 0.0f;
     }
-    stage = D_L00_0015F620;
+    stage = ((int *)&D_L00_0015F620);
     active = 1;
     pal = D_0013D1D2 == 'A';
     if (stage == 0) {
@@ -1107,7 +1107,7 @@ void FUN_L00_00299c48(void) {
             }
             if ((s16)D_L00_0015F622 < 0x2b) {
                 D_L00_0015F624 = -1;
-                D_L00_0015F620 = 1;
+                ((int *)&D_L00_0015F620) = 1;
             } else {
                 FUN_L00_00299c00();
                 return;
@@ -1144,7 +1144,7 @@ void FUN_L00_00299c48(void) {
                     D_L00_0015F626 = 0x32b4;
                 }
             }
-            D_L00_0015F620 = 0;
+            ((int *)&D_L00_0015F620) = 0;
             index = (s16)(D_L00_0015F622 + 1);
             D_L00_0015F624 = -1;
             D_L00_0015F622 = index;

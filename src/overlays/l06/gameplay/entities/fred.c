@@ -2364,7 +2364,7 @@ typedef struct {
 
 extern char *D_L06_0015FFD8_c __asm__("D_L06_0015FFD8");
 extern char D_0013E550[];
-extern char D_L06_00167540_c[] __asm__("D_L06_00167540");
+extern float D_L06_00167540[];
 extern float D_0015ED6C;
 extern float D_L06_00162200 __attribute__((sda));
 extern float D_L06_001FE890[];
@@ -2375,10 +2375,10 @@ extern int D_L06_00162238;
 extern int FUN_L00_0028d8c0(void *, int);
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern short D_L06_001621F8 __attribute__((sda));
+extern float D_L06_001621F8 __attribute__((sda));
 extern short D_L06_001621FC __attribute__((sda));
 extern short D_L06_00162204 __attribute__((sda));
-extern short D_L06_00162208 __attribute__((sda));
+extern float D_L06_00162208 __attribute__((sda));
 extern short D_L06_00162210 __attribute__((sda));
 extern short D_L06_00162214 __attribute__((sda));
 extern short D_L06_00162218 __attribute__((sda));
@@ -2457,10 +2457,10 @@ void FUN_L06_003049f8(char *moby)
             d->f18 = allocate_voice_for_target_entry(0, 4, moby);
         }
         FUN_L06_00305000_c(moby);
-        v = *(float *)&D_L06_001621F8 + *(float *)&D_L06_001621FC * D_0015ED6C;
-        *(float *)&D_L06_001621F8 = v;
+        v = D_L06_001621F8 + *(float *)&D_L06_001621FC * D_0015ED6C;
+        D_L06_001621F8 = v;
         if (1.0f < v) {
-            *(float *)&D_L06_001621F8 = v - 1.0f;
+            D_L06_001621F8 = v - 1.0f;
         }
         f21 = *(float *)&D_L06_00162204 / 30.0f;
         f20 = -(*(float *)&D_L06_00162204 * 0.5f);
@@ -2485,7 +2485,7 @@ void FUN_L06_003049f8(char *moby)
                 d->timer[i]--;
             }
         }
-        if (fast_vec_dist(moby + 0x10, D_L06_00167540_c) < 48.0f) {
+        if (fast_vec_dist(moby + 0x10, ((char *)D_L06_00167540)) < 48.0f) {
             enqueue_callback_list_1((int)FUN_L06_00305170_c, moby);
         }
         if (d->f14 >= 0 && *(unsigned char *)(D_L06_0015FFD8_c + 0xBC + (d->f14 << 8)) != 0) {
@@ -2509,7 +2509,7 @@ void FUN_L06_003049f8(char *moby)
         int j;
 
         euler_rotation_matrix(u.m.a, (float *)(moby + 0x40));
-        FUN_001f9ff8(u.m.b, *(float *)&D_L06_00162208);
+        FUN_001f9ff8(u.m.b, D_L06_00162208);
         multiply_matrix(u.m.a, u.m.a, u.m.b);
         for (i = 0; i < 4; i++) {
             euler_rotation_matrix(u.m.b, &D_L06_001FE890[i * 4]);

@@ -2404,12 +2404,12 @@ typedef struct ShipD_5E48 {
 extern unsigned char D_0014C050_r[] __asm__("D_0014C050");
 extern Ship_5E48 *D_L10_001742D8 __attribute__((section(".data")));
 extern char *FUN_L10_002cc1b8(void *vel, void *pos, int a, int b, int c, float scale);
-extern char D_L10_00179890[];
+extern char D_L10_00179910_2E9978[] __asm__("D_L10_00179890");
 extern char D_L10_001DD390[];
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_vec_length_c(void *) __asm__("func_001F9AF0");
 extern float D_0015ED60;
-extern float D_L10_001B0930[];
+extern Path_2E0630 *D_L10_001B0C30_2E0630[] __asm__("D_L10_001B0930");
 extern float FUN_L00_00258110_c(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float fast_difference_between_rotations_c2(float, float) __asm__("func_001FA688");
 extern float fast_vec_dist(void *, void *);
@@ -2441,7 +2441,7 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 extern unsigned char D_0014171B_t[] __asm__("D_0014161B");
-extern int D_0015EE84_m __asm__("D_0015ED84");
+extern int D_0015ED84;
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void FUN_L10_002e4a88(Ship_5E48 *m) {
@@ -2477,7 +2477,7 @@ void FUN_L10_002e4a88(Ship_5E48 *m) {
         m->s34 |= 0x41;
         if (m->b53 != 0) blend_moby_animation(m, 0, 0, 0);
         m->state = 1;
-        if ((D_0014C050_r)[m->bB0 + (D_0015EE84_m << 4)] != 0xFF) break;
+        if ((D_0014C050_r)[m->bB0 + (D_0015ED84 << 4)] != 0xFF) break;
         goto del;
     case 1:
         if (!is_point_inside_clip_volume(&tgt->pos, d->i148)) break;
@@ -2485,7 +2485,7 @@ void FUN_L10_002e4a88(Ship_5E48 *m) {
         if (m->b53 != 1) blend_moby_animation(m, 1, 0, scale_game_frames_c2(20));
         m->s34 &= 0xFFBE;
         m->i94 = *(int *)(m->p24 + 0x10);
-        if (*(int *)D_L10_00179890 == 0 && *(int *)(D_L10_00179890 + 0x24) == -1
+        if (*(int *)D_L10_00179910_2E9978 == 0 && *(int *)(D_L10_00179910_2E9978 + 0x24) == -1
             && D_001413F4[0] == 0 && *(unsigned short *)D_00141C48 == 0
             && D_0013D4CB[0] == 0) {
             FUN_L00_00203908_c(0x2715, 0x5C);

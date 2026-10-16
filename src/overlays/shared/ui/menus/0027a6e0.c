@@ -16,7 +16,7 @@ int FUN_L00_0027a6e0(char *menu) {
 
 extern char D_0013D408[];
 extern char D_0013D4C0[];
-extern char D_0013D4E8[];
+extern unsigned char items_acquired[] __asm__("D_0013D4E8");
 extern char D_0013D388[];
 extern short D_L00_001603F8 __attribute__((sda));
 extern short D_L00_001BA4A8[];
@@ -70,7 +70,7 @@ void FUN_L00_002831c0(void) {
         vc = code - 0x3d;
         if (code < 0x25) {
             D_0013D4C0[code] = 1;
-            D_0013D4E8[code] = 1;
+            ((char *)items_acquired)[code] = 1;
         } else if ((unsigned)(code - 0x25) < 0x12) {
             FUN_L00_002607d0(va);
         } else if ((unsigned)vb < 6) {

@@ -156,8 +156,8 @@ extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float approach_value(float *p, float target, float maxstep);
 extern int *D_L00_00177F00[];
-extern int D_0015ED60 __attribute__((section(".sdata")));
-extern int D_L00_00173E60; /* no foreign declaration */
+extern float frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern Vec4 D_94C8_60 __asm__("D_L00_00173E60"); /* no foreign declaration */
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_001f0b58(void);
 extern int FUN_L00_001f0d60();
@@ -180,7 +180,7 @@ extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern float D_0015EE60_m __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern float frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern int func_L00_001F2BE8_d6f0(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
 int FUN_L00_0025c698(char *moby, char *st) {
@@ -257,7 +257,7 @@ int FUN_L00_0025c698(char *moby, char *st) {
                 t = compute_interpolated_record_value(moby);
                 rr = (*(float *)(st + 0x50) - t) / s0;
                 if (0.0f < rr) {
-                    approach_value((float *)(moby + 0x58), rr, D_0015EE60_m * 0.1f);
+                    approach_value((float *)(moby + 0x58), rr, frame_scale * 0.1f);
                 }
             }
             break;
@@ -283,7 +283,7 @@ int FUN_L00_0025c698(char *moby, char *st) {
                 } else if (rr < 0.0f) {
                     rr = 0.0f;
                 }
-                approach_value((float *)(moby + 0x58), rr, D_0015EE60_m * 0.1f);
+                approach_value((float *)(moby + 0x58), rr, frame_scale * 0.1f);
             }
             break;
         case 2:

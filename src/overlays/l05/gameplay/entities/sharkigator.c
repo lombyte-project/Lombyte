@@ -1071,7 +1071,7 @@ extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
 extern s32 spawn_spark_c(void *, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("func_00218888");
 extern s32 truncate_float_to_s32_c4(f32) __asm__("func_001FA6D0");
 extern short D_L05_00161A84 __attribute__((sda));
-extern short D_L05_00161A98 __attribute__((sda));
+extern float D_L05_00161A98 __attribute__((sda));
 extern short D_L05_00161A9C __attribute__((sda));
 extern short D_L05_00161AA0 __attribute__((sda));
 extern short D_L05_00161AA4 __attribute__((sda));
@@ -1099,7 +1099,7 @@ f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L05_00303390_c(Moby *m) __asm__("FUN_L05_00303390");
 void FUN_L05_00303b08_c(struct Moby *m, s32 node, f32 side) __asm__("FUN_L05_00303b08");
-extern char D_0013F3D0_c[] __asm__("D_0013F3D0");
+extern float D_0013F3D0[];
 extern char D_001404A8[];
 
 void FUN_L05_00301f48(unsigned char *m) {
@@ -1130,7 +1130,7 @@ void FUN_L05_00301f48(unsigned char *m) {
     }
     FUN_L05_00303390_c((Moby *)m);
     t = *(char **)(d + 0x160);
-    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * (*(float *)&D_L05_00161A98);
+    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * (D_L05_00161A98);
     switch (m[0x20]) {
     case 0:
         *(unsigned short *)(m + 0x34) |= 0x1000;
@@ -1145,7 +1145,7 @@ void FUN_L05_00301f48(unsigned char *m) {
         d[0x5A] = truncate_float_to_s32_c4(11.2f);
         FUN_L01_0026d930(d + 0xD0);
         {
-        float q = *(float *)&D_L05_00161A98;
+        float q = D_L05_00161A98;
         *(float *)(d + 0xDC) = 2.0f;
         *(float *)(d + 0xD8) = 2.0f;
         {
@@ -1181,7 +1181,7 @@ void FUN_L05_00301f48(unsigned char *m) {
     case 1:
         if (*(int *)(d + 0x164) != 2 && random_integer_below_c2(9) == 0) {
             if (FUN_L01_00276fe8(d + 0x2C0, 1, *(int *)(d + 0x2C4), m + 0x10, (s32)(t + 0x10), dir,
-                                  (*(float *)&D_L05_00161A98) * 0.4f) != 0) {
+                                  (D_L05_00161A98) * 0.4f) != 0) {
                 if (random_integer_below_c2(0x100) & 1) {
                     *(float *)(d + 0x298) = -*(float *)(d + 0x298);
                 }
@@ -1224,7 +1224,7 @@ void FUN_L05_00301f48(unsigned char *m) {
             dir[1] = fast_sin_c6(*(float *)(m + 0x48)) * 2.0f;
             dir[2] = 0.0f;
             FUN_L00_00258b50(m, d + 0xD0, dir, out, 1.0f);
-            FUN_L00_00261d78(*(int *)(d + 0x2C0), pos0, pos0, (*(float *)&D_L05_00161A98) * 0.4f);
+            FUN_L00_00261d78(*(int *)(d + 0x2C0), pos0, pos0, (D_L05_00161A98) * 0.4f);
         }
         (*(short *)(d + 0x2D2))++;
         if ((vector_distance_xy_alt(pos0, d + 0x280) < 1.0f && *(short *)(d + 0x2D2) > scale_game_frames(0x3C))
@@ -1249,7 +1249,7 @@ void FUN_L05_00301f48(unsigned char *m) {
             dir[1] = fast_sin_c6(*(float *)(m + 0x48)) * 2.0f;
             dir[2] = 0.0f;
             FUN_L00_00258b50(m, d + 0xD0, dir, out, 1.0f);
-            FUN_L00_00261d78(*(int *)(d + 0x2C0), pos0, pos0, (*(float *)&D_L05_00161A98) * 0.4f);
+            FUN_L00_00261d78(*(int *)(d + 0x2C0), pos0, pos0, (D_L05_00161A98) * 0.4f);
         }
         near = 0;
         if (FUN_L00_00261b48(*(int *)(d + 0x2C0), pos0, t + 0x10, hit) != 0
@@ -1283,7 +1283,7 @@ void FUN_L05_00301f48(unsigned char *m) {
         break;
     case 15:
         if ((*(int *)(d + 0x2B8) != -1 && ((unsigned char *)*(int *)&D_L05_0015FFD8)[*(int *)(d + 0x2B8) * 256 + 0xBC] != 0)
-            || (*(int *)(d + 0x2BC) != -1 && is_point_inside_clip_volume(((char *)&D_0013F3D0_c), *(int *)(d + 0x2BC)) != 0)) {
+            || (*(int *)(d + 0x2BC) != -1 && is_point_inside_clip_volume(((char *)D_0013F3D0), *(int *)(d + 0x2BC)) != 0)) {
             *(short *)(m + 0x32) = 0x40;
             *(unsigned short *)(m + 0x34) |= 0x1000;
             m[0x20] = 1;
@@ -1424,7 +1424,7 @@ void FUN_L05_00301f48(unsigned char *m) {
     case 11:
         if (FUN_L00_0025c698(m, d + 0x70) & 0x60) {
             if (FUN_L01_00276fe8(d + 0x2C0, 1, *(int *)(d + 0x2C4), m + 0x10, (s32)(d + 0x270), dir,
-                                  (*(float *)&D_L05_00161A98) * 0.4f) != 0) {
+                                  (D_L05_00161A98) * 0.4f) != 0) {
                 m[0x20] = 4;
                 if (m[0x53] != 1) blend_moby_animation(m, 1, 0, scale_game_frames(10));
                 break;
@@ -1982,7 +1982,7 @@ extern f32 random_float_between_c4(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_c2 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float FUN_L00_0025bc00(float *, int, float, float);
 extern float fast_add_rotations_c5(float, float) __asm__("func_001FA580");
-extern int D_L05_0015F5CC __attribute__((section(".sdata")));
+extern int frame_number_gp __asm__("D_L05_0015F5CC") __attribute__((section(".sdata")));
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int FUN_L00_00259028(char *m, char *p, float *pos, char *v);
 extern int FUN_L00_00259740(void *, void *, int);
@@ -2025,8 +2025,8 @@ void FUN_L05_00305178_c(char *moby) __asm__("FUN_L05_00305178");
 void FUN_L05_00305898_c(char *m) __asm__("FUN_L05_00305898");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 extern char D_0013F350[];
-extern char D_0013F3D0_c2[] __asm__("D_0013F3D0");
-extern char D_0013E633_3047E8_c[] __asm__("D_0013E533");
+extern float D_0013F3D0[];
+extern char D_0013E533[];
 
 typedef char *(*Spawn_305778)(void *, void *, void *, int, int, long, long, long, int);
 
@@ -2216,7 +2216,7 @@ void FUN_L05_00304320(unsigned char *m) {
             b = truncate_float_to_s32_c5(FUN_001f96b0(random_float_between_c4(*(float *)&D_L05_00161B18, *(float *)&D_L05_00161B18 * 1.2f)));
             e = truncate_float_to_s32_c5(FUN_001f96b0(random_float_between_c4(*(float *)&D_L05_00161B1C, *(float *)&D_L05_00161B1C * 1.2f)));
             r = ((Spawn_305778)spawn_spark_c2)(v40, v20, v30, *(int *)&D_L05_00161B0C, *(int *)&D_L05_00161B10, a, b, e, -1);
-            if ((D_L05_0015F5CC & 7) == 0 && r != 0 && i == 0) {
+            if ((frame_number_gp & 7) == 0 && r != 0 && i == 0) {
                 int j;
                 for (j = 0; j < 8; j++) {
                     int o = j * 4;
@@ -2260,7 +2260,7 @@ void FUN_L05_00304320(unsigned char *m) {
             || (*(int *)(d + 0x190) != -1
                 && FUN_L00_00259740(h, D_L05_001B0930[*(int *)(d + 0x190)] + 0x10,
                                      *(int *)D_L05_001B0930[*(int *)(d + 0x190)]) == 0)
-            || FUN_001efa68(v40, D_0013E633_3047E8_c + 0xEED, 2, m, 0) != 0) {
+            || FUN_001efa68(v40, D_0013E533 + 0xEED, 2, m, 0) != 0) {
             if (m[0x53] != 0) blend_moby_animation(m, 0, 0, 3);
             m[0x20] = 1;
         }

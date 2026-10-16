@@ -2439,7 +2439,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_normalize_angle(f32) __asm__("FUN_001fa610");
-extern char *D_L06_00160058_F4058 __asm__("D_L06_0015FFD8");
+extern GbMoby *D_L06_0015FFD8_u __asm__("D_L06_0015FFD8");
 
 int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
     float v0[4];
@@ -2503,7 +2503,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
             FUN_L00_00272060(vA, r2, f21 * 0.07f, f21 * 0.7f, (r16 << 16) | gc | r18, 0, random_integer_below(2) ? 1 : -1, D_0015ED70 * 15.0f, vB);
         }
 
-        g = D_L06_00160058_F4058 + (*(int *)st << 8);
+        g = (*(char * *)&D_L06_0015FFD8_u) + (*(int *)st << 8);
         f20 = fast_normalize_angle(convert_integer_to_float(v58) * 60.0f * 0.017453292f);
         vB[0] = fast_cos_c2(fast_add_rotations_c2(*(float *)(g + 0x48), f20));
         vB[1] = fast_sin(fast_add_rotations_c2(*(float *)(g + 0x48), f20));

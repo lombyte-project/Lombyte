@@ -96,14 +96,14 @@ typedef struct {
     OvlVec4_261b48 points[1];
 } SegmentPath_261d78_261b48;
 
-extern SegmentPath_261d78_261b48 * D_L00_001B04B0[] __asm__("SegmentPath_261d78");
+extern SegmentPath_261968 *D_L00_001B04B0_261968[] __asm__("SegmentPath_261d78");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-extern SegmentPath_2629E0 *D_L00_001B0830_2629E0[] __asm__("D_L00_001B04B0");
+extern SegmentPath_261968 *D_L00_001B04B0_261968[] __asm__("D_L00_001B04B0");
 
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
     float v[4], w[4], z[4], t[4], u[4];
@@ -123,15 +123,15 @@ int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
     clear_u64_value(z);
     z[2] = 1.0f;
     best = 1.0f;
-    fast_vec_sub(t, (char *)D_L00_001B0830_2629E0[idx] + 0x10, a);
+    fast_vec_sub(t, (char *)((SegmentPath_2629E0 * *)D_L00_001B04B0_261968)[idx] + 0x10, a);
     transform_vector_by_basis(t, t, v);
     prev = t;
     cur = u;
-    if (i < D_L00_001B0830_2629E0[idx]->count) {
+    if (i < ((SegmentPath_2629E0 * *)D_L00_001B04B0_261968)[idx]->count) {
         offset = 0x20;
         zero = 0.0f;
         do {
-            fast_vec_sub(cur, (char *)D_L00_001B0830_2629E0[idx] + offset, a);
+            fast_vec_sub(cur, (char *)((SegmentPath_2629E0 * *)D_L00_001B04B0_261968)[idx] + offset, a);
             transform_vector_by_basis(cur, cur, v);
             if (t[3] != zero || u[3] != zero) {
                 if (u[1] * t[1] < 0.0f) {
@@ -148,7 +148,7 @@ int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
         next:
             i++;
             offset += 0x10;
-        } while (i < D_L00_001B0830_2629E0[idx]->count);
+        } while (i < ((SegmentPath_2629E0 * *)D_L00_001B04B0_261968)[idx]->count);
     }
     lerp_vector(c, a, b, best);
     return found;

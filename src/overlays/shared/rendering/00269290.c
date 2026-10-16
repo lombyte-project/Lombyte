@@ -857,12 +857,12 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern s32 fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern short D_L00_001601B8_d __asm__("D_L00_001601B8") __attribute__((sda));
-extern short D_L00_001601BC_d __asm__("D_L00_001601BC") __attribute__((sda));
-extern short D_L00_001601D8_d __asm__("D_L00_001601D8") __attribute__((sda));
-extern short D_L00_001601DC_d __asm__("D_L00_001601DC") __attribute__((sda));
-extern short D_L00_001601E8_d __asm__("D_L00_001601E8") __attribute__((sda));
-extern short D_L00_001601EC_d __asm__("D_L00_001601EC") __attribute__((sda));
+extern float D_L00_001601B8 __attribute__((sda));
+extern float D_L00_001601BC __attribute__((sda));
+extern float D_L00_001601D8 __attribute__((sda));
+extern float D_L00_001601DC __attribute__((sda));
+extern float D_L00_001601E8 __attribute__((sda));
+extern float D_L00_001601EC __attribute__((sda));
 extern unsigned char D_0013E05A[];
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -878,16 +878,16 @@ void FUN_L00_0026b500(unsigned char *m) {
     }
     add_vector_xyz(m + 0x10, m + 0x10, p);
     r = -fast_vec_length_c(p);
-    advance_accelerated_scalar((float *)(m + 0x30), &r, 0.0f, 0.0f, *(float *)&D_L00_001601E8_d * D_0015ED70, r);
+    advance_accelerated_scalar((float *)(m + 0x30), &r, 0.0f, 0.0f, D_L00_001601E8 * D_0015ED70, r);
     fast_vec_normalize_c(p, p, -r);
-    *(float *)(m + 0x18) = *(float *)(m + 0x18) + *(float *)&D_L00_001601EC_d * D_0015ED6C;
+    *(float *)(m + 0x18) = *(float *)(m + 0x18) + D_L00_001601EC * D_0015ED6C;
     ratio = convert_integer_to_float(*(short *)(m + 0xA)) / convert_integer_to_float(p[0x1D]);
     if (p[0x1F] & 1) {
-        float lo = *(float *)&D_L00_001601DC_d * w;
-        *(float *)(m + 0xC) = ((*(float *)&D_L00_001601D8_d - lo) * ratio + lo) * 210000.0f;
+        float lo = D_L00_001601DC * w;
+        *(float *)(m + 0xC) = ((D_L00_001601D8 - lo) * ratio + lo) * 210000.0f;
     } else {
-        float lo = *(float *)&D_L00_001601BC_d * w;
-        *(float *)(m + 0xC) = ((*(float *)&D_L00_001601B8_d - lo) * ratio + lo) * 210000.0f;
+        float lo = D_L00_001601BC * w;
+        *(float *)(m + 0xC) = ((D_L00_001601B8 - lo) * ratio + lo) * 210000.0f;
     }
     *(int *)(m + 4) = fast_tween_color_c(*(int *)(p + 0x18), *(int *)(p + 0x14), ratio);
     if (*(short *)(m + 0xA) < scale_game_frames_c(15)) {

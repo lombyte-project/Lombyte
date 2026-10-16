@@ -1800,7 +1800,7 @@ extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern float fast_vec_dist(void *, void *);
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
-extern int D_L07_0015F5CC_c2 __asm__("D_L07_0015F5CC") __attribute__((section(".sdata")));
+extern int D_L07_0015F5CC __attribute__((section(".sdata")));
 extern int FUN_L00_00257b90(int, int);
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
@@ -1926,7 +1926,7 @@ eb20:
             int r3;
             r2 = FUN_L00_00257b90(0, 10);
             r3 = scale_game_frames(r2);
-            *(int *)(d + 0xB4) = D_L07_0015F5CC_c2 + r1 + r3;
+            *(int *)(d + 0xB4) = D_L07_0015F5CC + r1 + r3;
             attach_manipulator(m, 0, d + 0x70);
             *(int *)(d + 0xC0) = 0;
             allocate_voice_for_target_entry(0, 4, (int)m);
@@ -1935,9 +1935,9 @@ eb20:
         break;
     }
     case 1: {
-        if (*(int *)(d + 0xB4) <= D_L07_0015F5CC_c2) {
+        if (*(int *)(d + 0xB4) <= D_L07_0015F5CC) {
             int r9 = scale_game_frames(0xB4);
-            *(int *)(d + 0xB4) = D_L07_0015F5CC_c2 + r9;
+            *(int *)(d + 0xB4) = D_L07_0015F5CC + r9;
             *(short *)(d + 0xB8) = 0;
             *(float *)(d + 0xBC) = random_angle_radians_c();
             *(short *)(d + 0xBA) = 0;
@@ -1993,9 +1993,9 @@ eb20:
                 *(short *)(d + 0xBA) = *(short *)(d + 0xBA) + 1;
             }
         eeE4:
-            if (*(int *)(d + 0xB4) <= D_L07_0015F5CC_c2) {
+            if (*(int *)(d + 0xB4) <= D_L07_0015F5CC) {
                 int r9 = scale_game_frames(0x78);
-                *(int *)(d + 0xB4) = D_L07_0015F5CC_c2 + r9;
+                *(int *)(d + 0xB4) = D_L07_0015F5CC + r9;
                 m[0x20] = 1;
             }
         break;

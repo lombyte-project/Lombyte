@@ -2127,7 +2127,7 @@ extern V D_L00_00173E60;
 extern char *FUN_L00_002630c8(void *, void *, void *, float *, float *, float *, float);
 extern char *func_0020D348_m(int);
 extern char D_0013F490[];
-extern char D_001413D0_c[] __asm__("D_001413D0");
+extern void *D_001413D0;
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern short D_L00_001613C4 __attribute__((sda));
@@ -2193,7 +2193,7 @@ char *FUN_L00_002a96f8(void *owner, void *pos, float a, float b, float c, char *
         }
         t.q = ((BoltOwner_2AA998 *)owner)->position.q;
         t.f[2] = ((float *)pos)[2];
-        if (FUN_001efa68(&t, pos, 0, *(int *)(D_001413D0_c), 0) != 0) {
+        if (FUN_001efa68(&t, pos, 0, *(int *)(((char *)&D_001413D0)), 0) != 0) {
             m[0xBC] = 1;
             qcopy(m + 0x10, &D_L00_00173E60);
         }

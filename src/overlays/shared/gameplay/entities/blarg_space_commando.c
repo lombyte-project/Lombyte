@@ -424,12 +424,12 @@ extern float FUN_001f96b0(float);
 extern float FUN_L00_00257c48(float lo, float hi);
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
-extern s32 * D_L06_001B0C30_c[] __asm__("D_L06_001B0C30");
+extern int *D_L06_001B0C30[];
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern short D_0015ED84 __attribute__((sda));
-extern short D_L06_00161FA8_c __asm__("D_L06_00161FA8") __attribute__((sda));
+extern int current_level_index __asm__("D_0015ED84") __attribute__((sda));
+extern float D_L06_00161FA8 __attribute__((sda));
 extern short D_L06_00161FAC __attribute__((sda));
 extern short D_L06_00161FB0 __attribute__((sda));
 extern short D_L06_00161FB4 __attribute__((sda));
@@ -462,7 +462,7 @@ void FUN_L06_002feb40(char *m) {
     float lo, hi, spd, off, pull;
 
     d = *(char **)(m + 0x78);
-    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * *(float *)&D_L06_00161FA8_c;
+    *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * D_L06_00161FA8;
     FUN_L06_002ff2c8(m);
     if (*(int *)(d + 0x38) != 0) {
         *(int *)(d + 0x188) = truncate_float_to_s32_c(FUN_001f96b0(random_float_between_c(180.0f, 240.0f)));
@@ -473,7 +473,7 @@ void FUN_L06_002feb40(char *m) {
     t = FUN_L00_0025a420(m, 0x330000, 0);
     r = fun_00213928(m, t, d + 0x20, 0, &hit, &dt, 0, 4);
     if (hit != 1 && (unsigned char)m[0x20] != 0x10) {
-        if (*(int *)&D_0015ED84 == 0xA && t != 0 && *(char **)(t + 0x20) != 0 &&
+        if (current_level_index == 0xA && t != 0 && *(char **)(t + 0x20) != 0 &&
             *(short *)(*(char **)(t + 0x20) + 0xA6) == 0x31A && D_0013D408[0x11] == 0) {
             D_0013D408[0x11] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
@@ -575,7 +575,7 @@ void FUN_L06_002feb40(char *m) {
     }
     {
     char *q = d + 0x120;
-    e = D_L06_001B0C30_c[*(int *)(d + 0x180)];
+    e = D_L06_001B0C30[*(int *)(d + 0x180)];
     if (FUN_L00_0025ff38(*(float *)(d + 0x198), m, q, 0, 0, e + 4, *e) != 2) {
         if (*(float *)(d + 0x198) < vector_distance_xy_alt(d + 0x170, d + 0x120)) {
             *(int *)(d + 0x164) = 2;

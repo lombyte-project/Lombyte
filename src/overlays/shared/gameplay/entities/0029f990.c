@@ -172,10 +172,10 @@ struct HoloPacket {
 
 extern float D_L00_001CA380[][4];
 extern float D_L00_001CA410[][2];
-extern int D_L00_001CA458_d[] __asm__("D_L00_001CA458") __attribute__((section(".data")));
+extern int D_L00_001CA458[] __attribute__((section(".data")));
 extern int D_L00_001CA4C0_d[] __asm__("D_L00_001CA4C0") __attribute__((section(".data")));
 extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
-extern short D_L00_00161184_d __asm__("D_L00_00161184") __attribute__((sda));
+extern float D_L00_00161184 __attribute__((sda));
 extern struct Quad D_L00_001CA480_d[] __asm__("D_L00_001CA480") __attribute__((section(".data")));
 extern void fast_draw_quad_real(void *, void *, int);
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
@@ -184,8 +184,8 @@ void FUN_L00_0029ff58(void) {
     struct HoloPacket s;
     float v[4][4];
     int i;
-    *(float *)&D_L00_00161184_d = *(float *)&D_L00_00161184_d + 0.01f;
-    if (*(float *)&D_L00_00161184_d > 1.0f) *(float *)&D_L00_00161184_d = *(float *)&D_L00_00161184_d - 1.0f;
+    D_L00_00161184 = D_L00_00161184 + 0.01f;
+    if (D_L00_00161184 > 1.0f) D_L00_00161184 = D_L00_00161184 - 1.0f;
     s.hdr[2] = 1;
     s.hdr[3] = 0x4000000044L;
     s.hdr[0] = 0;
@@ -207,18 +207,18 @@ void FUN_L00_0029ff58(void) {
         s.pos[3][0] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x10) + v[3][0];
         s.pos[3][1] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x14) + v[3][1];
         s.pos[3][2] = *(float *)((char *)D_L00_001CA4C0_d[7] + 0x18) + v[3][2];
-        s.col[0] = D_L00_001CA458_d[D_L00_001CA480_d[i].a];
-        s.col[1] = D_L00_001CA458_d[*(int *)((char *)D_L00_001CA480_d + i * 16 + 4)];
-        s.col[2] = D_L00_001CA458_d[*(int *)((char *)D_L00_001CA480_d + i * 16 + 8)];
-        s.col[3] = D_L00_001CA458_d[D_L00_001CA480_d[i].d];
+        s.col[0] = D_L00_001CA458[D_L00_001CA480_d[i].a];
+        s.col[1] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480_d + i * 16 + 4)];
+        s.col[2] = D_L00_001CA458[*(int *)((char *)D_L00_001CA480_d + i * 16 + 8)];
+        s.col[3] = D_L00_001CA458[D_L00_001CA480_d[i].d];
         s.uv[0][0] = D_L00_001CA410[D_L00_001CA480_d[i].a][0];
-        s.uv[0][1] = D_L00_001CA410[D_L00_001CA480_d[i].a][1] + *(float *)&D_L00_00161184_d;
+        s.uv[0][1] = D_L00_001CA410[D_L00_001CA480_d[i].a][1] + D_L00_00161184;
         s.uv[1][0] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480_d + i * 16 + 4)][0];
-        s.uv[1][1] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480_d + i * 16 + 4)][1] + *(float *)&D_L00_00161184_d;
+        s.uv[1][1] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480_d + i * 16 + 4)][1] + D_L00_00161184;
         s.uv[2][0] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480_d + i * 16 + 8)][0];
-        s.uv[2][1] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480_d + i * 16 + 8)][1] + *(float *)&D_L00_00161184_d;
+        s.uv[2][1] = D_L00_001CA410[*(int *)((char *)D_L00_001CA480_d + i * 16 + 8)][1] + D_L00_00161184;
         s.uv[3][0] = D_L00_001CA410[D_L00_001CA480_d[i].d][0];
-        s.uv[3][1] = D_L00_001CA410[D_L00_001CA480_d[i].d][1] + *(float *)&D_L00_00161184_d;
+        s.uv[3][1] = D_L00_001CA410[D_L00_001CA480_d[i].d][1] + D_L00_00161184;
         fast_draw_quad_real(&s, 0, 1);
     }
 }

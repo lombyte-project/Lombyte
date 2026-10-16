@@ -175,7 +175,7 @@ void FUN_L11_0030ee00(Lock_3102C8 *moby)
 /* Builds one GIF packet for a rotated textured sprite and advances the packet pointer. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003121C0), where it is exact; names translated to the US level program. */
 
-extern int gif_packet_end __asm__("D_L11_001611C0") __attribute__((section(".sdata")));
+extern int D_L11_001611C0_g __asm__("D_L11_001611C0") __attribute__((section(".sdata")));
 extern unsigned char screen_extent_c[] __asm__("D_0013E500");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -231,12 +231,12 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     subtract_vector_xyz(top_right, center, horizontal);
     qcopy(bottom_right, center);
 
-    *(int *)(gif_packet_end + 0) = 0x10000007;
+    *(int *)(D_L11_001611C0_g + 0) = 0x10000007;
     green_bits = green_bits << 8;
     rgba = rgba | green_bits;
     gif_dma_tag = 0x50000007;
     gif_regs = 0x53535353106;
-    *(int *)(gif_packet_end + 4) = 0;
+    *(int *)(D_L11_001611C0_g + 4) = 0;
     blue_bits = blue_bits << 16;
     rgba = rgba | blue_bits;
     alpha_bits = alpha_bits << 24;
@@ -244,15 +244,15 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     tex_size = 0x100010;
     gif_tag = 0xB400000000008001;
     rgba = rgba | alpha_bits;
-    *(int *)(gif_packet_end + 8) = 0;
+    *(int *)(D_L11_001611C0_g + 8) = 0;
     scale = 16.0f;
     u_end = texture_width << 4;
     v_end = texture_height << 20;
     packed_depth = (unsigned long)depth << 32;
-    *(int *)(gif_packet_end + 12) = gif_dma_tag;
-    tag = (char *)gif_packet_end;
+    *(int *)(D_L11_001611C0_g + 12) = gif_dma_tag;
+    tag = (char *)D_L11_001611C0_g;
     packet = (unsigned long *)(tag + 0x10);
-    gif_packet_end = (int)packet;
+    D_L11_001611C0_g = (int)packet;
     *(unsigned long *)(tag + 0x10) = gif_tag;
     packet[1] = gif_regs;
     packet[2] = tex0;
@@ -288,7 +288,7 @@ void FUN_L11_00310cf8(float x, float y, float width, float height, float angle, 
     }
 
     /* Fakematch: the store through the address keeps the reload after the last packet store. */
-    *(char **)&gif_packet_end += 0x70;
+    *(char **)&D_L11_001611C0_g += 0x70;
 }
 #define NOT_SDA
 
