@@ -152,7 +152,7 @@ extern void FUN_L00_001f3aa0(void);
 extern void FUN_L00_001f4490(void);
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void update_all_point_lights(void) __asm__("FUN_00201a28");
-extern void FUN_0020cfd0(void);
+extern void update_resident_packed_direction(void) __asm__("FUN_0020cfd0");
 extern void FUN_L00_0023ac78(s32);
 extern void update_help_state(void) __asm__("FUN_001fde90");
 extern void FUN_L00_00297e70_c(void) __asm__("FUN_L00_00297e70");
@@ -283,7 +283,7 @@ void handle_pause_input(void) {
     sound_update();
     noop_main_callback(D_L00_00161038, 6);
     update_all_point_lights();
-    FUN_0020cfd0();
+    update_resident_packed_direction();
     FUN_L00_0023ac78(1);
     update_help_state();
     if (DBG(2))
@@ -756,7 +756,7 @@ void FUN_L00_00298f90(void) {
     sound_update();
     noop_main_callback(D_L00_00161038, 6);
     update_all_point_lights();
-    FUN_0020cfd0();
+    update_resident_packed_direction();
     if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
         FUN_L00_00297e70();
     }

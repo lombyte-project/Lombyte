@@ -10502,38 +10502,6 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "gameplay/entities/fun_0020cfd0",
-        "source_path": "src/gameplay/entities/fun_0020cfd0.c",
-        "address": "0x0020cfd0",
-        "current_name": "FUN_0020cfd0",
-        "proposed_name": null,
-        "logical_group": "gameplay/entities",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "neighboring_group_context",
-            "functions": [
-              {
-                "address": "0x0020cef8",
-                "name": "FUN_0020cef8",
-                "logical_group": "gameplay/entities"
-              },
-              {
-                "address": "0x0020d1a8",
-                "name": "FUN_0020d1a8",
-                "logical_group": "gameplay/entities"
-              }
-            ]
-          },
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyfunc.c"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "gameplay/entities/process_moby_anim_data",
         "source_path": "src/gameplay/entities/process_moby_anim_data.c",
         "address": "0x0020d1a8",
@@ -20026,6 +19994,22 @@
           {
             "kind": "source_analysis",
             "note": "Preserves the supplied recovered Ghidra name. Supplied caller record shows update_camera_frame calling at 0x001edb08. Retail 0x001ed4c4-0x001ed4e0 normalizes g_afCameraTargetDirection (0x0013f5e0) and shifts/publishes direction in g_cameraTrackingState (0x001870d0); 0x001ed580, 0x001ed5a4 and 0x001ed5c4 damp its three direction components using helper 0x001ebd78. At 0x001ed5e8-0x001ed660 it subtracts the previous target position from target position 0x0013f3d0, measures and decomposes displacement, and retains the new position. At 0x001ed668-0x001ed6dc it conditionally damps height; 0x001ed6e0-0x001ed724 shifts history; 0x001ed728-0x001ed7ac retains selected-object address/value and suppresses deltas below 0.001. These state updates prove the broad camera tracking role without assigning unknown mode or object-class meanings."
+          }
+        ]
+      },
+      {
+        "address": "0x0020cfd0",
+        "current_name": "FUN_0020cfd0",
+        "proposed_name": "update_resident_packed_direction",
+        "logical_group": "gameplay/entities",
+        "unit": "gameplay/entities/update_resident_packed_direction",
+        "source_path": "src/gameplay/entities/update_resident_packed_direction.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x0020cfd8 the function loads g_pCameraReferenceData (0x001413d0), then calls 0x0020d510 at 0x0020cfec. Checked helper instructions 0x0020d510..0x0020d57c read its +0x38 packed preset selector and copy or interpolate vector slot +0x10 from 0x0019bdc0, recovered as g_abObjectRenderLightingPresets[].aAvVectors[1]. The assigned retail instructions 0x0020d000..0x0020d014 feed the vector's first two floats to angle helper 0x001f9e90 and fast_cos; 0x0020d028 calls fast_sin. Stores at 0x0020d02c, 0x0020d044 and 0x0020d048 set g_flResidentPackedDirection at 0x001caa80 to (0.14*cos(angle), 0.14*sin(angle), -0.99). The supplied caller is update_resident_gameplay_state via 0x00230e8c. This proves updating the named resident direction vector; no relevant string evidence is supplied or needed for this bounded role."
           }
         ]
       }
