@@ -1559,31 +1559,31 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L15_0029ae18(char *moby) {
-    float v2[4];
-    float v0[4];
-    float v1[4];
+    float noise[4];
+    float spark_a[4];
+    float spark_b[4];
     char *data = *(char **)(moby + 0x78);
     float s;
     int a, b, c;
     s = *(float *)&D_L15_00161440;
     s *= D_0015ED6C;
-    scale_vector_xyz(v0, data, *(float *)&D_L15_00161448);
-    random_vector(v2, s, s);
-    add_vector_xyz(v0, v0, v2);
+    scale_vector_xyz(spark_a, data, *(float *)&D_L15_00161448);
+    random_vector(noise, s, s);
+    add_vector_xyz(spark_a, spark_a, noise);
     s = *(float *)&D_L15_00161444;
     s *= D_0015ED6C;
-    scale_vector_xyz(v1, data, *(float *)&D_L15_0016144C);
-    random_vector(v2, s, s);
-    add_vector_xyz(v1, v1, v2);
-    v0[3] = *(float *)&D_L15_00161420;
-    v1[3] = *(float *)&D_L15_00161424;
+    scale_vector_xyz(spark_b, data, *(float *)&D_L15_0016144C);
+    random_vector(noise, s, s);
+    add_vector_xyz(spark_b, spark_b, noise);
+    spark_a[3] = *(float *)&D_L15_00161420;
+    spark_b[3] = *(float *)&D_L15_00161424;
     a = func_001FA898_r(multiply_global_factor_ed64(
         random_float_between_alt(*(float *)&D_L15_00161428, *(float *)&D_L15_0016142C)));
     b = func_001FA898_r(multiply_global_factor_ed64(
         random_float_between_alt(*(float *)&D_L15_00161430, *(float *)&D_L15_00161434)));
     c = func_001FA898_r(multiply_global_factor_ed64(
         random_float_between_alt(*(float *)&D_L15_00161438, *(float *)&D_L15_0016143C)));
-    spawn_spark(moby + 0x10, v0, v1, *(int *)&D_L15_00161418, *(int *)&D_L15_0016141C, a, b, c,
+    spawn_spark(moby + 0x10, spark_a, spark_b, *(int *)&D_L15_00161418, *(int *)&D_L15_0016141C, a, b, c,
                  *(int *)&D_L15_00161454);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029C168), where it is exact; names translated to the US level program. */
@@ -1636,7 +1636,7 @@ typedef struct {
     float pitchvel;
     float yaw0;
     float pitch0;
-    float speed1;
+    float speed_end;
     int f38;
     short f3C;
     short f3E;
@@ -1751,7 +1751,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
     v80[2] = 1.0f;
     d = m->data;
     t = d->target;
-    d->speed = d->speed + (d->speed1 - d->speed) / 10.0f * D_0015ED64;
+    d->speed = d->speed + (d->speed_end - d->speed) / 10.0f * D_0015ED64;
     FUN_001f9770(&d->f3C);
     {
         float a = convert_integer_to_float_c2(d->f3C);
@@ -2364,8 +2364,8 @@ void FUN_L15_002a2488(char *moby) {
     float g;
     float r0;
     float r;
-    float f20;
-    float f21;
+    float yaw;
+    float target_z;
     float fd;
     int state;
     int ret;
@@ -2425,14 +2425,14 @@ s3:
     c = (char *)&hero;
     fa = *(float *)(c + 0x80) - *(float *)(moby + 0x10);
     fb = *(float *)(c + 0x84) - *(float *)(moby + 0x14);
-    f20 = fast_add_rotations_c(*(float *)(data + 0x64), FUN_001f9e90(fa, fb));
-    f21 = *(float *)(c + 0xC8);
-    g = fast_cos_c(f20);
+    yaw = fast_add_rotations_c(*(float *)(data + 0x64), FUN_001f9e90(fa, fb));
+    target_z = *(float *)(c + 0xC8);
+    g = fast_cos_c(yaw);
     va[0] = g * (*(float *)&D_L15_001614B4 * D_0015ED6C);
-    r0 = fast_sin_c(f20);
+    r0 = fast_sin_c(yaw);
     va[1] = r0 * (*(float *)&D_L15_001614B4 * D_0015ED6C);
     va[2] = 0.0f;
-    fd = *(float *)(moby + 0x18) - f21;
+    fd = *(float *)(moby + 0x18) - target_z;
     if (0.6f < fd) {
         va[2] = -(D_0015ED6C * 3.0f);
     } else if (fd < 0.4f) {
@@ -2918,7 +2918,7 @@ extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void subtract_vector_xyz_c3(void *, void *, void *) __asm__("FUN_001f9a28");
-void normalize_vector_triplet(f32 *arg0) __asm__("FUN_00214128");
+void normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
 extern unsigned char *func_L00_00273F80_r(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 
 void FUN_L15_002a6e68(unsigned char *moby) {

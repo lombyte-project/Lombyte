@@ -993,7 +993,7 @@ extern unsigned char D_0015EDB0[] __attribute__((section(".sdata")));
 extern unsigned char D_0015EDB4[4] __attribute__((section(".sdata")));
 extern unsigned char D_0015EDC0[] __attribute__((section(".sdata")));
 extern unsigned char D_L00_00179700_c[][16] __asm__("D_L00_00179700");
-extern void FUN_L00_00263d40(int arg0, int arg1);
+extern void FUN_L00_00263d40(int, int);
 
 void FUN_L00_00206e00(void) {
     char *g;
@@ -2473,7 +2473,7 @@ void FUN_L00_00209ec8(void) {
     OvlQuad w[1];
     char *g;
     char *base;
-    float a, r, r0, f, a1, a2;
+    float a, r, r0, f, theta, phi;
     int t, c, col, life, n1, n2, k;
     OvlQuad *pt;
     g = D_0013F7EE;
@@ -2508,9 +2508,9 @@ void FUN_L00_00209ec8(void) {
         n2 = FUN_001fa6d0_209ec8(FUN_002132a8_209ec8(21000.0f, 31500.001953125f) / 1000.0f);
         r = FUN_002132a8_209ec8(D_0015ED6C * 0.15f, D_0015ED6C * 0.57f);
         qcopy(v, g - 0x41E);
-        a1 = FUN_00213308_209ec8();
-        a2 = FUN_00213308_209ec8();
-        build_spherical_offset(pt, r, a1, a2);
+        theta = FUN_00213308_209ec8();
+        phi = FUN_00213308_209ec8();
+        build_spherical_offset(pt, r, theta, phi);
         spark_v(v, pt, col, 0x70F0, life, n1, n2, 1);
     }
     t = random_int_between(FUN_001f96f8_209ec8(3), FUN_001f96f8_209ec8(7));
@@ -2841,7 +2841,7 @@ void FUN_L00_0020ac98(void) {
     float v[8];
     char *q;
     char *info, *info2, *p, *t;
-    float f20, f21, s;
+    float yaw_delta, pitch, s;
     int mode = *(int *)(g1 + 0x208C);
     if (mode != 1 && mode != 4 && mode != 2 && mode != 7 && mode != 0) {
         *(int *)(g1 + 0x2274) = 0;
@@ -2910,28 +2910,28 @@ void FUN_L00_0020ac98(void) {
     if (info2 != 0)
         v[2] += (float)*(unsigned char *)(info2 + 0x3A) * 0.125f;
     FUN_L00_00233660(&v[4], 0.3f, 0.0f, 0.85f);
-    f20 = fast_subtract_rotations(FUN_001f9e90_c(v[0] - v[4], v[1] - v[5]), *(float *)(g5 + 0x98));
-    f21 = FUN_001f9e90_c(vector_distance(v, q), v[6] - v[2]);
-    if (f20 > 1.02974427f)
-        f20 = 1.02974427f;
-    else if (f20 < -1.02974427f)
-        f20 = -1.02974427f;
-    if (f21 > 0.610865235f)
-        f21 = 0.610865235f;
-    if (f21 < -0.436332315f)
-        f21 = -0.436332315f;
+    yaw_delta = fast_subtract_rotations(FUN_001f9e90_c(v[0] - v[4], v[1] - v[5]), *(float *)(g5 + 0x98));
+    pitch = FUN_001f9e90_c(vector_distance(v, q), v[6] - v[2]);
+    if (yaw_delta > 1.02974427f)
+        yaw_delta = 1.02974427f;
+    else if (yaw_delta < -1.02974427f)
+        yaw_delta = -1.02974427f;
+    if (pitch > 0.610865235f)
+        pitch = 0.610865235f;
+    if (pitch < -0.436332315f)
+        pitch = -0.436332315f;
     g6 = (char *)hero_pos - 0x80;
     if (scale_game_frames(0x4D) - scale_game_frames(0x32) < *(int *)(g6 + 0x1C0)) {
-        if (f20 > 0.296705961f)
-            f20 = 0.296705961f;
-        else if (f20 < -0.296705961f)
-            f20 = -0.296705961f;
-        f21 = 0.0f;
+        if (yaw_delta > 0.296705961f)
+            yaw_delta = 0.296705961f;
+        else if (yaw_delta < -0.296705961f)
+            yaw_delta = -0.296705961f;
+        pitch = 0.0f;
     }
     FUN_L00_0020a228(frame_scale_sq * 0.021f, frame_scale_sq * 0.27f);
     p = D_L00_0017A780;
-    *(float *)(p + 0x274) = f21;
-    *(float *)(p + 0x278) = f20 * 0.7f;
+    *(float *)(p + 0x274) = pitch;
+    *(float *)(p + 0x278) = yaw_delta * 0.7f;
     FUN_L00_0020a210(frame_scale_sq * 0.014f, frame_scale_sq * 0.3f);
     *(float *)(p + 0x1C8) = *(float *)(p + 0x278) * 0.55f;
 }

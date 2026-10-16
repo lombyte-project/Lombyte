@@ -495,7 +495,7 @@ void FUN_L00_0025a9f8_272438(void *, void *, void *, int, void *, int, int, int,
                              float) __asm__("FUN_L00_0025a9f8");
 typedef struct {
     int i0;
-    float f4, f8, fc;
+    float unk4, unk8, fc;
     int i10;
     void *p14;
 } Q_272438;
@@ -507,8 +507,8 @@ void FUN_L00_00272438(unsigned char *m) {
     float x, y;
     int r;
     old = *pos;
-    q->f4 += q->f8;
-    FUN_L00_00262360_272438(q->i0, &x, &y, pos, q->f4, q->fc);
+    q->unk4 += q->unk8;
+    FUN_L00_00262360_272438(q->i0, &x, &y, pos, q->unk4, q->fc);
     if (fast_dec_timer(m + 0xA)) {
         free_effect_particle(m);
         return;
@@ -541,7 +541,7 @@ typedef struct {
     s32 wC;
     u8 v10[16];
     u8 v20[12];
-    f32 f2C;
+    f32 unk2C;
     S_2725d8 s;
 } P_2725d8;
 extern u8 *D_L00_001B215C __attribute__((section(".data")));
@@ -563,7 +563,7 @@ P_2725d8 *FUN_L00_002725d8(u8 *a0, u8 *a1, s32 a2, s32 a3, f32 a4, f32 a5) {
         p->b2 = *D_L00_001B215C;
         add_vector_xyz_cf(a0, a1, p->v10);
         qcopy(p->v20, p->v10);
-        p->f2C = a5;
+        p->unk2C = a5;
         *(f32 *)((u8 *)p + 0x1C) = a4;
         s = &p->s;
         p->s.o = a0;
@@ -584,7 +584,7 @@ typedef struct {
     u8 pad0[0x10];
     u128_2726d8 pos;
     u8 pad20[0xC];
-    f32 f2C;
+    f32 unk2C;
     Q_2726d8 q;
 } P_2726d8;
 void FUN_L00_00267a08(void *);
@@ -604,7 +604,7 @@ void FUN_L00_002726d8(P_2726d8 *p) {
         return;
     }
     sc = q->xC * random_float_between(0.5f, 1.0f);
-    save = p->f2C;
+    save = p->unk2C;
     qcopy(&t, &p->pos);
     moby_point_position(p->q.owner, q->x4, &p->pos);
     FUN_001f9a28(&t, &t, &p->pos);
@@ -617,7 +617,7 @@ void FUN_L00_002726d8(P_2726d8 *p) {
     fast_vec_normalize(&t, &t, f);
     FUN_001f9a10((u8 *)p + 0x20, &p->pos, &t);
     *(f32 *)((u8 *)p + 0x1C) = sc;
-    p->f2C = save;
+    p->unk2C = save;
 }
 void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9a10(void *, void *, void *);
@@ -706,7 +706,7 @@ unsigned char *FUN_L00_002729c8(void *pos, unsigned char a, unsigned char b, uns
 typedef float V_272bc0[4] __attribute__((aligned(16)));
 typedef struct {
     char p0[0x88];
-    float f88;
+    float unk88;
     char p1[0x2080 - 0x8C];
     int i2080;
 } P_272bc0;
@@ -769,7 +769,7 @@ void FUN_L00_00272bc0(unsigned char *p) {
         c = (unsigned char *)(*(V_272bc0 *)D_0013F3D0);
         if (vector_distance(p + 0x10, c) < 0.3f) {
             g = (P_272bc0 *)(c - 0x80);
-            if (g->f88 < *(float *)(p + 0x18) + 1.2f) {
+            if (g->unk88 < *(float *)(p + 0x18) + 1.2f) {
                 subtract_vector_xyz(t, c, p + 0x10);
                 normalize_vector_xyz(t, t, 1.0f);
                 t[2] = 1.0f;
@@ -876,7 +876,7 @@ typedef struct {
     u8 b8;
     u8 p9;
     s16 hA;
-    f32 fC;
+    f32 unkC;
     f32 x, y, z;
 } Part_273298;
 typedef struct {
@@ -922,19 +922,19 @@ typedef struct {
 } T_273448;
 typedef struct {
     T_273448 *m;
-    f32 f4;
-    f32 f8;
+    f32 unk4;
+    f32 unk8;
     s16 hC;
     s16 hE;
-    f32 f10;
-    f32 f14;
+    f32 unk10;
+    f32 unk14;
 } E_273448;
 typedef struct {
     u8 b0, b1, b2, b3;
     u32 w4;
     u8 b8, b9;
     s16 hA;
-    f32 fC;
+    f32 unkC;
     f32 pos[4] __attribute__((aligned(16)));
     E_273448 e;
 } P_273448;
@@ -958,31 +958,31 @@ void FUN_L00_00273448(P_273448 *p) {
         goto kill;
     }
     e->hC = (e->hC + 1) & 0xF;
-    if (p->fC < 159600.0f) {
-        p->fC += frame_scale * 3989.99976f;
-        if (159600.0f < p->fC) {
-            p->fC = 159600.0f;
+    if (p->unkC < 159600.0f) {
+        p->unkC += frame_scale * 3989.99976f;
+        if (159600.0f < p->unkC) {
+            p->unkC = 159600.0f;
         }
-    } else if (159600.0f < p->fC) {
-        p->fC -= frame_scale * 15959.999f;
-        if (p->fC < 159600.0f) {
-            p->fC = 159600.0f;
+    } else if (159600.0f < p->unkC) {
+        p->unkC -= frame_scale * 15959.999f;
+        if (p->unkC < 159600.0f) {
+            p->unkC = 159600.0f;
         }
     }
-    e->f8 += frame_scale * 0.001f;
-    p->b8 = truncate_float_to_s32(e->f8 * 255.0f);
+    e->unk8 += frame_scale * 0.001f;
+    p->b8 = truncate_float_to_s32(e->unk8 * 255.0f);
     p->b2 = tab_273448[e->hC];
-    if (p->fC <= 159600.0f || 0.0f < e->f10) {
-        f32 *q = &e->f4;
+    if (p->unkC <= 159600.0f || 0.0f < e->unk10) {
+        f32 *q = &e->unk4;
         *q += q[3];
     }
     {
         f32 x;
-        if (p->fC <= 159600.0f) {
-            x = e->f4;
+        if (p->unkC <= 159600.0f) {
+            x = e->unk4;
             lim = 0.3f;
         } else {
-            x = e->f4;
+            x = e->unk4;
             lim = 0.15f;
         }
         if (!(lim < x)) {
@@ -992,15 +992,15 @@ void FUN_L00_00273448(P_273448 *p) {
                 return;
             }
         } else {
-            e->f10 = -e->f10;
-            e->f4 = x + e->f10;
+            e->unk10 = -e->unk10;
+            e->unk4 = x + e->unk10;
         }
     }
-    p->w4 = (p->w4 & 0xFFFFFF) + (truncate_float_to_s32(e->f4 * 256.0f) << 24);
-    e->f14 += (1.0f - e->f14) * (frame_scale * 0.175f);
+    p->w4 = (p->w4 & 0xFFFFFF) + (truncate_float_to_s32(e->unk4 * 256.0f) << 24);
+    e->unk14 += (1.0f - e->unk14) * (frame_scale * 0.175f);
     pos_273448(e->m, e->hE, a);
     subtract_vector_xyz(v, g_debug_camera, a);
-    vscl_273448(v, v, e->f14);
+    vscl_273448(v, v, e->unk14);
     vadd_273448(p->pos, a, v);
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002745A8), where it is exact; names translated to the US level program. */
@@ -1332,10 +1332,10 @@ typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) V_274518;
 typedef struct {
-    f32 f0, f4, f8;
+    f32 unk0, unk4, unk8;
     u8 *iC;
-    f32 f10;
-    f32 f14;
+    f32 unk10;
+    f32 unk14;
     s16 h18;
     s16 h1A;
     s16 h1C;
@@ -1375,9 +1375,9 @@ void FUN_L00_00274518(M_274518 *m) {
             goto kill;
         if (r->iC == 0)
             return;
-        a.x = m->r.f0;
-        a.y = r->f4;
-        a.z = r->f8;
+        a.x = m->r.unk0;
+        a.y = r->unk4;
+        a.z = r->unk8;
         FUN_001f9a68_274518(&a, &a, convert_integer_to_float(r->h18));
         FUN_001f9a10_274518(m->v10, r->iC + 0x10, &a);
         return;
@@ -1395,9 +1395,9 @@ void FUN_L00_00274518(M_274518 *m) {
         z = 0.0f;
         FUN_L00_002743a8_274518(0, m->v10, FUN_001f96f8_274518(10), z, z, 0, m->b7, 0);
     } else {
-        a.x = r->f0;
-        a.y = r->f4;
-        a.z = r->f8;
+        a.x = r->unk0;
+        a.y = r->unk4;
+        a.z = r->unk8;
         z = 0.0f;
         p = FUN_L00_002743a8_274518((s32)r->iC, m->v10, FUN_001f96f8_274518(10), z, z, 0, m->b7,
                                     &a);
@@ -1408,32 +1408,32 @@ void FUN_L00_00274518(M_274518 *m) {
         return;
     qcopy(m->v10, r->iC + 0x10);
     k1 = 2.25f;
-    a.x = FUN_001f9dc8_274518(r->f10) * k1;
+    a.x = FUN_001f9dc8_274518(r->unk10) * k1;
     k2 = 0.28f;
-    a.y = FUN_001f9de0_274518(r->f10) * k1;
+    a.y = FUN_001f9de0_274518(r->unk10) * k1;
     a.z = a.x;
     a.x = 0.0f;
-    b.x = FUN_001f9dc8_274518(r->f14) * k2;
-    b.y = FUN_001f9de0_274518(r->f14) * k2;
+    b.x = FUN_001f9dc8_274518(r->unk14) * k2;
+    b.y = FUN_001f9de0_274518(r->unk14) * k2;
     b.z = b.x;
     b.x = 0.0f;
     clear_u64_value(&c);
-    c.y = r->f10;
+    c.y = r->unk10;
     rotation_matrix(mat, &c);
     transform_vector(&b, &b, mat);
     FUN_001f9a10_274518(&a, &a, &b);
     FUN_001f9cf8_274518(&a, &a, r->iC + 0xC0);
     FUN_001f9a10_274518(m->v10, m->v10, &a);
-    r->f10 = fast_add_rotations(r->f10, frame_time * 0.9599310755729675f);
-    r->f14 = fast_add_rotations(r->f14, frame_time * 4.363323211669922f);
+    r->unk10 = fast_add_rotations(r->unk10, frame_time * 0.9599310755729675f);
+    r->unk14 = fast_add_rotations(r->unk14, frame_time * 4.363323211669922f);
 }
 typedef struct {
     void *o;
     u8 b4;
     u8 b5;
     s16 h6;
-    float f8;
-    float fC;
+    float unk8;
+    float unkC;
 } S_274818;
 extern float FUN_002132a8_274818(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8_274818(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -1454,13 +1454,13 @@ void FUN_L00_00274818(char *p) {
     }
     v = p + 0x10;
     one = 1.0f;
-    f = s->f8 * FUN_002132a8_274818(0.05f, one);
+    f = s->unk8 * FUN_002132a8_274818(0.05f, one);
     save = *(float *)(p + 0x2C);
     FUN_L00_0024f7c8_274818(s->o, s->b4, v);
     FUN_0020cca8_274818(s->o, s->b4, a);
     x = FUN_001fa6c0_274818(s->b5);
     x = FUN_002132a8_274818(-x, x);
-    normalize_vector_xyz(&b, a, (x / 100.0f - one) * s->fC);
+    normalize_vector_xyz(&b, a, (x / 100.0f - one) * s->unkC);
     FUN_001f9a10_274818(p + 0x20, v, &b);
     *(float *)(p + 0x1C) = f;
     *(float *)(p + 0x2C) = save;
@@ -1678,7 +1678,7 @@ typedef struct {
     int n;
     int i14;
     int i18;
-    float f1C;
+    float unk1C;
 } Q_275158;
 
 extern unsigned char *D_L00_001B21A0 __attribute__((section(".data")));
@@ -1704,9 +1704,9 @@ unsigned char *FUN_L00_00275158(void *a, void *b, int n, float f) {
         q->i14 = 0;
         q->i18 = FUN_00213260_275158(0xC) - 6;
         ((float *)q)[3] = f;
-        q->f1C = *(float *)(m + 0xC) * 0.1f;
+        q->unk1C = *(float *)(m + 0xC) * 0.1f;
         if (n >= 0) {
-            q->f1C = *(float *)(m + 0xC) * 0.05f;
+            q->unk1C = *(float *)(m + 0xC) * 0.05f;
             if (FUN_00213260_275158(0x1E) == 0) {
                 q->i14 = -0x28;
             } else if (FUN_00213260_275158(0x1E) == 0) {
@@ -2066,10 +2066,10 @@ typedef struct {
     u8 b8;
     u8 p9;
     s16 hA;
-    f32 fC;
-    f32 f10;
-    f32 f14;
-    f32 f18;
+    f32 unkC;
+    f32 unk10;
+    f32 unk14;
+    f32 unk18;
     u8 p1C[4];
     int w20;
 } Part_275eb0;
@@ -2077,17 +2077,17 @@ int FUN_001f9770_00275eb0(s16 *) __asm__("FUN_001f9770");
 u32 FUN_001fa6e0_00275eb0(u32, u32, f32) __asm__("FUN_001fa6e0");
 void FUN_L00_00275eb0(Part_275eb0 *p) {
     float a;
-    if (p->f10 < 2.0f || 1021.0f < p->f10 || p->f14 < 2.0f || 1021.0f < p->f14 || p->f18 < 2.0f ||
-        1021.0f < p->f18 || FUN_001f9770_00275eb0(&p->hA)) {
+    if (p->unk10 < 2.0f || 1021.0f < p->unk10 || p->unk14 < 2.0f || 1021.0f < p->unk14 || p->unk18 < 2.0f ||
+        1021.0f < p->unk18 || FUN_001f9770_00275eb0(&p->hA)) {
         free_effect_particle(p);
         return;
     }
     if (p->w20) {
-        p->fC *= 0.99f;
+        p->unkC *= 0.99f;
         a = convert_integer_to_float(p->hA - 1);
         p->w4 = FUN_001fa6e0_00275eb0(0x30FFFFFF, p->w4, a / convert_integer_to_float(p->hA));
     } else {
-        p->fC *= 0.95f;
+        p->unkC *= 0.95f;
         a = convert_integer_to_float(p->hA - 1);
         p->w4 = FUN_001fa6e0_00275eb0(0x603F1008, p->w4, a / convert_integer_to_float(p->hA));
     }

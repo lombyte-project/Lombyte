@@ -2441,7 +2441,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_normalize_angle(f32) __asm__("FUN_001fa610");
 extern Moby *D_L06_0015FFD8;
 
-int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
+int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int flag, int *out) {
     float v0[4];
     float vB[4];
     float vA[4];
@@ -2480,7 +2480,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
 
         for (k = 0; k < 10; k++) {
             int r16, r17, r18, r2, gc;
-            float f0, f1, f20, f21;
+            float f0, lift, f20, f21;
             f21 = random_float_between_c2(0.1f, 1.0f);
             r18 = FUN_L00_00257b90(0x40, 0xFF);
             r17 = FUN_L00_00257b90(0x40, 0xFF);
@@ -2491,8 +2491,8 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
             f20 = f20 * random_float_between_c2(0.0f, 0.25f);
             vA[2] = 0.0f;
             vA[1] = f20;
-            f1 = vA[2] + random_float_between_c2(0.0f, 0.5f);
-            vA[2] = f1;
+            lift = vA[2] + random_float_between_c2(0.0f, 0.5f);
+            vA[2] = lift;
             FUN_L00_001ff290(vC, vA, ctx + 0x10);
             f0 = random_float_between_c2(0.0f, D_0015ED6C);
             fast_vec_normalize_c(vB, vB, f0);
@@ -2513,7 +2513,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
 
         for (k = 0; k < 10; k++) {
             int r16, r17, r18, r2, gc;
-            float f0, f1, f20, f21;
+            float f0, lift, f20, f21;
             f21 = random_float_between_c2(0.1f, 1.0f);
             r18 = FUN_L00_00257b90(0x40, 0xFF);
             r17 = FUN_L00_00257b90(0x40, 0xFF);
@@ -2524,8 +2524,8 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
             f20 = f20 * random_float_between_c2(0.0f, 0.25f);
             vC[2] = 0.0f;
             vC[1] = f20;
-            f1 = vC[2] + random_float_between_c2(0.0f, 0.5f);
-            vC[2] = f1;
+            lift = vC[2] + random_float_between_c2(0.0f, 0.5f);
+            vC[2] = lift;
             FUN_L00_001ff290(vD, vC, ctx + 0x10);
             f0 = random_float_between_c2(0.0f, D_0015ED6C);
             fast_vec_normalize_c(vA, vA, f0);
@@ -2553,7 +2553,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
         return 0;
     case 0x400:
     case 0x516:
-        if (a3 != 0) return 0;
+        if (flag != 0) return 0;
         if (*(unsigned char *)(moby + 0x20) == 2) return 0;
         if (!(vector_distance_xy_alt(ctx + 0x10, v0) < 1.0f)) return 0;
         *(char *)(ctx + 0x20) = 8;

@@ -67,7 +67,7 @@ int FUN_L05_0023b378(int id, float *out) {
 
 typedef struct {
     char pad[0x20];
-    int f20;
+    int unk20;
     char pad2[0x28];
 } ItemDef;
 
@@ -275,7 +275,7 @@ void FUN_L05_0023dc88(int i) {
                 ((int *)(D_00141660))[i] = w;
                 g->selected_item[i] = w;
                 if (i == 0) {
-                    D_L05_00179F20[g->selected_item[0]].f20 = 0x20;
+                    D_L05_00179F20[g->selected_item[0]].unk20 = 0x20;
                 }
                 changed = 1;
             }
@@ -335,7 +335,7 @@ void FUN_L05_0023dc88(int i) {
                     }
                     if (i == 0) {
                         struct Hero *k = &hero;
-                        D_L05_00179F20[k->selected_item[0]].f20 = 0x20;
+                        D_L05_00179F20[k->selected_item[0]].unk20 = 0x20;
                     }
                 }
                 changed = 1;
@@ -503,8 +503,8 @@ int FUN_L05_002515d0(void) {
     struct Hero *q;
     struct Hero *u;
     int r;
-    float v1[4];
-    float v2[4];
+    float ray_start[4];
+    float ray_end[4];
     float t;
     float scale;
     if ((unsigned)(p->state.control_mode - 0x15) < 2) {
@@ -563,13 +563,13 @@ int FUN_L05_002515d0(void) {
         if ((frame_number & 0x3F) == 0) {
             scale = 16.0f;
         }
-        hero_get_collision_ray_endpoints(v1, v2, 0, scale, 1.3f);
-        if (func_L00_001EFFF0(v1, v2, 2, *(int *)&u->moby, 0) != 0) {
+        hero_get_collision_ray_endpoints(ray_start, ray_end, 0, scale, 1.3f);
+        if (func_L00_001EFFF0(ray_start, ray_end, 2, *(int *)&u->moby, 0) != 0) {
             int s = collision_hit_material();
             u->ground_type = s;
             if ((short)s == 0) {
-                v1[2] = D_L05_00174268 - 0.01f;
-                if (func_L00_001EFFF0(v1, v2, 2, *(int *)&u->moby, 0) == 0) {
+                ray_start[2] = D_L05_00174268 - 0.01f;
+                if (func_L00_001EFFF0(ray_start, ray_end, 2, *(int *)&u->moby, 0) == 0) {
                     hero_set_state(0x34, 1);
                     return 1;
                 }
@@ -1398,8 +1398,8 @@ typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Node_254608;
 typedef struct { int n; int pad[3]; Node_254608 p[1]; } Path_254608;
 typedef struct {
     char pad0[0x20];
-    int f20;
-    int f24;
+    int unk20;
+    int unk24;
     int f28;
     int f2C[5];
     int f40;
@@ -1461,10 +1461,10 @@ void FUN_L05_00254608(void) {
         return;
     }
     d = (Data_254608 *)((struct Moby *)hero.unk86C)->pvars;
-    if (d->f20 == -1) {
+    if (d->unk20 == -1) {
         return;
     }
-    path = ((Path_254608 * *)D_L05_001B0930)[d->f20];
+    path = ((Path_254608 * *)D_L05_001B0930)[d->unk20];
     hero.unk8B4 = (void *)path;
     if (D_0015ED84_lui == 0x10) {
         *(u128_254608 *)v0 = 0;

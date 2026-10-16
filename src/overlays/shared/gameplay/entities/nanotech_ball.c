@@ -2037,7 +2037,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
     I6_DD3D8 t2;
     int r0, g0, b0;
     int r1, g1, b1;
-    float f22, f23, f24, sc, dt;
+    float f22, dist, f24, sc, dt;
     int step, i, j, k;
 
     blk = D_L00_001EA0B0;
@@ -2052,7 +2052,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
     if ((&D_0013E520)->b9 == 0) step = 2;
     fast_vec_scale_c(b, b, f22);
     subtract_vector_xyz_c3(a, D_L00_00166DC0, self + 0x10);
-    f23 = fast_vec_length(a);
+    dist = fast_vec_length(a);
     for (; i < 10 / step; i++) {
         *(u128_DD3D8 *)g = 0;
         g[0] = random_float_between(-1.0f, 1.0f);
@@ -2092,23 +2092,23 @@ void FUN_L00_002dbf28(char *self, char *q) {
     g[1] = random_float_between(-1.0f, 1.0f);
     g[2] = random_float_between(-1.0f, 1.0f);
     *(u128_DD3D8 *)e = *(u128_DD3D8 *)g;
-    a[2] += f23 * 0.5f;
-    fast_vec_normalize_c(e, e, f23 / 5.0f * D_0015ED6C);
-    fast_vec_normalize_c(a, a, (f23 + f23) * D_0015ED6C);
+    a[2] += dist * 0.5f;
+    fast_vec_normalize_c(e, e, dist / 5.0f * D_0015ED6C);
+    fast_vec_normalize_c(a, a, (dist + dist) * D_0015ED6C);
     add_vector_xyz(e, e, a);
     clamp_vector_length(e, e, D_0015ED6C * 10.0f);
     {
         int h = scale_game_frames_c(60);
         FUN_L00_002af450(self + 0x10, (char *)e, FUN_L00_00257b90_c(h, scale_game_frames_c(90)), 1, (&D_0013E520)->b9);
     }
-    if (f23 < 6.0f) {
-        k = func_001FA898_r(f23) + 1;
+    if (dist < 6.0f) {
+        k = func_001FA898_r(dist) + 1;
     } else {
         k = 4;
     }
     f24 = 0.0f;
-    if (f23 < 7.0f) {
-        f24 = 7.0f - f23;
+    if (dist < 7.0f) {
+        f24 = 7.0f - dist;
     }
     if (k > 0) {
         int cnt = k;
@@ -2126,14 +2126,14 @@ void FUN_L00_002dbf28(char *self, char *q) {
             FUN_L00_0026a9f0(self + 0x10, b, A, B, big, r1, r2, 0, 0, sh);
         } while (--cnt);
     }
-    if (f23 > 9.0f) {
-        float s4 = f22 * 4.0f;
-        func_L00_002E0CB8_DD3D8(s4, self, self + 0x10, b, scale_game_frames_c(15), 0x7F, 0x7F, 0x7F, 0x20);
+    if (dist > 9.0f) {
+        float size = f22 * 4.0f;
+        func_L00_002E0CB8_DD3D8(size, self, self + 0x10, b, scale_game_frames_c(15), 0x7F, 0x7F, 0x7F, 0x20);
         r0 = 0x7F;
         g0 = 0x20;
         b0 = 0;
         FUN_L00_0025c088(&r0, &g0, &b0, (&D_0013E520)->b9);
-        func_L00_002E0CB8_DD3D8(s4, self, self + 0x10, b, scale_game_frames_c(24), r0, g0, b0, 0x20);
+        func_L00_002E0CB8_DD3D8(size, self, self + 0x10, b, scale_game_frames_c(24), r0, g0, b0, 0x20);
     }
     r1 = 0x7F;
     g1 = 0x3F;
@@ -2159,7 +2159,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
         float s = f22 * 3.0f;
         func_L00_002E0CB8_DD3D8(s, self, self + 0x10, b, scale_game_frames_c(29), r1, g1, b1, 0x20);
     }
-    (*(Cam_DD3D8 *)D_L00_00166C80).f160 = (f23 < 20.0f) ? 0.4f - f23 * 0.0175f : 0.050000012f;
+    (*(Cam_DD3D8 *)D_L00_00166C80).f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
     (*(Cam_DD3D8 *)D_L00_00166C80).i168 = scale_game_frames_c(25);
     FUN_L00_002d3838((char *)&blk, self + 0x10, 0, 0);
     if ((&D_0013E520)->b9) {
@@ -2626,7 +2626,7 @@ typedef struct {
     float q[4][4];
     unsigned int col[4];
     float x0, y0, x1, y1, x2, y2, x3, y3;
-    long t0, t1, t2, t3;
+    long word0, word1, word2, word3;
 } Pkt;
 
 extern char g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
@@ -2652,10 +2652,10 @@ void FUN_L00_002dd8e8(void) {
     short *pv;
     int i, j, k, v;
     unsigned short y;
-    s.t1 = get_effect_texture(0x15);
-    s.t2 = 0x0000FF9000000260L;
-    s.t3 = 0x8000000048L;
-    s.t0 = 0;
+    s.word1 = get_effect_texture(0x15);
+    s.word2 = 0x0000FF9000000260L;
+    s.word3 = 0x8000000048L;
+    s.word0 = 0;
     a = D_L00_00161B48;
     D_L00_00161B48 = a + 0.001f;
     if (D_L00_00161B48 > 7.0f) D_L00_00161B48 -= 7.0f;

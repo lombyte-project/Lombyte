@@ -15,11 +15,11 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 /* Returns component d of c - a transformed by the matrix transpose_rotation_matrix builds from b. */
 float FUN_L00_0025c230(void *a, void *b, void *c, int d) {
-    float v0[4], v1[4], v2[16];
+    float delta[4], v1[4], v2[16];
     float *w = v1;
-    subtract_vector_xyz(v0, c, a);
+    subtract_vector_xyz(delta, c, a);
     transpose_rotation_matrix(v2, b);
-    transform_vector(w, v0, v2);
+    transform_vector(w, delta, v2);
     return w[d];
 }
 #define NOT_SDA
@@ -184,7 +184,7 @@ extern float frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata"))
 extern int func_L00_001F2BE8_d6f0(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
 int FUN_L00_0025c698(char *moby, char *st) {
-    float v0[4];
+    float eye[4];
     float v10[4];
     float v20[4];
     float v30[4];
@@ -251,11 +251,11 @@ int FUN_L00_0025c698(char *moby, char *st) {
     if (*(float *)(st + 0x54) != -1.0f && *(float *)(st + 0x50) != -1.0f) {
         switch (*(short *)(st + 0x3E)) {
         case 0: {
-            float s0;
-            s0 = absolute_float(*(float *)(st + 0x8) / *(float *)(st + 0x10));
-            if (2.0f < s0) {
+            float ratio;
+            ratio = absolute_float(*(float *)(st + 0x8) / *(float *)(st + 0x10));
+            if (2.0f < ratio) {
                 t = compute_interpolated_record_value(moby);
-                rr = (*(float *)(st + 0x50) - t) / s0;
+                rr = (*(float *)(st + 0x50) - t) / ratio;
                 if (0.0f < rr) {
                     approach_value((float *)(moby + 0x58), rr, frame_scale * 0.1f);
                 }
@@ -300,8 +300,8 @@ int FUN_L00_0025c698(char *moby, char *st) {
     }
 
     i = 0;
-    qcopy(v0, (moby + 0x10));
-    v0[2] = v0[2] + *(float *)(st + 0x28);
+    qcopy(eye, (moby + 0x10));
+    eye[2] = eye[2] + *(float *)(st + 0x28);
     add_vector_xyz_c((moby + 0x10), (moby + 0x10), st);
     qcopy(v20, (moby + 0x10));
     v20[2] = v20[2] + *(float *)(st + 0x28);
@@ -327,7 +327,7 @@ int FUN_L00_0025c698(char *moby, char *st) {
     sc = 0.0009765625f;
     t = fast_vec_length(st);
     if ((float)*(int *)(st + 0x20) * sc < t) {
-        collision_line(v0, v20, 36, moby, 0);
+        collision_line(eye, v20, 36, moby, 0);
         qcopy(v20, &D_94C8_60);
     }
     if (func_L00_001F10E0_l(v20, convert_integer_to_float(*(int *)(st + 0x20)) * sc, 36, moby) != 0) {

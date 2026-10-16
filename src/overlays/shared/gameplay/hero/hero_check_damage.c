@@ -929,7 +929,7 @@ typedef struct {
     u8 p0[0x18];
     s32 f18;
     u8 p1[0x24 - 0x1C];
-    s32 f24;
+    s32 unk24;
     s32 f28;
     s32 f2C;
     s32 f30;
@@ -954,7 +954,7 @@ void FUN_L00_0020e4c8(void) {
         return;
     P = &hero;
     P->unk2298 = t;
-    v19 = D_L00_00179AC0_c[t].f24;
+    v19 = D_L00_00179AC0_c[t].unk24;
     v21 = D_L00_00179AC0_c[t].f28;
     if ((s32)P->state.control_mode == 12)
         v21 = D_L00_00179AC0_c[t].f2C;
@@ -1343,7 +1343,7 @@ extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void copy_matrix3x4_alt() __asm__("FUN_001fa2b8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-void normalize_vector_triplet(f32 *arg0) __asm__("FUN_00214128");
+void normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
 extern char D_0013F350[] __attribute__((section(".data")));
 
 void FUN_L00_0020f160(char *arg) {
@@ -1351,7 +1351,7 @@ void FUN_L00_0020f160(char *arg) {
     float fa[16];
     int ri;
     int cnt;
-    float *fp;
+    float *sums;
     char *out;
     int n, i, k, acc;
     float mx;
@@ -1409,7 +1409,7 @@ void FUN_L00_0020f160(char *arg) {
     for (i = 0; i < n; i++) {
         char *b = ((char *)&D_0013F350);
         int t;
-        fp = fa;
+        sums = fa;
         t = i - 15;
         ri = (*(int *)(b + 0x21B8) - t) % 16;
         for (k = 0; k < n; k++) {
@@ -1417,7 +1417,7 @@ void FUN_L00_0020f160(char *arg) {
                 char *b = ((char *)&D_0013F350);
                 int u = k - 15;
                 int rj = (*(int *)(b + 0x21B8) - u) % 16;
-                *(float *)((char *)fp - (-(i * 4))) += FUN_L00_0020f0b8_c(
+                *(float *)((char *)sums - (-(i * 4))) += FUN_L00_0020f0b8_c(
                     (float *)(((char *)&D_0013F350) + 0x12F0 + ri * 0x30),
                     (float *)(((char *)&D_0013F350) + 0x12F0 + rj * 0x30));
             }
@@ -1755,7 +1755,7 @@ s32 FUN_L00_0020fe30(void) {
 
 typedef struct {
     char pad[0x20];
-    int f20;
+    int unk20;
     char pad2[0x28];
 } ItemDef;
 
@@ -1955,7 +1955,7 @@ void hero_switch_item(int i) {
                 ((int *)(D_00141660))[i] = w;
                 g->selected_item[i] = w;
                 if (i == 0) {
-                    item_defs[g->selected_item[0]].f20 = 0x20;
+                    item_defs[g->selected_item[0]].unk20 = 0x20;
                 }
                 changed = 1;
             }
@@ -2015,7 +2015,7 @@ void hero_switch_item(int i) {
                     }
                     if (i == 0) {
                         struct Hero *k = &hero;
-                        item_defs[k->selected_item[0]].f20 = 0x20;
+                        item_defs[k->selected_item[0]].unk20 = 0x20;
                     }
                 }
                 changed = 1;
@@ -3348,12 +3348,12 @@ void FUN_L00_00212ff0(void) {
     float v[4];
     if (globals->unk20B3 != 0) {
         float f2 = dot_vectors_xyz(&globals->motion.velocity, &globals->unk270);
-        float f1;
+        float ground_dist;
         float len;
         if (globals->air_frames.s != 0) return;
-        f1 = globals->ground_distance;
-        if (!(f1 < 0.0f)) return;
-        if (f1 < f2 + 0.0001f || globals->state.current == 0x3E) {
+        ground_dist = globals->ground_distance;
+        if (!(ground_dist < 0.0f)) return;
+        if (ground_dist < f2 + 0.0001f || globals->state.current == 0x3E) {
             qcopy(&globals->motion.pos, &globals->ground_point);
             return;
         }

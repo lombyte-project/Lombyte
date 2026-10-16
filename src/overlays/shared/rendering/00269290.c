@@ -3011,7 +3011,7 @@ typedef struct {
     s32 f14;
     s32 f18;
     f32 f1C;
-    s32 f20;
+    s32 unk20;
     char pad[0xC];
 } S_26ff10;
 
@@ -3109,7 +3109,7 @@ void FUN_L00_0026ff10(Moby_26ff10 *p) {
         c.v_26ff10.q_26ff10 = *(U128 *)pv;
         if (fl & 0x40)
             FUN_001f99f8_26ff10(&c);
-        c.f20 = 1;
+        c.unk20 = 1;
         col = pv->f1C;
         aux = &c;
         pa = v1u.f;
@@ -3387,11 +3387,11 @@ void FUN_L00_00270948(M_270948 *m) {
         e->v.f[1] *= 0.95f;
     }
     {
-        u8 f2 = e->b18;
+        u8 flags = e->b18;
         s = -1.0f;
-        if (f2 & 1)
+        if (flags & 1)
             s = 1.0f;
-        if (f2 & 8) {
+        if (flags & 8) {
             e->v.f[2] += frame_scale_sq * 0.008f;
             e->x10 += s * (D_0015ED60 * -0.01f) / FUN_001fa6c0_c(e->h16);
         } else {

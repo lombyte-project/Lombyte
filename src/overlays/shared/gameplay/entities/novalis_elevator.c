@@ -2062,7 +2062,7 @@ void FUN_L01_002eec68(char *m) {
     char *p;
     char *x;
     char *e;
-    char *t2;
+    char *spawned;
     char *q;
     char *cand;
     u128_2F0040 *wp;
@@ -2073,13 +2073,13 @@ void FUN_L01_002eec68(char *m) {
     int c258;
     int c260;
     float f20;
-    float f21;
-    float f22;
+    float rate;
+    float fixed_scale;
     float f24;
     float dist;
     float ang;
     float k;
-    float f7;
+    float seven;
 
     amount = 0.0f;
     d = *(char **)(m + 0x78);
@@ -2118,59 +2118,59 @@ void FUN_L01_002eec68(char *m) {
         f20 = 0.8f;
         allocate_voice_for_target_entry(0, 0, m);
         f24 = 1.0f;
-        f22 = 1024.0f;
-        f21 = 0.008f;
+        fixed_scale = 1024.0f;
+        rate = 0.008f;
         *(float *)(d + 0x20) = *(float *)(d + 0x20) - f24;
         d[0x9D] = 0;
-        *(float *)(d + 0x70) = f21;
+        *(float *)(d + 0x70) = rate;
         *(int *)(d + 0x84) = 8;
-        *(int *)(d + 0x80) = truncate_float_to_s32_c(*(float *)(d + 0x250) * f20 * f22);
+        *(int *)(d + 0x80) = truncate_float_to_s32_c(*(float *)(d + 0x250) * f20 * fixed_scale);
         *(float *)(d + 0x88) = *(float *)(d + 0x250) * f20;
         FUN_L01_002ef770((unsigned char *)m, (float *)(t + 0x10));
         if (0.0f < *(float *)(d + 0x20)) {
-            t2 = FUN_L01_002ef350(m);
-            if (t2 != 0) {
-                q = *(char **)(t2 + 0x78);
+            spawned = FUN_L01_002ef350(m);
+            if (spawned != 0) {
+                q = *(char **)(spawned + 0x78);
                 q[0x9D] = 3;
-                *(float *)(q + 0x70) = f21;
+                *(float *)(q + 0x70) = rate;
                 *(int *)(q + 0x84) = 8;
-                *(int *)(q + 0x80) = truncate_float_to_s32_c(*(float *)(d + 0x250) * f20 * f22);
+                *(int *)(q + 0x80) = truncate_float_to_s32_c(*(float *)(d + 0x250) * f20 * fixed_scale);
                 k = D_0015EE6C_c;
-                f7 = 7.0f;
+                seven = 7.0f;
                 *(float *)(q + 0x88) = *(float *)(d + 0x250) * f20;
                 *(float *)(q + 0x78) = D_L01_00161A30_c * k;
                 *(float *)(q + 0x7C) = D_L01_00161A34_c * k;
                 *(int *)(q + 0x84) = *(int *)(q + 0x84) | 4;
-                *(float *)(q + 0xB0) = f7;
+                *(float *)(q + 0xB0) = seven;
                 *(float *)(q + 0xB4) = 13.0f;
                 v.q = *(u128_2F0040 *)(t + 0x10);
                 FUN_L00_0025ab48(&v, &a1, q + 0x78, q + 0x7C);
                 a1 = fast_subtract_rotations(a1, 0.7853982f);
-                FUN_L00_0025c558(t2, q + 0x60, a1, 4, 8, 0);
-                t2[0x20] = 8;
-                *(float *)(t2 + 0x58) = f24;
+                FUN_L00_0025c558(spawned, q + 0x60, a1, 4, 8, 0);
+                spawned[0x20] = 8;
+                *(float *)(spawned + 0x58) = f24;
             }
-            t2 = FUN_L01_002ef350(m);
-            if (t2 != 0) {
-                q = *(char **)(t2 + 0x78);
-                *(float *)(q + 0x70) = f21;
+            spawned = FUN_L01_002ef350(m);
+            if (spawned != 0) {
+                q = *(char **)(spawned + 0x78);
+                *(float *)(q + 0x70) = rate;
                 q[0x9D] = 3;
                 *(int *)(q + 0x84) = 8;
-                *(int *)(q + 0x80) = truncate_float_to_s32_c(*(float *)(d + 0x250) * f20 * f22);
+                *(int *)(q + 0x80) = truncate_float_to_s32_c(*(float *)(d + 0x250) * f20 * fixed_scale);
                 k = D_0015EE6C_c;
-                f7 = 7.0f;
+                seven = 7.0f;
                 *(float *)(q + 0x88) = *(float *)(d + 0x250) * f20;
                 *(float *)(q + 0x78) = D_L01_00161A30_c * k;
                 *(float *)(q + 0x7C) = D_L01_00161A34_c * k;
                 *(int *)(q + 0x84) = *(int *)(q + 0x84) | 4;
-                *(float *)(q + 0xB0) = f7;
+                *(float *)(q + 0xB0) = seven;
                 *(float *)(q + 0xB4) = 13.0f;
                 v.q = *(u128_2F0040 *)(t + 0x10);
                 FUN_L00_0025ab48(&v, &a2, q + 0x78, q + 0x7C);
                 a2 = fast_add_rotations_c(a2, 0.7853982f);
-                FUN_L00_0025c558(t2, q + 0x60, a2, 4, 8, 0);
-                t2[0x20] = 8;
-                *(float *)(t2 + 0x58) = f24;
+                FUN_L00_0025c558(spawned, q + 0x60, a2, 4, 8, 0);
+                spawned[0x20] = 8;
+                *(float *)(spawned + 0x58) = f24;
             }
             p2 = *(char **)(t + 0x20);
             if (p2 != 0 && (x2 = *(char **)(p2 + 0x24)) != 0 && *(short *)(x2 + 0x46) == 5) {

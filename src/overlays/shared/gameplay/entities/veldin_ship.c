@@ -2726,16 +2726,16 @@ void FUN_L00_002d5988(Obj_2d5988 *o, Path_2d5988 *path, s32 p) {
     s = D_0015ED70_2d5988 * 16.0f;
     c = st->v60;
     if (l <= (c * c) / (s + s)) {
-        f32 a1 = c - s;
+        f32 low = c - s;
         f32 b1 = D_L00_00161990 * D_0015ED6C_2d5988;
-        st->v60 = a1;
-        if (a1 < b1)
+        st->v60 = low;
+        if (low < b1)
             st->v60 = b1;
     } else {
-        f32 a2 = c + s;
+        f32 high = c + s;
         f32 b2 = D_0015ED6C_2d5988 * 16.0f;
-        st->v60 = a2;
-        if (b2 < a2)
+        st->v60 = high;
+        if (b2 < high)
             st->v60 = b2;
     }
     idx = truncate_float_to_s32(w_ / path->a[0].f[3]);
@@ -3256,7 +3256,7 @@ typedef struct {
     s16 count; /* 02 */
     int idx;   /* 04 */
     char pad08[0x18];
-    float f20, f24, f28; /* 20 24 28 */
+    float unk20, unk24, unk28; /* 20 24 28 */
     s16 h2C, h2E;        /* 2C 2E */
     int x30, x34;        /* 30 34 */
     int col;             /* 38 */
@@ -3396,8 +3396,8 @@ void FUN_L00_002d6f28(P *p) {
                 b.z += 0.5f;
                 a.x = FUN_L00_00257c48(0.0f, frame_time * 0.25f);
                 a.y = FUN_L00_00257c48(0.0f, frame_time * 0.25f);
-                a.z = q->f20 * frame_time;
-                f = random_float_between(q->f24, q->f28);
+                a.z = q->unk20 * frame_time;
+                f = random_float_between(q->unk24, q->unk28);
                 col = FUN_L00_00257b90(q->h2C, q->h2E) << 24 | D_L00_001619C8;
                 r = FUN_L00_00257b90(D_L00_001619C0, D_L00_001619C4);
                 ent = FUN_L00_0026d000(&b, r, D_L00_001619B4, 1.0f, &a, D_L00_001619B8, col, f);
