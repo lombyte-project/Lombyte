@@ -425,6 +425,7 @@ RODATA_OVERLAYS = {
     "update_menu_entry_actions": (0x1E8770, 0xE96F0, 48),  # menu action switch table
     "draw_dialog_text": (0x1E7920, 0xE88A0, 124),  # switch table
     "sdk/rpc/sce_sif_reboot_iop": (0x152960, 0x538E0, 11),
+    "sdk/storage/cd_check_ncmd": (0x152EB0, 0x53E30, 39),
 }
 
 # Recovered C units that define the small-data variables their original

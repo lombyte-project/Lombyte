@@ -6,7 +6,7 @@ extern s32 D_001312DC[];
 extern volatile s32 D_001312E8[];
 extern s32 D_001312F8[];
 extern struct sceSifClientData D_00132490;
-extern u8 D_00152EB0[];
+const u8 D_00152EB0[] = "Ncmd fail sema cur_cmd:%d keep_cmd:%d\n";
 extern u8 D_00152ED8[];
 extern s32 D_00159750[];
 extern u8 D_00159758[];
