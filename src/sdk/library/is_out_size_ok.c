@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/libmpeg.h"
 
-extern u8 D_00153980[];
+const u8 D_00153980[] = "Too small buffer size for %dx%d picture\n";
 extern s32 _Error(void *a, void *b);
 extern s32 sprintf(char *d, char *f, ...);
 
