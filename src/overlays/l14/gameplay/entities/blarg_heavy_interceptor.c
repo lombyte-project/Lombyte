@@ -2105,7 +2105,7 @@ char D_L14_001FBE18[] = "Hovertank with a intro path that has no points. UID: %d
 char D_L14_001FBE58[] = "Hovertank with no boundPath. UID: %d\n";
 char D_L14_001FBE80[] = "Hovertank with a bound path that has no points. UID: %d\n";
 char D_L14_001FBEC0[] = "Hovertank with no bombPath. UID: %d\n";
-extern char D_L14_001FBEE8[];
+char D_L14_001FBEE8[] = "Hovertank with a bomb path that has no points. UID: %d\n";
 extern char D_L14_001FBF20[];
 extern char D_L14_001FBF48[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
