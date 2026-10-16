@@ -98,7 +98,7 @@ extern s16 D_L18_00198400[];
 extern u16 D_L18_001B0860[][16];
 extern char D_L18_001F0EB0[], D_L18_001F0F00[],
     D_L18_001F0FC0[],
-    D_L18_001F1130[], D_L18_001F1148[], D_L18_001F1160[],
+    D_L18_001F1148[], D_L18_001F1160[],
     D_L18_001F1178[];
 extern char D_L18_0015FC80[];
 extern char D_L18_0030A0C0[];
@@ -124,6 +124,7 @@ char D_L18_001F10D0[] = "tie insts:      %.1fK\n";
 char D_L18_001F10E8[] = "shrub insts:    %.1fK\n";
 char D_L18_001F1100[] = "moby insts:     %.1fK\n";
 char D_L18_001F1118[] = "moby pvars:     %.1fK\n";
+char D_L18_001F1130[] = "paths:          %.1fK\n";
 extern s32 D_L18_001B2480[];
 extern char *D_L18_001C6200[] __asm__("D_L18_001C6200");
 extern char *D_L18_001BCA30_2463f8[] __asm__("D_L18_001BCA30");
