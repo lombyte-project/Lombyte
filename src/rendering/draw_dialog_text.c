@@ -86,7 +86,7 @@ extern char D_0015F578[];
 extern char D_0015F580[];
 extern char D_0015F588[];
 struct TextRegion D_001E78F0 = {0x50, 0x154, 0x60, 0x1a0, 0x100, 0x54, 0, 0, 0x10, 1, 0, 0};
-extern struct TextRegion D_001E7908;
+struct TextRegion D_001E7908 = {0x64, 0x12c, 0x60, 0x1a0, 0x100, 0x68, 0, 0, 0x10, 1, 0, 0};
 void draw_dialog_text(void) {
     char buf[0x200];
     struct TextRegion box;
