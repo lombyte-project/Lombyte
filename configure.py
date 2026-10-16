@@ -436,6 +436,7 @@ RODATA_OVERLAYS = {
     "sdk/library/is_out_size_ok": (0x153980, 0x54900, 41),
     "sdk/callbacks/report_mpeg_sequence_scalable_unsupported": (0x153B48, 0x54AC8, 48),
     "sdk/callbacks/report_unknown_mpeg_extension": (0x153B78, 0x54AF8, 18),
+    "sdk/callbacks/report_mpeg_picture_spatial_scalable_unsupported": (0x153B90, 0x54B10, 50),
 }
 
 # Recovered C units that define the small-data variables their original
