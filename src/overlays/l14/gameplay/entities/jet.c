@@ -559,7 +559,7 @@ extern f32 D_0015ED6C_w __asm__("D_0015ED6C");
 extern struct { f32 v; } D_L14_00162230, D_L14_00162234;
 extern s32 D_L14_00162238;
 extern f32 D_L14_00162240;
-extern char D_L14_001FC980[];
+char D_L14_001FC980[] = "*Error: Moby 610 (wind-control) with no cuboid index (wind pushing hero area). UID: %d - RAR\n";
 extern char D_L14_001FC9E0[];
 extern char D_L14_001FCA38[];
 extern void wind_print(const char *, short) __asm__("FUN_001e93b0");
