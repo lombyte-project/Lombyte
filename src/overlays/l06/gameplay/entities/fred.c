@@ -877,7 +877,7 @@ extern unsigned char big_head_cheat_enabled_301070[] __asm__("D_0015EDB0") __att
 extern unsigned char cheats_301070[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern int D_0013D8AC_lui __asm__("D_0013D8AC") __attribute__((section(".data")));
 
-extern char D_L06_00201880[];
+char D_L06_00201880[] = "Scrawny Scientist";
 extern Obj_301070 *D_L06_00167580 __attribute__((section(".data")));
 extern unsigned char D_0013D505[];
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
