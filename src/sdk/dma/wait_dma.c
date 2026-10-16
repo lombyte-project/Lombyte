@@ -1,5 +1,5 @@
 #include "types.h"
-extern u8 D_001533E0[];
+const u8 D_001533E0[] = "libdma: sync timeout\n";
 extern s32 sceDmaPause();
 extern s32 scePrintf();
 
