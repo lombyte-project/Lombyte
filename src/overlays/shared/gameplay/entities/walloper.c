@@ -1391,7 +1391,7 @@ extern int D_00141680;
 extern int D_0015EEA4;
 extern float D_L00_001616E0 __attribute__((sda));
 extern int D_L00_001616EC __attribute__((sda));
-extern int D_L00_001617BC_gp __asm__("D_L00_001617BC") __attribute__((sda));
+extern int D_L00_001617BC;
 extern int D_L00_001617C0;
 extern int D_L00_001617C4;
 extern int D_L00_001617C8;
@@ -1604,7 +1604,7 @@ void FUN_L00_002bc7e8(Moby *moby) {
             func_001FFCB0_2BDAF0(data->snd);
             data->snd = -1;
         }
-        D_L00_001617BC_gp = 1;
+        D_L00_001617BC = 1;
         if (D_L00_001617C0 >= 0) {
             float brightness;
             func_L00_001FF4B0_2BDAF0(&direction, &moby->rot_row1, -0.5f);
@@ -1643,10 +1643,8 @@ void FUN_L00_002bc7e8(Moby *moby) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bcf98.s", FUN_L00_002bcf98);
 #else
-extern s32 D_L00_001617BC_gp __asm__("D_L00_001617BC") __attribute__((sda));
-extern s32 D_L00_001617BC_lui __asm__("D_L00_001617BC") __attribute__((section(".data")));
 extern f32 D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
-extern f32 D_L00_001617CC __attribute__((sda));
+extern f32 D_L00_001617CC_macro __asm__("D_L00_001617CC") __attribute__((section(".sdata")));
 extern s32 D_L00_00161718_i __asm__("D_L00_00161718") __attribute__((sda));
 extern s32 D_L00_00161720_i __asm__("D_L00_00161720") __attribute__((sda));
 extern s32 D_L00_00161724_i __asm__("D_L00_00161724") __attribute__((sda));
@@ -1668,10 +1666,10 @@ void FUN_L00_002bcf98(u8 *m) {
     s32 *clears;
     u128 *scaled_vector;
 
-    if (D_L00_001617BC_lui != 0) {
-        D_L00_001617BC_gp = 0;
+    if (D_L00_001617BC != 0) {
+        D_L00_001617BC = 0;
         scale = D_L00_001616DC_gp / convert_integer_to_float(12);
-        D_L00_001617CC = scale;
+        D_L00_001617CC_macro = scale;
         scale_vector_2bcf98(-scale, &vec, m + 0xD0);
         qcopy(&D_L00_001DBF60_2bcf98, (void *)source);
         for (i = 10; i >= 0; i--) {
