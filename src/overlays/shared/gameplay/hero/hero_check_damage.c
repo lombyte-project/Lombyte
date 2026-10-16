@@ -3104,7 +3104,8 @@ typedef struct {
 void FUN_001f9bf8_002126b8(Vec4_002126b8 *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002126b8(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_0025d238_002126b8(Vec4_002126b8 *, void *) __asm__("FUN_L00_0025d238");
-void FUN_L00_002126b8(Vec4_002126b8 *a, Vec4_002126b8 *b, int mode, float fa, float fb) {
+void hero_get_collision_ray_endpoints(Vec4_002126b8 *, Vec4_002126b8 *, int, float, float) __asm__("FUN_L00_002126b8");
+void hero_get_collision_ray_endpoints(Vec4_002126b8 *a, Vec4_002126b8 *b, int mode, float fa, float fb) {
     Vec4_002126b8 t[2];
     if (mode) {
         char *up = (char *)&hero.gravity_dir;
@@ -3134,7 +3135,6 @@ extern u8 D_L00_00173E60[] __attribute__((section(".data")));
 extern f32 D_L00_00173E68 __attribute__((section(".data")));
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
-void FUN_L00_002126b8_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 FUN_001efa68(void *, void *, s32, void *, s32);
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58(void);
@@ -3189,7 +3189,7 @@ void FUN_L00_002127b8(void) {
     if (hero.state.control_mode == 2) {
         g = hero.unk234 * 2.9f;
     }
-    FUN_L00_002126b8_c(&v10, &v0, k, g, -48.0f);
+    hero_get_collision_ray_endpoints((Vec4_002126b8 *)&v10, (Vec4_002126b8 *)&v0, k, g, -48.0f);
     if (FUN_001efa68(&v10, &v0, 2, hero.moby, 0) == 0) {
         goto tail;
     }

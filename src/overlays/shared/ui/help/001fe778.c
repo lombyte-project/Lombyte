@@ -65,7 +65,7 @@ extern u8 D_L15_00174440[] __attribute__((section(".data")));
 extern u8 D_L15_00174460[] __attribute__((section(".data")));
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
-void FUN_L00_002126b8_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
+void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 FUN_001efa68_c(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
@@ -126,7 +126,7 @@ void FUN_L15_0020a7a0(void) {
     if (hero.state.control_mode == 2) {
         g = hero.unk234 * 2.9f;
     }
-    FUN_L00_002126b8_c(&v10, &v0, k, g, -48.0f);
+    hero_get_collision_ray_endpoints(&v10, &v0, k, g, -48.0f);
     if (FUN_001efa68_c(&v10, &v0, 2, (s32)hero.moby, 0) == 0) {
         goto tail;
     }

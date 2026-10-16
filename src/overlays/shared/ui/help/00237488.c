@@ -493,7 +493,7 @@ extern int frame_number __asm__("D_L05_0015F5CC");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00216de8_c(int a, int b) __asm__("FUN_L00_00216de8");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void FUN_L00_002126b8(void *, void *, int, float, float);
+extern void hero_get_collision_ray_endpoints(void *, void *, int, float, float) __asm__("FUN_L00_002126b8");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 
@@ -563,7 +563,7 @@ int FUN_L05_002515d0(void) {
         if ((frame_number & 0x3F) == 0) {
             scale = 16.0f;
         }
-        FUN_L00_002126b8(v1, v2, 0, scale, 1.3f);
+        hero_get_collision_ray_endpoints(v1, v2, 0, scale, 1.3f);
         if (func_L00_001EFFF0(v1, v2, 2, *(int *)&u->moby, 0) != 0) {
             int s = collision_hit_material();
             u->ground_type = s;
