@@ -2,7 +2,7 @@
 #include "asm.h"
 
 extern void _Error(void *pState, char *message);
-extern char D_00153BC8[];
+const char D_00153BC8[] = "_pictureTemporalScalableExtension is not supported";
 
 void report_mpeg_picture_temporal_scalable_unsupported(void *pState) __asm__("FUN_0012cb20");
 
