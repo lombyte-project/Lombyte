@@ -541,7 +541,7 @@ typedef struct { char pad[0x34]; unsigned short flags; } M34_7DB0;
 
 typedef struct { unsigned char pad0[0x74]; unsigned char active; unsigned char pad75[0x13]; char *owner; } Voice_7DB0;
 
-extern unsigned char D_0013E550_r[] __asm__("D_0013E550");
+extern char D_0013E550[];
 extern char *D_L12_001600EC __attribute__((section(".sdata")));
 extern char D_0013F3D0[] __attribute__((section(".data")));
 extern char D_L12_00167240[];
@@ -816,7 +816,7 @@ void FUN_L12_003069d0(char *moby) {
     } else {
         int s = *(int *)(d + 0x604);
         if (s != -1) {
-            Voice_7DB0 *e = (Voice_7DB0 *)(D_0013E550_r + s * 0x70);
+            Voice_7DB0 *e = (Voice_7DB0 *)(((unsigned char *)D_0013E550) + s * 0x70);
             if (e->owner == moby && e->active != 0) release_voice_slot(s);
         }
         *(int *)(d + 0x604) = -1;

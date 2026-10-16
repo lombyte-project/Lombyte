@@ -1968,7 +1968,7 @@ unsigned char *FUN_L00_00275910(OvlQuad *pos, int s, int col, int mode, int b, f
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern short D_L00_0016024C __attribute__((sda));
-extern unsigned char D_0013F5E0_d[] __asm__("D_0013F5E0") __attribute__((section(".data")));
+extern char D_0013F5E0[] __attribute__((section(".data"))  );
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -2010,7 +2010,7 @@ void FUN_L00_00275aa0(char *m) {
     if (*(int *)(v + 0x18) != 0) {
         subtract_vector_xyz(d, *(char **)(v + 0x18) + 0x10, p);
         if (d[0] <= 2.0f && d[1] <= 2.0f) {
-            cross_vectors_xyz(e, d, D_0013F5E0_d);
+            cross_vectors_xyz(e, d, ((unsigned char *)D_0013F5E0));
             fast_vec_normalize_c(e, e, *(float *)&D_L00_0016024C);
             add_vector_xyz_c(p, p, e);
             if (d[0] <= 0.5f && d[1] <= 0.5f) {

@@ -2044,7 +2044,7 @@ extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern float D_0013F420[];
-extern char D_001413D0_c[] __asm__("D_001413D0");
+extern int D_001413D0[];
 extern char *D_L01_0015FFD8;
 extern const float D_L01_00161A30_c __asm__("D_L01_001619A0") __attribute__((sda));
 extern const float D_L01_00161A34_c __asm__("D_L01_001619A4") __attribute__((sda));
@@ -2229,7 +2229,7 @@ void FUN_L01_002eec68(char *m) {
         }
     }
     if (*(int *)(d + 0x200) == 0) {
-        *(int *)(d + 0x200) = *(int *)(((char *)&D_001413D0_c));
+        *(int *)(d + 0x200) = *(int *)(((char *)((char (*))D_001413D0)));
     }
     ang = fast_add_rotations_c(*(float *)(d + 0x254), frame_time * 9.424778f);
     *(float *)(d + 0x254) = ang;
