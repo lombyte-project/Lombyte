@@ -18,7 +18,7 @@ struct Clip {
     Vec4 constants[3];
 };
 
-extern Vec4 D_0018CFC0[4];
+Vec4 D_0018CFC0[4] = {0};
 extern f32 D_00160720[4];
 extern f32 D_00160B30;
 extern f32 D_001DFF50[];
