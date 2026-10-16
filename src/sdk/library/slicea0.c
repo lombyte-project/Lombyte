@@ -13,7 +13,7 @@ struct MpegMotionState {
     s32 values[8];
 };
 
-extern u8 D_00153800[];
+const u8 D_00153800[] = "slice_start_code(0x%08x) out of range";
 extern u8 D_00153828[];
 extern s32 _Error();
 extern s32 _Error1();

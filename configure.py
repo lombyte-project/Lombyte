@@ -431,6 +431,7 @@ RODATA_OVERLAYS = {
     "sdk/dma/wait_dma": (0x1533E0, 0x54360, 22),
     "sdk/library/sceDbcInit": (0x153518, 0x54498, 57),
     "sdk/library/mb_address_increment": (0x1537A8, 0x54728, 50),
+    "sdk/library/slicea0": (0x153800, 0x54780, 38),
 }
 
 # Recovered C units that define the small-data variables their original
