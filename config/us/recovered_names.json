@@ -14472,18 +14472,6 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "ui/menus/fun_00226fb8",
-        "source_path": "src/ui/menus/fun_00226fb8.c",
-        "address": "0x00226fb8",
-        "current_name": "FUN_00226fb8",
-        "proposed_name": null,
-        "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
-        "logical_group_confidence": "unresolved"
-      },
-      {
         "unit": "world/data/parse_typed_resource_record",
         "source_path": "src/world/data/parse_typed_resource_record.c",
         "address": "0x002270e8",
@@ -20021,6 +20009,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x0011a448, lw v0,0x10(a0) loads SifInitializePacket.dwReceiveBufferAddress; at 0x0011a450, the return delay-slot sw v0,0x8(a1) stores SifCommandState.dwRemoteReceiveAddress. The supplied original typed Ghidra decompilation names this handle_sif_initialize_command and documents initializer-installed callback slot zero; the supplied reference at 0x0011a59c belongs to sceSifInitCmd. Preserve this established descriptive name. The baseline validation reports strict/text matching of 100% for the complete 12-byte function."
+          }
+        ]
+      },
+      {
+        "address": "0x00226fb8",
+        "current_name": "FUN_00226fb8",
+        "proposed_name": "prepare_scaled_direction_and_perpendicular",
+        "logical_group": "ui/menus",
+        "unit": "ui/menus/prepare_scaled_direction_and_perpendicular",
+        "source_path": "src/ui/menus/prepare_scaled_direction_and_perpendicular.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00226fd4 the input vector is copied to stack; 0x00226fe0 calls recovered normalize_vector_xyz (0x001f9bf8) with length 1.0 and destination 0x00160370. Instructions 0x00227000..0x0022702c multiply its XYZ by the incoming scalar preserved in f20 and store to 0x00160390/394/398. The comparisons and stores at 0x0022701c..0x002270a4 select a component permutation into 0x00160380/384/388. At 0x002270b8 recovered cross_vectors_xyz (0x001f9ad8) crosses that vector with the normalized direction, in place; 0x002270d0 normalizes the cross-product at 0x00160380 with length 1.0. The supplied caller is submit_graphics_setup_command_stream, callsite 0x00227614; its body was unavailable, so the name describes only the proven vector preparation rather than a speculative graphics application."
           }
         ]
       }
