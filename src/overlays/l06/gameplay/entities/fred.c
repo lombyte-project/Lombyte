@@ -2362,7 +2362,6 @@ typedef struct {
     int f18;
 } Data_305E38;
 
-extern char *D_L06_0015FFD8_c __asm__("D_L06_0015FFD8");
 extern char D_0013E550[];
 extern float D_L06_00167540[];
 extern float D_0015ED6C;
@@ -2436,7 +2435,7 @@ void FUN_L06_003049f8(char *moby)
         }
         break;
     case 1: {
-        char *e = D_L06_0015FFD8_c + (d->f10 << 8);
+        char *e = D_L06_0015FFD8_301070 + (d->f10 << 8);
         if (*(short *)(e + 0xA6) == 0x463 && (unsigned char)e[0x20] < 3) {
             return;
         }
@@ -2488,7 +2487,7 @@ void FUN_L06_003049f8(char *moby)
         if (fast_vec_dist(moby + 0x10, ((char *)D_L06_00167540)) < 48.0f) {
             enqueue_callback_list_1((int)FUN_L06_00305170_c, moby);
         }
-        if (d->f14 >= 0 && *(unsigned char *)(D_L06_0015FFD8_c + 0xBC + (d->f14 << 8)) != 0) {
+        if (d->f14 >= 0 && *(unsigned char *)(D_L06_0015FFD8_301070 + 0xBC + (d->f14 << 8)) != 0) {
             int h;
             *(int *)(moby + 0x94) = 0;
             moby[0x20] = 3;

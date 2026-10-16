@@ -286,7 +286,6 @@ extern f32 fast_vec_length_c(void *) __asm__("func_001F9AF0");
 extern f32 random_float_between_c5(f32, f32) __asm__("func_002132A8");
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 extern int D_L08_0015F580_c __asm__("D_L08_0015F580");
-extern int D_L08_00174658_c __asm__("D_L08_00174658") __attribute__((section(".data")));
 extern float D_L08_00174660[];
 extern int FUN_001efa68(void *, void *, int, void *, int);
 extern int FUN_L00_001f0d60(float, void *, int, void *);
@@ -310,7 +309,7 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float D_0015ED70_gp __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern char D_L08_001746C0_36F8[] __asm__("D_L08_00174640");
-extern float D_L08_0015F660_36F8[] __asm__("D_L08_0015F580") __attribute__((section(".sdata")));
+extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") __attribute__((section(".sdata")));
 extern float D_L08_00174660[];
 
 void FUN_L08_002d23f0(char *moby) {
@@ -439,7 +438,7 @@ void FUN_L08_002d23f0(char *moby) {
         clear_u64_value(&c.p);
         c.p.st = 0;
         FUN_L00_001f2868(moby + 0x10, 1.0f, 0x10, moby, &c.p);
-        FUN_L00_0025e450_c3(moby, D_L08_0015F660_36F8, 0, 0.0f, 0.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, 1.0f, -1, 7.0f, 0, 7, -1, 0);
+        FUN_L00_0025e450_c3(moby, D_L08_0015F580_macro, 0, 0.0f, 0.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, 1.0f, -1, 7.0f, 0, 7, -1, 0);
         mark_moby_for_removal(moby);
         return;
     case 0x63: {
@@ -743,7 +742,6 @@ extern float D_0015ED6C_lui __asm__("D_0015ED6C");
 extern int D_L08_0015F694_2D5FA8 __asm__("D_L08_0015F5B0");
 extern int D_L08_0015F698_2D5FA8 __asm__("D_L08_0015F5B4") __attribute__((sda));
 extern int D_L08_0015F6A0_2D5FA8 __asm__("D_L08_0015F5BC") __attribute__((sda));
-extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") __attribute__((section(".sdata")));
 extern Path_2D5FA8 *D_L08_001B0FB0_2D5FA8[] __asm__("D_L08_001B0CB0");
 extern char D_001413D0[];
 extern unsigned char D_0013D50F_2D5FA8[] __asm__("D_0013D408");

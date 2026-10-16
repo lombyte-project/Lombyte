@@ -2764,11 +2764,10 @@ extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float FUN_L00_00257c48(float lo, float hi);
 extern int tick_countdown_32_alt_c(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern char D_0013F350_c2[] __asm__("D_0013F350");
 extern char D_001403B0[];
 
 void FUN_L00_0020a9e8(void) {
-    char *base = (char *)((char *)&D_0013F350_c2);
+    char *base = (char *)((char *)&D_0013F350_002062b0);
     int *q;
     char *g;
     int i, j;
