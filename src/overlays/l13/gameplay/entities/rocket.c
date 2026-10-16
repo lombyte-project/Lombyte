@@ -805,19 +805,17 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_0015ED6C_p __asm__("D_0015ED6C");
-extern float D_0015ED70_p __asm__("D_0015ED70");
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int D_L13_00161E70_p __asm__("D_L13_00161E70");
-extern int D_L13_00161E74_p __asm__("D_L13_00161E74") __attribute__((sda));
-extern int D_L13_00161E78_p __asm__("D_L13_00161E78") __attribute__((sda));
+extern int D_L13_00161E70;
+extern int D_L13_00161E74_gp __asm__("D_L13_00161E74") __attribute__((sda));
+extern int D_L13_00161E78_gp __asm__("D_L13_00161E78") __attribute__((sda));
 extern int FUN_L00_00258b50(struct Moby *, void *, void *, void *, float);
 extern int FUN_L00_0025c698(void *, void *);
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern s32 rand(void);
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern short D_L13_00161E58_p __asm__("D_L13_00161E58") __attribute__((sda));
+extern short D_L13_00161E58_gp __asm__("D_L13_00161E58") __attribute__((sda));
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00258278(void *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_00259888_c2(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
@@ -835,7 +833,6 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 extern void func_L00_0025A8C0_30A9B0(void *, void *, int, void *, float) __asm__("FUN_L13_00265990");
 extern float D_L13_00161EE8_309330 __asm__("D_L13_00161E58") __attribute__((sda));
-extern int D_L13_00161F00_309330 __asm__("D_L13_00161E70");
 extern float D_L13_00161F04_309330 __asm__("D_L13_00161E74") __attribute__((sda));
 extern float D_L13_00161F08_309330 __asm__("D_L13_00161E78") __attribute__((sda));
 extern void func_L00_002592B0_309330(struct Moby *, float, float *, float, float, float) __asm__("FUN_L13_00263fc8");
@@ -871,14 +868,14 @@ void FUN_L13_00307e98(struct Moby *moby) {
         vars->ctl.unkC = 0.5f;
         vars->ctl.unk0_p = func_001FA898_r(D_L13_00161EE8_309330 * 716.8f);
         vars->ctl.unk4 = D_L13_00161EE8_309330 * 0.7f;
-        vars->ctl.unk24 = D_L13_00161F08_309330 * D_0015ED6C_p * random_float_between(0.95f, 1.05f);
+        vars->ctl.unk24 = D_L13_00161F08_309330 * frame_time * random_float_between(0.95f, 1.05f);
         qcopy(&vars->home, &moby->pos);
         FUN_L00_0024f7c8(moby, 0, &vars->unk1E0);
         moby->state = 1;
         break;
     case 1:
         FUN_L00_0025be00(&moby->rot.z, fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
-                          &vars->turn, D_0015ED70_p * 6.2831855f, D_0015ED70_p * 6.2831855f, D_0015ED6C_p * 3.1415927f);
+                          &vars->turn, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
         if (vars->unk164 != 2) {
             f32 dist = vector_distance_xy_alt(&moby->pos, &target->pos);
             if (D_L13_00161F04_309330 < dist) {
@@ -924,7 +921,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
                 if (moby->prev_seq != 4) {
                     blend_moby_animation_c(moby, 4, 0, scale_game_frames(20));
                 }
-                vars->timer = scale_game_frames(D_L13_00161F00_309330);
+                vars->timer = scale_game_frames(D_L13_00161E70);
             } else {
                 moby->state = 1;
                 if (moby->prev_seq != 0) {
@@ -935,7 +932,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
         break;
     case 4:
         FUN_L00_0025be00(&moby->rot.z, fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
-                          &vars->turn, D_0015ED70_p * 6.2831855f, D_0015ED70_p * 6.2831855f, D_0015ED6C_p * 3.1415927f);
+                          &vars->turn, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
         if (tick_countdown_32_alt(&vars->timer) != 0) {
             moby->state = 3;
             FUN_L13_00309370_c((char *)moby);
@@ -957,7 +954,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
         break;
     case 5:
         FUN_L00_0025be00(&moby->rot.z, fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
-                          &vars->turn, D_0015ED70_p * 6.2831855f, D_0015ED70_p * 6.2831855f, D_0015ED6C_p * 3.1415927f);
+                          &vars->turn, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
         FUN_L00_0024f7c8(moby, 0, &a);
         qcopy(&b, &moby->pos);
         b.f[2] += 0.3f;
@@ -996,7 +993,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
         func_L00_002592B0_309330(moby,
                           fast_add_rotations_c(fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                                         vars->unk1A8), &vars->turn,
-                          0.05f, 0.3f, D_0015ED6C_p * 6.2831855f);
+                          0.05f, 0.3f, frame_time * 6.2831855f);
         a.f[0] = 2.0f * fast_cos(moby->rot.z);
         a.f[1] = 2.0f * fast_sin(moby->rot.z);
         a.f[2] = 0.0f;
@@ -1036,7 +1033,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
         near = 0;
         func_L00_002592B0_309330(moby,
                           fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn, 0.05f, 0.3f,
-                          D_0015ED6C_p * 6.2831855f);
+                          frame_time * 6.2831855f);
         a.f[0] = 2.0f * fast_cos(moby->rot.z);
         a.f[1] = 2.0f * fast_sin(moby->rot.z);
         a.f[2] = 0.0f;
@@ -1090,7 +1087,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
     case 13:
         func_L00_002592B0_309330(moby,
                           fast_arc_tan_c(vars->home.f[0] - moby->pos.x, vars->home.f[1] - moby->pos.y), &vars->turn, 0.05f,
-                          0.3f, D_0015ED6C_p * 6.2831855f);
+                          0.3f, frame_time * 6.2831855f);
         a.f[0] = 2.0f * fast_cos(moby->rot.z);
         a.f[1] = 2.0f * fast_sin(moby->rot.z);
         a.f[2] = 0.0f;

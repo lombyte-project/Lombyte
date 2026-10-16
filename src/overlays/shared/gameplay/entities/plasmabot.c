@@ -330,12 +330,12 @@ struct Moby_00AC8_p {
 
 typedef struct Moby_00AC8_p Moby_00AC8_p;
 
-extern char D_001413F4_p[] __asm__("D_001413F4");
-extern char D_L14_001FBB60_p[] __asm__("D_L14_001FBB60");
-extern char D_L14_001FBBA0_p[] __asm__("D_L14_001FBBA0");
-extern char D_L14_001FBBF8_p[] __asm__("D_L14_001FBBF8");
-extern char D_L14_001FBC38_p[] __asm__("D_L14_001FBC38");
-extern char D_L14_001FBC90_p[] __asm__("D_L14_001FBC90");
+extern char D_001413F4[];
+extern char D_L14_001FBB60[];
+extern char D_L14_001FBBA0[];
+extern char D_L14_001FBBF8[];
+extern char D_L14_001FBC38[];
+extern char D_L14_001FBC90[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -346,8 +346,7 @@ extern float D_0015ED70_p __asm__("D_0015ED70");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height(float, void *, int);
-extern int *D_L14_001B0BB0_p[] __asm__("D_L14_001B0BB0");
-extern int D_L14_0015F5C4_p __asm__("D_L14_0015F5C4");
+extern int D_L14_0015F5C4;
 extern int FUN_001efa68(void *, void *, int, void *, void *);
 extern int FUN_001f9770(void *);
 extern int FUN_L00_0025c698(void *, void *);
@@ -359,12 +358,12 @@ extern int FUN_L14_002b39a0_c(unsigned char *) __asm__("FUN_L14_002b39a0");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L14_001614E4_p __asm__("D_L14_001614E4") __attribute__((sda));
-extern short D_L14_001614E8_p __asm__("D_L14_001614E8") __attribute__((sda));
-extern short D_L14_001614EC_p __asm__("D_L14_001614EC") __attribute__((sda));
-extern short D_L14_001614F0_p __asm__("D_L14_001614F0");
-extern short D_L14_001614F4_p __asm__("D_L14_001614F4") __attribute__((sda));
-extern u8 D_L14_00174560_p[] __asm__("D_L14_00174560");
+extern short D_L14_001614E4_gp __asm__("D_L14_001614E4") __attribute__((sda));
+extern short D_L14_001614E8_gp __asm__("D_L14_001614E8") __attribute__((sda));
+extern short D_L14_001614EC_gp __asm__("D_L14_001614EC") __attribute__((sda));
+extern short D_L14_001614F0;
+extern short D_L14_001614F4_gp __asm__("D_L14_001614F4") __attribute__((sda));
+extern u8 D_L14_00174560[];
 extern void DebugPrint(char *, ...);
 extern void FUN_L00_0024f7c8(char *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
@@ -414,7 +413,7 @@ void FUN_L14_002b17d8(char *m) {
     owner = 0;
     FUN_L00_00263ac8(2.5f, m, 2, data + 0x120);
     if (*(int *)(data + 0x288) != 0) {
-        if (((unsigned char *)D_001413F4_p)[0] != 2) {
+        if (((unsigned char *)D_001413F4)[0] != 2) {
             *(unsigned short *)(m + 0x34) |= 0x41;
             *(int *)(m + 0x94) = 0;
             if (((unsigned char *)m)[0x53] == 5) {
@@ -439,7 +438,7 @@ void FUN_L14_002b17d8(char *m) {
         FUN_L14_002b2ed8_c((struct Moby *)m);
         owner = *(char **)(data + 0x110);
     }
-    if (D_L14_0015F5C4_p == 2) {
+    if (D_L14_0015F5C4 == 2) {
         ((unsigned char *)m)[0x31] = 0;
         *(unsigned short *)(m + 0x34) |= 1;
     } else if (((unsigned char *)m)[0x20] != 1) {
@@ -450,24 +449,24 @@ void FUN_L14_002b17d8(char *m) {
     case 0: {
         if (((unsigned char *)data)[0x24A] != 0) {
             if (*(int *)(data + 0x240) == -1) {
-                DebugPrint(D_L14_001FBB60_p, *(short *)(m + 0xB2));
+                DebugPrint(D_L14_001FBB60, *(short *)(m + 0xB2));
                 { call_D678(m); return; }
             }
-            if (*D_L14_001B0BB0_p[*(int *)(data + 0x240)] == 0) {
-                DebugPrint(D_L14_001FBBA0_p, *(short *)(m + 0xB2));
+            if (*D_L14_001B0BB0[*(int *)(data + 0x240)] == 0) {
+                DebugPrint(D_L14_001FBBA0, *(short *)(m + 0xB2));
                 { call_D678(m); return; }
             }
         }
         if (*(int *)(data + 0x244) == -1) {
-            DebugPrint(D_L14_001FBBF8_p, *(short *)(m + 0xB2));
+            DebugPrint(D_L14_001FBBF8, *(short *)(m + 0xB2));
             { call_D678(m); return; }
         }
-        if (*D_L14_001B0BB0_p[*(int *)(data + 0x244)] == 0) {
-            DebugPrint(D_L14_001FBC38_p, *(short *)(m + 0xB2));
+        if (*D_L14_001B0BB0[*(int *)(data + 0x244)] == 0) {
+            DebugPrint(D_L14_001FBC38, *(short *)(m + 0xB2));
             { call_D678(m); return; }
         }
         if (((unsigned char *)data)[0x24A] != 0 && *(int *)(data + 0x264) < 0) {
-            DebugPrint(D_L14_001FBC90_p, *(short *)(m + 0xB2));
+            DebugPrint(D_L14_001FBC90, *(short *)(m + 0xB2));
             { call_D678(m); return; }
         }
         if (random_integer_below(2) != 0) {
@@ -475,7 +474,7 @@ void FUN_L14_002b17d8(char *m) {
         }
         FUN_L14_002b3358_c(m);
         if (*(int *)(data + 0x240) != -1) {
-            qcopy(m + 0x10, (char *)D_L14_001B0BB0_p[*(int *)(data + 0x240)] + 0x10);
+            qcopy(m + 0x10, (char *)D_L14_001B0BB0[*(int *)(data + 0x240)] + 0x10);
         }
         data[0x28] = 1;
         data[0x29] = 0;
@@ -519,11 +518,11 @@ void FUN_L14_002b17d8(char *m) {
         if (FUN_001f9770(data + 0x248) == 0) return;
         if (FUN_L14_002d9870_c(*(int *)(data + 0x264)) == 0) return;
         if (call_4BF0(m) == 0) return;
-        *(short *)(data + 0x248) = scale_game_frames(*(int *)&D_L14_001614F0_p);
+        *(short *)(data + 0x248) = scale_game_frames(*(int *)&D_L14_001614F0);
         FUN_L14_002b3330_c(m);
         ((unsigned char *)m)[0x20] = 2;
         set_moby_animation_alt(m, 1, 0);
-        p = (float *)D_L14_001B0BB0_p[*(int *)(data + 0x240)];
+        p = (float *)D_L14_001B0BB0[*(int *)(data + 0x240)];
         *(float *)(m + 0x48) = fast_arc_tan_c(p[8] - p[4], p[9] - p[5]);
         *(int *)(data + 0x268) = 0;
         *(float *)(data + 0x27C) = 1.0f;
@@ -548,7 +547,7 @@ void FUN_L14_002b17d8(char *m) {
         }
         break;
     case 9: {
-        float *p = (float *)D_L14_001B0BB0_p[*(int *)(data + 0x240)];
+        float *p = (float *)D_L14_001B0BB0[*(int *)(data + 0x240)];
         FUN_L00_0025b8c0((float *)(m + 0x10), (float *)(data + 0x254), p[4], 0.01f, 0.2f, 0.0f);
         FUN_L00_0025b8c0((float *)(m + 0x14), (float *)(data + 0x258), p[5], 0.01f, 0.2f, 0.0f);
         if ((m[0x70] & 2) && ((unsigned char *)m)[0x52] == ((unsigned char *)m)[0x53]) {
@@ -595,7 +594,7 @@ void FUN_L14_002b17d8(char *m) {
                 blend_moby_animation(m, 2, 0, scale_game_frames(10));
                 ((unsigned char *)m)[0x20] = 9;
             } else {
-                *(short *)(data + 0x248) = scale_game_frames(*(int *)&D_L14_001614F0_p);
+                *(short *)(data + 0x248) = scale_game_frames(*(int *)&D_L14_001614F0);
                 ((unsigned char *)m)[0x20] = 0xD;
             }
         }
@@ -621,7 +620,7 @@ void FUN_L14_002b17d8(char *m) {
                 int n = *(int *)(data + 0x24C) - 1;
                 char *pe;
                 *(int *)(data + 0x24C) = n;
-                pe = (char *)D_L14_001B0BB0_p[*(int *)(data + 0x240)];
+                pe = (char *)D_L14_001B0BB0[*(int *)(data + 0x240)];
                 *(float *)(data + 0x250) = *(float *)(pe + (n << 4) + 0x1C);
             }
             *(float *)(data + 0x27C) = -1.0f;
@@ -640,14 +639,14 @@ void FUN_L14_002b17d8(char *m) {
         *(float *)(data + 0x278) = ang;
         ((unsigned char *)m)[0x20] = 5;
         blend_moby_animation(m, 4, 0, scale_game_frames(5));
-        *(short *)(data + 0x262) = scale_game_frames(*(int *)&D_L14_001614EC_p);
+        *(short *)(data + 0x262) = scale_game_frames(*(int *)&D_L14_001614EC_gp);
         break;
     }
     case 5: {
         float ang;
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(m + 0x10),
                                 *(float *)(owner + 0x14) - *(float *)(m + 0x14));
-        FUN_L14_002b35d8_c(m, 0, fast_subtract_rotations_c2(ang, *(float *)&D_L14_001614E8_p));
+        FUN_L14_002b35d8_c(m, 0, fast_subtract_rotations_c2(ang, *(float *)&D_L14_001614E8_gp));
         FUN_L14_002b37b0_c(m, ang);
         if ((m[0x70] & 2) && ((unsigned char *)m)[0x52] == ((unsigned char *)m)[0x53]) {
             blend_moby_animation(m, 5, 0, scale_game_frames(10));
@@ -665,8 +664,8 @@ void FUN_L14_002b17d8(char *m) {
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(m + 0x10),
                                 *(float *)(owner + 0x14) - *(float *)(m + 0x14));
         t = convert_integer_to_float(*(short *)(data + 0x262));
-        t = t / convert_integer_to_float(scale_game_frames(*(int *)&D_L14_001614EC_p));
-        c = *(float *)&D_L14_001614E8_p;
+        t = t / convert_integer_to_float(scale_game_frames(*(int *)&D_L14_001614EC_gp));
+        c = *(float *)&D_L14_001614E8_gp;
         f = fast_subtract_rotations_c2(*(float *)(data + 0x278), -c + (c + c) * t);
         if (((unsigned char *)data)[0x24B] != 0) {
             if (*(float *)(owner + 0x18) + 0.1f - *(float *)(m + 0x18) < 0.0f) {
@@ -680,9 +679,9 @@ void FUN_L14_002b17d8(char *m) {
         if (flag == 0) {
             v[2] = 0.0f;
         }
-        fast_vec_normalize(v, v, *(float *)&D_L14_001614E4_p);
+        fast_vec_normalize(v, v, *(float *)&D_L14_001614E4_gp);
         add_vector_xyz_c3(hit, mat[3], v);
-        fast_vec_normalize(v, v, *(float *)&D_L14_001614F4_p);
+        fast_vec_normalize(v, v, *(float *)&D_L14_001614F4_gp);
         add_vector_xyz_c3(mat[3], mat[3], v);
         ray.moby = m;
         ray.flags = 0x10001;
@@ -696,7 +695,7 @@ void FUN_L14_002b17d8(char *m) {
         ray.cls = *(unsigned short *)(m + 0xA6);
         ray.b98 = 0;
         if (FUN_001efa68(mat[3], hit, 0, m, &ray) != 0) {
-            qcopy(hit, D_L14_00174560_p);
+            qcopy(hit, D_L14_00174560);
         }
         FUN_L00_002e2190(m, mat, hit);
         if (FUN_001f9770(data + 0x262) != 0) {
@@ -732,7 +731,7 @@ void FUN_L14_002b17d8(char *m) {
         FUN_L00_0024f7c8(m, 2, mat);
         FUN_L14_002dea98_c(m, (char *)mat);
         call_F4A8(m, data + 0x40, m + 0x10, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-        if (((unsigned char *)D_001413F4_p)[0] == 2) {
+        if (((unsigned char *)D_001413F4)[0] == 2) {
             FUN_L00_00257470(m, 0x200, -1);
             { call_D678(m); return; }
         }
