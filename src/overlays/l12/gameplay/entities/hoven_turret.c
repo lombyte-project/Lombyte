@@ -1205,7 +1205,7 @@ extern int FUN_L04_002aee30(void *, void *, void *, int);
 extern int D_L12_00161F00_lui __asm__("D_L12_00161F00") __attribute__((section(".data")));
 extern int D_L12_00161F04_lui __asm__("D_L12_00161F04") __attribute__((section(".data")));
 extern void FUN_L12_00306350(struct Moby *, int);
-extern void FUN_L12_003064e8(void *);
+extern void FUN_L12_003064e8_u(void *) __asm__("FUN_L12_003064e8");
 
 void FUN_L12_003054b0(void *moby) {
     float position[4] __attribute__((aligned(16)));
@@ -1449,7 +1449,7 @@ hit_done:
             } while (i >= 0);
         }
     }
-    FUN_L12_003064e8(moby);
+    FUN_L12_003064e8_u(moby);
     if (*(short *)(data + 0x5fc) < 1 && !D_L12_00161F04_lui) {
         D_L12_00161F24 = 1;
         ((struct Moby *)moby)->state = 4;
@@ -1501,87 +1501,86 @@ void FUN_L12_00306350(struct Moby *moby, int slot) {
         *speed = frame_time_sq * 13.0f;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_003064e8.s", FUN_L12_003064e8);
-#else
-extern float D_L12_00161F40;
-extern float D_L12_00161F50[4];
-extern float D_L12_00161F60[4], D_L12_00161F70[4];
-extern float FUN_L00_0025bc98(void *, void *, int, float, float, float, float);
-extern void FUN_L00_00250df8(unsigned char *);
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003078C8), where it is exact; names translated to the US level program. */
 
-void FUN_L12_003064e8(void *moby) {
-    char *data;
-    int *saved = D_L12_001FB688;
-    int i = 0;
-    int offset = 0;
-    char *slot_data;
-    float *speed;
-    data = (char *)((struct Moby *)moby)->pvars;
-    speed = (float *)(data + 0x454);
-    slot_data = data;
-    do {
-        int index = *saved;
-        if (index != 0) {
-            struct Moby *other;
-            float height;
-            int slot_offset;
-            if (i == 17) {
-                other = (struct Moby *)moby;
-            } else {
-                if (index == -1) goto next_slot;
-                other = (struct Moby *)(D_L12_0015FFD8_p + index * 0x100);
-            }
-            if (i == 17) {
-                /* Retail stores the saved rotation 16 bytes after the saved position. */
-                if (D_L12_00161F40 == -1.0f) {
-                    qcopy(&D_L12_00161F40, &other->pos);
-                    qcopy((char *)&D_L12_00161F40 + 16, &other->rot);
-                }
-                qcopy(D_L12_00161F60, &other->pos);
-                qcopy(D_L12_00161F70, &other->rot);
-                qcopy(&other->pos, &D_L12_00161F40);
-                qcopy(&other->rot, (char *)&D_L12_00161F40 + 16);
-            }
-            if (other->pos.z < 20.0f) {
-                if (i == 17) return;
-                mark_moby_for_removal(other);
-                *saved = -1;
-            }
-            slot_offset = i << 4;
-            height = *(float *)(slot_data + 0x338) - *(float *)(data + offset + 0x570);
-            *(float *)(slot_data + 0x338) = height;
-            other->pos.z += height;
-            if (other->oclass == 0x500) {
-                other->rot.x = fast_add_rotations(other->rot.x, D_0015ED6C * 0.34906584f);
-                FUN_L00_0025bc98(&other->rot.y, speed, 0, 1.5707964f, 0.002f, 0.3f, 0.0f);
-            } else if (other->oclass == 0x4fd) {
-                other->rot.x = fast_add_rotations(other->rot.x, *(float *)(slot_data + 0x450));
-                FUN_L00_0025bc98(&other->rot.y, (char *)((int)data + slot_offset) + 0x454, 0, -1.5707964f, *(float *)(slot_data + 0x45c), 0.3f, 0.0f);
-            } else if (other->oclass == 0x4fa) {
-                other->rot.x = fast_add_rotations(other->rot.x, frame_time * -0.87266463f);
-                other->rot.y = fast_add_rotations(other->rot.y, *(float *)(slot_data + 0x454));
-                other->pos.y += D_0015ED6C * -4.0f;
-            } else {
-                other->pos.y += frame_time * -4.0f;
-                other->rot.x = fast_add_rotations(other->rot.x, *(float *)(slot_data + 0x450));
-                other->rot.y = fast_add_rotations(other->rot.y, *(float *)(slot_data + 0x454));
-            }
-            if (i == 17) {
-                qcopy(&D_L12_00161F40, &other->pos);
-                qcopy((char *)&D_L12_00161F40 + 16, &other->rot);
-            }
-            FUN_L00_00250df8((unsigned char *)other);
+extern float D_L12_00161F40;
+extern float D_L12_00161F50;
+extern float D_L12_00161F60;
+extern float D_L12_00161F70;
+extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
+extern float fast_add_rotations_c4(float, float) __asm__("func_001FA580");
+extern unsigned char * D_L12_0015FFD8_c __asm__("D_L12_0015FFD8");
+extern void FUN_L00_00250df8_c(void *) __asm__("FUN_L00_00250df8");
+extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
+
+void FUN_L12_003064e8(char *moby) {
+    int i;
+    int off;
+    char *data = *(char **)(moby + 0x78);
+    int last = 17;
+    for (i = 0, off = 0; i < 18; i++, off += 4) {
+        int s = D_L12_001FB688[i];
+        char *obj;
+        float f1;
+        if (s == 0) {
+            continue;
         }
-next_slot:
-        i++;
-        speed += 4;
-        slot_data += 0x10;
-        offset += 4;
-        saved++;
-    } while (i < 18);
+        if (i == last) {
+            obj = moby;
+        } else {
+            if (s == -1) {
+                continue;
+            }
+            obj = (char *)(D_L12_00160058_m + (s << 8));
+        }
+        if (i == last) {
+            f1 = D_L12_00161F40;
+            if (f1 == -1.0f) {
+                qcopy((char *)&D_L12_00161F40, obj + 0x10);
+                qcopy((char *)&D_L12_00161F50, obj + 0x40);
+            }
+            qcopy((char *)&D_L12_00161F60, obj + 0x10);
+            qcopy((char *)&D_L12_00161F70, obj + 0x40);
+            qcopy(obj + 0x10, (char *)&D_L12_00161F40);
+            qcopy(obj + 0x40, (char *)&D_L12_00161F50);
+            f1 = *(float *)(obj + 0x18);
+        } else {
+            f1 = *(float *)(obj + 0x18);
+        }
+        if (f1 < 20.0f) {
+            if (i == last) {
+                return;
+            }
+            mark_moby_for_removal_c(obj);
+            D_L12_001FB688[i] = -1;
+        }
+        f1 = *(float *)(data + 0x338 + i * 16) - *(float *)(data + off + 0x570);
+        *(float *)(data + 0x338 + i * 16) = f1;
+        *(float *)(obj + 0x18) = *(float *)(obj + 0x18) + f1;
+        if (*(short *)(obj + 0xA6) == 0x500) {
+            *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), D_0015ED6C * 0.34906584f);
+            FUN_L00_0025bc98(obj + 0x44, 1.5707964f, data + 0x454 + i * 16, 0, 0.00200000009f, 0.3f, 0.0f);
+        } else if (*(short *)(obj + 0xA6) == 0x4FD) {
+            *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), *(float *)(data + 0x450 + i * 16));
+            FUN_L00_0025bc98(obj + 0x44, -1.5707964f, (float *)(data + 0x450 + i * 16) + 1, 0, *(float *)(data + 0x45C + i * 16), 0.3f, 0.0f);
+        } else if (*(short *)(obj + 0xA6) == 0x4FA) {
+            float t;
+            *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), D_0015ED6C * -0.87266463f);
+            t = fast_add_rotations_c4(*(float *)(obj + 0x44), *(float *)(data + 0x454 + i * 16));
+            *(float *)(obj + 0x14) = *(float *)(obj + 0x14) + D_0015ED6C * -4.0f;
+            *(float *)(obj + 0x44) = t;
+        } else {
+            *(float *)(obj + 0x14) = *(float *)(obj + 0x14) + D_0015ED6C * -4.0f;
+            *(float *)(obj + 0x40) = fast_add_rotations_c4(*(float *)(obj + 0x40), *(float *)(data + 0x450 + i * 16));
+            *(float *)(obj + 0x44) = fast_add_rotations_c4(*(float *)(obj + 0x44), *(float *)(data + 0x454 + i * 16));
+        }
+        if (i == last) {
+            qcopy((char *)&D_L12_00161F40, obj + 0x10);
+            qcopy((char *)&D_L12_00161F50, obj + 0x40);
+        }
+        FUN_L00_00250df8_c(obj);
+    }
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306828.s", FUN_L12_00306828);
 #else
@@ -1658,7 +1657,7 @@ extern void FUN_001f9a40(void *, void *, void *, float);
 extern void FUN_L00_002eac18(int);
 extern int FUN_00214720(void *, int);
 extern void FUN_L12_003054b0(void *);
-extern void FUN_L12_003064e8(void *);
+extern void FUN_L12_003064e8_u(void *) __asm__("FUN_L12_003064e8");
 extern int FUN_0022da68(int, int, void *);
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
@@ -1927,7 +1926,7 @@ remove_moby:
             for (i = 0; i < 18; i++) FUN_L12_00306350(moby, i);
         }
         *(short *)(data + 0x5fa) += 1;
-        FUN_L12_003064e8(moby);
+        FUN_L12_003064e8_u(moby);
         break;
     }
     FUN_L12_00306828(moby);

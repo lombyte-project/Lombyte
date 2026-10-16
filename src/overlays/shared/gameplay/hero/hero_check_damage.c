@@ -1330,143 +1330,134 @@ float FUN_L00_0020f0b8(float *a, float *b) {
     }
     return s;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f160.s", FUN_L00_0020f160);
-#else
-extern volatile s32 D_00141508 __attribute__((section(".data")));
-extern s32 D_0014150C __attribute__((section(".data")));
-extern s32 D_00141510 __attribute__((section(".data")));
-extern volatile s32 D_0013F694 __attribute__((sda));
-extern u8 D_00140640[] __asm__("D_00140640") __attribute__((section(".data")));
-extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
-extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
-extern void FUN_001ff260_f160(void *) __asm__("FUN_001f99f8");
-extern void FUN_001ff278_f160(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_001ff300_f160(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void FUN_0025d330_f160(void *, void *) __asm__("FUN_00214598");
+/* Advances the 16-slot history ring, scores slots against each other and averages the agreeing ones into arg+0x40. */
+/* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020F7F8), where it is exact; names translated to the US level program. */
 
-void FUN_L00_0020f160(void *moby, void *matrix)
-{
-    u8 sum[0x40] __attribute__((aligned(16)));
-    /* Retail adds distances to these stack values without initializing them. */
-    f32 scores[16];
-    s32 i, j, n, chosen, ring, limit;
-    s32 count;
-    void *output;
-    f32 * volatile score_ptr;
-    s64 negative_one = -1;
-    f32 maximum;
-    u8 *record;
-    f32 *score;
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_F7F8;
+
+extern char D_0013E533_d[] __asm__("D_0013E533") __attribute__((section(".data")));
+extern float FUN_L00_0020f0b8_c(float *a, float *b) __asm__("FUN_L00_0020f0b8");
+extern short D_L00_0015F694_d __asm__("D_L00_0015F694") __attribute__((sda));
+extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
+extern void copy_matrix3x4_alt() __asm__("FUN_001fa2b8");
+extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
+extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
+void normalize_vector_triplet(f32 *arg0) __asm__("FUN_00214128");
+extern char D_0013F350_d[] __asm__("D_0013F350") __attribute__((section(".data")));
+
+void FUN_L00_0020f160(char *arg) {
+    V4_F7F8 vv[4];
+    float fa[16];
+    int ri;
+    int cnt;
+    float *fp;
+    char *out;
+    int n, i, k, acc;
+    float mx;
 
     {
-        /* Retail: hero + 0x12F0 ring; counters at +0x21B8..+0x21C0. */
-        struct Hero *hero_ptr = &hero;
-        u8 *records = hero_ptr->pad_12EF + 1;
-        record = records + (*(volatile s32 *)hero_ptr->pad_21B8) * 0x30;
-        copy_matrix(record, matrix);
-        record = records + (*(volatile s32 *)hero_ptr->pad_21B8) * 0x30;
-        normalize_vector_triplet(record);
-        ring = (*(volatile s32 *)hero_ptr->pad_21B8) + 1;
-        (*(s32 *)hero_ptr->pad_21B8) = ring % 16;
-        (*(s32 *)(hero_ptr->pad_21B8 + 4))++;
-        if ((*(s32 *)(hero_ptr->pad_21B8 + 4)) > 16)
-            (*(s32 *)(hero_ptr->pad_21B8 + 4)) = 16;
+    char *b = ((char *)&D_0013F350_d);
+    copy_matrix3x4_alt(((char *)&D_0013F350_d) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
+    normalize_vector_triplet(((char *)&D_0013F350_d) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
+
+    *(int *)(b + 0x21B8) = (*(int *)(b + 0x21B8) + 1) % 16;
+    *(int *)(b + 0x21BC) = *(int *)(b + 0x21BC) + 1;
+    if (*(int *)(b + 0x21BC) > 16) {
+        *(int *)(b + 0x21BC) = 16;
     }
-    {
-        u8 *record = sum;
-        i = 2;
-        do {
-            FUN_001ff260_f160(record);
-            i--;
-            record += 16;
-        } while (i >= 0);
     }
 
-    if (hero.state.control_mode == 22)
-        D_0013F694 = 14;
-    else if (hero.state.current == 2)
-        D_0013F694 = 5;
-    else
-        D_0013F694 = 11;
-    {
-        struct Hero *hero_ptr = &hero;
-        s32 limit = D_0013F694;
-        if ((*(s32 *)(hero_ptr->pad_21B8 + 8)) < limit)
-            (*(s32 *)(hero_ptr->pad_21B8 + 8))++;
-        else if ((*(s32 *)(hero_ptr->pad_21B8 + 8)) > limit)
-            (*(s32 *)(hero_ptr->pad_21B8 + 8))--;
-    }
-    {
-        struct Hero *hero_ptr = &hero;
-        n = (*(s32 *)(hero_ptr->pad_21B8 + 8));
-        if (n < 2)
-            n = 2;
-        if ((*(s32 *)(hero_ptr->pad_21B8 + 4)) < n)
-            return;
+    for (k = 0; k < 3; k++) {
+        clear_u64_value_c(&vv[k]);
     }
 
-    /* The completed triplet countdown leaves the signed remainder sentinel. */
-    negative_one = i;
-    output = (u8 *)moby + 0x40;
-    count = 0;
-    if (n > 0)
-        score_ptr = scores;
+    {
+    char *b = ((char *)&D_0013F350_d);
+    if (*(int *)(b + 0x208C) == 0x16) {
+        *(int *)&D_L00_0015F694_d = 14;
+    } else if (*(int *)(b + 0x2084) == 2) {
+        *(int *)&D_L00_0015F694_d = 5;
+    } else {
+        *(int *)&D_L00_0015F694_d = 11;
+    }
+    }
+
+    {
+    char *b = ((char *)&D_0013F350_d);
+    if (*(int *)(b + 0x21C0) < *(int *)&D_L00_0015F694_d) {
+        *(int *)(b + 0x21C0) = *(int *)(b + 0x21C0) + 1;
+    } else if (*(int *)&D_L00_0015F694_d < *(int *)(b + 0x21C0)) {
+        *(int *)(b + 0x21C0) = *(int *)(b + 0x21C0) - 1;
+    }
+    }
+
+    {
+    char *b = ((char *)&D_0013F350_d);
+    n = *(int *)(b + 0x21C0);
+    if (n < 2) {
+        n = 2;
+    }
+    if (*(int *)(b + 0x21BC) < n) {
+        return;
+    }
+    }
+
+    out = arg + 0x40;
+    cnt = 0;
+
     for (i = 0; i < n; i++) {
-        s32 a = (s32)((s64)(*(volatile s32 *)(hero.pad_21B8)) - (s64)(i - 15));
-        a %= 16;
-
-        if (n > 0) {
-            score = score_ptr;
-            score += i;
-            j = 0;
-            do {
-                if (i != j) {
-                    s32 b = (*(volatile s32 *)(hero.pad_21B8)) - (j - 15);
-                    {
-                        s32 ring = b + 15;
-                        if (negative_one < b)
-                            ring = b;
-                        b -= (ring >> 4) * 16;
-                    }
-                    *score += FUN_L00_0020f0b8((f32 *)((hero.pad_12EF + 1) + a * 0x30),
-                                              (f32 *)((hero.pad_12EF + 1) + b * 0x30));
-                }
-                j++;
-            } while (j < n);
+        char *b = ((char *)&D_0013F350_d);
+        int t;
+        fp = fa;
+        t = i - 15;
+        ri = (*(int *)(b + 0x21B8) - t) % 16;
+        for (k = 0; k < n; k++) {
+            if (i != k) {
+                char *b = ((char *)&D_0013F350_d);
+                int u = k - 15;
+                int rj = (*(int *)(b + 0x21B8) - u) % 16;
+                *(float *)((char *)fp - (-(i * 4))) += FUN_L00_0020f0b8_c(
+                    (float *)(((char *)&D_0013F350_d) + 0x12F0 + ri * 0x30),
+                    (float *)(((char *)&D_0013F350_d) + 0x12F0 + rj * 0x30));
+            }
         }
     }
-    maximum = 0.0f;
-    for (i = 0; i < n; i++)
-        if (maximum < scores[i])
-            maximum = scores[i];
-    if (n > 0) {
-        score_ptr = scores;
-        i = n;
-        do {
-            if (maximum * 0.2f < *score_ptr)
-                count++;
-            i--;
-            score_ptr++;
-        } while (i != 0);
-    }
-    chosen = 0;
-    limit = count < 3;
+
+    mx = 0.0f;
     for (i = 0; i < n; i++) {
-        if (!(maximum * 0.2f < scores[i]) || count < 1 || !limit) {
-            s32 a = (s32)((s64)(*(volatile s32 *)(hero.pad_21B8)) - (s64)(i - 15));
-            a %= 16;
-            record = (hero.pad_12EF + 1) + a * 0x30;
-            chosen++;
-            for (j = 0; j < 3; j++)
-                FUN_001ff278_f160(sum + j * 16, sum + j * 16, record + j * 16);
+        if (mx < fa[i]) {
+            mx = fa[i];
         }
     }
-    for (i = 0; i < 3; i++)
-        FUN_001ff300_f160(sum + i * 16, sum + i * 16, 1.0f / (f32)chosen);
-    FUN_0025d330_f160(sum, output);
+
+    for (i = 0; i < n; i++) {
+        if (mx * 0.2f < fa[i]) {
+            cnt++;
+        }
+    }
+
+    acc = 0;
+    for (i = 0; i < n; i++) {
+        if (mx * 0.2f < fa[i] && cnt > 0 && cnt < 3) {
+            continue;
+        }
+        acc++;
+        {
+        char *b = ((char *)&D_0013F350_d);
+        int t = i - 15;
+        ri = (*(int *)(b + 0x21B8) - t) % 16;
+        for (k = 0; k < 3; k++) {
+            add_vector_xyz(&vv[k], &vv[k], ((char *)&D_0013F350_d) + 0x12F0 + ri * 0x30 + k * 16);
+        }
+        }
+    }
+
+    for (k = 0; k < 3; k++) {
+        fast_vec_scale(&vv[k], &vv[k], 1.0f / (float)acc);
+    }
+    matrix_to_euler(vv, out);
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020f580.s", FUN_L00_0020f580);
 #else

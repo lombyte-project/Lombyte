@@ -657,7 +657,7 @@ extern f32 D_L14_001614B4 __attribute__((sda));
 extern f32 D_L14_001614B8 __attribute__((sda));
 
 extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
-extern void FUN_L14_002b2928(struct Moby *);
+extern void FUN_L14_002b2928_u(struct Moby *) __asm__("FUN_L14_002b2928");
 extern void enqueue_callback_list_1(void (*)(struct Moby *), struct Moby *) __asm__("FUN_001f4600");
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void build_moby_bone_transform(struct Moby *, s32, void *) __asm__("FUN_0020cca8");
@@ -729,172 +729,155 @@ void FUN_L14_002b2600(struct Moby *m)
     FUN_001f9a10(&pv->beam_start, &pv->beam_start, &dz);
     fast_vec_scale(&dy, &dy, -2.0f);
     FUN_001f9a10(&pv->beam_end, &pv->beam_start, &dy);
-    enqueue_callback_list_1(FUN_L14_002b2928, m);
+    enqueue_callback_list_1(FUN_L14_002b2928_u, m);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L14_002b2928.s", FUN_L14_002b2928);
-#else
-#include "rnc/rendering/geometry_quad.h"
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B3B78), where it is exact; names translated to the US level program. */
 
-extern Vec4 D_0013F5E0;
-extern Vec4 D_L14_001D8850[4];
-extern f32 D_L14_001614AC __attribute__((sda));
-extern f32 D_L14_001614BC __attribute__((sda));
-extern f32 D_L14_001614C0 __attribute__((sda));
-extern u64 get_effect_texture_l14(s32) __asm__("FUN_001f44b8");
-extern void draw_geometry_quad_l14(struct GeometryQuad *, s32, s32) __asm__("FUN_001f7d30");
-extern void cross_vectors_l14(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void transform_vector_l14(void *, void *, void *) __asm__("FUN_001f9d20");
+typedef u32 VecQuad __attribute__((mode(TI), aligned(16)));
 
-void FUN_L14_002b2928(struct Moby *m)
-{
-    struct GeometryQuad quad;
-    Vec4 basis[3];
-    Vec4 pos;
-    Vec4 offset;
-    ShipVars *pv = (ShipVars *)m->pvars;
-    Vec4 *corner;
-    Vec4 *template;
-    Vec4 *beam_start;
-    Vec4 *beam_end;
-    s32 color;
-    s32 i;
+typedef union {
+    VecQuad q;
+    f32 f[4];
+    s32 i[4];
+} Vec4_2b2928;
 
-    {
-        Vec4 *corner;
-        Vec4 *template;
-        s32 i;
-        qcopy(&pos, &pv->exhaust);
-        pos.f[3] = 1.0f;
-        FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
-        i = 3;
-        fast_vec_normalize(&basis[0], &basis[0], 1.0f);
-        cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
-        fast_vec_normalize(&basis[1], &basis[1], -1.0f);
-        cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
-        quad.texture = get_effect_texture_l14(11);
-        quad.primitive = 0x8000000048LL;
-        quad.texture_state = 0xFF9000000260LL;
-        quad.reserved.value = 5;
-        quad.colors[3] = 0x80FFFFFF;
-        quad.colors[2] = 0x80FFFFFF;
-        quad.colors[1] = 0x80FFFFFF;
-        quad.colors[0] = 0x80FFFFFF;
-        quad.texture_coordinates[0][0] = 0.0f;
-        quad.texture_coordinates[0][1] = 0.0f;
-        quad.texture_coordinates[1][0] = 0.0f;
-        quad.texture_coordinates[1][1] = 1.0f;
-        quad.texture_coordinates[2][0] = 1.0f;
-        quad.texture_coordinates[2][1] = 0.0f;
-        quad.texture_coordinates[3][0] = 1.0f;
-        quad.texture_coordinates[3][1] = 1.0f;
-        corner = &quad.positions[0];
-        do {
-            template = &D_L14_001D8850[3 - i];
-            fast_vec_scale(corner, template, 0.4f);
-            transform_vector_l14(corner, corner, &basis[0]);
-            corner++;
-            i--;
-        } while (i >= 0);
-        draw_geometry_quad_l14(&quad, 0, 0);
+extern Vec4_2b2928 D_L14_001D8850_d[] __asm__("D_L14_001D8850") __attribute__((section(".data")));
+extern char D_0013F5E0_d[] __asm__("D_0013F5E0") __attribute__((section(".data")));
+extern char D_L14_001674C0_d[] __asm__("D_L14_001674C0") __attribute__((section(".data")));
+extern int D_L14_001614AC_d __asm__("D_L14_001614AC") __attribute__((sda)); /* no foreign declaration */
+extern int D_L14_001614BC_d __asm__("D_L14_001614BC") __attribute__((sda)); /* no foreign declaration */
+extern int D_L14_001614C0_d __asm__("D_L14_001614C0") __attribute__((sda)); /* no foreign declaration */
+extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern void add_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void fast_draw_quad_real(void *, void *, s32);
+extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
+extern void subtract_vector_xyz_c3(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
+extern f32 D_L14_00161574_3B78 __asm__("D_L14_001614AC");
+extern f32 D_L14_00161584_3B78 __asm__("D_L14_001614BC");
+extern f32 D_L14_00161588_3B78 __asm__("D_L14_001614C0");
+
+void FUN_L14_002b2928(char *moby) {
+    char *data = *(char **)(moby + 0x78);
+    struct {
+        Vec4_2b2928 o[4];
+        unsigned int c[4];
+        float g[8];
+        u64 t[4];
+    } pk;
+    Vec4_2b2928 m[4];
+    Vec4_2b2928 w;
+    char *pp;
+    char *q;
+    char *r;
+    int i;
+    int j;
+    int a;
+
+    qcopy(&m[3], data + 0x1E0);
+    m[3].f[3] = 1.0f;
+    subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
+    fast_vec_normalize(&m[0], &m[0], 1.0f);
+    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0_d);
+    fast_vec_normalize(&m[1], &m[1], -1.0f);
+    cross_vectors_xyz(&m[2], &m[1], &m[0]);
+    pk.t[1] = get_effect_texture(11);
+    pk.t[3] = 0x8000000048ULL;
+    pk.t[2] = 0xFF9000000260ULL;
+    pk.t[0] = 5;
+    pk.c[3] = 0x80FFFFFF;
+    pk.c[2] = 0x80FFFFFF;
+    pk.c[1] = 0x80FFFFFF;
+    pk.c[0] = 0x80FFFFFF;
+    pk.g[0] = 0.0f;
+    pk.g[1] = 0.0f;
+    pk.g[2] = 0.0f;
+    pk.g[3] = 1.0f;
+    pk.g[4] = 1.0f;
+    pk.g[5] = 0.0f;
+    pk.g[6] = 1.0f;
+    pk.g[7] = 1.0f;
+    for (i = 0; i < 4; i++) {
+        fast_vec_scale_c(&pk.o[i], &D_L14_001D8850_d[i], 0.4f);
+        transform_vector(&pk.o[i], &pk.o[i], &m[0]);
     }
+    fast_draw_quad_real(&pk, 0, 0);
 
-    qcopy(&pos, &pv->joint6);
-    beam_end = &pv->beam_end;
-    FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
-    beam_start = &pv->beam_start;
-    fast_vec_normalize(&basis[0], &basis[0], 1.0f);
-    cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
-    fast_vec_normalize(&basis[1], &basis[1], -1.0f);
-    cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
-    quad.colors[3] = 0x202020FF;
-    quad.colors[2] = 0x202020FF;
-    quad.colors[1] = 0x202020FF;
-    quad.colors[0] = 0x202020FF;
-    i = 3;
-    corner = &quad.positions[0];
-    do {
-        template = &D_L14_001D8850[3 - i];
-        fast_vec_scale(corner, template, 0.2f);
-        transform_vector_l14(corner, corner, &basis[0]);
-        corner++;
-        i--;
-    } while (i >= 0);
-    draw_geometry_quad_l14(&quad, 0, 0);
+    qcopy(&m[3], data + 0x200);
+    pp = data + 0x220;
+    subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
+    r = data + 0x210;
+    q = data + 0x1F0;
+    fast_vec_normalize(&m[0], &m[0], 1.0f);
+    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0_d);
+    fast_vec_normalize(&m[1], &m[1], -1.0f);
+    cross_vectors_xyz(&m[2], &m[1], &m[0]);
+    pk.c[3] = 0x202020FF;
+    pk.c[2] = 0x202020FF;
+    pk.c[1] = 0x202020FF;
+    pk.c[0] = 0x202020FF;
+    for (j = 0; j < 4; j++) {
+        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], 0.2f);
+        transform_vector(&pk.o[j], &pk.o[j], &m[0]);
+    }
+    fast_draw_quad_real(&pk, 0, 0);
 
-    qcopy(&pos, &pv->nozzle);
-    FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
-    fast_vec_normalize(&basis[0], &basis[0], 1.0f);
-    cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
-    fast_vec_normalize(&basis[1], &basis[1], -1.0f);
-    cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
-    fast_vec_scale(&offset, &basis[0], D_L14_001614AC);
-    FUN_001f9a10(&pos, &pos, &offset);
-    quad.colors[3] = 0x4020FF20;
-    quad.colors[2] = 0x4020FF20;
-    quad.colors[1] = 0x4020FF20;
-    quad.colors[0] = 0x4020FF20;
-    i = 3;
-    corner = &quad.positions[0];
-    do {
-        template = &D_L14_001D8850[3 - i];
-        fast_vec_scale(corner, template, 0.2f);
-        transform_vector_l14(corner, corner, &basis[0]);
-        corner++;
-        i--;
-    } while (i >= 0);
-    draw_geometry_quad_l14(&quad, 0, 0);
+    qcopy(&m[3], q);
+    subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
+    fast_vec_normalize(&m[0], &m[0], 1.0f);
+    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0_d);
+    fast_vec_normalize(&m[1], &m[1], -1.0f);
+    cross_vectors_xyz(&m[2], &m[1], &m[0]);
+    fast_vec_scale_c(&w, &m[0], D_L14_00161574_3B78);
+    add_vector_xyz_c2(&m[3], &m[3], &w);
+    pk.c[3] = 0x4020FF20;
+    pk.c[2] = 0x4020FF20;
+    pk.c[1] = 0x4020FF20;
+    pk.c[0] = 0x4020FF20;
+    a = 0x40;
+    for (j = 0; j < 4; j++) {
+        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], 0.2f);
+        transform_vector(&pk.o[j], &pk.o[j], &m[0]);
+    }
+    fast_draw_quad_real(&pk, 0, 0);
 
-    qcopy(&pos, beam_start);
-    FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
-    fast_vec_normalize(&basis[0], &basis[0], 1.0f);
-    cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
-    fast_vec_normalize(&basis[1], &basis[1], -1.0f);
-    cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
-    fast_vec_scale(&offset, &basis[0], D_L14_001614BC);
-    FUN_001f9a10(&pos, &pos, &offset);
-    /* The preceding four-corner loop leaves i == -1, so this shifts by 24. */
-    color = 0x40;
-    color <<= i + 25;
-    quad.colors[3] = color | 0xFF2020;
-    quad.colors[2] = color | 0xFF2020;
-    quad.colors[1] = color | 0xFF2020;
-    quad.colors[0] = color | 0xFF2020;
-    i = 3;
-    corner = &quad.positions[0];
-    do {
-        template = &D_L14_001D8850[3 - i];
-        fast_vec_scale(corner, template, D_L14_001614C0);
-        transform_vector_l14(corner, corner, &basis[0]);
-        corner++;
-        i--;
-    } while (i >= 0);
-    draw_geometry_quad_l14(&quad, 0, 0);
+    qcopy(&m[3], r);
+    subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
+    fast_vec_normalize(&m[0], &m[0], 1.0f);
+    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0_d);
+    fast_vec_normalize(&m[1], &m[1], -1.0f);
+    cross_vectors_xyz(&m[2], &m[1], &m[0]);
+    fast_vec_scale_c(&w, &m[0], D_L14_00161584_3B78);
+    add_vector_xyz_c2(&m[3], &m[3], &w);
+    pk.c[3] = (a << 24) | 0xFF2020;
+    pk.c[2] = (a << 24) | 0xFF2020;
+    pk.c[1] = (a << 24) | 0xFF2020;
+    pk.c[0] = (a << 24) | 0xFF2020;
+    for (j = 0; j < 4; j++) {
+        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], D_L14_00161588_3B78);
+        transform_vector(&pk.o[j], &pk.o[j], &m[0]);
+    }
+    fast_draw_quad_real(&pk, 0, 0);
 
-    qcopy(&pos, beam_end);
-    FUN_001f9a28(&basis[0], &D_L14_001674C0, &pos);
-    fast_vec_normalize(&basis[0], &basis[0], 1.0f);
-    cross_vectors_l14(&basis[1], &basis[0], &D_0013F5E0);
-    fast_vec_normalize(&basis[1], &basis[1], -1.0f);
-    cross_vectors_l14(&basis[2], &basis[1], &basis[0]);
-    fast_vec_scale(&offset, &basis[0], D_L14_001614BC);
-    FUN_001f9a10(&pos, &pos, &offset);
-    quad.colors[3] = color | 0xFF2020;
-    quad.colors[2] = color | 0xFF2020;
-    quad.colors[1] = color | 0xFF2020;
-    quad.colors[0] = color | 0xFF2020;
-    i = 3;
-    corner = &quad.positions[0];
-    do {
-        template = &D_L14_001D8850[3 - i];
-        fast_vec_scale(corner, template, D_L14_001614C0);
-        transform_vector_l14(corner, corner, &basis[0]);
-        corner++;
-        i--;
-    } while (i >= 0);
-    draw_geometry_quad_l14(&quad, 0, 0);
+    qcopy(&m[3], pp);
+    subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
+    fast_vec_normalize(&m[0], &m[0], 1.0f);
+    cross_vectors_xyz(&m[1], &m[0], D_0013F5E0_d);
+    fast_vec_normalize(&m[1], &m[1], -1.0f);
+    cross_vectors_xyz(&m[2], &m[1], &m[0]);
+    fast_vec_scale_c(&w, &m[0], D_L14_00161584_3B78);
+    add_vector_xyz_c2(&m[3], &m[3], &w);
+    pk.c[3] = (a << 24) | 0xFF2020;
+    pk.c[2] = (a << 24) | 0xFF2020;
+    pk.c[1] = (a << 24) | 0xFF2020;
+    pk.c[0] = (a << 24) | 0xFF2020;
+    for (j = 0; j < 4; j++) {
+        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], D_L14_00161588_3B78);
+        transform_vector(&pk.o[j], &pk.o[j], &m[0]);
+    }
+    fast_draw_quad_real(&pk, 0, 0);
 }
-#endif
 #include "sda.h"
 #include "rnc/gameplay/entities/moby.h"
 

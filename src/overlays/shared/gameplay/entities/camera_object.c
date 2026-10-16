@@ -2112,92 +2112,97 @@ void wrench_update(WrenchMoby *m) {
     default: break;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002a96f8.s", FUN_L00_002a96f8);
-#else
-typedef union { u128 q; f32 f[4]; } V_2a96f8;
-typedef struct { V_2a96f8 v0; void *p10; s32 i14; void *p18; f32 f1C; s32 i20; s32 i24; s32 i28; f32 f2C; f32 f30; f32 f34; s32 i38; s16 h3C; s16 h3E; } O_2a96f8;
-typedef struct { u8 pad[0x10]; V_2a96f8 v10; u8 b20; u8 pad2[0x2C - 0x21]; f32 f2C; u8 b30; u8 b31; s16 h32; u8 pad3[0x44 - 0x34]; f32 f44; f32 f48; u8 pad4[0x78 - 0x4C]; O_2a96f8 *p78; u8 pad5[0xBC - 0x7C]; u8 bBC; } M_2a96f8;
-typedef struct { u8 pad[0xB]; u8 bB; u8 bC; u8 pad2[0x1E - 0xD]; u16 h1E; } R_2a96f8;
-typedef struct { u8 pad[0x10]; V_2a96f8 v10; } T_2a96f8;
-extern f32 D_0015ED6C_2a96f8 __asm__("D_0015ED6C");
-extern f32 D_L00_001613C4_2a96f8 __asm__("D_L00_001613C4") __attribute__((sda));
-extern u8 D_0013F490_2a96f8[] __asm__("D_0013F490");
-extern void *D_001413D0_2a96f8 __asm__("D_001413D0") __attribute__((section(".data")));
-extern V_2a96f8 D_L00_00173E60_2a96f8[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
-extern s16 D_L00_001B0770_lui[] __asm__("D_L00_001B0770") __attribute__((section(".data")));
-M_2a96f8 *FUN_0020c4f8_2a96f8(s32) __asm__("FUN_0020c4f8");
-void FUN_00214db0_2a96f8(void *, f32, f32, f32) __asm__("FUN_00214db0");
-T_2a96f8 *FUN_L00_002630c8_2a96f8(void *, void *, void *, f32, f32 *, f32 *, f32 *) __asm__("FUN_L00_002630c8");
-R_2a96f8 *FUN_L00_0025c338_2a96f8(void *) __asm__("FUN_002141f8");
-s32 FUN_001f96f8_2a96f8(s32) __asm__("FUN_001f96f8");
-f32 FUN_001f9af0_2a96f8(void *) __asm__("FUN_001f9af0");
-s32 FUN_L00_001efc70_2a96f8(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
-void FUN_L00_00250df8_2a96f8(void *) __asm__("FUN_L00_00250df8");
-void FUN_L00_0025f780_2a96f8(void *, void *, s32) __asm__("FUN_L00_0025f780");
-M_2a96f8 *FUN_L00_002a96f8(T_2a96f8 *src, V_2a96f8 *pos, T_2a96f8 *tgt, f32 x, f32 y, f32 z, f32 w, f32 v) {
-    M_2a96f8 *moby;
-    O_2a96f8 *vars;
-    R_2a96f8 *target_info;
-    V_2a96f8 dir, start;
-    f32 player_speed;
-    s32 delay;
-    moby = FUN_0020c4f8_2a96f8(0x100);
-    if (moby) {
-        moby->b30 = 0xFF;
-        moby->b31 = 1;
-        moby->b20 = 0;
-        moby->h32 = 0xFF;
-        moby->f2C *= D_L00_001613C4_2a96f8;
-        vars = moby->p78;
-        moby->f48 = w;
-        moby->f44 = v;
-        if (!tgt) {
-            FUN_00214db0_2a96f8(&dir, 20.0f * D_0015ED6C_2a96f8, w, v);
-            start.q = pos->q;
-            tgt = FUN_L00_002630c8_2a96f8(src, &start, &dir, 0.34906585f, &x, &y, &z);
+/* Spawns a homing bolt (class 0x100) from owner at pos, aimed at tgt or at whatever lies along its heading. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AA998), where it is exact; names translated to the US level program. */
+
+typedef float V[4] __attribute__((aligned(16)));
+
+typedef int Q_2aa998 __attribute__((mode(TI)));
+
+typedef union { Q_2aa998 q; float f[4]; } BoltVector_2AA998;
+
+typedef struct { char pad[0x10]; BoltVector_2AA998 position; } BoltOwner_2AA998;
+
+extern V D_L00_00173E60;
+extern char *FUN_L00_002630c8(void *, void *, void *, float *, float *, float *, float);
+extern char *func_0020D348_m(int);
+extern char D_0013F490[];
+extern char D_001413D0_c[] __asm__("D_001413D0");
+extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
+extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
+extern short D_L00_001613C4 __attribute__((sda));
+extern short D_L00_001B0770[];
+extern void FUN_L00_00250df8_c(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_0025f780(void *, short *, int);
+
+char *FUN_L00_002a96f8(void *owner, void *pos, float a, float b, float c, char *tgt, float rz, float ry) {
+    char *m;
+    char *d;
+    BoltVector_2AA998 t;
+    BoltVector_2AA998 p;
+    m = (char *)func_0020D348_m(0x100);
+    if (m != 0) {
+        ((unsigned char *)m)[0x30] = 0xFF;
+        m[0x31] = 1;
+        m[0x20] = 0;
+        *(float *)(m + 0x2C) *= *(float *)&D_L00_001613C4;
+        *(short *)(m + 0x32) = 0xFF;
+        d = *(char **)(m + 0x78);
+        *(float *)(m + 0x48) = rz;
+        *(float *)(m + 0x44) = ry;
+        if (tgt == 0) {
+            build_spherical_offset(&t, D_0015ED6C * 20.0f, rz, ry);
+            p.q = *(Q_2aa998 *)pos;
+            tgt = FUN_L00_002630c8(owner, &p, &t, &a, &b, &c, 0.34906584f);
         }
-        vars->p10 = src;
-        qcopy(&moby->v10, pos);
-        vars->i38 = 1;
-        vars->f34 = D_0015ED6C_2a96f8 * 100.0f;
-        vars->i24 = 0;
-        vars->i28 = 0;
-        vars->i20 = 0;
-        vars->p18 = tgt;
-        if (tgt) {
-            target_info = FUN_L00_0025c338_2a96f8(tgt);
-            if (target_info) {
-                target_info->h1E |= 0x80;
-                if (target_info->bB) vars->i38 = 0;
-                if (target_info->bC) vars->f34 = target_info->bC * D_0015ED6C_2a96f8;
+        *(void **)(d + 0x10) = owner;
+        qcopy(m + 0x10, pos);
+        *(float *)(d + 0x34) = D_0015ED6C * 100.0f;
+        *(int *)(d + 0x38) = 1;
+        *(int *)(d + 0x24) = 0;
+        *(int *)(d + 0x28) = 0;
+        *(int *)(d + 0x20) = 0;
+        *(char **)(d + 0x18) = tgt;
+        if (tgt != 0) {
+            unsigned char *e = (unsigned char *)FUN_002141f8(tgt);
+            if (e != 0) {
+                *(unsigned short *)(e + 0x1E) |= 0x80;
+                if (e[0xB] != 0) *(int *)(d + 0x38) = 0;
+                if (e[0xC] != 0) *(float *)(d + 0x34) = (float)e[0xC] * D_0015ED6C;
             }
         }
-        vars->f2C = x;
-        vars->f30 = y;
-        vars->i14 = FUN_001f96f8_2a96f8(0x96);
-        if (tgt) {
-            qcopy(&vars->v0, &tgt->v10);
-            vars->v0.f[2] += z;
-            vars->f1C = z;
+        *(float *)(d + 0x2C) = a;
+        *(float *)(d + 0x30) = b;
+        *(int *)(d + 0x14) = scale_game_frames_c(0x96);
+        if (tgt != 0) {
+            qcopy(d, tgt + 0x10);
+            *(float *)(d + 8) += c;
+            *(float *)(d + 0x1C) = c;
         }
-        player_speed = FUN_001f9af0_2a96f8(D_0013F490_2a96f8);
-        delay = FUN_001f96f8_2a96f8(D_0015ED6C_2a96f8 * 0.1f < player_speed ? 0x3C : 1);
-        vars->h3E = delay;
-        vars->h3C = delay;
-        dir.f[2] = pos->f[2];
-        dir.q = src->v10.q;
-        if (FUN_L00_001efc70_2a96f8(&dir, pos, 0, D_001413D0_2a96f8, 0)) {
-            moby->bBC = 1;
-            qcopy(&moby->v10, &D_L00_00173E60_2a96f8[0]);
+        {
+            int r;
+            if (fast_vec_length((float *)(D_0013F490)) > D_0015ED6C * 0.1f) {
+                r = scale_game_frames_c(0x3C);
+                *(short *)(d + 0x3E) = r;
+                *(short *)(d + 0x3C) = r;
+            } else {
+                r = scale_game_frames_c(1);
+                *(short *)(d + 0x3E) = r;
+                *(short *)(d + 0x3C) = r;
+            }
         }
-        FUN_L00_00250df8_2a96f8(moby);
-        FUN_L00_0025f780_2a96f8(moby, D_L00_001B0770_lui, 0x1F);
-        moby->f2C += moby->f2C;
+        t.q = ((BoltOwner_2AA998 *)owner)->position.q;
+        t.f[2] = ((float *)pos)[2];
+        if (FUN_001efa68(&t, pos, 0, *(int *)(D_001413D0_c), 0) != 0) {
+            m[0xBC] = 1;
+            qcopy(m + 0x10, &D_L00_00173E60);
+        }
+        FUN_L00_00250df8_c(m);
+        FUN_L00_0025f780(m, D_L00_001B0770, 0x1F);
+        *(float *)(m + 0x2C) += *(float *)(m + 0x2C);
     }
-    return moby;
+    return m;
 }
-#endif
 /* Creates a moby at a position with a scale, colour and a few data fields. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAC50), where it is exact; names translated to the US level program. */
 
@@ -2560,7 +2565,6 @@ void FUN_L00_002aa008(V_2aa008 *pos, N_2aa008 *self, void *arg) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AB548), where it is exact; names translated to the US level program. */
 
-typedef float V[4] __attribute__((aligned(16)));
 
 
 extern V D_L00_00166DC0;

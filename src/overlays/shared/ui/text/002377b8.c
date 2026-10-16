@@ -23,72 +23,90 @@ void FUN_L00_002377b8(char *p) {
         *(int *)(p + 0x7C) = 30;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00237840.s", FUN_L00_00237840);
-#else
-extern int D_L00_0015F760 __attribute__((sda));
-extern int D_L00_0015F764 __attribute__((sda));
-extern int FUN_L00_00235a70(char *, int *, int *);
-extern void FUN_L00_00235ad8(char *, int *, int *, int, int);
-extern void FUN_L00_0023caa8(int, int, int, int, unsigned long, int);
-extern int FUN_L00_0023b208(int, int);
-extern void FUN_L00_0023bac0(int, int, int, int, int, int);
+/* Draws a HUD gauge frame. */
+/* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_002381D0), where it is exact; names translated to the US level program. */
 
-int FUN_L00_00237840(char *rec) {
-    int x, y;
-    int left, top, right, bottom;
-    int w, h, bar_height, step, i, xbase, ybase;
+typedef struct {
+    char pad0[0x8];
+    int unk08;
+    int *unk0C;
+    char pad10[0x38];
+    short unk48;
+    short unk4A;
+    char pad4C[0x4];
+    int unk50;
+    int unk54;
+    int w;
+    int h;
+    int flags;
+    char pad64[0x8];
+    int unk6C;
+    unsigned char cnt[4];
+    int unk74;
+    int unk78;
+    int unk7C;
+    void *unk80;
+} HudElem_237840;
+
+extern s32 find_valid_animation_frame_index_alt(s32, s32) __asm__("func_001FF960");
+extern short D_L00_0015F760_d __asm__("D_L00_0015F760") __attribute__((sda));
+extern short D_L00_0015F764_d __asm__("D_L00_0015F764") __attribute__((sda));
+extern void FUN_L00_00235ad8_c(HudElem_237840 *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
+extern void FUN_L00_0023bac0(int, int, int, int, int, int);
+extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
+int FUN_L00_00235a70_c2(HudElem_237840 *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
+
+int FUN_L00_00237840(HudElem_237840 *e) {
+    int pos[2];
+    int left, top, right, bottom, w, h, bh, step, i;
     {
-        int w, h;
-        w = D_L00_0015F760;
-        h = D_L00_0015F764;
-        x = *(int *)(rec + 0x50);
-        y = *(int *)(rec + 0x54);
-        *(int *)(rec + 0x5c) = h;
-        *(int *)(rec + 0x58) = w;
+        int ww = *(int *)&D_L00_0015F760_d;
+        pos[0] = e->unk50;
+        pos[1] = e->unk54;
+        e->w = ww;
+        {
+            int *src = (int *)&D_L00_0015F764_d;
+            int *dst = &e->h;
+            __builtin_memcpy(dst, src, 4);
+        }
     }
-    FUN_L00_00235a70(rec, &x, &y);
-    FUN_L00_00235ad8(rec, &x, &y, *(int *)(rec + 0x6c), 0);
-    w = D_L00_0015F760 * 0xd0;
-    h = D_L00_0015F764 * 0xa0;
-    bar_height = D_L00_0015F760 * 0x260;
-    bottom = D_L00_0015F764 * 0xea0;
-    left = (x + *(short *)(rec + 0x48)) << 4;
-    top = (y + *(short *)(rec + 0x4a)) << 4;
+    FUN_L00_00235a70_c2(e, &pos[0], &pos[1]);
+    FUN_L00_00235ad8_c(e, &pos[0], &pos[1], e->unk6C, 0);
+    w = *(int *)&D_L00_0015F760_d * 0xD0;
+    h = *(int *)&D_L00_0015F764_d * 0xA0;
+    bh = *(int *)&D_L00_0015F760_d * 0x260;
+    bottom = *(int *)&D_L00_0015F764_d * 0xEA0;
+    left = (pos[0] + e->unk48) << 4;
+    top = (pos[1] + e->unk4A) << 4;
     left += w / 64;
     top += h / 256;
-    right = left + bar_height / 64;
+    right = left + bh / 64;
     bottom = top + bottom / 256;
-    FUN_L00_0023caa8(left, top, right, bottom, 0x80000000UL, 1);
+    append_screen_rect_packet(left, top, right, bottom, 0x80000000, 1);
     {
-        int step;
-        step = D_L00_0015F764 * 0xea0;
-        h = D_L00_0015F764;
-        top = (y + *(short *)(rec + 0x4a)) << 4;
-        top += (h * 0xf40) / 256;
-        bar_height = (*(int *)(rec + 0x74) * step) / (*(int *)(rec + 8) << 8);
-        FUN_L00_0023caa8(left, top, right, top - bar_height, 0x80829e00UL, 1);
+        int st = *(int *)&D_L00_0015F764_d * 0xEA0;
+        h = *(int *)&D_L00_0015F764_d;
+        top = (pos[1] + e->unk4A) << 4;
+        top += (h * 0xF40) / 256;
+        bh = (e->unk74 * st) / (e->unk08 << 8);
+        append_screen_rect_packet(left, top, right, top - bh, 0x80829E00, 1);
     }
     i = 1;
-    if (i < *(int *)(rec + 0x74)) do {
-        int h;
-        h = D_L00_0015F764;
-        top = (y + *(short *)(rec + 0x4a)) << 4;
-        top += (h * 0xf40) / 256;
-        step = D_L00_0015F764 * 0xea0;
-        step = i * step / (*(int *)(rec + 8) << 8);
+    if (i < e->unk74) do {
+        int hh = *(int *)&D_L00_0015F764_d;
+        top = (pos[1] + e->unk4A) << 4;
+        top += (hh * 0xF40) / 256;
+        step = *(int *)&D_L00_0015F764_d * 0xEA0;
+        step = i * step / (e->unk08 << 8);
         i++;
         top -= step;
         top -= 16;
-        FUN_L00_0023caa8(left, top, right, top + 32, 0x80000000UL, 1);
-
-    } while (i < *(int *)(rec + 0x74));
-    w = FUN_L00_0023b208(*(int *)rec, 0);
-    FUN_L00_0023bac0(w, x + *(short *)(rec + 0x48), y + *(short *)(rec + 0x4a),
-                       D_L00_0015F760, D_L00_0015F764, 0x80);
-    return *(int *)(rec + 0x58);
+        append_screen_rect_packet(left, top, right, top + 32, 0x80000000, 1);
+    } while (i < e->unk74);
+    w = find_valid_animation_frame_index_alt(*(int *)e, 0);
+    FUN_L00_0023bac0(w, pos[0] + e->unk48, pos[1] + e->unk4A, *(int *)&D_L00_0015F760_d, *(int *)&D_L00_0015F764_d, 0x80);
+    return e->w;
 }
-#endif
 typedef struct {
     u8 pad[0x48];
     s16 x48;

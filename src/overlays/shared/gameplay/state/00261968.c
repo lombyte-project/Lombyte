@@ -66,79 +66,93 @@ s32 FUN_L00_00261968(s32 path_index, OvlVec4 *start, OvlVec4 *end) {
     }
     return 0;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00261b48.s", FUN_L00_00261b48);
-#else
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00262BC0), where it is exact; names translated to the US level program. */
+
+typedef u32 VecQuad __attribute__((mode(TI), aligned(16)));
+
+typedef union {
+    VecQuad q;
+    f32 f[4];
+    s32 i[4];
+} Vec4_261b48;
+
 typedef struct {
     s32 count;
     u8 pad[12];
-    OvlVec4 points[1];
-} SegmentPath_261b48;
+    Vec4_261b48 points[1];
+} SegmentPath_2629E0;
 
-extern SegmentPath_261b48 *D_L00_001B04B0_261b48[] __asm__("D_L00_001B04B0");
-extern void FUN_001ff2a8_261b48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
-extern f32 FUN_001ff3d8_261b48(OvlVec4 *) __asm__("FUN_001f9af0");
-extern void FUN_001ff500_261b48(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
-extern void FUN_001ff260_261b48(OvlVec4 *) __asm__("FUN_001f99f8");
-extern void FUN_001ff6d0_261b48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9cf8");
-extern void FUN_001ff2d8_261b48(OvlVec4 *, OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9a40");
+typedef int OvlQuad_261b48 __attribute__((mode(TI)));
 
-s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out) {
-    OvlVec4 direction;
-    OvlVec4 axis;
-    OvlVec4 origin;
-    OvlVec4 first;
-    OvlVec4 next;
-    OvlVec4 *previous;
-    OvlVec4 *current;
-    SegmentPath_261b48 **entry;
-    s32 i;
-    s32 offset;
-    s32 found;
-    f32 nearest;
-    f32 crossing;
-    f32 zero;
+typedef union {
+    OvlQuad_261b48 q;
+    f32 f[4];
+    s32 i[4];
+} OvlVec4_261b48;
 
-    FUN_001ff2a8_261b48(&direction, end, start);
-    direction.i[2] = 0;
-    FUN_001ff500_261b48(&direction, &direction, 1.0f / FUN_001ff3d8_261b48(&direction));
-    FUN_001ff260_261b48(&axis);
-    axis.f[0] = direction.f[1];
-    axis.f[1] = -direction.f[0];
-    FUN_001ff260_261b48(&origin);
-    entry = &D_L00_001B04B0_261b48[path_index];
-    found = 0;
-    i = 1;
-    origin.f[2] = 1.0f;
-    nearest = origin.f[2];
-    FUN_001ff2a8_261b48(&first, &(*entry)->points[0], start);
-    FUN_001ff6d0_261b48(&first, &first, &direction);
-    previous = &first;
-    current = &next;
-    if (i < (*entry)->count) {
+typedef struct {
+    s32 count;
+    u8 pad[12];
+    OvlVec4_261b48 points[1];
+} SegmentPath_261d78_261b48;
+
+extern SegmentPath_261d78_261b48 * D_L00_001B04B0[] __asm__("SegmentPath_261d78");
+extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
+extern void subtract_vector_xyz_261b48(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
+extern SegmentPath_2629E0 *D_L00_001B0830_2629E0[] __asm__("D_L00_001B04B0");
+
+int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
+    float v[4], w[4], z[4], t[4], u[4];
+    float best;
+    float zero;
+    int found = 0;
+    int i = 1;
+    int offset;
+    float *prev;
+    float *cur;
+    subtract_vector_xyz_261b48(v, b, a);
+    v[2] = 0;
+    fast_vec_normalize(v, v, 1.0f / fast_vec_length(v));
+    clear_u64_value(w);
+    w[0] = v[1];
+    w[1] = -v[0];
+    clear_u64_value(z);
+    z[2] = 1.0f;
+    best = 1.0f;
+    subtract_vector_xyz_261b48(t, (char *)D_L00_001B0830_2629E0[idx] + 0x10, a);
+    transform_vector_by_basis(t, t, v);
+    prev = t;
+    cur = u;
+    if (i < D_L00_001B0830_2629E0[idx]->count) {
         offset = 0x20;
         zero = 0.0f;
         do {
-            FUN_001ff2a8_261b48(current, (OvlVec4 *)((u8 *)*entry + offset), start);
-            FUN_001ff6d0_261b48(current, current, &direction);
-            if (first.f[3] != zero || next.f[3] != zero) {
-                if (next.f[1] * first.f[1] < 0.0f) {
-                    crossing = (first.f[0] - next.f[0]) / (first.f[1] - next.f[1]) * -next.f[1] + next.f[0];
-                    if (crossing > 0.0f && crossing < nearest) {
-                        nearest = crossing;
+            subtract_vector_xyz_261b48(cur, (char *)D_L00_001B0830_2629E0[idx] + offset, a);
+            transform_vector_by_basis(cur, cur, v);
+            if (t[3] != zero || u[3] != zero) {
+                if (u[1] * t[1] < 0.0f) {
+                    float x = (t[0] - u[0]) / (t[1] - u[1]) * -u[1] + u[0];
+                    if (x > 0.0f && x < best) {
+                        best = x;
                         found = 1;
+                        qcopy(prev, cur);
+                        goto next;
                     }
                 }
             }
-            qcopy(previous, current);
+            qcopy(prev, cur);
+        next:
             i++;
             offset += 0x10;
-        } while (i < (*entry)->count);
+        } while (i < D_L00_001B0830_2629E0[idx]->count);
     }
-    FUN_001ff2d8_261b48(out, start, end, nearest);
+    lerp_vector(c, a, b, best);
     return found;
 }
-#endif
 #include "rnc/overlay/quad.h"
 
 typedef struct {

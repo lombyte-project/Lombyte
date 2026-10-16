@@ -1139,7 +1139,7 @@ void FUN_L00_0020b1d8_u(void) __asm__("FUN_L00_0020b1d8");
 void FUN_L00_0020a318(void);
 void FUN_L00_0020a540_u(void) __asm__("FUN_L00_0020a540");
 void FUN_L00_0020ac98_u(void) __asm__("FUN_L00_0020ac98");
-void FUN_L00_0020a9e8(void);
+void FUN_L00_0020a9e8_u(void) __asm__("FUN_L00_0020a9e8");
 void FUN_L00_002056a8(void);
 void FUN_L00_002059d8(void);
 void FUN_L00_00214fe8(void);
@@ -1190,7 +1190,7 @@ void FUN_L00_002070d0(void) {
     FUN_L00_0020a318();
     FUN_L00_0020a540_u();
     FUN_L00_0020ac98_u();
-    FUN_L00_0020a9e8();
+    FUN_L00_0020a9e8_u();
     FUN_L00_002056a8();
     FUN_L00_002059d8();
     FUN_L00_00214fe8();
@@ -2800,86 +2800,64 @@ void FUN_L00_0020a540(void) {
     P.f118 = P.f278 * 0.52f;
     P.f114 = P.f274 * 0.55f;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_0020a9e8.s", FUN_L00_0020a9e8);
-#else
-extern s32 FUN_001fef68_a9e8(s32 *) __asm__("FUN_L00_001fef68");
-extern s32 FUN_001fef20_a9e8(s32) __asm__("FUN_L00_001fef20");
-extern f32 FUN_L00_00257be8_a9e8(f32, f32) __asm__("FUN_L00_00257be8");
+/* Re-rolls four random motion parameters and copies each pair into its 0xB0-byte record. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020B060), where it is exact; names translated to the US level program. */
+
+extern char D_L00_0017A680_c2[] __asm__("D_L00_0017A680");
+extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern float FUN_L00_00257c48(float lo, float hi);
+extern int tick_countdown_32_alt_c(int *) __asm__("FUN_001f9740");
+extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
+extern char D_0013F350_c2[] __asm__("D_0013F350");
+extern char D_001403B0[];
 
 void FUN_L00_0020a9e8(void) {
-    struct Hero *g = &hero;
-    char *base = (char *)g;
-    s32 *timers;
-    s32 *check_timer;
-    s32 *store_timer;
-    char *record;
-    struct HeroEase *output;
-    s32 i;
+    char *base = (char *)((char *)&D_0013F350_c2);
+    int *q;
+    char *g;
+    int i, j;
+    char *tbl;
 
-    if (g->state.current != 0 || *(u8 *)((char *)g->moby + 0x53) != 0)
-        return;
-
-    timers = (s32 *)(base + 0x1060);
-    output = D_L00_0017A680_002054e8;
-    i = 0;
-    check_timer = timers;
-    record = base;
-    store_timer = check_timer;
-    do {
-        s32 j;
-        f32 y, x;
-        if (FUN_001fef68_a9e8(check_timer) != 0) {
-            s32 low, high;
+    if (*(int *)(base + 0x2084) != 0) return;
+    if (*(unsigned char *)(*(int *)(base + 0x2080) + 0x53) != 0) return;
+    q = (int *)(base + 0x1060);
+    g = base;
+    tbl = D_L00_0017A680_c2;
+    for (i = 0; i < 4; i++) {
+        char *f;
+        if (tick_countdown_32_alt_c(&q[i])) {
             if (i == 0) {
-                *(f32 *)&hero.unk1028 = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
-                low = FUN_001fef20_a9e8(0x46);
-                high = FUN_001fef20_a9e8(0x96);
-                *(s32 *)((char *)&hero + 0x1060) = FUN_L00_00257b90_a540(low, high);
+                int *s;
+                *(float *)(g + 0x1028) = FUN_L00_00257c48(0.17453292f, 0.5235988f);
+                s = (int *)(((char *)&D_001403B0));
+                *s = FUN_L00_00257b90(scale_game_frames_c(0x46), scale_game_frames_c(0x96));
             } else if (i == 1) {
-                *(f32 *)((char *)timers - 0x28) = FUN_L00_00257c48_a540(0.17453292f, 0.5235988f);
-                low = FUN_001fef20_a9e8(0x28);
-                high = FUN_001fef20_a9e8(0x5A);
-                timers[1] = FUN_L00_00257b90_a540(low, high);
+                *(float *)((char *)q - 0x28) = FUN_L00_00257c48(0.17453292f, 0.5235988f);
+                q[1] = FUN_L00_00257b90(scale_game_frames_c(0x28), scale_game_frames_c(0x5A));
             } else if (i == 2) {
-                *(f32 *)((char *)timers - 0x18) = FUN_L00_00257c48_a540(0.2617994f, 0.87266463f);
-                low = FUN_001fef20_a9e8(0x28);
-                high = FUN_001fef20_a9e8(0x5A);
-                timers[2] = FUN_L00_00257b90_a540(low, high);
+                *(float *)((char *)q - 0x18) = FUN_L00_00257c48(0.2617994f, 0.87266463f);
+                q[2] = FUN_L00_00257b90(scale_game_frames_c(0x28), scale_game_frames_c(0x5A));
             } else {
-                f32 old;
-                f32 value;
-                f32 first = FUN_L00_00257be8_a9e8(-0.08726646f, 0.5235988f);
-                old = *(f32 *)(record + 0x1028);
-                *(f32 *)(record + 0x1024) = first;
-                value = FUN_L00_00257c48_a540(0.34906584f, 0.9599311f);
-                *(f32 *)(record + 0x1028) = value;
-                if (old <= 0.0f && value <= 0.0f)
-                    goto negate_fourth;
-                if (old >= 0.0f && value >= 0.0f)
-                    goto negate_fourth;
-                goto fourth_sign_done;
-negate_fourth:
-                *(f32 *)(record + 0x1028) = -*(f32 *)(record + 0x1028);
-fourth_sign_done:
-                low = FUN_001fef20_a9e8(0x23);
-                high = FUN_001fef20_a9e8(0x46);
-                *store_timer = FUN_L00_00257b90_a540(low, high);
+                float old, nw;
+                *(float *)(g + i * 0x10 + 0x1024) = random_float_between_c(-0.08726646f, 0.5235988f);
+                old = *(float *)(g + i * 0x10 + 0x1028);
+                nw = FUN_L00_00257c48(0.34906584f, 0.95993108f);
+                *(float *)(g + i * 0x10 + 0x1028) = nw;
+                if ((old <= 0 && nw <= 0) || (old >= 0 && nw >= 0))
+                    *(float *)(g + i * 0x10 + 0x1028) = -*(float *)(g + i * 0x10 + 0x1028);
+                q[i] = FUN_L00_00257b90(scale_game_frames_c(0x23), scale_game_frames_c(0x46));
             }
         }
+        f = g + i * 0x10;
         j = i + 13;
-        y = *(f32 *)(record + 0x1028);
-        x = *(f32 *)(record + 0x1024);
-        output[j].rot_target.f[2] = y;
-        output[j].rot_target.f[1] = x;
-        record += 0x10;
-        store_timer++;
-        check_timer++;
-        i++;
-    } while (i < 4);
+        base = (char *)(j * 0xB0);
+        {
+            char *r = tbl + (int)base;
+            *(float *)(r + 0x68) = *(float *)(f + 0x1028);
+            *(float *)(r + 0x64) = *(float *)(f + 0x1024);
+        }
+    }
 }
-
-#endif
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020B310), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_001ABD80[] __asm__("D_L00_001ABA00");

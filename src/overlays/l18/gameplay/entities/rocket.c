@@ -2467,7 +2467,7 @@ extern float approach_value_alt(float *p, float target, float maxstep) __asm__("
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 extern float probe_ground_height_c(void *, int, float) __asm__("func_00213508");
 extern void FUN_L15_002d8710(char *);
-extern void FUN_L18_002ea1f8(struct Moby *);
+extern void FUN_L18_002ea1f8_u(struct Moby *) __asm__("FUN_L18_002ea1f8");
 extern void FUN_L18_002ea800(void *);
 void FUN_L18_002eacd8(struct Moby *m);
 extern void FUN_L18_002eaea0_u(void *) __asm__("FUN_L18_002eaea0");
@@ -2528,107 +2528,94 @@ void FUN_L18_002e9e70(struct Moby *moby) {
         break;
     }
     }
-    enqueue_callback_list_1(FUN_L18_002ea1f8, moby);
+    enqueue_callback_list_1(FUN_L18_002ea1f8_u, moby);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L18_002ea1f8.s", FUN_L18_002ea1f8);
-#else
-typedef struct {
-    float x, y, z, w;
-} __attribute__((aligned(16))) L18FlareVector;
-typedef struct {
-    float u, v;
-} L18FlareUV;
-typedef struct {
-    L18FlareVector corner[4];
-    unsigned int color[4];
-    L18FlareUV uv[4];
-    unsigned long long zero, texture, state, flags;
-} L18FlarePacket;
-typedef struct { char pad[0x140]; float position[4]; } L18FlareView;
-extern L18FlareView D_L18_00167680;
-extern float D_L18_001677C0_flare[] __asm__("D_L18_001677C0");
-extern L18FlareUV D_L18_001D9B50_flare[] __asm__("D_L18_001D9B50");
-extern L18FlareVector D_L18_001D9B70_flare[] __asm__("D_L18_001D9B70") __attribute__((section(".sdata")));
-extern int D_L18_00161EE4_flare __asm__("D_L18_00161EE4") __attribute__((sda));
-extern int D_L18_00161EE8_flare __asm__("D_L18_00161EE8") __attribute__((sda));
-extern int D_L18_00161EEC_flare __asm__("D_L18_00161EEC") __attribute__((sda));
-extern int D_L18_00161EF0_flare __asm__("D_L18_00161EF0") __attribute__((sda));
-extern int D_L18_00161EF8_flare __asm__("D_L18_00161EF8") __attribute__((sda));
-extern int D_L18_00161F08_flare __asm__("D_L18_00161F08") __attribute__((sda));
-extern void clear_flare_vector(void *) __asm__("FUN_001f99f8");
-extern float flare_length(float, float) __asm__("FUN_001f9e90");
-extern float flare_dot(void *, void *) __asm__("FUN_001f9b80");
-extern void copy_flare_vector(void *, void *) __asm__("FUN_001fa050");
-extern int tween_flare_color(float, int, int) __asm__("FUN_001fa6e0");
-extern void draw_flare_packet(void *, void *, int) __asm__("FUN_001f7d30");
+/* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB5E8), where it is exact; names translated to the US level program. */
 
-void FUN_L18_002ea1f8(struct Moby *moby) {
-    L18FlarePacket packet[4];
-    L18FlareVector axis;
-    L18FlareVector basis[4][4];
-    float *data = (float *)moby->pvars;
+typedef struct {
+    float vtx[4][4];
+    int color[4];
+    float uv[4][2];
+    long a;
+    long b;
+    long c;
+    long d;
+} Pkt;
+
+extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
+extern float D_L18_00167680_d[] __asm__("D_L18_00167680") __attribute__((section(".data")));
+extern float D_L18_001D9B50[][2];
+extern float D_L18_001D9B70[][4][4];
+extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
+extern s32 fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
+extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
+extern short D_L18_00161EE4_d __asm__("D_L18_00161EE4") __attribute__((sda));
+extern short D_L18_00161EE8_d __asm__("D_L18_00161EE8") __attribute__((sda));
+extern short D_L18_00161EEC_d __asm__("D_L18_00161EEC") __attribute__((sda));
+extern short D_L18_00161EF0_d __asm__("D_L18_00161EF0") __attribute__((sda));
+extern short D_L18_00161EF8_d __asm__("D_L18_00161EF8") __attribute__((sda));
+extern short D_L18_00161F08_d __asm__("D_L18_00161F08") __attribute__((sda));
+extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
+extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
+extern void fast_draw_quad_real(void *, void *, int);
+extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
+
+void FUN_L18_002ea1f8(char *moby) {
+    Pkt pkt[4];
+    float rot[4];
+    float m[4][4][4];
+    char *data = *(char **)(moby + 0x78);
+
+    clear_u64_value_c(rot);
+    rot[2] = fast_arc_tan_c(D_L18_00167680_d[0x50] - *(float *)(moby + 0x10), D_L18_00167680_d[0x51] - *(float *)(moby + 0x14));
+    rot[1] = -fast_arc_tan_c(vector_distance_xy_alt(moby + 0x10, &D_L18_00167680_d[0x50]), D_L18_00167680_d[0x52] - *(float *)(moby + 0x18));
+    euler_rotation_matrix(m[0][0], rot);
+    euler_rotation_matrix(m[1][0], rot);
+    fast_vec_scale_c(m[1][1], m[1][1], *(float *)(data + 0x24));
+    fast_vec_scale_c(m[1][2], m[1][2], *(float *)(data + 0x24));
+    qcopy(m[0][3], moby + 0x10);
+    qcopy(m[1][3], moby + 0x10);
+    rot[0] = *(float *)(data + 0x2C);
+    euler_rotation_matrix(m[2][0], rot);
+    fast_vec_scale_c(m[2][1], m[2][1], *(float *)(data + 0x24));
+    fast_vec_scale_c(m[2][2], m[2][2], *(float *)(data + 0x24));
+    qcopy(m[2][3], moby + 0x10);
+    rot[0] = *(float *)(data + 0x30);
+    euler_rotation_matrix(m[3][0], rot);
+    fast_vec_scale_c(m[3][1], m[3][1], *(float *)(data + 0x24));
+    fast_vec_scale_c(m[3][2], m[3][2], *(float *)(data + 0x24));
+    qcopy(m[3][3], moby + 0x10);
+    {
     int i;
-    unsigned int j;
-    L18FlareVector *corner;
-    float x, y;
-    void *pos = &moby->pos;
-    clear_flare_vector(&axis);
-    x = moby->pos.x;
-    y = moby->pos.y;
-    x = D_L18_00167680.position[0] - x;
-    y = D_L18_00167680.position[1] - y;
-    axis.z = flare_length(x, y);
-    axis.y = -flare_length(flare_dot(pos, D_L18_00167680.position),
-                            D_L18_00167680.position[2] - moby->pos.z);
-    copy_flare_vector(&basis[0][0], &axis);
-    copy_flare_vector(&basis[1][0], &axis);
-    scale_vector_xyz(&basis[1][1], &basis[1][1], data[9]);
-    scale_vector_xyz(&basis[1][2], &basis[1][2], data[9]);
-    qcopy(&basis[0][3], pos);
-    qcopy(&basis[1][3], pos);
-    axis.x = data[11];
-    copy_flare_vector(&basis[2][0], &axis);
-    scale_vector_xyz(&basis[2][1], &basis[2][1], data[9]);
-    scale_vector_xyz(&basis[2][2], &basis[2][2], data[9]);
-    qcopy(&basis[2][3], pos);
-    axis.x = data[12];
-    copy_flare_vector(&basis[3][0], &axis);
-    scale_vector_xyz(&basis[3][1], &basis[3][1], data[9]);
-    scale_vector_xyz(&basis[3][2], &basis[3][2], data[9]);
-    qcopy(&basis[3][3], pos);
-    i = 0;
-    do {
-        packet[i].texture = get_effect_texture((&D_L18_00161F08_flare)[i]);
-        packet[i].state = 0xff9000000260ULL;
-        packet[i].flags = D_L18_00161EE4_flare | ((unsigned long long)D_L18_00161EE8_flare << 2);
-        packet[i].flags |= (unsigned long long)D_L18_00161EEC_flare << 4;
-        packet[i].flags |= (unsigned long long)D_L18_00161EF0_flare << 6;
-        packet[i].flags |= 0x8000000000ULL;
-        packet[i].zero = 0;
-        corner = &D_L18_001D9B70_flare[i * 4];
-        j = 0;
-        do {
-            packet[i].uv[j].u = D_L18_001D9B50_flare[j].u;
-            packet[i].uv[j].v = D_L18_001D9B50_flare[j].v;
+    int j;
+    Pkt *p;
+    for (i = 0; i < 4; i++) {
+        {
+            long r = ((long (*)(int))get_effect_texture_c)(((int *)&D_L18_00161F08_d)[i]);
+            p = &pkt[i];
+            p->b = r;
+        }
+        p->c = 0xFF9000000260;
+        p->d = (*(int *)&D_L18_00161EE4_d) | (long)(*(int *)&D_L18_00161EE8_d) << 2 | (long)(*(int *)&D_L18_00161EEC_d) << 4 |
+                   (long)(*(int *)&D_L18_00161EF0_d) << 6 | 0x8000L << 24;
+        p->a = 0;
+        for (j = 0; j < 4; j++) {
+            pkt[i].uv[j][0] = D_L18_001D9B50[j][0];
+            pkt[i].uv[j][1] = D_L18_001D9B50[j][1];
             if (i == 0) {
-                packet[i].color[j] = tween_flare_color(data[9],
-                    (&D_L18_00161EF8_flare)[i] & 0xffffff, (&D_L18_00161EF8_flare)[i]);
+                pkt[0].color[j] = fast_tween_color_c(*(int *)&D_L18_00161EF8_d & 0xFFFFFF, *(int *)&D_L18_00161EF8_d, *(float *)(data + 0x24));
             } else {
-                packet[i].color[j] = (&D_L18_00161EF8_flare)[i];
+                pkt[i].color[j] = ((int *)&D_L18_00161EF8_d)[i];
             }
-            qcopy(&packet[i].corner[j], corner);
-            j++;
-            corner++;
-        } while (j < 4);
-        i++;
-    } while (i < 4);
-    draw_flare_packet(&packet[0], &basis[0][0], 0);
-    draw_flare_packet(&packet[1], &basis[1][0], 0);
-    draw_flare_packet(&packet[2], &basis[2][0], 0);
-    draw_flare_packet(&packet[3], &basis[3][0], 0);
+            qcopy(pkt[i].vtx[j], D_L18_001D9B70[i][j]);
+        }
+    }
+    }
+    fast_draw_quad_real(&pkt[0], m[0], 0);
+    fast_draw_quad_real(&pkt[1], m[1], 0);
+    fast_draw_quad_real(&pkt[2], m[2], 0);
+    fast_draw_quad_real(&pkt[3], m[3], 0);
 }
-#endif
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB988), where it is exact; names translated to the US level program. */
 
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");

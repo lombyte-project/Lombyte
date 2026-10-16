@@ -38,45 +38,50 @@ void FUN_L03_002de370(char *moby) {
         mark_moby_for_removal(moby);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L03_002e8628.s", FUN_L03_002e8628);
-#else
 #include "qcopy.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002E99F0), where it is exact; names translated to the US level program. */
+
+typedef struct { char pad0[0x40]; int x40; char pad1[8]; float x4C; } CamSub;
+
+typedef struct { char pad0[4]; float f4; float f8; int fC; CamSub sub; char pad1[0x20]; int x80; } CamInfo;
+
 extern int D_L03_0015EF50;
-extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
-extern void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void RaiseKernelTrap();
+extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 
-void FUN_L03_002e8628(char *moby) {
-    float angles[4] __attribute__((aligned(16)));
-    float matrix[16] __attribute__((aligned(16)));
-    int table = D_L03_0015EF50;
-    char *data = *(char **)(moby + 0x70);
-    char *params = data + 0x10;
-    char *entry;
-    char *sub;
-
-    *(float *)(params + 0x4c) = 1.5f;
-    *(int *)(*(char **)(moby + 0x70) + 0x80) = *(int *)(params + 0x40) = 0;
-    data = *(char **)(moby + 0x70);
-    *(float *)(data + 4) = 0.02f;
-    *(float *)(data + 8) = 0.1f;
-    *(int *)(data + 0xc) = 0;
-    entry = (char *)(table + (*(short *)(moby + 0x84) << 5));
-    sub = *(char **)(entry + 0x1c);
-    if (*(short *)(moby + 0x84) < 0)
-        raise_kernel_trap();
-    else
-        *(float *)(params + 0x4c) = *(float *)(sub + 0x18);
-    qcopy(moby + 0x30, entry);
-    qcopy(&angles, entry + 0x10);
-    rotation_matrix(matrix, &angles);
-    qcopy(moby, matrix);
-    qcopy(moby + 0x10, matrix + 4);
-    qcopy(moby + 0x20, matrix + 8);
-    qcopy(moby + 0x40, moby);
-    *(short *)(moby + 0x7e) = 0;
+void FUN_L03_002e8628(char *cam) {
+    float v[4] __attribute__((aligned(16)));
+    float mat[16] __attribute__((aligned(16)));
+    CamSub *a = &(*(CamInfo **)(cam + 0x70))->sub;
+    CamInfo *d;
+    char *ent;
+    int idx;
+    char *p;
+    a->x4C = 1.5f;
+    a->x40 = 0;
+    (*(CamInfo **)(cam + 0x70))->x80 = 0;
+    d = *(CamInfo **)(cam + 0x70);
+    d->f4 = 0.02f;
+    d->f8 = 0.1f;
+    d->fC = 0;
+    idx = *(short *)(cam + 0x84);
+    ent = (char *)D_L03_0015EF50 + (idx << 5);
+    p = *(char **)(ent + 0x1C);
+    if (idx < 0) {
+        RaiseKernelTrap();
+    } else {
+        a->x4C = *(float *)(p + 0x18);
+    }
+    qcopy(cam + 0x30, ent);
+    qcopy(v, ent + 0x10);
+    euler_rotation_matrix(mat, v);
+    qcopy(cam, mat);
+    qcopy(cam + 0x10, mat + 4);
+    qcopy(cam + 0x20, mat + 8);
+    qcopy(cam + 0x40, cam);
+    *(short *)(cam + 0x7E) = 0;
 }
-#endif
 #include "sda.h"
 
 #include "qcopy.h"

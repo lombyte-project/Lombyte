@@ -1292,102 +1292,79 @@ void FUN_L08_002e2078(struct Moby *m) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002e2250.s", FUN_L08_002e2250);
-#else
-extern int target_board_check_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
-extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
-extern void FUN_001f9a28(void *, void *, void *);
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
-extern float D_0015ED6C;
+/* Selects a damaged child moby, launches it, and advances the parent's state. */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E35C8), where it is exact; names translated to the US level program. */
+
+extern f32 random_float_between_c4(f32, f32) __asm__("func_002132A8");
+extern s32 allocate_voice_for_target_entry_alt_c2(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern s32 truncate_float_to_s32_c4(f32) __asm__("func_001FA6D0");
+extern void *FUN_L00_0025a420(void *, int, int);
+extern void FUN_L00_0025f090_c(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void FUN_L08_002e2250(struct Moby *moby) {
-    u8 mark = 0xff;
-    int selected = 0;
-    TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
-    TargetSlot *slots = vars->slots;
-    TargetSlot *slot;
-    int i = 0;
-    int hits = 0;
-    int sound = -1;
-    int total;
-
-    slot = slots;
-    do {
-        if (slot->moby != 0) {
-            if (target_board_check_hit(slot->moby, 0x10000, 0) != 0) {
-                if (i < 7) {
-                    if (hits < 1) {
-                        hits = 1;
-                        sound = 1;
-                        goto mark_hit;
-                    }
-                } else if (i < 10) {
-                    if (hits < 2) {
-                        hits = 2;
-                        sound = 1;
-                        goto mark_hit;
-                    }
-                } else if (hits < 4) {
-                    hits += 4;
-                    selected = i;
-                    sound = 2;
-                    goto mark_hit;
-                }
-mark_hit:
-                slot->moby->hit_slot = mark;
+    char *data = *(char **)((char *)moby + 0x78);
+    char *entries = data + 0x60;
+    char *p = entries;
+    int i;
+    int score = 0;
+    int state = -1;
+    int chosen = 0;
+    char *base;
+    for (i = 0; i < 34; i++, p += 16) {
+        char *m = *(char **)p;
+        if (m != 0 && FUN_L00_0025a420(m, 0x10000, 0) != 0) {
+            if (i < 7) {
+                if (score <= 0) { score = 1; state = 1; }
+            } else if (i < 10) {
+                if (score < 2) { score = 2; state = 1; }
+            } else {
+                if (score < 4) { score += 4; chosen = i; state = 2; }
             }
-        }
-        i++;
-        slot++;
-    } while (i < 34);
-    vars->points = (u16)vars->points + hits;
-    total = vars->points;
-    if (total >= 8) {
-        vars->points = total - (total / 8) * 8;
-        sound = 0;
-        if (selected != 0) {
-            u8 *vector;
-            slots += selected;
-            slot = slots;
-            vector = slot->moby->pvars;
-            FUN_L00_0025f090(moby, &slot->moby->pos, -1, 2.0f, 13.0f);
-            FUN_001f9a28(vector, &slot->moby->pos, &vars->slots[selected].anchor->pos);
-            normalize_vector_xyz(vector, vector, D_0015ED6C * 10.0f);
-            slot->moby->state = 1;
-            slot->moby = 0;
-            return;
-        }
-        {
-            int start = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
-            TargetSlot *base = slots;
-            i = 0;
-            do {
-                int index = (int)((unsigned int)i + (unsigned int)start) % 24 + 10;
-                slots = base + index;
-                slot = slots;
-                i++;
-                if (slot->moby != 0) {
-                    u8 *vector = slot->moby->pvars;
-                    FUN_L00_0025f090(moby, &slot->moby->pos, -1, 2.0f, 13.0f);
-                    FUN_001f9a28(vector, &slot->moby->pos, &vars->slots[index].anchor->pos);
-                    normalize_vector_xyz(vector, vector, D_0015ED6C * 10.0f);
-                    slot->moby->state = 1;
-                    slot->moby = 0;
-                    return;
-                }
-            } while (i < 24);
-            moby->state = 99;
+            (*(unsigned char **)p)[0xA4] = 0xFF;
         }
     }
-play_sound:
-    if (sound >= 0)
-        allocate_voice_for_target_entry(sound, 0, moby);
+    *(short *)(data + 0x28C) += score;
+    if (*(short *)(data + 0x28C) >= 8) {
+        state = 0;
+        *(short *)(data + 0x28C) = *(short *)(data + 0x28C) % 8;
+        if (chosen != 0) {
+            int off = chosen * 16;
+            char *entry;
+            char *v;
+            base = entries;
+            entry = base + off;
+            v = *(char **)(*(char **)entry + 0x78);
+            FUN_L00_0025f090_c(moby, *(char **)entry + 0x10, -1, 2.0f, 13.0f);
+            subtract_vector_xyz(v, *(char **)entry + 0x10, *(char **)(data + off + 0x64) + 0x10);
+            fast_vec_normalize_c(v, v, D_0015ED6C * 10.0f);
+            (*(char **)entry)[0x20] = 1;
+            *(char **)entry = 0;
+            return;
+        } else {
+            int start = truncate_float_to_s32_c4(random_float_between_c4(0.0f, 23.0f));
+            for (i = 0; i < 24; i++) {
+                int off = ((i + start) % 24 + 10) * 16;
+                char *entry;
+                char *v;
+                base = entries;
+                entry = base + off;
+                if (*(char **)entry != 0) {
+                    v = *(char **)(*(char **)entry + 0x78);
+                    FUN_L00_0025f090_c(moby, *(char **)entry + 0x10, -1, 2.0f, 13.0f);
+                    subtract_vector_xyz(v, *(char **)entry + 0x10, *(char **)(data + off + 0x64) + 0x10);
+                    fast_vec_normalize_c(v, v, D_0015ED6C * 10.0f);
+                    (*(char **)entry)[0x20] = 1;
+                    *(char **)entry = 0;
+                    return;
+                }
+            }
+            ((char *)moby)[0x20] = 99;
+        }
+    }
+    if (state >= 0) allocate_voice_for_target_entry_alt_c2(state, 0, moby);
 }
-#endif /* NON_MATCHING */
 #include "rnc/overlay/swarm_path.h"
 
 /* Gun turret on a gunship: cruises one path firing at its target, or circles a second path firing at random. */
@@ -1430,7 +1407,7 @@ extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
 extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
-extern void FUN_L08_002e2250(struct Moby *);
+extern void FUN_L08_002e2250_u(struct Moby *) __asm__("FUN_L08_002e2250");
 
 void FUN_L08_002e24e8(struct Moby *moby) {
     GunshipVars *vars = (GunshipVars *)moby->pvars;
@@ -1484,7 +1461,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
                          FUN_001f9e90(vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
                                       vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
                          &vars->turn_speed, 0.004f, 0.3f, 0.02f);
-        FUN_L08_002e2250(moby);
+        FUN_L08_002e2250_u(moby);
         FUN_L08_002e2078(moby);
         qcopy(&point, &vars->follow[0].path->points[waypoint]);
         if (FUN_001f9b48(&moby->pos, &point) < 0.5f) {

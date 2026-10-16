@@ -1963,80 +1963,72 @@ unsigned char *FUN_L00_00275910(OvlQuad *pos, int s, int col, int mode, int b, f
     }
     return m;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00275aa0.s", FUN_L00_00275aa0);
-#else
-extern float FUN_001fa6c0_275aa0(int) __asm__("FUN_001fa6c0");
-extern int FUN_001fa6d0_275aa0(float) __asm__("FUN_001fa6d0");
-extern void FUN_001f9a10_275aa0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern float FUN_001f9af0_275aa0(void *) __asm__("FUN_001f9af0");
-extern float D_0015964C_275aa0 __asm__("D_0015964C") __attribute__((section(".sdata")));
+/* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00276940), where it is exact; names translated to the US level program. */
 
-void FUN_L00_00275aa0(unsigned char *m) {
-    unsigned char *q = m + 0x20;
-    float v[4];
-    float d[4];
-    float t[4];
-    float f;
-    float alpha;
-    int h;
-    int originalAlpha;
-    float *velocity;
+extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
+extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern short D_L00_0016024C_d __asm__("D_L00_0016024C") __attribute__((sda));
+extern unsigned char D_0013F5E0_d[] __asm__("D_0013F5E0") __attribute__((section(".data")));
+extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 
-    m[8] += q[0xa];
-    h = *(short *)(q + 8);
-    if (h - *(short *)(m + 0xa) < 6) {
-        f = (float)(h - *(short *)(m + 0xa)) / 5.0f;
-        *(float *)(m + 0xc) = *(float *)(q + 4) +
-            ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)(q + 4)) * f;
-        originalAlpha = q[0xb];
-        h = originalAlpha;
-        h = (unsigned int)h >> 1;
-        h -= originalAlpha;
-        alpha = (float)h;
-        alpha *= f;
-        f = (float)originalAlpha + alpha;
-        alpha = f;
+static __inline__ void vcopy_276940(float *d, float *s) {
+    d[0] = s[0];
+    d[1] = s[1];
+    d[2] = s[2];
+    *(int *)&d[3] = 0;
+}
+
+void FUN_L00_00275aa0(char *m) {
+    char *v = m + 0x20;
+    char *p;
+    float f4;
+    float a[4] __attribute__((aligned(16)));
+    float d[4] __attribute__((aligned(16)));
+    float e[4] __attribute__((aligned(16)));
+    float *w;
+    int al;
+    m[8] += v[0xA];
+    if (*(short *)(v + 8) - *(short *)(m + 0xA) < 6) {
+        int c;
+        int c2;
+        f4 = (float)(*(short *)(v + 8) - *(short *)(m + 0xA)) / 5.0f;
+        *(float *)(m + 0xC) = *(float *)(v + 4) + ((*(float *)(m + 0x20) + *(float *)(v + 4)) * 0.5f - *(float *)(v + 4)) * f4;
+        c2 = (unsigned char)v[0xB] >> 1;
+        c = (unsigned char)v[0xB];
+        al = truncate_float_to_s32_c((float)c + (float)(c2 - c) * f4);
     } else {
-        f = (float)*(short *)(m + 0xa) / FUN_001fa6c0_275aa0(h - 6);
-        *(float *)(m + 0xc) = *(float *)q +
-            ((*(float *)q + *(float *)(q + 4)) * 0.5f - *(float *)q) * f;
-        alpha = (float)(q[0xb] >> 1);
-        alpha *= f;
-        alpha += 0.0f;
+        f4 = (float)*(short *)(m + 0xA) / convert_integer_to_float(*(short *)(v + 8) - 6);
+        *(float *)(m + 0xC) = *(float *)(m + 0x20) + ((*(float *)(m + 0x20) + *(float *)(v + 4)) * 0.5f - *(float *)(m + 0x20)) * f4;
+        al = truncate_float_to_s32_c((float)((unsigned char)v[0xB] >> 1) * f4 + 0.0f);
     }
-    h = FUN_001fa6d0_275aa0(alpha);
-    originalAlpha = *(int *)(m + 4);
-    originalAlpha &= 0xffffff;
-    h = (h << 24) | originalAlpha;
-    *(int *)(m + 4) = h;
-    velocity = (float *)(q + 0xc);
-    *(volatile float *)&v[0] = *(volatile float *)(q + 0xc);
-    *(volatile float *)&v[1] = *(volatile float *)(q + 0x10);
-    v[2] = *(float *)(q + 0x14);
-    *(volatile int *)&v[3] = 0;
-    FUN_001f9a10_275aa0(m + 0x10, m + 0x10, v);
-    if (*(int *)(q + 0x18)) {
-        subtract_vector_xyz(d, (char *)*(int *)(q + 0x18) + 0x10, m + 0x10);
+    p = m + 0x10;
+    *(int *)(m + 4) = (al << 24) | (*(int *)(m + 4) & 0xFFFFFF);
+    vcopy_276940(a, (float *)(v + 0xC));
+    add_vector_xyz_c(p, p, a);
+    if (*(int *)(v + 0x18) != 0) {
+        subtract_vector_xyz(d, *(char **)(v + 0x18) + 0x10, p);
         if (d[0] <= 2.0f && d[1] <= 2.0f) {
-            cross_vectors_xyz(t, d, hero.gravity_dir.f);
-            normalize_vector_xyz(t, t, D_0015964C_275aa0);
-            FUN_001f9a10_275aa0(m + 0x10, m + 0x10, t);
-            if (d[0] <= 0.5f && d[1] <= 0.5f)
-                normalize_vector_xyz(v, d, 0.03f);
-            else
-                normalize_vector_xyz(v, d, FUN_001f9af0_275aa0(v));
-            v[2] += 0.02f;
-            *(float *)(q + 0xc) = v[0];
-            velocity[1] = v[1];
-            velocity[2] = v[2];
+            cross_vectors_xyz(e, d, D_0013F5E0_d);
+            fast_vec_normalize_c(e, e, *(float *)&D_L00_0016024C_d);
+            add_vector_xyz_c(p, p, e);
+            if (d[0] <= 0.5f && d[1] <= 0.5f) {
+                fast_vec_normalize_c(a, d, 0.03f);
+            } else {
+                fast_vec_normalize_c(a, d, fast_vec_length(a));
+            }
+            w = (float *)(v + 0xC);
+            *(float *)(v + 0xC) = a[0];
+            w[1] = a[1];
+            a[2] = a[2] + 0.02f;
+            w[2] = a[2];
         }
     }
-    if (fast_dec_timer(m + 0xa))
-        free_effect_particle(m);
+    if (FUN_001f9770(m + 0xA)) {
+        FUN_L00_00267a08(m);
+    }
 }
-#endif
 extern float FUN_001fa6c0(int);
 
 void FUN_L00_00275d68(unsigned char *m) {
