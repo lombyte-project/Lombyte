@@ -257,6 +257,7 @@ OVERLAY_SN_UNITS = {
     "l11/gameplay/hero/0023c7a0.c",
     "l11/gameplay/hero/00253a18.c",
     "l11/gameplay/hero/hero_set_state.c",
+    "l12/gameplay/entities/003054b0.c",
     "l12/gameplay/entities/hoven_turret.c",
     "l12/gameplay/entities/platform.c",
     "l12/gameplay/entities/water_reservoir.c",
