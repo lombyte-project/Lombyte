@@ -148,6 +148,7 @@ s32 sound_update(void) {
     s32 pitch_bend;
     s32 handle;
     s32 command_flags;
+    u8 * volatile occlusion_history;
 
     underwater = use_alt_fog;
     water_height = 0.0f;
@@ -316,7 +317,8 @@ s32 sound_update(void) {
         }
     }
 
-    for (slot_index = 0; slot_index < 30; slot_index++) {
+    occlusion_history = D_0013E550.voices[0].occlusion_history;
+    for (slot_index = 0; slot_index < 30; slot_index++, occlusion_history += sizeof(VoiceSlot)) {
         if (!(voice_flags[slot_index] & 8)) {
             continue;
         }
@@ -373,7 +375,7 @@ s32 sound_update(void) {
                 }
             }
             occluded_samples =
-                ComputeByteStringHash(D_0013E550.voices[slot_index].occlusion_history, 36);
+                ComputeByteStringHash(occlusion_history, 36);
             if (occluded_samples >= 36) {
                 volumes[slot_index] = 0;
             } else if (occluded_samples >= 19) {
