@@ -1877,7 +1877,7 @@ int FUN_L06_00303160(char *moby, int path) {
     return ride->progress == 1.0f;
 }
 typedef struct { int v[6]; } Colors_303748;
-extern Colors_303748 D_L06_00201960;
+Colors_303748 D_L06_00201960 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
 Colors_303748 D_L06_00201948 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
 extern float D_L06_00162114 __attribute__((sda));
 extern float D_L06_00162118 __attribute__((sda));
