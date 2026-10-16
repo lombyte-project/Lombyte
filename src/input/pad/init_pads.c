@@ -6,7 +6,7 @@ typedef struct {
     s32 number;
     u8 reserve[4];
 } scePad2SocketParam;
-extern scePad2SocketParam D_001CD760;
+scePad2SocketParam D_001CD760 = {0};
 extern s32 sceDbcInit(void);
 extern s32 scePad2Init(s32);
 extern s32 scePad2CreateSocket(scePad2SocketParam *, void *);
