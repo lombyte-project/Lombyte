@@ -17,7 +17,7 @@ typedef struct {
 } LevelFx;
 extern f32 D_L02_00161F58 __attribute__((sda));
 s32 D_L02_00161F5C = 0x30704020;
-extern s32 D_L02_00161F60;
+s32 D_L02_00161F60 = 0x50e0e0e0;
 extern LevelFx D_L02_001B2680;
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
