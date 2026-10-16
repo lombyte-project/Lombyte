@@ -416,10 +416,6 @@ void crate_drop_bolts(u8 *a) {
         *(s16 *)(a + 0xB4) = 0;
     mark_moby_for_removal_cf(a, 0x100, -1);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002d09b8.s", FUN_L00_002d09b8);
-#else
-#endif
 #include "qcopy.h"
 typedef struct V2d1428 {
     f32 x, y, z, w;
@@ -488,7 +484,6 @@ void FUN_L00_002604f0(M2d1428 *, void *, void *, void *, void *, void *);
 P2d1428 *FUN_L00_002603d0(void *);
 void FUN_L00_00260738(void *, void *, void *, void *);
 
-#ifdef NON_MATCHING
 typedef union {
     f32 f[4];
     u128 q;
@@ -539,7 +534,9 @@ extern void FUN_002ac910_2d09b8(void *, void *, void *, f32, s32, s32, s32, s32,
 void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
     u8 *vars = (u8 *)m->vars;
     V2d09b8 position, b, rotation, c[3], a, d, e;
-    s32 kind, close, count, trail_count, particle, i, choice;
+    s32 kind;
+    M2d1428 *self;
+    s32 close, count, trail_count, particle, i, choice;
     s32 first, second, first_color, second_color;
     f32 angle, distance, height, speed, rise;
     u32 colors[6], other_colors[6];
@@ -568,6 +565,8 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
         *(u8 **)(*(u8 **)(*(u8 **)(vars + 0xA4) + 0x78) + 0xA0) = *(u8 **)(vars + 0xA0);
         *(u32 *)(*(u8 **)(*(u8 **)(vars + 0xA4) + 0x78) + 0xAC) |= 4;
     }
+    /* Fakematch: the self copy and the two empty tests on angle give retail's spill slots. */
+    self = m;
     {
         s32 i;
         qcopy(&position, &m->pos);
@@ -582,7 +581,11 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
         switch ((s16)((u16)m->oclass - 500)) {
         case 1: kind = 0x15C; break;
         case 3: kind = 0x15F; break;
-        case 2: kind = 0x162; break;
+        case 2:
+            if (!angle) {
+            }
+            kind = 0x162;
+            break;
         case 0: case 11: kind = 0x165; break;
         case 4: kind = 0x168; break;
         case 5: kind = 0x16B; break;
@@ -593,8 +596,12 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
         if (D_L00_0015FFBC >= 201) { count = 4; trail_count = 4; }
         else if (D_L00_0015FFBC >= 151) { count = 2; trail_count = 2; }
         else if (D_L00_0015FFBC >= 101) { count = 2; trail_count = 1; }
-        else if (D_L00_0015FFBC >= 51) { count = 1; trail_count = 0; }
-        else { count = 1; trail_count = 0; }
+        else {
+            if (!angle) {
+            }
+            if (D_L00_0015FFBC >= 51) { count = 1; trail_count = 0; }
+            else { count = 1; trail_count = 0; }
+        }
         angle = D_L00_00166C80_2d19b0[80] - m->pos.x;
         speed = D_L00_00166C80_2d19b0[81] - m->pos.y;
         angle = FUN_001ff8b0_2d09b8(angle, speed);
@@ -639,7 +646,7 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
             FUN_002af8b0_2d09b8(m, &a, &d, &e, kind + 1, particle, 0.25f, 0.5f);
         }
     }
-    *(u32 *)((u8 *)m + 0x94) = 0;
+    *(u32 *)((u8 *)self + 0x94) = 0;
     m->state = 3;
     *(u16 *)((u8 *)m + 0x34) |= 1;
     m->bBC = FUN_001fef20_2d09b8(15);
@@ -682,7 +689,6 @@ void FUN_L00_002d09b8(M2d1428 *m, s32 hit, s32 source) {
         FUN_002ac910_2d09b8(m, &a, &e, 3.0f, FUN_001fef20_2d09b8(29), 32, 0, 0, 32);
     }
 }
-#endif
 void FUN_L00_002d1428(M2d1428 *m) {
     O2d1428 *o;
     M2d1428 *p, *n, *next;

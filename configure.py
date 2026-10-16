@@ -364,6 +364,7 @@ OVERLAY_SN_UNITS = {
     "shared/rendering/sky/update_sky_shells_animated.c",
     "shared/runtime/dma/002b7a48.c",
     "shared/ui/help/001fe778.c",
+    "shared/ui/help/001ff938.c",
     "shared/ui/help/00204c60.c",
     "shared/ui/help/00215340.c",
     "shared/ui/help/0021d0a0.c",

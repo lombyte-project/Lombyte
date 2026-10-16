@@ -481,53 +481,53 @@ void FUN_L12_003064e8(char *moby) {
         FUN_L00_00250df8_c(obj);
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L12_00306828.s", FUN_L12_00306828);
-#else
-extern int D_L12_0015F5CC;
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+/* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00307C08), where it is exact; names translated to the US level program. */
 
-extern char *D_L12_0015FFD8_lui __asm__("D_L12_0015FFD8") __attribute__((section(".data")));
+extern int D_L12_0015F5CC_p __asm__("D_L12_0015F5CC");
+extern unsigned char * D_L12_0015FFD8_p_c __asm__("D_L12_0015FFD8");
+extern struct Moby *D_L12_00160058_303CA8 __asm__("D_L12_0015FFD8");
 
-void FUN_L12_00306828(struct Moby *moby) {
+void FUN_L12_00306828(char *moby) {
     int i;
     int alpha = 0x80000000;
-    char *data = (char *)moby->pvars;
+    char *data = *(char **)(moby + 0x78);
     for (i = 0; i < 18; i++) {
-        struct Moby *other;
+        char *other;
         int period;
         float sine;
         float color;
-        unsigned int red;
+        int red;
         int green;
         int blue;
         int packed_color;
         float phase;
         float divisor;
-        other = moby;
-        if (i != 17) {
-            other = (struct Moby *)(((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8) + (unsigned int)D_L12_0015FFD8_lui);
+        if (i == 17) {
+            other = moby;
+        } else {
+            other = (char *)D_L12_00160058_303CA8 + ((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8);
         }
-        if (other->oclass != 0x4FE) {
-            period = scale_ticks(0xAA);
+        if (*(short *)(other + 0xA6) == 0x4FE) continue;
+        {
+            period = scale_game_frames(0xAA);
             divisor = convert_integer_to_float(period);
-            phase = (float)(D_L12_0015F5CC % period) / divisor;
+            phase = (float)(D_L12_0015F5CC_p % period) / divisor;
             sine = fast_sin((phase + phase) * 3.1415927f + -3.1415927f);
             color = sine * 70.0f;
             red = truncate_float_to_s32(color);
             green = truncate_float_to_s32(color);
             blue = truncate_float_to_s32(sine * 10.0f);
-            packed_color = ((blue + 0x46) << 16) |
-                (alpha | ((green + 0xB4 > 0xFF ? 0xFF : green + 0xB4) << 8)) |
-                ((int)(red + 0xB4) > 0xFF ? 0xFF : red + 0xB4);
-            other->flags |= 0x10;
-            other->glow_color = packed_color;
+            packed_color = ((blue + 0x46) << 16) | alpha |
+                ((green + 0xB4 > 0xFF ? 0xFF : green + 0xB4) << 8) |
+                (red + 0xB4 > 0xFF ? 0xFF : red + 0xB4);
+            *(unsigned short *)(other + 0x34) |= 0x10;
+            *(int *)(other + 0x90) = packed_color;
         }
     }
+    /* Fakematch: keeping alpha live past the loop gives retail's schedule of the loop body. */
+    alpha++;
+    alpha--;
 }
-#endif /* NON_MATCHING */
 /* Planetbuster part update: rides its path, drops its parts and hands its voice slot back when done. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00307DB0), where it is exact; names translated to the US level program. */
 
@@ -592,7 +592,7 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_L12_003054b0_u(void *moby) __asm__("FUN_L12_003054b0");
 void FUN_L12_00306350_c(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
-void FUN_L12_00306828(struct Moby *moby);
+void FUN_L12_00306828_u(struct Moby *moby) __asm__("FUN_L12_00306828");
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern char D_0013F3D0[];
 extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") __attribute__((section(".sdata")));
@@ -806,7 +806,7 @@ void FUN_L12_003069d0(char *moby) {
         FUN_L12_003064e8_c(moby);
         break;
     }
-    FUN_L12_00306828(moby);
+    FUN_L12_00306828_u(moby);
     if ((unsigned char)moby[0x20] >= 1 && (unsigned char)moby[0x20] <= 3) {
         if (*(int *)(d + 0x604) == -1) *(int *)(d + 0x604) = allocate_voice_for_target_entry(0, 4, moby);
     } else {
