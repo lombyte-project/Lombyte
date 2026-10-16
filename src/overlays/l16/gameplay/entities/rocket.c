@@ -1682,7 +1682,12 @@ typedef struct {
     long alpha;
 } GlowQuad;
 
-extern float D_L16_001D3130[4][4] __attribute__((section(".data")));
+float D_L16_001D3130[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
 extern char D_L16_001671C0[];
 extern int D_L16_001619E0 __attribute__((sda));
 extern int D_L16_001619E4 __attribute__((sda));
