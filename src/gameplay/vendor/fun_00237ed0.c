@@ -34,7 +34,7 @@ extern s32 D_00161040[2] __attribute__((sda));
 extern s32 D_001610B0 MACRO_ADDR;
 extern s32 D_001610B4 MACRO_ADDR;
 extern BossVars D_001E63C0;
-extern s32 D_001E63FC NOT_SDA;
+s32 D_001E63FC NOT_SDA = 0;
 extern Cam D_001E65E0;
 
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
