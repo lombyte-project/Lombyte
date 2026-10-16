@@ -596,7 +596,7 @@ typedef struct {
 
 extern Light_e088 D_L11_001CB280;
 int D_L11_00161F64 = 0;
-extern char D_L11_0021B4C0[];
+char D_L11_0021B4C0[] = "I'm really sorry, but you can't have more than 128 water tiles in this level";
 extern char D_L11_001DA740[];
 extern float D_L11_001808C0[];
 extern void *D_L11_001612D0;
