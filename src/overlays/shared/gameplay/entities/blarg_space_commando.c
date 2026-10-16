@@ -442,7 +442,7 @@ extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
 extern void FUN_L00_00263d40(int, int);
 extern void FUN_L06_002ff2c8(void *);
-extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
+extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L06_002feb40(char *m) {
@@ -476,7 +476,7 @@ void FUN_L06_002feb40(char *m) {
         if (*(int *)&D_0015ED84 == 0xA && t != 0 && *(char **)(t + 0x20) != 0 &&
             *(short *)(*(char **)(t + 0x20) + 0xA6) == 0x31A && D_0013D408[0x11] == 0) {
             D_0013D408[0x11] = 1;
-            allocate_voice_for_bank_entry_alt(1, 0, 0);
+            allocate_voice_for_bank_entry(1, 0, 0);
             FUN_L00_00263d40(0x53D6, -1);
         }
         f = *(float *)(d + 0x20) - dt;

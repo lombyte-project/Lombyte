@@ -94,7 +94,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_L00_00267a08(void *);
 float absolute_float(float input) __asm__("FUN_001f99c0");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_002694f8(char *m) {
     char *p = m + 0x20;
@@ -167,9 +167,9 @@ after:
     if (d < 8.0f || d > 96.0f)
         goto kill;
     if (d < 16.0f) {
-        k = func_001FA898_r(convert_integer_to_float_c(k) * (d - 8.0f) * 0.125f);
+        k = truncate_float_to_s32(convert_integer_to_float_c(k) * (d - 8.0f) * 0.125f);
     } else if (d > 80.0f) {
-        k = func_001FA898_r(convert_integer_to_float_c(k) * (96.0f - d) * 0.0625f);
+        k = truncate_float_to_s32(convert_integer_to_float_c(k) * (96.0f - d) * 0.0625f);
     }
     *(int *)(m + 4) = (k << 24) | (*(int *)(m + 4) & 0xFFFFFF);
     if (FUN_001f9770(m + 0xA)) {
@@ -264,7 +264,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int D_L00_001B2094 __attribute__((section(".data")));
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void *FUN_L00_002678b8(int);
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigned char blue, int target, float a, float b) {
     char *particle;
@@ -275,7 +275,7 @@ void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigne
             qcopy(particle + 0x10, pos);
             *(int *)(particle + 4) = 0x7F000000 | (blue << 16) | (green << 8) | red;
             q = (float *)(particle + 0x20);
-            particle[9] = func_001FA898_r(4.0f) - 0x60;
+            particle[9] = truncate_float_to_s32(4.0f) - 0x60;
             particle[3] = 0x48;
             *(float *)(particle + 0xC) = b;
             particle[1] = 0;
@@ -657,7 +657,7 @@ extern void FUN_001f9a68(void *, void *, float);
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_0026a9f0_u(void *, void *, int, int, int, int, int, float, int,
                                float) __asm__("FUN_L00_0026a9f0");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_0026ac78(char *m) {
     char *p = m + 0x20;
@@ -674,10 +674,10 @@ void FUN_L00_0026ac78(char *m) {
                 s = 0.6f;
             FUN_001f9a68(p, p, s);
         }
-        if (*(short *)(m + 0xA) == func_001FA898_r((float)(unsigned char)p[0x1B] * 0.85f) &&
+        if (*(short *)(m + 0xA) == truncate_float_to_s32((float)(unsigned char)p[0x1B] * 0.85f) &&
             (unsigned char)p[0x1A] < 2 && !(p[0x19] & 4)) {
             for (i = 4; i >= 0; i--) {
-                int a = func_001FA898_r((float)(unsigned char)p[0x1B] *
+                int a = truncate_float_to_s32((float)(unsigned char)p[0x1B] *
                                         random_float_between_alt(0.9f, 1.1f));
                 int k = (unsigned char)p[0x18];
                 float g = random_float_between_alt(0.85f, 1.0f);
@@ -735,8 +735,8 @@ void FUN_L00_0026ac78(char *m) {
             }
         }
     } else {
-        int n1 = func_001FA898_r((float)(unsigned char)p[0x1B] * 0.75f) + 1;
-        int n2 = func_001FA898_r((float)(unsigned char)p[0x1B] * 0.25f) + 1;
+        int n1 = truncate_float_to_s32((float)(unsigned char)p[0x1B] * 0.75f) + 1;
+        int n2 = truncate_float_to_s32((float)(unsigned char)p[0x1B] * 0.25f) + 1;
         int life;
         *(float *)(p + 8) += frame_time_sq * 3.0f;
         FUN_001f9a10(m + 0x10, m + 0x10, p);
@@ -1478,7 +1478,7 @@ char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f
     if (p) {
         qcopy(p + 0x10, pos);
         *(int *)(p + 4) = c;
-        v = func_001FA898_r(4.0f) - 0x60;
+        v = truncate_float_to_s32(4.0f) - 0x60;
         p[1] = 0;
         *(float *)(p + 0xC) = f;
         p[3] = 0x48;
@@ -3222,7 +3222,7 @@ void *FUN_L00_00270758(char *a, char *b, unsigned char c, int d) {
         qcopy(p + 0x10, a);
         qcopy(q, b);
         *(int *)(p + 4) = FUN_L00_0025bfe0(0.7f, 0.7f, 0.7f, 0.08f);
-        p[9] = (char)(func_001FA898_r(4.0f) + 0x40);
+        p[9] = (char)(truncate_float_to_s32(4.0f) + 0x40);
         p[1] = 0;
         p[3] = 0x44;
         f = random_float_between_alt(0.0f, 1.0f);

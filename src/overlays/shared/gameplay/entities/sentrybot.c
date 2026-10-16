@@ -1688,7 +1688,7 @@ extern int D_L15_0015F30C;
 extern int FUN_001f9770(void *);
 extern int FUN_L00_001f2868(void *, float, int, void *, void *);
 extern int FUN_L00_00257b90(int, int);
-extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below_c3(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c4(f32) __asm__("func_001FA6D0");
@@ -1708,7 +1708,7 @@ extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, float, i
 extern void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 extern void FUN_L00_002ac910(char *, char *, int, int, float, int, int, int, int);
 extern void FUN_L00_002d3838(void *, void *, int, int);
-extern void build_look_at_matrix_c(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
+extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset_c(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -1849,7 +1849,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
             *(u128_29E8A0 *)dv = 0;
             dv[2] = 0.02f;
             transform_vector_by_basis(dv, dv, m->mtx);
-            build_look_at_matrix_c(dv, dv, m->mtx, random_angle_radians());
+            build_look_at_matrix(dv, dv, m->mtx, random_angle_radians());
             FUN_L00_0026cbb0(v90, dv, 0x4F007FFF, 0x1FFFFFFF, scale_game_frames(5), 1, 20000.0f);
             qcopy(v60, m->pos);
             FUN_L00_001ff290(delta, vel, up);
@@ -2039,7 +2039,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
                 char *cam2 = D_L15_00167280_c;
                 *(int *)(cam2 + 0x168) = sh;
             }
-            allocate_voice_for_target_entry_alt(0, 0, (int)m);
+            allocate_voice_for_target_entry(0, 0, (int)m);
             FUN_L00_002d3838(&tbl, m->pos, 0, 0);
             FUN_L00_0025f800(m, D_L15_001B0D70);
             mark_moby_for_removal_c3(m);

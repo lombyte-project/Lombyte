@@ -219,7 +219,7 @@ extern float FUN_001f9b48(void *, void *);
 extern int FUN_001f9770(void *);
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L01_00277fb8(void *);
-extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -2039,7 +2039,7 @@ extern short D_L01_00161998 __attribute__((sda));
 extern short D_L01_0016199C __attribute__((sda));
 extern void FUN_L00_0025ab48(void *, float *, void *, void *);
 extern void FUN_L00_0025c558(void *, void *, float, int, int, int);
-extern void allocate_voice_for_target_entry_alt(int, int, char *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -2116,7 +2116,7 @@ void FUN_L01_002eec68(char *m) {
     fun_00213928(m, t, d + 0x20, 0, &flag, &amount, 0, 4);
     if (flag != 1 && amount != 0.0f && *(unsigned char *)(m + 0x20) != 0xB && *(unsigned char *)(m + 0x20) != 0xA && *(unsigned char *)(m + 0x20) != 8) {
         f20 = 0.8f;
-        allocate_voice_for_target_entry_alt(0, 0, m);
+        allocate_voice_for_target_entry(0, 0, m);
         f24 = 1.0f;
         f22 = 1024.0f;
         f21 = 0.008f;

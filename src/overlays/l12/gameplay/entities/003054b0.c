@@ -76,11 +76,11 @@ extern void FUN_L00_002628d8(char *, char *, int, float, float);
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern void FUN_L12_003064e8_c2(char *) __asm__("FUN_L12_003064e8");
-extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L12_00306350_c2(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
-extern float func_00214158_2EDAA0(void) __asm__("FUN_00213308");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern char D_0013E633_e_c[] __asm__("D_0013F350");
 extern float func_001F9B88_304310(float) __asm__("FUN_001f99c0");
 extern char D_L12_001672C0_304310[] __asm__("D_L12_00167240");
@@ -92,7 +92,7 @@ extern int D_L12_00161F80_m __asm__("D_L12_00161F00") __attribute__((section(".s
 extern int D_L12_00161F84_m __asm__("D_L12_00161F04") __attribute__((section(".sdata")));
 extern int D_L12_00161FA0_s __asm__("D_L12_00161F20") __attribute__((sda));
 extern int D_L12_00161FA4_s __asm__("D_L12_00161F24") __attribute__((sda));
-extern int func_0022ED80_09590(int, int, void *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 void FUN_L12_003054b0(char *moby) {
     char *d = *(char **)(moby + 0x78);
@@ -171,7 +171,7 @@ void FUN_L12_003054b0(char *moby) {
                 if (FUN_001f9770(&md->h9E) == 0) {
                     if (FUN_L00_001fefc8(&md->b92) == 0) {
                         if (FUN_L00_001fefc8(&md->b93) != 0) {
-                            func_0022ED80_09590(0, 0, m);
+                            allocate_voice_for_target_entry(0, 0, m);
                             md->b93 = scale_game_frames(9);
                         }
                     }
@@ -266,7 +266,7 @@ void FUN_L12_003054b0(char *moby) {
                     if (*(short *)(d + 0x5FC) < 0) {
                         *(short *)(d + 0x5FC) = 0;
                     }
-                    func_0022ED80_09590(1, 0, m);
+                    allocate_voice_for_target_entry(1, 0, m);
                     if (*(short *)(d + 0x5FC) > 0) {
                         int k = D_L12_001FB670[i];
                         if (k != 0x11) {
@@ -291,7 +291,7 @@ void FUN_L12_003054b0(char *moby) {
                         int c;
                         qcopy(v0, m + 0x10);
                         v0[2] += random_float_between_c(0.1f, 0.5f);
-                        ang = func_00214158_2EDAA0();
+                        ang = random_angle_radians();
                         s = random_float_between_c(0.1f, 0.8f);
                         v0[0] += fast_cos(ang) * s;
                         v0[1] += fast_sin(ang) * s;
@@ -320,7 +320,7 @@ void FUN_L12_003054b0(char *moby) {
                 int c;
                 qcopy(v0, m + 0x10);
                 v0[2] += 0.7f;
-                ang = func_00214158_2EDAA0();
+                ang = random_angle_radians();
                 s = random_float_between_c(0.1f, 0.4f);
                 v0[0] += fast_cos(ang) * s;
                 v0[1] += fast_sin(ang) * s;
@@ -336,7 +336,7 @@ void FUN_L12_003054b0(char *moby) {
             for (j = 0; j < 3; j++) {
                 int c;
                 qcopy(v0, m + 0x10);
-                ang = func_00214158_2EDAA0();
+                ang = random_angle_radians();
                 s = random_float_between_c(0.1f, 0.8f);
                 v0[0] += fast_cos(ang) * s;
                 v0[1] += fast_sin(ang) * s;
@@ -585,12 +585,12 @@ extern void FUN_L12_0027b268(char *, void *, int);
 extern void FUN_L12_0027b370(char *, char *, int);
 extern void FUN_L12_003064e8_c(char *) __asm__("FUN_L12_003064e8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
-extern void release_voice_slot_c(s32) __asm__("FUN_0022d798");
+extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_L12_003054b0_u(void *moby) __asm__("FUN_L12_003054b0");
 void FUN_L12_00306350_c(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
@@ -598,7 +598,7 @@ void FUN_L12_00306828(struct Moby *moby);
 extern int D_0015EE84_e __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern char D_0013E633_e[] __asm__("D_0013F3D0");
 extern int D_L12_00161F80_m __asm__("D_L12_00161F00") __attribute__((section(".sdata")));
-extern int func_0022ED80_09590(int, int, void *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern P_7DB0 *D_L12_001B0C30_7DB0[] __asm__("D_L12_001B0930");
 extern unsigned char D_0014C150_7DB0[][16] __asm__("D_0014C050");
 
@@ -811,12 +811,12 @@ void FUN_L12_003069d0(char *moby) {
     }
     FUN_L12_00306828(moby);
     if ((unsigned char)moby[0x20] >= 1 && (unsigned char)moby[0x20] <= 3) {
-        if (*(int *)(d + 0x604) == -1) *(int *)(d + 0x604) = func_0022ED80_09590(0, 4, moby);
+        if (*(int *)(d + 0x604) == -1) *(int *)(d + 0x604) = allocate_voice_for_target_entry(0, 4, moby);
     } else {
         int s = *(int *)(d + 0x604);
         if (s != -1) {
             Voice_7DB0 *e = (Voice_7DB0 *)(D_0013E550_r + s * 0x70);
-            if (e->owner == moby && e->active != 0) release_voice_slot_c(s);
+            if (e->owner == moby && e->active != 0) release_voice_slot(s);
         }
         *(int *)(d + 0x604) = -1;
     }
@@ -1068,7 +1068,7 @@ extern float D_L12_001FB6D0[4][2];
 extern u128 D_L12_001FB6F0[4];
 extern u128 D_L12_001FB730[4];
 extern void copy_moby_matrix(void *, void *) __asm__("FUN_001fa298");
-extern long get_effect_texture_l12(int) __asm__("FUN_001f44b8");
+extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad_l12(void *, void *, int) __asm__("FUN_001f7d30");
 
 void FUN_L12_00308350(struct Moby *m) {
@@ -1083,7 +1083,7 @@ void FUN_L12_00308350(struct Moby *m) {
     copy_moby_matrix(matrix, &m->rot_row0);
     qcopy(&matrix[3], &m->pos);
     matrix[3][3] = 1.0f;
-    first.texture = second.texture = get_effect_texture_l12(0xe);
+    first.texture = second.texture = get_effect_texture(0xe);
     first.texture_state = second.texture_state = 0xFF9000000260L;
     first.gs_state = (long)D_L12_00161FBC | ((long)D_L12_00161FC0 << 2) | ((long)D_L12_00161FC4 << 4) | ((long)D_L12_00161FC8 << 6) | 0x8000000000L;
     second.gs_state = (long)D_L12_00161FCC | ((long)D_L12_00161FD0 << 2) | ((long)D_L12_00161FD4 << 4) | ((long)D_L12_00161FD8 << 6) | 0x8000000000L;
@@ -1163,7 +1163,7 @@ extern char D_L12_0016CCF0[];
 extern int D_L12_0015F5C4;
 extern int D_L12_0015F5CC;
 extern void FUN_L00_00298840(int);
-s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 void FUN_L12_003093c8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -1177,7 +1177,7 @@ void FUN_L12_003093c8(struct Moby *moby) {
             return;
         }
         p = (char *)&hero.motion.pos;
-        if (is_point_inside_clip_volume_u(p, *(int *)data) != 0) {
+        if (is_point_inside_clip_volume(p, *(int *)data) != 0) {
             *(char *)(*(int *)(data + 4) + base + 0x5C) = 1;
             qcopy(D_L12_0016CCF0, p);
             q = D_L12_0016CCF0 - 0x10;
@@ -1239,7 +1239,7 @@ extern int D_L12_001FBD10[];
 extern int D_L12_002059E0[];
 extern int D_L12_00205A08[];
 extern int D_L12_00205A58[];
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);

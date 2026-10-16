@@ -166,7 +166,7 @@ extern int FUN_L00_0025e3b8(void *);
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
-extern void probe_ground_height_alt(void *, int, float) __asm__("FUN_00213508");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -177,9 +177,9 @@ void FUN_L00_00259bc8(char *, float, int, int, void *, void *);
 void FUN_L00_0025c398_c(void *a0, void *a1, void *a2) __asm__("FUN_L00_0025c398");
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60");
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
-extern int func_L00_001EFFF0_p(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
-extern float func_00214358f(void *, int, float) __asm__("FUN_00213508");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float D_0015EE60_m __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern int func_L00_001F2BE8_d6f0(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
@@ -216,7 +216,7 @@ int FUN_L00_0025c698(char *moby, char *st) {
 
     qcopy(v10, moby + 0x10);
     v10[2] = v10[2] + *(float *)(st + 0x28);
-    f21 = func_00214358f(v10, 0, 0.5f);
+    f21 = probe_ground_height(v10, 0, 0.5f);
     if (FUN_001f0b58() == 0) {
         if (*(float *)(st + 0x5C) == 0.0f && f21 <= v10[2] && v10[2] + *(float *)(st + 0x8) < f21) {
             *(float *)(st + 0x5C) = 1.0f;
@@ -327,7 +327,7 @@ int FUN_L00_0025c698(char *moby, char *st) {
     sc = 0.0009765625f;
     t = fast_vec_length(st);
     if ((float)*(int *)(st + 0x20) * sc < t) {
-        func_L00_001EFFF0_p(v0, v20, 36, moby, 0);
+        collision_line(v0, v20, 36, moby, 0);
         qcopy(v20, &D_94C8_60);
     }
     if (func_L00_001F10E0_l(v20, convert_integer_to_float(*(int *)(st + 0x20)) * sc, 36, moby) != 0) {

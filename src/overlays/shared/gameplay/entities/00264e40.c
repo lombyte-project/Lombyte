@@ -41,7 +41,7 @@ extern short D_L02_001600E0 __attribute__((sda));
 extern void FUN_L00_00257d78(float *, float, float);
 extern void FUN_L00_0026d598(void *, void *, int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void advance_accelerated_scalar_alt(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 
@@ -76,7 +76,7 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
         travel = distance;
     }
     acceleration = D_0015ED70;
-    advance_accelerated_scalar_alt(&speed, &travel_step, travel, 1.0f, acceleration * 48.0f,
+    advance_accelerated_scalar(&speed, &travel_step, travel, 1.0f, acceleration * 48.0f,
                   (*(float *)&D_L02_001600D0) * D_0015ED6C);
     ((float (*)(void *, void *, float))fast_vec_normalize)(adjusted, adjusted, travel_step);
     n = (*(int *)&D_L02_001600D8);

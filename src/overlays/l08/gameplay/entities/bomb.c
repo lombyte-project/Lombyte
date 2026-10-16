@@ -291,7 +291,7 @@ extern int D_L08_00174660;
 extern int FUN_001efa68(void *, void *, int, void *, int);
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern int FUN_L00_001f2868(void *, float, int, void *, void *);
-extern int allocate_voice_for_target_entry_alt_c(int, int, void *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below_c3(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
@@ -306,7 +306,7 @@ extern void FUN_L00_00269958_c(void *, void *, int, int, int, int, int, int) __a
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
-extern void func_L00_001FF4B0_2B94B0(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float D_0015EE70_2B94B0 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_0015EE6C_36F8 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern char D_L08_001746C0_36F8[] __asm__("D_L08_00174640");
@@ -331,7 +331,7 @@ void FUN_L08_002d23f0(char *moby) {
                 if (!(*(unsigned char *)(moby + 0xBC) & 2)) *(unsigned char *)(moby + 0x20) = 0x62; else *(unsigned char *)(moby + 0x20) = 0x63;
                 qcopy((moby + 0x10), D_L08_001746E0_36F8);
                 FUN_L00_001ff660_c(d + 0x10, d + 0x10, D_L08_001746E0_36F8 + 0x20);
-                func_L00_001FF4B0_2B94B0(d + 0x10, d + 0x10, D_0015EE6C_36F8 + D_0015EE6C_36F8);
+                fast_vec_normalize(d + 0x10, d + 0x10, D_0015EE6C_36F8 + D_0015EE6C_36F8);
             }
         }
     }
@@ -353,7 +353,7 @@ void FUN_L08_002d23f0(char *moby) {
             t90[1] = random_float_between_c5(lo, hi);
             t90[2] = random_float_between_c5(lo, hi);
             *(v128_36F8 *)t80 = *(v128_36F8 *)t90;
-            func_L00_001FF4B0_2B94B0(t80, t80, D_0015EE6C_36F8);
+            fast_vec_normalize(t80, t80, D_0015EE6C_36F8);
             q = (int *)t70.b + random_integer_below_c3(4);
             FUN_L00_00269958_c((moby + 0x10), t80, *q, 0x4FFF, scale_game_frames_c(0x2D), 0x32, 0x78, 1);
         }
@@ -379,19 +379,19 @@ void FUN_L08_002d23f0(char *moby) {
                     {
                         char *v = d + 0x10;
                         FUN_L00_001ff660_c(v, v, D_L08_001746E0_36F8 + 0x20);
-                        func_L00_001FF4B0_2B94B0(v, v, D_0015EE6C_36F8 + D_0015EE6C_36F8);
+                        fast_vec_normalize(v, v, D_0015EE6C_36F8 + D_0015EE6C_36F8);
                     }
                 }
             } else if (*(int *)(tbl + 0x1C) > 0) {
                 if (*(unsigned char *)(moby + 0xBC) & 1) {
                     float k;
-                    allocate_voice_for_target_entry_alt_c(1, 0, moby);
+                    allocate_voice_for_target_entry(1, 0, moby);
                     qcopy((moby + 0x10), tbl + 0x20);
                     *(float *)(moby + 0x18) += f20;
                     FUN_L00_001ff660_c((d + 0x10), (d + 0x10), tbl + 0x40);
                     cross_vectors_xyz(&t70, (d + 0x10), tbl + 0x40);
                     k = D_0015EE6C_36F8 * 1.5f;
-                    func_L00_001FF4B0_2B94B0(&t70, &t70, random_float_between_c5(-k, k));
+                    fast_vec_normalize(&t70, &t70, random_float_between_c5(-k, k));
                     add_vector_xyz((d + 0x10), (d + 0x10), &t70);
                     fast_vec_scale_c((d + 0x10), (d + 0x10), 0.4f);
                     *(int *)(d + 0x24) += 1;
@@ -408,7 +408,7 @@ void FUN_L08_002d23f0(char *moby) {
                     *(unsigned char *)(moby + 0x20) = 0x62;
                     qcopy((moby + 0x10), tbl + 0x20);
                     FUN_L00_001ff660_c((d + 0x10), (d + 0x10), tbl + 0x40);
-                    func_L00_001FF4B0_2B94B0((d + 0x10), (d + 0x10), D_0015EE6C_36F8 + D_0015EE6C_36F8);
+                    fast_vec_normalize((d + 0x10), (d + 0x10), D_0015EE6C_36F8 + D_0015EE6C_36F8);
                 }
             }
         } else if (tick_countdown_32_alt(d + 0x20)) {
@@ -432,7 +432,7 @@ void FUN_L08_002d23f0(char *moby) {
         FUN_L00_0025d538_c(moby, d);
         break;
     case 0x62:
-        allocate_voice_for_target_entry_alt_c(0, 0, moby);
+        allocate_voice_for_target_entry(0, 0, moby);
         c.p.moby = moby;
         c.p.flags = 0x810001;
         c.p.f = 1.0f;
@@ -444,7 +444,7 @@ void FUN_L08_002d23f0(char *moby) {
         return;
     case 0x63: {
         char *p;
-        allocate_voice_for_target_entry_alt_c(0, 0, moby);
+        allocate_voice_for_target_entry(0, 0, moby);
         p = moby + 0x10;
         c.p.moby = moby;
         c.p.flags = 0x810001;

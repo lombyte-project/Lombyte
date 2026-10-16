@@ -345,7 +345,7 @@ extern int D_L00_0015F400 __asm__("D_L00_0015F400");
 extern O_298840 *D_L00_0015FFDC_298840 __asm__("D_L00_0015FFDC");
 void f211250_298840(void) __asm__("FUN_L00_00211250");
 void f216050_298840(int) __asm__("FUN_00216050");
-void update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
+extern int update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
 void memset_298840(void *, int, int) __asm__("FUN_001f97e8");
 void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -1022,16 +1022,16 @@ extern int D_L00_0015F5D8_c __asm__("D_L00_0015F5D8") __attribute__((section(".s
 extern int D_L00_0015F620[4] __attribute__((section(".sdata")));
 extern int D_L00_00173E00[];
 extern int D_L00_001611CC __attribute__((section(".sdata")));
-extern int update_audio_stream_until_idle_alt(int) __asm__("FUN_002168a8");
+extern int update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
 extern s32 D_0015ED80_c __asm__("D_0015ED80") __attribute__((section(".sdata")));
 extern s32 start_audio_stream_read(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216788");
 extern void FillTransferWords(void *, s32, s32);
-extern void fade_to_black_c(s32 n) __asm__("FUN_001f4a58");
+extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
 void FUN_L00_00299a68(void) {
     int t;
-    update_audio_stream_until_idle_alt(0);
-    fade_to_black_c(8);
+    update_audio_stream_until_idle(0);
+    fade_to_black(8);
     D_L00_0015F5D8_c = 1;
     *(float *)&D_L00_0015F3FC_c = 1.0f;
     D_L00_0015F5C4 = 7;
@@ -1045,7 +1045,7 @@ void FUN_L00_00299a68(void) {
     } else {
         start_audio_stream_read(D_L00_0015F620[2], D_00137B80_c.normal[((short *)D_L00_0015F620)[1]].a, D_00137B80_c.normal[((short *)D_L00_0015F620)[1]].b);
     }
-    update_audio_stream_until_idle_alt(1);
+    update_audio_stream_until_idle(1);
     ((short *)D_L00_0015F620)[1]++;
     if (D_0015ED80_c != 0) {
         start_audio_stream_read(D_L00_0015F620[3], D_00137B80_c.alt[((short *)D_L00_0015F620)[1]].a, D_00137B80_c.alt[((short *)D_L00_0015F620)[1]].b);

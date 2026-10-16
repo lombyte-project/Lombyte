@@ -331,7 +331,7 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float fast_vec_dist(void *, void *);
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
 extern int FUN_L00_00257b90(int, int);
-extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern struct L13Ent00178480 D_L13_00178400[];
@@ -444,7 +444,7 @@ void FUN_L13_00306300(struct Moby *moby) {
     {
         struct Moby *target = (*(L13Hit_p *)D_L13_00174140_c).moby;
         if (target != 0 && *(short *)((char *)target + 0xA6) == 0)
-            allocate_voice_for_target_entry_alt(0, 0, (int)moby);
+            allocate_voice_for_target_entry(0, 0, (int)moby);
     }
 remove:
     mark_moby_for_removal_c(moby);
@@ -2478,7 +2478,7 @@ extern void FUN_L00_0025d538(void *, void *);
 extern int FUN_L01_0026e008(int, int);
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L01_002787a0(void *);
 extern void FUN_L00_0025f8e0(void *, float);
 extern void FUN_001f9a10(void *, void *, void *);

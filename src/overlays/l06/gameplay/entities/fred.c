@@ -2289,7 +2289,7 @@ void FUN_L06_00304098(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305BF8), where it is exact; names translated to the US level program. */
 
-extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 /* Moves the moby from state 1 to 2 and gives it a voice. */
 void FUN_L06_003047b8(char *arg) {
@@ -2392,7 +2392,7 @@ extern void FUN_001f9ff8(float *, float);
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L06_00217300(void *);
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void allocate_voice_for_target_entry_alt(int, int, void *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void enqueue_callback_list_1(int, char *);
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -2402,7 +2402,7 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 unsigned char *FUN_L00_002730e0(float *pos, void *vel, int color, u8 life, u8 b, int mode, float scale);
 void FUN_L06_00305000_c(char *m) __asm__("FUN_L06_00305000");
 void FUN_L06_00305170_c(char *m) __asm__("FUN_L06_00305170");
-extern int func_0022ED80_305E38(int, int, void *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L00_00273F80_r(void *, void *, int, float, int, int, int) __asm__("FUN_L00_002730e0");
 
 void FUN_L06_003049f8(char *moby)
@@ -2454,7 +2454,7 @@ void FUN_L06_003049f8(char *moby)
         int l;
 
         if (FUN_L00_0028d8c0(moby, d->f18) == 0) {
-            d->f18 = func_0022ED80_305E38(0, 4, moby);
+            d->f18 = allocate_voice_for_target_entry(0, 4, moby);
         }
         FUN_L06_00305000_c(moby);
         v = *(float *)&D_L06_001621F8 + *(float *)&D_L06_001621FC * D_0015ED6C;
@@ -2500,7 +2500,7 @@ void FUN_L06_003049f8(char *moby)
                 }
             }
             d->f18 = -1;
-            allocate_voice_for_target_entry_alt(1, 0, moby);
+            allocate_voice_for_target_entry(1, 0, moby);
         }
         break;
     }

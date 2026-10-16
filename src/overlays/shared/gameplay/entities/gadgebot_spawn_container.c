@@ -2437,8 +2437,8 @@ extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
 extern int FUN_L00_00257b90(int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern float func_001F9FA8_D9970b(float) __asm__("FUN_001f9de0");
-extern float func_001FA7D8_26410(f32) __asm__("FUN_001fa610");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float fast_normalize_angle(f32) __asm__("FUN_001fa610");
 extern char *D_L06_00160058_F4058 __asm__("D_L06_0015FFD8");
 
 int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
@@ -2487,7 +2487,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
             r16 = FUN_L00_00257b90(0x40, 0xFF);
             f20 = fast_cos_c2(random_angle_radians_c2()) * random_float_between_c2(0.0f, 0.25f);
             vA[0] = f20;
-            f20 = func_001F9FA8_D9970b(random_angle_radians_c2());
+            f20 = fast_sin(random_angle_radians_c2());
             f20 = f20 * random_float_between_c2(0.0f, 0.25f);
             vA[2] = 0.0f;
             vA[1] = f20;
@@ -2504,9 +2504,9 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
         }
 
         g = D_L06_00160058_F4058 + (*(int *)st << 8);
-        f20 = func_001FA7D8_26410(convert_integer_to_float(v58) * 60.0f * 0.017453292f);
+        f20 = fast_normalize_angle(convert_integer_to_float(v58) * 60.0f * 0.017453292f);
         vB[0] = fast_cos_c2(fast_add_rotations_c2(*(float *)(g + 0x48), f20));
-        vB[1] = func_001F9FA8_D9970b(fast_add_rotations_c2(*(float *)(g + 0x48), f20));
+        vB[1] = fast_sin(fast_add_rotations_c2(*(float *)(g + 0x48), f20));
         vB[2] = 0.0f;
         add_vector_xyz(ctx + 0x10, vB, g + 0x10);
         *(u128_F4058 *)(ow + 0x2F0) = *(u128_F4058 *)(ow + 0x2E0) = *(u128_F4058 *)(ctx + 0x10);
@@ -2520,7 +2520,7 @@ int FUN_L06_002f2c28(char *ctx, char *ow, char *moby, int a3, int *out) {
             r16 = FUN_L00_00257b90(0x40, 0xFF);
             f20 = fast_cos_c2(random_angle_radians_c2()) * random_float_between_c2(0.0f, 0.25f);
             vC[0] = f20;
-            f20 = func_001F9FA8_D9970b(random_angle_radians_c2());
+            f20 = fast_sin(random_angle_radians_c2());
             f20 = f20 * random_float_between_c2(0.0f, 0.25f);
             vC[2] = 0.0f;
             vC[1] = f20;

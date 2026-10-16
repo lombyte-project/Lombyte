@@ -101,7 +101,7 @@ extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
-extern void subtract_vector_xyz_261b48(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern SegmentPath_2629E0 *D_L00_001B0830_2629E0[] __asm__("D_L00_001B04B0");
 
@@ -114,7 +114,7 @@ int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
     int offset;
     float *prev;
     float *cur;
-    subtract_vector_xyz_261b48(v, b, a);
+    fast_vec_sub(v, b, a);
     v[2] = 0;
     fast_vec_normalize(v, v, 1.0f / fast_vec_length(v));
     clear_u64_value(w);
@@ -123,7 +123,7 @@ int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
     clear_u64_value(z);
     z[2] = 1.0f;
     best = 1.0f;
-    subtract_vector_xyz_261b48(t, (char *)D_L00_001B0830_2629E0[idx] + 0x10, a);
+    fast_vec_sub(t, (char *)D_L00_001B0830_2629E0[idx] + 0x10, a);
     transform_vector_by_basis(t, t, v);
     prev = t;
     cur = u;
@@ -131,7 +131,7 @@ int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
         offset = 0x20;
         zero = 0.0f;
         do {
-            subtract_vector_xyz_261b48(cur, (char *)D_L00_001B0830_2629E0[idx] + offset, a);
+            fast_vec_sub(cur, (char *)D_L00_001B0830_2629E0[idx] + offset, a);
             transform_vector_by_basis(cur, cur, v);
             if (t[3] != zero || u[3] != zero) {
                 if (u[1] * t[1] < 0.0f) {

@@ -1217,8 +1217,8 @@ extern float fast_difference_between_rotations_c(float, float) __asm__("func_001
 extern float fast_vec_dist(void *, void *);
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L00_00173E40[];
-extern int FUN_001efa68_c3(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
-extern int FUN_002141f8_c(char *) __asm__("FUN_002141f8");
+extern int collision_line(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
+extern int fun_002141f8(char *) __asm__("FUN_002141f8");
 extern short D_L00_001616DC __attribute__((sda));
 extern short D_L00_001616D8 __attribute__((sda));
 extern void add_vector_xyz_c4(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1249,7 +1249,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
     *(VecQuad *)end = *(VecQuad *)(m0 + 0x10);
     position = start;
     end[2] = position[2];
-    collision = FUN_001efa68_c3((Vec4f *)end, (Vec4f *)position, 6, m0, 0);
+    collision = collision_line((Vec4f *)end, (Vec4f *)position, 6, m0, 0);
     res[0] = 0;
     if (collision) {
         qcopy(position, &D_L00_00173E60_c);
@@ -1261,7 +1261,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
             *(short *)(candidate + 0xA6) == 0x452)
             continue;
         qcopy(target, candidate + 0x10);
-        data = (char *)FUN_002141f8_c(candidate);
+        data = (char *)fun_002141f8(candidate);
         if (!data)
             continue;
         target[2] += *(float *)(data + 0x10);
@@ -1281,7 +1281,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
                                    *(float *)(candidate + 0x14) - *(float *)(g1 + 0x84));
             if (fast_difference_between_rotations_c(*(float *)(moby + 0x48), toward) < 1.0471976f &&
                 absolute_float(position[2] - target[2]) < 2.0f &&
-                !FUN_001efa68_c3((Vec4f *)position, (Vec4f *)target, 6, *(char **)(g1 + 0x2080), 0)) {
+                !collision_line((Vec4f *)position, (Vec4f *)target, 6, *(char **)(g1 + 0x2080), 0)) {
                 res[0] = (int)candidate;
                 *pitch = -elevation;
                 *heading = angle;
@@ -1298,7 +1298,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
         apparentAngle = fast_arc_sin(fast_vec_dist(offset, target) / (distance + distance));
         apparentAngle += apparentAngle;
         if (*(float *)&D_L00_001616D8 * 0.017453292f < apparentAngle) {
-            data = (char *)FUN_002141f8_c(candidate);
+            data = (char *)fun_002141f8(candidate);
             if (data) {
                 radius = convert_integer_to_float(*(unsigned char *)(data + 10)) * 0.125f;
                 reduction = fast_arc_sin(radius / distance);
@@ -1311,7 +1311,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
         }
         if (apparentAngle < *(float *)&D_L00_001616D8 * 0.017453292f) {
             int valid = 1;
-            if (FUN_001efa68_c3((Vec4f *)position, (Vec4f *)target, 6, self, 0)) {
+            if (collision_line((Vec4f *)position, (Vec4f *)target, 6, self, 0)) {
                 if (!D_L00_00173E40[6] || (char *)D_L00_00173E40[6] != candidate)
                     valid = 0;
             }

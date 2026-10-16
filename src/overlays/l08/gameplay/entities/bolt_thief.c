@@ -1296,7 +1296,7 @@ void FUN_L08_002e2078(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E35C8), where it is exact; names translated to the US level program. */
 
 extern f32 random_float_between_c4(f32, f32) __asm__("func_002132A8");
-extern s32 allocate_voice_for_target_entry_alt_c2(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 truncate_float_to_s32_c4(f32) __asm__("func_001FA6D0");
 extern void *FUN_L00_0025a420(void *, int, int);
 extern void FUN_L00_0025f090_c(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -1363,7 +1363,7 @@ void FUN_L08_002e2250(struct Moby *moby) {
             ((char *)moby)[0x20] = 99;
         }
     }
-    if (state >= 0) allocate_voice_for_target_entry_alt_c2(state, 0, moby);
+    if (state >= 0) allocate_voice_for_target_entry(state, 0, moby);
 }
 #include "rnc/overlay/swarm_path.h"
 
