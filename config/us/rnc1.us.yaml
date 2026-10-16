@@ -2079,7 +2079,7 @@ segments:
           - [0x13b1cc, textbin, text_gap_0023a24c_before_fun_0023a318]
           - [0x13b240, c, ui/menus/fun_0023a2c0]
           - [0x13b294, textbin, text_gap_0023a314_after_fun_0023a2c0]
-          - [0x13b298, c, gameplay/vendor/fun_0023a318]
+          - [0x13b298, c, gameplay/vendor/update_instance_attachment_points_and_lengths]
           - [0x13b334, textbin, text_gap_0023a3b4_after_fun_0023a318]
           - [0x13b338, c, video/decoder/play_mpeg_movie]
           - [0x13b3e0, c, video/decoder/read_mpeg]
