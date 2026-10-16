@@ -278,7 +278,7 @@ typedef struct {
     f32 normal_z; /* 0x48: ledge probes compare atan2(normal_z, xy length) with 20 degrees */
 } CollisionHit_2d23f0;
 
-extern CollisionHit_2d23f0 D_L08_00174640_c __asm__("D_L08_00174640");
+extern char D_L08_001746C0_36F8[] __asm__("D_L08_00174640");
 extern blk16 D_L08_00161868;
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_0015ED70_gp __asm__("D_0015ED70") __attribute__((section(".sdata")));
@@ -308,7 +308,6 @@ extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float D_0015ED70_gp __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_0015ED6C __attribute__((section(".sdata")));
-extern char D_L08_001746C0_36F8[] __asm__("D_L08_00174640");
 extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") __attribute__((section(".sdata")));
 extern float D_L08_00174660[];
 

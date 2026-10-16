@@ -2516,10 +2516,10 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             hit_wall = func_L00_001F2BE8_2DDEA0(record->f80, &moby->pos, 1, moby, &work.v[1]);
             hit_wall |= func_L00_001F10E0_2DDEA0(record->f80, &moby->pos, 0, moby);
             if (hit_wall != 0) {
-                qcopy_nc(&moby->pos, &((Coll_2DDEA0 *)((char *)D_L00_00173E40))->v30);
-                func_001F9BF0_2DDEA0(&record->v50, &((Coll_2DDEA0 *)((char *)D_L00_00173E40))->v20, &moby->pos);
+                qcopy_nc(&moby->pos, &((Coll_2DDEA0 *)D_L00_00173E40)->v30);
+                func_001F9BF0_2DDEA0(&record->v50, &((Coll_2DDEA0 *)D_L00_00173E40)->v20, &moby->pos);
             }
-            if (((Coll_2DDEA0 *)((char *)D_L00_00173E40))->hit != 0 && ((Coll_2DDEA0 *)((char *)D_L00_00173E40))->hit->oclass == 0) hit_wall = 0;
+            if (((Coll_2DDEA0 *)D_L00_00173E40)->hit != 0 && ((Coll_2DDEA0 *)D_L00_00173E40)->hit->oclass == 0) hit_wall = 0;
             if (record->state == 6) {
                 moby->flags &= 0x7FFF;
                 moby->collision = ((Cls_2DDEA0 *)moby->pclass)->i10;
@@ -2544,17 +2544,17 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             }
             if (hit_wall != 0) {
                 surface = 0;
-                if (((Coll_2DDEA0 *)((char *)D_L00_00173E40))->hit != 0 && ((Cls_2DDEA0 *)((Coll_2DDEA0 *)((char *)D_L00_00173E40))->hit->pclass) != 0) {
-                    surface = ((Cls_2DDEA0 *)((Coll_2DDEA0 *)((char *)D_L00_00173E40))->hit->pclass)->h46;
+                if (((Coll_2DDEA0 *)D_L00_00173E40)->hit != 0 && ((Cls_2DDEA0 *)((Coll_2DDEA0 *)D_L00_00173E40)->hit->pclass) != 0) {
+                    surface = ((Cls_2DDEA0 *)((Coll_2DDEA0 *)D_L00_00173E40)->hit->pclass)->h46;
                 }
-                func_L00_001FF4B0_2DDEA0(&((Coll_2DDEA0 *)((char *)D_L00_00173E40))->v40, &((Coll_2DDEA0 *)((char *)D_L00_00173E40))->v40, 1.0f);
+                func_L00_001FF4B0_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173E40)->v40, &((Coll_2DDEA0 *)D_L00_00173E40)->v40, 1.0f);
                 if (moby->prev_seq != record->anims[6]) {
                     unsigned char anim = record->anims[6];
                     func_00213DE0_2DDEA0(moby, anim, 0, func_001F9850_2DDEA0(0x14));
                 }
                 moby->collision_disable = record->i88;
                 record->state = 6;
-                if (0.87266463f < func_L00_001FF860_2DDEA0(((Coll_2DDEA0 *)((char *)D_L00_00173E40))->v40.z, func_001F9CE8_2DDEA0(&((Coll_2DDEA0 *)((char *)D_L00_00173E40))->v40))) {
+                if (0.87266463f < func_L00_001FF860_2DDEA0(((Coll_2DDEA0 *)D_L00_00173E40)->v40.z, func_001F9CE8_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173E40)->v40))) {
                     if (record->h9E >= 0) func_0022ED80_2DDEA0(record->h9E, 0, moby);
                     func_L00_002DDDE8_2DDEA0(moby, record, 1);
                     return 0;
@@ -2564,7 +2564,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                     func_L00_002DDDE8_2DDEA0(moby, record, 1);
                 }
                 qzero(&work.v[1]);
-                work.v[1].z = ((Coll_2DDEA0 *)((char *)D_L00_00173E40))->v40.z;
+                work.v[1].z = ((Coll_2DDEA0 *)D_L00_00173E40)->v40.z;
                 func_L00_001FF610_2DDEA0(&record->vel, &record->vel, &work.v[1]);
             }
             if (func_001F9908_2DDEA0(&record->i94) != 0) {
@@ -2735,7 +2735,6 @@ typedef struct { int pad[5]; int f14; } E04_DF168;
 typedef struct { short idx; short pad; float f; int pad2[3]; char *p; } E04;
 
 extern E04 D_L00_001E4C80[];
-extern G_c D_0013F350_c3 __asm__("D_0013F350") __attribute__((section(".data")));
 extern char D_L00_00161B60[] __attribute__((section(".sdata")));
 extern char D_L00_00161B70[] __attribute__((section(".sdata")));
 extern char D_L00_00166FD0[];
@@ -2753,8 +2752,6 @@ extern void build_look_at_matrix_c2(void *, void *, float, void *) __asm__("buil
 extern void clear_u64_value_c2(void *) __asm__("func_001F99F8");
 extern void fast_vec_normalize_c2(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c2(void *, void *, f32) __asm__("func_001F9A68");
-extern Hero hero_2DF168 __asm__("D_0013F350");
-extern E04_DF168 D_L00_001E4FD0_x[] __asm__("D_L00_001E4C80");
 
 void FUN_L00_002ddcb8(char *a, char *b) {
     u128_DF168 s[7];
@@ -2764,22 +2761,22 @@ void FUN_L00_002ddcb8(char *a, char *b) {
     if (D_L00_00161B40 == 0) return;
     D_L00_00161B84 = 1.7f;
     D_L00_00161B40 = 0;
-    st = hero_2DF168.state.current;
-    if ((st == 0x1E || st == 1) && (hero_2DF168.moby->flags & 1)) {
+    st = (*(Hero *)D_0013F350_c2).state.current;
+    if ((st == 0x1E || st == 1) && ((*(Hero *)D_0013F350_c2).moby->flags & 1)) {
         qcopy((char *)s, D_L00_00166FD0);
         qcopy((char *)s + 0x10, D_L00_00166FD0 + 0x10);
         qcopy((char *)s + 0x20, D_L00_00166FD0 + 0x20);
         v = (char *)s + 0x20;
     } else {
-        if (hero_2DF168.unk22C8 == 1) {
+        if ((*(Hero *)D_0013F350_c2).unk22C8 == 1) {
             fast_vec_scale_c2(s, a + 0xD0, -1.0f);
             qcopy((char *)s + 0x10, a + 0xC0);
             qcopy((char *)s + 0x20, a + 0xE0);
             v = (char *)s + 0x20;
         } else {
-            qcopy((char *)s, &hero_2DF168.basis[0]);
-            qcopy((char *)s + 0x10, &hero_2DF168.basis[1]);
-            qcopy((char *)s + 0x20, &hero_2DF168.basis[2]);
+            qcopy((char *)s, &(*(Hero *)D_0013F350_c2).basis[0]);
+            qcopy((char *)s + 0x10, &(*(Hero *)D_0013F350_c2).basis[1]);
+            qcopy((char *)s + 0x20, &(*(Hero *)D_0013F350_c2).basis[2]);
             v = (char *)s + 0x20;
         }
     }
@@ -2808,7 +2805,7 @@ void FUN_L00_002ddcb8(char *a, char *b) {
     D_L00_00161B58 = 0;
     if (D_L00_00161B44 != 0) {
         D_L00_00161B44 = 0;
-        for (j = 199; j >= 0; j--) D_L00_001E4FD0_x[j].f14 = 0;
+        for (j = 199; j >= 0; j--) ((E04_DF168 *)D_L00_001E4C80)[j].f14 = 0;
     }
 }
 #ifndef NON_MATCHING
