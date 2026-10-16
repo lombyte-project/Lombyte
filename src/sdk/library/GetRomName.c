@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/library/sdk_state.h"
 
-extern u8 D_00153C00[];
+const u8 D_00153C00[] = "rom0:ROMVER";
 extern u8 D_00153C10[];
 extern u8 D_00153C28[];
 extern s32 sceClose();

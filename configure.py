@@ -438,6 +438,7 @@ RODATA_OVERLAYS = {
     "sdk/callbacks/report_unknown_mpeg_extension": (0x153B78, 0x54AF8, 18),
     "sdk/callbacks/report_mpeg_picture_spatial_scalable_unsupported": (0x153B90, 0x54B10, 50),
     "sdk/callbacks/report_mpeg_picture_temporal_scalable_unsupported": (0x153BC8, 0x54B48, 51),
+    "sdk/library/GetRomName": (0x153C00, 0x54B80, 12),
 }
 
 # Recovered C units that define the small-data variables their original
