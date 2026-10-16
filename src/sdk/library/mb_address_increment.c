@@ -11,7 +11,7 @@ extern s32 _ipuVdec();
 extern s32 _peepBit();
 extern void _flushBuf();
 extern void _Error1();
-extern u8 D_001537A8[];
+const u8 D_001537A8[] = "Invalid macroblock_address_increment code(0x%08x)";
 
 s32 _mbAddressIncrement(MbCtx *ctx) {
     s32 total;
