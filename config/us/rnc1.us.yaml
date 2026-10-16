@@ -1787,7 +1787,7 @@ segments:
           - [0x122dcc, textbin, text_gap_00221e4c_before_fun_00221e50]
           - [0x122dd0, c, ui/menus/update_menu_cycle_selection]
           - [0x122ed8, c, ui/menus/fun_00221f58]
-          - [0x123070, c, ui/menus/fun_002220f0]
+          - [0x123070, c, ui/menus/draw_selected_menu_item_text]
           - [0x12320c, textbin, text_gap_0022228c_before_fun_00222290]
           - [0x123210, c, gameplay/state/process_global_state_flags]
           - [0x123354, textbin, text_gap_002223d4_after_fun_00222290]

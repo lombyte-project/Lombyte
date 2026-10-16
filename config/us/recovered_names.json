@@ -13445,38 +13445,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002220f0",
-        "source_path": "src/ui/menus/fun_002220f0.c",
-        "address": "0x002220f0",
-        "current_name": "FUN_002220f0",
-        "proposed_name": null,
-        "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "git_log",
-            "commit": "d261447",
-            "excerpt": "assembly tree (audio_dec_begin_put, fun_002220f0, fun_00225dd8, fun_00238520, fun_0022c6f8, fun_00226848): the yaml owner becomes the subsystem unit and the"
-          },
-          {
-            "kind": "neighboring_group_context",
-            "functions": [
-              {
-                "address": "0x00222290",
-                "name": "FUN_00222290",
-                "logical_group": "gameplay/state"
-              }
-            ]
-          },
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "gameplay/state/process_global_state_flags",
         "source_path": "src/gameplay/state/process_global_state_flags.c",
         "address": "0x00222290",
@@ -20013,6 +19981,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x00222dc8-0x00222de0 the function follows preview_stream_state[0].menu_context->selection->selected_item and reads a text index at 0x0013d2b0 with 0x1c stride. Instructions 0x00222de4-0x00222e04 gate rendering on memory-card operation states and DAT_0013d298 == 2. For index -1, 0x00222e18-0x00222e58 resolves localized string 0x5217 via resolve_localized_string (0x001fdd10) and passes it to 0x001f6af0 at (width/2,height/2-8). Otherwise 0x00222e68-0x00222ee4 resolves two IDs from 12-byte entries at 0x001ddd40 and draws them at (width/2,4) and (width/2,20), with color 0x80ffa888. Original Ghidra decompilation agrees with all these retail instructions. No direct callers were supplied; exact screen identity is intentionally unspecified."
+          }
+        ]
+      },
+      {
+        "address": "0x002220f0",
+        "current_name": "FUN_002220f0",
+        "proposed_name": "draw_selected_menu_item_text",
+        "logical_group": "ui/menus",
+        "unit": "ui/menus/draw_selected_menu_item_text",
+        "source_path": "src/ui/menus/draw_selected_menu_item_text.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00222120-0x0022213c, the assigned function follows preview_stream_state[0].menu_context to selection, indexes selected_item with a 12-byte stride, and reads item field +4. When that value is -1, 0x00222150-0x00222194 resolves localized string ID 0x5019 through resolve_localized_string (0x001fdd10) and passes it to 0x001f6af0 at coordinates width/2, height/2-8. Otherwise 0x002221a0-0x00222258 uses the value as a 12-byte index into 0x001ddd40, resolves the first two words as localized string IDs, and renders them at width/2 and height/3-8 or 2*height/3-8 with color 0x80ffa888. Bounded data request 9884a24099144115b72913e916962040 confirms table words begin 0x4eb9, 0x4ede, 0; 0x4eba, 0x4ecd, 6. Calls at 0x00222138 and 0x0022225c bracket rendering. No checked caller exists in the supplied evidence; the name makes no screen-specific claim."
           }
         ]
       }
