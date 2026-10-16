@@ -1156,7 +1156,12 @@ typedef struct {
 } Pk_2af4a0;
 
 extern char D_L14_001674C0_d[] __asm__("D_L14_001674C0") __attribute__((section(".data")));
-extern float D_L14_001D8640[4][4];
+float D_L14_001D8640[4][4] = {
+    {-1.0f, 1.0f, 0.0f, 1.0f},
+    {-1.0f, -1.0f, 0.0f, 1.0f},
+    {1.0f, 1.0f, 0.0f, 1.0f},
+    {1.0f, -1.0f, 0.0f, 1.0f},
+};
 extern float vector_length_xyz(void *a);
 extern void add_vector_xyz(void *, void *, void *);
 extern void draw_geometry_quad(void *, void *, int);
