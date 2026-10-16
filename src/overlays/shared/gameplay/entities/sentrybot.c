@@ -1664,7 +1664,11 @@ extern Tbl_29E8A0 D_L15_001E2610;
 extern int D_L15_00178500[];
 extern char *FUN_L00_002af450(char *, char *, int, int, int);
 extern char D_0013E533[];
-extern char D_L15_00167280_c[] __asm__("D_L15_00167280");
+typedef struct {
+    char pad[0x140];
+    float position[4];
+} LevelView;
+extern LevelView D_L15_00167280;
 extern char D_L15_00174440[];
 extern char D_L15_001B0D70[];
 extern f32 convert_integer_to_float_c2(s32) __asm__("func_001FA6C0");
@@ -2027,7 +2031,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
             ((void (*)(void *, void *, void *, float, int, int, int, int, int))FUN_L00_002ac910)(m, m->pos, v70, 4.0f, scale_game_frames(0x14), 0x7F, 0x7F, 0, 0x30);
             ((void (*)(void *, void *, void *, float, int, int, int, int, int))FUN_L00_002ac910)(m, m->pos, v70, 2.0f, scale_game_frames(0x13), 0xFF, 0xFF, 0xFF, 0x20);
             vel[0] = 0.0f;
-            cam = D_L15_00167280_c;
+            cam = (char *)&D_L15_00167280;
             m->bc = 0;
             if (dist < 20.0f) {
                 *(float *)(cam + 0x160) = 0.4f - dist * 0.0175f;
@@ -2036,7 +2040,7 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
             }
             {
                 int sh = scale_game_frames(0x19);
-                char *cam2 = D_L15_00167280_c;
+                char *cam2 = (char *)&D_L15_00167280;
                 *(int *)(cam2 + 0x168) = sh;
             }
             allocate_voice_for_target_entry(0, 0, (int)m);
@@ -2506,11 +2510,6 @@ typedef struct {
 
 extern float D_L15_001CE110[4][4][4];
 extern float D_L15_001CE210[8];
-typedef struct {
-    char pad[0x140];
-    float position[4];
-} LevelView;
-extern LevelView D_L15_00167280;
 extern int D_L15_001614C8 __attribute__((sda));
 extern long long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");

@@ -741,7 +741,7 @@ typedef union {
     s32 i[4];
 } Vec4_2b2928;
 
-extern Vec4_2b2928 D_L14_001D8850_d[] __asm__("D_L14_001D8850") __attribute__((section(".data")));
+extern Vec4_2b2928 D_L14_001D8850_lui[] __asm__("D_L14_001D8850") __attribute__((section(".data")));
 extern char D_0013F5E0[] __attribute__((section(".data")));
 extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
 extern float D_L14_001614AC __attribute__((sda)); /* no foreign declaration */
@@ -799,7 +799,7 @@ void FUN_L14_002b2928(char *moby) {
     pk.g[6] = 1.0f;
     pk.g[7] = 1.0f;
     for (i = 0; i < 4; i++) {
-        fast_vec_scale_c(&pk.o[i], &D_L14_001D8850_d[i], 0.4f);
+        fast_vec_scale_c(&pk.o[i], &D_L14_001D8850_lui[i], 0.4f);
         transform_vector(&pk.o[i], &pk.o[i], &m[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);
@@ -818,7 +818,7 @@ void FUN_L14_002b2928(char *moby) {
     pk.c[1] = 0x202020FF;
     pk.c[0] = 0x202020FF;
     for (j = 0; j < 4; j++) {
-        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], 0.2f);
+        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_lui[j], 0.2f);
         transform_vector(&pk.o[j], &pk.o[j], &m[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);
@@ -837,7 +837,7 @@ void FUN_L14_002b2928(char *moby) {
     pk.c[0] = 0x4020FF20;
     a = 0x40;
     for (j = 0; j < 4; j++) {
-        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], 0.2f);
+        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_lui[j], 0.2f);
         transform_vector(&pk.o[j], &pk.o[j], &m[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);
@@ -855,7 +855,7 @@ void FUN_L14_002b2928(char *moby) {
     pk.c[1] = (a << 24) | 0xFF2020;
     pk.c[0] = (a << 24) | 0xFF2020;
     for (j = 0; j < 4; j++) {
-        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], D_L14_001614C0_lui);
+        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_lui[j], D_L14_001614C0_lui);
         transform_vector(&pk.o[j], &pk.o[j], &m[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);
@@ -873,7 +873,7 @@ void FUN_L14_002b2928(char *moby) {
     pk.c[1] = (a << 24) | 0xFF2020;
     pk.c[0] = (a << 24) | 0xFF2020;
     for (j = 0; j < 4; j++) {
-        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_d[j], D_L14_001614C0_lui);
+        fast_vec_scale_c(&pk.o[j], &D_L14_001D8850_lui[j], D_L14_001614C0_lui);
         transform_vector(&pk.o[j], &pk.o[j], &m[0]);
     }
     fast_draw_quad_real(&pk, 0, 0);

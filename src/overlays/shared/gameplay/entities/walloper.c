@@ -19,7 +19,7 @@ extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
 extern u8 D_L00_001DB5C0[], D_L00_001DBA20[];
 extern char *D_L00_00173E58;
-extern Vec4 collision_position_2b94d0 __asm__("D_L00_00173E60");
+extern Vec4 collision_hit_point __asm__("D_L00_00173E60");
 extern float D_L00_00161594 __attribute__((sda));
 extern float D_L00_00161598 __attribute__((sda));
 extern float D_L00_0016159C __attribute__((sda));
@@ -284,9 +284,9 @@ next_candidate:;
                 }
             }
             if (hit_result) {
-                qcopy(point, &collision_position_2b94d0);
+                qcopy(point, &collision_hit_point);
                 *(short *)(v + 0x3e) = i;
-                qcopy(v + 0x10, &collision_position_2b94d0);
+                qcopy(v + 0x10, &collision_hit_point);
                 if (!D_L00_00173E58 || FUN_L00_00259830(D_L00_00173E58)) {
                     *(char **)(v + 0x20) = 0; *(short *)(v + 0x40) = 0;
                 }
@@ -1207,7 +1207,7 @@ void FUN_L00_002bc1a0(void *mv) {
 
 typedef u32 VecQuad __attribute__((mode(TI), aligned(16)));
 
-extern Vec4 collision_position_2b94d0 __asm__("D_L00_00173E60");
+extern Vec4 collision_hit_point __asm__("D_L00_00173E60");
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char D_0013F350[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -1252,7 +1252,7 @@ char *FUN_L00_002bc3b0(char *self, float *position, float *heading, float *pitch
     collision = collision_line((Vec4f *)end, (Vec4f *)position, 6, m0, 0);
     res[0] = 0;
     if (collision) {
-        qcopy(position, &collision_position_2b94d0);
+        qcopy(position, &collision_hit_point);
         return 0;
     }
     i = 0;
@@ -2576,8 +2576,7 @@ typedef struct {
     u8 pad2[0xC];
     float f28;
 } S173E40_2bec80;
-extern int D_L00_00173E40[]
-    __attribute__((section(".data")));
+extern int D_L00_00173E40[] __attribute__((section(".data")));
 int FUN_001efa68_002bec80(Vec4_2bec80 *, Vec4_2bec80 *, int, void *, int) __asm__("FUN_001efa68");
 unsigned int FUN_001f0b58_002bec80(void) __asm__("FUN_001f0b58");
 float FUN_L00_002bec80(Vec4_2bec80 *p, void *q) {
