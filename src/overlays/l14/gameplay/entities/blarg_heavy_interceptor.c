@@ -977,7 +977,12 @@ extern void rotmat_b(void *, void *) __asm__("FUN_001fa030");
 extern void xform_b(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_b(void *, int, int) __asm__("FUN_001f7d30");
 
-extern float D_L14_001D8600[4][4];
+float D_L14_001D8600[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
 void FUN_L14_002add48(char *moby) {
     char *d = *(char **)(moby + 0x78);
     float src[4][4];
