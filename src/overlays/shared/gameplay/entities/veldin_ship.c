@@ -1163,7 +1163,6 @@ extern void transform_vector_alt() __asm__("FUN_001f9d20");
 void FUN_L00_002d2158_c(int collision_arg, Moby_2D3608 *carrier, float *position) __asm__("FUN_L00_002d2158");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern char D_0013E539[];
-extern char D_0013F350_c[] __asm__("D_0013F350");
 extern char D_0013CAE4[];
 extern char D_00141680[];
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
@@ -1211,7 +1210,7 @@ void FUN_L00_002d2670(unsigned char *moby) {
     }
     *(int *)(d + 0x50) = 0;
 target_valid:
-    g = ((char *)&D_0013F350_c);
+    g = ((char *)&hero);
     if (*(int *)(g + 0x2084) == 1) FUN_L00_002223f8(0x1E, 1);
     if (tick_countdown_32_alt((int *)(d + 0x54))) {
         if (*(unsigned char *)(g + 0x20AC) == 0) {
@@ -1219,7 +1218,7 @@ target_valid:
             if (*(int *)(((char *)&D_0013CAE4)) & *(int *)(g + 0x10A0)) {
                 if (*(int *)(g + 0x2084) == 0x1E && FUN_L00_00233e98(-1)) goto L3D10;
             }
-            g = ((char *)&D_0013F350_c);
+            g = ((char *)&hero);
             if (*(int *)(g + 0x2084) == 0x23 && *(int *)(g + 0x198) == scale_game_frames_c2(0x10)) goto L3D10;
         }
     }
@@ -1257,7 +1256,7 @@ L3D34:
         *(int *)(d + 0x54) = scale_game_frames_c2(0x14);
         break;
     case 4: {
-        char *h = ((char *)&D_0013F350_c);
+        char *h = ((char *)&hero);
         if (*(int *)(h + 0x2084) != 0x23 && *(unsigned char *)(h + 0x20A8) == 0) moby[0x20] = 2;
         break;
     }
@@ -1278,7 +1277,7 @@ L3D34:
         qzero(&loc);
         *(int *)(d + 0x50) = FUN_L00_002c35c0(moby, d + 0x40, &loc);
     } else {
-        char *h = ((char *)&D_0013F350_c);
+        char *h = ((char *)&hero);
         if (*(unsigned char *)(h + 0x20A8)) {
             qzero(&loc);
             *(int *)(d + 0x50) = FUN_L00_002c35c0(moby, d + 0x40, &loc);

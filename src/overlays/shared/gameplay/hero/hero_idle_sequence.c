@@ -988,11 +988,9 @@ void FUN_L00_00206cf8(void) {
 extern int alternate_animation_sequence __asm__("D_0015EE20") __attribute__((section(".sdata")));
 extern int D_0015EEA0 __attribute__((section(".sdata")));
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
-extern unsigned char D_0013F350_c3[] __asm__("D_0013F350") __attribute__((section(".data")));
 extern unsigned char D_0015EDB0[] __attribute__((section(".sdata")));
 extern unsigned char D_0015EDB4[4] __attribute__((section(".sdata")));
 extern unsigned char D_0015EDC0[] __attribute__((section(".sdata")));
-extern unsigned char D_L00_00179700_c[][16] __asm__("D_L00_00179700");
 extern void FUN_L00_00263d40(int, int);
 
 void FUN_L00_00206e00(void) {
@@ -1000,7 +998,7 @@ void FUN_L00_00206e00(void) {
     int s;
     int i;
     if (D_0015EEA0 == 0 && alternate_animation_sequence == 0) return;
-    g = (char *)D_0013F350_c3;
+    g = (char *)&hero;
     s = 0;
     if (*(int *)(g + 0x198) == scale_game_frames_c2(0xF)) {
         if (*(int *)(g + 0x208C) == 4) {
@@ -1044,22 +1042,22 @@ void FUN_L00_00206e00(void) {
     }
     if (s == 0) return;
     {
-    char *q = (char *)D_0013F350_c3;
+    char *q = (char *)&hero;
     unsigned char *b0 = (unsigned char *)q + 0x21C4;
     b0[*(int *)(q + 0x21D4)] = s;
     *(int *)(q + 0x21D4) += 1;
     for (i = 0; i < 12; i++) {
-        char *g2 = (char *)D_0013F350_c3;
+        char *g2 = (char *)&hero;
         unsigned char *b = (unsigned char *)g2 + 0x21C4;
         int n = 0;
         int j;
         int k;
-        while (D_L00_00179700_c[i][n] != 0) n++;
+        while (D_L00_00179700[n + i * 16] != 0) n++;
         if (n == 0) continue;
         k = *(int *)(g2 + 0x21D4) - n;
         if (k < 0) k += 16;
         for (j = 0; j < n; j++) {
-            if (*(unsigned char *)(k + (int)b) != D_L00_00179700_c[i][j]) {
+            if (*(unsigned char *)(k + (int)b) != D_L00_00179700[j + i * 16]) {
                 j = -1;
                 break;
             }
@@ -1076,7 +1074,7 @@ void FUN_L00_00206e00(void) {
     }
     }
     {
-        char *r = (char *)D_0013F350_c3;
+        char *r = (char *)&hero;
         if (*(int *)(r + 0x21D4) >= 16) *(int *)(r + 0x21D4) = 0;
     }
 }
@@ -2539,13 +2537,12 @@ typedef struct G0020a240 {
     u8 v80[0x1b4];
     f32 f234;
 } G0020a240;
-extern G0020a240 D_0013F350_c __asm__("D_0013F350");
 extern u8 D_L00_00173E60[];
 extern void FUN_L00_002335c8(V0020a240 *, f32, f32, f32);
 extern s32 FUN_001efa68(V0020a240 *, V0020a240 *, s32, s32, s32);
 extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 s32 FUN_L00_0020a240(f32 *out, f32 a, f32 b) {
-    G0020a240 *g = &D_0013F350_c;
+    G0020a240 *g = (G0020a240 *)&hero;
     V0020a240 p;
     V0020a240 q;
 
@@ -2759,7 +2756,6 @@ void FUN_L00_0020a540(void) {
 /* Re-rolls four random motion parameters and copies each pair into its 0xB0-byte record. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020B060), where it is exact; names translated to the US level program. */
 
-extern Ent D_L00_0017A680_c[] __asm__("D_L00_0017A680");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float FUN_L00_00257c48(float lo, float hi);
 extern int tick_countdown_32_alt_c(int *) __asm__("FUN_001f9740");

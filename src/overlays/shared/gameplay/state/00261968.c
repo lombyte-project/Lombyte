@@ -96,14 +96,12 @@ typedef struct {
     OvlVec4_261b48 points[1];
 } SegmentPath_261d78_261b48;
 
-extern SegmentPath_261968 *D_L00_001B04B0_261968[] __asm__("SegmentPath_261d78");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-extern SegmentPath_261968 *D_L00_001B04B0_261968[] __asm__("D_L00_001B04B0");
 
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
     float v[4], w[4], z[4], t[4], u[4];
