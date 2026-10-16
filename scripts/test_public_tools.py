@@ -2096,6 +2096,17 @@ class CleanupCheckTests(unittest.TestCase):
                       "[forbidden] local path"):
             self.assertIn(check, out)
 
+    def test_raw_bytes_in_c_fail(self):
+        blob = ", ".join(["0x27"] * 20)
+        self.write("src/new_helper.c", "void new_helper(void) __asm__(\"FUN_00100100\");\nvoid new_helper(void) {\n}\n"
+                   f"u8 D_00130328[20] = {{{blob}}};\nchar message[] = \"hello\";\n"
+                   "u8 small_table[4] = {1, 2, 3, 4};\n")
+        code, out = self.check()
+        self.assertEqual(code, 1)
+        self.assertIn("[raw-bytes] D_00130328 is 20 raw bytes", out)
+        self.assertNotIn("message", out)
+        self.assertNotIn("small_table", out)
+
     def test_recovered_names_format_and_config(self):
         entry = {"unit": "missing", "source_path": "src/missing.c", "address": "0x00100000",
                  "current_name": "FUN_00100000", "proposed_name": "OldHelper", "logical_group": "EE/x",

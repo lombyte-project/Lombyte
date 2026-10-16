@@ -128,6 +128,10 @@ edit fails at once.
   `config/overlays/us/data.tsv`. `data-refs.py --emit ADDR --into FILE`
   (`--level N` for level data) writes both. Shared data and raw bytes stay in
   assembly, with their type in a header.
+- **Never guess a size.** When `--emit` stops (no declaration, `T x[]` with no
+  size, a type it cannot write), the data stays in assembly. Code or bytes
+  written as a C array of numbers are not data in C; `check-cleanup.py` flags
+  byte arrays of more than 16 values.
 - A variable defined in C is removed from `config/us/symbol_addrs.txt`.
 
 ## Moving files

@@ -70,6 +70,11 @@ TYPE_WORDS = ("s8|u8|s16|u16|s32|u32|s64|u64|s128|u128|f32|f64|b32|vs8|vu8|vs16|
               "(?:struct|union|enum)\\s+\\w+")
 DECL_LINE = re.compile(r"^\s*(?:(?:register|volatile|const|static|extern)\s+)*(?:" + TYPE_WORDS + r")\b"
                        r"(?:\s+(?:" + TYPE_WORDS + r")\b)*\s*([^;(){}]*?)\s*;", re.M)
+# A byte array defined with a list of numbers: raw bytes, which stay in assembly
+# (docs/code-cleanup.md, Data). Strings and typed tables are fine.
+RAW_BYTES = re.compile(r"^(?:const\s+)?(?:u8|s8|(?:un)?signed\s+char|char)\s+(\w+)\s*\[[^\]\n]*\]"
+                       r"(?:\s*__asm__\s*\(\s*\"([^\"]*)\"\s*\))?[^=;\n]*=\s*\{([^;]*?)\}\s*;", re.M)
+RAW_BYTES_MAX = 16
 SNAKE = re.compile(r"^_*[a-z][a-z0-9_]*$")
 PLACEHOLDER = re.compile(r"^(?:fun|func|FUN|sub|D|D_L\d\d|FUN_L\d\d|jtbl|text_gap|lbl)_[0-9A-Fa-f]{8}\w*?$")
 HEXPART = re.compile(r"^(?=[0-9A-Fa-f]*\d)[0-9A-Fa-f]{6,8}$")
@@ -199,6 +204,13 @@ def check_c_file(rel: str, raw: str) -> list[Problem]:
             if not macros or not macros <= ALLOWED_MACROS:
                 out.append(Problem("ifdef", rel, f"#{m.group(1)}{m.group(2).rstrip()}: only NON_MATCHING "
                                    "splits are allowed", line_of(text, m.start())))
+    # Raw bytes moved into C.
+    for m in RAW_BYTES.finditer(text):
+        count = len([v for v in m.group(3).split(",") if v.strip()])
+        if count > RAW_BYTES_MAX:
+            out.append(Problem("raw-bytes", rel, f"{m.group(1)} is {count} raw bytes in C: raw bytes and code stay "
+                               "in assembly until their type is known (never guess an array's size)",
+                               line_of(text, m.start()), f"raw bytes {m.group(1)}"))
     # C names bound to a label.
     names = [(m.group(1), m.group(3), m.start(), "function") for m in FUNC_DECL.finditer(text)]
     for m in DATA_DECL.finditer(text):
