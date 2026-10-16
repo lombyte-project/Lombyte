@@ -1798,7 +1798,7 @@ segments:
           - [0x1238c8, c, ui/menus/weapons/obtain_all_gold_weapons_menu]
           - [0x123a18, c, textbin/ui/menus/draw_localized_three_option_menu]
           - [0x123d14, textbin, text_gap_00222d94_before_fun_00222d98]
-          - [0x123d18, c, ui/menus/fun_00222d98]
+          - [0x123d18, c, ui/menus/draw_menu_selection_text]
           - [0x123e94, textbin, text_gap_00222f14_before_fun_00222f18]
           - [0x123e98, c, ui/menus/save_data/enter_save_slot_screen]
           - [0x123ed4, textbin, text_gap_00222f54_before_fun_00222f58]

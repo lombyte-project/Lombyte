@@ -13568,23 +13568,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_00222d98",
-        "source_path": "src/ui/menus/fun_00222d98.c",
-        "address": "0x00222d98",
-        "current_name": "FUN_00222d98",
-        "proposed_name": null,
-        "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "ui/menus/save_data/enter_save_slot_screen",
         "source_path": "src/ui/menus/save_data/enter_save_slot_screen.c",
         "address": "0x00222f18",
@@ -20014,6 +19997,22 @@
           {
             "kind": "source_analysis",
             "note": "At 0x00237f50-0x00237f70 the function dispatches on ResidentObjectState lifecycle byte +0x20. At 0x00237f78-0x0023807c it compares the shared timer 0x001e63f4 to scale_game_frames(600), selects one of two variants through game_random_remainder(2) at 0x00237f98, writes a dialogue request at 0x001516ec (0x00237fe0), and calls start_resident_animation_transition (0x00212f90) at 0x00238004/0x0023805c. At 0x00238164-0x002382d4 it gates lifecycle/animation selection on g_dialogueChannelTwoState.playback.nPhase at 0x0015172a being 3 and selects variant-dependent animation bindings. At 0x002380fc it calls resident_animation_threshold_crossed_this_step (0x00214cc8); when the threshold and pending flag permit, 0x00238114 calls stop_dialogue_channel_two_if_started (0x00215b10). The transition-complete bit at resident +0x70 returns the lifecycle to state 2 at 0x0023811c-0x00238160. These recovered symbols and matching retail instructions prove a resident dialogue animation state updater without requiring an unproven actor-specific name."
+          }
+        ]
+      },
+      {
+        "address": "0x00222d98",
+        "current_name": "FUN_00222d98",
+        "proposed_name": "draw_menu_selection_text",
+        "logical_group": "ui/menus",
+        "unit": "ui/menus/draw_menu_selection_text",
+        "source_path": "src/ui/menus/draw_menu_selection_text.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00222dc8-0x00222de0 the function follows preview_stream_state[0].menu_context->selection->selected_item and reads a text index at 0x0013d2b0 with 0x1c stride. Instructions 0x00222de4-0x00222e04 gate rendering on memory-card operation states and DAT_0013d298 == 2. For index -1, 0x00222e18-0x00222e58 resolves localized string 0x5217 via resolve_localized_string (0x001fdd10) and passes it to 0x001f6af0 at (width/2,height/2-8). Otherwise 0x00222e68-0x00222ee4 resolves two IDs from 12-byte entries at 0x001ddd40 and draws them at (width/2,4) and (width/2,20), with color 0x80ffa888. Original Ghidra decompilation agrees with all these retail instructions. No direct callers were supplied; exact screen identity is intentionally unspecified."
           }
         ]
       }
