@@ -939,7 +939,7 @@ extern s32 FUN_001ff960_c(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern void FUN_001ffc30_c(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void FUN_L00_0023b120_c(Hud *, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b120");
-extern s32 D_0015ED80_c __asm__("D_0015ED80");
+extern int pal_mode __asm__("D_0015ED80");
 extern s32 hero_max_health __asm__("D_0015EDA0");
 extern s32 D_L00_0015F808 __attribute__((sda));
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
@@ -979,7 +979,7 @@ s32 FUN_L00_00239810(Hud *m) {
     if (hero.state.current == 0x32)
         goto out;
     x = m->x;
-    if (D_0015ED80_c != 0)
+    if (pal_mode != 0)
         y = D_L00_0015F808 + 10;
     else
         y = D_L00_0015F808 + 0x12;

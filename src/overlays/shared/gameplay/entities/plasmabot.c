@@ -743,7 +743,7 @@ typedef union {
 
 extern Vec4_2b2928 D_L14_001D8850_d[] __asm__("D_L14_001D8850") __attribute__((section(".data")));
 extern char D_0013F5E0[] __attribute__((section(".data")));
-extern char D_L14_001674C0_d[] __asm__("D_L14_001674C0") __attribute__((section(".data")));
+extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
 extern float D_L14_001614AC __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001614BC __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001614C0 __attribute__((sda)); /* no foreign declaration */
@@ -777,7 +777,7 @@ void FUN_L14_002b2928(char *moby) {
 
     qcopy(&m[3], data + 0x1E0);
     m[3].f[3] = 1.0f;
-    subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
+    subtract_vector_xyz_c3(&m[0], ((char *)&D_L14_001674C0), &m[3]);
     fast_vec_normalize(&m[0], &m[0], 1.0f);
     cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
     fast_vec_normalize(&m[1], &m[1], -1.0f);
@@ -806,7 +806,7 @@ void FUN_L14_002b2928(char *moby) {
 
     qcopy(&m[3], data + 0x200);
     pp = data + 0x220;
-    subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
+    subtract_vector_xyz_c3(&m[0], ((char *)&D_L14_001674C0), &m[3]);
     r = data + 0x210;
     q = data + 0x1F0;
     fast_vec_normalize(&m[0], &m[0], 1.0f);
@@ -824,7 +824,7 @@ void FUN_L14_002b2928(char *moby) {
     fast_draw_quad_real(&pk, 0, 0);
 
     qcopy(&m[3], q);
-    subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
+    subtract_vector_xyz_c3(&m[0], ((char *)&D_L14_001674C0), &m[3]);
     fast_vec_normalize(&m[0], &m[0], 1.0f);
     cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
     fast_vec_normalize(&m[1], &m[1], -1.0f);
@@ -843,7 +843,7 @@ void FUN_L14_002b2928(char *moby) {
     fast_draw_quad_real(&pk, 0, 0);
 
     qcopy(&m[3], r);
-    subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
+    subtract_vector_xyz_c3(&m[0], ((char *)&D_L14_001674C0), &m[3]);
     fast_vec_normalize(&m[0], &m[0], 1.0f);
     cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
     fast_vec_normalize(&m[1], &m[1], -1.0f);
@@ -861,7 +861,7 @@ void FUN_L14_002b2928(char *moby) {
     fast_draw_quad_real(&pk, 0, 0);
 
     qcopy(&m[3], pp);
-    subtract_vector_xyz_c3(&m[0], D_L14_001674C0_d, &m[3]);
+    subtract_vector_xyz_c3(&m[0], ((char *)&D_L14_001674C0), &m[3]);
     fast_vec_normalize(&m[0], &m[0], 1.0f);
     cross_vectors_xyz(&m[1], &m[0], D_0013F5E0);
     fast_vec_normalize(&m[1], &m[1], -1.0f);
@@ -928,7 +928,7 @@ extern float D_L14_001614C8 __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025d538(void *, void *);
-extern char D_0013E633_x[] __asm__("D_0013E533");
+extern char D_0013E533[];
 extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 
 void FUN_L14_002b2f60(char *moby) {
@@ -996,7 +996,7 @@ void FUN_L14_002b2f60(char *moby) {
             y = fast_arc_tan(*(float *)(hit_info + 0x10), *(float *)(hit_info + 0x14));
             func_L00_0025D5B0_i(moby, state + 0x60, y, 8, scale_game_frames(5), 0);
             ((unsigned char *)state)[0xC7] = 0xFA;
-            if (((unsigned char *)D_0013E633_x)[0x2EC1] == 2) {
+            if (((unsigned char *)D_0013E533)[0x2EC1] == 2) {
                 FUN_L00_00257470(moby, 0x200, -1);
             } else {
                 FUN_L00_00257470(moby, 0, -1);
@@ -1135,7 +1135,7 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk_2af4a0;
 
-extern char D_L14_001674C0_d[] __asm__("D_L14_001674C0") __attribute__((section(".data")));
+extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
 extern float D_L14_001D8890[4][4];
 extern float D_L14_001614F8 __attribute__((sda));
 extern float D_L14_001614FC __attribute__((sda));
@@ -1167,7 +1167,7 @@ void FUN_L14_002b3a20(char *m) {
     pk.a = 0;
     vu1_add_g_sregister(0x4A, 0);
     vu1_add_g_sregister(0x47, 0x51001);
-    subtract_vector_xyz(v, D_L14_001674C0_d, pos);
+    subtract_vector_xyz(v, ((char *)&D_L14_001674C0), pos);
     len = vector_length_xyz(v);
     if (0.0f < len) {
         float s = D_L14_001614FC;
@@ -1295,7 +1295,7 @@ int FUN_L14_002d9870(int i) {
     data[2] = FUN_001f96f8(0x3C);
     return r;
 }
-extern f32 D_0015ED60_de670 __asm__("D_0015ED60");
+extern float D_0015ED60;
 #define DE670_THRESHOLD D_L14_00161B20
 #define DE670_DAMPING D_L14_00161B1C
 #define DE670_GRAVITY D_L14_00161B18
@@ -1336,15 +1336,15 @@ void FUN_L14_002de670(struct Moby *moby) {
     }
     FUN_001f9a10(&moby->pos, &moby->pos, velocity);
     absolute_velocity = absolute_float(velocity[0]);
-    if (DE670_THRESHOLD * D_0015ED60_de670 < absolute_velocity) {
-        velocity[0] *= (DE670_DAMPING - 1.0f) * D_0015ED60_de670 + 1.0f;
+    if (DE670_THRESHOLD * D_0015ED60 < absolute_velocity) {
+        velocity[0] *= (DE670_DAMPING - 1.0f) * D_0015ED60 + 1.0f;
     }
     absolute_velocity = absolute_float(velocity[1]);
-    if (DE670_THRESHOLD * D_0015ED60_de670 < absolute_velocity) {
-        velocity[1] *= (DE670_DAMPING - 1.0f) * D_0015ED60_de670 + 1.0f;
+    if (DE670_THRESHOLD * D_0015ED60 < absolute_velocity) {
+        velocity[1] *= (DE670_DAMPING - 1.0f) * D_0015ED60 + 1.0f;
     }
     if (velocity[2] > 0.0f) {
-        velocity[2] *= (DE670_DAMPING - 1.0f) * D_0015ED60_de670 + 1.0f;
+        velocity[2] *= (DE670_DAMPING - 1.0f) * D_0015ED60 + 1.0f;
     }
     velocity[2] -= DE670_GRAVITY * frame_scale_sq;
     moby->rot.x = fast_add_rotations(moby->rot.x, velocity[4]);

@@ -340,7 +340,7 @@ extern struct {
     int x0, x4, x8;
 } D_L00_00173E00_298840 __asm__("D_L00_00173E00") __attribute__((section(".data")));
 extern int D_L00_0015F5A0_298840 __asm__("D_L00_0015F5A0");
-extern float D_L00_0015F3FC_298840 __asm__("D_L00_0015F3FC");
+extern float fade_level __asm__("D_L00_0015F3FC");
 extern int D_L00_0015F400 __asm__("D_L00_0015F400");
 extern O_298840 *D_L00_0015FFDC_298840 __asm__("D_L00_0015FFDC");
 void f211250_298840(void) __asm__("FUN_L00_00211250");
@@ -387,7 +387,7 @@ void FUN_L00_00298840(int a) {
     D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + t;
     D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + t;
     f2039a0_298840();
-    D_L00_0015F3FC_298840 = 1.0f;
+    fade_level = 1.0f;
     D_L00_0015F5C0_m[1] = 2;
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
@@ -454,7 +454,7 @@ extern struct {
 } D_001516D0_298b18 __asm__("D_001516D0");
 extern int D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
 extern float D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
-extern int D_L00_0015F3FC_298b18 __asm__("D_L00_0015F3FC");
+extern float fade_level __asm__("D_L00_0015F3FC");
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") __attribute__((section(".data")));
 void f2335a0_298b18(void) __asm__("FUN_002335a0");
@@ -480,7 +480,7 @@ void FUN_L00_00298b18(void) {
     f1f4a58_298b18(0xC);
     D_L00_0015F5C0_m[1] = 0;
     D_L00_0016CAF0_lui = 0.63f;
-    D_L00_0015F3FC_298b18 = 0;
+    (*(int *)&fade_level) = 0;
     f1f2d98_298b18();
     for (i = 0; i < D_L00_0016C860_298b18.n; i++) {
         M_298b18 *m = D_L00_0016C860_298b18.m[i];
@@ -800,7 +800,7 @@ typedef struct {
     P2_002994f8 x[5];
     P2_002994f8 y[5];
 } Tab_002994f8;
-extern Tab_002994f8 D_00137B80_002994f8 __asm__("D_00137B80");
+extern Tab D_00137B80;
 void FUN_L00_002995d0(s32, s32, s32);
 /* Passes disc table entry i at 0x1A28 (0x1A50 while D_0015ED80 is set) to FUN_L00_002995d0. */
 void FUN_L00_002994f8(s32 i) {
@@ -808,11 +808,11 @@ void FUN_L00_002994f8(s32 i) {
     if (i < 0)
         return;
     if (D_0015ED80) {
-        a = D_00137B80_002994f8.y[i].a;
-        b = D_00137B80_002994f8.y[i].b;
+        a = (*(Tab_002994f8 *)&D_00137B80).y[i].a;
+        b = (*(Tab_002994f8 *)&D_00137B80).y[i].b;
     } else {
-        a = D_00137B80_002994f8.x[i].a;
-        b = D_00137B80_002994f8.x[i].b;
+        a = (*(Tab_002994f8 *)&D_00137B80).x[i].a;
+        b = (*(Tab_002994f8 *)&D_00137B80).x[i].b;
     }
     FUN_L00_002995d0(a, b, 0);
 }
@@ -911,14 +911,14 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002997c8.s", FUN_L00_002997c8);
 #else
 typedef struct { u8 pad[0x38]; s16 h38; } S_2997c8;
 typedef struct { u8 pad[0x6B]; u8 f; } M_2997c8;
-extern s32 D_0015ED80_2997c8 __asm__("D_0015ED80");
+extern int D_0015ED80;
 extern s32 D_0015EE88_2997c8 __asm__("D_0015EE88");
 extern s32 D_0015EE78_2997c8 __asm__("D_0015EE78");
 extern s32 D_0015EED8_2997c8 __asm__("D_0015EED8");
 extern S_2997c8 D_001516D0_2997c8 __asm__("D_001516D0") __attribute__((section(".data")));
 extern s32 D_L00_0015F5C4_2997c8 __asm__("D_L00_0015F5C4");
 extern struct ActiveSceneTrigger active_scene_trigger_lui __asm__("D_L00_00179100") __attribute__((section(".data")));
-extern M_2997c8 D_0013E550_2997c8 __asm__("D_0013E550") __attribute__((section(".data")));
+extern char D_0013E550[] __attribute__((section(".data")));
 int FUN_00122298_2997c8(s32) __asm__("FUN_00122298");
 void FUN_00120558_2997c8(s32, s32) __asm__("FUN_00120558");
 void FUN_00122e68_2997c8(void *) __asm__("FUN_00122e68");
@@ -937,8 +937,8 @@ void FUN_L00_002997c8(void) {
     FUN_00122298_2997c8(0);
     FUN_00120558_2997c8(0, 0);
     FUN_00122e68_2997c8(FUN_0012f1c8_2997c8);
-    large_count = D_0015ED80_2997c8 ? 14 : 13;
-    small_count = D_0015ED80_2997c8 ? 14 : 17;
+    large_count = D_0015ED80 ? 14 : 13;
+    small_count = D_0015ED80 ? 14 : 17;
     src = D_L00_00161058;
     vram = D_0015EE88_2997c8;
     for (i = 0; i < large_count; i++) {
@@ -972,7 +972,7 @@ void FUN_L00_002997c8(void) {
         active->trigger = 0;
         FUN_00216c48_2997c8(moby, trigger, 1);
     }
-    D_0013E550_2997c8.f |= 0x10;
+    (*(M_2997c8 *)D_0013E550).f |= 0x10;
 }
 #endif
 /* Stop sound, wait for the loader to go idle, then start the movie load. */
@@ -1016,14 +1016,14 @@ typedef struct { int a; int b; } LL9;
 typedef struct { char pad[0x16A8]; LL9 normal[20]; LL9 alt[20]; } G9;
 
 extern Tab D_00137B80;
-extern float D_L00_0015F3FC_298840_gp __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
+extern float fade_level_gp __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
 extern int D_L00_0015F5C4 __attribute__((section(".sdata")));
 extern int D_L00_0015F5D8_gp __asm__("D_L00_0015F5D8") __attribute__((section(".sdata")));
 extern short D_L00_0015F620 __attribute__((section(".sdata")));
 extern int D_L00_00173E00[];
 extern int D_L00_001611CC __attribute__((section(".sdata")));
 extern int update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
-extern s32 D_0015ED80_c __asm__("D_0015ED80") __attribute__((section(".sdata")));
+extern int D_0015ED80_gp __asm__("D_0015ED80") __attribute__((section(".sdata")));
 extern s32 start_audio_stream_read(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216788");
 extern void FillTransferWords(void *, s32, s32);
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
@@ -1033,21 +1033,21 @@ void FUN_L00_00299a68(void) {
     update_audio_stream_until_idle(0);
     fade_to_black(8);
     D_L00_0015F5D8_gp = 1;
-    D_L00_0015F3FC_298840_gp = 1.0f;
+    fade_level_gp = 1.0f;
     D_L00_0015F5C4 = 7;
     FillTransferWords(((int *)&D_L00_0015F620), 0, 16);
     t = D_L00_001611CC - 0xE0000;
     ((int *)&D_L00_0015F620)[2] = D_L00_00173E00[1] + t;
     ((int *)&D_L00_0015F620)[3] = D_L00_00173E00[2] + t;
     D_L00_001611CC = t;
-    if (D_0015ED80_c != 0) {
+    if (D_0015ED80_gp != 0) {
         start_audio_stream_read(((int *)&D_L00_0015F620)[2], (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].b);
     } else {
         start_audio_stream_read(((int *)&D_L00_0015F620)[2], (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].b);
     }
     update_audio_stream_until_idle(1);
     ((short *)((int *)&D_L00_0015F620))[1]++;
-    if (D_0015ED80_c != 0) {
+    if (D_0015ED80_gp != 0) {
         start_audio_stream_read(((int *)&D_L00_0015F620)[3], (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).alt[((short *)((int *)&D_L00_0015F620))[1]].b);
     } else {
         start_audio_stream_read(((int *)&D_L00_0015F620)[3], (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].a, (*(G9 *)&D_00137B80).normal[((short *)((int *)&D_L00_0015F620))[1]].b);
@@ -1341,9 +1341,9 @@ extern s32 D_0015ED98_29a6b0 __asm__("D_0015ED98");
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern s32 D_L00_00173E00_29a6b0[] __asm__("D_L00_00173E00");
 extern s32 D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
-extern f32 D_L00_0015F3FC_29a6b0 __asm__("D_L00_0015F3FC");
+extern float fade_level __asm__("D_L00_0015F3FC");
 extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
-extern u8 D_0013F350_29a6b0[] __asm__("D_0013F350");
+extern unsigned char D_0013F350[];
 extern Vec4 D_L00_00180260_29a6b0 __asm__("D_L00_00180260");
 extern s32 D_L00_00161188;
 extern s32 D_L00_0016118C;
@@ -1451,12 +1451,12 @@ void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m) {
         FUN_001f4a58_29a6b0(4);
     }
     FUN_L00_002039a0_29a6b0();
-    D_L00_0015F3FC_29a6b0 = 1.0f;
+    fade_level = 1.0f;
     D_L00_0015F5C4 = 5;
     D_L00_0015F400 = 0;
     FUN_L00_002223f8_29a6b0(100, 1);
-    D_0013F350_29a6b0[0x20AC] = 1;
-    D_0013F350_29a6b0[0x20A5] = 1;
+    D_0013F350[0x20AC] = 1;
+    D_0013F350[0x20A5] = 1;
     FUN_L00_00232fe8_29a6b0();
     if (vendor_29a6b0.mode != 0) {
         FUN_00212ed8_29a6b0(m, 3, 0);

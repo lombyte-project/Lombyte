@@ -364,7 +364,7 @@ void FUN_L06_002ffc38(int idx) {
     }
 }
 
-extern char D_0013F3D0_ffcb0[] __asm__("D_0013F3D0");
+extern char D_0013F3D0[];
 extern unsigned char *D_L06_0015FFD8_ffcb0 __asm__("D_L06_0015FFD8");
 extern char *D_L06_001600EC_ffcb0 __asm__("D_L06_001600EC");
 extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
@@ -416,7 +416,7 @@ void FUN_L06_002ffcb0(char *moby) {
         if ((data[2] < 0 || (unsigned char)D_L06_0015FFD8_ffcb0[(data[2] << 8) + 0xbc] == 0) && data[8] != -1) {
             break;
         }
-        if (vector_distance_ffcb0(moby + 0x10, D_0013F3D0_ffcb0) < 32.0f) {
+        if (vector_distance_ffcb0(moby + 0x10, D_0013F3D0) < 32.0f) {
             moby[0x20] = 2;
             data[9] = scale_frames_ffcb0(30);
         } else {
@@ -488,7 +488,7 @@ void FUN_L06_002ffcb0(char *moby) {
                     state = data[3];
                     state <<= 7;
                     base = (int)D_L06_001600EC_ffcb0;
-                    qcopy((void *)(state + base + 0x30), D_0013F3D0_ffcb0);
+                    qcopy((void *)(state + base + 0x30), D_0013F3D0);
                     *(float *)(state + base + 0x38) -= 0.5f;
                 }
                 data[3] = -1;
@@ -508,11 +508,11 @@ void FUN_L06_002ffcb0(char *moby) {
                 qcopy(from, (void *)(state + base + 0x70));
             }
             from[0] = D_L06_00162050 * 0.017453292f;
-            qcopy(rot, D_0013F3D0_ffcb0);
-            qcopy(target, D_0013F3D0_ffcb0 + 16);
+            qcopy(rot, D_0013F3D0);
+            qcopy(target, D_0013F3D0 + 16);
             /* Retail takes this component from the camera rotation, not the hero position. */
             target[1] = from[1];
-            normalize_2fd1a0(offset, D_0013F3D0_ffcb0 - 0x80, -2.0f);
+            normalize_2fd1a0(offset, D_0013F3D0 - 0x80, -2.0f);
             vec_add_ffcb0(rot, rot, offset);
             rot[2] += 0.85f;
             lerp_vector_ffcb0(pos, pos, rot, *(float *)(data + 6));
@@ -522,11 +522,11 @@ void FUN_L06_002ffcb0(char *moby) {
         }
         break;
     case 4:
-        if (vector_distance_ffcb0(moby + 0x10, D_0013F3D0_ffcb0) < 16.0f) {
+        if (vector_distance_ffcb0(moby + 0x10, D_0013F3D0) < 16.0f) {
             state = data[3];
             state <<= 7;
             base = (int)D_L06_001600EC_ffcb0;
-            qcopy((void *)(state + base + 0x30), D_0013F3D0_ffcb0);
+            qcopy((void *)(state + base + 0x30), D_0013F3D0);
             *(float *)(state + base + 0x38) -= 0.5f;
             data[3] = -1;
             moby[0x20] = 5;
@@ -869,7 +869,7 @@ extern void build_spherical_offset_301070(void *, float, float, float) __asm__("
 extern float vector_length_xy_301070(void *) __asm__("FUN_001f9b20");
 extern void update_joint_animation_301070(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
-extern char D_L06_00167540_301070[] __asm__("D_L06_00167540");
+extern float D_L06_00167540[];
 extern int D_L06_0015F5C4_macro __asm__("D_L06_0015F5C4") __attribute__((section(".sdata")));
 extern float D_L06_0015F3FC_macro __asm__("D_L06_0015F3FC") __attribute__((section(".sdata")));
 extern s32 D_L06_00179B90[] __asm__("D_L06_00179B90");
@@ -889,7 +889,7 @@ void FUN_L06_00301070(struct Moby *m) {
     float rate, head_rate;
     int tracking;
     FUN_L03_002db480_301070((char *)m);
-    if (m->visible != 0 && distance_xyz_301070(((float *)&m->pos), D_L06_00167540_301070) < 24.0f) {
+    if (m->visible != 0 && distance_xyz_301070(((float *)&m->pos), ((char *)D_L06_00167540)) < 24.0f) {
         FUN_L00_0025a120_301070(m);
         m->shadow_range = 0x13;
     }
@@ -2114,7 +2114,7 @@ typedef struct {
 
 extern Cut_304098 *D_L06_001600EC_304098 __asm__("D_L06_001600EC");
 extern struct Moby *D_L06_0015FFD8_304098 __asm__("D_L06_0015FFD8");
-extern char D_0013F3D0_304098[] __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern char D_0013F3D0[] __attribute__((section(".data")));
 extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
 typedef struct { char pad0[0x160]; float f160; int pad164; int f168; } Fx_304098;
 extern Fx_304098 D_L06_00167400_304098 __asm__("D_L06_00167400") __attribute__((section(".data")));
@@ -2190,7 +2190,7 @@ void FUN_L06_00304098(struct Moby *moby) {
         break;
     }
     case 3:
-        if (vector_distance_304098(D_0013F3D0_304098, &moby->pos) < 3.7f) {
+        if (vector_distance_304098(D_0013F3D0, &moby->pos) < 3.7f) {
             help_message_available = try_set_help_message_304098(4, 0x1783) != 0;
             if ((*(int *)(D_0013A5E0 + 0x2504) & 0x10) && help_message_available) {
                 allocate_voice_for_target_entry_304098(2, 0, moby);

@@ -1099,7 +1099,7 @@ extern f32 D_L13_00161E68 __attribute__((sda));
 extern f32 D_L13_00161E6C __attribute__((sda));
 extern s32 *walker_paths_8d10[] __asm__("D_L13_001B07B0");
 extern char D_L13_00160680[] __attribute__((section(".sdata")));
-extern s32 D_001413D0_8d10 __asm__("D_001413D0") __attribute__((section(".data")));
+extern int D_001413D0 __attribute__((section(".data")));
 extern CollisionHit coll_hit_8d10 __asm__("D_L13_00174140");
 extern void FUN_L13_003094f8(struct Moby *);
 extern f32 random_float_between_8d10(f32, f32) __asm__("FUN_002132a8");
@@ -1212,7 +1212,7 @@ void FUN_L13_00308d10(struct Moby *moby) {
         }
     }
     if (vars->start_frame == 0) {
-        vars->start_frame = D_001413D0_8d10;
+        vars->start_frame = D_001413D0;
     }
     ground = probe_ground_height_8d10(&moby->pos, 0, 0.5f);
     if (ground != 0.0f) {

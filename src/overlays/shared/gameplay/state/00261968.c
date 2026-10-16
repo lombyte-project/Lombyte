@@ -230,7 +230,7 @@ typedef struct {
 } SegmentPath_262030;
 
 extern SegmentPath_262030 *D_L00_001B04B0_262030[] __asm__("D_L00_001B04B0");
-extern OvlVec4 D_0013F5E0_262030 __asm__("D_0013F5E0");
+extern char D_0013F5E0[];
 extern f32 FUN_001ff218_262030(f32) __asm__("FUN_001f99c0");
 extern void FUN_001ff278_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
 extern void FUN_001ff2a8_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
@@ -263,7 +263,7 @@ s32 FUN_L00_00262030(f32 distance, s32 path_index, OvlVec4 *point, OvlVec4 *out)
     saved_out = out;
     qcopy(&working, point);
     entry = D_L00_001B04B0_262030[path_index];
-    offset = (s32)&D_0013F5E0_262030;
+    offset = (s32)&(*(OvlVec4 *)D_0013F5E0);
     original_height = FUN_001ff398_262030(&working, (OvlVec4 *)offset);
     i = 0;
     if (entry->count - 1 > found) {
@@ -309,8 +309,8 @@ next_segment_262030:
         } while (i < entry->count - 1);
     }
     if ((i = found)) {
-        projection = FUN_001ff398_262030(&working, &D_0013F5E0_262030);
-        FUN_001ff500_262030(original_height - projection, &segment, &D_0013F5E0_262030);
+        projection = FUN_001ff398_262030(&working, &(*(OvlVec4 *)D_0013F5E0));
+        FUN_001ff500_262030(original_height - projection, &segment, &(*(OvlVec4 *)D_0013F5E0));
         FUN_001ff278_262030(saved_out, &working, &segment);
     }
     return found;
