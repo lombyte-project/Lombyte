@@ -446,7 +446,8 @@ void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern u8 D_L01_00167240[];
 extern u128 D_L01_001742E0;
 
-void FUN_L01_002fa4c0(DropMoby *m) {
+void update_birdbot_projectile(DropMoby *) __asm__("FUN_L01_002fa4c0");
+void update_birdbot_projectile(DropMoby *m) {
     DropVars *v;
     u128 *pos;
     Vec4 prev;
