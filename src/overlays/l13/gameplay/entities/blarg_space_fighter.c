@@ -2190,7 +2190,7 @@ extern int FUN_001f96f8(int);
 extern int FUN_0022da68(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L01_0026e0e0(int, int);
 extern void debug_print(char *, short, short, int) __asm__("FUN_001e93b0");
-extern char D_L13_001F4D90[];
+char D_L13_001F4D90[] = "moby:%d(%d) opened at %d\n";
 extern char D_L13_001F4DB0[];
 extern char D_L13_001F4DD0[];
 extern int frame_count __asm__("D_L13_0015F5CC");
