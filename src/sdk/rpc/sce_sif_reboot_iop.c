@@ -1,5 +1,5 @@
 #include "types.h"
-extern char D_00152960[];
+const char D_00152960[] = "rom0:UDNL ";
 extern char D_00152970[];
 extern s32 scePrintf(const char *, ...);
 extern void sceSifInitRpc(u32);
