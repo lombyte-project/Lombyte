@@ -1,6 +1,5 @@
 #include "types.h"
 
-/* fdlibm word-access shape: EXTRACT_WORDS() is a do { ... } while (0) macro */
 typedef union {
     f64 value;
     struct {
@@ -9,18 +8,22 @@ typedef union {
     } parts;
 } ieee_double_shape_type;
 
+/* fdlibm math_private.h */
+#define EXTRACT_WORDS(ix0, ix1, d) \
+    do { \
+        ieee_double_shape_type ew_u; \
+        ew_u.value = (d); \
+        (ix0) = ew_u.parts.msw; \
+        (ix1) = ew_u.parts.lsw; \
+    } while (0)
+
 s32 double_is_not_nan(f64 x) __asm__("FUN_00116168");
 
 s32 double_is_not_nan(f64 x) {
     s32 hx;
     s32 lx;
-    ieee_double_shape_type ew_u;
 
-    do {
-        ew_u.value = x;
-        hx = ew_u.parts.msw;
-        lx = ew_u.parts.lsw;
-    } while (0);
+    EXTRACT_WORDS(hx, lx, x);
     hx &= 0x7fffffff;
     hx |= (u32)(lx | (-lx)) >> 31;
     hx = 0x7ff00000 - hx;

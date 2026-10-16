@@ -10,18 +10,21 @@ typedef struct {
 extern struct _reent *D_0012F76C[];
 extern void __sinit(struct _reent *);
 extern s32 _vfprintf_r(struct _reent *, FILE *, const char *, void *);
-/* newlib vfprintf: CHECK_INIT (fp) then _vfprintf_r. */
+/* newlib local.h */
+#define CHECK_INIT(fp) \
+    do { \
+        if ((fp)->_data == 0) { \
+            (fp)->_data = D_0012F76C[0]; \
+        } \
+        if (!(fp)->_data->__sdidinit) { \
+            __sinit((fp)->_data); \
+        } \
+    } while (0)
+
 s32 vfprintf(FILE *fp, const char *fmt0, void *ap) __asm__("FUN_00116da8");
 
 s32 vfprintf(FILE *fp, const char *fmt0, void *ap) {
-    do {
-        if (fp->_data == 0) {
-            fp->_data = D_0012F76C[0];
-        }
-        if (!fp->_data->__sdidinit) {
-            __sinit(fp->_data);
-        }
-    } while (0);
+    CHECK_INIT(fp);
     return _vfprintf_r(fp->_data, fp, fmt0, ap);
 }
 
