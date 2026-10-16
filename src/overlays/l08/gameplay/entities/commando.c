@@ -639,7 +639,7 @@ typedef struct {
 
 extern PointLight D_L08_00180AC0[];
 extern char D_L08_001FC220[];
-extern char D_L08_001FC250[];
+char D_L08_001FC250[] = "M671 Warning: texture h count (%f) is greater than max texture tile count (8)\n";
 extern char D_L08_001FC2A0[];
 extern char D_L08_001FC2D0[];
 extern s32 DebugPrint();
@@ -1295,4 +1295,3 @@ void FUN_L08_00302ce8(WM *m) {
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
-
