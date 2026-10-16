@@ -80,7 +80,12 @@ SDK_NAME = re.compile(r"^(?:_|sce|Sce|Sif|sif|Sbrk|isce|Pad|Mc|Cd|Lib)")
 FORBIDDEN = [
     (re.compile(r"(?:claude\.ai|chatgpt\.com|chat\.openai\.com)/\S*(?:session|chat|share|c/)", re.I),
      "link to a private AI session"),
-    (re.compile(r"^\s*(?:co[-_ ]?authored[-_ ]?by|claude[-_ ]?session)\s*:", re.I | re.M), "agent trailer"),
+    # A person who gave the change (a Naming Desk issue author) may be credited as
+    # `Co-authored-by: login <id+login@users.noreply.github.com>`; any other
+    # co-author line is an agent trailer.
+    (re.compile(r"^\s*(?:claude[-_ ]?session\s*:|co[-_ ]?authored[-_ ]?by\s*:"
+                r"(?!\s*[\w-]+ <\d+\+[\w-]+@users\.noreply\.github\.com>\s*$))", re.I | re.M),
+     "agent trailer"),
     (re.compile(r"generated (?:with|by) \[?claude", re.I), "AI tool footer"),
     (re.compile(r"(?:/home/(?!user\b)[\w.-]+/|/Users/[\w.-]+/|[A-Za-z]:\\\\?Users\\\\?|/mnt/[a-z]/)"),
      "local path"),

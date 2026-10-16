@@ -9,8 +9,8 @@ The standard is one lowercase `<type>: <summary>` prefix per subject
 (`decomp`, `overlay`, `docs`, `chore`, `fix`, `config`), with no repeated scope token.
 
 The hook also rewrites the message file before validation: every
-`co-authored-by:` and `claude-session:` trailer line (case-insensitive) is
-dropped, so agent trailers and links to private AI sessions never enter the
+`claude-session:` line and every `co-authored-by:` line (case-insensitive)
+except a person's GitHub noreply credit is dropped, so agent trailers and links to private AI sessions never enter the
 history.  A message that still contains a link to an AI chat or agent session
 anywhere else is rejected.  Messages without such lines are left untouched,
 byte for byte.
@@ -38,7 +38,10 @@ NAMING = Path(os.environ.get("RNC_COMMIT_NAMING", ""))
 
 # Trailer form only (line starts with the token + ":"): prose that merely
 # mentions the term, e.g. in a commit about this hook, must survive.
-TRAILER_RE = re.compile(r"^\s*(?:co[-_]?authored[-_]?by|claude[-_]?session)\s*:",
+# A person credited by their GitHub noreply address is kept (see
+# docs/commit-messages.md); every other co-author line is an agent trailer.
+TRAILER_RE = re.compile(r"^\s*(?:claude[-_]?session\s*:|co[-_]?authored[-_]?by\s*:"
+                        r"(?!\s*[\w-]+ <\d+\+[\w-]+@users\.noreply\.github\.com>\s*$))",
                         re.IGNORECASE | re.MULTILINE)
 # Links to private AI chat/agent sessions must never be published.
 SESSION_LINK_RE = re.compile(r"(?:claude\.ai|chatgpt\.com|chat\.openai\.com)/\S*(?:session|chat|share|c/)",

@@ -40,6 +40,9 @@ the map); `decomp:` stays the executable's.
   chat or agent sessions, in commit messages, pull request descriptions, or
   review comments. Sessions are private; this repository is public. The hook
   drops the trailers and rejects any remaining session link.
+- The one co-author line allowed credits a person who gave the change, such
+  as the author of a Naming Desk issue, by their GitHub noreply address:
+  `Co-authored-by: login <12345+login@users.noreply.github.com>`.
 - Author and committer are the maintainer, with the same name and e-mail as
   the existing history (`git log -1 --format='%an <%ae>' main`), including
   for commits prepared by an AI agent. Never commit under an agent identity

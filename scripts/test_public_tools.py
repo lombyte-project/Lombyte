@@ -2121,6 +2121,16 @@ class CleanupCheckTests(unittest.TestCase):
         self.assertIn("pull request description: [forbidden] agent trailer", out)
         self.assertNotIn("pull request title", out)
 
+    def test_person_credit_is_not_an_agent_trailer(self):
+        body = Path(self.tmp.name + "-body.md")
+        self.addCleanup(body.unlink)
+        body.write_text("Co-authored-by: someone <12345+someone@users.noreply.github.com>\n")
+        code, out = self.check("--title", "decomp: name the helper", "--body-file", str(body))
+        self.assertNotIn("agent trailer", out)
+        body.write_text("Co-authored-by: Claude <noreply@anthropic.com>\n")
+        code, out = self.check("--title", "decomp: name the helper", "--body-file", str(body))
+        self.assertIn("pull request description: [forbidden] agent trailer", out)
+
 
 if __name__ == "__main__":
     unittest.main()
