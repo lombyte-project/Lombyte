@@ -6,7 +6,7 @@ extern s32 sceOpen(const char *path, s32 flags);
 extern s32 sceRead(s32 fd, void *buf, s32 size);
 extern s32 sceClose(s32 fd);
 extern s32 CheckStateRange(const char *str);
-extern u8 D_00153030[];
+const u8 D_00153030[] = "rom0:ROMVER";
 
 s32 checkModelVersion(void) {
     s32 fd;

@@ -427,6 +427,7 @@ RODATA_OVERLAYS = {
     "sdk/rpc/sce_sif_reboot_iop": (0x152960, 0x538E0, 11),
     "sdk/storage/cd_check_ncmd": (0x152EB0, 0x53E30, 39),
     "sdk/storage/cd_check_scmd": (0x152F10, 0x53E90, 39),
+    "sdk/library/checkModelVersion": (0x153030, 0x53FB0, 12),
 }
 
 # Recovered C units that define the small-data variables their original
