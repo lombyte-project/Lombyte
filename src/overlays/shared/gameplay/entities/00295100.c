@@ -831,81 +831,76 @@ void FUN_L00_00299560(s32 i) {
     }
     FUN_L00_002995d0(a, b, game_language);
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002995d0.s", FUN_L00_002995d0);
-#else
-extern s32 D_L00_0015F5D8 __attribute__((section(".sdata")));
-extern s32 D_L00_00161048, D_L00_0016104C, D_L00_00161050;
-extern s32 D_L00_0015F40C;
-extern s32 D_0015EE78_gp __asm__("D_0015EE78_gp") __attribute__((sda));
+extern s32 movie_sector __asm__("D_L00_00161048") __attribute__((section(".sdata")));
+extern s32 movie_size __asm__("D_L00_0016104C") __attribute__((section(".sdata")));
+extern s32 movie_language __asm__("D_L00_00161050") __attribute__((section(".sdata")));
+extern s32 movie_buffer __asm__("D_L00_00161054") __attribute__((section(".sdata")));
+extern s32 movie_image_data __asm__("D_L00_00161058") __attribute__((section(".sdata")));
+extern s32 D_L00_0015F40C_macro __asm__("D_L00_0015F40C") __attribute__((section(".sdata")));
+extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") __attribute__((section(".sdata")));
+extern s32 D_L00_00173E04_data __asm__("D_L00_00173E04") __attribute__((section(".data")));
+/* [0] is gs_texture_allocation_start, [4] depth_buffer_address. */
+extern s32 gs_layout_macro[6] __asm__("D_0015EE78") __attribute__((section(".sdata")));
 extern void flush_cache(s32) __asm__("FUN_00118a80");
-extern void FUN_L00_0028e048(void);
-extern void FUN_L00_002656c0(void);
-extern void FUN_L00_001f9838(s32);
+extern void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
+extern void music_stop(void) __asm__("FUN_00215ee8");
+extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 extern void FUN_L00_002039a0(void);
-extern void sce_gs_set_def_load_image(void *, s16, s32, s32, s32, s32, s32, s32) __asm__("FUN_00122330");
-extern void sce_gs_exec_load_image(void *, s32) __asm__("FUN_00122658");
+extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
+extern s32 sceGsExecLoadImage(void *, u8 *);
 extern void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
-extern void FUN_L00_001eb078(s32, s32);
-extern void FUN_L00_001ff008(void);
-
+extern void debug_print_002995d0(char *, s32) __asm__("FUN_001e93b0");
+extern void FUN_001f97b0(void);
 extern char D_L00_001E9480[];
 
+/* Sets up a movie load, then uploads image data from the level buffer to GS memory in two runs of strips. */
 void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
-    u8 buffer[0x60] __attribute__((aligned(16)));
-    s32 source, destination, second_count, pal, initial_count;
+    s32 image[24];
+    s32 large_count, small_count, gs_address, source, i, j;
 
     voice_pool.header[0x6B] |= 8;
     flush_cache(0);
-    FUN_L00_0028e048();
-    FUN_L00_002656c0();
-    D_L00_00161048 = sector;
-    D_L00_0016104C = size;
-    D_L00_00161050 = language;
+    sound_stop_all_sounds();
+    music_stop();
+    movie_sector = sector;
+    movie_size = size;
+    movie_language = language;
     D_L00_0015F5D8 = 1;
-    FUN_L00_001f9838(4);
+    fade_to_black(4);
     FUN_L00_002039a0();
-    destination = *(volatile s32 *)&D_L00_0015F40C;
-    D_L00_0015F5C4 = 1;
-    D_L00_00161054 = D_L00_00173E00_298840.x4;
-    D_L00_00161058 = destination;
-    initial_count = 13;
-    second_count = 17;
-    pal = D_0015ED80;
-    source = *(volatile s32 *)&depth_buffer_address;
-    initial_count = pal ? 14 : initial_count;
-    second_count = pal ? 14 : second_count;
-    if (initial_count != 0) {
-        s32 count = initial_count;
-        do {
-            count--;
-            sce_gs_set_def_load_image(buffer, (source << 8) >> 16, 2, 1, 0, 0, 0x80, 0x80);
-            source += 0x10000;
-            flush_cache(0);
-            sce_gs_exec_load_image(buffer, destination);
-            destination += 0xc000;
-            wait_for_graphics_pipeline_idle(0, 0);
-        } while (count != 0);
+    D_L00_0015F5C4_macro = 1;
+    movie_buffer = D_L00_00173E04_data;
+    movie_image_data = D_L00_0015F40C_macro;
+    large_count = D_0015ED80 != 0 ? 0xE : 0xD;
+    small_count = D_0015ED80 != 0 ? 0xE : 0x11;
+    source = movie_image_data;
+    gs_address = gs_layout_macro[4];
+    i = 0;
+    while (i < large_count) {
+        sceGsSetDefLoadImage(image, gs_address >> 8, 2, 1, 0, 0, 0x80, 0x80);
+        i++;
+        gs_address += 0x10000;
+        flush_cache(0);
+        sceGsExecLoadImage(image, (u8 *)source);
+        source += 0xC000;
+        wait_for_graphics_pipeline_idle(0, 0);
     }
-    source = D_0015EE78_gp;
-    if (second_count != 0) {
-        s32 count = second_count;
-        do {
-            count--;
-            sce_gs_set_def_load_image(buffer, (source << 8) >> 16, 1, 0, 0, 0, 0x40, 0x40);
-            source += 0x4000;
-            flush_cache(0);
-            sce_gs_exec_load_image(buffer, destination);
-            destination += 0x4000;
-            wait_for_graphics_pipeline_idle(0, 0);
-        } while (count != 0);
+    gs_address = gs_layout_macro[0];
+    j = 0;
+    while (j < small_count) {
+        sceGsSetDefLoadImage(image, gs_address >> 8, 1, 0, 0, 0, 0x40, 0x40);
+        j++;
+        gs_address += 0x4000;
+        flush_cache(0);
+        sceGsExecLoadImage(image, (u8 *)source);
+        source += 0x4000;
+        wait_for_graphics_pipeline_idle(0, 0);
     }
-    if (source > 0x400000) {
-        FUN_L00_001eb078((s32)D_L00_001E9480, source - 0x400000);
-        FUN_L00_001ff008();
+    if (gs_address > 0x400000) {
+        debug_print_002995d0(D_L00_001E9480, gs_address - 0x400000);
+        FUN_001f97b0();
     }
 }
-#endif
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002997c8.s", FUN_L00_002997c8);
 #else
