@@ -767,7 +767,7 @@ void mine_update(M910 *m) {
                         int i;
                         int j;
                         int l;
-                        int FUN_L11_003192c8;
+                        int cb;
                         int cg;
                         int cr;
 
@@ -787,7 +787,7 @@ void mine_update(M910 *m) {
                         }
                         cr = 0x60;
                         cg = 0x60;
-                        FUN_L11_003192c8 = 0x7F;
+                        cb = 0x7F;
                         for (j = 0; j < 150; j++) {
                             float rr;
                             float ang;
@@ -807,15 +807,15 @@ void mine_update(M910 *m) {
                             n[2] -= rr * frame_time * 8.0f;
                             FUN_L00_002738e8(r, n, 0, random_float_between(0.35f, 1.25f), wz,
                                              frame_time_sq * 20.0f,
-                                             (0x16 << 24) | (FUN_L11_003192c8 << 16) | (cg << 8) | cr,
-                                             (FUN_L11_003192c8 << 16) | (cg << 8) | cr, 1);
+                                             (0x16 << 24) | (cb << 16) | (cg << 8) | cr,
+                                             (cb << 16) | (cg << 8) | cr, 1);
                         }
                         for (l = 0; l < 20; l++) {
                             int c1 = mine_blend_color(0x7F000000,
-                                                      (0x7F << 24) | (FUN_L11_003192c8 << 16) | (cg << 8) | cr,
+                                                      (0x7F << 24) | (cb << 16) | (cg << 8) | cr,
                                                       random_float_between(0.25f, 1.0f));
                             int c2 =
-                                mine_blend_color(0, ((FUN_L11_003192c8 / 2) << 16) | ((cg / 2) << 8) | (cr / 2),
+                                mine_blend_color(0, ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2),
                                                  random_float_between(0.5f, 1.0f));
                             float sz;
                             int life;
@@ -1657,7 +1657,7 @@ void bomb_update(BombMoby_2adb30 *m) {
         float t;
         int cr;
         int cg;
-        int FUN_L11_003192c8;
+        int cb;
         c.q = 0;
         c.f[0] = 128.0f;
         c.f[1] = 128.0f;
@@ -1667,8 +1667,8 @@ void bomb_update(BombMoby_2adb30 *m) {
         t = FUN_001fa6c0_2adb30(d->h6a) / FUN_001fa6c0_2adb30(FUN_001f96f8_2adb30(0x1E));
         cr = FUN_001fa6d0_2adb30((c.f[0] - 255.0f) * t + 255.0f);
         cg = FUN_001fa6d0_2adb30((c.f[1] - 64.0f) * t + 64.0f);
-        FUN_L11_003192c8 = FUN_001fa6d0_2adb30((c.f[2] - 64.0f) * t + 64.0f);
-        m->color = (FUN_L11_003192c8 << 16) | (0xFF << 24) | (cg << 8) | cr;
+        cb = FUN_001fa6d0_2adb30((c.f[2] - 64.0f) * t + 64.0f);
+        m->color = (cb << 16) | (0xFF << 24) | (cg << 8) | cr;
         if (d->h68 == 0) {
             if ((D_L00_0015F5CC_2adb30 & 7) == 0) {
                 int i;
@@ -1934,7 +1934,7 @@ void bomb_update(BombMoby_2adb30 *m) {
                     float wz;
                     int cr = 0x60;
                     int cg = 0x60;
-                    int FUN_L11_003192c8 = 0x7F;
+                    int cb = 0x7F;
                     int delay = 0;
                     v.q = m->pos.q;
                     v.f[2] += 3.5f;
@@ -1961,11 +1961,11 @@ void bomb_update(BombMoby_2adb30 *m) {
                             FUN_001f9a10_2adb30(&w, &w, &m->pos);
                             w.f[2] = gz + 0.5f;
                             v2.f[2] -= r * D_0015ED6C_2adb30 * 8.0f;
-                            FUN_L00_002738e8_2adb30(&w, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (FUN_L11_003192c8 << 16) | (cg << 8) | cr, (FUN_L11_003192c8 << 16) | (cg << 8) | cr, 1);
+                            FUN_L00_002738e8_2adb30(&w, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
                         }
                         for (j = 0; j < 20; j++) {
-                            int c0 = mine_blend_color(0x7F << 24, (0x7F << 24) | (FUN_L11_003192c8 << 16) | (cg << 8) | cr, FUN_002132a8_2adb30(0.25f, 1.0f));
-                            int c1 = mine_blend_color(0, ((FUN_L11_003192c8 / 2) << 16) | ((cg / 2) << 8) | (cr / 2), FUN_002132a8_2adb30(0.5f, 1.0f));
+                            int c0 = mine_blend_color(0x7F << 24, (0x7F << 24) | (cb << 16) | (cg << 8) | cr, FUN_002132a8_2adb30(0.25f, 1.0f));
+                            int c1 = mine_blend_color(0, ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2), FUN_002132a8_2adb30(0.5f, 1.0f));
                             float sz;
                             int life;
                             w.f[0] = FUN_002132a8_2adb30(-3.0f, 3.0f);

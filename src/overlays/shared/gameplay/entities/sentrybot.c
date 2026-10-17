@@ -872,16 +872,16 @@ void sentrybot_update(unsigned char *moby) {
         int g0 = func_001FA898_r(s * 70.0f);
         int b0 = func_001FA898_r(s * 10.0f);
         int cr = r0 + 0x32;
-        int FUN_L11_003192c8 = b0 + 0x14;
+        int cb = b0 + 0x14;
         int cg = g0 + 0xB4;
         if (cr > 0xFF)
             cr = 0xFF;
         if (cg > 0xFF)
             cg = 0xFF;
         if (lvl == 2) {
-            color = (alpha << 24) | (FUN_L11_003192c8 << 16) | ((cr / 2) << 8) | cg;
+            color = (alpha << 24) | (cb << 16) | ((cr / 2) << 8) | cg;
         } else {
-            color = (alpha << 24) | (FUN_L11_003192c8 << 16) | (cg << 8) | cr;
+            color = (alpha << 24) | (cb << 16) | (cg << 8) | cr;
         }
     }
     *(int *)(moby + 0x90) = fast_tween_color(*(int *)(moby + 0x90), color, 0.1f);

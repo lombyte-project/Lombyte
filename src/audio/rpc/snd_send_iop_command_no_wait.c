@@ -20,11 +20,11 @@ extern s32 FlushCache(s32);
 extern s32 StoreObjectIndex(void *, s32);
 extern s32 SceSifCheckStatRpc(void *);
 extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
-void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 FUN_L11_003192c8,
+void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb,
                                   s64 cb_data) __asm__("FUN_0012e6e0");
 
 extern s32 GlobalTableStatus __asm__("D_0015ECC4") __attribute__((sda));
-void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 FUN_L11_003192c8, s64 cb_data) {
+void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_data) {
     s32 need;
     s32 tries;
     s32 held;
@@ -32,7 +32,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 FUN_L11_00319
     u8 *p;
 
     held = 0;
-    if (GlobalTableStatus == 0 && snd_current_buffer == 0 && size == 0 && FUN_L11_003192c8 == 0) {
+    if (GlobalTableStatus == 0 && snd_current_buffer == 0 && size == 0 && cb == 0) {
         StoreObjectIndex(snd_sync_buffer, 1);
         while (SceSifCheckStatRpc(sound_command_client) != 0) {
             printf(snd_non_idle_error_string);
@@ -73,7 +73,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 FUN_L11_00319
         p[i] = data[i];
     }
     snd_batch_free_bytes[snd_batch_index] -= need;
-    snd_stream_buffers[snd_batch_index][*snd_batch_command_buffers[snd_batch_index]].func = FUN_L11_003192c8;
+    snd_stream_buffers[snd_batch_index][*snd_batch_command_buffers[snd_batch_index]].func = cb;
     snd_stream_buffers[snd_batch_index][*snd_batch_command_buffers[snd_batch_index]].data = cb_data;
     snd_post_message();
 }

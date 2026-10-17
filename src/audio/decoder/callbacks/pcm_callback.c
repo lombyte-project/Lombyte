@@ -14,9 +14,9 @@ extern void audio_dec_begin_put(void *, void **, s32 *, void **, s32 *) __asm__(
 extern s32 cpy2area(void *, s32, void *, s32, u8 *, s32, struct AudioBuf *,
                                     s32) __asm__("func_0023B810");
 extern void audio_dec_end_put(void *, s32) __asm__("func_0023AE28");
-s32 pcm_callback(void *mp, struct CbDataStr *FUN_L11_003192c8, struct AudioBuf *ab) __asm__("FUN_0023b728");
+s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) __asm__("FUN_0023b728");
 
-s32 pcm_callback(void *mp, struct CbDataStr *FUN_L11_003192c8, struct AudioBuf *ab) {
+s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) {
     void *ptr0;
     s32 len0;
     void *ptr1;
@@ -28,8 +28,8 @@ s32 pcm_callback(void *mp, struct CbDataStr *FUN_L11_003192c8, struct AudioBuf *
     s32 ret;
     s32 rest;
 
-    len = FUN_L11_003192c8->len - 4;
-    ps = FUN_L11_003192c8->data + 4;
+    len = cb->len - 4;
+    ps = cb->data + 4;
     end = ab->data + ab->size;
     if (ps >= end) {
         ps -= ab->size;

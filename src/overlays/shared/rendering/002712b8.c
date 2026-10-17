@@ -1132,7 +1132,7 @@ extern u32 D_L00_00160228 __attribute__((sda));
 void FUN_L00_00273a68(struct EmberParticle *p) {
     struct EmberMotion *m = &p->m;
     Vec4 t;
-    s32 cr, cg, FUN_L11_003192c8;
+    s32 cr, cg, cb;
     s32 n, c1, c2;
     f32 f;
 
@@ -1144,7 +1144,7 @@ void FUN_L00_00273a68(struct EmberParticle *p) {
         return;
     cr = p->color & 0xFF;
     cg = (p->color & 0xFF00) >> 8;
-    FUN_L11_003192c8 = ((u32)p->color >> 16) & 0xFF;
+    cb = ((u32)p->color >> 16) & 0xFF;
     if (!random_integer_below(D_L00_00160228 - 1)) {
         p->pos.f[2] = m->floor_z;
         m->vel.f[0] *= random_float_between(1.0f, 3.5f);
@@ -1168,11 +1168,11 @@ void FUN_L00_00273a68(struct EmberParticle *p) {
         if (!random_integer_below(0x13)) {
             t.q = p->pos.q;
             t.f[2] += 0.1f;
-            FUN_L00_002715e8(&t, 0, ((random_integer_below(6) + 0x34) << 24) | (FUN_L11_003192c8 << 16) | (cg << 8) | cr,
+            FUN_L00_002715e8(&t, 0, ((random_integer_below(6) + 0x34) << 24) | (cb << 16) | (cg << 8) | cr,
                              0.05f, 10500.0f);
         }
         if (!random_integer_below(9)) {
-            c1 = FUN_L00_002371e0(0x7F000000, 0x7F000000 | (FUN_L11_003192c8 << 16) | (cg << 8) | cr,
+            c1 = FUN_L00_002371e0(0x7F000000, 0x7F000000 | (cb << 16) | (cg << 8) | cr,
                                   random_float_between(0.25f, 1.0f));
             c2 = FUN_L00_002371e0(0, 0x5F00, random_float_between(0.5f, 1.0f));
             m->vel.f[0] = random_float_between(-1.0f, 1.0f);

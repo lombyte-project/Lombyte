@@ -157,7 +157,7 @@ typedef struct E_23ac78 {
     int a;
     unsigned int flags;
     int b[3];
-    void (*FUN_L11_003192c8)(struct E_23ac78 *);
+    void (*cb)(struct E_23ac78 *);
     char pad[0x68 - 0x18];
     int on;
     int lvl;
@@ -199,8 +199,8 @@ int FUN_L00_0023ac78(int call) {
         if (e->on && e->lvl == -6) {
             apply_pending_animation(e);
         }
-        if (call && e->FUN_L11_003192c8) {
-            e->FUN_L11_003192c8(e);
+        if (call && e->cb) {
+            e->cb(e);
         }
         e++;
     } while ((int)e < (int)(hud_elements + 13));

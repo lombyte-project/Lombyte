@@ -1486,7 +1486,7 @@ void sand_mouse_update(struct Moby *moby) {
         } else {
             int cr;
             int cg;
-            int FUN_L11_003192c8;
+            int cb;
             int col;
             int dir;
             int n;
@@ -1496,8 +1496,8 @@ void sand_mouse_update(struct Moby *moby) {
             FUN_L00_0025f8e0(va, D_L01_00161930);
             cr = (random_integer_3830() + 0x30) & 0x3F;
             cg = (random_integer_3830() + 0x20) & 0x3F;
-            FUN_L11_003192c8 = random_integer_3830() & 0x2F;
-            col = cr | (cg << 8) | (FUN_L11_003192c8 << 16) | (D_L01_0016193C << 24);
+            cb = random_integer_3830() & 0x2F;
+            col = cr | (cg << 8) | (cb << 16) | (D_L01_0016193C << 24);
             dir = random_integer_3830() % 2;
             if (d->timer & 1) {
                 dir = -dir;

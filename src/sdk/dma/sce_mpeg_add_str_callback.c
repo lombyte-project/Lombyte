@@ -27,7 +27,7 @@ extern u64 _type2id(s32 strType, s32 ch);
 
 s32 sceMpegAddStrCallback(sceMpeg *mp, s32 strType, s32 ch, s32 func, s32 data) {
     MpegSys *sys;
-    StrCallback *FUN_L11_003192c8;
+    StrCallback *cb;
     u64 id;
     s32 count;
     s32 i;
@@ -35,21 +35,21 @@ s32 sceMpegAddStrCallback(sceMpeg *mp, s32 strType, s32 ch, s32 func, s32 data) 
 
     old = 0;
     sys = mp->sys;
-    FUN_L11_003192c8 = sys->callbacks;
+    cb = sys->callbacks;
     id = _type2id(strType, ch);
     count = sys->count;
     for (i = 0; i < count; i++) {
-        if (id == FUN_L11_003192c8[i].id) {
-            old = FUN_L11_003192c8[i].func;
+        if (id == cb[i].id) {
+            old = cb[i].func;
             break;
         }
     }
     if (i < 64) {
         sys->count = count + 1;
-        FUN_L11_003192c8[i].id = id;
-        FUN_L11_003192c8[i].data = data;
-        FUN_L11_003192c8[i].func = func;
-        FUN_L11_003192c8[i].type = D_00132ED8[strType].type;
+        cb[i].id = id;
+        cb[i].data = data;
+        cb[i].func = func;
+        cb[i].type = D_00132ED8[strType].type;
     }
     return old;
 }

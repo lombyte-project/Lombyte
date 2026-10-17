@@ -12,7 +12,7 @@ typedef struct {
     void *cbData;
 } MpegDec;
 
-extern void _dispatchMpegCbNodata(void *FUN_L11_003192c8);
+extern void _dispatchMpegCbNodata(void *cb);
 
 #define IPU_CMD  ((volatile u64 *)0x10002000)
 #define IPU_CTRL ((volatile u32 *)0x10002010)

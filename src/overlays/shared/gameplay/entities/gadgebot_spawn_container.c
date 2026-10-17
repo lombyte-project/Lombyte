@@ -1609,9 +1609,9 @@ void gadgebot_update(GbMoby *moby) {
 
             {
                 int *ca = &d->f2A0[j];
-                int *FUN_L11_003192c8 = &d->f2C0[j];
+                int *cb = &d->f2C0[j];
 
-                if (*ca == -1 || *FUN_L11_003192c8 == -1) {
+                if (*ca == -1 || *cb == -1) {
                     break;
                 }
             }
@@ -1966,7 +1966,7 @@ void gadgebot_update(GbMoby *moby) {
                 float s = random_float_between(0.1f, 1.0f);
                 int cr = random_int_between(0x40, 0xFF);
                 int cg = random_int_between(0x40, 0xFF);
-                int FUN_L11_003192c8 = random_int_between(0x40, 0xFF);
+                int cb = random_int_between(0x40, 0xFF);
                 int t;
                 int ga;
                 float fa;
@@ -1983,7 +1983,7 @@ void gadgebot_update(GbMoby *moby) {
                 ga = (cg << 8) | 0x7F000000;
                 fa = s * 0.07f;
                 fb = s * 0.7f;
-                FUN_L00_00272060(v50, t, fa, fb, (FUN_L11_003192c8 << 16) | ga | cr, 0,
+                FUN_L00_00272060(v50, t, fa, fb, (cb << 16) | ga | cr, 0,
                                  random_integer_below(2) ? 1 : -1, frame_time_sq * 15.0f, v40);
             }
             return;

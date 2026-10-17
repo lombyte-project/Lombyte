@@ -9,7 +9,7 @@ typedef struct {
 
 extern char D_00153788[];
 extern void _waitIpuIdle(MpegDec *d);
-extern void _dispatchMpegCallback(void *FUN_L11_003192c8, s32 *arg);
+extern void _dispatchMpegCallback(void *cb, s32 *arg);
 extern void _Error(MpegDec *d, char *msg);
 extern s32 DIntr(void);
 extern s32 EnableInterrupts(void);
