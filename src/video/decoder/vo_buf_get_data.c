@@ -8,11 +8,11 @@ struct VoBuf {
 extern s32 FUN_0023d1f8();
 s32 vo_buf_get_data(struct VoBuf *arg0) __asm__("FUN_0023d288");
 
-s32 vo_buf_get_data(struct VoBuf *arg0) {
+s32 vo_buf_get_data(struct VoBuf *vo_buffer) {
     if (FUN_0023d1f8() != 0) {
         return 0;
     }
-    return arg0->unk0 + (arg0->unk8 * 0xD0000);
+    return vo_buffer->unk0 + (vo_buffer->unk8 * 0xD0000);
 }
 
 /* Recovered original symbol name. */
