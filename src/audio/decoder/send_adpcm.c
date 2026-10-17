@@ -16,8 +16,8 @@ extern void send_to_spu(struct AudioDec *, unsigned char *, int, int) __asm__("f
    pointer (one load, as retail). */
 void send_adpcm(void *arg0) __asm__("FUN_0023afc0");
 
-void send_adpcm(void *arg0) {
-    struct AudioDec *ad = arg0;
+void send_adpcm(void *audio_decoder) {
+    struct AudioDec *ad = audio_decoder;
     int avail = 0;
     int i, j, n;
     unsigned char *src, *dst;
