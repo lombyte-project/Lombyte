@@ -3,7 +3,7 @@
 extern s32 complete_stream_buffer_transfer() __asm__("FUN_00225cd8");
 s32 leave_menu_prompt(struct MenuScreen *arg0) __asm__("FUN_00221a88");
 
-s32 leave_menu_prompt(struct MenuScreen *arg0) {
-    arg0->data.prompt.buffer = complete_stream_buffer_transfer(arg0->data.prompt.buffer);
+s32 leave_menu_prompt(struct MenuScreen *menu_screen) {
+    menu_screen->data.prompt.buffer = complete_stream_buffer_transfer(menu_screen->data.prompt.buffer);
     return 0;
 }
