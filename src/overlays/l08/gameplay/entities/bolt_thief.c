@@ -619,8 +619,8 @@ extern int D_L08_00161B50 __attribute__((sda));
 extern int D_L08_00161BF0 __attribute__((sda));
 extern int D_L08_00167480;
 extern int FUN_001f9770_c() __asm__("FUN_001f9770");
-extern int FUN_L00_001fefc8();
-extern int FUN_L00_001ff378();
+extern int dec_byte_timer_edc30() __asm__("FUN_L00_001fefc8");
+extern int divide_vector_xyz() __asm__("FUN_L00_001ff378");
 extern int FUN_L00_00211250();
 extern int FUN_L00_00257b90(int, int);
 extern s32 D_0015ED84;
@@ -1401,9 +1401,9 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
-extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
-extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
+extern void turn_e50(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
+extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
+extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
 extern void FUN_L08_002e2250_u(struct Moby *) __asm__("FUN_L08_002e2250");
 
@@ -1455,7 +1455,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
     case 1:
         waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
         target = &D_L08_0015FFD8_m[vars->target_index];
-        FUN_L00_00258278(moby,
+        turn_e50(moby,
                          fast_arc_tan(vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
                                       vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
                          &vars->turn_speed, 0.004f, 0.3f, 0.02f);
@@ -1515,7 +1515,7 @@ void FUN_L08_002e24e8(struct Moby *moby) {
         fast_add_rotations(turn * distance, next_heading);
         heading = fast_arc_tan(follower->path->points[next].f[0] - moby->pos.x,
                                follower->path->points[next].f[1] - moby->pos.y);
-        FUN_L00_0025be00(&moby->rot.z, &vars->turn_speed, heading,
+        approach_angle(&moby->rot.z, &vars->turn_speed, heading,
                          D_L08_00161C44 * DEG_TO_RAD * frame_time_sq, D_L08_00161C44 * DEG_TO_RAD * frame_time_sq,
                          D_L08_00161C48 * DEG_TO_RAD * frame_time);
         qcopy(&point, &follower->path->points[next]);
@@ -1559,14 +1559,14 @@ void FUN_L08_002e24e8(struct Moby *moby) {
             struct Moby *part = vars->links[i].part;
             if (part != NULL) {
                 Vec4 *drift = (Vec4 *)part->pvars;
-                FUN_L00_0025f090(moby, &part->pos, -1, 3.0f, 13.0f);
+                cart_burst(moby, &part->pos, -1, 3.0f, 13.0f);
                 subtract_vector_xyz(drift, &part->pos, &moby->pos);
                 normalize_vector_xyz(drift, drift, frame_time * 5.0f);
                 part->state = 1;
                 vars->links[i].part = NULL;
             }
         }
-        FUN_L00_0025f090(moby, &moby->pos, -1, 5.0f, 13.0f);
+        cart_burst(moby, &moby->pos, -1, 5.0f, 13.0f);
         mark_moby_for_removal(moby);
         break;
     }
@@ -1603,11 +1603,11 @@ extern char D_001413D0[];
 extern void sound302618(float, struct Moby *, int, void *) __asm__("FUN_L00_00263ac8");
 extern void wake302618(struct Moby *) __asm__("FUN_L00_0025a120");
 extern void *FUN_L00_0025a420(void *, int, int);
-extern void FUN_L00_0025c558(struct Moby *, void *, float, int, int, int);
-extern int FUN_L00_0025c698(struct Moby *, void *);
+extern void trooper_start_knockback(struct Moby *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
+extern int mine_fall(struct Moby *, void *) __asm__("FUN_L00_0025c698");
 extern void FUN_L00_00257470(struct Moby *, int, int);
-extern void FUN_L00_0025d538(struct Moby *, void *);
-extern void FUN_L00_0025f730(void *, float);
+extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
+extern void vec_limit302618(void *, float) __asm__("FUN_L00_0025f730");
 extern int FUN_L00_0025f878(struct Moby *);
 extern void FUN_L00_002a7210(struct Moby *, struct Moby *, float, float);
 extern void FUN_00212f90(struct Moby *, int, int, int);
@@ -1674,7 +1674,7 @@ void FUN_L08_002e2df0(struct Moby *moby) {
             data->f8C = speed10;
             data->bAD = 0;
         }
-        FUN_L00_0025c558(moby, data->x70, fast_arc_tan(moby->pos.x - hero.motion.pos.f[0], moby->pos.y - hero.motion.pos.f[1]), 4, 1, 0);
+        trooper_start_knockback(moby, data->x70, fast_arc_tan(moby->pos.x - hero.motion.pos.f[0], moby->pos.y - hero.motion.pos.f[1]), 4, 1, 0);
         data->b67 = 0x78;
         FUN_L00_00257470(moby, 0, -1);
         moby->state = 8;
@@ -1717,7 +1717,7 @@ void FUN_L08_002e2df0(struct Moby *moby) {
         follower = &data->follow[0];
         next = (follower->point + follower->path->count + follower->direction) % follower->path->count;
         heading = fast_arc_tan(follower->path->points[next].f[0] - moby->pos.x, follower->path->points[next].f[1] - moby->pos.y);
-        FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
+        turn_e50(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
         path = follower->path;
         qcopy(&point, &path->points[next]);
         if (path->points[next].f[3] == 0.0f) {
@@ -1767,7 +1767,7 @@ void FUN_L08_002e2df0(struct Moby *moby) {
                 FUN_L00_0024f7c8(moby, 0, &step);
                 active_count++;
                 subtract_vector_xyz(&point, &step, &other->pos);
-                FUN_L00_0025f730(&point, D_0015ED6C * 4.0f);
+                vec_limit302618(&point, D_0015ED6C * 4.0f);
                 add_vector_xyz(&other->pos, &other->pos, &point);
                 if (vector_length_xyz(&point) < 2.0f * D_0015ED6C) {
                     other->state = 4;
@@ -1795,7 +1795,7 @@ void FUN_L08_002e2df0(struct Moby *moby) {
         found = 0;
         next = (follower->point + follower->path->count + follower->direction) % follower->path->count;
         heading = fast_arc_tan(follower->path->points[next].f[0] - moby->pos.x, follower->path->points[next].f[1] - moby->pos.y);
-        FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
+        turn_e50(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
         qcopy(&point, &follower->path->points[next]);
         for (i = 0; i < 0x32; i++) {
             struct Moby *other = data->list[i];
@@ -1838,7 +1838,7 @@ void FUN_L08_002e2df0(struct Moby *moby) {
         follower = &data->follow[1];
         next = (follower->point + follower->path->count + follower->direction) % follower->path->count;
         heading = fast_arc_tan(follower->path->points[next].f[0] - moby->pos.x, follower->path->points[next].f[1] - moby->pos.y);
-        FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
+        turn_e50(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
         qcopy(&point, &follower->path->points[next]);
         subtract_vector_xyz(&step, &point, &moby->pos);
         normalize_vector_xyz(&step, &step, D_L08_00161C50 * D_0015ED6C);
@@ -1858,7 +1858,7 @@ void FUN_L08_002e2df0(struct Moby *moby) {
 
         heading = fast_arc_tan(hero.motion.pos.f[0] - moby->pos.x, hero.motion.pos.f[1] - moby->pos.y);
         hero_position = hero.motion.pos.f;
-        FUN_L00_00258278(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
+        turn_e50(moby, heading, &data->f224, 0.01f, 0.3f, 0.1f);
         distance = FUN_001f9b48(hero_position, &moby->pos);
         if (distance < 17.0f || FUN_L00_0025f878(moby) != 0) {
             SwarmPathFollower *follower;
@@ -1874,8 +1874,8 @@ void FUN_L08_002e2df0(struct Moby *moby) {
         break;
     }
     case 8:
-        if (FUN_L00_0025c698(moby, data->x70) & 3) {
-            FUN_L00_0025f090(moby, &moby->pos, -1, 1.0f, 13.0f);
+        if (mine_fall(moby, data->x70) & 3) {
+            cart_burst(moby, &moby->pos, -1, 1.0f, 13.0f);
             mark_moby_for_removal(moby);
             return;
         }
@@ -1885,7 +1885,7 @@ void FUN_L08_002e2df0(struct Moby *moby) {
         }
         break;
     }
-    FUN_L00_0025d538(moby, data->x60);
+    trooper_anim_finish(moby, data->x60);
 }
 #include "rnc/overlay/hud.h"
 
@@ -1990,7 +1990,7 @@ extern unsigned char *FUN_L00_002603d0(int);
 extern unsigned char *FUN_L00_00272060(float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
 extern unsigned char D_0014BEC0[][4];
 extern unsigned char D_L08_0015FC88_macro[] __asm__("D_L08_0015FC88") __attribute__((section(".sdata")));
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L00_0025f730_c(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void f_L00_00260668(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
@@ -2337,7 +2337,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         }
         if (FUN_L00_001f0d60(0.25f, &moby->pos, 0x22, moby) != 0) {
             subtract_vector_xyz(direction, &moby->pos, ((CollPos_4BE8 *)D_L08_00174660)->pos);
-            FUN_L00_001ff660(vars->velocity, vars->velocity, direction);
+            reflect1688(vars->velocity, vars->velocity, direction);
             if (fast_arc_tan(direction[2], func_001F9CE8_2E16A0(direction)) < 0.7853982f
                 && fast_arc_tan(((Coll_4BE8 *)((char *)D_L08_00174660 - 0x20))->n[2], func_001F9CE8_2E16A0(((CollPos_4BE8 *)D_L08_00174660)->n)) < 0.7853982f) {
                 Coll_4BE8 *coll = (Coll_4BE8 *)((char *)D_L08_00174660 - 0x20);
@@ -2660,7 +2660,7 @@ void FUN_L08_002e88d8(char *m) {
             char *t = *q;
             char *d2;
             d2 = *(char **)(t + 0x78);
-            FUN_L00_0025f090(m, t + 0x10, -1, 2.0f, 13.0f);
+            cart_burst(m, t + 0x10, -1, 2.0f, 13.0f);
             subtract_vector_xyz(d2, *q + 0x10, *(char **)(o1 + data + 0x64) + 0x10);
             normalize_vector_xyz(d2, d2, D_0015ED6C * 10.0f);
             (*q)[0x20] = 1;
@@ -2675,7 +2675,7 @@ void FUN_L08_002e88d8(char *m) {
                 base = b2 + off; sq = (char **)base;
                 if (*sq != 0) {
                     char *d2 = *(char **)(*sq + 0x78);
-                    FUN_L00_0025f090(m, *sq + 0x10, -1, 2.0f, 13.0f);
+                    cart_burst(m, *sq + 0x10, -1, 2.0f, 13.0f);
                     subtract_vector_xyz(d2, *sq + 0x10, *(char **)(data + off + 0x64) + 0x10);
                     normalize_vector_xyz(d2, d2, D_0015ED6C * 10.0f);
                     (*sq)[0x20] = 1;
@@ -2726,8 +2726,8 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
-extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
+extern void turn_e50(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
+extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
 extern void FUN_L08_002e8788(char *);
 extern void FUN_L08_002e88d8_u(struct Moby *) __asm__("FUN_L08_002e88d8");
@@ -2781,7 +2781,7 @@ void FUN_L08_002e8cd0(struct Moby *moby) {
     case 1:
         waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
         target = &D_L08_0015FFD8_m[vars->target_index];
-        FUN_L00_00258278(moby,
+        turn_e50(moby,
                          fast_arc_tan(vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
                                       vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
                          &vars->turn_speed, 0.004f, 0.3f, 0.02f);
@@ -2880,14 +2880,14 @@ void FUN_L08_002e8cd0(struct Moby *moby) {
             struct Moby *part = vars->parts[i].moby;
             if (part != NULL) {
                 Vec4 *drift = (Vec4 *)part->pvars;
-                FUN_L00_0025f090(moby, &part->pos, -1, 3.0f, 13.0f);
+                cart_burst(moby, &part->pos, -1, 3.0f, 13.0f);
                 subtract_vector_xyz(drift, &part->pos, &moby->pos);
                 normalize_vector_xyz(drift, drift, frame_time * 5.0f);
                 part->state = 1;
                 vars->parts[i].moby = NULL;
             }
         }
-        FUN_L00_0025f090(moby, &moby->pos, -1, 5.0f, 13.0f);
+        cart_burst(moby, &moby->pos, -1, 5.0f, 13.0f);
         mark_moby_for_removal(moby);
         break;
     }
@@ -2959,7 +2959,7 @@ void FUN_L08_002e9558(char *moby) {
         e += 0x10;
     } while (i < 8);
 }
-extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
+extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -3015,7 +3015,7 @@ mark_hit:
             u8 *vector;
             char *position = data;
             vector = chosen->moby->pvars;
-            FUN_L00_0025f090(moby, &chosen->moby->pos, -1, 2.0f, 13.0f);
+            cart_burst(moby, &chosen->moby->pos, -1, 2.0f, 13.0f);
             position += selected * 16;
             fast_vec_sub(vector, &chosen->moby->pos,
                          &(*(struct Moby **)(position + 0x64))->pos);
@@ -3036,7 +3036,7 @@ mark_hit:
                 if (candidate->moby != 0) {
                     u8 *vector = candidate->moby->pvars;
                     char *position = data;
-                    FUN_L00_0025f090(moby, &candidate->moby->pos, -1, 2.0f, 13.0f);
+                    cart_burst(moby, &candidate->moby->pos, -1, 2.0f, 13.0f);
                     position += index * 16;
                     fast_vec_sub(vector, &candidate->moby->pos,
                                  &(*(struct Moby **)(position + 0x64))->pos);

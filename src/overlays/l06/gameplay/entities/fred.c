@@ -1118,7 +1118,7 @@ extern float D_L06_001620C4 __asm__("D_L06_001620C4") __attribute__((sda));
 extern int D_L06_0015F880 __asm__("D_L06_0015F880");
 extern void FUN_L06_002f45f0(int);
 extern void FUN_L06_002f9948(int);
-extern int FUN_L01_0026e008(int, int);
+extern int count_group_e3528(int, int) __asm__("FUN_L01_0026e008");
 extern void FUN_L06_003047b8(char *);
 extern int FUN_L06_003047f8(const u8 *);
 extern void FUN_L06_00302400(struct Moby *, int);
@@ -1176,7 +1176,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         m[0x30] = 0xFF;
         return;
     case 1:
-        if (FUN_L01_0026e008(*(int *)(d + 0x1C), -1) != 0) return;
+        if (count_group_e3528(*(int *)(d + 0x1C), -1) != 0) return;
         FUN_L06_003047b8(D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8));
         if (FUN_L06_003047f8((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8)) != 1) return;
         m[0x20] = 2;

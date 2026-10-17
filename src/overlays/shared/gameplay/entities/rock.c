@@ -38,9 +38,9 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
-extern s32 FUN_L00_0025d808(void *, void *, s32 *, f32 *, s32, f32);
-extern f32 FUN_L00_0025b8c0(f32 *value, f32 target, f32 *speed, f32 accel, f32 decel, f32 max);
+extern s32 near_6570(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32) __asm__("FUN_L00_0025df68");
+extern s32 sample_path(void *, void *, s32 *, f32 *, s32, f32) __asm__("FUN_L00_0025d808");
+extern f32 vendor_spring(f32 *value, f32 target, f32 *speed, f32 accel, f32 decel, f32 max) __asm__("FUN_L00_0025b8c0");
 
 /* Grind rail: measures its paths once, then while the hero is in control mode 0x10 snaps it to the nearest path
    point in range and pulls it along, faster on level 1 the more rail is left. */
@@ -84,7 +84,7 @@ void FUN_L01_002f6328(struct Moby *m) {
     best_path = 0;
     for (k = 0; k < d->count; k++) {
         path = D_L01_001B0930[d->paths[k]];
-        FUN_L00_0025df68(path, &hero.motion.pos, &pt, &seg, &t, 0, 999.0f, 5.0f, 0.0f);
+        near_6570(path, &hero.motion.pos, &pt, &seg, &t, 0, 999.0f, 5.0f, 0.0f);
         dist = vector_distance(&hero.motion.pos, &pt);
         if (dist < best) {
             best_path = path;
@@ -97,7 +97,7 @@ void FUN_L01_002f6328(struct Moby *m) {
     if (best_path == 0) {
         return;
     }
-    end = FUN_L00_0025d808(best_path, &pt, &best_seg, &best_t, 0, 0.3f);
+    end = sample_path(best_path, &pt, &best_seg, &best_t, 0, 0.3f);
     if (d->range < best) {
         return;
     }
@@ -133,7 +133,7 @@ void FUN_L01_002f6328(struct Moby *m) {
         rate = frame_time * 5.0f;
         pull.f[2] = 0.0f;
         drag = -vector_length_xy(&pull);
-        FUN_L00_0025b8c0(&drag, 0.0f, &hero.unk9E0, frame_scale_sq * 0.008f, frame_scale_sq * 0.3f, rate);
+        vendor_spring(&drag, 0.0f, &hero.unk9E0, frame_scale_sq * 0.008f, frame_scale_sq * 0.3f, rate);
         {
             f32 len = fast_vec_length(&pull);
             if (len < hero.unk9E0) {
@@ -490,7 +490,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern void FUN_L00_0026ced0(void *, void *, s32, s32, f32, s32);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -528,7 +528,7 @@ void rock_update(struct Moby *m) {
             m->rot.x = random_float_between(-3.1415927f, 3.1415927f);
             m->rot.y = random_float_between(-3.1415927f, 3.1415927f);
             m->rot.z = random_float_between(-3.1415927f, 3.1415927f);
-            FUN_L00_001ff660(&d->vel, &d->vel, &D_L01_001742C0.normal_x);
+            reflect1688(&d->vel, &d->vel, &D_L01_001742C0.normal_x);
             fast_vec_scale(&d->vel, &d->vel, random_float_between(0.07f, 0.13f));
             fast_vec_add(&d->vel, &d->vel, &v);
             fast_vec_normalize(&D_L01_001742C0.normal_x, &D_L01_001742C0.normal_x, 0.1f);
@@ -1638,7 +1638,7 @@ void FUN_L01_003089f0(char *m) {
 extern int D_0015ED84; /* no foreign declaration */
 extern int moby_killed[] __asm__("D_L01_001BA950");
 extern s32 D_0014C190[][64];
-extern void FUN_L01_0026e0e0(char *arg, int val);
+extern void set_group_state_30ca80(char *arg, int val) __asm__("FUN_L01_0026e0e0");
 
 void FUN_L01_00308b28(char *moby) {
     int d = D_0015ED84 << 8;
@@ -1649,7 +1649,7 @@ void FUN_L01_00308b28(char *moby) {
         1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
     t = *(unsigned char *)(moby + 0x21);
     if (t != 0xFF)
-        FUN_L01_0026e0e0((char *)t, 1);
+        set_group_state_30ca80((char *)t, 1);
     else
         moby[0x20] = 1;
 }

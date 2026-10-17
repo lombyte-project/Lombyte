@@ -530,12 +530,12 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L12_002400d0(int, int);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_001fff28(void *, int, float);
+extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void FUN_L00_00211250(void);
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int);
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_002607d0(int);
 extern void fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
@@ -729,7 +729,7 @@ void FUN_L12_00303540(struct Moby *moby) {
             if (data->f74 < D_L12_00161EA8) {
                 data->f74 = D_L12_00161EA8;
             }
-            FUN_L00_001fff28(data->f10, 1, -data->f74);
+            set_joint_67e8(data->f10, 1, -data->f74);
             if (moby->anim_flags & 2) {
                 blend_moby_animation_c(moby, 5, 0, 1);
             }
@@ -797,7 +797,7 @@ void FUN_L12_00303540(struct Moby *moby) {
             qcopy(v, ((Cam_304920 *)D_L12_00167180_304920)->f140);
             fast_add_rotations_cf(v, v, a, b, c);
             t = random_float_between_c(0.5f, 1.3f);
-            FUN_L00_0025e450(moby, D_L12_0015F580_f, v, 0.0f, 0.0f, 7, 0xF, 0x19, t, t * 0.57f, 10.0f, 3, 0.7f, 0.0f, 0, 0, -1, 0);
+            spawn_explosion(moby, D_L12_0015F580_f, v, 0.0f, 0.0f, 7, 0xF, 0x19, t, t * 0.57f, 10.0f, 3, 0.7f, 0.0f, 0, 0, -1, 0);
             data->fAE = scale_game_frames_alt(random_int_between(5, 0xD));
         }
         if (fast_dec_timer_s16(&data->fAC)) {

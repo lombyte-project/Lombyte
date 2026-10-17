@@ -22,7 +22,8 @@ void random_vector(float *out, float lo, float hi) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258E58), where it is exact; names translated to the US level program. */
 
 /* Cubic interpolation through four points a..d at t. */
-float FUN_L00_00257e20(float a, float b, float c, float d, float t) {
+float cubic_hermite_scalar(float a, float b, float c, float d, float t) __asm__("FUN_L00_00257e20");
+float cubic_hermite_scalar(float a, float b, float c, float d, float t) {
     float p = (d - c) - (a - b);
     float q = (a - b) - p;
     float t2 = t * t;

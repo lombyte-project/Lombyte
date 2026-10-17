@@ -194,7 +194,7 @@ extern void blend_moby_animation(VendMoby *, s32, s32, s32) __asm__("FUN_00212f9
 extern void mark_moby_for_removal(VendMoby *) __asm__("FUN_0020c828");
 extern s32 vend_rand(s32) __asm__("FUN_001f96f8");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern void FUN_L00_0025be00(void *, f32, void *, f32, f32, f32);
+extern void approach_angle(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_0025be00");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -210,15 +210,15 @@ extern f32 compute_interpolated_record_value(VendMoby *) __asm__("FUN_0020c9e0")
 extern s32 collision_line(void *, void *, s32, VendMoby *, VendQuery *) __asm__("FUN_001efa68");
 extern s32 vend_2040(VendMoby *) __asm__("FUN_L00_002e2040");
 extern s32 aim_ok_67e8(VendMoby *, void *, void *) __asm__("FUN_L00_002e2190");
-extern s32 FUN_L00_0025c698(VendMoby *, void *);
-extern void FUN_L00_0025f090(VendMoby *, void *, s32, f32, f32);
+extern s32 mine_fall(VendMoby *, void *) __asm__("FUN_L00_0025c698");
+extern void cart_burst(VendMoby *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263e30(VendMoby *, s32, s32, s32, s32, s32, s32);
 extern void debris302618(VendMoby *, s32, void *, void *, s32, s32, f32, void *, void *,
                              void *) __asm__("FUN_L00_00263fd8");
 extern void FUN_L00_002e1aa8();
 
 #define VEND_TURN(m, v, ang, k)                                                                    \
-    FUN_L00_0025be00(&(m)->unk40.f[2], ang, &(v)->turnVel, frame_time_sq *(k), frame_time_sq *(k),       \
+    approach_angle(&(m)->unk40.f[2], ang, &(v)->turnVel, frame_time_sq *(k), frame_time_sq *(k),       \
                      frame_time * 12.566371f)
 #define VEND_ANIM(m, a, t)                                                                         \
     if ((m)->anim != (a))                                                                          \
@@ -402,14 +402,14 @@ void FUN_L00_002e0b88(VendMoby *moby) {
         }
         break;
     case 7:
-        if (FUN_L00_0025c698(moby, vars->unk70) & 0x140) {
+        if (mine_fall(moby, vars->unk70) & 0x140) {
             moby->state = 3;
             VEND_ANIM(moby, 1, vend_rand(10));
         }
         break;
     case 8:
-        if (FUN_L00_0025c698(moby, vars->unk70) & 0x140) {
-            FUN_L00_0025f090(moby, &moby->pos, -1, 0.75f, 13.0f);
+        if (mine_fall(moby, vars->unk70) & 0x140) {
+            cart_burst(moby, &moby->pos, -1, 0.75f, 13.0f);
             FUN_L00_00263e30(moby, 0x7AB, 1, 0x7AB, 1, 4, 0);
             debris302618(moby, 0x78D, &moby->pos, &moby->unk40, 0, 0, 0.0f, D_L00_0015F580,
                              D_L00_0015F580, D_L00_0015F580);
@@ -504,9 +504,9 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern TrollColl *find_moby_hit(TrollMoby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void hit_reaction(TrollMoby *, TrollColl *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
 extern void trooper_knockback_arc(TrollVec *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
-extern void FUN_L00_0025c558(TrollMoby *, void *, s32, s32, s32, f32);
-extern void FUN_L00_0025d458(TrollMoby *, void *);
-extern void FUN_L00_0025d538(TrollMoby *, void *);
+extern void trooper_start_knockback(TrollMoby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
+extern void trooper_anim_update(TrollMoby *, void *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(TrollMoby *, void *) __asm__("FUN_L00_0025d538");
 extern s32 FUN_L00_0025fcb8(TrollMoby *, f32, void *);
 extern void activate_effect_l08(TrollMoby *, void *, s32, s32, void *, s32, f32) __asm__("FUN_L00_0025ff38");
 extern void FUN_L00_002e2040(TrollMoby *);
@@ -560,30 +560,30 @@ void FUN_L00_002e1678(TrollMoby *m) {
             m->flags &= ~0x1000;
             v.q = coll->pos.q;
             trooper_knockback_arc(&v, &angle, &vars->unk88, &vars->unk8C);
-            FUN_L00_0025c558(m, vars->unk70, 0xB, 1, 0, angle);
+            trooper_start_knockback(m, vars->unk70, 0xB, 1, 0, angle);
             vars->unkC0 = 7.0f;
             vars->unkC4 = 16.0f;
             m->state = 8;
             m->unk94 = 0;
             vars->unk67 = 0x78;
-            FUN_L00_0025d458(m, anim);
+            trooper_anim_update(m, anim);
             FUN_L00_00257470(m, 0, -1);
         } else {
             vars->unk88 = D_L00_00161BDC * frame_time * 0.35f;
             vars->unk8C = D_L00_00161BE0 * frame_time * 0.5f;
             v.q = coll->pos.q;
             trooper_knockback_arc(&v, &unused, &vars->unk88, &vars->unk8C);
-            FUN_L00_0025c558(m, vars->unk70, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
+            trooper_start_knockback(m, vars->unk70, 8, 1, 0, fast_arc_tan(coll->pos.f[0], coll->pos.f[1]));
             vars->unkC4 = vars->unkC0 = -1.0f;
             m->state = 7;
             vars->unk67 = 0xFA;
             vars->unk26 = scale_game_frames(0x3C);
-            FUN_L00_0025d458(m, anim);
+            trooper_anim_update(m, anim);
         }
         FUN_L00_002e2040(m);
     }
     m->unkA4 = 0xFF;
-    FUN_L00_0025d538(m, anim);
+    trooper_anim_finish(m, anim);
     if (m->state == 1) {
         a = D_L00_001B04B0[vars->unk1B4];
         activate_effect_l08(m, &vars->target, 0, 0, a->data, a->unk0, 64.0f);

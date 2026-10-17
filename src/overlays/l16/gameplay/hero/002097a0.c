@@ -144,7 +144,7 @@ void FUN_L16_002097a0(void) {
 
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_0025f730(void *a, float x);
+extern void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");
 
 void FUN_L16_0020f8b0(void) {
     char tmp[16];
@@ -155,7 +155,7 @@ void FUN_L16_0020f8b0(void) {
     fast_vec_normalize(tmp, q, *(float *)(q + 0x194));
     fast_vec_add(p, p, tmp);
     qcopy(p - 0x690, p);
-    FUN_L00_0025f730(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
+    vec_limit302618(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
 }
 typedef union {
     OvlQuad q;
@@ -170,7 +170,7 @@ s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
-s32 FUN_L00_0025e3b8(s32);
+s32 f5e3b8_20d6b0(s32) __asm__("FUN_L00_0025e3b8");
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
@@ -257,7 +257,7 @@ void FUN_L16_0020ffb0(void) {
         goto d1;
     }
     if (HH.moby != 0) {
-        if (FUN_L00_0025e3b8(HH.moby)) {
+        if (f5e3b8_20d6b0(HH.moby)) {
             hero.unk30A = 1;
             if ((u32)(hero.state.control_mode - 0x15) < 2) {
                 f2334d0_2133a8((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);

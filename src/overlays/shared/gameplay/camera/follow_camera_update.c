@@ -937,7 +937,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L00_00166DD8 __attribute__((section(".data")));
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
-extern float FUN_L00_00257e20(float, float, float, float, float);
+extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern float FUN_L00_00257ef0(float, float, float);
 extern float cosine_interpolate_alt(float, float, float) __asm__("FUN_002133d0");
 extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
@@ -989,7 +989,7 @@ void FUN_L00_002eae20(void *arg) {
                 F(c, 0x1C) = FUN_L00_00257ef0(F(c, 0x1C), F(c, 8), t);
             }
             F(c, 0x24) = F(c, 0x24) + (F(c, 0x10) - F(c, 0x24)) *
-                                          FUN_L00_00257e20(F(c, 0x44), 0, 1.0f, F(c, 0x48), t);
+                                          cubic_hermite_scalar(F(c, 0x44), 0, 1.0f, F(c, 0x48), t);
             F(c, 0x20) = FUN_L00_00257ef0(F(c, 0x20), F(c, 0xC), t);
             FUN_L00_00257f70(c + 0x30, c + 0x30, &hero.motion.pos, t);
             FUN_L00_001ed580(m + 0x30, c + 0x1C, c + 0x30);

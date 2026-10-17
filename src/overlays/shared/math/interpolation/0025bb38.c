@@ -39,7 +39,8 @@ extern void FUN_L00_0025b798_0025bc98(float *, float, float, float,
 extern float FUN_001fa580_0025bc98(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f99c0_0025bc98(float) __asm__("FUN_001f99c0");
 
-float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c) {
+float fast_subtract_rotations_cf(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
+float fast_subtract_rotations_cf(float *p, float *q, int n, float x, float a, float b, float c) {
     float d;
     if (n == 2) {
         if ((0.0f < x && *p < 0.0f) || (x < 0.0f && 0.0f < *p)) {
@@ -67,7 +68,8 @@ extern float FUN_001f9988_25be00(float) __asm__("FUN_001f9988");
 extern float FUN_00213ed8_25be00(float, float, float *) __asm__("FUN_00213ed8");
 extern void FUN_L00_0025bc00_25be00(float *, void *, float, float) __asm__("FUN_L00_0025bc00");
 
-float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float accel, float maxv) {
+float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
+float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) {
     float d;
     float v;
     float stop;
@@ -111,7 +113,8 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D038), where it is exact; names translated to the US level program. */
 
-unsigned int FUN_L00_0025bfe0(float r, float g, float b, float a) {
+unsigned int col_26fd28(float r, float g, float b, float a) __asm__("FUN_L00_0025bfe0");
+unsigned int col_26fd28(float r, float g, float b, float a) {
     unsigned int x = truncate_float_to_s32(r * 255.0f) & 0xFF;
     unsigned int y = truncate_float_to_s32(g * 255.0f) & 0xFF;
     unsigned int z = truncate_float_to_s32(b * 255.0f) & 0xFF;
@@ -155,7 +158,8 @@ void FUN_L00_0025c088(int *a, int *b, int *c, int mask) {
 extern void FUN_L00_0025c088(int *, int *, int *, int);
 
 /* Splits colour c into bytes, passes the low three through 0025c088 with mask, and repacks them. */
-unsigned FUN_L00_0025c0e8(unsigned c, int mask) {
+unsigned col_2af5b8(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
+unsigned col_2af5b8(unsigned c, int mask) {
     int v[3];
     unsigned a;
     unsigned t;

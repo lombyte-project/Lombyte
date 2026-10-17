@@ -344,7 +344,7 @@ typedef struct {
     f32 x, y, z, w;
 } V __attribute__((aligned(16)));
 void FUN_L00_001ff318(V *, V *, f32);
-void FUN_L00_001ff290(V *, V *, V *);
+void combine_velocity1688(V *, V *, V *) __asm__("FUN_L00_001ff290");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08(void *);
 void FUN_L00_00271ec8(u8 *m) {
@@ -353,7 +353,7 @@ void FUN_L00_00271ec8(u8 *m) {
     u32 c;
     FUN_L00_001ff318(&t, v, 0.95f);
     v->z += frame_time_sq * 5.0f;
-    FUN_L00_001ff290(&t, (V *)(m + 0x10), v);
+    combine_velocity1688(&t, (V *)(m + 0x10), v);
     c = *(u32 *)(m + 4) + 0xFE000000;
     *(u32 *)(m + 4) = c;
     if ((c & 0xFF000000) - 1 > 0x5EFFFFFF || fast_dec_timer_s16(m + 0xA) != 0) {

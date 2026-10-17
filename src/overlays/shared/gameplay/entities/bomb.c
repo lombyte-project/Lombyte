@@ -1005,7 +1005,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
 extern char D_L00_0015F580[] __attribute__((section(".sdata")));
 extern float D_L00_00161890_gp __asm__("D_L00_00161890") __attribute__((sda));
-extern float FUN_L00_00257e20(float, float, float, float, float);
+extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_00257b90_c2(int, int) __asm__("FUN_L00_00257b90");
@@ -1019,7 +1019,7 @@ extern unsigned char *FUN_L00_00275158(char *a, char *b, int c, float f);
 extern unsigned char D_0013E05A[];
 extern unsigned char D_L00_00173E80[];
 extern void *FUN_L00_0026dd20(void *, void *, unsigned, int, float);
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_002cbcc0_c(unsigned char *, int) __asm__("FUN_L00_002cbcc0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
@@ -1100,7 +1100,7 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float vx, flo
                 spark[1] = random_float_between_c2(-1.0f, 1.0f);
                 spark[2] = random_float_between_c2(-1.0f, 1.0f);
                 *(w128 *)scaled = *(w128 *)spark;
-                FUN_L00_001ff660(spark, direction, D_L00_00173E80);
+                reflect1688(spark, direction, D_L00_00173E80);
                 length = fast_vec_length(spark);
                 fast_vec_normalize(start, start, length * 0.5f);
                 add_vector_xyz(spark, spark, start);
@@ -1122,7 +1122,7 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float vx, flo
                 mark_moby_for_removal_c2(moby);
                 return 0;
             }
-            FUN_L00_001ff660(direction, direction, D_L00_00173E80);
+            reflect1688(direction, direction, D_L00_00173E80);
             *(float *)(moby + 0x48) = fast_arc_tan_c2(direction[0], direction[1]);
             length = vector_length_xy(direction);
             *(float *)(moby + 0x44) = -fast_arc_tan_c2(length, direction[2]);
@@ -1135,7 +1135,7 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float vx, flo
                     *(float *)(trail + 0xC) = random_float_between_c2(D_L00_00161870, D_L00_00161874);
                     index = convert_integer_to_float_c(i);
                     fraction = index / convert_integer_to_float_c(16);
-                    blend = FUN_L00_00257e20(-1.5f, 0.0f, 1.0f, 0.0f, fraction);
+                    blend = cubic_hermite_scalar(-1.5f, 0.0f, 1.0f, 0.0f, fraction);
                     *(float *)(trail + 0xC) = *(float *)(trail + 0xC) + (D_L00_00161878 - *(float *)(trail + 0xC)) * blend;
                     result = truncate_float_to_s32_c(blend * -64.0f + 128.0f);
                     *(int *)(trail + 4) = (result << 24) | 0xFFFFFF;
@@ -1999,7 +1999,7 @@ extern float D_0015ED60;
 extern float D_0015ED64;
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern float FUN_L00_001ff430(void *);
+extern float dot1688(void *) __asm__("FUN_L00_001ff430");
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
@@ -2009,7 +2009,7 @@ extern int FUN_L00_00257b90_c(int, int) __asm__("FUN_L00_00257b90");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 rand(void);
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
@@ -2020,7 +2020,7 @@ extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
-void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9, float fC, float fD, float fE, float fF, int k10, float fG, int k11, int s16, int s18, unsigned char flag);
+void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9, float fC, float fD, float fE, float fF, int k10, float fG, int k11, int s16, int s18, unsigned char flag) __asm__("FUN_L00_0025e450");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 void rocket_update(char *m) __asm__("FUN_L00_002cd1f0");
@@ -2085,10 +2085,10 @@ void rocket_update(char *m) {
             subtract_vector_xyz(&u.v.a, &u.v.c, d + 0x10);
             qcopy(d, &u.v.c);
             {
-                float r1 = FUN_L00_001ff430(&u.v.b);
+                float r1 = dot1688(&u.v.b);
                 float fB = (u.v.b.f[0] * u.v.a.f[0] + u.v.b.f[1] * u.v.a.f[1] + u.v.b.f[2] * u.v.a.f[2]) * -2.0f;
                 float fA = *(float *)(d + 0x30) * *(float *)(d + 0x30) - r1;
-                float r2f = FUN_L00_001ff430(&u.v.a);
+                float r2f = dot1688(&u.v.a);
                 float sq = square_root_scalar(fB * fB - (4.0f * fA) * (-r2f));
                 float t1 = (-fB + sq) / (fA + fA);
                 float t2 = (-fB - sq) / (fA + fA);
@@ -2195,7 +2195,7 @@ done:
                 || *(short *)(p + 0xA6) == 0x1C9 || *(short *)(p + 0xA6) == 0) goto keep;
             m[0xBC] = 2;
             qcopy(m + 0x10, gg + 0x20);
-            FUN_L00_001ff660(&dir, &v50, gg + 0x40);
+            reflect1688(&dir, &v50, gg + 0x40);
             fast_vec_normalize(&dir, &dir, D_0015ED6C + D_0015ED6C);
             func_L00_0025F4A8_alt(m, &dir, 0, 0.0f, 0.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_c(m);
@@ -2204,7 +2204,7 @@ done:
             if (*(int *)(gg + 0x1C) <= 0) goto keep;
             m[0xBC] = 1;
             qcopy(m + 0x10, gg + 0x20);
-            FUN_L00_001ff660(&dir, &v50, gg + 0x40);
+            reflect1688(&dir, &v50, gg + 0x40);
             fast_vec_normalize(&dir, &dir, D_0015ED6C + D_0015ED6C);
             func_L00_0025F4A8_alt(m, &dir, 0, 0.0f, 1.0f, 10, 3, 9, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_c(m);
@@ -2878,7 +2878,7 @@ extern int D_L00_0015F5CC_macro __asm__("D_L00_0015F5CC") __attribute__((section
 extern void *D_001413D0 __attribute__((section(".data")));
 extern s32 D_001413DC __attribute__((section(".data")));
 
-extern s32 FUN_L00_0025e3b8(void *);
+extern s32 f5e3b8_20d6b0(void *) __asm__("FUN_L00_0025e3b8");
 extern void FUN_L00_002d1428(struct Moby *);
 extern Contact *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int fun_00213928(void *, void *, void *, int, int *, int *, int *, int) __asm__("FUN_00213928");
@@ -2891,9 +2891,9 @@ extern void break_crate(struct Moby *, int, Contact *) __asm__("FUN_L00_002d09b8
 extern void crate_drop_bolts(struct Moby *) __asm__("FUN_L00_002d0538");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
-extern int FUN_L00_001fefc8(void *);
+extern int dec_byte_timer_edc30(void *) __asm__("FUN_L00_001fefc8");
 extern int FUN_L00_002591d0(struct Moby **, int, int, int);
-extern int FUN_L00_002592b8(struct Moby **, struct Moby *, int, int);
+extern int f2592b8_2591d0(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00_002592b8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 void crate_update(struct Moby *moby) __asm__("FUN_L00_002cf218");
@@ -2912,12 +2912,12 @@ void crate_update(struct Moby *moby) {
 
     pv = (CrateVars *)moby->pvars;
     if (pv->rider != NULL) {
-        if (FUN_L00_0025e3b8(pv->rider) == 0) {
+        if (f5e3b8_20d6b0(pv->rider) == 0) {
             pv->rider = NULL;
         }
     }
     if (pv->below != NULL) {
-        if (FUN_L00_0025e3b8(pv->below) == 0) {
+        if (f5e3b8_20d6b0(pv->below) == 0) {
             pv->below = NULL;
         }
     }
@@ -3086,7 +3086,7 @@ void crate_update(struct Moby *moby) {
         if (fast_bsphere_check(&burst.pos, moby->draw_dist) != -1) {
             break;
         }
-        if (!FUN_L00_001fefc8(&pv->unkC9)) {
+        if (!dec_byte_timer_edc30(&pv->unkC9)) {
             break;
         }
         if (moby->group == 0xFF) {
@@ -3143,7 +3143,7 @@ void crate_update(struct Moby *moby) {
                     break;
                 }
             }
-            FUN_L00_002592b8(&it, it, 0, 0);
+            f2592b8_2591d0(&it, it, 0, 0);
         }
         if (moby->state != 1) {
             moby->pos.z = probe_ground_height(&moby->pos, 0, 0.5f);
@@ -3184,7 +3184,7 @@ void crate_update(struct Moby *moby) {
         break;
 
     case 4:
-        if (FUN_L00_001fefc8(&moby->command)) {
+        if (dec_byte_timer_edc30(&moby->command)) {
             moby->state = 1;
             moby->flags &= ~1;
         }

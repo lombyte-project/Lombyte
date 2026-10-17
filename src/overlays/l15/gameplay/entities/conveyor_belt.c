@@ -220,11 +220,11 @@ extern float D_0015ED6C;
 extern float D_L15_00161FBC __attribute__((sda));
 extern int coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60();
-extern int FUN_L00_001ff660();
-extern int FUN_L00_0025e450();
+extern int reflect1688() __asm__("FUN_L00_001ff660");
+extern int spawn_explosion() __asm__("FUN_L00_0025e450");
 extern void *suck_get_aim_height(struct Moby_A4D88 *) __asm__("FUN_002141f8");
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -870,7 +870,7 @@ extern int D_L15_0015FFD8;
 extern float D_0013F3D0[];
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -898,7 +898,7 @@ void FUN_L15_002ec030(struct Moby *moby) {
         if (moby->state != 0) {
             subtract_vector_xyz(tmp, (char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10, data + 4);
             *(OvlQuad *)vec = *(OvlQuad *)tmp;
-            FUN_L00_001ff290(tmp, &moby->pos, vec);
+            combine_velocity1688(tmp, &moby->pos, vec);
         }
         *(OvlQuad *)(data + 4) = *(OvlQuad *)((char *)D_L15_0015FFD8 + data[3] * 0x100 + 0x10);
     }
@@ -931,7 +931,7 @@ void FUN_L15_002ec030(struct Moby *moby) {
             vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
             vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
             vec[2] = 0.0f;
-            FUN_L00_001ff290(&position, vec, &moby->pos);
+            combine_velocity1688(&position, vec, &moby->pos);
             clear_u64_value(tmp);
             tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             tmp[1] = 1.5707964f;
@@ -940,7 +940,7 @@ void FUN_L15_002ec030(struct Moby *moby) {
             vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
             vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 3.0f;
             vec[2] = 0.0f;
-            FUN_L00_001ff290(&position, vec, &moby->pos);
+            combine_velocity1688(&position, vec, &moby->pos);
             vec[2] = probe_ground_height(vec, 0, 0.5f);
             clear_u64_value(tmp);
             tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
@@ -978,7 +978,7 @@ void FUN_L15_002ec030(struct Moby *moby) {
             vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             vec[2] = 0.0f;
-            FUN_L00_001ff290(&position, vec, &moby->pos);
+            combine_velocity1688(&position, vec, &moby->pos);
             clear_u64_value(tmp);
             tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             tmp[1] = 1.5707964f;
@@ -988,7 +988,7 @@ void FUN_L15_002ec030(struct Moby *moby) {
             vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 0.5f;
             vec[2] = 0.0f;
-            FUN_L00_001ff290(&position, vec, &moby->pos);
+            combine_velocity1688(&position, vec, &moby->pos);
             clear_u64_value(tmp);
             tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
             tmp[1] = 1.5707964f;

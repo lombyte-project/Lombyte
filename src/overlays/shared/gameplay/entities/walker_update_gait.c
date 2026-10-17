@@ -38,7 +38,7 @@ int walker_gait_mask(float *a, float v) {
     }
     return r;
 }
-void FUN_L00_001fff28(void *, s32, f32);
+void set_joint_67e8(void *, s32, f32) __asm__("FUN_L00_001fff28");
 void FUN_L00_002a1538(u8 *a0) {
     s32 i;
     u8 *r = a0 + 0x130;
@@ -46,9 +46,9 @@ void FUN_L00_002a1538(u8 *a0) {
     for (i = 0; i < 2; i++) {
         u8 *p = a0 + i * 0xB0;
         if (p[0x161] != 0)
-            FUN_L00_001fff28(q + i * 0xB0, 2, 0.0f);
+            set_joint_67e8(q + i * 0xB0, 2, 0.0f);
         if (p[0x121] != 0)
-            FUN_L00_001fff28(r + i * 0xB0, 2, 0.0f);
+            set_joint_67e8(r + i * 0xB0, 2, 0.0f);
         *(s32 *)(p + 0x104) = 0;
         *(s32 *)(p + 0xFC) = 0;
     }

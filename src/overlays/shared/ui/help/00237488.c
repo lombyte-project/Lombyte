@@ -413,7 +413,7 @@ extern u8 D_L05_0017AB20[] __attribute__((section(".data")));
 extern int FUN_L05_002388a0(float, float, float *) __asm__("FUN_L00_0020a240");
 extern float FUN_L00_0022e0f0(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern s32 FUN_L00_0025e3b8(s32);
+extern s32 f5e3b8_20d6b0(s32) __asm__("FUN_L00_0025e3b8");
 extern void FUN_L00_0025c9d8(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern int FUN_L00_0021e8d8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float FUN_L00_0022e138(void *, void *) __asm__("FUN_001f9b48");
@@ -445,7 +445,7 @@ void FUN_L05_0024bdc0(void) {
             hero.unk250 = fast_arc_tan(wall->normal_z, normal_xy);
             if (wall->moby != 0) {
                 hero.unk255 = 1;
-                if (FUN_L00_0025e3b8(wall->moby)) hero.unk254 = 1;
+                if (f5e3b8_20d6b0(wall->moby)) hero.unk254 = 1;
             }
         }
     }
@@ -612,7 +612,7 @@ extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0015ED84; /* no foreign declaration */
-extern int FUN_L00_001fefc8(void *);
+extern int dec_byte_timer_edc30(void *) __asm__("FUN_L00_001fefc8");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d498(int);
 extern int FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
@@ -935,7 +935,7 @@ int FUN_L05_00251be8(void) {
             if (item == 0) {
                 break;
             }
-            if (FUN_L00_001fefc8(&(*(Hero *)((char *)&hero)).unk8CF) == 2 && (*(Hero *)((char *)&hero)).unk8CE != 0) {
+            if (dec_byte_timer_edc30(&(*(Hero *)((char *)&hero)).unk8CF) == 2 && (*(Hero *)((char *)&hero)).unk8CE != 0) {
                 (*(Hero *)((char *)&hero)).unk8CE--;
             }
             if ((*(Hero *)((char *)&hero)).unk8CE == 0) {
@@ -1114,7 +1114,7 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_001fa6d0(f32);
 extern f32 FUN_001f9b48(void *, void *);
 extern s32 FUN_L00_002591d0(void **, s32, s32, s32);
-extern s32 FUN_L00_002592b8(void **, void *, s32, s32);
+extern s32 f2592b8_2591d0(void **, void *, s32, s32) __asm__("FUN_L00_002592b8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
 extern s32 D_0013D4B8;
@@ -1151,7 +1151,7 @@ void FUN_L05_00253b48(void) {
                             allocate_voice_for_target_entry(1, 0, hero.unk86C);
                     }
                 }
-                FUN_L00_002592b8((void **)&first, first, 0, 0);
+                f2592b8_2591d0((void **)&first, first, 0, 0);
             } while (first != 0);
         }
     }
@@ -1187,7 +1187,7 @@ void FUN_L05_00253b48(void) {
                             }
                         }
                     }
-                    FUN_L00_002592b8((void **)&second, second, 0, 0);
+                    f2592b8_2591d0((void **)&second, second, 0, 0);
                 } while (second != 0);
             }
         }
@@ -1211,7 +1211,7 @@ void FUN_L05_00253b48(void) {
                 *(s32 *)((u8 *)g + 0x20B8) = 0x24;
                 weapon_ammo_counts[36]++;
             }
-            FUN_L00_002592b8((void **)&third, third, 0, 0);
+            f2592b8_2591d0((void **)&third, third, 0, 0);
         }
     }
 }

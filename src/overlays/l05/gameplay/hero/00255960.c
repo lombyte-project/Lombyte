@@ -118,7 +118,7 @@ extern void FUN_L00_002382a0(void);
 extern void FUN_L00_00239cc8(void);
 extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
-extern void FUN_L00_0025f730(void *a, float x);
+extern void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void FUN_L01_00227e48(int a0, int a1, int a2);
 extern void FUN_L01_00232290(void);
 extern void FUN_L01_002405a0(void);
@@ -1291,7 +1291,7 @@ void FUN_L05_00255960(void) {
                                 set_hero_animation(0xC, 9, -1.0f);
                             }
                             gravity_set_z(hero.motion.unk150.f, hero.motion.unk150.f, 0.0f);
-                            FUN_L00_0025f730(hero.motion.unk150.f, frame_time * 7.0f);
+                            vec_limit302618(hero.motion.unk150.f, frame_time * 7.0f);
                             hero.unk1C4 = scale_game_frames(7);
                             if (hero.state.prev == 0x2D) {
                                 hero.unk1C4 = scale_game_frames(0xA);
@@ -1314,7 +1314,7 @@ void FUN_L05_00255960(void) {
                                 break;
                             }
                             set_hero_animation(6, 0, scale_game_frames(0xC));
-                            FUN_L00_0025f730(hero.motion.unk150.f, frame_time * 7.7f);
+                            vec_limit302618(hero.motion.unk150.f, frame_time * 7.7f);
                             break;
                         }
                         hero_set_state(HERO_STATE_IDLE, 1);

@@ -694,7 +694,7 @@ extern int scale_game_frames_i(int) __asm__("FUN_001f96f8");
 extern short D_L18_00161988 __attribute__((sda));
 extern float D_L18_00161994 __attribute__((sda));
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern void FUN_L00_00258830(int, int, float, float, float, int);
+extern void push302618(int, int, float, float, float, int) __asm__("FUN_L00_00258830");
 void FUN_L18_002d5f20(unsigned char *m);
 extern void blend_moby_animation_alt(void *, int, int, int) __asm__("FUN_00212f90");
 extern short D_L18_00161A6C __asm__("D_0015ED6C");
@@ -767,7 +767,7 @@ void FUN_L18_002d5918(struct Moby *moby) {
                 if (lim2 < vector_length_xy(vel)) {
                     set_vector_length_xy(vel, vel, lim2);
                 }
-                FUN_L00_00258830((int)moby, (int)vel, 0.0f, 0.5f, 0.0f, 0);
+                push302618((int)moby, (int)vel, 0.0f, 0.5f, 0.0f, 0);
                 subtract_vector_xyz(vel, &moby->pos, b);
                 if (0.0f < *(float *)(data + 0x48)) {
                     *(float *)(data + 0x48) = 0.0f;
@@ -2313,7 +2313,7 @@ s32 FUN_L18_002dfba0(const u8 *moby) {
 }
 extern int FUN_L00_0025a420(void *, int, int);
 extern void FUN_L18_002e9e50(int);
-extern void FUN_L00_0025f090(float, float, void *, void *, int);
+extern void cart_burst(float, float, void *, void *, int) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00257d78(float *, float, float);
 extern float FUN_L00_00257c48(float, float);
 extern float random_float_between_9768(float, float) __asm__("FUN_002132a8");
@@ -2452,7 +2452,7 @@ remove:
         add_vector_9768(pos, pos, data + 4);
         if (data[7] - 16.0f > moby->pos.z ||
             hit_test_9768(1.0f, pos, 2, moby)) {
-            FUN_L00_0025f090(1.5f, 0.0f, moby, pos, -1);
+            cart_burst(1.5f, 0.0f, moby, pos, -1);
             remove_moby_9768(moby);
         }
         return;
@@ -2910,7 +2910,7 @@ extern float D_L18_001677C0_c[] __asm__("D_L18_001677C0");
 extern float D_L18_001D9F80[];
 extern float D_L18_001DA110[];
 extern float FUN_L00_00257c48(float lo, float hi);
-extern float FUN_L00_0025e310(float);
+extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
 extern int D_L18_0015F580; /* no foreign declaration */
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -2979,7 +2979,7 @@ void FUN_L18_002eaea0(void *moby) {
         float b;
         f21 = *(float *)&D_L18_00162000
               + (*(float *)&D_L18_00162004 - *(float *)&D_L18_00162000) * (convert_integer_to_float(i) * 0.05f);
-        f21 = f21 * fast_sin_c(FUN_L00_0025e310(*(float *)&D_L18_00162008 + (float)i * *(float *)&D_L18_00161FFC));
+        f21 = f21 * fast_sin_c(normalize_rotation_l14(*(float *)&D_L18_00162008 + (float)i * *(float *)&D_L18_00161FFC));
         f21 = f21 + FUN_L00_00257c48(*(float *)&D_L18_00162040, *(float *)&D_L18_00162044);
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] - D_L18_001D9F80[i];
         D_L18_001D9F80[i] = f21;
@@ -3019,9 +3019,9 @@ void FUN_L18_002eaea0(void *moby) {
             float h;
             float ang;
             float m;
-            g = FUN_L00_0025e310(*(float *)&D_L18_00162010 + (float)i * *(float *)&D_L18_00162018);
+            g = normalize_rotation_l14(*(float *)&D_L18_00162010 + (float)i * *(float *)&D_L18_00162018);
             h = *(float *)&D_L18_0016201C
-                * fast_sin_c(FUN_L00_0025e310(*(float *)&D_L18_00162024 + (float)i * *(float *)&D_L18_0016202C));
+                * fast_sin_c(normalize_rotation_l14(*(float *)&D_L18_00162024 + (float)i * *(float *)&D_L18_0016202C));
             qcopy(&D_L18_001D9D00[1][i], &D_L18_001D9D00[0][i]);
             h = h * fast_sin_c(g) + FUN_L00_00257c48(0.0f, 0.1f);
             D_L18_001D9D00[1][i].f[2] = D_L18_001D9D00[1][i].f[2] + h;

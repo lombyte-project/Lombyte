@@ -18,8 +18,8 @@
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
-extern void FUN_L00_0025d458(void *m, short *p);
-extern void FUN_L00_0025d538(void *, void *);
+extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 void FUN_L17_002cbc10(char *m) {
     char *d;
@@ -54,10 +54,10 @@ void FUN_L17_002cbc10(char *m) {
                 *(short *)(m + 0x34) &= 0xEFFF;
             }
             *(unsigned char *)(d + 0x67) = 0xF0;
-            FUN_L00_0025d458(m, (short *)e);
+            trooper_anim_update(m, (short *)e);
         }
         *(unsigned char *)(m + 0xA4) = 0xFF;
-        FUN_L00_0025d538(m, e);
+        trooper_anim_finish(m, e);
     }
 }
 
@@ -85,7 +85,7 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern short D_L17_00161498 __attribute__((sda));
 extern unsigned char *FUN_L17_0026fb60(char *parent, void *pos, float *vec);
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L17_002a95b8(struct Moby *moby);
 extern void add_vector_xyz(void *, void *, void *);
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
@@ -227,7 +227,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
             *(OvlQuad *)e50 = *(OvlQuad *)(d + 0x10);
             for (i = 0; i < 7; i++) {
                 scale_vector_xyz(c, d + 0x30, random_float_between(0.0f, 0.9f));
-                FUN_L00_001ff290(v60, c, e50);
+                combine_velocity1688(v60, c, e50);
                 normalize_vector_xyz(a, d + 0x30,
                                      random_float_between(frame_time * 10.0f, len / 20.0f));
                 FUN_L17_0026fb60(m, c, a);
@@ -356,7 +356,7 @@ extern char *FUN_L17_002f4fb8(int list);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern float FUN_L00_0025be00(float *p, float *v, float a, float b, float c, float d);
+extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -368,7 +368,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern char D_L17_00161980[4] __attribute__((sda));
 extern void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9,
                               float scale, float *v10, float *v11, float *v12) __asm__("FUN_L00_00263fd8");
-extern void FUN_L00_0025f090(void *, void *, int, float, float);
+extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025fcb8(void *, void *, float);
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L17_002cbc10(char *m);
@@ -449,7 +449,7 @@ void FUN_L17_002cb310(struct Moby *m) {
             yaw = &m->rot.z;
             ang = fast_arc_tan(dir[0], dir[1]);
             turn = frame_time_sq * 0.5235988f;
-            FUN_L00_0025be00(yaw, &d->yawvel, ang, turn, turn, frame_time * 1.0471976f);
+            approach_angle(yaw, &d->yawvel, ang, turn, turn, frame_time * 1.0471976f);
             d->fF4 = -fast_arc_tan(vector_length_xy(dir), dir[2]);
             update_joint_animation(m, d->a90, 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f);
             off = fast_difference_between_rotations(d->fD4,
@@ -500,7 +500,7 @@ void FUN_L17_002cb310(struct Moby *m) {
             yaw = &m->rot.z;
             ang = fast_arc_tan(dir[0], dir[1]);
             turn = frame_time_sq * 0.5235988f;
-            FUN_L00_0025be00(yaw, &d->yawvel, ang, turn, turn, frame_time * 1.0471976f);
+            approach_angle(yaw, &d->yawvel, ang, turn, turn, frame_time * 1.0471976f);
             d->fF4 = -fast_arc_tan(vector_length_xy(dir), dir[2]);
             update_joint_animation(m, d->a90, 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f);
             off = fast_difference_between_rotations(d->fD4,
@@ -538,7 +538,7 @@ void FUN_L17_002cb310(struct Moby *m) {
                          D_L17_0015F580, D_L17_0015F580);
         debris302618(m, 0x63B, &m->pos.x, &m->rot, 0, 0, 0.0f, D_L17_0015F580,
                          D_L17_0015F580, D_L17_0015F580);
-        FUN_L00_0025f090(m, &m->pos, -1, 10.0f, 13.0f);
+        cart_burst(m, &m->pos, -1, 10.0f, 13.0f);
         mark_moby_for_removal(m);
         break;
     }
@@ -640,7 +640,7 @@ extern unsigned char *FUN_L00_002730e0(float *pos, char *vel, int color, unsigne
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 void FUN_L17_002d7cf0(struct Moby *moby);
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
@@ -720,7 +720,7 @@ void FUN_L17_002d77f0(char *m) {
                                                wrap_angle(convert_integer_to_float(i) * 2.0943952f)),
                             f21));
                     transform_vector(spC0, spC0, mat2);
-                    FUN_L00_001ff290(spD0, spC0, (m + 0x10));
+                    combine_velocity1688(spD0, spC0, (m + 0x10));
                     if (FUN_001f9b48((m + 0x10), &hero.motion.pos) < 30.0f) {
                         collision_line((m + 0x10), spC0, 9, m, &blk);
                     }
@@ -749,7 +749,7 @@ void FUN_L17_002d77f0(char *m) {
                                     spE0[0] = *(OvlQuad *)(m + 0x10);
                                 scale_vector_xyz(spF0, spF0, random_float_between(0.0f, 0.9f));
                                 w = (char *)sp100;
-                                FUN_L00_001ff290(w, spE0, spF0);
+                                combine_velocity1688(w, spE0, spF0);
                                 f20 = frame_time;
                                 f20 *= 10.0f;
                                 normalize_vector_xyz(

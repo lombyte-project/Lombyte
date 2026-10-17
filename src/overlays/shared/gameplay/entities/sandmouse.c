@@ -562,7 +562,7 @@ struct HoverVars {
 struct HoverTuning {
     s32 unk0;             /* passed to FUN_L00_00258ad0 */
     u8 pad4[0x10];
-    f32 yaw_speed;        /* 0x14: turn speed FUN_L00_00258278 keeps (D_L01_001DEB4C) */
+    f32 yaw_speed;        /* 0x14: turn speed turn_e50 keeps (D_L01_001DEB4C) */
     u8 pad18[0x18];
     f32 unk30;
 };
@@ -581,9 +581,9 @@ extern void clamp_vector_length(void *, void *, f32) __asm__("FUN_001f9c90");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern void FUN_L00_00258278(struct Moby *, f32 *, f32, f32, f32, f32);
+extern void turn_e50(struct Moby *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_00258278");
 extern s32 FUN_L00_00258ad0(struct Moby *, Vec4 *, f32, f32, s32, s32);
-extern f32 FUN_L00_0025e310(f32);
+extern f32 normalize_rotation_l14(f32) __asm__("FUN_L00_0025e310");
 
 void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
     Vec4 v;
@@ -605,7 +605,7 @@ void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
     switch (m->command) {
     case 0:
         ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
-        FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
+        turn_e50(m, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
                          frame_time * 11.519173f);
         if (1.3f < d) {
             m->command = 2;
@@ -614,11 +614,11 @@ void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
     case 2:
         if (p->target == 0) {
             ang = fast_arc_tan(p->goal.f[0] - m->pos.x, p->goal.f[1] - m->pos.y);
-            FUN_L00_00258278(m, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
+            turn_e50(m, &D_L01_001DEB4C, ang, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f,
                              frame_time * 11.519173f);
         } else {
             ang = fast_arc_tan(p->target->pos.x - m->pos.x, p->target->pos.y - m->pos.y);
-            FUN_L00_00258278(m, &D_L01_001DEB4C, ang,
+            turn_e50(m, &D_L01_001DEB4C, ang,
                              D_L01_001620C4 * DEG_TO_RAD * frame_time_sq, D_L01_001620C8 * DEG_TO_RAD * frame_time_sq,
                              D_L01_001620CC * DEG_TO_RAD * frame_time);
         }
@@ -661,8 +661,8 @@ void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
         break;
     }
     t = &D_L01_001DEB38;
-    m->rot.x += (FUN_L00_0025e310(t->yaw_speed * D_L01_001620D0) - m->rot.x) * D_L01_001620D8;
-    m->rot.y += (FUN_L00_0025e310(fast_vec_length(&p->vel) * D_L01_001620D4) - m->rot.y) * D_L01_001620DC;
+    m->rot.x += (normalize_rotation_l14(t->yaw_speed * D_L01_001620D0) - m->rot.x) * D_L01_001620D8;
+    m->rot.y += (normalize_rotation_l14(fast_vec_length(&p->vel) * D_L01_001620D4) - m->rot.y) * D_L01_001620DC;
 }
 #include "sda.h"
 
@@ -750,13 +750,13 @@ extern void debug_print(void *) __asm__("FUN_001e93b0");
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void FUN_L01_0026d930(void *);
+extern void steering_init302618(void *) __asm__("FUN_L01_0026d930");
 extern void FUN_L01_002e30b8(void *, void *) __asm__("FUN_L01_0030d208");
 extern void FUN_L01_0023cf98(s32, s32);
 extern void FUN_L00_002323b8(f32, s32, s32);
 
 extern void FUN_0022d798(s32);
-extern s32 FUN_L00_00259028(void *, void *, void *, void *);
+extern s32 steer302618(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern void jet_animate(void *, f32) __asm__("FUN_L00_00259fe8");
 extern void FUN_L00_0025f8e0(void *, f32);
 extern s32 rand(void) __asm__("FUN_001160d8");
@@ -828,7 +828,7 @@ void sandmouse_update(struct Moby *m) {
         qcopy(p + 0x20, &m->pos);
         qcopy(p + 0x30, &m->pos);
         t = &D_L01_001DEB38;
-        FUN_L01_0026d930(t);
+        steering_init302618(t);
         {
             f32 time = frame_time;
             f32 scale = frame_scale;
@@ -873,7 +873,7 @@ void sandmouse_update(struct Moby *m) {
         }
         if (*(s32 *)(g + 0x1130) == 0 || *(s32 *)(g + 0x1158) != 5) break;
         angle = fast_arc_tan(hero.motion.pos.f[0] - m->pos.x, hero.motion.pos.f[1] - m->pos.y);
-        FUN_L00_00258278(m, &D_L01_001DEB38.yaw_speed, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+        turn_e50(m, &D_L01_001DEB38.yaw_speed, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
         qcopy(&v, D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100 + 0x10);
         v.f[2] += 0.5f;
         qcopy(&q, &hero.motion.pos);
@@ -923,9 +923,9 @@ void sandmouse_update(struct Moby *m) {
         } else {
             FUN_L01_002e30b8(m, p);
             angle = fast_arc_tan(HOVER_F(0) - m->pos.x, HOVER_F(4) - m->pos.y);
-            FUN_L00_00258278(m, &D_L01_001DEB38.yaw_speed, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+            turn_e50(m, &D_L01_001DEB38.yaw_speed, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
             HOVER_F(0x18) = 0.0f;
-            hit = FUN_L00_00259028(m, &D_L01_001DEB38, p, p + 0x10);
+            hit = steer302618(m, &D_L01_001DEB38, p, p + 0x10);
         }
         if ((hit & 6) != 0 || distance_xyz_30d308(&m->pos, p) < 0.25f) {
             if (m->prev_seq != 2) blend_moby_animation(m, 2, 0, scale_game_frames(10));
@@ -1013,7 +1013,7 @@ void sandmouse_update(struct Moby *m) {
         qcopy(p, D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100 + 0x10);
         *(s32 *)((char *)&D_L01_001DEB38 + 0x50) = 0;
         angle = fast_arc_tan(HOVER_F(0) - m->pos.x, HOVER_F(4) - m->pos.y);
-        FUN_L00_00258278(m, &D_L01_001DEB38.yaw_speed, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
+        turn_e50(m, &D_L01_001DEB38.yaw_speed, angle, frame_time_sq * 6.2831855f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
         if (m->prev_seq != 0) blend_moby_animation(m, 0, 0, scale_game_frames(6));
         ((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->command = 1;
         m->state = 1;
@@ -1142,7 +1142,7 @@ extern CameraTarget *D_L01_0015F70C;
 extern CameraPath *D_L01_001B0930[];
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
+extern s32 near_6570(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32) __asm__("FUN_L00_0025df68");
 
 /* Resets the camera's orbit, focus, spring, view and track from fixed values; for a kind 2 preset it
    also prepares its two paths once, measuring each point against the path it follows. */
@@ -1208,7 +1208,7 @@ void FUN_L01_00314e98(Camera *cam) {
         c = D_L01_001B0930[s->look_path];
         s->ready = 1;
         for (i = 0; i < a->count; i++) {
-            FUN_L00_0025df68(b, &a->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
+            near_6570(b, &a->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
             a->pts[i].f[0] = a->pts[i].f[3];
             a->pts[i].f[3] = seg;
         }
@@ -1227,7 +1227,7 @@ void FUN_L01_00314e98(Camera *cam) {
             prev = i;
         }
         for (i = 0; i < c->count; i++) {
-            FUN_L00_0025df68(d, &c->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
+            near_6570(d, &c->pts[i], &at, &seg, &t, 0, 20.0f, 5.0f, 0.0f);
             c->pts[i].f[0] = c->pts[i].f[3];
             c->pts[i].f[3] = seg;
         }
@@ -1346,7 +1346,7 @@ extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_L01_001672B0[];
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float cam_interp_values(float a, float b, float *p, float c, float d, float e);
-extern int FUN_L00_0025d808(void *, void *, int *, float *, float, int);
+extern int sample_path(void *, void *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
@@ -1390,7 +1390,7 @@ void FUN_L01_00315358(Cam_316730 *cam) {
         fraction = ((Hero *)(((char *)((char *)&hero))))->unk568;
         progress->t = fraction;
         progress->idx = segment;
-        FUN_L00_0025d808(D_L01_001B0C30_316730[path_index], camera_goal, &progress->idx, &progress->t, 1.0f, 0);
+        sample_path(D_L01_001B0C30_316730[path_index], camera_goal, &progress->idx, &progress->t, 1.0f, 0);
         qcopy(follow->pos, camera_goal);
         path = D_L01_001B0C30_316730[path_index];
         dist = path->nodes[segment].w * (fraction / ((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560)->nodes[segment].w);
@@ -1455,7 +1455,7 @@ void FUN_L01_00315358(Cam_316730 *cam) {
         dist = camera_length * (sum / hero_length);
         node = func_001FA898_r(pathC->nodes[j].w);
         node_fraction = 0.0f;
-        FUN_L00_0025d808(pathA, look_target, &node, &node_fraction, dist, 1);
+        sample_path(pathA, look_target, &node, &node_fraction, dist, 1);
         speed_scale = pathC->nodes[j].x;
         if (speed_scale <= 0.0f) {
             speed_scale = 0.01f;
@@ -1479,13 +1479,13 @@ void FUN_L01_00315358(Cam_316730 *cam) {
         if (params->f24 < 0) {
             float lead_offset;
 
-            FUN_L00_0025df68(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, path_point, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
+            near_6570(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, path_point, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
             if (params->f36 == 1) {
                 lead_offset = -(params->f38 * 4.0f);
             } else {
                 lead_offset = params->f38;
             }
-            FUN_L00_0025d808(path, path_point, &segment, &fraction, lead_offset, 1);
+            sample_path(path, path_point, &segment, &fraction, lead_offset, 1);
             qcopy(camera_goal, path_point);
         } else {
             int hero_segment;
@@ -1493,8 +1493,8 @@ void FUN_L01_00315358(Cam_316730 *cam) {
 
             hero_segment = ((Hero *)(((char *)((char *)&hero))))->unk564;
             hero_fraction = ((Hero *)(((char *)((char *)&hero))))->unk568;
-            FUN_L00_0025d808((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, path_point, &hero_segment, &hero_fraction, params->f38, 1);
-            FUN_L00_0025df68(path, path_point, camera_goal, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
+            sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, path_point, &hero_segment, &hero_fraction, params->f38, 1);
+            near_6570(path, path_point, camera_goal, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
         }
         cam->pos[0] = cam_interp_values(cam->pos[0], camera_goal[0], &data->vel[0], rate, 0.175f, 0.0f);
         cam->pos[1] = cam_interp_values(cam->pos[1], camera_goal[1], &data->vel[1], rate, 0.175f, 0.0f);
@@ -1503,11 +1503,11 @@ void FUN_L01_00315358(Cam_316730 *cam) {
     if (params->f24 < 0) {
         Path_316730 *path = D_L01_001B0C30_316730[params->f20];
 
-        FUN_L00_0025df68(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, look_target, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
+        near_6570(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, look_target, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
         if (D_0015EE84_c == 0xE && params->f30 == 0) {
-            FUN_L00_0025d808(path, delta, &segment, &fraction, lead, 0);
+            sample_path(path, delta, &segment, &fraction, lead, 0);
         } else {
-            FUN_L00_0025d808(path, delta, &segment, &fraction, lead, 1);
+            sample_path(path, delta, &segment, &fraction, lead, 1);
         }
         subtract_vector_xyz(delta, delta, look_target);
         add_vector_xyz(look_target, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, delta);
@@ -1517,7 +1517,7 @@ void FUN_L01_00315358(Cam_316730 *cam) {
 
         hero_segment = ((Hero *)(((char *)((char *)&hero))))->unk564;
         hero_fraction = ((Hero *)(((char *)((char *)&hero))))->unk568;
-        FUN_L00_0025d808((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, look_target, &hero_segment, &hero_fraction, lead, 1);
+        sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, look_target, &hero_segment, &hero_fraction, lead, 1);
     }
     normalize_vector_xyz(look_offset, D_L01_001672B0, follow->f4C);
     add_vector_xyz(path_point, look_offset, look_target);
@@ -1582,7 +1582,7 @@ void FUN_L01_00315de0(Camera *cam) {
         path = D_L01_001B0930[s->track_path];
         seg = 0;
         t = 0.0f;
-        if (FUN_L00_0025df68(path, &D_0013F3D0_315de0, &at, &seg, &t,
+        if (near_6570(path, &D_0013F3D0_315de0, &at, &seg, &t,
                              0, 20.0f, 1.0f, 0.0f)) {
             s32 count = path->count;
             next = seg + 1;

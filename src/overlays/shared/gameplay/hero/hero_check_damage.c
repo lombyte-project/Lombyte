@@ -147,7 +147,7 @@ extern s32 D_L00_0015F710;
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 FUN_001f99c0(f32);
-extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
+extern s32 near_6570(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32) __asm__("FUN_L00_0025df68");
 
 int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF, s32 *outKind,
@@ -171,7 +171,7 @@ int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
             continue;
         if (FUN_001f9b48(&D_L00_0015F70C[i], p) > D_L00_0015F70C[i].sphere.f[3])
             continue;
-        if (!FUN_L00_0025df68(D_L00_0015F70C[i].owner, p, to, &gotI, &gotF, D_L00_0015F70C[i].kind,
+        if (!near_6570(D_L00_0015F70C[i].owner, p, to, &gotI, &gotF, D_L00_0015F70C[i].kind,
                               12.0f, 10.0f, 0.0f))
             continue;
         hero_state = &hero;
@@ -2829,7 +2829,7 @@ typedef float V4_211d78[4] __attribute__((aligned(16)));
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void FUN_L00_00211cf8(float, float, float);
-extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
+extern float fast_subtract_rotations_cf(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 void FUN_L00_00211d78(int a, float x, float y, float z) {
     V4_211d78 t;
     float out;
@@ -2838,7 +2838,7 @@ void FUN_L00_00211d78(int a, float x, float y, float z) {
     transform_vector(t, &hero.motion.unk170, hero.unk40);
     r = fast_arc_tan(t[0], t[1]);
     out = zero;
-    hero.motion.unk188 = FUN_L00_0025bc98((char *)&out, (char *)&hero.motion.unk184, a, r, x, y, z);
+    hero.motion.unk188 = fast_subtract_rotations_cf((char *)&out, (char *)&hero.motion.unk184, a, r, x, y, z);
     FUN_L00_00211cf8(zero, zero, out);
 }
 #define NOT_SDA
@@ -2847,7 +2847,7 @@ void FUN_L00_00211d78(int a, float x, float y, float z) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002124E8), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
+extern float fast_subtract_rotations_cf(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void FUN_L00_00211d78(int, float, float, float);
 
 /* Calls 00211d78 when hero.unk20B3 is set, else updates hero.motion.unk188 via 0025bc98. */
@@ -2858,7 +2858,7 @@ void turn_to(int a, float x, float y, float z) {
         FUN_L00_00211d78(a, x, y, z);
     } else {
         g->motion.unk188 =
-            FUN_L00_0025bc98(&g->motion.rot.f[2], &g->motion.unk184, a, g->motion.move_yaw, x, y, z);
+            fast_subtract_rotations_cf(&g->motion.rot.f[2], &g->motion.unk184, a, g->motion.move_yaw, x, y, z);
     }
 }
 #define NOT_SDA
@@ -3342,7 +3342,7 @@ extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
+extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");

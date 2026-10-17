@@ -8,7 +8,8 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026E8E0), where it is exact; names translated to the US level program. */
 
-void FUN_L01_0026d930(char *p) {
+void steering_init302618(char *p) __asm__("FUN_L01_0026d930");
+void steering_init302618(char *p) {
     *(int *)(p + 0x0) = 0x280;
     *(float *)(p + 0x4) = 1.0f;
     *(float *)(p + 0x8) = 0.5f;
@@ -34,7 +35,8 @@ typedef struct {
 extern unsigned short *D_L01_001ABCC0_26e008[] __asm__("D_L01_001ABCC0") NOT_SDA;
 extern O_26e008 *D_L01_0015FFD8_26e008 __asm__("D_L01_0015FFD8");
 
-int FUN_L01_0026e008(int i, int st) {
+int count_group_e3528(int i, int st) __asm__("FUN_L01_0026e008");
+int count_group_e3528(int i, int st) {
     unsigned short *p;
     int n = 0;
     O_26e008 *o;
@@ -57,7 +59,8 @@ int FUN_L01_0026e008(int i, int st) {
 extern char *D_L01_0015FFD8;
 extern unsigned short *D_L01_001ABCC0[];
 
-void FUN_L01_0026e090(int i, int v) {
+void event_2E39E0(int i, int v) __asm__("FUN_L01_0026e090");
+void event_2E39E0(int i, int v) {
     unsigned short *t = D_L01_001ABCC0[i];
     unsigned short *p;
     if (t != 0) {
@@ -73,7 +76,8 @@ extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8");
  * func_L01_0026F090), where it is exact; names translated to the US level
  * program. The datum needs the unsplit macro form here, so it is declared
  * through an alias (same symbol, .sdata) beside its neighbour's declaration. */
-void FUN_L01_0026e0e0(int list, int state) {
+void set_group_state_30ca80(int list, int state) __asm__("FUN_L01_0026e0e0");
+void set_group_state_30ca80(int list, int state) {
     unsigned short *p;
     unsigned short *q = (unsigned short *)D_L01_001ABCC0[list];
 

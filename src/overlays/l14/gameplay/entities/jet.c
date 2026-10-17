@@ -172,7 +172,7 @@ extern f32 fast_cos_df510(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin_df510(f32) __asm__("FUN_001f9de0");
 extern void euler_matrix_df510(void *, void *) __asm__("FUN_001fa050");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float FUN_L00_00257e20(float, float, float, float, float);
+extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -318,7 +318,7 @@ void FUN_L14_002df510(struct Moby *m, void *path, int outer_alpha, int inner_alp
         qcopy(&q[0].v[1], &q[0].v[3]);
         qcopy(&q[1].v[0], &q[1].v[2]);
         qcopy(&q[1].v[1], &q[1].v[3]);
-        f = FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(n)) * 0.0f + 0.2f;
+        f = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(n)) * 0.0f + 0.2f;
         w[0].z = f;
         w[1].z = 2.0f * f;
         q[0].uv[0][0] = *(float *)(d + 0x1EC) + 0.0f;
@@ -419,7 +419,7 @@ extern void lift_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int lift_sound(int, int, void *) __asm__("FUN_0022da68");
 extern float lift_add_rot(float, float) __asm__("FUN_001fa580");
-extern void FUN_L00_001fff28(void *, int, float);
+extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern int lift_frames(int) __asm__("FUN_001f96f8");
 extern float lift_itof(int) __asm__("FUN_001fa6c0");
@@ -494,7 +494,7 @@ void FUN_L14_002e7bd8(struct Moby *m) {
     if (d->sound == -1 || (FUN_L00_0028d8c0(m, d->sound) == 0 && d->sound == -1))
         d->sound = lift_sound(0, 4, m);
     d->angle = lift_add_rot(d->angle, 0.17453292f);
-    FUN_L00_001fff28(d->wobble, 0, d->angle);
+    set_joint_67e8(d->wobble, 0, d->angle);
     lift_sub(&delta, &m->pos, &old);
     update_entity_matrix(d->spring, &delta, &rot, &m->rot);
     if (hero.state.control_mode == 13 && hero.unk964 == rider) {
@@ -1067,7 +1067,7 @@ extern s32 bolt_frames(s32) __asm__("FUN_001f96f8");
 extern int bolt_coll_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void FUN_L00_00259888(void *, struct Moby *, s32, void *, f32);
 extern void FUN_L07_0029a2a0(void *, void *);
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern char *FUN_L00_0026dd20(char *, char *, int c, int d, float f);
 extern int bolt_sound(int, int, void *) __asm__("FUN_0022da68");
 extern void bolt_remove(void *) __asm__("FUN_0020c828");
@@ -1142,7 +1142,7 @@ void FUN_L14_002ece00(struct Moby *m) {
                 spark.f[1] = bolt_random(-1.0f, 1.0f);
                 spark.f[2] = bolt_random(-1.0f, 1.0f);
                 dir.q = spark.q;
-                FUN_L00_001ff660(&spark, &v->vel, D_L14_00174580);
+                reflect1688(&spark, &v->vel, D_L14_00174580);
                 bolt_normalize(&dir, &dir, bolt_length(&spark) * 0.5f);
                 bolt_add(&dir, &spark, &dir);
                 bolt_normalize(&dir, &dir, bolt_random(frame_time * 3.0f, frame_time * 6.0f));
@@ -1453,7 +1453,7 @@ extern V_2EF078 D_L14_001E0050[];
 extern char D_L14_001674C0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L14_00161CD0_c[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
-extern float FUN_L00_00257e20(float, float, float, float, float);
+extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern int D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
 extern int D_L14_00161C78 __attribute__((sda));
 extern int D_L14_00161C7C __attribute__((sda));
@@ -1585,7 +1585,7 @@ void FUN_L14_002edc18(void) {
         qcopy(&q[0].v[1], &q[0].v[3]);
         qcopy(&q[1].v[0], &q[1].v[2]);
         qcopy(&q[1].v[1], &q[1].v[3]);
-        sz[0].z = D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(0x28));
+        sz[0].z = D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(i) / convert_integer_to_float(0x28));
         sz[1].z = sz[0].z * D_L14_00161C88;
     }
     qcopy(&m2[0], &m[0]);
@@ -1605,7 +1605,7 @@ void FUN_L14_002edc18(void) {
         q[0].col[1] = c;
         q[0].col[0] = c;
         q[1].col[0] = q[1].col[1] = D_L14_00161C7C | ((a >> 1) << 24);
-        sz[0].z = (D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(D_L14_00161CF8_macro[j]) / convert_integer_to_float(0x28))) * 0.75f;
+        sz[0].z = (D_L14_00161C84 + (D_L14_00161C80 - D_L14_00161C84) * cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, convert_integer_to_float(D_L14_00161CF8_macro[j]) / convert_integer_to_float(0x28))) * 0.75f;
         sz[1].z = sz[0].z * 4.0f;
         qcopy(&q[0].v[0], &sz[0]);
         scale_vector_xyz(&q[0].v[1], &q[0].v[0], -1.0f);
@@ -1962,7 +1962,7 @@ extern char *D_L14_001B0BB0_c3[] __asm__("D_L14_001B0BB0");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern float lerp_angle_5d48(float, float, float) __asm__("FUN_L00_0025b750");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
-extern int FUN_L00_0025d808() __asm__("FUN_L00_0025d808");
+extern int sample_path() __asm__("FUN_L00_0025d808");
 extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
 
@@ -2203,7 +2203,7 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void update_entity_matrix(void *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern void FUN_L00_00266858(void *, int);
 extern void FUN_L00_002e8450(int, float, float);
-extern float FUN_L00_00257e20(float, float, float, float, float);
+extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern void FUN_L05_00319510(void *);
 extern void FUN_L05_00319740(char *);
 extern void FUN_L05_003198e8(char *);
@@ -2339,7 +2339,7 @@ void FUN_L14_002f0538(struct Moby *moby) {
         qcopy(v30, d->save_pos);
         qcopy(v50, d->save_rot);
         taxi_sample_f(d->path, wrap, v40, v60, flags, 0.0f);
-        f = FUN_L00_00257e20(1.0f, 0.0f, 1.0f, 0.0f, d->t);
+        f = cubic_hermite_scalar(1.0f, 0.0f, 1.0f, 0.0f, d->t);
         lerp_vector(d->pos, v30, v40, f);
         d->rot[1] = taxi_add_rot(taxi_sub_rot(v60[1], v50[1]) * f, v50[1]);
         d->rot[2] = taxi_add_rot(taxi_sub_rot(v60[2], v50[2]) * f, v50[2]);
@@ -3078,7 +3078,7 @@ extern char *D_L14_001B0BB0_c5[] __asm__("D_L14_001B0BB0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy_c(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C_c2 __asm__("D_0015ED6C");
-extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
+extern void turn_e50(char *moby, float *vel, float target, float k, float d, float max) __asm__("FUN_L00_00258278");
 extern void FUN_L00_0025d808_c(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -3102,7 +3102,7 @@ void FUN_L14_002fc9a0(struct Moby *moby) {
         if (absolute_float(t[1]) > 0.01f) {
             a = fast_arc_tan(t[0], t[1]);
             b = fast_subtract_rotations(moby->rot.z, a);
-            FUN_L00_00258278(moby, (float *)(d + 0x88), a, (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
+            turn_e50(moby, (float *)(d + 0x88), a, (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
             c = fast_arc_tan(vector_length_xy_c(t), t[2]);
             FUN_L00_0025b8c0(&moby->rot.y, (float *)(d + 0x84), -c, (*(float *)&D_L14_00161F4C), (*(float *)&D_L14_00161F50), 0.0f);
             b = b / (*(float *)&D_L14_00161F58);
@@ -3453,13 +3453,13 @@ extern float D_0015ED6C_f2 __asm__("D_0015ED6C");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern float vector_length_xy(void *);
-extern int FUN_L00_0025d808() __asm__("FUN_L00_0025d808");
+extern int sample_path() __asm__("FUN_L00_0025d808");
 extern float D_L14_00161F7C __attribute__((sda));
 extern float D_L14_00161F80 __attribute__((sda));
 extern float D_L14_00161F84 __attribute__((sda));
 extern float D_L14_00161F88 __attribute__((sda));
 extern float D_L14_00161F78 __attribute__((sda));
-extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
+extern void turn_e50(char *moby, float *vel, float target, float k, float d, float max) __asm__("FUN_L00_00258278");
 extern void FUN_L13_00316f48(int);
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
@@ -3502,7 +3502,7 @@ int FUN_L14_002fd918(struct Moby *m) {
         if (0.01f < absolute_float(w[1])) {
             yaw = fast_arc_tan(w[0], w[1]);
             t = fast_subtract_rotations(m->rot.z, yaw);
-            FUN_L00_00258278(m, (float *)(d + 0x88), yaw, D_L14_00161F7C, D_L14_00161F80, 0.0f);
+            turn_e50(m, (float *)(d + 0x88), yaw, D_L14_00161F7C, D_L14_00161F80, 0.0f);
             yaw = fast_arc_tan(vector_length_xy(w), w[2]);
             FUN_L00_0025b8c0(&m->rot.y, (float *)(d + 0x84), -yaw, D_L14_00161F7C,
                              D_L14_00161F80, 0.0f);
@@ -3530,8 +3530,8 @@ extern s32 D_L14_00161FB0 __attribute__((sda));
 extern f32 D_L14_00161FA8 __attribute__((sda));
 extern f32 D_L14_00161FAC __attribute__((sda));
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
-                             float, int, float, float, int, int, int, int);
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
+                             float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int FUN_L00_0028d8c0(void *, int);
 extern void FUN_L14_002fded0(struct Moby *);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
@@ -3579,7 +3579,7 @@ void FUN_L14_002fdbb8(struct Moby *moby) {
             qcopy(&moby->pos, D_L14_001600EC + vars->point * 0x80 + 0x30);
             qcopy(&step, &moby->rot_row0);
             step.f[2] = 1.0f;
-            FUN_L00_0025e450(moby, &step, &moby->pos, 0.0f, 0.0f, 0x14, 0xA, 0xC, 10.0f, 6.0f,
+            spawn_explosion(moby, &step, &moby->pos, 0.0f, 0.0f, 0x14, 0xA, 0xC, 10.0f, 6.0f,
                              9.0f, 0, 1.0f, 30.0f, 1, 0xA, -1, 0);
             mark_moby_for_removal(moby);
             return;

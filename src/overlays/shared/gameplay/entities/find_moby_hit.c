@@ -239,13 +239,13 @@ typedef struct {
 } Vk __attribute__((aligned(16)));
 
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
-extern void FUN_L00_001fff28(void *, int, float);
+extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
 
 void FUN_L00_00259f50(void *a, float *v) {
     Vk t0, t1, t2;
-    FUN_L00_001fff28(&t2, 0, v[0]);
-    FUN_L00_001fff28(&t1, 1, v[1]);
-    FUN_L00_001fff28(&t0, 2, v[2]);
+    set_joint_67e8(&t2, 0, v[0]);
+    set_joint_67e8(&t1, 1, v[1]);
+    set_joint_67e8(&t0, 2, v[2]);
     multiply_quaternions(a, &t2, &t1);
     multiply_quaternions(a, a, &t0);
 }

@@ -8,7 +8,7 @@
 
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern s32 FUN_L00_00258b50(void *, void *, void *, void *, f32);
+extern s32 walk_e50(void *, void *, void *, void *, f32) __asm__("FUN_L00_00258b50");
 
 /* steers the moby toward a point 100 units ahead along its heading */
 s32 FUN_L12_00271dd8(struct Moby *m, void *ctl) {
@@ -18,5 +18,5 @@ s32 FUN_L12_00271dd8(struct Moby *m, void *ctl) {
     qcopy(&ahead, &m->pos);
     ahead.f[0] += fast_cos(m->rot.z) * 100.0f;
     ahead.f[1] += fast_sin(m->rot.z) * 100.0f;
-    return FUN_L00_00258b50(m, ctl, &ahead, &out, 1.0f);
+    return walk_e50(m, ctl, &ahead, &out, 1.0f);
 }

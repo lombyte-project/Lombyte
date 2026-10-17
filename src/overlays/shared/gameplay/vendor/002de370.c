@@ -17,7 +17,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int tick_countdown_32(int *arg0) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -25,7 +25,7 @@ void FUN_L03_002de370(char *moby) {
     float v[4];
     char *d = *(char **)(moby + 0x78);
     *(float *)(d + 8) = *(float *)(d + 8) - frame_time_sq * 9.8f;
-    FUN_L00_001ff290(v, moby + 0x10, d);
+    combine_velocity1688(v, moby + 0x10, d);
     *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(d + 0x10));
     *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(moby + 0x44), *(float *)(d + 0x14));
     *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(d + 0x18));

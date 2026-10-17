@@ -649,7 +649,7 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int FUN_L00_001fefc8(void *);
+extern int dec_byte_timer_edc30(void *) __asm__("FUN_L00_001fefc8");
 extern int FUN_L00_00257b90(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -714,7 +714,7 @@ void FUN_L00_0026ac78(char *m) {
                 fast_tween_color(*(int *)(p + 0x14), *(int *)(p + 0x10),
                              (float)*(short *)(m + 0xA) / (float)(unsigned char)p[0x1B]);
         }
-        FUN_L00_001fefc8(m + 0x38);
+        dec_byte_timer_edc30(m + 0x38);
         if (fast_dec_timer_s16(m + 0xA)) {
             if (p[0x19] & 2) {
                 int t = (unsigned char)p[0x1B] * 3;
@@ -3207,7 +3207,7 @@ void FUN_L00_00270710(char *a) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_002715F8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED60_c2 __asm__("D_0015ED60");
-extern int FUN_L00_0025bfe0(float, float, float, float);
+extern int col_26fd28(float, float, float, float) __asm__("FUN_L00_0025bfe0");
 extern unsigned char *D_L00_001B20B0 __attribute__((section(".data")));
 extern void *FUN_L00_002678b8_c2(int) __asm__("FUN_L00_002678b8");
 
@@ -3221,7 +3221,7 @@ void *FUN_L00_00270758(char *a, char *b, unsigned char c, int d) {
 
         qcopy(p + 0x10, a);
         qcopy(q, b);
-        *(int *)(p + 4) = FUN_L00_0025bfe0(0.7f, 0.7f, 0.7f, 0.08f);
+        *(int *)(p + 4) = col_26fd28(0.7f, 0.7f, 0.7f, 0.08f);
         p[9] = (char)(truncate_float_to_s32(4.0f) + 0x40);
         p[1] = 0;
         p[3] = 0x44;

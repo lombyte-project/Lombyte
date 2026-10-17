@@ -236,7 +236,7 @@ extern f32 FUN_001f99c0(f32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32, f32,
                              s32, s32, s32, s32);
@@ -286,7 +286,7 @@ void FUN_L01_0030ba18(struct Moby *m) {
     if (tick_countdown_32(&v->timer) || hit) {
         if (hit) {
             if (D_L01_001742C0.have_normal) {
-                FUN_L00_001ff660(v, v, &D_L01_001742C0.normal);
+                reflect1688(v, v, &D_L01_001742C0.normal);
             } else {
                 clear_vector(v);
             }

@@ -10,7 +10,7 @@ extern float D_L00_00161BB0 __attribute__((sda));
 float random_angle_radians(void) __asm__("FUN_00213308");
 void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-void FUN_L00_001fff28(char *, int, float);
+void set_joint_67e8(char *, int, float) __asm__("FUN_L00_001fff28");
 void vendor_orb_update(unsigned char *p) __asm__("FUN_L00_002df730");
 void vendor_orb_update(unsigned char *p) {
     char *m = *(char **)(p + 0x78);
@@ -26,7 +26,7 @@ void vendor_orb_update(unsigned char *p) {
         s = D_L00_00161BB0 * DEG_TO_RAD * frame_time;
         *(float *)(p + 0x48) = fast_add_rotations(*(float *)(p + 0x48), s);
         *(float *)(m + 0x40) = fast_add_rotations(*(float *)(m + 0x40), s * -2.0f);
-        FUN_L00_001fff28(m + 0x10, 2, *(float *)(m + 0x40));
+        set_joint_67e8(m + 0x10, 2, *(float *)(m + 0x40));
         break;
     }
 }
@@ -799,7 +799,7 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_c(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 f32 FUN_L00_00257c48(f32, f32);
-f32 FUN_L00_0025e310(f32 a);
+f32 normalize_rotation_l14(f32 a) __asm__("FUN_L00_0025e310");
 int FUN_L00_0023e738(void *v, float a, float b_0023e738, float c, float d, float e);
 unsigned char *FUN_L00_00274948(void *a, void *b, int c, int d);
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
@@ -1365,9 +1365,9 @@ extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void quaternion_to_matrix(void *, void *) __asm__("FUN_001fa4f8");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-extern void FUN_L00_001ff660(void *, void *, void *);
-extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, float, int, float, float, int, float, int, float, int, int, int, int);
-extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void spawn_explosion(void *, void *, void *, float, float, int, float, int, float, float, int, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void explode_4318(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_quaternion_from_axis_angle(void *, void *, f32) __asm__("FUN_00214530");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -1413,10 +1413,10 @@ void robot_arm_update(char *m) {
         transform_vector_by_basis(a20, d + 0x20, m + 0xC0);
         add_vector_xyz(a20, a20, m + 0x10);
         if (*(int *)(d + 0x34) & 2) {
-            FUN_L00_0025f3e8(m, a20, -1, *(float *)(d + 0x2C) * 0.5f, 0.0f);
+            explode_4318(m, a20, -1, *(float *)(d + 0x2C) * 0.5f, 0.0f);
         } else {
             float h = *(float *)(d + 0x2C) * 0.5f;
-            FUN_L00_0025e450(m, D_L00_0015F580, a20, 0.0f, 0.0f, 5, *(float *)(d + 0x2C), 3, h, 9.0f, 5, h, -1, 0.0f, 0, 0, -1, 0);
+            spawn_explosion(m, D_L00_0015F580, a20, 0.0f, 0.0f, 5, *(float *)(d + 0x2C), 3, h, 9.0f, 5, h, -1, 0.0f, 0, 0, -1, 0);
         }
         mark_moby_for_removal(m);
         return;
@@ -1447,7 +1447,7 @@ void robot_arm_update(char *m) {
         f21 = vector_length_xyz(d);
         f20 = dot_vectors_xyz(d, q);
         if (f20 < 0.0f) {
-            FUN_L00_001ff660(d, d, q);
+            reflect1688(d, d, q);
             normalize_vector_xyz(aD0, q, f20 * 0.5f);
             add_vector_xyz(d, d, aD0);
             normalize_vector_xyz(d, d, f21);
@@ -2523,7 +2523,7 @@ void FUN_L00_002e8680(void) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E9B60), where it is exact; names translated to the US level program. */
 
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float FUN_L00_00257e20(float a, float b, float c, float d, float t);
+extern float cubic_hermite_scalar(float a, float b, float c, float d, float t) __asm__("FUN_L00_00257e20");
 extern void FUN_001f9a68_c4(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -2574,7 +2574,7 @@ float FUN_L00_002e86b0(char *a0, float *a1, float lim) {
     if (t > 1.0f) {
         t = 1.0f;
     }
-    *(float *)(q + 0x1C) = FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, t) * sign;
+    *(float *)(q + 0x1C) = cubic_hermite_scalar(-1.0f, 0.0f, 1.0f, 0.0f, t) * sign;
     return r;
 }
 void FUN_001f9a28_c2(void *, void *, void *) __asm__("FUN_001f9a28");

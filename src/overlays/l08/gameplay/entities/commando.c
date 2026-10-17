@@ -48,8 +48,8 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
-extern void FUN_L00_0025f090(void *, void *, s32, f32, f32);
+extern void turn_e50(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
+extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
 extern void FUN_L08_002e9558(struct Moby *);
 extern void FUN_L08_002e9758(struct Moby *);
@@ -103,7 +103,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
     case 1:
         waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
         target = &D_L08_0015FFD8[vars->target_index];
-        FUN_L00_00258278(moby,
+        turn_e50(moby,
                          fast_arc_tan(vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
                                       vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
                          &vars->turn_speed, 0.004f, 0.3f, 0.02f);
@@ -196,14 +196,14 @@ void FUN_L08_002e9b70(struct Moby *moby) {
             struct Moby *part = vars->parts[i].moby;
             if (part != NULL) {
                 Vec4 *drift = (Vec4 *)part->pvars;
-                FUN_L00_0025f090(moby, &part->pos, -1, 3.0f, 13.0f);
+                cart_burst(moby, &part->pos, -1, 3.0f, 13.0f);
                 subtract_vector_xyz(drift, &part->pos, &moby->pos);
                 normalize_vector_xyz(drift, drift, frame_time * 5.0f);
                 part->state = 1;
                 vars->parts[i].moby = NULL;
             }
         }
-        FUN_L00_0025f090(moby, &moby->pos, -1, 5.0f, 13.0f);
+        cart_burst(moby, &moby->pos, -1, 5.0f, 13.0f);
         mark_moby_for_removal(moby);
         break;
     }
@@ -653,8 +653,8 @@ extern s32 D_L08_0015F3F8_gp __asm__("D_L08_0015f3f8") __attribute__((sda));
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 square_root(f32) __asm__("FUN_001f9988");
-extern f32 FUN_L00_0025e310(f32);
-extern f32 FUN_L00_00200228(f32, void *) __asm__("FUN_L00_00200228");
+extern f32 normalize_rotation_l14(f32) __asm__("FUN_L00_0025e310");
+extern f32 split_float_fraction(f32, void *) __asm__("FUN_L00_00200228");
 extern s32 tick_countdown_16(s16 *) __asm__("FUN_001f9770");
 extern s32 random_integer_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -798,7 +798,7 @@ void FUN_L08_002f5e58(struct Moby *m) {
             for (j = 0; j <= b[8]; j++) {
                 f32 a, c, t, base, angle, shape;
                 x = convert_integer_to_float(j) / convert_integer_to_float(b[8]);
-                a = FUN_L00_0025e310(f[0x17] * time);
+                a = normalize_rotation_l14(f[0x17] * time);
                 angle = x * 3.1415927f;
                 c = fast_sin(a);
                 t = f[0x16] * c;
@@ -806,8 +806,8 @@ void FUN_L08_002f5e58(struct Moby *m) {
                 noise_x = FUN_L08_002f5d98(x, (char *)d);
                 base = base + (noise_x * f[0x34] + noise_y * f[0x35] + bend * f[0x36]);
                 shape = height_a * x + height_b * (1.0f-x);
-                a = FUN_L00_0025e310(base + phase_a + f[0xb] * x + f[0xd] * y);
-                c = FUN_L00_0025e310(base + phase_b + f[0xc] * y + f[0xe] * x);
+                a = normalize_rotation_l14(base + phase_a + f[0xb] * x + f[0xd] * y);
+                c = normalize_rotation_l14(base + phase_b + f[0xc] * y + f[0xe] * x);
                 sine = square_root(fast_sin(angle));
                 shape = shape * sine;
                 shape = shape * (1.0f-y);
@@ -817,8 +817,8 @@ void FUN_L08_002f5e58(struct Moby *m) {
                 normalize_vector_xyz(&offset, &down[0], amp_b * t * sine * noise_x);
                 a = fast_sin(y * 3.1415927f);
                 c = fast_sin(angle);
-                t = fast_sin(FUN_L00_0025e310(base + f[0xb] * x));
-                base = fast_sin(FUN_L00_0025e310(base + f[0xd] * y));
+                t = fast_sin(normalize_rotation_l14(base + f[0xb] * x));
+                base = fast_sin(normalize_rotation_l14(base + f[0xd] * y));
                 normalize_vector_xyz(&wave, &normal, a * c * (f[0x1e] * t + f[0x1f] * base));
                 normalize_vector_xyz(&sag, &down[0], shape);
                 add_vector_xyz(&position, &velocity, &offset);
@@ -840,8 +840,8 @@ void FUN_L08_002f5e58(struct Moby *m) {
         f32 a;
         s32 count;
         f32 *weight;
-        a = fast_sin(FUN_L00_0025e310(time * f[0x12]));
-        a = FUN_L00_00200228(time*f[0x10] + f[0x11]*a, &temp);
+        a = fast_sin(normalize_rotation_l14(time * f[0x12]));
+        a = split_float_fraction(time*f[0x10] + f[0x11]*a, &temp);
         count = 0;
         if (count <= b[8]) {
             weight = u;
@@ -851,8 +851,8 @@ void FUN_L08_002f5e58(struct Moby *m) {
                 count++;
             } while (count <= b[8]);
         }
-        a = fast_sin(FUN_L00_0025e310(time * f[0x15]));
-        a = FUN_L00_00200228(time*f[0x13] + f[0x14]*a, &temp);
+        a = fast_sin(normalize_rotation_l14(time * f[0x15]));
+        a = split_float_fraction(time*f[0x13] + f[0x14]*a, &temp);
         count = 0;
         if (count <= b[9]) {
             weight = v;

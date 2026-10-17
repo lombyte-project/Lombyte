@@ -44,7 +44,7 @@ extern short D_L16_00161D8C __attribute__((sda));
 extern void *debris302618(char *, int, float *, void *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_L00_0025e450(void*,void*,void*,float,float,int,int,int,float,float,float,int,float,float,int,int,int,int);
+extern void spawn_explosion(void*,void*,void*,float,float,int,int,int,float,float,float,int,float,float,int,int,int,int) __asm__("FUN_L00_0025e450");
 extern void FUN_L16_002e2b60(struct Moby *);
 extern void FUN_L16_002e2fa0(void *);
 extern void FUN_L16_002e3050(char *);
@@ -223,7 +223,7 @@ void armed_transport_update(char *m) {
         *(float *)(d + 0x194) -= dt + dt;
         *(float *)(m + 0x40) += dt * 0.2617994f;
         if (fast_dec_timer((int *)(d + 0x160)) || hero.vehicle_mode == 2) {
-            FUN_L00_0025e450(m, D_L16_0015F580, m + 0x10, 0.0f, 0.0f, 20, 12, 8, 4.0f, 2.5f, 9.0f, -1, 2.0f, 0.0f,
+            spawn_explosion(m, D_L16_0015F580, m + 0x10, 0.0f, 0.0f, 20, 12, 8, 4.0f, 2.5f, 9.0f, -1, 2.0f, 0.0f,
                               0, 0, -1, 0);
             debris302618(m, 0x634, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
                               D_L16_0015F580);
@@ -264,8 +264,8 @@ extern int hit_reaction(void *, char *, void *, int, int *, float *, int, int) _
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void mark_moby_for_removal_u(char *) __asm__("FUN_0020c828");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_0025d458(void *, void *);
-extern void FUN_L00_0025d538(void *, void *);
+extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 
 typedef struct {
@@ -328,10 +328,10 @@ void FUN_L16_002e2b60(struct Moby *m) {
                 *(unsigned char *)(d + 0x67) = 120;
             }
         }
-        FUN_L00_0025d458(m, d + 0x60);
+        trooper_anim_update(m, d + 0x60);
     }
     m->hit_slot = 255;
-    FUN_L00_0025d538(m, d + 0x60);
+    trooper_anim_finish(m, d + 0x60);
     if (*(int *)(d + 0xD0) != -1 && D_001413DC[0] != 22) {
         char *path = D_L16_001B0930[*(int *)(d + 0xD0)];
         activate_effect_l08(128.0f, m, d + 0x70, 0, 0, path + 0x10, *(int *)path);

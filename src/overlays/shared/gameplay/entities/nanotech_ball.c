@@ -463,7 +463,7 @@ extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 float FUN_L00_00257c48(float lo, float hi);
-float FUN_L00_00257e20(float a, float b, float c, float d, float t);
+float cubic_hermite_scalar(float a, float b, float c, float d, float t) __asm__("FUN_L00_00257e20");
 int FUN_L00_00257b90(int lo, int hi);
 int FUN_L00_0028dc90(int i, int a1, int v, int k);
 int FUN_L00_002d8980_c(char *a) __asm__("FUN_L00_002d8980");
@@ -2012,7 +2012,7 @@ extern int FUN_L00_00257b90_c(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
-extern unsigned FUN_L00_0025c0e8(unsigned, int);
+extern unsigned col_2af5b8(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
 extern void FUN_L00_0025c088(int *, int *, int *, int);
 extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
@@ -2119,8 +2119,8 @@ void FUN_L00_002dbf28(char *self, char *q) {
             float big;
             t1 = D_L00_001EA100;
             t2 = D_L00_001EA118;
-            A = FUN_L00_0025c0e8(t1.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
-            B = FUN_L00_0025c0e8(t2.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
+            A = col_2af5b8(t1.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
+            B = col_2af5b8(t2.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
             big = f22 * 400000.0f;
             r1 = FUN_L00_00257b90_c(scale_game_frames_c(15), scale_game_frames_c(20));
             r2 = FUN_L00_00257b90_c(scale_game_frames_c(25), scale_game_frames_c(30));
@@ -2255,8 +2255,8 @@ extern int quaternion_to_matrix() __asm__("FUN_001fa4f8");
 extern int matrix_to_quaternion() __asm__("FUN_00214260");
 extern int FUN_L00_001f0d60();
 extern int FUN_L00_001f2868();
-extern int FUN_L00_001ff430();
-extern int FUN_L00_001ff660();
+extern int dot1688() __asm__("FUN_L00_001ff430");
+extern int reflect1688() __asm__("FUN_L00_001ff660");
 extern int FUN_L00_00259888();
 extern int allocate_voice_for_target_entry_alt(int,int,int) __asm__("FUN_0022da68");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
@@ -2276,11 +2276,11 @@ extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-f32 FUN_L00_0025e310(f32 a);
+f32 normalize_rotation_l14(f32 a) __asm__("FUN_L00_0025e310");
 float absolute_float_c(float input) __asm__("func_001F99C0");
 int FUN_L00_002da218(char *a);
 s32 scale_game_frames_alt_c2(s32) __asm__("FUN_001f96f8");
-void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
+void turn_e50(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
 void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d);
 void FUN_L00_0026c3d0(void *pos, void *mat);
 void FUN_L00_002dc938_c(char *p, char *q, int flag) __asm__("FUN_L00_002dc938");
@@ -3274,7 +3274,7 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
     }
 }
 int FUN_L00_002591d0(void *, s32, s32, s32);
-int FUN_L00_002592b8(void *, s32, s32, s32);
+int f2592b8_2591d0(void *, s32, s32, s32) __asm__("FUN_L00_002592b8");
 void FUN_L00_00263618(void *, void *, f32, f32);
 void FUN_L00_002df3d8(u8 *p) {
     u8 *it[2] __attribute__((aligned(16)));
@@ -3291,7 +3291,7 @@ void FUN_L00_002df3d8(u8 *p) {
                 FUN_L00_00263618(q + 0x10, m[1], s, 0.5f);
             }
         }
-        FUN_L00_002592b8(it, it[0], 0, 0);
+        f2592b8_2591d0(it, it[0], 0, 0);
     }
 }
 extern s32 D_L00_0015F5CC;

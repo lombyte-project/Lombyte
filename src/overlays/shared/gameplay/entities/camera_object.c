@@ -780,13 +780,13 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
 extern void FUN_0020c828(void *);
 extern s32 FUN_L00_001f0d60(void *, s32, void *, f32);
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 FUN_L00_001fe990(void *, s32, f32);
 extern s32 FUN_L00_002603d0(void *);
 extern void f_L00_00260668(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern void FUN_L00_00259f50(void *, void *);
-extern void FUN_L00_0025f730(void *, f32);
+extern void vec_limit302618(void *, f32) __asm__("FUN_L00_0025f730");
 extern void FUN_L00_002a6de8_c(Bolt *, void *, s32) __asm__("FUN_L00_002a6de8");
 extern void FUN_L00_002a6b70_c(Bolt *) __asm__("FUN_L00_002a6b70");
 extern void FUN_L00_002a7210_c(Bolt *, void *, f32, f32) __asm__("FUN_L00_002a7210");
@@ -901,7 +901,7 @@ void bolt_update(Bolt *obj) {
         v->rot.f[2] = fast_arc_tan(D_L00_00173E40.normal_x, D_L00_00173E40.normal_y);
         v->rot.f[1] = fast_arc_tan(D_L00_00173E40.normal_z, vec_len_xy(&D_L00_00173E40.normal_x));
         fast_vec_sub(&a, &obj->pos, &D_L00_00173E40.point);
-        FUN_L00_001ff660(&v->vel, &v->vel, &a);
+        reflect1688(&v->vel, &v->vel, &a);
         if (vector_distance(&obj->pos, &hero.motion.pos) < hero.reach_distance &&
             FUN_001f99c0(obj->pos.f[2] - hero.motion.pos.f[2]) < hero.reach_height) {
             if (hero.health.hp == 0) {
@@ -996,7 +996,7 @@ void bolt_update(Bolt *obj) {
         if (flag) {
             fast_vec_normalize(&a, &hero.unk0[8], D_0015ED6C * 7.0f);
             fast_vec_sub(&b, &a, &v->vel);
-            FUN_L00_0025f730(&b, frame_time_sq * 50.0f);
+            vec_limit302618(&b, frame_time_sq * 50.0f);
             fast_vec_add(&v->vel, &v->vel, &b);
         } else {
             t = frame_time_sq * 10.0f;
@@ -1829,7 +1829,7 @@ extern int FUN_L00_00216de8(int,int);
 extern int hero_set_state_2(int,int) __asm__("FUN_L00_002223f8");
 extern int sweep_hit_segment(void*,void*,void*,void*,void*,void*,int) __asm__("FUN_L00_00259d08");
 extern int FUN_L00_0025e368(char*);
-extern int FUN_L00_0025e3b8(int);
+extern int f5e3b8_20d6b0(int) __asm__("FUN_L00_0025e3b8");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int*) __asm__("FUN_001f9740");
@@ -2088,7 +2088,7 @@ void wrench_update(WrenchMoby *m) {
             }
         }
         collided=0;
-        if (FUN_001efa68(work.v[0],position,2,0,0) && collision_hit_material() && (!collision_hit.moby || !FUN_L00_0025e3b8((int)collision_hit.moby))) collided=collision_hit.surface!=0;
+        if (FUN_001efa68(work.v[0],position,2,0,0) && collision_hit_material() && (!collision_hit.moby || !f5e3b8_20d6b0((int)collision_hit.moby))) collided=collision_hit.surface!=0;
         if (collided || d->collision) {
             d->collision=0;
             if (!wrench_hero()->attack_cooldown) { d->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(2,0,(int)m); }

@@ -13,7 +13,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int f2592b8_2591d0(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern void FUN_L00_00263618(void *, int, float, float);
 
 void FUN_L02_002ec308(char *self) {
@@ -33,7 +33,7 @@ void FUN_L02_002ec308(char *self) {
                 }
             }
         }
-        FUN_L00_002592b8((int *)&cur, (int)cur, 0, 0);
+        f2592b8_2591d0((int *)&cur, (int)cur, 0, 0);
     }
 }
 /* Refreshes a moby's three sub-objects, packs its colour bytes, and queues a redraw when the global changed. */

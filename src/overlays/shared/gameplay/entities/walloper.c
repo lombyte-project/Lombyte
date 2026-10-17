@@ -60,7 +60,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int suck_get_aim_height() __asm__("FUN_002141f8");
 extern float FUN_L00_00257c48(float, float), FUN_L00_00257be8(float, float);
-extern float FUN_L00_0025e310(float);
+extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
 extern int FUN_L00_00257b90(int, int), FUN_00213260(int);
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
@@ -193,7 +193,7 @@ next_candidate:;
         n = (float)i;
         factor = D_L00_001615A4 + (D_L00_001615A8 - D_L00_001615A4) *
                     (convert_integer_to_float(i) * 0.05f);
-        phase = FUN_L00_0025e310((*(float *)&D_L00_001615AC_gp) + n * D_L00_001615A0);
+        phase = normalize_rotation_l14((*(float *)&D_L00_001615AC_gp) + n * D_L00_001615A0);
         wave = factor * fast_sin(phase);
         wave += FUN_L00_00257c48(D_L00_001615E4, D_L00_001615E8);
 
@@ -236,8 +236,8 @@ next_candidate:;
             }
         }
         if (i < 10) {
-            phase = FUN_L00_0025e310((*(float *)&D_L00_001615B4_gp) + (float)i * D_L00_001615BC);
-            angle = FUN_L00_0025e310((*(float *)&D_L00_001615C8_gp) + (float)i * D_L00_001615D0);
+            phase = normalize_rotation_l14((*(float *)&D_L00_001615B4_gp) + (float)i * D_L00_001615BC);
+            angle = normalize_rotation_l14((*(float *)&D_L00_001615C8_gp) + (float)i * D_L00_001615D0);
             factor = D_L00_001615C0 * fast_sin(angle);
             qcopy(side, point);
             wave = fast_sin(phase);
@@ -1725,7 +1725,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern float FUN_L00_0025e310(float);
+extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
 extern float D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
 extern signed char D_L00_00161763;
 extern float D_L00_001617CC;

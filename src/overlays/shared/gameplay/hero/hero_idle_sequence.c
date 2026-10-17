@@ -149,11 +149,11 @@ f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void detach_manipulator(s32, void *) __asm__("FUN_0020cb88");
 void attach_manipulator(s32, s32, void *) __asm__("FUN_0020cb10");
-/* FUN_L00_0025bc98 (eases an angle toward a target) with its int argument last. EABI
+/* fast_subtract_rotations_cf (eases an angle toward a target) with its int argument last. EABI
    passes ints and floats in separate registers, so the call is the same; this order
    gives retail's register allocation. */
 f32 turn_k(f32 *, f32, f32 *, f32, f32, f32, s32) __asm__("FUN_L00_0025bc98");
-void FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
+void vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void FUN_L00_00259f50(void *, void *);
 
 /* Eases one record's rotation and position toward their targets and rebuilds its matrix;
@@ -190,9 +190,9 @@ void FUN_L00_00205168(struct HeroEase *e) {
         turn_k(&rot->f[0], e->rot_target.f[0], &e->rot_vel.f[0], e->accel * frame_scale_sq, e->max_speed * frame_scale_sq, 0.0f, 2);
         turn_k(&rot->f[1], e->rot_target.f[1], &e->rot_vel.f[1], e->accel * frame_scale_sq, e->max_speed * frame_scale_sq, 0.0f, 2);
         turn_k(&rot->f[2], e->rot_target.f[2], &e->rot_vel.f[2], e->accel * frame_scale_sq, e->max_speed * frame_scale_sq, 0.0f, 2);
-        FUN_L00_0025b8c0(&pos->f[0], &e->pos_vel.f[0], e->pos_target.f[0], e->accel, e->max_speed, 0.0f);
-        FUN_L00_0025b8c0(&pos->f[1], &e->pos_vel.f[1], e->pos_target.f[1], e->accel, e->max_speed, 0.0f);
-        FUN_L00_0025b8c0(&pos->f[2], &e->pos_vel.f[2], e->pos_target.f[2], e->accel, e->max_speed, 0.0f);
+        vendor_spring(&pos->f[0], &e->pos_vel.f[0], e->pos_target.f[0], e->accel, e->max_speed, 0.0f);
+        vendor_spring(&pos->f[1], &e->pos_vel.f[1], e->pos_target.f[1], e->accel, e->max_speed, 0.0f);
+        vendor_spring(&pos->f[2], &e->pos_vel.f[2], e->pos_target.f[2], e->accel, e->max_speed, 0.0f);
         if (!e->attached)
             attach_manipulator(moby, e->unkA0, e);
         FUN_L00_00259f50(&e->quat, rot);
@@ -2051,7 +2051,7 @@ f32 FUN_L00_00208f20(f32 a, f32 b, f32 c, f32 d) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00209690), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_00200228(void *, float);
+extern float split_float_fraction(void *, float) __asm__("FUN_L00_00200228");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 #include "rnc/data_labels.h"
 
@@ -2066,7 +2066,7 @@ float vector_length_xyz_cf(float *a, int n) {
     if (*(int *)(d + 0xA98) & 2) {
         p = m;
     }
-    w = FUN_L00_00200228(buf, *(float *)(d + 0xAA8));
+    w = split_float_fraction(buf, *(float *)(d + 0xAA8));
     return w * a[i] + (*(float *)(d + 0xAAC) - w) * a[p];
 }
 typedef unsigned int u128_002090d0 __attribute__((mode(TI), aligned(16)));
@@ -2566,7 +2566,7 @@ extern V collision_hit_point __asm__("D_L00_00173E60") __attribute__((section(".
 extern char D_L00_0017A680_d[] __asm__("D_L00_0017A680") __attribute__((section(".data")));
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L00_0020a240_u(int, float, float) __asm__("FUN_L00_0020a240");
-extern int FUN_L00_0025e3b8(void *);
+extern int f5e3b8_20d6b0(void *) __asm__("FUN_L00_0025e3b8");
 extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") __attribute__((section(".data")));
 
 void FUN_L00_0020a318(void) {
@@ -2598,7 +2598,7 @@ void FUN_L00_0020a318(void) {
         return;
     if (*(unsigned char *)(g + 0x20A8) != 0) {
         if (D_L00_00173E58_d != 0) {
-            if (FUN_L00_0025e3b8(D_L00_00173E58_d) != 0)
+            if (f5e3b8_20d6b0(D_L00_00173E58_d) != 0)
                 return;
         }
     }

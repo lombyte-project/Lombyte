@@ -1233,7 +1233,7 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float vector_length_xyz(void *);
 extern int FUN_L00_00257b90(int, int);
-extern void FUN_L00_0025d458(void *m, short *p);
+extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void add_vector_xyz(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void normalize_vector_xyz(void *, void *, float);
@@ -1248,7 +1248,7 @@ void FUN_L09_002ee110(struct Moby *m) {
         *(float *)d = *(float *)d - *(float *)(r + 0x2C);
         if (0.0f < *(float *)d) {
             d[0x47] = 0x46;
-            FUN_L00_0025d458(m, (short *)(d + 0x40));
+            trooper_anim_update(m, (short *)(d + 0x40));
         } else {
             char *pos = &m->pos;
             v.x = fast_cos(m->rot.z) * (frame_time * 20.0f);
@@ -1633,7 +1633,7 @@ extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
-float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
+float fast_subtract_rotations_cf(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
 void FUN_L07_00288968(void *a0, void *a1, void *a2, void *a3, void *a4);
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int func_001F9850_2F9A50(int) __asm__("FUN_001f96f8");

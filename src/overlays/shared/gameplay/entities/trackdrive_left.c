@@ -442,7 +442,7 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 force_help_message(s32 arg0, s32 arg1) __asm__("FUN_002151d8");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
-void FUN_L00_0025d538(s32 id, void *s);
+void trooper_anim_finish(s32 id, void *s) __asm__("FUN_L00_0025d538");
 void FUN_L00_002ea9d8(char *src);
 void FUN_L00_002eaa30(char *src);
 void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
@@ -1360,7 +1360,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern unsigned char D_0014C050_a[] __asm__("D_0014C050");
 extern int D_L02_0015F5CC; /* no foreign declaration */
 extern int D_L02_0015FFD8; /* no foreign declaration */
-extern int FUN_L00_0025be00();
+extern int approach_angle() __asm__("FUN_L00_0025be00");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern float D_L02_00161CB0 __attribute__((sda));

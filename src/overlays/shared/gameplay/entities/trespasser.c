@@ -709,7 +709,7 @@ extern int FUN_L00_002bf9f0(void *, void *, void *, int);
 extern u8 FUN_L00_002bfec8(void *);
 extern void FUN_L00_00258278_2bffa8(void *, void *, float, float, float, float) __asm__("FUN_L00_00258278");
 extern u32 FUN_L00_00258ad0_2bffa8(void *, void *, int, int, float, float) __asm__("FUN_L00_00258ad0");
-extern u32 FUN_L00_00259028(void *, void *, void *, void *);
+extern u32 steer302618(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern int FUN_L00_0025b440(void *, void *);
 extern void FUN_L00_0025e450_2bffa8(void *, void *, void *, int, int, int, int, int, int, int, int, float, float, float, float, float, float, float) __asm__("FUN_L00_0025e450");
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -951,7 +951,7 @@ collision_done:
         target = (struct Moby *)collision_hit_2bffa8.moby;
         if (!hit || target == vars->target || (target && target->pclass && target->pclass->type == 5)) {
             old_z = moby->pos.z;
-            flags = FUN_L00_00259028(moby,(u8 *)&hero+0x1ec0,vars,&vars->velocity);
+            flags = steer302618(moby,(u8 *)&hero+0x1ec0,vars,&vars->velocity);
             if (1.0f < absolute_float(moby->pos.z-old_z)) {
                 moby->pos.z = old_z;
                 if (FUN_L00_002beab0(moby,5,0)) {
@@ -1674,7 +1674,7 @@ extern u8 D_0013E539;
 extern s32 D_L00_0015FFD8_2c35c0 __asm__("D_L00_0015FFD8");
 extern s16 D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section(".data")));
 extern f32 FUN_002132a8_2c35c0(f32, f32) __asm__("FUN_002132a8");
-extern void FUN_L00_0025f800(void *, void *);
+extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void place_2ce1f0(void *) __asm__("FUN_L00_0025d1b8");
 extern void FUN_L00_0025f780(void *, void *, s32);
 
@@ -1726,7 +1726,7 @@ u8 *FUN_L00_002c35c0(s32 value, u128 *position, u128 *other_position) {
                 }
             }
             if (candidate != 0) {
-                FUN_L00_0025f800(candidate, D_L00_001B0830_lui);
+                mine_spawn_drops(candidate, D_L00_001B0830_lui);
                 candidate[0x20] = 6;
             }
         }
@@ -1949,17 +1949,17 @@ extern float D_0015ED70_2c4380 __asm__("D_0015ED70");
 extern float D_0015ED6C_2c4380 __asm__("D_0015ED6C");
 extern float FUN_00200240_2c4380(int) __asm__("FUN_001fa6c0");
 extern int FUN_L00_0025a420(void *, int, int);
-extern int FUN_L00_00258830(void *, void *, float, float, float, int);
+extern int push302618(void *, void *, float, float, float, int) __asm__("FUN_L00_00258830");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern float FUN_L00_00259698_2c4380(void *, int, float) __asm__("FUN_00213508");
 extern void probe_ground_height_cf(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern void FUN_L00_002c40a0(S_2c40a0 *);
 extern void FUN_L00_002c4328(void *);
-extern void FUN_L00_0025d458(void *, void *);
-extern void FUN_L00_0025d538(void *, void *);
+extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025f8e0(float, void *);
-extern void FUN_L00_0025e450(float, void *, void *, int, float, float, int, int, int,
-                              float, float, float, float, int, int, int, int, int);
+extern void spawn_explosion(float, void *, void *, int, float, float, int, int, int,
+                              float, float, float, float, int, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void make_hit_089d0(float, void *, void *, int) __asm__("FUN_L00_00259858");
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_0024eb68_2c4380(void *) __asm__("FUN_0020c828");
@@ -1982,7 +1982,7 @@ extern float FUN_001ff7e8_2c4380(float) __asm__("FUN_001f9dc8");
 extern float FUN_001ff800_2c4380(float) __asm__("FUN_001f9de0");
 extern float FUN_00200130_2c4380(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_002000e8_2c4380(float, float) __asm__("FUN_001fa580");
-extern void FUN_L00_0025f800(void *, void *);
+extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 
 void decoy_update(char *moby) __asm__("FUN_L00_002c4380");
 void decoy_update(char *moby) {
@@ -2002,18 +2002,18 @@ void decoy_update(char *moby) {
     if (*(float *)(moby + 0x10) < 2.0f || 1021.0f < *(float *)(moby + 0x10) ||
         *(float *)(moby + 0x14) < 2.0f || 1021.0f < *(float *)(moby + 0x14) ||
         *(float *)(moby + 0x18) < 2.0f || 1021.0f < *(float *)(moby + 0x18)) {
-        FUN_L00_0025f800(moby, D_L00_001B0830_lui);
+        mine_spawn_drops(moby, D_L00_001B0830_lui);
         FUN_L00_0024eb68_2c4380(moby);
         return;
     }
     if ((hero.items[0].moby == 0 || *(short *)((char *)hero.items[0].moby + 0xa6) != 0x232) &&
         (u8)moby[0x20] == 1) {
-        FUN_L00_0025f800(moby, D_L00_001B0830_lui);
+        mine_spawn_drops(moby, D_L00_001B0830_lui);
         FUN_L00_0024eb68_2c4380(moby);
         return;
     }
     if (hero.vehicle_mode != 0 && (u8)moby[0x20] == 1) {
-        FUN_L00_0025f800(moby, D_L00_001B0830_lui);
+        mine_spawn_drops(moby, D_L00_001B0830_lui);
         FUN_L00_0024eb68_2c4380(moby);
         return;
     }
@@ -2044,7 +2044,7 @@ void decoy_update(char *moby) {
         if (target && (((u8)target[0x20] & 0xf0) != 0xf0) && hero.items[0].moby &&
             *(short *)((char *)hero.items[0].moby + 0xa6) == 0x232)
             return;
-        FUN_L00_0025f800(moby, D_L00_001B0830_lui);
+        mine_spawn_drops(moby, D_L00_001B0830_lui);
         FUN_L00_0024eb68_2c4380(moby);
         return;
     }
@@ -2071,7 +2071,7 @@ void decoy_update(char *moby) {
         }
         if (hero.state.current == 0x1e)
             *(int *)((char *)hero.moby + 0x94) = 0;
-        hit = FUN_L00_00258830(moby, vars + 0x10, 0.2f, 0.2f, 0.0f, 0);
+        hit = push302618(moby, vars + 0x10, 0.2f, 0.2f, 0.0f, 0);
         if (hit & 1) {
             qcopy(scratch.w, moby + 0x10);
             scratch.w[2] += 0.2f;
@@ -2178,7 +2178,7 @@ void decoy_update(char *moby) {
                         ((u8 *)vars)[7] = 0xfa;
                         *(float *)(vars + 0x48) -= len;
                     }
-                    FUN_L00_0025d458(moby, vars);
+                    trooper_anim_update(moby, vars);
                     if (*(float *)(vars + 0x48) < 0.0f) {
                         *(OvlQuad *)scratch.w = 0;
                         scratch.w[0] = D_0015ED60_2c4380 * 0.5f;
@@ -2186,7 +2186,7 @@ void decoy_update(char *moby) {
                         scratch.w[1] = scratch.w[0];
                         *(OvlQuad *)v = *(OvlQuad *)scratch.w;
                         FUN_L00_0025f8e0(scratch.w[0], v);
-                        FUN_L00_0025e450(0, moby, v, 0, 0, 4.0f, 0, 0, 0,
+                        spawn_explosion(0, moby, v, 0, 0, 4.0f, 0, 0, 0,
                                          3.0f, 9.0f, 1.0f, 12.0f, 2, 1, 1, -1, active);
                         if (active) {
                             make_hit_089d0(effect + effect, scratch.w, moby, 0x810000);
@@ -2195,7 +2195,7 @@ void decoy_update(char *moby) {
                             *(u16 *)((u8 *)scratch.x + 10) = *(u16 *)(moby + 0xa6);
                             collect_mobies_in_sphere(effect * 3.0f, moby + 0x10, 0x10, moby, scratch.w);
                         }
-                        FUN_L00_0025f800(moby, D_L00_001B0830_lui);
+                        mine_spawn_drops(moby, D_L00_001B0830_lui);
                         FUN_L00_0024eb68_2c4380(moby);
                         return;
                     }
@@ -2203,7 +2203,7 @@ void decoy_update(char *moby) {
             }
         }
         ((u8 *)moby)[0xa4] = 0xff;
-        FUN_L00_0025d538(moby, vars);
+        trooper_anim_finish(moby, vars);
         if (moby[0x70] & 2) {
             if (((u8 *)moby)[0x53] != 2)
                 FUN_00257880_2c4380(moby, 2, 0, FUN_001fef20_2c4380(10));
@@ -2244,7 +2244,7 @@ void decoy_update(char *moby) {
             if (FUN_001fef98_2c4380(vars + 0x44)) {
                 if (((u8 *)moby)[0x53])
                     FUN_00257880_2c4380(moby, 0, 0, FUN_001fef20_2c4380(60));
-                FUN_L00_0025f800(moby, D_L00_001B0830_lui);
+                mine_spawn_drops(moby, D_L00_001B0830_lui);
                 moby[0x20] = 5;
             }
         }

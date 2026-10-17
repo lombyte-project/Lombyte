@@ -11,7 +11,8 @@
 extern void FUN_L00_0025b798(float *ptr, float rate, float b, float c, float limit);
 float absolute_float(float input) __asm__("func_001F99C0");
 
-float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps) {
+float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
+float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) {
     float n, d;
     FUN_L00_0025b798(v, t - *p, u1, u2, eps);
     n = *p + *v;

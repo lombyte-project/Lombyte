@@ -992,7 +992,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void FUN_L01_0026e0e0(int, int);
+extern void set_group_state_30ca80(int, int) __asm__("FUN_L01_0026e0e0");
 extern void FUN_L05_0029be70(float, float, float, void *, void *, int, int);
 extern void FUN_L00_002718d0(float, float, void *, void *, void *);
 extern unsigned char D_0014C050[][16];
@@ -1037,7 +1037,7 @@ void FUN_L05_003150f0(struct Moby *m) {
         break;
     case 1:
         if (d->trigger >= 0 && D_L05_0015FFD8[d->trigger].command != 0) {
-            FUN_L01_0026e0e0(m->group, 2);
+            set_group_state_30ca80(m->group, 2);
         }
         break;
     case 2:
@@ -1446,7 +1446,7 @@ void FUN_L05_00316110(char *moby) {
     }
 }
 extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
-extern void FUN_L00_001fff28(void *, int, float);
+extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
 extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9b48(void *, void *);
 extern char *D_001413D0_316258 __asm__("D_001413D0") __attribute__((section(".data")));
@@ -1476,7 +1476,7 @@ void FUN_L05_00316258(char *moby) {
         } else {
             *(u8 *)(moby + 0x20) = 1;
             *(float *)(data + 0x60) = 0.5934119f;
-            FUN_L00_001fff28(data + 0x20, 0, 0.5934119f);
+            set_joint_67e8(data + 0x20, 0, 0.5934119f);
         }
         *(long long *)(moby + 0x38) = *(long long *)(D_001413D0_316258 + 0x38);
         break;
@@ -1526,7 +1526,7 @@ void FUN_L05_00316258(char *moby) {
                         *(u8 *)(moby + 0x20) = 3;
                 }
             }
-            FUN_L00_001fff28(data + 0x20, 0, *(float *)(data + 0x60));
+            set_joint_67e8(data + 0x20, 0, *(float *)(data + 0x60));
         }
         break;
     case 3:

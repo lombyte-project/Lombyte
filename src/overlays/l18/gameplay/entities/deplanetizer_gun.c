@@ -943,12 +943,12 @@ extern char D_L18_001625F0[4] __attribute__((sda));
 extern char D_L18_00162608 __attribute__((sda));
 extern float vector_distance_xy(float *, float *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int FUN_L00_0025c698(void *, void *);
-extern int FUN_L00_0025e450();
+extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
+extern int spawn_explosion() __asm__("FUN_L00_0025e450");
 extern int hitreact_3DF8(void *, void *) __asm__("FUN_L00_002dc9f0");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int random_integer_below(int);
@@ -1062,7 +1062,7 @@ void FUN_L18_002fbb98(unsigned char *m) {
         k = 6.2831855f;
         b = frame_time_sq * k;
         d = frame_time * k;
-        FUN_L00_0025be00((float *)s0, (float *)(e + 0x1E8), r, b, b, d);
+        approach_angle((float *)s0, (float *)(e + 0x1E8), r, b, b, d);
         if (is_value_within_interpolated_window((char *)m, 14.0f))
             FUN_L00_002599e8(m, 0.5f, 1.0f, 1.0f, 1, 1, 0, 1, 0);
         if (m[0x70] & 2) {
@@ -1082,7 +1082,7 @@ void FUN_L18_002fbb98(unsigned char *m) {
         break;
     }
     case 5:
-        if (!(FUN_L00_0025c698(m, e + 0x70) & 0x140))
+        if (!(mine_fall(m, e + 0x70) & 0x140))
             break;
     case 6:
         qcopy(tmp, m + 0x10);
@@ -1272,9 +1272,9 @@ typedef struct {
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float vector_distance_xy(float *, float *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
+extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float fast_cos(float) __asm__("func_001F9DC8");
-extern void FUN_L00_00258830(int, int, float, float, float, int);
+extern void push302618(int, int, float, float, float, int) __asm__("FUN_L00_00258830");
 extern void FUN_L00_00261d78(float, void *, void *, void *);
 
 float FUN_L18_002fc4e0(char *self, float *src) {
@@ -1290,7 +1290,7 @@ float FUN_L18_002fc4e0(char *self, float *src) {
         float d = fast_add_rotations(
             fast_arc_tan(a.v[0] - *(float *)(self + 0x10), a.v[1] - *(float *)(self + 0x14)),
             *(float *)(o + 0x1EC));
-        FUN_L00_0025be00((float *)(self + 0x48), (float *)(o + 0x1E8), d, frame_time_sq * 6.2831855f,
+        approach_angle((float *)(self + 0x48), (float *)(o + 0x1E8), d, frame_time_sq * 6.2831855f,
                          frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
     }
     b[0] = z;
@@ -1300,7 +1300,7 @@ float FUN_L18_002fc4e0(char *self, float *src) {
     v[0] = fast_cos(*(float *)(self + 0x48)) * *(float *)(o + 0x1F0);
     v[1] = fast_sin(*(float *)(self + 0x48)) * *(float *)(o + 0x1F0);
     v[2] = -(frame_time + frame_time);
-    FUN_L00_00258830((int)self, (int)v, h, h, z, 0);
+    push302618((int)self, (int)v, h, h, z, 0);
     FUN_L00_00261d78(h, *(void **)(o + 0x1E0), self + 0x10, self + 0x10);
     return dist;
 }

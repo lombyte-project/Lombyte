@@ -311,7 +311,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -351,7 +351,7 @@ void FUN_L11_00309098(char *moby) {
             r[1] = random_float_between(-1.0f, 1.0f);
             r[2] = random_float_between(-1.0f, 1.0f);
             *(OvlQuad *)q = *(OvlQuad *)r;
-            FUN_L00_001ff660(r, data, D_L11_00174880);
+            reflect1688(r, data, D_L11_00174880);
             normalize_vector_xyz(q, q, vector_length_xyz(r) * 0.5f);
             add_vector_xyz(q, r, q);
             normalize_vector_xyz(q, q, random_float_between(frame_time * 5.0f, frame_time * 9.0f));

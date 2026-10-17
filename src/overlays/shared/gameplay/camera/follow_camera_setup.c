@@ -1185,7 +1185,7 @@ f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
 extern void FUN_001f9a10_2e7d20(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern s32 FUN_L00_002e4290_2e7d20(void *) __asm__("FUN_L00_002e4290");
-s32 FUN_L00_0025e3b8(s32);
+s32 f5e3b8_20d6b0(s32) __asm__("FUN_L00_0025e3b8");
 void make_hit_descriptor(void *, void *, s32, void *, f32) __asm__("FUN_L00_00259888");
 void apply_hit_ece00(s32, void *) __asm__("FUN_L00_00259a88");
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
@@ -1329,7 +1329,7 @@ move:
     if (FUN_L00_002e4290_2e7d20((*(E40_2e7d20_t *)&D_L00_00173E40_lui).v20)) {
         goto clear;
     }
-    if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 != 0 && FUN_L00_0025e3b8((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18)) {
+    if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 != 0 && f5e3b8_20d6b0((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18)) {
         FUN_001f9a28_2e7d20(&v20, (u8 *)(*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 + 0x10, D_L00_00166DC0);
         v20.i[2] = 0;
         FUN_001f9bf8_2e7d20(&v20, &v20, 1.0f);

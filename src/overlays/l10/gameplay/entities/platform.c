@@ -921,7 +921,7 @@ void FUN_L10_002d7b18(struct Moby *a, float t) {
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L01_00274b78(float, void *, void *);
@@ -1002,7 +1002,7 @@ void FUN_L10_002d7b80(struct Moby *moby) {
                 rand_dir[1] = random_float_between_alt(-1.0f, 1.0f);
                 rand_dir[2] = random_float_between_alt(-1.0f, 1.0f);
                 *(OvlQuad *)raised = *(OvlQuad *)rand_dir;
-                FUN_L00_001ff660(rand_dir, data, D_L10_00174300);
+                reflect1688(rand_dir, data, D_L10_00174300);
                 fast_vec_normalize(raised, raised, fast_vec_length(rand_dir) * 0.5f);
                 fast_vec_add(raised, rand_dir, raised);
                 fast_vec_normalize(raised, raised,
@@ -1072,7 +1072,7 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float seg_sqrt(float) __asm__("func_001F9988");
 extern float D_0015ED6C;
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
@@ -1101,7 +1101,7 @@ int FUN_L10_002d8170(char *m, char *c, float *a2) {
             qcopy(m + 0x10, g + 0x20);
             normalize_vector_xyz(v20, g + 0x40, D_0015ED70 * 9.7f);
             add_vector_xyz(m + 0x10, m + 0x10, v20);
-            FUN_L00_001ff660(c, c, g + 0x40);
+            reflect1688(c, c, g + 0x40);
             scale_vector_xyz_c(c, c, 0.35f);
             normalize_vector_xyz(v20, g + 0x40, one);
             dot_vectors_xyz(v20, v10);
@@ -1127,7 +1127,7 @@ int FUN_L10_002d8170(char *m, char *c, float *a2) {
             qcopy(m + 0x10, g + 0x20);
             normalize_vector_xyz(v20, g + 0x40, D_0015ED70 * 9.7f);
             add_vector_xyz(m + 0x10, m + 0x10, v20);
-            FUN_L00_001ff660(c, c, g + 0x40);
+            reflect1688(c, c, g + 0x40);
             scale_vector_xyz_c(c, c, 0.5f);
             normalize_vector_xyz(v20, g + 0x40, one);
             if (0.707f < dot_vectors_xyz(v20, v10)) {
@@ -1647,7 +1647,7 @@ extern char D_0013D388[];
 char D_L10_001DD160[] = "Moby Class %d Instance %d has no pVars!  May be in the art file.\n\tMobyDeleted\n";
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int FUN_L00_002591d0(int *, int, int, int);
-extern int FUN_L00_002592b8(int *, int, int, int);
+extern int f2592b8_2591d0(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L10_002d9000_c() __asm__("FUN_L10_002d9000");
 extern OvlQuad D_L10_00167240;
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
@@ -1686,7 +1686,7 @@ void FUN_L10_002d90a8(unsigned char *m) {
                         flag = 1;
                         break;
                     }
-                } while (FUN_L00_002592b8(&it, it, 0, 0));
+                } while (f2592b8_2591d0(&it, it, 0, 0));
             }
         }
         hit = 0;
@@ -1821,8 +1821,8 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int D_0015ED84; /* no foreign declaration */
 extern int D_L10_001BA950[];
 extern unsigned char D_0014C190_c[] __asm__("D_0014C190");
-extern void FUN_L00_001ff290(void *, void *, void *);
-extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
+extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void spawn_debris_chunk(void *, void *, unsigned int, float, int, float, float, float, int) __asm__("FUN_L01_002f8530");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
@@ -1846,7 +1846,7 @@ void FUN_L10_002d9eb8(char *moby) {
     if (find_moby_hit(moby, 0x40000, 0)) {
         char *c0 = moby + 0xC0;
         v20.q = 0;
-        FUN_L00_0025e450(moby, &v20, moby + 0x10, 0.0f, 0.0f, 5, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
+        spawn_explosion(moby, &v20, moby + 0x10, 0.0f, 0.0f, 5, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
         trooper_play_sound(0, 0, moby, 0x99);
         n = 0x1D;
         do {
@@ -1859,7 +1859,7 @@ void FUN_L10_002d9eb8(char *moby) {
             v30.q = v40.q;
             transform_vector_by_basis(&v30, &v30, c0);
             normalize_vector_xyz(&v40, &v30, random_float_between(5.0f, 10.0f) * D_0015ED6C);
-            FUN_L00_001ff290(&v50, &v30, moby + 0x10);
+            combine_velocity1688(&v50, &v30, moby + 0x10);
             if (random_integer_below(1) == 0)
                 k = 0x70E;
             f21 = random_float_between(0.5f, 1.0f);
@@ -1873,7 +1873,7 @@ void FUN_L10_002d9eb8(char *moby) {
         v30.f[1] = 1.57000005f;
         v30.f[2] = 1.83099997f;
         transform_vector_by_basis(&v30, &v30, c0);
-        FUN_L00_0025e450(moby, &v20, &v30, 0.0f, 0.0f, 5, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
+        spawn_explosion(moby, &v20, &v30, 0.0f, 0.0f, 5, 3, 4, 4.0f, 2.0f, 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
         FUN_L10_002dd848_c(moby);
         FUN_L10_002eb8c0(moby);
         *(int *)(D_0014C190_c + (((short)*(unsigned short *)(moby + 0xB2) >> 5) * 4 + (D_0015ED84 << 8))) |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);

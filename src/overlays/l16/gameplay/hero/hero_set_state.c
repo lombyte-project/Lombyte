@@ -48,7 +48,7 @@ extern int FUN_L00_00216de8(int, int);
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int FUN_L00_00229a98(void);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int FUN_L00_0025d808(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
+extern int sample_path(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
 extern int FUN_L01_00226f10(int a);
 extern int FUN_L01_0028b510(void *, void *, float);
 extern int FUN_L05_002551b8(void);
@@ -77,7 +77,7 @@ extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002325e0(int bank, int seq);
 extern void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
-extern void FUN_L00_0025f730(void *a, float x);
+extern void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void FUN_L00_00262500(int a, char *b);
 extern void FUN_L00_00262528(char *o, int a, int b);
 extern void FUN_L00_00262840(char *o);
@@ -226,7 +226,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         p->health.hp = 0;
         qcopy(&p->motion.unk150, &p->motion.unk110);
-        FUN_L00_0025f730(&p->motion.unk150, frame_time * 3.5f);
+        vec_limit302618(&p->motion.unk150, frame_time * 3.5f);
         if (b)
             set_hero_animation(0x7C, 0, (float)scale_game_frames(0xC));
         break;
@@ -364,7 +364,7 @@ int hero_set_state(int a, int b) {
             s->unk690 = s->motion.pos.f[2] - s->unk69C - -0.12f;
             qcopy(&s->motion.unk150, &s->motion.unk110);
             s->motion.unk150.f[2] = 0.0f;
-            FUN_L00_0025f730(&s->motion.unk150, frame_time * 5.5f);
+            vec_limit302618(&s->motion.unk150, frame_time * 5.5f);
             s->rand_timer.range = 0x68;
             if (b)
                 set_hero_animation(0x3A, 0, (float)scale_game_frames(0x16));
@@ -607,7 +607,7 @@ int hero_set_state(int a, int b) {
             w = v2 + 0x70;
             qcopy(w, v2 + 0x30);
             gravity_flatten((float *)w, (float *)w);
-            FUN_L00_0025f730(w, frame_time * 9.5f);
+            vec_limit302618(w, frame_time * 9.5f);
             *(int *)(v2 + 0xF18) = 0x68;
             if (b)
                 set_hero_animation(0x3A, 0, (float)scale_game_frames(0x11));
@@ -837,7 +837,7 @@ int hero_set_state(int a, int b) {
             struct Hero *q = &hero;
             q->rand_timer.range = 0x68;
             qcopy(&q->motion.unk150, &q->motion.unk110);
-            FUN_L00_0025f730(&q->motion.unk150, frame_time * 7.0f);
+            vec_limit302618(&q->motion.unk150, frame_time * 7.0f);
             if (frame_time * 3.5f < q->motion.unk168)
                 FUN_L00_00216de8(0xC, 0);
             if (b) {
@@ -1007,7 +1007,7 @@ int hero_set_state(int a, int b) {
         p->unk5C0 = 0;
         seg = p->unk564;
         t = p->unk568;
-        FUN_L00_0025d808(*(int **)&p->unk560, pos, &seg, &t, p->unk584, 1.0f);
+        sample_path(*(int **)&p->unk560, pos, &seg, &t, p->unk584, 1.0f);
         subtract_vector_xyz(vec, pos, &p->motion.pos);
         if (0.001f < vector_length_xyz(vec)) {
             normalize_vector_xyz(vec, vec, 1.0f);
@@ -1821,7 +1821,7 @@ int hero_set_state(int a, int b) {
         FUN_L00_00213de8(0.5f);
         p->unk1EE = scale_game_frames(0x2D);
         qcopy(&p->motion.velocity, &p->motion.unk110);
-        FUN_L00_0025f730(&p->motion.velocity, frame_time * 7.0f);
+        vec_limit302618(&p->motion.velocity, frame_time * 7.0f);
         r = find_moby_hit(((void *)p->moby), 1, 0);
         if (r != 0) {
             hero_change_health(truncate_float_to_s32(*(float *)(r + 0x2C)));
@@ -1910,7 +1910,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         FUN_L00_00213de8(0.5f);
         qcopy(&p->motion.velocity, &p->motion.unk110);
-        FUN_L00_0025f730(&p->motion.velocity, frame_time * 5.0f);
+        vec_limit302618(&p->motion.velocity, frame_time * 5.0f);
         hero_change_health(1);
         p->invulnerable_frames = scale_game_frames(0x4D);
         if (b) {

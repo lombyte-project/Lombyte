@@ -306,13 +306,13 @@ void FUN_L09_0030a9e8(unsigned char *a0, char *a1) {
 /* Counts the live level-0x75E mobys among the 20 slots at +0xB0 and returns the last slot not counted. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030BEE8), where it is exact; names translated to the US level program. */
 
-extern int FUN_L01_0026e008(int, int);
+extern int count_group_e3528(int, int) __asm__("FUN_L01_0026e008");
 
 int FUN_L09_0030aae0(int unused, char *m) {
     int last = -1;
     int i;
     char **slot;
-    m[0x91] = FUN_L01_0026e008(*(int *)(m + 0x94), -1);
+    m[0x91] = count_group_e3528(*(int *)(m + 0x94), -1);
     for (i = 0, slot = (char **)(m + 0xB0); i < 20; i++, slot++) {
         char *o = *slot;
         if (o != 0 && *(short *)(o + 0xA6) == 0x75E && (unsigned char)o[0x20] != 0xFE &&
@@ -595,17 +595,17 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
-extern void FUN_L00_001fefc8(void *);
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void dec_byte_timer_edc30(void *) __asm__("FUN_L00_001fefc8");
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
-extern f32 FUN_L00_0025e310(f32);
+extern f32 normalize_rotation_l14(f32) __asm__("FUN_L00_0025e310");
 extern struct Moby *FUN_L09_0030a778(struct Moby *, Vec4 *);
 
 static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
     CollisionHit *hit = &D_L09_00173FC0;
 
     if (hit->moby == 0) {
-        FUN_L00_001ff660(&vars->vel, &vars->vel, &hit->normal_x);
+        reflect1688(&vars->vel, &vars->vel, &hit->normal_x);
         if (atan2_307ba8(hit->normal_z, vector_length_xy(&hit->normal_x)) < 0.6981317f && collision_hit_material() == -1) {
             scale_vector_xyz(&vars->vel, &vars->vel, 0.5f);
             if (fast_vec_length(&vars->vel) < 0.025f) {
@@ -613,7 +613,7 @@ static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
             }
         }
     } else if (((struct Moby *)hit->moby)->oclass != 0x75E) {
-        FUN_L00_001ff660(&vars->vel, &vars->vel, &hit->normal_x);
+        reflect1688(&vars->vel, &vars->vel, &hit->normal_x);
         if (atan2_307ba8(hit->normal_z, vector_length_xy(&hit->normal_x)) < 0.6981317f && collision_hit_material() == -1) {
             scale_vector_xyz(&vars->vel, &vars->vel, 1.2f);
         }
@@ -639,7 +639,7 @@ void spawner_egg_update(struct Moby *moby) {
     f32 dist;
     f32 rate;
 
-    FUN_L00_001fefc8(&vars->sound_delay);
+    dec_byte_timer_edc30(&vars->sound_delay);
     qcopy(&prev, &moby->pos);
     switch (moby->state) {
     case 0:
@@ -678,8 +678,8 @@ void spawner_egg_update(struct Moby *moby) {
         if (fast_dec_timer_s16(&vars->life) != 0) {
             moby->state = 2;
         }
-        moby->rot.x = FUN_L00_0025e310(vars->vel.f[0]);
-        moby->rot.y = FUN_L00_0025e310(vars->vel.f[1]);
+        moby->rot.x = normalize_rotation_l14(vars->vel.f[0]);
+        moby->rot.y = normalize_rotation_l14(vars->vel.f[1]);
         moby->collision = moby->pclass->collision;
         vars->owner->collision = vars->owner->pclass->collision;
         vars->vel.f[2] -= frame_time_sq * 9.8f;

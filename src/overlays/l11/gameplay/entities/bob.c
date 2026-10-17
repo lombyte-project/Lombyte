@@ -57,7 +57,7 @@ void FUN_L11_002cb668(struct Moby *moby) {
 
 extern char *func_0020D348_m(int);
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern float FUN_L00_0025be00(float *p, float a, float *v, float b, float c, float d);
+extern float approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 
 void FUN_L11_002cb810(struct Moby *moby) {
@@ -86,7 +86,7 @@ void FUN_L11_002cb810(struct Moby *moby) {
             f = fast_add_rotations_c(*(float *)(data + 4), 0.20769417f);
         else
             f = fast_subtract_rotations(*(float *)(data + 4), 0.20769417f);
-        if (FUN_L00_0025be00(&moby->rot.z, f, (float *)data, frame_time_sq * 0.34906584f, frame_time_sq * 0.34906584f, frame_time * 0.7853982f) == 0.0f)
+        if (approach_angle(&moby->rot.z, f, (float *)data, frame_time_sq * 0.34906584f, frame_time_sq * 0.34906584f, frame_time * 0.7853982f) == 0.0f)
             MOBY(moby)->state = 3;
         break;
     }
@@ -356,7 +356,7 @@ void FUN_L11_002d1030(void *mp) {
         char *m48 = (char *)moby + 0x48;
         ang = fast_arc_tan(*(float *)(d + 0x120) - *(float *)((char *)moby + 0x10),
                            *(float *)(d + 0x124) - *(float *)((char *)moby + 0x14));
-        FUN_L00_0025be00((float *)(m48), ang, (float *)(d + 0x150), D_0015ED70 * 12.566371f,
+        approach_angle((float *)(m48), ang, (float *)(d + 0x150), D_0015ED70 * 12.566371f,
                          D_0015ED70 * 25.132742f, D_0015ED6C * 12.566371f);
         *(float *)(d + 0x130) = fast_cos(*(float *)(m48)) * *(float *)(d + 0x154);
         f0 = fast_sin(*(float *)(m48));
@@ -425,7 +425,7 @@ void FUN_L11_002d1030(void *mp) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2500), where it is exact; names translated to the US level program. */
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_00258830(int, int, float, float, float, int);
+extern void push302618(int, int, float, float, float, int) __asm__("FUN_L00_00258830");
 extern void FUN_L00_00261d78(float, void *, void *, void *);
 
 void FUN_L11_002d1340(void *mp) {
@@ -435,7 +435,7 @@ void FUN_L11_002d1340(void *mp) {
     float B[4];
     qcopy(A, moby + 0x10);
     qcopy(B, d + 0x130);
-    FUN_L00_00258830((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
+    push302618((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
     if ((moby[0x20] >= 4 && moby[0x20] <= 6) || (moby[0x20] == 7 && *(int *)(d + 0x15C) == 3)) {
         FUN_L00_00261d78(0.3f, *(void **)(d + 0x60 - -(*(int *)(d + 0x158) * 4)), moby + 0x10,
                          moby + 0x10);
@@ -1783,7 +1783,7 @@ void FUN_L11_00309ac0(struct Moby *moby) {
             }
             moby->state = 3;
         }
-        FUN_L00_0025be00(&moby->rot.z, fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y), pv->vel_d8,
+        approach_angle(&moby->rot.z, fast_arc_tan(target[0] - moby->pos.x, target[1] - moby->pos.y), pv->vel_d8,
                          D_L11_00161DD8 * 0.017453292f * frame_time_sq,
                          D_L11_00161DD8 * 0.017453292f * frame_time_sq,
                          D_L11_00161DDC * 0.017453292f * frame_time);
@@ -1865,7 +1865,7 @@ int FUN_L11_0030a480(struct Moby *moby) {
     return 1;
 }
 extern void attach_manipulator(struct Moby *, int, void *) __asm__("FUN_0020cb10");
-extern void FUN_L00_001fff28(void *, int, float);
+extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void moby_point_position(struct Moby *, int, float *) __asm__("FUN_L00_0024f7c8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void FUN_L00_0026f080(float *, float *, float, float);
@@ -1908,7 +1908,7 @@ void FUN_L11_0030a500(struct Moby *moby) {
             step = frame_time * 2.6179938f;
         if (((u8 *)d)[i * 0x40 + 0x101]) {
             d->angle[i] = fast_add_rotations(d->angle[i], step);
-            FUN_L00_001fff28(d->parts[i].joint, 0, d->angle[i]);
+            set_joint_67e8(d->parts[i].joint, 0, d->angle[i]);
         }
     }
     if (vector_distance(&moby->pos, D_L11_001677C0) > 38.0f)

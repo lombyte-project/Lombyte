@@ -1792,11 +1792,11 @@ typedef struct {
     f32 x;
     f32 y;
 } PlayerPosView;
-extern s32 FUN_L01_0026e008(s32, s32);
+extern s32 count_group_e3528(s32, s32) __asm__("FUN_L01_0026e008");
 extern ClonedMoby *FUN_L01_00302328(ClonedMoby *);
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern void FUN_L00_0025c558(void *, void *, s32, s32, s32, f32);
+extern void trooper_start_knockback(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 s32 D_L01_00161E90 = 5;
 
 void FUN_L01_003021b8(SpawnerMoby *m) {
@@ -1813,7 +1813,7 @@ void FUN_L01_003021b8(SpawnerMoby *m) {
         if (v->src_id < 0) {
             break;
         }
-        if (FUN_L01_0026e008(v->src_id, 0xC) != 0) {
+        if (count_group_e3528(v->src_id, 0xC) != 0) {
             break;
         }
         if (v->count >= D_L01_00161E90) {
@@ -1831,7 +1831,7 @@ void FUN_L01_003021b8(SpawnerMoby *m) {
             nv->fB4 = 13.0f;
             nv->w78 = 0;
             nv->w7C = 0;
-            FUN_L00_0025c558(
+            trooper_start_knockback(
                 n, nv->path, 5, 8, 0,
                 fast_add_rotations(fast_arc_tan(hero.motion.pos.f[0] - m->x, hero.motion.pos.f[1] - m->y),
                                    3.1415927f));

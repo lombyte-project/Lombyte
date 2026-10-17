@@ -697,7 +697,7 @@ extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
@@ -707,7 +707,7 @@ extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001e
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_0022da68(int, int, void *);
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern float FUN_L00_0025e310(float);
+extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float FUN_002132a8(float, float);
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
@@ -752,7 +752,7 @@ void FUN_L03_002c4718(struct Moby *moby)
             fast_vec_normalize(&next_pos, &next_pos, 0.215f);
             fast_vec_add(pos, pos, &next_pos);
             if (D_L03_00173F40.moby == 0) {
-                FUN_L00_001ff660(vars, vars, &D_L03_00173F40.normal_x);
+                reflect1688(vars, vars, &D_L03_00173F40.normal_x);
                 angle = vec_len_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f && collision_hit_material() == -1) {
                     fast_vec_scale(vars, vars, 0.5f);
@@ -762,7 +762,7 @@ void FUN_L03_002c4718(struct Moby *moby)
                     }
                 }
             } else if (((struct Moby *)D_L03_00173F40.moby)->oclass != 0x221) {
-                FUN_L00_001ff660(vars, vars, &D_L03_00173F40.normal_x);
+                reflect1688(vars, vars, &D_L03_00173F40.normal_x);
                 angle = vec_len_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f && collision_hit_material() == -1)
                     fast_vec_scale(vars, vars, 1.2f);
@@ -780,14 +780,14 @@ first_collision_timer:
             fast_vec_normalize(&next_pos, &next_pos, 0.015f);
             fast_vec_add((Vec4 *)&moby->pos, &D_L03_00173F40.pad30, &next_pos);
             if (D_L03_00173F40.moby == 0) {
-                FUN_L00_001ff660(vars, vars, &D_L03_00173F40.normal_x);
+                reflect1688(vars, vars, &D_L03_00173F40.normal_x);
                 angle = vec_len_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f && collision_hit_material() == -1) {
                     fast_vec_scale(vars, vars, 0.5f);
                     if (fast_vec_length(vars) < 0.025f) moby->state = 1;
                 }
             } else if (((struct Moby *)D_L03_00173F40.moby)->oclass != 0x221) {
-                FUN_L00_001ff660(vars, vars, &D_L03_00173F40.normal_x);
+                reflect1688(vars, vars, &D_L03_00173F40.normal_x);
                 angle = vec_len_xy(&D_L03_00173F40.normal_x);
                 if (fast_arc_tan(D_L03_00173F40.normal_z, angle) < 0.6981317f && collision_hit_material() == -1)
                     fast_vec_scale(vars, vars, 1.2f);
@@ -810,8 +810,8 @@ first_collision_timer:
             }
         }
         if (fast_dec_timer_s16(vars + 5)) moby->state = 2;
-        moby->rot.x = FUN_L00_0025e310(vars[0]);
-        moby->rot.y = FUN_L00_0025e310(vars[1]);
+        moby->rot.x = normalize_rotation_l14(vars[0]);
+        moby->rot.y = normalize_rotation_l14(vars[1]);
         moby->collision_disable = old_disable;
         (*(struct Moby **)(vars + 4))->collision_disable = old_owner_disable;
         moby->collision = old_collision;
@@ -949,18 +949,18 @@ extern float D_L03_00161994 __attribute__((sda)); /* no foreign declaration */
 extern float D_L03_00161998 __attribute__((sda)); /* no foreign declaration */
 extern float D_L03_0016199C __attribute__((sda));
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
-extern int FUN_L00_001fff28();
+extern int set_joint_67e8() __asm__("FUN_L00_001fff28");
 extern int FUN_L00_00258110();
 extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_00214720");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
 extern void wake302618(void *) __asm__("FUN_L00_0025a120");
-extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_002628d8_c(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void debris302618(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void RaiseKernelTrap();
@@ -976,7 +976,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 float absolute_float(float input) __asm__("func_001F99C0");
-s32 FUN_L00_0025df68(s32 *path, void *point, void *nearest, f32 *fraction, s32 *segment, s32 wrap, f32 limit, f32 step, f32 height_tolerance);
+s32 near_6570(s32 *path, void *point, void *nearest, f32 *fraction, s32 *segment, s32 wrap, f32 limit, f32 step, f32 height_tolerance) __asm__("FUN_L00_0025df68");
 void apply_hit_ece00(unsigned char *m, void *src) __asm__("FUN_L00_00259a88");
 void FUN_L00_00263b38(char *p, float x);
 void FUN_L03_002ce238_c(char *m) __asm__("FUN_L03_002ce238");
@@ -1320,8 +1320,8 @@ extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_0025d458(void *m, short *p);
-extern void FUN_L00_0025d538(void *, void *);
+extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void FUN_L03_002ce238(char *m) {
@@ -1342,7 +1342,7 @@ void FUN_L03_002ce238(char *m) {
             *(unsigned char *)(m + 0x20) = 5;
         } else if (res != 0xB) {
             *(unsigned char *)(d + 0x67) = 0xB4;
-            FUN_L00_0025d458(m, (short *)(d + 0x60));
+            trooper_anim_update(m, (short *)(d + 0x60));
             if (*(float *)(r + 0x1C) == 5627.925f && *(unsigned char *)(m + 0x20) != 4) {
                 a = fast_arc_tan(*(float *)(m + 0x10) - *(float *)(r + 0),
                                  *(float *)(m + 0x14) - *(float *)(r + 4));
@@ -1366,7 +1366,7 @@ void FUN_L03_002ce238(char *m) {
         }
     }
     *(unsigned char *)(m + 0xA4) = 0xFF;
-    FUN_L00_0025d538(m, d + 0x60);
+    trooper_anim_finish(m, d + 0x60);
 }
 #include "sda.h"
 
@@ -1482,7 +1482,7 @@ extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__(
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_0028d8c0(void *, int);
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_001ff660(void *, void *, void *);
+extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_00259888(void *, void *, int, float, void *);
 extern void FUN_L03_0024e830(void *, void *, float);
 extern void FUN_L03_00260130(void *, void *, void *, void *, int);
@@ -1608,7 +1608,7 @@ void FUN_L03_002d47c0(Moby *moby) {
                         spark_dir.y = random_float_between_c(-1.0f, 1.0f);
                         spark_dir.z = random_float_between_c(-1.0f, 1.0f);
                         *(u128_2D5B88 *)&spark_vel = *(u128_2D5B88 *)&spark_dir;
-                        FUN_L00_001ff660(&spark_dir, &aim, D_L03_00173F80);
+                        reflect1688(&spark_dir, &aim, D_L03_00173F80);
                         normalize_vector_xyz(&spark_vel, &spark_vel, vector_length_xyz(&spark_dir) * 0.5f);
                         add_vector_xyz(&spark_dir, &spark_dir, &spark_vel);
                         normalize_vector_xyz(&spark_dir, &spark_dir, random_float_between_c(D_0015ED6C_c * 3.0f, D_0015ED6C_c * 6.0f));

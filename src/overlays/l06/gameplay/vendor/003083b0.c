@@ -15,7 +15,7 @@ extern u8 D_0013D388_83b0[] __asm__("D_0013D388");
 extern int is_point_inside_clip_volume_83b0(void *, int) __asm__("FUN_00214720");
 extern int help_request_83b0(int, int) __asm__("FUN_L00_00203908");
 extern int scale_game_frames_83b0(int) __asm__("FUN_001f96f8");
-extern int FUN_L01_0026e008(int, int);
+extern int count_group_e3528(int, int) __asm__("FUN_L01_0026e008");
 
 /* Level 6 help hints: shows the help messages for the area and records how often and when each was due. */
 void FUN_L06_003083b0(struct Moby *moby) {
@@ -58,7 +58,7 @@ void FUN_L06_003083b0(struct Moby *moby) {
             }
         }
     }
-    if (is_point_inside_clip_volume_83b0(&hero.motion.pos, vars[8]) && FUN_L01_0026e008(vars[6], -1) == 0) {
+    if (is_point_inside_clip_volume_83b0(&hero.motion.pos, vars[8]) && count_group_e3528(vars[6], -1) == 0) {
         for (j = 0; j < 6; j++) {
             m = (struct Moby *)(D_L06_0015FFD8_83b0 + (vars[j] << 8));
             if (vars[j] != -1 && m != 0 && m->state != 0xFE && m->state != 0xFD && m->state != 1) {

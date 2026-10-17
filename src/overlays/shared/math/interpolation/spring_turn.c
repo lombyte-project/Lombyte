@@ -88,7 +88,8 @@ float spring_turn(float *p, float a, float b, float c, float d, float lim) {
 }
 extern float FUN_001f99c0(float);
 
-void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit) {
+void turn_e50(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
+void turn_e50(unsigned char *m, float *ptr, float t, float b, float c, float limit) {
     float r = fast_subtract_rotations(t, *(float *)(m + 0x48));
     float k = r / 0.15707964f;
     float v;
@@ -346,10 +347,10 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
     return r;
 }
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-void FUN_L00_00258830(int, int, float, float, float, int);
-/* Calls FUN_L00_00258830 with c converted to float and divided by 1024. */
+void push302618(int, int, float, float, float, int) __asm__("FUN_L00_00258830");
+/* Calls push302618 with c converted to float and divided by 1024. */
 void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d) {
-    FUN_L00_00258830(a, b, x, convert_integer_to_float(c) * (1.0f / 1024.0f), y, d);
+    push302618(a, b, x, convert_integer_to_float(c) * (1.0f / 1024.0f), y, d);
 }
 #include "rnc/math/vector.h"
 
@@ -404,7 +405,8 @@ extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
 extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
 extern f32 frame_scale __asm__("D_0015ED60") __attribute__((sda));
-s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
+s32 walk_e50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) __asm__("FUN_L00_00258b50");
+s32 walk_e50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     Vec4 save;
     Vec4 d;
     Vec4 p;
@@ -519,7 +521,8 @@ int FUN_001f9740_259028(void *) __asm__("FUN_001f9740");
 int FUN_001f96f8_259028(int) __asm__("FUN_001f96f8");
 int FUN_L00_00258b50_259028(unsigned char *, char *, float *, void *,
                             float) __asm__("FUN_L00_00258b50");
-int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out) {
+int steer302618(unsigned char *m, char *c, float *tgt, void *out) __asm__("FUN_L00_00259028");
+int steer302618(unsigned char *m, char *c, float *tgt, void *out) {
     int r = 0;
     float a, d;
     FUN_001f99f8_259028(out);
