@@ -28,7 +28,7 @@ struct FsWord4 {
 };
 
 /* Incomplete arrays keep these small globals on the absolute-address path. */
-extern u8 D_0011B980[];
+extern void invoke_sif_file_command_callback(void *, void *) __asm__("func_0011B980");
 extern s32 D_0012FC94[];
 extern s32 D_0012FC98[];
 extern s32 D_0012FCA0[];
@@ -62,11 +62,11 @@ s32 sceFsInit(void) {
     struct FsWord4 response_word;
 
     sceSifInitRpc(0);
-    *init_request++ = 0;
-    *init_request-- = 0;
+    init_request[0] = 0;
+    init_request[1] = 0;
     irq_state = DIntr();
     sceSifAddCmdHandler(0x80000011, &_sceFs_Rcv_Intr, D_00157FC0);
-    sceSifAddCmdHandler(0x80000013, D_0011B980, init_request);
+    sceSifAddCmdHandler(0x80000013, invoke_sif_file_command_callback, init_request);
 
     if (irq_state != 0) {
         EnableInterrupts();
