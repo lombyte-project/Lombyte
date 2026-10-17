@@ -23,7 +23,7 @@ extern void _sendIpuCommand();
 extern void _waitIpuIdle();
 extern void receiveDataFromIPU();
 int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dct_type_out, struct MpegMbState *motion_vector_state,
-            int *arg5, int arg6) {
+            int *motion_field_select, int arg6) {
     int *sp20;
     int *sp24;
     u32 g1;
@@ -46,7 +46,7 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
     int var_2_213;
     *((int *)0x10002010) = ((*((int *)0x10002010)) & 0xF8FFFFFF) | (decoder->picture_coding_type << 0x18);
     sp20 = dct_type_out;
-    sp24 = arg5;
+    sp24 = motion_field_select;
     temp_2_32 = _ipuVdec(decoder, 1);
     *mb_type = temp_2_32;
     if (temp_2_32 == 0) {
