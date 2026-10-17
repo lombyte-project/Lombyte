@@ -81,7 +81,7 @@ extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 void update_world_object_animation(void *arg0) __asm__("FUN_00204790");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
-void update_world_object_animation(void *arg0) {
+void update_world_object_animation(void *unused_arg) {
     struct ModelRec *rec;
     struct Moby *mob;
     int *cp;
