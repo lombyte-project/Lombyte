@@ -36,14 +36,14 @@ void FUN_L15_002cbd88(void) {
 
 
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern int FUN_L00_0020d568(void);
+extern int fd568_208820(void) __asm__("FUN_L00_0020d568");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 
 int FUN_L15_002d6770(void) {
     struct Hero *p;
     float vec[4];
     float h;
-    if (FUN_L00_0020d568() != 0)
+    if (fd568_208820() != 0)
         return 1;
     p = &hero;
     if ((unsigned)(p->state.current - 0x18) < 2) {

@@ -132,14 +132,14 @@ extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 extern s32 collect_mobies_in_sphere(void *, s32, s32, s32, f32) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_002e8918(f32 *, f32, f32);
-extern void FUN_L00_002e8970(void *, f32, f32);
+extern void spin_s(void *, f32, f32) __asm__("FUN_L00_002e8970");
 extern void follow_camera_start_slide(void) __asm__("FUN_L00_002e8648");
-extern void FUN_L00_002e8620(void);
+extern void pitch2_s(void) __asm__("FUN_L00_002e8620");
 extern void follow_camera_set_height(f32, f32) __asm__("FUN_L00_002e84b8");
 extern void follow_camera_set_distance(s32, f32, f32) __asm__("FUN_L00_002e8450");
 extern void follow_camera_set_offset_scale(s32, f32, f32) __asm__("FUN_L00_002e84f0");
 extern void FUN_L00_002e8568(s32);
-extern void FUN_L00_002e8590(f32, f32);
+extern void follow_camera_set_lateral_spring(f32, f32) __asm__("FUN_L00_002e8590");
 
 /* Per-frame follow camera adjustments driven by the hero's state: sway, zoom and lookat tweaks, then the shake timers in m->h12/h14/h16. */
 void follow_camera_apply_overrides(O_2e6000 *o) __asm__("FUN_L00_002e6000");
@@ -202,7 +202,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
             follow_camera_set_distance(1, D_L00_00161D9C, 0.003f);
             follow_camera_set_height(D_L00_00161DA0, 0.003f);
         }
-        FUN_L00_002e8620();
+        pitch2_s();
         t = (S1D0_2e6000 *)((u8 *)o->m + 0x1D0);
         t->f3C = D_L00_00161DA8;
         t->f44 = D_L00_00161DA4;
@@ -210,7 +210,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
     if (hero.unk20AA != 0 && hero.state.control_mode != 0xF) {
         FUN_L00_002e8568(0);
         follow_camera_start_slide();
-        FUN_L00_002e8590(0.04f, 0.2f);
+        follow_camera_set_lateral_spring(0.04f, 0.2f);
     }
     x = &player_camera[1];
     if (x->fn != 0) x->fn();
@@ -226,7 +226,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
             x->i260++;
             if (scale_game_frames(400) < x->i260) x->i260 = scale_game_frames(400);
             f = convert_integer_to_float(x->i260) / convert_integer_to_float(scale_game_frames(400));
-            FUN_L00_002e8970(x->p25C + 0x10, f * 0.20943952f, 0.0f);
+            spin_s(x->p25C + 0x10, f * 0.20943952f, 0.0f);
         }
     }
     s->i10 = 0;
@@ -244,7 +244,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
     if (hero.state.current == 0x81 && (D_0013CAE0[0] & 3)) {
         FUN_L00_002e8568(0);
         follow_camera_start_slide();
-        FUN_L00_002e8590(0.04f, 0.2f);
+        follow_camera_set_lateral_spring(0.04f, 0.2f);
         { M_2e6000 *mm = o->m;
         mm->h16 = 0;
         mm->h12 = 0;
@@ -278,7 +278,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
         k = ++m->h16;
         if (scale_game_frames(0x1E) < k) m->h16 = scale_game_frames(0x1E);
         f = convert_integer_to_float(m->h16) / convert_integer_to_float(scale_game_frames(0x1E));
-        FUN_L00_002e8590((D_L00_00161D88 - 0.015f) * f + 0.015f, 0.2f);
+        follow_camera_set_lateral_spring((D_L00_00161D88 - 0.015f) * f + 0.015f, 0.2f);
         D_L00_0015EF40 = 0.0f;
     } else if (m->h14 != 0) {
         fast_dec_timer_s16(&m->h14);
@@ -1187,7 +1187,7 @@ extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa6
 extern s32 FUN_L00_002e4290_2e7d20(void *) __asm__("FUN_L00_002e4290");
 s32 FUN_L00_0025e3b8(s32);
 void make_hit_descriptor(void *, void *, s32, void *, f32) __asm__("FUN_L00_00259888");
-void FUN_L00_00259a88(s32, void *);
+void apply_hit_ece00(s32, void *) __asm__("FUN_L00_00259a88");
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
 #define AF_2e7d20(o) (*(f32 *)(a + (o)))
@@ -1338,7 +1338,7 @@ move:
         w.b18 = 3;
         w.b19 = 3;
         w.h1A = *(u16 *)(D_0013F350_2e7d20.p2080 + 0xA6);
-        FUN_L00_00259a88((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18, &w);
+        apply_hit_ece00((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18, &w);
     }
     BI_2e7d20(0x4C)++;
     if (BI_2e7d20(0x4C) >= FUN_001f96f8_2e7d20(0x1E)) {

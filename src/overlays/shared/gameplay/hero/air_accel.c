@@ -720,24 +720,24 @@ int FUN_L01_0022d838(Vec4 *pos, f32 *dir)
 
 extern void FUN_L00_00205538(void);
 extern void FUN_L00_00206c08(void);
-extern void FUN_L00_0020e698(void);
+extern void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
 extern void FUN_L00_00210748();
 extern void FUN_L00_00232628(void);
-extern void FUN_L00_00232fe8(void);
+extern void f32fe8_208820(void) __asm__("FUN_L00_00232fe8");
 extern void FUN_L00_00262840(char *o);
 extern void FUN_L01_00231ae0_u(void) __asm__("FUN_L01_00231ae0");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
 void FUN_L01_00231348(int a, int b, int c) {
     char *g;
-    FUN_L00_0020e698();
+    fire_end_2cc608();
     g = (char *)D_0013E533 + 0xE1D;
     *(char *)(g + 0x20A6) = 1;
     FUN_L00_00210748();
     *(int *)(g + 0x2080) = *(int *)(g + 0xA88);
     FUN_L00_00262840(g + 0x1670);
     *(int *)(*(char **)(g + 0x2080) + 0x98) = -1;
-    FUN_L00_00232fe8();
+    f32fe8_208820();
     FUN_L00_00206c08();
     FUN_L00_00205538();
     *(char *)(g + 0x20A4) = a;
@@ -1019,7 +1019,7 @@ extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float FUN_L00_002339d0(float *v);
+extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
@@ -1042,7 +1042,7 @@ void FUN_L01_00232978(int flag) {
     if (g->unk308 != 0) {
         return;
     }
-    if (FUN_L00_002339d0((float *)(&g->motion.velocity)) < frame_time * 0.1f) {
+    if (gravity_length_xy((float *)(&g->motion.velocity)) < frame_time * 0.1f) {
         return;
     }
     f2 = 0.37f;

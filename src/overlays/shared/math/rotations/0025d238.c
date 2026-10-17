@@ -725,7 +725,7 @@ extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned FUN_L00_0025c0e8(unsigned, int);
 extern void FUN_L00_0025c088(int *, int *, int *, int);
 extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
-extern void FUN_L00_002d3838(void *, void *, int, int);
+extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
@@ -784,7 +784,7 @@ void FUN_L00_0025f090(u8 *owner, u128 *pos, int sound, float scale, float flash)
             D_L00_001B02F0[10] = 13.0f;
             D_L00_001B02F0[8] = 13.0f;
         }
-        FUN_L00_002d3838(D_L00_001B02F0, pos, 0, 0);
+        mine_camera_blast(D_L00_001B02F0, pos, 0, 0);
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260460), where it is exact; names translated to the US level program. */
@@ -829,7 +829,7 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
             D_L00_001B02F0[10] = 13.0f;
             D_L00_001B02F0[8] = 13.0f;
         }
-        FUN_L00_002d3838(D_L00_001B02F0, pos, 0, 0);
+        mine_camera_blast(D_L00_001B02F0, pos, 0, 0);
     }
 }
 #define NOT_SDA

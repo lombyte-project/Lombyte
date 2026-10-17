@@ -219,7 +219,7 @@ typedef struct {
 } G;
 
 extern G D_L05_0016CC60;
-extern void FUN_L00_002637f8(int);
+extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L05_0031d5c8(unsigned char *m) {
     unsigned int s = m[0x20];
@@ -238,7 +238,7 @@ void FUN_L05_0031d5c8(unsigned char *m) {
                 int k = 3;
                 if (s < t)
                     k = 0;
-                FUN_L00_002637f8((int)g->m[k]);
+                cutscene_set_camera_target((int)g->m[k]);
             }
         }
         break;

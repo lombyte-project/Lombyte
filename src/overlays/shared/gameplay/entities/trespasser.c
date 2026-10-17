@@ -20,7 +20,8 @@ extern unsigned char D_0013A4E0[];
 extern void FUN_L00_002c1778_u(void *) __asm__("FUN_L00_002c1778");
 
 /* Runs FUN_L00_002c1778 when the moby data word 4 is set, else sets byte 0xBC from a mask test. */
-void FUN_L00_002c1718(char *m) {
+void trespasser_update(char *m) __asm__("FUN_L00_002c1718");
+void trespasser_update(char *m) {
     if (*(int *)(*(char **)(m + 0x78) + 4) != 0) {
         FUN_L00_002c1778_u(m);
     } else if (*(int *)(D_0013A4E0 + 0x2600) & *(int *)(((unsigned char *)&D_0013E533) + 0x1EBD)) {
@@ -202,7 +203,8 @@ unsigned char *FUN_0020c4f8_002c52a8(int) __asm__("FUN_0020c4f8");
 int FUN_001f96f8_002c52a8(int) __asm__("FUN_001f96f8");
 void FUN_L00_00250df8_002c52a8(void *) __asm__("FUN_L00_00250df8");
 void FUN_L00_0025d1b8_002c52a8(void *) __asm__("FUN_L00_0025d1b8");
-unsigned char *FUN_L00_002c52a8(u128 *a, int b, int c, int d) {
+unsigned char *spawn_on_path(u128 *a, int b, int c, int d) __asm__("FUN_L00_002c52a8");
+unsigned char *spawn_on_path(u128 *a, int b, int c, int d) {
     unsigned char *m = 0;
     {
         S179AC0_2c52a8 *e = (S179AC0_2c52a8 *)(b * 0x4C + (u8 *)D_L00_00179AC0_002c52a8);
@@ -420,7 +422,8 @@ void FUN_00212f90_2c7070(void *, int, int, int) __asm__("FUN_00212f90");
 void FUN_0020c828_2c7070(void *) __asm__("FUN_0020c828");
 void FUN_0020e098_2c7070(void *) __asm__("FUN_0020e098");
 extern unsigned char D_001413FF __attribute__((section(".data")));
-void FUN_L00_002c7070(unsigned char *m) {
+void swingshot_hook_update(unsigned char *m) __asm__("FUN_L00_002c7070");
+void swingshot_hook_update(unsigned char *m) {
     unsigned char **d;
     unsigned char *o;
     if (m == 0)
@@ -689,7 +692,7 @@ typedef struct {
 } Vars_2bffa8;
 extern CollisionHit collision_hit_2bffa8 __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern int FUN_L00_0025a420(void *, int, int);
-extern void FUN_L00_00260400(void *, int, void *, void *, void *, void *);
+extern void probe_ground_height_cf(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern float FUN_00213508_2bffa8(void *, int, float) __asm__("FUN_00213508");
 extern int FUN_001fa6d0_2c53c0(float) __asm__("FUN_001fa6d0");
 extern void FUN_00257880_2c4380(void *, int, int, int) __asm__("FUN_00212f90");
@@ -732,7 +735,8 @@ extern int collect_mobies_in_sphere_2bffa8(float, void *, int, void *, void *) _
 #define HB_2bffa8(o) (*((u8 *)&hero + (o)))
 #define ANIM_2bffa8(a,t) FUN_00257880_2c4380(moby,(a),0,scale_game_frames(t))
 #define OUTSIDE_2bffa8 (moby->pos.x < 2.0f || 1021.0f < moby->pos.x || moby->pos.y < 2.0f || 1021.0f < moby->pos.y || moby->pos.z < 2.0f || 1021.0f < moby->pos.z)
-void FUN_L00_002bffa8(struct Moby *moby) {
+void doom_bot_update(struct Moby *moby) __asm__("FUN_L00_002bffa8");
+void doom_bot_update(struct Moby *moby) {
     extern int level_game_mode __asm__("D_L00_0015F5C4") __attribute__((sda));
     Vars_2bffa8 *vars;
     OvlVec4 probe, start, end, delta, result;
@@ -839,7 +843,7 @@ collision_done:
         pos = &moby->pos;
     }
     if (FUN_00213508_2bffa8(pos,0,0.5f) != 0.0f && collision_hit_2bffa8.moby)
-        FUN_L00_00260400(moby,collision_hit_2bffa8.moby,pos,&moby->rot,pos,&moby->rot);
+        probe_ground_height_cf(moby,collision_hit_2bffa8.moby,pos,&moby->rot,pos,&moby->rot);
     switch (moby->state) {
     case 15: goto reset;
     case 0:
@@ -1183,7 +1187,8 @@ extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 
 /* Mine glove update: aims the glove and throws a mine at the target. */
-void FUN_L00_002c1ad0(struct Moby *moby) {
+void mine_glove_update(struct Moby *moby) __asm__("FUN_L00_002c1ad0");
+void mine_glove_update(struct Moby *moby) {
     GloveVars_2c1ad0 *vars;
     Vec4 saved, offset, rotatedOffset;
     Vec4 local[4];
@@ -1484,7 +1489,8 @@ extern int FUN_L00_00216de8_2c1ad0(int, int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_00233db8_2c1ad0(int, int) __asm__("FUN_L00_00233db8");
 extern int FUN_L00_00233e98_2c1ad0(int) __asm__("FUN_L00_00233e98");
 /* Updates the grip, chooses a throw target, and handles the held moby states. */
-void FUN_L00_002c26c8(struct Moby *moby) {
+void bomb_glove_update(struct Moby *moby) __asm__("FUN_L00_002c26c8");
+void bomb_glove_update(struct Moby *moby) {
     CarrierVars_2c26c8 *vars;
     OvlVec4 local[4], saved, offset, rotatedOffset, pos, target, basis[3], matrix[4];
     OvlVec4 launch;
@@ -1669,7 +1675,7 @@ extern s32 D_L00_0015FFD8_2c35c0 __asm__("D_L00_0015FFD8");
 extern s16 D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section(".data")));
 extern f32 FUN_002132a8_2c35c0(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_L00_0025f800(void *, void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void place_2ce1f0(void *) __asm__("FUN_L00_0025d1b8");
 extern void FUN_L00_0025f780(void *, void *, s32);
 
 u8 *FUN_L00_002c35c0(s32 value, u128 *position, u128 *other_position) {
@@ -1725,7 +1731,7 @@ u8 *FUN_L00_002c35c0(s32 value, u128 *position, u128 *other_position) {
             }
         }
         FUN_L00_00250df8(m);
-        FUN_L00_0025d1b8(m);
+        place_2ce1f0(m);
         *(u16 *)data = 0;
         data[8] = 0;
         data[9] = 0;
@@ -1946,7 +1952,7 @@ extern int FUN_L00_0025a420(void *, int, int);
 extern int FUN_L00_00258830(void *, void *, float, float, float, int);
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern float FUN_L00_00259698_2c4380(void *, int, float) __asm__("FUN_00213508");
-extern void FUN_L00_00260400(void *, int, void *, void *, void *, void *);
+extern void probe_ground_height_cf(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern void FUN_L00_002c40a0(S_2c40a0 *);
 extern void FUN_L00_002c4328(void *);
 extern void FUN_L00_0025d458(void *, void *);
@@ -1954,7 +1960,7 @@ extern void FUN_L00_0025d538(void *, void *);
 extern void FUN_L00_0025f8e0(float, void *);
 extern void FUN_L00_0025e450(float, void *, void *, int, float, float, int, int, int,
                               float, float, float, float, int, int, int, int, int);
-extern void FUN_L00_00259858(float, void *, void *, int);
+extern void make_hit_089d0(float, void *, void *, int) __asm__("FUN_L00_00259858");
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_0024eb68_2c4380(void *) __asm__("FUN_0020c828");
 extern void FUN_00257880_2c4380(void *, int, int, int) __asm__("FUN_00212f90");
@@ -1978,7 +1984,8 @@ extern float FUN_00200130_2c4380(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_002000e8_2c4380(float, float) __asm__("FUN_001fa580");
 extern void FUN_L00_0025f800(void *, void *);
 
-void FUN_L00_002c4380(char *moby) {
+void decoy_update(char *moby) __asm__("FUN_L00_002c4380");
+void decoy_update(char *moby) {
     int active = ((unsigned char *)&D_0013E533)[6];
     char *vars = *(char **)(moby + 0x78);
     char *target;
@@ -2182,7 +2189,7 @@ void FUN_L00_002c4380(char *moby) {
                         FUN_L00_0025e450(0, moby, v, 0, 0, 4.0f, 0, 0, 0,
                                          3.0f, 9.0f, 1.0f, 12.0f, 2, 1, 1, -1, active);
                         if (active) {
-                            FUN_L00_00259858(effect + effect, scratch.w, moby, 0x810000);
+                            make_hit_089d0(effect + effect, scratch.w, moby, 0x810000);
                             ((u8 *)scratch.x)[8] = 2;
                             ((u8 *)scratch.x)[9] = 1;
                             *(u16 *)((u8 *)scratch.x + 10) = *(u16 *)(moby + 0xa6);
@@ -2228,7 +2235,7 @@ void FUN_L00_002c4380(char *moby) {
                 } else
                     qzero(vars + 0x10);
                 if (coll_hit.moby)
-                    FUN_L00_00260400(moby, coll_hit.moby, moby + 0x10,
+                    probe_ground_height_cf(moby, coll_hit.moby, moby + 0x10,
                                      moby + 0x40, moby + 0x10, moby + 0x40);
             }
         } else {
@@ -2245,7 +2252,7 @@ void FUN_L00_002c4380(char *moby) {
     case 5:
         len = FUN_L00_00259698_2c4380(moby + 0x10, 0, 0.5f);
         if (len != 0.0f && coll_hit.moby)
-            FUN_L00_00260400(moby, coll_hit.moby, moby + 0x10,
+            probe_ground_height_cf(moby, coll_hit.moby, moby + 0x10,
                              moby + 0x40, moby + 0x10, moby + 0x40);
         if (moby[0x70] & 2)
             *(int *)(moby + 0x58) = 0;
@@ -2256,7 +2263,7 @@ void FUN_L00_002c4380(char *moby) {
         float len;
         len = FUN_L00_00259698_2c4380(moby + 0x10, 0, 0.5f);
         if (len != 0.0f && coll_hit.moby) {
-            FUN_L00_00260400(moby, coll_hit.moby, moby + 0x10,
+            probe_ground_height_cf(moby, coll_hit.moby, moby + 0x10,
                              moby + 0x40, moby + 0x10, moby + 0x40);
         }
         len = D_0015ED60_2c4380;
@@ -2327,7 +2334,8 @@ typedef struct {
 extern int D_L00_00161838_macro __asm__("D_L00_00161838") __attribute__((section(".sdata")));
 /* Update ammunition pickup physics, collection, animation and scale.
    Animation states share one stack value; index reloads follow calls. */
-void FUN_L00_002c53c0(struct Moby *m) {
+void devestator_ammo_update(struct Moby *m) __asm__("FUN_L00_002c53c0");
+void devestator_ammo_update(struct Moby *m) {
     AmmoPickup_2c53c0 *p;
     unsigned int state;
     FxVec position;
@@ -2600,7 +2608,8 @@ extern int FUN_L00_00205000_2bffa8(int) __asm__("FUN_L00_00205000");
 extern void FUN_L00_002323b8_2bffa8(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002c5dc8_2bffa8(char *) __asm__("FUN_L00_002c5dc8");
 
-void FUN_L00_002c6158(Moby *m) {
+void swingshot_update(Moby *m) __asm__("FUN_L00_002c6158");
+void swingshot_update(Moby *m) {
     V_2C74B8 v0;
     V_2C74B8 v10;
     Data_2C74B8 *d;
@@ -2876,7 +2885,8 @@ extern float FUN_001ff3d8_2c6158(void *) __asm__("FUN_001f9af0");
 extern void *FUN_00205000_2c6158(s32) __asm__("FUN_L00_00205000");
 extern void FUN_002323b8_2c6158(float, void *, s32) __asm__("FUN_L00_002323b8");
 
-void FUN_L00_002c6158(u8 *m) {
+void swingshot_update(u8 *m) __asm__("FUN_L00_002c6158");
+void swingshot_update(u8 *m) {
     u8 *vars;
     u8 *child;
     u8 *motion;
@@ -3277,7 +3287,8 @@ extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da
 
 /* Carrier: keeps its grip point in front of it, hands the held moby over when the hero asks, and
    picks a new one up when get_ammo allows. */
-void FUN_L00_002c7a58(struct Moby *moby) {
+void glove_of_doom_update(struct Moby *moby) __asm__("FUN_L00_002c7a58");
+void glove_of_doom_update(struct Moby *moby) {
     OvlVec4 pos;
     OvlVec4 offset;
     OvlVec4 local;

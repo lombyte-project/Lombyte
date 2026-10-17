@@ -639,10 +639,10 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 int FUN_L08_002e0228_c(struct Moby *m) __asm__("FUN_L08_002e0228");
 void FUN_L00_00216f90(void *pos, void *rot, int mode, int flag);
-void FUN_L00_002ea9d8(char *src);
-void FUN_L00_002eaa30(char *src);
-void FUN_L00_002eaaa0(void *pa, void *pb, s32 mode, s32 w, s32 x);
-void FUN_L00_002eac18(int mode);
+void ea210_drawend(char *src) __asm__("FUN_L00_002ea9d8");
+void ea210_drawflush(char *src) __asm__("FUN_L00_002eaa30");
+void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
+void ea210_hide(int mode) __asm__("FUN_L00_002eac18");
 void FUN_L08_002deee0_c(struct Moby *moby) __asm__("FUN_L08_002deee0");
 void FUN_L08_00306b30(u8 *object, s32 mode);
 void FUN_L08_00313ba8(void);
@@ -1600,8 +1600,8 @@ extern float D_0013F3D4;
 extern float D_0015ED6C;
 extern float D_L08_00161C50 __attribute__((sda));
 extern char D_001413D0[];
-extern void FUN_L00_00263ac8(float, struct Moby *, int, void *);
-extern void FUN_L00_0025a120(struct Moby *);
+extern void sound302618(float, struct Moby *, int, void *) __asm__("FUN_L00_00263ac8");
+extern void wake302618(struct Moby *) __asm__("FUN_L00_0025a120");
 extern void *FUN_L00_0025a420(void *, int, int);
 extern void FUN_L00_0025c558(struct Moby *, void *, float, int, int, int);
 extern int FUN_L00_0025c698(struct Moby *, void *);
@@ -1647,10 +1647,10 @@ void FUN_L08_002e2df0(struct Moby *moby) {
     BoltThiefVars *data;
 
     data = moby->pvars;
-    FUN_L00_00263ac8(2.5f, moby, 1, data->x260);
+    sound302618(2.5f, moby, 1, data->x260);
     if (moby->visible != 0) {
         if (FUN_001f9b48(&moby->pos, D_L08_001675C0) < 29.0f) {
-            FUN_L00_0025a120(moby);
+            wake302618(moby);
             moby->shadow_range = 0x17;
         }
     }
@@ -1978,7 +1978,7 @@ extern int D_L08_00161CD4_gp __asm__("D_L08_00161CD4") __attribute__((sda));
 extern int D_L08_00174658;
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
-extern int FUN_L00_002604f0(void *, int, void *, void *, void *, void *);
+extern int f_L00_002604f0(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern int queue_animation_update_alt(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern s32 level_bolts[] __asm__("D_0013DF38");
 extern s32 D_0015ED98;
@@ -1993,7 +1993,7 @@ extern unsigned char D_L08_0015FC88_macro[] __asm__("D_L08_0015FC88") __attribut
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L00_0025f730_c(void *a, float x) __asm__("FUN_L00_0025f730");
-extern void FUN_L00_00260668(void *, int, void *, void *, void *, void *);
+extern void f_L00_00260668(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern void FUN_L08_0026a0f8(void *, void *, float);
 extern void FUN_L08_002e4db8_c(char *a, float *v) __asm__("FUN_L08_002e4db8");
 extern void FUN_L08_002e4e90_c(char *m, float *out, float *rot) __asm__("FUN_L08_002e4e90");
@@ -2066,7 +2066,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         FUN_L08_002e4e90_c((char *)moby, (float *)&moby->pos, (float *)&moby->rot);
         if (linked != 0 && FUN_L00_002603d0(linked) != 0) {
             vars->u7C.i = linked;
-            FUN_L00_00260668(moby, linked, vars->anchor, vars->v10, vars->v20, vars->v30);
+            f_L00_00260668(moby, linked, vars->anchor, vars->v10, vars->v20, vars->v30);
         }
         moby->state = 1;
         vars->s6C = 0;
@@ -2078,7 +2078,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
         if (vars->u7C.i != 0) {
-            FUN_L00_002604f0(moby, vars->u7C.i, vars->v20, vars->v30, vars->anchor, vars->v10);
+            f_L00_002604f0(moby, vars->u7C.i, vars->v20, vars->v30, vars->anchor, vars->v10);
             if ((signed char)((struct Moby *)vars->u7C.i)->state < 0) {
                 vars = (Vars_4BE8 *)moby->pvars;
                 clear_u64_value(vars->velocity);
@@ -2408,7 +2408,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
                 if (vars->u7C.i != 0) {
                     Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
-                    FUN_L00_00260668(moby, vars->u7C.i, vars->anchor, vars->v10, vars->v20, vars->v30);
+                    f_L00_00260668(moby, vars->u7C.i, vars->anchor, vars->v10, vars->v20, vars->v30);
                 } else {
                     qcopy(&moby->pos, vars->v20);
                     qcopy(&moby->rot, vars->v30);

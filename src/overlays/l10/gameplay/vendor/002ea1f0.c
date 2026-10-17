@@ -291,7 +291,7 @@ struct L10Data {
 };
 
 extern struct L10Data D_L10_0016CCE0;
-extern void FUN_L00_002637f8(int);
+extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L10_002eacd8(struct Moby *m) {
     switch (m->state) {
@@ -312,7 +312,7 @@ void FUN_L10_002eacd8(struct Moby *m) {
                     i = 2;
                 else if (v == 7)
                     i = 3;
-                FUN_L00_002637f8(D_L10_0016CCE0.slot[i]);
+                cutscene_set_camera_target(D_L10_0016CCE0.slot[i]);
             }
         }
         break;

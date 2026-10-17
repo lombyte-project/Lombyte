@@ -43,7 +43,8 @@ extern u8 D_L15_001BB830[];
 extern u32 D_0014C190[];
 extern s32 D_L15_001BAAD0[];
 
-void FUN_L15_002e5958(struct Moby *moby) {
+void underwater_ring_update(struct Moby *moby) __asm__("FUN_L15_002e5958");
+void underwater_ring_update(struct Moby *moby) {
     VendorVars_2e5958 *vars = (VendorVars_2e5958 *)moby->pvars;
     u8 delta[16];
     u8 matrix[64];
@@ -226,14 +227,15 @@ extern int D_L15_0015F5C4;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D388_bd78[] __asm__("D_0013D388");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
-extern void FUN_L00_00298840(int);
-extern void FUN_L02_002ea7d0(char *);
-extern void FUN_L02_002ea8b0(char *);
+extern void start_scene(int) __asm__("FUN_L00_00298840");
+extern void ea210_init(char *) __asm__("FUN_L02_002ea7d0");
+extern void ea210_update(char *) __asm__("FUN_L02_002ea8b0");
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern float D_L15_001621A0 __attribute__((sda));
-void FUN_L15_002ebd78(struct Moby *moby) {
+void codebot_update(struct Moby *moby) __asm__("FUN_L15_002ebd78");
+void codebot_update(struct Moby *moby) {
     unsigned char *p;
     if (current_level_index != 0xF) {
         moby->rot.z =
@@ -242,7 +244,7 @@ void FUN_L15_002ebd78(struct Moby *moby) {
             moby->pclass->scale * D_L15_001621A0;
         switch (moby->state) {
         case 0:
-            FUN_L02_002ea7d0(moby);
+            ea210_init(moby);
             if (D_0013D388_bd78[2] != 0) {
                 mark_moby_for_removal(moby);
             } else {
@@ -251,11 +253,11 @@ void FUN_L15_002ebd78(struct Moby *moby) {
             }
             break;
         case 1:
-            FUN_L02_002ea8b0(moby);
+            ea210_update(moby);
             if (FUN_001f9b48(&moby->pos, &hero.motion.pos) < 3.0f) {
                 if (hero.state.current != 0x32) {
                     moby->flags |= 0x41;
-                    FUN_L00_00298840(1);
+                    start_scene(1);
                     moby->state = 2;
                 }
             }
@@ -292,7 +294,8 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_00210a08(int, int, struct Moby *);
 
-void FUN_L15_002ed068(struct Moby *moby) {
+void giant_clank_pad_update(struct Moby *moby) __asm__("FUN_L15_002ed068");
+void giant_clank_pad_update(struct Moby *moby) {
     struct Moby *linked = moby->pvars;
     struct Moby *entry;
     struct Moby *pad;

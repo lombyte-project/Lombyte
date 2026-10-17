@@ -17,7 +17,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
+extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 
 void FUN_L15_002e73c0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -42,7 +42,7 @@ void FUN_L15_002e73c0(struct Moby *moby) {
             *(int *)(data + 0x48) = 0;
             break;
         }
-        FUN_L00_00260738(data + 0x60, data + 0x40, &moby->rot, &moby->rot);
+        update_entity_matrix(data + 0x60, data + 0x40, &moby->rot, &moby->rot);
     }
 }
 #include "qcopy.h"
@@ -145,11 +145,11 @@ struct Moby_A4D88 {
     u8 unk7C;
     u8 pad7D;
     u8 unk7E;
-    u8 unk7F; /* set to 0x17 by FUN_L09_002c5990 near D_L09_00166F40 */
+    u8 unk7F; /* set to 0x17 by seeker_update near D_L09_00166F40 */
     u8 pad80[0x10];
     s32 unk90;
     u32 unk94; /* set from the class header's word 0x10 */
-    s32 unk98; /* set to 1 while a carrier holds the moby (FUN_L00_002c7a58) */
+    s32 unk98; /* set to 1 while a carrier holds the moby (glove_of_doom_update) */
     u8 pad9C[8];
     u8 unkA4;
     u8 padA5;
@@ -228,7 +228,7 @@ extern void FUN_L00_001ff290(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
+int probe_ground_height_cf(int u0, char *a, void *b, void *c, float *v, void *out) __asm__("FUN_L00_00260400");
 int FUN_L00_0028dc90(int i, int a1, int v, int k);
 void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0, s32 c1, f32 f, f32 spd, f32 z) __asm__("FUN_L00_0025a9f8");
 extern char D_L15_001744C0_2E9358[] __asm__("D_L15_00174440");
@@ -338,9 +338,9 @@ extern int D_L15_0015F5C4;
 extern int D_L15_0015F640;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D4FD[];
-extern void FUN_L00_00260860(int, int);
+extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void FUN_L00_00298840(int);
+extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002d6bf0(char *);
 extern void FUN_L10_00298940(char *);
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
@@ -363,7 +363,7 @@ void FUN_L15_002ea748(struct Moby *m) {
         FUN_L10_00298940((char *)m);
         if (vector_distance(&m->pos, &hero.motion.pos) < 3.0f) {
             m->flags |= 0x41;
-            FUN_L00_00298840(5);
+            start_scene(5);
             m->state = 2;
         }
         break;
@@ -371,7 +371,7 @@ void FUN_L15_002ea748(struct Moby *m) {
         if (D_L15_0015F5C4 != 2) {
             queue_dialogue_message(0x3AA3, -1);
             D_L15_0015F640 = scale_game_frames(0xB4);
-            FUN_L00_00260860(0x22, 1);
+            ea210_switch(0x22, 1);
             memcard_save_data(0, -1);
             m->state = 3;
         }
@@ -790,7 +790,7 @@ void FUN_L15_002eb928(struct Moby *moby) {
 
 
 extern char *func_0020D348_m(int);
-extern int FUN_L00_0025d1b8();
+extern int place_2ce1f0() __asm__("FUN_L00_0025d1b8");
 extern char *func_0020D348_c(int) __asm__("FUN_0020c4f8");
 extern void func_L00_0025E210_u(void *) __asm__("FUN_L00_0025d1b8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
@@ -1432,7 +1432,7 @@ void FUN_L15_002ed398(struct Moby *m) {
         break;
     }
 }
-/* Waits for state 1, then passes the slot for the level's current mode to FUN_L00_002637f8. */
+/* Waits for state 1, then passes the slot for the level's current mode to cutscene_set_camera_target. */
 struct L15MissionState {
     char pad0[0x30];
     int mode;
@@ -1442,7 +1442,7 @@ struct L15MissionState {
 
 extern int D_L15_0015F5C4;
 extern struct L15MissionState mission_2edb20 __asm__("D_L15_0016CE60");
-extern void FUN_L00_002637f8(int);
+extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L15_002edb20(struct Moby *m) {
     switch (m->state) {
@@ -1463,7 +1463,7 @@ void FUN_L15_002edb20(struct Moby *m) {
                     i = 2;
                 else if (v == 6)
                     i = 1;
-                FUN_L00_002637f8(mission_2edb20.slot[i]);
+                cutscene_set_camera_target(mission_2edb20.slot[i]);
             }
         }
         break;

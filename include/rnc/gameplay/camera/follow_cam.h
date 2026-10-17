@@ -6,7 +6,7 @@
 
 /*
  * State of the follow camera: the saved state of its camera record
- * (UpdateCam.saved_state, +0x70). FUN_L00_002e4fe8 writes `velocity`,
+ * (UpdateCam.saved_state, +0x70). follow_cam_focus_velocity writes `velocity`,
  * follow_camera_transition reads `follow` for its spring constants, and
  * fast_dec_timer counts `blend_timer` down. The follow_camera_set_* setters
  * (FUN_L00_002e8450..002e8680) each write one field and do nothing while the
@@ -69,7 +69,7 @@ typedef struct {
     f32 zoom;              /* 0x210: 1.0 is no zoom */
     f32 zoom_range;        /* 0x214 */
     u8 pad218[0xE];
-    s16 unk226;            /* 0x226: set to 1 by FUN_L00_002e8620 */
+    s16 unk226;            /* 0x226: set to 1 by pitch2_s */
     u8 pad228[4];
     f32 unk22C;            /* 0x22C: set by FUN_L00_002e8490 */
     s32 mode;              /* 0x230: 0 normal; shot cameras of type 10 and 11 set 0x14D and 2 */

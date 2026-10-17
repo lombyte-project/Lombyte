@@ -81,7 +81,7 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern s32 FUN_001fa6d0(float);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
-extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void FUN_L00_0025c558(void *, void *, s32, s32, s32, float);
 extern void FUN_L00_00257470(void *, s32, s32);
 extern void FUN_L00_0025d458(void *, void *);
@@ -91,7 +91,7 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern s32 FUN_L00_0025ff38(void *, void *, s32, s32, void *, s32, float);
+extern s32 activate_effect_l08(void *, void *, s32, s32, void *, s32, float) __asm__("FUN_L00_0025ff38");
 
 /* Path patroller update: rides its carrier moby until dropped, takes hits (hit and death states), and follows its D_L11_001B0EB0 path toward the hero. */
 void FUN_L11_00315968(struct Moby *moby) {
@@ -160,7 +160,7 @@ void FUN_L11_00315968(struct Moby *moby) {
                 d->unk174 = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
                 v.q = hit->pos.q;
-                FUN_L00_0025ab48(&v, &yaw, &d->unk138, &d->unk13C);
+                trooper_knockback_arc(&v, &yaw, &d->unk138, &d->unk13C);
                 FUN_L00_0025c558(moby, d->unk120, 3, 1, 0, yaw);
                 if (moby->state < 0xC) {
                     moby->state = 9;
@@ -181,7 +181,7 @@ void FUN_L11_00315968(struct Moby *moby) {
                 d->unk174 = 11.0f;
                 yaw = fast_arc_tan(moby->pos.x - hit->moby->pos.x, moby->pos.y - hit->moby->pos.y);
                 v.q = hit->pos.q;
-                FUN_L00_0025ab48(&v, &yaw, &d->unk138, &d->unk13C);
+                trooper_knockback_arc(&v, &yaw, &d->unk138, &d->unk13C);
                 FUN_L00_0025c558(moby, d->unk120, 3, 1, 0, yaw);
                 if (moby->state < 0xC) {
                     moby->state = 0xB;
@@ -219,7 +219,7 @@ void FUN_L11_00315968(struct Moby *moby) {
         d->reach = d->range;
     }
     path = path_table[d->path_index];
-    if (FUN_L00_0025ff38(moby, &d->goal, 0, 0, path + 0x10, *(s32 *)path, d->reach) != 2) {
+    if (activate_effect_l08(moby, &d->goal, 0, 0, path + 0x10, *(s32 *)path, d->reach) != 2) {
         Vec4f *p;
         if (moby->state == 1) {
             p = (Vec4f *)(path_table[d->path2_index] + 0x20);
@@ -733,8 +733,8 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
-void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
-                       float *v11, float scale, float *v12);
+void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+                       float *v11, float scale, float *v12) __asm__("FUN_L00_00263fd8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L11_00318488(struct Moby *);
 
@@ -791,9 +791,9 @@ void FUN_L11_00317c98(struct Moby *moby) {
             vec[2] += frame_scale * 0.08f;
             FUN_0022da68(2, 0, moby);
             FUN_L00_0025f090(moby, p1, -1, 3.0f, 13.0f);
-            FUN_L00_00263fd8((char *)moby, 0x602, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
-            FUN_L00_00263fd8((char *)moby, 0x603, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
-            FUN_L00_00263fd8((char *)moby, 0x784, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            debris302618((char *)moby, 0x602, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            debris302618((char *)moby, 0x603, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            debris302618((char *)moby, 0x784, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
             mark_moby_for_removal(moby);
         }
     }
@@ -881,8 +881,8 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void tick_countdown_32(int *arg0);
 extern void transform_vector_by_basis(void *, void *, void *);
-void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
-                       float *v11, float scale, float *v12);
+void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+                       float *v11, float scale, float *v12) __asm__("FUN_L00_00263fd8");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 extern char *func_L11_0031C210_5(void *, void *, void *, int, float) __asm__("FUN_L11_0031ada0");
 extern void *func_L00_00265050_s(char *, int, void *, void *, int, int, float *, float *, float,

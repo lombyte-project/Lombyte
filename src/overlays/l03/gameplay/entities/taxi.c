@@ -131,7 +131,7 @@ typedef struct {
     s16 patrol_timer;     /* 0x156 */
     u8 pad158[4];
     s32 alert_timer;      /* 0x15C */
-    u8 unk160[0x10];      /* 0x160: FUN_L00_00263ac8 record */
+    u8 unk160[0x10];      /* 0x160: sound302618 record */
 } TrooperVars;
 
 extern struct RailPath *D_L03_001B05B0[];
@@ -142,7 +142,7 @@ extern f32 D_L03_00161910 __attribute__((sda));
 extern f32 D_L03_00161914 __attribute__((sda));
 extern char D_L03_00166EC0[];
 extern void FUN_L03_0024e830(void *, void *, f32);
-extern void FUN_L00_00263ac8(struct Moby *, int, void *, f32);
+extern void sound302618(struct Moby *, int, void *, f32) __asm__("FUN_L00_00263ac8");
 void FUN_L03_002ca808(struct Moby *m);
 char *FUN_L03_002cc888(char *p, void *pos, float *dir);
 extern s32 trooper_frames(s32) __asm__("FUN_001f96f8");
@@ -168,7 +168,7 @@ extern void FUN_L00_0025e450(struct Moby *, void *, void *, f32, f32, s32, s32, 
 extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void trooper_kill(struct Moby *) __asm__("FUN_0020c828");
 extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
-extern void FUN_L00_0025a120(struct Moby *);
+extern void wake302618(struct Moby *) __asm__("FUN_L00_0025a120");
 
 /* l03 trooper update: patrols its rail path, turns to face the hero once in sight,
    fires three-shot bursts, falls under gravity and blows up when shot down or
@@ -189,7 +189,7 @@ void FUN_L03_002c9eb8(struct Moby *m) {
 
     FUN_L03_0024e830(m, &target, 100.0f);
     sight = 14.0f;
-    FUN_L00_00263ac8(m, 0, v->unk160, 4.5f);
+    sound302618(m, 0, v->unk160, 4.5f);
     FUN_L03_002ca808(m);
     if (v->alerted) {
         v->alerted = 0;
@@ -331,7 +331,7 @@ void FUN_L03_002c9eb8(struct Moby *m) {
         }
     }
     if (m->visible != 0 && trooper_dist2(&m->pos, D_L03_00166EC0) < 32.0f) {
-        FUN_L00_0025a120(m);
+        wake302618(m);
     }
 }
 typedef struct {
@@ -435,7 +435,7 @@ void FUN_L03_002ca808(struct Moby *m) {
 
 typedef float MineVec[4] __attribute__((aligned(16)));
 
-/* Explosion description handed to FUN_L00_002d3838 (0x50 bytes, copied from a level constant). */
+/* Explosion description handed to mine_camera_blast (0x50 bytes, copied from a level constant). */
 typedef struct {
     OvlQuad q[5];
 } MineBlast;
@@ -720,7 +720,7 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int FUN_L01_00277fb8(void *);
 extern void FUN_L00_00233ee8(void *, float, int);
 extern s32 FUN_L00_00233f38(void);
-extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void taxi_kill(struct Moby *) __asm__("FUN_0020c828");
 extern f32 taxi_atan2(f32, f32) __asm__("FUN_001f9e90");
 extern void taxi_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -857,7 +857,7 @@ void FUN_L03_002d3198(struct Moby *m) {
     }
     FUN_L03_002d3c40(m);
     taxi_vec_sub(&move, &m->pos, &oldPos);
-    FUN_L00_00260738(v->coll, &move, &oldRot, &m->rot);
+    update_entity_matrix(v->coll, &move, &oldRot, &m->rot);
 }
 
 /* Pvars of a moby flying along a rail path. */
@@ -955,7 +955,7 @@ struct SpinnerVars {
     u8 coll[0x10];   /* 0x20: collision record moved with the rotation */
 };
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 void FUN_L03_002d3e58(struct Moby *m) {
     Vec4 move;
     Vec4 oldRot;
@@ -966,7 +966,7 @@ void FUN_L03_002d3e58(struct Moby *m) {
     m->draw_dist = 0xFF;
     m->update_dist = 0xFF;
     m->rot.z = fast_add_rotations(m->rot.z, frame_time * 0.47996554f);
-    FUN_L00_00260738(v->coll, &move, &oldRot, &m->rot);
+    update_entity_matrix(v->coll, &move, &oldRot, &m->rot);
 }
 
 #define NOT_SDA
@@ -1030,7 +1030,7 @@ typedef struct {
     f32 speed;       /* 0x24 */
 } RocketVars;
 
-/* Damage record passed to FUN_L00_00259a88. */
+/* Damage record passed to apply_hit_ece00. */
 typedef struct {
     Vec4 dir;        /* 0x00: w is the force */
     u8 pad10[8];
@@ -1055,7 +1055,7 @@ extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern void FUN_L00_00259a88(void *, void *);
+extern void apply_hit_ece00(void *, void *) __asm__("FUN_L00_00259a88");
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float D_L03_00161B28 __attribute__((sda));
@@ -1121,7 +1121,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
                 hit.kind = state;
                 hit.source = state;
                 hit.oclass = m->oclass;
-                FUN_L00_00259a88(level[6], &hit);
+                apply_hit_ece00(level[6], &hit);
             }
             m->state = 2;
         }
@@ -1204,7 +1204,7 @@ struct QuestGiverVars {
     s32 link;          /* 0xD4: moby index of the class 0x3F4 helper it drives, -1 for none */
     s32 link_arg;      /* 0xD8: stored into the helper when it is released */
     u8 padDC[4];
-    u8 body[0x64];     /* 0xE0: body look-at driver (FUN_L00_002628d8) */
+    u8 body[0x64];     /* 0xE0: body look-at driver (update_joint_animation) */
     f32 pitch;         /* 0x144 */
     f32 yaw;           /* 0x148 */
     u8 pad14C[4];
@@ -1230,11 +1230,11 @@ extern float frame_scale_sq __asm__("D_0015ED64");
 extern void FUN_L01_0029b0a0(void *, int, struct Moby *, int, void *);
 extern void FUN_L00_002668a0(struct Moby *, struct TalkState *);
 extern int FUN_L00_00266448(struct Moby *, struct TalkState *);
-extern void FUN_L02_0025c758(struct Moby *);
-extern void FUN_L01_002783a8(struct Moby *, f32);
-extern void FUN_L00_002502a0(int);
-extern void FUN_L00_00284e50(void *, void *);
-extern void FUN_L00_00260860(int, int);
+extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
+extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
+extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -1244,7 +1244,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void FUN_L00_002628d8(float, float, void *, void *, int);
+extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
 /* Quest giver: talks when approached (driving its class 0x3F4 helper), warps the
    hero or, once the deal is accepted, removes the reward moby, records it and saves.
@@ -1295,11 +1295,11 @@ void FUN_L03_002da870(struct Moby *m) {
         talk->script = D_L03_00161BB8;
         v->talk.unk48 = 5;
         FUN_L00_002668a0(m, talk);
-        FUN_L02_0025c758(m);
+        initialize_moby_grounding(m);
         break;
     case 1:
         if (FUN_L00_00266448(m, talk)) {
-            FUN_L01_002783a8(m, 2.3f);
+            begin_dialogue_camera_transition(m, 2.3f);
             m->state = 2;
             if (v->link != -1) {
                 t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
@@ -1314,7 +1314,7 @@ void FUN_L03_002da870(struct Moby *m) {
     case 2:
         if (D_L03_0015F5C4 != 2) {
             if (v->talk.mode != 2) {
-                FUN_L00_002502a0(m->mission);
+                jet_clear_persistent(m->mission);
                 if (v->link != -1) {
                     t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
                     if (t->oclass == 0x3F4) {
@@ -1324,13 +1324,13 @@ void FUN_L03_002da870(struct Moby *m) {
                     }
                 }
                 if (v->talk.warp != -1) {
-                    FUN_L00_00284e50(D_L03_001600EC + v->talk.warp * 128 + 0x30,
+                    jet_reset_camera(D_L03_001600EC + v->talk.warp * 128 + 0x30,
                                      D_L03_001600EC + v->talk.warp * 128 + 0x70);
                 }
             }
             m->state = 1;
             if (v->talk.mode == 2) {
-                FUN_L00_00260860(0xC, 1);
+                ea210_switch(0xC, 1);
                 queue_dialogue_message(0xBC8, -1);
                 if (v->reward != -1) {
                     D_L03_001BA6D0.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
@@ -1431,8 +1431,8 @@ void FUN_L03_002da870(struct Moby *m) {
     }
     if (big_head_cheat_enabled)
         v->height = 2.75f;
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, v->body, 0);
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, v->head, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, v->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, v->head, 1);
 }
 
 extern float cos_2db020(float) __asm__("FUN_001f9dc8");
@@ -1443,7 +1443,7 @@ extern void vscale_2db020(void *, void *, float) __asm__("FUN_001f9a68");
 extern int ftoi_2db020(float) __asm__("FUN_001fa6d0");
 extern float itof_2db020(int) __asm__("FUN_001fa6c0");
 extern void kill_2db020(char *) __asm__("FUN_0020c828");
-extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 extern float D_L03_00161BC0;
 /* Moves the moby along its path: advances the distance, places it on the
@@ -1476,10 +1476,10 @@ void FUN_L03_002db020(struct Moby *m) {
     vscale_2db020(b, b, t);
     vadd_2db020(&m->pos, b, (*(float (**)[4])(v + 0x60))[i + 1]);
     vsub_2db020(a, &m->pos, old);
-    FUN_L00_00260738(v + 0x20, a, &m->rot, &m->rot);
+    update_entity_matrix(v + 0x20, a, &m->rot, &m->rot);
 }
 
-extern void FUN_L00_0025d1b8(struct Moby *);
+extern void place_2ce1f0(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern void clear_2db198(void *) __asm__("FUN_001f99f8");
 
 /* Spawns a path mover (class 0x382, moved by FUN_L03_002db020) on path, dist
@@ -1497,7 +1497,7 @@ struct Moby *FUN_L03_002db198(struct RailPath *path, float dist) {
         m->state = 0;
         v = m->pvars;
         m->flags |= 0x20;
-        FUN_L00_0025d1b8(m);
+        place_2ce1f0(m);
         qcopy(&m->pos, &path->pts[0]);
         clear_2db198(&m->rot);
         end = (Vec4 *)((u8 *)path + (path->count - 1) * 16) + 1;
@@ -1575,7 +1575,7 @@ struct TalkRecord {
     u8 pad38[8];
 };
 
-/* Look-at driver run by FUN_L00_002628d8. */
+/* Look-at driver run by update_joint_animation. */
 struct LookAt {
     u8 pad0[0x64];
     f32 pitch;         /* 0x64 */
@@ -1614,11 +1614,11 @@ extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
 extern char *D_L03_001600EC;
 extern float frame_scale_sq __asm__("D_0015ED64");
 extern void FUN_L03_002db480(struct Moby *);
-extern void FUN_L02_0025c758(struct Moby *);
-extern void FUN_L01_002783a8(struct Moby *, f32);
-extern void FUN_L00_002502a0(int);
-extern void FUN_L00_00284e50(void *, void *);
-extern void FUN_L00_00260860(int, int);
+extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
+extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
+extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern int guide_save(int, int) __asm__("FUN_0020b178");
@@ -1629,7 +1629,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void FUN_L00_002628d8(float, float, void *, void *, int);
+extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
 extern GameFlags_db558 race_gates __asm__("D_0013D5B0");
 /* Kerwan guide: talks when approached (turning round to face the hero first),
@@ -1669,7 +1669,7 @@ void FUN_L03_002db558(struct Moby *m) {
         m->spawn_frame = *(u64 *)(D_001413D0_db558[0] + 0x38);
         m->state = 1;
         FUN_L00_002668a0(m, (struct TalkState *)&v->talk);
-        FUN_L02_0025c758(m);
+        initialize_moby_grounding(m);
         if (D_0013D4C2[0] != 0) {
             v->talk.unk36 = -1;
         }
@@ -1699,7 +1699,7 @@ void FUN_L03_002db558(struct Moby *m) {
                 m->rot.z = fast_add_rotations(m->rot.z, 3.1415927f);
                 v->turned = 1;
             }
-            FUN_L01_002783a8(m, 2.7f);
+            begin_dialogue_camera_transition(m, 2.7f);
             m->anim_speed = 0.0f;
             m->state = 2;
         }
@@ -1710,7 +1710,7 @@ void FUN_L03_002db558(struct Moby *m) {
         }
         m->anim_speed = 1.0f;
         if (v->talk.mode != 2) {
-            FUN_L00_002502a0(m->mission);
+            jet_clear_persistent(m->mission);
             if (v->link != -1) {
                 t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
                 if (t->oclass == 0x3F4) {
@@ -1718,14 +1718,14 @@ void FUN_L03_002db558(struct Moby *m) {
                 }
             }
             if (v->warp != -1) {
-                FUN_L00_00284e50(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70);
+                jet_reset_camera(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70);
             }
         }
         m->state = 1;
         if (v->talk.mode != 2) {
             break;
         }
-        FUN_L00_00260860(2, 1);
+        ea210_switch(2, 1);
         queue_dialogue_message(0xBC7, -1);
         if (v->reward != -1) {
             t = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
@@ -1748,7 +1748,7 @@ void FUN_L03_002db558(struct Moby *m) {
             }
         }
         if (v->warp != -1) {
-            FUN_L00_00284e50(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70);
+            jet_reset_camera(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70);
         }
         guide_save(0, -1);
         FUN_L00_00216f90(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70, 0, 1);
@@ -1807,8 +1807,8 @@ void FUN_L03_002db558(struct Moby *m) {
     }
     if (big_head_cheat_enabled)
         v->head.height = 2.75f;
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, &v->head, 1);
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, &v->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, &v->head, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, &v->body, 0);
 }
 
 /* Pvars of the dialogue moby FUN_L03_002dbd90 drives (FUN_L00_002668a0 / FUN_L00_00266448 state). */
@@ -1834,7 +1834,7 @@ extern u8 D_0013D408[];
 extern char *D_001413D0[];
 extern char D_L03_00166EC0[];
 extern char *D_L03_001600EC;
-extern void FUN_L00_0025a120(struct Moby *);
+extern void wake302618(struct Moby *) __asm__("FUN_L00_0025a120");
 extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
 extern TalkerHit *talker_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
@@ -1843,8 +1843,8 @@ extern void talker_spawn_debris(struct Moby *, void *, void *, f32, f32, s32, s3
                              f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern int talker_init(struct Moby *, struct TalkerVars *) __asm__("FUN_L00_002668a0");
 extern int talker_update(struct Moby *, struct TalkerVars *) __asm__("FUN_L00_00266448");
-extern void FUN_L01_002783a8(struct Moby *, f32);
-extern void FUN_L00_00284e50(void *, void *);
+extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern f32 talker_rand_angle(void) __asm__("FUN_00213308");
 extern f32 talker_rand_range(f32, f32) __asm__("FUN_002132a8");
 extern f32 talker_cos(f32) __asm__("FUN_001f9dc8");
@@ -1865,7 +1865,7 @@ void FUN_L03_002dbd90(struct Moby *m) {
     float tmp[4];
 
     if (m->visible != 0 && FUN_001f9b48(&m->pos, D_L03_00166EC0) < 26.0f) {
-        FUN_L00_0025a120(m);
+        wake302618(m);
         m->shadow_range = 0x15;
     }
     if (D_L03_001BB330.collected[(s16)m->save_id] != 0 ||
@@ -1910,7 +1910,7 @@ void FUN_L03_002dbd90(struct Moby *m) {
     case 1:
         if (talker_update(m, d)) {
             D_0013D388[0x19] = 1;
-            FUN_L01_002783a8(m, 2.7f);
+            begin_dialogue_camera_transition(m, 2.7f);
             m->state = 2;
         }
         break;
@@ -1921,7 +1921,7 @@ void FUN_L03_002dbd90(struct Moby *m) {
         m->state = 1;
         if (d->mode == 2 && d->warp != -1) {
             w = D_L03_001600EC + d->warp * 128;
-            FUN_L00_00284e50(w + 0x30, w + 0x70);
+            jet_reset_camera(w + 0x30, w + 0x70);
         }
         break;
     case 3:
@@ -2091,7 +2091,7 @@ void FUN_L03_002dccc0(struct Moby *m) {
     }
     FUN_L03_002dd0f0(m);
     vec_sub(&move, &m->pos, &oldPos);
-    FUN_L00_00260738(d->coll, &move, &oldRot, &m->rot);
+    update_entity_matrix(d->coll, &move, &oldRot, &m->rot);
     if (!FUN_L01_00277fb8(m) && vector_distance(&m->pos, &hero.motion.pos) > 2.0f && d->timer == 0)
         d->ready = 1;
 }

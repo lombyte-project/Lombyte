@@ -180,7 +180,8 @@ extern short D_L05_0015FFD8;
 extern void FUN_L05_002f81b8_u(void *) __asm__("FUN_L05_002f81b8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-void FUN_L05_002f8080(char *m) {
+void hydrodisplacer_faucet_update(char *m) __asm__("FUN_L05_002f8080");
+void hydrodisplacer_faucet_update(char *m) {
     struct Hero *g = &hero;
     int f = 0;
     int *d = *(int **)(m + 0x78);
@@ -280,7 +281,8 @@ extern int D_00151928_87a8 __asm__("D_00151928") __attribute__((sda));
 extern int D_0015190C_87a8 __asm__("D_0015190C") __attribute__((sda));
 extern int D_00151910_87a8 __asm__("D_00151910") __attribute__((sda));
 
-void FUN_L05_002f87a8(unsigned char *moby) {
+void hoverboard_update(unsigned char *moby) __asm__("FUN_L05_002f87a8");
+void hoverboard_update(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     float delta[4], position[4], effect_position[4], offset[4], second_position[4];
     float angle, distance_scale, delta_length;
@@ -451,7 +453,8 @@ extern void FUN_L05_0030c220(struct Moby *m);
 void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
-void FUN_L05_0030c0a8(unsigned char *m) {
+void lamp_update(unsigned char *m) __asm__("FUN_L05_0030c0a8");
+void lamp_update(unsigned char *m) {
     char *d = *(char **)(m + 0x78);
     float r, lo, hi;
     switch (m[0x20]) {
@@ -635,7 +638,8 @@ extern f32 fast_sin_c(f32) __asm__("FUN_001f9de0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
-void FUN_L05_0030c5b0(struct Moby *moby) {
+void floor_button_update(struct Moby *moby) __asm__("FUN_L05_0030c5b0");
+void floor_button_update(struct Moby *moby) {
     s32 *vars = (s32 *)moby->pvars;
     s16 id;
     s32 i;
@@ -782,7 +786,8 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
-void FUN_L05_003186f8(char *moby)
+void blarg_gun_update(char *moby) __asm__("FUN_L05_003186f8");
+void blarg_gun_update(char *moby)
 {
     char *data = *(char **)(moby + 0x78);
     char buf[0x70];

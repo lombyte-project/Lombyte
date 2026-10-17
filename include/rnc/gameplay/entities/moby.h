@@ -65,13 +65,13 @@ struct Moby {
     u8 unk7C;
     u8 sound_slot;                    /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (FUN_L00_00232670) */
     u8 anim_trigger_count;
-    u8 shadow_range;                  /* shadow range in units of 1024; 0x17 from FUN_L09_002c5990 near D_L09_00166F40 */
+    u8 shadow_range;                  /* shadow range in units of 1024; 0x17 from seeker_update near D_L09_00166F40 */
     u8 pad80[6];
     s16 unk86;
     u8 pad88[8];
     s32 glow_color;                   /* glow colour (class header + 0x40) */
     u32 collision;                    /* collision data, from the class header (MobyClass.collision) */
-    s32 collision_disable;            /* per-primitive collision disable bits; 1 while a carrier holds the moby (FUN_L00_002c7a58) */
+    s32 collision_disable;            /* per-primitive collision disable bits; 1 while a carrier holds the moby (glove_of_doom_update) */
     u8 pad9C[8];
     u8 hit_slot;                      /* hit-message slot (0xFF: none) */
     u8 padA5;

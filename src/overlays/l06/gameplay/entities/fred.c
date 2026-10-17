@@ -377,15 +377,15 @@ extern void approach_two_stage_ffcb0(float *, float *, float, float, float, floa
 extern void lerp_vector_ffcb0(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void vec_add_ffcb0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00216f90(void *, void *, int, int);
-extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
-extern void FUN_L00_002eaa30(void *);
+extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
+extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L06_00312b40(float, float, float, float, float, float);
 extern void FUN_L06_00312a78(void *);
 extern void FUN_L06_00312ad0(void *);
 extern void FUN_L06_00312ce8(int);
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
-extern void FUN_L00_002eac18(int);
+extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
+extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
+extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 extern void FUN_L06_00300278(char *);
 extern void enqueue_callback_list_1(int, char *) __asm__("FUN_L06_00210fc8");
@@ -438,7 +438,7 @@ void FUN_L06_002ffcb0(char *moby) {
                 qcopy(pos, (void *)(state + base + 0x30));
                 qcopy(rot, (void *)(state + base + 0x70));
             }
-            FUN_L00_002eaaa0(pos, rot, 1, scale_frames_ffcb0(300), 0);
+            jet_mount(pos, rot, 1, scale_frames_ffcb0(300), 0);
             FUN_L06_00312b40(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
             FUN_L06_00312a78(pos);
             FUN_L06_00312ad0(rot);
@@ -517,8 +517,8 @@ void FUN_L06_002ffcb0(char *moby) {
             rot[2] += 0.85f;
             lerp_vector_ffcb0(pos, pos, rot, *(float *)(data + 6));
             lerp_vector_ffcb0(from, from, target, *(float *)(data + 6));
-            FUN_L00_002ea9d8(pos);
-            FUN_L00_002eaa30(from);
+            ea210_drawend(pos);
+            ea210_drawflush(from);
         }
         break;
     case 4:
@@ -1132,10 +1132,10 @@ extern void FUN_L06_00312a78(void *);
 extern void FUN_L06_00312ad0(void *);
 extern void FUN_L06_00312ce8(int);
 extern void FUN_L06_00312b40(float, float, float, float, float, float);
-extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
+extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_00216f90(void *, void *, int, int);
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
+extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L06_002356a0(int, int);
 extern void FUN_L06_00304088(char *);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -1153,9 +1153,9 @@ extern void FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
 extern void FUN_L06_003021d8(char *);
 extern void allocate_voice_for_group_entry(int, int, int) __asm__("FUN_0022dba0");
 extern void FUN_L06_002f45f0(int);
-extern void FUN_L00_002eac18(int);
+extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern void FUN_L02_002f8aa0(float, float, float, float, float, float);
+extern void set_camera_effect_304098(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 
 extern float D_L06_0015F400;
 void FUN_L06_00301b90(unsigned char *m) {
@@ -1206,7 +1206,7 @@ void FUN_L06_00301b90(unsigned char *m) {
             vc[2] = fast_arc_tan(vb[0] - va[0], vb[1] - va[1]);
             r = vector_distance_xy(va, vb);
             vc[1] = -fast_arc_tan(r, vb[2] - va[2]);
-            FUN_L00_002eaaa0(va, vc, 2, scale_game_frames(300), 0);
+            jet_mount(va, vc, 2, scale_game_frames(300), 0);
             FUN_L06_00312b40(D_L06_00162098, D_L06_0016209C,
                                D_L06_001620A0, D_L06_001620A4,
                                D_L06_001620A8, D_L06_001620B0);
@@ -2540,7 +2540,7 @@ void FUN_L06_003049f8(char *moby)
 
 extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_L00_00259858(char *a, int b, int c, float d);
+extern void make_hit_089d0(char *a, int b, int c, float d) __asm__("FUN_L00_00259858");
 
 extern float D_L06_001621E8 __attribute__((sda));
 extern float D_L06_001621EC __attribute__((sda));
@@ -2549,7 +2549,7 @@ void FUN_L06_00305000(char *m) {
     float P[4];
     float Q[4];
     float A[12];
-    FUN_L00_00259858((char *)A, (int)m, 0x10000, 6.0f);
+    make_hit_089d0((char *)A, (int)m, 0x10000, 6.0f);
     P[0] = D_L06_001621E8;
     P[1] = D_L06_001621EC;
     P[2] = D_L06_001621F0;

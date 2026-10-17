@@ -207,7 +207,7 @@ extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float FUN_L00_001eb328(void *, float, float, float, float, float);
+extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(float *, float *, float *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
@@ -256,7 +256,7 @@ void follow_camera_orbit(int arg) {
     y = fast_arc_sin(e1 / x);
     h = fast_vec_dot(p140, up);
     r = fast_arc_sin(h / bc);
-    i = FUN_L00_001eb328(d + 0x154, r, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
+    i = rope_spring_turn(d + 0x154, r, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
                          0.0f);
     fast_vec_scale(t0, up, e1);
     subtract_vector_xyz(t1, p130, t0);
@@ -266,7 +266,7 @@ void follow_camera_orbit(int arg) {
     x = fast_vec_length(t1);
     x = x * fast_vec_length(t3);
     r = 1.5707964f - fast_arc_sin(e / x);
-    x = FUN_L00_001eb328(d + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4,
+    x = rope_spring_turn(d + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4,
                          *(float *)&D_L00_00161CF8, 0.0f);
     fast_vec_cross(t4, t3, up);
     s = (fast_vec_dot(t4, t1) >= 0.0f) ? 1.0f : -1.0f;
@@ -804,7 +804,8 @@ extern char *D_L00_00166E00 __attribute__((section(".data")));
 extern char *FUN_L00_001eb1f8(int);
 
 /* Copies src to +0x80 of the object of entry 5 (from FUN_L00_001eb1f8 if needed). */
-void FUN_L00_002ea9d8(char *src) {
+void ea210_drawend(char *src) __asm__("FUN_L00_002ea9d8");
+void ea210_drawend(char *src) {
     char *g = D_L00_00166E00;
     char *p;
     if (*(short *)(g + 0x86) != 5)
@@ -822,7 +823,8 @@ extern V_2eaaa0 D_0013F3D0_2eaaa0 __asm__("D_0013F3D0") __attribute__((section("
 u8 *FUN_L00_001eb1f8_2eaaa0(s32) __asm__("FUN_L00_001eb1f8");
 void FUN_001ebf10_2eaaa0(u8 *) __asm__("FUN_001ebf10");
 void FUN_L00_001ed630_2eaaa0(void *, V_2eaaa0 *, V_2eaaa0 *) __asm__("FUN_L00_001ed630");
-void FUN_L00_002eaaa0(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
+void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
+void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
     u8 *m = FUN_L00_001eb1f8_2eaaa0(5);
     V_2eaaa0 a, b, c, d;
     u8 *n;
@@ -864,7 +866,8 @@ void FUN_001fa050_2eac18(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_2eac18(void *, void *) __asm__("FUN_001fa2b8");
 void FUN_001f9bf8_2eac18(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_2eac18(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_002eac18(int mode) {
+void ea210_hide(int mode) __asm__("FUN_L00_002eac18");
+void ea210_hide(int mode) {
     char *g = D_L00_00166C80_2eac18;
     char *o = *(char **)(g + 0x180);
     FUN_L00_001eb448_2eac18();
@@ -933,7 +936,7 @@ void FUN_L00_002ead60(char *m) {
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L00_00166DD8 __attribute__((section(".data")));
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float FUN_L00_001eb328(void *, float, float, float, float, float);
+extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float FUN_L00_00257e20(float, float, float, float, float);
 extern float FUN_L00_00257ef0(float, float, float);
 extern float cosine_interpolate_alt(float, float, float) __asm__("FUN_002133d0");
@@ -1003,10 +1006,10 @@ void FUN_L00_002eae20(void *arg) {
         }
         if (*(short *)(a + 0x2C) == 1) {
             F(m, 0x40) =
-                FUN_L00_001eb328(a, F(m, 0x40), F(b, 0x10), F(a, 0x20), F(a, 0x24), F(a, 0x28));
-            F(m, 0x44) = FUN_L00_001eb328(d + 0x34, F(m, 0x44), F(b, 0x14), F(a, 0x20), F(a, 0x24),
+                rope_spring_turn(a, F(m, 0x40), F(b, 0x10), F(a, 0x20), F(a, 0x24), F(a, 0x28));
+            F(m, 0x44) = rope_spring_turn(d + 0x34, F(m, 0x44), F(b, 0x14), F(a, 0x20), F(a, 0x24),
                                           F(a, 0x28));
-            F(m, 0x48) = FUN_L00_001eb328(d + 0x38, F(m, 0x48), F(b, 0x18), F(a, 0x20), F(a, 0x24),
+            F(m, 0x48) = rope_spring_turn(d + 0x38, F(m, 0x48), F(b, 0x18), F(a, 0x20), F(a, 0x24),
                                           F(a, 0x28));
         }
     }
@@ -1497,12 +1500,12 @@ void FUN_L00_002ebe70(char *o) {
             else
                 target = ((float *)&hero.motion.rot)[2];
         } else target = ((float *)&hero.motion.rot)[2];
-        *angle = FUN_L00_001eb328(m + 0xbc, *angle, target, 0.00125f, 0.175f, 0.0f);
+        *angle = rope_spring_turn(m + 0xbc, *angle, target, 0.00125f, 0.175f, 0.0f);
     } else if (hero.state.current == 0x25) {
         target = ((float *)&hero.motion.rot)[2];
         if (*(int *)(m + 0x80) == 1)
             target = *(float *)(*(char **)(m + 0x84) + 0x48);
-        *angle = FUN_L00_001eb328(m + 0xbc, *angle, target, D_L00_00161DD8_2ebe70, 0.175f, 0.0f);
+        *angle = rope_spring_turn(m + 0xbc, *angle, target, D_L00_00161DD8_2ebe70, 0.175f, 0.0f);
     }
     *(float *)(p + 0x30) = FUN_001ff7e8_2ebe70(*angle);
     *(float *)(p + 0x34) = FUN_001ff800_2ebe70(*angle);
@@ -1636,7 +1639,7 @@ void FUN_L00_002ec7b0(char *a) {
  *  - aim cameras: volume_camera_check -> volume_camera_aim.
  * Both run while the hero stands in one of the volumes the parameters name
  * (clip volumes and the FUN_L00_0025fa38 / FUN_L00_0025faf0 / path tests),
- * then end the camera with FUN_L00_002e8388 and set `done`.
+ * then end the camera with release_s and set `done`.
  */
 #include "rnc/gameplay/camera/follow_cam.h"
 #include "rnc/input/pad_state.h"

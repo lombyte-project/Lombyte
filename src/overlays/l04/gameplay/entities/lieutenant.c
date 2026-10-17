@@ -43,13 +43,13 @@ extern u8 D_0014C050[];
 extern struct ShopCamera D_L04_0016C9F0;
 extern s32 D_L04_0015F5C4;
 extern float FUN_001f9b48(void *, void *);
-extern void FUN_L00_0025a120(struct Moby *);
+extern void wake302618(struct Moby *) __asm__("FUN_L00_0025a120");
 extern void FUN_L02_002e0cd8(struct Moby *);
 extern void FUN_L00_002668a0(struct Moby *, struct VendorVars *);
 extern int FUN_00214720(char *, s32);
 extern int FUN_L00_00266448(struct Moby *, struct VendorVars *);
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
-extern void FUN_L00_002502a0(int);
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void fast_vec_normalize(Vec4 *, Vec4 *, float) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(Vec4 *, Vec4 *, void *) __asm__("FUN_001f9a10");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -62,7 +62,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
     struct VendorVars *vars = (struct VendorVars *)moby->pvars;
 
     if (moby->visible != 0 && FUN_001f9b48(&moby->pos, D_L04_00166F40) < 30.0f) {
-        FUN_L00_0025a120(moby);
+        wake302618(moby);
         ((struct VendorMobyView *)moby)->unk7F = 0x18;
     }
     FUN_L02_002e0cd8(moby);
@@ -88,7 +88,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
     case 2:
         if (vars->phase == 2) {
             unlock_planet(6);
-            FUN_L00_002502a0(((struct VendorMobyView *)moby)->slot);
+            jet_clear_persistent(((struct VendorMobyView *)moby)->slot);
             fast_vec_normalize(&pos, &((struct VendorMobyView *)moby)->facing, 2.0f);
             add_vector_xyz(&pos, &pos, &moby->pos);
             r = &rot;
@@ -476,7 +476,7 @@ void FUN_L04_002e5178(M2e5178 *m) {
         break;
     }
 }
-/* Waits for state 1, then passes the slot for the level's current mode to FUN_L00_002637f8. */
+/* Waits for state 1, then passes the slot for the level's current mode to cutscene_set_camera_target. */
 struct L04MissionState {
     char pad0[0x30];
     int mode;
@@ -486,7 +486,7 @@ struct L04MissionState {
 
 extern int D_L04_0015F5C4;
 extern struct L04MissionState D_L04_0016C9E0;
-extern void FUN_L00_002637f8(int);
+extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L04_002e53a0(struct Moby *m) {
     switch (m->state) {
@@ -504,7 +504,7 @@ void FUN_L04_002e53a0(struct Moby *m) {
                     i = 3;
                 else if (v == 1)
                     i = 2;
-                FUN_L00_002637f8(D_L04_0016C9E0.slot[i]);
+                cutscene_set_camera_target(D_L04_0016C9E0.slot[i]);
             }
         }
         break;

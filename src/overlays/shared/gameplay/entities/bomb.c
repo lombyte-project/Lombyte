@@ -170,7 +170,7 @@ extern s32 FUN_001f0d60_2c89e8(f32, void *, s32, void *) __asm__("FUN_L00_001f0d
 extern void FUN_L00_0026ed28(struct Moby *);
 extern void FUN_L00_002c8078(struct Moby *);
 extern void FUN_L00_002bfe08(struct Moby *, void *, void *);
-extern void FUN_L00_00260400(struct Moby *, s32, void *, void *, void *, void *);
+extern void probe_ground_height_cf(struct Moby *, s32, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
 
 /* Six checked switch entries: state 5 shares the default state reset. */
@@ -294,7 +294,7 @@ collision_miss:
         f32 f;
         f = probe_ground_height(&m->pos, 0, 0.5f);
         if (f != 0.0f && coll_hit.moby)
-            FUN_L00_00260400(m, coll_hit.moby, &m->pos, &m->rot, &m->pos, &m->rot);
+            probe_ground_height_cf(m, coll_hit.moby, &m->pos, &m->rot, &m->pos, &m->rot);
         if (tick_timer_2cb418(&v->timer)) {
             count = 0;
             for (p = (struct Moby *)D_L00_0015FFE4; p; p = p->next)
@@ -332,7 +332,7 @@ spawn_done:
         m->scale *= 0.92f;
         f = probe_ground_height(&m->pos, 0, 0.5f);
         if (f != 0.0f && coll_hit.moby)
-            FUN_L00_00260400(m, coll_hit.moby, &m->pos, &m->rot, &m->pos, &m->rot);
+            probe_ground_height_cf(m, coll_hit.moby, &m->pos, &m->rot, &m->pos, &m->rot);
         if (m->alpha) return;
 remove:
         mark_moby_for_removal(m);
@@ -607,7 +607,8 @@ extern void normalize_2c97e0(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 /* Update for class 0x10e. State-specific inequalities and scale omissions
  * follow the level-00 instructions, including the close state-3 step. */
-void FUN_L00_002c97e0(struct Moby *m)
+void morphoray_chicken_update(struct Moby *m) __asm__("FUN_L00_002c97e0");
+void morphoray_chicken_update(struct Moby *m)
 {
     V4 old_pos, next_pos, velocity, offset;
     Sub *s2 = (Sub *)m->pvars;
@@ -1701,7 +1702,8 @@ extern unsigned char *missile_2cc608(struct Moby *, float *, struct Moby *, floa
 extern int rand_2cc608(void) __asm__("FUN_001160d8");
 
 /* Ryno (class 454) update: target lock and reticle while held, then the eight-missile salvo state machine. */
-void FUN_L00_002cc608(struct Moby *m) {
+void ryno_update(struct Moby *m) __asm__("FUN_L00_002cc608");
+void ryno_update(struct Moby *m) {
     Mat3_2cc608 cam;
     Mat4_2cc608 view;
     Vec4 aim;
@@ -2021,7 +2023,8 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9, float fC, float fD, float fE, float fF, int k10, float fG, int k11, int s16, int s18, unsigned char flag);
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L00_002cd1f0(char *m) {
+void rocket_update(char *m) __asm__("FUN_L00_002cd1f0");
+void rocket_update(char *m) {
     char *d;
     char *q;
     char *p;
@@ -2489,7 +2492,8 @@ typedef struct {
     f32 pitch_velocity;
 } Vars_2ce358;
 
-void FUN_L00_002ce358(struct Moby *m)
+void drone_update(struct Moby *m) __asm__("FUN_L00_002ce358");
+void drone_update(struct Moby *m)
 {
     Vars_2ce358 *v = (Vars_2ce358 *)m->pvars;
     V4 collision_data[1], old_pos;

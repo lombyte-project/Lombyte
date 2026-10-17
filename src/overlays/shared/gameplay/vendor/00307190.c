@@ -19,7 +19,8 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
-char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
+char *projectile302618(char *pos, char *dir, int a2, int a3, int a4, int a5) __asm__("FUN_L08_00307190");
+char *projectile302618(char *pos, char *dir, int a2, int a3, int a4, int a5) {
     char *m = func_0020D348_m(0x50C);
     if (m != 0) {
         char *d;
@@ -51,7 +52,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_001ff290(void *, void *, void *);
-extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
+extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -89,7 +90,7 @@ void FUN_L08_00307298(char *m) {
             char *t = D_L08_00174640;
             if (*(int *)(t + 0x18) != *(int *)(d + 0x10)) {
                 if (*(int *)(t + 0x18) != 0) {
-                    FUN_L00_00259bc8(*(void **)(t + 0x18), (int)m, 0x10001, t + 0x20, d, 1.0f);
+                    spawn_nearby_effect(*(void **)(t + 0x18), (int)m, 0x10001, t + 0x20, d, 1.0f);
                 }
                 m[0x20] = 2;
             }
@@ -174,12 +175,12 @@ extern float D_L08_00162348 __attribute__((sda));
 extern float D_L08_00162354 __attribute__((sda));
 extern int D_L08_00162358 __attribute__((sda));
 extern float D_L08_0016235C __attribute__((sda));
-extern int FUN_L08_00211b08();
+extern int update_float_countdown() __asm__("FUN_L08_00211b08");
 extern u128_3091B0 D_L08_00160250 __attribute__((section(".sdata")));
 extern void FUN_L08_00272cb8(void *, void *, void *, float);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
-float FUN_L00_00263468(Vec4 *v);
-void FUN_L00_00262cf0(void *a, void *b);
+float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
+void fast_add_rotations_cf(void *a, void *b) __asm__("FUN_L00_00262cf0");
 void FUN_L00_002634f8(void *v);
 void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f);
 void FUN_L08_00307b90_c(int arg) __asm__("FUN_L08_00307b90");

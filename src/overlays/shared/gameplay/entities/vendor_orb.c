@@ -11,7 +11,8 @@ float random_angle_radians(void) __asm__("FUN_00213308");
 void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void FUN_L00_001fff28(char *, int, float);
-void FUN_L00_002df730(unsigned char *p) {
+void vendor_orb_update(unsigned char *p) __asm__("FUN_L00_002df730");
+void vendor_orb_update(unsigned char *p) {
     char *m = *(char **)(p + 0x78);
     float s;
     switch (p[0x20]) {
@@ -126,9 +127,9 @@ s32 FUN_L00_002e02e0_c(void) __asm__("FUN_L00_002e02e0");
 s32 scale_game_frames_alt_c(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002e01b0_c(char *m) __asm__("FUN_L00_002e01b0");
 void FUN_L00_002e0340_c(char *a) __asm__("FUN_L00_002e0340");
-void FUN_L00_002ea9d8(char *src);
-void FUN_L00_002eaa30(char *src);
-void FUN_L00_002eaaa0(void *pa, void *pb, s32 mode, s32 w, s32 x);
+void ea210_drawend(char *src) __asm__("FUN_L00_002ea9d8");
+void ea210_drawflush(char *src) __asm__("FUN_L00_002eaa30");
+void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
 void FUN_L00_002eac18_c(int mode) __asm__("FUN_L00_002eac18");
 extern char D_0013E633_2E0E50[] __asm__("D_0013F350");
 extern char D_0013A5E0_2E0E50[] __asm__("D_0013CAE0");
@@ -164,7 +165,8 @@ extern float func_001FA748_2E0E50(float, float) __asm__("FUN_001fa580");
 extern void func_L00_002EC0C8_2E0E50(int) __asm__("FUN_L00_002eac18");
 extern int func_001F9908_2E0E50(void *) __asm__("FUN_001f9740");
 
-void FUN_L00_002df9a0(Moby *moby) {
+void hydrodisplacer_update(Moby *moby) __asm__("FUN_L00_002df9a0");
+void hydrodisplacer_update(Moby *moby) {
     Vec_2E0E50 camera_pos, camera_rot;
     Data_2E0E50 *data = (void *)moby->pvars;
 
@@ -419,14 +421,14 @@ s32 FUN_L00_002e02e0(void) {
 extern int D_L00_0015F404;
 extern short D_L00_0015F3FC;
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void FUN_L00_002eac18(int);
+extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
 
 /* Moby state 4: clears two globals, calls 002eac18(3); control mode 0x13: calls 002223f8(0, 1). */
 void FUN_L00_002e0340(char *a) {
     if (*(unsigned char *)(a + 0x20) == 4) {
         D_L00_0015F404 = 0;
         *(int *)&D_L00_0015F3FC = 0;
-        FUN_L00_002eac18(3);
+        ea210_hide(3);
     }
     if (hero.state.control_mode == 0x13) {
         hero_set_state(HERO_STATE_IDLE, 1);
@@ -493,7 +495,8 @@ extern u16 D_00141B08[];
 extern T_2e03a0_2e03a0 D_L00_001BA5D0;
 extern T_2e03a0_2e03a0 D_L00_001BB230;
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
-void FUN_L00_002e03a0(M_2e03a0_2e03a0 *m) {
+void pilots_helmet_update(M_2e03a0_2e03a0 *m) __asm__("FUN_L00_002e03a0");
+void pilots_helmet_update(M_2e03a0_2e03a0 *m) {
     P_2e03a0_2e03a0 *p = m->p;
     char *g;
     E_2e03a0_2e03a0 *e;
@@ -627,7 +630,8 @@ extern s32_2e1f28 D_C58_2e1f28[] __asm__("D_L00_00161C58") __attribute__((sectio
 extern s32_2e1f28 D_C68_2e1f28[] __asm__("D_L00_00161C68") __attribute__((section(".sdata")));
 extern s32_2e1f28 D_C78_2e1f28[] __asm__("D_L00_00161C78") __attribute__((section(".sdata")));
 extern s32_2e1f28 D_C88_2e1f28[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
-s32_2e1f28 FUN_L00_002e1f28(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) {
+s32_2e1f28 anim_67e8(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) __asm__("FUN_L00_002e1f28");
+s32_2e1f28 anim_67e8(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) {
     s32_2e1f28 i, j;
     for (i = 0; i < 3; i++) {
         if (D_C88_2e1f28[i] == id)
@@ -658,7 +662,8 @@ extern s32 D_L00_00161C48_c[] __asm__("D_L00_00161C48") __attribute__((section("
 extern s32 D_L00_00161C88_c[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
 extern void stop_n(int) __asm__("FUN_L00_0023e838");
 
-int FUN_L00_002e2040(int id) {
+int vend_2040(int id) __asm__("FUN_L00_002e2040");
+int vend_2040(int id) {
     unsigned int i;
     for (i = 0; (int)i < 3; i++) {
         if (D_L00_00161C88_c[i] == id) {
@@ -712,7 +717,8 @@ extern Q002e2190 D_L00_001E6DE0[];
 extern s32 D_L00_00161BF8[] MACRO_ADDR;
 extern s32 D_L00_00161C88[] MACRO_ADDR;
 void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
-s32 FUN_L00_002e2190(s32 id, void *src, void *v) {
+s32 aim_ok_67e8(s32 id, void *src, void *v) __asm__("FUN_L00_002e2190");
+s32 aim_ok_67e8(s32 id, void *src, void *v) {
     s32 i;
     for (i = 0; i < 3; i++) {
         if (id == D_L00_00161C88[i]) {
@@ -1289,7 +1295,8 @@ int random_integer_below(int) __asm__("FUN_00213260");
 void FUN_00212f90_2e3a88(void *, int, int, int) __asm__("FUN_00212f90");
 extern float D_L00_00161C98 __attribute__((sda));
 extern float D_L00_00161C9C __attribute__((sda));
-void FUN_L00_002e3a88(unsigned char *m) {
+void pterodactyl_update(unsigned char *m) __asm__("FUN_L00_002e3a88");
+void pterodactyl_update(unsigned char *m) {
     D_2e3a88 *d = *(D_2e3a88 **)(m + 0x78);
     int *p = vend_paths[d->path];
     float y;
@@ -1333,7 +1340,8 @@ float FUN_001f9b48(void *, void *);
 float fast_vec_length(void *) __asm__("FUN_001f9af0");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(unsigned char *, int, int, int) __asm__("FUN_00212f90");
-void FUN_L00_002e3ca8(unsigned char *p) {
+void red_plant_update(unsigned char *p) __asm__("FUN_L00_002e3ca8");
+void red_plant_update(unsigned char *p) {
     char *g = (char *)&hero.motion.pos;
     if (FUN_001f9b48(g, p + 0x10) < 1.0f) {
         if (fast_vec_length(g + 0x80) > frame_time + frame_time && p[0x53] != 1) {
@@ -1375,7 +1383,8 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern int func_L00_001F10E0_s(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
 extern float coll_hit_normal[] __asm__("D_L00_00173E80") __attribute__((section(".data")));
-void FUN_L00_002e3d88(char *m) {
+void robot_arm_update(char *m) __asm__("FUN_L00_002e3d88");
+void robot_arm_update(char *m) {
     char *d = *(char **)(m + 0x78);
     float a20[4];
     float a30[12];
@@ -2344,7 +2353,8 @@ struct P1_388 {
 };
 extern struct P1_388 *D_L00_00166E00_c __asm__("D_L00_00166E00");
 /* -1 while D_L00_00166E00+0x86 is set; else clears its current id, 1 if it was id. */
-s32 FUN_L00_002e8388(s32 id) {
+s32 release_s(s32 id) __asm__("FUN_L00_002e8388");
+s32 release_s(s32 id) {
     struct P1_388 *t = D_L00_00166E00_c;
     if (t->f86 != 0) {
         return -1;
@@ -2373,7 +2383,8 @@ typedef struct {
     char pad00[0x84];
     short f84;
 } O842e83c0;
-int FUN_L00_002e83c0(int arg1, int arg2) {
+int ready_s(int arg1, int arg2) __asm__("FUN_L00_002e83c0");
+int ready_s(int arg1, int arg2) {
     void *a = D_L00_00166E00_c2;
     C842e83c0 *cur;
     u8 x;
@@ -2468,7 +2479,8 @@ void FUN_L00_002e8568(int v) {
 }
 extern char *D_L00_00166E00_002e8590[] __asm__("D_L00_00166E00");
 /* Stores non-zero a/b at +0x11C/+0x120 of D_L00_00166E00+0x70 while its short at 0x86 is 0. */
-void FUN_L00_002e8590(float a, float b) {
+void follow_camera_set_lateral_spring(float a, float b) __asm__("FUN_L00_002e8590");
+void follow_camera_set_lateral_spring(float a, float b) {
     char *p = D_L00_00166E00_002e8590[0];
     if (*(short *)(p + 0x86) == 0) {
         char *q = *(char **)(p + 0x70) + 0x40;
@@ -2483,7 +2495,8 @@ void FUN_L00_002e8590(float a, float b) {
 extern char *D_L00_00166E00_002e8620 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 
 /* Sets the short at +0x226 of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
-void FUN_L00_002e8620(void) {
+void pitch2_s(void) __asm__("FUN_L00_002e8620");
+void pitch2_s(void) {
     char *p = D_L00_00166E00_002e8620;
     if (*(short *)(p + 0x86) == 0) {
         *(short *)(*(char **)(p + 0x70) + 0x226) = 1;
@@ -2584,7 +2597,8 @@ void FUN_L00_002e8918(char *a, float x, float y) {
 extern char *D_L00_00166E00_002e8970 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e88c8_002e8970(char *, char *, float) __asm__("FUN_L00_002e88c8");
 /* Stores x at +0x1BC of D_L00_00166E00+0x70 and calls FUN_L00_002e88c8 with a and y. */
-void FUN_L00_002e8970(char *a, float x, float y) {
+void spin_s(char *a, float x, float y) __asm__("FUN_L00_002e8970");
+void spin_s(char *a, float x, float y) {
     char *b = a;
     char *p = D_L00_00166E00_002e8970;
     if (*(short *)(p + 0x86) == 0) {

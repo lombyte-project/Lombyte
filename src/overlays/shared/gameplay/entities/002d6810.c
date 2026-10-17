@@ -81,10 +81,10 @@ extern int FUN_L00_0023e738(float, float, float, float, float, void *);
 extern void FUN_L00_0023e838(int);
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern int FUN_L11_0030f270(void *);
-extern int FUN_L00_0020d568(void);
+extern int fd568_208820(void) __asm__("FUN_L00_0020d568");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void FUN_L00_00259a88(int, void *);
+extern void apply_hit_ece00(int, void *) __asm__("FUN_L00_00259a88");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void enqueue_timer_display(void *, void *) __asm__("FUN_L15_001f2ac8");
 extern void FUN_L15_002d79e8(char *);
@@ -240,7 +240,7 @@ next_path:      i -= 8; p += 8;
             set_vector_length_xy(1.0f, shot.pos, shot.pos);
             shot.type = 1; shot.oclass = *(unsigned short *)(moby + 0xa6);
             shot.pos[2] = 1.0f; shot.pos[3] = 5627.9248046875f; shot.state = 0;
-            FUN_L00_00259a88((int)hero.moby, &shot);
+            apply_hit_ece00((int)hero.moby, &shot);
             if ((unsigned char)moby[0x20] == 2) {
                 float x = DATA_FLOAT(0x50), y = DATA_FLOAT(0x54), z = DATA_FLOAT(0x58), w = DATA_FLOAT(0x5c);
                 D_L15_0015F448 = x; D_L15_0015F44C = y; D_L15_0015F450 = z; D_L15_0015F454 = w;
@@ -328,7 +328,7 @@ state_three: {
 
 finish:
     data = triggers; i = 3; other = (char *)&hero;
-    do { if (is_point_inside_clip_volume(((char *)other + 0x80), *data) && FUN_L00_0020d568()) ((struct Hero *)other)->water_surface_z = *(float *)(D_L15_001600EC_gp + *data * 0x80 + 0x38); data++; } while (--i >= 0);
+    do { if (is_point_inside_clip_volume(((char *)other + 0x80), *data) && fd568_208820()) ((struct Hero *)other)->water_surface_z = *(float *)(D_L15_001600EC_gp + *data * 0x80 + 0x38); data++; } while (--i >= 0);
 }
 #undef DATA_INT
 #undef DATA_SHORT

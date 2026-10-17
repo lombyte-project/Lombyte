@@ -81,7 +81,8 @@ extern int func_L00_00203F20_3102C8(int a, int b) __asm__("FUN_L00_00203908");
 extern float func_001F9D48_3102C8(void *, void *) __asm__("FUN_001f9b80");
 extern int func_001F9850_3102C8(int) __asm__("FUN_001f96f8");
 
-void FUN_L11_0030ee00(Lock_3102C8 *moby)
+void thruster_pack_lock_update(Lock_3102C8 *moby) __asm__("FUN_L11_0030ee00");
+void thruster_pack_lock_update(Lock_3102C8 *moby)
 {
     char *vars = moby->vars;
 

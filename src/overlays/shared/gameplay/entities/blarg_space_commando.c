@@ -30,7 +30,7 @@ typedef struct {
     u8 pad1C[0x14];
 } ShotInfo;
 
-/* pvars of FUN_L06_002fdbd0 */
+/* pvars of blarg_space_commando_update */
 typedef struct {
     u8 pad0[0x20];
     f32 unk20;
@@ -97,20 +97,21 @@ extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern s32 FUN_L00_00258b50(struct Moby *, MoveCtl *, void *, void *, f32);
 extern void make_hit_descriptor(ShotInfo *, struct Moby *, s32, void *, f32) __asm__("FUN_L00_00259888");
 extern void sweep_hit_segment(void *, void *, void *, void *, struct Moby *, ShotInfo *, s32) __asm__("FUN_L00_00259d08");
-extern void FUN_L00_0025a120(struct Moby *);
+extern void wake302618(struct Moby *) __asm__("FUN_L00_0025a120");
 extern void FUN_L00_0025be00(f32 *, f32, f32 *, f32, f32, f32);
 extern s32 FUN_L00_0025c698(struct Moby *, Vec4 *);
 extern void FUN_L00_0025e450(struct Moby *, Vec4 *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32,
                              f32, s32, s32, s32, s32);
-extern s32 FUN_L00_00261b48(s32, void *, void *, void *);
+extern s32 path_e50(s32, void *, void *, void *) __asm__("FUN_L00_00261b48");
 extern void FUN_L00_00261d78(s32, void *, void *, f32);
-extern void FUN_L00_00263ac8(struct Moby *, s32, void *, f32);
-extern void FUN_L00_00263fd8(struct Moby *, s32, void *, void *, s32, s32, f32, f32 *, f32 *, f32 *);
+extern void sound302618(struct Moby *, s32, void *, f32) __asm__("FUN_L00_00263ac8");
+extern void debris302618(struct Moby *, s32, void *, void *, s32, s32, f32, f32 *, f32 *, f32 *) __asm__("FUN_L00_00263fd8");
 extern void FUN_L01_0026d930(MoveCtl *);
 extern void FUN_L06_002feb40_u(struct Moby *) __asm__("FUN_L06_002feb40");
 extern void FUN_L06_002ff100_u(struct Moby *) __asm__("FUN_L06_002ff100");
 
-void FUN_L06_002fdbd0(struct Moby *moby) {
+void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L06_002fdbd0");
+void blarg_space_commando_update(struct Moby *moby) {
     Moby1068Vars *vars = (Moby1068Vars *)moby->pvars;
     struct Moby *target;
     s32 *route;
@@ -127,9 +128,9 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
 
     FUN_L06_002feb40_u(moby);
     target = vars->target;
-    FUN_L00_00263ac8(moby, 1, vars->unk420, 2.5f);
+    sound302618(moby, 1, vars->unk420, 2.5f);
     if (moby->visible != 0 && FUN_001f9b48(&moby->pos, &D_L06_00167540) < 27.0f) {
-        FUN_L00_0025a120(moby);
+        wake302618(moby);
         moby->shadow_range = 0x15;
     }
     moby->anim_speed = 1.0f;
@@ -316,7 +317,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
         a.f[2] = 0.0f;
         FUN_L00_00258b50(moby, &vars->ctl, &a, &b, 1.0f);
         FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
-        if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &c) != 0 &&
+        if (path_e50(vars->path, &moby->pos, &target->pos, &c) != 0 &&
             FUN_001f9b48(&moby->pos, &c) < 0.8f) {
             near = 1;
         }
@@ -396,11 +397,11 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
             a.f[2] += 1.0f;
             none = -1;
             FUN_L00_0025e450(moby, &vars->unk40, &a, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, none, 0);
-            FUN_L00_00263fd8(moby, 0x6A6, &moby->pos, &moby->rot, 0, 0, 0.0f, D_L06_0015F580, D_L06_0015F580,
+            debris302618(moby, 0x6A6, &moby->pos, &moby->rot, 0, 0, 0.0f, D_L06_0015F580, D_L06_0015F580,
                              D_L06_0015F580);
-            FUN_L00_00263fd8(moby, 0x6A7, &moby->pos, &moby->rot, 0, 0, 0.0f, D_L06_0015F580, D_L06_0015F580,
+            debris302618(moby, 0x6A7, &moby->pos, &moby->rot, 0, 0, 0.0f, D_L06_0015F580, D_L06_0015F580,
                              D_L06_0015F580);
-            FUN_L00_00263fd8(moby, 0x6A8, &moby->pos, &moby->rot, 0, 0, 0.0f, D_L06_0015F580, D_L06_0015F580,
+            debris302618(moby, 0x6A8, &moby->pos, &moby->rot, 0, 0, 0.0f, D_L06_0015F580, D_L06_0015F580,
                              D_L06_0015F580);
             mark_moby_for_removal(moby);
         }
@@ -422,7 +423,7 @@ extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
 extern float scale_time(float) __asm__("FUN_L04_001f1978");
 extern float FUN_L00_00257c48(float lo, float hi);
-extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
+extern int activate_effect_l08(float, char *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
 extern int *D_L06_001B0C30[];
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
@@ -576,7 +577,7 @@ void FUN_L06_002feb40(char *m) {
     {
     char *q = d + 0x120;
     e = D_L06_001B0C30[*(int *)(d + 0x180)];
-    if (FUN_L00_0025ff38(*(float *)(d + 0x198), m, q, 0, 0, e + 4, *e) != 2) {
+    if (activate_effect_l08(*(float *)(d + 0x198), m, q, 0, 0, e + 4, *e) != 2) {
         if (*(float *)(d + 0x198) < vector_distance_xy_alt(d + 0x170, d + 0x120)) {
             *(int *)(d + 0x164) = 2;
         } else if (3.0f < absolute_float(*(float *)(m + 0x18) - *(float *)(d + 0x128))) {

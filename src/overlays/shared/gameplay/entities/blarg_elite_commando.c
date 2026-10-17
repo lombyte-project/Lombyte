@@ -61,7 +61,7 @@ extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001e
 extern int FUN_L00_0028dc90(int, int, int, int);
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void FUN_L00_002598b0(int, float, void *, int, float, float, int, int, int);
+extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int);
 extern void FUN_L15_0029ae18(char *);
@@ -71,7 +71,8 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
 
-void FUN_L16_002a0a98(char *m) {
+void rocket_update(char *m) __asm__("FUN_L16_002a0a98");
+void rocket_update(char *m) {
     float desired[4], next[4], delta[4], blend[4];
     char *d = *(char **)(m + 0x78);
     void *remaining;
@@ -109,7 +110,7 @@ void FUN_L16_002a0a98(char *m) {
     if (collision_line((m + 0x10), next, 0, m, 0) != 0 ||
         vector_length_xyz(remaining) < *(float *)(d + 0x24)) {
         if (hero.vehicle_mode == 2)
-            FUN_L00_002598b0((int)m, 2.0f, (m + 0x10), 3, 2.0f, 1.0f, 0, 1, 0);
+            play_entity_sound((int)m, 2.0f, (m + 0x10), 3, 2.0f, 1.0f, 0, 1, 0);
         FUN_L00_0028dc90(4, 0, (int)m, 0x54C);
         FUN_L00_0025e450(m, d, (m + 0x10), 4.0f, 4.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f,
                          1, 1, -1, 0);
@@ -209,7 +210,8 @@ extern float func_L16_002D5280_update(char *, void *, int) __asm__("FUN_L16_002d
 extern int func_0022ED80_update(int, int, void *) __asm__("FUN_0022da68");
 extern float func_001F9D10_update(void *, void *) __asm__("FUN_001f9b48");
 
-void FUN_L16_002d2cf0(char *m) {
+void blarg_elite_commando_update(char *m) __asm__("FUN_L16_002d2cf0");
+void blarg_elite_commando_update(char *m) {
     float target[4], temp[4], delta[4];
     char *d = *(char **)(m + 0x78);
     char *source, *owner;
@@ -532,10 +534,10 @@ extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern int D_0015EE10 __attribute__((sda));
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L00_0025fcb8(float, char *, void *);
-extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
+extern int activate_effect_l08(float, char *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
 extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
@@ -599,7 +601,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
                 scratch.vector = *(OvlQuad *)(hit + 0x10);
                 scratch.angle = heading;
             }
-            FUN_L00_0025ab48(&scratch.vector, &scratch.angle, &d->forward_impulse,
+            trooper_knockback_arc(&scratch.vector, &scratch.angle, &d->forward_impulse,
                              &d->lateral_impulse);
             FUN_L00_0025c558(scratch.angle, m, d->knockback, 6, 1, 0);
             m->state = 8;
@@ -641,7 +643,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
                 scratch.vector = *(OvlQuad *)(hit + 0x10);
                 scratch.fatal_angle = heading;
             }
-            FUN_L00_0025ab48(&scratch.vector, &scratch.fatal_angle, &d->forward_impulse,
+            trooper_knockback_arc(&scratch.vector, &scratch.fatal_angle, &d->forward_impulse,
                              &d->lateral_impulse);
             FUN_L00_0025c558(scratch.fatal_angle, m, d->knockback, 7, 1, 0);
             m->state = 9;
@@ -671,7 +673,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
         d->pursuit_mode = 2;
     } else if (d->path_index >= 0 && d->pursuit_timer == 0) {
         char *path = D_L16_001B0930[d->path_index];
-        FUN_L00_0025ff38(24.0f, m, d->target, 0, 0, path + 0x10, *(int *)path);
+        activate_effect_l08(24.0f, m, d->target, 0, 0, path + 0x10, *(int *)path);
     } else {
         FUN_L00_0025fcb8(24.0f, m, d->target);
     }
@@ -891,7 +893,7 @@ extern char D_L16_00167240[], D_0013F420[];
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void FUN_L00_002628d8(char *, char *, int, float, float);
+extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
@@ -950,9 +952,9 @@ void FUN_L16_002d4590(char *m) {
             *(float *)(d + 0x298) = yaw2;
         }
     }
-    FUN_L00_002628d8(m, d + 0x130, 1, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
-    FUN_L00_002628d8(m, d + 0x1B0, 2, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
-    FUN_L00_002628d8(m, d + 0x230, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+    update_joint_animation(m, d + 0x130, 1, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+    update_joint_animation(m, d + 0x1B0, 2, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+    update_joint_animation(m, d + 0x230, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
 }
 /* Emit randomized joint particles while the moby is active. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5CD0), where it is exact; names translated to the US level program. */

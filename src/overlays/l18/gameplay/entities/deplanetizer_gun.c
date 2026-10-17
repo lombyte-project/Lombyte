@@ -18,7 +18,7 @@ extern void add_9780(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void norm_9780(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00263b70(void *, void *, void *, float, float);
+extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 extern void enqueue_callback_list_1_overlay(void *, void *) __asm__("FUN_L18_002020c8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L18_002fa250(void *, void *, void *, float, float);
@@ -125,7 +125,7 @@ void FUN_L18_002f88e8(struct Moby *moby) {
                         if (i == 5 && frames_9780(645) <= D_L18_0016D260_update.n &&
                             D_L18_0016D260_update.n <= frames_9780(730))
                         radius = 300000.0f;
-                        FUN_L00_00263b70(&direction, &direction, D_L18_0015F580, radius, radius * 0.4f);
+                        draw_trail(&direction, &direction, D_L18_0015F580, radius, radius * 0.4f);
                     }
                 }
             }
@@ -783,7 +783,7 @@ void FUN_L18_002fa640(struct Moby *moby) {
 extern char *func_0020D348_m(int);
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
+extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 void FUN_L18_002fa728(char *moby) {
@@ -796,7 +796,7 @@ void FUN_L18_002fa728(char *moby) {
         break;
     case 1:
         fast_vec_sub(tmp, moby + 0x10, data + 0x60);
-        FUN_L00_00260738(data + 0x20, tmp, data + 0x70, moby + 0x40);
+        update_entity_matrix(data + 0x20, tmp, data + 0x70, moby + 0x40);
         break;
     }
     if (*(unsigned char *)(moby + 0xBC) != 0 && *(int *)(data + 0x80) != 0 &&
@@ -891,7 +891,7 @@ extern ML D_L18_0016D260;
 extern int D_L18_0015F5C4;
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00263b70(void *, void *, void *, float, float);
+extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 
 extern short D_L18_00162578 __attribute__((sda));
 extern short D_L18_0016257C __attribute__((sda));
@@ -921,7 +921,7 @@ void FUN_L18_002fad28(M2 *m) {
                 moby_point_position(p, 9, buf2);
                 fast_vec_sub(buf3, buf, buf2);
                 fast_vec_normalize(buf3, buf3, *(float *)&D_L18_00162578);
-                FUN_L00_00263b70(buf, buf, buf3, *(float *)&D_L18_0016257C,
+                draw_trail(buf, buf, buf3, *(float *)&D_L18_0016257C,
                                  *(float *)&D_L18_00162580);
             }
         }
@@ -949,7 +949,7 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_L00_0025c698(void *, void *);
 extern int FUN_L00_0025e450();
-extern int FUN_L00_002dc9f0(void *, void *);
+extern int hitreact_3DF8(void *, void *) __asm__("FUN_L00_002dc9f0");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int random_integer_below(int);
 extern int scale_game_frames(int);
@@ -1021,7 +1021,7 @@ void FUN_L18_002fbb98(unsigned char *m) {
         break;
     }
     case 7:
-        if (FUN_L00_002dc9f0(m, e + 0x70)) {
+        if (hitreact_3DF8(m, e + 0x70)) {
             m[0x20] = 2;
             *(short *)(e + 0x138) = 0;
         }
@@ -1320,7 +1320,7 @@ typedef struct {
 } LaunchedMobyVars;
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float FUN_L00_0025abf0(void *, void *, float, float, int);
+extern float fn_2c2488(void *, void *, float, float, int) __asm__("FUN_L00_0025abf0");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 
 /* Launches the first idle (state 8) class-0x772 moby of group `group` from `from` towards `to` at `speed`.
@@ -1347,7 +1347,7 @@ int FUN_L18_002fc668(int group, void *from, void *to, float speed) {
                 fast_vec_sub(v->velocity, to, from);
                 v->velocity[2] = 0.0f;
                 fast_vec_normalize(v->velocity, v->velocity, speed);
-                v->velocity[2] = FUN_L00_0025abf0(from, to, speed, -(frame_time_sq * 10.0f), 0);
+                v->velocity[2] = fn_2c2488(from, to, speed, -(frame_time_sq * 10.0f), 0);
                 v->spin = randf_sym(15.0f, 45.0f) * 0.017453292f;
                 return 1;
             }

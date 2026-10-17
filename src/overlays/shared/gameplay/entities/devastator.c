@@ -100,7 +100,8 @@ extern void FUN_L00_0023e838_2b2100(int) __asm__("FUN_L00_0023e838");
 extern int FUN_001f9770_2b2100(short *) __asm__("FUN_001f9770");
 
 extern float D_L00_0017ACF4_lui __asm__("D_L00_0017ACF4") __attribute__((section(".data")));
-void FUN_L00_002b2100(struct Moby *m) {
+void devastator_update(struct Moby *m) __asm__("FUN_L00_002b2100");
+void devastator_update(struct Moby *m) {
     Matrix3_2b2100 rotation;
     Matrix4_2b2100 inverse;
     Vec_2b2100 velocity;
@@ -399,7 +400,8 @@ s32 FUN_L00_002b58d8_b3058(void *, void *, f32, f32) __asm__("FUN_L00_002b58d8")
 s32 FUN_001f96f8_b3058(s32) __asm__("FUN_001f96f8");
 void FUN_0022da68_b3058(s32, s32, void *) __asm__("FUN_0022da68");
 
-void FUN_L00_002b3058(O_b3058 *o) {
+void visibomb_update(O_b3058 *o) __asm__("FUN_L00_002b3058");
+void visibomb_update(O_b3058 *o) {
     V_b3058 *v;
     struct Hero *g;
     C_b3058 *c;
@@ -1609,8 +1611,8 @@ int FUN_L00_0023e738(void *v, float a, float b_0023e738, float c, float d, float
 struct Moby *FUN_L00_002caf70(struct Moby *source, OvlVec4 *position, struct Moby *other, f32 vx, f32 vy, f32 height, f32 speed);
 unsigned char *FUN_L00_002b46a8_49a8(int ign, void *from, float *yaw, float *pitch) __asm__("FUN_L00_002b46a8");
 void FUN_L00_001edf60(int a, int b, void *pos, int kind, int mode, float x, float y, float z);
-void FUN_L00_0020e698(void);
-void FUN_L00_00233660(float *out, float x, float y, float z);
+void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
+void f233660_2133a8(float *out, float x, float y, float z) __asm__("FUN_L00_00233660");
 void FUN_L00_0023e838(int);
 extern Hero hero_2B33E8 __asm__("D_0013F350");
 extern unsigned char item_usage_2B33E8[] __asm__("D_00141680");
@@ -1668,7 +1670,8 @@ extern float func_001FA888_2B5C98(int) __asm__("FUN_001fa6c0");
 extern int func_L00_0023F0D0_2B5C98(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void func_L00_0023F1D0_2B5C98(int) __asm__("FUN_L00_0023e838");
 
-void FUN_L00_002b49a8(struct Moby *moby) {
+void blaster_update(struct Moby *moby) __asm__("FUN_L00_002b49a8");
+void blaster_update(struct Moby *moby) {
     V_2B5C98 velocity;
     V_2B5C98 aim_point;
     V_2B5C98 launch;
@@ -2246,7 +2249,8 @@ extern float D_L00_001614A4 __attribute__((sda));
 extern float D_L00_001614A8 __attribute__((sda));
 extern int D_L00_0015F608_macro __asm__("D_L00_0015F608") __attribute__((section(".sdata")));
 /* visibomb_missile update (moby class 172): drift, homing toward the target, arming countdown. */
-void FUN_L00_002b6140(struct Moby *m) {
+void visibomb_missile_update(struct Moby *m) __asm__("FUN_L00_002b6140");
+void visibomb_missile_update(struct Moby *m) {
     V_2b6140 v20;
     V_2b6140 k30;
     V_2b6140 k40;
@@ -2606,7 +2610,8 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
 #endif
 
 
-void FUN_L00_002b6f10(Moby *m) {
+void taunter_update(Moby *m) __asm__("FUN_L00_002b6f10");
+void taunter_update(Moby *m) {
     Vars *o;
     s32 v;
     s32 a;
@@ -2965,7 +2970,8 @@ void FUN_001fa328_2b77f0(void *, void *, void *) __asm__("FUN_001fa328");
 void FUN_001f9c48_alt_2b77f0(void *, void *, void *) __asm__("FUN_001f9c48");
 void FUN_L00_00250df8_2b77f0(void) __asm__("FUN_L00_00250df8");
 
-void FUN_L00_002b77f0(unsigned char *m) {
+void pyrocitor_update(unsigned char *m) __asm__("FUN_L00_002b77f0");
+void pyrocitor_update(unsigned char *m) {
     unsigned char *v = *(unsigned char **)(m + 0x78);
     Vec_2b77f0 pos, dir, scratch, endpoint, particle_pos, random_vec;
     struct {
@@ -3413,8 +3419,8 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 int FUN_L00_0023e5e0(u128 *v, float a, float b, int col);
 void FUN_L00_00203908(int, int);
-void FUN_L00_0020e4c8(void);
-void FUN_L00_0020e698(void);
+void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
+void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_0023e838(int);
 void FUN_L00_002b9310(char *moby);
 extern int D_0015EEA4;
@@ -3453,7 +3459,8 @@ extern void FUN_L00_0020e4c8_2b2100a(void) __asm__("FUN_L00_0020e4c8");
 extern void FUN_L00_0020e698_2b2100(void) __asm__("FUN_L00_0020e698");
 extern void FUN_L00_0023e838_2b2100a(int) __asm__("FUN_L00_0023e838");
 
-void FUN_L00_002b87e0(struct Moby *m) {
+void tesla_claw_update(struct Moby *m) __asm__("FUN_L00_002b87e0");
+void tesla_claw_update(struct Moby *m) {
     V_2B9AD8 t;
     Data_2B9AD8 *s = (Data_2B9AD8 *)m->pvars;
     int active;

@@ -165,7 +165,7 @@ extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L01_00277fb8(void *);
-extern void FUN_L00_00260738(char *, void *, void *, void *);
+extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -235,7 +235,7 @@ void FUN_L10_00295c20(struct Moby *moby) {
     }
     }
     subtract_vector_xyz(v, &moby->pos, prev);
-    FUN_L00_00260738(d + 0x60, v, &moby->rot, &moby->rot);
+    update_entity_matrix(d + 0x60, v, &moby->rot, &moby->rot);
 }
 /* Spinning pickup: waits until the hero is close and level with it, then plays the scene, saves and goes away. */
 extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");
@@ -446,7 +446,7 @@ extern void * FUN_L00_00272060(void *, int, float, float, int, int, int, void *,
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_002e8568(int);
-extern void FUN_L00_002e8590(float, float);
+extern void follow_camera_set_lateral_spring(float, float) __asm__("FUN_L00_002e8590");
 extern void FUN_L00_002e8648(void);
 extern void FUN_L00_002e8680(void);
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -469,7 +469,7 @@ extern struct Moby * D_L10_0015FFD8;
 #define func_001FA898_2BFBB8 ((int (*)(float))truncate_float_to_s32)
 #define func_001FA8A8_2BFBB8 fast_tween_color
 #define func_001F9908_2BFBB8 ((int (*)(int *))tick_countdown_32_alt)
-#define func_L00_002E9A40_2BFBB8 FUN_L00_002e8590
+#define func_L00_002E9A40_2BFBB8 follow_camera_set_lateral_spring
 #define func_L00_002E9B30_2BFBB8 FUN_L00_002e8680
 #define func_L00_002E9AF8_2BFBB8 FUN_L00_002e8648
 #define func_L00_002E9A18_2BFBB8 FUN_L00_002e8568
@@ -1823,7 +1823,7 @@ extern int D_L10_001BA950[];
 extern unsigned char D_0014C190_c[] __asm__("D_0014C190");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int);
-extern void FUN_L01_002f8530(void *, void *, unsigned int, float, int, float, float, float, int);
+extern void spawn_debris_chunk(void *, void *, unsigned int, float, int, float, float, float, int) __asm__("FUN_L01_002f8530");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
 void FUN_L10_002d9eb8(char *moby) {
@@ -1866,7 +1866,7 @@ void FUN_L10_002d9eb8(char *moby) {
             c16 = random_int_between(0x3C, 0x78);
             f20 = random_float_between(2.0f, 3.0f);
             r2 = random_integer_below(4);
-            FUN_L01_002f8530(&v30, &v40, k, f21, c16, f20, 1.0f, 3.0f, r2 == 0);
+            spawn_debris_chunk(&v30, &v40, k, f21, c16, f20, 1.0f, 3.0f, r2 == 0);
         } while (n >= 0);
         v30.q = 0;
         v30.f[0] = 2.8599999f;

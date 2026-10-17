@@ -136,7 +136,7 @@ void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_L00_00216078(void *, void *);
 void FUN_L00_002335c8(void *, f32, f32, f32);
-void FUN_L00_002334d0(void *, void *, f32);
+void f2334d0_2133a8(void *, void *, f32) __asm__("FUN_L00_002334d0");
 f32 FUN_001f99c0(f32);
 
 extern CollisionHit HH __asm__("D_L05_00174240") __attribute__((section(".data")));
@@ -224,7 +224,7 @@ void FUN_L05_002402a8(void) {
         if (FUN_L00_0025e3b8(HH.moby)) {
             hero.unk30A = 1;
             if ((u32)(hero.state.control_mode - 0x15) < 2) {
-                FUN_L00_002334d0((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
+                f2334d0_2133a8((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
             }
         }
         p = suck_get_aim_height(HH.moby);
@@ -488,14 +488,14 @@ extern char *D_L05_00174258[];
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float FUN_L00_00213350(void *);
-extern float FUN_L00_002339d0(float *v);
-extern float FUN_L00_00233a78(float *);
+extern float forward_component(void *) __asm__("FUN_L00_00213350");
+extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
+extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00212ff0(void);
 extern void FUN_L00_002137a8(void);
-extern void FUN_L00_002338d0(float *, float *);
-extern void FUN_L00_00233b20(float *, float *, float);
+extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
+extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void FUN_L00_00233ba0(float *, float *, float);
 extern void FUN_L00_00233f80(int, void *, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -537,16 +537,16 @@ void FUN_L05_002413e0(void) {
             float length;
 
             position = (float *)((char *)position + 0x60);
-            length = FUN_L00_002339d0(position);
+            length = gravity_length_xy(position);
             limit = player->speed_limit - 0.02f;
             if (limit < length) normalize_vector_xyz(position, position, limit);
         }
         limited_velocity = (float *)(&hero.motion.velocity);
-        magnitude = FUN_L00_00233a78(limited_velocity);
+        magnitude = gravity_z(limited_velocity);
         limit = -*(float *)((char *)limited_velocity + 0x1FC); /* the player's gravity_limit */
         if (magnitude < limit) {
             if (limit > 0.0f) limit = 0.0f;
-            FUN_L00_00233b20(limited_velocity, limited_velocity, limit);
+            gravity_set_z(limited_velocity, limited_velocity, limit);
         }
     } else if (player->mode == 22) {
         qcopy(work.f, position);
@@ -610,8 +610,8 @@ void FUN_L05_002413e0(void) {
     if (magnitude < 0.0f) magnitude = 0.0f;
     normalize_vector_xyz(delta, velocity, magnitude);
     qcopy(work.f, velocity);
-    FUN_L00_002338d0(work.f, work.f);
-    FUN_L00_002338d0(horizontal, horizontal);
+    gravity_flatten(work.f, work.f);
+    gravity_flatten(horizontal, horizontal);
     normalize_vector_xyz(horizontal, horizontal, 1.0f);
     magnitude = dot_vectors_xyz(horizontal, work.f);
     if (magnitude < 0.0f) magnitude = 0.0f;
@@ -627,7 +627,7 @@ void FUN_L05_002413e0(void) {
     motion_player->speed = vector_length_xyz(delta);
     motion_player->horizontal_speed = vector_length_xy(delta);
     work.q = *(OvlQuad *)delta;
-    motion_player->vertical_speed = FUN_L00_00213350(work.f);
+    motion_player->vertical_speed = forward_component(work.f);
     if (motion_player->vertical_speed < 0.0f) motion_player->vertical_speed = 0.0f;
     qcopy(work.f, new_position);
     contact = (float *)((char *)delta - 0x20);

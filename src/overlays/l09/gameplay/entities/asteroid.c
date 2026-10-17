@@ -1079,7 +1079,7 @@ void FUN_L09_002eb970(struct Moby *m) {
 extern char *func_0020D348_m(int);
 extern s32 rand();
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void place_2ce1f0(void *) __asm__("FUN_L00_0025d1b8");
 
 char *FUN_L09_002edb60(char *src, int cls) {
     char *moby = func_0020D348_m(cls);
@@ -1092,7 +1092,7 @@ char *FUN_L09_002edb60(char *src, int cls) {
         qcopy(moby + 0x40, src + 0x40);
         moby[0xBC] = scale_game_frames(10);
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        place_2ce1f0(moby);
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(src + 0x34);
         if (cls == 0x514) {
             if (rand() & 1) {
@@ -1628,7 +1628,7 @@ extern float D_L09_00161A18 __attribute__((sda));
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
-extern void FUN_L00_00260738(char *, void *, void *, void *);
+extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");

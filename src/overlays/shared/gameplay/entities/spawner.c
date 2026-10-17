@@ -364,7 +364,8 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 /* Spawner update (moby class 0x75D): state 0 clears the slot list, state 1 picks a target and lobs a
  * 0x75E moby towards it, state 2 explodes. Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c:
  * func_L09_0030BF88), where it is exact; this build has no 0.85 limit check before a spawn. */
-void FUN_L09_0030ab80(char *moby)
+void spawner_update(char *moby) __asm__("FUN_L09_0030ab80");
+void spawner_update(char *moby)
 {
     char *d = *(char **)(moby + 0x78);
     float target[4];
@@ -596,7 +597,7 @@ extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN
 extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_001fefc8(void *);
 extern void FUN_L00_001ff660(void *, void *, void *);
-extern void FUN_L00_00259fe8(struct Moby *, f32);
+extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
 extern f32 FUN_L00_0025e310(f32);
 extern struct Moby *FUN_L09_0030a778(struct Moby *, Vec4 *);
 
@@ -625,7 +626,8 @@ static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
     }
 }
 
-void FUN_L09_0030b3b0(struct Moby *moby) {
+void spawner_egg_update(struct Moby *moby) __asm__("FUN_L09_0030b3b0");
+void spawner_egg_update(struct Moby *moby) {
     BubbleVars *vars = (BubbleVars *)moby->pvars;
     Vec4 prev;
     Vec4 step;
@@ -707,7 +709,7 @@ void FUN_L09_0030b3b0(struct Moby *moby) {
         }
         break;
     }
-    FUN_L00_00259fe8(moby, moby->scale * 0.3f / moby->pclass->scale);
+    jet_animate(moby, moby->scale * 0.3f / moby->pclass->scale);
     if (moby->pos.z < 5.0f || moby->pos.z > 500.0f) {
         FUN_L09_0030b350(moby, (char *)vars);
         return;

@@ -172,8 +172,8 @@ extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
-extern void FUN_L00_002598b0(int, float, void *, int, float, float, int, int, int);
-extern void FUN_L00_00259a88(int, void *);
+extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+extern void apply_hit_ece00(int, void *) __asm__("FUN_L00_00259a88");
 extern void FUN_L18_002dc4b8();
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -199,12 +199,12 @@ void FUN_L18_002dc260(struct Moby *moby) {
         fast_vec_normalize(v, v, frame_time * 4.0f);
         v[2] = frame_time * 4.0f;
         make_hit_descriptor(buf, (int)moby, 0x10001, v, 1.0f);
-        FUN_L00_00259a88(*(int *)(tgt + 0x2000), buf);
+        apply_hit_ece00(*(int *)(tgt + 0x2000), buf);
     }
     flag = game_frame & 4;
     d[1] = d[1] + D_L18_00161CA0 * frame_time;
     if (flag == 0) {
-        FUN_L00_002598b0(*(int *)(d + 3), d[0], pos, 0x10000, 1.0f, 1.0f, 0, 1, 0);
+        play_entity_sound(*(int *)(d + 3), d[0], pos, 0x10000, 1.0f, 1.0f, 0, 1, 0);
     }
     enqueue_callback_list_1(FUN_L18_002dc4b8, moby);
 }
@@ -628,7 +628,7 @@ void FUN_L18_002d5610(void *m, void *src) {
                           0, -1, 0);
     if (d != 0.0f) {
         if (hero.vehicle_mode == 2) {
-            FUN_L00_002598b0((int)moby, 2.0f, moby + 0x10, 2, D_L18_0016196C, 1.0f, 0, 1,
+            play_entity_sound((int)moby, 2.0f, moby + 0x10, 2, D_L18_0016196C, 1.0f, 0, 1,
                              0);
         }
     }
@@ -689,7 +689,7 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int D_001413D0[];
 extern float D_0015EE70 __asm__("D_0015ED70");
 extern int FUN_L00_0025fcb8(char *, char *, float);
-extern int FUN_L00_002dc9f0(void *, void *);
+extern int hitreact_3DF8(void *, void *) __asm__("FUN_L00_002dc9f0");
 extern int scale_game_frames_i(int) __asm__("FUN_001f96f8");
 extern short D_L18_00161988 __attribute__((sda));
 extern float D_L18_00161994 __attribute__((sda));
@@ -783,7 +783,7 @@ void FUN_L18_002d5918(struct Moby *moby) {
         }
         break;
     case 4:
-        if (FUN_L00_002dc9f0(moby, data + 0x110)) {
+        if (hitreact_3DF8(moby, data + 0x110)) {
             moby->state = 3;
             *(short *)(data + 0xC8) = 0;
         }
@@ -1458,7 +1458,7 @@ extern float D_L18_00161A64 __attribute__((sda));
 extern int D_L18_001623A8 __attribute__((sda));
 extern void FUN_L18_002d88b8(struct Moby *);
 extern void FUN_L18_00227dd0(int, int);
-extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int allocate_voice_82c0(int, int, struct Moby *) __asm__("FUN_0022da68");
@@ -1572,7 +1572,7 @@ void FUN_L18_002d82c0(struct Moby *moby) {
     }
     FUN_L18_002d8710(moby);
     add_vector_xyz(delta, delta, &moby->pos);
-    FUN_L00_00260738(data + 0x20, delta, old_rot, &moby->rot);
+    update_entity_matrix(data + 0x20, delta, old_rot, &moby->rot);
 }
 /* Starts the moby's next phase with the given pair if it is waiting. */
 int FUN_L18_002d8888(struct Moby *arg, int a, int b) {
@@ -1700,7 +1700,7 @@ extern int D_L18_00161C38 __attribute__((sda));
 extern int D_L18_00161C3C __attribute__((sda));
 extern int D_L18_00161C40 __attribute__((sda));
 extern int D_L18_00161C44 __attribute__((sda));
-extern void FUN_L00_00259fe8(unsigned char *m, float s);
+extern void jet_animate(unsigned char *m, float s) __asm__("FUN_L00_00259fe8");
 extern void FUN_L18_002dba20();
 extern void FUN_L18_002dbe80_c(char *moby) __asm__("FUN_L18_002dbe80");
 extern void add_vector_xyz(void *, void *, void *);
@@ -1774,7 +1774,7 @@ void FUN_L18_002db460(struct Moby *moby) {
         if (moby->pos.z < 10.0f) {
             mark_moby_for_removal_p(moby);
         } else {
-            FUN_L00_00259fe8((unsigned char *)moby, 1.0f);
+            jet_animate((unsigned char *)moby, 1.0f);
         }
         break;
     }

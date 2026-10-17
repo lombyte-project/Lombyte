@@ -149,7 +149,7 @@ void FUN_L00_0025c558(u8 *a, B_25c558 *b, int c, int d, int e, float f) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D6F0), where it is exact; names translated to the US level program. */
 
 extern Vec4 D_L00_00173E70;
-extern char *FUN_L00_002d7e90(void *, float);
+extern char *spawn_burst(void *, float) __asm__("FUN_L00_002d7e90");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_vec_dot_c(void *a, void *b) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
@@ -172,8 +172,8 @@ f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_002595a0(float *r0, float *r1, float a, float b, float c);
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
-void FUN_L00_00259710(void *a);
-void FUN_L00_00259bc8(char *, float, int, int, void *, void *);
+void floor_height_4318(void *a) __asm__("FUN_L00_00259710");
+void spawn_nearby_effect(char *, float, int, int, void *, void *) __asm__("FUN_L00_00259bc8");
 void FUN_L00_0025c398_c(void *a0, void *a1, void *a2) __asm__("FUN_L00_0025c398");
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60");
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
@@ -221,7 +221,7 @@ int FUN_L00_0025c698(char *moby, char *st) {
         if (*(float *)(st + 0x5C) == 0.0f && f21 <= v10[2] && v10[2] + *(float *)(st + 0x8) < f21) {
             *(float *)(st + 0x5C) = 1.0f;
             v10[2] = f21;
-            FUN_L00_002d7e90(v10, 3.0f);
+            spawn_burst(v10, 3.0f);
         }
         f21 = func_L00_0025A748_f((moby + 0x10));
     } else {
@@ -318,7 +318,7 @@ int FUN_L00_0025c698(char *moby, char *st) {
                     }
                 }
             } else {
-                FUN_L00_00259bc8((char *)*pp, 1.0f, (int)moby, 0x10000, (moby + 0x10), st);
+                spawn_nearby_effect((char *)*pp, 1.0f, (int)moby, 0x10000, (moby + 0x10), st);
             }
             pp++;
         } while (--k != 0);

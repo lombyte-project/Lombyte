@@ -961,7 +961,7 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int FUN_00213928();
 extern int FUN_L00_0025ff38();
-extern int FUN_L00_00260a88();
+extern int play_reaction_3024d8() __asm__("FUN_L00_00260a88");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int blend_moby_animation_alt(int) __asm__("FUN_00212f90");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -1266,20 +1266,20 @@ extern float D_L10_00161E44 __attribute__((sda));
 extern float D_L10_00161E4C __attribute__((sda));
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
-extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
-                              float *);
+extern void *debris302618(char *, int, float *, void *, int, int, float, float *, float *,
+                              float *) __asm__("FUN_L00_00263fd8");
 extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-extern void FUN_L00_0025a120(void *);
+extern void wake302618(void *) __asm__("FUN_L00_0025a120");
 extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
 extern void FUN_L00_0025d458(void *m, short *p);
 extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
-extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
+extern void sound302618(float, int, int, unsigned char *) __asm__("FUN_L00_00263ac8");
 extern void FUN_L01_0026d930(char *p);
-extern void FUN_L03_00250a78(float *p, float a, float b);
+extern void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
 extern void FUN_L10_002e0138(struct Moby *m);
 extern void FUN_L10_002e3a90_u(void *) __asm__("FUN_L10_002e3a90");
 extern void FUN_L10_002e3de8(char *moby);
@@ -1302,7 +1302,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
     FUN_L10_002e3ef0_u(m);
     t = d->tgt;
     m->f2C = *(float *)(m->p24 + 0x24) * D_L10_00161E24;
-    FUN_L00_00263ac8(2.5f, (int)m, 2, d->q2B0);
+    sound302618(2.5f, (int)m, 2, d->q2B0);
     *(OvlQuad *)from = *(OvlQuad *)m->pos;
     from[2] += 1.0f;
     *(OvlQuad *)to = *(OvlQuad *)(t + 0x10);
@@ -1806,7 +1806,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                 d->f98 = 0.75f;
                 d->i94 = 9;
                 d->f80 = x;
-                FUN_L03_00250a78(d->v70, 2.0f, 1.5f);
+                trooper_set_knockback(d->v70, 2.0f, 1.5f);
                 d->fC0 = 7.0f;
                 d->fC4 = 13.0f;
                 func_L00_0025D5B0_b(m, d->v70, 0xD, 1, 0, fast_add_rotations(m->f48, 3.1415927f));
@@ -1831,16 +1831,16 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                     pb = (char *)m + 0x40;
                     FUN_L10_002e3a90_u(m);
                     FUN_L00_0025f3e8(m, m->pos, -1, 1.25f, 20.0f);
-                    FUN_L00_00263fd8((char *)m, 0x775, m->pos, pb, 0, 2, zz, dp, dp, dp);
-                    FUN_L00_00263fd8((char *)m, 0x77A, m->pos, pb, 0, 2, zz, dp, dp, dp);
-                    FUN_L00_00263fd8((char *)m, 0x77B, m->pos, pb, 0, 2, zz, dp, dp, dp);
-                    FUN_L00_00263fd8((char *)m, 0x77C, m->pos, pb, 0, 2, zz, dp, dp, dp);
+                    debris302618((char *)m, 0x775, m->pos, pb, 0, 2, zz, dp, dp, dp);
+                    debris302618((char *)m, 0x77A, m->pos, pb, 0, 2, zz, dp, dp, dp);
+                    debris302618((char *)m, 0x77B, m->pos, pb, 0, 2, zz, dp, dp, dp);
+                    debris302618((char *)m, 0x77C, m->pos, pb, 0, 2, zz, dp, dp, dp);
                     qcopy(p, m->pos);
                     p[2] += 0.55f;
                     p[0] += randf_sym(0.0f, 0.3f);
                     p[1] += randf_sym(0.0f, 0.3f);
-                    FUN_L00_00263fd8((char *)m, 0x623, m->pos, pb, 0, 2, zz, dp, dp, dp);
-                    FUN_L00_00263fd8((char *)m, 0x624, m->pos, pb, 0, 2, zz, dp, dp, dp);
+                    debris302618((char *)m, 0x623, m->pos, pb, 0, 2, zz, dp, dp, dp);
+                    debris302618((char *)m, 0x624, m->pos, pb, 0, 2, zz, dp, dp, dp);
                     FUN_L00_00257470(m, 0, -1);
                     mark_moby_for_removal(m);
                     return;
@@ -1870,7 +1870,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
     }
     if (m->b31 != 0) {
         if (FUN_001f9b48(m->pos, D_L10_00167240) < 18.0f) {
-            FUN_L00_0025a120(m);
+            wake302618(m);
             m->b7F = 0xE;
         }
     }
@@ -2449,7 +2449,7 @@ void FUN_L10_002e4a88(Ship_5E48 *m) {
     float a;
     float b;
 
-    FUN_L00_00263ac8(2.5f, (int)m, 2, d->a1D0);
+    sound302618(2.5f, (int)m, 2, d->a1D0);
     if (d->i140 == -1) {
         DebugPrint(D_L10_001DD390, m->sA6, m->hA8);
         goto del;
@@ -2654,7 +2654,7 @@ void FUN_L10_002e4a88(Ship_5E48 *m) {
     }
     if (m->b31 != 0) {
         if (fast_vec_dist(&m->pos, D_L10_00167240) < 28.0f) {
-            FUN_L00_0025a120(m);
+            wake302618(m);
             m->b7F = 0x16;
         }
     }

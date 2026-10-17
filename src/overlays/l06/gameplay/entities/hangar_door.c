@@ -301,8 +301,8 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
+extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
 
 int FUN_L06_002fb2a8(char *moby) {
     float v0[4], m[4], v1[4], v2[4];
@@ -332,8 +332,8 @@ int FUN_L06_002fb2a8(char *moby) {
     m[2] = fast_arc_tan(*(float *)(moby + 0x10) - v0[0], *(float *)(moby + 0x14) - v0[1]);
     m[1] = -fast_arc_tan(vector_distance(v0, pos), *(float *)(moby + 0x18) - v0[2]) -
            (1.0f - *(float *)(data + 0x118)) * 30.0f * DEG_TO_RAD;
-    FUN_L00_002ea9d8(v0);
-    FUN_L00_002eaa30(m);
+    ea210_drawend(v0);
+    ea210_drawflush(m);
     if (*(float *)(data + 0x118) >= 1.0f && *(unsigned char *)(moby + 0x53) == 1)
         return 1;
     return 0;
@@ -345,14 +345,14 @@ int FUN_L06_002fb2a8(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC8E0), where it is exact; names translated to the US level program. */
 
 extern int *D_L06_001B0C30[];
-extern void FUN_L00_002eac18(int);
+extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 
 void FUN_L06_002fb4b0(char *arg) {
     char *data = *(char **)(arg + 0x78);
     hero_set_state(HERO_STATE_IDLE, 0);
     *D_L06_001B0C30[*(int *)(data + 0xEC)] = *(int *)(data + 0x114);
-    FUN_L00_002eac18(2);
+    ea210_hide(2);
 }
 /* Steers a moby's camera-like orientation toward a target point, returns 1 when done. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FCA98), where it is exact; names translated to the US level program. */
@@ -986,12 +986,12 @@ extern int D_L06_00161DA0 __attribute__((sda));
 extern int D_L06_00161DA4 __attribute__((sda));
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00216f90(void *, void *, int, int);
-extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
+extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 float absolute_float_c2(float input) __asm__("func_001F99C0");
 s32 FUN_L00_00203908(s32 a, s32 b);
-void FUN_L00_002502a0(int idx);
+void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 void FUN_L00_00263d40(int a, int b);
 void FUN_L06_00239528(void);
 void FUN_L06_002f5d78(char *moby);
@@ -1786,17 +1786,17 @@ extern void FUN_L00_00261d78(f32, s32, void *, void *);
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
-float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
+float fn_2c2488(float *a, float *b, float *out, float speed, float g) __asm__("FUN_L00_0025abf0");
 float FUN_L06_002f96f8_c(char *self) __asm__("FUN_L06_002f96f8");
 float absolute_float_c3(float input) __asm__("func_001F99C0");
 int FUN_L00_0025c698(void *moby, void *motion);
 s32 FUN_L00_00258b50(void *m, void *c, void *v, Vec4 *out, f32 f);
-s32 FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out);
+s32 path_e50(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out) __asm__("FUN_L00_00261b48");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
-void FUN_L00_0025a120(char *o);
+void wake302618(char *o) __asm__("FUN_L00_0025a120");
 void FUN_L00_0025c558(u8 *a, void *b, int c, int d, int e, float f);
 void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash);
-void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
+void sound302618(float x, int a, int b, unsigned char *p) __asm__("FUN_L00_00263ac8");
 void FUN_L00_00263e30(unsigned char *m, int n, int cnt, int base, int range, int cnt2, int flag);
 void FUN_L01_0026d930(char *p);
 void FUN_L06_002f91e8_c(Moby *moby) __asm__("FUN_L06_002f91e8");
@@ -2299,7 +2299,7 @@ int D_L06_00161EE8 = 0x80808080;
 int D_L06_00161EEC = 0x80604040;
 extern int FUN_001fa6e0(int, int, float);
 extern int FUN_00213928_c() __asm__("FUN_00213928");
-extern int FUN_L00_002598b0();
+extern int play_entity_sound() __asm__("FUN_L00_002598b0");
 extern int FUN_L00_0025a420_c() __asm__("FUN_L00_0025a420");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 float absolute_float_c(float input) __asm__("func_001F99C0");
@@ -2488,9 +2488,9 @@ int FUN_L06_002fb668_c(char *moby) __asm__("FUN_L06_002fb668");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 void FUN_L00_00235d80(HudElem *e);
 void FUN_L00_00235ea0(HudElem *e);
-void FUN_L00_0025a120(char *o);
+void wake302618(char *o) __asm__("FUN_L00_0025a120");
 void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash);
-void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
+void sound302618(float x, int a, int b, unsigned char *p) __asm__("FUN_L00_00263ac8");
 void FUN_L00_00263e30(unsigned char *m, int n, int cnt, int base, int range, int cnt2, int flag);
 void FUN_L06_002d9e08_c(int index) __asm__("FUN_L06_002d9e08");
 void FUN_L06_002d9e78_c(int idx) __asm__("FUN_L06_002d9e78");
@@ -2911,7 +2911,7 @@ extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) _
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_L00_00284e50(void *, void *);
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_00212f90(void *, int, int, int);
 extern void FUN_L00_0025d458(void *, void *);
 extern void FUN_L00_0025d538(void *, void *);
@@ -2922,7 +2922,7 @@ extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
 extern int FUN_001fa6e0(int, int, float);
-extern int FUN_L00_0025ff38(void *, void *, int, int, void *, int, float);
+extern int activate_effect_l08(void *, void *, int, int, void *, int, float) __asm__("FUN_L00_0025ff38");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L06_002fb148_recovery_high(char *) __asm__("FUN_L06_002fb508");
 extern void FUN_L06_002fb148_recovery_low(char *) __asm__("FUN_L06_002fb8c8");
@@ -3009,7 +3009,7 @@ start_recovery:
             moby[0x20] = 14;
             FUN_L00_00257470(moby, 0, -1);
             base = D_L06_001600EC + (*(int *)(data + 0xF8) << 7);
-            FUN_L00_00284e50(base + 0x30, base + 0x70);
+            jet_reset_camera(base + 0x30, base + 0x70);
             *(unsigned short *)(moby + 0x34) &= 0xEFFF;
             if ((unsigned char)moby[0x53] != 10)
                 FUN_00212f90(moby, 10, 0, scale_game_frames(10));
@@ -3075,7 +3075,7 @@ hit_response_done:
     *(int *)(moby + 0x90) = FUN_001fa6e0(D_L06_00161F10, D_L06_00161F14,
         (fast_sin(*(float *)(data + 0x128)) + 1.0f) * 0.5f);
     path = D_L06_001B0C30[*(int *)(data + 0xEC)];
-    FUN_L00_0025ff38(moby, data + 0x70, 0, 0, path + 4, *path, 255.0f);
+    activate_effect_l08(moby, data + 0x70, 0, 0, path + 4, *path, 255.0f);
     if (*(int *)(data + 0xB0) == 0) *(int *)(data + 0xB0) = D_L06_001413D0;
 }
 #include "sda.h"
@@ -3085,7 +3085,7 @@ hit_response_done:
 extern char *D_L06_0016016C __asm__("D_L06_001600EC");
 extern int *D_L06_001B0FB0[] __asm__("D_L06_001B0C30");
 extern void FUN_L00_00216f90(void *, void *, int, int);
-extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
+extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 
 void FUN_L06_002fb148(char *moby) {
     float v0[4], m[4], v1[4];
@@ -3101,9 +3101,9 @@ void FUN_L06_002fb148(char *moby) {
     m[2] = fast_arc_tan(*(float *)(moby + 0x10) - v0[0], *(float *)(moby + 0x14) - v0[1]);
     m[1] =
         -fast_arc_tan(vector_distance(v0, moby + 0x10), *(float *)(moby + 0x18) - v0[2]) - 0.5235988f;
-    FUN_L00_002eaaa0(v0, m, 1, 0, 0);
-    FUN_L00_002ea9d8(v0);
-    FUN_L00_002eaa30(m);
+    jet_mount(v0, m, 1, 0, 0);
+    ea210_drawend(v0);
+    ea210_drawflush(m);
     *D_L06_001B0FB0[*(int *)(data + 0xEC)] = 0;
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -3454,8 +3454,8 @@ int D_L06_00161F74 = 0x80208020;
 int D_L06_00161F78 = -1;
 extern int FUN_001fa6e0(int, int, float);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00260738(char *, void *, void *, void *);
-extern void FUN_L00_00298840(int);
+extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L01_00231348(int, int, int);
 extern void FUN_L01_0027a248(int, int);
 extern void FUN_L06_00227cf8(void);
@@ -3557,7 +3557,7 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
                     ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 |= 2;
                     if (D_0013D5DD_2FDA70[0x10] != 0 && D_L06_00161F78 == 0) {
                         D_L06_00161F78 = 1;
-                        FUN_L00_00298840(3);
+                        start_scene(3);
                         moby->state = 2;
                         break;
                     }
@@ -3684,5 +3684,5 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
         moby->f90 = FUN_001fa6e0(D_L06_00161F6C, D_L06_00161F70, f);
     }
     add_vector_xyz(&v0, &v0, &moby->pos);
-    FUN_L00_00260738(d->f20, &v0, &v10, &moby->rot);
+    update_entity_matrix(d->f20, &v0, &v10, &moby->rot);
 }

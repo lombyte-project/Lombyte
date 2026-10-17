@@ -267,7 +267,7 @@ void FUN_L13_002c1528(Moby_2C27B0 *m) {
 extern char *func_0020D348_m(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void place_2ce1f0(void *) __asm__("FUN_L00_0025d1b8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 unsigned char *FUN_L13_002c1f28(char *owner, char *pos, char *vec) {
@@ -294,7 +294,7 @@ unsigned char *FUN_L13_002c1f28(char *owner, char *pos, char *vec) {
             blend_moby_animation(moby, 1, 0, 10);
         }
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        place_2ce1f0(moby);
     }
     return moby;
 }
@@ -583,7 +583,7 @@ extern int FUN_L13_002c2d30_collision(struct Moby *, void *, float *, int, int *
 extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void FUN_L00_0025d458(void *, short *);
 extern void FUN_L00_0025d538(void *, void *);
-extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
+extern int activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f99c0(float);
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -691,7 +691,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     }
     {
         char *ptr = D_L13_001B07B0[*(int *)(d + 0xD0)];
-        r2 = FUN_L00_0025ff38(*(float *)(d + 0xD8), moby, d + 0x70, 0, 0, ptr + 0x10, *(int *)ptr);
+        r2 = activate_effect_l08(*(float *)(d + 0xD8), moby, d + 0x70, 0, 0, ptr + 0x10, *(int *)ptr);
     }
     if (r2 != 2) {
         if (*(float *)(d + 0xD8) < vector_distance(moby + 0x10, d + 0x70) ||
@@ -1877,7 +1877,7 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int a3, float f) {
         *(float *)(moby + 0x44) = random_angle_radians();
         *(float *)(moby + 0x48) = random_angle_radians();
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        place_2ce1f0(moby);
     }
     return moby;
 }
@@ -2345,7 +2345,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9870), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void place_2ce1f0(void *) __asm__("FUN_L00_0025d1b8");
 
 char *FUN_L13_002e8438(char *owner) {
     char *moby = create_moby(0x160);
@@ -2362,12 +2362,12 @@ char *FUN_L13_002e8438(char *owner) {
         *(int *)(data + 4) = 0;
         *(unsigned short *)(moby + 0x34) |= 0x200;
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        place_2ce1f0(moby);
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24);
     }
     return moby;
 }
-extern void FUN_L00_0024efb0(unsigned char *, int, int);
+extern void spin_n(unsigned char *, int, int) __asm__("FUN_L00_0024efb0");
 
 /* Fades the moby in (state 1), holds until its owner is gone or dying (state 2), fades it out (state 3) and removes it (state 4), easing its scale toward the class scale and spinning it all the while. */
 void FUN_L13_002e84d8(struct Moby *moby) {
@@ -2425,7 +2425,7 @@ void FUN_L13_002e84d8(struct Moby *moby) {
         step = 0xFC0;
         d[2] = old + step;
     }
-    FUN_L00_0024efb0(moby->pclass, 0, step);
+    spin_n(moby->pclass, 0, step);
 }
 /* Picks a line to play from a group, starting at a random entry and skipping ones already used; returns 1 when one was queued. */
 extern int rand_q(void) __asm__("FUN_001160d8");

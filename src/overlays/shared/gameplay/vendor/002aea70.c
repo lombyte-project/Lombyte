@@ -30,7 +30,7 @@ extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void FUN_L00_002039a0(void);
 extern void FUN_L00_00207330(int, int);
 extern void FUN_L00_0020fca8(int, int);
-extern void FUN_L00_00232fe8(void);
+extern void f32fe8_208820(void) __asm__("FUN_L00_00232fe8");
 extern void FUN_L00_0023aef8(void);
 extern void FUN_L00_002454c8(int);
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
@@ -75,7 +75,7 @@ void FUN_L01_002aea70(char *m, int lvl) {
     hero_set_state(100, 1);
     *(char *)&g->unk20AC = 1;
     *(char *)&g->unk20A5 = 1;
-    FUN_L00_00232fe8();
+    f32fe8_208820();
     transform_vector_by_basis(sc, &D_L01_00161100, m + 0xC0);
     add_vector_xyz(sc, sc, m + 0x10);
     *(float *)(s + 0xC8) = probe_ground_height(sc, 0, 0.5f);

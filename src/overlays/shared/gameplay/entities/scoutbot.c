@@ -66,11 +66,11 @@ extern float fast_difference_between_rotations(float, float) __asm__("func_001FA
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int fast_tween_color() __asm__("FUN_001fa6e0");
 extern int FUN_L00_0024f7c8();
-extern int FUN_L00_002dc9f0();
+extern int hitreact_3DF8() __asm__("FUN_L00_002dc9f0");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern short D_L08_00161888 __attribute__((sda));
-extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
+extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
@@ -85,7 +85,7 @@ void FUN_L00_0025a120(char *o);
 void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate);
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void FUN_L08_002d36e0_c(char *m) __asm__("FUN_L08_002d36e0");
-void FUN_L08_002d3878(char *m);
+void glow_3DF8(char *m) __asm__("FUN_L08_002d3878");
 void FUN_L08_002d3d78_c(char *m) __asm__("FUN_L08_002d3d78");
 void FUN_L08_002d4108_c(char *arg) __asm__("FUN_L08_002d4108");
 extern void sound_3DF8(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
@@ -122,7 +122,8 @@ extern char hero_pos_3DF8[] __asm__("D_L08_001675C0");
 extern float frame_3DF8 __asm__("D_0015ED6C");
 extern float dt_3DF8 __asm__("D_0015ED70");
 
-void FUN_L08_002d2af0(Moby *moby) {
+void scoutbot_update(Moby *moby) __asm__("FUN_L08_002d2af0");
+void scoutbot_update(Moby *moby) {
     Data_3DF8 *data = (struct Data_3DF8 *)moby->pvars;
     float target_pos[4];
     float offset[4];
@@ -330,7 +331,7 @@ extern char *D_L08_001B0CB0[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern int FUN_L00_0025ff38();
+extern int activate_effect_l08() __asm__("FUN_L00_0025ff38");
 extern void FUN_L00_00257470(void *, int, int);
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *,
@@ -391,7 +392,8 @@ extern u32 D_00151878_002d3878 __asm__("D_00151878") __attribute__((sda));
 extern u32 D_0015187C_002d3878 __asm__("D_0015187C") __attribute__((sda));
 extern u32 D_00151880_002d3878 __asm__("D_00151880") __attribute__((sda));
 extern u32 D_00151884_002d3878 __asm__("D_00151884") __attribute__((sda));
-void FUN_L08_002d3878(char *moby) {
+void glow_3DF8(char *moby) __asm__("FUN_L08_002d3878");
+void glow_3DF8(char *moby) {
     char *data = *(char **)(moby + 0x78);
     Packet_002d3878 pk;
     Vec_002d3878 matrix[3], direction, pos, delta, angles;
@@ -598,7 +600,8 @@ void FUN_001f7d30_002d4108(void *, s32, s32) __asm__("FUN_001f7d30");
 extern float D_L08_001D1D80[4][4] __attribute__((section(".data")));
 extern float D_L08_00161898 __attribute__((sda));
 extern float D_L08_0016189C __attribute__((sda));
-void FUN_L08_002d4108(char *arg) {
+void body_3DF8(char *arg) __asm__("FUN_L08_002d4108");
+void body_3DF8(char *arg) {
     char *data = *(char **)(arg + 0x78);
     Pk_002d4108 pk;
     float up[4];
@@ -780,7 +783,8 @@ extern float D_L08_00161D20 __attribute__((sda));
 typedef struct { unsigned int words[4]; } Vec_002e8210 __attribute__((aligned(16)));
 
 extern float D_L08_00174660[4];
-void FUN_L08_002e8210(char *moby) {
+void rocket_update(char *moby) __asm__("FUN_L08_002e8210");
+void rocket_update(char *moby) {
     char *position_ptr = moby + 0x10;
     char *data = *(char **)(moby + 0x78);
     float position_copy[4] __attribute__((aligned(16)));
@@ -1258,7 +1262,8 @@ extern void effect302618(void *, void *, int, float, float) __asm__("FUN_L00_002
 extern void *debris302618(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 
 extern char D_L08_001FC600[];
-void FUN_L08_00301158(char *moby) {
+void blarg_paratrooper_update(char *moby) __asm__("FUN_L08_00301158");
+void blarg_paratrooper_update(char *moby) {
     Paratrooper302618 *data = (Paratrooper302618 *)(*(char * *)((char *)(moby)+0x78));
     char *path;
     char *target;

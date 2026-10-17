@@ -33,7 +33,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_sqrt(float) __asm__("FUN_001f9988");
-extern void FUN_L00_0025ab48(void *, float *, void *, void *);
+extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
@@ -89,7 +89,7 @@ void FUN_L12_00308708(void *unused, struct Moby *m) {
     d->unk3C = fast_sqrt(a * 4.0f);
     d->unk5D = 0;
     d->unk44 = 1;
-    FUN_L00_0025ab48(dir, &ang, &d->launch_speed, &d->unk3C);
+    trooper_knockback_arc(dir, &ang, &d->launch_speed, &d->unk3C);
     FUN_L00_0025c558(ang, m, &d->arc, 1, 5, 2);
     d->unk6C = frame_time + frame_time;
     d->unk70 = -1.0f;
@@ -115,7 +115,8 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   int) __asm__("FUN_L00_0025e450");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L12_00308918(char *m) {
+void blarg_commander_update(char *m) __asm__("FUN_L12_00308918");
+void blarg_commander_update(char *m) {
     int st;
     char *d;
     char *p;

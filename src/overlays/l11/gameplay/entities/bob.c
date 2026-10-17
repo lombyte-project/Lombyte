@@ -163,9 +163,9 @@ extern void FUN_L05_00317398(void *);
 extern int FUN_00214720(void *, int);
 extern int FUN_L00_00266448(void *, void *);
 extern int FUN_L00_002668a0(void *, void *);
-extern void FUN_L01_002783a8(void *, float);
-extern void FUN_L00_00260860(int, int);
-extern void FUN_L00_00284e50(void *, void *);
+extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
+extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
 extern void FUN_L00_002039a0(void);
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
@@ -186,7 +186,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void FUN_00214db0(void *, float, float, float);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_002628d8(float, float, void *, void *, int);
+extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
 /* Watcher update, same routine as FUN_L08_00302ce8 with this level's states and data layout. */
 void FUN_L11_002d0710(WM11 *m) {
@@ -209,7 +209,7 @@ void FUN_L11_002d0710(WM11 *m) {
     case 1:
         if (FUN_00214720(hero.motion.pos.f, d->region)) {
             if (FUN_L00_00266448(m, d)) {
-                FUN_L01_002783a8(m, 2.7f);
+                begin_dialogue_camera_transition(m, 2.7f);
                 m->state = 2;
             }
         }
@@ -218,8 +218,8 @@ void FUN_L11_002d0710(WM11 *m) {
         if (D_L11_0015F5C4 != 2) {
             m->state = 1;
             if (d->h04 == 2) {
-                FUN_L00_00260860(3, 1);
-                FUN_L00_00284e50(hero.motion.pos.f, hero.motion.pos.f + 4);
+                ea210_switch(3, 1);
+                jet_reset_camera(hero.motion.pos.f, hero.motion.pos.f + 4);
                 memcard_save_data_d0710(0, -1);
                 FUN_L00_002039a0();
                 help_request(0x2AFB, 0x3D);
@@ -283,8 +283,8 @@ void FUN_L11_002d0710(WM11 *m) {
     }
     if (big_head_cheat_enabled)
         d->height = 2.75f;
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
 
 extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
@@ -292,7 +292,7 @@ extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2168), where it is exact; names translated to the US level program. */
 
 extern float D_L11_001677C0[];
-extern void FUN_L00_0025a120(void *);
+extern void wake302618(void *) __asm__("FUN_L00_0025a120");
 extern void FUN_L02_002e0cd8(void *);
 extern void FUN_L11_002d1030(void *);
 extern void FUN_L11_002d1340(void *);
@@ -302,7 +302,7 @@ void FUN_L11_002d27b0(WM11 *m);
 void FUN_L11_002d0fa8(struct Moby *moby) {
     FUN_L02_002e0cd8(moby);
     if (moby->visible && distance_xyz(&moby->pos, D_L11_001677C0) < 38.0f) {
-        FUN_L00_0025a120(moby);
+        wake302618(moby);
         moby->shadow_range = 30;
     }
     FUN_L11_002d1030(moby);
@@ -318,8 +318,8 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float FUN_L00_0025abf0(void *, void *, float, int, float);
-extern void FUN_L00_002604f0(void *, void *, void *, void *, void *, void *);
+extern float fn_2c2488(void *, void *, float, int, float) __asm__("FUN_L00_0025abf0");
+extern void f_L00_002604f0(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_00212f90(void *, int, int, int);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -382,7 +382,7 @@ void FUN_L11_002d1030(void *mp) {
             f0 = (float)scale_game_frames(0x3C);
             fast_vec_scale(d + 0x130, d + 0x130, 1.0f / f0);
             f0 = vector_length_xy(d + 0x130);
-            *(float *)(d + 0x138) = FUN_L00_0025abf0((char *)moby + 0x10, d + 0x120, f0, 0, -(D_0015ED70 * 10.8f));
+            *(float *)(d + 0x138) = fn_2c2488((char *)moby + 0x10, d + 0x120, f0, 0, -(D_0015ED70 * 10.8f));
             *(float *)((char *)moby + 0x58) = 0.6666667f;
         }
         f0 = fast_vec_length(d + 0x130);
@@ -401,7 +401,7 @@ void FUN_L11_002d1030(void *mp) {
         tbl += idx;
         o = (char *)D_L11_0015FFD8;
         o += *tbl << 8;
-        FUN_L00_002604f0(moby, o, &D_L11_001613E0, &D_L11_001613F0, (char *)moby + 0x10, (char *)moby + 0x40);
+        f_L00_002604f0(moby, o, &D_L11_001613E0, &D_L11_001613F0, (char *)moby + 0x10, (char *)moby + 0x40);
         if (FUN_L11_0030a480((struct Moby *)o) == 0)
             break;
     }
@@ -463,7 +463,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_L05_0028be78(void *, int, int);
-extern void FUN_L00_002502a0(int);
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00266858(void *, int);
 extern int FUN_L11_0030a830(struct Moby *arg);
 extern void FUN_L11_0030a840(unsigned char *arg);
@@ -590,7 +590,7 @@ void FUN_L11_002d14b0(void *arg) {
     case 1:
         if (d->unk56 == 0) {
             if (hero.air_frames.s == 0 && FUN_L00_00266448(moby, d->talk)) {
-                FUN_L01_002783a8(moby, 2.5f);
+                begin_dialogue_camera_transition(moby, 2.5f);
                 set_state_14b0(moby, 2);
             }
         } else if (vector_distance(&moby->pos, &hero.motion.pos) < 6.0f) {
@@ -664,7 +664,7 @@ void FUN_L11_002d14b0(void *arg) {
     case 12:
         d->talk_range = 255.0f;
         if (FUN_L00_00266448(moby, d->talk)) {
-            FUN_L00_002502a0(d->unk10C);
+            jet_clear_persistent(d->unk10C);
             D_0013D3DC = 1;
             FUN_L00_00266858(moby, 2);
             qcopy_nc(&moby->pos, &path_points_14b0[d->points[d->leg]].pos);
@@ -677,7 +677,7 @@ void FUN_L11_002d14b0(void *arg) {
             qcopy(D_L11_0016D270, v);
             qcopy(D_L11_0016D270 + 0x10, r);
             *(short *)(D_L11_0016D270 + 0x36) = 1;
-            FUN_L01_002783a8(moby, 2.5f);
+            begin_dialogue_camera_transition(moby, 2.5f);
             set_state_14b0(moby, 0xD);
         }
         break;
@@ -719,13 +719,13 @@ void FUN_L11_002d14b0(void *arg) {
     case 14:
         if (D_0014C050[d->unk118 + D_0015ED84 * 16] == 0xFF && D_001413D4_14b0 != 0x32 &&
             FUN_L00_00266448(moby, d->talk)) {
-            FUN_L01_002783a8(moby, 2.5f);
+            begin_dialogue_camera_transition(moby, 2.5f);
             set_state_14b0(moby, 0xF);
         }
         break;
     case 15:
         if (D_L11_0015F5C4 != 2) {
-            FUN_L00_00260860(6, 1);
+            ea210_switch(6, 1);
             memcard_save_data(0, -1);
             help_request(0x2AF8, 0x3A);
             mark_moby_for_removal(moby);
@@ -836,7 +836,7 @@ struct TgtData {
 
 extern int *D_L11_001B0EB0[];
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
-extern int FUN_L01_00276fe8(int *, int, int, void *, void *, void *, float);
+extern int follow_path(int *, int, int, void *, void *, void *, float) __asm__("FUN_L01_00276fe8");
 
 int FUN_L11_002d2340(struct Moby *moby, char *other) {
     struct TgtData *d = (struct TgtData *)moby->pvars;
@@ -863,7 +863,7 @@ int FUN_L11_002d2340(struct Moby *moby, char *other) {
     default:
         break;
     }
-    return FUN_L01_00276fe8(buf, n, d->b[d->idx], &moby->pos, other, d->e, 0.2f) != 0;
+    return follow_path(buf, n, d->b[d->idx], &moby->pos, other, d->e, 0.2f) != 0;
 }
 extern int D_L11_0015FFD8;
 extern int FUN_L11_00316128(char *);
@@ -920,7 +920,7 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
-void FUN_L00_00259710(void *a);
+void floor_height_4318(void *a) __asm__("FUN_L00_00259710");
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 
 int FUN_L11_002d25e8(struct Moby *m, float *out) {
@@ -1026,8 +1026,8 @@ void FUN_L11_002d27b0(WM11 *m) {
     }
     if (big_head_cheat_enabled)
         d->height = 2.75f;
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
 /* Pokitaru sentry pvars (class of FUN_L11_002f0e40). */
 struct PokSentryVars {
@@ -1059,7 +1059,7 @@ extern char *D_L11_001600EC;
 extern struct UsageStat usage_stats_f0e40[] __asm__("D_00141968") __attribute__((section(".data")));
 extern void mark_moby_for_removal_f0e40(void *) __asm__("FUN_0020c828");
 extern float absolute_float_f0e40(float) __asm__("FUN_001f99c0");
-extern void FUN_L00_002502a0(int);
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 
 void FUN_L11_002f0e40(struct Moby *moby) {
@@ -1071,7 +1071,7 @@ void FUN_L11_002f0e40(struct Moby *moby) {
 
     FUN_L02_002e0cd8(moby);
     if (moby->visible && distance_xyz(&moby->pos, D_L11_001677C0) < 30.0f) {
-        FUN_L00_0025a120(moby);
+        wake302618(moby);
         moby->shadow_range = 24;
     }
     switch (moby->state) {
@@ -1088,7 +1088,7 @@ void FUN_L11_002f0e40(struct Moby *moby) {
         break;
     case 1:
         if (FUN_L00_00266448(moby, d)) {
-            FUN_L01_002783a8(moby, 3.0f);
+            begin_dialogue_camera_transition(moby, 3.0f);
             moby->state = 2;
         }
         if (alternate_item_available[1] == 0 && discount_purchase_pricing[0] == 0) {
@@ -1105,9 +1105,9 @@ void FUN_L11_002f0e40(struct Moby *moby) {
             distance_xyz(hero.motion.pos.f, &moby->pos) < 4.0f &&
             absolute_float_f0e40(hero.motion.pos.f[2] - moby->pos.z) < 4.0f) {
             char *entry;
-            FUN_L00_002502a0(moby->mission);
+            jet_clear_persistent(moby->mission);
             entry = D_L11_001600EC + d->slot * 128;
-            FUN_L00_00284e50(entry + 0x30, entry + 0x70);
+            jet_reset_camera(entry + 0x30, entry + 0x70);
         }
         break;
     case 2:
@@ -1180,8 +1180,8 @@ void FUN_L11_002f0e40(struct Moby *moby) {
     }
     if (big_head_cheat_enabled)
         d->height = 2.75f;
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, d->body, 0);
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, d->head, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, d->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, d->head, 1);
 }
 #include "qcopy.h"
 
@@ -1213,7 +1213,7 @@ extern int enqueue_callback_2518(void (*)(char *), char *) __asm__("FUN_001f4600
 extern float D_L11_00161910 __attribute__((sda));
 extern float D_L11_00161914 __attribute__((sda));
 extern float D_L11_00161918 __attribute__((sda));
-/* L11 twin of FUN_L01_00308bd8: a three-part switch moby that, once the hero
+/* L11 twin of teleporter_update: a three-part switch moby that, once the hero
  * stands on it in mission state 0xB and presses the button, swings its parts
  * open and moves the linked moby (or its fallback) along. */
 void FUN_L11_002f2518(struct Moby *moby) {

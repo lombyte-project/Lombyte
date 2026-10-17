@@ -440,7 +440,7 @@ extern void FUN_L00_00276368(void);
 extern void FUN_L00_00276908(void);
 extern void FUN_L00_002831c0(void);
 extern void FUN_L00_0028ed58(s32);
-extern void FUN_L00_00298840(void *);
+extern void start_scene(void *) __asm__("FUN_L00_00298840");
 extern void FUN_L00_00299460(void *);
 extern void FUN_L00_002994f8(void *);
 extern void FUN_L00_00299560(void *);
@@ -524,7 +524,7 @@ void FUN_L00_00276bd0(void) {
             D_L00_001B9CF0.unk130 = tmp;
             fade_to_black(scale_game_frames(0x10));
             D_L00_0015F5C4 = 0;
-            FUN_L00_00298840(D_L00_001B9CF0.unkE4);
+            start_scene(D_L00_001B9CF0.unkE4);
         } else if (D_L00_001B9CF0.unkC == 7) {
             tmp = decode_mode;
             D_L00_001B9CF0.unk130 = tmp;

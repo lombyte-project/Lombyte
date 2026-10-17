@@ -359,7 +359,8 @@ int f122298_298840(int) __asm__("FUN_00122298");
 int f215b10_298840(void) __asm__("FUN_00215b10");
 extern char D_L00_0017C440[] __attribute__((section(".data")));
 extern float D_L00_0015F59C;
-void FUN_L00_00298840(int a) {
+void start_scene(int a) __asm__("FUN_L00_00298840");
+void start_scene(int a) {
     O_298840 *o;
     int t, i;
     if (a < 0)
@@ -1214,7 +1215,8 @@ extern u8 D_0013D4C0[];
 extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
 /* Builds the vendor list: the stocked items (up to 12, 0xFF-terminated), then
    every other available item (D_0013D4C0 set, h8 non-zero) not already listed. */
-void FUN_L00_0029a400(s32 skip_unflagged) {
+void build_list_29a6b0(s32 skip_unflagged) __asm__("FUN_L00_0029a400");
+void build_list_29a6b0(s32 skip_unflagged) {
     s32 count, i, j, value, item, k;
 
     count = 0;
@@ -1382,7 +1384,8 @@ extern f32 D_L00_001610E0 __attribute__((sda));
 extern s32 game_language_macro __asm__("D_0015ED88") __attribute__((section(".sdata")));
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 /* Opens the vendor: clears its state, spawns the vendor moby when none is given, builds the item list and its texts, then sets up the camera and the four slot offsets. */
-void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m) {
+void f_fun_l00_0029a6b0_227fa0(VendorMoby_29a6b0 *m) __asm__("FUN_L00_0029a6b0");
+void f_fun_l00_0029a6b0_227fa0(VendorMoby_29a6b0 *m) {
     s32 i;
     Vec4 *v;
     s32 half;
@@ -1654,7 +1657,7 @@ struct S16 {
 };
 extern struct S16 D_001516D0;
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-void FUN_L00_002330d0(void);
+void f330d0_208820(void) __asm__("FUN_L00_002330d0");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -1671,7 +1674,7 @@ void FUN_L00_0029af80(void) {
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
     hero.unk20A5 = 0;
-    FUN_L00_002330d0();
+    f330d0_208820();
     g = D_L00_001CA4C0_u;
     transform_vector_by_basis(&v, &D_L00_00161100, *(char **)(g + 0x28) + 0xC0);
     add_vector_xyz(&v, &v, *(char **)(g + 0x28) + 0x10);
@@ -1954,8 +1957,8 @@ extern void FUN_L00_0029ab70(s32);
 extern void FUN_L00_0023ac78(s32);
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L00_0029f990(void);
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
+extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
+extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_00201a28(void);
 extern void FUN_L00_0029a330(void);
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
@@ -2334,8 +2337,8 @@ void FUN_L00_0029c648(void) {
             enqueue_callback_list_1(FUN_L00_0029f990, vendor_menu.f1c);
         }
         if (vendor_menu.f40 == 0) {
-            FUN_L00_002ea9d8(&vendor_menu.f60);
-            FUN_L00_002eaa30(&vendor_menu.f70);
+            ea210_drawend(&vendor_menu.f60);
+            ea210_drawflush(&vendor_menu.f70);
         }
         FUN_00201a28();
         if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {

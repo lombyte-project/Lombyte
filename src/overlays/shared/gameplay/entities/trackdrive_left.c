@@ -298,7 +298,8 @@ void FUN_L02_002a46e0(void) {
 
 extern unsigned int D_L02_0015FFDC;
 
-void FUN_L02_002cb978(char *moby) {
+void trackdrive_left_update(char *moby) __asm__("FUN_L02_002cb978");
+void trackdrive_left_update(char *moby) {
     if ((unsigned int)moby < D_L02_0015FFDC) {
         *(int *)(moby + 0x58) = 0;
         *(unsigned short *)(moby + 0x34) |= 0x40;
@@ -444,8 +445,8 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 void FUN_L00_0025d538(s32 id, void *s);
 void FUN_L00_002ea9d8(char *src);
 void FUN_L00_002eaa30(char *src);
-void FUN_L00_002eaaa0(void *pa, void *pb, s32 mode, s32 w, s32 x);
-void FUN_L00_002eac18(int mode);
+void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
+void ea210_hide(int mode) __asm__("FUN_L00_002eac18");
 void FUN_L01_002405a0(void);
 void FUN_L02_002d8910_c(float *pos, float *rot, char *moby) __asm__("FUN_L02_002d8910");
 void FUN_L02_002d92f0_c(char *moby) __asm__("FUN_L02_002d92f0");
@@ -492,7 +493,8 @@ extern Hero D_0013F450_2D9F08 __asm__("D_0013F350");
 extern int D_0013CAE4 __attribute__((section(".data")));
 extern char D_0013C940[];
 
-void FUN_L02_002d8ad0(Moby *moby) {
+void tresspasser_pad_update(Moby *moby) __asm__("FUN_L02_002d8ad0");
+void tresspasser_pad_update(Moby *moby) {
     Vec_2D9F08 camera_pos, camera_rot;
     Data_2D9F08 *data = (struct Data_2D9F08 *)moby->pvars;
     int i;
@@ -959,7 +961,8 @@ extern int D_L02_00161B18 __attribute__((sda));
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002da3d8(int texture, u32 color, float start_angle, float end_angle, float radius_x, float radius_y) {
+void draw_arc_2d93e8(int texture, u32 color, float start_angle, float end_angle, float radius_x, float radius_y) __asm__("FUN_L02_002da3d8");
+void draw_arc_2d93e8(int texture, u32 color, float start_angle, float end_angle, float radius_x, float radius_y) {
     long corners[4];
     u32 colors[4];
     int uvs[4];
@@ -1024,7 +1027,8 @@ extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern void clear_vector(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
+void draw_arrow_2d93e8(int p0, int p1, int sel, float a, float s) __asm__("FUN_L02_002da6c0");
+void draw_arrow_2d93e8(int p0, int p1, int sel, float a, float s) {
     long xy[4];
     u32 col[4];
     int uv[4];
@@ -1116,7 +1120,8 @@ typedef unsigned long long u64_t;
         (dst) += (u64_t)q_;                                                                        \
     }
 
-void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
+void draw_bar_2d93e8(void *unused, f32 a, f32 b, f32 c, s32 d) __asm__("FUN_L02_002da938");
+void draw_bar_2d93e8(void *unused, f32 a, f32 b, f32 c, s32 d) {
     u64_t m[4];
     s32 a4[4];
     s32 p4[4];
@@ -1258,7 +1263,8 @@ extern float fast_cos_2dc6b0(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2dc6b0(float) __asm__("FUN_001f9de0");
 extern void FUN_L00_00260738_2dc6b0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
-void FUN_L02_002dc6b0(char *moby) {
+void escalator_update(char *moby) __asm__("FUN_L02_002dc6b0");
+void escalator_update(char *moby) {
     char *data = *(char **)(moby + 0x78);
     float limit;
     float y;
@@ -1373,7 +1379,8 @@ extern void func_L02_002FBC00_c(char *) __asm__("FUN_L02_002fa7c8");
 extern float func_L00_0025CE58_f(float *, float, float *, float, float,
                                  float) __asm__("FUN_L00_0025be00");
 
-void FUN_L02_002e0450(char *m) {
+void swingshot_versatarget_update(char *m) __asm__("FUN_L02_002e0450");
+void swingshot_versatarget_update(char *m) {
     char *d = *(char **)(m + 0x78);
     float v[4];
     float w[4];
@@ -1503,7 +1510,8 @@ extern float D_0015ED70;
 extern float D_0015ED6C;
 extern float D_L02_0015F3FC;
 
-void FUN_L02_002ea210(struct Moby *moby) {
+void tresspasser_update(struct Moby *moby) __asm__("FUN_L02_002ea210");
+void tresspasser_update(struct Moby *moby) {
     char *data;
     int which;
     int frames;

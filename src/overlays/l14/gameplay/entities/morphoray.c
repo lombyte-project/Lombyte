@@ -452,9 +452,9 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern void FUN_L00_00260860(s32, s32);
-extern void FUN_L00_00298840(s32);
-extern void FUN_L00_002502a0(s32);
+extern void ea210_switch(s32, s32) __asm__("FUN_L00_00260860");
+extern void start_scene(s32) __asm__("FUN_L00_00298840");
+extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern int memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
@@ -496,14 +496,14 @@ void FUN_L14_00305758(struct Moby *moby) {
             *(s32 *)(d + 0x18) = state;
         else
             *(s32 *)(d + 0x18) = 0;
-        FUN_L00_00260860(0x15, 1);
-        FUN_L00_00298840(6);
+        ea210_switch(0x15, 1);
+        start_scene(6);
         moby->state = 2;
         break;
     case 2:
         if (D_L14_0015F5C4 != state) {
             if (D_0014C050[moby->mission + current_level_index * 16] != 0xFF) {
-                FUN_L00_002502a0(moby->mission);
+                jet_clear_persistent(moby->mission);
                 memcard_save_data(0, -1);
             }
             if (*(s32 *)(d + 0x18) != 0)
@@ -632,7 +632,7 @@ typedef struct Snd_3071B0 {
     Moby_3071B0 *f88;
 } Snd_3071B0;
 
-extern float FUN_L00_0025b750(float, float, float);
+extern float lerp_angle_5d48(float, float, float) __asm__("FUN_L00_0025b750");
 extern int D_L14_0015FFD8_c __asm__("D_L14_0015FFD8");
 extern float D_L14_001621F4 __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001621F8 __attribute__((sda)); /* no foreign declaration */
@@ -645,7 +645,7 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t);
+f32 lerp_7b10(f32 a, f32 b, f32 t) __asm__("FUN_L00_0025b6a8");
 int FUN_L00_0028d8c0(int a, int i);
 int FUN_L00_0028dc90(int i, int a1, int v, int k);
 u8 *FUN_L14_00306158_c(u8 *self) __asm__("FUN_L14_00306158");
@@ -1232,7 +1232,7 @@ extern Level14State D_L14_0016CF60;
 extern int D_L14_0015F5C4;
 extern int FUN_L01_0026e008(int, int);
 extern unsigned char D_0013D408[];
-extern void FUN_L00_002637f8(int);
+extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
@@ -1261,7 +1261,7 @@ void FUN_L14_003087c0(struct Moby *moby) {
                 i = 0;
                 if (v <= D_L14_0015F5C4)
                     i = moby->state;
-                FUN_L00_002637f8(D_L14_0016CF60.v178[i]);
+                cutscene_set_camera_target(D_L14_0016CF60.v178[i]);
             }
         }
         break;

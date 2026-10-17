@@ -12,7 +12,9 @@ extern void update_joints_263a28(void *moby, short joint, int flags) __asm__("FU
 /* Joint positions in scratchpad, 16 bytes each. */
 #define JOINT_POSITIONS 0x70000000
 
-int FUN_L01_00263a28(char *moby, int index, unsigned int *type, float *result,
+int rig_probe_setup(char *moby, int index, unsigned int *type, float *result,
+                      float *radius, float *distance) __asm__("FUN_L01_00263a28");
+int rig_probe_setup(char *moby, int index, unsigned int *type, float *result,
                       float *radius, float *distance)
 {
     char *entry;

@@ -63,16 +63,16 @@ extern WatcherReward D_L02_0016CE60;
 extern char D_L02_00161D00[];
 extern void FUN_L02_002e0cd8(struct Moby *);
 extern void FUN_L02_002e1fb8(struct Moby *);
-extern void FUN_L02_0025c758(struct Moby *);
+extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
 extern void delete_moby(struct Moby *) __asm__("FUN_0020c828");
 extern void watcher_init(struct Moby *, WatcherVars *) __asm__("FUN_L00_002668a0");
 extern s32 watcher_talk(struct Moby *, WatcherVars *) __asm__("FUN_L00_00266448");
 extern void watcher_face(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern s32 point_in_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void give_reward(s32, s32) __asm__("FUN_L00_00203908");
-extern void FUN_L00_00260860(s32, s32);
-extern void FUN_L00_002502a0(s32);
-extern void FUN_L00_00284e50(void *, void *);
+extern void ea210_switch(s32, s32) __asm__("FUN_L00_00260860");
+extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void end_conversation(s32, s32) __asm__("FUN_0020b178");
 extern s32 count_down_16(s16 *) __asm__("FUN_001f9770");
 extern s32 count_down(s32 *) __asm__("FUN_001f9740");
@@ -113,9 +113,9 @@ extern void FUN_L02_00298c68(int);
 extern void approach_two_stage(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
 extern void lerp_vector(void *out, void *a, void *b, f32 t) __asm__("FUN_001f9a40");
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
-extern void FUN_L00_002eac18(int);
+extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
+extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
+extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
@@ -139,7 +139,7 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
         *(char **)(data + 0x20) = D_L02_00161CF0;
         moby->state = 1;
         initialize_npc_dialogue(moby, data);
-        FUN_L02_0025c758(moby);
+        initialize_moby_grounding(moby);
         prop = create_moby(0x38);
         *(struct Moby **)(data + 0x178) = prop;
         prop->draw_dist = 0x40;
@@ -189,10 +189,10 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
         if (level_game_mode != 2) {
             moby->state = 1;
             if (*(s16 *)(data + 4) == 0) {
-                FUN_L00_002502a0(moby->mission);
+                jet_clear_persistent(moby->mission);
                 if (*(s32 *)(data + 0x150) != -1) {
                     char *p = D_L02_001600EC + (*(s32 *)(data + 0x150) << 7);
-                    FUN_L00_00284e50(p + 0x30, p + 0x70);
+                    jet_reset_camera(p + 0x30, p + 0x70);
                 }
             } else if (*(s16 *)(data + 4) == 2) {
                 moby->visible = 0;
@@ -215,7 +215,7 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
         }
         break;
     case 5:
-        FUN_L00_00260860(5, 1);
+        ea210_switch(5, 1);
         end_conversation(0, -1);
         goto kill;
     case 3: {
@@ -232,15 +232,15 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
         rot.f[2] = angle_add(angle_sub(to.f[2], from.f[2]) * *(f32 *)(data + 0x180), from.f[2]);
         rot.f[1] = angle_add(angle_sub(to.f[1], from.f[1]) * *(f32 *)(data + 0x180), from.f[1]);
         rot.f[0] = angle_add(angle_sub(to.f[0], from.f[0]) * *(f32 *)(data + 0x180), from.f[0]);
-        FUN_L00_002ea9d8(&pos);
-        FUN_L00_002eaa30(&rot);
+        ea210_drawend(&pos);
+        ea210_drawflush(&rot);
         if (*(f32 *)(data + 0x180) < 1.0f) {
             approach_value((f32 *)(data + 0x17C), 0.0f, 0.1f);
         } else {
             approach_value((f32 *)(data + 0x17C), 1.0f, 0.1f);
             if (*(f32 *)(data + 0x17C) == 1.0f) {
                 moby->state = 4;
-                FUN_L00_002eac18(0);
+                ea210_hide(0);
             }
         }
         D_L02_0015F3FC = *(f32 *)(data + 0x17C);
@@ -370,7 +370,7 @@ void FUN_L02_002e1950(struct Moby *m) {
         m->state = 1;
         m->update_dist = 0xFF;
         watcher_init(m, v);
-        FUN_L02_0025c758(m);
+        initialize_moby_grounding(m);
         break;
     case 1:
         if (v->zone_check == 1 && point_in_clip_volume(&hero.motion.pos, v->zone))
@@ -383,9 +383,9 @@ void FUN_L02_002e1950(struct Moby *m) {
         }
         if (v->talk_state == 2) {
             give_reward(2000, 10);
-            FUN_L00_00260860(30, 1);
-            FUN_L00_002502a0(*((u8 *)m + 0xB0));
-            FUN_L00_00284e50(&hero.motion.pos, &hero.motion.rot);
+            ea210_switch(30, 1);
+            jet_clear_persistent(*((u8 *)m + 0xB0));
+            jet_reset_camera(&hero.motion.pos, &hero.motion.rot);
             end_conversation(0, -1);
             delete_moby(m);
             return;
@@ -562,7 +562,7 @@ extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int allocate_voice_for_target(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 /* Lift platform carried by an animated driver moby: follows the driver's joint 0, waits at an end (3/5) for the
  * hero to step on, then plays the driver's up or down animation (2/4) with its loop sound until it ends. */
@@ -667,7 +667,7 @@ void FUN_L02_002e2228(struct Moby *moby) {
         break;
     }
     add_vectors(&delta, &delta, &moby->pos);
-    FUN_L00_00260738(data + 0x60, &delta, &old_rot, &moby->rot);
+    update_entity_matrix(data + 0x60, &delta, &old_rot, &moby->rot);
 }
 
 extern int D_L02_0015F608;

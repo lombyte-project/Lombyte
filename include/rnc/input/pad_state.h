@@ -36,7 +36,7 @@ struct PadState {
     f32 analog[16];                     /* 0x100: [0..3] stick axes (-1..1), [4..15] pressure (0..1) */
     f32 analog_prev[16];                /* 0x140: copy of analog */
     u8 pad_180[0x9];
-    u8 unk189;                          /* 0x189: copied by FUN_L00_002d2ee8 on spawn */
+    u8 unk189;                          /* 0x189: copied by metal_detector_update on spawn */
     u8 pad_18A[0x4];
     s16 unk18E;                         /* 0x18E: cleared with unk190 by reset_global_state_fields */
     s32 unk190;                         /* 0x190 */

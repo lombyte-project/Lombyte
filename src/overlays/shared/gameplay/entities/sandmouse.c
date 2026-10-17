@@ -757,7 +757,7 @@ extern void FUN_L00_002323b8(f32, s32, s32);
 
 extern void FUN_0022d798(s32);
 extern s32 FUN_L00_00259028(void *, void *, void *, void *);
-extern void FUN_L00_00259fe8(void *, f32);
+extern void jet_animate(void *, f32) __asm__("FUN_L00_00259fe8");
 extern void FUN_L00_0025f8e0(void *, f32);
 extern s32 rand(void) __asm__("FUN_001160d8");
 extern void FUN_L01_0030dda0_with_vars(char *, char *) __asm__("FUN_L01_0030dda0");
@@ -770,7 +770,8 @@ extern s32 coll_line_fix(void *, void *, s32, void *, s32) __asm__("FUN_001efa68
 #define HOVER_S(off) (*(s16 *)(p + (off)))
 #define HOVER_F(off) (*(f32 *)(p + (off)))
 #define HOVER_SOUND_VALID ( *(struct Moby **)(D_0013E550 + HOVER_I(0x64) * 0x70 + 0x88) == m && *(u8 *)(D_0013E550 + HOVER_I(0x64) * 0x70 + 0x74) != 0 )
-void FUN_L01_0030df40(struct Moby *m) {
+void sandmouse_update(struct Moby *m) __asm__("FUN_L01_0030df40");
+void sandmouse_update(struct Moby *m) {
     char *p;
     struct Moby *e;
     OvlVec4 v, q;
@@ -1022,7 +1023,7 @@ void FUN_L01_0030df40(struct Moby *m) {
         break;
     }
     if (m->state >= 2) {
-        FUN_L00_00259fe8(m, 0.3f);
+        jet_animate(m, 0.3f);
         FUN_L01_0030dda0_with_vars((char *)m, p);
     }
     if (HOVER_I(0x48) != -1) {
@@ -1343,7 +1344,7 @@ extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float D_L01_001672B0[];
-extern float FUN_L00_001eb328(void *, float, float, float, float, float);
+extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float cam_interp_values(float a, float b, float *p, float c, float d, float e);
 extern int FUN_L00_0025d808(void *, void *, int *, float *, float, int);
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
@@ -1535,7 +1536,7 @@ void FUN_L01_00315358(Cam_316730 *cam) {
     } else {
         look->f20 = look->f20 - 0.00015f;
     }
-    pitch_step = FUN_L00_001eb328(&look->f34, 0.0f, pitch_error, look->f20, 0.175f, 0.0f);
+    pitch_step = rope_spring_turn(&look->f34, 0.0f, pitch_error, look->f20, 0.175f, 0.0f);
     cross_vectors_xyz(delta, look_dir, cam->f40);
     build_look_at_matrix(cam->f0, cam->f40, delta, pitch_step);
     normalize_vector_xyz(cam->f40, cam->f0, 1.0f);

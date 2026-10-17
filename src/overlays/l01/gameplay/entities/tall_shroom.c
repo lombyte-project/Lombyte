@@ -586,7 +586,7 @@ extern s32 D_L01_0015F580;
 void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_L01_002787a0();
-extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
+extern void *debris302618(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *) __asm__("FUN_L00_00263fd8");
 extern void FUN_L01_00278e20();
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
@@ -611,7 +611,7 @@ void FUN_L01_0030d0f0(TriggerMoby *obj) {
     case 2:
         allocate_voice_for_target_entry(0, 0, obj);
         FUN_L01_002787a0(obj);
-        FUN_L00_00263fd8(obj, 0x717, obj->pos, obj->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580,
+        debris302618(obj, 0x717, obj->pos, obj->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580,
                          0.0f, &D_L01_0015F580);
         FUN_L01_00278e20(obj, 0x718);
         mark_moby_for_removal(obj);

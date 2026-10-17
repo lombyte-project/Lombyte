@@ -398,7 +398,8 @@ extern char D_L11_00174860[];
 /* Homing missile: turns toward its target while the target lives and stays within 3 units of
    where it was last frame, leaves a smoke trail, and bursts on a hit, when its timer runs out
    or outside the level box. */
-void FUN_L11_003094f8(struct Moby *moby) {
+void rocket_update(struct Moby *moby) __asm__("FUN_L11_003094f8");
+void rocket_update(struct Moby *moby) {
     Missile_94f8 *data = (Missile_94f8 *)moby->pvars;
     Vec4f *pos;
     Vec4 previous_pos, spray, offset, velocity, random;
@@ -736,7 +737,8 @@ extern float ocean_level __asm__("D_L11_00161E1C");
 extern UV_30b358 wave_drift[] __asm__("D_L11_001D9AF0");
 extern float frame_delta_time __asm__("D_0015ED7C");
 
-void FUN_L11_0030b358(OceanMoby_30b358 *moby)
+void ocean_pokitaru_update(OceanMoby_30b358 *moby) __asm__("FUN_L11_0030b358");
+void ocean_pokitaru_update(OceanMoby_30b358 *moby)
 {
     OceanVars_30b358 *d = moby->vars;
     float src[4];

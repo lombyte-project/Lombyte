@@ -228,7 +228,7 @@ struct L03Cutscene {
 };
 
 extern struct L03Cutscene D_L03_0016C960;
-extern void FUN_L00_002637f8(void *);
+extern void cutscene_set_camera_target(void *) __asm__("FUN_L00_002637f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -258,7 +258,7 @@ void FUN_L03_002e01d0(char *m) {
                 i = 2;
             else if (v == 10)
                 i = 0;
-            FUN_L00_002637f8(D_L03_0016C960.mobys[i]);
+            cutscene_set_camera_target(D_L03_0016C960.mobys[i]);
         }
         if (D_L03_0015F5C4 != 2 || D_L03_0016C960.mode != 3)
             break;

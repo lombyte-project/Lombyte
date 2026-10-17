@@ -96,7 +96,7 @@ typedef struct {
     char pad7C[3];
     unsigned char b7F;
 } WM;
-extern void FUN_L01_002783a8(void *, float);
+extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -117,7 +117,7 @@ extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames_c(int) __asm__("scale_game_frames");
 extern int tick_countdown_32(int *);
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern void FUN_L00_002628d8(float, float, void *, void *, int);
+extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("subtract_vector_xyz");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
@@ -151,9 +151,9 @@ extern unsigned char D_0013DD49 __attribute__((section(".data")));
 extern char D_L08_001622E8[];
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L08_00305138_c(void *) __asm__("FUN_L08_00305138");
-extern void FUN_L00_0025a120(void *);
+extern void wake302618(void *) __asm__("FUN_L00_0025a120");
 extern float FUN_001f9b48(void *, void *);
-extern void FUN_L00_002502a0(int);
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
@@ -173,7 +173,7 @@ void FUN_L08_00305270(WM *m) {
     FUN_L08_00305138_c(m);
     if (m->opacity) {
         if (FUN_001f9b48(m->position, D_L08_001675C0_c) < 30.0f) {
-            FUN_L00_0025a120(m);
+            wake302618(m);
             m->b7F = 0x18;
         }
     }
@@ -193,7 +193,7 @@ void FUN_L08_00305270(WM *m) {
         break;
     case 1:
         if (vector_distance(m->position, (char *)&D_0013E633_watch + 0xE9D) < 8.0f) {
-            FUN_L00_002502a0(((unsigned char *)m)[0xB0]);
+            jet_clear_persistent(((unsigned char *)m)[0xB0]);
             m->state = 2;
         }
         break;
@@ -204,7 +204,7 @@ void FUN_L08_00305270(WM *m) {
         }
         if (D_0013F350_g.f2FC == 0 && (scale_game_frames(30) < D_0013F350_g.f300 || d->h56 != 0)) {
             FUN_L00_00266448(m, (char *)d + 0x20);
-            FUN_L01_002783a8(m, 2.2f);
+            begin_dialogue_camera_transition(m, 2.2f);
         }
         if (d->h24 == 4) {
             unlock_planet(9);
@@ -274,8 +274,8 @@ void FUN_L08_00305270(WM *m) {
     }
     if (D_0015EDB0_b)
         d->height = 2.75f;
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
 #include "sda.h"
 
@@ -397,7 +397,7 @@ extern int FUN_001f9740_c(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6d0(float);
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
-extern void FUN_L00_00284e50(void *, void *);
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern char D_L08_00162308[];
 extern char *D_L08_001600EC;
 extern unsigned char *D_L08_0015FFD8;
@@ -406,7 +406,7 @@ extern void FUN_L08_002e1698(void *);
 extern void FUN_L00_00299460(int);
 extern void FUN_L08_002a1880(int);
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
-extern void FUN_L00_00260860(int, int);
+extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
 
 /* Watcher moby update with a scripted reveal, then turns its head toward the hero or a random target. */
 void FUN_L08_003065d8(L14WatchMoby *m) {
@@ -429,10 +429,10 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
         break;
     case 1:
         if (FUN_L00_00266448(m, d))
-            FUN_L01_002783a8(m, 2.7f);
+            begin_dialogue_camera_transition(m, 2.7f);
         if (d->h36 == 2) {
             char *t = D_L08_001600EC + d->i48 * 128;
-            FUN_L00_00284e50(t + 0x30, t + 0x70);
+            jet_reset_camera(t + 0x30, t + 0x70);
             m->state = 2;
             FUN_L08_002e1698(D_L08_0015FFD8 + d->i50 * 256);
         }
@@ -448,8 +448,8 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
     case 2:
         break;
     case 5:
-        FUN_L00_002502a0(m->bB0);
-        FUN_L00_00260860(0x1B, 1);
+        jet_clear_persistent(m->bB0);
+        ea210_switch(0x1B, 1);
         memcard_save_data(0, -1);
         mark_moby_for_removal(m);
         return;
@@ -513,8 +513,8 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
     }
     if (D_0015EDB0_b)
         d->height = 2.75f;
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 
@@ -674,7 +674,7 @@ struct G08c {
 
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern struct G08c D_L08_0016D060_c __asm__("D_L08_0016D060");
-extern void FUN_L00_002637f8(int);
+extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L08_003084d8(struct Moby *moby) {
     int k;
@@ -693,7 +693,7 @@ void FUN_L08_003084d8(struct Moby *moby) {
                         k = 3;
                     else if (D_L08_0016D060_c.a == 2 || D_L08_0016D060_c.a == 5)
                         k = 2;
-                    FUN_L00_002637f8((int)D_L08_0016D060_c.objs[k]);
+                    cutscene_set_camera_target((int)D_L08_0016D060_c.objs[k]);
                 }
             }
         }

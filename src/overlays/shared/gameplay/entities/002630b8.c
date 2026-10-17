@@ -102,7 +102,8 @@ extern int D_L00_0015FC98;
 extern unsigned char *D_L00_0015FCA8;
 extern float D_L00_0015FCA0;
 extern float D_L00_0015FCA4;
-float FUN_L00_00263468(Vec4 *v) {
+float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
+float ground_height_at(Vec4 *v) {
     Vec4 t;
     int iy, ix;
     t.q = v->q;
@@ -234,7 +235,8 @@ extern s32 FUN_001f96f8_2637f8(s32) __asm__("FUN_001f96f8");
 extern Effect_2637f8 *FUN_L00_0026d000_2637f8(void *, f32, f32, f32, s32, void *, f32, u32)
     __asm__("FUN_L00_0026d000");
 extern u8 D_L00_0015F580_2637f8[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
-void FUN_L00_002637f8(u8 *m) {
+void cutscene_set_camera_target(u8 *m) __asm__("FUN_L00_002637f8");
+void cutscene_set_camera_target(u8 *m) {
     Vec4_2634f8 vectors[4];
     Vec4_2634f8 pos;
     Vec4_2634f8 scaled;
@@ -304,7 +306,8 @@ extern unsigned char D_0015EDB7;
 void attach_manipulator() __asm__("FUN_0020cb10");
 void detach_manipulator() __asm__("FUN_0020cb88");
 /* While D_0015EDB7 is set attaches the manipulator, sets floats 0x20..0x28 to x; else detaches. */
-void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p) {
+void sound302618(float x, int a, int b, unsigned char *p) __asm__("FUN_L00_00263ac8");
+void sound302618(float x, int a, int b, unsigned char *p) {
     if (D_0015EDB7) {
         if (p[1] == 0)
             attach_manipulator();
@@ -341,7 +344,8 @@ int FUN_001f96f8_263b70(int) __asm__("FUN_001f96f8");
 int FUN_001fa6d0_263b70(float) __asm__("FUN_001fa6d0");
 P_263b70 *FUN_L00_0026d000_263b70(void *, int, void *, float, float, float, float,
                                   int) __asm__("FUN_L00_0026d000");
-void FUN_L00_00263b70(void *p0, void *p1, void *vel, float a, float b) {
+void draw_trail(void *p0, void *p1, void *vel, float a, float b) __asm__("FUN_L00_00263b70");
+void draw_trail(void *p0, void *p1, void *vel, float a, float b) {
     P_263b70 *part;
     T_263b70 *tail;
     int i, j, m;
@@ -392,7 +396,8 @@ s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 get_help_message_text() __asm__("FUN_001fdd10");
 void sprintf() __asm__("FUN_00116248");
 /* Calls sprintf on D_L00_00179118 with help message a and b; c frames (default 0xB4). */
-void FUN_L00_00263db0(s32 a, s32 b, s32 c) {
+void f63db0_2c5be8(s32 a, s32 b, s32 c) __asm__("FUN_L00_00263db0");
+void f63db0_2c5be8(s32 a, s32 b, s32 c) {
     if (c == -1)
         c = scale_game_frames(0xB4);
     sprintf(D_L00_00179118, get_help_message_text(a), b);
@@ -498,7 +503,9 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+                       float *v11, float scale, float *v12) __asm__("FUN_L00_00263fd8");
+void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12) {
     char *m = (char *)func_0020D348_m(cls);
     char *d;

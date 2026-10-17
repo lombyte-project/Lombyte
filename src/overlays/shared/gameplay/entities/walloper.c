@@ -64,7 +64,7 @@ extern float FUN_L00_0025e310(float);
 extern int FUN_L00_00257b90(int, int), FUN_00213260(int);
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
-extern void FUN_L00_00259a88(void *, void *);
+extern void apply_hit_ece00(void *, void *) __asm__("FUN_L00_00259a88");
 extern int FUN_L00_00259830(void *);
 extern int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
 extern void FUN_L00_001f2868(float, void *, int, void *, void *);
@@ -277,7 +277,7 @@ next_candidate:;
             if (candidate) {
                 if (!suck_get_aim_height(candidate) || !*(char **)(candidate + 0x24) ||
                     *(short *)(*(char **)(candidate + 0x24) + 0x46) != 5)
-                    FUN_L00_00259a88(candidate, &hit);
+                    apply_hit_ece00(candidate, &hit);
                 else {
                     hit_result = 0; collided[collided_count++] = candidate;
                     *(int *)(candidate + 0x94) = 0;
@@ -306,7 +306,7 @@ next_candidate:;
         target_delta.f[3] = 5627.9248046875f;
         make_hit_descriptor(&effects.first.hit0, o, 0x210000, &target_delta, enabled_float + 2.0f);
         effects.first.hit0.id = *(short *)(o + 0xa6); effects.first.hit0.mode = 3; effects.first.hit0.kind = 5;
-        FUN_L00_00259a88(*(char **)(v + 0x20), &effects.first.hit0);
+        apply_hit_ece00(*(char **)(v + 0x20), &effects.first.hit0);
         timer = 5;
         data = (char *)suck_get_aim_height(*(char **)(v + 0x20));
         if (data && *(short *)(data + 4) == 1) timer = 1;
@@ -319,7 +319,7 @@ next_candidate:;
         target_delta.f[3] = 5627.9248046875f;
         make_hit_descriptor(&effects.hit1, o, 0x210000, &target_delta, enabled_float + 2.0f);
         effects.hit1.id = *(short *)(o + 0xa6); effects.hit1.kind = 5; effects.hit1.mode = 3;
-        FUN_L00_00259a88(*(char **)(v + 0x38), &effects.hit1);
+        apply_hit_ece00(*(char **)(v + 0x38), &effects.hit1);
         timer = 5;
         data = (char *)suck_get_aim_height(*(char **)(v + 0x38));
         if (data && *(short *)(data + 4) == 1) timer = 1;
@@ -836,7 +836,8 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern int func_001F9908_r(void *) __asm__("FUN_001f9740");
 
 extern SparkleRowC860 D_L00_001DBB90[];
-void FUN_L00_002bb558(char *m) {
+void walloper_update(char *m) __asm__("FUN_L00_002bb558");
+void walloper_update(char *m) {
     int flag = 0;
     float vec0[4] __attribute__((aligned(16)));
     float vec1[4] __attribute__((aligned(16)));
@@ -1418,8 +1419,8 @@ int FUN_L00_0028d8c0(int a, int i);
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
 struct Moby *FUN_L00_002c9348(void *a);
-void FUN_L00_0020e4c8(void);
-void FUN_L00_0020e698(void);
+void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
+void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00236268(HudElem *e);
 void FUN_L00_00236458(void);
 void FUN_L00_0023e838(int i);
@@ -1466,7 +1467,8 @@ extern void func_L00_00236BF8_2BDAF0(void) __asm__("FUN_L00_00236268");
 extern void func_L00_00236DE8_2BDAF0(void) __asm__("FUN_L00_00236458");
 extern void func_L00_002377E0_2BDAF0(void) __asm__("FUN_L00_00236e50");
 
-void FUN_L00_002bc7e8(Moby *moby) {
+void morphoray_update(Moby *moby) __asm__("FUN_L00_002bc7e8");
+void morphoray_update(Moby *moby) {
     Vq_2BDAF0 direction;
     Vq_2BDAF0 points[3];
     Vq_2BDAF0 matrix[4];
@@ -2896,7 +2898,7 @@ void FUN_L00_002bf810(char *a, char *b, int n) {
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f99c0(float);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float FUN_L00_0025abf0(void *, void *, int, float, float);
+extern float fn_2c2488(void *, void *, int, float, float) __asm__("FUN_L00_0025abf0");
 
 void FUN_L00_002bf8b0(unsigned char *m, unsigned char *o, u128 *src) {
     float s, t, r, lim;
@@ -2911,7 +2913,7 @@ void FUN_L00_002bf8b0(unsigned char *m, unsigned char *o, u128 *src) {
     if (F2BF(o, 0x20) < t)
         F2BF(o, 0x14) = F2BF(o, 0x20);
     F2BF(o, 0x18) = fast_arc_tan(F2BF(o, 0) - F2BF(m, 0x10), F2BF(o, 4) - F2BF(m, 0x14));
-    r = FUN_L00_0025abf0(m + 0x10, o, 0, F2BF(o, 0x14), -F2BF(o, 0x1C));
+    r = fn_2c2488(m + 0x10, o, 0, F2BF(o, 0x14), -F2BF(o, 0x1C));
     lim = frame_time * 7.0f;
     F2BF(o, 0x10) = r;
     if (lim < r)
@@ -3086,7 +3088,7 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_00250df8(unsigned char *);
-void FUN_L00_0025d1b8(unsigned char *);
+void place_2ce1f0(unsigned char *) __asm__("FUN_L00_0025d1b8");
 unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) {
     unsigned char *m = create_moby(0xba);
     if (m) {
@@ -3101,7 +3103,7 @@ unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) {
         qcopy(q + 0x10, c);
         *(int *)(q + 0x60) = a;
         FUN_L00_00250df8(m);
-        FUN_L00_0025d1b8(m);
+        place_2ce1f0(m);
         *(float *)(m + 0x2c) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.1f;
     }
     return m;

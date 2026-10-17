@@ -30,7 +30,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00227638(void);
-extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -198,7 +198,7 @@ void FUN_L09_003033a0(unsigned char *moby) {
         break;
     }
     subtract_vector_xyz(delta, (moby + 0x10), orig);
-    FUN_L00_00260738(data + 0x60, delta, moby + 0x40, moby + 0x40);
+    update_entity_matrix(data + 0x60, delta, moby + 0x40, moby + 0x40);
     if (!FUN_L01_00277fb8(moby)) {
         if (2.0f < vector_distance((moby + 0x10), &hero.motion.pos)) {
             if (*(short *)(data + 0xBA) == 0) {
@@ -923,10 +923,10 @@ extern void FUN_L00_0023e838(int);
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void FUN_L00_001ff378(void *, void *, float);
 extern void FUN_L00_001edf60(void *, int, void *, int, int, int, float, float, float);
-extern void FUN_L00_002eac18(int);
-extern void FUN_L00_002ea9d8(void *);
-extern void FUN_L00_002eaa30(void *);
-extern void FUN_L00_002eaaa0(void *, void *, int, int, int);
+extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
+extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
+extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
+extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -978,7 +978,7 @@ void FUN_L09_00304c80(struct Moby *moby) {
             add_vector_xyz(&hero.motion.pos, &hero.motion.pos, &offset);
             fast_mem_zero16(&hero.motion.velocity, 0x90);
             if (D_0013CAE4 & 0x10) {
-                FUN_L00_002eac18(0);
+                ea210_hide(0);
                 hero_set_state(0, 1);
                 moby->command = 2;
                 moby->state = 4;
@@ -986,7 +986,7 @@ void FUN_L09_00304c80(struct Moby *moby) {
             } else {
                 if (moby->state != 5) {
                     vars->dismount_delay = 2;
-                    FUN_L00_002eaaa0(&moby->pos, &moby->rot, 0, 0, 0);
+                    jet_mount(&moby->pos, &moby->rot, 0, 0, 0);
                     if (moby->prev_seq != 5) {
                         blend_moby_animation(moby, 5, 0, scale_game_frames(5));
                     }
@@ -1164,11 +1164,11 @@ void FUN_L09_00304c80(struct Moby *moby) {
             build_spherical_offset(&shot, D_L09_00161CB0, fast_add_rotations(1.5707964f, moby->rot.z), vars->pitch);
             shot.f[2] += D_L09_00161CB4;
             add_vector_xyz(&muzzle, &tmp, &shot);
-            FUN_L00_002ea9d8(&muzzle);
+            ea210_drawend(&muzzle);
             dir.f[0] = 0.0f;
             dir.f[1] = -vars->pitch;
             dir.f[2] = fast_add_rotations(1.5707964f, moby->rot.z);
-            FUN_L00_002eaa30(&dir);
+            ea210_drawflush(&dir);
         }
         FUN_L00_001edf60(moby, 0xFF0F0FFF, 0, 0xD, -1, 4, 1.0f, 0.0f, 90.0f);
         break;
@@ -1177,7 +1177,7 @@ void FUN_L09_00304c80(struct Moby *moby) {
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_001f9bf8(f32, void *, void *);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_L00_00259858(void *, void *, s32, f32);
+extern void make_hit_089d0(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern char D_L09_002090B0[];
 
@@ -1212,7 +1212,7 @@ void FUN_L09_00305a28(struct Moby *moby) {
     transform_vector_by_basis(work, work, (char *)moby + 0xc0);
     FUN_001f9bf8(F(data, 0), work + 8, work);
     fast_vec_add(work + 4, work + 4, work + 8);
-    FUN_L00_00259858(work + 12, moby, *(s32 *)(data + 0x10), *(float *)(data + 0xc));
+    make_hit_089d0(work + 12, moby, *(s32 *)(data + 0x10), *(float *)(data + 0xc));
     i = 0;
     if (*(s32 *)(data + 8) > 0) do {
         if (collect_mobies_in_sphere(F(data, 0), work + 4, 1, moby, work + 12) != 0) {
@@ -1236,7 +1236,7 @@ void FUN_L09_00305a28(struct Moby *moby) {
 extern char *func_0020D348_m(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void place_2ce1f0(void *) __asm__("FUN_L00_0025d1b8");
 
 char *FUN_L09_00308220(struct Moby *owner, int cls) {
     char *moby = func_0020D348_m(cls);
@@ -1251,7 +1251,7 @@ char *FUN_L09_00308220(struct Moby *owner, int cls) {
         qcopy(moby + 0x40, &owner->rot);
         moby[0xBC] = scale_game_frames(10);
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        place_2ce1f0(moby);
         *(float *)(moby + 0x2C) = owner->scale;
         *(unsigned short *)(moby + 0x34) = owner->flags;
         **(int **)(moby + 0x78) = *(int *)owner->pvars;
@@ -1604,7 +1604,7 @@ typedef struct {
 extern void attach_manipulator(struct Moby *, s32, void *) __asm__("FUN_0020cb10");
 extern void scale_vector_00309c08(f32, void *, void *) __asm__("FUN_001f9a68");
 extern s32 check_voice_target_00309c08(void *, s32) __asm__("FUN_L00_0028d8c0");
-extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern u8 D_0013F3D0[];
 extern u8 D_0014C050[];
 extern s32 D_L09_0015F5CC __attribute__((section(".data")));
@@ -1731,7 +1731,7 @@ void FUN_L09_00309c08(struct Moby *moby) {
         break;
     }
     add_vector_xyz(&original, &original, &moby->pos);
-    FUN_L00_00260738((u8 *)vars + 0x20, &original, &rotation, &moby->rot);
+    update_entity_matrix((u8 *)vars + 0x20, &original, &rotation, &moby->rot);
 }
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");

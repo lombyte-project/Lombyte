@@ -1099,7 +1099,7 @@ typedef struct {
     char pad7C[3];
     unsigned char b7F;
 } WM;
-extern void FUN_L01_002783a8(void *, float);
+extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -1117,7 +1117,7 @@ extern int FUN_L00_00266448(void *, void *);
 extern int FUN_L00_002668a0(void *, void *);
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int tick_countdown_32(int *);
-extern void FUN_L00_002628d8(float, float, void *, void *, int);
+extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("subtract_vector_xyz");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 typedef struct {
@@ -1151,12 +1151,12 @@ extern char D_L08_001621E0[];
 extern int D_L08_001621D8 __attribute__((sda));
 extern char *D_L08_001600EC;
 extern void FUN_L00_00262d38(int);
-extern void FUN_L00_00284e50(void *, void *);
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L08_00305138_c(void *) __asm__("FUN_L02_002e0cd8");
-extern void FUN_L00_0025a120(void *);
+extern void wake302618(void *) __asm__("FUN_L00_0025a120");
 extern float FUN_001f9b48(void *, void *);
-extern void FUN_L00_002502a0(int);
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
@@ -1171,7 +1171,7 @@ void FUN_L08_00302ce8(WM *m) {
     FUN_L08_00305138_c(m);
     if (m->opacity) {
         if (FUN_001f9b48(m->position, D_L08_001675C0_c) < (float)D_L08_001621D8) {
-            FUN_L00_0025a120(m);
+            wake302618(m);
             m->b7F = (D_L08_001621D8 * 13) >> 4;
         }
     }
@@ -1214,7 +1214,7 @@ void FUN_L08_00302ce8(WM *m) {
         }
         if (FUN_L00_00266448(m, (char *)d + 0x20)) {
             m->state = 3;
-            FUN_L01_002783a8(m, 2.2f);
+            begin_dialogue_camera_transition(m, 2.2f);
         }
         break;
     case 3:
@@ -1223,8 +1223,8 @@ void FUN_L08_00302ce8(WM *m) {
             if (d->h24 == 3) {
                 unlock_planet(10);
                 FUN_L00_00262d38(10);
-                FUN_L00_002502a0(((unsigned char *)m)[0xB0]);
-                FUN_L00_00284e50((char *)&D_0013E633_watch + 0xE9D, (char *)&D_0013E633_watch + 0xEAD);
+                jet_clear_persistent(((unsigned char *)m)[0xB0]);
+                jet_reset_camera((char *)&D_0013E633_watch + 0xE9D, (char *)&D_0013E633_watch + 0xEAD);
                 memcard_save_data(0, -1);
                 mark_moby_for_removal(m);
                 return;
@@ -1294,6 +1294,6 @@ void FUN_L08_00302ce8(WM *m) {
     }
     if (big_head_cheat_enabled)
         d->height = 2.75f;
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }

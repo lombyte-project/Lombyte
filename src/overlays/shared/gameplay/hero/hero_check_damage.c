@@ -294,10 +294,10 @@ void find_grind_rail(void) {
    (func_L00_00233EE0). */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020D990), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00233660(float *, float, float, float);
+extern void f233660_2133a8(float *, float, float, float) __asm__("FUN_L00_00233660");
 
 void FUN_L00_0020d2f8(float *out) {
-    FUN_L00_00233660(out, 0.3f, 0.0f, 1.34f);
+    f233660_2133a8(out, 0.3f, 0.0f, 1.34f);
 }
 typedef unsigned int u128_20d330 __attribute__((mode(TI), aligned(16)));
 #include "qcopy.h"
@@ -390,7 +390,8 @@ int FUN_L00_0020d540(void) {
     return (unsigned)(FUN_L00_0020d498_0020d540() - 0x1c) < 2;
 }
 /* True when hero.state.control_mode is 0x11/0x12 or state.current is 0x6A, 0x75, 0x76 or 0x82. */
-s32 FUN_L00_0020d568(void) {
+s32 fd568_208820(void) __asm__("FUN_L00_0020d568");
+s32 fd568_208820(void) {
     struct Hero *p = &hero;
     u32 a = p->state.control_mode;
     u32 b;
@@ -945,7 +946,8 @@ extern void FUN_L00_0024f0e8(u8 *, u8 **);
 extern void FUN_L00_0024f3e0(u8 *, u8 *, s32, s32, s32, s32);
 extern void FUN_L00_002323b8_c(s32, s32, f32) __asm__("FUN_L00_002323b8");
 
-void FUN_L00_0020e4c8(void) {
+void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
+void fire_start_2cc608(void) {
     s32 t, v19, v20, v21, i;
     u8 *o;
     struct Hero *P;
@@ -996,7 +998,8 @@ void FUN_L00_0020e4c8(void) {
 extern int hero_idle_sequence(int) __asm__("FUN_L00_00205000");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 
-void FUN_L00_0020e698(void) {
+void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
+void fire_end_2cc608(void) {
     struct Hero *g = &hero;
     if (g->unk20A8 != 0) {
         if (g->unkD08[0] != 0) {
@@ -1033,7 +1036,7 @@ void FUN_L00_0020e728(void) {
     struct Hero *hero_state;
     f32 angle;
     if (hero.unk20A8 && hero.unk20AA && get_ammo(-1) == 0)
-        FUN_L00_0020e698();
+        fire_end_2cc608();
     i = 0;
     slot = hero.unkD08;
     hero_state = (struct Hero *)((u8 *)slot - 0xD08);
@@ -1734,7 +1737,8 @@ void FUN_L00_0020fde0(int id) {
 }
 s32 FUN_L00_00233f38_0020fe30(void) __asm__("FUN_L00_00233f38");
 /* True when 00233f38, D_L00_0015F5C4 and hero.vehicle_mode are 0, control_mode <3 or 4, and base_condition is 0. */
-s32 FUN_L00_0020fe30(void) {
+s32 f_fun_l00_0020fe30_227fa0(void) __asm__("FUN_L00_0020fe30");
+s32 f_fun_l00_0020fe30_227fa0(void) {
     struct Hero *b;
     u32 s;
     if (FUN_L00_00233f38_0020fe30())
@@ -2515,7 +2519,8 @@ typedef struct {
     s16 f;
 } K2;
 /* True when p is non-null and its field f is 0x47. */
-s32 FUN_L00_00211360(K2 *p) {
+s32 f_fun_l00_00211360_227fa0(K2 *p) __asm__("FUN_L00_00211360");
+s32 f_fun_l00_00211360_227fa0(K2 *p) {
     if (p == 0) {
         return 0;
     }
@@ -2846,7 +2851,8 @@ extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
 extern void FUN_L00_00211d78(int, float, float, float);
 
 /* Calls 00211d78 when hero.unk20B3 is set, else updates hero.motion.unk188 via 0025bc98. */
-void FUN_L00_00211e30(int a, float x, float y, float z) {
+void turn_to(int a, float x, float y, float z) __asm__("FUN_L00_00211e30");
+void turn_to(int a, float x, float y, float z) {
     struct Hero *g = &hero;
     if (g->unk20B3 != 0) {
         FUN_L00_00211d78(a, x, y, z);
@@ -2862,7 +2868,7 @@ void FUN_L00_00211e30(int a, float x, float y, float z) {
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00212550), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
-extern void FUN_L00_00211e30(int, float, float, float);
+extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 
 void FUN_L00_00211e98(void) {
     float a, b, c;
@@ -2875,7 +2881,7 @@ void FUN_L00_00211e98(void) {
         b = frame_scale_sq * 0.07f;
         c = frame_time * 6.981317043304443f;
     }
-    FUN_L00_00211e30(0, a, b, c);
+    turn_to(0, a, b, c);
 }
 extern float D_0015ED6C_211f38 __asm__("D_0015ED6C");
 extern int FUN_L00_0020d498_211f38(int) __asm__("FUN_L00_0020d498");
@@ -3879,8 +3885,8 @@ extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
-extern void FUN_L00_00233810(void *, void *, f32);
-extern void FUN_L00_002334d0(void *, void *, f32);
+extern void f233810_2133a8(void *, void *, f32) __asm__("FUN_L00_00233810");
+extern void f2334d0_2133a8(void *, void *, f32) __asm__("FUN_L00_002334d0");
 extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 sqrtf_(f32) __asm__("FUN_001f9988");
@@ -3954,7 +3960,7 @@ void hero_integrate_velocity(void) {
             }
         }
         if (!(hero.state_timer < hero.unk420) && 0.0f < hero.unk428) {
-            FUN_L00_00233810(&hero.motion.velocity, &hero.motion.velocity, hero.unk428);
+            f233810_2133a8(&hero.motion.velocity, &hero.motion.velocity, hero.unk428);
             hero.unk42C += hero.unk428;
             hero.unk428 = 0.0f;
         }
@@ -3975,7 +3981,7 @@ void hero_integrate_velocity(void) {
                 if (c->frames > 0) {
                     c->value += c->keys[c->key].delta * frame_time_sq;
                 }
-                FUN_L00_00233810(&hero_velocity, &hero_velocity, c->value);
+                f233810_2133a8(&hero_velocity, &hero_velocity, c->value);
             }
         }
     }
@@ -3987,9 +3993,9 @@ tail:
     }
     if (hero.state_timer < hero.unk420) {
         gravity_set_z(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-        FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 48.0f);
+        f2334d0_2133a8(&hero.motion.velocity, &hero.motion.velocity, frame_time_sq * 48.0f);
     } else {
-        FUN_L00_002334d0(&hero.motion.velocity, &hero.motion.velocity, hero.unk4A0);
+        f2334d0_2133a8(&hero.motion.velocity, &hero.motion.velocity, hero.unk4A0);
         z = gravity_z(&hero.motion.velocity);
         g = gravity_z(&hero.motion.unk110);
         floor = g - 0.1f;

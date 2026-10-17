@@ -290,7 +290,7 @@ void FUN_L06_00309240(int idx) {
 extern char D_L06_0016CFE0[];
 extern int D_L06_0015F5C4;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_002637f8(int);
+extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L06_00309348(unsigned char *moby) {
     switch (moby[0x20]) {
@@ -303,7 +303,7 @@ void FUN_L06_00309348(unsigned char *moby) {
             char *p = D_L06_0016CFE0;
             if (*(int *)(p + 0x30) == 5) {
                 if (scale_game_frames(0x7F) >= *(int *)(p + 0x34)) {
-                    FUN_L00_002637f8(*(int *)(p + 0x180));
+                    cutscene_set_camera_target(*(int *)(p + 0x180));
                 }
             }
         }
@@ -336,7 +336,7 @@ extern char *func_0020D348_m(int);
 extern float D_L06_0015F580[] __attribute__((section(".sdata")));
 extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
+extern void debris302618(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void FUN_L01_002787a0(void *);
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *mk_a(int) __asm__("FUN_0020c4f8");
@@ -361,9 +361,9 @@ void FUN_L06_00309e08(char *self) {
         char *m;
         FUN_0022da68_c(0, 0, (int)self);
         FUN_L01_002787a0(self);
-        FUN_L00_00263fd8(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
+        debris302618(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
                          D_L06_0015F580, D_L06_0015F580);
-        FUN_L00_00263fd8(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
+        debris302618(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
                          D_L06_0015F580, D_L06_0015F580);
         m = mk_a(0x67D);
         if (m != 0) {

@@ -528,7 +528,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void FUN_L00_002628d8(float, float, void *, void *, int);
+extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 typedef struct {
     u8 pad0[0x454];
     u8 collected[1];
@@ -552,8 +552,8 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L02_002e0cd8(void *);
 extern void FUN_L00_002668a0(void *, void *);
 extern int FUN_L00_00266448(void *, void *);
-extern void FUN_L00_002502a0(int);
-extern void FUN_L00_00284e50(void *, void *);
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_L00_00262d38(int);
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
@@ -593,9 +593,9 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
         if (d->b8 == 1 && is_point_inside_clip_volume(&hero.motion.pos, d->i40)) {
             if (visited52[m->bB0 + current_level_index * 16] != 0xFF) {
                 char *t;
-                FUN_L00_002502a0(m->bB0);
+                jet_clear_persistent(m->bB0);
                 t = D_L14_001600EC + d->i44 * 128;
-                FUN_L00_00284e50(t + 0x30, t + 0x70);
+                jet_reset_camera(t + 0x30, t + 0x70);
             }
             d->fC = 255.0f;
         } else {
@@ -688,6 +688,6 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
     }
     if (D_0015EDB0_b)
         d->height = 2.75f;
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
-    FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
+    update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }

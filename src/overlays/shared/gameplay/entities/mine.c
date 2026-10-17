@@ -152,7 +152,7 @@ extern E D_0013E520;
 extern M910 *D_L00_00173E58 __attribute__((section(".data")));
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char *FUN_L00_0026bed0(char *, char *, int, int, float, int, int);
-extern char *FUN_L00_002d3838(char *a, char *b, int c, char *d);
+extern char *mine_camera_blast(char *a, char *b, int c, char *d) __asm__("FUN_L00_002d3838");
 extern char *FUN_L00_002d7e90(void *, float);
 extern char D_L00_00173E70[];
 extern s16 D_L00_001B07B0[];
@@ -166,7 +166,7 @@ extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_00200510(float, float, float);
-extern float FUN_L00_00259710(void *);
+extern float floor_height_4318(void *) __asm__("FUN_L00_00259710");
 extern float dot_vectors_xyz(void *a, void *b);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
@@ -182,7 +182,7 @@ extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__(
 extern int FUN_L00_002371e0(int, int, float);
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00258490(void *, void *, void *, float, float, float, float, int);
-extern int FUN_L00_00260400(void *, void *, void *, void *, void *, void *);
+extern int probe_ground_height_cf(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern int FUN_L00_0026f080(void *, void *, float, float);
 extern int FUN_L00_0028d8c0(void *, int);
 extern int FUN_L00_002aa2a8(W910 *, M910 *, int);
@@ -210,7 +210,7 @@ extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
-extern void FUN_L00_00259fe8(unsigned char *, float);
+extern void jet_animate(unsigned char *, float) __asm__("FUN_L00_00259fe8");
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int);
@@ -219,7 +219,7 @@ extern void FUN_L00_0025f800(void *, void *);
 extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
 extern void FUN_L00_0026f548(void *, void *, int, int);
 extern void FUN_L00_002738e8(void *, void *, int, float, float, float, int, int, int);
-extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
+extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern void add_vector_xyz(void *, void *, void *);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
@@ -349,7 +349,7 @@ void mine_update(M910 *m) {
                         int i;
                         char *p;
 
-                        FUN_L00_002a3ec8(*(int *)&D_L00_001612D0_gp, *(int *)&D_L00_001612D8_gp, 1,
+                        pool_splash(*(int *)&D_L00_001612D0_gp, *(int *)&D_L00_001612D8_gp, 1,
                                          m->pos.f[0], m->pos.f[1], 0.5f, -0.35f);
                         v->h50 = 1;
                         clear_vector((float *)v);
@@ -483,7 +483,7 @@ void mine_update(M910 *m) {
                     } else if (D_L00_00173E58 != 0) {
                         hd = (M910 *)FUN_002141f8_cf((unsigned char *)D_L00_00173E58);
                         if (hd != 0) {
-                            FUN_L00_00260400(m, v->p4C, &m->pos, &m->rx, &m->pos, &m->rx);
+                            probe_ground_height_cf(m, v->p4C, &m->pos, &m->rx, &m->pos, &m->rx);
                         }
                     }
                     if (hd == 0) {
@@ -757,7 +757,7 @@ void mine_update(M910 *m) {
                                          1.5f);
                     }
                 }
-                gz = FUN_L00_00259710(&m->pos);
+                gz = floor_height_4318(&m->pos);
                 if (v->h50 != 0) {
                     V910 t;
                     V910 n;
@@ -938,14 +938,14 @@ void mine_update(M910 *m) {
                 D_L00_00166C80.i168 = scale_game_frames(0x19);
                 FUN_001f9b48(&m->pos, hero.motion.pos.f);
                 if (D_E910.b11 != 0) {
-                    FUN_L00_002d3838((char *)&b, (char *)&m->pos, 0, 0);
+                    mine_camera_blast((char *)&b, (char *)&m->pos, 0, 0);
                 } else {
-                    FUN_L00_002d3838((char *)&a, (char *)&m->pos, 0, 0);
+                    mine_camera_blast((char *)&a, (char *)&m->pos, 0, 0);
                 }
                 FUN_L00_0025f800(m, D_L00_001B07B0);
                 mark_moby_for_removal(m);
             } else {
-                FUN_L00_00259fe8((unsigned char *)m, 0.25f);
+                jet_animate((unsigned char *)m, 0.25f);
             }
         }
     }
@@ -2203,7 +2203,8 @@ extern void refl_2afa48(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void vscl_2afa48(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 rnd_2afa48(f32, f32) __asm__("FUN_L00_00257c48");
 extern void kill_2afa48(void *) __asm__("FUN_0020c828");
-void FUN_L00_002afa48(M_2afa48 *m) {
+void nanotech_crate_fragment_update(M_2afa48 *m) __asm__("FUN_L00_002afa48");
+void nanotech_crate_fragment_update(M_2afa48 *m) {
     PV_2afa48 *pv = m->pv;
     u128 old;
     u128 *t;
@@ -2545,7 +2546,7 @@ extern P D_0013F350;
 extern V1688 D_L00_00160660 __attribute__((section(".sdata")));
 extern V1688 D_L00_00160680 __attribute__((section(".sdata")));
 extern char *FUN_L00_002af450(char *, char *, int, int, int);
-extern char *FUN_L00_002d3838(char *a, char *b, int c, char *d);
+extern char *mine_camera_blast(char *a, char *b, int c, char *d) __asm__("FUN_L00_002d3838");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -2625,7 +2626,8 @@ extern void transform1688(void *,void *,void *) __asm__("FUN_001f9d20");
 extern void rings1688(void *,void *,int,int,float,int,int,int,int,float) __asm__("FUN_L00_0026a9f0");
 extern void debris1688(void *,void *,int,int,float,int) __asm__("FUN_L00_0026a4c8");
 
-void FUN_L00_002b03a0(M910 *m) {
+void gold_devastator_missile_update(M910 *m) __asm__("FUN_L00_002b03a0");
+void gold_devastator_missile_update(M910 *m) {
     B910 effect=D_L00_001E9950;
     B910 gold_effect=D_L00_001E99A0;
     V1688 camera_delta;
@@ -2936,8 +2938,8 @@ void FUN_L00_002b03a0(M910 *m) {
         D_L00_00166C80.i168=scale_game_frames_alt(25);
         allocate_voice_for_target_entry_alt(0,0,(int)m);
         if(!reduced) {
-            if(D_0013E520.bB) FUN_L00_002d3838((char *)&gold_effect,(char *)(&m->pos),0,0);
-            else FUN_L00_002d3838((char *)&effect,(char *)(&m->pos),0,0);
+            if(D_0013E520.bB) mine_camera_blast((char *)&gold_effect,(char *)(&m->pos),0,0);
+            else mine_camera_blast((char *)&effect,(char *)(&m->pos),0,0);
         }
         d->bounce_count++;
         if(!D_0013E520.bB || d->bounce_count==3) {

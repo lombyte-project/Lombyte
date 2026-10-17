@@ -20,7 +20,7 @@ extern unsigned char D_0013CAE4[];
 extern unsigned char D_0013D388[];
 extern unsigned char D_0013DD4B[];
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
-extern void FUN_L00_00298840(int);
+extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_00299460(int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_light_flare() __asm__("func_0022DF40");
@@ -79,7 +79,7 @@ void FUN_L00_0028e180(unsigned char *m) {
                 if (current_level_index == 10 && hero.vehicle_mode == 1) {
                     m[0x20] = 0x2A;
                     *(unsigned short *)(m + 0x34) |= 0x41;
-                    FUN_L00_00298840(9);
+                    start_scene(9);
                 } else {
                     FUN_L00_002644e0(2);
                     D_L00_0015F630 = 1;
@@ -91,16 +91,16 @@ void FUN_L00_0028e180(unsigned char *m) {
         if (D_L00_0015F5C4 != 2) {
             q = D_0013D388;
             if (q[0x48] == 0 && D_0013D4DC[0] != 0) {
-                FUN_L00_00298840(4);
+                start_scene(4);
                 q[0x48] = 1;
             } else if ((q = D_0013D388)[0x49] == 0 && D_0013DD4B[0] != 0) {
-                FUN_L00_00298840(5);
+                start_scene(5);
                 q[0x49] = 1;
             } else if ((q = D_0013D388)[0x4A] == 0 && D_0013DD4B[0] != 0) {
                 FUN_L00_00299460(0xB);
                 q[0x4A] = 1;
             } else if ((q = D_0013D388)[0x4B] == 0 && D_0013DD4B[0] != 0) {
-                FUN_L00_00298840(6);
+                start_scene(6);
                 q[0x4B] = 1;
             } else {
                 m[0x20] = 0;

@@ -611,18 +611,18 @@ void FUN_L00_002165b8(void) {
         break;
     }
 }
-float FUN_L00_002339d0(void *);
-void FUN_L00_00233b20(void *, void *, float);
+float gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
+void gravity_set_z(void *, void *, float) __asm__("FUN_L00_00233b20");
 void FUN_L00_00233ba0(void *, void *, float);
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00216710(float x) {
     char *g = (&hero.motion.unk150);
-    float d = FUN_L00_002339d0(g);
+    float d = gravity_length_xy(g);
     if (0.001f < d) {
         float z = 0.0f;
         float s;
-        FUN_L00_00233b20(g, g, z);
+        gravity_set_z(g, g, z);
         s = d - x;
         if (s < z)
             s = z;
@@ -639,7 +639,7 @@ typedef union {
 extern s32 D_0013CB14[];
 
 extern void FUN_L00_002118c8_c(s32, f32) __asm__("FUN_L00_002118c8");
-extern void FUN_L00_00211e30(s32, f32, f32, f32);
+extern void turn_to(s32, f32, f32, f32) __asm__("FUN_L00_00211e30");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void FUN_L00_002132b8(f32, f32);
@@ -665,7 +665,7 @@ void FUN_L00_002167d0(void) {
 
     FUN_L00_002118c8_c(0, 1.0f);
     f20 = 0.2f;
-    FUN_L00_00211e30(0, frame_scale_sq * 0.02f, frame_scale_sq * f20, frame_time * 3.66519141f);
+    turn_to(0, frame_scale_sq * 0.02f, frame_scale_sq * f20, frame_time * 3.66519141f);
     if (hero.state.current == HERO_STATE_WRENCH_COMBO) {
         if (hero.unk229C < f20) {
             hero.motion.move_yaw = hero.motion.rot.f[2];
@@ -989,8 +989,8 @@ void FUN_L00_00217118(float a, float b) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217AF0), where it is exact; names translated to the US level program. */
 
 extern int *D_L00_00177F00[];
-extern void FUN_L00_002336e8(float *dst, float *src, float h);
-extern void FUN_L00_002a7e20(void *, int);
+extern void f336e8_208820(float *dst, float *src, float h) __asm__("FUN_L00_002336e8");
+extern void fin_2a8028(void *, int) __asm__("FUN_L00_002a7e20");
 
 void FUN_L00_00217368(int a, int n) {
     if (n != 0) {
@@ -1006,8 +1006,8 @@ void FUN_L00_00217368(int a, int n) {
             if (t == 5 || t == 9) {
                 float v[4] __attribute__((aligned(16)));
                 qcopy(v, (char *)D_L00_00177F00[i] + 0x10);
-                FUN_L00_002336e8(v, v, 0.5f);
-                FUN_L00_002a7e20(v, 4);
+                f336e8_208820(v, v, 0.5f);
+                fin_2a8028(v, 4);
             }
         }
     }
@@ -1074,8 +1074,8 @@ typedef struct {
 } ThrowPvars_217658;
 
 extern f32 player_camera[] __asm__("D_L00_00166C80");
-extern int FUN_L00_00211360(void *);
-extern void FUN_L00_00233660(void *, f32, f32, f32);
+extern int f_fun_l00_00211360_227fa0(void *) __asm__("FUN_L00_00211360");
+extern void f233660_2133a8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern float FUN_001f9e90_c2(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_00216de8_c(int, int) __asm__("FUN_L00_00216de8");
@@ -1111,11 +1111,11 @@ void FUN_L00_00217658(void) {
     if (aimed) {
         target = hero.items[0].moby;
         has_target = 0;
-        if (target != NULL && FUN_L00_00211360(target)) {
+        if (target != NULL && f_fun_l00_00211360_227fa0(target)) {
             tpv = (ThrowPvars_217658 *)target->pvars;
             if (tpv->unk7E) {
                 has_target = 1;
-                FUN_L00_00233660(dir, 0.5f, 0.0f, 0.5f);
+                f233660_2133a8(dir, 0.5f, 0.0f, 0.5f);
                 fast_vec_sub(delta, tpv->unk50, dir);
                 hero.aim_yaw = FUN_001f9e90_c2(delta[0], delta[1]);
                 hero.aim_pitch = FUN_001f9e90_c2(vec_len_xy(delta), delta[2]);
@@ -1127,7 +1127,7 @@ void FUN_L00_00217658(void) {
         }
     }
     item = hero.items[0].moby;
-    if (!FUN_L00_00211360(item)) {
+    if (!f_fun_l00_00211360_227fa0(item)) {
         return;
     }
     hero.items[0].unk1A = 1;

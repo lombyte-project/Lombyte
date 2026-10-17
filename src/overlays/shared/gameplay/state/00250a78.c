@@ -10,7 +10,8 @@
 
 extern float square_root(float) __asm__("FUN_001f9988");
 
-void FUN_L03_00250a78(float *p, float a, float b) {
+void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
+void trooper_set_knockback(float *p, float a, float b) {
     float root = square_root((b + b) * p[4]);
     float x = (root + root) / p[4];
     p[7] = root;

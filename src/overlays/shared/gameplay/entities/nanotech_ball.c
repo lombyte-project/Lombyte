@@ -512,7 +512,8 @@ extern int func_L00_0028EF68_2D9EA0(int, int, void *, int) __asm__("FUN_L00_0028
 extern float func_001FA888_2D9EA0(int) __asm__("FUN_001fa6c0");
 extern float func_L00_00258E58_2D9EA0(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 
-void FUN_L00_002d89f0(Moby *moby) {
+void nanotech_ball_update(Moby *moby) __asm__("FUN_L00_002d89f0");
+void nanotech_ball_update(Moby *moby) {
     V_2D9EA0 v0, v10, v20, v30, v40, v50, v60;
     D_2D9EA0 *data = (D_2D9EA0 *)moby->pvars;
 
@@ -1417,8 +1418,8 @@ extern int queue_animation_update_alt(int,int,int,int,int,int,int) __asm__("FUN_
 extern s32 D_0015EEA4;
 extern s32 FUN_L00_002d9f78(void);
 extern void transpose_rotation_matrix(void *,void *) __asm__("FUN_001fa2d8");
-extern void FUN_L00_0020e4c8(void);
-extern void FUN_L00_0020e698(void);
+extern void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
+extern void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
 extern void hero_set_state_2(int,int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_002377b8(void);
 extern void FUN_L00_00237840(void);
@@ -1452,7 +1453,8 @@ extern void suck_reset(SuckMoby *) __asm__("FUN_L00_002ddca0");
 extern void suck_draw_reticle(int,int,float,float,int,int,int,float,int) __asm__("FUN_L00_001edf60");
 extern SuckAimHeight *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern float D_L00_00173E68 __attribute__((section(".data")));
-void FUN_L00_002da790(SuckMoby *self) {
+void suckcannon_update(SuckMoby *self) __asm__("FUN_L00_002da790");
+void suckcannon_update(SuckMoby *self) {
     SuckWork work;
     SuckCannon *cannon;
     SuckStats *stats;
@@ -1487,7 +1489,7 @@ void FUN_L00_002da790(SuckMoby *self) {
     case 1:
         if (self->anim_flags & 2) blend_moby_animation(self,1,0,scale_game_frames_alt(0));
         func_001F9908_r(&cannon->cooldown);
-        if (cannon->cooldown == 0) FUN_L00_0020e698();
+        if (cannon->cooldown == 0) fire_end_2cc608();
         if (suck_hero.count > 0) {
             blend_moby_animation(self,6,0,scale_game_frames_alt(4));
             self->state = 4;
@@ -1495,7 +1497,7 @@ void FUN_L00_002da790(SuckMoby *self) {
         }
         if ((suck_input.held & suck_hero.fire_buttons) && cannon->cooldown==0 && suck_hero.unk20A7==0 &&
             suck_hero.unk20AC==0 && scale_game_frames_alt(15) < suck_hero.ready_frames && FUN_L00_002d9f78()==0) {
-            FUN_L00_0020e4c8();
+            fire_start_2cc608();
             cannon->sound = allocate_voice_for_target_entry_alt(2,4,(int)self);
             cannon->cooldown = scale_game_frames_alt(10);
             stats = (SuckStats *)(((char *)&item_usage));
@@ -1515,7 +1517,7 @@ void FUN_L00_002da790(SuckMoby *self) {
                 if (s[1].owner==self && s[1].active) release_voice_slot(sound);
             }
             cannon->sound=-1;
-            FUN_L00_0020e698();
+            fire_end_2cc608();
             suck_hero.firing=0;
             if (suck_hero.count>0) {
                 blend_moby_animation(self,6,0,scale_game_frames_alt(4));
@@ -1540,7 +1542,7 @@ void FUN_L00_002da790(SuckMoby *self) {
         if (!(suck_hero.sucking || (suck_hero.count < (suck_item_variant.gold==0?5:10) &&
             FUN_L00_002d9f78()==0 && ((suck_input.held&suck_hero.fire_buttons) || cannon->cooldown) &&
             !suck_hero.unk20AC && !suck_hero.unk20A7))) {
-            FUN_L00_0020e698();
+            fire_end_2cc608();
             sound=cannon->sound;
             if(sound!=-1) {
                 SuckVoice *s=(SuckVoice *)(((char *)&D_0013E550))+sound;
@@ -1568,10 +1570,10 @@ void FUN_L00_002da790(SuckMoby *self) {
         break;
     case 4:
         func_001F9908_r(&cannon->cooldown);
-        if (!cannon->cooldown) FUN_L00_0020e698();
+        if (!cannon->cooldown) fire_end_2cc608();
         if (self->anim_flags&2) {
             blend_moby_animation(self,6,0,scale_game_frames_alt(0));
-            FUN_L00_0020e698();
+            fire_end_2cc608();
         }
         if (!(suck_input.held&suck_hero.fire_buttons)) cannon->blocked=0;
         if (func_001F9908_r(&cannon->target_timer) ||
@@ -1613,7 +1615,7 @@ void FUN_L00_002da790(SuckMoby *self) {
             (suck_input.held&suck_hero.fire_buttons) && suck_hero.control_mode!=7 && suck_hero.control_mode!=3 &&
             suck_hero.control_mode!=18 && suck_hero.control_mode!=17 && !suck_hero.unk20AC && !suck_hero.unk20A7 &&
             scale_game_frames_alt(22)<suck_hero.ready_frames) {
-            FUN_L00_0020e4c8();
+            fire_start_2cc608();
             blend_moby_animation(self,5,0,scale_game_frames_alt(2));
             suck_hero.firing=2;
             cannon->cooldown=scale_game_frames_alt(25);
@@ -2000,7 +2002,7 @@ extern B50_DD3D8 D_L00_001EA0B0;
 extern I6_DD3D8 D_L00_001EA100;
 extern I6_DD3D8 D_L00_001EA118;
 extern char *FUN_L00_002af450(char *, char *, int, int, int);
-extern char *FUN_L00_002d3838(char *, char *, int, char *);
+extern char *mine_camera_blast(char *, char *, int, char *) __asm__("FUN_L00_002d3838");
 extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern float D_0015ED6C;
@@ -2160,7 +2162,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
     }
     (*(Cam_DD3D8 *)D_L00_00166C80).f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
     (*(Cam_DD3D8 *)D_L00_00166C80).i168 = scale_game_frames_c(25);
-    FUN_L00_002d3838((char *)&blk, self + 0x10, 0, 0);
+    mine_camera_blast((char *)&blk, self + 0x10, 0, 0);
     if ((&D_0013E520)->b9) {
         k = func_L00_001F2BE8_DD3D8(3.0f, self + 0x10, 0x10, self, 0);
         *(u128_DD3D8 *)e = *(u128_DD3D8 *)(self + 0x10);
@@ -2344,7 +2346,8 @@ extern int func_001FA898_2DDEA0(float) __asm__("FUN_001fa6d0");
 extern int func_L00_00259B08_2DDEA0(void *, void *, float, int, float, int) __asm__("FUN_L00_00258ad0");
 extern void func_001E9730_2DDEA0(void *) __asm__("FUN_001e93b0");
 
-int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
+int hitreact_3DF8(struct Moby *moby, char *vars) __asm__("FUN_L00_002dc9f0");
+int hitreact_3DF8(struct Moby *moby, char *vars) {
     Frame_2DDEA0 work;
     R_2DDEA0 *record;
 
@@ -2850,7 +2853,7 @@ float FUN_001ff218_002ddf60(float) __asm__("FUN_001f99c0");
 float FUN_001ff800_002ddf60(float) __asm__("FUN_001f9de0");
 float FUN_00200130_002ddf60(float, float) __asm__("FUN_001fa5c8");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-float FUN_L00_001eb328(void *, float, float, float, float, float);
+float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 float FUN_00257be8_002ddf60(float, float) __asm__("FUN_002132a8");
 int random_integer_below(int) __asm__("FUN_00213260");
 void FUN_001f9598_002ddf60(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -2972,7 +2975,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
         delta = FUN_001ff398_002ddf60(&temp1, &temp2);
         length = FUN_001ff3d8_002ddf60(&temp1);
         angle = 1.5707964f - FUN_001ff818_002ddf60(delta / (length * D_L00_00161B84_lui));
-        sampled = FUN_L00_001eb328(D_L00_001E5FE0 + row * 4, 0.0f, angle, 0.06f, 0.2f, 0.0f);
+        sampled = rope_spring_turn(D_L00_001E5FE0 + row * 4, 0.0f, angle, 0.06f, 0.2f, 0.0f);
         delta = FUN_00200130_002ddf60(angle, sampled);
         /* Retail retains the comparison constant as the second angle argument. */
         if (FUN_001ff218_002ddf60(delta) > 0.31415927f)
@@ -3331,7 +3334,8 @@ extern void FUN_L00_002df4a8_u(void *) __asm__("FUN_L00_002df4a8");
 extern int D_L00_00161B90 __attribute__((sda));
 extern int D_L00_00161B94 __attribute__((sda));
 extern float D_L00_00161B98 __attribute__((sda));
-void FUN_L00_002df4f8(char *m) {
+void red_orb_update(char *m) __asm__("FUN_L00_002df4f8");
+void red_orb_update(char *m) {
     char *p = *(char **)(m + 0x78);
     unsigned char s = m[0x20];
     float a;

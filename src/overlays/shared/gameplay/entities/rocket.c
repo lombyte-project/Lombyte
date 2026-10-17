@@ -141,7 +141,8 @@ extern void burst_cc2e8(void *, void *, int, float, float) __asm__("FUN_L00_0025
 extern void sfx_cc2e8(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern void kill_cc2e8(void *) __asm__("FUN_0020c828");
 
-void FUN_L10_002cc2e8(char *m) {
+void rocket_update(char *m) __asm__("FUN_L10_002cc2e8");
+void rocket_update(char *m) {
     Shot_cc2e8 *d = *(Shot_cc2e8 **)(m + 0x78);
     float pos0[4] __attribute__((aligned(16)));
     float c[4] __attribute__((aligned(16)));

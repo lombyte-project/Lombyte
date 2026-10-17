@@ -134,7 +134,7 @@ typedef struct {
     s32 x20;
 } CollQuery;
 
-extern void FUN_L00_0025d1b8();
+extern void place_2ce1f0() __asm__("FUN_L00_0025d1b8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 rand(void) __asm__("FUN_001160d8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -149,7 +149,7 @@ void FUN_L01_002f9bf0(SwayMoby *m) {
 
     v = m->pvars;
     if (m->state == 0) {
-        FUN_L00_0025d1b8(m);
+        place_2ce1f0(m);
         m->state = 1;
         v->sway = random_float_between(-1.0f, 1.0f);
         v->dir = (rand() & 1) ? 1.0f : -1.0f;
@@ -334,7 +334,7 @@ typedef struct {
     u32 c[6];
 } BurstPalette;
 
-/* Light used by the flash; FUN_L00_002d3838 places it at a position. */
+/* Light used by the flash; mine_camera_blast places it at a position. */
 typedef struct {
     u8 pad_00[0x20];
     f32 r;
@@ -352,7 +352,7 @@ extern void FUN_L00_0026a9f0(void *, void *, u32, u32, f32, s32, s32, f32, s32, 
 extern s32 spawn_glow_particle(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
 /* allocate_voice_for_target_entry; the unit declares it under this name */
 extern s32 FUN_0022da68(s32, s32, void *);
-extern void FUN_L00_002d3838(void *, void *, s32, s32);
+extern void mine_camera_blast(void *, void *, s32, s32) __asm__("FUN_L00_002d3838");
 
 void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light)
 {
@@ -404,7 +404,7 @@ void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 
             D_L01_001E3440.b = 13.0f;
             D_L01_001E3440.r = 13.0f;
         }
-        FUN_L00_002d3838(&D_L01_001E3440, pos_p, 0, 0);
+        mine_camera_blast(&D_L01_001E3440, pos_p, 0, 0);
     }
 }
 #include "rnc/math/vector.h"
@@ -1245,7 +1245,7 @@ extern s32 D_L01_0015F580;
 void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern void FUN_L01_002787a0();
-extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
+extern void *debris302618(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *) __asm__("FUN_L00_00263fd8");
 extern void FUN_L01_00278e20();
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
@@ -1288,7 +1288,7 @@ void FUN_L01_002fd9a0(SparkMoby *m) {
             off.z = 0.0f;
             fast_vec_add(&off, &off, &m->pos);
             off.z += s * 1.2f;
-            FUN_L00_00263fd8(m, 0x719, &off, &rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
+            debris302618(m, 0x719, &off, &rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
                              &D_L01_0015F580);
         }
         FUN_L01_00278e20(m, 0x718);
@@ -1612,7 +1612,7 @@ typedef struct {
     u8 pad4C[0x2C];
     OrbVars *pvars;
 } OrbMoby;
-extern void FUN_L00_0025d1b8(OrbMoby *);
+extern void place_2ce1f0(OrbMoby *) __asm__("FUN_L00_0025d1b8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
@@ -1623,7 +1623,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
     m = create_moby(0x313);
     if (m != 0) {
         pv = m->pvars;
-        FUN_L00_0025d1b8(m);
+        place_2ce1f0(m);
         m->w40 = 0;
         m->h32 = 0x40;
         m->b30 = 0xFF;
@@ -1646,7 +1646,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002FABE8.c: func_L01_00301198), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_002d7e90(void *, float);
+extern char *spawn_burst(void *, float) __asm__("FUN_L00_002d7e90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
@@ -1694,7 +1694,7 @@ void FUN_L01_002ffdc0(struct Moby *moby) {
             effect_pos[0] = moby->pos.x;
             effect_pos[1] = moby->pos.y;
             effect_pos[2] = D_L01_001742E8;
-            effect = FUN_L00_002d7e90(effect_pos, 2.0f);
+            effect = spawn_burst(effect_pos, 2.0f);
             if (effect != 0) {
                 effect[0x23] = 0x70;
             }

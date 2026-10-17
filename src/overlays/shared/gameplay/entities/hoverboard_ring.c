@@ -19,7 +19,8 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char *FUN_L00_002743a8(float f0, float f1, int a0, void *pos, int timer, int flag,
                                        int col, float *vel);
 
-void FUN_L05_0031abe0(char *moby) {
+void hoverboard_ring_update(char *moby) __asm__("FUN_L05_0031abe0");
+void hoverboard_ring_update(char *moby) {
     switch (((unsigned char *)moby)[0x20]) {
     case 0:
         ((unsigned char *)moby)[0x30] = 0x80;
@@ -48,7 +49,7 @@ void FUN_L05_0031abe0(char *moby) {
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/vector.h"
 
-/* Vars of the level 5 mine FUN_L05_0031c8e0 drives. */
+/* Vars of the level 5 mine lamp_update drives. */
 struct MineVars_c8e0 {
     u8 pad0[0x60];
     s32 alpha;                     /* 0x60: glow alpha, faded out with camera distance */
@@ -104,7 +105,8 @@ extern char *FUN_L05_0031d160(unsigned char *);
 void FUN_L05_0031cf58(char *m);
 
 /* Mine update: sets its glow, fades it out with camera distance and blows up into debris, smoke and sparks when something touches it. */
-void FUN_L05_0031c8e0(struct Moby *moby) {
+void lamp_update(struct Moby *moby) __asm__("FUN_L05_0031c8e0");
+void lamp_update(struct Moby *moby) {
     struct MineVars_c8e0 *vars = (struct MineVars_c8e0 *)moby->pvars;
     Vec4 tip;
     Vec4 vel;
@@ -587,7 +589,7 @@ extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern void rotate_about_axis(void *out, void *v, void *axis, f32 ang) __asm__("FUN_00214890");
-extern float FUN_L00_001eb328(void *, float, float, float, float, float);
+extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float FUN_001ebd78(void *, float, float, float, float, float);
 
 /* Camera that orbits the hero while hero.unk88E is set, easing yaw, pitch and distance toward their goals. */
@@ -666,8 +668,8 @@ void FUN_L05_003298d8(Camera *cam) {
         normalize_vector_xyz(&fwd, &fwd, 1.0f);
         rotate_about_axis(&side, &side, &fwd, cam->pitch);
         add_vector_xyz(&cam->pos, focus, &side);
-        cam->yaw = FUN_L00_001eb328(&spring[3], cam->yaw, spring[0], spring[6], spring[9], 0.0f);
-        cam->pitch = FUN_L00_001eb328(&spring[4], cam->pitch, spring[1], spring[7], spring[10], 0.0f);
+        cam->yaw = rope_spring_turn(&spring[3], cam->yaw, spring[0], spring[6], spring[9], 0.0f);
+        cam->pitch = rope_spring_turn(&spring[4], cam->pitch, spring[1], spring[7], spring[10], 0.0f);
         cam->dist = FUN_001ebd78(&spring[5], cam->dist, spring[2], spring[8], spring[11], 0.0f);
         if (hero.unk88E == 0) {
             o->mode = 0;

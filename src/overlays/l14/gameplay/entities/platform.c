@@ -587,7 +587,7 @@ void FUN_L14_002d7490(struct Moby *m) {
 }
 #include "qzero.h"
 extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002de2b8");
-extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern float D_L14_00161AFC __attribute__((sda));
 
 void FUN_L14_002de1f8(struct Moby *moby) {
@@ -610,7 +610,7 @@ void FUN_L14_002de1f8(struct Moby *moby) {
         rotation = &moby->rot;
     }
     FUN_L14_002de2b8_call(moby, D_L14_00161AFC, 8.0f);
-    FUN_L00_00260738(data + 0x20, D_L14_0015F580, &old_rotation, rotation);
+    update_entity_matrix(data + 0x20, D_L14_0015F580, &old_rotation, rotation);
 }
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002ACCC0.c (func_L14_002DF6B8) */
 #include "eetypes.h"

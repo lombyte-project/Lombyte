@@ -77,7 +77,8 @@ void FUN_L00_002500b8(char *o) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002512D8), where it is exact; names translated to the US level program. */
 
 /* Clears slot idx of this level's 16-entry table to 0xFF. */
-void FUN_L00_002502a0(int idx) {
+void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
+void jet_clear_persistent(int idx) {
     if (idx != 0xFF) {
         visited52[idx + current_level_index * 16] = 0xFF;
     }

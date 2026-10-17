@@ -98,7 +98,7 @@ typedef struct {
     u8 pad29[0x15];
     s16 unk3E;
     u8 pad40[0x20];
-    u8 carry[0x40];      /* 0x60: carried-object state for FUN_L00_00260738 */
+    u8 carry[0x40];      /* 0x60: carried-object state for update_entity_matrix */
     u8 start_end;        /* 0xA0: 0 starts at the far end */
     u8 padA1[3];
     f32 t;               /* 0xA4: position along the path, 0 to 1 */
@@ -137,7 +137,7 @@ extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022D
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 FUN_L00_0025b8c0(f32 *, f32 *, f32, f32, f32, f32);
 extern void FUN_L14_002ac2b8(struct Moby *);
-extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -323,7 +323,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
         FUN_L14_002ac2b8(moby);
     }
     subtract_vector_xyz(&delta, &moby->pos, &orig);
-    FUN_L00_00260738(vars->carry, &delta, &moby->rot, &moby->rot);
+    update_entity_matrix(vars->carry, &delta, &moby->rot, &moby->rot);
     if (!FUN_L01_00277fb8(moby)) {
         if (2.0f < vector_distance(&moby->pos, &hero.motion.pos)) {
             if (vars->wait == 0) {
@@ -369,7 +369,7 @@ extern int FUN_L14_002b4500(int);
 extern int FUN_L14_002b4670(int);
 extern void blend_moby_animation_c618(struct Moby *, int, int, int) __asm__("FUN_00212f90");
 extern u8 *FUN_002141f8_c618(struct Moby *) __asm__("FUN_002141f8");
-extern void FUN_L00_0025a120(void *);
+extern void wake302618(void *) __asm__("FUN_L00_0025a120");
 extern void memset_c618(void *, int, int) __asm__("FUN_001f97e8");
 extern void attach_manipulator_c618(void *, s32, void *) __asm__("FUN_0020cb10");
 extern void lerp_vector_c618(void *, void *, void *, float) __asm__("FUN_001f9a40");
@@ -463,7 +463,7 @@ void FUN_L14_002ac618(struct Moby *m) {
     FUN_L14_002ad8b8(m);
     if (m->state > 0 && m->state < 7) {
         if (FUN_001f9b48(&m->pos, D_L14_001674C0) < 40.0f) {
-            FUN_L00_0025a120(m);
+            wake302618(m);
         }
         *(s16 *)(d + 0x200) = 0;
     }
@@ -2136,7 +2136,7 @@ extern int scale_game_frames_c(int) __asm__("FUN_001f96f8");
 extern float D_L14_00161540 __attribute__((sda));
 extern unsigned char *FUN_L14_002bb310_c(char *owner, float angle, char *posp) __asm__("FUN_L14_002bb310");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_0025a120(void *);
+extern void wake302618(void *) __asm__("FUN_L00_0025a120");
 extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L14_002b5290_c(unsigned char *m) __asm__("FUN_L14_002b5290");
 extern void FUN_L14_002b5428_c(char *moby) __asm__("FUN_L14_002b5428");
@@ -2193,7 +2193,7 @@ void FUN_L14_002b46e8(Moby_2B5938 *moby) {
     if (moby->f31 != 0) {
         if (distance_xyz(moby->pos, D_L14_001674C0) < 40.0f && moby->state != 0 && moby->state != 1 &&
             moby->state != 9) {
-            FUN_L00_0025a120(moby);
+            wake302618(moby);
         }
     }
     switch (moby->state) {
@@ -2542,13 +2542,13 @@ void FUN_L14_002b5428(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6780), where it is exact; names translated to the US level program. */
 
 extern int *D_L14_001B0BB0[];
-extern int FUN_L00_0025ff38(float a, char *m, char *b, int c, int d, int *e, int f);
+extern int activate_effect_l08(float a, char *m, char *b, int c, int d, int *e, int f) __asm__("FUN_L00_0025ff38");
 
 void FUN_L14_002b5530(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (moby->state != 0 && moby->state != 9) {
         int *p = D_L14_001B0BB0[*(int *)(data + 0xD4)];
-        FUN_L00_0025ff38(255.0f, moby, data + 0x70, 0, 0, p + 4, *p);
+        activate_effect_l08(255.0f, moby, data + 0x70, 0, 0, p + 4, *p);
         if (*(int *)(data + 0xB0) == 0) {
             *(int *)(data + 0xB0) = *(int *)(D_0013E533 + 0x2E9D);
         }
@@ -2644,7 +2644,7 @@ extern float random_float_between(float, float);
 extern int scale_game_frames(int);
 extern void build_look_at_matrix(void *, void *, void *, float);
 extern void FUN_L00_0026c6e8(void *, void *);
-extern void FUN_L00_002d3838(int, void *, int, int);
+extern void mine_camera_blast(int, void *, int, int) __asm__("FUN_L00_002d3838");
 extern char D_L14_001D88D0[] __asm__("D_L14_001D88D0");
 extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 extern PuffParticle *spawn_puff(void *, float, float, float, int, void *, float,
@@ -2704,7 +2704,7 @@ void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
         pos[2] = original_pos[2] + randf_sym(0.0f, 0.2f);
         FUN_L00_0026c6e8(pos, direction);
     }
-    FUN_L00_002d3838((int)D_L14_001D88D0, original_pos, 0, 0);
+    mine_camera_blast((int)D_L14_001D88D0, original_pos, 0, 0);
 }
 /* Points the mover at the second-to-last node of its active path and clears its offset. */
 

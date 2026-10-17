@@ -46,7 +46,7 @@ float FUN_L13_002ba088(int flag, int n, float x, float b, float c, float lo, flo
 
 extern char *func_0020D348_m(int);
 extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_0025d1b8(void *);
+extern void place_2ce1f0(void *) __asm__("FUN_L00_0025d1b8");
 
 unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
     unsigned char *moby = func_0020D348_m(moby_class);
@@ -58,7 +58,7 @@ unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
         moby[0xBC] = 0;
         qcopy(moby + 0x10, position);
         FUN_L00_00250df8(moby);
-        FUN_L00_0025d1b8(moby);
+        place_2ce1f0(moby);
     }
     return moby;
 }
@@ -147,7 +147,8 @@ extern void allocate_voice_for_target_entry_1cc8(int, int, void *) __asm__("FUN_
 extern void mark_moby_for_removal_1cc8(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_00262b00_1cc8(float, float, void *, void *, void *) __asm__("FUN_L00_00262b00");
 
-void FUN_L13_002e1cc8(char *moby) {
+void ammocrate_update(char *moby) __asm__("FUN_L13_002e1cc8");
+void ammocrate_update(char *moby) {
     int *vars = *(int **)(moby + 0x78);
     int hero_moby = ((char *)hero.ship_moby);
     int hit = 0;
@@ -403,7 +404,8 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern Tex_2E8040 D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
 extern V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160");
 
-void FUN_L13_002e6c08(Moby *m) {
+void rocket_update(Moby *m) __asm__("FUN_L13_002e6c08");
+void rocket_update(Moby *m) {
     Rocket_2E8040 *d = *(void **)&m->pvars;
     V4_2E8040 old;
     V4_2E8040 hitpos;

@@ -20,7 +20,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern int D_00141DC4 __attribute__((section(".data")));
 extern int D_L17_00179D10[];
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern int FUN_L00_0020d568(void);
+extern int fd568_208820(void) __asm__("FUN_L00_0020d568");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
@@ -33,7 +33,7 @@ extern void DebugPrint();
 extern void FUN_L00_002039a0(void);
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_002e8680(void);
-extern void FUN_L00_002e8970(int a, float x, float y);
+extern void spin_s(int a, float x, float y) __asm__("FUN_L00_002e8970");
 extern void FUN_L06_00239528(void);
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern char D_00141D54[];
@@ -197,7 +197,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             *(int *)(d + 0x2C) = 0;
             *(int *)(d + 0x30) = -1;
         }
-        if (scale_game_frames(0xE10) < *(int *)(d + 0x2C) && tgt != -1 && FUN_L00_0020d568() &&
+        if (scale_game_frames(0xE10) < *(int *)(d + 0x2C) && tgt != -1 && fd568_208820() &&
             D_L17_00179D10[0] == 0 && D_L17_00179D10[9] == -1 && D_0013D408_b[0xBC] != 0) {
             help_request(0x4E2E, 0x78);
             *(int *)(d + 0x30) = tgt;
@@ -224,7 +224,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
     case 2: {
         char *cam;
         FUN_L00_002e8680();
-        FUN_L00_002e8970((int)(D_L17_001600EC + (*(int *)(d + 0x44) << 7) + 0x30), 0.02617994f,
+        spin_s((int)(D_L17_001600EC + (*(int *)(d + 0x44) << 7) + 0x30), 0.02617994f,
                          0.0f);
         cam = D_L17_00167580;
         f = fast_arc_tan(*(float *)(D_L17_001600EC + ((*(int *)(d + 0x44) << 7) + 0x30)) -
@@ -241,7 +241,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         FUN_L00_002e8680();
         if (func_001F9908_i((int *)(d + 0x5C))) {
             char *cam;
-            FUN_L00_002e8970((int)(D_L17_001600EC + (*(int *)(d + 0x40) << 7) + 0x30), 0.02617994f,
+            spin_s((int)(D_L17_001600EC + (*(int *)(d + 0x40) << 7) + 0x30), 0.02617994f,
                              0.0f);
             cam = D_L17_00167580;
             f = fast_arc_tan(*(float *)(D_L17_001600EC + ((*(int *)(d + 0x40) << 7) + 0x30)) -
@@ -846,8 +846,8 @@ void FUN_L17_002f5260(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6ED0), where it is exact; names translated to the US level program. */
 
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
-extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
-                              float *v11, float scale, float *v12);
+extern void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+                              float *v11, float scale, float *v12) __asm__("FUN_L00_00263fd8");
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((section(".sdata")));
@@ -870,7 +870,7 @@ void FUN_L17_002f5390(struct Moby *m) {
         allocate_voice_for_target_entry(0, 0, (int)m);
         FUN_L00_00257470(m, 0, -1);
         FUN_L01_002787a0(m);
-        FUN_L00_00263fd8((char *)m, 0x753, &m->pos.x, &m->rot, 0, 0, D_L17_0015F580_macro,
+        debris302618((char *)m, 0x753, &m->pos.x, &m->rot, 0, 0, D_L17_0015F580_macro,
                          D_L17_0015F580_macro, 0.0f, D_L17_0015F580_macro);
         FUN_L00_00263e30(m, 0x756, 1, 0x756, 1, 1, 2);
         FUN_L01_00278e20(m, 0x755);
