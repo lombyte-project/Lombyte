@@ -364,16 +364,16 @@ extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN
 extern s32 hero_set_state(s32, s32) __asm__("FUN_L02_0022b728");
 extern u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d60");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
-extern void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
-extern s32 f_fun_l00_0020fe30_227fa0(void) __asm__("FUN_L00_0020fe30");
-extern s32 f_fun_l00_00211360_227fa0(struct Moby *) __asm__("FUN_L00_00211360");
-extern s32 f_fun_l00_00216de8_227fa0(s32, s32) __asm__("FUN_L00_00216de8");
-extern void f_fun_l00_00217658_227fa0(void) __asm__("FUN_L00_00217658");
-extern void f_fun_l00_00221ee0_227fa0(void) __asm__("FUN_L00_00221ee0");
-extern void f_fun_l00_00222158_227fa0(void) __asm__("FUN_L00_00222158");
+extern void FUN_L00_0020e4c8(void);
+extern s32 FUN_L00_0020fe30(void);
+extern s32 FUN_L00_00211360(struct Moby *);
+extern s32 FUN_L00_00216de8(s32, s32);
+extern void FUN_L00_00217658(void);
+extern void FUN_L00_00221ee0(void);
+extern void FUN_L00_00222158(void);
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
-extern void f_fun_l00_0029a6b0_227fa0(s32) __asm__("FUN_L00_0029a6b0");
+extern void FUN_L00_0029a6b0(s32);
 
 /*
  * Gadget button handling for the item in hero slot 0 (FUN_L00_00227fa0 twin).
@@ -417,13 +417,13 @@ s32 FUN_L02_0022ee00(void)
             (hero.state.control_mode == 4 && hero.unk418 != 0)) {
             if (hero.on_slip_ground == 0 && pad_pressed_within(buttons, scale_game_frames(7), &out0) != 0) {
                 moby = hero.items[0].moby;
-                if (moby != NULL && f_fun_l00_00211360_227fa0(moby) != 0 && moby->state == 0) {
+                if (moby != NULL && FUN_L00_00211360(moby) != 0 && moby->state == 0) {
                     if ((controller_state.held & 0xA) ||
                         ((hero.state.current == HERO_STATE_LOOK || hero.state.current == 0x1E) &&
                          scale_game_frames(0x14) < hero.state_timer)) {
                         if ((hero.state.current == HERO_STATE_LOOK || hero.state.current == 0x1E) &&
                             scale_game_frames(0x14) < hero.state_timer) {
-                            f_fun_l00_00217658_227fa0();
+                            FUN_L00_00217658();
                         } else {
                             hero_set_state(HERO_STATE_CROUCH_SWING, 1);
                         }
@@ -479,8 +479,8 @@ s32 FUN_L02_0022ee00(void)
         break;
 
     case 12:
-        f_fun_l00_00221ee0_227fa0();
-        f_fun_l00_00222158_227fa0();
+        FUN_L00_00221ee0();
+        FUN_L00_00222158();
         window = scale_game_frames(5);
         if (hero.air_frames.s != 0) {
             window = scale_game_frames(8);
@@ -509,10 +509,10 @@ s32 FUN_L02_0022ee00(void)
         break;
 
     case 31:
-        if (hero.vehicle_mode == 0 && f_fun_l00_0020fe30_227fa0() != 0) {
+        if (hero.vehicle_mode == 0 && FUN_L00_0020fe30() != 0) {
             if (pad_pressed_within(buttons, scale_game_frames(7), NULL) != 0 && D_00141660 == 0x1F &&
                 hero.items[0].moby->oclass == 0x1E3 && hero.unk22DE == 0) {
-                f_fun_l00_00216de8_227fa0(0x18, 0);
+                FUN_L00_00216de8(0x18, 0);
                 hero.unk22DE = 0x12;
                 hero.unk22DC = 1;
             }
@@ -523,7 +523,7 @@ s32 FUN_L02_0022ee00(void)
         if ((hero.state.control_mode == 0 || hero.state.control_mode == 1 || hero.state.control_mode == 2 ||
              hero.state.control_mode == 4 || hero.state.control_mode == 5) &&
             pad_pressed_within(buttons, scale_game_frames(8), NULL) != 0) {
-            f_fun_l00_0029a6b0_227fa0(0);
+            FUN_L00_0029a6b0(0);
         }
         break;
 
@@ -537,7 +537,7 @@ s32 FUN_L02_0022ee00(void)
                      (controller_state.pressed & buttons)) &&
                     get_ammo(-1) != 0) {
                     if (hero.unk20A8 == 0) {
-                        fire_start_2cc608();
+                        FUN_L00_0020e4c8();
                     }
                 } else if ((controller_state.held & buttons) && get_ammo(-1) == 0 &&
                            voice_is_playing(hero.items[0].moby, vars->voice) == 0) {
@@ -572,7 +572,7 @@ s32 FUN_L02_0022ee00(void)
                             (hero.state.control_mode == 1 && hero.unk229C < 0.7f)) {
                             hero_set_state(0x23, 1);
                         } else {
-                            fire_start_2cc608();
+                            FUN_L00_0020e4c8();
                         }
                     } else if (hero.items[0].moby != NULL) {
                         allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
@@ -604,7 +604,7 @@ s32 FUN_L02_0022ee00(void)
 
     case 21:
         if (hero.items[0].moby != NULL && (controller_state.pressed & buttons)) {
-            fire_start_2cc608();
+            FUN_L00_0020e4c8();
         }
         break;
     }

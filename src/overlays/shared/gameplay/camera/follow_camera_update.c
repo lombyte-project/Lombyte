@@ -804,8 +804,8 @@ extern char *D_L00_00166E00 __attribute__((section(".data")));
 extern char *FUN_L00_001eb1f8(int);
 
 /* Copies src to +0x80 of the object of entry 5 (from FUN_L00_001eb1f8 if needed). */
-void ea210_drawend(char *src) __asm__("FUN_L00_002ea9d8");
-void ea210_drawend(char *src) {
+void FUN_L00_002ea9d8(char *src);
+void FUN_L00_002ea9d8(char *src) {
     char *g = D_L00_00166E00;
     char *p;
     if (*(short *)(g + 0x86) != 5)
@@ -866,8 +866,8 @@ void FUN_001fa050_2eac18(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_2eac18(void *, void *) __asm__("FUN_001fa2b8");
 void FUN_001f9bf8_2eac18(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_2eac18(void *, void *, void *) __asm__("FUN_001f9a10");
-void ea210_hide(int mode) __asm__("FUN_L00_002eac18");
-void ea210_hide(int mode) {
+void FUN_L00_002eac18(int mode);
+void FUN_L00_002eac18(int mode) {
     char *g = D_L00_00166C80_2eac18;
     char *o = *(char **)(g + 0x180);
     FUN_L00_001eb448_2eac18();
@@ -1414,7 +1414,7 @@ void FUN_L00_002ebbd8(void *arg) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebe70.s", FUN_L00_002ebe70);
 #else
-extern void set_help_color_2059d8(float, float, float *) __asm__("FUN_L00_0025b868");
+extern void FUN_L00_0025b868(float, float, float *);
 extern void FUN_001ff2a8_2ebe70(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001ff500_2ebe70(float, void *, void *) __asm__("FUN_001f9bf8");
 extern float FUN_001ff7e8_2ebe70(float) __asm__("FUN_001f9dc8");
@@ -1457,12 +1457,12 @@ void FUN_L00_002ebe70(char *o) {
         target = 4.64f;
         rate = 2.0f;
     }
-    set_help_color_2059d8(target, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xa0));
-    set_help_color_2059d8(rate, frame_time * 4.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xb0));
+    FUN_L00_0025b868(target, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xa0));
+    FUN_L00_0025b868(rate, frame_time * 4.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xb0));
     if (hero.state.current == 0x2c && current_level_index == 14)
-        set_help_color_2059d8(rate + 0.25f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
+        FUN_L00_0025b868(rate + 0.25f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
     else
-        set_help_color_2059d8(rate - 0.5f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
+        FUN_L00_0025b868(rate - 0.5f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
 
     if (hero.state.current == 0x2c) {
         if ((current_level_index == 14 || current_level_index == 7 || current_level_index == 9) &&
@@ -1639,7 +1639,7 @@ void FUN_L00_002ec7b0(char *a) {
  *  - aim cameras: volume_camera_check -> volume_camera_aim.
  * Both run while the hero stands in one of the volumes the parameters name
  * (clip volumes and the FUN_L00_0025fa38 / FUN_L00_0025faf0 / path tests),
- * then end the camera with release_s and set `done`.
+ * then end the camera with FUN_L00_002e8388 and set `done`.
  */
 #include "rnc/gameplay/camera/follow_cam.h"
 #include "rnc/input/pad_state.h"

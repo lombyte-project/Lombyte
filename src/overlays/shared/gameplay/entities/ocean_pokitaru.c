@@ -164,13 +164,13 @@ extern void build_spherical_offset_089d0(void *, float, float, float) __asm__("F
 extern void no_op_089d0(void *, void *) __asm__("FUN_001e93e8");
 extern void add_vector_089d0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_089d0(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void make_hit_089d0(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
+extern void FUN_L00_00259858(float, void *, struct Moby *, int);
 extern int collision_line_089d0(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern float random_float_between_089d0(float, float) __asm__("FUN_002132a8");
 extern void reflect_089d0(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern int scale_game_frames_089d0(int) __asm__("FUN_001f96f8");
 extern int random_int_between_089d0(int, int) __asm__("FUN_L00_00257b90");
-extern char *spawn_spark_089d0(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
+extern char *FUN_L00_0026dd20_c(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void remove_moby_089d0(void *) __asm__("FUN_0020c828");
 extern int tick_countdown_089d0(int *) __asm__("FUN_001f9740");
 char *FUN_L11_00308670(float *pos, float *aim, float r1, float r2, float maxd);
@@ -237,7 +237,7 @@ void FUN_L11_003089d0(struct Moby *moby) {
         remove_moby_089d0(moby);
         return;
     }
-    make_hit_089d0(1.0f, &hit, moby, 0x10000);
+    FUN_L00_00259858(1.0f, &hit, moby, 0x10000);
     hit.oclass = moby->oclass;
     if (collision_line_089d0(old, &moby->pos, 0, vars->owner, &hit)) {
         for (i = 0; i < 5; i++) {
@@ -250,7 +250,7 @@ void FUN_L11_003089d0(struct Moby *moby) {
             normalize_vector_089d0(q, q, vector_length_089d0(r) * 0.5f);
             add_vector_089d0(q, r, q);
             normalize_vector_089d0(q, q, random_float_between_089d0(frame_time * 5.0f, frame_time * 9.0f));
-            spawn_spark_089d0(&moby->pos, q, 0x7F2F4F6F, random_int_between_089d0(scale_game_frames_089d0(10), scale_game_frames_089d0(15)), 90000.0f);
+            FUN_L00_0026dd20_c(&moby->pos, q, 0x7F2F4F6F, random_int_between_089d0(scale_game_frames_089d0(10), scale_game_frames_089d0(15)), 90000.0f);
         }
         remove_moby_089d0(moby);
         return;
@@ -311,7 +311,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void FUN_L00_001ff660(void *, void *, void *);
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -351,7 +351,7 @@ void FUN_L11_00309098(char *moby) {
             r[1] = random_float_between(-1.0f, 1.0f);
             r[2] = random_float_between(-1.0f, 1.0f);
             *(OvlQuad *)q = *(OvlQuad *)r;
-            reflect1688(r, data, D_L11_00174880);
+            FUN_L00_001ff660(r, data, D_L11_00174880);
             normalize_vector_xyz(q, q, vector_length_xyz(r) * 0.5f);
             add_vector_xyz(q, r, q);
             normalize_vector_xyz(q, q, random_float_between(frame_time * 5.0f, frame_time * 9.0f));

@@ -282,7 +282,7 @@ float FUN_L00_0025db00(float *out, float *p, OvlQuad *a, OvlQuad *b) {
     return FUN_001f9b80_25db00(p, out);
 }
 extern float fabs_25dcd8(float) __asm__("FUN_001f99c0");
-extern float db00_25dcd8(void *, void *, void *, void *) __asm__("FUN_L00_0025db00");
+extern float FUN_L00_0025db00_c(void *, void *, void *, void *) __asm__("FUN_L00_0025db00");
 extern float dist_25dcd8(void *, void *) __asm__("FUN_001f9b80");
 extern float dsq_25dcd8(void *, void *) __asm__("FUN_001f9b48");
 extern void b6b8_25dcd8(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
@@ -291,9 +291,9 @@ extern void vadd_25dcd8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vscl_25dcd8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern float dot_25dcd8(void *, void *) __asm__("FUN_001f9ab0");
-extern float da70_25dcd8(void *, void *, float) __asm__("FUN_L00_0025da70");
-float resolve_level_path_segment_point_2e7618(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
-float resolve_level_path_segment_point_2e7618(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) {
+extern float FUN_L00_0025da70_c(void *, void *, float) __asm__("FUN_L00_0025da70");
+float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r);
+float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) {
     OvlQuad d[2];
     OvlQuad c[1];
     OvlQuad e[1];
@@ -303,7 +303,7 @@ float resolve_level_path_segment_point_2e7618(OvlQuad *out, OvlQuad *p, OvlQuad 
     int i;
     if (r > 0.0f && fabs_25dcd8(((float *)p)[2] - ((float *)a)[2]) < r &&
         fabs_25dcd8(((float *)p)[2] - ((float *)b)[2]) < r) {
-        res = db00_25dcd8(out, p, a, b);
+        res = FUN_L00_0025db00_c(out, p, a, b);
         r = dist_25dcd8(a, out);
         u = dist_25dcd8(a, b);
         d[0] = *a;
@@ -342,17 +342,17 @@ float resolve_level_path_segment_point_2e7618(OvlQuad *out, OvlQuad *p, OvlQuad 
     }
     e[0] = *p;
     g[0] = *out;
-    return da70_25dcd8(e, g, 0.0f);
+    return FUN_L00_0025da70_c(e, g, 0.0f);
 }
 extern f32 path_distance_25df68(void *, void *, f32) __asm__("FUN_L00_0025da70");
 extern void clear_vector_25df68(void *) __asm__("FUN_001f99f8");
 extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, f32, s32)
     __asm__("FUN_L00_0025d808");
 
-s32 near_6570(s32 *path, OvlQuad *point, OvlQuad *nearest,
+s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
                        s32 *segment, f32 *fraction, s32 wrap,
-                       f32 limit, f32 step, f32 height_tolerance) __asm__("FUN_L00_0025df68");
-s32 near_6570(s32 *path, OvlQuad *point, OvlQuad *nearest,
+                       f32 limit, f32 step, f32 height_tolerance);
+s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
                        s32 *segment, f32 *fraction, s32 wrap,
                        f32 limit, f32 step, f32 height_tolerance) {
     OvlQuad work[4];
@@ -418,7 +418,7 @@ s32 near_6570(s32 *path, OvlQuad *point, OvlQuad *nearest,
         count = *path;
         previous = count - 1;
         previous = (best_segment + previous) % count;
-        distance = resolve_level_path_segment_point_2e7618(nearest, point,
+        distance = FUN_L00_0025dcd8(nearest, point,
             (OvlQuad *)(path + 4 + previous * 4),
             (OvlQuad *)(path + 4 + best_segment * 4), height_tolerance);
         *segment = previous;
@@ -430,7 +430,7 @@ s32 near_6570(s32 *path, OvlQuad *point, OvlQuad *nearest,
     }
     count = *path;
     if (best_segment < count - 1 || wrap) {
-        next_distance = resolve_level_path_segment_point_2e7618(&work[1], point,
+        next_distance = FUN_L00_0025dcd8(&work[1], point,
             (OvlQuad *)(path + 4 + best_segment * 4),
             (OvlQuad *)(path + 4 + ((best_segment + 1) % count) * 4),
             height_tolerance);
@@ -466,7 +466,7 @@ f32 normalize_rotation_l14(f32 a) {
 
 extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
-/* False for null; true for a moby outside f5e3b8_20d6b0's range or of class 0x1F6. */
+/* False for null; true for a moby outside FUN_L00_0025e3b8's range or of class 0x1F6. */
 int FUN_L00_0025e368(char *a) {
     int r;
     if (a == 0) {
@@ -732,9 +732,9 @@ extern int FUN_L00_00257b90(int, int);
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern unsigned col_2af5b8(unsigned, int) __asm__("FUN_L00_0025c0e8");
+extern unsigned FUN_L00_0025c0e8(unsigned, int);
 extern void FUN_L00_0025c088(int *, int *, int *, int);
-extern void rings1688(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
+extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
@@ -765,7 +765,7 @@ void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
         big = scale * 400000.0f;
         c0 = D_L00_001E9030;
         c1 = D_L00_001E9048;
-        rings1688(pos, &vel, c0.v[random_integer_below(6)], c1.v[random_integer_below(6)],
+        FUN_L00_0026a9f0(pos, &vel, c0.v[random_integer_below(6)], c1.v[random_integer_below(6)],
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
@@ -802,8 +802,8 @@ void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
 
 /* Spawns an explosion burst at `pos`: three random-coloured particles, two tinted particles when `owner` is set, and
    (when `flash` is nonzero) a light with intensity `flash` (or 13 if negative). */
-void explode_4318(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");
-void explode_4318(char *owner, char *pos, float scale, float flash) {
+void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash);
+void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
     Vy10 zero_vec;
     S6y10 c0;
     S6y10 c1;
@@ -817,7 +817,7 @@ void explode_4318(char *owner, char *pos, float scale, float flash) {
         big = scale * k5;
         c0 = D_L00_001E9030;
         c1 = D_L00_001E9048;
-        rings1688(pos, &zero_vec, col_2af5b8(c0.v[random_integer_below(6)], 1), col_2af5b8(c1.v[random_integer_below(6)], 1),
+        FUN_L00_0026a9f0(pos, &zero_vec, FUN_L00_0025c0e8(c0.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(c1.v[random_integer_below(6)], 1),
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
@@ -854,8 +854,8 @@ extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 /* Clamps vector a to length x: normalizes it to x when vector_length_xyz is longer. */
-void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");
-void vec_limit302618(void *a, float x) {
+void FUN_L00_0025f730(void *a, float x);
+void FUN_L00_0025f730(void *a, float x) {
     if (x < fast_vec_length(a)) {
         fast_vec_normalize(a, a, x);
     }
@@ -925,8 +925,8 @@ void FUN_L00_0025f8e0(f32 *v, f32 r) {
 extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFE0 __attribute__((sda));
 /* True for a moby inside the moby table whose class at 0xA6 is 0x1F4..0x21C. */
-s32 f5e3b8_20d6b0(u8 *m) __asm__("FUN_L00_0025e3b8");
-s32 f5e3b8_20d6b0(u8 *m) {
+s32 FUN_L00_0025e3b8(u8 *m);
+s32 FUN_L00_0025e3b8(u8 *m) {
     u32 v;
     if (m == 0) {
     bad:

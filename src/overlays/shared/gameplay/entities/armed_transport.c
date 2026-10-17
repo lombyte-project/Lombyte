@@ -41,9 +41,9 @@ extern short D_L16_00161D7C __attribute__((sda));
 extern short D_L16_00161D80;
 extern short D_L16_00161D88 __attribute__((sda));
 extern short D_L16_00161D8C __attribute__((sda));
-extern void *debris302618(char *, int, float *, void *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
+extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
+extern void FUN_L00_00257470(void *, int, int);
 extern void spawn_explosion(void*,void*,void*,float,float,int,int,int,float,float,float,int,float,float,int,int,int,int) __asm__("FUN_L00_0025e450");
 extern void FUN_L16_002e2b60(struct Moby *);
 extern void FUN_L16_002e2fa0(void *);
@@ -225,13 +225,13 @@ void armed_transport_update(char *m) {
         if (fast_dec_timer((int *)(d + 0x160)) || hero.vehicle_mode == 2) {
             spawn_explosion(m, D_L16_0015F580, m + 0x10, 0.0f, 0.0f, 20, 12, 8, 4.0f, 2.5f, 9.0f, -1, 2.0f, 0.0f,
                               0, 0, -1, 0);
-            debris302618(m, 0x634, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
+            FUN_L00_00263fd8(m, 0x634, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
                               D_L16_0015F580);
-            debris302618(m, 0x635, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
+            FUN_L00_00263fd8(m, 0x635, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
                               D_L16_0015F580);
-            debris302618(m, 0x636, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
+            FUN_L00_00263fd8(m, 0x636, (float *)(m + 0x10), m + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
                               D_L16_0015F580);
-            explode302618(m, 0, -1);
+            FUN_L00_00257470(m, 0, -1);
             mark_moby_for_removal(m);
             return;
         }

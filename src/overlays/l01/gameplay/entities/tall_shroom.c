@@ -78,7 +78,7 @@ extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 FUN_L00_002d8128(void *);
-extern s32 check_moby_c(f32, void *) __asm__("FUN_L01_00275690");
+extern s32 FUN_L01_00275690(f32, void *);
 
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
@@ -199,7 +199,7 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                     }
                     usage_stats.stat[13].level_mask = usage_stats.stat[13].level_mask | (1 << current_level_index_macro) | 0x80000000;
                     help_request(1, 1);
-                } else if (check_moby_c(255.0f, m2) != 0) {
+                } else if (FUN_L01_00275690(255.0f, m2) != 0) {
                     help_request(2, 2);
                 }
             }
@@ -236,7 +236,7 @@ extern f32 FUN_001f99c0(f32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
-extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void FUN_L00_001ff660(void *, void *, void *);
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32, f32,
                              s32, s32, s32, s32);
@@ -286,7 +286,7 @@ void FUN_L01_0030ba18(struct Moby *m) {
     if (tick_countdown_32(&v->timer) || hit) {
         if (hit) {
             if (D_L01_001742C0.have_normal) {
-                reflect1688(v, v, &D_L01_001742C0.normal);
+                FUN_L00_001ff660(v, v, &D_L01_001742C0.normal);
             } else {
                 clear_vector(v);
             }
@@ -586,7 +586,7 @@ extern s32 D_L01_0015F580;
 void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_L01_002787a0();
-extern void *debris302618(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *) __asm__("FUN_L00_00263fd8");
+extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
 extern void FUN_L01_00278e20();
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
@@ -612,7 +612,7 @@ void tall_shroom_update(TriggerMoby *obj) {
     case 2:
         allocate_voice_for_target_entry(0, 0, obj);
         FUN_L01_002787a0(obj);
-        debris302618(obj, 0x717, obj->pos, obj->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580,
+        FUN_L00_00263fd8(obj, 0x717, obj->pos, obj->rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580,
                          0.0f, &D_L01_0015F580);
         FUN_L01_00278e20(obj, 0x718);
         mark_moby_for_removal(obj);

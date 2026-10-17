@@ -306,8 +306,8 @@ extern unsigned char D_0015EDB7;
 void attach_manipulator() __asm__("FUN_0020cb10");
 void detach_manipulator() __asm__("FUN_0020cb88");
 /* While D_0015EDB7 is set attaches the manipulator, sets floats 0x20..0x28 to x; else detaches. */
-void sound302618(float x, int a, int b, unsigned char *p) __asm__("FUN_L00_00263ac8");
-void sound302618(float x, int a, int b, unsigned char *p) {
+void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
+void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p) {
     if (D_0015EDB7) {
         if (p[1] == 0)
             attach_manipulator();
@@ -396,8 +396,8 @@ s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 get_help_message_text() __asm__("FUN_001fdd10");
 void sprintf() __asm__("FUN_00116248");
 /* Calls sprintf on D_L00_00179118 with help message a and b; c frames (default 0xB4). */
-void f63db0_2c5be8(s32 a, s32 b, s32 c) __asm__("FUN_L00_00263db0");
-void f63db0_2c5be8(s32 a, s32 b, s32 c) {
+void FUN_L00_00263db0(s32 a, s32 b, s32 c);
+void FUN_L00_00263db0(s32 a, s32 b, s32 c) {
     if (c == -1)
         c = scale_game_frames(0xB4);
     sprintf(D_L00_00179118, get_help_message_text(a), b);
@@ -503,9 +503,9 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
-                       float *v11, float scale, float *v12) __asm__("FUN_L00_00263fd8");
-void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+                       float *v11, float scale, float *v12);
+void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12) {
     char *m = (char *)func_0020D348_m(cls);
     char *d;

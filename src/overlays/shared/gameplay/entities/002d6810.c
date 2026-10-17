@@ -77,14 +77,14 @@ extern void set_vector_length_xy(float, void *, void *) __asm__("FUN_001f9c48");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int voice_is_playing(int, int) __asm__("FUN_L00_0028d8c0");
 extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
-extern int light_67e8(float, float, float, float, float, void *) __asm__("FUN_L00_0023e738");
-extern void stop_n(int) __asm__("FUN_L00_0023e838");
+extern int FUN_L00_0023e738(float, float, float, float, float, void *);
+extern void FUN_L00_0023e838(int);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int FUN_L11_0030f270(void *);
-extern int fd568_208820(void) __asm__("FUN_L00_0020d568");
-extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
+extern int FUN_L00_0020d568(void);
+extern void FUN_L00_001ff290(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void apply_hit_ece00(int, void *) __asm__("FUN_L00_00259a88");
+extern void FUN_L00_00259a88(int, void *);
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void enqueue_timer_display(void *, void *) __asm__("FUN_L15_001f2ac8");
 extern void FUN_L15_002d79e8(char *);
@@ -135,7 +135,7 @@ void FUN_L15_002d6810(unsigned char *moby) {
     unsigned int *bits;
     if ((unsigned char)moby[0x20] != 0 && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x124))) {
         if (DATA_INT(0x84)) { STOP_VOICE(0x14); STOP_VOICE(0x80); }
-        if (DATA_INT(0x120) != -1) { stop_n(DATA_INT(0x120)); DATA_INT(0x120) = -1; }
+        if (DATA_INT(0x120) != -1) { FUN_L00_0023e838(DATA_INT(0x120)); DATA_INT(0x120) = -1; }
         return;
     }
     switch (moby[0x20]) {
@@ -202,7 +202,7 @@ next_path:      i -= 8; p += 8;
                     *(u128 *)((char *)data + 0xf0) = *(u128 *)(D_L15_001600EC + best[index] * 0x80 + 0x30);
                     *(u128 *)((char *)data + 0x100) = *(u128 *)(D_L15_001600EC + best[index+1] * 0x80 + 0x30);
                     *(u128 *)((char *)data + 0x110) = *(u128 *)((char *)data + 0x100);
-                    if (DATA_INT(0x120) == -1) DATA_INT(0x120) = light_67e8(8.0f, 0.0f, 1.0f, 1.0f, 0.5f, (char *)data + 0xf0);
+                    if (DATA_INT(0x120) == -1) DATA_INT(0x120) = FUN_L00_0023e738(8.0f, 0.0f, 1.0f, 1.0f, 0.5f, (char *)data + 0xf0);
                     else {
                         char *other;
                         other = (char *)D_L15_001808C0 + DATA_INT(0x120) * 0x20;
@@ -230,7 +230,7 @@ next_path:      i -= 8; p += 8;
             D_L15_0015F450 = random_float_between(128.0f, 255.0f); *(int *)&D_L15_0015F454_gp = 0;
             radius = random_float_between(5.0f, 8.0f); angle = random_angle_radians(); rotation = random_angle_radians();
             build_spherical_offset((char *)data + 0x110, radius, angle, rotation);
-            combine_velocity1688(vector, (char *)data + 0x110, &hero.motion.unkD0);
+            FUN_L00_001ff290(vector, (char *)data + 0x110, &hero.motion.unkD0);
             *(u128 *)((char *)data + 0x100) = *(u128 *)((char *)data + 0x110);
             *(u128 *)((char *)data + 0xf0) = *(u128 *)&hero.motion.unkD0;
             FUN_L15_002d79e8((char *)moby); FUN_L15_002d7bb0((struct Moby *)moby); enqueue_callback_list_1(FUN_L15_002d8710, moby);
@@ -240,7 +240,7 @@ next_path:      i -= 8; p += 8;
             set_vector_length_xy(1.0f, shot.pos, shot.pos);
             shot.type = 1; shot.oclass = *(unsigned short *)(moby + 0xa6);
             shot.pos[2] = 1.0f; shot.pos[3] = 5627.9248046875f; shot.state = 0;
-            apply_hit_ece00((int)hero.moby, &shot);
+            FUN_L00_00259a88((int)hero.moby, &shot);
             if ((unsigned char)moby[0x20] == 2) {
                 float x = DATA_FLOAT(0x50), y = DATA_FLOAT(0x54), z = DATA_FLOAT(0x58), w = DATA_FLOAT(0x5c);
                 D_L15_0015F448 = x; D_L15_0015F44C = y; D_L15_0015F450 = z; D_L15_0015F454 = w;
@@ -300,7 +300,7 @@ state_three: {
         triggers = (int *)((char *)data + 0x60);
             p = (int *)((char *)data + 0x74); i = 2;
             do { if (*p != -1) set_moby_color(moby_array + *p * 0x100, 0x40, 0x40, 0x40); p++; } while (--i >= 0);
-            if (DATA_INT(0x120) != -1) { stop_n(DATA_INT(0x120)); DATA_INT(0x120) = -1; }
+            if (DATA_INT(0x120) != -1) { FUN_L00_0023e838(DATA_INT(0x120)); DATA_INT(0x120) = -1; }
             if (DATA_SHORT(0x12)) enqueue_timer_display(FUN_L15_002d77c0, moby);
             if (DATA_INT(0x84)) { STOP_VOICE(0x14); STOP_VOICE(0x80); DATA_INT(0x84) = 0; }
             p = (int *)data; i = 3;
@@ -328,7 +328,7 @@ state_three: {
 
 finish:
     data = triggers; i = 3; other = (char *)&hero;
-    do { if (is_point_inside_clip_volume(((char *)other + 0x80), *data) && fd568_208820()) ((struct Hero *)other)->water_surface_z = *(float *)(D_L15_001600EC_gp + *data * 0x80 + 0x38); data++; } while (--i >= 0);
+    do { if (is_point_inside_clip_volume(((char *)other + 0x80), *data) && FUN_L00_0020d568()) ((struct Hero *)other)->water_surface_z = *(float *)(D_L15_001600EC_gp + *data * 0x80 + 0x38); data++; } while (--i >= 0);
 }
 #undef DATA_INT
 #undef DATA_SHORT
@@ -522,7 +522,7 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-unsigned char *emit_23e008(void *pos, int s, int color, int mode, int b, float *v, float x, float y, float z) __asm__("FUN_L00_00272060");
+unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x, float y, float z);
 extern void spawn_2d8fa0(void *, int, float, float, int, int, int, void *, float) __asm__("FUN_L00_00272060");
 extern char D_0013F6E0_2d8fa0[] __asm__("D_0013F5E0");
 extern s32 D_L15_00161CE0_2d8fa0 __asm__("D_L15_00161C60") __attribute__((sda));
@@ -837,7 +837,7 @@ extern void spark_s(void *, float, void *, int, float, float, int, int, int) __a
 extern void blast_s(void *, void *, float, float, int) __asm__("FUN_L00_0025f090");
 extern void FUN_0022da68_s(int, int, void *) __asm__("FUN_0022da68");
 extern void remove_s(void *) __asm__("FUN_0020c828");
-extern void trail_s(void *, float, int, float) __asm__("FUN_L07_0029b8d8");
+extern void FUN_L07_0029b8d8(void *, float, int, float);
 
 void FUN_L15_002e4380(unsigned char *m) {
     char *d = *(char **)(m + 0x78);
@@ -867,5 +867,5 @@ void FUN_L15_002e4380(unsigned char *m) {
     }
     qcopy(m + 0x10, next);
     if (D_L15_0015F5CC_s % 3 == 0)
-        trail_s(m, 30000.0f, 0, 0.1f);
+        FUN_L07_0029b8d8(m, 30000.0f, 0, 0.1f);
 }

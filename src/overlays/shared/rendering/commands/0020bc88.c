@@ -9,8 +9,8 @@ extern int *D_L02_001611B8[] __attribute__((section(".sdata")));
 extern char D_L02_001609A0[];
 /* Append a 0x154-tagged packet to the display list: header, qcopy of a static block,
    then four vector triples (a, b, m rows), a value `c` and a flag-dependent word. */
-void draw_quad51(long *m, int *b, int *a, long c, int flag) __asm__("FUN_L02_0020bc88");
-void draw_quad51(long *m, int *b, int *a, long c, int flag) {
+void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag);
+void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag) {
     int *p;
     long *q;
     D_L02_001611B8[2][0] = 0x10000009;

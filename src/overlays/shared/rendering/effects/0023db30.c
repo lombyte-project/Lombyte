@@ -15,15 +15,15 @@ typedef struct {
     float texcoords[8];
     u64 texture[4];
 } __attribute__((aligned(16))) Quad_0023db30;
-extern u64 get_texture_0023db30(int) __asm__("FUN_L00_001f9298");
-extern void getpos_0023db30(void *, int, void *) __asm__("FUN_L00_0024f728");
-extern void rotate_0023db30(float, void *, void *, void *) __asm__("FUN_L00_0025fc08");
-extern void cross_0023db30(void *, void *, void *) __asm__("FUN_L00_001ff3c0");
-extern void scale_0023db30(float, void *, void *) __asm__("FUN_L00_001ff500");
+extern u64 FUN_L00_001f9298(int);
+extern void FUN_L00_0024f728(void *, int, void *);
+extern void FUN_L00_0025fc08(float, void *, void *, void *);
+extern void FUN_L00_001ff3c0(void *, void *, void *);
+extern void FUN_L00_001ff500(float, void *, void *);
 extern void scale_to_0023db30(float, void *, void *) __asm__("FUN_L00_001ff300");
-extern void add_0023db30(void *, void *, void *) __asm__("FUN_L00_001ff278");
-extern void clear_0023db30(void *) __asm__("FUN_L00_001ff260");
-extern void draw_0023db30(void *, void *, int) __asm__("FUN_L00_001fd228");
+extern void FUN_L00_001ff278(void *, void *, void *);
+extern void FUN_L00_001ff260(void *);
+extern void FUN_L00_001fd228(void *, void *, int);
 extern char D_L00_0015FC0A;
 
 void FUN_L00_0023db30(void *m) {
@@ -37,7 +37,7 @@ void FUN_L00_0023db30(void *m) {
     int i;
     OvlVec4 *p; OvlVec4 *point1; OvlVec4 *copied_ptr; OvlVec4 *other_ptr;
 
-    texture = get_texture_0023db30(14);
+    texture = FUN_L00_001f9298(14);
     quad.colors[0] = 0x3ff08080;
     quad.colors[1] = 0x3ff08080;
     quad.colors[2] = 0x3ff08030;
@@ -54,24 +54,24 @@ void FUN_L00_0023db30(void *m) {
     quad.texcoords[5] = 1.0f;
     quad.texcoords[6] = 1.0f;
     quad.texcoords[7] = 1.0f;
-    getpos_0023db30(m, 0, &pos);
+    FUN_L00_0024f728(m, 0, &pos);
     four = 4.0f;
-    rotate_0023db30(-0.34906584f, &pos, &pos, &rot);
-    cross_0023db30(&rot, &pos, &normal);
-    scale_0023db30(1.0f, &rot, &rot);
-    cross_0023db30(&normal, &rot, &pos);
+    FUN_L00_0025fc08(-0.34906584f, &pos, &pos, &rot);
+    FUN_L00_001ff3c0(&rot, &pos, &normal);
+    FUN_L00_001ff500(1.0f, &rot, &rot);
+    FUN_L00_001ff3c0(&normal, &rot, &pos);
     base.f[3] = 1.0f;
     scale_to_0023db30(four, &scaled, &pos);
     scaled.f[3] = 1.0f;
-    add_0023db30(&offset, &scaled, &base);
+    FUN_L00_001ff278(&offset, &scaled, &base);
     qcopy(&copied, &pos);
-    add_0023db30(&other, &copied, &pos);
+    FUN_L00_001ff278(&other, &copied, &pos);
     {
         quarter = 0.25f;
         copied.f[3] = quarter;
         other.f[3] = 0.5f;
 
-        clear_0023db30(&quad.points[0]);
+        FUN_L00_001ff260(&quad.points[0]);
         quad.points[0].i[2] = 0;
         quad.points[0].f[3] = 1.0f;
         point1 = &quad.points[1];
@@ -80,14 +80,14 @@ void FUN_L00_0023db30(void *m) {
         quad.points[1].f[2] += minus_quarter;
         quad.points[1].f[0] = four * copied.f[3];
         quad.points[1].f[3] = 1.0f;
-        clear_0023db30(&quad.points[2]);
+        FUN_L00_001ff260(&quad.points[2]);
         quad.points[2].i[2] = 0;
         quad.points[2].f[3] = 1.0f;
         qcopy(&quad.points[3], &copied);
         quad.points[3].f[2] += quarter;
         quad.points[3].f[0] = four * copied.f[3];
         quad.points[3].f[3] = 1.0f;
-        draw_0023db30(&quad, &pos, 1);
+        FUN_L00_001fd228(&quad, &pos, 1);
 
         i = 1;
         p = point1;
@@ -102,7 +102,7 @@ void FUN_L00_0023db30(void *m) {
             i += 2;
             p += 2;
         } while (i < 4);
-        draw_0023db30(&quad, &pos, 1);
+        FUN_L00_001fd228(&quad, &pos, 1);
 
     }
     {
@@ -125,7 +125,7 @@ void FUN_L00_0023db30(void *m) {
         quad.points[3].f[0] = other_x;
         quad.points[3].f[2] += 0.25f;
         quad.points[3].f[3] = 1.0f;
-        draw_0023db30(&quad, &pos, 1);
+        FUN_L00_001fd228(&quad, &pos, 1);
         i = 0;
         p = quad.points;
         do {
@@ -139,7 +139,7 @@ void FUN_L00_0023db30(void *m) {
             i += 1;
             p += 1;
         } while (i < 4);
-        draw_0023db30(&quad, &pos, 1);
+        FUN_L00_001fd228(&quad, &pos, 1);
 
     }
     {
@@ -148,7 +148,7 @@ void FUN_L00_0023db30(void *m) {
         quad.points[0].f[0] = four * other.f[3];
         quad.points[0].f[2] += minus_quarter;
         quad.points[0].f[3] = 1.0f;
-        clear_0023db30(point1);
+        FUN_L00_001ff260(point1);
         other_x = 3.0f;
         quad.points[1].f[0] = four * copied.f[3] * other_x;
         quad.points[1].f[2] += *(float *)(&D_L00_0015FC0A - 0x102);
@@ -158,11 +158,11 @@ void FUN_L00_0023db30(void *m) {
         quarter = 0.25f;
         quad.points[2].f[2] += quarter;
         quad.points[2].f[3] = 1.0f;
-        clear_0023db30(&quad.points[3]);
+        FUN_L00_001ff260(&quad.points[3]);
         quad.points[3].f[0] = four * copied.f[3] * other_x;
         quad.points[3].i[2] = 0;
         quad.points[3].f[3] = 1.0f;
-        draw_0023db30(&quad, &pos, 1);
+        FUN_L00_001fd228(&quad, &pos, 1);
         i = 0;
         p = quad.points;
         do {
@@ -176,7 +176,7 @@ void FUN_L00_0023db30(void *m) {
             i += 2;
             p += 2;
         } while (i < 4);
-        draw_0023db30(&quad, &pos, 1);
+        FUN_L00_001fd228(&quad, &pos, 1);
     }
 }
 #endif
@@ -189,8 +189,8 @@ extern float rnda_23e008(void) __asm__("FUN_00213308");
 extern void dir_23e008(void *, float, float, float) __asm__("FUN_00214db0");
 extern float rnd_23e008(float, float) __asm__("FUN_L00_00257c48");
 extern int fr_23e008(int) __asm__("FUN_001f96f8");
-extern unsigned char *emit_23e008(float *, int, float, float, float, int, int, int,
-                                  void *) __asm__("FUN_L00_00272060");
+extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, int, int,
+                                  void *);
 extern int rf_23e008(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_0023e008(void *p) {
@@ -213,11 +213,11 @@ void FUN_L00_0023e008(void *p) {
         pos[0] += rnd_23e008(0.0f, 0.15f);
         pos[1] += rnd_23e008(0.0f, 0.15f);
         pos[2] += rnd_23e008(0.0f, 0.15f);
-        r = emit_23e008(pos, fr_23e008(0x3C), s * 0.1f, s, 0.009f, 0x7F7F2020, 0, k, dir);
+        r = FUN_L00_00272060(pos, fr_23e008(0x3C), s * 0.1f, s, 0.009f, 0x7F7F2020, 0, k, dir);
         if (r)
             r[9] = rf_23e008(4.0f) + 0x70;
         k = -k;
-        r = emit_23e008(pos, fr_23e008(0x3C), s * 0.07f, s * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, dir);
+        r = FUN_L00_00272060(pos, fr_23e008(0x3C), s * 0.07f, s * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, dir);
         if (r)
             r[9] = rf_23e008(4.0f) + 0x70;
     }
@@ -304,8 +304,8 @@ typedef struct {
 extern T_0023e738 D_L00_001804C0_0023e738[] __asm__("D_L00_001804C0");
 extern P_0023e738 D_L00_001802C0_0023e738[] __asm__("D_L00_001802C0");
 void FUN_001f9810_0023e738(void *, int) __asm__("FUN_001f9810");
-int light_67e8(u128 *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
-int light_67e8(u128 *v, float a, float b_0023e738, float c, float d, float e) {
+int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float e);
+int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float e) {
     int i;
     T_0023e738 *t;
     P_0023e738 *p;
@@ -334,8 +334,8 @@ extern char D_L00_001804C0[];
 void detach_point_light() __asm__("FUN_00201f88");
 void fast_mem_zero16() __asm__("FUN_001f9810");
 /* Detaches the point light and clears entry i of D_L00_001802C0 and D_L00_001804C0. */
-void stop_n(int i) __asm__("FUN_L00_0023e838");
-void stop_n(int i) {
+void FUN_L00_0023e838(int i);
+void FUN_L00_0023e838(int i) {
     detach_point_light();
     fast_mem_zero16(D_L00_001802C0 + i * 32, 32);
     fast_mem_zero16(D_L00_001804C0 + i * 48, 48);

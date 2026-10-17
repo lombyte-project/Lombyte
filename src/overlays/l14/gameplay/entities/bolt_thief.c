@@ -231,7 +231,7 @@ extern int mine_fall(void *,void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L14_002fea80(struct Moby *moby);
 extern float D_L14_00161FBC __attribute__((sda));
 extern float D_L14_00161FC0 __attribute__((sda));
-extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
+extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -241,7 +241,7 @@ extern void FUN_L14_002fec28(void *);
 extern void FUN_L14_002feca8(void *);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
-extern void turn_e50(char*,float,float*,float,float,float) __asm__("FUN_L00_00258278");
+extern void FUN_L00_00258278(char*,float,float*,float,float,float);
 
 /* Same routine as bolt_thief_update, without the child hit test. */
 void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L14_002fe2a0");
@@ -266,7 +266,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         trooper_start_knockback(moby, d->knock, 1, 1, 0,
                           fast_arc_tan(moby->position[0] - player->motion.pos.f[0], moby->position[1] - player->motion.pos.f[1]));
         d->ticks = 0x78;
-        explode302618(moby, 0, -1);
+        FUN_L00_00257470(moby, 0, -1);
         moby->state = 6;
     }
     moby->opacity = 0xFF;
@@ -315,7 +315,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
     case 1: {
         struct Hero *player = &hero;
 
-        turn_e50((char *)moby,
+        FUN_L00_00258278((char *)moby,
                                  fast_arc_tan(player->motion.pos.f[0] - moby->position[0], player->motion.pos.f[1] - moby->position[1]),
                                  &d->turn, 0.005f, 0.2f, 0.0f);
         FUN_L14_002feca8(moby);
@@ -420,7 +420,7 @@ extern int sample_path(char *, float *, float *, float *, int, float) __asm__("F
 extern float D_L14_00161FB8 __attribute__((sda));
 extern char *D_L14_001B0BB0[];
 extern void subtract_vector_xyz(void *, void *, void *);
-extern void turn_e50(char *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
+extern void FUN_L00_00258278(char *, float, float *, float, float, float);
 
 int FUN_L14_002fea80(struct Moby *moby) {
     float pos[4];
@@ -447,7 +447,7 @@ int FUN_L14_002fea80(struct Moby *moby) {
     subtract_vector_xyz(delta, pos, &moby->pos);
     if (absolute_float(delta[0]) > 0.01f) {
         if (absolute_float(delta[1]) > 0.01f) {
-            turn_e50(moby, fast_arc_tan(delta[0], delta[1]), (float *)(data + 0xF0),
+            FUN_L00_00258278(moby, fast_arc_tan(delta[0], delta[1]), (float *)(data + 0xF0),
                              D_L14_00161FBC, D_L14_00161FC0, 0.0f);
         }
     }

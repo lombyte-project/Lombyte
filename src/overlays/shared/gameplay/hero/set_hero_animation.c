@@ -632,8 +632,8 @@ typedef struct {
 
 extern int D_L00_0015F5C4;
 
-void f32fe8_208820(void) __asm__("FUN_L00_00232fe8");
-void f32fe8_208820(void) {
+void FUN_L00_00232fe8(void);
+void FUN_L00_00232fe8(void) {
     struct Hero *base = &hero;
     struct Hero *tail;
     struct Hero *last;
@@ -677,8 +677,8 @@ void f32fe8_208820(void) {
    block, as retail re-forms it from the saved %hi before each one. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233950), where it is exact; names translated to the US level program. */
 
-void f330d0_208820(void) __asm__("FUN_L00_002330d0");
-void f330d0_208820(void) {
+void FUN_L00_002330d0(void);
+void FUN_L00_002330d0(void) {
     struct Hero *base = &hero;
     struct Hero *blk2;
     struct Hero *blk3;
@@ -847,8 +847,8 @@ typedef struct {
 } V002334d0 __attribute__((aligned(16)));
 void FUN_001f9bf8_002334d0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002334d0(void *, void *, void *) __asm__("FUN_001f9a10");
-void f2334d0_2133a8(f32 *out, f32 *in, f32 k) __asm__("FUN_L00_002334d0");
-void f2334d0_2133a8(f32 *out, f32 *in, f32 k) {
+void FUN_L00_002334d0(f32 *out, f32 *in, f32 k);
+void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
     struct Hero *b = &hero;
     V002334d0 t;
     switch (b->unk20B3) {
@@ -900,8 +900,8 @@ void FUN_L00_002335c8(float *out, float r, float angle, float z) {
 
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 /* Builds (x, y, z), transforms it by the hero matrix at 0 and adds the hero position. */
-void f233660_2133a8(float *out, float x, float y, float z) __asm__("FUN_L00_00233660");
-void f233660_2133a8(float *out, float x, float y, float z) {
+void FUN_L00_00233660(float *out, float x, float y, float z);
+void FUN_L00_00233660(float *out, float x, float y, float z) {
     struct Hero *base;
 
     clear_u64_value(out);
@@ -913,9 +913,9 @@ void f233660_2133a8(float *out, float x, float y, float z) {
     add_vector_xyz(out, out, &base->motion.pos);
 }
 void FUN_L00_002334d0_002336e8(float) __asm__("FUN_L00_002334d0");
-/* Calls f2334d0_2133a8 with -x. */
-void f336e8_208820(float x) __asm__("FUN_L00_002336e8");
-void f336e8_208820(float x) {
+/* Calls FUN_L00_002334d0 with -x. */
+void FUN_L00_002336e8(float x);
+void FUN_L00_002336e8(float x) {
     FUN_L00_002334d0_002336e8(-x);
 }
 typedef unsigned int u128_00233708 __attribute__((mode(TI), aligned(16)));
@@ -970,8 +970,8 @@ void FUN_001f99f8_00233810(void *) __asm__("FUN_001f99f8");
 void FUN_001fa050_00233810(void *, void *) __asm__("FUN_001fa050");
 void FUN_001f9d20_00233810(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_00233810(void *, void *, void *) __asm__("FUN_001f9a10");
-void f233810_2133a8(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233810");
-void f233810_2133a8(f32 *out, f32 *in, f32 z) {
+void FUN_L00_00233810(f32 *out, f32 *in, f32 z);
+void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
     struct Hero *b = &hero;
     M00233810 m;
     V00233810 t;
@@ -1326,8 +1326,8 @@ extern float f_001fa580(float, float) __asm__("FUN_001fa580");
 extern float f_001f9dc8(float) __asm__("FUN_001f9dc8");
 extern float f_001f9de0(float) __asm__("FUN_001f9de0");
 extern void probe_ground_height_cf(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
-extern int f_L00_00260668(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
-extern void f_L00_002604f0(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
+extern int FUN_L00_00260668(int, void *, void *, void *, void *, void *);
+extern void FUN_L00_002604f0(int, void *, void *, void *, void *, void *);
 extern void f_001f99f8(void *) __asm__("FUN_001f99f8");
 extern float f_001f9b20(void *) __asm__("FUN_001f9b20");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
@@ -1395,13 +1395,13 @@ void FUN_L00_00233f80(void) {
                 v20.z -= -1.43f;
                 probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &v30, &v40);
                 probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v20, &((Hero_234800 *)hero_233f80)->v90, &v20, &v40);
-                f_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &v40);
-                f_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v20, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v330, &v40);
+                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &v40);
+                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v20, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v330, &v40);
             } else if (plat->i3C & 4) {
-                f_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &v20);
+                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &((Hero_234800 *)hero_233f80)->v310, &v20);
             } else {
                 probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v30, &v40);
-                f_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v30, &v40, &((Hero_234800 *)hero_233f80)->v310, &v20);
+                FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &v30, &v40, &((Hero_234800 *)hero_233f80)->v310, &v20);
             }
             ((Hero_234800 *)hero_233f80)->i364 |= 1;
         }
@@ -1410,7 +1410,7 @@ void FUN_L00_00233f80(void) {
     }
     if ((((Hero_234800 *)hero_233f80)->i208C == 0 || ((Hero_234800 *)hero_233f80)->i208C == 12) && ((Hero_234800 *)hero_233f80)->f184 == 0.0f && ((Hero_234800 *)hero_233f80)->h30E == 0) {
         if (!(((Hero_234800 *)hero_233f80)->i364 & 2)) {
-            f_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v20, &((Hero_234800 *)hero_233f80)->v320);
+            FUN_L00_00260668(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v20, &((Hero_234800 *)hero_233f80)->v320);
             ((Hero_234800 *)hero_233f80)->i364 |= 2;
         }
     } else {
@@ -1440,8 +1440,8 @@ void FUN_L00_00233f80(void) {
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &v20);
     } else if (mode == 2) {
         probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &v40, &v50);
-        f_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v310, &((Hero_234800 *)hero_233f80)->v320, &v60, &v70);
-        f_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v330, &((Hero_234800 *)hero_233f80)->v320, &v80, &v90);
+        FUN_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v310, &((Hero_234800 *)hero_233f80)->v320, &v60, &v70);
+        FUN_L00_002604f0(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v330, &((Hero_234800 *)hero_233f80)->v320, &v80, &v90);
         if ((((Hero_234800 *)hero_233f80)->i2084 == 1 || ((Hero_234800 *)hero_233f80)->i2084 == 0x1E) && ((Hero_234800 *)hero_233f80)->b20A5 != 0) {
             ((Hero_234800 *)hero_233f80)->v90.z = v50.z;
         } else if (((Hero_234800 *)hero_233f80)->i364 & 2) {
@@ -1496,8 +1496,8 @@ void FUN_L00_00233f80(void) {
 extern int FUN_L00_00262030(int, void *, void *, float);
 
 /* Sets the short at &hero.unk1F6 to 4 when FUN_L00_00262030 succeeds. */
-void f2347c0_2133a8(void) __asm__("FUN_L00_002347c0");
-void f2347c0_2133a8(void) {
+void FUN_L00_002347c0(void);
+void FUN_L00_002347c0(void) {
     struct Hero *base = &hero;
 
     if (FUN_L00_00262030(base->unk22DA, &base->motion.pos, &base->motion.pos,

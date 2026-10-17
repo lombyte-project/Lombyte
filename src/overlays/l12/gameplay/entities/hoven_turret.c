@@ -358,8 +358,8 @@ void FUN_L12_00302f30(Moby *moby) {
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
-extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
 extern void FUN_L08_00313ba8(void *);
 
 extern char D_L12_00161EF0 __attribute__((sda));
@@ -369,11 +369,11 @@ void FUN_L12_003032e8(struct Moby *moby) {
     FUN_L08_00313ba8(moby);
     transform_vector_by_basis(m, &D_L12_00161EF0, &moby->rot_row0);
     fast_vec_add(m, m, &moby->pos);
-    ea210_drawend(m);
+    FUN_L00_002ea9d8(m);
     m[4] = 0;
     m[5] = -*(float *)(data + 0x74);
     m[6] = fast_add_rotations(1.5707964f, moby->rot.z);
-    ea210_drawflush(m + 4);
+    FUN_L00_002eaa30(m + 4);
 }
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -499,7 +499,7 @@ typedef struct {
 } Hit_304920;
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern char *spawn_spark_089d0(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
+extern char *FUN_L00_0026dd20(void *, void *, int, int, float);
 extern char voice_pool[] __asm__("D_0013E550") __attribute__((section(".data")));
 extern f32 fast_add_rotations_c3(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
@@ -530,9 +530,9 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L12_002400d0(int, int);
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
+extern void FUN_L00_001fff28(void *, int, float);
 extern void FUN_L00_00211250(void);
-extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -689,7 +689,7 @@ void hoven_turret_update(struct Moby *moby) {
                     crot[2] = -1.7f;
 
                     D_L12_00161F00 = 0;
-                    ea210_camera(cpos, crot, 0, 1);
+                    FUN_L00_00216f90(cpos, crot, 0, 1);
                 }
                 moby->state = 5;
                 break;
@@ -730,7 +730,7 @@ void hoven_turret_update(struct Moby *moby) {
             if (data->f74 < D_L12_00161EA8) {
                 data->f74 = D_L12_00161EA8;
             }
-            set_joint_67e8(data->f10, 1, -data->f74);
+            FUN_L00_001fff28(data->f10, 1, -data->f74);
             if (moby->anim_flags & 2) {
                 blend_moby_animation_c(moby, 5, 0, 1);
             }
@@ -773,10 +773,10 @@ void hoven_turret_update(struct Moby *moby) {
                     normalize_vector_xyz(vel, vel, vector_length_xyz(dir) * (frame_scale_macro * (0.65f - 1.0f) + 1.0f));
                     add_vector_xyz(vel, dir, vel);
                     normalize_vector_xyz(vel, vel, random_float_between_c(D_0015ED6C_gp * 3.0f, D_0015ED6C_gp * 6.0f));
-                    spawn_spark_089d0(muz, vel, 0x5F2F4F6F, random_int_between(scale_game_frames_alt(5), scale_game_frames_alt(0xA)), 50000.0f);
+                    FUN_L00_0026dd20(muz, vel, 0x5F2F4F6F, random_int_between(scale_game_frames_alt(5), scale_game_frames_alt(0xA)), 50000.0f);
                 }
                 normalize_vector_xyz(dir, dir, D_0015ED6C_gp * 0.5f);
-                spawn_spark_089d0(muz, dir, 0x2F4F7F7F, random_int_between(scale_game_frames_alt(4), scale_game_frames_alt(7)), 500000.0f);
+                FUN_L00_0026dd20(muz, dir, 0x2F4F7F7F, random_int_between(scale_game_frames_alt(4), scale_game_frames_alt(7)), 500000.0f);
             }
             if (D_L12_001619A0 == 0) {
                 FUN_L12_003032e8_c((char *)moby);
@@ -868,7 +868,7 @@ extern int D_L12_00161F0C __attribute__((sda));
 extern int D_L12_00161F10 __attribute__((sda));
 extern int D_L12_00161F14 __attribute__((sda));
 extern void vu1_add_g_sregister_c(s32, u64) __asm__("func_00233980");
-void draw_quad51(long *m, int *b, int *a, long c, int flag) __asm__("FUN_L02_0020bc88");
+void FUN_L02_0020bc88(long *m, int *b, int *a, long c, int flag);
 extern long func_001F4868_3055F8(int) __asm__("FUN_001f44b8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float func_001FA7D8_3055F8(float) __asm__("FUN_001fa610");
@@ -1061,7 +1061,7 @@ extern int collect_mobies_in_sphere(void *, int, struct Moby *, void *, float) _
 extern int coll_sphere(void *, int, struct Moby *, float) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_0025b8c0_304e00(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern void spawn_explosion_304e00(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void explode302618(struct Moby *, int, int) __asm__("FUN_L00_00257470");
+extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void jet_animate(float, struct Moby *) __asm__("FUN_L00_00259fe8");
 extern void mark_moby_for_removal_304e00(struct Moby *) __asm__("FUN_0020c828");
 
@@ -1106,7 +1106,7 @@ void FUN_L12_00304e00(struct Moby *moby) {
         (hits >= 2 && source != NULL && source->moby->oclass != 0x4F5)) {
         spawn_explosion_304e00(moby, D_L12_0015F580, 0, 0.0f, 0.0f, 3, 3, 5,
             1.0f, 0.5f, 4.0f, 0.7f, 2, 7.0f, 0, 0, -1, 0);
-        explode302618(moby, 0, -1);
+        FUN_L00_00257470(moby, 0, -1);
         mark_moby_for_removal_304e00(moby);
         return;
     }

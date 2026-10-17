@@ -490,24 +490,24 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     for (i6 = 0; i6 < D_001603D0; i6++) {
         s32 cr;
         s32 cg;
-        s32 cb;
+        s32 FUN_L11_003192c8;
         u8 *cp;
         s32 k2;
 
         cp = D_001603E0 + i6 * 0x60;
         cr = 0;
         cg = 0;
-        cb = 0;
+        FUN_L11_003192c8 = 0;
         for (k2 = 0; k2 < 24; k2++) {
             cr += cp[0];
             cg += cp[1];
-            cb += cp[2];
+            FUN_L11_003192c8 += cp[2];
             cp += 4;
         }
         cr /= 24;
         cg /= 24;
-        cb /= 24;
-        *(s32 *)((u8 *)&D_001603DC[i6] + 0x1C) = (cb << 16) | (cg << 8) | cr;
+        FUN_L11_003192c8 /= 24;
+        *(s32 *)((u8 *)&D_001603DC[i6] + 0x1C) = (FUN_L11_003192c8 << 16) | (cg << 8) | cr;
     }
 
     D_0015FF18 = (Ent100 *)p;

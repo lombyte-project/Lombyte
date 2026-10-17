@@ -103,8 +103,8 @@ extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
-int path_e50(int idx, void *a, void *b, void *c) __asm__("FUN_L00_00261b48");
-int path_e50(int idx, void *a, void *b, void *c) {
+int FUN_L00_00261b48(int idx, void *a, void *b, void *c);
+int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
     float v[4], w[4], z[4], t[4], u[4];
     float best;
     float zero;

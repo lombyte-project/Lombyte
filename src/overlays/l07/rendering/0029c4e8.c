@@ -13,7 +13,7 @@
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int col_26fd28(float, float, float, float) __asm__("FUN_L00_0025bfe0");
+extern int FUN_L00_0025bfe0(float, float, float, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -24,7 +24,7 @@ void FUN_L07_0029c4e8(void *pos, void *pos2) {
     if (p) {
         float *f = (float *)(p + 0x20);
         qcopy(p + 0x10, pos);
-        *(int *)(p + 4) = col_26fd28(1.0f, 1.0f, 1.0f, 0.6f);
+        *(int *)(p + 4) = FUN_L00_0025bfe0(1.0f, 1.0f, 1.0f, 0.6f);
         p[9] = func_001FA898_r(4.0f) + 0x40;
         p[1] = 0;
         p[3] = 0x48;

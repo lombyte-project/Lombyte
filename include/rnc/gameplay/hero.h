@@ -199,7 +199,7 @@ struct HeroHealth {
  *   unk200 / unk210 - copied from the collision hit (FUN_L00_002133a8)
  *   unk458 / unk45C - speeds eased in and scaled into velocity (FUN_L02_00223450)
  *   unk22D2         - set on a pad bit-0x10 press (no C reader yet)
- *   unk22DA         - nonzero makes FUN_L00_002133a8 call f2347c0_2133a8
+ *   unk22DA         - nonzero makes FUN_L00_002133a8 call FUN_L00_002347c0
  * Item switching (hero_switch_item): a nonzero pending_item[i] that differs
  * moves into selected_item[i] and changes slot i; saved_item[i] keeps the
  * slot's item while 0x1C, 0x1D, 6 or 4 is forced in (0x26 when it was empty).
@@ -295,7 +295,7 @@ struct Hero {
     s16 unk30A;                    /* 0x30A */
     union { s16 s; u16 u; } frames_off_ground; /* 0x30C: read signed, incremented unsigned */
     union { s16 s; u16 u; } air_frames; /* 0x30E: frames off the ground, 0 on landing */
-    Vec4 unk310;                   /* 0x310: attach anchor position (written by f_L00_00260668, read by f_L00_002604f0) */
+    Vec4 unk310;                   /* 0x310: attach anchor position (written by FUN_L00_00260668, read by FUN_L00_002604f0) */
     Vec4 unk320;                   /* 0x320: attach anchor rotation */
     Vec4 unk330;                   /* 0x330: attach anchor second position */
     u8 pad_340[0x10];
@@ -595,7 +595,7 @@ struct Hero {
     f32 unkA68;                    /* 0xA68 */
     f32 speed_scale;               /* 0xA6C: multiplier on the run target in some states (target = frame_time * 5.7 * speed_scale); 1.0 normally */
     f32 unkA70;                    /* 0xA70 */
-    f32 aim_yaw;                   /* 0xA74: gadget aim yaw (f_fun_l00_00217658_227fa0) */
+    f32 aim_yaw;                   /* 0xA74: gadget aim yaw (FUN_L00_00217658) */
     f32 aim_pitch;                 /* 0xA78: gadget aim pitch */
     s32 unkA7C;                    /* 0xA7C */
     s32 unkA80;                    /* 0xA80 */

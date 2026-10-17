@@ -80,13 +80,13 @@ extern int D_0015ED94;
 extern ItemDef D_L05_00179F20[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int fd568_208820() __asm__("FUN_L00_0020d568");
-extern int f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
+extern int FUN_L00_0020d568();
+extern int FUN_L00_00216de8(int, int);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0020a500(void);
-extern void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
+extern void FUN_L00_0020e698(void);
 extern void FUN_L00_002cdcc0(void);
-s32 f_fun_l00_0020fe30_227fa0(void) __asm__("FUN_L00_0020fe30");
+s32 FUN_L00_0020fe30(void);
 void FUN_L00_0020fd80(int id);
 void FUN_L00_0020fde0(int id);
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -171,7 +171,7 @@ void FUN_L05_0023dc88(int i) {
     }
     if (i == 1) {
         struct Hero *g;
-        if (fd568_208820() || (&hero)->state.current == 0x12) {
+        if (FUN_L00_0020d568() || (&hero)->state.current == 0x12) {
             int v;
             g = &hero;
             v = *(int *)((char *)g + 0x1108);
@@ -237,7 +237,7 @@ void FUN_L05_0023dc88(int i) {
     flag4 = 0;
     if (i == 3) {
         struct Hero *g;
-        if (fd568_208820() || (&hero)->state.current == 0x12) {
+        if (FUN_L00_0020d568() || (&hero)->state.current == 0x12) {
             if (*(int *)(D_00141660 + 0xC) != 4) {
                 int v;
                 g = &hero;
@@ -292,10 +292,10 @@ void FUN_L05_0023dc88(int i) {
         sb = g->pending_item;
         s = sb + i;
         if (*s == 0x1F) {
-            if (f_fun_l00_0020fe30_227fa0()) {
+            if (FUN_L00_0020fe30()) {
                 int v;
                 if (*(short *)((char *)g + 0x22DE) == 0) {
-                    f_fun_l00_00216de8_227fa0(0x18, 0);
+                    FUN_L00_00216de8(0x18, 0);
                     *(short *)((char *)g + 0x22DE) = 0x12;
                     *(short *)((char *)g + 0x22DC) = 1;
                 }
@@ -365,7 +365,7 @@ void FUN_L05_0023dc88(int i) {
         FUN_L00_0020fde0(*(hero.selected_item + i));
         FUN_L00_0020fd80(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
-            fire_end_2cc608();
+            FUN_L00_0020e698();
         }
         if (i == 0) {
             if (*hero.selected_item == 8) {
@@ -413,7 +413,7 @@ extern u8 D_L05_0017AB20[] __attribute__((section(".data")));
 extern int FUN_L05_002388a0(float, float, float *) __asm__("FUN_L00_0020a240");
 extern float FUN_L00_0022e0f0(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern s32 f5e3b8_20d6b0(s32) __asm__("FUN_L00_0025e3b8");
+extern s32 FUN_L00_0025e3b8(s32);
 extern void FUN_L00_0025c9d8(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern int FUN_L00_0021e8d8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float FUN_L00_0022e138(void *, void *) __asm__("FUN_001f9b48");
@@ -445,7 +445,7 @@ void FUN_L05_0024bdc0(void) {
             hero.unk250 = fast_arc_tan(wall->normal_z, normal_xy);
             if (wall->moby != 0) {
                 hero.unk255 = 1;
-                if (f5e3b8_20d6b0(wall->moby)) hero.unk254 = 1;
+                if (FUN_L00_0025e3b8(wall->moby)) hero.unk254 = 1;
             }
         }
     }
@@ -612,12 +612,12 @@ extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0015ED84; /* no foreign declaration */
-extern int dec_byte_timer_edc30(void *) __asm__("FUN_L00_001fefc8");
+extern int FUN_L00_001fefc8(void *);
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d498(int);
 extern int FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
-extern int f_fun_l00_00211360_227fa0(void *) __asm__("FUN_L00_00211360");
-extern int f_fun_l00_00222158_227fa0(void) __asm__("FUN_L00_00222158");
+extern int FUN_L00_00211360(void *);
+extern int FUN_L00_00222158(void);
 extern int FUN_L00_00233e98(int);
 extern int FUN_L00_00266d60(int, int, int *);
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -626,11 +626,11 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned short D_00141920[] __attribute__((section(".data")));
 extern unsigned short D_00141D80[] __attribute__((section(".data")));
-extern void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
-extern void f_fun_l00_00217658_227fa0(void) __asm__("FUN_L00_00217658");
-extern void f_fun_l00_00221ee0_227fa0(void) __asm__("FUN_L00_00221ee0");
+extern void FUN_L00_0020e4c8(void);
+extern void FUN_L00_00217658(void);
+extern void FUN_L00_00221ee0(void);
 extern void FUN_L00_0024f7c8(void *, int, void *);
-extern void f_fun_l00_0029a6b0_227fa0(void *) __asm__("FUN_L00_0029a6b0");
+extern void FUN_L00_0029a6b0(void *);
 extern void FUN_L05_0024cee8(int, int);
 extern void FUN_L05_002d4168(void *, void *, void *, float, float);
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
@@ -680,7 +680,7 @@ int FUN_L05_00251be8(void) {
             if (item == 0) {
                 break;
             }
-            if (!f_fun_l00_00211360_227fa0(item)) {
+            if (!FUN_L00_00211360(item)) {
                 break;
             }
             if (item->state != 0) {
@@ -688,7 +688,7 @@ int FUN_L05_00251be8(void) {
             }
             if ((D_0013CA40_p2523C8.held & 0xA) || (((*(Hero *)((char *)&hero)).state.current == 1 || (*(Hero *)((char *)&hero)).state.current == 0x1E) && (*(Hero *)((char *)&hero)).state_timer > scale_game_frames_alt(0x14))) {
                 if (((*(Hero *)((char *)&hero)).state.current == 1 || (*(Hero *)((char *)&hero)).state.current == 0x1E) && (*(Hero *)((char *)&hero)).state_timer > scale_game_frames_alt(0x14)) {
-                    f_fun_l00_00217658_227fa0();
+                    FUN_L00_00217658();
                     break;
                 }
                 func_L05_0024D680_2523C8(0x15, 1);
@@ -775,8 +775,8 @@ int FUN_L05_00251be8(void) {
         {
             int window;
 
-            f_fun_l00_00221ee0_227fa0();
-            f_fun_l00_00222158_227fa0();
+            FUN_L00_00221ee0();
+            FUN_L00_00222158();
             window = scale_game_frames_alt(5);
             if ((*(Hero *)((char *)&hero)).air_frames.s != 0) {
                 window = scale_game_frames_alt(8);
@@ -823,14 +823,14 @@ int FUN_L05_00251be8(void) {
         if ((*(Hero *)((char *)&hero)).unk22DE != 0) {
             break;
         }
-        f_fun_l00_00216de8_227fa0(0x18, 0);
+        FUN_L00_00216de8(0x18, 0);
         (*(Hero *)((char *)&hero)).unk22DE = 0x12;
         (*(Hero *)((char *)&hero)).unk22DC = 1;
         break;
     case 32:
         if ((*(Hero *)((char *)&hero)).state.control_mode < 3U || (*(Hero *)((char *)&hero)).state.control_mode == 4 || (*(Hero *)((char *)&hero)).state.control_mode == 5) {
             if (FUN_L00_00266d60(mask, scale_game_frames_alt(8), 0)) {
-                f_fun_l00_0029a6b0_227fa0(0);
+                FUN_L00_0029a6b0(0);
             }
         }
         break;
@@ -846,7 +846,7 @@ int FUN_L05_00251be8(void) {
             if (((D_0013CA40_p2523C8.held & mask) && (*(Hero *)((char *)&hero)).items[0].unk20 > scale_game_frames_alt(5)) || (D_0013CA40_p2523C8.pressed & mask)) {
                 if (FUN_L00_00233e98(-1)) {
                     if ((*(Hero *)((char *)&hero)).unk20A8 == 0) {
-                        fire_start_2cc608();
+                        FUN_L00_0020e4c8();
                     }
                     break;
                 }
@@ -883,7 +883,7 @@ int FUN_L05_00251be8(void) {
                         || ((*(Hero *)((char *)&hero)).state.control_mode == 1 && (*(Hero *)((char *)&hero)).unk229C < 0.7f)) {
                         func_L05_0024D680_2523C8(0x23, 1);
                     } else {
-                        fire_start_2cc608();
+                        FUN_L00_0020e4c8();
                     }
                     break;
                 }
@@ -913,7 +913,7 @@ int FUN_L05_00251be8(void) {
     case 21:
         if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby) != 0) {
             if (D_0013CA40_p2523C8.pressed & mask) {
-                fire_start_2cc608();
+                FUN_L00_0020e4c8();
             }
         }
         break;
@@ -935,7 +935,7 @@ int FUN_L05_00251be8(void) {
             if (item == 0) {
                 break;
             }
-            if (dec_byte_timer_edc30(&(*(Hero *)((char *)&hero)).unk8CF) == 2 && (*(Hero *)((char *)&hero)).unk8CE != 0) {
+            if (FUN_L00_001fefc8(&(*(Hero *)((char *)&hero)).unk8CF) == 2 && (*(Hero *)((char *)&hero)).unk8CE != 0) {
                 (*(Hero *)((char *)&hero)).unk8CE--;
             }
             if ((*(Hero *)((char *)&hero)).unk8CE == 0) {
@@ -1114,7 +1114,7 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_001fa6d0(f32);
 extern f32 FUN_001f9b48(void *, void *);
 extern s32 FUN_L00_002591d0(void **, s32, s32, s32);
-extern s32 f2592b8_2591d0(void **, void *, s32, s32) __asm__("FUN_L00_002592b8");
+extern s32 FUN_L00_002592b8(void **, void *, s32, s32);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
 extern s32 D_0013D4B8;
@@ -1151,7 +1151,7 @@ void FUN_L05_00253b48(void) {
                             allocate_voice_for_target_entry(1, 0, hero.unk86C);
                     }
                 }
-                f2592b8_2591d0((void **)&first, first, 0, 0);
+                FUN_L00_002592b8((void **)&first, first, 0, 0);
             } while (first != 0);
         }
     }
@@ -1187,7 +1187,7 @@ void FUN_L05_00253b48(void) {
                             }
                         }
                     }
-                    f2592b8_2591d0((void **)&second, second, 0, 0);
+                    FUN_L00_002592b8((void **)&second, second, 0, 0);
                 } while (second != 0);
             }
         }
@@ -1211,7 +1211,7 @@ void FUN_L05_00253b48(void) {
                 *(s32 *)((u8 *)g + 0x20B8) = 0x24;
                 weapon_ammo_counts[36]++;
             }
-            f2592b8_2591d0((void **)&third, third, 0, 0);
+            FUN_L00_002592b8((void **)&third, third, 0, 0);
         }
     }
 }

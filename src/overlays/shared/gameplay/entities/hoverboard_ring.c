@@ -764,7 +764,7 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int collide_32B1F8(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern float fabs_32B1F8(float) __asm__("FUN_001f99c0");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void orbit_32B1F8(Camera_32B1F8 *) __asm__("FUN_L05_003298d8");
+extern void FUN_L05_003298d8_c(Camera_32B1F8 *) __asm__("FUN_L05_003298d8");
 
 extern float D_L05_00174278 __attribute__((section(".data")));
 void FUN_L05_00329ce8(Camera_32B1F8 *camera) {
@@ -869,7 +869,7 @@ void FUN_L05_00329ce8(Camera_32B1F8 *camera) {
         else if (focus_state->dist < focus_distance) focus_state->dist = focus_state->dist + 0.02f;
         else focus_state->dist = focus_state->dist - 0.02f;
     }
-    orbit_32B1F8(camera);
+    FUN_L05_003298d8_c(camera);
     qcopy(&focus_state->pos, &orbit->next);
     qcopy(&focus, &focus_state->pos);
     fast_vec_normalize(&offset, &focus_state->axis, focus_state->dist);

@@ -166,7 +166,7 @@ extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_00200510(float, float, float);
-extern float floor_height_4318(void *) __asm__("FUN_L00_00259710");
+extern float FUN_L00_00259710(void *);
 extern float dot_vectors_xyz(void *a, void *b);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
@@ -189,7 +189,7 @@ extern int FUN_L00_002aa2a8(W910 *, M910 *, int);
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 D_L00_00166DC0[];
 extern s32 D_L00_00173E40[0x1C];
-extern s32 f5e3b8_20d6b0(s32) __asm__("FUN_L00_0025e3b8");
+extern s32 FUN_L00_0025e3b8(s32);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -208,7 +208,7 @@ extern void *FUN_L00_0026bb70(void *, void *, int, int, float, int, int, int, in
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void FUN_L00_001ff660(void *, void *, void *);
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void jet_animate(unsigned char *, float) __asm__("FUN_L00_00259fe8");
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
@@ -380,7 +380,7 @@ void mine_update(M910 *m) {
                     V910 ov;
                     {
                         if (coll_hit.moby != 0 &&
-                            (f5e3b8_20d6b0((int)coll_hit.moby) != 0 ||
+                            (FUN_L00_0025e3b8((int)coll_hit.moby) != 0 ||
                              (coll_hit.moby->flags & 0x5000)) &&
                             coll_hit.moby->cls != m->cls && coll_hit.moby != hero.moby &&
                             coll_hit.moby != v->owner) {
@@ -394,14 +394,14 @@ void mine_update(M910 *m) {
                             if (v->vel.f[2] < frame_time * -9.8f) {
                                 m->bBC = 1;
                                 qcopy(&m->pos, &coll_hit.pos);
-                                reflect1688(&c, v, &coll_hit.nrm);
+                                FUN_L00_001ff660(&c, v, &coll_hit.nrm);
                                 normalize_vector_xyz(&c, &c, frame_time + frame_time);
                                 normalize_vector_xyz(&up, &coll_hit.nrm, 1.0f);
                             } else {
                                 qcopy(&m->pos, &coll_hit.pos);
                                 normalize_vector_xyz(t, &coll_hit.nrm, frame_time_sq * 9.7f);
                                 add_vector_xyz(&m->pos, &m->pos, t);
-                                reflect1688(v, v, &coll_hit.nrm);
+                                FUN_L00_001ff660(v, v, &coll_hit.nrm);
                                 scale_vector_xyz(v, v, 0.4f);
                                 normalize_vector_xyz(t, &coll_hit.nrm, 1.0f);
                                 dot_vectors_xyz(t, &up);
@@ -415,7 +415,7 @@ void mine_update(M910 *m) {
                                 v->vel.f[2] < frame_time * -9.8f) {
                                 m->bBC = 1;
                                 qcopy(&m->pos, &coll_hit.pos);
-                                reflect1688(&c, v, &coll_hit.nrm);
+                                FUN_L00_001ff660(&c, v, &coll_hit.nrm);
                                 normalize_vector_xyz(&c, &c, frame_time + frame_time);
                                 normalize_vector_xyz(&up, &coll_hit.nrm, 1.0f);
                             } else {
@@ -426,7 +426,7 @@ void mine_update(M910 *m) {
                                 normalize_vector_xyz(t, &coll_hit.nrm, frame_time_sq * 9.7f);
                                 add_vector_xyz(&m->pos, &m->pos, t);
                                 *(OvlQuad *)ov = v->vel.q;
-                                reflect1688(v, v, &coll_hit.nrm);
+                                FUN_L00_001ff660(v, v, &coll_hit.nrm);
                                 scale_vector_xyz(v, v, 0.6f);
                                 v->vel.f[2] *= 0.5f;
                                 if (v->f6C == 0.0f) {
@@ -676,7 +676,7 @@ void mine_update(M910 *m) {
                             m->bBC = 1;
                             break;
                         }
-                        if (f5e3b8_20d6b0((int)o) != 0) {
+                        if (FUN_L00_0025e3b8((int)o) != 0) {
                             goto next;
                         }
                         rg = range;
@@ -757,7 +757,7 @@ void mine_update(M910 *m) {
                                          1.5f);
                     }
                 }
-                gz = floor_height_4318(&m->pos);
+                gz = FUN_L00_00259710(&m->pos);
                 if (v->h50 != 0) {
                     V910 t;
                     V910 n;
@@ -767,7 +767,7 @@ void mine_update(M910 *m) {
                         int i;
                         int j;
                         int l;
-                        int cb;
+                        int FUN_L11_003192c8;
                         int cg;
                         int cr;
 
@@ -787,7 +787,7 @@ void mine_update(M910 *m) {
                         }
                         cr = 0x60;
                         cg = 0x60;
-                        cb = 0x7F;
+                        FUN_L11_003192c8 = 0x7F;
                         for (j = 0; j < 150; j++) {
                             float rr;
                             float ang;
@@ -807,15 +807,15 @@ void mine_update(M910 *m) {
                             n[2] -= rr * frame_time * 8.0f;
                             FUN_L00_002738e8(r, n, 0, random_float_between(0.35f, 1.25f), wz,
                                              frame_time_sq * 20.0f,
-                                             (0x16 << 24) | (cb << 16) | (cg << 8) | cr,
-                                             (cb << 16) | (cg << 8) | cr, 1);
+                                             (0x16 << 24) | (FUN_L11_003192c8 << 16) | (cg << 8) | cr,
+                                             (FUN_L11_003192c8 << 16) | (cg << 8) | cr, 1);
                         }
                         for (l = 0; l < 20; l++) {
                             int c1 = mine_blend_color(0x7F000000,
-                                                      (0x7F << 24) | (cb << 16) | (cg << 8) | cr,
+                                                      (0x7F << 24) | (FUN_L11_003192c8 << 16) | (cg << 8) | cr,
                                                       random_float_between(0.25f, 1.0f));
                             int c2 =
-                                mine_blend_color(0, ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2),
+                                mine_blend_color(0, ((FUN_L11_003192c8 / 2) << 16) | ((cg / 2) << 8) | (cr / 2),
                                                  random_float_between(0.5f, 1.0f));
                             float sz;
                             int life;
@@ -1657,7 +1657,7 @@ void bomb_update(BombMoby_2adb30 *m) {
         float t;
         int cr;
         int cg;
-        int cb;
+        int FUN_L11_003192c8;
         c.q = 0;
         c.f[0] = 128.0f;
         c.f[1] = 128.0f;
@@ -1667,8 +1667,8 @@ void bomb_update(BombMoby_2adb30 *m) {
         t = FUN_001fa6c0_2adb30(d->h6a) / FUN_001fa6c0_2adb30(FUN_001f96f8_2adb30(0x1E));
         cr = FUN_001fa6d0_2adb30((c.f[0] - 255.0f) * t + 255.0f);
         cg = FUN_001fa6d0_2adb30((c.f[1] - 64.0f) * t + 64.0f);
-        cb = FUN_001fa6d0_2adb30((c.f[2] - 64.0f) * t + 64.0f);
-        m->color = (cb << 16) | (0xFF << 24) | (cg << 8) | cr;
+        FUN_L11_003192c8 = FUN_001fa6d0_2adb30((c.f[2] - 64.0f) * t + 64.0f);
+        m->color = (FUN_L11_003192c8 << 16) | (0xFF << 24) | (cg << 8) | cr;
         if (d->h68 == 0) {
             if ((D_L00_0015F5CC_2adb30 & 7) == 0) {
                 int i;
@@ -1934,7 +1934,7 @@ void bomb_update(BombMoby_2adb30 *m) {
                     float wz;
                     int cr = 0x60;
                     int cg = 0x60;
-                    int cb = 0x7F;
+                    int FUN_L11_003192c8 = 0x7F;
                     int delay = 0;
                     v.q = m->pos.q;
                     v.f[2] += 3.5f;
@@ -1961,11 +1961,11 @@ void bomb_update(BombMoby_2adb30 *m) {
                             FUN_001f9a10_2adb30(&w, &w, &m->pos);
                             w.f[2] = gz + 0.5f;
                             v2.f[2] -= r * D_0015ED6C_2adb30 * 8.0f;
-                            FUN_L00_002738e8_2adb30(&w, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
+                            FUN_L00_002738e8_2adb30(&w, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (FUN_L11_003192c8 << 16) | (cg << 8) | cr, (FUN_L11_003192c8 << 16) | (cg << 8) | cr, 1);
                         }
                         for (j = 0; j < 20; j++) {
-                            int c0 = mine_blend_color(0x7F << 24, (0x7F << 24) | (cb << 16) | (cg << 8) | cr, FUN_002132a8_2adb30(0.25f, 1.0f));
-                            int c1 = mine_blend_color(0, ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2), FUN_002132a8_2adb30(0.5f, 1.0f));
+                            int c0 = mine_blend_color(0x7F << 24, (0x7F << 24) | (FUN_L11_003192c8 << 16) | (cg << 8) | cr, FUN_002132a8_2adb30(0.25f, 1.0f));
+                            int c1 = mine_blend_color(0, ((FUN_L11_003192c8 / 2) << 16) | ((cg / 2) << 8) | (cr / 2), FUN_002132a8_2adb30(0.5f, 1.0f));
                             float sz;
                             int life;
                             w.f[0] = FUN_002132a8_2adb30(-3.0f, 3.0f);
@@ -2063,9 +2063,9 @@ extern float D_0015ED70_2af5b8 __asm__("D_0015ED70");
 float rndf_2af5b8(float, float) __asm__("FUN_002132a8");
 void scale_2af5b8(void *, void *, float) __asm__("FUN_001f9bf8");
 int rndi_2af5b8(int) __asm__("FUN_00213260");
-int col_2af5b8(int, int) __asm__("FUN_L00_0025c0e8");
+int FUN_L00_0025c0e8_c(int, int) __asm__("FUN_L00_0025c0e8");
 int fr_2af5b8(int) __asm__("FUN_001f96f8");
-void spark_v(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 float app_2af5b8(float, float) __asm__("FUN_001fa580");
 void add_2af5b8(void *, void *, void *) __asm__("FUN_001f9a10");
 void kill_2af5b8(void *) __asm__("FUN_0020c828");
@@ -2090,11 +2090,11 @@ void debris_update(unsigned char *m) {
             *(OvlQuad *)&v = *(OvlQuad *)&t;
             scale_2af5b8(&v, &v, D_0015ED6C_2af5b8);
             if (m[0xBC] & 0xFE) {
-                int a = col_2af5b8(c.c[rndi_2af5b8(4)], m[0xBC] >> 1);
-                int b = col_2af5b8(0x4FFF, m[0xBC] >> 1);
-                spark_v(m + 0x10, &v, a, b, fr_2af5b8(0x2D), 0x32, 0x78, 1);
+                int a = FUN_L00_0025c0e8_c(c.c[rndi_2af5b8(4)], m[0xBC] >> 1);
+                int b = FUN_L00_0025c0e8_c(0x4FFF, m[0xBC] >> 1);
+                FUN_L00_00269958(m + 0x10, &v, a, b, fr_2af5b8(0x2D), 0x32, 0x78, 1);
             } else {
-                spark_v(m + 0x10, &v, c.c[rndi_2af5b8(4)], 0x4FFF, fr_2af5b8(0x2D), 0x32, 0x78,
+                FUN_L00_00269958(m + 0x10, &v, c.c[rndi_2af5b8(4)], 0x4FFF, fr_2af5b8(0x2D), 0x32, 0x78,
                             1);
             }
         }
@@ -2589,10 +2589,10 @@ extern void *FUN_L00_0026bb70(void *, void *, int, int, float, int, int, int, in
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void FUN_L00_001ff660(void *, void *, void *);
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-extern void rings1688(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
+extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset_c(void *, f32, f32, f32) __asm__("FUN_00214db0");
@@ -2602,29 +2602,29 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 void FUN_L00_0026a4c8(Q1688 *a, Q1688 *b, int c, int d, int n, float f);
-void spark1688(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
+void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
 void spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
 void FUN_L00_002affa8(char *self, O *out, char *skip);
 extern Impact1688 impact1688 __asm__("D_L00_00173E40");
 extern HeroMotion1688 hero_motion1688 __asm__("D_0013F350");
-extern float dot1688(void *) __asm__("FUN_L00_001ff430");
-extern void cross1688(void *,void *,void *) __asm__("FUN_L00_001ff2c0");
+extern float FUN_L00_001ff430_c(void *) __asm__("FUN_L00_001ff430");
+extern void FUN_L00_001ff2c0_c(void *,void *,void *) __asm__("FUN_L00_001ff2c0");
 extern float horizontal1688(void *) __asm__("FUN_001f9b20");
 extern float chase1688(void *,float,float,float,float,float) __asm__("FUN_L00_00258110");
 extern unsigned char *smoke1688(void *,void *,int,int,int,int,float,float,float,float,float) __asm__("FUN_L00_002712b8");
 extern void rotate1688(void *,void *,void *) __asm__("FUN_001f9cf8");
 extern float random_angle1688(void) __asm__("FUN_00213308");
 extern void axis_rotate1688(void *,void *,void *,float) __asm__("FUN_00214890");
-extern void spark1688(void *,void *,int,int,int,int,float) __asm__("FUN_L00_0026cbb0");
-extern void combine_velocity1688(void *,void *,void *) __asm__("FUN_L00_001ff290");
+extern void FUN_L00_0026cbb0(void *,void *,int,int,int,int,float);
+extern void FUN_L00_001ff290_c(void *,void *,void *) __asm__("FUN_L00_001ff290");
 extern int collision1688(void *,void *,int,void *,void *) __asm__("FUN_001efa68");
-extern void reflect1688(void *,void *,void *) __asm__("FUN_L00_001ff660");
-extern void matrix_scale1688(void *,void *,float) __asm__("FUN_L00_001ffd48");
-extern void matrix_add1688(void *,void *,void *) __asm__("FUN_L00_001ffe20");
+extern void FUN_L00_001ff660(void *,void *,void *);
+extern void FUN_L00_001ffd48_c(void *,void *,float) __asm__("FUN_L00_001ffd48");
+extern void FUN_L00_001ffe20_c(void *,void *,void *) __asm__("FUN_L00_001ffe20");
 extern void identity1688(void *) __asm__("FUN_001f9fc8");
 extern void transform1688(void *,void *,void *) __asm__("FUN_001f9d20");
-extern void rings1688(void *,void *,int,int,float,int,int,int,int,float) __asm__("FUN_L00_0026a9f0");
-extern void debris1688(void *,void *,int,int,float,int) __asm__("FUN_L00_0026a4c8");
+extern void FUN_L00_0026a9f0(void *,void *,int,int,float,int,int,int,int,float);
+extern void FUN_L00_0026a4c8_c(void *,void *,int,int,float,int) __asm__("FUN_L00_0026a4c8");
 
 void gold_devastator_missile_update(M910 *m) __asm__("FUN_L00_002b03a0");
 void gold_devastator_missile_update(M910 *m) {
@@ -2676,12 +2676,12 @@ void gold_devastator_missile_update(M910 *m) {
         if(d->track_velocity) {
             float b,a,root,t1,t2,denominator,negative_b;
             subtract_vector_xyz(&phase.vectors.relative,&phase.vectors.target,&d->previous_target);
-            cross1688(&predicted,&phase.vectors.relative,&hero_velocity);
+            FUN_L00_001ff2c0_c(&predicted,&phase.vectors.relative,&hero_velocity);
             qcopy(&d->previous_target,&phase.vectors.target);
-            a=dot1688(&phase.vectors.relative);
+            a=FUN_L00_001ff430_c(&phase.vectors.relative);
             b=(phase.vectors.relative.f[0]*phase.collision.dir[0]+phase.vectors.relative.f[1]*phase.collision.dir[1]+phase.vectors.relative.f[2]*phase.collision.dir[2])*-2.0f;
             a=d->speed*d->speed-a;
-            root=square_root_scalar(b*b-a*4.0f*-dot1688(phase.collision.dir));
+            root=square_root_scalar(b*b-a*4.0f*-FUN_L00_001ff430_c(phase.collision.dir));
             negative_b=-b;
             denominator=a+a;
             t1=(negative_b+root)/denominator;
@@ -2746,11 +2746,11 @@ void gold_devastator_missile_update(M910 *m) {
         axis_rotate1688(&phase.vectors.relative,&phase.vectors.relative,m->mtx,random_angle1688());
         {
             int color=FUN_L00_0025c0e8(0x4F007FFF,D_0013E520.bB);
-            spark1688(&smoke_position,&phase.vectors.relative,color,0x1FFFFFFF,scale_game_frames_alt(15),1,25000.0f);
+            FUN_L00_0026cbb0(&smoke_position,&phase.vectors.relative,color,0x1FFFFFFF,scale_game_frames_alt(15),1,25000.0f);
         }
     }
     qcopy(&previous,(&m->pos));
-    combine_velocity1688(phase.collision.dir,&motion,&hero_velocity);
+    FUN_L00_001ff290_c(phase.collision.dir,&motion,&hero_velocity);
     add_vector_xyz((&m->pos),(&m->pos),&motion);
     if(m->pos.f[0]<0.0f || m->pos.f[1]<0.0f || m->pos.f[2]<0.0f) {
         mine_spawn_drops(m,D_L00_001B0770);
@@ -2779,7 +2779,7 @@ void gold_devastator_missile_update(M910 *m) {
                 hit_normal=&hit->normal;
                 skip=m;
                 normalize_vector_xyz(&surface_motion,&surface_motion,1.0f);
-                reflect1688(&blast_velocity,&motion,hit_normal);
+                FUN_L00_001ff660(&blast_velocity,&motion,hit_normal);
                 normalize_vector_xyz(&blast_velocity,&blast_velocity,D_0015ED6C+D_0015ED6C);
                 normalize_vector_xyz(&normal,hit_normal,1.0f);
             }
@@ -2789,7 +2789,7 @@ void gold_devastator_missile_update(M910 *m) {
             subtract_vector_xyz(&surface_motion,&hit->velocity_end,&hit->velocity_start);
             hit_normal=&hit->normal;
             normalize_vector_xyz(&surface_motion,&surface_motion,1.0f);
-            reflect1688(&blast_velocity,&motion,hit_normal);
+            FUN_L00_001ff660(&blast_velocity,&motion,hit_normal);
             normalize_vector_xyz(&blast_velocity,&blast_velocity,D_0015ED6C+D_0015ED6C);
             normalize_vector_xyz(&normal,hit_normal,1.0f);
         }
@@ -2838,11 +2838,11 @@ void gold_devastator_missile_update(M910 *m) {
         for(remaining=0;remaining<particles;remaining++) {
             if(m->bBC==1) {
                 float a=random_angle1688();
-                matrix_scale1688(rotation_part,basis_squared,1.0f-fast_cos(a));
-                matrix_scale1688(diagonal,basis,fast_sin(a));
-                matrix_add1688(diagonal,diagonal,rotation_part);
+                FUN_L00_001ffd48_c(rotation_part,basis_squared,1.0f-fast_cos(a));
+                FUN_L00_001ffd48_c(diagonal,basis,fast_sin(a));
+                FUN_L00_001ffe20_c(diagonal,diagonal,rotation_part);
                 identity1688(rotation_part);
-                matrix_add1688(rotation,diagonal,rotation_part);
+                FUN_L00_001ffe20_c(rotation,diagonal,rotation_part);
                 transform1688(&predicted,&surface_motion,rotation);
                 normalize_vector_xyz(&predicted,&predicted,random_float_between(8.5f,16.5f)*D_0015ED6C*size);
             } else {
@@ -2893,10 +2893,10 @@ void gold_devastator_missile_update(M910 *m) {
             int life=FUN_L00_00257b90(scale_game_frames_alt(15),scale_game_frames_alt(20))-particle_reduction*7;
             int end=FUN_L00_00257b90(scale_game_frames_alt(25),scale_game_frames_alt(30))-particle_reduction*10;
             int white_life, white_end;
-            rings1688((&m->pos),&blast_velocity,c,f,400000.0f,life,end,0,0,speed);
+            FUN_L00_0026a9f0((&m->pos),&blast_velocity,c,f,400000.0f,life,end,0,0,speed);
             white_life=FUN_L00_00257b90(scale_game_frames_alt(5),scale_game_frames_alt(10))-particle_reduction*5;
             white_end=FUN_L00_00257b90(scale_game_frames_alt(15),scale_game_frames_alt(20))-particle_reduction*7;
-            rings1688((&m->pos),&blast_velocity,0x7FFFFFFF,0xFFFFFF,400000.0f,white_life,white_end,0,0,speed*0.5f);
+            FUN_L00_0026a9f0((&m->pos),&blast_velocity,0x7FFFFFFF,0xFFFFFF,400000.0f,white_life,white_end,0,0,speed*0.5f);
         }
         for(i=0;i<particles;i++) {
             Colors1688 color=D_L00_001E99F0;
@@ -2916,7 +2916,7 @@ void gold_devastator_missile_update(M910 *m) {
             f=FUN_L00_0025c0e8(fade.colors[random_integer_below(6)],D_0013E520.bB);
             debris_scale=size*200000.0f;
             life=FUN_L00_00257b90(scale_game_frames_alt(20),scale_game_frames_alt(35))-particle_reduction*10;
-            debris1688((&m->pos),&v,c,f,debris_scale,life);
+            FUN_L00_0026a4c8_c((&m->pos),&v,c,f,debris_scale,life);
         }
         if(D_L00_0015F5D0<0.95f && distance>9.0f) {
             int c=127,f=127;
@@ -2951,7 +2951,7 @@ void gold_devastator_missile_update(M910 *m) {
         d->target=0;
         m->bBC=0;
         normalize_vector_xyz(&impact1688.normal,&impact1688.normal,1.0f);
-        reflect1688(&bounce[0],&motion,&impact1688.normal);
+        FUN_L00_001ff660(&bounce[0],&motion,&impact1688.normal);
         m->rz=fast_arc_tan(bounce[0].f[0],bounce[0].f[1]);
         m->ry=-fast_arc_tan(horizontal1688(&bounce[0]),bounce[0].f[2]);
         d->yaw_velocity=0.0f; d->pitch_velocity=0.0f;

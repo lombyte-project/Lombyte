@@ -75,7 +75,7 @@ struct L11HitInfo {
 
 extern struct L11HitInfo *FUN_L00_0025a420_h(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 fun_00213928(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
-extern void explode_4318(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f3e8");
+extern void FUN_L00_0025f3e8(void *, void *, s32, f32, f32);
 extern s32 FUN_L11_0030a830(void *);
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern s32 FUN_001fa6d0(float);
@@ -83,7 +83,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, s32, s32, s32, float) __asm__("FUN_L00_0025c558");
-extern void explode302618(void *, s32, s32) __asm__("FUN_L00_00257470");
+extern void FUN_L00_00257470(void *, s32, s32);
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_00212f90(void *, s32, s32, s32);
@@ -107,7 +107,7 @@ void FUN_L11_00315968(struct Moby *moby) {
     if (d->carrier != -1 && moby->state != 0xB && moby->state != 9 && moby->state != 0x12 &&
         moby->state != 0x11 && moby->state != 0 && moby->state != 0xC && moby->state != 0xD) {
         if (moby->pos.z < ((struct Moby *)D_L11_0015FFD8)[d->carrier].pos.z + 0.5f) {
-            explode_4318(moby, &moby->pos, -1, 0.5f, 10.0f);
+            FUN_L00_0025f3e8(moby, &moby->pos, -1, 0.5f, 10.0f);
             mark_moby_for_removal(moby);
         }
     }
@@ -189,7 +189,7 @@ void FUN_L11_00315968(struct Moby *moby) {
                     moby->state = 0x12;
                 }
                 d->unk117 = 0xF0;
-                explode302618(moby, 0, -1);
+                FUN_L00_00257470(moby, 0, -1);
                 break;
             }
             case 11:
@@ -734,8 +734,8 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
-                       float *v11, float scale, float *v12) __asm__("FUN_L00_00263fd8");
+void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+                       float *v11, float scale, float *v12);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L11_00318488(struct Moby *);
 
@@ -792,9 +792,9 @@ void FUN_L11_00317c98(struct Moby *moby) {
             vec[2] += frame_scale * 0.08f;
             FUN_0022da68(2, 0, moby);
             cart_burst(moby, p1, -1, 3.0f, 13.0f);
-            debris302618((char *)moby, 0x602, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
-            debris302618((char *)moby, 0x603, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
-            debris302618((char *)moby, 0x784, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            FUN_L00_00263fd8((char *)moby, 0x602, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            FUN_L00_00263fd8((char *)moby, 0x603, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
+            FUN_L00_00263fd8((char *)moby, 0x784, (float *)p1, p2, scale_game_frames(0x5A), 0, vec, dv, frame_time_sq * 12.0f, dv);
             mark_moby_for_removal(moby);
         }
     }
@@ -882,8 +882,8 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void tick_countdown_32(int *arg0);
 extern void transform_vector_by_basis(void *, void *, void *);
-void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
-                       float *v11, float scale, float *v12) __asm__("FUN_L00_00263fd8");
+void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+                       float *v11, float scale, float *v12);
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 extern char *func_L11_0031C210_5(void *, void *, void *, int, float) __asm__("FUN_L11_0031ada0");
 extern void *func_L00_00265050_s(char *, int, void *, void *, int, int, float *, float *, float,
@@ -1207,7 +1207,7 @@ extern int random_integer_below_c2(int) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");
+extern void FUN_L00_0025f730(void *a, float x);
 extern void FUN_L11_00319670(void *);
 extern void FUN_L11_0031a1c0(void *);
 extern void FUN_L11_0031a438(void *);
@@ -1347,7 +1347,7 @@ void blarg_ship_update(struct Moby *moby) {
             advance_accelerated_scalar(&c0, (float *)(d + 0x6C), len, frame_time_sq + frame_time_sq,
                                        frame_time_sq * 20.0f, D_0015ED6C_n[1] * 5.0f);
         }
-        vec_limit302618(s0, *(float *)(d + 0x6C));
+        FUN_L00_0025f730(s0, *(float *)(d + 0x6C));
         add_vector_xyz(&moby->pos.x, &moby->pos.x, s0);
         if (moby->command) {
             if (moby->visible) {
@@ -1492,7 +1492,7 @@ char *FUN_L11_0031a7d8(int list) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
 
-extern int count_group_e3528(int, int) __asm__("FUN_L01_0026e008");
+extern int FUN_L01_0026e008(int, int);
 extern unsigned char D_0013D408[];
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry_alt(int, int, int) __asm__("FUN_0022db10");
@@ -1502,7 +1502,7 @@ void FUN_L11_0031aa80(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     if (data[0] == -1) {
         mark_moby_for_removal(moby);
-    } else if (data[1] != -1 && count_group_e3528(data[1], -1) == 0) {
+    } else if (data[1] != -1 && FUN_L01_0026e008(data[1], -1) == 0) {
         unsigned char *g = D_0013D408;
         if (g[0x13] == 0) {
             g[0x13] = 1;

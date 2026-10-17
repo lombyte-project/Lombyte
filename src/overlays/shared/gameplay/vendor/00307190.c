@@ -19,8 +19,8 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 
-char *projectile302618(char *pos, char *dir, int a2, int a3, int a4, int a5) __asm__("FUN_L08_00307190");
-char *projectile302618(char *pos, char *dir, int a2, int a3, int a4, int a5) {
+char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5);
+char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
     char *m = func_0020D348_m(0x50C);
     if (m != 0) {
         char *d;
@@ -51,10 +51,10 @@ extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68")
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
+extern void FUN_L00_001ff290(void *, void *, void *);
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void spark_v(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
@@ -80,9 +80,9 @@ void FUN_L08_00307298(char *m) {
             float f = random_float_between_alt(0.95f, 0.985f);
             scale_vector_xyz(sc, d, f);
             normalize_vector_xyz(off, d, -0.1f);
-            combine_velocity1688(tmp, off, m + 0x10);
+            FUN_L00_001ff290(tmp, off, m + 0x10);
             a = scale_game_frames(random_int_between(0xF, 0x14));
-            spark_v(off, sc, 0x6F00AFFF, 0xFF, a, 0x28,
+            FUN_L00_00269958(off, sc, 0x6F00AFFF, 0xFF, a, 0x28,
                              scale_game_frames(random_int_between(7, 0xA)), 1);
         }
         add_vector_xyz(m + 0x10, m + 0x10, d);

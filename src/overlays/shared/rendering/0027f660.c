@@ -14,7 +14,7 @@
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int col_26fd28(float, float, float, float) __asm__("FUN_L00_0025bfe0");
+extern int FUN_L00_0025bfe0(float, float, float, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_002678b8(int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -25,7 +25,7 @@ void FUN_L01_0027f660(char *pos, char *vel) {
     if (p != 0) {
         char *q = (char *)p + 0x20;
         qcopy(p + 0x10, pos);
-        *(int *)(p + 4) = col_26fd28(0.425f, 0.425f, 0.225f, 1.0f);
+        *(int *)(p + 4) = FUN_L00_0025bfe0(0.425f, 0.425f, 0.225f, 1.0f);
         p[9] = func_001FA898_r(8.0f) - 0x60;
         p[1] = 0;
         p[3] = 0x48;
@@ -233,8 +233,8 @@ typedef struct {
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-int closest302618(void *arg0, List *arg1, float target) __asm__("FUN_L01_0028b510");
-int closest302618(void *arg0, List *arg1, float target) {
+int FUN_L01_0028b510(void *arg0, List *arg1, float target);
+int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
     int best = 0;
     int i;
     float bestDiff = 1e11f;
@@ -247,8 +247,8 @@ int closest302618(void *arg0, List *arg1, float target) {
     }
     return best;
 }
-int project_2E39E0(char *a0, List *list, char *pt, char *out) __asm__("FUN_L01_0028b5e0");
-int project_2E39E0(char *a0, List *list, char *pt, char *out) {
+int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out);
+int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out) {
     int idx0 = -1;
     int idx1 = -1;
     float best0 = 10000.0f;

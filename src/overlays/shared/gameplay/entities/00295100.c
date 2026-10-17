@@ -350,8 +350,7 @@ void memset_298840(void *, int, int) __asm__("FUN_001f97e8");
 void f2039a0_298840(void) __asm__("FUN_L00_002039a0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void f232fe8_298840(void) __asm__("FUN_L00_00232fe8");
-int f2451b8_298840(int) __asm__("FUN_L00_002451b8");
-int f1f96f8_298840(int) __asm__("FUN_001f96f8");
+int FUN_L00_002451b8_c(int) __asm__("FUN_L00_002451b8");
 void f1f4a58_298840(int) __asm__("FUN_001f4a58");
 void update_world_object_animation(void) __asm__("FUN_00204790");
 void f22ca50_298840(void) __asm__("FUN_0022ca50");
@@ -398,8 +397,8 @@ void start_scene(int a) {
         active_scene_trigger.moby->flags |= 1;
     if (D_L00_001B9CF0.unkEC)
         ((struct Moby *)D_L00_001B9CF0.unkEC)->flags |= 1;
-    f2451b8_298840(0);
-    f1f4a58_298840(f1f96f8_298840(6));
+    FUN_L00_002451b8_c(0);
+    f1f4a58_298840(scale_game_frames(6));
     update_audio_stream_until_idle(1);
     update_world_object_animation();
     for (o = D_L00_0015FFDC_298840; o->st != 0xFF; o++) {
@@ -413,7 +412,7 @@ void start_scene(int a) {
     }
     D_L00_0016C860_298840.x48 = -3;
     f215b10_298840();
-    f2451b8_298840(1);
+    FUN_L00_002451b8_c(1);
     for (i = 0; D_L00_0016C860_298840.x48 < i; i--)
         f122298_298840(0);
 }
@@ -468,8 +467,7 @@ float absolute_float(float) __asm__("FUN_001f99c0");
 void f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
 void f216f90_298b18(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void fun_00216c48(F_298b18 *, void *, int) __asm__("FUN_00216c48");
-int f1f96f8_298b18(int) __asm__("FUN_001f96f8");
-void f265880_298b18(int) __asm__("FUN_L00_00265880");
+void FUN_L00_00265880(int);
 void FUN_L00_00298b18(void) {
     O_298b18 *o;
     float f, g;
@@ -520,7 +518,7 @@ void FUN_L00_00298b18(void) {
         active_scene_trigger.trigger = 0;
         fun_00216c48(a, b, 1);
     }
-    f265880_298b18(f1f96f8_298b18(0x1E));
+    FUN_L00_00265880(scale_game_frames(0x1E));
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -846,7 +844,7 @@ extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
 extern void music_stop(void) __asm__("FUN_00215ee8");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
-extern void ea210_stop(void) __asm__("FUN_L00_002039a0");
+extern void FUN_L00_002039a0(void);
 extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(void *, u8 *);
 extern void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
@@ -868,7 +866,7 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     D_L00_00161050_macro = language;
     D_L00_0015F5D8 = 1;
     fade_to_black(4);
-    ea210_stop();
+    FUN_L00_002039a0();
     D_L00_0015F5C4_macro = 1;
     D_L00_00161054_macro = D_L00_00173E04_lui;
     D_L00_00161058_macro = D_L00_0015F40C_macro;
@@ -1215,8 +1213,8 @@ extern u8 D_0013D4C0[];
 extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
 /* Builds the vendor list: the stocked items (up to 12, 0xFF-terminated), then
    every other available item (D_0013D4C0 set, h8 non-zero) not already listed. */
-void build_list_29a6b0(s32 skip_unflagged) __asm__("FUN_L00_0029a400");
-void build_list_29a6b0(s32 skip_unflagged) {
+void FUN_L00_0029a400(s32 skip_unflagged);
+void FUN_L00_0029a400(s32 skip_unflagged) {
     s32 count, i, j, value, item, k;
 
     count = 0;
@@ -1351,7 +1349,7 @@ extern void update_moby_29a6b0(void *) __asm__("FUN_L00_00250df8");
 extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern void FUN_00216050_29a6b0(s32) __asm__("FUN_00216050");
 extern void FUN_0012dc80_29a6b0(void) __asm__("FUN_0012dc80");
-extern void build_list_29a6b0(s32) __asm__("FUN_L00_0029a400");
+extern void FUN_L00_0029a400(s32);
 extern void FUN_L00_0023aef8_29a6b0(void) __asm__("FUN_L00_0023aef8");
 extern s32 add_text_29a6b0(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void FUN_L00_00239cc8_29a6b0(void) __asm__("FUN_L00_00239cc8");
@@ -1384,8 +1382,8 @@ extern f32 D_L00_001610E0 __attribute__((sda));
 extern s32 game_language_macro __asm__("D_0015ED88") __attribute__((section(".sdata")));
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 /* Opens the vendor: clears its state, spawns the vendor moby when none is given, builds the item list and its texts, then sets up the camera and the four slot offsets. */
-void f_fun_l00_0029a6b0_227fa0(VendorMoby_29a6b0 *m) __asm__("FUN_L00_0029a6b0");
-void f_fun_l00_0029a6b0_227fa0(VendorMoby_29a6b0 *m) {
+void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m);
+void FUN_L00_0029a6b0(VendorMoby_29a6b0 *m) {
     s32 i;
     Vec4 *v;
     s32 half;
@@ -1422,7 +1420,7 @@ void f_fun_l00_0029a6b0_227fa0(VendorMoby_29a6b0 *m) {
     snd_pause_all_sounds_in_group(0x1D);
     FUN_00216050_29a6b0(0);
     FUN_0012dc80_29a6b0();
-    build_list_29a6b0(vendor_29a6b0.mode != 0);
+    FUN_L00_0029a400(vendor_29a6b0.mode != 0);
     half = vendor_29a6b0.count;
     sel = half / 2;
     if (half < 3) sel = 1;
@@ -1585,7 +1583,7 @@ extern void FUN_L00_002a09d8(s32);
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void FUN_L00_0020fca8(s32, s32);
 extern void parse_space_scene_chunk(s32, s32) __asm__("FUN_002049f0");
-extern void f2454c8_29ad08(s32) __asm__("FUN_L00_002454c8");
+extern void FUN_L00_002454c8(s32);
 extern void f204a40_29ad08(s32, s32) __asm__("FUN_00204a40");
 extern void FUN_L00_002455c0(s32);
 extern void f215b10_29ad08(void) __asm__("FUN_00215b10");
@@ -1637,7 +1635,7 @@ void FUN_L00_0029ad08(void) {
     if (hero.pending_item[0] == 0x18)
         hero.pending_item[0] = 0;
     f204a40_29ad08(D_L00_00179AC0_29ad08[D_L00_001CA4C0_29ad08.f48].id, -1);
-    f2454c8_29ad08(item);
+    FUN_L00_002454c8(item);
     state = &D_001516D0_29ad08;
     *(s32 *)&state->pad[0x1C] = 0x2734;
     FUN_L00_002455c0(0);
@@ -1657,11 +1655,11 @@ struct S16 {
 };
 extern struct S16 D_001516D0;
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-void f330d0_208820(void) __asm__("FUN_L00_002330d0");
+void FUN_L00_002330d0(void);
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-void ea210_camera(Vec4 *, Vec4 *, int, int) __asm__("FUN_L00_00216f90");
+void FUN_L00_00216f90(Vec4 *, Vec4 *, int, int);
 void update_resource_counter(void) __asm__("FUN_001ff768");
 void snd_continue_all_sounds_in_group(int) __asm__("FUN_0012e418");
 void music_unpause(void) __asm__("FUN_00216088");
@@ -1674,14 +1672,14 @@ void FUN_L00_0029af80(void) {
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
     hero.unk20A5 = 0;
-    f330d0_208820();
+    FUN_L00_002330d0();
     g = D_L00_001CA4C0_u;
     transform_vector_by_basis(&v, &D_L00_00161100, *(char **)(g + 0x28) + 0xC0);
     add_vector_xyz(&v, &v, *(char **)(g + 0x28) + 0x10);
     r.f[0] = 0.0f;
     r.f[1] = 0.0f;
     r.f[2] = fast_add_rotations(*(float *)(*(char **)(g + 0x28) + 0x48), -1.5707964f);
-    ea210_camera(&v, &r, 0, 1);
+    FUN_L00_00216f90(&v, &r, 0, 1);
     update_resource_counter();
     if ((unsigned short)(D_001516D0.mode - 6) >= 2)
         D_001516D0.mode = 5;
@@ -1957,8 +1955,8 @@ extern void FUN_L00_0029ab70(s32);
 extern void FUN_L00_0023ac78(s32);
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L00_0029f990(void);
-extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
-extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
 extern void FUN_00201a28(void);
 extern void FUN_L00_0029a330(void);
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
@@ -2337,8 +2335,8 @@ void FUN_L00_0029c648(void) {
             enqueue_callback_list_1(FUN_L00_0029f990, vendor_menu.f1c);
         }
         if (vendor_menu.f40 == 0) {
-            ea210_drawend(&vendor_menu.f60);
-            ea210_drawflush(&vendor_menu.f70);
+            FUN_L00_002ea9d8(&vendor_menu.f60);
+            FUN_L00_002eaa30(&vendor_menu.f70);
         }
         FUN_00201a28();
         if ((g_debug_menu.update_flags & 2) || ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {

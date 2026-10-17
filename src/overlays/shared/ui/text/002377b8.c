@@ -1241,7 +1241,7 @@ extern s32 D_L00_0015F910 __attribute__((sda));
 extern s32 D_L00_0015F914 __attribute__((sda));
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern void font_print_large_001fb470(s32, s32, s32, char *, s32) __asm__("FUN_L00_001fb470");
+extern void FUN_L00_001fb470(s32, s32, s32, char *, s32);
 
 /* Draws the short counter panel, its spinning icon, and a pulsing label. */
 s32 FUN_L00_0023a2d0(Hud *m) {
@@ -1299,8 +1299,8 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     scaled_text = pulse * text;
     shadow = fast_tween_color(0, 0x80000000, scaled_text);
     color = fast_tween_color(D_L00_0015F90C, D_L00_0015F910, scaled_text);
-    font_print_large_001fb470(text_x + 1, text_y + 1, shadow, buf, -1);
-    font_print_large_001fb470(text_x, text_y, color, buf, -1);
+    FUN_L00_001fb470(text_x + 1, text_y + 1, shadow, buf, -1);
+    FUN_L00_001fb470(text_x, text_y, color, buf, -1);
 out:
     return m->ret;
 }

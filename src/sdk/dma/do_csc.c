@@ -7,7 +7,7 @@ typedef struct {
 extern s32 DIntr(void);
 extern s32 EnableInterrupts(void);
 extern void _sendIpuCommand(MpegDec *d, u32 cmd);
-extern void _dispatchMpegCallback(void *cb, s32 *arg);
+extern void _dispatchMpegCallback(void *FUN_L11_003192c8, s32 *arg);
 
 void _doCSC(MpegDec *d, u32 src, s32 mbs) {
     s32 cbarg[8];

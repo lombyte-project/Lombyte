@@ -536,7 +536,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern void f49(void *, void *) __asm__("FUN_001f4600");
-extern void cb(void) __asm__("FUN_L11_003192c8");
+extern void FUN_L11_003192c8_c(void) __asm__("FUN_L11_003192c8");
 
 void FUN_L11_00319670(char *moby) {
     char *d = *(char **)(moby + 0x78);
@@ -571,7 +571,7 @@ void FUN_L11_00319670(char *moby) {
         int *p = *(int **)(d + 0x2C8);
         if (t != *p) {
             *p = t;
-            f49(cb, moby);
+            f49(FUN_L11_003192c8_c, moby);
         }
     }
 }

@@ -10,7 +10,7 @@ extern float D_L00_00161BB0 __attribute__((sda));
 float random_angle_radians(void) __asm__("FUN_00213308");
 void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-void set_joint_67e8(char *, int, float) __asm__("FUN_L00_001fff28");
+void FUN_L00_001fff28(char *, int, float);
 void vendor_orb_update(unsigned char *p) __asm__("FUN_L00_002df730");
 void vendor_orb_update(unsigned char *p) {
     char *m = *(char **)(p + 0x78);
@@ -26,7 +26,7 @@ void vendor_orb_update(unsigned char *p) {
         s = D_L00_00161BB0 * DEG_TO_RAD * frame_time;
         *(float *)(p + 0x48) = fast_add_rotations(*(float *)(p + 0x48), s);
         *(float *)(m + 0x40) = fast_add_rotations(*(float *)(m + 0x40), s * -2.0f);
-        set_joint_67e8(m + 0x10, 2, *(float *)(m + 0x40));
+        FUN_L00_001fff28(m + 0x10, 2, *(float *)(m + 0x40));
         break;
     }
 }
@@ -127,8 +127,8 @@ s32 FUN_L00_002e02e0_c(void) __asm__("FUN_L00_002e02e0");
 s32 scale_game_frames_alt_c(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002e01b0_c(char *m) __asm__("FUN_L00_002e01b0");
 void FUN_L00_002e0340_c(char *a) __asm__("FUN_L00_002e0340");
-void ea210_drawend(char *src) __asm__("FUN_L00_002ea9d8");
-void ea210_drawflush(char *src) __asm__("FUN_L00_002eaa30");
+void FUN_L00_002ea9d8(char *src);
+void FUN_L00_002eaa30(char *src);
 void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
 void FUN_L00_002eac18_c(int mode) __asm__("FUN_L00_002eac18");
 extern char D_0013E633_2E0E50[] __asm__("D_0013F350");
@@ -421,14 +421,14 @@ s32 FUN_L00_002e02e0(void) {
 extern int D_L00_0015F404;
 extern short D_L00_0015F3FC;
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
+extern void FUN_L00_002eac18(int);
 
 /* Moby state 4: clears two globals, calls 002eac18(3); control mode 0x13: calls 002223f8(0, 1). */
 void FUN_L00_002e0340(char *a) {
     if (*(unsigned char *)(a + 0x20) == 4) {
         D_L00_0015F404 = 0;
         *(int *)&D_L00_0015F3FC = 0;
-        ea210_hide(3);
+        FUN_L00_002eac18(3);
     }
     if (hero.state.control_mode == 0x13) {
         hero_set_state(HERO_STATE_IDLE, 1);
@@ -630,8 +630,8 @@ extern s32_2e1f28 D_C58_2e1f28[] __asm__("D_L00_00161C58") __attribute__((sectio
 extern s32_2e1f28 D_C68_2e1f28[] __asm__("D_L00_00161C68") __attribute__((section(".sdata")));
 extern s32_2e1f28 D_C78_2e1f28[] __asm__("D_L00_00161C78") __attribute__((section(".sdata")));
 extern s32_2e1f28 D_C88_2e1f28[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
-s32_2e1f28 anim_67e8(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) __asm__("FUN_L00_002e1f28");
-s32_2e1f28 anim_67e8(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) {
+s32_2e1f28 FUN_L00_002e1f28(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b);
+s32_2e1f28 FUN_L00_002e1f28(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) {
     s32_2e1f28 i, j;
     for (i = 0; i < 3; i++) {
         if (D_C88_2e1f28[i] == id)
@@ -660,21 +660,21 @@ extern s32 D_L00_00161BF8_c[] __asm__("D_L00_00161BF8") __attribute__((section("
 extern s32 D_L00_00161C38_c[] __asm__("D_L00_00161C38") __attribute__((section(".sdata")));
 extern s32 D_L00_00161C48_c[] __asm__("D_L00_00161C48") __attribute__((section(".sdata")));
 extern s32 D_L00_00161C88_c[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
-extern void stop_n(int) __asm__("FUN_L00_0023e838");
+extern void FUN_L00_0023e838(int);
 
-int vend_2040(int id) __asm__("FUN_L00_002e2040");
-int vend_2040(int id) {
+int FUN_L00_002e2040(int id);
+int FUN_L00_002e2040(int id) {
     unsigned int i;
     for (i = 0; (int)i < 3; i++) {
         if (D_L00_00161C88_c[i] == id) {
             D_L00_00161BF8_c[i] = 0;
             D_L00_00161C88_c[i] = 0;
             if (D_L00_00161C38_c[i] != -1) {
-                stop_n(D_L00_00161C38_c[i]);
+                FUN_L00_0023e838(D_L00_00161C38_c[i]);
                 D_L00_00161C38_c[i] = -1;
             }
             if (D_L00_00161C48_c[i] != -1) {
-                stop_n(D_L00_00161C48_c[i]);
+                FUN_L00_0023e838(D_L00_00161C48_c[i]);
                 D_L00_00161C48_c[i] = -1;
             }
             return 1;
@@ -688,7 +688,7 @@ extern s32 D_L00_00161BF8[] MACRO_ADDR;
 extern s32 D_L00_00161C38[] MACRO_ADDR;
 extern s32 D_L00_00161C48[] MACRO_ADDR;
 extern s32 D_L00_00161C88[] MACRO_ADDR;
-extern void stop_n(s32) __asm__("FUN_L00_0023e838");
+extern void FUN_L00_0023e838(s32);
 
 void FUN_L00_002e20f8(s32 i) {
     s32 v;
@@ -696,11 +696,11 @@ void FUN_L00_002e20f8(s32 i) {
     D_L00_00161BF8[i] = 0;
     D_L00_00161C88[i] = 0;
     if (v != -1) {
-        stop_n(v);
+        FUN_L00_0023e838(v);
         D_L00_00161C38[i] = -1;
     }
     if (D_L00_00161C48[i] != -1) {
-        stop_n(D_L00_00161C48[i]);
+        FUN_L00_0023e838(D_L00_00161C48[i]);
         D_L00_00161C48[i] = -1;
     }
 }
@@ -717,8 +717,8 @@ extern Q002e2190 D_L00_001E6DE0[];
 extern s32 D_L00_00161BF8[] MACRO_ADDR;
 extern s32 D_L00_00161C88[] MACRO_ADDR;
 void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
-s32 aim_ok_67e8(s32 id, void *src, void *v) __asm__("FUN_L00_002e2190");
-s32 aim_ok_67e8(s32 id, void *src, void *v) {
+s32 FUN_L00_002e2190(s32 id, void *src, void *v);
+s32 FUN_L00_002e2190(s32 id, void *src, void *v) {
     s32 i;
     for (i = 0; i < 3; i++) {
         if (id == D_L00_00161C88[i]) {
@@ -800,8 +800,8 @@ extern void transform_vector_c(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 f32 FUN_L00_00257c48(f32, f32);
 f32 normalize_rotation_l14(f32 a) __asm__("FUN_L00_0025e310");
-int light_67e8(void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
-unsigned char *flash_67e8(void *a, void *b, int c, int d) __asm__("FUN_L00_00274948");
+int FUN_L00_0023e738(void *v, float a, float b_0023e738, float c, float d, float e);
+unsigned char *FUN_L00_00274948(void *a, void *b, int c, int d);
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern Slot_2E3700 D_L00_001E7070_2E3700[] __asm__("D_L00_001E6D20");
 extern End_2E3700 D_L00_001E70A0_2E3700[] __asm__("D_L00_001E6D50");
@@ -1365,9 +1365,9 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void quaternion_to_matrix(void *, void *) __asm__("FUN_001fa4f8");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void FUN_L00_001ff660(void *, void *, void *);
 extern void spawn_explosion(void *, void *, void *, float, float, int, float, int, float, float, int, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void explode_4318(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
+extern void FUN_L00_0025f3e8(void *, void *, int, float, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_quaternion_from_axis_angle(void *, void *, f32) __asm__("FUN_00214530");
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
@@ -1413,7 +1413,7 @@ void robot_arm_update(char *m) {
         transform_vector_by_basis(a20, d + 0x20, m + 0xC0);
         add_vector_xyz(a20, a20, m + 0x10);
         if (*(int *)(d + 0x34) & 2) {
-            explode_4318(m, a20, -1, *(float *)(d + 0x2C) * 0.5f, 0.0f);
+            FUN_L00_0025f3e8(m, a20, -1, *(float *)(d + 0x2C) * 0.5f, 0.0f);
         } else {
             float h = *(float *)(d + 0x2C) * 0.5f;
             spawn_explosion(m, D_L00_0015F580, a20, 0.0f, 0.0f, 5, *(float *)(d + 0x2C), 3, h, 9.0f, 5, h, -1, 0.0f, 0, 0, -1, 0);
@@ -1447,7 +1447,7 @@ void robot_arm_update(char *m) {
         f21 = vector_length_xyz(d);
         f20 = dot_vectors_xyz(d, q);
         if (f20 < 0.0f) {
-            reflect1688(d, d, q);
+            FUN_L00_001ff660(d, d, q);
             normalize_vector_xyz(aD0, q, f20 * 0.5f);
             add_vector_xyz(d, d, aD0);
             normalize_vector_xyz(d, d, f21);
@@ -2353,8 +2353,8 @@ struct P1_388 {
 };
 extern struct P1_388 *D_L00_00166E00_c __asm__("D_L00_00166E00");
 /* -1 while D_L00_00166E00+0x86 is set; else clears its current id, 1 if it was id. */
-s32 release_s(s32 id) __asm__("FUN_L00_002e8388");
-s32 release_s(s32 id) {
+s32 FUN_L00_002e8388(s32 id);
+s32 FUN_L00_002e8388(s32 id) {
     struct P1_388 *t = D_L00_00166E00_c;
     if (t->f86 != 0) {
         return -1;
@@ -2383,8 +2383,8 @@ typedef struct {
     char pad00[0x84];
     short f84;
 } O842e83c0;
-int ready_s(int arg1, int arg2) __asm__("FUN_L00_002e83c0");
-int ready_s(int arg1, int arg2) {
+int FUN_L00_002e83c0(int arg1, int arg2);
+int FUN_L00_002e83c0(int arg1, int arg2) {
     void *a = D_L00_00166E00_c2;
     C842e83c0 *cur;
     u8 x;
@@ -2495,8 +2495,8 @@ void follow_camera_set_lateral_spring(float a, float b) {
 extern char *D_L00_00166E00_002e8620 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 
 /* Sets the short at +0x226 of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
-void pitch2_s(void) __asm__("FUN_L00_002e8620");
-void pitch2_s(void) {
+void FUN_L00_002e8620(void);
+void FUN_L00_002e8620(void) {
     char *p = D_L00_00166E00_002e8620;
     if (*(short *)(p + 0x86) == 0) {
         *(short *)(*(char **)(p + 0x70) + 0x226) = 1;
@@ -2597,8 +2597,8 @@ void FUN_L00_002e8918(char *a, float x, float y) {
 extern char *D_L00_00166E00_002e8970 __asm__("D_L00_00166E00") __attribute__((section(".data")));
 void FUN_L00_002e88c8_002e8970(char *, char *, float) __asm__("FUN_L00_002e88c8");
 /* Stores x at +0x1BC of D_L00_00166E00+0x70 and calls FUN_L00_002e88c8 with a and y. */
-void spin_s(char *a, float x, float y) __asm__("FUN_L00_002e8970");
-void spin_s(char *a, float x, float y) {
+void FUN_L00_002e8970(char *a, float x, float y);
+void FUN_L00_002e8970(char *a, float x, float y) {
     char *b = a;
     char *p = D_L00_00166E00_002e8970;
     if (*(short *)(p + 0x86) == 0) {

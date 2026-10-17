@@ -415,7 +415,7 @@ extern float D_L00_0015F76C __attribute__((sda));
 extern void FUN_L00_0023caa8(int, int, int, int, unsigned long, int) __asm__("FUN_00200e08");
 extern int FUN_001fef20(int) __asm__("FUN_001f96f8");
 extern float FUN_001fef10(float) __asm__("FUN_001f96b0");
-extern void f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
+extern void FUN_L00_00216de8(int, int);
 extern void *FUN_0023b208(int, int) __asm__("FUN_001ff960");
 extern void FUN_L00_0023bac0(void *, int, int, int, int, int);
 extern void FUN_L00_0023bd20(void *, int, int, int, int, int) __asm__("FUN_00200080");
@@ -465,7 +465,7 @@ int FUN_L00_002365a8(HudElem *e) {
     } else {
         current = 0;
     }
-    if (!previous && current == 1) f_fun_l00_00216de8_227fa0(11, 0);
+    if (!previous && current == 1) FUN_L00_00216de8(11, 0);
     image = FUN_0023b208(*(int *)e, current);
     FUN_L00_0023bac0(image, x + e->unk48, y + e->unk4A,
                        D_L00_0015F760, D_L00_0015F764, 0x80);

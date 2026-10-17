@@ -38,7 +38,7 @@ int walker_gait_mask(float *a, float v) {
     }
     return r;
 }
-void set_joint_67e8(void *, s32, f32) __asm__("FUN_L00_001fff28");
+void FUN_L00_001fff28(void *, s32, f32);
 void FUN_L00_002a1538(u8 *a0) {
     s32 i;
     u8 *r = a0 + 0x130;
@@ -46,9 +46,9 @@ void FUN_L00_002a1538(u8 *a0) {
     for (i = 0; i < 2; i++) {
         u8 *p = a0 + i * 0xB0;
         if (p[0x161] != 0)
-            set_joint_67e8(q + i * 0xB0, 2, 0.0f);
+            FUN_L00_001fff28(q + i * 0xB0, 2, 0.0f);
         if (p[0x121] != 0)
-            set_joint_67e8(r + i * 0xB0, 2, 0.0f);
+            FUN_L00_001fff28(r + i * 0xB0, 2, 0.0f);
         *(s32 *)(p + 0x104) = 0;
         *(s32 *)(p + 0xFC) = 0;
     }
@@ -156,7 +156,7 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern float fn_2c2488(float *a, float *b, float *out, float speed, float g) __asm__("FUN_L00_0025abf0");
+extern float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int D_L00_001CA760[];
@@ -812,7 +812,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
         if (flags & 0x30) {
             float dist = vector_distance_xy(m->pos, d->v60);
             debug_print_alt(D_L00_001611E0, dist);
-            d->fD8 = fn_2c2488(m->pos, d->v60, 0, d->fC0, -d->fDC);
+            d->fD8 = FUN_L00_0025abf0(m->pos, d->v60, 0, d->fC0, -d->fDC);
             d->uEE |= 4;
             d->f6C = fast_arc_tan(d->v60[0] - m->pos[0], d->v60[1] - m->pos[1]);
         }
@@ -842,7 +842,7 @@ void walker_update_gait(WalkMoby *m, WalkData *d, int flags, float speed, float 
         if (flags & 0x30) {
             float dist = fast_vec_dist(m->pos, d->v60);
             debug_print_alt(D_L00_001611E0, dist);
-            d->fD8 = fn_2c2488(m->pos, d->v60, 0, d->fC0, -d->fDC);
+            d->fD8 = FUN_L00_0025abf0(m->pos, d->v60, 0, d->fC0, -d->fDC);
             d->uEE |= 4;
             d->f6C = fast_arc_tan(d->v60[0] - m->pos[0], d->v60[1] - m->pos[1]);
         }

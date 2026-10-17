@@ -64,7 +64,7 @@ int is_state_field_large(int *state_fields) __asm__("func_0023AEE0");
 float scale_time(float input) __asm__("func_001F96B0");
 
 float multiply_global_scale(float input) __asm__("func_001F96E8");
-float multiply_global_factor_ed70(float input) __asm__("func_001F9730");
+float func_001F9730(float input);
 
 float absolute_float(float input) __asm__("func_001F99C0");
 

@@ -536,7 +536,7 @@ extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) _
 extern int FUN_L00_0025fcb8(float, char *, void *);
 extern int activate_effect_l08(float, char *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
+extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
@@ -648,7 +648,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
             trooper_start_knockback(scratch.fatal_angle, m, d->knockback, 7, 1, 0);
             m->state = 9;
             d->animation = 0xF0;
-            explode302618(m, 0, -1);
+            FUN_L00_00257470(m, 0, -1);
             break;
         }
         case 0:
@@ -829,7 +829,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern float D_L16_0015F5D0;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void rings1688(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
+extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
 extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
@@ -874,7 +874,7 @@ void FUN_L16_002d41f8(void *m) {
                 int lo = scale_game_frames(25), hi = scale_game_frames(30);
                 duration2 = random_int_between(lo, hi);
             }
-            rings1688(origin, movement, *a, *b, duration1, duration2, 0, 0, 400000.0f,
+            FUN_L00_0026a9f0(origin, movement, *a, *b, duration1, duration2, 0, 0, 400000.0f,
                              delay);
         } while (remaining != 0);
     }

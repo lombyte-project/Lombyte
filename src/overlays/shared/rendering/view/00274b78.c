@@ -12,8 +12,8 @@ extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 extern short D_L01_001B0CB0[] __attribute__((section(".data")));
 extern char *D_L01_001DD580[] __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-int select54(char *a, char *o, float best) __asm__("FUN_L01_00274b78");
-int select54(char *a, char *o, float best) {
+int FUN_L01_00274b78(char *a, char *o, float best);
+int FUN_L01_00274b78(char *a, char *o, float best) {
     struct Hero *g = &hero_lui;
     char *m;
     char *p;

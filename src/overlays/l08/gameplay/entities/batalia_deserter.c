@@ -151,7 +151,7 @@ extern unsigned char D_0013DD49 __attribute__((section(".data")));
 extern char D_L08_001622E8[];
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L08_00305138_c(void *) __asm__("FUN_L08_00305138");
-extern void wake302618(void *) __asm__("FUN_L00_0025a120");
+extern void FUN_L00_0025a120(void *);
 extern float FUN_001f9b48(void *, void *);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
@@ -174,7 +174,7 @@ void batalia_deserter_update(WM *m) {
     FUN_L08_00305138_c(m);
     if (m->opacity) {
         if (FUN_001f9b48(m->position, D_L08_001675C0_c) < 30.0f) {
-            wake302618(m);
+            FUN_L00_0025a120(m);
             m->b7F = 0x18;
         }
     }
@@ -407,7 +407,7 @@ extern void FUN_L08_002e1698(void *);
 extern void FUN_L00_00299460(int);
 extern void FUN_L08_002a1880(int);
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
-extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
+extern void FUN_L00_00260860(int, int);
 
 /* Watcher moby update with a scripted reveal, then turns its head toward the hero or a random target. */
 void the_plumber_batalia_update(L14WatchMoby *m) __asm__("FUN_L08_003065d8");
@@ -451,7 +451,7 @@ void the_plumber_batalia_update(L14WatchMoby *m) {
         break;
     case 5:
         jet_clear_persistent(m->bB0);
-        ea210_switch(0x1B, 1);
+        FUN_L00_00260860(0x1B, 1);
         memcard_save_data(0, -1);
         mark_moby_for_removal(m);
         return;

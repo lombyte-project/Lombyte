@@ -144,7 +144,7 @@ void FUN_L16_002097a0(void) {
 
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");
+extern void FUN_L00_0025f730(void *a, float x);
 
 void FUN_L16_0020f8b0(void) {
     char tmp[16];
@@ -155,7 +155,7 @@ void FUN_L16_0020f8b0(void) {
     fast_vec_normalize(tmp, q, *(float *)(q + 0x194));
     fast_vec_add(p, p, tmp);
     qcopy(p - 0x690, p);
-    vec_limit302618(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
+    FUN_L00_0025f730(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
 }
 typedef union {
     OvlQuad q;
@@ -170,7 +170,7 @@ s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
-s32 f5e3b8_20d6b0(s32) __asm__("FUN_L00_0025e3b8");
+s32 FUN_L00_0025e3b8(s32);
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
@@ -182,7 +182,7 @@ void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_L00_00216078(void *, void *);
 void FUN_L00_002335c8(void *, f32, f32, f32);
-void f2334d0_2133a8(void *, void *, f32) __asm__("FUN_L00_002334d0");
+void FUN_L00_002334d0(void *, void *, f32);
 f32 FUN_001f99c0(f32);
 
 extern CollisionHit HH __asm__("D_L16_00174240") __attribute__((section(".data")));
@@ -257,10 +257,10 @@ void FUN_L16_0020ffb0(void) {
         goto d1;
     }
     if (HH.moby != 0) {
-        if (f5e3b8_20d6b0(HH.moby)) {
+        if (FUN_L00_0025e3b8(HH.moby)) {
             hero.unk30A = 1;
             if ((u32)(hero.state.control_mode - 0x15) < 2) {
-                f2334d0_2133a8((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
+                FUN_L00_002334d0((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
             }
         }
         p = suck_get_aim_height(HH.moby);
@@ -371,16 +371,16 @@ typedef union {
     f32 f[4];
 } V_2133a8;
 extern void vzero_2133a8(void *) __asm__("FUN_001f99f8");
-extern void f2347c0_2133a8(void) __asm__("FUN_L00_002347c0");
-extern void f233660_2133a8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
-extern void f233810_2133a8(void *, void *, f32) __asm__("FUN_L00_00233810");
-extern void f2334d0_2133a8(void *, void *, f32) __asm__("FUN_L00_002334d0");
+extern void FUN_L00_002347c0(void);
+extern void FUN_L00_00233660(void *, f32, f32, f32);
+extern void FUN_L00_00233810(void *, void *, f32);
+extern void FUN_L00_002334d0(void *, void *, f32);
 extern void vadd_2133a8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vsub_2133a8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 vlen_2133a8(void *) __asm__("FUN_001f9af0");
 extern s32 coll1_2133a8(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 coll2_2133a8(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
-extern s32 coll3_2133a8(void *, f32) __asm__("FUN_L00_001f3170");
+extern s32 FUN_L00_001f3170(void *, f32);
 extern void vscl_2133a8(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u128_2133a8 D_L16_00174270[] __attribute__((section(".data")));
 s32 FUN_L16_00210b60(s32 mode) {
@@ -397,19 +397,19 @@ s32 FUN_L16_00210b60(s32 mode) {
     qcopy(&old, &hero.motion.pos.q);
     vzero_2133a8(&v);
     if (hero.unk22DA != 0) {
-        f2347c0_2133a8();
+        FUN_L00_002347c0();
         hero.unk22DA = 0;
     }
     if (hero.state.control_mode != 0x11) {
         if (hero.state.control_mode == 0x16) {
-            f233660_2133a8(&v, 0.0f, 0.0f, 0.7f);
+            FUN_L00_00233660(&v, 0.0f, 0.0f, 0.7f);
             vsub_2133a8(&v, &v, &hero.motion.pos.q);
         } else if (hero.unk20B3 != 0 || hero.unk1F8 != 0) {
             if (hero.unk20B3 == 1 || hero.unk1F8 != 0 ||
                 (unsigned)(hero.state.control_mode - 0x15) < 2) {
-                f233810_2133a8(&v, &v, 0.6f);
+                FUN_L00_00233810(&v, &v, 0.6f);
             } else {
-                f2334d0_2133a8(&v, &v, -hero.unk224);
+                FUN_L00_002334d0(&v, &v, -hero.unk224);
             }
         } else {
             v.f[2] = hero.unk224;
@@ -440,7 +440,7 @@ s32 FUN_L16_00210b60(s32 mode) {
                 h = 0.05f;
             }
             a = coll2_2133a8(&hero.motion.pos.q, mask, hero.unk234, ((s32)hero.moby), h);
-            if (!(a | coll3_2133a8(&hero.motion.pos.q, hero.unk234)))
+            if (!(a | FUN_L00_001f3170(&hero.motion.pos.q, hero.unk234)))
                 break;
         }
         c = D_L16_00174270;

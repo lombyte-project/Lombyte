@@ -37,7 +37,7 @@ extern int FUN_L00_00257b90(int lo, int hi);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern struct Moby *spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
-extern void explode302618(void *, s32, s32) __asm__("FUN_L00_00257470");
+extern void FUN_L00_00257470(void *, s32, s32);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Once hit hard enough: bursts into 200 smoke puffs and 40 debris chunks, then removes itself. */
@@ -105,7 +105,7 @@ void rock_formation_update(struct Moby *m) {
             spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)], random_float_between(0.04f, 0.09f),
                                FUN_L00_00257b90(60, 180), 1.0f, 1.0f, 0.75f, 0);
         }
-        explode302618(m, 0, -1);
+        FUN_L00_00257470(m, 0, -1);
         mark_moby_for_removal(m);
     }
 }
@@ -135,7 +135,7 @@ typedef struct {
     s32 x20;
 } CollQuery;
 
-extern void place_2ce1f0() __asm__("FUN_L00_0025d1b8");
+extern void FUN_L00_0025d1b8();
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 rand(void) __asm__("FUN_001160d8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -151,7 +151,7 @@ void fan_update(SwayMoby *m) {
 
     v = m->pvars;
     if (m->state == 0) {
-        place_2ce1f0(m);
+        FUN_L00_0025d1b8(m);
         m->state = 1;
         v->sway = random_float_between(-1.0f, 1.0f);
         v->dir = (rand() & 1) ? 1.0f : -1.0f;
@@ -350,7 +350,7 @@ extern BurstPalette D_L01_0020B508;   /* outer colours */
 BurstLight D_L01_001E3440 = {{0, 0, 0, 0, 0, 0, 0, 0, 0x66, 0x66, 0xa6, 0x3f, 0, 0, 0, 0, 0, 0, 0xff, 0, 0x13, 0xf, 0, 0xff, 0, 0x13, 0x11, 0, 0x64, 0, 0x13, 0x13}, 13.0f, 13.0f, 13.0f};
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
-extern void rings1688(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026a9f0");
+extern void FUN_L00_0026a9f0(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32);
 /* s32 return is load-bearing: a void prototype changes the code */
 extern s32 spawn_glow_particle(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
 /* allocate_voice_for_target_entry; the unit declares it under this name */
@@ -379,7 +379,7 @@ void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 
         size = scale * 400000.0f;
         inner = D_L01_0020B4F0;
         outer = D_L01_0020B508;
-        rings1688(pos_p, &vel,
+        FUN_L00_0026a9f0(pos_p, &vel,
                          inner_p->c[random_integer_below(6)], outer.c[random_integer_below(6)],
                          size,
                          random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)),
@@ -1251,7 +1251,7 @@ extern s32 D_L01_0015F580;
 void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern void FUN_L01_002787a0();
-extern void *debris302618(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *) __asm__("FUN_L00_00263fd8");
+extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
 extern void FUN_L01_00278e20();
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
@@ -1295,7 +1295,7 @@ void green_mushroom_update(SparkMoby *m) {
             off.z = 0.0f;
             fast_vec_add(&off, &off, &m->pos);
             off.z += s * 1.2f;
-            debris302618(m, 0x719, &off, &rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
+            FUN_L00_00263fd8(m, 0x719, &off, &rot, 0, 0, &D_L01_0015F580, &D_L01_0015F580, 0.0f,
                              &D_L01_0015F580);
         }
         FUN_L01_00278e20(m, 0x718);
@@ -1621,7 +1621,7 @@ typedef struct {
     u8 pad4C[0x2C];
     OrbVars *pvars;
 } OrbMoby;
-extern void place_2ce1f0(OrbMoby *) __asm__("FUN_L00_0025d1b8");
+extern void FUN_L00_0025d1b8(OrbMoby *);
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
@@ -1632,7 +1632,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
     m = create_moby(0x313);
     if (m != 0) {
         pv = m->pvars;
-        place_2ce1f0(m);
+        FUN_L00_0025d1b8(m);
         m->w40 = 0;
         m->h32 = 0x40;
         m->b30 = 0xFF;
@@ -1801,7 +1801,7 @@ typedef struct {
     f32 x;
     f32 y;
 } PlayerPosView;
-extern s32 count_group_e3528(s32, s32) __asm__("FUN_L01_0026e008");
+extern s32 FUN_L01_0026e008(s32, s32);
 extern ClonedMoby *FUN_L01_00302328(ClonedMoby *);
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -1823,7 +1823,7 @@ void beehive_update(SpawnerMoby *m) {
         if (v->src_id < 0) {
             break;
         }
-        if (count_group_e3528(v->src_id, 0xC) != 0) {
+        if (FUN_L01_0026e008(v->src_id, 0xC) != 0) {
             break;
         }
         if (v->count >= D_L01_00161E90) {

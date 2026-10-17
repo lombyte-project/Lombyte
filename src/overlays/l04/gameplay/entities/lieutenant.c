@@ -43,7 +43,7 @@ extern u8 D_0014C050[];
 extern struct ShopCamera D_L04_0016C9F0;
 extern s32 D_L04_0015F5C4;
 extern float FUN_001f9b48(void *, void *);
-extern void wake302618(struct Moby *) __asm__("FUN_L00_0025a120");
+extern void FUN_L00_0025a120(struct Moby *);
 extern void FUN_L02_002e0cd8(struct Moby *);
 extern void initialize_npc_dialogue(struct Moby *, struct VendorVars *) __asm__("FUN_L00_002668a0");
 extern int FUN_00214720(char *, s32);
@@ -63,7 +63,7 @@ void lieutenant_update(struct Moby *moby) {
     struct VendorVars *vars = (struct VendorVars *)moby->pvars;
 
     if (moby->visible != 0 && FUN_001f9b48(&moby->pos, D_L04_00166F40) < 30.0f) {
-        wake302618(moby);
+        FUN_L00_0025a120(moby);
         ((struct VendorMobyView *)moby)->unk7F = 0x18;
     }
     FUN_L02_002e0cd8(moby);

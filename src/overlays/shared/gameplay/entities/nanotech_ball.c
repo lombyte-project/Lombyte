@@ -1418,8 +1418,8 @@ extern int queue_animation_update_alt(int,int,int,int,int,int,int) __asm__("FUN_
 extern s32 D_0015EEA4;
 extern s32 FUN_L00_002d9f78(void);
 extern void transpose_rotation_matrix(void *,void *) __asm__("FUN_001fa2d8");
-extern void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
-extern void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
+extern void FUN_L00_0020e4c8(void);
+extern void FUN_L00_0020e698(void);
 extern void hero_set_state_2(int,int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_002377b8(void);
 extern void FUN_L00_00237840(void);
@@ -1489,7 +1489,7 @@ void suckcannon_update(SuckMoby *self) {
     case 1:
         if (self->anim_flags & 2) blend_moby_animation(self,1,0,scale_game_frames_alt(0));
         func_001F9908_r(&cannon->cooldown);
-        if (cannon->cooldown == 0) fire_end_2cc608();
+        if (cannon->cooldown == 0) FUN_L00_0020e698();
         if (suck_hero.count > 0) {
             blend_moby_animation(self,6,0,scale_game_frames_alt(4));
             self->state = 4;
@@ -1497,7 +1497,7 @@ void suckcannon_update(SuckMoby *self) {
         }
         if ((suck_input.held & suck_hero.fire_buttons) && cannon->cooldown==0 && suck_hero.unk20A7==0 &&
             suck_hero.unk20AC==0 && scale_game_frames_alt(15) < suck_hero.ready_frames && FUN_L00_002d9f78()==0) {
-            fire_start_2cc608();
+            FUN_L00_0020e4c8();
             cannon->sound = allocate_voice_for_target_entry_alt(2,4,(int)self);
             cannon->cooldown = scale_game_frames_alt(10);
             stats = (SuckStats *)(((char *)&item_usage));
@@ -1517,7 +1517,7 @@ void suckcannon_update(SuckMoby *self) {
                 if (s[1].owner==self && s[1].active) release_voice_slot(sound);
             }
             cannon->sound=-1;
-            fire_end_2cc608();
+            FUN_L00_0020e698();
             suck_hero.firing=0;
             if (suck_hero.count>0) {
                 blend_moby_animation(self,6,0,scale_game_frames_alt(4));
@@ -1542,7 +1542,7 @@ void suckcannon_update(SuckMoby *self) {
         if (!(suck_hero.sucking || (suck_hero.count < (suck_item_variant.gold==0?5:10) &&
             FUN_L00_002d9f78()==0 && ((suck_input.held&suck_hero.fire_buttons) || cannon->cooldown) &&
             !suck_hero.unk20AC && !suck_hero.unk20A7))) {
-            fire_end_2cc608();
+            FUN_L00_0020e698();
             sound=cannon->sound;
             if(sound!=-1) {
                 SuckVoice *s=(SuckVoice *)(((char *)&D_0013E550))+sound;
@@ -1570,10 +1570,10 @@ void suckcannon_update(SuckMoby *self) {
         break;
     case 4:
         func_001F9908_r(&cannon->cooldown);
-        if (!cannon->cooldown) fire_end_2cc608();
+        if (!cannon->cooldown) FUN_L00_0020e698();
         if (self->anim_flags&2) {
             blend_moby_animation(self,6,0,scale_game_frames_alt(0));
-            fire_end_2cc608();
+            FUN_L00_0020e698();
         }
         if (!(suck_input.held&suck_hero.fire_buttons)) cannon->blocked=0;
         if (func_001F9908_r(&cannon->target_timer) ||
@@ -1615,7 +1615,7 @@ void suckcannon_update(SuckMoby *self) {
             (suck_input.held&suck_hero.fire_buttons) && suck_hero.control_mode!=7 && suck_hero.control_mode!=3 &&
             suck_hero.control_mode!=18 && suck_hero.control_mode!=17 && !suck_hero.unk20AC && !suck_hero.unk20A7 &&
             scale_game_frames_alt(22)<suck_hero.ready_frames) {
-            fire_start_2cc608();
+            FUN_L00_0020e4c8();
             blend_moby_animation(self,5,0,scale_game_frames_alt(2));
             suck_hero.firing=2;
             cannon->cooldown=scale_game_frames_alt(25);
@@ -2012,10 +2012,10 @@ extern int FUN_L00_00257b90_c(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
-extern unsigned col_2af5b8(unsigned, int) __asm__("FUN_L00_0025c0e8");
+extern unsigned FUN_L00_0025c0e8(unsigned, int);
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
 extern void FUN_L00_0025c088(int *, int *, int *, int);
-extern void rings1688(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
+extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
@@ -2119,12 +2119,12 @@ void FUN_L00_002dbf28(char *self, char *q) {
             float big;
             t1 = D_L00_001EA100;
             t2 = D_L00_001EA118;
-            A = col_2af5b8(t1.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
-            B = col_2af5b8(t2.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
+            A = FUN_L00_0025c0e8(t1.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
+            B = FUN_L00_0025c0e8(t2.v[random_integer_below_c2(6)], (&D_0013E520)->b9);
             big = f22 * 400000.0f;
             r1 = FUN_L00_00257b90_c(scale_game_frames_c(15), scale_game_frames_c(20));
             r2 = FUN_L00_00257b90_c(scale_game_frames_c(25), scale_game_frames_c(30));
-            rings1688(self + 0x10, b, A, B, big, r1, r2, 0, 0, sh);
+            FUN_L00_0026a9f0(self + 0x10, b, A, B, big, r1, r2, 0, 0, sh);
         } while (--cnt);
     }
     if (dist > 9.0f) {
@@ -2255,8 +2255,8 @@ extern int quaternion_to_matrix() __asm__("FUN_001fa4f8");
 extern int matrix_to_quaternion() __asm__("FUN_00214260");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
-extern int dot1688() __asm__("FUN_L00_001ff430");
-extern int reflect1688() __asm__("FUN_L00_001ff660");
+extern int FUN_L00_001ff430();
+extern int FUN_L00_001ff660();
 extern int FUN_L00_00259888();
 extern int allocate_voice_for_target_entry_alt(int,int,int) __asm__("FUN_0022da68");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
@@ -2280,7 +2280,7 @@ f32 normalize_rotation_l14(f32 a) __asm__("FUN_L00_0025e310");
 float absolute_float_c(float input) __asm__("func_001F99C0");
 int FUN_L00_002da218(char *a);
 s32 scale_game_frames_alt_c2(s32) __asm__("FUN_001f96f8");
-void turn_e50(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
+void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d);
 void FUN_L00_0026c3d0(void *pos, void *mat);
 void FUN_L00_002dc938_c(char *p, char *q, int flag) __asm__("FUN_L00_002dc938");
@@ -2346,8 +2346,8 @@ extern int func_001FA898_2DDEA0(float) __asm__("FUN_001fa6d0");
 extern int func_L00_00259B08_2DDEA0(void *, void *, float, int, float, int) __asm__("FUN_L00_00258ad0");
 extern void func_001E9730_2DDEA0(void *) __asm__("FUN_001e93b0");
 
-int hitreact_3DF8(struct Moby *moby, char *vars) __asm__("FUN_L00_002dc9f0");
-int hitreact_3DF8(struct Moby *moby, char *vars) {
+int FUN_L00_002dc9f0(struct Moby *moby, char *vars);
+int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
     Frame_2DDEA0 work;
     R_2DDEA0 *record;
 
@@ -3274,7 +3274,7 @@ void FUN_L00_002df1e0(O_2df1e0 *p) {
     }
 }
 int FUN_L00_002591d0(void *, s32, s32, s32);
-int f2592b8_2591d0(void *, s32, s32, s32) __asm__("FUN_L00_002592b8");
+int FUN_L00_002592b8(void *, s32, s32, s32);
 void FUN_L00_00263618(void *, void *, f32, f32);
 void FUN_L00_002df3d8(u8 *p) {
     u8 *it[2] __attribute__((aligned(16)));
@@ -3291,7 +3291,7 @@ void FUN_L00_002df3d8(u8 *p) {
                 FUN_L00_00263618(q + 0x10, m[1], s, 0.5f);
             }
         }
-        f2592b8_2591d0(it, it[0], 0, 0);
+        FUN_L00_002592b8(it, it[0], 0, 0);
     }
 }
 extern s32 D_L00_0015F5CC;

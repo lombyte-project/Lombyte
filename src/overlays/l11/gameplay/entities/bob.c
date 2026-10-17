@@ -164,10 +164,10 @@ extern int FUN_00214720(void *, int);
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
-extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
+extern void FUN_L00_00260860(int, int);
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
-extern void ea210_stop(void) __asm__("FUN_L00_002039a0");
+extern void FUN_L00_002039a0(void);
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C3 __attribute__((section(".data")));
 extern int D_L11_0015F5C4;
@@ -219,10 +219,10 @@ void bob_update(WM11 *m) {
         if (D_L11_0015F5C4 != 2) {
             m->state = 1;
             if (d->h04 == 2) {
-                ea210_switch(3, 1);
+                FUN_L00_00260860(3, 1);
                 jet_reset_camera(hero.motion.pos.f, hero.motion.pos.f + 4);
                 memcard_save_data_d0710(0, -1);
-                ea210_stop();
+                FUN_L00_002039a0();
                 help_request(0x2AFB, 0x3D);
             }
         }
@@ -293,7 +293,7 @@ extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2168), where it is exact; names translated to the US level program. */
 
 extern float D_L11_001677C0[];
-extern void wake302618(void *) __asm__("FUN_L00_0025a120");
+extern void FUN_L00_0025a120(void *);
 extern void FUN_L02_002e0cd8(void *);
 extern void FUN_L11_002d1030(void *);
 extern void FUN_L11_002d1340(void *);
@@ -304,7 +304,7 @@ void resort_owner_update(struct Moby *moby) __asm__("FUN_L11_002d0fa8");
 void resort_owner_update(struct Moby *moby) {
     FUN_L02_002e0cd8(moby);
     if (moby->visible && distance_xyz(&moby->pos, D_L11_001677C0) < 38.0f) {
-        wake302618(moby);
+        FUN_L00_0025a120(moby);
         moby->shadow_range = 30;
     }
     FUN_L11_002d1030(moby);
@@ -320,8 +320,8 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float fn_2c2488(void *, void *, float, int, float) __asm__("FUN_L00_0025abf0");
-extern void f_L00_002604f0(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
+extern float FUN_L00_0025abf0(void *, void *, float, int, float);
+extern void FUN_L00_002604f0(void *, void *, void *, void *, void *, void *);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_00212f90(void *, int, int, int);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -384,7 +384,7 @@ void FUN_L11_002d1030(void *mp) {
             f0 = (float)scale_game_frames(0x3C);
             fast_vec_scale(d + 0x130, d + 0x130, 1.0f / f0);
             f0 = vector_length_xy(d + 0x130);
-            *(float *)(d + 0x138) = fn_2c2488((char *)moby + 0x10, d + 0x120, f0, 0, -(D_0015ED70 * 10.8f));
+            *(float *)(d + 0x138) = FUN_L00_0025abf0((char *)moby + 0x10, d + 0x120, f0, 0, -(D_0015ED70 * 10.8f));
             *(float *)((char *)moby + 0x58) = 0.6666667f;
         }
         f0 = fast_vec_length(d + 0x130);
@@ -403,7 +403,7 @@ void FUN_L11_002d1030(void *mp) {
         tbl += idx;
         o = (char *)D_L11_0015FFD8;
         o += *tbl << 8;
-        f_L00_002604f0(moby, o, &D_L11_001613E0, &D_L11_001613F0, (char *)moby + 0x10, (char *)moby + 0x40);
+        FUN_L00_002604f0(moby, o, &D_L11_001613E0, &D_L11_001613F0, (char *)moby + 0x10, (char *)moby + 0x40);
         if (FUN_L11_0030a480((struct Moby *)o) == 0)
             break;
     }
@@ -427,7 +427,7 @@ void FUN_L11_002d1030(void *mp) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2500), where it is exact; names translated to the US level program. */
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void push302618(int, int, float, float, float, int) __asm__("FUN_L00_00258830");
+extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void FUN_L00_00261d78(float, void *, void *, void *);
 
 void FUN_L11_002d1340(void *mp) {
@@ -437,7 +437,7 @@ void FUN_L11_002d1340(void *mp) {
     float B[4];
     qcopy(A, moby + 0x10);
     qcopy(B, d + 0x130);
-    push302618((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
+    FUN_L00_00258830((int)moby, (int)B, 0.5f, 0.3f, 0.0f, 0x10);
     if ((moby[0x20] >= 4 && moby[0x20] <= 6) || (moby[0x20] == 7 && *(int *)(d + 0x15C) == 3)) {
         FUN_L00_00261d78(0.3f, *(void **)(d + 0x60 - -(*(int *)(d + 0x158) * 4)), moby + 0x10,
                          moby + 0x10);
@@ -458,7 +458,7 @@ void FUN_L11_002d1340(void *mp) {
 extern int FUN_L11_002d2460(struct Moby *moby);
 extern int FUN_L11_002d2340(struct Moby *moby, char *other);
 extern int FUN_L11_002d25e8(struct Moby *m, float *out);
-extern void set_state_14b0(struct Moby *moby, int state) __asm__("FUN_L11_002d2088");
+extern void FUN_L11_002d2088_c(struct Moby *moby, int state) __asm__("FUN_L11_002d2088");
 extern float ground_height_14b0(void *) __asm__("FUN_L00_00259710");
 extern void scale_vector_14b0(void *out, void *a, f32 s) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -530,7 +530,7 @@ void FUN_L11_002d14b0(void *arg) {
     float r[4];
 
     if (moby->state >= 3 && moby->state <= 5 && proximity == 0) {
-        set_state_14b0(moby, 6);
+        FUN_L11_002d2088_c(moby, 6);
         return;
     }
     if (moby->state >= 4 && moby->state <= 6) {
@@ -540,7 +540,7 @@ void FUN_L11_002d14b0(void *arg) {
             qcopy(&d->target, v);
             d->target.z = ground_height_14b0(&d->target);
             d->next_state = 3;
-            set_state_14b0(moby, 7);
+            FUN_L11_002d2088_c(moby, 7);
         }
     }
     switch (moby->state) {
@@ -566,7 +566,7 @@ void FUN_L11_002d14b0(void *arg) {
                 qcopy_nc(&moby->pos, &path_points_14b0[d->points[3]].pos);
                 qcopy_nc(&moby->rot, &path_points_14b0[d->points[3]].rot);
                 FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (d->unk104 << 8)));
-                set_state_14b0(moby, 0xE);
+                FUN_L11_002d2088_c(moby, 0xE);
                 d->talk_range = 10.0f;
                 FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[0] << 8)));
                 FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[1] << 8)));
@@ -578,7 +578,7 @@ void FUN_L11_002d14b0(void *arg) {
             d->leg = 1;
             qcopy_nc(&moby->pos, &path_points_14b0[d->points[1]].pos);
             qcopy_nc(&moby->rot, &path_points_14b0[d->points[1]].rot);
-            set_state_14b0(moby, 6);
+            FUN_L11_002d2088_c(moby, 6);
             path_points_14b0[d->unk114].pos.z -= 500.0f;
             FUN_L11_0030a840((unsigned char *)(D_L11_0015FFD8 + (d->gates[0] << 8)));
             break;
@@ -587,40 +587,40 @@ void FUN_L11_002d14b0(void *arg) {
         path_points_14b0[d->unk114].pos.z -= 500.0f;
         d->leg = 0;
         d->talk_range = 5.0f;
-        set_state_14b0(moby, 1);
+        FUN_L11_002d2088_c(moby, 1);
         break;
     case 1:
         if (d->unk56 == 0) {
             if (hero.air_frames.s == 0 && update_npc_dialogue(moby, d->talk)) {
                 begin_dialogue_camera_transition(moby, 2.5f);
-                set_state_14b0(moby, 2);
+                FUN_L11_002d2088_c(moby, 2);
             }
         } else if (vector_distance(&moby->pos, &hero.motion.pos) < 6.0f) {
-            set_state_14b0(moby, 3);
+            FUN_L11_002d2088_c(moby, 3);
         }
         break;
     case 2:
         if (D_L11_0015F5C4 != 2)
-            set_state_14b0(moby, 3);
+            FUN_L11_002d2088_c(moby, 3);
         break;
     case 3:
         if (vector_distance(&moby->pos, &hero.motion.pos) > 6.0f &&
             FUN_L11_002d2340(moby, (char *)&hero.motion.pos) && proximity == 1)
-            set_state_14b0(moby, 4);
+            FUN_L11_002d2088_c(moby, 4);
         break;
     case 4:
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f ||
             !FUN_L11_002d2340(moby, (char *)&hero.motion.pos) || proximity == 2)
-            set_state_14b0(moby, 3);
+            FUN_L11_002d2088_c(moby, 3);
         else if (vector_distance(&moby->pos, &hero.motion.pos) > 8.0f)
-            set_state_14b0(moby, 5);
+            FUN_L11_002d2088_c(moby, 5);
         break;
     case 5:
         if (vector_distance(&moby->pos, &hero.motion.pos) < 3.0f ||
             !FUN_L11_002d2340(moby, (char *)&hero.motion.pos) || proximity == 2)
-            set_state_14b0(moby, 3);
+            FUN_L11_002d2088_c(moby, 3);
         else if (vector_distance(&moby->pos, &hero.motion.pos) < 4.0f)
-            set_state_14b0(moby, 4);
+            FUN_L11_002d2088_c(moby, 4);
         break;
     case 6:
         FUN_L11_002d2340(moby, (char *)&path_points_14b0[d->points[d->leg]].pos);
@@ -636,7 +636,7 @@ void FUN_L11_002d14b0(void *arg) {
                 scale_vector_14b0(v, &o->rot_row2, D_L11_00161410);
                 fast_vec_add(&d->target, &d->target, v);
                 d->next_state = 8;
-                set_state_14b0(moby, 7);
+                FUN_L11_002d2088_c(moby, 7);
                 break;
             }
             case 1: {
@@ -650,15 +650,15 @@ void FUN_L11_002d14b0(void *arg) {
                 fast_vec_add(&d->target, &d->target, v);
                 path_points_14b0[d->unk110].pos.z += 500.0f;
                 d->next_state = 8;
-                set_state_14b0(moby, 7);
+                FUN_L11_002d2088_c(moby, 7);
                 break;
             }
             case 2:
-                set_state_14b0(moby, 0xB);
+                FUN_L11_002d2088_c(moby, 0xB);
                 break;
             case 3:
                 path_points_14b0[d->unk114].pos.z += 500.0f;
-                set_state_14b0(moby, 0xC);
+                FUN_L11_002d2088_c(moby, 0xC);
                 break;
             }
         }
@@ -680,28 +680,28 @@ void FUN_L11_002d14b0(void *arg) {
             qcopy(D_L11_0016D270 + 0x10, r);
             *(short *)(D_L11_0016D270 + 0x36) = 1;
             begin_dialogue_camera_transition(moby, 2.5f);
-            set_state_14b0(moby, 0xD);
+            FUN_L11_002d2088_c(moby, 0xD);
         }
         break;
     case 13:
         if (D_L11_0015F5C4 != 2) {
             FUN_L11_002cb990((struct Moby *)(D_L11_0015FFD8 + (d->unk104 << 8)));
-            set_state_14b0(moby, 0xE);
+            FUN_L11_002d2088_c(moby, 0xE);
         }
         break;
     case 7:
         if (moby->anim_flags & 2)
-            set_state_14b0(moby, d->next_state);
+            FUN_L11_002d2088_c(moby, d->next_state);
         break;
     case 8:
         if (vector_distance(&moby->pos, &d->target) < 0.5f)
-            set_state_14b0(moby, 9);
+            FUN_L11_002d2088_c(moby, 9);
         break;
     case 9:
         {
             int i = d->leg != 0;
             if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (d->gates[i] << 8))))
-                set_state_14b0(moby, 0xA);
+                FUN_L11_002d2088_c(moby, 0xA);
         }
         break;
     case 10:
@@ -709,25 +709,25 @@ void FUN_L11_002d14b0(void *arg) {
             int n = ++d->leg;
             qcopy(&d->target, &path_points_14b0[d->unkD0[n]].pos);
             d->next_state = 4;
-            set_state_14b0(moby, 7);
+            FUN_L11_002d2088_c(moby, 7);
         }
         break;
     case 11:
         if (FUN_L11_0030a830((struct Moby *)(D_L11_0015FFD8 + (d->unk100 << 8)))) {
             d->leg += 1;
-            set_state_14b0(moby, 3);
+            FUN_L11_002d2088_c(moby, 3);
         }
         break;
     case 14:
         if (D_0014C050[d->unk118 + D_0015ED84 * 16] == 0xFF && D_001413D4_14b0 != 0x32 &&
             update_npc_dialogue(moby, d->talk)) {
             begin_dialogue_camera_transition(moby, 2.5f);
-            set_state_14b0(moby, 0xF);
+            FUN_L11_002d2088_c(moby, 0xF);
         }
         break;
     case 15:
         if (D_L11_0015F5C4 != 2) {
-            ea210_switch(6, 1);
+            FUN_L00_00260860(6, 1);
             memcard_save_data(0, -1);
             help_request(0x2AF8, 0x3A);
             mark_moby_for_removal(moby);
@@ -922,7 +922,7 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
-void floor_height_4318(void *a) __asm__("FUN_L00_00259710");
+void FUN_L00_00259710(void *a);
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 
 int FUN_L11_002d25e8(struct Moby *m, float *out) {
@@ -1074,7 +1074,7 @@ void fred_pokitaru_update(struct Moby *moby) {
 
     FUN_L02_002e0cd8(moby);
     if (moby->visible && distance_xyz(&moby->pos, D_L11_001677C0) < 30.0f) {
-        wake302618(moby);
+        FUN_L00_0025a120(moby);
         moby->shadow_range = 24;
     }
     switch (moby->state) {
@@ -1870,7 +1870,7 @@ int FUN_L11_0030a480(struct Moby *moby) {
     return 1;
 }
 extern void attach_manipulator(struct Moby *, int, void *) __asm__("FUN_0020cb10");
-extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
+extern void FUN_L00_001fff28(void *, int, float);
 extern void moby_point_position(struct Moby *, int, float *) __asm__("FUN_L00_0024f7c8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void random_integer_below_cf(float *, float *, float, float) __asm__("FUN_L00_0026f080");
@@ -1913,7 +1913,7 @@ void FUN_L11_0030a500(struct Moby *moby) {
             step = frame_time * 2.6179938f;
         if (((u8 *)d)[i * 0x40 + 0x101]) {
             d->angle[i] = fast_add_rotations(d->angle[i], step);
-            set_joint_67e8(d->parts[i].joint, 0, d->angle[i]);
+            FUN_L00_001fff28(d->parts[i].joint, 0, d->angle[i]);
         }
     }
     if (vector_distance(&moby->pos, D_L11_001677C0) > 38.0f)

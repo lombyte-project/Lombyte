@@ -4,8 +4,8 @@
 
 void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 /* Calls probe_ground_height(a, 0x20, 0.5f). */
-void floor_height_4318(void *a) __asm__("FUN_L00_00259710");
-void floor_height_4318(void *a) {
+void FUN_L00_00259710(void *a);
+void FUN_L00_00259710(void *a) {
     probe_ground_height(a, 0x20, 0.5f);
 }
 #define NOT_SDA
@@ -50,8 +50,8 @@ int FUN_L00_00259830(char *a) {
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Fills a record with b, c, d and flag 0, and clears the 64-bit value at its start. */
-void make_hit_089d0(char *a, int b, int c, float d) __asm__("FUN_L00_00259858");
-void make_hit_089d0(char *a, int b, int c, float d) {
+void FUN_L00_00259858(char *a, int b, int c, float d);
+void FUN_L00_00259858(char *a, int b, int c, float d) {
     *(int *)(a + 0x10) = b;
     *(int *)(a + 0x14) = c;
     *(float *)(a + 0x1C) = d;
@@ -128,8 +128,8 @@ typedef struct {
 extern G_259a88 D_L00_00173E40_259a88 __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern T_259a88 D_L00_00178100_259a88[] __asm__("D_L00_00178100") __attribute__((section(".data")));
 void FUN_001f99f8_259a88(void *) __asm__("FUN_001f99f8");
-void apply_hit_ece00(unsigned char *m, L_259a88 *src) __asm__("FUN_L00_00259a88");
-void apply_hit_ece00(unsigned char *m, L_259a88 *src) {
+void FUN_L00_00259a88(unsigned char *m, L_259a88 *src);
+void FUN_L00_00259a88(unsigned char *m, L_259a88 *src) {
     L_259a88 l;
     int i = D_L00_00173E40_259a88.idx;
     T_259a88 *e;
@@ -239,13 +239,13 @@ typedef struct {
 } Vk __attribute__((aligned(16)));
 
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
-extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
+extern void FUN_L00_001fff28(void *, int, float);
 
 void FUN_L00_00259f50(void *a, float *v) {
     Vk t0, t1, t2;
-    set_joint_67e8(&t2, 0, v[0]);
-    set_joint_67e8(&t1, 1, v[1]);
-    set_joint_67e8(&t0, 2, v[2]);
+    FUN_L00_001fff28(&t2, 0, v[0]);
+    FUN_L00_001fff28(&t1, 1, v[1]);
+    FUN_L00_001fff28(&t0, 2, v[2]);
     multiply_quaternions(a, &t2, &t1);
     multiply_quaternions(a, a, &t0);
 }
@@ -289,8 +289,8 @@ void jet_animate(unsigned char *m, float r) {
 extern int D_L00_00173E40_25a120[] __asm__("D_L00_00173E40");
 extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
-void wake302618(char *o) __asm__("FUN_L00_0025a120");
-void wake302618(char *o) {
+void FUN_L00_0025a120(char *o);
+void FUN_L00_0025a120(char *o) {
     float a[4];
     float b[4];
     void *p = o + 0x10;
@@ -473,8 +473,8 @@ typedef struct {
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
-float fn_2c2488(float *a, float *b, float *out, float speed, float g) __asm__("FUN_L00_0025abf0");
-float fn_2c2488(float *a, float *b, float *out, float speed, float g) {
+float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
+float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g) {
     Vc0 d;
     float t;
     subtract_vector_xyz(&d, b, a);
@@ -769,8 +769,8 @@ int FUN_L00_0025b440(O_25b440 *o, S_25b440 *s) {
     return s->state;
 }
 /* Linear interpolation: a + (b - a) * t. */
-f32 lerp_7b10(f32 a, f32 b, f32 t) __asm__("FUN_L00_0025b6a8");
-f32 lerp_7b10(f32 a, f32 b, f32 t) {
+f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t);
+f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t) {
     return a + (b - a) * t;
 }
 #ifndef NON_MATCHING
@@ -789,10 +789,10 @@ void interpolate_vector(f32 t, f32 *out, f32 *a, f32 *b) {
     volatile f32 *leftPtr = left.f;
     left.q = *(u128 *)a;
     right.q = *(u128 *)b;
-    dest[0] = lerp_7b10(left.f[0], right.f[0], t);
-    dest[1] = lerp_7b10(left.f[1], right.f[1], t);
-    dest[2] = lerp_7b10(left.f[2], rightPtr[2], t);
-    dest[3] = lerp_7b10(leftPtr[3], rightPtr[3], t);
+    dest[0] = FUN_L00_0025b6a8(left.f[0], right.f[0], t);
+    dest[1] = FUN_L00_0025b6a8(left.f[1], right.f[1], t);
+    dest[2] = FUN_L00_0025b6a8(left.f[2], rightPtr[2], t);
+    dest[3] = FUN_L00_0025b6a8(leftPtr[3], rightPtr[3], t);
 }
 #endif
 #define NOT_SDA
@@ -805,8 +805,8 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Turns from angle a toward angle b by fraction c of the difference. */
-float lerp_angle_5d48(float a, float b, float c) __asm__("FUN_L00_0025b750");
-float lerp_angle_5d48(float a, float b, float c) {
+float FUN_L00_0025b750(float a, float b, float c);
+float FUN_L00_0025b750(float a, float b, float c) {
     float r = fast_subtract_rotations(b, a);
     return fast_add_rotations(a, r * c);
 }

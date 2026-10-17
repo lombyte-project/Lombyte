@@ -34,8 +34,8 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_0024f7c8(struct Moby *, int, void *);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int FUN_L00_002591d0(struct Moby **, int, int, int);
-extern int f2592b8_2591d0(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00_002592b8");
-extern void set_group_state_30ca80(int, int) __asm__("FUN_L01_0026e0e0");
+extern int FUN_L00_002592b8(struct Moby **, struct Moby *, int, int);
+extern void FUN_L01_0026e0e0(int, int);
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern u8 D_0013F3D0[];
 extern s32 current_level_index __asm__("D_0015ED84");
@@ -80,7 +80,7 @@ void underwater_ring_update(struct Moby *moby) {
                     other->distance = vars->distance;
                 }
                 vars->notified_count++;
-                f2592b8_2591d0(&child, child, 0, 0);
+                FUN_L00_002592b8(&child, child, 0, 0);
             }
         }
         vars->timer = 0;
@@ -99,7 +99,7 @@ void underwater_ring_update(struct Moby *moby) {
         if (save_byte[0x454] != 0 ||
             ((((s32)*(u32 *)(((((s16)save_id >> 5) << 2) + (current_level_index << 8)) + (u8 *)D_0014C190)) >> (save_id & 31)) & 1) != 0) {
             if (vars->enabled != 0) {
-                set_group_state_30ca80(moby->group, 4);
+                FUN_L01_0026e0e0(moby->group, 4);
                 vars->timer = vars->restart_timer;
                 moby->state = 4;
                 break;
@@ -120,7 +120,7 @@ void underwater_ring_update(struct Moby *moby) {
         }
         if (moby->state == 2) {
             if (vars->child_count >= vars->notified_count) {
-                set_group_state_30ca80(moby->group, 4);
+                FUN_L01_0026e0e0(moby->group, 4);
                 allocate_voice_for_target_entry(1, 0x31, moby);
                 vars->timer = vars->restart_timer;
                 moby->state = 4;
@@ -130,7 +130,7 @@ void underwater_ring_update(struct Moby *moby) {
                     vars->child_count = 0;
                     vars->triggered = 0;
                     allocate_voice_for_target_entry(2, 0x31, moby);
-                    set_group_state_30ca80(moby->group, 3);
+                    FUN_L01_0026e0e0(moby->group, 3);
                 } else if (fast_dec_timer_s16(&vars->delay) != 0) {
                     allocate_voice_for_target_entry(0, 0x31, moby);
                     first = scale_game_frames(0x2d);
@@ -228,8 +228,8 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0013D388_bd78[] __asm__("D_0013D388");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void ea210_init(char *) __asm__("FUN_L02_002ea7d0");
-extern void ea210_update(char *) __asm__("FUN_L02_002ea8b0");
+extern void FUN_L02_002ea7d0(char *);
+extern void FUN_L02_002ea8b0(char *);
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -244,7 +244,7 @@ void codebot_update(struct Moby *moby) {
             moby->pclass->scale * D_L15_001621A0;
         switch (moby->state) {
         case 0:
-            ea210_init(moby);
+            FUN_L02_002ea7d0(moby);
             if (D_0013D388_bd78[2] != 0) {
                 mark_moby_for_removal(moby);
             } else {
@@ -253,7 +253,7 @@ void codebot_update(struct Moby *moby) {
             }
             break;
         case 1:
-            ea210_update(moby);
+            FUN_L02_002ea8b0(moby);
             if (FUN_001f9b48(&moby->pos, &hero.motion.pos) < 3.0f) {
                 if (hero.state.current != 0x32) {
                     moby->flags |= 0x41;
@@ -291,7 +291,7 @@ extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_00210a08(int, int, struct Moby *);
 
 void giant_clank_pad_update(struct Moby *moby) __asm__("FUN_L15_002ed068");
@@ -349,7 +349,7 @@ void giant_clank_pad_update(struct Moby *moby) {
             pad += *(int *)((u8 *)linked + 0x60);
             *(u128 *)position = *(u128 *)&moby->pos;
             *(float *)(position + 8) = probe_ground_height(position, 0, 0.5f) + 0.1f;
-            ea210_camera(position, &moby->rot, 0, 1);
+            FUN_L00_00216f90(position, &moby->rot, 0, 1);
             pad->collision = pad->pclass->collision;
             pad->visible = 1;
             pad->flags &= ~1;

@@ -31,8 +31,8 @@ void follow_camera_set_up_spring(float a, float b) {
 extern char *D_L00_00166E00 __attribute__((section(".data")));
 extern char *FUN_L00_001eb1f8(int);
 
-void ea210_drawflush(char *src) __asm__("FUN_L00_002eaa30");
-void ea210_drawflush(char *src) {
+void FUN_L00_002eaa30(char *src);
+void FUN_L00_002eaa30(char *src) {
     char *g = D_L00_00166E00;
     char *p;
     if (*(short *)(g + 0x86) != 5)

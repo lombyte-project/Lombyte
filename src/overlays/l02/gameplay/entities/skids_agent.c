@@ -70,7 +70,7 @@ extern s32 watcher_talk(struct Moby *, WatcherVars *) __asm__("FUN_L00_00266448"
 extern void watcher_face(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern s32 point_in_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void give_reward(s32, s32) __asm__("FUN_L00_00203908");
-extern void ea210_switch(s32, s32) __asm__("FUN_L00_00260860");
+extern void FUN_L00_00260860(s32, s32);
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void end_conversation(s32, s32) __asm__("FUN_0020b178");
@@ -113,9 +113,9 @@ extern void FUN_L02_00298c68(int);
 extern void approach_two_stage(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
 extern void lerp_vector(void *out, void *a, void *b, f32 t) __asm__("FUN_001f9a40");
-extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
-extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
-extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
+extern void FUN_L00_002ea9d8(void *);
+extern void FUN_L00_002eaa30(void *);
+extern void FUN_L00_002eac18(int);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
@@ -216,7 +216,7 @@ void skids_agent_update(struct Moby *moby) {
         }
         break;
     case 5:
-        ea210_switch(5, 1);
+        FUN_L00_00260860(5, 1);
         end_conversation(0, -1);
         goto kill;
     case 3: {
@@ -233,15 +233,15 @@ void skids_agent_update(struct Moby *moby) {
         rot.f[2] = angle_add(angle_sub(to.f[2], from.f[2]) * *(f32 *)(data + 0x180), from.f[2]);
         rot.f[1] = angle_add(angle_sub(to.f[1], from.f[1]) * *(f32 *)(data + 0x180), from.f[1]);
         rot.f[0] = angle_add(angle_sub(to.f[0], from.f[0]) * *(f32 *)(data + 0x180), from.f[0]);
-        ea210_drawend(&pos);
-        ea210_drawflush(&rot);
+        FUN_L00_002ea9d8(&pos);
+        FUN_L00_002eaa30(&rot);
         if (*(f32 *)(data + 0x180) < 1.0f) {
             approach_value((f32 *)(data + 0x17C), 0.0f, 0.1f);
         } else {
             approach_value((f32 *)(data + 0x17C), 1.0f, 0.1f);
             if (*(f32 *)(data + 0x17C) == 1.0f) {
                 moby->state = 4;
-                ea210_hide(0);
+                FUN_L00_002eac18(0);
             }
         }
         D_L02_0015F3FC = *(f32 *)(data + 0x17C);
@@ -385,7 +385,7 @@ void skid_mcmarx_update(struct Moby *m) {
         }
         if (v->talk_state == 2) {
             give_reward(2000, 10);
-            ea210_switch(30, 1);
+            FUN_L00_00260860(30, 1);
             jet_clear_persistent(*((u8 *)m + 0xB0));
             jet_reset_camera(&hero.motion.pos, &hero.motion.rot);
             end_conversation(0, -1);
@@ -683,8 +683,8 @@ extern char D_L02_001F3D90[];
 extern char D_L02_001F3DD0[];
 extern char D_L02_001F3E10[];
 extern char D_L02_001F3E80[];
-extern void begin_2ea048(float, float, float, float, int, int, int, int, int, int, void *) __asm__("FUN_L02_002a4818");
-extern void end_2ea048(void) __asm__("FUN_L02_002a47f8");
+extern void FUN_L02_002a4818(float, float, float, float, int, int, int, int, int, int, void *);
+extern void FUN_L02_002a47f8_c(void) __asm__("FUN_L02_002a47f8");
 extern int in_clip_2ea048(void *, int) __asm__("FUN_00214720");
 extern void draw_2ea048(void *) __asm__("FUN_00201f58");
 
@@ -693,7 +693,7 @@ extern void draw_2ea048(void *) __asm__("FUN_00201f58");
 void FUN_L02_002ea048(struct Moby *m) {
     int *d = (int *)m->pvars;
 
-    begin_2ea048(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, D_L02_001F3E80);
+    FUN_L02_002a4818(0.0f, 260080.0f, 255.0f, 0.0f, 15, 15, 25, 30, 40, 64, D_L02_001F3E80);
     if (D_L02_0015F608 != 0 || (d[0] != -1 && in_clip_2ea048(D_L02_001673C0, d[0]))) {
         draw_2ea048(D_L02_001F3C00);
     }
@@ -707,7 +707,7 @@ void FUN_L02_002ea048(struct Moby *m) {
     if (D_L02_0015F608 != 0 || (d[2] != -1 && in_clip_2ea048(D_L02_001673C0, d[2]))) {
         draw_2ea048(D_L02_001F3C60);
     }
-    end_2ea048();
+    FUN_L02_002a47f8_c();
 }
 
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");

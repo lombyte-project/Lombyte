@@ -48,7 +48,7 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
-extern void turn_e50(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
+extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
 extern struct Moby *FUN_L08_002de3e0(void *, struct Moby *, void *, f32, f32);
 extern void FUN_L08_002e9558(struct Moby *);
@@ -103,7 +103,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
     case 1:
         waypoint = (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) % vars->follow[0].path->count;
         target = &D_L08_0015FFD8[vars->target_index];
-        turn_e50(moby,
+        FUN_L00_00258278(moby,
                          fast_arc_tan(vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
                                       vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
                          &vars->turn_speed, 0.004f, 0.3f, 0.02f);
@@ -643,8 +643,8 @@ char D_L08_001FC250[] = "M671 Warning: texture h count (%f) is greater than max 
 extern char D_L08_001FC2A0[];
 extern char D_L08_001FC2D0[];
 extern s32 DebugPrint();
-extern int light_67e8(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern void stop_n(int) __asm__("FUN_L00_0023e838");
+extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern void FUN_L00_0023e838(int);
 void FUN_L08_002f5e58(struct Moby *m);
 #ifdef NON_MATCHING
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
@@ -1036,7 +1036,7 @@ void FUN_L08_002f70a0(struct Moby *m) {
         enqueue_callback_list_1(FUN_L08_002f5e58, m);
         if (d->flags & 4) {
             if (d->light == -1) {
-                d->light = light_67e8(d->light_pos.f, (f32)d->radius,
+                d->light = FUN_L00_0023e738(d->light_pos.f, (f32)d->radius,
                                             convert_integer_to_float(d->falloff) / 100.0f,
                                             d->intensity * convert_integer_to_float(d->red) / 100.0f,
                                             d->intensity * convert_integer_to_float(d->green) / 100.0f,
@@ -1049,7 +1049,7 @@ void FUN_L08_002f70a0(struct Moby *m) {
             }
         }
     } else if (d->light != -1) {
-        stop_n(d->light);
+        FUN_L00_0023e838(d->light);
         d->light = -1;
     }
     d->flags |= 2;
@@ -1154,7 +1154,7 @@ extern void FUN_L00_00262d38(int);
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L08_00305138_c(void *) __asm__("FUN_L02_002e0cd8");
-extern void wake302618(void *) __asm__("FUN_L00_0025a120");
+extern void FUN_L00_0025a120(void *);
 extern float FUN_001f9b48(void *, void *);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
@@ -1172,7 +1172,7 @@ void commando_update(WM *m) {
     FUN_L08_00305138_c(m);
     if (m->opacity) {
         if (FUN_001f9b48(m->position, D_L08_001675C0_c) < (float)D_L08_001621D8) {
-            wake302618(m);
+            FUN_L00_0025a120(m);
             m->b7F = (D_L08_001621D8 * 13) >> 4;
         }
     }

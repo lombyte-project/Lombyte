@@ -43,8 +43,8 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern unsigned char *D_L07_001B21F4 __asm__("D_L07_001B21F4") __attribute__((section(".data")));
 extern float D_L07_00166E40[];
 
-unsigned char *trail_s(void *m, short index, float amount, float factor) __asm__("FUN_L07_0029b8d8");
-unsigned char *trail_s(void *m, short index, float amount, float factor) {
+unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor);
+unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor) {
     float v[4];
     float t[4];
     unsigned char *p = create_part(0x3d);

@@ -446,7 +446,7 @@ void trooper_anim_finish(s32 id, void *s) __asm__("FUN_L00_0025d538");
 void FUN_L00_002ea9d8(char *src);
 void FUN_L00_002eaa30(char *src);
 void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
-void ea210_hide(int mode) __asm__("FUN_L00_002eac18");
+void FUN_L00_002eac18(int mode);
 void FUN_L01_002405a0(void);
 void FUN_L02_002d8910_c(float *pos, float *rot, char *moby) __asm__("FUN_L02_002d8910");
 void FUN_L02_002d92f0_c(char *moby) __asm__("FUN_L02_002d92f0");
@@ -731,9 +731,9 @@ extern int D_L02_00161BC0 __attribute__((sda));
 extern int D_L02_00161BC4 __attribute__((sda));
 extern int D_L02_0015F5CC;
 extern void FUN_L02_002dae88(void);
-extern void draw_arc_2d93e8(u64, u32, float, float, float, float) __asm__("FUN_L02_002da3d8");
-extern void draw_arrow_2d93e8(u64, int, int, float, float) __asm__("FUN_L02_002da6c0");
-extern void draw_bar_2d93e8(u64, f32, f32, f32, s32) __asm__("FUN_L02_002da938");
+extern void FUN_L02_002da3d8(u64, u32, float, float, float, float);
+extern void FUN_L02_002da6c0(u64, int, int, float, float);
+extern void FUN_L02_002da938(u64, f32, f32, f32, s32);
 
 void FUN_L02_002d93e8(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -805,10 +805,10 @@ void FUN_L02_002d93e8(char *moby) {
                     }
                 }
                 phase = add_rotation_2d93e8(angle, 0.31415927f);
-                draw_bar_2d93e8(texture, phase, (float)D_L02_00161B50, distance, color);
+                FUN_L02_002da938(texture, phase, (float)D_L02_00161B50, distance, color);
                 if (draw_second) {
                     phase = add_rotation_2d93e8(angle, 0.31415927f);
-                    draw_bar_2d93e8(texture, phase, distance, (float)D_L02_00161B50, D_L02_00161BB4);
+                    FUN_L02_002da938(texture, phase, distance, (float)D_L02_00161B50, D_L02_00161BB4);
                 }
             }
         }
@@ -845,10 +845,10 @@ void FUN_L02_002d93e8(char *moby) {
                     } else distance = (float)-extent;
                 }
                 phase = add_rotation_2d93e8(angle, 0.31415927f);
-                draw_bar_2d93e8(texture, phase, (float)D_L02_00161B44, distance, color);
+                FUN_L02_002da938(texture, phase, (float)D_L02_00161B44, distance, color);
                 if (draw_second) {
                     phase = add_rotation_2d93e8(angle, 0.31415927f);
-                    draw_bar_2d93e8(texture, phase, distance, (float)D_L02_00161B44, D_L02_00161BB4);
+                    FUN_L02_002da938(texture, phase, distance, (float)D_L02_00161B44, D_L02_00161BB4);
                 }
             }
         }
@@ -884,10 +884,10 @@ void FUN_L02_002d93e8(char *moby) {
                     }
                 }
                 phase = add_rotation_2d93e8(angle, 0.31415927f);
-                draw_bar_2d93e8(texture, phase, (float)D_L02_00161B38, distance, color);
+                FUN_L02_002da938(texture, phase, (float)D_L02_00161B38, distance, color);
                 if (draw_second) {
                     phase = add_rotation_2d93e8(angle, 0.31415927f);
-                    draw_bar_2d93e8(texture, phase, distance, (float)D_L02_00161B38, D_L02_00161BB4);
+                    FUN_L02_002da938(texture, phase, distance, (float)D_L02_00161B38, D_L02_00161BB4);
                 }
             }
         }
@@ -908,20 +908,20 @@ void FUN_L02_002d93e8(char *moby) {
         else color = D_L02_00161BA4; \
         angle = add_rotation_2d93e8(angle, (float)(i * 30) * 0.017453292f); \
         phase = add_rotation_2d93e8(angle, 0.5235988f); \
-        draw_arc_2d93e8(texture, color, angle, phase, (float)(outer_start), (float)(outer_end)); \
+        FUN_L02_002da3d8(texture, color, angle, phase, (float)(outer_start), (float)(outer_end)); \
         ring_index = (i + *(int *)(data + (offset))) % 12; \
         value = (slots)[ring_index]; \
         if (value != 0) { \
             if (value >= 3) { \
                 phase = add_rotation_2d93e8(angle, 0.2617994f); \
-                draw_arrow_2d93e8(texture, D_L02_00161BA8, 0, phase, (float)(radius)); \
+                FUN_L02_002da6c0(texture, D_L02_00161BA8, 0, phase, (float)(radius)); \
                 (slots)[(i + *(int *)(data + (offset))) % 12] = 2; \
             } else if (value == 2) { \
                 phase = add_rotation_2d93e8(angle, 0.2617994f); \
-                draw_arrow_2d93e8(texture, D_L02_00161BA8, 1, phase, (float)(radius)); \
+                FUN_L02_002da6c0(texture, D_L02_00161BA8, 1, phase, (float)(radius)); \
             } else { \
                 phase = add_rotation_2d93e8(angle, 0.2617994f); \
-                draw_arrow_2d93e8(texture, D_L02_00161BA8, 2, phase, (float)(radius)); \
+                FUN_L02_002da6c0(texture, D_L02_00161BA8, 2, phase, (float)(radius)); \
             } \
         } \
     } }
@@ -938,7 +938,7 @@ void FUN_L02_002d93e8(char *moby) {
             if (markers[11 - i] == 2) color = D_L02_00161BC4;
             else if (D_0013CAE4 & 0x20) color = D_L02_00161BC0;
             else color = D_L02_00161BBC;
-            draw_arc_2d93e8(texture, color, angle, phase, (float)D_L02_00161B58, (float)D_L02_00161B54);
+            FUN_L02_002da3d8(texture, color, angle, phase, (float)D_L02_00161B58, (float)D_L02_00161B54);
         }
     }
     vu1_add_g_sregister_2d93e8(0x47, 0x5360b);
@@ -958,7 +958,7 @@ extern int D_L02_00161B0C __attribute__((sda));
 extern int D_L02_00161B10 __attribute__((sda));
 extern int D_L02_00161B14 __attribute__((sda));
 extern int D_L02_00161B18 __attribute__((sda));
-extern void draw_quad51(void *, void *, void *, s64, s32) __asm__("FUN_L02_0020bc88");
+extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L02_002da3d8(int texture, u32 color, float start_angle, float end_angle, float radius_x, float radius_y) {
@@ -990,7 +990,7 @@ void FUN_L02_002da3d8(int texture, u32 color, float start_angle, float end_angle
         corners[2] += func_001FA898_r(fast_sin(angle1) * radius_x * 16.0f) + 0x8000;
         corners[3] += (u32)(-(func_001FA898_r(fast_cos(angle1) * radius_y * 16.0f) << 16) - (int)0x80000000);
         corners[3] += func_001FA898_r(fast_sin(angle1) * radius_y * 16.0f) + 0x8000;
-        draw_quad51(corners, uvs, colors, texture, 1);
+        FUN_L02_0020bc88(corners, uvs, colors, texture, 1);
     }
 }
 
@@ -1022,7 +1022,7 @@ extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 extern int D_L02_00161B9C __attribute__((sda));
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern void draw_quad51(void *, void *, void *, s64, s32) __asm__("FUN_L02_0020bc88");
+extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern void clear_vector(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -1082,8 +1082,8 @@ void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
     xy[3] += func_001FA898_r(M[3][0] * 16.0f) << 16;
     xy[3] += func_001FA898_r(M[3][1] * 16.0f);
     tex = get_effect_texture(D_L02_00161B1C_gp + 0x29);
-    draw_quad51(xy, uv, col, tex, 1);
-    draw_quad51(xy, uv, col, tex, 1);
+    FUN_L02_0020bc88(xy, uv, col, tex, 1);
+    FUN_L02_0020bc88(xy, uv, col, tex, 1);
 }
 extern s32 D_L02_0015F5CC;
 extern f32 D_L02_00161B60 __attribute__((sda));
@@ -1365,7 +1365,7 @@ extern int D_L02_00161CB4 __attribute__((sda));
 extern float D_L02_00161CB8 __attribute__((sda));
 extern float D_L02_00161CBC;
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void spawn_spark_2f6470(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
+extern void FUN_L00_002730e0(void *, void *, int, int, int, int, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_L02_002fa6d8(void);
@@ -1415,7 +1415,7 @@ void swingshot_versatarget_update(char *m) {
                     normalize_vector_xyz(w, v, -2.0f / multiply_global_factor_ed64(D_L02_00161CB0));
                     add_vector_xyz(v, v, m + 0x10);
                     a = truncate_float_to_s32(multiply_global_factor_ed64(D_L02_00161CB0)) & 0xFF;
-                    spawn_spark_2f6470(v, w, D_L02_00161CB4, a,
+                    FUN_L00_002730e0(v, w, D_L02_00161CB4, a,
                                      random_integer_below(0xFF) & 0xFF, 0,
                                      D_L02_00161CB8);
                 }
@@ -1473,27 +1473,27 @@ void FUN_L02_002e0cd8(char *moby) {
     }
 }
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void ea210_init(struct Moby *) __asm__("FUN_L02_002ea7d0");
-extern void ea210_update(struct Moby *) __asm__("FUN_L02_002ea8b0");
+extern void FUN_L02_002ea7d0_c(struct Moby *) __asm__("FUN_L02_002ea7d0");
+extern void FUN_L02_002ea8b0_c(struct Moby *) __asm__("FUN_L02_002ea8b0");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float ea210_addrot(float, float) __asm__("FUN_001fa580");
 extern float ea210_dist(void *, void *) __asm__("FUN_001f9b80");
 extern float ea210_abs(float) __asm__("FUN_001f99c0");
 extern void ea210_sound(int) __asm__("FUN_L00_00298840");
-extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
+extern void FUN_L00_00260860(int, int);
 extern void ea210_play(int, int) __asm__("FUN_L00_00263d40");
-extern void ea210_stop(void) __asm__("FUN_L00_002039a0");
+extern void FUN_L00_002039a0(void);
 extern void ea210_timing(int, int) __asm__("FUN_L00_00203908");
-extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void ea210_approach(float, float, float, float, void *, void *) __asm__("FUN_00213f38");
 extern void ea210_transform(float, void *, void *, void *) __asm__("FUN_001f9a40");
 extern float ea210_interp(float, float) __asm__("FUN_001fa5c8");
 extern float ea210_clamp(float, float) __asm__("FUN_001fa580");
 extern void ea210_draw(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
-extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
+extern void FUN_L00_002ea9d8_c(void *) __asm__("FUN_L00_002ea9d8");
+extern void FUN_L00_002eaa30_c(void *) __asm__("FUN_L00_002eaa30");
 extern float ea210_fade(float, float, void *) __asm__("FUN_00213ed8");
-extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
+extern void FUN_L00_002eac18(int);
 extern void ea210_audio(int, int) __asm__("FUN_0020b178");
 extern void ea210_destroy(struct Moby *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;
@@ -1520,7 +1520,7 @@ void tresspasser_update(struct Moby *moby) {
     which = moby->oclass == 0x3ED ? 0x1A : 0x16;
     switch (moby->state) {
     case 0:
-        ea210_init(moby);
+        FUN_L02_002ea7d0_c(moby);
         ground_offset = 0.2f;
         if (items_acquired[which] == 0) {
             probe_ground_height(&moby->pos, 0, 0.5f);
@@ -1534,7 +1534,7 @@ void tresspasser_update(struct Moby *moby) {
         return;
     case 1:
         moby->rot.z = ea210_clamp(moby->rot.z, angle);
-        ea210_update(moby);
+        FUN_L02_002ea8b0_c(moby);
         if (D_L02_0015F5CC % 10 != 0) return;
         if (!(ea210_dist(&moby->pos, D_0013F3D0) < 1.0f)) return;
         if (ea210_abs(moby->pos.z - *(float *)(D_0013F3D0 + 8)) < 2.0f) {
@@ -1553,21 +1553,21 @@ void tresspasser_update(struct Moby *moby) {
         if (level_game_mode == 2) return;
         if (D_001413F4 != 0) {
             if (which == 0x16) {
-                ea210_switch(0x16, 0);
+                FUN_L00_00260860(0x16, 0);
                 D_L02_0015F640 = 0;
             } else {
-                ea210_switch(which, 0);
+                FUN_L00_00260860(which, 0);
             }
         } else {
-            ea210_switch(which, 1);
+            FUN_L00_00260860(which, 1);
         }
         if (moby->oclass == 0x3ED) {
             ea210_play(0x7DF, -1);
-            ea210_stop();
+            FUN_L00_002039a0();
             ea210_timing(0x7D9, 0x13);
             D_L02_0015F3FC = 1.0f;
             moby->state = 4;
-            ea210_camera(D_0013F3D0, D_0013F3D0 + 16, 0x72, 1);
+            FUN_L00_00216f90(D_0013F3D0, D_0013F3D0 + 16, 0x72, 1);
             return;
         }
         ea210_audio(0, -1);
@@ -1594,8 +1594,8 @@ void tresspasser_update(struct Moby *moby) {
         output[0] = ea210_clamp(ea210_interp(d[0], c[0]) * *(float *)(data + 0x40), c[0]);
         if (D_L02_00167400 && *(short *)(D_L02_00167400 + 0x86) != 5)
             ea210_draw(position, output, 1, 0, 0);
-        ea210_drawend(position);
-        ea210_drawflush(output);
+        FUN_L00_002ea9d8_c(position);
+        FUN_L00_002eaa30_c(output);
         if (D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1 &&
             0.2f < *(float *)(data + 0x40)) {
             ea210_fade(1.0f, frame_time * 4.0f, &D_L02_0015F3FC);
@@ -1603,8 +1603,8 @@ void tresspasser_update(struct Moby *moby) {
             ea210_fade(0.0f, D_0015ED6C * 4.0f, &D_L02_0015F3FC);
         }
         if (D_L02_0015F3FC != 1.0f) return;
-        ea210_camera(D_0013F3D0, D_0013F3D0 + 16, 0, 0);
-        ea210_hide(0);
+        FUN_L00_00216f90(D_0013F3D0, D_0013F3D0 + 16, 0, 0);
+        FUN_L00_002eac18(0);
         moby->state = 5;
         return;
     }

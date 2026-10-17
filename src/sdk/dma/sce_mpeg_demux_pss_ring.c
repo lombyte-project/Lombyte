@@ -74,7 +74,7 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
     PssHdr hdr;
     SysBit *b;
     PssHdr *h;
-    sceMpegCbDataStr cb;
+    sceMpegCbDataStr FUN_L11_003192c8;
     sceMpegCallback cbfunc = 0;
     void *cbdata = 0;
     StreamCb *tbl;
@@ -117,25 +117,25 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
             for (i = 0; i < sys->n; i++) {
                 if (tbl[i].id == (h->pes.id & tbl[i].mask)) {
                     headerpos = h->pes.header;
-                    cb.type = 6;
-                    cb.header = GetSysbitPointer(b, headerpos);
-                    cb.data = GetSysbitPointer(b, h->pes.data);
-                    cb.len = h->pes.datalen;
-                    cb.pts = h->pes.pts;
-                    cb.dts = h->pes.dts;
-                    cont = tbl[i].func(mp, &cb, tbl[i].data);
+                    FUN_L11_003192c8.type = 6;
+                    FUN_L11_003192c8.header = GetSysbitPointer(b, headerpos);
+                    FUN_L11_003192c8.data = GetSysbitPointer(b, h->pes.data);
+                    FUN_L11_003192c8.len = h->pes.datalen;
+                    FUN_L11_003192c8.pts = h->pes.pts;
+                    FUN_L11_003192c8.dts = h->pes.dts;
+                    cont = tbl[i].func(mp, &FUN_L11_003192c8, tbl[i].data);
                     break;
                 }
             }
             if (i == sys->n && cbfunc != 0) {
                 headerpos = h->pes.header;
-                cb.type = 6;
-                cb.header = GetSysbitPointer(b, headerpos);
-                cb.data = GetSysbitPointer(b, h->pes.data);
-                cb.len = h->pes.datalen;
-                cb.pts = h->pes.pts;
-                cb.dts = h->pes.dts;
-                cont = cbfunc(mp, &cb, cbdata);
+                FUN_L11_003192c8.type = 6;
+                FUN_L11_003192c8.header = GetSysbitPointer(b, headerpos);
+                FUN_L11_003192c8.data = GetSysbitPointer(b, h->pes.data);
+                FUN_L11_003192c8.len = h->pes.datalen;
+                FUN_L11_003192c8.pts = h->pes.pts;
+                FUN_L11_003192c8.dts = h->pes.dts;
+                cont = cbfunc(mp, &FUN_L11_003192c8, cbdata);
             }
             if (cont) {
                 ret = b->pos >> 3;

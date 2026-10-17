@@ -452,7 +452,7 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern void ea210_switch(s32, s32) __asm__("FUN_L00_00260860");
+extern void FUN_L00_00260860(s32, s32);
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern int memcard_save_data(s32, s32) __asm__("FUN_0020b178");
@@ -497,7 +497,7 @@ void morphoray_update(struct Moby *moby) {
             *(s32 *)(d + 0x18) = state;
         else
             *(s32 *)(d + 0x18) = 0;
-        ea210_switch(0x15, 1);
+        FUN_L00_00260860(0x15, 1);
         start_scene(6);
         moby->state = 2;
         break;
@@ -545,8 +545,8 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *spr_2d6cd0(float f, void *pos, int a1, unsigned char a2, int idx,
-                                       int flag, int s, int mode) __asm__("FUN_L00_00272f68");
+extern unsigned char *FUN_L00_00272f68(float f, void *pos, int a1, unsigned char a2, int idx,
+                                       int flag, int s, int mode);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -587,7 +587,7 @@ void FUN_L14_00305b18(struct Moby *p) {
         g = g / (float)scale_game_frames(255);
         c = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - g));
         k = func_001FA898_r(*a++);
-        spr_2d6cd0(m->c[j], v, c, k, 0x35, 1, 2, 0);
+        FUN_L00_00272f68(m->c[j], v, c, k, 0x35, 1, 2, 0);
         j++;
         add_vector_xyz(v, v, &v[4]);
     }
@@ -633,7 +633,7 @@ typedef struct Snd_3071B0 {
     Moby_3071B0 *f88;
 } Snd_3071B0;
 
-extern float lerp_angle_5d48(float, float, float) __asm__("FUN_L00_0025b750");
+extern float FUN_L00_0025b750(float, float, float);
 extern int D_L14_0015FFD8_c __asm__("D_L14_0015FFD8");
 extern float D_L14_001621F4 __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001621F8 __attribute__((sda)); /* no foreign declaration */
@@ -646,7 +646,7 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-f32 lerp_7b10(f32 a, f32 b, f32 t) __asm__("FUN_L00_0025b6a8");
+f32 FUN_L00_0025b6a8(f32 a, f32 b, f32 t);
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 u8 *FUN_L14_00306158_c(u8 *self) __asm__("FUN_L14_00306158");
@@ -1120,7 +1120,7 @@ extern float D_L14_00162288 __attribute__((sda));
 extern float D_L14_0016228C __attribute__((sda));
 extern int path_step_7620(char *path, float *out, void *pos, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 extern void cart_burst(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025f090");
-extern void turn_e50(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
+extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -1190,7 +1190,7 @@ int FUN_L14_00307620(struct Moby *moby) {
     if (0.01f < AbsoluteFloat(delta[0]) && 0.01f < AbsoluteFloat(delta[1])) {
         yaw = atan2_7620(delta[0], delta[1]);
         bank = fast_subtract_rotations(moby->rot.z, yaw);
-        turn_e50(moby, yaw, (f32 *)(d + 0x98), D_L14_0016226C, D_L14_00162270, 0.0f);
+        FUN_L00_00258278(moby, yaw, (f32 *)(d + 0x98), D_L14_0016226C, D_L14_00162270, 0.0f);
         pitch = -atan2_7620(vector_length_xy(delta), delta[2]);
         vendor_spring(&moby->rot.y, (f32 *)(d + 0x94), pitch, D_L14_0016226C, D_L14_00162270, 0.0f);
         bank /= D_L14_00162278;
@@ -1233,7 +1233,7 @@ typedef struct {
 
 extern Level14State D_L14_0016CF60;
 extern int D_L14_0015F5C4;
-extern int count_group_e3528(int, int) __asm__("FUN_L01_0026e008");
+extern int FUN_L01_0026e008(int, int);
 extern unsigned char D_0013D408[];
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
@@ -1244,7 +1244,7 @@ void FUN_L14_003087c0(struct Moby *moby) {
     unsigned v;
     int i;
     if (d[0] != -1) {
-        if (count_group_e3528(d[0], -1) == 0) {
+        if (FUN_L01_0026e008(d[0], -1) == 0) {
             if (D_0013D408[0x17] == 0) {
                 D_0013D408[0x17] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
@@ -1776,7 +1776,7 @@ extern CamKey5d48 D_L14_001F6488[];
 extern char D_L14_0017AD80[];
 extern int scale_ticks_5d48(int) __asm__("FUN_001f96f8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern float lerp_angle_5d48(float, float, float) __asm__("FUN_L00_0025b750");
+extern float FUN_L00_0025b750(float, float, float);
 extern float cam_interp_angle_5d48(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float cam_interp_5d48(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 extern float atan2_5d48(float, float) __asm__("FUN_001f9e90");
@@ -1946,17 +1946,17 @@ void FUN_L14_00315d48(char *cam) {
         t = num / den;
     }
     k = D_L14_00162490;
-    x = lerp_angle_5d48(D_L14_001F6488[st->idx].a0 * 0.017453292f, D_L14_001F6488[st->idx + 1].a0 * 0.017453292f, t);
+    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].a0 * 0.017453292f, D_L14_001F6488[st->idx + 1].a0 * 0.017453292f, t);
     cur->f0 = cam_interp_angle_5d48(vel, cur->f0, x, k, 0.2f, 0.0f);
     k = D_L14_00162494;
-    x = lerp_angle_5d48(D_L14_001F6488[st->idx].a4 * 0.017453292f, D_L14_001F6488[st->idx + 1].a4 * 0.017453292f, t);
+    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].a4 * 0.017453292f, D_L14_001F6488[st->idx + 1].a4 * 0.017453292f, t);
     cur->f4 = cam_interp_angle_5d48(vel + 1, cur->f4, x, k, 0.2f, 0.0f);
     cur->f8 = cam_interp_5d48(vel + 2, cur->f8, D_L14_001F6488[st->idx].a8 + (D_L14_001F6488[st->idx + 1].a8 - D_L14_001F6488[st->idx].a8) * t, D_L14_00162498, 0.2f, 0.0f);
     k = D_L14_0016249C;
-    x = lerp_angle_5d48(D_L14_001F6488[st->idx].aC * 0.017453292f, D_L14_001F6488[st->idx + 1].aC * 0.017453292f, t);
+    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].aC * 0.017453292f, D_L14_001F6488[st->idx + 1].aC * 0.017453292f, t);
     cur->fC = cam_interp_angle_5d48(vel + 3, cur->fC, x, k, 0.2f, 0.0f);
     k = D_L14_001624A0;
-    x = lerp_angle_5d48(D_L14_001F6488[st->idx].a10 * 0.017453292f, D_L14_001F6488[st->idx + 1].a10 * 0.017453292f, t);
+    x = FUN_L00_0025b750(D_L14_001F6488[st->idx].a10 * 0.017453292f, D_L14_001F6488[st->idx + 1].a10 * 0.017453292f, t);
     cur->f10 = cam_interp_angle_5d48(vel + 4, cur->f10, x, k, 0.2f, 0.0f);
     ang = add_rots_5d48(atan2_5d48(hero.moby->rot_row1.x, hero.moby->rot_row1.y), cur->f0);
     D_L14_001624BC = ang;
@@ -1973,16 +1973,16 @@ void FUN_L14_00315d48(char *cam) {
     if (b == 0.0f && a == 0.0f) {
         b = (st->fC != 0.0f) ? st->fC : st->f8;
         st->f10 += (0.0f - st->f10) * D_L14_001624A4;
-        ang = lerp_angle_5d48(ang, b, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
+        ang = FUN_L00_0025b750(ang, b, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
     } else {
         if (b != 0.0f) {
             st->f10 += (1.0f - st->f10) * D_L14_001624A4;
-            ang = lerp_angle_5d48(ang, b, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
+            ang = FUN_L00_0025b750(ang, b, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
             st->f8 = a;
             st->fC = b;
         } else {
             st->f10 += (0.0f - st->f10) * D_L14_001624A4;
-            ang = lerp_angle_5d48(ang, a, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
+            ang = FUN_L00_0025b750(ang, a, ease_5d48(1.0f, 0.0f, 1.0f, 0.0f, st->f10));
             st->f8 = a;
             st->fC = b;
         }

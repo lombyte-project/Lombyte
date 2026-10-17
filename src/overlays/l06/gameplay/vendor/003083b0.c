@@ -15,7 +15,7 @@ extern u8 D_0013D388_83b0[] __asm__("D_0013D388");
 extern int is_point_inside_clip_volume_83b0(void *, int) __asm__("FUN_00214720");
 extern int help_request_83b0(int, int) __asm__("FUN_L00_00203908");
 extern int scale_game_frames_83b0(int) __asm__("FUN_001f96f8");
-extern int count_group_e3528(int, int) __asm__("FUN_L01_0026e008");
+extern int FUN_L01_0026e008(int, int);
 
 /* Level 6 help hints: shows the help messages for the area and records how often and when each was due. */
 void FUN_L06_003083b0(struct Moby *moby) {
@@ -58,7 +58,7 @@ void FUN_L06_003083b0(struct Moby *moby) {
             }
         }
     }
-    if (is_point_inside_clip_volume_83b0(&hero.motion.pos, vars[8]) && count_group_e3528(vars[6], -1) == 0) {
+    if (is_point_inside_clip_volume_83b0(&hero.motion.pos, vars[8]) && FUN_L01_0026e008(vars[6], -1) == 0) {
         for (j = 0; j < 6; j++) {
             m = (struct Moby *)(D_L06_0015FFD8_83b0 + (vars[j] << 8));
             if (vars[j] != -1 && m != 0 && m->state != 0xFE && m->state != 0xFD && m->state != 1) {
@@ -336,7 +336,7 @@ extern char *func_0020D348_m(int);
 extern float D_L06_0015F580[] __attribute__((section(".sdata")));
 extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
 extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
-extern void debris302618(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
+extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void FUN_L01_002787a0(void *);
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *mk_a(int) __asm__("FUN_0020c4f8");
@@ -361,9 +361,9 @@ void FUN_L06_00309e08(char *self) {
         char *m;
         FUN_0022da68_c(0, 0, (int)self);
         FUN_L01_002787a0(self);
-        debris302618(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
+        FUN_L00_00263fd8(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
                          D_L06_0015F580, D_L06_0015F580);
-        debris302618(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
+        FUN_L00_00263fd8(self, 0x67E, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
                          D_L06_0015F580, D_L06_0015F580);
         m = mk_a(0x67D);
         if (m != 0) {

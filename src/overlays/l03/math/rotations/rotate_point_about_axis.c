@@ -6,8 +6,8 @@ typedef unsigned int Q __attribute__((mode(TI), aligned(16)));
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void matrix_scale1688(void *, void *, float) __asm__("FUN_L00_001ffd48");
-extern void matrix_add1688(void *, void *, void *) __asm__("FUN_L00_001ffe20");
+extern void FUN_L00_001ffd48(void *, void *, float);
+extern void FUN_L00_001ffe20(void *, void *, void *);
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
@@ -43,10 +43,10 @@ void mark_moby_for_removal_cf(Q *axis, Q *point, float angle) {
     skew[2][3] = 0.0f;
     skew[3][3] = 0.0f;
     multiply_matrix(skew_sq, skew, skew);
-    matrix_scale1688(cos_part, skew_sq, 1.0f - fast_cos(angle));
-    matrix_scale1688(sin_part, skew, fast_sin(angle));
-    matrix_add1688(sin_part, sin_part, cos_part);
+    FUN_L00_001ffd48(cos_part, skew_sq, 1.0f - fast_cos(angle));
+    FUN_L00_001ffd48(sin_part, skew, fast_sin(angle));
+    FUN_L00_001ffe20(sin_part, sin_part, cos_part);
     set_identity_matrix(cos_part);
-    matrix_add1688(rot, sin_part, cos_part);
+    FUN_L00_001ffe20(rot, sin_part, cos_part);
     matrix_to_euler(rot, point_p);
 }

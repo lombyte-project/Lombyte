@@ -46,7 +46,7 @@ float FUN_L13_002ba088(int flag, int n, float x, float b, float c, float lo, flo
 
 extern char *func_0020D348_m(int);
 extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
-extern void place_2ce1f0(void *) __asm__("FUN_L00_0025d1b8");
+extern void FUN_L00_0025d1b8(void *);
 
 unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
     unsigned char *moby = func_0020D348_m(moby_class);
@@ -58,7 +58,7 @@ unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
         moby[0xBC] = 0;
         qcopy(moby + 0x10, position);
         allocate_voice_for_target_entry_cf(moby);
-        place_2ce1f0(moby);
+        FUN_L00_0025d1b8(moby);
     }
     return moby;
 }
@@ -362,7 +362,7 @@ typedef struct Rocket_2E8040 {
 
 typedef struct Tex_2E8040 { char pad0[0x5C]; unsigned char *p5C; } Tex_2E8040;
 
-char *spark1688(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
+char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");

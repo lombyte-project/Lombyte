@@ -20,10 +20,10 @@ extern u32 _nextBit(MpegDec *d, s32 n);
 extern void _sequenceHeader(MpegDec *d);
 extern void _groupOfPicturesHeader(MpegDec *d);
 extern void _pictureHeader(MpegDec *d);
-extern void _dispatchMpegCallback(void *cb, void *arg);
+extern void _dispatchMpegCallback(void *FUN_L11_003192c8, void *arg);
 
 s32 _nextHeader(MpegDec *d) {
-    MpegCbTimeStamp cb;
+    MpegCbTimeStamp FUN_L11_003192c8;
     u32 code;
 
     while (1) {
@@ -38,12 +38,12 @@ s32 _nextHeader(MpegDec *d) {
             break;
         case 0x100:
             _pictureHeader(d);
-            cb.type = 5;
-            cb.pts = -1;
-            cb.dts = -1;
-            _dispatchMpegCallback(d->cbData, &cb);
-            d->dts = cb.dts;
-            d->pts = cb.pts;
+            FUN_L11_003192c8.type = 5;
+            FUN_L11_003192c8.pts = -1;
+            FUN_L11_003192c8.dts = -1;
+            _dispatchMpegCallback(d->cbData, &FUN_L11_003192c8);
+            d->dts = FUN_L11_003192c8.dts;
+            d->pts = FUN_L11_003192c8.pts;
             return d->unk150;
         case 0x1B7:
             return 0;

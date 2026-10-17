@@ -35,7 +35,7 @@ typedef struct {
 extern void *create_part(s32) __asm__("FUN_L00_002678b8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern s32 col_26fd28(f32, f32, f32, f32) __asm__("FUN_L00_0025bfe0");
+extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
 extern u8 *D_L01_001B2500[];
 
 void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode, f32 x, f32 y, f32 z,
@@ -80,7 +80,7 @@ void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode, f32
     p->b8 = a * 255.0f;
     p->hA = scale_game_frames(life);
     s->b1B = 0;
-    p->w4 = col_26fd28(r, g, b, size);
+    p->w4 = FUN_L00_0025bfe0(r, g, b, size);
 }
 #include "eetypes.h"
 #include "qcopy.h"

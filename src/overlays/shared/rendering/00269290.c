@@ -190,8 +190,8 @@ unsigned char *FUN_L00_002678b8_00269958(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0_00269958(float) __asm__("FUN_001fa6d0");
 int FUN_001160d8_00269958(void) __asm__("FUN_001160d8");
 extern unsigned char *D_L00_001B2090 __attribute__((section(".data")));
-void spark_v(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag) __asm__("FUN_L00_00269958");
-void spark_v(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag) {
+void FUN_L00_00269958(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag);
+void FUN_L00_00269958(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag) {
     unsigned char *m = FUN_L00_002678b8_00269958(4);
     if (m) {
         int *e;
@@ -315,7 +315,7 @@ void FUN_L00_00269c70(char *m) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00269d20.s", FUN_L00_00269d20);
 #else
 extern int particle_collision_269d20(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void particle_step_269d20(float, void *, void *, void *) __asm__("FUN_L00_0025c2b0");
+extern void FUN_L00_0025c2b0(float, void *, void *, void *);
 extern void particle_matrix_269d20(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void particle_transform_269d20(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float particle_color_float_269d20(int) __asm__("FUN_001fa6c0");
@@ -347,7 +347,7 @@ void FUN_L00_00269d20(unsigned char *m) {
         velocity[0] = *(float *)(p + 0x0);
         velocity[1] = *(float *)(p + 0x4);
         velocity[2] = *(float *)(p + 0x8);
-        particle_step_269d20(*(float *)(e + 0x3c), matrix, velocity, D_L00_00173E80_26ff10);
+        FUN_L00_0025c2b0(*(float *)(e + 0x3c), matrix, velocity, D_L00_00173E80_26ff10);
         *(float *)(p + 0x0) = matrix[0];
         *(float *)(p + 0x4) = matrix[1];
         *(float *)(p + 0x8) = matrix[2];
@@ -471,8 +471,8 @@ extern unsigned char *D_L00_001B20A0_0026a4c8 __asm__("D_L00_001B20A0")
 unsigned char *FUN_L00_002678b8_0026a4c8(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0_0026a4c8(float) __asm__("FUN_001fa6d0");
 float FUN_001fa6c0_0026a4c8(int) __asm__("FUN_001fa6c0");
-void debris1688(u128 *a, u128 *b, int c, int d, int n, float f) __asm__("FUN_L00_0026a4c8");
-void debris1688(u128 *a, u128 *b, int c, int d, int n, float f) {
+void FUN_L00_0026a4c8(u128 *a, u128 *b, int c, int d, int n, float f);
+void FUN_L00_0026a4c8(u128 *a, u128 *b, int c, int d, int n, float f) {
     if (n) {
         unsigned char *m = FUN_L00_002678b8_0026a4c8(8);
         if (m) {
@@ -585,9 +585,9 @@ void FUN_001f9bf8_26a9f0(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_26a9f0(void *, void *, void *) __asm__("FUN_001f9a10");
 
 extern unsigned char *D_L00_001B20AC __attribute__((section(".data")));
-void rings1688(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19,
-                      float x, float y) __asm__("FUN_L00_0026a9f0");
-void rings1688(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19,
+void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19,
+                      float x, float y);
+void FUN_L00_0026a9f0(void *pos, void *dir, int col, int d, int n, int b1A, int b18, int b19,
                       float x, float y) {
     unsigned char *m;
     unsigned char *q;
@@ -653,7 +653,7 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int dec_byte_timer_edc30(void *) __asm__("FUN_L00_001fefc8");
+extern int FUN_L00_001fefc8(void *);
 extern int FUN_L00_00257b90(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -718,7 +718,7 @@ void FUN_L00_0026ac78(char *m) {
                 fast_tween_color(*(int *)(p + 0x14), *(int *)(p + 0x10),
                              (float)*(short *)(m + 0xA) / (float)(unsigned char)p[0x1B]);
         }
-        dec_byte_timer_edc30(m + 0x38);
+        FUN_L00_001fefc8(m + 0x38);
         if (fast_dec_timer_s16(m + 0xA)) {
             if (p[0x19] & 2) {
                 int t = (unsigned char)p[0x1B] * 3;
@@ -1340,8 +1340,8 @@ E0026c6e8 *FUN_L00_002678b8_u(s32) __asm__("FUN_L00_002678b8");
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-void spawn_2a8028(void *pos, void *vel) __asm__("FUN_L00_0026c6e8");
-void spawn_2a8028(void *pos, void *vel) {
+void FUN_L00_0026c6e8(void *pos, void *vel);
+void FUN_L00_0026c6e8(void *pos, void *vel) {
     E0026c6e8 *e = FUN_L00_002678b8_u(0x13);
     u32 v;
     if (e == 0)
@@ -1474,8 +1474,8 @@ extern s32 rand();
 extern void *FUN_L00_002678b8_c(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L00_001B20D4 __attribute__((section(".data")));
-char *spark1688(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
-char *spark1688(void *pos, void *dir, int c, int d, int n, int k, float f) {
+char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f) {
     char *p;
     char *q;
     int v;
@@ -1990,8 +1990,8 @@ char *FUN_L00_002678b8_0026dd20(int) __asm__("FUN_L00_002678b8");
 int FUN_001160d8_0026dd20(void) __asm__("FUN_001160d8");
 int FUN_001fa6d0_0026dd20(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B20EC[];
-char *spawn_spark_089d0(void *pos, void *dir, int a, int b, float f) __asm__("FUN_L00_0026dd20");
-char *spawn_spark_089d0(void *pos, void *dir, int a, int b, float f) {
+char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
+char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f) {
     char *o = FUN_L00_002678b8_0026dd20(0x1B);
     if (o) {
         char *q = o + 0x20;
@@ -2942,7 +2942,7 @@ typedef struct {
     E_26fd28 e;
 } P_26fd28;
 extern P_26fd28 *alloc_26fd28(s32) __asm__("FUN_L00_002678b8");
-extern s32 col_26fd28(f32, f32, f32, f32) __asm__("FUN_L00_0025bfe0");
+extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
 extern s32 trunc_26fd28(f32) __asm__("FUN_001fa6d0");
 extern f32 rang_26fd28(void) __asm__("FUN_00213308");
 extern f32 rfb_26fd28(f32, f32) __asm__("FUN_002132a8");
@@ -2958,7 +2958,7 @@ P_26fd28 *FUN_L00_0026fd28(u128 *pos, u128 *vel, u8 c, s32 d) {
         e = &p->e;
         qcopy(&p->pos, pos);
         qcopy(e, vel);
-        p->w4 = col_26fd28(0.7f, 0.7f, 0.7f, 0.08f);
+        p->w4 = FUN_L00_0025bfe0(0.7f, 0.7f, 0.7f, 0.08f);
         p->b9 = trunc_26fd28(4.0f) + 0x40;
         p->b1 = 0;
         p->b3 = 0x44;
@@ -3216,7 +3216,7 @@ void FUN_L00_00270710(char *a) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_002715F8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED60_c2 __asm__("D_0015ED60");
-extern int col_26fd28(float, float, float, float) __asm__("FUN_L00_0025bfe0");
+extern int FUN_L00_0025bfe0(float, float, float, float);
 extern unsigned char *D_L00_001B20B0 __attribute__((section(".data")));
 extern void *FUN_L00_002678b8_c2(int) __asm__("FUN_L00_002678b8");
 
@@ -3230,7 +3230,7 @@ void *FUN_L00_00270758(char *a, char *b, unsigned char c, int d) {
 
         qcopy(p + 0x10, a);
         qcopy(q, b);
-        *(int *)(p + 4) = col_26fd28(0.7f, 0.7f, 0.7f, 0.08f);
+        *(int *)(p + 4) = FUN_L00_0025bfe0(0.7f, 0.7f, 0.7f, 0.08f);
         p[9] = (char)(truncate_float_to_s32(4.0f) + 0x40);
         p[1] = 0;
         p[3] = 0x44;

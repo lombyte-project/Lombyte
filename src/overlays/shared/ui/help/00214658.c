@@ -786,8 +786,8 @@ extern char D_0013E533[];
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 /* In mode 3 allocates a voice for the object at D_0013F350+0xA88, else for the one at +0x2080. */
-int f_fun_l00_00216de8_227fa0(int a, int b) __asm__("FUN_L00_00216de8");
-int f_fun_l00_00216de8_227fa0(int a, int b) {
+int FUN_L00_00216de8(int a, int b);
+int FUN_L00_00216de8(int a, int b) {
     char *p = D_0013E533 + 0xE1D;
     int c;
     if (*(unsigned char *)(p + 0x20A4) == 3) {
@@ -852,7 +852,7 @@ void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217698), where it is exact; names translated to the US level program. */
 
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int f_fun_l00_00216de8_227fa0() __asm__("FUN_L00_00216de8");
+extern int FUN_L00_00216de8();
 
 /* For each of eight timers that fast_dec_timer reports as 2, clears a field and calls 00216de8. */
 void FUN_L00_00216f10(void) {
@@ -863,7 +863,7 @@ void FUN_L00_00216f10(void) {
     for (i = 0; i < 8; i++) {
         if (fast_dec_timer_s16(p + i * 8) == 2) {
             q[i * 4 - 3] = 0;
-            f_fun_l00_00216de8_227fa0(q[i * 4 - 2], q[i * 4]);
+            FUN_L00_00216de8(q[i * 4 - 2], q[i * 4]);
         }
     }
 }
@@ -886,8 +886,8 @@ void FUN_L00_002127b8_00216f90(void) __asm__("FUN_L00_002127b8");
 void FUN_L00_001ed280_00216f90(void) __asm__("FUN_L00_001ed280");
 void FUN_L00_002500b8_00216f90(int) __asm__("FUN_L00_002500b8");
 extern char D_0013F3D0[] __attribute__((section(".data")));
-void ea210_camera(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) __asm__("FUN_L00_00216f90");
-void ea210_camera(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) {
+void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag);
+void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) {
     char *q = D_0013F3D0;
     char *g;
     char *r;
@@ -992,8 +992,8 @@ void FUN_L00_00217118(float a, float b) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217AF0), where it is exact; names translated to the US level program. */
 
 extern int *D_L00_00177F00[];
-extern void f336e8_208820(float *dst, float *src, float h) __asm__("FUN_L00_002336e8");
-extern void fin_2a8028(void *, int) __asm__("FUN_L00_002a7e20");
+extern void FUN_L00_002336e8(float *dst, float *src, float h);
+extern void FUN_L00_002a7e20(void *, int);
 
 void FUN_L00_00217368(int a, int n) {
     if (n != 0) {
@@ -1009,8 +1009,8 @@ void FUN_L00_00217368(int a, int n) {
             if (t == 5 || t == 9) {
                 float v[4] __attribute__((aligned(16)));
                 qcopy(v, (char *)D_L00_00177F00[i] + 0x10);
-                f336e8_208820(v, v, 0.5f);
-                fin_2a8028(v, 4);
+                FUN_L00_002336e8(v, v, 0.5f);
+                FUN_L00_002a7e20(v, 4);
             }
         }
     }
@@ -1027,8 +1027,8 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void FUN_00214db0_217450(void *, float, float, float) __asm__("FUN_00214db0");
 extern float FUN_001f9dc8_217450(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_217450(float) __asm__("FUN_001f9de0");
-extern void spark_v(void *, void *, int, int, int, int, int,
-                                    int) __asm__("FUN_L00_00269958");
+extern void FUN_L00_00269958(void *, void *, int, int, int, int, int,
+                                    int);
 
 void FUN_L00_00217450(void) {
     V_217450 pos[1];
@@ -1059,7 +1059,7 @@ void FUN_L00_00217450(void) {
         FUN_00214db0_217450(&out, s, ang, e);
         pos[0].f[0] += FUN_001f9dc8_217450(ang) * r;
         pos[0].f[1] += FUN_001f9de0_217450(ang) * r;
-        spark_v(pos, &out, 0x7000C0F0, 0x70F0, t, a, b, 1);
+        FUN_L00_00269958(pos, &out, 0x7000C0F0, 0x70F0, t, a, b, 1);
     } while (i >= 0);
     if (!ang) {
     }
@@ -1077,8 +1077,8 @@ typedef struct {
 } ThrowPvars_217658;
 
 extern f32 player_camera[] __asm__("D_L00_00166C80");
-extern int f_fun_l00_00211360_227fa0(void *) __asm__("FUN_L00_00211360");
-extern void f233660_2133a8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
+extern int FUN_L00_00211360(void *);
+extern void FUN_L00_00233660(void *, f32, f32, f32);
 extern float FUN_001f9e90_c2(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_L00_00216de8_c(int, int) __asm__("FUN_L00_00216de8");
@@ -1095,8 +1095,8 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 
 /* Launches the equipped gadget moby: aims it at its target (or along the camera),
  * builds its orientation matrix and starts its animation/sound. */
-void f_fun_l00_00217658_227fa0(void) __asm__("FUN_L00_00217658");
-void f_fun_l00_00217658_227fa0(void) {
+void FUN_L00_00217658(void);
+void FUN_L00_00217658(void) {
     f32 dir[4];
     f32 delta[4];
     f32 mat[12];
@@ -1115,11 +1115,11 @@ void f_fun_l00_00217658_227fa0(void) {
     if (aimed) {
         target = hero.items[0].moby;
         has_target = 0;
-        if (target != NULL && f_fun_l00_00211360_227fa0(target)) {
+        if (target != NULL && FUN_L00_00211360(target)) {
             tpv = (ThrowPvars_217658 *)target->pvars;
             if (tpv->unk7E) {
                 has_target = 1;
-                f233660_2133a8(dir, 0.5f, 0.0f, 0.5f);
+                FUN_L00_00233660(dir, 0.5f, 0.0f, 0.5f);
                 fast_vec_sub(delta, tpv->unk50, dir);
                 hero.aim_yaw = FUN_001f9e90_c2(delta[0], delta[1]);
                 hero.aim_pitch = FUN_001f9e90_c2(vec_len_xy(delta), delta[2]);
@@ -1131,7 +1131,7 @@ void f_fun_l00_00217658_227fa0(void) {
         }
     }
     item = hero.items[0].moby;
-    if (!f_fun_l00_00211360_227fa0(item)) {
+    if (!FUN_L00_00211360(item)) {
         return;
     }
     hero.items[0].unk1A = 1;

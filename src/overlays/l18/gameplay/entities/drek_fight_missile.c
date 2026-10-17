@@ -1433,12 +1433,12 @@ extern unsigned char *FUN_L18_002f6e10(struct Moby *self);
 extern void *FUN_L18_002d6b58(float *a, float *b, int idx);
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
-extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void wake302618(void *) __asm__("FUN_L00_0025a120");
+extern void FUN_L00_0025a120(void *);
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void sound302618(float, int, int, unsigned char *) __asm__("FUN_L00_00263ac8");
+extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_L00_00299560(int i);
@@ -1507,11 +1507,11 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     {
         char *o = d->f3A4;
         if (o != 0 && o[0x20] >= 0) {
-            sound302618(*(float *)&D_L18_001623A4, (int)o, 0, d->f1C0);
+            FUN_L00_00263ac8(*(float *)&D_L18_001623A4, (int)o, 0, d->f1C0);
         }
     }
     if (moby->f31 != 0 && FUN_001f9b48(moby->f10, D_L18_001677C0) < 32.0f) {
-        wake302618(moby);
+        FUN_L00_0025a120(moby);
         moby->f7F = 0x1A;
     }
     switch (moby->f20) {
@@ -1673,7 +1673,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             FUN_L15_00208ca8();
             {
                 char *b = D_L18_001600EC + d->f2A0 * 0x80;
-                ea210_camera(b + 0x30, b + 0x70, 0, 1);
+                FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
             }
             jet_clear_persistent(d->f2B0);
             jet_reset_camera(hero.motion.pos.f, hero.motion.rot.f);
@@ -2883,7 +2883,7 @@ extern float freeze_stats_score_ref_b __asm__("D_0015ED6C");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern short D_L18_001623DC __asm__("D_L18_0016234C") __attribute__((sda));
 extern short D_L18_00162378_gp __asm__("D_L18_00162378") __attribute__((sda));
-extern void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");
+extern void FUN_L00_0025f730(void *a, float x);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 int FUN_L18_002f6878_c(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878");
@@ -2898,9 +2898,9 @@ void FUN_L18_002f6960(struct Moby *m) {
     subtract_vector_xyz(v, b, D_L18_001600EC + (*(int *)(d + 0x344) << 7) + 0x30);
     v[2] = 0.0f;
     if (*(int *)(b + 0x200C) == 0xF) {
-        vec_limit302618(v, *(float *)&D_L18_0016237C);
+        FUN_L00_0025f730(v, *(float *)&D_L18_0016237C);
     } else {
-        vec_limit302618(v, *(float *)&D_L18_00162378_gp);
+        FUN_L00_0025f730(v, *(float *)&D_L18_00162378_gp);
     }
     add_vector_xyz(v, v, D_L18_001600EC + (*(int *)(d + 0x344) << 7) + 0x30);
     t = hero.motion.speed_xy;
@@ -3336,10 +3336,10 @@ typedef union {
     float v[4];
 } QVec;
 
-extern char *spark1688(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
+extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int dec_byte_timer_edc30(void *) __asm__("FUN_L00_001fefc8");
+extern int FUN_L00_001fefc8(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames(int);
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
@@ -3380,7 +3380,7 @@ void FUN_L18_002f76a0(char *moby, void *p) {
     a.v[3] = 1.0f;
     b.v[0] = 0.23f;
     b.v[3] = 1.0f;
-    dec_byte_timer_edc30(moby + 0xBC);
+    FUN_L00_001fefc8(moby + 0xBC);
     transform_vector_by_basis(&b, &b, moby + 0xC0);
     add_vector_xyz(c, moby + 0x10, &b);
     transform_vector_by_basis(&a, &a, moby + 0xC0);
@@ -3405,7 +3405,7 @@ void FUN_L18_002f76a0(char *moby, void *p) {
         for (j = 0; j < *(int *)&D_L18_00162438; j++) {
             normalize_vector_xyz(
                 d, &a, random_float_between(*(float *)&D_L18_0016243C, *(float *)&D_L18_00162440));
-            spark1688(p, d, *(int *)&D_L18_001623EC, *(int *)&D_L18_001623F0,
+            FUN_L00_0026cbb0(p, d, *(int *)&D_L18_001623EC, *(int *)&D_L18_001623F0,
                              scale_game_frames(random_int_between(*(int *)&D_L18_00162444,
                                                                 *(int *)&D_L18_00162448)),
                              1, *(float *)&D_L18_0016244C);
@@ -3720,7 +3720,7 @@ extern void *FUN_L00_00257470_cf(char *src, int cls, float *pos, void *mat, int 
                                  float *v12) __asm__("FUN_L00_00263fd8");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
-extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
+extern void FUN_L00_001fff28(void *, int, float);
 extern void FUN_L00_0025d458_cf(void *) __asm__("FUN_0020c828");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025e450_cf(void *, short *) __asm__("FUN_L00_0025d458");
@@ -3816,8 +3816,8 @@ void FUN_L18_002f8050(void *mv) {
                          D_0015ED6C_e[1] * 12.566371f, D_0015ED6C_e[1] * 12.566371f,
                          frame_time * 9.424778f);
     }
-    set_joint_67e8(v, 1, *(float *)(d + 0x118));
-    set_joint_67e8(d + 0xD0, 2,
+    FUN_L00_001fff28(v, 1, *(float *)(d + 0x118));
+    FUN_L00_001fff28(d + 0xD0, 2,
                      fast_subtract_rotations(*(float *)(d + 0x110), *(float *)(m + 0x48)));
     multiply_quaternions(d + 0xD0, v, d + 0xD0);
     trooper_anim_finish(m, d + 0x60);
@@ -3830,7 +3830,7 @@ extern float D_0015ED6C_g __asm__("D_0015ED6C");
 extern int random_integer_below_c(int) __asm__("FUN_00213260");
 extern short D_L18_00162478 __attribute__((sda));
 extern short D_L18_00162480 __attribute__((sda));
-extern void push302618(int, int, float, float, float, int) __asm__("FUN_L00_00258830");
+extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 void FUN_L18_002f8658(struct Moby *m) {
@@ -3850,7 +3850,7 @@ void FUN_L18_002f8658(struct Moby *m) {
     approach_value((float *)(d + 0x12C), f, D_0015ED6C_e[1]);
     z = 0.0f;
     normalize_vector_xyz(v, &m->rot_row0, *(float *)(d + 0x12C));
-    push302618((int)m, (int)v, 0.5f, 0.5f, z, 0);
+    FUN_L00_00258830((int)m, (int)v, 0.5f, 0.5f, z, 0);
     if (FUN_001f9b48(&m->pos, t) < 1.0f) {
         int k = random_integer_below_c(*D_L18_001B0EB0[*(int *)(d + 0x100)] - 1) + 1;
         *(int *)(d + 0x120) = (*(int *)(d + 0x120) + k) % *D_L18_001B0EB0[*(int *)(d + 0x100)];

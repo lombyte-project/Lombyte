@@ -22,16 +22,16 @@ float FUN_L00_0025bb38(int n, float x, float y) {
         return d - 6.2831855f;
     return d + 6.2831855f;
 }
-extern float bb38_fif(float, void *, float) __asm__("FUN_L00_0025bb38");
+extern float FUN_L00_0025bb38_c(float, void *, float) __asm__("FUN_L00_0025bb38");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void FUN_L00_0025bc00(float *p, void *o, float a, float lim) {
-    float r = bb38_fif(a, o, *p);
+    float r = FUN_L00_0025bb38_c(a, o, *p);
     if (lim < r)
         r = lim;
     else if (r < -lim)
         r = -lim;
     *p = fast_add_rotations(*p, r);
-    bb38_fif(a, o, *p);
+    FUN_L00_0025bb38_c(a, o, *p);
 }
 extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025bb38");
 extern void FUN_L00_0025b798_0025bc98(float *, float, float, float,
@@ -113,8 +113,8 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D038), where it is exact; names translated to the US level program. */
 
-unsigned int col_26fd28(float r, float g, float b, float a) __asm__("FUN_L00_0025bfe0");
-unsigned int col_26fd28(float r, float g, float b, float a) {
+unsigned int FUN_L00_0025bfe0(float r, float g, float b, float a);
+unsigned int FUN_L00_0025bfe0(float r, float g, float b, float a) {
     unsigned int x = truncate_float_to_s32(r * 255.0f) & 0xFF;
     unsigned int y = truncate_float_to_s32(g * 255.0f) & 0xFF;
     unsigned int z = truncate_float_to_s32(b * 255.0f) & 0xFF;
@@ -158,8 +158,8 @@ void FUN_L00_0025c088(int *a, int *b, int *c, int mask) {
 extern void FUN_L00_0025c088(int *, int *, int *, int);
 
 /* Splits colour c into bytes, passes the low three through 0025c088 with mask, and repacks them. */
-unsigned col_2af5b8(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
-unsigned col_2af5b8(unsigned c, int mask) {
+unsigned FUN_L00_0025c0e8(unsigned c, int mask);
+unsigned FUN_L00_0025c0e8(unsigned c, int mask) {
     int v[3];
     unsigned a;
     unsigned t;

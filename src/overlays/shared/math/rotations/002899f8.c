@@ -7,8 +7,8 @@ typedef struct {
     float f;
 } O_2899f8;
 
-O_2899f8 *pick_2D5FA8(O_2899f8 *a, O_2899f8 *b, O_2899f8 *c, O_2899f8 *d) __asm__("FUN_L05_002899f8");
-O_2899f8 *pick_2D5FA8(O_2899f8 *a, O_2899f8 *b, O_2899f8 *c, O_2899f8 *d) {
+O_2899f8 *FUN_L05_002899f8(O_2899f8 *a, O_2899f8 *b, O_2899f8 *c, O_2899f8 *d);
+O_2899f8 *FUN_L05_002899f8(O_2899f8 *a, O_2899f8 *b, O_2899f8 *c, O_2899f8 *d) {
     O_2899f8 *r = a;
 
     if (r == 0) {

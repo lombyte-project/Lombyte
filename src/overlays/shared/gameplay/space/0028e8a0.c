@@ -96,7 +96,7 @@ void f2335a0_28e9c8(void) __asm__("FUN_002335a0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
 int fr_28e9c8(int) __asm__("FUN_001f96f8");
-void f245610_28e9c8(int, int) __asm__("FUN_L00_00245610");
+void FUN_L00_00245610(int, int);
 void f2049f0_28e9c8(int) __asm__("FUN_002049f0");
 void f22ca50_28e9c8(void) __asm__("FUN_0022ca50");
 int f122298_28e9c8(int) __asm__("FUN_00122298");
@@ -138,7 +138,7 @@ void FUN_L00_0028e9c8(int a) {
             m = 8;
             t = 14;
         }
-        f245610_28e9c8(m, fr_28e9c8(6));
+        FUN_L00_00245610(m, fr_28e9c8(6));
     } else {
         int k, r;
         n = D_0013E030_28e9c8.x26;
@@ -161,7 +161,7 @@ void FUN_L00_0028e9c8(int a) {
         r = 0;
         if (!D_0013E030_28e9c8.x2c)
             r = fr_28e9c8(6);
-        f245610_28e9c8(m2, r);
+        FUN_L00_00245610(m2, r);
     }
     music_stream_state.queued_secondary_track = t + 40000;
     f2049f0_28e9c8(0);
@@ -175,7 +175,7 @@ extern int D_L00_0015F5D8;
 extern short D_0013E05C __attribute__((section(".data")));
 void music_pause(int) __asm__("FUN_00216050");
 void sound_update(void) __asm__("FUN_0022ca50");
-void ea210_stop(void) __asm__("FUN_L00_002039a0");
+void FUN_L00_002039a0(void);
 void FUN_L00_0028e9c8(int);
 /* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
 void FUN_L00_0028ecd8(void) {
@@ -189,7 +189,7 @@ void FUN_L00_0028ecd8(void) {
     if ((unsigned)((unsigned short)h->secondary.state - 6) >= 2)
         h->secondary.state = 5;
     sound_update();
-    ea210_stop();
+    FUN_L00_002039a0();
     FUN_L00_0028e9c8(0);
     D_0013E05C = 0;
 }

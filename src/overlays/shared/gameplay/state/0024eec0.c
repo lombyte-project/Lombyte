@@ -23,8 +23,8 @@ void transpose_rotation_matrix(Mtx *, void *) __asm__("FUN_001fa2d8");
 void subtract_vector_xyz(Vec4 *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector(Vec4 *, Vec4 *, Mtx *) __asm__("FUN_001f9d20");
 void fast_vec_scale(Vec4 *, Vec4 *, float) __asm__("FUN_001f9a68");
-void f4eed8_208820(char *p, int idx, void *v, float a, float b) __asm__("FUN_L00_0024eed8");
-void f4eed8_208820(char *p, int idx, void *v, float a, float b) {
+void FUN_L00_0024eed8(char *p, int idx, void *v, float a, float b);
+void FUN_L00_0024eed8(char *p, int idx, void *v, float a, float b) {
     Mtx m;
     Vec4 t;
     Ent32 *e = &(*(Tbl **)(p + 0x94))->e[idx];
@@ -44,8 +44,8 @@ void f4eed8_208820(char *p, int idx, void *v, float a, float b) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_0024FFE8), where it is exact; names translated to the US level program. */
 
 /* Offsets the point pairs of each of the a[4] + a[5] entries by dx, dy. */
-void spin_n(unsigned char *a, int dx, int dy) __asm__("FUN_L00_0024efb0");
-void spin_n(unsigned char *a, int dx, int dy) {
+void FUN_L00_0024efb0(unsigned char *a, int dx, int dy);
+void FUN_L00_0024efb0(unsigned char *a, int dx, int dy) {
     int i;
     int n = a[4] + a[5];
     int *t = *(int **)a;

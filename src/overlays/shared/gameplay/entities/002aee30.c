@@ -164,12 +164,12 @@ extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");                          /* counts a s16 down, nonzero at 0 */
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 collision_line(void *, void *, s32, struct Moby *, CollisionProbe *) __asm__("FUN_001efa68");
-extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void FUN_L00_001ff660(void *, void *, void *);
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void spawn_spark_089d0(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
+extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
 
 /*
  * Update of the class 0xB8 shot (spawned by FUN_L04_002aee30): moves along
@@ -247,11 +247,11 @@ void FUN_L04_002af058(struct Moby *m)
             r.f[1] = random_float_between(-1.0f, 1.0f);
             r.f[2] = random_float_between(-1.0f, 1.0f);
             push.q = r.q;
-            reflect1688(&r, v, D_L04_00174000);
+            FUN_L00_001ff660(&r, v, D_L04_00174000);
             normalize_vector_xyz(&push, &push, vector_length_xyz(&r) * 0.5f);
             add_vector_xyz(&push, &r, &push);
             normalize_vector_xyz(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
-            spawn_spark_089d0(&m->pos, &push, 0x7F2F4F6F,
+            FUN_L00_0026dd20(&m->pos, &push, 0x7F2F4F6F,
                              random_int_between(scale_game_frames(10), scale_game_frames(15)), 30000.0f);
         }
     }

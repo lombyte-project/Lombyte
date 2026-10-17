@@ -69,7 +69,7 @@ typedef struct {
     f32 zoom;              /* 0x210: 1.0 is no zoom */
     f32 zoom_range;        /* 0x214 */
     u8 pad218[0xE];
-    s16 unk226;            /* 0x226: set to 1 by pitch2_s */
+    s16 unk226;            /* 0x226: set to 1 by FUN_L00_002e8620 */
     u8 pad228[4];
     f32 unk22C;            /* 0x22C: set by FUN_L00_002e8490 */
     s32 mode;              /* 0x230: 0 normal; shot cameras of type 10 and 11 set 0x14D and 2 */

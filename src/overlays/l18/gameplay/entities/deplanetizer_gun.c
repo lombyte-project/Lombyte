@@ -950,7 +950,7 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int spawn_explosion() __asm__("FUN_L00_0025e450");
-extern int hitreact_3DF8(void *, void *) __asm__("FUN_L00_002dc9f0");
+extern int FUN_L00_002dc9f0(void *, void *);
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int random_integer_below(int);
 extern int scale_game_frames(int);
@@ -964,7 +964,7 @@ extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void scale_vector_xyz(void *, void *, float);
 extern void vu_euler_rotation_basis(void *, void *);
 float FUN_L18_002fc4e0(char *self, float *src);
-extern float fd9a0_c(void *, void *) __asm__("FUN_L18_002fc4e0");
+extern float FUN_L18_002fc4e0_c(void *, void *) __asm__("FUN_L18_002fc4e0");
 extern float f9d48_i(void *, void *) __asm__("FUN_001f9b80");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
@@ -1023,7 +1023,7 @@ void gadgebot_update(unsigned char *m) {
         break;
     }
     case 7:
-        if (hitreact_3DF8(m, e + 0x70)) {
+        if (FUN_L00_002dc9f0(m, e + 0x70)) {
             m[0x20] = 2;
             *(short *)(e + 0x138) = 0;
         }
@@ -1040,7 +1040,7 @@ void gadgebot_update(unsigned char *m) {
     case 3: {
         float f;
         *(QVd058 *)tmp = *(QVd058 *)(e + 0x180);
-        f = fd9a0_c(m, tmp);
+        f = FUN_L18_002fc4e0_c(m, tmp);
         if (*(int *)(e + 0x1C4) == 2 && f < 5.0f) {
             m[0x20] = 2;
             if (m[0x53])
@@ -1276,7 +1276,7 @@ extern float vector_distance_xy(float *, float *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float fast_cos(float) __asm__("func_001F9DC8");
-extern void push302618(int, int, float, float, float, int) __asm__("FUN_L00_00258830");
+extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void FUN_L00_00261d78(float, void *, void *, void *);
 
 float FUN_L18_002fc4e0(char *self, float *src) {
@@ -1302,7 +1302,7 @@ float FUN_L18_002fc4e0(char *self, float *src) {
     v[0] = fast_cos(*(float *)(self + 0x48)) * *(float *)(o + 0x1F0);
     v[1] = fast_sin(*(float *)(self + 0x48)) * *(float *)(o + 0x1F0);
     v[2] = -(frame_time + frame_time);
-    push302618((int)self, (int)v, h, h, z, 0);
+    FUN_L00_00258830((int)self, (int)v, h, h, z, 0);
     FUN_L00_00261d78(h, *(void **)(o + 0x1E0), self + 0x10, self + 0x10);
     return dist;
 }
@@ -1322,7 +1322,7 @@ typedef struct {
 } LaunchedMobyVars;
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float fn_2c2488(void *, void *, float, float, int) __asm__("FUN_L00_0025abf0");
+extern float FUN_L00_0025abf0(void *, void *, float, float, int);
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 
 /* Launches the first idle (state 8) class-0x772 moby of group `group` from `from` towards `to` at `speed`.
@@ -1349,7 +1349,7 @@ int FUN_L18_002fc668(int group, void *from, void *to, float speed) {
                 fast_vec_sub(v->velocity, to, from);
                 v->velocity[2] = 0.0f;
                 fast_vec_normalize(v->velocity, v->velocity, speed);
-                v->velocity[2] = fn_2c2488(from, to, speed, -(frame_time_sq * 10.0f), 0);
+                v->velocity[2] = FUN_L00_0025abf0(from, to, speed, -(frame_time_sq * 10.0f), 0);
                 v->spin = randf_sym(15.0f, 45.0f) * 0.017453292f;
                 return 1;
             }

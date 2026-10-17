@@ -72,7 +72,7 @@ extern void FUN_L00_00207d00(void);
 extern void FUN_L00_00208a10(void);
 extern void FUN_L00_00208b60(void);
 extern void hero_update(void) __asm__("FUN_L00_00211670");
-extern void f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
+extern void FUN_L00_00216de8(int, int);
 extern void FUN_L00_00216f10(void);
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
@@ -154,7 +154,7 @@ void FUN_L01_00228000(void) {
             int pending = hero.pending_item[0];
             if (pending != 0 && pending != 0x1F) {
                 if (hero.unk22DE == 0) {
-                    f_fun_l00_00216de8_227fa0(0x19, 0);
+                    FUN_L00_00216de8(0x19, 0);
                     hero.unk22DE = 0x12;
                     hero.unk22DC = 1;
                 }
@@ -162,7 +162,7 @@ void FUN_L01_00228000(void) {
                 hero.pending_item[0] = 0;
                 if (hero.unk12E7 != 0 && hero.grounded_frames != 0 && D_0013D4DC[0] != 0 &&
                     hero.unk22DE == 0) {
-                    f_fun_l00_00216de8_227fa0(0x19, 0);
+                    FUN_L00_00216de8(0x19, 0);
                     hero.unk22DE = 0x12;
                     hero.unk22DC = 1;
                 }
@@ -432,7 +432,7 @@ extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern void FUN_L00_00259508(void *, void *, void *, int, float);
-extern char *c338_p(char *) __asm__("FUN_L00_002603d0");
+extern char *FUN_L00_002603d0(char *);
 extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 extern s32 coll2_2d090(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 
@@ -507,7 +507,7 @@ probe_next:
     if (coll_hit.moby != 0) {
         moby_allowed = 0;
         moby_record = suck_get_aim_height(coll_hit.moby);
-        moby_data = c338_p((char *)coll_hit.moby);
+        moby_data = FUN_L00_002603d0((char *)coll_hit.moby);
         if (moby_record && (*(u16 *)(moby_record + 0x1E) & 1))
             moby_allowed = 1;
         else if (moby_data)
@@ -712,24 +712,24 @@ int FUN_L01_0022d838(Vec4 *pos, f32 *dir)
 
 extern void FUN_L00_00205538(void);
 extern void FUN_L00_00206c08(void);
-extern void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
+extern void FUN_L00_0020e698(void);
 extern void FUN_L00_00210748();
 extern void FUN_L00_00232628(void);
-extern void f32fe8_208820(void) __asm__("FUN_L00_00232fe8");
+extern void FUN_L00_00232fe8(void);
 extern void FUN_L00_00262840(char *o);
 extern void FUN_L01_00231ae0_u(void) __asm__("FUN_L01_00231ae0");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
 void FUN_L01_00231348(int a, int b, int c) {
     char *g;
-    fire_end_2cc608();
+    FUN_L00_0020e698();
     g = (char *)D_0013E533 + 0xE1D;
     *(char *)(g + 0x20A6) = 1;
     FUN_L00_00210748();
     *(int *)(g + 0x2080) = *(int *)(g + 0xA88);
     FUN_L00_00262840(g + 0x1670);
     *(int *)(*(char **)(g + 0x2080) + 0x98) = -1;
-    f32fe8_208820();
+    FUN_L00_00232fe8();
     FUN_L00_00206c08();
     FUN_L00_00205538();
     *(char *)(g + 0x20A4) = a;
@@ -1109,7 +1109,7 @@ s32 FUN_001efa68_c(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
-s32 f5e3b8_20d6b0(s32) __asm__("FUN_L00_0025e3b8");
+s32 FUN_L00_0025e3b8(s32);
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
@@ -1195,7 +1195,7 @@ void FUN_L01_00232dc0(void) {
         goto d1;
     }
     if (HH.moby != 0) {
-        if (f5e3b8_20d6b0(HH.moby)) {
+        if (FUN_L00_0025e3b8(HH.moby)) {
             hero.unk30A = 1;
         }
         p = suck_get_aim_height(HH.moby);
