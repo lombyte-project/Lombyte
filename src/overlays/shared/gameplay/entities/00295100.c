@@ -840,7 +840,7 @@ extern s32 D_L00_0015F40C_macro __asm__("D_L00_0015F40C") __attribute__((section
 extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") __attribute__((section(".sdata")));
 extern s32 D_L00_00173E04_lui __asm__("D_L00_00173E04") __attribute__((section(".data")));
 /* [0] is gs_texture_allocation_start, [4] depth_buffer_address. */
-extern s32 D_0015EE78_macro[6] __asm__("D_0015EE78") MACRO_ADDR;
+extern s32 D_0015EE78_macro[6] __asm__("D_0015EE78") __attribute__((section(".sdata")));
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
 extern void music_stop(void) __asm__("FUN_00215ee8");
