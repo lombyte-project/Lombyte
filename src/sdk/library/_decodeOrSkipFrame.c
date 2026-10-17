@@ -4,14 +4,14 @@ extern s32 _decPicture(struct MpegDecoder *a0);
 extern void _dispatchMpegCbNodata(struct sceMpeg *a0);
 extern void _outputFrame(struct MpegDecoder *a0, s32 a1, s32 a2);
 extern s32 _updateRefImage(struct MpegDecoder *a0, s32 a1);
-s32 _decodeOrSkipFrame(struct sceMpeg *decoder, s32 arg1, s32 skip_threshold) {
+s32 _decodeOrSkipFrame(struct sceMpeg *decoder, s32 skip_comparison_value, s32 skip_threshold) {
     s32 ret;
     s32 flag;
     s32 t;
     struct MpegDecoder *tmp;
     flag = 0;
     tmp = decoder->sys;
-    if ((skip_threshold == -1) || (arg1 < skip_threshold)) {
+    if ((skip_threshold == -1) || (skip_comparison_value < skip_threshold)) {
         if (tmp->unk8 == 0) {
             decoder->frameCount = 0;
             tmp->unk8 = 1;
