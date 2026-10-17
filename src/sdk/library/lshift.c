@@ -33,7 +33,7 @@ struct Bigint {
 extern struct Bigint *_Balloc(s32, s32);
 extern s32 InsertLinkObject();
 
-struct Bigint *_lshift(s32 arg0, struct Bigint *input_bigint, s32 shift_bits) {
+struct Bigint *_lshift(s32 bigint_context, struct Bigint *input_bigint, s32 shift_bits) {
     s32 i;
     s32 k1;
     s32 n;
@@ -50,7 +50,7 @@ struct Bigint *_lshift(s32 arg0, struct Bigint *input_bigint, s32 shift_bits) {
     for (i = input_bigint->_maxwds; n1 > i; i <<= 1) {
         k1++;
     }
-    b1 = _Balloc(arg0, k1);
+    b1 = _Balloc(bigint_context, k1);
     x1 = b1->_x;
     for (i = 0; i < n; i++) {
         *x1++ = 0;
@@ -73,6 +73,6 @@ struct Bigint *_lshift(s32 arg0, struct Bigint *input_bigint, s32 shift_bits) {
         } while (x < xe);
     }
     b1->_wds = n1 - 1;
-    InsertLinkObject(arg0, input_bigint);
+    InsertLinkObject(bigint_context, input_bigint);
     return b1;
 }
