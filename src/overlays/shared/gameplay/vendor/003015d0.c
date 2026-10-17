@@ -283,18 +283,18 @@ extern int D_L14_001620F8 __attribute__((sda));
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L14_00301de8(char *m) {
-    char *d = *(char **)(m + 0x78);
+void FUN_L14_00301de8(char *moby) {
+    char *vars = *(char **)(moby + 0x78);
     char *dst, *src;
     u8 *indices;
     int i, j, k, copy_i, next_i;
-    float t;
+    float fraction;
 
-    if (*(s16 *)(d + 0x12) != 0) {
-        *(s16 *)(d + 0x12) = *(u16 *)(d + 0x12) - 1;
-        indices = (u8 *)(d + 0x18);
-        src = d + 0x260;
-        dst = d + 0x60;
+    if (*(s16 *)(vars + 0x12) != 0) {
+        *(s16 *)(vars + 0x12) = *(u16 *)(vars + 0x12) - 1;
+        indices = (u8 *)(vars + 0x18);
+        src = vars + 0x260;
+        dst = vars + 0x60;
         for (j = 22; j >= 0; j--) {
             add_vector_xyz(dst, dst, src);
             dst += 0x10;
@@ -304,7 +304,7 @@ void FUN_L14_00301de8(char *m) {
         do {
             next_i = i + 1;
             for (k = 2; k >= 0; k--) {
-                char *row = d + (i << 4) + (2 - k) * 0x40;
+                char *row = vars + (i << 4) + (2 - k) * 0x40;
                 add_vector_xyz(row + 0x460, row + 0x460, row + 0x560);
             }
             i = next_i;
@@ -314,21 +314,21 @@ void FUN_L14_00301de8(char *m) {
             indices = 0; /* End the saved index-base lifetime after the transfer. */
             copy_i = 0;
             do {
-                qcopy(d + 0x420 + (copy_i << 4), (char *)(((u8)src[copy_i] << 4) + (int)d) + 0x20);
+                qcopy(vars + 0x420 + (copy_i << 4), (char *)(((u8)src[copy_i] << 4) + (int)vars) + 0x20);
                 copy_i++;
             } while (copy_i < 4);
         }
     }
-    if (*(s16 *)(d + 0x12) > D_L14_001620C4) {
-        t = convert_integer_to_float(*(s16 *)(d + 0x12) - D_L14_001620C4) /
-            convert_integer_to_float(*(int *)(d + 0x620) - D_L14_001620C4);
-        *(int *)(d + 0x14) = fast_tween_color(D_L14_001620F4, D_L14_001620F0, t);
-    } else if (*(s16 *)(d + 0x12) > D_L14_001620C8) {
-        t = convert_integer_to_float(*(s16 *)(d + 0x12) - D_L14_001620C8) /
+    if (*(s16 *)(vars + 0x12) > D_L14_001620C4) {
+        fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) - D_L14_001620C4) /
+            convert_integer_to_float(*(int *)(vars + 0x620) - D_L14_001620C4);
+        *(int *)(vars + 0x14) = fast_tween_color(D_L14_001620F4, D_L14_001620F0, fraction);
+    } else if (*(s16 *)(vars + 0x12) > D_L14_001620C8) {
+        fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) - D_L14_001620C8) /
             convert_integer_to_float(D_L14_001620C4 - D_L14_001620C8);
-        *(int *)(d + 0x14) = fast_tween_color(D_L14_001620F8, D_L14_001620F4, t);
+        *(int *)(vars + 0x14) = fast_tween_color(D_L14_001620F8, D_L14_001620F4, fraction);
     } else {
-        *(int *)(d + 0x14) = 0;
+        *(int *)(vars + 0x14) = 0;
     }
 }
 #ifndef NON_MATCHING

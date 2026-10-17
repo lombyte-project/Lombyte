@@ -41,8 +41,8 @@ extern void FUN_L15_002044c8(void);
 extern void FUN_L15_0021d040(void);
 
 void FUN_L15_001ff938(void) {
-    unsigned char *b0, *b1, *b2, *b3, *b4, *b5, *b6;
-    unsigned char *moby;
+    unsigned char *hero0, *hero1, *hero2, *hero3, *hero4, *hero5, *hero6;
+    unsigned char *hero_moby;
     unsigned int copy[4] __attribute__((aligned(16)));
     int period, red, green, blue, alpha, i;
     unsigned int color;
@@ -52,101 +52,101 @@ void FUN_L15_001ff938(void) {
     FUN_L00_00211670();
     FUN_L15_002044c8();
     FUN_L15_0021d040();
-    b0 = ((char *)&D_0013F350);
-    if (b0[0x20A4] == 0)
+    hero0 = ((char *)&D_0013F350);
+    if (hero0[0x20A4] == 0)
         return;
     FUN_L00_00216f10();
     FUN_L00_002054e8();
-    if (b0[0x20A4] == 0)
+    if (hero0[0x20A4] == 0)
         return;
     FUN_L00_00208a10();
     FUN_L00_00207c48();
     FUN_L00_00207a58();
-    FUN_L00_002484e0(b0 + 0x80);
+    FUN_L00_002484e0(hero0 + 0x80);
 
-    if (b0[0x20A4] == 2) {
+    if (hero0[0x20A4] == 2) {
         if ((&big_head_cheat_enabled)[3] != 0)
-            D_L15_0017C06C[0] = (*(float *)&(*(short *)&D_0015EE18)) * 1.4f;
+            D_L15_0017C06C[0] = D_0015EE18 * 1.4f;
         FUN_L00_002059d8();
         FUN_L00_002061f0();
         {
-        unsigned char *m = *(unsigned char **)(b0 + 0x2080);
-        if (((*(unsigned short *)(m + 0x34) ^ 1) & 1) != 0) {
-            FUN_L00_0024f7c8(m, 6, copy);
-            qcopy(b0 + 0x1D80, copy);
+        unsigned char *hero_moby = *(unsigned char **)(hero0 + 0x2080);
+        if (((*(unsigned short *)(hero_moby + 0x34) ^ 1) & 1) != 0) {
+            FUN_L00_0024f7c8(hero_moby, 6, copy);
+            qcopy(hero0 + 0x1D80, copy);
             FUN_L00_00207d00();
         }
         }
     }
 
-    b1 = ((char *)&D_0013F350);
-    if (b1[0x20A4] == 3) {
+    hero1 = ((char *)&D_0013F350);
+    if (hero1[0x20A4] == 3) {
         if ((&big_head_cheat_enabled)[1] != 0)
             D_L15_0017C1CC[0] = 1.9f;
         alpha = 0x80;
         period = scale_game_frames(0xAA);
-        if (*(short *)(b1 + 0x22E0) == 2)
+        if (*(short *)(hero1 + 0x22E0) == 2)
             period = scale_game_frames(0x32);
-        else if (*(short *)(b1 + 0x22E0) == 1)
+        else if (*(short *)(hero1 + 0x22E0) == 1)
             period = scale_game_frames(0x5A);
         pulse = fast_sin((((float)(D_L15_0015F5CC % period) / convert_integer_to_float(period)) * 2.0f) * 3.1415927f + -3.1415927f);
         red = truncate_float_to_s32(pulse * 20.0f) + 0x32;
         green = truncate_float_to_s32(pulse * 70.0f) + 0xB4;
         blue = truncate_float_to_s32(pulse * 10.0f);
-        b2 = ((char *)&D_0013F350);
-        moby = *(unsigned char **)(b2 + 0x2080);
+        hero2 = ((char *)&D_0013F350);
+        hero_moby = *(unsigned char **)(hero2 + 0x2080);
         if (red > 0xFF) red = 0xFF;
         if (green > 0xFF) green = 0xFF;
         blue += 0x14;
-        *(unsigned short *)(moby + 0x34) |= 0x10;
-        if (*(short *)(b2 + 0x22E0) == 2)
+        *(unsigned short *)(hero_moby + 0x34) |= 0x10;
+        if (*(short *)(hero2 + 0x22E0) == 2)
             color = (alpha << 24) | (blue << 16) | ((red / 2) << 8) | green;
         else
             color = (alpha << 24) | (blue << 16) | (green << 8) | red;
-        b3 = ((char *)&D_0013F350);
-        *(unsigned int *)(*(unsigned char **)(b3 + 0x2080) + 0x90) =
-            fast_tween_color(0.1f, *(unsigned int *)(*(unsigned char **)(b3 + 0x2080) + 0x90), color);
+        hero3 = ((char *)&D_0013F350);
+        *(unsigned int *)(*(unsigned char **)(hero3 + 0x2080) + 0x90) =
+            fast_tween_color(0.1f, *(unsigned int *)(*(unsigned char **)(hero3 + 0x2080) + 0x90), color);
         for (i = 0; i < 3; i++)
         {
-            b4 = ((char *)&D_0013F350);
-            FUN_L00_0024f7c8(*(void **)(b4 + 0x2080), i, b4 + 0x1D50 + i * 16);
+            hero4 = ((char *)&D_0013F350);
+            FUN_L00_0024f7c8(*(void **)(hero4 + 0x2080), i, hero4 + 0x1D50 + i * 16);
         }
         alpha = 0x30;
-        b4 = ((char *)&D_0013F350);
+        hero4 = ((char *)&D_0013F350);
         {
-            unsigned char *mb = *(unsigned char **)(b4 + 0x2080);
-            blue = mb[0x92];
-            green = mb[0x91];
-            red = mb[0x90];
+            unsigned char *hero_moby = *(unsigned char **)(hero4 + 0x2080);
+            blue = hero_moby[0x92];
+            green = hero_moby[0x91];
+            red = hero_moby[0x90];
         }
-        if (*(short *)(b4 + 0x22DE) != 0)
-            alpha = truncate_float_to_s32((convert_integer_to_float(*(short *)(b4 + 0x22DE)) / convert_integer_to_float(0x12)) * (float)alpha);
-        *(unsigned int *)(b4 + 0x22E4) = (alpha << 24) | (blue << 16) | (green << 8) | red;
+        if (*(short *)(hero4 + 0x22DE) != 0)
+            alpha = truncate_float_to_s32((convert_integer_to_float(*(short *)(hero4 + 0x22DE)) / convert_integer_to_float(0x12)) * (float)alpha);
+        *(unsigned int *)(hero4 + 0x22E4) = (alpha << 24) | (blue << 16) | (green << 8) | red;
         FUN_L00_00207d00();
-        *(short *)(b4 + 0x22E0) = 0;
-        if (b4[0x20A4] == 3) {
-            int pending = *(int *)(b4 + 0x20B8);
+        *(short *)(hero4 + 0x22E0) = 0;
+        if (hero4[0x20A4] == 3) {
+            int pending = *(int *)(hero4 + 0x20B8);
             if (pending != 0 && pending != 0x1F) {
-                if (*(short *)(b4 + 0x22DE) == 0) {
+                if (*(short *)(hero4 + 0x22DE) == 0) {
                     FUN_L00_00216de8(0x19, 0);
-                    *(short *)(b4 + 0x22DE) = 0x12;
-                    *(short *)(b4 + 0x22DC) = 1;
+                    *(short *)(hero4 + 0x22DE) = 0x12;
+                    *(short *)(hero4 + 0x22DC) = 1;
                 }
             } else {
-                b5 = ((char *)&D_0013F350);
-                *(int *)(b5 + 0x20B8) = 0;
-                if (b5[0x12E7] != 0 && *(int *)(b5 + 0x300) != 0 && D_0013D4DC[0] != 0 &&
-                    *(short *)(b5 + 0x22DE) == 0) {
+                hero5 = ((char *)&D_0013F350);
+                *(int *)(hero5 + 0x20B8) = 0;
+                if (hero5[0x12E7] != 0 && *(int *)(hero5 + 0x300) != 0 && D_0013D4DC[0] != 0 &&
+                    *(short *)(hero5 + 0x22DE) == 0) {
                     FUN_L00_00216de8(0x19, 0);
-                    *(short *)(b5 + 0x22DE) = 0x12;
-                    *(short *)(b5 + 0x22DC) = 1;
+                    *(short *)(hero5 + 0x22DE) = 0x12;
+                    *(short *)(hero5 + 0x22DC) = 1;
                 }
             }
         }
     }
     FUN_L00_00208b60();
-    b6 = ((char *)&D_0013F350);
-    FUN_L00_00257024(*(void **)(b6 + 0x2080));
+    hero6 = ((char *)&D_0013F350);
+    FUN_L00_00257024(*(void **)(hero6 + 0x2080));
 }
 #define NOT_SDA
 
