@@ -10,7 +10,7 @@ extern s32 _Error();
 s32 reserve_aligned_buffer_space(s32 arg0, struct BufferPool *pool, s32 size,
                                  u32 alignment) __asm__("FUN_0012bc20");
 
-s32 reserve_aligned_buffer_space(s32 arg0, struct BufferPool *pool, s32 size, u32 alignment) {
+s32 reserve_aligned_buffer_space(s32 decoder_state, struct BufferPool *pool, s32 size, u32 alignment) {
     s32 start;
     u32 new_end;
 
@@ -20,6 +20,6 @@ s32 reserve_aligned_buffer_space(s32 arg0, struct BufferPool *pool, s32 size, u3
         pool->unk8 = new_end;
         return start;
     }
-    _Error(arg0, D_00153A38);
+    _Error(decoder_state, D_00153A38);
     return 0;
 }
