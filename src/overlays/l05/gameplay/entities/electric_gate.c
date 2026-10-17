@@ -2171,7 +2171,7 @@ extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__
 void taxi_update(struct Moby *moby) __asm__("FUN_L05_00318c78");
 void taxi_update(struct Moby *moby) {
     char *d = (char *)moby->pvars;
-    float v00[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
+    float old_position[4], old_rotation[4], position_delta[4], v30[4], v40[4], v50[4], v60[4], v70[4];
     struct Hero *g;
     struct Hero *g2;
     float z;
@@ -2181,8 +2181,8 @@ void taxi_update(struct Moby *moby) {
     float *qa;
     int h;
     int s;
-    qcopy(v00, &moby->pos);
-    qcopy(v10, &moby->rot);
+    qcopy(old_position, &moby->pos);
+    qcopy(old_rotation, &moby->rot);
     FUN_L00_00266858(moby, (moby->flags ^ 1) & 1);
     switch (moby->state) {
     case 0:
@@ -2293,8 +2293,8 @@ void taxi_update(struct Moby *moby) {
         }
         *(short *)(d + 0xB2) = -1;
     }
-    subtract_vector_xyz(v20, &moby->pos, v00);
-    FUN_L00_00260738(d + 0x20, v20, v10, &moby->rot);
+    subtract_vector_xyz(position_delta, &moby->pos, old_position);
+    FUN_L00_00260738(d + 0x20, position_delta, old_rotation, &moby->rot);
 }
 #include "qcopy.h"
 extern float func_001F9D10_19208(void *, void *) __asm__("FUN_001f9b48");
