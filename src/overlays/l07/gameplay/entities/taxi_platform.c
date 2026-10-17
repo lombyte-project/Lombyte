@@ -2689,12 +2689,12 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
     FUN_L00_0025d538(moby, data + 0x60);
     wander = tick_countdown_32_alt((int *)(data + 0x134)) != 0;
     if (*(int *)(data + 0x110) != 0 && moby[0x20] >= 7) {
-        char *p = *(char **)(data + 0x148);
-        inside = FUN_L00_00259740(&tgt, p + 0x10, *(int *)p) != 0;
+        char *area = *(char **)(data + 0x148);
+        inside = FUN_L00_00259740(&tgt, area + 0x10, *(int *)area) != 0;
     } else {
-        char *p = *(char **)(data + 0x148);
-        hero = ((char *)&D_0013F3D0);
-        inside = FUN_L00_00259740(hero, p + 0x10, *(int *)p) != 0;
+        char *area = *(char **)(data + 0x148);
+        hero = (char *)&D_0013F3D0;
+        inside = FUN_L00_00259740(hero, area + 0x10, *(int *)area) != 0;
         if (vector_distance_xy_alt(moby + 0x10, hero) < 30.0f) {
             tgt.moby = *(int *)(hero + 0x2000);
             qcopy(&tgt.pos, hero);
@@ -2712,8 +2712,8 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         }
     }
     if (*(int *)(data + 0x110) != 0) {
-        char *p = *(char **)(data + 0x128);
-        FUN_L00_00259740(moby + 0x10, p + 0x10, *(int *)p);
+        char *area = *(char **)(data + 0x128);
+        FUN_L00_00259740(moby + 0x10, area + 0x10, *(int *)area);
     }
     prev = moby[0xBC];
     next = 0xFF;
@@ -2742,8 +2742,8 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         if (moby[0x20] == 0xE || moby[0x20] == 0xC) {
             s += s;
         }
-        if (0.5f < vector_distance_xy_alt(moby + 0x10, &(*(Vec4_p *)&D_L07_00173EE0))) {
-            f = vector_distance_xy_alt(moby + 0x10, &(*(Vec4_p *)&D_L07_00173EE0));
+        if (0.5f < vector_distance_xy_alt(moby + 0x10, (Vec4_p *)&D_L07_00173EE0)) {
+            f = vector_distance_xy_alt(moby + 0x10, (Vec4_p *)&D_L07_00173EE0);
             f += f;
         } else {
             f = 1.0f;
@@ -2755,12 +2755,12 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             float size = random_float_between_c2(1.5f, 2.4f);
             pos[0] += random_float_between_c2(-0.15f, 0.15f);
             pos[1] += random_float_between_c2(-0.15f, 0.15f);
-            pos[2] = resolve_camera_surface_height(&(*(Vec4_p *)&D_L07_00173EE0), 0);
+            pos[2] = resolve_camera_surface_height((Vec4_p *)&D_L07_00173EE0, 0);
             FUN_L00_002715e8(pos, 0, -1, size, 5250.0f);
         }
     }
     if (1.0f <= F(data, 0x14C)) {
-        *(u128_p *)(((char *)&D_0013F3D0)) = *(u128_p *)(moby + 0x10);
+        *(u128_p *)&D_0013F3D0 = *(u128_p *)(moby + 0x10);
     }
 
     switch (moby[0x20]) {
@@ -2771,14 +2771,14 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         if ((moby[0x70] & 2) && moby[0x53] != 0) {
             blend_moby_animation(moby, 0, 0, 10);
         }
-        if (inside && tgt.moby != 0 && tgt.moby == *(int *)(((char *)((char *)&D_001413D0))) &&
+        if (inside && tgt.moby != 0 && tgt.moby == *(int *)&D_001413D0 &&
             !FUN_L07_0030f540_c(moby, 4, 6)) {
             if (moby[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, 10);
             }
             moby[0x20] = 4;
         }
-        if (tgt.moby != 0 && tgt.moby == *(int *)(((char *)((char *)&D_001413D0))) &&
+        if (tgt.moby != 0 && tgt.moby == *(int *)&D_001413D0 &&
             FUN_L07_0030f4d0_c(moby, tgt.moby, 1.5f)) {
             if (moby[0x53] != 2) {
                 blend_moby_animation(moby, 2, 0, 2);
@@ -2805,7 +2805,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         if ((moby[0x70] & 2) && moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
-        if (inside && tgt.moby != 0 && tgt.moby == *(int *)(((char *)((char *)&D_001413D0)))) {
+        if (inside && tgt.moby != 0 && tgt.moby == *(int *)&D_001413D0) {
             if (!FUN_L07_0030f540_c(moby, 4, 6)) {
                 if (moby[0x53] != 1) {
                     blend_moby_animation(moby, 1, 0, 10);
@@ -2813,12 +2813,12 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
                 moby[0x20] = 4;
             }
         } else {
-            float a = 1.74532926f;
-            float b = 4.5378561f;
+            float stiffness = 1.74532926f;
+            float damping = 4.5378561f;
             FUN_L00_00258278((char *)moby, (float *)(data + 0x120), F(data, 0x13C),
-                              frame_time_sq * a, frame_time_sq * b, frame_time * a);
+                              frame_time_sq * stiffness, frame_time_sq * damping, frame_time * stiffness);
             F(moby, 0x44) = FUN_L00_00258110((float *)(data + 0x124), F(moby, 0x44), 0.0f,
-                                              frame_time_sq * a, frame_time_sq * b, frame_time * a);
+                                              frame_time_sq * stiffness, frame_time_sq * damping, frame_time * stiffness);
             if (wander && is_point_inside_clip_volume_c2(moby + 0x10, *(int *)(data + 0x114))) {
                 if (moby[0x53] != 0) {
                     blend_moby_animation(moby, 0, 0, 10);
@@ -2837,7 +2837,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             *(int *)(data + 0x134) = rand() % 120 + 60;
             moby[0x20] = 1;
         }
-        if (tgt.moby != 0 && tgt.moby == *(int *)(((char *)((char *)&D_001413D0))) &&
+        if (tgt.moby != 0 && tgt.moby == *(int *)&D_001413D0 &&
             FUN_L07_0030f4d0_c(moby, tgt.moby, 1.5f)) {
             if (moby[0x53] != 2) {
                 blend_moby_animation(moby, 2, 0, 2);
@@ -2854,7 +2854,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         goto end;
     case 4: {
         float ang;
-        float d;
+        float pitch;
         int close = 1;
         float pi4 = 12.566371f;
         float three = 3.0f;
@@ -2862,9 +2862,9 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         ang = fast_arc_tan_c2(tgt.pos[0] - F(moby, 0x10), tgt.pos[1] - F(moby, 0x14));
         FUN_L00_00258278((char *)moby, (float *)(data + 0x120), ang,
                           frame_time_sq * pi4, frame_time_sq * zero, frame_time * pi4);
-        d = vector_distance_xy_alt(moby + 0x10, &tgt);
-        d = fast_arc_tan_c2(d, tgt.pos[2] - F(moby, 0x18));
-        F(moby, 0x44) = FUN_L00_00258110((float *)(data + 0x124), F(moby, 0x44), -d,
+        pitch = vector_distance_xy_alt(moby + 0x10, &tgt);
+        pitch = fast_arc_tan_c2(pitch, tgt.pos[2] - F(moby, 0x18));
+        F(moby, 0x44) = FUN_L00_00258110((float *)(data + 0x124), F(moby, 0x44), -pitch,
                                           frame_time_sq * pi4, frame_time_sq * zero, frame_time * pi4);
         if (!(vector_distance_xy_alt(moby + 0x10, ((char *)&D_0013F3D0)) < three)) {
             close = 0;
@@ -2883,9 +2883,9 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             F(data, 0x14C) = zero;
             qcopy(data + 0x100, moby + 0x10);
         }
-        ((struct { char p[0x138]; float f; } *)data)->f = tgt.pos[2] - 0.25f;
+        ((struct { char area[0x138]; float f; } *)data)->f = tgt.pos[2] - 0.25f;
         FUN_L07_0030f0f8_c((char *)moby, data, frame_time_sq * 38.0f, frame_time_sq * 0.0f, frame_time * 38.0f);
-        if (!inside || *(short *)(((char *)&D_0013F65C)) == 0) {
+        if (!inside || *(short *)&D_0013F65C == 0) {
             if (moby[0x53] != 1) {
                 blend_moby_animation(moby, 1, 0, 10);
             }
@@ -2901,7 +2901,6 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
     }
     case 5: {
         float ang;
-        float d;
         char *mpos;
         char *start;
         float one;
@@ -2924,16 +2923,16 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         no_op_main_callback_alt(start, mpos);
         subtract_vector_xyz(data + 0xD0, mpos, old);
         if (one <= F(data, 0x14C)) {
-            char *g = ((char *)&D_0013F350);
-            *(int *)(g + 0x22A8) = 0;
+            char *hero_bytes = (char *)&D_0013F350;
+            *(int *)(hero_bytes + 0x22A8) = 0;
             FUN_L00_002223f8(0x3D, 1);
-            *(int *)(*(char **)(g + 0x2080) + 0x98) = -1;
-            g[0x20A5] = 1;
+            *(int *)(*(char **)(hero_bytes + 0x2080) + 0x98) = -1;
+            hero_bytes[0x20A5] = 1;
             moby[0x20] = 6;
         } else {
             F(data, 0x13C) = ang;
         }
-        if (inside || *(short *)(((char *)&D_0013F65C)) != 0) {
+        if (inside || *(short *)&D_0013F65C != 0) {
             goto end;
         }
         *(int *)(data + 0x14C) = 0;
@@ -2999,12 +2998,12 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             }
             moby[0x20] = 9;
         } else {
-            float a = 0.785398185f;
-            float b = 1.57079637f;
+            float stiffness = 0.785398185f;
+            float damping = 1.57079637f;
             FUN_L00_00258278((char *)moby, (float *)(data + 0x120), F(data, 0x13C),
-                              frame_time_sq * a, frame_time_sq * b, frame_time * a);
+                              frame_time_sq * stiffness, frame_time_sq * damping, frame_time * stiffness);
             F(moby, 0x44) = FUN_L00_00258110((float *)(data + 0x124), F(moby, 0x44), 0.0f,
-                                              frame_time_sq * a, frame_time_sq * b, frame_time * a);
+                                              frame_time_sq * stiffness, frame_time_sq * damping, frame_time * stiffness);
             if (wander && is_point_inside_clip_volume_c2(moby + 0x10, *(int *)(data + 0x114))) {
                 if (moby[0x53] != 3) {
                     blend_moby_animation(moby, 3, 0, 10);
@@ -3037,7 +3036,6 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
     case 9:
     case 10: {
         float ang;
-        float d;
         float pi2 = 1.57079637f;
         ang = fast_arc_tan_c2(tgt.pos[0] - F(moby, 0x10), tgt.pos[1] - F(moby, 0x14));
         func_L00_002592B0_t((char *)moby, ang, (float *)(data + 0x120),
