@@ -11,7 +11,7 @@ extern s32 video_dec_reset() __asm__("func_0023CC30");
 s32 video_dec_create(s32 video_dec, s32 arg1, s32 arg2, s32 data, s32 tag, s32 size, s32 ts,
                      s32 ts_count) __asm__("FUN_0023cac8");
 
-s32 video_dec_create(s32 video_dec, s32 arg1, s32 arg2, s32 data, s32 tag, s32 size, s32 ts,
+s32 video_dec_create(s32 video_dec, s32 mpeg_work_area, s32 mpeg_work_area_size, s32 data, s32 tag, s32 size, s32 ts,
                      s32 ts_count) {
     sceMpegCreate(video_dec);
     AddMpegCallback(video_dec, 0, D_0023D080, 0);
