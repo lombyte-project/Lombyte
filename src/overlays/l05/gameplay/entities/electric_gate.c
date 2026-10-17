@@ -2411,3 +2411,10 @@ void qwarks_trailer_update(char *moby) {
         *(unsigned short *)(moby + 0x34) &= 0xFFFE;
     }
 }
+
+float D_L05_0020B740[4][2] = {
+    {0.5f, 0.0f},
+    {0.5f, 1.0f},
+    {0.5f, 0.0f},
+    {0.5f, 1.0f},
+};
