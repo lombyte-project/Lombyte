@@ -29,6 +29,17 @@ import rnc_units  # noqa: E402
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
+
+def _oracle_word(word: int, address: int, starts: dict[int, str]) -> str:
+    """One raw word, except a `jal` to a function of the same unit: that one is
+    written as `jal <symbol>` so the oracle carries the relocation our object
+    has (a recursive call would otherwise differ only in its relocation)."""
+    if word >> 26 == 3:
+        target = (address & 0xF0000000) | ((word & 0x3FFFFFF) << 2)
+        if target in starts:
+            return f"    jal {starts[target]}\n"
+    return f"    .word 0x{word:08X}\n"
+
 def parse_main_subsegments(path: Path) -> list[dict[str, object]]:
     """Read the project's simple `main.subsegments` YAML without PyYAML."""
     boundary = re.compile(
@@ -271,6 +282,7 @@ def install(
         obj.parent.mkdir(parents=True, exist_ok=True)
         try:
             body = ""
+            starts = {int(f["address"]): str(f["symbol"]) for f in row["functions"]}
             for function in row["functions"]:
                 name = str(function["symbol"])
                 start = int(function["address"])
@@ -294,7 +306,7 @@ def install(
                     else:
                         labels += retail
                 body += "".join(f"glabel {label}\n" for label in labels)
-                body += "".join(f"    .word 0x{word:08X}\n" for word in words)
+                body += "".join(_oracle_word(word, start + 4 * i, starts) for i, word in enumerate(words))
                 body += f".size {name}, . - {name}\n"
             rendered = (
                 '.include "macro.inc"\n.set noreorder\n.text\n'

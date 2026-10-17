@@ -14,7 +14,7 @@
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int FUN_L00_0025bfe0(float, float, float, float);
+extern int col_26fd28(float, float, float, float) __asm__("FUN_L00_0025bfe0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_002678b8(int);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -25,7 +25,7 @@ void FUN_L01_0027f660(char *pos, char *vel) {
     if (p != 0) {
         char *q = (char *)p + 0x20;
         qcopy(p + 0x10, pos);
-        *(int *)(p + 4) = FUN_L00_0025bfe0(0.425f, 0.425f, 0.225f, 1.0f);
+        *(int *)(p + 4) = col_26fd28(0.425f, 0.425f, 0.225f, 1.0f);
         p[9] = func_001FA898_r(8.0f) - 0x60;
         p[1] = 0;
         p[3] = 0x48;
@@ -90,7 +90,8 @@ extern int trunc_285768(float) __asm__("FUN_001fa6d0");
 
 /* Allocates a type 0x29 particle and fills it from the arguments; kind 0xFF
  * derives the frame from flags and picks one of two blend modes. */
-char *FUN_L01_00285768(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) {
+char *draw_number(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) __asm__("FUN_L01_00285768");
+char *draw_number(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) {
     char *r = alloc_285768(0x29);
     if (r != 0) {
         int *tail = (int *)(r + 0x20);
@@ -232,7 +233,8 @@ typedef struct {
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
+int closest302618(void *arg0, List *arg1, float target) __asm__("FUN_L01_0028b510");
+int closest302618(void *arg0, List *arg1, float target) {
     int best = 0;
     int i;
     float bestDiff = 1e11f;
@@ -245,7 +247,8 @@ int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
     }
     return best;
 }
-int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out) {
+int project_2E39E0(char *a0, List *list, char *pt, char *out) __asm__("FUN_L01_0028b5e0");
+int project_2E39E0(char *a0, List *list, char *pt, char *out) {
     int idx0 = -1;
     int idx1 = -1;
     float best0 = 10000.0f;
@@ -384,7 +387,7 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9a10(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4) {
@@ -396,11 +399,11 @@ void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4
     float c = t2 + t2;
     fast_vec_scale(out, p1, a - b + 1.0f);
     fast_vec_scale(tmp, p3, t3 - c + t);
-    FUN_001f9a10(out, out, tmp);
+    fast_vec_add(out, out, tmp);
     fast_vec_scale(tmp, p4, t3 - t2);
-    FUN_001f9a10(out, out, tmp);
+    fast_vec_add(out, out, tmp);
     fast_vec_scale(tmp, p2, b - a);
-    FUN_001f9a10(out, out, tmp);
+    fast_vec_add(out, out, tmp);
 }
 float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *moby) {
     OvlVec4 previousTangent;
@@ -417,7 +420,7 @@ float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *mo
     *(int *)path = 0;
     nextNode.q = *(OvlQuad *)((char *)path->f10 + 0x10);
     if (particles) {
-        FUN_L01_00285768(0.666f, &nextNode, (int)moby, 0, 0x80101080, 0x7f, -1, 0xff);
+        draw_number(0.666f, &nextNode, (int)moby, 0, 0x80101080, 0x7f, -1, 0xff);
     }
     /* The SN ABI assigns float arguments independently of the integer arguments.
      * Keep the retail argument setup order without changing the shared helper. */
@@ -432,7 +435,7 @@ float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *mo
         currentNode.q = nextNode.q;
         previousTangent.q = nextTangent.q;
         if (particles) {
-            FUN_L01_00285768(1.0f, &currentNode, (int)moby, index % 15 + 2, 0x80108010, 0x7f, -1, 0xff);
+            draw_number(1.0f, &currentNode, (int)moby, index % 15 + 2, 0x80108010, 0x7f, -1, 0xff);
         }
         t = 0.05f;
         nextIndex = FUN_L01_0028b828(path, index + 1);
@@ -444,7 +447,7 @@ float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *mo
         step = t;
         do {
             if (particles) {
-                FUN_L01_00285768(0.2f, &previousPoint, (int)moby, 0, 0x80404080, 0x7f, -1, 0xff);
+                draw_number(0.2f, &previousPoint, (int)moby, 0, 0x80404080, 0x7f, -1, 0xff);
             }
             FUN_L01_0028ba80(t, &point, &currentNode, &nextNode, &previousTangent, &nextTangent);
             t += step;
@@ -461,3 +464,15 @@ float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *mo
     *(int *)path = savedIndex;
     return total;
 }
+
+s32 D_L04_001B220C[1] __attribute__((section(".data"))) = {0};
+s32 D_L05_001B25D0[1] __attribute__((section(".data"))) = {0};
+s32 D_L06_001B2838[1] __attribute__((section(".data"))) = {0};
+s32 D_L08_001B28B8[1] __attribute__((section(".data"))) = {0};
+s32 D_L10_001B25D0[1] __attribute__((section(".data"))) = {0};
+s32 D_L11_001B2B50[1] __attribute__((section(".data"))) = {0};
+s32 D_L12_001B25D0[1] __attribute__((section(".data"))) = {0};
+s32 D_L13_001B2450[1] __attribute__((section(".data"))) = {0};
+s32 D_L14_001B278C[1] __attribute__((section(".data"))) = {0};
+s32 D_L15_001B26B8[1] __attribute__((section(".data"))) = {0};
+s32 D_L17_001B29B8[1] __attribute__((section(".data"))) = {0};

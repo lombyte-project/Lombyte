@@ -91,7 +91,8 @@ int FUN_L00_0025fcb8(char *a, char *o, float best) {
 }
 extern int FUN_00214720_25ff38(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_00259740_25ff38(void *, void *, int) __asm__("FUN_L00_00259740");
-int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv) {
+int activate_effect_l08(char *a, char *o, float best, int *list, int n, float *v, int nv) __asm__("FUN_L00_0025ff38");
+int activate_effect_l08(char *a, char *o, float best, int *list, int n, float *v, int nv) {
     struct Hero *g = &hero_lui;
     char *m;
     char *p;
@@ -207,7 +208,8 @@ void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out) {
+int probe_ground_height_cf(int u0, char *a, void *b, void *c, float *v, void *out) __asm__("FUN_L00_00260400");
+int probe_ground_height_cf(int u0, char *a, void *b, void *c, float *v, void *out) {
     M4_260400 m, n;
     char *o = c338_p(a);
     if (o == 0)
@@ -235,7 +237,8 @@ void FUN_00214598_002604f0(void *, void *) __asm__("FUN_00214598");
 void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *,
                                void *) __asm__("FUN_L00_00260668");
 void FUN_L00_0025f730_002604f0(void *, float) __asm__("FUN_L00_0025f730");
-int FUN_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f) {
+int f_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f) __asm__("FUN_L00_002604f0");
+int f_L00_002604f0(u8 *a, u8 *b, void *c, void *d, void *e, void *f) {
     float m2[16] __attribute__((aligned(16)));
     float m[16] __attribute__((aligned(16)));
     V4_2604f0 t;
@@ -274,7 +277,8 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
-int FUN_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d) {
+int f_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d) __asm__("FUN_L00_00260668");
+int f_L00_00260668(int x, char *o, float *a, float *c, float *b, float *d) {
     float m[16];
     float v[4];
     float w[4];
@@ -295,7 +299,8 @@ void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 #include "qcopy.h"
-void FUN_L00_00260738(char *out, OvlQuad *pos, void *m1, void *m2) {
+void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) __asm__("FUN_L00_00260738");
+void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) {
     M4 a, b, c;
     euler_rotation_matrix(a, m1);
     transpose_rotation_matrix(a, a);
@@ -346,7 +351,8 @@ extern int D_00141414 __attribute__((section(".data")));
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 
 extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
-void FUN_L00_00260860(int id, int flag) {
+void ea210_switch(int id, int flag) __asm__("FUN_L00_00260860");
+void ea210_switch(int id, int flag) {
     unsigned char *pa = &D_0013D4C0[id];
     unsigned char *pb = &items_acquired[id];
     int idx = id + 0x25;
@@ -444,7 +450,8 @@ extern void FUN_001eb078_260a88(int, ...) __asm__("FUN_001e93b0");
 extern float FUN_00200240_260a88(int) __asm__("FUN_001fa6c0");
 extern double FUN_00120478_260a88(float) __asm__("FUN_00120478");
 
-void FUN_L00_00260a88(char *moby, int lower, int upper, unsigned int flags, int path_index) {
+void play_reaction_3024d8(char *moby, int lower, int upper, unsigned int flags, int path_index) __asm__("FUN_L00_00260a88");
+void play_reaction_3024d8(char *moby, int lower, int upper, unsigned int flags, int path_index) {
     Vec_260a88 base, position, velocity, offset, adjusted, difference, quarter;
     float crossings[2];
     float time;

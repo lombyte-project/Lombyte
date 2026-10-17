@@ -14,12 +14,13 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int FUN_001fa728(char *, float);
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char *FUN_L00_002743a8(float f0, float f1, int a0, void *pos, int timer, int flag,
                                        int col, float *vel);
 
-void FUN_L05_0031abe0(char *moby) {
+void hoverboard_ring_update(char *moby) __asm__("FUN_L05_0031abe0");
+void hoverboard_ring_update(char *moby) {
     switch (((unsigned char *)moby)[0x20]) {
     case 0:
         ((unsigned char *)moby)[0x30] = 0x80;
@@ -31,7 +32,7 @@ void FUN_L05_0031abe0(char *moby) {
         int i;
         qcopy(v, moby + 0x10);
         v[3] = 8.0f;
-        if (FUN_001fa728((char *)v, 128.0f) != -1) {
+        if (fast_bsphere_check((char *)v, 128.0f) != -1) {
             if (hero.state.control_mode == 0x16) {
                 for (i = 0; i < 3; i++) {
                     float a = random_angle_radians();
@@ -48,7 +49,7 @@ void FUN_L05_0031abe0(char *moby) {
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/vector.h"
 
-/* Vars of the level 5 mine FUN_L05_0031c8e0 drives. */
+/* Vars of the level 5 mine lamp_update drives. */
 struct MineVars_c8e0 {
     u8 pad0[0x60];
     s32 alpha;                     /* 0x60: glow alpha, faded out with camera distance */
@@ -104,7 +105,8 @@ extern char *FUN_L05_0031d160(unsigned char *);
 void FUN_L05_0031cf58(char *m);
 
 /* Mine update: sets its glow, fades it out with camera distance and blows up into debris, smoke and sparks when something touches it. */
-void FUN_L05_0031c8e0(struct Moby *moby) {
+void lamp_update(struct Moby *moby) __asm__("FUN_L05_0031c8e0");
+void lamp_update(struct Moby *moby) {
     struct MineVars_c8e0 *vars = (struct MineVars_c8e0 *)moby->pvars;
     Vec4 tip;
     Vec4 vel;
@@ -310,7 +312,7 @@ char *FUN_L05_0031d160(unsigned char *a0) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
 
 
-extern float FUN_001f9b80(float *, float *);
+extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
@@ -331,7 +333,7 @@ void FUN_L05_00329358(char *moby) {
         w[1] = 447.82f;
         w[2] = 63.37f;
         w[3] = 1.0f;
-        if (FUN_001f9b80(w, p) < 48.0f) {
+        if (vector_distance(w, p) < 48.0f) {
             if (p[2] < 62.4f) {
                 p[2] = 62.4f;
             }
@@ -583,11 +585,11 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 FUN_001f9ab0(void *, void *);
+extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern void rotate_about_axis(void *out, void *v, void *axis, f32 ang) __asm__("FUN_00214890");
-extern float FUN_L00_001eb328(void *, float, float, float, float, float);
+extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float FUN_001ebd78(void *, float, float, float, float, float);
 
 /* Camera that orbits the hero while hero.unk88E is set, easing yaw, pitch and distance toward their goals. */
@@ -617,22 +619,22 @@ void FUN_L05_003298d8(Camera *cam) {
         cross_vectors_xyz(&fwd, &up, &side);
         normalize_vector_xyz(&fwd, &fwd, 1.0f);
         subtract_vector_xyz(&rel, &cam->pos, focus);
-        dot = FUN_001f9ab0(&rel, &up);
+        dot = fast_vec_dot(&rel, &up);
         normalize_vector_xyz(&along, &up, dot);
         subtract_vector_xyz(&flat, &rel, &along);
-        dot = FUN_001f9ab0(&fwd, &flat);
+        dot = fast_vec_dot(&fwd, &flat);
         len = vector_length_xyz(&flat);
         if (len == 0.0f) {
             len = 0.0001f;
         }
         ang = 1.5707964f - fast_arc_sin(dot / len);
         normalize_vector_xyz(&unit, &flat, 1.0f);
-        if (FUN_001f9ab0(&side, &unit) < 0.0f) {
+        if (fast_vec_dot(&side, &unit) < 0.0f) {
             ang = -ang;
         }
         cam->yaw = ang;
         rotate_about_axis(&rot, &fwd, &up, ang);
-        dot = FUN_001f9ab0(&rot, &rel);
+        dot = fast_vec_dot(&rot, &rel);
         len = vector_length_xyz(&rel);
         if (len == 0.0f) {
             len = 0.0001f;
@@ -640,7 +642,7 @@ void FUN_L05_003298d8(Camera *cam) {
         tilt = 1.5707964f - fast_arc_sin(dot / len);
         normalize_vector_xyz(&unit, &rel, 1.0f);
         pitch = -tilt;
-        if (FUN_001f9ab0(&up, &unit) < 0.0f) {
+        if (fast_vec_dot(&up, &unit) < 0.0f) {
             pitch = tilt;
         }
         cam->pitch = pitch;
@@ -666,8 +668,8 @@ void FUN_L05_003298d8(Camera *cam) {
         normalize_vector_xyz(&fwd, &fwd, 1.0f);
         rotate_about_axis(&side, &side, &fwd, cam->pitch);
         add_vector_xyz(&cam->pos, focus, &side);
-        cam->yaw = FUN_L00_001eb328(&spring[3], cam->yaw, spring[0], spring[6], spring[9], 0.0f);
-        cam->pitch = FUN_L00_001eb328(&spring[4], cam->pitch, spring[1], spring[7], spring[10], 0.0f);
+        cam->yaw = rope_spring_turn(&spring[3], cam->yaw, spring[0], spring[6], spring[9], 0.0f);
+        cam->pitch = rope_spring_turn(&spring[4], cam->pitch, spring[1], spring[7], spring[10], 0.0f);
         cam->dist = FUN_001ebd78(&spring[5], cam->dist, spring[2], spring[8], spring[11], 0.0f);
         if (hero.unk88E == 0) {
             o->mode = 0;
@@ -746,7 +748,7 @@ typedef struct { char pad0[0x48]; float vel; } Preset_32B1F8;
 typedef struct { char pad0[0x1C]; Preset_32B1F8 *preset; } Row_32B1F8;
 
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
 float absolute_float(float input) __asm__("func_001F99C0");

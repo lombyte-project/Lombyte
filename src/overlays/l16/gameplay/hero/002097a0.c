@@ -14,8 +14,8 @@
 /* Per-frame update of the pickup/hit state flags from the state code. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_00209D98), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f0b58(void);
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
 extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L16_0021e398");
@@ -66,8 +66,8 @@ void FUN_L16_002097a0(void) {
     if (v == 0xD) {
         struct Hero *q = &hero;
         if (q->state.current != 0x7B) {
-            if (FUN_L00_001f0d60(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
-                if (FUN_001f0b58() == 0xB) {
+            if (coll_sphere(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
+                if (collision_hit_material() == 0xB) {
                     hero_set_state(0x7B, 1);
                     return;
                 }
@@ -142,9 +142,9 @@ void FUN_L16_002097a0(void) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_0020FEC8), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9a10(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_0025f730(void *a, float x);
+extern void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");
 
 void FUN_L16_0020f8b0(void) {
     char tmp[16];
@@ -153,9 +153,9 @@ void FUN_L16_0020f8b0(void) {
     qcopy(p, p - 0x670);
     q = p - 0x770;
     fast_vec_normalize(tmp, q, *(float *)(q + 0x194));
-    FUN_001f9a10(p, p, tmp);
+    fast_vec_add(p, p, tmp);
     qcopy(p - 0x690, p);
-    FUN_L00_0025f730(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
+    vec_limit302618(p - 0x690, *(float *)(q + 0x85C) + *(float *)(q + 0x868));
 }
 typedef union {
     OvlQuad q;
@@ -166,23 +166,23 @@ extern u8 D_L16_00174260[] __attribute__((section(".data")));
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
-s32 FUN_001efa68(void *, void *, s32, s32, s32);
+s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
-s32 FUN_L00_0025e3b8(s32);
-u8 *FUN_002141f8(s32);
+s32 f5e3b8_20d6b0(s32) __asm__("FUN_L00_0025e3b8");
+u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 f32 FUN_L00_00233d30(void *);
 f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
-void FUN_001f9a28(void *, void *, void *);
+void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_L00_00216078(void *, void *);
 void FUN_L00_002335c8(void *, f32, f32, f32);
-void FUN_L00_002334d0(void *, void *, f32);
+void f2334d0_2133a8(void *, void *, f32) __asm__("FUN_L00_002334d0");
 f32 FUN_001f99c0(f32);
 
 extern CollisionHit HH __asm__("D_L16_00174240") __attribute__((section(".data")));
@@ -222,7 +222,7 @@ void FUN_L16_0020ffb0(void) {
         g = hero.unk234 * 2.9f;
     }
     hero_get_collision_ray_endpoints(&v10, &v0, k, g, -48.0f);
-    if (FUN_001efa68(&v10, &v0, 2, (s32)hero.moby, 0) == 0) {
+    if (collision_line(&v10, &v0, 2, (s32)hero.moby, 0) == 0) {
         goto tail;
     }
     r = coll_sound_class();
@@ -236,7 +236,7 @@ void FUN_L16_0020ffb0(void) {
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.unk2F8 <= 0) {
             hero.unk2F8 = 1;
         }
-        if (FUN_001efa68(&v10, &v0, 0x24, (s32)hero.moby, 0) == 0) {
+        if (collision_line(&v10, &v0, 0x24, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
         r = coll_sound_class();
@@ -248,7 +248,7 @@ void FUN_L16_0020ffb0(void) {
     if (hero.ground_type == 0xD) {
         hero.water_surface_z = HH.point.f[2];
         v10.f[2] = HH.point.f[2] - 0.01f;
-        if (FUN_001efa68(&v10, &v0, 4, (s32)hero.moby, 0) == 0) {
+        if (collision_line(&v10, &v0, 4, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
     }
@@ -257,13 +257,13 @@ void FUN_L16_0020ffb0(void) {
         goto d1;
     }
     if (HH.moby != 0) {
-        if (FUN_L00_0025e3b8(HH.moby)) {
+        if (f5e3b8_20d6b0(HH.moby)) {
             hero.unk30A = 1;
             if ((u32)(hero.state.control_mode - 0x15) < 2) {
-                FUN_L00_002334d0((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
+                f2334d0_2133a8((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
             }
         }
-        p = FUN_002141f8(HH.moby);
+        p = suck_get_aim_height(HH.moby);
         if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
             hero.unk30A = 1;
         }
@@ -276,7 +276,7 @@ void FUN_L16_0020ffb0(void) {
         sceVu0Normalize((u8 *)&hero.unk270, (u8 *)&HH.normal_x);
         hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        FUN_001f9a28(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
+        fast_vec_sub(&v20, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&v20, (u8 *)&hero.unk270)) {
             hero.ground_distance = -hero.ground_distance;
         }
@@ -309,7 +309,7 @@ d1:
         FUN_001f9a68_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, -1.0f);
         break;
     case 2:
-        FUN_001f9a28((u8 *)&hero.gravity_dir, (u8 *)&hero.motion.unkB0, (u8 *)&hero.motion.pos);
+        fast_vec_sub((u8 *)&hero.gravity_dir, (u8 *)&hero.motion.unkB0, (u8 *)&hero.motion.pos);
         FUN_001f9bf8_c((u8 *)&hero.gravity_dir, (u8 *)&hero.gravity_dir, 1.0f);
         break;
     }
@@ -342,7 +342,7 @@ d1:
         }
         FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
-        if (FUN_001efa68(&v30, &v0, 0x22, (s32)hero.moby, 0)) {
+        if (collision_line(&v30, &v0, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
@@ -528,14 +528,14 @@ extern char *D_L16_00174258[];
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float FUN_L00_00213350(void *);
-extern float FUN_L00_002339d0(float *v);
-extern float FUN_L00_00233a78(float *);
+extern float forward_component(void *) __asm__("FUN_L00_00213350");
+extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
+extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void FUN_L00_00212ff0(void);
 extern void FUN_L00_002137a8(void);
-extern void FUN_L00_002338d0(float *, float *);
-extern void FUN_L00_00233b20(float *, float *, float);
+extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
+extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void FUN_L00_00233ba0(float *, float *, float);
 extern void FUN_L00_00233f80(int, void *, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -543,7 +543,7 @@ extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-s32 FUN_001efa68(void *, void *, s32, s32, s32);
+s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void FUN_L16_0020ffb0(void);
 extern char D_0013F430[] __attribute__((section(".sdata")));
 
@@ -578,16 +578,16 @@ void FUN_L16_00211098(void) {
             float length;
 
             position = (float *)((char *)position + 0x60);
-            length = FUN_L00_002339d0(position);
+            length = gravity_length_xy(position);
             limit = player->speed_limit - 0.02f;
             if (limit < length) normalize_vector_xyz(position, position, limit);
         }
         limited_velocity = (float *)(&hero.motion.velocity);
-        magnitude = FUN_L00_00233a78(limited_velocity);
+        magnitude = gravity_z(limited_velocity);
         limit = -*(float *)((char *)limited_velocity + 0x1FC); /* the player's gravity_limit */
         if (magnitude < limit) {
             if (limit > 0.0f) limit = 0.0f;
-            FUN_L00_00233b20(limited_velocity, limited_velocity, limit);
+            gravity_set_z(limited_velocity, limited_velocity, limit);
         }
     } else if (player->mode == 15) {
         /* The same vertical clamp as in mode 22 below, written out in both places: the compiler merges the two. */
@@ -612,7 +612,7 @@ void FUN_L16_00211098(void) {
         qcopy(work.f, position);
         work.f[2] += 0.5f;
         add_vector_xyz(plane.f, work.f, (char *)position + 0x60);
-        if (FUN_001efa68(position, plane.f, 2, 0, 0)) {
+        if (collision_line(position, plane.f, 2, 0, 0)) {
             char *hit = D_L16_00174258[0];
 
             if (!hit || *(short *)(hit + 0xA6) == 0x1F6 || *(short *)(hit + 0xA6) == 0x59F) {
@@ -670,8 +670,8 @@ void FUN_L16_00211098(void) {
     if (magnitude < 0.0f) magnitude = 0.0f;
     normalize_vector_xyz(delta, velocity, magnitude);
     qcopy(work.f, velocity);
-    FUN_L00_002338d0(work.f, work.f);
-    FUN_L00_002338d0(horizontal, horizontal);
+    gravity_flatten(work.f, work.f);
+    gravity_flatten(horizontal, horizontal);
     normalize_vector_xyz(horizontal, horizontal, 1.0f);
     magnitude = dot_vectors_xyz(horizontal, work.f);
     if (magnitude < 0.0f) magnitude = 0.0f;
@@ -687,7 +687,7 @@ void FUN_L16_00211098(void) {
     motion_player->speed = vector_length_xyz(delta);
     motion_player->horizontal_speed = vector_length_xy(delta);
     work.q = *(OvlQuad *)delta;
-    motion_player->vertical_speed = FUN_L00_00213350(work.f);
+    motion_player->vertical_speed = forward_component(work.f);
     if (motion_player->vertical_speed < 0.0f) motion_player->vertical_speed = 0.0f;
     qcopy(work.f, new_position);
     contact = (float *)((char *)delta - 0x20);

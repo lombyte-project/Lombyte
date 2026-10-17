@@ -34,7 +34,7 @@ extern TextEntry *help_msgs __asm__("D_0015F6A0");
 extern HelpState D_001996D0;
 
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern s32 func_001F9740(void *);
+extern s32 tick_countdown_32(void *) __asm__("func_001F9740");
 extern s32 find_help_message_index(s32 arg0) __asm__("FUN_001fdca0");
 extern void link_localized_display_text(void) __asm__("FUN_001fdd58");
 extern s32 force_help_message(s32 arg0, s32 arg1) __asm__("FUN_002151d8");
@@ -86,7 +86,7 @@ void update_help_state(void) {
         }
         if (D_001996D0.msg >= 0) {
             if (D_001996D0.shown == 0) {
-                if (func_001F9740(D_001996D0.wait) != 0) {
+                if (tick_countdown_32(D_001996D0.wait) != 0) {
                     link_localized_display_text();
                     D_001996D0.shown++;
                 }

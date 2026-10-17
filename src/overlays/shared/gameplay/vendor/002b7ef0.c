@@ -5,7 +5,8 @@
 
 extern float D_L01_001CAE60[];
 
-void FUN_L01_002b7ef0(float s) {
+void pool_set_scale(float s) __asm__("FUN_L01_002b7ef0");
+void pool_set_scale(float s) {
     unsigned int i;
     float k = s / D_L01_001CAE60[16];
     for (i = 0; i < 0x5C; i++) {
@@ -48,7 +49,8 @@ extern void FUN_L01_00261d78(char *, char *, char *, float);
 extern void func_L01_002B90E8_2B9198(void) __asm__("FUN_L01_002b7f30");
 
 extern short D_L01_00161224 __attribute__((sda));
-void FUN_L01_002b7fe0(char *p, int n) {
+void pool_flush(char *p, int n) __asm__("FUN_L01_002b7fe0");
+void pool_flush(char *p, int n) {
     if (1.0f - pool_light[8] <= *(float *)&D_L01_00161224) {
         *(float *)&D_L01_00161224 = pool_light[8];
         func_L01_002B90E8_2B9198();
@@ -117,8 +119,15 @@ void FUN_L01_002b80d0(float *m) {
         }
     }
 }
-extern void FUN_L00_002a3ec8(void *, int, int);
+extern void pool_splash(void *, int, int) __asm__("FUN_L00_002a3ec8");
 
-void FUN_L01_002b8288(void *a, int b) {
-    FUN_L00_002a3ec8(a, b, 0);
+void pool_ripple(void *a, int b) __asm__("FUN_L01_002b8288");
+void pool_ripple(void *a, int b) {
+    pool_splash(a, b, 0);
 }
+
+f32 D_L05_001CAFE0[1] __attribute__((section(".data"))) = {0};
+f32 D_L07_001CABE0[1] __attribute__((section(".data"))) = {0};
+f32 D_L11_001CB560[1] __attribute__((section(".data"))) = {0};
+f32 D_L12_001CAFE0[1] __attribute__((section(".data"))) = {0};
+f32 D_L13_001CAE60[1] __attribute__((section(".data"))) = {0};

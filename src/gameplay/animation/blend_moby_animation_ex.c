@@ -36,7 +36,7 @@ extern void FUN_0020ede8(void *, int);
    old seq in unkA5 (unless it was already 0xFF), then marks seq 0xFF and
    frame = slot. Either way it then sets nextFrame/prevSeq from arg2/arg1,
    refreshes frame pointers (update_moby_animation_state), arms the timer (unk58 = 1),
-   resets unk54, clears unk70 bit 1, stores 1/func_001FA6C0(arg3) into
+   resets unk54, clears unk70 bit 1, stores 1/convert_integer_to_float(arg3) into
    unk5C, and copies a not-yet-named byte (offset 0x11) out of
    pClass->seqs[arg1] into unk7C. */
 void blend_moby_animation_ex(MobyAnim *moby, int new_seq, int frame_index, int blend_frames,

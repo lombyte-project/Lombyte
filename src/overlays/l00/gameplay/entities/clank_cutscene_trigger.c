@@ -270,12 +270,13 @@ typedef struct {
 
 extern u8 D_0013D388[];
 extern s16 D_00141628[];
-extern s32 FUN_L00_002668a0(DoorMoby *, void *);
-extern s32 FUN_L00_00266448(DoorMoby *, void *);
+extern s32 initialize_npc_dialogue(DoorMoby *, void *) __asm__("FUN_L00_002668a0");
+extern s32 update_npc_dialogue(DoorMoby *, void *) __asm__("FUN_L00_00266448");
 extern void initialize_global_state_entry(s32) __asm__("FUN_0022e188");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
-void FUN_L00_002d9dc8(DoorMoby *m) {
+void clank_cutscene_trigger_update(DoorMoby *m) __asm__("FUN_L00_002d9dc8");
+void clank_cutscene_trigger_update(DoorMoby *m) {
     DoorVars *vars;
 
     vars = m->vars;
@@ -289,7 +290,7 @@ void FUN_L00_002d9dc8(DoorMoby *m) {
     switch (m->state) {
     case 0:
         D_00141628[0] = 1;
-        FUN_L00_002668a0(m, vars->unk20);
+        initialize_npc_dialogue(m, vars->unk20);
         if (D_0013D388[8] != 0) {
             vars->unk56 = 1;
             vars->unk2C = 3.0f;
@@ -309,7 +310,7 @@ void FUN_L00_002d9dc8(DoorMoby *m) {
                 vars->unk2C = 3.0f;
             }
         }
-        if (FUN_L00_00266448(m, vars->unk20) != 0) {
+        if (update_npc_dialogue(m, vars->unk20) != 0) {
             m->state = 2;
             vars->unk2C = 3.0f;
         }

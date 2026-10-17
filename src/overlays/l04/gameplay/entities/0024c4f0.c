@@ -75,7 +75,7 @@ float FUN_L04_0024c660(float *dst, float *a, float *b, float *c) {
 
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int FUN_L04_0024c4f0(float *, float *, int);
-extern void FUN_001f9a28(void *, void *, void *);
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L04_0024c660_u(float *, float *, float *, float *) __asm__("FUN_L04_0024c660");
 
 int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n) {
@@ -88,7 +88,7 @@ int FUN_L04_0024c7d8(float *out, float *p, float *poly, int n) {
     for (i = 0; i < n; i++) {
         float d;
         FUN_L04_0024c660_u(tmp, poly + i * 4, poly + ((i + 1) % n) * 4, p);
-        FUN_001f9a28(diff, p, tmp);
+        fast_vec_sub(diff, p, tmp);
         d = fast_vec_length(diff);
         if (i == 0 || d < best) {
             best = d;

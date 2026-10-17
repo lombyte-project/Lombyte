@@ -1,8 +1,3 @@
-#include "asm.h"
-
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/sdk/dma/dma_ref_image/dmaRefImage.s", dmaRefImage);
-#else
 #include "types.h"
 #include "eetypes.h"
 #include "kernel.h"
@@ -71,4 +66,3 @@ void dmaRefImage(MpegRefImageState *state) {
         EnableInterrupts();
     }
 }
-#endif /* NON_MATCHING */

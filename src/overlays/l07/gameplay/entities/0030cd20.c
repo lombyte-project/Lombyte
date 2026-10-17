@@ -175,9 +175,9 @@ struct SwingGateVars {
 
 extern struct Moby *D_L07_0015FFD8;
 extern int FUN_0022da68(int, int, struct Moby *);
-extern float FUN_001f9dc8(float);
-extern float FUN_001fa580(float, float);
-extern float FUN_001fa5c8(float, float);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 void FUN_L07_0031b3f0(struct Moby *moby) {
     struct SwingGateVars *vars = (struct SwingGateVars *)moby->pvars;
@@ -204,8 +204,8 @@ void FUN_L07_0031b3f0(struct Moby *moby) {
     case 2:
         break;
     case 3:
-        vars->vel = FUN_001fa580(vars->vel, FUN_001f9dc8(moby->rot.y) * (vars->speed * frame_time));
-        moby->rot.y = FUN_001fa580(moby->rot.y, vars->vel);
+        vars->vel = fast_add_rotations(vars->vel, fast_cos(moby->rot.y) * (vars->speed * frame_time));
+        moby->rot.y = fast_add_rotations(moby->rot.y, vars->vel);
         vars->vel = vars->vel * vars->damp;
         target = &D_L07_0015FFD8[vars->target];
         if (target == 0 || target->state == 0xFE || target->state == 0xFD)
@@ -221,7 +221,7 @@ void FUN_L07_0031b3f0(struct Moby *moby) {
             moby->state = 2;
             break;
         }
-        f = FUN_001fa5c8(moby->rot.y, vars->rate);
+        f = fast_subtract_rotations(moby->rot.y, vars->rate);
         moby->rot.y = f;
         if (0.0f < f) {
             moby->rot.y = 0;

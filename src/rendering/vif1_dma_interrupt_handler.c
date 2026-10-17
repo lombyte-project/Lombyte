@@ -7,7 +7,7 @@ extern volatile s32 vif_chain_flags __asm__("D_00160EE0") __attribute__((sda));
 /* VIF1 DMA interrupt handler: clears the busy bit of the chain part whose tag
    ID raised the interrupt, all of them at the end of the chain, then resumes
    the channel. */
-s32 vif1_dma_interrupt_handler(s32 cause) __asm__("FUN_00233e00");
+s32 vif1_dma_interrupt_handler(s32 cause) __asm__("func_00233E00");
 
 s32 vif1_dma_interrupt_handler(s32 cause) {
     u32 chcr = *(volatile u32 *)0x10009000;

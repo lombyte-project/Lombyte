@@ -1677,6 +1677,33 @@ def fix_gp_rel_stores(asm_root: Path) -> int:
         fixed += 1
     return fixed
 
+def fix_mirror_symbols(asm_root: Path) -> int:
+    """Write splat's ``%lo(D_2xxxxxxx)`` / ``%hi(...)`` operands as immediates.
+
+    Code that ORs 0x20000000 into a RAM address (the uncached mirror) gets the
+    sum paired into a symbol, e.g. ``addiu $10, $10, %lo(D_20000020)`` for a
+    plain pointer step of 0x20.  No symbol lives there; the relocation only
+    makes objdiff reject a compiler object that emits the bare immediate.
+    The same words are written the way splat spells its other immediates.
+    """
+    pattern = re.compile(r"%(?P<op>lo|hi)\(D_(?P<addr>[23][0-9A-F]{7})\)")
+
+    def rewrite(match: re.Match[str]) -> str:
+        if int(match.group("addr"), 16) & 0x8000:
+            return match.group(0)  # a negative %lo: leave the pair to splat
+        if match.group("op") == "lo":
+            return f"(0x{match.group('addr')} & 0xFFFF)"
+        return f"(0x{match.group('addr')} >> 16)"
+
+    fixed = 0
+    for asm_file in asm_root.rglob("*.s"):
+        text = asm_file.read_text()
+        updated = pattern.sub(rewrite, text)
+        if updated != text:
+            asm_file.write_text(updated)
+            fixed += 1
+    return fixed
+
 def make_asm(config_path: Path, config: dict[str, Any]):
     with tempfile.TemporaryDirectory(dir=config_path, prefix="tmp_") as tmp_dir:
         tmp_path = Path(tmp_dir)
@@ -1740,6 +1767,9 @@ def make_asm(config_path: Path, config: dict[str, Any]):
         rewritten = fix_gp_rel_stores(dst_path)
         if rewritten:
             print(f"normalized gp-relative stores in {rewritten} expected asm files")
+        rewritten = fix_mirror_symbols(dst_path)
+        if rewritten:
+            print(f"unpaired uncached-mirror immediates in {rewritten} expected asm files")
 
         print(f"expected asm extracted to '{dst_path}'")
 
@@ -1760,6 +1790,7 @@ def make_asm(config_path: Path, config: dict[str, Any]):
             split.main([yaml_path], modes=["all"], verbose=False)
 
         rename_locals(asm_path)
+        fix_mirror_symbols(tmp_path / "asm")
 
         dst_path = dst_path.parent / "obj"
         tmp_obj_path = tmp_path / "obj"
@@ -2251,6 +2282,7 @@ def main():
         clean(config_dir)
 
     split.main([args.YAML_FILE], modes=["all"], verbose=False)
+    fix_mirror_symbols(config_dir / "asm")
 
     fix_assets(config_dir, config)
 

@@ -41,7 +41,8 @@ extern float D_L12_00161A00 __attribute__((sda));
 extern float D_L12_00161A04 __attribute__((sda));
 extern float D_L12_00161A08 __attribute__((sda));
 
-void FUN_L12_002ec720(struct Moby *moby) {
+void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
+void water_reservoir_update(struct Moby *moby) {
     float *data = (float *)moby->pvars;
     float pos[4], offset0[4], offset1[4], diff0[4], diff1[4];
     float fraction, frame_scale;
@@ -196,7 +197,7 @@ extern char *func_0020D348_m(int);
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 
 char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, float f1, float f2) {
     struct Moby *moby = (struct Moby *)func_0020D348_m(0x199);
@@ -219,7 +220,7 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
         *(float *)(data + 0x24) = f1;
         *(int *)(data + 0x28) = 0;
         *(int *)(data + 0x14) = r;
-        FUN_L00_00250df8(moby);
+        allocate_voice_for_target_entry_cf(moby);
     }
     return (char *)moby;
 }
@@ -249,21 +250,22 @@ extern void mark_moby_for_removal_ece00(struct Moby *) __asm__("FUN_0020c828");
 extern void add_vector_ece00(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_ece00(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void set_vector_length_ece00(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern int random_int_between_ece00(int, int) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spark_v(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern int FUN_001efa68_ece00(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
 extern int coll_sphere_ece00(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_ece00(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
 extern float fast_cos_ece00(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_ece00(float) __asm__("FUN_001f9de0");
 extern void apply_hit_ece00(int, void *) __asm__("FUN_L00_00259a88");
-extern void FUN_L00_0025e450(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
-                             int, float, int, int, int, int);
-extern void FUN_L00_0025f090(void *, void *, int, float, float);
+extern void spawn_explosion(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
+                             int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 
 /* Level 12 shot: flies with a smoke trail, damages the first moby it hits other than its owner, then pops. */
-void FUN_L12_002ece00(struct Moby *moby) {
+void rocket_update(struct Moby *moby) __asm__("FUN_L12_002ece00");
+void rocket_update(struct Moby *moby) {
     ShotVars_ece00 *vars = (ShotVars_ece00 *)moby->pvars;
     float old_pos[4];
     float side[4];
@@ -294,10 +296,10 @@ void FUN_L12_002ece00(struct Moby *moby) {
         moby->rot.x = fast_add_rotations_72(moby->rot.x, frame_time * 6.2831855f);
         set_vector_length_ece00(side, vars, 0.2f);
         set_vector_length_ece00(back, vars, -0.2f);
-        FUN_L00_001ff290(trail, back, &moby->pos);
-        FUN_L00_00269958(back, side, 0x6F00AFFF, 0xFF, scale_game_frames(random_int_between_ece00(15, 22)), 40,
+        combine_velocity1688(trail, back, &moby->pos);
+        spark_v(back, side, 0x6F00AFFF, 0xFF, scale_game_frames(random_int_between_ece00(15, 22)), 40,
                          random_int_between_ece00(20, 35), 1);
-        FUN_L00_00269958(back, side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(random_int_between_ece00(30, 60)), 40,
+        spark_v(back, side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(random_int_between_ece00(30, 60)), 40,
                          random_int_between_ece00(50, 75), 0);
         if (FUN_001efa68_ece00(&moby->pos, old_pos, 0, moby, 0) || coll_sphere_ece00(&moby->pos, 0.2f, 0, moby)) {
             if (D_L12_001742C0_ece00.moby != 0 && D_L12_001742C0_ece00.moby != (int)vars->owner) {
@@ -328,12 +330,12 @@ void FUN_L12_002ece00(struct Moby *moby) {
         add_vector_ece00(&moby->pos, &moby->pos, old_pos);
         if (current_level_index == 12 && camera_secondary_mode_ece00 == 50) {
             char *camera = D_L12_00167240 - 0x140;
-            FUN_L00_0025e450(moby, &D_L12_0015F580, 0, 0.0f, 0.0f, 3, 3, 5, 0.3f, 0.2f, 0.0f, 0.15f, -1, 0.0f, 0, 0,
+            spawn_explosion(moby, &D_L12_0015F580, 0, 0.0f, 0.0f, 3, 3, 5, 0.3f, 0.2f, 0.0f, 0.15f, -1, 0.0f, 0, 0,
                              -1, 0);
             *(float *)(camera + 0x160) = 0.025f;
             *(int *)(camera + 0x168) = scale_game_frames(20);
         } else {
-            FUN_L00_0025f090(moby, &moby->pos, 0, 0.25f, 13.0f);
+            cart_burst(moby, &moby->pos, 0, 0.25f, 13.0f);
         }
         mark_moby_for_removal_ece00(moby);
         break;
@@ -345,7 +347,7 @@ void FUN_L12_002ece00(struct Moby *moby) {
 
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern char D_00141968_h[] __asm__("D_00141968");
-extern int FUN_L01_0026e008(int, int);
+extern int count_group_e3528(int, int) __asm__("FUN_L01_0026e008");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
@@ -355,7 +357,7 @@ extern unsigned char D_0013D50F_e[] __asm__("D_0013D408");
 
 void FUN_L12_002ed280(struct Moby *m) {
     int *d = (int *)m->pvars;
-    if (FUN_L01_0026e008(d[3], -1) == 0) {
+    if (count_group_e3528(d[3], -1) == 0) {
         unsigned char *s = D_0013D50F_e;
         if (s[0x14] == 0) {
             s[0x14] = 1;

@@ -632,7 +632,8 @@ typedef struct {
 
 extern int D_L00_0015F5C4;
 
-void FUN_L00_00232fe8(void) {
+void f32fe8_208820(void) __asm__("FUN_L00_00232fe8");
+void f32fe8_208820(void) {
     struct Hero *base = &hero;
     struct Hero *tail;
     struct Hero *last;
@@ -676,7 +677,8 @@ void FUN_L00_00232fe8(void) {
    block, as retail re-forms it from the saved %hi before each one. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233950), where it is exact; names translated to the US level program. */
 
-void FUN_L00_002330d0(void) {
+void f330d0_208820(void) __asm__("FUN_L00_002330d0");
+void f330d0_208820(void) {
     struct Hero *base = &hero;
     struct Hero *blk2;
     struct Hero *blk3;
@@ -845,7 +847,8 @@ typedef struct {
 } V002334d0 __attribute__((aligned(16)));
 void FUN_001f9bf8_002334d0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_002334d0(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
+void f2334d0_2133a8(f32 *out, f32 *in, f32 k) __asm__("FUN_L00_002334d0");
+void f2334d0_2133a8(f32 *out, f32 *in, f32 k) {
     struct Hero *b = &hero;
     V002334d0 t;
     switch (b->unk20B3) {
@@ -897,7 +900,8 @@ void FUN_L00_002335c8(float *out, float r, float angle, float z) {
 
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 /* Builds (x, y, z), transforms it by the hero matrix at 0 and adds the hero position. */
-void FUN_L00_00233660(float *out, float x, float y, float z) {
+void f233660_2133a8(float *out, float x, float y, float z) __asm__("FUN_L00_00233660");
+void f233660_2133a8(float *out, float x, float y, float z) {
     struct Hero *base;
 
     clear_u64_value(out);
@@ -909,8 +913,9 @@ void FUN_L00_00233660(float *out, float x, float y, float z) {
     add_vector_xyz(out, out, &base->motion.pos);
 }
 void FUN_L00_002334d0_002336e8(float) __asm__("FUN_L00_002334d0");
-/* Calls FUN_L00_002334d0 with -x. */
-void FUN_L00_002336e8(float x) {
+/* Calls f2334d0_2133a8 with -x. */
+void f336e8_208820(float x) __asm__("FUN_L00_002336e8");
+void f336e8_208820(float x) {
     FUN_L00_002334d0_002336e8(-x);
 }
 typedef unsigned int u128_00233708 __attribute__((mode(TI), aligned(16)));
@@ -965,7 +970,8 @@ void FUN_001f99f8_00233810(void *) __asm__("FUN_001f99f8");
 void FUN_001fa050_00233810(void *, void *) __asm__("FUN_001fa050");
 void FUN_001f9d20_00233810(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_00233810(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
+void f233810_2133a8(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233810");
+void f233810_2133a8(f32 *out, f32 *in, f32 z) {
     struct Hero *b = &hero;
     M00233810 m;
     V00233810 t;
@@ -992,7 +998,8 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L00_002338d0(float *dst, float *src) {
+void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
+void gravity_flatten(float *dst, float *src) {
     struct Hero *base = &hero;
     float n[4] __attribute__((aligned(16)));
 
@@ -1018,12 +1025,13 @@ void FUN_L00_002338d0(float *dst, float *src) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234250), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b20(void *);
+extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
-float FUN_L00_002339d0(float *v) {
+float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
+float gravity_length_xy(float *v) {
     struct Hero *base = &hero;
     float m[16] __attribute__((aligned(16)));
     float inv[16] __attribute__((aligned(16)));
@@ -1031,13 +1039,13 @@ float FUN_L00_002339d0(float *v) {
 
     switch (base->unk20B3) {
     case 0:
-        return FUN_001f9b20(v);
+        return vec_len_xy(v);
     case 1:
     case 2:
         euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
         transpose_rotation_matrix(inv, m);
         transform_vector(out, v, inv);
-        return FUN_001f9b20(out);
+        return vec_len_xy(out);
     }
     return 0.0f;
 }
@@ -1047,11 +1055,12 @@ float FUN_L00_002339d0(float *v) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002342F8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9ab0(void *, void *);
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
-float FUN_L00_00233a78(float *v) {
+float gravity_z(float *v) __asm__("FUN_L00_00233a78");
+float gravity_z(float *v) {
     struct Hero *base = &hero;
     float m[16] __attribute__((aligned(16)));
     float axis[4] __attribute__((aligned(16)));
@@ -1065,13 +1074,14 @@ float FUN_L00_00233a78(float *v) {
         axis[2] = 1.0f;
         euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
         transform_vector(axis, axis, m);
-        return FUN_001f9ab0(axis, v);
+        return fast_vec_dot(axis, v);
     }
     return 0.0f;
 }
 void FUN_001f9d20_00233b20(void *, void *, void *) __asm__("FUN_001f9d20");
 /* Copies in to out with z, transformed by the two hero matrices in modes 1 and 2. */
-void FUN_L00_00233b20(f32 *out, f32 *in, f32 z) {
+void gravity_set_z(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233b20");
+void gravity_set_z(f32 *out, f32 *in, f32 z) {
     struct Hero *b = &hero;
     switch (b->unk20B3) {
     case 0:
@@ -1486,7 +1496,8 @@ void FUN_L00_00233f80(void) {
 extern int FUN_L00_00262030(int, void *, void *, float);
 
 /* Sets the short at &hero.unk1F6 to 4 when FUN_L00_00262030 succeeds. */
-void FUN_L00_002347c0(void) {
+void f2347c0_2133a8(void) __asm__("FUN_L00_002347c0");
+void f2347c0_2133a8(void) {
     struct Hero *base = &hero;
 
     if (FUN_L00_00262030(base->unk22DA, &base->motion.pos, &base->motion.pos,
@@ -1694,3 +1705,34 @@ void show_health_hud(void) {
     queue_animation_update(1, 0x7535, FUN_L00_002395b0, FUN_L00_00239630, FUN_L00_00239810,
                            &hero.health, 8);
 }
+
+f32 D_L02_0017C960[1] __attribute__((section(".data"))) = {0};
+f32 D_L02_0017C964[1] __attribute__((section(".data"))) = {0};
+f32 D_L03_0017C460[1] __attribute__((section(".data"))) = {0};
+f32 D_L03_0017C464[1] __attribute__((section(".data"))) = {0};
+f32 D_L04_0017C4E0[1] __attribute__((section(".data"))) = {0};
+f32 D_L04_0017C4E4[1] __attribute__((section(".data"))) = {0};
+f32 D_L05_0017C7C0[1] __attribute__((section(".data"))) = {0};
+f32 D_L05_0017C7C4[1] __attribute__((section(".data"))) = {0};
+f32 D_L06_0017CAE0[1] __attribute__((section(".data"))) = {0};
+f32 D_L06_0017CAE4[1] __attribute__((section(".data"))) = {0};
+f32 D_L07_0017C3E0[1] __attribute__((section(".data"))) = {0};
+f32 D_L07_0017C3E4[1] __attribute__((section(".data"))) = {0};
+f32 D_L08_0017CB60[1] __attribute__((section(".data"))) = {0};
+f32 D_L08_0017CB64[1] __attribute__((section(".data"))) = {0};
+f32 D_L09_0017C4E0[1] __attribute__((section(".data"))) = {0};
+f32 D_L09_0017C4E4[1] __attribute__((section(".data"))) = {0};
+f32 D_L10_0017C7E0[1] __attribute__((section(".data"))) = {0};
+f32 D_L10_0017C7E4[1] __attribute__((section(".data"))) = {0};
+f32 D_L12_0017C7E0[1] __attribute__((section(".data"))) = {0};
+f32 D_L12_0017C7E4[1] __attribute__((section(".data"))) = {0};
+f32 D_L13_0017C660[1] __attribute__((section(".data"))) = {0};
+f32 D_L13_0017C664[1] __attribute__((section(".data"))) = {0};
+f32 D_L14_0017CA60[1] __attribute__((section(".data"))) = {0};
+f32 D_L14_0017CA64[1] __attribute__((section(".data"))) = {0};
+f32 D_L15_0017C960[1] __attribute__((section(".data"))) = {0};
+f32 D_L15_0017C964[1] __attribute__((section(".data"))) = {0};
+f32 D_L16_0017C7C0[1] __attribute__((section(".data"))) = {0};
+f32 D_L16_0017C7C4[1] __attribute__((section(".data"))) = {0};
+f32 D_L17_0017CC60[1] __attribute__((section(".data"))) = {0};
+f32 D_L17_0017CC64[1] __attribute__((section(".data"))) = {0};

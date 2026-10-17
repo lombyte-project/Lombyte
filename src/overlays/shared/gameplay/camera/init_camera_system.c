@@ -32,7 +32,8 @@ s32 FUN_L00_001eb1f8(s32 id) {
 float FUN_001fa5c8_001eb328(float, float) __asm__("FUN_001fa5c8");
 float FUN_001f99c0_001eb328(float) __asm__("FUN_001f99c0");
 float FUN_001fa580_001eb328(float, float) __asm__("FUN_001fa580");
-float FUN_L00_001eb328(float *p, float a, float b, float c, float d, float lim) {
+float rope_spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_001eb328");
+float rope_spring_turn(float *p, float a, float b, float c, float d, float lim) {
     float t = FUN_001fa5c8_001eb328(b, a);
     *p = *p + (c * t - d * *p);
     if (lim != 0.0f) {

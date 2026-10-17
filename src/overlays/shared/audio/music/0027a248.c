@@ -5,7 +5,8 @@
 #include "rnc/audio/music/music_stream_state.h"
 
 /* requests a music track: plays it now when nothing is streaming, else queues it */
-void FUN_L01_0027a248(s32 track, s32 transition) {
+void jet_game_state(s32 track, s32 transition) __asm__("FUN_L01_0027a248");
+void jet_game_state(s32 track, s32 transition) {
     if (music_stream_state.primary.track == track && music_stream_state.requested_track == -1)
         return;
     if (music_stream_state.primary.state == 0 && music_stream_state.transition.state == 0) {

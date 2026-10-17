@@ -41,11 +41,11 @@ extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L11_0015F638;
 extern float D_L11_001677D8 __attribute__((section(".data")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_00208f20(float a, float b, float c, float d);
 extern float FUN_L00_00232b90(float a, float b, float c);
-extern float FUN_L00_00233a78(float *v);
+extern float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 extern float FUN_L00_00233c30(float *pos, float *vel, int *steps, float step);
 extern float FUN_L00_00266e80(int);
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
@@ -63,7 +63,7 @@ extern int D_L11_0016D180 __attribute__((section(".data")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_002050b8(int);
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
-extern int FUN_L00_00211360(void *);
+extern int f_fun_l00_00211360_227fa0(void *) __asm__("FUN_L00_00211360");
 extern int FUN_L00_00221d98(void);
 extern int FUN_L00_002276c0(void);
 extern int FUN_L00_00227778(void);
@@ -87,11 +87,11 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern unsigned char D_0013D4C0[];
 extern void FUN_L00_00206c08(void);
 extern void FUN_L00_00209ca8(int, int, int);
-extern void FUN_L00_0020e698(void);
+extern void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
 extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
-extern void FUN_L00_00216de8(int, int);
+extern void f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
 extern void FUN_L00_00228c18(void);
 extern void FUN_L00_00228fa8(void);
 extern void FUN_L00_00231d08(void);
@@ -100,7 +100,7 @@ extern void FUN_L00_00232628(void);
 extern void FUN_L00_00232640(int id);
 extern void FUN_L00_00233288(float a, float b, short c, unsigned char d, unsigned char e,
                              unsigned char f);
-extern void FUN_L00_00233b20(float *dst, float *src, float z);
+extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
 extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
 extern void FUN_L00_00237ae8(void);
 extern void FUN_L00_00237ba0(void);
@@ -108,7 +108,7 @@ extern void FUN_L00_002382a0(void);
 extern void FUN_L00_00239cc8(void);
 extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
-extern void FUN_L00_0025f730(void *a, float x);
+extern void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void FUN_L01_00227e48(int a0, int a1, int a2);
 extern void FUN_L01_00232290(void);
 extern void FUN_L01_002405a0(void);
@@ -296,7 +296,7 @@ void FUN_L11_00253a18(void) {
                         hero.unk22C8 == 0) {
                         int id = hero_slot_item_id(0);
                         if (id != hero.unk2298) {
-                            FUN_L00_0020e698();
+                            fire_end_2cc608();
                         } else {
                             int anim = D_L11_0017A4C0[id].anim;
                             if (hero.moby->prev_seq != anim) {
@@ -616,7 +616,7 @@ void FUN_L11_00253a18(void) {
                     {
                         struct Moby *m = hero.items[0].moby;
                         int ok = 1;
-                        if (m != 0 && FUN_L00_00211360(m) && m->state != 0) {
+                        if (m != 0 && f_fun_l00_00211360_227fa0(m) && m->state != 0) {
                             ok = 0;
                         }
                         if (controller_state.held & 5) {
@@ -865,7 +865,7 @@ void FUN_L11_00253a18(void) {
                     }
                     break;
                 case 101:
-                    if (FUN_001f9b80(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
+                    if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
                                     hero.motion.rot.f[2], hero.unk1640.f[3]) < 0.034906585f) {
@@ -889,7 +889,7 @@ void FUN_L11_00253a18(void) {
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
-                    if (0.2f < FUN_001f9b80(hero.motion.pos.f, hero.unk1640.f)) {
+                    if (0.2f < vector_distance(hero.motion.pos.f, hero.unk1640.f)) {
                         hero_set_state(0x65, 1);
                     }
                     break;
@@ -1223,8 +1223,8 @@ void FUN_L11_00253a18(void) {
                             if (hero_set_state(HERO_STATE_IDLE, 0)) {
                                 set_hero_animation(0xC, 9, -1.0f);
                             }
-                            FUN_L00_00233b20(hero.motion.unk150.f, hero.motion.unk150.f, 0.0f);
-                            FUN_L00_0025f730(hero.motion.unk150.f, frame_time * 7.0f);
+                            gravity_set_z(hero.motion.unk150.f, hero.motion.unk150.f, 0.0f);
+                            vec_limit302618(hero.motion.unk150.f, frame_time * 7.0f);
                             hero.unk1C4 = scale_game_frames(7);
                             if (hero.state.prev == 0x2D) {
                                 hero.unk1C4 = scale_game_frames(0xA);
@@ -1247,7 +1247,7 @@ void FUN_L11_00253a18(void) {
                                 break;
                             }
                             set_hero_animation(6, 0, scale_game_frames(0xC));
-                            FUN_L00_0025f730(hero.motion.unk150.f, frame_time * 7.7f);
+                            vec_limit302618(hero.motion.unk150.f, frame_time * 7.7f);
                             break;
                         }
                         hero_set_state(HERO_STATE_IDLE, 1);
@@ -1564,7 +1564,7 @@ void FUN_L11_00253a18(void) {
                             break;
                         }
                         if (hero.unk2F8 == 1) {
-                            FUN_L00_00216de8(0x11, 0);
+                            f_fun_l00_00216de8_227fa0(0x11, 0);
                             FUN_L00_00209ca8(3, 0x18, 1);
                         }
                         if (hero.unk418 != 0) {
@@ -1724,7 +1724,7 @@ void FUN_L11_00253a18(void) {
                                     scale_game_frames(0xE) < hero.state_timer &&
                                     (hero.unk41E == 0 ||
                                      (hero.ground_distance > 0.7f &&
-                                      absolute_float(FUN_L00_00233a78(hero.motion.velocity.f)) <
+                                      absolute_float(gravity_z(hero.motion.velocity.f)) <
                                           frame_time * 5.8f))) {
                                     hero_set_state(0xE, 1);
                                 } else if (D_0013D4C0[2] != 0 && hero_slot_item_id(3) != 4 &&
@@ -1788,7 +1788,7 @@ void FUN_L11_00253a18(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            f_fun_l00_00216de8_227fa0(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }
@@ -1853,7 +1853,7 @@ void FUN_L11_00253a18(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            f_fun_l00_00216de8_227fa0(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }

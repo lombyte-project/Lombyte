@@ -35,7 +35,7 @@ typedef struct {
 extern void *create_part(s32) __asm__("FUN_L00_002678b8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
+extern s32 col_26fd28(f32, f32, f32, f32) __asm__("FUN_L00_0025bfe0");
 extern u8 *D_L01_001B2500[];
 
 void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode, f32 x, f32 y, f32 z,
@@ -80,7 +80,7 @@ void FUN_L01_0027e900(s32 id, u128 *pos, s32 life, u8 kind, u8 tex, u8 mode, f32
     p->b8 = a * 255.0f;
     p->hA = scale_game_frames(life);
     s->b1B = 0;
-    p->w4 = FUN_L00_0025bfe0(r, g, b, size);
+    p->w4 = col_26fd28(r, g, b, size);
 }
 #include "eetypes.h"
 #include "qcopy.h"
@@ -108,7 +108,8 @@ extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern u8 *D_L01_001B25E0[];
 
-Particle *FUN_L01_00287b00(u128 *pos, u128 *vel, f32 f) {
+Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");
+Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) {
     Particle *p;
     s32 c;
     u32 col;
@@ -135,7 +136,8 @@ s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
-Particle *FUN_L01_00287c80(u128 *pos, u128 *dir, f32 scale, f32 speed) {
+Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) __asm__("FUN_L01_00287c80");
+Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) {
     Particle *p;
     PartMotion *m;
     f32 r;

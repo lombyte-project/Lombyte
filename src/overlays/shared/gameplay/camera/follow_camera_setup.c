@@ -126,20 +126,20 @@ extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 FUN_001f99c0(f32);
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
-extern f32 FUN_001fa6c0(s32);
-extern s32 FUN_001f96f8(s32);
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
-extern u8 *FUN_002141f8(s32);
+extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 extern s32 collect_mobies_in_sphere(void *, s32, s32, s32, f32) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_002e8918(f32 *, f32, f32);
-extern void FUN_L00_002e8970(void *, f32, f32);
+extern void spin_s(void *, f32, f32) __asm__("FUN_L00_002e8970");
 extern void follow_camera_start_slide(void) __asm__("FUN_L00_002e8648");
-extern void FUN_L00_002e8620(void);
+extern void pitch2_s(void) __asm__("FUN_L00_002e8620");
 extern void follow_camera_set_height(f32, f32) __asm__("FUN_L00_002e84b8");
 extern void follow_camera_set_distance(s32, f32, f32) __asm__("FUN_L00_002e8450");
 extern void follow_camera_set_offset_scale(s32, f32, f32) __asm__("FUN_L00_002e84f0");
 extern void FUN_L00_002e8568(s32);
-extern void FUN_L00_002e8590(f32, f32);
+extern void follow_camera_set_lateral_spring(f32, f32) __asm__("FUN_L00_002e8590");
 
 /* Per-frame follow camera adjustments driven by the hero's state: sway, zoom and lookat tweaks, then the shake timers in m->h12/h14/h16. */
 void follow_camera_apply_overrides(O_2e6000 *o) __asm__("FUN_L00_002e6000");
@@ -202,7 +202,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
             follow_camera_set_distance(1, D_L00_00161D9C, 0.003f);
             follow_camera_set_height(D_L00_00161DA0, 0.003f);
         }
-        FUN_L00_002e8620();
+        pitch2_s();
         t = (S1D0_2e6000 *)((u8 *)o->m + 0x1D0);
         t->f3C = D_L00_00161DA8;
         t->f44 = D_L00_00161DA4;
@@ -210,7 +210,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
     if (hero.unk20AA != 0 && hero.state.control_mode != 0xF) {
         FUN_L00_002e8568(0);
         follow_camera_start_slide();
-        FUN_L00_002e8590(0.04f, 0.2f);
+        follow_camera_set_lateral_spring(0.04f, 0.2f);
     }
     x = &player_camera[1];
     if (x->fn != 0) x->fn();
@@ -224,9 +224,9 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
             }
             x = &player_camera[0];
             x->i260++;
-            if (FUN_001f96f8(400) < x->i260) x->i260 = FUN_001f96f8(400);
-            f = FUN_001fa6c0(x->i260) / FUN_001fa6c0(FUN_001f96f8(400));
-            FUN_L00_002e8970(x->p25C + 0x10, f * 0.20943952f, 0.0f);
+            if (scale_game_frames(400) < x->i260) x->i260 = scale_game_frames(400);
+            f = convert_integer_to_float(x->i260) / convert_integer_to_float(scale_game_frames(400));
+            spin_s(x->p25C + 0x10, f * 0.20943952f, 0.0f);
         }
     }
     s->i10 = 0;
@@ -234,7 +234,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
     if (n > 0) {
         lp = D_L00_00177F00;
         for (i = 0; i < n; lp++, i++) {
-            e = FUN_002141f8(*lp);
+            e = suck_get_aim_height(*lp);
             if (e != 0 && (f32)e[0xD] != 0.0f) {
                 s->i10 = 1;
                 break;
@@ -244,7 +244,7 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
     if (hero.state.current == 0x81 && (D_0013CAE0[0] & 3)) {
         FUN_L00_002e8568(0);
         follow_camera_start_slide();
-        FUN_L00_002e8590(0.04f, 0.2f);
+        follow_camera_set_lateral_spring(0.04f, 0.2f);
         { M_2e6000 *mm = o->m;
         mm->h16 = 0;
         mm->h12 = 0;
@@ -271,18 +271,18 @@ void follow_camera_apply_overrides(O_2e6000 *o) {
     { f32 c = sum * 5.0f;
     if (1.0f < c) c = 1.0f;
     c = 1.0f - c;
-    if (c < D_L00_00161D84) m->h12 = FUN_001f96f8(0x20); }
+    if (c < D_L00_00161D84) m->h12 = scale_game_frames(0x20); }
     if (m->h12 != 0) {
-        if (fast_dec_timer_s16(&m->h12)) m->h14 = FUN_001f96f8(0x2D);
+        if (fast_dec_timer_s16(&m->h12)) m->h14 = scale_game_frames(0x2D);
         follow_camera_start_slide();
         k = ++m->h16;
-        if (FUN_001f96f8(0x1E) < k) m->h16 = FUN_001f96f8(0x1E);
-        f = FUN_001fa6c0(m->h16) / FUN_001fa6c0(FUN_001f96f8(0x1E));
-        FUN_L00_002e8590((D_L00_00161D88 - 0.015f) * f + 0.015f, 0.2f);
+        if (scale_game_frames(0x1E) < k) m->h16 = scale_game_frames(0x1E);
+        f = convert_integer_to_float(m->h16) / convert_integer_to_float(scale_game_frames(0x1E));
+        follow_camera_set_lateral_spring((D_L00_00161D88 - 0.015f) * f + 0.015f, 0.2f);
         D_L00_0015EF40 = 0.0f;
     } else if (m->h14 != 0) {
         fast_dec_timer_s16(&m->h14);
-        f = FUN_001fa6c0(m->h14) / FUN_001fa6c0(FUN_001f96f8(0x2D));
+        f = convert_integer_to_float(m->h14) / convert_integer_to_float(scale_game_frames(0x2D));
         f *= -0.75f;
         f += 0.75f;
         D_L00_0015EF40 = f;
@@ -1030,8 +1030,8 @@ int FUN_L00_002e7618(O002e7530 *o, V002e7530 *out, int step, float dist, float s
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E8E78), where it is exact; names translated to the US level program. */
 
 extern V D_L00_00173E60;
-extern float FUN_001f9ab0(void *, void *);
-extern void FUN_001f9a28(float *, float *, float *);
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern void fast_vec_sub(float *, float *, float *) __asm__("FUN_001f9a28");
 
 /* For arg1 1: true when (D_L00_00173E60 - arg2) points against the object's +0x130 vector. */
 int FUN_L00_002e79c8(void *arg0, int arg1, float *arg2) {
@@ -1040,8 +1040,8 @@ int FUN_L00_002e79c8(void *arg0, int arg1, float *arg2) {
 
     if (arg1 == 1) {
         ptr2 = *(char **)((char *)arg0 + 0x70) + 0x130;
-        FUN_001f9a28(diff, D_L00_00173E60, arg2);
-        if (FUN_001f9ab0(diff, ptr2) < 0.0f) {
+        fast_vec_sub(diff, D_L00_00173E60, arg2);
+        if (fast_vec_dot(diff, ptr2) < 0.0f) {
             return 1;
         }
     }
@@ -1185,9 +1185,9 @@ f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
 extern void FUN_001f9a10_2e7d20(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern s32 FUN_L00_002e4290_2e7d20(void *) __asm__("FUN_L00_002e4290");
-s32 FUN_L00_0025e3b8(s32);
+s32 f5e3b8_20d6b0(s32) __asm__("FUN_L00_0025e3b8");
 void make_hit_descriptor(void *, void *, s32, void *, f32) __asm__("FUN_L00_00259888");
-void FUN_L00_00259a88(s32, void *);
+void apply_hit_ece00(s32, void *) __asm__("FUN_L00_00259a88");
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
 #define AF_2e7d20(o) (*(f32 *)(a + (o)))
@@ -1329,7 +1329,7 @@ move:
     if (FUN_L00_002e4290_2e7d20((*(E40_2e7d20_t *)&D_L00_00173E40_lui).v20)) {
         goto clear;
     }
-    if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 != 0 && FUN_L00_0025e3b8((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18)) {
+    if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 != 0 && f5e3b8_20d6b0((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18)) {
         FUN_001f9a28_2e7d20(&v20, (u8 *)(*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 + 0x10, D_L00_00166DC0);
         v20.i[2] = 0;
         FUN_001f9bf8_2e7d20(&v20, &v20, 1.0f);
@@ -1338,7 +1338,7 @@ move:
         w.b18 = 3;
         w.b19 = 3;
         w.h1A = *(u16 *)(D_0013F350_2e7d20.p2080 + 0xA6);
-        FUN_L00_00259a88((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18, &w);
+        apply_hit_ece00((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18, &w);
     }
     BI_2e7d20(0x4C)++;
     if (BI_2e7d20(0x4C) >= FUN_001f96f8_2e7d20(0x1E)) {

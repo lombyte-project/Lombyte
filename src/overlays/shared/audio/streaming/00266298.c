@@ -72,14 +72,15 @@ extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void FUN_L00_00237190(void);
-extern void FUN_L00_002371e0(void);
+extern void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 extern void FUN_L00_00237200(void);
 extern void FUN_L00_00239cc8(void);
 extern void FUN_L00_00239d00(void);
 extern void FUN_L00_00239df8(void);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
-s32 FUN_L00_00266448(struct Moby *moby, struct SceneTrigger *trigger)
+s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) __asm__("FUN_L00_00266448");
+s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
 {
     struct Hero *h = &hero;
     struct SceneEntry *entry;
@@ -154,7 +155,7 @@ s32 FUN_L00_00266448(struct Moby *moby, struct SceneTrigger *trigger)
     }
 
     if (hud_keep_visible(bolt_hud_item, 10)) {
-        bolt_hud_item = queue_animation_update(12, 0, FUN_L00_00237190, FUN_L00_002371e0,
+        bolt_hud_item = queue_animation_update(12, 0, FUN_L00_00237190, mine_blend_color,
                                                FUN_L00_00237200, 0, 0);
     }
     {
@@ -172,7 +173,8 @@ s32 FUN_L00_00266448(struct Moby *moby, struct SceneTrigger *trigger)
 extern s32 D_0015ED84[];
 extern s32 D_L00_001791B8[] __attribute__((section(".data")));
 extern s32 D_L00_001C44B8[] __attribute__((section(".data")));
-s32 FUN_L00_002667d0(void *p) {
+s32 get_dialogue_entry(void *p) __asm__("FUN_L00_002667d0");
+s32 get_dialogue_entry(void *p) {
     s32 n = D_0015ED84[0];
     s32 lo;
     s32 hi;
@@ -194,7 +196,7 @@ typedef struct {
 } E00266858;
 extern E00266858 D_0013D5B0[];
 s32 FUN_L00_002667d0_u(s32, s32) __asm__("FUN_L00_002667d0");
-/* Stores b in the entry FUN_L00_002667d0 finds, if it finds one. */
+/* Stores b in the entry get_dialogue_entry finds, if it finds one. */
 void FUN_L00_00266858(s32 a, s32 b) {
     s32 i = FUN_L00_002667d0_u(a, b);
     if (i != -1)
@@ -229,7 +231,8 @@ extern E002668a0 D_0013D5B0_c[] __asm__("D_0013D5B0");
 extern P002668a0 *D_L00_001B1678[];
 extern s32 D_L00_0015F5CC;
 extern s32 FUN_L00_002667d0_c(void *) __asm__("FUN_L00_002667d0");
-s32 FUN_L00_002668a0(void *p, u8 *out_p) {
+s32 initialize_npc_dialogue(void *p, u8 *out_p) __asm__("FUN_L00_002668a0");
+s32 initialize_npc_dialogue(void *p, u8 *out_p) {
     Out002668a0 *out;
     s32 i;
     unsigned long long k;
@@ -255,3 +258,13 @@ s32 FUN_L00_002668a0(void *p, u8 *out_p) {
     out->f08 = ((u8 *)out->f3C)[out->f36 * 0x1C + (k = 0x10)] & 1;
     return i;
 }
+
+s32 D_L01_00179590[1] __attribute__((section(".data"))) = {0};
+s32 D_L02_00179710[1] __attribute__((section(".data"))) = {0};
+s32 D_L05_00179510[1] __attribute__((section(".data"))) = {0};
+s32 D_L08_00179910[1] __attribute__((section(".data"))) = {0};
+s32 D_L11_00179B10[1] __attribute__((section(".data"))) = {0};
+s32 D_L12_00179590[1] __attribute__((section(".data"))) = {0};
+s32 D_L14_00179810[1] __attribute__((section(".data"))) = {0};
+s32 D_L15_00179710[1] __attribute__((section(".data"))) = {0};
+s32 D_L16_00179510[1] __attribute__((section(".data"))) = {0};

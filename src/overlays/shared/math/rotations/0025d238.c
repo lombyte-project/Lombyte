@@ -43,22 +43,23 @@ typedef struct {
     short hi;
 } S;
 int scale_game_frames(int) __asm__("FUN_001f96f8");
-float FUN_001fa6c0(int);
+float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-void FUN_L00_00250320(void *, int *, int *, int *);
-void FUN_L00_0025d458(void *a, S *s) {
+void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
+void trooper_anim_update(void *a, S *s) __asm__("FUN_L00_0025d458");
+void trooper_anim_update(void *a, S *s) {
     int old = s->cur;
     if (old == 0 || s->flag != 0) {
         s->cur = scale_game_frames(s->lo);
         s->flag = 0;
         if (old != 0) {
             int n = scale_game_frames(s->lo);
-            s->cur = truncate_float_to_s32(n * (old / FUN_001fa6c0(scale_game_frames(s->hi))));
+            s->cur = truncate_float_to_s32(n * (old / convert_integer_to_float(scale_game_frames(s->hi))));
             if (s->cur <= 0)
                 s->cur = 1;
         } else {
             int x, y, z;
-            FUN_L00_00250320(a, &x, &y, &z);
+            get_moby_color(a, &x, &y, &z);
             s->r = x;
             s->g = y;
             s->b = z;
@@ -79,7 +80,8 @@ s32 FUN_001fa6d0_25d538(f32) __asm__("FUN_001fa6d0");
 s32 fast_dec_timer(void *) __asm__("FUN_001f9770");
 s32 FUN_001f96f8_25d538(s32) __asm__("FUN_001f96f8");
 void glow_n(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
-void FUN_L00_0025d538(s32 id, S_25d538 *s) {
+void trooper_anim_finish(s32 id, S_25d538 *s) __asm__("FUN_L00_0025d538");
+void trooper_anim_finish(s32 id, S_25d538 *s) {
     f32 d, f;
     s32 r, g, b;
     if (s->t == 0)
@@ -290,7 +292,8 @@ extern void vscl_25dcd8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern float dot_25dcd8(void *, void *) __asm__("FUN_001f9ab0");
 extern float da70_25dcd8(void *, void *, float) __asm__("FUN_L00_0025da70");
-float FUN_L00_0025dcd8(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) {
+float resolve_level_path_segment_point_2e7618(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
+float resolve_level_path_segment_point_2e7618(OvlQuad *out, OvlQuad *p, OvlQuad *a, OvlQuad *b, float r) {
     OvlQuad d[2];
     OvlQuad c[1];
     OvlQuad e[1];
@@ -346,7 +349,10 @@ extern void clear_vector_25df68(void *) __asm__("FUN_001f99f8");
 extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, f32, s32)
     __asm__("FUN_L00_0025d808");
 
-s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
+s32 near_6570(s32 *path, OvlQuad *point, OvlQuad *nearest,
+                       s32 *segment, f32 *fraction, s32 wrap,
+                       f32 limit, f32 step, f32 height_tolerance) __asm__("FUN_L00_0025df68");
+s32 near_6570(s32 *path, OvlQuad *point, OvlQuad *nearest,
                        s32 *segment, f32 *fraction, s32 wrap,
                        f32 limit, f32 step, f32 height_tolerance) {
     OvlQuad work[4];
@@ -412,7 +418,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
         count = *path;
         previous = count - 1;
         previous = (best_segment + previous) % count;
-        distance = FUN_L00_0025dcd8(nearest, point,
+        distance = resolve_level_path_segment_point_2e7618(nearest, point,
             (OvlQuad *)(path + 4 + previous * 4),
             (OvlQuad *)(path + 4 + best_segment * 4), height_tolerance);
         *segment = previous;
@@ -424,7 +430,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     }
     count = *path;
     if (best_segment < count - 1 || wrap) {
-        next_distance = FUN_L00_0025dcd8(&work[1], point,
+        next_distance = resolve_level_path_segment_point_2e7618(&work[1], point,
             (OvlQuad *)(path + 4 + best_segment * 4),
             (OvlQuad *)(path + 4 + ((best_segment + 1) % count) * 4),
             height_tolerance);
@@ -438,16 +444,17 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     }
     return 1;
 }
-extern f32 FUN_L00_00200228(void *, f32);
+extern f32 split_float_fraction(void *, f32) __asm__("FUN_L00_00200228");
 /* Wraps angle a into -pi..pi. */
-f32 FUN_L00_0025e310(f32 a) {
+f32 normalize_rotation_l14(f32 a) __asm__("FUN_L00_0025e310");
+f32 normalize_rotation_l14(f32 a) {
     f32 out;
     f32 x;
     f32 pi = 3.14159274f;
     f32 tp = 6.2831855f;
     x = a + pi;
     x /= tp;
-    x = FUN_L00_00200228(&out, x);
+    x = split_float_fraction(&out, x);
     x *= tp;
     return x - pi;
 }
@@ -459,7 +466,7 @@ f32 FUN_L00_0025e310(f32 a) {
 
 extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
-/* False for null; true for a moby outside FUN_L00_0025e3b8's range or of class 0x1F6. */
+/* False for null; true for a moby outside f5e3b8_20d6b0's range or of class 0x1F6. */
 int FUN_L00_0025e368(char *a) {
     int r;
     if (a == 0) {
@@ -522,7 +529,10 @@ extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata
 extern float D_L00_0015F5D4_macro __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
 extern float D_L00_0015F5D0_macro __asm__("D_L00_0015F5D0") __attribute__((section(".sdata")));
 /* Beam explosion at moby m: a spark burst from a spawn event, optional glow sparks and a flash, with a cam tint. */
-void FUN_L00_0025e450(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9,
+void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9,
+                       float fC, float fD, float fE, float fF, int k10, float fG, int k11,
+                       int s16, int s18, unsigned char flag) __asm__("FUN_L00_0025e450");
+void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9,
                        float fC, float fD, float fE, float fF, int k10, float fG, int k11,
                        int s16, int s18, unsigned char flag) {
     Q_25e450 vb;
@@ -722,13 +732,13 @@ extern int FUN_L00_00257b90(int, int);
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern unsigned FUN_L00_0025c0e8(unsigned, int);
+extern unsigned col_2af5b8(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern void FUN_L00_0025c088(int *, int *, int *, int);
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
-extern void FUN_L00_002d3838(void *, void *, int, int);
+extern void rings1688(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
+extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
-extern int FUN_001fa728(void *, float);
+extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 typedef struct {
@@ -742,7 +752,8 @@ extern Shake0025f090 D_L00_00166C80;
 
 /* Explosion burst at `pos`: three random-coloured particles, two tinted particles on `owner`, a camera shake when the
    spot is in view, the owner's sound unless it is dying, and a light flash of intensity `flash` (13 if negative). */
-void FUN_L00_0025f090(u8 *owner, u128 *pos, int sound, float scale, float flash) {
+void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) __asm__("FUN_L00_0025f090");
+void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
     Vy10 vel;
     int i;
     float sp, big;
@@ -754,7 +765,7 @@ void FUN_L00_0025f090(u8 *owner, u128 *pos, int sound, float scale, float flash)
         big = scale * 400000.0f;
         c0 = D_L00_001E9030;
         c1 = D_L00_001E9048;
-        FUN_L00_0026a9f0(pos, &vel, c0.v[random_integer_below(6)], c1.v[random_integer_below(6)],
+        rings1688(pos, &vel, c0.v[random_integer_below(6)], c1.v[random_integer_below(6)],
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
@@ -766,7 +777,7 @@ void FUN_L00_0025f090(u8 *owner, u128 *pos, int sound, float scale, float flash)
         Vy10 at;
         *(u128 *)&at = *pos;
         at.w = 2.0f;
-        if (FUN_001fa728(&at, 10.0f) != -1) {
+        if (fast_bsphere_check(&at, 10.0f) != -1) {
             D_L00_00166C80.scale = scale * 0.1f;
             D_L00_00166C80.frames = scale_game_frames_c(0x14);
         }
@@ -784,14 +795,15 @@ void FUN_L00_0025f090(u8 *owner, u128 *pos, int sound, float scale, float flash)
             D_L00_001B02F0[10] = 13.0f;
             D_L00_001B02F0[8] = 13.0f;
         }
-        FUN_L00_002d3838(D_L00_001B02F0, pos, 0, 0);
+        mine_camera_blast(D_L00_001B02F0, pos, 0, 0);
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260460), where it is exact; names translated to the US level program. */
 
 /* Spawns an explosion burst at `pos`: three random-coloured particles, two tinted particles when `owner` is set, and
    (when `flash` is nonzero) a light with intensity `flash` (or 13 if negative). */
-void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
+void explode_4318(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");
+void explode_4318(char *owner, char *pos, float scale, float flash) {
     Vy10 zero_vec;
     S6y10 c0;
     S6y10 c1;
@@ -805,7 +817,7 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
         big = scale * k5;
         c0 = D_L00_001E9030;
         c1 = D_L00_001E9048;
-        FUN_L00_0026a9f0(pos, &zero_vec, FUN_L00_0025c0e8(c0.v[random_integer_below(6)], 1), FUN_L00_0025c0e8(c1.v[random_integer_below(6)], 1),
+        rings1688(pos, &zero_vec, col_2af5b8(c0.v[random_integer_below(6)], 1), col_2af5b8(c1.v[random_integer_below(6)], 1),
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
@@ -829,7 +841,7 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
             D_L00_001B02F0[10] = 13.0f;
             D_L00_001B02F0[8] = 13.0f;
         }
-        FUN_L00_002d3838(D_L00_001B02F0, pos, 0, 0);
+        mine_camera_blast(D_L00_001B02F0, pos, 0, 0);
     }
 }
 #define NOT_SDA
@@ -838,12 +850,13 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607A8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9af0(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 /* Clamps vector a to length x: normalizes it to x when vector_length_xyz is longer. */
-void FUN_L00_0025f730(void *a, float x) {
-    if (x < FUN_001f9af0(a)) {
+void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");
+void vec_limit302618(void *a, float x) {
+    if (x < fast_vec_length(a)) {
         fast_vec_normalize(a, a, x);
     }
 }
@@ -870,7 +883,8 @@ void FUN_L00_0025f780(int a, short *list, short max) {
 }
 extern s32 D_L00_0015FFD8_c2 __asm__("D_L00_0015FFD8");
 /* Removes moby p from the index list a by moving the last entry into its place. */
-void FUN_L00_0025f800(s32 p, s16 *a) {
+void mine_spawn_drops(s32 p, s16 *a) __asm__("FUN_L00_0025f800");
+void mine_spawn_drops(s32 p, s16 *a) {
     s32 i;
     for (i = 1; i <= a[0]; i++) {
         if (D_L00_0015FFD8_c2 + (a[i] << 8) == p) {
@@ -911,7 +925,8 @@ void FUN_L00_0025f8e0(f32 *v, f32 r) {
 extern u8 *D_L00_0015FFD8_c __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFE0 __attribute__((sda));
 /* True for a moby inside the moby table whose class at 0xA6 is 0x1F4..0x21C. */
-s32 FUN_L00_0025e3b8(u8 *m) {
+s32 f5e3b8_20d6b0(u8 *m) __asm__("FUN_L00_0025e3b8");
+s32 f5e3b8_20d6b0(u8 *m) {
     u32 v;
     if (m == 0) {
     bad:

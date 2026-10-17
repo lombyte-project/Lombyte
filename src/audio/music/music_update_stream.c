@@ -11,7 +11,7 @@ typedef struct {
 } MusicPlaying;
 extern void snd_stop_sound(int) __asm__("func_0012E368");
 extern void snd_pause_vag_stream(int) __asm__("FUN_0012ec70");
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void snd_get_vag_stream_time_remaining_cb(int, void (*)(int, long),
                                                  long) __asm__("FUN_0012ecd0");
 extern void snd_sound_is_still_playing_cb(int, void (*)(int, long), long) __asm__("FUN_0012e448");
@@ -57,7 +57,7 @@ void music_update_stream(MusicPlaying *p) {
                 snd_pause_vag_stream(p->handle);
                 p->state |= 0x8000;
             }
-            if (FUN_001f9770(&p->fadeT) == 2) {
+            if (fast_dec_timer_s16(&p->fadeT) == 2) {
                 p->fade = 4;
             }
         } else if (p->state & 0x8000) {

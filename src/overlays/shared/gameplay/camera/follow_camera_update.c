@@ -203,15 +203,15 @@ void follow_camera_pull_back(char *o, float *x, float *y) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EABD0), where it is exact; names translated to the US level program. */
 
 extern char D_L00_00166E10[];
-extern float FUN_001f9ab0(void *, void *);
-extern float FUN_001f9af0(void *);
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float FUN_L00_001eb328(void *, float, float, float, float, float);
+extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(float *, float *, float *) __asm__("FUN_001f9a28");
-extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_001f9bf8(void *, void *, float);
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_002e9518_c(char *, float *, float *) __asm__("FUN_L00_002e9518");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
@@ -249,37 +249,37 @@ void follow_camera_orbit(int arg) {
     add_vector_xyz(d, d + 0x90, p130);
     x = *(float *)(p130 + 0x2C);
     x -= *(float *)(p1d0 + 0x30);
-    bc = FUN_001f9af0(p140);
+    bc = fast_vec_length(p140);
     FUN_L00_002e9518_c(m, &tb[0], &tb[1]);
     bc = cam_interp_values(d + 0x158, bc, x, tb[0], tb[1], 0.0f);
-    e1 = FUN_001f9ab0(p130, up);
+    e1 = fast_vec_dot(p130, up);
     y = fast_arc_sin(e1 / x);
-    h = FUN_001f9ab0(p140, up);
+    h = fast_vec_dot(p140, up);
     r = fast_arc_sin(h / bc);
-    i = FUN_L00_001eb328(d + 0x154, r, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
+    i = rope_spring_turn(d + 0x154, r, y, *(float *)&D_L00_00161CFC, *(float *)&D_L00_00161D00,
                          0.0f);
-    FUN_001f9a68(t0, up, e1);
+    fast_vec_scale(t0, up, e1);
     subtract_vector_xyz(t1, p130, t0);
-    FUN_001f9a68(t2, up, h);
+    fast_vec_scale(t2, up, h);
     subtract_vector_xyz(t3, p140, t2);
-    e = FUN_001f9ab0(t1, t3);
-    x = FUN_001f9af0(t1);
-    x = x * FUN_001f9af0(t3);
+    e = fast_vec_dot(t1, t3);
+    x = fast_vec_length(t1);
+    x = x * fast_vec_length(t3);
     r = 1.5707964f - fast_arc_sin(e / x);
-    x = FUN_L00_001eb328(d + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4,
+    x = rope_spring_turn(d + 0x150, 0.0f, r, *(float *)&D_L00_00161CF4,
                          *(float *)&D_L00_00161CF8, 0.0f);
     fast_vec_cross(t4, t3, up);
-    s = (FUN_001f9ab0(t4, t1) >= 0.0f) ? 1.0f : -1.0f;
+    s = (fast_vec_dot(t4, t1) >= 0.0f) ? 1.0f : -1.0f;
     base2 = D_L00_00166E10;
     fw = base2 + 0x30;
     build_look_at_matrix(t5, t3, up, x * s);
     fast_vec_cross(t4, up, t5);
     build_look_at_matrix(t5, t5, t4, i);
-    FUN_001f9bf8(p140, t5, bc);
-    FUN_001f9a68(t6, up, *(float *)(p130 + 0x30));
+    fast_vec_normalize(p140, t5, bc);
+    fast_vec_scale(t6, up, *(float *)(p130 + 0x30));
     add_vector_xyz(t7, t6, d + 0xA0);
-    e = FUN_001f9ab0(p140, fw);
-    len = FUN_001f9af0(p140);
+    e = fast_vec_dot(p140, fw);
+    len = fast_vec_length(p140);
     if (len != 0.0f) {
         x = 1.5707964f - fast_arc_sin(e / len);
         if (absolute_float(x) < 0.2617994f) {
@@ -468,15 +468,15 @@ extern float D_L00_00161DCC __attribute__((sda));
 extern float D_L00_00161DD0 __attribute__((sda));
 void FUN_L00_002e9cc0_c(void *) __asm__("FUN_L00_002e9cc0");
 void FUN_001f9bf8_c(void *, void *, float) __asm__("FUN_001f9bf8");
-void FUN_001f9ad8(void *, void *, void *);
+void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
-float FUN_001fa6c0(int);
+float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 float FUN_001f99c0(float);
 float FUN_001ebd78(float, float, float, float, float, float *);
 void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
 float FUN_001fa5c8_c(float, float) __asm__("FUN_001fa5c8");
-int FUN_L00_001f0d60(void *, int, void *, float);
+int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
 void FUN_L00_002e9f38(u8 *o) {
     V up;
     V side;
@@ -492,9 +492,9 @@ void FUN_L00_002e9f38(u8 *o) {
     if (t == 0.0f)
         t = -D_0013C940.f100;
     if (t == 0.0f)
-        t = FUN_001fa6c0((D_0013C940.i1A0 >> 15) & 1);
+        t = convert_integer_to_float((D_0013C940.i1A0 >> 15) & 1);
     if (t == 0.0f)
-        t = -FUN_001fa6c0((D_0013C940.i1A0 >> 13) & 1);
+        t = -convert_integer_to_float((D_0013C940.i1A0 >> 13) & 1);
     r = FUN_001f99c0(st->a);
     k = D_L00_00161DC0 + (D_L00_00161DC4 - D_L00_00161DC0) * r;
     st->a = r = FUN_001ebd78(st->a, t, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->va);
@@ -506,9 +506,9 @@ void FUN_L00_002e9f38(u8 *o) {
     if (t == 0.0f)
         t = -D_0013C940.f104;
     if (t == 0.0f)
-        t = FUN_001fa6c0((D_0013C940.i1A0 >> 12) & 1);
+        t = convert_integer_to_float((D_0013C940.i1A0 >> 12) & 1);
     if (t == 0.0f)
-        t = -FUN_001fa6c0((D_0013C940.i1A0 >> 14) & 1);
+        t = -convert_integer_to_float((D_0013C940.i1A0 >> 14) & 1);
     if (D_L00_00166C80_c.s270 != 0 && hero.state.prev == 2)
         t = 0.0f;
     if (D_0015EDDC == 0)
@@ -518,7 +518,7 @@ void FUN_L00_002e9f38(u8 *o) {
     st->b = FUN_001ebd78(st->b, t, D_L00_00161DC8, D_L00_00161DCC, D_L00_00161DD0, &st->vb);
     if (st->b != 0.0f) {
         float a, n, z;
-        FUN_001f9ad8(&side, o, &up);
+        fast_vec_cross(&side, o, &up);
         a = k * st->b;
         n = FUN_001f99c0(FUN_001fa580_c(st->ang, a));
         if (1.1170107f < n && FUN_001f99c0(st->ang) < n)
@@ -534,7 +534,7 @@ void FUN_L00_002e9f38(u8 *o) {
         d.f[2] = z;
         FUN_001f9bf8_c(&d, &d, st->z);
         FUN_001f9a10_c(o + 0x30, o + 0x30, &d);
-        if (FUN_L00_001f0d60(o + 0x30, 0x12, ((u8 *)hero.moby), 0.3f))
+        if (coll_sphere(o + 0x30, 0x12, ((u8 *)hero.moby), 0.3f))
             st->z = FUN_001ebd78(st->z, z, 0.005f, 0.2f, z, &st->vz);
         n = FUN_001fa580_c(st->ang, a);
         if (FUN_001f99c0(n) > 1.4660766f) {
@@ -547,9 +547,9 @@ void FUN_L00_002e9f38(u8 *o) {
         st->ang = FUN_001fa580_c(st->ang, a);
     }
     FUN_001f9bf8_c(o, o, 1.0f);
-    FUN_001f9ad8(o + 0x10, o, &up);
+    fast_vec_cross(o + 0x10, o, &up);
     FUN_001f9bf8_c(o + 0x10, o + 0x10, 1.0f);
-    FUN_001f9ad8(o + 0x20, o + 0x10, o);
+    fast_vec_cross(o + 0x20, o + 0x10, o);
 }
 /* FUN_L00_002ea488 -- camera-state steering: either replays the scripted
  * look (state 0x51 or the moby's own state) or steers toward the current
@@ -804,7 +804,8 @@ extern char *D_L00_00166E00 __attribute__((section(".data")));
 extern char *FUN_L00_001eb1f8(int);
 
 /* Copies src to +0x80 of the object of entry 5 (from FUN_L00_001eb1f8 if needed). */
-void FUN_L00_002ea9d8(char *src) {
+void ea210_drawend(char *src) __asm__("FUN_L00_002ea9d8");
+void ea210_drawend(char *src) {
     char *g = D_L00_00166E00;
     char *p;
     if (*(short *)(g + 0x86) != 5)
@@ -822,7 +823,8 @@ extern V_2eaaa0 D_0013F3D0_2eaaa0 __asm__("D_0013F3D0") __attribute__((section("
 u8 *FUN_L00_001eb1f8_2eaaa0(s32) __asm__("FUN_L00_001eb1f8");
 void FUN_001ebf10_2eaaa0(u8 *) __asm__("FUN_001ebf10");
 void FUN_L00_001ed630_2eaaa0(void *, V_2eaaa0 *, V_2eaaa0 *) __asm__("FUN_L00_001ed630");
-void FUN_L00_002eaaa0(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
+void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
+void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) {
     u8 *m = FUN_L00_001eb1f8_2eaaa0(5);
     V_2eaaa0 a, b, c, d;
     u8 *n;
@@ -864,7 +866,8 @@ void FUN_001fa050_2eac18(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_2eac18(void *, void *) __asm__("FUN_001fa2b8");
 void FUN_001f9bf8_2eac18(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_2eac18(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_002eac18(int mode) {
+void ea210_hide(int mode) __asm__("FUN_L00_002eac18");
+void ea210_hide(int mode) {
     char *g = D_L00_00166C80_2eac18;
     char *o = *(char **)(g + 0x180);
     FUN_L00_001eb448_2eac18();
@@ -933,11 +936,11 @@ void FUN_L00_002ead60(char *m) {
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L00_00166DD8 __attribute__((section(".data")));
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float FUN_L00_001eb328(void *, float, float, float, float, float);
-extern float FUN_L00_00257e20(float, float, float, float, float);
+extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
+extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern float FUN_L00_00257ef0(float, float, float);
 extern float cosine_interpolate_alt(float, float, float) __asm__("FUN_002133d0");
-extern int FUN_001f9740(int *);
+extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
 extern void FUN_L00_001ed580(void *, void *, void *);
 extern void FUN_L00_001ed630(void *, void *, void *);
 extern void FUN_L00_00257f70(void *, void *, void *, float);
@@ -958,12 +961,12 @@ void FUN_L00_002eae20(void *arg) {
         qcopy(m + 0x40, d + 0x90);
     } else if (t == 2) {
         float u;
-        FUN_001f9740((int *)c);
+        tick_countdown_32((int *)c);
         u = (float)(*(int *)(c + 4) - *(int *)(d + 0xE0)) / convert_integer_to_float(*(int *)(c + 4));
         FUN_L00_00257f70(m + 0x30, m + 0x30, b, u);
         FUN_L00_00258050((float *)(m + 0x40), (float *)(m + 0x40), (float *)(d + 0x90), u);
     } else if (t == 3) {
-        if (FUN_001f9740((int *)c) != 0) {
+        if (tick_countdown_32((int *)c) != 0) {
             qcopy(m + 0x30, b);
             qcopy(m + 0x40, d + 0x90);
         } else {
@@ -986,7 +989,7 @@ void FUN_L00_002eae20(void *arg) {
                 F(c, 0x1C) = FUN_L00_00257ef0(F(c, 0x1C), F(c, 8), t);
             }
             F(c, 0x24) = F(c, 0x24) + (F(c, 0x10) - F(c, 0x24)) *
-                                          FUN_L00_00257e20(F(c, 0x44), 0, 1.0f, F(c, 0x48), t);
+                                          cubic_hermite_scalar(F(c, 0x44), 0, 1.0f, F(c, 0x48), t);
             F(c, 0x20) = FUN_L00_00257ef0(F(c, 0x20), F(c, 0xC), t);
             FUN_L00_00257f70(c + 0x30, c + 0x30, &hero.motion.pos, t);
             FUN_L00_001ed580(m + 0x30, c + 0x1C, c + 0x30);
@@ -1003,10 +1006,10 @@ void FUN_L00_002eae20(void *arg) {
         }
         if (*(short *)(a + 0x2C) == 1) {
             F(m, 0x40) =
-                FUN_L00_001eb328(a, F(m, 0x40), F(b, 0x10), F(a, 0x20), F(a, 0x24), F(a, 0x28));
-            F(m, 0x44) = FUN_L00_001eb328(d + 0x34, F(m, 0x44), F(b, 0x14), F(a, 0x20), F(a, 0x24),
+                rope_spring_turn(a, F(m, 0x40), F(b, 0x10), F(a, 0x20), F(a, 0x24), F(a, 0x28));
+            F(m, 0x44) = rope_spring_turn(d + 0x34, F(m, 0x44), F(b, 0x14), F(a, 0x20), F(a, 0x24),
                                           F(a, 0x28));
-            F(m, 0x48) = FUN_L00_001eb328(d + 0x38, F(m, 0x48), F(b, 0x18), F(a, 0x20), F(a, 0x24),
+            F(m, 0x48) = rope_spring_turn(d + 0x38, F(m, 0x48), F(b, 0x18), F(a, 0x20), F(a, 0x24),
                                           F(a, 0x28));
         }
     }
@@ -1411,7 +1414,7 @@ void FUN_L00_002ebbd8(void *arg) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002ebe70.s", FUN_L00_002ebe70);
 #else
-extern void FUN_L00_0025b868(float, float, float *) __asm__("FUN_L00_0025b868");
+extern void set_help_color_2059d8(float, float, float *) __asm__("FUN_L00_0025b868");
 extern void FUN_001ff2a8_2ebe70(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001ff500_2ebe70(float, void *, void *) __asm__("FUN_001f9bf8");
 extern float FUN_001ff7e8_2ebe70(float) __asm__("FUN_001f9dc8");
@@ -1454,12 +1457,12 @@ void FUN_L00_002ebe70(char *o) {
         target = 4.64f;
         rate = 2.0f;
     }
-    FUN_L00_0025b868(target, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xa0));
-    FUN_L00_0025b868(rate, frame_time * 4.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xb0));
+    set_help_color_2059d8(target, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xa0));
+    set_help_color_2059d8(rate, frame_time * 4.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0xb0));
     if (hero.state.current == 0x2c && current_level_index == 14)
-        FUN_L00_0025b868(rate + 0.25f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
+        set_help_color_2059d8(rate + 0.25f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
     else
-        FUN_L00_0025b868(rate - 0.5f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
+        set_help_color_2059d8(rate - 0.5f, frame_time * 8.0f, (float *)(*(char **)(*(char **)(D_00166C80_c + 0x180) + 0x70) + 0x8c));
 
     if (hero.state.current == 0x2c) {
         if ((current_level_index == 14 || current_level_index == 7 || current_level_index == 9) &&
@@ -1497,12 +1500,12 @@ void FUN_L00_002ebe70(char *o) {
             else
                 target = ((float *)&hero.motion.rot)[2];
         } else target = ((float *)&hero.motion.rot)[2];
-        *angle = FUN_L00_001eb328(m + 0xbc, *angle, target, 0.00125f, 0.175f, 0.0f);
+        *angle = rope_spring_turn(m + 0xbc, *angle, target, 0.00125f, 0.175f, 0.0f);
     } else if (hero.state.current == 0x25) {
         target = ((float *)&hero.motion.rot)[2];
         if (*(int *)(m + 0x80) == 1)
             target = *(float *)(*(char **)(m + 0x84) + 0x48);
-        *angle = FUN_L00_001eb328(m + 0xbc, *angle, target, D_L00_00161DD8_2ebe70, 0.175f, 0.0f);
+        *angle = rope_spring_turn(m + 0xbc, *angle, target, D_L00_00161DD8_2ebe70, 0.175f, 0.0f);
     }
     *(float *)(p + 0x30) = FUN_001ff7e8_2ebe70(*angle);
     *(float *)(p + 0x34) = FUN_001ff800_2ebe70(*angle);
@@ -1636,7 +1639,7 @@ void FUN_L00_002ec7b0(char *a) {
  *  - aim cameras: volume_camera_check -> volume_camera_aim.
  * Both run while the hero stands in one of the volumes the parameters name
  * (clip volumes and the FUN_L00_0025fa38 / FUN_L00_0025faf0 / path tests),
- * then end the camera with FUN_L00_002e8388 and set `done`.
+ * then end the camera with release_s and set `done`.
  */
 #include "rnc/gameplay/camera/follow_cam.h"
 #include "rnc/input/pad_state.h"

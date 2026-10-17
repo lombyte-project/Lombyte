@@ -12,8 +12,8 @@ extern CollisionHit coll_hit __asm__("D_L15_00174440") __attribute__((section(".
 extern int coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 FUN_001f9b20(void *);
-extern f32 FUN_001f9e90(f32, f32);
+extern f32 vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 
 int FUN_L15_00247e90(struct Moby *obj, u128 *delta, int flags, float step, float radius) {
     Vec4 start;
@@ -32,7 +32,7 @@ int FUN_L15_00247e90(struct Moby *obj, u128 *delta, int flags, float step, float
         if (coll_sphere(&probe, radius, mask | 4, obj) == 0) {
             break;
         }
-        if (FUN_001f9e90(coll_hit.normal_z, FUN_001f9b20(&coll_hit.normal_x)) > 0.5235988f) {
+        if (fast_arc_tan(coll_hit.normal_z, vec_len_xy(&coll_hit.normal_x)) > 0.5235988f) {
             qcopy(&obj->pos, coll_hit.pad30);
             obj->pos.z -= step;
             pushed |= 1;

@@ -7,7 +7,7 @@ extern unsigned char *FUN_L00_002678b8(int);
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern unsigned char *D_L05_001B25C0 __asm__("D_L05_001B25C0") __attribute__((section(".data")));
+unsigned char *D_L05_001B25C0 __attribute__((section(".data"))) = 0;
 
 unsigned char *FUN_L05_0029bbe0(float a, void *pos, void *vel, int life, int size, int color) {
     unsigned char *p = FUN_L00_002678b8(0x30);

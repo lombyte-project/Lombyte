@@ -446,3 +446,5 @@ void FUN_L06_002fc630(unsigned char *moby) {
 void FUN_L06_00304088(unsigned char *moby) {
     moby[0x20] = 0x5;
 }
+
+s32 D_L06_0017459C[1] __attribute__((section(".data"))) = {0};

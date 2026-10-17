@@ -146,7 +146,7 @@ union RegionVector {
     u128 region_center;
     f32 f[4];
 };
-extern f32 func_001F9B80(union RegionVector *, union RegionVector *);
+extern f32 vector_distance(union RegionVector *, union RegionVector *) __asm__("func_001F9B80");
 
 s32 map_filter_l07_0(s32 projected_x, s32 projected_y, f32 x, f32 y,
                                        f32 z) __asm__("func_00206BD8");
@@ -172,7 +172,7 @@ s32 map_filter_l07_0(s32 projected_x, s32 projected_y, f32 x, f32 y, f32 z) {
         position.f[1] = y;
         region_center.f[0] = 337.5f;
         region_center.f[1] = 250.0f;
-        if (func_001F9B80(&position, &region_center) <= 7.0f) {
+        if (vector_distance(&position, &region_center) <= 7.0f) {
             return 1;
         }
         if (point_is_clockwise(projected_x, projected_y, 0x142, 0x12A, 0x173, 0xFC) &&

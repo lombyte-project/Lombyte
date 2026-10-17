@@ -10,7 +10,8 @@
 
 extern float square_root(float) __asm__("FUN_001f9988");
 
-void FUN_L03_00250a78(float *p, float a, float b) {
+void trooper_set_knockback(float *p, float a, float b) __asm__("FUN_L03_00250a78");
+void trooper_set_knockback(float *p, float a, float b) {
     float root = square_root((b + b) * p[4]);
     float x = (root + root) / p[4];
     p[7] = root;
@@ -30,9 +31,9 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern void FUN_L00_001ff290(void *, void *, void *);
-extern void *FUN_L00_002712b8(f32, f32, f32, f32, f32, void *, void *, s32, s32, s32, s32);
-extern void *FUN_L00_0026cbb0(void *, void *, s32, s32, s32, s32, f32);
+extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
+extern void *spawn_particle(f32, f32, f32, f32, f32, void *, void *, s32, s32, s32, s32) __asm__("FUN_L00_002712b8");
+extern void *spark1688(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
 
 void FUN_L03_00250ae8(char *param_1, u128 *param_2, void *param_3) {
     struct { u128 position; u128 velocity; u128 temp; } vectors;
@@ -56,8 +57,8 @@ void FUN_L03_00250ae8(char *param_1, u128 *param_2, void *param_3) {
         minimum = scale_game_frames(30);
         maximum = scale_game_frames(90);
         duration = random_int_between(minimum, maximum);
-        if (param_3) FUN_L00_001ff290(&vectors.temp, &vectors.velocity, param_3);
-        FUN_L00_002712b8(60000.0f, 3000.0f, 0.85f, -0.001f, 0.85f,
+        if (param_3) combine_velocity1688(&vectors.temp, &vectors.velocity, param_3);
+        spawn_particle(60000.0f, 3000.0f, 0.85f, -0.001f, 0.85f,
                          position, &vectors.velocity, duration, 30, 0xffffff, spin);
     }
     for (j = 0; j < truncate_float_to_s32(6.0f); ) {
@@ -68,8 +69,8 @@ void FUN_L03_00250ae8(char *param_1, u128 *param_2, void *param_3) {
         minimum = scale_game_frames(20);
         maximum = scale_game_frames(60);
         duration = random_int_between(minimum, maximum);
-        if (param_3) FUN_L00_001ff290(&vectors.temp, &vectors.velocity, param_3);
-        FUN_L00_0026cbb0(position, &vectors.velocity, 0x4f007fff, 0x1fffffff, duration, 1, 10000.0f);
+        if (param_3) combine_velocity1688(&vectors.temp, &vectors.velocity, param_3);
+        spark1688(position, &vectors.velocity, 0x4f007fff, 0x1fffffff, duration, 1, 10000.0f);
     }
 }
 #endif

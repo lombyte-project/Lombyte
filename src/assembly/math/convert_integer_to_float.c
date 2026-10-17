@@ -3,7 +3,7 @@
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/math/convert_integer_to_float/func_001FA6C0.s",
-            func_001FA6C0);
+            convert_integer_to_float);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

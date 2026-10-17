@@ -103,8 +103,8 @@ extern void scale_vector_xyz(void *out, void *a, f32 scale) __asm__("FUN_001f9a6
 extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void func_001F9CF8(void *out, void *a, void *b) __asm__("FUN_001f9cf8");
-extern void func_001FA2D8(void *out, void *a) __asm__("FUN_001fa2d8");
+extern void transform_vector_by_basis(void *out, void *a, void *b) __asm__("FUN_001f9cf8");
+extern void transpose_rotation_matrix(void *out, void *a) __asm__("FUN_001fa2d8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void music_update() __asm__("FUN_00216290");
@@ -265,7 +265,7 @@ s32 sound_update(void) {
         if (D_0013E550.voices[slot_index].moby != NULL &&
             !(D_0013E550.voices[slot_index].flags & 8)) {
             if (D_0013E550.voices[slot_index].flags & 0x40) {
-                func_001F9CF8(&direction, &D_0013E550.voices[slot_index].position_offset,
+                transform_vector_by_basis(&direction, &D_0013E550.voices[slot_index].position_offset,
                               &moby->rotation);
                 add_vector_xyz(&direction, &direction, &moby->position);
                 subtract_vector_xyz(&relative_velocity, &direction,
@@ -385,7 +385,7 @@ s32 sound_update(void) {
         }
     }
 
-    func_001FA2D8(listener_matrix, camera_rows);
+    transpose_rotation_matrix(listener_matrix, camera_rows);
     for (slot_index = 0; slot_index < 30; slot_index++) {
         command_flags = voice_flags[slot_index];
         if (command_flags == 0) {

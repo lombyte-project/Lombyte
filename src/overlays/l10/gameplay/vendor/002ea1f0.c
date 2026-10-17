@@ -66,7 +66,7 @@ void FUN_L10_002ea1f0(char *m) {
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -106,7 +106,7 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
             return;
         *burst =
             func_001FA898_r(random_float_between((float)D_L10_00161FAC, (float)D_L10_00161FB0));
-    } else if (FUN_001f9770(burst)) {
+    } else if (fast_dec_timer_s16(burst)) {
         *burst =
             -func_001FA898_r(random_float_between((float)D_L10_00161FB4, (float)D_L10_00161FB8));
         return;
@@ -117,7 +117,7 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
     p[3] = 2.0f;
     if (fast_bsphere_check((char *)p, 32.0f) == -1 && random_integer_below(3) != 0)
         return;
-    if (!FUN_001f9770(timer))
+    if (!fast_dec_timer_s16(timer))
         return;
     clear_u64_value(vel);
     vel[2] = D_L10_00161F68 * frame_time;
@@ -148,7 +148,7 @@ void FUN_L10_002ea4e8(void *pos, short *timer, short *burst) {
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -187,7 +187,7 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
     p[3] = 5.0f;
     if (fast_bsphere_check((char *)p, 32.0f) == -1 && random_integer_below(3) != 0)
         return;
-    if (!FUN_001f9770(timer))
+    if (!fast_dec_timer_s16(timer))
         return;
     clear_u64_value(vel);
     vel[2] = D_L10_00161FBC * frame_time;
@@ -215,7 +215,7 @@ void FUN_L10_002ea7b0(void *pos, short *timer) {
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float square_root(float) __asm__("FUN_001f9988");
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -250,7 +250,7 @@ void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
     float s;
     int a, b, c, c1;
     if (*burst >= 0) {
-        if (FUN_001f9770(burst)) {
+        if (fast_dec_timer_s16(burst)) {
             *burst = -func_001FA898_r(random_float_between((float)*(int *)&D_L10_00162044, (float)*(int *)&D_L10_00162048));
             return;
         }
@@ -262,7 +262,7 @@ void FUN_L10_002eaa08(void *pos, short *timer, short *burst, float height) {
     p[3] = 3.0f;
     p[2] -= 4.0f;
     if (fast_bsphere_check((char *)p, 32.0f) == -1) return;
-    if (!FUN_001f9770(timer)) return;
+    if (!fast_dec_timer_s16(timer)) return;
     s = random_float_between(1.0f - *(float *)&D_L10_00162020, *(float *)&D_L10_00162020 + 1.0f);
     a = func_001FA898_r((float)*(int *)&D_L10_00162018 * s);
     b = func_001FA898_r((float)*(int *)&D_L10_0016201C * s);
@@ -291,7 +291,7 @@ struct L10Data {
 };
 
 extern struct L10Data D_L10_0016CCE0;
-extern void FUN_L00_002637f8(int);
+extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L10_002eacd8(struct Moby *m) {
     switch (m->state) {
@@ -312,7 +312,7 @@ void FUN_L10_002eacd8(struct Moby *m) {
                     i = 2;
                 else if (v == 7)
                     i = 3;
-                FUN_L00_002637f8(D_L10_0016CCE0.slot[i]);
+                cutscene_set_camera_target(D_L10_0016CCE0.slot[i]);
             }
         }
         break;

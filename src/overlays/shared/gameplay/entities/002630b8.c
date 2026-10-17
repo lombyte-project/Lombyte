@@ -8,7 +8,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 
-/* Record FUN_002141f8 returns for a moby: collision size and aim height. */
+/* Record suck_get_aim_height returns for a moby: collision size and aim height. */
 typedef struct MobyBound {
     u8 pad0[0xA];
     u8 size;                      /* 0x0A: radius in eighths */
@@ -18,18 +18,18 @@ typedef struct MobyBound {
 
 extern struct Moby *D_L00_0015FFE4;
 extern u8 D_L00_00166DC0[];
-float FUN_001f9e90(float, float);
+float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float vector_length_xy(void *) __asm__("FUN_001f9b20");
 float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-float FUN_001fa688(float, float);
+float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 float FUN_001f99c0(float);
 float fast_arc_sin(float) __asm__("FUN_001f9df8");
 float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void build_spherical_offset(Vec4 *, float, float, float) __asm__("FUN_00214db0");
-MobyBound *FUN_002141f8(struct Moby *);
-int FUN_001efa68(void *, Vec4 *, int, void *, int);
+MobyBound *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
+int collision_line(void *, Vec4 *, int, void *, int) __asm__("FUN_001efa68");
 
 /* Picks the best auto-aim target moby (kind 5) for a shot from pos along dir:
    writes yaw/pitch toward it and its aim height, returns the moby or 0. */
@@ -43,8 +43,8 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
 
     pos.q = pos_in->q;
     dir.q = dir_in->q;
-    *yaw = FUN_001f9e90(dp->f[0], dp->f[1]);
-    *pitch = -FUN_001f9e90(vector_length_xy(dp), dp->f[2]);
+    *yaw = fast_arc_tan(dp->f[0], dp->f[1]);
+    *pitch = -fast_arc_tan(vector_length_xy(dp), dp->f[2]);
 
     for (m = D_L00_0015FFE4; m != 0; m = m->next) {
         MobyBound *b;
@@ -52,19 +52,19 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
         if ((s8)m->state < 0)
             continue;
         qcopy(&target, &m->pos);
-        b = FUN_002141f8(m);
+        b = suck_get_aim_height(m);
         if (b)
             target.f[2] += b->height;
         else
             target.f[2] += 0.5f;
         if (!(m->flags & 0x1000) || !m || !m->pclass || m->pclass->type != 5)
             continue;
-        t_yaw = FUN_001f9e90(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
-        t_pitch = FUN_001f9e90(vector_distance_xy(pp, &target), target.f[2] - pp->f[2]);
+        t_yaw = fast_arc_tan(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
+        t_pitch = fast_arc_tan(vector_distance_xy(pp, &target), target.f[2] - pp->f[2]);
         dist = fast_vec_dist(pp, &target);
         if (dist < 7.5f &&
-            FUN_001fa688(hero.moby->rot.z,
-                         FUN_001f9e90(m->pos.x - hero.motion.pos.f[0],
+            fast_difference_between_rotations(hero.moby->rot.z,
+                         fast_arc_tan(m->pos.x - hero.motion.pos.f[0],
                                       m->pos.y - hero.motion.pos.f[1])) < 1.0471976f &&
             FUN_001f99c0(t_pitch) < 1.0471976f) {
             *pitch = -t_pitch;
@@ -83,7 +83,7 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
             if (radius < dist)
                 ang -= shrink;
         }
-        if (ang < max_angle && !FUN_001efa68(D_L00_00166DC0, &target, 6, ignore, 0)) {
+        if (ang < max_angle && !collision_line(D_L00_00166DC0, &target, 6, ignore, 0)) {
             best = m;
             best_dist = dist;
             *pitch = -t_pitch;
@@ -102,7 +102,8 @@ extern int D_L00_0015FC98;
 extern unsigned char *D_L00_0015FCA8;
 extern float D_L00_0015FCA0;
 extern float D_L00_0015FCA4;
-float FUN_L00_00263468(Vec4 *v) {
+float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
+float ground_height_at(Vec4 *v) {
     Vec4 t;
     int iy, ix;
     t.q = v->q;
@@ -234,7 +235,8 @@ extern s32 FUN_001f96f8_2637f8(s32) __asm__("FUN_001f96f8");
 extern Effect_2637f8 *FUN_L00_0026d000_2637f8(void *, f32, f32, f32, s32, void *, f32, u32)
     __asm__("FUN_L00_0026d000");
 extern u8 D_L00_0015F580_2637f8[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
-void FUN_L00_002637f8(u8 *m) {
+void cutscene_set_camera_target(u8 *m) __asm__("FUN_L00_002637f8");
+void cutscene_set_camera_target(u8 *m) {
     Vec4_2634f8 vectors[4];
     Vec4_2634f8 pos;
     Vec4_2634f8 scaled;
@@ -304,7 +306,8 @@ extern unsigned char D_0015EDB7;
 void attach_manipulator() __asm__("FUN_0020cb10");
 void detach_manipulator() __asm__("FUN_0020cb88");
 /* While D_0015EDB7 is set attaches the manipulator, sets floats 0x20..0x28 to x; else detaches. */
-void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p) {
+void sound302618(float x, int a, int b, unsigned char *p) __asm__("FUN_L00_00263ac8");
+void sound302618(float x, int a, int b, unsigned char *p) {
     if (D_0015EDB7) {
         if (p[1] == 0)
             attach_manipulator();
@@ -341,7 +344,8 @@ int FUN_001f96f8_263b70(int) __asm__("FUN_001f96f8");
 int FUN_001fa6d0_263b70(float) __asm__("FUN_001fa6d0");
 P_263b70 *FUN_L00_0026d000_263b70(void *, int, void *, float, float, float, float,
                                   int) __asm__("FUN_L00_0026d000");
-void FUN_L00_00263b70(void *p0, void *p1, void *vel, float a, float b) {
+void draw_trail(void *p0, void *p1, void *vel, float a, float b) __asm__("FUN_L00_00263b70");
+void draw_trail(void *p0, void *p1, void *vel, float a, float b) {
     P_263b70 *part;
     T_263b70 *tail;
     int i, j, m;
@@ -392,7 +396,8 @@ s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 get_help_message_text() __asm__("FUN_001fdd10");
 void sprintf() __asm__("FUN_00116248");
 /* Calls sprintf on D_L00_00179118 with help message a and b; c frames (default 0xB4). */
-void FUN_L00_00263db0(s32 a, s32 b, s32 c) {
+void f63db0_2c5be8(s32 a, s32 b, s32 c) __asm__("FUN_L00_00263db0");
+void f63db0_2c5be8(s32 a, s32 b, s32 c) {
     if (c == -1)
         c = scale_game_frames(0xB4);
     sprintf(D_L00_00179118, get_help_message_text(a), b);
@@ -484,7 +489,7 @@ typedef struct {
 } Moby;
 
 extern float D_0015ED6C_s[] __asm__("D_0015ED6C") __attribute__((sda));
-extern float FUN_001f9af0(void *a);
+extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -493,12 +498,14 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
+                       float *v11, float scale, float *v12) __asm__("FUN_L00_00263fd8");
+void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12) {
     char *m = (char *)func_0020D348_m(cls);
     char *d;
@@ -528,7 +535,7 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
             *(float *)(d + 0x38) = random_float_between_alt(10.0f, 15.0f) * frame_time_sq;
         else
             *(float *)(d + 0x38) = scale;
-        if (FUN_001f9af0(v10) == 0.0f) {
+        if (fast_vec_length(v10) == 0.0f) {
             f21 = random_angle_radians();
             k = random_float_between_alt(2.0f, 4.0f) * frame_time;
             t[0] = fast_cos(f21) * k;
@@ -539,14 +546,14 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
         } else {
             qcopy(d, v10);
         }
-        if (FUN_001f9af0(v11) == 0.0f) {
+        if (fast_vec_length(v11) == 0.0f) {
             float g = D_0015ED6C_s[0];
             random_vector(t, g * 3.1415927f, g * 6.2831855f);
             qcopy(d + 0x10, t);
         } else {
             qcopy(d + 0x10, v11);
         }
-        if (FUN_001f9af0(v12) == 0.0f && v12[3] == 0.0f) {
+        if (fast_vec_length(v12) == 0.0f && v12[3] == 0.0f) {
             qcopy(t, *(char **)(m + 0x24) + 0x30);
             k2 = *(float *)(m + 0x2C);
             k2 = k2 * 0.0009765625f;
@@ -556,7 +563,7 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
         } else {
             qcopy(d + 0x20, v12);
         }
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }
@@ -565,7 +572,7 @@ extern s32 D_L00_0015F594;
 extern s32 D_L00_00161E08;
 extern s32 D_L00_00161E04;
 void FUN_L00_00237190(void);
-void FUN_L00_002371e0(void);
+void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void FUN_L00_00237200(void);
 s32 queue_animation_update(s32, s32, void *, void *, void *, s32, s32) __asm__("FUN_001ff308");
 void hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
@@ -577,7 +584,7 @@ void FUN_L00_00264328(void) {
     if (D_L00_0015F594 == 0 || D_L00_00161E08 == 0) {
         D_L00_00161E04 = -1;
     } else if (D_L00_00161E04 == -1) {
-        D_L00_00161E04 = queue_animation_update(0xC, 0, FUN_L00_00237190, FUN_L00_002371e0,
+        D_L00_00161E04 = queue_animation_update(0xC, 0, FUN_L00_00237190, mine_blend_color,
                                                 FUN_L00_00237200, 0, 0);
     } else {
         hud_keep_visible(D_L00_00161E04, 10);

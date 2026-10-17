@@ -11,7 +11,7 @@ typedef struct {
     /* 0x00 */ u8 unk0;
     /* 0x01 */ u8 attached;
     /* 0x02 */ u8 pad2[0xE];
-    /* 0x10 */ sceVu0FVECTOR rot;     /* quaternion, turned by FUN_L04_00292d48 */
+    /* 0x10 */ sceVu0FVECTOR rot;     /* quaternion, turned by rig_animate */
     /* 0x20 */ u8 pad20[0x20];
 } LegRigManip;
 
@@ -46,8 +46,8 @@ typedef struct {
     /* 0x00 */ s32 id;                /* animation sequence id */
     /* 0x04 */ f32 unk4;
     /* 0x08 */ f32 rate;              /* unk4 / multiply_global_factor_ed64(len * 2) */
-    /* 0x0C */ f32 start;             /* FUN_L04_002418b0(class slot, id) */
-    /* 0x10 */ f32 len;               /* FUN_L04_00241910(class slot, id) - start */
+    /* 0x0C */ f32 start;             /* animation_start(class slot, id) */
+    /* 0x10 */ f32 len;               /* animation_end(class slot, id) - start */
     /* 0x14 */ u8 pad14[0xC];
     /* 0x20 */ LegRigPhase phase[2];
 } LegRigAnim;

@@ -488,3 +488,4 @@ extern void FUN_L02_002a4058_u(char *arg, int val) __asm__("FUN_L01_0026e0e0");
 void FUN_L18_002e9e50(char *arg) {
     FUN_L02_002a4058_u(arg, 0x2);
 }
+

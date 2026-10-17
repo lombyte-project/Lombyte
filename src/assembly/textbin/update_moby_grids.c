@@ -3,7 +3,7 @@
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/update_moby_grids/FUN_0020dc20.s",
-            FUN_0020dc20);
+            update_moby_grids);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

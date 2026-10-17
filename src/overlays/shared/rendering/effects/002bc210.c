@@ -98,3 +98,6 @@ extern void FUN_L12_002bc210_u(void *, int, int, int) __asm__("FUN_L12_002bc210"
 void FUN_L12_002e71b0(void) {
     FUN_L12_002bc210_u(D_L12_001F5480, 0x2F, get_effect_texture(0x2C), get_effect_texture(0x2D));
 }
+
+f32 D_L15_0017CA60[1] __attribute__((section(".data"))) = {0};
+f32 D_L15_0017CA64[1] __attribute__((section(".data"))) = {0};

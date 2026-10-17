@@ -33,8 +33,8 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_sqrt(float) __asm__("FUN_001f9988");
-extern void FUN_L00_0025ab48(void *, float *, void *, void *);
-extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
+extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
+extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 #include "rnc/gameplay/entities/moby.h"
@@ -42,7 +42,7 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 /* Pvars of a lobbed projectile, as set up at launch. */
 typedef struct {
     u8 pad0[0x20];
-    Vec4f arc;          /* 0x20: filled by FUN_L00_0025c558 */
+    Vec4f arc;          /* 0x20: filled by trooper_start_knockback */
     f32 rise;           /* 0x30: D_0015ED70 * 40 */
     f32 fall;           /* 0x34: D_0015ED70 * 100 */
     f32 launch_speed;   /* 0x38 */
@@ -89,8 +89,8 @@ void FUN_L12_00308708(void *unused, struct Moby *m) {
     d->unk3C = fast_sqrt(a * 4.0f);
     d->unk5D = 0;
     d->unk44 = 1;
-    FUN_L00_0025ab48(dir, &ang, &d->launch_speed, &d->unk3C);
-    FUN_L00_0025c558(ang, m, &d->arc, 1, 5, 2);
+    trooper_knockback_arc(dir, &ang, &d->launch_speed, &d->unk3C);
+    trooper_start_knockback(ang, m, &d->arc, 1, 5, 2);
     d->unk6C = frame_time + frame_time;
     d->unk70 = -1.0f;
     d->unk74 = -1.0f;
@@ -109,13 +109,14 @@ typedef struct {
 } MO;
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern int FUN_L00_0025c698(void *, void *);
+extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L12_00308918(char *m) {
+void blarg_commander_update(char *m) __asm__("FUN_L12_00308918");
+void blarg_commander_update(char *m) {
     int st;
     char *d;
     char *p;
@@ -126,7 +127,7 @@ void FUN_L12_00308918(char *m) {
     d = *(char **)(m + 0x78);
     if (st == 1) {
         p = d + 0x20;
-        r = FUN_L00_0025c698(m, p);
+        r = mine_fall(m, p);
         mo->vx = fast_add_rotations(mo->vx, frame_time * 4.3633232f);
         mo->vy = fast_add_rotations(mo->vy, frame_time * 4.3633232f);
         *(unsigned short *)(m + 0x34) &= 0xEFFF;

@@ -81,7 +81,7 @@ extern void FUN_L00_00207d00(void);
 extern void FUN_L00_00208b60(void);
 extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00257024(int);
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_0024f7c8(void *, s32, void *);
 extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
 extern void *create_moby(s32) __asm__("FUN_0020c4f8");
@@ -92,7 +92,7 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern int allocate_voice_for_target_entry(void *, s32, void *) __asm__("FUN_0022da68");
-extern void FUN_L00_00216de8(s32, s32);
+extern void f_fun_l00_00216de8_227fa0(s32, s32) __asm__("FUN_L00_00216de8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
@@ -153,7 +153,7 @@ void FUN_L06_0021e1a0(void) {
                 *(u16 *)(*(char **)(g + 0x1624) + 0x34) = 0;
                 *(f32 *)(*(char **)(g + 0x1624) + 0x2c) *= 1.7f;
                 *(u16 *)(*(char **)(g + 0x1624) + 0x34) |= 0x10;
-                FUN_L00_00250df8(*(char **)(g + 0x1624));
+                allocate_voice_for_target_entry_cf(*(char **)(g + 0x1624));
             }
         }
         {
@@ -170,7 +170,7 @@ void FUN_L06_0021e1a0(void) {
                     ((f32 *)&scratch.help.offset)[2] = 0.0257f;
                     transform_vector_by_basis(&scratch.help.offset, &scratch.help.offset, *(char **)(g + 0x1624) + 0xc0);
                     *(f32 *)(*(char **)(g + 0x1624) + 0x18) -= ((f32 *)&scratch.help.offset)[2];
-                    FUN_L00_00250df8(*(char **)(g + 0x1624));
+                    allocate_voice_for_target_entry_cf(*(char **)(g + 0x1624));
                     scale = 1.7f;
                     if (D_0015EDB3_macro) scale = 3.1f;
                     if (*(s16 *)(g + 0x22fc)) scale *= 1.4f;
@@ -213,7 +213,7 @@ void FUN_L06_0021e1a0(void) {
                         (*(char **)(g + 0x1620))[0x31] = 1;
                         (*(char **)(g + 0x1620))[0x30] = 0;
                         *(u16 *)(*(char **)(g + 0x1620) + 0x34) = 0;
-                        FUN_L00_00250df8(*(char **)(g + 0x1620));
+                        allocate_voice_for_target_entry_cf(*(char **)(g + 0x1620));
                     }
                 }
                 if (*(char **)(g + 0x1620)) {
@@ -222,7 +222,7 @@ void FUN_L06_0021e1a0(void) {
                         OvlQuad *position = &scratch.rotation[3];
                         char *moby = *(char **)(g + 0x1620);
                         qcopy_nc(moby + 0x10, position);
-                        FUN_L00_00250df8(moby);
+                        allocate_voice_for_target_entry_cf(moby);
                     }
                     clear_u64_value((scratch.rotation + 4));
                     ((f32 *)(scratch.rotation + 4))[2] = -*(f32 *)(g + 0x98);
@@ -306,7 +306,7 @@ void FUN_L06_0021e1a0(void) {
             if (*(u8 *)(g + 0x20a4) == 3) {
                 if (*(s32 *)(g + 0x20b8) != 0 && *(s32 *)(g + 0x20b8) != 0x1f) {
                     if (*(s16 *)(g + 0x22de) == 0) {
-                        FUN_L00_00216de8(0x19, 0);
+                        f_fun_l00_00216de8_227fa0(0x19, 0);
                         *(s16 *)(g + 0x22de) = 0x12;
                         *(s16 *)(g + 0x22dc) = 1;
                     }
@@ -314,7 +314,7 @@ void FUN_L06_0021e1a0(void) {
                     char *g = (char *)&hero;
                     *(s32 *)(g + 0x20b8) = 0;
                     if (*(u8 *)(g + 0x12e7) && *(s32 *)(g + 0x300) && *(u8 *)(D_0013F350_lui - 0x1e74) && *(s16 *)(g + 0x22de) == 0) {
-                        FUN_L00_00216de8(0x19, 0);
+                        f_fun_l00_00216de8_227fa0(0x19, 0);
                         *(s16 *)(g + 0x22de) = 0x12;
                         *(s16 *)(g + 0x22dc) = 1;
                     }

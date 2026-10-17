@@ -77,7 +77,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int coll_line_fix() __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int set_vector_length_xy() __asm__("FUN_001f9c48");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
@@ -333,11 +333,12 @@ void FUN_L04_001f30e0(Moby **others, int other_count, Moby *moby, Steer_1F3010 *
 extern s32 D_L04_00173FF0[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 
-void FUN_L04_001f3a80(char *a, char *b, char *c, float f) {
+void apply_child_motion_29ecf8(char *a, char *b, char *c, float f) __asm__("FUN_L04_001f3a80");
+void apply_child_motion_29ecf8(char *a, char *b, char *c, float f) {
     int i;
     float v[4];
     char *p = b + 0x10;
@@ -348,7 +349,7 @@ void FUN_L04_001f3a80(char *a, char *b, char *c, float f) {
     for (i = 0; i < 6; i++) {
         qcopy(v, a + 0x10);
         v[2] = v[2] + f;
-        if (FUN_L00_001f0d60(*(float *)(c + 0x10) * 0.25f, v, 4, a)) {
+        if (coll_sphere(*(float *)(c + 0x10) * 0.25f, v, 4, a)) {
             qcopy(a + 0x10, D_L04_00173FF0);
             *(float *)(a + 0x18) = *(float *)(a + 0x18) - f;
         } else {

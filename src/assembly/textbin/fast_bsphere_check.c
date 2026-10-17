@@ -3,7 +3,7 @@
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fast_bsphere_check/FUN_001fa728.s",
-            FUN_001fa728);
+            fast_bsphere_check);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

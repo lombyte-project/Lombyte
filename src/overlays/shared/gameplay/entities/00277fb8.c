@@ -44,7 +44,8 @@ extern float fast_cos_q(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_q(float) __asm__("FUN_001f9de0");
 extern void clear_vector_q(void *) __asm__("FUN_001f99f8");
 
-void FUN_L01_002783a8(float scale, char *moby) {
+void begin_dialogue_camera_transition(float scale, char *moby) __asm__("FUN_L01_002783a8");
+void begin_dialogue_camera_transition(float scale, char *moby) {
     D_L01_0016CCE0_q.f = 1;
     qcopy(D_L01_0016CCE0_q.p, moby + 0x10);
     D_L01_0016CCE0_q.p[0] += fast_cos_q(*(float *)(moby + 0x48)) * scale;
@@ -58,15 +59,15 @@ void FUN_L01_002783a8(float scale, char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279790), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b80(void *, void *);
-extern void FUN_L00_00260a88(void *, int, int, int, int);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern void play_reaction_3024d8(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 
 void FUN_L01_002787a0(char *moby) {
     int r = 0;
-    if (FUN_001f9b80(moby + 0x10, D_0013E533 + 0xE9D) < 7.0f) {
+    if (vector_distance(moby + 0x10, D_0013E533 + 0xE9D) < 7.0f) {
         r = 2;
     }
-    FUN_L00_00260a88(moby, 4, 7, r, -1);
+    play_reaction_3024d8(moby, 4, 7, r, -1);
 }
 #include "qcopy.h"
 
@@ -74,7 +75,7 @@ void FUN_L01_002787a0(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279E10), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 
 void FUN_L01_00278e20(struct Moby *src, int oClass) {
     char *m = func_0020D348_m(oClass);
@@ -88,6 +89,9 @@ void FUN_L01_00278e20(struct Moby *src, int oClass) {
         *(long *)(m + 0x38) = src->spawn_frame;
         m[0x30] = 0;
         *(short *)(m + 0x34) = 0;
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
 }
+
+f32 D_L02_0016CE74[1] __attribute__((section(".data"))) = {0};
+f32 D_L05_0016CC74[1] __attribute__((section(".data"))) = {0};

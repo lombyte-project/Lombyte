@@ -54,8 +54,6 @@ extern s32 sprintf(char *, const char *, ...);
 extern void copy_text_to_shared_buffer(char *) __asm__("func_001FF658");
 extern s32 compute_clamped_count_difference(void) __asm__("FUN_00215248");
 
-void func_00216C48(void *arg0, Menu *menu, s32 arg2) __asm__("func_00216C48");
-
 #define SCRATCH ((char *)0x70000000)
 
 void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
@@ -161,7 +159,7 @@ void FUN_00216c48(void *arg0, Menu *menu, s32 arg2) {
         menu->unk38 = world_update_time_macro;
         e = (MenuItem *)(menu->unk3C + next * 0x1C);
         menu->unk8 = *(u8 *)&e->unk10 & 1;
-        func_00216C48(arg0, menu, 0);
+        FUN_00216c48(arg0, menu, 0);
     }
 }
 

@@ -13,7 +13,8 @@ extern void FUN_L01_002787a0(void *);
 extern void FUN_L01_00278e20(void *, int);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L03_002e2948(struct Moby *m) {
+void lightpost_update(struct Moby *m) __asm__("FUN_L03_002e2948");
+void lightpost_update(struct Moby *m) {
     int hit = 0;
     char *r = find_moby_hit(m, 0x10000, 0);
     switch (m->state) {

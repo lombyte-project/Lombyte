@@ -9,7 +9,7 @@
 
 extern unsigned char D_0013E529[];
 void FUN_L00_00235ea0(char *);
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 /* Sets p+8 to 10 or 5 by D_0013E529, then sets or caps the 0x7C timer by the hero mode. */
 void FUN_L00_002377b8(char *p) {
     FUN_L00_00235ea0(p);
@@ -18,7 +18,7 @@ void FUN_L00_002377b8(char *p) {
     else
         *(int *)(p + 8) = 5;
     if (hero.items[0].item_id == 9 && hero.vehicle_mode == 0) {
-        *(int *)(p + 0x7C) = FUN_001f96f8(0x78) + 30;
+        *(int *)(p + 0x7C) = scale_game_frames(0x78) + 30;
     } else if (*(int *)(p + 0x7C) > 30) {
         *(int *)(p + 0x7C) = 30;
     }
@@ -138,7 +138,7 @@ extern s32 D_L00_0015F72C __attribute__((sda));
 extern D00237ae8 D_L00_0017DAC0[];
 extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
 extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
-s32 FUN_001f96f8(s32);
+s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L00_00237ae8(O00237ae8 *o) {
     s32 i;
     D00237ae8 *d;
@@ -151,7 +151,7 @@ void FUN_L00_00237ae8(O00237ae8 *o) {
     o->x58 = D_L00_0015F718_gp;
     o->x5c = D_L00_0015F71C_gp;
     o->x74 = -2;
-    o->x78 = FUN_001f96f8(0x1E);
+    o->x78 = scale_game_frames(0x1E);
     o->x70 = 0;
     D_L00_0015F72C = 0;
     d = D_L00_0017DAC0;
@@ -205,7 +205,7 @@ extern int D_00141610[];
 extern int D_L00_0015FA98 __attribute__((section(".sdata")));
 extern int D_L00_0015FA94;
 extern int D_L00_0015F3F8;
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int remove_hud_item(int) __asm__("FUN_001ff480");
@@ -227,9 +227,9 @@ extern int D_L00_0017DC20 __attribute__((section(".data")));
 extern int D_L00_0017DC24 __attribute__((section(".data")));
 extern int D_0015EEA4;
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern float FUN_001fa6c0(int);
-extern float FUN_001fa5c8(float, float);
-extern float FUN_001fa688(float, float);
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int FUN_001fa6d0(float);
 extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 
@@ -240,7 +240,7 @@ void FUN_L00_00237ba0(Obj *p) {
     int old, n, s, k, id;
     u8 *c = &p->b70;
 
-    p->w7C = FUN_001f96f8(0xB4);
+    p->w7C = scale_game_frames(0xB4);
     p->w6C = 0x18;
     if (fast_dec_timer_s16(D_00141622)) D_0013C940.w1CC = 2;
     x = D_0013C940.unk148;
@@ -263,8 +263,8 @@ void FUN_L00_00237ba0(Obj *p) {
         if (mag > 0.9f) {
             a = ang + 3.1415927f + 3.1415927f + 1.5707964f + 3.1415927f / (float)D_L00_0015FA90;
             f = a * ((float)D_L00_0015FA90 / 6.2831855f);
-            r = (float)old * 6.2831855f / FUN_001fa6c0(D_L00_0015FA90) - 3.1415927f;
-            if (old == -1 || FUN_001fa688(r, FUN_001fa5c8(ang, 1.5707964f)) > 0.58904862f) {
+            r = (float)old * 6.2831855f / convert_integer_to_float(D_L00_0015FA90) - 3.1415927f;
+            if (old == -1 || fast_difference_between_rotations(r, fast_subtract_rotations(ang, 1.5707964f)) > 0.58904862f) {
                 s = (int)f % D_L00_0015FA90;
                 if (((s ^ 1) & 1)) {
                     float fr = f - (float)FUN_001fa6d0(f);
@@ -305,8 +305,8 @@ void FUN_L00_00237ba0(Obj *p) {
             if (hero_lui.items[0].item_id != id) {
                 if (usage_stats.stat[20].count < 0xFFFF) usage_stats.stat[20].count++;
             }
-            if (FUN_001f96f8(D_0015EEA4) / 600 > usage_stats.stat[20].unk2)
-                usage_stats.stat[20].unk2 = FUN_001f96f8(D_0015EEA4) / 600;
+            if (scale_game_frames(D_0015EEA4) / 600 > usage_stats.stat[20].unk2)
+                usage_stats.stat[20].unk2 = scale_game_frames(D_0015EEA4) / 600;
             usage_stats.stat[20].level_mask = usage_stats.stat[20].level_mask | (1 << current_level_index) | 0x80000000;
             if (id == 0x18) hero_lui.unk1FF5 = 1;
             else hero_lui.pending_item[0] = id;
@@ -526,7 +526,7 @@ extern int D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
 extern int D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern int D_L00_0015F72C __attribute__((sda));
 extern int D_L00_0015F740 __attribute__((sda));
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00238b18(char *p) {
     int a, b;
     D_L00_0015FA90 = 4;
@@ -538,7 +538,7 @@ void FUN_L00_00238b18(char *p) {
     *(int *)(p + 0x58) = a;
     *(int *)(p + 0x5C) = b;
     *(int *)(p + 0x74) = -2;
-    *(int *)(p + 0x78) = FUN_001f96f8(30);
+    *(int *)(p + 0x78) = scale_game_frames(30);
     D_L00_0015F72C = 0;
 }
 
@@ -547,7 +547,7 @@ void FUN_L00_00238b80(Obj *o) {
     int old, cur, n, t;
     u8 *c = &o->b70;
 
-    o->w7C = FUN_001f96f8(0xB4);
+    o->w7C = scale_game_frames(0xB4);
     o->w6C = 0x18;
     D_0013C940.w1CC = 2;
     x = D_0013C940.unk148;
@@ -691,7 +691,7 @@ extern int D_L00_0015F7D4 __attribute__((sda)); /* no foreign declaration */
 extern int D_L00_0015F7D8 __attribute__((sda)); /* no foreign declaration */
 extern int D_L00_0015F7DC __attribute__((sda)); /* no foreign declaration */
 extern Ent_239918 **D_L00_0015FAC0_c2 __asm__("D_L00_0015FAC0");
-extern int FUN_001fa6e0(int, int, f32);
+extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
 extern s32 find_valid_animation_frame_index_alt(s32, s32) __asm__("func_001FF960");
 extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
@@ -805,11 +805,11 @@ typedef struct {
     short a, b, c, d;
 } Q2395b0;
 extern Q2395b0 D_L00_0015FAB0;
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00235c80();
 /* Sets 0x7C, 0x58/0x5C = 64, 0x48 = 32, calls 00235c80 and links D_L00_0015FAB0. */
 void FUN_L00_002395b0(char *p) {
-    int r = FUN_001f96f8(0xB4);
+    int r = scale_game_frames(0xB4);
     *(int *)(p + 0x7C) = r + 30;
     *(int *)(p + 0x58) = 64;
     *(int *)(p + 0x5C) = 64;
@@ -880,10 +880,10 @@ void FUN_L00_00239630(HudElem *e) {
         }
     }
     if (e->unk74 != e->unk78 || e->unk74 == 1) {
-        e->unk7C = FUN_001f96f8(0x78);
+        e->unk7C = scale_game_frames(0x78);
         e->unk74 = e->unk78;
     }
-    if (e->unk7C >= FUN_001f96f8(5)) {
+    if (e->unk7C >= scale_game_frames(5)) {
         if (*(int *)&D_L00_0015F7F0_gp > c[0]) {
             c[0]++;
         } else if (c[1] < *(int *)&D_L00_0015F7F0_gp) {
@@ -918,7 +918,7 @@ typedef struct {
     s16 *p;
 } Hud;
 
-extern f32 FUN_001fa6c0(s32);
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_001ff960_c(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
@@ -972,12 +972,12 @@ s32 FUN_L00_00239810(Hud *m) {
     q = m->ab;
     if (q[0] == 0)
         goto out;
-    ratio_x = FUN_001fa6c0(q[0]) / FUN_001fa6c0(D_L00_0015F7F0_gp);
+    ratio_x = convert_integer_to_float(q[0]) / convert_integer_to_float(D_L00_0015F7F0_gp);
     if (1.0f < ratio_x)
         ratio_x = 1.0f;
     else if (ratio_x < 0.0f)
         ratio_x = 0.0f;
-    ratio_y = FUN_001fa6c0(q[1]) / FUN_001fa6c0(D_L00_0015F7F0_gp);
+    ratio_y = convert_integer_to_float(q[1]) / convert_integer_to_float(D_L00_0015F7F0_gp);
     if (1.0f < ratio_y)
         ratio_y = 1.0f;
     else if (ratio_y < 0.0f)
@@ -1095,7 +1095,7 @@ void FUN_L00_00239d00(T00239d00 *o) {
     }
 }
 /*
- * Draw callback of the bolt counter HUD element (queued by FUN_L00_00266448
+ * Draw callback of the bolt counter HUD element (queued by update_npc_dialogue
  * with FUN_L00_00239cc8 / FUN_L00_00239d00): a panel that slides open by
  * cnt[0] / bolt_panel_open_steps_gp, the spinning bolt icon (frame from *unk80), the
  * bolt count with a drop shadow, and a thousands separator every three
@@ -1204,11 +1204,11 @@ int FUN_L00_00239df8(HudElem *m)
 #include "sda.h"
 extern s32 D_00141398 NOT_SDA;
 extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
-s32 FUN_001f96f8(s32);
+s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L00_0023a218(u8 *m) {
     u8 *q = m + 0x70;
     if (D_00141398) {
-        s32 r = FUN_001f96f8(10);
+        s32 r = scale_game_frames(10);
         s32 lim = D_L00_0015F7F0_gp;
         *(s32 *)(m + 0x7C) = r;
         if (m[0x70] < lim) {
@@ -1239,9 +1239,9 @@ extern s32 D_L00_0015F908 __attribute__((sda));
 extern s32 D_L00_0015F90C __attribute__((sda));
 extern s32 D_L00_0015F910 __attribute__((sda));
 extern s32 D_L00_0015F914 __attribute__((sda));
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern void FUN_L00_001fb470(s32, s32, s32, char *, s32);
+extern void font_print_large_001fb470(s32, s32, s32, char *, s32) __asm__("FUN_L00_001fb470");
 
 /* Draws the short counter panel, its spinning icon, and a pulsing label. */
 s32 FUN_L00_0023a2d0(Hud *m) {
@@ -1291,7 +1291,7 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     sprintf_alt(buf, D_L00_0015F918);
     text_x = x + D_L00_0015F904;
     text_y = y + D_L00_0015F908;
-    period = FUN_001f96f8(D_L00_0015F914);
+    period = scale_game_frames(D_L00_0015F914);
     pulse = fast_sin((f32)(D_L00_0015F5CC % period) /
                      convert_integer_to_float(period) * 6.28318f - 3.14159f) * 4.0f - 3.0f;
     if (pulse < 0.0f)
@@ -1299,13 +1299,13 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     scaled_text = pulse * text;
     shadow = fast_tween_color(0, 0x80000000, scaled_text);
     color = fast_tween_color(D_L00_0015F90C, D_L00_0015F910, scaled_text);
-    FUN_L00_001fb470(text_x + 1, text_y + 1, shadow, buf, -1);
-    FUN_L00_001fb470(text_x, text_y, color, buf, -1);
+    font_print_large_001fb470(text_x + 1, text_y + 1, shadow, buf, -1);
+    font_print_large_001fb470(text_x, text_y, color, buf, -1);
 out:
     return m->ret;
 }
 extern short D_00140986 __attribute__((section(".data")));
-int FUN_L00_00235a70(char *, int *, int *);
+int hud_screen_position(char *, int *, int *) __asm__("FUN_L00_00235a70");
 void FUN_L00_00235ad8(char *, int *, int *, int, int);
 int get_icon_frame(int, int) __asm__("FUN_001ff960");
 void FUN_L00_0023b6c0(int, int, int, int, int, int);
@@ -1317,7 +1317,7 @@ int FUN_L00_0023a640(char *rec) {
     y = *(int *)(rec + 0x54);
     *(int *)(rec + 0x58) = 0x100;
     *(int *)(rec + 0x5C) = 0x40;
-    FUN_L00_00235a70(rec, &x, &y);
+    hud_screen_position(rec, &x, &y);
     FUN_L00_00235ad8(rec, &x, &y, *(int *)(rec + 0x6C), 0);
     n = *(int *)(rec + 0x74) * 0xDD / *(int *)(rec + 0x8) + 0x1B;
     FUN_L00_0023b6c0(get_icon_frame(0x7558, 1), x, y, n, 0x40, 0x80);
@@ -1330,13 +1330,39 @@ int FUN_L00_0023a640(char *rec) {
    of 30 + func_001F9850(120). */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B0F8), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00235c80(HudElem *);
 
 /* Sets unk7C to scale_game_frames(0x78) + 0x1E and w/h to 0x20, calls FUN_L00_00235c80. */
 void FUN_L00_0023a760(HudElem *e) {
-    e->unk7C = FUN_001f96f8(0x78) + 0x1E;
+    e->unk7C = scale_game_frames(0x78) + 0x1E;
     e->w = 0x20;
     e->h = 0x20;
     FUN_L00_00235c80(e);
 }
+
+s32 D_L01_0017E0A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L02_0017E220[1] __attribute__((section(".data"))) = {0};
+s32 D_L03_0017DD20[1] __attribute__((section(".data"))) = {0};
+s32 D_L04_0017DDA0[1] __attribute__((section(".data"))) = {0};
+s32 D_L04_0017DDC0[1] __attribute__((section(".data"))) = {0};
+s32 D_L05_0017E0A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L06_0017E3A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L06_0017E3C0[1] __attribute__((section(".data"))) = {0};
+s32 D_L07_0017DCA0[1] __attribute__((section(".data"))) = {0};
+s32 D_L07_0017DCC0[1] __attribute__((section(".data"))) = {0};
+s32 D_L08_0017E420[1] __attribute__((section(".data"))) = {0};
+s32 D_L09_0017DDA0[1] __attribute__((section(".data"))) = {0};
+s32 D_L09_0017DDC0[1] __attribute__((section(".data"))) = {0};
+s32 D_L10_0017E0A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L10_0017E0C0[1] __attribute__((section(".data"))) = {0};
+s32 D_L11_0017E620[1] __attribute__((section(".data"))) = {0};
+s32 D_L12_0017E0A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L13_0017DF20[1] __attribute__((section(".data"))) = {0};
+s32 D_L13_0017DF40[1] __attribute__((section(".data"))) = {0};
+s32 D_L14_0017E320[1] __attribute__((section(".data"))) = {0};
+s32 D_L15_0017E220[1] __attribute__((section(".data"))) = {0};
+s32 D_L16_0017E0A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L17_0017E520[1] __attribute__((section(".data"))) = {0};
+s32 D_L17_0017E540[1] __attribute__((section(".data"))) = {0};
+s32 D_L18_0017E620[1] __attribute__((section(".data"))) = {0};

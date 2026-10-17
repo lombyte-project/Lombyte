@@ -153,7 +153,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_002637f8(int);
+extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi,
                                 float size);
 extern char *func_L00_0026DEA0_c(void *, int, void *, int, float, float, float,
@@ -183,7 +183,7 @@ void FUN_L07_0031eba8(char *m) {
         t = *(int *)(S + 0x30) - 3;
         if ((unsigned)t < 2) {
             int idx = (unsigned)t > 1 ? 0 : 2;
-            FUN_L00_002637f8(((L07SparkState *)S)->arr[idx]);
+            cutscene_set_camera_target(((L07SparkState *)S)->arr[idx]);
         }
         if (*(int *)(S + 0x30) != a)
             return;
@@ -224,7 +224,7 @@ void FUN_L07_0031eba8(char *m) {
 
 extern char D_L07_0016C8E0[];
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00263b70(void *, void *, void *, float, float);
+extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
@@ -254,22 +254,26 @@ void FUN_L07_0031f900(unsigned char *moby) {
                 moby_point_position(o, 3, b0);
                 subtract_vector_xyz(c0, a0, b0);
                 normalize_vector_xyz(c0, c0, *(float *)&D_L07_00161CD8);
-                FUN_L00_00263b70(a0, a0, c0, *(float *)&D_L07_00161CDC,
+                draw_trail(a0, a0, c0, *(float *)&D_L07_00161CDC,
                                  *(float *)&D_L07_00161CE0);
                 moby_point_position(o, 1, a1);
                 moby_point_position(o, 4, b1);
                 subtract_vector_xyz(c1, a1, b1);
                 normalize_vector_xyz(c1, c1, *(float *)&D_L07_00161CD8);
-                FUN_L00_00263b70(a1, a1, c1, *(float *)&D_L07_00161CDC,
+                draw_trail(a1, a1, c1, *(float *)&D_L07_00161CDC,
                                  *(float *)&D_L07_00161CE0);
                 moby_point_position(o, 2, a2);
                 moby_point_position(o, 5, b2);
                 subtract_vector_xyz(c2, a2, b2);
                 normalize_vector_xyz(c2, c2, *(float *)&D_L07_00161CD8);
-                FUN_L00_00263b70(a2, a2, c2, *(float *)&D_L07_00161CDC,
+                draw_trail(a2, a2, c2, *(float *)&D_L07_00161CDC,
                                  *(float *)&D_L07_00161CE0);
             }
         }
         break;
     }
 }
+
+char D_L07_00211B30[] = "ERRORS, killing moby %d \n";
+
+char D_L07_00211B78[] = " spawn %d of %d at %3.3f,%3.3f,%3.3f dist:%f \n";

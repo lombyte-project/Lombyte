@@ -90,3 +90,20 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ffe20.s", FUN_L00_001ffe20);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fff28.s", FUN_L00_001fff28);
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ff9c0.s", FUN_L00_001ff9c0);
+
+f32 D_L01_0016EED8[1] __attribute__((section(".data"))) = {0};
+f32 D_L02_0016F058[1] __attribute__((section(".data"))) = {0};
+f32 D_L03_0016EB58[1] __attribute__((section(".data"))) = {0};
+f32 D_L04_0016EBD8[1] __attribute__((section(".data"))) = {0};
+f32 D_L05_0016EE58[1] __attribute__((section(".data"))) = {0};
+f32 D_L06_0016F1D8[1] __attribute__((section(".data"))) = {0};
+f32 D_L07_0016EAD8[1] __attribute__((section(".data"))) = {0};
+f32 D_L08_0016F258[1] __attribute__((section(".data"))) = {0};
+f32 D_L09_0016EBD8[1] __attribute__((section(".data"))) = {0};
+f32 D_L10_0016EED8[1] __attribute__((section(".data"))) = {0};
+f32 D_L12_0016EED8[1] __attribute__((section(".data"))) = {0};
+f32 D_L13_0016ED58[1] __attribute__((section(".data"))) = {0};
+f32 D_L14_0016F158[1] __attribute__((section(".data"))) = {0};
+f32 D_L15_0016F058[1] __attribute__((section(".data"))) = {0};
+f32 D_L16_0016EE58[1] __attribute__((section(".data"))) = {0};
+f32 D_L17_0016F358[1] __attribute__((section(".data"))) = {0};

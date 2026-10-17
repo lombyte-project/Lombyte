@@ -8,14 +8,14 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9dc8(float);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Cosine-eased rotation from x toward y at z. */
 float FUN_L00_00257ef0(float x, float y, float z) {
     float t = fast_subtract_rotations(y, x);
-    float c = FUN_001f9dc8(z * 3.1415927f);
+    float c = fast_cos(z * 3.1415927f);
     return fast_add_rotations(x, t * ((1.0f - c) * 0.5f));
 }
 #include "qcopy.h"
@@ -51,13 +51,13 @@ void FUN_L00_00257f70(void *dst, void *a, void *b, float t) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259088), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9dc8(float);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Blends three angles from a toward b with a cosine ease; ang 0 gives a, 1 gives b. */
 void FUN_L00_00258050(float *out, float *a, float *b, float ang) {
-    float s = (1.0f - FUN_001f9dc8(ang * 3.1415927f)) * 0.5f;
+    float s = (1.0f - fast_cos(ang * 3.1415927f)) * 0.5f;
     out[0] = fast_add_rotations(a[0], fast_subtract_rotations(b[0], a[0]) * s);
     out[1] = fast_add_rotations(a[1], fast_subtract_rotations(b[1], a[1]) * s);
     out[2] = fast_add_rotations(a[2], fast_subtract_rotations(b[2], a[2]) * s);
@@ -88,7 +88,8 @@ float spring_turn(float *p, float a, float b, float c, float d, float lim) {
 }
 extern float FUN_001f99c0(float);
 
-void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit) {
+void turn_e50(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
+void turn_e50(unsigned char *m, float *ptr, float t, float b, float c, float limit) {
     float r = fast_subtract_rotations(t, *(float *)(m + 0x48));
     float k = r / 0.15707964f;
     float v;
@@ -125,7 +126,7 @@ typedef struct {
     s32 x1c;
 } G002583f0;
 extern G002583f0 D_L00_00173E40_u __asm__("D_L00_00173E40");
-s32 FUN_001efa68(void *, void *, s32, s32, s32);
+s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
     V002583f0 t0, t1;
     s32 r;
@@ -135,7 +136,7 @@ s32 FUN_L00_002583f0(void *pos, s32 a, s32 flag, f32 up, f32 down) {
     t1.f[2] -= down;
     if (t1.f[2] < 0.0f)
         t1.f[2] = 0.0f;
-    r = FUN_001efa68(&t0, &t1, 0x22, a, 0);
+    r = collision_line(&t0, &t1, 0x22, a, 0);
     if (D_L00_00173E40_u.x1c < 0)
         r = 0;
     if (flag && D_L00_00173E40_u.x18 != 0)
@@ -276,8 +277,8 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern int D_L00_00173E40[];
-extern int FUN_001efa68(void *, void *, int, int, int);
-extern int FUN_L00_001f0d60();
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
@@ -305,7 +306,7 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
         normalize_vector_xyz(&t3, v, b);
         add_vector_xyz(&t2, &t3, p);
         t2.a[2] += a;
-        if (FUN_001efa68(&t1, &t2, fl, (int)m, 0)) {
+        if (collision_line(&t1, &t2, fl, (int)m, 0)) {
             subtract_vector_xyz(p, (char *)&D_94C8_60, &t3);
             r = 1;
             *(float *)(m + 0x18) -= a;
@@ -327,7 +328,7 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
     qcopy(&t2, q);
     t1.a[2] += a;
     t2.a[2] = b - 0.05f;
-    if (FUN_001efa68(&t1, &t2, fl | 2, (int)m, 0)) {
+    if (collision_line(&t1, &t2, fl | 2, (int)m, 0)) {
         if (D_L00_00173E40[7] > 0) {
             float g;
             r |= 2;
@@ -345,11 +346,11 @@ int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) {
     subtract_vector_xyz(v, q, &t0);
     return r;
 }
-float FUN_001fa6c0(int);
-void FUN_L00_00258830(int, int, float, float, float, int);
-/* Calls FUN_L00_00258830 with c converted to float and divided by 1024. */
+float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+void push302618(int, int, float, float, float, int) __asm__("FUN_L00_00258830");
+/* Calls push302618 with c converted to float and divided by 1024. */
 void FUN_L00_00258ad0(int a, int b, float x, float y, int c, int d) {
-    FUN_L00_00258830(a, b, x, FUN_001fa6c0(c) * (1.0f / 1024.0f), y, d);
+    push302618(a, b, x, convert_integer_to_float(c) * (1.0f / 1024.0f), y, d);
 }
 #include "rnc/math/vector.h"
 
@@ -390,11 +391,11 @@ typedef struct {
 
 extern Glob D_L00_00173E40_c __asm__("D_L00_00173E40");
 
-extern void FUN_001f9a28(void *, void *, void *);
-extern f32 FUN_001f9b20(void *);
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern f32 FUN_001f9dc8_c(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern void FUN_001f9a10(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 FUN_L00_002583f0_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002583f0");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -404,7 +405,8 @@ extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
 extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
 extern f32 frame_scale __asm__("D_0015ED60") __attribute__((sda));
-s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
+s32 walk_e50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) __asm__("FUN_L00_00258b50");
+s32 walk_e50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     Vec4 save;
     Vec4 d;
     Vec4 p;
@@ -424,8 +426,8 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
 
     sp = c->f1C * f;
     lim = c->f24 * f;
-    FUN_001f9a28(&d, v, &m->pos);
-    len = FUN_001f9b20(&d);
+    fast_vec_sub(&d, v, &m->pos);
+    len = vec_len_xy(&d);
     save.q = m->pos.q;
     t = sp * len;
     if (sp < t)
@@ -451,20 +453,20 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
         c->f18 = c->f18 - frame_time_sq_gp * 9.0f;
     }
     lim = m->pos.f[2] + 0.04f;
-    FUN_001f9a10(&p, &m->pos, &d);
+    fast_vec_add(&p, &m->pos, &d);
     p.f[2] = m->pos.f[2] - c->f30;
     if (FUN_L00_002583f0_c(&p, m, c->i38 & 0x20, c->f08, c->f0C)) {
         g = &D_L00_00173E40_c;
-        a = fast_arc_tan(g->v40.f[2], FUN_001f9b20(&g->v40));
+        a = fast_arc_tan(g->v40.f[2], vec_len_xy(&g->v40));
         h1 = g->f28;
-        if (0.5f < a && 0.1f < FUN_001f9b20(&d)) {
+        if (0.5f < a && 0.1f < vec_len_xy(&d)) {
             {
                 fast_vec_normalize(&q, &d, 0.57f);
-                FUN_001f9a10(&q, &q, &m->pos);
+                fast_vec_add(&q, &q, &m->pos);
                 q.f[2] = m->pos.f[2] - c->f30;
                 if (FUN_L00_002583f0_c(&q, m, c->i38 & 0x20, c->f08, c->f0C)) {
                     h2 = g->f28;
-                    if (!(0.5f <= fast_arc_tan(g->v40.f[2], FUN_001f9b20(&g->v40))))
+                    if (!(0.5f <= fast_arc_tan(g->v40.f[2], vec_len_xy(&g->v40))))
                         goto done;
                     mask = 0x22;
                     if (!(c->i38 & 8))
@@ -485,7 +487,7 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     }
 done:
     if (!(mask & 2)) {
-        l2 = FUN_001f9b20(&d);
+        l2 = vec_len_xy(&d);
         FUN_001f9a68_c(&p, &d, 1.0f / l2);
         r = FUN_L00_00258ad0_c(m, &d, c->f04, c->i00, c->f30, c->i38);
         if (r & 2)
@@ -519,7 +521,8 @@ int FUN_001f9740_259028(void *) __asm__("FUN_001f9740");
 int FUN_001f96f8_259028(int) __asm__("FUN_001f96f8");
 int FUN_L00_00258b50_259028(unsigned char *, char *, float *, void *,
                             float) __asm__("FUN_L00_00258b50");
-int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out) {
+int steer302618(unsigned char *m, char *c, float *tgt, void *out) __asm__("FUN_L00_00259028");
+int steer302618(unsigned char *m, char *c, float *tgt, void *out) {
     int r = 0;
     float a, d;
     FUN_001f99f8_259028(out);
@@ -667,14 +670,14 @@ float FUN_L00_00259468(float *a, float *b, int *out, float f) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A540), where it is exact; names translated to the US level program. */
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern void FUN_001f9a10(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L00_00259508(void *a, void *b, void *c, int d, float f) {
     float t[4];
     fast_vec_scale(t, c, convert_integer_to_float(d));
     t[2] -= convert_integer_to_float((d * d + d) >> 1) * f;
-    FUN_001f9a10(a, b, t);
+    fast_vec_add(a, b, t);
 }
 float FUN_001f99c0(float);
 float square_root(float) __asm__("FUN_001f9988");

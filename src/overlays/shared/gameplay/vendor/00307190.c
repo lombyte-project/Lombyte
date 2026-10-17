@@ -14,12 +14,13 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float FUN_001f9b20(void *);
+extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int FUN_001f96f8(int);
-extern void FUN_L00_00250df8(void *);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 
-char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
+char *projectile302618(char *pos, char *dir, int a2, int a3, int a4, int a5) __asm__("FUN_L08_00307190");
+char *projectile302618(char *pos, char *dir, int a2, int a3, int a4, int a5) {
     char *m = func_0020D348_m(0x50C);
     if (m != 0) {
         char *d;
@@ -30,14 +31,14 @@ char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
         m[0x20] = 1;
         qcopy(m + 0x10, dir);
         qcopy(d, pos);
-        *(int *)(d + 0x18) = FUN_001f96f8(a4);
+        *(int *)(d + 0x18) = scale_game_frames(a4);
         *(int *)(d + 0x10) = a2;
         *(int *)(d + 0x14) = a3;
         *(int *)(d + 0x2C) = a5;
         *(int *)(d + 0x28) = 0;
         *(float *)(m + 0x48) = fast_arc_tan(*(float *)d, *(float *)(d + 4));
-        *(float *)(m + 0x44) = -fast_arc_tan(FUN_001f9b20(d), *(float *)(d + 8));
-        FUN_L00_00250df8(m);
+        *(float *)(m + 0x44) = -fast_arc_tan(vec_len_xy(d), *(float *)(d + 8));
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }
@@ -46,14 +47,14 @@ char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
 
 extern char D_L08_00174640[];
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_001efa68(void *, void *, int, int, int);
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_001ff290(void *, void *, void *);
-extern void FUN_L00_00259bc8(void *, int, int, void *, void *, float);
-extern void FUN_L00_0025f090(void *, void *, int, float, float);
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
+extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
+extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+extern void spark_v(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
@@ -79,17 +80,17 @@ void FUN_L08_00307298(char *m) {
             float f = random_float_between_alt(0.95f, 0.985f);
             scale_vector_xyz(sc, d, f);
             normalize_vector_xyz(off, d, -0.1f);
-            FUN_L00_001ff290(tmp, off, m + 0x10);
+            combine_velocity1688(tmp, off, m + 0x10);
             a = scale_game_frames(random_int_between(0xF, 0x14));
-            FUN_L00_00269958(off, sc, 0x6F00AFFF, 0xFF, a, 0x28,
+            spark_v(off, sc, 0x6F00AFFF, 0xFF, a, 0x28,
                              scale_game_frames(random_int_between(7, 0xA)), 1);
         }
         add_vector_xyz(m + 0x10, m + 0x10, d);
-        if (FUN_001efa68(m + 0x10, prev, 0x10, *(int *)(d + 0x10), 0) != 0) {
+        if (collision_line(m + 0x10, prev, 0x10, *(int *)(d + 0x10), 0) != 0) {
             char *t = D_L08_00174640;
             if (*(int *)(t + 0x18) != *(int *)(d + 0x10)) {
                 if (*(int *)(t + 0x18) != 0) {
-                    FUN_L00_00259bc8(*(void **)(t + 0x18), (int)m, 0x10001, t + 0x20, d, 1.0f);
+                    spawn_nearby_effect(*(void **)(t + 0x18), (int)m, 0x10001, t + 0x20, d, 1.0f);
                 }
                 m[0x20] = 2;
             }
@@ -99,9 +100,9 @@ void FUN_L08_00307298(char *m) {
         break;
     case 2:
         if ((D_L08_0015F5D4 < 0.85f && D_L08_0015F5D0 < 0.85f) || *(int *)(d + 0x2C) == 1) {
-            FUN_L00_0025f090(m, m + 0x10, -1, 0.25f, 13.0f);
+            cart_burst(m, m + 0x10, -1, 0.25f, 13.0f);
         } else {
-            FUN_L00_0025f090(m, m + 0x10, -1, 0.25f, 0.0f);
+            cart_burst(m, m + 0x10, -1, 0.25f, 0.0f);
         }
         mark_moby_for_removal(m);
         break;
@@ -143,7 +144,7 @@ void FUN_L08_00307b90(int arg) {
     D_L08_00162370 = random_float_between_alt(b, multiply_global_factor_ed64(10.0f));
     v[0] = a * frame_time;
     v[1] = v[0];
-    t = FUN_001f9b20(D_L08_00162360) / fast_vec_length(v);
+    t = vec_len_xy(D_L08_00162360) / fast_vec_length(v);
     D_L08_00162374 = (int)(t * (c - d) + d);
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -174,12 +175,12 @@ extern float D_L08_00162348 __attribute__((sda));
 extern float D_L08_00162354 __attribute__((sda));
 extern int D_L08_00162358 __attribute__((sda));
 extern float D_L08_0016235C __attribute__((sda));
-extern int FUN_L08_00211b08();
+extern int update_float_countdown() __asm__("FUN_L08_00211b08");
 extern u128_3091B0 D_L08_00160250 __attribute__((section(".sdata")));
 extern void FUN_L08_00272cb8(void *, void *, void *, float);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
-float FUN_L00_00263468(Vec4 *v);
-void FUN_L00_00262cf0(void *a, void *b);
+float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
+void fast_add_rotations_cf(void *a, void *b) __asm__("FUN_L00_00262cf0");
 void FUN_L00_002634f8(void *v);
 void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f);
 void FUN_L08_00307b90_c(int arg) __asm__("FUN_L08_00307b90");
@@ -449,7 +450,6 @@ void FUN_L08_00313ba8(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00316fa8.s", FUN_L08_00316fa8);
 #else
 extern void rotate_about_axis(void *, void *, void *, float) __asm__("FUN_00214890");
-extern float ground_height_at(void *) __asm__("FUN_L00_00263468");
 extern int play_voice(int, int, void *, int) __asm__("FUN_L00_0028ddd8");
 extern int set_voice_volume(int, int) __asm__("FUN_L01_002a1968");
 extern float frame_delta_time __asm__("D_0015ED7C");

@@ -31,14 +31,14 @@ extern float D_L01_0017C270[][25];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0020d658(int back);
-extern float FUN_L00_002339d0(float *v);
+extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern int FUN_L00_002050b8(int);
-extern int FUN_L00_0020d568(void);
-extern int FUN_L00_00211360(char *);
-extern int FUN_L00_00216de8(int, int);
+extern int fd568_208820(void) __asm__("FUN_L00_0020d568");
+extern int f_fun_l00_00211360_227fa0(char *) __asm__("FUN_L00_00211360");
+extern int f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int FUN_L00_00229a98(void);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -55,19 +55,19 @@ extern void FUN_L00_00209ca8(int, int, int);
 extern void FUN_L00_0020a500(void);
 extern void FUN_L00_0020b930(void);
 extern void FUN_L00_0020e360(int a, int b);
-extern void FUN_L00_0020e698(void);
+extern void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
 extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00213de8(float);
 extern void FUN_L00_00214ed8(float a, float b, float c);
 extern void FUN_L00_00216ec0(int, int, int);
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void FUN_L00_002325e0(int bank, int seq);
-extern void FUN_L00_00233b20(float *dst, float *src, float z);
-extern void FUN_L00_0025f730(void *a, float x);
+extern void gravity_set_z(float *dst, float *src, float z) __asm__("FUN_L00_00233b20");
+extern void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void FUN_L00_00262500(int a, char *b);
 extern void FUN_L00_00262528(char *o, int a, int b);
 extern void FUN_L00_00262840(char *o);
-extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
+extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern void FUN_L01_002405a0(void);
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -200,7 +200,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         p->health.hp = 0;
         qcopy(&p->motion.unk150, &p->motion.unk110);
-        FUN_L00_0025f730(&p->motion.unk150, frame_time * 3.5f);
+        vec_limit302618(&p->motion.unk150, frame_time * 3.5f);
         if (b)
             set_hero_animation(0x7C, 0, (float)scale_game_frames(0xC));
         break;
@@ -228,7 +228,7 @@ int hero_set_state(int a, int b) {
         p->unk20A7 = 1;
         *(int *)&p->unk8FC = 0;
         if (p->state.prev_control_mode == 0x12) {
-            FUN_L00_00216de8(3, 0);
+            f_fun_l00_00216de8_227fa0(3, 0);
             p->state.step = 1;
         } else {
             p->unk8F4 = scale_game_frames(0x2D);
@@ -252,7 +252,7 @@ int hero_set_state(int a, int b) {
         p->unk20A7 = 1;
         p->unk8F4 = scale_game_frames(0x3C);
         if (p->state.prev_control_mode == 0x12) {
-            FUN_L00_00216de8(3, 0);
+            f_fun_l00_00216de8_227fa0(3, 0);
             p->state.step = 1;
         }
         p->unk8E0 = 0;
@@ -288,14 +288,14 @@ int hero_set_state(int a, int b) {
         if (p->state.prev_control_mode == 0x11) {
             FUN_L00_00209ca8(3, 0xA, 0);
             if (pool_draw_tiles != 0) {
-                FUN_L00_002a3ec8(pool_draw_tiles, pool_draw_count, 0, p->motion.pos.f[0],
+                pool_splash(pool_draw_tiles, pool_draw_count, 0, p->motion.pos.f[0],
                                  p->motion.pos.f[1], 0.4f, 0.3f);
             }
         } else if (p->motion.displacement.f[2] < frame_time * -0.5f) {
             int n = truncate_float_to_s32(absolute_float(p->motion.displacement.f[2]) * 300.0f);
             FUN_L00_00209ca8(3, n < 0x28 ? n : 0x28, 1);
             if (pool_draw_tiles != 0) {
-                FUN_L00_002a3ec8(pool_draw_tiles, pool_draw_count, 0, p->motion.pos.f[0],
+                pool_splash(pool_draw_tiles, pool_draw_count, 0, p->motion.pos.f[0],
                                  p->motion.pos.f[1], 0.5f, -0.4f);
             }
             p->unk90A = scale_game_frames(0x4B);
@@ -331,7 +331,7 @@ int hero_set_state(int a, int b) {
             s->unk690 = s->motion.pos.f[2] - s->unk69C - -0.12f;
             qcopy(&s->motion.unk150, &s->motion.unk110);
             s->motion.unk150.f[2] = 0.0f;
-            FUN_L00_0025f730(&s->motion.unk150, frame_time * 5.5f);
+            vec_limit302618(&s->motion.unk150, frame_time * 5.5f);
             s->rand_timer.range = 0x68;
             if (b)
                 set_hero_animation(0x3A, 0, (float)scale_game_frames(0x16));
@@ -552,7 +552,7 @@ int hero_set_state(int a, int b) {
         p->ground_speed = vector_length_xy(&p->motion.unk110);
         p->unk20AC = 1;
         if (p->vehicle_mode == 0)
-            FUN_L00_0020e698();
+            fire_end_2cc608();
         if (b) {
             if (p->vehicle_mode == 3) {
                 set_hero_animation(1, 0, (float)scale_game_frames(8));
@@ -609,7 +609,7 @@ int hero_set_state(int a, int b) {
         char *v = (char *)&p->motion.unk110;
         p->state.control_mode = 1;
         p->unk2284 = 0;
-        p->ground_speed = FUN_L00_002339d0((float *)v);
+        p->ground_speed = gravity_length_xy((float *)v);
         qcopy(&p->motion.unk150, v);
         if (b) {
             int id = 6;
@@ -635,9 +635,9 @@ int hero_set_state(int a, int b) {
             struct Hero *q = &hero;
             q->rand_timer.range = 0x68;
             qcopy(&q->motion.unk150, &q->motion.unk110);
-            FUN_L00_0025f730(&q->motion.unk150, frame_time * 7.0f);
+            vec_limit302618(&q->motion.unk150, frame_time * 7.0f);
             if (frame_time * 3.5f < q->motion.unk168)
-                FUN_L00_00216de8(0xC, 0);
+                f_fun_l00_00216de8_227fa0(0xC, 0);
             if (b) {
                 if (*(unsigned char *)(((char *)q->moby) + 0x52) == FUN_L01_00226f10(0)) {
                     set_hero_animation(0xD, 2, (float)scale_game_frames(9));
@@ -727,7 +727,7 @@ int hero_set_state(int a, int b) {
         p->unk944 = frame_time_sq * 7.0f;
         if (p->state.current == 0x77) {
             if (p->vehicle_mode == 0) {
-                p->health.unk22B2 = FUN_L00_00216de8(0x17, 0x20);
+                p->health.unk22B2 = f_fun_l00_00216de8_227fa0(0x17, 0x20);
             }
             p->unk950 =
                 randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
@@ -885,7 +885,7 @@ int hero_set_state(int a, int b) {
                     u->unk48C = 1.98f;
                     u->unk430 = 1.95f;
                 } else {
-                    FUN_L00_00233b20((float *)(&u->motion.velocity), (float *)(&u->motion.velocity), 0.0f);
+                    gravity_set_z((float *)(&u->motion.velocity), (float *)(&u->motion.velocity), 0.0f);
                     u->unk41C = 1;
                     u->unk3D0 = scale_game_frames(2);
                     u->unk3D4 = scale_game_frames(0x23) + u->unk3D0;
@@ -1184,7 +1184,7 @@ int hero_set_state(int a, int b) {
                     n = scale_game_frames(0x11);
                 set_hero_animation(0x2B, 4, (float)n);
                 m = hero_slot_moby(0);
-                if (FUN_L00_00211360(m))
+                if (f_fun_l00_00211360_227fa0(m))
                     blend_moby_animation(m, 0xA, 4, n + 2);
             }
             break;
@@ -1287,7 +1287,7 @@ int hero_set_state(int a, int b) {
                 j = j / 2;
                 set_hero_animation(k + 0x17, j, (float)n);
                 m = hero_slot_moby(0);
-                if (FUN_L00_00211360(m))
+                if (f_fun_l00_00211360_227fa0(m))
                     blend_moby_animation(m, k + 3, j, n);
             }
             break;
@@ -1323,7 +1323,7 @@ int hero_set_state(int a, int b) {
             n = scale_game_frames(5);
             set_hero_animation(k + 0x27, 5, (float)n);
             m = hero_slot_moby(0);
-            if (FUN_L00_00211360(m))
+            if (f_fun_l00_00211360_227fa0(m))
                 blend_moby_animation(m, k + 7, 5, n);
         }
         break;
@@ -1346,7 +1346,7 @@ int hero_set_state(int a, int b) {
         FUN_L00_00213de8(0.5f);
         p->unk1EE = scale_game_frames(0x2D);
         qcopy(&p->motion.velocity, &p->motion.unk110);
-        FUN_L00_0025f730(&p->motion.velocity, frame_time * 7.0f);
+        vec_limit302618(&p->motion.velocity, frame_time * 7.0f);
         r = find_moby_hit(((void *)p->moby), 1, 0);
         if (r != 0) {
             hero_change_health(truncate_float_to_s32(*(float *)(r + 0x2C)));
@@ -1435,7 +1435,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         FUN_L00_00213de8(0.5f);
         qcopy(&p->motion.velocity, &p->motion.unk110);
-        FUN_L00_0025f730(&p->motion.velocity, frame_time * 5.0f);
+        vec_limit302618(&p->motion.velocity, frame_time * 5.0f);
         hero_change_health(1);
         p->invulnerable_frames = scale_game_frames(0x4D);
         if (b) {
@@ -1493,7 +1493,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 9;
         p->unk20AC = 1;
         p->unk2284 = 0;
-        FUN_L00_0020e698();
+        fire_end_2cc608();
         set_hero_animation(FUN_L01_00226f10(0), 0, (float)scale_game_frames(0xA));
         break;
     }
@@ -1536,7 +1536,7 @@ int hero_set_state(int a, int b) {
         n = scale_game_frames(8);
         set_hero_animation(0x44, 2, (float)n);
         m = ((char *)p->items[0].moby);
-        if (FUN_L00_00211360(m))
+        if (f_fun_l00_00211360_227fa0(m))
             blend_moby_animation(m, 0xB, 2, n + scale_game_frames(5));
         break;
     }
@@ -1545,7 +1545,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 0x18;
         p->unk20AC = 1;
-        FUN_L00_0020e698();
+        fire_end_2cc608();
         if (b)
             set_hero_animation(FUN_L01_00226f10(0), 0, -1.0f);
         break;
@@ -1571,7 +1571,7 @@ int hero_set_state(int a, int b) {
             t->restore_item[1] = 1;
         }
     }
-    if (FUN_L00_0020d568() == 0) {
+    if (fd568_208820() == 0) {
         struct Hero *t = &hero;
         if (t->items[1].item_id == 0 && t->saved_item[1] != 0) {
             t->restore_item[1] = 1;
@@ -1580,7 +1580,7 @@ int hero_set_state(int a, int b) {
     {
         struct Hero *t = &hero;
         if (t->state.control_mode == 0x14) {
-            FUN_L00_0020e698();
+            fire_end_2cc608();
             t->unk20AC = 1;
         }
         if (t->state.control_mode != t->state.prev_control_mode) {
@@ -1605,17 +1605,17 @@ struct HeldGadgetVars {
 
 extern int D_00141660 __attribute__((section(".data")));
 int r1_double_tap_timer __asm__("D_L01_0015F674") = 0;
-extern int FUN_001f9740(int *) __asm__("FUN_001f9740");
+extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
 extern int FUN_0022da68(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);
 extern int FUN_L00_0020d498(int);
-extern void FUN_L00_0020e4c8(void);
-extern int FUN_L00_0020fe30(void);
-extern int FUN_L00_00216de8(int, int);
-extern void FUN_L00_00217658(void);
+extern void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
+extern int f_fun_l00_0020fe30_227fa0(void) __asm__("FUN_L00_0020fe30");
+extern int f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
+extern void f_fun_l00_00217658_227fa0(void) __asm__("FUN_L00_00217658");
 extern int FUN_L00_00233e98(int);
-extern int FUN_L00_0028d8c0(struct Moby *, int);
-extern void FUN_L00_0029a6b0(int);
+extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
+extern void f_fun_l00_0029a6b0_227fa0(int) __asm__("FUN_L00_0029a6b0");
 
 int FUN_L01_00240ed8(void) {
     int out0;
@@ -1642,13 +1642,13 @@ int FUN_L01_00240ed8(void) {
             (hero.state.control_mode == 4 && hero.unk418 != 0)) {
             if (hero.on_slip_ground == 0 && FUN_L00_00266d60(buttons, scale_game_frames(7), &out0) != 0) {
                 moby = hero.items[0].moby;
-                if (moby != 0 && FUN_L00_00211360((char *)moby) != 0 && moby->state == 0) {
+                if (moby != 0 && f_fun_l00_00211360_227fa0((char *)moby) != 0 && moby->state == 0) {
                     if ((controller_state.held & 0xa) != 0 ||
                         ((hero.state.current == 1 || hero.state.current == 0x1e) &&
                          scale_game_frames(0x14) < hero.state_timer)) {
                         if ((hero.state.current == 1 || hero.state.current == 0x1e) &&
                             scale_game_frames(0x14) < hero.state_timer) {
-                            FUN_L00_00217658();
+                            f_fun_l00_00217658_227fa0();
                         } else {
                             hero_set_state(0x15, 1);
                         }
@@ -1697,11 +1697,11 @@ int FUN_L01_00240ed8(void) {
         }
         break;
     case 0x1f:
-        if (hero.vehicle_mode == 0 && FUN_L00_0020fe30() != 0 &&
+        if (hero.vehicle_mode == 0 && f_fun_l00_0020fe30_227fa0() != 0 &&
             FUN_L00_00266d60(buttons, scale_game_frames(7), 0) != 0 &&
             D_00141660 == 0x1f && hero.items[0].moby->oclass == 0x1e3 &&
             hero.unk22DE == 0) {
-            FUN_L00_00216de8(0x18, 0);
+            f_fun_l00_00216de8_227fa0(0x18, 0);
             hero.unk22DE = 0x12;
             hero.unk22DC = 1;
         }
@@ -1710,7 +1710,7 @@ int FUN_L01_00240ed8(void) {
         if ((unsigned int)hero.state.control_mode < 3 || hero.state.control_mode == 4 ||
             hero.state.control_mode == 5) {
             if (FUN_L00_00266d60(buttons, scale_game_frames(8), 0) != 0)
-                FUN_L00_0029a6b0(0);
+                f_fun_l00_0029a6b0_227fa0(0);
         }
         break;
     case 0xf:
@@ -1724,10 +1724,10 @@ int FUN_L01_00240ed8(void) {
                       scale_game_frames(5) < hero.items[0].unk20) ||
                      (controller_state.pressed & buttons) != 0) &&
                     FUN_L00_00233e98(-1) != 0) {
-                    if (hero.unk20A8 == 0) FUN_L00_0020e4c8();
+                    if (hero.unk20A8 == 0) fire_start_2cc608();
                 } else if ((controller_state.held & buttons) != 0 &&
                            FUN_L00_00233e98(-1) == 0 &&
-                           FUN_L00_0028d8c0(hero.items[0].moby, vars->voice) == 0) {
+                           voice_is_playing(hero.items[0].moby, vars->voice) == 0) {
                     vars->voice = FUN_0022da68(0, 0, hero.items[0].moby);
                 }
             }
@@ -1756,7 +1756,7 @@ int FUN_L01_00240ed8(void) {
                             hero.state.current == 3 ||
                             (hero.state.control_mode == 1 && hero.unk229C < 0.7f))
                             hero_set_state(0x23, 1);
-                        else FUN_L00_0020e4c8();
+                        else fire_start_2cc608();
                     } else if (hero.items[0].moby != 0) {
                         FUN_0022da68(0, 0, hero.items[0].moby);
                     }
@@ -1780,13 +1780,13 @@ int FUN_L01_00240ed8(void) {
         break;
     case 0x15:
         if (hero.items[0].moby != 0 && (controller_state.pressed & buttons) != 0)
-            FUN_L00_0020e4c8();
+            fire_start_2cc608();
         break;
     }
     if (hero.state_timer == saved) {
         if (FUN_L00_0020d498(3) == 3 && hero.state.current != 0x81 &&
             (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.unk22D8 == 0) {
-            FUN_001f9740(&r1_double_tap_timer);
+            tick_countdown_32(&r1_double_tap_timer);
             if (r1_double_tap_timer != 0 &&
                 ((unsigned int)hero.state.control_mode < 2 || hero.state.control_mode == 0xc ||
                  ((hero.state.control_mode == 2 || hero.state.control_mode == 4) && hero.grounded_frames != 0)) &&

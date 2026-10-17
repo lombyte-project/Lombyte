@@ -88,7 +88,9 @@ s32 FUN_L01_00276a48(s32 *ids, s32 n, f32 radius, s32 path_index, OvlVec4 *pos) 
 }
 extern f32 vec_distance_276fe8(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9b80");
 
-s32 FUN_L01_00276fe8(s32 *ids, s32 n, s32 path_index, f32 radius,
+s32 follow_path(s32 *ids, s32 n, s32 path_index, f32 radius,
+                       OvlVec4 *pos, OvlVec4 *target, OvlVec4 *out) __asm__("FUN_L01_00276fe8");
+s32 follow_path(s32 *ids, s32 n, s32 path_index, f32 radius,
                        OvlVec4 *pos, OvlVec4 *target, OvlVec4 *out) {
     OvlVec4 side;
     OvlVec4 left;

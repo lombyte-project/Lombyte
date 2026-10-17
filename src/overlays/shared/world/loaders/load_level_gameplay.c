@@ -35,7 +35,7 @@ typedef struct {
     f32 length;
 } P_241788;
 
-extern f32 FUN_001fa6c0(s32);
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 FUN_001fa6d0(f32);
 extern s32 fptodp(f32) __asm__("FUN_00120478");
 extern void debug_print(void *, s32, s32) __asm__("FUN_001e93b0");
@@ -58,7 +58,7 @@ void FUN_L00_00241788(u8 *src, s32 n) {
             if (next_start == 0) {
                 next_start = *(s32 *)(src + 0x40);
             }
-            entries[i].length = FUN_001fa6c0(next_start - *(s32 *)(src + 0)) * 0.0009765625f;
+            entries[i].length = convert_integer_to_float(next_start - *(s32 *)(src + 0)) * 0.0009765625f;
             entries[i + 1].id = -1.0f;
             entries[i + 1].length = 0.0f;
         }
@@ -466,7 +466,7 @@ extern int D_L00_0016C058[];
 extern int D_L00_001AB840[];
 extern int D_L00_001BA4D0[];
 extern int debug_print_alt() __asm__("FUN_001e93b0");
-extern int FUN_L00_0024d8d0(void *, void *);
+extern int fast_decompress(void *, void *) __asm__("FUN_L00_0024d8d0");
 extern int FUN_L00_00284d90(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short D_L00_001AC780[];
@@ -490,7 +490,7 @@ extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern void FUN_L00_00204c60(void);
 extern void FUN_L00_00204f80(void);
 extern void FUN_L00_0024a798(int, int);
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_0028df58(short *);
 extern void FUN_L00_0028e180();
 extern void FUN_L00_0028e8a0(char *);
@@ -538,7 +538,7 @@ char *load_level_gameplay(int arg0) {
         level_root[1] = mem; /* D_0015EE50 */
     }
     FlushCache(0);
-    FUN_L00_0024d8d0(level_root[1], hdr);
+    fast_decompress(level_root[1], hdr);
     FlushCache(0);
     FillTransferWords(&D_0013F350, 0, 0x2310);
     FillTransferWords(D_L00_00166C80, 0, 0x3A0);
@@ -1081,7 +1081,7 @@ char *load_level_gameplay(int arg0) {
                 m->f34 |= *(unsigned short *)p;
                 p += 4;
                 if (m->f24 != 0) {
-                    FUN_L00_00250df8(m);
+                    allocate_voice_for_target_entry_cf(m);
                 }
                 c0 = *(int *)p;
                 p += 4;
@@ -1496,7 +1496,7 @@ char *load_level_gameplay(int arg0) {
             m->f30 = 0x10;
             m->f34 &= ~2;
             set_moby_animation(m, 1, 0);
-            FUN_L00_00250df8(m);
+            allocate_voice_for_target_entry_cf(m);
             D_0013E030.f0 = m;
             FUN_L00_0024a798((int)m, 0);
         }
@@ -2108,7 +2108,8 @@ extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 
 /* streams entry i of the current sector list into the loader buffer */
-s32 FUN_L00_002451b8(s32 i) {
+s32 f2451b8_298840(s32 i) __asm__("FUN_L00_002451b8");
+s32 f2451b8_298840(s32 i) {
     u8 *buf = D_L00_0016C860.buf;
     s32 start;
     s32 size;
@@ -2126,3 +2127,73 @@ s32 FUN_L00_002451b8(s32 i) {
     }
     return 1;
 }
+
+s64 D_L01_00182C60[1] __attribute__((section(".data"))) = {0};
+s64 D_L01_00182C68[1] __attribute__((section(".data"))) = {0};
+s64 D_L01_00182C78[1] __attribute__((section(".data"))) = {0};
+s32 D_L02_0017441C[1] __attribute__((section(".data"))) = {0};
+s64 D_L02_00182DE0[1] __attribute__((section(".data"))) = {0};
+s64 D_L02_00182DE8[1] __attribute__((section(".data"))) = {0};
+s64 D_L02_00182DF8[1] __attribute__((section(".data"))) = {0};
+s32 D_L02_001B0220[1] __attribute__((section(".data"))) = {0};
+s32 D_L02_001B0280[1] __attribute__((section(".data"))) = {0};
+s32 D_L03_00173F1C[1] __attribute__((section(".data"))) = {0};
+s64 D_L03_001828E0[1] __attribute__((section(".data"))) = {0};
+s64 D_L03_001828E8[1] __attribute__((section(".data"))) = {0};
+s64 D_L03_001828F8[1] __attribute__((section(".data"))) = {0};
+s32 D_L04_00173F9C[1] __attribute__((section(".data"))) = {0};
+s64 D_L04_00182960[1] __attribute__((section(".data"))) = {0};
+s64 D_L04_00182968[1] __attribute__((section(".data"))) = {0};
+s64 D_L04_00182978[1] __attribute__((section(".data"))) = {0};
+s32 D_L05_0017421C[1] __attribute__((section(".data"))) = {0};
+s64 D_L05_00182C60[1] __attribute__((section(".data"))) = {0};
+s64 D_L05_00182C68[1] __attribute__((section(".data"))) = {0};
+s64 D_L05_00182C78[1] __attribute__((section(".data"))) = {0};
+s32 D_L08_0017461C[1] __attribute__((section(".data"))) = {0};
+s64 D_L08_00182FE0[1] __attribute__((section(".data"))) = {0};
+s64 D_L08_00182FE8[1] __attribute__((section(".data"))) = {0};
+s64 D_L08_00182FF8[1] __attribute__((section(".data"))) = {0};
+s32 D_L08_001B0420[1] __attribute__((section(".data"))) = {0};
+s32 D_L08_001B0480[1] __attribute__((section(".data"))) = {0};
+s32 D_L09_00173F9C[1] __attribute__((section(".data"))) = {0};
+s64 D_L09_00182960[1] __attribute__((section(".data"))) = {0};
+s64 D_L09_00182968[1] __attribute__((section(".data"))) = {0};
+s64 D_L09_00182978[1] __attribute__((section(".data"))) = {0};
+s32 D_L10_0017429C[1] __attribute__((section(".data"))) = {0};
+s64 D_L10_00182C60[1] __attribute__((section(".data"))) = {0};
+s64 D_L10_00182C68[1] __attribute__((section(".data"))) = {0};
+s64 D_L10_00182C78[1] __attribute__((section(".data"))) = {0};
+s64 D_L11_001831E0[1] __attribute__((section(".data"))) = {0};
+s64 D_L11_001831E8[1] __attribute__((section(".data"))) = {0};
+s64 D_L11_001831F8[1] __attribute__((section(".data"))) = {0};
+s32 D_L11_001B0620[1] __attribute__((section(".data"))) = {0};
+s32 D_L11_001B0680[1] __attribute__((section(".data"))) = {0};
+s32 D_L12_0017429C[1] __attribute__((section(".data"))) = {0};
+s64 D_L12_00182C60[1] __attribute__((section(".data"))) = {0};
+s64 D_L12_00182C68[1] __attribute__((section(".data"))) = {0};
+s64 D_L12_00182C78[1] __attribute__((section(".data"))) = {0};
+s32 D_L13_0017411C[1] __attribute__((section(".data"))) = {0};
+s64 D_L13_00182AE0[1] __attribute__((section(".data"))) = {0};
+s64 D_L13_00182AE8[1] __attribute__((section(".data"))) = {0};
+s64 D_L13_00182AF8[1] __attribute__((section(".data"))) = {0};
+s32 D_L14_0017451C[1] __attribute__((section(".data"))) = {0};
+s64 D_L14_00182EE0[1] __attribute__((section(".data"))) = {0};
+s64 D_L14_00182EE8[1] __attribute__((section(".data"))) = {0};
+s64 D_L14_00182EF8[1] __attribute__((section(".data"))) = {0};
+s32 D_L14_001B0320[1] __attribute__((section(".data"))) = {0};
+s32 D_L14_001B0380[1] __attribute__((section(".data"))) = {0};
+s32 D_L15_0017441C[1] __attribute__((section(".data"))) = {0};
+s64 D_L15_00182DE0[1] __attribute__((section(".data"))) = {0};
+s64 D_L15_00182DE8[1] __attribute__((section(".data"))) = {0};
+s64 D_L15_00182DF8[1] __attribute__((section(".data"))) = {0};
+s32 D_L15_001B0220[1] __attribute__((section(".data"))) = {0};
+s32 D_L15_001B0280[1] __attribute__((section(".data"))) = {0};
+s32 D_L16_0017421C[1] __attribute__((section(".data"))) = {0};
+s64 D_L16_00182C60[1] __attribute__((section(".data"))) = {0};
+s64 D_L16_00182C68[1] __attribute__((section(".data"))) = {0};
+s64 D_L16_00182C78[1] __attribute__((section(".data"))) = {0};
+s64 D_L17_001830E0[1] __attribute__((section(".data"))) = {0};
+s64 D_L17_001830E8[1] __attribute__((section(".data"))) = {0};
+s64 D_L17_001830F8[1] __attribute__((section(".data"))) = {0};
+s32 D_L17_001B0520[1] __attribute__((section(".data"))) = {0};
+s32 D_L17_001B0580[1] __attribute__((section(".data"))) = {0};

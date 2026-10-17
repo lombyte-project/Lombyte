@@ -42,7 +42,7 @@ extern u8 D_0013D4C0[];
 extern s32 is_point_inside_clip_volume(void *point, s32 volume) __asm__("FUN_00214720");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 tick_countdown(s32 *) __asm__("FUN_001f9740");
-extern f32 FUN_001f9b80(void *, void *);
+extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 extern s32 allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
@@ -118,7 +118,7 @@ void FUN_L03_002df520(u8 *moby) {
         count = 0;
         for (m = D_L03_0015FFE4; m != 0; m = m->next) {
             if (m->pclass != 0 && *(s16 *)((u8 *)m->pclass + 0x46) == 5 &&
-                FUN_001f9b80(&m->pos, &hero.motion.pos) < 8.0f) {
+                vector_distance(&m->pos, &hero.motion.pos) < 8.0f) {
                 count++;
             }
         }
@@ -228,7 +228,7 @@ struct L03Cutscene {
 };
 
 extern struct L03Cutscene D_L03_0016C960;
-extern void FUN_L00_002637f8(void *);
+extern void cutscene_set_camera_target(void *) __asm__("FUN_L00_002637f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -258,7 +258,7 @@ void FUN_L03_002e01d0(char *m) {
                 i = 2;
             else if (v == 10)
                 i = 0;
-            FUN_L00_002637f8(D_L03_0016C960.mobys[i]);
+            cutscene_set_camera_target(D_L03_0016C960.mobys[i]);
         }
         if (D_L03_0015F5C4 != 2 || D_L03_0016C960.mode != 3)
             break;

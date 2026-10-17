@@ -146,7 +146,8 @@ extern s32 D_L00_00161220 __attribute__((sda));
 extern f32 square_root(f32) __asm__("FUN_001f9988");
 extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 #define NEIGHBOUR(k) (grids + tile->neighbours[k])
-void FUN_L00_002a3ec8(HeightTile *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount)
+void pool_splash(HeightTile *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount) __asm__("FUN_L00_002a3ec8");
+void pool_splash(HeightTile *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount)
 {
     HeightTile *tile = grids;
     s32 k, i, j, row_first, row_last, col_first, col_last;

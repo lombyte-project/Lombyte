@@ -9,7 +9,8 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00266060.c: func_L13_00266060), where it is exact; names translated to the US level program. */
 
-void FUN_L13_002650a8(int idx, int a, int b, int c) {
+void jet_group_state(int idx, int a, int b, int c) __asm__("FUN_L13_002650a8");
+void jet_group_state(int idx, int a, int b, int c) {
     short *list = D_L13_001ABB40[idx];
     if (list) {
         short *p = list;

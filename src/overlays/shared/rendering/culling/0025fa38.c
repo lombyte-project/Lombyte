@@ -13,7 +13,7 @@ typedef struct {
     float x, y, z, w;
 } Vp __attribute__((aligned(16)));
 
-extern float FUN_001f9b20(void *);
+extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
@@ -28,7 +28,7 @@ int FUN_L00_0025fa38(void *p, int i) {
     subtract_vector_xyz(&a, p, e + 0x30);
     a.w = 0;
     transform_vector_by_basis(&b, &a, e + 0x40);
-    if (FUN_001f9b20(&b) < 1.0f) {
+    if (vec_len_xy(&b) < 1.0f) {
         if (-1.0f <= b.z && b.z <= 1.0f) {
             return 1;
         }

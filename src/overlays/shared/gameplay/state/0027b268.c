@@ -14,7 +14,7 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 
 void FUN_L12_0027b370(char *parent, char *list, int n) {
     float m0[16];
@@ -32,7 +32,7 @@ void FUN_L12_0027b370(char *parent, char *list, int n) {
             matrix_to_euler(m1, p + 0x40);
             transform_vector(m2, list + i * 0x30, m0);
             add_vector_xyz(p + 0x10, parent + 0x10, m2);
-            FUN_L00_00250df8(p);
+            allocate_voice_for_target_entry_cf(p);
         }
     }
 }

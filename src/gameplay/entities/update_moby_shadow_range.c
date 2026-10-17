@@ -4,7 +4,7 @@
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float D_001CAA80[] NOT_SDA;
-extern int FUN_001efa68(void *, void *, int, int, int);
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern char coll_output[] __asm__("D_00194100");
 extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -34,7 +34,7 @@ void update_moby_shadow_range(char *m) {
     a[1] -= dir[1] * *(float *)(m + 0xC) * 0.000732421875f;
     qcopy(b, a);
     b[2] -= 8.0f;
-    if (FUN_001efa68(a, b, 0x22, 0, 0) != 0) {
+    if (collision_line(a, b, 0x22, 0, 0) != 0) {
         qcopy(a, p);
         hit = coll_output;
         h1 = *(float *)(hit + 0x28);
@@ -44,7 +44,7 @@ void update_moby_shadow_range(char *m) {
         fast_vec_normalize(dir, dir, (a[2] - h1) / -dir[2]);
         add_vector_xyz(b, a, dir);
         h2 = h1;
-        if (FUN_001efa68(a, b, 0x22, 0, 0) != 0) {
+        if (collision_line(a, b, 0x22, 0, 0) != 0) {
             h2 = *(float *)(hit + 0x28);
         }
         *(float *)(m + 0x84) = min_float(h1, h2) - 0.25f;

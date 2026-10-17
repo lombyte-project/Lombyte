@@ -29,8 +29,8 @@ typedef struct {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *func_0020D348_m(int);
 extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void debris302618(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void FUN_L01_002787a0(void *);
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *mk_a(int) __asm__("FUN_0020c4f8");
@@ -55,9 +55,9 @@ void FUN_L06_00309fa8(char *self) {
         char *m;
         FUN_0022da68_c(0, 0, (int)self);
         FUN_L01_002787a0(self);
-        FUN_L00_00263fd8(self, 0x682, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
+        debris302618(self, 0x682, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
                          D_L06_0015F580, D_L06_0015F580);
-        FUN_L00_00263fd8(self, 0x682, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
+        debris302618(self, 0x682, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
                          D_L06_0015F580, D_L06_0015F580);
         m = mk_a(0x681);
         if (m != 0) {

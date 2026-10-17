@@ -428,13 +428,13 @@ void FUN_L14_002d67e8(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
 
 extern int D_L14_0015F70C;
-extern void FUN_L00_0025d808(int a, char *pos, char *b, char *c, int d, float f);
+extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 
 extern float D_L14_00161A30 __attribute__((sda));
 void FUN_L14_002d7198(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int idx = *(int *)(data + 0x60);
-    FUN_L00_0025d808(*(int *)((idx << 5) + D_L14_0015F70C + 0x10), &moby->pos, data + 0x64,
+    sample_path(*(int *)((idx << 5) + D_L14_0015F70C + 0x10), &moby->pos, data + 0x64,
                      data + 0x68, 0, D_L14_00161A30 * frame_time);
 }
 /* Draws the racer's two glow quads, at its lamp (0xE0) and its tail (0x200), turned to face the camera. */
@@ -587,10 +587,11 @@ void FUN_L14_002d7490(struct Moby *m) {
 }
 #include "qzero.h"
 extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002de2b8");
-extern void FUN_L00_00260738(void *, void *, void *, void *);
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern float D_L14_00161AFC __attribute__((sda));
 
-void FUN_L14_002de1f8(struct Moby *moby) {
+void platform_update(struct Moby *moby) __asm__("FUN_L14_002de1f8");
+void platform_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     void *rotation;
     u128 old_rotation;
@@ -610,7 +611,7 @@ void FUN_L14_002de1f8(struct Moby *moby) {
         rotation = &moby->rot;
     }
     FUN_L14_002de2b8_call(moby, D_L14_00161AFC, 8.0f);
-    FUN_L00_00260738(data + 0x20, D_L14_0015F580, &old_rotation, rotation);
+    update_entity_matrix(data + 0x20, D_L14_0015F580, &old_rotation, rotation);
 }
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002ACCC0.c (func_L14_002DF6B8) */
 #include "eetypes.h"
@@ -621,7 +622,7 @@ typedef int u128_s07 __attribute__((mode(TI)));
 extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
+extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -691,9 +692,9 @@ void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
         }
     }
 
-    FUN_L00_0025b8c0((float *)(moby + 0xE0), (float *)(data + 0x60), v[0], 0.005f, 0.2f, 0.0f);
-    FUN_L00_0025b8c0((float *)(moby + 0xE4), (float *)(data + 0x64), v[1], 0.005f, 0.2f, 0.0f);
-    FUN_L00_0025b8c0((float *)(moby + 0xE8), (float *)(data + 0x68), v[2], 0.005f, 0.2f, 0.0f);
+    vendor_spring((float *)(moby + 0xE0), (float *)(data + 0x60), v[0], 0.005f, 0.2f, 0.0f);
+    vendor_spring((float *)(moby + 0xE4), (float *)(data + 0x64), v[1], 0.005f, 0.2f, 0.0f);
+    vendor_spring((float *)(moby + 0xE8), (float *)(data + 0x68), v[2], 0.005f, 0.2f, 0.0f);
 
     normalize_vector_xyz(moby + 0xE0, moby + 0xE0, 1.0f);
     *(u128_s07 *)d = 0;
@@ -734,8 +735,8 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int D_L14_0015F7EC __asm__("D_L14_0015F70C");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
-extern int FUN_L00_0028d8c0(void *, int);
-extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 extern void FUN_L14_002df080(char *);
 extern void FUN_L14_002df138(char *);
 extern void FUN_L14_002dfc58(char *);
@@ -773,8 +774,8 @@ void FUN_L14_002dee28(struct Moby *moby) {
             if (16.0f < absolute_float(x->motion.pos.f[1] - moby->pos.y))
                 goto end;
         }
-        if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x204)) == 0) {
-            *(int *)(data + 0x204) = FUN_L00_0028dc90(6, 4, (int)moby, 0xD3);
+        if (voice_is_playing(moby, *(int *)(data + 0x204)) == 0) {
+            *(int *)(data + 0x204) = trooper_play_sound(6, 4, (int)moby, 0xD3);
         }
         FUN_L14_002dfc58(moby);
         v[0] = fast_cos(moby->rot.z) * 3.125f;

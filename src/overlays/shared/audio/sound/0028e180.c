@@ -10,17 +10,17 @@
 extern char D_L00_00166DC0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int D_L00_0015F5C4;
 extern char D_L00_001BD880[];
 extern int D_L00_0015F630 __asm__("D_L00_0015F630");
-extern int FUN_L00_002644e0(int);
+extern int dismiss_help_message_304098(int) __asm__("FUN_L00_002644e0");
 extern unsigned char D_0013CAE4[];
 extern unsigned char D_0013D388[];
 extern unsigned char D_0013DD4B[];
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
-extern void FUN_L00_00298840(int);
+extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_00299460(int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_light_flare() __asm__("func_0022DF40");
@@ -49,7 +49,7 @@ void FUN_L00_0028e180(unsigned char *m) {
                 *(int *)(m + 0x90) = v | (v << 8) | (v << 16);
             }
             enqueue_callback_list_1_alt(render_environment_mapped_object, m);
-            if (FUN_001f9b80(m + 0x10, D_L00_00166DC0) < 32.0f) {
+            if (vector_distance(m + 0x10, D_L00_00166DC0) < 32.0f) {
                 enqueue_callback_list_1_alt(draw_light_flare, m);
             }
         }
@@ -62,7 +62,7 @@ void FUN_L00_0028e180(unsigned char *m) {
             }
         } else {
             q = (unsigned char *)(&hero.motion.pos);
-            if (FUN_001f9b80(p, q) < 6.0f) {
+            if (vector_distance(p, q) < 6.0f) {
                 transform_vector_by_basis(tmp, D_L00_001BD880 + ship_index[0] * 16, m + 0xC0);
                 add_vector_xyz(tmp, tmp, p);
                 if (FUN_001f9b48(tmp, q) < 4.0f) {
@@ -79,9 +79,9 @@ void FUN_L00_0028e180(unsigned char *m) {
                 if (current_level_index == 10 && hero.vehicle_mode == 1) {
                     m[0x20] = 0x2A;
                     *(unsigned short *)(m + 0x34) |= 0x41;
-                    FUN_L00_00298840(9);
+                    start_scene(9);
                 } else {
-                    FUN_L00_002644e0(2);
+                    dismiss_help_message_304098(2);
                     D_L00_0015F630 = 1;
                     ship_index[1] = 0;
                 }
@@ -91,16 +91,16 @@ void FUN_L00_0028e180(unsigned char *m) {
         if (D_L00_0015F5C4 != 2) {
             q = D_0013D388;
             if (q[0x48] == 0 && D_0013D4DC[0] != 0) {
-                FUN_L00_00298840(4);
+                start_scene(4);
                 q[0x48] = 1;
             } else if ((q = D_0013D388)[0x49] == 0 && D_0013DD4B[0] != 0) {
-                FUN_L00_00298840(5);
+                start_scene(5);
                 q[0x49] = 1;
             } else if ((q = D_0013D388)[0x4A] == 0 && D_0013DD4B[0] != 0) {
                 FUN_L00_00299460(0xB);
                 q[0x4A] = 1;
             } else if ((q = D_0013D388)[0x4B] == 0 && D_0013DD4B[0] != 0) {
-                FUN_L00_00298840(6);
+                start_scene(6);
                 q[0x4B] = 1;
             } else {
                 m[0x20] = 0;

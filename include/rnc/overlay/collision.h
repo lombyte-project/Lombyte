@@ -6,14 +6,14 @@
 
 /*
  * Collision hit record filled by the overlay collision queries
- * (FUN_L00_001f0d60, FUN_L00_001f19a0, coll_line_fix) at D_L00_00173E40
+ * (coll_sphere, rig_probe, coll_line_fix) at D_L00_00173E40
  * (per-level copies at other addresses). FUN_L00_002133a8 copies +0x30 into
  * hero.motion.pos, +0x40 into hero.unk200, +0x20 into hero.unk210 and +0x18 into
  * hero.coll_hit_moby.
  */
 typedef struct {
     u8 pad0[0x18];
-    s32 moby;                      /* 0x18: passed to FUN_002141f8 (reads moby+0x34, moby+0x78); 0 when no moby was hit */
+    s32 moby;                      /* 0x18: passed to suck_get_aim_height (reads moby+0x34, moby+0x78); 0 when no moby was hit */
     s32 unk1C;                     /* 0x1C: > 0 gates copying point and the normal into the hero (shared/gameplay/hero/air_accel.c) */
     union {
         OvlQuad q;

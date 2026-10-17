@@ -40,16 +40,16 @@ extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int vector_distance_xy() __asm__("FUN_001f9b80");
 extern int set_identity_matrix() __asm__("FUN_001f9fc8");
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
-extern int FUN_L00_002502f0();
+extern int set_moby_color() __asm__("FUN_L00_002502f0");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_dec_timer(s32 *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 float absolute_float(float input) __asm__("func_001F99C0");
-void FUN_L00_002502a0(int idx);
-void FUN_L01_0026e090(int i, int v);
-void FUN_L01_0026e0e0(int list, int state);
+void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
+void event_2E39E0(int i, int v) __asm__("FUN_L01_0026e090");
+void set_group_state_30ca80(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern char D_0013E633_30D370[] __asm__("D_0013F350") NOT_SDA;
 extern void func_L01_0026F090_30D370(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern void func_L01_0026F040_30D370(int, int) __asm__("FUN_L01_0026e090");
@@ -63,7 +63,8 @@ extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void func_L00_002512D8_30D370(int) __asm__("FUN_L00_002502a0");
 extern int func_001F9938_30D370(void *) __asm__("FUN_001f9770");
 
-void FUN_L07_0030bf90(unsigned char *moby)
+void timed_activation_pads_update(unsigned char *moby) __asm__("FUN_L07_0030bf90");
+void timed_activation_pads_update(unsigned char *moby)
 {
     char *d;
     char *p;
@@ -215,7 +216,8 @@ extern void subtract_vector_xyz_310df0(void *, void *, void *) __asm__("FUN_001f
 extern void play_sound_310df0(s32, s32, void *) __asm__("FUN_0022da68");
 
 
-void FUN_L07_00310df0(u8 *moby)
+void door_update(u8 *moby) __asm__("FUN_L07_00310df0");
+void door_update(u8 *moby)
 {
     u8 *data = *(u8 **)(moby + 0x78);
     u8 *other;
@@ -345,7 +347,8 @@ extern void play_sound_31aee0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void update_moby_motion_31aee0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern char *level_mobys __asm__("D_L07_0015FFD8");
 
-void FUN_L07_0031aee0(u8 *moby)
+void bridge_update(u8 *moby) __asm__("FUN_L07_0031aee0");
+void bridge_update(u8 *moby)
 {
     u8 *data = *(u8 **)(moby + 0x78);
     u8 *other;

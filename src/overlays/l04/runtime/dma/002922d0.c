@@ -47,7 +47,7 @@ extern void stub_printf() __asm__("FUN_001e93b0");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
 extern float animation_end(int, int) __asm__("FUN_L04_00241910");
-extern float FUN_001f96b0(float) __asm__("FUN_L04_001f1978");
+extern float scale_time(float) __asm__("FUN_L04_001f1978");
 extern void transform_scaled_vertex_batch(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
 extern void get_joint_matrix(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -76,7 +76,7 @@ void FUN_L04_002923b8(struct Moby *moby, LegRig *rig) {
                     ? rig->anims[i]->phase[0].to[j] - rig->anims[i]->phase[0].from[j]
                     : rig->anims[i]->phase[0].to[j] + rig->anims[i]->len - rig->anims[i]->phase[0].from[j];
             }
-            rig->anims[i]->rate = rig->anims[i]->unk4 / FUN_001f96b0(rig->anims[i]->len + rig->anims[i]->len);
+            rig->anims[i]->rate = rig->anims[i]->unk4 / scale_time(rig->anims[i]->len + rig->anims[i]->len);
         }
     }
     joints[0] = rig->legs[0].joint;

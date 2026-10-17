@@ -25,8 +25,8 @@ extern void FUN_L00_001eb078(const char *, ...);
 extern void FUN_L00_001ff040(void *, s32, s32);
 extern struct Moby *FUN_L00_00250768(void);
 extern void FUN_L00_00250480(struct Moby *);
-extern void FUN_L00_00250df8(struct Moby *);
-extern f32 FUN_L00_00200240(s32);
+extern void allocate_voice_for_target_entry_cf(struct Moby *) __asm__("FUN_L00_00250df8");
+extern f32 convert_integer_to_float_2059d8(s32) __asm__("FUN_L00_00200240");
 extern s32 fptodp(f32) __asm__("FUN_00120478");
 
 void FUN_L00_002648e0(void) {
@@ -69,7 +69,7 @@ void FUN_L00_002648e0(void) {
                 update(moby);
             }
             if (!(((volatile struct Moby *)moby)->flags & 4)) {
-                FUN_L00_00250df8(moby);
+                allocate_voice_for_target_entry_cf(moby);
             }
             current_ticks = *(volatile s32 *)0x10000000;
             entry = (s32 *)0x11004000 + (moby->class_slot * 2);
@@ -104,7 +104,7 @@ void FUN_L00_002648e0(void) {
                     count = profile->count;
                     scaled_ticks = (current_ticks << 5) / count;
                     profile_label = D_L00_00197A00[i];
-                    share = FUN_L00_00200240(current_ticks) / total_ticks;
+                    share = convert_integer_to_float_2059d8(current_ticks) / total_ticks;
                     share = share * 100.0f;
                     FUN_L00_001eb078(D_L00_001E90C8, profile_label, profile->count,
                                    scaled_ticks, fptodp(share));

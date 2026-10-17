@@ -650,7 +650,7 @@ segments:
           - [0x2ac6c, textbin, text_gap_00129b60_post_sdk_worker]
           - [0x2ac70, c, sdk/library/_dispRefImage]
           - [0x2ad80, c, sdk/library/disprefimagefield]
-          - [0x2af38, c, assembly/sdk/dma/dma_ref_image]
+          - [0x2af38, c, sdk/dma/dma_ref_image]
           - [0x2b0a4, textbin, text_gap_00129fb8_post_sdk_worker]
           - [0x2b0a8, c, sdk/dma/receive_data_from_ipu]
           - [0x2b12c, textbin, text_gap_0012a128_post_sdk_worker]
