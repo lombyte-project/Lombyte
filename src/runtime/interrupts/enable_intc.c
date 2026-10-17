@@ -7,7 +7,7 @@ extern s32 EnableInterrupts();
 
 s32 enable_intc(s32 arg0) __asm__("FUN_00119090");
 
-s32 enable_intc(s32 arg0) {
+s32 enable_intc(s32 cause_index) {
     u32 status;
     s32 result;
 
@@ -16,7 +16,7 @@ s32 enable_intc(s32 arg0) {
     if (status != 0) {
         DIntr();
     }
-    result = _EnableIntc(arg0);
+    result = _EnableIntc(cause_index);
     CpuSync();
     if (status != 0) {
         EnableInterrupts();
