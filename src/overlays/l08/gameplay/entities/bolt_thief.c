@@ -1897,7 +1897,7 @@ typedef struct Hero Hero;
 typedef int u128_4BE8_p __attribute__((mode(TI)));
 
 typedef struct {
-    float v0_p[4];               /* 0x00 */
+    float anchor[4];               /* 0x00 */
     float v10[4];              /* 0x10 */
     float v20[4];              /* 0x20 */
     float v30[4];              /* 0x30 */
@@ -1928,12 +1928,12 @@ typedef struct {
 } BoltSource_4BE8;
 
 typedef struct {
-    u16 unk0_p;
+    u16 unk0;
     u16 bolts;
 } BoltSourceStats_4BE8;
 
 typedef struct {
-    unsigned char pad_p[0x454];
+    unsigned char pad[0x454];
     unsigned char killed[1];
 } KillFlags_4BE8;
 
@@ -2043,7 +2043,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
             D_L08_00161CD4_gp = D_L08_0015F5CC;
         }
         moby->flags &= ~0x100;
-        qcopy(vars->v0_p, &moby->pos);
+        qcopy(vars->anchor, &moby->pos);
         if (vars->s6E == 0) {
             fast_vec_normalize_c2(point, &moby->rot_row2, 0.1f);
             add_vector_xyz(point, point, &moby->pos);
@@ -2051,11 +2051,11 @@ void FUN_L08_002e3870(struct Moby *moby) {
             add_vector_xyz(local, local, &moby->pos);
             if (FUN_001efa68(point, local, 2, 0, 0) != 0) {
                 CollPos_4BE8 *hit = (CollPos_4BE8 *)D_L08_00174660;
-                qcopy(vars->v0_p, hit->pos);
+                qcopy(vars->anchor, hit->pos);
                 linked = ((int *)hit)[-2];
                 fast_vec_normalize_c2(direction, hit->n, 1.0f);
             } else {
-                qcopy(vars->v0_p, &moby->pos);
+                qcopy(vars->anchor, &moby->pos);
                 clear_u64_value(direction);
                 direction[2] = 1.0f;
             }
@@ -2066,7 +2066,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         FUN_L08_002e4e90_c((char *)moby, (float *)&moby->pos, (float *)&moby->rot);
         if (linked != 0 && FUN_L00_002603d0(linked) != 0) {
             vars->u7C.i = linked;
-            FUN_L00_00260668(moby, linked, vars->v0_p, vars->v10, vars->v20, vars->v30);
+            FUN_L00_00260668(moby, linked, vars->anchor, vars->v10, vars->v20, vars->v30);
         }
         moby->state = 1;
         vars->s6C = 0;
@@ -2078,7 +2078,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
         if (vars->u7C.i != 0) {
-            FUN_L00_002604f0(moby, vars->u7C.i, vars->v20, vars->v30, vars->v0_p, vars->v10);
+            FUN_L00_002604f0(moby, vars->u7C.i, vars->v20, vars->v30, vars->anchor, vars->v10);
             if ((signed char)((struct Moby *)vars->u7C.i)->state < 0) {
                 vars = (Vars_4BE8 *)moby->pvars;
                 clear_u64_value(vars->v40);
@@ -2348,7 +2348,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
                 vars = (Vars_4BE8 *)moby->pvars;
                 n = truncate_float_to_s32_c5(FUN_001f96b0(D_L08_00161CD0_gp + random_float_between_c5(-10.0f, 10.0f)));
                 inv = 1.0f / convert_integer_to_float(n);
-                qcopy(vars->v0_p, coll->pos);
+                qcopy(vars->anchor, coll->pos);
                 matrix_to_euler(&moby->rot_row0, &moby->rot);
                 fast_vec_normalize_c2(direction, coll->n, 1.0f);
                 FUN_L08_002e4db8_c((char *)moby, direction);
@@ -2364,7 +2364,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
                         add_vector_xyz(vars->v40, vars->v40, platform + 0x10);
                         fast_vec_scale_c(point, platform + 0x10, convert_integer_to_float(n));
                         add_vector_xyz(vars->v20, vars->v20, point);
-                        add_vector_xyz(vars->v0_p, vars->v0_p, point);
+                        add_vector_xyz(vars->anchor, vars->anchor, point);
                     }
                 }
                 vars->v40[2] += frame_time_sq * 10.8f * (float)(n >> 1);
@@ -2408,7 +2408,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
                 if (vars->u7C.i != 0) {
                     Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
-                    FUN_L00_00260668(moby, vars->u7C.i, vars->v0_p, vars->v10, vars->v20, vars->v30);
+                    FUN_L00_00260668(moby, vars->u7C.i, vars->anchor, vars->v10, vars->v20, vars->v30);
                 } else {
                     qcopy(&moby->pos, vars->v20);
                     qcopy(&moby->rot, vars->v30);
@@ -2431,7 +2431,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
                     add_vector_xyz(vars->v40, vars->v40, platform + 0x10);
                     fast_vec_scale_c(direction, platform + 0x10, convert_integer_to_float(n));
                     add_vector_xyz(vars->v20, vars->v20, direction);
-                    add_vector_xyz(vars->v0_p, vars->v0_p, direction);
+                    add_vector_xyz(vars->anchor, vars->anchor, direction);
                 }
             }
             vars->v40[2] += frame_time_sq * 10.8f * (float)(n >> 1);

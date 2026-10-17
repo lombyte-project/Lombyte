@@ -744,10 +744,9 @@ void FUN_L13_00307b10(struct Moby *moby) {
 /* Update function of moby class 1262 (blarg space commando): turn, walk its path, shoot, die. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00309330), where it is exact; names translated to the US level program. */
 
-typedef u32 VecQuad_p __attribute__((mode(TI), aligned(16)));
 
 typedef struct {
-    u8 pad0_p[0x18];
+    u8 pad0[0x18];
     u8 unk18;
     u8 unk19;
     s16 oclass;
@@ -755,7 +754,7 @@ typedef struct {
 } Shot_309330;
 
 typedef struct {
-    s32 unk0_p;
+    s32 unk0;
     f32 unk4;
     f32 unk8;
     f32 unkC;
@@ -765,7 +764,7 @@ typedef struct {
 } Ctl_309330;
 
 typedef struct {
-    u8 pad0_p[0x20];
+    u8 pad0[0x20];
     f32 unk20;
     s16 unk24;
     u8 pad26[2];
@@ -861,7 +860,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
         FUN_L01_0026d930(&vars->ctl);
         vars->ctl.unk8 = 2.0f;
         vars->ctl.unkC = 0.5f;
-        vars->ctl.unk0_p = func_001FA898_r(D_L13_00161E58_gp * 716.8f);
+        vars->ctl.unk0 = func_001FA898_r(D_L13_00161E58_gp * 716.8f);
         vars->ctl.unk4 = D_L13_00161E58_gp * 0.7f;
         vars->ctl.unk24 = D_L13_00161E78_gp * frame_time * random_float_between(0.95f, 1.05f);
         qcopy(&vars->home, &moby->pos);

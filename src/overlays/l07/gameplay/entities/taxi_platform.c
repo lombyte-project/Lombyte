@@ -2555,50 +2555,12 @@ found:
 /* Update function of the sharkigator (class 1059): tracks the hero, swims its path, lunges and bites. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003109D0), where it is exact; names translated to the US level program. */
 
-typedef u32 VecQuad_p __attribute__((mode(TI), aligned(16)));
 
-typedef union {
-    VecQuad_p q;
-    f32 f[4];
-    s32 i[4];
-} Vec4_p;
-
-typedef struct {
-    float x;                   /* 0x00 */
-    float y;                   /* 0x04 */
-    float z;                   /* 0x08 */
-    char padC[0x10];
-    unsigned char b1C;         /* 0x1C */
-    unsigned char b1D;         /* 0x1D */
-    short h1E;                 /* 0x1E */
-    char rest[0x1170];
-} Rec_30D8E8_p;
-
-typedef u32 u128_p __attribute__((mode(TI), aligned(16)));
-
-struct WalkerPath_p {
-    s32 count;
-    u8 pad4[0xC];
-    Vec4_p pts[1];
-};
-
-struct WalkerData_p {
-    u8 pad0[0xF0];
-    Vec4_p goal; /* 0xF0 */
-    u8 pad100[0x28];
-    struct WalkerPath_p *path; /* 0x128 */
-    u8 pad12C[8];
-    s32 wander; /* 0x134 */
-    u8 pad138[4];
-    f32 heading; /* 0x13C */
-    f32 turnStep; /* 0x140 */
-};
-
-struct Tgt_3109D0_p {
+struct WalkerTarget {
     float pos[4];
-    u128_p q10;
-    u128_p q20;
-    u128_p q30;
+    u128 q10;
+    u128 q20;
+    u128 q30;
     int moby;
     int kind;
 };
@@ -2643,7 +2605,7 @@ int FUN_L07_0030f4d0_c(void *moby, int id, float scale) __asm__("FUN_L07_0030f4d
 int FUN_L07_0030f540_c(unsigned char *moby, int lower, int upper) __asm__("FUN_L07_0030f540");
 void FUN_L00_002a3ec8_c(void *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount) __asm__("FUN_L00_002a3ec8");
 void FUN_L07_0030e998_c(char *m, char *x, float *hp) __asm__("FUN_L07_0030e998");
-void FUN_L07_0030eee8_c(struct Moby *moby, struct WalkerData_p *data) __asm__("FUN_L07_0030eee8");
+void FUN_L07_0030eee8_c(struct Moby *moby, struct WalkerData *data) __asm__("FUN_L07_0030eee8");
 void FUN_L07_0030f0f8_c(char *a, char *b, float f12, float f13, float f14) __asm__("FUN_L07_0030f0f8");
 void FUN_L07_0030f308_c(char *moby, char *obj, int state, int anim, int seq, int frame, int next, int id, float lo, float hi, float len, float scale, float radius) __asm__("FUN_L07_0030f308");
 extern char D_0013F65C[];
@@ -2654,7 +2616,7 @@ extern void func_L00_002A5158_30D8E8(void *, int, int, float, float, float, floa
 
 void FUN_L07_0030f5f0(unsigned char *moby) {
     char *data;
-    struct Tgt_3109D0_p tgt;
+    struct WalkerTarget tgt;
     float pos[4];
     float off[4];
     float rel[4];
@@ -2742,25 +2704,25 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         if (moby[0x20] == 0xE || moby[0x20] == 0xC) {
             height += height;
         }
-        if (0.5f < vector_distance_xy_alt(moby + 0x10, (Vec4_p *)&D_L07_00173EE0)) {
-            scale = vector_distance_xy_alt(moby + 0x10, (Vec4_p *)&D_L07_00173EE0);
+        if (0.5f < vector_distance_xy_alt(moby + 0x10, (Vec4 *)&D_L07_00173EE0)) {
+            scale = vector_distance_xy_alt(moby + 0x10, (Vec4 *)&D_L07_00173EE0);
             scale += scale;
         } else {
             scale = 1.0f;
         }
         if (D_L07_0015F5CC % 45 == *(short *)(moby + 0xB2) && random_integer_below(2) == 0) {
-            func_L00_002A5158_30D8E8((*(Rec_30D8E8_p * *)&D_L07_001612D0), D_L07_001612D8, 1, F(moby, 0x10), F(moby, 0x14), scale, height);
+            func_L00_002A5158_30D8E8(D_L07_001612D0, D_L07_001612D8, 1, F(moby, 0x10), F(moby, 0x14), scale, height);
         }
         if (D_L07_0015F5CC % ((rand() & 7) + 20) == 0) {
             float size = random_float_between_c2(1.5f, 2.4f);
             pos[0] += random_float_between_c2(-0.15f, 0.15f);
             pos[1] += random_float_between_c2(-0.15f, 0.15f);
-            pos[2] = resolve_camera_surface_height((Vec4_p *)&D_L07_00173EE0, 0);
+            pos[2] = resolve_camera_surface_height((Vec4 *)&D_L07_00173EE0, 0);
             FUN_L00_002715e8(pos, 0, -1, size, 5250.0f);
         }
     }
     if (1.0f <= F(data, 0x14C)) {
-        *(u128_p *)&D_0013F3D0 = *(u128_p *)(moby + 0x10);
+        *(u128 *)&D_0013F3D0 = *(u128 *)(moby + 0x10);
     }
 
     switch (moby[0x20]) {
@@ -2827,7 +2789,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
                 moby[0x20] = 1;
             }
         }
-        FUN_L07_0030eee8_c((struct Moby *)moby, (struct WalkerData_p *)data);
+        FUN_L07_0030eee8_c((struct Moby *)moby, (struct WalkerData *)data);
         if (FUN_L07_0030f1e0_c((char *)moby, data, F(data, 0x13C), 0.209439516f, frame_time_sq * 6.0f,
                               0.52359879f, frame_time_sq * 4.0f, frame_time * 7.0f, frame_time * 3.0f) &&
             wander) {
@@ -2946,7 +2908,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         float seven = 7.0f;
         float pi = 3.14159274f;
         float pi2 = 1.57079637f;
-        FUN_L07_0030eee8_c((struct Moby *)moby, (struct WalkerData_p *)data);
+        FUN_L07_0030eee8_c((struct Moby *)moby, (struct WalkerData *)data);
         FUN_L07_0030f1e0_c((char *)moby, data, F(data, 0x13C), 0.209439516f, frame_time_sq * 6.0f,
                           0.52359879f, frame_time_sq * 4.0f, frame_time * seven, frame_time * 3.0f);
         FUN_L07_0030f0f8_c((char *)moby, data, frame_time_sq * 12.0f, frame_time_sq * 50.0f, frame_time * seven);
@@ -3012,7 +2974,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
                 moby[0x20] = 7;
             }
         }
-        FUN_L07_0030eee8_c((struct Moby *)moby, (struct WalkerData_p *)data);
+        FUN_L07_0030eee8_c((struct Moby *)moby, (struct WalkerData *)data);
         if (FUN_L07_0030f1e0_c((char *)moby, data, F(data, 0x13C), 0.34906584f, frame_time_sq * 3.0f,
                               1.04719758f, frame_time_sq * 9.0f, frame_time, frame_time) &&
             wander) {

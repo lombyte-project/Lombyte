@@ -218,18 +218,7 @@ unsigned char *FUN_L14_002ffaf8(unsigned char *owner, char *pos) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B2A28), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    char _pad00_p[0x10];
-    unsigned char nframes;
-} AnimSeq_2b17d8;
-
-typedef int u128_96938_p __attribute__((mode(TI)));
-
-struct Manip;
-
-typedef struct MobyClass MobyClass;
-
-typedef struct {
-    float a_p;
+    float a;
     float b;
     float c;
     float d;
@@ -241,94 +230,6 @@ typedef struct {
     float e;
     int f;
 } Ray;
-
-typedef struct {
-    f32 x_p;
-    f32 y;
-    f32 z;
-    f32 w;
-} Vec4f_00AC8;
-
-struct MobyClass_00AC8_p {
-    u8 pad_0[0xC];
-    u8 seq_count; /* number of entries in seqs[] (menu previews clamp the sequence to it) */
-    u8 pad_D[3];
-    u32 collision; /* collision data; copied into struct Moby.collision when a_p moby is (re)classed */
-    u8 pad_14[0x8];
-    void *retarget_table; /* retarget table: word table, indexed id * 4 + 4 (0024eec0) */
-    struct GifEntry *gifs; /* patched by patch_moby_gifs */
-    f32 scale; /* default draw scale: copied into struct Moby.scale, divides it */
-    s32 sound_defs; /* sound definitions, 0x20 bytes each */
-    void **callbacks; /* function-pointer table, called with the moby */
-    u8 pad_30[0x14];
-    u16 flags; /* initial struct Moby.flags */
-    s16 type; /* class type; 5 (a_p creature) is tested by targeting code */
-    struct AnimSeq_2b17d8 *seqs[1]; /* animation sequences, indexed by struct Moby.seq */
-};
-
-struct Moby_00AC8_p {
-    Vec4f_00AC8 bsphere;
-    Vec4f_00AC8 pos;
-    u8 state; /* >= 0xFE: dead, waiting to respawn */
-    u8 group; /* linked group: index into the level moby-list table D_Lxx_001ABCC0 (0xFF: none) */
-    u8 class_slot; /* class slot: pclass = D_L00_00197300[class_slot] (crate_update) */
-    u8 alpha; /* 0x80 by default; 0x40 for the smoke trail FUN_L09_00307ba8 spawns */
-    struct MobyClass_00AC8_p *pclass;
-    struct Moby_00AC8_p *next;
-    f32 scale; /* draw scale (FUN_L01_002fa068 halves it, FUN_L00_00215ef8 divides by it) */
-    u8 update_dist; /* update distance; 0xFF (always) or 0x7F for beams, set by spawners */
-    u8 visible; /* drawn last frame; set to 1 by spawners */
-    s16 draw_dist; /* draw distance; 0xFF (0x7F for beams), set by spawners */
-    u16 flags;
-    u16 occlusion; /* occlusion bits; 0x7F80 set by spawners */
-    u64 spawn_frame; /* frame count at which it may respawn */
-    Vec4f_00AC8 rot; /* z: yaw (FUN_L00_00266448 compares it with atan2 to the hero) */
-    u8 frame; /* animation frame */
-    u8 prev_frame; /* frame index in prev_seq */
-    u8 seq; /* animation sequence id */
-    u8 prev_seq;
-    f32 anim_time;
-    f32 anim_speed;
-    u8 pad5C[8];
-    struct Manip *manips;
-    void *cur_frame_data;
-    void *prev_frame_data;
-    u8 anim_flags;
-    u8 unk71; /* set to 0xFF when a_p moby changes class */
-    u8 unk72;
-    u8 unk73;
-    void (*update)(struct Moby_00AC8_p *moby);
-    u8 *pvars;
-    u8 unk7C;
-    u8 sound_slot; /* 0x7D: D_0013E550 slot of its looping sound, 0xFF: none (FUN_L00_00232670) */
-    u8 anim_trigger_count;
-    u8 shadow_range; /* shadow range in units of 1024; 0x17 from FUN_L09_002c5990 near D_L09_00166F40 */
-    u8 pad80[6];
-    s16 unk86;
-    u8 pad88[8];
-    s32 glow_color; /* glow colour (class header + 0x40) */
-    u32 collision; /* collision data, from the class header (MobyClass.collision) */
-    s32 collision_disable; /* per-primitive collision disable bits; 1 while a_p carrier holds the moby (FUN_L00_002c7a58) */
-    u8 pad9C[8];
-    u8 hit_slot; /* hit-message slot (0xFF: none) */
-    u8 padA5;
-    s16 oclass;
-    u8 padA8[8];
-    u8 mission; /* 0xB0: index into the level's D_0014C050 row (0xFF: not spawned) */
-    u8 padB1;
-    u16 save_id; /* index into the level collected[]/killed[] tables and save bits D_0014C190[level][id >> 5] */
-    s16 unkB4;
-    u8 padB6[2];
-    void *parent; /* 0xB8: spawner (bolt source record); its byte 0xB1 is a_p per-level id (FUN_L00_002a6b70) */
-    u8 command; /* external command byte */
-    u8 padBD[3];
-    Vec4f_00AC8 rot_row0; /* 0xC0: rows of the matrix built from rot (FUN_001fa030) */
-    Vec4f_00AC8 rot_row1;
-    Vec4f_00AC8 rot_row2;
-    u8 padF0[0x10];
-};
-
-typedef struct Moby_00AC8_p Moby_00AC8_p;
 
 extern char D_001413F4[];
 extern char D_L14_001FBB60[];
@@ -365,7 +266,7 @@ extern u8 D_L14_00174560[];
 extern void DebugPrint(char *, ...);
 extern void FUN_L00_0024f7c8(char *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_L00_0025e450_c(struct Moby_00AC8_p *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void FUN_L00_0025e450_c(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263ac8(float, char *, int, char *);
 extern void add_vector_xyz_c3(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -374,7 +275,7 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
-float FUN_L14_002b35d8_c(char *moby, int flag, float x_p) __asm__("FUN_L14_002b35d8");
+float FUN_L14_002b35d8_c(char *moby, int flag, float angle) __asm__("FUN_L14_002b35d8");
 int FUN_L14_002b3418_c(char *moby) __asm__("FUN_L14_002b3418");
 int FUN_L14_002b3920_c(int index) __asm__("FUN_L14_002b3920");
 int FUN_L14_002d9870_c(int i) __asm__("FUN_L14_002d9870");
@@ -388,7 +289,7 @@ void FUN_L14_002b3318_c(char *moby) __asm__("FUN_L14_002b3318");
 void FUN_L14_002b3330_c(char *moby) __asm__("FUN_L14_002b3330");
 void FUN_L14_002b3358_c(char *moby) __asm__("FUN_L14_002b3358");
 void FUN_L14_002b3578_c(char *moby) __asm__("FUN_L14_002b3578");
-void FUN_L14_002b37b0_c(char *a_p, float x_p) __asm__("FUN_L14_002b37b0");
+void FUN_L14_002b37b0_c(char *moby, float angle) __asm__("FUN_L14_002b37b0");
 void FUN_L14_002b3890_c(int idx) __asm__("FUN_L14_002b3890");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
@@ -405,7 +306,7 @@ void FUN_L14_002b17d8(char *moby) {
     float offset[4];
     float hit[4];
     Ray ray;
-    int x_p;
+    int status;
 
     data = *(char **)(moby + 0x78);
     owner = 0;
@@ -685,7 +586,7 @@ void FUN_L14_002b17d8(char *moby) {
         ray.flags = 0x10001;
         ray.f = 1;
         ray.e = 1.0f;
-        ray.a_p = fast_cos(*(float *)(moby + 0x48));
+        ray.a = fast_cos(*(float *)(moby + 0x48));
         ray.b = fast_sin(*(float *)(moby + 0x48));
         ray.c = 1.0f;
         ray.d = 5627.9248f;
@@ -739,8 +640,8 @@ void FUN_L14_002b17d8(char *moby) {
     case 12: {
         FUN_L00_0024f7c8(moby, 2, mat);
         FUN_L14_002dea98_c(moby, (char *)mat);
-        x_p = 0;
-        ((void (*)(char *, int *, int))FUN_L14_002e0170_c)(moby, &x_p, 1);
+        status = 0;
+        ((void (*)(char *, int *, int))FUN_L14_002e0170_c)(moby, &status, 1);
         FUN_L00_002e2040(moby);
         call_D678(moby);
         return;

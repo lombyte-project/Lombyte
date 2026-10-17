@@ -1457,14 +1457,14 @@ char *FUN_L08_002daa10(struct Moby *moby) {
 /* Update function of the blarg bomb thrower: hit reactions, then a state machine that walks to its bomb crate, picks up and throws bombs at the hero. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DBF68), where it is exact; names translated to the US level program. */
 
-typedef struct { char pad0_p[0x20]; struct Moby *moby; } Hit_2D5FA8_c;
+typedef struct { char pad0[0x20]; struct Moby *moby; } Hit_2D5FA8_c;
 
-typedef struct { char pad0_p[0x140]; float x, y; char pad148[0x10]; float f158; } Cam_DBF68;
+typedef struct { char pad0[0x140]; float x, y; char pad148[0x10]; float f158; } Cam_DBF68;
 
-typedef struct { char pad0_p[0x40]; struct Moby *target; int r44; } Look_DBF68;
+typedef struct { char pad0[0x40]; struct Moby *target; int r44; } Look_DBF68;
 
 typedef struct {
-    char pad0_p[0x20];
+    char pad0[0x20];
     float health;
     char pad24[5];
     unsigned char b29;
@@ -1507,7 +1507,7 @@ typedef struct {
     char blk160[0x10];
 } Data_DBF68;
 
-typedef struct { char pad0_p[0x140]; float x,y,z,w; } Camera46_c;
+typedef struct { char pad0[0x140]; float x,y,z,w; } Camera46_c;
 
 char *FUN_L08_002d22e0_c(int arg, char *pos, char *vec) __asm__("FUN_L08_002d22e0");
 char *FUN_L08_002daa10_c(struct Moby *moby) __asm__("FUN_L08_002daa10");
