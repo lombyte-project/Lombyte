@@ -364,7 +364,6 @@ extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001f99c0(f32);
 extern f32 D_0015ED60;
 extern f32 D_0015ED68;
-extern f32 D_0015ED6C;
 extern s32 D_L04_00173FF0[] __attribute__((section(".data")));
 
 s32 FUN_L04_00295778(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) {
@@ -506,8 +505,8 @@ s32 FUN_L04_00295778(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32
                 LegRigAnim *anim;
                 f32 rate;
 
-                if (!(rig->speed < D_0015ED6C * 0.19f) || !(min_turn < fast_difference_between_rotations(moby->rot.z, heading)) ||
-                    !(speed < (rate = D_0015ED6C * 0.19f))) {
+                if (!(rig->speed < frame_time * 0.19f) || !(min_turn < fast_difference_between_rotations(moby->rot.z, heading)) ||
+                    !(speed < (rate = frame_time * 0.19f))) {
                     anim = *entry;
                     rate = rig->speed;
                 } else {

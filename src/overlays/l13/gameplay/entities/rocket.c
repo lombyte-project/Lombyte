@@ -340,7 +340,6 @@ extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void set_vector_length_xy_c(void *, void *, f32) __asm__("FUN_001f9c48");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern char D_0013F350[];
 
 void FUN_L13_00306300(struct Moby *moby) {
     extern struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vec_p pos; L13Vec_p pad2; L13Vec_p matrix; } D_L13_00174140;
@@ -366,7 +365,7 @@ void FUN_L13_00306300(struct Moby *moby) {
     set_vector_length_xy_c(&work.velocity, &work.velocity, 1.0f);
     work.velocity.z = 1.0f;
     flags = 0x10001;
-    base = (unsigned char *)((char *)&D_0013F350);
+    base = (unsigned char *)((char *)((char *)&hero));
     if (base[0x1FF6] != 0 && *(float *)(data + 0xC) != 31337.6015625f &&
         fast_vec_dist(&moby->pos, base + 0x80) < 2.0f) {
         fast_vec_normalize_c(data, data, 0.5f);
@@ -375,7 +374,7 @@ void FUN_L13_00306300(struct Moby *moby) {
         *(int *)(data + 0x2C) = 5;
         *(float *)(data + 0xC) = 31337.6015625f;
         for (i = 0; i < 6; i++) {
-            unsigned char *b = (unsigned char *)((char *)&D_0013F350);
+            unsigned char *b = (unsigned char *)((char *)((char *)&hero));
             ent = ((char **)(b + 0x2020))[i];
             if (ent != 0) {
                 int f2 = flags | 1;
@@ -1171,7 +1170,7 @@ extern f32 D_L13_00161E68 __attribute__((sda));
 extern f32 D_L13_00161E6C __attribute__((sda));
 extern s32 *walker_paths_8d10[] __asm__("D_L13_001B07B0");
 extern char D_L13_00160680[] __attribute__((section(".sdata")));
-extern int D_001413D0 __attribute__((section(".data")));
+extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
 extern CollisionHit coll_hit_8d10 __asm__("D_L13_00174140");
 extern void FUN_L13_003094f8(struct Moby *);
 extern f32 random_float_between_8d10(f32, f32) __asm__("FUN_002132a8");
@@ -1284,7 +1283,7 @@ void FUN_L13_00308d10(struct Moby *moby) {
         }
     }
     if (vars->start_frame == 0) {
-        vars->start_frame = D_001413D0;
+        vars->start_frame = (*(int *)&D_001413D0_lui);
     }
     ground = probe_ground_height_8d10(&moby->pos, 0, 0.5f);
     if (ground != 0.0f) {
@@ -2414,7 +2413,7 @@ extern void FUN_0020c828(void *);
 extern void FUN_L13_0030c2b0(void *);
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float D_0015ED70;
-extern int D_001413D0 __attribute__((section(".data")));
+extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
 extern float D_L13_00161F18 __attribute__((sda));
 extern float D_L13_00161F1C __attribute__((sda));
 extern float D_L13_00161F20 __attribute__((sda));
@@ -2536,7 +2535,7 @@ void FUN_L13_0030c3b8(struct Moby *moby) {
     return;
 collision:
     if (moby->command != 1) return;
-    if (FUN_001efa68(&old_pos, &moby->pos, 2, (void *)D_001413D0, 0) == 0) return;
+    if (FUN_001efa68(&old_pos, &moby->pos, 2, (void *)(*(int *)&D_001413D0_lui), 0) == 0) return;
     FUN_L13_0030c2b0(moby);
     FUN_0020c828(moby);
 }

@@ -2245,7 +2245,6 @@ typedef struct {
     unsigned short hC2;
     unsigned int wC4;
 } S_2cdcc0;
-extern char D_0013F350[];
 extern S_2cdcc0 D_00141680_2cdcc0 __asm__("D_00141680");
 extern int D_0015EEA4_2cdcc0 __asm__("D_0015EEA4");
 int FUN_L00_00233e98_2cdcc0(int) __asm__("FUN_L00_00233e98");
@@ -2256,7 +2255,7 @@ int FUN_001f96f8_2cdcc0(int) __asm__("FUN_001f96f8");
 void FUN_001f9a10_2cdcc0(void *, void *, void *) __asm__("FUN_001f9a10");
 unsigned char *FUN_L00_002ce1f0_2cdcc0(unsigned char *, void *) __asm__("FUN_L00_002ce1f0");
 void FUN_L00_002cdcc0(void) {
-    P_2cdcc0 *p = &(*(P_2cdcc0 *)D_0013F350);
+    P_2cdcc0 *p = &(*(P_2cdcc0 *)((char *)&hero));
     S_2cdcc0 *s;
     float d[4] __attribute__((aligned(16)));
     float v[4] __attribute__((aligned(16)));
@@ -2874,7 +2873,7 @@ extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern u8 D_L00_00197BC0[];
 extern struct MobyClass *D_L00_00197300[];
 extern s32 D_0015ED84 __attribute__((section(".sdata")));
-extern s32 D_L00_0015F5CC __attribute__((section(".sdata")));
+extern int D_L00_0015F5CC_macro __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
 extern void *D_001413D0 __attribute__((section(".data")));
 extern s32 D_001413DC __attribute__((section(".data")));
 
@@ -2921,14 +2920,14 @@ void crate_update(struct Moby *moby) {
             pv->below = NULL;
         }
     }
-    pv->frameFC = D_L00_0015F5CC;
+    pv->frameFC = D_L00_0015F5CC_macro;
     coll = &pv->coll;
     if (pv->rider == NULL) {
         coll->flags |= 1;
     } else {
         coll->flags &= ~1;
     }
-    if (pv->frameB4 != D_L00_0015F5CC && moby->state != 0 && (pv->flags & 0xC)) {
+    if (pv->frameB4 != D_L00_0015F5CC_macro && moby->state != 0 && (pv->flags & 0xC)) {
         FUN_L00_002d1428(moby);
     }
     touched = 0;

@@ -139,7 +139,7 @@ typedef struct {
     char p1C[0x28 - 0x1C];
     float f28;
 } G_2d81b8;
-extern int D_L00_00173E40[] __attribute__((section(".data")));
+extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern float D_L00_00173E68_2d81b8 __asm__("D_L00_00173E68") __attribute__((section(".data")));
 extern float frame_time_sq __asm__("D_0015ED70");
 int FUN_001efa68_2d81b8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -160,7 +160,7 @@ void FUN_L00_002d81b8(unsigned char *m) {
         z = b.f[2];
     }
     if (hit) {
-        G_2d81b8 *g = &(*(G_2d81b8 *)D_L00_00173E40);
+        G_2d81b8 *g = &(*(G_2d81b8 *)D_L00_00173E40_lui);
         if (g->o) {
             if (FUN_L00_0025e3b8_2d81b8(g->o)) {
                 *(float *)(m + 0x10) = d->f10 = g->o->x;
@@ -370,7 +370,7 @@ void FUN_L00_002d8908(void) {
     }
 }
 #include "rnc/math/vector.h"
-extern char *D_001413D0 __attribute__((section(".data")));
+extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
 #include "rnc/gameplay/entities/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002D9EA0), where it is exact; names translated to the US level program. */
@@ -993,12 +993,12 @@ void FUN_L00_002d9810(u8 *m) {
 }
 #endif
 int FUN_001efa68(Vec4 *, Vec4 *, int, int, int);
-/* True when coll_line_fix returns 0 for the moby and D_001413D0 positions, both raised by 0.5. */
+/* True when coll_line_fix returns 0 for the moby and (*(char * *)&D_001413D0_lui) positions, both raised by 0.5. */
 int FUN_L00_002d8980(char *a) {
     Vec4 p, t;
     qcopy(&p, a + 0x10);
     p.f[2] += 0.5f;
-    qcopy(&t, D_001413D0 + 0x10);
+    qcopy(&t, (*(char * *)&D_001413D0_lui) + 0x10);
     t.f[2] += 0.5f;
     return FUN_001efa68(&p, &t, 0x12, 0, 0) == 0;
 }
@@ -1410,7 +1410,7 @@ extern f32 square_root_scalar(f32) __asm__("func_001F9988");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int D_L00_00173E40[];
+extern int D_L00_00173E40_lui[];
 extern int collision_segment_hits(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int allocate_voice_for_target_entry_alt(int,int,int) __asm__("FUN_0022da68");
 extern int queue_animation_update_alt(int,int,int,int,int,int,int) __asm__("FUN_001ff308");
@@ -1439,7 +1439,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
 s32 scale_game_frames_alt(s32) __asm__("FUN_001f96f8");
-extern char D_00141680[];
+#include "rnc/gameplay/state/game_globals.h"
 extern char D_0013E550[];
 extern int func_001F9908_r(void *) __asm__("FUN_001f9740");
 extern SuckHero suck_hero __asm__("D_0013F350");
@@ -1498,7 +1498,7 @@ void FUN_L00_002da790(SuckMoby *self) {
             FUN_L00_0020e4c8();
             cannon->sound = allocate_voice_for_target_entry_alt(2,4,(int)self);
             cannon->cooldown = scale_game_frames_alt(10);
-            stats = (SuckStats *)(((char *)&D_00141680));
+            stats = (SuckStats *)(((char *)&item_usage));
             if (stats->count < 65535) stats->count++;
             if (scale_game_frames_alt(D_0015EEA4)/600 > stats->longest)
                 stats->longest = scale_game_frames_alt(D_0015EEA4)/600;
@@ -1589,7 +1589,7 @@ void FUN_L00_002da790(SuckMoby *self) {
             transform_vector(&work.aim.velocity,&work.aim.velocity,&work.aim.inverse);
             add_vector_xyz(&work.aim.end,eye,&work.aim.velocity);
             if(collision_segment_hits(eye,&work.aim.end,0,(int)self,0)) {
-                hit=(SuckHit *)D_L00_00173E40;
+                hit=(SuckHit *)D_L00_00173E40_lui;
                 if(hit->moby && (hit->moby->flags&0x1000)) {
                     cannon->target=hit->moby;
                     cannon->target_timer=scale_game_frames_alt(20);
@@ -1617,7 +1617,7 @@ void FUN_L00_002da790(SuckMoby *self) {
             blend_moby_animation(self,5,0,scale_game_frames_alt(2));
             suck_hero.firing=2;
             cannon->cooldown=scale_game_frames_alt(25);
-            stats=(SuckStats *)(((char *)&D_00141680));
+            stats=(SuckStats *)(((char *)&item_usage));
             if(stats->count<65535) stats->count++;
             if(scale_game_frames_alt(D_0015EEA4)/600>stats->longest)
                 stats->longest=scale_game_frames_alt(D_0015EEA4)/600;
@@ -2291,7 +2291,7 @@ extern unsigned char D_001404FC_2DDEA0[] __asm__("D_001403FC");
 extern char D_0013F450_2DDEA0[] __asm__("D_0013F350");
 extern char D_0013F4D0_2DDEA0[] __asm__("D_0013F3D0");
 extern char D_0013FA90_2DDEA0[] __asm__("D_0013F990");
-extern int D_L00_00173E40[];
+extern int D_L00_00173E40_lui[];
 extern char D_L00_001EA4B0_2DDEA0[] __asm__("D_L00_001EA130");
 extern R_2DDEA0 *func_L00_002DCD40_2DDEA0(struct Moby *) __asm__("FUN_L00_002db890");
 extern float func_L00_001FF860_2DDEA0(float, float) __asm__("FUN_001f9e90");
@@ -2515,10 +2515,10 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             hit_wall = func_L00_001F2BE8_2DDEA0(record->f80, &moby->pos, 1, moby, &work.v[1]);
             hit_wall |= func_L00_001F10E0_2DDEA0(record->f80, &moby->pos, 0, moby);
             if (hit_wall != 0) {
-                qcopy_nc(&moby->pos, &((Coll_2DDEA0 *)D_L00_00173E40)->v30);
-                func_001F9BF0_2DDEA0(&record->v50, &((Coll_2DDEA0 *)D_L00_00173E40)->v20, &moby->pos);
+                qcopy_nc(&moby->pos, &((Coll_2DDEA0 *)D_L00_00173E40_lui)->v30);
+                func_001F9BF0_2DDEA0(&record->v50, &((Coll_2DDEA0 *)D_L00_00173E40_lui)->v20, &moby->pos);
             }
-            if (((Coll_2DDEA0 *)D_L00_00173E40)->hit != 0 && ((Coll_2DDEA0 *)D_L00_00173E40)->hit->oclass == 0) hit_wall = 0;
+            if (((Coll_2DDEA0 *)D_L00_00173E40_lui)->hit != 0 && ((Coll_2DDEA0 *)D_L00_00173E40_lui)->hit->oclass == 0) hit_wall = 0;
             if (record->state == 6) {
                 moby->flags &= 0x7FFF;
                 moby->collision = ((Cls_2DDEA0 *)moby->pclass)->i10;
@@ -2543,17 +2543,17 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             }
             if (hit_wall != 0) {
                 surface = 0;
-                if (((Coll_2DDEA0 *)D_L00_00173E40)->hit != 0 && ((Cls_2DDEA0 *)((Coll_2DDEA0 *)D_L00_00173E40)->hit->pclass) != 0) {
-                    surface = ((Cls_2DDEA0 *)((Coll_2DDEA0 *)D_L00_00173E40)->hit->pclass)->h46;
+                if (((Coll_2DDEA0 *)D_L00_00173E40_lui)->hit != 0 && ((Cls_2DDEA0 *)((Coll_2DDEA0 *)D_L00_00173E40_lui)->hit->pclass) != 0) {
+                    surface = ((Cls_2DDEA0 *)((Coll_2DDEA0 *)D_L00_00173E40_lui)->hit->pclass)->h46;
                 }
-                func_L00_001FF4B0_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173E40)->v40, &((Coll_2DDEA0 *)D_L00_00173E40)->v40, 1.0f);
+                func_L00_001FF4B0_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173E40_lui)->v40, &((Coll_2DDEA0 *)D_L00_00173E40_lui)->v40, 1.0f);
                 if (moby->prev_seq != record->anims[6]) {
                     unsigned char anim = record->anims[6];
                     func_00213DE0_2DDEA0(moby, anim, 0, func_001F9850_2DDEA0(0x14));
                 }
                 moby->collision_disable = record->i88;
                 record->state = 6;
-                if (0.87266463f < func_L00_001FF860_2DDEA0(((Coll_2DDEA0 *)D_L00_00173E40)->v40.z, func_001F9CE8_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173E40)->v40))) {
+                if (0.87266463f < func_L00_001FF860_2DDEA0(((Coll_2DDEA0 *)D_L00_00173E40_lui)->v40.z, func_001F9CE8_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173E40_lui)->v40))) {
                     if (record->h9E >= 0) func_0022ED80_2DDEA0(record->h9E, 0, moby);
                     func_L00_002DDDE8_2DDEA0(moby, record, 1);
                     return 0;
@@ -2563,7 +2563,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                     func_L00_002DDDE8_2DDEA0(moby, record, 1);
                 }
                 qzero(&work.v[1]);
-                work.v[1].z = ((Coll_2DDEA0 *)D_L00_00173E40)->v40.z;
+                work.v[1].z = ((Coll_2DDEA0 *)D_L00_00173E40_lui)->v40.z;
                 func_L00_001FF610_2DDEA0(&record->vel, &record->vel, &work.v[1]);
             }
             if (func_001F9908_2DDEA0(&record->i94) != 0) {

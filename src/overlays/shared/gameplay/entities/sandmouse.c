@@ -729,7 +729,7 @@ void FUN_L01_0030ded0(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_0030df40.s", FUN_L01_0030df40);
 #else
 extern u8 D_0013D4C5;
-extern u8 D_0015EDB0;
+#include "rnc/gameplay/state/options.h"
 extern char D_0013E550[];
 extern char D_L01_001BB6B0[];
 extern s32 D_0014C190[][64];
@@ -796,7 +796,7 @@ void FUN_L01_0030df40(struct Moby *m) {
             ((struct Moby *)(D_L01_0015FFD8_b618 + HOVER_I(0x48) * 0x100))->collision = 0;
     }
     if (m->state >= 3) {
-        if (D_0015EDB0 != 0) {
+        if (big_head_cheat_enabled != 0) {
             if (*(u8 *)(p + 0x91) == 0) attach_manipulator(m, 5, p + 0x90);
             HOVER_F(0xb8) = HOVER_F(0xb4) = HOVER_F(0xb0) = 2.1f;
         } else if (*(u8 *)(p + 0x91) != 0) detach_manipulator(m, p + 0x90);
@@ -1354,7 +1354,6 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
-extern char D_0013F350[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern int D_0015EE84_c __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern Path_316730 *D_L01_001B0C30_316730[] __asm__("D_L01_001B0930");
@@ -1386,14 +1385,14 @@ void FUN_L01_00315358(Cam_316730 *cam) {
         Path_316730 *path;
         float dist;
 
-        segment = ((Hero *)(((char *)&D_0013F350)))->unk564;
-        fraction = ((Hero *)(((char *)&D_0013F350)))->unk568;
+        segment = ((Hero *)(((char *)((char *)&hero))))->unk564;
+        fraction = ((Hero *)(((char *)((char *)&hero))))->unk568;
         progress->t = fraction;
         progress->idx = segment;
         FUN_L00_0025d808(D_L01_001B0C30_316730[path_index], camera_goal, &progress->idx, &progress->t, 1.0f, 0);
         qcopy(follow->pos, camera_goal);
         path = D_L01_001B0C30_316730[path_index];
-        dist = path->nodes[segment].w * (fraction / ((Path_316730 *)((Hero *)(((char *)&D_0013F350)))->unk560)->nodes[segment].w);
+        dist = path->nodes[segment].w * (fraction / ((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560)->nodes[segment].w);
         subtract_vector_xyz(delta, &path->nodes[segment + 1], &path->nodes[segment]);
         normalize_vector_xyz(look_target, delta, dist);
         add_vector_xyz(rail_point, &path->nodes[segment], look_target);
@@ -1425,11 +1424,11 @@ void FUN_L01_00315358(Cam_316730 *cam) {
             range_start = func_001FA898_r(pathB->nodes[prev].w);
             range_end = func_001FA898_r(pathB->nodes[i].w);
             if (range_end < range_start) {
-                if (((Hero *)(((char *)&D_0013F350)))->unk564 >= range_start || ((Hero *)(((char *)&D_0013F350)))->unk564 < range_end) {
+                if (((Hero *)(((char *)((char *)&hero))))->unk564 >= range_start || ((Hero *)(((char *)((char *)&hero))))->unk564 < range_end) {
                     break;
                 }
             } else {
-                if (((Hero *)(((char *)&D_0013F350)))->unk564 >= range_start && ((Hero *)(((char *)&D_0013F350)))->unk564 < range_end) {
+                if (((Hero *)(((char *)((char *)&hero))))->unk564 >= range_start && ((Hero *)(((char *)((char *)&hero))))->unk564 < range_end) {
                     break;
                 }
             }
@@ -1444,14 +1443,14 @@ void FUN_L01_00315358(Cam_316730 *cam) {
             lead = pathB->nodes[j].x;
         }
         base = func_001FA898_r(pathB->nodes[j].w);
-        count = ((Hero *)(((char *)&D_0013F350)))->unk564 - base;
+        count = ((Hero *)(((char *)((char *)&hero))))->unk564 - base;
         if (count < 0) {
             count += pathD->n;
         }
         for (i = 0; i < count; i++) {
             sum += pathD->nodes[(base + i) % pathD->n].w;
         }
-        sum += ((Hero *)(((char *)&D_0013F350)))->unk568;
+        sum += ((Hero *)(((char *)((char *)&hero))))->unk568;
         dist = camera_length * (sum / hero_length);
         node = func_001FA898_r(pathC->nodes[j].w);
         node_fraction = 0.0f;
@@ -1479,7 +1478,7 @@ void FUN_L01_00315358(Cam_316730 *cam) {
         if (params->f24 < 0) {
             float lead_offset;
 
-            FUN_L00_0025df68(path, ((Hero *)(((char *)&D_0013F350)))->motion.pos.f, path_point, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
+            FUN_L00_0025df68(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, path_point, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
             if (params->f36 == 1) {
                 lead_offset = -(params->f38 * 4.0f);
             } else {
@@ -1491,9 +1490,9 @@ void FUN_L01_00315358(Cam_316730 *cam) {
             int hero_segment;
             float hero_fraction;
 
-            hero_segment = ((Hero *)(((char *)&D_0013F350)))->unk564;
-            hero_fraction = ((Hero *)(((char *)&D_0013F350)))->unk568;
-            FUN_L00_0025d808((Path_316730 *)((Hero *)(((char *)&D_0013F350)))->unk560, path_point, &hero_segment, &hero_fraction, params->f38, 1);
+            hero_segment = ((Hero *)(((char *)((char *)&hero))))->unk564;
+            hero_fraction = ((Hero *)(((char *)((char *)&hero))))->unk568;
+            FUN_L00_0025d808((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, path_point, &hero_segment, &hero_fraction, params->f38, 1);
             FUN_L00_0025df68(path, path_point, camera_goal, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
         }
         cam->pos[0] = cam_interp_values(cam->pos[0], camera_goal[0], &data->vel[0], rate, 0.175f, 0.0f);
@@ -1503,21 +1502,21 @@ void FUN_L01_00315358(Cam_316730 *cam) {
     if (params->f24 < 0) {
         Path_316730 *path = D_L01_001B0C30_316730[params->f20];
 
-        FUN_L00_0025df68(path, ((Hero *)(((char *)&D_0013F350)))->motion.pos.f, look_target, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
+        FUN_L00_0025df68(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, look_target, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
         if (D_0015EE84_c == 0xE && params->f30 == 0) {
             FUN_L00_0025d808(path, delta, &segment, &fraction, lead, 0);
         } else {
             FUN_L00_0025d808(path, delta, &segment, &fraction, lead, 1);
         }
         subtract_vector_xyz(delta, delta, look_target);
-        add_vector_xyz(look_target, ((Hero *)(((char *)&D_0013F350)))->motion.pos.f, delta);
+        add_vector_xyz(look_target, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, delta);
     } else {
         int hero_segment;
         float hero_fraction;
 
-        hero_segment = ((Hero *)(((char *)&D_0013F350)))->unk564;
-        hero_fraction = ((Hero *)(((char *)&D_0013F350)))->unk568;
-        FUN_L00_0025d808((Path_316730 *)((Hero *)(((char *)&D_0013F350)))->unk560, look_target, &hero_segment, &hero_fraction, lead, 1);
+        hero_segment = ((Hero *)(((char *)((char *)&hero))))->unk564;
+        hero_fraction = ((Hero *)(((char *)((char *)&hero))))->unk568;
+        FUN_L00_0025d808((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->unk560, look_target, &hero_segment, &hero_fraction, lead, 1);
     }
     normalize_vector_xyz(look_offset, D_L01_001672B0, follow->f4C);
     add_vector_xyz(path_point, look_offset, look_target);

@@ -546,7 +546,6 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 s32 FUN_001efa68(void *, void *, s32, s32, s32);
 void FUN_L16_0020ffb0(void);
 extern char D_0013F430[] __attribute__((section(".sdata")));
-extern char D_0013F350[];
 
 void FUN_L16_00211098(void) {
     V previous;
@@ -617,7 +616,7 @@ void FUN_L16_00211098(void) {
             char *hit = D_L16_00174258[0];
 
             if (!hit || *(short *)(hit + 0xA6) == 0x1F6 || *(short *)(hit + 0xA6) == 0x59F) {
-                player = (L16MovementPlayer *)(((char *)&D_0013F350));
+                player = (L16MovementPlayer *)(((char *)((char *)&hero)));
                 if (!player->unconstrained) {
                     float length;
                     float limit;
@@ -715,7 +714,7 @@ void FUN_L16_00211098(void) {
         if (motion_player->slope > 0.5f) motion_player->slope = 0.5f;
         else if (motion_player->slope < -0.5f) motion_player->slope = -0.5f;
     }
-    cap_player = (L16MovementPlayer *)(((char *)&D_0013F350));
+    cap_player = (L16MovementPlayer *)(((char *)((char *)&hero)));
     magnitude = frame_time * 52.0f;
     if (magnitude < cap_player->speed) {
         scale_vector_xyz(cap_player->external, cap_player->external, magnitude / cap_player->speed);

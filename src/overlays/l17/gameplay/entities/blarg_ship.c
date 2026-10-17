@@ -38,7 +38,7 @@ extern void FUN_L06_00239528(void);
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 extern char D_00141D54[];
 extern char D_00141D7C[];
-extern unsigned char D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 extern int func_001F9908_i(int *) __asm__("FUN_001f9740");
 
 void FUN_L17_002f26d0(struct Moby *moby) {
@@ -204,7 +204,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
             *(int *)(d + 0x2C) = 0;
         }
         if (*(int *)(d + 0x58) != 0xFF &&
-            D_0014C050[*(int *)(d + 0x58) + (current_level_index << 4)] == 0xFF) {
+            visited52[*(int *)(d + 0x58) + (current_level_index << 4)] == 0xFF) {
             *(unsigned char *)(d + 0x4C) = 1;
         }
         if (*(unsigned char *)(d + 0x4C) == 0 &&

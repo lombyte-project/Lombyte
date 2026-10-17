@@ -475,7 +475,7 @@ extern u8 item_defs[] __asm__("D_L00_00179AC0") NOT_SDA;
 #define D_L00_001C40BE ((u16 *)((u8 *)D_L00_001C40B0 + 0xE))
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern int D_0013E520[];
-extern u8 D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 extern const char D_L00_0015EFE0[] __attribute__((sda));
 extern const char D_L00_0015EFF0[];
 extern const char D_L00_0015EFF8[];
@@ -742,7 +742,7 @@ void FUN_L00_001f4598(void) {
                 if ((D_0013C940.buttons.w.pressed & 0x20) != 0) {
                     index = g_debug_menu.segment_index;
                     player_setting =
-                        (u8 *)(g_debug_menu.segment_index + D_0015ED84 * 0x10 + D_0014C050);
+                        (u8 *)(g_debug_menu.segment_index + D_0015ED84 * 0x10 + visited52);
                     new_count = 0;
                     if (*player_setting == 0)
                         new_count = 255;
@@ -1102,7 +1102,7 @@ extern int fptodp(float) __asm__("FUN_00120478");
 extern int print_debug_text_centered(int,int,int,char*) __asm__("FUN_001f0c50");
 extern char D_L00_0015F0F0[];
 extern s32 sprintf(char *, const char *, ...);
-extern u8 D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 extern u8 D_L00_0015F444;
 extern u8 D_L00_0015F445;
 extern u8 D_L00_0015F446;
@@ -1174,7 +1174,7 @@ void FUN_L00_001f58e0(void) {
         print_debug_text(0xB0, 0xD6, 0x8000C0C0, D_L00_0015F0E8);
         {
             int mission = debug_menu60.mission;
-            sprintf(buf, D_L00_0015F0F0, mission, (D_0014C050)[mission + D_0015ED84 * stride]);
+            sprintf(buf, D_L00_0015F0F0, mission, (visited52)[mission + D_0015ED84 * stride]);
         }
         print_debug_text(0x108, 0xD6, 0x80F0F0F0, buf);
         if (debug_menu60.group == 1) {

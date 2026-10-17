@@ -784,10 +784,10 @@ skip:
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0021D6B8.c: func_L06_00239CD0), where it is exact; names translated to the US level program. */
 
-extern unsigned char D_0013E533[];
+#include "rnc/data_labels.h"
 
 void FUN_L06_00239528(void) {
-    switch (D_0013E533[0x2EC1]) {
+    switch (((unsigned char *)&D_0013E533)[0x2EC1]) {
     case 0:
         hero_set_state(HERO_STATE_IDLE, 1);
         break;

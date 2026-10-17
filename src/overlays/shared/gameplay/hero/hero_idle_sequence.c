@@ -486,7 +486,7 @@ void FUN_L00_002059d8(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_002064C0), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013D4D5[];
-extern unsigned char D_0013E533[];
+#include "rnc/data_labels.h"
 extern void FUN_L00_00235dc0(void);
 extern void FUN_L00_0023a218(void);
 extern void FUN_L00_0023a2d0(void);
@@ -496,7 +496,7 @@ s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
 void FUN_L00_00205ea8(void) {
     struct Hero *g;
     if (D_0013D4D5[6] == 0) {
-        *(int *)(D_0013E533 + 0x2E65) = 0;
+        *(int *)(((unsigned char *)&D_0013E533) + 0x2E65) = 0;
         return;
     }
     g = &hero;
@@ -2050,11 +2050,11 @@ f32 FUN_L00_00208f20(f32 a, f32 b, f32 c, f32 d) {
 
 extern float FUN_L00_00200228(void *, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char D_0013E533[];
+#include "rnc/data_labels.h"
 
 float FUN_L00_00209018(float *a, int n) {
     char buf[16] __attribute__((aligned(16)));
-    char *d = (char *)D_0013E533 + 0xE1D;
+    char *d = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     int i = truncate_float_to_s32(*(float *)(d + 0xAA8));
     int m = n - 1;
     int p = (i + m) % n;
@@ -2565,7 +2565,7 @@ extern int FUN_L00_0025e3b8(void *);
 extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") __attribute__((section(".data")));
 
 void FUN_L00_0020a318(void) {
-    char *g = (char *)D_0013E533 + 0xE1D;
+    char *g = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     char *p;
     char *p2;
     char *h;
@@ -2601,9 +2601,9 @@ void FUN_L00_0020a318(void) {
     p2 = D_L00_0017A680_d;
     *(float *)(p2 + 0x6D4) = s2 * 0.05f;
     *(float *)(p2 + 0x6D8) = s2 * 0.3f;
-    h = (char *)D_0013E533 + 0xE9D;
+    h = (char *)((unsigned char *)&D_0013E533) + 0xE9D;
     f = fast_vec_dist(h, collision_hit_point);
-    g2 = (char *)D_0013E533 + 0xE1D;
+    g2 = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     f = f - *(float *)(g2 + 0x234);
     f = (1.29999995f - f) / 1.29999995f;
     f = f * 1.25f;

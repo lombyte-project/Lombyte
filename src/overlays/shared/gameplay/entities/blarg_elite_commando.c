@@ -176,7 +176,7 @@ extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern unsigned char D_0015EDB0;
+#include "rnc/gameplay/state/options.h"
 extern int D_L16_00161A74 __attribute__((sda));
 extern int D_L16_00161A78 __attribute__((sda));
 extern int D_L16_00161A7C __attribute__((sda));
@@ -225,7 +225,7 @@ void FUN_L16_002d2cf0(char *m) {
     } else {
         qcopy(target, owner + 0x10);
     }
-    if ((&D_0015EDB0)[7])
+    if ((&big_head_cheat_enabled)[7])
         FUN_L00_00263b38(d + 0x130, 2.5f);
     switch (((unsigned char *)m)[0x20]) {
     case 0:
@@ -527,7 +527,6 @@ typedef struct {
 extern char *D_L16_001B0930[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern unsigned char D_0013D408[];
-extern char D_0013F350[];
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern int D_0015EE10 __attribute__((sda));
@@ -623,7 +622,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
             time_scale = frame_time_sq * 20.0f;
             m->flags &= 0xEFFF;
             d->impulse_time = time_scale;
-            if (((L16DamageResident *)D_0013F350)->difficulty == 2) {
+            if (((L16DamageResident *)((char *)&hero))->difficulty == 2) {
                 float impulse = frame_time;
                 m->anim_speed = 0.5f;
                 d->forward_impulse = impulse * 24.0f;
@@ -668,7 +667,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
     range = 255.0f;
     if (d->pursuit_timer == 0)
         range = d->pursuit_range;
-    if (((L16DamageResident *)D_0013F350)->mode == 22) {
+    if (((L16DamageResident *)((char *)&hero))->mode == 22) {
         d->pursuit_mode = 2;
     } else if (d->path_index >= 0 && d->pursuit_timer == 0) {
         char *path = D_L16_001B0930[d->path_index];
@@ -679,7 +678,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
     if (range < vector_distance_xy(&m->pos, d->target))
         d->pursuit_mode = 2;
     if (d->owner == 0)
-        d->owner = ((L16DamageResident *)D_0013F350)->owner;
+        d->owner = ((L16DamageResident *)((char *)&hero))->owner;
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5188), where it is exact; names translated to the US level program. */
 

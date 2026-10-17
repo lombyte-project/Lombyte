@@ -1228,7 +1228,6 @@ typedef struct {
     int fFC;
 } Data_2E51E8;
 
-extern Moby *D_L12_0015FFD8;
 extern char *D_L12_001B0930[];
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations_c2(f32, f32) __asm__("func_001FA580");
@@ -1269,7 +1268,7 @@ void FUN_L12_002e3ed8(Moby *moby) {
     data = (*(Data_2E51E8 **)&moby->pvars);
     qcopy(oldPos, (*(float (*)[4])&moby->pos));
     qcopy(oldRot, (*(float (*)[4])&moby->rot));
-    if (moby->state != 0 && data->fFC != -1 && (signed char)D_L12_0015FFD8[data->fFC].state >= 0) {
+    if (moby->state != 0 && data->fFC != -1 && (signed char)(*(Moby * *)&D_L12_0015FFD8_p)[data->fFC].state >= 0) {
         FUN_L12_002e3948_c((char *)moby);
         return;
     }
@@ -1455,7 +1454,7 @@ void FUN_L12_002e3ed8(Moby *moby) {
         }
         break;
     case 9: {
-        Moby *o = (Moby *)((char *)D_L12_0015FFD8 + (data->fF0 << 8));
+        Moby *o = (Moby *)((char *)(*(Moby * *)&D_L12_0015FFD8_p) + (data->fF0 << 8));
         qcopy(angles, (*(float (*)[4])&moby->pos));
         angles[2] = (*(float (*)[4])&o->pos)[2];
         clear_u64_value_c2(goal);
@@ -2358,7 +2357,7 @@ extern int D_L12_00161F20 __attribute__((section(".sdata")));
 extern int D_L12_001619A0 __attribute__((sda));
 typedef struct { char pad[0x25c]; struct Moby *moby; int count; } Tracking_e9f68;
 extern Tracking_e9f68 D_L12_00167100;
-extern unsigned char D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 #include "rnc/audio/voice_pool.h"
 extern unsigned char D_0013E550[];
 extern unsigned char D_0013D4CB __attribute__((section(".data")));
@@ -2419,7 +2418,7 @@ void FUN_L12_002e9f68(struct Moby *moby) {
 check_mode:
         if (index == 0) goto update_state;
     }
-    if (D_0014C050[moby->mission + current_level_index * 16] == 255) {
+    if (visited52[moby->mission + current_level_index * 16] == 255) {
         if (*(struct Moby **)(data + 0xac)) {
             mark_moby_for_removal(*(struct Moby **)(data + 0xac));
             *(struct Moby **)(data + 0xac) = 0;

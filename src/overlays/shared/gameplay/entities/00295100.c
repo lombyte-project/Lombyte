@@ -831,11 +831,11 @@ void FUN_L00_00299560(s32 i) {
     }
     FUN_L00_002995d0(a, b, game_language);
 }
-extern s32 movie_sector __asm__("D_L00_00161048") __attribute__((section(".sdata")));
-extern s32 movie_size __asm__("D_L00_0016104C") __attribute__((section(".sdata")));
-extern s32 movie_language __asm__("D_L00_00161050") __attribute__((section(".sdata")));
-extern s32 movie_buffer __asm__("D_L00_00161054") __attribute__((section(".sdata")));
-extern s32 movie_image_data __asm__("D_L00_00161058") __attribute__((section(".sdata")));
+extern int D_L00_00161048_macro __asm__("D_L00_00161048") __attribute__((section(".sdata")));
+extern int D_L00_0016104C_macro __asm__("D_L00_0016104C") __attribute__((section(".sdata")));
+extern s32 D_L00_00161048, D_L00_0016104C, D_L00_00161050_macro __asm__("D_L00_00161050") __attribute__((section(".sdata")));
+extern s32 D_L00_00161054_macro __asm__("D_L00_00161054") __attribute__((section(".sdata")));
+extern s32 D_L00_00161058_macro __asm__("D_L00_00161058") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F40C_macro __asm__("D_L00_0015F40C") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") __attribute__((section(".sdata")));
 extern s32 D_L00_00173E04_lui __asm__("D_L00_00173E04") __attribute__((section(".data")));
@@ -862,18 +862,18 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     flush_cache(0);
     sound_stop_all_sounds();
     music_stop();
-    movie_sector = sector;
-    movie_size = size;
-    movie_language = language;
+    D_L00_00161048_macro = sector;
+    D_L00_0016104C_macro = size;
+    (*(s32 *)&D_L00_00161050_macro) = language;
     D_L00_0015F5D8 = 1;
     fade_to_black(4);
     FUN_L00_002039a0();
     D_L00_0015F5C4_macro = 1;
-    movie_buffer = D_L00_00173E04_lui;
-    movie_image_data = D_L00_0015F40C_macro;
+    D_L00_00161054_macro = D_L00_00173E04_lui;
+    D_L00_00161058_macro = D_L00_0015F40C_macro;
     large_count = D_0015ED80 != 0 ? 0xE : 0xD;
     small_count = D_0015ED80 != 0 ? 0xE : 0x11;
-    source = movie_image_data;
+    source = D_L00_00161058_macro;
     gs_address = gs_layout_macro[4];
     i = 0;
     while (i < large_count) {

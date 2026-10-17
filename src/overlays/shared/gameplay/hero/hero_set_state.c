@@ -591,7 +591,7 @@ extern char D_L00_0017BF60_e[] __asm__("D_L00_0017BF60");
 extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
 extern T2C_222B80 attack_records[] __asm__("D_L00_0017BC28");
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
-extern char D_00141680[];
+#include "rnc/gameplay/state/game_globals.h"
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L00_0017BDF0[][25];
 extern float FUN_001f9b48(void *, void *);
@@ -1300,7 +1300,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0xD;
         p->unk2284 = 7;
         {
-            char *h = ((char *)&D_00141680);
+            char *h = ((char *)&item_usage);
             if (*(unsigned short *)(h + 0x60) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x60) = *(unsigned short *)(h + 0x60) + 1;
             }
@@ -1348,7 +1348,7 @@ int hero_set_state(int a, int b) {
         p->state.control_mode = 0xE;
         p->unk2284 = 7;
         {
-            char *h = ((char *)&D_00141680);
+            char *h = ((char *)&item_usage);
             if (*(unsigned short *)(h + 0x60) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x60) = *(unsigned short *)(h + 0x60) + 1;
             }
@@ -2214,7 +2214,7 @@ int hero_set_state(int a, int b) {
             }
             h[1].level_mask =
                 h[1].level_mask | (1 << current_level_index) | 0x80000000;
-            h2 = D_00141680;
+            h2 = item_usage;
             if (*(unsigned short *)(h2 + 0x128) <= 0xFFFE) {
                 *(unsigned short *)(h2 + 0x128) = *(unsigned short *)(h2 + 0x128) + 1;
             }
@@ -2251,7 +2251,7 @@ int hero_set_state(int a, int b) {
             break;
         }
         case 0x13: {
-            char *h = ((char *)&D_00141680);
+            char *h = ((char *)&item_usage);
             struct Hero *q;
             T2C_222B80 *e;
             int k;

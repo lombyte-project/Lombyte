@@ -16,14 +16,14 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C2A20), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013A4E0[];
-extern unsigned char D_0013E533[];
+#include "rnc/data_labels.h"
 extern void FUN_L00_002c1778_u(void *) __asm__("FUN_L00_002c1778");
 
 /* Runs FUN_L00_002c1778 when the moby data word 4 is set, else sets byte 0xBC from a mask test. */
 void FUN_L00_002c1718(char *m) {
     if (*(int *)(*(char **)(m + 0x78) + 4) != 0) {
         FUN_L00_002c1778_u(m);
-    } else if (*(int *)(D_0013A4E0 + 0x2600) & *(int *)(D_0013E533 + 0x1EBD)) {
+    } else if (*(int *)(D_0013A4E0 + 0x2600) & *(int *)(((unsigned char *)&D_0013E533) + 0x1EBD)) {
         m[0xBC] = 1;
     } else {
         m[0xBC] = 0;
@@ -1981,7 +1981,7 @@ extern float FUN_002000e8_2c4380(float, float) __asm__("FUN_001fa580");
 extern void FUN_L00_0025f800(void *, void *);
 
 void FUN_L00_002c4380(char *moby) {
-    int active = D_0013E533[6];
+    int active = ((unsigned char *)&D_0013E533)[6];
     char *vars = *(char **)(moby + 0x78);
     char *target;
     float v[4] __attribute__((aligned(16)));

@@ -1760,7 +1760,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern int truncate_float_to_s32(float);
-extern short D_0014C050 __attribute__((section(".data")));
+extern unsigned char visited52_lui[] __asm__("D_0014C050") __attribute__((section(".data")));
 extern void FUN_L16_002e3770(void *, int);
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
@@ -1772,7 +1772,7 @@ void FUN_L16_002cf198(struct Moby *m) {
     case 0:
         (*(float *)((char *)(d) + (0x68))) = random_angle_radians();
         (*(float *)((char *)(d) + (0x30))) = 0.001f;
-        if ((*(unsigned char *)((char *)(((char *)&D_0014C050) + (current_level_index << 4)) +
+        if ((*(unsigned char *)((char *)(((char *)&(*(short *)&visited52_lui)) + (current_level_index << 4)) +
                                 ((*(unsigned char *)((char *)(m) + (0xB0)))))) == 255 &&
             (*(int *)((char *)(d) + (0x64))) == -1) {
             (*(unsigned char *)((char *)(m) + (0xBC))) = 1;

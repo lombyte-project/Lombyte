@@ -121,7 +121,6 @@ extern void func_L00_0023A788_2B94B0(void) __asm__("FUN_L00_00239df8");
 extern char D_L08_001746D8_2B94B0[] __asm__("D_L08_00174658");
 extern int D_L08_001746D8_2B94B0i __asm__("D_L08_00174658") __attribute__((section(".data")));
 extern char D_L08_00174700_2B94B0[] __asm__("D_L08_00174680");
-extern char D_0013F350[];
 extern s32 D_0013DF38_arr[] __asm__("D_0013DF38");
 
 void FUN_L08_002b82a0(Moby_2B94B0 *m)
@@ -186,12 +185,12 @@ void FUN_L08_002b82a0(Moby_2B94B0 *m)
     case 2:
         hit = 0;
         m->f48 = func_001FA748_2B94B0(m->f48, d->fC);
-        if (((Hero_2B94B0 *)D_0013F350)->f208C == 15) {
-            if (vector_distance(((Hero_2B94B0 *)D_0013F350)->v510, m->pos) < 0.5f) hit = 1;
-            if (vector_distance(((Hero_2B94B0 *)D_0013F350)->v520, m->pos) < 0.5f) hit = 1;
-            if (vector_distance(((Hero_2B94B0 *)D_0013F350)->v530, m->pos) < 0.5f) hit = 1;
-        } else if (vector_distance(m->pos, ((Hero_2B94B0 *)D_0013F350)->pos) < ((Hero_2B94B0 *)D_0013F350)->f2288) {
-            if (absolute_float(m->pos[2] - ((Hero_2B94B0 *)D_0013F350)->pos[2]) < ((Hero_2B94B0 *)D_0013F350)->f228C) hit = 1;
+        if (((Hero_2B94B0 *)((char *)&hero))->f208C == 15) {
+            if (vector_distance(((Hero_2B94B0 *)((char *)&hero))->v510, m->pos) < 0.5f) hit = 1;
+            if (vector_distance(((Hero_2B94B0 *)((char *)&hero))->v520, m->pos) < 0.5f) hit = 1;
+            if (vector_distance(((Hero_2B94B0 *)((char *)&hero))->v530, m->pos) < 0.5f) hit = 1;
+        } else if (vector_distance(m->pos, ((Hero_2B94B0 *)((char *)&hero))->pos) < ((Hero_2B94B0 *)((char *)&hero))->f2288) {
+            if (absolute_float(m->pos[2] - ((Hero_2B94B0 *)((char *)&hero))->pos[2]) < ((Hero_2B94B0 *)((char *)&hero))->f228C) hit = 1;
         }
         if (hit == 0) break;
         if (d->target != 0) d->target->fA = 0;
@@ -1512,7 +1511,6 @@ typedef struct { char pad0_p[0x140]; float x,y,z,w; } Camera46_c;
 
 char *FUN_L08_002d22e0_c(int arg, char *pos, char *vec) __asm__("FUN_L08_002d22e0");
 char *FUN_L08_002daa10_c(struct Moby *moby) __asm__("FUN_L08_002daa10");
-extern Camera46_c D_L08_00167480_p __asm__("D_L08_00167480");
 extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_tan_c2(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos_c4(f32) __asm__("func_001F9DC8");
@@ -1561,12 +1559,12 @@ extern Cam_DBF68 D_L08_00167500_c __asm__("D_L08_00167480");
 void FUN_L08_002dabf0(struct Moby *moby) {
     Data_DBF68 *d = (Data_DBF68 *)moby->pvars;
     Look_DBF68 look;
-    float v50[4];
-    float v60[4];
-    float v70[4];
+    float point[4];
+    float velocity[4];
+    float aim[4];
     int hit;
     float damage;
-    float out;
+    float scratch;
     struct Moby *target;
     struct Moby *old;
 
@@ -1605,7 +1603,7 @@ void FUN_L08_002dabf0(struct Moby *moby) {
                 d->i94 = 9;
                 d->f84 = 0.0005f;
                 d->bAD = 0;
-                base = ((char *)&D_0013F350);
+                base = ((char *)((char *)&hero));
                 FUN_L00_0025c558(moby, d->blk70,
                                   fast_arc_tan_c2(moby->pos.x - *(float *)(base + 0x80),
                                                     moby->pos.y - *(float *)(base + 0x84)),
@@ -1623,7 +1621,7 @@ void FUN_L08_002dabf0(struct Moby *moby) {
             d->f88 = D_L08_0016198C_gp * frame_time;
             d->f8C = D_L08_00161990_gp * frame_time;
             d->bAD = 0;
-            base = ((char *)&D_0013F350);
+            base = ((char *)((char *)&hero));
             FUN_L00_0025c558(moby, d->blk70,
                               fast_arc_tan_c2(moby->pos.x - *(float *)(base + 0x80),
                                                 moby->pos.y - *(float *)(base + 0x84)),
@@ -1745,12 +1743,12 @@ void FUN_L08_002dabf0(struct Moby *moby) {
         break;
     }
     case 4:
-        v50[0] = fast_cos_c4(moby->rot.z) * 2.0f;
-        v50[1] = fast_sin(moby->rot.z) * 2.0f;
-        v50[2] = 0.0f;
-        add_vector_xyz(v50, v50, &d->p120->pos);
-        if (0.2f < vector_distance_xy_alt(&moby->pos, v50)) {
-            FUN_L00_00259028((char *)moby, d->blkD0, v50, (char *)d->v40);
+        point[0] = fast_cos_c4(moby->rot.z) * 2.0f;
+        point[1] = fast_sin(moby->rot.z) * 2.0f;
+        point[2] = 0.0f;
+        add_vector_xyz(point, point, &d->p120->pos);
+        if (0.2f < vector_distance_xy_alt(&moby->pos, point)) {
+            FUN_L00_00259028((char *)moby, d->blkD0, point, (char *)d->v40);
         }
         if (moby->anim_flags & 2) {
             Cam_DBF68 *cam;
@@ -1780,31 +1778,31 @@ void FUN_L08_002dabf0(struct Moby *moby) {
         func_L00_002592B0_x(fast_arc_tan_c2(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                             moby, d->blk12C, 0.02f, 0.3f, 0.2f);
         if (moby->seq == moby->prev_seq && FUN_0020c9e0(moby) == 19.0f) {
-            float len, t;
-            char *p;
-            subtract_vector_xyz(v70, &target->pos, &moby->pos);
-            v70[2] = 0.0f;
-            len = fast_vec_length_c2(v70);
-            t = len / FUN_001f96b0(D_L08_0016197C_gp);
-            len = len - (D_L08_00161988_gp * t + 2.0f);
-            if (10.0f < len) {
-                len = 10.0f;
-            } else if (len < 3.0f) {
-                len = 3.0f;
+            float distance, time;
+            char *next;
+            subtract_vector_xyz(aim, &target->pos, &moby->pos);
+            aim[2] = 0.0f;
+            distance = fast_vec_length_c2(aim);
+            time = distance / FUN_001f96b0(D_L08_0016197C_gp);
+            distance = distance - (D_L08_00161988_gp * time + 2.0f);
+            if (10.0f < distance) {
+                distance = 10.0f;
+            } else if (distance < 3.0f) {
+                distance = 3.0f;
             }
-            FUN_L00_0025f730(v70, len);
-            add_vector_xyz(v70, v70, &moby->pos);
-            func_L00_00250800_2D6C58(moby, 9, v50);
-            subtract_vector_xyz(v60, &target->pos, v50);
-            set_vector_length_xy(v60, v60, t);
-            v60[2] = FUN_L00_0025abf0(v50, v70, &out, t, -(frame_time_sq * 15.0f));
-            p = FUN_L08_002d22e0_c((int)moby, (char *)v50, (char *)v60);
-            d->p124 = (struct Moby *)p;
-            if (p != 0) {
-                char *pd = *(char **)(p + 0x78);
-                *(int *)(pd + 0x20) = scale_game_frames_c2(0xB4);
-                *(short *)(pd + 0xC) = scale_game_frames_c2(10);
-                *(short *)(pd + 0xE) = scale_game_frames_c2(10);
+            FUN_L00_0025f730(aim, distance);
+            add_vector_xyz(aim, aim, &moby->pos);
+            func_L00_00250800_2D6C58(moby, 9, point);
+            subtract_vector_xyz(velocity, &target->pos, point);
+            set_vector_length_xy(velocity, velocity, time);
+            velocity[2] = FUN_L00_0025abf0(point, aim, &scratch, time, -(frame_time_sq * 15.0f));
+            next = FUN_L08_002d22e0_c((int)moby, (char *)point, (char *)velocity);
+            d->p124 = (struct Moby *)next;
+            if (next != 0) {
+                char *next_vars = *(char **)(next + 0x78);
+                *(int *)(next_vars + 0x20) = scale_game_frames_c2(0xB4);
+                *(short *)(next_vars + 0xC) = scale_game_frames_c2(10);
+                *(short *)(next_vars + 0xE) = scale_game_frames_c2(10);
                 d->p124->state = 1;
                 d->p124->command |= 3;
                 d->i128 = scale_game_frames_c2(0xB4);
@@ -2021,7 +2019,7 @@ typedef struct {
 extern float FUN_001f9b80(void *, void *);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_L08_001B0CB0[];
-extern unsigned char D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 extern int D_L08_0015F5CC; /* no foreign declaration */
 extern Route_2dd4f8 *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
 
@@ -2059,7 +2057,7 @@ void FUN_L08_002dc180(struct Moby *moby) {
         y = fast_arc_tan(*(float *)((char *)a + ((n - 2) << 4) + 0x10) - *(float *)(data + 0x60),
                               *(float *)((char *)a + ((n - 2) << 4) + 0x14) - *(float *)(data + 0x64));
         fr = current_level_index << 4;
-        t = D_0014C050;
+        t = visited52;
         *(float *)(data + 0x78) = y;
         *(float *)(data + 0xE4) = 1.0f;
         *(int *)(data + 0x104) = 0;

@@ -1335,7 +1335,7 @@ float FUN_L00_0020f0b8(float *a, float *b) {
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_F7F8;
 
-extern char D_0013E533[] __attribute__((section(".data")));
+extern char D_0013E533_lui[] __asm__("D_0013E533") __attribute__((section(".data")));
 extern float FUN_L00_0020f0b8_c(float *a, float *b) __asm__("FUN_L00_0020f0b8");
 extern short D_L00_0015F694 __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1344,7 +1344,7 @@ extern void copy_matrix3x4_alt() __asm__("FUN_001fa2b8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
-extern char D_0013F350[] __attribute__((section(".data")));
+extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 
 void FUN_L00_0020f160(char *arg) {
     V4_F7F8 vv[4];
@@ -1357,9 +1357,9 @@ void FUN_L00_0020f160(char *arg) {
     float mx;
 
     {
-    char *b = ((char *)&D_0013F350);
-    copy_matrix3x4_alt(((char *)&D_0013F350) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
-    normalize_vector_triplet(((char *)&D_0013F350) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
+    char *b = ((char *)((char *)&hero_lui));
+    copy_matrix3x4_alt(((char *)((char *)&hero_lui)) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
+    normalize_vector_triplet(((char *)((char *)&hero_lui)) + 0x12F0 + *(int *)(b + 0x21B8) * 0x30);
 
     *(int *)(b + 0x21B8) = (*(int *)(b + 0x21B8) + 1) % 16;
     *(int *)(b + 0x21BC) = *(int *)(b + 0x21BC) + 1;
@@ -1373,7 +1373,7 @@ void FUN_L00_0020f160(char *arg) {
     }
 
     {
-    char *b = ((char *)&D_0013F350);
+    char *b = ((char *)((char *)&hero_lui));
     if (*(int *)(b + 0x208C) == 0x16) {
         *(int *)&D_L00_0015F694 = 14;
     } else if (*(int *)(b + 0x2084) == 2) {
@@ -1384,7 +1384,7 @@ void FUN_L00_0020f160(char *arg) {
     }
 
     {
-    char *b = ((char *)&D_0013F350);
+    char *b = ((char *)((char *)&hero_lui));
     if (*(int *)(b + 0x21C0) < *(int *)&D_L00_0015F694) {
         *(int *)(b + 0x21C0) = *(int *)(b + 0x21C0) + 1;
     } else if (*(int *)&D_L00_0015F694 < *(int *)(b + 0x21C0)) {
@@ -1393,7 +1393,7 @@ void FUN_L00_0020f160(char *arg) {
     }
 
     {
-    char *b = ((char *)&D_0013F350);
+    char *b = ((char *)((char *)&hero_lui));
     n = *(int *)(b + 0x21C0);
     if (n < 2) {
         n = 2;
@@ -1407,19 +1407,19 @@ void FUN_L00_0020f160(char *arg) {
     cnt = 0;
 
     for (i = 0; i < n; i++) {
-        char *b = ((char *)&D_0013F350);
+        char *b = ((char *)((char *)&hero_lui));
         int t;
         sums = fa;
         t = i - 15;
         ri = (*(int *)(b + 0x21B8) - t) % 16;
         for (k = 0; k < n; k++) {
             if (i != k) {
-                char *b = ((char *)&D_0013F350);
+                char *b = ((char *)((char *)&hero_lui));
                 int u = k - 15;
                 int rj = (*(int *)(b + 0x21B8) - u) % 16;
                 *(float *)((char *)sums - (-(i * 4))) += FUN_L00_0020f0b8_c(
-                    (float *)(((char *)&D_0013F350) + 0x12F0 + ri * 0x30),
-                    (float *)(((char *)&D_0013F350) + 0x12F0 + rj * 0x30));
+                    (float *)(((char *)((char *)&hero_lui)) + 0x12F0 + ri * 0x30),
+                    (float *)(((char *)((char *)&hero_lui)) + 0x12F0 + rj * 0x30));
             }
         }
     }
@@ -1444,11 +1444,11 @@ void FUN_L00_0020f160(char *arg) {
         }
         acc++;
         {
-        char *b = ((char *)&D_0013F350);
+        char *b = ((char *)((char *)&hero_lui));
         int t = i - 15;
         ri = (*(int *)(b + 0x21B8) - t) % 16;
         for (k = 0; k < 3; k++) {
-            add_vector_xyz(&vv[k], &vv[k], ((char *)&D_0013F350) + 0x12F0 + ri * 0x30 + k * 16);
+            add_vector_xyz(&vv[k], &vv[k], ((char *)((char *)&hero_lui)) + 0x12F0 + ri * 0x30 + k * 16);
         }
         }
     }
@@ -2803,7 +2803,7 @@ void FUN_L00_00211be8(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002123B0), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
+extern char D_0013E533_lui[];
 extern void FUN_001fa050(void *, void *);
 extern void FUN_001fa378(void *, void *, void *);
 extern void FUN_00214598(void *, void *);
@@ -2816,9 +2816,9 @@ void FUN_L00_00211cf8(float x, float y, float z) {
     in[1] = y;
     in[2] = z;
     FUN_001fa050(t, in);
-    FUN_001fa050(u, D_0013E533 + 0xEAD);
+    FUN_001fa050(u, D_0013E533_lui + 0xEAD);
     FUN_001fa378(u, u, t);
-    FUN_00214598(u, D_0013E533 + 0xEAD);
+    FUN_00214598(u, D_0013E533_lui + 0xEAD);
 }
 typedef float V4_211d78[4] __attribute__((aligned(16)));
 void FUN_001f9d20(void *, void *, void *);
@@ -3122,7 +3122,7 @@ typedef union {
     f32 f[4];
 } V;
 extern u8 D_L00_00173E40[] __attribute__((section(".data")));
-extern u8 D_L00_00173E60[] __attribute__((section(".data")));
+extern V D_L00_00173E60_lui __asm__("D_L00_00173E60") __attribute__((section(".data")));
 extern f32 D_L00_00173E68 __attribute__((section(".data")));
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
@@ -3191,7 +3191,7 @@ void FUN_L00_002127b8(void) {
     hero.unk12ED = r;
     hero.ground_type = FUN_001f0b58();
     if (hero.ground_type == 0) {
-        hero.water_surface_z = resolve_camera_surface_height(D_L00_00173E60, &hero.unk280);
+        hero.water_surface_z = resolve_camera_surface_height(((u8 *)&D_L00_00173E60_lui), &hero.unk280);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.unk2F8 <= 0) {
             hero.unk2F8 = 1;
         }
@@ -3391,7 +3391,7 @@ void FUN_L00_00212ff0(void) {
                     globals->motion.pos.f[2] = n;
                     if (lim < n) globals->motion.pos.f[2] = lim;
                 }
-                q = D_0013E533 + 0xEA5;
+                q = D_0013E533_lui + 0xEA5;
                 func_L00_0025C918_2136A8((float *)q, *(float *)(q + 0x250), (float *)(q + 0x27C), frame_scale_sq * 0.057f, frame_scale_sq * 0.3f, D_0015ED6C_c + D_0015ED6C_c);
             }
         } else {
@@ -3406,7 +3406,7 @@ void FUN_L00_00212ff0(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00213970), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
+extern char D_0013E533_lui[];
 extern float FUN_001f9af0(void *);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a68(void *, void *, float);
@@ -3414,7 +3414,7 @@ extern void FUN_001f9bf8(void *, void *, float);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void FUN_L00_002132b8(float a, float b) {
-    char *p = D_0013E533 + 0x173D;
+    char *p = D_0013E533_lui + 0x173D;
     char *q = p - 0x920;
     float v;
     build_spherical_offset(p, *(float *)(q + 0x930), *(float *)(q + 0x938), *(float *)(q + 0x934));
@@ -3757,7 +3757,7 @@ void FUN_L00_00213880(void)
 
 /* Scales four vectors and one float of the hero by s. */
 void FUN_L00_00213de8(float s) {
-    char *p = D_0013E533 + 0xF1D;
+    char *p = D_0013E533_lui + 0xF1D;
     float *f;
 
     FUN_001f9a68(p, p, s);

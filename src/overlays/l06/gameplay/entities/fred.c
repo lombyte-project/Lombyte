@@ -1100,7 +1100,7 @@ void FUN_L06_00301070(struct Moby *m) {
     update_joint_animation_301070(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, m, d->f40, 0);
     update_joint_animation_301070(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, m, d->fC0, 2);
 }
-extern unsigned char D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 extern char *D_L06_0015FFD8_301b90 __asm__("D_L06_0015FFD8");
 extern char *D_L06_001600EC_301b90 __asm__("D_L06_001600EC");
 extern int *D_L06_001B0C30_301b90[] __asm__("D_L06_001B0C30");
@@ -1165,7 +1165,7 @@ void FUN_L06_00301b90(unsigned char *m) {
     float vb[4] __attribute__((aligned(16)));
     switch (m[0x20]) {
     case 0:
-        if (D_0014C050[m[0xB0] + (current_level_index << 4)] != 0) {
+        if (visited52[m[0xB0] + (current_level_index << 4)] != 0) {
             mark_moby_for_removal((struct Obj *)m);
             return;
         }
@@ -1396,7 +1396,7 @@ typedef struct {
     char pad4[0x20];
     int f24;
 } Busy_302578;
-extern unsigned char D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 extern int D_0015EE1D;
 extern int D_0015EE1C;
 extern int D_L06_0015F5C4;
@@ -1477,7 +1477,7 @@ void FUN_L06_00302578(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         D_L06_0015FDF8 = 0;
-        if (*(unsigned char *)(d->fF8 + (current_level_index << 4) + (int)D_0014C050) == 0xFF) {
+        if (*(unsigned char *)(d->fF8 + (current_level_index << 4) + (int)visited52) == 0xFF) {
             FUN_L06_00304028((char *)moby);
         } else {
             D_0013D3AC_302578[5] = 0;
@@ -1708,7 +1708,7 @@ void FUN_L06_00302578(struct Moby *moby) {
 extern int D_0015EE1C;
 extern int D_0015EE1D;
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern unsigned char D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 extern unsigned short D_00141C00 __attribute__((section(".data")));
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
@@ -1717,11 +1717,11 @@ void FUN_L06_00302fd8(char *m) {
     switch (*(int *)(d + 0xBC)) {
     case 0: {
         int idx = current_level_index << 4;
-        int a = *(unsigned char *)(*(int *)(d + 0xF8) + idx + (int)D_0014C050);
+        int a = *(unsigned char *)(*(int *)(d + 0xF8) + idx + (int)visited52);
         if (a != 0xFF) {
             *(int *)(d + 0x9C) = 0;
         } else {
-            int b = *(unsigned char *)(*(int *)(d + 0xFC) + idx + (int)D_0014C050);
+            int b = *(unsigned char *)(*(int *)(d + 0xFC) + idx + (int)visited52);
             if (b == a) {
                 *(int *)(d + 0x9C) = 3;
             } else {

@@ -631,13 +631,12 @@ extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __as
 extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 float absolute_float(float input) __asm__("func_001F99C0");
-extern char D_0013F350[];
 extern char D_0013F3D0[];
 
 /* The caller passes two floats in f12/f13; this routine never reads them. */
 void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
     char *data = *(char **)(moby + 0x78);
-    char *g = (char *)((char *)&D_0013F350);
+    char *g = (char *)((char *)((char *)&hero));
     float v[4];
     float up[4];
     float d[4];
@@ -653,7 +652,7 @@ void FUN_L14_002de2b8(char *moby, f32 unused_arg1, f32 unused_arg2) {
 
     if ((*(char **)(g + 0x2FC) == moby && *(short *)(g + 0x30E) == 0) ||
         (*(char **)(g + 0x4F8) == moby && *(int *)(g + 0x208C) == 3)) {
-        char *p = (char *)((char *)&D_0013F350);
+        char *p = (char *)((char *)((char *)&hero));
         *(char *)(moby + 0xBC) = 1;
         if (absolute_float(*(float *)(p + 0x80) - *(float *)(moby + 0x10)) < 0.1f &&
             absolute_float(*(float *)(p + 0x84) - *(float *)(moby + 0x14)) < 0.1f) {

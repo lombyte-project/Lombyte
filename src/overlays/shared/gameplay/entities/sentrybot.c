@@ -1257,7 +1257,7 @@ extern float D_L15_00161408 __attribute__((sda));
 extern float D_L15_0016140C __attribute__((sda));
 extern char D_001413F4[];
 extern short D_0013F658[];
-extern int D_001413D0 NOT_SDA;
+extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern char D_0013F420[];
 extern char *FUN_L00_0025a420(void *, int, int);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -1458,7 +1458,7 @@ void FUN_L15_0029a570(void *object, int flag) {
         *(short *)(data + 0x158) = 0;
     }
     if (*(int *)(data + 0x110) == 0)
-        *(int *)(data + 0x110) = D_001413D0;
+        *(int *)(data + 0x110) = (*(int *)&D_001413D0_lui);
 }
 #define NOT_SDA
 

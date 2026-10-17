@@ -17,7 +17,7 @@ typedef unsigned int u128_init __attribute__((mode(TI), aligned(16)));
 extern struct Own D_L00_001B71F0;
 extern s32 D_L00_00173E04;
 extern s32 D_L00_00173E08;
-extern u8 D_L00_00173E40[] __attribute__((section(".data")));
+extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern void *D_L00_00197300[];
 extern s32 D_L00_0015F3F8_gp __asm__("D_L00_0015F3F8") __attribute__((sda));
 extern s32 frame_size __asm__("D_0013E504");
@@ -90,7 +90,7 @@ void FUN_L00_00276368(void) {
     s32 id;
     struct Own *owner;
 
-    { s32 *table = (s32 *)D_L00_00173E40; table[4] |= 0x80000000; }
+    { s32 *table = (s32 *)((u8 *)&D_L00_00173E40_lui); table[4] |= 0x80000000; }
     D_L00_001B9CF0.unk124 = 0;
     D_L00_001B9CF0.unkD0 = 0;
     if (D_L00_001B9CF0.state == 10) {
@@ -251,7 +251,7 @@ extern s32 D_00141660[];
 extern s32 D_0015EE78_gp __attribute__((sda));
 extern void *D_L00_00197300[];
 extern u8 D_L00_0017E4D8[] __attribute__((section(".data")));
-extern u8 D_L00_00173E40[] __attribute__((section(".data")));
+extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
 extern void FUN_L00_002a09d8(s32);
 extern void FUN_L00_002a07f8(void) __asm__("FUN_002335d0");
 extern void FUN_L00_002a08c8(void);
@@ -347,7 +347,7 @@ void FUN_L00_00276908(void) {
         }
         D_L00_0015F5D8 = 1;
         {
-            s32 *table = (s32 *)D_L00_00173E40;
+            s32 *table = (s32 *)((u8 *)&D_L00_00173E40_lui);
             table[4] &= 0x7fffffff;
         }
         FUN_L00_002a08c8();

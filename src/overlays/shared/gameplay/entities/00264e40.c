@@ -24,8 +24,8 @@ typedef struct { char *p[7]; short timer; } Slots_265E88;
 
 extern char *FUN_L00_0026b230(void *, void *, unsigned long, float);
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED6C __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
+extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_L02_00174460[];
 extern float FUN_001f96b0(float);
 extern float fast_vec_dist(void *, void *);
@@ -75,16 +75,16 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     } else {
         travel = distance;
     }
-    acceleration = D_0015ED70;
+    acceleration = frame_time_sq_macro;
     advance_accelerated_scalar(&speed, &travel_step, travel, 1.0f, acceleration * 48.0f,
-                  (*(float *)&D_L02_001600D0) * D_0015ED6C);
+                  (*(float *)&D_L02_001600D0) * frame_time_macro);
     ((float (*)(void *, void *, float))fast_vec_normalize)(adjusted, adjusted, travel_step);
     n = (*(int *)&D_L02_001600D8);
     first_count = (*(int *)&D_L02_001600D4);
     if (travel < 4.0f) first_count = 1;
     for (i = 0; i < n + first_count; i++) {
         FUN_L00_00257d78(offset, 0.0f,
-            (((*(float *)&D_L02_001600DC) - (*(float *)&D_L02_001600E0)) * (travel / distance) + (*(float *)&D_L02_001600E0)) * D_0015ED6C);
+            (((*(float *)&D_L02_001600DC) - (*(float *)&D_L02_001600E0)) * (travel / distance) + (*(float *)&D_L02_001600E0)) * frame_time_macro);
         add_vector_xyz(offset, offset, adjusted);
         fast_vec_scale(velocity, adjusted, random_float_between(0.0f, 1.0f));
         add_vector_xyz(velocity, velocity, origin);
@@ -104,7 +104,7 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
         float sp2 = random_float_between(10.0f, 30.0f);
         sp2 = FUN_001f96b0(sp2);
         ((Slots_265E88 *)slots)->timer = truncate_float_to_s32(sp2);
-        FUN_L00_00257d78(offset, 0.0f, D_0015ED6C + D_0015ED6C);
+        FUN_L00_00257d78(offset, 0.0f, frame_time_macro + frame_time_macro);
         fast_vec_scale(velocity, adjusted, random_float_between(0.5f, 0.1f));
         add_vector_xyz(velocity, velocity, offset);
         velocity[3] = 0.0f;

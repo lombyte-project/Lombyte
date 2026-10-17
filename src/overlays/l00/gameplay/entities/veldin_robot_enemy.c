@@ -177,7 +177,7 @@ extern f32 D_L00_00161BE4 __attribute__((sda));
 s32 D_L00_00161BE8 = 3;
 extern f32 D_L00_00161BEC __attribute__((sda));
 extern VendVec D_L00_00166DC0;
-extern s32 D_001413D0 NOT_SDA;
+extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern VendHit D_L00_00173E58;
 extern VendPath *vend_paths[] __asm__("D_L00_001B04B0");
 extern s32 D_L00_0015F580[] MACRO_ADDR;
@@ -368,14 +368,14 @@ void FUN_L00_002e0b88(VendMoby *moby) {
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.5f;
         if (FUN_001efa68(&mtx[3], &probe, 0, moby, &query) != 0 && hit != 0 &&
-            D_L00_00173E58.moby == D_001413D0) {
+            D_L00_00173E58.moby == (*(s32 *)&D_001413D0_lui)) {
             vend_2040(moby);
             moby->state = 6;
             VEND_ANIM(moby, 7, vend_rand(10));
         }
         if (FUN_001efa68(&mtx[3], &dir, 0, moby, &query) != 0) {
             qcopy(&dir, D_L00_00173E58.pos);
-            if (hit != 0 && D_L00_00173E58.moby == D_001413D0) {
+            if (hit != 0 && D_L00_00173E58.moby == (*(s32 *)&D_001413D0_lui)) {
                 vend_2040(moby);
                 moby->state = 6;
                 VEND_ANIM(moby, 7, vend_rand(10));

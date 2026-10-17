@@ -2333,7 +2333,7 @@ extern void spawn_particle_alt_9768(float, void *, void *, int, int, int) __asm_
 extern float D_0015EE70 __asm__("D_0015ED70");
 extern int D_L18_0015F580;
 extern float D_0013F3D0[4];
-extern unsigned char D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 
 extern unsigned char D_L18_001F29A0_9768[] __asm__("D_L18_001F29A0");
 extern unsigned char D_L18_001F29B8_9768[] __asm__("D_L18_001F29B8");
@@ -2347,7 +2347,7 @@ void FUN_L18_002e9768(struct Moby *moby) {
     case 0: {
         if (moby->mission != 0xff) {
             int unkB0 = moby->mission + current_level_index * 16;
-            if (((unsigned char *)((int *)D_0014C050))[unkB0] == 0xff) goto remove;
+            if (((unsigned char *)((int *)visited52))[unkB0] == 0xff) goto remove;
         }
         moby->state = 1;
         if (*(int *)data != 0) *(int *)(*(int *)data) = 3;

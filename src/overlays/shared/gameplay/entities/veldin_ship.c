@@ -1170,7 +1170,7 @@ void FUN_L00_002d2158_c(int collision_arg, Moby_2D3608 *carrier, float *position
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern u8 D_0013E539_lui __asm__("D_0013E539") __attribute__((section(".data")));
 extern char D_0013CAE4[];
-extern char D_00141680[];
+#include "rnc/gameplay/state/game_globals.h"
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 
 void FUN_L00_002d2670(unsigned char *moby) {
@@ -1248,7 +1248,7 @@ L3D34:
         break;
     case 3:
         if (*(char **)(d + 0x50)) {
-            char *stats = ((char *)&D_00141680);
+            char *stats = ((char *)&item_usage);
             if (*(unsigned short *)(stats + 0xC8) <= 0xFFFE) *(unsigned short *)(stats + 0xC8) = *(unsigned short *)(stats + 0xC8) + 1;
             if (scale_game_frames_c2(D_0015EEA4) / 600 > (int)*(unsigned short *)(stats + 0xCA))
                 *(unsigned short *)(stats + 0xCA) = scale_game_frames_c2(D_0015EEA4) / 600;
@@ -1823,7 +1823,6 @@ typedef struct { float x, y, z, w; } Vx __attribute__((aligned(16)));
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED60;
 extern int FUN_001f9770(void *);
 extern int FUN_L00_001fefc8(void *);
 extern int FUN_L00_0023e738(float *, float, float, float, float, float);
@@ -1958,7 +1957,7 @@ void FUN_L00_002d3a10(unsigned char *m) {
             if ((q & (0xC000L << 18)) == (0x8000L << 18)) *(int *)(o + 0x4C) ^= 0x2;
             if (!(*(int *)(o + 0x4C) & 0x2)) {
                 if (*(int *)(o + 0x4C) & 0x8) {
-                    float t = *(float *)(o + 0x60) - *(float *)(o + 0x44) * D_0015ED60;
+                    float t = *(float *)(o + 0x60) - *(float *)(o + 0x44) * frame_scale;
                     *(float *)(o + 0x60) = t;
                     if (t <= *(float *)(o + 0x3C)) {
                         *(float *)(o + 0x60) = *(float *)(o + 0x3C);
@@ -1967,7 +1966,7 @@ void FUN_L00_002d3a10(unsigned char *m) {
                         }
                     }
                 } else {
-                    float t = *(float *)(o + 0x60) + *(float *)(o + 0x40) * D_0015ED60;
+                    float t = *(float *)(o + 0x60) + *(float *)(o + 0x40) * frame_scale;
                     *(float *)(o + 0x60) = t;
                     if (*(float *)(o + 0x38) <= t) {
                         *(float *)(o + 0x60) = *(float *)(o + 0x38);
@@ -2001,7 +2000,7 @@ void FUN_L00_002d3a10(unsigned char *m) {
                 if (*(int *)(o + 0x4C) & 0x80) {
                     float a = convert_integer_to_float_c(o[0x27]) / 100.0f;
                     float b = convert_integer_to_float_c(o[0x29]) / 100.0f;
-                    float t = *(float *)(o + 0x54) - b * D_0015ED60;
+                    float t = *(float *)(o + 0x54) - b * frame_scale;
                     *(float *)(o + 0x54) = t;
                     if (t <= a) {
                         *(float *)(o + 0x54) = a;
@@ -2012,7 +2011,7 @@ void FUN_L00_002d3a10(unsigned char *m) {
                 } else {
                     float a = convert_integer_to_float_c(o[0x26]) / 100.0f;
                     float b = convert_integer_to_float_c(o[0x28]) / 100.0f;
-                    float t = *(float *)(o + 0x54) + b * D_0015ED60;
+                    float t = *(float *)(o + 0x54) + b * frame_scale;
                     *(float *)(o + 0x54) = t;
                     if (a <= t) {
                         *(float *)(o + 0x54) = a;
@@ -2048,7 +2047,7 @@ void FUN_L00_002d3a10(unsigned char *m) {
                 if (*(int *)(o + 0x4C) & 0x800) {
                     float a = convert_integer_to_float_c(o[0x2C]) / 100.0f;
                     float b = convert_integer_to_float_c(o[0x2E]) / 100.0f;
-                    float t = *(float *)(o + 0x58) - b * D_0015ED60;
+                    float t = *(float *)(o + 0x58) - b * frame_scale;
                     *(float *)(o + 0x58) = t;
                     if (t <= a) {
                         *(float *)(o + 0x58) = a;
@@ -2059,7 +2058,7 @@ void FUN_L00_002d3a10(unsigned char *m) {
                 } else {
                     float a = convert_integer_to_float_c(o[0x2B]) / 100.0f;
                     float b = convert_integer_to_float_c(o[0x2D]) / 100.0f;
-                    float t = *(float *)(o + 0x58) + b * D_0015ED60;
+                    float t = *(float *)(o + 0x58) + b * frame_scale;
                     *(float *)(o + 0x58) = t;
                     if (a <= t) {
                         *(float *)(o + 0x58) = a;
@@ -2095,7 +2094,7 @@ void FUN_L00_002d3a10(unsigned char *m) {
                 if (*(int *)(o + 0x4C) & 0x8000) {
                     float a = convert_integer_to_float_c(o[0x31]) / 100.0f;
                     float b = convert_integer_to_float_c(o[0x33]) / 100.0f;
-                    float t = *(float *)(o + 0x5C) - b * D_0015ED60;
+                    float t = *(float *)(o + 0x5C) - b * frame_scale;
                     *(float *)(o + 0x5C) = t;
                     if (t <= a) {
                         *(float *)(o + 0x5C) = a;
@@ -2106,7 +2105,7 @@ void FUN_L00_002d3a10(unsigned char *m) {
                 } else {
                     float a = convert_integer_to_float_c(o[0x30]) / 100.0f;
                     float b = convert_integer_to_float_c(o[0x32]) / 100.0f;
-                    float t = *(float *)(o + 0x5C) + b * D_0015ED60;
+                    float t = *(float *)(o + 0x5C) + b * frame_scale;
                     *(float *)(o + 0x5C) = t;
                     if (a <= t) {
                         *(float *)(o + 0x5C) = a;
@@ -3452,7 +3451,6 @@ extern float D_L00_001E1440_2d73e8[][2] __asm__("D_L00_001E1440");
 extern float D_L00_00161374 __asm__("D_L00_00161374");
 extern float D_L00_00161384 __asm__("D_L00_00161384");
 extern float D_L00_0016138C __asm__("D_L00_0016138C");
-extern float D_0015ED60;
 extern char camera_position[] __asm__("D_L00_00166DC0");
 u64 FUN_001f9298_2d73e8(s32) __asm__("FUN_L00_001f9298");
 void FUN_001ff2a8_2d73e8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -3514,7 +3512,7 @@ void FUN_L00_002d73e8(P *p) {
     for (i = q->start; i < end; i++) {
         speed = D_L00_001D4480[i];
         f = D_L00_001D31C0[i];
-        f -= D_0015ED60 * speed;
+        f -= frame_scale * speed;
         transform = D_L00_001D2860[i] ? negative_transform : positive_transform;
         D_L00_001D31C0[i] = f;
         if (f <= -8.0f)

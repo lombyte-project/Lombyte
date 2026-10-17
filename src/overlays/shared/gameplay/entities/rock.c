@@ -759,13 +759,13 @@ typedef struct {
 
 extern G_q D_L01_0016CCE0_q __asm__("D_L01_0016CCE0");
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
-extern unsigned char D_0015EDB0_s __asm__("D_0015EDB0");
+#include "rnc/gameplay/state/options.h"
 extern unsigned char D_L01_0017C8C0_q[] __asm__("D_L01_0017C8C0") __attribute__((section(".data")));
 extern void attach_manipulator_q(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 extern short D_L01_00161D30 __attribute__((sda));
 void FUN_L01_002ff028(char *a) {
-    if (cutscene_mode == 2 && D_0015EDB0_s != 0) {
+    if (cutscene_mode == 2 && big_head_cheat_enabled != 0) {
         int i;
         for (i = 0; i < D_L01_0016CCE0_q.n; i++) {
             char *moby = D_L01_0016CCE0_q.m[i];

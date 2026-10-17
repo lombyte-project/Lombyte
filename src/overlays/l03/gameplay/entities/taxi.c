@@ -1147,7 +1147,7 @@ typedef struct {
 } G_2da710;
 
 extern int D_L03_0015F5C4;
-extern unsigned char D_0015EDB0;
+#include "rnc/gameplay/state/options.h"
 extern float D_L03_0015F5A0;
 extern G_2da710 D_L03_0016C960;
 extern char D_L03_0017C540[];
@@ -1160,7 +1160,7 @@ void FUN_L03_002da710(struct Moby *m) {
     char *s;
     int i;
 
-    if (D_L03_0015F5C4 == 2 && D_0015EDB0 != 0) {
+    if (D_L03_0015F5C4 == 2 && big_head_cheat_enabled != 0) {
         if (D_L03_0016C960.mode == 2 && D_L03_0016C960.t >= 0x1EA && D_L03_0016C960.t < 0x266) {
             D_L03_0015F5A0 = -0.2f;
         }
@@ -1222,7 +1222,7 @@ extern struct Moby *D_L03_0015FFD8;
 extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
 extern s32 D_L03_001BA720[];
 extern char D_L03_00161BB8[];
-extern u8 D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 extern u8 D_L03_0015FC88[];
 extern L03LevelState D_L03_001BA6D0;
 extern char *D_L03_001600EC;
@@ -1282,7 +1282,7 @@ void FUN_L03_002da870(struct Moby *m) {
             taxi_kill(m);
             return;
         }
-        if (D_0014C050[m->mission + current_level_index * 16] == 0xFF && v->link != -1) {
+        if (visited52[m->mission + current_level_index * 16] == 0xFF && v->link != -1) {
             t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
             if (t->oclass == 0x3F4) {
                 flag = (s32 *)(t->pvars + 0x8C);
@@ -1345,7 +1345,7 @@ void FUN_L03_002da870(struct Moby *m) {
                     do {
                         group = o->mission;
                     } while (0);
-                    if (D_L03_0015FC88[group] != 0xFF && D_0014C050[group + current_level_index * 16] == 0xFF) {
+                    if (D_L03_0015FC88[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
                         /* Fakematch: see above. */
                         do {
                         record:
@@ -1429,7 +1429,7 @@ void FUN_L03_002da870(struct Moby *m) {
         v->pitch = pitch;
         v->yaw = yaw * 0.5f;
     }
-    if (D_0015EDB0)
+    if (big_head_cheat_enabled)
         v->height = 2.75f;
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, v->body, 0);
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, v->head, 1);
@@ -1610,7 +1610,7 @@ extern u8 D_0013D4C2[];
 extern char *D_001413D0_db558[] __asm__("D_001413D0");
 extern struct Moby *D_L03_0015FFD8;
 extern s32 D_L03_0015FFD8_i __asm__("D_L03_0015FFD8");
-extern u8 D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 extern char *D_L03_001600EC;
 extern float frame_scale_sq __asm__("D_0015ED64");
 extern void FUN_L03_002db480(struct Moby *);
@@ -1660,7 +1660,7 @@ void FUN_L03_002db558(struct Moby *m) {
         } else {
             v->turned = 1;
         }
-        if (D_0014C050[m->mission + current_level_index * 16] == 0xFF && v->link != -1) {
+        if (visited52[m->mission + current_level_index * 16] == 0xFF && v->link != -1) {
             t = (struct Moby *)((v->link << 8) + D_L03_0015FFD8_i);
             if (t->oclass == 0x3F4) {
                 *(s32 *)(t->pvars + 0x8C) = 1;
@@ -1685,13 +1685,13 @@ void FUN_L03_002db558(struct Moby *m) {
                 {
                     s32 k = o->mission;
                     u32 u = k & 0xFF;
-                    if (k == 0xFF || (D_L03_0015FC88[u] != 0xFF && D_0014C050[u + current_level_index * 16] == 0xFF)) {
+                    if (k == 0xFF || (D_L03_0015FC88[u] != 0xFF && visited52[u + current_level_index * 16] == 0xFF)) {
                         D_L03_001BB330.collected[(s16)o->save_id] = k + 2;
                     }
                 }
             }
         }
-        if (item_available[2] != 0 && D_0014C050[m->mission + current_level_index * 16] == 0xFF) {
+        if (item_available[2] != 0 && visited52[m->mission + current_level_index * 16] == 0xFF) {
             break;
         }
         if (FUN_L00_00266448(m, (struct TalkState *)&v->talk)) {
@@ -1741,7 +1741,7 @@ void FUN_L03_002db558(struct Moby *m) {
                 do {
                     group = o->mission;
                 } while (0);
-                if (D_L03_0015FC88[group] != 0xFF && D_0014C050[group + current_level_index * 16] == 0xFF) {
+                if (D_L03_0015FC88[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
                 rec2:
                     D_L03_001BB330.collected[(s16)o->save_id] = o->mission + 2;
                 }
@@ -1805,7 +1805,7 @@ void FUN_L03_002db558(struct Moby *m) {
         v->head.pitch = pitch;
         v->body.yaw = v->head.yaw = yaw * 0.5f;
     }
-    if (D_0015EDB0)
+    if (big_head_cheat_enabled)
         v->head.height = 2.75f;
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, &v->head, 1);
     FUN_L00_002628d8(rate * frame_scale_sq, head_rate * frame_scale_sq, m, &v->body, 0);

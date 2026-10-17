@@ -4,14 +4,14 @@
 
 extern u8 *D_L00_0015FFDC;
 extern u8 *D_L00_0015FFE0;
-extern u32 D_L00_0015F5CC;
+#include "rnc/overlay/level_labels.h"
 extern s32 D_L00_0015FFBC;
 void FUN_L00_0024e7a8(void) {
     u8 *p;
     s32 flag = 0;
     D_L00_0015FFBC = 0;
     for (p = D_L00_0015FFDC; p < D_L00_0015FFE0; p += 0x100) {
-        if ((p[0x20] >= 0xFE && D_L00_0015F5CC >= *(u64 *)(p + 0x38)) || flag) {
+        if ((p[0x20] >= 0xFE && (*(u32 *)&D_L00_0015F5CC) >= *(u64 *)(p + 0x38)) || flag) {
             D_L00_0015FFBC++;
             if (p[0x20] == 0xFF)
                 flag = 1;

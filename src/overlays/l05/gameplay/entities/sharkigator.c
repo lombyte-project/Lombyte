@@ -1598,7 +1598,7 @@ extern float func_001F9CE8_3047E8(void *) __asm__("FUN_001f9b20");
 extern void update_joint_animation(void *, void *, int, float, float) __asm__("FUN_L00_002628d8");
 extern Path_3047E8 *D_L05_001B0CB0_3047E8[] __asm__("D_L05_001B0930");
 extern char D_0013F420[];
-extern int D_001413D0[] __attribute__((section(".data")));
+extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
 
 void FUN_L05_00303390(Moby *m) {
     Vec_3047E8 v0;
@@ -1721,13 +1721,13 @@ void FUN_L05_00303390(Moby *m) {
         }
     }
     if (d->target == 0) {
-        d->target = (*(Moby * *)D_001413D0);
+        d->target = (*(Moby * *)D_001413D0_lui);
     }
     d->f2D8 = func_001FA748_3047E8(d->f2D8, D_0015ED6C * 9.424778f);
     m->glow_color = fast_tween_color(D_L05_00161A74, D_L05_00161A78, (func_001F9FA8_3047E8(d->f2D8) + 1.0f) * 0.5f);
     k = m->state;
     if (k < 10) {
-    if (k >= 4 && d->target == (*(Moby * *)D_001413D0)) {
+    if (k >= 4 && d->target == (*(Moby * *)D_001413D0_lui)) {
         float yaw, pitch;
         func_001F9BF0_3047E8(v0, ((float *)&d->target->pos), ((float *)&m->pos));
         yaw = func_001FA790_3047E8(angle_atan2(v0[0], v0[1]), m->rot.z);

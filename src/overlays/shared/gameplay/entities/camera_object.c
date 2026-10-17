@@ -145,7 +145,7 @@ extern float D_L00_00161374_gp __asm__("D_L00_00161374") __attribute__((sda));
 extern float D_L00_00161378 __attribute__((sda));
 extern float D_L00_00161384_gp __asm__("D_L00_00161384") __attribute__((sda));
 extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
-extern float D_0015ED60;
+#include "rnc/globals.h"
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 float FUN_001fa6c0(int);
 void FUN_L00_002a4cd8(unsigned char *p) {
@@ -166,7 +166,7 @@ void FUN_L00_002a4cd8(unsigned char *p) {
         D_L00_0016138C_gp = one / (float)r;
         break;
     case 1:
-        D_L00_00161374_gp -= D_L00_00161378 * D_0015ED60;
+        D_L00_00161374_gp -= D_L00_00161378 * frame_scale;
         if (D_L00_00161374_gp <= -8.0f)
             D_L00_00161374_gp += 8.0f;
         break;

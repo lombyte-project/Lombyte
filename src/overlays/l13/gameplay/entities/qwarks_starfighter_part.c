@@ -493,7 +493,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L13_002e8b58(struct Moby *moby);
 void set_animation_parameter(s32 anim_id, s32 value) __asm__("FUN_001ff570");
-extern unsigned char D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 extern char D_0013F350[];
 extern char D_001516D0[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -524,7 +524,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
     switch (moby->state) {
     case 0: {
         int j;
-        if (moby->bB0 != 0xFF && D_0014C050[moby->bB0 + (D_0015ED84 << 4)] == 0xFF) {
+        if (moby->bB0 != 0xFF && visited52[moby->bB0 + (D_0015ED84 << 4)] == 0xFF) {
             mark_moby_for_removal_c(moby);
             return;
         }

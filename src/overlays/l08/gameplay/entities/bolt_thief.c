@@ -602,7 +602,6 @@ extern float FUN_001f9b80(void *, void *);
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0013CAE4 __attribute__((section(".data"))); /* no foreign declaration */
 extern int D_0013F350;
-extern float D_0015ED60;
 extern int D_0015EDDC;
 extern int D_L08_00161A90 __attribute__((sda));
 extern float D_L08_00161AE8_gp __asm__("D_L08_00161AE8") __attribute__((sda));
@@ -654,7 +653,6 @@ extern unsigned char visited52[][16] __asm__("D_0014C050");
 extern int invert52 __asm__("D_0015EDDC");
 extern char *D_L08_0015FFD8;
 extern int D_0015ED84;
-extern float D_0015ED60;
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern CannonCamera52_2E16A0 cannon_camera52 __asm__("D_L08_00167480");
@@ -848,7 +846,7 @@ void FUN_L08_002e0328(Moby *moby) {
                     random_vec[1] = func_002140F8_2E16A0(-1.0f,1.0f);
                     random_vec[2] = func_002140F8_2E16A0(-1.0f,1.0f);
                     *(u128 *)scatter = *(u128 *)random_vec;
-                    fast_vec_normalize(scatter, scatter, fast_vec_length(direction) * (D_0015ED60 * -0.35000002f + 1.0f));
+                    fast_vec_normalize(scatter, scatter, fast_vec_length(direction) * (frame_scale * -0.35000002f + 1.0f));
                     fast_vec_add(scatter, direction, scatter);
                     fast_vec_normalize(scatter, scatter, func_002140F8_2E16A0(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
                     min_life = func_001F9850_2E16A0(5);
@@ -877,7 +875,7 @@ void FUN_L08_002e0328(Moby *moby) {
                     random_vec[1] = func_002140F8_2E16A0(-1.0f,1.0f);
                     random_vec[2] = func_002140F8_2E16A0(-1.0f,1.0f);
                     *(u128 *)scatter = *(u128 *)random_vec;
-                    fast_vec_normalize(scatter, scatter, fast_vec_length(direction) * (D_0015ED60 * -0.35000002f + 1.0f));
+                    fast_vec_normalize(scatter, scatter, fast_vec_length(direction) * (frame_scale * -0.35000002f + 1.0f));
                     fast_vec_add(scatter, direction, scatter);
                     fast_vec_normalize(scatter, scatter, func_002140F8_2E16A0(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
                     min_life = func_001F9850_2E16A0(5);
@@ -2011,7 +2009,6 @@ float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_00239df8(HudElem *m);
 void FUN_L00_00239cc8(HudElem *e);
 void FUN_L00_00239d00(void *o);
-extern char D_0013F350_p[] __asm__("D_0013F350");
 extern char D_0013F3D0[];
 extern char D_0013F490[];
 extern void func_L00_0023A658_4BE8(void) __asm__("FUN_L08_002444a8");
@@ -2092,8 +2089,8 @@ void FUN_L08_002e3870(struct Moby *m) {
                 break;
             }
         }
-        if (absolute_float(m->pos.z - ((Hero *)(((char *)&D_0013F350_p)))->motion.pos.f[2]) < ((Hero *)(((char *)&D_0013F350_p)))->reach_distance
-            && vector_distance_xy_alt(&m->pos, ((Hero *)(((char *)&D_0013F350_p)))->motion.pos.f) < ((Hero *)(((char *)&D_0013F350_p)))->reach_height) {
+        if (absolute_float(m->pos.z - ((Hero *)(((char *)((char *)&hero))))->motion.pos.f[2]) < ((Hero *)(((char *)((char *)&hero))))->reach_distance
+            && vector_distance_xy_alt(&m->pos, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f) < ((Hero *)(((char *)((char *)&hero))))->reach_height) {
             d->i68 = scale_game_frames_c(1);
             m->state = 2;
         }
@@ -2174,8 +2171,8 @@ void FUN_L08_002e3870(struct Moby *m) {
 
                 FUN_L00_0025bc00(&d->f60, t, 0.5235988f, 0);
             } else {
-                float t = fast_add_rotations_c4(fast_arc_tan(((Hero *)(((char *)&D_0013F350_p)))->motion.pos.f[0] - m->pos.x,
-                                                          ((Hero *)(((char *)&D_0013F350_p)))->motion.pos.f[1] - m->pos.y),
+                float t = fast_add_rotations_c4(fast_arc_tan(((Hero *)(((char *)((char *)&hero))))->motion.pos.f[0] - m->pos.x,
+                                                          ((Hero *)(((char *)((char *)&hero))))->motion.pos.f[1] - m->pos.y),
                                         1.5707964f);
 
                 FUN_L00_0025bc00(&d->f60, t, 0.08726646f, 0);
@@ -2332,10 +2329,10 @@ void FUN_L08_002e3870(struct Moby *m) {
             mark_moby_for_removal_c3(m);
             return;
         }
-        if (m->pos.z < d->f60 - 4.0f && m->pos.z < ((Hero *)(((char *)&D_0013F350_p)))->motion.pos.f[2] - 4.0f) {
+        if (m->pos.z < d->f60 - 4.0f && m->pos.z < ((Hero *)(((char *)((char *)&hero))))->motion.pos.f[2] - 4.0f) {
             Vars_4BE8 *e = (Vars_4BE8 *)m->pvars;
 
-            *(u128_4BE8_p *)e->v10 = *(u128_4BE8_p *)((char *)&D_0013F350_p + 0x90);
+            *(u128_4BE8_p *)e->v10 = *(u128_4BE8_p *)((char *)((char *)&hero) + 0x90);
             e->i68 = scale_game_frames_c(1);
             m->state = 2;
             break;
@@ -2379,8 +2376,8 @@ void FUN_L08_002e3870(struct Moby *m) {
                 m->state = 5;
                 d->i68 = n;
                 d->u7C.i = D_L08_00174658_lui;
-                if (absolute_float(m->pos.z - ((Hero *)(((char *)&D_0013F350_p)))->motion.pos.f[2]) < ((Hero *)(((char *)&D_0013F350_p)))->reach_distance
-                    && vector_distance_xy_alt(&m->pos, ((Hero *)(((char *)&D_0013F350_p)))->motion.pos.f) < ((Hero *)(((char *)&D_0013F350_p)))->reach_height) {
+                if (absolute_float(m->pos.z - ((Hero *)(((char *)((char *)&hero))))->motion.pos.f[2]) < ((Hero *)(((char *)((char *)&hero))))->reach_distance
+                    && vector_distance_xy_alt(&m->pos, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f) < ((Hero *)(((char *)((char *)&hero))))->reach_height) {
                     Vars_4BE8 *e = (Vars_4BE8 *)m->pvars;
 
                     e->i68 = scale_game_frames_c(1);
@@ -2402,8 +2399,8 @@ void FUN_L08_002e3870(struct Moby *m) {
             int n;
             float inv;
 
-            if (absolute_float(m->pos.z - ((Hero *)(((char *)&D_0013F350_p)))->motion.pos.f[2]) < ((Hero *)(((char *)&D_0013F350_p)))->reach_distance
-                && vector_distance_xy_alt(&m->pos, ((Hero *)(((char *)&D_0013F350_p)))->motion.pos.f) < ((Hero *)(((char *)&D_0013F350_p)))->reach_height) {
+            if (absolute_float(m->pos.z - ((Hero *)(((char *)((char *)&hero))))->motion.pos.f[2]) < ((Hero *)(((char *)((char *)&hero))))->reach_distance
+                && vector_distance_xy_alt(&m->pos, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f) < ((Hero *)(((char *)((char *)&hero))))->reach_height) {
                 d->i68 = scale_game_frames_c(1);
                 m->state = 2;
                 break;

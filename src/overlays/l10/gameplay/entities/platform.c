@@ -238,7 +238,6 @@ void FUN_L10_00295c20(struct Moby *moby) {
     FUN_L00_00260738(d + 0x60, v, &moby->rot, &moby->rot);
 }
 /* Spinning pickup: waits until the hero is close and level with it, then plays the scene, saves and goes away. */
-extern float D_0015ED6C_p __asm__("D_0015ED6C");
 extern char *D_L10_0015FFD8_p __asm__("D_L10_0015FFD8");
 extern void FUN_L00_002d6bf0_p(void *) __asm__("FUN_L00_002d6bf0");
 extern void FUN_L10_00298940_p(void *) __asm__("FUN_L10_00298940");
@@ -253,7 +252,7 @@ extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int D_L10_0015F640;
 void FUN_L10_00298668(struct Moby *m) {
     char *d = (char *)m->pvars;
-    m->rot.z = fast_add_rotations(m->rot.z, D_0015ED6C_p * 1.5707964f);
+    m->rot.z = fast_add_rotations(m->rot.z, frame_time * 1.5707964f);
     switch (m->state) {
     case 0:
         FUN_L00_002d6bf0_p(m);
@@ -421,7 +420,7 @@ typedef unsigned int Q_2BFBB8 __attribute__((mode(TI), aligned(16)));
 
 typedef struct { char p0[0x10]; float x; float y; char p1[8]; unsigned char state; char p2[0xDF]; } Ent;
 
-extern Ent *D_L10_0015FFD8_c __asm__("D_L10_0015FFD8");
+extern struct Moby * D_L10_0015FFD8;
 extern char D_0013F350[];
 extern char D_L10_00167100[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -451,7 +450,7 @@ extern void FUN_L00_002e8590(float, float);
 extern void FUN_L00_002e8648(void);
 extern void FUN_L00_002e8680(void);
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern char *D_L10_00160058_00299818 __asm__("D_L10_0015FFD8");
+extern struct Moby * D_L10_0015FFD8;
 
 #define func_001F9850_2BFBB8 ((int (*)(int))scale_game_frames)
 #define func_001F9D48_2BFBB8 ((float (*)(void *, void *))vector_distance_xy_alt)
@@ -524,7 +523,7 @@ void FUN_L10_002be858(char *m)
         func_0022ED80_2BFBB8(0, 0, (int)m);
         {
             int di = *data << 8;
-            char *effect = D_L10_00160058_00299818 + di;
+            char *effect = (*(char * *)&D_L10_0015FFD8) + di;
             func_L00_00217718_2BFBB8(effect + 0x10, effect + 0x40, 0x43, 0);
         }
         {
@@ -555,7 +554,7 @@ void FUN_L10_002be858(char *m)
             velocity[1] = func_001F9FA8_2BFBB8(func_00214158_2BFBB8()) * func_002140F8_2BFBB8(0.0f, 0.5f);
             velocity[2] = 0.0f;
             velocity[2] += func_002140F8_2BFBB8(0.0f, 0.5f);
-            func_L00_001FF240_2BFBB8(op, velocity, D_L10_00160058_00299818 + (*data << 8) + 0x10);
+            func_L00_001FF240_2BFBB8(op, velocity, (*(char * *)&D_L10_0015FFD8) + (*data << 8) + 0x10);
             func_L00_001FF4B0_2BFBB8(position, position, func_002140F8_2BFBB8(0.0f, D_0015ED6C));
             position[2] = func_002140F8_2BFBB8(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = func_001F9850_2BFBB8(func_L00_00258BC8_2BFBB8(15, 30));

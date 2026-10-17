@@ -441,7 +441,6 @@ s32 FUN_L05_00240ed0(s32 mode) {
     return 1;
 }
 
-extern char D_0013F350[];
 
 s32 FUN_001efa68(void *, void *, s32, s32, s32);
 
@@ -557,7 +556,7 @@ void FUN_L05_002413e0(void) {
             char *hit = D_L05_00174258[0];
 
             if (!hit || *(short *)(hit + 0xA6) == 0x1F6 || *(short *)(hit + 0xA6) == 0x59F) {
-                player = (L16MovementPlayer *)(((char *)&D_0013F350));
+                player = (L16MovementPlayer *)(((char *)((char *)&hero)));
                 if (!player->unconstrained) {
                     float length;
                     float limit;
@@ -655,7 +654,7 @@ void FUN_L05_002413e0(void) {
         if (motion_player->slope > 0.5f) motion_player->slope = 0.5f;
         else if (motion_player->slope < -0.5f) motion_player->slope = -0.5f;
     }
-    cap_player = (L16MovementPlayer *)(((char *)&D_0013F350));
+    cap_player = (L16MovementPlayer *)(((char *)((char *)&hero)));
     magnitude = frame_time * 52.0f;
     if (magnitude < cap_player->speed) {
         scale_vector_xyz(cap_player->external, cap_player->external, magnitude / cap_player->speed);

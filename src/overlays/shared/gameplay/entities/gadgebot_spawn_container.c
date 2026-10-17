@@ -1380,7 +1380,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern float D_L06_00161CE0 __attribute__((sda));
-extern unsigned char D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 #define GB_FLAG (*(unsigned char *)0x15EDB3)
 extern void FUN_L00_001ff290(void *, void *, void *);
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
@@ -1487,7 +1487,7 @@ void FUN_L06_002f0040(GbMoby *moby) {
         moby->pos[2] = probe_ground_height(moby->pos, 0, 0.5f);
         FUN_L06_002d8b98((char *)moby);
         d->f2F0.q = d->f2E0.q = *(OvlQuad *)moby->pos;
-        if (D_0014C050[moby->fB0 + current_level_index * 16] == 0xFF) {
+        if (visited52[moby->fB0 + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -2961,7 +2961,7 @@ extern void FUN_L02_002ea7d0(char *);
 extern void FUN_L06_002f7548(char *);
 void FUN_L06_002f7628(char *m);
 extern char D_0014171B_86b8[] __asm__("D_0014C190");
-extern unsigned char D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 
 void FUN_L06_002f7288(char *m) {
     char *d = *(char **)(m + 0x78);
@@ -2973,7 +2973,7 @@ void FUN_L06_002f7288(char *m) {
                       D_0014171B_86b8) >>
                  (*(unsigned short *)(m + 0xB2) & 0x1F) &
              1) &&
-            (current_level_index != 10 || (q = (unsigned char *)((char *)D_0014C050),
+            (current_level_index != 10 || (q = (unsigned char *)((char *)visited52),
                                     (q + ((unsigned char *)m)[0xB0]))[0xA0] == 0xFF)) {
             m[0x20] = 2;
             m[0xBC] = 1;

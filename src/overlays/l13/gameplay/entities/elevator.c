@@ -2583,7 +2583,7 @@ typedef struct { char pad0[0x10]; JetVec velocity; Jet *source; int pad24,pad28;
 extern JetPlayer jet_player47 __asm__("D_0013F350");
 extern JetCamera jet_camera47 __asm__("D_L13_00166F80");
 extern JetTransition D_001516D0[];
-extern unsigned char D_0014C050[];
+#include "rnc/gameplay/state/game_globals.h"
 extern unsigned char D_0013E550[];
 extern unsigned char D_0013A4E0[];
 extern float D_L13_0015ED60;
@@ -2699,7 +2699,7 @@ void FUN_L13_002bb068(Jet *m) {
         hp_bar_clut[0]=palette;
         if (!initialized) __builtin_memcpy(D_L13_001CBE70,palette,1024);
         hp_bar_saved=1; d->wait_timer=1; d->energy=1;
-        if (m->persistent!=0xFF && (D_0014C050)[m->persistent+(D_L13_0015ED84<<4)]==0xFF) m->state=9;
+        if (m->persistent!=0xFF && (visited52)[m->persistent+(D_L13_0015ED84<<4)]==0xFF) m->state=9;
         if (d->group_a>0) jet_group_state(d->group_a,0,0,0);
         if (d->group_b>0) jet_group_state(d->group_b,0,0,0);
         jet_group_switch(D_L13_001CBDE8,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
@@ -2708,7 +2708,7 @@ void FUN_L13_002bb068(Jet *m) {
     }
     case 1: {
         short enter=0;
-        if (m->persistent!=0xFF && (D_0014C050)[m->persistent+(D_L13_0015ED84<<4)]==0xFF) m->state=9;
+        if (m->persistent!=0xFF && (visited52)[m->persistent+(D_L13_0015ED84<<4)]==0xFF) m->state=9;
         else if (d->trigger!=-1 && jet_check_trigger(D_0013F3D0,d->trigger)) { d->blend=0.99f; D_L13_0015F3FC=0.99f; enter=1; }
         else if (jet_distance(m,((JetPlayer*)(&jet_player47))->moby)<2.0f) {
             int pressed=jet_try_help(7,0x53E4)!=0;

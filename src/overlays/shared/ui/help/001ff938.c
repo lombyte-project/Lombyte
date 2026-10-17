@@ -156,11 +156,11 @@ void FUN_L15_001ff938(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_00200D20), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013E05A[];
-extern unsigned char D_0013E533[];
+#include "rnc/data_labels.h"
 extern void FUN_L00_00207330(int, int);
 
 void FUN_L15_00200788(void) {
-    unsigned char *base = D_0013E533 + 0xE1D;
+    unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
     int index = *(int *)(base + 0x10B8);
     if (index >= 0 && *(D_0013E05A + 0x4C6 + index) != 0) {
         int first = *(int *)(base + 0x1090);
@@ -217,7 +217,7 @@ void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 
 void FUN_L15_00208ca8(void) {
-    unsigned char *base = D_0013E533 + 0xE1D;
+    unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
     unsigned char *b;
     int p;
     void *q;
@@ -230,7 +230,7 @@ void FUN_L15_00208ca8(void) {
         }
     }
     FUN_L00_00205538();
-    b = D_0013E533 + 0xE1D;
+    b = ((unsigned char *)&D_0013E533) + 0xE1D;
     p = *(int *)(b + 0xA84);
     b[0x20A4] = 0;
     if (p != 0) {
@@ -575,7 +575,7 @@ skip:
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 
 void FUN_L15_0021ab60(void) {
-    switch (D_0013E533[0x2EC1]) {
+    switch (((unsigned char *)&D_0013E533)[0x2EC1]) {
     case 0:
         hero_set_state(HERO_STATE_IDLE, 1);
         break;

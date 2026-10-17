@@ -1163,7 +1163,7 @@ extern f32 D_L00_00161CD0 __attribute__((sda));
 typedef struct { u8 pad[0x100]; f32 x; f32 y; } C940_2e7d20_t;
 extern C940_2e7d20_t D_0013C940_2e7d20  __asm__("D_0013C940")__attribute__((section(".data")));
 typedef struct { u8 pad[0x18]; s32 p18; s32 p1C; u8 v20[0x10]; } E40_2e7d20_t;
-extern E40_2e7d20_t D_L00_00173E40 __attribute__((section(".data")));
+extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
 
 void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 extern s32 probe_world_sphere(void *, s32, void *, s32, f32) __asm__("FUN_L00_001f2868");
@@ -1327,11 +1327,11 @@ move:
     if (!collision_line((x + 0x90), &v10, camera_collision_mask, D_0013F350_2e7d20.p2080, 0)) {
         goto clear;
     }
-    if (FUN_L00_002e4290_2e7d20(D_L00_00173E40.v20)) {
+    if (FUN_L00_002e4290_2e7d20((*(E40_2e7d20_t *)&D_L00_00173E40_lui).v20)) {
         goto clear;
     }
-    if (D_L00_00173E40.p18 != 0 && FUN_L00_0025e3b8(D_L00_00173E40.p18)) {
-        FUN_001f9a28_2e7d20(&v20, (u8 *)D_L00_00173E40.p18 + 0x10, D_L00_00166DC0);
+    if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 != 0 && FUN_L00_0025e3b8((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18)) {
+        FUN_001f9a28_2e7d20(&v20, (u8 *)(*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 + 0x10, D_L00_00166DC0);
         v20.i[2] = 0;
         FUN_001f9bf8_2e7d20(&v20, &v20, 1.0f);
         v20.f[3] = 5627.9248046875f;
@@ -1339,7 +1339,7 @@ move:
         w.b18 = 3;
         w.b19 = 3;
         w.h1A = *(u16 *)(D_0013F350_2e7d20.p2080 + 0xA6);
-        FUN_L00_00259a88(D_L00_00173E40.p18, &w);
+        FUN_L00_00259a88((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18, &w);
     }
     BI_2e7d20(0x4C)++;
     if (BI_2e7d20(0x4C) >= FUN_001f96f8_2e7d20(0x1E)) {

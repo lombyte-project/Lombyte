@@ -365,14 +365,14 @@ extern unsigned char D_00141EA0[];
 extern SrcElem_p D_L00_00179AC0[];
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char D_0013D428[];
-extern char D_L00_0015F5CC_p[] __asm__("D_L00_0015F5CC");
+#include "rnc/overlay/level_labels.h"
 extern char D_L00_0015F7C8[];
 extern f32 convert_integer_to_float_c2(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 extern int D_L00_0015FA90_p __asm__("D_L00_0015FA90");
-extern int D_L00_0015FAC0_p __asm__("D_L00_0015FAC0");
+extern void * D_L00_0015FAC0;
 extern s32 fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0");
 extern s32 sprintf(char *, const char *, ...);
@@ -399,14 +399,11 @@ extern short D_L00_0015F7BC_gp __asm__("D_L00_0015F7BC") __attribute__((sda));
 extern short D_L00_0015F7C0_p __asm__("D_L00_0015F7C0");
 extern short D_L00_0015F7C4_gp __asm__("D_L00_0015F7C4") __attribute__((sda));
 extern u32 strlen(const char *);
-extern unsigned char D_L00_001C40B0_p[] __asm__("D_L00_001C40B0");
 extern unsigned char D_0013E520[];
 extern int D_L00_0015F5CC_i __asm__("D_L00_0015F5CC");
-extern char D_L00_001C40B0_c[] __asm__("D_L00_001C40B0");
 extern void FUN_L00_0023b120(char *, int, int, int, int, int);
 extern void draw_hud_sprite_c2(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 int FUN_L00_00235a70_c3(HudElem_p *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
-extern int D_0014171B_i[] __asm__("D_L00_001C40B0");
 
 #define GI(x) (*(int *)&(x))
 #define GF(x) (*(float *)&(x))
@@ -480,7 +477,7 @@ int FUN_L00_002382a0(HudElem_p *rec) {
         {
         int id;
         id = *(int *)((char *)D_00141EA0 + selected * 4);
-        wr = D_L00_001C40B0_c + id * 24;
+        wr = ((char *)&D_L00_001C40B0) + id * 24;
         if (*(unsigned short *)(wr + 8) != 0) {
             int shadow, item;
             item = *(int *)(D_0013D428 + id * 4);
@@ -535,7 +532,7 @@ int FUN_L00_002382a0(HudElem_p *rec) {
         int id;
         char *wr;
         id = *(int *)((char *)D_00141EA0 + selected * 4);
-        wr = D_L00_001C40B0_c + id * 24;
+        wr = ((char *)&D_L00_001C40B0) + id * 24;
         if (*(unsigned short *)(wr + 8) != 0)
             text_y += GI(D_L00_0015F7B4);
         else if (prefix_length != 0)

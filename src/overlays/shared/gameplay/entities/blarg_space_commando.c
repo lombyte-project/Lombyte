@@ -412,7 +412,7 @@ void FUN_L06_002fdbd0(struct Moby *moby) {
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char *FUN_L06_00300c60_c(int unused, char *pa, char *pb) __asm__("FUN_L06_00300c60");
-extern char D_001413D0[];
+#include "rnc/data_labels.h"
 extern f32 D_0015ED6C;
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -585,7 +585,7 @@ void FUN_L06_002feb40(char *m) {
     }
     }
     if (*(int *)(d + 0x160) == 0) {
-        *(int *)(d + 0x160) = *(int *)(D_001413D0);
+        *(int *)(d + 0x160) = *(int *)(((char *)&D_001413D0));
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300530), where it is exact; names translated to the US level program. */

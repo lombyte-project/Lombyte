@@ -341,8 +341,6 @@ extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations_c2(f32, f32) __asm__("func_001FA5C8");
-extern float D_0015ED6C_p __asm__("D_0015ED6C");
-extern float D_0015ED70_p __asm__("D_0015ED70");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height(float, void *, int);
@@ -564,8 +562,8 @@ void FUN_L14_002b17d8(char *m) {
         float k;
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(m + 0x10),
                                 *(float *)(owner + 0x14) - *(float *)(m + 0x14));
-        k = D_0015ED70_p * 12.566371f;
-        call_CE58((float *)(m + 0x48), ang, (float *)(data + 0x23C), k, k, D_0015ED6C_p * 6.2831855f);
+        k = frame_time_sq * 12.566371f;
+        call_CE58((float *)(m + 0x48), ang, (float *)(data + 0x23C), k, k, frame_time * 6.2831855f);
         if (*(int *)(data + 0x114) == 2) break;
         if (FUN_001f9770(data + 0x248) == 0) break;
         ((unsigned char *)m)[0x20] = 3;
@@ -606,8 +604,8 @@ void FUN_L14_002b17d8(char *m) {
         FUN_L14_002b3578_c(m);
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(m + 0x10),
                                 *(float *)(owner + 0x14) - *(float *)(m + 0x14));
-        k = D_0015ED70_p * 12.566371f;
-        call_CE58((float *)(m + 0x48), ang, (float *)(data + 0x23C), k, k, D_0015ED6C_p * 6.2831855f);
+        k = frame_time_sq * 12.566371f;
+        call_CE58((float *)(m + 0x48), ang, (float *)(data + 0x23C), k, k, frame_time * 6.2831855f);
         aim = FUN_L14_002b35d8_c(m, 0, *(float *)(m + 0x48));
         FUN_L14_002b37b0_c(m, ang);
         if (*(int *)(data + 0x114) == 2) {

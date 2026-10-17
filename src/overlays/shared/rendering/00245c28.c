@@ -300,138 +300,32 @@ void FUN_L00_00245c28(void) {
     }
     do_space_transition();
 }
-#ifndef NON_MATCHING
-/* Sets up the map's tables, loads its data from disc and builds the circular mask. */
-/* Ported from rac1-decomp (src/overlays/shared/map_002465F8.c: func_L00_00246EC0), where it is exact; names translated to the US level program. */
-
-extern char D_00137B80[];
-extern char D_L00_0015FE00[];
-extern char D_L00_001E8B00[];
-extern float D_L00_00182810[];
-extern float D_L00_00182A70[];
-extern int *D_L00_00173E08[];
-extern int D_L00_00183EF0[];
-extern int D_L00_001841F0_c[] __asm__("D_L00_001841F0");
-extern int FUN_L00_0024d8d0();
-extern s32 D_0015ED84;
-extern s32 hud_heap_alloc() __asm__("func_001FF288");
-extern unsigned char D_0013D4C0[];
-extern unsigned char D_0014161B[];
-extern unsigned char D_L00_00184394[];
-extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
-extern void fast_mem_copy_alt(void *, void *, int) __asm__("FUN_001f98d0");
-extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
-s32 load(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
-s32 stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");
-extern char D_00138438_c[] __asm__("D_00138438");
-extern char D_001383A0[];
-extern char D_00141EC0[];
-
-void FUN_L00_002464a8(void) {
-    int i, j;
-    int *gl;
-    int *q;
-    int v;
-    int *e;
-    int *data;
-    int n, len;
-    int heap_tag, first_size, second_size, scratch;
-    int *archive, *archive_base;
-    unsigned char *mask, *level_data;
-    int x, y, w;
-    float lim;
-    unsigned char *pp;
-    extern int D_L00_001841F0_c[];
-    extern char D_00137B80[];
-
-    D_L00_001841F0_c[4] = 1;
-    { int i;
-    for (i = 0; i < 20; i++) {
-        D_L00_001841F0_c[0x41 + i] = D_L00_00183EF0[i * 2];
-        ((float *)D_L00_001841F0_c)[0x2D + i] = 0.65f;
-        D_L00_001841F0_c[0x55 + i] = D_L00_00183EF0[i * 2 + 1];
-    } }
-    v = current_level_index;
-    D_L00_001841F0_c[0x8B] = -1;
-    D_L00_001841F0_c[0x89] = v > 18 ? 0 : v;
-    { int i;
-    for (i = 0; i < 19; i++) {
-        float a = D_L00_00182810[i * 8], b = D_L00_00182810[i * 8 + 1], c = D_L00_00182810[i * 8 + 2], dd = D_L00_00182810[i * 8 + 3];
-        float ee = D_L00_00182810[i * 8 + 4], f = D_L00_00182810[i * 8 + 5], gg = D_L00_00182810[i * 8 + 6], h = D_L00_00182810[i * 8 + 7];
-        float p = (ee - gg) / (a - c);
-        float r = (f - h) / (b - dd);
-        D_L00_00182A70[i * 4 + 1] = p;
-        D_L00_00182A70[i * 4 + 3] = r;
-        D_L00_00182A70[i * 4] = ee - p * a;
-        D_L00_00182A70[i * 4 + 2] = f - r * b;
-    } }
-    pp = (unsigned char *)D_0013D4C0;
-    if (pp[0x21] != 0) {
-        D_L00_001841F0_c[0x8C] = 1;
-        e = (int *)(((char *)&D_00138438_c)) + D_L00_001841F0_c[0x89] * 2;
-    } else {
-        D_L00_001841F0_c[0x8C] = 0;
-        e = (int *)(((char *)&D_001383A0)) + D_L00_001841F0_c[0x89] * 2;
-    }
-    if (e[1] != 0) {
-        gl = D_L00_001841F0_c;
-        gl[10] = 1;
-        heap_tag = (int)D_L00_0015FE00;
-        archive_base = D_L00_00173E08[0];
-        archive = (int *)((int)archive_base + 0x9A800);
-        scratch = e[1] << 7;
-        load(archive, e[0], e[1]);
-        gl[0x8B] = stash_send_data((int)archive, scratch, 0x4800, (int)D_L00_001E8B00);
-        gl[0x8D] = scratch;
-        FUN_L00_0024d8d0((int)archive, (int)archive_base);
-        archive = archive_base;
-        first_size = archive[1] - archive[0];
-        gl[0] = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);
-        fast_mem_copy_alt((void *)gl[0], (char *)archive + archive[0], first_size);
-        gl[0] += 8;
-        gl[1] = gl[0];
-        second_size = archive[2] - archive[1];
-        gl[5] = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
-        fast_mem_copy_alt((void *)gl[5], (char *)archive + archive[1], second_size);
-        gl[2] = hud_heap_alloc(0x1000, 0, (char *)heap_tag, 0x2F3);
-        for (i = 0; i < 8; i++) {
-            D_L00_001841F0_c[12 + i * 4] = -1;
-            D_L00_001841F0_c[13 + i * 4] = -1;
-            D_L00_001841F0_c[14 + i * 4] = D_L00_001841F0_c[2] + i * 0x200;
-        }
-        w = hud_heap_alloc(0x8000, 0, D_L00_0015FE00, 0x2FC);
-        level_data = ((char *)&D_00141EC0) + D_L00_001841F0_c[0x89] * 0x800;
-        D_L00_001841F0_c[3] = w;
-        if (level_data[0] != 0) {
-            load_map_chunk((void *)D_L00_001841F0_c[3], level_data, D_L00_001841F0_c[5]);
-        } else {
-            decode_map_mask((int *)D_L00_001841F0_c[3], (unsigned char *)D_L00_001841F0_c[0], (short *)D_L00_001841F0_c[1]);
-        }
-        lim = 256.0f;
-        for (y = 0; y < 32; y++) {
-            for (x = 0; x < 32; x++) {
-                if ((15.5f - (float)x) * (15.5f - (float)x) +
-                    (15.5f - (float)y) * (15.5f - (float)y) > lim) {
-                    D_L00_00184394[x / 8 + y * 4] |= 1 << (x - (x / 8) * 8);
-                }
-            }
-        }
-    } else {
-        D_L00_001841F0_c[0] = 0;
-        D_L00_001841F0_c[2] = 0;
-        D_L00_001841F0_c[3] = 0;
-        D_L00_001841F0_c[1] = 0;
-        D_L00_001841F0_c[10] = 0;
-    }
-}
-#else
-#endif
 #include "rnc/storage/disc_table.h"
 
 typedef struct {
-    u8 pad0[0x24];
+    s32 unk0;
+    s32 unk4;
+    s32 buffer;
+    s32 unkC;
+} MapChunkSlot;
+
+typedef struct {
+    s32 first_data;
+    s32 second_data;
+    s32 scratch_data;
+    s32 mask_data;
+    s32 initialized;
+    s32 second_raw;
+    u8 pad18[0xc];
     s32 active;
-    u8 pad28[0x1fc];
+    s32 unk28;
+    u8 pad2c[4];
+    MapChunkSlot slots[8];
+    u8 padB0[4];
+    f32 unkB4[20];
+    s32 unk104[20];
+    s32 unk154[20];
+    u8 pad1a4[0x80];
     s32 archive_index;
     s32 load_state;
     s32 file_handle;
@@ -454,6 +348,127 @@ typedef struct {
     u8 pad2a4[4];
     s32 last_transfer_bytes;
 } RenderArchiveState;
+
+/* Sets up the map's tables, loads its data from disc and builds the circular mask. */
+/* Ported from rac1-decomp (src/overlays/shared/map_002465F8.c: func_L00_00246EC0), where it is exact; names translated to the US level program. */
+
+extern char D_L00_0015FE00[];
+extern char D_L00_001E8B00[];
+extern float D_L00_00182810[];
+extern float D_L00_00182A70[];
+extern int *D_L00_00173E08[];
+extern int D_L00_00183EF0[];
+extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
+extern int FUN_L00_0024d8d0();
+extern s32 D_0015ED84;
+extern s32 hud_heap_alloc() __asm__("func_001FF288");
+extern unsigned char D_0013D4C0[];
+extern unsigned char D_0014161B[];
+extern unsigned char D_L00_00184394[];
+extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
+extern void fast_mem_copy_alt(void *, void *, int) __asm__("FUN_001f98d0");
+extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
+s32 load(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
+s32 stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");
+extern struct DiscFile D_00138438[];
+extern char D_001383A0[];
+extern char D_00141EC0[];
+
+void FUN_L00_002464a8(void) {
+    int i, j;
+    RenderArchiveState *gl;
+    int *q;
+    int v;
+    int *e;
+    int *data;
+    int n, len;
+    int heap_tag, first_size, second_size, scratch;
+    int *archive, *archive_base;
+    unsigned char *mask, *level_data;
+    int x, y, w;
+    float lim;
+    unsigned char *pp;
+
+    D_L00_001841F0.initialized = 1;
+    { int i;
+    for (i = 0; i < 20; i++) {
+        D_L00_001841F0.unk104[i] = D_L00_00183EF0[i * 2];
+        D_L00_001841F0.unkB4[i] = 0.65f;
+        D_L00_001841F0.unk154[i] = D_L00_00183EF0[i * 2 + 1];
+    } }
+    v = current_level_index;
+    D_L00_001841F0.file_handle = -1;
+    D_L00_001841F0.archive_index = v > 18 ? 0 : v;
+    { int i;
+    for (i = 0; i < 19; i++) {
+        float a = D_L00_00182810[i * 8], b = D_L00_00182810[i * 8 + 1], c = D_L00_00182810[i * 8 + 2], dd = D_L00_00182810[i * 8 + 3];
+        float ee = D_L00_00182810[i * 8 + 4], f = D_L00_00182810[i * 8 + 5], gg = D_L00_00182810[i * 8 + 6], h = D_L00_00182810[i * 8 + 7];
+        float p = (ee - gg) / (a - c);
+        float r = (f - h) / (b - dd);
+        D_L00_00182A70[i * 4 + 1] = p;
+        D_L00_00182A70[i * 4 + 3] = r;
+        D_L00_00182A70[i * 4] = ee - p * a;
+        D_L00_00182A70[i * 4 + 2] = f - r * b;
+    } }
+    pp = (unsigned char *)D_0013D4C0;
+    if (pp[0x21] != 0) {
+        D_L00_001841F0.loaded = 1;
+        e = (int *)(((char *)((char *)&D_00138438))) + D_L00_001841F0.archive_index * 2;
+    } else {
+        D_L00_001841F0.loaded = 0;
+        e = (int *)(((char *)&D_001383A0)) + D_L00_001841F0.archive_index * 2;
+    }
+    if (e[1] != 0) {
+        gl = &D_L00_001841F0;
+        gl->unk28 = 1;
+        heap_tag = (int)D_L00_0015FE00;
+        archive_base = D_L00_00173E08[0];
+        archive = (int *)((int)archive_base + 0x9A800);
+        scratch = e[1] << 7;
+        load(archive, e[0], e[1]);
+        gl->file_handle = stash_send_data((int)archive, scratch, 0x4800, (int)D_L00_001E8B00);
+        gl->transfer_bytes = scratch;
+        FUN_L00_0024d8d0((int)archive, (int)archive_base);
+        archive = archive_base;
+        first_size = archive[1] - archive[0];
+        gl->first_data = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);
+        fast_mem_copy_alt((void *)gl->first_data, (char *)archive + archive[0], first_size);
+        gl->first_data += 8;
+        gl->second_data = gl->first_data;
+        second_size = archive[2] - archive[1];
+        gl->second_raw = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
+        fast_mem_copy_alt((void *)gl->second_raw, (char *)archive + archive[1], second_size);
+        gl->scratch_data = hud_heap_alloc(0x1000, 0, (char *)heap_tag, 0x2F3);
+        for (i = 0; i < 8; i++) {
+            D_L00_001841F0.slots[i].unk0 = -1;
+            D_L00_001841F0.slots[i].unk4 = -1;
+            D_L00_001841F0.slots[i].buffer = D_L00_001841F0.scratch_data + i * 0x200;
+        }
+        w = hud_heap_alloc(0x8000, 0, D_L00_0015FE00, 0x2FC);
+        level_data = ((char *)&D_00141EC0) + D_L00_001841F0.archive_index * 0x800;
+        D_L00_001841F0.mask_data = w;
+        if (level_data[0] != 0) {
+            load_map_chunk((void *)D_L00_001841F0.mask_data, level_data, D_L00_001841F0.second_raw);
+        } else {
+            decode_map_mask((int *)D_L00_001841F0.mask_data, (unsigned char *)D_L00_001841F0.first_data, (short *)D_L00_001841F0.second_data);
+        }
+        lim = 256.0f;
+        for (y = 0; y < 32; y++) {
+            for (x = 0; x < 32; x++) {
+                if ((15.5f - (float)x) * (15.5f - (float)x) +
+                    (15.5f - (float)y) * (15.5f - (float)y) > lim) {
+                    D_L00_00184394[x / 8 + y * 4] |= 1 << (x - (x / 8) * 8);
+                }
+            }
+        }
+    } else {
+        D_L00_001841F0.first_data = 0;
+        D_L00_001841F0.scratch_data = 0;
+        D_L00_001841F0.mask_data = 0;
+        D_L00_001841F0.second_data = 0;
+        D_L00_001841F0.unk28 = 0;
+    }
+}
 
 extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
 extern u8 D_0013D4E1 __attribute__((section(".data")));

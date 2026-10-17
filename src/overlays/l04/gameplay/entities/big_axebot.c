@@ -549,7 +549,6 @@ extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 extern void tick_countdown_32(int *counter);
 void FUN_L04_002ba3e0(char *arg, void *a, void *b, void *c);
-extern char D_0013F350[];
 extern P_B7B0 *D_L04_001B0930_B7B0[] __asm__("D_L04_001B0630");
 
 void FUN_L04_002ba520(M_B7B0 *moby) {
@@ -1518,7 +1517,6 @@ extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void transform_vector_by_basis(void *, void *, void *);
 int FUN_L04_002c1e98(struct Moby *moby);
 void FUN_L04_002c1d70(struct Moby *moby);
-extern char D_0013F350[];
 extern char D_0013E550[];
 extern void *func_L00_0025B478_2C35F0(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void func_L00_002592B0_b(char *moby, float target, float *vel, float k, float d,
@@ -1556,7 +1554,7 @@ void FUN_L04_002c2270(M_35F0 *moby) {
     moby->f30 = 0x20;
     FUN_L04_002c1b80((struct Moby *)moby);
     if (moby->state == 1 || moby->state == 3) {
-        H_35F0 *h = (H_35F0 *)(((char *)&D_0013F350));
+        H_35F0 *h = (H_35F0 *)(((char *)((char *)&hero)));
         if (h->f240 == moby || FUN_001f9b48(moby->pos, h->pos) < 1.5f) {
             blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
             data->f146 = scale_game_frames(0x3C);
@@ -2269,7 +2267,6 @@ extern void refresh_moby_spatial_bounds_from_basis(void *);
 extern void subtract_vector_xyz(void *dst, void *a, void *b);
 extern void tick_countdown_32(int *counter);
 void FUN_L04_002c4808_c(char *arg) __asm__("FUN_L04_002c4808");
-extern char D_0013F350[];
 extern int func_L00_002594C8_o(void *, void *, void *, float, float, float, float,
                                int) __asm__("FUN_L00_00258490");
 
