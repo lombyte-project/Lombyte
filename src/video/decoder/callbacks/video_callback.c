@@ -24,7 +24,7 @@ extern s32 video_dec_put_ts(u8 *, s64, s64, u32, s32) __asm__("func_0023CC98");
 
 s32 video_callback(s32 arg0, struct VdecCb *cb, struct VdecBuf *ab) __asm__("FUN_0023b5f0");
 
-s32 video_callback(s32 arg0, struct VdecCb *cb, struct VdecBuf *ab) {
+s32 video_callback(s32 unused_callback_arg, struct VdecCb *cb, struct VdecBuf *ab) {
     u32 ptr0;
     s32 len0;
     u32 ptr1;
