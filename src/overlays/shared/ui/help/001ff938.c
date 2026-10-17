@@ -18,7 +18,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern f32 D_0015EE18;
 extern unsigned char D_0013D4DC[];
 extern unsigned char D_0013F350[];
-extern struct { unsigned char b[8]; } D_0015EDB0_s __asm__("D_0015EDB0");
+#include "rnc/gameplay/state/options.h"
 extern float D_L15_0017C06C[];
 extern float D_L15_0017C1CC[];
 extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
@@ -65,7 +65,7 @@ void FUN_L15_001ff938(void) {
     FUN_L00_002484e0(b0 + 0x80);
 
     if (b0[0x20A4] == 2) {
-        if (D_0015EDB0_s.b[3] != 0)
+        if ((&big_head_cheat_enabled)[3] != 0)
             D_L15_0017C06C[0] = (*(float *)&(*(short *)&D_0015EE18)) * 1.4f;
         FUN_L00_002059d8();
         FUN_L00_002061f0();
@@ -81,7 +81,7 @@ void FUN_L15_001ff938(void) {
 
     b1 = ((char *)&D_0013F350);
     if (b1[0x20A4] == 3) {
-        if (D_0015EDB0_s.b[1] != 0)
+        if ((&big_head_cheat_enabled)[1] != 0)
             D_L15_0017C1CC[0] = 1.9f;
         alpha = 0x80;
         period = scale_game_frames(0xAA);

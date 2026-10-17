@@ -482,7 +482,7 @@ void FUN_L12_003064e8(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00307C08), where it is exact; names translated to the US level program. */
 
-extern int D_L12_0015F5CC_p __asm__("D_L12_0015F5CC");
+extern int D_L12_0015F5CC;
 extern unsigned char * D_L12_0015FFD8;
 
 void FUN_L12_00306828(char *moby) {
@@ -509,7 +509,7 @@ void FUN_L12_00306828(char *moby) {
         {
             period = scale_game_frames(0xAA);
             divisor = convert_integer_to_float(period);
-            phase = (float)(D_L12_0015F5CC_p % period) / divisor;
+            phase = (float)(D_L12_0015F5CC % period) / divisor;
             sine = fast_sin((phase + phase) * 3.1415927f + -3.1415927f);
             color = sine * 70.0f;
             red = truncate_float_to_s32(color);

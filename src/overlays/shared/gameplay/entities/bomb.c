@@ -1026,7 +1026,7 @@ extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0
 extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
-extern char D_0013E520_c[] __asm__("D_0013E520");
+#include "rnc/gameplay/state/item_state.h"
 
 char *FUN_L00_002caf70(char *a, char *vec, char *b, float unk18, float unk1C, float yaw, float pitch) {
     float tv[4];
@@ -1082,7 +1082,7 @@ char *FUN_L00_002caf70(char *a, char *vec, char *b, float unk18, float unk1C, fl
         *(int *)(d + 0x10) = 0;
         *(int *)(d + 0x14) = 0;
         r2 = scale_game_frames_c2(0x23);
-        p = (unsigned char *)((char *)&D_0013E520_c);
+        p = (unsigned char *)((char *)item_text_variant);
         r2 = r2 + p[0xF] * 10;
         *(int *)(d + 0x28) = 0;
         *(short *)(d + 0x24) = r2;
@@ -1112,7 +1112,7 @@ char *FUN_L00_002caf70(char *a, char *vec, char *b, float unk18, float unk1C, fl
                 r3 = FUN_L00_00257b90_c2(r, r2);
                 FUN_L00_0026dd20(m + 0x10, (char *)v, 0x7F2F4F6F, r3, 30000.0f);
             } while (k >= 0);
-            p = (unsigned char *)((char *)&D_0013E520_c);
+            p = (unsigned char *)((char *)item_text_variant);
             if (p[0xF] == 0) {
                 FUN_L00_002cbcc0_c(m, 0);
                 mark_moby_for_removal_c2(m);

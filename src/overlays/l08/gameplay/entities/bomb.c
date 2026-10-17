@@ -1520,7 +1520,7 @@ extern float D_L08_0016197C_gp __asm__("D_L08_0016197C") __attribute__((sda));
 extern float D_L08_00161988_gp __asm__("D_L08_00161988") __attribute__((sda));
 extern float D_L08_0016198C_gp __asm__("D_L08_0016198C") __attribute__((sda));
 extern float D_L08_00161990_gp __asm__("D_L08_00161990") __attribute__((sda));
-extern float D_L08_001675C0_p[] __asm__("D_L08_001675C0");
+extern float D_L08_001675C0[];
 extern float FUN_001f96b0(float);
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float fast_difference_between_rotations_c3(float, float) __asm__("func_001FA688");
@@ -1571,7 +1571,7 @@ void FUN_L08_002dabf0(struct Moby *moby) {
     damage = 0.0f;
     func_L00_00264B40_x(moby, D_L08_001619AC_gp, 3.0f, d->blk160);
     if (moby->visible != 0) {
-        if (fast_vec_dist(&moby->pos, D_L08_001675C0_p) < 29.0f) {
+        if (fast_vec_dist(&moby->pos, D_L08_001675C0) < 29.0f) {
             FUN_L00_0025a120(moby);
             moby->shadow_range = 0x17;
         }

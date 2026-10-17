@@ -2613,7 +2613,7 @@ extern f32 random_angle_radians_c2(void) __asm__("func_00213308");
 extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0");
-extern int D_L07_0015F5CC_p __asm__("D_L07_0015F5CC");
+extern int D_L07_0015F5CC;
 extern int D_L07_001612D8;
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int FUN_001f0b58(void);
@@ -2750,10 +2750,10 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         } else {
             f = 1.0f;
         }
-        if (D_L07_0015F5CC_p % 45 == *(short *)(moby + 0xB2) && random_integer_below(2) == 0) {
+        if (D_L07_0015F5CC % 45 == *(short *)(moby + 0xB2) && random_integer_below(2) == 0) {
             func_L00_002A5158_30D8E8((*(Rec_30D8E8_p * *)&D_L07_001612D0), D_L07_001612D8, 1, F(moby, 0x10), F(moby, 0x14), f, s);
         }
-        if (D_L07_0015F5CC_p % ((rand() & 7) + 20) == 0) {
+        if (D_L07_0015F5CC % ((rand() & 7) + 20) == 0) {
             float size = random_float_between_c2(1.5f, 2.4f);
             pos[0] += random_float_between_c2(-0.15f, 0.15f);
             pos[1] += random_float_between_c2(-0.15f, 0.15f);

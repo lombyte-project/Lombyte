@@ -1165,10 +1165,8 @@ typedef struct {
     s32 timer58;
     s32 delay;
 } GloveVars_2c1ad0;
-extern struct { u8 pad0[0x11]; u8 unk11; } D_0013E520_2c1ad0 __asm__("D_0013E520");
-extern struct { u8 pad0[0x88]; u16 deliveries; u16 unk8A; u32 levels; } D_00141680_s __asm__("D_00141680");
-extern struct { u8 pad0[0x18]; s32 moby; u8 pad1C[4]; Vec4 point; } coll_hit_2c1ad0 __asm__("D_L00_00173E40");
-extern Vec4 D_L00_00166DC0_v __asm__("D_L00_00166DC0");
+extern CollisionHit coll_hit __asm__("D_L00_00173E40");
+extern Vec4 D_L00_00166DC0;
 extern char D_L00_00166C80[];
 extern short D_L00_001B07B0[];
 extern f32 frame_scale_inv_macro __asm__("D_0015ED68") __attribute__((section(".sdata")));
@@ -1234,7 +1232,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     if (vars->held != 0 && !hero.unk20AC) {
         out = (float *)vars->held->pvars;
         arc.q = 0;
-        arc.f[0] = frame_time_macro * (D_0013E520_2c1ad0.unk11 ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f));
+        arc.f[0] = frame_time_macro * (item_text_variant[0x11] ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f));
         launch.q = arc.q;
         adjust_direction_2c1ad0(&launch, &launch, hero.basis);
         pos.f[0] = fast_cos(fast_add_rotations(-0.361968011f, atan2_f(hero.unk670, hero.unk674))) * 0.859039009f;
@@ -1247,7 +1245,7 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
         add_vector_xyz(&target, &target, &pos);
         if (controller_state.held & 5) {
             probe.q = 0;
-            probe.f[2] = D_0013E520_2c1ad0.unk11 ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f);
+            probe.f[2] = item_text_variant[0x11] ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f);
             arc.q = probe.q;
             hit = 0;
             rotate_vector_2c1ad0(&arc, &arc, matrix);
@@ -1256,23 +1254,23 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
             slope = atan2_f(vector_length_xy_2c1ad0(&arc), arc.f[2]);
             if (0.593411922f < slope) slope = 0.593411922f;
             if (slope < -1.39626336f) slope = -1.39626336f;
-            build_spherical_offset_2c1ad0(&arc, D_0013E520_2c1ad0.unk11 ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f), angle, slope);
+            build_spherical_offset_2c1ad0(&arc, item_text_variant[0x11] ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f), angle, slope);
             {
                 float distance = vector_length_xy_2c1ad0(&arc);
                 float z = arc.f[2];
                 if (distance != 0.0f) horizontal = z / distance;
                 else horizontal = z / 0.01f;
             }
-            root = square_root(frame_time_sq_macro * 9.8f * (D_0013E520_2c1ad0.unk11 ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f)) * 0.5f);
+            root = square_root(frame_time_sq_macro * 9.8f * (item_text_variant[0x11] ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f)) * 0.5f);
             radius = (root + root) * root * (1.0f - horizontal) / (frame_time_sq_macro * 9.8f);
             vertical = horizontal * radius;
             if (0.0f < radius) {
                 arc.f[0] = fast_cos(angle) * radius;
                 arc.f[1] = fast_sin(angle) * radius;
                 arc.f[2] = vertical;
-                add_vector_xyz(&probe, &D_L00_00166DC0_v, &arc);
-                if (collision_line(&D_L00_00166DC0_v, &probe, 2, moby, 0) && coll_hit_2c1ad0.moby != (s32)hero.moby) {
-                    qcopy(&target, &coll_hit_2c1ad0.point);
+                add_vector_xyz(&probe, &D_L00_00166DC0, &arc);
+                if (collision_line(&D_L00_00166DC0, &probe, 2, moby, 0) && coll_hit.moby != (s32)hero.moby) {
+                    qcopy(&target, &coll_hit.point);
                     hit = 1;
                     angle = atan2_f(target.f[0] - pos.f[0], target.f[1] - pos.f[1]);
                 }
@@ -1280,11 +1278,11 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
                     target.f[0] = fast_cos(angle) * radius * 5.0f;
                     target.f[1] = fast_sin(angle) * radius * 5.0f;
                     target.f[2] = vertical * 5.0f;
-                    add_vector_xyz(&target, &target, &D_L00_00166DC0_v);
+                    add_vector_xyz(&target, &target, &D_L00_00166DC0);
                 }
             }
         }
-        FUN_L00_002c1928_f(frame_time_sq_macro * 9.8f, 1.0f, D_0013E520_2c1ad0.unk11 ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f), pos.f, target.f, out);
+        FUN_L00_002c1928_f(frame_time_sq_macro * 9.8f, 1.0f, item_text_variant[0x11] ? ((controller_state.held & 5) ? 12.0f : 4.0f) : ((controller_state.held & 5) ? 6.0f : 4.0f), pos.f, target.f, out);
     }
     switch (moby->state) {
     case 0:
@@ -1300,15 +1298,15 @@ void FUN_L00_002c1ad0(struct Moby *moby) {
     case 3:
         if (vars->held != 0) {
             FUN_L00_002aa008(&pos, vars->held, vars->held->pvars);
-            if (D_00141680_s.deliveries <= 0xfffe)
-                ++D_00141680_s.deliveries;
+            if (D_00141680_2c1ad0.deliveries <= 0xfffe)
+                ++D_00141680_2c1ad0.deliveries;
             {
                 s32 frames = scale_game_frames(D_0015EEA4_macro);
                 frames /= 600;
-                if (D_00141680_s.unk8A < frames)
-                    D_00141680_s.unk8A = scale_game_frames(D_0015EEA4_macro) / 600;
+                if (D_00141680_2c1ad0.unkA2 < frames)
+                    D_00141680_2c1ad0.unkA2 = scale_game_frames(D_0015EEA4_macro) / 600;
             }
-            D_00141680_s.levels = (D_00141680_s.levels | (1u << current_level_index_macro)) | 0x80000000;
+            D_00141680_2c1ad0.levels = (D_00141680_2c1ad0.levels | (1u << current_level_index_macro)) | 0x80000000;
             FUN_L00_0025f780(vars->held, D_L00_001B07B0, 0x3F);
             vars->held = 0;
             vars->timer54 = scale_game_frames(10);
