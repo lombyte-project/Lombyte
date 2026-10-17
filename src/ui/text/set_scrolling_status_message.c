@@ -11,8 +11,8 @@ extern u8 D_001E8A70[];
 extern s32 sprintf();
 void set_scrolling_status_message(s32 arg0) __asm__("FUN_00237e90");
 
-void set_scrolling_status_message(s32 arg0) {
-    sprintf(D_001E63C0.unk2C, D_001E8A70, arg0);
+void set_scrolling_status_message(s32 message) {
+    sprintf(D_001E63C0.unk2C, D_001E8A70, message);
     D_001E63C0.unk44 = 0;
 }
 
