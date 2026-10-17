@@ -432,7 +432,7 @@ extern Sys *D_L00_0016051C_c3 __asm__("D_L00_0016051C");
 extern u32 D_L00_00160500_gp[1] __asm__("D_L00_00160500") __attribute__((sda));
 extern u32 D_L00_001604F0[1] __attribute__((sda));
 extern char D_L00_001BD7E0_lui[] __asm__("D_L00_001BD7E0") __attribute__((section(".data")));
-u8 D_L00_001BD7B0[48] = {0, 0, 0x40, 0x41, 0, 0, 0xd8, 0x41, 0, 0, 0, 0x41, 0x33, 0x33, 0xb3, 0x3e, 0, 0, 0xa0, 0xc1, 0, 0, 0x70, 0xc1, 0, 0, 0x20, 0x41, 0x33, 0x33, 0xb3, 0x3e, 0, 0, 0x70, 0x41, 0, 0, 0xc8, 0xc1, 0, 0, 0x80, 0x3f, 0x33, 0x33, 0xb3, 0x3e};
+extern u8 D_L00_001BD7B0[] __attribute__((section(".data")));
 
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void FUN_0022b690_c2(s32) __asm__("FUN_0022b690");

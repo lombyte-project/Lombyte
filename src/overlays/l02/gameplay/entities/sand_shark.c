@@ -55,7 +55,7 @@ extern void write_dma_channel_002101b8(void *, int, int) __asm__("FUN_L02_002101
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002A59F8), where it is exact; names translated to the US level program. */
 
-char D_L02_001CB400[256] = {0, 0, 0x40, 0, 8, 0, 0x48, 0, 0x10, 0, 0x50, 0, 0x18, 0, 0x58, 0, 0x20, 0, 0x60, 0, 0x28, 0, 0x68, 0, 0x30, 0, 0x70, 0, 0x38, 0, 0x78, 0, 0x78, 0, 0x40, 0, 0x40, 0, -128, 0, 0x48, 0, -120, 0, 0x50, 0, -112, 0, 0x58, 0, -104, 0, 0x60, 0, -96, 0, 0x68, 0, -88, 0, 0x70, 0, -80, 0, 0x78, 0, -72, 0, -72, 0, -128, 0, -128, 0, -64, 0, -120, 0, -56, 0, -112, 0, -48, 0, -104, 0, -40, 0, -96, 0, -32, 0, -88, 0, -24, 0, -80, 0, -16, 0, -72, 0, -8, 0, -8, 0, -64, 0, -64, 0, 0, 1, -56, 0, 8, 1, -48, 0, 0x10, 1, -40, 0, 0x18, 1, -32, 0, 0x20, 1, -24, 0, 0x28, 1, -16, 0, 0x30, 1, -8, 0, 0x38, 1, 0x38, 1, 0, 1, 0, 1, 0x40, 1, 8, 1, 0x48, 1, 0x10, 1, 0x50, 1, 0x18, 1, 0x58, 1, 0x20, 1, 0x60, 1, 0x28, 1, 0x68, 1, 0x30, 1, 0x70, 1, 0x38, 1, 0x78, 1, 0x78, 1, 0x40, 1, 0x40, 1, -128, 1, 0x48, 1, -120, 1, 0x50, 1, -112, 1, 0x58, 1, -104, 1, 0x60, 1, -96, 1, 0x68, 1, -88, 1, 0x70, 1, -80, 1, 0x78, 1, -72, 1, -72, 1, -128, 1, -128, 1, -64, 1, -120, 1, -56, 1, -112, 1, -48, 1, -104, 1, -40, 1, -96, 1, -32, 1, -88, 1, -24, 1, -80, 1, -16, 1, -72, 1, -8, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+extern char D_L02_001CB400[];
 extern void FUN_L02_002a40f0(void *);
 
 void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, float w, int e, int f,
@@ -139,18 +139,7 @@ void FUN_L02_002d3a50(void *moby, void *a, void *b, int n, float sa, float sb) {
 /* Transforms two table vectors by the moby's matrix and passes them on. */
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D5098), where it is exact; names translated to the US level program. */
 
-float D_L02_001D3230[10][4] = {
-    {-2.882f, -0.021f, 0.264f, 0.173f},
-    {-3.5f, 0.006f, 0.264f, 0.361f},
-    {-3.146f, 0.006f, 0.363f, 0.146f},
-    {-3.255f, 0.006f, 0.625f, 0.215f},
-    {-3.143f, 0.179f, 0.522f, 0.109f},
-    {-3.067f, 0.238f, 0.732f, 0.174f},
-    {-3.143f, -0.2f, 0.522f, 0.109f},
-    {-3.067f, -0.208f, 0.732f, 0.174f},
-    {-2.62f, -0.001f, -0.22f, 0.032f},
-    {-3.1f, -0.001f, 0.132f, 0.177f},
-};
+extern float D_L02_001D3230[][4] __attribute__((section(".data")));
 float D_L02_001619C0[4] __attribute__((section(".sdata"))) = {-3.25f, 0.0f, 0.2f, 0.0f};
 extern short D_L02_001619D0 __attribute__((sda));
 extern void FUN_001f9a10(void *, void *, void *);

@@ -27,7 +27,7 @@ void FUN_L00_00203b18(void) {
             *(int *)g = 8;
     }
 }
-char D_L00_00179448[4] __attribute__((section(".data"))) = {0};
+extern char D_L00_00179448[];
 /* Clears the short at D_L00_00179448. */
 void FUN_L00_00203b78(void) {
     *(short *)D_L00_00179448 = 0;
@@ -280,8 +280,8 @@ extern u8 D_L00_0017A680_56a8[] __asm__("D_L00_0017A680");
 extern Quad_56a8 D_L00_0017C040[];
 extern Quad_56a8 D_L00_0017C0B0[];
 extern Quad_56a8 D_L00_0017C120[];
-s32 D_L00_0017C1C0[8] = {0xf, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0};
-f32 D_L00_0017C190[12] = {0.0f, 0.25f, 0.5f, 0.75f, 1.0f, 1.0f, 1.0f, 0.8f, 0.6f, 0.4f, 0.2f, 0.0f};
+extern s32 D_L00_0017C1C0[];
+extern f32 D_L00_0017C190[];
 void FUN_L00_002056a8(void) {
     u8 *e;
 
@@ -1409,7 +1409,7 @@ void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void gravity_set_z(void *, void *, float) __asm__("FUN_L00_00233b20");
 
-float D_L00_001797D8[46] = {0.0f, 1.0f, 1.2f, 1.35f, 1.5f, 1.35f, 1.2f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f, 0.01f, 0.01f, 0.01f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.2f, 1.35f, 1.4f, 1.45f, 1.4f, 1.35f, 1.3f, 1.25f, 1.2f, 1.15f, 1.1f, 1.05f, 1.0f, -1.0f, 0.0f, 0.0f};
+extern float D_L00_001797D8[] __attribute__((section(".data")));
 void FUN_L00_00207a58(void) {
     struct Hero *G = &hero;
     OvlQuad t[1];
@@ -3738,7 +3738,3 @@ u8 D_L18_001F0347[1] __attribute__((section(".data"))) = {0};
 u8 D_L18_001F034F[1] __attribute__((section(".data"))) = {0};
 u8 D_L18_001F0357[1] __attribute__((section(".data"))) = {0};
 u8 D_L18_001F035F[1] __attribute__((section(".data"))) = {0};
-
-u8 D_L00_0017C1E0_2059d8[16] __asm__("D_L00_0017C1E0") = {0x12, 0xf7, 0x18, 0x3e, 0xd4, 0x48, 0x4b, 0xbd, 0xd, 0xa6, 0xa1, 0x3e, 0xb9, 0x88, 0x6f, 0x3f};
-u8 D_L00_0017C260_2059d8[64] __asm__("D_L00_0017C260") = {0x48, 0x19, 0xe2, 0x44, 0x29, 0x7c, 0xd5, 0x43, 0x1f, 0x45, 0xbe, 0x44, 0, 0, 0, 0, 0x1f, 0xa5, 0xe3, 0x44, 0xd7, 0x63, 0xcd, 0x43, 0x52, 0x58, 0xf, 0x45, 0, 0, 0, 0, 0x48, 0x19, 0xe2, 0x44, 0x29, 0x7c, 0xd5, 0xc3, 0x1f, 0x45, 0xbe, 0x44, 0, 0, 0, 0, 0x1f, 0xa5, 0xe3, 0x44, 0xd7, 0x63, 0xcd, 0xc3, 0x52, 0x58, 0xf, 0x45, 0, 0, 0, 0};
-f32 D_L00_0017C2A0_2059d8[24] __asm__("D_L00_0017C2A0") = {0.0f, 0.2f, 0.4f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f, 0.0f, 0.0f, 0.0f};

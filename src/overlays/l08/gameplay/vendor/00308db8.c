@@ -10,8 +10,8 @@
 /* Runs the two per-entry update calls over a 13-entry table. */
 
 extern Pair D_L08_001F8548[];
-int D_L08_001F84C8[8] = {0x1f4d00, 0x1f5168, 0x1f5498, 0x1f5640, 0x1f56b8, 0x1f5b00, 0x1f5e10, 0x1f5f18};
-int D_L08_001F84E8[16] = {0x1f5f90, 0x1f6280, 0x1f64a0, 0x1f65c0, 0x1f6610, 0x1f68f0, 0x1f6b00, 0x1f6bb0, 0x1f6c00, 0x1f7068, 0x1f7398, 0x1f7540, 0x1f75b8, 0x1f7a00, 0x1f7d10, 0x1f7e18};
+extern int D_L08_001F84C8[];
+extern int D_L08_001F84E8[];
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 
@@ -24,8 +24,8 @@ void FUN_L08_00308db8(int a) {
     }
 }
 extern Pair D_L08_001623F8[] __attribute__((section(".sdata")));
-int D_L08_001F4C18[12] = {0x1f1ad0, 0x1f1da0, 0x1f2070, 0x1f2460, 0x1f24b0, 0x1f28e0, 0x1f2b38, 0x1f2f68, 0x1f3398, 0x1f3980, 0x1f39f8, 0x1f4040};
-int D_L08_001F4C00[6] = {0x1f0240, 0x1f0670, 0x1f0aa0, 0x1f1088, 0x1f1100, 0x1f1748};
+extern int D_L08_001F4C18[];
+extern int D_L08_001F4C00[];
 void FUN_L08_00308e90(int a) {
     int i;
     for (i = 0; i < 0x6; i++) {

@@ -1061,7 +1061,7 @@ void FUN_L00_00273800(char *a) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00274788), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b80(void *, void *);
-unsigned char *D_L00_001B2180[2] __attribute__((section(".data"))) = {0};
+extern unsigned char *D_L00_001B2180[];
 extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
 
 unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, float f1, int col, float f2, int a4, int big) {

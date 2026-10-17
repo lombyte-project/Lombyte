@@ -2192,7 +2192,7 @@ extern void FUN_L01_0026e0e0(int, int);
 extern void debug_print(char *, short, short, int) __asm__("FUN_001e93b0");
 char D_L13_001F4D90[] = "moby:%d(%d) opened at %d\n";
 char D_L13_001F4DB0[] = "moby:%d(%d) failed at %d\n";
-char D_L13_001F4DD0[32] = {0x6d, 0x6f, 0x62, 0x79, 0x3a, 0x25, 0x64, 0x28, 0x25, 0x64, 0x29, 0x20, 0x63, 0x6c, 0x6f, 0x73, 0x65, 0x64, 0x20, 0x61, 0x74, 0x20, 0x25, 0x64, 0xa, 0, 0, 0, 0, 0, 0, 0};
+extern char D_L13_001F4DD0[];
 extern int frame_count __asm__("D_L13_0015F5CC");
 
 
@@ -2431,7 +2431,7 @@ void FUN_L13_002e84d8(struct Moby *moby) {
 extern int rand_q(void) __asm__("FUN_001160d8");
 extern int below_q(int) __asm__("FUN_00213260");
 
-unsigned char D_L13_001D3558[136] = {0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xa, 0xb, 0xc, 0xd, 0xe, 0x15, 0x13, 0xf, 0x10, 0x11, 0x12, 0x1b, 0x16, 0x17, 0x18, 0x14, 0x19, 0x1a, 0x1f, 0x1e, 0x1d, 0x1c, 0x20, 0x21, 0x22, 0x23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xcd, 0xcd, 0xcd, 0xcd, 0xcd, 0xcd, 0xcd, 0xcd};
+extern unsigned char D_L13_001D3558[];
 int FUN_L13_002e86f8(void *unused, unsigned char *p, int base, int n) {
     int j = rand_q() % n;
     int id = D_L13_001D3558[base + j];
@@ -2495,8 +2495,8 @@ typedef struct {
     int on[1];
 } Vd_v;
 
-int D_L13_001D3508[6] = {9, 0, 1, 2, 3, 0xa};
-int D_L13_001D3520[6] = {9, 0xa, 0xb, 0xc, 0xd, 0x14};
+extern int D_L13_001D3508[];
+extern int D_L13_001D3520[];
 void FUN_L13_002e8920(struct Moby *m, char *d) {
     OvlQuad zv;
     float a[4];
@@ -2526,7 +2526,7 @@ void FUN_L13_002e8920(struct Moby *m, char *d) {
 
 
 extern int frame_count __asm__("D_L13_0015F5CC");
-int D_L13_001D3538[8] = {0x14, 9, 0xe, 4, 6, 8, -1, 0};
+extern int D_L13_001D3538[];
 extern int FUN_L00_00257b90(int, int);
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -2564,7 +2564,7 @@ void FUN_L13_002e8b58(struct Moby *moby) {
     }
 }
 /* Places the attached pieces on their bones, keeping each position inside a box, and copies the moby's pose to them. */
-int D_L13_001D34A8[12] = {-1, 0xd, 0xc, 0xb, -1, 0xa, 9, 0x14, 0x14, 0x14, 0x14, 0x14};
+extern int D_L13_001D34A8[];
 extern char *FUN_L13_002ecd10(char *, int, int);
 extern void FUN_0020c828(char *);
 

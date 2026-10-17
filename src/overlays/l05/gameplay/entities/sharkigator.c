@@ -3124,12 +3124,12 @@ extern void FUN_L05_0030d678_30ca80(void) __asm__("FUN_L05_0030d678");
 
 extern Cam_30ca80 D_L05_00180340;
 extern Light_30ca80 light __asm__("D_L05_001CAD00");
-int D_L05_0020B440[48][4] = {0};
-unsigned short record_draw_values[48] __asm__("D_L05_0020B380") = {0xfff0, 0x3100, 0xffff, 0x1331, 0xc800, 0xfff0, 0x8ccc, 0xffff, 0xfec8, 0xf531, 0xffff, 0x37f, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xfffe, 0xeffc};
-int rise_frames[6] __asm__("D_L05_0020B3E0") = {0x67, 0x2b1, 0x320, 0x514, 0x4e20, 0x4e20};
-float rise_speeds[6] __asm__("D_L05_0020B3F8") = {0.0f, 0.51f, 0.26f, 0.475f, 0.8f, 2.0f};
-int base_rise_frames[6] __asm__("D_L05_0020B410") = {0x67, 0x2b1, 0x320, 0x514, 0x4e20, 0x4e20};
-float base_rise_speeds[6] __asm__("D_L05_0020B428") = {0.0f, 0.51f, 0.26f, 0.475f, 0.8f, 2.0f};
+extern int D_L05_0020B440[][4];
+extern unsigned short record_draw_values[] __asm__("D_L05_0020B380");
+extern int rise_frames[] __asm__("D_L05_0020B3E0");
+extern float rise_speeds[] __asm__("D_L05_0020B3F8");
+extern int base_rise_frames[] __asm__("D_L05_0020B410");
+extern float base_rise_speeds[] __asm__("D_L05_0020B428");
 extern void *D_L05_001612D4 __attribute__((section(".sdata")));
 extern unsigned char D_L05_00161204[] __attribute__((section(".sdata")));
 extern unsigned char D_L05_00161205[] __attribute__((section(".sdata")));

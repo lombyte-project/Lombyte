@@ -885,8 +885,8 @@ collision:
 extern Pair D_L08_001E8348[];
 extern char D_L08_001E8360[];
 extern int D_L08_001E2858[];
-int D_L08_001E8268[14] = {0x1e2960, 0x1e2a00, 0x1e2aa0, 0x1e2ba0, 0x1e2bf8, 0x1e2f88, 0x1e3198, 0x1e32b8, 0x1e3478, 0x1e3668, 0x1e3d58, 0x1e3db8, 0x1e4110, 0};
-int D_L08_001E82A0[28] = {0x1e4700, 0x1e4770, 0x1e47e0, 0x1e4890, 0x1e48d0, 0x1e4b30, 0x1e4c90, 0x1e4d50, 0x1e4e80, 0x1e4fd0, 0x1e5470, 0x1e54b0, 0x1e56f0, 0, 0x1e5ae0, 0x1e5b80, 0x1e5c20, 0x1e5d20, 0x1e5d78, 0x1e6108, 0x1e6318, 0x1e6438, 0x1e65f8, 0x1e67e8, 0x1e6ed8, 0x1e6f38, 0x1e7290, 0};
+extern int D_L08_001E8268[];
+extern int D_L08_001E82A0[];
 extern int D_L08_001E8310[];
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
@@ -901,8 +901,8 @@ void FUN_L08_002f0b40(int a) {
 }
 extern Pair D_L08_00161E10[] __attribute__((section(".sdata")));
 extern int D_L08_001DDF40[];
-int D_L08_001E27C8[24] = {0x1df7e0, 0x1dfab0, 0x1dfaf0, 0x1dfb30, 0x1dfd20, 0x1e0020, 0x1e02f0, 0x1e0360, 0x1e0660, 0x1e0770, 0x1e07b0, 0, 0x1e07d8, 0x1e0c10, 0x1e0c70, 0x1e0cc8, 0x1e0fb0, 0x1e1428, 0x1e1858, 0x1e18f8, 0x1e1d70, 0x1e1f00, 0x1e1f58, 0};
-int D_L08_001E2798[12] = {0x1de020, 0x1de458, 0x1de4b8, 0x1de510, 0x1de7f8, 0x1dec70, 0x1df0a0, 0x1df140, 0x1df5b8, 0x1df748, 0x1df7a0, 0};
+extern int D_L08_001E27C8[];
+extern int D_L08_001E2798[];
 extern int D_L08_001E2828[];
 void FUN_L08_002f0c18(int a) {
     int i;

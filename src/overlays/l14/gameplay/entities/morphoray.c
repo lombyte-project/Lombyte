@@ -395,7 +395,7 @@ void FUN_L14_00305408(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00306A88), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_0015FFD8;
-float D_L14_001EE5E0[18] = {0};
+extern float D_L14_001EE5E0[];
 extern unsigned short *D_L14_001ABF40[];
 
 void FUN_L14_00305600(struct Moby *moby) {
@@ -1767,20 +1767,8 @@ extern float D_L14_001624A0 __attribute__((sda));
 extern float D_L14_001624A4 __attribute__((sda));
 extern float D_L14_001624AC __attribute__((sda));
 extern float D_L14_001624B0 __attribute__((sda));
-float D_L14_001F6C38[6][3] = {
-    {0.1f, 0.1098f, 0.1161f},
-    {0.1377f, 0.1481f, 0.1536f},
-    {0.2394f, 0.2497f, 0.2516f},
-    {0.262f, 0.2725f, 0.2738f},
-    {0.4131f, 0.4241f, 0.4208f},
-    {0.4636f, 0.4742f, 0.4688f},
-};
-float D_L14_001F6C08[4][3] = {
-    {0.1371f, 0.1475f, 0.1531f},
-    {0.2404f, 0.2508f, 0.2526f},
-    {0.3467f, 0.3575f, 0.3563f},
-    {0.3949f, 0.406f, 0.4034f},
-};
+extern float D_L14_001F6C38[][3];
+extern float D_L14_001F6C08[][3];
 extern CamKey5d48 D_L14_001F6488[];
 extern char D_L14_0017AD80[];
 extern int scale_ticks_5d48(int) __asm__("FUN_001f96f8");

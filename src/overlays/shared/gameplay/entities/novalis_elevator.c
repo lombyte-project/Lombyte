@@ -828,7 +828,7 @@ extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FU
 extern void FUN_L01_002aea70_2e1ac0(struct Moby *, s32, ItemPrice_2e1ac0 *) __asm__("FUN_L01_002aea70");
 extern s32 FUN_0020b178_2e1ac0(s32, s32) __asm__("FUN_0020b178");
 
-s32 D_L01_001DEB10[10] = {0x13, 0xa, 0xb, 0x10, 0x11, 0xf, 0x15, 0x14, 0x19, 9};
+extern s32 D_L01_001DEB10[];
 extern ItemPrice_2e1ac0 D_L01_001C4530[];
 extern s32 alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
 void FUN_L01_002e1ac0(struct Moby *m) {
@@ -1244,7 +1244,7 @@ extern float D_L01_00161938 __attribute__((sda));
 extern int D_L01_0016193C __attribute__((sda));
 extern float D_L01_00161940 __attribute__((sda));
 extern char D_L01_0020AE80[];
-char D_L01_0020AEA0[32] = {0x6e, 0x6f, 0x20, 0x73, 0x74, 0x61, 0x72, 0x74, 0x20, 0x68, 0x6f, 0x75, 0x73, 0x65, 0x21, 0x20, 0x6b, 0x69, 0x6c, 0x6c, 0x69, 0x6e, 0x67, 0x20, 0x6d, 0x6f, 0x75, 0x73, 0x65, 0xa, 0, 0};
+extern char D_L01_0020AEA0[];
 extern void debug_print_2e3f20(char *) __asm__("FUN_001e93b0");
 extern void initialize_mover_2e3f20(void *) __asm__("FUN_L01_0026d930");
 extern void FUN_L01_00263a28(void *, int, int *, float *, float *, int *);

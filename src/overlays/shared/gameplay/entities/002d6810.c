@@ -472,7 +472,7 @@ extern V_2d8fa0 D_L15_001D3740[];
 extern V_2d8fa0 D_L15_001D3750[2][20];
 extern V_2d8fa0 D_L15_001D3A20[];
 extern char D_0013E533[];
-char D_L15_001D3BC0[64] = {0};
+extern char D_L15_001D3BC0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");

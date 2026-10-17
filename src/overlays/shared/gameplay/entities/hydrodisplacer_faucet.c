@@ -981,7 +981,7 @@ void FUN_L05_00319740(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
-char D_L05_00215C00[112] = {0x66, 0x66, -90, 0x3f, 0x66, 0x66, -90, 0x3f, 0, 0, 0, 0, 0, 0, -128, 0x3f, 0x66, 0x66, -90, 0x3f, 0x66, 0x66, -90, -65, 0, 0, 0, 0, 0, 0, -128, 0x3f, 0, 0, 0, 0, 0x33, 0x33, -45, -65, 0, 0, 0, 0, 0, 0, -128, 0x3f, 0x66, 0x66, -90, -65, 0x66, 0x66, -90, -65, 0, 0, 0, 0, 0, 0, -128, 0x3f, 0x66, 0x66, -90, -65, 0x66, 0x66, -90, 0x3f, 0, 0, 0, 0, 0, 0, -128, 0x3f, 0, 0, 0, 0, 0x33, 0x33, -45, 0x3f, 0, 0, 0, 0, 0, 0, -128, 0x3f, 0x66, 0x66, -90, 0x3f, 0x66, 0x66, -90, 0x3f, 0, 0, 0, 0, 0, 0, -128, 0x3f};
+extern char D_L05_00215C00[];
 extern void FUN_001f9a10(void *, void *, void *);
 extern void FUN_001f9cf8(void *, void *, void *);
 
@@ -1002,11 +1002,3 @@ void FUN_L05_003198e8(char *a) {
         }
     }
 }
-
-float D_L05_001D67B0[8] = {0.5f, 1.0f, 0.5f, 1.0f, 0.5f, 0.0f, 0.5f, 0.0f};
-float D_L05_001D67D0[1][4] = {
-    {0.8f, 0.0f, 0.0f, 1.0f},
-};
-float D_L05_001D6810[1][4] = {
-    {0.4f, 0.0f, 0.0f, 1.0f},
-};

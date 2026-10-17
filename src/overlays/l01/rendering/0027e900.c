@@ -106,7 +106,7 @@ typedef struct {
 extern void *create_part(s32) __asm__("FUN_L00_002678b8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-u8 *D_L01_001B25E0[1] __attribute__((section(".data"))) = {0};
+extern u8 *D_L01_001B25E0[];
 
 Particle *FUN_L01_00287b00(u128 *pos, u128 *vel, f32 f) {
     Particle *p;
@@ -129,7 +129,7 @@ Particle *FUN_L01_00287b00(u128 *pos, u128 *vel, f32 f) {
     }
     return p;
 }
-u8 *D_L01_001B25E4[1] __attribute__((section(".data"))) = {0};
+extern u8 *D_L01_001B25E4[];
 void *create_part(s32) __asm__("FUN_L00_002678b8");
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");

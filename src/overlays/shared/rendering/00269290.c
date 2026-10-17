@@ -2443,7 +2443,7 @@ extern s32 FUN_001fa6d0_0026ed28(f32) __asm__("FUN_001fa6d0");
 extern f32 FUN_002132a8_0026ed28(f32, f32) __asm__("FUN_002132a8");
 extern s32 FUN_L00_0025bfe0_0026ed28(f32, f32, f32, f32) __asm__("FUN_L00_0025bfe0");
 extern f32 D_0015ED60_0026ed28 __asm__("D_0015ED60");
-u8 *D_L00_001B20A0_0026ed28[3] __asm__("D_L00_001B20A0") = {0};
+extern u8 *D_L00_001B20A0_0026ed28[] __asm__("D_L00_001B20A0") __attribute__((section(".data")));
 Part_26ed28 *FUN_L00_0026ed28(u8 *a) {
     Part_26ed28 *p;
     Body_26ed28 *s;

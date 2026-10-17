@@ -13,7 +13,7 @@ extern float FUN_001f9b48(void *, void *);
 extern float FUN_001f9b80(void *, void *);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int D_L00_0015F5C4;
-char D_L00_001BD880[48] = {0, 0, -128, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -128, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -128, 0x3f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+extern char D_L00_001BD880[];
 extern int D_L00_0015F630 __asm__("D_L00_0015F630");
 extern int FUN_L00_002644e0(int);
 extern unsigned char D_0013CAE4[];

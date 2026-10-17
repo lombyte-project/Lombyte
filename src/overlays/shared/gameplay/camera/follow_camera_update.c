@@ -1260,8 +1260,8 @@ void FUN_L00_001eb0c8_002eb930(void *, void *, float) __asm__("FUN_L00_001eb0c8"
 void FUN_L00_002eb3b0_002eb930(char *) __asm__("FUN_L00_002eb3b0");
 void FUN_L00_001eb0b0_002eb930(void *) __asm__("FUN_L00_001eb0b0");
 extern char D_L00_001E77C0[];
-char D_L00_001E77D8[24] = {0x29, 0x5c, -113, 0x3d, 0, 0, -128, 0x3f, 0x29, 0x5c, -113, 0x3d, 0, 0, -128, 0x3f, 0x29, 0x5c, -113, 0x3d, 0, 0, 0, 0};
-char D_L00_001E77F0[32] = {0xa, -41, 0x23, 0x3d, 0xa, -41, 0x23, 0x3d, 0xa, -41, 0x23, 0x3d, -92, 0x70, 0x7d, 0x3f, 0xa, -41, 0x23, 0x3d, 0, 0, 0, 0, -51, -51, -51, -51, -51, -51, -51, -51};
+extern char D_L00_001E77D8[];
+extern char D_L00_001E77F0[];
 char *FUN_L00_002eb930(void *arg) {
     char *o = FUN_L00_001eb1f8_002eb930(6);
     char *m;

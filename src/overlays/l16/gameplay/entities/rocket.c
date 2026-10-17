@@ -1917,18 +1917,8 @@ typedef struct {
     long zero,texture,flags,mode;
 } L16RibbonPacket;
 
-float D_L16_001D3170[4][4] = {
-    {0.0f, 0.0f, -0.05f, 1.0f},
-    {0.0f, 0.0f, 0.05f, 1.0f},
-    {1.0f, 0.0f, -0.05f, 1.0f},
-    {1.0f, 0.0f, 0.05f, 1.0f},
-};
-float D_L16_001D31B0[4][2] = {
-    {0.5f, 0.0f},
-    {0.5f, 1.0f},
-    {0.5f, 0.0f},
-    {0.5f, 1.0f},
-};
+extern float D_L16_001D3170[][4];
+extern float D_L16_001D31B0[][2];
 extern int D_L16_001619EC __attribute__((sda)); /* no foreign declaration */
 extern int D_L16_001619F0 __attribute__((sda)); /* no foreign declaration */
 extern int D_L16_001619E8 __attribute__((sda)); /* no foreign declaration */

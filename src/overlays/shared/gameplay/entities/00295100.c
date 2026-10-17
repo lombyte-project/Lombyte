@@ -357,7 +357,7 @@ void update_world_object_animation(void) __asm__("FUN_00204790");
 void f22ca50_298840(void) __asm__("FUN_0022ca50");
 int f122298_298840(int) __asm__("FUN_00122298");
 int f215b10_298840(void) __asm__("FUN_00215b10");
-char D_L00_0017C440[64] = {0};
+extern char D_L00_0017C440[] __attribute__((section(".data")));
 extern float D_L00_0015F59C;
 void FUN_L00_00298840(int a) {
     O_298840 *o;
@@ -1560,8 +1560,8 @@ void FUN_L00_0029ab70(int a) {
     f12dc80_29ab70();
 }
 extern s32 D_L00_0015F3FC;
-s32 D_L00_001CA020[38] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, 7, 0, 0xa, -1, 0xd, 9, 8, 5, 1, 0xb, 0xc, 2, 6, -1, -1, 3, 4, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-s32 D_L00_001CA580[2] __attribute__((section(".data"))) = {0};
+extern s32 D_L00_001CA020[];
+extern s32 D_L00_001CA580[];
 extern Vendor_29a6b0 D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
 extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
 extern s32 D_L00_00161100 __attribute__((sda));
@@ -2948,5 +2948,3 @@ f32 D_L18_001CAF88[2] __attribute__((section(".data"))) = {0};
 u8 D_L18_001CAF94[4] __attribute__((section(".data"))) = {0};
 u8 D_L18_001CAF98[8] __attribute__((section(".data"))) = {0};
 u8 D_L18_001CAFA0[304] = {0};
-
-s32 D_L00_00173BF0[68] = {0, 0x1a4, 0x2d0, 0x3fc, 0x528, 0x654, 0x780, 0x8e8, 0xa50, 0xbf4, 0xd20, 0xe4c, 0xf78, 0x10a4, 0x11d0, 0x12fc, 0x1428, 0x1590, 0x1734, 0x1860, 0x198c, 0x1ab8, 0x1be4, 0x1d10, 0x1e3c, 0x1f68, 0x2094, 0x2238, 0x23dc, 0x2580, 0x26ac, 0x27d8, 0x2904, 0x2a30, 0x2b5c, 0x2c88, 0x2df0, 0x2f58, 0x30fc, 0x32b4, 0x3458, 0x35c0, 0x3764, 0x3908, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
