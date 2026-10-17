@@ -176,7 +176,7 @@ extern CollisionHit HH __asm__("D_L12_001742C0") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L12_001742C0 + (o)))
 
 void FUN_L12_00233e80(void) {
-    V v0, v10, v20, v30, v40, v50, v60;
+    V v0, v10, v20, v30, v40, hit_surface_angles, normalized_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -327,13 +327,13 @@ d1:
             if (0.4f < FUN_001f99c0(f)) {
                 hero.unk2C0.f[i] = 0.0f;
             }
-            sceVu0Normalize(&v60, (u8 *)&HH.normal_x);
-            FUN_L00_00216078(&v60, &v50);
-            if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
-                hero.unk2C8.f[i] = v50.f[1];
+            sceVu0Normalize(&normalized_hit_normal, (u8 *)&HH.normal_x);
+            FUN_L00_00216078(&normalized_hit_normal, &hit_surface_angles);
+            if (-0.78539819f < hit_surface_angles.f[1] && hit_surface_angles.f[1] < 0.78539819f) {
+                hero.unk2C8.f[i] = hit_surface_angles.f[1];
             }
-            if (-0.78539819f < v50.f[0] && v50.f[0] < 0.78539819f) {
-                hero.unk2D0.f[i] = v50.f[0];
+            if (-0.78539819f < hit_surface_angles.f[0] && hit_surface_angles.f[0] < 0.78539819f) {
+                hero.unk2D0.f[i] = hit_surface_angles.f[0];
             }
         } else {
             hero.unk2C0.i[i] = 0;
