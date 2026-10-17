@@ -45,8 +45,8 @@ struct Obj *spawn_spark(u128 *source_quadword, f32 *first_vector, f32 *second_ve
                          s32 arg7, s32 lookup_index_and_flags) {
     struct Obj *o;
     struct Sub *s;
-    f32 t0[4];
-    f32 t1[4];
+    f32 first_vector_scratch[4];
+    f32 second_vector_scratch[4];
 
     o = create_part(2);
     if (o != 0) {
@@ -71,8 +71,8 @@ struct Obj *spawn_spark(u128 *source_quadword, f32 *first_vector, f32 *second_ve
         s->h18 = truncate_float_to_s32(second_vector[3] * 210000.0f / 1000.0f);
         pack_vector_xyz_with_shared_scale(first_vector, &s->a);
         pack_vector_xyz_with_shared_scale(second_vector, &s->b);
-        load_display_text_resource_entry(t0, &s->a);
-        load_display_text_resource_entry(t1, &s->b);
+        load_display_text_resource_entry(first_vector_scratch, &s->a);
+        load_display_text_resource_entry(second_vector_scratch, &s->b);
         s->c = arg3;
         s->d = arg4;
         s->h10 = arg5;
