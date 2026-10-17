@@ -2832,7 +2832,7 @@ extern char D_L00_001E4B40[];
 extern char D_L00_001E6020[] __asm__("D_L00_001E6020");
 extern char D_L00_001E5FE0[];
 extern short D_L00_001E6008[] __attribute__((section(".data")));
-extern unsigned char D_L00_00173E60[];
+extern V D_L00_00173E60;
 void FUN_L00_002ddcb8_u(char *, void *) __asm__("FUN_L00_002ddcb8");
 void FUN_L00_002dd8e8_u(void) __asm__("FUN_L00_002dd8e8");
 void FUN_001ff2a8_002ddf60(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -2896,7 +2896,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     FUN_001ff500_002ddcb8(&probe, &first, D_L00_00161B84_lui * 10.0f);
     FUN_001ff278_002ddcb8(&probe, &probe, initial_vector);
     if (FUN_001efc70_002ddf60(initial_vector, &probe, 20, *(void **)(global + 0x2080), 0)) {
-        i = truncate_float_to_s32(FUN_001ff488_002ddf60(((char *)D_L00_00173E60), initial_vector) / D_L00_00161B84_lui);
+        i = truncate_float_to_s32(FUN_001ff488_002ddf60(((char *)((unsigned char *)&D_L00_00173E60)), initial_vector) / D_L00_00161B84_lui);
         if (i < 10) {
             halfword = (short *)(D_L00_001E5F40_002ddcb8 + 0xc8) + i;
             j = i;

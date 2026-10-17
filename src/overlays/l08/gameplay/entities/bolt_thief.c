@@ -1947,7 +1947,6 @@ extern CollPos_4BE8 D_L08_00174660;
 extern KillFlags_4BE8 D_L08_001BADD0;
 extern KillFlags_4BE8 D_L08_001BBA30;
 extern struct Moby *D_L08_0015FFDC;
-extern char D_0013E533_p[] __asm__("D_0013E533");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_subtract_rotations_c2(f32, f32) __asm__("func_001FA5C8");
 extern f32 fast_vec_dist(void *, void *);
