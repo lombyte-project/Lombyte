@@ -27,7 +27,7 @@ extern s32 DmaChannelsUsed[] __asm__("D_001533F8");
 extern s32 Memclr();
 extern s32 sceDmaPutEnv();
 
-s32 sceDmaReset(s32 arg0) {
+s32 sceDmaReset(s32 enable_dma) {
     s32 buf[5];
     s32 status;
     s32 i;
@@ -50,7 +50,7 @@ s32 sceDmaReset(s32 arg0) {
     *(u32 *)0x1000E010 = mask;
     Memclr(buf, 0x14);
     sceDmaPutEnv(buf);
-    if (arg0 == 1) {
+    if (enable_dma == 1) {
         *(volatile u32 *)0x1000E000 |= 1;
     }
     return status;
