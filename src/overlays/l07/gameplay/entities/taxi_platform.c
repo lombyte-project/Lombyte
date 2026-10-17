@@ -2603,9 +2603,8 @@ struct Tgt_3109D0_p {
     int kind;
 };
 
-extern Rec_30D8E8_p *D_L07_001612D0_p __asm__("D_L07_001612D0");
-extern Vec4_p D_L07_00173EE0_p __asm__("D_L07_00173EE0");
-extern char *D_L07_0015FFD8_p __asm__("D_L07_0015FFD8");
+extern Rec_30D8E8 * D_L07_001612D0;
+extern char *D_L07_0015FFD8;
 extern char D_0013E533[];
 extern char D_L07_002117F8[];
 extern char D_L07_00211838[];
@@ -2615,7 +2614,7 @@ extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0");
 extern int D_L07_0015F5CC_p __asm__("D_L07_0015F5CC");
-extern int D_L07_001612D8_p __asm__("D_L07_001612D8");
+extern int D_L07_001612D8;
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int FUN_001f0b58(void);
 extern int FUN_L00_00259740(void *, void *, int);
@@ -2681,7 +2680,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
     FUN_L00_00263ac8(moby, 0, data + 0x150, 2.2f);
     if (moby[0x20] == 0) {
         if (FUN_L07_0030ed30_c((char *)moby, data)) {
-            DebugPrint_alt(D_L07_002117F8, (int)((char *)moby - D_L07_0015FFD8_p) >> 8);
+            DebugPrint_alt(D_L07_002117F8, (int)((char *)moby - D_L07_0015FFD8) >> 8);
             mark_moby_for_removal_c4(moby);
             return;
         }
@@ -2745,20 +2744,20 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         if (moby[0x20] == 0xE || moby[0x20] == 0xC) {
             s += s;
         }
-        if (0.5f < vector_distance_xy_alt(moby + 0x10, &D_L07_00173EE0_p)) {
-            f = vector_distance_xy_alt(moby + 0x10, &D_L07_00173EE0_p);
+        if (0.5f < vector_distance_xy_alt(moby + 0x10, &(*(Vec4_p *)&D_L07_00173EE0))) {
+            f = vector_distance_xy_alt(moby + 0x10, &(*(Vec4_p *)&D_L07_00173EE0));
             f += f;
         } else {
             f = 1.0f;
         }
         if (D_L07_0015F5CC_p % 45 == *(short *)(moby + 0xB2) && random_integer_below(2) == 0) {
-            func_L00_002A5158_30D8E8(D_L07_001612D0_p, D_L07_001612D8_p, 1, F(moby, 0x10), F(moby, 0x14), f, s);
+            func_L00_002A5158_30D8E8((*(Rec_30D8E8_p * *)&D_L07_001612D0), D_L07_001612D8, 1, F(moby, 0x10), F(moby, 0x14), f, s);
         }
         if (D_L07_0015F5CC_p % ((rand() & 7) + 20) == 0) {
             float size = random_float_between_c2(1.5f, 2.4f);
             pos[0] += random_float_between_c2(-0.15f, 0.15f);
             pos[1] += random_float_between_c2(-0.15f, 0.15f);
-            pos[2] = resolve_camera_surface_height(&D_L07_00173EE0_p, 0);
+            pos[2] = resolve_camera_surface_height(&(*(Vec4_p *)&D_L07_00173EE0), 0);
             FUN_L00_002715e8(pos, 0, -1, size, 5250.0f);
         }
     }

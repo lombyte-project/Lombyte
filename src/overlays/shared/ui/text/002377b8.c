@@ -371,7 +371,6 @@ extern f32 convert_integer_to_float_c2(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
-extern int D_L00_0015FA90_p __asm__("D_L00_0015FA90");
 extern void * D_L00_0015FAC0;
 extern s32 fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0");
@@ -400,7 +399,6 @@ extern short D_L00_0015F7C0_p __asm__("D_L00_0015F7C0");
 extern short D_L00_0015F7C4_gp __asm__("D_L00_0015F7C4") __attribute__((sda));
 extern u32 strlen(const char *);
 extern unsigned char D_0013E520[];
-extern int D_L00_0015F5CC_i __asm__("D_L00_0015F5CC");
 extern void FUN_L00_0023b120(char *, int, int, int, int, int);
 extern void draw_hud_sprite_c2(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 int FUN_L00_00235a70_c3(HudElem_p *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
@@ -429,7 +427,7 @@ int FUN_L00_002382a0(HudElem_p *rec) {
     else if (fade < 0.0f) fade = 0.0f;
     {
         float phase, angle, radius;
-        phase = convert_integer_to_float_c2(D_L00_0015F5CC_i % GI(D_L00_0015F7B0_gp));
+        phase = convert_integer_to_float_c2(D_L00_0015F5CC % GI(D_L00_0015F7B0_gp));
         phase /= convert_integer_to_float_c2(GI(D_L00_0015F7B0_gp));
         phase *= 6.28318f;
         angle = fast_sin(phase - 3.14159f);
@@ -451,9 +449,9 @@ int FUN_L00_002382a0(HudElem_p *rec) {
                   y, -half_w, half_h, alpha);
     draw_hud_sprite_c2(find_valid_animation_frame_index_alt(0xe934, 0), x,
                   y + GI(D_L00_0015F71C_p), half_w, -half_h, alpha);
-    for (i = 0; i < D_L00_0015FA90_p; i++) {
+    for (i = 0; i < D_L00_0015FA90; i++) {
         angle = fast_add_rotations_c(((float)i + (float)i) * 3.1415927f /
-                              (float)D_L00_0015FA90_p - 3.1415927f, 1.5707964f);
+                              (float)D_L00_0015FA90 - 3.1415927f, 1.5707964f);
         icon_x = x + GI(D_L00_0015F720_gp) +
                  (int)(GF(D_L00_0015F78C_gp) * fast_cos(angle) * GF(D_L00_0015F7C4_gp));
         icon_y = y + GI(D_L00_0015F724_gp) +
@@ -510,8 +508,8 @@ int FUN_L00_002382a0(HudElem_p *rec) {
             if (*(const unsigned char *)suffix == '-') {
                 suffix++;
                 /* Fakematch: touching the frame counter here gives retail's register order for the text position. */
-                D_L00_0015F5CC_i++;
-                D_L00_0015F5CC_i--;
+                D_L00_0015F5CC++;
+                D_L00_0015F5CC--;
                 prefix_length = j + 2;
                 break;
             }

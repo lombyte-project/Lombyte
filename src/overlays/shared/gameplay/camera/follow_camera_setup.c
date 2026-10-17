@@ -872,7 +872,6 @@ typedef struct G002e7318 {
 } G002e7318;
 extern G002e7318 D_L00_00166E10_c __asm__("D_L00_00166E10");
 extern f32 follow_cam_min_distance_gp __asm__("D_L00_00161CD8") __attribute__((sda));
-extern V002e7318 D_L00_00173E60_c __asm__("D_L00_00173E60");
 extern V002e7318 D_L00_00173E70;
 extern s32 FUN_L00_002e4180_c(V002e7318 *, f32) __asm__("FUN_L00_002e4180");
 extern s32 coll_sphere(V002e7318 *, f32, s32, s32) __asm__("FUN_L00_001f0d60");
@@ -909,7 +908,7 @@ s32 FUN_L00_002e7318(O002e7318 *o) {
             hb = 1;
         }
         if (x->s38 != 0) {
-            subtract_vector_xyz(&tmp, &D_L00_00173E60_c, &pos);
+            subtract_vector_xyz(&tmp, &(*(V002e7318 *)&D_L00_00173E60), &pos);
             normalize_vector_xyz(&tmp, &tmp, 1.0f);
             d = dot_vectors_xyz(&g->v40, &tmp);
             if (d > 0.75f)
