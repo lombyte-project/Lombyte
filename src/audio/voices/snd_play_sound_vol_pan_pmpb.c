@@ -3,7 +3,7 @@ extern s32 snd_send_iop_command_no_wait() __asm__("func_0012E6E0");
 void snd_play_sound_vol_pan_pmpb(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
                                  s32 a7) __asm__("FUN_0012e308");
 
-void snd_play_sound_vol_pan_pmpb(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) {
+void snd_play_sound_vol_pan_pmpb(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 callback_address, s32 callback_context_address) {
     s32 buf[6];
 
     buf[0] = a0;
@@ -12,7 +12,7 @@ void snd_play_sound_vol_pan_pmpb(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5,
     buf[3] = a3;
     buf[4] = a4;
     buf[5] = a5;
-    snd_send_iop_command_no_wait(0x11, 0x18, buf, a6, a7);
+    snd_send_iop_command_no_wait(0x11, 0x18, buf, callback_address, callback_context_address);
 }
 
 extern __typeof__(snd_play_sound_vol_pan_pmpb) func_0012E308 __attribute__((alias("FUN_0012e308")));
