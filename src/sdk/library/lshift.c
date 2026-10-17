@@ -33,7 +33,7 @@ struct Bigint {
 extern struct Bigint *_Balloc(s32, s32);
 extern s32 InsertLinkObject();
 
-struct Bigint *_lshift(s32 arg0, struct Bigint *arg1, s32 arg2) {
+struct Bigint *_lshift(s32 arg0, struct Bigint *input_bigint, s32 shift_bits) {
     s32 i;
     s32 k1;
     s32 n;
@@ -44,10 +44,10 @@ struct Bigint *_lshift(s32 arg0, struct Bigint *arg1, s32 arg2) {
     u32 *xe;
     u32 z;
 
-    n = arg2 >> 5;
-    k1 = arg1->_k;
-    n1 = n + arg1->_wds + 1;
-    for (i = arg1->_maxwds; n1 > i; i <<= 1) {
+    n = shift_bits >> 5;
+    k1 = input_bigint->_k;
+    n1 = n + input_bigint->_wds + 1;
+    for (i = input_bigint->_maxwds; n1 > i; i <<= 1) {
         k1++;
     }
     b1 = _Balloc(arg0, k1);
@@ -55,13 +55,13 @@ struct Bigint *_lshift(s32 arg0, struct Bigint *arg1, s32 arg2) {
     for (i = 0; i < n; i++) {
         *x1++ = 0;
     }
-    x = arg1->_x;
-    xe = x + arg1->_wds;
-    if (arg2 &= 0x1F) {
-        k1 = 32 - arg2;
+    x = input_bigint->_x;
+    xe = x + input_bigint->_wds;
+    if (shift_bits &= 0x1F) {
+        k1 = 32 - shift_bits;
         z = 0;
         do {
-            *x1++ = *x << arg2 | z;
+            *x1++ = *x << shift_bits | z;
             z = *x++ >> k1;
         } while (x < xe);
         if ((*x1 = z) != 0) {
@@ -73,6 +73,6 @@ struct Bigint *_lshift(s32 arg0, struct Bigint *arg1, s32 arg2) {
         } while (x < xe);
     }
     b1->_wds = n1 - 1;
-    InsertLinkObject(arg0, arg1);
+    InsertLinkObject(arg0, input_bigint);
     return b1;
 }
