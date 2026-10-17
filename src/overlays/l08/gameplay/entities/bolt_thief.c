@@ -1963,7 +1963,7 @@ extern float D_L08_00161CA8;
 extern float D_L08_00161CAC_gp __asm__("D_L08_00161CAC") __attribute__((sda));
 extern float D_L08_00161CB0;
 extern float D_L08_00161CB4_gp __asm__("D_L08_00161CB4") __attribute__((sda));
-extern float D_L08_00161CB8_p __asm__("D_L08_00161CB8");
+extern float D_L08_00161CB8;
 extern float D_L08_00161CBC_gp __asm__("D_L08_00161CBC") __attribute__((sda));
 extern float D_L08_00161CD0_gp __asm__("D_L08_00161CD0") __attribute__((sda));
 extern float FUN_001f96b0(float);
@@ -1980,7 +1980,7 @@ extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern int FUN_L00_002604f0(void *, int, void *, void *, void *, void *);
 extern int queue_animation_update_alt(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
-extern s32 D_0013DF38_p[] __asm__("D_0013DF38");
+extern s32 level_bolts[] __asm__("D_0013DF38");
 extern s32 D_0015ED98;
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
@@ -2013,7 +2013,6 @@ extern char D_0013F490[];
 extern void func_L00_0023A658_4BE8(void) __asm__("FUN_L08_002444a8");
 extern void func_L00_0023A690_4BE8(void) __asm__("FUN_L08_002444e0");
 extern void func_L00_0023A788_4BE8(void) __asm__("FUN_L08_002445d8");
-extern unsigned char D_0014C150_4BE8[][16] __asm__("D_0014C050");
 extern int D_L08_00174658_lui __asm__("D_L08_00174658") __attribute__((section(".data")));
 
 void FUN_L08_002e3870(struct Moby *m) {
@@ -2030,13 +2029,13 @@ void FUN_L08_002e3870(struct Moby *m) {
 
         switch (m->oclass) {
         case 0x279:
-            m->scale = m->pclass->scale * *(float *)&D_L08_00161CB4_gp;
+            m->scale = m->pclass->scale * D_L08_00161CB4_gp;
             break;
         case 0x3DC:
-            m->scale = m->pclass->scale * *(float *)&D_L08_00161CB8_p;
+            m->scale = m->pclass->scale * D_L08_00161CB8;
             break;
         case 0x3DD:
-            m->scale = m->pclass->scale * *(float *)&D_L08_00161CBC_gp;
+            m->scale = m->pclass->scale * D_L08_00161CBC_gp;
             break;
         }
         linked = 0;
@@ -2229,7 +2228,7 @@ void FUN_L08_002e3870(struct Moby *m) {
                     m->alpha = (fast_vec_dist(b, &m->pos) + lim) * 128.0f / (lim + lim);
                 }
                 if (D_L08_00161CC4_gp != 0) {
-                    m->scale = m->pclass->scale * *(float *)&D_L08_00161CB4_gp * (fast_vec_dist(b, &m->pos) + lim) / (lim + lim);
+                    m->scale = m->pclass->scale * D_L08_00161CB4_gp * (fast_vec_dist(b, &m->pos) + lim) / (lim + lim);
                 }
             } else {
                 int value;
@@ -2283,11 +2282,11 @@ void FUN_L08_002e3870(struct Moby *m) {
                     D_0014D590[current_level_index][src->id].bolts += value;
                 }
                 D_0015ED98 += value;
-                D_0013DF38_p[current_level_index] += value;
+                level_bolts[current_level_index] += value;
                 queue_animation_update_alt(2, 0x754E, func_L00_0023A658_4BE8, func_L00_0023A690_4BE8, func_L00_0023A788_4BE8, &D_0015ED98, 9999999);
                 if (m < D_L08_0015FFDC) {
                     D_L08_001BADD0.killed[(short)m->save_id] = m->mission + 2;
-                    if (m->mission == 0xFF || (D_L08_0015FC88_macro[m->mission] != 0xFF && D_0014C150_4BE8[current_level_index][m->mission] == 0xFF)) {
+                    if (m->mission == 0xFF || (D_L08_0015FC88_macro[m->mission] != 0xFF && D_0014C050[m->mission + current_level_index * 16] == 0xFF)) {
                         D_L08_001BBA30.killed[(short)m->save_id] = m->mission + 2;
                     }
                 }
@@ -2324,7 +2323,7 @@ void FUN_L08_002e3870(struct Moby *m) {
                 D_0014D590[current_level_index][src->id].bolts += value;
             }
             D_0015ED98 += value;
-            D_0013DF38_p[current_level_index] += value;
+            level_bolts[current_level_index] += value;
             mark_moby_for_removal_c3(m);
             return;
         }
@@ -2454,12 +2453,12 @@ extern short D_L08_00161C64 __attribute__((sda));
 extern short D_L08_00161C7C __attribute__((sda));
 extern short D_L08_00161C80 __attribute__((sda));
 extern short D_L08_00161C78 __attribute__((sda));
-extern short D_L08_00161CB8 __attribute__((sda));
-extern short D_L08_00161CBC __attribute__((sda));
+extern float D_L08_00161CB8 __attribute__((sda));
+extern float D_L08_00161CBC __attribute__((sda));
 extern short D_L08_00161C84 __attribute__((sda));
 extern short D_L08_00161C68 __attribute__((sda));
 extern short D_L08_00161C6C __attribute__((sda));
-extern short D_L08_00161CB4 __attribute__((sda));
+extern float D_L08_00161CB4 __attribute__((sda));
 extern short D_L08_00161C70 __attribute__((sda));
 extern short D_L08_00161C74 __attribute__((sda));
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
@@ -2483,19 +2482,19 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     float t;
     switch (moby->oclass) {
     case 0x3DC:
-        sx = *(float *)&D_L08_00161C68 * *(float *)&D_L08_00161CB8;
-        sy = *(float *)&D_L08_00161C74 * *(float *)&D_L08_00161CB8;
-        sz = *(float *)&D_L08_00161C80 * *(float *)&D_L08_00161CB8;
+        sx = *(float *)&D_L08_00161C68 * D_L08_00161CB8;
+        sy = *(float *)&D_L08_00161C74 * D_L08_00161CB8;
+        sz = *(float *)&D_L08_00161C80 * D_L08_00161CB8;
         break;
     case 0x3DD:
-        sx = *(float *)&D_L08_00161C6C * *(float *)&D_L08_00161CBC;
-        sy = *(float *)&D_L08_00161C78 * *(float *)&D_L08_00161CBC;
-        sz = *(float *)&D_L08_00161C84 * *(float *)&D_L08_00161CBC;
+        sx = *(float *)&D_L08_00161C6C * D_L08_00161CBC;
+        sy = *(float *)&D_L08_00161C78 * D_L08_00161CBC;
+        sz = *(float *)&D_L08_00161C84 * D_L08_00161CBC;
         break;
     default:
-        sx = *(float *)&D_L08_00161C64 * *(float *)&D_L08_00161CB4;
-        sy = *(float *)&D_L08_00161C70 * *(float *)&D_L08_00161CB4;
-        sz = *(float *)&D_L08_00161C7C * *(float *)&D_L08_00161CB4;
+        sx = *(float *)&D_L08_00161C64 * D_L08_00161CB4;
+        sy = *(float *)&D_L08_00161C70 * D_L08_00161CB4;
+        sz = *(float *)&D_L08_00161C7C * D_L08_00161CB4;
         break;
     }
     euler_rotation_matrix(b, (float *)(data + 0x10));
