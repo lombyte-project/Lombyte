@@ -77,18 +77,17 @@ typedef struct {
 
 extern VoiceRuntimeState D_0013E550;
 extern f32 D_0013F640[];
-extern f32 D_0015ED6C;
-extern s32 D_0015F5E8;
-extern s32 D_0015F604;
-extern s32 D_0015F60C;
+extern s32 boot_level_active __asm__("D_0015F5E8");
+extern s32 game_mode __asm__("D_0015F604");
+extern s32 world_update_time __asm__("D_0015F60C");
 extern VoiceVector D_00187080;
-extern u8 D_00187290[];
-extern s32 D_001872D4;
+extern char camera_rows[] __asm__("D_00187290");
+extern s32 use_alt_fog __asm__("D_001872D4");
 
 extern s32 ComputeByteStringHash(u8 *, s32);
 extern int snd_get_doppler_pitch_mod(int arg0);
-extern void FillTransferWords(void *, s32, s32);
-extern void ReadGlobalTableEntry(void);
+extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
+extern void read_global_table_entry(void) __asm__("ReadGlobalTableEntry");
 extern s32 snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void snd_set_master_volume(s32, s32) __asm__("FUN_0012e208");
 extern void snd_play_sound_vol_pan_pmpb() __asm__("FUN_0012e308");
@@ -106,7 +105,7 @@ extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void func_001F9CF8(void *out, void *a, void *b) __asm__("FUN_001f9cf8");
 extern void func_001FA2D8(void *out, void *a) __asm__("FUN_001fa2d8");
-extern f32 ConvertIntegerToFloat(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void music_update() __asm__("FUN_00216290");
 extern void clamp_voice_position_to_collision(void *) __asm__("FUN_0022c5a8");
@@ -154,7 +153,7 @@ s32 sound_update(void) {
     s32 command_flags;
     u8 * volatile occlusion_history;
 
-    underwater = D_001872D4;
+    underwater = use_alt_fog;
     water_height = 0.0f;
     if (underwater != 0) {
         water_height = D_0013F640[0];
@@ -171,7 +170,7 @@ s32 sound_update(void) {
     }
     D_0013E550.reverb_commands = 0;
 
-    if ((D_0015F604 == 0 || D_0015F604 == 2) && D_0015F5E8 == 0) {
+    if ((game_mode == 0 || game_mode == 2) && boot_level_active == 0) {
         clamp_voice_position_to_collision(&listener_occlusion_position);
     }
 
@@ -189,7 +188,7 @@ s32 sound_update(void) {
         do {
             subtract_vector_xyz(&relative_velocity, &D_0013E550.listener_history[current_index],
                                 &D_0013E550.listener_history[previous_history_index]);
-            if (!(vector_length_xyz(&relative_velocity) < D_0015ED6C * 60.0f)) {
+            if (!(vector_length_xyz(&relative_velocity) < frame_time * 60.0f)) {
                 break;
             }
             listener_sample_count++;
@@ -200,10 +199,10 @@ s32 sound_update(void) {
     }
     if (listener_sample_count >= 2) {
         scale_vector_xyz(&listener_velocity, &listener_velocity,
-                         1.0f / ConvertIntegerToFloat(listener_sample_count));
+                         1.0f / convert_integer_to_float(listener_sample_count));
     }
 
-    if (D_0015F604 == 2) {
+    if (game_mode == 2) {
         snd_set_master_volume(1, 0);
         snd_set_master_volume(0, D_0013E550.group_0_volume / 2);
         snd_set_master_volume(3, D_0013E550.group_3_volume / 2);
@@ -222,9 +221,9 @@ s32 sound_update(void) {
 
     voice_flags = flags;
     volumes = voice_volumes;
-    FillTransferWords(voice_flags, 0, 0x78);
-    FillTransferWords(volumes, 0, 0x78);
-    FillTransferWords(radial_velocities, 0, 0x78);
+    fill_transfer_words(voice_flags, 0, 0x78);
+    fill_transfer_words(volumes, 0, 0x78);
+    fill_transfer_words(radial_velocities, 0, 0x78);
 
     for (slot_index = 0; slot_index < 30; slot_index++) {
         if (D_0013E550.voices[slot_index].state != 7) {
@@ -257,7 +256,7 @@ s32 sound_update(void) {
             voice_flags[slot_index] = 0x20;
             continue;
         }
-        if (D_0015F604 != 0 && D_0015F604 != 2 && D_0015F604 != 6 &&
+        if (game_mode != 0 && game_mode != 2 && game_mode != 6 &&
             D_0013E550.voices[slot_index].state != 7) {
             voice_flags[slot_index] = 0x10;
             continue;
@@ -324,16 +323,16 @@ s32 sound_update(void) {
             continue;
         }
         if (D_0013E550.voices[slot_index].state == 7) {
-            if ((D_0015F604 != 0 && D_0015F604 != 2) || D_0015F5E8 != 0) {
+            if ((game_mode != 0 && game_mode != 2) || boot_level_active != 0) {
                 continue;
             }
             occluded_samples = 0;
-            if (D_0015F60C != D_0013E550.occlusion_frame) {
+            if (world_update_time != D_0013E550.occlusion_frame) {
                 for (sample_index = 0; sample_index < 6; sample_index++) {
                     clamp_voice_position_to_collision(
                         &D_0013E550.occlusion_samples[sample_index]);
                 }
-                D_0013E550.occlusion_frame = D_0015F60C;
+                D_0013E550.occlusion_frame = world_update_time;
             }
             for (history_offset = 0, sample_index = 0; history_offset < 36;
                  history_offset += 6, sample_index++) {
@@ -354,13 +353,13 @@ s32 sound_update(void) {
                 voice_volumes[slot_index] = (36 - occluded_samples) * voice_volumes[slot_index] / divisor;
             }
         } else {
-            if ((D_0015F604 == 0 || D_0015F604 == 2) && D_0015F5E8 == 0) {
+            if ((game_mode == 0 || game_mode == 2) && boot_level_active == 0) {
                 D_0013E550.voices[slot_index].occlusion_history_position =
                     (D_0013E550.voices[slot_index].occlusion_history_position + 1) % 36;
                 /* Active sources test every other frame; other voices every fourth. */
-                command_flags = (slot_index ^ D_0015F60C) & 1;
+                command_flags = (slot_index ^ world_update_time) & 1;
                 if (!(D_0013E550.voices[slot_index].flags & 4)) {
-                    command_flags = ((D_0015F60C ^ slot_index) & 3) == 0;
+                    command_flags = ((world_update_time ^ slot_index) & 3) == 0;
                 }
                 if (command_flags) {
                     D_0013E550.voices[slot_index].occlusion_history
@@ -386,7 +385,7 @@ s32 sound_update(void) {
         }
     }
 
-    func_001FA2D8(listener_matrix, D_00187290);
+    func_001FA2D8(listener_matrix, camera_rows);
     for (slot_index = 0; slot_index < 30; slot_index++) {
         command_flags = voice_flags[slot_index];
         if (command_flags == 0) {
@@ -444,7 +443,7 @@ s32 sound_update(void) {
     music_update();
     snd_reset_state_and_flush_commands();
     snd_flush_sound_commands();
-    ReadGlobalTableEntry();
+    read_global_table_entry();
     D_0013E550.pending_commands = 0;
     return 0;
 }
