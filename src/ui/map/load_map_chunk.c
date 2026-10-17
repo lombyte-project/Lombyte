@@ -5,13 +5,13 @@ extern s32 expand_map_coverage() __asm__("func_00207E58");
 extern void noop_memory_callback() __asm__("func_00208810");
 void load_map_chunk(s32 arg0, u8 *src, s32 arg2) __asm__("FUN_00207bb0");
 
-void load_map_chunk(s32 arg0, u8 *src, s32 arg2) {
+void load_map_chunk(s32 destination, u8 *src, s32 skip_count_stream) {
     noop_memory_callback();
     if (D_001A0118 != 0) {
         if (*src & 1) {
-            decode_compressed_occlusion_map(arg0, src, arg2);
+            decode_compressed_occlusion_map(destination, src, skip_count_stream);
         } else {
-            expand_map_coverage(arg0, src);
+            expand_map_coverage(destination, src);
         }
     }
 }
