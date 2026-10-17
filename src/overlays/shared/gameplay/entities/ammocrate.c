@@ -45,7 +45,7 @@ float FUN_L13_002ba088(int flag, int n, float x, float b, float c, float lo, flo
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002E2F98), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
 unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
@@ -57,7 +57,7 @@ unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
         moby[0x20] = 0;
         moby[0xBC] = 0;
         qcopy(moby + 0x10, position);
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
     }
     return moby;
@@ -323,7 +323,7 @@ unsigned char *FUN_L13_002e6a58(char *src, char *pos, char *target, char *vec, i
         *(float *)(moby + 0x2C) =
             *(float *)(*(char **)(moby + 0x24) + 0x24) *
             (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
         FUN_L00_0026daa0((char *)moby, 0x60808080, arg, 0, 500000.0f);
     }
     return moby;
@@ -404,8 +404,8 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern Tex_2E8040 D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
 extern V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160");
 
-void rocket_update(Moby *m) __asm__("FUN_L13_002e6c08");
-void rocket_update(Moby *m) {
+void FUN_L13_002e6c08(Moby *m);
+void FUN_L13_002e6c08(Moby *m) {
     Rocket_2E8040 *d = *(void **)&m->pvars;
     V4_2E8040 old;
     V4_2E8040 hitpos;

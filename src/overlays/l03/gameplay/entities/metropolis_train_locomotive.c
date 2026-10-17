@@ -1089,7 +1089,7 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 void FUN_L03_0029cff0(struct Moby *m) {
@@ -1111,9 +1111,9 @@ void FUN_L03_0029cff0(struct Moby *m) {
                          *(float *)(d + 0x118) * 10.0f * DEG_TO_RAD * frame_time_sq,
                          *(float *)(d + 0x118) * 5.0f * DEG_TO_RAD * frame_time_sq,
                          *(float *)(d + 0x118) * DEG_TO_RAD * frame_time);
-    w = normalize_rotation_l14(t * *(float *)(d + 0x124));
+    w = normalize_angle(t * *(float *)(d + 0x124));
     w = fast_subtract_rotations(m->rot.x, w);
-    w = normalize_rotation_l14(w * *(float *)(d + 0x128));
+    w = normalize_angle(w * *(float *)(d + 0x128));
     m->rot.x =
         spring_turn((float *)(d + 0x114), m->rot.x, w,
                          *(float *)(d + 0x110) * 10.0f * DEG_TO_RAD * frame_time_sq,

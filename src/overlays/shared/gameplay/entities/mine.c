@@ -182,7 +182,7 @@ extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__(
 extern int mine_blend_color(int, int, float) __asm__("FUN_L00_002371e0");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00258490(void *, void *, void *, float, float, float, float, int);
-extern int probe_ground_height_cf(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
+extern int FUN_L00_00260400(void *, void *, void *, void *, void *, void *);
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_002aa2a8(W910 *, M910 *, int);
@@ -483,7 +483,7 @@ void mine_update(M910 *m) {
                     } else if (D_L00_00173E58 != 0) {
                         hd = (M910 *)FUN_002141f8_cf((unsigned char *)D_L00_00173E58);
                         if (hd != 0) {
-                            probe_ground_height_cf(m, v->p4C, &m->pos, &m->rx, &m->pos, &m->rx);
+                            FUN_L00_00260400(m, v->p4C, &m->pos, &m->rx, &m->pos, &m->rx);
                         }
                     }
                     if (hd == 0) {
@@ -1583,7 +1583,7 @@ extern float FUN_L00_0025b6a8_2adb30(float, float, float) __asm__("FUN_L00_0025b
 extern void FUN_L00_0025c088_2adb30(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
 extern unsigned FUN_L00_0025c0e8_2adb30(unsigned c, int mask) __asm__("FUN_L00_0025c0e8");
 extern unsigned char *FUN_L00_002603d0_2adb30(unsigned char *) __asm__("FUN_L00_002603d0");
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void FUN_L00_0026a9f0_2adb30(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void *FUN_L00_0026bb70_2adb30(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
@@ -1994,7 +1994,7 @@ void bomb_update(BombMoby_2adb30 *m) {
     } else if (m->state != 2) {
         int v;
         d->h6a++;
-        v = FUN_001fa6d0_2adb30(FUN_001f9de0_2adb30(normalize_rotation_l14((float)d->h6a * 0.068f)) * 96.0f) + 0x9F;
+        v = FUN_001fa6d0_2adb30(FUN_001f9de0_2adb30(normalize_angle((float)d->h6a * 0.068f)) * 96.0f) + 0x9F;
         m->color = (v << 16) | (0xFF << 24) | (v << 8) | v;
     }
     if (m->state == 2) {

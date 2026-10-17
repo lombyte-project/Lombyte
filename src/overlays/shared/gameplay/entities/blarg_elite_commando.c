@@ -534,7 +534,7 @@ extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern int D_0015EE10 __attribute__((sda));
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L00_0025fcb8(float, char *, void *);
-extern int activate_effect_l08(float, char *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
@@ -673,7 +673,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
         d->pursuit_mode = 2;
     } else if (d->path_index >= 0 && d->pursuit_timer == 0) {
         char *path = D_L16_001B0930[d->path_index];
-        activate_effect_l08(24.0f, m, d->target, 0, 0, path + 0x10, *(int *)path);
+        FUN_L00_0025ff38(24.0f, m, d->target, 0, 0, path + 0x10, *(int *)path);
     } else {
         FUN_L00_0025fcb8(24.0f, m, d->target);
     }

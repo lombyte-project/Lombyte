@@ -710,7 +710,7 @@ extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
 extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern float FUN_L00_0025bb38(int, float, float);
 extern float FUN_L00_0025bc00(float *, int, float, float);
-extern float fast_subtract_rotations_cf(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
+extern float FUN_L00_0025bc98(void *, float, void *, int, float, float, float);
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float vector_length_xyz(void *);
@@ -752,7 +752,7 @@ extern void FUN_L00_00215340(void);
 extern void FUN_L00_00215ef8(void);
 extern void FUN_L00_00216710(float);
 extern void FUN_L00_00216de8_cf(void) __asm__("FUN_L00_0020b5b8");
-extern void release_voice_slot_cf(int, int, int) __asm__("FUN_L00_00216e48");
+extern void FUN_L00_00216e48(int, int, int);
 extern void FUN_L00_00217118(float, float);
 extern void FUN_L00_00217368(int, int);
 extern void FUN_L00_00217658(void);
@@ -1120,7 +1120,7 @@ void FUN_L02_00225c20(void) {
             if (fast_difference_between_rotations(a, hero.motion.rot.f[2]) > 90.0f) {
                 a = FUN_001f9b80_cf(a, 3.1415927f);
             }
-            fast_subtract_rotations_cf(&hero.unk9AC, a, &hero.unk9B8, 0, frame_scale_sq * 0.02f,
+            FUN_L00_0025bc98(&hero.unk9AC, a, &hero.unk9B8, 0, frame_scale_sq * 0.02f,
                              frame_scale_sq * 0.3f, 0.0f);
         }
         hero.motion.move_yaw = hero.unk9AC;
@@ -1139,9 +1139,9 @@ void FUN_L02_00225c20(void) {
         vec[1][0] =
             -fast_arc_tan(square_root(vec[0][0] * vec[0][0] + vec[0][2] * vec[0][2]), vec[0][1]);
         vec[1][1] = fast_arc_tan(vec[0][2], vec[0][0]);
-        fast_subtract_rotations_cf(&hero.motion.rot.f[1], vec[1][1], &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.04f,
+        FUN_L00_0025bc98(&hero.motion.rot.f[1], vec[1][1], &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.04f,
                          frame_scale_sq * 0.2f, frame_time * 9.599311f);
-        fast_subtract_rotations_cf(&hero.motion.rot.f[0], vec[1][0], &hero.motion.unkA0.f[0], 0, frame_scale_sq * 0.04f,
+        FUN_L00_0025bc98(&hero.motion.rot.f[0], vec[1][0], &hero.motion.unkA0.f[0], 0, frame_scale_sq * 0.04f,
                          frame_scale_sq * 0.2f, frame_time * 9.599311f);
         if (!(hero.motion.pos.f[2] < ((Moby *)hero.unk994)->f10[2])) {
             below = 0;
@@ -1875,9 +1875,9 @@ void FUN_L02_00225c20(void) {
                 t = 0.43633232f;
             }
             qcopy(vec[0], hero.motion.rot.f);
-            fast_subtract_rotations_cf(&vec[0][1], t, &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.02f,
+            FUN_L00_0025bc98(&vec[0][1], t, &hero.motion.unkA0.f[1], 0, frame_scale_sq * 0.02f,
                              frame_scale_sq * 0.3f, frame_time * 2.6179938f);
-            fast_subtract_rotations_cf(&vec[0][0], 0.0f, &hero.motion.unkA0.f[0], 0, frame_scale_sq * 0.02f,
+            FUN_L00_0025bc98(&vec[0][0], 0.0f, &hero.motion.unkA0.f[0], 0, frame_scale_sq * 0.02f,
                              frame_scale_sq * 0.3f, frame_time * 2.6179938f);
             FUN_L00_002091d8(hero.motion.unkA0.f[0], hero.motion.unkA0.f[1], 0.0f);
             if (hero.ground_distance > 1.0f) {
@@ -1918,7 +1918,7 @@ void FUN_L02_00225c20(void) {
         float v;
 
         fast = 1;
-        release_voice_slot_cf(4, (int)((Moby *)hero.moby), 0x12);
+        FUN_L00_00216e48(4, (int)((Moby *)hero.moby), 0x12);
         if (!(hero.ground_distance > 0.7f)) {
             fast = 0;
         }
@@ -1968,7 +1968,7 @@ void FUN_L02_00225c20(void) {
                 }
             }
             hero.unk2228 = -1;
-            release_voice_slot_cf(3, (int)((Moby *)hero.moby), 2);
+            FUN_L00_00216e48(3, (int)((Moby *)hero.moby), 2);
         } else {
             if (hero.unk2224 != -1) {
                 Row13E650 *e = (Row13E650 *)(D_0013E550 + hero.unk2224 * 0x70);
@@ -1978,7 +1978,7 @@ void FUN_L02_00225c20(void) {
                 }
             }
             hero.unk2224 = -1;
-            release_voice_slot_cf(4, (int)((Moby *)hero.moby), 0x12);
+            FUN_L00_00216e48(4, (int)((Moby *)hero.moby), 0x12);
         }
         v = frame_time * 3.0f;
         if (hero.items[3].item_id == 3) {

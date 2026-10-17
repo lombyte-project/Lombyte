@@ -181,15 +181,15 @@ int FUN_L00_002a4dc8(int a) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-void allocate_voice_for_target_entry_cf(unsigned char *) __asm__("FUN_L00_00250df8");
-/* Creates a class 0x3EF moby at v and runs allocate_voice_for_target_entry_cf on it. */
+void FUN_L00_00250df8(unsigned char *);
+/* Creates a class 0x3EF moby at v and runs FUN_L00_00250df8 on it. */
 unsigned char *FUN_L00_002a4de0(u128 *v) {
     unsigned char *m = create_moby(0x3ef);
     if (m) {
         m[0x30] = 0xff;
         *(unsigned short *)(m + 0x34) |= 0x41;
         qcopy(m + 0x10, v);
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -1404,7 +1404,7 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
                 angle = random_float_between(-30.0f, 30.0f) * 0.017453292f;
             FUN_L00_002a7210(m, D_001413D0, angle, 0.0f);
         }
-        allocate_voice_for_target_entry_cf((u8 *)m);
+        FUN_L00_00250df8((u8 *)m);
     } else {
         current_bolt_count += value;
     }
@@ -1826,7 +1826,7 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00211870(float);
 extern int FUN_L00_00216de8(int,int);
-extern int hero_set_state_2(int,int) __asm__("FUN_L00_002223f8");
+extern int FUN_L00_002223f8(int,int);
 extern int sweep_hit_segment(void*,void*,void*,void*,void*,void*,int) __asm__("FUN_L00_00259d08");
 extern int FUN_L00_0025e368(char*);
 extern int FUN_L00_0025e3b8(int);
@@ -1839,7 +1839,7 @@ extern void FUN_L00_002336e8(float*,float*,float);
 extern void moby_point_position(void*,int,void*) __asm__("FUN_L00_0024f7c8");
 extern void make_hit_descriptor(void*,void*,int,float,void*) __asm__("FUN_L00_00259888");
 extern void spawn_nearby_effect(void*,int,int,void*,void*,float) __asm__("FUN_L00_00259bc8");
-extern void interpolate_vector(void*,void*,void*,float) __asm__("FUN_L00_0025b6b8");
+extern void FUN_L00_0025b6b8(void*,void*,void*,float);
 extern void FUN_L00_00262480(char*,float,float,float);
 extern void FUN_L00_00262608(void*,int);
 extern void FUN_L00_00262840(char*);
@@ -2023,7 +2023,7 @@ void wrench_update(WrenchMoby *m) {
             }
         }
         if (reaction) {
-            hero_set_state_2(33,1);
+            FUN_L00_002223f8(33,1);
             if (collision_hit.moby) {
                 WrenchMoby *target=collision_hit.moby;
                 wrench_hero()->reaction_yaw=fast_arc_tan(wrench_hero()->position[0]-target->position[0],wrench_hero()->position[1]-target->position[1]);
@@ -2105,7 +2105,7 @@ void wrench_update(WrenchMoby *m) {
                 MobyHitState *hit=(MobyHitState*)suck_get_aim_height(collision_hit.moby);
                 if (!hit || hit->hit_count<2 || hit->hit_index!=work.shifted.query.class_id) {
                     work.q[7]=*(WrenchQuad*)collision_hit.moby->position;
-                    interpolate_vector(work.v[6],work.v[5],work.v[7],0.5f); FUN_L00_002a7e20(work.v[6],5);
+                    FUN_L00_0025b6b8(work.v[6],work.v[5],work.v[7],0.5f); FUN_L00_002a7e20(work.v[6],5);
                     d->timer=scale_game_frames_alt(30); wrench_hero()->attack_cooldown=1; allocate_voice_for_target_entry_alt(FUN_L00_002a7d90(),0,(int)m);
                 }
             }

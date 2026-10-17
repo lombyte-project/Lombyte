@@ -1271,7 +1271,7 @@ extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_
 extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern int activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
 
 void FUN_L15_0029a570(void *object, int flag) {
     unsigned char *moby = object;
@@ -1420,7 +1420,7 @@ void FUN_L15_0029a570(void *object, int flag) {
         data[0x15A] = 0;
     }
     path = D_L15_001B0AB0[*(int *)(data + 0x120)];
-    if (activate_effect_l08(moby, data + 0xD0, 128.0f, 0, 0, path + 4, *path) != 2) {
+    if (FUN_L00_0025ff38(moby, data + 0xD0, 128.0f, 0, 0, path + 4, *path) != 2) {
         float target_angle;
         seen = 0;
         target_angle = fast_arc_tan(*(float *)(data + 0xD0) - *(float *)(moby + 0x10),
@@ -1699,7 +1699,7 @@ extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below_c3(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c4(f32) __asm__("func_001FA6D0");
 extern unsigned char *D_L15_001B26DC __attribute__((section(".data")));
-extern unsigned char *spawn_particle(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
+extern unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
 extern void *FUN_L00_0026bb70_c(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 extern void suck_draw_reticle(void *, int, float, float, void *, int, int, float, int) __asm__("FUN_L00_001edf60");
 extern void FUN_L00_001ff290(void *, void *, void *);
@@ -1845,13 +1845,13 @@ void FUN_L15_0029d6c0(M_29E8A0 *m) {
             add_vector_xyz(delta, delta, v90);
             fast_vec_normalize(v90, vel, random_float_between(0.0f, 1.0f) * d->speed);
             add_vector_xyz(v90, v90, m->pos);
-            p = (Part_29E8A0 *)spawn_particle(v90, delta, scale_game_frames(0x3C), 0x7F, 0x606060, 3,
+            p = (Part_29E8A0 *)FUN_L00_002712b8(v90, delta, scale_game_frames(0x3C), 0x7F, 0x606060, 3,
                 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
             if (p != 0) {
                 p->f2 = *D_L15_001B26DC;
                 p->f3 = 0x44;
             }
-            spawn_particle(m->pos, delta, scale_game_frames(6), 0x7F, 0xB0B0B0, 3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
+            FUN_L00_002712b8(m->pos, delta, scale_game_frames(6), 0x7F, 0xB0B0B0, 3, 40000.0f, 1000.0f, 1.0f, -0.0004f, 0.0f);
             *(u128_29E8A0 *)dv = 0;
             dv[2] = 0.02f;
             transform_vector_by_basis(dv, dv, m->mtx);

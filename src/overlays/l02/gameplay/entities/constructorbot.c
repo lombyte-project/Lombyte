@@ -33,8 +33,8 @@ extern u8 *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32
 extern void rand_vec(void *, f32, f32) __asm__("FUN_L00_00257d78");
 
 /* Shard debris update: drifts along its velocity, sheds particle trails and expires when its timer runs out. */
-void constructorbot_update(struct Moby *m) __asm__("FUN_L02_002ebf20");
-void constructorbot_update(struct Moby *m) {
+void FUN_L02_002ebf20(struct Moby *m);
+void FUN_L02_002ebf20(struct Moby *m) {
     ShardVars *v = (ShardVars *)m->pvars;
     Vec4f p, back, half, jit;
     u8 *q;

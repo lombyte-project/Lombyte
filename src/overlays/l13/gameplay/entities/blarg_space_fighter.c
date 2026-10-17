@@ -14,7 +14,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 
 extern char *create_moby_c13(int) __asm__("FUN_0020c4f8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern char *FUN_L00_0026daa0(char *, int, int, int, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f90");
@@ -49,7 +49,7 @@ unsigned char *FUN_L13_002c13b0(char *src, char *pos, char *target, char *vec, i
             qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
         }
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24);
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
         FUN_L00_0026daa0((char *)moby, 0x60808080, arg, 0, 500000.0f);
     }
     return moby;
@@ -134,8 +134,8 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void rocket_update(Moby_2C27B0 *m) __asm__("FUN_L13_002c1528");
-void rocket_update(Moby_2C27B0 *m) {
+void FUN_L13_002c1528(Moby_2C27B0 *m);
+void FUN_L13_002c1528(Moby_2C27B0 *m) {
     Rocket_2C27B0 *d = m->data;
     V4_2C27B0 old;
     V4_2C27B0 hitpos;
@@ -267,7 +267,7 @@ void rocket_update(Moby_2C27B0 *m) {
 
 extern char *func_0020D348_m(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -294,7 +294,7 @@ unsigned char *FUN_L13_002c1f28(char *owner, char *pos, char *vec) {
         if (moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
     }
     return moby;
@@ -584,7 +584,7 @@ extern int FUN_L13_002c2d30_collision(struct Moby *, void *, float *, int, int *
 extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern int activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f99c0(float);
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -692,7 +692,7 @@ void FUN_L13_002c2d30(unsigned char *moby) {
     }
     {
         char *ptr = D_L13_001B07B0[*(int *)(d + 0xD0)];
-        r2 = activate_effect_l08(*(float *)(d + 0xD8), moby, d + 0x70, 0, 0, ptr + 0x10, *(int *)ptr);
+        r2 = FUN_L00_0025ff38(*(float *)(d + 0xD8), moby, d + 0x70, 0, 0, ptr + 0x10, *(int *)ptr);
     }
     if (r2 != 2) {
         if (*(float *)(d + 0xD8) < vector_distance(moby + 0x10, d + 0x70) ||
@@ -767,7 +767,7 @@ void FUN_L13_002c37e0(struct Moby *moby, unsigned char *d, float *fp) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4C10), where it is exact; names translated to the US level program. */
 
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 float absolute_float(float input) __asm__("func_001F99C0");
 
@@ -787,7 +787,7 @@ void FUN_L13_002c3988(struct Moby *moby, char *d, float p2, float p3) {
     if (moby->rot.x < -1.5707964f)
         moby->rot.x = -1.5707964f;
     moby->rot.x = moby->rot.x * 0.98f;
-    normalize_rotation_l14(moby->rot.x);
+    normalize_angle(moby->rot.x);
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4D50), where it is exact; names translated to the US level program. */
 
@@ -1878,7 +1878,7 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int a3, float f) {
         *(float *)(moby + 0x40) = random_angle_radians();
         *(float *)(moby + 0x44) = random_angle_radians();
         *(float *)(moby + 0x48) = random_angle_radians();
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
     }
     return moby;
@@ -2347,7 +2347,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9870), where it is exact; names translated to the US level program. */
 
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
 char *FUN_L13_002e8438(char *owner) {
@@ -2364,7 +2364,7 @@ char *FUN_L13_002e8438(char *owner) {
         *(char **)data = owner;
         *(int *)(data + 4) = 0;
         *(unsigned short *)(moby + 0x34) |= 0x200;
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24);
     }
@@ -2660,7 +2660,7 @@ void FUN_L13_002e9018(struct Moby *m, char *p, float a, float b) {
     if (m->rot.x < -1.5707964f)
         m->rot.x = -1.5707964f;
     m->rot.x *= 0.985f;
-    normalize_rotation_l14(m->rot.x);
+    normalize_angle(m->rot.x);
 }
 /* Level overlay code after unclassified; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
 

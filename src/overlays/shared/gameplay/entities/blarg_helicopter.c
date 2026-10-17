@@ -41,7 +41,7 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
+extern void FUN_L00_00262cf0(void *, void *, float, float, float);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -61,7 +61,7 @@ void FUN_L03_002bae48(char *moby) {
     qcopy(moby + 0x10, *(char **)(*(char **)p + 0x78) + 0xF0);
     v = *(float *)(p + 0x10) + *(float *)(p + 0x14);
     *(float *)(p + 0x10) = v;
-    fast_add_rotations_cf(moby + 0x10, moby + 0x10, -v, *(float *)(moby + 0x48),
+    FUN_L00_00262cf0(moby + 0x10, moby + 0x10, -v, *(float *)(moby + 0x48),
                      *(float *)(moby + 0x44));
     *(float *)(moby + 0x40) =
         fast_add_rotations(*(float *)(moby + 0x40), frame_time * 5.235987663269043f);
@@ -707,7 +707,7 @@ extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001e
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_0022da68(int, int, void *);
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float FUN_002132a8(float, float);
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
@@ -810,8 +810,8 @@ first_collision_timer:
             }
         }
         if (fast_dec_timer_s16(vars + 5)) moby->state = 2;
-        moby->rot.x = normalize_rotation_l14(vars[0]);
-        moby->rot.y = normalize_rotation_l14(vars[1]);
+        moby->rot.x = normalize_angle(vars[0]);
+        moby->rot.y = normalize_angle(vars[1]);
         moby->collision_disable = old_disable;
         (*(struct Moby **)(vars + 4))->collision_disable = old_owner_disable;
         moby->collision = old_collision;

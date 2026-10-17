@@ -266,7 +266,7 @@ extern void mark_moby_for_removal_u(char *) __asm__("FUN_0020c828");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern void FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 
 typedef struct {
     s32 status;
@@ -334,7 +334,7 @@ void FUN_L16_002e2b60(struct Moby *m) {
     trooper_anim_finish(m, d + 0x60);
     if (*(int *)(d + 0xD0) != -1 && D_001413DC[0] != 22) {
         char *path = D_L16_001B0930[*(int *)(d + 0xD0)];
-        activate_effect_l08(128.0f, m, d + 0x70, 0, 0, path + 0x10, *(int *)path);
+        FUN_L00_0025ff38(128.0f, m, d + 0x70, 0, 0, path + 0x10, *(int *)path);
     } else
         *(int *)(d + 0xB4) = 2;
     if (*(int *)(d + 0xB0) == 0) {

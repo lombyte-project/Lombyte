@@ -291,7 +291,7 @@ extern void *spawn_beam_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 void set_moby_color(void *, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
-extern void allocate_voice_for_target_entry_cf() __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8();
 
 BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     u128 p;
@@ -322,7 +322,7 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
         v->color = color;
         FUN_L00_0026daa0(m, 0x2F00007F, color, -1, 210000.0f);
         FUN_L00_0026daa0(m, 0x4F004F7F, v->color, -1, 115500.0f);
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -1528,7 +1528,7 @@ typedef struct {
     s32 *pvars;
 } SpawnedMoby;
 extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void allocate_voice_for_target_entry_cf() __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8();
 
 SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
     SpawnedMoby *m;
@@ -1545,7 +1545,7 @@ SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
         qcopy(&m->pos, &src->pos);
         qcopy(&m->rot, &src->rot);
         *pv = -1;
-        allocate_voice_for_target_entry_cf(m, -1);
+        FUN_L00_00250df8(m, -1);
     }
     return m;
 }
@@ -1644,7 +1644,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
         pv->timer = 0x78;
         pv->f10 = frame_time_sq * 15.0f;
         pv->spin = random_float_between(0.0031415929f, 0.062831856f);
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -1655,7 +1655,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002FABE8.c: func_L01_00301198), where it is exact; names translated to the US level program. */
 
-extern char *spawn_burst(void *, float) __asm__("FUN_L00_002d7e90");
+extern char *FUN_L00_002d7e90(void *, float);
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
@@ -1703,7 +1703,7 @@ void FUN_L01_002ffdc0(struct Moby *moby) {
             effect_pos[0] = moby->pos.x;
             effect_pos[1] = moby->pos.y;
             effect_pos[2] = D_L01_001742E8;
-            effect = spawn_burst(effect_pos, 2.0f);
+            effect = FUN_L00_002d7e90(effect_pos, 2.0f);
             if (effect != 0) {
                 effect[0x23] = 0x70;
             }
@@ -1874,7 +1874,7 @@ ClonedMoby *FUN_L01_00302328(ClonedMoby *src) {
     v->f250 = 1.0f;
     v->w170 = truncate_float_to_s32(819.2f);
     v->f224 = 30.0f;
-    allocate_voice_for_target_entry_cf(m);
+    FUN_L00_00250df8(m);
     return m;
 }
 void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");

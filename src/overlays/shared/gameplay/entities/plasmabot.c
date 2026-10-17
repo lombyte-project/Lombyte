@@ -15,12 +15,12 @@
 extern char D_0013E533[];
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int *D_L14_001B0BB0[];
-extern int activate_effect_l08(char *, char *, float, int, int, int *, int) __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38(char *, char *, float, int, int, int *, int);
 
 void FUN_L14_002b3268(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int *tbl = D_L14_001B0BB0[*(int *)(data + 0x244)];
-    if (activate_effect_l08(moby, data + 0xD0, *(float *)(data + 0x234), 0, 0, tbl + 4, *tbl) != 2) {
+    if (FUN_L00_0025ff38(moby, data + 0xD0, *(float *)(data + 0x234), 0, 0, tbl + 4, *tbl) != 2) {
         if (*(float *)(data + 0x234) < vector_distance(moby + 0x10, data + 0xD0)) {
             *(int *)(data + 0x114) = 2;
         }
@@ -187,7 +187,7 @@ void FUN_L14_002fec28(char *moby) {
 
 extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 unsigned char *FUN_L14_002ffaf8(unsigned char *owner, char *pos) {
     unsigned char *m = func_0020D348_m(0x3A5);
@@ -206,7 +206,7 @@ unsigned char *FUN_L14_002ffaf8(unsigned char *owner, char *pos) {
         m[0x30] = 0xFF;
         *(short *)(m + 0x32) = 0xFF;
         m[0x31] = 1;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -298,8 +298,8 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 #define call_F4A8 ((void (*)(char *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int))FUN_L00_0025e450_c)
 #define call_D678 ((void (*)(char *))mark_moby_for_removal_c)
 
-void plasmabot_update(char *moby) __asm__("FUN_L14_002b17d8");
-void plasmabot_update(char *moby) {
+void FUN_L14_002b17d8(char *moby);
+void FUN_L14_002b17d8(char *moby) {
     char *data;
     char *owner;
     int state;
@@ -1464,7 +1464,7 @@ unsigned char *FUN_L14_002dea98(char *owner, char *pos) {
         *(float *)(d + 0x14) = FUN_L00_00257c48(0.05235988f, 0.13962634f);
         *(float *)(d + 0x18) = FUN_L00_00257c48(0.0f, DEG_TO_RAD);
         *(int *)(d + 0x20) = scale_game_frames(200);
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -1630,7 +1630,7 @@ unsigned char *FUN_L14_002e0170(char *owner, float *scale, int mode) {
             *(float *)(d + 0x24) = random_angle_2e0170(0.05235988f, 0.13962634f);
             *(float *)(d + 0x28) = random_angle_2e0170(0.0f, 0.017453293f);
         }
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }

@@ -149,7 +149,7 @@ f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void detach_manipulator(s32, void *) __asm__("FUN_0020cb88");
 void attach_manipulator(s32, s32, void *) __asm__("FUN_0020cb10");
-/* fast_subtract_rotations_cf (eases an angle toward a target) with its int argument last. EABI
+/* FUN_L00_0025bc98 (eases an angle toward a target) with its int argument last. EABI
    passes ints and floats in separate registers, so the call is the same; this order
    gives retail's register allocation. */
 f32 turn_k(f32 *, f32, f32 *, f32, f32, f32, s32) __asm__("FUN_L00_0025bc98");
@@ -593,7 +593,7 @@ void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void advance_moby_animation(void *) __asm__("FUN_0020d580");
-void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+void FUN_L00_00250df8(void *);
 void FUN_L00_002061f0(void) {
     M4_2061f0 m;
     struct Hero *g = &hero;
@@ -609,7 +609,7 @@ void FUN_L00_002061f0(void) {
         *(unsigned short *)(o + 0x34) &= 0xFFBE;
         blend_moby_animation(o, 0x81, 0, scale_game_frames(10));
         advance_moby_animation(o);
-        allocate_voice_for_target_entry_cf(o);
+        FUN_L00_00250df8(o);
     } else {
         *(unsigned short *)(o + 0x34) |= 0x41;
     }
@@ -640,7 +640,7 @@ extern void FUN_L00_00207d00(void);
 extern void FUN_L00_00208b60(void);
 extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00257024(int);
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0024f7c8(void *, s32, void *);
 extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
 extern void *create_moby(s32) __asm__("FUN_0020c4f8");
@@ -712,7 +712,7 @@ void FUN_L00_002062b0(void) {
                 *(u16 *)(*(char **)(g + 0x1624) + 0x34) = 0;
                 *(f32 *)(*(char **)(g + 0x1624) + 0x2c) *= 1.7f;
                 *(u16 *)(*(char **)(g + 0x1624) + 0x34) |= 0x10;
-                allocate_voice_for_target_entry_cf(*(char **)(g + 0x1624));
+                FUN_L00_00250df8(*(char **)(g + 0x1624));
             }
         }
         {
@@ -729,7 +729,7 @@ void FUN_L00_002062b0(void) {
                     ((f32 *)&scratch.help.offset)[2] = 0.0257f;
                     transform_vector_by_basis(&scratch.help.offset, &scratch.help.offset, *(char **)(g + 0x1624) + 0xc0);
                     *(f32 *)(*(char **)(g + 0x1624) + 0x18) -= ((f32 *)&scratch.help.offset)[2];
-                    allocate_voice_for_target_entry_cf(*(char **)(g + 0x1624));
+                    FUN_L00_00250df8(*(char **)(g + 0x1624));
                     scale = 1.7f;
                     if (D_0015EDB3_macro) scale = 3.1f;
                     if (*(s16 *)(g + 0x22fc)) scale *= 1.4f;
@@ -772,7 +772,7 @@ void FUN_L00_002062b0(void) {
                         (*(char **)(g + 0x1620))[0x31] = 1;
                         (*(char **)(g + 0x1620))[0x30] = 0;
                         *(u16 *)(*(char **)(g + 0x1620) + 0x34) = 0;
-                        allocate_voice_for_target_entry_cf(*(char **)(g + 0x1620));
+                        FUN_L00_00250df8(*(char **)(g + 0x1620));
                     }
                 }
                 if (*(char **)(g + 0x1620)) {
@@ -781,7 +781,7 @@ void FUN_L00_002062b0(void) {
                         OvlQuad *position = &scratch.rotation[3];
                         char *moby = *(char **)(g + 0x1620);
                         qcopy_nc(moby + 0x10, position);
-                        allocate_voice_for_target_entry_cf(moby);
+                        FUN_L00_00250df8(moby);
                     }
                     clear_u64_value((scratch.rotation + 4));
                     ((f32 *)(scratch.rotation + 4))[2] = -*(f32 *)(g + 0x98);
@@ -2055,8 +2055,8 @@ extern float split_float_fraction(void *, float) __asm__("FUN_L00_00200228");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 #include "rnc/data_labels.h"
 
-float vector_length_xyz_cf(float *a, int n) __asm__("FUN_L00_00209018");
-float vector_length_xyz_cf(float *a, int n) {
+float FUN_L00_00209018(float *a, int n);
+float FUN_L00_00209018(float *a, int n) {
     char buf[16] __attribute__((aligned(16)));
     char *d = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
     int i = truncate_float_to_s32(*(float *)(d + 0xAA8));
@@ -2283,8 +2283,8 @@ extern int FUN_00213260_209638(int) __asm__("FUN_00213260");
 extern void FUN_L00_002718d0_209638(void *, void *, void *, float,
                                     float) __asm__("FUN_L00_002718d0");
 
-void fast_sin_cf(int seed, int limit) __asm__("FUN_L00_00209638");
-void fast_sin_cf(int seed, int limit) {
+void FUN_L00_00209638(int seed, int limit);
+void FUN_L00_00209638(int seed, int limit) {
     float v[4];
     float pos[4];
     float ang;
@@ -2414,7 +2414,7 @@ extern float D_0015ED6C;
 extern f32 random_float_between(f32 a, f32 b) __asm__("FUN_002132a8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 FUN_L00_00257b90(s32, s32);
-extern void spawn_burst(Vec4 *, f32) __asm__("FUN_L00_002d7e90");
+extern void FUN_L00_002d7e90(Vec4 *, f32);
 extern void FUN_L00_002715e8(Vec4 *, f32 *, s32, f32, f32);
 extern void FUN_L00_0026f548(Vec4 *, Vec4 *, s32, s32);
 
@@ -2435,7 +2435,7 @@ void FUN_L00_00209ca8(s32 puffs, s32 debris, s32 flash) {
     if (flash) {
         qcopy(&v, &hero.motion.pos);
         v.f[2] = hero.water_surface_z;
-        spawn_burst(&v, 2.25f);
+        FUN_L00_002d7e90(&v, 2.25f);
     }
     for (j = 0; j < puffs; j++) {
         v.f[0] = hero.motion.pos.f[0] + random_float_between(-0.3f, 0.3f);

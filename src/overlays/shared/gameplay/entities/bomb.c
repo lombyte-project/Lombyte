@@ -170,7 +170,7 @@ extern s32 FUN_001f0d60_2c89e8(f32, void *, s32, void *) __asm__("FUN_L00_001f0d
 extern void FUN_L00_0026ed28(struct Moby *);
 extern void FUN_L00_002c8078(struct Moby *);
 extern void FUN_L00_002bfe08(struct Moby *, void *, void *);
-extern void probe_ground_height_cf(struct Moby *, s32, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
+extern void FUN_L00_00260400(struct Moby *, s32, void *, void *, void *, void *);
 extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
 
 /* Six checked switch entries: state 5 shares the default state reset. */
@@ -294,7 +294,7 @@ collision_miss:
         f32 f;
         f = probe_ground_height(&m->pos, 0, 0.5f);
         if (f != 0.0f && coll_hit.moby)
-            probe_ground_height_cf(m, coll_hit.moby, &m->pos, &m->rot, &m->pos, &m->rot);
+            FUN_L00_00260400(m, coll_hit.moby, &m->pos, &m->rot, &m->pos, &m->rot);
         if (tick_timer_2cb418(&v->timer)) {
             count = 0;
             for (p = (struct Moby *)D_L00_0015FFE4; p; p = p->next)
@@ -332,7 +332,7 @@ spawn_done:
         m->scale *= 0.92f;
         f = probe_ground_height(&m->pos, 0, 0.5f);
         if (f != 0.0f && coll_hit.moby)
-            probe_ground_height_cf(m, coll_hit.moby, &m->pos, &m->rot, &m->pos, &m->rot);
+            FUN_L00_00260400(m, coll_hit.moby, &m->pos, &m->rot, &m->pos, &m->rot);
         if (m->alpha) return;
 remove:
         mark_moby_for_removal(m);
@@ -467,7 +467,7 @@ extern void set_moby_color(void *, u8, u8, u8) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_00269b70(void *, int, int, int, int, f32, f32);
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void FUN_L00_002c92d8_c(void *) __asm__("FUN_L00_002c92d8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 struct Moby *FUN_L00_002c9348(State *a) {
     struct Moby *n;
@@ -561,7 +561,7 @@ struct Moby *FUN_L00_002c9348(State *a) {
         if (s2->unk74) {
             n->flags &= ~0x20;
         }
-        allocate_voice_for_target_entry_cf(n);
+        FUN_L00_00250df8(n);
     }
     return n;
 }
@@ -2396,7 +2396,7 @@ char *FUN_L00_002cdf28(char *a, int *excl) {
 }
 
 extern char *spawn_2ce1f0(int) __asm__("FUN_0020c4f8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 extern float atan2_2ce1f0(float, float) __asm__("FUN_001f9e90");
 extern float dist_2ce1f0(void *, void *) __asm__("FUN_001f9b80");
@@ -2419,7 +2419,7 @@ char *FUN_L00_002ce1f0(int a, void *pos) {
         *(int *)(v + 0x44) = a;
         g = &hero;
         g->ammo_used++;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
         FUN_L00_0025d1b8(m);
         *(float *)(v + 0x28) = atan2_2ce1f0(*(float *)(m + 0x10) - g->motion.pos.f[0], *(float *)(m + 0x14) - g->motion.pos.f[1]);
         *(float *)(v + 0x24) = atan2_2ce1f0(dist_2ce1f0(&g->motion.pos, m + 0x10), *(float *)(m + 0x18) - g->motion.pos.f[2]);

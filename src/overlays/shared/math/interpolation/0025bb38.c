@@ -39,8 +39,8 @@ extern void FUN_L00_0025b798_0025bc98(float *, float, float, float,
 extern float FUN_001fa580_0025bc98(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f99c0_0025bc98(float) __asm__("FUN_001f99c0");
 
-float fast_subtract_rotations_cf(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
-float fast_subtract_rotations_cf(float *p, float *q, int n, float x, float a, float b, float c) {
+float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
+float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c) {
     float d;
     if (n == 2) {
         if ((0.0f < x && *p < 0.0f) || (x < 0.0f && 0.0f < *p)) {

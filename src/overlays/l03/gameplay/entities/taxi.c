@@ -985,11 +985,11 @@ extern CollisionHit coll_hit __asm__("D_L03_00173F60");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-char *compute_interpolated_record_value_cf(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2) __asm__("FUN_L03_002d4288");
-char *compute_interpolated_record_value_cf(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2) {
+char *FUN_L03_002d4288(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2);
+char *FUN_L03_002d4288(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2) {
     char *m = (char *)func_0020D348_m(0x341);
     char *d;
     if (m != 0) {
@@ -1015,7 +1015,7 @@ char *compute_interpolated_record_value_cf(char *a, char *pos, struct Moby *pare
             *(OvlQuad *)(m + 0x10) = *(OvlQuad *)&coll_hit;
             *(int *)(d + 0x24) = 0;
         }
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -1510,7 +1510,7 @@ struct Moby *FUN_L03_002db198(struct RailPath *path, float dist) {
         *(float *)(v + 0x64) = dist;
         *(struct RailPath **)(v + 0x60) = path;
         *(u8 **)(v + 0x8) = move;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }

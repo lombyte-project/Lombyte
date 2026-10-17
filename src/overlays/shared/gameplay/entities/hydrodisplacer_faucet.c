@@ -453,8 +453,8 @@ extern void FUN_L05_0030c220(struct Moby *m);
 void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
-void lamp_update(unsigned char *m) __asm__("FUN_L05_0030c0a8");
-void lamp_update(unsigned char *m) {
+void FUN_L05_0030c0a8(unsigned char *m);
+void FUN_L05_0030c0a8(unsigned char *m) {
     char *d = *(char **)(m + 0x78);
     float r, lo, hi;
     switch (m[0x20]) {

@@ -60,7 +60,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int suck_get_aim_height() __asm__("FUN_002141f8");
 extern float FUN_L00_00257c48(float, float), FUN_L00_00257be8(float, float);
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int FUN_L00_00257b90(int, int), FUN_00213260(int);
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
@@ -193,7 +193,7 @@ next_candidate:;
         n = (float)i;
         factor = D_L00_001615A4 + (D_L00_001615A8 - D_L00_001615A4) *
                     (convert_integer_to_float(i) * 0.05f);
-        phase = normalize_rotation_l14((*(float *)&D_L00_001615AC_gp) + n * D_L00_001615A0);
+        phase = normalize_angle((*(float *)&D_L00_001615AC_gp) + n * D_L00_001615A0);
         wave = factor * fast_sin(phase);
         wave += FUN_L00_00257c48(D_L00_001615E4, D_L00_001615E8);
 
@@ -236,8 +236,8 @@ next_candidate:;
             }
         }
         if (i < 10) {
-            phase = normalize_rotation_l14((*(float *)&D_L00_001615B4_gp) + (float)i * D_L00_001615BC);
-            angle = normalize_rotation_l14((*(float *)&D_L00_001615C8_gp) + (float)i * D_L00_001615D0);
+            phase = normalize_angle((*(float *)&D_L00_001615B4_gp) + (float)i * D_L00_001615BC);
+            angle = normalize_angle((*(float *)&D_L00_001615C8_gp) + (float)i * D_L00_001615D0);
             factor = D_L00_001615C0 * fast_sin(angle);
             qcopy(side, point);
             wave = fast_sin(phase);
@@ -658,7 +658,7 @@ void FUN_L00_002bb0b0(void *mv) {
 u8 *create_moby(s32) __asm__("FUN_0020c4f8");
 void clear_u64_value() __asm__("FUN_001f99f8");
 void refresh_moby_spatial_bounds_from_basis() __asm__("FUN_0020e098");
-void allocate_voice_for_target_entry_cf() __asm__("FUN_L00_00250df8");
+void FUN_L00_00250df8();
 u8 *FUN_L00_002bb360(u8 *src) {
     u8 *m = create_moby(0xB3);
     if (m) {
@@ -675,7 +675,7 @@ u8 *FUN_L00_002bb360(u8 *src) {
         *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)(src + 0xD0);
         *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)(src + 0xE0);
         refresh_moby_spatial_bounds_from_basis(m);
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -1398,7 +1398,7 @@ extern int D_L00_001617C8;
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
 extern int suck_get_aim_height() __asm__("FUN_002141f8");
-extern int hero_set_state_2() __asm__("FUN_L00_002223f8");
+extern int FUN_L00_002223f8();
 extern int FUN_L00_00236e50();
 extern int FUN_L00_0024f7c8();
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -1711,7 +1711,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
 extern signed char D_L00_00161763;
 extern float D_L00_001617CC;
@@ -3073,7 +3073,7 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
 #include "eetypes.h"
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-void allocate_voice_for_target_entry_cf(unsigned char *) __asm__("FUN_L00_00250df8");
+void FUN_L00_00250df8(unsigned char *);
 void FUN_L00_0025d1b8(unsigned char *);
 unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) {
     unsigned char *m = create_moby(0xba);
@@ -3088,7 +3088,7 @@ unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) {
         qcopy(m + 0x10, b);
         qcopy(q + 0x10, c);
         *(int *)(q + 0x60) = a;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
         FUN_L00_0025d1b8(m);
         *(float *)(m + 0x2c) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.1f;
     }

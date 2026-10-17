@@ -583,7 +583,7 @@ extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void FUN_L00_00258278(struct Moby *, f32 *, f32, f32, f32, f32);
 extern s32 FUN_L00_00258ad0(struct Moby *, Vec4 *, f32, f32, s32, s32);
-extern f32 normalize_rotation_l14(f32) __asm__("FUN_L00_0025e310");
+extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 
 void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
     Vec4 v;
@@ -661,8 +661,8 @@ void FUN_L01_0030d880(struct Moby *m, struct HoverVars *p) {
         break;
     }
     t = &D_L01_001DEB38;
-    m->rot.x += (normalize_rotation_l14(t->yaw_speed * D_L01_001620D0) - m->rot.x) * D_L01_001620D8;
-    m->rot.y += (normalize_rotation_l14(fast_vec_length(&p->vel) * D_L01_001620D4) - m->rot.y) * D_L01_001620DC;
+    m->rot.x += (normalize_angle(t->yaw_speed * D_L01_001620D0) - m->rot.x) * D_L01_001620D8;
+    m->rot.y += (normalize_angle(fast_vec_length(&p->vel) * D_L01_001620D4) - m->rot.y) * D_L01_001620DC;
 }
 #include "sda.h"
 

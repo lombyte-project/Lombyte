@@ -338,8 +338,8 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   int) __asm__("FUN_L00_0025e450");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern unsigned char *D_L18_001B2ADC;
-extern unsigned char *spawn_particle(void *pos, float *vec, int s, int a, int col, int n, float x,
-                                       float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
+extern unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x,
+                                       float y, float z, float w, float pw);
 extern void FUN_L00_00257d78(float *, float, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
@@ -399,7 +399,7 @@ void FUN_L18_002a7220(char *moby) {
         FUN_L00_00257d78(d, frame_time * 0.1f, frame_time * 0.2f);
         scale_vector_xyz(e, data, random_float_between(0.0f, 1.0f));
         add_vector_xyz(e, e, moby + 0x10);
-        r = spawn_particle(e, d, scale_game_frames(10), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
+        r = FUN_L00_002712b8(e, d, scale_game_frames(10), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
                              1.0f, -0.0002f, 0.0f);
         if (r != 0) {
             r[2] = *D_L18_001B2DDC_c;
@@ -577,8 +577,8 @@ typedef union {
     Q128 q;
     float v[4];
 } QU;
-extern unsigned char *spawn_particle(void *pos, float *vec, int s, int a, int col, int n, float x,
-                                       float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
+extern unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x,
+                                       float y, float z, float w, float pw);
 extern void FUN_L00_00257d78(float *, float, float);
 extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
@@ -593,7 +593,7 @@ void FUN_L18_002d5488(void *mobyp, void *vec) {
     FUN_L00_00257d78(a0, frame_time * 0.1f, frame_time * 0.2f);
     scale_vector_xyz(v10, vec, random_float_between(0.0f, 1.0f));
     add_vector_xyz(v10, v10, moby + 0x10);
-    p = spawn_particle(v10, a0, scale_game_frames(0x14), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
+    p = FUN_L00_002712b8(v10, a0, scale_game_frames(0x14), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
                          1.0f, -0.0002f, 0.0f);
     if (p != 0) {
         p[2] = *(unsigned char *)D_L18_001B2DDC_c;
@@ -2913,7 +2913,7 @@ extern float D_L18_001677C0_c[] __asm__("D_L18_001677C0");
 extern float D_L18_001D9F80[];
 extern float D_L18_001DA110[];
 extern float FUN_L00_00257c48(float lo, float hi);
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int D_L18_0015F580; /* no foreign declaration */
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -2982,7 +2982,7 @@ void FUN_L18_002eaea0(void *moby) {
         float b;
         f21 = *(float *)&D_L18_00162000
               + (*(float *)&D_L18_00162004 - *(float *)&D_L18_00162000) * (convert_integer_to_float(i) * 0.05f);
-        f21 = f21 * fast_sin_c(normalize_rotation_l14(*(float *)&D_L18_00162008 + (float)i * *(float *)&D_L18_00161FFC));
+        f21 = f21 * fast_sin_c(normalize_angle(*(float *)&D_L18_00162008 + (float)i * *(float *)&D_L18_00161FFC));
         f21 = f21 + FUN_L00_00257c48(*(float *)&D_L18_00162040, *(float *)&D_L18_00162044);
         D_L18_001D9D00[0][i].f[2] = D_L18_001D9D00[0][i].f[2] - D_L18_001D9F80[i];
         D_L18_001D9F80[i] = f21;
@@ -3022,9 +3022,9 @@ void FUN_L18_002eaea0(void *moby) {
             float h;
             float ang;
             float m;
-            g = normalize_rotation_l14(*(float *)&D_L18_00162010 + (float)i * *(float *)&D_L18_00162018);
+            g = normalize_angle(*(float *)&D_L18_00162010 + (float)i * *(float *)&D_L18_00162018);
             h = *(float *)&D_L18_0016201C
-                * fast_sin_c(normalize_rotation_l14(*(float *)&D_L18_00162024 + (float)i * *(float *)&D_L18_0016202C));
+                * fast_sin_c(normalize_angle(*(float *)&D_L18_00162024 + (float)i * *(float *)&D_L18_0016202C));
             qcopy(&D_L18_001D9D00[1][i], &D_L18_001D9D00[0][i]);
             h = h * fast_sin_c(g) + FUN_L00_00257c48(0.0f, 0.1f);
             D_L18_001D9D00[1][i].f[2] = D_L18_001D9D00[1][i].f[2] + h;

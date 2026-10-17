@@ -1420,7 +1420,7 @@ extern s32 FUN_L00_002d9f78(void);
 extern void transpose_rotation_matrix(void *,void *) __asm__("FUN_001fa2d8");
 extern void FUN_L00_0020e4c8(void);
 extern void FUN_L00_0020e698(void);
-extern void hero_set_state_2(int,int) __asm__("FUN_L00_002223f8");
+extern void FUN_L00_002223f8(int,int);
 extern void FUN_L00_002377b8(void);
 extern void FUN_L00_00237840(void);
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -1578,7 +1578,7 @@ void suckcannon_update(SuckMoby *self) {
         if (!(suck_input.held&suck_hero.fire_buttons)) cannon->blocked=0;
         if (func_001F9908_r(&cannon->target_timer) ||
             (cannon->target && ((u8)cannon->target->state&0x80))) cannon->target=0;
-        if (suck_hero.state==1) hero_set_state_2(30,1);
+        if (suck_hero.state==1) FUN_L00_002223f8(30,1);
         if (suck_hero.state==30 && (suck_hero.moby->flags&1) && !suck_hero.unk20AC) {
             char *camera=D_L00_00166C80;
             SuckVec *eye;
@@ -2276,7 +2276,7 @@ extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-f32 normalize_rotation_l14(f32 a) __asm__("FUN_L00_0025e310");
+f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
 float absolute_float_c(float input) __asm__("func_001F99C0");
 int FUN_L00_002da218(char *a);
 s32 scale_game_frames_alt_c2(s32) __asm__("FUN_001f96f8");

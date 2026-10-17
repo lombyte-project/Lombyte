@@ -518,7 +518,7 @@ void spawner_update(char *moby)
 extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L09_0030b218(int owner, void *pos, void *rot, unsigned char a, unsigned char b) {
     char *m = (char *)func_0020D348_m(0x75E);
@@ -539,7 +539,7 @@ char *FUN_L09_0030b218(int owner, void *pos, void *rot, unsigned char a, unsigne
         d[0x1C] = b;
         d[0x1A] = a;
         d[0x1B] = 0;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -598,7 +598,7 @@ extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d6
 extern void FUN_L00_001fefc8(void *);
 extern void FUN_L00_001ff660(void *, void *, void *);
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
-extern f32 normalize_rotation_l14(f32) __asm__("FUN_L00_0025e310");
+extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 extern struct Moby *FUN_L09_0030a778(struct Moby *, Vec4 *);
 
 static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
@@ -678,8 +678,8 @@ void spawner_egg_update(struct Moby *moby) {
         if (fast_dec_timer_s16(&vars->life) != 0) {
             moby->state = 2;
         }
-        moby->rot.x = normalize_rotation_l14(vars->vel.f[0]);
-        moby->rot.y = normalize_rotation_l14(vars->vel.f[1]);
+        moby->rot.x = normalize_angle(vars->vel.f[0]);
+        moby->rot.y = normalize_angle(vars->vel.f[1]);
         moby->collision = moby->pclass->collision;
         vars->owner->collision = vars->owner->pclass->collision;
         vars->vel.f[2] -= frame_time_sq * 9.8f;

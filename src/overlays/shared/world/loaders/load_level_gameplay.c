@@ -490,7 +490,7 @@ extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern void FUN_L00_00204c60(void);
 extern void FUN_L00_00204f80(void);
 extern void FUN_L00_0024a798(int, int);
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0028df58(short *);
 extern void FUN_L00_0028e180();
 extern void FUN_L00_0028e8a0(char *);
@@ -1081,7 +1081,7 @@ char *load_level_gameplay(int arg0) {
                 m->f34 |= *(unsigned short *)p;
                 p += 4;
                 if (m->f24 != 0) {
-                    allocate_voice_for_target_entry_cf(m);
+                    FUN_L00_00250df8(m);
                 }
                 c0 = *(int *)p;
                 p += 4;
@@ -1496,7 +1496,7 @@ char *load_level_gameplay(int arg0) {
             m->f30 = 0x10;
             m->f34 &= ~2;
             set_moby_animation(m, 1, 0);
-            allocate_voice_for_target_entry_cf(m);
+            FUN_L00_00250df8(m);
             D_0013E030.f0 = m;
             FUN_L00_0024a798((int)m, 0);
         }

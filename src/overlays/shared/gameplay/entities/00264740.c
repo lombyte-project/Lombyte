@@ -10,7 +10,7 @@ extern struct Moby *D_L00_0015FFD8;
 extern struct Moby *D_L00_0015FFE4;
 extern void *active_mobies[] __asm__("D_L00_001ABA00");
 extern void FUN_L00_00250480(struct Moby *moby);
-extern void allocate_voice_for_target_entry_cf(struct Moby *moby) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(struct Moby *moby);
 
 void FUN_L00_00264740(void)
 {
@@ -50,7 +50,7 @@ void FUN_L00_00264740(void)
                 update(current);
             }
             if (!(((volatile struct Moby *)current)->flags & 4)) {
-                allocate_voice_for_target_entry_cf(current);
+                FUN_L00_00250df8(current);
             }
         }
         current = current->next;

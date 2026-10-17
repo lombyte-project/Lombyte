@@ -1873,7 +1873,7 @@ extern void attach_manipulator(struct Moby *, int, void *) __asm__("FUN_0020cb10
 extern void FUN_L00_001fff28(void *, int, float);
 extern void moby_point_position(struct Moby *, int, float *) __asm__("FUN_L00_0024f7c8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern void random_integer_below_cf(float *, float *, float, float) __asm__("FUN_L00_0026f080");
+extern void FUN_L00_0026f080(float *, float *, float, float);
 extern float fast_cos_a500(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_a500(float) __asm__("FUN_001f9de0");
 extern int level_frame __asm__("D_L11_0015F5CC");
@@ -1938,7 +1938,7 @@ void FUN_L11_0030a500(struct Moby *moby) {
             vel[2] = 0.0f;
             vel[2] = random_float_between(-2.0f, 2.0f) * frame_time;
             life = random_float_between(6300.0f, 14700.0f);
-            random_integer_below_cf(pos, vel, life, 222.5f);
+            FUN_L00_0026f080(pos, vel, life, 222.5f);
         }
     }
 }

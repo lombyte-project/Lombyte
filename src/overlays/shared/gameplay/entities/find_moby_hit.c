@@ -781,8 +781,8 @@ typedef union {
     f32 f[4];
 } Vec4_25b6b8 __attribute__((aligned(16)));
 
-void interpolate_vector(f32 t, f32 *out, f32 *a, f32 *b) __asm__("FUN_L00_0025b6b8");
-void interpolate_vector(f32 t, f32 *out, f32 *a, f32 *b) {
+void FUN_L00_0025b6b8(f32 t, f32 *out, f32 *a, f32 *b);
+void FUN_L00_0025b6b8(f32 t, f32 *out, f32 *a, f32 *b) {
     Vec4_25b6b8 left, right;
     f32 *dest = out;
     volatile f32 *rightPtr = right.f;

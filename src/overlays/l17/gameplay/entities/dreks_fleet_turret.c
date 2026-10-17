@@ -874,7 +874,7 @@ void FUN_L17_002d7cf0(struct Moby *moby) {
 
 
 extern char *D_L17_00174758;
-extern char *random_integer_below_cf(char *vec, float *pos, float sc, float vy) __asm__("FUN_L00_0026f080");
+extern char *FUN_L00_0026f080(char *vec, float *pos, float sc, float vy);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
@@ -947,7 +947,7 @@ void FUN_L17_002dc3f8(struct Moby *m) {
                     *(OvlQuad *)d = *(OvlQuad *)t;
                     normalize_vector_xyz(
                         d, d, random_float_between_alt(frame_time * 4.0f, frame_time * 8.0f));
-                    random_integer_below_cf(&m->pos, d, random_float_between_alt(0.05f, 0.1f) * 210000.0f,
+                    FUN_L00_0026f080(&m->pos, d, random_float_between_alt(0.05f, 0.1f) * 210000.0f,
                                      yy);
                 } while (--i >= 0);
                 mark_moby_for_removal_u(m);

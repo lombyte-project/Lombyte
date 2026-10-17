@@ -2829,7 +2829,7 @@ typedef float V4_211d78[4] __attribute__((aligned(16)));
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void FUN_L00_00211cf8(float, float, float);
-extern float fast_subtract_rotations_cf(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
+extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
 void FUN_L00_00211d78(int a, float x, float y, float z) {
     V4_211d78 t;
     float out;
@@ -2838,7 +2838,7 @@ void FUN_L00_00211d78(int a, float x, float y, float z) {
     transform_vector(t, &hero.motion.unk170, hero.unk40);
     r = fast_arc_tan(t[0], t[1]);
     out = zero;
-    hero.motion.unk188 = fast_subtract_rotations_cf((char *)&out, (char *)&hero.motion.unk184, a, r, x, y, z);
+    hero.motion.unk188 = FUN_L00_0025bc98((char *)&out, (char *)&hero.motion.unk184, a, r, x, y, z);
     FUN_L00_00211cf8(zero, zero, out);
 }
 #define NOT_SDA
@@ -2847,7 +2847,7 @@ void FUN_L00_00211d78(int a, float x, float y, float z) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002124E8), where it is exact; names translated to the US level program. */
 
-extern float fast_subtract_rotations_cf(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
+extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
 extern void FUN_L00_00211d78(int, float, float, float);
 
 /* Calls 00211d78 when hero.unk20B3 is set, else updates hero.motion.unk188 via 0025bc98. */
@@ -2858,7 +2858,7 @@ void turn_to(int a, float x, float y, float z) {
         FUN_L00_00211d78(a, x, y, z);
     } else {
         g->motion.unk188 =
-            fast_subtract_rotations_cf(&g->motion.rot.f[2], &g->motion.unk184, a, g->motion.move_yaw, x, y, z);
+            FUN_L00_0025bc98(&g->motion.rot.f[2], &g->motion.unk184, a, g->motion.move_yaw, x, y, z);
     }
 }
 #define NOT_SDA

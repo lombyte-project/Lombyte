@@ -49,7 +49,7 @@ void hoverboard_ring_update(char *moby) {
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/vector.h"
 
-/* Vars of the level 5 mine lamp_update drives. */
+/* Vars of the level 5 mine FUN_L05_0031c8e0 drives. */
 struct MineVars_c8e0 {
     u8 pad0[0x60];
     s32 alpha;                     /* 0x60: glow alpha, faded out with camera distance */
@@ -105,8 +105,8 @@ extern char *FUN_L05_0031d160(unsigned char *);
 void FUN_L05_0031cf58(char *m);
 
 /* Mine update: sets its glow, fades it out with camera distance and blows up into debris, smoke and sparks when something touches it. */
-void lamp_update(struct Moby *moby) __asm__("FUN_L05_0031c8e0");
-void lamp_update(struct Moby *moby) {
+void FUN_L05_0031c8e0(struct Moby *moby);
+void FUN_L05_0031c8e0(struct Moby *moby) {
     struct MineVars_c8e0 *vars = (struct MineVars_c8e0 *)moby->pvars;
     Vec4 tip;
     Vec4 vel;

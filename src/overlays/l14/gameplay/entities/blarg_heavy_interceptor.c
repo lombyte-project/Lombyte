@@ -145,8 +145,8 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 float absolute_float(float input) __asm__("FUN_001f99c0");
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
-void platform_update(struct Moby *moby) __asm__("FUN_L14_002aba80");
-void platform_update(struct Moby *moby) {
+void FUN_L14_002aba80(struct Moby *moby);
+void FUN_L14_002aba80(struct Moby *moby) {
     PathMoverVars *vars = (PathMoverVars *)moby->pvars;
     MoverPath *path;
     Vec4 orig;
@@ -431,8 +431,8 @@ extern f32 D_L14_001613A0_c618 __asm__("D_L14_001613A0") __attribute__((sda));
 extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
 
 extern Vec4 D_L14_00174560;
-void blarg_heavy_interceptor_update(struct Moby *m) __asm__("FUN_L14_002ac618");
-void blarg_heavy_interceptor_update(struct Moby *m) {
+void FUN_L14_002ac618(struct Moby *m);
+void FUN_L14_002ac618(struct Moby *m) {
     char *d = (char *)m->pvars;
     float v[4];
     float w[4];
@@ -2546,13 +2546,13 @@ void FUN_L14_002b5428(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6780), where it is exact; names translated to the US level program. */
 
 extern int *D_L14_001B0BB0[];
-extern int activate_effect_l08(float a, char *m, char *b, int c, int d, int *e, int f) __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38(float a, char *m, char *b, int c, int d, int *e, int f);
 
 void FUN_L14_002b5530(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (moby->state != 0 && moby->state != 9) {
         int *p = D_L14_001B0BB0[*(int *)(data + 0xD4)];
-        activate_effect_l08(255.0f, moby, data + 0x70, 0, 0, p + 4, *p);
+        FUN_L00_0025ff38(255.0f, moby, data + 0x70, 0, 0, p + 4, *p);
         if (*(int *)(data + 0xB0) == 0) {
             *(int *)(data + 0xB0) = *(int *)(D_0013E533 + 0x2E9D);
         }
@@ -2985,7 +2985,7 @@ void FUN_L14_002bac78(struct Moby *m) {
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int);
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
 extern void cross_vectors_xyz(void *, void *, void *);
@@ -3024,7 +3024,7 @@ unsigned char *FUN_L14_002bb310(struct Moby *owner, float angle, char *posp) {
         *(short *)(d + 0x10) = scale_game_frames(200);
         *(char **)(d + 0x20) = owner;
         *(short *)(d + 0x12) = -1;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -3087,8 +3087,8 @@ void FUN_L14_002d67e8(struct Moby *m);
 void FUN_L14_002d7198(struct Moby *m);
 void FUN_L14_002d7490(struct Moby *m);
 
-void plasmabot_update(struct Moby *m) __asm__("FUN_L14_002d5f40");
-void plasmabot_update(struct Moby *m) {
+void FUN_L14_002d5f40(struct Moby *m);
+void FUN_L14_002d5f40(struct Moby *m) {
     struct L14RacerVars *d = (struct L14RacerVars *)m->pvars;
     u8 pos[16];
     f32 vel[3];

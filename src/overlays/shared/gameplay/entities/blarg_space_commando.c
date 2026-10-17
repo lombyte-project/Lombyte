@@ -423,7 +423,7 @@ extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_L04_001f1978(float);
 extern float FUN_L00_00257c48(float lo, float hi);
-extern int activate_effect_l08(float, char *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
 extern int *D_L06_001B0C30[];
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
@@ -577,7 +577,7 @@ void FUN_L06_002feb40(char *m) {
     {
     char *q = d + 0x120;
     e = D_L06_001B0C30[*(int *)(d + 0x180)];
-    if (activate_effect_l08(*(float *)(d + 0x198), m, q, 0, 0, e + 4, *e) != 2) {
+    if (FUN_L00_0025ff38(*(float *)(d + 0x198), m, q, 0, 0, e + 4, *e) != 2) {
         if (*(float *)(d + 0x198) < vector_distance_xy_alt(d + 0x170, d + 0x120)) {
             *(int *)(d + 0x164) = 2;
         } else if (3.0f < absolute_float(*(float *)(m + 0x18) - *(float *)(d + 0x128))) {

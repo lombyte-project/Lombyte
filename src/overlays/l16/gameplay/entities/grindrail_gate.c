@@ -221,7 +221,7 @@ void help_desk_lady_update(L16WatchMoby *m) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4B50), where it is exact; names translated to the US level program. */
 
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 void FUN_L16_002e36e8(struct Moby *moby) {
     float *d = (float *)moby->pvars;
@@ -230,7 +230,7 @@ void FUN_L16_002e36e8(struct Moby *moby) {
         fast_vec_normalize(&moby->rot_row2, &moby->rot_row2, d[1] * 0.25f);
         moby->state = 1;
         moby->flags |= 0x101;
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
     }
 }
 
@@ -1227,7 +1227,7 @@ extern float vector_distance(void*,void*) __asm__("FUN_001f9b80");
 extern float D_L16_00161E54 __attribute__((sda));
 extern float D_L16_00161E5C __attribute__((sda));
 extern float D_L16_00161E60 __attribute__((sda));
-extern int activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -1273,7 +1273,7 @@ void FUN_L16_002e6208(void *arg) {
     trooper_anim_finish(m, d->reaction);
     b = (int)&D_L16_001B0930[d->path];
     a = *(int *)b;
-    if (activate_effect_l08(m, d->target, 16.0f, 0, 0, (void *)(a + 0x10), *(int *)a) != 2) {
+    if (FUN_L00_0025ff38(m, d->target, 16.0f, 0, 0, (void *)(a + 0x10), *(int *)a) != 2) {
         if (vector_distance(d->home, d->target) > 16.0f ||
             absolute_float(m->position[2] - d->target[2]) > 3.0f) {
             d->i1C4 = 2;

@@ -65,7 +65,7 @@ extern void FUN_L00_00258278(void *, float, void *, float, float, float);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
@@ -253,7 +253,7 @@ void snow_plow_update(struct Moby *moby) {
             goto hit;
         }
         advance_moby_animation(other);
-        allocate_voice_for_target_entry_cf(other);
+        FUN_L00_00250df8(other);
         refresh_moby_spatial_bounds_from_basis(other);
         other->flags |= 6;
     }

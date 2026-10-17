@@ -360,7 +360,7 @@ void FUN_L09_002c1978(void *data_ptr, void *list_ptr, int count) {
 extern char *func_0020D348_m(int);
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
@@ -379,7 +379,7 @@ char *FUN_L09_002c2500(struct Moby *src, char *pos, int cls) {
         qcopy(p, pos);
         qcopy(d + 0x10, pos);
         *(char **)(d + 0x2C) = src;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
         moby_point_position(m, 0, &v0);
         subtract_vector_xyz(&v1, pos, &v0);
         transform_vector_by_basis(&v1, &v1, &src->rot_row0);
@@ -388,7 +388,7 @@ char *FUN_L09_002c2500(struct Moby *src, char *pos, int cls) {
         *(OvlQuad *)(m + 0xC0) = *(OvlQuad *)&src->rot_row0;
         *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)&src->rot_row1;
         *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)&src->rot_row2;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -517,7 +517,7 @@ char *FUN_L09_002ea778(void) {
             *(float *)(moby + 0x2C) = *(float *)(d + 0x50);
         }
         *(int *)(d + 0x58) = -1;
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }
@@ -1079,7 +1079,7 @@ void asteroid_update(struct Moby *m) {
 
 extern char *func_0020D348_m(int);
 extern s32 rand();
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_0025d1b8(void *);
 
 char *FUN_L09_002edb60(char *src, int cls) {
@@ -1092,7 +1092,7 @@ char *FUN_L09_002edb60(char *src, int cls) {
         qcopy(moby + 0x10, src + 0x10);
         qcopy(moby + 0x40, src + 0x40);
         moby[0xBC] = scale_game_frames(10);
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
         FUN_L00_0025d1b8(moby);
         *(unsigned short *)(moby + 0x34) = *(unsigned short *)(src + 0x34);
         if (cls == 0x514) {
@@ -1293,7 +1293,7 @@ extern void *create_moby_local() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF6D0), where it is exact; names translated to the US level program. */
 
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L09_002ee380(char *owner, void *position, float angle) {
     u128_ee380 pos;
@@ -1311,7 +1311,7 @@ char *FUN_L09_002ee380(char *owner, void *position, float angle) {
         qcopy(moby + 0x40, owner + 0x40);
         *(float *)(moby + 0x48) = angle;
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }
@@ -1437,7 +1437,7 @@ struct Moby *FUN_L09_002ef868(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, 
         d->spin = random_float_between(-(frame_time * 9.075712f), frame_time * 9.075712f);
         d->tumble = random_float_between(-(frame_time * 6.2831855f), frame_time * 6.2831855f);
         d->life = scale_game_frames(FUN_L00_00257b90(0x5A, 0x6E));
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -1533,7 +1533,7 @@ char *FUN_L09_002efda8(struct Moby *owner, void *position, float angle) {
         qcopy(moby + 0x10, copy);
         qcopy(moby + 0x40, &owner->rot);
         *(long *)(moby + 0x38) = owner->spawn_frame;
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }
@@ -1575,7 +1575,7 @@ char *FUN_L09_002efe48(void *unused, float lower_radius, float upper_radius, voi
         MOBY(moby)->visible = 1;
         pi -= difference;
         MOBY(moby)->scale *= (3.1415927f - difference) + (3.1415927f - difference) + 1.0f;
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }
@@ -1635,7 +1635,7 @@ extern void FUN_L00_00262b00(float, float, char *, float *, float *);
 extern void FUN_L00_00262b80(void *, char *, char *, float, float, float);
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
-float fast_subtract_rotations_cf(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
+float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
 void FUN_L07_00288968(void *a0, void *a1, void *a2, void *a3, void *a4);
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int func_001F9850_2F9A50(int) __asm__("FUN_001f96f8");

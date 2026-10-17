@@ -747,8 +747,8 @@ extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int D_L18_0015F5C4;
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
 
-void deplanetizer_gun_update(struct Moby *moby) __asm__("FUN_L18_002fa640");
-void deplanetizer_gun_update(struct Moby *moby) {
+void FUN_L18_002fa640(struct Moby *moby);
+void FUN_L18_002fa640(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         moby->state = 1;
@@ -783,7 +783,7 @@ void deplanetizer_gun_update(struct Moby *moby) {
 
 extern char *func_0020D348_m(int);
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
@@ -818,7 +818,7 @@ void FUN_L18_002fa728(char *moby) {
     if (child != 0) {
         qcopy(child + 0x10, moby + 0x10);
         qcopy(child + 0x40, moby + 0x40);
-        allocate_voice_for_target_entry_cf(child);
+        FUN_L00_00250df8(child);
     }
 }
 extern int D_L18_001AC240[];

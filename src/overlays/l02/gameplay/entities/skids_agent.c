@@ -120,7 +120,7 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void copy_matrix(void *, void *) __asm__("FUN_001fa2b8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 /* Aridia NPC with a carried prop moby (data+0x178): dialogue state machine (the hint in state 1 is usage
  * record 50), a path-camera ride (3/4) that fades D_L02_0015F3FC in and out, then the shared head-tracking tail. */
@@ -273,7 +273,7 @@ void skids_agent_update(struct Moby *moby) {
             copy_matrix(&(*(struct Moby **)(data + 0x178))->rot_row0, mtx);
             transform_vector_by_basis(&offset, D_L02_00161CE0, &(*(struct Moby **)(data + 0x178))->rot_row0);
             vec_add(&(*(struct Moby **)(data + 0x178))->pos, &(*(struct Moby **)(data + 0x178))->pos, &offset);
-            allocate_voice_for_target_entry_cf(*(struct Moby **)(data + 0x178));
+            FUN_L00_00250df8(*(struct Moby **)(data + 0x178));
         }
     });
 

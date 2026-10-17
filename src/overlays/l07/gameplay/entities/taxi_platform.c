@@ -35,7 +35,7 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
 void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
@@ -66,7 +66,7 @@ unsigned char *FUN_L07_0030b538(void *pos, float *dir, int a, int b) {
         *(int *)(d + 0x50) = a;
         *(int *)(d + 0x54) = b;
         m[0x23] = 0x10;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -94,7 +94,7 @@ char *FUN_L07_0030ba90(char *pos, char *vec, int c, short d) {
         qcopy(p, vec);
         *(int *)(p + 0x10) = c;
         *(int *)(p + 0x14) = d;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -204,7 +204,7 @@ char *FUN_L07_0030e370(char *pos, char *vec, int arg) {
         *(int *)(data + 0x10) = arg;
         m[0x23] = 0x30;
         *(unsigned short *)(m + 0x34) |= 0x200;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
         FUN_L00_0026daa0(m, 0x800040FF, 0x80, -1, 500000.0f);
     }
     return m;
@@ -961,7 +961,7 @@ void FUN_L07_0030af40(struct Moby *m) {
     ((struct SpawnMobyView *)m)->unk71 = 0xFF;
     m->collision = ((struct SpawnClassView *)m->pclass)->unk10;
     FUN_L00_0025d1b8(m);
-    allocate_voice_for_target_entry_cf(m);
+    FUN_L00_00250df8(m);
     t = suck_get_aim_height(m);
     if (t != 0)
         t->frames = t->length;
@@ -2042,7 +2042,7 @@ unsigned char *FUN_L07_0030dbb0(int a, void *pos, int b, float f0, float f1, flo
         h = g - 0x140;
         *(float *)(h + 0x160) = 0.3f - vector_distance(moby + 0x10, g) / 100.0f;
         *(int *)(h + 0x168) = scale_game_frames(0x14);
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
         FUN_0022da68(0, 0, (int)moby);
     }
     return moby;
@@ -2593,7 +2593,7 @@ extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern unsigned char D_L07_00161B50_gp[1] __asm__("D_L07_00161B50") __attribute__((sda));
 extern unsigned char D_L07_00161B40_gp[1] __asm__("D_L07_00161B40") __attribute__((sda));
 extern unsigned char *FUN_L00_002715e8(void *, int, int, float, float);
-extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
+extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void FUN_L00_0025e450_c2(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263ac8(void *, int, void *, float);
@@ -2893,7 +2893,7 @@ void sharkigator_update(unsigned char *moby) {
         if (one <= F(data, 0x14C)) {
             char *hero_bytes = (char *)&D_0013F350;
             *(int *)(hero_bytes + 0x22A8) = 0;
-            hero_set_state_2(0x3D, 1);
+            FUN_L00_002223f8(0x3D, 1);
             *(int *)(*(char **)(hero_bytes + 0x2080) + 0x98) = -1;
             hero_bytes[0x20A5] = 1;
             moby[0x20] = 6;
@@ -3105,7 +3105,7 @@ extern int rand(void) __asm__("FUN_001160d8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
 extern float FUN_L00_0025bc00(float *, float, int, float);
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -3187,15 +3187,15 @@ void FUN_L07_003112c8(char *moby) {
         if (((unsigned char *)data)[0xBE] != 0)
             FUN_L01_0026e090(((unsigned char *)moby)[0x21], 2);
         *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(data + 0xA4),
-            fast_sin(normalize_rotation_l14(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.75f)) * 0.017453292f);
+            fast_sin(normalize_angle(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.75f)) * 0.017453292f);
         *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(data + 0xA8),
-            fast_cos(normalize_rotation_l14(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.89f)) * 0.017453292f);
+            fast_cos(normalize_angle(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.89f)) * 0.017453292f);
         break;
     case 2:
         *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(data + 0xA4),
-            fast_sin(normalize_rotation_l14(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.75f)) * 0.017453292f);
+            fast_sin(normalize_angle(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.75f)) * 0.017453292f);
         *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(data + 0xA8),
-            fast_cos(normalize_rotation_l14(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.89f)) * 0.017453292f);
+            fast_cos(normalize_angle(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.89f)) * 0.017453292f);
         if (!tick_countdown_32((int *)(data + 0xAC))) break;
         if (((unsigned char *)data)[0xBE] != 0) {
             parent_data[0x19D] = data[0xBF];
@@ -3310,7 +3310,7 @@ void FUN_L07_003112c8(char *moby) {
 /* Falling leaf: drops off its branch after a random delay, swaying, then falls faster and vanishes near the ground. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00312FA8), where it is exact; names translated to the US level program. */
 
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 s32 allocate_voice_for_target_entry_c(s32 entry_index, s32 flags,
@@ -3353,11 +3353,11 @@ void FUN_L07_00311bc8(char *m) {
         break;
     case 2:
         *(float *)(m + 0x40) =
-            fast_sin(normalize_rotation_l14(convert_integer_to_float(*(short *)(d + 0xA0)) * 0.75f)) *
+            fast_sin(normalize_angle(convert_integer_to_float(*(short *)(d + 0xA0)) * 0.75f)) *
             DEG_TO_RAD;
         {
             float c =
-                fast_cos(normalize_rotation_l14(convert_integer_to_float(*(short *)(d + 0xA0)) * 0.89f));
+                fast_cos(normalize_angle(convert_integer_to_float(*(short *)(d + 0xA0)) * 0.89f));
             float e = frame_scale;
             *(float *)(m + 0x44) = c * DEG_TO_RAD;
             *(float *)(m + 0x18) -= e * 0.002f;

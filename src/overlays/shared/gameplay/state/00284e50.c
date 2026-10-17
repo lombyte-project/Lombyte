@@ -81,7 +81,7 @@ extern unsigned short D_00151708 __attribute__((section(".data")));
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern void FUN_L00_00210a08(s32, s32, void *);
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void init_camera_system(void) __asm__("FUN_L00_001ed280");
 extern void FUN_L00_002852c0(void);
@@ -138,7 +138,7 @@ scan:
         }
     }
     p = &hero;
-    allocate_voice_for_target_entry_cf(p->moby);
+    FUN_L00_00250df8(p->moby);
     euler_rotation_basis((char *)hero.moby + 0xC0, &hero.motion.rot);
     init_camera_system();
     FUN_L00_002852c0();

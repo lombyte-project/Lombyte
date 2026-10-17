@@ -89,7 +89,7 @@ void FUN_L06_002d8178(void *moby_ptr, void *target_ptr) {
 /* Spawns moby class 0x12E at the owner's position, copying its fields. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D98E0), where it is exact; names translated to the US level program. */
 
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L06_002d8510(char *owner) {
     char *moby = func_0020D348_m(0x12E);
@@ -103,7 +103,7 @@ char *FUN_L06_002d8510(char *owner) {
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
         *(unsigned short *)(moby + 0x34) |= 0x1000;
         qcopy(moby + 0x10, owner + 0x10);
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }
@@ -313,7 +313,7 @@ char *FUN_L06_002d8b98(char *owner) {
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
         *(char **)(moby + 0xB8) = owner;
         qcopy(moby + 0x10, owner + 0x10);
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }
@@ -483,7 +483,7 @@ void frog_update(unsigned char *moby) {
                 *(short *)(child + 0x32) = 0x40;
             }
             (*(char **)(data + 0x20C))[0x31] = 1;
-            allocate_voice_for_target_entry_cf(*(char **)(data + 0x20C));
+            FUN_L00_00250df8(*(char **)(data + 0x20C));
             *(unsigned short *)(moby + 0x34) |= 0x41;
         } else if (*(short *)(data + 0x202) != 0) {
             moby[0x20] = 0xF;

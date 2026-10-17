@@ -17,7 +17,7 @@ extern char *func_0020D348_m(int);
 extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5);
 char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
@@ -38,7 +38,7 @@ char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
         *(int *)(d + 0x28) = 0;
         *(float *)(m + 0x48) = fast_arc_tan(*(float *)d, *(float *)(d + 4));
         *(float *)(m + 0x44) = -fast_arc_tan(vec_len_xy(d), *(float *)(d + 8));
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -180,7 +180,7 @@ extern u128_3091B0 D_L08_00160250 __attribute__((section(".sdata")));
 extern void FUN_L08_00272cb8(void *, void *, void *, float);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
-void fast_add_rotations_cf(void *a, void *b) __asm__("FUN_L00_00262cf0");
+void FUN_L00_00262cf0(void *a, void *b);
 void FUN_L00_002634f8(void *v);
 void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f);
 void FUN_L08_00307b90_c(int arg) __asm__("FUN_L08_00307b90");

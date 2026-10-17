@@ -1243,7 +1243,7 @@ extern int FUN_L01_00277fb8(void *);
 extern int FUN_L08_002025d0(void *, int, int, void *, int);
 extern s32 FUN_L01_0026e008(s32, s32);
 extern s32 tick_countdown_32_alt_c(s32 *) __asm__("FUN_001f9740");
-extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
+extern void FUN_L00_0025b6b8(void *, void *, void *, float);
 extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void add_vector_xyz_c3(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1368,7 +1368,7 @@ void platform_update(Moby *moby) {
         swing = absolute_float(swing);
         *(u128 *)angles = *(u128 *)&path->nodes[0];
         *(u128 *)goal = *(u128 *)&path->nodes[1];
-        interpolate_vector((*(float (*)[4])&moby->pos), angles, goal, swing);
+        FUN_L00_0025b6b8((*(float (*)[4])&moby->pos), angles, goal, swing);
         angles[2] = (*(float (*)[4])&moby->rot)[2];
         if (FUN_L01_00277fb8(moby)) {
             FUN_L12_002e3e28_c((char *)moby, angles, 1);
@@ -1392,7 +1392,7 @@ void platform_update(Moby *moby) {
         swing = absolute_float(swing);
         *(u128 *)angles = *(u128 *)&path->nodes[0];
         *(u128 *)goal = *(u128 *)&path->nodes[1];
-        interpolate_vector((*(float (*)[4])&moby->pos), angles, goal, swing);
+        FUN_L00_0025b6b8((*(float (*)[4])&moby->pos), angles, goal, swing);
         (*(float (*)[4])&moby->rot)[1] = -1.5707964f;
         break;
     }

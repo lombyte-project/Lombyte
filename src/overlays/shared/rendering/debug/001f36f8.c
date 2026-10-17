@@ -410,7 +410,7 @@ f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 f32 fast_sin(f32) __asm__("FUN_001f9de0");
 void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
-void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+void FUN_L00_00250df8(void *);
 void FUN_L00_001f4490(void) {
     DebugCameraBlock *a = &D_L00_00166C80;
     B001f4490 *b = &D_L00_0016C058;
@@ -428,7 +428,7 @@ void FUN_L00_001f4490(void) {
     qcopy(d + 0x10, &c->motion.pos);
     qcopy(d + 0x40, c->motion.rot.f);
     copy_memory_aligned(d + 0xC0, c, 0x30);
-    allocate_voice_for_target_entry_cf(*(u8 **)&c->moby);
+    FUN_L00_00250df8(*(u8 **)&c->moby);
 }
 /* Pending C: keep the oracle until the placed overlay bytes match. */
 #ifndef NON_MATCHING

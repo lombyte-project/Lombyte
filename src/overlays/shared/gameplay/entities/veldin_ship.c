@@ -1161,7 +1161,7 @@ extern int FUN_L00_002c35c0(void *, void *, void *);
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
 extern short D_L00_001B0830[];
-extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
+extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void FUN_L00_002c3888(float *, char *, void *);
@@ -1220,7 +1220,7 @@ void decoy_glove_update(unsigned char *moby) {
     *(int *)(d + 0x50) = 0;
 target_valid:
     g = ((char *)&hero);
-    if (*(int *)(g + 0x2084) == 1) hero_set_state_2(0x1E, 1);
+    if (*(int *)(g + 0x2084) == 1) FUN_L00_002223f8(0x1E, 1);
     if (tick_countdown_32_alt((int *)(d + 0x54))) {
         if (*(unsigned char *)(g + 0x20AC) == 0) {
             if (*(unsigned char *)(g + 0x20A8) && *(int *)(g + 0x1BC) == scale_game_frames_c2(0x11)) goto L3D10;
@@ -2887,7 +2887,7 @@ extern s32 FUN_001fa6d0(f32);
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern f32 spring_turn_2d5de8(f32 angle, f32 target, f32 accel, f32 damping, f32 limit, f32 *speed) __asm__("FUN_L00_00258110");
 extern void FUN_L00_0025df68(Path *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
-extern s32 probe_ground_height_cf(struct Moby *, struct Moby *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
+extern s32 FUN_L00_00260400(struct Moby *, struct Moby *, void *, void *, void *, void *);
 extern void FUN_L00_002607d0(s32);
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
@@ -3162,7 +3162,7 @@ void infobot_update(struct Moby *moby)
         carrier = &D_L00_0015FFD8[infobot->carrier];
         if (carrier->oclass == 0x336) {
             step.q = 0;
-            probe_ground_height_cf(moby, carrier, &D_L00_001600EC_2d5de8[infobot->attach].pos, &step,
+            FUN_L00_00260400(moby, carrier, &D_L00_001600EC_2d5de8[infobot->attach].pos, &step,
                              &D_L00_001600EC_2d5de8[infobot->attach].pos, &step);
             fast_vec_add(&point, &offset, &D_L00_001600EC_2d5de8[infobot->attach].pos);
             MPOS(moby)->q = point.q;
@@ -3701,9 +3701,9 @@ unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void FUN_L00_0025d1b8(unsigned char *);
 void set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
 float random_angle_radians(void) __asm__("FUN_00213308");
-void allocate_voice_for_target_entry_cf(unsigned char *) __asm__("FUN_L00_00250df8");
-unsigned char *spawn_burst(u128 *v, float s) __asm__("FUN_L00_002d7e90");
-unsigned char *spawn_burst(u128 *v, float s) {
+void FUN_L00_00250df8(unsigned char *);
+unsigned char *FUN_L00_002d7e90(u128 *v, float s);
+unsigned char *FUN_L00_002d7e90(u128 *v, float s) {
     unsigned char *m = create_moby(0x307);
     if (m) {
         FUN_L00_0025d1b8(m);
@@ -3713,7 +3713,7 @@ unsigned char *spawn_burst(u128 *v, float s) {
         *(float *)(m + 0x2c) *= s;
         qcopy(m + 0x10, v);
         *(float *)(m + 0x48) = random_angle_radians();
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }

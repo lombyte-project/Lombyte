@@ -14,9 +14,9 @@ extern int FUN_001fa6d0_2712b8(float) __asm__("FUN_001fa6d0");
 extern int FUN_00213260_2712b8(int) __asm__("FUN_00213260");
 
 extern unsigned char *D_L00_001B2130 __attribute__((section(".data")));
-unsigned char *spawn_particle(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
-                                float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
-unsigned char *spawn_particle(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
+unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
+                                float y, float z, float w, float pw);
+unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
                                 float y, float z, float w, float pw) {
     unsigned char *m = p27fe00_alloc(0x2C);
     if (m) {

@@ -331,7 +331,7 @@ extern char *D_L08_001B0CB0[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern int activate_effect_l08() __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38();
 extern void FUN_L00_00257470(void *, int, int);
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *,
@@ -783,8 +783,8 @@ extern float D_L08_00161D20 __attribute__((sda));
 typedef struct { unsigned int words[4]; } Vec_002e8210 __attribute__((aligned(16)));
 
 extern float D_L08_00174660[4];
-void rocket_update(char *moby) __asm__("FUN_L08_002e8210");
-void rocket_update(char *moby) {
+void FUN_L08_002e8210(char *moby);
+void FUN_L08_002e8210(char *moby) {
     char *position_ptr = moby + 0x10;
     char *data = *(char **)(moby + 0x78);
     float position_copy[4] __attribute__((aligned(16)));

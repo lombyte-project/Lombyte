@@ -29,7 +29,7 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_001f9a68(void *, void *, float);
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L15_002e4580(char *src, float *v, char *pos) {
     char *m = func_0020D348_m(0x3A6);
@@ -50,7 +50,7 @@ char *FUN_L15_002e4580(char *src, float *v, char *pos) {
         *(unsigned short *)(m + 0x34) |= 0x200;
         *(float *)(m + 0x48) = fast_arc_tan(v[0], v[1]);
         *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(v), v[2]);
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
         FUN_L00_0026daa0(m, 0x600040FF, 0x80, -1, 170000.0f);
     }
     return m;
@@ -487,7 +487,7 @@ extern float D_L15_0015F580[] __attribute__((section(".sdata")));
 extern float D_L15_001D3B60[];
 extern float D_L15_001D39D0[];
 extern float FUN_L00_00257c48(float lo, float hi);
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -564,7 +564,7 @@ void FUN_L15_002d7bb0(Moby *moby) {
         float pitch;
         wave = *(float *)&D_L15_00161C0C
               + (*(float *)&D_L15_00161C10 - *(float *)&D_L15_00161C0C) * (convert_integer_to_float(i) * 0.05f);
-        wave = wave * fast_sin_c(normalize_rotation_l14(*(float *)&D_L15_00161C14 + (float)i * *(float *)&D_L15_00161C08));
+        wave = wave * fast_sin_c(normalize_angle(*(float *)&D_L15_00161C14 + (float)i * *(float *)&D_L15_00161C08));
         wave = wave + FUN_L00_00257c48(*(float *)&D_L15_00161C4C, *(float *)&D_L15_00161C50);
         D_L15_001D3750[0][i].f[2] = D_L15_001D3750[0][i].f[2] - D_L15_001D39D0[i];
         D_L15_001D39D0[i] = wave;
@@ -604,9 +604,9 @@ void FUN_L15_002d7bb0(Moby *moby) {
             float height;
             float side_angle;
             float swing;
-            phase = normalize_rotation_l14(*(float *)&D_L15_00161C1C + (float)i * *(float *)&D_L15_00161C24);
+            phase = normalize_angle(*(float *)&D_L15_00161C1C + (float)i * *(float *)&D_L15_00161C24);
             height = *(float *)&D_L15_00161C28
-                * fast_sin_c(normalize_rotation_l14(*(float *)&D_L15_00161C30 + (float)i * *(float *)&D_L15_00161C38));
+                * fast_sin_c(normalize_angle(*(float *)&D_L15_00161C30 + (float)i * *(float *)&D_L15_00161C38));
             qcopy(&D_L15_001D3750[1][i], &D_L15_001D3750[0][i]);
             height = height * fast_sin_c(phase) + FUN_L00_00257c48(0.0f, 0.1f);
             D_L15_001D3750[1][i].f[2] = D_L15_001D3750[1][i].f[2] + height;

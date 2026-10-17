@@ -1104,7 +1104,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float absolute_float_5c88(float) __asm__("func_001F99C0");
 extern float FUN_00213508(void *, int, float);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern int activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int FUN_L02_002d5658(void *argp);
 extern void FUN_L02_002d5728(char *arg);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -1203,7 +1203,7 @@ void FUN_L02_002d5c88(unsigned char *moby) {
     moby[0xA4] = 0xFF;
     trooper_anim_finish(moby, d->anim);
     path = D_L02_001B0AB0_5c88[d->i290];
-    if (activate_effect_l08(d->f250, moby, d->tgt, 0, 0, path + 4, *path) != 2 &&
+    if (FUN_L00_0025ff38(d->f250, moby, d->tgt, 0, 0, path + 4, *path) != 2 &&
         (d->f250 < vector_distance(d->home, d->tgt) ||
          absolute_float_5c88(*(float *)(moby + 0x18) - d->tgt[2]) > 3.0f)) {
         d->i214 = 2;
@@ -1218,7 +1218,7 @@ void FUN_L02_002d5c88(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7550), where it is exact; names translated to the US level program. */
 
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void func_00213DE0(void *, int, int, int) __asm__("FUN_00212f90");
 
 void FUN_L02_002d6118(struct Moby *moby, void *position, float *direction) {
@@ -1231,7 +1231,7 @@ void FUN_L02_002d6118(struct Moby *moby, void *position, float *direction) {
     qcopy(&moby->pos, position);
     qcopy(data + 0x40, direction);
     moby->rot.z = fast_arc_tan(direction[0], direction[1]);
-    allocate_voice_for_target_entry_cf(moby);
+    FUN_L00_00250df8(moby);
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7648), where it is exact; names translated to the US level program. */
 
@@ -1388,8 +1388,8 @@ extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float_c(float input) __asm__("func_001F99C0");
 
-void constructorbot_update(struct Moby *moby) __asm__("FUN_L02_002d7748");
-void constructorbot_update(struct Moby *moby) {
+void FUN_L02_002d7748(struct Moby *moby);
+void FUN_L02_002d7748(struct Moby *moby) {
     float position[4];
     float direction[4];
     char shot[0x30];
@@ -2506,7 +2506,7 @@ extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_00233ee8(void *, int, float);
 extern int FUN_L00_00233f38();
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void FUN_L00_002ea9d8(void *);
 extern void FUN_L00_002eaa30(void *);
@@ -2602,10 +2602,10 @@ void transport_pod_update(unsigned char *moby) {
         fast_vec_normalize(&a, (char *)D_L02_0015FFD8 + (d->gear[3] << 8) + 0xC0, s);
         fast_vec_add((char *)D_L02_0015FFD8 + (d->gear[3] << 8) + 0x10,
                      (char *)D_L02_0015FFD8 + (d->gear[3] << 8) + 0x10, &a);
-        allocate_voice_for_target_entry_cf((char *)D_L02_0015FFD8 + (d->gear[0] << 8));
-        allocate_voice_for_target_entry_cf((char *)D_L02_0015FFD8 + (d->gear[1] << 8));
-        allocate_voice_for_target_entry_cf((char *)D_L02_0015FFD8 + (d->gear[2] << 8));
-        allocate_voice_for_target_entry_cf((char *)D_L02_0015FFD8 + (d->gear[3] << 8));
+        FUN_L00_00250df8((char *)D_L02_0015FFD8 + (d->gear[0] << 8));
+        FUN_L00_00250df8((char *)D_L02_0015FFD8 + (d->gear[1] << 8));
+        FUN_L00_00250df8((char *)D_L02_0015FFD8 + (d->gear[2] << 8));
+        FUN_L00_00250df8((char *)D_L02_0015FFD8 + (d->gear[3] << 8));
         if (tick_countdown_32(&d->timer)) {
             moby[0x20] = 3;
             FUN_0022da68_dc88(1, 0, moby);
@@ -2873,8 +2873,8 @@ void FUN_L02_002def80(struct Moby *moby) {
             moby->rot.z,
             (*(float *)(*(char **)(d + 0x88) + 0x18) - moby->pos.z) * k * DEG_TO_RAD);
     }
-    allocate_voice_for_target_entry_cf(*(void **)(d + 0x84));
-    allocate_voice_for_target_entry_cf(*(void **)(d + 0x88));
+    FUN_L00_00250df8(*(void **)(d + 0x84));
+    FUN_L00_00250df8(*(void **)(d + 0x88));
 }
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E04E8), where it is exact; names translated to the US level program. */
 
@@ -2900,8 +2900,8 @@ void FUN_L02_002df0b0(struct Moby *moby) {
     *(float *)(*(char **)(d + 0x88) + 0x48) = fast_add_rotations(
         moby->rot.z,
         (*(float *)(*(char **)(d + 0x88) + 0x18) - moby->pos.z) * k2 * DEG_TO_RAD);
-    allocate_voice_for_target_entry_cf(*(char **)(d + 0x84));
-    allocate_voice_for_target_entry_cf(*(char **)(d + 0x88));
+    FUN_L00_00250df8(*(char **)(d + 0x84));
+    FUN_L00_00250df8(*(char **)(d + 0x88));
 }
 /* State machine for a moby that picks a new animation each time the previous one finishes. */
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E05E0), where it is exact; names translated to the US level program. */
@@ -3347,7 +3347,7 @@ void sandshark_egg_update(struct Moby *moby) {
         *(int *)(*(char **)(d + 0x60) + 0x94) =
             *(int *)(*(char **)(*(char **)(d + 0x60) + 0x24) + 0x10);
         *(float *)(*(char **)(d + 0x60) + 0x58) = 1.0f;
-        allocate_voice_for_target_entry_cf(*(char **)(d + 0x60));
+        FUN_L00_00250df8(*(char **)(d + 0x60));
         mark_moby_for_removal(moby);
         break;
     }

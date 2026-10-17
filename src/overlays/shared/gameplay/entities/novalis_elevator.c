@@ -464,7 +464,7 @@ void FUN_L01_002c72c8(void) {
     }
 }
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
-extern int noop_callback_l(void *) __asm__("FUN_001e9448");
+extern int FUN_001e9448(void *);
 extern int collect_mobies_in_sphere(float, void *, int, int, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_00259bc8_2c7530(float, void *, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
@@ -499,7 +499,7 @@ void FUN_L01_002c7530(char *moby) {
         fast_vec_normalize(normal, data + 8, 1.0f);
         make_hit_descriptor(hit, moby, 0, 0.0f, normal);
         if (collect_mobies_in_sphere(D_L01_0016149C, moby + 0x10, 0x10, data[6], hit) &&
-            !noop_callback_l(moby)) {
+            !FUN_001e9448(moby)) {
             CollisionHit *contact = (CollisionHit *)D_L01_001742C0;
             if (contact->moby != 0)
                 FUN_L00_00259bc8_2c7530(1.0f, contact->moby, moby, 0x10001, &contact->point, normal);
@@ -2039,7 +2039,7 @@ extern char *D_L01_0015FFD8;
 extern int D_L01_001612D0;
 extern float D_L01_001619A0;
 extern float D_L01_001619A4;
-extern int activate_effect_l08(float, char *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern int fast_tween_color(float, int, int);
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
@@ -2215,7 +2215,7 @@ void FUN_L01_002eec68(char *m) {
     if (c260 <= 0 || *(unsigned char *)((c260 << 8) + (*(int *)&D_L01_0015FFD8) + 0xBC) != 0) {
         e = D_L01_001B0930[*(int *)(d + 0x24C)];
         b = d + 0x1C0;
-        if (activate_effect_l08(*(float *)(d + 0x228), m, b, 0, 0, e + 0x10, *(int *)e) != 2) {
+        if (FUN_L00_0025ff38(*(float *)(d + 0x228), m, b, 0, 0, e + 0x10, *(int *)e) != 2) {
             if (*(float *)(d + 0x228) < vector_distance_xy_alt(d + 0x210, b)
                 || 3.0f < absolute_float(*(float *)(m + 0x18) - *(float *)(d + 0x1C8))) {
                 *(int *)(d + 0x204) = 2;
@@ -2249,7 +2249,7 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_002ef350.s", FUN_L01_002ef350);
 #else
 extern short *lists_2ef478[] __asm__("D_L01_001ABCC0");
 extern char *D_L01_0015FFD8;
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L01_002ef350(char *self) {
     short *list;
@@ -2297,7 +2297,7 @@ scan:
             qcopy(other + 0x40, self + 0x40);
             *(float *)(other_data + 0x20) = *(float *)(self_data + 0x20);
             *(float *)(other_data + 0x224) = *(float *)(self_data + 0x224);
-            allocate_voice_for_target_entry_cf(other);
+            FUN_L00_00250df8(other);
             return other;
         }
     } while (1);

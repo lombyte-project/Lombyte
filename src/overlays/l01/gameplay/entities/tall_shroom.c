@@ -348,7 +348,7 @@ typedef struct {
 } DebrisMoby;
 
 extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void allocate_voice_for_target_entry_cf(DebrisMoby *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(DebrisMoby *);
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -374,7 +374,7 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
         v->spin_y = randf_sym(0.05235988f, 0.13962634f);
         v->spin_z = randf_sym(0.0f, DEG_TO_RAD);
         v->timer = scale_game_frames(200);
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }

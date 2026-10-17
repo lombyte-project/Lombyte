@@ -443,7 +443,7 @@ extern float D_L13_00160660[] __attribute__((section(".sdata")));
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0015ED84;
 extern int D_0015EEA4;
@@ -763,10 +763,10 @@ void FUN_L13_002eb098(Moby388 *moby) {
                                       *(float *)(ship + 0x34));
                     abs_pitch_error = absolute_float(pitch_error);
                     if (abs_yaw_error > 0.38397244f) {
-                        *(float *)(ship + 0x38) = fast_add_rotations(*(float *)(ship + 0x38), normalize_rotation_l14((abs_yaw_error - 0.38397244f) / 0.17453292f * yaw_error));
+                        *(float *)(ship + 0x38) = fast_add_rotations(*(float *)(ship + 0x38), normalize_angle((abs_yaw_error - 0.38397244f) / 0.17453292f * yaw_error));
                     }
                     if (abs_pitch_error > 0.38397244f) {
-                        *(float *)(ship + 0x34) = fast_add_rotations(*(float *)(ship + 0x34), normalize_rotation_l14((abs_pitch_error - 0.38397244f) / 0.17453292f * pitch_error));
+                        *(float *)(ship + 0x34) = fast_add_rotations(*(float *)(ship + 0x34), normalize_angle((abs_pitch_error - 0.38397244f) / 0.17453292f * pitch_error));
                     }
                 }
             }
@@ -1098,7 +1098,7 @@ void FUN_L13_002eb098(Moby388 *moby) {
 extern char *create_moby(int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 char *FUN_L13_002ecd10(char *src, int arg, int id) {
@@ -1116,13 +1116,13 @@ char *FUN_L13_002ecd10(char *src, int arg, int id) {
         *(int *)(data + 0x44) = arg;
         moby_point_position(src, arg, moby + 0x10);
         *(char **)(data + 0x3C) = src;
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
         qcopy(moby + 0x40, src + 0x40);
         *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)(src + 0xC0);
         *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)(src + 0xD0);
         *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)(src + 0xE0);
         *(int *)(data + 0x40) = scale_game_frames(0x258);
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }

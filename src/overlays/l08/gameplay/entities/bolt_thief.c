@@ -58,7 +58,7 @@ void FUN_L08_002e1698(struct Moby *arg) {
 extern char *func_0020D348_m(int);
 extern char D_0013E533[];
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 void *FUN_L08_002e1c98(struct Moby *parent, int oClass, int joint, int pjoint) {
     unsigned char *m = func_0020D348_m(oClass);
@@ -73,7 +73,7 @@ void *FUN_L08_002e1c98(struct Moby *parent, int oClass, int joint, int pjoint) {
         moby_point_position(m, joint, v0);
         moby_point_position(parent, pjoint, v10);
         fast_vec_sub(m + 0x10, v10, v0);
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }
@@ -160,7 +160,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 extern float D_L08_00161D28 __attribute__((sda));
 void FUN_L08_002e8ba0(struct Moby *a) {
@@ -188,7 +188,7 @@ void FUN_L08_002e8ba0(struct Moby *a) {
     for (i = 0; i < 12; i++) {
         char *m = *(char **)(base + 0x10 + i * 16);
         if (m != 0)
-            allocate_voice_for_target_entry_cf(m);
+            FUN_L00_00250df8(m);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002EADF0), where it is exact; names translated to the US level program. */
@@ -224,7 +224,7 @@ void FUN_L08_002e9a18(struct Moby *arg) {
     for (i = 0; i < 16; i++) {
         char *o = *(char **)p;
         if (o != 0) {
-            allocate_voice_for_target_entry_cf(o);
+            FUN_L00_00250df8(o);
             o = *(char **)p;
             if (*(unsigned short *)(o + 0x34) & 0x8000) {
                 fast_vec_scale(o + 0xD0, o + 0xD0, -1.0f);
@@ -1286,7 +1286,7 @@ void FUN_L08_002e2078(struct Moby *m) {
     }
     for (i = 1; i < 34; i++) {
         if (links[i].part != 0) {
-            allocate_voice_for_target_entry_cf(links[i].part);
+            FUN_L00_00250df8(links[i].part);
         }
     }
 }

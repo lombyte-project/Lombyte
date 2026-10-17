@@ -1878,7 +1878,7 @@ void teleporter_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030A6A8), where it is exact; names translated to the US level program. */
 
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 extern float D_L01_00161F78 __attribute__((sda));
 extern float D_L01_00161F80 __attribute__((sda));
@@ -1901,7 +1901,7 @@ void FUN_L01_003092d0(char *m) {
         fast_vec_add(*p + 0x10, *p + 0x10, v);
         *(float *)(*p + 0x44) = *(float *)(d + 0x24) * -1.0471976f - 0.34906584f;
         euler_rotation_basis(*p + 0xC0, *p + 0x40);
-        allocate_voice_for_target_entry_cf(*p);
+        FUN_L00_00250df8(*p);
         p++;
     }
 }

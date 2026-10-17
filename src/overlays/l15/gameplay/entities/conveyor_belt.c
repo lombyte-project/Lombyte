@@ -55,7 +55,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E92C8), where it is exact; names translated to the US level program. */
 
-extern void allocate_voice_for_target_entry_cf(void *, void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *, void *);
 
 char *FUN_L15_002e7ed8(void *unused, void *vector) {
     char *moby = create_moby(0x4E9);
@@ -72,7 +72,7 @@ char *FUN_L15_002e7ed8(void *unused, void *vector) {
         qcopy(moby + 0x10, vector);
         field = *(char **)(moby + 0x24);
         *(int *)(moby + 0x94) = *(int *)(field + 0x10);
-        allocate_voice_for_target_entry_cf(moby, field);
+        FUN_L00_00250df8(moby, field);
     }
     return moby;
 }
@@ -229,7 +229,7 @@ extern void FUN_L00_001ff290(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-int probe_ground_height_cf(int u0, char *a, void *b, void *c, float *v, void *out) __asm__("FUN_L00_00260400");
+int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
 int FUN_L00_0028dc90(int i, int a1, int v, int k);
 void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0, s32 c1, f32 f, f32 spd, f32 z) __asm__("FUN_L00_0025a9f8");
 extern char D_L15_001744C0_2E9358[] __asm__("D_L15_00174440");
@@ -843,7 +843,7 @@ void FUN_L15_002eb6b8(void) {
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void random_integer_below_cf(float, float, char *, float *) __asm__("FUN_L00_0026f080");
+extern void FUN_L00_0026f080(float, float, char *, float *);
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 extern short D_L15_00162198 __attribute__((sda));
@@ -855,7 +855,7 @@ void FUN_L15_002eb928(struct Moby *moby) {
         char *pos = &moby->pos;
         clear_u64_value(vec);
         vec[2] = random_float_between(0.75f, 1.5f) * *(float *)&D_L15_00162198 * frame_time;
-        random_integer_below_cf(random_float_between(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
+        FUN_L00_0026f080(random_float_between(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECDD0), where it is exact; names translated to the US level program. */

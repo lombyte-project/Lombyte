@@ -649,7 +649,7 @@ typedef struct {
 } Vars;
 
 extern struct Moby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void allocate_voice_for_target_entry_cf(struct Moby *moby) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(struct Moby *moby);
 extern void FUN_L00_0025d1b8(struct Moby *moby);
 
 /* spawns a class 0x24 child that copies its parent's position and scale */
@@ -677,7 +677,7 @@ struct Moby *FUN_L13_002b4958(struct Moby *parent) {
         v->unk2A = 3;
         v->unk28 = 0;
         v->unk30 = 0.9f;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
         FUN_L00_0025d1b8(m);
     }
     return m;
@@ -2089,7 +2089,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L13_001672E0[];
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float seg_sqrt(float) __asm__("func_001F9988");
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -2181,13 +2181,13 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = normalize_rotation_l14(convert_integer_to_float(frame_count) / 20.0f);
+                        float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
                         FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
                     }
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = normalize_rotation_l14(convert_integer_to_float(frame_count) / 20.0f);
+                        float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
                         FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
                     }
                 }
@@ -2221,13 +2221,13 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                         {
                             float x = (v[0] - scr[4]) * 0.0625f;
                             float y = (v[1] - scr[5]) * 0.0625f;
-                            float ang = normalize_rotation_l14(convert_integer_to_float(frame_count) / 20.0f);
+                            float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
                             FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f, ang);
                         }
                         {
                             float x = (v[0] - scr[4]) * 0.0625f;
                             float y = (v[1] - scr[5]) * 0.0625f;
-                            float ang = normalize_rotation_l14(convert_integer_to_float(frame_count) / 20.0f);
+                            float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
                             FUN_L13_002b7d50(tab, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f, -ang);
                         }
                     } else {
@@ -2248,7 +2248,7 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = normalize_rotation_l14(convert_integer_to_float(frame_count) / 20.0f);
+                        float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
@@ -2262,7 +2262,7 @@ int FUN_L13_002b8be0(int a, char *p, char *a2, void *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = normalize_rotation_l14(convert_integer_to_float(frame_count) / 20.0f);
+                        float ang = normalize_angle(convert_integer_to_float(frame_count) / 20.0f);
                         FUN_L13_002b7d50(D_L13_001CBD40, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f, -ang);
                     }
                 }
@@ -2366,7 +2366,7 @@ skip:
 
 extern char *msg_string(s32) __asm__("func_001FDD10");
 extern char D_L13_001CBC60[];
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int D_L13_001CBE70[];
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 font_print_center_large(s32, s32, u64, s32, s32) __asm__("func_001F6C20");
@@ -2425,7 +2425,7 @@ void FUN_L13_002b97f8(char *moby) {
             k = t * 5.0f + 1.0f;
             if (m > 1.0f) m = 1.0f;
             c = func_001FA898_r(m * 96.0f);
-            func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k, normalize_rotation_l14(convert_integer_to_float(frame_count) / 30.0f), 0, 0xFF, 0, c);
+            func_L13_002B9590_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k, normalize_angle(convert_integer_to_float(frame_count) / 30.0f), 0, 0xFF, 0, c);
             *(int *)(d + 0xEC) = 0;
         } else {
             a = 0xFF;
@@ -2869,7 +2869,7 @@ void fighter_jet_update(Jet *m) {
 #ifdef NON_MATCHING
 #include "rnc/input/pad_state.h"
 extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
-extern float fast_subtract_rotations_cf(float *, float, float *, int, float, float, float) __asm__("FUN_L00_0025bc98");
+extern float FUN_L00_0025bc98(float *, float, float *, int, float, float, float);
 extern float FUN_L13_002ba088(int, int, float, float, float, float, float);
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
@@ -2969,7 +2969,7 @@ void FUN_L13_002ba178(void *moby, void *obj) {
         }
         vendor_spring(&F(d,0x6C),&F(d,0x90),x,frame_scale_sq*0.03f,frame_scale_sq,turn_rate);
         vendor_spring(&F(d,0x70),&F(d,0x94),y,frame_scale_sq*0.03f,frame_scale_sq,pitch_rate);
-        fast_subtract_rotations_cf(&d->angles[0],F(d,0x6C),&F(d,0x98),0,frame_scale_sq*0.05f,frame_scale_sq,frame_scale);
+        FUN_L00_0025bc98(&d->angles[0],F(d,0x6C),&F(d,0x98),0,frame_scale_sq*0.05f,frame_scale_sq,frame_scale);
         d->angles[1] = fast_subtract_rotations(d->angles[1],F(d,0x70)*(frame_scale*0.012271847f));
         d->angles[2] = fast_subtract_rotations(d->angles[2],F(d,0x6C)*(frame_scale*0.012271847f));
         if (d->angles[1] > 1.3962634f) d->angles[1] = 1.3962634f;
@@ -3040,9 +3040,9 @@ void FUN_L13_002ba178(void *moby, void *obj) {
     camera_rotation[2]=d->angles[2];
     if (m->state==2) qcopy(d->previous_rotation,camera_rotation);
     else {
-        fast_subtract_rotations_cf(&d->previous_rotation[0],camera_rotation[0],&F(d,0xA0),0,frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
-        fast_subtract_rotations_cf(&d->previous_rotation[1],camera_rotation[1],&F(d,0xA4),0,frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
-        fast_subtract_rotations_cf(&d->previous_rotation[2],camera_rotation[2],&F(d,0xA8),0,frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
+        FUN_L00_0025bc98(&d->previous_rotation[0],camera_rotation[0],&F(d,0xA0),0,frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
+        FUN_L00_0025bc98(&d->previous_rotation[1],camera_rotation[1],&F(d,0xA4),0,frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
+        FUN_L00_0025bc98(&d->previous_rotation[2],camera_rotation[2],&F(d,0xA8),0,frame_scale_sq*0.15f,frame_scale_sq*0.8f,frame_scale);
     }
     rotation[0]=d->previous_rotation[0]; rotation[2]=d->previous_rotation[2]; rotation[1]=d->previous_rotation[1];
     FUN_L00_002eaa30(rotation);

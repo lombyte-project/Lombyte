@@ -1211,7 +1211,7 @@ extern struct Moby *FUN_L12_00308670(void);
 extern void FUN_L12_00308708(struct Moby *, struct Moby *);
 extern void FUN_L15_002c6900(struct Moby *);
 extern void FUN_L02_00261c80(float, void *, void *);
-extern void activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern void FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int FUN_L01_0026e008(int, int);
 extern int FUN_L00_00259740(void *, void *, int);
 extern void FUN_L00_0025a120(void *);
@@ -1225,7 +1225,7 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern int FUN_L03_002d5208(float, void *, void *, void *, int);
 extern void FUN_L00_0025e450_5630(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_001fff28(float, void *, int);
@@ -1281,7 +1281,7 @@ get_goal:
         {
             SteeringPath_5630 *path;
             path = D_L15_001B0AB0_5630[*(int *)(vars + 0x194)];
-            activate_effect_l08(*(float *)(vars + 0x1a0), moby, &goal, 0, 0, path->pt, path->n);
+            FUN_L00_0025ff38(*(float *)(vars + 0x1a0), moby, &goal, 0, 0, path->pt, path->n);
         }
     }
     if (*(float *)(vars + 0x1a0) < FUN_001f9b48(&moby->pos, &goal))
@@ -1588,7 +1588,7 @@ apply_delta:
         *(u128 *)&(*(struct Moby **)(vars + 0x160))->pos = *(u128 *)&moby->pos;
         *(u128 *)&(*(struct Moby **)(vars + 0x160))->rot = *(u128 *)&moby->rot;
         advance_moby_animation(*(struct Moby **)(vars + 0x160));
-        allocate_voice_for_target_entry_cf(*(struct Moby **)(vars + 0x160));
+        FUN_L00_00250df8(*(struct Moby **)(vars + 0x160));
         (*(struct Moby **)(vars + 0x160))->flags |= 6;
     }
     {

@@ -501,7 +501,7 @@ extern float FUN_001f9b48(void *, void *);
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char D_0013E500[];
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -598,14 +598,14 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = normalize_rotation_l14(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
+                        float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
                         FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.0f,
                                          ang);
                     }
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = normalize_rotation_l14(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
+                        float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
                         FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x500000FF, x, y, 1.3f,
                                          -ang);
                     }
@@ -625,13 +625,13 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
                 {
                     float x = (v[0] - scr[4]) * 0.0625f;
                     float y = (v[1] - scr[5]) * 0.0625f;
-                    float ang = normalize_rotation_l14(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
+                    float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
                     FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.0f, ang);
                 }
                 {
                     float x = (v[0] - scr[4]) * 0.0625f;
                     float y = (v[1] - scr[5]) * 0.0625f;
-                    float ang = normalize_rotation_l14(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
+                    float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
                     FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0x400000FF, x, y, 2.5f, -ang);
                 }
             }
@@ -651,7 +651,7 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = normalize_rotation_l14(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
+                        float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
                         FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f,
                                          -ang);
                     }
@@ -666,7 +666,7 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
-                        float ang = normalize_rotation_l14(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
+                        float ang = normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 20.0f);
                         FUN_L13_002b7d50(D_L17_001D9AC0, 0x1E, 0xFFFFF3, 0xFF00FF00, x, y, 1.0f,
                                          -ang);
                     }
@@ -827,7 +827,7 @@ skip:
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char D_L17_001D99E0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int D_L17_001D9B68[];
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -901,7 +901,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
                 m = 1.0f;
             c = func_001FA898_r(m * 96.0f);
             func_L17_002EBF08_f(convert_integer_to_float(sp10), convert_integer_to_float(sp14), k,
-                                normalize_rotation_l14(convert_integer_to_float(D_L17_0015F5CC) / 30.0f), 0,
+                                normalize_angle(convert_integer_to_float(D_L17_0015F5CC) / 30.0f), 0,
                                 0xFF, 0, c);
             *(int *)(d + 0xEC) = 0;
         } else {
@@ -1102,7 +1102,7 @@ extern float D_L17_0016D3F0 __attribute__((section(".data")));
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
-extern float fast_subtract_rotations_cf(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
+extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
 extern float FUN_L13_002ba088(int, int, float, float, float, float, float);
 extern float fast_add_rotations(float, float);
 extern float vector_length_xy(void *);
@@ -1310,7 +1310,7 @@ void FUN_L17_002ec360(Moby *m, Obj *o) {
         FUN_L17_002edf10((char *)m, &a, &b);
         vendor_spring(&o->f6C, &o->f90, a, D_L17_001620AC, D_L17_001620B0, ka);
         vendor_spring(&o->f70, &o->f94, b, D_L17_001620BC, D_L17_001620C0, kb);
-        fast_subtract_rotations_cf((char *)&o->f30, (char *)&o->f98, 0, o->f6C * D_L17_0016208C,
+        FUN_L00_0025bc98((char *)&o->f30, (char *)&o->f98, 0, o->f6C * D_L17_0016208C,
                          D_L17_001620CC, D_L17_001620D0, D_L17_001620D4);
         o->f34 = fast_subtract_rotations(o->f34, o->f70 * D_L17_00162024);
         o->f38 = fast_subtract_rotations(o->f38, o->f6C * D_L17_00162028);
@@ -1402,11 +1402,11 @@ void FUN_L17_002ec360(Moby *m, Obj *o) {
         wr.e[1].v[1] = fast_subtract_rotations(fast_add_rotations(o->f34, D_L17_0016204C),
                                                o->f70 * D_L17_00162024);
         wr.e[1].v[2] = o->f38;
-        fast_subtract_rotations_cf((char *)&o->f20, (char *)&o->fA0, 0, wr.e[1].v[0], D_L17_001620F0,
+        FUN_L00_0025bc98((char *)&o->f20, (char *)&o->fA0, 0, wr.e[1].v[0], D_L17_001620F0,
                          D_L17_001620F4, D_L17_001620F8);
-        fast_subtract_rotations_cf((char *)&o->f24, (char *)&o->fA4, 0, wr.e[1].v[1], D_L17_001620FC,
+        FUN_L00_0025bc98((char *)&o->f24, (char *)&o->fA4, 0, wr.e[1].v[1], D_L17_001620FC,
                          D_L17_00162100, D_L17_00162104);
-        fast_subtract_rotations_cf((char *)&o->f28, (char *)&o->fA8, 0, wr.e[1].v[2], D_L17_00162108,
+        FUN_L00_0025bc98((char *)&o->f28, (char *)&o->fA8, 0, wr.e[1].v[2], D_L17_00162108,
                          D_L17_0016210C, D_L17_00162110);
     }
     ang[0] = o->f20;
@@ -2101,7 +2101,7 @@ void magnet_elevator_update(struct Moby *moby) {
             f = 0.0f;
         }
         (*(float *)((char *)(moby) + (0x44))) = f * 3.1415927f;
-        (*(float *)((char *)(moby) + (0x44))) = normalize_rotation_l14(f * 3.1415927f);
+        (*(float *)((char *)(moby) + (0x44))) = normalize_angle(f * 3.1415927f);
     }
     switch (B(moby, 0x20)) {
     case 0:
@@ -2801,7 +2801,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern int activate_effect_l08(float, char *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
@@ -2857,7 +2857,7 @@ void FUN_L17_002efa48(void *moby_v, int arg) {
     if (arg != 0) {
         return;
     }
-    if (activate_effect_l08(128.0f, (char *)moby, d->v180, 0, 0, 0, 0) == 2) {
+    if (FUN_L00_0025ff38(128.0f, (char *)moby, d->v180, 0, 0, 0, 0) == 2) {
         return;
     }
     if (FUN_001f9b48(moby->pos, d->v1B0) < 64.0f) {

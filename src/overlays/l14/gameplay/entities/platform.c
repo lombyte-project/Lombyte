@@ -590,8 +590,8 @@ extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002d
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern float D_L14_00161AFC __attribute__((sda));
 
-void platform_update(struct Moby *moby) __asm__("FUN_L14_002de1f8");
-void platform_update(struct Moby *moby) {
+void FUN_L14_002de1f8(struct Moby *moby);
+void FUN_L14_002de1f8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     void *rotation;
     u128 old_rotation;

@@ -75,7 +75,7 @@ void FUN_L01_002787a0(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279E10), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 void FUN_L01_00278e20(struct Moby *src, int oClass) {
     char *m = func_0020D348_m(oClass);
@@ -89,7 +89,7 @@ void FUN_L01_00278e20(struct Moby *src, int oClass) {
         *(long *)(m + 0x38) = src->spawn_frame;
         m[0x30] = 0;
         *(short *)(m + 0x34) = 0;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
 }
 

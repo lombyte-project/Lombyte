@@ -49,7 +49,7 @@ void FUN_L14_003167e0(u8 *arg0) {
 }
 
 extern u8 *create_moby(s32) __asm__("FUN_0020c4f8");
-extern void allocate_voice_for_target_entry_cf(u8 *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(u8 *);
 
 /* Allocate 0x574 bytes, copy the two 16-byte records out of the caller, stamp
  * the header fields and hand it to the level's post-create hook.  Returns the
@@ -65,7 +65,7 @@ u8 *FUN_L14_00306158(u8 *self) {
         o[0x20] = 0;
         *(s16 *)(o + 0x32) = 0x40;
         o[0x31] = 1;
-        allocate_voice_for_target_entry_cf(o);
+        FUN_L00_00250df8(o);
     }
     return o;
 }
@@ -929,8 +929,8 @@ extern char D_0013E550_6ee0[] __asm__("D_0013E550");
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002FF358.c (func_L14_00308368) */
-void blarg_heavy_interceptor_update(struct Moby *m) __asm__("FUN_L14_00306ee0");
-void blarg_heavy_interceptor_update(struct Moby *m) {
+void FUN_L14_00306ee0(struct Moby *m);
+void FUN_L14_00306ee0(struct Moby *m) {
     Data_6ee0 *d = (Data_6ee0 *)m->pvars;
     Vec4f vec __attribute__((aligned(16)));
     char *hit;

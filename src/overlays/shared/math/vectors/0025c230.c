@@ -151,7 +151,7 @@ void trooper_start_knockback(u8 *a, B_25c558 *b, int c, int d, int e, float f) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D6F0), where it is exact; names translated to the US level program. */
 
 extern Vec4 D_L00_00173E70;
-extern char *spawn_burst(void *, float) __asm__("FUN_L00_002d7e90");
+extern char *FUN_L00_002d7e90(void *, float);
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_vec_dot_c(void *a, void *b) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
@@ -224,7 +224,7 @@ int mine_fall(char *moby, char *st) {
         if (*(float *)(st + 0x5C) == 0.0f && f21 <= v10[2] && v10[2] + *(float *)(st + 0x8) < f21) {
             *(float *)(st + 0x5C) = 1.0f;
             v10[2] = f21;
-            spawn_burst(v10, 3.0f);
+            FUN_L00_002d7e90(v10, 3.0f);
         }
         f21 = func_L00_0025A748_f((moby + 0x10));
     } else {

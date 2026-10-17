@@ -2555,8 +2555,8 @@ float FUN_002132a8_26f080(float, float) __asm__("FUN_002132a8");
 int FUN_L00_00257b90_26f080(int, int) __asm__("FUN_L00_00257b90");
 int FUN_001f96f8_26f080(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L00_001B2108 __attribute__((section(".data")));
-unsigned char *random_integer_below_cf(void *pos, float *v, float x, float y) __asm__("FUN_L00_0026f080");
-unsigned char *random_integer_below_cf(void *pos, float *v, float x, float y) {
+unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y);
+unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y) {
     unsigned char *m = FUN_L00_002678b8_26f080(0x22);
     if (m) {
         float *q = (float *)(m + 0x20);

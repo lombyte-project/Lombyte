@@ -904,7 +904,7 @@ void FUN_L06_002f4390(char *m) {
 /* Puts a moby in state 2 and its seven linked mobys in state 3, resetting each one's heading. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F68D0), where it is exact; names translated to the US level program. */
 
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 void FUN_L06_002f54a0(char *a) {
     char *data = *(char **)(a + 0x78);
@@ -918,7 +918,7 @@ void FUN_L06_002f54a0(char *a) {
         *(int *)(data + 0x14) = 0;
         *(float *)(a + 0x40) =
             fast_subtract_rotations(*(float *)(data + 0x10), *(float *)(data + 0x14));
-        allocate_voice_for_target_entry_cf(a);
+        FUN_L00_00250df8(a);
         p = (char **)(data + 0x24);
         for (i = 0; i < 7; i++) {
             char *c = p[i];
@@ -930,7 +930,7 @@ void FUN_L06_002f54a0(char *a) {
             *(int *)(d + 0x14) = 0;
             *(float *)(p[i] + 0x40) =
                 fast_subtract_rotations(*(float *)(d + 0x10), *(float *)(d + 0x14));
-            allocate_voice_for_target_entry_cf(p[i]);
+            FUN_L00_00250df8(p[i]);
         }
     }
 }
@@ -1225,8 +1225,8 @@ void FUN_L06_002f5d78(char *moby) {
         offset += 4;
         *(float *)(*left + 0x40) = -angle;
         *(float *)(*right + 0x40) = angle;
-        allocate_voice_for_target_entry_cf(*left);
-        allocate_voice_for_target_entry_cf(*right);
+        FUN_L00_00250df8(*left);
+        FUN_L00_00250df8(*right);
     }
     {
         int i, offset;
@@ -1282,8 +1282,8 @@ void FUN_L06_002f5d78(char *moby) {
             if (upper != 0.0f && threshold == 0.0f) allocate_voice_for_target_entry(2, 0, (int)*right);
             *(float *)(*left + 0x44) = -angle;
             *(float *)(*right + 0x44) = -upper;
-            allocate_voice_for_target_entry_cf(*left);
-            allocate_voice_for_target_entry_cf(*right);
+            FUN_L00_00250df8(*left);
+            FUN_L00_00250df8(*right);
         }
     }
 }
@@ -2926,7 +2926,7 @@ extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
 extern int FUN_001fa6e0(int, int, float);
-extern int activate_effect_l08(void *, void *, int, int, void *, int, float) __asm__("FUN_L00_0025ff38");
+extern int FUN_L00_0025ff38(void *, void *, int, int, void *, int, float);
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L06_002fb148_recovery_high(char *) __asm__("FUN_L06_002fb508");
 extern void FUN_L06_002fb148_recovery_low(char *) __asm__("FUN_L06_002fb8c8");
@@ -3079,7 +3079,7 @@ hit_response_done:
     *(int *)(moby + 0x90) = FUN_001fa6e0(D_L06_00161F10, D_L06_00161F14,
         (fast_sin(*(float *)(data + 0x128)) + 1.0f) * 0.5f);
     path = D_L06_001B0C30[*(int *)(data + 0xEC)];
-    activate_effect_l08(moby, data + 0x70, 0, 0, path + 4, *path, 255.0f);
+    FUN_L00_0025ff38(moby, data + 0x70, 0, 0, path + 4, *path, 255.0f);
     if (*(int *)(data + 0xB0) == 0) *(int *)(data + 0xB0) = D_L06_001413D0;
 }
 #include "sda.h"
@@ -3241,7 +3241,7 @@ void FUN_L06_002fbfb0(char *moby) {
         fast_vec_add(moby + 0x10, data + 0x10, v);
         fast_vec_normalize(v, data + 0x30, -D_L06_00161F20);
         fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
-        allocate_voice_for_target_entry_cf(*(char **)(data + 0x40));
+        FUN_L00_00250df8(*(char **)(data + 0x40));
         moby[0x20] = 5;
         return;
     case 1:
@@ -3267,7 +3267,7 @@ void FUN_L06_002fbfb0(char *moby) {
         fast_vec_add(moby + 0x10, data + 0x10, v);
         fast_vec_normalize(v, data + 0x30, -b);
         fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
-        allocate_voice_for_target_entry_cf(*(char **)(data + 0x40));
+        FUN_L00_00250df8(*(char **)(data + 0x40));
         if (absolute_float(a - D_L06_00161F1C) < 0.01f && absolute_float(b - D_L06_00161F20) < 0.01f) moby[0x20] = 5;
         return;
     case 4:
@@ -3330,7 +3330,7 @@ void FUN_L06_002fbfb0(char *moby) {
         fast_vec_add(moby + 0x10, data + 0x10, v);
         fast_vec_normalize(v, data + 0x30, -phase_b);
         fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
-        allocate_voice_for_target_entry_cf(*(char **)(data + 0x40));
+        FUN_L00_00250df8(*(char **)(data + 0x40));
         if (!fast_dec_timer(data + 0x4c)) return;
         moby[0xbc] = next_phase;
         *(int *)(data + 0x4c) = scale_game_frames_alt(next_timer);

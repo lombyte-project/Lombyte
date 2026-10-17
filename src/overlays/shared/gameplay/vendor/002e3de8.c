@@ -482,7 +482,7 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s32 tick_countdown_16_5f18(s16 *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32_5f18(f32) __asm__("FUN_001fa6d0");
 extern s32 scale_game_frames_5f18(s32) __asm__("FUN_001f96f8");
-extern void hero_set_state_2(s32, s32) __asm__("FUN_L00_002223f8");
+extern void hero_set_state(s32, s32) __asm__("FUN_L00_002223f8");
 extern void debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
 extern void debug_line_5f18(void *, void *) __asm__("FUN_001e93e8");
 
@@ -550,7 +550,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
             cam->transition_state = 4;
             D_L10_0015F404 = 0;
             if (*(int *)(rec + 0x4C) == 0)
-                hero_set_state_2(0, 1);
+                hero_set_state(0, 1);
         }
         if (*(int *)(rec + 0x40) == 0)
             return;

@@ -44,7 +44,7 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float integer_to_float_l14(int) __asm__("FUN_001fa6c0");
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float spread_l14(float, float) __asm__("FUN_L00_00257c48");
 extern void enqueue_callback_l14(void *, void *) __asm__("FUN_001f4600");
 void FUN_L14_002df458(struct Moby *);
@@ -94,7 +94,7 @@ void FUN_L14_002df138(u8 *moby) {
             b = 0.0f;
         } else {
             a = (f32)i;
-            b = fast_sin(normalize_rotation_l14(d[0x1E0 / 4] + (a * step))) * 0.1f;
+            b = fast_sin(normalize_angle(d[0x1E0 / 4] + (a * step))) * 0.1f;
             b += spread_l14(0.0f, 0.2f);
         }
         d[(i * 4) + 2] = b;
@@ -122,8 +122,8 @@ void FUN_L14_002df138(u8 *moby) {
     for (i = 0; i < 19; i++) {
         c = (f32)i;
         d[(i * 4) + (0xA8 / 4)] = 0.0f;
-        t = normalize_rotation_l14(d[0x1E4 / 4] + (c * 0.99483764f));
-        u = fast_sin(normalize_rotation_l14(d[0x1E8 / 4] + (c * 0.20944f))) * 0.75f;
+        t = normalize_angle(d[0x1E4 / 4] + (c * 0.99483764f));
+        u = fast_sin(normalize_angle(d[0x1E8 / 4] + (c * 0.20944f))) * 0.75f;
         d[(i * 4) + (0xA8 / 4)] += (u * fast_sin(t)) + spread_l14(0.0f, 0.2f);
         d[(i * 4) + (0xA4 / 4)] = fast_cos(t) * 0.5f;
         d[(i * 4) + (0xA0 / 4)] = c * 0.39f;
@@ -1014,7 +1014,7 @@ extern char *func_0020D348_m(int);
 extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
@@ -1037,7 +1037,7 @@ char *FUN_L14_002eccf0(void *a, float *b, int c, int d) {
         *(int *)(data + 0x20) = c;
         *(int *)(data + 0x24) = d;
         m[0x23] = 0x10;
-        allocate_voice_for_target_entry_cf(m);
+        FUN_L00_00250df8(m);
     }
     return m;
 }

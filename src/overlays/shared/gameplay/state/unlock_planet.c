@@ -91,8 +91,8 @@ int FUN_L00_0025fcb8(char *a, char *o, float best) {
 }
 extern int FUN_00214720_25ff38(void *, int) __asm__("FUN_00214720");
 extern int FUN_L00_00259740_25ff38(void *, void *, int) __asm__("FUN_L00_00259740");
-int activate_effect_l08(char *a, char *o, float best, int *list, int n, float *v, int nv) __asm__("FUN_L00_0025ff38");
-int activate_effect_l08(char *a, char *o, float best, int *list, int n, float *v, int nv) {
+int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv);
+int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv) {
     struct Hero *g = &hero_lui;
     char *m;
     char *p;
@@ -208,8 +208,8 @@ void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-int probe_ground_height_cf(int u0, char *a, void *b, void *c, float *v, void *out) __asm__("FUN_L00_00260400");
-int probe_ground_height_cf(int u0, char *a, void *b, void *c, float *v, void *out) {
+int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
+int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out) {
     M4_260400 m, n;
     char *o = FUN_L00_002603d0_c(a);
     if (o == 0)

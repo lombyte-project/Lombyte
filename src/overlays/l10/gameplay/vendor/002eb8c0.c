@@ -8,7 +8,7 @@
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
 
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 
 char *FUN_L10_002eb8c0(struct Moby *owner) {
     char *moby = create_moby(0x781);
@@ -22,7 +22,7 @@ char *FUN_L10_002eb8c0(struct Moby *owner) {
         *(long *)(moby + 0x38) = owner->spawn_frame;
         qcopy(moby + 0x10, &owner->pos);
         *(float *)(moby + 0x18) = 59.0f;
-        allocate_voice_for_target_entry_cf(moby);
+        FUN_L00_00250df8(moby);
     }
     return moby;
 }

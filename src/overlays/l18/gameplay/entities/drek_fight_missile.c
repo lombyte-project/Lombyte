@@ -3365,8 +3365,8 @@ extern char D_L18_0016244C[4] __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void transform_vector_by_basis(void *, void *, void *);
-unsigned char *spawn_particle(void *pos, float *vec, int s, int a, int col, int n, float x,
-                                float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
+unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x,
+                                float y, float z, float w, float pw);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L18_002f76a0(char *moby, void *p) {
@@ -3392,7 +3392,7 @@ void FUN_L18_002f76a0(char *moby, void *p) {
                 d, &a, random_float_between(*(float *)&D_L18_0016240C, *(float *)&D_L18_00162410));
             h = func_001FA898_r(
                 randf_sym((float)*(int *)&D_L18_00162420, (float)*(int *)&D_L18_00162424));
-            spawn_particle(p, d,
+            FUN_L00_002712b8(p, d,
                              scale_game_frames(random_int_between(*(int *)&D_L18_00162428,
                                                                 *(int *)&D_L18_0016242C)),
                              0x7F, 0xFFFFFF, h, *(float *)&D_L18_00162414,
@@ -3517,8 +3517,8 @@ extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
 extern int D_L18_00162384_w[] __asm__("D_L18_00162384") __attribute__((section(".sdata")));
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
 
-void deplanetizer_gun_update(M *moby) __asm__("FUN_L18_002f7ad8");
-void deplanetizer_gun_update(M *moby) {
+void FUN_L18_002f7ad8(M *moby);
+void FUN_L18_002f7ad8(M *moby) {
     switch (moby->state) {
     case 0:
         moby->state = 1;
@@ -3579,7 +3579,7 @@ extern int FUN_L18_002f8658_u() __asm__("FUN_L18_002f8658");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L18_0016247C_gp __asm__("D_L18_0016247C") __attribute__((sda));
-extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void FUN_L00_00250df8(void *);
 extern void FUN_L03_00250ae8(void *, void *, int);
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
@@ -3618,7 +3618,7 @@ void rocket_tank_update(M1454 *m) {
                 *(int *)(t + 0x94) = 0;
             }
             blend_moby_animation(d->c138, 0, 0, 0);
-            allocate_voice_for_target_entry_cf(d->c138);
+            FUN_L00_00250df8(d->c138);
         }
         if (d->c13c == 0) {
             char *c = func_0020D348_m(0x14B);
@@ -3638,7 +3638,7 @@ void rocket_tank_update(M1454 *m) {
                 *(int *)(t + 0x94) = 0;
             }
             blend_moby_animation(d->c13c, 0, 0, 0);
-            allocate_voice_for_target_entry_cf(d->c13c);
+            FUN_L00_00250df8(d->c13c);
         }
         if (m->b53 != 1) {
             blend_moby_animation(m, 1, 0, scale_game_frames(10));

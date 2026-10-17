@@ -509,7 +509,7 @@ extern void trooper_start_knockback(TrollMoby *, void *, s32, s32, s32, f32) __a
 extern void trooper_anim_update(TrollMoby *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(TrollMoby *, void *) __asm__("FUN_L00_0025d538");
 extern s32 FUN_L00_0025fcb8(TrollMoby *, f32, void *);
-extern void activate_effect_l08(TrollMoby *, void *, s32, s32, void *, s32, f32) __asm__("FUN_L00_0025ff38");
+extern void FUN_L00_0025ff38(TrollMoby *, void *, s32, s32, void *, s32, f32);
 extern void FUN_L00_002e2040(TrollMoby *);
 extern f32 D_L00_00161BD0 __attribute__((sda));
 extern f32 D_L00_00161BD4 __attribute__((sda));
@@ -587,7 +587,7 @@ void FUN_L00_002e1678(TrollMoby *m) {
     trooper_anim_finish(m, anim);
     if (m->state == 1) {
         a = D_L00_001B04B0[vars->unk1B4];
-        activate_effect_l08(m, &vars->target, 0, 0, a->data, a->unk0, 64.0f);
+        FUN_L00_0025ff38(m, &vars->target, 0, 0, a->data, a->unk0, 64.0f);
     } else if (m->state != 5) {
         range = D_L00_00161BD0;
         if (vars->unk1DA != 0) {

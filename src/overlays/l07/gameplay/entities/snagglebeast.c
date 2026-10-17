@@ -20,7 +20,7 @@ extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister_l07(int, u64) __asm__("FUN_00233980");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern void FUN_L00_0024f7c8(void *, int, void *);
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
@@ -107,7 +107,7 @@ void FUN_L07_00312948(char *moby, int phase, float speed, float radius,
                 quad.colors[1] = quad.colors[3];
                 quad.colors[3] = ((u32)truncate_float_to_s32(convert_integer_to_float(0) * row_alpha) << 24) | inner_color;
                 quad.colors[2] = quad.colors[3];
-                wrapped = normalize_rotation_l14(angle + spin * 0.02f);
+                wrapped = normalize_angle(angle + spin * 0.02f);
                 build_spherical_offset(&quad.positions[2], radius, wrapped, latitude);
                 wrapped = fast_add_rotations(wrapped, 0.3926991f);
                 build_spherical_offset(&quad.positions[3], radius, wrapped, latitude);
@@ -159,7 +159,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -221,7 +221,7 @@ void FUN_L07_00312e70(char *moby, float radius, int phase, float speed, int colo
     for (angle = -3.1415927f; angle < step + 3.1415927f; angle += step) {
         qcopy(&quad.positions[0], &quad.positions[1]);
         qcopy(&quad.positions[2], &quad.positions[3]);
-        wrapped = normalize_rotation_l14(angle + spin * 0.02f);
+        wrapped = normalize_angle(angle + spin * 0.02f);
         offset[1] = radius * fast_cos(wrapped);
         offset[2] = radius * fast_sin(wrapped);
         offset[0] = 0.0f;
@@ -323,7 +323,7 @@ extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_00212f90(void *, int, int, int);
-extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
+extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_00266858(void *, int);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
@@ -377,7 +377,7 @@ void FUN_L07_00313420(char *moby, char *data, float *health) {
                 data[0x67] = 0x78;
                 trooper_anim_update(moby, data + 0x60);
                 if ((u8)moby[0x53] != 2) FUN_00212f90(moby, 2, 0, random_int_between(10, 13));
-                if (D_001413D4 == 0x78) hero_set_state_2(0, 1);
+                if (D_001413D4 == 0x78) FUN_L00_002223f8(0, 1);
                 if (*(int *)(data + 0x1f0) != -1) {
                     FUN_L00_00266858(moby, 1);
                     FUN_L00_00257470(moby, 0, -1);
@@ -402,7 +402,7 @@ void FUN_L07_00313420(char *moby, char *data, float *health) {
                 trooper_anim_update(moby, data + 0x60);
                 if ((u8)moby[0x20] < 10 && *health < scratch.threshold) {
                     int slot;
-                    if (D_001413D4 == 0x78) hero_set_state_2(0, 1);
+                    if (D_001413D4 == 0x78) FUN_L00_002223f8(0, 1);
                     if ((u8)moby[0x53] != 2) {
                         int first = random_int_between(0, 2);
                         FUN_00212f90(moby, 2, first, random_int_between(20, 22));
@@ -1491,7 +1491,7 @@ void snagglebeast_update(unsigned char *moby) {
                     } else {
                         *(float *)(data + 0x128) = *(float *)(moby + 0x18) + 2.0f;
                     }
-                    hero_set_state_2(0x78, 1);
+                    FUN_L00_002223f8(0x78, 1);
                     *(int *)(data + 0x164) = 0;
                     *(float *)(data + 0x1AC) = 20.0f;
                     *(short *)(data + 0x19E) = 0;
@@ -1513,7 +1513,7 @@ void snagglebeast_update(unsigned char *moby) {
                     *(short *)(data + 0x196) = scale_ticks(0x320);
                     *(int *)(data + 0x160) = scale_ticks(0xF0);
                     FUN_L07_00318e98((int)moby);
-                    { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) hero_set_state_2(0, 1); }
+                    { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) FUN_L00_002223f8(0, 1); }
                     data[0x1C7] = 0;
                     if (*(int *)(data + 0x1F8) != -1) {
                         char *sl = (D_0013E5C4 - 0x74) + *(int *)(data + 0x1F8) * 0x70;
@@ -1590,7 +1590,7 @@ void snagglebeast_update(unsigned char *moby) {
             *(int *)(data + 0x164) = 0;
             *(short *)(data + 0x196) = scale_ticks(0xF);
             FUN_L07_00318e98((int)moby);
-            { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) hero_set_state_2(0, 1); }
+            { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) FUN_L00_002223f8(0, 1); }
             *(int *)(data + 0x160) = scale_ticks(0x46);
             data[0x1C7] = 0;
             if (*(int *)(data + 0x1F8) != -1) {
@@ -1609,7 +1609,7 @@ void snagglebeast_update(unsigned char *moby) {
                 FUN_00212f90(moby, 9, r, random_int_between(0x10, 0x19));
             }
             FUN_L07_00318e98((int)moby);
-            { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) hero_set_state_2(0, 1); }
+            { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) FUN_L00_002223f8(0, 1); }
             if (*(int *)(data + 0x1F8) != -1) {
                 char *sl = (D_0013E5C4 - 0x74) + *(int *)(data + 0x1F8) * 0x70;
                 if (*(void **)(sl + 0x88) == moby && *(unsigned char *)(sl + 0x74) != 0) {
@@ -2694,7 +2694,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern float normalize_rotation_l14(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
@@ -2758,7 +2758,7 @@ void machinegun_turret_update(unsigned char *moby) {
         }
         *(float *)(data + 0x88) = 0.0f;
         *(float *)(data + 0x8c) = *(float *)(data + 0x84) - *(float *)(data + 0x80);
-        *(float *)(moby + 0x48) = normalize_rotation_l14(*(float *)(data + 0x80));
+        *(float *)(moby + 0x48) = normalize_angle(*(float *)(data + 0x80));
         *(float *)(data + 0x90) = *(float *)(moby + 0x18);
         data[0x29] = 0;
         moby[0xbc] = 0;
@@ -2782,7 +2782,7 @@ void machinegun_turret_update(unsigned char *moby) {
                 *(s16 *)(data + 0x7e) = 1;
             }
         }
-        *(float *)(moby + 0x48) = normalize_rotation_l14(*(float *)(data + 0x80) + *(float *)(data + 0x88));
+        *(float *)(moby + 0x48) = normalize_angle(*(float *)(data + 0x80) + *(float *)(data + 0x88));
         if (fast_dec_timer_s16(data + 0x7c) == 0) return;
         if ((u8)moby[0xbc] == 0) {
             if (*(int *)(data + 0x98) == 0 || (*(u16 *)(data + 0x9c) & 1)) {
@@ -2837,12 +2837,12 @@ void machinegun_turret_update(unsigned char *moby) {
             *(float *)(moby + 0x18) -= frame_time * 5.0f;
         else
             *(float *)(moby + 0x18) = *(float *)(data + 0x90) - 0.7f;
-        direction = normalize_rotation_l14(*(float *)(data + 0x80) + *(float *)(data + 0x88));
+        direction = normalize_angle(*(float *)(data + 0x80) + *(float *)(data + 0x88));
         distance = fast_difference_between_rotations(*(float *)(moby + 0x48), direction);
         if (D_0015ED6C * 12.566371f < distance)
             *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), D_0015ED6C * 12.566371f);
         else
-            *(float *)(moby + 0x48) = normalize_rotation_l14(*(float *)(data + 0x80) + *(float *)(data + 0x88));
+            *(float *)(moby + 0x48) = normalize_angle(*(float *)(data + 0x80) + *(float *)(data + 0x88));
         if (fast_dec_timer_s16(data + 0x7c) != 0) {
             FUN_0022da68(2, 0, moby);
             if ((u8)moby[0x53] != 3) FUN_00212f90(moby, 3, 0, 5);
