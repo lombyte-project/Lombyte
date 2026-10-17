@@ -1653,8 +1653,8 @@ extern void set_moby_animation_c2(void *, s32, s32) __asm__("func_00212ED8");
 int FUN_L14_00268038(char *a, char *o, float best);
 void FUN_L14_002b4340_c(struct Moby *m) __asm__("FUN_L14_002b4340");
 extern int func_001E9730_2B4E40() __asm__("FUN_001e93b0");
-extern char D_L14_001FC0C0_2B4E40[] __asm__("D_L14_001FBD50");
-extern char D_L14_001FC0E8_2B4E40[] __asm__("D_L14_001FBD78");
+extern char D_L14_001FBD50[];
+extern char D_L14_001FBD78[];
 extern void func_L14_002B5590_2B4E40(unsigned char *m) __asm__("FUN_L14_002b4340");
 extern void func_0020D678_2B4E40(void *) __asm__("FUN_0020c828");
 extern int func_001F9908_2B4E40(void *) __asm__("FUN_001f9740");
@@ -1700,12 +1700,12 @@ void machinegun_turret_update(char *moby) {
         *(int *)(data + 0x8C) = 0;
         *(short *)(data + 0x74) = 0;
         if (*(int *)(data + 0x80) == -1) {
-            func_001E9730_2B4E40(D_L14_001FC0C0_2B4E40, *(short *)(moby + 0xB2));
+            func_001E9730_2B4E40(D_L14_001FBD50, *(short *)(moby + 0xB2));
             func_0020D678_2B4E40(moby);
             return;
         }
         if (*(int *)(data + 0x90) == -1) {
-            func_001E9730_2B4E40(D_L14_001FC0E8_2B4E40, *(short *)(moby + 0xB2));
+            func_001E9730_2B4E40(D_L14_001FBD78, *(short *)(moby + 0xB2));
             func_0020D678_2B4E40(moby);
             return;
         }
@@ -3173,3 +3173,7 @@ void plasmabot_update(struct Moby *m) {
     }
     FUN_L14_002d7490(m);
 }
+
+char D_L14_001FBD50[] = "Turret with no aiming cuboid. UID: %d\n";
+
+char D_L14_001FBD78[] = "Turret with no waking cuboid. UID: %d\n";

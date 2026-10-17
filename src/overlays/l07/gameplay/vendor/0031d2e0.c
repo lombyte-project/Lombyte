@@ -273,3 +273,7 @@ void FUN_L07_0031f900(unsigned char *moby) {
         break;
     }
 }
+
+char D_L07_00211B30[] = "ERRORS, killing moby %d \n";
+
+char D_L07_00211B78[] = " spawn %d of %d at %3.3f,%3.3f,%3.3f dist:%f \n";

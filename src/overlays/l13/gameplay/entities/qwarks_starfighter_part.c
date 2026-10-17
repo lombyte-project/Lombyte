@@ -1651,3 +1651,5 @@ void FUN_L13_002f8a78(char *moby) {
     }
     FUN_L00_0024efb0(*(unsigned char **)(moby + 0x24), step, 0);
 }
+
+char D_L13_001F4F38[] = "tractor too long, abort\n";
