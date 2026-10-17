@@ -7,11 +7,11 @@ struct KeyedFlagRecord {
 
 s32 clear_record_flag_by_key(s32 arg0) __asm__("FUN_00225e20");
 
-s32 clear_record_flag_by_key(s32 arg0) {
+s32 clear_record_flag_by_key(s32 record_key) {
     s32 i;
 
     for (i = 0; i < 5; i++) {
-        if (graphics_buffer_descriptors[i].address == arg0) {
+        if (graphics_buffer_descriptors[i].address == record_key) {
             graphics_buffer_descriptors[i].flags &= ~4;
             return 0;
         }
