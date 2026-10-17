@@ -16,7 +16,7 @@ extern void vu1_add_g_sregister(int, long) __asm__("func_00233980");
    the start subtracts its own variable, which keeps retail's order. */
 int draw_menu_text_box(char *arg0) __asm__("FUN_00222768");
 
-int draw_menu_text_box(char *arg0) {
+int draw_menu_text_box(char *menu_text_box) {
     short box[12];
     int ypos;
     int n;
@@ -25,16 +25,16 @@ int draw_menu_text_box(char *arg0) {
     vu1_add_g_sregister(0x47, 0x30000);
     vu1_add_g_sregister(0x42, 0x8000000044L);
     setup_gif_paging(0);
-    PackImageDescriptor(box, arg0);
+    PackImageDescriptor(box, menu_text_box);
     box[9] = 9;
-    box[3] = *(int *)(arg0 + 0x18) + *(int *)(arg0 + 0x20);
-    box[0] = *(int *)(arg0 + 0x1C) + 4;
-    box[1] = *(int *)(arg0 + 0x1C) + *(int *)(arg0 + 0x24) - 4;
-    box[2] = *(int *)(arg0 + 0x18);
-    box[4] = *(int *)(arg0 + 0x18) + (*(int *)(arg0 + 0x20) >> 1);
+    box[3] = *(int *)(menu_text_box + 0x18) + *(int *)(menu_text_box + 0x20);
+    box[0] = *(int *)(menu_text_box + 0x1C) + 4;
+    box[1] = *(int *)(menu_text_box + 0x1C) + *(int *)(menu_text_box + 0x24) - 4;
+    box[2] = *(int *)(menu_text_box + 0x18);
+    box[4] = *(int *)(menu_text_box + 0x18) + (*(int *)(menu_text_box + 0x20) >> 1);
     box[10] = 0;
     box[11] = 0;
-    switch (*(int *)(arg0 + 0x50)) {
+    switch (*(int *)(menu_text_box + 0x50)) {
     case 1:
     case 2:
     case 3:
@@ -50,26 +50,26 @@ int draw_menu_text_box(char *arg0) {
     case 16:
     case 17:
     case 18:
-        n = (*(int *)(arg0 + 0x3C) >> 4) - 4;
-        ypos = *(int *)(arg0 + 0x1C) - n;
-        for (i = 0; (*(int **)(arg0 + 0x34))[i] != -1; i++) {
+        n = (*(int *)(menu_text_box + 0x3C) >> 4) - 4;
+        ypos = *(int *)(menu_text_box + 0x1C) - n;
+        for (i = 0; (*(int **)(menu_text_box + 0x34))[i] != -1; i++) {
             box[5] = ypos;
-            box[11] = (*(int *)(arg0 + 0x3C) >> 4) & 0xF;
+            box[11] = (*(int *)(menu_text_box + 0x3C) >> 4) & 0xF;
             font_print_window_regular(box, 0x80FFA888L,
-                                      get_help_message_text((*(int **)(arg0 + 0x34))[i]), -1);
+                                      get_help_message_text((*(int **)(menu_text_box + 0x34))[i]), -1);
             ypos += box[7];
             ypos += 10;
         }
-        if (ypos + 0x18 < *(int *)(arg0 + 0x1C) + *(int *)(arg0 + 0x24)) {
-            *(int *)(arg0 + 0x54) = 1;
+        if (ypos + 0x18 < *(int *)(menu_text_box + 0x1C) + *(int *)(menu_text_box + 0x24)) {
+            *(int *)(menu_text_box + 0x54) = 1;
         }
         break;
     case 4:
     case 11:
     case 15:
     case 19:
-        box[5] = *(int *)(arg0 + 0x1C) + 0x20;
-        font_print_window_regular(box, 0x80FFA888L, get_help_message_text(*(int *)(arg0 + 0x34)),
+        box[5] = *(int *)(menu_text_box + 0x1C) + 0x20;
+        font_print_window_regular(box, 0x80FFA888L, get_help_message_text(*(int *)(menu_text_box + 0x34)),
                                   -1);
         break;
     case 0:
