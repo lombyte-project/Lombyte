@@ -1387,14 +1387,14 @@ void robot_arm_update(char *m) __asm__("FUN_L00_002e3d88");
 void robot_arm_update(char *m) {
     char *d = *(char **)(m + 0x78);
     float a20[4];
-    float a30[12];
-    float a60[4];
-    float a70[4];
-    float a80[4];
-    float a90[16];
+    float rotation_step_basis[12];
+    float offset_after_rotation[4];
+    float rotation_offset_delta[4];
+    float collision_probe_position[4];
+    float bounce_rotation_matrix[16];
     float aD0[4];
     float aE0[4];
-    char *s23;
+    char *rotation_step_euler;
     float r;
     float *q;
 
@@ -1428,19 +1428,19 @@ void robot_arm_update(char *m) {
         m[0x23] = func_001FA898_r((float)*(int *)(d + 0x30) / multiply_global_factor_ed64(10.0f) * 128.0f);
         break;
     }
-    s23 = d + 0x10;
-    vu_euler_rotation_basis(a30, s23);
+    rotation_step_euler = d + 0x10;
+    vu_euler_rotation_basis(rotation_step_basis, rotation_step_euler);
     transform_vector_by_basis(a20, d + 0x20, m + 0xC0);
-    multiply_matrix_basis_columns(m + 0xC0, a30, m + 0xC0);
-    transform_vector_by_basis(a60, d + 0x20, m + 0xC0);
-    subtract_vector_xyz(a70, a60, a20);
-    subtract_vector_xyz((float *)(m + 0x10), (float *)(m + 0x10), a70);
+    multiply_matrix_basis_columns(m + 0xC0, rotation_step_basis, m + 0xC0);
+    transform_vector_by_basis(offset_after_rotation, d + 0x20, m + 0xC0);
+    subtract_vector_xyz(rotation_offset_delta, offset_after_rotation, a20);
+    subtract_vector_xyz((float *)(m + 0x10), (float *)(m + 0x10), rotation_offset_delta);
     add_vector_xyz(m + 0x10, m + 0x10, d);
     r = *(float *)(d + 0x2C);
     *(float *)(d + 8) = *(float *)(d + 8) - *(float *)(d + 0x38);
-    transform_vector_by_basis(a80, d + 0x20, m + 0xC0);
-    add_vector_xyz(a80, a80, m + 0x10);
-    if (func_L00_001F10E0_s(a80, r, 0, m)) {
+    transform_vector_by_basis(collision_probe_position, d + 0x20, m + 0xC0);
+    add_vector_xyz(collision_probe_position, collision_probe_position, m + 0x10);
+    if (func_L00_001F10E0_s(collision_probe_position, r, 0, m)) {
         float f21, f20;
         q = coll_hit_normal;
         normalize_vector_xyz(q, q, 1.0f);
@@ -1453,9 +1453,9 @@ void robot_arm_update(char *m) {
             normalize_vector_xyz(d, d, f21);
             cross_vectors_xyz(aE0, q, d);
             normalize_vector_xyz(aE0, aE0, 1.0f);
-            build_quaternion_from_axis_angle(aE0, aE0, vector_length_xyz(s23));
-            quaternion_to_matrix(aE0, a90);
-            matrix_to_euler(a90, s23);
+            build_quaternion_from_axis_angle(aE0, aE0, vector_length_xyz(rotation_step_euler));
+            quaternion_to_matrix(aE0, bounce_rotation_matrix);
+            matrix_to_euler(bounce_rotation_matrix, rotation_step_euler);
         }
     }
 }
