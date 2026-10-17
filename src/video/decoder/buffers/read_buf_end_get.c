@@ -4,6 +4,8 @@ struct ReadBuf {
     s32 count;
 };
 
+s32 read_buf_end_get(struct ReadBuf *table, s32 requested) __asm__("GetStateTableWord");
+
 s32 read_buf_end_get(struct ReadBuf *table, s32 requested) {
     s32 taken;
     s32 result;

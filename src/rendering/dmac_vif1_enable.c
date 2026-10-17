@@ -2,7 +2,7 @@
 #include "rnc/data_labels.h"
 extern s32 AddDmacHandler();
 extern s32 enable_dmac() __asm__("func_00119160");
-extern s32 vif1_dma_interrupt_handler(s32 cause) __asm__("FUN_00233e00");
+extern s32 vif1_dma_interrupt_handler(s32 cause) __asm__("func_00233E00");
 extern void print_register_values_and_halt() __asm__("func_00233F00");
 
 void dmac_vif1_enable(void) __asm__("FUN_00233d00");
