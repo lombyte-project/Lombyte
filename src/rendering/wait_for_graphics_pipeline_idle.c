@@ -10,7 +10,7 @@
  */
 s32 wait_for_graphics_pipeline_idle(s32 arg0, s32 arg1) __asm__("FUN_00120558");
 
-s32 wait_for_graphics_pipeline_idle(s32 arg0, s32 arg1) {
+s32 wait_for_graphics_pipeline_idle(s32 unused_arg0, s32 unused_arg1) {
     u32 busy;
     u32 initial_busy;
     u32 vif1_dma;
@@ -19,8 +19,8 @@ s32 wait_for_graphics_pipeline_idle(s32 arg0, s32 arg1) {
     u32 vpu_status;
     u32 gif_status;
 
-    (void)arg0;
-    (void)arg1;
+    (void)unused_arg0;
+    (void)unused_arg1;
     do {
         vif1_dma = *(vu32 *)0x10009000;
         initial_busy = 1;
