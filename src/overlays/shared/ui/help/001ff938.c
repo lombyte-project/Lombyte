@@ -15,7 +15,7 @@ extern int D_L15_0015F5B0;
 extern int D_L15_0015F5CC;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_0015EE18;
+extern f32 D_0015EE18;
 extern unsigned char D_0013D4DC[];
 extern unsigned char D_0013F350[];
 extern struct { unsigned char b[8]; } D_0015EDB0_s __asm__("D_0015EDB0");
@@ -66,7 +66,7 @@ void FUN_L15_001ff938(void) {
 
     if (b0[0x20A4] == 2) {
         if (D_0015EDB0_s.b[3] != 0)
-            D_L15_0017C06C[0] = (*(float *)&D_0015EE18) * 1.4f;
+            D_L15_0017C06C[0] = (*(float *)&(*(short *)&D_0015EE18)) * 1.4f;
         FUN_L00_002059d8();
         FUN_L00_002061f0();
         {
