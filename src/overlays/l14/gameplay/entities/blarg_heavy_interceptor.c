@@ -3168,5 +3168,3 @@ void FUN_L14_002d5f40(struct Moby *m) {
     }
     FUN_L14_002d7490(m);
 }
-
-u8 D_L14_001D86CC[4] __attribute__((section(".data"))) = {0};

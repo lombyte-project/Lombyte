@@ -1183,5 +1183,3 @@ void FUN_L12_00304e00(struct Moby *moby) {
     }
     FUN_L00_00259fe8(1.0f, moby);
 }
-
-s32 D_L12_00167278[2] __attribute__((section(".data"))) = {0};

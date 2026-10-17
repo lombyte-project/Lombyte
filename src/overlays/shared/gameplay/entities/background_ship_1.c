@@ -1186,7 +1186,6 @@ int FUN_L02_002fc298(char *moby) {
 s32 D_L02_00167604[1] __attribute__((section(".data"))) = {0};
 f32 D_L02_00167608[1] __attribute__((section(".data"))) = {0};
 s32 D_L02_00167610[1] __attribute__((section(".data"))) = {0};
-s32 D_L03_00166FDC[4] = {0};
 s32 D_L03_00167100[1] __attribute__((section(".data"))) = {0};
 s32 D_L03_00167104[1] __attribute__((section(".data"))) = {0};
 f32 D_L03_00167108[1] __attribute__((section(".data"))) = {0};
@@ -1202,8 +1201,6 @@ s32 D_L05_00167404[1] __attribute__((section(".data"))) = {0};
 f32 D_L05_00167408[1] __attribute__((section(".data"))) = {0};
 f32 D_L05_0016740C[1] __attribute__((section(".data"))) = {0};
 s32 D_L05_00167410[1] __attribute__((section(".data"))) = {0};
-s32 D_L06_0016765C[4] = {0};
-s32 D_L07_00166F5C[4] = {0};
 s32 D_L07_00167080[1] __attribute__((section(".data"))) = {0};
 s32 D_L07_00167084[1] __attribute__((section(".data"))) = {0};
 f32 D_L07_00167088[1] __attribute__((section(".data"))) = {0};

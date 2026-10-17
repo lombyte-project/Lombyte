@@ -2385,5 +2385,3 @@ void FUN_L10_002dd650(struct Moby *m) {
         }
     }
 }
-
-u8 D_L10_001D9FF0[4] __attribute__((section(".data"))) = {0};

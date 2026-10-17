@@ -490,7 +490,5 @@ void FUN_L06_00316330(char *moby) {
     }
 }
 
-u8 D_L06_001FE960[4] __attribute__((section(".data"))) = {0};
 s32 D_L06_001FE9D0[1] __attribute__((section(".data"))) = {0};
-u8 D_L10_001DA1A0[4] __attribute__((section(".data"))) = {0};
 s32 D_L10_001DA210[1] __attribute__((section(".data"))) = {0};

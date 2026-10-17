@@ -462,27 +462,14 @@ float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *mo
     return total;
 }
 
-s32 D_L02_001B2724[3] = {0};
-s32 D_L02_001B27A8[2] __attribute__((section(".data"))) = {0};
 s32 D_L04_001B220C[1] __attribute__((section(".data"))) = {0};
 s32 D_L05_001B25D0[1] __attribute__((section(".data"))) = {0};
-s32 D_L05_001B2628[4] = {0};
 s32 D_L06_001B2838[1] __attribute__((section(".data"))) = {0};
-s32 D_L06_001B28A4[3] = {0};
-s32 D_L06_001B2928[4] = {0};
 s32 D_L08_001B28B8[1] __attribute__((section(".data"))) = {0};
-s32 D_L08_001B29A8[3] = {0};
-s32 D_L10_001B25A4[3] = {0};
 s32 D_L10_001B25D0[1] __attribute__((section(".data"))) = {0};
 s32 D_L11_001B2B50[1] __attribute__((section(".data"))) = {0};
-s32 D_L11_001B2BA8[4] = {0};
 s32 D_L12_001B25D0[1] __attribute__((section(".data"))) = {0};
-s32 D_L12_001B2628[4] = {0};
 s32 D_L13_001B2450[1] __attribute__((section(".data"))) = {0};
-s32 D_L13_001B24A8[4] = {0};
 s32 D_L14_001B278C[1] __attribute__((section(".data"))) = {0};
-s32 D_L14_001B2824[3] = {0};
-s32 D_L14_001B28A8[4] = {0};
 s32 D_L15_001B26B8[1] __attribute__((section(".data"))) = {0};
 s32 D_L17_001B29B8[1] __attribute__((section(".data"))) = {0};
-s32 D_L17_001B2AA8[4] = {0};

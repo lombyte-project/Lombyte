@@ -3365,34 +3365,18 @@ void FUN_L00_002c7a58(struct Moby *moby) {
 }
 
 s32 D_L00_00173E64[1] __attribute__((section(".data"))) = {0};
-s16 D_L00_00173E74[2] __attribute__((section(".data"))) = {0};
 s32 D_L01_001742E4[1] __attribute__((section(".data"))) = {0};
-s16 D_L01_001742F4[2] __attribute__((section(".data"))) = {0};
 s32 D_L02_00174464[1] __attribute__((section(".data"))) = {0};
-s16 D_L02_00174474[2] __attribute__((section(".data"))) = {0};
 s32 D_L03_00173F64[1] __attribute__((section(".data"))) = {0};
-s16 D_L03_00173F74[2] __attribute__((section(".data"))) = {0};
 s32 D_L04_00173FE4[1] __attribute__((section(".data"))) = {0};
-s16 D_L04_00173FF4[2] __attribute__((section(".data"))) = {0};
 s32 D_L05_00174264[1] __attribute__((section(".data"))) = {0};
-s16 D_L05_00174274[2] __attribute__((section(".data"))) = {0};
 s32 D_L06_001745E4[1] __attribute__((section(".data"))) = {0};
-s16 D_L06_001745F4[2] __attribute__((section(".data"))) = {0};
 s32 D_L07_00173EE4[1] __attribute__((section(".data"))) = {0};
-s16 D_L07_00173EF4[2] __attribute__((section(".data"))) = {0};
 s32 D_L08_00174664[1] __attribute__((section(".data"))) = {0};
-s16 D_L08_00174674[2] __attribute__((section(".data"))) = {0};
 s32 D_L09_00173FE4[1] __attribute__((section(".data"))) = {0};
-s16 D_L09_00173FF4[2] __attribute__((section(".data"))) = {0};
 s32 D_L10_001742E4[1] __attribute__((section(".data"))) = {0};
-s16 D_L10_001742F4[2] __attribute__((section(".data"))) = {0};
 s32 D_L12_001742E4[1] __attribute__((section(".data"))) = {0};
-s16 D_L12_001742F4[2] __attribute__((section(".data"))) = {0};
 s32 D_L13_00174164[1] __attribute__((section(".data"))) = {0};
-s16 D_L13_00174174[2] __attribute__((section(".data"))) = {0};
 s32 D_L14_00174564[1] __attribute__((section(".data"))) = {0};
-s16 D_L14_00174574[2] __attribute__((section(".data"))) = {0};
 s32 D_L15_00174464[1] __attribute__((section(".data"))) = {0};
-s16 D_L15_00174474[2] __attribute__((section(".data"))) = {0};
 s32 D_L16_00174264[1] __attribute__((section(".data"))) = {0};
-s16 D_L16_00174274[2] __attribute__((section(".data"))) = {0};

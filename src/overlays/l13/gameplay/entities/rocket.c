@@ -2625,5 +2625,3 @@ s32 D_L13_001CABAC[1] __attribute__((section(".data"))) = {0};
 f32 D_L13_001CABB0[1] __attribute__((section(".data"))) = {0};
 f32 D_L13_001CABB4[1] __attribute__((section(".data"))) = {0};
 f32 D_L13_001CABB8[1] __attribute__((section(".data"))) = {0};
-u8 D_L13_001CABBC[1] __attribute__((section(".data"))) = {0};
-u8 D_L13_001CABBD[3] __attribute__((section(".data"))) = {0};

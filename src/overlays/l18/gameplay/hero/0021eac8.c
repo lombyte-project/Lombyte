@@ -2667,5 +2667,3 @@ void FUN_L18_0021eac8(void) {
         hero.unk1A4 = 0;
     }
 }
-
-f32 D_L18_0017B0E4[3] = {0};

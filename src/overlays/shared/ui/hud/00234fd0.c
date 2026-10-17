@@ -145,35 +145,19 @@ void FUN_L00_00235668(int state) {
     }
 }
 
-s32 D_L01_0017E9A0[4] = {0};
 s32 D_L02_0017EB18[1] __attribute__((section(".data"))) = {0};
 s32 D_L02_0017EB1C[1] __attribute__((section(".data"))) = {0};
-s32 D_L02_0017EB20[4] = {0};
 s32 D_L03_0017E618[1] __attribute__((section(".data"))) = {0};
 s32 D_L03_0017E61C[1] __attribute__((section(".data"))) = {0};
-s32 D_L03_0017E620[4] = {0};
-s32 D_L04_0017E6A0[4] = {0};
-s32 D_L05_0017E9A0[4] = {0};
 s32 D_L06_0017EC98[1] __attribute__((section(".data"))) = {0};
 s32 D_L06_0017EC9C[1] __attribute__((section(".data"))) = {0};
-s32 D_L06_0017ECA0[4] = {0};
 s32 D_L07_0017E598[1] __attribute__((section(".data"))) = {0};
 s32 D_L07_0017E59C[1] __attribute__((section(".data"))) = {0};
-s32 D_L07_0017E5A0[4] = {0};
 s32 D_L08_0017ED18[1] __attribute__((section(".data"))) = {0};
 s32 D_L08_0017ED1C[1] __attribute__((section(".data"))) = {0};
-s32 D_L08_0017ED20[4] = {0};
-s32 D_L09_0017E6A0[4] = {0};
-s32 D_L10_0017E9A0[4] = {0};
-s32 D_L12_0017E9A0[4] = {0};
-s32 D_L13_0017E820[4] = {0};
 s32 D_L14_0017EC18[1] __attribute__((section(".data"))) = {0};
 s32 D_L14_0017EC1C[1] __attribute__((section(".data"))) = {0};
-s32 D_L14_0017EC20[4] = {0};
 s32 D_L15_0017EB18[1] __attribute__((section(".data"))) = {0};
 s32 D_L15_0017EB1C[1] __attribute__((section(".data"))) = {0};
-s32 D_L15_0017EB20[4] = {0};
-s32 D_L16_0017E9A0[4] = {0};
 s32 D_L17_0017EE18[1] __attribute__((section(".data"))) = {0};
 s32 D_L17_0017EE1C[1] __attribute__((section(".data"))) = {0};
-s32 D_L17_0017EE20[4] = {0};

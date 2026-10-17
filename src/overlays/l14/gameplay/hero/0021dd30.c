@@ -2360,5 +2360,4 @@ void FUN_L14_00228cd0(void) {
     }
 }
 
-f32 D_L14_0017ADE4[3] = {0};
 f32 D_L14_0017AFF0[1] __attribute__((section(".data"))) = {0};

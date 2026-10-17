@@ -3600,6 +3600,3 @@ void FUN_L14_002fdbb8(struct Moby *moby) {
 f32 D_L14_001DFD84[1] __attribute__((section(".data"))) = {0};
 f32 D_L14_001DFD88[1] __attribute__((section(".data"))) = {0};
 f32 D_L14_001DFD8C[1] __attribute__((section(".data"))) = {0};
-u8 D_L14_001DFD90[16] = {0};
-u8 D_L14_001DFDA0[576] = {0};
-u8 D_L14_001DFFF0[16] = {0};

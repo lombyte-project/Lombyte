@@ -123,14 +123,8 @@ void FUN_L01_002b8288(void *a, int b) {
     FUN_L00_002a3ec8(a, b, 0);
 }
 
-u8 D_L01_001CAE64[4] __attribute__((section(".data"))) = {0};
-u8 D_L05_001CAE64[4] __attribute__((section(".data"))) = {0};
 f32 D_L05_001CAFE0[1] __attribute__((section(".data"))) = {0};
-u8 D_L07_001CAA64[4] __attribute__((section(".data"))) = {0};
 f32 D_L07_001CABE0[1] __attribute__((section(".data"))) = {0};
-u8 D_L11_001CB3E4[4] __attribute__((section(".data"))) = {0};
 f32 D_L11_001CB560[1] __attribute__((section(".data"))) = {0};
-u8 D_L12_001CAE64[4] __attribute__((section(".data"))) = {0};
 f32 D_L12_001CAFE0[1] __attribute__((section(".data"))) = {0};
-u8 D_L13_001CACE4[4] __attribute__((section(".data"))) = {0};
 f32 D_L13_001CAE60[1] __attribute__((section(".data"))) = {0};

@@ -492,7 +492,3 @@ void FUN_L18_002e9e50(char *arg) {
 s64 D_L18_001831E0[1] __attribute__((section(".data"))) = {0};
 s64 D_L18_001831E8[1] __attribute__((section(".data"))) = {0};
 s64 D_L18_001831F8[1] __attribute__((section(".data"))) = {0};
-u8 D_L18_001B05C4[92] = {0};
-u8 D_L18_001B0624[92] = {0};
-u8 D_L18_001B0684[92] = {0};
-u8 D_L18_001B06F0[128] = {0};

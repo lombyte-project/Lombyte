@@ -440,5 +440,3 @@ s32 D_L07_00173E9C[1] __attribute__((section(".data"))) = {0};
 s64 D_L07_00182860[1] __attribute__((section(".data"))) = {0};
 s64 D_L07_00182868[1] __attribute__((section(".data"))) = {0};
 s64 D_L07_00182878[1] __attribute__((section(".data"))) = {0};
-u8 D_L07_001BC634[1020] = {0};
-u8 D_L07_001C4A84[764] = {0};

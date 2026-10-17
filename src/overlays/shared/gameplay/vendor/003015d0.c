@@ -648,7 +648,3 @@ void FUN_L14_003039e0(unsigned char *m) {
         break;
     }
 }
-
-u8 D_L14_001E5FD0[4] __attribute__((section(".data"))) = {0};
-u8 D_L15_001D94F0[4] __attribute__((section(".data"))) = {0};
-u8 D_L17_001D9860[4] __attribute__((section(".data"))) = {0};

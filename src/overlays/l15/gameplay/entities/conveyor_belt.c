@@ -1847,20 +1847,9 @@ int FUN_L15_002f8ba8(char *moby) {
 }
 
 f32 D_L15_001DDBA8[1] __attribute__((section(".data"))) = {0};
-u8 D_L15_001DE204[4] __attribute__((section(".data"))) = {0};
 f32 D_L15_001DE208[1] __attribute__((section(".data"))) = {0};
-u8 D_L15_001DE20C[804] = {0};
-u8 D_L15_001DE754[268] = {0};
 f32 D_L15_001DE868[1] __attribute__((section(".data"))) = {0};
 f32 D_L15_001DECB8[1] __attribute__((section(".data"))) = {0};
-u8 D_L15_001DECBC[8] __attribute__((section(".data"))) = {0};
-u8 D_L15_001DECC4[532] = {0};
 f32 D_L15_001DEEDC[1] __attribute__((section(".data"))) = {0};
-u8 D_L15_001DEEE0[360] = {0};
-u8 D_L15_001DF04C[180] = {0};
 f32 D_L15_001DF948[1] __attribute__((section(".data"))) = {0};
-u8 D_L15_001DF94C[8] __attribute__((section(".data"))) = {0};
-u8 D_L15_001DF954[1036] = {0};
 f32 D_L15_001DFD64[1] __attribute__((section(".data"))) = {0};
-u8 D_L15_001DFD68[696] = {0};
-u8 D_L15_001E0024[348] = {0};

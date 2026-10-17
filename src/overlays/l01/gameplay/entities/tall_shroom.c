@@ -723,5 +723,3 @@ void FUN_L01_0030f208(ScrollMoby *m) {
         break;
     }
 }
-
-u8 D_L01_00202E9C[4] __attribute__((section(".data"))) = {0};

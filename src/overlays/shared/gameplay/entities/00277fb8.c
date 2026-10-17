@@ -93,23 +93,5 @@ void FUN_L01_00278e20(struct Moby *src, int oClass) {
 }
 
 f32 D_L02_0016CE74[1] __attribute__((section(".data"))) = {0};
-u8 D_L03_0016C970[4] __attribute__((section(".data"))) = {0};
-f32 D_L03_0016C974[3] = {0};
-u8 D_L03_0016C980[8] __attribute__((section(".data"))) = {0};
-f32 D_L03_0016C988[2] __attribute__((section(".data"))) = {0};
-u8 D_L05_0016CC70[4] __attribute__((section(".data"))) = {0};
 f32 D_L05_0016CC74[1] __attribute__((section(".data"))) = {0};
-u8 D_L05_0016CC80[8] __attribute__((section(".data"))) = {0};
-f32 D_L05_0016CC88[2] __attribute__((section(".data"))) = {0};
-u8 D_L06_0016CFF0[4] __attribute__((section(".data"))) = {0};
-f32 D_L06_0016CFF4[2] __attribute__((section(".data"))) = {0};
-u8 D_L06_0016D000[8] __attribute__((section(".data"))) = {0};
-f32 D_L06_0016D008[2] __attribute__((section(".data"))) = {0};
-u8 D_L08_0016D070[4] __attribute__((section(".data"))) = {0};
-f32 D_L08_0016D074[3] = {0};
-f32 D_L08_0016D088[2] __attribute__((section(".data"))) = {0};
-f32 D_L14_0016CF74[3] = {0};
-u8 D_L16_0016CC70[4] __attribute__((section(".data"))) = {0};
 f32 D_L16_0016CC74[1] __attribute__((section(".data"))) = {0};
-u8 D_L16_0016CC80[8] __attribute__((section(".data"))) = {0};
-f32 D_L16_0016CC88[2] __attribute__((section(".data"))) = {0};

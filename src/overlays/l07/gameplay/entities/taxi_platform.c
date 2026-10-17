@@ -3584,5 +3584,3 @@ s32 D_L07_001CA92C[1] __attribute__((section(".data"))) = {0};
 f32 D_L07_001CA930[1] __attribute__((section(".data"))) = {0};
 f32 D_L07_001CA934[1] __attribute__((section(".data"))) = {0};
 f32 D_L07_001CA938[1] __attribute__((section(".data"))) = {0};
-u8 D_L07_001CA93C[1] __attribute__((section(".data"))) = {0};
-u8 D_L07_001CA93D[3] __attribute__((section(".data"))) = {0};

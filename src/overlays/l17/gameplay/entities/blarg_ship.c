@@ -1035,5 +1035,3 @@ void FUN_L17_002f6138(int n, char *nrm, char *pos, int unused, float *out) {
         out[i * 2 + 1] = (r[1] / len + 0.5f) * 4.0f;
     }
 }
-
-u8 D_L17_001E3B20[1200] = {0};

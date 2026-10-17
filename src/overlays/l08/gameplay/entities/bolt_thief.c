@@ -3053,5 +3053,3 @@ mark_hit:
     if (sound >= 0)
         allocate_voice_for_target_entry(sound, 0, moby);
 }
-
-s32 D_L08_001675F8[2] __attribute__((section(".data"))) = {0};
