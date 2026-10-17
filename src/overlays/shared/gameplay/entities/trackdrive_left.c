@@ -1469,8 +1469,8 @@ void FUN_L02_002e0cd8(char *moby) {
     }
 }
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void ea210_init(char *) __asm__("FUN_L02_002ea7d0");
-extern void ea210_update(char *) __asm__("FUN_L02_002ea8b0");
+extern void ea210_init(struct Moby *) __asm__("FUN_L02_002ea7d0");
+extern void ea210_update(struct Moby *) __asm__("FUN_L02_002ea8b0");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float ea210_addrot(float, float) __asm__("FUN_001fa580");
 extern float ea210_dist(void *, void *) __asm__("FUN_001f9b80");
@@ -1491,7 +1491,7 @@ extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
 extern float ea210_fade(float, float, void *) __asm__("FUN_00213ed8");
 extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
 extern void ea210_audio(int, int) __asm__("FUN_0020b178");
-extern void ea210_destroy(char *) __asm__("FUN_0020c828");
+extern void ea210_destroy(struct Moby *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern int D_L02_0015F640 __attribute__((sda));
@@ -1503,41 +1503,41 @@ extern float D_0015ED70;
 extern float D_0015ED6C;
 extern float D_L02_0015F3FC;
 
-void FUN_L02_002ea210(char *moby) {
+void FUN_L02_002ea210(struct Moby *moby) {
     char *data;
     int which;
     int frames;
     float angle;
     float k;
-    data = *(char **)(moby + 0x78);
+    data = (char *)moby->pvars;
     frames = scale_game_frames(60);
     angle = 3.14159274f / (float)frames;
-    which = *(short *)(moby + 0xA6) == 0x3ED ? 0x1A : 0x16;
-    switch (*(unsigned char *)(moby + 0x20)) {
+    which = moby->oclass == 0x3ED ? 0x1A : 0x16;
+    switch (moby->state) {
     case 0:
         ea210_init(moby);
         k = 0.2f;
         if (items_acquired[which] == 0) {
-            probe_ground_height(moby + 0x10, 0, 0.5f);
-            *(float *)(moby + 0x40) = 1.57079637f;
-            *(float *)(moby + 0x44) = 3.14159274f;
-            *(float *)(moby + 0x18) = D_L02_00174468 + k;
-            *(unsigned char *)(moby + 0x20) = 1;
+            probe_ground_height(&moby->pos, 0, 0.5f);
+            *(float *)((char *)moby + 0x40) = 1.57079637f;
+            *(float *)((char *)moby + 0x44) = 3.14159274f;
+            moby->pos.z = D_L02_00174468 + k;
+            moby->state = 1;
             return;
         }
         ea210_destroy(moby);
         return;
     case 1:
-        *(float *)(moby + 0x48) = ea210_clamp(*(float *)(moby + 0x48), angle);
+        moby->rot.z = ea210_clamp(moby->rot.z, angle);
         ea210_update(moby);
         if (D_L02_0015F5CC % 10 != 0) return;
-        if (!(ea210_dist(moby + 0x10, D_0013F3D0) < 1.0f)) return;
-        if (ea210_abs(*(float *)(moby + 0x18) - *(float *)(D_0013F3D0 + 8)) < 2.0f) {
-            *(unsigned char *)(moby + 0x20) = 3;
-            *(unsigned short *)(moby + 0x34) |= 1;
-            moby[0x31] = 0;
-            *(int *)(moby + 0x94) = 0;
-            if (*(short *)(moby + 0xA6) == 0x3ED) {
+        if (!(ea210_dist(&moby->pos, D_0013F3D0) < 1.0f)) return;
+        if (ea210_abs(moby->pos.z - *(float *)(D_0013F3D0 + 8)) < 2.0f) {
+            moby->state = 3;
+            moby->flags |= 1;
+            moby->visible = 0;
+            moby->collision = 0;
+            if (moby->oclass == 0x3ED) {
                 ea210_sound(4);
             } else {
                 ea210_sound(2);
@@ -1556,12 +1556,12 @@ void FUN_L02_002ea210(char *moby) {
         } else {
             ea210_switch(which, 1);
         }
-        if (*(short *)(moby + 0xA6) == 0x3ED) {
+        if (moby->oclass == 0x3ED) {
             ea210_play(0x7DF, -1);
             ea210_stop();
             ea210_timing(0x7D9, 0x13);
             D_L02_0015F3FC = 1.0f;
-            *(unsigned char *)(moby + 0x20) = 4;
+            moby->state = 4;
             ea210_camera(D_0013F3D0, D_0013F3D0 + 16, 0x72, 1);
             return;
         }
@@ -1600,7 +1600,7 @@ void FUN_L02_002ea210(char *moby) {
         if (D_L02_0015F3FC != 1.0f) return;
         ea210_camera(D_0013F3D0, D_0013F3D0 + 16, 0, 0);
         ea210_hide(0);
-        *(unsigned char *)(moby + 0x20) = 5;
+        moby->state = 5;
         return;
     }
     case 5:
