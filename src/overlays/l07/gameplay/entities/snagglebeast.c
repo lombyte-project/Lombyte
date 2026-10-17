@@ -327,7 +327,7 @@ extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00266858(void *, int);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void split_float_fraction(float, void *) __asm__("FUN_L00_00200228");
+extern void FUN_L00_00200228(float, void *);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int FUN_0022da68(int, int, void *);
@@ -393,7 +393,7 @@ void FUN_L07_00313420(char *moby, char *data, float *health) {
                 remaining = -2.0f;
                 if (!(2.0f < damage + damage)) remaining = -(damage + damage);
                 *(float *)(data + 0x1fc) = remaining;
-                split_float_fraction(original_health / frame, (void *)((unsigned)&scratch | 4));
+                FUN_L00_00200228(original_health / frame, (void *)((unsigned)&scratch | 4));
                 if ((float)*(short *)(data + 0x24) - 1.0f < original_health) scratch.threshold = 5.0f;
                 scratch.threshold *= frame;
                 *health -= *(float *)(hit + 0x2c);
@@ -869,7 +869,7 @@ void snagglebeast_update(unsigned char *moby) {
     }
     if (moby[0xBC] % 3U == 2) *(int *)(data + 0x1B4) += 0xF;
     if (moby[0x20] != 8 && moby[0x20] != 0) FUN_L00_002defe0((int)moby);
-    if (data[0x1C5] == 1) {
+    if ((int)data[0x1C5] - 1 == 0) {
         if (*(int *)(data + 0x1F8) == -1) *(int *)(data + 0x1F8) = FUN_0022da68(0xF, 4, (int)moby);
         *(float *)(data + 0x1C8) += frame_scale * 0.01f;
         if (*(float *)(data + 0x1C8) >= 1.0f) data[0x1C5] = 0;
@@ -1007,7 +1007,7 @@ void snagglebeast_update(unsigned char *moby) {
         float rot;
         rot = *(float *)(moby + 0x48);
         if (level_frame_count % 6 == 0) trail_s((char *)moby, 0, 600000.0f, 5.0f);
-        if ((level_frame_count - 2) % 6 == 0) trail_s((char *)moby, 1, 600000.0f, 5.0f);
+        if ((frame_count_l07 - 2) % 6 == 0) trail_s((char *)moby, 1, 600000.0f, 5.0f);
         if (FUN_L07_00313de8(moby, data, (float *)(((char *)&hero) + 0x80), 9, 0)) break;
         turn_e50((struct Moby *)moby, target_angle, (float *)(data + 0x168), frame_time_sq * 2.0943952f, frame_time_sq * 0.6981317f, frame_time * 2.0943952f);
         if (fast_difference_between_rotations(*(float *)(moby + 0x48), rot) > frame_time * 0.17453292f) {
@@ -2488,7 +2488,7 @@ void FUN_L07_00319698(struct Moby *moby, SwooperSpawnerVars *spawner_vars) {
 extern Vec4 D_L07_00166E40;
 extern f32 D_0015ED6C;
 
-extern s32 get_target_sight(struct Moby *, SwooperSight *, f32) __asm__("FUN_L07_002886d8");
+extern s32 FUN_L07_002886d8(struct Moby *, SwooperSight *, f32);
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 FUN_001f99c0(f32);
@@ -2527,7 +2527,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
     }
     collision = vars->collision;
     spawner_vars = (SwooperSpawnerVars *)vars->spawner->pvars;
-    get_target_sight(moby, &sight, spawner_vars->view_range);
+    FUN_L07_002886d8(moby, &sight, spawner_vars->view_range);
     if (moby->visible && FUN_001f9b48(&moby->pos, &D_L07_00166E40) < 27.0f) {
         wake302618(moby);
         moby->shadow_range = 0x15;

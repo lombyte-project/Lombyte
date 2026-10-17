@@ -2169,7 +2169,6 @@ extern int D_L10_00161D68;
 extern float D_L10_00161D54 __attribute__((sda));
 extern float D_L10_00161D58 __attribute__((sda));
 extern float D_L10_00161D5C __attribute__((sda));
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void FUN_001f28c8(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f28e0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f2968(float, void *, void *) __asm__("FUN_001f9a68");

@@ -450,7 +450,6 @@ void FUN_L08_00313ba8(void) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00316fa8.s", FUN_L08_00316fa8);
 #else
 extern void rotate_about_axis(void *, void *, void *, float) __asm__("FUN_00214890");
-extern float ground_height_at(void *) __asm__("FUN_L00_00263468");
 extern int play_voice(int, int, void *, int) __asm__("FUN_L00_0028ddd8");
 extern int set_voice_volume(int, int) __asm__("FUN_L01_002a1968");
 extern float frame_delta_time __asm__("D_0015ED7C");

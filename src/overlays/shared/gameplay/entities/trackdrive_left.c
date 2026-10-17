@@ -961,8 +961,7 @@ extern int D_L02_00161B18 __attribute__((sda));
 extern void draw_quad51(void *, void *, void *, s64, s32) __asm__("FUN_L02_0020bc88");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void draw_arc_2d93e8(int texture, u32 color, float start_angle, float end_angle, float radius_x, float radius_y) __asm__("FUN_L02_002da3d8");
-void draw_arc_2d93e8(int texture, u32 color, float start_angle, float end_angle, float radius_x, float radius_y) {
+void FUN_L02_002da3d8(int texture, u32 color, float start_angle, float end_angle, float radius_x, float radius_y) {
     long corners[4];
     u32 colors[4];
     int uvs[4];
@@ -1027,8 +1026,7 @@ extern void draw_quad51(void *, void *, void *, s64, s32) __asm__("FUN_L02_0020b
 extern void clear_vector(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void draw_arrow_2d93e8(int p0, int p1, int sel, float a, float s) __asm__("FUN_L02_002da6c0");
-void draw_arrow_2d93e8(int p0, int p1, int sel, float a, float s) {
+void FUN_L02_002da6c0(int p0, int p1, int sel, float a, float s) {
     long xy[4];
     u32 col[4];
     int uv[4];
@@ -1120,8 +1118,7 @@ typedef unsigned long long u64_t;
         (dst) += (u64_t)q_;                                                                        \
     }
 
-void draw_bar_2d93e8(void *unused, f32 a, f32 b, f32 c, s32 d) __asm__("FUN_L02_002da938");
-void draw_bar_2d93e8(void *unused, f32 a, f32 b, f32 c, s32 d) {
+void FUN_L02_002da938(void *unused, f32 a, f32 b, f32 c, s32 d) {
     u64_t m[4];
     s32 a4[4];
     s32 p4[4];
