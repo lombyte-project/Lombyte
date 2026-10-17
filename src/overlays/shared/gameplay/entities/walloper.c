@@ -1640,9 +1640,6 @@ void morphoray_update(Moby *moby) {
         D_L00_001617C0 = -1;
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_002bcf98.s", FUN_L00_002bcf98);
-#else
 extern f32 D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
 extern f32 D_L00_001617CC_macro __asm__("D_L00_001617CC") __attribute__((section(".sdata")));
 extern s32 D_L00_00161718_i __asm__("D_L00_00161718") __attribute__((sda));
@@ -1659,42 +1656,31 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void FUN_L00_002bcf98(u8 *m) {
     u128 vec;
-    volatile u128 *source = *(u128 **)(m + 0x78);
+    u128 *source = *(u128 **)(m + 0x78);
     s32 i;
+    s32 j;
     f32 scale;
-    u128 *copies;
-    s32 *clears;
-    u128 *scaled_vector;
 
     if (D_L00_001617BC != 0) {
         D_L00_001617BC = 0;
         scale = D_L00_001616DC_gp / convert_integer_to_float(12);
         D_L00_001617CC_macro = scale;
         scale_vector_2bcf98(-scale, &vec, m + 0xD0);
-        qcopy(&D_L00_001DBF60_2bcf98, (void *)source);
-        for (i = 10; i >= 0; i--) {
-            fast_vec_add((&D_L00_001DBF60_2bcf98 + (11 - i)), &((u128 *)&D_L00_001DBF50)[11 - i], &vec);
+        qcopy(&D_L00_001DBF60_2bcf98, source);
+        for (i = 1; i < 12; i++) {
+            fast_vec_add(&D_L00_001DBF60_2bcf98 + i, (u128 *)&D_L00_001DBF50 + i, &vec);
         }
         D_L00_00161718_i = 0;
         D_L00_00161720_i = 0;
         D_L00_00161724_i = 0;
-        scaled_vector = &vec;
         D_L00_001617D0 = 0.0f;
         D_L00_00161824 = 0;
-        copies = (u128 *)&D_L00_001DD0D0;
-        clears = &D_L00_00161818;
-        {
-            s32 j;
-            for (j = 2; j >= 0; j--) {
-                *clears = 0;
-                qcopy(copies, scaled_vector);
-                copies++;
-                clears++;
-            }
+        for (j = 0; j < 3; j++) {
+            (&D_L00_00161818)[j] = 0;
+            qcopy((u128 *)&D_L00_001DD0D0 + j, &vec);
         }
     }
 }
-#endif
 /* Tesla claw arc: bends the twelve-point beam toward the target, builds the two side rails and the ring of
  * twenty points around each node, queues the draw callback, sparks at the tip, and runs the three travelling
  * pulses along the beam. */
