@@ -47,23 +47,23 @@ s32 draw_pause_ring(struct PauseState *pause_state) {
     s32 flag;
     f32 cx, cy, radius;
     struct IconEnt *iconTab;
-    s32 v1, viewport_height;
+    s32 viewport_dimension, viewport_height;
 
     setup_gif_paging(0);
-    v1 = pause_state->w;
+    viewport_dimension = pause_state->w;
     iconTab = D_001863D0;
     viewport_height = pause_state->h;
-    flag = v1 < viewport_height;
+    flag = viewport_dimension < viewport_height;
     /* v1 doubles as `selected`: retail's movz reuses the same register
        that already holds v1 (loaded straight into it), so the C must
        overwrite v1 itself rather than assign a fresh local -- that
        fresh local costs an extra `move` before the conditional one. */
-    cx = (f32)v1 * 0.5f;
+    cx = (f32)viewport_dimension * 0.5f;
     cy = (f32)viewport_height * 0.5f;
     if (flag == 0) {
-        v1 = viewport_height;
+        viewport_dimension = viewport_height;
     }
-    radius = (f32)v1 * 0.5f - 40.0f;
+    radius = (f32)viewport_dimension * 0.5f - 40.0f;
     i = 0;
     do {
         f32 t, x, y;

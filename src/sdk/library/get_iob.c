@@ -25,16 +25,16 @@ extern s32 WaitSema();
 extern s32 SignalSema();
 extern u8 D_00157D80[];
 
-void *get_iob(u32 arg0) {
+void *get_iob(u32 slot_index) {
     void *result;
 
     _sceFsIobSemaMK();
     WaitSema(D_0012FCA0[0]);
-    if (arg0 >= 32) {
+    if (slot_index >= 32) {
         SignalSema(D_0012FCA0[0]);
         return 0;
     }
-    result = (void *)&D_00157D80[arg0 << 4];
+    result = (void *)&D_00157D80[slot_index << 4];
     SignalSema(D_0012FCA0[0]);
     return result;
 }

@@ -5,7 +5,7 @@
 extern s32 sceCdGetError();
 s32 snd_stream_safe_cd_get_error(s32 arg0) __asm__("FUN_0012eef0");
 
-s32 snd_stream_safe_cd_get_error(s32 arg0) {
+s32 snd_stream_safe_cd_get_error(s32 unused_arg) {
     if (snd_cd_stream_active == 0) {
         return sceCdGetError();
     }

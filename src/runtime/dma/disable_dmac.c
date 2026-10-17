@@ -7,7 +7,7 @@ extern s32 EnableInterrupts();
 
 s32 disable_dmac(s32 arg0) __asm__("FUN_001190f8");
 
-s32 disable_dmac(s32 arg0) {
+s32 disable_dmac(s32 channel_index) {
     u32 status;
     s32 result;
 
@@ -16,7 +16,7 @@ s32 disable_dmac(s32 arg0) {
     if (status != 0) {
         DIntr();
     }
-    result = _DisableDmac(arg0);
+    result = _DisableDmac(channel_index);
     CpuSync();
     if (status != 0) {
         EnableInterrupts();

@@ -16,7 +16,7 @@ void snd_play_vag_stream_by_loc_ex_cb(s32 loc, s32 size, s32 vol_l, s32 vol_r, s
                                       u64 cb_data) __asm__("FUN_0012ec08");
 
 void snd_play_vag_stream_by_loc_ex_cb(s32 loc, s32 size, s32 vol_l, s32 vol_r, s32 pitch, s32 flags,
-                                      s32 voice, s32 channel, s32 a8, s32 id, u64 cb_data) {
+                                      s32 voice, s32 channel, s32 request_word_6, s32 id, u64 cb_data) {
     int new_var;
     s32 buf[7];
     new_var = (pitch << 16) | (vol_l & 0xFFFF);
@@ -29,7 +29,7 @@ void snd_play_vag_stream_by_loc_ex_cb(s32 loc, s32 size, s32 vol_l, s32 vol_r, s
     buf[3] = (flags << 16) | (vol_r & 0xFFFF);
     buf[4] = voice;
     buf[5] = channel;
-    buf[6] = a8;
+    buf[6] = request_word_6;
     snd_send_iop_command_no_wait(0x2C, 0x1C, buf, id, cb_data);
 }
 

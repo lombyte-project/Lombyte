@@ -16,7 +16,7 @@ extern s32 sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, voi
 
 s32 snd_bank_load_by_loc(s32 location, s32 arg1) __asm__("FUN_0012df20");
 
-s32 snd_bank_load_by_loc(s32 location, s32 arg1) {
+s32 snd_bank_load_by_loc(s32 location, s32 byte_offset) {
     snd_cd_load_error = 0;
     if (snd_cd_callback_pending != 0) {
         printf("snd_BankLoadByLoc: Load already in progress!\n");
@@ -26,7 +26,7 @@ s32 snd_bank_load_by_loc(s32 location, s32 arg1) {
         printf("snd_BankLoadByLoc: CD BUSY!\n");
         return 0;
     }
-    snd_cd_bank_load_request[1] = arg1;
+    snd_cd_bank_load_request[1] = byte_offset;
     snd_cd_callback_arg = 0xFFFFFFFF;
     snd_cd_bank_load_request[0] = location;
     while (SceSifCheckStatRpc(D_0015EBE8) != 0) {

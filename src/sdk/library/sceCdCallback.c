@@ -5,7 +5,7 @@ extern s32 sceCdSync();
 extern s32 DIntr();
 extern s32 EnableInterrupts();
 
-s32 sceCdCallback(s32 arg0) {
+s32 sceCdCallback(s32 callback) {
     s32 intr;
     s32 old;
 
@@ -14,7 +14,7 @@ s32 sceCdCallback(s32 arg0) {
     }
     intr = DIntr();
     old = D_00159740[0];
-    D_00159740[0] = arg0;
+    D_00159740[0] = callback;
     if (intr != 0) {
         EnableInterrupts();
     }

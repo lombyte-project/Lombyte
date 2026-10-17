@@ -6,7 +6,7 @@ extern s32 find_id_in_terminated_table(s32 id) __asm__("func_00205220");
 
 s32 pick_map_slot_to_evict(s32 arg0, s32 arg1) __asm__("FUN_00205278");
 
-s32 pick_map_slot_to_evict(s32 arg0, s32 arg1) {
+s32 pick_map_slot_to_evict(s32 unused_arg0, s32 unused_arg1) {
     s64 max;
     s32 base;
     s64 delta;

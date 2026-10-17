@@ -7,10 +7,10 @@ extern s32 sceGsSyncV();
 
 void start_display(s32 arg0) __asm__("FUN_0023b590");
 
-void start_display(s32 arg0) {
+void start_display(s32 vblank_field_to_skip) {
     do {
 
-    } while (sceGsSyncV(0) == arg0);
+    } while (sceGsSyncV(0) == vblank_field_to_skip);
     movie_display_active = 1;
     D_001611E4 = 0;
 }

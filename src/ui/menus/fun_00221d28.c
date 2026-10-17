@@ -5,8 +5,8 @@ extern int pause_level_sprite_lists[] __asm__("D_001D4528");
 extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
 /* `D_001D4528[(unsigned)D_0015ED84 % 19]`; the older near-miss
    predated MACRO_ADDR. */
-int FUN_00221d28(char *arg0) {
-    *(int *)(arg0 + 0x34) = pause_level_sprite_lists[(unsigned int)current_level_index % 19];
+int FUN_00221d28(char *destination) {
+    *(int *)(destination + 0x34) = pause_level_sprite_lists[(unsigned int)current_level_index % 19];
     return 0;
 }
 

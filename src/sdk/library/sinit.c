@@ -30,16 +30,16 @@ struct Reent {
 };
 
 extern void std();
-void __sinit(struct Reent *arg0) {
+void __sinit(struct Reent *reent_context) {
     s32 *temp_17_9;
 
-    temp_17_9 = ((u8 *)arg0 + (0x1E4));
-    arg0->unk3C = D_00113AC8;
-    arg0->unk38 = 1;
-    std(temp_17_9, 4, 0, arg0);
-    std(((u8 *)arg0 + (0x23C)), 9, 1, arg0);
-    std(((u8 *)arg0 + (0x294)), 0xA, 2, arg0);
-    arg0->unk1E0 = temp_17_9;
-    arg0->unk1DC = 3;
-    arg0->unk1D8 = 0;
+    temp_17_9 = ((u8 *)reent_context + (0x1E4));
+    reent_context->unk3C = D_00113AC8;
+    reent_context->unk38 = 1;
+    std(temp_17_9, 4, 0, reent_context);
+    std(((u8 *)reent_context + (0x23C)), 9, 1, reent_context);
+    std(((u8 *)reent_context + (0x294)), 0xA, 2, reent_context);
+    reent_context->unk1E0 = temp_17_9;
+    reent_context->unk1DC = 3;
+    reent_context->unk1D8 = 0;
 }

@@ -49,11 +49,11 @@ struct DpsubWork {
     s64 unk60;
     s64 unk68;
 };
-void dpsub(s64 arg0, s64 arg1) {
+void dpsub(s64 minuend, s64 subtrahend) {
     struct DpsubWork work;
 
-    work.unk60 = arg0;
-    work.unk68 = arg1;
+    work.unk60 = minuend;
+    work.unk68 = subtrahend;
     __unpack_d(&work.unk60, &work);
     __unpack_d(&work.unk68, &work.unk20);
     work.unk24 ^= 1;

@@ -12,13 +12,13 @@ extern u8 D_001536A0[];
 extern s32 debug_print_stub() __asm__("func_00124A20");
 extern s32 sceSifCallRpc();
 extern struct DbCState RpcReceiveData __asm__("D_0015B080");
-s32 sceDbcReceiveData(s32 arg0, s32 arg1, s32 *arg2, u8 *arg3) {
+s32 sceDbcReceiveData(s32 arg0, s32 arg1, s32 *byte_count, u8 *destination) {
     struct DbCState *state = &RpcReceiveData;
     s32 i;
 
     state->unk0 = arg0;
     state->unk4 = arg1;
-    state->unk8 = *arg2;
+    state->unk8 = *byte_count;
     if (sceSifCallRpc(RpcQueueData, 0x8000091A, 0, state, 0x400, state, 0x400, 0, 0) < 0) {
         debug_print_stub(D_001536A0);
         return 0;
@@ -26,11 +26,11 @@ s32 sceDbcReceiveData(s32 arg0, s32 arg1, s32 *arg2, u8 *arg3) {
     if (state->unk8C < 0) {
         return state->unk8C;
     }
-    *arg2 = state->unk8;
+    *byte_count = state->unk8;
     i = 0;
     if (state->unk8 > 0) {
         do {
-            arg3[i] = state->payload[i];
+            destination[i] = state->payload[i];
             i++;
         } while (i < state->unk8);
         return state->unk8C;

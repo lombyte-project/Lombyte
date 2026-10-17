@@ -13,7 +13,7 @@ extern void prepare_resident_class_render_data(MobyClassData *, s32, s32,
                                                s32) __asm__("FUN_00203338");
 void register_moby_class(MobyClassData *moby, s32 arg1, s32 arg2, s32 oclass) __asm__("FUN_00203640");
 
-void register_moby_class(MobyClassData *moby, s32 arg1, s32 arg2, s32 oclass) {
+void register_moby_class(MobyClassData *moby, s32 indexed_textures, s32 material_map, s32 oclass) {
     s32 n;
 
     n = D_0015FF00;
@@ -27,7 +27,7 @@ void register_moby_class(MobyClassData *moby, s32 arg1, s32 arg2, s32 oclass) {
         D_001B6180[n] = moby->unk2C;
         assign_moby_class_data(oclass);
         D_0015FF00++;
-        prepare_resident_class_render_data(moby, arg1, arg2, oclass);
+        prepare_resident_class_render_data(moby, indexed_textures, material_map, oclass);
     }
 }
 

@@ -34,16 +34,16 @@ struct sceSifServeData {
 extern s32 GetRpcPacket();
 extern s32 SearchSvdata();
 extern void isceSifSendCmd();
-void _request_bind(struct RpcBindRequest *arg0, s32 arg1) {
+void _request_bind(struct RpcBindRequest *bind_request, s32 rpc_state) {
     struct RpcBindPacket *packet;
     s32 new_var;
     struct sceSifServeData *svdata;
-    packet = GetRpcPacket(arg1);
-    new_var = (s32)arg0->unk14;
-    packet->unk1C = (s32)arg0->unk1C;
+    packet = GetRpcPacket(rpc_state);
+    new_var = (s32)bind_request->unk14;
+    packet->unk1C = (s32)bind_request->unk1C;
     packet->unk14 = new_var;
     packet->unk20 = 0x80000009;
-    svdata = SearchSvdata(arg0->unk20, arg1);
+    svdata = SearchSvdata(bind_request->unk20, rpc_state);
     if (svdata == 0) {
         packet->unk24 = 0;
         packet->unk28 = 0;

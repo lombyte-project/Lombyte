@@ -22,9 +22,9 @@ extern void video_dec_begin_put(u8 *, u32 *, s32 *, u32 *, s32 *) __asm__("func_
 extern void video_dec_end_put(u8 *, s32) __asm__("func_0023CC10");
 extern s32 video_dec_put_ts(u8 *, s64, s64, u32, s32) __asm__("func_0023CC98");
 
-s32 video_callback(s32 arg0, struct VdecCb *FUN_L11_003192c8, struct VdecBuf *ab) __asm__("FUN_0023b5f0");
+s32 video_callback(s32 unused_callback_arg, struct VdecCb *cb, struct VdecBuf *ab) __asm__("FUN_0023b5f0");
 
-s32 video_callback(s32 arg0, struct VdecCb *FUN_L11_003192c8, struct VdecBuf *ab) {
+s32 video_callback(s32 unused_callback_arg, struct VdecCb *cb, struct VdecBuf *ab) {
     u32 ptr0;
     s32 len0;
     u32 ptr1;
@@ -36,8 +36,8 @@ s32 video_callback(s32 arg0, struct VdecCb *FUN_L11_003192c8, struct VdecBuf *ab
     s32 rest;
     s32 ret;
 
-    len = FUN_L11_003192c8->len;
-    ps = FUN_L11_003192c8->data;
+    len = cb->len;
+    ps = cb->data;
     end = ab->data + ab->size;
     n = end - ps;
     if (len < n) {
@@ -48,7 +48,7 @@ s32 video_callback(s32 arg0, struct VdecCb *FUN_L11_003192c8, struct VdecBuf *ab
     ret = cpy2area((ptr0 & 0x0FFFFFFF) | 0x20000000, len0,
                                    (ptr1 & 0x0FFFFFFF) | 0x20000000, len1, ps, n, ab, rest);
     if (ret > 0) {
-        if (video_dec_put_ts(D_0016120C + 0xD9048, FUN_L11_003192c8->pts, FUN_L11_003192c8->dts, ptr0, ret) == 0) {
+        if (video_dec_put_ts(D_0016120C + 0xD9048, cb->pts, cb->dts, ptr0, ret) == 0) {
             err_message(D_001E8B08);
         }
     }

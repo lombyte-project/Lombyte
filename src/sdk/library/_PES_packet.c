@@ -32,18 +32,18 @@ struct PES_TBL {
     u8 v[16];
 } __attribute__((packed));
 
-s32 _PES_packet(s32 arg0, struct PES_BS *bs, struct PES_HDR *hdr) {
+s32 _PES_packet(s32 error_context, struct PES_BS *bs, struct PES_HDR *hdr) {
     struct PES_TBL tbl;
     s32 ctx;
     s32 flag1;
     s32 len;  /* PES_header_data_length */
     s32 base; /* (s32)bs->stamp, captured before the header fields */
     s64 now;  /* the same stamp, re-read at the sync point */
-    s32 v7;   /* PTS_DTS_flags */
+    s32 pts_dts_flags;   /* PTS_DTS_flags */
     s32 v8;   /* 4-bit length, indexes tbl */
-    s32 v5;   /* PES_extension_flag */
+    s32 pes_extension_flag;   /* PES_extension_flag */
 
-    ctx = arg0;
+    ctx = error_context;
     hdr->unk28 = (s32)bs->stamp;
     tbl = *(struct PES_TBL *)D_001539C8;
     _sysbitGet(bs, 0x18);
@@ -58,13 +58,13 @@ s32 _PES_packet(s32 arg0, struct PES_BS *bs, struct PES_HDR *hdr) {
         _sysbitGet(bs, 2);
         hdr->unkC = _sysbitGet(bs, 2);
         _sysbitGet(bs, 4);
-        v7 = _sysbitGet(bs, 2);
+        pts_dts_flags = _sysbitGet(bs, 2);
         flag1 = _sysbitGet(bs, 1);
         v8 = _sysbitGet(bs, 4);
-        v5 = _sysbitGet(bs, 1);
+        pes_extension_flag = _sysbitGet(bs, 1);
         len = _sysbitGet(bs, 8);
         base = bs->stamp;
-        if (v7 & 2) {
+        if (pts_dts_flags & 2) {
             u32 a, b, c;
             _sysbitGet(bs, 4);
             a = _sysbitGet(bs, 3);
@@ -75,7 +75,7 @@ s32 _PES_packet(s32 arg0, struct PES_BS *bs, struct PES_HDR *hdr) {
             _sysbitMarker(bs);
             hdr->unk10 = ((s64)((a >> 2) & 1) << 0x20) | (s64)(u32)(a << 30 | b << 15 | c);
         }
-        if (v7 == 3) {
+        if (pts_dts_flags == 3) {
             u32 a, b, c;
             _sysbitGet(bs, 4);
             a = _sysbitGet(bs, 3);
@@ -92,34 +92,34 @@ s32 _PES_packet(s32 arg0, struct PES_BS *bs, struct PES_HDR *hdr) {
         if (v8 != 0) {
             _sysbitGet(bs, tbl.v[v8]);
         }
-        if (v5 == 1) {
+        if (pes_extension_flag == 1) {
             s32 a1;
-            s32 a2;
+            s32 pack_header_field_flag;
             s32 a3;
             s32 a4;
-            s32 a5;
+            s32 pes_extension_2_flag;
             a1 = _sysbitGet(bs, 1);
-            a2 = _sysbitGet(bs, 1);
+            pack_header_field_flag = _sysbitGet(bs, 1);
             a3 = _sysbitGet(bs, 1);
             a4 = _sysbitGet(bs, 1);
             _sysbitGet(bs, 3);
-            a5 = _sysbitGet(bs, 1);
-            if (a1 == v5) {
+            pes_extension_2_flag = _sysbitGet(bs, 1);
+            if (a1 == pes_extension_flag) {
                 _sysbitGet(bs, 0x30);
                 _sysbitGet(bs, 0x30);
                 _sysbitGet(bs, 0x20);
             }
-            if (a2 == v5) {
+            if (pack_header_field_flag == pes_extension_flag) {
                 _Error(ctx, D_001539D8);
                 return 0;
             }
-            if (a3 == v5) {
+            if (a3 == pes_extension_flag) {
                 _sysbitGet(bs, 0x10);
             }
-            if (a4 == v5) {
+            if (a4 == pes_extension_flag) {
                 _sysbitGet(bs, 0x10);
             }
-            if (a5 == v5) {
+            if (pes_extension_2_flag == pes_extension_flag) {
                 u32 i;
                 u32 n;
                 _sysbitMarker(bs);

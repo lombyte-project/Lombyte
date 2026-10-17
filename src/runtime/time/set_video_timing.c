@@ -13,8 +13,8 @@ extern f32 frame_scale_inv_macro __asm__("D_0015ED68") MACRO_ADDR;
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern f32 frame_time_cube_macro __asm__("D_0015ED74") MACRO_ADDR;
-void set_video_timing(s32 arg0) {
-    if (arg0 == 0) {
+void set_video_timing(s32 pal_mode_enabled) {
+    if (pal_mode_enabled == 0) {
         pal_mode = 0;
         frame_scale_macro = 1.0f;
         frame_scale_sq_macro = 1.0f;

@@ -12,7 +12,7 @@ extern MissionNode *D_001A2C20[];
 
 int collect_mission_ids(int *out, int *mask, int *nums, int arg3) __asm__("FUN_0020bc00");
 
-int collect_mission_ids(int *out, int *mask, int *nums, int arg3) {
+int collect_mission_ids(int *out, int *mask, int *nums, int use_selected_ids) {
     MissionNode *p = D_001A2C20[0];
     int count = 0;
     int all = 1;
@@ -36,7 +36,7 @@ int collect_mission_ids(int *out, int *mask, int *nums, int arg3) {
         }
         if (!(f & 2) && t != 0 && !((f & 1) && t == 2)) {
             out[count] = p->id;
-            if (arg3 != 0) {
+            if (use_selected_ids != 0) {
                 out[count] = (p->status == 2) ? 0x523E : p->ids[p->sel];
             }
             if (mask != 0 && p->status == 2) {

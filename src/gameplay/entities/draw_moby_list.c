@@ -9,11 +9,11 @@ extern s32 vu1_add_g_sregister() __asm__("func_00233980");
 
 void draw_moby_list(s32 arg0, s32 arg1) __asm__("FUN_0020d330");
 
-void draw_moby_list(s32 arg0, s32 arg1) {
+void draw_moby_list(s32 source_address, s32 arg1) {
     vu1_add_g_sregister(0x47, (long)0x5360B);
     flush_cache(0);
     restore_moby_class_dists();
-    moby_anim_head = moby_proc(arg0, moby_anim_head, arg1, 0);
+    moby_anim_head = moby_proc(source_address, moby_anim_head, arg1, 0);
     stash_moby_class_dists();
     moby_anim_head -= 0x10;
 }

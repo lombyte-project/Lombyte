@@ -2,9 +2,9 @@
 extern s32 snd_send_iop_command_and_wait() __asm__("func_0012E548");
 void snd_stream_safe_check_cd_idle(s32 arg0) __asm__("FUN_0012ed30");
 
-void snd_stream_safe_check_cd_idle(s32 arg0) {
+void snd_stream_safe_check_cd_idle(s32 payload_word) {
     u8 sp_slot[0x10];
-    *(s32 *)sp_slot = arg0;
+    *(s32 *)sp_slot = payload_word;
     snd_send_iop_command_and_wait(0x36, 4, sp_slot);
 }
 

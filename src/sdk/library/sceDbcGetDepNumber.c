@@ -23,15 +23,15 @@ extern s32 synchronize_cache_range() __asm__("func_00118F88");
 extern s32 debug_print_stub() __asm__("func_00124A20");
 extern s32 sceSifCallRpc();
 extern struct DbCState RpcReceiveData __asm__("D_0015B080");
-s32 sceDbcGetDepNumber(s32 arg0) {
+s32 sceDbcGetDepNumber(s32 dependency_index) {
     s32 result;
 
     synchronize_cache_range(D_0015B480, D_0015B480 + 0x80);
     DIntr();
     *(struct DbCBlob *)D_0015B500 = *(struct DbCBlob *)D_0015B480;
     EnableInterrupts();
-    if (((s32 *)D_0015B500)[arg0] == 1) {
-        RpcReceiveData.unk0 = arg0;
+    if (((s32 *)D_0015B500)[dependency_index] == 1) {
+        RpcReceiveData.unk0 = dependency_index;
         if (sceSifCallRpc(D_0015B008, 0x80000903, 0, &RpcReceiveData, 0x400, &RpcReceiveData, 0x400, 0, 0) <
             0) {
             debug_print_stub(D_001535B8);

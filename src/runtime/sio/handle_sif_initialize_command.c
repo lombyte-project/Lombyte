@@ -2,11 +2,11 @@
 
 s32 handle_sif_initialize_command(s32 *a0, s32 *a1) __asm__("FUN_0011a448");
 
-s32 handle_sif_initialize_command(s32 *a0, s32 *a1) {
+s32 handle_sif_initialize_command(s32 *initialize_packet, s32 *command_state) {
     s32 value;
 
-    value = *(s32 *)((u8 *)a0 + 0x10);
-    *(s32 *)((u8 *)a1 + 0x8) = value;
+    value = *(s32 *)((u8 *)initialize_packet + 0x10);
+    *(s32 *)((u8 *)command_state + 0x8) = value;
     return value;
 }
 

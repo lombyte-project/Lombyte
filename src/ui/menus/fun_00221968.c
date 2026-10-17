@@ -7,7 +7,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
-s32 FUN_00221968(struct MenuScreen *arg0) {
+s32 FUN_00221968(struct MenuScreen *menu_screen) {
     if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
         if (menu_system.current->back != 0) {
             menu_system.next = menu_system.current->back;
@@ -18,14 +18,14 @@ s32 FUN_00221968(struct MenuScreen *arg0) {
         selected_level_index[0] = current_level_index;
         return 1;
     } else if (controller_state.pressed_unmasked & PAD_CROSS) {
-        allocate_voice_for_target_entry(0, 0x11, arg0->moby);
+        allocate_voice_for_target_entry(0, 0x11, menu_screen->moby);
         return 1;
     } else if (controller_state.pressed_unmasked & PAD_CIRCLE) {
         menu_system.unkE4 = selected_level_index[0];
         menu_system.unkF0 = menu_system.current;
         menu_system.close_request = 3;
         menu_system.unkF4 = 0xF;
-        allocate_voice_for_target_entry(0, 0x11, arg0->moby);
+        allocate_voice_for_target_entry(0, 0x11, menu_screen->moby);
     }
     return 0;
 }

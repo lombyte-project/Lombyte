@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
-void music_pause(s32 arg0) {
-    if (arg0 != 0) {
+void music_pause(s32 pause_secondary) {
+    if (pause_secondary != 0) {
         music_stream_state.secondary.fade_flags = -0x8000;
         music_stream_state.secondary.unkE = 0;
     }

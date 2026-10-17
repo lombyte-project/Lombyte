@@ -19,8 +19,8 @@
  */
 void unpack_spr_descriptor(void *arg0) __asm__("FUN_001238a0");
 
-void unpack_spr_descriptor(void *arg0) {
-    char *p = (char *)((unsigned int)arg0 | 0x20000000);
+void unpack_spr_descriptor(void *descriptor) {
+    char *p = (char *)((unsigned int)descriptor | 0x20000000);
     unsigned char *src;
     char *d;
     int i;

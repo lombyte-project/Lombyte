@@ -7,12 +7,12 @@ struct Pad {
 };
 extern struct Pad D_0015B540[];
 extern s32 sceDbcGetDepNumber();
-s32 scePad2LinkDriver(s32 arg0) {
+s32 scePad2LinkDriver(s32 socket_index) {
     s32 dep;
     dep = sceDbcGetDepNumber();
     if (dep < 0)
         return dep;
-    D_0015B540[arg0].unk8 = dep;
-    D_0015B540[arg0].unk4 = 1;
+    D_0015B540[socket_index].unk8 = dep;
+    D_0015B540[socket_index].unk4 = 1;
     return dep;
 }

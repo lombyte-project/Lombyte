@@ -9,8 +9,8 @@ extern s32 music_update() __asm__("func_00216290");
 extern s32 sceGsSyncV();
 s16 update_audio_stream_until_idle(s32 arg0) __asm__("FUN_002168a8");
 
-s16 update_audio_stream_until_idle(s32 arg0) {
-    if (arg0 != 0) {
+s16 update_audio_stream_until_idle(s32 wait_for_completion) {
+    if (wait_for_completion != 0) {
         if (music_stream_state.read_state != 0) {
             do {
                 sceGsSyncV(0);
