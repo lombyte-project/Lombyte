@@ -24,7 +24,7 @@ extern void vu1_add_g_sregister(s32, s32) __asm__("func_00233980");
 extern s32 sprintf();
 s32 draw_selected_item_ammo(s32 arg0) __asm__("FUN_0021f158");
 
-s32 draw_selected_item_ammo(s32 arg0) {
+s32 draw_selected_item_ammo(s32 image_descriptor_input) {
     u8 sp_slot[0x50];
     u8 descriptor[0x20];
     s16 temp_4_20;
@@ -61,7 +61,7 @@ s32 draw_selected_item_ammo(s32 arg0) {
         }
     }
     setup_gif_paging(0);
-    PackImageDescriptor((s32 *)descriptor, arg0);
+    PackImageDescriptor((s32 *)descriptor, image_descriptor_input);
     *(s16 *)(descriptor + 0x10) = 0x10;
     *(s16 *)(descriptor + 0x12) = 3;
     font_print_window_regular((s32 *)descriptor, (((u64)0x80FF << 0x10) | 0xA888), sp_slot, -1);
