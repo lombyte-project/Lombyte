@@ -41,7 +41,7 @@ extern void load_display_text_resource_entry(void *, void *) __asm__("func_00214
 struct Obj *spawn_spark(u128 *arg0, f32 *arg1, f32 *arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6,
                          s32 arg7, s32 arg8) __asm__("FUN_00218888");
 
-struct Obj *spawn_spark(u128 *source_quadword, f32 *first_vector, f32 *second_vector, s32 arg3, s32 arg4, s32 arg5, s32 arg6,
+struct Obj *spawn_spark(u128 *source_quadword, f32 *first_vector, f32 *second_vector, s32 arg3, s32 arg4, s32 frame_count, s32 arg6,
                          s32 arg7, s32 lookup_index_and_flags) {
     struct Obj *o;
     struct Sub *s;
@@ -65,7 +65,7 @@ struct Obj *spawn_spark(u128 *source_quadword, f32 *first_vector, f32 *second_ve
                 o->b3 = 0x48;
             }
         }
-        o->hA = arg5;
+        o->hA = frame_count;
         s = &o->sub;
         s->h16 = truncate_float_to_s32(first_vector[3] * 210000.0f / 1000.0f);
         s->h18 = truncate_float_to_s32(second_vector[3] * 210000.0f / 1000.0f);
@@ -75,7 +75,7 @@ struct Obj *spawn_spark(u128 *source_quadword, f32 *first_vector, f32 *second_ve
         load_display_text_resource_entry(second_vector_scratch, &s->b);
         s->c = arg3;
         s->d = arg4;
-        s->h10 = arg5;
+        s->h10 = frame_count;
         s->h12 = arg6;
         s->h14 = arg7;
     }
