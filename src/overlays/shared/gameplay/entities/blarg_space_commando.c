@@ -1023,5 +1023,4 @@ void FUN_L06_003021d8(char *moby) {
     font_print_center_large_001f6c20(W(D_L06_001620C8), W(D_L06_001620CC), col, (int)buf, 8);
 }
 
-f32 D_L06_001F2EAC[1] __attribute__((section(".data"))) = {0};
 f32 D_L10_001DA10C[1] __attribute__((section(".data"))) = {0};

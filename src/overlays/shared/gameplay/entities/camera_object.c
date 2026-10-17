@@ -2675,7 +2675,6 @@ s16 D_L02_001CBDCC[1] __attribute__((section(".data"))) = {0};
 s32 D_L02_001CBEE0[1] __attribute__((section(".data"))) = {0};
 s16 D_L03_001CB8CC[1] __attribute__((section(".data"))) = {0};
 s32 D_L03_001CB9E0[1] __attribute__((section(".data"))) = {0};
-s16 D_L04_001CB94C[1] __attribute__((section(".data"))) = {0};
 s32 D_L04_001CBA60[1] __attribute__((section(".data"))) = {0};
 s16 D_L05_001CBC4C[1] __attribute__((section(".data"))) = {0};
 s32 D_L05_001CBD60[1] __attribute__((section(".data"))) = {0};

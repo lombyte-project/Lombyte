@@ -1699,9 +1699,6 @@ void FUN_L02_002ea8b0(char *m) {
     }
 }
 
-f32 D_L02_001D33C0[1] __attribute__((section(".data"))) = {0};
-f32 D_L02_001D33D0[1] __attribute__((section(".data"))) = {0};
-f32 D_L02_001D33E0[1] __attribute__((section(".data"))) = {0};
 s32 D_L03_001CB4C4[1] __attribute__((section(".data"))) = {0};
 s32 D_L03_001CB4C8[1] __attribute__((section(".data"))) = {0};
 s32 D_L03_001CB4CC[1] __attribute__((section(".data"))) = {0};

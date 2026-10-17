@@ -437,6 +437,3 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
 }
 
 s32 D_L07_00173E9C[1] __attribute__((section(".data"))) = {0};
-s64 D_L07_00182860[1] __attribute__((section(".data"))) = {0};
-s64 D_L07_00182868[1] __attribute__((section(".data"))) = {0};
-s64 D_L07_00182878[1] __attribute__((section(".data"))) = {0};

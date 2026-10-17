@@ -448,6 +448,3 @@ void FUN_L06_00304088(unsigned char *moby) {
 }
 
 s32 D_L06_0017459C[1] __attribute__((section(".data"))) = {0};
-s64 D_L06_00182F60[1] __attribute__((section(".data"))) = {0};
-s64 D_L06_00182F68[1] __attribute__((section(".data"))) = {0};
-s64 D_L06_00182F78[1] __attribute__((section(".data"))) = {0};
