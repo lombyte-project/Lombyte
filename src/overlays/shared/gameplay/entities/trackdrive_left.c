@@ -1468,9 +1468,6 @@ void FUN_L02_002e0cd8(char *moby) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L02_002ea210.s", FUN_L02_002ea210);
-#else
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void ea210_init(char *) __asm__("FUN_L02_002ea7d0");
 extern void ea210_update(char *) __asm__("FUN_L02_002ea8b0");
@@ -1511,6 +1508,7 @@ void FUN_L02_002ea210(char *moby) {
     int which;
     int frames;
     float angle;
+    float k;
     data = *(char **)(moby + 0x78);
     frames = scale_game_frames(60);
     angle = 3.14159274f / (float)frames;
@@ -1518,14 +1516,13 @@ void FUN_L02_002ea210(char *moby) {
     switch (*(unsigned char *)(moby + 0x20)) {
     case 0:
         ea210_init(moby);
+        k = 0.2f;
         if (items_acquired[which] == 0) {
-            float height;
             probe_ground_height(moby + 0x10, 0, 0.5f);
-            *(float *)(moby + 0x44) = 3.14159274f;
             *(float *)(moby + 0x40) = 1.57079637f;
-            height = D_L02_00174468;
+            *(float *)(moby + 0x44) = 3.14159274f;
+            *(float *)(moby + 0x18) = D_L02_00174468 + k;
             *(unsigned char *)(moby + 0x20) = 1;
-            *(float *)(moby + 0x18) = height + 0.2f;
             return;
         }
         ea210_destroy(moby);
@@ -1615,7 +1612,6 @@ void FUN_L02_002ea210(char *moby) {
         return;
     }
 }
-#endif
 /* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002EBC08), where it is exact; names translated to the US level program. */
 
