@@ -660,7 +660,7 @@ void FUN_L00_002167d0(void) {
     struct Hero *m;
     struct Hero *q;
     Vec4 *r;
-    V4 v0, v1, v2, v3, v4;
+    V4 target_velocity, target_velocity_before_impulse, saved_move_impulse, v3, slope_velocity_delta;
     f32 f20, f21, f22, a, b, c, d, e, h, k;
 
     FUN_L00_002118c8_c(0, 1.0f);
@@ -675,23 +675,23 @@ void FUN_L00_002167d0(void) {
         hero.target_speed = 0.0f;
     }
     f20 = 5.9f;
-    v0.f[0] = fast_cos(hero.motion.move_yaw) * hero.target_speed * (frame_time * f20);
+    target_velocity.f[0] = fast_cos(hero.motion.move_yaw) * hero.target_speed * (frame_time * f20);
     h = fast_sin(hero.motion.move_yaw) * hero.target_speed;
-    v0.f[2] = 0.0f;
+    target_velocity.f[2] = 0.0f;
     d = frame_time;
     f20 = d * f20;
-    v0.f[1] = h * f20;
-    qcopy(&v1, &v0);
-    f21 = v0.f[2];
+    target_velocity.f[1] = h * f20;
+    qcopy(&target_velocity_before_impulse, &target_velocity);
+    f21 = target_velocity.f[2];
     if (f21 < hero.unk930) {
         FUN_L00_002132b8(0.7f, d * f21);
-        qcopy(&v2, &hero.move_impulse);
-        FUN_001f9a10_c(&v0, &v0, &hero.move_impulse);
+        qcopy(&saved_move_impulse, &hero.move_impulse);
+        FUN_001f9a10_c(&target_velocity, &target_velocity, &hero.move_impulse);
         FUN_001f99f8_c(&hero.move_impulse);
     }
-    f20 = -(hero.motion.velocity.f[0] * v0.f[0] + hero.motion.velocity.f[1] * v0.f[1]);
+    f20 = -(hero.motion.velocity.f[0] * target_velocity.f[0] + hero.motion.velocity.f[1] * target_velocity.f[1]);
     if (f21 < f20) {
-        f20 = f20 / vector_length_xy(&v0);
+        f20 = f20 / vector_length_xy(&target_velocity);
         f20 = f20 / vector_length_xy(hero.motion.velocity.f);
     }
     if (1.0f < f20) {
@@ -715,12 +715,12 @@ void FUN_L00_002167d0(void) {
     e = hero.unk930;
     f22 = 0.0f;
     if (f22 < e) {
-        f20 = -fast_vec_dot(&v1, &v2);
-        e = fast_vec_length(&v1);
+        f20 = -fast_vec_dot(&target_velocity_before_impulse, &saved_move_impulse);
+        e = fast_vec_length(&target_velocity_before_impulse);
         if (f22 < e) {
             f20 = f20 / e;
         }
-        b = vector_length_xy(&v2);
+        b = vector_length_xy(&saved_move_impulse);
         a = (b - f20) / b;
         c = frame_time_sq * 3.0f;
         b = c * a;
@@ -733,7 +733,7 @@ void FUN_L00_002167d0(void) {
             f21 = b;
         }
     }
-    fast_vec_sub(&v3, &v0, &hero.motion.unk130);
+    fast_vec_sub(&v3, &target_velocity, &hero.motion.unk130);
     v3.f[2] = 0.0f;
     if (f21 < fast_vec_length(&v3)) {
         fast_vec_normalize(&v3, &v3, f21);
@@ -751,18 +751,18 @@ void FUN_L00_002167d0(void) {
         v3.f[0] = fast_cos(f21) * f20;
         v3.f[1] = fast_sin(f21) * f20;
         v3.f[2] = 0.0f;
-        fast_vec_sub(&v4, &v3, r);
-        v4.f[2] = 0.0f;
-        if (f22 < fast_vec_length(&v4)) {
-            fast_vec_normalize(&v4, &v4, f22);
+        fast_vec_sub(&slope_velocity_delta, &v3, r);
+        slope_velocity_delta.f[2] = 0.0f;
+        if (f22 < fast_vec_length(&slope_velocity_delta)) {
+            fast_vec_normalize(&slope_velocity_delta, &slope_velocity_delta, f22);
         }
-        FUN_001f9a10_c(r, r, &v4);
+        FUN_001f9a10_c(r, r, &slope_velocity_delta);
     }
     qcopy(&v3, &hero.motion.velocity);
     v3.f[2] = 0.0f;
     m = &hero;
-    m->unk3B0 = fast_vec_dot(&v3, &v0);
-    k = fast_vec_length(&v0);
+    m->unk3B0 = fast_vec_dot(&v3, &target_velocity);
+    k = fast_vec_length(&target_velocity);
     if (0.0f < k) {
         m->unk3B0 = m->unk3B0 / (k * (frame_time * 5.9f));
     }
