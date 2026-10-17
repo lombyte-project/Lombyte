@@ -15,7 +15,7 @@ struct MpegMotionRef {
 
 extern u8 D_00153868[];
 extern s32 _Error(struct MpegDecoder *a0, u8 *a1);
-s32 _skipMB0(struct MpegDecoder *decoder, struct MpegSkipState *arg1, s32 *arg2, struct MpegMotionRef *arg3,
+s32 _skipMB0(struct MpegDecoder *decoder, struct MpegSkipState *skip_state, s32 *arg2, struct MpegMotionRef *motion_reference,
              s32 *flags) {
     s32 temp_10_11;
     s32 temp_2_32;
@@ -26,18 +26,18 @@ s32 _skipMB0(struct MpegDecoder *decoder, struct MpegSkipState *arg1, s32 *arg2,
     *(s32 *)((u8 *)(((u8 *)decoder + (temp_10_11))) + 0x6CC) = 1;
     decoder->dc_reset = 1;
     if (decoder->picture_coding_type == 2) {
-        arg1->unk14 = 0;
-        arg1->unk10 = 0;
-        arg1->unk4 = 0;
-        arg1->unk0 = 0;
+        skip_state->unk14 = 0;
+        skip_state->unk10 = 0;
+        skip_state->unk4 = 0;
+        skip_state->unk0 = 0;
     }
     if (decoder->picture_structure == 3) {
         *arg2 = 2;
     } else {
         *arg2 = 1;
         temp_2_32 = decoder->picture_structure == 2;
-        arg3->unk4 = temp_2_32;
-        arg3->unk0 = temp_2_32;
+        motion_reference->unk4 = temp_2_32;
+        motion_reference->unk0 = temp_2_32;
     }
     if (decoder->picture_coding_type == 1) {
         _Error(decoder, D_00153868);
