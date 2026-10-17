@@ -81,7 +81,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern unsigned char D_0015EDB1[] __attribute__((section(".data")));
 extern unsigned char D_L00_0017A680[];
-extern int D_L01_0015F5CC;
+extern int level_frame_count __asm__("D_L01_0015F5CC");
 extern unsigned char D_0013D4DC[];
 
 void FUN_L01_00228000(void)
@@ -113,7 +113,7 @@ void FUN_L01_00228000(void)
         if (p->unk22E0 == 2) period = scale_game_frames(50);
         else if (p->unk22E0 == 1) period = scale_game_frames(90);
         value = convert_integer_to_float(period);
-        phase = fast_sin((((float)(D_L01_0015F5CC % (int)period) / value) * 2.0f) * 3.1415927f + -3.1415927f);
+        phase = fast_sin((((float)(level_frame_count % (int)period) / value) * 2.0f) * 3.1415927f + -3.1415927f);
         r = truncate_float_to_s32(phase * 20.0f) + 50;
         g = truncate_float_to_s32(phase * 70.0f) + 180;
         if (r > 255) r = 255;
