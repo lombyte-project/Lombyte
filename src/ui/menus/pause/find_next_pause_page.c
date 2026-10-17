@@ -12,7 +12,7 @@
    copy is retail's kept %hi. */
 int find_next_pause_page(char *arg0, int reverse) __asm__("FUN_0021b7a8");
 
-int find_next_pause_page(char *arg0, int reverse) {
+int find_next_pause_page(char *page, int reverse) {
     int ok = 0;
     int found = 0;
 
@@ -21,28 +21,28 @@ int find_next_pause_page(char *arg0, int reverse) {
     }
     {
         struct MenuSystem *g = &menu_system;
-        if (g->unk134 != 0 && (*(int *)(arg0 + 0x30) & 8)) {
+        if (g->unk134 != 0 && (*(int *)(page + 0x30) & 8)) {
             ok = 1;
         }
-        if (g->unk138 != 0 && (*(int *)(arg0 + 0x30) & 4)) {
+        if (g->unk138 != 0 && (*(int *)(page + 0x30) & 4)) {
             ok = 1;
         }
     }
     while (ok) {
         struct MenuSystem *g = &menu_system;
         found = 1;
-        arg0 = *(char **)(arg0 + 0x4C);
+        page = *(char **)(page + 0x4C);
         ok = 0;
-        if (g->unk134 != 0 && (*(int *)(arg0 + 0x30) & 8)) {
+        if (g->unk134 != 0 && (*(int *)(page + 0x30) & 8)) {
             ok = 1;
         }
-        if (g->unk138 != 0 && (*(int *)(arg0 + 0x30) & 4)) {
+        if (g->unk138 != 0 && (*(int *)(page + 0x30) & 4)) {
             ok = 1;
         }
     }
     if (found) {
         struct MenuSystem *g2 = &menu_system;
-        g2->current->pending_focus = (struct MenuScreen *)arg0;
+        g2->current->pending_focus = (struct MenuScreen *)page;
     }
     return 0;
 }
