@@ -2598,7 +2598,6 @@ extern int FUN_001fa6d0(float);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_002595a0(float *, float *, float, float, float);
 extern float FUN_0020c9e0(struct Moby *);
-extern void FUN_L05_00307480_c(struct Moby *, int, int, int) __asm__("FUN_L05_00307480");
 
 void FUN_L05_00307570(struct Moby *m) {
     float root0, root1;
@@ -2608,7 +2607,7 @@ void FUN_L05_00307570(struct Moby *m) {
         float duration;
         float acceleration;
         if (m->prev_seq != 5 && scale_game_frames(3) >= d->timer) {
-            FUN_L05_00307480_c(m, 5, 1, scale_game_frames(5));
+            FUN_L05_00307480(m, 5, 1, scale_game_frames(5));
             d->sequence = -1;
         }
         acceleration = frame_time_sq * 21.0f * -0.5f;
@@ -2625,7 +2624,7 @@ void FUN_L05_00307570(struct Moby *m) {
             chosen = random_int_between(0, 3) + 1;
             d->sequence = chosen;
             sequence = chosen;
-            FUN_L05_00307480_c(m, sequence, 1, scale_game_frames(7));
+            FUN_L05_00307480(m, sequence, 1, scale_game_frames(7));
         }
         if (d->sequence != -1) {
             if (m->seq == m->prev_seq) {
@@ -2641,10 +2640,10 @@ void FUN_L05_00307570(struct Moby *m) {
             }
             if (d->sequence != -1) {
                 if (duration < (float)scale_game_frames(9)) {
-                    FUN_L05_00307480_c(m, 5, 3, scale_game_frames(7));
+                    FUN_L05_00307480(m, 5, 3, scale_game_frames(7));
                     d->sequence = -1;
                 } else if (m->anim_flags & 2) {
-                    FUN_L05_00307480_c(m, 5, 2, scale_game_frames(7));
+                    FUN_L05_00307480(m, 5, 2, scale_game_frames(7));
                     d->sequence = -1;
                 }
             }
@@ -2659,7 +2658,7 @@ void FUN_L05_00307570(struct Moby *m) {
     } else {
         m->anim_speed = 1.0f;
         if ((m->anim_flags & 2) && m->prev_seq != 0) {
-            FUN_L05_00307480_c(m, 0, 0, scale_game_frames(8));
+            FUN_L05_00307480(m, 0, 0, scale_game_frames(8));
         }
     }
     if (d->rider != 0)

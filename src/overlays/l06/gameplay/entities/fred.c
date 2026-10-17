@@ -7285,7 +7285,6 @@ extern int scale_game_frames_03b68(int) __asm__("FUN_001f96f8");
 extern void FUN_L06_0030bef8_03b68(void *, int, int, int) __asm__("FUN_L06_0030bef8");
 extern void clear_vector_03b68(void *) __asm__("FUN_001f99f8");
 extern void random_vector_03b68(void *, float, float) __asm__("FUN_L00_00257d78");
-extern void FUN_L06_00303748_c(float, struct Moby *, void *, void *, int) __asm__("FUN_L06_00303748");
 extern void add_vector_03b68(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_03b68(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void scale_vector_03b68(void *, void *, float) __asm__("FUN_001f9a68");
@@ -7327,7 +7326,7 @@ void FUN_L06_00303b68(struct Moby *moby) {
     do {
         id = *list & 0x7FFF;
         random_vector_03b68(push, 1.0f, 2.0f);
-        FUN_L06_00303748_c(30.0f, moby, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos, push, 1);
+        FUN_L06_00303748(30.0f, moby, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos, push, 1);
         add_vector_03b68(middle, middle, &((struct Moby *)(D_L06_0015FFD8_03b68 + (id << 8)))->pos);
         count++;
         if (largest < ((struct Moby *)((id << 8) + (int)D_L06_0015FFD8_03b68))->bsphere.w) {
