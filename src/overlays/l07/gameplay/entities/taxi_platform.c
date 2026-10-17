@@ -3503,7 +3503,7 @@ extern char D_L07_00173EE0_2cd2b0[] __asm__("D_L07_00173EE0");
 
 void FUN_L07_00312420(struct Moby *arg)
 {
-    float v0[4], v10[4], v20[4], v30[4], v40[4], v50[4], m[4], c2[4], h[4], ii[4], jj[4];
+    float line_endpoint[4], v10[4], quad_side_offset[4], attachment_position[4], endpoint_to_attachment[4], v50[4], m[4], c2[4], h[4], ii[4], jj[4];
     float f20, t;
     int flag = 1;
     EffData_313800 *p = ((EffData_313800 *)arg->pvars);
@@ -3516,30 +3516,30 @@ void FUN_L07_00312420(struct Moby *arg)
     f20 = f20 / 10.0f;
     t = FUN_L00_0025e310_2cd2b0(f20 + t * 1.5707964f);
     v50[0] = v50[0] + FUN_001f9de0_2cd2b0(t);
-    add_vector_xyz_cf(arg, 2, v30);
-    subtract_vector_xyz(v10, v50, v30);
+    add_vector_xyz_cf(arg, 2, attachment_position);
+    subtract_vector_xyz(v10, v50, attachment_position);
     FUN_001f9bf8_2cd2b0(v10, v10, 30.0f);
-    add_vector_xyz(v0, v50, v10);
-    if (FUN_001efa68_2cd2b0(v30, v0, 2, arg, 0)) {
-        qcopy(v0, D_L07_00173EE0_2cd2b0);
+    add_vector_xyz(line_endpoint, v50, v10);
+    if (FUN_001efa68_2cd2b0(attachment_position, line_endpoint, 2, arg, 0)) {
+        qcopy(line_endpoint, D_L07_00173EE0_2cd2b0);
     } else {
         flag = 0;
     }
-    subtract_vector_xyz(v40, v30, v0);
-    cross_vectors_xyz(v20, D_L07_00167050_2cd2b0, v40);
-    FUN_001f9bf8_2cd2b0(v20, v20, 0.25f);
-    add_vector_xyz(v10, v20, v0);
+    subtract_vector_xyz(endpoint_to_attachment, attachment_position, line_endpoint);
+    cross_vectors_xyz(quad_side_offset, D_L07_00167050_2cd2b0, endpoint_to_attachment);
+    FUN_001f9bf8_2cd2b0(quad_side_offset, quad_side_offset, 0.25f);
+    add_vector_xyz(v10, quad_side_offset, line_endpoint);
     if (flag) {
-        FUN_L00_002729c8_2cd2b0(v0, 0, FUN_001f96f8_2cd2b0((rand_e50() & 1) + 0x2D),
+        FUN_L00_002729c8_2cd2b0(line_endpoint, 0, FUN_001f96f8_2cd2b0((rand_e50() & 1) + 0x2D),
             FUN_001f96f8_2cd2b0((rand_e50() & 7) + 0x37), 1,
             FUN_001f96f8_2cd2b0((rand_e50() & 3) + 0xD), arg, 1.0f, 1.0f);
         if (p->f15C != 0.0f) {
-            subtract_vector_xyz(c2, v0, p->f150);
+            subtract_vector_xyz(c2, line_endpoint, p->f150);
             FUN_001f9bf8_2cd2b0(c2, c2, 0.2f);
             qcopy(m, p->f150);
             for (k = 0; k < 4; k++) {
                 add_vector_xyz(m, m, c2);
-                subtract_vector_xyz(h, m, v30);
+                subtract_vector_xyz(h, m, attachment_position);
                 FUN_001f9bf8_2cd2b0(h, h, 5.0f);
                 subtract_vector_xyz(ii, m, h);
                 add_vector_xyz(jj, m, h);
@@ -3557,7 +3557,7 @@ void FUN_L07_00312420(struct Moby *arg)
                 }
             }
         }
-        qcopy(p->f150, v0);
+        qcopy(p->f150, line_endpoint);
         p->f15C = 1.0f;
     } else {
         p->f15C = 0.0f;
@@ -3571,9 +3571,9 @@ void FUN_L07_00312420(struct Moby *arg)
     pkt.uv[6] = pkt.uv[2] = 1.0f;
     pkt.uv[3] = pkt.uv[1] = 0.0f;
     pkt.uv[7] = pkt.uv[5] = 1.0f;
-    qcopy_nc(pkt.a, v30);
-    add_vector_xyz(pkt.b, pkt.a, v20);
-    qcopy(pkt.c, v0);
+    qcopy_nc(pkt.a, attachment_position);
+    add_vector_xyz(pkt.b, pkt.a, quad_side_offset);
+    qcopy(pkt.c, line_endpoint);
     qcopy(pkt.d, v10);
     draw_geometry_quad(&pkt, 0, 1);
 }
