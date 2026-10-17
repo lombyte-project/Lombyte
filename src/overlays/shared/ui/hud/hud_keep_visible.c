@@ -342,11 +342,12 @@ typedef struct {
 } HudElem_p;
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern float D_L00_0017E660_c[][4] __asm__("D_L00_0017E660");
-extern short D_L00_0015F750_gp __asm__("D_L00_0015F750") __attribute__((sda));
-extern short D_L00_0015F754_gp __asm__("D_L00_0015F754") __attribute__((sda));
-extern short D_L00_0015F758_gp __asm__("D_L00_0015F758") __attribute__((sda));
-extern short D_L00_0015F75C_gp __asm__("D_L00_0015F75C") __attribute__((sda));
+typedef struct {
+    float x, y, vx, vy;
+} Star_236458;
+
+extern Star_236458 D_L00_0017E660[];
+extern int D_L00_0015F75C_gp __asm__("D_L00_0015F75C") __attribute__((sda));
 void FUN_L00_00235d80_c(HudElem_p *e) __asm__("FUN_L00_00235d80");
 
 void FUN_L00_00236268(HudElem_p *e) {
@@ -356,35 +357,31 @@ void FUN_L00_00236268(HudElem_p *e) {
 
     FUN_L00_00235d80_c(e);
     for (i = 0; i < 100; i++) {
-        v = *(float *)&D_L00_0015F750_gp;
+        v = star_init_limit0_gp;
         if (i >= 10) {
-            v = *(float *)&D_L00_0015F754_gp;
-            if (i >= 20) v = *(float *)&D_L00_0015F758_gp;
+            v = star_init_limit1_gp;
+            if (i >= 20) v = star_init_limit2_gp;
         }
-        n = *(int *)&D_L00_0015F75C_gp;
+        n = D_L00_0015F75C_gp;
         span = (232.0f - (v + v)) / (float)n;
         lo = (v - 116.0f) + (float)(i % n) * span;
         hi = lo + span;
-        D_L00_0017E660_c[i][0] = random_float_between(v - 17.0f, 17.0f - v);
-        D_L00_0017E660_c[i][1] = random_float_between(lo, hi);
-        D_L00_0017E660_c[i][2] = random_float_between(-0.4f, 0.4f);
-        D_L00_0017E660_c[i][3] = random_float_between(-0.6f, 0.6f);
-        D_L00_0017E660_c[i][2] += random_float_between(-0.4f, 0.4f);
-        D_L00_0017E660_c[i][3] += random_float_between(-0.6f, 0.6f);
-        D_L00_0017E660_c[i][2] += random_float_between(-0.4f, 0.4f);
-        D_L00_0017E660_c[i][3] += random_float_between(-0.6f, 0.6f);
+        D_L00_0017E660[i].x = random_float_between(v - 17.0f, 17.0f - v);
+        D_L00_0017E660[i].y = random_float_between(lo, hi);
+        D_L00_0017E660[i].vx = random_float_between(-0.4f, 0.4f);
+        D_L00_0017E660[i].vy = random_float_between(-0.6f, 0.6f);
+        D_L00_0017E660[i].vx += random_float_between(-0.4f, 0.4f);
+        D_L00_0017E660[i].vy += random_float_between(-0.6f, 0.6f);
+        D_L00_0017E660[i].vx += random_float_between(-0.4f, 0.4f);
+        D_L00_0017E660[i].vy += random_float_between(-0.6f, 0.6f);
     }
     /* Fakematch: keeping n live past the loop gives retail's schedule of the loop body. */
     n++;
     n--;
 }
 
-typedef struct {
-    float x, y, vx, vy;
-} Star_236458;
 
 extern int D_L00_0015F3F8;
-extern Star_236458 D_L00_0017E660[];
 void FUN_L00_00235ea0();
 
 /* Moves every other star by its velocity and bounces it off a box whose size
