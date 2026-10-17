@@ -2726,30 +2726,30 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
     }
     FUN_L00_0024f7c8(moby, 0, pos);
     if (FUN_L00_001f0d60(0.8f, pos, 1, moby) != 0 && FUN_001f0b58() == 0) {
-        float s;
-        float f;
-        s = **(float **)(data + 0x12C);
-        s -= F(data, 0x130);
-        s *= 0.5f;
-        if (s < absolute_float(F(moby, 0x18) - pos[2])) {
-            s = (**(float **)(data + 0x12C) - F(data, 0x130)) * 0.5f;
+        float height;
+        float scale;
+        height = **(float **)(data + 0x12C);
+        height -= F(data, 0x130);
+        height *= 0.5f;
+        if (height < absolute_float(F(moby, 0x18) - pos[2])) {
+            height = (**(float **)(data + 0x12C) - F(data, 0x130)) * 0.5f;
         } else {
-            s = absolute_float(F(moby, 0x18) - pos[2]);
+            height = absolute_float(F(moby, 0x18) - pos[2]);
         }
         if (F(data, 0xD8) < 0.0f) {
-            s = -s;
+            height = -height;
         }
         if (moby[0x20] == 0xE || moby[0x20] == 0xC) {
-            s += s;
+            height += height;
         }
         if (0.5f < vector_distance_xy_alt(moby + 0x10, (Vec4_p *)&D_L07_00173EE0)) {
-            f = vector_distance_xy_alt(moby + 0x10, (Vec4_p *)&D_L07_00173EE0);
-            f += f;
+            scale = vector_distance_xy_alt(moby + 0x10, (Vec4_p *)&D_L07_00173EE0);
+            scale += scale;
         } else {
-            f = 1.0f;
+            scale = 1.0f;
         }
         if (D_L07_0015F5CC % 45 == *(short *)(moby + 0xB2) && random_integer_below(2) == 0) {
-            func_L00_002A5158_30D8E8((*(Rec_30D8E8_p * *)&D_L07_001612D0), D_L07_001612D8, 1, F(moby, 0x10), F(moby, 0x14), f, s);
+            func_L00_002A5158_30D8E8((*(Rec_30D8E8_p * *)&D_L07_001612D0), D_L07_001612D8, 1, F(moby, 0x10), F(moby, 0x14), scale, height);
         }
         if (D_L07_0015F5CC % ((rand() & 7) + 20) == 0) {
             float size = random_float_between_c2(1.5f, 2.4f);
@@ -2883,7 +2883,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
             F(data, 0x14C) = zero;
             qcopy(data + 0x100, moby + 0x10);
         }
-        ((struct { char area[0x138]; float f; } *)data)->f = tgt.pos[2] - 0.25f;
+        ((struct { char pad[0x138]; float f; } *)data)->f = tgt.pos[2] - 0.25f;
         FUN_L07_0030f0f8_c((char *)moby, data, frame_time_sq * 38.0f, frame_time_sq * 0.0f, frame_time * 38.0f);
         if (!inside || *(short *)&D_0013F65C == 0) {
             if (moby[0x53] != 1) {
