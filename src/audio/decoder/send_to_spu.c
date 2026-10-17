@@ -8,7 +8,7 @@ extern void snd_update_movie_adpcm(s32, s32) __asm__("FUN_0012f148");
 
 void send_to_spu(struct AudioDec *dec, s32 src, s32 size, s32 arg3) __asm__("FUN_0023af18");
 
-void send_to_spu(struct AudioDec *dec, s32 src, s32 size, s32 arg3) {
+void send_to_spu(struct AudioDec *dec, s32 src, s32 size, s32 staging_byte_offset) {
     u32 descriptor[4];
     s32 dma_id;
 
@@ -22,7 +22,7 @@ void send_to_spu(struct AudioDec *dec, s32 src, s32 size, s32 arg3) {
     } while (dma_id == 0);
     while (sceSifDmaStat(dma_id) >= 0) {
     }
-    snd_update_movie_adpcm(size, arg3);
+    snd_update_movie_adpcm(size, staging_byte_offset);
 }
 
 extern __typeof__(send_to_spu) func_0023AF18 __attribute__((alias("FUN_0023af18")));
