@@ -83,7 +83,6 @@ extern void FUN_L01_00242930(void);
 
 /* Per-frame hero update; in vehicle mode 3 it also pulses the hero moby's glow colour. */
 void FUN_L01_00228000(void) {
-    struct Hero *h0, *h1, *h2, *h3, *h4, *h5, *h6;
     struct Moby *hero_moby;
     int period, red, green, blue, alpha, i;
     unsigned int color;
@@ -93,39 +92,35 @@ void FUN_L01_00228000(void) {
     hero_update();
     FUN_L01_0022cd48();
     FUN_L01_00242930();
-    h0 = &hero;
-    if (h0->vehicle_mode == 0)
+    if (hero.vehicle_mode == 0)
         return;
     FUN_L00_00216f10();
     FUN_L00_002054e8();
-    if (h0->vehicle_mode == 0)
+    if (hero.vehicle_mode == 0)
         return;
     FUN_L00_00208a10();
     FUN_L00_00207c48();
     FUN_L00_00207a58();
-    FUN_L00_002484e0(&h0->motion.pos);
-
-    h1 = &hero;
-    if (h1->vehicle_mode == 3) {
+    FUN_L00_002484e0(&hero.motion.pos);
+    if (hero.vehicle_mode == 3) {
         if ((&big_head_cheat_enabled)[1] != 0)
             D_L01_0017C04C[0] = 1.9f;
         alpha = 0x80;
         period = scale_game_frames(0xAA);
-        if (h1->unk22E0 == 2)
+        if (hero.unk22E0 == 2)
             period = scale_game_frames(0x32);
-        else if (h1->unk22E0 == 1)
+        else if (hero.unk22E0 == 1)
             period = scale_game_frames(0x5A);
         pulse = fast_sin((((float)(level_frame_count % period) / convert_integer_to_float(period)) * 2.0f) * 3.1415927f + -3.1415927f);
         red = truncate_float_to_s32(pulse * 20.0f) + 0x32;
         green = truncate_float_to_s32(pulse * 70.0f) + 0xB4;
         blue = truncate_float_to_s32(pulse * 10.0f);
-        h2 = &hero;
-        hero_moby = h2->moby;
+        hero_moby = hero.moby;
         if (red > 0xFF) red = 0xFF;
         if (green > 0xFF) green = 0xFF;
         blue += 0x14;
         hero_moby->flags |= 0x10;
-        if (h2->unk22E0 == 2) {
+        if (hero.unk22E0 == 2) {
             unsigned int packed = (alpha << 24) | (blue << 16);
             packed |= (red / 2) << 8;
             color = packed | green;
@@ -134,53 +129,48 @@ void FUN_L01_00228000(void) {
             packed |= green << 8;
             color = packed | red;
         }
-        h3 = &hero;
-        h3->moby->glow_color = fast_tween_color(0.1f, h3->moby->glow_color, color);
+        hero.moby->glow_color = fast_tween_color(0.1f, hero.moby->glow_color, color);
         for (i = 0; i < 3; i++) {
-            h4 = &hero;
-            moby_point_position(h4->moby, i, (char *)h4 + 0x1D50 + i * 16);
+            moby_point_position(hero.moby, i, (char *)&hero + 0x1D50 + i * 16);
         }
         alpha = 0x30;
-        h4 = &hero;
         {
-            struct Moby *moby = h4->moby;
+            struct Moby *moby = hero.moby;
             blue = ((unsigned char *)&moby->glow_color)[2];
             green = ((unsigned char *)&moby->glow_color)[1];
             red = ((unsigned char *)&moby->glow_color)[0];
         }
-        if (h4->unk22DE != 0)
-            alpha = truncate_float_to_s32((convert_integer_to_float(h4->unk22DE) / convert_integer_to_float(0x12)) * (float)alpha);
+        if (hero.unk22DE != 0)
+            alpha = truncate_float_to_s32((convert_integer_to_float(hero.unk22DE) / convert_integer_to_float(0x12)) * (float)alpha);
         {
             unsigned int packed = (alpha << 24) | (blue << 16);
             packed |= green << 8;
             packed |= red;
-            *(unsigned int *)((char *)h4 + 0x22E4) = packed;
+            *(unsigned int *)((char *)&hero + 0x22E4) = packed;
         }
         FUN_L00_00207d00();
-        h4->unk22E0 = 0;
-        if (h4->vehicle_mode == 3) {
-            int pending = h4->pending_item[0];
+        hero.unk22E0 = 0;
+        if (hero.vehicle_mode == 3) {
+            int pending = hero.pending_item[0];
             if (pending != 0 && pending != 0x1F) {
-                if (h4->unk22DE == 0) {
+                if (hero.unk22DE == 0) {
                     f_fun_l00_00216de8_227fa0(0x19, 0);
-                    h4->unk22DE = 0x12;
-                    h4->unk22DC = 1;
+                    hero.unk22DE = 0x12;
+                    hero.unk22DC = 1;
                 }
             } else {
-                h5 = &hero;
-                h5->pending_item[0] = 0;
-                if (h5->unk12E7 != 0 && h5->grounded_frames != 0 && D_0013D4DC[0] != 0 &&
-                    h5->unk22DE == 0) {
+                hero.pending_item[0] = 0;
+                if (hero.unk12E7 != 0 && hero.grounded_frames != 0 && D_0013D4DC[0] != 0 &&
+                    hero.unk22DE == 0) {
                     f_fun_l00_00216de8_227fa0(0x19, 0);
-                    h5->unk22DE = 0x12;
-                    h5->unk22DC = 1;
+                    hero.unk22DE = 0x12;
+                    hero.unk22DC = 1;
                 }
             }
         }
     }
     FUN_L00_00208b60();
-    h6 = &hero;
-    FUN_L00_00257024(h6->moby);
+    FUN_L00_00257024(hero.moby);
 }
 #define NOT_SDA
 

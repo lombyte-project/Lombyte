@@ -1513,7 +1513,7 @@ void tresspasser_update(struct Moby *moby) {
     int which;
     int frames;
     float angle;
-    float k;
+    float ground_offset;
     data = (char *)moby->pvars;
     frames = scale_game_frames(60);
     angle = 3.14159274f / (float)frames;
@@ -1521,12 +1521,12 @@ void tresspasser_update(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         ea210_init(moby);
-        k = 0.2f;
+        ground_offset = 0.2f;
         if (items_acquired[which] == 0) {
             probe_ground_height(&moby->pos, 0, 0.5f);
             *(float *)((char *)moby + 0x40) = 1.57079637f;
             *(float *)((char *)moby + 0x44) = 3.14159274f;
-            moby->pos.z = D_L02_00174468 + k;
+            moby->pos.z = D_L02_00174468 + ground_offset;
             moby->state = 1;
             return;
         }
