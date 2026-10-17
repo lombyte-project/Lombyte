@@ -475,31 +475,31 @@ extern struct Moby * D_L10_0015FFD8;
 #define func_L00_002E9AF8_2BFBB8 FUN_L00_002e8648
 #define func_L00_002E9A18_2BFBB8 FUN_L00_002e8568
 
-void FUN_L10_002be858(char *m)
+void FUN_L10_002be858(char *moby)
 {
-    int *data = *(int **)(m + 0x78);
+    int *data = *(int **)(moby + 0x78);
     float position[4];
     float velocity[4];
     float offset[4];
     float angle;
-    float *op;
+    float *offset_ptr;
     int i;
-    char *g;
+    char *hero_bytes;
     int life;
-    if (*(unsigned char *)(m + 0x20) == 0) {
+    if (*(unsigned char *)(moby + 0x20) == 0) {
         D_L10_001618A8 = 0;
         D_L10_001618A4 = func_001F9850_2BFBB8(D_L10_001618A4);
         D_L10_001618A0 = func_001F9850_2BFBB8(D_L10_001618A0);
-        *(unsigned char *)(m + 0x20) = 1;
+        *(unsigned char *)(moby + 0x20) = 1;
     }
-    g = D_0013F350;
-    if ((unsigned char)g[0x20A4] == 1 && *data != -1 &&
-        func_001F9D48_2BFBB8(m + 0x10, g + 0x80) < 0.5f) {
-        op = offset;
+    hero_bytes = D_0013F350;
+    if ((unsigned char)hero_bytes[0x20A4] == 1 && *data != -1 &&
+        func_001F9D48_2BFBB8(moby + 0x10, hero_bytes + 0x80) < 0.5f) {
+        offset_ptr = offset;
         i = 9;
         do {
             float size, size_scaled;
-            int red, green, blue, color, spin, gk;
+            int red, green, blue, color, spin, green_alpha;
             i--;
             size = func_002140F8_2BFBB8(0.1f, 1.0f);
             red = func_L00_00258BC8_2BFBB8(0x40, 0xff);
@@ -509,38 +509,38 @@ void FUN_L10_002be858(char *m)
             velocity[1] = func_001F9FA8_2BFBB8(func_00214158_2BFBB8()) * func_002140F8_2BFBB8(0.0f, 0.5f);
             velocity[2] = 0.0f;
             velocity[2] += func_002140F8_2BFBB8(0.0f, 0.5f);
-            func_L00_001FF240_2BFBB8(op, velocity, D_0013F350 + 0x80);
+            func_L00_001FF240_2BFBB8(offset_ptr, velocity, D_0013F350 + 0x80);
             func_L00_001FF4B0_2BFBB8(position, position, func_002140F8_2BFBB8(0.0f, D_0015ED6C));
             position[2] = func_002140F8_2BFBB8(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = func_001F9850_2BFBB8(func_L00_00258BC8_2BFBB8(15, 30));
-            gk = (green << 8) | 0x7f000000;
-            color = (blue << 16) | gk | red;
+            green_alpha = (green << 8) | 0x7f000000;
+            color = (blue << 16) | green_alpha | red;
             size_scaled = size * 0.07f;
             size *= 0.7f;
             spin = func_002140B0_2BFBB8(2) ? 1 : -1;
             func_L00_00272F00_2BFBB8(velocity, life, size_scaled, size, color, 0, spin, position, D_0015ED70 * 15.0f);
         } while (i >= 0);
-        func_0022ED80_2BFBB8(0, 0, (int)m);
+        func_0022ED80_2BFBB8(0, 0, (int)moby);
         {
-            int di = *data << 8;
-            char *effect = (*(char * *)&D_L10_0015FFD8) + di;
+            int moby_offset = *data << 8;
+            char *effect = (*(char * *)&D_L10_0015FFD8) + moby_offset;
             func_L00_00217718_2BFBB8(effect + 0x10, effect + 0x40, 0x43, 0);
         }
         {
-            char *b180 = D_L10_00167100;
-            char *effect = *(char **)(b180 + 0x180);
+            char *table = D_L10_00167100;
+            char *effect = *(char **)(table + 0x180);
             D_L10_001618A8 = D_L10_001618A0;
             if (*(short *)(effect + 0x86) == 0) {
-                char *e = *(char **)(b180 + 0x180);
-                short *timer = (short *)(*(char **)(e + 0x70) + 0x20);
+                char *current = *(char **)(table + 0x180);
+                short *timer = (short *)(*(char **)(current + 0x70) + 0x20);
                 *timer = func_001F9850_2BFBB8(0x5a);
-                qcopy(e + 0x40, e);
+                qcopy(current + 0x40, current);
             }
         }
         i = 9;
         do {
             float size, size_scaled;
-            int red, green, blue, color, spin, gk;
+            int red, green, blue, color, spin, green_alpha;
             *(Q_2BFBB8 *)velocity = 0;
             velocity[0] = func_002140F8_2BFBB8(-1.0f, 1.0f);
             i--;
@@ -554,12 +554,12 @@ void FUN_L10_002be858(char *m)
             velocity[1] = func_001F9FA8_2BFBB8(func_00214158_2BFBB8()) * func_002140F8_2BFBB8(0.0f, 0.5f);
             velocity[2] = 0.0f;
             velocity[2] += func_002140F8_2BFBB8(0.0f, 0.5f);
-            func_L00_001FF240_2BFBB8(op, velocity, (*(char * *)&D_L10_0015FFD8) + (*data << 8) + 0x10);
+            func_L00_001FF240_2BFBB8(offset_ptr, velocity, (*(char * *)&D_L10_0015FFD8) + (*data << 8) + 0x10);
             func_L00_001FF4B0_2BFBB8(position, position, func_002140F8_2BFBB8(0.0f, D_0015ED6C));
             position[2] = func_002140F8_2BFBB8(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = func_001F9850_2BFBB8(func_L00_00258BC8_2BFBB8(15, 30));
-            gk = (green << 8) | 0x7f000000;
-            color = (blue << 16) | gk | red;
+            green_alpha = (green << 8) | 0x7f000000;
+            color = (blue << 16) | green_alpha | red;
             size_scaled = size * 0.07f;
             size *= 0.7f;
             spin = func_002140B0_2BFBB8(2) ? 1 : -1;
@@ -569,7 +569,7 @@ void FUN_L10_002be858(char *m)
     if (D_L10_0015F5CC % func_001F9850_2BFBB8(0x3c) == 0 && *data != -1) {
         for (i = 0; i < func_001FA898_2BFBB8(16.0f); i++) {
             char *effect;
-            *(Q_2BFBB8 *)position = *(Q_2BFBB8 *)(m + 0x10);
+            *(Q_2BFBB8 *)position = *(Q_2BFBB8 *)(moby + 0x10);
             position[2] += func_001FA888_2BFBB8(i) * 0.1f * 0.0625f + 1.8f;
             effect = (char *)func_L00_00272488_2BFBB8(position, 0, 0x1eff7f40, 0.0f, D_0015ED6C * 315000.0f);
             if (effect != 0) {
@@ -587,7 +587,7 @@ void FUN_L10_002be858(char *m)
         angle = phase * 3.1415927f;
     }
     if (3.1415927f < angle) angle -= 6.2831855f;
-    *(unsigned int *)(m + 0x90) = func_001FA8A8_2BFBB8(0x80464646, 0x80828282, (func_001F9FA8_2BFBB8(angle) + 1.0f) * 0.5f);
+    *(unsigned int *)(moby + 0x90) = func_001FA8A8_2BFBB8(0x80464646, 0x80828282, (func_001F9FA8_2BFBB8(angle) + 1.0f) * 0.5f);
     func_001F9908_2BFBB8(&D_L10_001618A8);
     if (D_L10_001618A8 != 0) {
         if (D_L10_001618A4 < D_L10_001618A8) angle = 0.002f;
