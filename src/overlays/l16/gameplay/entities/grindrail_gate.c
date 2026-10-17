@@ -100,7 +100,8 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 extern L16WatchFlags D_0013D355_watch __asm__("D_0013D24D");
 
-void FUN_L16_002e3190(L16WatchMoby *m) {
+void help_desk_lady_update(L16WatchMoby *m) __asm__("FUN_L16_002e3190");
+void help_desk_lady_update(L16WatchMoby *m) {
     L16WatchScratch scratch;
     L16WatchData *d = m->data;
     L16WatchFlags *flags;
@@ -358,7 +359,8 @@ extern void set_moby_animation_alt(void *, int, int) __asm__("FUN_00212ed8");
 void turn_e50(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
 extern void func_L00_002592B0_path54(char*,float,float*,float,float,float) __asm__("FUN_L00_00258278");
 
-void FUN_L16_002e37a0(L16CrateMoby *moby) {
+void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L16_002e37a0");
+void bolt_thief_update(L16CrateMoby *moby) {
     L16CrateData *d = moby->data;
     char *hit;
 
@@ -619,7 +621,8 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__("FUN_00214e58");
 
-void FUN_L16_002e43e0(struct Moby *moby) {
+void taxi_update(struct Moby *moby) __asm__("FUN_L16_002e43e0");
+void taxi_update(struct Moby *moby) {
     char *d = (char *)moby->pvars;
     float v00[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
     struct Hero *g;
@@ -972,7 +975,8 @@ void FUN_L16_002e56e0_c(Level16VendorTurnMoby *moby) __asm__("FUN_L16_002e56e0")
 extern void func_L16_002E6B48_6908(void *) __asm__("FUN_L16_002e56e0");
 extern int func_0022ED80_6908(int, int, void *) __asm__("FUN_0022da68");
 
-void FUN_L16_002e54a0(struct Moby *m) {
+void grindrail_button_update(struct Moby *m) __asm__("FUN_L16_002e54a0");
+void grindrail_button_update(struct Moby *m) {
     char *d = (char *)m->pvars;
     char *g;
     char *base;
@@ -1074,7 +1078,8 @@ void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 short D_L16_00161E48 = 0;
-void FUN_L16_002e5e08(struct Moby *m) {
+void chomper_update(struct Moby *m) __asm__("FUN_L16_002e5e08");
+void chomper_update(struct Moby *m) {
     char *d = (char *)m->pvars;
     FUN_L16_002e6208(m);
     sound302618(2.1f, (int)m, 1, (unsigned char *)(d + 0x220));
@@ -1436,7 +1441,8 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern char D_00141968[];
 extern L16ChallengePlayer D_0013E633_challenge __asm__("D_0013E533");
 
-void FUN_L16_002e6808(L16ChallengeMoby *m) {
+void gadgetron_ceo_update(L16ChallengeMoby *m) __asm__("FUN_L16_002e6808");
+void gadgetron_ceo_update(L16ChallengeMoby *m) {
     L16ChallengeScratch scratch;
     L16ChallengeData *d = m->data;
     L16ChallengeActivation *activation = (L16ChallengeActivation *)d->activation;
@@ -2101,7 +2107,8 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-void FUN_L16_002e7f80(L16PlatformMoby *moby) {
+void elevator_update(L16PlatformMoby *moby) __asm__("FUN_L16_002e7f80");
+void elevator_update(L16PlatformMoby *moby) {
     L16PlatformVector delta, old_rotation, motion;
     L16PlatformData *d = moby->data;
     float *position = moby->position;
@@ -2326,7 +2333,8 @@ void FUN_L16_002e84e8(struct Moby *m) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9D48), where it is exact; names translated to the US level program. */
 
-void FUN_L16_002e88d0(struct Moby *moby) {
+void gadgetron_sign_update(struct Moby *moby) __asm__("FUN_L16_002e88d0");
+void gadgetron_sign_update(struct Moby *moby) {
     switch (moby->state) {
     case 0: {
         float size = moby->scale * 4.0f;

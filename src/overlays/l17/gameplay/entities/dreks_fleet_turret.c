@@ -382,7 +382,8 @@ extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L17_002cb310(struct Moby *m) {
+void dreks_fleet_turret_update(struct Moby *m) __asm__("FUN_L17_002cb310");
+void dreks_fleet_turret_update(struct Moby *m) {
     float dir[4];
     float from[4];
     Vars347 *d = (Vars347 *)m->pvars;

@@ -222,7 +222,8 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Updates the lift: rides between its two heights, blends the camera while the hero rides it and pulses its colour while it waits. */
-void FUN_L13_002b39e0(struct Moby *moby) {
+void elevator_update(struct Moby *moby) __asm__("FUN_L13_002b39e0");
+void elevator_update(struct Moby *moby) {
     LiftVars *vars = (LiftVars *)moby->pvars;
     float delta[4];
     float rot[4];
@@ -377,7 +378,8 @@ extern unsigned char D_0013E533[];
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L13_002b4060(struct Moby *moby, float *v, float *w) {
+void lift_view_2b39e0(struct Moby *moby, float *v, float *w) __asm__("FUN_L13_002b4060");
+void lift_view_2b39e0(struct Moby *moby, float *v, float *w) {
     float ang = moby->rot.z;
     float r = 2.5f;
     float z = 1.5f;
@@ -476,7 +478,8 @@ extern void FUN_L00_0025e450_2b0e80(void *, void *, void *, float, float, int, i
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern unsigned char D_0013F420_2b0e80[] __asm__("D_0013F420");
 
-void FUN_L13_002b41b8(Moby_2B5368 *m) {
+void blarg_turret_update(Moby_2B5368 *m) __asm__("FUN_L13_002b41b8");
+void blarg_turret_update(Moby_2B5368 *m) {
     Data_2B5368 *data = m->data;
     Moby_2B5368 *t;
     Moby_2B5368 *gun;
@@ -796,7 +799,8 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L13_002b4c80(struct Moby *moby) {
+void blarg_gunner_update(struct Moby *moby) __asm__("FUN_L13_002b4c80");
+void blarg_gunner_update(struct Moby *moby) {
     unsigned char *d = moby->pvars;
     float a[4];
     float b[4];
@@ -1124,7 +1128,8 @@ void FUN_L13_002b4f28(struct Moby *moby, char *data);
 void FUN_L13_002b4ff0(struct Moby *m, char *d);
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
-void FUN_L13_002b50d8(RsMoby *m) {
+void robosquawker_update(RsMoby *m) __asm__("FUN_L13_002b50d8");
+void robosquawker_update(RsMoby *m) {
     RsVars *v;
     RsVec old;
     RsTarget tgt;
@@ -2638,7 +2643,8 @@ extern int jet_allocate_voice(int,int,int) __asm__("FUN_0022da68");
 extern int jet_check_trigger(void *,int) __asm__("FUN_00214720");
 extern int jet_fast_dec_death_timer(void *) __asm__("FUN_001f9770");
 
-void FUN_L13_002bb068(Jet *m) {
+void fighter_jet_update(Jet *m) __asm__("FUN_L13_002bb068");
+void fighter_jet_update(Jet *m) {
     JetData *d;
     JetVec impulse;
     int state,initial_state;

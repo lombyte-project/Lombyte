@@ -860,7 +860,8 @@ extern void FUN_L01_002787a0(void *);
 extern void *debris302618(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void FUN_0025c2f0(float, void *, void *, int, int, int, int) __asm__("FUN_L00_0026cbb0");
 
-void FUN_L15_002c2938(struct Moby *moby)
+void construction_arm_update(struct Moby *moby) __asm__("FUN_L15_002c2938");
+void construction_arm_update(struct Moby *moby)
 {
     UpdateVars_2938 *d = (UpdateVars_2938 *)moby->pvars;
     int hit = 0;
@@ -1232,7 +1233,8 @@ extern void FUN_L15_002c52b8_goal(void *, void *, void *) __asm__("FUN_L15_002c5
 extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9d20");
 
-void FUN_L15_002c5630(struct Moby *moby)
+void helicopter_update(struct Moby *moby) __asm__("FUN_L15_002c5630");
+void helicopter_update(struct Moby *moby)
 {
     SteeringVec_4f88 origin;
     TargetGoal_5630 goal;
@@ -1928,7 +1930,8 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern char *func_L10_002CD578_v(void *vel, float scale, void *pos, int a, int b,
                                  int c) __asm__("FUN_L10_002cc1b8");
 
-void FUN_L15_002cf3a8(UMoby *m) {
+void ultramech_unlimited_update(UMoby *m) __asm__("FUN_L15_002cf3a8");
+void ultramech_unlimited_update(UMoby *m) {
     UVec v10;
     UVec v20;
     UVec v30;

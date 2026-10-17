@@ -596,7 +596,8 @@ extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") __attribute__((section(".
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int D_L12_001B0930;
 
-void FUN_L12_003069d0(char *moby) {
+void planetbuster_maximus_part_update(char *moby) __asm__("FUN_L12_003069d0");
+void planetbuster_maximus_part_update(char *moby) {
     float v[4];
     float w[4];
     char *d = *(char **)(moby + 0x78);
@@ -872,7 +873,8 @@ extern void FUN_L12_00307ab8(struct Moby *m);
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-void FUN_L12_00307840(struct Moby *m) {
+void homing_mine_spawner_update(struct Moby *m) __asm__("FUN_L12_00307840");
+void homing_mine_spawner_update(struct Moby *m) {
     char *d = (char *)m->pvars;
     int *slots;
     int i;

@@ -19,7 +19,8 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 
-void FUN_L15_002e73c0(struct Moby *moby) {
+void conveyor_belt_update(struct Moby *moby) __asm__("FUN_L15_002e73c0");
+void conveyor_belt_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (data != 0) {
         unsigned char state = moby->state;
@@ -248,7 +249,8 @@ extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90")
 extern int probe_world_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern void mine_blast_mobys(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 
-void FUN_L15_002e7f68(Moby_2E9358 *moby) {
+void poison_vessel_update(Moby_2E9358 *moby) __asm__("FUN_L15_002e7f68");
+void poison_vessel_update(Moby_2E9358 *moby) {
     Vec_2E9358 s20;
     Vec_2E9358 s30;
     Vec_2E9358 s40;
@@ -346,7 +348,8 @@ extern void FUN_L10_00298940(char *);
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
 extern short D_L15_00162078 __attribute__((sda));
-void FUN_L15_002ea748(struct Moby *m) {
+void bolt_grabber_update(struct Moby *m) __asm__("FUN_L15_002ea748");
+void bolt_grabber_update(struct Moby *m) {
     m->rot.z = fast_add_rotations(m->rot.z, frame_time * 1.5707964f);
     m->scale = m->pclass->scale * *(float *)&D_L15_00162078;
     switch (m->state) {
@@ -887,7 +890,8 @@ extern float scale_time(float) __asm__("FUN_L15_001f8648");
 
 #include "rnc/gameplay/state/item_state.h"
 
-void FUN_L15_002ec030(struct Moby *moby) {
+void codebot_slot_update(struct Moby *moby) __asm__("FUN_L15_002ec030");
+void codebot_slot_update(struct Moby *moby) {
     int *data = (int *)moby->pvars;
     float vec[4] __attribute__((aligned(16)));
     float tmp[4] __attribute__((aligned(16)));
@@ -1038,7 +1042,8 @@ extern float FUN_001f98a8(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_001f8b80(void *) __asm__("FUN_001f9b20");
 extern void FUN_00251fd0(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
-void FUN_L15_002ec760(struct Moby *moby) {
+void ultramech_scientist_update(struct Moby *moby) __asm__("FUN_L15_002ec760");
+void ultramech_scientist_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *other;
     int index;

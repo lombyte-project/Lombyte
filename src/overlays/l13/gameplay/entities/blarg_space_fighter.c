@@ -134,7 +134,8 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L13_002c1528(Moby_2C27B0 *m) {
+void rocket_update(Moby_2C27B0 *m) __asm__("FUN_L13_002c1528");
+void rocket_update(Moby_2C27B0 *m) {
     Rocket_2C27B0 *d = m->data;
     V4_2C27B0 old;
     V4_2C27B0 hitpos;
@@ -1727,7 +1728,8 @@ extern int D_0014C190[];
 /* Indexed by data[0x74 / 4]; state 1 clears the entry and removal sets it. */
 extern int linked_state_flags[] __asm__("D_L13_001847A8");
 
-void FUN_L13_002cefc0(struct Moby *moby) {
+void forcefield_tower_update(struct Moby *moby) __asm__("FUN_L13_002cefc0");
+void forcefield_tower_update(struct Moby *moby) {
     unsigned char *m = (unsigned char *)moby;
     int *data = *(int **)(m + 0x78);
     float position[4];
@@ -1991,7 +1993,8 @@ extern s32 frame_count __asm__("D_L13_0015F5CC");
 extern char *moby_base_1638 __asm__("D_L13_0015FFD8");
 
 /* Blob update: waits on its home point, jumps out at the hero when the ship comes near, splits when it hits something, and respawns. */
-void FUN_L13_002e1638(struct Moby *moby) {
+void asteroid_update(struct Moby *moby) __asm__("FUN_L13_002e1638");
+void asteroid_update(struct Moby *moby) {
     struct BlobVars *vars = (struct BlobVars *)moby->pvars;
     f32 distance = distance_xyz_1638(&moby->pos, &hero_pos_1638);
     f32 size;

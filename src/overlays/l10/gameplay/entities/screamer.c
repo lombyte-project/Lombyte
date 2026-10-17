@@ -124,7 +124,8 @@ extern V_2E0630 D_L10_001672C0_2E0630 __asm__("D_L10_00167240");
 extern Path_2E0630 *D_L10_001B0C30_2E0630[] __asm__("D_L10_001B0930");
 extern V_2E0630 D_L10_00174360_2E0630 __asm__("D_L10_001742E0");
 
-void FUN_L10_002df270(Moby *moby) {
+void screamer_update(Moby *moby) __asm__("FUN_L10_002df270");
+void screamer_update(Moby *moby) {
     float waypoint[6];
     D_2E0630 *data = (D_2E0630 *)moby->pvars;
     Moby *leader;
@@ -416,7 +417,7 @@ typedef struct {
     char p2[0xDF];
 } Ent;
 
-/* Retail reaches D_L10_0015FFD8 here with the lui/lw macro; FUN_L10_002e1d38 reaches it through $gp. An alias 8 bytes lower keeps the macro form under SN. */
+/* Retail reaches D_L10_0015FFD8 here with the lui/lw macro; toxic_crab_update reaches it through $gp. An alias 8 bytes lower keeps the macro form under SN. */
 extern Ent *D_L10_0015FFD0_e[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
 extern short *D_L10_001ABCC0[];
 
@@ -1292,7 +1293,8 @@ extern void func_L00_0025D5B0_b(void *, void *, int, int, int, float) __asm__("F
 extern void func_L00_002592B0_b(char *moby, float target, float k, float d, float max,
                                 float *vel) __asm__("FUN_L00_00258278");
 
-void FUN_L10_002e1d38(Moby2E30F8 *m) {
+void toxic_crab_update(Moby2E30F8 *m) __asm__("FUN_L10_002e1d38");
+void toxic_crab_update(Moby2E30F8 *m) {
     int see = 0;
     Crab2E30F8 *d = m->data;
     char *t;
@@ -2438,7 +2440,8 @@ s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_0021
 extern int D_0015ED84;
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L10_002e4a88(Ship_5E48 *m) {
+void blarg_ship_update(Ship_5E48 *m) __asm__("FUN_L10_002e4a88");
+void blarg_ship_update(Ship_5E48 *m) {
     ShipD_5E48 *d = m->d;
     Ship_5E48 *tgt;
     V_2E52B0 A;
@@ -2821,7 +2824,8 @@ extern int D_0013ED98 __attribute__((section(".sdata")));
 extern int D_0013EDA0 __attribute__((sda));
 extern int D_L10_0013F640 __asm__("D_L10_0013F640") __attribute__((section(".sdata")));
 
-void FUN_L10_002e8358(struct Moby *moby) {
+void nanotech_upgrade_vendor_update(struct Moby *moby) __asm__("FUN_L10_002e8358");
+void nanotech_upgrade_vendor_update(struct Moby *moby) {
     int *timer;
     float angle;
     int purchase;
@@ -3077,7 +3081,8 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-void FUN_L10_002e8ab0(struct Moby *moby) {
+void gun_update(struct Moby *moby) __asm__("FUN_L10_002e8ab0");
+void gun_update(struct Moby *moby) {
     Vars_2E8AB0 *vars = (Vars_2E8AB0 *)moby->pvars;
     int *bits;
     float rotation[4];
@@ -3255,7 +3260,8 @@ extern int truncate_float_e9648(float) __asm__("FUN_001fa6d0");
 extern int tick_countdown_e9648(int *) __asm__("FUN_001f9740");
 
 /* Level 10 door: swings open once the hero enters its clip volume and sets its save bit; starts open when the bit is already set. */
-void FUN_L10_002e9648(struct Moby *moby) {
+void gate_1_update(struct Moby *moby) __asm__("FUN_L10_002e9648");
+void gate_1_update(struct Moby *moby) {
     DoorVars_e9648 *vars = (DoorVars_e9648 *)moby->pvars;
     unsigned short save_id;
 
@@ -3370,7 +3376,8 @@ extern int func_001F9878_2EAD50(float) __asm__("FUN_001fa6d0");
 extern float func_001FA888_2EAD50(int) __asm__("FUN_001fa6c0");
 extern int func_001F9908_2EAD50(int *) __asm__("FUN_001f9740");
 
-void FUN_L10_002e9990(GateMoby_2EAD50 *m)
+void gate_2_update(GateMoby_2EAD50 *m) __asm__("FUN_L10_002e9990");
+void gate_2_update(GateMoby_2EAD50 *m)
 {
     GateVars_2EAD50 *d = m->vars;
     float v[3];

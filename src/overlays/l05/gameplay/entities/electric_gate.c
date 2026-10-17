@@ -2133,7 +2133,7 @@ void television_update(struct Moby *moby) {
         break;
     }
 }
-/* Same source as the exact FUN_L16_002e43e0, with its moby data 8 bytes further on, an x range on the pickup test and a table test for state 6. */
+/* Same source as the exact taxi_update, with its moby data 8 bytes further on, an x range on the pickup test and a table test for state 6. */
 typedef struct {
     char pad00[0x30];
     float position[4];

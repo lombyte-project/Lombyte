@@ -53,7 +53,8 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int func_0022ED80_2F0F78(int, int, int) __asm__("FUN_0022da68");
 
-void FUN_L18_002efb88(struct Moby *moby) {
+void drek_fight_missile_update(struct Moby *moby) __asm__("FUN_L18_002efb88");
+void drek_fight_missile_update(struct Moby *moby) {
     char *d = (char *)moby->pvars;
     if (moby->state != 4) {
         moby->rot.x = fast_add_rotations(moby->rot.x,
@@ -1484,7 +1485,8 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 
-void FUN_L18_002f2bf0(BossMoby *moby) {
+void drek_final_boss_robot_update(BossMoby *moby) __asm__("FUN_L18_002f2bf0");
+void drek_final_boss_robot_update(BossMoby *moby) {
     BossData *d = (BossData *)moby->f78;
     BossMoby *tgt;
     float v0[4];
@@ -3515,7 +3517,8 @@ extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
 extern int D_L18_00162384_w[] __asm__("D_L18_00162384") __attribute__((section(".sdata")));
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
 
-void FUN_L18_002f7ad8(M *moby) {
+void deplanetizer_gun_update(M *moby) __asm__("FUN_L18_002f7ad8");
+void deplanetizer_gun_update(M *moby) {
     switch (moby->state) {
     case 0:
         moby->state = 1;
@@ -3585,7 +3588,8 @@ extern short D_L18_0016247C __asm__("D_L18_0016247C");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern void func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 
-void FUN_L18_002f7c40(M1454 *m) {
+void rocket_tank_update(M1454 *m) __asm__("FUN_L18_002f7c40");
+void rocket_tank_update(M1454 *m) {
     D1454 *d = m->data;
     FUN_L18_002f8050(m);
     switch (m->state) {

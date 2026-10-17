@@ -893,7 +893,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int hero_set_state(int, int) __asm__("FUN_L11_0024db50");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
-/* Private variables of the tilting platform (FUN_L11_0030eb90). */
+/* Private variables of the tilting platform (seesaw_platform_update). */
 struct L11TiltVars {
     u8 pad0[0x20];
     u8 unk20[0x3C]; /* 0x20: rider state for update_entity_matrix */
@@ -903,7 +903,8 @@ struct L11TiltVars {
 
 /* Tilting platform: rot.y springs back and is damped through its spin; the hero standing on it tilts it toward
    his side, and a tilt past D_L11_00161F84 degrees knocks him into hero state 6. */
-void FUN_L11_0030eb90(struct Moby *m) {
+void seesaw_platform_update(struct Moby *m) __asm__("FUN_L11_0030eb90");
+void seesaw_platform_update(struct Moby *m) {
     Vec4f v;
     Vec4f rot;
     float matrix[16] __attribute__((aligned(16)));
@@ -1075,7 +1076,8 @@ extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
 
 extern struct Moby *D_L11_00174858 __attribute__((section(".data")));
 /* Ship ammo / health pickup: falls and bounces, is pulled toward the hero's ship, and refills it on contact. */
-void FUN_L11_0030f728(struct Moby *m) {
+void ammocrate_update(struct Moby *m) __asm__("FUN_L11_0030f728");
+void ammocrate_update(struct Moby *m) {
     struct Moby *ship = hero.ship_moby;
     char *pv = m->pvars;
     float dist = 100000.0f;
@@ -1343,7 +1345,7 @@ void FUN_L11_00310028(struct Moby *moby) {
         break;
     }
 }
-/* pvars of the moby run by FUN_L11_00310180 (FUN_L11_00310698 does its hit handling) */
+/* pvars of the moby run by psytcopus_update (FUN_L11_00310698 does its hit handling) */
 struct PokiPathVars {
     u8 pad_00[0x20];
     f32 health;                 /* 0x20 */
@@ -1439,7 +1441,8 @@ extern float abs_0698(float) __asm__("FUN_001f99c0");
 
 /* Path moby update: hit handling first, then a state machine that turns toward the player or its target,
    spawns and fires a projectile (pvars 0x160) and dies by explosion or by reaching the end of its path. */
-void FUN_L11_00310180(struct Moby *m) {
+void psytcopus_update(struct Moby *m) __asm__("FUN_L11_00310180");
+void psytcopus_update(struct Moby *m) {
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
     struct Moby *target;
     Vec4f v;
@@ -1566,7 +1569,7 @@ void FUN_L11_00310180(struct Moby *m) {
         break;
     }
 }
-/* Hit handling for the FUN_L11_00310180 moby: takes damage, picks the hurt or death reaction, keeps it on its path. */
+/* Hit handling for the psytcopus_update moby: takes damage, picks the hurt or death reaction, keeps it on its path. */
 void FUN_L11_00310698(struct Moby *m) {
     struct PokiPathVars *pv = (struct PokiPathVars *)m->pvars;
     Vec4f v;
@@ -1919,7 +1922,7 @@ typedef struct {
 extern struct UsageStat help_stats[] __asm__("D_00141968");
 extern s32 D_0015EEA4;
 extern short D_L11_001F0CF8[];  /* outline of an ammo pip */
-/* The health bar's palette: FUN_L11_00313290 points clut at it in texture
+/* The health bar's palette: jet_fighter_update points clut at it in texture
    memory and, the first time (saved), copies it to D_L11_001F1088. */
 typedef struct {
     s32 *clut;
@@ -2551,7 +2554,7 @@ void FUN_L11_00312838(struct Moby *m, ShipVars_2838 *o) {
                      -fast_add_rot_2838(o->f24, -(o->f70 / 7.0f) - 0.1f));
 }
 /* Per-frame update for the player's ship moby on Pokitaru: takes hits, boards and leaves the ship,
-   and runs the flight states. Same source as the exact FUN_L17_002ed018 with Pokitaru's states. */
+   and runs the flight states. Same source as the exact fighter_jet_update with Pokitaru's states. */
 
 typedef struct {
     char pad00[0x10];
@@ -2608,7 +2611,8 @@ extern int FUN_L11_0031a758(int);
 extern int FUN_L11_0031a7d8(int);
 
 s32 hp_bar_saved __asm__("D_L11_00162170") = 0;
-void FUN_L11_00313290(struct Moby *moby) {
+void jet_fighter_update(struct Moby *moby) __asm__("FUN_L11_00313290");
+void jet_fighter_update(struct Moby *moby) {
     ShipVars_2838 *v;
     ShipHit_3290 *hit;
     W4_2838 dir;
@@ -2992,7 +2996,7 @@ void FUN_L11_00313f60(struct Moby *moby, float *a, float *b) {
         hero.ship_flags |= 2;
     }
 }
-/* pvars of the class 0x4DE creature run by FUN_L11_00314318. */
+/* pvars of the class 0x4DE creature run by puffoid_update. */
 typedef struct {
     u8 pad00[0x20];
     f32 unk20;            /* 0x20 */
@@ -3099,7 +3103,8 @@ extern float sin_4318(float) __asm__("FUN_001f9de0");
 
 /* Update for the class 0x4DE creature: spawns on a path or a carrier moby, wanders, chases and attacks
    the target, jumps between path points, and smokes while it dies. */
-void FUN_L11_00314318(struct Moby *moby) {
+void puffoid_update(struct Moby *moby) __asm__("FUN_L11_00314318");
+void puffoid_update(struct Moby *moby) {
     CreatureVars_4318 *d = (CreatureVars_4318 *)moby->pvars;
     struct Moby *target;
     float pos[4];

@@ -662,7 +662,7 @@ struct Hero {
     u8 unk12ED;                    /* 0x12ED */
     u8 unk12EE;                    /* 0x12EE */
     u8 pad_12EF[0x301];
-    struct Moby *ship_moby;        /* 0x15F0: the ship the hero is flying (l17 FUN_L17_002ed018) */
+    struct Moby *ship_moby;        /* 0x15F0: the ship the hero is flying (l17 fighter_jet_update) */
     s16 ship_oclass;               /* 0x15F4: its oclass, -1 when none */
     u8 ship_ammo;                  /* 0x15F6: shots left in the space levels; firing needs one and takes it (FUN_L11_003126f8) */
     u8 ship_ammo_max;              /* 0x15F7: ammo pips the ship HUD draws, lit while below ship_ammo */

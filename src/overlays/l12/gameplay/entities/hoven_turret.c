@@ -568,7 +568,8 @@ extern int func_0020BFC8_304920(int, int) __asm__("FUN_0020b178");
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
-void FUN_L12_00303540(struct Moby *moby) {
+void hoven_turret_update(struct Moby *moby) __asm__("FUN_L12_00303540");
+void hoven_turret_update(struct Moby *moby) {
     Data_304920 *data = *(Data_304920 **)&moby->pvars;
 
     ((Snd_304920 *)(D_0013E533 + 0x1D))->f6C = moby;

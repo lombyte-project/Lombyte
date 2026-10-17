@@ -427,7 +427,8 @@ extern int lift_tick(short *) __asm__("FUN_001f9770");
 extern float lift_length(void *) __asm__("FUN_001f9af0");
 extern void lift_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L14_002e7bd8(struct Moby *m) {
+void shuttle_update(struct Moby *m) __asm__("FUN_L14_002e7bd8");
+void shuttle_update(struct Moby *m) {
     L14LiftVars *d;
     Vec4 old;
     Vec4 rot;
@@ -1765,7 +1766,8 @@ typedef struct {
 } L14VendorVars;
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Vendor platform update: rides its two rails between the trigger volumes, with hum and motor sounds. */
-void FUN_L14_002ee8d8(struct Moby *m) {
+void elevator_update(struct Moby *m) __asm__("FUN_L14_002ee8d8");
+void elevator_update(struct Moby *m) {
     L14VendorVars *d = (L14VendorVars *)m->pvars;
     Vec4 old;
     Vec4 rot;
@@ -2221,7 +2223,8 @@ void FUN_L14_002f13f8(struct Moby *moby);
 
 extern void taxi_sample_f(s32 *, int, void *, void *, int, float) __asm__("FUN_00214e58");
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002E0538.c (func_L14_002F19C0) */
-void FUN_L14_002f0538(struct Moby *moby) {
+void taxi_update(struct Moby *moby) __asm__("FUN_L14_002f0538");
+void taxi_update(struct Moby *moby) {
     L14TaxiVars *d = (L14TaxiVars *)moby->pvars;
     float v00[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
     float m80[16];
@@ -2684,7 +2687,8 @@ extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 /* Watcher moby update: gated by its collectable and trigger, then turns its head toward the hero or a random target. */
-void FUN_L14_002fba20(L14WatchMoby *m) {
+void qwark_oltanis_update(L14WatchMoby *m) __asm__("FUN_L14_002fba20");
+void qwark_oltanis_update(L14WatchMoby *m) {
     L14WatchScratch scratch;
     L14WatchData *d = (L14WatchData *)m->data;
     float rate;
@@ -3518,7 +3522,7 @@ int FUN_L14_002fd918(struct Moby *m) {
     return 0;
 }
 #include "rnc/overlay/quad.h"
-/* pvars of the flyer FUN_L14_002fdbb8 moves to a path point */
+/* pvars of the flyer rocket_update moves to a path point */
 typedef struct {
     s32 point;   /* 0x0: path point index into D_L14_001600EC (0x80 each, position at 0x30) */
     s32 target;  /* 0x4: moby index removed on arrival */
@@ -3536,7 +3540,8 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void FUN_L14_002fded0(struct Moby *);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
-void FUN_L14_002fdbb8(struct Moby *moby) {
+void rocket_update(struct Moby *moby) __asm__("FUN_L14_002fdbb8");
+void rocket_update(struct Moby *moby) {
     FlyerVars *vars = (FlyerVars *)moby->pvars;
     Vec4f diff;
     OvlVec4 step;

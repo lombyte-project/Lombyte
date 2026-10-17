@@ -857,7 +857,8 @@ extern int truncate_float(float) __asm__("FUN_001fa6d0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern char *spawn_particle(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
-void FUN_L12_002e3098(struct Moby *moby) {
+void troll_alert_e3528(struct Moby *moby) __asm__("FUN_L12_002e3098");
+void troll_alert_e3528(struct Moby *moby) {
     float pos[4];
     float vel[4];
     float accel[4];
@@ -1256,7 +1257,8 @@ void FUN_L12_002e3e28_c(struct Moby *moby, float *out, int on) __asm__("FUN_L12_
 extern Path_2E51E8 *D_L12_001B0C30_2E51E8[] __asm__("D_L12_001B0930");
 extern void func_L12_002E4F18_2E51E8(void *, void *, void *, int, int) __asm__("FUN_L12_002e3c08");
 
-void FUN_L12_002e3ed8(Moby *moby) {
+void platform_update(Moby *moby) __asm__("FUN_L12_002e3ed8");
+void platform_update(Moby *moby) {
     float oldPos[4];
     float oldRot[4];
     float delta[4];
@@ -1570,7 +1572,8 @@ extern void subtract_vector_xyz(void *, void *, void *);
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 
 extern char *D_L12_001600EC;
-void FUN_L12_002e6c48(L16WatchMoby *m) {
+void miner_update(L16WatchMoby *m) __asm__("FUN_L12_002e6c48");
+void miner_update(L16WatchMoby *m) {
     L16WatchScratch scratch;
     L16WatchData *d = m->data;
     float rate;
@@ -1721,7 +1724,7 @@ void FUN_L12_002e7290(void *a, void *b) {
 }
 extern void FUN_L12_002e81e0(struct Moby *);
 extern void FUN_L12_002e8608(struct Moby *, float *);
-extern void FUN_L12_002e86d0(struct Moby *);
+extern void ogre_leave_e81e0(struct Moby *) __asm__("FUN_L12_002e86d0");
 extern void FUN_L12_002e8720(struct Moby *);
 extern void FUN_L12_002e87b0(char *);
 extern void FUN_L12_002e8808(struct Moby *, float *, float, float);
@@ -1759,7 +1762,8 @@ extern void FUN_L04_002aee30(void *, void *, void *, int);
 /* Ogre update: initialization, path following, aiming, attack and removal.
    The retail unsigned group sentinel is 0xff; unordered angle comparisons
    keep the original branch outcomes. Quad copies include the fourth word. */
-void FUN_L12_002e72c0(struct Moby *moby) {
+void blarg_trooper_update(struct Moby *moby) __asm__("FUN_L12_002e72c0");
+void blarg_trooper_update(struct Moby *moby) {
     TargetReport54_2E2EF0 work;
     Vec4 v;
     Vec4 delta;
@@ -2006,7 +2010,7 @@ state3:
         if (moby->pos.z < 2.0f) {
             explode302618(moby, 0, -1);
 leave:
-            FUN_L12_002e86d0(moby);
+            ogre_leave_e81e0(moby);
             return;
         }
         break;
@@ -2067,7 +2071,7 @@ typedef struct {
     s32 groups[4];       /* 0x278: group ids counted before calling for help (-1: none) */
     s32 call_timer;      /* 0x288 */
     f32 alert_speed;     /* 0x28C */
-    s32 volume;          /* 0x290: clip volume that hands the ogre to FUN_L12_002e86d0 (-1: none) */
+    s32 volume;          /* 0x290: clip volume that hands the ogre to ogre_leave_e81e0 (-1: none) */
 } OgreVars_e81e0;
 
 typedef struct {
@@ -2215,7 +2219,8 @@ typedef struct {
 
 extern void explode302618(struct Moby *, int, int) __asm__("FUN_L00_00257470");
 
-void FUN_L12_002e86d0(struct Moby *moby) {
+void ogre_leave_e81e0(struct Moby *moby) __asm__("FUN_L12_002e86d0");
+void ogre_leave_e81e0(struct Moby *moby) {
     moby->unkB4 = 0;
     explode302618(moby, 0, -1);
     if (((Level12VendorData *)moby->pvars)->child != 0) {
@@ -2364,7 +2369,8 @@ extern unsigned char D_0013D4CB __attribute__((section(".data")));
 extern unsigned short D_00141C50 __attribute__((section(".data")));
 extern int D_L12_0015F580_gp __asm__("D_L12_0015F580") __attribute__((section(".sdata")));
 
-void FUN_L12_002e9f68(struct Moby *moby) {
+void blarg_helicopter_update(struct Moby *moby) __asm__("FUN_L12_002e9f68");
+void blarg_helicopter_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     struct Moby *child;
     float target[20] __attribute__((aligned(16)));
@@ -2793,7 +2799,7 @@ void FUN_L12_002eb220(struct Moby *m) {
     m->hit_slot = 0xFF;
     trooper_anim_finish(m, d + 0x60);
 }
-/* Data of the second watcher (FUN_L12_002eb570): the L16 watcher layout with
+/* Data of the second watcher (edwina_update): the L16 watcher layout with
  * the turret and base mobys it spawns at 0x164/0x168. */
 typedef struct {
     char pad00[0x20];
@@ -2831,7 +2837,8 @@ extern void FUN_L03_002db480_b570(void *) __asm__("FUN_L03_002db480");
 extern void blend_moby_animation_b570(void *, int, int, int) __asm__("FUN_00212f90");
 extern void FUN_L00_00260860_b570(int, int) __asm__("FUN_L00_00260860");
 
-void FUN_L12_002eb570(L16WatchMoby *m) {
+void edwina_update(L16WatchMoby *m) __asm__("FUN_L12_002eb570");
+void edwina_update(L16WatchMoby *m) {
     L16WatchScratch scratch;
     L12WatchData *d = (L12WatchData *)m->data;
     float rate;
@@ -3071,7 +3078,8 @@ extern int func_L01_00276680_i(char *vec, float scale) __asm__("FUN_L01_00275690
 extern float D_L12_001619A8 __attribute__((sda));
 extern float D_L12_001619AC __attribute__((sda));
 extern float D_L12_001619B0 __attribute__((sda));
-void FUN_L12_002ebea8(char *m) {
+void helicopter_update(char *m) __asm__("FUN_L12_002ebea8");
+void helicopter_update(char *m) {
     char *d = *(char **)(m + 0x78);
     float A[4];
     float B[4];
@@ -3157,7 +3165,8 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 
-void FUN_L12_002ec1d0(unsigned char *m) {
+void crane_arm_update(unsigned char *m) __asm__("FUN_L12_002ec1d0");
+void crane_arm_update(unsigned char *m) {
     float dist = vector_distance(m + 0x10, &hero.motion.pos);
     switch (m[0x20]) {
     case 0:

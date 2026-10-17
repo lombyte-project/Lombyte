@@ -99,7 +99,8 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) L13Vector_5a58;
 
-void FUN_L13_00305a58(struct Moby *moby) {
+void rocket_update(struct Moby *moby) __asm__("FUN_L13_00305a58");
+void rocket_update(struct Moby *moby) {
     extern struct { char pad[0x18]; struct Moby *moby; int pad1; L13Vector_5a58 pos; L13Vector_5a58 pad2; L13Vector_5a58 matrix; } D_L13_00174140;
     extern int D_L13_0015F580;
     char *data = (char *)moby->pvars;
@@ -663,7 +664,8 @@ extern void blast_mobys_7b10(struct Moby *, void *, void *, int, int, int, int, 
 extern float scale_time_7b10(float) __asm__("FUN_001f96b0");
 extern void remove_7b10(struct Moby *) __asm__("FUN_0020c828");
 
-void FUN_L13_00307b10(struct Moby *moby) {
+void poison_vessel_update(struct Moby *moby) __asm__("FUN_L13_00307b10");
+void poison_vessel_update(struct Moby *moby) {
     struct BlastVars *vars = (struct BlastVars *)moby->pvars;
     struct BlastHit *hit;
     float *health;
@@ -831,7 +833,8 @@ extern float D_L13_00161E74_gp __asm__("D_L13_00161E74") __attribute__((sda));
 extern float D_L13_00161E78_gp __asm__("D_L13_00161E78") __attribute__((sda));
 extern void func_L00_002592B0_309330(struct Moby *, float, float *, float, float, float) __asm__("FUN_L13_00263fc8");
 
-void FUN_L13_00307e98(struct Moby *moby) {
+void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L13_00307e98");
+void blarg_space_commando_update(struct Moby *moby) {
     Vars_309330 *vars = (Vars_309330 *)moby->pvars;
     struct Moby *target;
     Vec4 point;
@@ -2554,7 +2557,8 @@ extern void FUN_0020c828(void *);
 
 #include "qzero.h"
 extern s32 D_L13_001BA7D0[];
-void FUN_L13_0030cdb8(struct Moby *moby) {
+void blarg_ship_update(struct Moby *moby) __asm__("FUN_L13_0030cdb8");
+void blarg_ship_update(struct Moby *moby) {
     char *data;
     void *hit;
     OvlVec4 vector;

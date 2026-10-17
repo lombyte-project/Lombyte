@@ -1123,7 +1123,8 @@ void mmr_q(void *obj) __asm__("FUN_0020c828");
 extern float D_L18_00161998 __attribute__((sda));
 extern float D_L18_0016199C __attribute__((sda));
 extern float D_L18_001619A0 __attribute__((sda));
-void FUN_L18_002d6600(char *moby) {
+void thruster_pack_lock_green_update(char *moby) __asm__("FUN_L18_002d6600");
+void thruster_pack_lock_green_update(char *moby) {
     L18E_q *d = *(L18E_q **)(moby + 0x78);
     *(float *)(moby + 0x2C) = (*(L18Cls_q **)(moby + 0x24))->f24 * D_L18_00161998;
     switch (((unsigned char *)moby)[0x20]) {
@@ -1335,7 +1336,8 @@ extern int trigger_help_message(int, int) __asm__("FUN_L00_00203908");
 
 extern int allocate_voice_int_7b20(int, int, int) __asm__("FUN_0022da68");
 
-void FUN_L18_002d7b20(struct Moby *moby) {
+void thruster_pack_lock_red_update(struct Moby *moby) __asm__("FUN_L18_002d7b20");
+void thruster_pack_lock_red_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int index;
 
@@ -1465,7 +1467,8 @@ extern int allocate_voice_82c0(int, int, struct Moby *) __asm__("FUN_0022da68");
 
 /* Ported from rac1-decomp nonmatching/l18_veldin2/func_L18_002D96B0.c (func_L18_002D96B0) */
 /* Sinking platform update: arms its tilt, then sinks it under the hero until it is removed. */
-void FUN_L18_002d82c0(struct Moby *moby) {
+void floating_platform_update(struct Moby *moby) __asm__("FUN_L18_002d82c0");
+void floating_platform_update(struct Moby *moby) {
     char *data;
     float delta[4] __attribute__((aligned(16)));
     float old_rot[4] __attribute__((aligned(16)));

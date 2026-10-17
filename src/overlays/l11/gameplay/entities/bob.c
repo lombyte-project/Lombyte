@@ -189,7 +189,8 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
 /* Watcher update, same routine as commando_update with this level's states and data layout. */
-void FUN_L11_002d0710(WM11 *m) {
+void bob_update(WM11 *m) __asm__("FUN_L11_002d0710");
+void bob_update(WM11 *m) {
     WS11 scratch;
     WD11 *d = (WD11 *)m->data;
     float rate;
@@ -299,7 +300,8 @@ extern void FUN_L11_002d1340(void *);
 extern void FUN_L11_002d14b0(void *);
 void FUN_L11_002d27b0(WM11 *m);
 
-void FUN_L11_002d0fa8(struct Moby *moby) {
+void resort_owner_update(struct Moby *moby) __asm__("FUN_L11_002d0fa8");
+void resort_owner_update(struct Moby *moby) {
     FUN_L02_002e0cd8(moby);
     if (moby->visible && distance_xyz(&moby->pos, D_L11_001677C0) < 38.0f) {
         wake302618(moby);
@@ -486,7 +488,7 @@ extern float D_L11_00161410 __attribute__((sda));
 extern float D_L11_00161414 __attribute__((sda));
 extern float D_L11_00161418 __attribute__((sda));
 
-/* Pvars of the path-walking NPC run by FUN_L11_002d0fa8. */
+/* Pvars of the path-walking NPC run by resort_owner_update. */
 struct PokKeeperVars {
     u8 pad00[0x20];
     u8 talk[0xC];                     /* 0x20: talk prompt (initialize_npc_dialogue / update_npc_dialogue) */
@@ -1029,7 +1031,7 @@ void FUN_L11_002d27b0(WM11 *m) {
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->body, 0);
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, d->head, 1);
 }
-/* Pokitaru sentry pvars (class of FUN_L11_002f0e40). */
+/* Pokitaru sentry pvars (class of fred_pokitaru_update). */
 struct PokSentryVars {
     char pad00[4];
     short h04;
@@ -1062,7 +1064,8 @@ extern float absolute_float_f0e40(float) __asm__("FUN_001f99c0");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 
-void FUN_L11_002f0e40(struct Moby *moby) {
+void fred_pokitaru_update(struct Moby *moby) __asm__("FUN_L11_002f0e40");
+void fred_pokitaru_update(struct Moby *moby) {
     WS11 scratch;
     struct PokSentryVars *d = (struct PokSentryVars *)moby->pvars;
     float rate;
@@ -1216,7 +1219,8 @@ extern float D_L11_00161918 __attribute__((sda));
 /* L11 twin of teleporter_update: a three-part switch moby that, once the hero
  * stands on it in mission state 0xB and presses the button, swings its parts
  * open and moves the linked moby (or its fallback) along. */
-void FUN_L11_002f2518(struct Moby *moby) {
+void teleporter_update(struct Moby *moby) __asm__("FUN_L11_002f2518");
+void teleporter_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
 
     switch (moby->state) {
@@ -1651,7 +1655,8 @@ extern float D_L11_00161DD8 __attribute__((sda));
 extern float D_L11_00161DDC __attribute__((sda));
 extern float D_L11_00161DEC __attribute__((sda));
 extern float D_L11_00161DF0 __attribute__((sda));
-void FUN_L11_00309ac0(struct Moby *moby) {
+void pokitaru_boat_update(struct Moby *moby) __asm__("FUN_L11_00309ac0");
+void pokitaru_boat_update(struct Moby *moby) {
     struct PokPv_309ac0 *pv = (struct PokPv_309ac0 *)moby->pvars;
     float start_pos[4];
     float start_rot[4];

@@ -34,7 +34,8 @@ extern float D_L10_00161BFC __attribute__((sda));
 extern float D_L10_00161C00 __attribute__((sda));
 extern float D_L10_00161C04 __attribute__((sda));
 extern float D_L10_00161C08 __attribute__((sda));
-void FUN_L10_002d8c00(struct Moby *moby) {
+void bombthrower_grass_update(struct Moby *moby) __asm__("FUN_L10_002d8c00");
+void bombthrower_grass_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float a[4];
     float b[4];
@@ -250,7 +251,8 @@ extern void FUN_L00_00284e50_p(void *, void *) __asm__("FUN_L00_00284e50");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 extern int D_L10_0015F640;
-void FUN_L10_00298668(struct Moby *m) {
+void magnetboots_update(struct Moby *m) __asm__("FUN_L10_00298668");
+void magnetboots_update(struct Moby *m) {
     char *d = (char *)m->pvars;
     m->rot.z = fast_add_rotations(m->rot.z, frame_time * 1.5707964f);
     switch (m->state) {
@@ -474,7 +476,8 @@ extern struct Moby * D_L10_0015FFD8;
 #define func_L00_002E9AF8_2BFBB8 FUN_L00_002e8648
 #define func_L00_002E9A18_2BFBB8 FUN_L00_002e8568
 
-void FUN_L10_002be858(char *moby)
+void gadgebot_telepot_pad_update(char *moby) __asm__("FUN_L10_002be858");
+void gadgebot_telepot_pad_update(char *moby)
 {
     int *data = *(int **)(moby + 0x78);
     float position[4];
@@ -610,7 +613,8 @@ extern unsigned char D_0014C050_bf[] __asm__("D_0014C050");
 
 extern BfState D_L10_001BAA50;
 extern unsigned char D_L10_0015FC88[8];
-void FUN_L10_002befe8(unsigned char *m) {
+void gate_update(unsigned char *m) __asm__("FUN_L10_002befe8");
+void gate_update(unsigned char *m) {
     float *d = *(float **)(m + 0x78);
     unsigned short id;
     switch (m[0x20]) {
@@ -1652,7 +1656,8 @@ extern int FUN_L10_002d9000_c() __asm__("FUN_L10_002d9000");
 extern OvlQuad D_L10_00167240;
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L10_002d90a8(unsigned char *m) {
+void lab_door_update(unsigned char *m) __asm__("FUN_L10_002d90a8");
+void lab_door_update(unsigned char *m) {
     int *d = *(int **)(m + 0x78);
     OvlQuad v[2];
     int it;
@@ -1748,7 +1753,8 @@ extern f32 fabsf_fast(f32) __asm__("FUN_001f99c0");
 extern s32 FUN_0022da68(s32, s32, struct Moby *);
 
 /* Floor plate: lit and opening its door while a moby (other than class 0x3EF) rests on it, dark and closing it otherwise. */
-void FUN_L10_002d92b8(struct Moby *m) {
+void button_update(struct Moby *m) __asm__("FUN_L10_002d92b8");
+void button_update(struct Moby *m) {
     FloorPlateVars *v = (FloorPlateVars *)m->pvars;
     s32 pressed = 0;
     struct Moby *door;
@@ -2347,7 +2353,8 @@ extern int D_L10_001BA950[];
 extern unsigned char D_0014C190[] NOT_SDA;
 void mark_moby_for_removal_d650(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L10_002dd650(struct Moby *m) {
+void block_cave_update(struct Moby *m) __asm__("FUN_L10_002dd650");
+void block_cave_update(struct Moby *m) {
     int i;
     char *e;
     float w[16];

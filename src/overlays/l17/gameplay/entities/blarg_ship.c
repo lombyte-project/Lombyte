@@ -546,7 +546,8 @@ extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 extern float D_L17_001623E8 __attribute__((sda));
-void FUN_L17_002f40d8(struct Moby *moby) {
+void blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
+void blarg_ship_update(struct Moby *moby) {
     float s0[4];
     float s10[4];
     float s20[4];

@@ -11,7 +11,8 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 walk_e50(void *, void *, void *, void *, f32) __asm__("FUN_L00_00258b50");
 
 /* steers the moby toward a point 100 units ahead along its heading */
-s32 FUN_L12_00271dd8(struct Moby *m, void *ctl) {
+s32 steer_8808(struct Moby *m, void *ctl) __asm__("FUN_L12_00271dd8");
+s32 steer_8808(struct Moby *m, void *ctl) {
     Vec4 ahead;
     Vec4 out;
 

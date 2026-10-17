@@ -17,7 +17,8 @@ typedef struct {
     unsigned char flags;
 } Level13SoundEffectTarget;
 
-int FUN_L13_002982e8(int index, const void *vector) {
+int set_voice_position(int index, const void *vector) __asm__("FUN_L13_002982e8");
+int set_voice_position(int index, const void *vector) {
     int offset = index * 0x70;
     char *base = D_0013E533 + 0x1D;
     char *vector_base = base + 0xA0;

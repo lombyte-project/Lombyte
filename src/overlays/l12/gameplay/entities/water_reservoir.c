@@ -41,7 +41,8 @@ extern float D_L12_00161A00 __attribute__((sda));
 extern float D_L12_00161A04 __attribute__((sda));
 extern float D_L12_00161A08 __attribute__((sda));
 
-void FUN_L12_002ec720(struct Moby *moby) {
+void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
+void water_reservoir_update(struct Moby *moby) {
     float *data = (float *)moby->pvars;
     float pos[4], offset0[4], offset1[4], diff0[4], diff1[4];
     float fraction, frame_scale;
@@ -263,7 +264,8 @@ extern void spawn_explosion(struct Moby *, void *, void *, float, float, int, in
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 
 /* Level 12 shot: flies with a smoke trail, damages the first moby it hits other than its owner, then pops. */
-void FUN_L12_002ece00(struct Moby *moby) {
+void rocket_update(struct Moby *moby) __asm__("FUN_L12_002ece00");
+void rocket_update(struct Moby *moby) {
     ShotVars_ece00 *vars = (ShotVars_ece00 *)moby->pvars;
     float old_pos[4];
     float side[4];

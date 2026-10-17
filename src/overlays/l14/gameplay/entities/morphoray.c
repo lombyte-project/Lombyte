@@ -460,7 +460,8 @@ extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
-void FUN_L14_00305758(struct Moby *moby) {
+void morphoray_update(struct Moby *moby) __asm__("FUN_L14_00305758");
+void morphoray_update(struct Moby *moby) {
     u8 *o = (u8 *)moby;
     u8 *d = (u8 *)moby->pvars;
     f32 v[4];
@@ -776,7 +777,8 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
-void FUN_L14_00306b78(struct Moby *moby) {
+void button_update(struct Moby *moby) __asm__("FUN_L14_00306b78");
+void button_update(struct Moby *moby) {
     s32 *d = (s32 *)moby->pvars;
     s16 id;
     s32 i;
@@ -927,7 +929,8 @@ extern char D_0013E550_6ee0[] __asm__("D_0013E550");
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002FF358.c (func_L14_00308368) */
-void FUN_L14_00306ee0(struct Moby *m) {
+void blarg_heavy_interceptor_update(struct Moby *m) __asm__("FUN_L14_00306ee0");
+void blarg_heavy_interceptor_update(struct Moby *m) {
     Data_6ee0 *d = (Data_6ee0 *)m->pvars;
     Vec4f vec __attribute__((aligned(16)));
     char *hit;

@@ -145,7 +145,8 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 float absolute_float(float input) __asm__("FUN_001f99c0");
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
-void FUN_L14_002aba80(struct Moby *moby) {
+void platform_update(struct Moby *moby) __asm__("FUN_L14_002aba80");
+void platform_update(struct Moby *moby) {
     PathMoverVars *vars = (PathMoverVars *)moby->pvars;
     MoverPath *path;
     Vec4 orig;
@@ -430,7 +431,8 @@ extern f32 D_L14_001613A0_c618 __asm__("D_L14_001613A0") __attribute__((sda));
 extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
 
 extern Vec4 D_L14_00174560;
-void FUN_L14_002ac618(struct Moby *m) {
+void blarg_heavy_interceptor_update(struct Moby *m) __asm__("FUN_L14_002ac618");
+void blarg_heavy_interceptor_update(struct Moby *m) {
     char *d = (char *)m->pvars;
     float v[4];
     float w[4];
@@ -1673,7 +1675,8 @@ extern float func_L00_001FF860_2B4E40(float, float) __asm__("FUN_001f9e90");
 extern int func_002140B0_2B4E40(int) __asm__("FUN_00213260");
 extern void func_L00_001FF4B0_2B4E40(void *, void *, float) __asm__("FUN_001f9bf8");
 
-void FUN_L14_002b3bf0(char *moby) {
+void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
+void machinegun_turret_update(char *moby) {
     char *data;
     float v20[4];
     float v30[4];
@@ -2164,7 +2167,8 @@ extern char *func_L14_00302968_2B5938(int a0, float *a1, float *a2, float f, int
 extern void func_L00_0025F4A8_2B5938(void *, void *, void *, float, float, int, int, int, float, float, float, float,
                                      int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L14_002b46e8(Moby_2B5938 *moby) {
+void minibomber_update(Moby_2B5938 *moby) __asm__("FUN_L14_002b46e8");
+void minibomber_update(Moby_2B5938 *moby) {
     Data_2B5938 *d = moby->d;
     float v[12];
     float *tgt;
@@ -3083,7 +3087,8 @@ void FUN_L14_002d67e8(struct Moby *m);
 void FUN_L14_002d7198(struct Moby *m);
 void FUN_L14_002d7490(struct Moby *m);
 
-void FUN_L14_002d5f40(struct Moby *m) {
+void plasmabot_update(struct Moby *m) __asm__("FUN_L14_002d5f40");
+void plasmabot_update(struct Moby *m) {
     struct L14RacerVars *d = (struct L14RacerVars *)m->pvars;
     u8 pos[16];
     f32 vel[3];

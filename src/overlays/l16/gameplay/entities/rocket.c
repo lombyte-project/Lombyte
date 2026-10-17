@@ -280,7 +280,8 @@ extern s32 SubtractIntegerWithClamp(s32);
 
 extern float D_L16_00161A84 __attribute__((sda));
 extern int D_L16_00161A88 __attribute__((sda));
-void FUN_L16_002d5cb8(struct Moby *moby) {
+void test_dummy_door_update(struct Moby *moby) __asm__("FUN_L16_002d5cb8");
+void test_dummy_door_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     switch (moby->state) {
     case 0:
@@ -865,7 +866,8 @@ extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
 extern float D_L16_0016198C __attribute__((sda));
-void FUN_L16_002c9878(struct Moby *m) {
+void conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
+void conveyor_belt_update(struct Moby *m) {
     char *d = (char *)m->pvars;
     float vec[4];
     float target;
@@ -1188,7 +1190,8 @@ extern unsigned char *func_L16_002C75D0_2cf180(int, void *, float *, float,
 extern int func_L00_0025A8E8_2cf180(void *, float, void *, int, float, float, int, int,
                                     int) __asm__("FUN_L00_002598b0");
 
-void FUN_L16_002cddb8(unsigned char *m) {
+void test_dummy_update(unsigned char *m) __asm__("FUN_L16_002cddb8");
+void test_dummy_update(unsigned char *m) {
     L16SparkVector v0, v1, v2;
     L16SparkQuery fx;
     L16DummyData *d = *(L16DummyData **)(m + 0x78);
@@ -1766,7 +1769,8 @@ extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022d
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
-void FUN_L16_002cf198(struct Moby *m) {
+void wall_button_update(struct Moby *m) __asm__("FUN_L16_002cf198");
+void wall_button_update(struct Moby *m) {
     char *d = (char *)m->pvars;
     switch ((*(unsigned char *)((char *)(m) + (0x20)))) {
     case 0:
@@ -2294,7 +2298,8 @@ void FUN_L16_002cff48(struct Moby *moby);
 void FUN_L16_002d0058_c(L16LeapMoby *m) __asm__("FUN_L16_002d0058");
 
 extern int D_L16_00161A08 __attribute__((sda));
-void FUN_L16_002d04a0(unsigned char *m) {
+void test_dummy_on_hoverboard_update(unsigned char *m) __asm__("FUN_L16_002d04a0");
+void test_dummy_on_hoverboard_update(unsigned char *m) {
     float pos[4], delta[4], ahead[4], impact[4], spray[4], lateral[4], dust[4];
     char *d = *(char **)(m + 0x78);
     char *g;
@@ -2576,7 +2581,8 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 
-void FUN_L16_002d59e0(unsigned char *moby) {
+void door_update(unsigned char *moby) __asm__("FUN_L16_002d59e0");
+void door_update(unsigned char *moby) {
     char *d = *(char **)(moby + 0x78);
     char *pos;
     char buf[16];

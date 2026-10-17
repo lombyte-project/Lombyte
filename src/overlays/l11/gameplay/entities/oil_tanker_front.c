@@ -482,7 +482,7 @@ void FUN_L11_00316320(struct Moby *moby) {
     }
 }
 
-/* Private variables of the chained moby class 0x527 (FUN_L11_003172c0 and its helpers). */
+/* Private variables of the chained moby class 0x527 (oil_tanker_front_update and its helpers). */
 struct L11ChainVars {
     u8 pad0[0x60];
     s32 path_index;          /* 0x60: index into D_L11_001B0EB0 */
@@ -512,7 +512,8 @@ void FUN_L11_00317c98(struct Moby *);
 void FUN_L11_003180a0(struct Moby *, int);
 
 /* Chain head update: spawns the eight 0x4F1 links, waits for D_001413D4 to reach 0x32, then moves along its path and runs the link helpers. */
-void FUN_L11_003172c0(struct Moby *moby) {
+void oil_tanker_front_update(struct Moby *moby) __asm__("FUN_L11_003172c0");
+void oil_tanker_front_update(struct Moby *moby) {
     struct L11ChainVars *d = (struct L11ChainVars *)moby->pvars;
 
     switch (moby->state) {
@@ -960,7 +961,8 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
 extern short D_L11_00162388 __attribute__((sda));
-void FUN_L11_00318b30(unsigned char *moby) {
+void energy_sphere_update(unsigned char *moby) __asm__("FUN_L11_00318b30");
+void energy_sphere_update(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     float v[4];
     float *vp;
@@ -1217,7 +1219,8 @@ extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 void blend_moby_animation_c(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 extern short D_L11_001623D0 __attribute__((sda));
-void FUN_L11_00319838(struct Moby *moby) {
+void blarg_ship_update(struct Moby *moby) __asm__("FUN_L11_00319838");
+void blarg_ship_update(struct Moby *moby) {
     float s0[4];
     float s10[4];
     float s20[4];

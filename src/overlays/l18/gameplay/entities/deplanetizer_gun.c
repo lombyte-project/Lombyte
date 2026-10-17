@@ -747,7 +747,8 @@ extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int D_L18_0015F5C4;
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
 
-void FUN_L18_002fa640(struct Moby *moby) {
+void deplanetizer_gun_update(struct Moby *moby) __asm__("FUN_L18_002fa640");
+void deplanetizer_gun_update(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         moby->state = 1;
@@ -969,7 +970,8 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 
-void FUN_L18_002fbb98(unsigned char *m) {
+void gadgebot_update(unsigned char *m) __asm__("FUN_L18_002fbb98");
+void gadgebot_update(unsigned char *m) {
     char tmp[16];
     unsigned char *e = *(unsigned char **)(m + 0x78);
     unsigned char *s0;

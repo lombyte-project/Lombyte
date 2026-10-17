@@ -1847,7 +1847,7 @@ extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
-/* Same platform routine as FUN_L16_002e7f80, with a waiting state (1) and this level's tables. */
+/* Same platform routine as elevator_update, with a waiting state (1) and this level's tables. */
 void elevator_update(L16PlatformMoby *moby) __asm__("FUN_L02_002dbd38");
 void elevator_update(L16PlatformMoby *moby) {
     L16PlatformVector delta, old_rotation, motion;

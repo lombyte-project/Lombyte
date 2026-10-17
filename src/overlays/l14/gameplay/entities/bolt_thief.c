@@ -243,8 +243,9 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void turn_e50(char*,float,float*,float,float,float) __asm__("FUN_L00_00258278");
 
-/* Same routine as FUN_L16_002e37a0, without the child hit test. */
-void FUN_L14_002fe2a0(L16CrateMoby *moby) {
+/* Same routine as bolt_thief_update, without the child hit test. */
+void bolt_thief_update(L16CrateMoby *moby) __asm__("FUN_L14_002fe2a0");
+void bolt_thief_update(L16CrateMoby *moby) {
     L16CrateData *d = moby->data;
     char *hit;
 
@@ -559,7 +560,8 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Watcher moby update: gated by its collectable and trigger, primes a camera target, then turns its head toward the hero. */
-void FUN_L14_002fefe0(L14WatchMoby *m) {
+void sam_update(L14WatchMoby *m) __asm__("FUN_L14_002fefe0");
+void sam_update(L14WatchMoby *m) {
     L14WatchScratch scratch;
     L14WatchData *d = (L14WatchData *)m->data;
     float rate;

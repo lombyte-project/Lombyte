@@ -29,7 +29,8 @@ float absolute_float_c(float input) __asm__("FUN_001f99c0");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L17_002e87d8(struct Moby *m) {
+void door_update(struct Moby *m) __asm__("FUN_L17_002e87d8");
+void door_update(struct Moby *m) {
     char *d = (char *)m->pvars;
     float v[4];
     float tmp[4];
@@ -1626,7 +1627,8 @@ extern int D_L17_0015F608;
 extern char *D_L17_0015F420;
 extern ShipLevelEntry D_L17_0016DA80[];
 extern ShipShake D_L17_00167580;
-void FUN_L17_002ed018(ShipMoby *moby) {
+void fighter_jet_update(ShipMoby *moby) __asm__("FUN_L17_002ed018");
+void fighter_jet_update(ShipMoby *moby) {
     ShipVars *v;
     ShipHit *hit;
     W4 dir;
@@ -2077,7 +2079,8 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void mark_moby_for_removal_c2(void *obj) __asm__("FUN_0020c828");
 extern char D_0013F350_c2[] __asm__("D_0013F350");
 
-void FUN_L17_002ee2b0(struct Moby *moby) {
+void magnet_elevator_update(struct Moby *moby) __asm__("FUN_L17_002ee2b0");
+void magnet_elevator_update(struct Moby *moby) {
     char *state = P(moby, 0x78);
     float delta[4];
     float rot[4];
@@ -2378,7 +2381,8 @@ void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("F
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((section(".sdata")));
-void FUN_L17_002eeb68(unsigned char *m) {
+void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
+void robot_dog_update(unsigned char *m) {
     Vars1382 *d;
     unsigned char *tgt;
     int r;
@@ -3439,7 +3443,8 @@ void FUN_L17_002f20d8(struct Moby *moby);
 extern char D_0014C190[];
 extern char D_0013CAE4[];
 
-void FUN_L17_002f1940(struct Moby *m) {
+void shuttle_update(struct Moby *m) __asm__("FUN_L17_002f1940");
+void shuttle_update(struct Moby *m) {
     Vars1448 *v = (Vars1448 *)m->pvars;
     float old_pos[4];
     float old_rot[4];
