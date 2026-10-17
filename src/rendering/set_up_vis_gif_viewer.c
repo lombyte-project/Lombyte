@@ -5,7 +5,7 @@
 void set_up_vis_gif_viewer(u64 *q, s32 n, s32 prim, s32 a3, s32 t0,
                            s32 mode) __asm__("FUN_00202fd0");
 
-void set_up_vis_gif_viewer(u64 *q, s32 n, s32 prim, s32 a3, s32 t0, s32 mode) {
+void set_up_vis_gif_viewer(u64 *q, s32 n, s32 prim, s32 material_control_base, s32 material_control_shift2, s32 mode) {
     u64 w0;
     s64 w1;
     u64 w2;
@@ -17,7 +17,7 @@ void set_up_vis_gif_viewer(u64 *q, s32 n, s32 prim, s32 a3, s32 t0, s32 mode) {
     if (mode >= 0) {
         q[0] = (0x20 | (w1 & 0x1C)) | ((u64)prim << 6) | ((u64)(u32)n << 32);
         q += 2;
-        q[0] = (a3 | ((u64)t0 << 2)) | ((u64)mode << 24);
+        q[0] = (material_control_base | ((u64)material_control_shift2 << 2)) | ((u64)mode << 24);
         q += 2;
         q[0] = w0;
         q[2] = w2;
