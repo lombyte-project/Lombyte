@@ -833,7 +833,7 @@ void FUN_L00_00299560(s32 i) {
 }
 extern int D_L00_00161048_macro __asm__("D_L00_00161048") __attribute__((section(".sdata")));
 extern int D_L00_0016104C_macro __asm__("D_L00_0016104C") __attribute__((section(".sdata")));
-extern s32 D_L00_00161048, D_L00_0016104C, D_L00_00161050_macro __asm__("D_L00_00161050") __attribute__((section(".sdata")));
+extern s32 D_L00_00161050_macro __asm__("D_L00_00161050") __attribute__((section(".sdata")));
 extern s32 D_L00_00161054_macro __asm__("D_L00_00161054") __attribute__((section(".sdata")));
 extern s32 D_L00_00161058_macro __asm__("D_L00_00161058") __attribute__((section(".sdata")));
 extern s32 D_L00_0015F40C_macro __asm__("D_L00_0015F40C") __attribute__((section(".sdata")));
@@ -864,7 +864,7 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     music_stop();
     D_L00_00161048_macro = sector;
     D_L00_0016104C_macro = size;
-    (*(s32 *)&D_L00_00161050_macro) = language;
+    D_L00_00161050_macro = language;
     D_L00_0015F5D8 = 1;
     fade_to_black(4);
     FUN_L00_002039a0();

@@ -375,19 +375,16 @@ extern char D_001383A0[];
 extern char D_00141EC0[];
 
 void FUN_L00_002464a8(void) {
-    int i, j;
-    RenderArchiveState *gl;
-    int *q;
-    int v;
-    int *e;
-    int *data;
-    int n, len;
+    int i;
+    RenderArchiveState *state;
+    int level;
+    int *entry;
     int heap_tag, first_size, second_size, scratch;
     int *archive, *archive_base;
-    unsigned char *mask, *level_data;
-    int x, y, w;
-    float lim;
-    unsigned char *pp;
+    unsigned char *level_data;
+    int x, y, mask_buffer;
+    float radius_sq;
+    unsigned char *flags;
 
     D_L00_001841F0.initialized = 1;
     { int i;
@@ -396,67 +393,67 @@ void FUN_L00_002464a8(void) {
         D_L00_001841F0.unkB4[i] = 0.65f;
         D_L00_001841F0.unk154[i] = D_L00_00183EF0[i * 2 + 1];
     } }
-    v = current_level_index;
+    level = current_level_index;
     D_L00_001841F0.file_handle = -1;
-    D_L00_001841F0.archive_index = v > 18 ? 0 : v;
+    D_L00_001841F0.archive_index = level > 18 ? 0 : level;
     { int i;
     for (i = 0; i < 19; i++) {
-        float a = D_L00_00182810[i * 8], b = D_L00_00182810[i * 8 + 1], c = D_L00_00182810[i * 8 + 2], dd = D_L00_00182810[i * 8 + 3];
-        float ee = D_L00_00182810[i * 8 + 4], f = D_L00_00182810[i * 8 + 5], gg = D_L00_00182810[i * 8 + 6], h = D_L00_00182810[i * 8 + 7];
-        float p = (ee - gg) / (a - c);
-        float r = (f - h) / (b - dd);
-        D_L00_00182A70[i * 4 + 1] = p;
-        D_L00_00182A70[i * 4 + 3] = r;
-        D_L00_00182A70[i * 4] = ee - p * a;
-        D_L00_00182A70[i * 4 + 2] = f - r * b;
+        float world_x0 = D_L00_00182810[i * 8], world_y0 = D_L00_00182810[i * 8 + 1], world_x1 = D_L00_00182810[i * 8 + 2], world_y1 = D_L00_00182810[i * 8 + 3];
+        float map_x0 = D_L00_00182810[i * 8 + 4], map_y0 = D_L00_00182810[i * 8 + 5], map_x1 = D_L00_00182810[i * 8 + 6], map_y1 = D_L00_00182810[i * 8 + 7];
+        float scale_x = (map_x0 - map_x1) / (world_x0 - world_x1);
+        float scale_y = (map_y0 - map_y1) / (world_y0 - world_y1);
+        D_L00_00182A70[i * 4 + 1] = scale_x;
+        D_L00_00182A70[i * 4 + 3] = scale_y;
+        D_L00_00182A70[i * 4] = map_x0 - scale_x * world_x0;
+        D_L00_00182A70[i * 4 + 2] = map_y0 - scale_y * world_y0;
     } }
-    pp = (unsigned char *)D_0013D4C0;
-    if (pp[0x21] != 0) {
+    flags = (unsigned char *)D_0013D4C0;
+    if (flags[0x21] != 0) {
         D_L00_001841F0.loaded = 1;
-        e = (int *)(((char *)((char *)&D_00138438))) + D_L00_001841F0.archive_index * 2;
+        entry = (int *)&D_00138438 + D_L00_001841F0.archive_index * 2;
     } else {
         D_L00_001841F0.loaded = 0;
-        e = (int *)(((char *)&D_001383A0)) + D_L00_001841F0.archive_index * 2;
+        entry = (int *)&D_001383A0 + D_L00_001841F0.archive_index * 2;
     }
-    if (e[1] != 0) {
-        gl = &D_L00_001841F0;
-        gl->unk28 = 1;
+    if (entry[1] != 0) {
+        state = &D_L00_001841F0;
+        state->unk28 = 1;
         heap_tag = (int)D_L00_0015FE00;
         archive_base = ((int **)&D_L00_00173E08)[0];
         archive = (int *)((int)archive_base + 0x9A800);
-        scratch = e[1] << 7;
-        load(archive, e[0], e[1]);
-        gl->file_handle = stash_send_data((int)archive, scratch, 0x4800, (int)D_L00_001E8B00);
-        gl->transfer_bytes = scratch;
+        scratch = entry[1] << 7;
+        load(archive, entry[0], entry[1]);
+        state->file_handle = stash_send_data((int)archive, scratch, 0x4800, (int)D_L00_001E8B00);
+        state->transfer_bytes = scratch;
         FUN_L00_0024d8d0((int)archive, (int)archive_base);
         archive = archive_base;
         first_size = archive[1] - archive[0];
-        gl->first_data = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);
-        fast_mem_copy_alt((void *)gl->first_data, (char *)archive + archive[0], first_size);
-        gl->first_data += 8;
-        gl->second_data = gl->first_data;
+        state->first_data = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);
+        fast_mem_copy_alt((void *)state->first_data, (char *)archive + archive[0], first_size);
+        state->first_data += 8;
+        state->second_data = state->first_data;
         second_size = archive[2] - archive[1];
-        gl->second_raw = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
-        fast_mem_copy_alt((void *)gl->second_raw, (char *)archive + archive[1], second_size);
-        gl->scratch_data = hud_heap_alloc(0x1000, 0, (char *)heap_tag, 0x2F3);
+        state->second_raw = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
+        fast_mem_copy_alt((void *)state->second_raw, (char *)archive + archive[1], second_size);
+        state->scratch_data = hud_heap_alloc(0x1000, 0, (char *)heap_tag, 0x2F3);
         for (i = 0; i < 8; i++) {
             D_L00_001841F0.slots[i].unk0 = -1;
             D_L00_001841F0.slots[i].unk4 = -1;
             D_L00_001841F0.slots[i].buffer = D_L00_001841F0.scratch_data + i * 0x200;
         }
-        w = hud_heap_alloc(0x8000, 0, D_L00_0015FE00, 0x2FC);
+        mask_buffer = hud_heap_alloc(0x8000, 0, D_L00_0015FE00, 0x2FC);
         level_data = ((char *)&D_00141EC0) + D_L00_001841F0.archive_index * 0x800;
-        D_L00_001841F0.mask_data = w;
+        D_L00_001841F0.mask_data = mask_buffer;
         if (level_data[0] != 0) {
             load_map_chunk((void *)D_L00_001841F0.mask_data, level_data, D_L00_001841F0.second_raw);
         } else {
             decode_map_mask((int *)D_L00_001841F0.mask_data, (unsigned char *)D_L00_001841F0.first_data, (short *)D_L00_001841F0.second_data);
         }
-        lim = 256.0f;
+        radius_sq = 256.0f;
         for (y = 0; y < 32; y++) {
             for (x = 0; x < 32; x++) {
                 if ((15.5f - (float)x) * (15.5f - (float)x) +
-                    (15.5f - (float)y) * (15.5f - (float)y) > lim) {
+                    (15.5f - (float)y) * (15.5f - (float)y) > radius_sq) {
                     D_L00_00184394[x / 8 + y * 4] |= 1 << (x - (x / 8) * 8);
                 }
             }

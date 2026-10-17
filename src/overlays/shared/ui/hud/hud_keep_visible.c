@@ -316,30 +316,8 @@ void FUN_L00_00236128(HudElem *e) {
 extern float star_init_limit0_gp __asm__("D_L00_0015F750") __attribute__((sda));
 extern float star_init_limit1_gp __asm__("D_L00_0015F754") __attribute__((sda));
 extern float star_init_limit2_gp __asm__("D_L00_0015F758") __attribute__((sda));
-/* fills 100 hud particle records with randomised positions and drift */
+/* Fills the 100 hud stars with random positions and drift. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236BF8), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char pad0[0x8];
-    int unk08;
-    int *unk0C;
-    char pad10[0x38];
-    short unk48;
-    short unk4A;
-    char pad4C[0x4];
-    int unk50;
-    int unk54;
-    int w;
-    int h;
-    int flags;
-    char pad64[0x8];
-    int unk6C;
-    unsigned char cnt[4];
-    int unk74;
-    int unk78;
-    int unk7C;
-    void *unk80;
-} HudElem_p;
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 typedef struct {
@@ -348,25 +326,24 @@ typedef struct {
 
 extern Star_236458 D_L00_0017E660[];
 extern int D_L00_0015F75C_gp __asm__("D_L00_0015F75C") __attribute__((sda));
-void FUN_L00_00235d80_c(HudElem_p *e) __asm__("FUN_L00_00235d80");
 
-void FUN_L00_00236268(HudElem_p *e) {
+void FUN_L00_00236268(HudElem *elem) {
     int i;
-    float v, lo, span, hi;
-    int n;
+    float margin, lo, band, hi;
+    int bands;
 
-    FUN_L00_00235d80_c(e);
+    FUN_L00_00235d80(elem);
     for (i = 0; i < 100; i++) {
-        v = star_init_limit0_gp;
+        margin = star_init_limit0_gp;
         if (i >= 10) {
-            v = star_init_limit1_gp;
-            if (i >= 20) v = star_init_limit2_gp;
+            margin = star_init_limit1_gp;
+            if (i >= 20) margin = star_init_limit2_gp;
         }
-        n = D_L00_0015F75C_gp;
-        span = (232.0f - (v + v)) / (float)n;
-        lo = (v - 116.0f) + (float)(i % n) * span;
-        hi = lo + span;
-        D_L00_0017E660[i].x = random_float_between(v - 17.0f, 17.0f - v);
+        bands = D_L00_0015F75C_gp;
+        band = (232.0f - (margin + margin)) / (float)bands;
+        lo = (margin - 116.0f) + (float)(i % bands) * band;
+        hi = lo + band;
+        D_L00_0017E660[i].x = random_float_between(margin - 17.0f, 17.0f - margin);
         D_L00_0017E660[i].y = random_float_between(lo, hi);
         D_L00_0017E660[i].vx = random_float_between(-0.4f, 0.4f);
         D_L00_0017E660[i].vy = random_float_between(-0.6f, 0.6f);
@@ -375,9 +352,9 @@ void FUN_L00_00236268(HudElem_p *e) {
         D_L00_0017E660[i].vx += random_float_between(-0.4f, 0.4f);
         D_L00_0017E660[i].vy += random_float_between(-0.6f, 0.6f);
     }
-    /* Fakematch: keeping n live past the loop gives retail's schedule of the loop body. */
-    n++;
-    n--;
+    /* Fakematch: keeping bands live past the loop gives retail's schedule of the loop body. */
+    bands++;
+    bands--;
 }
 
 

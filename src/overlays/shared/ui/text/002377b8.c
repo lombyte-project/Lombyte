@@ -329,27 +329,6 @@ void FUN_L00_00237ba0(Obj *p) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00238C30), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char pad0[0x8];
-    int unk08;
-    int *unk0C;
-    char pad10[0x38];
-    short unk48;
-    short unk4A;
-    char pad4C[0x4];
-    int unk50;
-    int unk54;
-    int w;
-    int h;
-    int flags;
-    char pad64[0x8];
-    int unk6C;
-    unsigned char cnt[4];
-    int unk74;
-    int unk78;
-    int unk7C;
-    void *unk80;
-} HudElem_p;
 
 
 typedef struct { int id; char pad[0x14]; int item; } E_238C30;
@@ -395,26 +374,24 @@ extern u32 strlen(const char *);
 extern unsigned char D_0013E520[];
 extern void FUN_L00_0023b120(char *, int, int, int, int, int);
 extern void draw_hud_sprite_c2(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
-int FUN_L00_00235a70_c3(HudElem_p *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
+int FUN_L00_00235a70_c3(HudElem *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 
 
-int FUN_L00_002382a0(HudElem_p *rec) {
-    char *wr;
+int FUN_L00_002382a0(HudElem *rec) {
+    char *weapon_entry;
     int x, y, half_w, half_h, alpha;
     int marker_alpha;
     int i, icon_x, icon_y, selected;
-    int entry_offset, marker_offset, normal_offset;
     int color, shadow, text_y, id, item, prefix_length, text_length, j;
     float open, fade, angle;
     const char *text, *suffix;
-    char *entry;
-    unsigned char *q = rec->cnt;
+    unsigned char *counters = rec->cnt;
     char formatted[80];
 
-    open = convert_integer_to_float_c2(q[0]) / convert_integer_to_float_c2(D_L00_0015F780_gp);
+    open = convert_integer_to_float_c2(counters[0]) / convert_integer_to_float_c2(D_L00_0015F780_gp);
     if (1.0f < open) open = 1.0f;
     else if (open < 0.0f) open = 0.0f;
-    fade = convert_integer_to_float_c2(q[1]) / convert_integer_to_float_c2(D_L00_0015F780_gp);
+    fade = convert_integer_to_float_c2(counters[1]) / convert_integer_to_float_c2(D_L00_0015F780_gp);
     if (1.0f < fade) fade = 1.0f;
     else if (fade < 0.0f) fade = 0.0f;
     {
@@ -467,11 +444,11 @@ int FUN_L00_002382a0(HudElem_p *rec) {
         {
         int id;
         id = *(int *)((char *)D_00141EA0 + selected * 4);
-        wr = ((char *)&D_L00_001C40B0) + id * 24;
-        if (*(unsigned short *)(wr + 8) != 0) {
+        weapon_entry = ((char *)&D_L00_001C40B0) + id * 24;
+        if (*(unsigned short *)(weapon_entry + 8) != 0) {
             int shadow, item;
             item = weapon_ammo_counts[id];
-            sprintf(formatted, D_L00_0015F7C8, item, *(unsigned short *)(wr + 0xE));
+            sprintf(formatted, D_L00_0015F7C8, item, *(unsigned short *)(weapon_entry + 0xE));
             if (item != 0)
                 shadow = fast_tween_color_c(D_L00_0015F7A8_gp, D_L00_0015F7AC, open * fade);
             else
@@ -520,10 +497,10 @@ int FUN_L00_002382a0(HudElem_p *rec) {
         text_y = y + D_L00_0015F724_gp;
         {
         int id;
-        char *wr;
+        char *weapon_entry;
         id = *(int *)((char *)D_00141EA0 + selected * 4);
-        wr = ((char *)&D_L00_001C40B0) + id * 24;
-        if (*(unsigned short *)(wr + 8) != 0)
+        weapon_entry = ((char *)&D_L00_001C40B0) + id * 24;
+        if (*(unsigned short *)(weapon_entry + 8) != 0)
             text_y += D_L00_0015F7B4;
         else if (prefix_length != 0)
             text_y += D_L00_0015F7B8;
