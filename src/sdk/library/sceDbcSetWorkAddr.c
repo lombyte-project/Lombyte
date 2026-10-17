@@ -16,8 +16,8 @@ extern u8 D_00153558[];
 extern s32 debug_print_stub() __asm__("func_00124A20");
 extern s32 sceSifCallRpc();
 extern struct DbCState RpcReceiveData __asm__("D_0015B080");
-s32 sceDbcSetWorkAddr(s32 arg0) {
-    RpcReceiveData.unk4 = arg0;
+s32 sceDbcSetWorkAddr(s32 work_address) {
+    RpcReceiveData.unk4 = work_address;
     if (sceSifCallRpc(RpcQueueData, 0x80000904, 0, &RpcReceiveData, 0x400, &RpcReceiveData, 0x400, 0, 0) <
         0) {
         debug_print_stub(D_00153558);
