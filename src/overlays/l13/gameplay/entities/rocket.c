@@ -835,9 +835,9 @@ extern void func_L00_002592B0_309330(struct Moby *, float, float *, float, float
 void FUN_L13_00307e98(struct Moby *moby) {
     Vars_309330 *vars = (Vars_309330 *)moby->pvars;
     struct Moby *target;
-    Vec4 a;
-    Vec4 b;
-    Vec4 c;
+    Vec4 point;
+    Vec4 origin;
+    Vec4 direction;
     Shot_309330 shot;
     s32 near;
     s32 close;
@@ -950,24 +950,24 @@ void FUN_L13_00307e98(struct Moby *moby) {
     case 5:
         FUN_L00_0025be00(&moby->rot.z, fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                           &vars->turn, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
-        FUN_L00_0024f7c8(moby, 0, &a);
-        qcopy(&b, &moby->pos);
-        b.f[2] += 0.3f;
+        FUN_L00_0024f7c8(moby, 0, &point);
+        qcopy(&origin, &moby->pos);
+        origin.f[2] += 0.3f;
         {
         f32 frame = compute_interpolated_record_value(moby);
         if (frame >= 9.0f && frame <= 15.0f) {
-            c.f[0] = fast_cos(moby->rot.z);
-            c.f[1] = fast_sin(moby->rot.z);
-            c.f[2] = 1.0f;
-            c.f[3] = 5627.925f;
-            func_L00_0025A8C0_30A9B0(&shot, moby, 1, &c, 1.0f);
+            direction.f[0] = fast_cos(moby->rot.z);
+            direction.f[1] = fast_sin(moby->rot.z);
+            direction.f[2] = 1.0f;
+            direction.f[3] = 5627.925f;
+            func_L00_0025A8C0_30A9B0(&shot, moby, 1, &direction, 1.0f);
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = moby->oclass;
-            FUN_L00_00259d08(&a, &b, &vars->unk1E0, &b, moby, &shot, 5);
+            FUN_L00_00259d08(&point, &origin, &vars->unk1E0, &origin, moby, &shot, 5);
         }
         }
-        qcopy(&vars->unk1E0, &a);
+        qcopy(&vars->unk1E0, &point);
         if (moby->anim_flags & 2) {
             moby->state = 6;
             moby->command = 1;
@@ -989,10 +989,10 @@ void FUN_L13_00307e98(struct Moby *moby) {
                           fast_add_rotations_c(fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                                         vars->unk1A8), &vars->turn,
                           0.05f, 0.3f, frame_time * 6.2831855f);
-        a.f[0] = 2.0f * fast_cos(moby->rot.z);
-        a.f[1] = 2.0f * fast_sin(moby->rot.z);
-        a.f[2] = 0.0f;
-        if (FUN_L00_00258b50(moby, &vars->ctl, &a, &b, 1.0f) & 2) {
+        point.f[0] = 2.0f * fast_cos(moby->rot.z);
+        point.f[1] = 2.0f * fast_sin(moby->rot.z);
+        point.f[2] = 0.0f;
+        if (FUN_L00_00258b50(moby, &vars->ctl, &point, &origin, 1.0f) & 2) {
             rand();
             vars->unk1A8 = convert_integer_to_float(-1) * 1.0995574f;
         } else {
@@ -1000,8 +1000,8 @@ void FUN_L13_00307e98(struct Moby *moby) {
         }
         FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
         close = 0;
-        if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &c) != 0 &&
-            fast_vec_dist(&moby->pos, &c) < 0.8f) {
+        if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &direction) != 0 &&
+            fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             close = 1;
         }
         {
@@ -1029,13 +1029,13 @@ void FUN_L13_00307e98(struct Moby *moby) {
         func_L00_002592B0_309330(moby,
                           fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn, 0.05f, 0.3f,
                           frame_time * 6.2831855f);
-        a.f[0] = 2.0f * fast_cos(moby->rot.z);
-        a.f[1] = 2.0f * fast_sin(moby->rot.z);
-        a.f[2] = 0.0f;
-        FUN_L00_00258b50(moby, &vars->ctl, &a, &b, 1.0f);
+        point.f[0] = 2.0f * fast_cos(moby->rot.z);
+        point.f[1] = 2.0f * fast_sin(moby->rot.z);
+        point.f[2] = 0.0f;
+        FUN_L00_00258b50(moby, &vars->ctl, &point, &origin, 1.0f);
         FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
-        if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &c) != 0 &&
-            fast_vec_dist(&moby->pos, &c) < 0.8f) {
+        if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &direction) != 0 &&
+            fast_vec_dist(&moby->pos, &direction) < 0.8f) {
             near = 1;
         }
         if (vars->unk184 == 0) {
@@ -1054,24 +1054,24 @@ void FUN_L13_00307e98(struct Moby *moby) {
         }
         break;
     case 12:
-        FUN_L00_0024f7c8(moby, 0, &a);
-        qcopy(&b, &moby->pos);
-        b.f[2] += 1.5f;
+        FUN_L00_0024f7c8(moby, 0, &point);
+        qcopy(&origin, &moby->pos);
+        origin.f[2] += 1.5f;
         {
         f32 frame = compute_interpolated_record_value(moby);
         if (frame >= 9.0f && frame <= 15.0f) {
-            c.f[0] = fast_cos(moby->rot.z);
-            c.f[1] = fast_sin(moby->rot.z);
-            c.f[2] = 1.0f;
-            c.f[3] = 5627.925f;
-            func_L00_0025A8C0_30A9B0(&shot, moby, 1, &c, 1.0f);
+            direction.f[0] = fast_cos(moby->rot.z);
+            direction.f[1] = fast_sin(moby->rot.z);
+            direction.f[2] = 1.0f;
+            direction.f[3] = 5627.925f;
+            func_L00_0025A8C0_30A9B0(&shot, moby, 1, &direction, 1.0f);
             shot.unk18 = 0;
             shot.unk19 = 1;
             shot.oclass = moby->oclass;
-            FUN_L00_00259d08(&a, &b, &vars->unk1E0, &b, moby, &shot, 5);
+            FUN_L00_00259d08(&point, &origin, &vars->unk1E0, &origin, moby, &shot, 5);
         }
         }
-        qcopy(&vars->unk1E0, &a);
+        qcopy(&vars->unk1E0, &point);
         if (moby->anim_flags & 2) {
             moby->state = 11;
             if (moby->prev_seq != 1) {
@@ -1083,12 +1083,12 @@ void FUN_L13_00307e98(struct Moby *moby) {
         func_L00_002592B0_309330(moby,
                           fast_arc_tan_c(vars->home.f[0] - moby->pos.x, vars->home.f[1] - moby->pos.y), &vars->turn, 0.05f,
                           0.3f, frame_time * 6.2831855f);
-        a.f[0] = 2.0f * fast_cos(moby->rot.z);
-        a.f[1] = 2.0f * fast_sin(moby->rot.z);
-        a.f[2] = 0.0f;
+        point.f[0] = 2.0f * fast_cos(moby->rot.z);
+        point.f[1] = 2.0f * fast_sin(moby->rot.z);
+        point.f[2] = 0.0f;
         if (fast_difference_between_rotations(moby->rot.z, fast_arc_tan_c(vars->home.f[0] - moby->pos.x,
                                                          vars->home.f[1] - moby->pos.y)) < 0.7853982f) {
-            FUN_L00_00258b50(moby, &vars->ctl, &a, &b, 1.0f);
+            FUN_L00_00258b50(moby, &vars->ctl, &point, &origin, 1.0f);
             FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
         }
         if (fast_vec_dist(&vars->home, &moby->pos) < 1.0f) {
