@@ -3,7 +3,7 @@
 void decode_motion_vector(s32 *arg0, s32 arg1, s32 arg2, s32 arg3,
                           s32 arg4) __asm__("FUN_001280a8");
 
-void decode_motion_vector(s32 *motion_vector, s32 delta_shift, s32 motion_code, s32 motion_residual, s32 arg4) {
+void decode_motion_vector(s32 *motion_vector, s32 delta_shift, s32 motion_code, s32 motion_residual, s32 use_half_scale) {
     int new_var;
     s32 temp_4_5;
     int new_var3;
@@ -14,7 +14,7 @@ void decode_motion_vector(s32 *motion_vector, s32 delta_shift, s32 motion_code, 
     temp_4_5 = *motion_vector;
     new_var = 1;
     temp_9_6 = 0x10 << delta_shift;
-    var_4_9 = (arg4 != 0) ? (temp_4_5 >> new_var) : (temp_4_5);
+    var_4_9 = (use_half_scale != 0) ? (temp_4_5 >> new_var) : (temp_4_5);
     new_var3 = motion_code > 0;
     if (new_var3) {
         var_4_9 = (var_4_9 + new_var) + (((motion_code - new_var) << delta_shift) + motion_residual);
@@ -43,11 +43,11 @@ void decode_motion_vector(s32 *motion_vector, s32 delta_shift, s32 motion_code, 
     }
     if (motion_code) {
         {
-            new_var3 = arg4 != 0;
+            new_var3 = use_half_scale != 0;
         }
         *motion_vector = (new_var3) ? (var_4_9 * 2) : (var_4_9);
     } else {
-        *motion_vector = (arg4 != 0) ? (var_4_9 * 2) : (var_4_9);
+        *motion_vector = (use_half_scale != 0) ? (var_4_9 * 2) : (var_4_9);
     }
 }
 
