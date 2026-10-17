@@ -22,7 +22,7 @@ extern s32 _nextBit(struct MpegDecoder *, s32);
 extern void _sendIpuCommand();
 extern void _waitIpuIdle();
 extern void receiveDataFromIPU();
-int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dct_type_out, struct MpegMbState *arg4,
+int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dct_type_out, struct MpegMbState *motion_vector_state,
             int *arg5, int arg6) {
     int *sp20;
     int *sp24;
@@ -89,22 +89,22 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
     }
     if (((*mb_type) & 8) || (((*mb_type) & 1) && (decoder->concealment_motion_vectors != 0))) {
         if (decoder->unk848 != 0) {
-            _motionVectors(decoder, arg4, arg6, sp24, 0, var_19_84, var_20_86, decoder->f_code_forward_h - 1,
+            _motionVectors(decoder, motion_vector_state, arg6, sp24, 0, var_19_84, var_20_86, decoder->f_code_forward_h - 1,
                            decoder->f_code_forward_v - 1, motion_flag, var_23_95);
         } else {
             temp_7_163 = decoder->unk158 - 1;
-            _motionVector(decoder, arg4, arg6, temp_7_163, temp_7_163, 0, 0, decoder->unk154);
+            _motionVector(decoder, motion_vector_state, arg6, temp_7_163, temp_7_163, 0, 0, decoder->unk154);
         }
     }
     var_2_172 = 0;
     if (decoder->unk11C == 0) {
         if ((*mb_type) & 4) {
             if (decoder->unk848 != 0) {
-                _motionVectors(decoder, arg4, arg6, sp24, 1, var_19_84, var_20_86, decoder->f_code_backward_h - 1,
+                _motionVectors(decoder, motion_vector_state, arg6, sp24, 1, var_19_84, var_20_86, decoder->f_code_backward_h - 1,
                                decoder->f_code_backward_v - 1, 0, var_23_95);
             } else {
                 temp_7_200 = decoder->unk160 - 1;
-                _motionVector(decoder, ((u8 *)arg4) + 8, arg6, temp_7_200, temp_7_200, 0, 0,
+                _motionVector(decoder, ((u8 *)motion_vector_state) + 8, arg6, temp_7_200, temp_7_200, 0, 0,
                               decoder->unk15C);
             }
         }
@@ -136,21 +136,21 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
             }
             if ((((*mb_type) & 1) || ((decoder->dc_reset = 1, ((*mb_type) & 1) != 0))) &&
                 (decoder->concealment_motion_vectors == 0)) {
-                arg4->unk14 = 0;
-                arg4->unk10 = 0;
-                arg4->unk4 = 0;
-                arg4->unk0 = 0;
-                arg4->unk1C = 0;
-                arg4->unk18 = 0;
-                arg4->unkC = 0;
-                arg4->unk8 = 0;
+                motion_vector_state->unk14 = 0;
+                motion_vector_state->unk10 = 0;
+                motion_vector_state->unk4 = 0;
+                motion_vector_state->unk0 = 0;
+                motion_vector_state->unk1C = 0;
+                motion_vector_state->unk18 = 0;
+                motion_vector_state->unkC = 0;
+                motion_vector_state->unk8 = 0;
             }
             temp_4_287 = decoder->picture_coding_type;
             var_2_172 = 1;
             if (temp_4_287 == 2) {
                 var_2_172 = 1;
                 if (!((*mb_type) & 9)) {
-                    arg4->unk0 = (arg4->unk4 = (arg4->unk10 = (arg4->unk14 = 0)));
+                    motion_vector_state->unk0 = (motion_vector_state->unk4 = (motion_vector_state->unk10 = (motion_vector_state->unk14 = 0)));
                     if (decoder->picture_structure == 3) {
                         *motion_type = temp_4_287;
                     } else {
