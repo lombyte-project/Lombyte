@@ -747,8 +747,8 @@ void FUN_L13_00307b10(struct Moby *moby) {
 
 typedef struct {
     u8 pad0[0x18];
-    u8 unk18;
-    u8 unk19;
+    u8 active;
+    u8 valid;
     s16 oclass;
     u8 pad1C[0x14];
 } Shot_309330;
@@ -838,8 +838,8 @@ void FUN_L13_00307e98(struct Moby *moby) {
     Vec4 origin;
     Vec4 direction;
     Shot_309330 shot;
-    s32 near;
-    s32 close;
+    s32 blocked;
+    s32 path_blocked;
     s32 hit;
 
     FUN_L13_00308d10_c(moby);
@@ -960,8 +960,8 @@ void FUN_L13_00307e98(struct Moby *moby) {
             direction.f[2] = 1.0f;
             direction.f[3] = 5627.925f;
             func_L00_0025A8C0_30A9B0(&shot, moby, 1, &direction, 1.0f);
-            shot.unk18 = 0;
-            shot.unk19 = 1;
+            shot.active = 0;
+            shot.valid = 1;
             shot.oclass = moby->oclass;
             FUN_L00_00259d08(&point, &origin, &vars->unk1E0, &origin, moby, &shot, 5);
         }
@@ -998,10 +998,10 @@ void FUN_L13_00307e98(struct Moby *moby) {
             vars->unk1A8 = 0.0f;
         }
         FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
-        close = 0;
+        path_blocked = 0;
         if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
-            close = 1;
+            path_blocked = 1;
         }
         {
         f32 dist = vector_distance_xy_alt(&moby->pos, &target->pos);
@@ -1010,7 +1010,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
             if (moby->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             }
-        } else if (close != 0) {
+        } else if (path_blocked != 0) {
             moby->state = 2;
             if (moby->prev_seq != 3) {
                 blend_moby_animation(moby, 3, 0, scale_game_frames(10));
@@ -1024,7 +1024,7 @@ void FUN_L13_00307e98(struct Moby *moby) {
         }
         break;
     case 11:
-        near = 0;
+        blocked = 0;
         func_L00_002592B0_309330(moby,
                           fast_arc_tan_c(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn, 0.05f, 0.3f,
                           frame_time * 6.2831855f);
@@ -1035,11 +1035,11 @@ void FUN_L13_00307e98(struct Moby *moby) {
         FUN_L00_00261d78(vars->path, &moby->pos, &moby->pos, 0.75f);
         if (FUN_L00_00261b48(vars->path, &moby->pos, &target->pos, &direction) != 0 &&
             fast_vec_dist(&moby->pos, &direction) < 0.8f) {
-            near = 1;
+            blocked = 1;
         }
         if (vars->unk184 == 0) {
             moby->state = 13;
-        } else if (near != 0) {
+        } else if (blocked != 0) {
             moby->state = 12;
             if (moby->prev_seq != 6) {
                 blend_moby_animation(moby, 6, 0, scale_game_frames(10));
@@ -1064,8 +1064,8 @@ void FUN_L13_00307e98(struct Moby *moby) {
             direction.f[2] = 1.0f;
             direction.f[3] = 5627.925f;
             func_L00_0025A8C0_30A9B0(&shot, moby, 1, &direction, 1.0f);
-            shot.unk18 = 0;
-            shot.unk19 = 1;
+            shot.active = 0;
+            shot.valid = 1;
             shot.oclass = moby->oclass;
             FUN_L00_00259d08(&point, &origin, &vars->unk1E0, &origin, moby, &shot, 5);
         }

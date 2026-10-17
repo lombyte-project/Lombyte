@@ -485,12 +485,12 @@ void FUN_L12_003064e8(char *moby) {
 extern int D_L12_0015F5CC;
 extern unsigned char * D_L12_0015FFD8;
 
-void FUN_L12_00306828(char *moby) {
+void FUN_L12_00306828(struct Moby *moby) {
     int i;
     int alpha = 0x80000000;
-    char *data = *(char **)(moby + 0x78);
+    char *data = (char *)moby->pvars;
     for (i = 0; i < 18; i++) {
-        char *other;
+        struct Moby *other;
         int period;
         float sine;
         float color;
@@ -503,9 +503,9 @@ void FUN_L12_00306828(char *moby) {
         if (i == 17) {
             other = moby;
         } else {
-            other = (char *)(*(struct Moby * *)&D_L12_0015FFD8_p) + ((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8);
+            other = (struct Moby *)((char *)(*(struct Moby * *)&D_L12_0015FFD8_p) + ((unsigned int)*(int *)(data + i * 0x30 + 0x20) << 8));
         }
-        if (*(short *)(other + 0xA6) == 0x4FE) continue;
+        if (other->oclass == 0x4FE) continue;
         {
             period = scale_game_frames(0xAA);
             divisor = convert_integer_to_float(period);
@@ -518,8 +518,8 @@ void FUN_L12_00306828(char *moby) {
             packed_color = ((blue + 0x46) << 16) | alpha |
                 ((green + 0xB4 > 0xFF ? 0xFF : green + 0xB4) << 8) |
                 (red + 0xB4 > 0xFF ? 0xFF : red + 0xB4);
-            *(unsigned short *)(other + 0x34) |= 0x10;
-            *(int *)(other + 0x90) = packed_color;
+            other->flags |= 0x10;
+            other->glow_color = packed_color;
         }
     }
     /* Fakematch: keeping alpha live past the loop gives retail's schedule of the loop body. */
@@ -590,7 +590,6 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_L12_003054b0_u(void *moby) __asm__("FUN_L12_003054b0");
 void FUN_L12_00306350_c(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
-void FUN_L12_00306828_u(struct Moby *moby) __asm__("FUN_L12_00306828");
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern char D_0013F3D0[];
 extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") __attribute__((section(".sdata")));
@@ -804,7 +803,7 @@ void FUN_L12_003069d0(char *moby) {
         FUN_L12_003064e8_c(moby);
         break;
     }
-    FUN_L12_00306828_u(moby);
+    FUN_L12_00306828(moby);
     if ((unsigned char)moby[0x20] >= 1 && (unsigned char)moby[0x20] <= 3) {
         if (*(int *)(d + 0x604) == -1) *(int *)(d + 0x604) = allocate_voice_for_target_entry(0, 4, moby);
     } else {

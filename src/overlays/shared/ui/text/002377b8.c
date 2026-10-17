@@ -709,7 +709,7 @@ extern float func_001FA748_239918(float, float) __asm__("FUN_001fa580");
 extern int func_00200198_239918(int, int) __asm__("FUN_001ff960");
 extern void func_00200468_239918(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 extern void func_L00_0023BAB8_239918(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
-extern int func_001FE540_239918(int) __asm__("FUN_001fdd10");
+extern int get_text(int) __asm__("FUN_001fdd10");
 extern int func_00116810_239918(int) __asm__("FUN_001166cc");
 extern int func_001FA8A8_239918(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001F6EA8_239918(int, int, int, int, int) __asm__("FUN_001f6af0");
@@ -788,7 +788,7 @@ int FUN_L00_00238f88(Elem_239918 *element) {
     if (selected >= 0 && D_L00_0015FAC0_c2[D_L00_0015F72C][selected].unk0 != 0) {
         text_ids = D_L00_0015F8C0_239918;
         if (D_L00_0015FAC0_c2[D_L00_0015F72C][selected].unk0 != 0) {
-            text = func_001FE540_239918(text_ids.v[selected]);
+            text = get_text(text_ids.v[selected]);
             if (text != 0 && func_00116810_239918(text) != 0) {
                 float fade = text_fade * open_fade;
                 color = func_001FA8A8_239918(D_L00_0015F7D4, D_L00_0015F7D8, fade);

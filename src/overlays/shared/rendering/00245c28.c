@@ -352,10 +352,10 @@ typedef struct {
 /* Sets up the map's tables, loads its data from disc and builds the circular mask. */
 /* Ported from rac1-decomp (src/overlays/shared/map_002465F8.c: func_L00_00246EC0), where it is exact; names translated to the US level program. */
 
-extern char D_L00_0015FE00[];
+extern char render_archive_source_file[] __asm__("D_L00_0015FE00");
 extern char D_L00_001E8B00[];
-extern float D_L00_00182810[];
-extern float D_L00_00182A70[];
+extern float map_points[] __asm__("D_L00_00182810");
+extern float map_coefficients[] __asm__("D_L00_00182A70");
 extern s32 D_L00_00173E08 __attribute__((section(".data")));
 extern int D_L00_00183EF0[];
 extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
@@ -378,7 +378,7 @@ void FUN_L00_002464a8(void) {
     int i;
     RenderArchiveState *state;
     int level;
-    int *entry;
+    struct DiscFile *file;
     int heap_tag, first_size, second_size, scratch;
     int *archive, *archive_base;
     unsigned char *level_data;
@@ -398,31 +398,31 @@ void FUN_L00_002464a8(void) {
     D_L00_001841F0.archive_index = level > 18 ? 0 : level;
     { int i;
     for (i = 0; i < 19; i++) {
-        float world_x0 = D_L00_00182810[i * 8], world_y0 = D_L00_00182810[i * 8 + 1], world_x1 = D_L00_00182810[i * 8 + 2], world_y1 = D_L00_00182810[i * 8 + 3];
-        float map_x0 = D_L00_00182810[i * 8 + 4], map_y0 = D_L00_00182810[i * 8 + 5], map_x1 = D_L00_00182810[i * 8 + 6], map_y1 = D_L00_00182810[i * 8 + 7];
+        float world_x0 = map_points[i * 8], world_y0 = map_points[i * 8 + 1], world_x1 = map_points[i * 8 + 2], world_y1 = map_points[i * 8 + 3];
+        float map_x0 = map_points[i * 8 + 4], map_y0 = map_points[i * 8 + 5], map_x1 = map_points[i * 8 + 6], map_y1 = map_points[i * 8 + 7];
         float scale_x = (map_x0 - map_x1) / (world_x0 - world_x1);
         float scale_y = (map_y0 - map_y1) / (world_y0 - world_y1);
-        D_L00_00182A70[i * 4 + 1] = scale_x;
-        D_L00_00182A70[i * 4 + 3] = scale_y;
-        D_L00_00182A70[i * 4] = map_x0 - scale_x * world_x0;
-        D_L00_00182A70[i * 4 + 2] = map_y0 - scale_y * world_y0;
+        map_coefficients[i * 4 + 1] = scale_x;
+        map_coefficients[i * 4 + 3] = scale_y;
+        map_coefficients[i * 4] = map_x0 - scale_x * world_x0;
+        map_coefficients[i * 4 + 2] = map_y0 - scale_y * world_y0;
     } }
     flags = (unsigned char *)D_0013D4C0;
     if (flags[0x21] != 0) {
         D_L00_001841F0.loaded = 1;
-        entry = (int *)&D_00138438 + D_L00_001841F0.archive_index * 2;
+        file = (struct DiscFile *)D_00138438 + D_L00_001841F0.archive_index;
     } else {
         D_L00_001841F0.loaded = 0;
-        entry = (int *)&D_001383A0 + D_L00_001841F0.archive_index * 2;
+        file = (struct DiscFile *)D_001383A0 + D_L00_001841F0.archive_index;
     }
-    if (entry[1] != 0) {
+    if (file->size != 0) {
         state = &D_L00_001841F0;
         state->unk28 = 1;
-        heap_tag = (int)D_L00_0015FE00;
+        heap_tag = (int)render_archive_source_file;
         archive_base = ((int **)&D_L00_00173E08)[0];
         archive = (int *)((int)archive_base + 0x9A800);
-        scratch = entry[1] << 7;
-        load(archive, entry[0], entry[1]);
+        scratch = file->size << 7;
+        load(archive, file->sector, file->size);
         state->file_handle = stash_send_data((int)archive, scratch, 0x4800, (int)D_L00_001E8B00);
         state->transfer_bytes = scratch;
         FUN_L00_0024d8d0((int)archive, (int)archive_base);
@@ -441,7 +441,7 @@ void FUN_L00_002464a8(void) {
             D_L00_001841F0.slots[i].unk4 = -1;
             D_L00_001841F0.slots[i].buffer = D_L00_001841F0.scratch_data + i * 0x200;
         }
-        mask_buffer = hud_heap_alloc(0x8000, 0, D_L00_0015FE00, 0x2FC);
+        mask_buffer = hud_heap_alloc(0x8000, 0, render_archive_source_file, 0x2FC);
         level_data = ((char *)&D_00141EC0) + D_L00_001841F0.archive_index * 0x800;
         D_L00_001841F0.mask_data = mask_buffer;
         if (level_data[0] != 0) {

@@ -443,7 +443,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void * FUN_L00_002715e8(void *, int, int, float, float);
 extern void * FUN_L00_00272060(void *, int, float, float, int, int, int, void *, float);
-extern void FUN_L00_001ff290(void *, void *, void *);
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern void FUN_L00_002e8568(int);
 extern void FUN_L00_002e8590(float, float);
@@ -460,7 +460,6 @@ extern struct Moby * D_L10_0015FFD8;
 #define func_L00_00258BC8_2BFBB8 ((int (*)(int, int))FUN_L00_00257b90)
 #define func_001F9F90_2BFBB8 ((float (*)(float))fast_cos)
 #define func_001F9FA8_2BFBB8 ((float (*)(float))fast_sin)
-#define func_L00_001FF240_2BFBB8 ((void (*)(void *, void *, void *))FUN_L00_001ff290)
 #define func_L00_001FF4B0_2BFBB8 ((void (*)(void *, void *, float))fast_vec_normalize_c)
 #define func_L00_00272F00_2BFBB8 FUN_L00_00272060
 #define func_L00_00272488_2BFBB8 FUN_L00_002715e8
@@ -480,9 +479,9 @@ void FUN_L10_002be858(char *moby)
     int *data = *(int **)(moby + 0x78);
     float position[4];
     float velocity[4];
-    float offset[4];
+    float offset_buffer[4];
     float angle;
-    float *offset_ptr;
+    float *offset;
     int i;
     char *hero_bytes;
     int life;
@@ -495,7 +494,7 @@ void FUN_L10_002be858(char *moby)
     hero_bytes = D_0013F350;
     if ((unsigned char)hero_bytes[0x20A4] == 1 && *data != -1 &&
         func_001F9D48_2BFBB8(moby + 0x10, hero_bytes + 0x80) < 0.5f) {
-        offset_ptr = offset;
+        offset = offset_buffer;
         i = 9;
         do {
             float size, size_scaled;
@@ -509,7 +508,7 @@ void FUN_L10_002be858(char *moby)
             velocity[1] = func_001F9FA8_2BFBB8(func_00214158_2BFBB8()) * func_002140F8_2BFBB8(0.0f, 0.5f);
             velocity[2] = 0.0f;
             velocity[2] += func_002140F8_2BFBB8(0.0f, 0.5f);
-            func_L00_001FF240_2BFBB8(offset_ptr, velocity, D_0013F350 + 0x80);
+            add_vectors(offset, velocity, D_0013F350 + 0x80);
             func_L00_001FF4B0_2BFBB8(position, position, func_002140F8_2BFBB8(0.0f, D_0015ED6C));
             position[2] = func_002140F8_2BFBB8(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = func_001F9850_2BFBB8(func_L00_00258BC8_2BFBB8(15, 30));
@@ -554,7 +553,7 @@ void FUN_L10_002be858(char *moby)
             velocity[1] = func_001F9FA8_2BFBB8(func_00214158_2BFBB8()) * func_002140F8_2BFBB8(0.0f, 0.5f);
             velocity[2] = 0.0f;
             velocity[2] += func_002140F8_2BFBB8(0.0f, 0.5f);
-            func_L00_001FF240_2BFBB8(offset_ptr, velocity, (*(char * *)&D_L10_0015FFD8) + (*data << 8) + 0x10);
+            add_vectors(offset, velocity, (*(char * *)&D_L10_0015FFD8) + (*data << 8) + 0x10);
             func_L00_001FF4B0_2BFBB8(position, position, func_002140F8_2BFBB8(0.0f, D_0015ED6C));
             position[2] = func_002140F8_2BFBB8(D_0015ED6C * 2.5f, D_0015ED6C * 5.0f);
             life = func_001F9850_2BFBB8(func_L00_00258BC8_2BFBB8(15, 30));

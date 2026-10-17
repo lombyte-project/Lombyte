@@ -218,18 +218,18 @@ unsigned char *FUN_L14_002ffaf8(unsigned char *owner, char *pos) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B2A28), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    float a;
-    float b;
-    float c;
-    float d;
+    float x;
+    float y;
+    float scale;
+    float distance;
     char *moby;
     int flags;
-    unsigned char b98;
-    unsigned char b99;
-    unsigned short cls;
-    float e;
-    int f;
-} Ray;
+    unsigned char mode;
+    unsigned char enabled;
+    unsigned short oclass;
+    float strength;
+    int count;
+} LineInfo;
 
 extern char D_001413F4[];
 extern char D_L14_001FBB60[];
@@ -246,7 +246,7 @@ extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, f
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height(float, void *, int);
 extern int D_L14_0015F5C4;
-extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_001f9770(void *);
 extern int FUN_L00_0025c698(void *, void *);
 extern int FUN_L00_00261968(int, void *, void *);
@@ -303,9 +303,9 @@ void FUN_L14_002b17d8(char *moby) {
     char *owner;
     int state;
     float mat[4][4];
-    float offset[4];
-    float hit[4];
-    Ray ray;
+    float direction[4];
+    float end[4];
+    LineInfo info;
     int status;
 
     data = *(char **)(moby + 0x78);
@@ -574,29 +574,29 @@ void FUN_L14_002b17d8(char *moby) {
         FUN_L14_002b35d8_c(moby, flag, angle);
         FUN_L14_002b37b0_c(moby, ang);
         build_moby_bone_transform_c(moby, 0, mat);
-        qcopy(offset, mat[1]);
+        qcopy(direction, mat[1]);
         if (flag == 0) {
-            offset[2] = 0.0f;
+            direction[2] = 0.0f;
         }
-        fast_vec_normalize(offset, offset, D_L14_001614E4_gp);
-        add_vector_xyz_c3(hit, mat[3], offset);
-        fast_vec_normalize(offset, offset, D_L14_001614F4_gp);
-        add_vector_xyz_c3(mat[3], mat[3], offset);
-        ray.moby = moby;
-        ray.flags = 0x10001;
-        ray.f = 1;
-        ray.e = 1.0f;
-        ray.a = fast_cos(*(float *)(moby + 0x48));
-        ray.b = fast_sin(*(float *)(moby + 0x48));
-        ray.c = 1.0f;
-        ray.d = 5627.9248f;
-        ray.b99 = 1;
-        ray.cls = *(unsigned short *)(moby + 0xA6);
-        ray.b98 = 0;
-        if (FUN_001efa68(mat[3], hit, 0, moby, &ray) != 0) {
-            qcopy(hit, D_L14_00174560);
+        fast_vec_normalize(direction, direction, D_L14_001614E4_gp);
+        add_vector_xyz_c3(end, mat[3], direction);
+        fast_vec_normalize(direction, direction, D_L14_001614F4_gp);
+        add_vector_xyz_c3(mat[3], mat[3], direction);
+        info.moby = moby;
+        info.flags = 0x10001;
+        info.count = 1;
+        info.strength = 1.0f;
+        info.x = fast_cos(*(float *)(moby + 0x48));
+        info.y = fast_sin(*(float *)(moby + 0x48));
+        info.scale = 1.0f;
+        info.distance = 5627.9248f;
+        info.enabled = 1;
+        info.oclass = *(unsigned short *)(moby + 0xA6);
+        info.mode = 0;
+        if (coll_line_fix(mat[3], end, 0, moby, &info) != 0) {
+            qcopy(end, D_L14_00174560);
         }
-        FUN_L00_002e2190(moby, mat, hit);
+        FUN_L00_002e2190(moby, mat, end);
         if (FUN_001f9770(data + 0x262) != 0) {
             blend_moby_animation(moby, 6, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 7;

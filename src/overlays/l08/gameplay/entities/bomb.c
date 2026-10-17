@@ -1461,7 +1461,7 @@ typedef struct { char pad0[0x20]; struct Moby *moby; } Hit_2D5FA8_c;
 
 typedef struct { char pad0[0x140]; float x, y; char pad148[0x10]; float f158; } Cam_DBF68;
 
-typedef struct { char pad0[0x40]; struct Moby *target; int r44; } Look_DBF68;
+typedef struct { char pad0[0x40]; struct Moby *target; int result; } Look_DBF68;
 
 typedef struct {
     char pad0[0x20];
@@ -1558,7 +1558,7 @@ extern char camera_state_bytes[] __asm__("D_L08_00167480");
 
 void FUN_L08_002dabf0(struct Moby *moby) {
     Data_DBF68 *vars = (Data_DBF68 *)moby->pvars;
-    Look_DBF68 look;
+    Look_DBF68 search;
     float point[4];
     float velocity[4];
     float aim[4];
@@ -1637,11 +1637,11 @@ void FUN_L08_002dabf0(struct Moby *moby) {
         effects_start_2D5FA8_c(moby, vars->anim);
     }
     moby->hit_slot = 0xFF;
-    look.r44 = FUN_L08_0026a3d0(moby, 16.0f, &look);
-    if (look.target == 0) {
-        look.target = *(struct Moby **)&D_001413D0;
+    search.result = FUN_L08_0026a3d0(moby, 16.0f, &search);
+    if (search.target == 0) {
+        search.target = *(struct Moby **)&D_001413D0;
     }
-    target = look.target;
+    target = search.target;
     switch (moby->state) {
     case 0:
         moby->flags |= 0x1000;

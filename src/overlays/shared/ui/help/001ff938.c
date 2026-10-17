@@ -30,12 +30,12 @@ extern void FUN_L00_00207c48(void);
 extern void FUN_L00_00207d00(void);
 extern void FUN_L00_00208a10(void);
 extern void FUN_L00_00208b60(void);
-extern void FUN_L00_00211670(void);
+extern void hero_update(void) __asm__("FUN_L00_00211670");
 extern void FUN_L00_00216de8(int, int);
 extern void FUN_L00_00216f10(void);
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
-extern void FUN_L00_0024f7c8(void *, int, void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257024(void *);
 extern void FUN_L15_002044c8(void);
 extern void FUN_L15_0021d040(void);
@@ -49,7 +49,7 @@ void FUN_L15_001ff938(void) {
     float pulse;
 
     FUN_L00_00232670();
-    FUN_L00_00211670();
+    hero_update();
     FUN_L15_002044c8();
     FUN_L15_0021d040();
     hero0 = ((char *)&D_0013F350);
@@ -72,7 +72,7 @@ void FUN_L15_001ff938(void) {
         {
         unsigned char *hero_moby = *(unsigned char **)(hero0 + 0x2080);
         if (((*(unsigned short *)(hero_moby + 0x34) ^ 1) & 1) != 0) {
-            FUN_L00_0024f7c8(hero_moby, 6, copy);
+            moby_point_position(hero_moby, 6, copy);
             qcopy(hero0 + 0x1D80, copy);
             FUN_L00_00207d00();
         }
@@ -109,7 +109,7 @@ void FUN_L15_001ff938(void) {
         for (i = 0; i < 3; i++)
         {
             hero4 = ((char *)&D_0013F350);
-            FUN_L00_0024f7c8(*(void **)(hero4 + 0x2080), i, hero4 + 0x1D50 + i * 16);
+            moby_point_position(*(void **)(hero4 + 0x2080), i, hero4 + 0x1D50 + i * 16);
         }
         alpha = 0x30;
         hero4 = ((char *)&D_0013F350);
@@ -125,7 +125,7 @@ void FUN_L15_001ff938(void) {
         FUN_L00_00207d00();
         *(short *)(hero4 + 0x22E0) = 0;
         if (hero4[0x20A4] == 3) {
-            int pending = *(int *)(hero4 + 0x20B8);
+            int pending = ((struct Hero *)hero4)->pending_item[0];
             if (pending != 0 && pending != 0x1F) {
                 if (*(short *)(hero4 + 0x22DE) == 0) {
                     FUN_L00_00216de8(0x19, 0);
@@ -134,7 +134,7 @@ void FUN_L15_001ff938(void) {
                 }
             } else {
                 hero5 = ((char *)&D_0013F350);
-                *(int *)(hero5 + 0x20B8) = 0;
+                ((struct Hero *)hero5)->pending_item[0] = 0;
                 if (hero5[0x12E7] != 0 && *(int *)(hero5 + 0x300) != 0 && D_0013D4DC[0] != 0 &&
                     *(short *)(hero5 + 0x22DE) == 0) {
                     FUN_L00_00216de8(0x19, 0);

@@ -1027,11 +1027,11 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 #include "rnc/gameplay/state/item_state.h"
 
-char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float unk18, float unk1C, float yaw, float pitch) {
-    float start[4];
-    float from[4];
+char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float vx, float vy, float yaw, float pitch) {
+    float start_position[4];
+    float probe[4];
     float direction[4];
-    float jitter[4];
+    float scaled[4];
     float spark[4];
     unsigned char *moby;
     char *vars;
@@ -1043,13 +1043,13 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float unk18, 
     int i;
     int sparks;
     float length;
-    float curve;
+    float blend;
     float index;
     float fraction;
-    float *point;
+    float *start;
 
-    point = start;
-    *(w128 *)start = *(w128 *)spawn_pos;
+    start = start_position;
+    *(w128 *)start_position = *(w128 *)spawn_pos;
     moby = func_0020D348_m(0x131);
     if (moby != 0) {
         vars = *(char **)(moby + 0x78);
@@ -1061,7 +1061,7 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float unk18, 
         *(float *)(moby + 0x40) = D_L00_00161890_gp;
         *(float *)(moby + 0x44) = fast_add_rotations(pitch, (&D_L00_00161890_gp)[1]);
         *(float *)(moby + 0x48) = yaw;
-        qcopy(moby + 0x10, point);
+        qcopy(moby + 0x10, start);
         if (target != 0) {
             int bounds;
             qcopy(vars, target + 0x10);
@@ -1074,8 +1074,8 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float unk18, 
         } else {
             clear_u64_value_c(vars);
         }
-        *(float *)(vars + 0x18) = unk18;
-        *(float *)(vars + 0x1C) = unk1C;
+        *(float *)(vars + 0x18) = vx;
+        *(float *)(vars + 0x1C) = vy;
         *(int *)(vars + 0x10) = 0;
         *(int *)(vars + 0x14) = 0;
         timer = scale_game_frames_c2(0x23);
@@ -1084,13 +1084,13 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float unk18, 
         *(int *)(vars + 0x28) = 0;
         *(short *)(vars + 0x24) = timer;
         *(short *)(vars + 0x26) = timer;
-        *(w128 *)from = *(w128 *)(owner + 0x10);
-        from[2] = point[2];
-        result = FUN_001efa68(from, point, 0, (int)owner, 0);
+        *(w128 *)probe = *(w128 *)(owner + 0x10);
+        probe[2] = start[2];
+        result = FUN_001efa68(probe, start, 0, (int)owner, 0);
         if (result != 0) {
             build_spherical_offset(direction, D_0015ED6C * 40.0f, *(float *)(moby + 0x48), -*(float *)(moby + 0x44));
             qcopy(moby + 0x10, D_L00_00173E60_c);
-            point = jitter;
+            start = scaled;
             sparks = 4;
             do {
                 *(w128 *)spark = 0;
@@ -1098,11 +1098,11 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float unk18, 
                 sparks--;
                 spark[1] = random_float_between_c2(-1.0f, 1.0f);
                 spark[2] = random_float_between_c2(-1.0f, 1.0f);
-                *(w128 *)jitter = *(w128 *)spark;
+                *(w128 *)scaled = *(w128 *)spark;
                 FUN_L00_001ff660(spark, direction, D_L00_00173E80);
                 length = fast_vec_length(spark);
-                fast_vec_normalize(point, point, length * 0.5f);
-                add_vector_xyz(spark, spark, point);
+                fast_vec_normalize(start, start, length * 0.5f);
+                add_vector_xyz(spark, spark, start);
                 fast_vec_normalize(spark, spark, random_float_between_c2(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
                 result = scale_game_frames_c2(10);
                 timer = scale_game_frames_c2(15);
@@ -1134,9 +1134,9 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float unk18, 
                     *(float *)(trail + 0xC) = random_float_between_c2(D_L00_00161870, D_L00_00161874);
                     index = convert_integer_to_float_c(i);
                     fraction = index / convert_integer_to_float_c(16);
-                    curve = FUN_L00_00257e20(-1.5f, 0.0f, 1.0f, 0.0f, fraction);
-                    *(float *)(trail + 0xC) = *(float *)(trail + 0xC) + (D_L00_00161878 - *(float *)(trail + 0xC)) * curve;
-                    result = truncate_float_to_s32_c(curve * -64.0f + 128.0f);
+                    blend = FUN_L00_00257e20(-1.5f, 0.0f, 1.0f, 0.0f, fraction);
+                    *(float *)(trail + 0xC) = *(float *)(trail + 0xC) + (D_L00_00161878 - *(float *)(trail + 0xC)) * blend;
+                    result = truncate_float_to_s32_c(blend * -64.0f + 128.0f);
                     *(int *)(trail + 4) = (result << 24) | 0xFFFFFF;
                     ((int *)(vars + 0x2C))[i] = (int)trail;
                 } else {
@@ -1147,7 +1147,7 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float unk18, 
     }
     return moby;
 }
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC868), where it is exact; names translated to the US level program. */
+/* Ported probe rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC868), where it is exact; names translated to the US level program. */
 
 /* Four floats aligned to 16 bytes, the layout moved by one lq/sq. */
 typedef struct {
