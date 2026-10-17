@@ -9,7 +9,7 @@ extern void fast_vec_normalize(f32 *, f32 *, f32) __asm__("func_001F9BF8");
 
 void normalize_vector_triplet(f32 *arg0) __asm__("FUN_00214128");
 
-void normalize_vector_triplet(f32 *arg0) {
+void normalize_vector_triplet(f32 *matrix) {
     struct Vec3Padded scratch;
     f32 *base;
     f32 *src;
@@ -20,7 +20,7 @@ void normalize_vector_triplet(f32 *arg0) {
     s32 next;
     s32 count;
 
-    base = arg0;
+    base = matrix;
     i = 0;
     do {
         next = i + 1;
