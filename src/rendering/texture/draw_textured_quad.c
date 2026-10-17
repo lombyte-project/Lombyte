@@ -21,7 +21,7 @@ void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh
     s32 y0;
     s32 u1;
     s32 u0;
-    s32 v1;
+    s32 texture_v_end;
 
     sx = screen_extent.left;
     sy = screen_extent.top;
@@ -31,7 +31,7 @@ void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh
     y1 = ((y + h) << 4) + sy - 8;
     u1 = (u + uw) << 4;
     u0 = u << 4;
-    v1 = v + vh;
+    texture_v_end = v + vh;
     render_packet_cursor.tag->tag = 0x10000007;
     render_packet_cursor.tag->addr = 0;
     render_packet_cursor.tag->vif0 = 0;
@@ -48,9 +48,9 @@ void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh
     q[4] = x0 | ((u64)y0 << 16) | 0xFFFFF000000000;
     q[5] = (v << 20) + u1;
     q[6] = x1 | ((u64)y0 << 16) | 0xFFFFF000000000;
-    q[7] = (v1 << 20) + u0;
+    q[7] = (texture_v_end << 20) + u0;
     q[8] = x0 | ((u64)y1 << 16) | 0xFFFFF000000000;
-    q[9] = (v1 << 20) + u1;
+    q[9] = (texture_v_end << 20) + u1;
     q[10] = x1 | ((u64)y1 << 16) | 0xFFFFF000000000;
     q[11] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x60);
