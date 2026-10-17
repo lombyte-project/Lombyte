@@ -16,9 +16,6 @@ void FUN_L00_0024a798(s32 v, s32 i) {
     }
 }
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00249d80.s", FUN_L00_00249d80);
-#else
 typedef unsigned int MenuCacheQuad __attribute__((mode(TI), aligned(16)));
 
 typedef struct {
@@ -60,13 +57,17 @@ s32 FUN_L00_00249d80(s32 key) {
     if (D_L00_001841F0_49d80.entries[0].key != key) {
         times = &D_L00_001841F0_49d80.entries[0].last_used;
         entry = &D_L00_001841F0_49d80.entries[0].key;
+        /* Fakematch: the outer do-while (0) and the miss++/miss-- below give
+         * retail's registers. */
         do {
-            if (entry[1] < times[victim * 4]) {
-                victim = i;
-            }
-            ++i;
-            entry += 4;
-        } while (i < 8 && *entry != key);
+            do {
+                if (entry[1] < times[victim * 4]) {
+                    victim = i;
+                }
+                ++i;
+                entry += 4;
+            } while (i < 8 && *entry != key);
+        } while (0);
     }
     if (i == 8) {
         FUN_L00_002483c8(D_L00_001841F0_49d80.entries[victim].pixels, key,
@@ -79,10 +80,12 @@ s32 FUN_L00_00249d80(s32 key) {
         base = (MenuCacheQuad *)&D_L00_001841F0_49d80.entries[0];
         other = base + i;
         temp = *other;
+        /* Fakematch: see the loop above. */
+        miss++;
+        miss--;
         *other = *base;
         *base = temp;
     }
     D_L00_001841F0_49d80.entries[0].last_used = D_L00_0015F3F8;
     return miss;
 }
-#endif
