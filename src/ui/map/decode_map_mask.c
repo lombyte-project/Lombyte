@@ -4,7 +4,7 @@ extern void decode_map_rle_row(u8 *dst, s32 arg1, s32 arg2, s16 *arg3) __asm__("
 
 void decode_map_mask(u8 *dst, s32 arg1, s16 *arg2) __asm__("FUN_00206710");
 
-void decode_map_mask(u8 *dst, s32 arg1, s16 *arg2) {
+void decode_map_mask(u8 *dst, s32 compressed_data_base, s16 *row_end_offsets) {
     s32 s;
     s32 i;
     s32 col;
@@ -16,7 +16,7 @@ void decode_map_mask(u8 *dst, s32 arg1, s16 *arg2) {
 
     src = (u8 *)0x70000000;
     for (i = 0; i < 0x100; i++) {
-        decode_map_rle_row((u8 *)0x70000000, i, arg1, arg2);
+        decode_map_rle_row((u8 *)0x70000000, i, compressed_data_base, row_end_offsets);
         s = i % 0x10;
         p = dst + ((s + ((i / 0x10) * 0x200)) * 4);
         for (col = 0; col < 0x20; col++) {
