@@ -1554,7 +1554,7 @@ extern void effects_update_2D5FA8_c(struct Moby *, short *) __asm__("FUN_L00_002
 extern void func_L00_00264B40_x(struct Moby *, int, float, char *) __asm__("FUN_L00_00263ac8");
 extern float FUN_0020c9e0(struct Moby *);
 extern void func_L00_002592B0_x(float, void *, void *, float, float, float) __asm__("FUN_L00_00258278");
-extern Cam_DBF68 D_L08_00167500_c __asm__("D_L08_00167480");
+extern char camera_state_bytes[] __asm__("D_L08_00167480");
 
 void FUN_L08_002dabf0(struct Moby *moby) {
     Data_DBF68 *d = (Data_DBF68 *)moby->pvars;
@@ -1724,7 +1724,7 @@ void FUN_L08_002dabf0(struct Moby *moby) {
         func_L00_002592B0_x(fast_arc_tan_c2(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                             moby, d->blk12C, 0.02f, 0.3f, 0.2f);
         if (dist < 20.0f && 8.0f < dist && tick_countdown_32_alt(&d->i128) != 0) {
-            Cam_DBF68 *cam = &D_L08_00167500_c;
+            Cam_DBF68 *cam = (Cam_DBF68 *)camera_state_bytes;
             if (fast_difference_between_rotations_c3(cam->f158, fast_arc_tan_c2(moby->pos.x - cam->x, moby->pos.y - cam->y)) < 0.55850536f) {
                 goto attack;
             }
@@ -1753,7 +1753,7 @@ void FUN_L08_002dabf0(struct Moby *moby) {
         if (moby->anim_flags & 2) {
             Cam_DBF68 *cam;
             if (vector_distance_xy_alt(&moby->pos, &target->pos) < 6.0f
-                || (cam = &D_L08_00167500_c,
+                || (cam = (Cam_DBF68 *)camera_state_bytes,
                     0.55850536f < fast_difference_between_rotations_c3(cam->f158, fast_arc_tan_c2(moby->pos.x - cam->x, moby->pos.y - cam->y)))) {
                 old = d->p120;
                 if ((d->p120 = (struct Moby *)FUN_L08_002daa10_c((char *)moby)) == 0) {

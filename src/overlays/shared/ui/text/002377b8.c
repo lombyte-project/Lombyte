@@ -351,20 +351,14 @@ typedef struct {
     void *unk80;
 } HudElem_p;
 
-typedef struct {
-    char pad_00[0x38];
-    unsigned short x38;
-    char pad_3A[0x4C - 0x3A];
-} SrcElem_p;
 
 typedef struct { int id; char pad[0x14]; int item; } E_238C30;
 
 typedef struct { char pad[0x46]; short h46, h48; char pad4A[2]; } TI_238C30;
 
 extern unsigned char D_00141EA0[];
-extern SrcElem_p D_L00_00179AC0[];
+extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern char D_0013D428[];
 #include "rnc/overlay/level_labels.h"
 extern char D_L00_0015F7C8[];
 extern f32 convert_integer_to_float_c2(s32) __asm__("func_001FA6C0");
@@ -476,7 +470,7 @@ int FUN_L00_002382a0(HudElem_p *rec) {
         wr = ((char *)&D_L00_001C40B0) + id * 24;
         if (*(unsigned short *)(wr + 8) != 0) {
             int shadow, item;
-            item = *(int *)(D_0013D428 + id * 4);
+            item = weapon_ammo_counts[id];
             sprintf(formatted, D_L00_0015F7C8, item, *(unsigned short *)(wr + 0xE));
             if (item != 0)
                 shadow = fast_tween_color_c(D_L00_0015F7A8_gp, D_L00_0015F7AC, open * fade);
@@ -492,9 +486,9 @@ int FUN_L00_002382a0(HudElem_p *rec) {
             int item, id;
             item = *(int *)(((char **)D_L00_0015FAC0)[D_L00_0015F72C_gp] + selected * 0x1C + 0x18);
             if (((unsigned char *)D_0013E520)[item])
-                id = ((TI_238C30 *)D_L00_00179AC0)[item].h48;
+                id = ((TI_238C30 *)item_defs)[item].h48;
             else
-                id = ((TI_238C30 *)D_L00_00179AC0)[item].h46;
+                id = ((TI_238C30 *)item_defs)[item].h46;
             text = get_help_message_text(id);
         }
         if (text == 0) return rec->w;

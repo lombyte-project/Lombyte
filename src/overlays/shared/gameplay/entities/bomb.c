@@ -1002,12 +1002,11 @@ extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
-extern float D_L00_0015F580[] __attribute__((section(".sdata")));
+extern char D_L00_0015F580[] __attribute__((section(".sdata")));
 extern float D_L00_00161890_gp __asm__("D_L00_00161890") __attribute__((sda));
 extern float FUN_L00_00257e20(float, float, float, float, float);
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern int FUN_002141f8_c2(char *) __asm__("FUN_002141f8");
 extern int FUN_L00_00257b90_c2(int, int) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
@@ -1068,7 +1067,7 @@ char *FUN_L00_002caf70(char *a, char *vec, char *b, float unk18, float unk1C, fl
         if (b != 0) {
             int rr;
             qcopy(d, b + 0x10);
-            rr = FUN_002141f8_c2(b);
+            rr = (int)FUN_002141f8(b);
             if (rr != 0) {
                 *(float *)(d + 0x8) = *(float *)(d + 0x8) + *(float *)(rr + 0x10);
             } else {
@@ -1132,7 +1131,7 @@ char *FUN_L00_002caf70(char *a, char *vec, char *b, float unk18, float unk1C, fl
         } else {
             FUN_L00_0026daa0(m, 0x2F4F7F7F, *(short *)(d + 0x24), -1, *(float *)&D_L00_00161888);
             for (i = 0; i < 17; i++) {
-                q = (char *)FUN_L00_00275158(m + 0x10, (char *)D_L00_0015F580, 1, 0.0f);
+                q = (char *)FUN_L00_00275158(m + 0x10, D_L00_0015F580, 1, 0.0f);
                 if (q != 0) {
                     *(float *)(q + 0xC) = random_float_between_c2(*(float *)&D_L00_00161870, *(float *)&D_L00_00161874);
                     fi = convert_integer_to_float_c(i);

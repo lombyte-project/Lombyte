@@ -356,7 +356,7 @@ extern char D_L00_0015FE00[];
 extern char D_L00_001E8B00[];
 extern float D_L00_00182810[];
 extern float D_L00_00182A70[];
-extern int *D_L00_00173E08[];
+extern s32 D_L00_00173E08 __attribute__((section(".data")));
 extern int D_L00_00183EF0[];
 extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
 extern int FUN_L00_0024d8d0();
@@ -422,7 +422,7 @@ void FUN_L00_002464a8(void) {
         gl = &D_L00_001841F0;
         gl->unk28 = 1;
         heap_tag = (int)D_L00_0015FE00;
-        archive_base = D_L00_00173E08[0];
+        archive_base = ((int **)&D_L00_00173E08)[0];
         archive = (int *)((int)archive_base + 0x9A800);
         scratch = e[1] << 7;
         load(archive, e[0], e[1]);

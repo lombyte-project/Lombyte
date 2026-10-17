@@ -2604,7 +2604,6 @@ struct Tgt_3109D0_p {
 };
 
 extern Rec_30D8E8 * D_L07_001612D0;
-extern char *D_L07_0015FFD8;
 extern char D_0013E533[];
 extern char D_L07_002117F8[];
 extern char D_L07_00211838[];
@@ -2650,7 +2649,6 @@ void FUN_L07_0030f308_c(char *moby, char *obj, int state, int anim, int seq, int
 extern char D_0013F65C[];
 extern char D_0013F350[];
 extern void func_L00_002A5158_30D8E8(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
-extern int func_001F9908_30D8E8(int *) __asm__("FUN_001f9740");
 
 #define func_L00_002592B0_t(m,a,v,k,d,x) ((void (*)(char *, float, float *, float, float, float))FUN_L00_00258278)(m,a,v,k,d,x)
 
@@ -2680,7 +2678,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
     FUN_L00_00263ac8(moby, 0, data + 0x150, 2.2f);
     if (moby[0x20] == 0) {
         if (FUN_L07_0030ed30_c((char *)moby, data)) {
-            DebugPrint_alt(D_L07_002117F8, (int)((char *)moby - D_L07_0015FFD8) >> 8);
+            DebugPrint_alt(D_L07_002117F8, (int)((char *)moby - (char *)level_mobys) >> 8);
             mark_moby_for_removal_c4(moby);
             return;
         }
@@ -2689,7 +2687,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
     FUN_L07_002886d8(moby, &tgt, 30.0f);
     FUN_L07_0030e998_c((char *)moby, data, (float *)(data + 0x20));
     FUN_L00_0025d538(moby, data + 0x60);
-    wander = func_001F9908_30D8E8((int *)(data + 0x134)) != 0;
+    wander = tick_countdown_32_alt((int *)(data + 0x134)) != 0;
     if (*(int *)(data + 0x110) != 0 && moby[0x20] >= 7) {
         char *p = *(char **)(data + 0x148);
         inside = FUN_L00_00259740(&tgt, p + 0x10, *(int *)p) != 0;

@@ -477,7 +477,7 @@ class DataDeclarationTests(unittest.TestCase):
     """No new data label may get a second type or name (scripts/data-decls.py)."""
 
     # Labels that still disagree; lower it when you fix some, never raise it.
-    KNOWN_CONFLICTS = 602
+    KNOWN_CONFLICTS = 600
 
     def test_no_new_conflicting_declarations(self):
         decls = load_module("rnc_data_decls", ROOT / "scripts" / "data-decls.py")

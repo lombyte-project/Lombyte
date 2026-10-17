@@ -840,7 +840,7 @@ extern s32 D_L00_0015F40C_macro __asm__("D_L00_0015F40C") __attribute__((section
 extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") __attribute__((section(".sdata")));
 extern s32 D_L00_00173E04_lui __asm__("D_L00_00173E04") __attribute__((section(".data")));
 /* [0] is gs_texture_allocation_start, [4] depth_buffer_address. */
-extern s32 gs_layout_macro[6] __asm__("D_0015EE78") __attribute__((section(".sdata")));
+extern s32 D_0015EE78_macro[6] __asm__("D_0015EE78") MACRO_ADDR;
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
 extern void music_stop(void) __asm__("FUN_00215ee8");
@@ -874,7 +874,7 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
     large_count = D_0015ED80 != 0 ? 0xE : 0xD;
     small_count = D_0015ED80 != 0 ? 0xE : 0x11;
     source = D_L00_00161058_macro;
-    gs_address = gs_layout_macro[4];
+    gs_address = D_0015EE78_macro[4];
     i = 0;
     while (i < large_count) {
         sceGsSetDefLoadImage(image, gs_address >> 8, 2, 1, 0, 0, 0x80, 0x80);
@@ -885,7 +885,7 @@ void FUN_L00_002995d0(s32 sector, s32 size, s32 language) {
         source += 0xC000;
         wait_for_graphics_pipeline_idle(0, 0);
     }
-    gs_address = gs_layout_macro[0];
+    gs_address = D_0015EE78_macro[0];
     j = 0;
     while (j < small_count) {
         sceGsSetDefLoadImage(image, gs_address >> 8, 1, 0, 0, 0, 0x40, 0x40);

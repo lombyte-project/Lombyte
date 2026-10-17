@@ -1943,7 +1943,7 @@ typedef struct {
     char pad10[0x10];
     float n[4];                /* 0x20 */
 } CollPos_4BE8;
-extern CollPos_4BE8 D_L08_00174660;
+extern float D_L08_00174660[];
 extern KillFlags_4BE8 D_L08_001BADD0;
 extern KillFlags_4BE8 D_L08_001BBA30;
 extern struct Moby *D_L08_0015FFDC;
@@ -2050,7 +2050,7 @@ void FUN_L08_002e3870(struct Moby *m) {
             fast_vec_scale_c(c, &m->rot_row2, -2.0f);
             add_vector_xyz(c, c, &m->pos);
             if (FUN_001efa68(b, c, 2, 0, 0) != 0) {
-                CollPos_4BE8 *hit = &D_L08_00174660;
+                CollPos_4BE8 *hit = (CollPos_4BE8 *)D_L08_00174660;
                 qcopy(d->v0_p, hit->pos);
                 linked = ((int *)hit)[-2];
                 fast_vec_normalize_c2(a, hit->n, 1.0f);
@@ -2336,11 +2336,11 @@ void FUN_L08_002e3870(struct Moby *m) {
             break;
         }
         if (FUN_L00_001f0d60(0.25f, &m->pos, 0x22, m) != 0) {
-            subtract_vector_xyz(a, &m->pos, D_L08_00174660.pos);
+            subtract_vector_xyz(a, &m->pos, ((CollPos_4BE8 *)D_L08_00174660)->pos);
             FUN_L00_001ff660(d->v40, d->v40, a);
             if (fast_arc_tan(a[2], func_001F9CE8_2E16A0(a)) < 0.7853982f
-                && fast_arc_tan(((Coll_4BE8 *)((char *)&D_L08_00174660 - 0x20))->n[2], func_001F9CE8_2E16A0(D_L08_00174660.n)) < 0.7853982f) {
-                Coll_4BE8 *cl = (Coll_4BE8 *)((char *)&D_L08_00174660 - 0x20);
+                && fast_arc_tan(((Coll_4BE8 *)((char *)D_L08_00174660 - 0x20))->n[2], func_001F9CE8_2E16A0(((CollPos_4BE8 *)D_L08_00174660)->n)) < 0.7853982f) {
+                Coll_4BE8 *cl = (Coll_4BE8 *)((char *)D_L08_00174660 - 0x20);
                 int n;
                 float inv;
 
