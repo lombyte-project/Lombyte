@@ -280,18 +280,18 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002eca30(char *m, void *arg1) {
-    float v10[4], v20[4], v30[4], v40[4], v50[4];
+void FUN_L02_002eca30(char *m, void *previous_position) {
+    float v10[4], v20[4], position_delta[4], random_offset[4], emission_position[4];
     int i;
-    fast_vec_sub(v30, m + 0x10, arg1);
+    fast_vec_sub(position_delta, m + 0x10, previous_position);
     for (i = 0; i < 3; i++) {
         int a, b, c, d, e;
         char *p;
-        moby_point_position(m, i, v50);
-        fast_vec_scale(v10, v30, *(float *)&D_L02_00161F84);
-        fast_vec_scale(v20, v30, *(float *)&D_L02_00161F88);
-        random_vector(v40, 0.0f, *(float *)&D_L02_00161F8C * frame_time);
-        add_vector_xyz(v20, v20, v40);
+        moby_point_position(m, i, emission_position);
+        fast_vec_scale(v10, position_delta, *(float *)&D_L02_00161F84);
+        fast_vec_scale(v20, position_delta, *(float *)&D_L02_00161F88);
+        random_vector(random_offset, 0.0f, *(float *)&D_L02_00161F8C * frame_time);
+        add_vector_xyz(v20, v20, random_offset);
         v10[3] = random_float_between(*(float *)&D_L02_00161FA0, *(float *)&D_L02_00161FA4);
         v20[3] = random_float_between(*(float *)&D_L02_00161FA8, *(float *)&D_L02_00161FAC);
         a = fast_tween_color(*(int *)&D_L02_00161FB0, *(int *)&D_L02_00161FB4,
@@ -308,7 +308,7 @@ void FUN_L02_002eca30(char *m, void *arg1) {
             (float)*(int *)&D_L02_00161F98 *
             (random_float_between(-*(float *)&D_L02_00161F9C, *(float *)&D_L02_00161F9C) +
              1.0f)));
-        p = spawn_spark(v50, v10, v20, a, b, c, d, e, -1);
+        p = spawn_spark(emission_position, v10, v20, a, b, c, d, e, -1);
         if (p != 0)
             p[9] = func_001FA898_r(8.0f) + 0x60;
     }
