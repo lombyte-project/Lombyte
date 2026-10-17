@@ -3755,3 +3755,20 @@ int FUN_L17_002f2180(char *moby, int idx) {
     }
     return d->fA4 == 1.0f;
 }
+
+u8 D_L17_001DC684[4] __attribute__((section(".data"))) = {0};
+f32 D_L17_001DC688[1] __attribute__((section(".data"))) = {0};
+u8 D_L17_001DC68C[1772] = {0};
+u8 D_L17_001DCD7C[356] = {0};
+f32 D_L17_001DD100[1] __attribute__((section(".data"))) = {0};
+f32 D_L17_001DD104[1] __attribute__((section(".data"))) = {0};
+f32 D_L17_001DD320[1] __attribute__((section(".data"))) = {0};
+u8 D_L17_001DD324[4] __attribute__((section(".data"))) = {0};
+f32 D_L17_001DD328[1] __attribute__((section(".data"))) = {0};
+u8 D_L17_001DD32C[892] = {0};
+s32 D_L17_001DD6A8[1] __attribute__((section(".data"))) = {0};
+u8 D_L17_001DD6AC[180] = {0};
+u8 D_L17_001DDBA4[4] __attribute__((section(".data"))) = {0};
+f32 D_L17_001DDBA8[1] __attribute__((section(".data"))) = {0};
+u8 D_L17_001DDBAC[532] = {0};
+u8 D_L17_001DDF2C[180] = {0};

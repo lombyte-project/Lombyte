@@ -823,3 +823,20 @@ void FUN_L00_0025b798(float *ptr, float rate, float b, float c, float limit) {
         *ptr = -absolute_float(rate);
     }
 }
+
+s32 D_L00_00173E54[1] __attribute__((section(".data"))) = {0};
+s32 D_L01_001742D4[1] __attribute__((section(".data"))) = {0};
+s32 D_L02_00174454[1] __attribute__((section(".data"))) = {0};
+s32 D_L03_00173F54[1] __attribute__((section(".data"))) = {0};
+s32 D_L04_00173FD4[1] __attribute__((section(".data"))) = {0};
+s32 D_L05_00174254[1] __attribute__((section(".data"))) = {0};
+s32 D_L06_001745D4[1] __attribute__((section(".data"))) = {0};
+s32 D_L07_00173ED4[1] __attribute__((section(".data"))) = {0};
+s32 D_L08_00174654[1] __attribute__((section(".data"))) = {0};
+s32 D_L09_00173FD4[1] __attribute__((section(".data"))) = {0};
+s32 D_L10_001742D4[1] __attribute__((section(".data"))) = {0};
+s32 D_L12_001742D4[1] __attribute__((section(".data"))) = {0};
+s32 D_L13_00174154[1] __attribute__((section(".data"))) = {0};
+s32 D_L14_00174554[1] __attribute__((section(".data"))) = {0};
+s32 D_L15_00174454[1] __attribute__((section(".data"))) = {0};
+s32 D_L16_00174254[1] __attribute__((section(".data"))) = {0};

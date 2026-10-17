@@ -51,3 +51,6 @@ void FUN_L08_0027f5f0(void *pos, int kind, void *vel, float f) {
         *(float *)(p + 0x2C) = f;
     }
 }
+
+s32 D_L12_001B2624[1] __attribute__((section(".data"))) = {0};
+s32 D_L14_001B28A4[1] __attribute__((section(".data"))) = {0};

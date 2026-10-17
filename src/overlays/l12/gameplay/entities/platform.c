@@ -3217,3 +3217,6 @@ void FUN_L12_002ec1d0(unsigned char *m) {
         break;
     }
 }
+
+s32 D_L12_00167360[3] = {0};
+f32 D_L12_001CBF44[3887] = {0};

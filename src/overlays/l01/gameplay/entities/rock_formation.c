@@ -1882,3 +1882,15 @@ void FUN_L01_00307c48(void *self) {
 BurstPalette D_L01_0020B4F0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
 
 BurstPalette D_L01_0020B508 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+u8 D_L01_0017C8C1[31] = {0};
+f32 D_L01_0017C8E0[1] __attribute__((section(".data"))) = {0};
+f32 D_L01_0017C8E4[1] __attribute__((section(".data"))) = {0};
+f32 D_L01_0017C8E8[6] = {0};
+s32 D_L01_001CAD28[1] __attribute__((section(".data"))) = {0};
+s32 D_L01_001CAD2C[1] __attribute__((section(".data"))) = {0};
+f32 D_L01_001CAD30[1] __attribute__((section(".data"))) = {0};
+f32 D_L01_001CAD34[1] __attribute__((section(".data"))) = {0};
+f32 D_L01_001CAD38[1] __attribute__((section(".data"))) = {0};
+u8 D_L01_001CAD3D[3] __attribute__((section(".data"))) = {0};
+u8 D_L01_001FBDFC[4] __attribute__((section(".data"))) = {0};

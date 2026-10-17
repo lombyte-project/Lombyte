@@ -755,3 +755,5 @@ void FUN_L11_0031a438(char *moby) {
     normalize_vector_xyz(direction, direction, *(float *)(d + 0x80));
     add_vector_xyz(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
 }
+
+f32 D_L17_001DE0F0[1] __attribute__((section(".data"))) = {0};

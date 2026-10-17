@@ -3417,3 +3417,11 @@ void FUN_L05_0030d5c0(char *moby) {
         }
     } while (*p++ >= 0);
 }
+
+s32 D_L05_001CAD28[1] __attribute__((section(".data"))) = {0};
+s32 D_L05_001CAD2C[1] __attribute__((section(".data"))) = {0};
+f32 D_L05_001CAD30[1] __attribute__((section(".data"))) = {0};
+f32 D_L05_001CAD34[1] __attribute__((section(".data"))) = {0};
+f32 D_L05_001CAD38[1] __attribute__((section(".data"))) = {0};
+u8 D_L05_001CAD3D[3] __attribute__((section(".data"))) = {0};
+u8 D_L05_001E1EB4[30] = {0};

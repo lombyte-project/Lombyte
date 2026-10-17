@@ -2860,3 +2860,18 @@ void FUN_L07_0031a250(unsigned char *moby) {
         break;
     }
 }
+
+u8 D_L07_0020C6C1[31] = {0};
+f32 D_L07_0020C6E0[1] __attribute__((section(".data"))) = {0};
+f32 D_L07_0020C6E4[1] __attribute__((section(".data"))) = {0};
+f32 D_L07_0020C6E8[6] = {0};
+f32 D_L07_0020C844[3] = {0};
+u8 D_L07_0020C850[4] __attribute__((section(".data"))) = {0};
+u8 D_L07_0020C854[4] __attribute__((section(".data"))) = {0};
+u8 D_L07_0020C858[4] __attribute__((section(".data"))) = {0};
+u8 D_L07_0020C85C[4740] = {0};
+u8 D_L07_0020DAE0[16] = {0};
+u8 D_L07_0020DAFC[4] __attribute__((section(".data"))) = {0};
+u8 D_L07_0020DB10[144] = {0};
+u8 D_L07_0020DBCA[16] = {0};
+s16 D_L07_0020DBDA[3] __attribute__((section(".data"))) = {0};

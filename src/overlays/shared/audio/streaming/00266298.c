@@ -255,3 +255,14 @@ s32 FUN_L00_002668a0(void *p, u8 *out_p) {
     out->f08 = ((u8 *)out->f3C)[out->f36 * 0x1C + (k = 0x10)] & 1;
     return i;
 }
+
+s32 D_L01_00179590[1] __attribute__((section(".data"))) = {0};
+s32 D_L02_00179710[1] __attribute__((section(".data"))) = {0};
+s32 D_L05_00179510[1] __attribute__((section(".data"))) = {0};
+s32 D_L06_00179890[1] __attribute__((section(".data"))) = {0};
+s32 D_L08_00179910[1] __attribute__((section(".data"))) = {0};
+s32 D_L11_00179B10[1] __attribute__((section(".data"))) = {0};
+s32 D_L12_00179590[1] __attribute__((section(".data"))) = {0};
+s32 D_L14_00179810[1] __attribute__((section(".data"))) = {0};
+s32 D_L15_00179710[1] __attribute__((section(".data"))) = {0};
+s32 D_L16_00179510[1] __attribute__((section(".data"))) = {0};

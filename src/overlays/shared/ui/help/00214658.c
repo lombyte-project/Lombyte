@@ -1165,3 +1165,34 @@ void FUN_L00_00217658(void) {
     FUN_L00_00262528(hero.unk17B0, 0x17, 5);
     blend_moby_animation(item, 6, 0, scale_game_frames(5));
 }
+
+f32 D_L01_0017AC14[1] __attribute__((section(".data"))) = {0};
+f32 D_L02_0017AD94[1] __attribute__((section(".data"))) = {0};
+f32 D_L02_0017B984[1] __attribute__((section(".data"))) = {0};
+f32 D_L02_0017B988[1] __attribute__((section(".data"))) = {0};
+f32 D_L03_0017A894[1] __attribute__((section(".data"))) = {0};
+f32 D_L05_0017ABF4[1] __attribute__((section(".data"))) = {0};
+f32 D_L05_0017B7E4[1] __attribute__((section(".data"))) = {0};
+f32 D_L05_0017B7E8[1] __attribute__((section(".data"))) = {0};
+f32 D_L06_0017AF14[1] __attribute__((section(".data"))) = {0};
+f32 D_L07_0017B7E8[7] = {0};
+f32 D_L07_0017B898[8] = {0};
+f32 D_L08_0017AF94[1] __attribute__((section(".data"))) = {0};
+f32 D_L11_0017B194[1] __attribute__((section(".data"))) = {0};
+f32 D_L11_0017BD84[1] __attribute__((section(".data"))) = {0};
+f32 D_L11_0017BD88[1] __attribute__((section(".data"))) = {0};
+f32 D_L13_0017B684[1] __attribute__((section(".data"))) = {0};
+f32 D_L13_0017B688[1] __attribute__((section(".data"))) = {0};
+f32 D_L14_0017BA84[1] __attribute__((section(".data"))) = {0};
+f32 D_L14_0017BA88[1] __attribute__((section(".data"))) = {0};
+f32 D_L15_0017AD94[1] __attribute__((section(".data"))) = {0};
+f32 D_L15_0017B984[1] __attribute__((section(".data"))) = {0};
+f32 D_L15_0017B988[1] __attribute__((section(".data"))) = {0};
+f32 D_L16_0017ABF4[1] __attribute__((section(".data"))) = {0};
+f32 D_L16_0017B7E4[1] __attribute__((section(".data"))) = {0};
+f32 D_L16_0017B7E8[1] __attribute__((section(".data"))) = {0};
+f32 D_L17_0017BC84[1] __attribute__((section(".data"))) = {0};
+f32 D_L17_0017BC88[1] __attribute__((section(".data"))) = {0};
+f32 D_L18_0017B194[1] __attribute__((section(".data"))) = {0};
+f32 D_L18_0017BD84[1] __attribute__((section(".data"))) = {0};
+f32 D_L18_0017BD88[1] __attribute__((section(".data"))) = {0};

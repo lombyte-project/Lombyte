@@ -2592,3 +2592,33 @@ void FUN_L00_002e8970(char *a, float x, float y) {
         FUN_L00_002e88c8_002e8970(p, b, y);
     }
 }
+
+u8 D_L00_001E6D30[32] = {0};
+u8 D_L00_001E6F60[1632] = {0};
+f32 D_L01_0016736C[1] __attribute__((section(".data"))) = {0};
+f32 D_L02_001674EC[1] __attribute__((section(".data"))) = {0};
+f32 D_L03_00166FEC[1] __attribute__((section(".data"))) = {0};
+f32 D_L04_0016706C[1] __attribute__((section(".data"))) = {0};
+f32 D_L05_001672EC[1] __attribute__((section(".data"))) = {0};
+f32 D_L06_0016766C[1] __attribute__((section(".data"))) = {0};
+f32 D_L07_00166F6C[1] __attribute__((section(".data"))) = {0};
+f32 D_L09_0016706C[1] __attribute__((section(".data"))) = {0};
+f32 D_L10_0016736C[1] __attribute__((section(".data"))) = {0};
+f32 D_L12_0016736C[1] __attribute__((section(".data"))) = {0};
+f32 D_L13_001671EC[1] __attribute__((section(".data"))) = {0};
+f32 D_L14_001675EC[1] __attribute__((section(".data"))) = {0};
+u8 D_L14_001EDD40[16] = {0};
+u8 D_L14_001EDD50[32] = {0};
+u8 D_L14_001EDD70[144] = {0};
+u8 D_L14_001EDE00[48] = {0};
+u8 D_L14_001EDE30[48] = {0};
+u8 D_L14_001EDE60[288] = {0};
+u8 D_L14_001EDF80[1632] = {0};
+f32 D_L15_001674EC[1] __attribute__((section(".data"))) = {0};
+u8 D_L15_001D9570[16] = {0};
+u8 D_L15_001D9580[32] = {0};
+u8 D_L15_001D95A0[144] = {0};
+u8 D_L15_001D9630[48] = {0};
+u8 D_L15_001D9660[48] = {0};
+u8 D_L15_001D9690[288] = {0};
+f32 D_L16_001672EC[1] __attribute__((section(".data"))) = {0};

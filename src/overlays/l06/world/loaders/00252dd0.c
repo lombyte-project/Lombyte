@@ -446,3 +446,13 @@ void FUN_L06_002fc630(unsigned char *moby) {
 void FUN_L06_00304088(unsigned char *moby) {
     moby[0x20] = 0x5;
 }
+
+s32 D_L06_0017459C[1] __attribute__((section(".data"))) = {0};
+s64 D_L06_00182F60[1] __attribute__((section(".data"))) = {0};
+s64 D_L06_00182F68[1] __attribute__((section(".data"))) = {0};
+s64 D_L06_00182F78[1] __attribute__((section(".data"))) = {0};
+u8 D_L06_001B0344[92] = {0};
+u8 D_L06_001B03A4[92] = {0};
+u8 D_L06_001B0404[92] = {0};
+u8 D_L06_001B0470[368] = {0};
+u8 D_L06_001C5184[124] = {0};

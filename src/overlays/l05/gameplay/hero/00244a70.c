@@ -2716,3 +2716,5 @@ void FUN_L05_00244a70(void) {
         hero.unk1A4 = 0;
     }
 }
+
+f32 D_L05_0017AD50[1] __attribute__((section(".data"))) = {0};

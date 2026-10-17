@@ -75,3 +75,6 @@ unsigned char *FUN_L07_0029b8d8(void *m, short index, float amount, float factor
     }
     return p;
 }
+
+s32 D_L13_001B244C[1] __attribute__((section(".data"))) = {0};
+s32 D_L14_001B284C[2] __attribute__((section(".data"))) = {0};

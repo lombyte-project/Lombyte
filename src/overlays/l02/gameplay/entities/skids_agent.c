@@ -730,3 +730,5 @@ void FUN_L02_002ea198(struct Moby *moby) {
         break;
     }
 }
+
+f32 D_L02_0016CE78[2] __attribute__((section(".data"))) = {0};

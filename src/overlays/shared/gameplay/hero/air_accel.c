@@ -1735,3 +1735,5 @@ void FUN_L01_002488e8(void) {
 void FUN_L01_00248900(void) {
     *(unsigned short *)((char *)(*(char **)(D_0013E533 + 0x2E9D)) + 0x34) &= ~1;
 }
+
+u8 D_L14_00179FF0[16] = {0};

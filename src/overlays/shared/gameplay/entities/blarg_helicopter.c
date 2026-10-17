@@ -1972,3 +1972,8 @@ void FUN_L03_002dca30(struct Moby *m)
         return;
     }
 }
+
+u8 D_L06_0017CBC1[31] = {0};
+f32 D_L06_0017CBE0[1] __attribute__((section(".data"))) = {0};
+f32 D_L06_0017CBE4[1] __attribute__((section(".data"))) = {0};
+f32 D_L06_0017CBE8[6] = {0};

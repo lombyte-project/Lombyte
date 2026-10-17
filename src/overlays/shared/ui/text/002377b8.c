@@ -1340,3 +1340,29 @@ void FUN_L00_0023a760(HudElem *e) {
     e->h = 0x20;
     FUN_L00_00235c80(e);
 }
+
+s32 D_L01_0017E0A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L02_0017E220[1] __attribute__((section(".data"))) = {0};
+s32 D_L03_0017DD20[1] __attribute__((section(".data"))) = {0};
+s32 D_L04_0017DDA0[1] __attribute__((section(".data"))) = {0};
+s32 D_L04_0017DDC0[1] __attribute__((section(".data"))) = {0};
+s32 D_L05_0017E0A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L06_0017E3A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L06_0017E3C0[1] __attribute__((section(".data"))) = {0};
+s32 D_L07_0017DCA0[1] __attribute__((section(".data"))) = {0};
+s32 D_L07_0017DCC0[1] __attribute__((section(".data"))) = {0};
+s32 D_L08_0017E420[1] __attribute__((section(".data"))) = {0};
+s32 D_L09_0017DDA0[1] __attribute__((section(".data"))) = {0};
+s32 D_L09_0017DDC0[1] __attribute__((section(".data"))) = {0};
+s32 D_L10_0017E0A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L10_0017E0C0[1] __attribute__((section(".data"))) = {0};
+s32 D_L11_0017E620[1] __attribute__((section(".data"))) = {0};
+s32 D_L12_0017E0A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L13_0017DF20[1] __attribute__((section(".data"))) = {0};
+s32 D_L13_0017DF40[1] __attribute__((section(".data"))) = {0};
+s32 D_L14_0017E320[1] __attribute__((section(".data"))) = {0};
+s32 D_L15_0017E220[1] __attribute__((section(".data"))) = {0};
+s32 D_L16_0017E0A0[1] __attribute__((section(".data"))) = {0};
+s32 D_L17_0017E520[1] __attribute__((section(".data"))) = {0};
+s32 D_L17_0017E540[1] __attribute__((section(".data"))) = {0};
+s32 D_L18_0017E620[1] __attribute__((section(".data"))) = {0};

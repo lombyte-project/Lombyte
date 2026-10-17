@@ -803,3 +803,40 @@ void FUN_L11_0030b358(OceanMoby_30b358 *moby)
     }
     enqueue_callback_b358((void *)FUN_L11_0030a908_b358, moby);
 }
+
+f32 D_L11_001D9B0C[1] __attribute__((section(".data"))) = {0};
+f32 D_L11_001D9B10[1] __attribute__((section(".data"))) = {0};
+f32 D_L11_001D9B14[1] __attribute__((section(".data"))) = {0};
+f32 D_L11_001D9B18[1] __attribute__((section(".data"))) = {0};
+f32 D_L11_001D9B1C[1] __attribute__((section(".data"))) = {0};
+u8 D_L11_001D9B20[744] = {0};
+s32 D_L11_001D9E0C[1] __attribute__((section(".data"))) = {0};
+u8 D_L11_001D9E10[248] = {0};
+u8 D_L11_001D9F0C[4] __attribute__((section(".data"))) = {0};
+u8 D_L11_001D9F10[760] = {0};
+s32 D_L11_001DA314[1] __attribute__((section(".data"))) = {0};
+s32 D_L11_001DA318[1] __attribute__((section(".data"))) = {0};
+s32 D_L11_001DA31C[1] __attribute__((section(".data"))) = {0};
+u8 D_L11_001DA320[496] = {0};
+u8 D_L11_001DA514[508] = {0};
+f32 D_L16_001D8A28[1] __attribute__((section(".data"))) = {0};
+f32 D_L16_001D8A2C[1] __attribute__((section(".data"))) = {0};
+f32 D_L16_001D8A30[1] __attribute__((section(".data"))) = {0};
+f32 D_L16_001D8A34[1] __attribute__((section(".data"))) = {0};
+f32 D_L16_001D8A38[1] __attribute__((section(".data"))) = {0};
+f32 D_L16_001D8A3C[1] __attribute__((section(".data"))) = {0};
+u8 D_L16_001D8A40[744] = {0};
+s32 D_L16_001D8D28[1] __attribute__((section(".data"))) = {0};
+s32 D_L16_001D8D2C[1] __attribute__((section(".data"))) = {0};
+u8 D_L16_001D8D30[248] = {0};
+u8 D_L16_001D8E28[4] __attribute__((section(".data"))) = {0};
+u8 D_L16_001D8E2C[4] __attribute__((section(".data"))) = {0};
+u8 D_L16_001D8E30[760] = {0};
+u8 D_L16_001D9128[264] = {0};
+s32 D_L16_001D9230[1] __attribute__((section(".data"))) = {0};
+s32 D_L16_001D9234[1] __attribute__((section(".data"))) = {0};
+s32 D_L16_001D9238[1] __attribute__((section(".data"))) = {0};
+s32 D_L16_001D923C[1] __attribute__((section(".data"))) = {0};
+u8 D_L16_001D9240[496] = {0};
+u8 D_L16_001D9430[4] __attribute__((section(".data"))) = {0};
+u8 D_L16_001D9434[508] = {0};

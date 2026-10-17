@@ -3578,3 +3578,11 @@ void FUN_L07_00312420(struct Moby *arg)
     qcopy(pkt.d, v10);
     draw_geometry_quad(&pkt, 0, 1);
 }
+
+s32 D_L07_001CA928[1] __attribute__((section(".data"))) = {0};
+s32 D_L07_001CA92C[1] __attribute__((section(".data"))) = {0};
+f32 D_L07_001CA930[1] __attribute__((section(".data"))) = {0};
+f32 D_L07_001CA934[1] __attribute__((section(".data"))) = {0};
+f32 D_L07_001CA938[1] __attribute__((section(".data"))) = {0};
+u8 D_L07_001CA93C[1] __attribute__((section(".data"))) = {0};
+u8 D_L07_001CA93D[3] __attribute__((section(".data"))) = {0};

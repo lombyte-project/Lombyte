@@ -49,3 +49,5 @@ void FUN_L03_0022c728(void) {
                          random_int_between(scale_game_frames(12), scale_game_frames(35)));
     }
 }
+
+s32 D_L03_0016CAE4[1] __attribute__((section(".data"))) = {0};

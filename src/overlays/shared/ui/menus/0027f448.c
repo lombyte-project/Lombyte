@@ -57,3 +57,9 @@ int FUN_L00_00284d90(int lvl, int uid) {
     }
     return k;
 }
+
+u8 D_L03_001BA4B8[3] __attribute__((section(".data"))) = {0};
+u8 D_L04_001BA538[3] __attribute__((section(".data"))) = {0};
+u8 D_L07_001BA438[31] = {0};
+u8 D_L09_001BA538[3] __attribute__((section(".data"))) = {0};
+u8 D_L13_001BA6B8[1] __attribute__((section(".data"))) = {0};

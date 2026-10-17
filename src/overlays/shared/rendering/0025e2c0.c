@@ -86,3 +86,5 @@ unsigned char *FUN_L15_002647f0(void *pos, float *p, float *c, int d, int e, int
     }
     return r;
 }
+
+s32 D_L17_001B2A70[1] __attribute__((section(".data"))) = {0};

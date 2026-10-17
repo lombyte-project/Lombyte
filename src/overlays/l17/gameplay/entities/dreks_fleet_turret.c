@@ -955,3 +955,5 @@ void FUN_L17_002dc3f8(struct Moby *m) {
         break;
     }
 }
+
+u8 D_L17_001D3F74[4] __attribute__((section(".data"))) = {0};

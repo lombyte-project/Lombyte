@@ -1838,3 +1838,5 @@ int FUN_L09_0030a298(struct Moby *moby) {
     }
     return done;
 }
+
+s32 D_L09_00166F78[2] __attribute__((section(".data"))) = {0};

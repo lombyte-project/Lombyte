@@ -2900,3 +2900,6 @@ void FUN_L16_002ea128(unsigned char *m) {
         break;
     }
 }
+
+s32 D_L16_0016CDE4[1] __attribute__((section(".data"))) = {0};
+u8 D_L16_001E53C0[1200] = {0};

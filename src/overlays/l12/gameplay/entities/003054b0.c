@@ -1333,3 +1333,6 @@ void FUN_L12_0030bff0(M_bff0 *m) {
         break;
     }
 }
+
+s32 D_L12_001FB6CC[1] __attribute__((section(".data"))) = {0};
+f32 D_L12_001FB6D4[1] __attribute__((section(".data"))) = {0};

@@ -2024,3 +2024,5 @@ int FUN_L14_00316748(char *moby, char *other) {
     }
     return 0;
 }
+
+u8 D_L14_001F6C84[11996] = {0};

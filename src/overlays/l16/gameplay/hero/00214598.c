@@ -2872,3 +2872,6 @@ void FUN_L16_00214598(void) {
         hero.unk1A4 = 0;
     }
 }
+
+f32 D_L16_0017AB44[3] = {0};
+f32 D_L16_0017AD50[1] __attribute__((section(".data"))) = {0};
