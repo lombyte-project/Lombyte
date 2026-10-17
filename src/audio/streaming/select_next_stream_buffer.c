@@ -5,12 +5,12 @@ extern s32 get_stream_buffer_size() __asm__("func_00225D88");
 
 s32 select_next_stream_buffer(s32 arg0) __asm__("FUN_00225c18");
 
-s32 select_next_stream_buffer(s32 arg0) {
+s32 select_next_stream_buffer(s32 require_low_flag_bit) {
     s32 i;
     s32 f;
 
     for (i = 0; i < 5; i++) {
-        if (arg0 != 0) {
+        if (require_low_flag_bit != 0) {
             f = graphics_buffer_descriptors[i].flags ^ 1;
         } else {
             f = graphics_buffer_descriptors[i].flags;
