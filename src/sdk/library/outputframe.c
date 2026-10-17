@@ -4,12 +4,12 @@
 #include "rnc/sdk/libmpeg.h"
 extern s32 _dispRefImage(struct MpegDecoder *mpeg, struct MpegRefImage *arg1, s32 arg2);
 extern s32 _dispRefImageField(struct MpegDecoder *mpeg, struct MpegRefImage *arg1, struct MpegRefImage *arg2, s32 arg3);
-void _outputFrame(struct MpegDecoder *mpeg, s32 arg1, s32 arg2) {
+void _outputFrame(struct MpegDecoder *mpeg, s32 arg1, s32 output_enabled) {
     struct MpegRefImage *var_5_14;
     struct MpegRefImage *var_5_24;
     struct MpegRefImage *var_6_27;
 
-    if (arg2 != 0) {
+    if (output_enabled != 0) {
         if (mpeg->picture_structure == 3) {
             if (mpeg->picture_coding_type == 3) {
                 var_5_14 = mpeg->ref_images[3];
