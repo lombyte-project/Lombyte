@@ -26,15 +26,15 @@ struct RpcRdataPacket {
 };
 extern s32 GetRpcPacket();
 extern void isceSifSendCmd();
-void _request_rdata(struct RpcRdataRequest *arg0, s32 arg1) {
+void _request_rdata(struct RpcRdataRequest *request, s32 arg1) {
     s32 a;
     s32 b;
     struct RpcRdataPacket *packet;
     packet = GetRpcPacket(arg1);
-    a = (s32)arg0->unk14;
-    b = (s32)arg0->unk1C;
+    a = (s32)request->unk14;
+    b = (s32)request->unk1C;
     packet->unk14 = a;
     packet->unk1C = b;
     packet->unk20 = 0x8000000C;
-    isceSifSendCmd(0x80000008, packet, 0x40, arg0->unk20, arg0->unk24, arg0->unk28);
+    isceSifSendCmd(0x80000008, packet, 0x40, request->unk20, request->unk24, request->unk28);
 }
