@@ -14,7 +14,7 @@ extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void memcard_restore_game(s32) __asm__("func_00209298");
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
-extern void func_00226B08(s32);
+extern void load_level_zero_preserving_progress(s32) __asm__("func_00226B08");
 extern void clear_scene_state_buffers(void) __asm__("func_00226F50");
 
 s32 process_global_state_flags(void) __asm__("FUN_00222290");
@@ -29,7 +29,7 @@ s32 process_global_state_flags(void) {
         if (mode_freeze_state == 1 || mode_freeze_state == 0x10) {
             menu_system.next = (struct MenuPage *)D_001D4EC0;
         } else {
-            func_00226B08(-1);
+            load_level_zero_preserving_progress(-1);
             InitializeGlobalStateEntry(0);
             *(u16 *)D_0013E05A = 1;
         }

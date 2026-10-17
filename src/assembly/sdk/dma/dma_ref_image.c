@@ -1,11 +1,11 @@
-#include "types.h"
-#include "eetypes.h"
-#include "kernel.h"
 #include "asm.h"
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/sdk/dma/dma_ref_image/dmaRefImage.s", dmaRefImage);
 #else
+#include "types.h"
+#include "eetypes.h"
+#include "kernel.h"
 
 /* One of the two image buffers of the Sony libmpeg decoder state. */
 typedef struct MpegRefImageBuffer {
@@ -36,24 +36,30 @@ extern u128 mpeg_ref_image_chain[] __asm__("D_0015E840");
 /* Sony libmpeg: builds a chain of ref tags for the current buffer in
    uncached memory and starts the to-scratchpad DMA channel on it. */
 void dmaRefImage(MpegRefImageState *state) {
+    s32 i;
     u64 *tag;
     s32 count;
-    s32 i;
     s32 interrupts;
     s32 id;
     u32 address;
+    u64 first_tag;
 
+    i = 0;
     tag = (u64 *)(((u32)mpeg_ref_image_chain & 0x0fffffff) | 0x20000000);
     count = state->buffers[state->index].count;
-    for (i = 0; i < count; i++) {
-        tag[0] = ((u64)(state->buffers[state->index].first_source[i] & 0x0fffffff) << 32) | 0x30000030;
-        address = state->buffers[state->index].second_source[i];
-        id = 3;
-        if (i == count - 1) {
-            id = 0;
-        }
-        tag[2] = ((u64)(address & 0x0fffffff) << 32) | ((u64)id << 28) | 0x30;
-        tag += 4;
+    if (count > 0) {
+        do {
+            first_tag = ((u64)(state->buffers[state->index].first_source[i] & 0x0fffffff) << 32) | 0x30000030;
+            address = state->buffers[state->index].second_source[i];
+            id = 3;
+            if (i == count - 1) {
+                id = 0;
+            }
+            tag[0] = first_tag;
+            tag[2] = ((u64)(address & 0x0fffffff) << 32) | ((u64)id << 28) | 0x30;
+            tag += 4;
+            i++;
+        } while (i < count);
     }
     interrupts = DIntr();
     CpuSync();

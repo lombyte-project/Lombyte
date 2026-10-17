@@ -152,6 +152,7 @@ s32 sound_update(void) {
     s32 pitch_bend;
     s32 handle;
     s32 command_flags;
+    u8 * volatile occlusion_history;
 
     underwater = D_001872D4;
     water_height = 0.0f;

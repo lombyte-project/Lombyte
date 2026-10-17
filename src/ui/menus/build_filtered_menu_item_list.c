@@ -37,7 +37,9 @@ extern s32 D_001D6248[];
 extern s32 D_001D6280[];
 extern struct Menu D_001D1088;
 
-s32 FUN_002216c0(void) {
+s32 build_filtered_menu_item_list(void) __asm__("FUN_002216c0");
+
+s32 build_filtered_menu_item_list(void) {
     s32 n;
     s32 i;
     s32 id;
@@ -70,4 +72,4 @@ s32 FUN_002216c0(void) {
     return 0;
 }
 
-extern __typeof__(FUN_002216c0) func_002216C0 __attribute__((alias("FUN_002216c0")));
+extern __typeof__(build_filtered_menu_item_list) func_002216C0 __attribute__((alias("FUN_002216c0")));

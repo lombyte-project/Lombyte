@@ -2526,13 +2526,13 @@ void FUN_L00_002ce358(struct Moby *m)
             count = 0;
             distance = 1000000.0f;
             *(u8 *)((u8 *)&hero + 0x1ff4) = 1;
-            *(u8 *)((u8 *)&hero + 0x1ff7) = 0;
+            hero.ammo_capacity = 0;
             *(f32 *)((u8 *)&hero + 0x1ff8) = FUN_002000e8_2ce358(*(f32 *)((u8 *)&hero + 0x1ff8), frame_scale * 0.05f);
             {
                 struct Moby **slots, **exclusions;
                 s32 i;
-                exclusions = (struct Moby **)((u8 *)&hero + 0x1ffc);
                 slots = (struct Moby **)hero.unk2020;
+                exclusions = (struct Moby **)((u8 *)&hero + 0x1ffc);
                 for (i = 0; i < 6; i++, slots++) {
                     other = *slots;
                     if (other != 0) {
@@ -2545,7 +2545,7 @@ void FUN_L00_002ce358(struct Moby *m)
                                 count++;
                                 *exclusions++ = *(struct Moby **)(other->pvars + 0x30);
                                 if (other->state < 4)
-                                    (*(u8 *)((u8 *)&hero + 0x1ff7))++;
+                                    (hero.ammo_capacity)++;
                                 if (count > 8)
                                     break;
                             }
@@ -2671,11 +2671,15 @@ state2:
         }
         qcopy(&collision_data[0], &m->pos);
         if (FUN_001f0d60_2ce358(0.2f, &collision_data[0], 0, m)) {
+            category = 0;
             other = (struct Moby *)coll_hit.moby;
             if (other && other->oclass == 0 && other->state != 0xfe && other->state != 0xfd)
                 goto update_rotations;
             other = (struct Moby *)((volatile CollisionHit *)&coll_hit)->moby;
-            category = other && other->pclass ? *(u8 *)((u8 *)other->pclass + 0x46) : 0;
+            if (other) {
+                category = 0;
+                if (other->pclass) category = *(u8 *)((u8 *)other->pclass + 0x46);
+            }
             other = (struct Moby *)((volatile CollisionHit *)&coll_hit)->moby;
             if (other && other->state != 0xfe && other->state != 0xfd &&
                 (category == 5 || category == 7 || category == 8)) {

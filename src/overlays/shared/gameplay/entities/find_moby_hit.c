@@ -528,16 +528,18 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
             list = entry + 4;
             do {
                 float radius, extent;
+                int type;
                 flags = *(unsigned int *)(list - 4);
                 last = flags >> 31;
-                chosen = mask >> (index & 31);
-                if (!((chosen ^ 1) & 1) && (flags & 0x20000)) {
+                type = flags & 0xff;
+                chosen = (mask >> index) ^ 1;
+                if (!(chosen & 1) && (flags & 0x20000)) {
                     entries[count] = entry;
-                    switch ((int)(flags & 0xff)) {
+                    switch (type) {
                     case 0:
                     case 1:
                     case 2: {
-                        if ((int)(flags & 0xff) < 2) {
+                        if (type < 2) {
                             qcopy(&first, (void *)((entry + 0x10)));
                             FUN_001f9a80_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
                             radius = first.f[3];
@@ -546,13 +548,14 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
                             qcopy(&second, (void *)((entry + 0x10)));
                             FUN_001f9a10_25aca0(&first, &first, &second);
                             FUN_001f9a68_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
-                            extent = *(float *)(entity + 0x2c);
-                            radius = *(float *)(list + 8) * extent * 0.0009765625f;
+                            radius = *(float *)(entity + 0x2c);
+                            radius = *(float *)(list + 8) * radius * 0.0009765625f;
                         }
                         weights[count] = radius * 4.1887903f * radius * radius;
                         break;
                     }
                     case 3: {
+                        float radius, extent;
                         qcopy(&first, (void *)((entry + 0x10)));
                         FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
                         radius = first.f[3] * *(float *)(entity + 0x2c);
@@ -597,15 +600,15 @@ int FUN_L00_0025aca0(float density, unsigned char *entity, int maximum, Vec4_25a
             if (type < 2) {
                 qcopy(&first, (void *)((entry + 0x10)));
                 FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
-                radius = first.f[3];
+                extent = first.f[3] * *(float *)(entity + 0x2c);
             } else {
                 qcopy(&first, (void *)((0x70000000 + (*(int *)(entry + 4) << 4))));
                 qcopy(&second, (void *)((entry + 0x10)));
                 FUN_001f9a10_25aca0(&first, &first, &second);
                 FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
-                radius = *(float *)(entry + 0xc);
+                extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c);
             }
-            extent = radius * *(float *)(entity + 0x2c) * 0.0009765625f;
+            extent *= 0.0009765625f;
             FUN_L00_001ff378_25aca0(1024.0f, &first, &first);
             do {
                 second.f[0] = FUN_002132a8_25aca0(-extent, extent);

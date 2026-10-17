@@ -2518,7 +2518,6 @@ extern f32 D_0013F3D0_b6bc8[] __asm__("D_0013F3D0");
 s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     u128 velocity __attribute__((aligned(16)));
     union { u128 q; f32 f[4]; } pos __attribute__((aligned(16)));
-    Moby **p;
     Moby *other;
     u8 *state;
     Vars *vars;
@@ -2535,7 +2534,7 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
     vars->pad14 = 0;
     other = D_001ABA00_b6bc8[0];
     if (other != 0) {
-        p = D_001ABA00_b6bc8;
+        i = 0;
         do {
             state = FUN_L00_0025c338_b6bc8(other);
             if (state != 0) {
@@ -2574,8 +2573,8 @@ s32 FUN_L00_002b6bc8(Moby *m, f32 radius) {
                     }
                 }
             }
-            p++;
-            other = *p;
+            i++;
+            other = D_001ABA00_b6bc8[i];
         } while (other != 0);
     }
     i = 1;
@@ -3004,7 +3003,7 @@ void FUN_L00_002b77f0(unsigned char *m) {
         if (m[0x52] != 0)
             goto tail;
         if (FUN_L00_0024edc8_2b77f0(m) > 10.0f &&
-            (D_0013CAE0[0] & g->items[0].button_mask) != 0 && m[0x53] != 1) {
+            (g->items[0].button_mask & D_0013CAE0[0]) != 0 && m[0x53] != 1) {
             FUN_L00_00257880_2b77f0(m, 1, 0, FUN_001f96f8_2b77f0(5));
         }
         break;
@@ -3025,14 +3024,14 @@ void FUN_L00_002b77f0(unsigned char *m) {
                 *(s16 *)(v + 0x44) = -1;
             }
         }
-        if ((D_0013CAE0[0] & g->items[0].button_mask) && !g->unk20AC &&
+        if ((g->items[0].button_mask & D_0013CAE0[0]) && !g->unk20AC &&
             FUN_L00_00233e98_2b77f0(-1)) {
             m[0x20] = 3;
             FUN_L00_0020e4c8_2b77f0();
             *(s16 *)(v + 0x4C) = FUN_001f96f8_2b77f0(10);
             if (*(s16 *)(v + 0x44) == -1)
                 *(s16 *)(v + 0x44) = FUN_L00_0023e5e0_2b77f0(7.5f, 0.0f, m + 0x10, 0);
-        } else if ((D_0013CAE0[1] & g->items[0].button_mask) &&
+        } else if ((g->items[0].button_mask & D_0013CAE0[1]) &&
                    !FUN_L00_00233e98_2b77f0(-1)) {
             FUN_L00_0028dbe8_2b77f0(0, 0, m);
         }
@@ -3135,7 +3134,7 @@ void FUN_L00_002b77f0(unsigned char *m) {
             FUN_L00_00233db8_2b77f0(-1, 1);
         divisor = FUN_L00_00233e98_2b77f0(-1);
         if (FUN_001f9740_2b77f0(v + 0x4C)) {
-            if ((D_0013CAE0[0] & g->items[0].button_mask) &&
+            if ((g->items[0].button_mask & D_0013CAE0[0]) &&
                 !g->unk20AC && divisor)
                 goto tail;
             m[0x20] = 2;

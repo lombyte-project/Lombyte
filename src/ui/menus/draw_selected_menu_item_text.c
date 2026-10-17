@@ -6,7 +6,9 @@ extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern s32 do_gif_paging() __asm__("func_001F4398");
 extern s32 font_print_center(s32, s32, u64, s32, s32) __asm__("func_001F6AF0");
 extern s32 get_help_message_text() __asm__("func_001FDD10");
-s32 FUN_002220f0(struct MenuScreen *menu) {
+s32 draw_selected_menu_item_text(struct MenuScreen *menu) __asm__("FUN_002220f0");
+
+s32 draw_selected_menu_item_text(struct MenuScreen *menu) {
     s32 height;
     s32 center_y;
     s32 temp_16_61;

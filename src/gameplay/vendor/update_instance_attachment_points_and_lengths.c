@@ -16,7 +16,9 @@ struct __attribute__((packed)) Pair64 {
     u64 a;
     u64 b;
 };
-void FUN_0023a318(struct Arg *arg) {
+void update_instance_attachment_points_and_lengths(struct Arg *arg) __asm__("FUN_0023a318");
+
+void update_instance_attachment_points_and_lengths(struct Arg *arg) {
     u8 sp_slot[0x30];
     struct Node *node;
     node = arg->node;
@@ -28,4 +30,4 @@ void FUN_0023a318(struct Arg *arg) {
     node->b = fast_vec_length(sp_slot + 0x10);
 }
 
-extern __typeof__(FUN_0023a318) func_0023A318 __attribute__((alias("FUN_0023a318")));
+extern __typeof__(update_instance_attachment_points_and_lengths) func_0023A318 __attribute__((alias("FUN_0023a318")));

@@ -140,7 +140,7 @@ extern void set_vector_xyz(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern float FUN_001f9b80(void *, void *);
 extern void FUN_001fa050(void *, void *) __asm__("FUN_001fa050");
-extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern void *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float D_0015ED6C;
 extern int D_L14_001620BC __attribute__((sda));
 extern int D_L14_001620C0 __attribute__((sda));

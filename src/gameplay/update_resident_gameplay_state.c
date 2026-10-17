@@ -178,7 +178,7 @@ extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern ResidentRenderObject *create_moby(s32) __asm__("func_0020C4F8");
 extern void mark_moby_for_removal(ResidentRenderObject *) __asm__("func_0020C828");
 extern void update_moby_animation_state(ResidentRenderObject *) __asm__("func_0020C880");
-extern void func_0020CFD0(void);
+extern void update_resident_packed_direction(void) __asm__("func_0020CFD0");
 extern void refresh_resident_object_spatial_bounds(ResidentRenderObject *) __asm__("func_0020DEF8");
 extern void update_visible_resident_objects(void) __asm__("func_00212E28");
 extern void update_moby_shadow_range(ResidentRenderObject *) __asm__("func_00213700");
@@ -531,7 +531,7 @@ void update_resident_gameplay_state(void) {
         }
         sound_update();
         update_all_point_lights();
-        func_0020CFD0();
+        update_resident_packed_direction();
         noop_callback_h();
         break;
 
@@ -773,7 +773,7 @@ void update_resident_gameplay_state(void) {
         update_camera();
         sound_update();
         update_all_point_lights();
-        func_0020CFD0();
+        update_resident_packed_direction();
         noop_callback_h();
         break;
 

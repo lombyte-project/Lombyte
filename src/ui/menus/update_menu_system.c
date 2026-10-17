@@ -24,8 +24,8 @@ struct Ent {
     f32 unk58;
 };
 
-extern void func_00218D10(void);
-extern void func_00218F98(void) __asm__("FUN_00218f98");
+extern void reset_active_camera_position_and_basis(void) __asm__("func_00218D10");
+extern void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
 extern void update_visible_resident_objects() __asm__("FUN_00212e28");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Ent *) __asm__("func_0022DA68");
 extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
@@ -46,7 +46,7 @@ void update_menu_system(void) {
     struct MenuScreen *m;
 
     menu_system.update_count = menu_system.update_count + 1;
-    func_00218D10();
+    reset_active_camera_position_and_basis();
     if (menu_system.state == 0x14) {
         if (menu_system.timer != 0) {
             menu_system.timer = menu_system.timer - 1;
@@ -69,7 +69,7 @@ void update_menu_system(void) {
         return;
     }
     if (menu_system.state == 0 || menu_system.state == 0x2D) {
-        func_00218F98();
+        initialize_menu_preview_scene();
     }
     if (mode_freeze_flags & 1) {
         mode_freeze_init(3, menu_system.current);

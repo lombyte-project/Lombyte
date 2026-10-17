@@ -5,9 +5,9 @@ extern s32 font_print_wrapped() __asm__("FUN_001f6cb8");
 void font_print_wrapped_small(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
                               s32 arg6) __asm__("FUN_001f6fd0");
 
-void font_print_wrapped_small(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
-                              s32 arg6) {
-    font_print_wrapped(arg0, arg1, arg2, arg3, arg4, arg5, arg6, get_effect_texture(2), small_font_metrics);
+void font_print_wrapped_small(s32 start_x, s32 start_y, s32 wrap_width, s32 max_height, s32 arg4, s32 text,
+                              s32 byte_limit) {
+    font_print_wrapped(start_x, start_y, wrap_width, max_height, arg4, text, byte_limit, get_effect_texture(2), small_font_metrics);
 }
 
 extern void func_001F6FD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6)

@@ -2870,21 +2870,24 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     int next_row;
 
     FUN_L00_002ddcb8_u(frame_context, initial_vector);
-    global = (char *)&D_0013F350_c + 0xcb0;
+    global = (char *)&D_0013F350_c;
     {
-        int i = *(int *)(global + (0x2084 - 0xcb0));
-    if ((i == 30 || i == 1) && (*(u16 *)(*(char **)(global + (0x2080 - 0xcb0)) + 0x34) & 1)) {
+        int i = *(int *)(global + 0x2084);
+    if ((i == 30 || i == 1) && (*(u16 *)(*(char **)(global + 0x2080) + 0x34) & 1)) {
         qcopy(&first, D_L00_00166FD0_002ddcb8);
         qcopy(&second, D_L00_00166FD0_002ddcb8 + 0x10);
         qcopy(&third, D_L00_00166FD0_002ddcb8 + 0x20);
-    } else if (*(short *)(global + (0x22c8 - 0xcb0)) == 1) {
+    } else if (*(short *)(global + 0x22c8) == 1) {
         FUN_001ff300_002ddcb8(&first, (char *)frame_context + 0xd0, -1.0f);
-        qcopy_nc(&second, (char *)frame_context + 0xc0);
-        qcopy_nc(&third, (char *)frame_context + 0xe0);
+        current = frame_context;
+        current += 0xc0;
+        qcopy_nc(&second, current);
+        current += 0x20;
+        qcopy_nc(&third, current);
     } else {
-        qcopy(&first, global + (0x640 - 0xcb0));
-        qcopy(&second, global + (0x650 - 0xcb0));
-        qcopy(&third, global + (0x660 - 0xcb0));
+        qcopy(&first, global + 0x640);
+        qcopy(&second, global + 0x650);
+        qcopy(&third, global + 0x660);
     }
     }
     FUN_001ff500_002ddcb8(&scaled_first, &first, D_L00_00161B84_lui);
@@ -2892,7 +2895,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     qcopy(D_L00_001E5F40_002ddcb8, initial_vector);
     FUN_001ff500_002ddcb8(&probe, &first, D_L00_00161B84_lui * 10.0f);
     FUN_001ff278_002ddcb8(&probe, &probe, initial_vector);
-    if (FUN_001efc70_002ddf60(initial_vector, &probe, 20, *(void **)(global + (0x2080 - 0xcb0)), 0)) {
+    if (FUN_001efc70_002ddf60(initial_vector, &probe, 20, *(void **)(global + 0x2080), 0)) {
         i = truncate_float_to_s32(FUN_001ff488_002ddf60(((char *)D_L00_00173E60), initial_vector) / D_L00_00161B84_lui);
         if (i < 10) {
             halfword = (short *)(D_L00_001E5F40_002ddcb8 + 0xc8) + i;
@@ -2962,6 +2965,7 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
     do {
         float sampled, angle, delta, length, row_float, spread, phase;
         index = row << 4;
+        row_float = (float)row;
         FUN_001ff2a8_002ddf60(&temp1, D_L00_001E5F40_002ddcb8 + index, D_L00_001E5F30 + index);
         qcopy(&temp2, &scaled_first);
         FUN_001ff3c0_002ddf60(&edge, &temp2, &temp1);
@@ -2981,7 +2985,6 @@ void FUN_L00_002ddf60(void *frame_context, void *initial_vector) {
             if (length > 2.0f)
                 FUN_001ff300_002ddcb8(&offset, &offset, 2.0f / length);
         }
-        row_float = (float)row;
         if (row > 5) FUN_001ff2d8_002ddf60(&offset, &offset, &temp1, row_float / FUN_00200240_002ddf60(10) + 0.0f);
         FUN_001ff278_002ddcb8(D_L00_001E5F40_002ddcb8 + index, D_L00_001E5F30 + index, &offset);
         qcopy(&tangent, &scaled_first);

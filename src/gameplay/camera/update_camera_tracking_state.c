@@ -40,7 +40,9 @@ extern f32 FUN_001f9ab0(void *a, void *b);
 extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
-void FUN_001ed470(void) {
+void update_camera_tracking_state(void) __asm__("FUN_001ed470");
+
+void update_camera_tracking_state(void) {
     Vec4 dir;
     Vec4 proj;
     struct CamColl *cam;
@@ -112,4 +114,4 @@ void FUN_001ed470(void) {
     }
 }
 
-extern __typeof__(FUN_001ed470) func_001ED470 __attribute__((alias("FUN_001ed470")));
+extern __typeof__(update_camera_tracking_state) func_001ED470 __attribute__((alias("FUN_001ed470")));

@@ -12,7 +12,9 @@ extern void configure_graphics_projection(s32 arg0, s32 arg1, f32 fparg0, f32 fp
 extern s16 D_001518EE[];
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
-void FUN_001f7888(s32 tw, s32 th, s32 fixed, f32 scale) {
+void configure_graphics_render_target_and_projection(s32 tw, s32 th, s32 fixed, f32 scale) __asm__("FUN_001f7888");
+
+void configure_graphics_render_target_and_projection(s32 tw, s32 th, s32 fixed, f32 scale) {
     s32 base;
 
     if (fixed != 0) {
@@ -35,4 +37,4 @@ void FUN_001f7888(s32 tw, s32 th, s32 fixed, f32 scale) {
     vu1_add_g_sregister(0x42, 0x8000000044L);
 }
 
-extern __typeof__(FUN_001f7888) func_001F7888 __attribute__((alias("FUN_001f7888")));
+extern __typeof__(configure_graphics_render_target_and_projection) func_001F7888 __attribute__((alias("FUN_001f7888")));

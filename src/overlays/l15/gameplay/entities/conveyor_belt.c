@@ -1090,8 +1090,8 @@ void FUN_L15_002ec760(struct Moby *moby) {
         }
         break;
     case 1:
-        if (is_point_inside_clip_volume((void *)0x13f3d0, *(int *)(data + 0x27c)) &&
-            (D_001413DC < 2 || D_001413DC == 9) && FUN_00255a30(moby, data)) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x27c)) &&
+            ((unsigned int)hero.state.control_mode < 2 || (unsigned int)hero.state.control_mode == 9) && FUN_00255a30(moby, data)) {
             FUN_L00_002502a0_v(*(int *)(data + 0x280));
             moby->anim_speed = 0.0f;
             moby->state = 2;
@@ -1107,7 +1107,8 @@ void FUN_L15_002ec760(struct Moby *moby) {
             }
         }
         break;
-    case 2:
+    case 2: {
+        char *other;
         if (D_L15_0015F5C4 != 2) {
             moby->anim_speed = 1.0f;
             if (*(short *)(data + 4) == 0) {
@@ -1121,7 +1122,9 @@ void FUN_L15_002ec760(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    }
+    case 3: {
+        char *other;
         if (D_001413F4 == 2) {
             index = *(int *)(data + 0x158);
             if (index != -1) {
@@ -1138,7 +1141,9 @@ void FUN_L15_002ec760(struct Moby *moby) {
             }
         }
         break;
-    case 4:
+    }
+    case 4: {
+        char *other;
         if (FUN_001f86a0(data + 0x15c)) {
             FUN_L15_00208ca8();
             FUN_00246e30((char *)D_L15_0015FFD8 + (*(int *)(data + 0x14c) << 8), 0, 0);
@@ -1157,6 +1162,7 @@ void FUN_L15_002ec760(struct Moby *moby) {
             moby->state = 5;
         }
         break;
+    }
     case 5: start_scene_p(1); moby->state = 6; break;
     case 6:
         if (D_L15_0015F5C4 != 2) { FUN_L00_00299460_v(0x10); moby->state = 7; }
@@ -1177,9 +1183,10 @@ void FUN_L15_002ec760(struct Moby *moby) {
     char *pos = (char *)&moby->pos;
     fast = 0.02f;
     slow = 0.3f;
-    near_distance = FUN_001f8c00(pos, (void *)0x13f3d0);
+    near_distance = FUN_001f8c00(pos, &hero.motion.pos);
     if (near_distance < 8.0f) {
-        yaw = FUN_001f9028(D_0013F420 - *(float *)(pos), D_0013F424 - *(float *)((char *)moby + 0x14));
+        yaw = D_0013F424 - *(float *)((char *)moby + 0x14);
+        yaw = FUN_001f9028(D_0013F420 - *(float *)(pos), yaw);
         if (FUN_001f9968(moby->rot.z, yaw) < 1.5707964f) {
             if (FUN_001f8b50((void *)0x13f450) > 0.01f)
                 *(int *)(data + 0x274) = FUN_001f8658(0x78);
@@ -1210,10 +1217,10 @@ ready:
     FUN_001f8a20(&vecs.diff, &vecs.target, &vecs.pos);
     yaw = FUN_001f98a8(FUN_001f9028(((float *)&vecs.diff)[0], ((float *)&vecs.diff)[1]), moby->rot.z);
     pitch = -FUN_001f9028(FUN_001f8b80(&vecs.diff), ((float *)&vecs.diff)[2]);
-    if (yaw > 1.5707964f) yaw = 1.5707964f;
-    else if (yaw < -1.5707964f) yaw = -1.5707964f;
-    if (pitch > 0.5235988f) pitch = 0.5235988f;
-    else if (pitch < -0.5235988f) pitch = -0.5235988f;
+    if (yaw < -1.5707964f) yaw = -1.5707964f;
+    else if (yaw > 1.5707964f) yaw = 1.5707964f;
+    if (pitch < -0.5235988f) pitch = -0.5235988f;
+    else if (pitch > 0.5235988f) pitch = 0.5235988f;
     {
     float half_yaw = yaw * 0.5f;
     *(volatile float *)(data + 0x248) = half_yaw;

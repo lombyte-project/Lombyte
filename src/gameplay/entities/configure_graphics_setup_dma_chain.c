@@ -7,7 +7,9 @@ extern u8 D_0015FEC0[];
 extern void FUN_00227740(void);
 extern void submit_graphics_setup_command_stream(void *) __asm__("FUN_00227548");
 extern void noop_core_callback(void *, s32) __asm__("func_001F21B0");
-void FUN_0020d060(void) {
+void configure_graphics_setup_dma_chain(void) __asm__("FUN_0020d060");
+
+void configure_graphics_setup_dma_chain(void) {
     struct DmaTag *tag;
 
     if (D_0015FF3C == 0) {
@@ -36,4 +38,4 @@ void FUN_0020d060(void) {
     noop_core_callback(D_0015FEC0, 8);
 }
 
-extern __typeof__(FUN_0020d060) func_0020D060 __attribute__((alias("FUN_0020d060")));
+extern __typeof__(configure_graphics_setup_dma_chain) func_0020D060 __attribute__((alias("FUN_0020d060")));

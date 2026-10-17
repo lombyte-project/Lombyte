@@ -45,10 +45,10 @@ extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 is_value_within_interpolated_window(Moby *, f32) __asm__("FUN_00214cc8");
 extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 
-void FUN_00237ed0(Moby *m) __asm__("FUN_00237ed0");
+void update_resident_dialogue_animation_state(Moby *m) __asm__("FUN_00237ed0");
 
 extern u8 big_head_cheat_enabled __asm__("D_0015EDB0") MACRO_ADDR;
-void FUN_00237ed0(Moby *m) {
+void update_resident_dialogue_animation_state(Moby *m) {
     s32 r;
     s32 a;
 
@@ -176,4 +176,4 @@ void FUN_00237ed0(Moby *m) {
     }
 }
 
-extern __typeof__(FUN_00237ed0) func_00237ED0 __attribute__((alias("FUN_00237ed0")));
+extern __typeof__(update_resident_dialogue_animation_state) func_00237ED0 __attribute__((alias("FUN_00237ed0")));

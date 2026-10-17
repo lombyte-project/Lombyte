@@ -42,26 +42,26 @@ extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("fun
 
 s32 draw_pause_ring(struct PauseState *arg0) __asm__("FUN_00220b20");
 
-s32 draw_pause_ring(struct PauseState *arg0) {
+s32 draw_pause_ring(struct PauseState *pause_state) {
     s32 i;
     s32 flag;
     f32 cx, cy, radius;
     struct IconEnt *iconTab;
-    s32 v1, v0;
+    s32 v1, viewport_height;
 
     setup_gif_paging(0);
-    v1 = arg0->w;
+    v1 = pause_state->w;
     iconTab = D_001863D0;
-    v0 = arg0->h;
-    flag = v1 < v0;
+    viewport_height = pause_state->h;
+    flag = v1 < viewport_height;
     /* v1 doubles as `selected`: retail's movz reuses the same register
        that already holds v1 (loaded straight into it), so the C must
        overwrite v1 itself rather than assign a fresh local -- that
        fresh local costs an extra `move` before the conditional one. */
     cx = (f32)v1 * 0.5f;
-    cy = (f32)v0 * 0.5f;
+    cy = (f32)viewport_height * 0.5f;
     if (flag == 0) {
-        v1 = v0;
+        v1 = viewport_height;
     }
     radius = (f32)v1 * 0.5f - 40.0f;
     i = 0;
@@ -71,7 +71,7 @@ s32 draw_pause_ring(struct PauseState *arg0) {
         t = fast_normalize_angle((f32)i * 0.7853982f + -1.5707964f);
         x = cx + fast_cos(t) * radius;
         y = cy + fast_sin(t) * radius;
-        if (i == arg0->sel) {
+        if (i == pause_state->sel) {
             u64 color = ((SubtractIntegerWithClamp((game_frame_counter & 0x3F) - 0x20) + 0x40) * 0x10202) |
                         0x80000000;
 
@@ -80,11 +80,11 @@ s32 draw_pause_ring(struct PauseState *arg0) {
             append_screen_rect_packet((s32)x - 0x12, (s32)y - 0x12, (s32)x + 0x12, (s32)y + 0x12,
                                       panel_clear_color, 0);
         }
-        if (arg0->slots[i] == 0) {
+        if (pause_state->slots[i] == 0) {
             append_screen_rect_packet((s32)x - 0xF, (s32)y - 0xF, (s32)x + 0xF, (s32)y + 0xF,
                                       0x40404040L, 0);
         } else {
-            s32 idx = arg0->slots[i];
+            s32 idx = pause_state->slots[i];
             s32 id = get_icon_frame(iconTab[idx].id, item_text_variant[idx] ? 4 : 0);
 
             draw_hud_sprite(id, (s32)x - 0x11, (s32)y - 0x11, 0x20, 0x20, 0x80);
@@ -92,10 +92,10 @@ s32 draw_pause_ring(struct PauseState *arg0) {
         i += 1;
     } while (i < 8);
     draw_hud_sprite(get_icon_frame(0xE99E, 0), 8, 0x27, 0x20, -0x20, 0x80);
-    draw_hud_sprite(get_icon_frame(0xE99E, 0), arg0->w - 0xA, 0x27, -0x20, -0x20,
+    draw_hud_sprite(get_icon_frame(0xE99E, 0), pause_state->w - 0xA, 0x27, -0x20, -0x20,
                     0x80);
     font_print_large(0x28, 0xF, 0x80FFA888L, D_001602D8, -1);
-    font_print_large(arg0->w - 0x3C, 0xF, 0x80FFA888L, D_001602E0, -1);
+    font_print_large(pause_state->w - 0x3C, 0xF, 0x80FFA888L, D_001602E0, -1);
     do_gif_paging();
     return 2;
 }

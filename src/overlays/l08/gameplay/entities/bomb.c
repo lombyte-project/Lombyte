@@ -461,7 +461,7 @@ void FUN_L08_002d23f0(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d42d8.s", FUN_L08_002d42d8);
 #else
 extern int D_L08_001B0CB0[];
-extern char D_001413D0[];
+extern s32 D_001413D0[];
 extern char D_0013D388[] __attribute__((section(".data")));
 extern unsigned short D_00141C38 __attribute__((section(".data")));
 extern unsigned char D_0013D4CB;
@@ -493,7 +493,7 @@ void FUN_L08_002d42d8(struct Moby *moby) {
     void *position = &moby->pos;
     struct Moby *target;
     struct Moby *other;
-    int state;
+    long state;
     float angle, speed, frame;
     qcopy(old_position, position);
     qcopy(old_rotation, &moby->rot);
@@ -742,7 +742,7 @@ extern int D_L08_0015F694_2D5FA8 __asm__("D_L08_0015F5B0");
 extern int D_L08_0015F698_2D5FA8 __asm__("D_L08_0015F5B4") __attribute__((sda));
 extern int D_L08_0015F6A0_2D5FA8 __asm__("D_L08_0015F5BC") __attribute__((sda));
 extern Path_2D5FA8 *D_L08_001B0FB0_2D5FA8[] __asm__("D_L08_001B0CB0");
-extern char D_001413D0[];
+extern s32 D_001413D0[];
 extern unsigned char D_0013D50F_2D5FA8[] __asm__("D_0013D408");
 extern Hit_2D5FA8 *find_2D5FA8(Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern Hit_2D5FA8 *pick_2D5FA8(Hit_2D5FA8 *, Hit_2D5FA8 *, Hit_2D5FA8 *, int) __asm__("FUN_L05_002899f8");

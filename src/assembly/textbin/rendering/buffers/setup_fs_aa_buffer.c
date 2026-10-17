@@ -55,7 +55,7 @@ void setup_fs_aa_buffer(s32 display_width, s32 display_height, s32 storage_width
     active_fs_aa_buffer->draw0.frame1.FBP = fs_aa_buffer.fbp0;
     *(volatile u64 *)&active_fs_aa_buffer->draw0.zbuf1 =
         (u64)fs_aa_buffer.zbp | ((u64)(fs_aa_buffer.zpsm & 0xF) << 24);
-    *(volatile u128 *)&active_fs_aa_buffer->giftag0 = 0;
+    active_fs_aa_buffer->giftag0 = (struct GifTag){0};
     active_fs_aa_buffer->giftag0.NLOOP = 8;
     active_fs_aa_buffer->giftag0.EOP = 1;
     active_fs_aa_buffer->giftag0.NREG = 1;

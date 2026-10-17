@@ -56,7 +56,130 @@ void FUN_L01_00227e48(int a0, int a1, int a2) {
         FUN_L00_0028de68(a0, a1, flag, 0, *(int *)(g + 0x2080));
     }
 }
+#ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00228000.s", FUN_L01_00228000);
+#else
+#include "rnc/gameplay/entities/moby.h"
+extern void FUN_L00_00232670(void);
+extern void hero_update(void) __asm__("FUN_L00_00211670");
+extern void FUN_L01_0022cd48(void);
+extern void FUN_L01_00242930(void);
+extern void FUN_L00_00216f10(void);
+extern void FUN_L00_002054e8(void);
+extern void FUN_L00_00208a10(void);
+extern void FUN_L00_00207c48(void);
+extern void FUN_L00_00207a58(void);
+extern void FUN_L00_002484e0(void *);
+extern void FUN_L00_00207d00(void);
+extern void FUN_L00_00216de8(int, int);
+extern void FUN_L00_00208b60(void);
+extern void FUN_L00_00257024(void *);
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
+extern unsigned char D_0015EDB1[] __attribute__((section(".data")));
+extern unsigned char D_L00_0017A680[];
+extern int level_frame_count __asm__("D_L01_0015F5CC");
+extern unsigned char D_0013D4DC[];
+
+void FUN_L01_00228000(void)
+{
+    struct Hero *p;
+    struct Hero *q;
+    long period;
+    int r, g, b, alpha, i;
+    int color;
+    float phase, value, numerator;
+    char *v;
+    FUN_L00_00232670();
+    hero_update();
+    FUN_L01_0022cd48();
+    FUN_L01_00242930();
+    p = &hero;
+    if (p->vehicle_mode == 0) return;
+    FUN_L00_00216f10();
+    FUN_L00_002054e8();
+    if (p->vehicle_mode == 0) return;
+    FUN_L00_00208a10();
+    FUN_L00_00207c48();
+    FUN_L00_00207a58();
+    FUN_L00_002484e0(&p->motion.pos);
+    if (p->vehicle_mode == 3) {
+        if (D_0015EDB1[0] != 0) *(float *)(D_L00_0017A680 + 0x154C) = 1.9f;
+        alpha = 128;
+        period = scale_game_frames(170);
+        if (p->unk22E0 == 2) period = scale_game_frames(50);
+        else if (p->unk22E0 == 1) period = scale_game_frames(90);
+        value = convert_integer_to_float(period);
+        phase = fast_sin((((float)(level_frame_count % (int)period) / value) * 2.0f) * 3.1415927f + -3.1415927f);
+        r = truncate_float_to_s32(phase * 20.0f) + 50;
+        g = truncate_float_to_s32(phase * 70.0f) + 180;
+        if (r > 255) r = 255;
+        b = truncate_float_to_s32(phase * 10.0f) + 20;
+        hero.moby->flags |= 0x10;
+        if (g > 255) g = 255;
+        if (hero.unk22E0 == 2) {
+            int channels;
+            channels = alpha << 24;
+            channels |= b << 16;
+            channels |= (r / 2) << 8;
+            color = channels | g;
+        } else {
+            color = ((alpha << 24) | (b << 16)) | ((g << 8) | r);
+        }
+        q = &hero;
+
+        hero.moby->glow_color = fast_tween_color(0.1f, hero.moby->glow_color, color);
+        v = (char *)q + 0x1D50;
+        for (i = 0; i < 3; i++) {
+            moby_point_position(q->moby, i, v + i * 16);
+        }
+        q = &hero;
+        alpha = 48;
+        r = ((unsigned char *)&q->moby->glow_color)[0];
+        b = ((unsigned char *)&q->moby->glow_color)[2];
+        g = ((unsigned char *)&q->moby->glow_color)[1];
+        if (q->unk22DE != 0) {
+            numerator = convert_integer_to_float(q->unk22DE);
+            value = convert_integer_to_float(18);
+            alpha = truncate_float_to_s32((numerator / value) * (float)alpha);
+        }
+        {
+            int packed_color;
+            packed_color = (alpha << 24) | (b << 16);
+            packed_color |= g << 8;
+            packed_color |= r;
+            *(unsigned int *)((char *)q + 0x22E4) = packed_color;
+        }
+        FUN_L00_00207d00();
+        q->unk22E0 = 0;
+        if (q->vehicle_mode != 3) goto finish;
+        if (q->pending_item[0] == 0) goto pending_zero;
+        if (q->pending_item[0] == 31) goto pending_zero;
+        if (q->unk22DE == 0) {
+            FUN_L00_00216de8(25, 0);
+            q->unk22DE = 18;
+            q->unk22DC = 1;
+        }
+        goto finish;
+pending_zero:
+        p = &hero;
+        p->pending_item[0] = 0;
+        if (p->unk12E7 == 0) goto finish;
+        if (p->grounded_frames == 0) goto finish;
+        if (D_0013D4DC[0] == 0) goto finish;
+        if (p->unk22DE != 0) goto finish;
+        FUN_L00_00216de8(25, 0);
+        p->unk22DE = 18;
+        p->unk22DC = 1;
+    }
+finish:
+    FUN_L00_00208b60();
+    FUN_L00_00257024(hero.moby);
+}
+#endif
 #define NOT_SDA
 
 #define MACRO_ADDR

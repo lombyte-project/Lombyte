@@ -282,54 +282,58 @@ void draw_map_overlay(void) {
                         goto next_outer_icon;
                     }
                     j = i + 1;
-                    inner_icon_offset = j * inner_stride;
-                    inner_offset = inner_icon_offset;
-                    for (;
-                         !(((struct MapIcon *)((u8 *)level_map_selection.icons + inner_offset))->flags & 4);
-                         j++, inner_offset += inner_stride, inner_icon_offset += sizeof(struct MapIcon)) {
-                        pan_x = icon_bounds[j].x1 - icon_bounds[i].x0;
-                        if (pan_x <= 0)
-                            continue;
-                        map_extent = icon_bounds[i].x1 - icon_bounds[j].x0;
-                        if (map_extent <= 0)
-                            continue;
-                        pan_y = icon_bounds[j].y1 - icon_bounds[i].y0;
-                        if (pan_y <= 0)
-                            continue;
-                        oy1 = icon_bounds[i].y1 - icon_bounds[j].y0;
-                        if (oy1 <= 0)
-                            continue;
-                        icon = (struct MapIcon *)((u8 *)level_map_selection.icons + inner_icon_offset);
-                        if (icon->active == 0 ||
-                            icon->texture_id == 0 ||
-                            (icon->flags & 3)) {
-                            continue;
-                        }
-                        ax = 0;
-                        ay = 0;
-                        bx = 0;
-                        by = 0;
-                        if (pan_x <= map_extent && pan_x <= pan_y && pan_x <= oy1) {
-                            ax = pan_x >> 1;
-                            bx = ax - pan_x;
-                        } else if (map_extent <= pan_y && map_extent <= oy1) {
-                            bx = map_extent >> 1;
-                            ax = bx - map_extent;
-                        } else if (pan_y <= oy1) {
-                            ay = pan_y >> 1;
-                            by = ay - pan_y;
-                        } else {
-                            by = oy1 >> 1;
-                            ay = by - oy1;
-                        }
-                        icon_bounds[i].x0 += ax;
-                        icon_bounds[i].x1 += ax;
-                        icon_bounds[i].y0 += ay;
-                        icon_bounds[i].y1 += ay;
-                        icon_bounds[j].x0 += bx;
-                        icon_bounds[j].x1 += bx;
-                        icon_bounds[j].y0 += by;
-                        icon_bounds[j].y1 += by;
+                    if (!(level_map_selection.icons[j].flags & 4)) {
+                        inner_offset = j * inner_stride;
+                        inner_icon_offset = inner_offset;
+                        do {
+                            pan_x = icon_bounds[j].x1 - icon_bounds[i].x0;
+                            if (pan_x <= 0)
+                                goto next_inner_icon;
+                            map_extent = icon_bounds[i].x1 - icon_bounds[j].x0;
+                            if (map_extent <= 0)
+                                goto next_inner_icon;
+                            pan_y = icon_bounds[j].y1 - icon_bounds[i].y0;
+                            if (pan_y <= 0)
+                                goto next_inner_icon;
+                            oy1 = icon_bounds[i].y1 - icon_bounds[j].y0;
+                            if (oy1 <= 0)
+                                goto next_inner_icon;
+                            icon = (struct MapIcon *)(inner_icon_offset + (u32)level_map_selection.icons);
+                            if (icon->active == 0 ||
+                                icon->texture_id == 0 ||
+                                (icon->flags & 3)) {
+                                goto next_inner_icon;
+                            }
+                            ax = 0;
+                            ay = 0;
+                            bx = 0;
+                            by = 0;
+                            if (pan_x <= map_extent && pan_x <= pan_y && pan_x <= oy1) {
+                                ax = pan_x >> 1;
+                                bx = ax - pan_x;
+                            } else if (map_extent <= pan_y && map_extent <= oy1) {
+                                bx = map_extent >> 1;
+                                ax = bx - map_extent;
+                            } else if (pan_y <= oy1) {
+                                ay = pan_y >> 1;
+                                by = ay - pan_y;
+                            } else {
+                                by = oy1 >> 1;
+                                ay = by - oy1;
+                            }
+                            icon_bounds[i].x0 += ax;
+                            icon_bounds[i].x1 += ax;
+                            icon_bounds[i].y0 += ay;
+                            icon_bounds[i].y1 += ay;
+                            icon_bounds[j].x0 += bx;
+                            icon_bounds[j].x1 += bx;
+                            icon_bounds[j].y0 += by;
+                            icon_bounds[j].y1 += by;
+                        next_inner_icon:
+                            j++;
+                            inner_offset += inner_stride;
+                            inner_icon_offset += sizeof(struct MapIcon);
+                        } while (!(((struct MapIcon *)(inner_offset + (u32)level_map_selection.icons))->flags & 4));
                     }
                 next_outer_icon:
                     i++;
@@ -344,8 +348,8 @@ void draw_map_overlay(void) {
             if (!(level_map_selection.icons[0].flags & 4)) {
                 do {
                     if (level_map_selection.icons[i].active != 0 && !(level_map_selection.icons[i].flags & 1) &&
-                        (id = level_map_selection.icons[i].texture_id) != 0) {
-                        frame_index = level_map_selection.icons[i].frame_index;
+                        ((id = level_map_selection.icons[i].texture_id),
+                         (frame_index = level_map_selection.icons[i].frame_index), id != 0)) {
                         if (level_map_selection.icons[i].flags & 0x40) {
                             append_screen_rect_packet(
                                 icon_bounds[i].x0 - 0x20, icon_bounds[i].y0 - 0x20,
@@ -397,11 +401,12 @@ void draw_map_overlay(void) {
                                 icon_bounds[i].x1 - icon_bounds[i].x0,
                                 icon_bounds[i].y1 - icon_bounds[i].y0, 0x80);
                         }
-                        if (level_map_selection.icons[i].flags & 0x10) {
-                            label_width = level_map_selection.icons[i].label_width;
-                            label_offset_x = level_map_selection.icons[i].label_offset_x;
-                            label_height = level_map_selection.icons[i].label_height;
-                            label_offset_y = level_map_selection.icons[i].label_offset_y;
+                        icon = &level_map_selection.icons[i];
+                        if (icon->flags & 0x10) {
+                            label_width = icon->label_width;
+                            label_offset_x = icon->label_offset_x;
+                            label_height = icon->label_height;
+                            label_offset_y = icon->label_offset_y;
                             if (label_offset_x == 0) {
                                 label_x = ((icon_bounds[i].x0 + icon_bounds[i].x1) >> 5) -
                                           label_width / 2;

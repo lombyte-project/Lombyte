@@ -10,7 +10,9 @@ extern void FUN_0020d510(s32, f32 *);
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-void FUN_0020cfd0(void) {
+void update_resident_packed_direction(void) __asm__("FUN_0020cfd0");
+
+void update_resident_packed_direction(void) {
     f32 v[4];
     f32 angle;
 
@@ -21,4 +23,4 @@ void FUN_0020cfd0(void) {
     D_001CAA80.z = -0.99f;
 }
 
-extern __typeof__(FUN_0020cfd0) func_0020CFD0 __attribute__((alias("FUN_0020cfd0")));
+extern __typeof__(update_resident_packed_direction) func_0020CFD0 __attribute__((alias("FUN_0020cfd0")));

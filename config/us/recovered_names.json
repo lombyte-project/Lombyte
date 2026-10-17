@@ -3625,33 +3625,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "runtime/sio/fun_0011cae0",
-        "source_path": "src/runtime/sio/fun_0011cae0.c",
-        "address": "0x0011cae0",
-        "current_name": "FUN_0011cae0",
-        "proposed_name": null,
-        "logical_group": "runtime/sio",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "neighboring_group_context",
-            "functions": [
-              {
-                "address": "0x0011c938",
-                "name": "FUN_0011c938",
-                "logical_group": "runtime/rpc"
-              }
-            ]
-          },
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp core/0011CCE0.c"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "runtime/startup/run_global_constructors",
         "source_path": "src/runtime/startup/run_global_constructors.c",
         "address": "0x0011dc18",
@@ -5550,25 +5523,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/camera/fun_001ed470",
-        "source_path": "src/gameplay/camera/fun_001ed470.c",
-        "address": "0x001ed470",
-        "current_name": "FUN_001ed470",
-        "proposed_name": "camera_pre_update",
-        "logical_group": "unclassified",
-        "status": "needs_review",
-        "confidence": "low",
-        "evidence": [
-          {
-            "kind": "cross_project_name",
-            "project": "ReRAC",
-            "name": "CameraPreUpdate",
-            "note": "suggested, from its level-01 copy"
-          }
-        ],
-        "logical_group_confidence": "unresolved"
-      },
-      {
         "unit": "gameplay/camera/update_camera_underwater_flag",
         "source_path": "src/gameplay/camera/update_camera_underwater_flag.c",
         "address": "0x001ed7f0",
@@ -5829,25 +5783,6 @@
           }
         ],
         "logical_group_confidence": "high"
-      },
-      {
-        "unit": "rendering/view/fun_001f2260",
-        "source_path": "src/rendering/view/fun_001f2260.c",
-        "address": "0x001f2260",
-        "current_name": "FUN_001f2260",
-        "proposed_name": "build_rotation_view_proj",
-        "logical_group": "unclassified",
-        "status": "needs_review",
-        "confidence": "low",
-        "evidence": [
-          {
-            "kind": "cross_project_name",
-            "project": "ReRAC",
-            "name": "build_rotation_view_proj",
-            "note": "suggested"
-          }
-        ],
-        "logical_group_confidence": "unresolved"
       },
       {
         "unit": "rendering/update_fog",
@@ -6553,18 +6488,6 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "rendering/fun_001f5808",
-        "source_path": "src/rendering/fun_001f5808.c",
-        "address": "0x001f5808",
-        "current_name": "FUN_001f5808",
-        "proposed_name": null,
-        "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
-        "logical_group_confidence": "unresolved"
-      },
-      {
         "unit": "textbin/fun_001f5ab0",
         "source_path": "src/assembly/textbin/fun_001f5ab0.c",
         "address": "0x001f5ab0",
@@ -7071,23 +6994,6 @@
           }
         ],
         "logical_group_confidence": "unresolved"
-      },
-      {
-        "unit": "rendering/fun_001f7888",
-        "source_path": "src/rendering/fun_001f7888.c",
-        "address": "0x001f7888",
-        "current_name": "FUN_001f7888",
-        "proposed_name": null,
-        "logical_group": "rendering",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp draw.c"
-          }
-        ],
-        "logical_group_confidence": "high"
       },
       {
         "unit": "rendering/state/begin_draw_frame",
@@ -10596,70 +10502,6 @@
         "logical_group_confidence": "medium"
       },
       {
-        "unit": "gameplay/entities/fun_0020cfd0",
-        "source_path": "src/gameplay/entities/fun_0020cfd0.c",
-        "address": "0x0020cfd0",
-        "current_name": "FUN_0020cfd0",
-        "proposed_name": null,
-        "logical_group": "gameplay/entities",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "neighboring_group_context",
-            "functions": [
-              {
-                "address": "0x0020cef8",
-                "name": "FUN_0020cef8",
-                "logical_group": "gameplay/entities"
-              },
-              {
-                "address": "0x0020d1a8",
-                "name": "FUN_0020d1a8",
-                "logical_group": "gameplay/entities"
-              }
-            ]
-          },
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyfunc.c"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
-        "unit": "gameplay/entities/fun_0020d060",
-        "source_path": "src/gameplay/entities/fun_0020d060.c",
-        "address": "0x0020d060",
-        "current_name": "FUN_0020d060",
-        "proposed_name": null,
-        "logical_group": "gameplay/entities",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "neighboring_group_context",
-            "functions": [
-              {
-                "address": "0x0020cef8",
-                "name": "FUN_0020cef8",
-                "logical_group": "gameplay/entities"
-              },
-              {
-                "address": "0x0020d1a8",
-                "name": "FUN_0020d1a8",
-                "logical_group": "gameplay/entities"
-              }
-            ]
-          },
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyfunc.c"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "gameplay/entities/process_moby_anim_data",
         "source_path": "src/gameplay/entities/process_moby_anim_data.c",
         "address": "0x0020d1a8",
@@ -11280,23 +11122,6 @@
           {
             "kind": "source_analysis",
             "note": "60 Hz (0) or 50 Hz (1) frame-time constants (body, rac1-decomp mobyutil.c)"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
-        "unit": "gameplay/entities/fun_00214a98",
-        "source_path": "src/gameplay/entities/fun_00214a98.c",
-        "address": "0x00214a98",
-        "current_name": "FUN_00214a98",
-        "proposed_name": null,
-        "logical_group": "gameplay/entities",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp mobyutil.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -12116,29 +11941,6 @@
         "logical_group_confidence": "unresolved"
       },
       {
-        "unit": "rendering/fun_00218d10",
-        "source_path": "src/rendering/fun_00218d10.c",
-        "address": "0x00218d10",
-        "current_name": "FUN_00218d10",
-        "proposed_name": null,
-        "logical_group": "audio/voices",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "neighboring_group_context",
-            "functions": [
-              {
-                "address": "0x00218d78",
-                "name": "FUN_00218d78",
-                "logical_group": "audio/voices"
-              }
-            ]
-          }
-        ],
-        "logical_group_confidence": "low"
-      },
-      {
         "unit": "audio/voices/pause_all_sounds",
         "source_path": "src/audio/voices/pause_all_sounds.c",
         "address": "0x00218d78",
@@ -12155,18 +11957,6 @@
           }
         ],
         "logical_group_confidence": "medium"
-      },
-      {
-        "unit": "rendering/fun_00218f98",
-        "source_path": "src/rendering/fun_00218f98.c",
-        "address": "0x00218f98",
-        "current_name": "FUN_00218f98",
-        "proposed_name": null,
-        "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
-        "logical_group_confidence": "unresolved"
       },
       {
         "unit": "ui/menus/close_menu_system",
@@ -13479,23 +13269,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002216c0",
-        "source_path": "src/ui/menus/fun_002216c0.c",
-        "address": "0x002216c0",
-        "current_name": "FUN_002216c0",
-        "proposed_name": null,
-        "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "ui/map/draw_level_selection_map_screen",
         "source_path": "src/ui/map/draw_level_selection_map_screen.c",
         "address": "0x00221930",
@@ -13655,38 +13428,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "ui/menus/fun_002220f0",
-        "source_path": "src/ui/menus/fun_002220f0.c",
-        "address": "0x002220f0",
-        "current_name": "FUN_002220f0",
-        "proposed_name": null,
-        "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "git_log",
-            "commit": "d261447",
-            "excerpt": "assembly tree (audio_dec_begin_put, fun_002220f0, fun_00225dd8, fun_00238520, fun_0022c6f8, fun_00226848): the yaml owner becomes the subsystem unit and the"
-          },
-          {
-            "kind": "neighboring_group_context",
-            "functions": [
-              {
-                "address": "0x00222290",
-                "name": "FUN_00222290",
-                "logical_group": "gameplay/state"
-              }
-            ]
-          },
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
         "unit": "gameplay/state/process_global_state_flags",
         "source_path": "src/gameplay/state/process_global_state_flags.c",
         "address": "0x00222290",
@@ -13773,23 +13514,6 @@
           {
             "kind": "source_analysis",
             "note": "Builds and draws three localized menu entries with selection markers; the exact screen is left unspecified."
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
-        "unit": "ui/menus/fun_00222d98",
-        "source_path": "src/ui/menus/fun_00222d98.c",
-        "address": "0x00222d98",
-        "current_name": "FUN_00222d98",
-        "proposed_name": null,
-        "logical_group": "ui/menus",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp pause.c"
           }
         ],
         "logical_group_confidence": "high"
@@ -14561,18 +14285,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "assembly/textbin/fun_00226b08",
-        "source_path": "src/assembly/textbin/fun_00226b08.c",
-        "address": "0x00226b08",
-        "current_name": "FUN_00226b08",
-        "proposed_name": null,
-        "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
-        "logical_group_confidence": "unresolved"
-      },
-      {
         "unit": "ui/menus/fun_00226e08",
         "source_path": "src/ui/menus/fun_00226e08.c",
         "address": "0x00226e08",
@@ -14617,18 +14329,6 @@
           }
         ],
         "logical_group_confidence": "medium"
-      },
-      {
-        "unit": "ui/menus/fun_00226fb8",
-        "source_path": "src/ui/menus/fun_00226fb8.c",
-        "address": "0x00226fb8",
-        "current_name": "FUN_00226fb8",
-        "proposed_name": null,
-        "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
-        "logical_group_confidence": "unresolved"
       },
       {
         "unit": "world/data/parse_typed_resource_record",
@@ -16513,18 +16213,6 @@
         "logical_group_confidence": "high"
       },
       {
-        "unit": "gameplay/vendor/fun_00237ed0",
-        "source_path": "src/gameplay/vendor/fun_00237ed0.c",
-        "address": "0x00237ed0",
-        "current_name": "FUN_00237ed0",
-        "proposed_name": null,
-        "logical_group": "unclassified",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [],
-        "logical_group_confidence": "unresolved"
-      },
-      {
         "unit": "gameplay/vendor/render_capture_scrolling_text",
         "source_path": "src/gameplay/vendor/render_capture_scrolling_text.c",
         "address": "0x00238310",
@@ -16798,33 +16486,6 @@
           }
         ],
         "logical_group_confidence": "unresolved"
-      },
-      {
-        "unit": "gameplay/vendor/fun_0023a318",
-        "source_path": "src/gameplay/vendor/fun_0023a318.c",
-        "address": "0x0023a318",
-        "current_name": "FUN_0023a318",
-        "proposed_name": null,
-        "logical_group": "gameplay/vendor",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "neighboring_group_context",
-            "functions": [
-              {
-                "address": "0x0023a460",
-                "name": "FUN_0023a460",
-                "logical_group": "video/decoder"
-              }
-            ]
-          },
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp vendor.c"
-          }
-        ],
-        "logical_group_confidence": "high"
       },
       {
         "unit": "video/decoder/play_mpeg_movie",
@@ -18195,40 +17856,6 @@
             "note": "Range dispatcher over the six track-start units, as an if/else-if chain on thresholds 0x2710, 0x4E20, 0x7530, 0x9C3F, 0xC34F and 0xEA5F, with ids below 10000 served from D_0013A664 indexed by id * 0x250. The six thresholds are the only thing that distinguishes the units it calls, so the names carry the range."
           }
         ]
-      },
-      {
-        "unit": "runtime/sio/fun_0011a428",
-        "source_path": "src/runtime/sio/fun_0011a428.c",
-        "address": "0x0011a428",
-        "current_name": "FUN_0011a428",
-        "proposed_name": null,
-        "logical_group": "runtime/sio",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp core/00119D88.c (SIO); role not settled"
-          }
-        ],
-        "logical_group_confidence": "high"
-      },
-      {
-        "unit": "runtime/sio/fun_0011a448",
-        "source_path": "src/runtime/sio/fun_0011a448.c",
-        "address": "0x0011a448",
-        "current_name": "FUN_0011a448",
-        "proposed_name": null,
-        "logical_group": "runtime/sio",
-        "status": "unresolved",
-        "confidence": "unresolved",
-        "evidence": [
-          {
-            "kind": "cross_region_module",
-            "note": "rac1-decomp places it in its original source file: rac1-decomp core/00119D88.c (SIO)"
-          }
-        ],
-        "logical_group_confidence": "high"
       },
       {
         "unit": "runtime/memory/unpack_spr_descriptor",
@@ -20071,6 +19698,310 @@
           }
         ],
         "logical_group_confidence": "medium"
+      },
+      {
+        "address": "0x001f7888",
+        "current_name": "FUN_001f7888",
+        "proposed_name": "configure_graphics_render_target_and_projection",
+        "logical_group": "rendering",
+        "unit": "rendering/configure_graphics_render_target_and_projection",
+        "source_path": "src/rendering/configure_graphics_render_target_and_projection.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x001f78b4..0x001f78e8 the assigned function selects either DAT_001518ee shifted by 13 or an 8192-byte-aligned address below g_dwGsTextureAllocationBase, subtracting 4 << min(width_exponent + height_exponent,16). At 0x001f78f0 it calls established build_graphics_render_target (0x001fb440) with the two exponents and selected byte address. Bounded helper evidence confirms that builder records 1<<exponent dimensions at 0x001518e0/0x001518e2 and constructs the drawing environment and framebuffer/texture state. At 0x001f78f8..0x001f7920 the wrapper computes those same power-of-two dimensions and calls configure_graphics_projection (0x001f33b8), retaining its f12 input. At 0x001f7924..0x001f7954 it emits register 0x47 with zero or 0x30000 according to the flag and register 0x42 with 0x8000000044 through emit_gs_register_write (0x00233980). The supplied caller reference is render_level_effects_and_screen_sprites via 0x00219ae8; no effect-specific claim is required."
+          }
+        ]
+      },
+      {
+        "address": "0x0011a428",
+        "current_name": "FUN_0011a428",
+        "proposed_name": "handle_sif_set_system_register",
+        "logical_group": "runtime/sio",
+        "unit": "runtime/sio/handle_sif_set_system_register",
+        "source_path": "src/runtime/sio/handle_sif_set_system_register.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x0011a428/0x0011a430 the retail body loads packet register index +0x10 and value +0x14; 0x0011a42c loads the state system-register table pointer +0x1c; 0x0011a434 scales the index by four, 0x0011a438 computes the entry, and the return delay-slot store at 0x0011a440 writes the value. Prepared Ghidra decompilation identifies SifSetSystemRegisterPacket and SifCommandState and documents system command 0x80000001 installed in callback slot one, with supplied sceSifInitCmd reference 0x0011a5a4. Retain its established verb-first descriptive name. Managed baseline reports strict/text match 100%, 28 retail bytes, no differences, legal/promotable candidate."
+          }
+        ]
+      },
+      {
+        "address": "0x00218d10",
+        "current_name": "FUN_00218d10",
+        "proposed_name": "reset_active_camera_position_and_basis",
+        "logical_group": "rendering",
+        "unit": "rendering/reset_active_camera_position_and_basis",
+        "source_path": "src/rendering/reset_active_camera_position_and_basis.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00218d28, 0x00218d30 and 0x00218d34, stores to 0x00187084/0x00187088/0x00187080 set recovered g_flActiveCameraPosition to (256,256,64). The sq zero instructions at 0x00218d38, 0x00218d44 and 0x00218d50 clear the three recovered g_flCameraBasisColumn arrays at 0x00187290, 0x001872a0 and 0x001872b0. Stores at 0x00218d64..0x00218d74 set offsets 0x37c,0x350,0x364,0x378 from 0x00186f40 to 1.0, producing columns (1,0,0,0),(0,1,0,0),(0,0,1,1). Checked direct caller FUN_002192a8 calls this unconditionally at 0x002192e4 before its state/update dispatch, later calling publish_camera_environment at 0x00219330 and update_visible_resident_objects at 0x00219668. Supplied second caller render_level_effects_and_screen_sprites calls at 0x00219730. These camera symbols, exact writes and caller placement support the reset role without guessing a particular mode."
+          }
+        ]
+      },
+      {
+        "address": "0x0011cae0",
+        "current_name": "FUN_0011cae0",
+        "proposed_name": "sif_load_module_server_changed",
+        "logical_group": "runtime/sio",
+        "unit": "runtime/sio/sif_load_module_server_changed",
+        "source_path": "src/runtime/sio/sif_load_module_server_changed.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x0011cb14, 0x0011cb2c and 0x0011cb40, the function compares four bytes using 0x001151b4 (memcmp in the supplied comparison) between records at 0x00158428, 0x0012fbec and the reference pointer stored at 0x0012fcb4 (g_pSifLoadModuleVersionReference). Branches at 0x0011cb1c and 0x0011cb34 return false for either equality, and 0x0011cb48 returns true only if the final pair also differs. Checked caller load_sif_module_buffer_with_result at 0x0011cb70 calls it at 0x0011cbb0 after initialize_sif_load_module; a true result takes 0x0011cbc0..0x0011cbc8 to return -0x10004 rather than issuing load-module RPC 6 at 0x0011cd2c. This corroborates and preserves the supplied Ghidra name sif_load_module_server_changed."
+          }
+        ]
+      },
+      {
+        "address": "0x00218f98",
+        "current_name": "FUN_00218f98",
+        "proposed_name": "initialize_menu_preview_scene",
+        "logical_group": "rendering",
+        "unit": "rendering/initialize_menu_preview_scene",
+        "source_path": "src/rendering/initialize_menu_preview_scene.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "The supplied original Ghidra decompilation identifies preview_stream_state, MenuPreviewContext, create_menu_preview_moby, camera position and lighting presets. Retail instructions at 0x00218fb0 set state 2, and 0x00218fe4/0x00218ff0 install default context 0x001d45c8 in both context slots. 0x00218fec..0x00219014 initialize lighting preset 14; 0x00219018/0x00219020 synchronize DMA/vblank, and 0x0021908c..0x002190b4 establish graphics workspace pointers and initialize descriptors/bounds. 0x002190f0 creates class 0x472 objects, stores them in the array at 0x001d5d90, attaches callback 0x0023a2c0 at 0x00219118, copies camera position and zeroes rotation at 0x00219120..0x00219154, and selects each context animation's final frame at 0x00219180; the loop bound at 0x0021918c is fourteen. Checked caller FUN_002192a8 invokes this initializer at 0x0021936c only for state 0 or 0x2d (tests 0x0021935c..0x00219364), then manages fourteen context entries and the same preview object array, including animation transitions at 0x00219548/0x00219568. Caller is itself called by update_gameplay_frame at 0x001eb3b4. Bounded bytes at 0x001d45c8 confirm the fourteen initial animation indices (0,1,16,17,18,5..13); no identifying strings were present. This proves initialization of the menu preview scene without assigning an unsupported specific menu identity."
+          }
+        ]
+      },
+      {
+        "address": "0x002216c0",
+        "current_name": "FUN_002216c0",
+        "proposed_name": "build_filtered_menu_item_list",
+        "logical_group": "ui/menus",
+        "unit": "ui/menus/build_filtered_menu_item_list",
+        "source_path": "src/ui/menus/build_filtered_menu_item_list.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00221738..0x00221764 the assigned ui/menus function selects signed item IDs from 10-byte-stride source entries in four ranges split at indices 6, 9 and 12; 0x002217c8 bounds traversal to 14 candidates. Instructions 0x00221768..0x00221774 test the per-item byte at 0x0013d4c0 and skip zero entries. For each retained item, 0x0022177c..0x002217b4 index the recovered g_pVendorItemDefinitions table at 0x001863d0 with stride 0x4c, copy wIcon_texture_group_id (+0x38) into compact 10-byte records at 0x001d61b8, zero two halfwords, save item ID at +6 and original candidate index at +8, and copy definition +0x40/+0x44 to parallel arrays 0x001d6248/0x001d6280. At 0x002217e8 the retained-entry count is stored to 0x001d10c8. The prepared decompilation corroborates these operations. No checked caller or string establishes a narrower menu or filter meaning, so the name describes only this proven construction."
+          }
+        ]
+      },
+      {
+        "address": "0x0023a318",
+        "current_name": "FUN_0023a318",
+        "proposed_name": "update_instance_attachment_points_and_lengths",
+        "logical_group": "gameplay/vendor",
+        "unit": "gameplay/vendor/update_instance_attachment_points_and_lengths",
+        "source_path": "src/gameplay/vendor/update_instance_attachment_points_and_lengths.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x0023a334 the target loads its output/cache pointer from instance+0x78. Instructions 0x0023a338-0x0023a358 copy four indices from 0x00160ed0; bounded data request 3df7f474d36a481787f50134e008cdb9 confirms little-endian words 0,1,2,3. At 0x0023a35c it calls the established transform_instance_attachment_points (0x0020cd48) with count 4 and that output pointer. Calls to subtract_vector_xyz (0x001f9a28) at 0x0023a36c and 0x0023a380 compute point1-point0 and point2-point0. Calls to vector_length_xyz (0x001f9af0) at 0x0023a388 and 0x0023a394 produce lengths stored at cache+0x40 and +0x44 by 0x0023a398/0x0023a39c. Supplied caller reference is 0x0023a300 in FUN_0023a2c0; no gameplay-specific role is inferred from it. Naming baseline reports 100% function/text match, no differences, non_text_ok and promotable true; strict_match_percent is 99.30769 as reported. No source edits, Git commands, or builds were performed."
+          }
+        ]
+      },
+      {
+        "address": "0x0020d060",
+        "current_name": "FUN_0020d060",
+        "proposed_name": "configure_graphics_setup_dma_chain",
+        "logical_group": "gameplay/entities",
+        "unit": "gameplay/entities/configure_graphics_setup_dma_chain",
+        "source_path": "src/gameplay/entities/configure_graphics_setup_dma_chain.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x0020d074 the assigned function branches on count 0x0015ff3c. The zero path (0x0020d07c–0x0020d0b0) writes a zero-length 0x10000000 tag and clears its remaining words through pointer 0x0015ff40. The nonzero path reserves 16 bytes from g_pDmaPacketCursor (0x00160f00), writes 0x20000000 link tags, and points the reserved tag at the generated segment (0x0020d0b4–0x0020d108). It invokes 0x00227740 at 0x0020d104, then recovered submit_graphics_setup_command_stream at 0x00227548 from 0x0020d110 with buffer 0x001c8680. Checked helper 0x00227740 consumes the same count and object records at 0x001c8500, transforms their data, and writes the zero-terminated output at 0x001c8680. Instructions 0x0020d12c–0x0020d18c link the generated segment back to reserved_tag+16 and patch the saved cursor tag to resume after the inserted segment. Sole checked caller 0x0020d3b0 invokes this at 0x0020d444 under the recovered g_nMobyPatchReady gate; sibling 0x0020cdf0 uses the same cursor/reserved-tag linking pattern. This establishes graphics setup chain configuration without assigning an unproven visual-effect name."
+          }
+        ]
+      },
+      {
+        "address": "0x001f2260",
+        "current_name": "FUN_001f2260",
+        "proposed_name": "update_camera_view_matrices",
+        "logical_group": "rendering/view",
+        "unit": "rendering/view/update_camera_view_matrices",
+        "source_path": "src/rendering/view/update_camera_view_matrices.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x001f2268-0x001f230c the routine tests g_dwCameraPositionPublicationSuppressed (0x0018c32c), copies g_flCameraBasisColumn0..2 from 0x00187290 or constructs a basis using identity and X/Y/Z rotations from g_flCameraEulerAngles at 0x00187090. At 0x001f2314-0x001f23bc it rearranges/sign-flips that basis into the homogeneous matrix at 0x00186f40. Calls at 0x001f23b8, 0x001f23c8, 0x001f24b4 and 0x001f2504 compose matrices into 0x00186f80, 0x00186fc0, 0x00187000 and g_flActiveViewProjection at 0x00187040. Bounded checked helper evidence for 0x001fa378 (request 0ef04cbb94c1426bb2f49d5c122381d8) confirms four-vector VU matrix multiplication via vmulax/vmadday/vmaddaz/vmaddw. At 0x001f2514-0x001f2554 the basis is copied to 0x0018cf80 and g_flActiveCameraPosition at 0x00187080 is scaled by 1024 into 0x0018cfb0, with homogeneous W=1024. Supplied callers include render_gameplay_frame via 0x001eb454, render_level_effects_and_screen_sprites via 0x00219738, and render_level_frame via 0x001f3a30/0x0022f2a4/0x0022f2f4/0x0022f30c, supporting a rendering camera-matrix refresh. Naming baseline reports 808 bytes, 100% function/text matching, non_text_ok=true, no differences, and promotable=true. Source was not edited."
+          }
+        ]
+      },
+      {
+        "address": "0x0011a448",
+        "current_name": "FUN_0011a448",
+        "proposed_name": "handle_sif_initialize_command",
+        "logical_group": "runtime/sio",
+        "unit": "runtime/sio/handle_sif_initialize_command",
+        "source_path": "src/runtime/sio/handle_sif_initialize_command.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x0011a448, lw v0,0x10(a0) loads SifInitializePacket.dwReceiveBufferAddress; at 0x0011a450, the return delay-slot sw v0,0x8(a1) stores SifCommandState.dwRemoteReceiveAddress. The supplied original typed Ghidra decompilation names this handle_sif_initialize_command and documents initializer-installed callback slot zero; the supplied reference at 0x0011a59c belongs to sceSifInitCmd. Preserve this established descriptive name. The baseline validation reports strict/text matching of 100% for the complete 12-byte function."
+          }
+        ]
+      },
+      {
+        "address": "0x00226fb8",
+        "current_name": "FUN_00226fb8",
+        "proposed_name": "prepare_scaled_direction_and_perpendicular",
+        "logical_group": "ui/menus",
+        "unit": "ui/menus/prepare_scaled_direction_and_perpendicular",
+        "source_path": "src/ui/menus/prepare_scaled_direction_and_perpendicular.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00226fd4 the input vector is copied to stack; 0x00226fe0 calls recovered normalize_vector_xyz (0x001f9bf8) with length 1.0 and destination 0x00160370. Instructions 0x00227000..0x0022702c multiply its XYZ by the incoming scalar preserved in f20 and store to 0x00160390/394/398. The comparisons and stores at 0x0022701c..0x002270a4 select a component permutation into 0x00160380/384/388. At 0x002270b8 recovered cross_vectors_xyz (0x001f9ad8) crosses that vector with the normalized direction, in place; 0x002270d0 normalizes the cross-product at 0x00160380 with length 1.0. The supplied caller is submit_graphics_setup_command_stream, callsite 0x00227614; its body was unavailable, so the name describes only the proven vector preparation rather than a speculative graphics application."
+          }
+        ]
+      },
+      {
+        "address": "0x001f5808",
+        "current_name": "FUN_001f5808",
+        "proposed_name": "emit_textured_rectangle",
+        "logical_group": "rendering",
+        "unit": "rendering/emit_textured_rectangle",
+        "source_path": "src/rendering/emit_textured_rectangle.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x001f5878–0x001f58cc the function converts x, x+width, y and y+height to 16ths of a pixel using convert_float_to_word and adds g_nViewportFixedLeft/Top minus 8; 0x001f58d0–0x001f5904 rejects rectangles outside the coordinate bounds. At 0x001f591c–0x001f5978 it begins a packet through g_pDmaPacketCursor (0x00160f00) and copies the template at 0x00160860. The primitive value 0x154 at 0x001f59e8/0x001f5a00 selects a textured triangle strip with fixed UV coordinates; 0x001f5a30–0x001f5a4c emits four UV/XYZ pairs combining the two texture endpoints and two screen endpoints. The cursor advances by a total 0x90 bytes. Checked caller FUN_001f6638 indexes four-byte records by character code and advances the screen x position by a scaled record width (0x001f68ac–0x001f68c0); its calls at 0x001f67b4 and 0x001f68a0 supply 16x16 atlas regions and scaled screen dimensions, while 0x001f6858 supplies a 24x16 region. This confirms textured rectangle emission rather than text parsing within the target."
+          }
+        ]
+      },
+      {
+        "address": "0x001ed470",
+        "current_name": "FUN_001ed470",
+        "proposed_name": "update_camera_tracking_state",
+        "logical_group": "gameplay/camera",
+        "unit": "gameplay/camera/update_camera_tracking_state",
+        "source_path": "src/gameplay/camera/update_camera_tracking_state.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "Preserves the supplied recovered Ghidra name. Supplied caller record shows update_camera_frame calling at 0x001edb08. Retail 0x001ed4c4-0x001ed4e0 normalizes g_afCameraTargetDirection (0x0013f5e0) and shifts/publishes direction in g_cameraTrackingState (0x001870d0); 0x001ed580, 0x001ed5a4 and 0x001ed5c4 damp its three direction components using helper 0x001ebd78. At 0x001ed5e8-0x001ed660 it subtracts the previous target position from target position 0x0013f3d0, measures and decomposes displacement, and retains the new position. At 0x001ed668-0x001ed6dc it conditionally damps height; 0x001ed6e0-0x001ed724 shifts history; 0x001ed728-0x001ed7ac retains selected-object address/value and suppresses deltas below 0.001. These state updates prove the broad camera tracking role without assigning unknown mode or object-class meanings."
+          }
+        ]
+      },
+      {
+        "address": "0x0020cfd0",
+        "current_name": "FUN_0020cfd0",
+        "proposed_name": "update_resident_packed_direction",
+        "logical_group": "gameplay/entities",
+        "unit": "gameplay/entities/update_resident_packed_direction",
+        "source_path": "src/gameplay/entities/update_resident_packed_direction.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x0020cfd8 the function loads g_pCameraReferenceData (0x001413d0), then calls 0x0020d510 at 0x0020cfec. Checked helper instructions 0x0020d510..0x0020d57c read its +0x38 packed preset selector and copy or interpolate vector slot +0x10 from 0x0019bdc0, recovered as g_abObjectRenderLightingPresets[].aAvVectors[1]. The assigned retail instructions 0x0020d000..0x0020d014 feed the vector's first two floats to angle helper 0x001f9e90 and fast_cos; 0x0020d028 calls fast_sin. Stores at 0x0020d02c, 0x0020d044 and 0x0020d048 set g_flResidentPackedDirection at 0x001caa80 to (0.14*cos(angle), 0.14*sin(angle), -0.99). The supplied caller is update_resident_gameplay_state via 0x00230e8c. This proves updating the named resident direction vector; no relevant string evidence is supplied or needed for this bounded role."
+          }
+        ]
+      },
+      {
+        "address": "0x00237ed0",
+        "current_name": "FUN_00237ed0",
+        "proposed_name": "update_resident_dialogue_animation_state",
+        "logical_group": "gameplay/vendor",
+        "unit": "gameplay/vendor/update_resident_dialogue_animation_state",
+        "source_path": "src/gameplay/vendor/update_resident_dialogue_animation_state.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00237f50-0x00237f70 the function dispatches on ResidentObjectState lifecycle byte +0x20. At 0x00237f78-0x0023807c it compares the shared timer 0x001e63f4 to scale_game_frames(600), selects one of two variants through game_random_remainder(2) at 0x00237f98, writes a dialogue request at 0x001516ec (0x00237fe0), and calls start_resident_animation_transition (0x00212f90) at 0x00238004/0x0023805c. At 0x00238164-0x002382d4 it gates lifecycle/animation selection on g_dialogueChannelTwoState.playback.nPhase at 0x0015172a being 3 and selects variant-dependent animation bindings. At 0x002380fc it calls resident_animation_threshold_crossed_this_step (0x00214cc8); when the threshold and pending flag permit, 0x00238114 calls stop_dialogue_channel_two_if_started (0x00215b10). The transition-complete bit at resident +0x70 returns the lifecycle to state 2 at 0x0023811c-0x00238160. These recovered symbols and matching retail instructions prove a resident dialogue animation state updater without requiring an unproven actor-specific name."
+          }
+        ]
+      },
+      {
+        "address": "0x00222d98",
+        "current_name": "FUN_00222d98",
+        "proposed_name": "draw_menu_selection_text",
+        "logical_group": "ui/menus",
+        "unit": "ui/menus/draw_menu_selection_text",
+        "source_path": "src/ui/menus/draw_menu_selection_text.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00222dc8-0x00222de0 the function follows preview_stream_state[0].menu_context->selection->selected_item and reads a text index at 0x0013d2b0 with 0x1c stride. Instructions 0x00222de4-0x00222e04 gate rendering on memory-card operation states and DAT_0013d298 == 2. For index -1, 0x00222e18-0x00222e58 resolves localized string 0x5217 via resolve_localized_string (0x001fdd10) and passes it to 0x001f6af0 at (width/2,height/2-8). Otherwise 0x00222e68-0x00222ee4 resolves two IDs from 12-byte entries at 0x001ddd40 and draws them at (width/2,4) and (width/2,20), with color 0x80ffa888. Original Ghidra decompilation agrees with all these retail instructions. No direct callers were supplied; exact screen identity is intentionally unspecified."
+          }
+        ]
+      },
+      {
+        "address": "0x002220f0",
+        "current_name": "FUN_002220f0",
+        "proposed_name": "draw_selected_menu_item_text",
+        "logical_group": "ui/menus",
+        "unit": "ui/menus/draw_selected_menu_item_text",
+        "source_path": "src/ui/menus/draw_selected_menu_item_text.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00222120-0x0022213c, the assigned function follows preview_stream_state[0].menu_context to selection, indexes selected_item with a 12-byte stride, and reads item field +4. When that value is -1, 0x00222150-0x00222194 resolves localized string ID 0x5019 through resolve_localized_string (0x001fdd10) and passes it to 0x001f6af0 at coordinates width/2, height/2-8. Otherwise 0x002221a0-0x00222258 uses the value as a 12-byte index into 0x001ddd40, resolves the first two words as localized string IDs, and renders them at width/2 and height/3-8 or 2*height/3-8 with color 0x80ffa888. Bounded data request 9884a24099144115b72913e916962040 confirms table words begin 0x4eb9, 0x4ede, 0; 0x4eba, 0x4ecd, 6. Calls at 0x00222138 and 0x0022225c bracket rendering. No checked caller exists in the supplied evidence; the name makes no screen-specific claim."
+          }
+        ]
+      },
+      {
+        "address": "0x00226b08",
+        "current_name": "FUN_00226b08",
+        "proposed_name": "load_level_zero_preserving_progress",
+        "logical_group": "textbin",
+        "unit": "textbin/load_level_zero_preserving_progress",
+        "source_path": "src/textbin/load_level_zero_preserving_progress.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00226b58..0x00226be8 seven state ranges are copied to scratchpad before the call at 0x00226c18 to 0x00209370. That helper reads a disc chunk through read_cd_sectors_blocking at 0x002093a8, initializes its offset-0x10 payload at 0x002093b8, and explicitly stores zero to g_nCurrentLevelIndex (0x0015ed84) at 0x002093cc. The assigned wrapper restores selected state at 0x00226c20..0x00226d14, including the saved bolt count from 0x0015ed98, selected bytes indexed by 0x001d5ba0, and eight entries from 0x00141ea0 filtered against 0x0013d4c0. It preserves flags at 0x0013d38c/0x0013d38d and increments 0x0015ee20, then refreshes g_cdClock at 0x00226d6c/0x00226d7c. Caller 0x00222290 passes -1 at 0x002222e0 and immediately requests level zero at 0x002222e8. Caller 0x002235b8 passes its save cursor slot (+0x40) at 0x00223670; subsequent code writes bolt count, level, counter and clock into 0x1c-byte save-slot records at 0x00223704..0x00223794. At 0x00226d84..0x00226dd0 a nonnegative argument selects that slot and schedules pending memory-card state 0x13 when idle. These instruction-backed effects establish the proposed verb-first name; no string interpretation is required."
+          }
+        ]
+      },
+      {
+        "address": "0x00214a98",
+        "current_name": "FUN_00214a98",
+        "proposed_name": "pack_vector_xyz_with_shared_scale",
+        "logical_group": "gameplay/entities",
+        "unit": "gameplay/entities/pack_vector_xyz_with_shared_scale",
+        "source_path": "src/gameplay/entities/pack_vector_xyz_with_shared_scale.c",
+        "status": "proposed",
+        "confidence": "high",
+        "evidence": [
+          {
+            "kind": "source_analysis",
+            "note": "At 0x00214ab8/0x00214ac4/0x00214ad0 the assigned function uses absolute_value_scalar on XYZ; 0x00214ad8..0x00214af8 selects their maximum magnitude. 0x00214afc..0x00214b3c computes convert_float_to_word(max_abs * 10000 / 63) and clamps the scale to 1..255. At 0x00214b50..0x00214b94 it writes float(scale) as the fourth lane and transforms each XYZ lane to component/(scale*0.0001)+127. The call at 0x00214b98 reaches 0x001f9d68, whose vftoi0.xyzw at 0x001f9d70 and ppach/ppacb at 0x001f9d84/0x001f9d8c pack the four converted lanes into bytes; 0x00214ba0 stores the low 32-bit word. Caller 0x00218888 invokes this function at 0x002189dc and 0x002189e8 to write object offsets +0x20 and +0x24, then passes those same words to 0x00214bc0 at 0x002189f4 and 0x00218a00. That inverse routine subtracts (127,127,127) through recovered subtract_vector_xyz at 0x00214c18 and multiplies XYZ by the fourth lane*0.0001 through recovered scale_vector_xyz at 0x00214c28. This proves shared-scale XYZ packing without requiring an unproven gameplay subsystem label."
+          }
+        ]
       }
     ]
   }

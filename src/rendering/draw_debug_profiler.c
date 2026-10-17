@@ -56,7 +56,7 @@ extern void draw_lens_flare(void) __asm__("func_001EDC50");
 extern void render_queued_rotated_sprites(void) __asm__("FUN_001ee338");
 extern void noop_core_callback(void *, s32) __asm__("func_001F21B0");
 extern void noop_core_callback_secondary(void *, s32) __asm__("func_001F21B8");
-extern void func_001F2260(void);
+extern void update_camera_view_matrices(void) __asm__("func_001F2260");
 extern void update_fog(void) __asm__("func_001F2588");
 extern void update_occlusion(void) __asm__("FUN_001f2c10");
 extern void reset_gs_registers(void) __asm__("func_001F3868");
@@ -117,7 +117,7 @@ void draw_debug_profiler(void) {
         draw_config.unk8 == 0 || D_0018C34C[0] != 0) {
         append_gif_transfer_packet();
     }
-    func_001F2260();
+    update_camera_view_matrices();
     prune_moby_references();
     update_occlusion();
     reset_gs_registers();

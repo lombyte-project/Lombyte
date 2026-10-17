@@ -10,7 +10,9 @@ extern u8 D_0012FBEC[];
 extern u32 D_0012FCB4[];
 extern u8 D_00158428[];
 extern s32 memcmp();
-s32 FUN_0011cae0(void) {
+s32 sif_load_module_server_changed(void) __asm__("FUN_0011cae0");
+
+s32 sif_load_module_server_changed(void) {
     u8 *new_var;
     s32 result;
     result = 0;

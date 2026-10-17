@@ -25,9 +25,9 @@ void draw_screen_effect(void) {
     u64 mask;
     s32 c;
     u64 e;
-    s32 v14;
+    s32 first_stripe_color;
     u64 e18;
-    s32 v24;
+    s32 second_stripe_color;
     u64 e28;
 
     i = 0;
@@ -47,22 +47,22 @@ void draw_screen_effect(void) {
             if (e18 != 0) {
                 vu1_add_g_sregister(0x42, e18 & mask);
             }
-            v14 = screen_color_effect_now->unk14;
-            if (v14 & 0xFF000000) {
+            first_stripe_color = screen_color_effect_now->unk14;
+            if (first_stripe_color & 0xFF000000) {
                 draw_rect_overlay(i,
                                   (i + screen_color_effect_now->unk10 < height - 1) ? i + screen_color_effect_now->unk10 : height - 1,
-                                  0, fs_aa_buffer.display_width, (u64)((s64)v14 << 0x20) >> 0x20);
+                                  0, fs_aa_buffer.display_width, (u64)((s64)first_stripe_color << 0x20) >> 0x20);
             }
             i = i + screen_color_effect_now->unk10;
             e28 = screen_color_effect_now->unk28;
             if (e28 != 0) {
                 vu1_add_g_sregister(0x42, e28 & mask);
             }
-            v24 = screen_color_effect_now->unk24;
-            if (v24 & 0xFF000000) {
+            second_stripe_color = screen_color_effect_now->unk24;
+            if (second_stripe_color & 0xFF000000) {
                 draw_rect_overlay(i,
                                   (i + screen_color_effect_now->unk20 < height - 1) ? i + screen_color_effect_now->unk20 : height - 1,
-                                  0, fs_aa_buffer.display_width, (u64)((s64)v24 << 0x20) >> 0x20);
+                                  0, fs_aa_buffer.display_width, (u64)((s64)second_stripe_color << 0x20) >> 0x20);
             }
             i = i + screen_color_effect_now->unk20;
         } while (i < height);

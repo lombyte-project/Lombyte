@@ -13,7 +13,9 @@ struct S {
 extern struct S D_00186F40;
 extern s32 D_001872A0;
 extern s32 D_001872B0;
-void FUN_00218d10(void) {
+void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
+
+void reset_active_camera_position_and_basis(void) {
     D_00186F40.f140 = 256.0f;
     D_00186F40.f148 = 64.0f;
     D_00186F40.f144 = 256.0f;
@@ -26,4 +28,4 @@ void FUN_00218d10(void) {
     D_00186F40.f37C = 1.0f;
 }
 
-extern __typeof__(FUN_00218d10) func_00218D10 __attribute__((alias("FUN_00218d10")));
+extern __typeof__(reset_active_camera_position_and_basis) func_00218D10 __attribute__((alias("FUN_00218d10")));

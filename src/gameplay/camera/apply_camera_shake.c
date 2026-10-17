@@ -23,32 +23,32 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 
 void apply_camera_shake(struct CameraShake *shake, s32 arg1) __asm__("FUN_001ed360");
 
-void apply_camera_shake(struct CameraShake *shake, s32 arg1) {
+void apply_camera_shake(struct CameraShake *shake, s32 axis_index) {
     f32 sp_slot[4];
-    f32 v1;
-    f32 v2;
-    f32 v3;
-    f32 v4;
+    f32 remaining_frames_float;
+    f32 total_frames_float;
+    f32 remaining_frame_ratio;
+    f32 oscillation_cosine;
     f32 val;
-    s32 v5;
+    s32 remaining_frames;
 
     if (cur_cam[0] != 0 && cur_cam[0]->unk86 == 6) {
         shake->unk8 = 0;
         shake->unkC = 0;
     } else {
-        v5 = shake->unk8;
-        if (v5 != 0) {
-            if (shake->unkC < v5) {
-                shake->unkC = v5;
+        remaining_frames = shake->unk8;
+        if (remaining_frames != 0) {
+            if (shake->unkC < remaining_frames) {
+                shake->unkC = remaining_frames;
             }
             fast_dec_timer(&shake->unk8);
-            v1 = convert_integer_to_float(shake->unk8);
-            v2 = convert_integer_to_float(shake->unkC);
-            v3 = v1 / v2;
-            v4 = fast_cos(fast_normalize_angle(2.0f * convert_integer_to_float(shake->unk8)));
-            val = shake->unk0 * v4 * v3 * v3;
+            remaining_frames_float = convert_integer_to_float(shake->unk8);
+            total_frames_float = convert_integer_to_float(shake->unkC);
+            remaining_frame_ratio = remaining_frames_float / total_frames_float;
+            oscillation_cosine = fast_cos(fast_normalize_angle(2.0f * convert_integer_to_float(shake->unk8)));
+            val = shake->unk0 * oscillation_cosine * remaining_frame_ratio * remaining_frame_ratio;
             shake->unk4 = val;
-            if (arg1 == 0) {
+            if (axis_index == 0) {
                 fast_vec_normalize(sp_slot, D_001872B0, val);
             } else {
                 fast_vec_normalize(sp_slot, camera_rows, val);
