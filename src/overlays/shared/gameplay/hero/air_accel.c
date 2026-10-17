@@ -441,7 +441,7 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern void FUN_L00_00259508(void *, void *, void *, int, float);
 extern char *FUN_L00_002603d0(char *);
-extern u8 *FUN_002141f8(s32);
+extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 extern s32 coll2_2d090(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 
 /* Probes for a reachable ledge ahead of the hero and records its edge. */
@@ -514,7 +514,7 @@ probe_next:
 
     if (coll_hit.moby != 0) {
         moby_allowed = 0;
-        moby_record = FUN_002141f8(coll_hit.moby);
+        moby_record = suck_get_aim_height(coll_hit.moby);
         moby_data = FUN_L00_002603d0((char *)coll_hit.moby);
         if (moby_record && (*(u16 *)(moby_record + 0x1E) & 1))
             moby_allowed = 1;
@@ -1015,13 +1015,13 @@ void FUN_L01_00232290(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00232F90), where it is exact; names translated to the US level program. */
 
 extern char D_L01_001742C0_d[] __asm__("D_L01_001742C0") __attribute__((section(".data")));
-extern float FUN_001f9b20(void *);
-extern float FUN_001f9dc8(float);
-extern float FUN_001f9de0(float);
+extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_002339d0(float *v);
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern int FUN_001f0b58(void);
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
@@ -1056,17 +1056,17 @@ void FUN_L01_00232978(int flag) {
     s[2] += f2;
     qcopy(t, &g->motion.pos);
     t[2] += f2 * 0.3f;
-    if (flag != 0 || FUN_001f9b20(&g->motion.velocity) < 0.01f) {
-        p[0] = FUN_001f9dc8(g->motion.rot.f[2]) * f21;
-        p[1] = FUN_001f9de0(g->motion.rot.f[2]) * f21;
+    if (flag != 0 || vec_len_xy(&g->motion.velocity) < 0.01f) {
+        p[0] = fast_cos(g->motion.rot.f[2]) * f21;
+        p[1] = fast_sin(g->motion.rot.f[2]) * f21;
         p[2] = 0.0f;
-        q[0] = FUN_001f9dc8(g->motion.rot.f[2]) * f21 * 1.4f;
-        q[1] = FUN_001f9de0(g->motion.rot.f[2]) * f21 * 1.4f;
+        q[0] = fast_cos(g->motion.rot.f[2]) * f21 * 1.4f;
+        q[1] = fast_sin(g->motion.rot.f[2]) * f21 * 1.4f;
         q[2] = 0.0f;
     } else {
         qcopy(p, &g->motion.velocity);
         p[2] = 0.0f;
-        fast_vec_scale(p, p, f21 / FUN_001f9b20(p));
+        fast_vec_scale(p, p, f21 / vec_len_xy(p));
         qcopy(q, p);
         fast_vec_scale(q, q, 1.4f);
     }
@@ -1076,7 +1076,7 @@ void FUN_L01_00232978(int flag) {
     h1 = &hero;
     if (FUN_001efa68(t, q, 4, (int)h1->moby, 0) != 0) {
         if (D_L01_001742DC > 0) {
-            k = FUN_001f0b58();
+            k = collision_hit_material();
         }
     }
     f20 = 0.0f;
@@ -1084,7 +1084,7 @@ void FUN_L01_00232978(int flag) {
     if (FUN_001efa68(s, p, 4, (int)h2->moby, 0) != 0) {
         w = D_L01_001742C0_d;
         if (*(int *)(w + 0x1C) > 0) {
-            f20 = fast_arc_tan(*(float *)(w + 0x48), FUN_001f9b20(w + 0x40));
+            f20 = fast_arc_tan(*(float *)(w + 0x48), vec_len_xy(w + 0x40));
         }
     }
     if (f20 >= 0.87266463f || k == 8 || k == 12) {
@@ -1118,7 +1118,7 @@ s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
-u8 *FUN_002141f8(s32);
+u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
 f32 FUN_L00_00233d30(void *);
@@ -1206,7 +1206,7 @@ void FUN_L01_00232dc0(void) {
         if (FUN_L00_0025e3b8(HH.moby)) {
             hero.unk30A = 1;
         }
-        p = FUN_002141f8(HH.moby);
+        p = suck_get_aim_height(HH.moby);
         if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
             hero.unk30A = 1;
         }

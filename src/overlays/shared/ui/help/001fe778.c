@@ -71,7 +71,7 @@ s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
 s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
-u8 *FUN_002141f8(s32);
+u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
 f32 FUN_L00_00233d30(void *);
@@ -165,7 +165,7 @@ void FUN_L15_0020a7a0(void) {
         if (FUN_L00_0025e3b8(HH.moby)) {
             hero.unk30A = 1;
         }
-        p = FUN_002141f8(HH.moby);
+        p = suck_get_aim_height(HH.moby);
         if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
             hero.unk30A = 1;
         }

@@ -687,7 +687,7 @@ void FUN_L18_002f9eb8(struct Moby *m) {
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FB6B0), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi,
@@ -712,7 +712,7 @@ void FUN_L18_002fa250(void *a, void *b, void *c, float f0, float f1) {
                                 f0, 0x7F204080);
         p = m + 0x20;
         if (m) {
-            *(short *)(m + 0xA) = FUN_001f96f8(15);
+            *(short *)(m + 0xA) = scale_game_frames(15);
             m[9] = func_001FA898_r(4.0f) + 0x40;
             *(int *)(p + 4) = 2;
             p[0xA] = 0x7F;
@@ -730,7 +730,7 @@ void FUN_L18_002fa250(void *a, void *b, void *c, float f0, float f1) {
         p = m + 0x20;
         if (m) {
             m[9] = func_001FA898_r(4.0f) + 0x40;
-            *(short *)(m + 0xA) = FUN_001f96f8(4);
+            *(short *)(m + 0xA) = scale_game_frames(4);
             m[8] = random_integer_below(0xFF);
             *(int *)(p + 4) = k2;
             p[0xA] = k7f;
@@ -781,7 +781,7 @@ void FUN_L18_002fa640(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBB88), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void FUN_001f9a28(void *, void *, void *);
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_00250df8(void *);
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
@@ -795,7 +795,7 @@ void FUN_L18_002fa728(char *moby) {
         moby[0x20] = 1;
         break;
     case 1:
-        FUN_001f9a28(tmp, moby + 0x10, data + 0x60);
+        fast_vec_sub(tmp, moby + 0x10, data + 0x60);
         FUN_L00_00260738(data + 0x20, tmp, data + 0x70, moby + 0x40);
         break;
     }
@@ -919,7 +919,7 @@ void FUN_L18_002fad28(M2 *m) {
                 p = D_L18_0016D260.arr[idx];
                 moby_point_position(p, 8, buf);
                 moby_point_position(p, 9, buf2);
-                FUN_001f9a28(buf3, buf, buf2);
+                fast_vec_sub(buf3, buf, buf2);
                 fast_vec_normalize(buf3, buf3, *(float *)&D_L18_00162578);
                 FUN_L00_00263b70(buf, buf, buf3, *(float *)&D_L18_0016257C,
                                  *(float *)&D_L18_00162580);
@@ -1318,7 +1318,7 @@ typedef struct {
     u8 pad1F0[4];
     f32 unk1F4;        /* 0x1F4: set to 1.0 on launch */
 } LaunchedMobyVars;
-extern void FUN_001f9a28(void *, void *, void *);
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float FUN_L00_0025abf0(void *, void *, float, float, int);
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
@@ -1344,7 +1344,7 @@ int FUN_L18_002fc668(int group, void *from, void *to, float speed) {
                 qcopy(&moby->pos, from);
                 moby->state = 1;
                 v->unk1F4 = 1.0f;
-                FUN_001f9a28(v->velocity, to, from);
+                fast_vec_sub(v->velocity, to, from);
                 v->velocity[2] = 0.0f;
                 fast_vec_normalize(v->velocity, v->velocity, speed);
                 v->velocity[2] = FUN_L00_0025abf0(from, to, speed, -(frame_time_sq * 10.0f), 0);

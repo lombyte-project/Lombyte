@@ -159,7 +159,7 @@ extern int *D_L00_00177F00[];
 extern float frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60"); /* no foreign declaration */
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern int FUN_001f0b58(void);
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_001f0d60();
 extern int FUN_L00_001f2868(void *, float, int, void *, void *);
 extern int FUN_L00_0025e3b8(void *);
@@ -217,7 +217,7 @@ int FUN_L00_0025c698(char *moby, char *st) {
     qcopy(v10, moby + 0x10);
     v10[2] = v10[2] + *(float *)(st + 0x28);
     f21 = probe_ground_height(v10, 0, 0.5f);
-    if (FUN_001f0b58() == 0) {
+    if (collision_hit_material() == 0) {
         if (*(float *)(st + 0x5C) == 0.0f && f21 <= v10[2] && v10[2] + *(float *)(st + 0x8) < f21) {
             *(float *)(st + 0x5C) = 1.0f;
             v10[2] = f21;

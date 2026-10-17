@@ -41,8 +41,8 @@ extern f32 D_L00_001616DC;
 s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
-void FUN_001f9cf8(void *, void *, void *);
-void FUN_001f9a10(void *, void *, void *);
+void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void FUN_L00_002d7f88(S_002d7f88 *self) {
     D_002d7f88 *d = self->p78;
@@ -61,8 +61,8 @@ void FUN_L00_002d7f88(S_002d7f88 *self) {
     m = o->p78;
     clear_u64_value(self->v10);
     self->f14 = -d->f4;
-    FUN_001f9cf8(self->v10, self->v10, (u8 *)d->o + 0xC0);
-    FUN_001f9a10(self->v10, self->v10, m);
+    transform_vector_by_basis(self->v10, self->v10, (u8 *)d->o + 0xC0);
+    fast_vec_add(self->v10, self->v10, m);
     qcopy(&self->q40, &d->o->q40);
     if (d->f4 > D_L00_001616DC) {
         self->b23 = truncate_float_to_s32((1.0f - (d->f4 - D_L00_001616DC) * 10.0f) * 127.0f);
@@ -992,7 +992,7 @@ void FUN_L00_002d9810(u8 *m) {
     FUN_00233980_002d9810(0x47, 0x5360b);
 }
 #endif
-int FUN_001efa68(Vec4 *, Vec4 *, int, int, int);
+int collision_line(Vec4 *, Vec4 *, int, int, int) __asm__("FUN_001efa68");
 /* True when coll_line_fix returns 0 for the moby and (*(char * *)&D_001413D0_lui) positions, both raised by 0.5. */
 int FUN_L00_002d8980(char *a) {
     Vec4 p, t;
@@ -1000,7 +1000,7 @@ int FUN_L00_002d8980(char *a) {
     p.f[2] += 0.5f;
     qcopy(&t, (*(char * *)&D_001413D0_lui) + 0x10);
     t.f[2] += 0.5f;
-    return FUN_001efa68(&p, &t, 0x12, 0, 0) == 0;
+    return collision_line(&p, &t, 0x12, 0, 0) == 0;
 }
 /* False in modes 0, 1, 5, 12, and in modes 2 and 4 unless the state is 0x3C. */
 int FUN_L00_002d9f78(void) {
@@ -1032,9 +1032,9 @@ typedef struct {
 
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
-extern void FUN_001fa2b8(void *, void *);
+extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern void FUN_0020e098(void *);
+extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 
 /* Composes the 0xC0 matrix of a with the one built from c into b+0xC0 and flags b for update. */
 void FUN_L00_002d9fd0(char *a, char *b, void *c) {
@@ -1042,9 +1042,9 @@ void FUN_L00_002d9fd0(char *a, char *b, void *c) {
     euler_rotation_matrix(&t0, c);
     copy_matrix_rotation(&t1, a + 0xC0);
     multiply_matrix(&t2, &t1, &t0);
-    FUN_001fa2b8(b + 0xC0, &t2);
+    copy_matrix3x4(b + 0xC0, &t2);
     *(unsigned short *)(b + 0x34) |= 4;
-    FUN_0020e098(b);
+    refresh_moby_spatial_bounds_from_basis(b);
 }
 
 #define NOT_SDA
@@ -1194,7 +1194,7 @@ extern void FUN_L00_002ddf60(void *, void *);
 extern R *FUN_L00_002db890_c(M_da360 *) __asm__("FUN_L00_002db890");
 extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern s32 FUN_L00_002d9f78_c(void) __asm__("FUN_L00_002d9f78");
-extern f32 FUN_001f9e90(f32, f32);
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern s32 FUN_001efa68_c(void *, V_da360 *, s32, M_da360 *, s32) __asm__("FUN_001efa68");
 int FUN_L00_002da058(u8 *p, void *q, void *m_, void *r_, void *buf);
@@ -1227,9 +1227,9 @@ void FUN_L00_002da360(u8 *p, void *q) {
                         qcopy(&v, &m->pos);
                         v.z += 0.4f;
                         t = fast_difference_between_rotations(
-                            a, FUN_001f9e90(v.x - *(f32 *)(p + 0x10), v.y - *(f32 *)(p + 0x14)));
+                            a, fast_arc_tan(v.x - *(f32 *)(p + 0x10), v.y - *(f32 *)(p + 0x14)));
                         if (t * t < thr) {
-                            t = FUN_001f9e90(d, v.z - *(f32 *)(p + 0x18));
+                            t = fast_arc_tan(d, v.z - *(f32 *)(p + 0x18));
                             t = fast_difference_between_rotations(b, t);
                             if (t * t < thr) {
                                 if (!FUN_001efa68_c(buf, &v, 2, m, 0))
@@ -1403,7 +1403,7 @@ typedef struct { u8 pad[9]; u8 gold; } SuckItemVariant; /* item 9 (Suck Cannon) 
 typedef struct { u8 pad[0x10]; float height; } SuckAimHeight;
 extern char D_L00_00166C80[];
 extern char D_L00_00166DC0[];
-extern f32 FUN_001f9e90(f32, f32);
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 square_root_scalar(f32) __asm__("func_001F9988");
@@ -1419,7 +1419,7 @@ extern s32 FUN_L00_002d9f78(void);
 extern void transpose_rotation_matrix(void *,void *) __asm__("FUN_001fa2d8");
 extern void FUN_L00_0020e4c8(void);
 extern void FUN_L00_0020e698(void);
-extern void FUN_L00_002223f8(int,int);
+extern void hero_set_state_2(int,int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_002377b8(void);
 extern void FUN_L00_00237840(void);
 extern void FUN_L00_0024f7c8(void *, int, void *);
@@ -1576,7 +1576,7 @@ void FUN_L00_002da790(SuckMoby *self) {
         if (!(suck_input.held&suck_hero.fire_buttons)) cannon->blocked=0;
         if (func_001F9908_r(&cannon->target_timer) ||
             (cannon->target && ((u8)cannon->target->state&0x80))) cannon->target=0;
-        if (suck_hero.state==1) FUN_L00_002223f8(30,1);
+        if (suck_hero.state==1) hero_set_state_2(30,1);
         if (suck_hero.state==30 && (suck_hero.moby->flags&1) && !suck_hero.unk20AC) {
             char *camera=D_L00_00166C80;
             SuckVec *eye;
@@ -1668,8 +1668,8 @@ void FUN_L00_002da790(SuckMoby *self) {
                 limit=10000.0f;
                 best=0;
                 if(suck_hero.aim_locked) yaw=suck_hero.aim_yaw;
-                else yaw=FUN_001f9e90(work.fire.velocity.f.x,work.fire.velocity.f.y);
-                pitch=-FUN_001f9e90(vector_length_xy(&work.fire.velocity),work.fire.velocity.f.z);
+                else yaw=fast_arc_tan(work.fire.velocity.f.x,work.fire.velocity.f.y);
+                pitch=-fast_arc_tan(vector_length_xy(&work.fire.velocity),work.fire.velocity.f.z);
                 m=suck_moby_list;
                 while(m) {
                     if(m->state>=0 && m!=stored) {
@@ -1680,12 +1680,12 @@ void FUN_L00_002da790(SuckMoby *self) {
                         if(r) work.fire.point.f.z+=r->height;
                         else work.fire.point.f.z+=0.5f;
                         if((m->flags&0x1000) && m && m->cls && m->cls->category==5) {
-                            tyaw=FUN_001f9e90(work.fire.point.f.x-work.fire.launch.f.x,work.fire.point.f.y-work.fire.launch.f.y);
-                            tpitch=FUN_001f9e90(vector_distance_xy(&work.fire.launch,&work.fire.point),work.fire.point.f.z-work.fire.launch.f.z);
+                            tyaw=fast_arc_tan(work.fire.point.f.x-work.fire.launch.f.x,work.fire.point.f.y-work.fire.launch.f.y);
+                            tpitch=fast_arc_tan(vector_distance_xy(&work.fire.launch,&work.fire.point),work.fire.point.f.z-work.fire.launch.f.z);
                             dyaw=fast_difference_between_rotations(yaw,tyaw);
                             distance=distance_xyz(&work.fire.launch,&work.fire.point);
                             if(distance<2.5f && fast_difference_between_rotations(suck_hero.yaw,
-                                FUN_001f9e90(m->pos.f.x-suck_hero.pos.f.x,m->pos.f.y-suck_hero.pos.f.y))<1.0471976f &&
+                                fast_arc_tan(m->pos.f.x-suck_hero.pos.f.x,m->pos.f.y-suck_hero.pos.f.y))<1.0471976f &&
                                 absolute_float(tpitch)<0.7853982f) {
                                 best=m;
                                 break;
@@ -3322,7 +3322,7 @@ void FUN_L00_002df4a8(M09 *m) {
 /* update for the pulsing colour object */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E09A8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9de0(float);
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void FUN_L00_002502f0(void *, int, int, int);
@@ -3345,7 +3345,7 @@ void FUN_L00_002df4f8(char *m) {
         a = fast_add_rotations(*(float *)p,
                                D_L00_00161B98 * DEG_TO_RAD * frame_time);
         *(float *)p = a;
-        a = FUN_001f9de0(a);
+        a = fast_sin(a);
         c = fast_tween_color(D_L00_00161B90, D_L00_00161B94, a * 0.5f + 0.5f);
         b = (c >> 16) & 0xFF;
         g = (c >> 8) & 0xFF;

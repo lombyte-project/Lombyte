@@ -954,7 +954,7 @@ struct SpinnerVars {
     u8 pad0[0x20];
     u8 coll[0x10];   /* 0x20: collision record moved with the rotation */
 };
-extern float FUN_001fa580(float, float);
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 void FUN_L03_002d3e58(struct Moby *m) {
     Vec4 move;
@@ -965,7 +965,7 @@ void FUN_L03_002d3e58(struct Moby *m) {
     v = (struct SpinnerVars *)m->pvars;
     m->draw_dist = 0xFF;
     m->update_dist = 0xFF;
-    m->rot.z = FUN_001fa580(m->rot.z, frame_time * 0.47996554f);
+    m->rot.z = fast_add_rotations(m->rot.z, frame_time * 0.47996554f);
     FUN_L00_00260738(v->coll, &move, &oldRot, &m->rot);
 }
 
@@ -981,7 +981,7 @@ void FUN_L03_002d3e58(struct Moby *m) {
 
 extern CollisionHit coll_hit __asm__("D_L03_00173F60");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
@@ -1007,7 +1007,7 @@ char *FUN_L03_002d4288(char *a, char *pos, struct Moby *parent, int n, float f0,
         *(int *)(d + 0x28) = 0;
         *(OvlQuad *)v = *(OvlQuad *)&parent->pos;
         v[2] = *(float *)(pos + 8);
-        if (FUN_001efa68(v, pos, 2, parent, 0) != 0) {
+        if (collision_line(v, pos, 2, parent, 0) != 0) {
             *(int *)(d + 0x14) = 0;
             *(OvlQuad *)(m + 0x10) = *(OvlQuad *)&coll_hit;
             *(int *)(d + 0x24) = 0;
@@ -1109,7 +1109,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
                                         frame_time_sq_macro * 3.1415927f, frame_time * 0.5235988f);
             m->pos.z += fast_sin(-m->rot.y) * v->speed;
         }
-        if (FUN_001efa68(pos, &old, 0, v->ignore, 0) != 0 ||
+        if (collision_line(pos, &old, 0, v->ignore, 0) != 0 ||
             coll_sphere(0.2f, pos, 0, v->ignore) != 0) {
             level = (void **)&D_L03_00173F40;
             if (level[6] != NULL) {
@@ -1125,7 +1125,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
             }
             m->state = 2;
         }
-        if (FUN_001f9740(&v->timer) != 0) {
+        if (tick_countdown_32(&v->timer) != 0) {
             m->state = 2;
         }
         break;
@@ -1237,11 +1237,11 @@ extern void FUN_L00_00284e50(void *, void *);
 extern void FUN_L00_00260860(int, int);
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern s32 FUN_001f9740(s32 *);
+extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
@@ -1386,18 +1386,18 @@ void FUN_L03_002da870(struct Moby *m) {
         tracking = 1;
         if (taxi_dist2(&m->pos, g) < 8.0f &&
             (h = (struct Hero *)((u8 *)g - 0x80),
-             FUN_001fa688(m->rot.z, taxi_atan2(h->motion.unkD0.f[0] - m->pos.x, h->motion.unkD0.f[1] - m->pos.y))) <
+             fast_difference_between_rotations(m->rot.z, taxi_atan2(h->motion.unkD0.f[0] - m->pos.x, h->motion.unkD0.f[1] - m->pos.y))) <
                 1.5707964f) {
             if (vec_len((u8 *)g + 0x80) > 0.01f) {
                 v->watch_timer = scale_game_frames(120);
             } else {
-                FUN_001f9740(&v->watch_timer);
+                tick_countdown_32(&v->watch_timer);
             }
         } else if (v->watch_timer) {
             v->watch_timer = 0;
             qcopy(&v->target, &hero.motion.unkD0);
         }
-        if (FUN_001f9740(&v->target_timer)) {
+        if (tick_countdown_32(&v->target_timer)) {
             float heading;
             v->target_timer = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading = fast_add_rotations(m->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
@@ -1531,7 +1531,7 @@ extern char D_L03_001E35F0[];
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");
 extern float FUN_001f9b48(void *, void *);
 extern struct Moby *FUN_L03_002db198(struct RailPath *, float);
-extern int FUN_001f9740(s32 *);
+extern int tick_countdown_32(s32 *) __asm__("FUN_001f9740");
 extern int FUN_L00_0028d8c0(struct RailSpawnerMoby *, int);
 extern int FUN_L00_0028dc90(int, int, struct RailSpawnerMoby *, int);
 
@@ -1558,7 +1558,7 @@ void FUN_L03_002db280(struct RailSpawnerMoby *moby) {
             FUN_L03_002db198(path, d);
         moby->unk30 = 0x60;
     }
-    if (FUN_001f9740(&vars->timer)) {
+    if (tick_countdown_32(&vars->timer)) {
         vars->timer = ftoi_2db020(2.9f / D_L03_00161BC0);
         FUN_L03_002db198(D_L03_001B05B0[vars->path], 0.0f);
     }
@@ -1622,11 +1622,11 @@ extern void FUN_L00_00260860(int, int);
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_00216f90(void *, void *, int, int);
 extern int guide_save(int, int) __asm__("FUN_0020b178");
-extern float FUN_001fa688(float, float);
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern s32 FUN_001f9740(s32 *);
+extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void FUN_L00_002628d8(float, float, void *, void *, int);
@@ -1762,18 +1762,18 @@ void FUN_L03_002db558(struct Moby *m) {
         tracking = 1;
         if (taxi_dist2(&m->pos, g) < 8.0f &&
             (h = (struct Hero *)((u8 *)g - 0x80),
-             FUN_001fa688(m->rot.z, taxi_atan2(h->motion.unkD0.f[0] - m->pos.x, h->motion.unkD0.f[1] - m->pos.y))) <
+             fast_difference_between_rotations(m->rot.z, taxi_atan2(h->motion.unkD0.f[0] - m->pos.x, h->motion.unkD0.f[1] - m->pos.y))) <
                 1.5707964f) {
             if (vec_len((u8 *)g + 0x80) > 0.01f) {
                 v->watch_timer = scale_game_frames(120);
             } else {
-                FUN_001f9740(&v->watch_timer);
+                tick_countdown_32(&v->watch_timer);
             }
         } else if (v->watch_timer) {
             v->watch_timer = 0;
             qcopy(&v->target, &hero.motion.unkD0);
         }
-        if (FUN_001f9740(&v->target_timer)) {
+        if (tick_countdown_32(&v->target_timer)) {
             float heading;
             v->target_timer = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading = fast_add_rotations(m->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
@@ -2026,7 +2026,7 @@ void FUN_L03_002dccc0(struct Moby *m) {
     FUN_L00_00266858(m, FUN_L03_002dcb30((unsigned char *)m));
     qcopy(&oldPos, &m->pos);
     oldRot.q = *(u128 *)&m->rot;
-    FUN_001f9740(&d->timer);
+    tick_countdown_32(&d->timer);
     switch (m->state) {
     case 0:
         m->command = d->start_end;

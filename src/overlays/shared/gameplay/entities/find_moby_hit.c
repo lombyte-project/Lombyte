@@ -171,7 +171,7 @@ typedef struct {
 } G_259bc8;
 extern G_259bc8 D_L00_00173E40 __attribute__((section(".data")));
 extern T_259bc8 moby_hits[] __asm__("D_L00_00178100") __attribute__((section(".data")));
-extern float FUN_001f9af0(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 
 void FUN_L00_00259bc8(unsigned char *m, int x, int y, u128 *p, u128 *q, float f) {
     int i = D_L00_00173E40.idx;
@@ -187,7 +187,7 @@ void FUN_L00_00259bc8(unsigned char *m, int x, int y, u128 *p, u128 *q, float f)
     e->f = f;
     e->owner = m;
     e->z = 0;
-    if (FUN_001f9af0(q) > 0.0001f) {
+    if (fast_vec_length(q) > 0.0001f) {
         e->flag = 1;
     } else {
         e->flag = 0;
@@ -281,7 +281,7 @@ void FUN_L00_00259fe8(unsigned char *m, float r) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025B178), where it is exact; names translated to the US level program. */
 
 extern int D_L00_00173E40_25a120[] __asm__("D_L00_00173E40");
-extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
 void FUN_L00_0025a120(char *o) {
     float a[4];
@@ -294,7 +294,7 @@ void FUN_L00_0025a120(char *o) {
     }
     qcopy(b, p);
     b[2] = b[2] + 0.5f;
-    if (func_L00_001EFFF0(b, a, 0x22, 0, 0) != 0) {
+    if (coll_line_fix(b, a, 0x22, 0, 0) != 0) {
         float *t = (float *)D_L00_00173E40_25a120;
         *(float *)(o + 0x84) = t[10] - 0.2f;
         *(float *)(o + 0x88) = t[10] + 0.2f;
@@ -375,14 +375,14 @@ typedef struct {
 extern f32 D_L00_00160080[2] __attribute__((sda));
 extern f32 D_L00_001B01C8[][8];
 extern u8 D_L00_001B0180[][4];
-extern Q_25a478 *FUN_002141f8(void *);
+extern Q_25a478 *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
-extern f32 FUN_001f9dc8(f32);
-extern f32 FUN_001f9de0(f32);
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 FUN_001f9af0_c(void *) __asm__("FUN_001f9af0");
-extern void FUN_001f9a68(void *, void *, f32);
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");

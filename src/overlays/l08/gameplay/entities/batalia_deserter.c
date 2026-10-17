@@ -101,9 +101,9 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa688_cf(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -180,7 +180,7 @@ void FUN_L08_00305270(WM *m) {
     switch (m->state) {
     case 0:
         if (m->animation != 1)
-            blend_moby_animation(m, 1, 0, FUN_001f96f8(20));
+            blend_moby_animation(m, 1, 0, scale_game_frames(20));
         if (D_0013DD49 && visited52[((unsigned char *)m)[0xB0] + current_level_index * 16] == 0xFF) {
             mark_moby_for_removal(m);
             return;
@@ -192,7 +192,7 @@ void FUN_L08_00305270(WM *m) {
             FUN_L00_002668a0(m, (char *)d + 0x20);
         break;
     case 1:
-        if (FUN_001f9b80(m->position, (char *)&D_0013E633_watch + 0xE9D) < 8.0f) {
+        if (vector_distance(m->position, (char *)&D_0013E633_watch + 0xE9D) < 8.0f) {
             FUN_L00_002502a0(((unsigned char *)m)[0xB0]);
             m->state = 2;
         }
@@ -200,9 +200,9 @@ void FUN_L08_00305270(WM *m) {
     case 2:
         if (m->flags70 & 2) {
             if (m->animation != random_integer_below(2) + 1)
-                blend_moby_animation(m, random_integer_below(2) + 1, 0, FUN_001f96f8(20));
+                blend_moby_animation(m, random_integer_below(2) + 1, 0, scale_game_frames(20));
         }
-        if (D_0013F350_g.f2FC == 0 && (FUN_001f96f8(30) < D_0013F350_g.f300 || d->h56 != 0)) {
+        if (D_0013F350_g.f2FC == 0 && (scale_game_frames(30) < D_0013F350_g.f300 || d->h56 != 0)) {
             FUN_L00_00266448(m, (char *)d + 0x20);
             FUN_L01_002783a8(m, 2.2f);
         }
@@ -220,7 +220,7 @@ void FUN_L08_00305270(WM *m) {
     if (m->animation == 1) {
         char *player = (char *)&D_0013E633_watch + 0xE9D;
         tracking = 1;
-        if (FUN_001f9b80(m->position, player) < 8.0f &&
+        if (vector_distance(m->position, player) < 8.0f &&
             FUN_001f9e90_cf(
                 m->yaw,
                 FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] -
@@ -331,7 +331,7 @@ void FUN_L08_003063f0(struct Moby *moby) {
     }
 }
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 typedef struct {
     float target[4];
     float eye[4];
@@ -389,13 +389,13 @@ typedef struct {
 } L14Player;
 extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float FUN_001f9b20(void *);
+extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f9740_c(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6d0(float);
-extern void FUN_001f9a28(void *, void *, void *);
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
 extern void FUN_L00_00284e50(void *, void *);
 extern char D_L08_00162308[];
@@ -464,10 +464,10 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
         if (FUN_001f9b80_c(m->position, g) < 8.0f &&
             (q = (L14Player *)(g - 0x80),
              fast_difference_between_rotations(
-                 m->yaw, FUN_001f9e90(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) <
+                 m->yaw, fast_arc_tan(q->aim[0] - m->position[0], q->aim[1] - m->position[1]))) <
                 1.5707964f) {
             if (fast_vec_length(g + 0x80) > 0.01f)
-                d->moving_timer = FUN_001f96f8(120);
+                d->moving_timer = scale_game_frames(120);
             else
                 FUN_001f9740_c(&d->moving_timer);
         } else if (d->moving_timer) {
@@ -481,7 +481,7 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
                 fast_add_rotations(m->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(d->target, 6.0f, heading,
                                    random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            FUN_001f9a10(d->target, d->target, m->position);
+            fast_vec_add(d->target, d->target, m->position);
         }
         if (d->moving_timer) {
             qcopy(scratch.target, hero.motion.unkD0.f);
@@ -496,9 +496,9 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
         float pitch;
         qcopy(scratch.eye, m->position);
         scratch.eye[2] += 1.0f;
-        FUN_001f9a28(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(FUN_001f9e90(scratch.delta[0], scratch.delta[1]), m->yaw);
-        pitch = -FUN_001f9e90(FUN_001f9b20(scratch.delta), scratch.delta[2]);
+        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
+        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), m->yaw);
+        pitch = -fast_arc_tan(vec_len_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)
@@ -707,7 +707,7 @@ void FUN_L08_003084d8(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
 
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern void FUN_001f9a10(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void FUN_L08_0027fe00(float *, float *, int, float);
@@ -725,7 +725,7 @@ void FUN_L08_00308c90(struct Moby *moby) {
         a[3] = 1.0f;
         euler_rotation_basis(b, &moby->rot);
         transform_vector_by_basis(a, a, b);
-        FUN_001f9a10(a, a, &moby->pos);
+        fast_vec_add(a, a, &moby->pos);
         c[0] = 0;
         c[1] = random_float_between_alt(*(float *)(data + 0x18) * frame_time,
                                         *(float *)(data + 0x1C) * frame_time);
@@ -785,7 +785,7 @@ extern float D_L08_00162388;
 extern float D_L08_0016238C;
 extern float vector_length_xyz(void *);
 extern int D_L08_001623F0;
-extern int FUN_001fa728(char *, float);
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32();
 extern short D_L08_00162380 __attribute__((sda));
 int D_L08_001623C4 = 0;
@@ -836,7 +836,7 @@ void FUN_L08_003097b0(struct Moby *moby) {
         v[1] = D_L08_00162384;
         v[2] = D_L08_00162388;
         v[3] = D_L08_0016238C;
-        if (FUN_001fa728((char *)v, 1000.0f) >= 0) {
+        if (fast_bsphere_check((char *)v, 1000.0f) >= 0) {
             w[0] = *(float *)&D_L08_00162380;
             w[1] = D_L08_00162384;
             w[2] = D_L08_00162388;

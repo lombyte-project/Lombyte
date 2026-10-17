@@ -1287,8 +1287,8 @@ extern s32 D_L00_0015F5CC;
 extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
 
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
-extern f32 FUN_001f9dc8(f32);
-extern f32 FUN_001f9de0(f32);
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_001f9cf8(V4 *, V4 *, V4 *);
 extern s32 FUN_001f96f8_c2(s32) __asm__("FUN_001f96f8");
@@ -1315,8 +1315,8 @@ void FUN_L00_002b3c50(X *x) {
     u8 *p;
 
     g = x->f78;
-    l0.f[0] = FUN_001f9dc8(random_angle_radians()) * 0.05f;
-    l0.f[1] = FUN_001f9de0(random_angle_radians()) * 0.05f;
+    l0.f[0] = fast_cos(random_angle_radians()) * 0.05f;
+    l0.f[1] = fast_sin(random_angle_radians()) * 0.05f;
     l0.f[2] = 0.0f;
     l0.f[2] = -random_float_between(0.01f, 0.03f);
     FUN_001f9cf8(&l0, &l0, &x->vC0);
@@ -1591,9 +1591,9 @@ extern int advance_moby_animation(void *) __asm__("func_0020D580");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
 extern u32 D_0013C940[];
-extern unsigned char *FUN_002141f8(void *);
+extern unsigned char *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void FUN_L00_001f2868(void *, float, int, void *, void *);
-extern void FUN_L00_002223f8(int, int);
+extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_49a8(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -2055,9 +2055,9 @@ typedef struct {
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern void FUN_001fa2b8(void *, void *);
-extern void FUN_001f9d20(void *, void *, void *);
-extern void FUN_001f9a10(void *, void *, void *);
+extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 
 void FUN_L00_002b5ba0(unsigned char *m, unsigned char *o) {
@@ -2079,9 +2079,9 @@ void FUN_L00_002b5ba0(unsigned char *m, unsigned char *o) {
     euler_rotation_matrix(&b, *(unsigned char **)(o + 0x20) + 0x40);
     copy_matrix_rotation(&c, m + 0xC0);
     multiply_matrix(&a, &c, &b);
-    FUN_001fa2b8(*(unsigned char **)(o + 0x20) + 0xC0, &a);
-    FUN_001f9d20(&r, &k, &a);
-    FUN_001f9a10(*(unsigned char **)(o + 0x20) + 0x10, &r, m + 0x10);
+    copy_matrix3x4(*(unsigned char **)(o + 0x20) + 0xC0, &a);
+    transform_vector(&r, &k, &a);
+    fast_vec_add(*(unsigned char **)(o + 0x20) + 0x10, &r, m + 0x10);
     refresh_moby_spatial_bounds_from_basis(*(unsigned char **)(o + 0x20));
 }
 /* spawns a burst of sparks and glow flashes at a moby, scaled by its distance from the origin marker */
@@ -3404,7 +3404,7 @@ extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
 extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
 extern u32 D_0013C940[];
 extern u8 D_0013E550[];
-extern unsigned char *FUN_002141f8(void *);
+extern unsigned char *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");

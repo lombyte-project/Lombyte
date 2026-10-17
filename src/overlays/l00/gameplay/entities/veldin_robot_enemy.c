@@ -187,7 +187,7 @@ extern void FUN_L00_00263b38(void *, f32);
 extern void FUN_L00_002628d8(VendMoby *, void *, s32, f32, f32);
 extern void FUN_L00_0025a120(VendMoby *);
 extern f32 FUN_001f9b48(void *, void *);
-extern f32 FUN_001f9b80(void *, void *);
+extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void blend_moby_animation(VendMoby *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -197,7 +197,7 @@ extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void FUN_L00_0025be00(void *, f32, void *, f32, f32, f32);
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern f32 FUN_001f9af0(void *);
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 advance_accelerated_scalar(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_00213f38");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 FUN_L00_002e1f28(VendMoby *, s32, s32);
@@ -207,7 +207,7 @@ extern void build_moby_bone_transform(VendMoby *, s32, void *) __asm__("FUN_0020
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 compute_interpolated_record_value(VendMoby *) __asm__("FUN_0020c9e0");
-extern s32 FUN_001efa68(void *, void *, s32, VendMoby *, VendQuery *);
+extern s32 collision_line(void *, void *, s32, VendMoby *, VendQuery *) __asm__("FUN_001efa68");
 extern s32 vend_2040(VendMoby *) __asm__("FUN_L00_002e2040");
 extern s32 FUN_L00_002e2190(VendMoby *, void *, void *);
 extern s32 FUN_L00_0025c698(VendMoby *, void *);
@@ -298,7 +298,7 @@ void FUN_L00_002e0b88(VendMoby *moby) {
         advance_accelerated_scalar(FUN_001f9b48(&moby->pos, &path->pts[path->count - 1]),
                                    frame_time_sq * 8.0f, frame_time_sq * 16.0f, frame_time * 12.0f, &vel,
                                    &vars->speed);
-        if (FUN_001f9af0(&dir) < vars->speed + vars->speed) {
+        if (fast_vec_length(&dir) < vars->speed + vars->speed) {
             vars->pathPt++;
             if (vars->pathPt == path->count) {
                 moby->state = 3;
@@ -313,7 +313,7 @@ void FUN_L00_002e0b88(VendMoby *moby) {
             moby, vars,
             fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
             12.566371f);
-        if (FUN_001f9b80(&moby->pos, &hero.motion.pos) < 20.0f) {
+        if (vector_distance(&moby->pos, &hero.motion.pos) < 20.0f) {
             VEND_ANIM(moby, 4, vend_rand(20));
         } else if (moby->unk70 & 2) {
             VEND_ANIM(moby, random_integer_below(2) + 1, vend_rand(20));
@@ -367,13 +367,13 @@ void FUN_L00_002e0b88(VendMoby *moby) {
         }
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.5f;
-        if (FUN_001efa68(&mtx[3], &probe, 0, moby, &query) != 0 && hit != 0 &&
+        if (collision_line(&mtx[3], &probe, 0, moby, &query) != 0 && hit != 0 &&
             D_L00_00173E58.moby == (*(s32 *)&D_001413D0_lui)) {
             vend_2040(moby);
             moby->state = 6;
             VEND_ANIM(moby, 7, vend_rand(10));
         }
-        if (FUN_001efa68(&mtx[3], &dir, 0, moby, &query) != 0) {
+        if (collision_line(&mtx[3], &dir, 0, moby, &query) != 0) {
             qcopy(&dir, D_L00_00173E58.pos);
             if (hit != 0 && D_L00_00173E58.moby == (*(s32 *)&D_001413D0_lui)) {
                 vend_2040(moby);
@@ -497,7 +497,7 @@ typedef struct {
 
 extern s16 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern f32 FUN_001f9b80(void *, void *);
+extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L00_00257470(TrollMoby *, s32, s32);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -593,7 +593,7 @@ void FUN_L00_002e1678(TrollMoby *m) {
             range = 37.0f;
         }
         if (FUN_L00_0025fcb8(m, range, &vars->target) != 2 &&
-            range < FUN_001f9b80(&m->pos, &vars->target)) {
+            range < vector_distance(&m->pos, &vars->target)) {
             vars->unk114 = 2;
         }
     }
@@ -607,8 +607,8 @@ void FUN_L00_002e1678(TrollMoby *m) {
         if (t == 0 || t->state == 0xFE || t->state == 0xFD) {
             vars->unk1BC = -1;
         } else {
-            range = FUN_001f9b80(&m->pos, &t->pos);
-            if (range < FUN_001f9b80(&m->pos, &vars->targetMoby->pos)) {
+            range = vector_distance(&m->pos, &t->pos);
+            if (range < vector_distance(&m->pos, &vars->targetMoby->pos)) {
                 vars->targetMoby = t;
                 qcopy(&vars->target, &t->pos);
                 vars->unk114 = 1;

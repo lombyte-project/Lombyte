@@ -58,12 +58,12 @@ void FUN_L01_002783a8(float scale, char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279790), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void FUN_L00_00260a88(void *, int, int, int, int);
 
 void FUN_L01_002787a0(char *moby) {
     int r = 0;
-    if (FUN_001f9b80(moby + 0x10, D_0013E533 + 0xE9D) < 7.0f) {
+    if (vector_distance(moby + 0x10, D_0013E533 + 0xE9D) < 7.0f) {
         r = 2;
     }
     FUN_L00_00260a88(moby, 4, 7, r, -1);

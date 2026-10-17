@@ -16,7 +16,7 @@ extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 void FUN_L00_002371e0(void);
 void FUN_L01_002b96e0(s32, void *);
 extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern float FUN_001f9de0(float);
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void FUN_L01_00309bf8(void) {
     f32 v;
@@ -24,7 +24,7 @@ void FUN_L01_00309bf8(void) {
 
     FUN_L00_002371e0();
     FUN_L01_002b96e0(3, D_L01_00202D80);
-    v = FUN_001f9de0((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
+    v = fast_sin((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
     v = v * 0.5f + 0.5f;
     for (i = 2; i >= 0; i--) {
         D_L01_00202D80[i].f5c = v;
@@ -624,7 +624,7 @@ typedef struct {
 
 extern EnvVec D_L01_00167240;
 extern f32 D_L01_00162110[2];
-extern void FUN_001f9a28(void *, void *, void *);
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -642,7 +642,7 @@ void FUN_L01_0030ef18(s32 n, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32
         pos.x = verts[i][0];
         pos.y = verts[i][1];
         pos.z = verts[i][2];
-        FUN_001f9a28(&eye, &pos, &D_L01_00167240);
+        fast_vec_sub(&eye, &pos, &D_L01_00167240);
         fast_vec_normalize(&eye, &eye, 1.0f);
         nrm.w = 1.0f;
         nrm.x = -normals[i][0];
@@ -650,7 +650,7 @@ void FUN_L01_0030ef18(s32 n, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32
         nrm.z = -normals[i][2];
         fast_vec_normalize(&nrm, &nrm, 1.0f);
         fast_vec_scale(&refl, &nrm, fast_vec_dot(&nrm, &eye) * 2.0f);
-        FUN_001f9a28(&refl, &eye, &refl);
+        fast_vec_sub(&refl, &eye, &refl);
         fast_vec_normalize(&refl, &refl, 1.0f);
         refl.z += 1.0f;
         len = fast_vec_length(&refl) * 2.0f;

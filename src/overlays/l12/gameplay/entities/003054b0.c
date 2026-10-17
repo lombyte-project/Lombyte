@@ -64,7 +64,7 @@ extern int D_L12_00161F24 __attribute__((section(".sdata")));
 extern int D_L12_00161F34 __attribute__((sda));
 extern int D_L12_001FB670[];
 extern int D_L12_001FB688[];
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_001fefc8(void *);
 extern int FUN_L00_00257b90(int, int);
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
@@ -161,20 +161,20 @@ void FUN_L12_003054b0(char *moby) {
             D_L12_00161F34 = 0;
         }
         if ((D_L12_00161F00_gp != 0 || flag) && md->f80 > 0.0f) {
-            FUN_001f9770(&md->h98);
-            FUN_001f9770(&md->h9C);
+            fast_dec_timer_s16(&md->h98);
+            fast_dec_timer_s16(&md->h9C);
             if (md->h98 == 0) {
                 if (fast_difference_between_rotations(*(float *)(d + idx * 0x30 + 0x18), yaw) < 0.06981317f) {
                     md->h9E = scale_game_frames(0x14);
                 }
-                if (FUN_001f9770(&md->h9E) == 0) {
+                if (fast_dec_timer_s16(&md->h9E) == 0) {
                     if (FUN_L00_001fefc8(&md->b92) == 0) {
                         if (FUN_L00_001fefc8(&md->b93) != 0) {
                             allocate_voice_for_target_entry(0, 0, m);
                             md->b93 = scale_game_frames(9);
                         }
                     }
-                    if (FUN_001f9770(&md->h9C) != 0) {
+                    if (fast_dec_timer_s16(&md->h9C) != 0) {
                         float rz;
                         float pitch;
                         int n;
@@ -821,7 +821,7 @@ void FUN_L12_003069d0(char *moby) {
 extern void FUN_L00_00250df8(unsigned char *);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0026de90(char *, int, float);
-extern short *FUN_002141f8(unsigned char *);
+extern short *suck_get_aim_height(unsigned char *) __asm__("FUN_002141f8");
 
 void FUN_L12_003076e0(struct Moby *m) {
     char *d = (char *)m->pvars;
@@ -851,7 +851,7 @@ void FUN_L12_003076e0(struct Moby *m) {
     for (i = 0; i < 14; i++) {
         FUN_L00_0026de90(&m->pos, 0, random_float_between(frame_time * 3.0f, frame_time * 5.0f));
     }
-    r = FUN_002141f8(o);
+    r = suck_get_aim_height(o);
     if (r != 0) {
         *(float *)r = r[2];
     }
@@ -864,8 +864,8 @@ void FUN_L12_003076e0(struct Moby *m) {
 /* Door/switch moby: clears its linked mobys, waits for the hero, opens, fires its list one by one, closes. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308C20), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b80(void *, void *);
-extern int FUN_001f9770(void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 void FUN_L12_003076e0(struct Moby *m);
 extern void FUN_L12_00307ab8(struct Moby *m);
@@ -893,7 +893,7 @@ void FUN_L12_00307840(struct Moby *m) {
         break;
     case 1:
         if (*(int *)(d + 0xB4) != 2) {
-            if (FUN_001f9b80(&m->pos, d + 0x70) < *(float *)(d + 0xF8)) {
+            if (vector_distance(&m->pos, d + 0x70) < *(float *)(d + 0xF8)) {
                 m->state = 2;
             }
         }
@@ -910,7 +910,7 @@ void FUN_L12_00307840(struct Moby *m) {
         }
         break;
     case 3:
-        if (FUN_001f9770(d + 0xFC)) {
+        if (fast_dec_timer_s16(d + 0xFC)) {
             if (slots[*(int *)(d + 0xF0)] != -1) {
                 FUN_L12_003076e0(m);
                 m->command = m->command == 0;
@@ -944,8 +944,8 @@ void FUN_L12_00307840(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308E98), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern int FUN_001f96f8(int);
-extern int FUN_001f9770(void *);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_0025fcb8(char *, char *, float);
 float absolute_float(float input) __asm__("func_001F99C0");
 
@@ -954,10 +954,10 @@ void FUN_L12_00307ab8(struct Moby *m) {
     char *pad;
     if (m->state != 0) {
         if (*(int *)(d + 0x38) != 0) {
-            *(short *)(d + 0xFE) = FUN_001f96f8(0xB4);
+            *(short *)(d + 0xFE) = scale_game_frames(0xB4);
         }
         *(int *)(d + 0x38) = 0;
-        if (FUN_001f9770(d + 0xFE)) {
+        if (fast_dec_timer_s16(d + 0xFE)) {
             *(float *)(d + 0xF8) = *(float *)(d + 0xF4);
         } else {
             *(float *)(d + 0xF8) = *(float *)(d + 0xF4) + 5.0f;

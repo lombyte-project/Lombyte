@@ -461,7 +461,7 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern f32 convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void FUN_L00_00257470(void *, int, int);
-extern void *FUN_002141f8(void *);
+extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_002502f0(void *, u8, u8, u8);
 extern void FUN_L00_00269b70(void *, int, int, int, int, f32, f32);
@@ -527,7 +527,7 @@ struct Moby *FUN_L00_002c9348(State *a) {
         s2->unk74 = D_0013E520[0x15];
         n->command = s2->unk74;
         FUN_L00_00257470(a, 0, -1);
-        q = FUN_002141f8(a);
+        q = suck_get_aim_height(a);
         if (q != NULL && *(u8 *)((u8 *)q + 0xE) == 1) {
             *(u8 *)((u8 *)q + 0xE) = 2;
         } else {
@@ -1006,7 +1006,7 @@ extern char D_L00_0015F580[] __attribute__((section(".sdata")));
 extern float D_L00_00161890_gp __asm__("D_L00_00161890") __attribute__((sda));
 extern float FUN_L00_00257e20(float, float, float, float, float);
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
-extern int FUN_001efa68(void *, void *, int, int, int);
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_00257b90_c2(int, int) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
@@ -1065,7 +1065,7 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float vx, flo
         if (target != 0) {
             int bounds;
             qcopy(vars, target + 0x10);
-            bounds = (int)FUN_002141f8(target);
+            bounds = (int)suck_get_aim_height(target);
             if (bounds != 0) {
                 *(float *)(vars + 0x8) = *(float *)(vars + 0x8) + *(float *)(bounds + 0x10);
             } else {
@@ -1086,7 +1086,7 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float vx, flo
         *(short *)(vars + 0x26) = timer;
         *(w128 *)probe = *(w128 *)(owner + 0x10);
         probe[2] = start[2];
-        result = FUN_001efa68(probe, start, 0, (int)owner, 0);
+        result = collision_line(probe, start, 0, (int)owner, 0);
         if (result != 0) {
             build_spherical_offset(direction, D_0015ED6C * 40.0f, *(float *)(moby + 0x48), -*(float *)(moby + 0x44));
             qcopy(moby + 0x10, D_L00_00173E60_c);
@@ -2002,7 +2002,7 @@ extern float FUN_L00_00258110(float *vel, float cur, float target, float k, floa
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
 extern Data D_L00_00173E40;
-extern int FUN_001efa68(void *, void *, int, int, int);
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_00257b90_c(int, int) __asm__("FUN_L00_00257b90");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 rand(void);
@@ -2154,7 +2154,7 @@ void FUN_L00_002cd1f0(char *m) {
         euler_rotation_matrix(va0, m + 0x40);
         transform_vector(&u.v.a, &u.v.a, va0);
         add_vector_xyz(m + 0x10, d + 0x10, &u.v.a);
-        if (FUN_001efa68(&v20, m + 0x10, 6, (int)m, 0) == 0) goto done;
+        if (collision_line(&v20, m + 0x10, 6, (int)m, 0) == 0) goto done;
         goto hit;
     top:;
     }
@@ -2184,7 +2184,7 @@ done:
     u.h.w = 5627.925f;
     u.h.b19 = 3;
     u.h.s = *(unsigned short *)(m + 0xA6);
-    if (FUN_001efa68(&v20, m + 0x10, 0, (int)m, (int)&u.v.a)) {
+    if (collision_line(&v20, m + 0x10, 0, (int)m, (int)&u.v.a)) {
         gg = (char *)((int *)&D_L00_00173E40);
         p = *(char **)(gg + 0x18);
         if (p != 0) {
@@ -2307,7 +2307,7 @@ void FUN_L00_002cde78(char *m) {
 
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int D_L00_0015FFE4;
-extern int FUN_001efa68(void *, void *, int, int, int);
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_002141f8_c(char *) __asm__("FUN_002141f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
@@ -2384,7 +2384,7 @@ char *FUN_L00_002cdf28(char *a, int *excl) {
         qcopy(v, m + 0x10);
         if (x != 0)
             v[2] = v[2] + (*(float *)(x + 0x10) + 0.05f);
-        if (FUN_001efa68(a, v, 6, (int)m, 0) == 0) {
+        if (collision_line(a, v, 6, (int)m, 0) == 0) {
             best = dist;
             result = m;
         }
@@ -2886,11 +2886,11 @@ extern void update_moby_animation_state(struct Moby *) __asm__("FUN_0020c880");
 extern void break_crate(struct Moby *, int, Contact *) __asm__("FUN_L00_002d09b8");
 extern void crate_drop_bolts(struct Moby *) __asm__("FUN_L00_002d0538");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-extern int FUN_001fa728(void *, float);
+extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int FUN_L00_001fefc8(void *);
 extern int FUN_L00_002591d0(struct Moby **, int, int, int);
 extern int FUN_L00_002592b8(struct Moby **, struct Moby *, int, int);
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 void crate_update(struct Moby *moby) __asm__("FUN_L00_002cf218");
 void crate_update(struct Moby *moby) {
@@ -3079,7 +3079,7 @@ void crate_update(struct Moby *moby) {
         qcopy(&burst.pos, &moby->pos);
         burst.pos.z += 0.5f;
         burst.pos.w = 1.0f;
-        if (FUN_001fa728(&burst.pos, moby->draw_dist) != -1) {
+        if (fast_bsphere_check(&burst.pos, moby->draw_dist) != -1) {
             break;
         }
         if (!FUN_L00_001fefc8(&pv->unkC9)) {
@@ -3121,7 +3121,7 @@ void crate_update(struct Moby *moby) {
         }
         FUN_L00_002591d0(&it, moby->group, 0, 0);
         while (it != NULL) {
-            if (moby != it && !(FUN_001f9b80(&moby->pos, &it->pos) > 0.1f) && it->state == 1) {
+            if (moby != it && !(vector_distance(&moby->pos, &it->pos) > 0.1f) && it->state == 1) {
                 CrateVars *ipv = (CrateVars *)it->pvars;
 
                 if (ipv->rider == NULL) {

@@ -19,7 +19,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_00203908(int, int) __asm__("FUN_L00_00203908");
 extern void FUN_L00_002d5830(void *) __asm__("FUN_L00_002d5830");
-extern void FUN_001f99f8(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 typedef unsigned int L05Vector __attribute__((mode(TI), aligned(16)));
 
 typedef struct { unsigned short count, best; int flags; } VendorEventRecord;
@@ -183,7 +183,7 @@ void FUN_L05_0031bf40(unsigned char *moby) {
         }
         if (hero.state.control_mode == 0x12) {
             if (is_point_inside_clip_volume(data + 4, data[13]) || is_point_inside_clip_volume(data + 4, data[14])) {
-                FUN_001f99f8(data + 4);
+                clear_u64_value(data + 4);
                 data[24]++;
             }
         } else if (data[24] > 1 &&

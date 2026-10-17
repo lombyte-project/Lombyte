@@ -2,7 +2,7 @@
 typedef int s32;
 typedef float f32;
 #include "qcopy.h"
-extern int FUN_001efa68(void *, void *, int, int, int);
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern char D_00194120[];
 /* Builds two 16-byte copies of *pos: one with byte offset 8 (a float)
    forced to 0.01f, the other with its offset-8 float bumped by height_offset.
@@ -19,7 +19,7 @@ f32 probe_ground_height(void *pos, s32 flags, f32 height_offset) {
     *(f32 *)(low_point + 8) = 0.01f;
     qcopy(raised_point, pos);
     *(f32 *)(raised_point + 8) = *(f32 *)(raised_point + 8) + height_offset;
-    if (FUN_001efa68(raised_point, low_point, flags | 2, 0, 0) != 0) {
+    if (collision_line(raised_point, low_point, flags | 2, 0, 0) != 0) {
         return *(f32 *)(D_00194120 + 8);
     }
     return 0.0f;

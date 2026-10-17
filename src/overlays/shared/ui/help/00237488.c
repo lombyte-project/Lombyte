@@ -78,8 +78,8 @@ extern int D_0015ED8C;
 extern int D_0015ED90;
 extern int D_0015ED94;
 extern ItemDef D_L05_00179F20[];
-extern int FUN_001f96f8(int);
-extern int FUN_001f9770(void *);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_0020d568();
 extern int FUN_L00_00216de8(int, int);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -354,14 +354,14 @@ void FUN_L05_0023dc88(int i) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
-    if (FUN_001f9770(&hero.items[i].timer) == 0) {
+    if (fast_dec_timer_s16(&hero.items[i].timer) == 0) {
         changed = 0;
     }
     if (changed) {
         struct Hero *g = &hero;
         *(int *)((char *)g + i * 0x50 + 0x10B0) = 3;
         FUN_L00_0020a500();
-        *(int *)((char *)g + 0x1010) = random_int_between(FUN_001f96f8(0x32), FUN_001f96f8(0x5A));
+        *(int *)((char *)g + 0x1010) = random_int_between(scale_game_frames(0x32), scale_game_frames(0x5A));
         FUN_L00_0020fde0(*(hero.selected_item + i));
         FUN_L00_0020fd80(*(hero.selected_item + i));
         if (g->unk20A8 != 0) {
@@ -412,7 +412,7 @@ extern u8 D_L05_00174260[] __attribute__((section(".data")));
 extern u8 D_L05_0017AB20[] __attribute__((section(".data")));
 extern int FUN_L05_002388a0(float, float, float *) __asm__("FUN_L00_0020a240");
 extern float FUN_L00_0022e0f0(void *) __asm__("FUN_001f9b20");
-extern float FUN_L00_0022e598(float, float) __asm__("FUN_001f9e90");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern s32 FUN_L00_0025e3b8(s32);
 extern void FUN_L00_0025c9d8(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern int FUN_L00_0021e8d8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -442,7 +442,7 @@ void FUN_L05_0024bdc0(void) {
         if (FUN_L05_002388a0(0.7f, 4.0f, &hero.wall_probe_distance)) {
             CollisionHit *wall = &D_L05_00174240;
             float normal_xy = FUN_L00_0022e0f0(&wall->normal_x);
-            hero.unk250 = FUN_L00_0022e598(wall->normal_z, normal_xy);
+            hero.unk250 = fast_arc_tan(wall->normal_z, normal_xy);
             if (wall->moby != 0) {
                 hero.unk255 = 1;
                 if (FUN_L00_0025e3b8(wall->moby)) hero.unk254 = 1;
@@ -1102,7 +1102,7 @@ void FUN_L05_00253850(void) {
         }
     }
 }
-extern s32 FUN_001f96f8(s32);
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_001fefc8_c(u8 *) __asm__("FUN_L00_001fefc8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001f99c0(f32);
@@ -1146,7 +1146,7 @@ void FUN_L05_00253b48(void) {
                     transform_vector(delta, delta, matrix);
                     if (FUN_001f99c0(delta[0]) < 0.5f && FUN_001f99c0(delta[1]) < 2.9f && FUN_001f99c0(delta[2]) < 2.9f) {
                         hero.unk8C4 += **(s32 **)(first + 0x78);
-                        first[0xBC] = FUN_001f96f8(0x3C);
+                        first[0xBC] = scale_game_frames(0x3C);
                         if (hero.unk86C != 0)
                             allocate_voice_for_target_entry(1, 0, hero.unk86C);
                     }
@@ -1155,7 +1155,7 @@ void FUN_L05_00253b48(void) {
             } while (first != 0);
         }
     }
-    count = FUN_001f96f8(0x32);
+    count = scale_game_frames(0x32);
     period = convert_integer_to_float(count);
     ratio = (f32)(D_L00_0015F5CC % count) / period;
     ratio += ratio;
@@ -1181,7 +1181,7 @@ void FUN_L05_00253b48(void) {
                             transform_vector(delta, delta, matrix);
                             if (FUN_001f99c0(delta[0]) < 2.8f && FUN_001f99c0(delta[1]) < 1.25f && FUN_001f99c0(delta[2]) < 1.5f) {
                                 hero.unk8C4 += **(s32 **)(second + 0x78);
-                                second[0xBC] = FUN_001f96f8(0x3C);
+                                second[0xBC] = scale_game_frames(0x3C);
                                 if (hero.unk86C != 0)
                                     allocate_voice_for_target_entry(1, 0, hero.unk86C);
                             }
@@ -1198,7 +1198,7 @@ void FUN_L05_00253b48(void) {
 
             if (*(s16 *)(third + 0xA6) == 0x1D6 && FUN_L00_001fefc8_c(third + 0xBC) != 0 && FUN_001f9b48(&hero.motion.unkD0, third + 0x10) < 1.5f) {
                 struct Hero *g = &hero;
-                third[0xBC] = FUN_001f96f8(300);
+                third[0xBC] = scale_game_frames(300);
                 if (*(s32 *)((u8 *)g + 0x10B8) != 0x24) {
                     *(s32 *)((u8 *)g + 0x20B8) = 0x24;
                     g->unk20AC = 0;
@@ -1223,7 +1223,7 @@ extern u8 D_0013D388;
 extern s32 D_0015ED84 __attribute__((sda));
 extern s32 D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda));
 extern f32 D_L05_002169F8[] __asm__("D_L05_002169F8");
-extern f32 FUN_001f96b0(f32) __asm__("FUN_L05_0022dbc8");
+extern f32 scale_time(f32) __asm__("FUN_L05_0022dbc8");
 
 void FUN_L05_00254058(void) {
     s32 *counter;
@@ -1309,7 +1309,7 @@ void FUN_L05_00254058(void) {
         struct Hero *g = &hero;
         table = *(struct ScoreTable *)D_L05_002169F8;
         *(f32 *)((char *)g + 0x6F4) = table.values[*(s32 *)((char *)g + 0x6F0)];
-        frames = FUN_001f96b0(1.0f);
+        frames = scale_time(1.0f);
         *(s32 *)((char *)g + 0x6FC) = truncate_float_to_s32((f32)((*(s32 *)((char *)g + 0x6F8) * 100) / (s32)(frames * 60.0f)));
         *(s32 *)((char *)g + 0x6FC) += *(s32 *)((char *)g + 0x6F0) * 25;
         *(s32 *)((char *)g + 0x6FC) = truncate_float_to_s32((f32)*(s32 *)((char *)g + 0x6FC) * *(f32 *)((char *)g + 0x6F4));
@@ -1717,9 +1717,9 @@ int FUN_L05_00255208(void) {
         if (FUN_L00_0021e8d8(start, end, 2, 0, 0) &&
             D_L05_00174240.moby == 0 && D_L05_00174240.unk1C != 0) {
             CollisionHit *wall = &D_L05_00174240;
-            if (1.2217305f < FUN_L00_0022e598(wall->normal_z, FUN_L00_0022e0f0(&wall->normal_x))) {
-                player->unk8A4 = fast_add_rotations(FUN_L00_0022e598(wall->normal_x, wall->normal_y), 3.1415927f);
-                if (fast_difference_between_rotations(FUN_L00_0022e598(player->motion.velocity.f[0], player->motion.velocity.f[1]), player->unk8A4) < 0.7853982f) {
+            if (1.2217305f < fast_arc_tan(wall->normal_z, FUN_L00_0022e0f0(&wall->normal_x))) {
+                player->unk8A4 = fast_add_rotations(fast_arc_tan(wall->normal_x, wall->normal_y), 3.1415927f);
+                if (fast_difference_between_rotations(fast_arc_tan(player->motion.velocity.f[0], player->motion.velocity.f[1]), player->unk8A4) < 0.7853982f) {
                     state = 0x6F;
                     if (!(player->ground_distance < 1.0f)) state = 0x6D;
                     goto change_state;
@@ -1778,7 +1778,7 @@ int FUN_L05_00255208(void) {
             (*((unsigned char *)(&hero)->moby + 0x53) == 0x55 || *((unsigned char *)(&hero)->moby + 0x53) == 0x7F) &&
             *((unsigned char *)(&hero)->moby + 0x51) < 13) {
             int animation = FUN_L05_002551b8();
-            int frames = FUN_001f96f8(7);
+            int frames = scale_game_frames(7);
             set_hero_animation(animation, 14, (float)frames);
         }
     }
@@ -1812,14 +1812,14 @@ continue_fall:
         hero_set_state(0x6B, 0);
         if (*((unsigned char *)(&hero)->moby + 0x53) != 0x55 && *((unsigned char *)(&hero)->moby + 0x53) != 0x7F) {
             int animation = FUN_L05_002551b8();
-            int frames = FUN_001f96f8(7);
+            int frames = scale_game_frames(7);
             set_hero_animation(animation, 14, (float)frames);
         }
         return 1;
     }
     if (*((unsigned char *)(&hero)->moby + 0x53) != 0x55 && *((unsigned char *)(&hero)->moby + 0x53) != 0x7F) {
         int animation = FUN_L05_002551b8();
-        int frames = FUN_001f96f8(7);
+        int frames = scale_game_frames(7);
         set_hero_animation(animation, 14, (float)frames);
     }
     return 0;

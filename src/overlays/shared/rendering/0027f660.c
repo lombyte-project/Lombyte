@@ -384,7 +384,7 @@ void FUN_L01_0028b8c8(void *out, int *l, int idx, float a, float b) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9a10(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4) {
@@ -396,11 +396,11 @@ void FUN_L01_0028ba80(float t, void *out, void *p1, void *p2, void *p3, void *p4
     float c = t2 + t2;
     fast_vec_scale(out, p1, a - b + 1.0f);
     fast_vec_scale(tmp, p3, t3 - c + t);
-    FUN_001f9a10(out, out, tmp);
+    fast_vec_add(out, out, tmp);
     fast_vec_scale(tmp, p4, t3 - t2);
-    FUN_001f9a10(out, out, tmp);
+    fast_vec_add(out, out, tmp);
     fast_vec_scale(tmp, p2, b - a);
-    FUN_001f9a10(out, out, tmp);
+    fast_vec_add(out, out, tmp);
 }
 float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *moby) {
     OvlVec4 previousTangent;

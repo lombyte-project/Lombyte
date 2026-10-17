@@ -13,7 +13,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00204130), where it is exact; names translated to the US level program. */
 
 extern char D_L00_00179410[];
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void dismiss_help(void) __asm__("FUN_001fdc08");
 
 /* Once (flag 0x38): starts a 0x3C-frame timer, dismisses help, sets the first word to 8 if 0. */
@@ -21,7 +21,7 @@ void FUN_L00_00203b18(void) {
     char *g = D_L00_00179410;
     if (*(short *)(g + 0x38) == 0) {
         *(short *)(g + 0x38) = 1;
-        *(int *)(g + 0x3C) = FUN_001f96f8(0x3C);
+        *(int *)(g + 0x3C) = scale_game_frames(0x3C);
         dismiss_help();
         if (*(int *)g == 0)
             *(int *)g = 8;
@@ -255,18 +255,18 @@ void FUN_L00_00205538(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205C18), where it is exact; names translated to the US level program. */
 
 extern int D_L00_0015F5CC;
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void FUN_L00_00205600(void) {
     struct Hero *g = &hero;
     if (g->rand_timer.fired == 0) {
         if (g->rand_timer.range == 0) {
-            g->rand_timer.deadline = D_L00_0015F5CC + FUN_001f96f8(30);
+            g->rand_timer.deadline = D_L00_0015F5CC + scale_game_frames(30);
         } else if (D_L00_0015F5CC > g->rand_timer.deadline) {
             int a, b;
             g->rand_timer.fired = 1;
-            a = FUN_001f96f8(20);
+            a = scale_game_frames(20);
             b = random_integer_below(g->rand_timer.range);
             g->rand_timer.deadline =
                 D_L00_0015F5CC + a + b + random_integer_below(g->rand_timer.range);
@@ -589,7 +589,7 @@ typedef float M4_2061f0[16] __attribute__((aligned(16)));
 void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void advance_moby_animation(void *) __asm__("FUN_0020d580");
 void FUN_L00_00250df8(void *);
@@ -606,7 +606,7 @@ void FUN_L00_002061f0(void) {
         copy_matrix3x4(o + 0xC0, m);
         matrix_to_euler(m, o + 0x40);
         *(unsigned short *)(o + 0x34) &= 0xFFBE;
-        blend_moby_animation(o, 0x81, 0, FUN_001f96f8(10));
+        blend_moby_animation(o, 0x81, 0, scale_game_frames(10));
         advance_moby_animation(o);
         FUN_L00_00250df8(o);
     } else {
@@ -1078,7 +1078,7 @@ void FUN_L00_00206e00(void) {
         if (*(int *)(r + 0x21D4) >= 16) *(int *)(r + 0x21D4) = 0;
     }
 }
-int FUN_001f96f8(int);
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 void fade_to_black(int) __asm__("FUN_001f4a58");
 void FUN_L00_002062b0(void);
 void FUN_L00_00232670(void);
@@ -1117,7 +1117,7 @@ void FUN_L00_002070d0(void) {
     struct Hero *g = &hero;
     if (g->motion.pos.f[0] < 2.0f || g->motion.pos.f[1] < 2.0f ||
         1022.0f < g->motion.pos.f[0] || 1022.0f < g->motion.pos.f[1]) {
-        fade_to_black(FUN_001f96f8(0x10));
+        fade_to_black(scale_game_frames(0x10));
         {
             struct Hero *g2 = &hero;
             g2->unk20B1 = 1;
@@ -1316,10 +1316,10 @@ void FUN_L00_002076a8(void) {
 
     blink = 0;
     if (hero.state.current == 0x80 || hero.state.current == 0x82) {
-        blink = hero.state_timer < FUN_001f96f8(0x1e);
+        blink = hero.state_timer < scale_game_frames(0x1e);
     }
     if ((current_level_index == 0xf || current_level_index == 0x11) &&
-        hero.state.current == 0x76 && hero.state_timer < FUN_001f96f8(0x14)) {
+        hero.state.current == 0x76 && hero.state_timer < scale_game_frames(0x14)) {
         blink = 1;
     }
     if (blink) {
@@ -2818,7 +2818,7 @@ extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int D_L00_0015F6B0 __asm__("D_L00_0015F5CC");
 extern int FUN_001efa68_ac98(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int FUN_002141f8(char *);
+extern int suck_get_aim_height(char *) __asm__("FUN_002141f8");
 extern unsigned char hero_pos[] __asm__("D_0013F3D0") NOT_SDA;
 extern void FUN_L00_00233660(float *, float, float, float);
 float absolute_float(float input) __asm__("FUN_001f99c0");
@@ -2850,7 +2850,7 @@ void FUN_L00_0020ac98(void) {
         bestPri = 0.0f;
         best = 0;
         for (i = 0; (m = D_L00_001ABD80[i]) != 0; i++) {
-            info = (char *)FUN_002141f8(m);
+            info = (char *)suck_get_aim_height(m);
             if (info != 0) {
                 float d, a, sc, pri;
                 d = vector_distance(hero_pos + 0x0, m + 0x10);
@@ -2901,7 +2901,7 @@ void FUN_L00_0020ac98(void) {
     if (t == 0)
         return;
     qcopy(v, t + 0x10);
-    info2 = (char *)FUN_002141f8(t);
+    info2 = (char *)suck_get_aim_height(t);
     if (info2 != 0)
         v[2] += (float)*(unsigned char *)(info2 + 0x3A) * 0.125f;
     FUN_L00_00233660(&v[4], 0.3f, 0.0f, 0.85f);
@@ -3362,7 +3362,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern int FUN_001efa68_c(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int FUN_001f0b58(void);
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_001f19a0();
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013F350[];

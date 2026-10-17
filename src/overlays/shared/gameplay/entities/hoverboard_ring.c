@@ -14,7 +14,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int FUN_001fa728(char *, float);
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char *FUN_L00_002743a8(float f0, float f1, int a0, void *pos, int timer, int flag,
                                        int col, float *vel);
@@ -31,7 +31,7 @@ void FUN_L05_0031abe0(char *moby) {
         int i;
         qcopy(v, moby + 0x10);
         v[3] = 8.0f;
-        if (FUN_001fa728((char *)v, 128.0f) != -1) {
+        if (fast_bsphere_check((char *)v, 128.0f) != -1) {
             if (hero.state.control_mode == 0x16) {
                 for (i = 0; i < 3; i++) {
                     float a = random_angle_radians();
@@ -310,7 +310,7 @@ char *FUN_L05_0031d160(unsigned char *a0) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
 
 
-extern float FUN_001f9b80(float *, float *);
+extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
@@ -331,7 +331,7 @@ void FUN_L05_00329358(char *moby) {
         w[1] = 447.82f;
         w[2] = 63.37f;
         w[3] = 1.0f;
-        if (FUN_001f9b80(w, p) < 48.0f) {
+        if (vector_distance(w, p) < 48.0f) {
             if (p[2] < 62.4f) {
                 p[2] = 62.4f;
             }
@@ -583,7 +583,7 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 FUN_001f9ab0(void *, void *);
+extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern void rotate_about_axis(void *out, void *v, void *axis, f32 ang) __asm__("FUN_00214890");
@@ -617,22 +617,22 @@ void FUN_L05_003298d8(Camera *cam) {
         cross_vectors_xyz(&fwd, &up, &side);
         normalize_vector_xyz(&fwd, &fwd, 1.0f);
         subtract_vector_xyz(&rel, &cam->pos, focus);
-        dot = FUN_001f9ab0(&rel, &up);
+        dot = fast_vec_dot(&rel, &up);
         normalize_vector_xyz(&along, &up, dot);
         subtract_vector_xyz(&flat, &rel, &along);
-        dot = FUN_001f9ab0(&fwd, &flat);
+        dot = fast_vec_dot(&fwd, &flat);
         len = vector_length_xyz(&flat);
         if (len == 0.0f) {
             len = 0.0001f;
         }
         ang = 1.5707964f - fast_arc_sin(dot / len);
         normalize_vector_xyz(&unit, &flat, 1.0f);
-        if (FUN_001f9ab0(&side, &unit) < 0.0f) {
+        if (fast_vec_dot(&side, &unit) < 0.0f) {
             ang = -ang;
         }
         cam->yaw = ang;
         rotate_about_axis(&rot, &fwd, &up, ang);
-        dot = FUN_001f9ab0(&rot, &rel);
+        dot = fast_vec_dot(&rot, &rel);
         len = vector_length_xyz(&rel);
         if (len == 0.0f) {
             len = 0.0001f;
@@ -640,7 +640,7 @@ void FUN_L05_003298d8(Camera *cam) {
         tilt = 1.5707964f - fast_arc_sin(dot / len);
         normalize_vector_xyz(&unit, &rel, 1.0f);
         pitch = -tilt;
-        if (FUN_001f9ab0(&up, &unit) < 0.0f) {
+        if (fast_vec_dot(&up, &unit) < 0.0f) {
             pitch = tilt;
         }
         cam->pitch = pitch;

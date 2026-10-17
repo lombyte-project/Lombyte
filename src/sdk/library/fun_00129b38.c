@@ -33,7 +33,8 @@ typedef struct Obj40 {
    the entry budget at +0xE0; an unsized one has to fit width * height
    against +0xE4. On a refusal, format the two figures into the message
    at D_00153A80 and report it. Returns whether it fits. */
-int FUN_00129b38(void *arg0) {
+int FinishMpegReferenceImage(void *arg0) __asm__("FUN_00129b38");
+int FinishMpegReferenceImage(void *arg0) {
     Obj40 *s = (Obj40 *)arg0;
     int r = 1;
     if (s->unk008 != 2) {
@@ -45,4 +46,4 @@ int FUN_00129b38(void *arg0) {
     return r;
 }
 
-extern __typeof__(FUN_00129b38) func_00129B38 __attribute__((alias("FUN_00129b38")));
+extern __typeof__(FinishMpegReferenceImage) func_00129B38 __attribute__((alias("FUN_00129b38")));

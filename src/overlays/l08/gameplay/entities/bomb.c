@@ -83,7 +83,7 @@ typedef struct Hero_2B94B0 {
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float D_0015ED70;
 extern int D_0015ED84;
 extern char *D_L08_0015FFD8;
@@ -265,7 +265,7 @@ typedef int OvlQuad_c __attribute__((mode(TI)));
 
 typedef struct {
     u8 pad0[0x18];
-    s32 moby; /* 0x18: passed to FUN_002141f8 (reads moby+0x34, moby+0x78); 0 when no moby was hit */
+    s32 moby; /* 0x18: passed to suck_get_aim_height (reads moby+0x34, moby+0x78); 0 when no moby was hit */
     s32 unk1C; /* 0x1C: > 0 gates copying point and the normal into the hero (shared/ui/help/00226f10.c) */
     union {
         OvlQuad_c q;
@@ -273,7 +273,7 @@ typedef struct {
     } point; /* 0x20: f[2] is read as the ground height */
     u8 pad30[0x10]; /* 0x30: position after push-out (copied into hero.motion.pos) */
     f32 normal_x; /* 0x40: start of the surface normal; its angle is tested against 50 degrees (0.87266463) */
-    f32 normal_y; /* 0x44: FUN_001f9e90 (atan2) of normal_x, normal_y is stored in the hero */
+    f32 normal_y; /* 0x44: fast_arc_tan (atan2) of normal_x, normal_y is stored in the hero */
     f32 normal_z; /* 0x48: ledge probes compare atan2(normal_z, xy length) with 20 degrees */
 } CollisionHit_2d23f0;
 
@@ -286,7 +286,7 @@ extern f32 fast_vec_length_c(void *) __asm__("func_001F9AF0");
 extern f32 random_float_between_c5(f32, f32) __asm__("func_002132A8");
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 extern float D_L08_00174660[];
-extern int FUN_001efa68(void *, void *, int, void *, int);
+extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern int FUN_L00_001f2868(void *, float, int, void *, void *);
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -366,7 +366,7 @@ void FUN_L08_002d23f0(char *moby) {
         c.r.x.st = st;
         c.r.x.f = 1.0f;
         qcopy(c.r.x.v, d + 0x10);
-        if (FUN_001efa68(c.r.start, c.r.end, 0, moby, 0)) {
+        if (collision_line(c.r.start, c.r.end, 0, moby, 0)) {
             char *tbl = (char *)&D_L08_00174640;
             int v = *(int *)(tbl + 0x18);
             if (v != 0) {
@@ -1521,7 +1521,7 @@ extern float D_L08_00161988_gp __asm__("D_L08_00161988") __attribute__((sda));
 extern float D_L08_0016198C_gp __asm__("D_L08_0016198C") __attribute__((sda));
 extern float D_L08_00161990_gp __asm__("D_L08_00161990") __attribute__((sda));
 extern float D_L08_001675C0[];
-extern float FUN_001f96b0(float);
+extern float scale_time(float) __asm__("FUN_L04_001f1978");
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float fast_difference_between_rotations_c3(float, float) __asm__("func_001FA688");
 extern float fast_vec_dist(void *, void *);
@@ -1783,7 +1783,7 @@ void FUN_L08_002dabf0(struct Moby *moby) {
             subtract_vector_xyz(aim, &target->pos, &moby->pos);
             aim[2] = 0.0f;
             distance = fast_vec_length_c2(aim);
-            time = distance / FUN_001f96b0(D_L08_0016197C_gp);
+            time = distance / scale_time(D_L08_0016197C_gp);
             distance = distance - (D_L08_00161988_gp * time + 2.0f);
             if (10.0f < distance) {
                 distance = 10.0f;
@@ -1981,7 +1981,7 @@ void FUN_L08_002dbdb0(struct Moby *moby) {
 
 extern char D_L08_001DB280[];
 extern int D_L08_001B0CB0[];
-extern void FUN_001f9cf8(void *, void *, void *);
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void FUN_L08_002dc0c8(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -1993,7 +1993,7 @@ void FUN_L08_002dc0c8(struct Moby *moby) {
         char *p = (char *)t + 0x10;
         int i;
         for (i = 7; i >= 0; i--) {
-            FUN_001f9cf8(p, q, mat);
+            transform_vector_by_basis(p, q, mat);
             q += 0x10;
             add_vector_xyz(p, p, pos);
             p += 0x10;
@@ -2016,7 +2016,7 @@ typedef struct {
     float e[1][4];
 } Route_2dd4f8;
 
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_L08_001B0CB0[];
 #include "rnc/gameplay/state/game_globals.h"
@@ -2067,7 +2067,7 @@ void FUN_L08_002dc180(struct Moby *moby) {
             *(Route_2dd4f8 **)(data + 0x120) = c;
         } else if (f94) {
             *(Route_2dd4f8 **)(data + 0x120) = b;
-        } else if (32.0f < FUN_001f9b80(&moby->pos, pl) || D_L08_0015F5CC < 5) {
+        } else if (32.0f < vector_distance(&moby->pos, pl) || D_L08_0015F5CC < 5) {
             moby->visible = 0;
             moby->flags |= 1;
             *(int *)(data + 0x124) = 0;
@@ -2441,7 +2441,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         moby->rotation[0]=fast_add_rotations(moby->rotation[0],D_0015ED6C*6.2831855f);
         qcopy(target,data->target->position); target[2]+=5.0f;
         yaw=fast_arc_tan(moby->position[0]-target[0],moby->position[1]-target[1]);
-        pitch=fast_arc_tan(FUN_001f9b80(target,moby->position),moby->position[2]-target[2]);
+        pitch=fast_arc_tan(vector_distance(target,moby->position),moby->position[2]-target[2]);
         FUN_L00_00262cf0(target,target,data->roll,data->yaw,data->pitch);
         subtract_vector_xyz(delta,target,moby->position);
         FUN_L00_0025f730(delta,target_data->speed*D_0015ED6C);
@@ -2510,7 +2510,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
         next=(route->waypoint+route->path->count+route->direction)%route->path->count;
         yaw=fast_arc_tan(*(float*)((char*)route->path+(next<<4)+0x10)-moby->position[0],*(float*)((char*)route->path+(next<<4)+0x14)-moby->position[1]);
         FUN_L00_00258278(moby,&data->yaw_velocity,yaw,0.1f,1.3f,1.0f);
-        moby->rotation[1]=fast_arc_tan(FUN_001f9b80(route->path->e[next],moby->position),moby->position[2]-route->path->e[next][2]);
+        moby->rotation[1]=fast_arc_tan(vector_distance(route->path->e[next],moby->position),moby->position[2]-route->path->e[next][2]);
         qcopy_nc(target,route->path->e[next]);
         if (route->waypoint!=route->path->count-1) {
             int life0,life1,size1;
@@ -2603,7 +2603,7 @@ void FUN_L08_002dd3c0(M46 *moby) {
 }
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern float D_L08_001675C0[];
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern int D_L08_00161A34 __attribute__((sda));
@@ -2623,7 +2623,7 @@ struct Moby *FUN_L08_002de3e0(void *pos, struct Moby *target, void *velocity, fl
         data = (char *)moby->pvars;
         qcopy(&moby->pos, pos);
         reference = D_L08_001675C0;
-        distance = FUN_001f9b80(reference, &moby->pos);
+        distance = vector_distance(reference, &moby->pos);
         reference = (float *)((char *)reference - 0x140);
         moby->rot.y = -fast_arc_tan(distance, reference[82] - moby->pos.z);
         *(volatile float *)&moby->rot.z = fast_arc_tan(reference[80] - moby->pos.x,

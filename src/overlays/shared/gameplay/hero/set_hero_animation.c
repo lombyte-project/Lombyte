@@ -1018,7 +1018,7 @@ void FUN_L00_002338d0(float *dst, float *src) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234250), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b20(void *);
+extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
@@ -1031,13 +1031,13 @@ float FUN_L00_002339d0(float *v) {
 
     switch (base->unk20B3) {
     case 0:
-        return FUN_001f9b20(v);
+        return vec_len_xy(v);
     case 1:
     case 2:
         euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
         transpose_rotation_matrix(inv, m);
         transform_vector(out, v, inv);
-        return FUN_001f9b20(out);
+        return vec_len_xy(out);
     }
     return 0.0f;
 }
@@ -1047,7 +1047,7 @@ float FUN_L00_002339d0(float *v) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002342F8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9ab0(void *, void *);
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
@@ -1065,7 +1065,7 @@ float FUN_L00_00233a78(float *v) {
         axis[2] = 1.0f;
         euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
         transform_vector(axis, axis, m);
-        return FUN_001f9ab0(axis, v);
+        return fast_vec_dot(axis, v);
     }
     return 0.0f;
 }

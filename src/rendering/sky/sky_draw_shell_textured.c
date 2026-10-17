@@ -24,7 +24,7 @@ struct Shell {
 
 extern u8 sky_textured_gs_block[] __asm__("D_0013D160");
 
-extern void FUN_0022c4c8(struct SkyTile *tiles, s32 count, u8 *visibility) __asm__("FUN_0022c4c8");
+extern void sky_bsphere_check(struct SkyTile *tiles, s32 count, u8 *visibility) __asm__("FUN_0022c4c8");
 extern void WriteDmaChannelRegisters(s32 address, s32 qwc, s32 destination);
 extern void dma_to_spr_sync(void) __asm__("func_0020B3E0");
 extern s32 FUN_0022bf94(s32, s32, s32, s32) __asm__("FUN_0022bf94");
@@ -44,7 +44,7 @@ void sky_draw_shell_textured(struct Shell *shell) {
         return;
     }
 
-    FUN_0022c4c8(shell->tiles, shell->count, visibility);
+    sky_bsphere_check(shell->tiles, shell->count, visibility);
 
     render_packet_cursor.words[0] = 0x30000007;
     *(s32 *)((u32)render_packet_cursor.words + 4) = (s32)sky_textured_gs_block;

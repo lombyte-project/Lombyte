@@ -51,7 +51,7 @@ extern float D_L08_0015F638;
 extern float D_L08_001675D8 __attribute__((section(".data")));
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_00208f20(float a, float b, float c, float d);
@@ -74,7 +74,7 @@ extern int D_L08_0015F6DC_d __asm__("D_L08_0015F6DC");
 extern int D_L08_0015F594 __attribute__((sda));
 extern int D_L08_0015F73C;
 extern int D_L08_0016CF80 __attribute__((section(".data")));
-extern int FUN_001efa68(void *, void *, int, int, int);
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_002050b8(int);
 #include "rnc/overlay/path.h"
@@ -896,7 +896,7 @@ void FUN_L08_002370d8(void) {
                     }
                     break;
                 case 101:
-                    if (FUN_001f9b80(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
+                    if (vector_distance(hero.motion.pos.f, hero.unk1640.f) < 0.2f) {
                         if (frame_time * 2.7f > hero.motion.speed_xy) {
                             if (fast_difference_between_rotations(
                                     hero.motion.rot.f[2], hero.unk1640.f[3]) < 0.034906585f) {
@@ -920,7 +920,7 @@ void FUN_L08_002370d8(void) {
                     if ((hero.unkA98 & 2) || hero.unk1650 != 0) {
                         hero_set_state(HERO_STATE_IDLE, 1);
                     }
-                    if (0.2f < FUN_001f9b80(hero.motion.pos.f, hero.unk1640.f)) {
+                    if (0.2f < vector_distance(hero.motion.pos.f, hero.unk1640.f)) {
                         hero_set_state(0x65, 1);
                     }
                     break;
@@ -1199,7 +1199,7 @@ void FUN_L08_002370d8(void) {
                                 v1[1] = fast_sin(hero.unk57C) * 5.0f;
                                 v1[2] = 0.0f;
                                 add_vector_xyz(v1, v1, v0);
-                                if (FUN_001efa68(v0, v1, 2, 0, 0)) {
+                                if (collision_line(v0, v1, 2, 0, 0)) {
                                     ok = 0;
                                 }
                             }

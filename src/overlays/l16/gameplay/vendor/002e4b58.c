@@ -164,7 +164,7 @@ void FUN_L16_002e4f30(struct Moby *a) {
 /* Sets up the draw state, then draws the three entries of the level's table. */
 
 extern char D_L16_001DF2D0[] __attribute__((section(".data")));
-extern int FUN_001fa728(char *, float);
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int get_effect_texture_l16(int) __asm__("FUN_001f44b8");
 extern float D_L16_001DE720[];
 extern float D_L16_001DEA90[];
@@ -194,7 +194,7 @@ void FUN_L16_002e97a0(void) {
     vu1_add_g_sregister_l16(0x14, 0xFF9000000260);
     font_queue_vu_state();
     for (i = 0; i < 0x2; i++) {
-        if (FUN_001fa728(D_L16_001DF2B0[i], 512.0f) != -1) {
+        if (fast_bsphere_check(D_L16_001DF2B0[i], 512.0f) != -1) {
             FUN_L16_002e8b98_i(a[i], d[i], b[i], c[i], D_L16_001DF2D0);
             FUN_L00_001fde98(a[i], b[i], e[i], D_L16_001DF2D0, 1);
         }

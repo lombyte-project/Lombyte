@@ -306,7 +306,7 @@ extern int D_L11_00161DC4 __attribute__((sda));
 extern int D_L11_00161DC8 __attribute__((sda));
 extern int D_L11_00161DCC __attribute__((sda));
 extern float D_L11_00161DD0 __attribute__((sda));
-extern int FUN_001efa68(void *, void *, int, void *, void *);
+extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
@@ -343,7 +343,7 @@ void FUN_L11_00309098(char *moby) {
     FUN_L00_0026dd20((char *)p, (char *)v, c, scale_game_frames(D_L11_00161DC8), (float)D_L11_00161DCC);
     add_vector_xyz(pos, pos, data);
     make_hit_descriptor(hit, moby, 0x10000, *(float *)(data + 0x20), data);
-    if (FUN_001efa68(old, pos, 0, *(void **)(data + 0x1C), hit)) {
+    if (collision_line(old, pos, 0, *(void **)(data + 0x1C), hit)) {
         int i;
         for (i = 0; i < 5; i++) {
             *(OvlQuad *)r = 0;
@@ -459,7 +459,7 @@ void FUN_L11_003094f8(struct Moby *moby) {
         return;
     }
     moby_point_position_94f8(moby, 1, &spray);
-    if (FUN_001efa68(&previous_pos, &spray, 0, data->collision, 0)) {
+    if (collision_line(&previous_pos, &spray, 0, data->collision, 0)) {
         FUN_L00_0025e450_94f8(moby, data, D_L11_00174860, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f,
                                -1, 20.0f, 0, 1, -1, 0);
         mark_moby_for_removal(moby);

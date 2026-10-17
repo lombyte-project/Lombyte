@@ -31,7 +31,7 @@ extern T2C_235E08 D_L06_0017C3A8[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float D_L06_0017C570[][25];
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_001f9e90(float, float);
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0020d658(int back);
 extern float FUN_L00_002339d0(float *v);
@@ -442,7 +442,7 @@ int hero_set_state(int a, int b) {
                 *(unsigned int *)(h + 0x64) | (1 << current_level_index) | 0x80000000;
         }
         p->motion.move_yaw =
-            FUN_001f9e90(*(float *)(((char *)p->unk964) + 0x10) - p->motion.pos.f[0],
+            fast_arc_tan(*(float *)(((char *)p->unk964) + 0x10) - p->motion.pos.f[0],
                          *(float *)(((char *)p->unk964) + 0x14) - p->motion.pos.f[1]);
         if (b) {
             set_hero_animation(0x2F, 2, (float)scale_game_frames(5));
@@ -518,7 +518,7 @@ int hero_set_state(int a, int b) {
             if (*(float *)(d + 0x2C) != 0.0f)
                 q->unk9CC = *(float *)(d + 0x2C);
             q->unk9AC =
-                FUN_001f9e90(*(float *)(((char *)q->unk994) + 0x10) - q->motion.pos.f[0],
+                fast_arc_tan(*(float *)(((char *)q->unk994) + 0x10) - q->motion.pos.f[0],
                              *(float *)(((char *)q->unk994) + 0x14) - q->motion.pos.f[1]);
             q->unk9A4 = FUN_001f9b48(&q->motion.pos, ((char *)q->unk994) + 0x10);
             q->unk9B0 = frame_time_sq * 27.0f;
@@ -598,10 +598,10 @@ int hero_set_state(int a, int b) {
             if (((char *)q->unk5D8) != 0) {
                 if (1.5707964f <
                     fast_difference_between_rotations(
-                        FUN_001f9e90(
+                        fast_arc_tan(
                             *(float *)(((char *)q->unk5D8) + 0x10) - q->motion.pos.f[0],
                             *(float *)(((char *)q->unk5D8) + 0x14) - q->motion.pos.f[1]),
-                        fast_add_rotations(q->unk588, FUN_001f9e90(d.v.x, d.v.y)))) {
+                        fast_add_rotations(q->unk588, fast_arc_tan(d.v.x, d.v.y)))) {
                     q->unk588 = 1.5707964f;
                     q->unk58C = 1;
                 }
@@ -1133,7 +1133,7 @@ int hero_set_state(int a, int b) {
                     if (1.5707964f <
                         fast_difference_between_rotations(
                             q->motion.rot.f[2],
-                            FUN_001f9e90(q->unk500.f[0] - q->unk540.f[0],
+                            fast_arc_tan(q->unk500.f[0] - q->unk540.f[0],
                                          q->unk500.f[1] - q->unk540.f[1])))
                         id = 0x1F;
                     set_hero_animation(id, 0, (float)scale_game_frames(5));
@@ -1374,7 +1374,7 @@ int hero_set_state(int a, int b) {
             if (q->items[0].item_id == 0xA && ((char *)q->unkA50) != 0) {
                 q->unkA58 = 1;
                 q->unkA5C =
-                    FUN_001f9e90(*(float *)(((char *)q->unkA50) + 0x10) - q->motion.pos.f[0],
+                    fast_arc_tan(*(float *)(((char *)q->unkA50) + 0x10) - q->motion.pos.f[0],
                                  *(float *)(((char *)q->unkA50) + 0x14) - q->motion.pos.f[1]);
             }
             break;

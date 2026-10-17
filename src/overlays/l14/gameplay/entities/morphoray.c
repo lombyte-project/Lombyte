@@ -340,8 +340,8 @@ extern char *D_L14_0015FFD8;
 extern L14LevelState D_L14_001BB930;
 extern int D_L14_001BABD0[];
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern int FUN_001f96f8(int);
-extern float FUN_001fa6c0(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void FUN_L10_002f5a50(int);
 extern void FUN_L14_00305600(struct Moby *);
@@ -378,8 +378,8 @@ void FUN_L14_00305408(unsigned char *moby) {
         D_0014C190_257218[current_level_index][*(short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
         D_L14_001BABD0[*(short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
         moby[0x20] = 2;
-        d[1] = FUN_001f96f8(0x78);
-        ((float *)d)[2] = 1.0f / FUN_001fa6c0(d[1]);
+        d[1] = scale_game_frames(0x78);
+        ((float *)d)[2] = 1.0f / convert_integer_to_float(d[1]);
         FUN_L10_002f5a50(d[4]);
         break;
     case 2:
@@ -412,7 +412,7 @@ void FUN_L14_00305600(struct Moby *moby) {
         } while (*(short *)p++ >= 0);
     }
 }
-extern float FUN_001fa6c0(int);
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float FUN_L00_00257e20(float, float, float, float, float);
 
 /* Per-frame update: slides each listed part toward a rest height by a factor from the moby's animation value. */
@@ -426,7 +426,7 @@ void FUN_L14_00305680(struct Moby *moby) {
     if (p == 0) {
         return;
     }
-    x = FUN_001fa6c0(d[1]) * ((float *)d)[2];
+    x = convert_integer_to_float(d[1]) * ((float *)d)[2];
     t = FUN_L00_00257e20(-1.0f, 0.0f, 1.0f, 0.0f, 1.0f - x);
     base = D_L14_0015FFD8;
     h = D_L14_001EE5E0;

@@ -35,7 +35,7 @@ typedef struct {
     f32 length;
 } P_241788;
 
-extern f32 FUN_001fa6c0(s32);
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 FUN_001fa6d0(f32);
 extern s32 fptodp(f32) __asm__("FUN_00120478");
 extern void debug_print(void *, s32, s32) __asm__("FUN_001e93b0");
@@ -58,7 +58,7 @@ void FUN_L00_00241788(u8 *src, s32 n) {
             if (next_start == 0) {
                 next_start = *(s32 *)(src + 0x40);
             }
-            entries[i].length = FUN_001fa6c0(next_start - *(s32 *)(src + 0)) * 0.0009765625f;
+            entries[i].length = convert_integer_to_float(next_start - *(s32 *)(src + 0)) * 0.0009765625f;
             entries[i + 1].id = -1.0f;
             entries[i + 1].length = 0.0f;
         }

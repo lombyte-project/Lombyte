@@ -442,7 +442,7 @@ void FUN_L05_00307010(char *moby) {
 /* UpdateMoby_823: pick random wobble parameters, then animate them each frame */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0030D500), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9de0(float);
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void FUN_L00_001fff28(void *, int, float);
@@ -477,10 +477,10 @@ void FUN_L05_0030c0a8(unsigned char *m) {
         enqueue_callback_list_1((void *)FUN_L05_0030c220, m);
         t = fast_add_rotations(*(float *)(d + 0x44), *(float *)(d + 0x4C));
         *(float *)(d + 0x44) = t;
-        *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 0x40), FUN_001f9de0(t) * k);
+        *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 0x40), fast_sin(t) * k);
         t = fast_add_rotations(*(float *)(d + 0x48), *(float *)(d + 0x50));
         *(float *)(d + 0x48) = t;
-        FUN_L00_001fff28(d + 0x10, 1, FUN_001f9de0(t) * k + k);
+        FUN_L00_001fff28(d + 0x10, 1, fast_sin(t) * k + k);
         break;
     }
     }
@@ -947,7 +947,7 @@ void FUN_L05_00319690(char *moby) {
 /* Wobbles a moby's position and rotation from its sine-driven state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AC50), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9de0(float);
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void FUN_L05_00319740(char *moby) {
     char *d = *(char **)(moby + 0x78);
@@ -956,18 +956,18 @@ void FUN_L05_00319740(char *moby) {
     qcopy(moby + 0x40, d + 0x70);
     s = fast_add_rotations(*(float *)(d + 0xC8), frame_time * 2.0943951f);
     *(float *)(d + 0xC8) = s;
-    t = FUN_001f9de0(s);
+    t = fast_sin(s);
     w = frame_time * 1.6929693f;
     *(float *)(moby + 0x18) += t * 0.25f;
     s = fast_add_rotations(*(float *)(d + 0xCC), w);
     *(float *)(d + 0xCC) = s;
-    t = fast_add_rotations(*(float *)(moby + 0x44), FUN_001f9de0(s) * 0.08726646f);
+    t = fast_add_rotations(*(float *)(moby + 0x44), fast_sin(s) * 0.08726646f);
     w = frame_time * 0.9250245f;
     *(float *)(moby + 0x44) = t;
     s = fast_add_rotations(*(float *)(d + 0xD0), w);
     *(float *)(d + 0xD0) = s;
     *(float *)(moby + 0x40) =
-        fast_add_rotations(*(float *)(moby + 0x40), FUN_001f9de0(s) * 0.08726646f);
+        fast_add_rotations(*(float *)(moby + 0x40), fast_sin(s) * 0.08726646f);
     if (*(float *)(moby + 0x40) > 0.17453292f)
         *(float *)(moby + 0x40) = 0.17453292f;
     else if (*(float *)(moby + 0x40) < -0.17453292f)
@@ -982,8 +982,8 @@ void FUN_L05_00319740(char *moby) {
 
 extern char *D_L05_001B0930[];
 extern char D_L05_00215C00[];
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9cf8(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void FUN_L05_003198e8(char *a) {
     char *data = *(char **)(a + 0x78);
@@ -994,8 +994,8 @@ void FUN_L05_003198e8(char *a) {
             int i;
             struct Hero *g;
             for (i = 0; i < 7; i++) {
-                FUN_001f9cf8(p + 0x10 + i * 16, D_L05_00215C00 + i * 16, a + 0xC0);
-                FUN_001f9a10(p + 0x10 + i * 16, p + 0x10 + i * 16, a + 0x10);
+                transform_vector_by_basis(p + 0x10 + i * 16, D_L05_00215C00 + i * 16, a + 0xC0);
+                fast_vec_add(p + 0x10 + i * 16, p + 0x10 + i * 16, a + 0x10);
             }
             g = &hero;
             *(unsigned short *)&g->unk22DA = *(unsigned short *)(data + 0xDC);

@@ -15,7 +15,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_L00_00173E40[];
-extern int FUN_001efa68(void *, void *, int, int, int);
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60();
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -42,7 +42,7 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
         normalize_vector_xyz(&reach, velocity, radius);
         add_vector_xyz(&ray_end, &reach, pos);
         ray_end.a[2] += step_height;
-        if (FUN_001efa68(&ray_start, &ray_end, coll_flags, (int)moby, 0)) {
+        if (collision_line(&ray_start, &ray_end, coll_flags, (int)moby, 0)) {
             subtract_vector_xyz(pos, (char *)&D_94C8_60, &reach);
             result = 1;
             *(float *)(moby + 0x18) -= step_height;
@@ -64,7 +64,7 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
     qcopy(&ray_end, position);
     ray_start.a[2] += step_height;
     ray_end.a[2] = radius - 0.05f;
-    if (FUN_001efa68(&ray_start, &ray_end, coll_flags | 2, (int)moby, 0)) {
+    if (collision_line(&ray_start, &ray_end, coll_flags | 2, (int)moby, 0)) {
         if (D_L00_00173E40[7] > 0) {
             float surface;
             result |= 2;

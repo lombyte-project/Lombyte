@@ -43,7 +43,7 @@ typedef struct {
     short hi;
 } S;
 int scale_game_frames(int) __asm__("FUN_001f96f8");
-float FUN_001fa6c0(int);
+float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 void FUN_L00_00250320(void *, int *, int *, int *);
 void FUN_L00_0025d458(void *a, S *s) {
@@ -53,7 +53,7 @@ void FUN_L00_0025d458(void *a, S *s) {
         s->flag = 0;
         if (old != 0) {
             int n = scale_game_frames(s->lo);
-            s->cur = truncate_float_to_s32(n * (old / FUN_001fa6c0(scale_game_frames(s->hi))));
+            s->cur = truncate_float_to_s32(n * (old / convert_integer_to_float(scale_game_frames(s->hi))));
             if (s->cur <= 0)
                 s->cur = 1;
         } else {
@@ -728,7 +728,7 @@ extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int
 extern void FUN_L00_002d3838(void *, void *, int, int);
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
-extern int FUN_001fa728(void *, float);
+extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 typedef struct {
@@ -766,7 +766,7 @@ void FUN_L00_0025f090(u8 *owner, u128 *pos, int sound, float scale, float flash)
         Vy10 at;
         *(u128 *)&at = *pos;
         at.w = 2.0f;
-        if (FUN_001fa728(&at, 10.0f) != -1) {
+        if (fast_bsphere_check(&at, 10.0f) != -1) {
             D_L00_00166C80.scale = scale * 0.1f;
             D_L00_00166C80.frames = scale_game_frames_c(0x14);
         }
@@ -838,12 +838,12 @@ void FUN_L00_0025f3e8(char *owner, char *pos, float scale, float flash) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607A8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9af0(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 /* Clamps vector a to length x: normalizes it to x when vector_length_xyz is longer. */
 void FUN_L00_0025f730(void *a, float x) {
-    if (x < FUN_001f9af0(a)) {
+    if (x < fast_vec_length(a)) {
         fast_vec_normalize(a, a, x);
     }
 }

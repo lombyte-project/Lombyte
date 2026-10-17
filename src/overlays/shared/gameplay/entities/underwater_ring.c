@@ -29,7 +29,7 @@ extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern f32 FUN_001f9b48(void *, void *);
-extern s16 FUN_001f9770(s16 *);
+extern s16 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_0024f7c8(struct Moby *, int, void *);
 extern void FUN_L00_002502f0(void *, int, int, int);
@@ -125,12 +125,12 @@ void FUN_L15_002e5958(struct Moby *moby) {
                 moby->state = 4;
                 break;
             } else {
-                if (FUN_001f9770(&vars->timer) != 0) {
+                if (fast_dec_timer_s16(&vars->timer) != 0) {
                     vars->child_count = 0;
                     vars->triggered = 0;
                     allocate_voice_for_target_entry(2, 0x31, moby);
                     FUN_L01_0026e0e0(moby->group, 3);
-                } else if (FUN_001f9770(&vars->delay) != 0) {
+                } else if (fast_dec_timer_s16(&vars->delay) != 0) {
                     allocate_voice_for_target_entry(0, 0x31, moby);
                     first = scale_game_frames(0x2d);
                     second = scale_game_frames(5);
@@ -156,7 +156,7 @@ void FUN_L15_002e5958(struct Moby *moby) {
     case 4: {
         u16 save_id;
         u32 *bits;
-        if (FUN_001f9770(&vars->flash_timer) != 0) {
+        if (fast_dec_timer_s16(&vars->flash_timer) != 0) {
             vars->flash_timer = scale_game_frames(0x14);
             if (vars->flash_color != 0) {
                 FUN_L00_002502f0(moby, 0, 0xff, 0);

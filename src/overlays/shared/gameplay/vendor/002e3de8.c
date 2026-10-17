@@ -14,7 +14,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void FUN_001f9a10(float *, float *, float *);
+extern void fast_vec_add(float *, float *, float *) __asm__("FUN_001f9a10");
 extern void FUN_L01_00287158(float *, float, float, int, int, int);
 
 extern short D_L10_00161E58 __attribute__((sda));
@@ -35,7 +35,7 @@ void FUN_L10_002e3de8(char *moby) {
     v[0] = fast_cos(a) * b;
     v[1] = fast_sin(a) * b;
     v[2] = 0.0f;
-    FUN_001f9a10(v, v, (float *)(moby + 0x10));
+    fast_vec_add(v, v, (float *)(moby + 0x10));
     v[2] = v[2] + 0.025f;
     g = *(int *)&D_L10_00161E58;
     h = *(int *)&D_L10_00161E5C;
@@ -482,7 +482,7 @@ extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s32 tick_countdown_16_5f18(s16 *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32_5f18(f32) __asm__("FUN_001fa6d0");
 extern s32 scale_game_frames_5f18(s32) __asm__("FUN_001f96f8");
-extern void FUN_L00_002223f8(s32, s32);
+extern void hero_set_state_2(s32, s32) __asm__("FUN_L00_002223f8");
 extern void debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
 extern void debug_line_5f18(void *, void *) __asm__("FUN_001e93e8");
 
@@ -550,7 +550,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
             cam->transition_state = 4;
             D_L10_0015F404 = 0;
             if (*(int *)(rec + 0x4C) == 0)
-                FUN_L00_002223f8(0, 1);
+                hero_set_state_2(0, 1);
         }
         if (*(int *)(rec + 0x40) == 0)
             return;

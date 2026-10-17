@@ -645,11 +645,11 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void FUN_L00_002132b8(f32, f32);
 extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
-extern f32 FUN_001f9b20(void *);
+extern f32 vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern f32 FUN_001f9af0(void *);
-extern void FUN_001f9a28(void *, void *, void *);
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -691,8 +691,8 @@ void FUN_L00_002167d0(void) {
     }
     f20 = -(hero.motion.velocity.f[0] * v0.f[0] + hero.motion.velocity.f[1] * v0.f[1]);
     if (f21 < f20) {
-        f20 = f20 / FUN_001f9b20(&v0);
-        f20 = f20 / FUN_001f9b20(hero.motion.velocity.f);
+        f20 = f20 / vec_len_xy(&v0);
+        f20 = f20 / vec_len_xy(hero.motion.velocity.f);
     }
     if (1.0f < f20) {
         f20 = 1.0f;
@@ -716,11 +716,11 @@ void FUN_L00_002167d0(void) {
     f22 = 0.0f;
     if (f22 < e) {
         f20 = -fast_vec_dot(&v1, &v2);
-        e = FUN_001f9af0(&v1);
+        e = fast_vec_length(&v1);
         if (f22 < e) {
             f20 = f20 / e;
         }
-        b = FUN_001f9b20(&v2);
+        b = vec_len_xy(&v2);
         a = (b - f20) / b;
         c = frame_time_sq * 3.0f;
         b = c * a;
@@ -733,9 +733,9 @@ void FUN_L00_002167d0(void) {
             f21 = b;
         }
     }
-    FUN_001f9a28(&v3, &v0, &hero.motion.unk130);
+    fast_vec_sub(&v3, &v0, &hero.motion.unk130);
     v3.f[2] = 0.0f;
-    if (f21 < FUN_001f9af0(&v3)) {
+    if (f21 < fast_vec_length(&v3)) {
         fast_vec_normalize(&v3, &v3, f21);
     }
     r = &hero.motion.velocity;
@@ -751,9 +751,9 @@ void FUN_L00_002167d0(void) {
         v3.f[0] = fast_cos(f21) * f20;
         v3.f[1] = fast_sin(f21) * f20;
         v3.f[2] = 0.0f;
-        FUN_001f9a28(&v4, &v3, r);
+        fast_vec_sub(&v4, &v3, r);
         v4.f[2] = 0.0f;
-        if (f22 < FUN_001f9af0(&v4)) {
+        if (f22 < fast_vec_length(&v4)) {
             fast_vec_normalize(&v4, &v4, f22);
         }
         FUN_001f9a10_c(r, r, &v4);
@@ -762,7 +762,7 @@ void FUN_L00_002167d0(void) {
     v3.f[2] = 0.0f;
     m = &hero;
     m->unk3B0 = fast_vec_dot(&v3, &v0);
-    k = FUN_001f9af0(&v0);
+    k = fast_vec_length(&v0);
     if (0.0f < k) {
         m->unk3B0 = m->unk3B0 / (k * (frame_time * 5.9f));
     }
@@ -849,7 +849,7 @@ void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
 /* Ticks eight timer slots and, for each that has run out, clears a field and calls the release helper. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217698), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_00216de8();
 
 /* For each of eight timers that fast_dec_timer reports as 2, clears a field and calls 00216de8. */
@@ -859,7 +859,7 @@ void FUN_L00_00216f10(void) {
     int i;
 
     for (i = 0; i < 8; i++) {
-        if (FUN_001f9770(p + i * 8) == 2) {
+        if (fast_dec_timer_s16(p + i * 8) == 2) {
             q[i * 4 - 3] = 0;
             FUN_L00_00216de8(q[i * 4 - 2], q[i * 4]);
         }
@@ -1116,9 +1116,9 @@ void FUN_L00_00217658(void) {
             if (tpv->unk7E) {
                 has_target = 1;
                 FUN_L00_00233660(dir, 0.5f, 0.0f, 0.5f);
-                FUN_001f9a28(delta, tpv->unk50, dir);
+                fast_vec_sub(delta, tpv->unk50, dir);
                 hero.aim_yaw = FUN_001f9e90_c2(delta[0], delta[1]);
-                hero.aim_pitch = FUN_001f9e90_c2(FUN_001f9b20(delta), delta[2]);
+                hero.aim_pitch = FUN_001f9e90_c2(vec_len_xy(delta), delta[2]);
             }
         }
         if (!has_target) {

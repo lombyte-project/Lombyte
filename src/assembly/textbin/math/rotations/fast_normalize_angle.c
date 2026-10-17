@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM(
     "config/us/expected/asm/assembly/textbin/math/rotations/fast_normalize_angle/FUN_001fa610.s",
-    FUN_001fa610);
+    fast_normalize_angle);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), like its fastfunc neighbours

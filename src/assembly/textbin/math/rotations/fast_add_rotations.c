@@ -4,7 +4,7 @@
 #ifndef NON_MATCHING
 INCLUDE_ASM(
     "config/us/expected/asm/assembly/textbin/math/rotations/fast_add_rotations/FUN_001fa580.s",
-    FUN_001fa580);
+    fast_add_rotations);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

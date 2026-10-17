@@ -383,7 +383,7 @@ extern float D_L08_00161DC8;
 extern float D_L08_00161DCC;
 extern float vector_length_xyz(void *);
 extern int D_L08_00161E08;
-extern int FUN_001fa728(char *, float);
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short D_L08_00161DC0 __attribute__((sda));
 extern short D_L08_00161E04 __attribute__((sda));
@@ -434,7 +434,7 @@ void FUN_L08_002f1548(struct Moby *moby) {
         v[1] = D_L08_00161DC4;
         v[2] = D_L08_00161DC8;
         v[3] = D_L08_00161DCC;
-        if (FUN_001fa728((char *)v, 1000.0f) >= 0) {
+        if (fast_bsphere_check((char *)v, 1000.0f) >= 0) {
             w[0] = *(float *)&D_L08_00161DC0;
             w[1] = D_L08_00161DC4;
             w[2] = D_L08_00161DC8;
@@ -1032,7 +1032,7 @@ void FUN_L08_002f70a0(struct Moby *m) {
     }
     pos.q = *(u128 *)at;
     pos.f[3] = convert_integer_to_float(d->radius);
-    if ((m->visible != 0 || FUN_001fa728((char *)&pos, 255.0f) != -1) && !hidden) {
+    if ((m->visible != 0 || fast_bsphere_check((char *)&pos, 255.0f) != -1) && !hidden) {
         enqueue_callback_list_1(FUN_L08_002f5e58, m);
         if (d->flags & 4) {
             if (d->light == -1) {
@@ -1105,7 +1105,7 @@ extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa688_cf(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -1239,7 +1239,7 @@ void FUN_L08_00302ce8(WM *m) {
     if (m->animation == 1) {
         char *player = (char *)&D_0013E633_watch + 0xE9D;
         tracking = 1;
-        if (FUN_001f9b80(m->position, player) < 8.0f &&
+        if (vector_distance(m->position, player) < 8.0f &&
             FUN_001f9e90_cf(
                 m->yaw,
                 FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] -

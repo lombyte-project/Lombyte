@@ -64,7 +64,7 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int FUN_L15_002d6770(void);
 extern float scale_game_frames_float(float) __asm__("FUN_L15_001f8648");
 extern int FUN_001fa6d0(float);
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -165,7 +165,7 @@ void FUN_L15_002d6810(unsigned char *moby) {
         int *p; int i;
         found = 0;
         active = FUN_L15_002d6770();
-        if (FUN_001f9770((char *)data + 0x10)) {
+        if (fast_dec_timer_s16((char *)data + 0x10)) {
             DATA_SHORT(0x12) = FUN_001fa6d0(scale_game_frames_float(D_L15_00161BCC * 60.0f));
             moby[0x20] = 2;
             if (DATA_INT(0x84)) { STOP_VOICE(0x80); }
@@ -280,7 +280,7 @@ next_target: p++;
     }
     if (!FUN_L00_0028d8c0(DATA_INT(0x84), DATA_INT(0x14))) DATA_INT(0x14) = FUN_L00_0028dc90(0, 5, DATA_INT(0x84), 0x28f);
     if ((unsigned char)moby[0x20] == 1 && !FUN_L00_0028d8c0(DATA_INT(0x84), DATA_INT(0x80))) DATA_INT(0x80) = FUN_L00_0028dc90(1, 5, DATA_INT(0x84), 0x28f);
-    if (FUN_001f9770((char *)data + 0x12) && (unsigned char)moby[0x20] == 2) { RESET_TIMERS(); }
+    if (fast_dec_timer_s16((char *)data + 0x12) && (unsigned char)moby[0x20] == 2) { RESET_TIMERS(); }
     p = (int *)data; i = 3;
     do {
         if (*p != -1) {
@@ -320,7 +320,7 @@ state_three: {
                 p++;
             } while (--i >= 0);
             DATA_INT(0x8c) = ready;
-            if (!FUN_001f9770((char *)data + 0x12) && !(is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x70)) && hero.air_frames.s == 0) && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x128))) goto finish;
+            if (!fast_dec_timer_s16((char *)data + 0x12) && !(is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x70)) && hero.air_frames.s == 0) && !is_point_inside_clip_volume(&hero.motion.pos, DATA_INT(0x128))) goto finish;
             p = (int *)data; i = 3;
             do { if (*p != -1) { other = (char *)(*p * 0x100 + (int)moby_array); if (*(short *)(other + 0xa6) == 0x33e) other[0x20] = 1; else FUN_L15_002d95a0(other); } p++; } while (--i >= 0);
             RESET_TIMERS(); goto finish;
@@ -488,7 +488,7 @@ extern float D_L15_001D3B60[];
 extern float D_L15_001D39D0[];
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float FUN_L00_0025e310(float);
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
@@ -638,7 +638,7 @@ void FUN_L15_002d7bb0(Moby *moby) {
             qcopy(&vectors[8], &data->b);
             bend = 0.5f;
         }
-        if (FUN_001f9770(D_L15_00161CC0 + k)) {
+        if (fast_dec_timer_s16(D_L15_00161CC0 + k)) {
             int j;
             D_L15_00161CC0[k] = scale_game_frames_alt(D_L15_00161CD0[k]);
             D_L15_00161CC8[k] = 0;

@@ -36,7 +36,7 @@ extern f32 cam_interp_values(f32 *vel, f32 from, f32 to, f32 stiffness, f32 damp
 extern float absolute_float(float input) __asm__("func_001F99C0");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-extern f32 FUN_001f9ab0(void *a, void *b);
+extern f32 fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
@@ -54,7 +54,7 @@ void update_camera_tracking_state(void) {
     fast_vec_normalize(&dir, &hero.gravity_dir, -1.0f);
     qcopy(&cam->unk40, &cam->unk30);
     qcopy(&cam->unk30, &dir);
-    if (FUN_001f9ab0(&cam->dir, &dir) < -0.98f) {
+    if (fast_vec_dot(&cam->dir, &dir) < -0.98f) {
         dir.f[0] += 0.2f;
         dir.f[1] += 0.2f;
         dir.f[2] += 0.2f;
@@ -69,7 +69,7 @@ void update_camera_tracking_state(void) {
 
     subtract_vector_xyz(&cam->unk70, &hero.motion.pos, &cam->unk60);
     cam->unkA0 = fast_vec_length(&cam->unk70);
-    d = FUN_001f9ab0(&cam->unk70, &dir);
+    d = fast_vec_dot(&cam->unk70, &dir);
     cam->unkA8 = d;
     fast_vec_normalize(&proj, &dir, d);
     qcopy(&cam->unk90, &proj);

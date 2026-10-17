@@ -281,7 +281,7 @@ frame_tail:
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002E7E90), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_0026daa0(char *, int, int, int, float);
-extern void *FUN_002141f8(char *);
+extern void *suck_get_aim_height(char *) __asm__("FUN_002141f8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void build_spherical_offset_u(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -302,7 +302,7 @@ unsigned char *FUN_L13_002e6a58(char *src, char *pos, char *target, char *vec, i
         if (target != 0) {
             char *e;
             *(int *)(data + 0x3C) = *(short *)(target + 0xA6);
-            e = FUN_002141f8(target);
+            e = suck_get_aim_height(target);
             if (e != 0) {
                 *(unsigned short *)(e + 0x1E) |= 0x80;
             }

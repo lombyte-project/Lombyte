@@ -93,7 +93,7 @@ void FUN_L06_003083b0(struct Moby *moby) {
 }
 #include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
-extern int FUN_001fa728(char *, float);
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -161,7 +161,7 @@ void FUN_L06_00308c68(struct Moby *m) {
 
     qcopy(&v1, &*(SparkVector *)&m->pos);
     v1.w = 3.0f;
-    if (FUN_001fa728(&v1, 64.0f) == -1) {
+    if (fast_bsphere_check(&v1, 64.0f) == -1) {
         return;
     }
     switch (m->state) {
@@ -254,7 +254,7 @@ void FUN_L06_00308c68(struct Moby *m) {
 extern char *D_L06_0015FFD8;
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_001fa728(char *, float);
+extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short *D_L06_001ABFC0[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -271,7 +271,7 @@ void FUN_L06_00309240(int idx) {
             if (*(short *)(m + 0xA6) == 0x5E8 && (unsigned char)m[0x20] == 1) {
                 qcopy(v, m + 0x10);
                 v[3] = 0.25f;
-                if (FUN_001fa728((char *)v, 64.0f) >= 0) {
+                if (fast_bsphere_check((char *)v, 64.0f) >= 0) {
                     data = *(char **)(m + 0x78);
                     m[0x20] = 2;
                     *(int *)(data + 0x28) =

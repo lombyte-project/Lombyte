@@ -60,8 +60,8 @@ extern void clear_vector(Vec4 *) __asm__("FUN_001f99f8");
 extern f32 FUN_001f9af0(Vec4 *);
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern f32 FUN_001f9dc8(f32);
-extern f32 FUN_001f9de0(f32);
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
@@ -192,8 +192,8 @@ void FUN_L09_002c5990(struct Moby *moby) {
             vars->moving = 0;
         }
         if (vars->moving != 0) {
-            vel.f[0] = FUN_001f9dc8(moby->rot.z) * vars->speed;
-            vel.f[1] = FUN_001f9de0(moby->rot.z) * vars->speed;
+            vel.f[0] = fast_cos(moby->rot.z) * vars->speed;
+            vel.f[1] = fast_sin(moby->rot.z) * vars->speed;
             vel.f[2] = 0.0f;
             diff = hero.motion.pos.f[2] + 0.8f - z;
             if (moby->pos.z < hero.motion.pos.f[2] + 0.8f) {

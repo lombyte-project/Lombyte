@@ -8,7 +8,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 
-/* Record FUN_002141f8 returns for a moby: collision size and aim height. */
+/* Record suck_get_aim_height returns for a moby: collision size and aim height. */
 typedef struct MobyBound {
     u8 pad0[0xA];
     u8 size;                      /* 0x0A: radius in eighths */
@@ -18,18 +18,18 @@ typedef struct MobyBound {
 
 extern struct Moby *D_L00_0015FFE4;
 extern u8 D_L00_00166DC0[];
-float FUN_001f9e90(float, float);
+float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float vector_length_xy(void *) __asm__("FUN_001f9b20");
 float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-float FUN_001fa688(float, float);
+float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 float FUN_001f99c0(float);
 float fast_arc_sin(float) __asm__("FUN_001f9df8");
 float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void build_spherical_offset(Vec4 *, float, float, float) __asm__("FUN_00214db0");
-MobyBound *FUN_002141f8(struct Moby *);
-int FUN_001efa68(void *, Vec4 *, int, void *, int);
+MobyBound *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
+int collision_line(void *, Vec4 *, int, void *, int) __asm__("FUN_001efa68");
 
 /* Picks the best auto-aim target moby (kind 5) for a shot from pos along dir:
    writes yaw/pitch toward it and its aim height, returns the moby or 0. */
@@ -43,8 +43,8 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
 
     pos.q = pos_in->q;
     dir.q = dir_in->q;
-    *yaw = FUN_001f9e90(dp->f[0], dp->f[1]);
-    *pitch = -FUN_001f9e90(vector_length_xy(dp), dp->f[2]);
+    *yaw = fast_arc_tan(dp->f[0], dp->f[1]);
+    *pitch = -fast_arc_tan(vector_length_xy(dp), dp->f[2]);
 
     for (m = D_L00_0015FFE4; m != 0; m = m->next) {
         MobyBound *b;
@@ -52,19 +52,19 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
         if ((s8)m->state < 0)
             continue;
         qcopy(&target, &m->pos);
-        b = FUN_002141f8(m);
+        b = suck_get_aim_height(m);
         if (b)
             target.f[2] += b->height;
         else
             target.f[2] += 0.5f;
         if (!(m->flags & 0x1000) || !m || !m->pclass || m->pclass->type != 5)
             continue;
-        t_yaw = FUN_001f9e90(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
-        t_pitch = FUN_001f9e90(vector_distance_xy(pp, &target), target.f[2] - pp->f[2]);
+        t_yaw = fast_arc_tan(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
+        t_pitch = fast_arc_tan(vector_distance_xy(pp, &target), target.f[2] - pp->f[2]);
         dist = fast_vec_dist(pp, &target);
         if (dist < 7.5f &&
-            FUN_001fa688(hero.moby->rot.z,
-                         FUN_001f9e90(m->pos.x - hero.motion.pos.f[0],
+            fast_difference_between_rotations(hero.moby->rot.z,
+                         fast_arc_tan(m->pos.x - hero.motion.pos.f[0],
                                       m->pos.y - hero.motion.pos.f[1])) < 1.0471976f &&
             FUN_001f99c0(t_pitch) < 1.0471976f) {
             *pitch = -t_pitch;
@@ -83,7 +83,7 @@ struct Moby *FUN_L00_002630c8(void *ignore, Vec4 *pos_in, Vec4 *dir_in, f32 *yaw
             if (radius < dist)
                 ang -= shrink;
         }
-        if (ang < max_angle && !FUN_001efa68(D_L00_00166DC0, &target, 6, ignore, 0)) {
+        if (ang < max_angle && !collision_line(D_L00_00166DC0, &target, 6, ignore, 0)) {
             best = m;
             best_dist = dist;
             *pitch = -t_pitch;
@@ -484,7 +484,7 @@ typedef struct {
 } Moby;
 
 extern float D_0015ED6C_s[] __asm__("D_0015ED6C") __attribute__((sda));
-extern float FUN_001f9af0(void *a);
+extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
@@ -528,7 +528,7 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
             *(float *)(d + 0x38) = random_float_between_alt(10.0f, 15.0f) * frame_time_sq;
         else
             *(float *)(d + 0x38) = scale;
-        if (FUN_001f9af0(v10) == 0.0f) {
+        if (fast_vec_length(v10) == 0.0f) {
             f21 = random_angle_radians();
             k = random_float_between_alt(2.0f, 4.0f) * frame_time;
             t[0] = fast_cos(f21) * k;
@@ -539,14 +539,14 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
         } else {
             qcopy(d, v10);
         }
-        if (FUN_001f9af0(v11) == 0.0f) {
+        if (fast_vec_length(v11) == 0.0f) {
             float g = D_0015ED6C_s[0];
             random_vector(t, g * 3.1415927f, g * 6.2831855f);
             qcopy(d + 0x10, t);
         } else {
             qcopy(d + 0x10, v11);
         }
-        if (FUN_001f9af0(v12) == 0.0f && v12[3] == 0.0f) {
+        if (fast_vec_length(v12) == 0.0f && v12[3] == 0.0f) {
             qcopy(t, *(char **)(m + 0x24) + 0x30);
             k2 = *(float *)(m + 0x2C);
             k2 = k2 * 0.0009765625f;

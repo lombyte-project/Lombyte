@@ -64,7 +64,7 @@ extern unsigned char D_0014C190_r[] __asm__("D_0014C190");
 extern unsigned char D_0013F350_r[] __asm__("D_0013F350");
 extern unsigned char D_0014C050_r[] __asm__("D_0014C050");
 extern unsigned char D_0013F3D0_r[] __asm__("D_0013F3D0");
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int D_0014C050; /* no foreign declaration */
 extern int D_L11_0015FC88; /* no foreign declaration */
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");

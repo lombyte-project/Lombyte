@@ -14,9 +14,9 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float FUN_001f9b20(void *);
+extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int FUN_001f96f8(int);
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
 
 char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
@@ -30,13 +30,13 @@ char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
         m[0x20] = 1;
         qcopy(m + 0x10, dir);
         qcopy(d, pos);
-        *(int *)(d + 0x18) = FUN_001f96f8(a4);
+        *(int *)(d + 0x18) = scale_game_frames(a4);
         *(int *)(d + 0x10) = a2;
         *(int *)(d + 0x14) = a3;
         *(int *)(d + 0x2C) = a5;
         *(int *)(d + 0x28) = 0;
         *(float *)(m + 0x48) = fast_arc_tan(*(float *)d, *(float *)(d + 4));
-        *(float *)(m + 0x44) = -fast_arc_tan(FUN_001f9b20(d), *(float *)(d + 8));
+        *(float *)(m + 0x44) = -fast_arc_tan(vec_len_xy(d), *(float *)(d + 8));
         FUN_L00_00250df8(m);
     }
     return m;
@@ -46,7 +46,7 @@ char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
 
 extern char D_L08_00174640[];
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
-extern int FUN_001efa68(void *, void *, int, int, int);
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -85,7 +85,7 @@ void FUN_L08_00307298(char *m) {
                              scale_game_frames(random_int_between(7, 0xA)), 1);
         }
         add_vector_xyz(m + 0x10, m + 0x10, d);
-        if (FUN_001efa68(m + 0x10, prev, 0x10, *(int *)(d + 0x10), 0) != 0) {
+        if (collision_line(m + 0x10, prev, 0x10, *(int *)(d + 0x10), 0) != 0) {
             char *t = D_L08_00174640;
             if (*(int *)(t + 0x18) != *(int *)(d + 0x10)) {
                 if (*(int *)(t + 0x18) != 0) {
@@ -143,7 +143,7 @@ void FUN_L08_00307b90(int arg) {
     D_L08_00162370 = random_float_between_alt(b, multiply_global_factor_ed64(10.0f));
     v[0] = a * frame_time;
     v[1] = v[0];
-    t = FUN_001f9b20(D_L08_00162360) / fast_vec_length(v);
+    t = vec_len_xy(D_L08_00162360) / fast_vec_length(v);
     D_L08_00162374 = (int)(t * (c - d) + d);
 }
 #include "rnc/gameplay/entities/moby.h"

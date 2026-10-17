@@ -623,9 +623,9 @@ struct Moby *FUN_L09_002eaa50(struct Moby *owner) {
 extern float D_L09_00166F40[];
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void FUN_001f9a10(void *, void *, void *);
-extern void FUN_001f9a28(void *, void *, void *);
-extern void FUN_001f9a68(void *, void *, float);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void delete_moby(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -637,14 +637,14 @@ void FUN_L09_002ead30(unsigned char *m) {
         float len, t;
         m[0x23] -= 2;
         d = *(char **)(m + 0x78);
-        FUN_001f9a68(d, d, frame_scale * -0.0199999809f + 1.0f);
+        fast_vec_scale(d, d, frame_scale * -0.0199999809f + 1.0f);
         *(float *)(d + 8) -= frame_time_sq * 20.0f;
-        FUN_001f9a10(d + 0x20, d + 0x20, d);
-        FUN_001f9a28(m + 0x10, d + 0x20, D_L09_00166F40);
+        fast_vec_add(d + 0x20, d + 0x20, d);
+        fast_vec_sub(m + 0x10, d + 0x20, D_L09_00166F40);
         len = fast_vec_length(m + 0x10);
         if (len > 100.0f) {
             fast_vec_normalize(m + 0x10, m + 0x10, 100.0f);
-            FUN_001f9a10(m + 0x10, m + 0x10, D_L09_00166F40);
+            fast_vec_add(m + 0x10, m + 0x10, D_L09_00166F40);
             *(float *)(m + 0x2C) = *(float *)(d + 0x50) * (100.0f / len);
         } else {
             qcopy(m + 0x10, d + 0x20);
@@ -1582,8 +1582,8 @@ char *FUN_L09_002efe48(void *unused, float lower_radius, float upper_radius, voi
 
 void FUN_L09_002f0040(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    FUN_001f9a10(&moby->pos, &moby->pos, data);
-    FUN_001f9a68(data, data, 1.0f + frame_scale * -0.019999980926513672f);
+    fast_vec_add(&moby->pos, &moby->pos, data);
+    fast_vec_scale(data, data, 1.0f + frame_scale * -0.019999980926513672f);
     if (moby->anim_flags & 2) {
         delete_moby(moby);
     }

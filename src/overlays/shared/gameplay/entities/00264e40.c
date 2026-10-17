@@ -27,11 +27,11 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_L02_00174460[];
-extern float FUN_001f96b0(float);
+extern float scale_time(float) __asm__("FUN_L04_001f1978");
 extern float fast_vec_dist(void *, void *);
 extern int D_L02_0015F5CC __attribute__((section(".sdata")));
-extern int FUN_001efa68(void *, void *, int, int, int);
-extern int FUN_001f9770(void *);
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern float D_L02_001600D0 __attribute__((sda));
 extern int D_L02_001600D4 __attribute__((sda));
@@ -69,7 +69,7 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     qcopy(origin, position);
     fast_vec_normalize(adjusted, direction, distance + 0.75f);
     add_vector_xyz(end, adjusted, origin);
-    if (FUN_001efa68(origin, end, 2, 0, 0)) {
+    if (collision_line(origin, end, 2, 0, 0)) {
         travel = fast_vec_dist(origin, D_L02_00174460) - 0.75f;
         if (travel < 0.0f) travel = 0.0f;
     } else {
@@ -100,9 +100,9 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
             }
         }
     }
-    if (FUN_001f9770(slots + 0x1c)) {
+    if (fast_dec_timer_s16(slots + 0x1c)) {
         float sp2 = random_float_between(10.0f, 30.0f);
-        sp2 = FUN_001f96b0(sp2);
+        sp2 = scale_time(sp2);
         ((Slots_265E88 *)slots)->timer = truncate_float_to_s32(sp2);
         FUN_L00_00257d78(offset, 0.0f, frame_time_macro + frame_time_macro);
         fast_vec_scale(velocity, adjusted, random_float_between(0.5f, 0.1f));

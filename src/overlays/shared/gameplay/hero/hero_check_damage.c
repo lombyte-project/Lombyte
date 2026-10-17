@@ -145,7 +145,7 @@ struct LedgeSpot_20cd08 {
 extern struct LedgeSpot_20cd08 *D_L00_0015F70C;
 extern s32 D_L00_0015F710;
 extern f32 FUN_001f9b48(void *, void *);
-extern f32 FUN_001f9b80(void *, void *);
+extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 FUN_001f99c0(f32);
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
@@ -183,7 +183,7 @@ int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
             height_limit = 10.0f;
             distance_limit += 0.5f;
         }
-        distance = FUN_001f9b80(p, to);
+        distance = vector_distance(p, to);
         height = FUN_001f99c0(p->f[2] - to->f[2]);
         if (!(distance < distance_limit && height < height_limit))
             continue;
@@ -1766,7 +1766,7 @@ extern int D_0015ED8C;
 extern int D_0015ED90;
 extern int D_0015ED94;
 extern ItemDef item_defs[] __asm__("D_L00_00179AC0");
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_0020d568_c() __asm__("FUN_L00_0020d568");
 extern int FUN_L00_00216de8(int, int);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -2034,7 +2034,7 @@ void hero_switch_item(int i) {
             s->items[0].timer = s->items[0].timer_reload;
         }
     }
-    if (FUN_001f9770(&hero.items[i].timer) == 0) {
+    if (fast_dec_timer_s16(&hero.items[i].timer) == 0) {
         changed = 0;
     }
     if (changed) {
@@ -2274,7 +2274,7 @@ void FUN_L00_00210b30(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211338), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9c48(float *, float *, float);
+extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 
 /* Scales x/y by s and sets or scales z, per component or through set_vector_length_xy. */
 void hero_knockback(float *v, int each, float s, float z) __asm__("FUN_L00_00210c80");
@@ -2284,7 +2284,7 @@ void hero_knockback(float *v, int each, float s, float z) {
         v[1] *= s;
         v[2] *= z;
     } else {
-        FUN_001f9c48(v, v, s);
+        set_vector_length_xy(v, v, s);
         v[2] = z;
     }
 }
@@ -2653,11 +2653,11 @@ void hero_update(void)
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211EE8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b20(void *);
+extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
 
 /* Length from vector_length_xy on hero.stick_x, capped at 1. */
 float FUN_L00_00211830(void) {
-    float len = FUN_001f9b20(&hero.stick_x);
+    float len = vec_len_xy(&hero.stick_x);
 
     if (1.0f < len) {
         len = 1.0f;
@@ -2804,8 +2804,8 @@ void FUN_L00_00211be8(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002123B0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533_lui[];
-extern void FUN_001fa050(void *, void *);
-extern void FUN_001fa378(void *, void *, void *);
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_00214598(void *, void *);
 
 /* Multiplies the 001fa050 matrices of (x, y, z) and of hero.unk40, stored back by 00214598. */
@@ -2815,14 +2815,14 @@ void FUN_L00_00211cf8(float x, float y, float z) {
     in[0] = x;
     in[1] = y;
     in[2] = z;
-    FUN_001fa050(t, in);
-    FUN_001fa050(u, D_0013E533_lui + 0xEAD);
-    FUN_001fa378(u, u, t);
+    euler_rotation_matrix(t, in);
+    euler_rotation_matrix(u, D_0013E533_lui + 0xEAD);
+    multiply_matrix(u, u, t);
     FUN_00214598(u, D_0013E533_lui + 0xEAD);
 }
 typedef float V4_211d78[4] __attribute__((aligned(16)));
-void FUN_001f9d20(void *, void *, void *);
-float FUN_001f9e90(float, float);
+void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void FUN_L00_00211cf8(float, float, float);
 extern float FUN_L00_0025bc98(char *, char *, int, float, float, float, float);
 void FUN_L00_00211d78(int a, float x, float y, float z) {
@@ -2830,8 +2830,8 @@ void FUN_L00_00211d78(int a, float x, float y, float z) {
     float out;
     float zero = 0.0f;
     float r;
-    FUN_001f9d20(t, &hero.motion.unk170, hero.unk40);
-    r = FUN_001f9e90(t[0], t[1]);
+    transform_vector(t, &hero.motion.unk170, hero.unk40);
+    r = fast_arc_tan(t[0], t[1]);
     out = zero;
     hero.motion.unk188 = FUN_L00_0025bc98((char *)&out, (char *)&hero.motion.unk184, a, r, x, y, z);
     FUN_L00_00211cf8(zero, zero, out);
@@ -3126,17 +3126,17 @@ extern V D_L00_00173E60_lui __asm__("D_L00_00173E60") __attribute__((section(".d
 extern f32 D_L00_00173E68 __attribute__((section(".data")));
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
-s32 FUN_001efa68(void *, void *, s32, void *, s32);
+s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
-s32 FUN_001f0b58(void);
+s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 FUN_L00_0025e3b8(s32);
-u8 *FUN_002141f8(s32);
+u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 f32 FUN_001f9b48(void *, void *);
-void FUN_00125180(void *, void *);
+void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 f32 FUN_L00_00233d30(void *);
 f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
-void FUN_001f9a28(void *, void *, void *);
+void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -3181,7 +3181,7 @@ void FUN_L00_002127b8(void) {
         g = hero.unk234 * 2.9f;
     }
     hero_get_collision_ray_endpoints((Vec4_002126b8 *)&v10, (Vec4_002126b8 *)&v0, k, g, -48.0f);
-    if (FUN_001efa68(&v10, &v0, 2, hero.moby, 0) == 0) {
+    if (collision_line(&v10, &v0, 2, hero.moby, 0) == 0) {
         goto tail;
     }
     r = coll_sound_class();
@@ -3189,13 +3189,13 @@ void FUN_L00_002127b8(void) {
         r = 3;
     }
     hero.unk12ED = r;
-    hero.ground_type = FUN_001f0b58();
+    hero.ground_type = collision_hit_material();
     if (hero.ground_type == 0) {
         hero.water_surface_z = resolve_camera_surface_height(((u8 *)&D_L00_00173E60_lui), &hero.unk280);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.unk2F8 <= 0) {
             hero.unk2F8 = 1;
         }
-        if (FUN_001efa68(&v10, &v0, 0x24, hero.moby, 0) == 0) {
+        if (collision_line(&v10, &v0, 0x24, hero.moby, 0) == 0) {
             goto d1;
         }
         r = coll_sound_class();
@@ -3207,14 +3207,14 @@ void FUN_L00_002127b8(void) {
     if (hero.ground_type == 0xD) {
         hero.water_surface_z = D_L00_00173E68;
         v10.f[2] = D_L00_00173E68 - 0.01f;
-        if (FUN_001efa68(&v10, &v0, 4, hero.moby, 0) == 0) {
+        if (collision_line(&v10, &v0, 4, hero.moby, 0) == 0) {
             goto d1;
         }
     }
     if (hero.ground_type == 3) {
         hero.unk2F4 = D_L00_00173E68;
         v10.f[2] = D_L00_00173E68 - 0.01f;
-        if (FUN_001efa68(&v10, &v0, 4, hero.moby, 0) == 0) {
+        if (collision_line(&v10, &v0, 4, hero.moby, 0) == 0) {
             goto d1;
         }
     }
@@ -3229,7 +3229,7 @@ void FUN_L00_002127b8(void) {
         if (FUN_L00_0025e3b8(HH.moby)) {
             hero.unk30A = 1;
         }
-        p = FUN_002141f8(HH.moby);
+        p = suck_get_aim_height(HH.moby);
         if (p != 0 && (*(u16 *)(p + 0x1E) & 8)) {
             hero.unk30A = 1;
         }
@@ -3239,10 +3239,10 @@ void FUN_L00_002127b8(void) {
         hero.ground_z.f = HH.point.f[2];
         hero.ground_distance = FUN_001f9b48(&hero.motion.pos, &hero.ground_point);
         hero.ground_moby = (struct Moby *)HH.moby;
-        FUN_00125180(&hero.unk270, (u8 *)&HH.normal_x);
+        sceVu0Normalize(&hero.unk270, (u8 *)&HH.normal_x);
         hero.ground_slope.f = FUN_L00_00233d30((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        FUN_001f9a28(&v20, &hero.ground_point, &hero.motion.pos);
+        fast_vec_sub(&v20, &hero.ground_point, &hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&v20, &hero.unk270)) {
             hero.ground_distance = -hero.ground_distance;
         }
@@ -3275,7 +3275,7 @@ d1:
         FUN_001f9a68_c(&hero.gravity_dir, &hero.gravity_dir, -1.0f);
         break;
     case 2:
-        FUN_001f9a28(&hero.gravity_dir, &hero.motion.unkB0, &hero.motion.pos);
+        fast_vec_sub(&hero.gravity_dir, &hero.motion.unkB0, &hero.motion.pos);
         FUN_001f9bf8_c(&hero.gravity_dir, &hero.gravity_dir, 1.0f);
         break;
     }
@@ -3308,13 +3308,13 @@ d1:
         }
         FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
-        if (FUN_001efa68(&v30, &v0, 0x22, hero.moby, 0)) {
+        if (collision_line(&v30, &v0, 0x22, hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
                 hero.unk2C0.f[i] = 0.0f;
             }
-            FUN_00125180(&v60, (u8 *)&HH.normal_x);
+            sceVu0Normalize(&v60, (u8 *)&HH.normal_x);
             FUN_L00_00216078(&v60, &v50);
             if (-0.78539819f < v50.f[1] && v50.f[1] < 0.78539819f) {
                 hero.unk2C8.f[i] = v50.f[1];
@@ -3335,7 +3335,7 @@ d1:
 extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -3372,7 +3372,7 @@ void FUN_L00_00212ff0(void) {
             float y = absolute_float(globals->motion.velocity.f[2]) + 0.01f;
             if (x < y) {
                 if (globals->wall_hit != 0) {
-                    float d = FUN_001f9b80(&globals->unk210, &globals->motion.pos);
+                    float d = vector_distance(&globals->unk210, &globals->motion.pos);
                     if (globals->unk234 * 0.5f < d) {
                         globals->motion.pos.f[2] = globals->ground_z.f;
                         return;
@@ -3407,10 +3407,10 @@ void FUN_L00_00212ff0(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00213970), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533_lui[];
-extern float FUN_001f9af0(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void FUN_001f9a68(void *, void *, float);
-extern void FUN_001f9bf8(void *, void *, float);
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void FUN_L00_002132b8(float a, float b) {
@@ -3418,28 +3418,28 @@ void FUN_L00_002132b8(float a, float b) {
     char *q = p - 0x920;
     float v;
     build_spherical_offset(p, *(float *)(q + 0x930), *(float *)(q + 0x938), *(float *)(q + 0x934));
-    FUN_001f9a68(p, p, a);
-    v = FUN_001f9af0(p);
+    fast_vec_scale(p, p, a);
+    v = fast_vec_length(p);
     if (v <= b) {
         clear_u64_value(p);
     } else {
-        FUN_001f9bf8(p, p, v - b);
+        fast_vec_normalize(p, p, v - b);
     }
 }
 typedef unsigned int u128_213350 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vec4_213350;
-float FUN_001f9dc8(float);
-float FUN_001f9de0(float);
+float fast_cos(float) __asm__("FUN_001f9dc8");
+float fast_sin(float) __asm__("FUN_001f9de0");
 void FUN_001f9ab0(void *, Vec4_213350 *);
 /* dot_vectors_xyz of v with (cos, sin, 0) of the angle hero.motion.rot.z. */
 void FUN_L00_00213350(u128_213350 *v) {
     u128_213350 a[2];
     struct Hero *g = &hero;
     a[0] = *v;
-    ((Vec4_213350 *)&a[1])->x = FUN_001f9dc8(g->motion.rot.f[2]);
-    ((Vec4_213350 *)&a[1])->y = FUN_001f9de0(g->motion.rot.f[2]);
+    ((Vec4_213350 *)&a[1])->x = fast_cos(g->motion.rot.f[2]);
+    ((Vec4_213350 *)&a[1])->y = fast_sin(g->motion.rot.f[2]);
     ((Vec4_213350 *)&a[1])->z = 0.0f;
     FUN_001f9ab0(&a[0], (Vec4_213350 *)&a[1]);
 }
@@ -3760,10 +3760,10 @@ void FUN_L00_00213de8(float s) {
     char *p = D_0013E533_lui + 0xF1D;
     float *f;
 
-    FUN_001f9a68(p, p, s);
-    FUN_001f9a68(p + 0x10, p + 0x10, s);
-    FUN_001f9a68(p - 0x20, p - 0x20, s);
-    FUN_001f9a68(p + 0x50, p + 0x50, s);
+    fast_vec_scale(p, p, s);
+    fast_vec_scale(p + 0x10, p + 0x10, s);
+    fast_vec_scale(p - 0x20, p - 0x20, s);
+    fast_vec_scale(p + 0x50, p + 0x50, s);
     f = (float *)(p - 0x100);
     f[0x194 / 4] = f[0x194 / 4] * s;
 }

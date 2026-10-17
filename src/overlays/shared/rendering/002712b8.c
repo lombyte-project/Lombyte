@@ -137,14 +137,14 @@ unsigned char *FUN_L00_002715e8(void *pos, int x, int color, float size, float w
     }
     return m;
 }
-extern void FUN_001f9a10(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00267a08(void *);
 extern float FUN_001f99c0(float);
 
 void FUN_L00_00271748(unsigned char *m) {
     unsigned char *v = m + 0x20;
     float z;
-    FUN_001f9a10(m + 0x10, m + 0x10, v);
+    fast_vec_add(m + 0x10, m + 0x10, v);
     if (*(float *)(m + 0x10) < 2.0f || 1021.0f < *(float *)(m + 0x10) ||
         *(float *)(m + 0x14) < 2.0f || 1021.0f < *(float *)(m + 0x14) ||
         (z = *(float *)(m + 0x18)) < 2.0f || 1021.0f < z) {
@@ -244,7 +244,7 @@ unsigned char *FUN_L00_00271b18(u128 *a, u128 *b, float x) {
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272A88), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9a10(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_L00_00267a08(void *);
 
@@ -252,7 +252,7 @@ void FUN_L00_00271be8(char *m) {
     char *v = m + 0x20;
     int t;
     fast_vec_scale(v, v, 0.975f);
-    FUN_001f9a10(m + 0x10, m + 0x10, v);
+    fast_vec_add(m + 0x10, m + 0x10, v);
     *(float *)(m + 0xC) += 14700.0f;
     m[8] += v[0x10];
     t = *(int *)(m + 4) + 0xFE000000;
@@ -268,19 +268,19 @@ void FUN_L00_00271be8(char *m) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272B28), where it is exact; names translated to the US level program. */
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_001fa6e0(int, int, float);
-extern void FUN_001f9a10(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00267a08(void *);
 
 void FUN_L00_00271c88(char *m) {
     char *v = m + 0x20;
     m[8] += v[0x1C];
-    FUN_001f9a10(m + 0x10, m + 0x10, v);
+    fast_vec_add(m + 0x10, m + 0x10, v);
     *(int *)(m + 4) = FUN_001fa6e0(
         *(int *)(v + 0x18), *(int *)(v + 0x14),
         absolute_float(convert_integer_to_float(*(short *)(m + 0xA)) * *(float *)(v + 0x10) - 1.0f));
-    if (FUN_001f9770(m + 0xA)) {
+    if (fast_dec_timer_s16(m + 0xA)) {
         FUN_L00_00267a08(m);
     }
 }
@@ -299,8 +299,8 @@ typedef struct {
     V00271d20 acc;
 } O00271d20;
 extern V00271d20 D_L00_00173E60;
-void FUN_001f9a10(void *, void *, void *);
-s32 FUN_001f9770(void *);
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08(void *);
 s32 coll_line_fix(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void FUN_L00_00271d20(O00271d20 *o) {
@@ -312,9 +312,9 @@ void FUN_L00_00271d20(O00271d20 *o) {
     t.f[1] = acc->f[1];
     t.f[2] = acc->f[2];
     t.f[3] = 0.0f;
-    FUN_001f9a10(pos, pos, &t);
-    FUN_001f9a10(vel, vel, &t);
-    if (FUN_001f9770(&o->xa)) {
+    fast_vec_add(pos, pos, &t);
+    fast_vec_add(vel, vel, &t);
+    if (fast_dec_timer_s16(&o->xa)) {
         FUN_L00_00267a08(o);
     } else if (coll_line_fix(vel, pos, 0x10, acc->i[3], 0)) {
         o->pos.q = D_L00_00173E60.q;
@@ -345,7 +345,7 @@ typedef struct {
 } V __attribute__((aligned(16)));
 void FUN_L00_001ff318(V *, V *, f32);
 void FUN_L00_001ff290(V *, V *, V *);
-s32 FUN_001f9770(void *);
+s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08(void *);
 void FUN_L00_00271ec8(u8 *m) {
     V t;
@@ -356,7 +356,7 @@ void FUN_L00_00271ec8(u8 *m) {
     FUN_L00_001ff290(&t, (V *)(m + 0x10), v);
     c = *(u32 *)(m + 4) + 0xFE000000;
     *(u32 *)(m + 4) = c;
-    if ((c & 0xFF000000) - 1 > 0x5EFFFFFF || FUN_001f9770(m + 0xA) != 0) {
+    if ((c & 0xFF000000) - 1 > 0x5EFFFFFF || fast_dec_timer_s16(m + 0xA) != 0) {
         FUN_L00_00267a08(m);
     } else {
         f32 f = *(f32 *)(m + 0xC);
@@ -370,14 +370,14 @@ void FUN_L00_00271ec8(u8 *m) {
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272E60), where it is exact; names translated to the US level program. */
 
-extern int FUN_001f9770(void *);
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_001fa6e0(int, int, float);
 extern void FUN_L00_00267a08(void *);
 
 void FUN_L00_00271fc0(char *m) {
     char *v;
     float f;
-    if (FUN_001f9770(m + 0xA)) {
+    if (fast_dec_timer_s16(m + 0xA)) {
         FUN_L00_00267a08(m);
     } else {
         v = m + 0x20;
@@ -590,10 +590,10 @@ typedef struct {
 void FUN_L00_00267a08(void *);
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
-void FUN_001f9a28(void *, void *, void *);
-f32 FUN_001f9af0(void *);
+void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-void FUN_001f9a10(void *, void *, void *);
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002726d8(P_2726d8 *p) {
     Q_2726d8 *q = &p->q;
     u128_2726d8 t;
@@ -607,25 +607,25 @@ void FUN_L00_002726d8(P_2726d8 *p) {
     save = p->unk2C;
     qcopy(&t, &p->pos);
     moby_point_position(p->q.owner, q->x4, &p->pos);
-    FUN_001f9a28(&t, &t, &p->pos);
+    fast_vec_sub(&t, &t, &p->pos);
     r2 = random_float_between(-0.021f, 0.021f);
-    if (FUN_001f9af0(&t) < 0.0625f) {
+    if (fast_vec_length(&t) < 0.0625f) {
         f = r2 + 0.0625f;
     } else {
-        f = FUN_001f9af0(&t) + r2;
+        f = fast_vec_length(&t) + r2;
     }
     fast_vec_normalize(&t, &t, f);
-    FUN_001f9a10((u8 *)p + 0x20, &p->pos, &t);
+    fast_vec_add((u8 *)p + 0x20, &p->pos, &t);
     *(f32 *)((u8 *)p + 0x1C) = sc;
     p->unk2C = save;
 }
 void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-void FUN_001f9a10(void *, void *, void *);
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00267a08(void *);
 void FUN_L00_00272838(u8 *m) {
     s32 n;
     fast_vec_scale(m + 0x20, m + 0x20, 0.975f);
-    FUN_001f9a10(m + 0x10, m + 0x10, m + 0x20);
+    fast_vec_add(m + 0x10, m + 0x10, m + 0x20);
     *(f32 *)(m + 0xC) += 6300.0f;
     n = m[4] - 4;
     if (n <= 0) {
@@ -824,15 +824,15 @@ unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int fl
     }
     return m;
 }
-void FUN_001f9a10(void *, void *, void *);
-s32 FUN_001f9770(void *);
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08(void *);
 /* Adds the vector at D_0013F3D0 in mode 1, then calls 00267a08 once the timer at +0xA ends. */
 void FUN_L00_00273088(u8 *a) {
     u8 *q = a + 0x20;
     if (*(s32 *)(q + 0x10) == 1)
-        FUN_001f9a10(a + 0x10, &hero.motion.pos, q);
-    if (FUN_001f9770(a + 0xA))
+        fast_vec_add(a + 0x10, &hero.motion.pos, q);
+    if (fast_dec_timer_s16(a + 0xA))
         FUN_L00_00267a08(a);
 }
 typedef struct {
@@ -1060,7 +1060,7 @@ void FUN_L00_00273800(char *a) {
 /* Spawns a type-64 particle at pos moving with vel, sprite size chosen by distance to the hero. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00274788), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char *D_L00_001B2180[];
 extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
 
@@ -1070,7 +1070,7 @@ unsigned char *FUN_L00_002738e8(void *pos, void *vel, float scale, int life, flo
     if (r != 0) {
         u = r + 0x20;
         qcopy(r + 0x10, pos);
-        if (FUN_001f9b80(D_0013F3D0_c, pos) < 80.0f) {
+        if (vector_distance(D_0013F3D0_c, pos) < 80.0f) {
             r[9] = truncate_float_to_s32(1.0f) + 0x30;
         } else {
             r[9] = truncate_float_to_s32(1.0f) + 0x20;
@@ -1127,9 +1127,9 @@ void FUN_L00_00273a68(struct EmberParticle *p) {
     s32 n, c1, c2;
     f32 f;
 
-    if (FUN_001f9770(&p->life))
+    if (fast_dec_timer_s16(&p->life))
         m->vel.f[2] -= m->gravity;
-    FUN_001f9a10(&p->pos, &p->pos, &m->vel);
+    fast_vec_add(&p->pos, &p->pos, &m->vel);
     p->spin += 2;
     if (!(p->pos.f[2] < m->floor_z))
         return;
@@ -1269,13 +1269,13 @@ unsigned char *FUN_L00_002741a0(void *a, int color, float s, float z) {
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002751A8), where it is exact; names translated to the US level program. */
 
-extern void FUN_001f9a10(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00267a08(void *);
 
 void FUN_L00_00274308(char *m) {
     char *v = m + 0x20;
     int t;
-    FUN_001f9a10(m + 0x10, m + 0x10, v);
+    fast_vec_add(m + 0x10, m + 0x10, v);
     *(float *)(m + 0xC) += *(float *)(v + 0x10);
     m[8] += 1;
     t = *(unsigned short *)(m + 0xA) - 1;
@@ -1292,7 +1292,7 @@ extern unsigned char *D_L00_001B218C __attribute__((section(".data")));
 unsigned char *FUN_L00_002678b8(int);
 int FUN_001fa6d0(float);
 int FUN_00213260(int);
-float FUN_001fa6c0(int);
+float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
 unsigned char *FUN_L00_002743a8(int k, u128 *pos, int n, float x, float y, int mode, int col,
                                 float *vec) {
@@ -1317,7 +1317,7 @@ unsigned char *FUN_L00_002743a8(int k, u128 *pos, int n, float x, float y, int m
             m[2] = D_L00_001B218C[1];
         }
         if (mode == 0) {
-            *(short *)(v + 0x1A) = FUN_001fa6d0(127.0f / FUN_001fa6c0(n));
+            *(short *)(v + 0x1A) = FUN_001fa6d0(127.0f / convert_integer_to_float(n));
         }
         if (vec) {
             *(float *)(v + 0) = vec[0];
@@ -1879,12 +1879,12 @@ void FUN_L00_002756f0(unsigned char *m) {
 }
 extern int D_L00_00160240 __attribute__((sda));
 void FUN_L00_00259430();
-int FUN_001f9770(void *);
+int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08();
 /* Lowers the top byte at p+4 by D_L00_00160240; calls 00267a08 once fast_dec_timer_s16(p+0xA) is set. */
 void FUN_L00_00275810(char *p) {
     FUN_L00_00259430(p + 4, D_L00_00160240);
-    if (FUN_001f9770(p + 0xA))
+    if (fast_dec_timer_s16(p + 0xA))
         FUN_L00_00267a08(p);
 }
 typedef union {
@@ -1900,10 +1900,10 @@ typedef struct {
     V00275860 pos;
     V00275860 vel;
 } O00275860;
-f32 FUN_001fa6c0(s32);
+f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0(f32);
-void FUN_001f9a10(void *, void *, void *);
-s32 FUN_001f9770(void *);
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void FUN_L00_00267a08(void *);
 void FUN_L00_00275860(O00275860 *o) {
     V00275860 t;
@@ -1911,11 +1911,11 @@ void FUN_L00_00275860(O00275860 *o) {
     t.q = o->vel.q;
     w = t.f[3];
     t.f[3] = 0.0f;
-    k = FUN_001fa6c0(o->h) / w;
+    k = convert_integer_to_float(o->h) / w;
     o->col = (FUN_001fa6d0(k * 38.0f) << 24) | 0x808080;
     o->a = FUN_001fa6d0(k * 33.0f);
-    FUN_001f9a10(&o->pos, &o->pos, &t);
-    if (FUN_001f9770(&o->h))
+    fast_vec_add(&o->pos, &o->pos, &t);
+    if (fast_dec_timer_s16(&o->h))
         FUN_L00_00267a08(o);
 }
 extern int FUN_001fa6d0_275910(float) __asm__("FUN_001fa6d0");
@@ -2025,11 +2025,11 @@ void FUN_L00_00275aa0(char *m) {
             w[2] = a[2];
         }
     }
-    if (FUN_001f9770(m + 0xA)) {
+    if (fast_dec_timer_s16(m + 0xA)) {
         FUN_L00_00267a08(m);
     }
 }
-extern float FUN_001fa6c0(int);
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
 void FUN_L00_00275d68(unsigned char *m) {
     float *v = (float *)(m + 0x20);
@@ -2039,13 +2039,13 @@ void FUN_L00_00275d68(unsigned char *m) {
         v[0] += v[4];
         v[1] += v[5];
         v[2] += v[6];
-        FUN_001f9a10(m + 0x10, (char *)*(int *)(v + 7) + 0x10, v);
+        fast_vec_add(m + 0x10, (char *)*(int *)(v + 7) + 0x10, v);
     } else {
         ((float *)(m + 0x10))[0] += v[4];
         ((float *)(m + 0x10))[1] += v[5];
         ((float *)(m + 0x10))[2] += v[6];
     }
-    if (FUN_001f9770(m + 0xA)) {
+    if (fast_dec_timer_s16(m + 0xA)) {
         FUN_L00_00267a08(m);
         return;
     }
@@ -2053,11 +2053,11 @@ void FUN_L00_00275d68(unsigned char *m) {
         c = *(int *)(m + 4) & 0xFFFFFF;
         *(int *)(m + 4) =
             FUN_001fa6e0(c, *(int *)(m + 4),
-                         FUN_001fa6c0(*(short *)(m + 0xA) - 1) / FUN_001fa6c0(*(short *)(m + 0xA)));
+                         convert_integer_to_float(*(short *)(m + 0xA) - 1) / convert_integer_to_float(*(short *)(m + 0xA)));
     } else {
         *(int *)(m + 4) =
             FUN_001fa6e0(0, *(int *)(m + 4),
-                         FUN_001fa6c0(*(short *)(m + 0xA) - 1) / FUN_001fa6c0(*(short *)(m + 0xA)));
+                         convert_integer_to_float(*(short *)(m + 0xA) - 1) / convert_integer_to_float(*(short *)(m + 0xA)));
     }
 }
 typedef struct {

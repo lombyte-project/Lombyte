@@ -12,7 +12,7 @@ typedef union {
 } V;
 
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 FUN_001f9b20(void *);
+extern f32 vec_len_xy(void *) __asm__("FUN_001f9b20");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void debug_print(char *) __asm__("FUN_001e93b0");
 extern char D_L00_001E78B0[];
@@ -45,7 +45,7 @@ s32 *FUN_L00_001ee1b0(OvlQuad *v, f32 rad) {
         subtract_vector_xyz(&d, e, tp);
         f = *(f32 *)(e + 0xC);
         d.f[3] = 1.0f;
-        if (FUN_001f9b20(&d) < f + rad) {
+        if (vec_len_xy(&d) < f + rad) {
             if (FUN_L00_001ee318_c(tp, (s32 *)e, rad) != 0) {
                 return (s32 *)e;
             }

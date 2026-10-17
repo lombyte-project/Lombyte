@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/sound.c, func_0022D970). */
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int FUN_001efa68(void *, void *, int, int, int);
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern char D_00187080[];
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
@@ -17,7 +17,7 @@ int test_voice_occlusion(void *voice, void *listener_position) {
     fast_vec_scale(test_position, test_position, 0.75f);
     clamp_vector_length(test_position, test_position, 64.0f);
     add_vector_xyz(test_position, test_position, D_00187080);
-    return FUN_001efa68(listener_position, test_position, 0x82, *(int *)((char *)voice + 0x18), 0);
+    return collision_line(listener_position, test_position, 0x82, *(int *)((char *)voice + 0x18), 0);
 }
 
 extern __typeof__(test_voice_occlusion) func_0022C658 __attribute__((alias("FUN_0022c658")));

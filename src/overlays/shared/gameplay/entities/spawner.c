@@ -581,13 +581,13 @@ typedef struct {
 
 extern CollisionHit D_L09_00173FC0;
 
-extern s32 FUN_001efa68(void *, void *, s32, struct Moby *, s32);
-extern s32 FUN_001f0b58(void);
-extern s32 FUN_001f9770(void *);
+extern s32 collision_line(void *, void *, s32, struct Moby *, s32) __asm__("FUN_001efa68");
+extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
+extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 FUN_001f9af0(void *);
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -605,15 +605,15 @@ static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
 
     if (hit->moby == 0) {
         FUN_L00_001ff660(&vars->vel, &vars->vel, &hit->normal_x);
-        if (atan2_307ba8(hit->normal_z, vector_length_xy(&hit->normal_x)) < 0.6981317f && FUN_001f0b58() == -1) {
+        if (atan2_307ba8(hit->normal_z, vector_length_xy(&hit->normal_x)) < 0.6981317f && collision_hit_material() == -1) {
             scale_vector_xyz(&vars->vel, &vars->vel, 0.5f);
-            if (FUN_001f9af0(&vars->vel) < 0.025f) {
+            if (fast_vec_length(&vars->vel) < 0.025f) {
                 moby->state = 1;
             }
         }
     } else if (((struct Moby *)hit->moby)->oclass != 0x75E) {
         FUN_L00_001ff660(&vars->vel, &vars->vel, &hit->normal_x);
-        if (atan2_307ba8(hit->normal_z, vector_length_xy(&hit->normal_x)) < 0.6981317f && FUN_001f0b58() == -1) {
+        if (atan2_307ba8(hit->normal_z, vector_length_xy(&hit->normal_x)) < 0.6981317f && collision_hit_material() == -1) {
             scale_vector_xyz(&vars->vel, &vars->vel, 1.2f);
         }
     } else {
@@ -647,7 +647,7 @@ void FUN_L09_0030b3b0(struct Moby *moby) {
         add_vector_xyz(&step, &step, &moby->pos);
         moby->collision = 0;
         vars->owner->collision = 0;
-        if (FUN_001efa68(&prev, &step, 4, moby, 0) != 0) {
+        if (collision_line(&prev, &step, 4, moby, 0) != 0) {
             subtract_vector_xyz(&step, &D_L09_00173FC0.point, &step);
             normalize_vector_xyz(&step, &step, 0.215f);
             add_vector_xyz(&moby->pos, &moby->pos, &step);
@@ -666,14 +666,14 @@ void FUN_L09_0030b3b0(struct Moby *moby) {
                 other->state != 0xFD) {
                 subtract_vector_xyz(&away, &moby->pos, &other->pos);
                 away.f[2] = 0.0f;
-                dist = FUN_001f9af0(&away);
+                dist = fast_vec_length(&away);
                 if (dist < 1.8f) {
                     scale_vector_xyz(&away, &away, (1.8f - dist) * (frame_scale * -0.5f + 1.0f));
                     add_vector_xyz(&moby->pos, &moby->pos, &away);
                 }
             }
         }
-        if (FUN_001f9770(&vars->life) != 0) {
+        if (fast_dec_timer_s16(&vars->life) != 0) {
             moby->state = 2;
         }
         moby->rot.x = FUN_L00_0025e310(vars->vel.f[0]);

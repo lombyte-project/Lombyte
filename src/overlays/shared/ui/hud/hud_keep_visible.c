@@ -199,7 +199,7 @@ s32 hud_keep_visible(s32 key, s32 val) {
     }
     return 1;
 }
-extern float FUN_001fa6c0(int);
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int FUN_001fa6d0(float);
 extern float square_root(float) __asm__("FUN_001f9988");
 extern void FUN_L00_0023aaa8(void *);
@@ -229,7 +229,7 @@ void FUN_L00_00235ea0(e) HudElem *e;
             int t = e->unk74 - e->unk78;
             d = t < 0 ? -t : t;
             if (d != 0) {
-                s = FUN_001fa6d0(square_root(FUN_001fa6c0(d) / 25.0f) * 5.0f);
+                s = FUN_001fa6d0(square_root(convert_integer_to_float(d) / 25.0f) * 5.0f);
                 s = s < d * scale_game_frames(2) / scale_game_frames(10)
                         ? d * scale_game_frames(2) / scale_game_frames(10)
                         : s;

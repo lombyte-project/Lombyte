@@ -158,10 +158,10 @@ typedef struct {
 extern f32 D_L04_00166F40[];                             /* arena centre */
 extern u128 D_L04_00173FE0;                              /* hit position of the last collision_line */
 extern u8 D_L04_00174000[];
-extern f32 FUN_001f9b80(void *, void *);
+extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
-extern s32 FUN_001f9770(s16 *);                          /* counts a s16 down, nonzero at 0 */
+extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");                          /* counts a s16 down, nonzero at 0 */
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 collision_line(void *, void *, s32, struct Moby *, CollisionProbe *) __asm__("FUN_001efa68");
 extern void FUN_L00_001ff660(void *, void *, void *);
@@ -205,7 +205,7 @@ void FUN_L04_002af058(struct Moby *m)
         v->unk24 = 1;
     v->hero_dist = d;
     if (m->pos.x < 0.0f || m->pos.y < 0.0f || m->pos.z < 0.0f
-        || range < FUN_001f9b80(&m->pos, D_L04_00166F40)) {
+        || range < vector_distance(&m->pos, D_L04_00166F40)) {
         mark_moby_for_removal(m);
         return;
     }
@@ -229,7 +229,7 @@ void FUN_L04_002af058(struct Moby *m)
         pr.unk19 = pr.unk18 = 1;
         pr.oclass = m->oclass;
     }
-    if (FUN_001f9770(&v->time) && m->command == 0) {
+    if (fast_dec_timer_s16(&v->time) && m->command == 0) {
         m->command = 1;
         v->time = v->time_max / 4;
     } else if (v->time <= 0 && m->command != 0) {

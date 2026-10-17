@@ -10,7 +10,7 @@
 extern char D_L00_00166DC0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
-extern float FUN_001f9b80(void *, void *);
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int D_L00_0015F5C4;
 extern char D_L00_001BD880[];
@@ -49,7 +49,7 @@ void FUN_L00_0028e180(unsigned char *m) {
                 *(int *)(m + 0x90) = v | (v << 8) | (v << 16);
             }
             enqueue_callback_list_1_alt(render_environment_mapped_object, m);
-            if (FUN_001f9b80(m + 0x10, D_L00_00166DC0) < 32.0f) {
+            if (vector_distance(m + 0x10, D_L00_00166DC0) < 32.0f) {
                 enqueue_callback_list_1_alt(draw_light_flare, m);
             }
         }
@@ -62,7 +62,7 @@ void FUN_L00_0028e180(unsigned char *m) {
             }
         } else {
             q = (unsigned char *)(&hero.motion.pos);
-            if (FUN_001f9b80(p, q) < 6.0f) {
+            if (vector_distance(p, q) < 6.0f) {
                 transform_vector_by_basis(tmp, D_L00_001BD880 + ship_index[0] * 16, m + 0xC0);
                 add_vector_xyz(tmp, tmp, p);
                 if (FUN_001f9b48(tmp, q) < 4.0f) {
