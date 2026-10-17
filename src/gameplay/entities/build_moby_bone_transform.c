@@ -8,13 +8,13 @@ extern void multiply_matrix(s32, void *, s32) __asm__("FUN_001fa378");
 extern void FUN_00210850(struct Moby *, s32, s32 *, s32);
 void build_moby_bone_transform(struct Moby *arg0, s32 arg1, s32 arg2) __asm__("FUN_0020cca8");
 
-void build_moby_bone_transform(struct Moby *moby, s32 arg1, s32 output_transform) {
+void build_moby_bone_transform(struct Moby *moby, s32 bone_index, s32 output_transform) {
     u8 sp_slot[0x40];
     s32 sp40;
     f32 scale;
     s32 temp_16_22;
 
-    sp40 = arg1;
+    sp40 = bone_index;
     scale = (*(f32 *)((u8 *)moby + 0x2C)) * 0.0009765625f;
     FUN_00210850(moby, 1, &sp40, output_transform);
     temp_16_22 = output_transform + 0x30;
