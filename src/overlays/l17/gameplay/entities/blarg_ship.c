@@ -430,8 +430,8 @@ void FUN_L17_002f32f0(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5388), where it is exact; names translated to the US level program. */
 
 
-extern short D_L17_001623D0 __attribute__((sda));
-extern short D_L17_001623D8 __attribute__((sda));
+extern float D_L17_001623D0 __attribute__((sda));
+extern float D_L17_001623D8 __attribute__((sda));
 extern void FUN_L17_002f32f0_c(char *) __asm__("FUN_L17_002f32f0");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
@@ -440,7 +440,7 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 extern float D_L17_001DDFE0[];
 extern float D_L17_001DE058[];
 extern float D_L17_001DE070[];
-extern short D_L17_001623D4 __attribute__((sda));
+extern float D_L17_001623D4 __attribute__((sda));
 void FUN_L17_002f3848(struct Moby *moby) {
     char *d = (char *)moby->pvars;
     float t0[4];
@@ -466,9 +466,9 @@ done:
         }
         qcopy(d, &moby->pos);
         build_spherical_offset(
-            t0, (*(float *)&D_L17_001623D4 + *(float *)&D_L17_001623D0) / *(float *)&D_L17_001623D8,
+            t0, (D_L17_001623D4 + D_L17_001623D0) / D_L17_001623D8,
             moby->rot.z, 0.0f);
-        build_spherical_offset(t1, *(float *)&D_L17_001623D0 / *(float *)&D_L17_001623D8,
+        build_spherical_offset(t1, D_L17_001623D0 / D_L17_001623D8,
                                *(float *)(d + 0x44), 0.0f);
         add_vector_xyz(t2, t0, t1);
         *(OvlQuad *)t0 = *(OvlQuad *)t2;
@@ -545,7 +545,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
-extern short D_L17_001623E8 __attribute__((sda));
+extern float D_L17_001623E8 __attribute__((sda));
 void FUN_L17_002f40d8(struct Moby *moby) {
     float s0[4];
     float s10[4];
@@ -707,7 +707,7 @@ void FUN_L17_002f40d8(struct Moby *moby) {
                 }
                 add_vector_xyz(sA0, sA0, &moby->pos.x);
                 subtract_vector_xyz(s80, sB0, sA0);
-                normalize_vector_xyz(s90, s80, *(float *)&D_L17_001623E8 * frame_time);
+                normalize_vector_xyz(s90, s80, D_L17_001623E8 * frame_time);
                 add_vector_xyz(s90, s90, s20);
                 p = FUN_L11_00308f48((int)moby, s90, sA0, 128.0f, -1.0f, 10.0f);
                 if (p) {

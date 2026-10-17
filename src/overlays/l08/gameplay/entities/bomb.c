@@ -16,11 +16,11 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L08_00279f00(char *);
 extern void FUN_L00_0025d1b8(void *);
 
-extern short D_L08_00161468 __attribute__((sda));
-extern short D_L08_0016146C __attribute__((sda));
+extern float D_L08_00161468 __attribute__((sda));
+extern float D_L08_0016146C __attribute__((sda));
 void FUN_L08_002b8228(struct Moby *moby) {
-    float a = *(float *)&D_L08_00161468;
-    float b = *(float *)&D_L08_0016146C;
+    float a = D_L08_00161468;
+    float b = D_L08_0016146C;
     char *d;
     moby->rot.x = 0.0f;
     moby->rot.y = 0.5235988f;
@@ -293,7 +293,7 @@ extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below_c3(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern short D_L08_00161860 __attribute__((sda));
+extern float D_L08_00161860 __attribute__((sda));
 extern void FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_00259fe8(void *, float);
 extern void FUN_L00_0025d458_c(void *, short *) __asm__("FUN_L00_0025d458");
@@ -358,7 +358,7 @@ void FUN_L08_002d23f0(char *moby) {
         f20 = 0.16f;
         c.r.start[2] -= f20;
         add_vector_xyz((moby + 0x10), (moby + 0x10), (d + 0x10));
-        *(float *)(d + 0x18) -= *(float *)&D_L08_00161860 * D_0015ED70_gp;
+        *(float *)(d + 0x18) -= D_L08_00161860 * D_0015ED70_gp;
         qcopy(c.r.end, moby + 0x10);
         c.r.end[2] -= f20;
         c.r.x.moby = moby;
@@ -2806,21 +2806,21 @@ extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) _
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern short D_L08_00161A48 __attribute__((sda));
-extern short D_L08_00161A4C __attribute__((sda));
-extern short D_L08_00161A50 __attribute__((sda));
-extern short D_L08_00161A54 __attribute__((sda));
-extern short D_L08_00161A58 __attribute__((sda));
-extern short D_L08_00161A5C __attribute__((sda));
-extern short D_L08_00161A60 __attribute__((sda));
-extern short D_L08_00161A64 __attribute__((sda));
-extern short D_L08_00161A68 __attribute__((sda));
-extern short D_L08_00161A6C __attribute__((sda));
-extern short D_L08_00161A70 __attribute__((sda));
-extern short D_L08_00161A74 __attribute__((sda));
-extern short D_L08_00161A78 __attribute__((sda));
-extern short D_L08_00161A7C __attribute__((sda));
-extern short D_L08_00161A80 __attribute__((sda));
+extern float D_L08_00161A48 __attribute__((sda));
+extern float D_L08_00161A4C __attribute__((sda));
+extern float D_L08_00161A50 __attribute__((sda));
+extern int D_L08_00161A54 __attribute__((sda));
+extern int D_L08_00161A58 __attribute__((sda));
+extern int D_L08_00161A5C __attribute__((sda));
+extern float D_L08_00161A60 __attribute__((sda));
+extern float D_L08_00161A64 __attribute__((sda));
+extern float D_L08_00161A68 __attribute__((sda));
+extern float D_L08_00161A6C __attribute__((sda));
+extern float D_L08_00161A70 __attribute__((sda));
+extern int D_L08_00161A74 __attribute__((sda));
+extern int D_L08_00161A78 __attribute__((sda));
+extern int D_L08_00161A7C __attribute__((sda));
+extern int D_L08_00161A80 __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -2841,24 +2841,24 @@ void FUN_L08_002dec90(struct Moby *m, char *pos) {
     v60[2] = 0.3f;
     transform_vector_by_basis(v50, v60, &m->rot_row0);
     add_vector_xyz(v50, v50, &m->pos);
-    scale_vector_xyz(v10, v30, *(float *)&D_L08_00161A48);
-    scale_vector_xyz(v20, v30, *(float *)&D_L08_00161A4C);
-    random_vector(v40, 0.0f, *(float *)&D_L08_00161A50 * frame_time);
+    scale_vector_xyz(v10, v30, D_L08_00161A48);
+    scale_vector_xyz(v20, v30, D_L08_00161A4C);
+    random_vector(v40, 0.0f, D_L08_00161A50 * frame_time);
     add_vector_xyz(v20, v20, v40);
-    v10[3] = random_float_between(*(float *)&D_L08_00161A64, *(float *)&D_L08_00161A68);
-    v20[3] = random_float_between(*(float *)&D_L08_00161A6C, *(float *)&D_L08_00161A70);
-    a = fast_tween_color(*(int *)&D_L08_00161A74, *(int *)&D_L08_00161A78,
+    v10[3] = random_float_between(D_L08_00161A64, D_L08_00161A68);
+    v20[3] = random_float_between(D_L08_00161A6C, D_L08_00161A70);
+    a = fast_tween_color(D_L08_00161A74, D_L08_00161A78,
                      random_float_between(0.0f, 1.0f));
-    b = fast_tween_color(*(int *)&D_L08_00161A7C, *(int *)&D_L08_00161A80,
+    b = fast_tween_color(D_L08_00161A7C, D_L08_00161A80,
                      random_float_between(0.0f, 1.0f));
     c = func_001FA898_r(
-        multiply_global_factor_ed64((float)*(int *)&D_L08_00161A54 * random_float_between(0.0f, 1.0f) + 1.0f));
+        multiply_global_factor_ed64((float)D_L08_00161A54 * random_float_between(0.0f, 1.0f) + 1.0f));
     d = func_001FA898_r(multiply_global_factor_ed64(
-        (float)*(int *)&D_L08_00161A58 *
-        (random_float_between(-*(float *)&D_L08_00161A60, *(float *)&D_L08_00161A60) + 1.0f)));
+        (float)D_L08_00161A58 *
+        (random_float_between(-D_L08_00161A60, D_L08_00161A60) + 1.0f)));
     e = func_001FA898_r(multiply_global_factor_ed64(
-        (float)*(int *)&D_L08_00161A5C *
-        (random_float_between(-*(float *)&D_L08_00161A60, *(float *)&D_L08_00161A60) + 1.0f)));
+        (float)D_L08_00161A5C *
+        (random_float_between(-D_L08_00161A60, D_L08_00161A60) + 1.0f)));
     r = spawn_spark(v50, v10, v20, a, b, c, d, e, -1);
     if (r != 0) {
         r[9] = func_001FA898_r(8.0f) - 0x70;

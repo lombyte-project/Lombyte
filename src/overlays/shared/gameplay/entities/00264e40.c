@@ -33,11 +33,11 @@ extern int D_L02_0015F5CC __attribute__((section(".sdata")));
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_001f9770(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L02_001600D0 __attribute__((sda));
-extern short D_L02_001600D4 __attribute__((sda));
-extern short D_L02_001600D8 __attribute__((sda));
-extern short D_L02_001600DC __attribute__((sda));
-extern short D_L02_001600E0 __attribute__((sda));
+extern float D_L02_001600D0 __attribute__((sda));
+extern int D_L02_001600D4 __attribute__((sda));
+extern int D_L02_001600D8 __attribute__((sda));
+extern float D_L02_001600DC __attribute__((sda));
+extern float D_L02_001600E0 __attribute__((sda));
 extern void FUN_L00_00257d78(float *, float, float);
 extern void FUN_L00_0026d598(void *, void *, int);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -77,14 +77,14 @@ void FUN_L02_00264e70(char *slots, float *position, float *direction, float dist
     }
     acceleration = frame_time_sq_macro;
     advance_accelerated_scalar(&speed, &travel_step, travel, 1.0f, acceleration * 48.0f,
-                  (*(float *)&D_L02_001600D0) * frame_time_macro);
+                  (D_L02_001600D0) * frame_time_macro);
     ((float (*)(void *, void *, float))fast_vec_normalize)(adjusted, adjusted, travel_step);
-    n = (*(int *)&D_L02_001600D8);
-    first_count = (*(int *)&D_L02_001600D4);
+    n = (D_L02_001600D8);
+    first_count = (D_L02_001600D4);
     if (travel < 4.0f) first_count = 1;
     for (i = 0; i < n + first_count; i++) {
         FUN_L00_00257d78(offset, 0.0f,
-            (((*(float *)&D_L02_001600DC) - (*(float *)&D_L02_001600E0)) * (travel / distance) + (*(float *)&D_L02_001600E0)) * frame_time_macro);
+            (((D_L02_001600DC) - (D_L02_001600E0)) * (travel / distance) + (D_L02_001600E0)) * frame_time_macro);
         add_vector_xyz(offset, offset, adjusted);
         fast_vec_scale(velocity, adjusted, random_float_between(0.0f, 1.0f));
         add_vector_xyz(velocity, velocity, origin);

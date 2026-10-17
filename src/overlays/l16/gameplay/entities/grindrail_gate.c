@@ -1872,9 +1872,9 @@ extern void func_L00_0026DD70_emit(void *, void *, int, int, float,
 
 int D_L16_00161E98 = 0x60d0d080;
 int D_L16_00161E9C = 0x801000;
-extern short D_L16_00161EA0 __attribute__((sda));
-extern short D_L16_00161EA4 __attribute__((sda));
-extern short D_L16_00161EA8 __attribute__((sda));
+extern float D_L16_00161EA0 __attribute__((sda));
+extern float D_L16_00161EA4 __attribute__((sda));
+extern float D_L16_00161EA8 __attribute__((sda));
 void FUN_L16_002e7a30(unsigned char *m, void *v) {
     float input[4];
     float offset[4];
@@ -1889,8 +1889,8 @@ void FUN_L16_002e7a30(unsigned char *m, void *v) {
     if (!(FUN_001f9b48(m + 0x10, D_L16_001671C0) < 75.0f))
         return;
     r = FUN_001f9b48(m + 0x10, input);
-    scale_vector_xyz(out, m + 0xC0, *(float *)&D_L16_00161EA0 * r);
-    size = *(float *)&D_L16_00161EA4;
+    scale_vector_xyz(out, m + 0xC0, D_L16_00161EA0 * r);
+    size = D_L16_00161EA4;
     size *= frame_time;
     normalize_vector_xyz(offset, m + 0xC0, -0.5f);
     add_vector_xyz(offset, offset, m + 0x10);
@@ -1898,7 +1898,7 @@ void FUN_L16_002e7a30(unsigned char *m, void *v) {
     b = random_angle_radians();
     build_spherical_offset_u(velocity, size, a, b);
     add_vector_xyz(velocity, velocity, out);
-    final_size = *(float *)&D_L16_00161EA8;
+    final_size = D_L16_00161EA8;
     final_size *= 210000.0f;
     func_L00_0026DD70_emit(offset, velocity, D_L16_00161E98, D_L16_00161E9C,
                            final_size, scale_game_frames(0x23));

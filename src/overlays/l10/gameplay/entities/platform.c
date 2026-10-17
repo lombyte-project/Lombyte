@@ -29,11 +29,11 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 
 int D_L10_00161BF0 = 240;
 int D_L10_00161BF4 = 600;
-extern short D_L10_00161BF8 __attribute__((sda));
-extern short D_L10_00161BFC __attribute__((sda));
-extern short D_L10_00161C00 __attribute__((sda));
-extern short D_L10_00161C04 __attribute__((sda));
-extern short D_L10_00161C08 __attribute__((sda));
+extern float D_L10_00161BF8 __attribute__((sda));
+extern float D_L10_00161BFC __attribute__((sda));
+extern float D_L10_00161C00 __attribute__((sda));
+extern float D_L10_00161C04 __attribute__((sda));
+extern float D_L10_00161C08 __attribute__((sda));
 void FUN_L10_002d8c00(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     float a[4];
@@ -44,15 +44,15 @@ void FUN_L10_002d8c00(struct Moby *moby) {
         moby->state = 1;
     }
     if (FUN_001f9740((int *)data)) {
-        float x = *(float *)&D_L10_00161BF8;
+        float x = D_L10_00161BF8;
         float p = random_float_between_alt(-x, x) * DEG_TO_RAD;
         float q = fast_add_rotations(moby->rot.z, p);
         float r =
-            random_float_between_alt(*(float *)&D_L10_00161BFC, *(float *)&D_L10_00161C00) *
+            random_float_between_alt(D_L10_00161BFC, D_L10_00161C00) *
             DEG_TO_RAD;
         build_spherical_offset(
             a,
-            random_float_between_alt(*(float *)&D_L10_00161C04, *(float *)&D_L10_00161C08) *
+            random_float_between_alt(D_L10_00161C04, D_L10_00161C08) *
                 frame_time,
             q, r);
         FUN_001f9a10(b, &moby->pos, a);
@@ -1623,8 +1623,8 @@ void FUN_L10_002d8d30(char *m) {
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
-extern short D_L10_00161C0C __attribute__((sda));
-extern short D_L10_00161C10 __attribute__((sda));
+extern float D_L10_00161C0C __attribute__((sda));
+extern float D_L10_00161C10 __attribute__((sda));
 int FUN_L10_002d9000(struct Moby *m, float *p) {
     float a[4] __attribute__((aligned(16)));
     float t10[16] __attribute__((aligned(16)));
@@ -1635,8 +1635,8 @@ int FUN_L10_002d9000(struct Moby *m, float *p) {
     subtract_vector_xyz(t60, a, &m->pos);
     *(OvlQuad *)t50 = *(OvlQuad *)t60;
     transform_vector(t50, t50, t10);
-    if (absolute_float(t50[0]) < *(float *)&D_L10_00161C10) {
-        return absolute_float(t50[1]) < *(float *)&D_L10_00161C0C;
+    if (absolute_float(t50[0]) < D_L10_00161C10) {
+        return absolute_float(t50[1]) < D_L10_00161C0C;
     }
     return 0;
 }

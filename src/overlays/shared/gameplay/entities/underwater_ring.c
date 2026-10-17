@@ -232,14 +232,14 @@ extern void FUN_L02_002ea8b0(char *);
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-extern short D_L15_001621A0 __attribute__((sda));
+extern float D_L15_001621A0 __attribute__((sda));
 void FUN_L15_002ebd78(struct Moby *moby) {
     unsigned char *p;
     if (current_level_index != 0xF) {
         moby->rot.z =
             fast_add_rotations(moby->rot.z, frame_time * 1.5707964f);
         moby->scale =
-            moby->pclass->scale * *(float *)&D_L15_001621A0;
+            moby->pclass->scale * D_L15_001621A0;
         switch (moby->state) {
         case 0:
             FUN_L02_002ea7d0(moby);

@@ -215,7 +215,7 @@ void FUN_L00_002054e8(void) {
     } while ((s32)p < (s32)end);
 }
 typedef struct {
-    u8 a0;
+    u8 unk0;
     u8 active;
     char pad[0x3E];
     char m40[0x20];

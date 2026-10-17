@@ -1337,7 +1337,7 @@ typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_F7F8;
 
 extern char D_0013E533_lui[] __asm__("D_0013E533") __attribute__((section(".data")));
 extern float FUN_L00_0020f0b8_c(float *a, float *b) __asm__("FUN_L00_0020f0b8");
-extern short D_L00_0015F694 __attribute__((sda));
+extern int D_L00_0015F694 __attribute__((sda));
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void copy_matrix3x4_alt() __asm__("FUN_001fa2b8");
@@ -1375,19 +1375,19 @@ void FUN_L00_0020f160(char *arg) {
     {
     char *b = ((char *)((char *)&hero_lui));
     if (*(int *)(b + 0x208C) == 0x16) {
-        *(int *)&D_L00_0015F694 = 14;
+        D_L00_0015F694 = 14;
     } else if (*(int *)(b + 0x2084) == 2) {
-        *(int *)&D_L00_0015F694 = 5;
+        D_L00_0015F694 = 5;
     } else {
-        *(int *)&D_L00_0015F694 = 11;
+        D_L00_0015F694 = 11;
     }
     }
 
     {
     char *b = ((char *)((char *)&hero_lui));
-    if (*(int *)(b + 0x21C0) < *(int *)&D_L00_0015F694) {
+    if (*(int *)(b + 0x21C0) < D_L00_0015F694) {
         *(int *)(b + 0x21C0) = *(int *)(b + 0x21C0) + 1;
-    } else if (*(int *)&D_L00_0015F694 < *(int *)(b + 0x21C0)) {
+    } else if (D_L00_0015F694 < *(int *)(b + 0x21C0)) {
         *(int *)(b + 0x21C0) = *(int *)(b + 0x21C0) - 1;
     }
     }

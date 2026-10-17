@@ -375,8 +375,8 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L06_00161C10 __attribute__((sda));
-extern short D_L06_00161C14 __attribute__((sda));
+extern int D_L06_00161C10 __attribute__((sda));
+extern int D_L06_00161C14 __attribute__((sda));
 extern short D_L06_00161BF0[1] __attribute__((sda));
 extern void set_vector_unit_z(void *) __asm__("FUN_001f9a00");
 extern void FUN_L00_00257470(void *, int, int);
@@ -411,7 +411,7 @@ void FUN_L06_002e8678(unsigned char *moby) {
     int mode;
 
     data = *(char **)(moby + 0x78);
-    if (*(int *)&D_L06_00161C10 != 0) {
+    if (D_L06_00161C10 != 0) {
         return;
     }
     mode = D_L06_0015F5C4;
@@ -439,10 +439,10 @@ void FUN_L06_002e8678(unsigned char *moby) {
     switch (moby[0x20]) {
     case 0: {
         float wait;
-        int spawn_count = *(int *)&D_L06_00161C14;
+        int spawn_count = D_L06_00161C14;
         int divisor = *(short *)(data + 0x240);
         *(short *)(data + 0x20A) = spawn_count % 8;
-        *(int *)&D_L06_00161C14 = spawn_count + 1;
+        D_L06_00161C14 = spawn_count + 1;
         if (divisor != 0) {
             *(short *)(moby + 0xB4) = *(short *)(moby + 0xB4) / divisor;
         }
@@ -885,7 +885,7 @@ extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("FUN_0021
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
-extern short D_L06_00161C00 __attribute__((sda));
+extern float D_L06_00161C00 __attribute__((sda));
 void FUN_L06_002e9998(char *m, float *a1, float *a2) {
     float d;
     float A[4], B[4], C[4], D[4], E[4], F[4], G[4], H[4];
@@ -900,7 +900,7 @@ void FUN_L06_002e9998(char *m, float *a1, float *a2) {
     m += 0xC0;
     extract_matrix_rotation_quaternion(A, m);
     extract_matrix_rotation_quaternion(B, F);
-    quaternion_nlerp(A, A, B, *(float *)&D_L06_00161C00);
+    quaternion_nlerp(A, A, B, D_L06_00161C00);
     quaternion_to_rotation_basis(A, m);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EAED8), where it is exact; names translated to the US level program. */
@@ -3187,10 +3187,10 @@ extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float D_0015ED6C;
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L00_0028d8c0(void *, int);
-extern short D_L06_00161E74 __attribute__((sda));
-extern short D_L06_00161E78 __attribute__((sda));
-extern short D_L06_00161E7C __attribute__((sda));
-extern short D_L06_00161E80 __attribute__((sda));
+extern float D_L06_00161E74 __attribute__((sda));
+extern float D_L06_00161E78 __attribute__((sda));
+extern float D_L06_00161E7C __attribute__((sda));
+extern float D_L06_00161E80 __attribute__((sda));
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern void FUN_L06_002f7c68_c(char *m) __asm__("FUN_L06_002f7c68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -3216,19 +3216,19 @@ void FUN_L06_002f7ab8(struct Moby *m) {
     switch (m->state) {
     case 0:
         FUN_L00_002502f0(m, 0x80, 0x80, 0x80);
-        m->scale = m->pclass->scale * *(float *)&D_L06_00161E80;
+        m->scale = m->pclass->scale * D_L06_00161E80;
         *(char **)d = d + 0x20;
         m->state = 1;
         m->flags |= 0x20;
         *(int *)(d + 0x60) = -1;
     case 1: {
-        float a0 = *(float *)&D_L06_00161E74 * DEG_TO_RAD * D_0015ED6C;
+        float a0 = D_L06_00161E74 * DEG_TO_RAD * D_0015ED6C;
         float a1, a2;
         float x = fast_add_rotations(m->rot.x, a0);
-        a1 = *(float *)&D_L06_00161E78 * DEG_TO_RAD * D_0015ED6C;
+        a1 = D_L06_00161E78 * DEG_TO_RAD * D_0015ED6C;
         m->rot.x = x;
         x = fast_add_rotations(m->rot.y, a1);
-        a2 = *(float *)&D_L06_00161E7C * DEG_TO_RAD * D_0015ED6C;
+        a2 = D_L06_00161E7C * DEG_TO_RAD * D_0015ED6C;
         m->rot.y = x;
         m->rot.z = fast_add_rotations(m->rot.z, a2);
     }
@@ -3246,14 +3246,14 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void FUN_L00_002730e0(void *, float, void *, int, int, int, int);
 
-extern short D_L06_00161E84 __attribute__((sda));
-extern short D_L06_00161E88 __attribute__((sda));
-extern short D_L06_00161E98 __attribute__((sda));
-extern short D_L06_00161E9C __attribute__((sda));
-extern short D_L06_00161EA0 __attribute__((sda));
-extern short D_L06_00161EA4 __attribute__((sda));
-extern short D_L06_00161EA8 __attribute__((sda));
-extern short D_L06_00161EAC __attribute__((sda));
+extern float D_L06_00161E84 __attribute__((sda));
+extern float D_L06_00161E88 __attribute__((sda));
+extern int D_L06_00161E98 __attribute__((sda));
+extern int D_L06_00161E9C __attribute__((sda));
+extern int D_L06_00161EA0 __attribute__((sda));
+extern int D_L06_00161EA4 __attribute__((sda));
+extern float D_L06_00161EA8 __attribute__((sda));
+extern float D_L06_00161EAC __attribute__((sda));
 extern unsigned char D_L06_00161E94 __attribute__((sda));
 void FUN_L06_002f7c68(char *m) {
     float buf[4];
@@ -3263,14 +3263,14 @@ void FUN_L06_002f7c68(char *m) {
         int r;
         int c;
         int v;
-        random_vector(buf, *(float *)&D_L06_00161E84 * frame_time,
-                         *(float *)&D_L06_00161E88 * frame_time);
-        f = random_float_between_alt(*(float *)&D_L06_00161EA8, *(float *)&D_L06_00161EAC);
+        random_vector(buf, D_L06_00161E84 * frame_time,
+                         D_L06_00161E88 * frame_time);
+        f = random_float_between_alt(D_L06_00161EA8, D_L06_00161EAC);
         if (random_integer_below(2) != 0) {
-            r = fast_tween_color(*(int *)&D_L06_00161E98, *(int *)&D_L06_00161E9C,
+            r = fast_tween_color(D_L06_00161E98, D_L06_00161E9C,
                              random_float_between_alt(0.0f, 1.0f));
         } else {
-            r = fast_tween_color(*(int *)&D_L06_00161EA0, *(int *)&D_L06_00161EA4,
+            r = fast_tween_color(D_L06_00161EA0, D_L06_00161EA4,
                              random_float_between_alt(0.0f, 1.0f));
         }
         c = D_L06_00161E94;

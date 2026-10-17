@@ -332,20 +332,20 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern short D_L12_00161888 __attribute__((sda));
-extern short D_L12_0016188C __attribute__((sda));
-extern short D_L12_00161890 __attribute__((sda));
-extern short D_L12_00161894 __attribute__((sda));
-extern short D_L12_00161898 __attribute__((sda));
-extern short D_L12_0016189C __attribute__((sda));
-extern short D_L12_001618A0 __attribute__((sda));
-extern short D_L12_001618A4 __attribute__((sda));
-extern short D_L12_001618AC __attribute__((sda));
-extern short D_L12_001618B0 __attribute__((sda));
-extern short D_L12_001618B4 __attribute__((sda));
-extern short D_L12_001618B8 __attribute__((sda));
-extern short D_L12_001618BC __attribute__((sda));
-extern short D_L12_001618C0 __attribute__((sda));
+extern float D_L12_00161888 __attribute__((sda));
+extern float D_L12_0016188C __attribute__((sda));
+extern float D_L12_00161890 __attribute__((sda));
+extern float D_L12_00161894 __attribute__((sda));
+extern float D_L12_00161898 __attribute__((sda));
+extern float D_L12_0016189C __attribute__((sda));
+extern float D_L12_001618A0 __attribute__((sda));
+extern float D_L12_001618A4 __attribute__((sda));
+extern int D_L12_001618AC __attribute__((sda));
+extern int D_L12_001618B0 __attribute__((sda));
+extern int D_L12_001618B4 __attribute__((sda));
+extern int D_L12_001618B8 __attribute__((sda));
+extern int D_L12_001618BC __attribute__((sda));
+extern int D_L12_001618C0 __attribute__((sda));
 int D_L12_001618C4 = 0xa0f0e8e0;
 int D_L12_001618C8 = 0x20f0e8e0;
 int D_L12_001618CC = 0x10017;
@@ -366,25 +366,25 @@ void FUN_L12_002e19a8(void *pos) {
         w[0] = w[0] + random_float_between_alt(-0.25f, 0.25f);
         w[1] = w[1] + random_float_between_alt(-0.25f, 0.25f);
         clear_u64_value(v3);
-        v4[0] = fast_cos(r) * (random_float_between_alt(*(float *)&D_L12_00161898,
-                                                        *(float *)&D_L12_0016189C) *
+        v4[0] = fast_cos(r) * (random_float_between_alt(D_L12_00161898,
+                                                        D_L12_0016189C) *
                                frame_time);
-        v4[1] = fast_sin(r) * (random_float_between_alt(*(float *)&D_L12_00161898,
-                                                        *(float *)&D_L12_0016189C) *
+        v4[1] = fast_sin(r) * (random_float_between_alt(D_L12_00161898,
+                                                        D_L12_0016189C) *
                                frame_time);
         *(int *)&v4[2] = 0;
-        v3[2] = random_float_between_alt(*(float *)&D_L12_00161888, *(float *)&D_L12_0016188C) *
+        v3[2] = random_float_between_alt(D_L12_00161888, D_L12_0016188C) *
                 frame_time;
-        v4[2] = random_float_between_alt(*(float *)&D_L12_00161890, *(float *)&D_L12_00161894) *
+        v4[2] = random_float_between_alt(D_L12_00161890, D_L12_00161894) *
                 frame_time;
-        v3[3] = *(float *)&D_L12_001618A0;
-        v4[3] = *(float *)&D_L12_001618A4;
-        a = func_001FA898_r(random_float_between_alt((float)*(int *)&D_L12_001618AC,
-                                                     (float)*(int *)&D_L12_001618B0));
-        b = func_001FA898_r(random_float_between_alt((float)*(int *)&D_L12_001618B4,
-                                                     (float)*(int *)&D_L12_001618B8));
-        c = func_001FA898_r(random_float_between_alt((float)*(int *)&D_L12_001618BC,
-                                                     (float)*(int *)&D_L12_001618C0));
+        v3[3] = D_L12_001618A0;
+        v4[3] = D_L12_001618A4;
+        a = func_001FA898_r(random_float_between_alt((float)D_L12_001618AC,
+                                                     (float)D_L12_001618B0));
+        b = func_001FA898_r(random_float_between_alt((float)D_L12_001618B4,
+                                                     (float)D_L12_001618B8));
+        c = func_001FA898_r(random_float_between_alt((float)D_L12_001618BC,
+                                                     (float)D_L12_001618C0));
         spawn_spark(w, v3, v4, D_L12_001618C4, D_L12_001618C8, a, b, c,
                      D_L12_001618CC);
     } while (--i >= 0);
@@ -1161,7 +1161,7 @@ extern void FUN_001f9a28(void *, void *, void *);
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
-extern short D_L12_00161914 __attribute__((sda));
+extern float D_L12_00161914 __attribute__((sda));
 void FUN_L12_002e3e28(struct Moby *moby, float *out, int on) {
     float m[4];
     float a[4];
@@ -1174,7 +1174,7 @@ void FUN_L12_002e3e28(struct Moby *moby, float *out, int on) {
         m[2] = -moby->rot.z;
         euler_rotation_matrix(b, m);
         transform_vector(a, a, b);
-        g = *(float *)&D_L12_00161914;
+        g = D_L12_00161914;
         out[1] = a[0] / g;
         out[0] = -a[1] / g;
     } else {
@@ -3003,7 +3003,7 @@ void FUN_L12_002eb570(L16WatchMoby *m) {
 /* Hit handler: counts hits toward a help message, bursts debris and blinks the moby until its timer runs out. */
 extern char D_0013D408[];
 extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
-extern short D_0015EE04 __attribute__((sda));
+extern int D_0015EE04 __attribute__((sda));
 extern s32 D_L12_001619B4 __attribute__((sda));
 extern void FUN_L00_0025e450(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int);
@@ -3019,8 +3019,8 @@ void FUN_L12_002ebca8(struct Moby *m, int flag) {
     unsigned char *q;
     if (find_moby_hit(m, 0xA30000, 0) != 0) {
         if (hero.state.current != 0x32) {
-            *(int *)&D_0015EE04 += 1;
-            if (*(int *)&D_0015EE04 >= 5) {
+            D_0015EE04 += 1;
+            if (D_0015EE04 >= 5) {
                 q = (unsigned char *)(D_0013D408);
                 if (q[0x15] == 0) {
                     q[0x15] = 1;
@@ -3068,9 +3068,9 @@ extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28"
 void FUN_L01_00275690(char *vec, float scale);
 extern int func_L01_00276680_i(char *vec, float scale) __asm__("FUN_L01_00275690");
 
-extern short D_L12_001619A8 __attribute__((sda));
-extern short D_L12_001619AC __attribute__((sda));
-extern short D_L12_001619B0 __attribute__((sda));
+extern float D_L12_001619A8 __attribute__((sda));
+extern float D_L12_001619AC __attribute__((sda));
+extern float D_L12_001619B0 __attribute__((sda));
 void FUN_L12_002ebea8(char *m) {
     char *d = *(char **)(m + 0x78);
     float A[4];
@@ -3123,8 +3123,8 @@ void FUN_L12_002ebea8(char *m) {
             h = fast_subtract_rotations(h, fast_arc_tan(B[0], B[1]));
             ang = h / vector_length_xyz_c(A);
             *(float *)(m + 0x40) = fast_add_rotations_c(*(float *)(m + 0x40),
-                fast_subtract_rotations(ang * *(float *)&D_L12_001619AC, *(float *)(m + 0x40)) / *(float *)&D_L12_001619B0);
-            if (distance_xyz(m + 0x10, C) < *(float *)&D_L12_001619A8 * D_0015ED6C) {
+                fast_subtract_rotations(ang * D_L12_001619AC, *(float *)(m + 0x40)) / D_L12_001619B0);
+            if (distance_xyz(m + 0x10, C) < D_L12_001619A8 * D_0015ED6C) {
                 char *t3;
                 *(int *)(d + 0x60) = next;
                 t3 = *(char **)(p + 0x10);
@@ -3133,10 +3133,10 @@ void FUN_L12_002ebea8(char *m) {
                 }
             }
             subtract_vector_xyz_c(E, C, m + 0x10);
-            normalize_vector_xyz(E, E, *(float *)&D_L12_001619A8 * D_0015ED6C);
+            normalize_vector_xyz(E, E, D_L12_001619A8 * D_0015ED6C);
             add_vector_xyz_c2(m + 0x10, m + 0x10, E);
             *(float *)(m + 0x48) = fast_add_rotations_c(*(float *)(m + 0x48),
-                fast_subtract_rotations(fast_arc_tan(E[0], E[1]), *(float *)(m + 0x48)) / *(float *)&D_L12_001619B0);
+                fast_subtract_rotations(fast_arc_tan(E[0], E[1]), *(float *)(m + 0x48)) / D_L12_001619B0);
             *(float *)(m + 0x44) = 0.52359879f;
             break;
         }

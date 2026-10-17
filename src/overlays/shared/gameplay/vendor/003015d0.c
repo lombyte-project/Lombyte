@@ -47,13 +47,13 @@ extern void FUN_L14_00301de8(char *);
 extern void FUN_L14_00301fa8(char *);
 extern void FUN_L14_00302538(char *);
 extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
-extern short D_L14_0016219C_s __asm__("D_L14_001620CC") __attribute__((sda));
-extern short D_L14_00162188_s __asm__("D_L14_001620B8") __attribute__((sda));
-extern short D_L14_001621A0_s __asm__("D_L14_001620D0") __attribute__((sda));
+extern int D_L14_0016219C_s __asm__("D_L14_001620CC") __attribute__((sda));
+extern int D_L14_00162188_s __asm__("D_L14_001620B8") __attribute__((sda));
+extern int D_L14_001621A0_s __asm__("D_L14_001620D0") __attribute__((sda));
 extern s32 D_L14_001620C8_gp __asm__("D_L14_001620C8") __attribute__((sda));
-extern short D_L14_001621A4_s __asm__("D_L14_001620D4") __attribute__((sda));
+extern int D_L14_001621A4_s __asm__("D_L14_001620D4") __attribute__((sda));
 
-extern short D_L14_001620D8 __attribute__((sda));
+extern int D_L14_001620D8 __attribute__((sda));
 void FUN_L14_003015d0(unsigned char *m) {
     D1224 *d = *(D1224 **)(m + 0x78);
     float v[4] __attribute__((aligned(16)));
@@ -66,7 +66,7 @@ void FUN_L14_003015d0(unsigned char *m) {
             return;
         }
     }
-    if (*(int *)&D_L14_0016219C_s != 0) {
+    if (D_L14_0016219C_s != 0) {
         return;
     }
     s = m[0x20];
@@ -80,9 +80,9 @@ void FUN_L14_003015d0(unsigned char *m) {
         d->sA = 1;
         break;
     case 1:
-        if (*(int *)&D_L14_00162188_s != 0) {
+        if (D_L14_00162188_s != 0) {
             if (d->s12 == 0) {
-                *(int *)&D_L14_00162188_s = *(int *)&D_L14_00162188_s - 1;
+                D_L14_00162188_s = D_L14_00162188_s - 1;
                 FUN_L14_003017f8((char *)m);
             }
         }
@@ -108,17 +108,17 @@ void FUN_L14_003015d0(unsigned char *m) {
         }
         break;
     }
-    if (*(int *)&D_L14_001620D8 == 0) {
+    if (D_L14_001620D8 == 0) {
         if (FUN_001f9b80(m + 0x10, &hero.motion.pos) < 10.0f) {
             FUN_L14_00302538((char *)m);
         }
     }
     if (d->s12 != 0) {
-        if (*(int *)&D_L14_001621A0_s == 0) {
+        if (D_L14_001621A0_s == 0) {
             FUN_L14_00301de8((char *)m);
         }
         if (*(int *)&D_L14_001620C8_gp < d->s12) {
-            if (*(int *)&D_L14_001621A4_s != 0) {
+            if (D_L14_001621A4_s != 0) {
                 return;
             }
             enqueue_callback_list_1(FUN_L14_00301fa8, m);

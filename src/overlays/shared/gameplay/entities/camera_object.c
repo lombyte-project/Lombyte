@@ -2130,7 +2130,7 @@ extern char D_0013F490[];
 extern void *D_001413D0;
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern short D_L00_001613C4 __attribute__((sda));
+extern float D_L00_001613C4 __attribute__((sda));
 extern short D_L00_001B0770[];
 extern void FUN_L00_00250df8_c(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_0025f780(void *, short *, int);
@@ -2145,7 +2145,7 @@ char *FUN_L00_002a96f8(void *owner, void *pos, float a, float b, float c, char *
         ((unsigned char *)m)[0x30] = 0xFF;
         m[0x31] = 1;
         m[0x20] = 0;
-        *(float *)(m + 0x2C) *= *(float *)&D_L00_001613C4;
+        *(float *)(m + 0x2C) *= D_L00_001613C4;
         *(short *)(m + 0x32) = 0xFF;
         d = *(char **)(m + 0x78);
         *(float *)(m + 0x48) = rz;

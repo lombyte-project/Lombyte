@@ -2633,7 +2633,7 @@ extern char D_L00_001E5EE0[] __attribute__((section(".data")));
 extern char D_L00_001E6020[] __attribute__((section(".data")));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern float D_L00_00161B48 __attribute__((sda));
-extern short D_L00_00161B4C __attribute__((sda));
+extern float D_L00_00161B4C __attribute__((sda));
 extern float D_L00_00161B50 __attribute__((sda));
 extern short D_L00_001E6008[] __attribute__((section(".data")));
 extern void fast_draw_quad_real(void *, void *, int);
@@ -2661,9 +2661,9 @@ void FUN_L00_002dd8e8(void) {
     step = 0.3f;
     a += step;
     for (i = 1; i < 10; i++) {
-        b = *(float *)&D_L00_00161B4C;
-        *(float *)&D_L00_00161B4C = b + D_L00_00161B50;
-        if (*(float *)&D_L00_00161B4C > 7.0f) *(float *)&D_L00_00161B4C -= 7.0f;
+        b = D_L00_00161B4C;
+        D_L00_00161B4C = b + D_L00_00161B50;
+        if (D_L00_00161B4C > 7.0f) D_L00_00161B4C -= 7.0f;
         a2 = a + step;
         for (j = 0; j < 20; j++) {
             qcopy(s.q[0], D_L00_001E6020 + (j * 16 + i * 0x140));
@@ -3328,9 +3328,9 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern void FUN_L00_002df4a8_u(void *) __asm__("FUN_L00_002df4a8");
 
-extern short D_L00_00161B90 __attribute__((sda));
-extern short D_L00_00161B94 __attribute__((sda));
-extern short D_L00_00161B98 __attribute__((sda));
+extern int D_L00_00161B90 __attribute__((sda));
+extern int D_L00_00161B94 __attribute__((sda));
+extern float D_L00_00161B98 __attribute__((sda));
 void FUN_L00_002df4f8(char *m) {
     char *p = *(char **)(m + 0x78);
     unsigned char s = m[0x20];
@@ -3343,10 +3343,10 @@ void FUN_L00_002df4f8(char *m) {
         break;
     case 1:
         a = fast_add_rotations(*(float *)p,
-                               *(float *)&D_L00_00161B98 * DEG_TO_RAD * frame_time);
+                               D_L00_00161B98 * DEG_TO_RAD * frame_time);
         *(float *)p = a;
         a = FUN_001f9de0(a);
-        c = fast_tween_color(*(int *)&D_L00_00161B90, *(int *)&D_L00_00161B94, a * 0.5f + 0.5f);
+        c = fast_tween_color(D_L00_00161B90, D_L00_00161B94, a * 0.5f + 0.5f);
         b = (c >> 16) & 0xFF;
         g = (c >> 8) & 0xFF;
         r = c & 0xFF;

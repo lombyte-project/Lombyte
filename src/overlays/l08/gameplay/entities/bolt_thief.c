@@ -162,7 +162,7 @@ extern void FUN_001f9a28(void *, void *, void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8(void *);
 
-extern short D_L08_00161D28 __attribute__((sda));
+extern float D_L08_00161D28 __attribute__((sda));
 void FUN_L08_002e8ba0(struct Moby *a) {
     char *data = (char *)a->pvars;
     float v0[4], v10[4], v20[4];
@@ -183,7 +183,7 @@ void FUN_L08_002e8ba0(struct Moby *a) {
         char *r = *(char **)(data + 0x90);
         *(float *)(*(char **)(data + 0x90) + 0x40) = fast_add_rotations(
             *(float *)(r + 0x40),
-            *(float *)&D_L08_00161D28 * DEG_TO_RAD * D_0015ED6C);
+            D_L08_00161D28 * DEG_TO_RAD * D_0015ED6C);
     }
     for (i = 0; i < 12; i++) {
         char *m = *(char **)(base + 0x10 + i * 16);
@@ -195,7 +195,7 @@ void FUN_L08_002e8ba0(struct Moby *a) {
 
 extern void FUN_001f9a68(void *, void *, float);
 
-extern short D_L08_00161D38 __attribute__((sda));
+extern float D_L08_00161D38 __attribute__((sda));
 void FUN_L08_002e9a18(struct Moby *arg) {
     char *data = (char *)arg->pvars;
     float v0[4];
@@ -218,7 +218,7 @@ void FUN_L08_002e9a18(struct Moby *arg) {
     if (*(char **)(data + 0x90) != 0) {
         *(float *)(*(char **)(data + 0x90) + 0x40) =
             fast_add_rotations(*(float *)(*(char **)(data + 0x90) + 0x40),
-                               *(float *)&D_L08_00161D38 * DEG_TO_RAD * D_0015ED6C);
+                               D_L08_00161D38 * DEG_TO_RAD * D_0015ED6C);
     }
     p = parts + 0x10;
     for (i = 0; i < 16; i++) {
@@ -2449,18 +2449,18 @@ void FUN_L08_002e3870(struct Moby *moby) {
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern short D_L08_00161C64 __attribute__((sda));
-extern short D_L08_00161C7C __attribute__((sda));
-extern short D_L08_00161C80 __attribute__((sda));
-extern short D_L08_00161C78 __attribute__((sda));
+extern float D_L08_00161C64 __attribute__((sda));
+extern float D_L08_00161C7C __attribute__((sda));
+extern float D_L08_00161C80 __attribute__((sda));
+extern float D_L08_00161C78 __attribute__((sda));
 extern float D_L08_00161CB8 __attribute__((sda));
 extern float D_L08_00161CBC __attribute__((sda));
-extern short D_L08_00161C84 __attribute__((sda));
-extern short D_L08_00161C68 __attribute__((sda));
-extern short D_L08_00161C6C __attribute__((sda));
+extern float D_L08_00161C84 __attribute__((sda));
+extern float D_L08_00161C68 __attribute__((sda));
+extern float D_L08_00161C6C __attribute__((sda));
 extern float D_L08_00161CB4 __attribute__((sda));
-extern short D_L08_00161C70 __attribute__((sda));
-extern short D_L08_00161C74 __attribute__((sda));
+extern float D_L08_00161C70 __attribute__((sda));
+extern float D_L08_00161C74 __attribute__((sda));
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2482,19 +2482,19 @@ void FUN_L08_002e4e90(struct Moby *moby, float *out, float *rot) {
     float t;
     switch (moby->oclass) {
     case 0x3DC:
-        sx = *(float *)&D_L08_00161C68 * D_L08_00161CB8;
-        sy = *(float *)&D_L08_00161C74 * D_L08_00161CB8;
-        sz = *(float *)&D_L08_00161C80 * D_L08_00161CB8;
+        sx = D_L08_00161C68 * D_L08_00161CB8;
+        sy = D_L08_00161C74 * D_L08_00161CB8;
+        sz = D_L08_00161C80 * D_L08_00161CB8;
         break;
     case 0x3DD:
-        sx = *(float *)&D_L08_00161C6C * D_L08_00161CBC;
-        sy = *(float *)&D_L08_00161C78 * D_L08_00161CBC;
-        sz = *(float *)&D_L08_00161C84 * D_L08_00161CBC;
+        sx = D_L08_00161C6C * D_L08_00161CBC;
+        sy = D_L08_00161C78 * D_L08_00161CBC;
+        sz = D_L08_00161C84 * D_L08_00161CBC;
         break;
     default:
-        sx = *(float *)&D_L08_00161C64 * D_L08_00161CB4;
-        sy = *(float *)&D_L08_00161C70 * D_L08_00161CB4;
-        sz = *(float *)&D_L08_00161C7C * D_L08_00161CB4;
+        sx = D_L08_00161C64 * D_L08_00161CB4;
+        sy = D_L08_00161C70 * D_L08_00161CB4;
+        sz = D_L08_00161C7C * D_L08_00161CB4;
         break;
     }
     euler_rotation_matrix(b, (float *)(data + 0x10));

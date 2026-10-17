@@ -1231,7 +1231,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_00260D30_k(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 
-extern short D_L04_00161884 __attribute__((sda));
+extern float D_L04_00161884 __attribute__((sda));
 float FUN_L04_002c1fb8(struct Moby *moby, void *out, float speed) {
     float away[4];
     float target[4];
@@ -1258,9 +1258,9 @@ float FUN_L04_002c1fb8(struct Moby *moby, void *out, float speed) {
         if (other == moby || *(short *)(other + 0xA6) != moby->oclass) continue;
         if (FUN_001f9b80((float *)(other + 0x10), (float *)&moby->pos) < 3.0f) {
             subtract_vector_xyz_c(away, &moby->pos, other + 0x10);
-            scale_vector_xyz(away, away, *(float *)&D_L04_00161884);
+            scale_vector_xyz(away, away, D_L04_00161884);
             add_vector_xyz_c(out, out, away);
-            weight += *(float *)&D_L04_00161884;
+            weight += D_L04_00161884;
         }
         if (FUN_001f9b80((float *)(other + 0x10), target) < target_dist) is_closest = 0;
     }

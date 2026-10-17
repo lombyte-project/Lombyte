@@ -1010,10 +1010,10 @@ extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_L00_00257b90_c2(int, int) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames_c2(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
-extern short D_L00_00161870 __attribute__((sda));
-extern short D_L00_00161874 __attribute__((sda));
-extern short D_L00_00161878 __attribute__((sda));
-extern short D_L00_00161888 __attribute__((sda));
+extern float D_L00_00161870 __attribute__((sda));
+extern float D_L00_00161874 __attribute__((sda));
+extern float D_L00_00161878 __attribute__((sda));
+extern float D_L00_00161888 __attribute__((sda));
 extern unsigned char *FUN_L00_00275158(char *a, char *b, int c, float f);
 extern unsigned char D_0013E05A[];
 extern unsigned char D_L00_00173E80[];
@@ -1127,15 +1127,15 @@ char *FUN_L00_002caf70(char *owner, char *spawn_pos, char *target, float unk18, 
             *(float *)(moby + 0x44) = -fast_arc_tan_c2(length, direction[2]);
             return moby;
         } else {
-            FUN_L00_0026daa0(moby, 0x2F4F7F7F, *(short *)(vars + 0x24), -1, *(float *)&D_L00_00161888);
+            FUN_L00_0026daa0(moby, 0x2F4F7F7F, *(short *)(vars + 0x24), -1, D_L00_00161888);
             for (i = 0; i < 17; i++) {
                 trail = (char *)FUN_L00_00275158(moby + 0x10, D_L00_0015F580, 1, 0.0f);
                 if (trail != 0) {
-                    *(float *)(trail + 0xC) = random_float_between_c2(*(float *)&D_L00_00161870, *(float *)&D_L00_00161874);
+                    *(float *)(trail + 0xC) = random_float_between_c2(D_L00_00161870, D_L00_00161874);
                     index = convert_integer_to_float_c(i);
                     fraction = index / convert_integer_to_float_c(16);
                     curve = FUN_L00_00257e20(-1.5f, 0.0f, 1.0f, 0.0f, fraction);
-                    *(float *)(trail + 0xC) = *(float *)(trail + 0xC) + (*(float *)&D_L00_00161878 - *(float *)(trail + 0xC)) * curve;
+                    *(float *)(trail + 0xC) = *(float *)(trail + 0xC) + (D_L00_00161878 - *(float *)(trail + 0xC)) * curve;
                     result = truncate_float_to_s32_c(curve * -64.0f + 128.0f);
                     *(int *)(trail + 4) = (result << 24) | 0xFFFFFF;
                     ((int *)(vars + 0x2C))[i] = (int)trail;

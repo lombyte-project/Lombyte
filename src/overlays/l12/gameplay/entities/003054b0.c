@@ -565,9 +565,9 @@ extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_002
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
-extern short D_L12_00161F28 __attribute__((sda));
-extern short D_L12_00161F2C __attribute__((sda));
-extern short D_L12_00161F30 __attribute__((sda));
+extern float D_L12_00161F28 __attribute__((sda));
+extern float D_L12_00161F2C __attribute__((sda));
+extern float D_L12_00161F30 __attribute__((sda));
 #include "rnc/gameplay/state/game_globals.h"
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
 extern void FUN_L00_0025b8c0(float *, float *, float, float, float, float);
@@ -676,9 +676,9 @@ void FUN_L12_003069d0(char *moby) {
                               D_0015ED64 * 0.03f, D_0015ED64 * 0.3f, D_0015ED6C_gp * 2.7f);
         }
         FUN_L00_00262b00(0.7f, D_0015ED6C_gp * 1.2217305f, moby, (float *)(d + 0x5CC), (float *)(d + 0x5C8));
-        FUN_L00_00262b80(moby, d + 0x5E4, d + 0x5E8, *(float *)&D_L12_00161F30,
-                          *(float *)&D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
-                          *(float *)&D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
+        FUN_L00_00262b80(moby, d + 0x5E4, d + 0x5E8, D_L12_00161F30,
+                          D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
+                          D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
         FUN_L12_0027b370(moby, d, 0x11);
         if (is_point_inside_clip_volume_c(D_0013F3D0, *(int *)(d + 0x5EC)) || D_L12_00161F00_gp) {
             int i;
@@ -696,9 +696,9 @@ void FUN_L12_003069d0(char *moby) {
         int nx;
         float f;
         FUN_L00_00262b00(0.7f, D_0015ED6C_gp * 1.2217305f, moby, (float *)(d + 0x5CC), (float *)(d + 0x5C8));
-        FUN_L00_00262b80(moby, d + 0x5E4, d + 0x5E8, *(float *)&D_L12_00161F30,
-                          *(float *)&D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
-                          *(float *)&D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
+        FUN_L00_00262b80(moby, d + 0x5E4, d + 0x5E8, D_L12_00161F30,
+                          D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
+                          D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
         path = ((P_7DB0 * *)&D_L12_001B0930)[*(int *)(d + 0x5C0)];
         if (*(short *)(d + 0x5F8) < *(int *)path - 11) {
             approach_value((float *)(d + 0x5F0), D_0015ED6C_gp * 8.0f, D_0015ED70 * 10.0f);
@@ -731,9 +731,9 @@ void FUN_L12_003069d0(char *moby) {
         D_L12_00161F34++;
         FUN_L00_0025bc98(moby + 0x48, 3.0543261f, d + 0x5F4, -1, D_0015ED64 * 0.0015f, D_0015ED64 * 0.3f, D_0015ED6C_gp * 0.17453292f);
         FUN_L00_00262b00(0.7f, D_0015ED6C_gp * 1.2217305f, moby, (float *)(d + 0x5CC), (float *)(d + 0x5C8));
-        FUN_L00_00262b80(moby, d + 0x5E4, d + 0x5E8, *(float *)&D_L12_00161F30,
-                          *(float *)&D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
-                          *(float *)&D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
+        FUN_L00_00262b80(moby, d + 0x5E4, d + 0x5E8, D_L12_00161F30,
+                          D_L12_00161F28 * 0.017453292f * D_0015ED6C_gp,
+                          D_L12_00161F2C * 0.017453292f * D_0015ED6C_gp);
         FUN_L12_0027b370(moby, d, 0x11);
         FUN_L12_003054b0_u(moby);
         break;

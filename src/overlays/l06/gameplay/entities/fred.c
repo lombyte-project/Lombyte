@@ -733,7 +733,7 @@ extern void FUN_001f9a10(void *, void *, void *);
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
-extern short D_L06_00162090 __attribute__((sda));
+extern float D_L06_00162090 __attribute__((sda));
 extern int GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
 void FUN_L06_00300df0(char *moby) {
     char *data = *(char **)(moby + 0x78);
@@ -756,7 +756,7 @@ void FUN_L06_00300df0(char *moby) {
         } else {
             float f = convert_integer_to_float(GB_FRAME_gp % 600) / 600.0f;
             float g = fast_sin(f * 6.28318f);
-            *(float *)(moby + 0x18) = *(float *)(data + 0xC) + *(float *)&D_L06_00162090 * g;
+            *(float *)(moby + 0x18) = *(float *)(data + 0xC) + D_L06_00162090 * g;
         }
         break;
     case 2:
@@ -2321,15 +2321,15 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
-extern short D_L06_001621B4 __attribute__((sda));
-extern short D_L06_001621B8 __attribute__((sda));
+extern float D_L06_001621B4 __attribute__((sda));
+extern int D_L06_001621B8 __attribute__((sda));
 void FUN_L06_00304818(int unused, void *obj) {
     float pos[4];
     V6 a;
     V6 b;
     int i = 0;
     clear_u64_value(pos);
-    if (*(int *)&D_L06_001621B8 > 0) {
+    if (D_L06_001621B8 > 0) {
         do {
             float s;
             float f;
@@ -2344,10 +2344,10 @@ void FUN_L06_00304818(int unused, void *obj) {
             s = s * frame_time;
             pa = a.v + random_integer_below(6);
             pb = b.v + random_integer_below(6);
-            f = *(float *)&D_L06_001621B4 * 400000.0f;
+            f = D_L06_001621B4 * 400000.0f;
             r1 = random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
-            FUN_L00_0026a9f0(obj, pos, *pa, *pb, f, r1, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, s * *(float *)&D_L06_001621B4);
-        } while (i < *(int *)&D_L06_001621B8);
+            FUN_L00_0026a9f0(obj, pos, *pa, *pb, f, r1, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, s * D_L06_001621B4);
+        } while (i < D_L06_001621B8);
     }
 }
 /* Level 06 update for moby class 1123: waits for its partner, animates four ribbons, then bursts into particles. */
@@ -2375,18 +2375,18 @@ extern int FUN_L00_0028d8c0(void *, int);
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern float D_L06_001621F8 __attribute__((sda));
-extern short D_L06_001621FC __attribute__((sda));
-extern short D_L06_00162204 __attribute__((sda));
+extern float D_L06_001621FC __attribute__((sda));
+extern float D_L06_00162204 __attribute__((sda));
 extern float D_L06_00162208 __attribute__((sda));
-extern short D_L06_00162210 __attribute__((sda));
-extern short D_L06_00162214 __attribute__((sda));
-extern short D_L06_00162218 __attribute__((sda));
-extern short D_L06_0016221C __attribute__((sda));
-extern short D_L06_00162220 __attribute__((sda));
-extern short D_L06_00162224 __attribute__((sda));
-extern short D_L06_00162228 __attribute__((sda));
-extern short D_L06_0016222C __attribute__((sda));
-extern short D_L06_00162230 __attribute__((sda));
+extern float D_L06_00162210 __attribute__((sda));
+extern int D_L06_00162214 __attribute__((sda));
+extern int D_L06_00162218 __attribute__((sda));
+extern float D_L06_0016221C __attribute__((sda));
+extern float D_L06_00162220 __attribute__((sda));
+extern int D_L06_00162224 __attribute__((sda));
+extern int D_L06_00162228 __attribute__((sda));
+extern float D_L06_0016222C __attribute__((sda));
+extern float D_L06_00162230 __attribute__((sda));
 extern void FUN_001f9ff8(float *, float);
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L06_00217300(void *);
@@ -2419,7 +2419,7 @@ void FUN_L06_003049f8(char *moby)
 
     switch ((unsigned char)moby[0x20]) {
     case 0:
-        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)&D_L06_00162210;
+        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00162210;
         D_L06_00162238 = 0x16;
         D_L06_00162234 = 0x2D;
         d->timer[1] = 0xB;
@@ -2456,13 +2456,13 @@ void FUN_L06_003049f8(char *moby)
             d->f18 = allocate_voice_for_target_entry(0, 4, moby);
         }
         FUN_L06_00305000_c(moby);
-        v = D_L06_001621F8 + *(float *)&D_L06_001621FC * D_0015ED6C;
+        v = D_L06_001621F8 + D_L06_001621FC * D_0015ED6C;
         D_L06_001621F8 = v;
         if (1.0f < v) {
             D_L06_001621F8 = v - 1.0f;
         }
-        f21 = *(float *)&D_L06_00162204 / 30.0f;
-        f20 = -(*(float *)&D_L06_00162204 * 0.5f);
+        f21 = D_L06_00162204 / 30.0f;
+        f20 = -(D_L06_00162204 * 0.5f);
         for (i = 0; i < 4; i++) {
             if (d->timer[i] == 0) {
                 for (j = 0; j < 30; j++) {
@@ -2521,12 +2521,12 @@ void FUN_L06_003049f8(char *moby)
                 float scale;
                 int s;
                 unsigned char life;
-                fast_vec_normalize_c(u.m.pos, u.m.b, FUN_L00_00257c48(0.0f, *(float *)&D_L06_00162204 * 0.75f));
+                fast_vec_normalize_c(u.m.pos, u.m.b, FUN_L00_00257c48(0.0f, D_L06_00162204 * 0.75f));
                 add_vector_xyz_c(u.m.pos, u.m.pos, u.m.b + 12);
-                color = fast_tween_color(*(int *)&D_L06_00162214, *(int *)&D_L06_00162218, random_float_between(0.0f, 1.0f));
-                scale = random_float_between(*(float *)&D_L06_0016221C, *(float *)&D_L06_00162220);
-                s = truncate_float_to_s32_c(random_float_between((float)*(int *)&D_L06_00162224, (float)*(int *)&D_L06_00162228));
-                FUN_L00_00257d78(u.m.vel, *(float *)&D_L06_0016222C * D_0015ED6C, *(float *)&D_L06_00162230 * D_0015ED6C);
+                color = fast_tween_color(D_L06_00162214, D_L06_00162218, random_float_between(0.0f, 1.0f));
+                scale = random_float_between(D_L06_0016221C, D_L06_00162220);
+                s = truncate_float_to_s32_c(random_float_between((float)D_L06_00162224, (float)D_L06_00162228));
+                FUN_L00_00257d78(u.m.vel, D_L06_0016222C * D_0015ED6C, D_L06_00162230 * D_0015ED6C);
                 life = scale_game_frames(s);
                 func_L00_00273F80_r(u.m.pos, u.m.vel, color, scale, life, (unsigned char)random_integer_below(0xFF), 0);
             }
@@ -2542,31 +2542,31 @@ extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_L00_00259858(char *a, int b, int c, float d);
 
-extern short D_L06_001621E8 __attribute__((sda));
-extern short D_L06_001621EC __attribute__((sda));
-extern short D_L06_001621F0 __attribute__((sda));
+extern float D_L06_001621E8 __attribute__((sda));
+extern float D_L06_001621EC __attribute__((sda));
+extern float D_L06_001621F0 __attribute__((sda));
 void FUN_L06_00305000(char *m) {
     float P[4];
     float Q[4];
     float A[12];
     FUN_L00_00259858((char *)A, (int)m, 0x10000, 6.0f);
-    P[0] = *(float *)&D_L06_001621E8;
-    P[1] = *(float *)&D_L06_001621EC;
-    P[2] = *(float *)&D_L06_001621F0;
-    Q[0] = -*(float *)&D_L06_001621E8;
-    Q[1] = *(float *)&D_L06_001621EC;
-    Q[2] = *(float *)&D_L06_001621F0;
+    P[0] = D_L06_001621E8;
+    P[1] = D_L06_001621EC;
+    P[2] = D_L06_001621F0;
+    Q[0] = -D_L06_001621E8;
+    Q[1] = D_L06_001621EC;
+    Q[2] = D_L06_001621F0;
     transform_vector_by_basis(P, P, m + 0xC0);
     FUN_001f9a10(P, P, m + 0x10);
     transform_vector_by_basis(Q, Q, m + 0xC0);
     FUN_001f9a10(Q, Q, m + 0x10);
     coll_line_fix(P, Q, 0, (int)m, (int)A);
-    P[0] = *(float *)&D_L06_001621E8;
-    P[1] = -*(float *)&D_L06_001621EC;
-    P[2] = *(float *)&D_L06_001621F0;
-    Q[0] = -*(float *)&D_L06_001621E8;
-    Q[1] = -*(float *)&D_L06_001621EC;
-    Q[2] = *(float *)&D_L06_001621F0;
+    P[0] = D_L06_001621E8;
+    P[1] = -D_L06_001621EC;
+    P[2] = D_L06_001621F0;
+    Q[0] = -D_L06_001621E8;
+    Q[1] = -D_L06_001621EC;
+    Q[2] = D_L06_001621F0;
     transform_vector_by_basis(P, P, m + 0xC0);
     FUN_001f9a10(P, P, m + 0x10);
     transform_vector_by_basis(Q, Q, m + 0xC0);
@@ -2585,13 +2585,13 @@ extern float D_L06_001FE890[];
 extern int D_L06_00162234;
 extern int D_L06_00162238;
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern short D_L06_001621C4 __attribute__((sda));
-extern short D_L06_001621C8 __attribute__((sda));
-extern short D_L06_001621C0 __attribute__((sda));
-extern short D_L06_001621CC __attribute__((sda));
-extern short D_L06_001621E0 __attribute__((sda));
-extern short D_L06_001621E4 __attribute__((sda));
-extern short D_L06_001621F4 __attribute__((sda));
+extern int D_L06_001621C4 __attribute__((sda));
+extern int D_L06_001621C8 __attribute__((sda));
+extern int D_L06_001621C0 __attribute__((sda));
+extern int D_L06_001621CC __attribute__((sda));
+extern int D_L06_001621E0 __attribute__((sda));
+extern int D_L06_001621E4 __attribute__((sda));
+extern float D_L06_001621F4 __attribute__((sda));
 extern f32 D_L06_001621F8_gp __asm__("D_L06_001621F8") __attribute__((sda));
 extern f32 D_L06_00162208_gp __asm__("D_L06_00162208") __attribute__((sda));
 extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");
@@ -2622,9 +2622,9 @@ void FUN_L06_00305170(char *m) {
     vu1_add_g_sregister(6, get_effect_texture(0xE));
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(8, 0);
-    vu1_add_g_sregister(0x42, (long)*(int *)&D_L06_001621C0 | ((long)*(int *)&D_L06_001621C4 << 2) |
-                                  ((long)*(int *)&D_L06_001621C8 << 4) |
-                                  ((long)*(int *)&D_L06_001621CC << 6) | 0x8000000000L);
+    vu1_add_g_sregister(0x42, (long)D_L06_001621C0 | ((long)D_L06_001621C4 << 2) |
+                                  ((long)D_L06_001621C8 << 4) |
+                                  ((long)D_L06_001621CC << 6) | 0x8000000000L);
     font_queue_vu_state();
     m0 = mat[0];
     sp = s;
@@ -2644,9 +2644,9 @@ void FUN_L06_00305170(char *m) {
     s[0] = D_L06_00162234;
     s[2] = (int)(data + 0xF00);
     s[1] = D_L06_00162238;
-    s[3] = *(int *)&D_L06_001621E0;
-    s[4] = *(int *)&D_L06_001621E4;
-    *(float *)&s[7] = *(float *)&D_L06_001621F4;
+    s[3] = D_L06_001621E0;
+    s[4] = D_L06_001621E4;
+    *(float *)&s[7] = D_L06_001621F4;
     *(float *)&s[8] = *(float *)&D_L06_001621F8_gp;
     s[5] = 0x1E;
     s[6] = (int)data;

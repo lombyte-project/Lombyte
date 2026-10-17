@@ -583,7 +583,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
-extern short D_L13_00161388 __attribute__((sda));
+extern float D_L13_00161388 __attribute__((sda));
 int D_L13_0016138C = 2;
 void FUN_L13_002b47a0(struct Moby *moby) {
     float v[4];
@@ -597,8 +597,8 @@ void FUN_L13_002b47a0(struct Moby *moby) {
         x = (20.0f - d) / 20.0f * 5.0f + 2.5f;
         ang = fast_add_rotations(random_float_between(-x, x) * DEG_TO_RAD,
                                  moby->rot.z);
-        v2[0] = FUN_001f9dc8(ang) * (*(float *)&D_L13_00161388 * frame_time);
-        v2[1] = FUN_001f9de0(ang) * (*(float *)&D_L13_00161388 * frame_time);
+        v2[0] = FUN_001f9dc8(ang) * (D_L13_00161388 * frame_time);
+        v2[1] = FUN_001f9de0(ang) * (D_L13_00161388 * frame_time);
         v2[2] = 0;
         FUN_001f9a10(v, v, v2);
         FUN_L13_003061c8(*(float *)(data + 0x68), v, v2, moby);

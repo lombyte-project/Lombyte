@@ -1357,10 +1357,10 @@ extern int D_L02_0015FFD8; /* no foreign declaration */
 extern int FUN_L00_0025be00();
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern short D_L02_00161CB0 __attribute__((sda));
-extern short D_L02_00161CB4 __attribute__((sda));
-extern short D_L02_00161CB8 __attribute__((sda));
-extern short D_L02_00161CBC;
+extern float D_L02_00161CB0 __attribute__((sda));
+extern int D_L02_00161CB4 __attribute__((sda));
+extern float D_L02_00161CB8 __attribute__((sda));
+extern float D_L02_00161CBC;
 extern void FUN_L00_002502f0(void *, int, int, int);
 extern void FUN_L00_002730e0(void *, void *, int, int, int, int, float);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1407,13 +1407,13 @@ void FUN_L02_002e0450(char *m) {
                     int a;
                     if (D_L02_0015F5CC & 4)
                         s = -1.0f;
-                    normalize_vector_xyz(v, m + 0xD0, s * *(float *)&D_L02_00161CBC);
-                    normalize_vector_xyz(w, v, -2.0f / multiply_global_factor_ed64(*(float *)&D_L02_00161CB0));
+                    normalize_vector_xyz(v, m + 0xD0, s * D_L02_00161CBC);
+                    normalize_vector_xyz(w, v, -2.0f / multiply_global_factor_ed64(D_L02_00161CB0));
                     add_vector_xyz(v, v, m + 0x10);
-                    a = truncate_float_to_s32(multiply_global_factor_ed64(*(float *)&D_L02_00161CB0)) & 0xFF;
-                    FUN_L00_002730e0(v, w, *(int *)&D_L02_00161CB4, a,
+                    a = truncate_float_to_s32(multiply_global_factor_ed64(D_L02_00161CB0)) & 0xFF;
+                    FUN_L00_002730e0(v, w, D_L02_00161CB4, a,
                                      random_integer_below(0xFF) & 0xFF, 0,
-                                     *(float *)&D_L02_00161CB8);
+                                     D_L02_00161CB8);
                 }
             }
         }

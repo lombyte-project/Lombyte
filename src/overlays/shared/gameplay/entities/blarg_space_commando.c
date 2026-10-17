@@ -430,11 +430,11 @@ extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 extern float D_L06_00161FA8 __attribute__((sda));
-extern short D_L06_00161FAC __attribute__((sda));
-extern short D_L06_00161FB0 __attribute__((sda));
-extern short D_L06_00161FB4 __attribute__((sda));
-extern short D_L06_00161FB8 __attribute__((sda));
-extern short D_L06_00161FBC __attribute__((sda));
+extern float D_L06_00161FAC __attribute__((sda));
+extern float D_L06_00161FB0 __attribute__((sda));
+extern float D_L06_00161FB4 __attribute__((sda));
+extern float D_L06_00161FB8 __attribute__((sda));
+extern float D_L06_00161FBC __attribute__((sda));
 extern unsigned char D_0013D408[];
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025c558(void *, void *, float, int, int, int);
@@ -500,8 +500,8 @@ void FUN_L06_002feb40(char *m) {
             m[0x20] = 0xF;
             q = d + 0x60;
             n = scale_game_frames_c(0x3C);
-            a = *(float *)&D_L06_00161FB0 * D_0015ED6C;
-            b = *(float *)&D_L06_00161FB4 * D_0015ED6C;
+            a = D_L06_00161FB0 * D_0015ED6C;
+            b = D_L06_00161FB4 * D_0015ED6C;
             *(short *)(d + 0x26) = n;
             *(float *)(d + 0x7C) = b;
             *(float *)(d + 0x78) = a;
@@ -518,8 +518,8 @@ void FUN_L06_002feb40(char *m) {
             float a, b;
             m[0x20] = 0x10;
             q = d + 0x60;
-            a = *(float *)&D_L06_00161FB8 * D_0015ED6C;
-            b = *(float *)&D_L06_00161FBC * D_0015ED6C;
+            a = D_L06_00161FB8 * D_0015ED6C;
+            b = D_L06_00161FBC * D_0015ED6C;
             *(unsigned short *)(m + 0x34) &= 0xEFFF;
             *(float *)(d + 0x78) = a;
             *(float *)(d + 0x7C) = b;
@@ -569,9 +569,9 @@ void FUN_L06_002feb40(char *m) {
     *(unsigned char *)(m + 0xA4) = 0xFF;
     FUN_L00_0025d538(m, d + 0x110);
     if (*(int *)(d + 0x188) != 0) {
-        *(float *)(d + 0x198) = *(float *)&D_L06_00161FAC + 6.0f;
+        *(float *)(d + 0x198) = D_L06_00161FAC + 6.0f;
     } else {
-        *(float *)(d + 0x198) = *(float *)&D_L06_00161FAC;
+        *(float *)(d + 0x198) = D_L06_00161FAC;
     }
     {
     char *q = d + 0x120;
@@ -600,8 +600,8 @@ extern void add_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
-extern short D_L06_00161FD4 __attribute__((sda));
-extern short D_L06_00161FD8 __attribute__((sda));
+extern float D_L06_00161FD4 __attribute__((sda));
+extern int D_L06_00161FD8 __attribute__((sda));
 void FUN_L06_002ff100(char *m) {
     char *d = *(char **)(m + 0x78);
     float v[4];
@@ -612,7 +612,7 @@ void FUN_L06_002ff100(char *m) {
     *(float *)(d + 0x218) = *(float *)(m + 0x18);
     for (i = 0; i < 16; i++) {
         float f = convert_integer_to_float(i) * 0.0625f - 0.5f;
-        f = f * (*(float *)&D_L06_00161FD4 * 0.017453292f);
+        f = f * (D_L06_00161FD4 * 0.017453292f);
         v[0] = fast_cos(fast_add_rotations(f, *(float *)(m + 0x48))) * 0.2f;
         v[1] = fast_sin_c(fast_add_rotations(f, *(float *)(m + 0x48))) * 0.2f;
         v[2] = 0.15f;
@@ -624,7 +624,7 @@ void FUN_L06_002ff100(char *m) {
             *(float *)(d + 0x23C + i * 16) = 1.0f;
         }
     }
-    *(float *)(d + 0x21C) = (float)scale_game_frames(*(int *)&D_L06_00161FD8);
+    *(float *)(d + 0x21C) = (float)scale_game_frames(D_L06_00161FD8);
 }
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L06_002ff2c8.s", FUN_L06_002ff2c8);
@@ -839,22 +839,22 @@ extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern short D_L06_00162004 __attribute__((sda));
-extern short D_L06_00162008 __attribute__((sda));
-extern short D_L06_0016200C __attribute__((sda));
-extern short D_L06_00162010 __attribute__((sda));
-extern short D_L06_00162014 __attribute__((sda));
-extern short D_L06_00162018 __attribute__((sda));
-extern short D_L06_0016201C __attribute__((sda));
-extern short D_L06_00162020 __attribute__((sda));
-extern short D_L06_00162024 __attribute__((sda));
-extern short D_L06_00162028 __attribute__((sda));
-extern short D_L06_0016202C __attribute__((sda));
-extern short D_L06_00162030 __attribute__((sda));
-extern short D_L06_00162034 __attribute__((sda));
-extern short D_L06_00162038 __attribute__((sda));
-extern short D_L06_0016203C __attribute__((sda));
-extern short D_L06_00162040 __attribute__((sda));
+extern int D_L06_00162004 __attribute__((sda));
+extern int D_L06_00162008 __attribute__((sda));
+extern float D_L06_0016200C __attribute__((sda));
+extern float D_L06_00162010 __attribute__((sda));
+extern float D_L06_00162014 __attribute__((sda));
+extern float D_L06_00162018 __attribute__((sda));
+extern float D_L06_0016201C __attribute__((sda));
+extern float D_L06_00162020 __attribute__((sda));
+extern float D_L06_00162024 __attribute__((sda));
+extern float D_L06_00162028 __attribute__((sda));
+extern float D_L06_0016202C __attribute__((sda));
+extern float D_L06_00162030 __attribute__((sda));
+extern float D_L06_00162034 __attribute__((sda));
+extern float D_L06_00162038 __attribute__((sda));
+extern float D_L06_0016203C __attribute__((sda));
+extern int D_L06_00162040 __attribute__((sda));
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -874,37 +874,37 @@ void FUN_L06_002ff978(char *moby) {
             *(float *)(data - (-(n * 16)) + 0x23C) < 0.99f) {
             continue;
         }
-        if (*(float *)&D_L06_0016203C < random_float_between(0.0f, 1.0f)) {
+        if (D_L06_0016203C < random_float_between(0.0f, 1.0f)) {
             continue;
         }
         f21 = random_angle_radians();
         f22 = random_angle_radians();
         v[0] = fast_cos(f21) *
-               random_float_between(*(float *)&D_L06_0016202C, *(float *)&D_L06_00162030);
+               random_float_between(D_L06_0016202C, D_L06_00162030);
         v[1] = fast_sin(f21) *
-               random_float_between(*(float *)&D_L06_0016202C, *(float *)&D_L06_00162030);
+               random_float_between(D_L06_0016202C, D_L06_00162030);
         v[2] = 0;
         w[0] = fast_cos(f22) *
-               random_float_between(*(float *)&D_L06_0016202C, *(float *)&D_L06_00162030);
+               random_float_between(D_L06_0016202C, D_L06_00162030);
         w[1] = fast_sin(f22) *
-               random_float_between(*(float *)&D_L06_0016202C, *(float *)&D_L06_00162030);
+               random_float_between(D_L06_0016202C, D_L06_00162030);
         w[2] = 0;
-        v[2] = random_float_between(*(float *)&D_L06_00162034, *(float *)&D_L06_00162038);
-        w[2] = random_float_between(*(float *)&D_L06_00162034, *(float *)&D_L06_00162038);
+        v[2] = random_float_between(D_L06_00162034, D_L06_00162038);
+        w[2] = random_float_between(D_L06_00162034, D_L06_00162038);
         s18 = func_001FA898_r(multiply_global_factor_ed64(
-            random_float_between(*(float *)&D_L06_00162014, *(float *)&D_L06_00162018)));
+            random_float_between(D_L06_00162014, D_L06_00162018)));
         s19 = func_001FA898_r(multiply_global_factor_ed64(
-            random_float_between(*(float *)&D_L06_0016201C, *(float *)&D_L06_00162020)));
+            random_float_between(D_L06_0016201C, D_L06_00162020)));
         s17 = func_001FA898_r(multiply_global_factor_ed64(
-            random_float_between(*(float *)&D_L06_00162024, *(float *)&D_L06_00162028)));
+            random_float_between(D_L06_00162024, D_L06_00162028)));
         scale_vector_xyz(v, v, 1.0f / (float)s18);
-        v[3] = *(float *)&D_L06_0016200C;
+        v[3] = D_L06_0016200C;
         scale_vector_xyz(w, w, 1.0f / (float)s17);
-        w[3] = *(float *)&D_L06_00162010;
+        w[3] = D_L06_00162010;
         p = data + (off + 0x230);
         lerp_vector(s10, p, p, random_float_between(0.0f, 1.0f));
-        spawn_spark(s10, v, w, *(int *)&D_L06_00162004, *(int *)&D_L06_00162008, s18, s19, s17,
-                     *(int *)&D_L06_00162040);
+        spawn_spark(s10, v, w, D_L06_00162004, D_L06_00162008, s18, s19, s17,
+                     D_L06_00162040);
     }
 }
 #define NOT_SDA
