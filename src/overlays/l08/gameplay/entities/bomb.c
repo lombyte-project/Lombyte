@@ -461,7 +461,7 @@ void FUN_L08_002d23f0(char *moby) {
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_002d42d8.s", FUN_L08_002d42d8);
 #else
 extern int D_L08_001B0CB0[];
-extern char D_001413D0[];
+extern s32 D_001413D0[];
 extern char D_0013D388[] __attribute__((section(".data")));
 extern unsigned short D_00141C38 __attribute__((section(".data")));
 extern unsigned char D_0013D4CB;
@@ -742,7 +742,7 @@ extern int D_L08_0015F694_2D5FA8 __asm__("D_L08_0015F5B0");
 extern int D_L08_0015F698_2D5FA8 __asm__("D_L08_0015F5B4") __attribute__((sda));
 extern int D_L08_0015F6A0_2D5FA8 __asm__("D_L08_0015F5BC") __attribute__((sda));
 extern Path_2D5FA8 *D_L08_001B0FB0_2D5FA8[] __asm__("D_L08_001B0CB0");
-extern char D_001413D0[];
+extern s32 D_001413D0[];
 extern unsigned char D_0013D50F_2D5FA8[] __asm__("D_0013D408");
 extern Hit_2D5FA8 *find_2D5FA8(Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern Hit_2D5FA8 *pick_2D5FA8(Hit_2D5FA8 *, Hit_2D5FA8 *, Hit_2D5FA8 *, int) __asm__("FUN_L05_002899f8");
@@ -1479,7 +1479,7 @@ extern float FUN_L08_002592c8(void *);
 extern char D_0013F3D0[] __attribute__((section(".data")));
 extern int FUN_001f9740(int *);
 extern float FUN_L08_00211a20(float);
-extern void set_vector_length_xy(float, void *, void *) __asm__("FUN_001f9c48");
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern char camera_state_bytes[] __asm__("D_L08_00167480");
 extern float frame_time __attribute__((sda));
 extern int D_L08_001619B4 __attribute__((sda));
@@ -1706,7 +1706,7 @@ fire_animation:
             add_vector_xyz(aim, aim, &moby->pos);
             FUN_L00_0024f7c8(moby, 9, point);
             subtract_vector_xyz(velocity, &target->pos, point);
-            set_vector_length_xy(time, velocity, velocity);
+            set_vector_length_xy(velocity, velocity, time);
             velocity[2] = FUN_L08_00265120(point, aim, collision.scratch, time, -(D_0015ED70 * 15.0f));
             next = FUN_L08_002d22e0((int)moby, (char *)point, (char *)velocity);
             *(char **)(d + 0x124) = next;
