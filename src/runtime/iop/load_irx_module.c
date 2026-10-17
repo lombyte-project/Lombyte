@@ -14,14 +14,14 @@ extern s32 InvokeIopStatus(s32 module_id, s32 a1, s32 a2);
 extern void invoke_state_initializer(s32 module_id) __asm__("InvokeStateInitializer");
 
 s32 load_irx_module(s32 irx_image, s32 arg1) __asm__("FUN_00201520");
-s32 load_irx_module(s32 irx_image, s32 arg1) {
+s32 load_irx_module(s32 irx_image, s32 size_bytes) {
     struct sceSifDmaData transfer;
     s32 module_id;
     s32 dma_id;
     s32 result;
 
-    module_id = sceSifAllocIopHeap(arg1);
-    transfer.size = arg1;
+    module_id = sceSifAllocIopHeap(size_bytes);
+    transfer.size = size_bytes;
     transfer.source = irx_image;
     transfer.destination = module_id;
     transfer.attr = 0;
