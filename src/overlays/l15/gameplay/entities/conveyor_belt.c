@@ -389,7 +389,7 @@ void bolt_grabber_update(struct Moby *m) {
 
 extern char *FUN_L15_002e7ed8_c(void *, void *) __asm__("FUN_L15_002e7ed8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L15_0016207C;
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -403,7 +403,7 @@ void FUN_L15_002eabd8(struct Moby *moby) {
         moby->update_dist = 0xFF;
         break;
     case 1:
-        if (tick_countdown_32(data)) {
+        if (fast_dec_timer(data)) {
             data[0] = func_001FA898_r(multiply_global_factor_ed64(*(float *)&D_L15_0016207C * 60.0f));
             FUN_L15_002e7ed8_c(moby, &moby->pos);
         }
@@ -1216,7 +1216,7 @@ void ultramech_scientist_update(struct Moby *moby) {
     }
     case 4: {
         char *other;
-        if (tick_countdown_32(data + 0x15c)) {
+        if (fast_dec_timer(data + 0x15c)) {
             FUN_L15_00208ca8();
             FUN_00246e30((char *)D_L15_0015FFD8 + (*(int *)(data + 0x14c) << 8), 0, 0);
             *(short *)(data + 0x36) = 1;

@@ -1011,7 +1011,7 @@ void FUN_L14_002ec810(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EE150), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
@@ -1027,7 +1027,7 @@ char *FUN_L14_002eccf0(void *a, float *b, int c, int d) {
         *(short *)(m + 0x32) = 0x7F;
         m[0x31] = 1;
         data = *(char **)(m + 0x78);
-        *(float *)(m + 0x44) = -fast_arc_tan(vec_len_xy(b), b[2]);
+        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(b), b[2]);
         *(float *)(m + 0x48) = fast_arc_tan(b[0], b[1]);
         qcopy(m + 0x10, a);
         qcopy(data + 0x10, a);
@@ -2653,7 +2653,7 @@ extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6d0(float);
 extern int FUN_00214720_c(void *, int) __asm__("FUN_00214720");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -2774,12 +2774,12 @@ void qwark_oltanis_update(L14WatchMoby *m) {
             if (fast_vec_length(g + 0x80) > 0.01f)
                 d->moving_timer = scale_game_frames(120);
             else
-                tick_countdown_32(&d->moving_timer);
+                fast_dec_timer(&d->moving_timer);
         } else if (d->moving_timer) {
             d->moving_timer = 0;
             qcopy(d->target, hero.motion.unkD0.f);
         }
-        if (tick_countdown_32(&d->target_timer)) {
+        if (fast_dec_timer(&d->target_timer)) {
             float heading;
             d->target_timer = FUN_001fa6d0(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading =
@@ -2803,7 +2803,7 @@ void qwark_oltanis_update(L14WatchMoby *m) {
         scratch.eye[2] += 1.0f;
         fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
         yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), m->yaw);
-        pitch = -fast_arc_tan(vec_len_xy(scratch.delta), scratch.delta[2]);
+        pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)
@@ -3567,7 +3567,7 @@ void rocket_update(struct Moby *moby) {
     case 2:
         fast_vec_sub(&diff, D_L14_001600EC + vars->point * 0x80 + 0x30, &moby->pos);
         dist = fast_vec_length(&diff);
-        tick_countdown_32(&vars->timer);
+        fast_dec_timer(&vars->timer);
         speed = D_L14_00161FA8 * frame_time;
         if (dist < speed || dist <= 0.0f) {
             if (vars->sound != -1) {
@@ -3590,7 +3590,7 @@ void rocket_update(struct Moby *moby) {
             return;
         }
         moby->rot.x = fast_add_rotations(moby->rot.x, 2.0f * DEG_TO_RAD);
-        moby->rot.y = FUN_L00_0025b750(moby->rot.y, -fast_arc_tan(vec_len_xy(&diff), diff.z), D_L14_00161FAC);
+        moby->rot.y = FUN_L00_0025b750(moby->rot.y, -fast_arc_tan(vector_length_xy(&diff), diff.z), D_L14_00161FAC);
         moby->rot.z = FUN_L00_0025b750(moby->rot.z, fast_arc_tan(diff.x, diff.y), D_L14_00161FAC);
         fast_vec_scale(&step, &moby->rot_row0, speed);
         add_vector_xyz((u8 *)&moby->pos, (u8 *)&moby->pos, (u8 *)&step);

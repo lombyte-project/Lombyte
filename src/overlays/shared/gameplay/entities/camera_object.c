@@ -760,7 +760,7 @@ extern void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern f32 vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -840,7 +840,7 @@ void bolt_update(Bolt *obj) {
             qcopy(&v->pos, &D_L00_00173E40.point);
             clear_u64_value(&v->rot);
             v->rot.f[2] = fast_arc_tan(D_L00_00173E40.normal_x, D_L00_00173E40.normal_y);
-            v->rot.f[1] = fast_arc_tan(D_L00_00173E40.normal_z, vec_len_xy(&D_L00_00173E40.normal_x));
+            v->rot.f[1] = fast_arc_tan(D_L00_00173E40.normal_z, vector_length_xy(&D_L00_00173E40.normal_x));
             if (D_L00_00173E40.moby != 0 && FUN_L00_002603d0((void *)D_L00_00173E40.moby) != 0) {
                 void *gm = (void *)D_L00_00173E40.moby;
                 v->ground_moby = gm;
@@ -899,7 +899,7 @@ void bolt_update(Bolt *obj) {
         qcopy(&v->pos, &D_L00_00173E40.point);
         clear_u64_value(&v->rot);
         v->rot.f[2] = fast_arc_tan(D_L00_00173E40.normal_x, D_L00_00173E40.normal_y);
-        v->rot.f[1] = fast_arc_tan(D_L00_00173E40.normal_z, vec_len_xy(&D_L00_00173E40.normal_x));
+        v->rot.f[1] = fast_arc_tan(D_L00_00173E40.normal_z, vector_length_xy(&D_L00_00173E40.normal_x));
         fast_vec_sub(&a, &obj->pos, &D_L00_00173E40.point);
         FUN_L00_001ff660(&v->vel, &v->vel, &a);
         if (vector_distance(&obj->pos, &hero.motion.pos) < hero.reach_distance &&
@@ -912,10 +912,10 @@ void bolt_update(Bolt *obj) {
             return;
         }
         ang = 0.7853982f;
-        if (!(fast_arc_tan(a.f[2], vec_len_xy(&a)) < ang)) {
+        if (!(fast_arc_tan(a.f[2], vector_length_xy(&a)) < ang)) {
             return;
         }
-        if (!(fast_arc_tan(D_L00_00173E40.normal_z, vec_len_xy(&D_L00_00173E40.normal_x)) < ang)) {
+        if (!(fast_arc_tan(D_L00_00173E40.normal_z, vector_length_xy(&D_L00_00173E40.normal_x)) < ang)) {
             return;
         }
         obj->state = 2;

@@ -414,7 +414,7 @@ void FUN_L18_002a7220(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002A87D0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
@@ -435,7 +435,7 @@ char *FUN_L18_002a75f0(struct Moby *owner, float *pos, float *vec, int arg3) {
         *(short *)(data + 0x12) = arg3;
         *(char **)(data + 0x14) = owner;
         *(float *)(moby + 0x48) = fast_arc_tan(vec[0], vec[1]);
-        *(float *)(moby + 0x44) = -fast_arc_tan(vec_len_xy(vec), vec[2]);
+        *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(vec), vec[2]);
     }
     return moby;
 }
@@ -504,7 +504,7 @@ void FUN_L18_002d5050(struct Moby *moby) {
         FUN_L18_002d5488(moby, v10);
         fast_vec_add(&moby->pos, &moby->pos, v10);
         moby->rot.z = fast_arc_tan(v10[0], v10[1]);
-        f = fast_arc_tan(vec_len_xy(v10), v10[2]);
+        f = fast_arc_tan(vector_length_xy(v10), v10[2]);
         k = frame_time;
         moby->rot.y = -f;
         moby->rot.x = fast_add_rotations(moby->rot.x, k * 18.849556f);
@@ -558,7 +558,7 @@ char *FUN_L18_002d5348(float *pos, float *dir, float *target, float a, float b, 
         *(int *)(data + 0x30) = frames >> 1;
         *(int *)(data + 0x38) = kind;
         *(float *)(moby + 0x48) = fast_arc_tan(dir[0], dir[1]);
-        *(float *)(moby + 0x44) = -fast_arc_tan(vec_len_xy(dir), dir[2]);
+        *(float *)(moby + 0x44) = -fast_arc_tan(vector_length_xy(dir), dir[2]);
         allocate_voice_for_target_entry(0, 0, (int)moby);
     }
     return moby;

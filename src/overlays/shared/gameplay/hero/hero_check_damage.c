@@ -2658,11 +2658,11 @@ void hero_update(void)
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211EE8), where it is exact; names translated to the US level program. */
 
-extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 
 /* Length from vector_length_xy on hero.stick_x, capped at 1. */
 float FUN_L00_00211830(void) {
-    float len = vec_len_xy(&hero.stick_x);
+    float len = vector_length_xy(&hero.stick_x);
 
     if (1.0f < len) {
         len = 1.0f;

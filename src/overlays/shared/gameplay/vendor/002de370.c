@@ -15,7 +15,7 @@
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int tick_countdown_32(int *arg0) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *arg0) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_001ff290(void *, void *, void *);
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -34,7 +34,7 @@ void FUN_L03_002de370(char *moby) {
         float b = convert_integer_to_float(*(int *)(d + 0x20));
         moby[0x23] = func_001FA898_r(a * 255.0f / b);
     }
-    if (tick_countdown_32((int *)(d + 0x24)) != 0) {
+    if (fast_dec_timer((int *)(d + 0x24)) != 0) {
         mark_moby_for_removal(moby);
     }
 }

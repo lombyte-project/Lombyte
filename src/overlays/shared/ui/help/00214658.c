@@ -645,7 +645,7 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void FUN_L00_002132b8(f32, f32);
 extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
-extern f32 vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -691,8 +691,8 @@ void FUN_L00_002167d0(void) {
     }
     f20 = -(hero.motion.velocity.f[0] * v0.f[0] + hero.motion.velocity.f[1] * v0.f[1]);
     if (f21 < f20) {
-        f20 = f20 / vec_len_xy(&v0);
-        f20 = f20 / vec_len_xy(hero.motion.velocity.f);
+        f20 = f20 / vector_length_xy(&v0);
+        f20 = f20 / vector_length_xy(hero.motion.velocity.f);
     }
     if (1.0f < f20) {
         f20 = 1.0f;
@@ -720,7 +720,7 @@ void FUN_L00_002167d0(void) {
         if (f22 < e) {
             f20 = f20 / e;
         }
-        b = vec_len_xy(&v2);
+        b = vector_length_xy(&v2);
         a = (b - f20) / b;
         c = frame_time_sq * 3.0f;
         b = c * a;
@@ -1122,7 +1122,7 @@ void FUN_L00_00217658(void) {
                 FUN_L00_00233660(dir, 0.5f, 0.0f, 0.5f);
                 fast_vec_sub(delta, tpv->unk50, dir);
                 hero.aim_yaw = FUN_001f9e90_c2(delta[0], delta[1]);
-                hero.aim_pitch = FUN_001f9e90_c2(vec_len_xy(delta), delta[2]);
+                hero.aim_pitch = FUN_001f9e90_c2(vector_length_xy(delta), delta[2]);
             }
         }
         if (!has_target) {

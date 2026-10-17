@@ -964,7 +964,7 @@ void sandmouse_update(struct Moby *m) {
                 m->anim_speed = random_float_between_alt(0.95f, 1.05f);
             }
         }
-        if (*(s32 *)(g + 0x1130) == 0 || *(s32 *)(g + 0x1158) != 5 || hero.state.control_mode == 22 || hero.state.control_mode == 20 || hero.vehicle_mode != 0 || *(s16 *)(D_L01_00167280_lui + 0x86) == 20 || tick_countdown_32(p + 0x58) || D_L01_0016209C <= HOVER_I(0x5c)) {
+        if (*(s32 *)(g + 0x1130) == 0 || *(s32 *)(g + 0x1158) != 5 || hero.state.control_mode == 22 || hero.state.control_mode == 20 || hero.vehicle_mode != 0 || *(s16 *)(D_L01_00167280_lui + 0x86) == 20 || fast_dec_timer(p + 0x58) || D_L01_0016209C <= HOVER_I(0x5c)) {
             qzero(p + 0x10);
             HOVER_S(0x52) = D_L01_001620A4;
             if (HOVER_I(0x64) != -1 && HOVER_SOUND_VALID) FUN_0022d798(HOVER_I(0x64));

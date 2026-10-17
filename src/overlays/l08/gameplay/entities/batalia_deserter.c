@@ -390,7 +390,7 @@ typedef struct {
 } L14Player;
 extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -500,7 +500,7 @@ void the_plumber_batalia_update(L14WatchMoby *m) {
         scratch.eye[2] += 1.0f;
         fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
         yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), m->yaw);
-        pitch = -fast_arc_tan(vec_len_xy(scratch.delta), scratch.delta[2]);
+        pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)

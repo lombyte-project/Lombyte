@@ -258,7 +258,7 @@ extern char D_L02_001FA8C0[];
 extern void FUN_001e93b0_e50(char *, short) __asm__("FUN_001e93b0");
 extern int rand_e50(void) __asm__("FUN_001160d8");
 extern int scale_ticks_e50(int) __asm__("FUN_001f96f8");
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -419,7 +419,7 @@ void sand_shark_update(struct Moby *moby) {
                  &vars->turn_vel, 0.05f, 0.3f, 0.04f);
         moby->pos.x += fast_cos_e50(moby->rot.z) * D_0015ED6C;
         moby->pos.y += fast_sin_e50(moby->rot.z) * D_0015ED6C;
-        if (tick_countdown_32(&vars->turn_timer)) {
+        if (fast_dec_timer(&vars->turn_timer)) {
             vars->turn_timer = scale_ticks_e50(0x3C);
             f = vars->turn_range * 0.017453292f;
             vars->turn_offset = rand_between_e50(-f, f);
@@ -2155,7 +2155,7 @@ typedef struct {
 extern unsigned short D_0014D590_cb38[][64][2] __asm__("D_0014D590") __attribute__((section(".data")));
 extern int D_0014EE90[];
 extern int D_L02_0015FFD8;
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
@@ -2200,7 +2200,7 @@ void sand_shark_nest_update(unsigned char *moby) {
         }
         break;
     case 1:
-        if (tick_countdown_32(&d->timer)) {
+        if (fast_dec_timer(&d->timer)) {
             if (FUN_L02_002dd2a8_c(moby)) {
                 moby[0x20] = 2;
                 if (moby[0x53] != 1) {
@@ -2495,7 +2495,7 @@ extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern float absolute_float_dc88(float) __asm__("func_001F99C0");
 extern float FUN_00213f38(float *, float *, float, float, float, float);
 extern void sample_camera_path(void *, int, void *, void *, int, float) __asm__("FUN_00214e58");
@@ -2606,7 +2606,7 @@ void transport_pod_update(unsigned char *moby) {
         FUN_L00_00250df8((char *)D_L02_0015FFD8 + (d->gear[1] << 8));
         FUN_L00_00250df8((char *)D_L02_0015FFD8 + (d->gear[2] << 8));
         FUN_L00_00250df8((char *)D_L02_0015FFD8 + (d->gear[3] << 8));
-        if (tick_countdown_32(&d->timer)) {
+        if (fast_dec_timer(&d->timer)) {
             moby[0x20] = 3;
             FUN_0022da68_dc88(1, 0, moby);
         }
@@ -2690,7 +2690,7 @@ void transport_pod_update(unsigned char *moby) {
         } else if (r6 == 0) {
             FUN_L00_002eac18(2);
             moby[0x20] = 0xD;
-        } else if (tick_countdown_32(&d->ride_timer)) {
+        } else if (fast_dec_timer(&d->ride_timer)) {
             FUN_L00_002eac18(2);
             moby[0x20] = 0xD;
             FUN_L02_00237478();

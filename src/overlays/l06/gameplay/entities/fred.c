@@ -6442,7 +6442,7 @@ extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float FUN_L06_00216fa8(float);
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern float FUN_002132a8(float, float);
 extern int jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
@@ -6561,7 +6561,7 @@ void FUN_L06_00301b90(unsigned char *m) {
                 if (*(int *)(d + 0xB4) == x && *(short *)D_0015172A == 3) continue_audio_stream_if_ready();
             }
         }
-        if (tick_countdown_32(d + 0xC0) != 0) {
+        if (fast_dec_timer(d + 0xC0) != 0) {
             allocate_voice_for_group_entry(0, 0, (int)hero.moby);
             *(int *)(d + 0xC0) = truncate_float_to_s32(FUN_L06_00216fa8(FUN_002132a8(480.0f, 600.0f)));
             D_L06_00167400[88] = 0.4f;
@@ -6570,7 +6570,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         if (D_L06_0015F5C4 == 0) FUN_001f4600((int)FUN_L06_003021d8, (char *)m);
         if (hero.state.current == 0x72) { m[0x20] = 6; return; }
         if (D_L06_0015F5C4 != 0) return;
-        if (tick_countdown_32(d + 0xB4) == 0) return;
+        if (fast_dec_timer(d + 0xB4) == 0) return;
         m[0x20] = 5;
         x = scale_game_frames(15);
         q = D_L06_0015FFD8_301b90 + (*(int *)(d + 0x30) << 8);
@@ -6586,7 +6586,7 @@ void FUN_L06_00301b90(unsigned char *m) {
             D_L06_0015F400 = 0.0f;
             return;
         }
-        if (tick_countdown_32(d + 0xBC) == 0) return;
+        if (fast_dec_timer(d + 0xBC) == 0) return;
         approach_value((float *)(d + 0xB8), 1.0f, frame_time * 6.0f);
         D_L06_0015F400 = *(float *)(d + 0xB8);
         return;

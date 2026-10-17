@@ -14,7 +14,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00250df8(void *);
@@ -37,7 +37,7 @@ char *FUN_L08_00307190(char *pos, char *dir, int a2, int a3, int a4, int a5) {
         *(int *)(d + 0x2C) = a5;
         *(int *)(d + 0x28) = 0;
         *(float *)(m + 0x48) = fast_arc_tan(*(float *)d, *(float *)(d + 4));
-        *(float *)(m + 0x44) = -fast_arc_tan(vec_len_xy(d), *(float *)(d + 8));
+        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(d), *(float *)(d + 8));
         FUN_L00_00250df8(m);
     }
     return m;
@@ -144,7 +144,7 @@ void FUN_L08_00307b90(int arg) {
     D_L08_00162370 = random_float_between_alt(b, multiply_global_factor_ed64(10.0f));
     v[0] = a * frame_time;
     v[1] = v[0];
-    t = vec_len_xy(D_L08_00162360) / fast_vec_length(v);
+    t = vector_length_xy(D_L08_00162360) / fast_vec_length(v);
     D_L08_00162374 = (int)(t * (c - d) + d);
 }
 #include "rnc/gameplay/entities/moby.h"

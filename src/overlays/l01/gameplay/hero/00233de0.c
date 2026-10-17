@@ -190,7 +190,7 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
-extern f32 vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void FUN_L00_002132b8(f32, f32);
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
@@ -288,7 +288,7 @@ void FUN_L01_00234b40(void) {
         if (hero.target_speed < D_L01_0017C250[0] * frame_time * 0.2f) {
             if (hero.state.control_mode == 2) {
                 d = hero.unk944;
-                speed = vec_len_xy(&hero.motion.velocity);
+                speed = vector_length_xy(&hero.motion.velocity);
                 approach_value(0.0f, d, &speed);
                 FUN_001f9c48_u(hero.motion.velocity.f, hero.motion.velocity.f, speed);
                 return;

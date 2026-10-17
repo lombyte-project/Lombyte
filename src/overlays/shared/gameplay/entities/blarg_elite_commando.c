@@ -16,7 +16,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1B58), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
@@ -39,7 +39,7 @@ char *FUN_L16_002a09a0(char *owner, float *pos, char *vec) {
         *(char **)(data + 0x18) = owner;
         *(int *)(data + 0x10) = 0;
         *(float *)(moby + 0x48) = fast_arc_tan(pos[0], pos[1]);
-        a = vec_len_xy(pos);
+        a = vector_length_xy(pos);
         b = fast_arc_tan(a, pos[2]);
         *(float *)(moby + 0x44) = -b;
         moby[0x31] = 0;
@@ -151,7 +151,7 @@ char *FUN_L16_002a0dc0(char *owner, char *vec, void *pos, void *vel, int c, floa
         *(float *)(d + 0x2C) = random_float_between_alt(0.0f, y) * DEG_TO_RAD;
         *(int *)(d + 0x34) = 0;
         *(float *)(m + 0x48) = fast_arc_tan(*(float *)vec, *(float *)(vec + 4));
-        *(float *)(m + 0x44) = -fast_arc_tan(vec_len_xy(vec), *(float *)(vec + 8));
+        *(float *)(m + 0x44) = -fast_arc_tan(vector_length_xy(vec), *(float *)(vec + 8));
         m[0x31] = 0;
         *(unsigned short *)(m + 0x34) |= 1;
     }

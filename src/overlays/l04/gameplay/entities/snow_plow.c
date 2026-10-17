@@ -46,7 +46,7 @@ extern unsigned char D_0013D408[];
 extern void debug_print() __asm__("FUN_001e93b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -421,7 +421,7 @@ hit:
     }
     moby->hit_slot = 0xff;
     if (*(int *)(data + 0x174) == 0) return;
-    if (tick_countdown_32((int *)(data + 0x170))) {
+    if (fast_dec_timer((int *)(data + 0x170))) {
         char *camera = D_L04_00166E00;
         amount = fast_arc_tan(moby->pos.x - *(float *)(camera + 0x140), moby->pos.y - *(float *)(camera + 0x144));
         if (1.5707964f < fast_difference_between_rotations(*(float *)(camera + 0x158), amount)) {
@@ -1410,7 +1410,7 @@ void FUN_L04_002d6f68(char *moby) {
     qcopy(dst + 0x10, moby + 0x10);
 }
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern int tick_countdown_32(s32 *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -1449,7 +1449,7 @@ void leaf_update(struct Moby *moby) {
     case 1:
         if (!(vector_distance(&moby->pos, D_L04_00166F40) < 32.0f))
             return;
-        if (!tick_countdown_32((int *)(data + 0x44)))
+        if (!fast_dec_timer((int *)(data + 0x44)))
             return;
         direction.q = 0;
         direction.f[0] = random_float_between(-1.0f, 1.0f);
@@ -1471,7 +1471,7 @@ void leaf_update(struct Moby *moby) {
         moby->state = 2;
         return;
     case 2:
-        tick_countdown_32((int *)(data + 0x44));
+        fast_dec_timer((int *)(data + 0x44));
         normalize_vector_xyz(&random, &random, D_L04_001CB940[5] / 10.0f);
         add_vector_xyz(data + 0x10, data + 0x10, &random);
         normalize_vector_xyz(&work, data + 0x10, 5.0f);
@@ -1561,7 +1561,7 @@ extern s32 D_L04_001BA650[];
 extern LevelCollected D_L04_001BB3B0;
 extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int tick_countdown_32(s32 *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
@@ -1594,7 +1594,7 @@ void upper_door_update(struct Moby *m) {
         break;
     case 2:
         m->pos.z += riser_rise_speed(m) * frame_time;
-        if (tick_countdown_32(&d->timer)) {
+        if (fast_dec_timer(&d->timer)) {
             D_0014C190_257218[current_level_index][(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
             D_L04_001BA650[(s16)m->save_id >> 5] |= 1 << (m->save_id & 0x1F);
             if (m->oclass == 0x44D)

@@ -439,7 +439,7 @@ extern char D_L03_001E2478[];
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern int FUN_L01_00277fb8(char *);
@@ -475,7 +475,7 @@ void FUN_L03_00292890(char *moby);
         if (!voice_is_playing(moby, data->i108)) {                                                              \
             data->i108 = allocate_voice_for_target_entry(1, 4, (int)moby);                                      \
         }                                                                                                       \
-        if (tick_countdown_32(&data->i104)) {                                                                        \
+        if (fast_dec_timer(&data->i104)) {                                                                        \
             allocate_voice_for_target_entry(0, 0, (int)moby);                                                   \
             data->i104 = random_int_between(scale_game_frames(900), scale_game_frames(400));                                \
         }                                                                                                       \
@@ -737,7 +737,7 @@ extern char *D_L03_001B05B0_294c08[] __asm__("D_L03_001B05B0");
 extern char D_0013E550_294c08[] __asm__("D_0013E550");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern void noop_main_callback(void *) __asm__("FUN_001e93e8");
@@ -797,7 +797,7 @@ void moving_platform_small_update(char *moby) {
         *(int *)pa = pa[4] < 0 ? 0 : **(int **)(pa + 0x10) - 1;
         *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)(data + 0xFC);
         *(int *)(data + 0x104) = -1;
-        if (tick_countdown_32(data + 0x100)) {
+        if (fast_dec_timer(data + 0x100)) {
             *(float *)(data + 0x110) = FUN_001f9b48(*(char **)(pa + 0x10) + 0x10,
                                                     *(char **)(pa + 0x10) + **(int **)(pa + 0x10) * 0x10);
             t = scale_game_frames(240);
@@ -844,7 +844,7 @@ void moving_platform_small_update(char *moby) {
         }
         break;
     case 2:
-        if (tick_countdown_32(data + 0xE8)) {
+        if (fast_dec_timer(data + 0xE8)) {
             *(int *)(data + 0x10C) = 0;
             moby[0x20] = 1;
         }
@@ -893,7 +893,7 @@ void moving_platform_small_update(char *moby) {
         }
         break;
     case 4:
-        if (tick_countdown_32(data + 0xE8)) {
+        if (fast_dec_timer(data + 0xE8)) {
             moby[0x20] = 3;
         }
         break;
@@ -1580,7 +1580,7 @@ extern float compute_interpolated_record_value_c5bb8(void *) __asm__("FUN_0020c9
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_001160d8(void);
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int FUN_L00_00259028(char *m, char *p, char *pos, char *v);
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
@@ -1629,7 +1629,7 @@ void robot_dog_update(char *moby) {
     FUN_L03_0024e830(moby, (char *)&tgt, data->f230);
     FUN_L00_00263ac8_c5bb8(moby, 0, data->m280, 2.1f);
     FUN_L03_002c6a20((struct Moby *)moby);
-    tick_countdown_32(&data->i244);
+    fast_dec_timer(&data->i244);
     switch (((unsigned char *)moby)[0x20]) {
     case 0:
         *(unsigned short *)(moby + 0x34) |= 0x1000;
@@ -1725,7 +1725,7 @@ void robot_dog_update(char *moby) {
         dir[1] = 2.0f * fast_sin(*(float *)(moby + 0x48));
         dir[2] = 0.0f;
         FUN_L00_00258b50(moby, &data->i180, dir, push, 1.0f);
-        if (tick_countdown_32(&data->i23C)) {
+        if (fast_dec_timer(&data->i23C)) {
             data->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
         }
         d = vector_distance(moby + 0x10, &tgt);

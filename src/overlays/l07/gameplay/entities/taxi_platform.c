@@ -369,7 +369,7 @@ void FUN_L07_00312150(char *a) {
 /* steps a hit-effect emitter: orient, spawn a puff, and reseed the timer */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00313690), where it is exact; names translated to the US level program. */
 
-extern int tick_countdown_32(int *counter) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *counter) __asm__("FUN_001f9740");
 extern int FUN_0022da68(int, int, int);
 extern int FUN_L07_0030e370_c() __asm__("FUN_L07_0030e370");
 extern void FUN_L00_001ff600(float, void *, void *);
@@ -379,7 +379,7 @@ int FUN_L07_003122b0(void *mp, char *obj, float *vec) {
     unsigned char *moby = mp;
     float A[4];
     float B[4];
-    if (tick_countdown_32((int *)(obj + 0x160))) {
+    if (fast_dec_timer((int *)(obj + 0x160))) {
         moby_point_position(moby, *(int *)(obj + 0x164) & 1, A);
         fast_vec_sub(B, vec, A);
         FUN_L00_001ff600(10.7f, B, B);
@@ -1126,7 +1126,7 @@ void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
                     fast_vec_sub((char *)child + 0x60, (char *)child + 0x80,
                                   (char *)cursor + 0x10);
                     qcopy((void *)(cursor + 0x10), (void *)(child + 0x80));
-                    if (tick_countdown_32((int *)(child + 0x98)) &&
+                    if (fast_dec_timer((int *)(child + 0x98)) &&
                         *(s32 *)(child + 0x90) == *(s32 *)(data + 0x90))
                         FUN_L07_0030af40((struct Moby *)cursor);
                 }
@@ -3103,7 +3103,7 @@ end:
 }
 extern int rand(void) __asm__("FUN_001160d8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern float FUN_L00_0025bc00(float *, float, int, float);
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
@@ -3196,7 +3196,7 @@ void FUN_L07_003112c8(char *moby) {
             fast_sin(normalize_angle(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.75f)) * 0.017453292f);
         *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(data + 0xA8),
             fast_cos(normalize_angle(convert_integer_to_float(*(int *)(data + 0xAC)) * 0.89f)) * 0.017453292f);
-        if (!tick_countdown_32((int *)(data + 0xAC))) break;
+        if (!fast_dec_timer((int *)(data + 0xAC))) break;
         if (((unsigned char *)data)[0xBE] != 0) {
             parent_data[0x19D] = data[0xBF];
             parent[0x20] = 12;
@@ -3274,7 +3274,7 @@ void FUN_L07_003112c8(char *moby) {
         roll = fast_sin(*(float *)(data + 0xC4)) * 0.02f;
         if (*(int *)(data + 0xAC) != 0) {
             float forward, side;
-            tick_countdown_32((int *)(data + 0xAC));
+            fast_dec_timer((int *)(data + 0xAC));
             subtract_vector_xyz(scratch, &hero.motion.pos, moby + 0x10);
             forward = dot_vector_xyz(scratch, moby + 0xC0);
             side = dot_vector_xyz(scratch, moby + 0xD0) * -0.03f;
@@ -3295,7 +3295,7 @@ void FUN_L07_003112c8(char *moby) {
         if (*(float *)(moby + 0x44) < -0.5235988f) *(float *)(moby + 0x44) = -0.5235988f;
         break;
     }
-    if (((unsigned char *)moby)[0x20] == 5 && tick_countdown_32((int *)(data + 0xC8))) {
+    if (((unsigned char *)moby)[0x20] == 5 && fast_dec_timer((int *)(data + 0xC8))) {
         float last = *(float *)(data + 0xCC);
         float height = *(float *)(data + 0xB8);
         if ((height <= last && *(float *)(moby + 0x18) < height) || (last <= height && height < *(float *)(moby + 0x18))) {

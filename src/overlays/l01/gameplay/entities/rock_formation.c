@@ -140,7 +140,7 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 rand(void) __asm__("FUN_001160d8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void collect_mobies_in_sphere(void *, s32, void *, void *, f32) __asm__("FUN_L00_001f2868");
-extern s32 tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 
@@ -163,7 +163,7 @@ void fan_update(SwayMoby *m) {
     q.x20 = 0;
     collect_mobies_in_sphere(m->pos, 0x10, m, &q, 1.2f);
     if (v->dir == v->sway) {
-        if (tick_countdown_32(&v->timer)) {
+        if (fast_dec_timer(&v->timer)) {
             v->dir = -v->dir;
             v->timer = scale_game_frames(0x5A);
         }
@@ -489,7 +489,7 @@ void update_birdbot_projectile(DropMoby *m) {
     probe.b28 = 1;
     probe.b29 = 1;
     probe.id = m->hA6;
-    if (tick_countdown_32(v->sound) != 0) {
+    if (fast_dec_timer(v->sound) != 0) {
         tmp = m->pos.q;
         FUN_L01_002fa1b0(m, &tmp, 0, 0.5f, zero);
         mark_moby_for_removal(m);

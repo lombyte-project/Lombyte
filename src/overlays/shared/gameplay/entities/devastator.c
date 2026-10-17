@@ -1595,7 +1595,7 @@ extern int tick_countdown_32_alt(int *arg0) __asm__("FUN_001f9740");
 extern u32 D_0013C940[];
 extern unsigned char *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern void hero_set_state(int, int) __asm__("FUN_L00_002223f8");
+extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_49a8(void *, s32, s32, s32) __asm__("FUN_00212f90");

@@ -1025,7 +1025,7 @@ void gravity_flatten(float *dst, float *src) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234250), where it is exact; names translated to the US level program. */
 
-extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
@@ -1039,13 +1039,13 @@ float gravity_length_xy(float *v) {
 
     switch (base->unk20B3) {
     case 0:
-        return vec_len_xy(v);
+        return vector_length_xy(v);
     case 1:
     case 2:
         euler_rotation_matrix(m, ((char *)base->moby) + 0x40);
         transpose_rotation_matrix(inv, m);
         transform_vector(out, v, inv);
-        return vec_len_xy(out);
+        return vector_length_xy(out);
     }
     return 0.0f;
 }

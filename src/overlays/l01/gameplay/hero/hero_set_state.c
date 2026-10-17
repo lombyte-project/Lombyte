@@ -1605,7 +1605,7 @@ struct HeldGadgetVars {
 
 extern int D_00141660 __attribute__((section(".data")));
 int r1_double_tap_timer __asm__("D_L01_0015F674") = 0;
-extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int FUN_0022da68(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);
 extern int FUN_L00_0020d498(int);
@@ -1786,7 +1786,7 @@ int FUN_L01_00240ed8(void) {
     if (hero.state_timer == saved) {
         if (FUN_L00_0020d498(3) == 3 && hero.state.current != 0x81 &&
             (hero.unk308 == 0 || D_0013D4DC[0] == 0) && hero.unk22D8 == 0) {
-            tick_countdown_32(&r1_double_tap_timer);
+            fast_dec_timer(&r1_double_tap_timer);
             if (r1_double_tap_timer != 0 &&
                 ((unsigned int)hero.state.control_mode < 2 || hero.state.control_mode == 0xc ||
                  ((hero.state.control_mode == 2 || hero.state.control_mode == 4) && hero.grounded_frames != 0)) &&

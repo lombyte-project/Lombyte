@@ -1370,7 +1370,7 @@ void FUN_L13_00309370(struct Moby *m) {
     *(float *)(d + 0x1FC) = scale_game_frames(D_L13_00161E84);
 }
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float dot_vector_xyz(void *, void *) __asm__("FUN_001f9ab0");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
@@ -1412,7 +1412,7 @@ void FUN_L13_003094f8(struct Moby *moby) {
     float prior_height, dot;
 
     timer = func_001FA898_r(data->anchor.w);
-    tick_countdown_32(&timer);
+    fast_dec_timer(&timer);
     data->anchor.w = (float)timer;
     if (!timer) return;
 

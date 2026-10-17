@@ -1128,7 +1128,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
             }
             m->state = 2;
         }
-        if (tick_countdown_32(&v->timer) != 0) {
+        if (fast_dec_timer(&v->timer) != 0) {
             m->state = 2;
         }
         break;
@@ -1244,7 +1244,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -1395,13 +1395,13 @@ void helga_update(struct Moby *m) {
             if (vec_len((u8 *)g + 0x80) > 0.01f) {
                 v->watch_timer = scale_game_frames(120);
             } else {
-                tick_countdown_32(&v->watch_timer);
+                fast_dec_timer(&v->watch_timer);
             }
         } else if (v->watch_timer) {
             v->watch_timer = 0;
             qcopy(&v->target, &hero.motion.unkD0);
         }
-        if (tick_countdown_32(&v->target_timer)) {
+        if (fast_dec_timer(&v->target_timer)) {
             float heading;
             v->target_timer = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading = fast_add_rotations(m->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
@@ -1535,7 +1535,7 @@ extern char D_L03_001E35F0[];
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");
 extern float FUN_001f9b48(void *, void *);
 extern struct Moby *FUN_L03_002db198(struct RailPath *, float);
-extern int tick_countdown_32(s32 *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern int voice_is_playing(struct RailSpawnerMoby *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0028dc90(int, int, struct RailSpawnerMoby *, int);
 
@@ -1562,7 +1562,7 @@ void FUN_L03_002db280(struct RailSpawnerMoby *moby) {
             FUN_L03_002db198(path, d);
         moby->unk30 = 0x60;
     }
-    if (tick_countdown_32(&vars->timer)) {
+    if (fast_dec_timer(&vars->timer)) {
         vars->timer = ftoi_2db020(2.9f / D_L03_00161BC0);
         FUN_L03_002db198(D_L03_001B05B0[vars->path], 0.0f);
     }
@@ -1630,7 +1630,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -1772,13 +1772,13 @@ void big_al_update(struct Moby *m) {
             if (vec_len((u8 *)g + 0x80) > 0.01f) {
                 v->watch_timer = scale_game_frames(120);
             } else {
-                tick_countdown_32(&v->watch_timer);
+                fast_dec_timer(&v->watch_timer);
             }
         } else if (v->watch_timer) {
             v->watch_timer = 0;
             qcopy(&v->target, &hero.motion.unkD0);
         }
-        if (tick_countdown_32(&v->target_timer)) {
+        if (fast_dec_timer(&v->target_timer)) {
             float heading;
             v->target_timer = truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
             heading = fast_add_rotations(m->rot.z, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
@@ -2032,7 +2032,7 @@ void FUN_L03_002dccc0(struct Moby *m) {
     FUN_L00_00266858(m, FUN_L03_002dcb30((unsigned char *)m));
     qcopy(&oldPos, &m->pos);
     oldRot.q = *(u128 *)&m->rot;
-    tick_countdown_32(&d->timer);
+    fast_dec_timer(&d->timer);
     switch (m->state) {
     case 0:
         m->command = d->start_end;

@@ -189,7 +189,7 @@ int FUN_L18_002f0030(char *moby, int group, float *pos) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F1510), where it is exact; names translated to the US level program. */
 
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -231,7 +231,7 @@ int FUN_L18_002f0120(char *moby, float *vec) {
     p = *(char **)(d + 0x16C);
     if (p) {
         fast_vec_sub(v, moby + 0x10, p + 0x10);
-        if (!(vec_len_xy(v) < 4.5f)) {
+        if (!(vector_length_xy(v) < 4.5f)) {
             return 0;
         }
         set_vector_length_xy(v, v, random_float_between_alt(15.0f, 20.0f));

@@ -392,7 +392,7 @@ typedef struct {
 extern Glob D_L00_00173E40_c __asm__("D_L00_00173E40");
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 FUN_001f9dc8_c(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -427,7 +427,7 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     sp = c->f1C * f;
     lim = c->f24 * f;
     fast_vec_sub(&d, v, &m->pos);
-    len = vec_len_xy(&d);
+    len = vector_length_xy(&d);
     save.q = m->pos.q;
     t = sp * len;
     if (sp < t)
@@ -457,16 +457,16 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     p.f[2] = m->pos.f[2] - c->f30;
     if (FUN_L00_002583f0_c(&p, m, c->i38 & 0x20, c->f08, c->f0C)) {
         g = &D_L00_00173E40_c;
-        a = fast_arc_tan(g->v40.f[2], vec_len_xy(&g->v40));
+        a = fast_arc_tan(g->v40.f[2], vector_length_xy(&g->v40));
         h1 = g->f28;
-        if (0.5f < a && 0.1f < vec_len_xy(&d)) {
+        if (0.5f < a && 0.1f < vector_length_xy(&d)) {
             {
                 fast_vec_normalize(&q, &d, 0.57f);
                 fast_vec_add(&q, &q, &m->pos);
                 q.f[2] = m->pos.f[2] - c->f30;
                 if (FUN_L00_002583f0_c(&q, m, c->i38 & 0x20, c->f08, c->f0C)) {
                     h2 = g->f28;
-                    if (!(0.5f <= fast_arc_tan(g->v40.f[2], vec_len_xy(&g->v40))))
+                    if (!(0.5f <= fast_arc_tan(g->v40.f[2], vector_length_xy(&g->v40))))
                         goto done;
                     mask = 0x22;
                     if (!(c->i38 & 8))
@@ -487,7 +487,7 @@ s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f) {
     }
 done:
     if (!(mask & 2)) {
-        l2 = vec_len_xy(&d);
+        l2 = vector_length_xy(&d);
         FUN_001f9a68_c(&p, &d, 1.0f / l2);
         r = FUN_L00_00258ad0_c(m, &d, c->f04, c->i00, c->f30, c->i38);
         if (r & 2)

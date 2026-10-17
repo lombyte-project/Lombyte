@@ -1007,7 +1007,7 @@ void FUN_L01_00232290(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00232F90), where it is exact; names translated to the US level program. */
 
 extern char D_L01_001742C0_d[] __asm__("D_L01_001742C0") __attribute__((section(".data")));
-extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -1048,7 +1048,7 @@ void FUN_L01_00232978(int flag) {
     s[2] += f2;
     qcopy(t, &g->motion.pos);
     t[2] += f2 * 0.3f;
-    if (flag != 0 || vec_len_xy(&g->motion.velocity) < 0.01f) {
+    if (flag != 0 || vector_length_xy(&g->motion.velocity) < 0.01f) {
         p[0] = fast_cos(g->motion.rot.f[2]) * f21;
         p[1] = fast_sin(g->motion.rot.f[2]) * f21;
         p[2] = 0.0f;
@@ -1058,7 +1058,7 @@ void FUN_L01_00232978(int flag) {
     } else {
         qcopy(p, &g->motion.velocity);
         p[2] = 0.0f;
-        fast_vec_scale(p, p, f21 / vec_len_xy(p));
+        fast_vec_scale(p, p, f21 / vector_length_xy(p));
         qcopy(q, p);
         fast_vec_scale(q, q, 1.4f);
     }
@@ -1076,7 +1076,7 @@ void FUN_L01_00232978(int flag) {
     if (FUN_001efa68(s, p, 4, (int)h2->moby, 0) != 0) {
         w = D_L01_001742C0_d;
         if (*(int *)(w + 0x1C) > 0) {
-            f20 = fast_arc_tan(*(float *)(w + 0x48), vec_len_xy(w + 0x40));
+            f20 = fast_arc_tan(*(float *)(w + 0x48), vector_length_xy(w + 0x40));
         }
     }
     if (f20 >= 0.87266463f || k == 8 || k == 12) {

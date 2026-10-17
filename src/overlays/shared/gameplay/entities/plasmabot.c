@@ -1237,7 +1237,7 @@ void FUN_L14_002b3a20(char *m) {
 
 extern u8 *D_L14_00167500 NOT_SDA;
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
-extern s32 tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 
 void plasmabot_hatch_update(struct Moby *moby) __asm__("FUN_L14_002d96e0");
 void plasmabot_hatch_update(struct Moby *moby) {
@@ -1255,7 +1255,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
         }
         break;
     case 1:
-        if (tick_countdown_32(data + 8) != 0) {
+        if (fast_dec_timer(data + 8) != 0) {
             moby->state = 2;
             set_moby_animation(moby, 1, 0);
         }
@@ -1281,7 +1281,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
         }
         break;
     case 6:
-        if (tick_countdown_32(data + 8) != 0) {
+        if (fast_dec_timer(data + 8) != 0) {
             set_moby_animation(moby, 3, 0);
             moby->state = 7;
         }
@@ -1339,7 +1339,7 @@ extern void enqueue_callback_list_1(void (*)(struct Moby *), struct Moby *) __as
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern f32 fast_add_rotations(f32, f32);
-extern s32 tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 random_integer_below_de670(s32) __asm__("FUN_00213260");
 extern s32 FUN_L00_00257b90(s32, s32);
@@ -1391,7 +1391,7 @@ void FUN_L14_002de670(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (tick_countdown_32(velocity + 8) != 0 || coll_sphere(0.5f, &moby->pos, 0, *(void **)(velocity + 9)) != 0) {
+    if (fast_dec_timer(velocity + 8) != 0 || coll_sphere(0.5f, &moby->pos, 0, *(void **)(velocity + 9)) != 0) {
         spawn_explosion(moby, velocity, &moby->pos, 0.0f, 0.0f, 5, 2, 4,
                             1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, -1, 0);
         coll_sphere(1.0f, &moby->pos, 0, D_001413D0_de670);

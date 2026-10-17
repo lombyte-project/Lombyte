@@ -745,7 +745,7 @@ int FUN_L17_002eace8(int a, char *p, char *a2, char *a3, float f0, float f1, flo
 extern unsigned char D_0013C940_u[] __asm__("D_0013C940");
 extern int D_L17_0015F5C4;
 int D_L17_0016216C = 600;
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L17_002eace8_u(int, char *, char *, char *, float, float, float, char *,
                               char *) __asm__("FUN_L17_002eace8");
@@ -764,7 +764,7 @@ void FUN_L17_002eb768(int a, char *p) {
     float v[4];
     int h;
     if (!(D_L17_0015F5C4 >= 3 && D_L17_0015F5C4 <= 4)) {
-        tick_countdown_32((int *)(p + 0x8C));
+        fast_dec_timer((int *)(p + 0x8C));
     }
     if (W(p, 0x8C) != 0 && P(p, 0x88) != 0 && H(P(p, 0x88), 0xA6) == W(p, 0x128) &&
         B(P(p, 0x88), 0x20) != 0xFE && B(P(p, 0x88), 0x20) != 0xFD) {
@@ -973,7 +973,7 @@ void FUN_L17_002eb9a8(struct Moby *moby) {
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDAF0), where it is exact; names translated to the US level program. */
 
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int FUN_L11_00308848(void *, void *, void *, float, float);
 extern f32 D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
@@ -993,7 +993,7 @@ void FUN_L17_002ec000(char *moby, char *obj, float p2, float p3) {
     char d[16];
     build_spherical_offset(a, *(float *)&D_L17_0016206C * *(float *)&D_L17_001620A0_gp, p2, p3);
     fast_vec_add(a, a, obj);
-    if (tick_countdown_32(obj + 0x80) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x84)) {
+    if (fast_dec_timer(obj + 0x80) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x84)) {
         allocate_voice_for_target_entry(3, 0, (int)moby);
         fast_vec_normalize(c, a, 2.2f);
         moby_point_position(moby, 3 + (obj[0x61] & 1), b);
@@ -1017,7 +1017,7 @@ int D_L17_00162078 = 30;
 void FUN_L17_002ec150(char *moby, char *obj) {
     char a[16];
     char b[16];
-    if (tick_countdown_32(obj + 0x84) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x28)) {
+    if (fast_dec_timer(obj + 0x84) && (*(int *)(D_0013A4E0_u + 0x2610) & 0x28)) {
         if (hero.ship_ammo != 0) {
             char *pos = moby + 0x40;
             float s;
@@ -1586,11 +1586,11 @@ typedef struct {
     char b[0x400];
 } ShipBlock400;
 
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float vec_len_xy(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_00213ed8(float *, float, float);
@@ -1640,7 +1640,7 @@ void fighter_jet_update(ShipMoby *moby) {
 
     if (moby != 0) {
         v = (ShipVars *)moby->vars;
-        tick_countdown_32(&v->timerDC);
+        fast_dec_timer(&v->timerDC);
         if (moby->state != 7 && moby->state != 1 && moby->state != 2) {
             hit = (ShipHit *)find_moby_hit(moby, 0x30001, 0);
             if (hit != 0 && moby->state == 4) {
@@ -1661,7 +1661,7 @@ void fighter_jet_update(ShipMoby *moby) {
                             fast_subtract_rotations(fast_arc_tan(dir[0], dir[1]), v->rot[2]) * D_L17_00162018 * k);
                         v->rot[1] = fast_add_rotations(
                             v->rot[1],
-                            fast_subtract_rotations(fast_arc_tan(vec_len_xy(dir), dir[2]), v->rot[1]) *
+                            fast_subtract_rotations(fast_arc_tan(vector_length_xy(dir), dir[2]), v->rot[1]) *
                                 D_L17_0016201C * k);
                     }
                 } else {
@@ -1897,7 +1897,7 @@ void fighter_jet_update(ShipMoby *moby) {
             force_help_message(6, 0);
             D_L17_0015F608 = 2;
             FUN_L17_002ec360((Moby *)moby, (Obj *)v);
-            if (tick_countdown_32(&v->timerF8)) {
+            if (fast_dec_timer(&v->timerF8)) {
                 FUN_00213ed8(&v->fade, 1.0f, frame_time * 4.0f);
                 D_L17_0015F3FC = v->fade;
             }

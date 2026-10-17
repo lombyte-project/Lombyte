@@ -141,7 +141,7 @@ extern void stick_target(f32, s32) __asm__("FUN_L00_002118c8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void turn_to(s32, f32, f32, f32) __asm__("FUN_L00_00211e30");
 extern void FUN_L00_00211e30_b(f32, f32, f32, s32) __asm__("FUN_L00_00211e30");
-extern s32 tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_00229a98(void);
 extern void FUN_L00_00211e98(void);
@@ -351,7 +351,7 @@ void FUN_L05_00244a70(void) {
                 transform_vector_by_basis(&hero.motion.unk170, &v0, &D_L05_001671D8[0x1F8]);
                 hero.motion.move_yaw = *(f32 *)D_L05_001671D8;
                 turn_to(0, frame_scale_sq, frame_scale_sq * 0.0f, frame_time * 174.53293f);
-                if (D_L05_0015F688 > 0 && tick_countdown_32(&D_L05_0015F688) != 0) {
+                if (D_L05_0015F688 > 0 && fast_dec_timer(&D_L05_0015F688) != 0) {
                     s32 t;
                     if (usage_stats.stat[18].count < 0xFFFF) {
                         usage_stats.stat[18].count++;
@@ -635,7 +635,7 @@ void FUN_L05_00244a70(void) {
             stick_target(1.0f, 0);
             turn_to(0, frame_scale_sq * 0.007f, frame_scale_sq * 0.08f, frame_time * 5.2359877f);
             hero.unk8EC = hero.motion.unk184;
-            tick_countdown_32(&hero.unk8F4);
+            fast_dec_timer(&hero.unk8F4);
             if (hero.state.step == 1) {
                 hero.target_speed = frame_time * 6.0f;
             } else if (hero.state.current == 0x35) {
@@ -665,7 +665,7 @@ void FUN_L05_00244a70(void) {
             if (hero.state.current != 0x35 || !(PD.u1A0.i1A0 & 0xA)) {
                 hero.target_speed *= k;
             };
-            if (tick_countdown_32(&hero.unk8F0) != 0) {
+            if (fast_dec_timer(&hero.unk8F0) != 0) {
                 s32 lo2;
                 s32 hi2;
                 pl = &hero;
@@ -778,7 +778,7 @@ void FUN_L05_00244a70(void) {
         approach_value(&len, 0.0f, frame_time_sq * 4.0f);
         fast_vec_normalize(&hero.motion.unk150, &hero.motion.unk150, len);
         qcopy(&hero.motion.velocity, &hero.motion.unk150);
-        if (tick_countdown_32(&hero.unk8F0) == 2) {
+        if (fast_dec_timer(&hero.unk8F0) == 2) {
             moby_point_position((struct MobyView *)hero.moby, 4, &v0);
             v20.q = 0;
             v20.f[0] = 0.4f;
@@ -825,7 +825,7 @@ void FUN_L05_00244a70(void) {
             }
         }
         turn_to(0, frame_scale_sq * 0.007f, frame_scale_sq * 0.08f, frame_time * 5.2359877f);
-        tick_countdown_32(&hero.unk698);
+        fast_dec_timer(&hero.unk698);
         if (hero.state.current == 0x36) {
             if (PD.i1D4 != 0 && hero.unk698 != 0) {
                 hero.target_speed = frame_time * 3.0f;
@@ -920,9 +920,9 @@ void FUN_L05_00244a70(void) {
                              frame_time * 0.6981317f);
             approach_value(&hero.unk868, frame_time * 11.0f, frame_time_sq * 20.0f);
             if (hero.unk8C4 != 0) {
-                tick_countdown_32(&hero.unk8C4);
+                fast_dec_timer(&hero.unk8C4);
             } else {
-                tick_countdown_32(&hero.unk864);
+                fast_dec_timer(&hero.unk864);
             }
             if ((struct MobyView *)hero.unk86C != NULL) {
                 ((struct MobyView *)hero.unk86C)->bBC = 1;

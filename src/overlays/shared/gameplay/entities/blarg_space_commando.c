@@ -80,7 +80,7 @@ extern s32 *D_L06_001B0C30[];
 extern f32 D_L06_0015F580[] MACRO_ADDR;
 
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
@@ -251,7 +251,7 @@ void blarg_space_commando_update(struct Moby *moby) {
         approach_angle(&moby->rot.z, fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, frame_time_sq * 6.2831855f,
                          frame_time * 3.1415927f);
-        if (tick_countdown_32(&vars->timer) != 0) {
+        if (fast_dec_timer(&vars->timer) != 0) {
             FUN_L06_002ff100_u(moby);
             moby->state = 3;
             if (moby->prev_seq != 5) {
@@ -652,7 +652,7 @@ void FUN_L06_002ff2c8(char *moby) {
     ShotInfo shot;
 
     frames = truncate_float_to_s32(*(f32 *)(data + 0x21C));
-    tick_countdown_32(&frames);
+    fast_dec_timer(&frames);
     *(f32 *)(data + 0x21C) = (f32)frames;
     if (frames == 0) {
         return;

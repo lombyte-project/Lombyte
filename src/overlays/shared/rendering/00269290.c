@@ -294,13 +294,13 @@ void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigne
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026AB10), where it is exact; names translated to the US level program. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void FUN_L00_00269c70(char *m) {
     float *p;
     p = (float *)(m + 0x20);
-    if (tick_countdown_32(p)) {
+    if (fast_dec_timer(p)) {
         free_effect_particle(m);
         return;
     }
@@ -2016,7 +2016,7 @@ char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f) {
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026ECA0), where it is exact; names translated to the US level program. */
 
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
@@ -2025,7 +2025,7 @@ void FUN_L00_0026de00(char *a) {
     fast_vec_add(a + 0x10, a + 0x10, b);
     *(unsigned *)(a + 4) = (*(unsigned *)(a + 4) & 0xFFFFFF) +
                            (((*(int *)(b + 0x18) * *(int *)(b + 0x10)) / *(int *)(b + 0x14)) << 24);
-    if (tick_countdown_32(a + 0x30))
+    if (fast_dec_timer(a + 0x30))
         free_effect_particle(a);
 }
 typedef struct {

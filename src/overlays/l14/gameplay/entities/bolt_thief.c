@@ -524,7 +524,7 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -645,12 +645,12 @@ void sam_update(L14WatchMoby *m) {
             if (fast_vec_length(g + 0x80) > 0.01f)
                 d->moving_timer = scale_game_frames(120);
             else
-                tick_countdown_32(&d->moving_timer);
+                fast_dec_timer(&d->moving_timer);
         } else if (d->moving_timer) {
             d->moving_timer = 0;
             qcopy(d->target, hero.motion.unkD0.f);
         }
-        if (tick_countdown_32(&d->target_timer)) {
+        if (fast_dec_timer(&d->target_timer)) {
             float heading;
             d->target_timer =
                 truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));

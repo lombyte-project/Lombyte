@@ -463,7 +463,7 @@ void FUN_L01_002c72c8(void) {
                          FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1, 20000.0f);
     }
 }
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int FUN_001e9448(void *);
 extern int collect_mobies_in_sphere(float, void *, int, int, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_00259bc8_2c7530(float, void *, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
@@ -506,7 +506,7 @@ void FUN_L01_002c7530(char *moby) {
             ((void (*)(void *))FUN_L01_002c72c8)(moby);
             goto remove;
         }
-        if (tick_countdown_32(data)) {
+        if (fast_dec_timer(data)) {
             data[0] = scale_game_frames(0x1e);
             moby[0x20] = 2;
             if (data[4] != 0)
@@ -516,7 +516,7 @@ void FUN_L01_002c7530(char *moby) {
     case 0:
         break;
     case 2:
-        if (tick_countdown_32(data)) {
+        if (fast_dec_timer(data)) {
         remove:
             FUN_0020c828(moby);
         } else {
@@ -1261,7 +1261,7 @@ extern void finish_moby_2e3f20(void *, float) __asm__("FUN_L00_00259fe8");
 extern int random_integer_3830(void) __asm__("FUN_001160d8");
 extern void blend_moby_animation_3830(void *, int, int, int) __asm__("FUN_00212f90");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -1458,7 +1458,7 @@ void sand_mouse_update(struct Moby *moby) {
             && hero_2e3f20->i208C != 0x16
             && hero_2e3f20->i208C != 0x14
             && hero_2e3f20->b20A4 == 0
-            && !tick_countdown_32(&d->t60)
+            && !fast_dec_timer(&d->t60)
             && d->count < D_L01_0016191C) {
             FUN_L01_002e3110((char *)moby, (char *)d);
             FUN_L01_002e3830(moby, d);

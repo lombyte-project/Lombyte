@@ -847,7 +847,7 @@ extern void FUN_L00_00217118(f32, f32);
 extern void FUN_L00_002118c8_c(f32, s32) __asm__("FUN_L00_002118c8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void turn_to(s32, f32, f32, f32) __asm__("FUN_L00_00211e30");
-extern s32 tick_countdown_32(void *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_00229a98(void);
 extern void FUN_L00_00211e98(void);
@@ -1041,7 +1041,7 @@ void FUN_L06_0022e020(void) {
                 transform_vector_by_basis(&hero.motion.unk170, &v0, &D_L06_00167558[0x1F8]);
                 hero.motion.move_yaw = *(f32 *)D_L06_00167558;
                 turn_to(0, frame_scale_sq, frame_scale_sq * 0.0f, D_0015ED6C_c * 174.53293f);
-                if (D_L06_0015F688 > 0 && tick_countdown_32(&D_L06_0015F688) != 0) {
+                if (D_L06_0015F688 > 0 && fast_dec_timer(&D_L06_0015F688) != 0) {
                     s32 t;
                     if (usage_stats.stat[18].count < 0xFFFF) {
                         usage_stats.stat[18].count++;
