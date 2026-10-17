@@ -679,7 +679,7 @@ extern char D_L02_001F3D30[];
 extern char D_L02_001F3D90[];
 extern char D_L02_001F3DD0[];
 extern char D_L02_001F3E10[];
-extern char D_L02_001F3E80[];
+char D_L02_001F3E80[384] = {0};
 extern void begin_2ea048(float, float, float, float, int, int, int, int, int, int, void *) __asm__("FUN_L02_002a4818");
 extern void end_2ea048(void) __asm__("FUN_L02_002a47f8");
 extern int in_clip_2ea048(void *, int) __asm__("FUN_00214720");

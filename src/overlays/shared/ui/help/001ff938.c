@@ -19,8 +19,8 @@ extern f32 D_0015EE18;
 extern unsigned char D_0013D4DC[];
 extern unsigned char D_0013F350[];
 #include "rnc/gameplay/state/options.h"
-extern float D_L15_0017C06C[];
-extern float D_L15_0017C1CC[];
+float D_L15_0017C06C[88] = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 2.75506e-40f, 0.02f, 0.2f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 3.67346e-40f, 0.02f, 0.2f};
+float D_L15_0017C1CC[1] __attribute__((section(".data"))) = {1.0f};
 extern unsigned int fast_tween_color(float, unsigned int, unsigned int);
 extern void FUN_L00_002054e8(void);
 extern void FUN_L00_002059d8(void);

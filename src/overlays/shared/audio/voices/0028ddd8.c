@@ -29,7 +29,7 @@ int FUN_L00_0028ddd8(int a, int b, int c, int d) {
 
 extern char D_0013E550_c[] __asm__("D_0013E550");
 
-extern unsigned char D_L00_001BD820[];
+unsigned char D_L00_001BD820[32] = {0, 2, 6, 1, 0, 2, 2, 0, 2, 2, 1, 7, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xcd, 0xcd, 0xcd, 0xcd, 0xcd, 0xcd, 0xcd, 0xcd};
 extern int D_L00_0015F574;
 
 int FUN_L00_0028de68(int a0, int a1, int a2, int a3, int a4) {

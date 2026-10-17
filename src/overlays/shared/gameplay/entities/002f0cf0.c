@@ -8,8 +8,8 @@
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 extern Pair D_L08_00161E20[] __attribute__((section(".sdata")));
-extern int D_L08_001DDEE0[];
-extern int D_L08_001DDEC0[];
+int D_L08_001DDEE0[16] = {0x1dc360, 0x1dc4b0, 0x1dc540, 0x1dc6b0, 0x1dc7f0, 0x1dc920, 0x1dca50, 0x1dcb70, 0x1dcc88, 0x1dce78, 0x1dcf50, 0x1dd170, 0x1dd350, 0x1dd518, 0x1dd6d8, 0x1dd880};
+int D_L08_001DDEC0[8] = {0x1db5c0, 0x1db7b0, 0x1db888, 0x1dbaa8, 0x1dbc88, 0x1dbe50, 0x1dc010, 0x1dc1b8};
 void FUN_L08_002f0cf0(int a) {
     int i;
     for (i = 0; i < 0x8; i++) {

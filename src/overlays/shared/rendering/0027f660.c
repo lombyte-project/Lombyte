@@ -84,7 +84,7 @@ char *FUN_L01_00280970(int a, char *b) {
     return p;
 }
 
-extern char *D_L01_001B25A4[];
+char *D_L01_001B25A4[3] = {0};
 extern char *alloc_285768(int) __asm__("FUN_L00_002678b8");
 extern int trunc_285768(float) __asm__("FUN_001fa6d0");
 

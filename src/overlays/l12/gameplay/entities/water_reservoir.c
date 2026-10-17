@@ -128,7 +128,7 @@ typedef struct {
     long g[4];
 } Quad;
 
-extern char D_L12_001F5B20[];
+char D_L12_001F5B20[64] = {-102, -103, 0x19, 0x3f, -51, -52, -52, 0x3e, 0, 0, 0, 0, 0, 0, -128, 0x3f, -102, -103, 0x19, 0x3f, -51, -52, -52, -66, 0, 0, 0, 0, 0, 0, -128, 0x3f, -102, -103, 0x19, 0x3f, -51, -52, -52, 0x3e, 0, 0, -64, -64, 0, 0, -128, 0x3f, -102, -103, 0x19, 0x3f, -51, -52, -52, -66, 0, 0, -64, -64, 0, 0, -128, 0x3f};
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");

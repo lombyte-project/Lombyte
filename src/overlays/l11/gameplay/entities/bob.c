@@ -1397,7 +1397,7 @@ extern float fast_cos_2f2d58(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_2f2d58(float) __asm__("FUN_001f9de0");
 extern void draw_quad_2f2d58(void *, void *, int) __asm__("FUN_001f7d30");
 
-extern float D_L11_001D3530[];
+float D_L11_001D3530[8] = {0.5f, 0.0f, 0.5f, 1.0f, 0.5f, 0.0f, 0.5f, 1.0f};
 
 int D_L11_00161920 = 0;
 int D_L11_00161924 = 2;

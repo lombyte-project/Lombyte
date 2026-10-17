@@ -1826,7 +1826,7 @@ continue_fall:
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_0025BDA8), where it is exact; names translated to the US level program. */
 
-extern char D_L05_0017C068[];
+char D_L05_0017C068[8] __attribute__((section(".data"))) = {0x55, 0, 5, 0, 0x7f, 0, 5, 0};
 #include "rnc/data_labels.h"
 
 void FUN_L05_0025b538(void) {

@@ -516,10 +516,10 @@ extern UV_30a908 D_L11_00161E08_30a908[] __asm__("D_L11_00161E08") __attribute__
 extern char D_L11_0016D440[];
 extern char D_L11_001679D0[];
 extern Pos_30a908 D_L11_001D9B08[];
-extern int D_L11_001D9E08[];
+int D_L11_001D9E08[1] __attribute__((section(".data"))) = {0};
 extern UV_30a908 D_L11_001DA310[];
 extern Pos_30a908 D_L11_001D9F08[];
-extern int D_L11_001DA208[];
+int D_L11_001DA208[66] = {0};
 extern UV_30a908 D_L11_001DA510[];
 extern float wave_speed[2] __asm__("D_L11_00161DF8") __attribute__((sda));
 extern float tide_level_macro __asm__("D_L11_00161E18") __attribute__((section(".sdata")));

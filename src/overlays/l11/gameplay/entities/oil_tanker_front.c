@@ -1185,8 +1185,8 @@ void FUN_L11_003191c0(struct Moby *moby) {
 extern char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len, float z);
 extern char *FUN_L11_0030f5a8(void *position, void *vector, int id);
 extern char D_L11_001B0EB0[];
-extern char D_L11_001F14B0[];
-extern char D_L11_001F14C0[];
+char D_L11_001F14B0[16] = {-102, -103, -103, 0x3e, -51, -52, -52, 0x3e, 0x33, 0x33, -109, -65, 0, 0, 0, 0};
+char D_L11_001F14C0[16] = {-102, -103, -103, 0x3e, -51, -52, -52, -66, 0x33, 0x33, -109, -65, 0, 0, 0, 0};
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");

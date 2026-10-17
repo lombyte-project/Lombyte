@@ -39,8 +39,23 @@ typedef struct Data_303CA8 {
 
 extern Moby *D_L12_0015FFD8;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L12_001FB530[][4];
-extern float D_L12_001FB5B0[][4];
+float D_L12_001FB530[1][4] = {
+    {0.0f, 0.0f, -0.05f, 1.0f},
+};
+float D_L12_001FB5B0[12][4] = {
+    {0.0f, 0.0f, 3.141593f, 0.0f},
+    {0.0f, 0.0f, 0.0f, 0.0f},
+    {1.0f, 0.2f, -0.1f, 1.0f},
+    {1.0f, 0.2f, -0.5f, 1.0f},
+    {1.0f, -0.2f, -0.1f, 1.0f},
+    {1.0f, -0.2f, -0.5f, 1.0f},
+    {-0.01f, 0.09f, 0.15f, 1.0f},
+    {-0.01f, 0.0f, 0.0f, 1.0f},
+    {-0.01f, -0.09f, 0.15f, 1.0f},
+    {-0.01f, 0.0f, 0.0f, 1.0f},
+    {0.0f, 0.0f, 0.0f, 1.0f},
+    {1.0f, 0.0f, 1.0f, 1.0f},
+};
 extern int D_L12_00161DCC __attribute__((sda));
 extern int D_L12_00161DD0 __attribute__((sda));
 extern int D_L12_00161DD4 __attribute__((sda));
@@ -64,7 +79,7 @@ extern int func_001F4868_303CA8(int) __asm__("FUN_001f44b8");
 extern float func_001FA888_303CA8(int) __asm__("FUN_001fa6c0");
 extern int func_001FA8A8_303CA8(int, int, float) __asm__("FUN_001fa6e0");
 extern void func_L00_001FD1D8_303CA8(void *, void *, int) __asm__("FUN_001f7d30");
-extern float D_L12_001FB7D0_303CA8[] __asm__("D_L12_001FB510");
+float D_L12_001FB7D0_303CA8[1] __asm__("D_L12_001FB510") __attribute__((section(".data"))) = {0};
 
 void FUN_L12_003028c8(Moby *moby) {
     Quad_303CA8 quad[2];

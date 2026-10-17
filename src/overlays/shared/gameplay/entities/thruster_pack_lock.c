@@ -757,3 +757,5 @@ void FUN_L11_0031a438(char *moby) {
 }
 
 f32 D_L17_001DE0F0[1] __attribute__((section(".data"))) = {0};
+
+float D_L11_001F1490[1] __attribute__((section(".data"))) = {0};

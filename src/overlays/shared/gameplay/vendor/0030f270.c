@@ -17,8 +17,8 @@ int FUN_L11_0030f270(char *moby) {
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 extern Pair D_L11_00162628[] __attribute__((section(".sdata")));
-extern int D_L11_00217710[];
-extern int D_L11_002176F8[];
+int D_L11_00217710[12] = {0x215ee0, 0x216050, 0x216160, 0x216470, 0x2165d0, 0, 0x2166e8, 0x216910, 0x216aa0, 0x216f38, 0x217148, 0};
+int D_L11_002176F8[6] = {0x2152d0, 0x2154f8, 0x215688, 0x215b20, 0x215d30, 0};
 void FUN_L11_0031e858(int a) {
     int i;
     for (i = 0; i < 0x5; i++) {

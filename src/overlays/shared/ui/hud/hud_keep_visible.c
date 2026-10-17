@@ -75,7 +75,7 @@ int FUN_L00_00235a70(HudElem *rec, int *x, int *y) {
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L00_0017E3A0[];
-extern float D_L00_0017E400[];
+float D_L00_0017E400[24] = {1.0f, 0.957629f, 0.90895f, 0.853955f, 0.792884f, 0.726271f, 0.654988f, 0.58027f, 0.503702f, 0.427172f, 0.352767f, 0.282629f, 0.218757f, 0.162805f, 0.11588f, 0.078408f, 0.050092f, 0.029985f, 0.016673f, 0.008528f, 0.003969f, 0.00166f, 0.000616f, 0.000199f};
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void FUN_L00_00235ad8(HudElem *e, int *x, int *y, int t, int d) {

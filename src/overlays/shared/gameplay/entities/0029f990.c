@@ -170,9 +170,19 @@ struct HoloPacket {
     long hdr[4];
 };
 
-extern float D_L00_001CA380[][4];
+float D_L00_001CA380[9][4] = {
+    {0.0f, -0.6f, 1.6f, 0.0f},
+    {0.0f, 0.0f, 1.6f, 0.0f},
+    {0.0f, 0.6f, 1.6f, 0.0f},
+    {0.0f, -0.2f, 0.9f, 0.0f},
+    {0.0f, 0.0f, 1.0f, 0.0f},
+    {0.0f, 0.2f, 0.9f, 0.0f},
+    {0.0f, -0.05f, 0.67f, 0.0f},
+    {0.0f, 0.0f, 0.67f, 0.0f},
+    {0.0f, 0.05f, 0.67f, 0.0f},
+};
 extern float D_L00_001CA410[][2];
-extern int D_L00_001CA458[] __attribute__((section(".data")));
+int D_L00_001CA458[10] = {0x10808080, 0x10808080, 0x10808080, 0x60808080, 0x60808080, 0x60808080, 0x60808080, 0x60808080, 0x60808080, 0};
 extern int D_L00_001CA4C0_lui[] __asm__("D_L00_001CA4C0") __attribute__((section(".data")));
 extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
 extern float D_L00_00161184 __attribute__((sda));

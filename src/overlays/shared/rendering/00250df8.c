@@ -88,8 +88,8 @@ extern int FUN_001fa6d0_257470(float) __asm__("FUN_001fa6d0");
 extern float FUN_001f9b48_257470(void *, void *) __asm__("FUN_001f9b48");
 extern void FUN_L00_00260a88_257470(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 
-extern unsigned char D_L00_001E8F00[] __attribute__((section(".data")));
-extern unsigned char D_L00_001E8F28[] __attribute__((section(".data")));
+unsigned char D_L00_001E8F00[40] = {0x43, 0x6c, 0x61, 0x73, 0x73, 0x3a, 0x20, 0x25, 0x34, 0x64, 0x20, 0x55, 0x49, 0x44, 0x3a, 0x20, 0x25, 0x34, 0x64, 0x20, 0x42, 0x6f, 0x6c, 0x74, 0x73, 0x3a, 0x20, 0x25, 0x33, 0x64, 0x20, 0x28, 0x25, 0x33, 0x64, 0x29, 0, 0, 0, 0};
+unsigned char D_L00_001E8F28[24] = {0x20, 0x52, 0x65, 0x6d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x65, 0x64, 0x3a, 0x20, 0x25, 0x33, 0x64, 0, 0, 0, 0, 0, 0, 0, 0};
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190") __attribute__((section(".data")));
 extern int D_L00_001BA4D0_lui[] __asm__("D_L00_001BA4D0") __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));

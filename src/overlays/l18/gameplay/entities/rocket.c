@@ -3198,3 +3198,22 @@ u8 D_L18_001D9F84[76] = {0};
 u8 D_L18_001D9FE0[304] = {0};
 u8 D_L18_001DA114[60] = {0};
 u8 D_L18_001DA170[64] = {0};
+
+float D_L18_001D4310[1] __attribute__((section(".data"))) = {0};
+float D_L18_001D4330[1] __attribute__((section(".data"))) = {0};
+float D_L18_001D9B50[4][2] = {
+    {1.0f, 0.0f},
+    {1.0f, 1.0f},
+    {0.0f, 0.0f},
+    {0.0f, 1.0f},
+};
+float D_L18_001D9B70[4][4][4] = {
+    {{0.0f, 2.0f, -2.0f, 1.0f}, {0.0f, -2.0f, -2.0f, 1.0f}, {0.0f, 2.0f, 2.0f, 1.0f}, {0.0f, -2.0f, 2.0f, 1.0f}},
+    {{0.0f, 1.0f, -1.0f, 1.0f}, {0.0f, -1.0f, -1.0f, 1.0f}, {0.0f, 1.0f, 1.0f, 1.0f}, {0.0f, -1.0f, 1.0f, 1.0f}},
+    {{0.0f, 3.0f, -3.0f, 1.0f}, {0.0f, -3.0f, -3.0f, 1.0f}, {0.0f, 3.0f, 3.0f, 1.0f}, {0.0f, -3.0f, 3.0f, 1.0f}},
+    {{0.0f, 3.0f, -3.0f, 1.0f}, {0.0f, -3.0f, -3.0f, 1.0f}, {0.0f, 3.0f, 3.0f, 1.0f}, {0.0f, -3.0f, 3.0f, 1.0f}},
+};
+int D_L18_001D9C70[6] = {0x4fff8f00, 0x4fff8f00, 0x4fff7f00, 0x4fff6f00, 0x2fffffff, 0x2fffffff};
+int D_L18_001D9C88[6] = {0x2f7f5f00, 0x2f7f4f00, 0x2f7f3f00, 0x2f4f4f4f, 0x2fc0c0c0, 0x3fc0c0c0};
+unsigned char D_L18_001F29A0_9768[7] __asm__("D_L18_001F29A0") __attribute__((section(".data"))) = {0xff, 0x8f, 0, 0x4f, 0xff, 0x8f, 0};
+unsigned char D_L18_001F29B8_9768[7] __asm__("D_L18_001F29B8") __attribute__((section(".data"))) = {0x7f, 0x5f, 0, 0x2f, 0x7f, 0x4f, 0};

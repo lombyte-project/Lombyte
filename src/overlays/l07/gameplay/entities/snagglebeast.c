@@ -635,7 +635,7 @@ typedef struct {
 
 extern L07MobyList D_L07_0016C8E0;
 extern int scene_state __asm__("D_L07_0015F5C4");
-extern unsigned char D_L07_0020C6C0[];
+unsigned char D_L07_0020C6C0[1] __attribute__((section(".data"))) = {0};
 extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
 void FUN_L07_00314058(char *moby) {
@@ -2875,3 +2875,19 @@ u8 D_L07_0020DAFC[4] __attribute__((section(".data"))) = {0};
 u8 D_L07_0020DB10[144] = {0};
 u8 D_L07_0020DBCA[16] = {0};
 s16 D_L07_0020DBDA[3] __attribute__((section(".data"))) = {0};
+
+int D_L07_0020C600[12][4] = {
+    {0xa, 5, 0, 0},
+    {0xb, 5, 0, 0},
+    {0xd, 1, 0, 0},
+    {0xf, 0x19, 0, 0},
+    {0x10, 0x168, 0, 0},
+    {0x11, 0xa, 0, 0},
+    {0x13, 0x168, 0, 0},
+    {0x14, 1, 0, 0},
+    {0x17, 1, 0, 0},
+    {0x18, 1, 0, 0},
+    {0x19, 1, 0, 0},
+    {-1, -1, 0, 0},
+};
+float D_L07_0020DBA0[10] = {0};

@@ -335,7 +335,7 @@ typedef struct {
 extern ItemDef item_defs[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
 extern int weapon_ammo_counts[] __asm__("D_0013D428");
 extern int pause_iop_sprite_lists[] __asm__("D_00141EA0");
-extern int D_L00_001B0340[] __attribute__((section(".data")));
+int D_L00_001B0340[76] = {-1, -1, 0xbc7, 0x2b04, 0x2ee6, 0x7e0, 0x2b05, 0x232a, -1, 0xfa7, -1, -1, 0xbc8, -1, -1, -1, -1, -1, -1, -1, -1, 0x36b2, 0x177c, 0x1396, -1, -1, 0x7df, 0x1f49, 0x271b, 0x177d, 0x7e1, 0x3e86, 0x36b3, 0x3e85, 0x3aa3, 0x2b06, -1, -1, -1, 0xbc7, 0x2b04, 0x2ee6, 0x7e0, 0x2b05, 0x232a, -1, 0x53df, -1, -1, 0xbc8, -1, -1, -1, -1, -1, -1, -1, -1, 0x36b2, 0x177c, 0x53e2, -1, -1, 0x7df, 0x1f49, 0x271b, 0x177d, 0x7e1, 0x3e86, 0x53dd, 0x53dc, 0x53db, 0x53de, -1, 0, 0};
 extern int D_L00_001C3E98[] __attribute__((section(".data")));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013D4C0[];
