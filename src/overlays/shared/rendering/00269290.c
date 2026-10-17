@@ -3458,10 +3458,6 @@ void FUN_L00_002710a0(u8 *p) {
     *(f32 *)(q + 8) += frame_scale_sq * 0.0005f;
 }
 
-s32 D_L01_001B2514[1] __attribute__((section(".data"))) = {0};
-s32 D_L01_001B2530[1] __attribute__((section(".data"))) = {0};
-s32 D_L01_001B2534[1] __attribute__((section(".data"))) = {0};
-s32 D_L01_001B253C[1] __attribute__((section(".data"))) = {0};
 s32 D_L01_001B2548[1] __attribute__((section(".data"))) = {0};
 s32 D_L01_001B2554[1] __attribute__((section(".data"))) = {0};
 s32 D_L01_001B2558[1] __attribute__((section(".data"))) = {0};
@@ -3550,9 +3546,6 @@ s32 D_L10_001B2568[1] __attribute__((section(".data"))) = {0};
 s32 D_L10_001B256C[1] __attribute__((section(".data"))) = {0};
 s32 D_L10_001B2570[1] __attribute__((section(".data"))) = {0};
 s32 D_L10_001B2588[1] __attribute__((section(".data"))) = {0};
-s32 D_L11_001B2A90[1] __attribute__((section(".data"))) = {0};
-s32 D_L11_001B2AB0[1] __attribute__((section(".data"))) = {0};
-s32 D_L11_001B2ABC[1] __attribute__((section(".data"))) = {0};
 s32 D_L11_001B2AC8[1] __attribute__((section(".data"))) = {0};
 s32 D_L11_001B2AD4[1] __attribute__((section(".data"))) = {0};
 s32 D_L11_001B2AD8[1] __attribute__((section(".data"))) = {0};

@@ -3286,7 +3286,6 @@ void FUN_L06_002f7c68(char *m) {
     }
 }
 
-f32 D_L06_001D4364[1] __attribute__((section(".data"))) = {0};
 f32 D_L10_001D4060[1] __attribute__((section(".data"))) = {0};
 f32 D_L10_001D4064[1] __attribute__((section(".data"))) = {0};
 s32 D_L10_001D9F20[1] __attribute__((section(".data"))) = {0};

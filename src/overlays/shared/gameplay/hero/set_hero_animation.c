@@ -1706,10 +1706,6 @@ void show_health_hud(void) {
                            &hero.health, 8);
 }
 
-f32 D_L00_0017C360[1] __attribute__((section(".data"))) = {0};
-f32 D_L00_0017C364[1] __attribute__((section(".data"))) = {0};
-f32 D_L01_0017C7E0[1] __attribute__((section(".data"))) = {0};
-f32 D_L01_0017C7E4[1] __attribute__((section(".data"))) = {0};
 f32 D_L02_0017C960[1] __attribute__((section(".data"))) = {0};
 f32 D_L02_0017C964[1] __attribute__((section(".data"))) = {0};
 f32 D_L03_0017C460[1] __attribute__((section(".data"))) = {0};

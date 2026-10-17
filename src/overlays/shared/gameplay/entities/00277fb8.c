@@ -95,4 +95,3 @@ void FUN_L01_00278e20(struct Moby *src, int oClass) {
 
 f32 D_L02_0016CE74[1] __attribute__((section(".data"))) = {0};
 f32 D_L05_0016CC74[1] __attribute__((section(".data"))) = {0};
-f32 D_L16_0016CC74[1] __attribute__((section(".data"))) = {0};

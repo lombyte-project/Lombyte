@@ -430,9 +430,7 @@ void FUN_L00_002a02b0(void) {
     patch_moby_gifs();
 }
 
-s32 D_L00_001CA4C8[1] __attribute__((section(".data"))) = {0};
 s32 D_L01_001CA900[1] __attribute__((section(".data"))) = {0};
-s32 D_L01_001CA948[1] __attribute__((section(".data"))) = {0};
 s32 D_L02_001CAA80[1] __attribute__((section(".data"))) = {0};
 s32 D_L02_001CAAC8[1] __attribute__((section(".data"))) = {0};
 s32 D_L03_001CA580[1] __attribute__((section(".data"))) = {0};

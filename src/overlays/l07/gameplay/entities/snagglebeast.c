@@ -2864,5 +2864,3 @@ void machinegun_turret_update(unsigned char *moby) {
     }
 }
 
-f32 D_L07_0020C6E0[1] __attribute__((section(".data"))) = {0};
-f32 D_L07_0020C6E4[1] __attribute__((section(".data"))) = {0};

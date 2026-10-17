@@ -806,15 +806,6 @@ void ocean_pokitaru_update(OceanMoby_30b358 *moby)
     enqueue_callback_b358((void *)FUN_L11_0030a908_b358, moby);
 }
 
-f32 D_L11_001D9B0C[1] __attribute__((section(".data"))) = {0};
-f32 D_L11_001D9B10[1] __attribute__((section(".data"))) = {0};
-f32 D_L11_001D9B14[1] __attribute__((section(".data"))) = {0};
-f32 D_L11_001D9B18[1] __attribute__((section(".data"))) = {0};
-f32 D_L11_001D9B1C[1] __attribute__((section(".data"))) = {0};
-s32 D_L11_001D9E0C[1] __attribute__((section(".data"))) = {0};
-s32 D_L11_001DA314[1] __attribute__((section(".data"))) = {0};
-s32 D_L11_001DA318[1] __attribute__((section(".data"))) = {0};
-s32 D_L11_001DA31C[1] __attribute__((section(".data"))) = {0};
 f32 D_L16_001D8A28[1] __attribute__((section(".data"))) = {0};
 f32 D_L16_001D8A2C[1] __attribute__((section(".data"))) = {0};
 f32 D_L16_001D8A30[1] __attribute__((section(".data"))) = {0};

@@ -2128,8 +2128,6 @@ s32 f2451b8_298840(s32 i) {
     return 1;
 }
 
-s32 D_L00_00173E1C[1] __attribute__((section(".data"))) = {0};
-s32 D_L01_0017429C[1] __attribute__((section(".data"))) = {0};
 s64 D_L01_00182C60[1] __attribute__((section(".data"))) = {0};
 s64 D_L01_00182C68[1] __attribute__((section(".data"))) = {0};
 s64 D_L01_00182C78[1] __attribute__((section(".data"))) = {0};

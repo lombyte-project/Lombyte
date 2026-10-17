@@ -1851,10 +1851,3 @@ int FUN_L15_002f8ba8(char *moby) {
     return -1;
 }
 
-f32 D_L15_001DDBA8[1] __attribute__((section(".data"))) = {0};
-f32 D_L15_001DE208[1] __attribute__((section(".data"))) = {0};
-f32 D_L15_001DE868[1] __attribute__((section(".data"))) = {0};
-f32 D_L15_001DECB8[1] __attribute__((section(".data"))) = {0};
-f32 D_L15_001DEEDC[1] __attribute__((section(".data"))) = {0};
-f32 D_L15_001DF948[1] __attribute__((section(".data"))) = {0};
-f32 D_L15_001DFD64[1] __attribute__((section(".data"))) = {0};

@@ -91,7 +91,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001fff28.s", FUN_L00_001fff28);
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_001ff9c0.s", FUN_L00_001ff9c0);
 
-f32 D_L00_0016EA58[1] __attribute__((section(".data"))) = {0};
 f32 D_L01_0016EED8[1] __attribute__((section(".data"))) = {0};
 f32 D_L02_0016F058[1] __attribute__((section(".data"))) = {0};
 f32 D_L03_0016EB58[1] __attribute__((section(".data"))) = {0};

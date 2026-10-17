@@ -2668,7 +2668,6 @@ int FUN_L00_002aa2a8(char *a0, char *o, int mode) {
     return 0;
 }
 
-s16 D_L00_001CB7CC[1] __attribute__((section(".data"))) = {0};
 s32 D_L00_001D7460[1] __attribute__((section(".data"))) = {0};
 s16 D_L01_001CBC4C[1] __attribute__((section(".data"))) = {0};
 s32 D_L01_001D78E0[1] __attribute__((section(".data"))) = {0};

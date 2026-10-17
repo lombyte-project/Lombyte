@@ -262,7 +262,6 @@ s32 initialize_npc_dialogue(void *p, u8 *out_p) {
 s32 D_L01_00179590[1] __attribute__((section(".data"))) = {0};
 s32 D_L02_00179710[1] __attribute__((section(".data"))) = {0};
 s32 D_L05_00179510[1] __attribute__((section(".data"))) = {0};
-s32 D_L06_00179890[1] __attribute__((section(".data"))) = {0};
 s32 D_L08_00179910[1] __attribute__((section(".data"))) = {0};
 s32 D_L11_00179B10[1] __attribute__((section(".data"))) = {0};
 s32 D_L12_00179590[1] __attribute__((section(".data"))) = {0};

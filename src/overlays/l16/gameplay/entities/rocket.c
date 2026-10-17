@@ -2892,4 +2892,3 @@ int FUN_L16_002e0e28(char *m) {
     return 0;
 }
 
-f32 D_L16_001D3014[1] __attribute__((section(".data"))) = {0};

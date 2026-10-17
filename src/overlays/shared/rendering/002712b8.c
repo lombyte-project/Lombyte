@@ -2127,11 +2127,6 @@ void FUN_L00_00276078(void) {
     }
 }
 
-s32 D_L01_001B25B0[1] __attribute__((section(".data"))) = {0};
-s32 D_L01_001B25B4[1] __attribute__((section(".data"))) = {0};
-s32 D_L01_001B25B8[1] __attribute__((section(".data"))) = {0};
-s32 D_L01_001B25DC[1] __attribute__((section(".data"))) = {0};
-s32 D_L01_001B2608[1] __attribute__((section(".data"))) = {0};
 s32 D_L02_001B2730[1] __attribute__((section(".data"))) = {0};
 s32 D_L02_001B2774[1] __attribute__((section(".data"))) = {0};
 s32 D_L02_001B2788[1] __attribute__((section(".data"))) = {0};

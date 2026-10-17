@@ -3602,6 +3602,3 @@ void rocket_update(struct Moby *moby) {
     }
 }
 
-f32 D_L14_001DFD84[1] __attribute__((section(".data"))) = {0};
-f32 D_L14_001DFD88[1] __attribute__((section(".data"))) = {0};
-f32 D_L14_001DFD8C[1] __attribute__((section(".data"))) = {0};
