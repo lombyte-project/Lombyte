@@ -1611,7 +1611,7 @@ f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 void FUN_001f9bf8_274e48(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_274e48(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_00214a98_274e48(void *, void *) __asm__("FUN_00214a98");
+void pack_vector_xyz_with_shared_scale(void *, void *) __asm__("FUN_00214a98");
 s32 FUN_001fa6e0_274e48(s32, s32, f32) __asm__("FUN_001fa6e0");
 void load_display_text_resource_entry(void *, void *) __asm__("FUN_00214bc0");
 s32 FUN_001f9770_274e48(void *) __asm__("FUN_001f9770");
@@ -1631,7 +1631,7 @@ void FUN_L00_00274e48(M_274e48 *m) {
             FUN_001f9a10_274e48(&m->v10, &m->v10, &a);
         } else {
             FUN_001f9bf8_274e48(&a, &a, 0.005f);
-            FUN_00214a98_274e48(&a, (u8 *)r + 4);
+            pack_vector_xyz_with_shared_scale(&a, (u8 *)r + 4);
         }
     }
     d = (2.5f - (d - 0.5f)) / 2.5f;
