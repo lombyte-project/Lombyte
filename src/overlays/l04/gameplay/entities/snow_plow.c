@@ -79,7 +79,8 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void debris302618(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 
 /* Class-dependent movement, manipulator rotation, hit effects and visibility. */
-void FUN_L04_002ca420(struct Moby *moby) {
+void snow_plow_update(struct Moby *moby) __asm__("FUN_L04_002ca420");
+void snow_plow_update(struct Moby *moby) {
     Vec4 old;
     Vec4 delta, *d;
     /* The sphere query is its position followed by the record; the hit cases pass one or the other. */
@@ -463,7 +464,8 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 
-void FUN_L04_002cdda0(char *moby) {
+void floating_platform_update(char *moby) __asm__("FUN_L04_002cdda0");
+void floating_platform_update(char *moby) {
     float old[4];
     float delta[4];
     char *data = *(char **)(moby + 0x78);
@@ -516,7 +518,8 @@ void FUN_L04_002cdda0(char *moby) {
 extern void remove_moby_2ce060(void *) __asm__("FUN_0020c828");
 
 /* Marks the moby for removal; the unused buffer is kept for its frame. */
-void FUN_L04_002ce060(void *moby) {
+void transport_ship_update(void *moby) __asm__("FUN_L04_002ce060");
+void transport_ship_update(void *moby) {
     char buf[0x50];
 
     remove_moby_2ce060(moby);
@@ -763,7 +766,8 @@ void FUN_L04_002d1608(void *m);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
-void FUN_L04_002d16b8(WBMoby *m) {
+void woodcut_bot_update(WBMoby *m) __asm__("FUN_L04_002d16b8");
+void woodcut_bot_update(WBMoby *m) {
     int excited = 0;
     WBData *d = m->d;
     unsigned char *p120;
@@ -1415,7 +1419,8 @@ extern float D_L04_001CB940[6];
 extern char D_L04_00173FE0[];
 
 /* Three-state motion update. The saved position is restored when the timer expires. */
-void FUN_L04_002d7e90(struct Moby *moby) {
+void leaf_update(struct Moby *moby) __asm__("FUN_L04_002d7e90");
+void leaf_update(struct Moby *moby) {
     Vec4 random;
     Vec4 old;
     Vec4 work;
@@ -1560,7 +1565,8 @@ extern int tick_countdown_32(s32 *) __asm__("FUN_001f9740");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
-void FUN_L04_002e17d8(struct Moby *m) {
+void upper_door_update(struct Moby *m) __asm__("FUN_L04_002e17d8");
+void upper_door_update(struct Moby *m) {
     struct RiserVars *d = (struct RiserVars *)m->pvars;
     struct Moby *t;
     s16 idx;
@@ -1625,7 +1631,8 @@ extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
-void FUN_L04_002e1a10(struct Moby *moby) {
+void suck_cannon_update(struct Moby *moby) __asm__("FUN_L04_002e1a10");
+void suck_cannon_update(struct Moby *moby) {
     struct PortalVars *vars = (struct PortalVars *)moby->pvars;
     struct Moby *exit;
 

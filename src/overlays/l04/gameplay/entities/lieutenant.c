@@ -55,7 +55,8 @@ extern void add_vector_xyz(Vec4 *, Vec4 *, void *) __asm__("FUN_001f9a10");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
-void FUN_L04_002e3078(struct Moby *moby) {
+void lieutenant_update(struct Moby *moby) __asm__("FUN_L04_002e3078");
+void lieutenant_update(struct Moby *moby) {
     Vec4 pos;
     Vec4 rot;
     Vec4 *r;

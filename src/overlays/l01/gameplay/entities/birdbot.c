@@ -691,7 +691,8 @@ extern void subtract_vector_xyz(void *, void *, void *);
 void FUN_L01_002e6518_c(SplashMoby *m, u128 *origin) __asm__("FUN_L01_002e6518");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L01_002e6bf0(PeMoby *m) {
+void birdbot_update(PeMoby *m) __asm__("FUN_L01_002e6bf0");
+void birdbot_update(PeMoby *m) {
     PeVars *v;
     PeVec old;
     PeTarget tgt;
@@ -1526,7 +1527,8 @@ extern s32 FUN_L01_002efbf8(void *, s32, s32);
     if ((m)->anim != (a))                                                                          \
     blend_moby_animation((m), (a), (b), (c))
 
-void FUN_L01_002efc60(Mob577 *self) {
+void peckbot_update(Mob577 *self) __asm__("FUN_L01_002efc60");
+void peckbot_update(Mob577 *self) {
     Vec577 oldpos;
     Mob577Target target;
     Vec577 v70;
@@ -2127,7 +2129,8 @@ extern void near_6570(PePath *, void *, void *, f32 *, s32 *, s32, f32, f32, f32
 /* the point a step further along the path; nonzero at the path's end */
 extern s32 sample_path(PePath *, void *, f32 *, s32 *, s32, f32) __asm__("FUN_L00_0025d808");
 
-void FUN_L01_002f3120(Moby *self)
+void water_current_update(Moby *self) __asm__("FUN_L01_002f3120");
+void water_current_update(Moby *self)
 {
     PathCarrierVars *v;
     PePath *path;
@@ -2231,7 +2234,8 @@ extern Moby *D_L01_0015FFD8;
 f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 f32 fast_normalize_angle(f32 a) __asm__("FUN_001fa610");
 
-void FUN_L01_002f4348(Moby *self) {
+void cave_door_update(Moby *self) __asm__("FUN_L01_002f4348");
+void cave_door_update(Moby *self) {
     RotVars *v;
     Moby *m;
     f32 *mv;
@@ -2282,7 +2286,8 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 /* Per-frame update of a breakable moby: scales its speed by distance, and on a hit spawns the break effect, frees its child mobys and removes itself; otherwise fades its alpha by height. */
-void FUN_L01_002f4428(char *moby) {
+void fighter_jet_update(char *moby) __asm__("FUN_L01_002f4428");
+void fighter_jet_update(char *moby) {
     float hit_dir[4];
     float hit_vec[4];
     char *data = *(char **)(moby + 0x78);
@@ -2379,7 +2384,8 @@ extern int voice_is_playing_for(void *moby, int handle) __asm__("FUN_L00_0028d8c
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 
-void FUN_L01_002f4710(Moby *self)
+void door_half_update(Moby *self) __asm__("FUN_L01_002f4710");
+void door_half_update(Moby *self)
 {
     struct SliderVars *v;
     Moby *driver;
@@ -2438,7 +2444,7 @@ void FUN_L01_002f4710(Moby *self)
         break;
     }
 }
-/* pvars of the rider carrier FUN_L01_002f4960 runs */
+/* pvars of the rider carrier stationary_ship_update runs */
 typedef struct {
     u8 pad0[0x60];
     s32 node;                 /* 0x60: path node it is at */
@@ -2541,7 +2547,8 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Rider carrier: waits for the hero in its clip volume, then follows its path carrying up to eight rider mobys (and steers its camera moby), drops them off one by one at the marked node and removes itself at the end of the path. */
-void FUN_L01_002f4960(CarrierMoby *m) {
+void stationary_ship_update(CarrierMoby *m) __asm__("FUN_L01_002f4960");
+void stationary_ship_update(CarrierMoby *m) {
     CarrierVars *v;
     CarrierCamVars *cv;
     PePath *p;
@@ -2946,7 +2953,8 @@ extern GunshipMoby *spawn_beam(void *, void *, void *, void *, s32, s32) __asm__
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /* Ported from rac1-decomp src/overlays/l01_novalis/vendor_002BA898.c (func_L01_002F8B00) */
-void FUN_L01_002f7728(GunshipMoby *m) {
+void bomber_jet_update(GunshipMoby *m) __asm__("FUN_L01_002f7728");
+void bomber_jet_update(GunshipMoby *m) {
     GunshipVars *d = m->vars;
     GunshipFollow *sub = &d->sub;
     float s;
@@ -3224,7 +3232,8 @@ extern f32 FUN_001f9b48(void *, void *);
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 resolve_camera_surface_height(void *, s32) __asm__("FUN_002135f0");
 
-void FUN_L01_002f8268(HoverMoby *m) {
+void water_lily_update(HoverMoby *m) __asm__("FUN_L01_002f8268");
+void water_lily_update(HoverMoby *m) {
     HoverVars *v;
     struct Hero *pl;
     HoverVec old;
@@ -3486,7 +3495,8 @@ void FUN_L01_002f9000(Obj *obj);
 extern void ea210_hide(s32) __asm__("FUN_L00_002eac18");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
-void FUN_L01_002f9080(CapMoby *m) {
+void falling_rock_update(CapMoby *m) __asm__("FUN_L01_002f9080");
+void falling_rock_update(CapMoby *m) {
     CapVars *v;
     u8 *e;
 
@@ -3621,7 +3631,8 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
-void FUN_L01_002f95c0(LiftMoby *m) {
+void piston_platform_update(LiftMoby *m) __asm__("FUN_L01_002f95c0");
+void piston_platform_update(LiftMoby *m) {
     LiftVars *v;
     u128 old;
     u128 delta;

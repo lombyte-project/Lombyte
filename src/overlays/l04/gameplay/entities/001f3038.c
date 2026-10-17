@@ -337,7 +337,8 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 
-void FUN_L04_001f3a80(char *a, char *b, char *c, float f) {
+void apply_child_motion_29ecf8(char *a, char *b, char *c, float f) __asm__("FUN_L04_001f3a80");
+void apply_child_motion_29ecf8(char *a, char *b, char *c, float f) {
     int i;
     float v[4];
     char *p = b + 0x10;

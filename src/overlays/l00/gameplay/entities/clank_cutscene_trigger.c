@@ -275,7 +275,8 @@ extern s32 update_npc_dialogue(DoorMoby *, void *) __asm__("FUN_L00_00266448");
 extern void initialize_global_state_entry(s32) __asm__("FUN_0022e188");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 
-void FUN_L00_002d9dc8(DoorMoby *m) {
+void clank_cutscene_trigger_update(DoorMoby *m) __asm__("FUN_L00_002d9dc8");
+void clank_cutscene_trigger_update(DoorMoby *m) {
     DoorVars *vars;
 
     vars = m->vars;

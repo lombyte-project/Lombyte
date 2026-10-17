@@ -551,7 +551,8 @@ extern void tick_countdown_32(int *counter);
 void FUN_L04_002ba3e0(char *arg, void *a, void *b, void *c);
 extern P_B7B0 *D_L04_001B0930_B7B0[] __asm__("D_L04_001B0630");
 
-void FUN_L04_002ba520(M_B7B0 *moby) {
+void big_axebot_update(M_B7B0 *moby) __asm__("FUN_L04_002ba520");
+void big_axebot_update(M_B7B0 *moby) {
     D_B7B0 *data = moby->data;
     T_B7B0 tg;
     V4_B7B0 prev;
@@ -1523,7 +1524,8 @@ extern void func_L00_002592B0_b(char *moby, float target, float *vel, float k, f
                                 float max) __asm__("FUN_L00_00258278");
 extern P_35F0 *D_L04_001B0930_2C35F0[] __asm__("D_L04_001B0630");
 
-void FUN_L04_002c2270(M_35F0 *moby) {
+void circular_saw_enemy_update(M_35F0 *moby) __asm__("FUN_L04_002c2270");
+void circular_saw_enemy_update(M_35F0 *moby) {
     D_35F0 *data = moby->data;
     T_35F0 tg;
     V4_35F0 prev;
@@ -2270,7 +2272,8 @@ void FUN_L04_002c4808_c(char *arg) __asm__("FUN_L04_002c4808");
 extern int func_L00_002594C8_o(void *, void *, void *, float, float, float, float,
                                int) __asm__("FUN_L00_00258490");
 
-void FUN_L04_002c4850(struct Moby *moby) {
+void blarg_trooper_update(struct Moby *moby) __asm__("FUN_L04_002c4850");
+void blarg_trooper_update(struct Moby *moby) {
     struct {
         float tgt[20];
         float v50[4];
@@ -2897,7 +2900,8 @@ extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
 extern s32 play_moby_voice(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
 /* Follows a linked switch moby (class 0x118): mirrors its position value, loops a sound while it moves, plays a click at either end and swaps class 0x41C back to 0x1B0 when it reaches 1.0. */
-void FUN_L04_002c6858(struct Moby *m) {
+void eudora_bridge_update(struct Moby *m) __asm__("FUN_L04_002c6858");
+void eudora_bridge_update(struct Moby *m) {
     SwitchFollowerVars *v = (SwitchFollowerVars *)m->pvars;
     f32 last = m->anim_time;
     struct Moby *other;
@@ -2989,7 +2993,7 @@ void FUN_L04_002c6858(struct Moby *m) {
 }
 #include "rnc/gameplay/entities/moby.h"
 
-/* Pvars of a door driven by a lever (FUN_L04_002c6bb8 update): follows the lever's travel and plays its sounds. */
+/* Pvars of a door driven by a lever (platform_booster_update update): follows the lever's travel and plays its sounds. */
 typedef struct {
     s32 lever;       /* 0x00: moby index of the lever, -1 for none */
     s32 target;      /* 0x04: moby index it carries along, -1 for none */
@@ -3019,7 +3023,8 @@ extern u8 voice_slots[] __asm__("D_0013E550");
 
 
 /* Door update: follows its lever's travel, pushes the lever back while opening, and runs the motor sounds. */
-void FUN_L04_002c6bb8(struct Moby *m) {
+void platform_booster_update(struct Moby *m) __asm__("FUN_L04_002c6bb8");
+void platform_booster_update(struct Moby *m) {
     DoorVars *v = (DoorVars *)m->pvars;
     f32 prev;
     struct Moby *lever;

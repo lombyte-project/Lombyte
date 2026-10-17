@@ -63,7 +63,7 @@ struct RailPath {
     Vec4 pts[1];      /* 0x10: xyz point, w length of the segment to the next */
 };
 
-/* What FUN_L03_0024e830 finds within range of a moby (rocket, trooper). */
+/* What helicopter_target49_2CDDC8 finds within range of a moby (rocket, trooper). */
 typedef struct {
     Vec4 aim;        /* 0x00: point to aim at (the trooper turns toward it) */
     u8 pad10[0x10];
@@ -141,7 +141,7 @@ extern f32 D_L03_00161920 __attribute__((sda));
 extern f32 D_L03_00161910 __attribute__((sda));
 extern f32 D_L03_00161914 __attribute__((sda));
 extern char D_L03_00166EC0[];
-extern void FUN_L03_0024e830(void *, void *, f32);
+extern void helicopter_target49_2CDDC8(void *, void *, f32) __asm__("FUN_L03_0024e830");
 extern void sound302618(struct Moby *, int, void *, f32) __asm__("FUN_L00_00263ac8");
 void FUN_L03_002ca808(struct Moby *m);
 char *FUN_L03_002cc888(char *p, void *pos, float *dir);
@@ -173,7 +173,8 @@ extern void wake302618(struct Moby *) __asm__("FUN_L00_0025a120");
 /* l03 trooper update: patrols its rail path, turns to face the hero once in sight,
    fires three-shot bursts, falls under gravity and blows up when shot down or
    when it drops into a pit. */
-void FUN_L03_002c9eb8(struct Moby *m) {
+void mine_layer_update(struct Moby *m) __asm__("FUN_L03_002c9eb8");
+void mine_layer_update(struct Moby *m) {
     TrooperVars *v = (TrooperVars *)m->pvars;
     TrooperPatrol *pt;
     struct RailPath *path;
@@ -187,7 +188,7 @@ void FUN_L03_002c9eb8(struct Moby *m) {
     s32 n;
     s32 i;
 
-    FUN_L03_0024e830(m, &target, 100.0f);
+    helicopter_target49_2CDDC8(m, &target, 100.0f);
     sight = 14.0f;
     sound302618(m, 0, v->unk160, 4.5f);
     FUN_L03_002ca808(m);
@@ -956,7 +957,8 @@ struct SpinnerVars {
 };
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-void FUN_L03_002d3e58(struct Moby *m) {
+void robo_shack_sign_update(struct Moby *m) __asm__("FUN_L03_002d3e58");
+void robo_shack_sign_update(struct Moby *m) {
     Vec4 move;
     Vec4 oldRot;
     struct SpinnerVars *v;
@@ -986,7 +988,8 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
-char *FUN_L03_002d4288(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2) {
+char *compute_interpolated_record_value_cf(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2) __asm__("FUN_L03_002d4288");
+char *compute_interpolated_record_value_cf(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2) {
     char *m = (char *)func_0020D348_m(0x341);
     char *d;
     if (m != 0) {
@@ -1041,7 +1044,7 @@ typedef struct {
 } RocketHit;
 
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern void FUN_L03_0024e830(void *, void *, f32);
+extern void helicopter_target49_2CDDC8(void *, void *, f32) __asm__("FUN_L03_0024e830");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1082,7 +1085,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
     case 1:
         pos = &m->pos;
         range = convert_integer_to_float(v->timer * 2) * v->speed;
-        FUN_L03_0024e830(m, &target, range);
+        helicopter_target49_2CDDC8(m, &target, range);
         qcopy(&old, pos);
         add_vector_xyz(pos, pos, v);
         cam.q = D_0013F490_v.q;
@@ -1196,7 +1199,7 @@ struct TalkState {
     s32 warp;          /* 0x4C: index into D_L03_001600EC, -1 for none */
 };
 
-/* Pvars of the Kerwan quest giver FUN_L03_002da870 drives. */
+/* Pvars of the Kerwan quest giver helga_update drives. */
 struct QuestGiverVars {
     u8 pad0[0x80];
     struct TalkState talk;  /* 0x80 */
@@ -1249,7 +1252,8 @@ extern void update_joint_animation(float, float, void *, void *, int) __asm__("F
 /* Quest giver: talks when approached (driving its class 0x3F4 helper), warps the
    hero or, once the deal is accepted, removes the reward moby, records it and saves.
    While idle it turns its head toward the hero or toward random points. */
-void FUN_L03_002da870(struct Moby *m) {
+void helga_update(struct Moby *m) __asm__("FUN_L03_002da870");
+void helga_update(struct Moby *m) {
     struct QuestGiverVars *v = (struct QuestGiverVars *)m->pvars;
     struct TalkState *talk = &v->talk;
     struct Moby *t;
@@ -1585,7 +1589,7 @@ struct LookAt {
     u8 pad74[0xC];
 };
 
-/* Pvars of the Kerwan guide FUN_L03_002db558 drives. */
+/* Pvars of the Kerwan guide big_al_update drives. */
 struct GuideVars {
     struct TalkRecord talk;
     struct LookAt head;    /* 0x40 */
@@ -1635,7 +1639,8 @@ extern GameFlags_db558 race_gates __asm__("D_0013D5B0");
 /* Kerwan guide: talks when approached (turning round to face the hero first),
    releases its reward moby once the item is owned, can warp the hero, and turns
    its head toward the hero or random points while idle. */
-void FUN_L03_002db558(struct Moby *m) {
+void big_al_update(struct Moby *m) __asm__("FUN_L03_002db558");
+void big_al_update(struct Moby *m) {
     struct GuideVars *v = (struct GuideVars *)m->pvars;
     struct Moby *t;
     struct Moby *o;
@@ -1811,7 +1816,7 @@ void FUN_L03_002db558(struct Moby *m) {
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, m, &v->body, 0);
 }
 
-/* Pvars of the dialogue moby FUN_L03_002dbd90 drives (initialize_npc_dialogue / update_npc_dialogue state). */
+/* Pvars of the dialogue moby robot_qwark_update drives (initialize_npc_dialogue / update_npc_dialogue state). */
 struct TalkerVars {
     u8 pad0[4];
     s16 mode;         /* 0x04: 2 when the talk ends in a warp */
@@ -1855,7 +1860,8 @@ extern void FUN_L00_0026ced0(void *, void *, u32, u32, s32, f32);
 /* A talking moby that can be shot down: talks (and may warp the hero) when
  * approached, and once hit by a type 3 hit or already recorded as collected
  * it breaks, records its save bit, and keeps sparking. */
-void FUN_L03_002dbd90(struct Moby *m) {
+void robot_qwark_update(struct Moby *m) __asm__("FUN_L03_002dbd90");
+void robot_qwark_update(struct Moby *m) {
     struct TalkerVars *d = (struct TalkerVars *)m->pvars;
     TalkerHit *hit;
     u8 type;

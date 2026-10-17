@@ -14,7 +14,8 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 /* Rotates a point (in place) about a unit axis by angle using a Rodrigues-style
  * matrix: skew = cross-product matrix of axis, sin_part = sin*skew,
  * cos_part = (1-cos)*skew^2; cos_part is then reused as the identity matrix. */
-void FUN_L03_0024fba8(Q *axis, Q *point, float angle) {
+void mark_moby_for_removal_cf(Q *axis, Q *point, float angle) __asm__("FUN_L03_0024fba8");
+void mark_moby_for_removal_cf(Q *axis, Q *point, float angle) {
     float axis_v[4] __attribute__((aligned(16)));
     float point_v[4] __attribute__((aligned(16)));
     float skew[4][4] __attribute__((aligned(16)));

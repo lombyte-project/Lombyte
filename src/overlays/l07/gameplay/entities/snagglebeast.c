@@ -732,7 +732,8 @@ extern void stop_n(int) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal(void *);
 extern void jet_animate(struct Moby *, float) __asm__("FUN_L00_00259fe8");
 extern void FUN_L07_00312150(char *);
-void FUN_L07_00314150(unsigned char *moby) {
+void snagglebeast_update(unsigned char *moby) __asm__("FUN_L07_00314150");
+void snagglebeast_update(unsigned char *moby) {
     Vec4 oldpos;
     ChaserSight sight;
     Vec4 position;
@@ -2298,7 +2299,8 @@ extern struct Moby *debris_target __asm__("D_L07_00173ED8") __attribute__((secti
 /* Floating mine: wakes when its target or a seen point comes close, then bobs and chases the seen
    point. It blows up when a hit lands (not from classes 0x456/0x365/0x367), on contact with a
    solid moby or when its timer runs out, and is removed once 64 units from home. */
-void FUN_L07_00319040(struct Moby *moby) {
+void homing_mine_update(struct Moby *moby) __asm__("FUN_L07_00319040");
+void homing_mine_update(struct Moby *moby) {
     Mine_19040 *vars;
     f32 *health;
     char sight[0x50];
@@ -2456,7 +2458,7 @@ typedef struct {
     s32 bob_timer;         /* 0xAC */
 } SwooperVars;
 
-/* What FUN_L07_002886d8 reports about the hero. */
+/* What get_target_sight reports about the hero. */
 typedef struct {
     Vec4 pos;
     u8 pad10[0x30];
@@ -2486,7 +2488,7 @@ void FUN_L07_00319698(struct Moby *moby, SwooperSpawnerVars *spawner_vars) {
 extern Vec4 D_L07_00166E40;
 extern f32 D_0015ED6C;
 
-extern s32 FUN_L07_002886d8(struct Moby *, SwooperSight *, f32);
+extern s32 get_target_sight(struct Moby *, SwooperSight *, f32) __asm__("FUN_L07_002886d8");
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 FUN_001f99c0(f32);
@@ -2525,7 +2527,7 @@ void FUN_L07_003196e0(struct Moby *moby) {
     }
     collision = vars->collision;
     spawner_vars = (SwooperSpawnerVars *)vars->spawner->pvars;
-    FUN_L07_002886d8(moby, &sight, spawner_vars->view_range);
+    get_target_sight(moby, &sight, spawner_vars->view_range);
     if (moby->visible && FUN_001f9b48(&moby->pos, &D_L07_00166E40) < 27.0f) {
         wake302618(moby);
         moby->shadow_range = 0x15;
@@ -2705,7 +2707,8 @@ extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern void FUN_L07_0030b538(void *, void *, void *, int);
 extern float D_0015ED6C;
 
-void FUN_L07_0031a250(unsigned char *moby) {
+void machinegun_turret_update(unsigned char *moby) __asm__("FUN_L07_0031a250");
+void machinegun_turret_update(unsigned char *moby) {
     char *data;
     char *hit;
     char *collision;

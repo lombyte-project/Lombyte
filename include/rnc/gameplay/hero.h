@@ -797,7 +797,7 @@ struct Hero {
     f32 unk22A4;                   /* 0x22A4 */
     struct HeroHealth health;      /* 0x22A8 */
     s32 unk22B4;                   /* 0x22B4 */
-    f32 unk22B8;                   /* 0x22B8: distance to the nearest carrying path this frame (FUN_L01_002f3120 keeps the minimum) */
+    f32 unk22B8;                   /* 0x22B8: distance to the nearest carrying path this frame (water_current_update keeps the minimum) */
     u8 pad_22BC[0x8];
     s32 unk22C4;                   /* 0x22C4 */
     s16 unk22C8;                   /* 0x22C8 */

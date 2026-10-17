@@ -884,7 +884,8 @@ extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern f32 frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
 /* Update of moby class 1105 (fred): steps the conversation and camera states, then turns the head toward the hero. */
-void FUN_L06_00301070(struct Moby *m) {
+void fred_update(struct Moby *m) __asm__("FUN_L06_00301070");
+void fred_update(struct Moby *m) {
     Data_301070 *d = *(struct Data_301070 **)&m->pvars;
     float rate, head_rate;
     int tracking;
@@ -1454,7 +1455,8 @@ extern int D_L06_0016210C __attribute__((sda));
 extern int D_L06_00162110 __attribute__((sda));
 extern unsigned char D_0013D4D5[] __attribute__((section(".data")));
 /* Update of moby class 1109 (shuttle): waits at one of three camera points, takes the hero's choice of destination, flies there through a cutscene and hands over to the level's travel sequence. */
-void FUN_L06_00302578(struct Moby *moby) {
+void shuttle_update(struct Moby *moby) __asm__("FUN_L06_00302578");
+void shuttle_update(struct Moby *moby) {
     Data_302578 *d = *(Data_302578 **)&moby->pvars;
     float old_pos[4];
     float old_rot[4];
@@ -2151,7 +2153,8 @@ extern float D_L06_001621A4 __attribute__((sda));
 extern float D_L06_001621A8 __attribute__((sda));
 extern float D_L06_001621B0 __attribute__((sda));
 extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[] __attribute__((section(".data")));
-void FUN_L06_00304098(struct Moby *moby) {
+void red_button_update(struct Moby *moby) __asm__("FUN_L06_00304098");
+void red_button_update(struct Moby *moby) {
     Data_304098 *data = *(struct Data_304098 **)&moby->pvars;
     Vector_304098 camera_position;
     Vector_304098 camera_rotation;

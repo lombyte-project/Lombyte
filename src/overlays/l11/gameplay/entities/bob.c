@@ -188,7 +188,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
-/* Watcher update, same routine as FUN_L08_00302ce8 with this level's states and data layout. */
+/* Watcher update, same routine as commando_update with this level's states and data layout. */
 void FUN_L11_002d0710(WM11 *m) {
     WS11 scratch;
     WD11 *d = (WD11 *)m->data;

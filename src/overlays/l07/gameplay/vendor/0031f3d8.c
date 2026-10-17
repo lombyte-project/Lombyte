@@ -37,7 +37,8 @@ void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *mk_a(int) __asm__("FUN_0020c4f8");
 extern void upd_a(void *) __asm__("FUN_L00_00250df8");
 
-void FUN_L07_0031f3d8(char *self) {
+void mushroom_update(char *self) __asm__("FUN_L07_0031f3d8");
+void mushroom_update(char *self) {
     int flag = 0;
     char *o = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
@@ -80,7 +81,8 @@ void FUN_L07_0031f3d8(char *self) {
 
 void mark_moby_for_removal_c_c(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L07_0031f5b0(char *self) {
+void robot_head_update(char *self) __asm__("FUN_L07_0031f5b0");
+void robot_head_update(char *self) {
     int flag = 0;
     char *o = find_moby_hit(self, 0x10000, 0);
     switch (((unsigned char *)self)[0x20]) {
@@ -124,7 +126,8 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 
 void mark_moby_for_removal_c_c2(struct Obj *obj) __asm__("FUN_0020c828");
 
-void FUN_L07_0031f780(unsigned char *m) {
+void seashell_update(unsigned char *m) __asm__("FUN_L07_0031f780");
+void seashell_update(unsigned char *m) {
     int flag = 0;
     float z;
     char *p, *pos, *vel;

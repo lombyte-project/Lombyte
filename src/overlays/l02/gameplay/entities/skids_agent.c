@@ -124,7 +124,8 @@ extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8
 
 /* Aridia NPC with a carried prop moby (data+0x178): dialogue state machine (the hint in state 1 is usage
  * record 50), a path-camera ride (3/4) that fades D_L02_0015F3FC in and out, then the shared head-tracking tail. */
-void FUN_L02_002e0dc0(struct Moby *moby) {
+void skids_agent_update(struct Moby *moby) __asm__("FUN_L02_002e0dc0");
+void skids_agent_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     s32 t;
     f32 fade;
@@ -349,8 +350,9 @@ void FUN_L02_002e0dc0(struct Moby *moby) {
 }
 
 extern f32 frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
-/* Watcher NPC update (twin of FUN_L05_00317470): idles with random animations, talks to the hero and drops its reward, and turns its head toward the hero or a random look target. */
-void FUN_L02_002e1950(struct Moby *m) {
+/* Watcher NPC update (twin of qwarks_bouncer_update): idles with random animations, talks to the hero and drops its reward, and turns its head toward the hero or a random look target. */
+void skid_mcmarx_update(struct Moby *m) __asm__("FUN_L02_002e1950");
+void skid_mcmarx_update(struct Moby *m) {
     WatcherVars *v = (WatcherVars *)m->pvars;
     WatcherLook look;
     f32 rate;
@@ -566,7 +568,8 @@ extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L0
 
 /* Lift platform carried by an animated driver moby: follows the driver's joint 0, waits at an end (3/5) for the
  * hero to step on, then plays the driver's up or down animation (2/4) with its loop sound until it ends. */
-void FUN_L02_002e2228(struct Moby *moby) {
+void liftcar_platform_update(struct Moby *moby) __asm__("FUN_L02_002e2228");
+void liftcar_platform_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     struct Moby *driver = &D_L02_0015FFD8[*(int *)(data + 0xA0)];
     Vec4 delta;
@@ -718,7 +721,8 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L02_002a47f8(float);
 extern void FUN_L02_002ea048_cb(void) __asm__("FUN_L02_002ea048");
 
-void FUN_L02_002ea198(struct Moby *moby) {
+void ocean_aridia_update(struct Moby *moby) __asm__("FUN_L02_002ea198");
+void ocean_aridia_update(struct Moby *moby) {
     switch (moby->state) {
     case 0:
         FUN_L02_002a47f8(0.16666667f);

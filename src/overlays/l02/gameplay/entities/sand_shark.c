@@ -46,7 +46,8 @@ void FUN_L02_002400c8(void) {
 
 extern void FUN_L02_002a40d0(void *);
 
-void FUN_L02_002a47f8(void) {
+void end_2ea048(void) __asm__("FUN_L02_002a47f8");
+void end_2ea048(void) {
     char scratch[0x40];
     FUN_L02_002a40d0(scratch);
 }
@@ -58,7 +59,9 @@ extern void write_dma_channel_002101b8(void *, int, int) __asm__("FUN_L02_002101
 extern char D_L02_001CB400[];
 extern void FUN_L02_002a40f0(void *);
 
-void FUN_L02_002a4818(int a, int b, int c, int d, float x, float y, float z, float w, int e, int f,
+void begin_2ea048(int a, int b, int c, int d, float x, float y, float z, float w, int e, int f,
+                      int g) __asm__("FUN_L02_002a4818");
+void begin_2ea048(int a, int b, int c, int d, float x, float y, float z, float w, int e, int f,
                       int g) {
     char scratch[0x40];
     scratch[0x30] = a;
@@ -181,7 +184,7 @@ void FUN_L02_002d3dd0(void *moby) {
     FUN_L02_002d3c98(moby, 6, 7, D_L02_001619F4);
     FUN_L02_002d3c98(moby, 8, 9, D_L02_001619F8);
 }
-/* pvars of the Aridia enemy FUN_L02_002d3e50 updates (it leaves its burrow, walks, jumps and digs back in). */
+/* pvars of the Aridia enemy sand_shark_update updates (it leaves its burrow, walks, jumps and digs back in). */
 typedef struct {
     /* 0x000 */ char pad0[0x20];
     /* 0x020 */ float unk20;
@@ -306,7 +309,8 @@ int D_L02_001619B0 = 0xa000000;
 int D_L02_001619E4 = 0x40306058;
 int D_L02_001619E8 = 0x306058;
 /* Aridia burrowing enemy: profiled with EE timer 0 around its state machine. */
-void FUN_L02_002d3e50(struct Moby *moby) {
+void sand_shark_update(struct Moby *moby) __asm__("FUN_L02_002d3e50");
+void sand_shark_update(struct Moby *moby) {
     Varsd3e50 *vars;
     OvlVec4 v0;
     OvlVec4 v1;
@@ -1384,7 +1388,8 @@ extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float_c(float input) __asm__("func_001F99C0");
 
-void FUN_L02_002d7748(struct Moby *moby) {
+void constructorbot_update(struct Moby *moby) __asm__("FUN_L02_002d7748");
+void constructorbot_update(struct Moby *moby) {
     float position[4];
     float direction[4];
     char shot[0x30];
@@ -1843,7 +1848,8 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
 /* Same platform routine as FUN_L16_002e7f80, with a waiting state (1) and this level's tables. */
-void FUN_L02_002dbd38(L16PlatformMoby *moby) {
+void elevator_update(L16PlatformMoby *moby) __asm__("FUN_L02_002dbd38");
+void elevator_update(L16PlatformMoby *moby) {
     L16PlatformVector delta, old_rotation, motion;
     L16PlatformData *d = moby->data;
     float *position = moby->position;
@@ -2095,7 +2101,8 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L02_002dca10(struct Moby *moby) {
+void bulldozer_update(struct Moby *moby) __asm__("FUN_L02_002dca10");
+void bulldozer_update(struct Moby *moby) {
     switch (moby->prev_seq) {
     case 0:
         if (moby->anim_flags & 2) {
@@ -2121,7 +2128,7 @@ void FUN_L02_002dca10(struct Moby *moby) {
         break;
     }
 }
-/* pvars of the class FUN_L02_002dcb38 updates (only the fields it touches). */
+/* pvars of the class sand_shark_nest_update updates (only the fields it touches). */
 typedef struct {
     char pad0[0x20];
     float f20;           /* 0x20 */
@@ -2161,7 +2168,8 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 
 /* Spawner-fed moby: counts itself in on spawn, hands itself to a group target on a timer, fires a
    projectile at it (state 2) and bursts into debris when its hit animation flags it (state 4). */
-void FUN_L02_002dcb38(unsigned char *moby) {
+void sand_shark_nest_update(unsigned char *moby) __asm__("FUN_L02_002dcb38");
+void sand_shark_nest_update(unsigned char *moby) {
     Varscb38 *d = *(Varscb38 **)(moby + 0x78);
     char *o;
     int n;
@@ -2389,7 +2397,8 @@ Level02GroupMoby *FUN_L02_002dd2a8(Level02GroupMoby *owner) {
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
-void FUN_L02_002dd370(struct Moby *moby) {
+void grab_crane_update(struct Moby *moby) __asm__("FUN_L02_002dd370");
+void grab_crane_update(struct Moby *moby) {
     switch (moby->prev_seq) {
     case 0:
         if (moby->anim_flags & 2) {
@@ -2425,7 +2434,8 @@ void FUN_L02_002dd370(struct Moby *moby) {
 extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
-void FUN_L02_002ddc00(struct Moby *moby)
+void platform_update(struct Moby *moby) __asm__("FUN_L02_002ddc00");
+void platform_update(struct Moby *moby)
 {
     char zero[16];
     char pos[16];
@@ -2437,7 +2447,7 @@ void FUN_L02_002ddc00(struct Moby *moby)
 }
 #include "rnc/gameplay/state/usage_stats.h"
 
-/* pvars of the class FUN_L02_002ddc88 updates (the lift: two rail mobys 0x421/0x422 ride with it). */
+/* pvars of the class transport_pod_update updates (the lift: two rail mobys 0x421/0x422 ride with it). */
 typedef struct {
     char pad0[0x20];
     char riders[0x40];   /* 0x20: passed to update_entity_matrix */
@@ -2522,7 +2532,8 @@ extern Nodedc88 *D_L02_001600EC_n __asm__("D_L02_001600EC");
 
 extern int D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda));
 /* Aridia lift: carries the hero between two stops, with its two rail mobys, gears and a camera path. */
-void FUN_L02_002ddc88(unsigned char *moby) {
+void transport_pod_update(unsigned char *moby) __asm__("FUN_L02_002ddc88");
+void transport_pod_update(unsigned char *moby) {
     Varsdc88 *d = *(Varsdc88 **)(moby + 0x78);
     int i;
     int *path;
@@ -2903,7 +2914,8 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 extern short D_L02_00161C68 __attribute__((sda));
-void FUN_L02_002df1a8(struct Moby *moby) {
+void crane_update(struct Moby *moby) __asm__("FUN_L02_002df1a8");
+void crane_update(struct Moby *moby) {
     int *d = (int *)moby->pvars;
     moby->anim_speed = *(float *)&D_L02_00161C68;
     switch (moby->prev_seq) {
@@ -3013,7 +3025,8 @@ extern s32 turret_lerp_colour(f32, s32, s32) __asm__("FUN_001fa6e0");
 
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 /* Swivel turret update: waits a random time, turns to a random heading with a loop sound, then fires one shot with debris and fades its colour while the recoil animation plays. */
-void FUN_L02_002df3d8(struct Moby *m) {
+void rocket_launcher_update(struct Moby *m) __asm__("FUN_L02_002df3d8");
+void rocket_launcher_update(struct Moby *m) {
     SwivelTurretVars *v = (SwivelTurretVars *)m->pvars;
     Vec4f dir, muzzle;
     f32 t;
@@ -3145,7 +3158,8 @@ extern void quaternion_nlerp(void *, void *, void *, float) __asm__("FUN_001fa40
 extern void quaternion_rotation_basis(void *, void *) __asm__("FUN_001fa480");
 
 /* Turns the moby from its spawn rotation to the goal angles once it is triggered (unkBC). */
-void FUN_L02_002df948(struct Moby *m) {
+void rocket_door1_update(struct Moby *m) __asm__("FUN_L02_002df948");
+void rocket_door1_update(struct Moby *m) {
     Vec4 qx;
     Vec4 qy;
     Vec4 qz;
@@ -3208,7 +3222,8 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L02_002dffc8(struct Moby *moby) {
+void tresspasser_door1_update(struct Moby *moby) __asm__("FUN_L02_002dffc8");
+void tresspasser_door1_update(struct Moby *moby) {
     char *d = (char *)moby->pvars;
     float a[4];
     float b[4];
@@ -3248,7 +3263,8 @@ void FUN_L02_002dffc8(struct Moby *moby) {
 
 extern char D_L02_0015FFD8_c3 __asm__("D_L02_0015FFD8");
 
-void FUN_L02_002e0138(struct Moby *moby) {
+void tresspasser_door2_update(struct Moby *moby) __asm__("FUN_L02_002e0138");
+void tresspasser_door2_update(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     switch (moby->state) {
     case 0:
@@ -3293,7 +3309,8 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 int D_L02_00161C9C = 0x6f707070;
 int D_L02_00161CA0 = 0x707070;
-void FUN_L02_002e0280(struct Moby *moby) {
+void sandshark_egg_update(struct Moby *moby) __asm__("FUN_L02_002e0280");
+void sandshark_egg_update(struct Moby *moby) {
     float u[4];
     float v[4];
     char *d = (char *)moby->pvars;
@@ -3356,7 +3373,8 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
 /* One-shot burst: when hit, flags D_0013D39D, sprays 200 dust puffs and 50 sparks, then removes itself. */
-void FUN_L02_002e0720(struct Moby *moby) {
+void rocks_update(struct Moby *moby) __asm__("FUN_L02_002e0720");
+void rocks_update(struct Moby *moby) {
     char *h;
     int i;
     int j;

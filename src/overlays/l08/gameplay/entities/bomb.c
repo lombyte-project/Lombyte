@@ -486,7 +486,8 @@ void FUN_L08_002d5d08_u(struct Moby *moby) __asm__("FUN_L08_002d5d08");
 void FUN_L08_002d6450(struct Moby *moby);
 char *FUN_L08_002dc8a0(char *src, char *pos, char *vec);
 
-void FUN_L08_002d42d8(struct Moby *moby) {
+void bomber_tank_update(struct Moby *moby) __asm__("FUN_L08_002d42d8");
+void bomber_tank_update(struct Moby *moby) {
     float old_position[4], old_rotation[4], velocity[4], joint_pos[4];
     char *data = (char *)moby->pvars;
     void *position = &moby->pos;
@@ -1556,7 +1557,8 @@ extern float FUN_0020c9e0(struct Moby *);
 extern void func_L00_002592B0_x(float, void *, void *, float, float, float) __asm__("FUN_L00_00258278");
 extern char camera_state_bytes[] __asm__("D_L08_00167480");
 
-void FUN_L08_002dabf0(struct Moby *moby) {
+void blarg_bombthrower_update(struct Moby *moby) __asm__("FUN_L08_002dabf0");
+void blarg_bombthrower_update(struct Moby *moby) {
     Data_DBF68 *vars = (Data_DBF68 *)moby->pvars;
     Look_DBF68 search;
     float point[4];
@@ -1910,7 +1912,8 @@ void FUN_L08_002dc7f0(struct Moby *moby);
 /* Lift update: runs the lift's state machine (0 setup, 2 carry the hero
  * when riding, 3 travel to the selected stop) and moves anything riding it
  * by how far it moved this frame. */
-void FUN_L08_002dbdb0(struct Moby *moby) {
+void shuttle_update(struct Moby *moby) __asm__("FUN_L08_002dbdb0");
+void shuttle_update(struct Moby *moby) {
     LiftVars *vars = (LiftVars *)moby->pvars;
     Vec4 old_pos;
     Vec4 old_rot;
@@ -2410,7 +2413,8 @@ extern Route_2dd4f8_2dd3c0 *D_L08_001B0FB0_r_c[] __asm__("D_L08_001B0CB0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern int timer46(int*) __asm__("FUN_001f9740");
 
-void FUN_L08_002dd3c0(M46 *moby) {
+void rocket_update(M46 *moby) __asm__("FUN_L08_002dd3c0");
+void rocket_update(M46 *moby) {
     V46 target,delta,accel,effect,aux;
     D46 *data=moby->data;
     if (FUN_L00_0025a420(moby,0x210000,0) && moby->state!=4) {

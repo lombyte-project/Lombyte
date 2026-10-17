@@ -164,7 +164,8 @@ extern struct {
 } D_0013F350_g __asm__("D_0013F350");
 
 /* Watcher moby update: wakes when the hero is near, then turns its head toward the hero or a random target. */
-void FUN_L08_00305270(WM *m) {
+void batalia_deserter_update(WM *m) __asm__("FUN_L08_00305270");
+void batalia_deserter_update(WM *m) {
     L16WatchScratch scratch;
     WD8 *d = (WD8 *)m->data;
     float rate;
@@ -409,7 +410,8 @@ extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
 
 /* Watcher moby update with a scripted reveal, then turns its head toward the hero or a random target. */
-void FUN_L08_003065d8(L14WatchMoby *m) {
+void the_plumber_batalia_update(L14WatchMoby *m) __asm__("FUN_L08_003065d8");
+void the_plumber_batalia_update(L14WatchMoby *m) {
     L14WatchScratch scratch;
     L14WatchData *d = (L14WatchData *)m->data;
     float rate;

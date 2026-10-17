@@ -497,7 +497,8 @@ extern char D_0013E550_292e98[] __asm__("D_0013E550");
 /* Kerwan train engine: waits for the hero to board (clip volume 0xB4), then runs the ride: accelerates
  * along its path pulling the cars, keeps the turret cars aimed at the hero, throws him off if he falls
  * behind, switches to the second path when the cars are done and brakes at its end (state 6 resets). */
-void FUN_L03_00292e98(char *moby) {
+void metropolis_train_locomotive_update(char *moby) __asm__("FUN_L03_00292e98");
+void metropolis_train_locomotive_update(char *moby) {
     float start[4];
     int seg;
     float frac;
@@ -747,7 +748,8 @@ extern void scale_vector_xyz(void *out, void *a, float s) __asm__("FUN_001f9a68"
 
 /* Path platform update: waits, then glides along its path one way and back (ease in/out over 240 frames),
  * or steps node to node towards the path end, pausing between runs and playing its loop sound. */
-void FUN_L03_00294c08(char *moby) {
+void moving_platform_small_update(char *moby) __asm__("FUN_L03_00294c08");
+void moving_platform_small_update(char *moby) {
     float delta[4];
     float old_rot[4];
     float step[4];
@@ -907,7 +909,8 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
-void FUN_L03_002953f8(struct Moby *moby) {
+void metropolis_train_carriage_update(struct Moby *moby) __asm__("FUN_L03_002953f8");
+void metropolis_train_carriage_update(struct Moby *moby) {
     float a[4];
     float v[4];
     char *data;
@@ -1134,7 +1137,7 @@ extern void spawn_debris_29d2e0(char *, int, float *, void *, int, int, float, f
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *out, void *a, float s) __asm__("FUN_001f9a68");
-void FUN_L03_0029dba8(char *moby);
+void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
 
 #define SPAWN_DEBRIS(id) \
     spawn_debris_29d2e0(moby, (id), (float *)(moby + 0x10), moby + 0x40, scale_game_frames(90), 0, frame_time_sq * 12.0f, push, \
@@ -1218,7 +1221,7 @@ void FUN_L03_0029d2e0(char *moby, void *vel_in, int flag) {
         }
         allocate_voice_for_group_entry(0, 0, moby);
     }
-    D_L03_00160770 = (void *)FUN_L03_0029dba8;
+    D_L03_00160770 = (void *)red_ship_1_update;
     ((unsigned char *)moby)[0xA4] = 0xFF;
     if (*(short *)(data + 0x14A) != 0) {
         if (fast_dec_timer_s16(data + 0x14A) && flag) {
@@ -1270,7 +1273,8 @@ extern void report_29dba8(void *, int, int) __asm__("FUN_001e93b0");
 /* Train car update: keeps the cars of a group in step (stops them all when none can move), and on its
  * first frame snaps to the nearest path node and sets up the spline; then runs along the path spline,
  * steering, banking and spawning its hit/smoke effects; state 2 waits without a path, 3 waits a timer. */
-void FUN_L03_0029dba8(char *moby) {
+void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
+void red_ship_1_update(char *moby) {
     float zero[4];
     float old_rot[4];
     float old_pos[4];
@@ -1582,9 +1586,9 @@ extern int steer302618(char *m, char *p, char *pos, char *v) __asm__("FUN_L00_00
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int near_6570(void *, void *, void *, int *, float *, int, float, float, float) __asm__("FUN_L00_0025df68");
 extern int hitreact_3DF8(void *, void *) __asm__("FUN_L00_002dc9f0");
-extern int FUN_L03_0024e830(char *, char *, float);
+extern int helicopter_target49_2CDDC8(char *, char *, float) __asm__("FUN_L03_0024e830");
 extern int FUN_L03_002c6ca0(struct Moby *moby);
-extern int FUN_L03_002c6d98(int id);
+extern int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -1603,9 +1607,10 @@ extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void mark_moby_for_removal_c5bb8(void *) __asm__("FUN_0020c828");
 extern void spawn_debris_c5bb8(char *, int, float *, void *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
 
-/* Kerwan enemy update: waits at home, walks its path or chases the target picked by FUN_L03_0024e830
+/* Kerwan enemy update: waits at home, walks its path or chases the target picked by helicopter_target49_2CDDC8
  * (its partner moby data->0x248 is a class 0x23E), attacks in range, returns home, dies (states 8, 9, 21). */
-void FUN_L03_002c5bb8(char *moby) {
+void robot_dog_update(char *moby) __asm__("FUN_L03_002c5bb8");
+void robot_dog_update(char *moby) {
     Tgt2c5bb8 tgt;
     float dir[4];
     float push[4];
@@ -1621,7 +1626,7 @@ void FUN_L03_002c5bb8(char *moby) {
     float a;
 
     data = *(Data2c5bb8 **)(moby + 0x78);
-    FUN_L03_0024e830(moby, (char *)&tgt, data->f230);
+    helicopter_target49_2CDDC8(moby, (char *)&tgt, data->f230);
     FUN_L00_00263ac8_c5bb8(moby, 0, data->m280, 2.1f);
     FUN_L03_002c6a20((struct Moby *)moby);
     tick_countdown_32(&data->i244);
@@ -1671,7 +1676,7 @@ void FUN_L03_002c5bb8(char *moby) {
             *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(p + 0x10);
             *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(p + 0x20) - *(float *)(p + 0x10),
                                                    *(float *)(p + 0x24) - *(float *)(p + 0x14));
-            if ((random_integer_below(14) == 0 && FUN_L03_002c6d98(((unsigned char *)moby)[0x21])) ||
+            if ((random_integer_below(14) == 0 && is_point_inside_clip_volume_cf(((unsigned char *)moby)[0x21])) ||
                 is_point_inside_clip_volume(&tgt, data->i27C) ||
                 (FUN_001f9b48(&tgt, moby + 0x10) < data->f274 && absolute_float_c5bb8(tgt.pos[2] - *(float *)(moby + 0x18)) < 4.0f)) {
                 data->i278 = 0;
@@ -1927,7 +1932,8 @@ extern int f2592b8_2591d0(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L03_002c5b78_c(unsigned char *) __asm__("FUN_L03_002c5b78");
 extern int FUN_L03_002c5b78_c_002c6d58(unsigned char *) __asm__("FUN_L03_002c6d58");
 
-int FUN_L03_002c6d98(int id) {
+int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
+int is_point_inside_clip_volume_cf(int id) {
     unsigned char *item;
     if (id == 0xFF) goto absent;
     FUN_L00_002591d0((int *)&item, id, 0, 0);
@@ -3227,7 +3233,7 @@ void FUN_L03_002c95a8(Moby2C8398 *m) {
     m->bA4 = 0xFF;
     trooper_anim_finish(m, (char *)d + 0x60);
 }
-extern int FUN_L03_0024e830(char *, char *, float);
+extern int helicopter_target49_2CDDC8(char *, char *, float) __asm__("FUN_L03_0024e830");
 extern int near_6570(void *, void *, void *, int *, float *, int, float, float, float) __asm__("FUN_L00_0025df68");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
@@ -3251,7 +3257,7 @@ void FUN_L03_002c9ca0(Moby2C8398 *m) {
     best_ang = 0.0f;
     pf = &d->pf;
     best_dist = best_ang;
-    FUN_L03_0024e830((char *)m, (char *)&target, d->f270);
+    helicopter_target49_2CDDC8((char *)m, (char *)&target, d->f270);
     seg = pf->idx;
     near_6570(pf->path, m->pos, near, &seg, &dist, 0, 999.0f, 5.0f, 0.0f);
     pf->idx = 0;

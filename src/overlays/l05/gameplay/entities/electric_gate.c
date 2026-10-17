@@ -76,7 +76,8 @@ void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
 
 extern short D_L05_00161D38 __attribute__((sda));
-void FUN_L05_0030dc68(char *m) {
+void electric_gate_update(char *m) __asm__("FUN_L05_0030dc68");
+void electric_gate_update(char *m) {
     char *data = *(char **)(m + 0x78);
     int state = *(unsigned char *)(m + 0x20);
     char *base;
@@ -528,7 +529,8 @@ typedef struct {
     char pad90[0x1FF0];
     int f2080;
 } DrainCoverHero;
-void FUN_L05_0030e7f8(DrainCoverMoby *moby) {
+void drain_cover_update(DrainCoverMoby *moby) __asm__("FUN_L05_0030e7f8");
+void drain_cover_update(DrainCoverMoby *moby) {
     DrainCoverData *data = moby->d;
     float old_position[4];
     float old_rotation[4];
@@ -810,7 +812,8 @@ extern u8 *emit_23e008(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32
                             void *vel, f32 f2) __asm__("FUN_L00_00272060");
 extern char D_L05_001BAAA0[];
 
-void FUN_L05_0030f5c8(struct Moby *moby) {
+void pipe_mounted_grating_update(struct Moby *moby) __asm__("FUN_L05_0030f5c8");
+void pipe_mounted_grating_update(struct Moby *moby) {
     float vel[4];
     float spin_vel[4];
     float dir[4];
@@ -1186,7 +1189,8 @@ extern void ea210_hide(s32) __asm__("FUN_L00_002eac18");
 extern void lift_camera_view(void *, void *, void *) __asm__("FUN_L05_00315ee0");
 extern void place_marker_ring(void *) __asm__("FUN_L05_00315f70");
 
-void FUN_L05_003156d0(struct Moby *moby) {
+void elevator_with_button_update(struct Moby *moby) __asm__("FUN_L05_003156d0");
+void elevator_with_button_update(struct Moby *moby) {
     LiftVars *vars = (LiftVars *)moby->pvars;
     Vec4 delta;
     Vec4 rot;
@@ -1426,7 +1430,8 @@ void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern void func_L05_00317538_3175D8(void) __asm__("FUN_L05_00316070");
 extern float D_L05_00211B20[];
 
-void FUN_L05_00316110(char *moby) {
+void ocean_rilgar_update(char *moby) __asm__("FUN_L05_00316110");
+void ocean_rilgar_update(char *moby) {
     switch ((unsigned char)moby[0x20]) {
     case 0:
         FUN_L02_002a40d0(D_L05_00211B20, 1.0f);
@@ -1607,10 +1612,11 @@ extern int D_L05_0015F5C4;
 extern s32 breast_growth_count_gp __asm__("D_L05_00161ED0") __attribute__((sda));
 extern unsigned char D_0015EDB0[] MACRO_ADDR;
 extern unsigned char D_L05_0017C8A0[];
-extern void FUN_L05_00316810(char *, int);
+extern void update_hoverboard_girl_boobs_animation(char *, int) __asm__("FUN_L05_00316810");
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
-void FUN_L05_00316990(char *arg) {
+void update_hoverboard_girl_cutscene_instances(char *arg) __asm__("FUN_L05_00316990");
+void update_hoverboard_girl_cutscene_instances(char *arg) {
     if (D_L05_0015F5C4 == 2 && (D_0015EDB0[0] != 0 || *(int *)&breast_growth_count_gp != 0)) {
         int i;
         for (i = 0; i < D_L05_0016CC60.n; i++) {
@@ -1626,7 +1632,7 @@ void FUN_L05_00316990(char *arg) {
                     }
                 }
                 if (*(int *)&breast_growth_count_gp != 0) {
-                    FUN_L05_00316810(moby, *(int *)(arg + 0x78));
+                    update_hoverboard_girl_boobs_animation(moby, *(int *)(arg + 0x78));
                 }
             }
         }
@@ -1739,8 +1745,9 @@ extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 extern unsigned char D_0013DD47 __attribute__((section(".data")));
-/* Watcher moby update (variant of FUN_L05_003180a0): turns its head toward the hero or a random target. */
-void FUN_L05_00317470(WM_c *m) {
+/* Watcher moby update (variant of shady_salesman_update): turns its head toward the hero or a random target. */
+void qwarks_bouncer_update(WM_c *m) __asm__("FUN_L05_00317470");
+void qwarks_bouncer_update(WM_c *m) {
     L16WatchScratch_c scratch;
     WD2 *d = (WD2 *)m->data;
     float rate;
@@ -1943,7 +1950,8 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 extern void subtract_vector_xyz(void *, void *, void *);
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 
-void FUN_L05_003180a0(WM *m) {
+void shady_salesman_update(WM *m) __asm__("FUN_L05_003180a0");
+void shady_salesman_update(WM *m) {
     L16WatchScratch scratch;
     WD *d = m->data;
     float rate;
@@ -2097,7 +2105,8 @@ extern float random_angle_radians_alt(void) __asm__("FUN_00213308");
 extern int D_L05_0015F5C4;
 
 extern short D_L05_00161F08 __attribute__((sda));
-void FUN_L05_00318b98(struct Moby *moby) {
+void television_update(struct Moby *moby) __asm__("FUN_L05_00318b98");
+void television_update(struct Moby *moby) {
     float v;
     char *data = (char *)moby->pvars;
     int g;
@@ -2159,7 +2168,8 @@ extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a
 float absolute_float(float input) __asm__("func_001F99C0");
 extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__("FUN_00214e58");
 
-void FUN_L05_00318c78(struct Moby *moby) {
+void taxi_update(struct Moby *moby) __asm__("FUN_L05_00318c78");
+void taxi_update(struct Moby *moby) {
     char *d = (char *)moby->pvars;
     float v00[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
     struct Hero *g;
@@ -2391,7 +2401,8 @@ void FUN_L05_003193a8(char *moby) {
 
 extern int D_L05_0015F5C4_c __asm__("D_L05_0015F5C4");
 
-void FUN_L05_00319c28(char *moby) {
+void qwarks_trailer_update(char *moby) __asm__("FUN_L05_00319c28");
+void qwarks_trailer_update(char *moby) {
     if (D_L05_0015F5C4_c == 2) {
         moby[0x31] = 0;
         *(unsigned short *)(moby + 0x34) |= 1;

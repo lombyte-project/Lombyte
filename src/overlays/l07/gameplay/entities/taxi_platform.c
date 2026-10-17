@@ -18,7 +18,8 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 extern void func_00233AB8(void) __asm__("FUN_L07_002ba260");
 
-void FUN_L07_002fbdb8(char *arg) {
+void purple_ship_update(char *arg) __asm__("FUN_L07_002fbdb8");
+void purple_ship_update(char *arg) {
     arg[0x30] = 8;
     *(short *)(arg + 0xA6) = 0x215;
     add_draw_callback((void *)func_00233AB8, arg);
@@ -111,7 +112,8 @@ extern int is_point_inside_clip_volume() __asm__("FUN_00214720");
 extern char D_L07_00208560[];
 extern void FUN_L02_002a40d0(void *, float);
 
-void FUN_L07_0030d440(unsigned char *moby) {
+void ocean_umbris_update(unsigned char *moby) __asm__("FUN_L07_0030d440");
+void ocean_umbris_update(unsigned char *moby) {
     switch (moby[0x20]) {
     case 0:
         FUN_L02_002a40d0(D_L07_00208560, 0.66666669f);
@@ -987,7 +989,8 @@ extern char D_L07_00211550[] __asm__("D_L07_00211550");
 extern char D_L07_00211580[] __asm__("D_L07_00211580");
 extern char D_L07_002115D0[] __asm__("D_L07_002115D0");
 
-void FUN_L07_0030b000(struct Moby *moby) {
+void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) __asm__("FUN_L07_0030b000");
+void boltcrate_possibly_for_metal_detector_update(struct Moby *moby) {
     char *data;
     char *path;
     f32 *remaining;
@@ -1406,7 +1409,8 @@ extern int FUN_L01_00275690_2cd2b0(void *, float) __asm__("FUN_L01_00275690");
 extern void FUN_L01_002b7fe0_2cd2b0(void *, int) __asm__("FUN_L01_002b7fe0");
 extern void FUN_L07_0030cd20_2cd2b0(void) __asm__("FUN_L07_0030cd20");
 
-void FUN_L07_0030c508(Moby_30D8E8 *m) {
+void water_update(Moby_30D8E8 *m) __asm__("FUN_L07_0030c508");
+void water_update(Moby_30D8E8 *m) {
     Data_30D8E8 *d = m->data;
     int i;
     int j;
@@ -1811,7 +1815,7 @@ extern void wake302618(void *) __asm__("FUN_L00_0025a120");
 extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void FUN_L07_002886d8(void *, void *, float);
+extern void get_target_sight(void *, void *, float) __asm__("FUN_L07_002886d8");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -1819,7 +1823,8 @@ extern void mark_moby_for_removal_c3(void *) __asm__("func_0020C828");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
-void FUN_L07_0030d4d8(char *m) {
+void bombomatic_update(char *m) __asm__("FUN_L07_0030d4d8");
+void bombomatic_update(char *m) {
     char *d;
     char *s16;
     char *t;
@@ -1917,7 +1922,7 @@ void FUN_L07_0030d4d8(char *m) {
 eb20:
     ((unsigned char *)m)[0xA4] = 0xFF;
     trooper_anim_finish(m, d + 0x60);
-    FUN_L07_002886d8(m, v30, 20.0f);
+    get_target_sight(m, v30, 20.0f);
     switch (((unsigned char *)m)[0x20]) {
     case 0: {
             int r1 = scale_game_frames(*(int *)(d + 0xB0));
@@ -2614,7 +2619,8 @@ extern void func_L00_002A5158_30D8E8(void *, int, int, float, float, float, floa
 
 #define func_L00_002592B0_t(m,a,v,k,d,x) ((void (*)(char *, float, float *, float, float, float))turn_e50)(m,a,v,k,d,x)
 
-void FUN_L07_0030f5f0(unsigned char *moby) {
+void sharkigator_update(unsigned char *moby) __asm__("FUN_L07_0030f5f0");
+void sharkigator_update(unsigned char *moby) {
     char *data;
     struct WalkerTarget target;
     float point[4];
@@ -2646,7 +2652,7 @@ void FUN_L07_0030f5f0(unsigned char *moby) {
         }
         goto end;
     }
-    FUN_L07_002886d8(moby, &target, 30.0f);
+    get_target_sight(moby, &target, 30.0f);
     FUN_L07_0030e998_c((char *)moby, data, (float *)(data + 0x20));
     trooper_anim_finish(moby, data + 0x60);
     wander = tick_countdown_32_alt((int *)(data + 0x134)) != 0;

@@ -590,7 +590,8 @@ extern void *debris302618(void *, s32, void *, void *, s32, s32, void *, void *,
 extern void FUN_L01_00278e20();
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-void FUN_L01_0030d0f0(TriggerMoby *obj) {
+void tall_shroom_update(TriggerMoby *obj) __asm__("FUN_L01_0030d0f0");
+void tall_shroom_update(TriggerMoby *obj) {
     TriggerHit *hit;
     s32 flag;
 

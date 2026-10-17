@@ -42,7 +42,8 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 #define F(p, o) (*(float *)((p) + (o)))
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
-void FUN_L09_003033a0(unsigned char *moby) {
+void elevator_update(unsigned char *moby) __asm__("FUN_L09_003033a0");
+void elevator_update(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *path;
     float orig[4], delta[4], tmp[4];
@@ -307,7 +308,8 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 
-void FUN_L09_00303d10(struct Moby *m) {
+void refueling_station_update(struct Moby *m) __asm__("FUN_L09_00303d10");
+void refueling_station_update(struct Moby *m) {
     char *d = (char *)m->pvars;
     float v[4];
     unsigned char *q;
@@ -537,7 +539,8 @@ void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_e
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern Moby *func_L09_00305580_305710(void *, void *, int) __asm__("FUN_L09_003041d0");
 
-void FUN_L09_00304360(Moby *m) {
+void airship_part_update(Moby *m) __asm__("FUN_L09_00304360");
+void airship_part_update(Moby *m) {
     Data_305710 *d = (*(Data_305710 **)&m->pvars);
     float v20[4];
     float v30[4];
@@ -694,7 +697,8 @@ extern void print_missing_link(char *, short) __asm__("FUN_001e93b0");
 extern void effect_00304360(f32, f32, f32, f32, f32, f32, f32,
                              void *, void *, int, int, int, int, int, int, int, int, int) __asm__("FUN_L00_0025e450");
 
-void FUN_L09_00304360(unsigned char *moby) {
+void airship_part_update(unsigned char *moby) __asm__("FUN_L09_00304360");
+void airship_part_update(unsigned char *moby) {
     unsigned char *data = *(unsigned char **)(moby + 0x78);
     unsigned char *link;
     unsigned char *link2;
@@ -947,7 +951,8 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
 
-void FUN_L09_00304c80(struct Moby *moby) {
+void turret_update(struct Moby *moby) __asm__("FUN_L09_00304c80");
+void turret_update(struct Moby *moby) {
     Vec4 seat;
     Vec4 offset;
     Vec4 tmp;
@@ -1317,7 +1322,8 @@ extern void func_0020D678_309688(void *) __asm__("FUN_0020c828");
 extern unsigned char D_0014171B_309688[] __asm__("D_0014C050");
 extern char alternate_item_available[] __asm__("D_0013D388");
 
-void FUN_L09_003082d8(Moby *moby)
+void barrier_update(Moby *moby) __asm__("FUN_L09_003082d8");
+void barrier_update(Moby *moby)
 {
     BarrierData_309688 *data = (*(BarrierData_309688 **)&moby->pvars);
     float origin[4], center[4], piece_pos[4], vel[4], push[4];
@@ -1613,7 +1619,8 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int FUN_L09_0030a298(struct Moby *);
 
-void FUN_L09_00309c08(struct Moby *moby) {
+void shuttle_update(struct Moby *moby) __asm__("FUN_L09_00309c08");
+void shuttle_update(struct Moby *moby) {
     PathFlyerVars_00309c08 *vars = (PathFlyerVars_00309c08 *)moby->pvars;
     PathNodes_00309c08 *path = (PathNodes_00309c08 *)D_L09_001B0630[vars->path];
     Vec4 *position = &moby->pos;

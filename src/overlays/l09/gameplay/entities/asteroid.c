@@ -956,7 +956,8 @@ extern struct Moby *func_L09_002EBA58_2ECC50(void) __asm__("FUN_L09_002ea778");
 extern int func_L09_00295880_2ECC50(void *, void *, void *, int, int, float) __asm__("FUN_L09_00294ae0");
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 
-void FUN_L09_002eb970(struct Moby *m) {
+void asteroid_update(struct Moby *m) __asm__("FUN_L09_002eb970");
+void asteroid_update(struct Moby *m) {
     Data_2ECC50 *d = (*(Data_2ECC50 **)&m->pvars);
     Path_2ECC50 *path;
     float v0[4];
@@ -1127,7 +1128,8 @@ extern void FUN_L00_0025e450_edc30(struct Moby *, void *, void *, float, float, 
                                    float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 /* Level 9 breakable stack: when hit, swaps in the next damaged class (0x512 -> 0x513 -> 0x514), bursts debris and smoke and removes itself once gone. */
-void FUN_L09_002edc30(struct Moby *moby) {
+void display_update(struct Moby *moby) __asm__("FUN_L09_002edc30");
+void display_update(struct Moby *moby) {
     float center[4];
     float top[4];
     float push[4];
@@ -1651,7 +1653,8 @@ extern int func_0022ED80_2F9A50(int, int, void *) __asm__("FUN_0022da68");
 extern unsigned char D_0013E633_2F9A50[] __asm__("D_0013F350");
 extern unsigned char D_0013F3D0[];
 
-void FUN_L09_002f86a0(Moby *moby)
+void platform_update(Moby *moby) __asm__("FUN_L09_002f86a0");
+void platform_update(Moby *moby)
 {
     PlatVars_2F9A50 *data = (*(PlatVars_2F9A50 **)&moby->pvars);
     Vec_2F9A50 movement;

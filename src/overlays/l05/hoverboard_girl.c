@@ -138,7 +138,8 @@ void update_hoverboard_girl(HoverboardGirlMoby *) __asm__("FUN_L05_00316ab8");
 
 extern f32 frame_scale_sq __asm__("D_0015ED64");
 
-void FUN_L05_00316810(HoverboardGirlMoby *moby, HoverboardGirlState *state) {
+void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *moby, HoverboardGirlState *state) __asm__("FUN_L05_00316810");
+void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *moby, HoverboardGirlState *state) {
     s32 joint_index = 0;
     HoverboardGirlJoint *joint = &state->joints[2];
     HoverboardGirlState *state_window = state;
@@ -163,7 +164,8 @@ void FUN_L05_00316810(HoverboardGirlMoby *moby, HoverboardGirlState *state) {
     } while (joint_index < 2);
 }
 
-void FUN_L05_00316ab8(HoverboardGirlMoby *moby) {
+void update_hoverboard_girl(HoverboardGirlMoby *moby) __asm__("FUN_L05_00316ab8");
+void update_hoverboard_girl(HoverboardGirlMoby *moby) {
     HoverboardGirlState *state = moby->data;
     HoverboardGirlVector target_position;
     HoverboardGirlVector head_position;

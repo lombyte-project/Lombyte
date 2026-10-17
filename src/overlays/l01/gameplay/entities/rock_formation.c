@@ -41,7 +41,8 @@ extern void explode302618(void *, s32, s32) __asm__("FUN_L00_00257470");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Once hit hard enough: bursts into 200 smoke puffs and 40 debris chunks, then removes itself. */
-void FUN_L01_002f9810(struct Moby *m) {
+void rock_formation_update(struct Moby *m) __asm__("FUN_L01_002f9810");
+void rock_formation_update(struct Moby *m) {
     DebrisHit *hit;
     s32 i;
     s32 j;
@@ -143,7 +144,8 @@ extern s32 tick_countdown_32(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 
-void FUN_L01_002f9bf0(SwayMoby *m) {
+void fan_update(SwayMoby *m) __asm__("FUN_L01_002f9bf0");
+void fan_update(SwayMoby *m) {
     SwayVars *v;
     CollQuery q;
 
@@ -223,7 +225,8 @@ extern int FUN_L00_00257b90(int lo, int hi);
 extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
 
 extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
-void FUN_L01_002f9d80(BurstMoby *self) {
+void bridge_piece_1_update(BurstMoby *self) __asm__("FUN_L01_002f9d80");
+void bridge_piece_1_update(BurstMoby *self) {
     BurstTarget *t;
     BurstColors colors;
     BurstVec dir;
@@ -508,7 +511,8 @@ extern DebrisColors D_L01_00161C70;
 extern u8 D_0013D388[];
 
 /* Removed once collected; when hit, bursts into 500 smoke puffs and 100 chunks, marks itself collected and sets D_0013D388[0xE] (an item-availability flag). */
-void FUN_L01_002fa800(struct Moby *m) {
+void destroyable_cave_wall_update(struct Moby *m) __asm__("FUN_L01_002fa800");
+void destroyable_cave_wall_update(struct Moby *m) {
     s32 i;
     s32 j;
     f32 s;
@@ -714,7 +718,8 @@ extern void func_L01_002A3680_2FC140(void) __asm__("FUN_L01_002a2480");
 extern unsigned char D_L01_0015FC88[] __attribute__((section(".sdata")));
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
-void FUN_L01_002fad68(Moby_2FC140 *moby) {
+void agnogg_ship_front_update(Moby_2FC140 *moby) __asm__("FUN_L01_002fad68");
+void agnogg_ship_front_update(Moby_2FC140 *moby) {
     Data_2FC140 *data;
     Link_2FC140 *q;
     int r16;
@@ -941,7 +946,8 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 
-void FUN_L01_002fb8a8(PendulumMoby *self) {
+void bridge_half_update(PendulumMoby *self) __asm__("FUN_L01_002fb8a8");
+void bridge_half_update(PendulumMoby *self) {
     PendulumVars *v;
     PendVec4 arm;
     PendVec4 d;
@@ -1252,7 +1258,8 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L01_002fd9a0(SparkMoby *m) {
+void green_mushroom_update(SparkMoby *m) __asm__("FUN_L01_002fd9a0");
+void green_mushroom_update(SparkMoby *m) {
     SparkHit *hit;
     s32 flag;
     s32 i;
@@ -1382,7 +1389,8 @@ typedef struct {
 
 extern f32 FUN_001f99c0(f32);
 
-void FUN_L01_002fed68(HoverMoby *m) {
+void door_left_update(HoverMoby *m) __asm__("FUN_L01_002fed68");
+void door_left_update(HoverMoby *m) {
     HoverVars *v;
     Vec4 *player;
     Vec4 off;
@@ -1464,7 +1472,8 @@ extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern void add_vector_xyz(void *, void *, void *);
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-void FUN_L01_002ff860(struct Moby *m) {
+void pipe_update(struct Moby *m) __asm__("FUN_L01_002ff860");
+void pipe_update(struct Moby *m) {
     char *d = (char *)m->pvars;
     char *t = find_moby_hit(m, 0x10000, 0);
     m->hit_slot = 0xFF;
@@ -1799,7 +1808,8 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void trooper_start_knockback(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 s32 D_L01_00161E90 = 5;
 
-void FUN_L01_003021b8(SpawnerMoby *m) {
+void beehive_update(SpawnerMoby *m) __asm__("FUN_L01_003021b8");
+void beehive_update(SpawnerMoby *m) {
     SpawnerVars *v = m->pvars;
     SpawnerMoby *n;
     CloneAiVars *nv;
@@ -1870,7 +1880,8 @@ ClonedMoby *FUN_L01_00302328(ClonedMoby *src) {
 void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-void FUN_L01_00307c48(void *self) {
+void mushroom_underside_update(void *self) __asm__("FUN_L01_00307c48");
+void mushroom_underside_update(void *self) {
     u8 *p;
 
     p = trooper_find_hit(self, 0x10000, 0);

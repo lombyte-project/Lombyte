@@ -225,7 +225,8 @@ extern void FUN_L00_002e1aa8();
     blend_moby_animation((m), (a), 0, (t))
 
 extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((sda));
-void FUN_L00_002e0b88(VendMoby *moby) {
+void veldin_robot_enemy_update(VendMoby *moby) __asm__("FUN_L00_002e0b88");
+void veldin_robot_enemy_update(VendMoby *moby) {
     VendVars *vars;
     VendTarget *target;
     VendPath *path;

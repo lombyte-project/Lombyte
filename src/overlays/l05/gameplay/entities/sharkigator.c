@@ -230,7 +230,8 @@ extern void reset_2d1688(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa
 extern void FUN_L05_002d1e30(char *);
 extern void FUN_L05_002d1fd8(int, char *);
 
-void FUN_L05_002d1688(char *moby) {
+void sharkigator_update(char *moby) __asm__("FUN_L05_002d1688");
+void sharkigator_update(char *moby) {
     char *data = *(char **)(moby + 0x78);
     int state = *(unsigned char *)(moby + 0x20);
     int one = 1;
@@ -624,7 +625,8 @@ extern void func_L05_002D8B68_2D8388(void) __asm__("FUN_L05_002d7920");
 extern float D_L05_001672C8_2D8388[] __asm__("D_L05_001671C8");
 extern char *D_L05_001B0CB0_2D8388[] __asm__("D_L05_001B0930");
 
-void FUN_L05_002d7140(char *moby) {
+void scenery_ship_update(char *moby) __asm__("FUN_L05_002d7140");
+void scenery_ship_update(char *moby) {
     Data_2D8388 *data = *(Data_2D8388 **)(moby + 0x78);
     char *hit;
     char *path;
@@ -896,7 +898,8 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char *D_L05_001B0CB0_x[] __asm__("D_L05_001B0930");
 extern int func_001F9908_v(void *) __asm__("FUN_001f9740");
 
-void FUN_L05_002dac80(struct Moby *m) {
+void amoeboid_update(struct Moby *m) __asm__("FUN_L05_002dac80");
+void amoeboid_update(struct Moby *m) {
     char *d = (char *)m->pvars;
     float dir[4];
     FUN_L05_002daf58_c(m);
@@ -1104,7 +1107,8 @@ void FUN_L05_00303b08_c(struct Moby *m, s32 node, f32 side) __asm__("FUN_L05_003
 extern float D_0013F3D0[];
 extern char D_001404A8[];
 
-void FUN_L05_00301f48(unsigned char *m) {
+void extermibot_update(unsigned char *m) __asm__("FUN_L05_00301f48");
+void extermibot_update(unsigned char *m) {
     char *d = *(char **)(m + 0x78);
     char *t;
     float dir[4];
@@ -2032,7 +2036,8 @@ extern char D_0013E533[];
 
 typedef char *(*Spawn_305778)(void *, void *, void *, int, int, long, long, long, int);
 
-void FUN_L05_00304320(unsigned char *m) {
+void extermitank_update(unsigned char *m) __asm__("FUN_L05_00304320");
+void extermitank_update(unsigned char *m) {
     char *d = *(char **)(m + 0x78);
     float v10[4];
     float v20[4];
@@ -2751,7 +2756,8 @@ extern char D_001413DC[];
 extern char D_0013F350[];
 extern int func_L00_001F2BE8_308D68(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 
-void FUN_L05_00307910(Moby *moby) {
+void skid_mcmarx_update(Moby *moby) __asm__("FUN_L05_00307910");
+void skid_mcmarx_update(Moby *moby) {
     float path_point[4];
     float step[4];
     float probe[4];
@@ -2977,7 +2983,8 @@ extern float D_L05_00161CDC __attribute__((sda));
 extern float D_L05_00161CE0 __attribute__((sda));
 extern int D_L05_00161CE4 __attribute__((sda));
 extern int D_L05_00161CE8 __attribute__((sda));
-void FUN_L05_0030bdd8(unsigned char *moby) {
+void floating_platform_update(unsigned char *moby) __asm__("FUN_L05_0030bdd8");
+void floating_platform_update(unsigned char *moby) {
     char *data = *(char **)(moby + 0x78);
     float v[4];
     float w[4];
@@ -3026,7 +3033,8 @@ extern void f_L00_002604f0(char *, char *, char *, char *, char *, char *) __asm
 extern void fast_vec_sub(float *, char *, float *) __asm__("FUN_001f9a28");
 extern void FUN_L00_00260738_c(char *, float *, float *, char *) __asm__("FUN_L00_00260738");
 
-void FUN_L05_0030bf98(char *moby)
+void box_update(char *moby) __asm__("FUN_L05_0030bf98");
+void box_update(char *moby)
 {
     char *d = *(char **)(moby + 0x78);
     float p[4];
@@ -3149,7 +3157,8 @@ extern float move_speed __asm__("D_L05_00161D30") __attribute__((sda));
 extern float move_accel __asm__("D_L05_00161D34") __attribute__((sda));
 extern s32 D_L05_001612D8 __attribute__((section(".sdata")));
 /* Update of the level 05 water mobys: sets up the 48-record water chain, moves the surface by state and keeps its record in step. */
-void FUN_L05_0030ca80(struct Moby *moby) {
+void water_update(struct Moby *moby) __asm__("FUN_L05_0030ca80");
+void water_update(struct Moby *moby) {
     WaterVars_30ca80 *d = *(WaterVars_30ca80 **)&moby->pvars;
 
     switch (moby->state) {
@@ -3395,7 +3404,8 @@ extern char D_L05_001D6880[];
 extern int D_L05_0015FFD8;
 extern short *D_L05_001ABCC0[];
 
-void FUN_L05_0030d5c0(char *moby) {
+void update_group_30ca80(char *moby) __asm__("FUN_L05_0030d5c0");
+void update_group_30ca80(char *moby) {
     char *data = *(char **)(moby + 0x78);
     short *p = D_L05_001ABCC0[*(unsigned char *)(moby + 0x21)];
     char(*base)[256] = (char(*)[256])D_L05_0015FFD8;

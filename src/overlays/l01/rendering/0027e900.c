@@ -108,7 +108,8 @@ extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern u8 *D_L01_001B25E0[];
 
-Particle *FUN_L01_00287b00(u128 *pos, u128 *vel, f32 f) {
+Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");
+Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) {
     Particle *p;
     s32 c;
     u32 col;
@@ -135,7 +136,8 @@ s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
-Particle *FUN_L01_00287c80(u128 *pos, u128 *dir, f32 scale, f32 speed) {
+Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) __asm__("FUN_L01_00287c80");
+Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) {
     Particle *p;
     PartMotion *m;
     f32 r;

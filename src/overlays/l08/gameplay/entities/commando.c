@@ -1161,8 +1161,9 @@ extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
-/* Watcher update, same routine as FUN_L08_00305270 with two more states and the joint pose copy. */
-void FUN_L08_00302ce8(WM *m) {
+/* Watcher update, same routine as batalia_deserter_update with two more states and the joint pose copy. */
+void commando_update(WM *m) __asm__("FUN_L08_00302ce8");
+void commando_update(WM *m) {
     L16WatchScratch scratch;
     WD8 *d = (WD8 *)m->data;
     float rate;

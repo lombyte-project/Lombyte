@@ -441,7 +441,8 @@ extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern int D_L06_0015F5C4;
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
-void FUN_L06_002b4770(char *m) {
+void hangar_door_update(char *m) __asm__("FUN_L06_002b4770");
+void hangar_door_update(char *m) {
     char *d = *(char **)(m + 0x78);
     float z;
     float a;
@@ -618,7 +619,8 @@ extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
 
 extern short D_L06_00161D24 __attribute__((sda));
 extern short D_L06_00161D28 __attribute__((sda));
-void FUN_L06_002f3ad8(char *m) {
+void toxic_gas_vent_update(char *m) __asm__("FUN_L06_002f3ad8");
+void toxic_gas_vent_update(char *m) {
     char *d = *(char **)(m + 0x78);
     float s;
     if (*(int *)(d + 0x90) >= 0) {
@@ -1831,7 +1833,8 @@ extern void func_0020D678_91A8(Moby *) __asm__("FUN_0020c828");
 extern char D_L06_00167540_macro[] __asm__("D_L06_00167540");
 extern int *D_L06_001B0C30_macro[] __asm__("D_L06_001B0C30");
 
-void FUN_L06_002f7d78(Moby *moby)
+void alien_snapper_update(Moby *moby) __asm__("FUN_L06_002f7d78");
+void alien_snapper_update(Moby *moby)
 {
     SnapperVars_91A8 *vars = (SnapperVars_91A8 *)moby->pvars;
     Moby *target;
@@ -2564,7 +2567,8 @@ extern unsigned char D_0013D3A7_q[] __asm__("D_0013D3A7");
 extern unsigned char D_0013D4FD_q[] __asm__("D_0013D4FD");
 extern unsigned char D_0013D407_q[] __asm__("D_0013D407");
 
-void FUN_L06_002f9a28(unsigned char *moby)
+void alien_queen_update(unsigned char *moby) __asm__("FUN_L06_002f9a28");
+void alien_queen_update(unsigned char *moby)
 {
     unsigned char *data = *(unsigned char **)(moby + 0x78);
     char *target;

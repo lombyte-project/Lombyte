@@ -1641,7 +1641,8 @@ typedef struct {
     unsigned char x260[1];
 } BoltThiefVars;
 
-void FUN_L08_002e2df0(struct Moby *moby) {
+void bolt_thief_update(struct Moby *moby) __asm__("FUN_L08_002e2df0");
+void bolt_thief_update(struct Moby *moby) {
     Vec4 point;
     Vec4 step;
     BoltThiefVars *data;
@@ -2733,7 +2734,8 @@ extern void FUN_L08_002e8788(char *);
 extern void FUN_L08_002e88d8_u(struct Moby *) __asm__("FUN_L08_002e88d8");
 extern void FUN_L08_002e8ba0(struct Moby *);
 
-void FUN_L08_002e8cd0(struct Moby *moby) {
+void shrub_update(struct Moby *moby) __asm__("FUN_L08_002e8cd0");
+void shrub_update(struct Moby *moby) {
     SwarmVars *vars = (SwarmVars *)moby->pvars;
     SwarmPathFollower *follower;
     struct Moby *target;
