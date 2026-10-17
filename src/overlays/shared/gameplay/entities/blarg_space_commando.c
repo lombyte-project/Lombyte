@@ -421,7 +421,7 @@ extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians_c(void) __asm__("func_00213308");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern f32 vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
-extern float scale_time(float) __asm__("FUN_L04_001f1978");
+extern float FUN_L04_001f1978(float);
 extern float FUN_L00_00257c48(float lo, float hi);
 extern int activate_effect_l08(float, char *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
@@ -466,7 +466,7 @@ void FUN_L06_002feb40(char *m) {
     *(float *)(m + 0x2C) = *(float *)(*(char **)(m + 0x24) + 0x24) * D_L06_00161FA8;
     FUN_L06_002ff2c8(m);
     if (*(int *)(d + 0x38) != 0) {
-        *(int *)(d + 0x188) = truncate_float_to_s32_c(scale_time(random_float_between_c(180.0f, 240.0f)));
+        *(int *)(d + 0x188) = truncate_float_to_s32_c(FUN_L04_001f1978(random_float_between_c(180.0f, 240.0f)));
         *(int *)(d + 0x38) = 0;
     }
     tick_countdown_32_alt((s32 *)(d + 0x188));

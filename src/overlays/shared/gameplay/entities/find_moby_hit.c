@@ -287,7 +287,7 @@ void jet_animate(unsigned char *m, float r) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025B178), where it is exact; names translated to the US level program. */
 
 extern int D_L00_00173E40_25a120[] __asm__("D_L00_00173E40");
-extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
 void FUN_L00_0025a120(char *o);
 void FUN_L00_0025a120(char *o) {
@@ -301,7 +301,7 @@ void FUN_L00_0025a120(char *o) {
     }
     qcopy(b, p);
     b[2] = b[2] + 0.5f;
-    if (coll_line_fix(b, a, 0x22, 0, 0) != 0) {
+    if (collision_line(b, a, 0x22, 0, 0) != 0) {
         float *t = (float *)D_L00_00173E40_25a120;
         *(float *)(o + 0x84) = t[10] - 0.2f;
         *(float *)(o + 0x88) = t[10] + 0.2f;

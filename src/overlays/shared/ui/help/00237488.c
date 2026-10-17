@@ -1223,7 +1223,7 @@ extern u8 D_0013D388;
 extern s32 D_0015ED84 __attribute__((sda));
 extern s32 D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda));
 extern f32 D_L05_002169F8[] __asm__("D_L05_002169F8");
-extern f32 scale_time(f32) __asm__("FUN_L05_0022dbc8");
+extern f32 FUN_L05_0022dbc8(f32);
 
 void FUN_L05_00254058(void) {
     s32 *counter;
@@ -1309,7 +1309,7 @@ void FUN_L05_00254058(void) {
         struct Hero *g = &hero;
         table = *(struct ScoreTable *)D_L05_002169F8;
         *(f32 *)((char *)g + 0x6F4) = table.values[*(s32 *)((char *)g + 0x6F0)];
-        frames = scale_time(1.0f);
+        frames = FUN_L05_0022dbc8(1.0f);
         *(s32 *)((char *)g + 0x6FC) = truncate_float_to_s32((f32)((*(s32 *)((char *)g + 0x6F8) * 100) / (s32)(frames * 60.0f)));
         *(s32 *)((char *)g + 0x6FC) += *(s32 *)((char *)g + 0x6F0) * 25;
         *(s32 *)((char *)g + 0x6FC) = truncate_float_to_s32((f32)*(s32 *)((char *)g + 0x6FC) * *(f32 *)((char *)g + 0x6F4));

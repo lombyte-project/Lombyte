@@ -632,7 +632,7 @@ extern char *FUN_L01_002fa068(void *, void *, void *, float, float, int);
 extern char D_L01_0020AF80[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L01_0015F580[] __attribute__((section(".sdata")));
-extern float scale_time(float) __asm__("FUN_L04_001f1978");
+extern float FUN_L04_001f1978(float);
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1065,7 +1065,7 @@ void birdbot_update(PeMoby *m) {
             if (collision_line(&vc, &va, 0, m, 0) == 0) {
                 yaw = FUN_001f9e90_cf(vb.f[0], vb.f[1]);
                 pitch = FUN_001f9e90_cf(vector_length_xy_cf(&vb), vb.f[2]);
-                FUN_L01_002fa068(m, &va, &vb, yaw, pitch, func_001FA898_r(scale_time(10.0f)));
+                FUN_L01_002fa068(m, &va, &vb, yaw, pitch, func_001FA898_r(FUN_L04_001f1978(10.0f)));
                 v->h1A4++;
             } else {
                 if (m->b53 != 0) {
@@ -1471,7 +1471,7 @@ extern MobyNode *D_L01_0015FFE4;
 extern u8 D_L01_00161A80[] __attribute__((section(".sdata")));
 
 extern s32 FUN_001160d8();
-extern f32 scale_time(f32) __asm__("FUN_L04_001f1978");
+extern f32 FUN_L04_001f1978(f32);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -1707,7 +1707,7 @@ void peckbot_update(Mob577 *self) {
         g17 = FUN_00213508(&self->pos, 0, 0.5f);
         approach_value(&v->vel.f[2], -(frame_time * 8.0f), frame_time_sq * 10.8f);
         self->pos.f[2] = self->pos.f[2] + v->vel.f[2];
-        if (self->anim != 1 && self->pos.f[2] - g17 <= frame_time * 8.0f * scale_time(45.0f)) {
+        if (self->anim != 1 && self->pos.f[2] - g17 <= frame_time * 8.0f * FUN_L04_001f1978(45.0f)) {
             SET_ANIM(self, 1, 0, scale_game_frames(5));
         }
         if (self->pos.f[2] <= g17) {

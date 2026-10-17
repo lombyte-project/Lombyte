@@ -840,7 +840,7 @@ extern unsigned short *D_L15_001ABE40[];
 extern float D_L15_0015F580[] __attribute__((section(".sdata")));
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_00251fd0(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
-extern float scale_time(float) __asm__("FUN_L15_001f8648");
+extern float FUN_L15_001f8648(float);
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float FUN_001f9b48(void *, void *);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -887,7 +887,7 @@ void construction_arm_update(struct Moby *moby)
     switch (moby->state) {
     case 0:
         d->timer = truncate_float_to_s32(random_float_between(
-            scale_time(D_L15_00161A00 * 60.0f), scale_time(D_L15_00161A04 * 60.0f)));
+            FUN_L15_001f8648(D_L15_00161A00 * 60.0f), FUN_L15_001f8648(D_L15_00161A04 * 60.0f)));
         *(int *)&d->yaw_velocity = d->side = *(int *)&d->yaw = 0;
         moby->update_dist = 0xff;
         moby->state = 1;
@@ -967,8 +967,8 @@ void construction_arm_update(struct Moby *moby)
         break;
     case 5:
         if (moby->prev_seq == d->side * 2 + 3 && (moby->anim_flags & 2)) {
-            minimum = scale_time(D_L15_00161A00 * 60.0f);
-            maximum = scale_time(D_L15_00161A04 * 60.0f);
+            minimum = FUN_L15_001f8648(D_L15_00161A00 * 60.0f);
+            maximum = FUN_L15_001f8648(D_L15_00161A04 * 60.0f);
             d->timer = truncate_float_to_s32(random_float_between(minimum, maximum));
             duration = scale_game_frames(6);
             blend_moby_animation(moby, 0, 0, duration);
@@ -1582,7 +1582,7 @@ apply_delta:
         }
     }
     moby->pos.z -= D_L15_00161A0C * fast_cos(*(float *)(vars + 0x16c));
-    *(float *)(vars + 0x16c) = fast_add_rotations(*(float *)(vars + 0x16c), 6.2831855f / scale_time(D_L15_00161A08 * 60.0f));
+    *(float *)(vars + 0x16c) = fast_add_rotations(*(float *)(vars + 0x16c), 6.2831855f / FUN_L15_001f8648(D_L15_00161A08 * 60.0f));
     moby->pos.z += D_L15_00161A0C * fast_cos(*(float *)(vars + 0x16c));
     if (*(struct Moby **)(vars + 0x160) != 0) {
         *(u128 *)&(*(struct Moby **)(vars + 0x160))->pos = *(u128 *)&moby->pos;
@@ -1863,7 +1863,7 @@ extern ULevelState D_L15_001BABD0;
 extern ULevelState D_L15_001BB830;
 extern UPath *D_L15_001B0AB0[];
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
-extern float scale_time(float) __asm__("FUN_L04_001f1978");
+extern float FUN_L04_001f1978(float);
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -2053,7 +2053,7 @@ void ultramech_unlimited_update(UMoby *m) {
             break;
         }
         dist = FUN_001f9b48(&m->pos, (UVec *)path + path->n);
-        if (dist < speed / scale_time(26.0f) && m->anim != 5) {
+        if (dist < speed / FUN_L04_001f1978(26.0f) && m->anim != 5) {
             blend_moby_animation(m, 5, 0, scale_game_frames(6));
         }
         subtract_vector_xyz(&v20, (UVec *)path + (seg + 2), (UVec *)path + (seg + 1));
@@ -2083,9 +2083,9 @@ void ultramech_unlimited_update(UMoby *m) {
             qcopy(&v10, &m->pos);
             v10.f[2] += 1.0f;
             z = probe_ground_height(&v10, 0, 0.5f);
-            if (m->pos.f[2] - z < d->vel.f[2] * scale_time(26.0f) +
+            if (m->pos.f[2] - z < d->vel.f[2] * FUN_L04_001f1978(26.0f) +
                                       *(float *)&D_L15_00161B18 * frame_time_sq * 0.5f *
-                                          scale_time(26.0f) * scale_time(26.0f) &&
+                                          FUN_L04_001f1978(26.0f) * FUN_L04_001f1978(26.0f) &&
                 m->anim != 5) {
                 blend_moby_animation(m, 5, 0, scale_game_frames(6));
             }
@@ -2158,7 +2158,7 @@ void ultramech_unlimited_update(UMoby *m) {
                 m->state = 6;
                 if (m->anim != 0)
                     blend_moby_animation(m, 0, 0, scale_game_frames(0xA));
-                d->timer = func_001FA898_r(scale_time(d->f188 * 60.0f));
+                d->timer = func_001FA898_r(FUN_L04_001f1978(d->f188 * 60.0f));
             } else if (d->w1D8 == 0 &&
                        vector_distance(&m->pos, &tgt->pos) < *(float *)&D_L15_00161B24) {
                 m->state = 7;

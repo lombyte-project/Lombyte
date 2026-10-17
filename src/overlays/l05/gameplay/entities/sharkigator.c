@@ -1060,7 +1060,7 @@ extern f32 fast_cos_c4(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin_c6(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians_c4(void) __asm__("func_00213308");
 extern f32 random_float_between_c3(f32, f32) __asm__("func_002132A8");
-extern float scale_time(float) __asm__("FUN_L04_001f1978");
+extern float FUN_L04_001f1978(float);
 extern float fast_add_rotations_c4(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float fast_vec_dist(void *, void *);
@@ -1354,10 +1354,10 @@ void extermibot_update(unsigned char *m) {
                 out[0] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[1] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[2] = random_float_between_c3(-(D_L05_00161ABC * D_0015ED6C), D_L05_00161ABC * D_0015ED6C);
-                c1 = truncate_float_to_s32_c4(scale_time(random_float_between_c3(D_L05_00161AAC, D_L05_00161AAC * 2.0f)));
-                c2 = truncate_float_to_s32_c4(scale_time(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
+                c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AAC, D_L05_00161AAC * 2.0f)));
+                c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
                 spawn_spark_c(pos, dir, out, D_L05_00161A9C, D_L05_00161AA0, c1, c2,
-                              truncate_float_to_s32_c4(scale_time(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
+                              truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
             }
             dir[3] = D_L05_00161AC0 * 0.1f;
             out[3] = D_L05_00161AC4 * 0.1f;
@@ -1370,10 +1370,10 @@ void extermibot_update(unsigned char *m) {
                 out[0] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[1] = random_float_between_c3(-D_0015ED6C, D_0015ED6C);
                 out[2] = random_float_between_c3(-(D_L05_00161ABC * D_0015ED6C), D_L05_00161ABC * D_0015ED6C);
-                c1 = truncate_float_to_s32_c4(scale_time(random_float_between_c3(D_L05_00161AAC, D_L05_00161AAC * 2.0f)));
-                c2 = truncate_float_to_s32_c4(scale_time(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
+                c1 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AAC, D_L05_00161AAC * 2.0f)));
+                c2 = truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB0, D_L05_00161AB0 * 1.2f)));
                 spawn_spark_c(pos, dir, out, D_L05_00161AA4, D_L05_00161AA8, c1, c2,
-                              truncate_float_to_s32_c4(scale_time(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
+                              truncate_float_to_s32_c4(FUN_L04_001f1978(random_float_between_c3(D_L05_00161AB4, D_L05_00161AB4 * 1.2f))), -1);
             }
         }
         break;

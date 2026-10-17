@@ -453,7 +453,7 @@ typedef struct {
 
 extern char *D_L18_00174858;
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern float scale_time(float) __asm__("FUN_L04_001f1978");
+extern float FUN_L04_001f1978(float);
 extern int D_L18_0015F5C4;
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern float D_L18_00161964;
@@ -526,7 +526,7 @@ void FUN_L18_002d5050(struct Moby *moby) {
             mark_moby_for_removal(moby);
         } else if (d->flags & 2) {
             f = (float)(d->end - d->c);
-            if (f <= scale_time(D_L18_00161964)) {
+            if (f <= FUN_L04_001f1978(D_L18_00161964)) {
                 enqueue_callback_list_1(FUN_L18_002d5768, moby);
             }
         }
@@ -1662,13 +1662,13 @@ void FUN_L18_002d88b8(struct Moby *moby) {
                           random_float_between(0.0f, 1.0f));
         i1 = FUN_001fa6e0((*(int *)&(D_L18_00161AA4)), (*(int *)&(D_L18_00161AA8)),
                           random_float_between(0.0f, 1.0f));
-        i2 = func_001FA898_r(scale_time(
+        i2 = func_001FA898_r(FUN_L04_001f1978(
             (float)(*(int *)&(D_L18_00161A7C)) * random_float_between(0.0f, 1.0f) + 1.0f));
-        i3 = func_001FA898_r(scale_time((float)(*(int *)&(D_L18_00161A80)) *
+        i3 = func_001FA898_r(FUN_L04_001f1978((float)(*(int *)&(D_L18_00161A80)) *
                                           (random_float_between(-(*(float *)&(D_L18_00161A88)),
                                                                     (*(float *)&(D_L18_00161A88))) +
                                            1.0f)));
-        i4 = func_001FA898_r(scale_time((float)(*(int *)&(D_L18_00161A84)) *
+        i4 = func_001FA898_r(FUN_L04_001f1978((float)(*(int *)&(D_L18_00161A84)) *
                                           (random_float_between(-(*(float *)&(D_L18_00161A88)),
                                                                     (*(float *)&(D_L18_00161A88))) +
                                            1.0f)));
@@ -1742,13 +1742,13 @@ void FUN_L18_002db460(struct Moby *moby) {
                               random_float_between(0.0f, 1.0f));
             i1 = FUN_001fa6e0(D_L18_00161C38, D_L18_00161C3C,
                               random_float_between(0.0f, 1.0f));
-            i2 = func_001FA898_r(scale_time(
+            i2 = func_001FA898_r(FUN_L04_001f1978(
                 (float)D_L18_00161C10 * random_float_between(0.0f, 1.0f) + 1.0f));
-            i3 = func_001FA898_r(scale_time(
+            i3 = func_001FA898_r(FUN_L04_001f1978(
                 (float)D_L18_00161C14 *
                 (random_float_between(-D_L18_00161C1C, D_L18_00161C1C) +
                  1.0f)));
-            i4 = func_001FA898_r(scale_time(
+            i4 = func_001FA898_r(FUN_L04_001f1978(
                 (float)D_L18_00161C18 *
                 (random_float_between(-D_L18_00161C1C, D_L18_00161C1C) +
                  1.0f)));
@@ -2664,11 +2664,11 @@ void FUN_L18_002ea598(struct Moby *moby) {
         FUN_L00_00257d78(v20, k1, k2);
         fast_vec_scale(v30, v20, (*(float *)&(D_L18_00161F5C)));
         v30[2] -= random_float_between(k3, k4);
-        a = func_001FA898_r(scale_time(random_float_between(
+        a = func_001FA898_r(FUN_L04_001f1978(random_float_between(
             (*(float *)&(D_L18_00161F3C)), (*(float *)&(D_L18_00161F40)))));
-        b = func_001FA898_r(scale_time(random_float_between(
+        b = func_001FA898_r(FUN_L04_001f1978(random_float_between(
             (*(float *)&(D_L18_00161F44)), (*(float *)&(D_L18_00161F48)))));
-        c = func_001FA898_r(scale_time(random_float_between(
+        c = func_001FA898_r(FUN_L04_001f1978(random_float_between(
             (*(float *)&(D_L18_00161F4C)), (*(float *)&(D_L18_00161F50)))));
         v20[3] = random_float_between((*(float *)&(D_L18_00161F2C)),
                                           (*(float *)&(D_L18_00161F30)));

@@ -389,7 +389,7 @@ void bolt_grabber_update(struct Moby *m) {
 
 extern char *FUN_L15_002e7ed8_c(void *, void *) __asm__("FUN_L15_002e7ed8");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
-extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
+extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L15_0016207C;
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -1094,7 +1094,6 @@ extern void FUN_00255e88(void *, void *) __asm__("FUN_L00_002668a0");
 extern int FUN_00255a30(void *, void *) __asm__("FUN_L00_00266448");
 extern int FUN_002489f0(int, int) __asm__("FUN_L01_0026e008");
 extern int FUN_001f8658(int) __asm__("FUN_001f96f8");
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void FUN_00246e30(void *, int, int) __asm__("FUN_00212ed8");
 extern void FUN_00254c50(int, int) __asm__("FUN_L01_0027a248");
 extern void FUN_0023ca30(int, int) __asm__("FUN_0020b178");
@@ -1102,7 +1101,6 @@ extern float FUN_001f8c00(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001f9968(float, float) __asm__("FUN_001fa688");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern int max_float(float) __asm__("FUN_001fa6d0");
 extern float FUN_001f9860(float, float) __asm__("FUN_001fa580");
 extern void FUN_00252348(float, float, float, void *) __asm__("FUN_00214db0");
 extern void FUN_001f89f0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1218,7 +1216,7 @@ void ultramech_scientist_update(struct Moby *moby) {
     }
     case 4: {
         char *other;
-        if (fast_dec_timer(data + 0x15c)) {
+        if (tick_countdown_32(data + 0x15c)) {
             FUN_L15_00208ca8();
             FUN_00246e30((char *)D_L15_0015FFD8 + (*(int *)(data + 0x14c) << 8), 0, 0);
             *(short *)(data + 0x36) = 1;
@@ -1275,7 +1273,7 @@ void ultramech_scientist_update(struct Moby *moby) {
 ready:
     if (fast_dec_timer(data + 0x278)) {
         float angle = 0.017453292f;
-        *(int *)(data + 0x278) = max_float(scale_time(random_float_between(180.0f, 300.0f)));
+        *(int *)(data + 0x278) = truncate_float_to_s32(scale_time(random_float_between(180.0f, 300.0f)));
         turn = FUN_001f9860(moby->rot.z, random_float_between(-90.0f, 90.0f) * angle);
         FUN_00252348(6.0f, turn, random_float_between(0.0f, 30.0f) * angle, data + 0x260);
         FUN_001f89f0(data + 0x260, data + 0x260, pos);

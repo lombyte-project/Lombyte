@@ -1075,7 +1075,7 @@ extern float D_L13_00161394 __attribute__((sda));
 extern float D_L13_00161398 __attribute__((sda));
 extern float D_L13_0016139C __attribute__((sda));
 extern float D_L13_001670C0[];
-extern float scale_time(float) __asm__("FUN_L04_001f1978");
+extern float FUN_L04_001f1978(float);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
@@ -1451,7 +1451,7 @@ void robosquawker_update(RsMoby *m) {
         approach_value(&v->v40.f[2], -(frame_time * 8.0f), frame_time_sq * 10.8f);
         FUN_L00_00258830(m, &v->v40, 0.6f, 0.5f, 0.0f, 0);
         if (m->b53 != 2
-            && m->pos.f[2] - g <= frame_time * 8.0f * scale_time(45.0f)
+            && m->pos.f[2] - g <= frame_time * 8.0f * FUN_L04_001f1978(45.0f)
             && m->b53 != 2) {
             blend_moby_animation_c(m, 2, 0, scale_game_frames_alt(5));
         }

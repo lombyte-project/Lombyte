@@ -2904,7 +2904,7 @@ extern f32 fast_cos_c4(f32) __asm__("func_001F9DC8");
 extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
 extern f32 fast_sin_c4(f32) __asm__("func_001F9DE0");
 extern float D_0015ED6C;
-extern float scale_time(float) __asm__("FUN_L04_001f1978");
+extern float FUN_L04_001f1978(float);
 extern float fast_add_rotations_c2(float, float) __asm__("func_001FA580");
 extern s32 rand(void);
 extern s32 random_integer_below_c4(s32) __asm__("func_00213260");
@@ -3049,7 +3049,7 @@ void spiderbot_update(unsigned char *moby) {
             unsigned char life;
             s = -1.0f;
             if (rand() & 1) s = 1.0f;
-            k = truncate_float_to_s32_c5(scale_time(random_float_between(D_L15_00161560 * 0.5f, D_L15_00161560)));
+            k = truncate_float_to_s32_c5(FUN_L04_001f1978(random_float_between(D_L15_00161560 * 0.5f, D_L15_00161560)));
             subtract_vector_xyz_c3(T2, d + 0x10, moby + 0x10);
             *(u128_2A8090 *)B = *(u128_2A8090 *)T2;
             fast_vec_scale(B, B, s);

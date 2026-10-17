@@ -1967,7 +1967,7 @@ extern float D_L08_00161CB4_gp __asm__("D_L08_00161CB4") __attribute__((sda));
 extern float D_L08_00161CB8;
 extern float D_L08_00161CBC_gp __asm__("D_L08_00161CBC") __attribute__((sda));
 extern float D_L08_00161CD0_gp __asm__("D_L08_00161CD0") __attribute__((sda));
-extern float scale_time(float) __asm__("FUN_L04_001f1978");
+extern float FUN_L04_001f1978(float);
 extern float FUN_L00_0025bc00(float *, float, float, int);
 extern float fast_add_rotations_c4(float, float) __asm__("func_001FA580");
 extern float vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
@@ -2347,7 +2347,7 @@ void FUN_L08_002e3870(struct Moby *moby) {
 
                 moby->flags &= ~0x100;
                 vars = (Vars_4BE8 *)moby->pvars;
-                frames = truncate_float_to_s32_c5(scale_time(D_L08_00161CD0_gp + random_float_between_c5(-10.0f, 10.0f)));
+                frames = truncate_float_to_s32_c5(FUN_L04_001f1978(D_L08_00161CD0_gp + random_float_between_c5(-10.0f, 10.0f)));
                 per_frame = 1.0f / convert_integer_to_float(frames);
                 qcopy(vars->anchor, coll->pos);
                 matrix_to_euler(&moby->rot_row0, &moby->rot);

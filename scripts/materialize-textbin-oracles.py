@@ -29,7 +29,6 @@ import rnc_units  # noqa: E402
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
-
 def _oracle_word(word: int, address: int, starts: dict[int, str]) -> str:
     """One raw word, except a `jal` to a function of the same unit: that one is
     written as `jal <symbol>` so the oracle carries the relocation our object
@@ -39,6 +38,7 @@ def _oracle_word(word: int, address: int, starts: dict[int, str]) -> str:
         if target in starts:
             return f"    jal {starts[target]}\n"
     return f"    .word 0x{word:08X}\n"
+
 
 def parse_main_subsegments(path: Path) -> list[dict[str, object]]:
     """Read the project's simple `main.subsegments` YAML without PyYAML."""

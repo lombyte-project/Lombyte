@@ -6440,7 +6440,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern float scale_time(float) __asm__("FUN_L06_00216fa8");
+extern float FUN_L06_00216fa8(float);
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 extern float FUN_002132a8(float, float);
@@ -6529,7 +6529,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         if (nb == **p - 1) {
             m[0x20] = 4;
             FUN_L06_00302400((struct Moby *)m, 1);
-            *(int *)(d + 0xB4) = truncate_float_to_s32(scale_time(D_L06_001620C4));
+            *(int *)(d + 0xB4) = truncate_float_to_s32(FUN_L06_00216fa8(D_L06_001620C4));
             FUN_L06_00312ce8(2);
             FUN_L06_002356a0(0, 1);
             D_L06_0015F404 = 0;
@@ -6563,7 +6563,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         }
         if (tick_countdown_32(d + 0xC0) != 0) {
             allocate_voice_for_group_entry(0, 0, (int)hero.moby);
-            *(int *)(d + 0xC0) = truncate_float_to_s32(scale_time(FUN_002132a8(480.0f, 600.0f)));
+            *(int *)(d + 0xC0) = truncate_float_to_s32(FUN_L06_00216fa8(FUN_002132a8(480.0f, 600.0f)));
             D_L06_00167400[88] = 0.4f;
             ((int *)D_L06_00167400)[90] = scale_game_frames(60);
         }

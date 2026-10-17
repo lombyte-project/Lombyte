@@ -1522,7 +1522,7 @@ extern float D_L08_00161988_gp __asm__("D_L08_00161988") __attribute__((sda));
 extern float D_L08_0016198C_gp __asm__("D_L08_0016198C") __attribute__((sda));
 extern float D_L08_00161990_gp __asm__("D_L08_00161990") __attribute__((sda));
 extern float D_L08_001675C0[];
-extern float scale_time(float) __asm__("FUN_L04_001f1978");
+extern float FUN_L04_001f1978(float);
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float fast_difference_between_rotations_c3(float, float) __asm__("func_001FA688");
 extern float fast_vec_dist(void *, void *);
@@ -1785,7 +1785,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             subtract_vector_xyz(aim, &target->pos, &moby->pos);
             aim[2] = 0.0f;
             distance = fast_vec_length_c2(aim);
-            time = distance / scale_time(D_L08_0016197C_gp);
+            time = distance / FUN_L04_001f1978(D_L08_0016197C_gp);
             distance = distance - (D_L08_00161988_gp * time + 2.0f);
             if (10.0f < distance) {
                 distance = 10.0f;

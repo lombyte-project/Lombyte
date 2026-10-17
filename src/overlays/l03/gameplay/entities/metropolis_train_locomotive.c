@@ -1571,7 +1571,7 @@ char D_L03_001618D0 = 3;
 extern char D_L03_00166EC0[];
 extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
 extern float absolute_float_c5bb8(float) __asm__("FUN_001f99c0");
-extern float scale_time(float) __asm__("FUN_L04_001f1978");
+extern float FUN_L04_001f1978(float);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -1649,7 +1649,7 @@ void robot_dog_update(char *moby) {
         data->f1A4 = data->f234 * frame_time;
         data->i1B8 |= 0x20;
         data->f1A8 = 2.0954423f;
-        a = scale_time(6.0f);
+        a = FUN_L04_001f1978(6.0f);
         data->f264 = 1.0f;
         data->i244 = 0;
         data->i26C = 0;
@@ -1729,11 +1729,11 @@ void robot_dog_update(char *moby) {
             data->i23C = scale_game_frames((int)random_float_between(30.0f, 90.0f));
         }
         d = vector_distance(moby + 0x10, &tgt);
-        if (d < data->f234 * frame_time * 0.5f * scale_time(40.0f) +
-                    data->f234 * frame_time * scale_time(10.0f) + 1.5f) {
+        if (d < data->f234 * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
+                    data->f234 * frame_time * FUN_L04_001f1978(10.0f) + 1.5f) {
             moby[0x20] = 6;
             if (((unsigned char *)moby)[0x53] != 5) {
-                blend_moby_animation_c5bb8(moby, 5, 0, truncate_float_to_s32(scale_time(10.0f)));
+                blend_moby_animation_c5bb8(moby, 5, 0, truncate_float_to_s32(FUN_L04_001f1978(10.0f)));
             }
         } else if (data->f230 < FUN_001f9b48(&tgt, data->home) ||
                    absolute_float_c5bb8(tgt.pos[2] - *(float *)(moby + 0x18)) > 3.0f) {
@@ -1784,7 +1784,7 @@ void robot_dog_update(char *moby) {
         dir[2] = 0.0f;
         FUN_L00_00258b50(moby, &data->i180, dir, data->v40, 1.0f);
         if (((unsigned char *)moby)[0x52] == 5) {
-            approach_value_c5bb8(&data->f1A4, 0.0f, data->f234 * frame_time / scale_time(40.0f));
+            approach_value_c5bb8(&data->f1A4, 0.0f, data->f234 * frame_time / FUN_L04_001f1978(40.0f));
         }
         if (absolute_float_c5bb8(compute_interpolated_record_value_c5bb8(moby) - 25.0f) <= 0.25f &&
             absolute_float_c5bb8(tgt.pos[2] - *(float *)(moby + 0x18)) < 1.0f &&
@@ -1821,11 +1821,11 @@ void robot_dog_update(char *moby) {
             }
         } else if (data->i244 == 0) {
             d = vector_distance(moby + 0x10, &tgt);
-            if (d < data->f234 * frame_time * 0.5f * scale_time(40.0f) +
-                        data->f234 * frame_time * scale_time(10.0f) + 1.5f) {
+            if (d < data->f234 * frame_time * 0.5f * FUN_L04_001f1978(40.0f) +
+                        data->f234 * frame_time * FUN_L04_001f1978(10.0f) + 1.5f) {
                 moby[0x20] = 6;
                 if (((unsigned char *)moby)[0x53] != 5) {
-                    blend_moby_animation_c5bb8(moby, 5, 0, truncate_float_to_s32(scale_time(10.0f)));
+                    blend_moby_animation_c5bb8(moby, 5, 0, truncate_float_to_s32(FUN_L04_001f1978(10.0f)));
                 }
             }
         }

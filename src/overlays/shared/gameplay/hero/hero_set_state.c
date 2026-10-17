@@ -3044,7 +3044,6 @@ extern float D_L00_00173E68 __attribute__((section(".data")));
 extern int D_L00_0015F5CC;
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00216de8(int a, int b);
-extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void hero_get_collision_ray_endpoints(void *, void *, int, float, float) __asm__("FUN_L00_002126b8");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 
@@ -3112,12 +3111,12 @@ int FUN_L00_002279b0(void) {
             scale = 16.0f;
         }
         hero_get_collision_ray_endpoints(v1, v2, 0, scale, 1.3f);
-        if (coll_line_fix(v1, v2, 2, *(int *)&u->moby, 0) != 0) {
+        if (collision_line(v1, v2, 2, u->moby, 0) != 0) {
             int s = collision_hit_material();
             u->ground_type = s;
             if ((short)s == 0) {
                 v1[2] = D_L00_00173E68 - 0.01f;
-                if (coll_line_fix(v1, v2, 2, *(int *)&u->moby, 0) == 0) {
+                if (collision_line(v1, v2, 2, u->moby, 0) == 0) {
                     hero_set_state(0x34, 1);
                     return 1;
                 }

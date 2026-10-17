@@ -43,7 +43,7 @@ extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C9B8), where it is exact; names translated to the US level program. */
 
 extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
-extern void quaternion_rotation_basis(void *, void *) __asm__("FUN_001fa2b8");
+extern void FUN_001fa2b8(void *, void *);
 extern void func_0020DAF8(void *, int, void *) __asm__("FUN_0020cca8");
 extern void func_0020EEE8(void *) __asm__("FUN_0020e098");
 
@@ -53,7 +53,7 @@ void FUN_L12_0027b9c0(struct Moby *parent, unsigned char *child, int mode) {
     qcopy(child + 0x10, workspace + 0x30);
     advance_moby_animation(child);
     allocate_voice_for_target_entry_cf(child);
-    quaternion_rotation_basis(child + 0xC0, workspace);
+    FUN_001fa2b8(child + 0xC0, workspace);
     normalize_vector_triplet(child + 0xC0);
     func_0020EEE8(child);
     if (parent->flags & 1)
