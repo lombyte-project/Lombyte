@@ -71,7 +71,7 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
-extern void FUN_L00_00257470(struct Moby *, s32, s32);
+extern void explode302618(struct Moby *, s32, s32) __asm__("FUN_L00_00257470");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern void push302618(struct Moby *, Vec4 *, s32, f32, f32, f32) __asm__("FUN_L00_00258830");
 extern void wake302618(struct Moby *) __asm__("FUN_L00_0025a120");
@@ -271,7 +271,7 @@ void seeker_update(struct Moby *moby) {
         }
         break;
     case 7:
-        FUN_L00_00257470(moby, 0, -1);
+        explode302618(moby, 0, -1);
         voice = vars->voice;
         if (voice != -1) {
             slot = (VoiceSlot *)(D_0013E550 + voice * 0x70);

@@ -13,7 +13,8 @@
 
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 
-int FUN_L00_0028ddd8(int a, int b, int c, int d) {
+int play_voice(int a, int b, int c, int d) __asm__("FUN_L00_0028ddd8");
+int play_voice(int a, int b, int c, int d) {
     int r;
     if (a >= D_L00_0015F5F0)
         return -1;
@@ -58,7 +59,8 @@ typedef struct {
 } E0028df38;
 extern E0028df38 D_0013E550[];
 /* Sets word 0x21 of voice entry i to v; returns 1. */
-s32 FUN_L00_0028df38(s32 i, s32 v) {
+s32 engine_voice_set_pitch(s32 i, s32 v) __asm__("FUN_L00_0028df38");
+s32 engine_voice_set_pitch(s32 i, s32 v) {
     E0028df38 *p = &D_0013E550[i];
     p->w[0x21] = v;
     return 1;

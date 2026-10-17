@@ -71,7 +71,7 @@ extern void FUN_L00_00207c48(void);
 extern void FUN_L00_00207a58(void);
 extern void FUN_L00_002484e0(void *);
 extern void FUN_L00_00207d00(void);
-extern void FUN_L00_00216de8(int, int);
+extern void f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
 extern void FUN_L00_00208b60(void);
 extern void FUN_L00_00257024(void *);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -159,7 +159,7 @@ void FUN_L01_00228000(void)
         if (q->pending_item[0] == 0) goto pending_zero;
         if (q->pending_item[0] == 31) goto pending_zero;
         if (q->unk22DE == 0) {
-            FUN_L00_00216de8(25, 0);
+            f_fun_l00_00216de8_227fa0(25, 0);
             q->unk22DE = 18;
             q->unk22DC = 1;
         }
@@ -171,7 +171,7 @@ pending_zero:
         if (p->grounded_frames == 0) goto finish;
         if (D_0013D4DC[0] == 0) goto finish;
         if (p->unk22DE != 0) goto finish;
-        FUN_L00_00216de8(25, 0);
+        f_fun_l00_00216de8_227fa0(25, 0);
         p->unk22DE = 18;
         p->unk22DC = 1;
     }
@@ -278,8 +278,8 @@ void FUN_L01_00228870(void) {
     FUN_L00_00208b60();
 }
 extern unsigned char gold_weapon_purchased[] __asm__("D_0013E520");
-extern void FUN_L00_00250320(struct Moby *, int *, int *, int *);
-extern void FUN_L00_002502f0(struct Moby *, int, int, int);
+extern void get_moby_color(struct Moby *, int *, int *, int *) __asm__("FUN_L00_00250320");
+extern void set_moby_color(struct Moby *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_002072c8(void);
 extern void FUN_L00_00207330(struct Moby *, struct Moby *);
 
@@ -302,7 +302,7 @@ void FUN_L01_00228e38(void)
             blink = 1;
     }
     if (blink) {
-        FUN_L00_00250320(hero.moby, &r, &g, &b);
+        get_moby_color(hero.moby, &r, &g, &b);
         if (hero.state_timer % 4 < 3) {
             r = 0;
             g = 0;
@@ -312,7 +312,7 @@ void FUN_L01_00228e38(void)
             g = 0x90;
             b = 0xF0;
         }
-        FUN_L00_002502f0(hero.moby, r, g, b);
+        set_moby_color(hero.moby, r, g, b);
         FUN_L00_002072c8();
     }
     if (hero.items[0].item_id >= 0 && gold_weapon_purchased[hero.items[0].item_id] != 0
@@ -440,7 +440,7 @@ extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern void FUN_L00_00259508(void *, void *, void *, int, float);
-extern char *FUN_L00_002603d0(char *);
+extern char *c338_p(char *) __asm__("FUN_L00_002603d0");
 extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
 extern s32 coll2_2d090(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 
@@ -515,7 +515,7 @@ probe_next:
     if (coll_hit.moby != 0) {
         moby_allowed = 0;
         moby_record = suck_get_aim_height(coll_hit.moby);
-        moby_data = FUN_L00_002603d0((char *)coll_hit.moby);
+        moby_data = c338_p((char *)coll_hit.moby);
         if (moby_record && (*(u16 *)(moby_record + 0x1E) & 1))
             moby_allowed = 1;
         else if (moby_data)

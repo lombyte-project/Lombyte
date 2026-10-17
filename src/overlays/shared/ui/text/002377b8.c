@@ -1095,7 +1095,7 @@ void FUN_L00_00239d00(T00239d00 *o) {
     }
 }
 /*
- * Draw callback of the bolt counter HUD element (queued by FUN_L00_00266448
+ * Draw callback of the bolt counter HUD element (queued by update_npc_dialogue
  * with FUN_L00_00239cc8 / FUN_L00_00239d00): a panel that slides open by
  * cnt[0] / bolt_panel_open_steps_gp, the spinning bolt icon (frame from *unk80), the
  * bolt count with a drop shadow, and a thousands separator every three
@@ -1241,7 +1241,7 @@ extern s32 D_L00_0015F910 __attribute__((sda));
 extern s32 D_L00_0015F914 __attribute__((sda));
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern void FUN_L00_001fb470(s32, s32, s32, char *, s32);
+extern void font_print_large_001fb470(s32, s32, s32, char *, s32) __asm__("FUN_L00_001fb470");
 
 /* Draws the short counter panel, its spinning icon, and a pulsing label. */
 s32 FUN_L00_0023a2d0(Hud *m) {
@@ -1299,13 +1299,13 @@ s32 FUN_L00_0023a2d0(Hud *m) {
     scaled_text = pulse * text;
     shadow = fast_tween_color(0, 0x80000000, scaled_text);
     color = fast_tween_color(D_L00_0015F90C, D_L00_0015F910, scaled_text);
-    FUN_L00_001fb470(text_x + 1, text_y + 1, shadow, buf, -1);
-    FUN_L00_001fb470(text_x, text_y, color, buf, -1);
+    font_print_large_001fb470(text_x + 1, text_y + 1, shadow, buf, -1);
+    font_print_large_001fb470(text_x, text_y, color, buf, -1);
 out:
     return m->ret;
 }
 extern short D_00140986 __attribute__((section(".data")));
-int FUN_L00_00235a70(char *, int *, int *);
+int hud_screen_position(char *, int *, int *) __asm__("FUN_L00_00235a70");
 void FUN_L00_00235ad8(char *, int *, int *, int, int);
 int get_icon_frame(int, int) __asm__("FUN_001ff960");
 void FUN_L00_0023b6c0(int, int, int, int, int, int);
@@ -1317,7 +1317,7 @@ int FUN_L00_0023a640(char *rec) {
     y = *(int *)(rec + 0x54);
     *(int *)(rec + 0x58) = 0x100;
     *(int *)(rec + 0x5C) = 0x40;
-    FUN_L00_00235a70(rec, &x, &y);
+    hud_screen_position(rec, &x, &y);
     FUN_L00_00235ad8(rec, &x, &y, *(int *)(rec + 0x6C), 0);
     n = *(int *)(rec + 0x74) * 0xDD / *(int *)(rec + 0x8) + 0x1B;
     FUN_L00_0023b6c0(get_icon_frame(0x7558, 1), x, y, n, 0x40, 0x80);

@@ -1070,7 +1070,7 @@ void FUN_L12_002e3528(struct Moby *moby) {
  * mirrored across its local Y axis), with random jitter. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E4C58), where it is exact; names translated to the US level program. */
 
-extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern char *spark1688(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1103,9 +1103,9 @@ void FUN_L12_002e3948(struct Moby *moby) {
     p2[1] = -p2[1];
     transform_vector_by_basis(p2, p2, &moby->rot_row0);
     add_vector_xyz_c(p2, p2, &moby->pos);
-    FUN_L00_0026cbb0(p1, a, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
+    spark1688(p1, a, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
     func_L00_0026DEA0_x(p1, 0.05f, 1.01f, 1.03f, 6, b, 30000.0f, 0x404040);
-    FUN_L00_0026cbb0(p2, a, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
+    spark1688(p2, a, 0x4F007FFF, 0x1FFFFFFF, FUN_L00_00257b90(scale_game_frames(8), scale_game_frames(0x11)), 1, 10000.0f);
     func_L00_0026DEA0_x(p2, 0.05f, 1.01f, 1.03f, 6, b, 30000.0f, 0x404040);
 }
 /* Steers the moby toward a target point, speeding up or braking, and turns it toward the given angles. */
@@ -1550,15 +1550,15 @@ extern char *func_0020D348_m_x(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_x(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L12_0027b9c0_x(void *, void *, int) __asm__("FUN_L12_0027b9c0");
 extern void FUN_L00_00263d40_c(int, int) __asm__("FUN_L00_00263d40");
-extern int FUN_L00_00266448(void *, void *);
-extern int FUN_L00_002668a0(void *, void *);
+extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
+extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -1584,11 +1584,11 @@ void FUN_L12_002e6c48(L16WatchMoby *m) {
             return;
         }
         m->state = 1;
-        FUN_L00_002668a0(m, &d->activation);
+        initialize_npc_dialogue(m, &d->activation);
         initialize_moby_grounding(m);
         break;
     case 1:
-        if (alternate_item_available[1] == 0 && FUN_L00_00266448(m, &d->activation)) {
+        if (alternate_item_available[1] == 0 && update_npc_dialogue(m, &d->activation)) {
             FUN_L01_002783a8_c(m, 2.5f);
             *(int *)((char *)m + 0x58) = 0;
             m->state = 2;
@@ -1738,14 +1738,14 @@ extern float fast_add_rotations_e81e0(float, float) __asm__("FUN_001fa580");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void subtract_8808(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_00257470(struct Moby *, int, int);
+extern void explode302618(struct Moby *, int, int) __asm__("FUN_L00_00257470");
 extern struct Moby *D_L12_00178380[];
 extern int coll_line_fix_72(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int query_mobys_72(void *, int, void *, int, float) __asm__("FUN_L00_001f2868");
 extern int f5e3b8_20d6b0(void *) __asm__("FUN_L00_0025e3b8");
 extern float FUN_L00_00257c48(float, float);
 extern void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int closest302618(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int FUN_L12_0027b8e0(void *, void *, float, float, float);
 extern float vector_project_72(void *) __asm__("FUN_001f9b20");
 extern void FUN_L04_002aee30(void *, void *, void *, int);
@@ -1864,7 +1864,7 @@ hide:
         if (moby->group != 0xff) event_2E39E0(moby->group, 1);
         if (OGRE_I(0x254) == -1) goto state3;
         else {
-            OGRE_I(0x260) = FUN_L01_0028b510(&moby->pos, D_L12_001B0930_w[OGRE_I(0x254)], 0.0f);
+            OGRE_I(0x260) = closest302618(&moby->pos, D_L12_001B0930_w[OGRE_I(0x254)], 0.0f);
             moby->state = 1;
         }
         break;
@@ -1999,12 +1999,12 @@ state3:
     }
     case 9: {
         if (mine_fall(moby, data + 0x70) & 0x60) {
-            FUN_L00_00257470(moby, 0, -1);
+            explode302618(moby, 0, -1);
             FUN_L12_002e7290(moby, &moby->pos);
             goto leave;
         }
         if (moby->pos.z < 2.0f) {
-            FUN_L00_00257470(moby, 0, -1);
+            explode302618(moby, 0, -1);
 leave:
             FUN_L12_002e86d0(moby);
             return;
@@ -2213,11 +2213,11 @@ typedef struct {
 } Level12VendorData;
 
 
-extern void FUN_L00_00257470(struct Moby *, int, int);
+extern void explode302618(struct Moby *, int, int) __asm__("FUN_L00_00257470");
 
 void FUN_L12_002e86d0(struct Moby *moby) {
     moby->unkB4 = 0;
-    FUN_L00_00257470(moby, 0, -1);
+    explode302618(moby, 0, -1);
     if (((Level12VendorData *)moby->pvars)->child != 0) {
         mark_moby_for_removal(((Level12VendorData *)moby->pvars)->child);
     }
@@ -2348,7 +2348,7 @@ extern int allocate_voice_for_target_entry_e9f68(int, int, int) __asm__("FUN_002
 extern void release_voice(int) __asm__("FUN_0022d798");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spark_v(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern char *FUN_L12_002ecce8(void *, void *, int, int, float, float, float);
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern unsigned char D_001413F4 __attribute__((section(".data")));
@@ -2559,7 +2559,7 @@ update_state:
                     a = FUN_L00_00257b90(30, 70);
                     life = scale_game_frames_alt(a);
                     size = FUN_L00_00257b90(120, 170);
-                    FUN_L00_00269958(&position, &velocity, color, 255, life, 30, size, 1);
+                    spark_v(&position, &velocity, color, 255, life, 30, size, 1);
                 }
                 limit = 4;
                 if (*(int *)(data + 0xc0)) {
@@ -2618,7 +2618,7 @@ update_state:
             *(struct Moby **)(data + 0xac) = 0;
         }
         spawn_explosion(moby, ((char *)&D_L12_0015F580_gp), &moby->pos, 0.0f, 0.0f, 20, 3, 4, 4.0f, 2.0f, 100000.0f, 2, 3.0f, 15.0f, 1, 1, -1, 0);
-        if (*(int *)(data + 0xc0) == 0) FUN_L00_00257470(moby, 0, -1);
+        if (*(int *)(data + 0xc0) == 0) explode302618(moby, 0, -1);
         index = *(int *)(data + 0xb0);
         if (index != -1 && (void *)((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.owner == (void *)moby && ((VoicePoolWindow *)(D_0013E550 + index * 0x70))->voice.state) release_voice(index);
         *(int *)(data + 0xb0) = -1;
@@ -2847,14 +2847,14 @@ void FUN_L12_002eb570(L16WatchMoby *m) {
     switch (m->state) {
     case 0:
         m->state = 1;
-        FUN_L00_002668a0(m, &d->activation);
+        initialize_npc_dialogue(m, &d->activation);
         d->activation.radius = 1.7f;
         initialize_moby_grounding(m);
         if (alternate_item_available[0x13C])
             *(short *)((char *)d + 0x56) = -1;
         break;
     case 1:
-        if (alternate_item_available[0x13C] == 0 && FUN_L00_00266448(m, &d->activation)) {
+        if (alternate_item_available[0x13C] == 0 && update_npc_dialogue(m, &d->activation)) {
             FUN_L01_002783a8_c(m, 2.52f);
             *(int *)((char *)m + 0x58) = 0;
             m->state = 2;

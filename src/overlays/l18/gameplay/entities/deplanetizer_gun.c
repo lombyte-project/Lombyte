@@ -782,7 +782,7 @@ void FUN_L18_002fa640(struct Moby *moby) {
 
 extern char *func_0020D348_m(int);
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
@@ -817,7 +817,7 @@ void FUN_L18_002fa728(char *moby) {
     if (child != 0) {
         qcopy(child + 0x10, moby + 0x10);
         qcopy(child + 0x40, moby + 0x40);
-        FUN_L00_00250df8(child);
+        allocate_voice_for_target_entry_cf(child);
     }
 }
 extern int D_L18_001AC240[];

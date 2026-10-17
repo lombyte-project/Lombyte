@@ -31,7 +31,7 @@ extern void FUN_L00_00207d00(void);
 extern void FUN_L00_00208a10(void);
 extern void FUN_L00_00208b60(void);
 extern void hero_update(void) __asm__("FUN_L00_00211670");
-extern void FUN_L00_00216de8(int, int);
+extern void f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
 extern void FUN_L00_00216f10(void);
 extern void FUN_L00_00232670(void);
 extern void FUN_L00_002484e0(void *);
@@ -128,7 +128,7 @@ void FUN_L15_001ff938(void) {
             int pending = ((struct Hero *)hero4)->pending_item[0];
             if (pending != 0 && pending != 0x1F) {
                 if (*(short *)(hero4 + 0x22DE) == 0) {
-                    FUN_L00_00216de8(0x19, 0);
+                    f_fun_l00_00216de8_227fa0(0x19, 0);
                     *(short *)(hero4 + 0x22DE) = 0x12;
                     *(short *)(hero4 + 0x22DC) = 1;
                 }
@@ -137,7 +137,7 @@ void FUN_L15_001ff938(void) {
                 ((struct Hero *)hero5)->pending_item[0] = 0;
                 if (hero5[0x12E7] != 0 && *(int *)(hero5 + 0x300) != 0 && D_0013D4DC[0] != 0 &&
                     *(short *)(hero5 + 0x22DE) == 0) {
-                    FUN_L00_00216de8(0x19, 0);
+                    f_fun_l00_00216de8_227fa0(0x19, 0);
                     *(short *)(hero5 + 0x22DE) = 0x12;
                     *(short *)(hero5 + 0x22DC) = 1;
                 }

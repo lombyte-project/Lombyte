@@ -499,7 +499,7 @@ extern s16 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern void FUN_L00_00257470(TrollMoby *, s32, s32);
+extern void explode302618(TrollMoby *, s32, s32) __asm__("FUN_L00_00257470");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern TrollColl *find_moby_hit(TrollMoby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void hit_reaction(TrollMoby *, TrollColl *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
@@ -567,7 +567,7 @@ void FUN_L00_002e1678(TrollMoby *m) {
             m->unk94 = 0;
             vars->unk67 = 0x78;
             trooper_anim_update(m, anim);
-            FUN_L00_00257470(m, 0, -1);
+            explode302618(m, 0, -1);
         } else {
             vars->unk88 = D_L00_00161BDC * frame_time * 0.35f;
             vars->unk8C = D_L00_00161BE0 * frame_time * 0.5f;
@@ -644,7 +644,7 @@ typedef struct {
 
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
-extern SparkPart *FUN_L00_00274948(void *, void *, s32, void *);
+extern SparkPart *flash_67e8(void *, void *, s32, void *) __asm__("FUN_L00_00274948");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void FUN_L00_002e1c78();
@@ -664,12 +664,12 @@ void FUN_L00_002e1aa8(SparkMoby *m) {
     moby_point_position(m, 1, pos);
     vars->pos[2] -= 0.333f;
     random_spherical_offset(vel, 0.005f, 0.03f);
-    p = FUN_L00_00274948(pos, vel, 0x7F, m);
+    p = flash_67e8(pos, vel, 0x7F, m);
     if (p != 0) {
         p->unkC = random_float_between(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
-        p = FUN_L00_00274948(vars->pos, D_L00_0015F580, 0x7F, m);
+        p = flash_67e8(vars->pos, D_L00_0015F580, 0x7F, m);
         if (p != 0) {
             t = &p->tail;
             if (i == 2 && random_integer_below(8) == 0) {

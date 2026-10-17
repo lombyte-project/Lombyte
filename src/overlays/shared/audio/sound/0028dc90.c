@@ -12,7 +12,8 @@
 
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
 
-int FUN_L00_0028dc90(int i, int a1, int v, int k) {
+int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
+int trooper_play_sound(int i, int a1, int v, int k) {
     char *t = D_L00_00197300[class_slot[k]];
     char *e;
     int r;

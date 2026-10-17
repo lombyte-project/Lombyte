@@ -13,7 +13,8 @@
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-void FUN_L01_002b7c68(float *in, int *out) {
+void pool_bind_tile(float *in, int *out) __asm__("FUN_L01_002b7c68");
+void pool_bind_tile(float *in, int *out) {
     out[0] = func_001FA898_r((in[0] + pool_light[2]) * 1024.0f);
     out[1] = func_001FA898_r((in[1] + pool_light[3]) * 1024.0f);
     out[2] = func_001FA898_r((in[2] - 1.0f) * 1024.0f);
@@ -46,7 +47,8 @@ typedef struct VuChainRecord {
 
 extern void memset(void *, s32, s32);
 
-void FUN_L01_002b7a48(VuChainRecord *records, int count) {
+void pool_init_tiles(VuChainRecord *records, int count) __asm__("FUN_L01_002b7a48");
+void pool_init_tiles(VuChainRecord *records, int count) {
     int i;
     for (i = 0; i < count; i++) {
         int j;

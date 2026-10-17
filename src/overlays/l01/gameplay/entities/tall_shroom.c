@@ -13,7 +13,7 @@ typedef struct {
 
 extern Ent D_L01_00202D80[];
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
-void FUN_L00_002371e0(void);
+void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void FUN_L01_002b96e0(s32, void *);
 extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -22,7 +22,7 @@ void FUN_L01_00309bf8(void) {
     f32 v;
     s32 i;
 
-    FUN_L00_002371e0();
+    mine_blend_color();
     FUN_L01_002b96e0(3, D_L01_00202D80);
     v = fast_sin((convert_integer_to_float(level_frame_count & 0x3F) - 32.0f) * 0.09817477f);
     v = v * 0.5f + 0.5f;
@@ -78,7 +78,7 @@ extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 FUN_L00_002d8128(void *);
-extern s32 FUN_L01_00275690(f32, void *);
+extern s32 check_moby_c(f32, void *) __asm__("FUN_L01_00275690");
 
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
@@ -199,7 +199,7 @@ void FUN_L01_0030acb8(struct Moby *moby) {
                     }
                     usage_stats.stat[13].level_mask = usage_stats.stat[13].level_mask | (1 << current_level_index_macro) | 0x80000000;
                     help_request(1, 1);
-                } else if (FUN_L01_00275690(255.0f, m2) != 0) {
+                } else if (check_moby_c(255.0f, m2) != 0) {
                     help_request(2, 2);
                 }
             }
@@ -348,7 +348,7 @@ typedef struct {
 } DebrisMoby;
 
 extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8(DebrisMoby *);
+extern void allocate_voice_for_target_entry_cf(DebrisMoby *) __asm__("FUN_L00_00250df8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -374,7 +374,7 @@ DebrisMoby *FUN_L01_0030be70(DebrisMoby *src, void *dir, f32 scale) {
         v->spin_y = randf_sym(0.05235988f, 0.13962634f);
         v->spin_z = randf_sym(0.0f, DEG_TO_RAD);
         v->timer = scale_game_frames(200);
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }

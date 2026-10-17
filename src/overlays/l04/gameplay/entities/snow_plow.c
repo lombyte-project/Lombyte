@@ -65,7 +65,7 @@ extern void turn_e50(void *, float, void *, float, float, float) __asm__("FUN_L0
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
@@ -252,7 +252,7 @@ void FUN_L04_002ca420(struct Moby *moby) {
             goto hit;
         }
         advance_moby_animation(other);
-        FUN_L00_00250df8(other);
+        allocate_voice_for_target_entry_cf(other);
         refresh_moby_spatial_bounds_from_basis(other);
         other->flags |= 6;
     }
@@ -737,7 +737,7 @@ extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__
 extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
 extern void wake302618(void *) __asm__("FUN_L00_0025a120");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
@@ -857,7 +857,7 @@ void FUN_L04_002d16b8(WBMoby *m) {
                 d->f110 = 14.0f;
                 d->f114 = 24.0f;
                 m->state = 0xB;
-                FUN_L00_00257470(m, 0, -1);
+                explode302618(m, 0, -1);
                 d->fB7 = 0x78;
                 trooper_anim_update(m, d->fB0);
                 d->f3E4 = (2.0f / multiply_global_factor_ed64(15.0f)) * 2.0f;
@@ -1361,7 +1361,7 @@ void FUN_L04_002d16b8(WBMoby *m) {
                 d->f3E0 = 0.0f;
             }
             if (m->pos[2] < 2.0f) {
-                FUN_L00_00257470(m, 0, -1);
+                explode302618(m, 0, -1);
                 mark_moby_for_removal(m);
             }
         }
@@ -1554,7 +1554,7 @@ struct RiserVars {
 
 extern s32 D_L04_001BA650[];
 extern LevelCollected D_L04_001BB3B0;
-extern int FUN_L00_0028dc90(int, int, struct Moby *, int);
+extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32(s32 *) __asm__("FUN_001f9740");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
@@ -1582,7 +1582,7 @@ void FUN_L04_002e17d8(struct Moby *m) {
                 return;
         }
         if (m->oclass == 0x44D || m->oclass == 0x5FC)
-            FUN_L00_0028dc90(0, 0, m, 0x44D);
+            trooper_play_sound(0, 0, m, 0x44D);
         m->state = 2;
         d->timer = scale_game_frames(60);
         break;

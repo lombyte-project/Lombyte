@@ -67,7 +67,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations_c(float, float) __asm__("func_001FA688");
 extern float probe_ground_height_c(void *, int, float) __asm__("func_00213508");
 extern int FUN_001f9b80_c() __asm__("FUN_001f9b80");
-extern int FUN_L00_001f0d60();
+extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt_c(int *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
@@ -1271,7 +1271,7 @@ extern void *debris302618(char *, int, float *, void *, int, int, float, float *
 extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void turn_e50(char *moby, float *vel, float target, float k, float d, float max) __asm__("FUN_L00_00258278");
 extern void wake302618(void *) __asm__("FUN_L00_0025a120");
 extern void FUN_L00_0025c558(float, void *, void *, int, int, int);
@@ -1793,7 +1793,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                 float x;
                 r = collision_hit_material();
                 if (r == 0 || r == 1 || r == 3) {
-                    FUN_L00_00257470(m, 0x200, -1);
+                    explode302618(m, 0x200, -1);
                     mark_moby_for_removal(m);
                     return;
                 }
@@ -1812,7 +1812,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                 func_L00_0025D5B0_b(m, d->v70, 0xD, 1, 0, fast_add_rotations(m->f48, 3.1415927f));
                 d->b67 = 0xFA;
                 FUN_L00_0025d458(m, (short *)d->q60);
-                FUN_L00_00257470(m, 0, -1);
+                explode302618(m, 0, -1);
                 break;
             }
         }
@@ -1841,7 +1841,7 @@ void FUN_L10_002e1d38(Moby2E30F8 *m) {
                     p[1] += randf_sym(0.0f, 0.3f);
                     debris302618((char *)m, 0x623, m->pos, pb, 0, 2, zz, dp, dp, dp);
                     debris302618((char *)m, 0x624, m->pos, pb, 0, 2, zz, dp, dp, dp);
-                    FUN_L00_00257470(m, 0, -1);
+                    explode302618(m, 0, -1);
                     mark_moby_for_removal(m);
                     return;
                 }
@@ -2050,7 +2050,7 @@ extern void FUN_L10_002e0138_c(unsigned char *m) __asm__("FUN_L10_002e0138");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 float absolute_float_c(float input) __asm__("func_001F99C0");
-int FUN_L01_00274b78(char *a, char *o, float best);
+int select54(char *a, char *o, float best) __asm__("FUN_L01_00274b78");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 void FUN_L00_0025ab48_c(void *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
 void FUN_L00_00263d40(int a, int b);
@@ -2642,7 +2642,7 @@ void FUN_L10_002e4a88(Ship_5E48 *m) {
     case 8: {
         float z = 0.0f;
         spawn_explosion(m, d->a40, &m->pos, z, z, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 5, 15.0f, 1, 1, -1, 0);
-        FUN_L00_00257470(m, 0, -1);
+        explode302618(m, 0, -1);
         FUN_L00_00263fd8_c((char *)m, 0x5FD, (float *)&m->pos, (char *)m + 0x40, 0, 0, 0.0f, D_L10_0015F580, D_L10_0015F580, D_L10_0015F580);
         FUN_L00_00263fd8_c((char *)m, 0x5FE, (float *)&m->pos, (char *)m + 0x40, 0, 0, 0.0f, D_L10_0015F580, D_L10_0015F580, D_L10_0015F580);
         mark_moby_for_removal_c2(m);

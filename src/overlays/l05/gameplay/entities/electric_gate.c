@@ -806,8 +806,8 @@ extern int allocate_target_entry_f5c8(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L05_00318648(struct Moby *, struct Moby *, void *, void *, int);
 extern void FUN_L01_0029b0a0(void *, int, void *, int, void *);
 extern void update_entity_f5c8(struct Moby *) __asm__("FUN_L00_00250df8");
-extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
-                            void *vel, f32 f2);
+extern u8 *emit_23e008(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
+                            void *vel, f32 f2) __asm__("FUN_L00_00272060");
 extern char D_L05_001BAAA0[];
 
 void FUN_L05_0030f5c8(struct Moby *moby) {
@@ -865,10 +865,10 @@ void FUN_L05_0030f5c8(struct Moby *moby) {
                             spin--;
                         }
                         size = random_float_between_f5c8(0.4f, 0.5f);
-                        FUN_L00_00272060(pos, scale_game_frames_f5c8(25), size * 0.2f, size, 0x7F207F7F, 0, spin, drift,
+                        emit_23e008(pos, scale_game_frames_f5c8(25), size * 0.2f, size, 0x7F207F7F, 0, spin, drift,
                                          0.0f);
                         spin = -spin;
-                        FUN_L00_00272060(pos, scale_game_frames_f5c8(25), size * 0.14f, size * 0.7f, 0x7F7F7F7F, 1, spin, drift,
+                        emit_23e008(pos, scale_game_frames_f5c8(25), size * 0.14f, size * 0.7f, 0x7F7F7F7F, 1, spin, drift,
                                          0.0f);
                     }
                         piece->spawn_frame = moby->spawn_frame;
@@ -994,7 +994,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void set_group_state_30ca80(int, int) __asm__("FUN_L01_0026e0e0");
 extern void FUN_L05_0029be70(float, float, float, void *, void *, int, int);
-extern void FUN_L00_002718d0(float, float, void *, void *, void *);
+extern void spawn_splash(float, float, void *, void *, void *) __asm__("FUN_L00_002718d0");
 extern unsigned char D_0014C050[][16];
 extern struct Moby *D_L05_0015FFD8;
 extern struct FloorRow *D_L05_001612D0;
@@ -1109,7 +1109,7 @@ void FUN_L05_003150f0(struct Moby *m) {
                     v[0] += fast_cos(ang) * r;
                     v[1] += fast_sin(ang) * r;
                     v[2] = floor + 0.05f;
-                    FUN_L00_002718d0(random_float_between(1.0f, 1.5f), random_integer_below(2) ? 2.0f : -2.0f, v,
+                    spawn_splash(random_float_between(1.0f, 1.5f), random_integer_below(2) ? 2.0f : -2.0f, v,
                                      D_L05_0015F580_macro, &D_L05_001612D0[d->floor].z);
                 }
             }
@@ -1168,7 +1168,7 @@ extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 approach_with_speed(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -1220,7 +1220,7 @@ void FUN_L05_003156d0(struct Moby *moby) {
         break;
     case 2:
     case 3:
-        if (!FUN_L00_0028d8c0(moby, vars->sound)) {
+        if (!voice_is_playing(moby, vars->sound)) {
             vars->sound = allocate_voice_for_target_entry(0, 4, moby);
         }
         if (moby->command) {
@@ -1273,7 +1273,7 @@ void FUN_L05_003156d0(struct Moby *moby) {
         break;
     case 6:
     case 7:
-        if (FUN_L00_0028d8c0(moby, vars->sound)) {
+        if (voice_is_playing(moby, vars->sound)) {
             release_voice_slot(vars->sound);
             vars->sound = -1;
         }
@@ -1923,8 +1923,8 @@ extern float truncate_float_to_s32_cf(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
-extern int FUN_L00_00266448(void *, void *);
-extern int FUN_L00_002668a0(void *, void *);
+extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
+extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
@@ -1932,7 +1932,7 @@ extern int scale_game_frames(int);
 extern int tick_countdown_32(int *);
 extern char D_L05_00161EF8[];
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -1966,10 +1966,10 @@ void FUN_L05_003180a0(WM *m) {
         m->position[2] = probe_ground_height(m->position, 0, 0.5f);
         d->ptr20 = (void *)D_L05_00161EF8;
         m->state = 1;
-        FUN_L00_002668a0(m, d);
+        initialize_npc_dialogue(m, d);
         break;
     case 1:
-        if (FUN_L00_00266448(m, d))
+        if (update_npc_dialogue(m, d))
             begin_dialogue_camera_transition(m, 2.0f);
         if ((unsigned)(d->sub - 3) < 2) {
             ea210_switch(0x17, 1);
@@ -2139,7 +2139,7 @@ extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L05_003195f8(char *);
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_001f9d20(void *, void *, void *);
@@ -2270,10 +2270,10 @@ void FUN_L05_00318c78(struct Moby *moby) {
         g2->unk1F2 = 2;
         g2->unk1F4 = 2;
         FUN_L05_003198e8(moby);
-        if (FUN_L00_0028d8c0(moby, *(short *)(d + 0xB2)) == 0) {
+        if (voice_is_playing(moby, *(short *)(d + 0xB2)) == 0) {
             *(short *)(d + 0xB2) = func_0022ED80_i(0, 4, moby);
         }
-    } else if (FUN_L00_0028d8c0(moby, *(short *)(d + 0xB2)) != 0) {
+    } else if (voice_is_playing(moby, *(short *)(d + 0xB2)) != 0) {
         h = *(short *)(d + 0xB2);
         if (h != -1) {
             e = D_0013E550 + h * 0x70;

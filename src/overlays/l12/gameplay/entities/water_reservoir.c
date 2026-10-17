@@ -196,7 +196,7 @@ extern char *func_0020D348_m(int);
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 
 char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, float f1, float f2) {
     struct Moby *moby = (struct Moby *)func_0020D348_m(0x199);
@@ -219,7 +219,7 @@ char *FUN_L12_002ecce8(char *src, char *pos, int owner, int seed, float f0, floa
         *(float *)(data + 0x24) = f1;
         *(int *)(data + 0x28) = 0;
         *(int *)(data + 0x14) = r;
-        FUN_L00_00250df8(moby);
+        allocate_voice_for_target_entry_cf(moby);
     }
     return (char *)moby;
 }
@@ -251,7 +251,7 @@ extern void subtract_vector_ece00(void *, void *, void *) __asm__("FUN_001f9a28"
 extern void set_vector_length_ece00(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void combine_velocity1688(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern int random_int_between_ece00(int, int) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spark_v(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern int FUN_001efa68_ece00(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
 extern int coll_sphere_ece00(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_ece00(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
@@ -295,9 +295,9 @@ void FUN_L12_002ece00(struct Moby *moby) {
         set_vector_length_ece00(side, vars, 0.2f);
         set_vector_length_ece00(back, vars, -0.2f);
         combine_velocity1688(trail, back, &moby->pos);
-        FUN_L00_00269958(back, side, 0x6F00AFFF, 0xFF, scale_game_frames(random_int_between_ece00(15, 22)), 40,
+        spark_v(back, side, 0x6F00AFFF, 0xFF, scale_game_frames(random_int_between_ece00(15, 22)), 40,
                          random_int_between_ece00(20, 35), 1);
-        FUN_L00_00269958(back, side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(random_int_between_ece00(30, 60)), 40,
+        spark_v(back, side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(random_int_between_ece00(30, 60)), 40,
                          random_int_between_ece00(50, 75), 0);
         if (FUN_001efa68_ece00(&moby->pos, old_pos, 0, moby, 0) || coll_sphere_ece00(&moby->pos, 0.2f, 0, moby)) {
             if (D_L12_001742C0_ece00.moby != 0 && D_L12_001742C0_ece00.moby != (int)vars->owner) {

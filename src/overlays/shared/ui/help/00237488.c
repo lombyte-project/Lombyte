@@ -81,7 +81,7 @@ extern ItemDef D_L05_00179F20[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fd568_208820() __asm__("FUN_L00_0020d568");
-extern int FUN_L00_00216de8(int, int);
+extern int f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0020a500(void);
 extern void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
@@ -295,7 +295,7 @@ void FUN_L05_0023dc88(int i) {
             if (f_fun_l00_0020fe30_227fa0()) {
                 int v;
                 if (*(short *)((char *)g + 0x22DE) == 0) {
-                    FUN_L00_00216de8(0x18, 0);
+                    f_fun_l00_00216de8_227fa0(0x18, 0);
                     *(short *)((char *)g + 0x22DE) = 0x12;
                     *(short *)((char *)g + 0x22DC) = 1;
                 }
@@ -620,14 +620,14 @@ extern int f_fun_l00_00211360_227fa0(void *) __asm__("FUN_L00_00211360");
 extern int f_fun_l00_00222158_227fa0(void) __asm__("FUN_L00_00222158");
 extern int FUN_L00_00233e98(int);
 extern int FUN_L00_00266d60(int, int, int *);
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned short D_00141920[] __attribute__((section(".data")));
 extern unsigned short D_00141D80[] __attribute__((section(".data")));
 extern void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
-extern void FUN_L00_00217658(void);
+extern void f_fun_l00_00217658_227fa0(void) __asm__("FUN_L00_00217658");
 extern void f_fun_l00_00221ee0_227fa0(void) __asm__("FUN_L00_00221ee0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void f_fun_l00_0029a6b0_227fa0(void *) __asm__("FUN_L00_0029a6b0");
@@ -688,7 +688,7 @@ int FUN_L05_00251be8(void) {
             }
             if ((D_0013CA40_p2523C8.held & 0xA) || (((*(Hero *)((char *)&hero)).state.current == 1 || (*(Hero *)((char *)&hero)).state.current == 0x1E) && (*(Hero *)((char *)&hero)).state_timer > scale_game_frames_alt(0x14))) {
                 if (((*(Hero *)((char *)&hero)).state.current == 1 || (*(Hero *)((char *)&hero)).state.current == 0x1E) && (*(Hero *)((char *)&hero)).state_timer > scale_game_frames_alt(0x14)) {
-                    FUN_L00_00217658();
+                    f_fun_l00_00217658_227fa0();
                     break;
                 }
                 func_L05_0024D680_2523C8(0x15, 1);
@@ -823,7 +823,7 @@ int FUN_L05_00251be8(void) {
         if ((*(Hero *)((char *)&hero)).unk22DE != 0) {
             break;
         }
-        FUN_L00_00216de8(0x18, 0);
+        f_fun_l00_00216de8_227fa0(0x18, 0);
         (*(Hero *)((char *)&hero)).unk22DE = 0x12;
         (*(Hero *)((char *)&hero)).unk22DC = 1;
         break;
@@ -853,7 +853,7 @@ int FUN_L05_00251be8(void) {
             }
             if (D_0013CA40_p2523C8.held & mask) {
                 if (!FUN_L00_00233e98(-1)) {
-                    if (!FUN_L00_0028d8c0((Moby *)(*(Hero *)((char *)&hero)).items[0].moby, pv->fC)) {
+                    if (!voice_is_playing((Moby *)(*(Hero *)((char *)&hero)).items[0].moby, pv->fC)) {
                         pv->fC = allocate_voice_for_target_entry_alt(0, 0, (int)((Moby *)(*(Hero *)((char *)&hero)).items[0].moby));
                     }
                 }

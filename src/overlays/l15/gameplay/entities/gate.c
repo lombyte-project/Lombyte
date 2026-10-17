@@ -691,7 +691,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int blend_color(float t, int from, int to) __asm__("FUN_L15_00249ce8");
 extern s32 scale_game_frames_2aa280(s32) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void spawn_explosion(void *m, void *unused, void *pos, float fA, float fB, int n, int k8, int k9,
                              float fC, float fD, float fE, float fF, int k10, float fG, int k11,
                              int s16, int s18, unsigned char flag) __asm__("FUN_L00_0025e450");
@@ -803,7 +803,7 @@ void FUN_L15_002aa280(struct Moby *moby)
             if (debris != 0)
                 *(float *)((char *)debris + 0x2c) = moby->pos.z - 0.5f;
         }
-        FUN_L00_00257470(moby, 0, -1);
+        explode302618(moby, 0, -1);
         mark_moby_for_removal(moby);
     } else {
         moby->hit_slot = 0xff;
@@ -1224,7 +1224,7 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern int FUN_L03_002d5208(float, void *, void *, void *, int);
 extern void FUN_L00_0025e450_5630(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void set_joint_67e8(float, void *, int) __asm__("FUN_L00_001fff28");
@@ -1586,7 +1586,7 @@ apply_delta:
         *(u128 *)&(*(struct Moby **)(vars + 0x160))->pos = *(u128 *)&moby->pos;
         *(u128 *)&(*(struct Moby **)(vars + 0x160))->rot = *(u128 *)&moby->rot;
         advance_moby_animation(*(struct Moby **)(vars + 0x160));
-        FUN_L00_00250df8(*(struct Moby **)(vars + 0x160));
+        allocate_voice_for_target_entry_cf(*(struct Moby **)(vars + 0x160));
         (*(struct Moby **)(vars + 0x160))->flags |= 6;
     }
     {
@@ -1882,7 +1882,7 @@ extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, fl
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, void *f, int n) __asm__("FUN_L00_00259d08");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int count_group_e3528(int, int) __asm__("FUN_L01_0026e008");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
@@ -2368,7 +2368,7 @@ void FUN_L15_002cf3a8(UMoby *m) {
         break;
     }
     if (moving) {
-        if (FUN_L00_0028d8c0(m, d->snd))
+        if (voice_is_playing(m, d->snd))
             goto spawn;
         d->snd = allocate_voice_for_target_entry(7, 4, (int)m);
     } else {

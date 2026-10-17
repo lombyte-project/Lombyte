@@ -376,7 +376,7 @@ extern float normalize_timer_ffcb0(int) __asm__("FUN_001fa6c0");
 extern void approach_two_stage_ffcb0(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void lerp_vector_ffcb0(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void vec_add_ffcb0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L06_00312b40(float, float, float, float, float, float);
@@ -463,7 +463,7 @@ void FUN_L06_002ffcb0(char *moby) {
                 }
                 state = data[4];
                 state <<= 7;
-                FUN_L00_00216f90((void *)(base + state + 0x30), (void *)(base + state + 0x70), 0x72, 0);
+                ea210_camera((void *)(base + state + 0x30), (void *)(base + state + 0x70), 0x72, 0);
             }
         }
         if (data[9] < D_L06_00162044)
@@ -1133,7 +1133,7 @@ extern void FUN_L06_00312ad0(void *);
 extern void FUN_L06_00312ce8(int);
 extern void FUN_L06_00312b40(float, float, float, float, float, float);
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
 extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L06_002356a0(int, int);
@@ -1146,7 +1146,7 @@ extern float scale_time(float) __asm__("FUN_L06_00216fa8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
 extern float FUN_002132a8(float, float);
-extern int FUN_L01_0027a248(int, int);
+extern int jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern int FUN_L00_00211250(void);
 extern void FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
@@ -1188,7 +1188,7 @@ void FUN_L06_00301b90(unsigned char *m) {
         if (FUN_L06_003047f8((const u8 *)D_L06_0015FFD8_301b90 + (*(int *)(d + 0x2C) << 8)) != 2) return;
         m[0x20] = 3;
         *(int *)(d + 0xB0) = 1;
-        FUN_L01_0027a248(6, 9);
+        jet_game_state(6, 9);
         if (*(short *)D_0015172A == 3) continue_audio_stream_if_ready();
         FUN_L06_002ffc38(*(int *)(d + 0x10));
         FUN_L06_002e9e30(*(int *)(d + 0x14));
@@ -1214,7 +1214,7 @@ void FUN_L06_00301b90(unsigned char *m) {
             FUN_L06_00312ad0(vc);
             {
                 char *q = D_L06_001600EC_301b90 + (*(int *)(d + 0x28) << 7);
-                FUN_L00_00216f90(q + 0x30, q + 0x70, 0x72, 0);
+                ea210_camera(q + 0x30, q + 0x70, 0x72, 0);
             }
         }
         return;
@@ -1907,7 +1907,7 @@ extern int float_to_int_03b68(float) __asm__("FUN_001fa6d0");
 extern int fast_tween_color_03b68(int, int, float) __asm__("FUN_001fa6e0");
 extern u8 *emit_particle_03b68(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern void prepare_piece_effect_303748(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void rings1688(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 
 void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count) {
     float position[4], direction[4], velocity[4], acceleration[4];
@@ -1937,7 +1937,7 @@ void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count)
                 high = scale_game_frames(30);
                 second_time = random_int_between(low, high);
             }
-            FUN_L00_0026a9f0(pos, push, *first_color, *second_color, strength, first_time, second_time, 0, 0,
+            rings1688(pos, push, *first_color, *second_color, strength, first_time, second_time, 0, 0,
                              frame_time_03b68 * 10.0f * scale);
         }
     }
@@ -2318,7 +2318,7 @@ extern V6 D_L06_002019B8;
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void rings1688(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
 extern float D_L06_001621B4 __attribute__((sda));
@@ -2346,7 +2346,7 @@ void FUN_L06_00304818(int unused, void *obj) {
             pb = b.v + random_integer_below(6);
             f = D_L06_001621B4 * 400000.0f;
             r1 = random_int_between(scale_game_frames(0xF), scale_game_frames(0x14));
-            FUN_L00_0026a9f0(obj, pos, *pa, *pb, f, r1, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, s * D_L06_001621B4);
+            rings1688(obj, pos, *pa, *pb, f, r1, random_int_between(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, s * D_L06_001621B4);
         } while (i < D_L06_001621B8);
     }
 }
@@ -2371,7 +2371,7 @@ extern float FUN_L00_00257c48(float lo, float hi);
 extern float fast_vec_dist(void *, void *);
 extern int D_L06_00162234;
 extern int D_L06_00162238;
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern float D_L06_001621F8 __attribute__((sda));
@@ -2398,7 +2398,7 @@ extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-unsigned char *FUN_L00_002730e0(float *pos, void *vel, int color, u8 life, u8 b, int mode, float scale);
+unsigned char *spawn_spark_2f6470(float *pos, void *vel, int color, u8 life, u8 b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void FUN_L06_00305000_c(char *m) __asm__("FUN_L06_00305000");
 void FUN_L06_00305170_c(char *m) __asm__("FUN_L06_00305170");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -2452,7 +2452,7 @@ void FUN_L06_003049f8(char *moby)
         int k;
         int l;
 
-        if (FUN_L00_0028d8c0(moby, d->f18) == 0) {
+        if (voice_is_playing(moby, d->f18) == 0) {
             d->f18 = allocate_voice_for_target_entry(0, 4, moby);
         }
         FUN_L06_00305000_c(moby);

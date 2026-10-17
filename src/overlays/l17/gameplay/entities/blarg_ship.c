@@ -30,7 +30,7 @@ extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern unsigned char D_0013D4DF __attribute__((section(".data")));
 extern int D_0015ED80_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")));
 extern void DebugPrint();
-extern void FUN_L00_002039a0(void);
+extern void ea210_stop(void) __asm__("FUN_L00_002039a0");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 extern void FUN_L00_002e8680(void);
 extern void spin_s(int a, float x, float y) __asm__("FUN_L00_002e8970");
@@ -209,7 +209,7 @@ void FUN_L17_002f26d0(struct Moby *moby) {
         }
         if (*(unsigned char *)(d + 0x4C) == 0 &&
             is_point_inside_clip_volume(&hero.motion.pos, *(int *)(d + 0x3C))) {
-            FUN_L00_002039a0();
+            ea210_stop();
             if (*(int *)(((char *)&D_00141DC4)) >= 0) {
                 help_request(0x4268, 0x8B);
             }
@@ -812,7 +812,7 @@ char *FUN_L17_002f4fb8(int list) {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_0022da68(int, int, int);
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void FUN_L00_00263e30(void *, int, int, int, int, int, int);
 extern void FUN_L01_002787a0(void *);
 extern void FUN_L01_00278e20(void *, int);
@@ -833,7 +833,7 @@ void FUN_L17_002f5260(struct Moby *m) {
         break;
     case 2:
         FUN_0022da68(0, 0, (int)m);
-        FUN_L00_00257470(m, 0, -1);
+        explode302618(m, 0, -1);
         FUN_L01_002787a0(m);
         FUN_L00_00263e30(m, 0x753, 1, 0x753, 1, 11, 2);
         FUN_L00_00263e30(m, 0x756, 1, 0x756, 1, 1, 2);
@@ -868,7 +868,7 @@ void FUN_L17_002f5390(struct Moby *m) {
         break;
     case 2:
         allocate_voice_for_target_entry(0, 0, (int)m);
-        FUN_L00_00257470(m, 0, -1);
+        explode302618(m, 0, -1);
         FUN_L01_002787a0(m);
         debris302618((char *)m, 0x753, &m->pos.x, &m->rot, 0, 0, D_L17_0015F580_macro,
                          D_L17_0015F580_macro, 0.0f, D_L17_0015F580_macro);

@@ -595,7 +595,7 @@ struct Hero {
     f32 unkA68;                    /* 0xA68 */
     f32 speed_scale;               /* 0xA6C: multiplier on the run target in some states (target = frame_time * 5.7 * speed_scale); 1.0 normally */
     f32 unkA70;                    /* 0xA70 */
-    f32 aim_yaw;                   /* 0xA74: gadget aim yaw (FUN_L00_00217658) */
+    f32 aim_yaw;                   /* 0xA74: gadget aim yaw (f_fun_l00_00217658_227fa0) */
     f32 aim_pitch;                 /* 0xA78: gadget aim pitch */
     s32 unkA7C;                    /* 0xA7C */
     s32 unkA80;                    /* 0xA80 */

@@ -97,7 +97,7 @@ extern int D_0015EDF4;
 extern int D_0015EDFC;
 extern int stub_printf() __asm__("FUN_001e93b0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float D_0015ED60;
 extern float D_L02_0015F580;
@@ -164,7 +164,7 @@ void background_ship_1_update(char *moby) {
     }
     case 1:
         qcopy(tv, moby + 0x10);
-        if (FUN_L00_0028d8c0(moby, *(int *)(d + 0x6C)) == 0) {
+        if (voice_is_playing(moby, *(int *)(d + 0x6C)) == 0) {
             *(int *)(d + 0x6C) = func_0022ED80_r(1, 4, (int)moby);
         }
         p2 = *(float *)&D_L02_00161F64 * frame_time;
@@ -421,7 +421,7 @@ void background_ship_2_update(char *moby) {
             return;
         }
         qcopy(tv, moby + 0x10);
-        if (FUN_L00_0028d8c0(moby, *(int *)(d + 0x6C)) == 0) {
+        if (voice_is_playing(moby, *(int *)(d + 0x6C)) == 0) {
             *(int *)(d + 0x6C) = func_0022ED80_r(1, 4, (int)moby);
         }
         p2 = D_L02_00161FC0 * frame_time;

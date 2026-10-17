@@ -38,7 +38,7 @@ extern float vector_length_xy(void *);
 extern int FUN_L00_002050b8(int);
 extern int fd568_208820(void) __asm__("FUN_L00_0020d568");
 extern int f_fun_l00_00211360_227fa0(char *) __asm__("FUN_L00_00211360");
-extern int FUN_L00_00216de8(int, int);
+extern int f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int FUN_L00_00229a98(void);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -228,7 +228,7 @@ int hero_set_state(int a, int b) {
         p->unk20A7 = 1;
         *(int *)&p->unk8FC = 0;
         if (p->state.prev_control_mode == 0x12) {
-            FUN_L00_00216de8(3, 0);
+            f_fun_l00_00216de8_227fa0(3, 0);
             p->state.step = 1;
         } else {
             p->unk8F4 = scale_game_frames(0x2D);
@@ -252,7 +252,7 @@ int hero_set_state(int a, int b) {
         p->unk20A7 = 1;
         p->unk8F4 = scale_game_frames(0x3C);
         if (p->state.prev_control_mode == 0x12) {
-            FUN_L00_00216de8(3, 0);
+            f_fun_l00_00216de8_227fa0(3, 0);
             p->state.step = 1;
         }
         p->unk8E0 = 0;
@@ -637,7 +637,7 @@ int hero_set_state(int a, int b) {
             qcopy(&q->motion.unk150, &q->motion.unk110);
             vec_limit302618(&q->motion.unk150, frame_time * 7.0f);
             if (frame_time * 3.5f < q->motion.unk168)
-                FUN_L00_00216de8(0xC, 0);
+                f_fun_l00_00216de8_227fa0(0xC, 0);
             if (b) {
                 if (*(unsigned char *)(((char *)q->moby) + 0x52) == FUN_L01_00226f10(0)) {
                     set_hero_animation(0xD, 2, (float)scale_game_frames(9));
@@ -727,7 +727,7 @@ int hero_set_state(int a, int b) {
         p->unk944 = frame_time_sq * 7.0f;
         if (p->state.current == 0x77) {
             if (p->vehicle_mode == 0) {
-                p->health.unk22B2 = FUN_L00_00216de8(0x17, 0x20);
+                p->health.unk22B2 = f_fun_l00_00216de8_227fa0(0x17, 0x20);
             }
             p->unk950 =
                 randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
@@ -1611,10 +1611,10 @@ extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);
 extern int FUN_L00_0020d498(int);
 extern void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
 extern int f_fun_l00_0020fe30_227fa0(void) __asm__("FUN_L00_0020fe30");
-extern int FUN_L00_00216de8(int, int);
-extern void FUN_L00_00217658(void);
+extern int f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
+extern void f_fun_l00_00217658_227fa0(void) __asm__("FUN_L00_00217658");
 extern int FUN_L00_00233e98(int);
-extern int FUN_L00_0028d8c0(struct Moby *, int);
+extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
 extern void f_fun_l00_0029a6b0_227fa0(int) __asm__("FUN_L00_0029a6b0");
 
 int FUN_L01_00240ed8(void) {
@@ -1648,7 +1648,7 @@ int FUN_L01_00240ed8(void) {
                          scale_game_frames(0x14) < hero.state_timer)) {
                         if ((hero.state.current == 1 || hero.state.current == 0x1e) &&
                             scale_game_frames(0x14) < hero.state_timer) {
-                            FUN_L00_00217658();
+                            f_fun_l00_00217658_227fa0();
                         } else {
                             hero_set_state(0x15, 1);
                         }
@@ -1701,7 +1701,7 @@ int FUN_L01_00240ed8(void) {
             FUN_L00_00266d60(buttons, scale_game_frames(7), 0) != 0 &&
             D_00141660 == 0x1f && hero.items[0].moby->oclass == 0x1e3 &&
             hero.unk22DE == 0) {
-            FUN_L00_00216de8(0x18, 0);
+            f_fun_l00_00216de8_227fa0(0x18, 0);
             hero.unk22DE = 0x12;
             hero.unk22DC = 1;
         }
@@ -1727,7 +1727,7 @@ int FUN_L01_00240ed8(void) {
                     if (hero.unk20A8 == 0) fire_start_2cc608();
                 } else if ((controller_state.held & buttons) != 0 &&
                            FUN_L00_00233e98(-1) == 0 &&
-                           FUN_L00_0028d8c0(hero.items[0].moby, vars->voice) == 0) {
+                           voice_is_playing(hero.items[0].moby, vars->voice) == 0) {
                     vars->voice = FUN_0022da68(0, 0, hero.items[0].moby);
                 }
             }

@@ -786,7 +786,8 @@ extern char D_0013E533[];
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 /* In mode 3 allocates a voice for the object at D_0013F350+0xA88, else for the one at +0x2080. */
-int FUN_L00_00216de8(int a, int b) {
+int f_fun_l00_00216de8_227fa0(int a, int b) __asm__("FUN_L00_00216de8");
+int f_fun_l00_00216de8_227fa0(int a, int b) {
     char *p = D_0013E533 + 0xE1D;
     int c;
     if (*(unsigned char *)(p + 0x20A4) == 3) {
@@ -816,7 +817,8 @@ extern G D_0013F350;
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 /* Allocates a voice (b, 4, a) for slot idx when it has none; records a in slot idx. */
-void FUN_L00_00216e48(int idx, int a, int b) {
+void release_voice_slot_cf(int idx, int a, int b) __asm__("FUN_L00_00216e48");
+void release_voice_slot_cf(int idx, int a, int b) {
     G *g = &D_0013F350;
     if (g->a[idx] == -1) {
         g->a[idx] = allocate_voice_for_target_entry(b, 4, a);
@@ -850,7 +852,7 @@ void FUN_L00_00216ec0_00216ec0(s32 a, s32 b, s32 c) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217698), where it is exact; names translated to the US level program. */
 
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_00216de8();
+extern int f_fun_l00_00216de8_227fa0() __asm__("FUN_L00_00216de8");
 
 /* For each of eight timers that fast_dec_timer reports as 2, clears a field and calls 00216de8. */
 void FUN_L00_00216f10(void) {
@@ -861,7 +863,7 @@ void FUN_L00_00216f10(void) {
     for (i = 0; i < 8; i++) {
         if (fast_dec_timer_s16(p + i * 8) == 2) {
             q[i * 4 - 3] = 0;
-            FUN_L00_00216de8(q[i * 4 - 2], q[i * 4]);
+            f_fun_l00_00216de8_227fa0(q[i * 4 - 2], q[i * 4]);
         }
     }
 }
@@ -884,7 +886,8 @@ void FUN_L00_002127b8_00216f90(void) __asm__("FUN_L00_002127b8");
 void FUN_L00_001ed280_00216f90(void) __asm__("FUN_L00_001ed280");
 void FUN_L00_002500b8_00216f90(int) __asm__("FUN_L00_002500b8");
 extern char D_0013F3D0[] __attribute__((section(".data")));
-void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) {
+void ea210_camera(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) __asm__("FUN_L00_00216f90");
+void ea210_camera(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) {
     char *q = D_0013F3D0;
     char *g;
     char *r;
@@ -1092,7 +1095,8 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 
 /* Launches the equipped gadget moby: aims it at its target (or along the camera),
  * builds its orientation matrix and starts its animation/sound. */
-void FUN_L00_00217658(void) {
+void f_fun_l00_00217658_227fa0(void) __asm__("FUN_L00_00217658");
+void f_fun_l00_00217658_227fa0(void) {
     f32 dir[4];
     f32 delta[4];
     f32 mat[12];

@@ -181,15 +181,15 @@ int FUN_L00_002a4dc8(int a) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-void FUN_L00_00250df8(unsigned char *);
-/* Creates a class 0x3EF moby at v and runs FUN_L00_00250df8 on it. */
+void allocate_voice_for_target_entry_cf(unsigned char *) __asm__("FUN_L00_00250df8");
+/* Creates a class 0x3EF moby at v and runs allocate_voice_for_target_entry_cf on it. */
 unsigned char *FUN_L00_002a4de0(u128 *v) {
     unsigned char *m = create_moby(0x3ef);
     if (m) {
         m[0x30] = 0xff;
         *(unsigned short *)(m + 0x34) |= 0x41;
         qcopy(m + 0x10, v);
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }
@@ -1072,8 +1072,8 @@ extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 /* spawns a sparkle particle */
-extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
-                            void *vel, f32 f2);
+extern u8 *emit_23e008(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
+                            void *vel, f32 f2) __asm__("FUN_L00_00272060");
 
 /*
  * CollectBolt: adds the bolt moby's value (1, or 5 / 20 / 50 for classes
@@ -1126,9 +1126,9 @@ void FUN_L00_002a6b70(struct Moby *bolt)
     if (spin == 0)
         spin--;
     size = random_float_between(0.4f, 0.5f);
-    FUN_L00_00272060(&pos, scale_game_frames(0x19), size * 0.2f, size, 0x7F207F7F, 0, spin, &vel, 0.0f);
+    emit_23e008(&pos, scale_game_frames(0x19), size * 0.2f, size, 0x7F207F7F, 0, spin, &vel, 0.0f);
     spin = -spin;
-    FUN_L00_00272060(&pos, scale_game_frames(0x19), size * 0.14f, size * k, 0x7F7F7F7F, 1, spin, &vel, 0.0f);
+    emit_23e008(&pos, scale_game_frames(0x19), size * 0.14f, size * k, 0x7F7F7F7F, 1, spin, &vel, 0.0f);
 }
 #define NOT_SDA
 
@@ -1322,7 +1322,7 @@ typedef struct {
 extern void *D_001413D0 __attribute__((section(".data")));
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_002502f0(void *, int, int, int);       /* sets the moby colour */
+extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");       /* sets the moby colour */
 extern void scale_0023db30(void *, void *, float) __asm__("FUN_L00_001ff500");
 
 /*
@@ -1381,7 +1381,7 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
         m->scale = m->pclass->scale * scale;
         euler_rotation_basis(&m->rot_row0, &m->rot);
         if ((src->flags & 0x20) && (color = *(u8 **)(src->pvars + 0xC)) != 0)
-            FUN_L00_002502f0(m, color[4], color[5], color[6]);
+            set_moby_color(m, color[4], color[5], color[6]);
         else
             m->spawn_frame = src->spawn_frame;
         v->unk6E = random_int_between(0, scale_game_frames(600));
@@ -1404,7 +1404,7 @@ struct Moby *FUN_L00_002a7438(struct Moby *src, void *pos, void *vel, int flags,
                 angle = random_float_between(-30.0f, 30.0f) * 0.017453292f;
             FUN_L00_002a7210(m, D_001413D0, angle, 0.0f);
         }
-        FUN_L00_00250df8((u8 *)m);
+        allocate_voice_for_target_entry_cf((u8 *)m);
     } else {
         current_bolt_count += value;
     }
@@ -1825,7 +1825,7 @@ extern int FUN_001efa68(void*,void*,int,int,int);
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00211870(float);
-extern int FUN_L00_00216de8(int,int);
+extern int f_fun_l00_00216de8_227fa0(int,int) __asm__("FUN_L00_00216de8");
 extern int hero_set_state_2(int,int) __asm__("FUN_L00_002223f8");
 extern int sweep_hit_segment(void*,void*,void*,void*,void*,void*,int) __asm__("FUN_L00_00259d08");
 extern int FUN_L00_0025e368(char*);
@@ -1854,7 +1854,7 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_L00_002a7d90(void);
 int FUN_L00_002a7de0(void);
-void FUN_L00_001edf60(int a, int b, void *pos, int kind, int mode, float x, float y, float z);
+void suck_draw_reticle(int a, int b, void *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
 void FUN_L00_002a7c70_c(void *m) __asm__("FUN_L00_002a7c70");
 void FUN_L00_002a7e20(float *pos, int n);
 void FUN_L00_002a8028(u8 *o);
@@ -2081,7 +2081,7 @@ void wrench_update(WrenchMoby *m) {
             }
             if (arrived) {
                 int sound;
-                FUN_L00_00216de8(5,0);
+                f_fun_l00_00216de8_227fa0(5,0);
                 sound=wrench_hero()->thrown_sound;
                 if (sound!=-1) { unsigned char *audio=voice_slot(sound); if (*(WrenchMoby**)(audio+0x88)==wrench_hero()->moby && audio[0x74]) release_voice_slot(sound); }
                 wrench_hero()->thrown_sound=-1; FUN_L00_00262840((char*)wrench_hero()+0x17B0); wrench_hero()->thrown=0; m->state=0;
@@ -2210,7 +2210,7 @@ char *FUN_L00_002a96f8(void *owner, void *pos, float a, float b, float c, char *
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAC50), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void FUN_L00_002502f0(void *, int, int, int);
+extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 
 void *FUN_L00_002a99b0(int unused, void *pos, int c, float scale, float a, float b) {
     char *m = func_0020D348_m(0x593);
@@ -2218,7 +2218,7 @@ void *FUN_L00_002a99b0(int unused, void *pos, int c, float scale, float a, float
         char *d;
         float s;
         qcopy(m + 0x10, pos);
-        FUN_L00_002502f0(m, 0x80, 0x80, 0x70);
+        set_moby_color(m, 0x80, 0x80, 0x70);
         d = *(char **)(m + 0x78);
         s = scale + scale;
         *(float *)d = a;
@@ -2296,7 +2296,7 @@ void FUN_L00_002a9b80(void *a, OvlQuad *v) {
 extern int D_L00_0015F320;
 extern int D_L00_0015F330;
 extern short D_L00_001613C8_d __asm__("D_L00_001613C8") __attribute__((sda));
-extern void FUN_L00_0023e838(int);
+extern void stop_n(int) __asm__("FUN_L00_0023e838");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void FUN_L00_002a9be0(void) {
@@ -2312,7 +2312,7 @@ void FUN_L00_002a9be0(void) {
             D_L00_0015F330 = 0;
             idx = *(short *)(data + 0x2C);
             if (idx != -1)
-                FUN_L00_0023e838(idx);
+                stop_n(idx);
             mark_moby_for_removal(*(char **)&D_L00_001613C8_d);
         }
         *(int *)&D_L00_001613C8_d = 0;

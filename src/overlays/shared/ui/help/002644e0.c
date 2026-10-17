@@ -12,7 +12,8 @@
 s32 remove_hud_item(s32 arg0) __asm__("FUN_001ff480");
 
 /* When D_L00_0015F594 is a and a HUD item is set: removes it and clears both; true if removed. */
-int FUN_L00_002644e0(int a) {
+int dismiss_help_message_304098(int a) __asm__("FUN_L00_002644e0");
+int dismiss_help_message_304098(int a) {
     if (D_L00_0015F594 == a) {
         if (D_L00_00161E04 != -1) {
             D_L00_0015F590 = 0;

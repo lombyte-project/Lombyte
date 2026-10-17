@@ -605,7 +605,7 @@ int FUN_L06_002e9ea0(int index) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F4F08), where it is exact; names translated to the US level program. */
 
 extern float fast_add_rotations(float, float);
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -647,7 +647,7 @@ void FUN_L06_002f3ad8(char *m) {
         *(int *)(d + 0x94) = -1;
         break;
     case 1:
-        if (FUN_L00_0028d8c0(m, *(int *)(d + 0x94)) == 0) {
+        if (voice_is_playing(m, *(int *)(d + 0x94)) == 0) {
             *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
         }
         FUN_L06_002f3d70(m);
@@ -657,7 +657,7 @@ void FUN_L06_002f3ad8(char *m) {
         *(float *)(m + 0x48) = fast_add_rotations(*(float *)(d + 0x84), s);
         break;
     case 2:
-        if (FUN_L00_0028d8c0(m, *(int *)(d + 0x94)) == 0) {
+        if (voice_is_playing(m, *(int *)(d + 0x94)) == 0) {
             *(int *)(d + 0x94) = func_0022ED80_r(0, 4, (int)m);
         }
         FUN_L06_002f3d70(m);
@@ -902,7 +902,7 @@ void FUN_L06_002f4390(char *m) {
 /* Puts a moby in state 2 and its seven linked mobys in state 3, resetting each one's heading. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F68D0), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 
 void FUN_L06_002f54a0(char *a) {
     char *data = *(char **)(a + 0x78);
@@ -916,7 +916,7 @@ void FUN_L06_002f54a0(char *a) {
         *(int *)(data + 0x14) = 0;
         *(float *)(a + 0x40) =
             fast_subtract_rotations(*(float *)(data + 0x10), *(float *)(data + 0x14));
-        FUN_L00_00250df8(a);
+        allocate_voice_for_target_entry_cf(a);
         p = (char **)(data + 0x24);
         for (i = 0; i < 7; i++) {
             char *c = p[i];
@@ -928,7 +928,7 @@ void FUN_L06_002f54a0(char *a) {
             *(int *)(d + 0x14) = 0;
             *(float *)(p[i] + 0x40) =
                 fast_subtract_rotations(*(float *)(d + 0x10), *(float *)(d + 0x14));
-            FUN_L00_00250df8(p[i]);
+            allocate_voice_for_target_entry_cf(p[i]);
         }
     }
 }
@@ -985,7 +985,7 @@ extern float D_L06_00161D80_gp __asm__("D_L06_00161D80") __attribute__((sda));
 extern int D_L06_00161DA0 __attribute__((sda));
 extern int D_L06_00161DA4 __attribute__((sda));
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
@@ -1223,8 +1223,8 @@ void FUN_L06_002f5d78(char *moby) {
         offset += 4;
         *(float *)(*left + 0x40) = -angle;
         *(float *)(*right + 0x40) = angle;
-        FUN_L00_00250df8(*left);
-        FUN_L00_00250df8(*right);
+        allocate_voice_for_target_entry_cf(*left);
+        allocate_voice_for_target_entry_cf(*right);
     }
     {
         int i, offset;
@@ -1280,8 +1280,8 @@ void FUN_L06_002f5d78(char *moby) {
             if (upper != 0.0f && threshold == 0.0f) allocate_voice_for_target_entry(2, 0, (int)*right);
             *(float *)(*left + 0x44) = -angle;
             *(float *)(*right + 0x44) = -upper;
-            FUN_L00_00250df8(*left);
-            FUN_L00_00250df8(*right);
+            allocate_voice_for_target_entry_cf(*left);
+            allocate_voice_for_target_entry_cf(*right);
         }
     }
 }
@@ -1777,7 +1777,7 @@ extern float D_L06_00161ED0 __attribute__((sda));
 extern float D_L06_00161ED4 __attribute__((sda));
 extern int D_L06_00161EDC __attribute__((sda));
 extern int D_L06_00161EE0 __attribute__((sda));
-extern int FUN_L00_001f2868();
+extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int FUN_L00_0024f7c8();
 extern int FUN_L00_00259740();
 extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_00214720");
@@ -2910,7 +2910,7 @@ extern char *FUN_L00_0025a420(void *, int, int);
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_00212f90(void *, int, int, int);
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
@@ -2923,7 +2923,7 @@ extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
 extern int FUN_001fa6e0(int, int, float);
 extern int activate_effect_l08(void *, void *, int, int, void *, int, float) __asm__("FUN_L00_0025ff38");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L06_002fb148_recovery_high(char *) __asm__("FUN_L06_002fb508");
 extern void FUN_L06_002fb148_recovery_low(char *) __asm__("FUN_L06_002fb8c8");
 extern short D_L06_0014162A __attribute__((section(".data")));
@@ -3007,7 +3007,7 @@ start_recovery:
                 *(int *)(data + 0x10C) = -1;
             }
             moby[0x20] = 14;
-            FUN_L00_00257470(moby, 0, -1);
+            explode302618(moby, 0, -1);
             base = D_L06_001600EC + (*(int *)(data + 0xF8) << 7);
             jet_reset_camera(base + 0x30, base + 0x70);
             *(unsigned short *)(moby + 0x34) &= 0xEFFF;
@@ -3055,7 +3055,7 @@ hit_response_done:
                 moby[0x20] = 5;
                 *(int *)(data + 0x170) = 0;
                 base = D_L06_001600EC + (*(int *)(data + 0xF8) << 7);
-                FUN_L00_00216f90(base + 0x30, base + 0x70, 0x72, 1);
+                ea210_camera(base + 0x30, base + 0x70, 0x72, 1);
                 qcopy(moby + 0x10, data + 0xC0);
                 *(float *)(moby + 0x48) = fast_arc_tan(hero.motion.pos.f[0] - *(float *)(moby + 0x10),
                                                          hero.motion.pos.f[1] - *(float *)(moby + 0x14));
@@ -3084,7 +3084,7 @@ hit_response_done:
 
 extern char *D_L06_0016016C __asm__("D_L06_001600EC");
 extern int *D_L06_001B0FB0[] __asm__("D_L06_001B0C30");
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 
 void FUN_L06_002fb148(char *moby) {
@@ -3092,7 +3092,7 @@ void FUN_L06_002fb148(char *moby) {
     char *data = *(char **)(moby + 0x78);
     char *base = D_L06_0016016C + (*(int *)(data + 0xF8) << 7);
     *(int *)(data + 0x118) = 0;
-    FUN_L00_00216f90(base + 0x30, base + 0x70, 0x72, 0);
+    ea210_camera(base + 0x30, base + 0x70, 0x72, 0);
     qcopy(v0, moby + 0x10);
     v0[2] = hero.motion.pos.f[2] + 2.0f;
     normalize_vector_xyz(v1, moby + 0xC0, 8.0f);
@@ -3237,7 +3237,7 @@ void FUN_L06_002fbfb0(char *moby) {
         fast_vec_add(moby + 0x10, data + 0x10, v);
         fast_vec_normalize(v, data + 0x30, -D_L06_00161F20);
         fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
-        FUN_L00_00250df8(*(char **)(data + 0x40));
+        allocate_voice_for_target_entry_cf(*(char **)(data + 0x40));
         moby[0x20] = 5;
         return;
     case 1:
@@ -3263,7 +3263,7 @@ void FUN_L06_002fbfb0(char *moby) {
         fast_vec_add(moby + 0x10, data + 0x10, v);
         fast_vec_normalize(v, data + 0x30, -b);
         fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
-        FUN_L00_00250df8(*(char **)(data + 0x40));
+        allocate_voice_for_target_entry_cf(*(char **)(data + 0x40));
         if (absolute_float(a - D_L06_00161F1C) < 0.01f && absolute_float(b - D_L06_00161F20) < 0.01f) moby[0x20] = 5;
         return;
     case 4:
@@ -3326,7 +3326,7 @@ void FUN_L06_002fbfb0(char *moby) {
         fast_vec_add(moby + 0x10, data + 0x10, v);
         fast_vec_normalize(v, data + 0x30, -phase_b);
         fast_vec_add(*(char **)(data + 0x40) + 0x10, data + 0x10, v);
-        FUN_L00_00250df8(*(char **)(data + 0x40));
+        allocate_voice_for_target_entry_cf(*(char **)(data + 0x40));
         if (!fast_dec_timer(data + 0x4c)) return;
         moby[0xbc] = next_phase;
         *(int *)(data + 0x4c) = scale_game_frames_alt(next_timer);
@@ -3457,7 +3457,7 @@ extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L01_00231348(int, int, int);
-extern void FUN_L01_0027a248(int, int);
+extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void FUN_L06_00227cf8(void);
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
@@ -3550,9 +3550,9 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
                     FUN_L06_00227cf8();
                     {
                         char *b = D_L06_001600EC_c + (d->f7C << 7);
-                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                        ea210_camera(b + 0x30, b + 0x70, 0, 1);
                     }
-                    FUN_L01_0027a248(0, 10);
+                    jet_game_state(0, 10);
                     ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 |= 1;
                     ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 |= 2;
                     if (D_0013D5DD_2FDA70[0x10] != 0 && D_L06_00161F78 == 0) {
@@ -3571,10 +3571,10 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
                     ((Moby_2FDA70 *)D_L06_0015FFD8_c)[d->f6C].f34 &= 0xFFFE;
                     {
                         char *b = D_L06_001600EC_c + (d->f80 << 7);
-                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                        ea210_camera(b + 0x30, b + 0x70, 0, 1);
                     }
                     FUN_L01_00231348(1, 0x43, (int)(D_L06_0015FFD8_c + (d->f6C << 8)));
-                    FUN_L01_0027a248(2, 7);
+                    jet_game_state(2, 7);
                 } else if (d->f84 == 0) {
                     fade_to_black(scale_game_frames_alt(0x10));
                     FUN_L06_002f5360_c(D_L06_0015FFD8_c + (d->f64 << 8));
@@ -3584,7 +3584,7 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
                     d->f94 = 1;
                     {
                         char *b = D_L06_001600EC_c + (d->f80 << 7);
-                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                        ea210_camera(b + 0x30, b + 0x70, 0, 1);
                     }
                 } else {
                     fade_to_black(scale_game_frames_alt(0x10));
@@ -3595,7 +3595,7 @@ void FUN_L06_002fc640(Moby_2FDA70 *moby) {
                     d->f94 = 0;
                     {
                         char *b = D_L06_001600EC_c + (d->f7C << 7);
-                        FUN_L00_00216f90(b + 0x30, b + 0x70, 0, 1);
+                        ea210_camera(b + 0x30, b + 0x70, 0, 1);
                     }
                 }
             }

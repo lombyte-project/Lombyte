@@ -448,7 +448,7 @@ extern float D_L00_00161A54 __attribute__((sda));
 extern int D_L00_00161A58_gp __asm__("D_L00_00161A58") __attribute__((sda));
 extern float D_L00_00161A5C __attribute__((sda));
 extern int fast_bsphere_check() __asm__("FUN_001fa728");
-extern int FUN_L00_00267a08();
+extern int free_effect_particle() __asm__("FUN_L00_00267a08");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern unsigned char D_0013F5E0[];
 extern volatile unsigned char D_0015EDB6;
@@ -465,7 +465,7 @@ extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 float FUN_L00_00257c48(float lo, float hi);
 float cubic_hermite_scalar(float a, float b, float c, float d, float t) __asm__("FUN_L00_00257e20");
 int FUN_L00_00257b90(int lo, int hi);
-int FUN_L00_0028dc90(int i, int a1, int v, int k);
+int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 int FUN_L00_002d8980_c(char *a) __asm__("FUN_L00_002d8980");
 s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32 FUN_L00_002d8510_c(M_2d8510 *m) __asm__("FUN_L00_002d8510");
@@ -2007,7 +2007,7 @@ extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern float D_0015ED6C;
 extern int *D_L00_00177F00[];
-extern int FUN_L00_001f2868();
+extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90_c(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
@@ -2015,7 +2015,7 @@ extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern unsigned col_2af5b8(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
 extern void FUN_L00_0025c088(int *, int *, int *, int);
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void rings1688(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
@@ -2124,7 +2124,7 @@ void FUN_L00_002dbf28(char *self, char *q) {
             big = f22 * 400000.0f;
             r1 = FUN_L00_00257b90_c(scale_game_frames_c(15), scale_game_frames_c(20));
             r2 = FUN_L00_00257b90_c(scale_game_frames_c(25), scale_game_frames_c(30));
-            FUN_L00_0026a9f0(self + 0x10, b, A, B, big, r1, r2, 0, 0, sh);
+            rings1688(self + 0x10, b, A, B, big, r1, r2, 0, 0, sh);
         } while (--cnt);
     }
     if (dist > 9.0f) {
@@ -2253,8 +2253,8 @@ extern int multiply_quaternions() __asm__("FUN_001fa3c0");
 extern int quaternion_nlerp() __asm__("FUN_001fa400");
 extern int quaternion_to_matrix() __asm__("FUN_001fa4f8");
 extern int matrix_to_quaternion() __asm__("FUN_00214260");
-extern int FUN_L00_001f0d60();
-extern int FUN_L00_001f2868();
+extern int coll_sphere() __asm__("FUN_L00_001f0d60");
+extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int dot1688() __asm__("FUN_L00_001ff430");
 extern int reflect1688() __asm__("FUN_L00_001ff660");
 extern int FUN_L00_00259888();
@@ -3328,7 +3328,7 @@ void FUN_L00_002df4a8(M09 *m) {
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void FUN_L00_002502f0(void *, int, int, int);
+extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_002df4a8_u(void *) __asm__("FUN_L00_002df4a8");
 
 extern int D_L00_00161B90 __attribute__((sda));
@@ -3361,7 +3361,7 @@ void red_orb_update(char *m) {
         t |= g << 8;
         *(int *)(p + 4) = t | r;
         FUN_L00_002df4a8_u(m);
-        FUN_L00_002502f0(m, c & 0xFF, (c >> 16) & 0xFF, (unsigned)c >> 24);
+        set_moby_color(m, c & 0xFF, (c >> 16) & 0xFF, (unsigned)c >> 24);
         break;
     }
 }

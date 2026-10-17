@@ -148,7 +148,7 @@ void FUN_L06_00307578(char *moby) {
 /* state transitions of a moby depending on its id at 0xA6 */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00309088), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
+extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 
@@ -167,7 +167,7 @@ void FUN_L06_00307c48(unsigned char *a, unsigned char *m) {
         break;
     case 0x542:
         m[0x20] = 2;
-        FUN_L00_0028dc90(0, 0, (int)m, 0x434);
+        trooper_play_sound(0, 0, (int)m, 0x434);
         m[0x30] = 0xFF;
         jet_clear_persistent(a[0xB0]);
         break;
@@ -320,7 +320,7 @@ typedef struct {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *func_0020D348_m(int);
 extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void debris302618(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void FUN_L01_002787a0(void *);
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
@@ -415,7 +415,7 @@ extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
+extern void draw_quad51(void *, void *, void *, s64, s32) __asm__("FUN_L02_0020bc88");
 extern s32 D_0013E500[];
 extern s32 D_L06_00162414 __attribute__((sda));
 extern s32 D_L06_00162418 __attribute__((sda));
@@ -478,7 +478,7 @@ void FUN_L06_0030bfa8(char *moby) {
     corners[3] += (y + radius) << 16;
     corners[3] += x - radius;
     texture = get_effect_texture(D_L06_00162414);
-    FUN_L02_0020bc88(corners, uvs, colors, texture, 1);
+    draw_quad51(corners, uvs, colors, texture, 1);
     vu1_add_g_sregister(0x47, 0x5360B);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00317770), where it is exact; names translated to the US level program. */

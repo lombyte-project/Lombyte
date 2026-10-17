@@ -440,14 +440,14 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int near_6570(void *, void *, void *, int *, float *, int, float, float, float) __asm__("FUN_L00_0025df68");
 extern int FUN_L01_00277fb8(char *);
 extern int FUN_L03_002c6c60(char *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
 extern void FUN_L00_00266858(void *, int);
-extern void FUN_L01_0027a248(int, int);
+extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
 extern void FUN_L03_002c6c90(char *);
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
@@ -472,7 +472,7 @@ void FUN_L03_00292890(char *moby);
 /* Keeps the engine loop sound playing and restarts the horn at random intervals. */
 #define ENGINE_SOUND()                                                                                          \
     {                                                                                                           \
-        if (!FUN_L00_0028d8c0(moby, data->i108)) {                                                              \
+        if (!voice_is_playing(moby, data->i108)) {                                                              \
             data->i108 = allocate_voice_for_target_entry(1, 4, (int)moby);                                      \
         }                                                                                                       \
         if (tick_countdown_32(&data->i104)) {                                                                        \
@@ -596,7 +596,7 @@ void FUN_L03_00292e98(char *moby) {
         if (mode < 2 || mode == 9 || mode == 12) {
             moby[0xBC] = 4;
             D_L03_0015FDFC = 1;
-            FUN_L01_0027a248(4, 7);
+            jet_game_state(4, 7);
             FUN_L00_00266858(moby, 1);
             ((char *)&D_L03_0015FFD8_m292[data->i100])[0xBC] = 1;
             td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->i100] + 0x78);
@@ -687,7 +687,7 @@ void FUN_L03_00292e98(char *moby) {
         cdata->fFC = data->fC0;
         gunship_follow_path(coupling);
         moby[0xBC] = 5;
-        FUN_L01_0027a248(0, 8);
+        jet_game_state(0, 8);
         break;
     case 5:
         td = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->iD8] + 0x78);
@@ -737,8 +737,8 @@ extern char D_0013E550_294c08[] __asm__("D_0013E550");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern int tick_countdown_32(void *) __asm__("FUN_001f9740");
-extern int FUN_L00_0028d8c0(void *, int);
-extern int FUN_L00_0028dc90(int, int, int, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern void noop_main_callback(void *) __asm__("FUN_001e93e8");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void vec_limit302618(void *, float) __asm__("FUN_L00_0025f730");
@@ -809,8 +809,8 @@ void FUN_L03_00294c08(char *moby) {
         speed = *(float *)(data + 0x114);
         base = 0.0f;
         if ((*(short *)(moby + 0xA6) == 0x389 || *(short *)(moby + 0xA6) == 0x364) &&
-            !FUN_L00_0028d8c0(moby, *(int *)(data + 0x104))) {
-            *(int *)(data + 0x104) = FUN_L00_0028dc90(0, 4, (int)moby, 0x389);
+            !voice_is_playing(moby, *(int *)(data + 0x104))) {
+            *(int *)(data + 0x104) = trooper_play_sound(0, 4, (int)moby, 0x389);
         }
         t = ++*(int *)(data + 0x10C);
         if (scale_game_frames(240) / 2 < *(int *)(data + 0x10C)) {
@@ -942,7 +942,7 @@ void FUN_L03_002953f8(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DB88), where it is exact; names translated to the US level program. */
 
 extern int D_L03_0015F5CC; /* no foreign declaration */
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 
 void FUN_L03_0029c9d0(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -955,7 +955,7 @@ void FUN_L03_0029c9d0(struct Moby *moby) {
     if (*(short *)(data + 0x14A) != 0)
         return;
     if (*(int *)(data + 0x150) >= 0) {
-        if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x150)) != 0)
+        if (voice_is_playing(moby, *(int *)(data + 0x150)) != 0)
             return;
     }
     switch (moby->oclass) {
@@ -1253,8 +1253,8 @@ extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int FUN_L00_002591d0(int *, int, int, int);
 extern int f2592b8_2591d0(int *, int, int, int) __asm__("FUN_L00_002592b8");
-extern int FUN_L01_00275690(char *, float);
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int check_moby_c(char *, float) __asm__("FUN_L01_00275690");
+extern int closest302618(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int FUN_L01_0028b828(void *, int);
 extern int FUN_L01_0028b878(char *);
 extern void FUN_L01_0028b410(char *);
@@ -1318,7 +1318,7 @@ void FUN_L03_0029dba8(char *moby) {
                 if (item == 0) {
                     break;
                 }
-                if (FUN_L01_00275690(item, convert_integer_to_float(*(short *)(item + 0x32))) != -1) {
+                if (check_moby_c(item, convert_integer_to_float(*(short *)(item + 0x32))) != -1) {
                     found = 1;
                     break;
                 }
@@ -1366,7 +1366,7 @@ void FUN_L03_0029dba8(char *moby) {
         FUN_L01_0028b410(pm);
         if (((unsigned char *)pm)[5] == 0) {
             if (*(int *)pm <= 0) {
-                r = FUN_L01_0028b510(pos0, *(void **)(pm + 0x10), 0.0f);
+                r = closest302618(pos0, *(void **)(pm + 0x10), 0.0f);
                 *(int *)pm = r;
                 if (pm[4] >= 0 ? r == **(int **)(pm + 0x10) - 1 : r == 0) {
                     *(int *)pm = 0;
@@ -1588,7 +1588,7 @@ extern int FUN_L03_002c6d98(int id);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void turn_e50(char *moby, float *vel, float target, float k, float d, float max) __asm__("FUN_L00_00258278");
 extern void spawn_nearby_effect(void *, void *, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void wake302618(void *) __asm__("FUN_L00_0025a120");
@@ -1848,13 +1848,13 @@ void FUN_L03_002c5bb8(char *moby) {
             spawn_debris_c5bb8(moby, 0x6CE, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
             spawn_debris_c5bb8(moby, 0x6CF, (float *)(moby + 0x10), moby + 0x40, 0, 0, 0.0f, D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
             FUN_L00_00263e30(moby, 0x77D, 1, 0x77D, 1, 3, 2);
-            FUN_L00_00257470(moby, 0, -1);
+            explode302618(moby, 0, -1);
             mark_moby_for_removal_c5bb8(moby);
             return;
         }
     low:
         if (*(float *)(moby + 0x18) < 2.0f) {
-            FUN_L00_00257470(moby, 0, -1);
+            explode302618(moby, 0, -1);
             mark_moby_for_removal_c5bb8(moby);
             return;
         }

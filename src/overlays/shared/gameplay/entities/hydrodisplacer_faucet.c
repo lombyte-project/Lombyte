@@ -448,7 +448,7 @@ extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
-extern void FUN_L00_002502f0(void *, int, int, int);
+extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L05_0030c220(struct Moby *m);
 void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
@@ -470,7 +470,7 @@ void lamp_update(unsigned char *m) {
         hi = frame_time * 0.2617994f;
         *(float *)(d + 0x50) = r;
         *(float *)(d + 0x4C) = randf_sym(lo, hi);
-        FUN_L00_002502f0(m, 0x80, 0x80, 0x80);
+        set_moby_color(m, 0x80, 0x80, 0x80);
         attach_manipulator((char *)m, 0, d);
         m[0x20] = 1;
         break;

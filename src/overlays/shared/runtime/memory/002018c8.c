@@ -86,7 +86,8 @@ extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 
 #define SCRATCHPAD ((u8 *)0x70000000)
 
-void FUN_L00_002018c8(void) {
+void level_draw_dialog_text(void) __asm__("FUN_L00_002018c8");
+void level_draw_dialog_text(void) {
     char buf[0x200];
     struct TextRegion box;
 

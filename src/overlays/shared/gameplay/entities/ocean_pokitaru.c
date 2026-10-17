@@ -89,8 +89,8 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_002502f0(void *, int, int, int);
-extern void FUN_L00_00250df8(void *);
+extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, float b) {
@@ -120,8 +120,8 @@ unsigned char *FUN_L11_00308848(char *owner, float *dir, float *pos, float a, fl
             *(float *)(*(char **)(m + 0x24) + 0x24) *
             (*(float *)(owner + 0x2C) / *(float *)(*(char **)(owner + 0x24) + 0x24));
         m[0x23] = func_001FA898_r(*(float *)(d + 0x10) * 24.0f);
-        FUN_L00_002502f0(m, 0xFF, 0xFF, 0xFF);
-        FUN_L00_00250df8(m);
+        set_moby_color(m, 0xFF, 0xFF, 0xFF);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }
@@ -290,7 +290,7 @@ char *FUN_L11_00308f48(int owner, float *dir, float *pos, float size, float len,
         *(float *)(p + 0x20) = z;
         *(int *)(p + 0x18) = r - 13;
         *(short *)(m + 0x34) = 0x200;
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }

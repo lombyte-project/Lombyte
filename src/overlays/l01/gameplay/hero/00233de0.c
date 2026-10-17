@@ -475,7 +475,7 @@ extern void FUN_L00_00216de8_cf(void) __asm__("FUN_L00_0020b5b8");
 extern void FUN_L00_00216e48_cf(void) __asm__("FUN_L00_00227d40");
 extern void FUN_L00_00217118(float, float);
 extern void FUN_L00_00217368(int, int);
-extern void FUN_L00_00217658(void);
+extern void f_fun_l00_00217658_227fa0(void) __asm__("FUN_L00_00217658");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void f2334d0_2133a8(float *, float *, float) __asm__("FUN_L00_002334d0");
 extern void f336e8_208820(float *, float *, float) __asm__("FUN_L00_002336e8");
@@ -1328,7 +1328,7 @@ void FUN_L01_002370b8(void) {
             }
         }
         if (hero.unkA9C == 0 && FUN_L00_00211870(33.0f)) {
-            FUN_L00_00217658();
+            f_fun_l00_00217658_227fa0();
         }
         speed_step(frame_time_sq * 37.0f, frame_time_sq * 28.0f);
         set_planar_vel(99999.0f);

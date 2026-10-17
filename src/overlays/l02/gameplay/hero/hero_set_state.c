@@ -42,7 +42,7 @@ extern float vector_length_xy(void *);
 extern int FUN_L00_002050b8(int);
 extern int fd568_208820(void) __asm__("FUN_L00_0020d568");
 extern int f_fun_l00_00211360_227fa0(char *) __asm__("FUN_L00_00211360");
-extern int FUN_L00_00216de8(int, int);
+extern int f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int FUN_L00_00229a98(void);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -421,7 +421,7 @@ int hero_set_state(int a, int b) {
             qcopy(&q->motion.unk150, &q->motion.unk110);
             vec_limit302618(&q->motion.unk150, frame_time * 7.0f);
             if (frame_time * 3.5f < q->motion.unk168)
-                FUN_L00_00216de8(0xC, 0);
+                f_fun_l00_00216de8_227fa0(0xC, 0);
             if (b) {
                 if (*(unsigned char *)(((char *)q->moby) + 0x52) == FUN_L01_00226f10(0)) {
                     set_hero_animation(0xD, 2, (float)scale_game_frames(9));
@@ -632,7 +632,7 @@ int hero_set_state(int a, int b) {
         p->unk944 = frame_time_sq * 7.0f;
         if (p->state.current == 0x77) {
             if (p->vehicle_mode == 0) {
-                p->health.unk22B2 = FUN_L00_00216de8(0x17, 0x20);
+                p->health.unk22B2 = f_fun_l00_00216de8_227fa0(0x17, 0x20);
             }
             p->unk950 =
                 randf_sym(frame_time * 3.1415927f, frame_time * 4.3633232f);
@@ -737,7 +737,7 @@ int hero_set_state(int a, int b) {
         {
             struct Hero *u = &hero;
             if (u->state.current == 0x69)
-                FUN_L00_00216de8(0xA, 0);
+                f_fun_l00_00216de8_227fa0(0xA, 0);
             u->unk410 = u->motion.pos.f[2];
             u->unk4A0 = frame_time_sq * 29.7f;
             u->unk3E8 = -1;
@@ -1303,7 +1303,7 @@ int hero_set_state(int a, int b) {
             struct Hero *r = &hero;
             r->state.control_mode = 0x19;
             r->unk2284 = 0;
-            FUN_L00_00216de8(9, 0);
+            f_fun_l00_00216de8_227fa0(9, 0);
             r->rand_timer.range = 0x68;
             r->target_speed = 0.0f;
             r->ground_speed = 0.0f;
@@ -1319,7 +1319,7 @@ int hero_set_state(int a, int b) {
         if (current_level_index == 0xF)
             FUN_L00_00217450();
         p->unk1CC = 0x2710;
-        FUN_L00_00216de8(9, 0);
+        f_fun_l00_00216de8_227fa0(9, 0);
         p->rand_timer.range = 0x68;
         if (b)
             set_hero_animation(0x71, 0, (float)scale_game_frames(8));
@@ -1818,7 +1818,7 @@ extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_002050b8(int);
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int f_fun_l00_00211360_227fa0(char *) __asm__("FUN_L00_00211360");
-extern int FUN_L00_00216de8(int, int);
+extern int f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_00221d98(void);
 extern int FUN_L00_002276c0(void);
 extern int FUN_L00_00228b78(int, int);
@@ -3225,7 +3225,7 @@ void FUN_L02_00230988(void) {
                             break;
                         }
                         if (hero.unk2F8 == 1) {
-                            FUN_L00_00216de8(0x11, 0);
+                            f_fun_l00_00216de8_227fa0(0x11, 0);
                             FUN_L00_00209ca8(3, 0x18, 1);
                         }
                         if (hero.unk418 != 0) {
@@ -3452,7 +3452,7 @@ void FUN_L02_00230988(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            f_fun_l00_00216de8_227fa0(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }
@@ -3517,7 +3517,7 @@ void FUN_L02_00230988(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            f_fun_l00_00216de8_227fa0(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }

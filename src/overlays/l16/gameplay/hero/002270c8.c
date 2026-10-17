@@ -113,8 +113,8 @@ extern void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern void FUN_L00_00211be8(void);
-extern void FUN_L00_00216de8(int, int);
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
+extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_00228c18(void);
 extern void FUN_L00_00228fa8(void);
 extern void FUN_L00_00231d08(void);
@@ -1988,7 +1988,7 @@ void FUN_L16_002270c8(void) {
                             break;
                         }
                         if (hero.unk2F8 == 1) {
-                            FUN_L00_00216de8(0x11, 0);
+                            f_fun_l00_00216de8_227fa0(0x11, 0);
                             FUN_L00_00209ca8(3, 0x18, 1);
                         }
                         if (hero.unk418 != 0) {
@@ -2371,7 +2371,7 @@ void FUN_L16_002270c8(void) {
                     if (hero.unkA98 & 2) {
                         FUN_L05_00254358(v0, v1);
                         hero.unk874 = v1[2];
-                        FUN_L00_00216f90(v0, v1, 0x6B, 1);
+                        ea210_camera(v0, v1, 0x6B, 1);
                     }
                     break;
                 case 110:
@@ -2379,14 +2379,14 @@ void FUN_L16_002270c8(void) {
                         hero.state_timer > hero.unk8BE) {
                         FUN_L05_00254358(v0, v1);
                         hero.unk874 = v1[2];
-                        FUN_L00_00216f90(v0, v1, 0x6B, 1);
+                        ea210_camera(v0, v1, 0x6B, 1);
                     }
                     break;
                 case 111:
                     if (hero.unkA98 & 2) {
                         FUN_L05_00254358(v0, v1);
                         hero.unk874 = v1[2];
-                        FUN_L00_00216f90(v0, v1, 0x6B, 1);
+                        ea210_camera(v0, v1, 0x6B, 1);
                     }
                     break;
                 case 83:
@@ -2411,7 +2411,7 @@ void FUN_L16_002270c8(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            f_fun_l00_00216de8_227fa0(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }
@@ -2476,7 +2476,7 @@ void FUN_L16_002270c8(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            f_fun_l00_00216de8_227fa0(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }

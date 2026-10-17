@@ -437,7 +437,7 @@ extern float D_L06_00161FB4 __attribute__((sda));
 extern float D_L06_00161FB8 __attribute__((sda));
 extern float D_L06_00161FBC __attribute__((sda));
 extern unsigned char D_0013D408[];
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -557,7 +557,7 @@ void FUN_L06_002feb40(char *m) {
                 }
             }
             *(unsigned char *)(d + 0x117) = 0xFA;
-            FUN_L00_00257470(m, 0, -1);
+            explode302618(m, 0, -1);
             break;
         }
         case 0:

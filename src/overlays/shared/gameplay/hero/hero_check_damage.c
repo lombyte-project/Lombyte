@@ -1772,7 +1772,7 @@ extern int D_0015ED94;
 extern ItemDef item_defs[] __asm__("D_L00_00179AC0");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_0020d568_c() __asm__("FUN_L00_0020d568");
-extern int FUN_L00_00216de8(int, int);
+extern int f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0020a500(void);
 extern void FUN_L00_0020e698_c(void) __asm__("FUN_L00_0020e698");
@@ -1979,7 +1979,7 @@ void hero_switch_item(int i) {
             if (FUN_L00_0020fe30_c()) {
                 int v;
                 if (g->unk22DE == 0) {
-                    FUN_L00_00216de8(0x18, 0);
+                    f_fun_l00_00216de8_227fa0(0x18, 0);
                     g->unk22DE = 0x12;
                     g->unk22DC = 1;
                 }

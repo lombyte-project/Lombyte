@@ -45,7 +45,7 @@ typedef struct {
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-void FUN_L00_00250320(void *, int *, int *, int *);
+void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
 void trooper_anim_update(void *a, S *s) __asm__("FUN_L00_0025d458");
 void trooper_anim_update(void *a, S *s) {
     int old = s->cur;
@@ -59,7 +59,7 @@ void trooper_anim_update(void *a, S *s) {
                 s->cur = 1;
         } else {
             int x, y, z;
-            FUN_L00_00250320(a, &x, &y, &z);
+            get_moby_color(a, &x, &y, &z);
             s->r = x;
             s->g = y;
             s->b = z;
@@ -734,7 +734,7 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned col_2af5b8(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern void FUN_L00_0025c088(int *, int *, int *, int);
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void rings1688(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
@@ -765,7 +765,7 @@ void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) {
         big = scale * 400000.0f;
         c0 = D_L00_001E9030;
         c1 = D_L00_001E9048;
-        FUN_L00_0026a9f0(pos, &vel, c0.v[random_integer_below(6)], c1.v[random_integer_below(6)],
+        rings1688(pos, &vel, c0.v[random_integer_below(6)], c1.v[random_integer_below(6)],
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }
@@ -817,7 +817,7 @@ void explode_4318(char *owner, char *pos, float scale, float flash) {
         big = scale * k5;
         c0 = D_L00_001E9030;
         c1 = D_L00_001E9048;
-        FUN_L00_0026a9f0(pos, &zero_vec, col_2af5b8(c0.v[random_integer_below(6)], 1), col_2af5b8(c1.v[random_integer_below(6)], 1),
+        rings1688(pos, &zero_vec, col_2af5b8(c0.v[random_integer_below(6)], 1), col_2af5b8(c1.v[random_integer_below(6)], 1),
             big, FUN_L00_00257b90(scale_game_frames_c(0xF), scale_game_frames_c(0x14)),
             FUN_L00_00257b90(scale_game_frames_c(0x19), scale_game_frames_c(0x1E)), 0, 0, sp * scale);
     }

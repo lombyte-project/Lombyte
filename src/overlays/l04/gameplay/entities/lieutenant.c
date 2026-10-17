@@ -45,9 +45,9 @@ extern s32 D_L04_0015F5C4;
 extern float FUN_001f9b48(void *, void *);
 extern void wake302618(struct Moby *) __asm__("FUN_L00_0025a120");
 extern void FUN_L02_002e0cd8(struct Moby *);
-extern void FUN_L00_002668a0(struct Moby *, struct VendorVars *);
+extern void initialize_npc_dialogue(struct Moby *, struct VendorVars *) __asm__("FUN_L00_002668a0");
 extern int FUN_00214720(char *, s32);
-extern int FUN_L00_00266448(struct Moby *, struct VendorVars *);
+extern int update_npc_dialogue(struct Moby *, struct VendorVars *) __asm__("FUN_L00_00266448");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void fast_vec_normalize(Vec4 *, Vec4 *, float) __asm__("FUN_001f9bf8");
@@ -75,14 +75,14 @@ void FUN_L04_002e3078(struct Moby *moby) {
             break;
         }
         moby->state = 1;
-        FUN_L00_002668a0(moby, vars);
+        initialize_npc_dialogue(moby, vars);
         break;
     case 1:
         if (FUN_00214720(&hero.motion.pos, vars->item))
             vars->alpha = 255.0f;
         else
             vars->alpha = 1.0f;
-        if (FUN_L00_00266448(moby, vars))
+        if (update_npc_dialogue(moby, vars))
             moby->state = 2;
         break;
     case 2:
@@ -104,7 +104,7 @@ void FUN_L04_002e3078(struct Moby *moby) {
             break;
         }
         if (D_L04_0015F5C4 != 2)
-            FUN_L00_00266448(moby, vars);
+            update_npc_dialogue(moby, vars);
         break;
     case 3:
         moby->flags |= 0x41;

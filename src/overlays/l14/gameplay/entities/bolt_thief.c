@@ -231,7 +231,7 @@ extern int mine_fall(void *,void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L14_002fea80(struct Moby *moby);
 extern float D_L14_00161FBC __attribute__((sda));
 extern float D_L14_00161FC0 __attribute__((sda));
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -265,7 +265,7 @@ void FUN_L14_002fe2a0(L16CrateMoby *moby) {
         trooper_start_knockback(moby, d->knock, 1, 1, 0,
                           fast_arc_tan(moby->position[0] - player->motion.pos.f[0], moby->position[1] - player->motion.pos.f[1]));
         d->ticks = 0x78;
-        FUN_L00_00257470(moby, 0, -1);
+        explode302618(moby, 0, -1);
         moby->state = 6;
     }
     moby->opacity = 0xFF;
@@ -550,8 +550,8 @@ extern struct {
 } D_L14_0016CF60;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L02_002e0cd8(void *);
-extern void FUN_L00_002668a0(void *, void *);
-extern int FUN_L00_00266448(void *, void *);
+extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
+extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_L00_00262d38(int);
@@ -584,7 +584,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
             return;
         }
         d->p20 = (void *)D_L14_00161FE8;
-        FUN_L00_002668a0(m, d);
+        initialize_npc_dialogue(m, d);
         m->state = 1;
         d->b8 = 1;
         break;
@@ -601,7 +601,7 @@ void FUN_L14_002fefe0(L14WatchMoby *m) {
         } else {
             d->fC = 3.0f;
         }
-        if (FUN_L00_00266448(m, d)) {
+        if (update_npc_dialogue(m, d)) {
             char *t = D_L14_001600EC + d->i48 * 128;
             D_L14_0016CF60.h46 = 1;
             qcopy(D_L14_0016CF60.q10, t + 0x30);

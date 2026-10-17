@@ -78,7 +78,7 @@ extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
-int FUN_L00_0028d8c0(int a, int i);
+int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 void turn_e50(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
 void FUN_L00_0025a120(char *o);
@@ -332,7 +332,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int activate_effect_l08() __asm__("FUN_L00_0025ff38");
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_L00_00260FB0_f(char *, void *, float, int, int, void *,
                                int) __asm__("FUN_L00_0025ff38");
@@ -350,7 +350,7 @@ void FUN_L08_002d36e0(char *m) {
             idx = 1;
         if (idx < 12) {
             if (idx >= 0) {
-                FUN_L00_00257470(m, 0, -1);
+                explode302618(m, 0, -1);
                 m[0x20] = 0x63;
             }
         }
@@ -1183,7 +1183,7 @@ extern float D_L08_0015F5D0;
 extern float D_L08_0015F5D4;
 extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int lerp_vector() __asm__("FUN_001f9a40");
-extern int FUN_L00_001f2868();
+extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00259888();
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
@@ -1201,7 +1201,7 @@ float approach_angle(float *cur, float *vel, float target, float lim, float acce
 int FUN_L00_00258830(char *m, char *v, int flags, float a, float b, float c);
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);
 int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
-int FUN_L01_0028b510(void *arg0, void *arg1, float target);
+int closest302618(void *arg0, void *arg1, float target) __asm__("FUN_L01_0028b510");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
 void FUN_L00_0025a120(char *o);
 void vec_limit302618(void *a, float x) __asm__("FUN_L00_0025f730");

@@ -23,7 +23,7 @@ extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9b48(void *, void *);
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L01_00277fb8(void *);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -147,7 +147,7 @@ void FUN_L09_003033a0(unsigned char *moby) {
             int i;
             float f20, t;
             char *q;
-            if (!FUN_L00_0028d8c0(moby, *(int *)(data + 0xC4))) {
+            if (!voice_is_playing(moby, *(int *)(data + 0xC4))) {
                 *(int *)(data + 0xC4) = allocate_voice_for_target_entry(0, 4, (int)moby);
             }
             F(data, 0xA8) += F(data, 0xAC) * frame_time;
@@ -231,7 +231,7 @@ extern VendorHitSource *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_
 extern s32 fptodp(f32) __asm__("FUN_00120478");
 extern void debug_print(char *, s32, s32) __asm__("FUN_001e93b0");
 extern s32 FUN_00213928(struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32);
-extern void FUN_L00_00257470(struct Moby *, s32, s32);
+extern void explode302618(struct Moby *, s32, s32) __asm__("FUN_L00_00257470");
 extern void trooper_anim_update(struct Moby *, u8 *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(struct Moby *, u8 *) __asm__("FUN_L00_0025d538");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
@@ -274,7 +274,7 @@ void FUN_L09_00303b30(struct Moby *moby, VendorVars *vars, f32 *health) {
                         link->command = 1;
                     }
                 }
-                FUN_L00_00257470(moby, 0, -1);
+                explode302618(moby, 0, -1);
                 vars->anim[7] = 0x78;
                 trooper_anim_update(moby, vars->anim);
                 moby->state = 3;
@@ -325,7 +325,7 @@ void FUN_L09_00303d10(struct Moby *m) {
     case 1:
         if ((D_L09_0015F5CC & 7) == (((int)m >> 8) & 7)) {
             if (*(int *)(d + 0x7C) == -1 ||
-                (FUN_L00_0028d8c0(m, *(int *)(d + 0x7C)) == 0 && *(int *)(d + 0x7C) == -1)) {
+                (voice_is_playing(m, *(int *)(d + 0x7C)) == 0 && *(int *)(d + 0x7C) == -1)) {
                 *(int *)(d + 0x7C) = func_0022ED80_r(1, 4, m);
             }
         }
@@ -423,7 +423,7 @@ void FUN_L09_00303fc8(struct Moby *moby, VendorVars2 *vars, f32 *health) {
                         link->command = 1;
                     }
                 }
-                FUN_L00_00257470(moby, 0, -1);
+                explode302618(moby, 0, -1);
                 moby->state = 3;
             } else {
                 *health -= src->damage;
@@ -918,11 +918,11 @@ extern TurretBeam D_L09_00180440[];
 extern void FUN_L09_002efda8(struct Moby *, Vec4 *);
 extern struct Moby *FUN_L09_00307ba8(void *, void *, void *, int);
 extern void FUN_L08_00313ba8(void);
-extern int FUN_L00_0023e738(void *, float, float, float, float, float);
-extern void FUN_L00_0023e838(int);
-extern void FUN_L00_0026dd20(void *, void *, int, int, float);
+extern int light_67e8(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
+extern void stop_n(int) __asm__("FUN_L00_0023e838");
+extern void spawn_spark_089d0(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
-extern void FUN_L00_001edf60(void *, int, void *, int, int, int, float, float, float);
+extern void suck_draw_reticle(void *, int, void *, int, int, int, float, float, float) __asm__("FUN_L00_001edf60");
 extern void ea210_hide(int) __asm__("FUN_L00_002eac18");
 extern void ea210_drawend(void *) __asm__("FUN_L00_002ea9d8");
 extern void ea210_drawflush(void *) __asm__("FUN_L00_002eaa30");
@@ -941,7 +941,7 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -1033,7 +1033,7 @@ void FUN_L09_00304c80(struct Moby *moby) {
             add_vector_xyz(&tmp, &tmp, &seat);
             if (vars->beam == -1) {
                 vars->beam_frames = 0;
-                vars->beam = FUN_L00_0023e738(&tmp, 0.4f, 0.0f, 4.0f, 4.0f, 4.0f);
+                vars->beam = light_67e8(&tmp, 0.4f, 0.0f, 4.0f, 4.0f, 4.0f);
                 allocate_voice_for_target_entry(1, 0, moby);
             } else {
                 beam = &D_L09_00180440[vars->beam];
@@ -1059,7 +1059,7 @@ void FUN_L09_00304c80(struct Moby *moby) {
             }
             if (hero.ground_moby != moby && vars->beam != -1) {
                 allocate_voice_for_target_entry(2, 0, moby);
-                FUN_L00_0023e838(vars->beam);
+                stop_n(vars->beam);
                 vars->beam = -1;
             }
         }
@@ -1118,10 +1118,10 @@ void FUN_L09_00304c80(struct Moby *moby) {
                         normalize_vector_xyz(&dir, &dir, fast_vec_length(&shot) * (frame_scale * (0.65f - 1.0f) + 1.0f));
                         add_vector_xyz(&dir, &shot, &dir);
                         normalize_vector_xyz(&dir, &dir, random_float_between(frame_time * 3.0f, frame_time * 6.0f));
-                        FUN_L00_0026dd20(&muzzle, &dir, 0x5F2F4F6F, random_int_between(scale_game_frames(5), scale_game_frames(10)), 50000.0f);
+                        spawn_spark_089d0(&muzzle, &dir, 0x5F2F4F6F, random_int_between(scale_game_frames(5), scale_game_frames(10)), 50000.0f);
                     }
                     normalize_vector_xyz(&shot, &shot, frame_time * 0.5f);
-                    FUN_L00_0026dd20(&muzzle, &shot, 0x2F4F7F7F, random_int_between(scale_game_frames(4), scale_game_frames(7)), 500000.0f);
+                    spawn_spark_089d0(&muzzle, &shot, 0x2F4F7F7F, random_int_between(scale_game_frames(4), scale_game_frames(7)), 500000.0f);
                 } else if (moby->anim_flags & 2) {
                     blend_moby_animation(moby, 4, 0, 1);
                 }
@@ -1145,10 +1145,10 @@ void FUN_L09_00304c80(struct Moby *moby) {
                         normalize_vector_xyz(&dir, &dir, fast_vec_length(&shot) * (frame_scale * (0.65f - 1.0f) + 1.0f));
                         add_vector_xyz(&dir, &shot, &dir);
                         normalize_vector_xyz(&dir, &dir, random_float_between(frame_time * 3.0f, frame_time * 6.0f));
-                        FUN_L00_0026dd20(&muzzle, &dir, 0x5F2F4F6F, random_int_between(scale_game_frames(5), scale_game_frames(10)), 50000.0f);
+                        spawn_spark_089d0(&muzzle, &dir, 0x5F2F4F6F, random_int_between(scale_game_frames(5), scale_game_frames(10)), 50000.0f);
                     }
                     normalize_vector_xyz(&shot, &shot, frame_time * 0.5f);
-                    FUN_L00_0026dd20(&muzzle, &shot, 0x2F4F7F7F, random_int_between(scale_game_frames(4), scale_game_frames(7)), 500000.0f);
+                    spawn_spark_089d0(&muzzle, &shot, 0x2F4F7F7F, random_int_between(scale_game_frames(4), scale_game_frames(7)), 500000.0f);
                 } else if (moby->anim_flags & 2) {
                     blend_moby_animation(moby, 3, 0, 1);
                 }
@@ -1157,7 +1157,7 @@ void FUN_L09_00304c80(struct Moby *moby) {
             blend_moby_animation(moby, 5, 0, 1);
         }
         if (fast_dec_timer_s16(&vars->dismount_delay) != 0) {
-            FUN_L00_00250df8(moby);
+            allocate_voice_for_target_entry_cf(moby);
             moby->flags |= 4;
             FUN_L08_00313ba8();
             moby_point_position(moby, 0, &tmp);
@@ -1170,7 +1170,7 @@ void FUN_L09_00304c80(struct Moby *moby) {
             dir.f[2] = fast_add_rotations(1.5707964f, moby->rot.z);
             ea210_drawflush(&dir);
         }
-        FUN_L00_001edf60(moby, 0xFF0F0FFF, 0, 0xD, -1, 4, 1.0f, 0.0f, 90.0f);
+        suck_draw_reticle(moby, 0xFF0F0FFF, 0, 0xD, -1, 4, 1.0f, 0.0f, 90.0f);
         break;
     }
 }
@@ -1198,7 +1198,7 @@ void FUN_L09_00305a28(struct Moby *moby) {
     }
     if ((D_L09_0015F5CC & 7) == (((int)moby >> 8) & 7)) {
         if (*(s32 *)(data + 0x14) == -1 ||
-            (FUN_L00_0028d8c0(moby, *(s32 *)(data + 0x14)) == 0 &&
+            (voice_is_playing(moby, *(s32 *)(data + 0x14)) == 0 &&
              *(s32 *)(data + 0x14) == -1)) {
             *(s32 *)(data + 0x14) = allocate_voice_for_target_entry(0, 4, moby);
         }
@@ -1235,7 +1235,7 @@ void FUN_L09_00305a28(struct Moby *moby) {
 
 extern char *func_0020D348_m(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void place_2ce1f0(void *) __asm__("FUN_L00_0025d1b8");
 
 char *FUN_L09_00308220(struct Moby *owner, int cls) {
@@ -1250,7 +1250,7 @@ char *FUN_L09_00308220(struct Moby *owner, int cls) {
         qcopy(moby + 0x10, &owner->pos);
         qcopy(moby + 0x40, &owner->rot);
         moby[0xBC] = scale_game_frames(10);
-        FUN_L00_00250df8(moby);
+        allocate_voice_for_target_entry_cf(moby);
         place_2ce1f0(moby);
         *(float *)(moby + 0x2C) = owner->scale;
         *(unsigned short *)(moby + 0x34) = owner->flags;

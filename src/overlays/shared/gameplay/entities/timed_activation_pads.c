@@ -40,7 +40,7 @@ extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int vector_distance_xy() __asm__("FUN_001f9b80");
 extern int set_identity_matrix() __asm__("FUN_001f9fc8");
 extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
-extern int FUN_L00_002502f0();
+extern int set_moby_color() __asm__("FUN_L00_002502f0");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");

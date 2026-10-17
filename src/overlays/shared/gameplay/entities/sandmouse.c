@@ -16,8 +16,8 @@ extern s32 random_integer_between_b618(s32, s32) __asm__("FUN_L00_00257b90");
 extern f32 itof_s_b618(s32) __asm__("FUN_001fa6c0");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void interpolate_vector_b618(void *, void *, void *, f32) __asm__("FUN_L00_0025b6b8");
-extern s32 FUN_L00_0023e738(void *, f32, f32, f32, f32, f32);
-extern void FUN_L00_0023e838(s32);
+extern s32 light_67e8(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_0023e738");
+extern void stop_n(s32) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal_b618(void *) __asm__("FUN_0020c828");
 extern char D_L01_00167240_b618[] __asm__("D_L01_00167240");
 extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8") __attribute__((sda));
@@ -75,7 +75,7 @@ void FUN_L01_0030b618(u8 *m) {
     if (i != -1 && *(s8 *)((D_L01_0015FFD8_b618 + 0x20) + i * 0x100) < 0) {
         slot = *(s32 *)(e + 0x68);
         if (slot != -1)
-            FUN_L00_0023e838(slot);
+            stop_n(slot);
         mark_moby_for_removal_b618(m);
         return;
     }
@@ -120,7 +120,7 @@ void FUN_L01_0030b618(u8 *m) {
         }
         slot = *(s32 *)(e + 0x68);
         if (slot == -1) {
-            slot = FUN_L00_0023e738(m + 0x10, *(f32 *)(e + 0x60), *(f32 *)(e + 0x4c),
+            slot = light_67e8(m + 0x10, *(f32 *)(e + 0x60), *(f32 *)(e + 0x4c),
                                   *(f32 *)(e + 0x40), *(f32 *)(e + 0x44),
                                   *(f32 *)(e + 0x48));
             *(s32 *)(e + 0x68) = slot;
@@ -135,7 +135,7 @@ void FUN_L01_0030b618(u8 *m) {
     } else {
         slot = *(s32 *)(e + 0x68);
         if (slot != -1) {
-            FUN_L00_0023e838(slot);
+            stop_n(slot);
             *(s32 *)(e + 0x68) = -1;
         }
     }
@@ -762,7 +762,7 @@ extern void FUN_L00_0025f8e0(void *, f32);
 extern s32 rand(void) __asm__("FUN_001160d8");
 extern void FUN_L01_0030dda0_with_vars(char *, char *) __asm__("FUN_L01_0030dda0");
 extern s32 FUN_0022da68_sound(s32, s32, void *) __asm__("FUN_0022da68");
-extern void FUN_L00_00272060(void *, s32, u32, s32, s32, void *, f32, f32, f32);
+extern void emit_23e008(void *, s32, u32, s32, s32, void *, f32, f32, f32) __asm__("FUN_L00_00272060");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern s32 coll_line_fix(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 
@@ -1000,7 +1000,7 @@ void sandmouse_update(struct Moby *m) {
             if (*(u16 *)(p + 0x52) & 1) r = -r;
             n = random_integer_between_b618(D_L01_001620A8, D_L01_001620AC);
             angle = random_float_between_alt(D_L01_001620B4, D_L01_001620B8);
-            FUN_L00_00272060(&v, n, color, 2, r, &q, angle, 0.001f, D_L01_001620C0 * frame_time_sq);
+            emit_23e008(&v, n, color, 2, r, &q, angle, 0.001f, D_L01_001620C0 * frame_time_sq);
             m->flags |= 0x200;
             m->alpha -= 0x80 / D_L01_001620A4;
             m->rot.z = fast_add_rotations(m->rot.z, frame_time * 25.132742f);
@@ -1780,7 +1780,7 @@ void FUN_L01_00319f18(char *moby) {
 }
 extern char D_0013E5E0[];
 extern char D_L01_00167240[];
-extern int FUN_L00_0028ddd8(int, int, int, int);
+extern int play_voice(int, int, int, int) __asm__("FUN_L00_0028ddd8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 void FUN_L01_0031a078(int a0) {
@@ -1793,7 +1793,7 @@ void FUN_L01_0031a078(int a0) {
     flag = *(int *)(r + 0x8C) == a0 && *(unsigned char *)(r + 0x74) != 0;
     if (*(int *)(D_L01_00167240 + 0x254) != 0) {
         if (!flag) {
-            *(int *)(p + 4) = FUN_L00_0028ddd8(*(int *)p, 0x15, a0, 0x400);
+            *(int *)(p + 4) = play_voice(*(int *)p, 0x15, a0, 0x400);
         }
     } else {
         if (flag) {
@@ -1811,7 +1811,7 @@ void FUN_L01_0031a078(int a0) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B500), where it is exact; names translated to the US level program. */
 
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern void FUN_L01_0027a248(int, int);
+extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void subtract_vector_xyz(void *, void *, void *);
 extern void transform_vector_by_basis(void *, void *, void *);
 
@@ -1834,9 +1834,9 @@ void FUN_L01_0031a128(int *moby) {
             if (s[6] == -1)
                 s[6] = s[7];
             if (v[4] > 0) {
-                FUN_L01_0027a248(p[1], s[7]);
+                jet_game_state(p[1], s[7]);
             } else {
-                FUN_L01_0027a248(p[0], s[6]);
+                jet_game_state(p[0], s[6]);
             }
             p[2] = 0;
         }

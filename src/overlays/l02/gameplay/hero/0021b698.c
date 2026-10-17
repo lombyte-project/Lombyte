@@ -14,7 +14,7 @@
 extern int D_0015ED84_c __asm__("D_0015ED84");
 extern int D_0015ED84_d __asm__("D_0015ED84");
 extern int FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
 extern void FUN_L00_0020b930(void);
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
@@ -51,7 +51,7 @@ void FUN_L02_0021b698(void) {
     if (v == 0xD) {
         struct Hero *q = &hero;
         if (q->state.current != 0x7B) {
-            if (FUN_L00_001f0d60(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
+            if (coll_sphere(q->unk234 + 0.03f, &q->motion.unkD0, 2, 0)) {
                 if (FUN_001f0b58_c() == 0xB) {
                     hero_set_state(0x7B, 1);
                     return;
@@ -752,10 +752,10 @@ extern void FUN_L00_00215340(void);
 extern void FUN_L00_00215ef8(void);
 extern void FUN_L00_00216710(float);
 extern void FUN_L00_00216de8_cf(void) __asm__("FUN_L00_0020b5b8");
-extern void FUN_L00_00216e48(int, int, int);
+extern void release_voice_slot_cf(int, int, int) __asm__("FUN_L00_00216e48");
 extern void FUN_L00_00217118(float, float);
 extern void FUN_L00_00217368(int, int);
-extern void FUN_L00_00217658(void);
+extern void f_fun_l00_00217658_227fa0(void) __asm__("FUN_L00_00217658");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void f2334d0_2133a8(float *dst, float *src, float h) __asm__("FUN_L00_002334d0");
 extern void f336e8_208820(float *, float *, float) __asm__("FUN_L00_002336e8");
@@ -1441,7 +1441,7 @@ void FUN_L02_00225c20(void) {
             }
         }
         if (hero.unkA9C == 0 && FUN_L00_00211870(33.0f)) {
-            FUN_L00_00217658();
+            f_fun_l00_00217658_227fa0();
         }
         speed_step(frame_time_sq * 37.0f, frame_time_sq * 28.0f);
         set_planar_vel(99999.0f);
@@ -1918,7 +1918,7 @@ void FUN_L02_00225c20(void) {
         float v;
 
         fast = 1;
-        FUN_L00_00216e48(4, (int)((Moby *)hero.moby), 0x12);
+        release_voice_slot_cf(4, (int)((Moby *)hero.moby), 0x12);
         if (!(hero.ground_distance > 0.7f)) {
             fast = 0;
         }
@@ -1968,7 +1968,7 @@ void FUN_L02_00225c20(void) {
                 }
             }
             hero.unk2228 = -1;
-            FUN_L00_00216e48(3, (int)((Moby *)hero.moby), 2);
+            release_voice_slot_cf(3, (int)((Moby *)hero.moby), 2);
         } else {
             if (hero.unk2224 != -1) {
                 Row13E650 *e = (Row13E650 *)(D_0013E550 + hero.unk2224 * 0x70);
@@ -1978,7 +1978,7 @@ void FUN_L02_00225c20(void) {
                 }
             }
             hero.unk2224 = -1;
-            FUN_L00_00216e48(4, (int)((Moby *)hero.moby), 0x12);
+            release_voice_slot_cf(4, (int)((Moby *)hero.moby), 0x12);
         }
         v = frame_time * 3.0f;
         if (hero.items[3].item_id == 3) {

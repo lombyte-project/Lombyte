@@ -278,7 +278,7 @@ extern float vector_length_xy(void *);
 extern float vector_length_xyz(void *);
 extern int D_L00_00173E40[];
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int FUN_L00_001f0d60();
+extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern void add_vector_xyz(void *, void *, void *);
 extern void normalize_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);

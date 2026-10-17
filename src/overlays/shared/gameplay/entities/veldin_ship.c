@@ -481,7 +481,7 @@ s32 coll_line_fix(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void break_crate(M2d1428 *, s32, s32) __asm__("FUN_L00_002d09b8");
 void FUN_L00_002d0538_c(M2d1428 *) __asm__("FUN_L00_002d0538");
 void f_L00_002604f0(M2d1428 *, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
-P2d1428 *FUN_L00_002603d0(void *);
+P2d1428 *c338_p(void *) __asm__("FUN_L00_002603d0");
 void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 typedef union {
@@ -754,7 +754,7 @@ void FUN_L00_002d1428(M2d1428 *m) {
             qcopy(&c, &m->pos);
             qcopy(&d, &m->v40);
             f_L00_002604f0(m, o->path, &b, o->vE0, &m->pos, &m->v40);
-            if (FUN_L00_002603d0(o->path)->flags & 4) {
+            if (c338_p(o->path)->flags & 4) {
                 qcopy(&o->vD0, &b);
                 o->vD0.z -= o->fF4;
             }
@@ -1154,7 +1154,7 @@ extern char D_0013E533[];
 extern unsigned char D_0014161B;
 extern int D_0015ED84;
 extern int D_0015EEA4;
-extern int FUN_L00_00216de8(int, int);
+extern int f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
 extern int FUN_L00_00233db8(int, int);
 extern int FUN_L00_00233e98(int);
 extern int FUN_L00_002c35c0(void *, void *, void *);
@@ -1233,7 +1233,7 @@ target_valid:
     }
     goto L3D34;
 L3D10:
-    FUN_L00_00216de8(0x1A, 0);
+    f_fun_l00_00216de8_227fa0(0x1A, 0);
     FUN_L00_00233db8(-1, 1);
     moby[0x20] = 3;
 L3D34:
@@ -1505,9 +1505,9 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
 extern void FUN_L00_00259f50(void *, void *);
 extern void quaternion_nlerp(void *, void *, void *, f32) __asm__("FUN_001fa400");
-extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
+extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L00_0028df38(s32, s32);
+extern void engine_voice_set_pitch(s32, s32) __asm__("FUN_L00_0028df38");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_L00_0025f8e0(void *, f32);
 extern void FUN_L00_002a7438(void *, void *, void *, s32, s32, s32);
@@ -1627,11 +1627,11 @@ void metal_detector_update(struct Moby *moby) {
         }
         if ((controller_state_lui.held & 0x20) && hero.items[0].unk20 > scale_game_frames(0xF)) {
             if (hero.unk2044 < 10.0f) {
-                if (FUN_L00_0028d8c0(moby, vars->voice2) == 0 && vars->voice2 == -1) {
+                if (voice_is_playing(moby, vars->voice2) == 0 && vars->voice2 == -1) {
                     vars->voice2 = allocate_voice_for_target_entry(1, 4, moby);
                 }
                 if (vars->voice2 != -1) {
-                    FUN_L00_0028df38(vars->voice2,
+                    engine_voice_set_pitch(vars->voice2,
                                      truncate_float_to_s32((10.0f - (hero.unk2044 + hero.unk2044)) * 32767.0f / 60.0f) - 0x1FFF);
                 }
                 {
@@ -1831,11 +1831,11 @@ extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
 extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int dec_byte_timer_edc30(void *) __asm__("FUN_L00_001fefc8");
-extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern int light_67e8(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned char D_L00_001802C0[];
-extern void FUN_L00_0023e838(int);
+extern void stop_n(int) __asm__("FUN_L00_0023e838");
 extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
 extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 int FUN_001fa728(Vec4f *, float);
@@ -1895,7 +1895,7 @@ void FUN_L00_002d3a10(unsigned char *m) {
     }
     if (*(int *)(o + 0x48) != -1 && tick_countdown_32_alt((int *)(o + 0x48))) {
         if (*(int *)(o + 0x50) != -1) {
-            FUN_L00_0023e838(*(int *)(o + 0x50));
+            stop_n(*(int *)(o + 0x50));
             *(int *)(o + 0x50) = -1;
         }
         mark_moby_for_removal(m);
@@ -2136,7 +2136,7 @@ void FUN_L00_002d3a10(unsigned char *m) {
         r = *(int *)(o + 0x50);
         if (r == -1) {
             float kk = convert_integer_to_float_c(o[0x24]) / 100.0f;
-            *(int *)(o + 0x50) = FUN_L00_0023e738((float *)v21, *(float *)(o + 0x60), kk, *(float *)(o + 0x54), *(float *)(o + 0x58), *(float *)(o + 0x5C));
+            *(int *)(o + 0x50) = light_67e8((float *)v21, *(float *)(o + 0x60), kk, *(float *)(o + 0x54), *(float *)(o + 0x58), *(float *)(o + 0x5C));
         } else {
             unsigned char *e = D_L00_001802C0 + (r << 5);
             qcopy(e + 0x10, v21);
@@ -2148,7 +2148,7 @@ void FUN_L00_002d3a10(unsigned char *m) {
         }
     } else {
         if (*(int *)(o + 0x50) != -1) {
-            FUN_L00_0023e838(*(int *)(o + 0x50));
+            stop_n(*(int *)(o + 0x50));
             *(int *)(o + 0x50) = r;
         }
     }
@@ -3699,21 +3699,21 @@ void FUN_L00_002d7d58(char *m, int i) {
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void place_2ce1f0(unsigned char *) __asm__("FUN_L00_0025d1b8");
-void FUN_L00_002502f0(unsigned char *, int, int, int);
+void set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
 float random_angle_radians(void) __asm__("FUN_00213308");
-void FUN_L00_00250df8(unsigned char *);
+void allocate_voice_for_target_entry_cf(unsigned char *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_burst(u128 *v, float s) __asm__("FUN_L00_002d7e90");
 unsigned char *spawn_burst(u128 *v, float s) {
     unsigned char *m = create_moby(0x307);
     if (m) {
         place_2ce1f0(m);
-        FUN_L00_002502f0(m, 0x28, 0x28, 0x46);
+        set_moby_color(m, 0x28, 0x28, 0x46);
         m[0x30] = 0xff;
         *(short *)(m + 0x32) = 0x40;
         *(float *)(m + 0x2c) *= s;
         qcopy(m + 0x10, v);
         *(float *)(m + 0x48) = random_angle_radians();
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }

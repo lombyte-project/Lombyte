@@ -518,7 +518,7 @@ void spawner_update(char *moby)
 extern char *func_0020D348_m(int);
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 
 char *FUN_L09_0030b218(int owner, void *pos, void *rot, unsigned char a, unsigned char b) {
     char *m = (char *)func_0020D348_m(0x75E);
@@ -539,7 +539,7 @@ char *FUN_L09_0030b218(int owner, void *pos, void *rot, unsigned char a, unsigne
         d[0x1C] = b;
         d[0x1A] = a;
         d[0x1B] = 0;
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }

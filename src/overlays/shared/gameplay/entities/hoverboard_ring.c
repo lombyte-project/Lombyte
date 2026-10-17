@@ -748,7 +748,7 @@ typedef struct { char pad0[0x48]; float vel; } Preset_32B1F8;
 typedef struct { char pad0[0x1C]; Preset_32B1F8 *preset; } Row_32B1F8;
 
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
 float absolute_float(float input) __asm__("func_001F99C0");

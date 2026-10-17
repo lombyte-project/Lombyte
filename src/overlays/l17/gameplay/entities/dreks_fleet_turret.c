@@ -350,7 +350,7 @@ typedef struct {
     int pad[3];
 } Aim347;
 
-extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
+extern char *spawn_spark_089d0(char *pos, char *vel, int c, int d, float f) __asm__("FUN_L00_0026dd20");
 extern char *FUN_L17_002e94d8(char *src, char *pos, float *v, float f);
 extern char *FUN_L17_002f4fb8(int list);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -465,7 +465,7 @@ void FUN_L17_002cb310(struct Moby *m) {
                     normalize_vector_xyz(j, dir, frame_time * 60.0f);
                     add_vector_xyz(j + 4, j, j + 4);
                     qzero(zero);
-                    p = FUN_L00_0026dd20((char *)(j + 4), (char *)zero, 0x80FF8F6F, 3, 1260000.0f);
+                    p = spawn_spark_089d0((char *)(j + 4), (char *)zero, 0x80FF8F6F, 3, 1260000.0f);
                     if (p != 0) {
                         p[9] = func_001FA898_r(4.0f) + 0x70;
                     }
@@ -516,7 +516,7 @@ void FUN_L17_002cb310(struct Moby *m) {
                         subtract_vector_xyz(tmp, j + 4, j);
                         normalize_vector_xyz(tmp, tmp, 250.0f);
                         add_vector_xyz(tmp, tmp, j + 4);
-                        p = FUN_L00_0026dd20((char *)(j + 4), (char *)zero, 0x80FF8F6F, 3,
+                        p = spawn_spark_089d0((char *)(j + 4), (char *)zero, 0x80FF8F6F, 3,
                                              1260000.0f);
                         if (p != 0) {
                             p[9] = func_001FA898_r(4.0f) + 0x70;
@@ -635,8 +635,8 @@ extern short D_L17_00161B88 __attribute__((sda));
 extern short D_L17_00161B8C __attribute__((sda));
 extern short D_L17_00161B90 __attribute__((sda));
 extern short D_L17_00161B94 __attribute__((sda));
-extern unsigned char *FUN_L00_002730e0(float *pos, char *vel, int color, unsigned char life,
-                                       unsigned char b, int mode, float scale);
+extern unsigned char *spawn_spark_2f6470(float *pos, char *vel, int color, unsigned char life,
+                                       unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 void FUN_L17_002d7cf0(struct Moby *moby);
@@ -755,7 +755,7 @@ void FUN_L17_002d77f0(char *m) {
                                 normalize_vector_xyz(
                                     spF0, spF0,
                                     random_float_between(f20, len / convert_integer_to_float(c * 4)));
-                                FUN_L00_002730e0((float *)spE0, (char *)spF0,
+                                spawn_spark_2f6470((float *)spE0, (char *)spF0,
                                                  *(int *)&D_L17_00161B94, c & 0xFF,
                                                  random_integer_below(0xFF) & 0xFF, 0,
                                                  *(float *)&D_L17_00161B8C);
@@ -873,7 +873,7 @@ void FUN_L17_002d7cf0(struct Moby *moby) {
 
 
 extern char *D_L17_00174758;
-extern char *FUN_L00_0026f080(char *vec, float *pos, float sc, float vy);
+extern char *random_integer_below_cf(char *vec, float *pos, float sc, float vy) __asm__("FUN_L00_0026f080");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
@@ -946,7 +946,7 @@ void FUN_L17_002dc3f8(struct Moby *m) {
                     *(OvlQuad *)d = *(OvlQuad *)t;
                     normalize_vector_xyz(
                         d, d, random_float_between_alt(frame_time * 4.0f, frame_time * 8.0f));
-                    FUN_L00_0026f080(&m->pos, d, random_float_between_alt(0.05f, 0.1f) * 210000.0f,
+                    random_integer_below_cf(&m->pos, d, random_float_between_alt(0.05f, 0.1f) * 210000.0f,
                                      yy);
                 } while (--i >= 0);
                 mark_moby_for_removal_u(m);

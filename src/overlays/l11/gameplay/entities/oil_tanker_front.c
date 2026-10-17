@@ -83,7 +83,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, s32, s32, s32, float) __asm__("FUN_L00_0025c558");
-extern void FUN_L00_00257470(void *, s32, s32);
+extern void explode302618(void *, s32, s32) __asm__("FUN_L00_00257470");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_00212f90(void *, s32, s32, s32);
@@ -189,7 +189,7 @@ void FUN_L11_00315968(struct Moby *moby) {
                     moby->state = 0x12;
                 }
                 d->unk117 = 0xF0;
-                FUN_L00_00257470(moby, 0, -1);
+                explode302618(moby, 0, -1);
                 break;
             }
             case 11:
@@ -354,7 +354,7 @@ extern s32 FUN_0022da68(s32, s32, void *);
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void FUN_L00_00250df8(struct Moby *);
+extern void allocate_voice_for_target_entry_cf(struct Moby *) __asm__("FUN_L00_00250df8");
 
 /* Private variables of the two-door moby FUN_L11_00316320 runs. */
 struct L11GateVars {
@@ -425,8 +425,8 @@ void FUN_L11_00316320(struct Moby *moby) {
         d->left->pos.z = moby->pos.z + d->t * 4.0f - 4.0f;
         fast_vec_add(&d->right->pos, &moby->pos, v);
         d->right->pos.z = moby->pos.z + d->t * 4.0f - 4.0f;
-        FUN_L00_00250df8(d->left);
-        FUN_L00_00250df8(d->right);
+        allocate_voice_for_target_entry_cf(d->left);
+        allocate_voice_for_target_entry_cf(d->right);
         if (d->t >= 1.0f) {
             d->t = 0.0f;
             moby->state = 3;
@@ -439,8 +439,8 @@ void FUN_L11_00316320(struct Moby *moby) {
         a = (1.0f - d->t) * (D_L11_00162310 * 0.017453292f);
         d->left->rot.y = a;
         d->right->rot.y = a;
-        FUN_L00_00250df8(d->left);
-        FUN_L00_00250df8(d->right);
+        allocate_voice_for_target_entry_cf(d->left);
+        allocate_voice_for_target_entry_cf(d->right);
         if (d->t >= 1.0f) {
             d->t = 0.0f;
             moby->state = 4;
@@ -456,8 +456,8 @@ void FUN_L11_00316320(struct Moby *moby) {
         a = d->t * 1.5707964f;
         d->left->rot.x = -a;
         d->right->rot.x = a;
-        FUN_L00_00250df8(d->left);
-        FUN_L00_00250df8(d->right);
+        allocate_voice_for_target_entry_cf(d->left);
+        allocate_voice_for_target_entry_cf(d->right);
         if (d->t >= 1.0f) {
             d->t = 0.0f;
             moby->state = 5;
@@ -472,12 +472,12 @@ void FUN_L11_00316320(struct Moby *moby) {
         d->left->pos.z = moby->pos.z + D_L11_00162308;
         d->left->rot.x = -(D_L11_0016230C * 0.017453292f);
         d->left->rot.y = D_L11_00162310 * 0.017453292f;
-        FUN_L00_00250df8(d->left);
+        allocate_voice_for_target_entry_cf(d->left);
         fast_vec_add(&d->right->pos, &moby->pos, v);
         d->right->pos.z = moby->pos.z + D_L11_00162308;
         d->right->rot.x = D_L11_0016230C * 0.017453292f;
         d->right->rot.y = D_L11_00162310 * 0.017453292f;
-        FUN_L00_00250df8(d->right);
+        allocate_voice_for_target_entry_cf(d->right);
         break;
     }
 }
@@ -504,7 +504,7 @@ struct L11ChainVars {
 extern float D_L11_00162320 __attribute__((sda));
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern s32 FUN_0022da68(s32, s32, void *);
-extern s32 FUN_L00_0028d8c0(void *, s32);
+extern s32 voice_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 void FUN_L11_00317678(struct Moby *);
 void FUN_L11_00317820(struct Moby *);
@@ -584,7 +584,7 @@ void FUN_L11_003172c0(struct Moby *moby) {
         if (moby->state == 2) {
             FUN_L11_00317c98(moby);
         }
-        if (FUN_L00_0028d8c0(moby, d->sound) == 0) {
+        if (voice_is_playing(moby, d->sound) == 0) {
             d->sound = FUN_0022da68(0, 4, moby);
         }
         break;
@@ -719,7 +719,7 @@ void FUN_L11_00317820(struct Moby *moby) {
                                     pitch0) * t,
             pitch0);
         d->links[i]->rot.z = fast_add_rotations(fast_subtract_rotations(yaw1, yaw0) * t, yaw0);
-        FUN_L00_00250df8(d->links[i]);
+        allocate_voice_for_target_entry_cf(d->links[i]);
         fast_vec_normalize(v, &d->links[i]->rot_row0, D_L11_00162328);
         fast_vec_add(v, v, &d->links[i]->pos);
     }
@@ -1523,7 +1523,7 @@ extern void FUN_L11_0031b098_c(char *) __asm__("FUN_L11_0031b098");
 extern void add_vector_xyz(void *, void *, void *);
 extern void scale_vector_xyz(void *, void *, float);
 float absolute_float(float input) __asm__("func_001F99C0");
-unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y);
+unsigned char *random_integer_below_cf(void *pos, float *v, float x, float y) __asm__("FUN_L00_0026f080");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char *func_L00_0026FF20_p(void *, float *, float, float) __asm__("FUN_L00_0026f080");
 

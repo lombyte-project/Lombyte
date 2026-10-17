@@ -58,7 +58,7 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
 extern float fast_vec_dist(void *) __asm__("FUN_001f9b48");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int FUN_L00_0028dc90(int, int, int, int);
+extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
@@ -79,7 +79,7 @@ void rocket_update(char *m) {
     float yaw, pitch;
     if (*(int *)(d + 0x34) == 0 && func_001F9D10_2E7198(m + 0x10, D_L16_001671C0) < 15.0f) {
         *(int *)(d + 0x34) = 1;
-        FUN_L00_0028dc90(5, 0, (int)m, 0x54C);
+        trooper_play_sound(5, 0, (int)m, 0x54C);
     }
     if (*(unsigned char *)(m + 0x20) != 0)
         return;
@@ -111,7 +111,7 @@ void rocket_update(char *m) {
         vector_length_xyz(remaining) < *(float *)(d + 0x24)) {
         if (hero.vehicle_mode == 2)
             play_entity_sound((int)m, 2.0f, (m + 0x10), 3, 2.0f, 1.0f, 0, 1, 0);
-        FUN_L00_0028dc90(4, 0, (int)m, 0x54C);
+        trooper_play_sound(4, 0, (int)m, 0x54C);
         spawn_explosion(m, d, (m + 0x10), 4.0f, 4.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f,
                          1, 1, -1, 0);
         mark_moby_for_removal(m);
@@ -185,7 +185,7 @@ extern int D_L16_0015F5C4;
 extern int D_L16_0016CC90 __attribute__((section(".data")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
@@ -452,7 +452,7 @@ void blarg_elite_commando_update(char *m) {
                 *(float *)(d + 0x2C8) + *(float *)(d + 0x2EC) * fast_sin(*(float *)(d + 0x2E8));
         }
         if (func_001F9D10_update(m + 0x10, D_L16_001671C0) < 32.0f &&
-            !FUN_L00_0028d8c0(m, *(int *)(d + 0x304)))
+            !voice_is_playing(m, *(int *)(d + 0x304)))
             *(int *)(d + 0x304) = func_0022ED80_update(7, 4, m);
     }
     if (D_L16_00161A78)
@@ -536,7 +536,7 @@ extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) _
 extern int FUN_L00_0025fcb8(float, char *, void *);
 extern int activate_effect_l08(float, char *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
@@ -648,7 +648,7 @@ void FUN_L16_002d38b0(struct Moby *m) {
             trooper_start_knockback(scratch.fatal_angle, m, d->knockback, 7, 1, 0);
             m->state = 9;
             d->animation = 0xF0;
-            FUN_L00_00257470(m, 0, -1);
+            explode302618(m, 0, -1);
             break;
         }
         case 0:
@@ -829,7 +829,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern float D_L16_0015F5D0;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, int, float, float);
+extern void rings1688(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
@@ -874,7 +874,7 @@ void FUN_L16_002d41f8(void *m) {
                 int lo = scale_game_frames(25), hi = scale_game_frames(30);
                 duration2 = random_int_between(lo, hi);
             }
-            FUN_L00_0026a9f0(origin, movement, *a, *b, duration1, duration2, 0, 0, 400000.0f,
+            rings1688(origin, movement, *a, *b, duration1, duration2, 0, 0, 400000.0f,
                              delay);
         } while (remaining != 0);
     }

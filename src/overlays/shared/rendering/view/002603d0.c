@@ -3,7 +3,8 @@
 #include "asm.h"
 
 /* Returns the pointer at +8 of the moby data when flag 0x20 at 0x34 is set, else 0. */
-char *FUN_L00_002603d0(char *m) {
+char *c338_p(char *m) __asm__("FUN_L00_002603d0");
+char *c338_p(char *m) {
     if (m == 0)
         return 0;
     if ((*(u16 *)(m + 0x34) & 0x20) == 0)

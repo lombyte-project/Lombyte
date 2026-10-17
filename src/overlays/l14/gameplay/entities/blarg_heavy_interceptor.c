@@ -44,7 +44,7 @@ void FUN_L14_002460f8(void) {
 
 extern u16 *D_L14_001ABF40_u[] __asm__("D_L14_001ABF40");
 extern u8 *D_L14_0015FFD8;
-extern void FUN_L00_0023e838(s32);
+extern void stop_n(s32) __asm__("FUN_L00_0023e838");
 extern void FUN_0020c828(void *);
 
 /* Walk the record list at D_L14_001ABF40_u[index] (terminated by a negative
@@ -72,7 +72,7 @@ void FUN_L14_002bb4d8(u8 *self) {
     s16 v = *(s16 *)(p + 0x12);
 
     if (v != -1) {
-        FUN_L00_0023e838(v);
+        stop_n(v);
         *(s16 *)(p + 0x12) = -1;
     }
     FUN_0020c828(self);
@@ -131,7 +131,7 @@ extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9b48(void *, void *);
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L01_00277fb8(void *);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -268,7 +268,7 @@ void FUN_L14_002aba80(struct Moby *moby) {
             f32 fi;
             Vec4 *from;
 
-            if (!FUN_L00_0028d8c0(moby, vars->voice)) {
+            if (!voice_is_playing(moby, vars->voice)) {
                 vars->voice = allocate_voice_for_target_entry(0, 4, moby);
             }
             vars->speed += vars->target_speed * frame_time;
@@ -391,7 +391,7 @@ extern f32 random_float_c618(f32, f32) __asm__("FUN_002132a8");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+extern char *spark1688(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern unsigned char *FUN_L00_0026d000_c618(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__("FUN_L00_0026d000");
 extern void FUN_L00_0025c398_c618(void *, void *, int) __asm__("FUN_L00_0025c398");
 extern s32 allocate_voice_c618(s32, s32, void *) __asm__("FUN_0022da68");
@@ -758,7 +758,7 @@ void FUN_L14_002ac618(struct Moby *m) {
             FUN_0020c828(m);
             return;
         }
-        FUN_L00_0026cbb0(&m->pos, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
+        spark1688(&m->pos, D_L14_0015F580, 0x4F007FFF, 0x1FFFFFFF,
                          random_int_between(scale_game_frames(10), scale_game_frames(20)), 1, 60000.0f);
         for (i = 0; i < 2; i++) {
             int a = random_integer_below(6);
@@ -794,10 +794,10 @@ void FUN_L14_002ac618(struct Moby *m) {
     } else {
         m->command = 0;
     }
-    if (m->state == 1 && !FUN_L00_0028d8c0(m, *(s32 *)(d + 0x1D0))) {
+    if (m->state == 1 && !voice_is_playing(m, *(s32 *)(d + 0x1D0))) {
         *(s32 *)(d + 0x1D0) = allocate_voice_c618(0, 4, m);
     }
-    if ((m->state == 3 || m->state == 4) && !FUN_L00_0028d8c0(m, *(s32 *)(d + 0x1D0))) {
+    if ((m->state == 3 || m->state == 4) && !voice_is_playing(m, *(s32 *)(d + 0x1D0))) {
         *(s32 *)(d + 0x1D0) = allocate_voice_c618(2, 4, m);
     }
 }
@@ -806,7 +806,7 @@ void FUN_L14_002ac618(struct Moby *m) {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -846,7 +846,7 @@ void FUN_L14_002ad8b8(struct Moby *moby) {
         case 2:
             moby->state = 7;
             moby->flags &= 0xEFFF;
-            FUN_L00_00257470(moby, 0, -1);
+            explode302618(moby, 0, -1);
             break;
         case 0:
         case 11:
@@ -1638,7 +1638,7 @@ extern int D_L14_00161530 __attribute__((sda)); /* no foreign declaration */
 extern int D_L14_00161534 __attribute__((sda)); /* no foreign declaration */
 extern int debug_print_alt() __asm__("FUN_001e93b0");
 extern int FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_002502f0();
+extern int set_moby_color() __asm__("FUN_L00_002502f0");
 extern int is_point_inside_clip_volume_c(void *arg0, int arg1) __asm__("func_00214720");
 extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
@@ -1920,7 +1920,7 @@ void FUN_L14_002b4340(struct Moby *m) {
             m->state = 6;
             m->flags &= 0xEFFF;
             d[0x67] = 0xF0;
-            FUN_L00_00257470(m, 0, -1);
+            explode302618(m, 0, -1);
             break;
         }
         trooper_anim_update(m, (short *)(d + 0x60));
@@ -2441,7 +2441,7 @@ void FUN_L14_002b46e8(Moby_2B5938 *moby) {
     }
     }
     if (moby->state > 1 && moby->state != 9) {
-        if (FUN_L00_0028d8c0(moby, d->f108) == 0) {
+        if (voice_is_playing(moby, d->f108) == 0) {
             d->f108 = allocate_voice_for_target_entry_alt(0, 4, (int)moby);
         }
     }
@@ -2498,7 +2498,7 @@ void FUN_L14_002b5290(struct Moby *m) {
             m->state = 9;
             m->flags &= 0xEFFF;
             d[0x67] = 0xFA;
-            FUN_L00_00257470(m, 0, -1);
+            explode302618(m, 0, -1);
             break;
         }
         FUN_L00_0025d458_c(m, d + 0x60);
@@ -2643,7 +2643,7 @@ extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float);
 extern int scale_game_frames(int);
 extern void build_look_at_matrix(void *, void *, void *, float);
-extern void FUN_L00_0026c6e8(void *, void *);
+extern void spawn_2a8028(void *, void *) __asm__("FUN_L00_0026c6e8");
 extern void mine_camera_blast(int, void *, int, int) __asm__("FUN_L00_002d3838");
 extern char D_L14_001D88D0[] __asm__("D_L14_001D88D0");
 extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
@@ -2702,7 +2702,7 @@ void FUN_L14_002b5968(struct Moby *moby, float *point, float angle) {
         pos[0] = original_pos[0] + randf_sym(0.0f, 0.2f);
         pos[1] = original_pos[1] + randf_sym(0.0f, 0.2f);
         pos[2] = original_pos[2] + randf_sym(0.0f, 0.2f);
-        FUN_L00_0026c6e8(pos, direction);
+        spawn_2a8028(pos, direction);
     }
     mine_camera_blast((int)D_L14_001D88D0, original_pos, 0, 0);
 }
@@ -2866,11 +2866,11 @@ extern int frames_d(int) __asm__("FUN_001f96f8");
 extern int rand_below_d(int) __asm__("FUN_00213260");
 extern float rand_between_d(float, float) __asm__("FUN_002132a8");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int FUN_L00_0028dc90(int, int, void *, int);
+extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern void e450_b78(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern char *FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
-extern int FUN_L00_0023e738(float *, float, float, float, float, float);
+extern char *spark1688(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
+extern int light_67e8(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern PuffParticle *spawn_puff_d(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
 void FUN_L14_002bac78(struct Moby *m) {
@@ -2908,7 +2908,7 @@ void FUN_L14_002bac78(struct Moby *m) {
     if (coll_sphere(0.75f, &m->pos, 0, 0) != 0 ||
         (abs_d(m->pos.x - hero.motion.pos.f[0]) < 10.0f && abs_d(m->pos.y - hero.motion.pos.f[1]) < 10.0f)) {
         clear_d(joint);
-        FUN_L00_0028dc90(1, 0, m, (*(struct Moby **)(d + 0x20))->oclass);
+        trooper_play_sound(1, 0, m, (*(struct Moby **)(d + 0x20))->oclass);
         e450_b78(m, joint, &m->pos, 2.0f, 4.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 5.0f, 0, 2,
                          -1, 0);
         FUN_L14_002bb4d8((u8 *)m);
@@ -2923,7 +2923,7 @@ void FUN_L14_002bac78(struct Moby *m) {
     add_d(at, joint, ofs);
     sub_d(dir, joint, &m->pos);
     normalize_d(dir, dir, 0.05f);
-    FUN_L00_0026cbb0(at, dir, 0x4F007FFF, 0x1FFFFFFF, random_int_between(frames_d(10), frames_d(20)), 1, 40000.0f);
+    spark1688(at, dir, 0x4F007FFF, 0x1FFFFFFF, random_int_between(frames_d(10), frames_d(20)), 1, 40000.0f);
     for (i = 0; i < 3; i++) {
         if (i != 2) {
             scale_d(ofs, (char *)m + 0xC0, randf_sym(0.01f, 0.5f));
@@ -2957,7 +2957,7 @@ void FUN_L14_002bac78(struct Moby *m) {
         qcopy(push, (char *)m + 0xE0);
     add_d(at, at, push);
     if (*(short *)(d + 0x12) == -1) {
-        *(short *)(d + 0x12) = FUN_L00_0023e738(at, range, 0.0f, bright, green, blue);
+        *(short *)(d + 0x12) = light_67e8(at, range, 0.0f, bright, green, blue);
     } else {
         l = (float *)(D_L14_001809C0 + *(short *)(d + 0x12) * 32);
         qcopy(l + 4, at);
@@ -2981,7 +2981,7 @@ void FUN_L14_002bac78(struct Moby *m) {
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int);
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
 extern void cross_vectors_xyz(void *, void *, void *);
@@ -3020,7 +3020,7 @@ unsigned char *FUN_L14_002bb310(struct Moby *owner, float angle, char *posp) {
         *(short *)(d + 0x10) = scale_game_frames(200);
         *(char **)(d + 0x20) = owner;
         *(short *)(d + 0x12) = -1;
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }

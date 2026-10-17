@@ -31,7 +31,7 @@ extern f32 D_L08_00161D34 __attribute__((sda));
 extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8;
 
-extern s32 FUN_L00_0028d8c0(struct Moby *, s32);
+extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -81,7 +81,7 @@ void FUN_L08_002e9b70(struct Moby *moby) {
     if (D_L08_00161D40 != 0) {
         return;
     }
-    if (!FUN_L00_0028d8c0(moby, vars->sound)) {
+    if (!voice_is_playing(moby, vars->sound)) {
         vars->sound = allocate_voice_for_target_entry(3, 4, moby);
     }
     switch (moby->state) {
@@ -263,7 +263,7 @@ extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void FUN_L01_002a1968(s32, s32);
+extern void vendor_volume(s32, s32) __asm__("FUN_L01_002a1968");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 /* Swings the gate to its driver's progress, fading a creak in while it
@@ -296,20 +296,20 @@ void FUN_L08_002ea4c0(struct Moby *moby) {
     if (fast_difference_between_rotations(moby->rot.y, yaw) != 0.0f) {
         moby->rot.y = yaw;
         if (moby->oclass == 0x1D4) {
-            if (!FUN_L00_0028d8c0(moby, vars->voice)) {
+            if (!voice_is_playing(moby, vars->voice)) {
                 vars->voice = allocate_voice_for_target_entry(0, 4, moby);
-                FUN_L01_002a1968(vars->voice, 1);
+                vendor_volume(vars->voice, 1);
             } else if (((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume < 0x400) {
-                FUN_L01_002a1968(vars->voice, ((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume +
+                vendor_volume(vars->voice, ((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume +
                                                   0x400 / scale_game_frames(60));
             }
         }
-    } else if (moby->oclass == 0x1D4 && FUN_L00_0028d8c0(moby, vars->voice)) {
+    } else if (moby->oclass == 0x1D4 && voice_is_playing(moby, vars->voice)) {
         if (((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume < 0x100) {
             release_voice_slot(vars->voice);
             vars->voice = -1;
         } else {
-            FUN_L01_002a1968(vars->voice, ((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume -
+            vendor_volume(vars->voice, ((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume -
                                               0x400 / scale_game_frames(60));
         }
     }
@@ -320,7 +320,7 @@ void FUN_L08_002ea4c0(struct Moby *moby) {
         D_0013D388[vars->flag + 0x30] = 1;
         moby->state = 2;
         allocate_voice_for_target_entry(1, 0, moby);
-        if (moby->oclass == 0x1D4 && FUN_L00_0028d8c0(moby, vars->voice))
+        if (moby->oclass == 0x1D4 && voice_is_playing(moby, vars->voice))
             release_voice_slot(vars->voice);
     }
 }
@@ -643,8 +643,8 @@ char D_L08_001FC250[] = "M671 Warning: texture h count (%f) is greater than max 
 extern char D_L08_001FC2A0[];
 extern char D_L08_001FC2D0[];
 extern s32 DebugPrint();
-extern int FUN_L00_0023e738(float *, float, float, float, float, float);
-extern void FUN_L00_0023e838(int);
+extern int light_67e8(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
+extern void stop_n(int) __asm__("FUN_L00_0023e838");
 void FUN_L08_002f5e58(struct Moby *m);
 #ifdef NON_MATCHING
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
@@ -1036,7 +1036,7 @@ void FUN_L08_002f70a0(struct Moby *m) {
         enqueue_callback_list_1(FUN_L08_002f5e58, m);
         if (d->flags & 4) {
             if (d->light == -1) {
-                d->light = FUN_L00_0023e738(d->light_pos.f, (f32)d->radius,
+                d->light = light_67e8(d->light_pos.f, (f32)d->radius,
                                             convert_integer_to_float(d->falloff) / 100.0f,
                                             d->intensity * convert_integer_to_float(d->red) / 100.0f,
                                             d->intensity * convert_integer_to_float(d->green) / 100.0f,
@@ -1049,7 +1049,7 @@ void FUN_L08_002f70a0(struct Moby *m) {
             }
         }
     } else if (d->light != -1) {
-        FUN_L00_0023e838(d->light);
+        stop_n(d->light);
         d->light = -1;
     }
     d->flags |= 2;
@@ -1113,8 +1113,8 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float truncate_float_to_s32_cf(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz_c(void *) __asm__("vector_length_xyz");
-extern int FUN_L00_00266448(void *, void *);
-extern int FUN_L00_002668a0(void *, void *);
+extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
+extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int tick_countdown_32(int *);
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -1195,10 +1195,10 @@ void FUN_L08_00302ce8(WM *m) {
             qcopy((char *)m + 0x40, b + j * 0x80 + 0x70);
             m->state = 2;
         }
-        FUN_L00_002668a0(m, (char *)d + 0x20);
+        initialize_npc_dialogue(m, (char *)d + 0x20);
         break;
     case 1:
-        if (FUN_L00_00266448(m, (char *)d + 0x20)) {
+        if (update_npc_dialogue(m, (char *)d + 0x20)) {
             char *b = D_L08_001600EC;
             int j = d->joint;
             qcopy(m->position, b + j * 0x80 + 0x30);
@@ -1212,7 +1212,7 @@ void FUN_L08_00302ce8(WM *m) {
             if (m->animation != random_integer_below(2) + 1)
                 blend_moby_animation(m, random_integer_below(2) + 1, 0, scale_game_frames(20));
         }
-        if (FUN_L00_00266448(m, (char *)d + 0x20)) {
+        if (update_npc_dialogue(m, (char *)d + 0x20)) {
             m->state = 3;
             begin_dialogue_camera_transition(m, 2.2f);
         }

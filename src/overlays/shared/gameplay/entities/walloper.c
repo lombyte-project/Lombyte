@@ -67,9 +67,9 @@ extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN
 extern void apply_hit_ece00(void *, void *) __asm__("FUN_L00_00259a88");
 extern int FUN_L00_00259830(void *);
 extern int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
-extern void FUN_L00_001f2868(float, void *, int, void *, void *);
+extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_0022da68(int, int, void *);
-extern unsigned char *FUN_L00_00272060(void *, int, int, int, int, float *, float, float, float);
+extern unsigned char *emit_23e008(void *, int, int, int, int, float *, float, float, float) __asm__("FUN_L00_00272060");
 
 typedef struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } HitDescriptor_2b94d0;
 void FUN_L00_002b94d0(u8 *o) {
@@ -174,7 +174,7 @@ next_candidate:;
     make_hit_descriptor(&hit, o, 0x210000, &camera_direction, enabled_float + 2.0f);
     hit.mode = 1; hit.kind = 5; hit.id = *(short *)(o + 0xa6);
     *(short *)(v + 0x3e) = 20;
-    FUN_L00_001f2868(0.3f, v, 0x10, *(void **)((char *)&D_001413D0), &hit);
+    collect_mobies_in_sphere(0.3f, v, 0x10, *(void **)((char *)&D_001413D0), &hit);
     fast_vec_sub(&direction, v + 0x10, v);
     fast_vec_normalize(&direction, &direction, 1.0f);
     if (*(char **)(v + 0x20) || *(char **)(v + 0x38)) {
@@ -375,13 +375,13 @@ next_candidate:;
     build_look_at_matrix(&target_delta, &target_delta, D_0013F3D0 + 0x5e0, angle);
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = FUN_L00_00257be8(0.2f, 0.6f);
-    FUN_L00_00272060(v, scale_game_frames(15), D_L00_001615F8 | 0x7f000000, 0, spin,
+    emit_23e008(v, scale_game_frames(15), D_L00_001615F8 | 0x7f000000, 0, spin,
                     (float *)&target_delta, amplitude * 0.3f, amplitude, 0.0f);
-    FUN_L00_00272060(v, scale_game_frames(15), 0x307f7f7f, 0, -spin,
+    emit_23e008(v, scale_game_frames(15), 0x307f7f7f, 0, -spin,
                     (float *)&target_delta, amplitude * 0.15f, amplitude * 0.5f, 0.0f);
     spin = FUN_L00_00257b90(1, 8); if (FUN_00213260(2)) spin = -spin;
     amplitude = FUN_L00_00257be8(0.15f, 3.0f);
-    FUN_L00_00272060(v + 0x10, scale_game_frames(12), D_L00_001615F8 | 0x7f000000, 0, spin,
+    emit_23e008(v + 0x10, scale_game_frames(12), D_L00_001615F8 | 0x7f000000, 0, spin,
                     (float *)(D_0013F3D0 + 0x201b0), amplitude * 0.1f, amplitude, 0.0f);
 }
 #endif
@@ -658,7 +658,7 @@ void FUN_L00_002bb0b0(void *mv) {
 u8 *create_moby(s32) __asm__("FUN_0020c4f8");
 void clear_u64_value() __asm__("FUN_001f99f8");
 void refresh_moby_spatial_bounds_from_basis() __asm__("FUN_0020e098");
-void FUN_L00_00250df8();
+void allocate_voice_for_target_entry_cf() __asm__("FUN_L00_00250df8");
 u8 *FUN_L00_002bb360(u8 *src) {
     u8 *m = create_moby(0xB3);
     if (m) {
@@ -675,7 +675,7 @@ u8 *FUN_L00_002bb360(u8 *src) {
         *(OvlQuad *)(m + 0xD0) = *(OvlQuad *)(src + 0xD0);
         *(OvlQuad *)(m + 0xE0) = *(OvlQuad *)(src + 0xE0);
         refresh_moby_spatial_bounds_from_basis(m);
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }
@@ -1415,7 +1415,7 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 f32 compute_interpolated_record_value_c(void *anim) __asm__("FUN_0020c9e0");
 int FUN_L00_0023e5e0(void *v, float a, float b, int col);
-int FUN_L00_0028d8c0(int a, int i);
+int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
 struct Moby *FUN_L00_002c9348(void *a);
@@ -1423,7 +1423,7 @@ void fire_start_2cc608(void) __asm__("FUN_L00_0020e4c8");
 void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00236268(HudElem *e);
 void FUN_L00_00236458(void);
-void FUN_L00_0023e838(int i);
+void stop_n(int i) __asm__("FUN_L00_0023e838");
 void FUN_L00_00263d40(int a, int b);
 extern char D_0013A5E0_2BDAF0[] __asm__("D_0013CAE0");
 extern char item_unlocked[] __asm__("D_0013D408");
@@ -1747,7 +1747,7 @@ extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0
 extern void cross_vectors_xyz_c(void *, void *, void *) __asm__("func_001F9AD8");
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a28");
-unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x, float y, float z);
+unsigned char *emit_23e008(void *pos, int s, int color, int mode, int b, float *v, float x, float y, float z) __asm__("FUN_L00_00272060");
 unsigned char *FUN_L00_00275910(void *pos, int s, int col, int mode, int b, float *vec, int h, float x, float y);
 void FUN_L00_002bcf98(u8 *m);
 void FUN_L00_002bdc50_c(void *o) __asm__("FUN_L00_002bdc50");
@@ -3087,7 +3087,7 @@ int FUN_L00_002bf9f0(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int chec
 #include "eetypes.h"
 #include "qcopy.h"
 unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-void FUN_L00_00250df8(unsigned char *);
+void allocate_voice_for_target_entry_cf(unsigned char *) __asm__("FUN_L00_00250df8");
 void place_2ce1f0(unsigned char *) __asm__("FUN_L00_0025d1b8");
 unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) {
     unsigned char *m = create_moby(0xba);
@@ -3102,7 +3102,7 @@ unsigned char *FUN_L00_002bfe08(int a, u128 *b, u128 *c) {
         qcopy(m + 0x10, b);
         qcopy(q + 0x10, c);
         *(int *)(q + 0x60) = a;
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
         place_2ce1f0(m);
         *(float *)(m + 0x2c) = *(float *)(*(char **)(m + 0x24) + 0x24) * 0.1f;
     }

@@ -476,7 +476,7 @@ float FUN_001ebd78(float, float, float, float, float, float *);
 void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
 float FUN_001fa5c8_c(float, float) __asm__("FUN_001fa5c8");
-int FUN_L00_001f0d60(void *, int, void *, float);
+int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
 void FUN_L00_002e9f38(u8 *o) {
     V up;
     V side;
@@ -534,7 +534,7 @@ void FUN_L00_002e9f38(u8 *o) {
         d.f[2] = z;
         FUN_001f9bf8_c(&d, &d, st->z);
         FUN_001f9a10_c(o + 0x30, o + 0x30, &d);
-        if (FUN_L00_001f0d60(o + 0x30, 0x12, ((u8 *)hero.moby), 0.3f))
+        if (coll_sphere(o + 0x30, 0x12, ((u8 *)hero.moby), 0.3f))
             st->z = FUN_001ebd78(st->z, z, 0.005f, 0.2f, z, &st->vz);
         n = FUN_001fa580_c(st->ang, a);
         if (FUN_001f99c0(n) > 1.4660766f) {

@@ -22,7 +22,8 @@ typedef struct {
     int count;
 } T1edf60;
 extern T1edf60 D_L00_00169040;
-void FUN_L00_001edf60(int a, int b, OvlQuad *pos, int kind, int mode, float x, float y, float z) {
+void suck_draw_reticle(int a, int b, OvlQuad *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
+void suck_draw_reticle(int a, int b, OvlQuad *pos, int kind, int mode, float x, float y, float z) {
     E1edf60 *e;
     if (D_L00_0015F5C4 == 2)
         return;

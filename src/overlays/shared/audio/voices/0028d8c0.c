@@ -10,7 +10,8 @@
 /* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028EB98), where it is exact; names translated to the US level program. */
 
 /* True when entry i (0x70 bytes) holds a at 0x88 and its byte at 0x74 is 1 or 2. */
-int FUN_L00_0028d8c0(int a, int i) {
+int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
+int voice_is_playing(int a, int i) {
     if (i >= 0) {
         char *p = D_0013E533 + 0x1D + i * 0x70;
         if (*(int *)(p + 0x88) == a) {

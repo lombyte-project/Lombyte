@@ -111,8 +111,8 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float truncate_float_to_s32_cf(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern float vector_length_xyz_c(void *) __asm__("vector_length_xyz");
-extern int FUN_L00_00266448(void *, void *);
-extern int FUN_L00_002668a0(void *, void *);
+extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
+extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames_c(int) __asm__("scale_game_frames");
 extern int tick_countdown_32(int *);
@@ -189,7 +189,7 @@ void FUN_L08_00305270(WM *m) {
         d->p40 = (void *)D_L08_001622E8;
         m->state = 1;
         if (d->i64 >= 0)
-            FUN_L00_002668a0(m, (char *)d + 0x20);
+            initialize_npc_dialogue(m, (char *)d + 0x20);
         break;
     case 1:
         if (vector_distance(m->position, (char *)&D_0013E633_watch + 0xE9D) < 8.0f) {
@@ -203,7 +203,7 @@ void FUN_L08_00305270(WM *m) {
                 blend_moby_animation(m, random_integer_below(2) + 1, 0, scale_game_frames(20));
         }
         if (D_0013F350_g.f2FC == 0 && (scale_game_frames(30) < D_0013F350_g.f300 || d->h56 != 0)) {
-            FUN_L00_00266448(m, (char *)d + 0x20);
+            update_npc_dialogue(m, (char *)d + 0x20);
             begin_dialogue_camera_transition(m, 2.2f);
         }
         if (d->h24 == 4) {
@@ -428,7 +428,7 @@ void FUN_L08_003065d8(L14WatchMoby *m) {
         FUN_L00_002668a0_c(m, d);
         break;
     case 1:
-        if (FUN_L00_00266448(m, d))
+        if (update_npc_dialogue(m, d))
             begin_dialogue_camera_transition(m, 2.7f);
         if (d->h36 == 2) {
             char *t = D_L08_001600EC + d->i48 * 128;

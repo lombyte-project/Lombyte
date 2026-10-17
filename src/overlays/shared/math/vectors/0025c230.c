@@ -62,7 +62,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_0025aca0(void *, int, void *, void *, float);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E520[];
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spark_v(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
@@ -87,11 +87,11 @@ void FUN_L00_0025c398(void *a0, void *a1, void *a2) {
         if (flag[0x10]) {
             a = scale_game_frames(random_int_between(20, 35));
             b = random_int_between(40, 60);
-            FUN_L00_00269958(&buf[i], tmp, 0x7000FFA0, 0xFF00, a, 30, b, 1);
+            spark_v(&buf[i], tmp, 0x7000FFA0, 0xFF00, a, 30, b, 1);
         } else {
             a = scale_game_frames(random_int_between(20, 35));
             b = random_int_between(40, 60);
-            FUN_L00_00269958(&buf[i], tmp, 0x7000A0FF, 0xFF, a, 30, b, 1);
+            spark_v(&buf[i], tmp, 0x7000A0FF, 0xFF, a, 30, b, 1);
         }
     }
 }
@@ -162,8 +162,8 @@ extern float frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata"))
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60"); /* no foreign declaration */
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern int FUN_L00_001f0d60();
-extern int FUN_L00_001f2868(void *, float, int, void *, void *);
+extern int coll_sphere() __asm__("FUN_L00_001f0d60");
+extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int f5e3b8_20d6b0(void *) __asm__("FUN_L00_0025e3b8");
 extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");

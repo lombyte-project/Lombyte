@@ -161,13 +161,13 @@ typedef struct {
 
 extern void FUN_L05_00317398(void *);
 extern int FUN_00214720(void *, int);
-extern int FUN_L00_00266448(void *, void *);
-extern int FUN_L00_002668a0(void *, void *);
+extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
+extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern void ea210_switch(int, int) __asm__("FUN_L00_00260860");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
-extern void FUN_L00_002039a0(void);
+extern void ea210_stop(void) __asm__("FUN_L00_002039a0");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C3 __attribute__((section(".data")));
 extern int D_L11_0015F5C4;
@@ -203,12 +203,12 @@ void FUN_L11_002d0710(WM11 *m) {
         } else {
             m->state = 1;
         }
-        FUN_L00_002668a0(m, d);
+        initialize_npc_dialogue(m, d);
         d->f0C = 3.7f;
         break;
     case 1:
         if (FUN_00214720(hero.motion.pos.f, d->region)) {
-            if (FUN_L00_00266448(m, d)) {
+            if (update_npc_dialogue(m, d)) {
                 begin_dialogue_camera_transition(m, 2.7f);
                 m->state = 2;
             }
@@ -221,7 +221,7 @@ void FUN_L11_002d0710(WM11 *m) {
                 ea210_switch(3, 1);
                 jet_reset_camera(hero.motion.pos.f, hero.motion.pos.f + 4);
                 memcard_save_data_d0710(0, -1);
-                FUN_L00_002039a0();
+                ea210_stop();
                 help_request(0x2AFB, 0x3D);
             }
         }
@@ -489,7 +489,7 @@ extern float D_L11_00161418 __attribute__((sda));
 /* Pvars of the path-walking NPC run by FUN_L11_002d0fa8. */
 struct PokKeeperVars {
     u8 pad00[0x20];
-    u8 talk[0xC];                     /* 0x20: talk prompt (FUN_L00_002668a0 / FUN_L00_00266448) */
+    u8 talk[0xC];                     /* 0x20: talk prompt (initialize_npc_dialogue / update_npc_dialogue) */
     f32 talk_range;                   /* 0x2C */
     u8 pad30[0x26];
     s16 unk56;
@@ -543,7 +543,7 @@ void FUN_L11_002d14b0(void *arg) {
     }
     switch (moby->state) {
     case 0:
-        FUN_L00_002668a0(moby, d->talk);
+        initialize_npc_dialogue(moby, d->talk);
         moby->update_dist = 0xFF;
         FUN_L05_0028be78(&d->unk60[0], 1, d->unk70[0]);
         FUN_L05_0028be78(&d->unk60[1], 1, d->unk70[1]);
@@ -589,7 +589,7 @@ void FUN_L11_002d14b0(void *arg) {
         break;
     case 1:
         if (d->unk56 == 0) {
-            if (hero.air_frames.s == 0 && FUN_L00_00266448(moby, d->talk)) {
+            if (hero.air_frames.s == 0 && update_npc_dialogue(moby, d->talk)) {
                 begin_dialogue_camera_transition(moby, 2.5f);
                 set_state_14b0(moby, 2);
             }
@@ -663,7 +663,7 @@ void FUN_L11_002d14b0(void *arg) {
         break;
     case 12:
         d->talk_range = 255.0f;
-        if (FUN_L00_00266448(moby, d->talk)) {
+        if (update_npc_dialogue(moby, d->talk)) {
             jet_clear_persistent(d->unk10C);
             D_0013D3DC = 1;
             FUN_L00_00266858(moby, 2);
@@ -718,7 +718,7 @@ void FUN_L11_002d14b0(void *arg) {
         break;
     case 14:
         if (D_0014C050[d->unk118 + D_0015ED84 * 16] == 0xFF && D_001413D4_14b0 != 0x32 &&
-            FUN_L00_00266448(moby, d->talk)) {
+            update_npc_dialogue(moby, d->talk)) {
             begin_dialogue_camera_transition(moby, 2.5f);
             set_state_14b0(moby, 0xF);
         }
@@ -1083,11 +1083,11 @@ void FUN_L11_002f0e40(struct Moby *moby) {
             mark_moby_for_removal_f0e40(moby);
             return;
         }
-        FUN_L00_002668a0(moby, d);
+        initialize_npc_dialogue(moby, d);
         d->f0C = 4.0f;
         break;
     case 1:
-        if (FUN_L00_00266448(moby, d)) {
+        if (update_npc_dialogue(moby, d)) {
             begin_dialogue_camera_transition(moby, 3.0f);
             moby->state = 2;
         }
@@ -1868,7 +1868,7 @@ extern void attach_manipulator(struct Moby *, int, void *) __asm__("FUN_0020cb10
 extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void moby_point_position(struct Moby *, int, float *) __asm__("FUN_L00_0024f7c8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern void FUN_L00_0026f080(float *, float *, float, float);
+extern void random_integer_below_cf(float *, float *, float, float) __asm__("FUN_L00_0026f080");
 extern float fast_cos_a500(float) __asm__("FUN_001f9dc8");
 extern float fast_sin_a500(float) __asm__("FUN_001f9de0");
 extern int level_frame __asm__("D_L11_0015F5CC");
@@ -1933,7 +1933,7 @@ void FUN_L11_0030a500(struct Moby *moby) {
             vel[2] = 0.0f;
             vel[2] = random_float_between(-2.0f, 2.0f) * frame_time;
             life = random_float_between(6300.0f, 14700.0f);
-            FUN_L00_0026f080(pos, vel, life, 222.5f);
+            random_integer_below_cf(pos, vel, life, 222.5f);
         }
     }
 }

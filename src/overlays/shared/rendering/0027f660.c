@@ -90,7 +90,8 @@ extern int trunc_285768(float) __asm__("FUN_001fa6d0");
 
 /* Allocates a type 0x29 particle and fills it from the arguments; kind 0xFF
  * derives the frame from flags and picks one of two blend modes. */
-char *FUN_L01_00285768(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) {
+char *draw_number(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) __asm__("FUN_L01_00285768");
+char *draw_number(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) {
     char *r = alloc_285768(0x29);
     if (r != 0) {
         int *tail = (int *)(r + 0x20);
@@ -232,7 +233,8 @@ typedef struct {
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float absolute_float(float input) __asm__("func_001F99C0");
 
-int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
+int closest302618(void *arg0, List *arg1, float target) __asm__("FUN_L01_0028b510");
+int closest302618(void *arg0, List *arg1, float target) {
     int best = 0;
     int i;
     float bestDiff = 1e11f;
@@ -245,7 +247,8 @@ int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
     }
     return best;
 }
-int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out) {
+int project_2E39E0(char *a0, List *list, char *pt, char *out) __asm__("FUN_L01_0028b5e0");
+int project_2E39E0(char *a0, List *list, char *pt, char *out) {
     int idx0 = -1;
     int idx1 = -1;
     float best0 = 10000.0f;
@@ -417,7 +420,7 @@ float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *mo
     *(int *)path = 0;
     nextNode.q = *(OvlQuad *)((char *)path->f10 + 0x10);
     if (particles) {
-        FUN_L01_00285768(0.666f, &nextNode, (int)moby, 0, 0x80101080, 0x7f, -1, 0xff);
+        draw_number(0.666f, &nextNode, (int)moby, 0, 0x80101080, 0x7f, -1, 0xff);
     }
     /* The SN ABI assigns float arguments independently of the integer arguments.
      * Keep the retail argument setup order without changing the shared helper. */
@@ -432,7 +435,7 @@ float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *mo
         currentNode.q = nextNode.q;
         previousTangent.q = nextTangent.q;
         if (particles) {
-            FUN_L01_00285768(1.0f, &currentNode, (int)moby, index % 15 + 2, 0x80108010, 0x7f, -1, 0xff);
+            draw_number(1.0f, &currentNode, (int)moby, index % 15 + 2, 0x80108010, 0x7f, -1, 0xff);
         }
         t = 0.05f;
         nextIndex = FUN_L01_0028b828(path, index + 1);
@@ -444,7 +447,7 @@ float FUN_L01_0028bb90(float a, float b, T_28b828 *path, int particles, void *mo
         step = t;
         do {
             if (particles) {
-                FUN_L01_00285768(0.2f, &previousPoint, (int)moby, 0, 0x80404080, 0x7f, -1, 0xff);
+                draw_number(0.2f, &previousPoint, (int)moby, 0, 0x80404080, 0x7f, -1, 0xff);
             }
             FUN_L01_0028ba80(t, &point, &currentNode, &nextNode, &previousTangent, &nextTangent);
             t += step;

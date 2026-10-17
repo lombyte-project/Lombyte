@@ -88,7 +88,7 @@ extern float atan2_f(float, float) __asm__("FUN_001f9e90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");  /* distance between two points */
 extern void FUN_L00_0026daa0(struct Moby *, int color, int life, int, float size);
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /*
@@ -135,7 +135,7 @@ struct Moby *FUN_L04_002aee30(struct Moby *owner, void *pos, void *dir, int life
             FUN_L00_0026daa0(m, 0x2F4F7F7F, life * 5 / 4, -1, 100000.0f);
             FUN_L00_0026daa0(m, 0x4F6F7F7F, life * 5 / 4, -1, 40000.0f);
         }
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }
@@ -169,7 +169,7 @@ extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
+extern void spawn_spark_089d0(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
 
 /*
  * Update of the class 0xB8 shot (spawned by FUN_L04_002aee30): moves along
@@ -251,7 +251,7 @@ void FUN_L04_002af058(struct Moby *m)
             normalize_vector_xyz(&push, &push, vector_length_xyz(&r) * 0.5f);
             add_vector_xyz(&push, &r, &push);
             normalize_vector_xyz(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
-            FUN_L00_0026dd20(&m->pos, &push, 0x7F2F4F6F,
+            spawn_spark_089d0(&m->pos, &push, 0x7F2F4F6F,
                              random_int_between(scale_game_frames(10), scale_game_frames(15)), 30000.0f);
         }
     }
@@ -268,7 +268,7 @@ void FUN_L04_002af058(struct Moby *m)
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D48B8), where it is exact; names translated to the US level program. */
 
 
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 void *FUN_L04_002ce080(char *src, char *pos) {
@@ -286,7 +286,7 @@ void *FUN_L04_002ce080(char *src, char *pos) {
         *(float *)(m + 0x48) = *(float *)(src + 0x48);
         *(unsigned long *)(m + 0x38) = *(unsigned long *)(src + 0x38);
         qcopy(m + 0x10, p);
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }

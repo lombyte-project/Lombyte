@@ -304,7 +304,8 @@ typedef struct {
 extern T_0023e738 D_L00_001804C0_0023e738[] __asm__("D_L00_001804C0");
 extern P_0023e738 D_L00_001802C0_0023e738[] __asm__("D_L00_001802C0");
 void FUN_001f9810_0023e738(void *, int) __asm__("FUN_001f9810");
-int FUN_L00_0023e738(u128 *v, float a, float b_0023e738, float c, float d, float e) {
+int light_67e8(u128 *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
+int light_67e8(u128 *v, float a, float b_0023e738, float c, float d, float e) {
     int i;
     T_0023e738 *t;
     P_0023e738 *p;
@@ -333,7 +334,8 @@ extern char D_L00_001804C0[];
 void detach_point_light() __asm__("FUN_00201f88");
 void fast_mem_zero16() __asm__("FUN_001f9810");
 /* Detaches the point light and clears entry i of D_L00_001802C0 and D_L00_001804C0. */
-void FUN_L00_0023e838(int i) {
+void stop_n(int i) __asm__("FUN_L00_0023e838");
+void stop_n(int i) {
     detach_point_light();
     fast_mem_zero16(D_L00_001802C0 + i * 32, 32);
     fast_mem_zero16(D_L00_001804C0 + i * 48, 48);

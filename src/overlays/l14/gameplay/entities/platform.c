@@ -734,8 +734,8 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int D_L14_0015F7EC __asm__("D_L14_0015F70C");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
-extern int FUN_L00_0028d8c0(void *, int);
-extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 extern void FUN_L14_002df080(char *);
 extern void FUN_L14_002df138(char *);
 extern void FUN_L14_002dfc58(char *);
@@ -773,8 +773,8 @@ void FUN_L14_002dee28(struct Moby *moby) {
             if (16.0f < absolute_float(x->motion.pos.f[1] - moby->pos.y))
                 goto end;
         }
-        if (FUN_L00_0028d8c0(moby, *(int *)(data + 0x204)) == 0) {
-            *(int *)(data + 0x204) = FUN_L00_0028dc90(6, 4, (int)moby, 0xD3);
+        if (voice_is_playing(moby, *(int *)(data + 0x204)) == 0) {
+            *(int *)(data + 0x204) = trooper_play_sound(6, 4, (int)moby, 0xD3);
         }
         FUN_L14_002dfc58(moby);
         v[0] = fast_cos(moby->rot.z) * 3.125f;

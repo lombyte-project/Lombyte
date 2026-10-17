@@ -73,7 +73,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void *FUN_L04_002aee30(void *, void *, void *, int);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
+extern void spark_v(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern void FUN_L12_003064e8_c2(char *) __asm__("FUN_L12_003064e8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -212,7 +212,7 @@ void FUN_L12_003054b0(char *moby) {
                                 c1 = FUN_L00_00257b90(0x6E, 0xC8);
                                 c1 = 0x7F000000 | (c1 << 8) | c0;
                                 life = scale_game_frames(FUN_L00_00257b90(0xF, 0x1E));
-                                FUN_L00_00269958(v0, v3, c1, 0xFF, life, 0x37, FUN_L00_00257b90(0xB4, 0x10E), 1);
+                                spark_v(v0, v3, c1, 0xFF, life, 0x37, FUN_L00_00257b90(0xB4, 0x10E), 1);
                             }
                         }
                         md->h9C = scale_game_frames(7);
@@ -818,7 +818,7 @@ void FUN_L12_003069d0(char *moby) {
 #include "qcopy.h"
 
 /* Spawns the next linked moby at this one's spot, sets it up and gives it a random spin. */
-extern void FUN_L00_00250df8(unsigned char *);
+extern void allocate_voice_for_target_entry_cf(unsigned char *) __asm__("FUN_L00_00250df8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0026de90(char *, int, float);
 extern short *suck_get_aim_height(unsigned char *) __asm__("FUN_002141f8");
@@ -846,7 +846,7 @@ void FUN_L12_003076e0(struct Moby *m) {
     o->hit_slot = 0xFF;
     o->collision = p->collision;
     o->spawn_frame = m->spawn_frame;
-    FUN_L00_00250df8(o);
+    allocate_voice_for_target_entry_cf(o);
     o->parent = m;
     for (i = 0; i < 14; i++) {
         FUN_L00_0026de90(&m->pos, 0, random_float_between(frame_time * 3.0f, frame_time * 5.0f));
@@ -978,7 +978,7 @@ void FUN_L12_00307ab8(struct Moby *m) {
 
 #include "rnc/gameplay/state/game_globals.h"
 
-extern int FUN_L01_00275690(void *, float);
+extern int check_moby_c(void *, float) __asm__("FUN_L01_00275690");
 extern int FUN_0022da68(int, int, void *);
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
@@ -1001,7 +1001,7 @@ void FUN_L12_003081b0(struct Moby *m) {
         break;
     case 1:
         vis = 1;
-        if (FUN_L01_00275690(m, 48.0f) == -1) {
+        if (check_moby_c(m, 48.0f) == -1) {
             vis = 0;
         }
         if (vis) {

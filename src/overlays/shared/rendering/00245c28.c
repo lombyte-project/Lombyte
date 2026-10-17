@@ -359,7 +359,7 @@ extern float map_coefficients[] __asm__("D_L00_00182A70");
 extern s32 D_L00_00173E08 __attribute__((section(".data")));
 extern int D_L00_00183EF0[];
 extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
-extern int FUN_L00_0024d8d0();
+extern int fast_decompress() __asm__("FUN_L00_0024d8d0");
 extern s32 D_0015ED84;
 extern s32 hud_heap_alloc() __asm__("func_001FF288");
 extern unsigned char D_0013D4C0[];
@@ -425,7 +425,7 @@ void FUN_L00_002464a8(void) {
         load(archive, file->sector, file->size);
         state->file_handle = stash_send_data((int)archive, scratch, 0x4800, (int)D_L00_001E8B00);
         state->transfer_bytes = scratch;
-        FUN_L00_0024d8d0((int)archive, (int)archive_base);
+        fast_decompress((int)archive, (int)archive_base);
         archive = archive_base;
         first_size = archive[1] - archive[0];
         state->first_data = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);

@@ -498,7 +498,7 @@ extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -563,7 +563,7 @@ void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, fl
         } else {
             qcopy(d + 0x20, v12);
         }
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }
@@ -572,7 +572,7 @@ extern s32 D_L00_0015F594;
 extern s32 D_L00_00161E08;
 extern s32 D_L00_00161E04;
 void FUN_L00_00237190(void);
-void FUN_L00_002371e0(void);
+void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void FUN_L00_00237200(void);
 s32 queue_animation_update(s32, s32, void *, void *, void *, s32, s32) __asm__("FUN_001ff308");
 void hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
@@ -584,7 +584,7 @@ void FUN_L00_00264328(void) {
     if (D_L00_0015F594 == 0 || D_L00_00161E08 == 0) {
         D_L00_00161E04 = -1;
     } else if (D_L00_00161E04 == -1) {
-        D_L00_00161E04 = queue_animation_update(0xC, 0, FUN_L00_00237190, FUN_L00_002371e0,
+        D_L00_00161E04 = queue_animation_update(0xC, 0, FUN_L00_00237190, mine_blend_color,
                                                 FUN_L00_00237200, 0, 0);
     } else {
         hud_keep_visible(D_L00_00161E04, 10);

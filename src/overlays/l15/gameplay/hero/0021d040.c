@@ -107,7 +107,7 @@ extern void fire_end_2cc608(void) __asm__("FUN_L00_0020e698");
 extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
-extern void FUN_L00_00216de8(int, int);
+extern void f_fun_l00_00216de8_227fa0(int, int) __asm__("FUN_L00_00216de8");
 extern void FUN_L00_00228c18(void);
 extern void FUN_L00_00228fa8(void);
 extern void FUN_L00_00231d08(void);
@@ -1609,7 +1609,7 @@ void FUN_L15_0021d040(void) {
                             break;
                         }
                         if (hero.unk2F8 == 1) {
-                            FUN_L00_00216de8(0x11, 0);
+                            f_fun_l00_00216de8_227fa0(0x11, 0);
                             FUN_L00_00209ca8(3, 0x18, 1);
                         }
                         if (hero.unk418 != 0) {
@@ -2064,7 +2064,7 @@ void FUN_L15_0021d040(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            f_fun_l00_00216de8_227fa0(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }
@@ -2129,7 +2129,7 @@ void FUN_L15_0021d040(void) {
                     }
                     if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
                         if (hero.unk22DE == 0) {
-                            FUN_L00_00216de8(0x19, 0);
+                            f_fun_l00_00216de8_227fa0(0x19, 0);
                             hero.unk22DE = 0x12;
                             hero.unk22DC = 1;
                         }

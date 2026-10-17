@@ -688,7 +688,7 @@ extern s32 D_L00_00161BF8[] MACRO_ADDR;
 extern s32 D_L00_00161C38[] MACRO_ADDR;
 extern s32 D_L00_00161C48[] MACRO_ADDR;
 extern s32 D_L00_00161C88[] MACRO_ADDR;
-extern void FUN_L00_0023e838(s32);
+extern void stop_n(s32) __asm__("FUN_L00_0023e838");
 
 void FUN_L00_002e20f8(s32 i) {
     s32 v;
@@ -696,11 +696,11 @@ void FUN_L00_002e20f8(s32 i) {
     D_L00_00161BF8[i] = 0;
     D_L00_00161C88[i] = 0;
     if (v != -1) {
-        FUN_L00_0023e838(v);
+        stop_n(v);
         D_L00_00161C38[i] = -1;
     }
     if (D_L00_00161C48[i] != -1) {
-        FUN_L00_0023e838(D_L00_00161C48[i]);
+        stop_n(D_L00_00161C48[i]);
         D_L00_00161C48[i] = -1;
     }
 }
@@ -800,8 +800,8 @@ extern void transform_vector_c(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 f32 FUN_L00_00257c48(f32, f32);
 f32 normalize_rotation_l14(f32 a) __asm__("FUN_L00_0025e310");
-int FUN_L00_0023e738(void *v, float a, float b_0023e738, float c, float d, float e);
-unsigned char *FUN_L00_00274948(void *a, void *b, int c, int d);
+int light_67e8(void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
+unsigned char *flash_67e8(void *a, void *b, int c, int d) __asm__("FUN_L00_00274948");
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern Slot_2E3700 D_L00_001E7070_2E3700[] __asm__("D_L00_001E6D20");
 extern End_2E3700 D_L00_001E70A0_2E3700[] __asm__("D_L00_001E6D50");
@@ -1361,7 +1361,7 @@ extern char D_L00_0015F580[] __attribute__((section(".sdata")));
 extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
 extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void quaternion_to_matrix(void *, void *) __asm__("FUN_001fa4f8");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
@@ -1981,7 +1981,7 @@ extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int FUN_001f96f8_c2(int) __asm__("FUN_001f96f8");
 extern int FUN_001f9770_c(void *) __asm__("FUN_001f9770");
-extern int FUN_L00_001f0d60(float, void *, int, void *);
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern float FUN_L00_002e4580_u(void *, float) __asm__("FUN_L00_002e4580");
 extern s32 D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
 extern short D_L00_00161D3C_gp __asm__("D_L00_00161D3C") __attribute__((sda));
@@ -2084,7 +2084,7 @@ void FUN_L00_002e4fe8(char *m, float *v2) {
         lerp_vector((float)*(short *)(e + 0xD4) * *(float *)(e + 0xCC), e + 0x10, e + 0x30,
                      e + 0x20);
         if (*(unsigned char *)(e + 0xD7) == 0) {
-            if (FUN_L00_001f0d60(0.2f, m + 0x30, 0x12, 0)) {
+            if (coll_sphere(0.2f, m + 0x30, 0x12, 0)) {
                 qcopy(e + 0x30, e + 0x10);
                 *(unsigned char *)(e + 0xD7) = 1;
             }

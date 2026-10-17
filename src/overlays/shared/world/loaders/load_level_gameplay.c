@@ -466,7 +466,7 @@ extern int D_L00_0016C058[];
 extern int D_L00_001AB840[];
 extern int D_L00_001BA4D0[];
 extern int debug_print_alt() __asm__("FUN_001e93b0");
-extern int FUN_L00_0024d8d0(void *, void *);
+extern int fast_decompress(void *, void *) __asm__("FUN_L00_0024d8d0");
 extern int FUN_L00_00284d90(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short D_L00_001AC780[];
@@ -490,7 +490,7 @@ extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern void FUN_L00_00204c60(void);
 extern void FUN_L00_00204f80(void);
 extern void FUN_L00_0024a798(int, int);
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_0028df58(short *);
 extern void FUN_L00_0028e180();
 extern void FUN_L00_0028e8a0(char *);
@@ -538,7 +538,7 @@ char *load_level_gameplay(int arg0) {
         level_root[1] = mem; /* D_0015EE50 */
     }
     FlushCache(0);
-    FUN_L00_0024d8d0(level_root[1], hdr);
+    fast_decompress(level_root[1], hdr);
     FlushCache(0);
     FillTransferWords(&D_0013F350, 0, 0x2310);
     FillTransferWords(D_L00_00166C80, 0, 0x3A0);
@@ -1081,7 +1081,7 @@ char *load_level_gameplay(int arg0) {
                 m->f34 |= *(unsigned short *)p;
                 p += 4;
                 if (m->f24 != 0) {
-                    FUN_L00_00250df8(m);
+                    allocate_voice_for_target_entry_cf(m);
                 }
                 c0 = *(int *)p;
                 p += 4;
@@ -1496,7 +1496,7 @@ char *load_level_gameplay(int arg0) {
             m->f30 = 0x10;
             m->f34 &= ~2;
             set_moby_animation(m, 1, 0);
-            FUN_L00_00250df8(m);
+            allocate_voice_for_target_entry_cf(m);
             D_0013E030.f0 = m;
             FUN_L00_0024a798((int)m, 0);
         }
@@ -2108,7 +2108,8 @@ extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 
 /* streams entry i of the current sector list into the loader buffer */
-s32 FUN_L00_002451b8(s32 i) {
+s32 f2451b8_298840(s32 i) __asm__("FUN_L00_002451b8");
+s32 f2451b8_298840(s32 i) {
     u8 *buf = D_L00_0016C860.buf;
     s32 start;
     s32 size;

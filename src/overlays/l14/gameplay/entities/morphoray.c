@@ -49,7 +49,7 @@ void FUN_L14_003167e0(u8 *arg0) {
 }
 
 extern u8 *create_moby(s32) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8(u8 *);
+extern void allocate_voice_for_target_entry_cf(u8 *) __asm__("FUN_L00_00250df8");
 
 /* Allocate 0x574 bytes, copy the two 16-byte records out of the caller, stamp
  * the header fields and hand it to the level's post-create hook.  Returns the
@@ -65,7 +65,7 @@ u8 *FUN_L14_00306158(u8 *self) {
         o[0x20] = 0;
         *(s16 *)(o + 0x32) = 0x40;
         o[0x31] = 1;
-        FUN_L00_00250df8(o);
+        allocate_voice_for_target_entry_cf(o);
     }
     return o;
 }
@@ -544,8 +544,8 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern unsigned char *FUN_L00_00272f68(float f, void *pos, int a1, unsigned char a2, int idx,
-                                       int flag, int s, int mode);
+extern unsigned char *spr_2d6cd0(float f, void *pos, int a1, unsigned char a2, int idx,
+                                       int flag, int s, int mode) __asm__("FUN_L00_00272f68");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -586,7 +586,7 @@ void FUN_L14_00305b18(struct Moby *p) {
         g = g / (float)scale_game_frames(255);
         c = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - g));
         k = func_001FA898_r(*a++);
-        FUN_L00_00272f68(m->c[j], v, c, k, 0x35, 1, 2, 0);
+        spr_2d6cd0(m->c[j], v, c, k, 0x35, 1, 2, 0);
         j++;
         add_vector_xyz(v, v, &v[4]);
     }
@@ -646,8 +646,8 @@ extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 f32 lerp_7b10(f32 a, f32 b, f32 t) __asm__("FUN_L00_0025b6a8");
-int FUN_L00_0028d8c0(int a, int i);
-int FUN_L00_0028dc90(int i, int a1, int v, int k);
+int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
+int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 u8 *FUN_L14_00306158_c(u8 *self) __asm__("FUN_L14_00306158");
 extern Moby_3071B0 *func_L14_003075E0_3071B0(Moby_3071B0 *owner) __asm__("FUN_L14_00306158");
 extern void func_001F9C30_3071B0(void *, void *, float) __asm__("FUN_001f9a68");

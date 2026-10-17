@@ -88,7 +88,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002F9B10), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 
 char *FUN_L05_002f8718(char *owner) {
     char *moby = create_moby(0x1B7);
@@ -100,7 +100,7 @@ char *FUN_L05_002f8718(char *owner) {
         qcopy(moby + 0x10, owner + 0x10);
         qcopy(moby + 0x40, owner + 0x40);
         *(unsigned long *)(moby + 0x38) = *(unsigned long *)(owner + 0x38);
-        FUN_L00_00250df8(moby);
+        allocate_voice_for_target_entry_cf(moby);
     }
     return moby;
 }
@@ -465,7 +465,7 @@ extern float D_L05_001612E8;
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
-extern unsigned char *FUN_L00_002718d0(void *, void *, void *, float, float);
+extern unsigned char *spawn_splash(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void FUN_L00_0026f548(void *, void *, int, int);
 extern void add_vector_xyz(void *, void *, void *);
@@ -494,7 +494,7 @@ void FUN_L05_002d1fd8(int unused, char *p) {
         random_vector(v, 1.0f, 1.0f);
         add_vector_xyz(v, v, p);
         v[2] = D_L05_001612E8 + 0.05f;
-        q = FUN_L00_002718d0(v, D_L05_0015F580_macro, base, random_float_between(0.7f, 1.0f),
+        q = spawn_splash(v, D_L05_0015F580_macro, base, random_float_between(0.7f, 1.0f),
                              i == 0 ? 2.0f : -2.0f);
         if (q) {
             *(short *)(q + 0xA) = func_001FA898_r(multiply_global_factor_ed64(random_float_between(30.0f, 60.0f)));
@@ -595,7 +595,7 @@ extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
-int FUN_L00_0028d8c0(int a, int i);
+int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 void *debris302618(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12) __asm__("FUN_L00_00263fd8");
 void FUN_L05_002d7020_c(char *m) __asm__("FUN_L05_002d7020");
 void FUN_L05_002d7890_c(char *moby, int *path) __asm__("FUN_L05_002d7890");
@@ -1566,7 +1566,7 @@ extern void FUN_L00_002628d8(char *, char *, int, float, float);
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_0025ff38(float best, char *a, char *o, int *excluded, int excluded_count, void *region, int region_count);
-void FUN_L00_00257470(unsigned char *m, int flags, int arg);
+void explode302618(unsigned char *m, int flags, int arg) __asm__("FUN_L00_00257470");
 void trooper_knockback_arc(void *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
 void FUN_L00_0025c558(u8 *a, void *b, int c, int d, int e, float f);
 void FUN_L00_0025d458(void *a, void *s);
@@ -2070,7 +2070,7 @@ void FUN_L05_00304320(unsigned char *m) {
             c = *(char **)(d + 0x184);
             qcopy(c + 0x10, m + 0x10);
             *(int *)(c + 0x94) = 0;
-            FUN_L00_00250df8(*(char **)(d + 0x184));
+            allocate_voice_for_target_entry_cf(*(char **)(d + 0x184));
         }
         if (*(char **)(d + 0x188) == 0) {
             *(char **)(d + 0x188) = func_0020D348_m(0x369);
@@ -2085,7 +2085,7 @@ void FUN_L05_00304320(unsigned char *m) {
             c = *(char **)(d + 0x188);
             qcopy(c + 0x10, m + 0x10);
             *(int *)(c + 0x94) = 0;
-            FUN_L00_00250df8(*(char **)(d + 0x188));
+            allocate_voice_for_target_entry_cf(*(char **)(d + 0x188));
         }
         attach_manipulator((char *)m, 0, (unsigned char *)(d + 0xF0));
         attach_manipulator((char *)m, 1, (unsigned char *)(d + 0x130));
@@ -2496,7 +2496,7 @@ void FUN_L05_00305898(char *m) {
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int FUN_L01_0028b510(void *, void *, float);
+extern int closest302618(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int FUN_L00_0025d7a0(char *, int, int, int);
 extern char *D_L05_001B0930[];
 extern int random_integer_below_e10(int) __asm__("FUN_00213260");
@@ -2556,7 +2556,7 @@ void FUN_L05_00306e10(char *obj) {
             /* At the last node of a branch: back to the base path, five nodes past its nearest one. */
             if (d->node == path->count - 1) {
                 d->path = base;
-                d->node = FUN_L01_0028b510(d->position, base, 0.0f);
+                d->node = closest302618(d->position, base, 0.0f);
                 d->node = FUN_L00_0025d7a0((char *)d->path, d->node, 5, 1);
             }
         } else if (path->points[d->node][3] > 0.0f && random_integer_below_e10(100) > 0) {
@@ -2737,7 +2737,7 @@ extern int D_L05_00178300[];
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int f5e3b8_20d6b0(int) __asm__("FUN_L00_0025e3b8");
 extern unsigned char D_0013D388[];
-extern void FUN_L00_001f2868(void *, int, void *, void *, float);
+extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void wake302618(void *) __asm__("FUN_L00_0025a120");
 extern void FUN_L00_00263b38(void *, float);

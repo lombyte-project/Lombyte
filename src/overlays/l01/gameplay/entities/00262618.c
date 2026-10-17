@@ -11,11 +11,11 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L01_00262618.s", FUN_L01_00262618);
 #include "sda.h"
 
 extern u8 D_L01_001E3380[];
-void FUN_L00_002371e0(void);
+void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void FUN_L01_002b96e0(s32, void *);
 
 void FUN_L01_002f6150(void) {
-    FUN_L00_002371e0();
+    mine_blend_color();
     FUN_L01_002b96e0(0x2, D_L01_001E3380);
 }
 #include "eetypes.h"
@@ -26,6 +26,6 @@ void FUN_L01_002f6150(void) {
 extern u8 D_L01_001FBC80[];
 
 void FUN_L01_002feb28(void) {
-    FUN_L00_002371e0();
+    mine_blend_color();
     FUN_L01_002b96e0(0x4, D_L01_001FBC80);
 }

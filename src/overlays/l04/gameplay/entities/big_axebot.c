@@ -523,8 +523,8 @@ extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0")
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void set_joint_67e8(void *, int, float) __asm__("FUN_L00_001fff28");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00250df8(void *);
-extern void FUN_L00_00257470(void *, int, int);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void FUN_L00_00258490_cf(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00259740_cf(void *, void *, float, float, float) __asm__("FUN_L04_00295778");
 extern void wake302618(void *) __asm__("FUN_L00_0025a120");
@@ -710,7 +710,7 @@ void FUN_L04_002ba520(M_B7B0 *moby) {
                     moby->state = 10;
                     data->fB7 = 0x78;
                     trooper_anim_update(moby, (short *)data->fB0);
-                    FUN_L00_00257470(moby, 0, -1);
+                    explode302618(moby, 0, -1);
                     break;
                 case 2:
                 case 9:
@@ -1021,7 +1021,7 @@ void FUN_L04_002ba520(M_B7B0 *moby) {
             if (data->f424 != 0) {
                 attach_manipulator_cf(data->f424);
             }
-            FUN_L00_00257470(moby, 0, -1);
+            explode302618(moby, 0, -1);
             debris302618((char *)moby, 0x798, moby->pos, moby->rot, 0, 0, 0.0f, D_L04_0015F580,
                              D_L04_0015F580, D_L04_0015F580);
             debris302618((char *)moby, 0x799, moby->pos, moby->rot, 0, 0, 0.0f, D_L04_0015F580,
@@ -1098,7 +1098,7 @@ void FUN_L04_002ba520(M_B7B0 *moby) {
             axe = data->f424;
             qcopy(axe->pos, m2[3]);
             advance_moby_animation(axe);
-            FUN_L00_00250df8(data->f424);
+            allocate_voice_for_target_entry_cf(data->f424);
             copy_matrix3x4(data->f424->fC0, m2);
             normalize_vector_triplet(data->f424->fC0);
             refresh_moby_spatial_bounds_from_basis(data->f424);
@@ -1188,7 +1188,7 @@ void FUN_L04_002c1b80(struct Moby *m) {
 
 extern unsigned char D_0013E550_u[] __asm__("D_0013E550");
 extern void FUN_0022da68(int, int, char *);
-extern void FUN_L00_00257470(void *, int, int);
+extern void explode302618(void *, int, int) __asm__("FUN_L00_00257470");
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
@@ -1213,7 +1213,7 @@ void FUN_L04_002c1d70(struct Moby *moby) {
     }
     r = -1;
     *(int *)(data + 0x238) = r;
-    FUN_L00_00257470(moby, 0, -1);
+    explode302618(moby, 0, -1);
     moby_point_position(moby, 5, pos);
     func_L00_0025F4A8_alt(moby, vec, pos, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, 1.0f, -1,
                           15.0f, 1, 1, r, 0);
@@ -2244,7 +2244,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern struct Path5BD0 *D_L04_001B0630[];
 extern void *FUN_L04_002ce080(void *, void *);
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void turn_e50(char *moby, float *vel, float target, float k, float d, float max) __asm__("FUN_L00_00258278");
 extern void apply_hit_ece00(void *, void *) __asm__("FUN_L00_00259a88");
 extern void wake302618(void *) __asm__("FUN_L00_0025a120");
@@ -2414,7 +2414,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
             *(float *)(data + 0xC0) = 12.0f;
             *(float *)(data + 0xC4) = 25.0f;
             moby->state = 0xB;
-            FUN_L00_00257470(moby, 0, -1);
+            explode302618(moby, 0, -1);
             break;
         case 3:
         case 6: {
@@ -2835,7 +2835,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
         o = *(char **)(data + 0xF8);
         qcopy(o + 0x10, st.w.m[3]);
         advance_moby_animation(o);
-        FUN_L00_00250df8(*(char **)(data + 0xF8));
+        allocate_voice_for_target_entry_cf(*(char **)(data + 0xF8));
         copy_matrix3x4(*(char **)(data + 0xF8) + 0xC0, st.w.m);
         normalize_vector_triplet(*(char **)(data + 0xF8) + 0xC0);
         {
@@ -2863,7 +2863,7 @@ void FUN_L04_002c4850(struct Moby *moby) {
         }
     }
     if (moby->pos.z < *(float *)(data + 0xD4) - 5.0f) {
-        FUN_L00_00257470(moby, 0, -1);
+        explode302618(moby, 0, -1);
         FUN_L04_002c4808_c(moby);
         return;
     }

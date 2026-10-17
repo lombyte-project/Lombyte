@@ -41,7 +41,8 @@ s32 help_request(s32 a, s32 b) {
 extern char D_L00_00179410[];
 
 /* When D_L00_00179410 is active, may set the 0x5A state to 5, then clears and resets the record. */
-void FUN_L00_002039a0(void) {
+void ea210_stop(void) __asm__("FUN_L00_002039a0");
+void ea210_stop(void) {
     if (*(int *)(D_L00_00179410) != 0) {
         int v = *(int *)((char *)(*(int *)(D_L00_00179410 + 0x20) << 4) + (int)D_L00_0015F660 + 8);
         if (v != -1) {

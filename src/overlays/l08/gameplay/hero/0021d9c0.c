@@ -277,7 +277,7 @@ extern void FUN_L00_002121c0(void);
 extern void FUN_L00_00217450(void);
 extern struct MobyView *create_moby(s32) __asm__("FUN_0020c4f8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_L00_00250df8(struct MobyView *);
+extern void allocate_voice_for_target_entry_cf(struct MobyView *) __asm__("FUN_L00_00250df8");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct MobyView *) __asm__("FUN_0022da68");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern s32 FUN_L00_001ff600(f32, void *, void *);
@@ -295,7 +295,7 @@ struct VoiceSlot {
 extern u8 D_0013E550[];
 extern u8 D_L08_0017C7C0[];
 
-extern void FUN_L00_00216e48(s32, struct MobyView *, s32);
+extern void release_voice_slot_cf(s32, struct MobyView *, s32) __asm__("FUN_L00_00216e48");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern void FUN_L00_00209a40(s32, s32);
@@ -306,7 +306,7 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void moby_point_position(struct MobyView *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern u8 *FUN_L00_0026f080(void *, void *, f32, f32);
+extern u8 *random_integer_below_cf(void *, void *, f32, f32) __asm__("FUN_L00_0026f080");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -373,7 +373,7 @@ struct PlayerSpeedTuning {
     f32 x18;
 };
 extern struct PlayerSpeedTuning D_L08_0017C5B8;
-extern s32 FUN_L00_00216de8(s32, s32);
+extern s32 f_fun_l00_00216de8_227fa0(s32, s32) __asm__("FUN_L00_00216de8");
 extern void FUN_L00_00233708(void *, void *, f32);
 extern void f233810_2133a8(void *, void *, f32) __asm__("FUN_L00_00233810");
 extern s32 collision_line(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");
@@ -412,7 +412,7 @@ extern void FUN_L00_00262500(void *, void *);
 extern void FUN_L00_00262528(void *, s32, s32);
 extern void FUN_L00_00262608(void *, s32);
 extern void FUN_L00_00217368(void *, s32);
-extern void FUN_L00_00217658(void);
+extern void f_fun_l00_00217658_227fa0(void) __asm__("FUN_L00_00217658");
 extern f32 set_planar_vel(f32) __asm__("FUN_L00_002120d8");
 extern s32 FUN_L00_00211870(f32);
 
@@ -572,7 +572,7 @@ void FUN_L08_002284e0(void) {
             MV(hero.unk6A4)->b30 = 0;
             MV(hero.unk6A4)->b23 = 0;
             MV(hero.unk6A4)->u34.uh34 |= 0x800;
-            FUN_L00_00250df8(MV(hero.unk6A4));
+            allocate_voice_for_target_entry_cf(MV(hero.unk6A4));
             allocate_voice_for_target_entry(0, 0, MV(hero.unk6A4));
         }
         if (MV(hero.unk6A4) != NULL) {
@@ -586,7 +586,7 @@ void FUN_L08_002284e0(void) {
             o = MV(hero.moby);
             qcopy(&m->u10.v10, &o->u10.v10);
             qcopy(&m->u40.v40, &o->u40.v40);
-            FUN_L00_00250df8(m);
+            allocate_voice_for_target_entry_cf(m);
         }
     drop:
         hero.motion.velocity.f[2] = 0.0f;
@@ -600,7 +600,7 @@ void FUN_L08_002284e0(void) {
     case 0x34:
     case 0x35:
         if (hero.state.current == 0x35) {
-            FUN_L00_00216e48(5, MV(hero.moby), 0x13);
+            release_voice_slot_cf(5, MV(hero.moby), 0x13);
         } else {
             s32 idx = hero.unk222C;
             if (idx != -1) {
@@ -781,7 +781,7 @@ void FUN_L08_002284e0(void) {
                 fast_vec_normalize(&v20, &v20, frame_time * 1.5f);
                 add_vector_xyz(&v10, &v10, &v20);
                 v10.f[2] += frame_time * 2.0f;
-                FUN_L00_0026f080(&v0, &v10, 25200.0f, -1.0f);
+                random_integer_below_cf(&v0, &v10, 25200.0f, -1.0f);
                 if (random_integer_below(100) < 40.0f) {
                     lo2 = scale_game_frames(4);
                     hi2 = 11;
@@ -808,7 +808,7 @@ void FUN_L08_002284e0(void) {
                         fast_add_rotations_cf(&v10, &v10, frame_time * -0.75f, hero.motion.rot.f[2], hero.motion.rot.f[1]);
                         hero.unk8F8 = truncate_float_to_s32((frame_time * 7.0f - hero.ground_speed) /
                                                        (frame_time * 7.0f) * scale_game_frames(5));
-                        FUN_L00_0026f080(&v0, &v10, random_float_between(6300.0f, 9450.0f), -1.0f);
+                        random_integer_below_cf(&v0, &v10, random_float_between(6300.0f, 9450.0f), -1.0f);
                     }
                 }
             }
@@ -891,7 +891,7 @@ void FUN_L08_002284e0(void) {
             fast_vec_normalize(&v20, &v20, frame_time * 1.5f);
             add_vector_xyz(&v10, &v10, &v20);
             v10.f[2] += frame_time * 2.0f;
-            FUN_L00_0026f080(&v0, &v10, 25200.0f, -1.0f);
+            random_integer_below_cf(&v0, &v10, 25200.0f, -1.0f);
             if (scale_game_frames(40) > hero.state_timer) {
                 hero.unk8F0 = random_int_between(scale_game_frames(2), scale_game_frames(5)) + hero.state_timer / 5;
             } else if (scale_game_frames(70) < hero.state_timer) {
@@ -1354,7 +1354,7 @@ void FUN_L08_002284e0(void) {
                 hero.motion.velocity.f[1] += fast_sin(hero.motion.rot.f[2]) * (frame_time * 1.3f);
                 qcopy(&hero.motion.unk130, &hero.motion.velocity);
             }
-            FUN_L00_00217658();
+            f_fun_l00_00217658_227fa0();
         }
         speed_step(frame_time_sq * 37.0f, frame_time_sq * 28.0f);
         set_planar_vel(99999.0f);
@@ -1700,9 +1700,9 @@ void FUN_L08_002284e0(void) {
         f32 old;
         f32 d;
         if (current_level_index == 0xF) {
-            FUN_L00_00216e48(2, MV(hero.moby), 0x1D);
+            release_voice_slot_cf(2, MV(hero.moby), 0x1D);
         } else {
-            FUN_L00_00216e48(2, MV(hero.moby), 6);
+            release_voice_slot_cf(2, MV(hero.moby), 6);
         }
         if (current_level_index != 0xF) {
             FUN_L00_00209a40(4, 2);
@@ -1760,7 +1760,7 @@ void FUN_L08_002284e0(void) {
         s32 idx;
         f32 r;
         if (hero.state.current != 0x29 && hero.state.current != 0x2A && hero.state.current != 0x42) {
-            FUN_L00_00216e48(0, MV(hero.moby), 0);
+            release_voice_slot_cf(0, MV(hero.moby), 0);
         } else {
             if (hero.unk2218 != -1) {
                 struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + hero.unk2218 * 0x70);
@@ -2162,7 +2162,7 @@ void FUN_L08_002284e0(void) {
         s32 big;
         f32 sp;
         f32 m;
-        FUN_L00_00216e48(4, MV(hero.moby), 0x12);
+        release_voice_slot_cf(4, MV(hero.moby), 0x12);
         big = 1;
         if (!(hero.ground_distance > 0.7f)) {
             big = 0;
@@ -2212,7 +2212,7 @@ void FUN_L08_002284e0(void) {
                 }
             }
             hero.unk2228 = -1;
-            FUN_L00_00216e48(3, MV(hero.moby), 2);
+            release_voice_slot_cf(3, MV(hero.moby), 2);
         } else {
             if (hero.unk2224 != -1) {
                 struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + hero.unk2224 * 0x70);
@@ -2221,7 +2221,7 @@ void FUN_L08_002284e0(void) {
                 }
             }
             hero.unk2224 = -1;
-            FUN_L00_00216e48(4, MV(hero.moby), 0x12);
+            release_voice_slot_cf(4, MV(hero.moby), 0x12);
         }
         sp = frame_time * 3.0f;
         if (hero.items[3].item_id == 3) {
@@ -2261,7 +2261,7 @@ void FUN_L08_002284e0(void) {
         s32 t420;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (FUN_L00_00211870(10.0f) != 0) {
-                FUN_L00_00216de8(4, 0);
+                f_fun_l00_00216de8_227fa0(4, 0);
             }
         }
         if (hero.unk4A8 != 0 && hero.unk12E2 != 0) {

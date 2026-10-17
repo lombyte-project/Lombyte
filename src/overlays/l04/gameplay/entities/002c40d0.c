@@ -45,7 +45,7 @@ s32 FUN_L04_002c41b0(T6 *p) {
 }
 
 
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 /* Creates a class 0x23A moby at pos, copying a few fields from src. */
@@ -64,7 +64,7 @@ void *FUN_L04_002d34d8(char *src, char *pos) {
         *(float *)(m + 0x48) = *(float *)(src + 0x48);
         *(unsigned long *)(m + 0x38) = *(unsigned long *)(src + 0x38);
         qcopy(m + 0x10, p);
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }

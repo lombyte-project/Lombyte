@@ -228,7 +228,7 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern void font_print_center_large(s32, s32, s32, char *, s32) __asm__("FUN_001f6c20");
 extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");
-extern s32 FUN_L00_00235a70(char *, s32 *, s32 *);
+extern s32 hud_screen_position(char *, s32 *, s32 *) __asm__("FUN_L00_00235a70");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void FUN_L00_0023b6c0(s32, s32, s32, s32, s32, s32);
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
@@ -323,7 +323,7 @@ s32 FUN_L05_00262f50(char *e) {
     y = *(s32 *)((u8 *)e + 0x54);
     *(s32 *)((u8 *)e + 0x58) = 0x100;
     *(s32 *)((u8 *)e + 0x5c) = 0x40;
-    FUN_L00_00235a70((char *)e, &x, &y);
+    hud_screen_position((char *)e, &x, &y);
     value = *(s32 *)((u8 *)e + 0x74);
     value *= 0xdd;
     value /= *(s32 *)((u8 *)e + 8);

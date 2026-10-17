@@ -37,7 +37,7 @@ extern int FUN_L00_00257b90(int lo, int hi);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_0026ced0(void *, void *, int, int, float, int);
 extern struct Moby *spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
-extern void FUN_L00_00257470(void *, s32, s32);
+extern void explode302618(void *, s32, s32) __asm__("FUN_L00_00257470");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Once hit hard enough: bursts into 200 smoke puffs and 40 debris chunks, then removes itself. */
@@ -104,7 +104,7 @@ void FUN_L01_002f9810(struct Moby *m) {
             spawn_debris_chunk(&pos, &vel, colors.c[random_integer_below(3)], random_float_between(0.04f, 0.09f),
                                FUN_L00_00257b90(60, 180), 1.0f, 1.0f, 0.75f, 0);
         }
-        FUN_L00_00257470(m, 0, -1);
+        explode302618(m, 0, -1);
         mark_moby_for_removal(m);
     }
 }
@@ -286,9 +286,9 @@ typedef struct {
 
 extern void *spawn_beam_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
-void FUN_L00_002502f0(void *, s32, s32, s32);
+void set_moby_color(void *, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void FUN_L00_0026daa0(void *, u32, s32, s32, f32);
-extern void FUN_L00_00250df8();
+extern void allocate_voice_for_target_entry_cf() __asm__("FUN_L00_00250df8");
 
 BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
     u128 p;
@@ -310,7 +310,7 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
         m->h32 = 0x7F;
         m->b31 = 1;
         m->scale *= 0.5f;
-        FUN_L00_002502f0(m, 0x7F, 0x7F, 0x7F);
+        set_moby_color(m, 0x7F, 0x7F, 0x7F);
         m->rx = random_angle_radians();
         m->ry = random_angle_radians();
         m->rz = random_angle_radians();
@@ -319,7 +319,7 @@ BeamMoby *FUN_L01_002fa068(s32 owner, u128 *pos, u128 *target, s32 color) {
         v->color = color;
         FUN_L00_0026daa0(m, 0x2F00007F, color, -1, 210000.0f);
         FUN_L00_0026daa0(m, 0x4F004F7F, v->color, -1, 115500.0f);
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }
@@ -347,7 +347,7 @@ extern BurstPalette D_L01_0020B508;   /* outer colours */
 BurstLight D_L01_001E3440 = {{0, 0, 0, 0, 0, 0, 0, 0, 0x66, 0x66, 0xa6, 0x3f, 0, 0, 0, 0, 0, 0, 0xff, 0, 0x13, 0xf, 0, 0xff, 0, 0x13, 0x11, 0, 0x64, 0, 0x13, 0x13}, 13.0f, 13.0f, 13.0f};
 extern void clear_vector(void *) __asm__("FUN_001f99f8");
 extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
-extern void FUN_L00_0026a9f0(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32);
+extern void rings1688(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026a9f0");
 /* s32 return is load-bearing: a void prototype changes the code */
 extern s32 spawn_glow_particle(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
 /* allocate_voice_for_target_entry; the unit declares it under this name */
@@ -376,7 +376,7 @@ void FUN_L01_002fa1b0(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 
         size = scale * 400000.0f;
         inner = D_L01_0020B4F0;
         outer = D_L01_0020B508;
-        FUN_L00_0026a9f0(pos_p, &vel,
+        rings1688(pos_p, &vel,
                          inner_p->c[random_integer_below(6)], outer.c[random_integer_below(6)],
                          size,
                          random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)),
@@ -934,7 +934,7 @@ typedef struct {
 
 extern u8 D_0014C050[];
 extern u8 D_0013E550[];
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -977,7 +977,7 @@ void FUN_L01_002fb8a8(PendulumMoby *self) {
             }
             v->sound = -1;
             self->state = 1;
-        } else if (!FUN_L00_0028d8c0(self, v->sound)) {
+        } else if (!voice_is_playing(self, v->sound)) {
             v->sound = FUN_0022da68(0, 4, self);
         }
         break;
@@ -1519,7 +1519,7 @@ typedef struct {
     s32 *pvars;
 } SpawnedMoby;
 extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8();
+extern void allocate_voice_for_target_entry_cf() __asm__("FUN_L00_00250df8");
 
 SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
     SpawnedMoby *m;
@@ -1536,7 +1536,7 @@ SpawnedMoby *FUN_L01_002ffa90(SpawnedMoby *src) {
         qcopy(&m->pos, &src->pos);
         qcopy(&m->rot, &src->rot);
         *pv = -1;
-        FUN_L00_00250df8(m, -1);
+        allocate_voice_for_target_entry_cf(m, -1);
     }
     return m;
 }
@@ -1554,7 +1554,7 @@ typedef struct {
     u128 mtx[4];
 } SmokeMoby;
 
-extern int FUN_L00_0028d8c0(void *, int);
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1570,7 +1570,7 @@ void FUN_L01_002ffb28(SmokeMoby *self) {
     s32 i;
 
     v = self->vars;
-    if (FUN_L00_0028d8c0(self, v->sound) == 0) {
+    if (voice_is_playing(self, v->sound) == 0) {
         v->sound = FUN_0022da68(0, 4, self);
     }
     for (i = 0; i < 2; i++) {
@@ -1635,7 +1635,7 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
         pv->timer = 0x78;
         pv->f10 = frame_time_sq * 15.0f;
         pv->spin = random_float_between(0.0031415929f, 0.062831856f);
-        FUN_L00_00250df8(m);
+        allocate_voice_for_target_entry_cf(m);
     }
     return m;
 }
@@ -1864,7 +1864,7 @@ ClonedMoby *FUN_L01_00302328(ClonedMoby *src) {
     v->f250 = 1.0f;
     v->w170 = truncate_float_to_s32(819.2f);
     v->f224 = 30.0f;
-    FUN_L00_00250df8(m);
+    allocate_voice_for_target_entry_cf(m);
     return m;
 }
 void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");

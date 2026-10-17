@@ -958,7 +958,7 @@ extern int D_L02_00161B0C __attribute__((sda));
 extern int D_L02_00161B10 __attribute__((sda));
 extern int D_L02_00161B14 __attribute__((sda));
 extern int D_L02_00161B18 __attribute__((sda));
-extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
+extern void draw_quad51(void *, void *, void *, s64, s32) __asm__("FUN_L02_0020bc88");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void draw_arc_2d93e8(int texture, u32 color, float start_angle, float end_angle, float radius_x, float radius_y) __asm__("FUN_L02_002da3d8");
@@ -991,7 +991,7 @@ void draw_arc_2d93e8(int texture, u32 color, float start_angle, float end_angle,
         corners[2] += func_001FA898_r(fast_sin(angle1) * radius_x * 16.0f) + 0x8000;
         corners[3] += (u32)(-(func_001FA898_r(fast_cos(angle1) * radius_y * 16.0f) << 16) - (int)0x80000000);
         corners[3] += func_001FA898_r(fast_sin(angle1) * radius_y * 16.0f) + 0x8000;
-        FUN_L02_0020bc88(corners, uvs, colors, texture, 1);
+        draw_quad51(corners, uvs, colors, texture, 1);
     }
 }
 
@@ -1023,7 +1023,7 @@ extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 extern int D_L02_00161B9C __attribute__((sda));
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
+extern void draw_quad51(void *, void *, void *, s64, s32) __asm__("FUN_L02_0020bc88");
 extern void clear_vector(void *);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -1084,8 +1084,8 @@ void draw_arrow_2d93e8(int p0, int p1, int sel, float a, float s) {
     xy[3] += func_001FA898_r(M[3][0] * 16.0f) << 16;
     xy[3] += func_001FA898_r(M[3][1] * 16.0f);
     tex = get_effect_texture(D_L02_00161B1C_gp + 0x29);
-    FUN_L02_0020bc88(xy, uv, col, tex, 1);
-    FUN_L02_0020bc88(xy, uv, col, tex, 1);
+    draw_quad51(xy, uv, col, tex, 1);
+    draw_quad51(xy, uv, col, tex, 1);
 }
 extern s32 D_L02_0015F5CC;
 extern f32 D_L02_00161B60 __attribute__((sda));
@@ -1367,8 +1367,8 @@ extern float D_L02_00161CB0 __attribute__((sda));
 extern int D_L02_00161CB4 __attribute__((sda));
 extern float D_L02_00161CB8 __attribute__((sda));
 extern float D_L02_00161CBC;
-extern void FUN_L00_002502f0(void *, int, int, int);
-extern void FUN_L00_002730e0(void *, void *, int, int, int, int, float);
+extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
+extern void spawn_spark_2f6470(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_L02_002fa6d8(void);
@@ -1395,7 +1395,7 @@ void swingshot_versatarget_update(char *m) {
             m[0x20] = 2;
             *(unsigned short *)(m + 0x34) |= 0x41;
         } else {
-            FUN_L00_002502f0(m, 0xC0, 0xC0, 0xC0);
+            set_moby_color(m, 0xC0, 0xC0, 0xC0);
             func_L02_002FBB10_c(m);
             m[0x20] = 1;
         }
@@ -1418,7 +1418,7 @@ void swingshot_versatarget_update(char *m) {
                     normalize_vector_xyz(w, v, -2.0f / multiply_global_factor_ed64(D_L02_00161CB0));
                     add_vector_xyz(v, v, m + 0x10);
                     a = truncate_float_to_s32(multiply_global_factor_ed64(D_L02_00161CB0)) & 0xFF;
-                    FUN_L00_002730e0(v, w, D_L02_00161CB4, a,
+                    spawn_spark_2f6470(v, w, D_L02_00161CB4, a,
                                      random_integer_below(0xFF) & 0xFF, 0,
                                      D_L02_00161CB8);
                 }

@@ -54,7 +54,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E92C8), where it is exact; names translated to the US level program. */
 
-extern void FUN_L00_00250df8(void *, void *);
+extern void allocate_voice_for_target_entry_cf(void *, void *) __asm__("FUN_L00_00250df8");
 
 char *FUN_L15_002e7ed8(void *unused, void *vector) {
     char *moby = create_moby(0x4E9);
@@ -71,7 +71,7 @@ char *FUN_L15_002e7ed8(void *unused, void *vector) {
         qcopy(moby + 0x10, vector);
         field = *(char **)(moby + 0x24);
         *(int *)(moby + 0x94) = *(int *)(field + 0x10);
-        FUN_L00_00250df8(moby, field);
+        allocate_voice_for_target_entry_cf(moby, field);
     }
     return moby;
 }
@@ -125,7 +125,7 @@ struct Moby_A4D88 {
     u16 flags;
     u16 unk36; /* set to 0x7F80 by spawners */
     u64 spawn_frame; /* frame count at which it may respawn */
-    Vec4f_A4D88 rot; /* z: yaw (FUN_L00_00266448 compares it with atan2 to the hero) */
+    Vec4f_A4D88 rot; /* z: yaw (update_npc_dialogue compares it with atan2 to the hero) */
     u8 frame; /* animation frame */
     u8 prev_frame; /* frame index in prev_seq */
     u8 seq; /* animation sequence id */
@@ -443,7 +443,7 @@ extern float D_L15_00162100 __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern float D_L15_00162104 __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
-extern void FUN_L00_00250320(void *, void *, void *, void *);
+extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void vu1_add_gs_register(s32, unsigned long) __asm__("func_00233980");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
@@ -479,7 +479,7 @@ void FUN_L15_002eac90(struct Moby *moby) {
     d->f0 = d->f4;
     d->f4 = fast_add_rotations(d->f4,
                                360.0f / multiply_global_factor_ed64(D_L15_001620FC) * DEG_TO_RAD * frame_time);
-    FUN_L00_00250320(moby, &r, &g, &b);
+    get_moby_color(moby, &r, &g, &b);
     color = (D_L15_001620F4 << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 3; i++) {
         for (j = 0; j < D_L15_00162080[i]; j++) {
@@ -555,7 +555,7 @@ extern float D_L15_00162160 __attribute__((sda));
 extern float D_L15_00162164 __attribute__((sda));
 extern float D_L15_00162168 __attribute__((sda));
 extern void FUN_L00_001fde98(int, int, int, void *, int);
-extern void FUN_L00_00250320(void *, void *, void *, void *);
+extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void FUN_L15_002eb108(struct Moby *moby) {
@@ -581,7 +581,7 @@ void FUN_L15_002eb108(struct Moby *moby) {
     data->prev = data->angle;
     data->angle = fast_add_rotations(data->angle, 360.0f / multiply_global_factor_ed64(D_L15_00162164) *
                                                       DEG_TO_RAD * frame_time);
-    FUN_L00_00250320(moby, &r, &g, &b);
+    get_moby_color(moby, &r, &g, &b);
     /* The second float of each pair in t: p->f[0] is t.f[1], p->f[2] is t.f[3]. */
     p = (Quad4 *)&t.f[1];
     color = (D_L15_0016215C << 24) | (b << 16) | (g << 8) | r;
@@ -771,7 +771,7 @@ void FUN_L15_002eb6b8(void) {
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECD18), where it is exact; names translated to the US level program. */
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void FUN_L00_0026f080(float, float, char *, float *);
+extern void random_integer_below_cf(float, float, char *, float *) __asm__("FUN_L00_0026f080");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 extern short D_L15_00162198 __attribute__((sda));
@@ -783,7 +783,7 @@ void FUN_L15_002eb928(struct Moby *moby) {
         char *pos = &moby->pos;
         clear_u64_value(vec);
         vec[2] = random_float_between(0.75f, 1.5f) * *(float *)&D_L15_00162198 * frame_time;
-        FUN_L00_0026f080(random_float_between(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
+        random_integer_below_cf(random_float_between(0.06f, 0.12f) * 210000.0f, *data, pos, vec);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECDD0), where it is exact; names translated to the US level program. */
@@ -880,7 +880,7 @@ extern int FUN_L15_002f78e0(int);
 extern int FUN_L15_002ebfb0(int);
 extern void FUN_L15_002ebf28(int, int);
 extern char *FUN_L15_002eb9e0(char *, char *);
-extern void FUN_L00_00216f90(void *, void *, int, int);
+extern void ea210_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 
 /* Bind this call to its checked overlay instance rather than a duplicate. */
 extern float scale_time(float) __asm__("FUN_L15_001f8648");
@@ -944,7 +944,7 @@ void FUN_L15_002ec030(struct Moby *moby) {
             vec[2] = probe_ground_height(vec, 0, 0.5f);
             clear_u64_value(tmp);
             tmp[2] = fast_add_rotations(moby->rot.z, 1.5707964f);
-            FUN_L00_00216f90(vec, tmp, 0x72, 0);
+            ea210_camera(vec, tmp, 0x72, 0);
             if (data[8] != -1)
                 FUN_L15_002ebf28(data[8], 1);
             moby->state = 3;

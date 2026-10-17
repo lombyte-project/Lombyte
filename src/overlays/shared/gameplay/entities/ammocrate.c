@@ -45,7 +45,7 @@ float FUN_L13_002ba088(int flag, int n, float x, float b, float c, float lo, flo
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002E2F98), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void FUN_L00_00250df8(void *);
+extern void allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00250df8");
 extern void place_2ce1f0(void *) __asm__("FUN_L00_0025d1b8");
 
 unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
@@ -57,7 +57,7 @@ unsigned char *FUN_L13_002e1c50(char *position, int moby_class) {
         moby[0x20] = 0;
         moby[0xBC] = 0;
         qcopy(moby + 0x10, position);
-        FUN_L00_00250df8(moby);
+        allocate_voice_for_target_entry_cf(moby);
         place_2ce1f0(moby);
     }
     return moby;
@@ -323,7 +323,7 @@ unsigned char *FUN_L13_002e6a58(char *src, char *pos, char *target, char *vec, i
         *(float *)(moby + 0x2C) =
             *(float *)(*(char **)(moby + 0x24) + 0x24) *
             (*(float *)(src + 0x2C) / *(float *)(*(char **)(src + 0x24) + 0x24));
-        FUN_L00_00250df8(moby);
+        allocate_voice_for_target_entry_cf(moby);
         FUN_L00_0026daa0((char *)moby, 0x60808080, arg, 0, 500000.0f);
     }
     return moby;
@@ -362,7 +362,7 @@ typedef struct Rocket_2E8040 {
 
 typedef struct Tex_2E8040 { char pad0[0x5C]; unsigned char *p5C; } Tex_2E8040;
 
-char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
+char *spark1688(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -380,7 +380,7 @@ extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float accel, float maxv);
-unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
+unsigned char *spawn_particle(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
 void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate);
 extern float func_002140F8_2E8040(float, float) __asm__("FUN_002132a8");
 extern void func_L00_001FF4B0_2E8040(void *, void *, float) __asm__("FUN_001f9bf8");

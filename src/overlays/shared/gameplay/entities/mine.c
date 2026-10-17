@@ -151,7 +151,7 @@ extern Cam910 D_L00_00166C80;
 extern E D_0013E520;
 extern M910 *D_L00_00173E58 __attribute__((section(".data")));
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
-extern char *FUN_L00_0026bed0(char *, char *, int, int, float, int, int);
+extern char *mine_debris(char *, char *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 extern char *mine_camera_blast(char *a, char *b, int c, char *d) __asm__("FUN_L00_002d3838");
 extern char *FUN_L00_002d7e90(void *, float);
 extern char D_L00_00173E70[];
@@ -179,12 +179,12 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
-extern int FUN_L00_002371e0(int, int, float);
+extern int mine_blend_color(int, int, float) __asm__("FUN_L00_002371e0");
 extern int FUN_L00_00257b90(int, int);
 extern int FUN_L00_00258490(void *, void *, void *, float, float, float, float, int);
 extern int probe_ground_height_cf(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
-extern int FUN_L00_0026f080(void *, void *, float, float);
-extern int FUN_L00_0028d8c0(void *, int);
+extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_002aa2a8(W910 *, M910 *, int);
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 D_L00_00166DC0[];
@@ -316,7 +316,7 @@ void mine_update(M910 *m) {
                         float wz = resolve_camera_surface_height((float *)&m->pos, &q);
 
                         scale_vector_xyz(&q, v, 0.25f);
-                        FUN_L00_0026f080(&m->pos, &q, random_float_between(0.05f, 0.1f) * 210000.0f,
+                        random_integer_below_cf(&m->pos, &q, random_float_between(0.05f, 0.1f) * 210000.0f,
                                          wz);
                     }
                 }
@@ -568,7 +568,7 @@ void mine_update(M910 *m) {
                         if ((m->b70 & 2) && m->b52 == 1 && m->anim != 2) {
                             blend_moby_animation(m, 2, 0, 10);
                         }
-                        if (FUN_L00_0028d8c0(m, v->i68) == 0) {
+                        if (voice_is_playing(m, v->i68) == 0) {
                             v->i68 = allocate_voice_for_target_entry(1, 4, (int)m);
                         }
                         sp = v->f40 + frame_time_sq * 15.0f;
@@ -782,7 +782,7 @@ void mine_update(M910 *m) {
                             *(OvlQuad *)n = *(OvlQuad *)r;
                             normalize_vector_xyz(
                                 n, n, random_float_between(frame_time * 4.0f, frame_time * 8.0f));
-                            FUN_L00_0026f080(&m->pos, n,
+                            random_integer_below_cf(&m->pos, n,
                                              random_float_between(0.05f, 0.1f) * 210000.0f, wz);
                         }
                         cr = 0x60;
@@ -811,11 +811,11 @@ void mine_update(M910 *m) {
                                              (cb << 16) | (cg << 8) | cr, 1);
                         }
                         for (l = 0; l < 20; l++) {
-                            int c1 = FUN_L00_002371e0(0x7F000000,
+                            int c1 = mine_blend_color(0x7F000000,
                                                       (0x7F << 24) | (cb << 16) | (cg << 8) | cr,
                                                       random_float_between(0.25f, 1.0f));
                             int c2 =
-                                FUN_L00_002371e0(0, ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2),
+                                mine_blend_color(0, ((cb / 2) << 16) | ((cg / 2) << 8) | (cr / 2),
                                                  random_float_between(0.5f, 1.0f));
                             float sz;
                             int life;
@@ -878,7 +878,7 @@ void mine_update(M910 *m) {
                                 int life = FUN_L00_00257b90(scale_game_frames(0xB4),
                                                             scale_game_frames(0xF0));
 
-                                FUN_L00_0026bed0((char *)r, (char *)n, c1, 0x101010, sz, life, 0);
+                                mine_debris((char *)r, (char *)n, c1, 0x101010, sz, life, 0);
                                 break;
                             }
                             case 1: {
@@ -886,7 +886,7 @@ void mine_update(M910 *m) {
                                 int c2 = FUN_L00_0025c0e8(0x0F081020, D_E910.b11);
                                 float sz = random_float_between(50000.0f, 100000.0f) * sc;
 
-                                FUN_L00_0026bed0((char *)r, (char *)n, c1, c2, sz,
+                                mine_debris((char *)r, (char *)n, c1, c2, sz,
                                                  scale_game_frames(0xB4), 1);
                                 break;
                             }
@@ -902,14 +902,14 @@ void mine_update(M910 *m) {
                                 sz = sc * 150000.0f;
                                 life = FUN_L00_00257b90(scale_game_frames(0x1E),
                                                         scale_game_frames(0x2D));
-                                FUN_L00_0026bed0((char *)r, (char *)n, c1, c2, sz, life, 2);
+                                mine_debris((char *)r, (char *)n, c1, c2, sz, life, 2);
                                 break;
                             }
                             case 3: {
-                                int c1 = FUN_L00_002371e0(0x7F000000, 0x7F182030,
+                                int c1 = mine_blend_color(0x7F000000, 0x7F182030,
                                                           random_float_between(0.25f, 1.0f));
                                 int c2 =
-                                    FUN_L00_002371e0(0, 0x5F5F5F, random_float_between(0.5f, 1.0f));
+                                    mine_blend_color(0, 0x5F5F5F, random_float_between(0.5f, 1.0f));
                                 float sz;
                                 int life;
 
@@ -921,7 +921,7 @@ void mine_update(M910 *m) {
                                 sz = random_float_between(200000.0f, 300000.0f) * sc;
                                 life = FUN_L00_00257b90(scale_game_frames(0xF0),
                                                         scale_game_frames(0x12C));
-                                FUN_L00_0026bed0((char *)r, (char *)n, c1, c2, sz, life, 3);
+                                mine_debris((char *)r, (char *)n, c1, c2, sz, life, 3);
                                 break;
                             }
                             }
@@ -2566,7 +2566,7 @@ extern int D_L00_0015F5CC;
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int set_identity_matrix() __asm__("FUN_001f9fc8");
-extern int FUN_L00_001f2868(void *, int, void *, void *, float);
+extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_001ff290();
 extern int FUN_L00_001ff2c0();
 extern int FUN_L00_001ff430();
@@ -2592,7 +2592,7 @@ extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void reflect1688(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-extern void FUN_L00_0026a9f0(void *, void *, int, int, float, int, int, int, int, float);
+extern void rings1688(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset_c(void *, f32, f32, f32) __asm__("FUN_00214db0");
@@ -2602,8 +2602,8 @@ extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 void FUN_L00_0026a4c8(Q1688 *a, Q1688 *b, int c, int d, int n, float f);
-void FUN_L00_0026cbb0(void *, void *, int, int, int, int, float);
-void FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, float, float, float);
+void spark1688(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
+void spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
 void FUN_L00_002affa8(char *self, O *out, char *skip);
 extern Impact1688 impact1688 __asm__("D_L00_00173E40");
 extern HeroMotion1688 hero_motion1688 __asm__("D_0013F350");
@@ -2811,7 +2811,7 @@ void gold_devastator_missile_update(M910 *m) {
         int particles;
         int particle_reduction;
         int i,j;
-        int hit=FUN_L00_001f2868((&m->pos),16,m,0,(size+size));
+        int hit=collect_mobies_in_sphere((&m->pos),16,m,0,(size+size));
         particles=10;
         predicted.q=m->pos.q;
         FUN_L00_0025a9f8(m,&predicted,D_L00_00177F00,hit,(int)skip,0x830000,3,1,3.0f,1.0f,1.0f);
