@@ -2059,7 +2059,7 @@ void FUN_L14_00228cd0(void) {
     case 0x4C:
     case 0x5E:
     case 0x69: {
-        s32 t198;
+        s32 state_timer_or_trail_value;
         s32 state_timer_threshold;
         if (hero.state.current == 0x1C && hero.unk22D8 == 0 && hero.items[3].item_id == 3) {
             if (FUN_L00_00211870(10.0f) != 0) {
@@ -2074,12 +2074,12 @@ void FUN_L14_00228cd0(void) {
             }
             stick_target(hero.unk424, 0);
         }
-        t198 = hero.state_timer;
+        state_timer_or_trail_value = hero.state_timer;
         state_timer_threshold = hero.unk420;
-        if (t198 == state_timer_threshold) {
+        if (state_timer_or_trail_value == state_timer_threshold) {
             qcopy(&hero.unk400, &hero.motion.pos);
         }
-        if (hero.unk418 != 0 || (t198 < state_timer_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
+        if (hero.unk418 != 0 || (state_timer_or_trail_value < state_timer_threshold && hero.state.current != HERO_STATE_HIGH_JUMP && hero.state.current != HERO_STATE_PACK_LONG_JUMP && hero.state.current != 0xC &&
                             hero.state.current != 0x11 && hero.state.current != 0x1C && hero.state.current != 0x4C)) {
             if (hero.unk4A8 != 0) {
                 FUN_L00_002167d0();
@@ -2154,8 +2154,8 @@ void FUN_L14_00228cd0(void) {
             FUN_L00_00215340();
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP || hero.state.current == 0xD) {
-            t198 = (scale_game_frames(12) < hero.state_timer) * 2;
-            FUN_L00_00262608(&hero.trail.pos[0], t198);
+            state_timer_or_trail_value = (scale_game_frames(12) < hero.state_timer) * 2;
+            FUN_L00_00262608(&hero.trail.pos[0], state_timer_or_trail_value);
         }
         if (hero.state.current == HERO_STATE_PACK_LONG_JUMP && scale_game_frames(8) < hero.state_timer && hero.anim_frame < 28.0f) {
             s32 n;
