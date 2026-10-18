@@ -388,6 +388,10 @@ void FUN_L11_0030dd18(struct Moby *m);
    points (pos at 0x30, rotation at 0x70) before handing back to the hero. */
 void FUN_L11_0030d800(struct Moby *m) {
     enum {
+        CHILD_GRID_STATE_FADE_TO_POINT_POSE = 2,
+        CHILD_GRID_STATE_FADE_TO_HERO_POSE = 4
+    };
+    enum {
         CHILD_GRID_STATE_CREATE_CHILDREN = 0,
         CHILD_GRID_STATE_WAIT_LINK_COMMAND = 1,
         CHILD_GRID_STATE_BLEND_POINT_POSES = 3
@@ -428,7 +432,7 @@ void FUN_L11_0030d800(struct Moby *m) {
         }
         break;
     }
-    case 2:
+    case CHILD_GRID_STATE_FADE_TO_POINT_POSE:
         old = pv->fade;
         approach_value_d800(&pv->fade, 1.0f, 1.0f / (float)scale_game_frames(20));
         D_L11_0015F3FC = 1.0f - absolute_float_d800(pv->fade);
@@ -465,7 +469,7 @@ void FUN_L11_0030d800(struct Moby *m) {
             pv->fade = -1.0f;
         }
         break;
-    case 4:
+    case CHILD_GRID_STATE_FADE_TO_HERO_POSE:
         old = pv->fade;
         approach_value_d800(&pv->fade, 1.0f, 1.0f / (float)scale_game_frames(20));
         D_L11_0015F3FC = 1.0f - absolute_float_d800(pv->fade);
