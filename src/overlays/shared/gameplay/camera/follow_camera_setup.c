@@ -941,16 +941,16 @@ typedef struct {
 } O002e7530;
 void FUN_L00_002e7530(O002e7530 *o, V002e7530 *a, V002e7530 *b, V002e7530 *c, V002e7530 *out,
                       f32 k1, f32 k2) {
-    V002e7530 t0, t1, t2, t3;
+    V002e7530 separation_vector, separation_step, radial_offset, adjusted_position;
     u8 *m = o->m;
-    subtract_vector_xyz(&t0, b, c);
+    subtract_vector_xyz(&separation_vector, b, c);
     m += 0x90;
-    normalize_vector_xyz(&t1, &t0, k1);
-    add_vector_xyz(b, b, &t1);
-    subtract_vector_xyz(&t2, b, m);
-    normalize_vector_xyz(&t2, &t2, k2);
-    add_vector_xyz(&t3, m, &t2);
-    subtract_vector_xyz(a, &t3, out);
+    normalize_vector_xyz(&separation_step, &separation_vector, k1);
+    add_vector_xyz(b, b, &separation_step);
+    subtract_vector_xyz(&radial_offset, b, m);
+    normalize_vector_xyz(&radial_offset, &radial_offset, k2);
+    add_vector_xyz(&adjusted_position, m, &radial_offset);
+    subtract_vector_xyz(a, &adjusted_position, out);
 }
 extern char *current_follow_cam __asm__("D_L00_00166E00") __attribute__((section(".data")));
 extern int D_L00_0015EF5C __asm__("D_L00_0015EF5C");
