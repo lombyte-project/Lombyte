@@ -2990,6 +2990,10 @@ extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L17_002f0210(struct Moby *moby) {
+    enum {
+        ROBOT_DOG_STATE_RETURN_HOME = 11,
+        ROBOT_DOG_STATE_APPROACH_TARGET = 9
+    };
     char *data;
     int n;
     int alpha;
@@ -3024,9 +3028,9 @@ void FUN_L17_002f0210(struct Moby *moby) {
         break;
     case 7:
     case 8:
-    case 9:
+    case ROBOT_DOG_STATE_APPROACH_TARGET:
     case 10:
-    case 11:
+    case ROBOT_DOG_STATE_RETURN_HOME:
     case 13:
     case 14:
     case 15:
