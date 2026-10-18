@@ -497,10 +497,13 @@ void FUN_0020c828_2b3458(void *) __asm__("FUN_0020c828");
 extern int D_L00_00161478 __attribute__((sda));
 extern int D_L00_00161480 __attribute__((sda));
 void FUN_L00_002b3458(unsigned char *m) {
+    enum {
+        STATE_INITIALIZE = 0
+    };
     V_2b3458 *v = *(V_2b3458 **)(m + 0x78);
     int r, i;
     switch (m[0x20]) {
-    case 0:
+    case STATE_INITIALIZE:
         m[0x20] = 1;
         v->w4 = D_L00_00161478;
         v->w8 = 3;
