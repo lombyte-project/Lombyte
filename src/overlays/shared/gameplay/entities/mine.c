@@ -1675,19 +1675,19 @@ void bomb_update(BombMoby_2adb30 *m) {
             if ((D_L00_0015F5CC_2adb30 & 7) == 0) {
                 int i;
                 for (i = 0; i < *(int *)&D_L00_0016142C; i++) {
-                    Vec_2adb30 v1;
+                    Vec_2adb30 spark_velocity;
                     Vec_2adb30 v2;
-                    Vec_2adb30 v3;
+                    Vec_2adb30 random_velocity_offset;
                     int p0;
                     int p1;
                     int n0;
                     int n1;
                     int n2;
-                    FUN_001f9a68_2adb30(&v1, d, *(float *)&D_L00_001613F4);
-                    random_vector(v3.f, 0.0f, *(float *)&D_L00_001613F8 * D_0015ED6C_2adb30);
-                    FUN_001f9a10_2adb30(&v1, &v3, &v1);
+                    FUN_001f9a68_2adb30(&spark_velocity, d, *(float *)&D_L00_001613F4);
+                    random_vector(random_velocity_offset.f, 0.0f, *(float *)&D_L00_001613F8 * D_0015ED6C_2adb30);
+                    FUN_001f9a10_2adb30(&spark_velocity, &random_velocity_offset, &spark_velocity);
                     FUN_001f99f8_2adb30(v2.f);
-                    v1.f[3] = FUN_002132a8_2adb30(*(float *)&D_L00_0016140C, *(float *)&D_L00_00161410);
+                    spark_velocity.f[3] = FUN_002132a8_2adb30(*(float *)&D_L00_0016140C, *(float *)&D_L00_00161410);
                     v2.f[3] = FUN_002132a8_2adb30(*(float *)&D_L00_00161414, *(float *)&D_L00_00161418);
                     p0 = fast_tween_color(*(int *)&D_L00_0016141C, *(int *)&D_L00_00161420, FUN_002132a8_2adb30(0.0f, 1.0f));
                     p1 = fast_tween_color(*(int *)&D_L00_00161424, *(int *)&D_L00_00161428, FUN_002132a8_2adb30(0.0f, 1.0f));
@@ -1695,7 +1695,7 @@ void bomb_update(BombMoby_2adb30 *m) {
                     n1 = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161400 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
                     n2 = FUN_001fa6d0_2adb30(FUN_001f96b0_2adb30((float)*(int *)&D_L00_00161404 * (FUN_002132a8_2adb30(-*(float *)&D_L00_00161408, *(float *)&D_L00_00161408) + 1.0f)));
                     v2.f[2] -= *(float *)&D_L00_001613F0 * frame_time_sq_macro * (float)n1;
-                    spawn_spark(&m->pos, &v1, &v2, p0, p1, n0, n1, n2, *(int *)&D_L00_00161430);
+                    spawn_spark(&m->pos, &spark_velocity, &v2, p0, p1, n0, n1, n2, *(int *)&D_L00_00161430);
                 }
             }
         }
