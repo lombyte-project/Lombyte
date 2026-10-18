@@ -1434,7 +1434,7 @@ segments:
           - [0x10cd90, c, gameplay/missions/fun_0020be10]
           - [0x10cdb8, c, gameplay/missions/fun_0020be38]
           - [0x10cde4, textbin, text_gap_0020be64_after_fun_0020be38]
-          - [0x10cde8, c, gameplay/missions/fun_0020be68]
+          - [0x10cde8, c, gameplay/missions/is_item_available]
           - [0x10ce00, c, gameplay/missions/fun_0020be80]
           - [0x10ce54, textbin, text_gap_0020bed4_after_fun_0020be80]
           - [0x10ce58, c, gameplay/missions/fun_0020bed8]
