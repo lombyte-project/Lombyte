@@ -16,7 +16,7 @@ extern void font_print_window_small(struct TextRegion *, long, char *,
    ldl/ldr/sdl/sdr pairs, exactly retail's sequence. */
 int draw_prompt_box(char *arg0) __asm__("FUN_00221b50");
 
-int draw_prompt_box(char *arg0) {
+int draw_prompt_box(char *prompt_dimensions) {
     char *text;
     int v;
 
@@ -37,10 +37,10 @@ int draw_prompt_box(char *arg0) {
     }
     {
         struct TextRegion c = {1,
-                               *(int *)(arg0 + 0x24) + 1,
+                               *(int *)(prompt_dimensions + 0x24) + 1,
                                1,
-                               *(int *)(arg0 + 0x20) + 1,
-                               *(int *)(arg0 + 0x20) >> 1,
+                               *(int *)(prompt_dimensions + 0x20) + 1,
+                               *(int *)(prompt_dimensions + 0x20) >> 1,
                                5,
                                0,
                                0,
@@ -48,7 +48,7 @@ int draw_prompt_box(char *arg0) {
                                5};
 
         font_print_window_small(&c, 0x80000000L, text, -1);
-        c.anchor_y = (*(int *)(arg0 + 0x24) - c.rendered_height) >> 1;
+        c.anchor_y = (*(int *)(prompt_dimensions + 0x24) - c.rendered_height) >> 1;
         c.flags ^= 4;
         font_print_window_small(&c, 0x80000000L, text, -1);
         c.top--;
