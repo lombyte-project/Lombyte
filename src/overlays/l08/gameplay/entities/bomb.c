@@ -1054,11 +1054,11 @@ extern char *func_00219780_2D6C58(void *, void *, void *, int, int, int, int, in
 
 void FUN_L08_002d5950(char *moby, int joint, int count) {
     char *data = *(char **)(moby + 0x78);
-    char t10[32];
+    char joint_transform_buffer[32];
     float t30[8];
     float joint_pos[4];
     float velocity[4];
-    float t70[4];
+    float spread_vector[4];
     float jitter[4];
     float spawn_pos[4];
     int i;
@@ -1066,7 +1066,7 @@ void FUN_L08_002d5950(char *moby, int joint, int count) {
     float random_angle, offset;
 
     func_L00_00250800_2D6C58(moby, joint, joint_pos);
-    func_0020DAF8_2D6C58(moby, joint, t10);
+    func_0020DAF8_2D6C58(moby, joint, joint_transform_buffer);
     for (i = 0; i < count; i++) {
         float *spawn_ptr = spawn_pos;
 
@@ -1076,36 +1076,36 @@ void FUN_L08_002d5950(char *moby, int joint, int count) {
         spawn_pos[1] += func_002140F8_2D6C58(-0.05f, 0.05f);
         spawn_pos[2] += func_002140F8_2D6C58(-0.05f, 0.05f);
         qcopy(velocity, data + 0x40);
-        qcopy(t70, data + 0x40);
+        qcopy(spread_vector, data + 0x40);
         if (count / 3 < i) {
             func_L00_001FF4B0_2D6C58(jitter, t30, func_002140F8_2D6C58(D_L08_001618DC, D_L08_001618DC * 1.2f) * D_0015ED6C);
             fast_vec_add(velocity, velocity, jitter);
-            fast_vec_scale(t70, t70, 0.5f);
+            fast_vec_scale(spread_vector, spread_vector, 0.5f);
             offset = func_001F9F90_2D6C58(random_angle);
             offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8) * D_0015ED6C);
-            t70[0] = t70[0] + offset;
+            spread_vector[0] = spread_vector[0] + offset;
             offset = func_001F9FA8_2D6C58(random_angle);
             offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8) * D_0015ED6C);
-            t70[1] = t70[1] + offset;
-            t70[2] = D_L08_001618E0 * D_0015ED6C;
+            spread_vector[1] = spread_vector[1] + offset;
+            spread_vector[2] = D_L08_001618E0 * D_0015ED6C;
         } else {
             func_L00_001FF4B0_2D6C58(jitter, t30, func_002140F8_2D6C58(0.0f, D_L08_001618DC) * D_0015ED6C);
             fast_vec_add(velocity, velocity, jitter);
-            fast_vec_scale(t70, t70, 0.5f);
+            fast_vec_scale(spread_vector, spread_vector, 0.5f);
             offset = func_001F9F90_2D6C58(random_angle);
             offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8 * 0.25f) * D_0015ED6C);
-            t70[0] = t70[0] + offset;
+            spread_vector[0] = spread_vector[0] + offset;
             offset = func_001F9FA8_2D6C58(random_angle);
             offset = offset * (func_002140F8_2D6C58(0.0f, D_L08_001618E8 * 0.25f) * D_0015ED6C);
-            t70[1] = t70[1] + offset;
-            t70[2] = D_L08_001618E0 * D_0015ED6C;
+            spread_vector[1] = spread_vector[1] + offset;
+            spread_vector[2] = D_L08_001618E0 * D_0015ED6C;
         }
         velocity[3] = D_L08_001618F8;
-        t70[3] = D_L08_001618FC;
+        spread_vector[3] = D_L08_001618FC;
         frames1 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618EC, (float)D_L08_001618EC * 1.2f)));
         frames2 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F0, (float)D_L08_001618F0 * 1.2f)));
         frames3 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)D_L08_001618F4, (float)D_L08_001618F4 * 1.5f)));
-        func_00219780_2D6C58(joint_pos, velocity, t70, D_L08_001618D4, D_L08_001618D8, frames1, frames2, frames3, -1);
+        func_00219780_2D6C58(joint_pos, velocity, spread_vector, D_L08_001618D4, D_L08_001618D8, frames1, frames2, frames3, -1);
     }
 }
 /* Spawns debris mobys while the level counter allows, then scatters or bursts the group's other mobys. */
