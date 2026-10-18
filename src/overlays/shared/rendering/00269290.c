@@ -191,7 +191,7 @@ int FUN_001fa6d0_00269958(float) __asm__("FUN_001fa6d0");
 int FUN_001160d8_00269958(void) __asm__("FUN_001160d8");
 extern unsigned char *D_L00_001B2090 __attribute__((section(".data")));
 void FUN_L00_00269958(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag);
-void FUN_L00_00269958(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int flag) {
+void FUN_L00_00269958(u128 *a, u128 *b, int c, int d, int n, int scalar_base, int scalar_delta, int flag) {
     unsigned char *m = FUN_L00_002678b8_00269958(4);
     if (m) {
         int *e;
@@ -212,8 +212,8 @@ void FUN_L00_00269958(u128 *a, u128 *b, int c, int d, int n, int s1, int s2, int
         e[7] = n;
         e[4] = c;
         e[5] = d;
-        *(short *)((char *)e + 0x18) = s2;
-        *(short *)((char *)e + 0x1a) = s1;
+        *(short *)((char *)e + 0x18) = scalar_delta;
+        *(short *)((char *)e + 0x1a) = scalar_base;
     }
 }
 typedef struct {
