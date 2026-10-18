@@ -1757,8 +1757,8 @@ extern void FUN_L00_002634f8_275320(void *) __asm__("FUN_L00_002634f8");
 
 void FUN_L00_00275320(O_275320 *o) {
     V_275320 tmp;
-    V_275320 t2;
-    V_275320 t3;
+    V_275320 ground_probe_position;
+    V_275320 ground_recheck_position;
     V_275320 *vel = &o->vel;
     float h;
     int ix;
@@ -1783,17 +1783,17 @@ void FUN_L00_00275320(O_275320 *o) {
     FUN_001f9a10_275320(&o->pos, &o->pos, &tmp);
     FUN_001f9a10_275320(&o->pos, &o->pos, particle_drift);
     if (ix != (int)o->pos.f[0] || iy != (int)o->pos.f[1]) {
-        t2.q = o->pos.q;
-        h = ground_height_at(&t2);
+        ground_probe_position.q = o->pos.q;
+        h = ground_height_at(&ground_probe_position);
         if (h < particle_min_ground) {
             h = particle_min_ground;
         } else {
-            t3.q = o->pos.q;
-            h = ground_height_at(&t3);
+            ground_recheck_position.q = o->pos.q;
+            h = ground_height_at(&ground_recheck_position);
         }
         if (o->pos.f[2] < h) {
-            t2.q = o->pos.q;
-            FUN_L00_002634f8_275320(&t2);
+            ground_probe_position.q = o->pos.q;
+            FUN_L00_002634f8_275320(&ground_probe_position);
             free_effect_particle(o);
             return;
         }
