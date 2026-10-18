@@ -234,12 +234,12 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 int FUN_L01_0028b510(void *arg0, List *arg1, float target);
-int FUN_L01_0028b510(void *arg0, List *arg1, float target) {
+int FUN_L01_0028b510(void *reference_point, List *point_list, float target) {
     int best = 0;
     int i;
     float bestDiff = 1e11f;
-    for (i = 0; i < arg1->count; i++) {
-        float d = fast_vec_dist(arg1->e[i], arg0);
+    for (i = 0; i < point_list->count; i++) {
+        float d = fast_vec_dist(point_list->e[i], reference_point);
         if (absolute_float(d - target) < bestDiff) {
             bestDiff = d;
             best = i;
