@@ -18,7 +18,7 @@ extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern void music_pause(s32);
 extern s32 snd_flush_sound_commands() __asm__("FUN_0012dc80");
 extern s32 update_mission_list() __asm__("FUN_0020b950");
-extern void func_00226E58();
+extern void update_skill_point_and_gold_weapon_menu_entries() __asm__("func_00226E58");
 
 void pause_all_sounds(s32 mode) __asm__("FUN_00218d78");
 
@@ -77,7 +77,7 @@ void pause_all_sounds(s32 mode) {
     }
     update_mission_list();
     D_001D0398[0] = 0;
-    func_00226E58();
+    update_skill_point_and_gold_weapon_menu_entries();
     {
         struct MenuSystem *g = &menu_system;
         g->unk13C = 1;

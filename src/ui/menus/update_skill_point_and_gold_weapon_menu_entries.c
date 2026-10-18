@@ -15,7 +15,9 @@ extern struct Menu D_001D2800;
 extern struct Labels D_001D2878;
 extern s32 count_nonzero_entries_up_to_30(void) __asm__("func_00215348");
 extern s32 count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
-void FUN_00226e58(void) {
+void update_skill_point_and_gold_weapon_menu_entries(void) __asm__("FUN_00226e58");
+
+void update_skill_point_and_gold_weapon_menu_entries(void) {
     s32 a;
     s32 b;
     s32 c;
@@ -33,4 +35,4 @@ void FUN_00226e58(void) {
     D_001D2878.text[3] = c ? 0x4FD8 : 0x4FDB;
 }
 
-extern __typeof__(FUN_00226e58) func_00226E58 __attribute__((alias("FUN_00226e58")));
+extern __typeof__(update_skill_point_and_gold_weapon_menu_entries) func_00226E58 __attribute__((alias("FUN_00226e58")));
