@@ -1055,7 +1055,7 @@ extern char *func_00219780_2D6C58(void *, void *, void *, int, int, int, int, in
 void FUN_L08_002d5950(char *moby, int joint, int count) {
     char *data = *(char **)(moby + 0x78);
     char joint_transform_buffer[32];
-    float t30[8];
+    float jitter_direction_source[8];
     float joint_pos[4];
     float velocity[4];
     float spread_vector[4];
@@ -1078,7 +1078,7 @@ void FUN_L08_002d5950(char *moby, int joint, int count) {
         qcopy(velocity, data + 0x40);
         qcopy(spread_vector, data + 0x40);
         if (count / 3 < i) {
-            func_L00_001FF4B0_2D6C58(jitter, t30, func_002140F8_2D6C58(D_L08_001618DC, D_L08_001618DC * 1.2f) * D_0015ED6C);
+            func_L00_001FF4B0_2D6C58(jitter, jitter_direction_source, func_002140F8_2D6C58(D_L08_001618DC, D_L08_001618DC * 1.2f) * D_0015ED6C);
             fast_vec_add(velocity, velocity, jitter);
             fast_vec_scale(spread_vector, spread_vector, 0.5f);
             offset = func_001F9F90_2D6C58(random_angle);
@@ -1089,7 +1089,7 @@ void FUN_L08_002d5950(char *moby, int joint, int count) {
             spread_vector[1] = spread_vector[1] + offset;
             spread_vector[2] = D_L08_001618E0 * D_0015ED6C;
         } else {
-            func_L00_001FF4B0_2D6C58(jitter, t30, func_002140F8_2D6C58(0.0f, D_L08_001618DC) * D_0015ED6C);
+            func_L00_001FF4B0_2D6C58(jitter, jitter_direction_source, func_002140F8_2D6C58(0.0f, D_L08_001618DC) * D_0015ED6C);
             fast_vec_add(velocity, velocity, jitter);
             fast_vec_scale(spread_vector, spread_vector, 0.5f);
             offset = func_001F9F90_2D6C58(random_angle);
