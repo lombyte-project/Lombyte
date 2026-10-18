@@ -41,6 +41,16 @@ s32 service_level_archive_load(void) __asm__("FUN_00204428");
 
 extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 s32 service_level_archive_load(void) {
+    enum {
+        LOAD_SHARED_ARCHIVE = 0,
+        LOAD_LEVEL_ARCHIVE = 1,
+        LOAD_SOUND_ARCHIVE = 2,
+        STOP_LEVEL_SOUNDS = 3,
+        UNLOAD_PREVIOUS_SOUND_BANK = 4,
+        RESOLVE_XREFS_AFTER_BANK_UNLOAD = 5,
+        START_SOUND_BANK_LOAD = 6,
+        WAIT_FOR_SOUND_BANK_LOAD = 7
+    };
     s32 stage;
     u16 next_stage;
     s32 retry_stage;
@@ -85,7 +95,7 @@ s32 service_level_archive_load(void) {
     }
     stage = (s16)D_0015EE48;
     switch (stage) {
-    case 0:
+    case LOAD_SHARED_ARCHIVE:
         if (pal_mode != 0) {
             sound_aligned_bytes =
                 ((disc_table.sound_archive_alt.size << 11) + 0xFFF) & 0xFFFFF000;
@@ -109,12 +119,12 @@ s32 service_level_archive_load(void) {
                                        archive_start_or_sectors);
         D_0015EE48 = D_0015EE48 + 1;
         break;
-    case 1:
+    case LOAD_LEVEL_ARCHIVE:
         next_disc_entry = (struct LevelArchiveDiscEntry *)((u8 *)&disc_table + level_index * 8);
         submit_audio_stream_io_request(level_archive_base, *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12C8), *(s32 *)((s32)&disc_table + (level_index << 3) + 0x12CC));
         D_0015EE48 = D_0015EE48 + 1;
         break;
-    case 2:
+    case LOAD_SOUND_ARCHIVE:
         if (pal_mode != 0) {
             submit_audio_stream_io_request(sound_archive_base, disc_table.sound_archive_alt.sector,
                                            disc_table.sound_archive_alt.size);
@@ -125,7 +135,7 @@ s32 service_level_archive_load(void) {
     increment_stage:
         D_0015EE48 = D_0015EE48 + 1;
         break;
-    case 3:
+    case STOP_LEVEL_SOUNDS:
         if (D_0015EE4A != 0) {
             return 0;
         }
@@ -137,7 +147,7 @@ s32 service_level_archive_load(void) {
             D_0015EE48 = 6;
         }
         break;
-    case 4:
+    case UNLOAD_PREVIOUS_SOUND_BANK:
         if (snd_flush_sound_commands() != 0) {
             return 0;
         }
@@ -146,14 +156,14 @@ s32 service_level_archive_load(void) {
         sound_bank_handle = 0;
         D_0015EE48 = next_stage + 1;
         break;
-    case 5:
+    case RESOLVE_XREFS_AFTER_BANK_UNLOAD:
         if (snd_flush_sound_commands() != 0) {
             return 0;
         }
         snd_resolve_bank_xrefs();
         D_0015EE48 = D_0015EE48 + 1;
         break;
-    case 6:
+    case START_SOUND_BANK_LOAD:
         if (snd_flush_sound_commands() != 0) {
             return 0;
         }
@@ -163,7 +173,7 @@ s32 service_level_archive_load(void) {
                                  (s32)store_async_sound_bank_handle, (u32)&sound_bank_handle);
         D_0015EE48 = D_0015EE48 + 1;
         break;
-    case 7:
+    case WAIT_FOR_SOUND_BANK_LOAD:
         if (snd_flush_sound_commands() != 0) {
             return 0;
         }
