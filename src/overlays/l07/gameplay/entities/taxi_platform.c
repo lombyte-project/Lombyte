@@ -772,6 +772,10 @@ extern void initialize_global_state_entry(int) __asm__("FUN_0022e188");
 void FUN_L07_002f5ba0(struct Moby *moby)
 {
     enum {
+        CONTROLLER_WAIT_FOR_OPEN_VOLUME = 4,
+        CONTROLLER_WAIT_FOR_FINISH_VOLUME = 8
+    };
+    enum {
         CONTROLLER_CLEANUP_LINKED_MOBY = 12,
         CONTROLLER_DELETE_SELF = 13
     };
@@ -800,7 +804,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
     case 3:
         moby->state = 4;
         break;
-    case 4:
+    case CONTROLLER_WAIT_FOR_OPEN_VOLUME:
         if (alternate_item_available[0x29] == 0) {
             if (data->open_volume != -1) {
                 if (is_point_inside_clip_volume_i(&hero.motion.pos, data->open_volume) != 0) {
@@ -854,7 +858,7 @@ void FUN_L07_002f5ba0(struct Moby *moby)
         jet_game_state(2, 4);
         moby->state = 8;
         break;
-    case 8:
+    case CONTROLLER_WAIT_FOR_FINISH_VOLUME:
         if (alternate_item_available[0x2A] == 0) {
             struct Moby *e;
             if (data->moby_0c == -1 || (e = &level_mobys[data->moby_0c]) == 0 || e->state == 0xFE || e->state == 0xFD) {
