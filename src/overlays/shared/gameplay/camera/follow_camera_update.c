@@ -46,9 +46,9 @@ void follow_camera_build_view(u8 *p) {
     f32 g2, g3, e2, h2;
     f32 g, r, d, e, t, x, h;
     f32 v0[4];
-    f32 v1[4];
-    f32 v2[4];
-    f32 v3[4];
+    f32 projected_reference_position[4];
+    f32 projected_camera_position[4];
+    f32 view_direction[4];
     f32 v4[4];
 
     base = D_L00_00166E10_2e9010;
@@ -67,16 +67,16 @@ void follow_camera_build_view(u8 *p) {
         tb = base + 0x20;
         g = FUN_001f9ab0_2e9010(q + 0x80, tb);
         FUN_001f9a68_2e9010(v0, tb, g);
-        FUN_001f9a28_2e9010(v1, q + 0x80, v0);
+        FUN_001f9a28_2e9010(projected_reference_position, q + 0x80, v0);
         q2 = *(u8 **)(p + 0x70);
         q130 = q2 + 0x130;
         g = FUN_001f9ab0_2e9010(p + 0x30, tb);
         FUN_001f9a68_2e9010(v0, tb, g);
-        FUN_001f9a28_2e9010(v2, p + 0x30, v0);
-        FUN_001f9a28_2e9010(v3, v1, v2);
-        r0 = FUN_001f9af0_2e9010(v3);
+        FUN_001f9a28_2e9010(projected_camera_position, p + 0x30, v0);
+        FUN_001f9a28_2e9010(view_direction, projected_reference_position, projected_camera_position);
+        r0 = FUN_001f9af0_2e9010(view_direction);
         if (0.05f <= r0) {
-            FUN_001f9a68_2e9010(p, v3, 1.0f / r0);
+            FUN_001f9a68_2e9010(p, view_direction, 1.0f / r0);
         }
         w = p + 0x10;
         FUN_001f9ad8_2e9010(w, p, up);
@@ -90,17 +90,17 @@ void follow_camera_build_view(u8 *p) {
         d = *(f32 *)(q20 + 0x8) - g2;
         *(f32 *)(q20 + 0x4) = g2;
         FUN_001f9a68_2e9010(v0, up, -FUN_001f9ab0_2e9010(q2 + 0x140, up));
-        FUN_001f9a28_2e9010(v0, v0, v3);
+        FUN_001f9a28_2e9010(v0, v0, view_direction);
         w = (u8 *)v4;
         FUN_001f9a28_2e9010(w, p + 0x30, v0);
         FUN_001f9a68_2e9010(v0, up, -d);
         FUN_001f9a28_2e9010(w, w, v0);
-        FUN_001f9a28_2e9010(v3, w, p + 0x30);
-        r = FUN_001f9af0_2e9010(v3);
+        FUN_001f9a28_2e9010(view_direction, w, p + 0x30);
+        r = FUN_001f9af0_2e9010(view_direction);
         if (r != 0.0f) {
-            e = 1.5707964f - FUN_001f9df8_2e9010(FUN_001f9ab0_2e9010(p, v3) / r);
+            e = 1.5707964f - FUN_001f9df8_2e9010(FUN_001f9ab0_2e9010(p, view_direction) / r);
             FUN_001f9ad8_2e9010(p20, p10, p);
-            if (FUN_001f9ab0_2e9010(p20, v3) < 0.0f) {
+            if (FUN_001f9ab0_2e9010(p20, view_direction) < 0.0f) {
                 e = -e;
             }
             g3 = FUN_001f9ab0_2e9010(q130, up);
