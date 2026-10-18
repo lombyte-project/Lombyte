@@ -680,6 +680,9 @@ extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void FUN_L08_003084d8(struct Moby *moby) {
     enum {
+        MOBY_ACTIVE = 1
+    };
+    enum {
         MOBY_INITIALIZE = 0
     };
     int k;
@@ -688,7 +691,7 @@ void FUN_L08_003084d8(struct Moby *moby) {
         moby->update_dist = 0xFF;
         moby->state = 1;
         break;
-    case 1:
+    case MOBY_ACTIVE:
         if (D_L08_0015F5C4 == 2) {
             int t = D_L08_0016D060_c.a;
             if ((t >= 1 && t <= 2) || t == 4 || t == 5) {
