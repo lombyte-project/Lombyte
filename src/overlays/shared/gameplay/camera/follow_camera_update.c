@@ -613,7 +613,7 @@ extern void FUN_001f9740_2ea488(void *) __asm__("FUN_001f9740");
 #define P D_0013F350_2ea488
 int FUN_L00_002ea488(u8 *, char *) __asm__("FUN_L00_002ea488");
 
-int FUN_L00_002ea488(u8 *m, char *a1) {
+int FUN_L00_002ea488(u8 *m, char *mode_check_object) {
     Q_2ea488 *q;
     char *o;
     char *r;
@@ -631,7 +631,7 @@ int FUN_L00_002ea488(u8 *m, char *a1) {
     st = g->i2284;
     if (st == *(s16 *)(m + 0x86) || st == 0x51) {
         o = D_L00_00166E00_2ea488;
-        t = *(s16 *)(a1 + 0x86);
+        t = *(s16 *)(mode_check_object + 0x86);
         if (t != 0 && t != 10 && t != 14 && t != 2)
             goto off;
         s = *(s16 *)(o + 0x86);
