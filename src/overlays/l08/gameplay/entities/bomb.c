@@ -312,7 +312,7 @@ extern float D_L08_00174660[];
 
 void FUN_L08_002d23f0(char *moby) {
     union Coll_36F8 c;
-    blk16 t70;
+    blk16 table_or_bounce_scratch;
     float normalized_direction[4];
     float random_direction[4];
     char *d;
@@ -344,14 +344,14 @@ void FUN_L08_002d23f0(char *moby) {
             float lo = -1.0f;
             float hi = 1.0f;
             int *q;
-            t70 = D_L08_00161868;
+            table_or_bounce_scratch = D_L08_00161868;
             *(v128_36F8 *)random_direction = 0;
             random_direction[0] = random_float_between_c5(lo, hi);
             random_direction[1] = random_float_between_c5(lo, hi);
             random_direction[2] = random_float_between_c5(lo, hi);
             *(v128_36F8 *)normalized_direction = *(v128_36F8 *)random_direction;
             fast_vec_normalize(normalized_direction, normalized_direction, D_0015ED6C);
-            q = (int *)t70.b + random_integer_below_c3(4);
+            q = (int *)table_or_bounce_scratch.b + random_integer_below_c3(4);
             FUN_L00_00269958_c((moby + 0x10), normalized_direction, *q, 0x4FFF, scale_game_frames_c(0x2D), 0x32, 0x78, 1);
         }
         qcopy(c.r.start, moby + 0x10);
@@ -386,10 +386,10 @@ void FUN_L08_002d23f0(char *moby) {
                     qcopy((moby + 0x10), tbl + 0x20);
                     *(float *)(moby + 0x18) += f20;
                     FUN_L00_001ff660_c((d + 0x10), (d + 0x10), tbl + 0x40);
-                    cross_vectors_xyz(&t70, (d + 0x10), tbl + 0x40);
+                    cross_vectors_xyz(&table_or_bounce_scratch, (d + 0x10), tbl + 0x40);
                     k = D_0015ED6C * 1.5f;
-                    fast_vec_normalize(&t70, &t70, random_float_between_c5(-k, k));
-                    add_vector_xyz((d + 0x10), (d + 0x10), &t70);
+                    fast_vec_normalize(&table_or_bounce_scratch, &table_or_bounce_scratch, random_float_between_c5(-k, k));
+                    add_vector_xyz((d + 0x10), (d + 0x10), &table_or_bounce_scratch);
                     fast_vec_scale_c((d + 0x10), (d + 0x10), 0.4f);
                     *(int *)(d + 0x24) += 1;
                     *(int *)(d + 0x20) = scale_game_frames_c(0xB4);
