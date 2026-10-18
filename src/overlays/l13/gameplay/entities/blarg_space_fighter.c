@@ -1126,8 +1126,8 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
     char *path;
     float hpos[4];
     float v30[4];
-    float v40[4];
-    float v50[4];
+    float spawn_position[4];
+    float vehicle_lead_offset[4];
 
     d = moby->data;
     veh = ((Hero_2C56B0 *)(((char *)&D_0013F350)))->veh;
@@ -1256,26 +1256,26 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
                     d->fA4 = scale_game_frames_alt(6) + func_001FA898_s((D_L13_0015F5D0 + D_L13_0015F5D4) * 1.3f);
                     if (vehd != 0) {
                         Vec_2C56B0 up;
-                        float v70[4];
+                        float lateral_aim_offset[4];
                         float lead;
 
                         *(u128 *)up = 0;
                         up[2] = 1.0f;
 
-                        cross_vectors_xyz(v70, &vehd->vel, up);
-                        cross_vectors_xyz(up, v70, &vehd->vel);
+                        cross_vectors_xyz(lateral_aim_offset, &vehd->vel, up);
+                        cross_vectors_xyz(up, lateral_aim_offset, &vehd->vel);
                         normalize_vector_xyz(up, up, d->fAC * 5.0f * fast_sin(d->fB0));
-                        normalize_vector_xyz(v70, v70, d->fAC * 5.0f * fast_cos(d->fB0));
+                        normalize_vector_xyz(lateral_aim_offset, lateral_aim_offset, d->fAC * 5.0f * fast_cos(d->fB0));
                         add_vector_xyz(v30, hpos, up);
-                        add_vector_xyz(v30, v30, v70);
+                        add_vector_xyz(v30, v30, lateral_aim_offset);
                         FUN_L00_0025f8e0(v30, 0.6f);
                         lead = vector_distance(&moby->pos, ((char *)&D_0013F3D0));
-                        normalize_vector_xyz(v50, &vehd->vel, vehd->f64 * (lead / (vehd->f64 + D_0015ED6C * 50.0f)));
-                        add_vector_xyz(v30, v30, v50);
+                        normalize_vector_xyz(vehicle_lead_offset, &vehd->vel, vehd->f64 * (lead / (vehd->f64 + D_0015ED6C * 50.0f)));
+                        add_vector_xyz(v30, v30, vehicle_lead_offset);
                         subtract_vector_xyz_c(v30, v30, &moby->pos);
-                        normalize_vector_xyz(v40, v30, 2.6f);
-                        add_vector_xyz(v40, v40, &moby->pos);
-                        FUN_L11_00308f48((int)moby, v30, v40, 121.0f, D_0015ED6C * 50.0f, 5.0f);
+                        normalize_vector_xyz(spawn_position, v30, 2.6f);
+                        add_vector_xyz(spawn_position, spawn_position, &moby->pos);
+                        FUN_L11_00308f48((int)moby, v30, spawn_position, 121.0f, D_0015ED6C * 50.0f, 5.0f);
                         func_0022ED80_s(0, 0, (int)moby);
                     }
                     d->fAC = d->fAC * ((random_float_between(0.92f, 0.94f) - 1.0f) * D_0015ED60 + 1.0f);
@@ -1309,11 +1309,11 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         subtract_vector_xyz_c(v30, D_L13_001670C0, &moby->pos);
         func_L00_0025F4A8_alt(moby, v30, 0, 0.0f, 0.0f, 5, 3, 10, 4.0f, 3.0f, 9.0f, 1.1f, -1, 20.0f, 0, 1, -1, 0);
         normalize_vector_xyz(v30, v30, 4.0f);
-        subtract_vector_xyz_c(v40, &moby->pos, v30);
+        subtract_vector_xyz_c(spawn_position, &moby->pos, v30);
         scale_vector_xyz(v30, &d->vel, 0.5f);
         switch (rand() % 10) {
         case 0:
-            FUN_L13_002e1c50((char *)v40, 0xE0);
+            FUN_L13_002e1c50((char *)spawn_position, 0xE0);
             break;
         case 1:
         case 2:
@@ -1321,7 +1321,7 @@ void FUN_L13_002c4428(Moby_2C56B0 *moby) {
         case 4:
         case 5:
         case 6:
-            FUN_L13_002e1c50((char *)v40, 0xE4);
+            FUN_L13_002e1c50((char *)spawn_position, 0xE4);
             break;
         case 7:
         case 8:
