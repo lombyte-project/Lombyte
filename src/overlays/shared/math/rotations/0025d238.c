@@ -14,14 +14,14 @@ f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_0025d238(V0025d238 *src, V0025d238 *v) {
-    V0025d238 t0, t1;
+    V0025d238 source_copy, scaled_delta;
     f32 *pv, *p0, *p1;
-    V0025d238 *a = &t0, *b = &t1;
+    V0025d238 *a = &source_copy, *b = &scaled_delta;
     s32 i;
-    t0.q = src->q;
-    p0 = t0.f;
+    source_copy.q = src->q;
+    p0 = source_copy.f;
     pv = v->f;
-    p1 = t1.f;
+    p1 = scaled_delta.f;
     for (i = 2; i >= 0; i--) {
         if (*pv < 0.0f) {
             subtract_vector_xyz(b, v, a);
