@@ -76,8 +76,8 @@ Procedure and acceptance bar for Ratchet & Clank (PS2, `SCUS_971.99`).
   re-verify all four measures from a fresh compile.
 - Remove the oracle only after the transaction succeeds. Progress numbers
   come from the tree; never edit them by hand.
-- Use the semantic C identifier from `docs/recovered-names.md` when its evidence
-  supports the function's role. Bind it to the existing `FUN_<address>` linker
+- Name the function only when the evidence supports its role
+  ([code-cleanup.md](code-cleanup.md#names)). Bind the name to the existing `FUN_<address>` linker
   symbol with a GNU assembler label; this keeps the emitted symbol stable while
   making C references descriptive. Keep other aliases only when code or
   configuration requires them.

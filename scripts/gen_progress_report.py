@@ -34,11 +34,10 @@ What the report counts (the same contract as ``assets/decomp_map.json``):
   vtables; matched are the bytes C defines and the proofs check: the
   ``*_OVERLAYS`` entries of ``configure.py`` (the boot gate) and
   ``config/overlays/us/data.tsv`` (``make overlays``). bss is not counted.
-* report units are grouped by the logical subsystem in
-  ``recovered_names.json``; a clicked group shows its member functions;
-* only entries with status ``proposed`` replace the function's current symbol
-  with a semantic name. Grouping hints are independent of name status, and
-  conservative fallback groups cover units absent from the proposal catalog.
+* report units are grouped by their source folder; a clicked group shows
+  its member functions;
+* a function's symbol is its C name; a unit still in assembly takes the name
+  its callers bind to its ``FUN_`` label.
 
 The file holds group and function names, addresses, sizes and percentages only.
 Source paths are omitted because a logical group can span multiple source
@@ -65,14 +64,13 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from rnc_units import INCLUDE_ASM_RE, classify_units, parse_config_rows, source_symbol  # noqa: E402
+from rnc_units import (ADDR_SYMBOL_RE, INCLUDE_ASM_RE, classify_units, label_names,  # noqa: E402
+                       main_vram_offset, parse_config_rows, source_symbol)
 from overlay_units import category_of, group_of, load_levels, overlay_functions  # noqa: E402
 from progress_groups import (  # noqa: E402
-    canonical_owner,
     write_fuzzy_scores,
     committed_function_scores,
     group_for_owner,
-    load_group_assignments,
     report_category_for_owner,
     report_group_name,
 )
@@ -253,14 +251,6 @@ LABEL_DEF_RE = re.compile(
 INCLUDE_ASM_LABEL_RE = re.compile(r'INCLUDE_ASM\([^\n]*\b(?:FUN|func)_([0-9A-Fa-f]{8})\)')
 
 
-def main_vram_offset() -> int | None:
-    """VMA minus file offset of the executable's main segment."""
-    path = REPO / "config" / "us" / "rnc1.us.yaml"
-    text = path.read_text() if path.is_file() else ""
-    match = re.search(r"name: main\n\s+type: code\n\s+start: (0x[0-9a-fA-F]+)\n\s+vram: (0x[0-9a-fA-F]+)", text)
-    return int(match.group(2), 16) - int(match.group(1), 16) if match else None
-
-
 def unit_functions(unit: dict, vram_offset: int | None) -> list[tuple[int, int, str | None]]:
     """(offset, size, C name) of each function a unit holds.
 
@@ -284,31 +274,9 @@ def unit_functions(unit: dict, vram_offset: int | None) -> list[tuple[int, int, 
     return [(offset, bounds[i + 1] - offset, found[offset]) for i, offset in enumerate(offsets)]
 
 
-def recovered_by_address() -> dict[int, str]:
-    """Proposed recovered name of each function address."""
-    path = REPO / "config" / "us" / "recovered_names.json"
-    payload = json.loads(path.read_text()) if path.is_file() else {}
-    names: dict[int, str] = {}
-
-    def walk(node: object) -> None:
-        if isinstance(node, dict):
-            address, name = node.get("address"), node.get("proposed_name")
-            if isinstance(address, str) and isinstance(name, str) and "source_path" in node:
-                names.setdefault(int(address, 16), name)
-            for value in node.values():
-                walk(value)
-        elif isinstance(node, list):
-            for value in node:
-                walk(value)
-
-    walk(payload)
-    return names
-
-
 def build_report(scores: dict[object, float]) -> dict:
-    assignments = load_group_assignments(REPO)
-    vram_offset = main_vram_offset()
-    recovered = recovered_by_address()
+    vram_offset = main_vram_offset(REPO / "config" / "us" / "rnc1.us.yaml")
+    named = label_names(REPO)
     functions = []
     for unit in classify_units(REPO):
         if unit["category"] == "asm":
@@ -316,8 +284,6 @@ def build_report(scores: dict[object, float]) -> dict:
         canonical_name = unit_name(unit["owner"])
         address = int(unit["address"])
         owner = str(unit["owner"])
-        assignment = assignments.get(canonical_owner(owner), {})
-        proposed_name = assignment.get("proposed_name")
         exact = unit["category"] == "exact"
         score = scores.get(address, scores.get(canonical_name, scores.get(owner, 0.0)))
         fuzzy = 100.0 if exact else round(min(100.0, max(0.0, score)), 4)
@@ -325,11 +291,10 @@ def build_report(scores: dict[object, float]) -> dict:
             fuzzy = 99.99  # only promoted C counts as matched
         parts = unit_functions(unit, vram_offset)
         for offset, size, c_name in parts:
-            if len(parts) == 1:
-                symbol = proposed_name or unit_symbol(unit)
-            else:
-                vma = offset + (vram_offset or 0)
-                symbol = recovered.get(vma) or c_name or f"FUN_{vma:08x}"
+            vma = offset + (vram_offset or 0)
+            symbol = unit_symbol(unit) if len(parts) == 1 else c_name or f"FUN_{vma:08x}"
+            if ADDR_SYMBOL_RE.match(symbol):
+                symbol = named.get(vma, symbol)
             functions.append({
                 "owner": canonical_name,
                 "size": size,
@@ -337,7 +302,7 @@ def build_report(scores: dict[object, float]) -> dict:
                 "exact": exact,
                 "fuzzy": fuzzy,
                 "category": unit_category(owner),
-                "logical_group": group_for_owner(owner, assignments),
+                "logical_group": group_for_owner(owner),
                 "symbol": symbol,
             })
     functions.sort(key=lambda function: function["address"])

@@ -59,9 +59,8 @@ removing the trick does not change the code, it is not a fakematch: delete it.
 
 ## Names
 
-- **Only name what you can prove.** Good evidence: recovered symbols
-  ([recovered-names.md](recovered-names.md)), strings, callers, tables and
-  nearby functions. A wrong name is worse than `fun_<addr>`.
+- **Only name what you can prove.** Good evidence: recovered symbols,
+  strings, callers, tables and nearby functions. A wrong name is worse than `fun_<addr>`.
 - **Functions:** `lower_snake_case`, verb first (`draw_hud`), with a
   subsystem prefix when it helps (`hud_`, `save_card_`). Recovered CamelCase
   names become clear snake_case. Sony SDK names stay as they are. Keep
@@ -71,9 +70,8 @@ removing the trick does not change the code, it is not a fakematch: delete it.
   file after the moby class or function it holds
   ([overlays.md](overlays.md#sources-and-the-proof)). Keep `fun_<addr>.c`
   until the name is proven.
-- **Renaming:** use the tool, one function at a time, so callers in level
-  code are updated too:
-  `python3 scripts/rename-function-proposals.py --address 0x... --apply`
+- **Renaming:** rename the function in its own file and in every caller,
+  level code included (`grep -rn FUN_<addr> src include`).
 - **Globals:** `D_<addr>` gets a C name plus a `__asm__("D_<addr>")` label.
   Use one spelling and declare it once, in a header.
 - **Locals and fields:** name them by what they hold (`count`, `next`), not by

@@ -21,7 +21,7 @@ ROW_RE = re.compile(
 # and the readable C body under `#else`; see src/assembly/README.md.
 GUARD_RE = re.compile(r"^#ifndef\s+NON_MATCHING\s*$")
 FUNC_DEF_RE = re.compile(
-    r"(?m)^[A-Za-z_][A-Za-z0-9_ \t\*]*?\b([A-Za-z_]\w*)\s*\([^;{]*\)\s*\{"
+    r"(?m)^(?!typedef\b)[A-Za-z_][A-Za-z0-9_ \t\*]*?\b([A-Za-z_]\w*)\s*\([^;{]*\)\s*\{"
 )
 INCLUDE_ASM_RE = re.compile(r'INCLUDE_ASM\s*\(\s*"[^"]*"\s*,\s*([A-Za-z_]\w*)\s*\)')
 ADDR_SYMBOL_RE = re.compile(r"^(?:FUN_|func_|D_|DAT_)[0-9A-Fa-f]+$")
@@ -29,7 +29,6 @@ OVERLAY_NAME = re.compile(r"^FUN_L\d{2}_[0-9a-f]{8}$")
 
 CONFIG_PATH = Path("config") / "us" / "rnc1.us.yaml"
 CATEGORY_PATH = Path("config") / "us" / "unit_categories.json"
-RECOVERED_PATH = Path("config") / "us" / "recovered_names.json"
 
 
 def parse_config_rows(config: Path) -> list[tuple[int, str, str]]:
@@ -77,30 +76,31 @@ def demangle_cfront(name: str) -> str:
     return stem if stem[:1].isalpha() else name
 
 
-def load_recovered_full(config_dir: Path) -> dict[str, str]:
-    """owner -> recovered name for `full` matches starting at the unit start."""
-    path = config_dir / "recovered_names.json"
-    if not path.is_file():
-        return {}
-    try:
-        payload = json.loads(path.read_text())
-    except (OSError, json.JSONDecodeError):
-        return {}
-    names: dict[str, str] = {}
-    for entry in payload.get("symbols", []):
-        if entry.get("match") != "full":
-            continue
-        unit = entry.get("unit")
-        name = str(entry.get("name") or "")
-        if not unit or not name:
-            continue
-        address, unit_address = entry.get("address"), entry.get("unit_address")
-        if address and unit_address and address != unit_address:
-            continue
-        # The yaml owner and the recovered table agree on one of these forms.
-        names.setdefault(unit, name)
-        names.setdefault(unit.removeprefix("assembly/"), name)
-    return names
+def main_vram_offset(config: Path) -> int | None:
+    """VMA minus file offset of the executable's main segment."""
+    text = config.read_text() if config.is_file() else ""
+    match = re.search(r"name: main\n\s+type: code\n\s+start: (0x[0-9a-fA-F]+)\n\s+vram: (0x[0-9a-fA-F]+)", text)
+    return int(match.group(2), 16) - int(match.group(1), 16) if match else None
+
+
+LABEL_NAME_RE = re.compile(r'\b([A-Za-z_]\w*)\s*\([^;{}]*\)\s*__asm__\("(?:FUN|func)_([0-9A-Fa-f]{8})"\)')
+
+
+def label_names(repo: Path) -> dict[int, str]:
+    """address -> the C name the tree binds to ``FUN_<address>`` most often.
+
+    Callers name a function whose own unit is still assembly, so this names
+    pending units too."""
+    counts: dict[int, dict[str, int]] = {}
+    for root in ("src", "include"):
+        for path in sorted((repo / root).rglob("*.[ch]")):
+            for match in LABEL_NAME_RE.finditer(path.read_text(errors="replace")):
+                name = match.group(1)
+                if not ADDR_SYMBOL_RE.match(name):
+                    names = counts.setdefault(int(match.group(2), 16), {})
+                    names[name] = names.get(name, 0) + 1
+    return {address: min(names, key=lambda name: (-names[name], name))
+            for address, names in counts.items()}
 
 
 def source_symbol(source: Path) -> str | None:
@@ -120,14 +120,13 @@ def source_symbol(source: Path) -> str | None:
     return match.group(1) if match else None
 
 
-def display_for(owner: str, source: Path, recovered: dict[str, str]) -> str | None:
-    """Evidence-backed display name for a unit, or None."""
+def display_for(source: Path) -> str | None:
+    """Display name for a unit: its source's first function name, or None."""
     if source.is_file():
         name = source_symbol(source)
         if name and not ADDR_SYMBOL_RE.match(name):
             return demangle_cfront(name)
-    name = recovered.get(owner) or recovered.get(owner.removeprefix("assembly/"))
-    return demangle_cfront(name) if name else None
+    return None
 
 
 def unit_source(repo: Path, owner: str) -> Path:
@@ -258,7 +257,6 @@ def classify_units(repo: Path) -> list[dict]:
     ``pending`` (C still missing or not byte-exact).
     """
     exact_assembly, intentional = load_categories(repo / CATEGORY_PATH)
-    recovered = load_recovered_full(repo / RECOVERED_PATH.parent)
     units = []
     for unit in configured_units(repo / CONFIG_PATH):
         owner = unit["owner"]
@@ -277,7 +275,7 @@ def classify_units(repo: Path) -> list[dict]:
                 **unit,
                 "source": source,
                 "category": category,
-                "display": display_for(owner, source, recovered),
+                "display": display_for(source),
             }
         )
     return units

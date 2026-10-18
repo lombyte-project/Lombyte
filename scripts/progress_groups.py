@@ -3,13 +3,7 @@
 from __future__ import annotations
 
 import json
-import re
 from pathlib import Path
-
-NAME_PROPOSALS = Path("config") / "us" / "recovered_names.json"
-NAME_PROPOSALS_SCHEMA = "rnc-function-name-proposals-v1"
-GROUP_PART_RE = re.compile(r"[a-z][a-z0-9_]*$")
-FUNCTION_NAME_RE = re.compile(r"[a-z][a-z0-9_]*$")
 
 
 def canonical_owner(owner: str) -> str:
@@ -21,12 +15,10 @@ def report_category_for_owner(owner: str) -> str:
     return "sdk" if canonical_owner(owner).split("/", 1)[0] in {"sdk", "kernel"} else "game"
 
 
-def fallback_group(owner: str) -> str:
-    """Return a semantic source bucket, or ``unclassified`` when unknown.
+def group_for_owner(owner: str) -> str:
+    """Logical group of a unit: its source folder, or ``unclassified`` when unknown.
 
-    Address ranges made the progress map look more specific without adding
-    useful meaning. Keep owners with no supported subsystem assignment in one
-    honest bucket until symbols or call relationships justify a better group.
+    A function moves to another group by moving its file to that folder.
     """
     parts = canonical_owner(owner).split("/")
     root = parts[0]
@@ -70,93 +62,14 @@ def fallback_group(owner: str) -> str:
         if len(parts) == 2:
             return "sdk/library"
         return "/".join(parts[:-1])
-    if root in {"runtime", "rendering", "gameplay", "audio", "video", "storage", "ui", "math"}:
+    if root in {
+        "runtime", "rendering", "gameplay", "audio", "video",
+        "storage", "ui", "math", "input", "world",
+    }:
         return "/".join(parts[:-1]) if len(parts) > 1 else root
     if root == "kernel":
         return "sdk/interrupts"
     return root
-
-
-def load_group_assignments(repo: Path) -> dict[str, dict[str, str | None]]:
-    """Load catalog groups and accepted display names, keyed by canonical owner.
-
-    Group hints are usable regardless of name status: a function may have a
-    useful subsystem assignment even when its semantic name is unresolved.
-    The function name itself is only taken from entries marked ``proposed``.
-    """
-    path = repo / NAME_PROPOSALS
-    if not path.is_file():
-        return {}
-    payload = json.loads(path.read_text())
-    proposals = payload.get("rename_proposals") or {}
-    if not proposals:
-        return {}
-    if proposals.get("schema") != NAME_PROPOSALS_SCHEMA:
-        raise ValueError(f"unsupported recovered-name proposal schema in {path}")
-
-    result: dict[str, dict[str, str | None]] = {}
-    first_address: dict[str, int | None] = {}
-    for entry in proposals.get("entries", []):
-        if not isinstance(entry, dict):
-            continue
-        unit = entry.get("unit")
-        source_path = entry.get("source_path")
-        group = entry.get("logical_group")
-        if not isinstance(unit, str) or not isinstance(source_path, str):
-            raise ValueError(f"proposal at {entry.get('address')} has no source-unit owner")
-        if not source_path.startswith("src/") or not source_path.endswith(".c"):
-            raise ValueError(f"invalid source_path in proposal at {entry.get('address')}")
-        unit_key = canonical_owner(unit)
-        source_key = canonical_owner(source_path[len("src/"):-2])
-        if unit_key != source_key:
-            raise ValueError(
-                f"unit/source_path disagreement in proposal at {entry.get('address')}: "
-                f"{unit} vs {source_path}"
-            )
-        if not isinstance(group, str) or not group:
-            raise ValueError(f"proposal at {entry.get('address')} has no logical_group")
-        parts = group.split("/")
-        if any(not GROUP_PART_RE.fullmatch(part) for part in parts):
-            raise ValueError(f"invalid logical_group in proposal at {entry.get('address')}")
-        if parts[0] in {"ee", "vu"}:
-            raise ValueError(f"architecture root is not a logical group: {group}")
-
-        # ``unclassified`` is an explicit lack of semantic evidence. Preserve
-        # that label unless the source module supplies a useful broad fallback.
-        if group == "unclassified":
-            group = fallback_group(unit_key)
-
-        name = entry.get("proposed_name")
-        if entry.get("status") != "proposed" or not isinstance(name, str) or not FUNCTION_NAME_RE.fullmatch(name):
-            name = None
-        assignment = {"logical_group": group, "proposed_name": name}
-        # A unit holding several functions of one translation unit has one
-        # entry per function: they must agree on the group, and the unit takes
-        # the name of its first function.
-        address = parse_address(entry.get("address"))
-        previous = result.get(unit_key)
-        if previous is not None:
-            if previous["logical_group"] != group:
-                raise ValueError(f"multiple grouping entries for source unit {unit_key}")
-            previous_address = first_address.get(unit_key)
-            if address is None or previous_address is None:
-                if previous != assignment:
-                    raise ValueError(f"multiple grouping/name entries for source unit {unit_key}")
-                continue
-            if address == previous_address:
-                raise ValueError(f"multiple entries for function {entry.get('address')} in {unit_key}")
-            if address > previous_address:
-                continue
-        result[unit_key] = assignment
-        first_address[unit_key] = address
-    return result
-
-
-def group_for_owner(owner: str, assignments: dict[str, dict[str, str | None]]) -> str:
-    assignment = assignments.get(canonical_owner(owner))
-    if assignment and assignment.get("logical_group"):
-        return str(assignment["logical_group"])
-    return fallback_group(owner)
 
 
 def report_group_name(category: str, logical_group: str) -> str:
