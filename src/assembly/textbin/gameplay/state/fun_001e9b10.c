@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/textbin/fun_001e9b10/FUN_001e9b10.s", FUN_001e9b10);
+INCLUDE_ASM("config/us/expected/asm/assembly/textbin/gameplay/state/fun_001e9b10/FUN_001e9b10.s", FUN_001e9b10);
 #else
 #include "rnc/globals.h"
 #include "types.h"

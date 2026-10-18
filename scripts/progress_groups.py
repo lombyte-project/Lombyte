@@ -62,7 +62,10 @@ def group_for_owner(owner: str) -> str:
         if len(parts) == 2:
             return "sdk/library"
         return "/".join(parts[:-1])
-    if root in {"runtime", "rendering", "gameplay", "audio", "video", "storage", "ui", "math"}:
+    if root in {
+        "runtime", "rendering", "gameplay", "audio", "video",
+        "storage", "ui", "math", "input", "world",
+    }:
         return "/".join(parts[:-1]) if len(parts) > 1 else root
     if root == "kernel":
         return "sdk/interrupts"

@@ -482,7 +482,7 @@ DATA_OVERLAYS = {
     "gameplay/camera/backup_current_cam": (0x1893D0, 0x8A350, 1920),
     "textbin/append_billboard_batch": (0x18ED00, 0x8FC80, 512),
     "ui/map/map_filters": (0x1A03B0, 0xA1330, 4),
-    "textbin/initialize_level_runtime": (0x1CAAC0, 0xCBA40, 4096),
+    "textbin/gameplay/state/initialize_level_runtime": (0x1CAAC0, 0xCBA40, 4096),
     "textbin/world/data/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60, 1152),
     "ui/menus/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
     "textbin/gameplay/gadgets/load_hand_gadget": (0x1D52E8, 0xD6268, 1776),
