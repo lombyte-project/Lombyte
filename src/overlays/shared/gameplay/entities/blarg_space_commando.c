@@ -873,7 +873,7 @@ void FUN_L06_002ff978(char *moby) {
     for (i = 0; i < 15; i = n) {
         float f21, f22;
         int s18, s19, s17;
-        int s10[4];
+        int spark_position[4];
         float v[4], w[4];
         char *p;
         int off = i * 16;
@@ -910,8 +910,8 @@ void FUN_L06_002ff978(char *moby) {
         scale_vector_xyz(w, w, 1.0f / (float)s17);
         w[3] = D_L06_00162010;
         p = data + (off + 0x230);
-        lerp_vector(s10, p, p, random_float_between(0.0f, 1.0f));
-        spawn_spark(s10, v, w, D_L06_00162004, D_L06_00162008, s18, s19, s17,
+        lerp_vector(spark_position, p, p, random_float_between(0.0f, 1.0f));
+        spawn_spark(spark_position, v, w, D_L06_00162004, D_L06_00162008, s18, s19, s17,
                      D_L06_00162040);
     }
 }
