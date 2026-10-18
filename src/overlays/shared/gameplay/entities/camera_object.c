@@ -1152,8 +1152,8 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
     char *data = *(char **)(moby + 0x78);
     float m0[12];
     float m1[12];
-    float v60[4];
-    float v70[4];
+    float local_rotation_angles[4];
+    float rotated_position_offset[4];
     float A[4];
     float B[4];
     float D[4];
@@ -1204,14 +1204,14 @@ void FUN_L00_002a6de8(char *moby, void *out1, void *out2) {
         *(float *)(data + 0x50) = fast_subtract_rotations(*(float *)(data + 0x50), c1);
         *(float *)(data + 0x58) = fast_subtract_rotations(*(float *)(data + 0x58), -0.0125f);
     }
-    qcopy(v60, data + 0x50);
-    v60[1] = c2;
-    euler_rotation_basis(m0, v60);
+    qcopy(local_rotation_angles, data + 0x50);
+    local_rotation_angles[1] = c2;
+    euler_rotation_basis(m0, local_rotation_angles);
     euler_rotation_basis(m1, B);
     multiply_matrix3x3(moby + 0xC0, m1, m0);
     fast_vec_scale(moby + 0x10, &m1[8], c3);
-    fast_vec_scale(v70, moby + 0xC0, c4);
-    fast_vec_add(moby + 0x10, moby + 0x10, v70);
+    fast_vec_scale(rotated_position_offset, moby + 0xC0, c4);
+    fast_vec_add(moby + 0x10, moby + 0x10, rotated_position_offset);
     fast_vec_add(moby + 0x10, moby + 0x10, A);
     if (out1 != 0)
         qcopy(out1, A);
