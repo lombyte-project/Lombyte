@@ -925,7 +925,7 @@ segments:
           - [0xec38c, textbin, text_gap_001eb40c_before_fun_001eb410]
           - [0xec390, c, gameplay/state/transition_default_draw]
           - [0xec6c0, c, gameplay/state/is_active_state_entry]
-          - [0xec718, c, assembly/textbin/gameplay/state/transition_do_transition]
+          - [0xec718, c, gameplay/state/transition_do_transition]
           - [0xecc08, textbin, text_gap_001ebc88_before_fun_001ebc90]
           - [0xecc10, c, gameplay/camera/backup_current_cam]
           - [0xecc6c, textbin, text_gap_001ebcec_after_fun_001ebc90]
