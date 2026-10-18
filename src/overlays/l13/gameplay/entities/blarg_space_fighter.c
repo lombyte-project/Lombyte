@@ -1652,6 +1652,9 @@ extern char D_L13_001f49a8[];
 
 void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
     enum {
+        HIT_REACTION_NONE = 0
+    };
+    enum {
         HIT_REACTION_LETHAL = 1
     };
     char *src;
@@ -1673,7 +1676,7 @@ void FUN_L13_002cecb8(struct Moby *moby, unsigned char *d, float *health) {
         case 2:
             *health = 0.0f;
             break;
-        case 0:
+        case HIT_REACTION_NONE:
         case 3:
         case 4:
         case 5:
