@@ -1925,6 +1925,7 @@ void shuttle_update(struct Moby *moby) __asm__("FUN_L08_002dbdb0");
 void shuttle_update(struct Moby *moby) {
     enum {
         SHUTTLE_STATE_INITIALIZE = 0,
+        SHUTTLE_STATE_WAIT_FOR_DEPARTURE = 2,
         SHUTTLE_STATE_TRAVEL = 3
     };
     LiftVars *vars = (LiftVars *)moby->pvars;
@@ -1962,7 +1963,7 @@ void shuttle_update(struct Moby *moby) {
             moby->update_dist = 0xFF;
         }
         break;
-    case 2:
+    case SHUTTLE_STATE_WAIT_FOR_DEPARTURE:
         if (hero.ground_moby == moby) {
             if (D_L08_00179C10.busy == 0 && D_L08_00179C10.owner == -1) {
                 qcopy(&p, &hero.motion.pos);
