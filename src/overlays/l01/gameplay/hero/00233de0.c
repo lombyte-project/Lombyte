@@ -48,7 +48,7 @@ void FUN_L01_00233de0(void)
 {
     Vec4 old_pos;
     Vec4 tmp;
-    Vec4 tmp2;
+    Vec4 projection_velocity;
     f32 limit;
     f32 d;
     f32 w;
@@ -117,15 +117,15 @@ void FUN_L01_00233de0(void)
     }
     normalize_vector_xyz(&hero.motion.unk130, &tmp, d);
 
-    qcopy(&tmp2, &hero.motion.velocity);
-    FUN_L00_00233ba0((float *)&tmp2, (float *)&tmp2, 0.0f);
+    qcopy(&projection_velocity, &hero.motion.velocity);
+    FUN_L00_00233ba0((float *)&projection_velocity, (float *)&projection_velocity, 0.0f);
     FUN_L00_00233ba0((float *)&hero.motion.unk120, (float *)&hero.motion.unk120, 0.0f);
     normalize_vector_xyz(&hero.motion.unk120, &hero.motion.unk120, 1.0f);
-    d = dot_vectors_xyz(&hero.motion.unk120, &tmp2);
+    d = dot_vectors_xyz(&hero.motion.unk120, &projection_velocity);
     if (d < 0.0f) {
         d = 0.0f;
     }
-    normalize_vector_xyz(&hero.motion.unk120, &tmp2, d);
+    normalize_vector_xyz(&hero.motion.unk120, &projection_velocity, d);
 
     hero.motion.speed_xy = vector_length_xyz(&hero.motion.unk110);
     hero.motion.unk164 = vector_length_xy(&hero.motion.unk110);
