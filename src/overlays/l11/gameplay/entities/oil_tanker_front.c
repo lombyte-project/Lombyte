@@ -1162,21 +1162,21 @@ extern short D_L11_001623C4 __attribute__((sda));
 extern short D_L11_001623C8 __attribute__((sda));
 extern short D_L11_001623CC __attribute__((sda));
 void FUN_L11_003191c0(struct Moby *moby) {
-    float v0[4];
-    float v1[4];
+    float first_spark_vector[4];
+    float second_spark_vector[4];
     int c1;
     int c2;
-    random_vector(v0, *(float *)&D_L11_001623AC * D_0015ED6C_n[1],
+    random_vector(first_spark_vector, *(float *)&D_L11_001623AC * D_0015ED6C_n[1],
                      *(float *)&D_L11_001623B0 * D_0015ED6C_n[1]);
-    random_vector(v1, *(float *)&D_L11_001623AC * D_0015ED6C_n[1],
+    random_vector(second_spark_vector, *(float *)&D_L11_001623AC * D_0015ED6C_n[1],
                      *(float *)&D_L11_001623B0 * D_0015ED6C_n[1]);
-    v0[3] = *(float *)&D_L11_001623B4;
-    v1[3] = *(float *)&D_L11_001623B8;
+    first_spark_vector[3] = *(float *)&D_L11_001623B4;
+    second_spark_vector[3] = *(float *)&D_L11_001623B8;
     c1 = fast_tween_color(*(int *)&D_L11_001623BC, *(int *)&D_L11_001623C0,
                       random_float_between_alt(0.0f, 1.0f));
     c2 = fast_tween_color(*(int *)&D_L11_001623BC, *(int *)&D_L11_001623C0,
                       random_float_between_alt(0.0f, 1.0f));
-    spawn_spark(&moby->pos, v0, v1, c1, c2, *(int *)&D_L11_001623C4, *(int *)&D_L11_001623C8,
+    spawn_spark(&moby->pos, first_spark_vector, second_spark_vector, c1, c2, *(int *)&D_L11_001623C4, *(int *)&D_L11_001623C8,
                  *(int *)&D_L11_001623CC, *(int *)&D_L11_001623A8);
 }
 #include "sda.h"
