@@ -486,7 +486,7 @@ int FUN_L00_00222158(void) {
     char *m;
     char *best;
     char *q;
-    float bestd, d, a13, a14, a15, x;
+    float bestd, d, max_target_distance, a14, a15, x;
     int k;
     int out;
     float v[4];
@@ -522,10 +522,10 @@ int FUN_L00_00222158(void) {
         x = *(float *)(gb + 0x98);
         if (*(int *)(gb + 0x208C) == 0xF)
             x = *(float *)(gb + 0x57C);
-        a13 = 30.0f;
+        max_target_distance = 30.0f;
         if (*(float *)(q + 0x20) != 0.0f)
-            a13 = *(float *)(q + 0x20);
-        d = FUN_L00_0020d6b0(m, &out, x, a13, a14, a15);
+            max_target_distance = *(float *)(q + 0x20);
+        d = FUN_L00_0020d6b0(m, &out, x, max_target_distance, a14, a15);
         if (out != 0)
             continue;
         gb += 0x80;
