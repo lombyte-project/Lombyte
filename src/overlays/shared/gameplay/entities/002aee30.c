@@ -23,19 +23,19 @@ extern void FUN_L04_002c41e0(void *, void *, void *, int, float, float);
 
 extern short D_L04_001618B0 __attribute__((sda));
 void FUN_L04_002c45b8(char *a, int i, int j, int k) {
-    float v0[4], v10[4];
+    float first_world_position[4], second_world_position[4];
     char *pi, *pj;
     pi = D_L04_001D2C90 + i * 16;
-    qcopy(v0, pi);
-    v0[3] = 1.0f;
-    transform_vector_by_basis(v0, v0, a + 0xC0);
-    add_vector_xyz(v0, v0, a + 0x10);
+    qcopy(first_world_position, pi);
+    first_world_position[3] = 1.0f;
+    transform_vector_by_basis(first_world_position, first_world_position, a + 0xC0);
+    add_vector_xyz(first_world_position, first_world_position, a + 0x10);
     pj = D_L04_001D2C90 + j * 16;
-    qcopy(v10, pj);
-    v10[3] = 1.0f;
-    transform_vector_by_basis(v10, v10, a + 0xC0);
-    add_vector_xyz(v10, v10, a + 0x10);
-    FUN_L04_002c41e0(a, v0, v10, k, *(float *)(pi + 0xC) * *(float *)&D_L04_001618B0,
+    qcopy(second_world_position, pj);
+    second_world_position[3] = 1.0f;
+    transform_vector_by_basis(second_world_position, second_world_position, a + 0xC0);
+    add_vector_xyz(second_world_position, second_world_position, a + 0x10);
+    FUN_L04_002c41e0(a, first_world_position, second_world_position, k, *(float *)(pi + 0xC) * *(float *)&D_L04_001618B0,
                      *(float *)(pj + 0xC) * *(float *)&D_L04_001618B0);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5A50), where it is exact; names translated to the US level program. */
