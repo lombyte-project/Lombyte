@@ -2632,6 +2632,10 @@ s32 hp_bar_saved __asm__("D_L11_00162170") = 0;
 void jet_fighter_update(struct Moby *moby) __asm__("FUN_L11_00313290");
 void jet_fighter_update(struct Moby *moby) {
     enum {
+        JET_FIGHTER_STATE_DELAYED_EXIT = 8,
+        JET_FIGHTER_STATE_INACTIVE = 9
+    };
+    enum {
         JET_FIGHTER_STATE_INITIALIZE = 0,
         JET_FIGHTER_STATE_WAIT_FOR_BOARDING = 1,
         JET_FIGHTER_STATE_BOARD = 2,
@@ -2863,7 +2867,7 @@ void jet_fighter_update(struct Moby *moby) {
                 hero_respawn();
             }
             break;
-        case 8:
+        case JET_FIGHTER_STATE_DELAYED_EXIT:
             D_L11_0015F608 = 2;
             FUN_L11_00312838(moby, v);
             if (timer_3290(&v->iF8)) {
@@ -2902,7 +2906,7 @@ void jet_fighter_update(struct Moby *moby) {
                 }
             }
             break;
-        case 9:
+        case JET_FIGHTER_STATE_INACTIVE:
             if (v->fade != 0.0f) {
                 approach_value_c788(&v->fade, 0.0f, frame_time * 4.0f);
                 D_L11_0015F3FC = v->fade;
