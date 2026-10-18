@@ -760,11 +760,11 @@ typedef struct {
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
-void FUN_L05_00318648(char *m, int b, void *v1, void *v2, int a) {
+void FUN_L05_00318648(char *m, int b, void *initial_motion_step, void *local_rotation_offset, int a) {
     Dat *d = *(Dat **)(m + 0x78);
     m[0x20] = 1;
-    qcopy((char *)d + 0x30, v1);
-    qcopy((char *)d + 0x10, v2);
+    qcopy((char *)d + 0x30, initial_motion_step);
+    qcopy((char *)d + 0x10, local_rotation_offset);
     d->id = scale_game_frames(a);
     d->s[0] = random_float_between(-(frame_time * 4.1887903f), frame_time * 4.1887903f);
     d->s[1] = random_float_between(-(frame_time * 4.1887903f), frame_time * 4.1887903f);
