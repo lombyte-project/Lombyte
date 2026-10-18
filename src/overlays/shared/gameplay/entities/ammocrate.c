@@ -90,16 +90,16 @@ void FUN_L13_002b7d50(short *pts, int n, float x0, float y0, unsigned int col, u
     *(int *)(D_L13_001611C0 + 8) = 0;
     *(int *)(D_L13_001611C0 + 12) = q | 0x50000000;
     {
-        char *t1 = (char *)D_L13_001611C0;
-        D_L13_001611C0 = (int)(t1 + 0x10);
+        char *packet_header = (char *)D_L13_001611C0;
+        D_L13_001611C0 = (int)(packet_header + 0x10);
         qcopy((void *)D_L13_001611C0, &D_L13_001608E0);
-        *(short *)(t1 + 0x10) = -0x7FFF;
+        *(short *)(packet_header + 0x10) = -0x7FFF;
     }
     {
-        unsigned long long *t2 = (unsigned long long *)((char *)D_L13_001611C0 + 0x10);
-        D_L13_001611C0 = (int)t2;
-        t2[0] = 0x144;
-        t2[1] = prim;
+        unsigned long long *primitive_payload = (unsigned long long *)((char *)D_L13_001611C0 + 0x10);
+        D_L13_001611C0 = (int)primitive_payload;
+        primitive_payload[0] = 0x144;
+        primitive_payload[1] = prim;
     }
     {
         char *t3 = (char *)D_L13_001611C0;
