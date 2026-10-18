@@ -59,6 +59,14 @@ extern char *strcpy(char *, const char *);
 void memcard_update_state(void) __asm__("FUN_002093d8");
 
 void memcard_update_state(void) {
+    enum {
+        MEMCARD_QUERY_INFO = 0,
+        MEMCARD_PROCESS_INFO_RESULT = 1,
+        MEMCARD_REQUEST_FORMAT = 3,
+        MEMCARD_PROCESS_FORMAT_RESULT = 4,
+        MEMCARD_REQUEST_UNFORMAT = 5,
+        MEMCARD_PROCESS_UNFORMAT_RESULT = 6
+    };
     char name[0x40];
 
     if (MC.busy) {
@@ -68,7 +76,7 @@ void memcard_update_state(void) {
     MC.busy = 1;
 
     switch (MC.state) {
-    case 0:
+    case MEMCARD_QUERY_INFO:
         if (MC.cur < 0) {
             MC.cur = 0;
         }
@@ -77,7 +85,7 @@ void memcard_update_state(void) {
         }
         break;
 
-    case 1:
+    case MEMCARD_PROCESS_INFO_RESULT:
         if (MC.result != 0) {
             CARD.save_index = -3;
             CARD.sync_result = MC.result;
@@ -113,7 +121,7 @@ void memcard_update_state(void) {
         MC.busy = 0;
         break;
 
-    case 3:
+    case MEMCARD_REQUEST_FORMAT:
         if (CARD.format == 0) {
             if (SceMcFormat(CARD.port, CARD.slot) == 0) {
                 MC.state = 4;
@@ -124,7 +132,7 @@ void memcard_update_state(void) {
         MC.state = 2;
         break;
 
-    case 4:
+    case MEMCARD_PROCESS_FORMAT_RESULT:
         if (MC.result != 0) {
             MC.err = 1;
             MC.err_card = MC.cur;
@@ -134,7 +142,7 @@ void memcard_update_state(void) {
         MC.busy = 0;
         break;
 
-    case 5:
+    case MEMCARD_REQUEST_UNFORMAT:
         if (CARD.format == 0) {
             if (SceMcUnformat(CARD.port, CARD.slot) == 0) {
                 MC.state = 6;
@@ -145,7 +153,7 @@ void memcard_update_state(void) {
         MC.state = 2;
         break;
 
-    case 6:
+    case MEMCARD_PROCESS_UNFORMAT_RESULT:
         if (MC.result != 0) {
             MC.err = 2;
             MC.err_card = MC.cur;
