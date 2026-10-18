@@ -556,8 +556,8 @@ void blarg_ship_update(struct Moby *moby) {
     float m50[4];
     float m60[4];
     float hero_relative_position[4];
-    float s80[4];
-    float s90[4];
+    float firing_target_delta[4];
+    float firing_direction[4];
     float sA0[4];
     float sB0[4];
     float c0;
@@ -707,14 +707,14 @@ void blarg_ship_update(struct Moby *moby) {
                     transform_vector_by_basis(sA0, D_L17_001DE120, &moby->rot_row0);
                 }
                 add_vector_xyz(sA0, sA0, &moby->pos.x);
-                subtract_vector_xyz(s80, sB0, sA0);
-                normalize_vector_xyz(s90, s80, D_L17_001623E8 * frame_time);
-                add_vector_xyz(s90, s90, hero_position_delta);
-                p = FUN_L11_00308f48((int)moby, s90, sA0, 128.0f, -1.0f, 10.0f);
+                subtract_vector_xyz(firing_target_delta, sB0, sA0);
+                normalize_vector_xyz(firing_direction, firing_target_delta, D_L17_001623E8 * frame_time);
+                add_vector_xyz(firing_direction, firing_direction, hero_position_delta);
+                p = FUN_L11_00308f48((int)moby, firing_direction, sA0, 128.0f, -1.0f, 10.0f);
                 if (p) {
-                    subtract_vector_xyz(s90, s90, hero_position_delta);
-                    *(float *)(p + 0x44) = -fast_arc_tan(vector_length_xy(s90), s90[2]);
-                    *(float *)(p + 0x48) = fast_arc_tan(s90[0], s90[1]);
+                    subtract_vector_xyz(firing_direction, firing_direction, hero_position_delta);
+                    *(float *)(p + 0x44) = -fast_arc_tan(vector_length_xy(firing_direction), firing_direction[2]);
+                    *(float *)(p + 0x48) = fast_arc_tan(firing_direction[0], firing_direction[1]);
                 }
             }
             if (moby->visible == 0) {
