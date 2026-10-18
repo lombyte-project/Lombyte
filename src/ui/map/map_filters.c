@@ -397,11 +397,11 @@ int map_filter_l08_0(int unused_input, int arg1) {
    and the compare are ps2eeas's (tools/ps2eeas_nops.py). */
 int map_filter_l08_1(int arg0, float unused1, float unused2, float arg1) __asm__("func_002074B0");
 
-int map_filter_l08_1(int arg0, float unused1, float unused2, float arg1) {
+int map_filter_l08_1(int arg0, float unused1, float unused2, float reveal_test_value) {
     if (arg0 < 0xE0) {
-        return (arg1 >= 47.75f) ? 1 : 0;
+        return (reveal_test_value >= 47.75f) ? 1 : 0;
     }
-    return (arg1 < 29.0f) ? 1 : 0;
+    return (reveal_test_value < 29.0f) ? 1 : 0;
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, func_00207D38). */
