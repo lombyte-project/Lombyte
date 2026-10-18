@@ -798,6 +798,15 @@ extern void FUN_L00_002a7210_c(Bolt *, void *, f32, f32) __asm__("FUN_L00_002a72
 void bolt_update(Bolt *obj) __asm__("FUN_L00_002a5dd8");
 void bolt_update(Bolt *obj) {
     enum {
+        BOLT_INITIALIZE_CLASS_ONE = 0xD,
+        BOLT_INITIALIZE_CLASS_FIVE = 0xE,
+        BOLT_INITIALIZE_CLASS_TWENTY = 0xF,
+        BOLT_INITIALIZE_CLASS_FIFTY = 0x10,
+        BOLT_FALLING_CLASS_ONE = 0xD,
+        BOLT_FALLING_CLASS_FIVE = 0xE,
+        BOLT_FALLING_CLASS_TWENTY = 0xF
+    };
+    enum {
         BOLT_INITIALIZE = 0,
         BOLT_FALLING = 1,
         BOLT_SETTLING = 2,
@@ -867,16 +876,16 @@ void bolt_update(Bolt *obj) {
         v->slot_timer = FUN_L00_00257b90(0, scale_game_frames(600));
         v->slot = -1;
         switch (obj->oclass) {
-        case 0xD:
+        case BOLT_INITIALIZE_CLASS_ONE:
             obj->scale = obj->pclass->scale * 0.65f;
             break;
-        case 0xE:
+        case BOLT_INITIALIZE_CLASS_FIVE:
             obj->scale = obj->pclass->scale * 0.7f;
             break;
-        case 0xF:
+        case BOLT_INITIALIZE_CLASS_TWENTY:
             obj->scale = obj->pclass->scale * 0.75f;
             break;
-        case 0x10:
+        case BOLT_INITIALIZE_CLASS_FIFTY:
             obj->scale = obj->pclass->scale * 0.6f;
             break;
         }
@@ -887,13 +896,13 @@ void bolt_update(Bolt *obj) {
         quaternion_to_rotation_basis(&v->spin, &c);
         multiply_matrix3x3(&obj->rot, &c, &obj->rot);
         switch (obj->oclass) {
-        case 0xD:
+        case BOLT_FALLING_CLASS_ONE:
             hr = 0.15f;
             break;
-        case 0xE:
+        case BOLT_FALLING_CLASS_FIVE:
             hr = 0.23f;
             break;
-        case 0xF:
+        case BOLT_FALLING_CLASS_TWENTY:
             hr = 0.23f;
             break;
         default:
