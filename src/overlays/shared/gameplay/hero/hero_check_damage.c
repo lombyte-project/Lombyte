@@ -948,7 +948,7 @@ extern void FUN_L00_002323b8_c(s32, s32, f32) __asm__("FUN_L00_002323b8");
 
 void FUN_L00_0020e4c8(void);
 void FUN_L00_0020e4c8(void) {
-    s32 t, hero_animation_id, v20, v21, i;
+    s32 t, hero_animation_id, animation_step_divisor, slot_animation_id, i;
     u8 *o;
     struct Hero *P;
     t = FUN_L00_0020d498_c(0);
@@ -957,23 +957,23 @@ void FUN_L00_0020e4c8(void) {
     P = &hero;
     P->unk2298 = t;
     hero_animation_id = D_L00_00179AC0_c[t].unk24;
-    v21 = D_L00_00179AC0_c[t].f28;
+    slot_animation_id = D_L00_00179AC0_c[t].f28;
     if ((s32)P->state.control_mode == 12)
-        v21 = D_L00_00179AC0_c[t].f2C;
+        slot_animation_id = D_L00_00179AC0_c[t].f2C;
     P->unk20A8 = 1;
     {
         s32 k = D_L00_00179AC0_c[t].f30;
         P->unk20AA = k;
     }
-    v20 = FUN_001f96f8_c(10);
+    animation_step_divisor = FUN_001f96f8_c(10);
     if (D_L00_00179AC0_c[t].f18 == 0)
-        v20 = FUN_001f96f8_c(11);
+        animation_step_divisor = FUN_001f96f8_c(11);
     if (P->state.control_mode == 0 && P->unk22C8 == 0) {
         P->unk2294 = hero_animation_id;
-        FUN_L00_002323b8_c(hero_animation_id, 0, (f32)v20);
+        FUN_L00_002323b8_c(hero_animation_id, 0, (f32)animation_step_divisor);
         return;
     }
-    if (v21 == -1)
+    if (slot_animation_id == -1)
         return;
     for (i = 0; i < 2 && (i != 1 || hero.unk20AB == 2); i++) {
         if (hero.unkD08[i] != 0) {
@@ -982,10 +982,10 @@ void FUN_L00_0020e4c8(void) {
         o = FUN_L00_0024f028((u8 *)hero.moby, D_L00_0015F6A0_gp[i]);
         hero.unkD08[i] = o;
         if (o != 0) {
-            hero.unk2294 = v21;
+            hero.unk2294 = slot_animation_id;
             hero.unkD14 = 0;
             *(f32 *)(o + 8) = 1.0f;
-            FUN_L00_0024f3e0((u8 *)hero.moby, o, hero.unk2294, 0, v20, 1);
+            FUN_L00_0024f3e0((u8 *)hero.moby, o, hero.unk2294, 0, animation_step_divisor, 1);
         }
     }
 }
