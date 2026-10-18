@@ -1914,6 +1914,9 @@ void FUN_L08_002dc7f0(struct Moby *moby);
  * by how far it moved this frame. */
 void shuttle_update(struct Moby *moby) __asm__("FUN_L08_002dbdb0");
 void shuttle_update(struct Moby *moby) {
+    enum {
+        SHUTTLE_STATE_INITIALIZE = 0
+    };
     LiftVars *vars = (LiftVars *)moby->pvars;
     Vec4 old_pos;
     Vec4 old_rot;
@@ -1934,7 +1937,7 @@ void shuttle_update(struct Moby *moby) {
     vars->spin.f[0] = fast_add_rotations(vars->spin.f[0], frame_time * 1.5707964f);
     FUN_L00_00259f50(vars->spin_state, &vars->spin);
     switch (moby->state) {
-    case 0:
+    case SHUTTLE_STATE_INITIALIZE:
         clear_u64_value(&vars->spin);
         if (vars->path == -1) {
             qcopy(&vars->home_pos, &moby->pos);
