@@ -2648,8 +2648,8 @@ extern short D_L18_00161F64 __attribute__((sda));
 extern short D_L18_00161F68 __attribute__((sda));
 void FUN_L18_002ea598(struct Moby *moby) {
     float spark_spawn_position[4];
-    float v20[4];
-    float v30[4];
+    float first_spark_vector[4];
+    float second_spark_vector[4];
     float scaled_target_direction[4];
     int i;
     int c1, c2, a, b, c;
@@ -2661,18 +2661,18 @@ void FUN_L18_002ea598(struct Moby *moby) {
     k3 = (*(float *)&(D_L18_00161F60)) * frame_time;
     k4 = (*(float *)&(D_L18_00161F64)) * frame_time;
     for (i = 0; i < 3; i++) {
-        FUN_L00_00257d78(v20, k1, k2);
-        fast_vec_scale(v30, v20, (*(float *)&(D_L18_00161F5C)));
-        v30[2] -= random_float_between(k3, k4);
+        FUN_L00_00257d78(first_spark_vector, k1, k2);
+        fast_vec_scale(second_spark_vector, first_spark_vector, (*(float *)&(D_L18_00161F5C)));
+        second_spark_vector[2] -= random_float_between(k3, k4);
         a = func_001FA898_r(FUN_L04_001f1978(random_float_between(
             (*(float *)&(D_L18_00161F3C)), (*(float *)&(D_L18_00161F40)))));
         b = func_001FA898_r(FUN_L04_001f1978(random_float_between(
             (*(float *)&(D_L18_00161F44)), (*(float *)&(D_L18_00161F48)))));
         c = func_001FA898_r(FUN_L04_001f1978(random_float_between(
             (*(float *)&(D_L18_00161F4C)), (*(float *)&(D_L18_00161F50)))));
-        v20[3] = random_float_between((*(float *)&(D_L18_00161F2C)),
+        first_spark_vector[3] = random_float_between((*(float *)&(D_L18_00161F2C)),
                                           (*(float *)&(D_L18_00161F30)));
-        v30[3] = random_float_between((*(float *)&(D_L18_00161F34)),
+        second_spark_vector[3] = random_float_between((*(float *)&(D_L18_00161F34)),
                                           (*(float *)&(D_L18_00161F38)));
         fast_vec_scale(spark_spawn_position, scaled_target_direction, random_float_between(0.0f, 1.0f));
         fast_vec_add(spark_spawn_position, spark_spawn_position, &moby->pos);
@@ -2680,7 +2680,7 @@ void FUN_L18_002ea598(struct Moby *moby) {
                           random_float_between(0.0f, 1.0f));
         c2 = FUN_001fa6e0((*(int *)&(D_L18_00161F24)), (*(int *)&(D_L18_00161F28)),
                           random_float_between(0.0f, 1.0f));
-        spawn_spark(spark_spawn_position, v20, v30, c1, c2, a, b, c, (*(int *)&(D_L18_00161F68)));
+        spawn_spark(spark_spawn_position, first_spark_vector, second_spark_vector, c1, c2, a, b, c, (*(int *)&(D_L18_00161F68)));
     }
 }
 #ifndef NON_MATCHING
