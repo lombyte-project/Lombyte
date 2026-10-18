@@ -1059,12 +1059,8 @@ void FUN_L00_00299c00(void) {
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00299c48.s", FUN_L00_00299c48);
 #else
-extern s16 slideshow_state __asm__("D_L00_0015F620");
-extern s16 slideshow_slide __asm__("D_L00_0015F622");
-extern s16 slideshow_timer __asm__("D_L00_0015F624");
-extern s16 slideshow_frame __asm__("D_L00_0015F626");
-extern s32 *slideshow_dst __asm__("D_L00_0015F628");
-extern s32 *slideshow_src __asm__("D_L00_0015F62C");
+typedef struct { s16 state; s16 slide; s16 timer; s16 frame; s32 *dst; s32 *src; } Slideshow;
+extern Slideshow slideshow __asm__("D_L00_0015F620") __attribute__((section(".sdata")));
 extern s16 cd_read_active[] __asm__("D_001516D8");
 extern u8 D_0013D1D0[];
 extern s32 D_L00_00173BF0[];
@@ -1083,57 +1079,63 @@ void FUN_L00_00299c48(void) {
         fade_level_gp = 0.0f;
     }
     skip_check = D_0013D1D0[2] == 'A';
-    if (slideshow_state == 0) {
-        if (slideshow_frame >= D_L00_00173BF0[slideshow_slide] - 0x24) {
+    if (slideshow.state == 0) {
+        if (slideshow.frame >= D_L00_00173BF0[slideshow.slide] - 0x24) {
             if (cd_read_active[0] != 0) {
                 update_audio_stream_until_idle(1);
             }
-            if ((!skip_check && slideshow_slide == 0x27) || slideshow_slide >= 0x2B) {
+            if (!skip_check && slideshow.slide == 0x27) {
+            end_show:
                 FUN_L00_00299c00();
                 return;
             }
-            slideshow_timer = -1;
-            slideshow_state = 1;
+            if (slideshow.slide >= 0x2B) {
+                goto end_show;
+            }
+            slideshow.timer = -1;
+            slideshow.state = 1;
         }
-    } else if (slideshow_state == 1) {
+    } else if (slideshow.state == 1) {
         FUN_L00_002a09d8(1);
-        if (slideshow_timer < 0x20) {
-            src = slideshow_src + slideshow_timer;
-            dst = slideshow_dst + slideshow_timer;
+        if (slideshow.timer < 0x20) {
+            src = slideshow.src;
+            dst = slideshow.dst;
+            src += slideshow.timer;
+            dst += slideshow.timer;
             for (i = 0; i < 0x38000; i += 0x20) {
                 *dst = *src;
                 src += 0x20;
                 dst += 0x20;
             }
-        } else if (slideshow_timer >= 0x24) {
+        } else if (slideshow.timer >= 0x24) {
             if (!skip_check) {
-                if (slideshow_slide == 8) {
-                    slideshow_slide = 0x11;
-                    slideshow_frame = 0x1590;
+                if (slideshow.slide == 8) {
+                    slideshow.slide = 0x11;
+                    slideshow.frame = 0x1590;
                 }
             } else {
-                if (slideshow_slide == 0x11) {
-                    slideshow_slide = 0x1B;
-                    slideshow_frame = 0x2238;
+                if (slideshow.slide == 0x11) {
+                    slideshow.slide = 0x1B;
+                    slideshow.frame = 0x2238;
                 }
-                if (slideshow_slide == 0x25) {
-                    slideshow_slide = 0x27;
-                    slideshow_frame = 0x32B4;
+                if (slideshow.slide == 0x25) {
+                    slideshow.slide = 0x27;
+                    slideshow.frame = 0x32B4;
                 }
             }
-            slideshow_state = 0;
-            slideshow_timer = -1;
-            slideshow_slide++;
-            slide = slideshow_slide % 20;
+            slideshow.state = 0;
+            slideshow.timer = -1;
+            slideshow.slide++;
+            slide = slideshow.slide % 20;
             if (D_0015ED80_gp != 0) {
-                start_audio_stream_read((s32)slideshow_src, (*(G9 *)&D_00137B80).alt[slide].a, (*(G9 *)&D_00137B80).alt[slide].b);
+                start_audio_stream_read((s32)slideshow.src, (*(G9 *)&D_00137B80).alt[slide].a, (*(G9 *)&D_00137B80).alt[slide].b);
             } else {
-                start_audio_stream_read((s32)slideshow_src, (*(G9 *)&D_00137B80).normal[slide].a, (*(G9 *)&D_00137B80).normal[slide].b);
+                start_audio_stream_read((s32)slideshow.src, (*(G9 *)&D_00137B80).normal[slide].a, (*(G9 *)&D_00137B80).normal[slide].b);
             }
         }
     }
-    slideshow_timer++;
-    slideshow_frame++;
+    slideshow.timer++;
+    slideshow.frame++;
     if (D_0013CAE4 & 0x800) {
         FUN_L00_00299c00();
     }
