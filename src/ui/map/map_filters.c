@@ -495,10 +495,10 @@ int map_filter_l09_2(void) {
    residual. */
 int map_filter_l10_0(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207690");
 
-int map_filter_l10_0(int arg0, float unused1, float unused2, float arg1) {
+int map_filter_l10_0(int arg0, float unused1, float unused2, float reveal_test_value) {
     if (arg0 >= 0xBE)
         return menu_item_enabled_68[0] != 0;
-    return (arg1 >= 58.5f) ? 1 : 0;
+    return (reveal_test_value >= 58.5f) ? 1 : 0;
 }
 
 extern unsigned char menu_item_enabled_64 __asm__("D_0013D3D4") NOT_SDA;
