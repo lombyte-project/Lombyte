@@ -2000,6 +2000,9 @@ extern short D_L00_00161D10 __attribute__((sda));
 extern short D_L00_00161D80 __attribute__((sda));
 void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
     enum {
+        CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY = 9
+    };
+    enum {
         CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY = 4
     };
     enum {
@@ -2126,7 +2129,7 @@ void FUN_L00_002e4fe8(char *m, float *out_focus_velocity) {
         FUN_001f9a68_c2(tmp, g + 0x30, x);
         FUN_001f9a28(e, cam, tmp);
         break;
-    case 9:
+    case CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY:
     case 10:
         x = fast_vec_dot(cam, g + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, g + 0x30, x);
