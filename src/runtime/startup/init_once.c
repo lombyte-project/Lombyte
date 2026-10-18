@@ -55,7 +55,11 @@ void init_once(void) __asm__("FUN_00201650");
 
 void init_once(void) {
     enum {
-        SYSTEM_LANGUAGE_GAME_FALLBACK = 1
+        SYSTEM_LANGUAGE_GAME_FALLBACK = 1,
+        SYSTEM_LANGUAGE_GAME_COLUMN_TWO = 2,
+        SYSTEM_LANGUAGE_GAME_COLUMN_FOUR = 3,
+        SYSTEM_LANGUAGE_GAME_COLUMN_THREE = 4,
+        SYSTEM_LANGUAGE_GAME_COLUMN_FIVE = 5
     };
     u8 buf[0x800];
     s32 lang;
@@ -137,16 +141,16 @@ void init_once(void) {
     initialize_alpha_lookup_table();
     lang = sceScfGetLanguage();
     switch (lang) {
-    case 2:
+    case SYSTEM_LANGUAGE_GAME_COLUMN_TWO:
         game_language = 2;
         return;
-    case 4:
+    case SYSTEM_LANGUAGE_GAME_COLUMN_THREE:
         game_language = 3;
         return;
-    case 3:
+    case SYSTEM_LANGUAGE_GAME_COLUMN_FOUR:
         game_language = 4;
         return;
-    case 5:
+    case SYSTEM_LANGUAGE_GAME_COLUMN_FIVE:
         game_language = 5;
         return;
     default:
