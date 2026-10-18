@@ -95,6 +95,9 @@ extern s32 FUN_L00_0025ff38(void *, void *, s32, s32, void *, s32, float);
 
 /* Path patroller update: rides its carrier moby until dropped, takes hits (hit and death states), and follows its D_L11_001B0EB0 path toward the hero. */
 void FUN_L11_00315968(struct Moby *moby) {
+    enum {
+        HIT_RESPONSE_DEATH = 1
+    };
     struct L11PatrolVars *d = (struct L11PatrolVars *)moby->pvars;
     Vec4 v;
     s32 out;
@@ -170,7 +173,7 @@ void FUN_L11_00315968(struct Moby *moby) {
                 d->unk117 = 0x78;
                 break;
             }
-            case 1:
+            case HIT_RESPONSE_DEATH:
             case 2: {
                 float yaw;
                 moby->flags &= ~0x1000;
