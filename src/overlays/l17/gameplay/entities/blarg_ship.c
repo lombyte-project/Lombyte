@@ -903,7 +903,7 @@ extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
-    V4 v0;
+    V4 normalized_position_delta;
     V4 p;
     V4 r;
     V4 q;
@@ -915,16 +915,16 @@ void FUN_L17_002f54d8(int n, V3 *b, V3 *a, int unused, float *out) {
         p.v.x = a[i].x;
         p.v.y = a[i].y;
         p.v.z = a[i].z;
-        fast_vec_sub(&v0, &p, D_L17_001676C0);
-        fast_vec_normalize(&v0, &v0, 1.0f);
+        fast_vec_sub(&normalized_position_delta, &p, D_L17_001676C0);
+        fast_vec_normalize(&normalized_position_delta, &normalized_position_delta, 1.0f);
         q.w = 1.0f;
         q.v.x = b[i].x;
         q.v.y = b[i].y;
         q.v.z = b[i].z;
         fast_vec_normalize(&q, &q, 1.0f);
-        d = fast_vec_dot(&q, &v0);
+        d = fast_vec_dot(&q, &normalized_position_delta);
         fast_vec_scale(&r, &q, d + d);
-        fast_vec_sub(&r, &v0, &r);
+        fast_vec_sub(&r, &normalized_position_delta, &r);
         fast_vec_normalize(&r, &r, 1.0f);
         r.v.z = r.v.z + 1.0f;
         len = fast_vec_length(&r);
