@@ -1215,15 +1215,12 @@ void FUN_L05_00253b48(void) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L05_00254058.s", FUN_L05_00254058);
-#else
-extern u8 D_0013D388;
-extern f32 D_L05_002169F8[];
-extern f32 multiply_global_factor(f32) __asm__("FUN_001f96b0");
+/* Updates action and rotation scores while the challenge is active. */
+/* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00254838), where it is exact; names translated to the US level program. */
 
 struct ScoreTable { f32 values[5]; };
 
+/* The hero's challenge tally. */
 struct HeroTally {
     u8 pad0[0x6D0];
     f32 spin[3];          /* 0x6D0 */
@@ -1237,76 +1234,66 @@ struct HeroTally {
     s32 max_spins;        /* 0x70C */
     s32 spin_score;       /* 0x710 */
     s32 total_score;      /* 0x714 */
+    u8 pad718[0x190];
+    s32 active;           /* 0x8A8 */
 };
+
+extern struct ScoreTable D_L05_002169F8;
+extern float multiply_global_factor(float) __asm__("FUN_001f96b0");
+extern int D_0015ED84;
+extern int D_0015EEA4;
+extern u8 alternate_item_available[128] __asm__("D_0013D388");
 
 #define TALLY ((struct HeroTally *)&hero)
 
 void FUN_L05_00254058(void) {
-    struct UsageStats *stats;
-    s32 play_time;
-    s32 unit;
-    s32 i;
-    f32 spin;
-
-    if (D_0013D388 == 0) return;
-    if (hero.unk8A8 != 0) {
-        stats = &usage_stats;
-        if (stats->stat[30].count < 0xFFFF) {
-            stats->stat[30].count++;
-        }
-        play_time = scale_game_frames(D_0015EEA4_macro);
-        unit = 600;
-        if (play_time / unit > stats->stat[30].unk2) {
-            stats->stat[30].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
-        }
-        stats->stat[30].level_mask = stats->stat[30].level_mask | (1 << D_0015ED84_gp) | 0x80000000;
+    int i;
+    if (alternate_item_available[0] == 0) return;
+    if (TALLY->active != 0) {
+        struct UsageStats *stats = &usage_stats;
+        if (stats->stat[30].count < 0xFFFF) stats->stat[30].count++;
+        if (scale_game_frames(D_0015EEA4) / 600 > stats->stat[30].unk2)
+            stats->stat[30].unk2 = scale_game_frames(D_0015EEA4) / 600;
+        stats->stat[30].level_mask = stats->stat[30].level_mask | (1 << D_0015ED84) | 0x80000000;
     }
     for (i = 0; i < 3; i++) {
-        if (absolute_float(TALLY->spin[i]) > 3.3161256f) {
-            s32 count = TALLY->spin_count[i];
-            spin = TALLY->spin[i];
-            if (0.0f < spin) spin -= 6.2831855f;
-            else spin += 6.2831855f;
-            TALLY->spin[i] = spin;
-            TALLY->spin_count[i] = count + 1;
-        }
-    }
-    {
-        TALLY->max_spins = 0;
-        for (i = 0; i < 3; i++) {
-            if (TALLY->max_spins < TALLY->spin_count[i]) TALLY->max_spins = TALLY->spin_count[i];
-        }
-    }
-    {
-        s32 step = 100;
-        s32 n = TALLY->max_spins;
-        TALLY->spin_score = 0;
-        if (n > 0) {
-            s32 total = 0;
-            for (i = 0; i < n; i++) {
-                total += step;
-                step += 50;
+        float *spin = &TALLY->spin[i];
+        if (absolute_float(*spin) > 3.3161256f) {
+            float value = *spin;
+            if (value > 0.0f) {
+                *spin = value - 6.2831855f;
+                TALLY->spin_count[i]++;
+            } else {
+                *spin = value + 6.2831855f;
+                TALLY->spin_count[i]++;
             }
-            TALLY->spin_score = total;
         }
     }
-    {
-        TALLY->flag_count = 0;
-        for (i = 0; i < 4; i++) {
-            if (TALLY->flags[i] != 0) TALLY->flag_count++;
-        }
+    TALLY->max_spins = 0;
+    for (i = 0; i < 3; i++) {
+        if (TALLY->max_spins < TALLY->spin_count[i]) TALLY->max_spins = TALLY->spin_count[i];
     }
     {
-        struct ScoreTable table = *(struct ScoreTable *)D_L05_002169F8;
+        int step = 100;
+        TALLY->spin_score = 0;
+        for (i = 0; i < TALLY->max_spins; i++) {
+            TALLY->spin_score += step;
+            step += 50;
+        }
+    }
+    TALLY->flag_count = 0;
+    for (i = 0; i < 4; i++) {
+        if (TALLY->flags[i] != 0) TALLY->flag_count++;
+    }
+    {
+        struct ScoreTable table = D_L05_002169F8;
         TALLY->rank_scale = table.values[TALLY->flag_count];
-        TALLY->score = truncate_float_to_s32((f32)((TALLY->time_score_base * 100) / (s32)(multiply_global_factor(1.0f) * 60.0f)));
+        TALLY->score = truncate_float_to_s32((float)((TALLY->time_score_base * 100) / (int)(multiply_global_factor(1.0f) * 60.0f)));
         TALLY->score += TALLY->flag_count * 25;
-        TALLY->score = truncate_float_to_s32((f32)TALLY->score * TALLY->rank_scale);
+        TALLY->score = truncate_float_to_s32((float)TALLY->score * TALLY->rank_scale);
         TALLY->total_score = TALLY->spin_score + TALLY->score;
     }
 }
-#undef TALLY
-#endif
 /* Finds the nearest path node ahead of the hero (behind the facing test) and returns its position and heading. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00254B38), where it is exact; names translated to the US level program. */
 
