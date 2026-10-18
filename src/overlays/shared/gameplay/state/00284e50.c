@@ -71,9 +71,6 @@ void jet_reset_camera(OvlQuad *a, OvlQuad *b) {
         }
     }
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00285008.s", FUN_L00_00285008);
-#else
 extern char D_L00_001BA5D0[] __attribute__((section(".data")));
 extern u8 *D_L00_0015FFD8;
 extern u8 *D_L00_0015FFDC;
@@ -114,18 +111,18 @@ void FUN_L00_00285008(void) {
     }
     if (*(int *)(s + 0x44) != 0 && *(int *)(s + 0x44) != 3) {
         id = 0;
-        if (*(int *)(s + 0x44) == 1)
-            goto mode_one;
-        if (*(int *)(s + 0x44) != 2)
-            goto invalid_mode;
-        id = 0x1A3;
-        goto scan;
-mode_one:
-        id = 0x57;
-        goto scan;
-invalid_mode:
-        raise_kernel_trap();
-scan:
+        switch (*(int *)(s + 0x44)) {
+        case 1:
+            id = 0x57;
+            break;
+        case 2:
+            id = 0x1A3;
+            break;
+        default:
+            raise_kernel_trap();
+            break;
+        }
+
         for (i = 0; ; i++) {
             m = D_L00_0015FFD8 + i * 0x100;
             if (m >= D_L00_0015FFDC)
@@ -143,7 +140,6 @@ scan:
     init_camera_system();
     FUN_L00_002852c0();
 }
-#endif /* NON_MATCHING */
 extern u8 *D_L00_0015FFD8;
 extern u8 *D_L00_0015FFDC;
 /* Finds the moby (0x100 bytes each) whose short at 0xB2 equals id; 0 when none. */
