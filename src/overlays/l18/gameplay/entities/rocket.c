@@ -2647,15 +2647,15 @@ extern short D_L18_00161F60 __attribute__((sda));
 extern short D_L18_00161F64 __attribute__((sda));
 extern short D_L18_00161F68 __attribute__((sda));
 void FUN_L18_002ea598(struct Moby *moby) {
-    float v10[4];
+    float spark_spawn_position[4];
     float v20[4];
     float v30[4];
-    float v40[4];
+    float scaled_target_direction[4];
     int i;
     int c1, c2, a, b, c;
     float k1, k2, k3, k4;
-    fast_vec_sub(v40, (void *)moby->pvars, &moby->pos);
-    fast_vec_normalize(v40, v40, frame_time * 60.0f);
+    fast_vec_sub(scaled_target_direction, (void *)moby->pvars, &moby->pos);
+    fast_vec_normalize(scaled_target_direction, scaled_target_direction, frame_time * 60.0f);
     k1 = (*(float *)&(D_L18_00161F54)) * frame_time;
     k2 = (*(float *)&(D_L18_00161F58)) * frame_time;
     k3 = (*(float *)&(D_L18_00161F60)) * frame_time;
@@ -2674,13 +2674,13 @@ void FUN_L18_002ea598(struct Moby *moby) {
                                           (*(float *)&(D_L18_00161F30)));
         v30[3] = random_float_between((*(float *)&(D_L18_00161F34)),
                                           (*(float *)&(D_L18_00161F38)));
-        fast_vec_scale(v10, v40, random_float_between(0.0f, 1.0f));
-        fast_vec_add(v10, v10, &moby->pos);
+        fast_vec_scale(spark_spawn_position, scaled_target_direction, random_float_between(0.0f, 1.0f));
+        fast_vec_add(spark_spawn_position, spark_spawn_position, &moby->pos);
         c1 = FUN_001fa6e0((*(int *)&(D_L18_00161F1C)), (*(int *)&(D_L18_00161F20)),
                           random_float_between(0.0f, 1.0f));
         c2 = FUN_001fa6e0((*(int *)&(D_L18_00161F24)), (*(int *)&(D_L18_00161F28)),
                           random_float_between(0.0f, 1.0f));
-        spawn_spark(v10, v20, v30, c1, c2, a, b, c, (*(int *)&(D_L18_00161F68)));
+        spawn_spark(spark_spawn_position, v20, v30, c1, c2, a, b, c, (*(int *)&(D_L18_00161F68)));
     }
 }
 #ifndef NON_MATCHING
