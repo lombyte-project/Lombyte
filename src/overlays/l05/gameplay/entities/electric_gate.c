@@ -2175,6 +2175,9 @@ extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__
 void taxi_update(struct Moby *moby) __asm__("FUN_L05_00318c78");
 void taxi_update(struct Moby *moby) {
     enum {
+        TAXI_FOLLOW_PATH = 4
+    };
+    enum {
         TAXI_INITIALIZE = 0,
         TAXI_WAIT_FOR_PICKUP = 1,
         TAXI_BLEND_TO_PATH_START = 3,
@@ -2243,7 +2246,7 @@ void taxi_update(struct Moby *moby) {
             moby->state = 4;
         }
         break;
-    case 4:
+    case TAXI_FOLLOW_PATH:
         if (FUN_L05_003195f8(moby)) {
             *(int *)(d + 0xC0) = 0;
             *(int *)(d + 0xC4) = 0;
