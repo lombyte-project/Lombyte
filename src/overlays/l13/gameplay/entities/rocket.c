@@ -493,13 +493,12 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
     subtract_vector_xyz(&work.direction, D_L13_001670C0, &work.pos);
     distance = vector_length_xyz(&work.direction);
     {
-        int i = 9;
-        do {
+        int i;
+        for (i = 0; i < 10; i++) {
             int lo, hi, duration;
             OvlVec4 *random_direction, *offset, *axis;
             work.random_vector.q = 0;
             work.random_vector.f[0] = FUN_002132a8(-1.0f, 1.0f);
-            i--;
             work.random_vector.f[1] = FUN_002132a8(-1.0f, 1.0f);
             random_direction = &work.random_direction;
             offset = &work.offset;
@@ -516,17 +515,16 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
             lo = scale_game_frames(60); hi = scale_game_frames(120);
             duration = random_int_between(lo, hi);
             FUN_L13_0030c138(&work.pos, random_direction, duration, 0);
-        } while (i >= 0);
+        }
     }
     twice_distance = distance + distance;
     {
-        int i = 3;
-        do {
+        int i;
+        for (i = 0; i < 4; i++) {
             int lo, hi, duration;
             OvlVec4 *random_direction, *axis, *offset;
             work.random_vector.q = 0;
             work.random_vector.f[0] = FUN_002132a8(-1.0f, 1.0f);
-            i--;
             work.random_vector.f[1] = FUN_002132a8(-1.0f, 1.0f);
             random_direction = &work.random_direction;
             axis = &work.axis;
@@ -542,7 +540,7 @@ void FUN_L13_003073c8(struct Moby *moby, void *vars) {
             lo = scale_game_frames(60); hi = scale_game_frames(90);
             duration = random_int_between(lo, hi);
             FUN_L13_0030c138(&work.pos, random_direction, duration, 1);
-        } while (i >= 0);
+        }
     }
     work.random_vector.q = 0;
     work.random_vector.f[0] = FUN_002132a8(-1.0f, 1.0f);
