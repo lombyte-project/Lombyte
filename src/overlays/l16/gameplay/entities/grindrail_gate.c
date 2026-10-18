@@ -623,6 +623,11 @@ extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__
 
 void taxi_update(struct Moby *moby) __asm__("FUN_L16_002e43e0");
 void taxi_update(struct Moby *moby) {
+    enum {
+        TAXI_INITIALIZE = 0,
+        TAXI_BLEND_TO_PATH_START = 3,
+        TAXI_BLEND_TO_DESTINATION_POSE = 5
+    };
     char *d = (char *)moby->pvars;
     float previous_position[4], previous_rotation[4], position_delta[4], v30[4], transition_end_position[4], transition_start_rotation[4], transition_end_rotation[4], hero_local_offset[4];
     struct Hero *g;
@@ -638,7 +643,7 @@ void taxi_update(struct Moby *moby) {
     qcopy(previous_rotation, &moby->rot);
     FUN_L00_00266858(moby, (moby->flags ^ 1) & 1);
     switch (moby->state) {
-    case 0:
+    case TAXI_INITIALIZE:
         *(short *)(d + 0xAA) = -1;
         FUN_L16_002e4900_c(moby);
         break;
@@ -665,7 +670,7 @@ void taxi_update(struct Moby *moby) {
             }
         }
         break;
-    case 3:
+    case TAXI_BLEND_TO_PATH_START:
         advance_accelerated_scalar_c(1.0f, D_0015ED70_c2, D_0015ED70_c2, frame_time * 0.5f,
                                      (float *)(d + 0xB0), (float *)(d + 0xB4));
         qa = v30;
@@ -693,7 +698,7 @@ void taxi_update(struct Moby *moby) {
             moby->state = 5;
         }
         break;
-    case 5:
+    case TAXI_BLEND_TO_DESTINATION_POSE:
         advance_accelerated_scalar_c(1.0f, D_0015ED70_c2, D_0015ED70_c2, frame_time * 0.5f,
                                      (float *)(d + 0xB0), (float *)(d + 0xB4));
         qa = transition_end_position;
