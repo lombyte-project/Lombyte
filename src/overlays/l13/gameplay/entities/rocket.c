@@ -1747,6 +1747,11 @@ extern void FUN_L00_002eac18(int);
 extern void FUN_L13_0030ad38(struct Moby *, float *, float *);
 
 void FUN_L13_0030a6d8(struct Moby *moby) {
+    enum {
+        LIFT_INITIALIZE = 0,
+        LIFT_MOVE_TO_TOP = 2,
+        LIFT_MOVE_TO_BOTTOM = 3
+    };
     LiftVarsA6D8 *vars = (LiftVarsA6D8 *)moby->pvars;
     float delta[4];
     float rot[4];
@@ -1758,7 +1763,7 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
     qcopy(rot, &moby->rot);
     moby->rot.y = fast_add_rotations((1.0f - (moby->pos.z - vars->bottom) / (vars->top - vars->bottom)) * 3.1415927f, vars->angle * DEG_TO_RAD);
     switch (moby->state) {
-    case 0:
+    case LIFT_INITIALIZE:
         vars->pulse = random_angle_radians();
         vars->voice = -1;
         vars->timer = 0;
@@ -1786,8 +1791,8 @@ void FUN_L13_0030a6d8(struct Moby *moby) {
         }
         break;
     }
-    case 2:
-    case 3: {
+    case LIFT_MOVE_TO_TOP:
+    case LIFT_MOVE_TO_BOTTOM: {
         float target;
         if (!voice_is_playing(moby, vars->voice))
             vars->voice = allocate_voice(0, 4, moby);
