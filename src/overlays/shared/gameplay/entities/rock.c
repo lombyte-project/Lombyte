@@ -1693,6 +1693,10 @@ extern float D_L01_00161F8C __attribute__((sda));
 extern float D_L01_00161F90 __attribute__((sda));
 void teleporter_update(struct Moby *moby) __asm__("FUN_L01_00308bd8");
 void teleporter_update(struct Moby *moby) {
+    enum {
+        TELEPORTER_INITIALIZE = 0,
+        TELEPORTER_WAIT_FOR_USE = 1
+    };
     char *data = (char *)moby->pvars;
     int active = 0;
 
@@ -1721,7 +1725,7 @@ void teleporter_update(struct Moby *moby) {
         moby->flags &= ~0x41;
     }
     switch (moby->state) {
-    case 0: {
+    case TELEPORTER_INITIALIZE: {
         char **slots = (char **)(data + 0x14);
         int i;
         moby->update_dist = 0xFF;
@@ -1753,7 +1757,7 @@ void teleporter_update(struct Moby *moby) {
             FUN_L01_0026e0e0_c((char *)moby->group, 1);
         }
         moby->state = 1;
-    case 1: {
+    case TELEPORTER_WAIT_FOR_USE: {
         struct Hero *g;
         if (*(int *)(data + 8) >= 0 && D_0014C050[*(int *)(data + 8) + D_0015ED84_c * 16] != 0xFF)
             break;
