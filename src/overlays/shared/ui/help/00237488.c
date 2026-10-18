@@ -1239,7 +1239,7 @@ struct HeroTally {
 };
 
 extern struct ScoreTable D_L05_002169F8;
-extern float multiply_global_factor(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int D_0015ED84;
 extern int D_0015EEA4;
 extern u8 alternate_item_available[128] __asm__("D_0013D388");
@@ -1288,7 +1288,7 @@ void FUN_L05_00254058(void) {
     {
         struct ScoreTable table = D_L05_002169F8;
         TALLY->rank_scale = table.values[TALLY->flag_count];
-        TALLY->score = truncate_float_to_s32((float)((TALLY->time_score_base * 100) / (int)(multiply_global_factor(1.0f) * 60.0f)));
+        TALLY->score = truncate_float_to_s32((float)((TALLY->time_score_base * 100) / (int)(scale_time(1.0f) * 60.0f)));
         TALLY->score += TALLY->flag_count * 25;
         TALLY->score = truncate_float_to_s32((float)TALLY->score * TALLY->rank_scale);
         TALLY->total_score = TALLY->spin_score + TALLY->score;

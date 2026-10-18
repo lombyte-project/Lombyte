@@ -531,8 +531,8 @@ extern float D_L00_0015F76C __attribute__((sda));
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void FUN_L00_0023bac0(int, int, int, int, int, int);
 extern void FUN_L00_001ff348(void *, void *, void *);
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 
@@ -578,13 +578,13 @@ int FUN_L00_00236e50(HudElem *e) {
     star_width = 0;
     for (i = 0; i < 100; i++) {
         if (i == 0) {
-            subtract_vector_xyz(direction, direction, first_step);
+            fast_vec_sub(direction, direction, first_step);
             star_width = (int)(star_init_limit0_gp * 32.0f);
             offset += star_init_limit0_gp;
         }
         if (offset < D_L00_0017E660[i].y) continue;
         FUN_L00_001ff348(star_position, &D_L00_0017E660[i], origin);
-        add_vector_xyz(star_position, star_position, direction);
+        fast_vec_add(star_position, star_position, direction);
         draw_hud_sprite_subpixel(image, (int)star_position[0], (int)star_position[1], star_width, star_width, 0x80);
     }
     return e->w;

@@ -2,39 +2,41 @@
 #include "types.h"
 #include "asm.h"
 
-extern int FUN_001f6250_1fcb28(char *, int) __asm__("FUN_001f6250");
-extern int FUN_001fa6d0_1fcb28(float) __asm__("FUN_001fa6d0");
-extern void FUN_00201128_1fcb28(int, int, int, int, int) __asm__("FUN_00201128");
-extern void FUN_001f61f8_1fcb28(void) __asm__("FUN_001f61f8");
-extern void FUN_001f61e8_1fcb28(void) __asm__("FUN_001f61e8");
-extern void FUN_001f6530_1fcb28(int, int, u64, char *, int) __asm__("FUN_001f6530");
+extern int measure_text_width_regular(char *, int) __asm__("FUN_001f6250");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern void draw_stretchable_ui_frame(int, int, int, int, int) __asm__("FUN_00201128");
+extern void disable_global_flag(void) __asm__("FUN_001f61f8");
+extern void enable_global_flag(void) __asm__("FUN_001f61e8");
+extern void font_print_large(int, int, u64, char *, int) __asm__("FUN_001f6530");
 
-void FUN_L00_001fcb28(int x, int y, int mode, float s, float a, char *str) {
-    int w, l, r;
-    u32 c;
-    s32 d;
-    w = FUN_001f6250_1fcb28(str, -1) * s;
-    r = x;
-    l = r;
+/* Draws one line of timed text centred, right- or left-aligned on x (mode 0, 1, -1), on a frame box, with a shadow. */
+void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) __asm__("FUN_L00_001fcb28");
+void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) {
+    int width, right, left;
+    u32 shadow;
+    s32 color;
+    width = measure_text_width_regular(text, -1) * scale;
+    left = x;
+    right = left;
     switch (mode) {
     case 0:
-        r -= w >> 1;
-        l = x + (w >> 1);
+        left -= width >> 1;
+        right = x + (width >> 1);
         break;
     case 1:
-        r -= w;
+        left -= width;
         break;
     case -1:
-        l = r + w;
+        right = left + width;
         break;
     }
-    FUN_00201128_1fcb28(r - 0x20, y - 0xE, l - r + 0x40, 0x1C, FUN_001fa6d0_1fcb28(s * 112.0f));
-    FUN_001f61f8_1fcb28();
-    c = (int)(a * 128.0f) << 24;
-    d = c + 0xE0E0E0;
-    FUN_001f6530_1fcb28(r + 1, y - 7, c, str, -1);
-    FUN_001f6530_1fcb28(r, y - 8, d, str, -1);
-    FUN_001f61e8_1fcb28();
+    draw_stretchable_ui_frame(left - 0x20, y - 0xE, right - left + 0x40, 0x1C, truncate_float_to_s32(scale * 112.0f));
+    disable_global_flag();
+    shadow = (int)(alpha * 128.0f) << 24;
+    color = shadow + 0xE0E0E0;
+    font_print_large(left + 1, y - 7, shadow, text, -1);
+    font_print_large(left, y - 8, color, text, -1);
+    enable_global_flag();
 }
 /* Draws a level text entry while its frame window is open: fades it in and out,
    and either joins its lines with " - " or draws each line 26 pixels lower. */
@@ -51,7 +53,8 @@ typedef struct {
     s16 separator_mode;
 } LevelTextEntry;
 
-void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
+void draw_timed_text(LevelTextEntry *entry, s32 frame) __asm__("FUN_L00_001fcca0");
+void draw_timed_text(LevelTextEntry *entry, s32 frame) {
     int start = entry->start;
     int end = start + entry->duration;
     float scale, alpha;
@@ -98,7 +101,7 @@ void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
             int line_y = entry->y;
             int mode = entry->mode;
             *out = 0;
-            FUN_L00_001fcb28(x, line_y, mode, scale, alpha, buffer);
+            draw_timed_text_line(x, line_y, mode, scale, alpha, buffer);
         }
     } else {
         out = buffer;
@@ -106,7 +109,7 @@ void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
         while (*source != 0) {
             if (*source == 1) {
                 *out = 0;
-                FUN_L00_001fcb28(entry->x, y, entry->mode, scale, alpha, buffer);
+                draw_timed_text_line(entry->x, y, entry->mode, scale, alpha, buffer);
                 y += 26;
                 out = buffer;
                 while (*source == 1) source++;
@@ -117,7 +120,7 @@ void FUN_L00_001fcca0(LevelTextEntry *entry, s32 frame) {
         }
         if (out > buffer) {
             *out = 0;
-            FUN_L00_001fcb28(entry->x, y, entry->mode, scale, alpha, buffer);
+            draw_timed_text_line(entry->x, y, entry->mode, scale, alpha, buffer);
         }
     }
 }

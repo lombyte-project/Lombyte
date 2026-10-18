@@ -151,7 +151,7 @@ extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0")
 extern void relocate_sky_definition(char *) __asm__("FUN_002028e0");
 extern void FUN_L00_00241728_26b768(char *) __asm__("FUN_L00_00241728");
 extern void register_moby_class(char *, void *, void *, s32) __asm__("FUN_00203640");
-extern void FUN_L00_00241788_26b768(void *, s32) __asm__("FUN_L00_00241788");
+extern void print_moby_class_sizes(void *, s32) __asm__("FUN_L00_00241788");
 extern void relocate_asset_entry_pointers(Class26b768 *, s32) __asm__("FUN_002032e0");
 extern void register_object_render_class(char *, void *, void *, s32) __asm__("FUN_00203730");
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
@@ -275,7 +275,7 @@ s32 FUN_L07_0026b768(s32 full, s32 keep) {
         FUN_L00_00241728_26b768(base + h[5]);
         for (i = 0, q2 = (char *)h + h[7]; i < h[6]; i++, q2 += 0x20)
             register_moby_class(*(s32 *)q2 ? base + *(s32 *)q2 : 0, (char *)h + h[0xF], q2 + 0x10, *(s32 *)(q2 + 4));
-        FUN_L00_00241788_26b768((char *)h + h[7], h[7]);
+        print_moby_class_sizes((char *)h + h[7], h[7]);
         for (sq = 0, p = (char *)h + h[0x1E]; sq < D_L07_00197380[0]->seq_count; sq++, p += 4) {
             if (*(s32 *)p) {
                 D_L07_00197380[0]->seqs[sq] = base + *(s32 *)p;

@@ -713,7 +713,7 @@ int FUN_L01_0022d838(Vec4 *pos, f32 *dir)
 extern void FUN_L00_00205538(void);
 extern void FUN_L00_00206c08(void);
 extern void FUN_L00_0020e698(void);
-extern void FUN_L00_00210748();
+extern void hero_update_items() __asm__("FUN_L00_00210748");
 extern void FUN_L00_00232628(void);
 extern void FUN_L00_00232fe8(void);
 extern void FUN_L00_00262840(char *o);
@@ -725,7 +725,7 @@ void FUN_L01_00231348(int a, int b, int c) {
     FUN_L00_0020e698();
     g = (char *)D_0013E533 + 0xE1D;
     *(char *)(g + 0x20A6) = 1;
-    FUN_L00_00210748();
+    hero_update_items();
     *(int *)(g + 0x2080) = *(int *)(g + 0xA88);
     FUN_L00_00262840(g + 0x1670);
     *(int *)(*(char **)(g + 0x2080) + 0x98) = -1;

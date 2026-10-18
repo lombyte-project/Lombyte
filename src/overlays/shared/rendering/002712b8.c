@@ -434,10 +434,10 @@ unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, fl
 /* Particle update: adds data[0xA] to byte 8, fades the alpha over the last frames, moves by the velocity and frees the particle outside 2..1021 or when its timer ends. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00273090), where it is exact; names translated to the US level program. */
 
-extern s32 fast_dec_timer_s16_c(s16 *) __asm__("func_001F9770");
-extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
+extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_00267a08(void *);
-extern void add_vector_xyz_c2(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 static __inline__ void vcopy_273090(float *d, float *s) {
     d[0] = s[0];
@@ -459,21 +459,21 @@ void FUN_L00_002721f0(char *part) {
         *(float *)(part + 0xC) = *(float *)(data + 4) + ((*(float *)(part + 0x20) + *(float *)(data + 4)) * 0.5f - *(float *)(data + 4)) * t;
         end = (unsigned char)data[0xB] >> 1;
         start = (unsigned char)data[0xB];
-        alpha = truncate_float_to_s32_c2((float)start + (float)(end - start) * t);
+        alpha = truncate_float_to_s32((float)start + (float)(end - start) * t);
     } else {
         t = (float)*(short *)(part + 0xA) / convert_integer_to_float(*(short *)(data + 8) - 6);
         *(float *)(part + 0xC) = *(float *)(part + 0x20) + ((*(float *)(part + 0x20) + *(float *)(data + 4)) * 0.5f - *(float *)(part + 0x20)) * t;
-        alpha = truncate_float_to_s32_c2((float)((unsigned char)data[0xB] >> 1) * t + 0.0f);
+        alpha = truncate_float_to_s32((float)((unsigned char)data[0xB] >> 1) * t + 0.0f);
     }
     *(int *)(part + 4) = (alpha << 24) | (*(int *)(part + 4) & 0xFFFFFF);
     vcopy_273090(velocity, (float *)(data + 0xC));
-    add_vector_xyz_c2(part + 0x10, part + 0x10, velocity);
+    fast_vec_add(part + 0x10, part + 0x10, velocity);
     *(float *)(data + 0x14) -= *(float *)(data + 0x18);
     if (*(float *)(part + 0x10) < 2.0f || *(float *)(part + 0x10) > 1021.0f ||
         *(float *)(part + 0x14) < 2.0f || *(float *)(part + 0x14) > 1021.0f ||
         *(float *)(part + 0x18) < 2.0f || *(float *)(part + 0x18) > 1021.0f) {
         FUN_L00_00267a08(part);
-    } else if (fast_dec_timer_s16_c(part + 0xA)) {
+    } else if (fast_dec_timer_s16(part + 0xA)) {
         FUN_L00_00267a08(part);
     }
 }

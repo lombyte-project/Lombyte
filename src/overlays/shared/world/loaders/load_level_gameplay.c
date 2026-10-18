@@ -27,55 +27,56 @@ void FUN_L00_00241728(s32 *h) {
         }
     }
 }
-/* Debug print: lists the records (0x20 bytes: start offset, id) by length, longest first. */
+/* Debug print: lists the moby classes (0x20-byte records: data offset, class id) by data size in K, largest first. */
 /* Ported from rac1-decomp (src/overlays/shared/loaders_00240398.c: func_L00_00242120), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    f32 id;
-    f32 length;
-} P_241788;
+    f32 class_id;
+    f32 size;
+} MobyClassSize;
 
-extern char D_L00_001E8640[];
+extern char moby_class_size_format[] __asm__("D_L00_001E8640");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
 extern int fptodp(float) __asm__("FUN_00120478");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 
-void FUN_L00_00241788(int *record, int n) {
-    P_241788 entries[512];
+void print_moby_class_sizes(int *record, int n) __asm__("FUN_L00_00241788");
+void print_moby_class_sizes(int *record, int n) {
+    MobyClassSize entries[512];
     int i, j, k, done;
 
     for (i = 0; i < n; i++, record += 8) {
-        entries[i].id = (float)record[1];
+        entries[i].class_id = (float)record[1];
         if (record[0] == 0) {
-            entries[i].length = 0;
+            entries[i].size = 0;
         } else {
             if (record[8] != 0) {
-                entries[i].length = convert_integer_to_float(record[8] - record[0]) * 0.0009765625f;
+                entries[i].size = convert_integer_to_float(record[8] - record[0]) * 0.0009765625f;
             } else {
-                entries[i].length = convert_integer_to_float(record[0x10] - record[0]) * 0.0009765625f;
+                entries[i].size = convert_integer_to_float(record[0x10] - record[0]) * 0.0009765625f;
             }
-            entries[i + 1].id = -1.0f;
-            entries[i + 1].length = 0;
+            entries[i + 1].class_id = -1.0f;
+            entries[i + 1].size = 0;
         }
     }
     do {
         done = 1;
         for (j = 0; j < n; j++) {
-            if (entries[j].length < entries[j + 1].length) {
-                float id = entries[j].id;
-                float length = entries[j].length;
+            if (entries[j].size < entries[j + 1].size) {
+                float class_id = entries[j].class_id;
+                float size = entries[j].size;
                 done = 0;
-                entries[j].id = entries[j + 1].id;
-                entries[j].length = entries[j + 1].length;
-                entries[j + 1].id = id;
-                entries[j + 1].length = length;
+                entries[j].class_id = entries[j + 1].class_id;
+                entries[j].size = entries[j + 1].size;
+                entries[j + 1].class_id = class_id;
+                entries[j + 1].size = size;
             }
         }
     } while (!done);
     for (k = 0; k < n; k++) {
-        int id = truncate_float_to_s32(entries[k].id);
-        debug_print(D_L00_001E8640, id, fptodp(entries[k].length));
+        int class_id = truncate_float_to_s32(entries[k].class_id);
+        debug_print(moby_class_size_format, class_id, fptodp(entries[k].size));
     }
 }
 /* Reads the gameplay file of a level, which lists the objects placed in the
@@ -1794,7 +1795,6 @@ extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0")
 extern void relocate_sky_definition(char *) __asm__("FUN_002028e0");
 extern void FUN_L00_00241728_244110(char *) __asm__("FUN_L00_00241728");
 extern void register_moby_class(char *, void *, void *, s32) __asm__("FUN_00203640");
-extern void FUN_L00_00241788_244110(void *, s32) __asm__("FUN_L00_00241788");
 extern void relocate_asset_entry_pointers(Class244110 *, s32) __asm__("FUN_002032e0");
 extern void register_object_render_class(char *, void *, void *, s32) __asm__("FUN_00203730");
 extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
@@ -1916,7 +1916,7 @@ s32 FUN_L00_00244110(s32 full, s32 keep) {
         FUN_L00_00241728_244110(base + h[5]);
         for (i = 0, q2 = (char *)h + h[7]; i < h[6]; i++, q2 += 0x20)
             register_moby_class(*(s32 *)q2 ? base + *(s32 *)q2 : 0, (char *)h + h[0xF], q2 + 0x10, *(s32 *)(q2 + 4));
-        FUN_L00_00241788_244110((char *)h + h[7], h[7]);
+        print_moby_class_sizes((int *)((char *)h + h[7]), h[7]);
         for (sq = 0, p = (char *)h + h[0x1E]; sq < D_L00_00197300[0]->seq_count; sq++, p += 4) {
             if (*(s32 *)p) {
                 D_L00_00197300[0]->seqs[sq] = base + *(s32 *)p;

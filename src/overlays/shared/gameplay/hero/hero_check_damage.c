@@ -2100,7 +2100,8 @@ extern s32 D_L00_0015F3F8;
 /* Through hero_lui the slot address is built as in retail (lui, then the index); through hero it is not. */
 #define ITEM_SLOT(i) ((struct Hero *)((char *)&hero_lui + (i) * sizeof(struct HeroItemSlot)))
 
-void FUN_L00_00210748(void) {
+void hero_update_items(void) __asm__("FUN_L00_00210748");
+void hero_update_items(void) {
     int i;
     int k;
     struct Moby *moby;
@@ -2163,7 +2164,7 @@ void FUN_L00_00210928(void) {
     FUN_L00_0020f580();
     FUN_L00_00234808();
     FUN_L00_002080b0();
-    FUN_L00_00210748();
+    hero_update_items();
 }
 void FUN_L00_0020e698_210a08(void) __asm__("FUN_L00_0020e698");
 void FUN_L00_00262840_210a08(void *) __asm__("FUN_L00_00262840");
@@ -2180,7 +2181,7 @@ void FUN_L00_00210a08(int mode, int b, char *m) {
     FUN_L00_0020e698_210a08();
     g = &hero;
     g->unk20A6 = 1;
-    FUN_L00_00210748();
+    hero_update_items();
     g->moby = (struct Moby *)g->unkA88;
     FUN_L00_00262840_210a08(&g->trail);
     *(int *)((char *)g->moby + 0x98) = -1;
