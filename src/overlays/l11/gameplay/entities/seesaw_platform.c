@@ -1757,7 +1757,7 @@ extern int FUN_L11_00318050(char *moby, void **out);
 extern short *D_L11_001AC240[];
 void FUN_L11_00311be8(void *moby, void *a1, void *a2);
 
-void *FUN_L11_00311948(void *moby, char *ship_vars, float *a2, float *a3, float f0, float f1, float f2, void *current_target, int a5) {
+void *FUN_L11_00311948(void *moby, char *ship_vars, float *reference_position, float *reference_rotation, float f0, float f1, float f2, void *current_target, int a5) {
     void *best = 0;
     float bestd = 1000.0f;
     short *p;
