@@ -968,6 +968,7 @@ void codebot_slot_update(struct Moby *moby) {
     enum {
         CODEBOT_SLOT_INITIALIZE = 0,
         CODEBOT_SLOT_WAIT_FOR_PROXIMITY = 1,
+        CODEBOT_SLOT_WAIT_TO_CREATE_EFFECT = 2,
         CODEBOT_SLOT_ANIMATE_EFFECT = 3,
         CODEBOT_SLOT_COMPLETED = 4
     };
@@ -1009,7 +1010,7 @@ void codebot_slot_update(struct Moby *moby) {
             moby->state = 2;
         }
         break;
-    case 2:
+    case CODEBOT_SLOT_WAIT_TO_CREATE_EFFECT:
         if (FUN_L15_002f78e0(data[0])) {
             vec[0] = fast_cos(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
             vec[1] = fast_sin(fast_add_rotations(moby->rot.z, -1.5707964f)) * 2.0f;
