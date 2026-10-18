@@ -145,7 +145,7 @@ void FUN_L13_00309bc8(struct Moby *moby) {
     for (i = 0; i < 15; i = n) {
         float f21, f22;
         int s18, s19, s17;
-        int s10[4];
+        int spawn_position[4];
         float v[4], w[4];
         char *p;
         int off = i * 16;
@@ -182,8 +182,8 @@ void FUN_L13_00309bc8(struct Moby *moby) {
         scale_vector_xyz(w, w, 1.0f / (float)s17);
         w[3] = *(float *)&D_L13_00161EBC;
         p = data + (off + 0x210);
-        lerp_vector(s10, p, p, random_float_between_alt(0.0f, 1.0f));
-        spawn_spark(s10, v, w, D_L13_00161EB0, D_L13_00161EB4, s18, s19, s17,
+        lerp_vector(spawn_position, p, p, random_float_between_alt(0.0f, 1.0f));
+        spawn_spark(spawn_position, v, w, D_L13_00161EB0, D_L13_00161EB4, s18, s19, s17,
                      D_L13_00161EEC);
     }
 }
