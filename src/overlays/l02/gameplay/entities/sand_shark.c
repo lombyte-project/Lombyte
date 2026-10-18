@@ -3315,6 +3315,9 @@ int D_L02_00161CA0 = 0x707070;
 void sandshark_egg_update(struct Moby *moby) __asm__("FUN_L02_002e0280");
 void sandshark_egg_update(struct Moby *moby) {
     enum {
+        SANDSHARK_EGG_FALL_UNTIL_LANDING = 1
+    };
+    enum {
         SANDSHARK_EGG_HANDOFF_TO_LINKED_MOBY = 2
     };
     float u[4];
@@ -3326,7 +3329,7 @@ void sandshark_egg_update(struct Moby *moby) {
     int s;
     char *c;
     switch (moby->state) {
-    case 1:
+    case SANDSHARK_EGG_FALL_UNTIL_LANDING:
         clear_vector(u);
         if (mine_fall(moby, d) & 1) {
             moby->state = 2;
