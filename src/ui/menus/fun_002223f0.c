@@ -23,6 +23,8 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 FUN_002223f0(struct Menu *menu) {
     enum {
         INITIALIZE_MENU_SEQUENCE = 0,
+        WAIT_FOR_INITIAL_DELAY = 1,
+        BEGIN_FINAL_DELAY = 18,
         WAIT_FOR_FINAL_DELAY = 19
     };
     int flag;
@@ -58,7 +60,7 @@ s32 FUN_002223f0(struct Menu *menu) {
         menu->str = (s32)D_001D5098;
         break;
 
-    case 1:
+    case WAIT_FOR_INITIAL_DELAY:
 
     case 5:
 
@@ -163,7 +165,7 @@ s32 FUN_002223f0(struct Menu *menu) {
         }
         break;
 
-    case 18:
+    case BEGIN_FINAL_DELAY:
         if (menu->unk40 == 0) {
             D_001D2AF4[0] = 0;
             menu->str = 0x5175;
