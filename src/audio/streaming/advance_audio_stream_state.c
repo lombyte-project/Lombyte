@@ -27,9 +27,15 @@ extern s32 start_audio_stream_read() __asm__("FUN_00216788");
 s32 advance_audio_stream_state(struct AudioStream *stream) __asm__("FUN_00220648");
 
 s32 advance_audio_stream_state(struct AudioStream *stream) {
+    enum {
+        AUDIO_STREAM_START_FIRST_READ = 0,
+        AUDIO_STREAM_WAIT_FIRST_READ = 1,
+        AUDIO_STREAM_START_SECOND_READ = 2,
+        AUDIO_STREAM_WAIT_SECOND_READ = 3
+    };
 
     switch (stream->unk44) {
-    case 0:
+    case AUDIO_STREAM_START_FIRST_READ:
         if (stream->unk48 == 0 || music_stream_state.read_state != 0) {
             break;
         }
@@ -43,12 +49,12 @@ s32 advance_audio_stream_state(struct AudioStream *stream) {
             stream->unk44 = -1;
         }
         break;
-    case 1:
+    case AUDIO_STREAM_WAIT_FIRST_READ:
         if (music_stream_state.read_state == 0) {
             stream->unk44 = 2;
         }
         break;
-    case 2:
+    case AUDIO_STREAM_START_SECOND_READ:
         if (stream->unk4C == 0 || music_stream_state.read_state != 0) {
             break;
         }
@@ -62,7 +68,7 @@ s32 advance_audio_stream_state(struct AudioStream *stream) {
             stream->unk44 = -1;
         }
         break;
-    case 3:
+    case AUDIO_STREAM_WAIT_SECOND_READ:
         if (music_stream_state.read_state == 0) {
             stream->unk44 = 4;
         }
