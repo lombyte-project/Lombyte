@@ -1585,6 +1585,9 @@ extern char D_L01_00174340_c[] __asm__("D_L01_001742C0");
 
 void FUN_L01_002eda00(char *m) {
     enum {
+        MOVE_UNTIL_COLLISION_OR_TIMEOUT = 1
+    };
+    enum {
         BURST_AND_REMOVE = 2
     };
     char *d = *(char **)(m + 0x78);
@@ -1593,7 +1596,7 @@ void FUN_L01_002eda00(char *m) {
     Hit_2eedd8 h;
     float gz;
     switch (((unsigned char *)m)[0x20]) {
-    case 1:
+    case MOVE_UNTIL_COLLISION_OR_TIMEOUT:
         qcopy(prev, m + 0x10);
         add_vector_xyz(m + 0x10, m + 0x10, d);
         *(float *)(m + 0x48) = fast_arc_tan(*(float *)(d + 0), *(float *)(d + 4));
