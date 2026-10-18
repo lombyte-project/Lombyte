@@ -1904,6 +1904,10 @@ static __inline__ WrenchHero *sweep_hero(void) { return (WrenchHero*)((char*)swe
 
 void wrench_update(WrenchMoby *m) __asm__("FUN_L00_002a84c8");
 void wrench_update(WrenchMoby *m) {
+    enum {
+        WRENCH_THROW_OUTBOUND = 10,
+        WRENCH_THROW_RETURNING = 11
+    };
     WrenchVars *d=m->data;
     WrenchScratch work;
     WrenchHero *player=wrench_hero();
@@ -2055,7 +2059,7 @@ void wrench_update(WrenchMoby *m) {
         }
         break;
     }
-    case 10: case 11: {
+    case WRENCH_THROW_OUTBOUND: case WRENCH_THROW_RETURNING: {
         int collided;
         float *position;
         float radius;
