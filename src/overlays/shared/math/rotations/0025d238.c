@@ -534,7 +534,7 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
                        int s16, int s18, unsigned char flag) __asm__("FUN_L00_0025e450");
 void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9,
                        float fC, float fD, float fE, float fF, int k10, float fG, int k11,
-                       int s16, int s18, unsigned char flag) {
+                       int spray_count, int s18, unsigned char flag) {
     Q_25e450 vb;
     Q_25e450 v0;
     float dist;
@@ -582,7 +582,7 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
     subtract_vector_xyz_25e450(&v0, D_L00_00166DC0_25e450, pos);
     dist = vector_length_xyz_25e450(&v0);
     {
-    if (s16 != 0) {
+    if (spray_count != 0) {
         Q_25e450 d2;
         Q_25e450 rnd;
         int i;
@@ -599,8 +599,8 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
             func_L00_001FF548_25e450(&d2, &d2, frame_time_macro * 10.0f);
             func_L00_002B0738_25e450(pos, &d2, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), 0, 0);
         }
-        s16 = s16 - 1;
-        for (i = 0; i < s16; i++) {
+        spray_count = spray_count - 1;
+        for (i = 0; i < spray_count; i++) {
             float a;
             float b;
             int sel;
