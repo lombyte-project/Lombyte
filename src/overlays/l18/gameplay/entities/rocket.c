@@ -2349,8 +2349,8 @@ void FUN_L18_002e9768(struct Moby *moby) {
     switch (state) {
     case 0: {
         if (moby->mission != 0xff) {
-            int unkB0 = moby->mission + current_level_index * 16;
-            if (((unsigned char *)((int *)visited52))[unkB0] == 0xff) goto remove;
+            int mission_table_index = moby->mission + current_level_index * 16;
+            if (((unsigned char *)((int *)visited52))[mission_table_index] == 0xff) goto remove;
         }
         moby->state = 1;
         if (*(int *)data != 0) *(int *)(*(int *)data) = 3;
