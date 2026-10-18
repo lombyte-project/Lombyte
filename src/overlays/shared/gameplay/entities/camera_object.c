@@ -2657,11 +2657,11 @@ int FUN_L00_002aa2a8(char *a0, char *o, int mode) {
         }
         {
             char *g = (char *)&D_L00_00166DC0;
-            char *a10 = a0 + 0x10;
+            char *hit_position = a0 + 0x10;
             *(u128 *)(a0 + 0x20) = *(u128 *)D_L00_00173E80;
-            subtract_vector_xyz(C, a10, g);
+            subtract_vector_xyz(C, hit_position, g);
             scale_vector_xyz_c(C, C, 0.95f);
-            add_vector_xyz(a10, C, g);
+            add_vector_xyz(hit_position, C, g);
         }
         return 1;
     }
