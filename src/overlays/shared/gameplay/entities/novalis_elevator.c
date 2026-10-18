@@ -1581,6 +1581,9 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char D_L01_00174340_c[] __asm__("D_L01_001742C0");
 
 void FUN_L01_002eda00(char *m) {
+    enum {
+        BURST_AND_REMOVE = 2
+    };
     char *d = *(char **)(m + 0x78);
     float prev[4];
     float z[4];
@@ -1624,7 +1627,7 @@ void FUN_L01_002eda00(char *m) {
         if (tick_countdown_32_alt(d + 0x14) != 0)
             m[0x20] = 2;
         break;
-    case 2:
+    case BURST_AND_REMOVE:
         cart_burst(m, m + 0x10, -1, 0.25f, 13.0f);
         mark_moby_for_removal(m);
         break;
