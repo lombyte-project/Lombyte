@@ -333,6 +333,9 @@ extern int D_L11_0016D260[];
 extern int D_L11_0015FFD8;
 
 void FUN_L11_002d1030(void *mp) {
+    enum {
+        RESORT_OWNER_JUMP_TO_TARGET = 7
+    };
     struct Moby *moby = mp;
     char *d = (char *)moby->pvars;
     float ang;
@@ -378,7 +381,7 @@ void FUN_L11_002d1030(void *mp) {
         }
         break;
     }
-    case 7:
+    case RESORT_OWNER_JUMP_TO_TARGET:
         if (FUN_00214cc8(moby, 9.0f)) {
             fast_vec_sub(d + 0x130, d + 0x120, (char *)moby + 0x10);
             f0 = (float)scale_game_frames(0x3C);
