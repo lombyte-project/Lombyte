@@ -302,7 +302,8 @@ void FUN_L14_002b17d8(char *moby);
 void FUN_L14_002b17d8(char *moby) {
     enum {
         PLASMABOT_INITIALIZE = 0,
-        PLASMABOT_RETURN_TO_PATH_START = 9
+        PLASMABOT_RETURN_TO_PATH_START = 9,
+        PLASMABOT_FACE_TARGET_AND_WAIT = 13
     };
     char *data;
     char *owner;
@@ -463,7 +464,7 @@ void FUN_L14_002b17d8(char *moby) {
         }
         break;
     }
-    case 13: {
+    case PLASMABOT_FACE_TARGET_AND_WAIT: {
         float ang;
         float k;
         ang = fast_arc_tan_c(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
