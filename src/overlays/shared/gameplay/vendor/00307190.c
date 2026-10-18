@@ -446,76 +446,63 @@ extern char *D_L08_00167600 __attribute__((section(".data")));
 void FUN_L08_00313ba8(void) {
     D_L08_00167600[0x88] = 1;
 }
-#ifndef NON_MATCHING
-INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00316fa8.s", FUN_L08_00316fa8);
-#else
-extern void rotate_about_axis(void *, void *, void *, float) __asm__("FUN_00214890");
-extern int play_voice(int, int, void *, int) __asm__("FUN_L00_0028ddd8");
-extern int set_voice_volume(int, int) __asm__("FUN_L01_002a1968");
-extern float frame_delta_time __asm__("D_0015ED7C");
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00318468), where it is exact; names translated to the US level program. */
+
+extern char D_0013E533[];
+extern char D_L08_0016C588[];
+extern float D_0015ED7C;
+extern int FUN_L00_00263468();
+extern int FUN_L00_0028ddd8(int a, int b, int c, int d);
+extern int FUN_L01_002a1968(int, int);
+extern float D_L08_001625E8 __attribute__((sda));
+extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern char D_0013E550[];
-#define D_L08_001675C8 (*(float *)(D_L08_001675C0 + 8))
-#define D_L08_001625D8 (*(float *)((char *)&D_L08_0016234C + 0x28c))
+extern char D_0013E5E0[];
+extern void vadd_3DF8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern char hero_pos_3DF8[] __asm__("D_L08_001675C0");
 
-void FUN_L08_00316fa8(char *moby) {
-    float point[4];
-    float radius[4];
+void FUN_L08_00316fa8(char *m) {
+    float p[4];
+    float off[4];
     float axis[4];
-    float fraction = 0.0f;
-    float angle = 0.0f;
-    int *data = *(int **)(moby + 8);
-    int voice;
-    char *slot;
-    float smoothed;
-    float volume;
-
-    radius[0] = 4.0f;
-    radius[1] = 0.0f;
-    radius[2] = 0.0f;
-    radius[3] = 1.0f;
-    axis[0] = 0.0f;
-    axis[1] = 0.0f;
+    char *d = *(char **)(m + 8);
+    float ang = 0.0f;
+    float open = ang;
+    off[0] = 4.0f;
+    off[1] = open;
+    off[2] = open;
+    off[3] = 1.0f;
+    axis[0] = open;
+    axis[1] = open;
     axis[2] = 1.0f;
     do {
-        rotate_about_axis(point, radius, axis, angle);
-        add_vector_xyz(point, D_L08_001675C0, point);
-        if (ground_height_at(point) < D_L08_001675C8) {
-            fraction += 0.05f;
-        }
-        angle += 0.31415927f;
-    } while (angle < 6.2831855f);
-
-    smoothed = D_L08_001625D8;
-    if (smoothed < fraction) {
-        volume = frame_delta_time * 0.2f;
-        volume = smoothed + volume;
+        build_look_at_matrix(p, off, axis, ang);
+        vadd_3DF8(p, hero_pos_3DF8, p);
+        if (func_L00_002644E0_3091B0(p) < ((Cam_3091B0 *)(hero_pos_3DF8 - 0x140))->f148) open += 0.05f;
+        ang += 0.31415927f;
+    } while (ang < 6.2831855f);
+    if (D_L08_001625E8 < open) {
+        D_L08_001625E8 += D_0015ED7C * 0.2f;
     } else {
-        volume = frame_delta_time * 0.75f;
-        volume = smoothed - volume;
+        D_L08_001625E8 -= D_0015ED7C * 0.75f;
     }
-    D_L08_001625D8 = volume;
-    if (D_L08_001625D8 > 1.0f) {
-        D_L08_001625D8 = 1.0f;
+    if (1.0f < D_L08_001625E8) {
+        D_L08_001625E8 = 1.0f;
+    } else if (D_L08_001625E8 < 0.0f) {
+        D_L08_001625E8 = 0.0f;
     }
-    if (D_L08_001625D8 < 0.0f) {
-        D_L08_001625D8 = 0.0f;
-    }
-
-    voice = data[2];
-    slot = D_0013E550 + voice * 0x70;
-    if (*(char **)(slot + 0x8c) == moby) {
-        if (*(unsigned char *)(slot + 0x74) != 0) {
-            set_voice_volume(voice, (int)(((*(float *)&data[1] + D_L08_001625D8) /
-                                          (*(float *)&data[1] + 1.0f)) * 1024.0f));
+    {
+        char *e = ((char *)&D_0013E550) + *(int *)(d + 8) * 0x70;
+        if (*(char **)(e + 0x8C) == m && ((unsigned char *)e)[0x74] != 0) {
+            FUN_L01_002a1968(*(int *)(d + 8),
+                              (int)((*(float *)(d + 4) + D_L08_001625E8) / (*(float *)(d + 4) + 1.0f) * 1024.0f));
         }
     }
-    slot = D_0013E550 + data[2] * 0x70;
-    qcopy(slot + 0x90, D_L08_001675C0);
-    if (*(char **)(slot + 0x8c) == moby) {
-        if (*(unsigned char *)(slot + 0x74) != 0) {
-            return;
+    qcopy_nc(((char *)&D_0013E550) + 0x90 + *(int *)(d + 8) * 0x70, hero_pos_3DF8);
+    {
+        char *e = ((char *)&D_0013E550) + *(int *)(d + 8) * 0x70;
+        if (*(char **)(e + 0x8C) != m || ((unsigned char *)e)[0x74] == 0) {
+            *(int *)(d + 8) = FUN_L00_0028ddd8(*(int *)d, 0x15, (int)m, 0x400);
         }
     }
-    data[2] = play_voice(data[0], 0x15, moby, 0x400);
 }
-#endif
