@@ -420,6 +420,10 @@ extern float func_L00_0025CCF0_spark(void *, void *, float, float, float, float,
 extern int func_L00_001EFFF0_spark(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 void FUN_L16_002a3f38(unsigned char *m) {
+    enum {
+        PROJECTILE_STATE_FLYING = 0,
+        PROJECTILE_STATE_IMPACT = 1
+    };
     L16SparkVector desired, previous, velocity, random;
     L16SparkQuery query;
     char *d = *(char **)(m + 0x78);
@@ -429,7 +433,7 @@ void FUN_L16_002a3f38(unsigned char *m) {
     struct Hero *player;
     float yaw, pitch;
     switch (m[0x20]) {
-    case 0: {
+    case PROJECTILE_STATE_FLYING: {
         float step, time;
         step = D_0015ED6C;
         time = frame_time_sq;
@@ -517,7 +521,7 @@ void FUN_L16_002a3f38(unsigned char *m) {
         }
         break;
     }
-    case 1:
+    case PROJECTILE_STATE_IMPACT:
         func_L00_0025F4A8_alt(m, &D_L16_0015F580_spark, 0, 0.0f, 0.0f, 3, 3, 5, 1.0f, 0.5f, 4.0f,
                               0.7f, 0, 7.0f, 0, 0, -1, 0);
         mark_moby_for_removal_a3f38(m);
