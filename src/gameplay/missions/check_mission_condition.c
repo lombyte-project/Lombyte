@@ -11,6 +11,10 @@ s32 check_mission_condition(s16 kind, s32 value) __asm__("FUN_0020baf0");
 
 s32 check_mission_condition(s16 kind, s32 value) {
     enum {
+        MISSION_CONDITION_UPGRADE_LEVEL_NONZERO = 4,
+        MISSION_CONDITION_UPGRADE_LEVEL_AT_LEAST_TWO = 5
+    };
+    enum {
         MISSION_CONDITION_ALWAYS_TRUE = 0,
         MISSION_CONDITION_LEVEL_AVAILABLE = 1,
         MISSION_CONDITION_ITEM_AVAILABLE = 2,
@@ -28,12 +32,12 @@ s32 check_mission_condition(s16 kind, s32 value) {
         return item_available[value] != 0;
     case MISSION_CONDITION_ITEM_ACQUIRED:
         return items_acquired[value] != 0;
-    case 4:
+    case MISSION_CONDITION_UPGRADE_LEVEL_NONZERO:
         if (value < 121) {
             return D_0013D5B0[value].level != 0;
         }
         break;
-    case 5:
+    case MISSION_CONDITION_UPGRADE_LEVEL_AT_LEAST_TWO:
         if (value < 121) {
             return D_0013D5B0[value].level >= 2;
         }
