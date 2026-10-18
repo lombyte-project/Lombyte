@@ -153,6 +153,10 @@ int D_L06_0016237C = 0x10019;
 extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 /* Level 06 moby update: a spark emitter; state 4 bursts on a random timer, state 3 sprays continuously. */
 void FUN_L06_00308c68(struct Moby *m) {
+    enum {
+        SPARK_EMITTER_INITIALIZE = 0,
+        SPARK_EMITTER_DELAYED_ACTION = 2
+    };
     SparkData *d = *(void **)&m->pvars;
     SparkVector position_test_vector;
     SparkVector rotation_based_spark_vector;
@@ -165,7 +169,7 @@ void FUN_L06_00308c68(struct Moby *m) {
         return;
     }
     switch (m->state) {
-    case 0:
+    case SPARK_EMITTER_INITIALIZE:
         copy_moby_rotation(&*(SparkVector *)&m->rot_row0, &*(SparkVector *)&m->rot);
         if (d->f4 != 0) {
             m->state = 1;
@@ -175,7 +179,7 @@ void FUN_L06_00308c68(struct Moby *m) {
             m->state = 3;
         }
         break;
-    case 2:
+    case SPARK_EMITTER_DELAYED_ACTION:
         if (timer_step(&d->f28)) {
             spark_action(m, &*(SparkVector *)&m->pos, -1, 0.333f, 13.0f);
             if (d->f0 != 0) {
