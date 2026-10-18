@@ -145,7 +145,9 @@ extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
 extern void light_tfrags(void *) __asm__("FUN_00234f98");
 extern void light_ties(void *) __asm__("FUN_00237370");
 
-u8 *FUN_001e9b10(LevelHeader *header) {
+u8 *initialize_level_render_state(LevelHeader *header) __asm__("FUN_001e9b10");
+
+u8 *initialize_level_render_state(LevelHeader *header) {
     u8 *pool;
     u8 *environment;
     u8 *light_record;
@@ -475,4 +477,4 @@ u8 *FUN_001e9b10(LevelHeader *header) {
     return pool;
 }
 
-extern __typeof__(FUN_001e9b10) func_001E9B10 __attribute__((alias("FUN_001e9b10")));
+extern __typeof__(initialize_level_render_state) func_001E9B10 __attribute__((alias("FUN_001e9b10")));
