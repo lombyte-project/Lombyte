@@ -50,6 +50,7 @@ void update_resident_dialogue_animation_state(Moby *m) __asm__("FUN_00237ed0");
 extern u8 big_head_cheat_enabled __asm__("D_0015EDB0") MACRO_ADDR;
 void update_resident_dialogue_animation_state(Moby *m) {
     enum {
+        RESIDENT_WAIT_TO_RESTORE_IDLE_ANIMATION = 3,
         RESIDENT_WAIT_TO_START_DIALOGUE_ANIMATION = 12
     };
     s32 r;
@@ -91,7 +92,7 @@ void update_resident_dialogue_animation_state(Moby *m) {
         }
         D_001E63C0.timer++;
         break;
-    case 3:
+    case RESIDENT_WAIT_TO_RESTORE_IDLE_ANIMATION:
         if (m->flags & 2) {
             if (m->anim != 0) {
                 blend_moby_animation(m, 0, 0, scale_game_frames(0x12));
