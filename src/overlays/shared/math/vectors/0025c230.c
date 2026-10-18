@@ -66,12 +66,12 @@ extern void FUN_L00_00269958(void *, void *, int, int, int, int, int, int);
 extern void add_vector_xyz(void *, void *, void *);
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
-void FUN_L00_0025c398(void *a0, void *base_vector, void *a2) {
+void FUN_L00_0025c398(void *source_object, void *base_vector, void *point_source_mask) {
     V4 buf[20];
     float tmp[4];
     int n, i;
 
-    n = FUN_L00_0025aca0(a0, 20, buf, a2, 14.0f);
+    n = FUN_L00_0025aca0(source_object, 20, buf, point_source_mask, 14.0f);
     if (n == 0) {
         return;
     }
