@@ -2446,6 +2446,9 @@ extern void FUN_0024f7e0(float, void *, void *, int, int, void *, int) __asm__("
 extern float FUN_001f8bc8(void *, void *) __asm__("FUN_001f9b48");
 
 void FUN_L15_002d0fa8(void *arg) {
+    enum {
+        HIT_REACTION_DEATH = 1
+    };
     UMoby *m = arg;
     UData *d = m->data;
     char *slot = 0;
@@ -2535,7 +2538,7 @@ void FUN_L15_002d0fa8(void *arg) {
                 m->state = 9;
                 *(unsigned char *)((char *)d + 0x67) = 0x78;
                 break;
-            case 1:
+            case HIT_REACTION_DEATH:
             case 2:
                 origin.q = 0;
                 m->flags &= 0xEFFF;
