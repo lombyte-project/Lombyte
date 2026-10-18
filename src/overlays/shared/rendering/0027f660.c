@@ -248,17 +248,17 @@ int FUN_L01_0028b510(void *reference_point, List *point_list, float target) {
     return best;
 }
 int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out);
-int FUN_L01_0028b5e0(char *a0, List *list, char *pt, char *out) {
+int FUN_L01_0028b5e0(char *reference_object, List *list, char *pt, char *out) {
     int idx0 = -1;
     int idx1 = -1;
     float best0 = 10000.0f;
     float best1 = 10000.0f;
-    float d_init = fast_vec_dist(a0 + 0x10, pt);
+    float d_init = fast_vec_dist(reference_object + 0x10, pt);
     int i;
 
     for (i = 0; i < list->count; i++) {
         float d_pt = fast_vec_dist(list->e[i], pt);
-        float d_a0 = fast_vec_dist(list->e[i], a0 + 0x10);
+        float d_a0 = fast_vec_dist(list->e[i], reference_object + 0x10);
         if (d_a0 < best0) {
             best0 = d_a0;
             idx0 = i;
