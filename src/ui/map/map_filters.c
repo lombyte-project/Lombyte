@@ -567,11 +567,11 @@ int map_filter_l11_1(int arg0, float unused1, float unused2, float reveal_test_v
 extern unsigned char D_0013D3E0 NOT_SDA;
 int map_filter_l11_2(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207800");
 
-int map_filter_l11_2(int arg0, float unused1, float unused2, float arg1) {
+int map_filter_l11_2(int arg0, float unused1, float unused2, float reveal_test_value) {
     if (arg0 < 0xDD) {
-        return (arg1 >= 238.0f && arg1 <= 241.0f) ? 1 : 0;
+        return (reveal_test_value >= 238.0f && reveal_test_value <= 241.0f) ? 1 : 0;
     }
-    return arg1 <= 180.0f && D_0013D3E0 != 0;
+    return reveal_test_value <= 180.0f && D_0013D3E0 != 0;
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, func_002080B0). */
