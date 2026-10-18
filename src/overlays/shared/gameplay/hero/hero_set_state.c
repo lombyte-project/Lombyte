@@ -281,7 +281,7 @@ void FUN_L00_00221b68(void) {
     char *q = (char *)D_0013E533 + 0xE1D;
     char *p;
     char *r;
-    float t0;
+    float distance_error;
     float d;
     float lim;
     float ang;
@@ -307,8 +307,8 @@ void FUN_L00_00221b68(void) {
             if (d < *(float *)(p + 0x234) * 0.05f) {
                 ang = *(float *)(p + 0x98);
             }
-            t0 = d - lim;
-            vendor_spring(&t0, (float *)(p + 0x244), 0.0f, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
+            distance_error = d - lim;
+            vendor_spring(&distance_error, (float *)(p + 0x244), 0.0f, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f,
                              frame_time * 2.8f);
             *(float *)(p + 0xF0) = fast_cos(ang) * *(float *)(p + 0x244);
             *(float *)(p + 0xF4) = fast_sin(ang) * *(float *)(p + 0x244);
