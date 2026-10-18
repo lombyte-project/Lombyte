@@ -85,7 +85,7 @@ differs. `make` does not track header dependencies: after changing
     patch does the same here. Retail and SN's cc1 keep the branch on the insn. Of 1,530 game-range units, 9
     change: the fixtures, and five overlay files whose changed functions are
     not exact either way
-  - fixtures: `textbin/ui/menus/update_menu_grid_selection` (the `beqz`
+  - fixtures: `ui/menus/update_menu_grid_selection` (the `beqz`
     targets the `addiu $3` again), `ui/menus/update_menu_cycle_selection`
     (exact on the game compiler, was an SN route), `FUN_L05_0024bdc0`,
     `FUN_L00_00221310`
@@ -98,7 +98,7 @@ differs. `make` does not track header dependencies: after changing
     keeps it in place and fills the slot from after the call, as SN's cc1
     does. Of 1,244 promoted and 286 pending game-range units compiled with
     and without the patch, only the two fixtures change
-  - fixtures: `textbin/gameplay/state/transition_do_transition` (the `ori` of
+  - fixtures: `gameplay/state/transition_do_transition` (the `ori` of
     the `0xFFFFFFF0` mask stays above the MMIO stores),
     `FUN_L00_00245c28` (the `daddu $s3` stays in the load delay slot)
 

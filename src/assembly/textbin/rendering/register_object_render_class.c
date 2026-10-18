@@ -58,8 +58,8 @@ void register_object_render_class(ObjectRenderClass *render_class,
     fixed_threshold = convert_float_to_word(render_class->scale * 1024.0f);
     entry_index = registered_object_render_class_count++;
     object_render_class_fixed_thresholds[entry_index] = fixed_threshold;
-    render_class->runtime_data = 0;
-    render_class->runtime_index = 0;
+    render_class->first_instance = 0;
+    render_class->instance_count = 0;
     for (stream_index = 0; stream_index < 3; stream_index++) {
         if (render_class->streams[stream_index] != 0) {
             render_class->streams[stream_index] =

@@ -1,6 +1,7 @@
 #include "types.h"
 #include "sda.h"
 #include "qcopy.h"
+#include "rnc/rendering/shrub_instance.h"
 #include "rnc/rendering/tie_instance.h"
 
 typedef struct {
@@ -24,11 +25,6 @@ typedef struct {
 } LightDef;
 
 typedef struct {
-    u8 pad[0x1E];
-    u16 lights;
-} Obj20;
-
-typedef struct {
     u8 pad[0x36];
     u16 lights;
     u8 pad38[8];
@@ -36,8 +32,6 @@ typedef struct {
 
 extern LightDef point_lights[] __asm__("D_0019C1C0");
 extern LightSlot point_light_data[] __asm__("D_0019C3C0");
-extern Obj20 *D_00160F50;
-extern Obj20 *D_00160F54;
 extern Obj40 *D_00160E8C __attribute__((sda));
 extern s32 D_00160E90;
 
@@ -52,8 +46,8 @@ void create_point_light(s32 i) {
     s16 *p;
     s16 *end;
     Vec sphere;
-    Obj20 *o;
-    Tie *tie;
+    TieInstance *tie;
+    ShrubInstance *shrub;
     Obj40 *m;
     s32 n;
     s32 n2;
@@ -69,18 +63,18 @@ void create_point_light(s32 i) {
     if (p < end) {
         slot->n0 = 0;
         n = 0;
-        for (o = D_00160F50; o != D_00160F54; o++, n++) {
-            if (FUN_001f9bb0(&sphere, o)) {
+        for (tie = ties; tie != ties_end; tie++, n++) {
+            if (FUN_001f9bb0(&sphere, tie)) {
                 *p++ = n;
-                v = o->lights;
+                v = tie->lights;
                 if (v == 0xFFFF) {
-                    o->lights = i | 0xFFF0;
+                    tie->lights = i | 0xFFF0;
                 } else if ((v & 0xFFF0) == 0xFFF0) {
-                    o->lights = (v & 0xFF0F) | (i << 4);
+                    tie->lights = (v & 0xFF0F) | (i << 4);
                 } else if ((v & 0xFF00) == 0xFF00) {
-                    o->lights = (v & 0xF0FF) | (i << 8);
+                    tie->lights = (v & 0xF0FF) | (i << 8);
                 } else if ((v & 0xF000) == 0xF000) {
-                    o->lights = (v & 0x0FFF) | (i << 12);
+                    tie->lights = (v & 0x0FFF) | (i << 12);
                 } else {
                     p--;
                 }
@@ -118,18 +112,18 @@ void create_point_light(s32 i) {
             if (p < end) {
                 slot->n2 = p - slot->buf;
                 n3 = 0;
-                for (tie = ties; tie != ties_end; tie++, n3++) {
-                    if (FUN_001f9bb0(&sphere, tie)) {
+                for (shrub = shrubs; shrub != shrubs_end; shrub++, n3++) {
+                    if (FUN_001f9bb0(&sphere, shrub)) {
                         *p++ = n3;
-                        v = tie->lights;
+                        v = shrub->lights;
                         if (v == 0xFFFF) {
-                            tie->lights = i | 0xFFF0;
+                            shrub->lights = i | 0xFFF0;
                         } else if ((v & 0xFFF0) == 0xFFF0) {
-                            tie->lights = (v & 0xFF0F) | (i << 4);
+                            shrub->lights = (v & 0xFF0F) | (i << 4);
                         } else if ((v & 0xFF00) == 0xFF00) {
-                            tie->lights = (v & 0xF0FF) | (i << 8);
+                            shrub->lights = (v & 0xF0FF) | (i << 8);
                         } else if ((v & 0xF000) == 0xF000) {
-                            tie->lights = (v & 0x0FFF) | (i << 12);
+                            shrub->lights = (v & 0x0FFF) | (i << 12);
                         } else {
                             p--;
                         }
