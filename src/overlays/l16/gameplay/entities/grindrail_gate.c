@@ -102,6 +102,10 @@ extern L16WatchFlags D_0013D355_watch __asm__("D_0013D24D");
 
 void help_desk_lady_update(L16WatchMoby *m) __asm__("FUN_L16_002e3190");
 void help_desk_lady_update(L16WatchMoby *m) {
+    enum {
+        HELP_DESK_INITIALIZE_DIALOGUE = 0,
+        HELP_DESK_POLL_DIALOGUE = 1
+    };
     L16WatchScratch scratch;
     L16WatchData *d = m->data;
     L16WatchFlags *flags;
@@ -112,13 +116,13 @@ void help_desk_lady_update(L16WatchMoby *m) {
     FUN_L12_002e6b60((char *)m);
     activation = &d->activation;
     switch (m->state) {
-    case 0:
+    case HELP_DESK_INITIALIZE_DIALOGUE:
         initialize_npc_dialogue(m, activation);
         m->state = 1;
         d->activation.radius = 20.0f;
         m->opacity = 0xFF;
         break;
-    case 1: {
+    case HELP_DESK_POLL_DIALOGUE: {
         L16WatchPlayer *player = (L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D);
         if (player->disabled == 0 && player->mode != 15 && player->mode != 22) {
             if (is_point_inside_clip_volume((char *)player + 0x80, d->activation_region) &&
