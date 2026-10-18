@@ -576,13 +576,16 @@ int rand(void) __asm__("FUN_001160d8");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 void FUN_L00_00269b70(float *, unsigned char, unsigned char, unsigned char, float, float, int);
 void FUN_L00_002c8078(unsigned char *m) {
+    enum {
+        COLLISION_MATERIAL_WATER = 0
+    };
     float v[4] __attribute__((aligned(16)));
     int i;
     int r, g;
     unsigned char b;
     float s;
     switch (collision_hit_material()) {
-    case 0:
+    case COLLISION_MATERIAL_WATER:
     case 1:
     case 3:
     case 8:
