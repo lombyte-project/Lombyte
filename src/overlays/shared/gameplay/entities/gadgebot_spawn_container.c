@@ -1389,7 +1389,7 @@ extern void subtract_vector_xyz(void *, void *, void *);
 void gadgebot_update(GbMoby *moby) __asm__("FUN_L06_002f0040");
 void gadgebot_update(GbMoby *moby) {
     float out[4];
-    float v10[4];
+    float raised_position_snapshot[4];
     float save0[4];
     float save1[4];
     float v40[4];
@@ -1975,8 +1975,8 @@ void gadgebot_update(GbMoby *moby) {
         float saved_control_f10;
         float saved_control_f24;
 
-        qcopy(v10, moby->pos);
-        v10[2] += D_L06_00161CE0 + 0.02f;
+        qcopy(raised_position_snapshot, moby->pos);
+        raised_position_snapshot[2] += D_L06_00161CE0 + 0.02f;
         qcopy(v40, moby->pos);
         saved_control_f10 = d->ctl.unk10;
         saved_control_f24 = d->ctl.unk24;
