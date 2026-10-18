@@ -341,8 +341,8 @@ void spawner_update(struct Moby *moby) __asm__("FUN_L03_002bef68");
 void spawner_update(struct Moby *moby) {
     int used[4];
     Vec4A_2bef68 v30;
-    Vec4A_2bef68 v40;
-    Vec4A_2bef68 v50;
+    Vec4A_2bef68 launch_velocity;
+    Vec4A_2bef68 target_position;
     Vec4A_2bef68 v60;
     Vec4A_2bef68 v70;
     int st;
@@ -528,34 +528,34 @@ void spawner_update(struct Moby *moby) {
                 if (rad < 3.0f) {
                     rad = 3.0f;
                 }
-                v40.x = FUN_001f9dc8_2bef68(ang) * rad;
-                v40.y = FUN_001f9de0_2bef68(ang) * rad;
-                v40.z = 0.0f;
-                FUN_001f9c90_2bef68(&v40, &v40, d->f90);
-                FUN_001f9a10_2bef68(&v50, &v30, &v40);
-                h = FUN_00213508_2bef68(&v50, 0, 0.5f);
+                launch_velocity.x = FUN_001f9dc8_2bef68(ang) * rad;
+                launch_velocity.y = FUN_001f9de0_2bef68(ang) * rad;
+                launch_velocity.z = 0.0f;
+                FUN_001f9c90_2bef68(&launch_velocity, &launch_velocity, d->f90);
+                FUN_001f9a10_2bef68(&target_position, &v30, &launch_velocity);
+                h = FUN_00213508_2bef68(&target_position, 0, 0.5f);
                 if (h != 0.0f) {
-                    v50.z = h;
+                    target_position.z = h;
                 }
                 break;
             }
             case 1: {
                 float len;
-                FUN_001f9a28_2bef68(&v40, D_0013E533_2bef68 + 0xE9D, &v30);
-                v40.z = 0.0f;
-                FUN_001f9a68_2bef68(&v40, &v40, 0.5f);
-                len = FUN_001f9af0_2bef68(&v40);
+                FUN_001f9a28_2bef68(&launch_velocity, D_0013E533_2bef68 + 0xE9D, &v30);
+                launch_velocity.z = 0.0f;
+                FUN_001f9a68_2bef68(&launch_velocity, &launch_velocity, 0.5f);
+                len = FUN_001f9af0_2bef68(&launch_velocity);
                 if (d->b83 & 8) {
-                    FUN_001f9bf8_2bef68(&v40, &v40, FUN_002132a8_2bef68(len, 3.0f));
+                    FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, FUN_002132a8_2bef68(len, 3.0f));
                 }
-                if (FUN_001f9af0_2bef68(&v40) < 3.0f) {
-                    FUN_001f9bf8_2bef68(&v40, &v40, 3.0f);
+                if (FUN_001f9af0_2bef68(&launch_velocity) < 3.0f) {
+                    FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, 3.0f);
                 }
-                FUN_001f9c90_2bef68(&v40, &v40, d->f90);
-                FUN_001f9a10_2bef68(&v50, &v30, &v40);
-                h = FUN_00213508_2bef68(&v50, 0, 0.5f);
+                FUN_001f9c90_2bef68(&launch_velocity, &launch_velocity, d->f90);
+                FUN_001f9a10_2bef68(&target_position, &v30, &launch_velocity);
+                h = FUN_00213508_2bef68(&target_position, 0, 0.5f);
                 if (h != 0.0f) {
-                    v50.z = h;
+                    target_position.z = h;
                 }
                 break;
             }
@@ -578,12 +578,12 @@ void spawner_update(struct Moby *moby) {
                 if (bi != -1) {
                     used[bi] = 1;
                 }
-                FUN_001f9a28_2bef68(&v40, &v60, &v30);
-                len = FUN_001f9af0_2bef68(&v40);
+                FUN_001f9a28_2bef68(&launch_velocity, &v60, &v30);
+                len = FUN_001f9af0_2bef68(&launch_velocity);
                 if (d->b83 & 8) {
-                    FUN_001f9bf8_2bef68(&v40, &v40, FUN_002132a8_2bef68(len, 3.0f));
+                    FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, FUN_002132a8_2bef68(len, 3.0f));
                 }
-                qcopy(&v50, &v60);
+                qcopy(&target_position, &v60);
                 break;
             }
             case 3: {
@@ -603,12 +603,12 @@ void spawner_update(struct Moby *moby) {
                     if (FUN_L03_002beba0(p[j], (float *)&v60) != 0) continue;
                     break;
                 }
-                FUN_001f9a28_2bef68(&v40, &v60, &v30);
-                len = FUN_001f9af0_2bef68(&v40);
+                FUN_001f9a28_2bef68(&launch_velocity, &v60, &v30);
+                len = FUN_001f9af0_2bef68(&launch_velocity);
                 if (d->b83 & 8) {
-                    FUN_001f9bf8_2bef68(&v40, &v40, FUN_002132a8_2bef68(len, 3.0f));
+                    FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, FUN_002132a8_2bef68(len, 3.0f));
                 }
-                qcopy(&v50, &v60);
+                qcopy(&target_position, &v60);
                 break;
             }
             case 4: {
@@ -629,12 +629,12 @@ void spawner_update(struct Moby *moby) {
                     if (FUN_L03_002beba0(p[j], (float *)&v60) != 0) continue;
                     break;
                 }
-                FUN_001f9a28_2bef68(&v40, &v60, &v30);
-                len = FUN_001f9af0_2bef68(&v40);
+                FUN_001f9a28_2bef68(&launch_velocity, &v60, &v30);
+                len = FUN_001f9af0_2bef68(&launch_velocity);
                 if (d->b83 & 8) {
-                    FUN_001f9bf8_2bef68(&v40, &v40, FUN_002132a8_2bef68(len, 3.0f));
+                    FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, FUN_002132a8_2bef68(len, 3.0f));
                 }
-                qcopy(&v50, &v60);
+                qcopy(&target_position, &v60);
                 break;
             }
             case 5:
@@ -643,14 +643,14 @@ void spawner_update(struct Moby *moby) {
             {
                 float speed;
                 char *m;
-                speed = FUN_001f9af0_2bef68(&v40) * (d->fE4 * frame_scale_macro);
-                v40.z = 0.0f;
-                FUN_001f9bf8_2bef68(&v40, &v40, speed);
-                FUN_001f9bf8_2bef68(&v60, &v40, 0.05f);
+                speed = FUN_001f9af0_2bef68(&launch_velocity) * (d->fE4 * frame_scale_macro);
+                launch_velocity.z = 0.0f;
+                FUN_001f9bf8_2bef68(&launch_velocity, &launch_velocity, speed);
+                FUN_001f9bf8_2bef68(&v60, &launch_velocity, 0.05f);
                 FUN_L00_0025f8e0_2bef68((float *)&v60, 0.025f);
                 FUN_L00_001ff290_2bef68(&v70, &v60, &v30);
-                v40.z = FUN_L00_0025abf0_2bef68(&v60, &v50, 0, speed, -(d->fDC * frame_time_sq_macro));
-                m = FUN_L03_002c45d8_2bef68((char *)moby, (float *)&v60, (float *)&v40, d->h8C, d->b83);
+                launch_velocity.z = FUN_L00_0025abf0_2bef68(&v60, &target_position, 0, speed, -(d->fDC * frame_time_sq_macro));
+                m = FUN_L03_002c45d8_2bef68((char *)moby, (float *)&v60, (float *)&launch_velocity, d->h8C, d->b83);
                 if (m != 0) {
                     *(unsigned char *)(m + 0x30) = 0xFF;
                 }
