@@ -41,10 +41,10 @@ void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 
     context->half_height = projection_half_height;
     context->scr_x = context->half_width * 4.0f;
     context->scr_y = projection_half_height * 4.0f;
-    context->fog_far_int = fog_far_intensity;
-    context->fog_near_int = fog_near_intensity;
     context->fog_near_dist = fog_near_distance;
     context->fog_far_dist = fog_far_distance;
+    context->fog_near_int = fog_near_intensity;
+    context->fog_far_int = fog_far_intensity;
     update_view_context();
 }
 
