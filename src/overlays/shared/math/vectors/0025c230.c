@@ -15,11 +15,11 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 /* Returns component d of c - a transformed by the matrix transpose_rotation_matrix builds from b. */
 float FUN_L00_0025c230(void *a, void *b, void *c, int d) {
-    float delta[4], v1[4], v2[16];
-    float *w = v1;
+    float delta[4], transformed_delta[4], transposed_rotation_matrix[16];
+    float *w = transformed_delta;
     subtract_vector_xyz(delta, c, a);
-    transpose_rotation_matrix(v2, b);
-    transform_vector(w, delta, v2);
+    transpose_rotation_matrix(transposed_rotation_matrix, b);
+    transform_vector(w, delta, transposed_rotation_matrix);
     return w[d];
 }
 #define NOT_SDA
