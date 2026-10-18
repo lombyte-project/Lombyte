@@ -1074,9 +1074,9 @@ extern char *func_00219780_2E2A38(void *, void *, void *, int, int, int, int, in
 
 void FUN_L08_002e16c0(Moby_2E2A38 *m) {
     Data_2E2A38 *d = m->data;
-    float v10[4];
+    float particle_primary_vector[4];
     Pair_2E2A38 tab;
-    float v30[4];
+    float particle_secondary_vector[4];
     float particle_spawn_position[4];
     int i;
 
@@ -1100,7 +1100,7 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
             int *q;
             int a;
             int b;
-            clear_u64_value(v10);
+            clear_u64_value(particle_primary_vector);
             tab = D_L08_00161C30;
             q = &tab.v[random_integer_below_c(2)];
             {
@@ -1111,7 +1111,7 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
                 int lo = scale_game_frames_alt(25);
                 b = FUN_L00_00257b90(lo, scale_game_frames_alt(30));
             }
-            func_L00_0026B890_2E2A38(m->pos, v10, 0x2F3F3F7F, *q, a, b, 0, 0, 400000.0f,
+            func_L00_0026B890_2E2A38(m->pos, particle_primary_vector, 0x2F3F3F7F, *q, a, b, 0, 0, 400000.0f,
                                      random_float_between_c2(8.0f, 16.0f) * D_0015ED6C_gp);
         }
         if (m->pos[2] < 15.2f) {
@@ -1123,18 +1123,18 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
                 qcopy(particle_spawn_position, m->pos);
                 particle_spawn_position[0] += random_float_between_c2(-3.0f, 3.0f);
                 particle_spawn_position[1] += random_float_between_c2(-3.0f, 3.0f);
-                v10[2] = D_L08_00161C0C * D_0015ED6C_gp;
-                v10[0] += fast_cos(ang) * D_L08_00161C14;
-                v10[1] += fast_sin(ang) * D_L08_00161C14;
-                v30[2] = D_L08_00161C10 * D_0015ED6C_gp;
-                v30[0] += fast_cos(ang) * D_L08_00161C18;
-                v30[1] += fast_sin(ang) * D_L08_00161C18;
-                v10[3] = D_L08_00161C28;
-                v30[3] = D_L08_00161C2C;
+                particle_primary_vector[2] = D_L08_00161C0C * D_0015ED6C_gp;
+                particle_primary_vector[0] += fast_cos(ang) * D_L08_00161C14;
+                particle_primary_vector[1] += fast_sin(ang) * D_L08_00161C14;
+                particle_secondary_vector[2] = D_L08_00161C10 * D_0015ED6C_gp;
+                particle_secondary_vector[0] += fast_cos(ang) * D_L08_00161C18;
+                particle_secondary_vector[1] += fast_sin(ang) * D_L08_00161C18;
+                particle_primary_vector[3] = D_L08_00161C28;
+                particle_secondary_vector[3] = D_L08_00161C2C;
                 c1 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C1C, (float)(D_L08_00161C1C * 2))));
                 c2 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C20, (float)(D_L08_00161C20 * 2))));
                 c3 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C24, (float)(D_L08_00161C24 * 2))));
-                func_00219780_2E2A38(particle_spawn_position, v10, v30, D_L08_00161C04, D_L08_00161C08, c1, c2, c3, -1);
+                func_00219780_2E2A38(particle_spawn_position, particle_primary_vector, particle_secondary_vector, D_L08_00161C04, D_L08_00161C08, c1, c2, c3, -1);
             }
             m->state = 3;
         }
