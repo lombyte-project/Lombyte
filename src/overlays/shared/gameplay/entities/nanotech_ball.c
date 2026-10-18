@@ -3200,7 +3200,7 @@ extern void scale_vector_xyz(void *, void *, float);
 extern void subtract_vector_xyz(void *, void *, void *);
 void normalize_vector_xyz(void *, void *, f32);
 
-void FUN_L00_002df048(int arg0) {
+void FUN_L00_002df048(int callback_context) {
     VQ a, b, c;
     int i;
     float len;
@@ -3225,7 +3225,7 @@ void FUN_L00_002df048(int arg0) {
             *(short *)(p + 0xA) = 0x46;
         }
     }
-    FUN_L00_002defe0(arg0);
+    FUN_L00_002defe0(callback_context);
 }
 typedef struct {
     u8 pad[0x46];
