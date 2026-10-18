@@ -443,9 +443,9 @@ extern float D_L17_001DE070[];
 extern float D_L17_001623D4 __attribute__((sda));
 void FUN_L17_002f3848(struct Moby *moby) {
     char *d = (char *)moby->pvars;
-    float t0[4];
-    float t1[4];
-    float t2[4];
+    float offset_accumulator[4];
+    float pvar_angle_offset[4];
+    float vector_sum[4];
     int i;
     if (*(int *)(d + 0x4C) != -1) {
         struct Hero *g = &hero;
@@ -466,14 +466,14 @@ done:
         }
         qcopy(d, &moby->pos);
         build_spherical_offset(
-            t0, (D_L17_001623D4 + D_L17_001623D0) / D_L17_001623D8,
+            offset_accumulator, (D_L17_001623D4 + D_L17_001623D0) / D_L17_001623D8,
             moby->rot.z, 0.0f);
-        build_spherical_offset(t1, D_L17_001623D0 / D_L17_001623D8,
+        build_spherical_offset(pvar_angle_offset, D_L17_001623D0 / D_L17_001623D8,
                                *(float *)(d + 0x44), 0.0f);
-        add_vector_xyz(t2, t0, t1);
-        *(OvlQuad *)t0 = *(OvlQuad *)t2;
-        add_vector_xyz(t2, d, t0);
-        *(OvlQuad *)(d + 0x10) = *(OvlQuad *)t2;
+        add_vector_xyz(vector_sum, offset_accumulator, pvar_angle_offset);
+        *(OvlQuad *)offset_accumulator = *(OvlQuad *)vector_sum;
+        add_vector_xyz(vector_sum, d, offset_accumulator);
+        *(OvlQuad *)(d + 0x10) = *(OvlQuad *)vector_sum;
         moby->update_dist = 0xFF;
         *(float *)(d + 0x10) -= 300.0f;
     } else {
