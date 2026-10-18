@@ -315,7 +315,7 @@ extern CollisionHit HH __asm__("D_L02_00174440") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L02_00174440 + (o)))
 
 void FUN_L02_002216a0(void) {
-    V collision_ray_end, collision_ray_start, v20, v30, v40, probe_surface_angles, normalized_probe_hit_normal;
+    V collision_ray_end, collision_ray_start, v20, probe_ray_start, v40, probe_surface_angles, normalized_probe_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -469,9 +469,9 @@ d1:
         if (i == 1) {
             a = -a;
         }
-        FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
+        FUN_L00_002335c8(&probe_ray_start, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
-        if (collision_line(&v30, &collision_ray_end, 0x22, (s32)hero.moby, 0)) {
+        if (collision_line(&probe_ray_start, &collision_ray_end, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
