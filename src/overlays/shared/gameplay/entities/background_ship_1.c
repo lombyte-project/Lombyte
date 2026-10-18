@@ -532,7 +532,7 @@ extern short D_L02_0016200C __attribute__((sda));
 extern short D_L02_00162010 __attribute__((sda));
 
 void FUN_L02_002ed420(char *m, void *previous_position) {
-    float v10[4], v20[4], position_delta[4], random_offset[4], emission_position[4];
+    float first_spark_vector[4], second_spark_vector[4], position_delta[4], random_offset[4], emission_position[4];
     int i;
 
     fast_vec_sub(position_delta, m + 0x10, previous_position);
@@ -541,12 +541,12 @@ void FUN_L02_002ed420(char *m, void *previous_position) {
         char *p;
 
         moby_point_position(m, i, emission_position);
-        fast_vec_scale(v10, position_delta, *(float *)&D_L02_00161FD8);
-        fast_vec_scale(v20, position_delta, *(float *)&D_L02_00161FDC);
+        fast_vec_scale(first_spark_vector, position_delta, *(float *)&D_L02_00161FD8);
+        fast_vec_scale(second_spark_vector, position_delta, *(float *)&D_L02_00161FDC);
         random_vector(random_offset, 0.0f, *(float *)&D_L02_00161FE0 * frame_time);
-        add_vector_xyz(v20, v20, random_offset);
-        v10[3] = random_float_between(*(float *)&D_L02_00161FF4, *(float *)&D_L02_00161FF8);
-        v20[3] = random_float_between(*(float *)&D_L02_00161FFC, *(float *)&D_L02_00162000);
+        add_vector_xyz(second_spark_vector, second_spark_vector, random_offset);
+        first_spark_vector[3] = random_float_between(*(float *)&D_L02_00161FF4, *(float *)&D_L02_00161FF8);
+        second_spark_vector[3] = random_float_between(*(float *)&D_L02_00161FFC, *(float *)&D_L02_00162000);
         a = fast_tween_color(*(int *)&D_L02_00162004, *(int *)&D_L02_00162008,
                          random_float_between(0.0f, 1.0f));
         b = fast_tween_color(*(int *)&D_L02_0016200C, *(int *)&D_L02_00162010,
@@ -561,7 +561,7 @@ void FUN_L02_002ed420(char *m, void *previous_position) {
             (float)*(int *)&D_L02_00161FEC *
             (random_float_between(-*(float *)&D_L02_00161FF0, *(float *)&D_L02_00161FF0) +
              1.0f)));
-        p = spawn_spark(emission_position, v10, v20, a, b, c, d, e, -1);
+        p = spawn_spark(emission_position, first_spark_vector, second_spark_vector, a, b, c, d, e, -1);
         if (p != 0) {
             p[9] = func_001FA898_r(8.0f) + 0x60;
         }
