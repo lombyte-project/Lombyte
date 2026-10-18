@@ -1474,7 +1474,7 @@ float f213308_2bad40(void) __asm__("FUN_00213308");
 void f2502f0_2bad40(char *, int, int, int) __asm__("FUN_L00_002502f0");
 void f250df8_2bad40(char *) __asm__("FUN_L00_00250df8");
 /* Spawns a child effect (moby 0xEB) on the parent: copies its position and rotation, then sets the colour, timers and scale. */
-char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int secondary_color, int a4, float f, float scale) {
+char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int secondary_color, int timer_frames, float f, float scale) {
     char *m = f20c4f8_2bad40(0xEB);
     if (m) {
         char *d = *(char **)(m + 0x78);
@@ -1487,11 +1487,11 @@ char *FUN_L03_002bad40(struct Moby *parent, int unused, int color, int secondary
         qcopy(m + 0x10, (char *)parent->pvars + 0xF0);
         *(OvlQuad *)(m + 0x40) = *(OvlQuad *)&parent->rot;
         *(float *)(m + 0x40) = f213308_2bad40();
-        *(short *)(d + 0xC) = a4;
+        *(short *)(d + 0xC) = timer_frames;
         b = (color >> 16) & 0xFF;
         g = (color >> 8) & 0xFF;
         r = color & 0xFF;
-        *(short *)(d + 0xE) = a4;
+        *(short *)(d + 0xE) = timer_frames;
         *(float *)(d + 0x14) = f;
         *(int *)(d + 0x4) = color;
         *(int *)(d + 0x8) = secondary_color;
