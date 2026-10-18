@@ -2831,8 +2831,8 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L08_002dec90(struct Moby *m, char *pos) {
-    float v10[4];
-    float v20[4];
+    float scaled_displacement_vector[4];
+    float jittered_displacement_vector[4];
     float frame_displacement[4];
     float random_jitter[4];
     float spark_position[4];
@@ -2845,12 +2845,12 @@ void FUN_L08_002dec90(struct Moby *m, char *pos) {
     local_spawn_offset[2] = 0.3f;
     transform_vector_by_basis(spark_position, local_spawn_offset, &m->rot_row0);
     add_vector_xyz(spark_position, spark_position, &m->pos);
-    scale_vector_xyz(v10, frame_displacement, D_L08_00161A48);
-    scale_vector_xyz(v20, frame_displacement, D_L08_00161A4C);
+    scale_vector_xyz(scaled_displacement_vector, frame_displacement, D_L08_00161A48);
+    scale_vector_xyz(jittered_displacement_vector, frame_displacement, D_L08_00161A4C);
     random_vector(random_jitter, 0.0f, D_L08_00161A50 * frame_time);
-    add_vector_xyz(v20, v20, random_jitter);
-    v10[3] = random_float_between(D_L08_00161A64, D_L08_00161A68);
-    v20[3] = random_float_between(D_L08_00161A6C, D_L08_00161A70);
+    add_vector_xyz(jittered_displacement_vector, jittered_displacement_vector, random_jitter);
+    scaled_displacement_vector[3] = random_float_between(D_L08_00161A64, D_L08_00161A68);
+    jittered_displacement_vector[3] = random_float_between(D_L08_00161A6C, D_L08_00161A70);
     a = fast_tween_color(D_L08_00161A74, D_L08_00161A78,
                      random_float_between(0.0f, 1.0f));
     b = fast_tween_color(D_L08_00161A7C, D_L08_00161A80,
@@ -2863,7 +2863,7 @@ void FUN_L08_002dec90(struct Moby *m, char *pos) {
     e = func_001FA898_r(multiply_global_factor_ed64(
         (float)D_L08_00161A5C *
         (random_float_between(-D_L08_00161A60, D_L08_00161A60) + 1.0f)));
-    r = spawn_spark(spark_position, v10, v20, a, b, c, d, e, -1);
+    r = spawn_spark(spark_position, scaled_displacement_vector, jittered_displacement_vector, a, b, c, d, e, -1);
     if (r != 0) {
         r[9] = func_001FA898_r(8.0f) - 0x70;
     }
