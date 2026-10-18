@@ -1074,6 +1074,10 @@ extern CollisionHit D_L03_00173F40;
 /* Homing rocket update: flies on, trails smoke, steers up or down toward a target, explodes on impact or timeout. */
 extern Vec4 D_0013F490_v __asm__("D_0013F490");
 void FUN_L03_002d43c8(struct Moby *m) {
+    enum {
+        ROCKET_FLY = 1,
+        ROCKET_BURST_AND_REMOVE = 2
+    };
     Vec4 old;
     Vec4 side;
     Vec4 back;
@@ -1089,7 +1093,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
     float range;
 
     switch (state) {
-    case 1:
+    case ROCKET_FLY:
         pos = &m->pos;
         range = convert_integer_to_float(v->timer * 2) * v->speed;
         FUN_L03_0024e830(m, &target, range);
@@ -1139,7 +1143,7 @@ void FUN_L03_002d43c8(struct Moby *m) {
             m->state = 2;
         }
         break;
-    case 2:
+    case ROCKET_BURST_AND_REMOVE:
         cart_burst(m, &m->pos, 0, 0.25f, 13.0f);
         mark_moby_for_removal(m);
         break;
