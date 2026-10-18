@@ -382,15 +382,15 @@ void FUN_L03_002ebb00(void *arg) {
     char *a = d + 0xD0;
     char *b = d + 0xF0;
     struct Hero *g = &hero;
-    float v3[4];
-    float v1[4];
-    float v2[4];
+    float camera_back_offset[4];
+    float gravity_offset[4];
+    float camera_position[4];
     struct Hero *h;
     if (g->unk2284 != 0x50 || g->state.current == 0x11) {
         *(float *)(b + 0x34) = g->motion.pos.f[2];
     }
-    func_L00_001FF4B0_ebb00(v1, &hero.gravity_dir, -*(float *)(a + 0x10));
-    func_L00_001FF4B0_ebb00(v3, b, -*(float *)a);
+    func_L00_001FF4B0_ebb00(gravity_offset, &hero.gravity_dir, -*(float *)(a + 0x10));
+    func_L00_001FF4B0_ebb00(camera_back_offset, b, -*(float *)a);
     h = &hero;
     *(float *)d =
         func_001EC120_ebb00(d + 0x10, *(float *)d, h->motion.pos.f[0], *(float *)(d + 0x20),
@@ -401,11 +401,11 @@ void FUN_L03_002ebb00(void *arg) {
     *(float *)(d + 8) =
         func_001EC120_ebb00(d + 0x18, *(float *)(d + 8), *(float *)(b + 0x34), *(float *)(d + 0x20),
                             *(float *)(d + 0x24), *(float *)(d + 0x28));
-    func_001F9BD8_ebb00(v2, d, v1);
-    func_001F9BD8_ebb00(v2, v2, v3);
-    *(float *)(m + 0x30) = v2[0];
-    *(float *)(m + 0x34) = v2[1];
-    *(float *)(m + 0x38) = v2[2];
+    func_001F9BD8_ebb00(camera_position, d, gravity_offset);
+    func_001F9BD8_ebb00(camera_position, camera_position, camera_back_offset);
+    *(float *)(m + 0x30) = camera_position[0];
+    *(float *)(m + 0x34) = camera_position[1];
+    *(float *)(m + 0x38) = camera_position[2];
 }
 #include "qcopy.h"
 
