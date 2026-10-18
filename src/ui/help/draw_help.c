@@ -39,7 +39,8 @@ void draw_help(void) __asm__("FUN_001fe980");
 
 void draw_help(void) {
     enum {
-        HELP_PROMPT = 2
+        HELP_PROMPT = 2,
+        HELP_TEXT_STEADY = 5
     };
     if (((HelpState *)D_001996D0)->state == 0) {
         return;
@@ -92,7 +93,7 @@ void draw_help(void) {
         }
         break;
     case 4:
-    case 5:
+    case HELP_TEXT_STEADY:
     case 6:
         if (D_0015EF1D_b) {
             short win[12];
