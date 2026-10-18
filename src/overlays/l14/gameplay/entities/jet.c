@@ -2226,14 +2226,14 @@ extern void taxi_sample_f(s32 *, int, void *, void *, int, float) __asm__("FUN_0
 void taxi_update(struct Moby *moby) __asm__("FUN_L14_002f0538");
 void taxi_update(struct Moby *moby) {
     L14TaxiVars *d = (L14TaxiVars *)moby->pvars;
-    float v00[4], v10[4], v20[4], v30[4], v40[4], v50[4], v60[4], v70[4];
+    float previous_position[4], previous_rotation[4], position_delta[4], v30[4], v40[4], v50[4], v60[4], hero_relative_position[4];
     float m80[16];
     int ticks = 10;
     int button = 0x10;
     int wrap = 0;
     int flags = 0;
-    qcopy(v00, &moby->pos);
-    qcopy(v10, &moby->rot);
+    qcopy(previous_position, &moby->pos);
+    qcopy(previous_rotation, &moby->rot);
     FUN_L00_00266858(moby, (moby->flags ^ 1) & 1);
     switch (moby->state) {
     case 0:
@@ -2245,10 +2245,10 @@ void taxi_update(struct Moby *moby) {
         struct Hero *g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             transpose_rotation_matrix(v30, &moby->rot_row0);
-            taxi_sub(v70, &g->motion.pos, &moby->pos);
-            v70[3] = 0;
-            transform_vector(v70, v70, v30);
-            if (taxi_fabs(v70[1]) < 1.2f) {
+            taxi_sub(hero_relative_position, &g->motion.pos, &moby->pos);
+            hero_relative_position[3] = 0;
+            transform_vector(hero_relative_position, hero_relative_position, v30);
+            if (taxi_fabs(hero_relative_position[1]) < 1.2f) {
                 FUN_L14_002f1140(moby);
                 FUN_L14_002f13f8(moby);
                 if ((*(int *)D_0013CAE4 & button) && D_L14_0015F594 == 4) {
@@ -2383,10 +2383,10 @@ void taxi_update(struct Moby *moby) {
         g = &hero;
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             transpose_rotation_matrix(m80, &moby->rot_row0);
-            taxi_sub(v70, &g->motion.pos, &moby->pos);
-            v70[3] = 0;
-            transform_vector(v70, v70, m80);
-            if (taxi_fabs(v70[1]) < 1.2f) {
+            taxi_sub(hero_relative_position, &g->motion.pos, &moby->pos);
+            hero_relative_position[3] = 0;
+            transform_vector(hero_relative_position, hero_relative_position, m80);
+            if (taxi_fabs(hero_relative_position[1]) < 1.2f) {
                 FUN_L14_002f13f8(moby);
                 if (*(int *)D_0013CAE4 & button) {
                     qcopy(d->save_pos, d->pos);
@@ -2446,8 +2446,8 @@ void taxi_update(struct Moby *moby) {
         }
         d->sound = -1;
     }
-    taxi_sub(v20, &moby->pos, v00);
-    update_entity_matrix(d->spring, v20, v10, &moby->rot);
+    taxi_sub(position_delta, &moby->pos, previous_position);
+    update_entity_matrix(d->spring, position_delta, previous_rotation, &moby->rot);
 }
 extern float FUN_001f9b48_2f1040(void *, void *) __asm__("FUN_001f9b48");
 struct L14PathPoint {
