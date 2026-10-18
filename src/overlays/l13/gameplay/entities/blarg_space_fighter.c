@@ -3344,20 +3344,20 @@ extern void FUN_L13_002ea330_c(char *a, char *b, float f) __asm__("FUN_L13_002ea
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 unsigned char *FUN_L13_002ea6b8(char *a, char *b) {
-    float spawn_position[4], projectile_velocity[4], predicted_target_position[4], v3[4], random_velocity_offset[4];
+    float spawn_position[4], projectile_velocity[4], predicted_target_position[4], scratch_vector[4], random_velocity_offset[4];
     struct Hero *x;
     unsigned char *r;
     moby_point_position(a, 0xE, spawn_position);
     x = &hero;
     if (((char *)x->ship_moby) != 0 && *(short *)(((char *)x->ship_moby) + 0xA6) == 0x45) {
         FUN_L13_002ea330_c((char *)predicted_target_position, (char *)spawn_position, frame_time * 20.0f);
-        subtract_vector_xyz(v3, predicted_target_position, spawn_position);
-        normalize_vector_xyz(projectile_velocity, v3, frame_time * 20.0f);
+        subtract_vector_xyz(scratch_vector, predicted_target_position, spawn_position);
+        normalize_vector_xyz(projectile_velocity, scratch_vector, frame_time * 20.0f);
         normalize_vector_xyz(random_velocity_offset, ((char *)x->ship_moby) + 0xD0,
                              random_float_between_alt(-(frame_time * 30.0f), frame_time * 30.0f));
-        normalize_vector_xyz(v3, ((char *)x->ship_moby) + 0xE0,
+        normalize_vector_xyz(scratch_vector, ((char *)x->ship_moby) + 0xE0,
                              random_float_between_alt(-(frame_time * 30.0f), frame_time * 30.0f));
-        add_vector_xyz(random_velocity_offset, random_velocity_offset, v3);
+        add_vector_xyz(random_velocity_offset, random_velocity_offset, scratch_vector);
         normalize_vector_xyz(random_velocity_offset, random_velocity_offset,
                              random_float_between_alt(frame_time * 5.0f, frame_time * 30.0f));
         add_vector_xyz(projectile_velocity, projectile_velocity, random_velocity_offset);
