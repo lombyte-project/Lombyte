@@ -3614,17 +3614,17 @@ extern int FUN_L00_00221d98(void);
 extern int pad_pressed_within(int, void *, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_00266e00(int, void *, void *, int);
 
-int FUN_L00_00228b78(void *a0, int suppress_normal_jump) {
+int FUN_L00_00228b78(void *jump_press_window_frames, int suppress_normal_jump) {
     s32 buf;
     int len;
 
-    if (!pad_pressed_within(0x40, a0, &buf))
+    if (!pad_pressed_within(0x40, jump_press_window_frames, &buf))
         return 0;
 
     len = FUN_L00_00221d98();
 
     if ((*(int *)((char *)D_0013A4E0 + 0x2600) & 0xA) != 0) {
-        if (len > 0 && FUN_L00_00266e00(0x40, (void *)0x1F000, (char *)a0 + len, len)) {
+        if (len > 0 && FUN_L00_00266e00(0x40, (void *)0x1F000, (char *)jump_press_window_frames + len, len)) {
             hero_set_state(HERO_STATE_HIGH_JUMP, 1);
             return 1;
         }
