@@ -1,7 +1,7 @@
-#include "rnc/rendering/sky_shell.h"
 #include "types.h"
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/rendering/sky_shell.h"
 
 struct SkyShell {
     u8 pad_0[8];

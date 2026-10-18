@@ -2,15 +2,13 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/rendering/graphics_buffer.h"
 
-
 void initialize_graphics_buffer_descriptors(s32 mode) __asm__("FUN_00225ac0");
 
 /* Mode zero writes one primary descriptor and clears four entries.
  * Nonzero mode writes two primary descriptors, one secondary descriptor,
  * and two further primary descriptors. Address strides are 0x11800 for
- * the first two groups and 0x4F000 for the final group. The second word
- * is zero except for the final group, where it is one. The address words
- * and flag value have no further meaning established by this function. */
+ * the first two groups and 0x4F000 for the final group. The flag word
+ * is one only for the final group. */
 void initialize_graphics_buffer_descriptors(s32 mode) {
     s32 secondary_address;
     s32 primary_address;

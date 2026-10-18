@@ -2,8 +2,8 @@
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
 #include "rnc/gameplay/gadgets/hand_gadget.h"
+#include "rnc/ui/menus/menu_globals.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
-extern char preview_binding_table[] __asm__("D_001863D0");
 extern char preview_binding_table_alias[] __asm__("D_001863D0");
 extern void refresh_moby_spatial_bounds(void *) __asm__("FUN_0020def8");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
@@ -61,11 +61,11 @@ void update_menu_preview_class_pose(void *preview) {
         detach_manipulator(source_moby_address, attachment);
     }
     if (reset_bindings) {
-        noop_callback_s(preview_binding_table_alias, preview_binding_table, moby->resource_address,
+        noop_callback_s(preview_binding_table_alias, menu_item_info, moby->resource_address,
                         0, source_moby_address);
-        moby->primary_binding = preview_binding_table;
+        moby->primary_binding = (char *)menu_item_info;
         moby->binding_blend_word = 0;
-        moby->secondary_binding = preview_binding_table;
+        moby->secondary_binding = (char *)menu_item_info;
         *(int *)(moby_bytes + 0x58) = 0;
         moby->binding_state = 0;
     }

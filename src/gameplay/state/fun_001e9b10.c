@@ -5,6 +5,7 @@
 #include "sda.h"
 
 #include "rnc/math/vector.h"
+#include "rnc/rendering/tie_instance.h"
 
 typedef struct Shrub {
     f32 v[3];
@@ -18,18 +19,6 @@ typedef struct Shrub {
     u16 x1E;                /* 0x1E */
 } Shrub;
 
-typedef struct Tie {
-    f32 v[3];
-    f32 scale;  /* 0x0C */
-    f32 radius; /* 0x10 */
-    u8 pad14[3];
-    u8 x17;  /* 0x17 */
-    s16 x18; /* 0x18 */
-    u8 cls;  /* 0x1A */
-    u8 x1B;  /* 0x1B */
-    u16 x1C; /* 0x1C */
-    u16 x1E; /* 0x1E */
-} Tie;
 
 typedef struct FRow {
     f32 v[3];
@@ -146,9 +135,6 @@ extern s32 D_001600B4;
 extern s32 D_001600B8;
 extern s32 part_clip_dist __asm__("D_001600BC");
 extern u8 requested_video_mode __asm__("D_0016034C");
-extern s32 D_001603D0;
-extern Tie *D_001603D4;
-extern Tie *D_001603D8;
 extern TieData *D_001603DC;
 extern u8 *D_001603E0;
 extern f32 occl_fog_density_set __asm__("D_001603E4");
@@ -383,35 +369,35 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
     light_ties((void *)0x70000000);
 
     tc = (u8 *)hdr + hdr->x3C;
-    D_001603D0 = *(s32 *)tc;
+    tie_count = *(s32 *)tc;
     tc += 0x10;
-    D_001603D4 = (Tie *)p;
-    size2 = D_001603D0 << 5;
+    ties = (Tie *)p;
+    size2 = tie_count << 5;
     p += size2;
-    if (D_001603D0 != 0) {
-        fill_transfer_words(D_001603D4, 0, size2);
+    if (tie_count != 0) {
+        fill_transfer_words(ties, 0, size2);
     }
     p = (u8 *)(((u32)p + 0x3F) & ~0x3F);
     D_001603DC = (TieData *)p;
-    size3 = D_001603D0 << 6;
+    size3 = tie_count << 6;
     p += size3;
-    if (D_001603D0 != 0) {
+    if (tie_count != 0) {
         fill_transfer_words(D_001603DC, 0, size3);
     }
-    size4 = D_001603D0 * 0x60;
+    size4 = tie_count * 0x60;
     D_001603E0 = p;
     p += size4;
     p = (u8 *)(((u32)p + 0x3F) & ~0x3F);
-    if (D_001603D0 != 0) {
+    if (tie_count != 0) {
         fill_transfer_words(D_001603E0, 0, size4);
     }
     lastTie = -1;
     /* Retail 0x001ea2a4-0x001ea2c4 publishes the tie data pointer,
        the end of the tie array, and the next pool base in this order. */
     D_00160AB0.x4 = D_001603E0;
-    D_001603D8 = &D_001603D4[D_001603D0];
-    for (i = 0; i < D_001603D0; i++) {
-        tie = &D_001603D4[i];
+    ties_end = &ties[tie_count];
+    for (i = 0; i < tie_count; i++) {
+        tie = &ties[i];
         cls = shrub_render_class_slot_by_id[*(s32 *)tc];
         td = &D_001603DC[i];
         tie->cls = cls;
@@ -421,13 +407,13 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
             D_001D7F30[cls]->count = 0;
         }
         D_001D7F30[cls]->count++;
-        tie->x18 = i;
+        tie->index = i;
         tie->radius = *(f32 *)(tc + 4);
         if (tie->radius < 16.0f) {
             tie->radius = 16.0f;
         }
         tie->x1B = 0;
-        tie->x1E = 0xFFFF;
+        tie->lights = 0xFFFF;
         if (D_001D7F30[cls]->x1C != 0) {
             f32 rad;
 
@@ -473,13 +459,13 @@ u8 *FUN_001e9b10(LevelHeader *hdr) {
         add_vector_xyz(tie, tie, &td->m3);
     }
     spb = (u16 *)0x70000000;
-    for (i5 = 0; i5 < D_001603D0; i5++) {
+    for (i5 = 0; i5 < tie_count; i5++) {
         *spb++ = i5;
     }
     *spb = 0xFFFF;
     FUN_0022a5e0((void *)0x70000000);
 
-    for (i6 = 0; i6 < D_001603D0; i6++) {
+    for (i6 = 0; i6 < tie_count; i6++) {
         s32 cr;
         s32 cg;
         s32 cb;
