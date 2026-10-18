@@ -3133,11 +3133,11 @@ void helicopter_update(char *m) {
             *(float *)(m + 0x40) = fast_add_rotations_c(*(float *)(m + 0x40),
                 fast_subtract_rotations(ang * D_L12_001619AC, *(float *)(m + 0x40)) / D_L12_001619B0);
             if (distance_xyz(m + 0x10, C) < D_L12_001619A8 * D_0015ED6C) {
-                char *t3;
+                char *path;
                 *(int *)(d + 0x60) = next;
-                t3 = *(char **)(p + 0x10);
-                if (next == *(int *)t3 - 1) {
-                    qcopy((m + 0x10), t3 + 0x10);
+                path = *(char **)(p + 0x10);
+                if (next == *(int *)path - 1) {
+                    qcopy((m + 0x10), path + 0x10);
                 }
             }
             subtract_vector_xyz_c(E, C, m + 0x10);
