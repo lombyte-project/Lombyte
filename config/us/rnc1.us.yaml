@@ -1336,7 +1336,7 @@ segments:
           - [0x1078f8, c, ui/map/map_filters]
           - [0x108a88, c, ui/map/save_map_coverage]
           - [0x108b30, c, ui/map/load_map_chunk]
-          - [0x108ba8, c, assembly/textbin/ui/map/decode_compressed_occlusion_map]
+          - [0x108ba8, c, ui/map/decode_compressed_occlusion_map]
           - [0x108dd8, c, ui/map/expand_map_coverage]
           - [0x108fa8, textbin, text_gap_00208028_after_fun_00207e58]
           - [0x108fb0, c, ui/map/downsample_map_coverage]
