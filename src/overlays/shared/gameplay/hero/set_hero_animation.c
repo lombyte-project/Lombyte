@@ -1567,7 +1567,7 @@ extern void FUN_L00_00209240(int);
 extern void FUN_L00_0020f580(void);
 extern void FUN_L00_00234808_u(void) __asm__("FUN_L00_00234808");
 
-void FUN_L00_00234a50(int a0) {
+void FUN_L00_00234a50(int moby_override) {
     char *d;
     struct Hero *base;
     char *o;
@@ -1581,7 +1581,7 @@ void FUN_L00_00234a50(int a0) {
                 *(unsigned short *)(o + 0x34) |= 0x800;
             }
         }
-        FUN_L00_00209240(a0);
+        FUN_L00_00209240(moby_override);
         FUN_L00_0020f580();
         FUN_L00_00234808_u();
         base = &hero;
