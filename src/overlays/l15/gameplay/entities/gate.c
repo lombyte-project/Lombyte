@@ -1934,7 +1934,7 @@ void ultramech_unlimited_update(UMoby *m) __asm__("FUN_L15_002cf3a8");
 void ultramech_unlimited_update(UMoby *m) {
     UVec v10;
     UVec v20;
-    UVec v30;
+    UVec vector_arithmetic_result;
     UVec hit_direction;
     UVec attack_start;
     UVec attack_end;
@@ -2151,7 +2151,7 @@ void ultramech_unlimited_update(UMoby *m) {
                 func_L10_002CD578_v(&v20, 3.0f, &v10, (int)m, (int)tgt,
                                     scale_game_frames(D_L15_00161B1C));
                 normalize_vector_xyz(&v20, &v20, 3.0f);
-                FUN_L00_001ff290(&v30, &v10, &v20);
+                FUN_L00_001ff290(&vector_arithmetic_result, &v10, &v20);
                 FUN_L03_00250ae8(m, &v10, 0);
                 d->shots++;
             } else if ((float)d->shots >= 6.0f && (m->animFlags & 2)) {
@@ -2249,10 +2249,10 @@ void ultramech_unlimited_update(UMoby *m) {
         FUN_L00_00258278((char *)m, &d->turnVel, ang, frame_time_sq * 1.0471976f,
                          frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
         qcopy(&v10, &m->pos);
-        subtract_vector_xyz(&v30, &v20, &m->pos);
-        v20.q = v30.q;
+        subtract_vector_xyz(&vector_arithmetic_result, &v20, &m->pos);
+        v20.q = vector_arithmetic_result.q;
         normalize_vector_xyz(&v20, &v20, frame_time * 6.5f);
-        FUN_L00_001ff290(&v30, &v20, &m->pos);
+        FUN_L00_001ff290(&vector_arithmetic_result, &v20, &m->pos);
         if (!FUN_L00_00258490(m, &v10, &v20, 1, 2.25f, 1.75f, 0.5f, 0.5235988f) ||
             point_in_path_xy(&v10, D_L15_001B0AB0[d->side]->pt, D_L15_001B0AB0[d->side]->n)) {
             qcopy(&m->pos, &v10);
