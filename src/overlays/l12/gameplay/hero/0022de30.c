@@ -176,7 +176,7 @@ extern CollisionHit HH __asm__("D_L12_001742C0") __attribute__((section(".data")
 #define HF(o) (*(f32 *)(D_L12_001742C0 + (o)))
 
 void FUN_L12_00233e80(void) {
-    V v0, v10, v20, v30, v40, hit_surface_angles, normalized_hit_normal;
+    V collision_ray_second_endpoint, ground_ray_first_endpoint, v20, v30, v40, hit_surface_angles, normalized_hit_normal;
     f32 f;
     s32 r;
     s32 i;
@@ -207,8 +207,8 @@ void FUN_L12_00233e80(void) {
     if (hero.state.control_mode == 2) {
         g = hero.unk234 * 2.9f;
     }
-    hero_get_collision_ray_endpoints(&v10, &v0, k, g, -48.0f);
-    if (FUN_001efa68_u(&v10, &v0, 2, (s32)hero.moby, 0) == 0) {
+    hero_get_collision_ray_endpoints(&ground_ray_first_endpoint, &collision_ray_second_endpoint, k, g, -48.0f);
+    if (FUN_001efa68_u(&ground_ray_first_endpoint, &collision_ray_second_endpoint, 2, (s32)hero.moby, 0) == 0) {
         goto tail;
     }
     r = coll_sound_class();
@@ -222,7 +222,7 @@ void FUN_L12_00233e80(void) {
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.unk2F8 <= 0) {
             hero.unk2F8 = 1;
         }
-        if (FUN_001efa68_u(&v10, &v0, 0x24, (s32)hero.moby, 0) == 0) {
+        if (FUN_001efa68_u(&ground_ray_first_endpoint, &collision_ray_second_endpoint, 0x24, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
         r = coll_sound_class();
@@ -233,8 +233,8 @@ void FUN_L12_00233e80(void) {
     }
     if (hero.ground_type == 0xD) {
         hero.water_surface_z = HH.point.f[2];
-        v10.f[2] = HH.point.f[2] - 0.01f;
-        if (FUN_001efa68_u(&v10, &v0, 4, (s32)hero.moby, 0) == 0) {
+        ground_ray_first_endpoint.f[2] = HH.point.f[2] - 0.01f;
+        if (FUN_001efa68_u(&ground_ray_first_endpoint, &collision_ray_second_endpoint, 4, (s32)hero.moby, 0) == 0) {
             goto d1;
         }
     }
@@ -321,7 +321,7 @@ d1:
         }
         FUN_L00_002335c8(&v30, 0.2f, a, 0.45f);
         FUN_L00_002335c8(&v40, 0.2f, a, -0.45f);
-        if (FUN_001efa68_u(&v30, &v0, 0x22, (s32)hero.moby, 0)) {
+        if (FUN_001efa68_u(&v30, &collision_ray_second_endpoint, 0x22, (s32)hero.moby, 0)) {
             f = HH.point.f[2] - hero.ground_z.f;
             hero.unk2C0.f[i] = f;
             if (0.4f < FUN_001f99c0(f)) {
