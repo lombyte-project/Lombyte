@@ -105,7 +105,7 @@ void FUN_L17_002a8da0(struct Moby *m) {
     float hero_offset[4];
     float axis_aligned_hero_offset[4];
     float e50[4];
-    float v60[12];
+    float hit_descriptor_and_vector_scratch[12];
     char *d;
     char *e;
     int flag;
@@ -221,13 +221,13 @@ void FUN_L17_002a8da0(struct Moby *m) {
             subtract_vector_xyz(hero_offset, &hero.motion.pos, &m->pos);
             normalize_vector_xyz(axis_aligned_hero_offset, &m->rot_row0, dot_vectors_xyz(&m->rot_row0, hero_offset));
             subtract_vector_xyz(hero_offset, hero_offset, axis_aligned_hero_offset);
-            func_L00_0025A8C0_alt((char *)v60, (int)m, 0x10001, 1.0f, hero_offset);
-            collision_line(&m->pos, d + 0x20, 9, m, v60);
+            func_L00_0025A8C0_alt((char *)hit_descriptor_and_vector_scratch, (int)m, 0x10001, 1.0f, hero_offset);
+            collision_line(&m->pos, d + 0x20, 9, m, hit_descriptor_and_vector_scratch);
             len = vector_length_xyz(d + 0x30);
             *(OvlQuad *)e50 = *(OvlQuad *)(d + 0x10);
             for (i = 0; i < 7; i++) {
                 scale_vector_xyz(c, d + 0x30, random_float_between(0.0f, 0.9f));
-                FUN_L00_001ff290(v60, c, e50);
+                FUN_L00_001ff290(hit_descriptor_and_vector_scratch, c, e50);
                 normalize_vector_xyz(a, d + 0x30,
                                      random_float_between(frame_time * 10.0f, len / 20.0f));
                 FUN_L17_0026fb60(m, c, a);
@@ -236,8 +236,8 @@ void FUN_L17_002a8da0(struct Moby *m) {
             *(OvlQuad *)e50 = *(OvlQuad *)(d + 0x20);
             for (i = 0; i < 8; i++) {
                 scale_vector_xyz(c, d + 0x30, random_float_between(0.0f, 0.9f));
-                subtract_vector_xyz(v60, e50, c);
-                *(OvlQuad *)c = *(OvlQuad *)v60;
+                subtract_vector_xyz(hit_descriptor_and_vector_scratch, e50, c);
+                *(OvlQuad *)c = *(OvlQuad *)hit_descriptor_and_vector_scratch;
                 normalize_vector_xyz(a, d + 0x30,
                                      random_float_between(frame_time * 10.0f, len / 20.0f));
                 FUN_L17_0026fb60(m, c, a);
