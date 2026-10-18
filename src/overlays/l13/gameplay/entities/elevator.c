@@ -2886,6 +2886,10 @@ extern char D_L13_001F4450[];
 #define F(p,o) (*(float *)((char *)(p)+(o)))
 
 /* Flight motion, steering, camera and collision response for the mounted fighter. */
+static inline float turn_angle(float distance, JetData *d, int axis, float angle, float limit) {
+    return FUN_L13_002ba088(1, 5, distance, d->angles[axis], angle, 50.0f, limit);
+}
+
 void FUN_L13_002ba178(void *moby, void *obj) {
     Jet *m = moby;
     JetData *d = obj;
@@ -2989,7 +2993,7 @@ void FUN_L13_002ba178(void *moby, void *obj) {
     } else qcopy(target,&D_L13_00161430);
     distance = vector_distance(m->position,&D_L13_00161430);
     angle = angle_atan2(target[0]-m->position[0],target[1]-m->position[1]);
-    d->angles[2] = FUN_L13_002ba088(1,5,distance,d->angles[2],angle,50.0f,yaw_limit);
+    d->angles[2] = turn_angle(distance, d, 2, angle, yaw_limit);
     angle = angle_atan2(target[0]-m->position[0],target[1]-m->position[1]);
     m->rotation[2] = FUN_L13_002ba088(1,5,distance,m->rotation[2],angle,50.0f,yaw_limit);
     height = absolute_float(target[2]-m->position[2]);
