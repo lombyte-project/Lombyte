@@ -387,6 +387,11 @@ void FUN_L11_0030dd18(struct Moby *m);
 /* Spawns the 4x6 child grid, waits for its linked moby, then fades and blends between two D_L11_001600EC
    points (pos at 0x30, rotation at 0x70) before handing back to the hero. */
 void FUN_L11_0030d800(struct Moby *m) {
+    enum {
+        CHILD_GRID_STATE_CREATE_CHILDREN = 0,
+        CHILD_GRID_STATE_WAIT_LINK_COMMAND = 1,
+        CHILD_GRID_STATE_BLEND_POINT_POSES = 3
+    };
     GridVars_d800 *pv = (GridVars_d800 *)m->pvars;
     Vec4f pos;
     Vec4f rot;
@@ -395,7 +400,7 @@ void FUN_L11_0030d800(struct Moby *m) {
     float old;
 
     switch (m->state) {
-    case 0:
+    case CHILD_GRID_STATE_CREATE_CHILDREN:
         for (row = 0; row < 4; row++) {
             for (col = 0; col < 6; col++) {
                 pv->grid[row][col] = create_moby_d800(0x4B7);
@@ -410,7 +415,7 @@ void FUN_L11_0030d800(struct Moby *m) {
         pv->t = 0.0f;
         m->state = 1;
         break;
-    case 1: {
+    case CHILD_GRID_STATE_WAIT_LINK_COMMAND: {
         struct Moby *link = (struct Moby *)((pv->link << 8) + D_L11_0015FFD8_d800);
         if (link->command == 1) {
             m->state = 2;
@@ -437,7 +442,7 @@ void FUN_L11_0030d800(struct Moby *m) {
             m->state = 3;
         }
         break;
-    case 3:
+    case CHILD_GRID_STATE_BLEND_POINT_POSES:
         pv->prev = pv->t;
         approach_d800(&pv->t, &pv->vel, 1.0f, D_L11_00161F58 * frame_time_sq, D_L11_00161F5C * frame_time_sq,
                       D_L11_00161F60 * frame_time);
