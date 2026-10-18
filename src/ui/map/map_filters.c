@@ -580,11 +580,11 @@ int map_filter_l11_2(int reveal_test_selector, float unused1, float unused2, flo
    other arm is func_00208160's second test with D_0013D3E2. */
 int map_filter_l11_3(int arg0, float unused1, float unused2, float arg1) __asm__("func_00207880");
 
-int map_filter_l11_3(int arg0, float unused1, float unused2, float reveal_test_value) {
+int map_filter_l11_3(int reveal_test_selector, float unused1, float unused2, float reveal_test_value) {
     struct Hero *s = &hero;
     int a = s->state.control_mode == 17 || s->state.control_mode == 18 || s->base_condition == 1;
 
-    if (arg0 < 0x15F) {
+    if (reveal_test_selector < 0x15F) {
         return (reveal_test_value >= 200.0f) ? a : 0;
     }
     return reveal_test_value >= 233.0f && reveal_test_value <= 235.0f && D_0013D3E2[0] != 0;
