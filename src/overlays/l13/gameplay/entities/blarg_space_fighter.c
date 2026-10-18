@@ -1887,13 +1887,13 @@ char *FUN_L13_002e1140(char *owner, char *pos, char *vec, int remaining_split_co
         }
         r = random_float_between_alt(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
         switch (rand() % 3) {
-        case 0:
+        case SPIN_AXIS_X:
             *(float *)(d + 0x30) = r;
             break;
-        case 1:
+        case SPIN_AXIS_Y:
             *(float *)(d + 0x34) = r;
             break;
-        case 2:
+        case SPIN_AXIS_Z:
             *(float *)(d + 0x38) = r;
             break;
         }
