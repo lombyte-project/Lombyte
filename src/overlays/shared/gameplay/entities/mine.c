@@ -2676,7 +2676,7 @@ void gold_devastator_missile_update(M910 *m) {
         phase.vectors.target.f[2]+=d->target_height;
         subtract_vector_xyz(phase.collision.dir,&phase.vectors.target,(&m->pos));
         if(d->track_velocity) {
-            float b,a,root,t1,t2,denominator,negative_b;
+            float b,a,root,intercept_time_plus_root,intercept_time_minus_root,denominator,negative_b;
             subtract_vector_xyz(&phase.vectors.relative,&phase.vectors.target,&d->previous_target);
             FUN_L00_001ff2c0_c(&predicted,&phase.vectors.relative,&hero_velocity);
             qcopy(&d->previous_target,&phase.vectors.target);
@@ -2686,16 +2686,16 @@ void gold_devastator_missile_update(M910 *m) {
             root=square_root_scalar(b*b-a*4.0f*-FUN_L00_001ff430_c(phase.collision.dir));
             negative_b=-b;
             denominator=a+a;
-            t1=(negative_b+root)/denominator;
-            t2=(negative_b-root)/denominator;
-            if(t1>0.0f && t2>0.0f) {
-                if(t2<t1) time=t1;
-                else time=t2;
+            intercept_time_plus_root=(negative_b+root)/denominator;
+            intercept_time_minus_root=(negative_b-root)/denominator;
+            if(intercept_time_plus_root>0.0f && intercept_time_minus_root>0.0f) {
+                if(intercept_time_minus_root<intercept_time_plus_root) time=intercept_time_plus_root;
+                else time=intercept_time_minus_root;
             } else {
-                if(t1>0.0f) time=t1;
+                if(intercept_time_plus_root>0.0f) time=intercept_time_plus_root;
                 else {
                     time=-1.0f;
-                    if(t2>0.0f) time=t2;
+                    if(intercept_time_minus_root>0.0f) time=intercept_time_minus_root;
                 }
             }
         }
