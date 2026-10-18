@@ -1192,7 +1192,7 @@ extern int func_L00_0025A8E8_2cf180(void *, float, void *, int, float, float, in
 
 void test_dummy_update(unsigned char *m) __asm__("FUN_L16_002cddb8");
 void test_dummy_update(unsigned char *m) {
-    L16SparkVector v0, v1, v2;
+    L16SparkVector v0, v1, launch_velocity;
     L16SparkQuery fx;
     L16DummyData *d = *(L16DummyData **)(m + 0x78);
     /* A count, then 16-byte points from +0x10. A point copied whole is `path + i * 16 + 16`; its x and y are read
@@ -1290,11 +1290,11 @@ void test_dummy_update(unsigned char *m) {
             float gravity = frame_time_sq * 10.0f;
             v0.f[2] = probe_ground_height(v0.f, 0, 0.5f);
             moby_point_position(d->child, 0, v1.f);
-            subtract_vector_xyz(v2.f, v0.f, v1.f);
-            v2.f[2] = 0.0f;
-            normalize_vector_xyz(v2.f, v2.f, speed);
-            v2.f[2] = FUN_L00_0025abf0(v1.f, v0.f, 0, speed, -gravity);
-            func_L16_002C75D0_2cf180((int)m, v1.f, v2.f, gravity, scale_game_frames(300));
+            subtract_vector_xyz(launch_velocity.f, v0.f, v1.f);
+            launch_velocity.f[2] = 0.0f;
+            normalize_vector_xyz(launch_velocity.f, launch_velocity.f, speed);
+            launch_velocity.f[2] = FUN_L00_0025abf0(v1.f, v0.f, 0, speed, -gravity);
+            func_L16_002C75D0_2cf180((int)m, v1.f, launch_velocity.f, gravity, scale_game_frames(300));
         } else if (m[0x70] & 2) {
             d->node = (d->node + 1) & 1;
             m[0x20] = 3;
