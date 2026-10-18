@@ -534,7 +534,7 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
                        int s16, int s18, unsigned char flag) __asm__("FUN_L00_0025e450");
 void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9,
                        float fC, float fD, float fE, float fF, int k10, float fG, int k11,
-                       int spray_count, int s18, unsigned char flag) {
+                       int spray_count, int effect_reduction_level, unsigned char flag) {
     Q_25e450 vb;
     Q_25e450 v0;
     float dist;
@@ -547,9 +547,9 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
     v0.f[2] = frame_time_macro * 8.0f * fF;
     f3 = D_L00_0015F5D4_macro + D_L00_0015F5D0_macro;
     *(u128_25e450 *)&vb = *(u128_25e450 *)&v0;
-    if (s18 == -1) {
-        s18 = 0;
-        if (1.7f < f3) s18 = 1;
+    if (effect_reduction_level == -1) {
+        effect_reduction_level = 0;
+        if (1.7f < f3) effect_reduction_level = 1;
     }
     if (pos == 0) {
         if (m == 0) return;
@@ -576,7 +576,7 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
         dir.f[2] += frame_time_macro * 3.0f;
         dist = fF * 40000.0f;
         func_L00_0026CA10_25e450(pos, &dir, func_L00_0025D140_25e450(0x4F007FFF, flag), func_L00_0025D140_25e450(0x1F00007F, flag),
-            random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x78)) - s18 * 10, 1, -1, -1, dist);
+            random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x78)) - effect_reduction_level * 10, 1, -1, -1, dist);
         }
     }
     subtract_vector_xyz_25e450(&v0, D_L00_00166DC0_25e450, pos);
@@ -634,11 +634,11 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
         sp = sp * fF;
         func_L00_0026B890_25e450(pos, &vb, func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag),
             func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag), fF * 400000.0f,
-            random_int_between_25e450(scale_game_frames_25e450(0xF), scale_game_frames_25e450(0x14)) - s18 * 3,
-            random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - s18 * 5, 0, 0, sp);
+            random_int_between_25e450(scale_game_frames_25e450(0xF), scale_game_frames_25e450(0x14)) - effect_reduction_level * 3,
+            random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - effect_reduction_level * 5, 0, 0, sp);
         func_L00_0026B890_25e450(pos, &vb, 0x7FFFFFFF, 0xFFFFFF, fF * 400000.0f,
-            random_int_between_25e450(scale_game_frames_25e450(5), scale_game_frames_25e450(0xA)) - s18 * 2,
-            random_int_between_25e450(scale_game_frames_25e450(0xF), scale_game_frames_25e450(0x14)) - s18 * 3, 0, 0, sp * 0.5f);
+            random_int_between_25e450(scale_game_frames_25e450(5), scale_game_frames_25e450(0xA)) - effect_reduction_level * 2,
+            random_int_between_25e450(scale_game_frames_25e450(0xF), scale_game_frames_25e450(0x14)) - effect_reduction_level * 3, 0, 0, sp * 0.5f);
     }
     }
     {
@@ -659,7 +659,7 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
         p1 = func_L00_0025D140_25e450(c0.v[random_integer_below_25e450(6)], flag);
         p2 = func_L00_0025D140_25e450(c1.v[random_integer_below_25e450(6)], flag);
         func_L00_0026B368_25e450(pos, &vel, p1, p2,
-            random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - s18 * 5, 200000.0f);
+            random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - effect_reduction_level * 5, 200000.0f);
     }
     }
     if (m != 0 && fC > 0.0f) {
@@ -697,7 +697,7 @@ void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n
         allocate_voice_for_target_entry_25e450(k10, 0, m);
     }
     if (fG != 0.0f) {
-        if (s18 == 0) {
+        if (effect_reduction_level == 0) {
             Q_25e450 v;
             qcopy(&v, pos);
             v.f[3] = fG;
