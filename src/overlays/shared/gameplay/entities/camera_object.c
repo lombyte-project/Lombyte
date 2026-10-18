@@ -35,6 +35,10 @@ float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_002a4890(void) {
+    enum {
+        AMBIENCE_WAIT_AND_SELECT_TARGET = 0,
+        AMBIENCE_INTERPOLATE_TO_TARGET = 1
+    };
     struct Amb *s = &D_L00_001CB7C0;
     float a, b, c, d, e;
     switch (s->hC) {
@@ -42,7 +46,7 @@ void FUN_L00_002a4890(void) {
         break;
     case 2:
         switch (s->hE) {
-        case 0:
+        case AMBIENCE_WAIT_AND_SELECT_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
                 a = convert_integer_to_float(s->h1C) * random_float_between_alt(0.5f, 1.5f);
                 c = fast_add_rotations(s->f0, random_float_between_alt(-1.0471976f, 1.0471976f));
@@ -53,7 +57,7 @@ void FUN_L00_002a4890(void) {
                 s->hE = 1;
             }
             break;
-        case 1:
+        case AMBIENCE_INTERPOLATE_TO_TARGET:
             if (fast_dec_timer_s16(&s->h1E)) {
                 s->h1E = func_001FA898_r(convert_integer_to_float(s->h1C) *
                                          random_float_between_alt(2.0f, 3.0f));
