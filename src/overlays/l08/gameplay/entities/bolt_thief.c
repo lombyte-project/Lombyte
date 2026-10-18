@@ -1077,7 +1077,7 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
     float v10[4];
     Pair_2E2A38 tab;
     float v30[4];
-    float a40[4];
+    float particle_spawn_position[4];
     int i;
 
     switch (m->state) {
@@ -1120,9 +1120,9 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
                 int c1;
                 int c2;
                 int c3;
-                qcopy(a40, m->pos);
-                a40[0] += random_float_between_c2(-3.0f, 3.0f);
-                a40[1] += random_float_between_c2(-3.0f, 3.0f);
+                qcopy(particle_spawn_position, m->pos);
+                particle_spawn_position[0] += random_float_between_c2(-3.0f, 3.0f);
+                particle_spawn_position[1] += random_float_between_c2(-3.0f, 3.0f);
                 v10[2] = D_L08_00161C0C * D_0015ED6C_gp;
                 v10[0] += fast_cos(ang) * D_L08_00161C14;
                 v10[1] += fast_sin(ang) * D_L08_00161C14;
@@ -1134,7 +1134,7 @@ void FUN_L08_002e16c0(Moby_2E2A38 *m) {
                 c1 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C1C, (float)(D_L08_00161C1C * 2))));
                 c2 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C20, (float)(D_L08_00161C20 * 2))));
                 c3 = truncate_float_to_s32_c2(FUN_001f96b0_c(random_float_between_c2((float)D_L08_00161C24, (float)(D_L08_00161C24 * 2))));
-                func_00219780_2E2A38(a40, v10, v30, D_L08_00161C04, D_L08_00161C08, c1, c2, c3, -1);
+                func_00219780_2E2A38(particle_spawn_position, v10, v30, D_L08_00161C04, D_L08_00161C08, c1, c2, c3, -1);
             }
             m->state = 3;
         }
